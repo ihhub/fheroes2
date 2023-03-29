@@ -165,7 +165,7 @@ const char * Heroes::GetName( int heroid )
             // necromant
             gettext_noop( "Zom" ), gettext_noop( "Darlana" ), gettext_noop( "Zam" ), gettext_noop( "Ranloo" ), gettext_noop( "Charity" ), gettext_noop( "Rialdo" ),
             gettext_noop( "Roxana" ), gettext_noop( "Sandro" ), gettext_noop( "Celia" ),
-            // campains
+            // campaigns
             gettext_noop( "Roland" ), gettext_noop( "Lord Corlagon" ), gettext_noop( "Sister Eliza" ), gettext_noop( "Archibald" ), gettext_noop( "Lord Halton" ),
             gettext_noop( "Brother Brax" ),
             // loyalty version
@@ -1587,8 +1587,10 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
 // Move hero to a new position. This function applies no action and no penalty
 void Heroes::Move2Dest( const int32_t dstIndex )
 {
-    if ( dstIndex != GetIndex() ) {
-        world.GetTiles( GetIndex() ).SetHeroes( nullptr );
+    const int32_t currentIndex = GetIndex();
+
+    if ( dstIndex != currentIndex ) {
+        world.GetTiles( currentIndex ).SetHeroes( nullptr );
         SetIndex( dstIndex );
         Scout( dstIndex );
         world.GetTiles( dstIndex ).SetHeroes( this );

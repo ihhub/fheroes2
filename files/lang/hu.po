@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-11 16:34+0000\n"
+"POT-Creation-Date: 2023-03-29 00:36+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -707,6 +707,16 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "egy %{defender} elpusztult."
 msgstr[1] "%{count} %{defender} elpusztult."
 
+msgid "1 soul is absorbed."
+msgid_plural "%{count} souls are absorbed."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "1 %{unit} is revived."
+msgid_plural "%{count} %{unit} are revived."
+msgstr[0] ""
+msgstr[1] ""
+
 #, fuzzy
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "A %{monster} ide menjen."
@@ -1174,7 +1184,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 
@@ -4480,6 +4490,13 @@ msgstr "Magyar nyelv"
 msgid "Danish"
 msgstr ""
 
+msgid "Slovak"
+msgstr ""
+
+#, fuzzy
+msgid "Vietnamese"
+msgstr "%{name} mutatása"
+
 msgid ", FPS: "
 msgstr ""
 
@@ -5284,9 +5301,6 @@ msgstr ""
 "Megszereztél egy fűrészmalmot. Ez naponta %{count} egységnyi fát biztosít "
 "számodra."
 
-msgid "You beat the Ghosts and are able to restore the mine to production."
-msgstr "Elűzted a szellemeket, a bánya újra használható."
-
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
@@ -5334,6 +5348,9 @@ msgid ""
 "You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
 "wish to enter?"
 msgstr ""
+
+msgid "You beat the Ghosts and are able to restore the mine to production."
+msgstr "Elűzted a szellemeket, a bánya újra használható."
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -6375,9 +6392,9 @@ msgstr ""
 "használatára."
 
 #, fuzzy
-msgid "%{skill} regenerates one of your hero's spell points per day."
+msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
-"%{skill} regenerates %{count} of your hero's spell points per day."
+"%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] ""
 "Alap Misztika naponta %{count}-vel növeli a varázspontok újratermelődését."
 msgstr[1] ""

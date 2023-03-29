@@ -24,15 +24,15 @@
 #include <filesystem>
 #include <fstream> // IWYU pragma: keep
 #include <iostream>
-#include <limits>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <system_error>
-#include <type_traits>
 #include <vector>
 
 #include "serialize.h"
 #include "system.h"
+#include "tools.h"
 
 namespace
 {
@@ -69,6 +69,8 @@ int main( int argc, char ** argv )
         return EXIT_FAILURE;
     }
 
+    uint32_t filesProcessed = 0;
+
     for ( const std::string & inputFileName : inputFileNames ) {
         std::ifstream inputStream( inputFileName, std::ios_base::binary | std::ios_base::ate );
         if ( !inputStream ) {
@@ -77,21 +79,19 @@ int main( int argc, char ** argv )
             continue;
         }
 
-        const std::streampos pos = inputStream.tellg();
-        if ( pos <= 0 ) {
-            std::cerr << "File " << inputFileName << " is empty" << std::endl;
-            // Ignore files of invalid size
-            continue;
-        }
-
-        const std::make_unsigned_t<std::streamoff> posOffset = pos;
-        if ( posOffset > std::numeric_limits<size_t>::max() ) {
+        const auto size = fheroes2::checkedCast<size_t>( static_cast<std::streamoff>( inputStream.tellg() ) );
+        if ( !size ) {
             std::cerr << "File " << inputFileName << " is too large" << std::endl;
             // Ignore files of invalid size
             continue;
         }
 
-        const size_t size = static_cast<size_t>( posOffset );
+        if ( size == 0U ) {
+            std::cerr << "File " << inputFileName << " is empty" << std::endl;
+            // Ignore files of invalid size
+            continue;
+        }
+
         if ( size != correctBINSize ) {
             // Ignore files of invalid size
             continue;
@@ -99,10 +99,20 @@ int main( int argc, char ** argv )
 
         std::cout << "Processing " << inputFileName << "..." << std::endl;
 
-        std::vector<char> buf( size );
+        std::vector<char> buf( size.value() );
 
         inputStream.seekg( 0, std::ios_base::beg );
-        inputStream.read( buf.data(), buf.size() );
+
+        {
+            const auto streamSize = fheroes2::checkedCast<std::streamsize>( buf.size() );
+            if ( !streamSize ) {
+                std::cerr << "File " << inputFileName << " is too large" << std::endl;
+                return EXIT_FAILURE;
+            }
+
+            inputStream.read( buf.data(), streamSize.value() );
+        }
+
         if ( !inputStream ) {
             std::cerr << "Error reading from file " << inputFileName << std::endl;
             return EXIT_FAILURE;
@@ -118,10 +128,9 @@ int main( int argc, char ** argv )
 
         const char * data = buf.data();
 
-        outputStream << "Monster eye position: [" << fheroes2::getLEValue<int16_t>( data, 1 ) << ", " << fheroes2::getLEValue<int16_t>( data, 3 ) << "]" << std::endl
-                     << std::endl;
+        outputStream << "Monster eye position: [" << fheroes2::getLEValue<int16_t>( data, 1 ) << ", " << fheroes2::getLEValue<int16_t>( data, 3 ) << "]\n\n";
 
-        outputStream << "Animation frame offsets:" << std::endl;
+        outputStream << "Animation frame offsets:\n";
         for ( size_t setId = 0; setId < 7; ++setId ) {
             outputStream << setId + 1 << " : ";
             for ( size_t frameId = 0; frameId < 16; ++frameId ) {
@@ -134,9 +143,9 @@ int main( int argc, char ** argv )
                     outputStream << frameValue << " ";
                 }
             }
-            outputStream << std::endl;
+            outputStream << "\n";
         }
-        outputStream << std::endl;
+        outputStream << "\n";
 
         constexpr size_t maxIdleAnimationCount = 5;
 
@@ -147,45 +156,43 @@ int main( int argc, char ** argv )
 
             idleAnimationCount = maxIdleAnimationCount;
         }
-        outputStream << std::endl << std::endl;
+        outputStream << "\n\n";
 
-        outputStream << "Probabilities of each idle animation:" << std::endl;
+        outputStream << "Probabilities of each idle animation:\n";
         for ( size_t animId = 0; animId < idleAnimationCount; ++animId ) {
-            outputStream << animId + 1 << ": " << fheroes2::getLEValue<float>( data, 118, animId ) << std::endl;
+            outputStream << animId + 1 << ": " << fheroes2::getLEValue<float>( data, 118, animId ) << "\n";
         }
-        outputStream << std::endl;
+        outputStream << "\n";
 
         outputStream << "Idle animation delay (?) (ms): " << fheroes2::getLEValue<uint32_t>( data, 138, 0 ) << " " << fheroes2::getLEValue<uint32_t>( data, 138, 1 )
                      << " " << fheroes2::getLEValue<uint32_t>( data, 138, 2 ) << " " << fheroes2::getLEValue<uint32_t>( data, 138, 3 ) << " "
-                     << fheroes2::getLEValue<uint32_t>( data, 138, 4 ) << std::endl
-                     << std::endl;
+                     << fheroes2::getLEValue<uint32_t>( data, 138, 4 ) << "\n\n";
 
-        outputStream << "Idle animation delay (?) (ms): " << fheroes2::getLEValue<uint32_t>( data, 158 ) << std::endl << std::endl;
-        outputStream << "Walking animation speed (ms): " << fheroes2::getLEValue<uint32_t>( data, 162 ) << std::endl << std::endl;
-        outputStream << "Shooting animation speed (ms): " << fheroes2::getLEValue<uint32_t>( data, 166 ) << std::endl << std::endl;
-        outputStream << "Flying animation speed (ms): " << fheroes2::getLEValue<uint32_t>( data, 170 ) << std::endl << std::endl;
+        outputStream << "Idle animation delay (?) (ms): " << fheroes2::getLEValue<uint32_t>( data, 158 ) << "\n\n";
+        outputStream << "Walking animation speed (ms): " << fheroes2::getLEValue<uint32_t>( data, 162 ) << "\n\n";
+        outputStream << "Shooting animation speed (ms): " << fheroes2::getLEValue<uint32_t>( data, 166 ) << "\n\n";
+        outputStream << "Flying animation speed (ms): " << fheroes2::getLEValue<uint32_t>( data, 170 ) << "\n\n";
 
-        outputStream << "Projectile start positions:" << std::endl;
-        outputStream << "[" << fheroes2::getLEValue<int16_t>( data, 174, 0 ) << ", " << fheroes2::getLEValue<int16_t>( data, 174, 1 ) << "]" << std::endl;
-        outputStream << "[" << fheroes2::getLEValue<int16_t>( data, 174, 2 ) << ", " << fheroes2::getLEValue<int16_t>( data, 174, 3 ) << "]" << std::endl;
-        outputStream << "[" << fheroes2::getLEValue<int16_t>( data, 174, 4 ) << ", " << fheroes2::getLEValue<int16_t>( data, 174, 5 ) << "]" << std::endl;
-        outputStream << std::endl;
+        outputStream << "Projectile start positions:\n";
+        outputStream << "[" << fheroes2::getLEValue<int16_t>( data, 174, 0 ) << ", " << fheroes2::getLEValue<int16_t>( data, 174, 1 ) << "]\n";
+        outputStream << "[" << fheroes2::getLEValue<int16_t>( data, 174, 2 ) << ", " << fheroes2::getLEValue<int16_t>( data, 174, 3 ) << "]\n";
+        outputStream << "[" << fheroes2::getLEValue<int16_t>( data, 174, 4 ) << ", " << fheroes2::getLEValue<int16_t>( data, 174, 5 ) << "]\n";
+        outputStream << "\n";
 
         const int projectileFramesCount = static_cast<unsigned char>( *( data + 186 ) );
-        outputStream << "Number of projectile frames is " << projectileFramesCount << std::endl << std::endl;
+        outputStream << "Number of projectile frames is " << projectileFramesCount << "\n\n";
 
-        outputStream << "Projectile angles:" << std::endl;
+        outputStream << "Projectile angles:\n";
         for ( size_t angleId = 0; angleId < 12; ++angleId ) {
-            outputStream << fheroes2::getLEValue<float>( data, 187, angleId ) << std::endl;
+            outputStream << fheroes2::getLEValue<float>( data, 187, angleId ) << "\n";
         }
-        outputStream << std::endl;
+        outputStream << "\n";
 
-        outputStream << "Troop count offset: [" << fheroes2::getLEValue<int32_t>( data, 235 ) << ", " << fheroes2::getLEValue<int32_t>( data, 239 ) << "]" << std::endl
-                     << std::endl;
+        outputStream << "Troop count offset: [" << fheroes2::getLEValue<int32_t>( data, 235 ) << ", " << fheroes2::getLEValue<int32_t>( data, 239 ) << "]\n\n";
 
         constexpr char invalidFrameId = '\xFF';
 
-        outputStream << "Animation sequence (frame IDs):" << std::endl;
+        outputStream << "Animation sequence (frame IDs):\n";
         for ( size_t setId = 0; setId < 34; ++setId ) {
             outputStream << setId + 1 << " : ";
 
@@ -209,14 +216,18 @@ int main( int argc, char ** argv )
                           << " while found number is " << frameCount << std::endl;
             }
 
-            outputStream << std::endl;
+            outputStream << "\n";
         }
 
         if ( !outputStream ) {
             std::cerr << "Error writing to file " << outputFilePath << std::endl;
             return EXIT_FAILURE;
         }
+
+        ++filesProcessed;
     }
+
+    std::cout << "Total processed files: " << filesProcessed << std::endl;
 
     return EXIT_SUCCESS;
 }

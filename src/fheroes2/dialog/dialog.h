@@ -85,7 +85,7 @@ namespace Dialog
     std::string SelectFileLoad();
     std::string SelectFileSave();
 
-    void QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile = false );
+    void QuickInfo( const Maps::Tiles & tile );
 
     // These functions are able to show the location of an object on the radar. If the location should be shown on the radar, then an
     // additional area, the contents of which should be restored when the radar is redrawn (areaToRestore), can be optionally specified.
@@ -100,7 +100,7 @@ namespace Dialog
     bool InputString( const std::string & header, std::string & result, const std::string & title = std::string(), const size_t charLimit = 0 );
     Troop RecruitMonster( const Monster & monster0, uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
     void DwellingInfo( const Monster &, uint32_t available );
-    int ArmyInfo( const Troop & troop, int flags, bool isReflected = false );
+    int ArmyInfo( const Troop & troop, int flags, bool isReflected = false, const int32_t windowOffsetY = 0 );
     int ArmyJoinFree( const Troop & troop );
     int ArmyJoinWithCost( const Troop &, const uint32_t join, const uint32_t gold );
     int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit );

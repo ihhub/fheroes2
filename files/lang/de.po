@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-11 16:34+0000\n"
+"POT-Creation-Date: 2023-03-29 00:36+0000\n"
 "PO-Revision-Date: 2022-12-22 21:39+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -733,6 +733,16 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "1 %{defender} stirbt."
 msgstr[1] "%{count} %{defender} sterben."
 
+msgid "1 soul is absorbed."
+msgid_plural "%{count} souls are absorbed."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "1 %{unit} is revived."
+msgid_plural "%{count} %{unit} are revived."
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Hat %{monster}: von [%{src}] nach [%{dst}] verschoben."
 
@@ -1225,7 +1235,7 @@ msgstr ""
 "Möglichkeit zu geben, in dieser Region zu operieren."
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 "Beseitigen Sie alle Gegner in diesem Gebiet. Dann gehört das erste Stück des "
@@ -4549,6 +4559,13 @@ msgstr "Ungarisch"
 msgid "Danish"
 msgstr "Dänisch"
 
+msgid "Slovak"
+msgstr ""
+
+#, fuzzy
+msgid "Vietnamese"
+msgstr "%{name} ansehen"
+
 msgid ", FPS: "
 msgstr ", FPS: "
 
@@ -5455,10 +5472,6 @@ msgstr ""
 "Sie erhalten die Kontrolle über ein Sägewerk. Es wird Sie mit %{count} "
 "Einheiten Holz pro Tag versorgen."
 
-msgid "You beat the Ghosts and are able to restore the mine to production."
-msgstr ""
-"Sie haben die Geister besiegt und können die Mine wieder in Betrieb nehmen."
-
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
@@ -5510,6 +5523,10 @@ msgid ""
 msgstr ""
 "Sie stoßen auf eine verlassene Goldmine. In der Mine scheint es zu spuken. "
 "Möchten Sie sie betreten?"
+
+msgid "You beat the Ghosts and are able to restore the mine to production."
+msgstr ""
+"Sie haben die Geister besiegt und können die Mine wieder in Betrieb nehmen."
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -6640,9 +6657,10 @@ msgstr "%{skill} erlaubt es Ihrem Helden, Zauber der vierten Stufe zu lernen."
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "%{skill} erlaubt es Ihrem Helden, Zauber der fünften Stufe zu lernen."
 
-msgid "%{skill} regenerates one of your hero's spell points per day."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
-"%{skill} regenerates %{count} of your hero's spell points per day."
+"%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] "%{skill} regeneriert einen der Zauberpunkte Ihres Helden pro Tag."
 msgstr[1] ""
 "%{skill} regeneriert %{count} der Zauberpunkte Ihres Helden pro Tag."

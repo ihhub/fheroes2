@@ -217,14 +217,7 @@ namespace
             break;
 
         case MP2::OBJ_ABANDONED_MINE:
-            if ( !hero.isFriends( tile.QuantityColor() ) ) {
-                if ( tile.isCaptureObjectProtected() ) {
-                    return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
-                }
-
-                return true;
-            }
-            break;
+            return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
 
         case MP2::OBJ_LEAN_TO:
         case MP2::OBJ_MAGIC_GARDEN:
@@ -833,9 +826,6 @@ namespace AI
             return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 4000.0 : 2000.0;
         }
         case MP2::OBJ_ABANDONED_MINE: {
-            if ( tile.QuantityColor() == hero.GetColor() ) {
-                return -dangerousTaskPenalty; // don't even attempt to go here
-            }
             return 3000.0;
         }
         case MP2::OBJ_ARTIFACT: {
@@ -1251,9 +1241,6 @@ namespace AI
             return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 3000.0 : 1500.0;
         }
         case MP2::OBJ_ABANDONED_MINE: {
-            if ( tile.QuantityColor() == hero.GetColor() ) {
-                return -dangerousTaskPenalty; // don't even attempt to go here
-            }
             return 5000.0;
         }
         case MP2::OBJ_ARTIFACT: {
@@ -1728,7 +1715,7 @@ namespace AI
                     std::set<int> & defenseSecondaries = defense->second.secondaryTaskTileId;
                     defenseSecondaries.erase( tileIndex );
                     if ( defenseSecondaries.empty() ) {
-                        // if no one else was threatning this then we no longer have to defend
+                        // if no one else was threatening this then we no longer have to defend
                         _priorityTargets.erase( secondaryTaskId );
                     }
                 }

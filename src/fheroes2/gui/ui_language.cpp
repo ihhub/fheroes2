@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -64,7 +64,9 @@ namespace
             { "ro", fheroes2::SupportedLanguage::Romanian },   { "romanian", fheroes2::SupportedLanguage::Romanian },
             { "nl", fheroes2::SupportedLanguage::Dutch },      { "dutch", fheroes2::SupportedLanguage::Dutch },
             { "hu", fheroes2::SupportedLanguage::Hungarian },  { "hungarian", fheroes2::SupportedLanguage::Hungarian },
-            { "dk", fheroes2::SupportedLanguage::Danish },     { "danish", fheroes2::SupportedLanguage::Danish } };
+            { "dk", fheroes2::SupportedLanguage::Danish },     { "danish", fheroes2::SupportedLanguage::Danish },
+            { "sk", fheroes2::SupportedLanguage::Slovak },     { "slovak", fheroes2::SupportedLanguage::Slovak },
+            { "vi", fheroes2::SupportedLanguage::Vietnamese }, { "vietnamese", fheroes2::SupportedLanguage::Vietnamese } };
 }
 
 namespace fheroes2
@@ -112,7 +114,8 @@ namespace fheroes2
                                                              SupportedLanguage::Belarusian, SupportedLanguage::Bulgarian, SupportedLanguage::Ukrainian,
                                                              SupportedLanguage::Romanian,   SupportedLanguage::Spanish,   SupportedLanguage::Portuguese,
                                                              SupportedLanguage::Swedish,    SupportedLanguage::Turkish,   SupportedLanguage::Dutch,
-                                                             SupportedLanguage::Hungarian,  SupportedLanguage::Czech,     SupportedLanguage::Danish };
+                                                             SupportedLanguage::Hungarian,  SupportedLanguage::Czech,     SupportedLanguage::Danish,
+                                                             SupportedLanguage::Slovak,     SupportedLanguage::Vietnamese };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
             if ( language != resourceLanguage && isAlphabetSupported( language ) ) {
@@ -180,6 +183,10 @@ namespace fheroes2
             return _( "Hungarian" );
         case SupportedLanguage::Danish:
             return _( "Danish" );
+        case SupportedLanguage::Slovak:
+            return _( "Slovak" );
+        case SupportedLanguage::Vietnamese:
+            return _( "Vietnamese" );
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -228,6 +235,10 @@ namespace fheroes2
             return "hu";
         case SupportedLanguage::Danish:
             return "dk";
+        case SupportedLanguage::Slovak:
+            return "sk";
+        case SupportedLanguage::Vietnamese:
+            return "vi";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );

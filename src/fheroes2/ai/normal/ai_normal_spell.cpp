@@ -310,7 +310,7 @@ namespace AI
     {
         const int spellID = spell.GetID();
 
-        // Make sure this spell can be applied to the current unit (skip check for dispell estimation)
+        // Make sure this spell can be applied to the current unit (skip check for dispel estimation)
         if ( !forDispell
              && ( ( target.Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) && spellID != Spell::ANTIMAGIC ) || target.isUnderSpellEffect( spell )
                   || !target.AllowApplySpell( spell, _commander ) ) ) {

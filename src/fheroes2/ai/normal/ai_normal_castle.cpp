@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -202,7 +202,7 @@ namespace AI
             double possibleReinforcementStrength = possibleReinforcement.GetStrength();
 
             // A very rough estimation of strength. We measure the strength of possible army to hire with the strength of purchasing a turret.
-            const Battle::Tower tower( castle, Battle::TWR_RIGHT, Rand::DeterministicRandomGenerator( 0 ), 0 );
+            const Battle::Tower tower( castle, Battle::TowerType::TWR_RIGHT, Rand::DeterministicRandomGenerator( 0 ), 0 );
             const Troop towerMonster( Monster::ARCHER, tower.GetCount() );
             const double towerStrength = towerMonster.GetStrength();
             if ( possibleReinforcementStrength > towerStrength ) {

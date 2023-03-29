@@ -217,6 +217,9 @@ namespace Interface
             updateCursor = true;
         }
 
+        // Update fog directions data for entire map tiles by checking fog data for current player and its allies.
+        static void updateMapFogDirections();
+
         void QueueEventProcessing( bool isCursorOverGamearea );
 
         static fheroes2::Image GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset );

@@ -129,7 +129,7 @@ namespace
         }
     }
 
-    void RedistributeTroopToFirstFreeSlot( ArmyTroop & troopFrom, Army * armyTarget, const uint32_t count )
+    void RedistributeTroopToFirstFreeSlot( ArmyTroop & troopFrom, const Army * armyTarget, const uint32_t count )
     {
         // can't split up a stack with just 1 unit, and obviously on count == 0, there's no splitting at all
         if ( troopFrom.GetCount() <= 1 || count == 0 )
@@ -143,17 +143,17 @@ namespace
         troopFrom.SetCount( troopFrom.GetCount() - count );
     }
 
-    void RedistributeTroopByOne( ArmyTroop & troopFrom, Army * armyTarget )
+    void RedistributeTroopByOne( ArmyTroop & troopFrom, const Army * armyTarget )
     {
         RedistributeTroopToFirstFreeSlot( troopFrom, armyTarget, 1 );
     }
 
-    void RedistributeTroopEvenly( ArmyTroop & troopFrom, Army * armyTarget )
+    void RedistributeTroopEvenly( ArmyTroop & troopFrom, const Army * armyTarget )
     {
         RedistributeTroopToFirstFreeSlot( troopFrom, armyTarget, troopFrom.GetCount() / 2 );
     }
 
-    bool IsSplitHotkeyUsed( ArmyTroop & troopFrom, Army * armyTarget )
+    bool IsSplitHotkeyUsed( ArmyTroop & troopFrom, const Army * armyTarget )
     {
         if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_ONE ) ) {
             RedistributeTroopByOne( troopFrom, armyTarget );
@@ -178,6 +178,7 @@ ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
     , use_mini_sprite( mini )
     , read_only( ro )
     , can_change( change )
+    , _troopWindowOffsetY( 0 )
 {
     if ( use_mini_sprite )
         SetBackground( { 43, 43 }, fheroes2::GetColorId( 0, 45, 0 ) );
@@ -551,7 +552,7 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
             }
         }
 
-        switch ( Dialog::ArmyInfo( troop, flags ) ) {
+        switch ( Dialog::ArmyInfo( troop, flags, false, _troopWindowOffsetY ) ) {
         case Dialog::UPGRADE:
             world.GetKingdom( _army->GetColor() ).OddFundsResource( troop.GetTotalUpgradeCost() );
             troop.Upgrade();
@@ -618,7 +619,7 @@ bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
             troop.Reset();
         }
         else {
-            Dialog::ArmyInfo( troop, Dialog::ZERO );
+            Dialog::ArmyInfo( troop, Dialog::ZERO, false, _troopWindowOffsetY );
         }
     }
 

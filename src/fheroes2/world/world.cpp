@@ -58,6 +58,7 @@
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
+#include "spell.h"
 #include "tools.h"
 #include "translations.h"
 #include "week.h"
@@ -840,13 +841,11 @@ int32_t World::NextWhirlpool( const int32_t index ) const
     return Rand::Get( whilrpools );
 }
 
-/* return count captured object */
 uint32_t World::CountCapturedObject( int obj, int col ) const
 {
     return map_captureobj.GetCount( obj, col );
 }
 
-/* return count captured mines */
 uint32_t World::CountCapturedMines( int type, int color ) const
 {
     switch ( type ) {
@@ -861,21 +860,21 @@ uint32_t World::CountCapturedMines( int type, int color ) const
     return map_captureobj.GetCountMines( type, color );
 }
 
-/* capture object */
 void World::CaptureObject( int32_t index, int color )
 {
     const MP2::MapObjectType objectType = GetTiles( index ).GetObject( false );
     map_captureobj.Set( index, objectType, color );
 
     Castle * castle = getCastleEntrance( Maps::GetPoint( index ) );
-    if ( castle && castle->GetColor() != color )
+    if ( castle && castle->GetColor() != color ) {
         castle->ChangeColor( color );
+    }
 
-    if ( color & ( Color::ALL | Color::UNUSED ) )
+    if ( color & ( Color::ALL | Color::UNUSED ) ) {
         GetTiles( index ).setOwnershipFlag( objectType, color );
+    }
 }
 
-/* return color captured object */
 int World::ColorCapturedObject( int32_t index ) const
 {
     return map_captureobj.GetColor( index );
@@ -1407,6 +1406,37 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     msg >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1003_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1003_RELEASE ) {
+        for ( Maps::Tiles & tile : w.vec_tiles ) {
+            if ( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE ) {
+                const int32_t spellId = Maps::getSpellIdFromTile( tile );
+
+                if ( spellId == Spell::HAUNT ) {
+                    const ResourceCount rc = tile.QuantityResourceCount();
+                    const int resource = rc.isValid() ? rc.first : Resource::GOLD;
+
+                    Maps::Tiles::RestoreAbandonedMine( tile, resource );
+
+                    Heroes * hero = tile.GetHeroes();
+                    if ( hero ) {
+                        hero->SetMapsObject( MP2::OBJ_MINES );
+                    }
+                    else {
+                        tile.SetObject( MP2::OBJ_MINES );
+                    }
+                }
+                else {
+                    Troop & guardians = w.GetCapturedObject( tile.GetIndex() ).GetTroop();
+
+                    tile.MonsterSetCount( guardians.isValid() ? guardians.GetCount() : 0 );
+
+                    guardians.Reset();
+                }
+            }
+        }
+    }
 
     return msg;
 }

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-11 16:34+0000\n"
+"POT-Creation-Date: 2023-03-29 00:36+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -680,6 +680,18 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
+msgid "1 soul is absorbed."
+msgid_plural "%{count} souls are absorbed."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "1 %{unit} is revived."
+msgid_plural "%{count} %{unit} are revived."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr ""
 
@@ -1107,7 +1119,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 
@@ -4236,6 +4248,13 @@ msgstr ""
 msgid "Danish"
 msgstr ""
 
+msgid "Slovak"
+msgstr ""
+
+#, fuzzy
+msgid "Vietnamese"
+msgstr "Žiūrėti %{name}"
+
 msgid ", FPS: "
 msgstr ""
 
@@ -4946,9 +4965,6 @@ msgstr ""
 "Jūs užvaldėte lentpjūvę. Ši lentpjūvė gamins jums %{count} medienos vnt. per "
 "dieną."
 
-msgid "You beat the Ghosts and are able to restore the mine to production."
-msgstr ""
-
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
@@ -4995,6 +5011,9 @@ msgstr ""
 msgid ""
 "You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
 "wish to enter?"
+msgstr ""
+
+msgid "You beat the Ghosts and are able to restore the mine to production."
 msgstr ""
 
 msgid ""
@@ -5873,12 +5892,13 @@ msgstr ""
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr ""
 
-msgid "%{skill} regenerates one of your hero's spell points per day."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
-"%{skill} regenerates %{count} of your hero's spell points per day."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+"%{skill} regenerates %{count} additional spell points per day to your hero."
+msgstr[0] "%{name} teikia %{count} geležies rūdos vnt. per dieną."
+msgstr[1] "%{name} teikia %{count} geležies rūdos vnt. per dieną."
+msgstr[2] "%{name} teikia %{count} geležies rūdos vnt. per dieną."
 
 #, fuzzy
 msgid "%{skill} increases your hero's luck by %{count}."
