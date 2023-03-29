@@ -380,8 +380,8 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
 
         if ( icn_covr != ICN::UNKNOWN )
             board.SetCovrObjects( icn_covr );
-        else
-            board.SetCobjObjects( world.GetTiles( tileIndex ), seededGen );
+
+        board.SetCobjObjects( world.GetTiles( tileIndex ), seededGen );
     }
 
     AI::Get().battleBegins();
