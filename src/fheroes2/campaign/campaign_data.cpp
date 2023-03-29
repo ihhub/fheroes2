@@ -372,7 +372,7 @@ namespace
                 gettext_noop( "The Giant's Pass" ), gettext_noop( "Aurora Borealis" ), gettext_noop( "Betrayal's End" ), gettext_noop( "Corruption's Heart" ) };
         const std::array<std::string, scenarioCount> scenarioDescription = {
             gettext_noop( "Subdue the unruly local lords in order to provide the Empire with facilities to operate in this region." ),
-            gettext_noop( "Eliminate all oposition in this area. Then the first piece of the artifact will be yours." ),
+            gettext_noop( "Eliminate all opposition in this area. Then the first piece of the artifact will be yours." ),
             gettext_noop(
                 "The sorceresses to the northeast are rebelling! For the good of the empire you must quash their feeble uprising on your way to the mountains." ),
             gettext_noop(

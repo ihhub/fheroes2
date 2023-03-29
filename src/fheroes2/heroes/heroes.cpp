@@ -165,7 +165,7 @@ const char * Heroes::GetName( int heroid )
             // necromant
             gettext_noop( "Zom" ), gettext_noop( "Darlana" ), gettext_noop( "Zam" ), gettext_noop( "Ranloo" ), gettext_noop( "Charity" ), gettext_noop( "Rialdo" ),
             gettext_noop( "Roxana" ), gettext_noop( "Sandro" ), gettext_noop( "Celia" ),
-            // campains
+            // campaigns
             gettext_noop( "Roland" ), gettext_noop( "Lord Corlagon" ), gettext_noop( "Sister Eliza" ), gettext_noop( "Archibald" ), gettext_noop( "Lord Halton" ),
             gettext_noop( "Brother Brax" ),
             // loyalty version

@@ -1210,7 +1210,7 @@ msgstr ""
 "работа в този регион."
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 "Премахни всяка опозиция в тази област. След това първото парче от артефакта "

@@ -1715,7 +1715,7 @@ namespace AI
                     std::set<int> & defenseSecondaries = defense->second.secondaryTaskTileId;
                     defenseSecondaries.erase( tileIndex );
                     if ( defenseSecondaries.empty() ) {
-                        // if no one else was threatning this then we no longer have to defend
+                        // if no one else was threatening this then we no longer have to defend
                         _priorityTargets.erase( secondaryTaskId );
                     }
                 }
