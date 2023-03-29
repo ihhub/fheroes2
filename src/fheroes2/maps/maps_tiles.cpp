@@ -1350,10 +1350,10 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterSpritesPerTile
     assert( GetObject() == MP2::OBJ_MONSTER );
 
     const Monster & monster = QuantityMonster();
-    const std::pair<uint32_t, uint32_t> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
+    const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
 
     const int icnId{ ICN::MINI_MONSTER_IMAGE };
-    const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndicies.first );
+    const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.first );
     const fheroes2::Point monsterSpriteOffset( monsterSprite.x() + 16, monsterSprite.y() + 30 );
 
     std::vector<fheroes2::Point> outputSquareInfo;
@@ -1364,15 +1364,15 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterSpritesPerTile
 
     std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
     for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndicies.first, false,
+        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndices.first, false,
                                  static_cast<uint8_t>( 255 ) );
     }
 
     outputSquareInfo.clear();
     outputImageInfo.clear();
 
-    if ( spriteIndicies.second > 0 ) {
-        const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndicies.second );
+    if ( spriteIndices.second > 0 ) {
+        const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.second );
         const fheroes2::Point secondaryMonsterSpriteOffset( secondaryMonsterSprite.x() + 16, secondaryMonsterSprite.y() + 30 );
 
         fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
@@ -1380,7 +1380,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterSpritesPerTile
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
         for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndicies.second, false,
+            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndices.second, false,
                                      static_cast<uint8_t>( 255 ) );
         }
     }
@@ -1393,10 +1393,10 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterShadowSpritesP
     assert( GetObject() == MP2::OBJ_MONSTER );
 
     const Monster & monster = QuantityMonster();
-    const std::pair<uint32_t, uint32_t> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
+    const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
 
     const int icnId{ ICN::MINI_MONSTER_SHADOW };
-    const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndicies.first );
+    const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.first );
     const fheroes2::Point monsterSpriteOffset( monsterSprite.x() + 16, monsterSprite.y() + 30 );
 
     std::vector<fheroes2::Point> outputSquareInfo;
@@ -1407,15 +1407,15 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterShadowSpritesP
 
     std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
     for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndicies.first, false,
+        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndices.first, false,
                                  static_cast<uint8_t>( 255 ) );
     }
 
     outputSquareInfo.clear();
     outputImageInfo.clear();
 
-    if ( spriteIndicies.second > 0 ) {
-        const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndicies.second );
+    if ( spriteIndices.second > 0 ) {
+        const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.second );
         const fheroes2::Point secondaryMonsterSpriteOffset( secondaryMonsterSprite.x() + 16, secondaryMonsterSprite.y() + 30 );
 
         fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
@@ -1423,7 +1423,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterShadowSpritesP
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
         for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndicies.second, false,
+            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndices.second, false,
                                      static_cast<uint8_t>( 255 ) );
         }
     }

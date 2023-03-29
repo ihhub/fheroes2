@@ -82,7 +82,7 @@ This module responds to the following cache variables:
   SDL2_LIBRARY
     SDL2 Library (.dll, .so, .a, etc) path.
 
-  SDL2MAIN_LIBRAY
+  SDL2MAIN_LIBRARY
     SDL2main Library (.a) path.
 
   SDL2_BUILDING_LIBRARY

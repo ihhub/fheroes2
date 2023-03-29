@@ -91,7 +91,7 @@ protected:
     virtual uint32_t getMovementPenalty( int src, int dst, int direction ) const;
 
     // Subtracts movement points taking the transition between turns into account
-    uint32_t substractMovePoints( const uint32_t movePoints, const uint32_t substractedMovePoints ) const;
+    uint32_t subtractMovePoints( const uint32_t movePoints, const uint32_t subtractedMovePoints ) const;
 
     uint8_t _pathfindingSkill = Skill::Level::EXPERT;
     int _currentColor = Color::NONE;
