@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-23 15:44+0000\n"
+"POT-Creation-Date: 2023-03-29 00:36+0000\n"
 "PO-Revision-Date: 2022-12-22 21:39+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4562,6 +4562,10 @@ msgstr "Dänisch"
 msgid "Slovak"
 msgstr ""
 
+#, fuzzy
+msgid "Vietnamese"
+msgstr "%{name} ansehen"
+
 msgid ", FPS: "
 msgstr ", FPS: "
 
@@ -6653,9 +6657,10 @@ msgstr "%{skill} erlaubt es Ihrem Helden, Zauber der vierten Stufe zu lernen."
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "%{skill} erlaubt es Ihrem Helden, Zauber der fünften Stufe zu lernen."
 
-msgid "%{skill} regenerates one of your hero's spell points per day."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
-"%{skill} regenerates %{count} of your hero's spell points per day."
+"%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] "%{skill} regeneriert einen der Zauberpunkte Ihres Helden pro Tag."
 msgstr[1] ""
 "%{skill} regeneriert %{count} der Zauberpunkte Ihres Helden pro Tag."

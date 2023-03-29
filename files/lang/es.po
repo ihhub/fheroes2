@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-23 15:44+0000\n"
+"POT-Creation-Date: 2023-03-29 00:36+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -4549,6 +4549,10 @@ msgstr "Español"
 msgid "Slovak"
 msgstr ""
 
+#, fuzzy
+msgid "Vietnamese"
+msgstr "Ver %{name}"
+
 msgid ", FPS: "
 msgstr ""
 
@@ -6576,11 +6580,16 @@ msgstr "%{skill} permite a tu héroe aprender hechizos de cuarto nivel."
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "%{skill} permite a tu héroe aprender hechizos de quinto nivel."
 
-msgid "%{skill} regenerates one of your hero's spell points per day."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
-"%{skill} regenerates %{count} of your hero's spell points per day."
+"%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] ""
+"Has tomado el control de una mina de cristal. Te proveerá con %{count} "
+"unidades de cristal al día."
 msgstr[1] ""
+"Has tomado el control de una mina de cristal. Te proveerá con %{count} "
+"unidades de cristal al día."
 
 #, fuzzy
 msgid "%{skill} increases your hero's luck by %{count}."

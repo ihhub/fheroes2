@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-23 15:44+0000\n"
+"POT-Creation-Date: 2023-03-29 00:36+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4400,6 +4400,10 @@ msgstr "Danska"
 msgid "Slovak"
 msgstr ""
 
+#, fuzzy
+msgid "Vietnamese"
+msgstr "Visa %{name}"
+
 msgid ", FPS: "
 msgstr ", FPS: "
 
@@ -6302,11 +6306,16 @@ msgstr "%{skill} låter din hjälte lära sig fjärde nivåns besvärjelser."
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "%{skill} låter din hjälte lära sig femte nivåns besvärjelser."
 
-msgid "%{skill} regenerates one of your hero's spell points per day."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
-"%{skill} regenerates %{count} of your hero's spell points per day."
+"%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] ""
+"Du får kontroll över en kristallgruva. Den kommer att förse dig med %{count} "
+"enheter av kristaller per dag."
 msgstr[1] ""
+"Du får kontroll över en kristallgruva. Den kommer att förse dig med %{count} "
+"enheter av kristaller per dag."
 
 msgid "%{skill} increases your hero's luck by %{count}."
 msgstr "%{skill} höjer din hjältes tur med %{count}."

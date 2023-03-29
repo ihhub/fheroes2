@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-23 15:44+0000\n"
+"POT-Creation-Date: 2023-03-29 00:36+0000\n"
 "PO-Revision-Date: 2023-03-18 14:09+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4483,6 +4483,10 @@ msgstr "Датский"
 msgid "Slovak"
 msgstr ""
 
+#, fuzzy
+msgid "Vietnamese"
+msgstr "Просмотреть %{name}"
+
 msgid ", FPS: "
 msgstr ", FPS: "
 
@@ -6484,9 +6488,10 @@ msgstr "%{skill} позволяет изучать заклинания 4-го �
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "%{skill} позволяет изучать все возможные заклинания."
 
-msgid "%{skill} regenerates one of your hero's spell points per day."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
-"%{skill} regenerates %{count} of your hero's spell points per day."
+"%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] "Восстанавливает %{count} пункт магии героя в день."
 msgstr[1] "Восстанавливает %{count} пункта магии героя в день."
 msgstr[2] "Восстанавливает %{count} пунктов магии героя в день."
