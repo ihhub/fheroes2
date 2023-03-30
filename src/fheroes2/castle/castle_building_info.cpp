@@ -697,7 +697,7 @@ namespace
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
-            return _( "The Dungeon increases the income of the town by %{count} / day." );
+            return _( "The Dungeon increases the income of the town by %{count} gold per day." );
         case BUILD_WEL2:
             return _( "The Waterfall increases production of Centaurs by %{count} per week." );
         default:
