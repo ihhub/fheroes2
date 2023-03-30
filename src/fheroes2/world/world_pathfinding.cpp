@@ -630,8 +630,10 @@ uint32_t AIWorldPathfinder::getMovementPenalty( int src, int dst, int direction 
     return defaultPenalty;
 }
 
-int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
+int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero, bool & isTerritoryExpansion )
 {
+    isTerritoryExpansion = false;
+
     // paths have to be pre-calculated to find a spot where we're able to move
     reEvaluateIfNeeded( hero );
 
@@ -646,14 +648,16 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
 
     nodesToExplore.push_back( start );
 
+    int bestIndex = -1;
+
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
 
-        if ( start != currentNodeIdx ) {
+        if ( bestIndex == -1 && start != currentNodeIdx ) {
             int32_t maxTilesToReveal = Maps::getFogTileCountToBeRevealed( currentNodeIdx, scoutingDistance, _currentColor );
             if ( maxTilesToReveal > 0 ) {
                 // Found a tile where we can reveal fog. Check for other tiles in the queue to find the one with the highest value.
-                int bestIndex = currentNodeIdx;
+                bestIndex = currentNodeIdx;
                 for ( ; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
                     const int nodeIdx = nodesToExplore[lastProcessedNode];
                     const int32_t tilesToReveal = Maps::getFogTileCountToBeRevealed( nodeIdx, scoutingDistance, _currentColor );
@@ -663,8 +667,6 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                         bestIndex = nodeIdx;
                     }
                 }
-
-                return bestIndex;
             }
         }
 
@@ -690,6 +692,15 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                 continue;
             }
 
+            for ( const int32_t tileIndex : Maps::getAroundIndexes( newIndex ) ) {
+                if ( world.GetTiles( tileIndex ).isFog( _currentColor ) ) {
+                    // We found a tile which has a neighboring tile covered in fog.
+                    // Since the current tile is accessible for the hero, the tile covered by fog most likely is accessible too.
+                    isTerritoryExpansion = true;
+                    return newIndex;
+                }
+            }
+
             nodesToExplore.push_back( newIndex );
 
             // If there is a teleport on this tile, we should also consider the endpoints
@@ -711,12 +722,22 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                     continue;
                 }
 
+                for ( const int32_t tileIndex : Maps::getAroundIndexes( teleportIndex ) ) {
+                    if ( world.GetTiles( tileIndex ).isFog( _currentColor ) ) {
+                        // We found a tile which has a neighboring tile covered in fog.
+                        // Since the current tile is accessible for the hero, the tile covered by fog most likely is accessible too.
+                        isTerritoryExpansion = true;
+                        return teleportIndex;
+                    }
+                }
+
                 nodesToExplore.push_back( teleportIndex );
             }
         }
     }
 
-    return -1;
+    // If we reach here it means that no tiles covered by fog are really useful. Let's at least uncover something even if it's useless.
+    return bestIndex;
 }
 
 int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )

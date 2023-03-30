@@ -1652,15 +1652,23 @@ namespace AI
         }
 
         double fogDiscoveryValue = getFogDiscoveryValue( hero );
-        const int fogDiscoveryTarget = _pathfinder.getFogDiscoveryTile( hero );
+        bool isTerritoryExpansion = false;
+        const int fogDiscoveryTarget = _pathfinder.getFogDiscoveryTile( hero, isTerritoryExpansion );
         if ( fogDiscoveryTarget >= 0 ) {
             uint32_t distanceToFogDiscovery = _pathfinder.getDistance( fogDiscoveryTarget );
 
+            // TODO: add logic to check fog discovery based on Dimension Door distance, not the nearest tile.
             bool useDimensionDoor = false;
             const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, fogDiscoveryTarget ) );
             if ( dimensionDoorDist > 0 && ( distanceToFogDiscovery == 0 || dimensionDoorDist < distanceToFogDiscovery / 2 ) ) {
                 distanceToFogDiscovery = dimensionDoorDist;
                 useDimensionDoor = true;
+            }
+
+            if ( isTerritoryExpansion && fogDiscoveryValue < 0 ) {
+                // This is actually a very useful fog discovery action which might lead to finding of new objects.
+                // Increase the value of this action.
+                fogDiscoveryValue /= 2;
             }
 
             getObjectValue( fogDiscoveryTarget, distanceToFogDiscovery, fogDiscoveryValue, useDimensionDoor );
