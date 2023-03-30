@@ -180,20 +180,20 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     const int32_t worldSize = width * height;
 
-    if ( totalFileSize < static_cast<size_t>( MP2::MP2_MAP_INFO_SIZE + worldSize * MP2::MP2_TILE_STRUCTURE_SIZE + MP2::MP2_ADDON_COUNT_SIZE ) ) {
+    if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE + static_cast<size_t>( worldSize ) * MP2::MP2_TILE_STRUCTURE_SIZE + MP2::MP2_ADDON_COUNT_SIZE ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
         return false;
     }
 
     // Skip MP2 tile structures for now and read addons.
-    fs.skip( static_cast<size_t>( worldSize * MP2::MP2_TILE_STRUCTURE_SIZE ) );
+    fs.skip( static_cast<size_t>( worldSize ) * MP2::MP2_TILE_STRUCTURE_SIZE );
 
     // It is a valid case that a map has no add-ons.
-    const uint32_t addonCount = fs.getLE32();
+    const size_t addonCount = fs.getLE32();
     std::vector<MP2::mp2addon_t> vec_mp2addons( addonCount );
 
-    if ( totalFileSize < static_cast<size_t>( MP2::MP2_MAP_INFO_SIZE + worldSize * MP2::MP2_TILE_STRUCTURE_SIZE + addonCount * MP2::MP2_ADDON_STRUCTURE_SIZE
-                                              + MP2::MP2_ADDON_COUNT_SIZE ) ) {
+    if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE + static_cast<size_t>( worldSize ) * MP2::MP2_TILE_STRUCTURE_SIZE + addonCount * MP2::MP2_ADDON_STRUCTURE_SIZE
+                                              + MP2::MP2_ADDON_COUNT_SIZE ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
         return false;
     }
@@ -204,8 +204,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     // If this assertion blows up it means that we are not reading the data properly from the file.
     assert( fs.tell()
-            == static_cast<size_t>( MP2::MP2_MAP_INFO_SIZE + worldSize * MP2::MP2_TILE_STRUCTURE_SIZE + addonCount * MP2::MP2_ADDON_STRUCTURE_SIZE
-                                    + MP2::MP2_ADDON_COUNT_SIZE ) );
+            == MP2::MP2_MAP_INFO_SIZE + static_cast<size_t>( worldSize ) * MP2::MP2_TILE_STRUCTURE_SIZE + addonCount * MP2::MP2_ADDON_STRUCTURE_SIZE
+                                    + MP2::MP2_ADDON_COUNT_SIZE );
     const size_t afterAddonInfoPos = fs.tell();
 
     // Come back to the end of map info section and read information about MP2 tiles.
@@ -285,7 +285,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     }
 
     // If this assertion blows up it means that we are not reading the data properly from the file.
-    assert( fs.tell() == static_cast<size_t>( MP2::MP2_MAP_INFO_SIZE + worldSize * MP2::MP2_TILE_STRUCTURE_SIZE ) );
+    assert( fs.tell() == MP2::MP2_MAP_INFO_SIZE + static_cast<size_t>( worldSize ) * MP2::MP2_TILE_STRUCTURE_SIZE );
 
     // Go back to the section after the add-on structure information and read the rest of data.
     fs.seek( afterAddonInfoPos );
