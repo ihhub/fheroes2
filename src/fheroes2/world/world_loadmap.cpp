@@ -504,9 +504,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                                                                                                       << pblock.size() )
                 }
                 else {
-                    // TODO: Byte 60 is hero info structure is always 0 so the below logic is invalid.
-                    // TODO: As a result any hero released from a Jail is Knight.
-                    const uint8_t raceId = pblock[0x3c];
+                    // Byte 60 contains race type information.
+                    const uint8_t raceId = pblock[60];
                     int raceType = Race::KNGT;
                     switch ( raceId ) {
                     case 0:
