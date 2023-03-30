@@ -658,8 +658,8 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero, bool & isTerrit
             if ( maxTilesToReveal > 0 ) {
                 // Found a tile where we can reveal fog. Check for other tiles in the queue to find the one with the highest value.
                 bestIndex = currentNodeIdx;
-                for ( ; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
-                    const int nodeIdx = nodesToExplore[lastProcessedNode];
+                for ( size_t currentNodeId = lastProcessedNode + 1; currentNodeId < nodesToExplore.size(); ++currentNodeId ) {
+                    const int nodeIdx = nodesToExplore[currentNodeId];
                     const int32_t tilesToReveal = Maps::getFogTileCountToBeRevealed( nodeIdx, scoutingDistance, _currentColor );
 
                     if ( std::make_tuple( maxTilesToReveal, _cache[nodeIdx]._cost ) < std::make_tuple( tilesToReveal, _cache[bestIndex]._cost ) ) {
