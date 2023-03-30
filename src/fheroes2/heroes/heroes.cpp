@@ -306,7 +306,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     // - uint8_t (1 byte)
     //     Custom portrait ID.
     //
-    // - uint8_t (1 byte) 20
+    // - uint8_t (1 byte)
     //     Custom first artifact ID.
     //
     // - uint8_t (1 byte)
@@ -321,7 +321,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     // - uint32_t (4 bytes)
     //    Experience.
     //
-    // - uint8_t (1 byte) 28
+    // - uint8_t (1 byte)
     //     Does the hero have custom secondary skills?
     //
     // - uint8_t (1 byte)
@@ -369,7 +369,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     // - uint8_t (1 byte)
     //     Custom secondary skill level at slot 7.
     //
-    // - uint8_t (1 byte) 44
+    // - uint8_t (1 byte)
     //     Custom secondary skill level at slot 8.
     //
     // - uint8_t (1 byte)
@@ -378,13 +378,13 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     // - uint8_t (1 byte)
     //     Does the hero have a custom name?
     //
-    // - string of 13 bytes 59
+    // - string of 13 bytes
     //    Null terminated string of custom hero name.
     //
-    // - uint8_t (1 byte) 60
+    // - uint8_t (1 byte)
     //     Is AI hero on patrol?
     //
-    // - uint8_t (1 byte) 61
+    // - uint8_t (1 byte)
     //     AI hero patrol distance.
     //
     // - unused 15 bytes
