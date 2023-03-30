@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-29 00:36+0000\n"
+"POT-Creation-Date: 2023-03-30 11:54+0000\n"
 "PO-Revision-Date: 2022-12-18 08:40+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2458,7 +2458,8 @@ msgstr ""
 "krigere. Hvis du besøker den kan du få en oversikt over alle de forskjellige "
 "krigerne i borgen i tillegg til at du kan verve dem derfra."
 
-msgid "The Statue increases your town's income by %{count} per day."
+#, fuzzy
+msgid "The Statue increases your town's income by %{count} gold per day."
 msgstr "Statuen øker den daglige inntekten til byen med %{count} gullstykker."
 
 msgid "The Left Turret provides extra firepower during castle combat."

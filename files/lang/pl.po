@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-29 00:36+0000\n"
+"POT-Creation-Date: 2023-03-30 11:54+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -2409,7 +2409,8 @@ msgstr ""
 "Studnia zwiększa przyrost populacji wszystkich stworzeń o 2 jednostki "
 "tygodniowo."
 
-msgid "The Statue increases your town's income by %{count} per day."
+#, fuzzy
+msgid "The Statue increases your town's income by %{count} gold per day."
 msgstr "Statua zwiększa dzienny przychód miasta o %{count} sztuk złota."
 
 msgid "The Left Turret provides extra firepower during castle combat."

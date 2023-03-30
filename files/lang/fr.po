@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-29 00:36+0000\n"
+"POT-Creation-Date: 2023-03-30 11:54+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -2434,7 +2434,8 @@ msgstr ""
 "Le puits augmente le taux de croissance de population de %{count} créatures "
 "par semaine dans chaque demeure."
 
-msgid "The Statue increases your town's income by %{count} per day."
+#, fuzzy
+msgid "The Statue increases your town's income by %{count} gold per day."
 msgstr "La statue génère des revenus de %{count} pièces d'or par jour."
 
 msgid "The Left Turret provides extra firepower during castle combat."

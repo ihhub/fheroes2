@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-29 00:36+0000\n"
+"POT-Creation-Date: 2023-03-30 11:54+0000\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -2369,7 +2369,8 @@ msgid ""
 msgstr ""
 "Studna zvyšuje tempo růstu ve všech obydlích o %{count} stvoření za týden."
 
-msgid "The Statue increases your town's income by %{count} per day."
+#, fuzzy
+msgid "The Statue increases your town's income by %{count} gold per day."
 msgstr "Socha zvyšuje městské příjmy o %{count} za den."
 
 msgid "The Left Turret provides extra firepower during castle combat."

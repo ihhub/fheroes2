@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-29 00:36+0000\n"
+"POT-Creation-Date: 2023-03-30 11:54+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -2399,7 +2399,8 @@ msgid ""
 "per week."
 msgstr "A Kút hetente %{count}-vel növeli az összes lény szaporulatát."
 
-msgid "The Statue increases your town's income by %{count} per day."
+#, fuzzy
+msgid "The Statue increases your town's income by %{count} gold per day."
 msgstr "A Szobor naponta %{count}-nel növeli a város bevételét."
 
 msgid "The Left Turret provides extra firepower during castle combat."
