@@ -468,13 +468,13 @@ double Heroes::getRecruitValue() const
     return army.GetStrength() + ( ( bag_artifacts.getArtifactValue() * 10.0 + getStatsValue() ) * SKILL_VALUE );
 }
 
-double Heroes::getMeetingValue( const Heroes & recievingHero ) const
+double Heroes::getMeetingValue( const Heroes & receivingHero ) const
 {
     // TODO: add logic to check artifacts with curses and those which are invaluable for a hero.
 
     // Magic Book is not transferable.
     const uint32_t artCount = bag_artifacts.CountArtifacts() - bag_artifacts.Count( Artifact::MAGIC_BOOK );
-    const uint32_t canFit = HEROESMAXARTIFACT - recievingHero.bag_artifacts.CountArtifacts();
+    const uint32_t canFit = HEROESMAXARTIFACT - receivingHero.bag_artifacts.CountArtifacts();
 
     double artifactValue = bag_artifacts.getArtifactValue() * 5.0;
     if ( artCount > canFit ) {
@@ -482,7 +482,7 @@ double Heroes::getMeetingValue( const Heroes & recievingHero ) const
     }
 
     // TODO: leaving only one monster in an army is very risky. Add logic to find out which part of the army would be useful to get.
-    return recievingHero.army.getReinforcementValue( army ) + artifactValue * SKILL_VALUE;
+    return receivingHero.army.getReinforcementValue( army ) + artifactValue * SKILL_VALUE;
 }
 
 int Heroes::GetAttack() const
@@ -1394,7 +1394,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
     Skill::Secondary sec1;
     Skill::Secondary sec2;
 
-    secondary_skills.FindSkillsForLevelUp( _race, seeds.seedSecondaySkill1, seeds.seedSecondaySkill2, sec1, sec2 );
+    secondary_skills.FindSkillsForLevelUp( _race, seeds.seedSecondarySkill1, seeds.seedSecondarySkill2, sec1, sec2 );
 
     if ( sec1.isValid() && sec2.isValid() ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) << " or " << Skill::Secondary::String( sec2.Skill() ) )
@@ -1410,7 +1410,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
 
     if ( autoselect ) {
         if ( sec1.isValid() && sec2.isValid() ) {
-            selected = Rand::GetWithSeed( 0, 1, seeds.seedSecondaySkillRandomChoose ) ? sec1 : sec2;
+            selected = Rand::GetWithSeed( 0, 1, seeds.seedSecondarySkillRandomChoose ) ? sec1 : sec2;
         }
         else {
             selected = sec1.isValid() ? sec1 : sec2;
@@ -1952,13 +1952,13 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
 
     HeroSeedsForLevelUp seeds;
     seeds.seedPrimarySkill = hash;
-    seeds.seedSecondaySkill1 = hash + 1;
-    seeds.seedSecondaySkill2 = hash + 2;
-    seeds.seedSecondaySkillRandomChoose = hash + 3;
+    seeds.seedSecondarySkill1 = hash + 1;
+    seeds.seedSecondarySkill2 = hash + 2;
+    seeds.seedSecondarySkillRandomChoose = hash + 3;
     return seeds;
 }
 
-double Heroes::getAIMininumJoiningArmyStrength() const
+double Heroes::getAIMinimumJoiningArmyStrength() const
 {
     // Ideally we need to assert here that the hero is under AI control.
     // But in cases when we regain a temporary control from the AI then the hero becomes non-AI.

@@ -276,7 +276,7 @@ uint32_t WorldPathfinder::getMovementPenalty( int src, int dst, int direction ) 
     return penalty;
 }
 
-uint32_t WorldPathfinder::substractMovePoints( const uint32_t movePoints, const uint32_t substractedMovePoints ) const
+uint32_t WorldPathfinder::subtractMovePoints( const uint32_t movePoints, const uint32_t subtractedMovePoints ) const
 {
     // We do not perform pathfinding for a real hero on the map, this is no-op
     if ( _maxMovePoints == 0 ) {
@@ -285,14 +285,14 @@ uint32_t WorldPathfinder::substractMovePoints( const uint32_t movePoints, const 
 
     // This movement takes place at the beginning of a new turn: start with max movement points,
     // don't carry leftovers from the previous turn
-    if ( movePoints < substractedMovePoints ) {
-        assert( _maxMovePoints >= substractedMovePoints );
+    if ( movePoints < subtractedMovePoints ) {
+        assert( _maxMovePoints >= subtractedMovePoints );
 
-        return _maxMovePoints - substractedMovePoints;
+        return _maxMovePoints - subtractedMovePoints;
     }
 
     // This movement takes place on the same turn
-    return movePoints - substractedMovePoints;
+    return movePoints - subtractedMovePoints;
 }
 
 void WorldPathfinder::processWorldMap()
@@ -337,7 +337,7 @@ void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int
             newNode._from = currentNodeIdx;
             newNode._cost = movementCost;
             newNode._objectID = newTile.GetObject();
-            newNode._remainingMovePoints = substractMovePoints( currentNode._remainingMovePoints, movementPenalty );
+            newNode._remainingMovePoints = subtractMovePoints( currentNode._remainingMovePoints, movementPenalty );
 
             nodesToExplore.push_back( newIndex );
         }
@@ -439,7 +439,7 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
                 monsterNode._from = currentNodeIdx;
                 monsterNode._cost = movementCost;
                 monsterNode._objectID = monsterTile.GetObject();
-                monsterNode._remainingMovePoints = substractMovePoints( currentNode._remainingMovePoints, movementPenalty );
+                monsterNode._remainingMovePoints = subtractMovePoints( currentNode._remainingMovePoints, movementPenalty );
             }
         }
     }
@@ -902,16 +902,16 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
     const Kingdom & kingdom = world.GetKingdom( _currentColor );
     const Directions & directions = Direction::All();
 
-    std::set<int> uniqueIndicies;
-    auto validateAndAdd = [&kingdom, &result, &uniqueIndicies]( int index, const MP2::MapObjectType objectType ) {
+    std::set<int> uniqueIndices;
+    auto validateAndAdd = [&kingdom, &result, &uniqueIndices]( int index, const MP2::MapObjectType objectType ) {
         // std::set insert returns a pair, second value is true if it was unique
-        if ( uniqueIndicies.insert( index ).second && kingdom.isValidKingdomObject( world.GetTiles( index ), objectType ) ) {
+        if ( uniqueIndices.insert( index ).second && kingdom.isValidKingdomObject( world.GetTiles( index ), objectType ) ) {
             result.emplace_back( index, objectType );
         }
     };
 
     // skip the target itself to make sure we don't double count
-    uniqueIndicies.insert( targetIndex );
+    uniqueIndices.insert( targetIndex );
 
 #ifndef NDEBUG
     std::set<int> uniqPathIndexes;

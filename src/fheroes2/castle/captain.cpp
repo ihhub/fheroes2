@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -204,12 +204,12 @@ fheroes2::Sprite Captain::GetPortrait( const PortraitType type ) const
         if ( portraitIcnId < 0 )
             return fheroes2::Image();
 
-        fheroes2::Sprite portait = fheroes2::AGG::GetICN( portraitIcnId, 0 );
+        fheroes2::Sprite portrait = fheroes2::AGG::GetICN( portraitIcnId, 0 );
         const fheroes2::Image & flag = fheroes2::AGG::GetICN( ICN::GetFlagIcnId( GetColor() ), 0 );
 
         const fheroes2::Point & offset = GetFlagOffset( GetRace() );
-        fheroes2::Blit( flag, portait, offset.x, offset.y );
-        return portait;
+        fheroes2::Blit( flag, portrait, offset.x, offset.y );
+        return portrait;
     }
     case PORT_MEDIUM:
     case PORT_SMALL:

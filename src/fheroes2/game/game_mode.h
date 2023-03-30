@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,7 +40,7 @@ namespace fheroes2
         NEW_HOT_SEAT,
         NEW_BATTLE_ONLY,
         LOAD_STANDARD,
-        LOAD_CAMPAIN,
+        LOAD_CAMPAIGN,
         LOAD_MULTI,
         LOAD_HOT_SEAT,
         SCENARIO_INFO,

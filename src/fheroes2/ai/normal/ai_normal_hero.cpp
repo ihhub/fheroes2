@@ -599,7 +599,7 @@ namespace
             , _pathfinder( pathfinder )
             , _ai( ai )
             , _heroArmyStrength( hero.GetArmy().GetStrength() )
-            , _armyStrengthThreshold( hero.getAIMininumJoiningArmyStrength() )
+            , _armyStrengthThreshold( hero.getAIMinimumJoiningArmyStrength() )
         {
             // Do nothing.
         }

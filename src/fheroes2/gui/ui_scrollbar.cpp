@@ -156,7 +156,7 @@ namespace fheroes2
         }
     }
 
-    Image generateScrollbarSlider( const Image & originalSlider, const bool horizonalSlider, const int32_t sliderAreaLength, const int32_t elementCountPerView,
+    Image generateScrollbarSlider( const Image & originalSlider, const bool horizontalSlider, const int32_t sliderAreaLength, const int32_t elementCountPerView,
                                    const int32_t totalElementCount, const Rect & startSliderArea, const Rect & middleSliderArea )
     {
         if ( originalSlider.empty() ) {
@@ -167,7 +167,7 @@ namespace fheroes2
 
         assert( sliderAreaLength > 0 && elementCountPerView > 0 );
 
-        if ( horizonalSlider ) {
+        if ( horizontalSlider ) {
             if ( middleSliderArea.width < 1 ) {
                 // Middle area cannot be empty!
                 assert( 0 );
@@ -194,19 +194,19 @@ namespace fheroes2
             }
         }
 
-        const int32_t currentSliderLength = horizonalSlider ? originalSlider.width() : originalSlider.height();
+        const int32_t currentSliderLength = horizontalSlider ? originalSlider.width() : originalSlider.height();
 
         if ( sliderAreaLength * elementCountPerView < currentSliderLength * totalElementCount ) {
             // Slider is too big.
             return originalSlider;
         }
 
-        const int32_t step = horizonalSlider ? middleSliderArea.width : middleSliderArea.height;
+        const int32_t step = horizontalSlider ? middleSliderArea.width : middleSliderArea.height;
         const int32_t middleLength = ( sliderAreaLength * elementCountPerView / std::max( elementCountPerView, totalElementCount ) ) - currentSliderLength;
 
         int32_t width = originalSlider.width();
         int32_t height = originalSlider.height();
-        if ( horizonalSlider ) {
+        if ( horizontalSlider ) {
             width += middleLength;
         }
         else {
@@ -219,7 +219,7 @@ namespace fheroes2
         Copy( originalSlider, startSliderArea.x, startSliderArea.y, output, startSliderArea.x, startSliderArea.y, startSliderArea.width, startSliderArea.height );
 
         int32_t offset = 0;
-        if ( horizonalSlider ) {
+        if ( horizontalSlider ) {
             offset = startSliderArea.x + startSliderArea.width;
         }
         else {
@@ -228,7 +228,7 @@ namespace fheroes2
 
         const int32_t middleChunkCount = middleLength / step;
         for ( int32_t i = 0; i < middleChunkCount; ++i ) {
-            if ( horizonalSlider ) {
+            if ( horizontalSlider ) {
                 Copy( originalSlider, middleSliderArea.x, middleSliderArea.y, output, offset, startSliderArea.y, middleSliderArea.width, middleSliderArea.height );
 
                 offset += middleSliderArea.width;
@@ -243,7 +243,7 @@ namespace fheroes2
         // Draw leftovers.
         const int32_t leftover = middleLength - middleChunkCount * step;
         if ( leftover > 0 ) {
-            if ( horizonalSlider ) {
+            if ( horizontalSlider ) {
                 Copy( originalSlider, middleSliderArea.x, middleSliderArea.y, output, offset, startSliderArea.y, leftover, middleSliderArea.height );
 
                 offset += leftover;
@@ -255,7 +255,7 @@ namespace fheroes2
             }
         }
 
-        if ( horizonalSlider ) {
+        if ( horizontalSlider ) {
             Copy( originalSlider, startSliderArea.x + startSliderArea.width, startSliderArea.y, output, offset, startSliderArea.y,
                   originalSlider.width() - startSliderArea.width, startSliderArea.height );
         }

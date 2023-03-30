@@ -70,9 +70,9 @@ namespace fheroes2
 struct HeroSeedsForLevelUp
 {
     uint32_t seedPrimarySkill = 0;
-    uint32_t seedSecondaySkill1 = 0;
-    uint32_t seedSecondaySkill2 = 0;
-    uint32_t seedSecondaySkillRandomChoose = 0;
+    uint32_t seedSecondarySkill1 = 0;
+    uint32_t seedSecondarySkill2 = 0;
+    uint32_t seedSecondarySkillRandomChoose = 0;
 };
 
 class Heroes final : public HeroBase, public ColorBase
@@ -559,7 +559,7 @@ public:
         return static_cast<uint8_t>( _alphaValue );
     }
 
-    double getAIMininumJoiningArmyStrength() const;
+    double getAIMinimumJoiningArmyStrength() const;
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
