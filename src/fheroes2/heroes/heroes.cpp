@@ -271,34 +271,34 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     //     Does the hero have custom army set by map creator?
     //
     // - uint8_t (1 byte)
-    //    Custom defender monster type in army slot 1.
+    //    Custom monster type in army slot 1.
     //
     // - uint8_t (1 byte)
-    //    Custom defender monster type in army slot 2.
+    //    Custom monster type in army slot 2.
     //
     // - uint8_t (1 byte)
-    //    Custom defender monster type in army slot 3.
+    //    Custom monster type in army slot 3.
     //
     // - uint8_t (1 byte)
-    //    Custom defender monster type in army slot 4.
+    //    Custom monster type in army slot 4.
     //
     // - uint8_t (1 byte)
-    //    Custom defender monster type in army slot 5.
+    //    Custom monster type in army slot 5.
     //
     // - uint16_t (2 bytes)
-    //    The number of custom defender monsters in army slot 1.
+    //    The number of custom monsters in army slot 1.
     //
     // - uint16_t (2 bytes)
-    //    The number of custom defender monsters in army slot 2.
+    //    The number of custom monsters in army slot 2.
     //
     // - uint16_t (2 bytes)
-    //    The number of custom defender monsters in army slot 3.
+    //    The number of custom monsters in army slot 3.
     //
     // - uint16_t (2 bytes)
-    //    The number of custom defender monsters in army slot 4.
+    //    The number of custom monsters in army slot 4.
     //
     // - uint16_t (2 bytes)
-    //    The number of custom defender monsters in army slot 5.
+    //    The number of custom monsters in army slot 5.
     //
     // - uint8_t (1 byte)
     //     Does the hero have a custom portrait?
