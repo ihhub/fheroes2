@@ -186,7 +186,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     }
 
     // Skip MP2 tile structures for now and read addons.
-    fs.skip( worldSize * MP2::MP2_TILE_STRUCTURE_SIZE );
+    fs.skip( static_cast<size_t>( worldSize * MP2::MP2_TILE_STRUCTURE_SIZE ) );
 
     // It is a valid case that a map has no add-ons.
     const uint32_t addonCount = fs.getLE32();
@@ -532,7 +532,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                         break;
                     }
 
-                    Heroes * hero = GetFreemanHeroes( raceId );
+                    Heroes * hero = GetFreemanHeroes( raceType );
 
                     if ( hero ) {
                         hero->LoadFromMP2( findobject, Color::NONE, hero->GetRace(), pblock );

@@ -48,7 +48,6 @@
 
 class Castle;
 class StreamBase;
-class StreamBuf;
 
 namespace Battle
 {
