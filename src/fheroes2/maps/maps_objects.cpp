@@ -130,7 +130,7 @@ MapSphinx::MapSphinx()
 
 void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data )
 {
-    assert( data.size() >= MP2::SIZEOFMP2RIDDLE );
+    assert( data.size() >= MP2::MP2_RIDDLE_STRUCTURE_MIN_SIZE );
 
     // Structure containing information about a Sphinx object.
     //
@@ -226,7 +226,7 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
 
     message = dataStream.toString();
     if ( message.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Sphinx question is empty. Marking it as an invalid object." )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Sphinx at tile index " << tileIndex << " does not have questions. Marking it as visited." )
         return;
     }
 
