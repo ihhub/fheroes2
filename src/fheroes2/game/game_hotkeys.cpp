@@ -143,8 +143,7 @@ namespace
             = { HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|load game" ), fheroes2::Key::KEY_L };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_HIGHSCORES )]
             = { HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|highscores" ), fheroes2::Key::KEY_H };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_CREDITS )]
-            = { HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|credits" ), fheroes2::Key::KEY_C };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_CREDITS )] = { HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|credits" ), fheroes2::Key::KEY_C };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_STANDARD )]
             = { HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|standard game" ), fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_CAMPAIGN )]
@@ -215,20 +214,16 @@ namespace
             = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|world map down left" ), fheroes2::Key::KEY_KP_1 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_DOWN_RIGHT )]
             = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|world map down right" ), fheroes2::Key::KEY_KP_3 };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SAVE_GAME )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|save game" ), fheroes2::Key::KEY_S };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_NEXT_HERO )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|next hero" ), fheroes2::Key::KEY_H };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SAVE_GAME )] = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|save game" ), fheroes2::Key::KEY_S };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_NEXT_HERO )] = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|next hero" ), fheroes2::Key::KEY_H };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_CONTINUE_HERO_MOVEMENT )]
             = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|continue hero movement" ), fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_CAST_SPELL )]
             = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|cast adventure spell" ), fheroes2::Key::KEY_C };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SLEEP_HERO )]
             = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|put hero to sleep" ), fheroes2::Key::KEY_Z };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_NEXT_TOWN )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|next town" ), fheroes2::Key::KEY_T };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_END_TURN )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|end turn" ), fheroes2::Key::KEY_E };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_NEXT_TOWN )] = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|next town" ), fheroes2::Key::KEY_T };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_END_TURN )] = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|end turn" ), fheroes2::Key::KEY_E };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_FILE_OPTIONS )]
             = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|file options" ), fheroes2::Key::KEY_F };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_ADVENTURE_OPTIONS )]
@@ -316,8 +311,7 @@ namespace
             = { HotKeyCategory::ARMY, gettext_noop( "hotkey|split stack by half" ), fheroes2::Key::KEY_SHIFT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_ONE )]
             = { HotKeyCategory::ARMY, gettext_noop( "hotkey|split stack by one" ), fheroes2::Key::KEY_CONTROL };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_JOIN_STACKS )]
-            = { HotKeyCategory::ARMY, gettext_noop( "hotkey|join stacks" ), fheroes2::Key::KEY_ALT };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_JOIN_STACKS )] = { HotKeyCategory::ARMY, gettext_noop( "hotkey|join stacks" ), fheroes2::Key::KEY_ALT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_UPGRADE_TROOP )]
             = { HotKeyCategory::ARMY, gettext_noop( "hotkey|upgrade troop" ), fheroes2::Key::KEY_U };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_DISMISS_TROOP )]
