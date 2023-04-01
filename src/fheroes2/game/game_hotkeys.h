@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -169,7 +169,7 @@ namespace Game
 
     std::string getHotKeyNameByEventId( const HotKeyEvent eventID );
 
-    std::string getHotKeyEventNameByEventId( const HotKeyEvent eventID );
+    const char * getHotKeyEventNameByEventId( const HotKeyEvent eventID );
 
     std::vector<Game::HotKeyEvent> getAllHotKeyEvents();
 

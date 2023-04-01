@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -222,7 +222,7 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
                                         ? _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." )
                                         : _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" );
 
-        const TextBox displayMesssage( message, Font::BIG, dst_rt );
+        const TextBox displayMessage( message, Font::BIG, dst_rt );
 
         if ( !_singlePlayer ) {
             buttonGift.enable();

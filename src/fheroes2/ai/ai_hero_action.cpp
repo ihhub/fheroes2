@@ -208,7 +208,7 @@ namespace
             return true;
         }
 
-        if ( troop.GetStrength() < hero.getAIMininumJoiningArmyStrength() ) {
+        if ( troop.GetStrength() < hero.getAIMinimumJoiningArmyStrength() ) {
             // No use to hire such a weak troop.
             return false;
         }

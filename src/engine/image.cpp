@@ -1783,7 +1783,7 @@ namespace fheroes2
         }
     }
 
-    void FillTransform( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t tranformId )
+    void FillTransform( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t transformId )
     {
         if ( !Verify( image, x, y, width, height ) )
             return;
@@ -1796,7 +1796,7 @@ namespace fheroes2
 
         for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
             std::fill( imageY, imageY + width, static_cast<uint8_t>( 0 ) );
-            std::fill( transformY, transformY + width, tranformId );
+            std::fill( transformY, transformY + width, transformId );
         }
     }
 

@@ -29,15 +29,23 @@ namespace MP2
 {
     enum MP2Info
     {
-        MP2OFFSETDATA = 428,
-        SIZEOFMP2TILE = 20,
-        SIZEOFMP2ADDON = 15,
-        SIZEOFMP2CASTLE = 70, // Refer to Castle::LoadFromMP2() method for more information.
-        SIZEOFMP2HEROES = 76,
-        SIZEOFMP2SIGN = 10,
-        SIZEOFMP2RUMOR = 9,
-        SIZEOFMP2EVENT = 50,
-        SIZEOFMP2RIDDLE = 137
+        MP2_MAP_INFO_SIZE = 428,
+        MP2_ADDON_COUNT_SIZE = 4,
+
+        MP2_ADDON_STRUCTURE_SIZE = 15,
+        MP2_CASTLE_STRUCTURE_SIZE = 70,
+        MP2_EVENT_STRUCTURE_MIN_SIZE = 50,
+        MP2_HEROES_STRUCTURE_SIZE = 76,
+        MP2_RIDDLE_STRUCTURE_MIN_SIZE = 137,
+        MP2_RUMOR_STRUCTURE_MIN_SIZE = 9,
+        MP2_SIGN_STRUCTURE_MIN_SIZE = 10,
+        MP2_TILE_STRUCTURE_SIZE = 20,
+
+        MP2_CASTLE_COUNT = 72,
+        MP2_CASTLE_POSITION_SIZE = 3,
+
+        MP2_CAPTURE_OBJECT_COUNT = 144,
+        MP2_CAPTURE_OBJECT_POSITION_SIZE = 3
     };
 
     // Tile structure from the original map format.
@@ -103,54 +111,6 @@ namespace MP2
         // UID is used to find all pieces/addons which belong to the same object.
         // In Editor first object will have UID as 0. Then second object placed on the map will have UID 0 + number of pieces / tiles per previous object and etc.
         uint32_t level2ObjectUID;
-    };
-
-    // origin mp2 heroes
-    // 0x004c - size
-    struct mp2heroes_t
-    {
-        uint8_t unknown;
-        bool customTroops;
-        uint8_t monster1; // 0xff none
-        uint8_t monster2; // 0xff none
-        uint8_t monster3; // 0xff none
-        uint8_t monster4; // 0xff none
-        uint8_t monster5; // 0xff none
-        uint16_t countMonter1;
-        uint16_t countMonter2;
-        uint16_t countMonter3;
-        uint16_t countMonter4;
-        uint16_t countMonter5;
-        uint8_t customPortrate;
-        uint8_t portrate;
-        uint8_t artifact1; // 0xff none
-        uint8_t artifact2; // 0xff none
-        uint8_t artifact3; // 0xff none
-        uint8_t unknown2; // 0
-        uint32_t exerience;
-        bool customSkill;
-        uint8_t skill1; // 0xff none
-        uint8_t skill2; // pathfinding, archery, logistic, scouting,
-        uint8_t skill3; // diplomacy, navigation, leadership, wisdom,
-        uint8_t skill4; // mysticism, luck, ballistics, eagle, necromance, estate
-        uint8_t skill5;
-        uint8_t skill6;
-        uint8_t skill7;
-        uint8_t skill8;
-        uint8_t skillLevel1;
-        uint8_t skillLevel2;
-        uint8_t skillLevel3;
-        uint8_t skillLevel4;
-        uint8_t skillLevel5;
-        uint8_t skillLevel6;
-        uint8_t skillLevel7;
-        uint8_t skillLevel8;
-        uint8_t unknown3; // 0
-        uint8_t customName;
-        char name[13]; // name + '\0'
-        bool patrol;
-        uint8_t countSquare; // for patrol
-        uint8_t unknown4[15]; // 0
     };
 
     // origin mp2 sign or bottle

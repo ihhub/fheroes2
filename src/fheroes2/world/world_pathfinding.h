@@ -91,7 +91,7 @@ protected:
     virtual uint32_t getMovementPenalty( int src, int dst, int direction ) const;
 
     // Subtracts movement points taking the transition between turns into account
-    uint32_t substractMovePoints( const uint32_t movePoints, const uint32_t substractedMovePoints ) const;
+    uint32_t subtractMovePoints( const uint32_t movePoints, const uint32_t subtractedMovePoints ) const;
 
     uint8_t _pathfindingSkill = Skill::Level::EXPERT;
     int _currentColor = Color::NONE;
@@ -133,7 +133,7 @@ public:
 
     void reEvaluateIfNeeded( const Heroes & hero );
     void reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill );
-    int getFogDiscoveryTile( const Heroes & hero );
+    int getFogDiscoveryTile( const Heroes & hero, bool & isTerritoryExpansion );
 
     // Used for cases when heroes are stuck because one hero might be blocking the way and we have to move him.
     int getNearestTileToMove( const Heroes & hero );
