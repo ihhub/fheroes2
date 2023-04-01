@@ -1387,11 +1387,11 @@ msgid ""
 "You must take control of the castle of Magic, where the fount of wizardry "
 "lies. Do this and your victory will be supreme."
 msgstr ""
-"Musíš ovládnout hrad Magic, ve které, se nachází pramen kouzel. Dokaž to a "
+"Musíš ovládnout hrad Magic, ve kterém se nachází pramen kouzel. Dokaž to a "
 "Tvé vítězství bude to nejslavnější ze všech."
 
 msgid "Blood is Thicker"
-msgstr "Pokrvné pouto"
+msgstr "Pokrevné pouto"
 
 msgid "King and Country"
 msgstr "Král a jeho země"
