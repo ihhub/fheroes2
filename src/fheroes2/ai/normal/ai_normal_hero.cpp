@@ -362,6 +362,8 @@ namespace
             }
 
             if ( pathfinder.getDistance( index ) > hero.GetMovePoints() && hero.getDailyRestoredSpellPoints() + hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
+                // The Well is located at a distance which cannot be reached by the hero at the current turn.
+                // But if the hero will restore all spell points by the next day there is no reason to even to visit the Well.
                 return false;
             }
 
@@ -1694,8 +1696,7 @@ namespace AI
             if ( fogDiscoveryTarget >= 0 && fogDiscoveryValue > maxPriority ) {
                 priorityTarget = fogDiscoveryTarget;
                 maxPriority = fogDiscoveryValue;
-                DEBUG_LOG( DBG_AI, DBG_INFO,
-                           hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (fog discovery)" )
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (fog discovery)" )
             }
             else {
                 DEBUG_LOG( DBG_AI, DBG_INFO,
