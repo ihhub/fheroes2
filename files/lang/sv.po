@@ -50,7 +50,7 @@ msgid "INFO"
 msgstr "INFO"
 
 msgid "QUIT"
-msgstr "AVSLUTA"
+msgstr "AVSLUT."
 
 msgid "CANCEL"
 msgstr "AVBRYT"
@@ -83,10 +83,10 @@ msgid "DISMISS"
 msgstr "SPARKA"
 
 msgid "UPGRADE"
-msgstr "UPPGRADERA"
+msgstr "UPPG."
 
 msgid "RESTART"
-msgstr "ÅTERSTARTA"
+msgstr "OMSTART"
 
 msgid "S"
 msgstr "S"
@@ -101,7 +101,7 @@ msgid "X-L"
 msgstr "XL"
 
 msgid "ALL"
-msgstr "ALLA"
+msgstr "ALL"
 
 msgid ""
 "STANDARD\n"
@@ -122,8 +122,7 @@ msgid ""
 "PLAYER\n"
 "GAME"
 msgstr ""
-"FLERSPELAR-\n"
-"SPEL"
+"MULTIPLAYSPEL"
 
 msgid "CONFIG"
 msgstr "ANPASSA"
