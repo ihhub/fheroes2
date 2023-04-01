@@ -276,7 +276,7 @@ uint32_t WorldPathfinder::getMovementPenalty( int src, int dst, int direction ) 
     return penalty;
 }
 
-uint32_t WorldPathfinder::substractMovePoints( const uint32_t movePoints, const uint32_t substractedMovePoints ) const
+uint32_t WorldPathfinder::subtractMovePoints( const uint32_t movePoints, const uint32_t subtractedMovePoints ) const
 {
     // We do not perform pathfinding for a real hero on the map, this is no-op
     if ( _maxMovePoints == 0 ) {
@@ -285,14 +285,14 @@ uint32_t WorldPathfinder::substractMovePoints( const uint32_t movePoints, const 
 
     // This movement takes place at the beginning of a new turn: start with max movement points,
     // don't carry leftovers from the previous turn
-    if ( movePoints < substractedMovePoints ) {
-        assert( _maxMovePoints >= substractedMovePoints );
+    if ( movePoints < subtractedMovePoints ) {
+        assert( _maxMovePoints >= subtractedMovePoints );
 
-        return _maxMovePoints - substractedMovePoints;
+        return _maxMovePoints - subtractedMovePoints;
     }
 
     // This movement takes place on the same turn
-    return movePoints - substractedMovePoints;
+    return movePoints - subtractedMovePoints;
 }
 
 void WorldPathfinder::processWorldMap()
@@ -337,7 +337,7 @@ void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int
             newNode._from = currentNodeIdx;
             newNode._cost = movementCost;
             newNode._objectID = newTile.GetObject();
-            newNode._remainingMovePoints = substractMovePoints( currentNode._remainingMovePoints, movementPenalty );
+            newNode._remainingMovePoints = subtractMovePoints( currentNode._remainingMovePoints, movementPenalty );
 
             nodesToExplore.push_back( newIndex );
         }
@@ -439,7 +439,7 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
                 monsterNode._from = currentNodeIdx;
                 monsterNode._cost = movementCost;
                 monsterNode._objectID = monsterTile.GetObject();
-                monsterNode._remainingMovePoints = substractMovePoints( currentNode._remainingMovePoints, movementPenalty );
+                monsterNode._remainingMovePoints = subtractMovePoints( currentNode._remainingMovePoints, movementPenalty );
             }
         }
     }
@@ -630,8 +630,10 @@ uint32_t AIWorldPathfinder::getMovementPenalty( int src, int dst, int direction 
     return defaultPenalty;
 }
 
-int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
+int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero, bool & isTerritoryExpansion )
 {
+    isTerritoryExpansion = false;
+
     // paths have to be pre-calculated to find a spot where we're able to move
     reEvaluateIfNeeded( hero );
 
@@ -646,16 +648,18 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
 
     nodesToExplore.push_back( start );
 
+    int bestIndex = -1;
+
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
 
-        if ( start != currentNodeIdx ) {
+        if ( bestIndex == -1 && start != currentNodeIdx ) {
             int32_t maxTilesToReveal = Maps::getFogTileCountToBeRevealed( currentNodeIdx, scoutingDistance, _currentColor );
             if ( maxTilesToReveal > 0 ) {
                 // Found a tile where we can reveal fog. Check for other tiles in the queue to find the one with the highest value.
-                int bestIndex = currentNodeIdx;
-                for ( ; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
-                    const int nodeIdx = nodesToExplore[lastProcessedNode];
+                bestIndex = currentNodeIdx;
+                for ( size_t i = lastProcessedNode + 1; i < nodesToExplore.size(); ++i ) {
+                    const int nodeIdx = nodesToExplore[i];
                     const int32_t tilesToReveal = Maps::getFogTileCountToBeRevealed( nodeIdx, scoutingDistance, _currentColor );
 
                     if ( std::make_tuple( maxTilesToReveal, _cache[nodeIdx]._cost ) < std::make_tuple( tilesToReveal, _cache[bestIndex]._cost ) ) {
@@ -663,8 +667,6 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                         bestIndex = nodeIdx;
                     }
                 }
-
-                return bestIndex;
             }
         }
 
@@ -690,6 +692,15 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                 continue;
             }
 
+            for ( const int32_t tileIndex : Maps::getAroundIndexes( newIndex ) ) {
+                if ( world.GetTiles( tileIndex ).isFog( _currentColor ) ) {
+                    // We found a tile which has a neighboring tile covered in fog.
+                    // Since the current tile is accessible for the hero, the tile covered by fog most likely is accessible too.
+                    isTerritoryExpansion = true;
+                    return newIndex;
+                }
+            }
+
             nodesToExplore.push_back( newIndex );
 
             // If there is a teleport on this tile, we should also consider the endpoints
@@ -711,12 +722,22 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                     continue;
                 }
 
+                for ( const int32_t tileIndex : Maps::getAroundIndexes( teleportIndex ) ) {
+                    if ( world.GetTiles( tileIndex ).isFog( _currentColor ) ) {
+                        // We found a tile which has a neighboring tile covered in fog.
+                        // Since the current tile is accessible for the hero, the tile covered by fog most likely is accessible too.
+                        isTerritoryExpansion = true;
+                        return teleportIndex;
+                    }
+                }
+
                 nodesToExplore.push_back( teleportIndex );
             }
         }
     }
 
-    return -1;
+    // If we reach here it means that no tiles covered by fog are really useful. Let's at least uncover something even if it's useless.
+    return bestIndex;
 }
 
 int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
@@ -902,16 +923,16 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
     const Kingdom & kingdom = world.GetKingdom( _currentColor );
     const Directions & directions = Direction::All();
 
-    std::set<int> uniqueIndicies;
-    auto validateAndAdd = [&kingdom, &result, &uniqueIndicies]( int index, const MP2::MapObjectType objectType ) {
+    std::set<int> uniqueIndices;
+    auto validateAndAdd = [&kingdom, &result, &uniqueIndices]( int index, const MP2::MapObjectType objectType ) {
         // std::set insert returns a pair, second value is true if it was unique
-        if ( uniqueIndicies.insert( index ).second && kingdom.isValidKingdomObject( world.GetTiles( index ), objectType ) ) {
+        if ( uniqueIndices.insert( index ).second && kingdom.isValidKingdomObject( world.GetTiles( index ), objectType ) ) {
             result.emplace_back( index, objectType );
         }
     };
 
     // skip the target itself to make sure we don't double count
-    uniqueIndicies.insert( targetIndex );
+    uniqueIndices.insert( targetIndex );
 
 #ifndef NDEBUG
     std::set<int> uniqPathIndexes;

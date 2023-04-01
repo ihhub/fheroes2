@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-21 03:14+0000\n"
+"POT-Creation-Date: 2023-03-30 11:54+0000\n"
 "PO-Revision-Date: 2022-12-18 08:40+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1233,7 +1233,7 @@ msgstr ""
 "fotfeste i denne regionen."
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 "Slå ned på all motstanden i dette området. Når du har klart det vil den "
@@ -2458,7 +2458,8 @@ msgstr ""
 "krigere. Hvis du besøker den kan du få en oversikt over alle de forskjellige "
 "krigerne i borgen i tillegg til at du kan verve dem derfra."
 
-msgid "The Statue increases your town's income by %{count} per day."
+#, fuzzy
+msgid "The Statue increases your town's income by %{count} gold per day."
 msgstr "Statuen øker den daglige inntekten til byen med %{count} gullstykker."
 
 msgid "The Left Turret provides extra firepower during castle combat."
@@ -4555,6 +4556,10 @@ msgstr ""
 msgid "Slovak"
 msgstr ""
 
+#, fuzzy
+msgid "Vietnamese"
+msgstr "Vis %{name}"
+
 msgid ", FPS: "
 msgstr ", FPS: "
 
@@ -5450,9 +5455,6 @@ msgstr ""
 "Du tar kontroll over et sagbruk. Det vil gi deg %{count} enheter ved hver "
 "dag."
 
-msgid "You beat the Ghosts and are able to restore the mine to production."
-msgstr "Du fordriver gjenferdene og får satt gruva tilbake i drift."
-
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
@@ -5504,6 +5506,9 @@ msgid ""
 msgstr ""
 "Du kommer over ei forlatt gullgruve. Gruva ser ut til å være hjemsøkt.\n"
 "Vil du gå inn?"
+
+msgid "You beat the Ghosts and are able to restore the mine to production."
+msgstr "Du fordriver gjenferdene og får satt gruva tilbake i drift."
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -6613,9 +6618,10 @@ msgstr "%{skill} lar helten din lære seg trolldommer av fjerde nivå."
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "%{skill} lar helten din lære seg trolldommer av femte nivå."
 
-msgid "%{skill} regenerates one of your hero's spell points per day."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
-"%{skill} regenerates %{count} of your hero's spell points per day."
+"%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] "%{skill} fyller opp én mana for helten din hver dag."
 msgstr[1] "%{skill} fyller opp %{count} mana for helten din hver dag."
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-21 03:14+0000\n"
+"POT-Creation-Date: 2023-03-30 11:54+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -1231,7 +1231,7 @@ msgstr ""
 "installations pour opérer dans cette région."
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 "Éliminez tous les opposants dans cette zone. Ensuite, la première pièce de "
@@ -2434,7 +2434,8 @@ msgstr ""
 "Le puits augmente le taux de croissance de population de %{count} créatures "
 "par semaine dans chaque demeure."
 
-msgid "The Statue increases your town's income by %{count} per day."
+#, fuzzy
+msgid "The Statue increases your town's income by %{count} gold per day."
 msgstr "La statue génère des revenus de %{count} pièces d'or par jour."
 
 msgid "The Left Turret provides extra firepower during castle combat."
@@ -4555,6 +4556,10 @@ msgstr "Danois"
 msgid "Slovak"
 msgstr ""
 
+#, fuzzy
+msgid "Vietnamese"
+msgstr "Voir %{name}"
+
 msgid ", FPS: "
 msgstr ", FPS : "
 
@@ -5458,10 +5463,6 @@ msgstr ""
 "Vous prenez le contrôle d'une scierie. Elle vous fournira %{count} bûches de "
 "bois par jour."
 
-msgid "You beat the Ghosts and are able to restore the mine to production."
-msgstr ""
-"Vous battez les fantômes et êtes capable de remettre la mine en production."
-
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
@@ -5513,6 +5514,10 @@ msgid ""
 msgstr ""
 "Vous tombez sur une mine d'or abandonnée. La mine semble hantée. Souhaitez-"
 "vous entrer ?"
+
+msgid "You beat the Ghosts and are able to restore the mine to production."
+msgstr ""
+"Vous battez les fantômes et êtes capable de remettre la mine en production."
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -6645,9 +6650,10 @@ msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr ""
 "%{skill} permet à votre héros d'apprendre des sorts de cinquième niveau."
 
-msgid "%{skill} regenerates one of your hero's spell points per day."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
-"%{skill} regenerates %{count} of your hero's spell points per day."
+"%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] "%{skill} régénère un point de sort de votre héros par jour."
 msgstr[1] "%{skill} régénère %{count} points de sort de votre héros par jour."
 

@@ -204,7 +204,7 @@ namespace
         }
     }
 
-    void replaceTranformPixel( fheroes2::Image & image, const int32_t position, const uint8_t value )
+    void replaceTransformPixel( fheroes2::Image & image, const int32_t position, const uint8_t value )
     {
         if ( ( position < ( image.width() * image.height() ) ) && ( image.transform()[position] != 0 ) ) {
             image.transform()[position] = 0;
@@ -2404,11 +2404,11 @@ namespace fheroes2
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 640 && original.height() == 256 ) {
-                        replaceTranformPixel( original, 51945, 17 );
-                        replaceTranformPixel( original, 61828, 25 );
-                        replaceTranformPixel( original, 64918, 164 );
-                        replaceTranformPixel( original, 77685, 18 );
-                        replaceTranformPixel( original, 84618, 19 );
+                        replaceTransformPixel( original, 51945, 17 );
+                        replaceTransformPixel( original, 61828, 25 );
+                        replaceTransformPixel( original, 64918, 164 );
+                        replaceTransformPixel( original, 77685, 18 );
+                        replaceTransformPixel( original, 84618, 19 );
                     }
                 }
                 return true;
@@ -2418,7 +2418,7 @@ namespace fheroes2
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 101 && original.height() == 93 ) {
-                        replaceTranformPixel( original, 9084, 77 );
+                        replaceTransformPixel( original, 9084, 77 );
                     }
                 }
                 return true;
@@ -2428,10 +2428,10 @@ namespace fheroes2
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 101 && original.height() == 93 ) {
-                        replaceTranformPixel( original, 2314, 70 );
-                        replaceTranformPixel( original, 5160, 71 );
-                        replaceTranformPixel( original, 5827, 18 );
-                        replaceTranformPixel( original, 7474, 167 );
+                        replaceTransformPixel( original, 2314, 70 );
+                        replaceTransformPixel( original, 5160, 71 );
+                        replaceTransformPixel( original, 5827, 18 );
+                        replaceTransformPixel( original, 7474, 167 );
                     }
                 }
                 return true;
@@ -2441,23 +2441,23 @@ namespace fheroes2
                     // Statue image has bad pixels.
                     Sprite & original = _icnVsSprite[id][7];
                     if ( original.width() == 135 && original.height() == 57 ) {
-                        replaceTranformPixel( original, 3687, 50 );
-                        replaceTranformPixel( original, 5159, 108 );
-                        replaceTranformPixel( original, 5294, 108 );
+                        replaceTransformPixel( original, 3687, 50 );
+                        replaceTransformPixel( original, 5159, 108 );
+                        replaceTransformPixel( original, 5294, 108 );
                     }
                 }
                 if ( _icnVsSprite[id].size() >= 24 ) {
                     // Mage tower image has a bad pixel.
                     Sprite & original = _icnVsSprite[id][23];
                     if ( original.width() == 135 && original.height() == 57 ) {
-                        replaceTranformPixel( original, 4333, 23 );
+                        replaceTransformPixel( original, 4333, 23 );
                     }
                 }
                 if ( _icnVsSprite[id].size() >= 29 ) {
                     // Mage tower image has a bad pixel.
                     Sprite & original = _icnVsSprite[id][28];
                     if ( original.width() == 135 && original.height() == 57 ) {
-                        replaceTranformPixel( original, 4333, 23 );
+                        replaceTransformPixel( original, 4333, 23 );
                     }
                 }
                 return true;
@@ -2467,7 +2467,7 @@ namespace fheroes2
                 if ( _icnVsSprite[id].size() >= 2 ) {
                     Sprite & original = _icnVsSprite[id][1];
                     if ( original.width() == 84 && original.height() == 81 ) {
-                        replaceTranformPixel( original, 4934, 18 );
+                        replaceTransformPixel( original, 4934, 18 );
                     }
                 }
                 return true;
@@ -2477,10 +2477,10 @@ namespace fheroes2
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 84 && original.height() == 81 ) {
-                        replaceTranformPixel( original, 1692, 26 );
-                        replaceTranformPixel( original, 2363, 32 );
-                        replaceTranformPixel( original, 2606, 21 );
-                        replaceTranformPixel( original, 2608, 21 );
+                        replaceTransformPixel( original, 1692, 26 );
+                        replaceTransformPixel( original, 2363, 32 );
+                        replaceTransformPixel( original, 2606, 21 );
+                        replaceTransformPixel( original, 2608, 21 );
                     }
                 }
                 return true;
@@ -2490,31 +2490,31 @@ namespace fheroes2
                     // Rainbow has bad pixels.
                     Sprite & original = _icnVsSprite[id][13];
                     if ( original.width() == 135 && original.height() == 57 ) {
-                        replaceTranformPixel( original, 2047, 160 );
-                        replaceTranformPixel( original, 2052, 159 );
-                        replaceTranformPixel( original, 2055, 160 );
-                        replaceTranformPixel( original, 2060, 67 );
-                        replaceTranformPixel( original, 2063, 159 );
-                        replaceTranformPixel( original, 2067, 67 );
-                        replaceTranformPixel( original, 2184, 67 );
-                        replaceTranformPixel( original, 2192, 158 );
-                        replaceTranformPixel( original, 3508, 67 );
-                        replaceTranformPixel( original, 3641, 67 );
-                        replaceTranformPixel( original, 3773, 69 );
-                        replaceTranformPixel( original, 3910, 67 );
-                        replaceTranformPixel( original, 4039, 69 );
-                        replaceTranformPixel( original, 4041, 67 );
-                        replaceTranformPixel( original, 4172, 67 );
-                        replaceTranformPixel( original, 4578, 69 );
+                        replaceTransformPixel( original, 2047, 160 );
+                        replaceTransformPixel( original, 2052, 159 );
+                        replaceTransformPixel( original, 2055, 160 );
+                        replaceTransformPixel( original, 2060, 67 );
+                        replaceTransformPixel( original, 2063, 159 );
+                        replaceTransformPixel( original, 2067, 67 );
+                        replaceTransformPixel( original, 2184, 67 );
+                        replaceTransformPixel( original, 2192, 158 );
+                        replaceTransformPixel( original, 3508, 67 );
+                        replaceTransformPixel( original, 3641, 67 );
+                        replaceTransformPixel( original, 3773, 69 );
+                        replaceTransformPixel( original, 3910, 67 );
+                        replaceTransformPixel( original, 4039, 69 );
+                        replaceTransformPixel( original, 4041, 67 );
+                        replaceTransformPixel( original, 4172, 67 );
+                        replaceTransformPixel( original, 4578, 69 );
                     }
                 }
                 if ( _icnVsSprite[id].size() >= 25 ) {
                     // Red tower has bad pixels.
                     Sprite & original = _icnVsSprite[id][24];
                     if ( original.width() == 135 && original.height() == 57 ) {
-                        replaceTranformPixel( original, 2830, 165 );
-                        replaceTranformPixel( original, 3101, 165 );
-                        replaceTranformPixel( original, 3221, 69 );
+                        replaceTransformPixel( original, 2830, 165 );
+                        replaceTransformPixel( original, 3101, 165 );
+                        replaceTransformPixel( original, 3221, 69 );
                     }
                 }
                 return true;

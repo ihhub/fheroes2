@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-21 03:14+0000\n"
+"POT-Creation-Date: 2023-03-30 11:54+0000\n"
 "PO-Revision-Date: 2023-03-18 14:09+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -1227,7 +1227,7 @@ msgstr ""
 "обосноваться в этом регионе."
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 "Сокрушите всех врагов в этой области. Тогда первая часть артефакта будет "
@@ -2408,7 +2408,8 @@ msgid ""
 "per week."
 msgstr "Колодец увеличивает прирост всех существ в замке на %{count} в неделю."
 
-msgid "The Statue increases your town's income by %{count} per day."
+#, fuzzy
+msgid "The Statue increases your town's income by %{count} gold per day."
 msgstr "Статуя приносит в казну %{count} золотых ежедневно."
 
 msgid "The Left Turret provides extra firepower during castle combat."
@@ -4483,6 +4484,10 @@ msgstr "Датский"
 msgid "Slovak"
 msgstr ""
 
+#, fuzzy
+msgid "Vietnamese"
+msgstr "Просмотреть %{name}"
+
 msgid ", FPS: "
 msgstr ", FPS: "
 
@@ -5344,9 +5349,6 @@ msgstr ""
 "Вы стали хозяином лесопилки. Она будет приносить Вам по %{count} меры "
 "древесины в день."
 
-msgid "You beat the Ghosts and are able to restore the mine to production."
-msgstr "Вы выгнали призраков из шахты и восстановили её работу."
-
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
@@ -5398,6 +5400,9 @@ msgid ""
 msgstr ""
 "Вы подошли к заброшенной шахте. Возможно в ней живут Привидения. Хотите "
 "войти и проверить это?"
+
+msgid "You beat the Ghosts and are able to restore the mine to production."
+msgstr "Вы выгнали призраков из шахты и восстановили её работу."
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -6484,9 +6489,10 @@ msgstr "%{skill} позволяет изучать заклинания 4-го �
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "%{skill} позволяет изучать все возможные заклинания."
 
-msgid "%{skill} regenerates one of your hero's spell points per day."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
-"%{skill} regenerates %{count} of your hero's spell points per day."
+"%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] "Восстанавливает %{count} пункт магии героя в день."
 msgstr[1] "Восстанавливает %{count} пункта магии героя в день."
 msgstr[2] "Восстанавливает %{count} пунктов магии героя в день."

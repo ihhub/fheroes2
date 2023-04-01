@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-21 03:14+0000\n"
+"POT-Creation-Date: 2023-03-30 11:54+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -1190,7 +1190,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 
@@ -2407,7 +2407,8 @@ msgstr ""
 "El Pozo incrementa el ritmo de crecimiento de todas las moradas en %{count} "
 "criaturas por semana."
 
-msgid "The Statue increases your town's income by %{count} per day."
+#, fuzzy
+msgid "The Statue increases your town's income by %{count} gold per day."
 msgstr ""
 "La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
@@ -4549,6 +4550,10 @@ msgstr "Español"
 msgid "Slovak"
 msgstr ""
 
+#, fuzzy
+msgid "Vietnamese"
+msgstr "Ver %{name}"
+
 msgid ", FPS: "
 msgstr ""
 
@@ -5432,11 +5437,6 @@ msgstr ""
 "Has tomado el control de un aserradero. Te proveerá con %{count} unidades de "
 "madera al día."
 
-msgid "You beat the Ghosts and are able to restore the mine to production."
-msgstr ""
-"Derrotas a los Fantasmas y eres capaz de restablecer la producción de la "
-"mina."
-
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
@@ -5488,6 +5488,11 @@ msgid ""
 msgstr ""
 "Llegas a una mina de oro abandonada. La mina parece estar embrujada. "
 "¿Quieres entrar en ella?"
+
+msgid "You beat the Ghosts and are able to restore the mine to production."
+msgstr ""
+"Derrotas a los Fantasmas y eres capaz de restablecer la producción de la "
+"mina."
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -6576,11 +6581,16 @@ msgstr "%{skill} permite a tu héroe aprender hechizos de cuarto nivel."
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "%{skill} permite a tu héroe aprender hechizos de quinto nivel."
 
-msgid "%{skill} regenerates one of your hero's spell points per day."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
-"%{skill} regenerates %{count} of your hero's spell points per day."
+"%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] ""
+"Has tomado el control de una mina de cristal. Te proveerá con %{count} "
+"unidades de cristal al día."
 msgstr[1] ""
+"Has tomado el control de una mina de cristal. Te proveerá con %{count} "
+"unidades de cristal al día."
 
 #, fuzzy
 msgid "%{skill} increases your hero's luck by %{count}."

@@ -130,11 +130,11 @@ the modules find the appropriate libraries:
   Set headers path. (Override)
 - `SDL2_LIBRARY` and `SDL2_<COMPONENT>_LIBRARY`:<br>
   Set the library (.dll, .so, .a, etc) path. (Override)
-- `SDL2MAIN_LIBRAY`:<br>
+- `SDL2MAIN_LIBRARY`:<br>
   Set the `SDL2main` library (.a) path. (Override)
 
 These variables could be used in case of Windows projects, and when the
-libraries are not localized in a standard pathes. They can be specified when
+libraries are not localized in a standard paths. They can be specified when
 executing the `cmake` command or when using the [CMake GUI][] (They are marked
 as advanced).
 

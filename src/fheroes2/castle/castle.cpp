@@ -116,7 +116,7 @@ Castle::Castle( int32_t cx, int32_t cy, int rc )
 
 void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
 {
-    assert( data.size() == MP2::SIZEOFMP2CASTLE );
+    assert( data.size() == MP2::MP2_CASTLE_STRUCTURE_SIZE );
 
     // Structure containing information about town or castle.
     //
@@ -2443,8 +2443,8 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
 
     // Add castle bonuses if there are any troops defending the castle
     if ( isCastle() && totalStrength > 1 ) {
-        const Battle::Tower tower( *this, Battle::TWR_CENTER, Rand::DeterministicRandomGenerator( 0 ), 0 );
-        const double towerStr = tower.GetStrengthWithBonus( tower.GetBonus(), 0 );
+        const Battle::Tower tower( *this, Battle::TowerType::TWR_CENTER, Rand::DeterministicRandomGenerator( 0 ), 0 );
+        const double towerStr = tower.GetStrengthWithBonus( tower.GetAttackBonus(), 0 );
 
         totalStrength += towerStr;
         if ( isBuild( BUILD_LEFTTURRET ) ) {

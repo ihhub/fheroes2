@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-21 03:14+0000\n"
+"POT-Creation-Date: 2023-03-30 11:54+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1210,7 +1210,7 @@ msgstr ""
 "работа в този регион."
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 "Премахни всяка опозиция в тази област. След това първото парче от артефакта "
@@ -2402,7 +2402,8 @@ msgstr ""
 "Кладенецът увеличава скоростта на растеж във всички жилища с %{count} "
 "същества на седмица."
 
-msgid "The Statue increases your town's income by %{count} per day."
+#, fuzzy
+msgid "The Statue increases your town's income by %{count} gold per day."
 msgstr "Статуята увеличава приходите на твоя град с %{count} на ден."
 
 msgid "The Left Turret provides extra firepower during castle combat."
@@ -4486,6 +4487,10 @@ msgstr "Датски"
 msgid "Slovak"
 msgstr ""
 
+#, fuzzy
+msgid "Vietnamese"
+msgstr "Виж %{name}"
+
 msgid ", FPS: "
 msgstr ""
 
@@ -5352,11 +5357,6 @@ msgstr ""
 "Получаваш контрол над дъскорезницата. Ще ти осигури %{count} единици дърва "
 "на ден."
 
-msgid "You beat the Ghosts and are able to restore the mine to production."
-msgstr ""
-"Ти побеждаваш Призраците и си в състояние да възстановиш мината за "
-"производство."
-
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
@@ -5407,6 +5407,11 @@ msgid ""
 msgstr ""
 "Попадаш на изоставена златна мина. Мината изглежда обитавана от духове. "
 "Желаеш ли да влезеш?"
+
+msgid "You beat the Ghosts and are able to restore the mine to production."
+msgstr ""
+"Ти побеждаваш Призраците и си в състояние да възстановиш мината за "
+"производство."
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -6500,9 +6505,10 @@ msgstr "%{skill} позволява на твоя герой да научи з�
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "%{skill} позволява на твоя герой да научи заклинания от пето ниво."
 
-msgid "%{skill} regenerates one of your hero's spell points per day."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
-"%{skill} regenerates %{count} of your hero's spell points per day."
+"%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] ""
 "%{skill} регенерира по една от точките за заклинание на твоя герой на ден."
 msgstr[1] ""

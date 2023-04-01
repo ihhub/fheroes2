@@ -43,7 +43,7 @@ namespace MP2
     void loadAddon( StreamBase & stream, mp2addon_t & addon )
     {
         addon.nextAddonIndex = stream.getLE16();
-        addon.objectNameN1 = stream.get() * 2;
+        addon.objectNameN1 = stream.get() * 2; // TODO: why we multiply by 2 here?
         addon.indexNameN1 = stream.get();
         addon.quantityN = stream.get();
         addon.objectNameN2 = stream.get();

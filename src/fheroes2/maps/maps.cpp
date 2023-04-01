@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "maps.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -33,7 +35,6 @@
 #include "game.h"
 #include "kingdom.h"
 #include "logging.h"
-#include "maps.h"
 #include "maps_tiles.h"
 #include "players.h"
 #include "race.h"
@@ -344,6 +345,7 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
     }
 
     const int alliedColors = Players::GetPlayerFriends( playerColor );
+    const bool isHumanOrHumanFriend = !isAIPlayer || Players::isFriends( playerColor, Players::HumanColors() );
 
     const int revealRadiusSquared = scoutingDistance * scoutingDistance + 4; // constant factor for "backwards compatibility"
 
@@ -354,6 +356,9 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
     const int32_t minX = std::max( center.x - scoutingDistance, 0 );
     const int32_t maxX = std::min( center.x + scoutingDistance, world.w() - 1 );
     assert( minX < maxX );
+
+    fheroes2::Point fogRevealMinPos( world.h(), world.w() );
+    fheroes2::Point fogRevealMaxPos( 0, 0 );
 
     for ( int32_t y = minY; y <= maxY; ++y ) {
         const int32_t dy = y - center.y;
@@ -366,9 +371,28 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
                     AI::Get().revealFog( tile );
                 }
 
-                tile.ClearFog( alliedColors );
+                if ( tile.isFog( alliedColors ) ) {
+                    // Clear fog only if it is not already cleared.
+                    tile.ClearFog( alliedColors );
+
+                    if ( isHumanOrHumanFriend ) {
+                        // Update fog reveal area points only for human player and his allies.
+                        fogRevealMinPos.x = std::min( fogRevealMinPos.x, x );
+                        fogRevealMinPos.y = std::min( fogRevealMinPos.y, y );
+                        fogRevealMaxPos.x = std::max( fogRevealMaxPos.x, x );
+                        fogRevealMaxPos.y = std::max( fogRevealMaxPos.y, y );
+                    }
+                }
             }
         }
+    }
+
+    // Update fog directions only for human player and his allies and only if fog has to be cleared.
+    if ( isHumanOrHumanFriend && ( fogRevealMaxPos.x >= fogRevealMinPos.x ) && ( fogRevealMaxPos.y >= fogRevealMinPos.y ) ) {
+        // Fog directions should be updated 1 tile outside of the cleared fog.
+        fogRevealMinPos -= { 1, 1 };
+        fogRevealMaxPos += { 1, 1 };
+        Maps::Tiles::updateFogDirectionsInArea( fogRevealMinPos, fogRevealMaxPos, alliedColors );
     }
 }
 
@@ -558,7 +582,7 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
 {
     /*
     Castle/Town object image consists of 42 tile sprites:
-    10 base tiles (OBJNTWBA) with 16 shadow tiles on left side (OBJNTWSH) overlayed by 16 town tiles (OBJNTOWN)
+    10 base tiles (OBJNTWBA) with 16 shadow tiles on left side (OBJNTWSH) overlaid by 16 town tiles (OBJNTOWN)
 
     Shadows (OBJNTWSH)  Castle (OBJNTOWN)
                               0

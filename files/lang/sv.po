@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-21 14:40+0000\n"
+"POT-Creation-Date: 2023-03-30 11:54+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1153,7 +1153,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 
@@ -2358,7 +2358,7 @@ msgid ""
 msgstr ""
 "Brunnen ökar produktionen i alla bostäder med %{count} varelser per vecka."
 
-msgid "The Statue increases your town's income by %{count} per day."
+msgid "The Statue increases your town's income by %{count} gold per day."
 msgstr "Statyn ökar din stads inkomst med %{count} guld per dag."
 
 msgid "The Left Turret provides extra firepower during castle combat."
@@ -4396,6 +4396,10 @@ msgstr "Danska"
 msgid "Slovak"
 msgstr ""
 
+#, fuzzy
+msgid "Vietnamese"
+msgstr "Visa %{name}"
+
 msgid ", FPS: "
 msgstr ", FPS: "
 
@@ -5237,9 +5241,6 @@ msgstr ""
 "Du får kontroll över ett sågverk. Den kommer att förse dig med %{count} "
 "enheter av ved per dag."
 
-msgid "You beat the Ghosts and are able to restore the mine to production."
-msgstr "Du besegrade spökena och kan återställa gruvans produktion."
-
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
@@ -5292,6 +5293,9 @@ msgid ""
 msgstr ""
 "Du stöter på en övergiven guldgruva. Gruvan verkar vara hemsökt. Vill du gå "
 "in?"
+
+msgid "You beat the Ghosts and are able to restore the mine to production."
+msgstr "Du besegrade spökena och kan återställa gruvans produktion."
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -6296,11 +6300,13 @@ msgstr "%{skill} låter din hjälte att lära sig %{count}:e nivåns besvärjels
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "%{skill} låter din hjälte att lära sig %{count}:e nivåns besvärjelser."
 
-msgid "%{skill} regenerates one of your hero's spell points per day."
+msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
-"%{skill} regenerates %{count} of your hero's spell points per day."
-msgstr[0] "%{skill} återhämtar ytterligare %{count} av hjältens besvärjelsepoäng per dag."
-msgstr[1] "%{skill} återhämtar ytterligare %{count} av hjältens besvärjelsepoäng per dag."
+"%{skill} regenerates %{count} additional spell points per day to your hero."
+msgstr[0] ""
+""%{skill} återhämtar ytterligare %{count} av hjältens besvärjelsepoäng per dag."
+msgstr[1] ""
+""%{skill} återhämtar ytterligare %{count} av hjältens besvärjelsepoäng per dag."
 
 msgid "%{skill} increases your hero's luck by %{count}."
 msgstr "%{skill} höjer din hjältes tur med %{count}."
