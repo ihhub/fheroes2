@@ -1005,8 +1005,17 @@ void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::
 
     // Draw a monster's sprite.
     const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, unit.GetSpriteIndex() );
-    fheroes2::Blit( mons32, output, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ),
-                    revert );
+    if ( unit.Modes( Battle::CAP_MIRRORIMAGE ) ) {
+        fheroes2::Sprite mirroredMonster = mons32;
+
+        fheroes2::ApplyPalette( mirroredMonster, PAL::GetPalette( PAL::PaletteType::MIRROR_IMAGE ) );
+        fheroes2::Blit( mirroredMonster, output, pos.x + ( pos.width - mons32.width() ) / 2,
+                        pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ), revert );
+    }
+    else {
+        fheroes2::Blit( mons32, output, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ),
+                        revert );
+    }
 
     Text number( fheroes2::abbreviateNumber( unit.GetCount() ), Font::SMALL );
     number.Blit( pos.x + 2, pos.y + 2, output );
