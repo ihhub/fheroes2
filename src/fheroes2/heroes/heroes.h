@@ -560,6 +560,8 @@ public:
 
     double getAIMinimumJoiningArmyStrength() const;
 
+    uint32_t getDailyRestoredSpellPoints() const;
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );

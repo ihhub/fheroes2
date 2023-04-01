@@ -915,6 +915,18 @@ void Heroes::ActionAfterBattle()
     SetModes( ACTION );
 }
 
+uint32_t Heroes::getDailyRestoredSpellPoints() const
+{
+    uint32_t points = GameStatic::GetHeroesRestoreSpellPointsPerDay();
+
+    // Spell points from artifacts.
+    points += static_cast<uint32_t>( GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POINTS_DAILY_GENERATION ) );
+
+    points += GetSecondaryValues( Skill::Secondary::MYSTICISM );
+
+    return points;
+}
+
 void Heroes::ReplenishSpellPoints()
 {
     const uint32_t maxp = GetMaxSpellPoints();
@@ -929,19 +941,13 @@ void Heroes::ReplenishSpellPoints()
 
     // in castle?
     if ( castle && castle->GetLevelMageGuild() ) {
-        curr = maxp;
+        SetSpellPoints( maxp );
     }
+    else {
+        curr += getDailyRestoredSpellPoints();
 
-    // everyday
-    curr += GameStatic::GetHeroesRestoreSpellPointsPerDay();
-
-    // Spell points from artifacts.
-    curr += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POINTS_DAILY_GENERATION );
-
-    // secondary skill
-    curr += GetSecondaryValues( Skill::Secondary::MYSTICISM );
-
-    SetSpellPoints( std::min( curr, maxp ) );
+        SetSpellPoints( std::min( curr, maxp ) );
+    }
 }
 
 void Heroes::calculatePath( int32_t dstIdx )
