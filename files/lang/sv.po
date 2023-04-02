@@ -291,7 +291,7 @@ msgstr "Flera"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Armén består av trupper från %{count} olika "
-"fraktioner, ger -%{penalty}"
+"klasser, ger -%{penalty}"
 
 msgid "Some undead in group -1"
 msgstr "Några odöda i armén -1"
@@ -9331,16 +9331,16 @@ msgstr "Mass-\n-"
 "välsignelse"
 
 msgid "Magically increases the defense skill of the selected creatures."
-msgstr "Ökar vald varelses Försvarsförmåga genom förtrollning"
+msgstr "Ökar vald varelses Försvarsförmåga genom förtrollning."
 
 msgid "Stoneskin"
 msgstr "Stenhud"
 
 msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
-"version of Stoneskin."
+"variant of Stoneskin."
 msgstr ""
-"Ökar Försvarförmågan för vald varelse. Detta är en förbättrad version "
+"Ökar Försvarförmågan för vald varelse. Detta är en förbättrad variant "
 "av Stenhud."
 
 msgid "Steelskin"
@@ -9633,7 +9633,7 @@ msgstr "Syner"
 msgid ""
 "Visions predicts the likely outcome of an encounter with a neutral army camp."
 msgstr ""
-"Syner förutspår det sannolika utfallet av en strid med ett neutralt fiendeläger."
+"Syner förutspår det sannolika utfallet av en strid mot ett neutralt fiendeläger."
 
 msgid "Haunt"
 msgstr "Hemsök"
