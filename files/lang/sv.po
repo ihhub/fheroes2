@@ -4712,11 +4712,10 @@ msgid "Danish"
 msgstr "Danska"
 
 msgid "Slovak"
-msgstr ""
+msgstr "Slovakiska"
 
-#, fuzzy
 msgid "Vietnamese"
-msgstr "Visa %{name}"
+msgstr "Vietnamesiska"
 
 msgid ", FPS: "
 msgstr ", FPS: "
