@@ -1606,7 +1606,7 @@ namespace AI
 
         auto getObjectValue
             = [&objectValidator, &valueStorage, this, heroStrength, &hero, leftMovePoints]( const int destination, uint32_t & distance, double & value,
-                                                                                            const MP2::MapObjectType objectType, const bool isDimensionDoor ) {
+                                                                                            const MP2::MapObjectType type, const bool isDimensionDoor ) {
                   if ( !isDimensionDoor ) {
                       // Dimension door path does not include any objects on the way.
                       const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( destination );
@@ -1637,7 +1637,7 @@ namespace AI
                       distance = leftMovePoints + ( distance - leftMovePoints ) * 2;
                   }
 
-                  value = ScaleWithDistance( value, distance, objectType );
+                  value = ScaleWithDistance( value, distance, type );
               };
 
         // Set baseline target if it's a special role
