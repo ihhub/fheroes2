@@ -681,7 +681,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         Route::Path::const_iterator currentStep = path.begin();
         Route::Path::const_iterator nextStep = currentStep;
 
-        if ( currentHero->isMoveEnabled() ) {
+        if ( currentHero->isMoveEnabled() && ( currentHero->GetDirection() == path.GetFrontDirection() ) ) {
             // Do not draw the first path mark when hero / boat is moving in the direction of the path.
             ++currentStep;
             ++nextStep;
