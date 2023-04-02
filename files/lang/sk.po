@@ -1141,7 +1141,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 
@@ -4369,64 +4369,67 @@ msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr ""
 
 msgid "English"
-msgstr ""
+msgstr "Anglicky"
 
 msgid "French"
-msgstr ""
+msgstr "Francúzsky"
 
 msgid "Polish"
-msgstr ""
+msgstr "Poľsky"
 
 msgid "German"
-msgstr ""
+msgstr "Nemecky"
 
 msgid "Russian"
-msgstr ""
+msgstr "Rusky"
 
 msgid "Italian"
-msgstr ""
+msgstr "Taliansky"
 
 msgid "Czech"
-msgstr ""
+msgstr "Česky"
 
 msgid "Norwegian"
-msgstr ""
+msgstr "Nórsky"
 
 msgid "Belarusian"
-msgstr ""
+msgstr "Bielorusky"
 
 msgid "Bulgarian"
-msgstr ""
+msgstr "Bulharsky"
 
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukrajinsky"
 
 msgid "Romanian"
-msgstr ""
+msgstr "Rumunsky"
 
 msgid "Spanish"
-msgstr ""
+msgstr "Španielsky"
 
 msgid "Swedish"
-msgstr ""
+msgstr "Švédsky"
 
 msgid "Portuguese"
-msgstr ""
+msgstr "Portugalsky"
 
 msgid "Turkish"
-msgstr ""
+msgstr "Turecky"
 
 msgid "Dutch"
-msgstr ""
+msgstr "Holandsky"
 
 msgid "Hungarian"
-msgstr ""
+msgstr "Maďarsky"
 
 msgid "Danish"
-msgstr ""
+msgstr "Dánsky"
 
 msgid "Slovak"
-msgstr ""
+msgstr "Slovensky"
+
+msgid "Vietnamese"
+msgstr "Vietnamsky"
 
 msgid ", FPS: "
 msgstr ""
@@ -6042,9 +6045,9 @@ msgstr ""
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr ""
 
-msgid "%{skill} regenerates one of your hero's spell points per day."
+msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
-"%{skill} regenerates %{count} of your hero's spell points per day."
+"%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
