@@ -303,8 +303,7 @@ void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & 
 
     SetIndex( mapIndex );
     SetUID( mapIndex );
-    DEBUG_LOG( DBG_GAME, DBG_INFO,
-               "Sign at location " << mapIndex << " has a message: " << message )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Sign at location " << mapIndex << " has a message: " << message )
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapSign & obj )

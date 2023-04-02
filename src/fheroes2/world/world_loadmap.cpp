@@ -435,8 +435,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
         const size_t blockSize = fs.getLE16();
         if ( blockSize == 0 ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN,
-                       "Invalid MP2 file format: received an empty block size " )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 file format: received an empty block size " )
             continue;
         }
 
@@ -458,8 +457,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             switch ( objectType ) {
             case MP2::OBJ_CASTLE:
                 if ( MP2::MP2_CASTLE_STRUCTURE_SIZE != pblock.size() ) {
-                    DEBUG_LOG( DBG_GAME, DBG_WARN,
-                               "Invalid MP2 file format: received invalid castle structure size equal to " << pblock.size() )
+                    DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 file format: received invalid castle structure size equal to " << pblock.size() )
                 }
                 else {
                     Castle * castle = getCastleEntrance( Maps::GetPoint( objectTileId ) );
@@ -477,8 +475,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             case MP2::OBJ_RANDOM_TOWN:
             case MP2::OBJ_RANDOM_CASTLE:
                 if ( MP2::MP2_CASTLE_STRUCTURE_SIZE != pblock.size() ) {
-                    DEBUG_LOG( DBG_GAME, DBG_WARN,
-                               "Invalid MP2 file format: received invalid castle structure size equal to " << pblock.size() )
+                    DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 file format: received invalid castle structure size equal to " << pblock.size() )
                 }
                 else {
                     // Random castle's entrance tile is marked as OBJ_RNDCASTLE or OBJ_RNDTOWN instead of OBJ_CASTLE.
