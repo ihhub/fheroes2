@@ -113,14 +113,6 @@ namespace MP2
         uint32_t level2ObjectUID;
     };
 
-    // origin mp2 sign or bottle
-    struct mp2info_t
-    {
-        uint8_t id; // 0x01
-        uint8_t zero[8]; // 8 byte 0x00
-        char text; // message  + '/0'
-    };
-
     // origin mp2 event for coord
     struct mp2eventcoord_t
     {
@@ -167,14 +159,6 @@ namespace MP2
         bool yellow;
         bool orange;
         bool purple;
-        char text; // message + '/0'
-    };
-
-    // origin mp2 rumor
-    struct mp2rumor_t
-    {
-        uint8_t id; // 0x00
-        uint8_t zero[7]; // 7 byte 0x00
         char text; // message + '/0'
     };
 
