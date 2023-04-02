@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_arena.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -28,6 +30,7 @@
 #include <iterator>
 #include <ostream>
 #include <random>
+#include <type_traits>
 #include <utility>
 
 #include "ai.h"
@@ -36,7 +39,6 @@
 #include "artifact.h"
 #include "artifact_info.h"
 #include "audio.h"
-#include "battle_arena.h"
 #include "battle_army.h"
 #include "battle_bridge.h"
 #include "battle_catapult.h"
@@ -265,16 +267,16 @@ Battle::Interface * Battle::Arena::GetInterface()
     return arena->_interface.get();
 }
 
-Battle::Tower * Battle::Arena::GetTower( int type )
+Battle::Tower * Battle::Arena::GetTower( const TowerType type )
 {
     assert( arena != nullptr );
 
     switch ( type ) {
-    case TWR_LEFT:
+    case TowerType::TWR_LEFT:
         return arena->_towers[0].get();
-    case TWR_CENTER:
+    case TowerType::TWR_CENTER:
         return arena->_towers[1].get();
-    case TWR_RIGHT:
+    case TowerType::TWR_RIGHT:
         return arena->_towers[2].get();
     default:
         break;
@@ -333,13 +335,13 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
 
     if ( castle ) {
         if ( castle->isBuild( BUILD_LEFTTURRET ) ) {
-            _towers[0] = std::make_unique<Tower>( *castle, TWR_LEFT, _randomGenerator, _uidGenerator.GetUnique() );
+            _towers[0] = std::make_unique<Tower>( *castle, TowerType::TWR_LEFT, _randomGenerator, _uidGenerator.GetUnique() );
         }
 
-        _towers[1] = std::make_unique<Tower>( *castle, TWR_CENTER, _randomGenerator, _uidGenerator.GetUnique() );
+        _towers[1] = std::make_unique<Tower>( *castle, TowerType::TWR_CENTER, _randomGenerator, _uidGenerator.GetUnique() );
 
         if ( castle->isBuild( BUILD_RIGHTTURRET ) ) {
-            _towers[2] = std::make_unique<Tower>( *castle, TWR_RIGHT, _randomGenerator, _uidGenerator.GetUnique() );
+            _towers[2] = std::make_unique<Tower>( *castle, TowerType::TWR_RIGHT, _randomGenerator, _uidGenerator.GetUnique() );
         }
 
         if ( _army1->GetCommander() ) {
@@ -670,7 +672,10 @@ void Battle::Arena::TowerAction( const Tower & twr )
         return;
     }
 
-    Command cmd( CommandType::MSG_BATTLE_TOWER, twr.GetType(), targetInfo.first->GetUID() );
+    using TowerGetTypeUnderlyingType = typename std::underlying_type_t<decltype( twr.GetType() )>;
+    static_assert( std::is_same_v<TowerGetTypeUnderlyingType, uint8_t>, "Type of Tower::GetType() has been changed, check the logic below" );
+
+    Command cmd( CommandType::MSG_BATTLE_TOWER, static_cast<TowerGetTypeUnderlyingType>( twr.GetType() ), targetInfo.first->GetUID() );
 
     ApplyAction( cmd );
 

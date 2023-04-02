@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -697,7 +697,7 @@ namespace
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
-            return _( "The Dungeon increases the income of the town by %{count} / day." );
+            return _( "The Dungeon increases the income of the town by %{count} gold per day." );
         case BUILD_WEL2:
             return _( "The Waterfall increases production of Centaurs by %{count} per week." );
         default:
@@ -864,7 +864,7 @@ namespace fheroes2
         case BUILD_WELL:
             return _( "The Well increases the growth rate of all dwellings by %{count} creatures per week." );
         case BUILD_STATUE:
-            return _( "The Statue increases your town's income by %{count} per day." );
+            return _( "The Statue increases your town's income by %{count} gold per day." );
         case BUILD_LEFTTURRET:
             return _( "The Left Turret provides extra firepower during castle combat." );
         case BUILD_RIGHTTURRET:

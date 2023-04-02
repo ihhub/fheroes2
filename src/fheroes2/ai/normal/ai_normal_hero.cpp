@@ -217,14 +217,7 @@ namespace
             break;
 
         case MP2::OBJ_ABANDONED_MINE:
-            if ( !hero.isFriends( tile.QuantityColor() ) ) {
-                if ( tile.isCaptureObjectProtected() ) {
-                    return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
-                }
-
-                return true;
-            }
-            break;
+            return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
 
         case MP2::OBJ_LEAN_TO:
         case MP2::OBJ_MAGIC_GARDEN:
@@ -606,7 +599,7 @@ namespace
             , _pathfinder( pathfinder )
             , _ai( ai )
             , _heroArmyStrength( hero.GetArmy().GetStrength() )
-            , _armyStrengthThreshold( hero.getAIMininumJoiningArmyStrength() )
+            , _armyStrengthThreshold( hero.getAIMinimumJoiningArmyStrength() )
         {
             // Do nothing.
         }
@@ -833,9 +826,6 @@ namespace AI
             return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 4000.0 : 2000.0;
         }
         case MP2::OBJ_ABANDONED_MINE: {
-            if ( tile.QuantityColor() == hero.GetColor() ) {
-                return -dangerousTaskPenalty; // don't even attempt to go here
-            }
             return 3000.0;
         }
         case MP2::OBJ_ARTIFACT: {
@@ -1251,9 +1241,6 @@ namespace AI
             return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 3000.0 : 1500.0;
         }
         case MP2::OBJ_ABANDONED_MINE: {
-            if ( tile.QuantityColor() == hero.GetColor() ) {
-                return -dangerousTaskPenalty; // don't even attempt to go here
-            }
             return 5000.0;
         }
         case MP2::OBJ_ARTIFACT: {
@@ -1665,15 +1652,23 @@ namespace AI
         }
 
         double fogDiscoveryValue = getFogDiscoveryValue( hero );
-        const int fogDiscoveryTarget = _pathfinder.getFogDiscoveryTile( hero );
+        bool isTerritoryExpansion = false;
+        const int fogDiscoveryTarget = _pathfinder.getFogDiscoveryTile( hero, isTerritoryExpansion );
         if ( fogDiscoveryTarget >= 0 ) {
             uint32_t distanceToFogDiscovery = _pathfinder.getDistance( fogDiscoveryTarget );
 
+            // TODO: add logic to check fog discovery based on Dimension Door distance, not the nearest tile.
             bool useDimensionDoor = false;
             const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, fogDiscoveryTarget ) );
             if ( dimensionDoorDist > 0 && ( distanceToFogDiscovery == 0 || dimensionDoorDist < distanceToFogDiscovery / 2 ) ) {
                 distanceToFogDiscovery = dimensionDoorDist;
                 useDimensionDoor = true;
+            }
+
+            if ( isTerritoryExpansion && fogDiscoveryValue < 0 ) {
+                // This is actually a very useful fog discovery action which might lead to finding of new objects.
+                // Increase the value of this action.
+                fogDiscoveryValue /= 2;
             }
 
             getObjectValue( fogDiscoveryTarget, distanceToFogDiscovery, fogDiscoveryValue, useDimensionDoor );
@@ -1728,7 +1723,7 @@ namespace AI
                     std::set<int> & defenseSecondaries = defense->second.secondaryTaskTileId;
                     defenseSecondaries.erase( tileIndex );
                     if ( defenseSecondaries.empty() ) {
-                        // if no one else was threatning this then we no longer have to defend
+                        // if no one else was threatening this then we no longer have to defend
                         _priorityTargets.erase( secondaryTaskId );
                     }
                 }

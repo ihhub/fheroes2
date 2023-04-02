@@ -107,19 +107,25 @@ namespace
             return false;
         }
 
-        if ( colors == 0 )
+        if ( colors == 0 ) {
             return false;
+        }
 
         const int32_t indexFrom = hero.GetIndex();
-        if ( !Maps::isValidAbsIndex( indexFrom ) )
+        if ( !Maps::isValidAbsIndex( indexFrom ) ) {
             return false;
+        }
 
-        if ( !world.GetTiles( indexFrom ).isFog( colors ) )
+        // Show AI hero animation if he is visible (or barely visible) for human player.
+        if ( world.GetTiles( indexFrom ).getFogDirection() != DIRECTION_ALL ) {
             return true;
+        }
 
         const Route::Path & path = hero.GetPath();
-        if ( path.isValid() && world.GetTiles( path.front().GetIndex() ).GetFogDirections( colors ) != DIRECTION_ALL )
+        // Show AI hero animation if any of the tiles next to the first tile in the path is visible for human player.
+        if ( path.isValid() && ( world.GetTiles( path.front().GetIndex() ).getFogDirection() != DIRECTION_ALL ) ) {
             return true;
+        }
 
         return false;
     }
@@ -202,7 +208,7 @@ namespace
             return true;
         }
 
-        if ( troop.GetStrength() < hero.getAIMininumJoiningArmyStrength() ) {
+        if ( troop.GetStrength() < hero.getAIMinimumJoiningArmyStrength() ) {
             // No use to hire such a weak troop.
             return false;
         }
@@ -600,15 +606,9 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dstIndex );
 
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
-            auto removeObjectProtection = [&hero, objectType, &tile]() {
+            auto removeObjectProtection = [&tile]() {
                 // Clear any metadata related to spells
                 tile.clearAdditionalMetadata();
-
-                // Restore the abandoned mine
-                if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
-                    Maps::Tiles::UpdateAbandonedMineSprite( tile );
-                    hero.SetMapsObject( MP2::OBJ_MINES );
-                }
             };
 
             auto captureObject = [&hero, &tile, &removeObjectProtection]() {
@@ -648,6 +648,10 @@ namespace
                 captureObject();
             }
         }
+
+#ifndef WITH_DEBUG
+        (void)objectType;
+#endif
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " object: " << MP2::StringObject( objectType ) )
     }
@@ -743,6 +747,12 @@ namespace
             hero.SetVisited( dst_index, Visit::GLOBAL );
             hero.setVisitedForAllies( dst_index );
             world.ActionForMagellanMaps( hero.GetColor() );
+
+            if ( Players::isFriends( hero.GetColor(), Players::HumanColors() ) ) {
+                // Fully update fog directions if AI player is an ally.
+                Interface::GameArea::updateMapFogDirections();
+            }
+
             kingdom.OddFundsResource( payment );
         }
 
@@ -762,6 +772,8 @@ namespace
         assert( world.GetTiles( indexTo ).GetObject() != MP2::OBJ_HEROES );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            // AI-controlled hero cannot activate Stone Liths from the same tile, but should move to this tile from some
+            // other tile first, so there is no need to re-center the game area on the hero before his disappearance
             hero.FadeOut();
         }
 
@@ -824,6 +836,8 @@ namespace
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            // AI-controlled hero cannot activate Whirlpool from the same tile, but should move to this tile from some
+            // other tile first, so there is no need to re-center the game area on the hero before his disappearance
             hero.FadeOut();
         }
 
@@ -1308,9 +1322,26 @@ namespace
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
 
-    void AIToAbandonedMine( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+    void AIToAbandonedMine( Heroes & hero, const int32_t dstIndex )
     {
-        AIToCaptureObject( hero, objectType, dst_index );
+        Maps::Tiles & tile = world.GetTiles( dstIndex );
+
+        Army army( tile );
+
+        Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
+
+        if ( result.AttackerWins() ) {
+            hero.IncreaseExperience( result.GetExperienceAttacker() );
+
+            Maps::Tiles::RestoreAbandonedMine( tile, Resource::GOLD );
+            hero.SetMapsObject( MP2::OBJ_MINES );
+            tile.QuantitySetColor( hero.GetColor() );
+        }
+        else {
+            AIBattleLose( hero, result, true );
+        }
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
 
     void AIToBarrier( const Heroes & hero, int32_t dst_index )
@@ -1401,26 +1432,17 @@ namespace
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
 
-    void AIToBoat( Heroes & hero, int32_t dst_index )
+    void AIToBoat( Heroes & hero, const int32_t dst_index )
     {
         if ( hero.isShipMaster() )
             return;
 
-        const int32_t from_index = hero.GetIndex();
+        hero.setLastGroundRegion( world.GetTiles( hero.GetIndex() ).GetRegion() );
 
-        // disabled nearest coasts (on week MP2::isWeekLife)
-        MapsIndexes coasts = Maps::ScanAroundObjectWithDistance( from_index, 4, MP2::OBJ_COAST );
-        coasts.push_back( from_index );
-
-        for ( MapsIndexes::const_iterator it = coasts.begin(); it != coasts.end(); ++it )
-            hero.SetVisited( *it );
-
-        hero.setLastGroundRegion( world.GetTiles( from_index ).GetRegion() );
-
-        const fheroes2::Point & destPos = Maps::GetPoint( dst_index );
-        const fheroes2::Point offset( destPos - hero.GetCenter() );
+        const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut( offset );
         }
 
@@ -1430,9 +1452,6 @@ namespace
         hero.SetMapsObject( MP2::OBJ_NONE );
         world.GetTiles( dst_index ).resetObjectSprite();
         hero.SetShipMaster( true );
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
-        }
         hero.GetPath().Reset();
 
         AI::Get().HeroesClearTask( hero );
@@ -1442,7 +1461,7 @@ namespace
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
 
-    void AIToCoast( Heroes & hero, int32_t dst_index )
+    void AIToCoast( Heroes & hero, const int32_t dst_index )
     {
         if ( !hero.isShipMaster() )
             return;
@@ -1451,8 +1470,8 @@ namespace
         Maps::Tiles & from = world.GetTiles( fromIndex );
 
         // Calculate the offset before making the action.
-        const fheroes2::Point & prevPosition = Maps::GetPoint( dst_index );
-        const fheroes2::Point offset( prevPosition - hero.GetCenter() );
+        const fheroes2::Point prevPos = hero.GetCenter();
+        const fheroes2::Point offset( Maps::GetPoint( dst_index ) - prevPos );
 
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
@@ -1461,9 +1480,10 @@ namespace
         hero.GetPath().Reset();
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( prevPosition );
-            hero.FadeIn( { offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() } );
+            Interface::Basic::Get().GetGameArea().SetCenter( prevPos );
+            hero.FadeIn( offset );
         }
+
         hero.ActionNewPosition( true );
 
         AI::Get().HeroesClearTask( hero );
@@ -1609,8 +1629,9 @@ namespace AI
         case MP2::OBJ_LIGHTHOUSE:
             AIToCaptureObject( hero, objectType, dst_index );
             break;
+
         case MP2::OBJ_ABANDONED_MINE:
-            AIToAbandonedMine( hero, objectType, dst_index );
+            AIToAbandonedMine( hero, dst_index );
             break;
 
         case MP2::OBJ_SHIPWRECK_SURVIVOR:
@@ -1969,6 +1990,7 @@ namespace AI
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut();
         }
 
@@ -2004,6 +2026,7 @@ namespace AI
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut();
         }
 

@@ -89,7 +89,8 @@ try {
                        "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
                        "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall",
                        # Legacy HoMM2 installation
-                       "HKEY_LOCAL_MACHINE\SOFTWARE\New World Computing\Heroes of Might and Magic 2")) {
+                       "HKEY_LOCAL_MACHINE\SOFTWARE\New World Computing\Heroes of Might and Magic 2",
+                       "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\New World Computing\Heroes of Might and Magic 2")) {
         if (-Not (Test-Path -Path "Microsoft.PowerShell.Core\Registry::$key" -PathType Container)) {
             continue
         }

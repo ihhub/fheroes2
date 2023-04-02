@@ -263,9 +263,16 @@ namespace Maps
         static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area );
         void redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void redrawTopLayerObject( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon ) const;
-        int GetFogDirections( int color ) const;
 
-        void drawFog( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
+        // Determine the fog direction in the area between min and max positions for given player(s) color code and store it in corresponding tile data.
+        static void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color );
+        // Return fog direction of tile. A tile without fog returns "Direction::UNKNOWN".
+        uint16_t getFogDirection() const
+        {
+            return _fogDirection;
+        }
+
+        void drawFog( fheroes2::Image & dst, const Interface::GameArea & area ) const;
         void RedrawPassable( fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area ) const;
         void redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level ) const;
 
@@ -313,7 +320,6 @@ namespace Maps
             return ( _fogColors & colors ) == colors;
         }
 
-        bool isFogAllAround( const int color ) const;
         void ClearFog( const int colors );
 
         void MonsterSetCount( uint32_t count );
@@ -379,15 +385,15 @@ namespace Maps
         static int getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
         static int getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
 
-        static void UpdateAbandonedMineLeftSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex, const int resource );
-
-        static void UpdateAbandonedMineRightSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex );
-
         static std::pair<int, int> ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
         static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
         static void PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count );
-        static void UpdateAbandonedMineSprite( Tiles & tile );
-        static void setAbandonedMineObjectType( const Tiles & tile );
+
+        // Restores an abandoned mine whose main tile is 'tile', turning it into an ordinary mine that brings
+        // resources of type 'resource'. This method updates all sprites and sets object types for non-action
+        // tiles. The object type for the action tile (i.e. the main tile) remains unchanged and should be
+        // updated separately.
+        static void RestoreAbandonedMine( Tiles & tile, const int resource );
 
         // Some tiles have incorrect object type. This is due to original Editor issues.
         static void fixTileObjectType( Tiles & tile );
@@ -411,6 +417,11 @@ namespace Maps
         bool isTallObject() const;
 
         bool isDetachedObject() const;
+
+        void _setFogDirection( const uint16_t fogDirection )
+        {
+            _fogDirection = fogDirection;
+        }
 
         static void UpdateMonsterInfo( Tiles & );
         static void UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad );
@@ -461,6 +472,9 @@ namespace Maps
         MP2::MapObjectType _mainObjectType{ MP2::OBJ_NONE };
         uint16_t tilePassable = DIRECTION_ALL;
         uint8_t _fogColors = Color::ALL;
+
+        // Fog direction to render fog in Game Area.
+        uint16_t _fogDirection{ DIRECTION_ALL };
 
         uint8_t heroID = 0;
 
