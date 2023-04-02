@@ -166,7 +166,7 @@ msgid "GIFT"
 msgstr "DAR"
 
 msgid "DIFFICULTY"
-msgstr "OBŤIAŽNOSŤ"
+msgstr "OBTIAŽNOSŤ"
 
 msgid "MIN"
 msgstr "MIN"
