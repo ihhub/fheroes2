@@ -1604,41 +1604,41 @@ namespace AI
         ObjectValidator objectValidator( hero, _pathfinder, *this );
         ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
-        auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero, leftMovePoints]( const int destination, uint32_t & distance, double & value,
-                                                                                                            const MP2::MapObjectType objectType,
-                                                                                                            const bool isDimensionDoor ) {
-            if ( !isDimensionDoor ) {
-                // Dimension door path does not include any objects on the way.
-                const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( destination );
-                for ( const IndexObject & pair : list ) {
-                    if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) ) {
-                        const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
-                        if ( extraValue > 0 ) {
-                            // There is no need to reduce the quality of the object even if the path has others.
-                            value += extraValue;
-                        }
-                    }
-                }
-            }
+        auto getObjectValue
+            = [&objectValidator, &valueStorage, this, heroStrength, &hero, leftMovePoints]( const int destination, uint32_t & distance, double & value,
+                                                                                            const MP2::MapObjectType objectType, const bool isDimensionDoor ) {
+                  if ( !isDimensionDoor ) {
+                      // Dimension door path does not include any objects on the way.
+                      const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( destination );
+                      for ( const IndexObject & pair : list ) {
+                          if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) ) {
+                              const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
+                              if ( extraValue > 0 ) {
+                                  // There is no need to reduce the quality of the object even if the path has others.
+                                  value += extraValue;
+                              }
+                          }
+                      }
+                  }
 
-            const RegionStats & regionStats = _regions[world.GetTiles( destination ).GetRegion()];
+                  const RegionStats & regionStats = _regions[world.GetTiles( destination ).GetRegion()];
 
-            if ( heroStrength < regionStats.highestThreat ) {
-                const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
+                  if ( heroStrength < regionStats.highestThreat ) {
+                      const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
 
-                if ( castle && ( castle->GetGarrisonStrength( &hero ) <= 0 || castle->GetColor() == hero.GetColor() ) )
-                    value -= dangerousTaskPenalty / 2;
-                else
-                    value -= dangerousTaskPenalty;
-            }
+                      if ( castle && ( castle->GetGarrisonStrength( &hero ) <= 0 || castle->GetColor() == hero.GetColor() ) )
+                          value -= dangerousTaskPenalty / 2;
+                      else
+                          value -= dangerousTaskPenalty;
+                  }
 
-            if ( distance > leftMovePoints ) {
-                // Distant object which is out of reach for the current turn must have lower priority.
-                distance = leftMovePoints + ( distance - leftMovePoints ) * 2;
-            }
+                  if ( distance > leftMovePoints ) {
+                      // Distant object which is out of reach for the current turn must have lower priority.
+                      distance = leftMovePoints + ( distance - leftMovePoints ) * 2;
+                  }
 
-            value = ScaleWithDistance( value, distance, objectType );
-        };
+                  value = ScaleWithDistance( value, distance, objectType );
+              };
 
         // Set baseline target if it's a special role
         if ( hero.getAIRole() == Heroes::Role::COURIER ) {
