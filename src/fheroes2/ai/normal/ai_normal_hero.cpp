@@ -686,12 +686,55 @@ namespace
     const double dangerousTaskPenalty = 20000.0;
     const double fogDiscoveryBaseValue = -10000.0;
 
-    double ScaleWithDistance( double value, uint32_t distance )
+    double getDistanceModifier( const MP2::MapObjectType objectType )
     {
-        if ( distance == 0 )
+        // The value above 1.0 means that the object is useful only if it is nearby.
+        // The value below 1.0 means that the object should remain in focus even on greater distances.
+        if ( !MP2::isActionObject( objectType ) ) {
+            return 1.0;
+        }
+
+        switch ( objectType ) {
+        case MP2::OBJ_CASTLE:
+            return 0.8;
+        case MP2::OBJ_ALCHEMIST_LAB:
+        case MP2::OBJ_ARTIFACT:
+        case MP2::OBJ_HEROES:
+        case MP2::OBJ_MINES:
+        case MP2::OBJ_SAWMILL:
+            return 0.9;
+        case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_FLOTSAM:
+        case MP2::OBJ_GENIE_LAMP:
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_SEA_CHEST:
+            return 0.95;
+        case MP2::OBJ_BUOY:
+        case MP2::OBJ_TEMPLE:
+        case MP2::OBJ_FAERIE_RING:
+        case MP2::OBJ_FOUNTAIN:
+        case MP2::OBJ_IDOL:
+        case MP2::OBJ_MERMAID:
+            // In most situations Luck and Morale modifier objects are useful to be visited when they are very close.
+            return 1.1;
+        default:
+            break;
+        }
+
+        return 1.0;
+    }
+
+    double ScaleWithDistance( const double value, const uint32_t distance, const MP2::MapObjectType objectType )
+    {
+        if ( distance == 0 ) {
             return value;
-        // scale non-linearly (more value lost as distance increases)
-        return value - ( distance * std::log10( distance ) );
+        }
+
+        // Some objects do not loose their value drastically over distances. This allows AI heroes to keep focus on important targets.
+        const double correctedDistance = distance * getDistanceModifier( objectType );
+
+        // Scale non-linearly (more value lost as distance increases)
+        return value - ( correctedDistance * std::log10( correctedDistance ) );
     }
 
     double getFogDiscoveryValue( const Heroes & hero )
@@ -1562,6 +1605,7 @@ namespace AI
         ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
         auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero, leftMovePoints]( const int destination, uint32_t & distance, double & value,
+                                                                                                            const MP2::MapObjectType objectType,
                                                                                                             const bool isDimensionDoor ) {
             if ( !isDimensionDoor ) {
                 // Dimension door path does not include any objects on the way.
@@ -1593,7 +1637,7 @@ namespace AI
                 distance = leftMovePoints + ( distance - leftMovePoints ) * 2;
             }
 
-            value = ScaleWithDistance( value, distance );
+            value = ScaleWithDistance( value, distance, objectType );
         };
 
         // Set baseline target if it's a special role
@@ -1635,7 +1679,7 @@ namespace AI
                 }
 
                 double value = valueStorage.value( node, dist );
-                getObjectValue( node.first, dist, value, useDimensionDoor );
+                getObjectValue( node.first, dist, value, static_cast<MP2::MapObjectType>( node.second ), useDimensionDoor );
 
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
@@ -1671,7 +1715,7 @@ namespace AI
                 fogDiscoveryValue /= 2;
             }
 
-            getObjectValue( fogDiscoveryTarget, distanceToFogDiscovery, fogDiscoveryValue, useDimensionDoor );
+            getObjectValue( fogDiscoveryTarget, distanceToFogDiscovery, fogDiscoveryValue, MP2::OBJ_NONE, useDimensionDoor );
         }
 
         if ( priorityTarget != -1 ) {
