@@ -498,6 +498,13 @@ int Resource::getResourceTypeFromIconIndex( const uint32_t index )
     return UNKNOWN;
 }
 
+Funds Resource::CalculateEventResourceUpdate( const Funds & currentFunds, const Funds & eventFunds )
+{
+    Funds funds = currentFunds + eventFunds;
+    funds.Trim();
+    return funds - currentFunds;
+}
+
 int Funds::GetValidItems() const
 {
     int rs = 0;
@@ -558,13 +565,6 @@ void Funds::Trim()
         gems = 0;
     if ( gold < 0 )
         gold = 0;
-}
-
-Funds Funds::CalculateEventResourceUpdate( const Funds & eventFunds ) const
-{
-    Funds funds = *this + eventFunds;
-    funds.Trim();
-    return funds - *this;
 }
 
 void Funds::Reset()
