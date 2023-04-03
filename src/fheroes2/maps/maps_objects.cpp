@@ -276,21 +276,34 @@ MapSign::MapSign()
     : MapObjectSimple( MP2::OBJ_SIGN )
 {}
 
-void MapSign::LoadFromMP2( int32_t index, StreamBuf st )
+void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data )
 {
-    st.skip( 9 );
-    message = st.toString();
+    assert( data.size() >= MP2::MP2_SIGN_STRUCTURE_MIN_SIZE );
+    assert( data[0] == 0x1 );
+
+    // Structure containing information about a sign or bottle.
+    //
+    // - uint8_t (1 byte)
+    //     Always equal to 1.
+    //
+    // - unused 8 bytes
+    //    Unknown / unused. TODO: find out what these bytes used for.
+    //
+    // - string
+    //    Null terminated string.
+
+    StreamBuf dataStream( data );
+    dataStream.skip( 9 );
+    message = dataStream.toString();
 
     if ( message.empty() ) {
         const std::vector<std::string> randomMessage{ _( "Next sign 50 miles." ), _( "Burma shave." ), _( "See Rock City." ), _( "This space for rent." ) };
         message = Rand::Get( randomMessage );
     }
 
-    SetIndex( index );
-    SetUID( index );
-    DEBUG_LOG( DBG_GAME, DBG_INFO,
-               "sign"
-                   << ": " << message )
+    SetIndex( mapIndex );
+    SetUID( mapIndex );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Sign at location " << mapIndex << " has a message: " << message )
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapSign & obj )
