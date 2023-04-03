@@ -259,7 +259,7 @@ void Kingdom::ActionNewDayResourceUpdate( const std::function<void( const EventD
     }
 
     // Resources from events
-    EventsDate events = world.GetEventsDate( GetColor() );
+    const EventsDate events = world.GetEventsDate( GetColor() );
     for ( const EventDate & event : events ) {
         const Funds fundsUpdate = Resource::CalculateEventResourceUpdate( GetFunds(), event.resource );
         AddFundsResource( fundsUpdate );
