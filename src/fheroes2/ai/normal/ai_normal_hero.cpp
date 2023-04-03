@@ -349,7 +349,25 @@ namespace
         }
 
         case MP2::OBJ_MAGIC_WELL:
-            return !hero.isObjectTypeVisited( objectType ) && hero.HaveSpellBook() && hero.GetSpellPoints() < hero.GetMaxSpellPoints();
+            if ( hero.isObjectTypeVisited( objectType ) ) {
+                return false;
+            }
+
+            if ( !hero.HaveSpellBook() ) {
+                return false;
+            }
+
+            if ( hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
+                return false;
+            }
+
+            if ( pathfinder.getDistance( index ) > hero.GetMovePoints() && hero.getDailyRestoredSpellPoints() + hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
+                // The Well is located at a distance which cannot be reached by the hero at the current turn.
+                // But if the hero will restore all spell points by the next day there is no reason to even to visit the Well.
+                return false;
+            }
+
+            return true;
 
         case MP2::OBJ_ARTESIAN_SPRING:
             return !hero.isVisited( tile, Visit::GLOBAL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
@@ -1721,9 +1739,12 @@ namespace AI
             if ( fogDiscoveryTarget >= 0 && fogDiscoveryValue > maxPriority ) {
                 priorityTarget = fogDiscoveryTarget;
                 maxPriority = fogDiscoveryValue;
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (fog discovery)" )
             }
-            DEBUG_LOG( DBG_AI, DBG_INFO,
-                       hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" )
+            else {
+                DEBUG_LOG( DBG_AI, DBG_INFO,
+                           hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" )
+            }
         }
         else if ( !heroInPatrolMode ) {
             priorityTarget = fogDiscoveryTarget;
