@@ -2667,7 +2667,7 @@ namespace
         if ( event_maps && event_maps->isAllow( hero.GetColor() ) ) {
             hero.SetMove( false );
 
-            Funds fundsToUpdate = hero.GetKingdom().GetFunds().CalculateEventResourceUpdate( event_maps->resources );
+            const Funds fundsToUpdate = hero.GetKingdom().GetFunds().CalculateEventResourceUpdate( event_maps->resources );
 
             std::vector<fheroes2::ResourceDialogElement> resourceUI = fheroes2::getResourceDialogElements( fundsToUpdate );
             std::unique_ptr<fheroes2::ArtifactDialogElement> artifactUI;

@@ -699,8 +699,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     conf.SetCurrentColor( player->GetColor() );
 
-                    world.ClearFog( player->GetColor() );
-
                     kingdom.ActionBeforeTurn();
 
                     iconsPanel.ShowIcons( ICON_ANY );
@@ -746,8 +744,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, hotSeatAIFogColors( player ) );
                     }
 
-                    if ( !loadedFromSave )
+                    if ( !loadedFromSave ) {
                         kingdom.ActionNewDayResourceUpdate( nullptr );
+                    }
 
                     kingdom.ActionBeforeTurn();
 
