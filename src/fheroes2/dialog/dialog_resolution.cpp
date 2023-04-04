@@ -60,6 +60,7 @@ namespace
         if ( resolution.scale > 1 ) {
             return std::make_pair( std::to_string( resolution.width ), std::to_string( resolution.height ) + " (x" + std::to_string( resolution.scale ) + ")" );
         }
+
         return std::make_pair( std::to_string( resolution.width ), std::to_string( resolution.height ) );
     }
 
