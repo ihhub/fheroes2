@@ -178,7 +178,6 @@ namespace Battle
         }
 
         uint32_t ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected );
-        uint32_t ApplyDamage( const uint32_t );
         uint32_t CalculateRetaliationDamage( uint32_t damageTaken ) const;
         uint32_t CalculateMinDamage( const Unit & ) const;
         uint32_t CalculateMaxDamage( const Unit & ) const;
@@ -276,6 +275,8 @@ namespace Battle
         AnimationState animation;
 
     private:
+        uint32_t ApplyDamage( const uint32_t dmg );
+
         // Add a temporary affection (usually a spell effect) with the specified duration. Only one affection can be added.
         void addAffection( const uint32_t mode, const uint32_t duration );
 
