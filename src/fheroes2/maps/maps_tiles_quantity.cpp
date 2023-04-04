@@ -1144,7 +1144,7 @@ namespace Maps
         return tile.GetObject() == MP2::OBJ_MONSTER && tile.getAdditionalMetadata() == Monster::JOIN_CONDITION_FREE;
     }
 
-    Monster Maps::getMonsterFromTile( const Tiles & tile )
+    Monster getMonsterFromTile( const Tiles & tile )
     {
         switch ( tile.GetObject( false ) ) {
         case MP2::OBJ_WATCH_TOWER:
@@ -1208,7 +1208,7 @@ namespace Maps
         return { Monster::UNKNOWN };
     }
 
-    Spell Maps::getSpellFromTile( const Tiles & tile )
+    Spell getSpellFromTile( const Tiles & tile )
     {
         switch ( tile.GetObject( false ) ) {
         case MP2::OBJ_ARTIFACT:
