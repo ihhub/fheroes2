@@ -203,8 +203,6 @@ void Maps::Tiles::QuantitySetResource( int res, uint32_t count )
     quantity2 = static_cast<Quantity2Type>( count );
 }
 
-
-
 ResourceCount Maps::Tiles::QuantityResourceCount() const
 {
     switch ( GetObject( false ) ) {
