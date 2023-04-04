@@ -107,6 +107,8 @@ namespace
                                                 ICN::BUTTON_SMALL_RESTART_GOOD,
                                                 ICN::BUTTON_SMALL_RESTART_EVIL,
                                                 ICN::BUTTON_KINGDOM_EXIT,
+                                                ICN::BUTTON_KINGDOM_HEROES,
+                                                ICN::BUTTON_KINGDOM_TOWNS,
                                                 ICN::BUTTON_MAPSIZE_SMALL,
                                                 ICN::BUTTON_MAPSIZE_MEDIUM,
                                                 ICN::BUTTON_MAPSIZE_LARGE,
@@ -905,6 +907,49 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_KINGDOM_HEROES: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::OVERVIEW, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::OVERVIEW, 1 );
+                    break;
+                }
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::OVERVIEW, 0 + i );
+
+                    // clean the button.
+                    Fill( out, 5, 10 + i, 89, 20, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HEROES" ), { 6, 5 }, { 6, 6 }, { 89, 34 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_KINGDOM_TOWNS: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::OVERVIEW, 2 );
+                    _icnVsSprite[id][1] = GetICN( ICN::OVERVIEW, 3 );
+                    break;
+                }
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::OVERVIEW, 2 + i );
+
+                    // clean the button.
+                    Fill( out, 6, 7 + i, 89 - i, 29, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWNS/\nCASTLES" ), { 6, 5 }, { 6, 6 }, { 90, 34 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+
             case ICN::BUTTON_MAPSIZE_SMALL: {
                 _icnVsSprite[id].resize( 2 );
 
@@ -1982,6 +2027,8 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_RESTART_GOOD:
             case ICN::BUTTON_SMALL_RESTART_EVIL:
             case ICN::BUTTON_KINGDOM_EXIT:
+            case ICN::BUTTON_KINGDOM_HEROES:
+            case ICN::BUTTON_KINGDOM_TOWNS:
             case ICN::BUTTON_MAPSIZE_SMALL:
             case ICN::BUTTON_MAPSIZE_MEDIUM:
             case ICN::BUTTON_MAPSIZE_LARGE:
