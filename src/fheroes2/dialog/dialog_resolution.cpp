@@ -54,6 +54,7 @@ namespace
     const int32_t textOffsetYCorrection = 6;
     const std::string middleText = " x ";
     const int32_t textPadding = 6;
+    const int32_t aspectRatioApproximationIterations = 100;
 
     std::pair<std::string, std::string> getResolutionStrings( const fheroes2::ResolutionInfo & resolution )
     {
@@ -68,27 +69,27 @@ namespace
     {
         const double ratio = static_cast<double>( resolution.width ) / static_cast<double>( resolution.height );
         double bestDelta = DBL_MAX;
-        std::int32_t i = 1;
-        std::int32_t j = 1;
-        std::int32_t best_i = 0;
-        std::int32_t best_j = 0;
+        int32_t width = 1;
+        int32_t height = 1;
+        int32_t bestWidth = 0;
+        int32_t bestHeight = 0;
 
-        for ( int iterations = 0; iterations < 100; iterations++ ) {
-            if ( const double delta = static_cast<double>( i ) / static_cast<double>( j ) - ratio; delta < 0 ) {
-                i++;
+        for ( int32_t iterations = 0; iterations < aspectRatioApproximationIterations; iterations++ ) {
+            if ( const double delta = static_cast<double>( width ) / static_cast<double>( height ) - ratio; delta < 0 ) {
+                width++;
             }
             else {
-                j++;
+                height++;
             }
 
-            if ( const std::double_t new_delta = std::abs( static_cast<double>( i ) / static_cast<double>( j ) - ratio ); new_delta < bestDelta ) {
-                bestDelta = new_delta;
-                best_i = i;
-                best_j = j;
+            if ( const std::double_t newDelta = std::abs( static_cast<double>( width ) / static_cast<double>( height ) - ratio ); newDelta < bestDelta ) {
+                bestDelta = newDelta;
+                bestWidth = width;
+                bestHeight = height;
             }
         }
 
-        return std::to_string( best_i ) + ":" + std::to_string( best_j );
+        return std::to_string( bestWidth ) + ":" + std::to_string( bestHeight );
     }
 
     class ResolutionList : public Interface::ListBox<fheroes2::ResolutionInfo>
