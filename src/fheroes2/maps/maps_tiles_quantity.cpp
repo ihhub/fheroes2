@@ -209,11 +209,11 @@ ResourceCount Maps::Tiles::QuantityResourceCount() const
     case MP2::OBJ_ARTIFACT:
         switch ( QuantityVariant() ) {
         case 1:
-            return ResourceCount( Resource::GOLD, getGoldAmountFromTile( *this ) );
+            return { Resource::GOLD, getGoldAmountFromTile( *this ) };
         case 2:
-            return ResourceCount( Resource::getResourceTypeFromIconIndex( QuantityExt() - 1 ), 3 );
+            return { Resource::getResourceTypeFromIconIndex( QuantityExt() - 1 ), 3 };
         case 3:
-            return ResourceCount( Resource::getResourceTypeFromIconIndex( QuantityExt() - 1 ), 5 );
+            return { Resource::getResourceTypeFromIconIndex( QuantityExt() - 1 ), 5 };
         default:
             break;
         }
@@ -221,16 +221,16 @@ ResourceCount Maps::Tiles::QuantityResourceCount() const
 
     case MP2::OBJ_SEA_CHEST:
     case MP2::OBJ_TREASURE_CHEST:
-        return ResourceCount( Resource::GOLD, getGoldAmountFromTile( *this ) );
+        return { Resource::GOLD, getGoldAmountFromTile( *this ) };
 
     case MP2::OBJ_FLOTSAM:
-        return ResourceCount( Resource::WOOD, quantity1 );
+        return { Resource::WOOD, quantity1 };
 
     default:
         break;
     }
 
-    return ResourceCount( quantity1, Resource::GOLD == quantity1 ? getGoldAmountFromTile( *this ) : quantity2 );
+    return { quantity1, Resource::GOLD == quantity1 ? getGoldAmountFromTile( *this ) : quantity2 };
 }
 
 Funds Maps::Tiles::QuantityFunds() const
@@ -262,7 +262,7 @@ Funds Maps::Tiles::QuantityFunds() const
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_GRAVEYARD:
     case MP2::OBJ_DAEMON_CAVE:
-        return Funds( Resource::GOLD, getGoldAmountFromTile( *this ) );
+        return { Resource::GOLD, getGoldAmountFromTile( *this ) };
 
     default:
         break;
