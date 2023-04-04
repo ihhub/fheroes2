@@ -1917,6 +1917,35 @@ void Battle::Interface::RedrawCover()
                 }
                 break;
             }
+            case Spell::TELEPORT: {
+                if ( cursorType == Cursor::WAR_NONE ) {
+                    highlightCells.emplace( cell );
+                }
+                else if ( cursorType == Cursor::SP_TELEPORT ) {
+                    if ( Board::isValidIndex( teleport_src ) ) {
+                        const Unit * unitToTeleport = arena.GetTroopBoard( teleport_src );
+                        assert( unitToTeleport != nullptr );
+
+                        const Position pos = Position::GetPosition( *unitToTeleport, index_pos );
+                        assert( pos.GetHead() != nullptr );
+
+                        highlightCells.emplace( pos.GetHead() );
+
+                        if ( unitToTeleport->isWide() ) {
+                            assert( pos.GetTail() != nullptr );
+
+                            highlightCells.emplace( pos.GetTail() );
+                        }
+                    }
+                    else {
+                        highlightCells.emplace( cell );
+                    }
+                }
+                else {
+                    assert( 0 );
+                }
+                break;
+            }
             default:
                 highlightCells.emplace( cell );
             }
@@ -1969,7 +1998,6 @@ void Battle::Interface::RedrawCover()
             }
 
             const Position pos = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) );
-
             assert( pos.GetHead() != nullptr );
 
             highlightCells.emplace( pos.GetHead() );
@@ -2514,42 +2542,53 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
     const Spell & spell = humanturn_spell;
 
     if ( cell && _currentUnit && spell.isValid() ) {
-        const Unit * b_stats = cell->GetUnit();
+        const Unit * unitOnCell = cell->GetUnit();
 
-        // over graveyard
-        if ( !b_stats && arena.GraveyardAllowResurrect( index_pos, spell ) ) {
-            b_stats = arena.GraveyardLastTroop( index_pos );
-            if ( b_stats->isWide() ) { // we need to check tail and head positions
-                const Cell * tailCell = Board::GetCell( b_stats->GetTailIndex() );
-                const Cell * headCell = Board::GetCell( b_stats->GetHeadIndex() );
-                if ( !tailCell || tailCell->GetUnit() || !headCell || headCell->GetUnit() )
-                    b_stats = nullptr;
+        // Cursor is over some dead unit that we can resurrect
+        if ( unitOnCell == nullptr && arena.GraveyardAllowResurrect( index_pos, spell ) ) {
+            unitOnCell = arena.GraveyardLastTroop( index_pos );
+            assert( unitOnCell != nullptr );
+
+            if ( unitOnCell->isWide() ) {
+                const Cell * headCell = Board::GetCell( unitOnCell->GetHeadIndex() );
+                const Cell * tailCell = Board::GetCell( unitOnCell->GetTailIndex() );
+                assert( headCell != nullptr && tailCell != nullptr );
+
+                // This dead unit is partially covered by an alive unit
+                if ( headCell->GetUnit() || tailCell->GetUnit() ) {
+                    unitOnCell = nullptr;
+                }
             }
         }
 
-        // teleport check first
+        // Check the Teleport spell first
         if ( Board::isValidIndex( teleport_src ) ) {
             const Unit * unitToTeleport = arena.GetTroopBoard( teleport_src );
-
             assert( unitToTeleport != nullptr );
 
-            if ( !b_stats && cell->isPassableForUnit( *unitToTeleport ) ) {
+            if ( !unitOnCell && cell->isPassableForUnit( *unitToTeleport ) ) {
                 statusMsg = _( "Teleport here" );
+
                 return Cursor::SP_TELEPORT;
             }
 
             statusMsg = _( "Invalid teleport destination" );
+
             return Cursor::WAR_NONE;
         }
-        else if ( b_stats && b_stats->AllowApplySpell( spell, _currentUnit->GetCurrentOrArmyCommander() ) ) {
+
+        if ( unitOnCell && unitOnCell->AllowApplySpell( spell, _currentUnit->GetCurrentOrArmyCommander() ) ) {
             statusMsg = _( "Cast %{spell} on %{monster}" );
             StringReplace( statusMsg, "%{spell}", spell.GetName() );
-            StringReplaceWithLowercase( statusMsg, "%{monster}", b_stats->GetName() );
+            StringReplaceWithLowercase( statusMsg, "%{monster}", unitOnCell->GetName() );
+
             return GetCursorFromSpell( spell.GetID() );
         }
-        else if ( !spell.isApplyToFriends() && !spell.isApplyToEnemies() && !spell.isApplyToAnyTroops() ) {
+
+        if ( !spell.isApplyToFriends() && !spell.isApplyToEnemies() && !spell.isApplyToAnyTroops() ) {
             statusMsg = _( "Cast %{spell}" );
             StringReplace( statusMsg, "%{spell}", spell.GetName() );
+
             return GetCursorFromSpell( spell.GetID() );
         }
     }
