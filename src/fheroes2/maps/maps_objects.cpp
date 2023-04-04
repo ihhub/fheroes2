@@ -146,7 +146,7 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
 
     colors = 0;
 
-    if ( dataStream.get() ){
+    if ( dataStream.get() ) {
         colors |= Color::BLUE;
     }
 

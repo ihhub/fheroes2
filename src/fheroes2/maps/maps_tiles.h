@@ -338,7 +338,6 @@ namespace Maps
         int QuantityExt() const;
         int QuantityColor() const;
         uint32_t QuantityGold() const;
-        
         Skill::Secondary QuantitySkill() const;
         ResourceCount QuantityResourceCount() const;
         Funds QuantityFunds() const;
