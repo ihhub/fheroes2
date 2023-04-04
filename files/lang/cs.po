@@ -1268,7 +1268,7 @@ msgid "Border Towns"
 msgstr "Pohraniční města"
 
 msgid "Conquer and Unify"
-msgstr "Dobij a sjednoť"
+msgstr "Dobyj a sjednoť"
 
 msgid "Crazy Uncle Ivan"
 msgstr "Šílený strýc Ivan"
@@ -4266,7 +4266,7 @@ msgid ""
 "You captured %{name}!\n"
 "You are victorious."
 msgstr ""
-"Dobil si %{name}!\n"
+"Dobyl si %{name}!\n"
 "Jsi vítěz."
 
 msgid ""
@@ -4357,10 +4357,10 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "Capture the castle '%{name}'."
-msgstr "Dobití hradu '%{name}'."
+msgstr "Dobytí hradu '%{name}'."
 
 msgid "Capture the town '%{name}'."
-msgstr "Dobití města '%{name}'."
+msgstr "Dobytí města '%{name}'."
 
 msgid "Defeat the hero '%{name}'."
 msgstr "Porážka hrdiny '%{name}'."
