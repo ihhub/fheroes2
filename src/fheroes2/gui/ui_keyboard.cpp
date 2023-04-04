@@ -156,19 +156,8 @@ namespace
     {
         fheroes2::Sprite released;
         fheroes2::Sprite pressed;
-        fheroes2::Point releasedOffset;
-        fheroes2::Point pressedOffset;
-        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, buttonWidth, releasedOffset, pressedOffset );
 
-        const fheroes2::FontColor fontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-
-        const fheroes2::Text releasedText( StringUpper( info ), { fheroes2::FontSize::BUTTON_RELEASED, fontColor } );
-        const fheroes2::Text pressedText( StringUpper( info ), { fheroes2::FontSize::BUTTON_PRESSED, fontColor } );
-
-        const fheroes2::Point textOffset{ ( buttonWidth - releasedText.width() ) / 2, ( 16 - fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) ) / 2 };
-
-        releasedText.draw( releasedOffset.x + textOffset.x, releasedOffset.y + textOffset.y, released );
-        pressedText.draw( pressedOffset.x + textOffset.x, pressedOffset.y + textOffset.y, pressed );
+        makeButtonSprites( released, pressed, info, buttonWidth, isEvilInterface );
 
         return { 0, 0, released, pressed };
     }
