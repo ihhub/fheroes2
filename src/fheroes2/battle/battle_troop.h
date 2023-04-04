@@ -117,11 +117,6 @@ namespace Battle
 
         bool isHaveDamage() const;
 
-        bool isMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const
-        {
-            return 100 <= GetMagicResist( spell, attackingArmySpellPower, attackingHero );
-        }
-
         bool OutOfWalls() const;
         bool canReach( int index ) const;
         bool canReach( const Unit & unit ) const;
@@ -276,6 +271,11 @@ namespace Battle
         AnimationState animation;
 
     private:
+        bool isMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const
+        {
+            return 100 <= GetMagicResist( spell, attackingArmySpellPower, attackingHero );
+        }
+
         // Add a temporary affection (usually a spell effect) with the specified duration. Only one affection can be added.
         void addAffection( const uint32_t mode, const uint32_t duration );
 

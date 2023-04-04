@@ -1875,12 +1875,11 @@ void Battle::Interface::RedrawCover()
         fheroes2::Blit( bridgeImage, _mainSurface, bridgeImage.x(), bridgeImage.y() );
     }
 
-    // cursor
     const Cell * cell = Board::GetCell( index_pos );
     const int cursorType = Cursor::Get().Themes();
 
     if ( cell && _currentUnit && conf.BattleShowMouseShadow() ) {
-        std::set<const Cell *> highlightCells;
+        std::set<const Cell *> highlightedCells;
 
         if ( humanturn_spell.isValid() ) {
             switch ( humanturn_spell.GetID() ) {
@@ -1889,37 +1888,37 @@ void Battle::Interface::RedrawCover()
                 for ( size_t i = 0; i < around.size(); ++i ) {
                     const Cell * nearbyCell = Board::GetCell( around[i] );
                     if ( nearbyCell != nullptr ) {
-                        highlightCells.emplace( nearbyCell );
+                        highlightedCells.emplace( nearbyCell );
                     }
                 }
                 break;
             }
             case Spell::FIREBALL:
             case Spell::METEORSHOWER: {
-                highlightCells.emplace( cell );
+                highlightedCells.emplace( cell );
                 const Indexes around = Board::GetAroundIndexes( index_pos );
                 for ( size_t i = 0; i < around.size(); ++i ) {
                     const Cell * nearbyCell = Board::GetCell( around[i] );
                     if ( nearbyCell != nullptr ) {
-                        highlightCells.emplace( nearbyCell );
+                        highlightedCells.emplace( nearbyCell );
                     }
                 }
                 break;
             }
             case Spell::FIREBLAST: {
-                highlightCells.emplace( cell );
+                highlightedCells.emplace( cell );
                 const Indexes around = Board::GetDistanceIndexes( index_pos, 2 );
                 for ( size_t i = 0; i < around.size(); ++i ) {
                     const Cell * nearbyCell = Board::GetCell( around[i] );
                     if ( nearbyCell != nullptr ) {
-                        highlightCells.emplace( nearbyCell );
+                        highlightedCells.emplace( nearbyCell );
                     }
                 }
                 break;
             }
             case Spell::TELEPORT: {
                 if ( cursorType == Cursor::WAR_NONE ) {
-                    highlightCells.emplace( cell );
+                    highlightedCells.emplace( cell );
                 }
                 else if ( cursorType == Cursor::SP_TELEPORT ) {
                     if ( Board::isValidIndex( teleport_src ) ) {
@@ -1929,16 +1928,16 @@ void Battle::Interface::RedrawCover()
                         const Position pos = Position::GetPosition( *unitToTeleport, index_pos );
                         assert( pos.GetHead() != nullptr );
 
-                        highlightCells.emplace( pos.GetHead() );
+                        highlightedCells.emplace( pos.GetHead() );
 
                         if ( unitToTeleport->isWide() ) {
                             assert( pos.GetTail() != nullptr );
 
-                            highlightCells.emplace( pos.GetTail() );
+                            highlightedCells.emplace( pos.GetTail() );
                         }
                     }
                     else {
-                        highlightCells.emplace( cell );
+                        highlightedCells.emplace( cell );
                     }
                 }
                 else {
@@ -1947,17 +1946,17 @@ void Battle::Interface::RedrawCover()
                 break;
             }
             default:
-                highlightCells.emplace( cell );
+                highlightedCells.emplace( cell );
             }
         }
         else if ( _currentUnit->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT )
                   && ( cursorType == Cursor::WAR_ARROW || cursorType == Cursor::WAR_BROKENARROW ) ) {
-            highlightCells.emplace( cell );
+            highlightedCells.emplace( cell );
             const Indexes around = Board::GetAroundIndexes( index_pos );
             for ( size_t i = 0; i < around.size(); ++i ) {
                 const Cell * nearbyCell = Board::GetCell( around[i] );
                 if ( nearbyCell != nullptr ) {
-                    highlightCells.emplace( nearbyCell );
+                    highlightedCells.emplace( nearbyCell );
                 }
             }
         }
@@ -1967,12 +1966,12 @@ void Battle::Interface::RedrawCover()
             assert( pos.GetHead() != nullptr );
             assert( pos.GetTail() != nullptr );
 
-            highlightCells.emplace( pos.GetHead() );
-            highlightCells.emplace( pos.GetTail() );
+            highlightedCells.emplace( pos.GetHead() );
+            highlightedCells.emplace( pos.GetTail() );
         }
         else if ( cursorType == Cursor::SWORD_TOPLEFT || cursorType == Cursor::SWORD_TOPRIGHT || cursorType == Cursor::SWORD_BOTTOMLEFT
                   || cursorType == Cursor::SWORD_BOTTOMRIGHT || cursorType == Cursor::SWORD_LEFT || cursorType == Cursor::SWORD_RIGHT ) {
-            highlightCells.emplace( cell );
+            highlightedCells.emplace( cell );
 
             int direction = 0;
             if ( cursorType == Cursor::SWORD_TOPLEFT ) {
@@ -2000,19 +1999,19 @@ void Battle::Interface::RedrawCover()
             const Position pos = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) );
             assert( pos.GetHead() != nullptr );
 
-            highlightCells.emplace( pos.GetHead() );
+            highlightedCells.emplace( pos.GetHead() );
 
             if ( _currentUnit->isWide() ) {
                 assert( pos.GetTail() != nullptr );
 
-                highlightCells.emplace( pos.GetTail() );
+                highlightedCells.emplace( pos.GetTail() );
             }
 
             if ( _currentUnit->isDoubleCellAttack() ) {
                 const Cell * secondAttackedCell = Board::GetCell( index_pos, Board::GetReflectDirection( direction ) );
 
                 if ( secondAttackedCell ) {
-                    highlightCells.emplace( secondAttackedCell );
+                    highlightedCells.emplace( secondAttackedCell );
                 }
             }
             else if ( _currentUnit->isAllAdjacentCellsAttack() ) {
@@ -2028,32 +2027,32 @@ void Battle::Interface::RedrawCover()
                     const Unit * nearbyUnit = nearbyCell->GetUnit();
 
                     if ( nearbyUnit && nearbyUnit->GetColor() != _currentUnit->GetCurrentColor() ) {
-                        highlightCells.emplace( nearbyCell );
+                        highlightedCells.emplace( nearbyCell );
                     }
                 }
             }
         }
         else {
-            highlightCells.emplace( cell );
+            highlightedCells.emplace( cell );
         }
 
-        assert( !highlightCells.empty() );
+        assert( !highlightedCells.empty() );
 
         const HeroBase * currentCommander = arena.GetCurrentCommander();
-        const int spellPower = ( currentCommander == nullptr ) ? 0 : currentCommander->GetPower();
 
-        for ( const Cell * highlightCell : highlightCells ) {
-            bool isApplicable = highlightCell->isPassable( false );
+        for ( const Cell * highlightedCell : highlightedCells ) {
+            assert( highlightedCell != nullptr );
+
+            bool isApplicable = highlightedCell->isPassable( false );
 
             if ( isApplicable ) {
-                const Unit * highlightedUnit = highlightCell->GetUnit();
+                const Unit * highlightedUnit = highlightedCell->GetUnit();
 
-                isApplicable
-                    = highlightedUnit == nullptr || !humanturn_spell.isValid() || !highlightedUnit->isMagicResist( humanturn_spell, spellPower, currentCommander );
+                isApplicable = highlightedUnit == nullptr || !humanturn_spell.isValid() || highlightedUnit->AllowApplySpell( humanturn_spell, currentCommander );
             }
 
             if ( isApplicable ) {
-                fheroes2::Blit( _hexagonCursorShadow, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
+                fheroes2::Blit( _hexagonCursorShadow, _mainSurface, highlightedCell->GetPos().x, highlightedCell->GetPos().y );
             }
         }
     }
