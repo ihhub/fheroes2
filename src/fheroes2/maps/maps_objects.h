@@ -34,8 +34,6 @@
 
 class StreamBase;
 
-class StreamBuf;
-
 class MapObjectSimple : public MapPosition
 {
 public:

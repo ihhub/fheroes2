@@ -48,7 +48,6 @@
 
 class MapObjectSimple;
 class StreamBase;
-class StreamBuf;
 
 struct MapEvent;
 struct Week;
