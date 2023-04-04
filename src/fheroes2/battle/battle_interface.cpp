@@ -2565,7 +2565,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
             const Unit * unitToTeleport = arena.GetTroopBoard( teleport_src );
             assert( unitToTeleport != nullptr );
 
-            if ( !unitOnCell && cell->isPassableForUnit( *unitToTeleport ) ) {
+            if ( unitOnCell == nullptr && cell->isPassableForUnit( *unitToTeleport ) ) {
                 statusMsg = _( "Teleport here" );
 
                 return Cursor::SP_TELEPORT;
