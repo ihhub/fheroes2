@@ -1917,10 +1917,11 @@ void Battle::Interface::RedrawCover()
                 break;
             }
             case Spell::TELEPORT: {
-                if ( cursorType == Cursor::WAR_NONE ) {
+                switch ( cursorType ) {
+                case Cursor::WAR_NONE:
                     highlightedCells.emplace( cell );
-                }
-                else if ( cursorType == Cursor::SP_TELEPORT ) {
+                    break;
+                case Cursor::SP_TELEPORT:
                     if ( Board::isValidIndex( teleport_src ) ) {
                         const Unit * unitToTeleport = arena.GetTroopBoard( teleport_src );
                         assert( unitToTeleport != nullptr );
@@ -1939,14 +1940,17 @@ void Battle::Interface::RedrawCover()
                     else {
                         highlightedCells.emplace( cell );
                     }
-                }
-                else {
+                    break;
+                default:
+                    // This should never happen
                     assert( 0 );
+                    break;
                 }
                 break;
             }
             default:
                 highlightedCells.emplace( cell );
+                break;
             }
         }
         else if ( _currentUnit->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT )
