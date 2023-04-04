@@ -945,7 +945,8 @@ namespace fheroes2
                     Fill( out, 6, 7 + i, 89 - i, 29, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWNS/\nCASTLES" ), { 6, 5 }, { 6, 6 }, { 90, 34 }, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWNS/\nCASTLES" ), { 6, 5 }, { 6, 6 }, { 90, 34 },
+                                    fheroes2::FontColor::WHITE );
 
                 break;
             }
