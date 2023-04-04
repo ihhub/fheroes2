@@ -28,6 +28,7 @@
 #include <vector>
 
 #include "army.h"
+#include "army_troop.h"
 #include "artifact_info.h"
 #include "castle.h"
 #include "gamedefs.h"
@@ -449,8 +450,8 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( spell == Spell::IDENTIFYHERO ) {
-            Players & players = Settings::Get().GetPlayers();
-            if ( players.size() == 1 ) {
+            const int opponentCount = Settings::Get().GetPlayers().getInPlayOpponentsCount( hero->GetColor() );
+            if ( opponentCount == 0 ) {
                 if ( res != nullptr ) {
                     *res = _( "There are no opponents. Casting this spell will not bring any advantage." );
                 }
