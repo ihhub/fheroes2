@@ -746,13 +746,12 @@ uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t &
     }
 
     uint32_t resurrected = 0;
+
     if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
-        resurrected = killed * enemy.Monster::GetHitPoints();
-        enemy.Resurrect( resurrected, true, false );
+        resurrected = enemy.Resurrect( killed * enemy.Monster::GetHitPoints(), true, false );
     }
     else if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
-        resurrected = killed * Monster::GetHitPoints();
-        enemy.Resurrect( resurrected, false, false );
+        resurrected = enemy.Resurrect( killed * Monster::GetHitPoints(), false, false );
     }
 
     if ( resurrected > 0 ) {
