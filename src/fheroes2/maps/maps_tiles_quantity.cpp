@@ -203,67 +203,7 @@ void Maps::Tiles::QuantitySetResource( int res, uint32_t count )
     quantity2 = static_cast<Quantity2Type>( count );
 }
 
-uint32_t Maps::Tiles::QuantityGold() const
-{
-    switch ( GetObject( false ) ) {
-    case MP2::OBJ_ARTIFACT:
-        switch ( QuantityVariant() ) {
-        case 1:
-            return 2000;
-        case 2:
-            return 2500;
-        case 3:
-            return 3000;
-        default:
-            break;
-        }
-        break;
 
-    case MP2::OBJ_RESOURCE:
-    case MP2::OBJ_MAGIC_GARDEN:
-    case MP2::OBJ_WATER_WHEEL:
-    case MP2::OBJ_TREE_OF_KNOWLEDGE:
-        return quantity1 == Resource::GOLD ? 100 * quantity2 : 0;
-
-    case MP2::OBJ_FLOTSAM:
-    case MP2::OBJ_CAMPFIRE:
-    case MP2::OBJ_SEA_CHEST:
-    case MP2::OBJ_TREASURE_CHEST:
-    case MP2::OBJ_DERELICT_SHIP:
-    case MP2::OBJ_GRAVEYARD:
-        return 100 * quantity2;
-
-    case MP2::OBJ_DAEMON_CAVE:
-        switch ( QuantityVariant() ) {
-        case 2:
-        case 4:
-            return 2500;
-        default:
-            break;
-        }
-        break;
-
-    case MP2::OBJ_SHIPWRECK:
-        switch ( QuantityVariant() ) {
-        case 1:
-            return 1000;
-        case 2:
-        case 4:
-            // Case 4 gives 2000 gold and an artifact.
-            return 2000;
-        case 3:
-            return 5000;
-        default:
-            break;
-        }
-        break;
-
-    default:
-        break;
-    }
-
-    return 0;
-}
 
 ResourceCount Maps::Tiles::QuantityResourceCount() const
 {
@@ -271,7 +211,7 @@ ResourceCount Maps::Tiles::QuantityResourceCount() const
     case MP2::OBJ_ARTIFACT:
         switch ( QuantityVariant() ) {
         case 1:
-            return ResourceCount( Resource::GOLD, QuantityGold() );
+            return ResourceCount( Resource::GOLD, getGoldAmountFromTile( *this ) );
         case 2:
             return ResourceCount( Resource::getResourceTypeFromIconIndex( QuantityExt() - 1 ), 3 );
         case 3:
@@ -283,7 +223,7 @@ ResourceCount Maps::Tiles::QuantityResourceCount() const
 
     case MP2::OBJ_SEA_CHEST:
     case MP2::OBJ_TREASURE_CHEST:
-        return ResourceCount( Resource::GOLD, QuantityGold() );
+        return ResourceCount( Resource::GOLD, getGoldAmountFromTile( *this ) );
 
     case MP2::OBJ_FLOTSAM:
         return ResourceCount( Resource::WOOD, quantity1 );
@@ -292,7 +232,7 @@ ResourceCount Maps::Tiles::QuantityResourceCount() const
         break;
     }
 
-    return ResourceCount( quantity1, Resource::GOLD == quantity1 ? QuantityGold() : quantity2 );
+    return ResourceCount( quantity1, Resource::GOLD == quantity1 ? getGoldAmountFromTile( *this ) : quantity2 );
 }
 
 Funds Maps::Tiles::QuantityFunds() const
@@ -306,17 +246,17 @@ Funds Maps::Tiles::QuantityFunds() const
             return Funds( rc );
         case 2:
         case 3:
-            return Funds( Resource::GOLD, QuantityGold() ) + Funds( rc );
+            return Funds( Resource::GOLD, getGoldAmountFromTile( *this ) ) + Funds( rc );
         default:
             break;
         }
         break;
 
     case MP2::OBJ_CAMPFIRE:
-        return Funds( Resource::GOLD, QuantityGold() ) + Funds( rc );
+        return Funds( Resource::GOLD, getGoldAmountFromTile( *this ) ) + Funds( rc );
 
     case MP2::OBJ_FLOTSAM:
-        return Funds( Resource::GOLD, QuantityGold() ) + Funds( Resource::WOOD, quantity1 );
+        return Funds( Resource::GOLD, getGoldAmountFromTile( *this ) ) + Funds( Resource::WOOD, quantity1 );
 
     case MP2::OBJ_SEA_CHEST:
     case MP2::OBJ_TREASURE_CHEST:
@@ -324,7 +264,7 @@ Funds Maps::Tiles::QuantityFunds() const
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_GRAVEYARD:
     case MP2::OBJ_DAEMON_CAVE:
-        return Funds( Resource::GOLD, QuantityGold() );
+        return Funds( Resource::GOLD, getGoldAmountFromTile( *this ) );
 
     default:
         break;
@@ -1234,7 +1174,7 @@ namespace Maps
     {
         switch ( tile.GetObject( false ) ) {
         case MP2::OBJ_WAGON:
-            return Artifact( tile.GetQuantity2() ? static_cast<int>( Artifact::UNKNOWN ) : tile.GetQuantity1() );
+            return { tile.GetQuantity2() ? static_cast<int>( Artifact::UNKNOWN ) : tile.GetQuantity1() };
 
         case MP2::OBJ_SKELETON:
         case MP2::OBJ_DAEMON_CAVE:
@@ -1243,7 +1183,7 @@ namespace Maps
         case MP2::OBJ_SHIPWRECK_SURVIVOR:
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_GRAVEYARD:
-            return Artifact( tile.GetQuantity1() );
+            return { tile.GetQuantity1() };
 
         case MP2::OBJ_ARTIFACT:
             if ( tile.QuantityVariant() == 15 ) {
@@ -1252,12 +1192,74 @@ namespace Maps
                 return art;
             }
             else
-                return Artifact( tile.GetQuantity1() );
+                return { tile.GetQuantity1() };
 
         default:
             break;
         }
 
-        return Artifact( Artifact::UNKNOWN );
+        return { Artifact::UNKNOWN };
+    }
+
+    uint32_t getGoldAmountFromTile( const Tiles & tile )
+    {
+        switch ( tile.GetObject( false ) ) {
+        case MP2::OBJ_ARTIFACT:
+            switch ( tile.QuantityVariant() ) {
+            case 1:
+                return 2000;
+            case 2:
+                return 2500;
+            case 3:
+                return 3000;
+            default:
+                break;
+            }
+            break;
+
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_MAGIC_GARDEN:
+        case MP2::OBJ_WATER_WHEEL:
+        case MP2::OBJ_TREE_OF_KNOWLEDGE:
+            return tile.GetQuantity1() == Resource::GOLD ? 100 * tile.GetQuantity2() : 0;
+
+        case MP2::OBJ_FLOTSAM:
+        case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_SEA_CHEST:
+        case MP2::OBJ_TREASURE_CHEST:
+        case MP2::OBJ_DERELICT_SHIP:
+        case MP2::OBJ_GRAVEYARD:
+            return 100 * tile.GetQuantity2();
+
+        case MP2::OBJ_DAEMON_CAVE:
+            switch ( tile.QuantityVariant() ) {
+            case 2:
+            case 4:
+                return 2500;
+            default:
+                break;
+            }
+            break;
+
+        case MP2::OBJ_SHIPWRECK:
+            switch ( tile.QuantityVariant() ) {
+            case 1:
+                return 1000;
+            case 2:
+            case 4:
+                // Case 4 gives 2000 gold and an artifact.
+                return 2000;
+            case 3:
+                return 5000;
+            default:
+                break;
+            }
+            break;
+
+        default:
+            break;
+        }
+
+        return 0;
     }
 }

@@ -125,13 +125,13 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
     dataStream.skip( 1 );
 
     // Get the amount of resources.
-    resources.wood = dataStream.getLE32();
-    resources.mercury = dataStream.getLE32();
-    resources.ore = dataStream.getLE32();
-    resources.sulfur = dataStream.getLE32();
-    resources.crystal = dataStream.getLE32();
-    resources.gems = dataStream.getLE32();
-    resources.gold = dataStream.getLE32();
+    resources.wood = static_cast<int32_t>( dataStream.getLE32() );
+    resources.mercury = static_cast<int32_t>( dataStream.getLE32() );
+    resources.ore = static_cast<int32_t>( dataStream.getLE32() );
+    resources.sulfur = static_cast<int32_t>( dataStream.getLE32() );
+    resources.crystal = static_cast<int32_t>( dataStream.getLE32() );
+    resources.gems = static_cast<int32_t>( dataStream.getLE32() );
+    resources.gold = static_cast<int32_t>( dataStream.getLE32() );
 
     // An artifact to be given.
     artifact = dataStream.getLE16();

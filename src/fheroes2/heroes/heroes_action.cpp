@@ -1248,7 +1248,7 @@ namespace
     void ActionToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        uint32_t gold = tile.QuantityGold();
+        uint32_t gold = getGoldAmountFromTile( tile );
         std::string ask;
         std::string msg;
         std::string win;
@@ -1691,7 +1691,7 @@ namespace
         const std::string & hdr = MP2::StringObject( objectType );
 
         std::string msg;
-        uint32_t gold = tile.QuantityGold();
+        uint32_t gold = getGoldAmountFromTile( tile );
 
         // dialog
         if ( tile.isWater() ) {
@@ -2884,7 +2884,7 @@ namespace
                 return Outcome::Experience;
             }
             case 2: {
-                const uint32_t gold = tile.QuantityGold();
+                const uint32_t gold = getGoldAmountFromTile( tile );
 
                 std::string msg = _(
                     "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points and %{count} gold." );
@@ -2917,7 +2917,7 @@ namespace
             }
             default: {
                 const Kingdom & kingdom = hero.GetKingdom();
-                const uint32_t gold = tile.QuantityGold();
+                const uint32_t gold = getGoldAmountFromTile( tile );
                 const Funds payment( Resource::GOLD, gold );
 
                 if ( !kingdom.AllowPayment( payment ) ) {
@@ -2982,7 +2982,7 @@ namespace
 
                     break;
                 case Outcome::ExperienceAndGold: {
-                    const uint32_t gold = tile.QuantityGold();
+                    const uint32_t gold = getGoldAmountFromTile( tile );
 
                     hero.IncreaseExperience( demonSlayingExperience );
                     kingdom.AddFundsResource( Funds( Resource::GOLD, gold ) );
@@ -2998,7 +2998,7 @@ namespace
                     break;
                 }
                 case Outcome::PayOff: {
-                    const uint32_t gold = tile.QuantityGold();
+                    const uint32_t gold = getGoldAmountFromTile( tile );
                     const Funds payment( Resource::GOLD, gold );
 
                     kingdom.OddFundsResource( payment );

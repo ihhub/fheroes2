@@ -1519,13 +1519,13 @@ void EventDate::LoadFromMP2( const std::vector<uint8_t> & data )
     dataStream.skip( 1 );
 
     // Get the amount of resources.
-    resource.wood = dataStream.getLE32();
-    resource.mercury = dataStream.getLE32();
-    resource.ore = dataStream.getLE32();
-    resource.sulfur = dataStream.getLE32();
-    resource.crystal = dataStream.getLE32();
-    resource.gems = dataStream.getLE32();
-    resource.gold = dataStream.getLE32();
+    resource.wood = static_cast<int32_t>( dataStream.getLE32() );
+    resource.mercury = static_cast<int32_t>( dataStream.getLE32() );
+    resource.ore = static_cast<int32_t>( dataStream.getLE32() );
+    resource.sulfur = static_cast<int32_t>( dataStream.getLE32() );
+    resource.crystal = static_cast<int32_t>( dataStream.getLE32() );
+    resource.gems = static_cast<int32_t>( dataStream.getLE32() );
+    resource.gold = static_cast<int32_t>( dataStream.getLE32() );
 
     dataStream.skip( 2 );
 

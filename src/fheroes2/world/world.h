@@ -118,13 +118,6 @@ struct CapturedObjects : std::map<int32_t, CapturedObject>
 
 struct EventDate
 {
-    EventDate()
-        : firstOccurrenceDay( 0 )
-        , repeatPeriodInDays( 0 )
-        , colors( 0 )
-        , isApplicableForAIPlayers( false )
-    {}
-
     void LoadFromMP2( const std::vector<uint8_t> & data );
 
     bool isAllow( const int color, const uint32_t date ) const;
@@ -135,10 +128,10 @@ struct EventDate
     }
 
     Funds resource;
-    uint32_t firstOccurrenceDay;
-    uint32_t repeatPeriodInDays;
-    int colors;
-    bool isApplicableForAIPlayers;
+    uint32_t firstOccurrenceDay{ 0 };
+    uint32_t repeatPeriodInDays{ 0 };
+    int colors{ 0 };
+    bool isApplicableForAIPlayers{ false };
     std::string message;
 
     std::string title;
