@@ -776,12 +776,15 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
         return false;
     }
 
-    if ( hero && spell.isApplyToFriends() && GetColor() != hero->GetColor() )
+    if ( hero && spell.isApplyToFriends() && GetColor() != hero->GetColor() ) {
         return false;
-    if ( hero && spell.isApplyToEnemies() && GetColor() == hero->GetColor() && !forceApplyToAlly )
+    }
+    if ( hero && spell.isApplyToEnemies() && GetColor() == hero->GetColor() && !forceApplyToAlly ) {
         return false;
-    if ( isMagicResist( spell, ( hero ? hero->GetPower() : 0 ), hero ) )
+    }
+    if ( GetMagicResist( spell, ( hero ? hero->GetPower() : 0 ), hero ) >= 100 ) {
         return false;
+    }
 
     const HeroBase * myhero = GetCommander();
     if ( !myhero )
