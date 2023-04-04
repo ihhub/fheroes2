@@ -241,5 +241,4 @@ namespace fheroes2
 
     // Generate released and pressed button sprites with the text.
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface );
-
 }
