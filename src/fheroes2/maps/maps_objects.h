@@ -75,7 +75,7 @@ struct MapEvent : public MapObjectSimple
 {
     MapEvent();
 
-    void LoadFromMP2( int32_t index, StreamBuf );
+    void LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data );
 
     bool isAllow( int color ) const;
     void SetVisited( int color );

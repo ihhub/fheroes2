@@ -62,7 +62,7 @@ bool Maps::Tiles::QuantityIsValid() const
         return true;
 
     case MP2::OBJ_PYRAMID:
-        return QuantitySpell().isValid();
+        return getSpellFromTile( *this ).isValid();
 
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_GRAVEYARD:
@@ -74,10 +74,10 @@ bool Maps::Tiles::QuantityIsValid() const
         return quantity2 != 0;
 
     case MP2::OBJ_SKELETON:
-        return QuantityArtifact() != Artifact::UNKNOWN;
+        return getArtifactFromTile( *this ) != Artifact::UNKNOWN;
 
     case MP2::OBJ_WAGON:
-        return QuantityArtifact() != Artifact::UNKNOWN || quantity2 != 0;
+        return getArtifactFromTile( *this ) != Artifact::UNKNOWN || quantity2 != 0;
 
     case MP2::OBJ_DAEMON_CAVE:
         return QuantityVariant() != 0;
@@ -152,28 +152,6 @@ void Maps::Tiles::QuantitySetSkill( int skill )
     }
 }
 
-Spell Maps::Tiles::QuantitySpell() const
-{
-    switch ( GetObject( false ) ) {
-    case MP2::OBJ_ARTIFACT:
-        if ( QuantityVariant() == 15 ) {
-            return { quantity1 };
-        }
-        return { Spell::NONE };
-
-    case MP2::OBJ_SHRINE_FIRST_CIRCLE:
-    case MP2::OBJ_SHRINE_SECOND_CIRCLE:
-    case MP2::OBJ_SHRINE_THIRD_CIRCLE:
-    case MP2::OBJ_PYRAMID:
-        return { quantity1 };
-
-    default:
-        break;
-    }
-
-    return { Spell::NONE };
-}
-
 void Maps::Tiles::QuantitySetSpell( int spell )
 {
     using Quantity1Type = decltype( quantity1 );
@@ -193,37 +171,6 @@ void Maps::Tiles::QuantitySetSpell( int spell )
     default:
         break;
     }
-}
-
-Artifact Maps::Tiles::QuantityArtifact() const
-{
-    switch ( GetObject( false ) ) {
-    case MP2::OBJ_WAGON:
-        return Artifact( quantity2 ? static_cast<int>( Artifact::UNKNOWN ) : quantity1 );
-
-    case MP2::OBJ_SKELETON:
-    case MP2::OBJ_DAEMON_CAVE:
-    case MP2::OBJ_SEA_CHEST:
-    case MP2::OBJ_TREASURE_CHEST:
-    case MP2::OBJ_SHIPWRECK_SURVIVOR:
-    case MP2::OBJ_SHIPWRECK:
-    case MP2::OBJ_GRAVEYARD:
-        return Artifact( quantity1 );
-
-    case MP2::OBJ_ARTIFACT:
-        if ( QuantityVariant() == 15 ) {
-            Artifact art( Artifact::SPELL_SCROLL );
-            art.SetSpell( QuantitySpell().GetID() );
-            return art;
-        }
-        else
-            return Artifact( quantity1 );
-
-    default:
-        break;
-    }
-
-    return Artifact( Artifact::UNKNOWN );
 }
 
 void Maps::Tiles::QuantitySetArtifact( int art )
@@ -417,75 +364,9 @@ int Maps::Tiles::QuantityColor() const
     }
 }
 
-Monster Maps::Tiles::QuantityMonster() const
-{
-    switch ( GetObject( false ) ) {
-    case MP2::OBJ_WATCH_TOWER:
-        return Monster( Monster::ORC );
-    case MP2::OBJ_EXCAVATION:
-        return Monster( Monster::SKELETON );
-    case MP2::OBJ_CAVE:
-        return Monster( Monster::CENTAUR );
-    case MP2::OBJ_TREE_HOUSE:
-        return Monster( Monster::SPRITE );
-    case MP2::OBJ_ARCHER_HOUSE:
-        return Monster( Monster::ARCHER );
-    case MP2::OBJ_GOBLIN_HUT:
-        return Monster( Monster::GOBLIN );
-    case MP2::OBJ_DWARF_COTTAGE:
-        return Monster( Monster::DWARF );
-    case MP2::OBJ_HALFLING_HOLE:
-        return Monster( Monster::HALFLING );
-    case MP2::OBJ_PEASANT_HUT:
-        return Monster( Monster::PEASANT );
-
-    case MP2::OBJ_RUINS:
-        return Monster( Monster::MEDUSA );
-    case MP2::OBJ_TREE_CITY:
-        return Monster( Monster::SPRITE );
-    case MP2::OBJ_WAGON_CAMP:
-        return Monster( Monster::ROGUE );
-    case MP2::OBJ_DESERT_TENT:
-        return Monster( Monster::NOMAD );
-
-    case MP2::OBJ_TROLL_BRIDGE:
-        return Monster( Monster::TROLL );
-    case MP2::OBJ_DRAGON_CITY:
-        return Monster( Monster::RED_DRAGON );
-    case MP2::OBJ_CITY_OF_DEAD:
-        return Monster( Monster::POWER_LICH );
-
-    case MP2::OBJ_GENIE_LAMP:
-        return Monster( Monster::GENIE );
-
-    case MP2::OBJ_ABANDONED_MINE:
-        return { Monster::GHOST };
-
-    // Price of Loyalty
-    case MP2::OBJ_WATER_ALTAR:
-        return Monster( Monster::WATER_ELEMENT );
-    case MP2::OBJ_AIR_ALTAR:
-        return Monster( Monster::AIR_ELEMENT );
-    case MP2::OBJ_FIRE_ALTAR:
-        return Monster( Monster::FIRE_ELEMENT );
-    case MP2::OBJ_EARTH_ALTAR:
-        return Monster( Monster::EARTH_ELEMENT );
-    case MP2::OBJ_BARROW_MOUNDS:
-        return Monster( Monster::GHOST );
-
-    case MP2::OBJ_MONSTER:
-        return Monster( _imageIndex + 1 );
-
-    default:
-        break;
-    }
-
-    return MP2::isCaptureObject( GetObject( false ) ) ? Monster( world.GetCapturedObject( GetIndex() ).GetTroop().GetID() ) : Monster( Monster::UNKNOWN );
-}
-
 Troop Maps::Tiles::QuantityTroop() const
 {
-    return MP2::isCaptureObject( GetObject( false ) ) ? world.GetCapturedObject( GetIndex() ).GetTroop() : Troop( QuantityMonster(), MonsterCount() );
+    return MP2::isCaptureObject( GetObject( false ) ) ? world.GetCapturedObject( GetIndex() ).GetTroop() : Troop( getMonsterFromTile( *this ), MonsterCount() );
 }
 
 void Maps::Tiles::QuantityReset()
@@ -871,11 +752,11 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_BARRIER:
-        QuantitySetColor( Tiles::getColorFromBarrierSprite( _objectIcnType, _imageIndex ) );
+        QuantitySetColor( getColorFromBarrierSprite( _objectIcnType, _imageIndex ) );
         break;
 
     case MP2::OBJ_TRAVELLER_TENT:
-        QuantitySetColor( Tiles::getColorFromTravellerTentSprite( _objectIcnType, _imageIndex ) );
+        QuantitySetColor( getColorFromTravellerTentSprite( _objectIcnType, _imageIndex ) );
         break;
 
     case MP2::OBJ_ALCHEMIST_LAB: {
@@ -1261,5 +1142,122 @@ namespace Maps
     bool isMonsterOnTileJoinConditionFree( const Tiles & tile )
     {
         return tile.GetObject() == MP2::OBJ_MONSTER && tile.getAdditionalMetadata() == Monster::JOIN_CONDITION_FREE;
+    }
+
+    Monster Maps::getMonsterFromTile( const Tiles & tile )
+    {
+        switch ( tile.GetObject( false ) ) {
+        case MP2::OBJ_WATCH_TOWER:
+            return { Monster::ORC };
+        case MP2::OBJ_EXCAVATION:
+            return { Monster::SKELETON };
+        case MP2::OBJ_CAVE:
+            return { Monster::CENTAUR };
+        case MP2::OBJ_TREE_HOUSE:
+            return { Monster::SPRITE };
+        case MP2::OBJ_ARCHER_HOUSE:
+            return { Monster::ARCHER };
+        case MP2::OBJ_GOBLIN_HUT:
+            return { Monster::GOBLIN };
+        case MP2::OBJ_DWARF_COTTAGE:
+            return { Monster::DWARF };
+        case MP2::OBJ_HALFLING_HOLE:
+            return { Monster::HALFLING };
+        case MP2::OBJ_PEASANT_HUT:
+            return { Monster::PEASANT };
+        case MP2::OBJ_RUINS:
+            return { Monster::MEDUSA };
+        case MP2::OBJ_TREE_CITY:
+            return { Monster::SPRITE };
+        case MP2::OBJ_WAGON_CAMP:
+            return { Monster::ROGUE };
+        case MP2::OBJ_DESERT_TENT:
+            return { Monster::NOMAD };
+        case MP2::OBJ_TROLL_BRIDGE:
+            return { Monster::TROLL };
+        case MP2::OBJ_DRAGON_CITY:
+            return { Monster::RED_DRAGON };
+        case MP2::OBJ_CITY_OF_DEAD:
+            return { Monster::POWER_LICH };
+        case MP2::OBJ_GENIE_LAMP:
+            return { Monster::GENIE };
+        case MP2::OBJ_ABANDONED_MINE:
+            return { Monster::GHOST };
+        // Price of Loyalty
+        case MP2::OBJ_WATER_ALTAR:
+            return { Monster::WATER_ELEMENT };
+        case MP2::OBJ_AIR_ALTAR:
+            return { Monster::AIR_ELEMENT };
+        case MP2::OBJ_FIRE_ALTAR:
+            return { Monster::FIRE_ELEMENT };
+        case MP2::OBJ_EARTH_ALTAR:
+            return { Monster::EARTH_ELEMENT };
+        case MP2::OBJ_BARROW_MOUNDS:
+            return { Monster::GHOST };
+
+        case MP2::OBJ_MONSTER:
+            return { tile.GetObjectSpriteIndex() + 1 };
+        default:
+            break;
+        }
+
+        if ( MP2::isCaptureObject( tile.GetObject( false ) ) ) {
+            return { world.GetCapturedObject( tile.GetIndex() ).GetTroop().GetID() };
+        }
+
+        return { Monster::UNKNOWN };
+    }
+
+    Spell Maps::getSpellFromTile( const Tiles & tile )
+    {
+        switch ( tile.GetObject( false ) ) {
+        case MP2::OBJ_ARTIFACT:
+            if ( tile.QuantityVariant() == 15 ) {
+                return { tile.GetQuantity1() };
+            }
+            return { Spell::NONE };
+
+        case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+        case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+        case MP2::OBJ_SHRINE_THIRD_CIRCLE:
+        case MP2::OBJ_PYRAMID:
+            return { tile.GetQuantity1() };
+
+        default:
+            break;
+        }
+
+        return { Spell::NONE };
+    }
+
+    Artifact getArtifactFromTile( const Tiles & tile )
+    {
+        switch ( tile.GetObject( false ) ) {
+        case MP2::OBJ_WAGON:
+            return Artifact( tile.GetQuantity2() ? static_cast<int>( Artifact::UNKNOWN ) : tile.GetQuantity1() );
+
+        case MP2::OBJ_SKELETON:
+        case MP2::OBJ_DAEMON_CAVE:
+        case MP2::OBJ_SEA_CHEST:
+        case MP2::OBJ_TREASURE_CHEST:
+        case MP2::OBJ_SHIPWRECK_SURVIVOR:
+        case MP2::OBJ_SHIPWRECK:
+        case MP2::OBJ_GRAVEYARD:
+            return Artifact( tile.GetQuantity1() );
+
+        case MP2::OBJ_ARTIFACT:
+            if ( tile.QuantityVariant() == 15 ) {
+                Artifact art( Artifact::SPELL_SCROLL );
+                art.SetSpell( getSpellFromTile( tile ).GetID() );
+                return art;
+            }
+            else
+                return Artifact( tile.GetQuantity1() );
+
+        default:
+            break;
+        }
+
+        return Artifact( Artifact::UNKNOWN );
     }
 }

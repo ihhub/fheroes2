@@ -776,7 +776,7 @@ namespace
                 hero.GetKingdom().AddFundsResource( funds );
             }
             else {
-                const Artifact & art = tile.QuantityArtifact();
+                const Artifact & art = getArtifactFromTile( tile );
                 message += '\n';
                 message.append( _( "Searching through the tattered clothing, you find the %{artifact}." ) );
                 StringReplace( message, "%{artifact}", art.GetName() );
@@ -810,7 +810,7 @@ namespace
         const std::string title( MP2::StringObject( MP2::OBJ_WAGON ) );
 
         if ( tile.QuantityIsValid() ) {
-            const Artifact & art = tile.QuantityArtifact();
+            const Artifact & art = getArtifactFromTile( tile );
 
             if ( art.isValid() ) {
                 if ( hero.IsFullBagArtifacts() ) {
@@ -891,7 +891,7 @@ namespace
 
     void ActionToShrine( Heroes & hero, int32_t dst_index )
     {
-        const Spell & spell = world.GetTiles( dst_index ).QuantitySpell();
+        const Spell & spell = getSpellFromTile( world.GetTiles( dst_index ) );
         const uint32_t spell_level = spell.Level();
 
         std::string head;
@@ -1055,7 +1055,7 @@ namespace
     void ActionToPyramid( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        const Spell & spell = tile.QuantitySpell();
+        const Spell & spell = getSpellFromTile( tile );
 
         const std::string ask = _(
             "You come upon the pyramid of a great and ancient king.\nYou are tempted to search it for treasure, but all the old stories warn of fearful curses and undead "
@@ -1295,7 +1295,7 @@ namespace
 
                     complete = true;
 
-                    const Artifact & art = tile.QuantityArtifact();
+                    const Artifact & art = getArtifactFromTile( tile );
                     if ( art.isValid() ) {
                         if ( hero.IsFullBagArtifacts() ) {
                             gold = GoldInsteadArtifact( objectType );
@@ -1481,7 +1481,7 @@ namespace
             hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
         }
         else {
-            const Artifact & art = tile.QuantityArtifact();
+            const Artifact & art = getArtifactFromTile( tile );
             std::string str = _(
                 "You've pulled a shipwreck survivor from certain death in an unforgiving ocean. Grateful, he rewards you for your act of kindness by giving you the %{art}." );
             StringReplace( str, "%{art}", art.GetName() );
@@ -1514,7 +1514,7 @@ namespace
             Dialog::Message( title, _( "You cannot pick up this artifact, you already have a full load!" ), Font::BIG, Dialog::OK );
         else {
             uint32_t cond = tile.QuantityVariant();
-            Artifact art = tile.QuantityArtifact();
+            Artifact art = getArtifactFromTile( tile );
 
             bool result = false;
             std::string msg;
@@ -1696,7 +1696,7 @@ namespace
         // dialog
         if ( tile.isWater() ) {
             if ( gold ) {
-                const Artifact & art = tile.QuantityArtifact();
+                const Artifact & art = getArtifactFromTile( tile );
 
                 if ( art.isValid() ) {
                     if ( hero.IsFullBagArtifacts() ) {
@@ -1738,7 +1738,7 @@ namespace
             }
         }
         else {
-            const Artifact & art = tile.QuantityArtifact();
+            const Artifact & art = getArtifactFromTile( tile );
 
             if ( gold ) {
                 const uint32_t expr = gold > 500 ? gold - 500 : 500;
@@ -2036,7 +2036,7 @@ namespace
                 else {
                     // The army should include only the original monsters
                     const uint32_t monstersLeft = army.getTotalCount();
-                    assert( monstersLeft == army.GetCountMonsters( tile.QuantityMonster() ) );
+                    assert( monstersLeft == army.GetCountMonsters( getMonsterFromTile( tile ) ) );
 
                     Troop & troop = world.GetCapturedObject( dstIndex ).GetTroop();
                     troop.SetCount( monstersLeft );
@@ -2899,7 +2899,7 @@ namespace
                 return Outcome::ExperienceAndGold;
             }
             case 3: {
-                const Artifact art = tile.QuantityArtifact();
+                const Artifact art = getArtifactFromTile( tile );
                 if ( !art.isValid() ) {
                     return Outcome::Invalid;
                 }
@@ -2990,7 +2990,7 @@ namespace
                     break;
                 }
                 case Outcome::ExperienceAndArtifact: {
-                    const Artifact art = tile.QuantityArtifact();
+                    const Artifact art = getArtifactFromTile( tile );
 
                     hero.IncreaseExperience( demonSlayingExperience );
                     hero.PickupArtifact( art );

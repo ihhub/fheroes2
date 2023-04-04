@@ -580,7 +580,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             case MP2::OBJ_EVENT:
                 if ( MP2::MP2_EVENT_STRUCTURE_MIN_SIZE <= pblock.size() && 0x01 == pblock[0] ) {
                     MapEvent * obj = new MapEvent();
-                    obj->LoadFromMP2( objectTileId, StreamBuf( pblock ) );
+                    obj->LoadFromMP2( objectTileId, pblock );
                     map_objects.add( obj );
                 }
                 break;
@@ -599,9 +599,9 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         // other events
         else if ( 0x00 == pblock[0] ) {
             // Daily event.
-            if ( MP2::MP2_EVENT_STRUCTURE_MIN_SIZE <= pblock.size() && 1 == pblock[42] ) {
+            if ( MP2::MP2_EVENT_STRUCTURE_MIN_SIZE <= pblock.size() && pblock[42] == 1 ) {
                 vec_eventsday.emplace_back();
-                vec_eventsday.back().LoadFromMP2( StreamBuf( pblock ) );
+                vec_eventsday.back().LoadFromMP2( pblock );
             }
             else if ( MP2::MP2_RUMOR_STRUCTURE_MIN_SIZE <= pblock.size() ) {
                 // Structure containing information about a rumor.

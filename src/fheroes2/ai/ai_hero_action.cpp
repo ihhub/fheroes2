@@ -535,14 +535,14 @@ namespace
 
         if ( tile.isWater() ) {
             if ( gold ) {
-                const Artifact & art = tile.QuantityArtifact();
+                const Artifact & art = getArtifactFromTile( tile );
 
                 if ( art.isValid() && !hero.PickupArtifact( art ) )
                     gold = GoldInsteadArtifact( objectType );
             }
         }
         else {
-            const Artifact & art = tile.QuantityArtifact();
+            const Artifact & art = getArtifactFromTile( tile );
 
             if ( gold ) {
                 const uint32_t experience = gold > 500 ? gold - 500 : 500;
@@ -630,7 +630,7 @@ namespace
                 else {
                     // The army should include only the original monsters
                     const uint32_t monstersLeft = army.getTotalCount();
-                    assert( monstersLeft == army.GetCountMonsters( tile.QuantityMonster() ) );
+                    assert( monstersLeft == army.GetCountMonsters( getMonsterFromTile( tile ) ) );
 
                     Troop & troop = world.GetCapturedObject( dstIndex ).GetTroop();
                     troop.SetCount( monstersLeft );
@@ -679,7 +679,7 @@ namespace
 
         // artifact
         if ( tile.QuantityIsValid() ) {
-            const Artifact & art = tile.QuantityArtifact();
+            const Artifact & art = getArtifactFromTile( tile );
 
             if ( !hero.PickupArtifact( art ) ) {
                 uint32_t gold = GoldInsteadArtifact( objectType );
@@ -699,7 +699,7 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
         if ( tile.QuantityIsValid() ) {
-            const Artifact & art = tile.QuantityArtifact();
+            const Artifact & art = getArtifactFromTile( tile );
 
             if ( art.isValid() )
                 hero.PickupArtifact( art );
@@ -931,7 +931,7 @@ namespace
 
     void AIToShrine( Heroes & hero, int32_t dst_index )
     {
-        const Spell & spell = world.GetTiles( dst_index ).QuantitySpell();
+        const Spell & spell = getSpellFromTile( world.GetTiles( dst_index ) );
         const uint32_t spell_level = spell.Level();
 
         if ( spell.isValid() &&
@@ -1088,7 +1088,7 @@ namespace
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
                 complete = true;
-                const Artifact & art = tile.QuantityArtifact();
+                const Artifact & art = getArtifactFromTile( tile );
 
                 if ( art.isValid() && !hero.PickupArtifact( art ) )
                     gold = GoldInsteadArtifact( objectType );
@@ -1114,7 +1114,7 @@ namespace
     void AIToPyramid( Heroes & hero, int32_t dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        const Spell & spell = tile.QuantitySpell();
+        const Spell & spell = getSpellFromTile( tile );
 
         if ( spell.isValid() ) {
             // battle
@@ -1374,7 +1374,7 @@ namespace
         if ( hero.IsFullBagArtifacts() )
             hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, GoldInsteadArtifact( objectType ) ) );
         else
-            hero.PickupArtifact( tile.QuantityArtifact() );
+            hero.PickupArtifact( getArtifactFromTile( tile ) );
 
         tile.RemoveObjectSprite();
         tile.QuantityReset();
@@ -1388,7 +1388,7 @@ namespace
 
         if ( !hero.IsFullBagArtifacts() ) {
             uint32_t cond = tile.QuantityVariant();
-            Artifact art = tile.QuantityArtifact();
+            Artifact art = getArtifactFromTile( tile );
 
             bool result = false;
 

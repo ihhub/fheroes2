@@ -174,7 +174,7 @@ namespace
 
         // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
         if ( MP2::isArtifactObject( objectType ) ) {
-            const Artifact art = tile.QuantityArtifact();
+            const Artifact art = getArtifactFromTile( tile );
 
             if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
                 return false;
@@ -268,7 +268,7 @@ namespace
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
         case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
-            const Spell & spell = tile.QuantitySpell();
+            const Spell & spell = getSpellFromTile( tile );
             if ( !spell.isValid() ) {
                 // The spell cannot be invalid!
                 assert( 0 );
@@ -890,7 +890,7 @@ namespace AI
             return 3000.0;
         }
         case MP2::OBJ_ARTIFACT: {
-            const Artifact art = tile.QuantityArtifact();
+            const Artifact art = getArtifactFromTile( tile );
             assert( art.isValid() );
 
             // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
@@ -905,8 +905,8 @@ namespace AI
         case MP2::OBJ_TREASURE_CHEST: {
             // TODO: add logic if the object contains an artifact and resources.
 
-            if ( tile.QuantityArtifact().isValid() ) {
-                const Artifact art = tile.QuantityArtifact();
+            if ( getArtifactFromTile( tile ).isValid() ) {
+                const Artifact art = getArtifactFromTile( tile );
 
                 // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
                 if ( isFindArtifactVictoryConditionForHuman( art ) ) {
@@ -925,12 +925,12 @@ namespace AI
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_SKELETON:
         case MP2::OBJ_WAGON: {
-            if ( !tile.QuantityArtifact().isValid() ) {
+            if ( !getArtifactFromTile( tile ).isValid() ) {
                 // Don't waste time to go here.
                 return -dangerousTaskPenalty;
             }
 
-            const Artifact art = tile.QuantityArtifact();
+            const Artifact art = getArtifactFromTile( tile );
 
             // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
             if ( isFindArtifactVictoryConditionForHuman( art ) ) {
@@ -964,7 +964,7 @@ namespace AI
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
         case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
-            const Spell & spell = tile.QuantitySpell();
+            const Spell & spell = getSpellFromTile( tile );
             return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() );
         }
         case MP2::OBJ_ARENA:
@@ -1305,7 +1305,7 @@ namespace AI
             return 5000.0;
         }
         case MP2::OBJ_ARTIFACT: {
-            const Artifact art = tile.QuantityArtifact();
+            const Artifact art = getArtifactFromTile( tile );
             assert( art.isValid() );
 
             // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
@@ -1336,7 +1336,7 @@ namespace AI
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
         case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
-            const Spell & spell = tile.QuantitySpell();
+            const Spell & spell = getSpellFromTile( tile );
             return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() ) * 1.1;
         }
         case MP2::OBJ_ARENA:
