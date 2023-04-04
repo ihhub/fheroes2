@@ -389,6 +389,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                 charInsertPos = filename.size();
                 listbox.Unselect();
                 isListboxSelected = false;
+                needRedraw = true;
             }
             else if ( le.MouseClickLeft( enter_field ) ) {
                 charInsertPos = GetInsertPosition( filename, le.GetMouseCursor().x, enter_field.x );
