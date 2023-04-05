@@ -387,7 +387,7 @@ msgid "Grid"
 msgstr "Rutnät"
 
 msgid "Shadow Movement"
-msgstr "Beskuggad Förflyttning"
+msgstr "Skuggförflyttning"
 
 msgid "Shadow Cursor"
 msgstr "Skuggmarkör"
@@ -839,7 +839,6 @@ msgstr "AI"
 msgid "Please select another hero."
 msgstr "Välj en annan hjälte."
 
-
 msgid "Set Attack Skill"
 msgstr "Ange Anfallsförmåga"
 
@@ -877,7 +876,7 @@ msgid "The %{name} fires with the strength of %{count} Archers"
 msgstr "%{name} avfyrar med styrkan av %{count} Bågskyttar"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr "varje med en +%{attack}-bonus till deras Anfallsförmåga."
+msgstr "varje med en +%{attack}bonus till deras Anfallsförmåga."
 
 msgid "The %{name} is destroyed."
 msgstr "%{name} förstörs."
@@ -2335,7 +2334,7 @@ msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
 "percent."
 msgstr "Helgedomen ökar Svartkonstförmågan hos dina svartkonstnärer med 10"
-"procent"
+"procent."
 
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
@@ -9339,7 +9338,7 @@ msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
 "variant of Stoneskin."
 msgstr ""
-"Ökar Försvarförmågan för vald varelse. Detta är en förbättrad variant "
+"Ökar Försvarförmågan för vald varelse. Detta är en förbättrad version "
 "av Stenhud."
 
 msgid "Steelskin"
@@ -9688,7 +9687,6 @@ msgstr "Inga besvärjelser att kasta."
 msgid "Your hero has %{point} spell points remaining."
 msgstr "Din hjälte har %{point} besvärjelsepoäng kvar."
 
-#, fuzzy
 msgid "View Adventure Spells"
 msgstr "Visa Kartbesvärjelser"
 
