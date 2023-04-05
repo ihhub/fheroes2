@@ -279,12 +279,15 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).height();
     fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, cancelButtonIcnID, 0, 1 );
 
-    fheroes2::Sprite released;
-    fheroes2::Sprite pressed;
+    // Generate a button to open the Virtual Keyboard window.
+    fheroes2::Sprite releasedVirtualKB;
+    fheroes2::Sprite pressedVirtualKB;
     const int32_t buttonVirtualKBWidth = 15;
-    makeButtonSprites( released, pressed, "...", buttonVirtualKBWidth, isEvilInterface, true );
+
+    makeButtonSprites( releasedVirtualKB, pressedVirtualKB, "...", buttonVirtualKBWidth, isEvilInterface, true );
+    // To center the button horizontally we have to take into account that actual button sprite is 10 pixels longer then the requested button width.
     fheroes2::ButtonSprite buttonVirtualKB
-        = makeButtonWithBackground( box_rt.x + ( box_rt.width - buttonVirtualKBWidth - 10 ) / 2, dst_pt.y, released, pressed, display );
+        = makeButtonWithBackground( box_rt.x + ( box_rt.width - buttonVirtualKBWidth - 10 ) / 2, dst_pt.y, releasedVirtualKB, pressedVirtualKB, display );
 
     if ( res.empty() ) {
         buttonOk.disable();
@@ -297,7 +300,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     buttonCancel.draw();
     buttonVirtualKB.draw();
 
-    display.render( box_rt );
+    display.render();
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -336,7 +339,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
             Dialog::Message( _( "Cancel" ), _( "Exit this menu without doing anything." ), Font::BIG );
         }
         else if ( le.MousePressRight( buttonOk.area() ) ) {
-            Dialog::Message( _( "Okay" ), _( "Click to apply the entered string." ), Font::BIG );
+            Dialog::Message( _( "Okay" ), _( "Click to apply the entered text." ), Font::BIG );
         }
         else if ( le.MousePressRight( buttonVirtualKB.area() ) ) {
             Dialog::Message( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Font::BIG );

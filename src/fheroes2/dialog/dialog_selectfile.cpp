@@ -225,14 +225,14 @@ MapsFileInfoList GetSortedMapsFileInfoList()
     list1.ReadDir( Game::GetSaveDir(), Game::GetSaveFileExtension(), false );
 
     MapsFileInfoList list2( list1.size() );
-    int ii = 0;
-    for ( ListFiles::const_iterator itd = list1.begin(); itd != list1.end(); ++itd, ++ii ) {
-        if ( !list2[ii].ReadSAV( *itd ) ) {
-            --ii;
+    int32_t saveFileCount = 0;
+    for ( std::string saveFile : list1 ) {
+        if ( list2[saveFileCount].ReadSAV( saveFile ) ) {
+            ++saveFileCount;
         }
     }
-    if ( static_cast<size_t>( ii ) != list2.size() ) {
-        list2.resize( ii );
+    if ( static_cast<size_t>( saveFileCount ) != list2.size() ) {
+        list2.resize( saveFileCount );
     }
     std::sort( list2.begin(), list2.end(), Maps::FileInfo::FileSorting );
 
@@ -339,13 +339,12 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     buttonOk.draw();
     buttonCancel.draw();
 
-    // Generate and render the "..." button for Virtual Keyboard dialog.
     if ( isEditing ) {
+        // Generate and render a button to open the Virtual Keyboard window.
         fheroes2::Sprite released;
         fheroes2::Sprite pressed;
 
         makeButtonSprites( released, pressed, "...", 15, false, true );
-
         buttonVirtualKB = makeButtonWithShadow( rt.x + 315, rt.y + 283, released, pressed, display, { -4, 4 } );
 
         buttonVirtualKB.draw();
