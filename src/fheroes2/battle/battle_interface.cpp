@@ -1145,7 +1145,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     , _flyingUnit( nullptr )
     , b_current_sprite( nullptr )
     , index_pos( -1 )
-    , teleport_src( -1 )
+    , _teleportSpellSrcIdx( -1 )
     , listlog( nullptr )
     , _cursorRestorer( true, Cursor::WAR_POINTER )
     , _bridgeAnimation( { false, BridgeMovementAnimation::UP_POSITION } )
@@ -1922,8 +1922,8 @@ void Battle::Interface::RedrawCover()
                     highlightedCells.emplace( cell );
                     break;
                 case Cursor::SP_TELEPORT:
-                    if ( Board::isValidIndex( teleport_src ) ) {
-                        const Unit * unitToTeleport = arena.GetTroopBoard( teleport_src );
+                    if ( Board::isValidIndex( _teleportSpellSrcIdx ) ) {
+                        const Unit * unitToTeleport = arena.GetTroopBoard( _teleportSpellSrcIdx );
                         assert( unitToTeleport != nullptr );
 
                         const Position pos = Position::GetPosition( *unitToTeleport, index_pos );
@@ -2565,8 +2565,8 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
         }
 
         // Check the Teleport spell first
-        if ( Board::isValidIndex( teleport_src ) ) {
-            const Unit * unitToTeleport = arena.GetTroopBoard( teleport_src );
+        if ( Board::isValidIndex( _teleportSpellSrcIdx ) ) {
+            const Unit * unitToTeleport = arena.GetTroopBoard( _teleportSpellSrcIdx );
             assert( unitToTeleport != nullptr );
 
             if ( unitOnCell == nullptr && cell->isPassableForUnit( *unitToTeleport ) ) {
@@ -2925,7 +2925,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
     // reset cast
     if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
         humanturn_spell = Spell::NONE;
-        teleport_src = -1;
+        _teleportSpellSrcIdx = -1;
     }
     else if ( le.MouseCursor( _interfacePosition ) && humanturn_spell.isValid() ) {
         const int themes = GetBattleSpellCursor( msg );
@@ -2952,13 +2952,13 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << index_pos )
 
             if ( Cursor::SP_TELEPORT == cursor.Themes() ) {
-                if ( 0 > teleport_src )
-                    teleport_src = index_pos;
+                if ( 0 > _teleportSpellSrcIdx )
+                    _teleportSpellSrcIdx = index_pos;
                 else {
-                    a.emplace_back( CommandType::MSG_BATTLE_CAST, Spell::TELEPORT, teleport_src, index_pos );
+                    a.emplace_back( CommandType::MSG_BATTLE_CAST, Spell::TELEPORT, _teleportSpellSrcIdx, index_pos );
                     humanturn_spell = Spell::NONE;
                     humanturn_exit = true;
-                    teleport_src = -1;
+                    _teleportSpellSrcIdx = -1;
                 }
             }
             else if ( Cursor::SP_MIRRORIMAGE == cursor.Themes() ) {
