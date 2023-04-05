@@ -525,7 +525,8 @@ namespace fheroes2
         return { offsetX + shadow.x(), offsetY + shadow.y(), releasedWithBackground, pressedWithBackground, disabledWithBackground };
     }
 
-    void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, int32_t width, Point & releasedOffset, Point & pressedOffset )
+    void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, int32_t width, Point & releasedOffset, Point & pressedOffset,
+                                const bool isTransparentBackground /* = false */ )
     {
         assert( width > 0 );
 
@@ -543,29 +544,36 @@ namespace fheroes2
         const Sprite & originalReleased = AGG::GetICN( icnId, 0 );
         const Sprite & originalPressed = AGG::GetICN( icnId, 1 );
 
-        const int32_t backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
-        const Sprite & background = AGG::GetICN( backgroundIcnId, 0 );
+        if ( isTransparentBackground ) {
+            released = resizeButton( originalReleased, width );
+            pressed = resizeButton( originalPressed, width );
+        }
+        else {
+            const int32_t backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
+            const Sprite & background = AGG::GetICN( backgroundIcnId, 0 );
 
-        Image temp = resizeButton( originalReleased, width );
-        released.resize( temp.width(), temp.height() );
-        assert( background.width() >= temp.width() && background.height() >= temp.height() );
-        Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, released, 0, 0, temp.width(), temp.height() );
-        Blit( temp, released );
-        released.setPosition( originalReleased.x(), originalReleased.y() );
+            Image temp = resizeButton( originalReleased, width );
+            released.resize( temp.width(), temp.height() );
+            assert( background.width() >= temp.width() && background.height() >= temp.height() );
+            Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, released, 0, 0, temp.width(), temp.height() );
+            Blit( temp, released );
+            released.setPosition( originalReleased.x(), originalReleased.y() );
 
-        temp = resizeButton( originalPressed, width );
-        pressed.resize( temp.width(), temp.height() );
-        assert( background.width() >= temp.width() && background.height() >= temp.height() );
-        Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, pressed, 0, 0, temp.width(), temp.height() );
-        Blit( temp, pressed );
-        pressed.setPosition( originalPressed.x(), originalPressed.y() );
+            temp = resizeButton( originalPressed, width );
+            pressed.resize( temp.width(), temp.height() );
+            assert( background.width() >= temp.width() && background.height() >= temp.height() );
+            Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, pressed, 0, 0, temp.width(), temp.height() );
+            Blit( temp, pressed );
+            pressed.setPosition( originalPressed.x(), originalPressed.y() );
+        }
     }
 
-    void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface )
+    void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface,
+                            const bool isTransparentBackground )
     {
         fheroes2::Point releasedOffset;
         fheroes2::Point pressedOffset;
-        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, buttonWidth, releasedOffset, pressedOffset );
+        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, buttonWidth, releasedOffset, pressedOffset, isTransparentBackground );
 
         const fheroes2::FontColor fontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 

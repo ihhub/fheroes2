@@ -157,7 +157,7 @@ namespace
         fheroes2::Sprite released;
         fheroes2::Sprite pressed;
 
-        makeButtonSprites( released, pressed, info, buttonWidth, isEvilInterface );
+        makeButtonSprites( released, pressed, info, buttonWidth, isEvilInterface, false );
 
         return { 0, 0, released, pressed };
     }

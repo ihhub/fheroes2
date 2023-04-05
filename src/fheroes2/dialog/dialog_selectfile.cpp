@@ -279,7 +279,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     fheroes2::Button buttonOk( rt.x + 34, rt.y + 315, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
     fheroes2::Button buttonCancel( rt.x + 244, rt.y + 315, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
-    fheroes2::ButtonSprite openVirtualKB;
+    fheroes2::ButtonSprite buttonVirtualKB;
 
     MapsFileInfoList lists = GetSortedMapsFileInfoList();
     FileInfoListBox listbox( rt.getPosition() );
@@ -344,11 +344,11 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         fheroes2::Sprite released;
         fheroes2::Sprite pressed;
 
-        makeButtonSprites( released, pressed, "...", 15, false );
+        makeButtonSprites( released, pressed, "...", 15, false, true );
 
-        openVirtualKB = makeButtonWithShadow( rt.x + 315, rt.y + 283, released, pressed, display, { -4, 4 } );
+        buttonVirtualKB = makeButtonWithShadow( rt.x + 315, rt.y + 283, released, pressed, display, { -4, 4 } );
 
-        openVirtualKB.draw();
+        buttonVirtualKB.draw();
     }
 
     display.render();
@@ -363,7 +363,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
         if ( isEditing ) {
-            le.MousePressLeft( openVirtualKB.area() ) ? openVirtualKB.drawOnPress() : openVirtualKB.drawOnRelease();
+            le.MousePressLeft( buttonVirtualKB.area() ) ? buttonVirtualKB.drawOnPress() : buttonVirtualKB.drawOnRelease();
         }
 
         listbox.QueueEventProcessing();
@@ -384,7 +384,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             break;
         }
         else if ( isEditing ) {
-            if ( le.MouseClickLeft( openVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( enter_field ) ) ) {
+            if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( enter_field ) ) ) {
                 fheroes2::openVirtualKeyboard( filename );
                 charInsertPos = filename.size();
                 listbox.Unselect();
@@ -425,7 +425,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                 Dialog::Message( _( "Okay" ), _( "Click to load a previously saved game." ), Font::BIG );
             }
         }
-        else if ( isEditing && le.MousePressRight( openVirtualKB.area() ) ) {
+        else if ( isEditing && le.MousePressRight( buttonVirtualKB.area() ) ) {
             Dialog::Message( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Font::BIG );
         }
 
@@ -477,7 +477,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         buttonCancel.draw();
 
         if ( isEditing ) {
-            openVirtualKB.draw();
+            buttonVirtualKB.draw();
         }
 
         display.render();
