@@ -2550,18 +2550,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
         // Cursor is over some dead unit that we can resurrect
         if ( unitOnCell == nullptr && arena.GraveyardAllowResurrect( index_pos, spell ) ) {
             unitOnCell = arena.GraveyardLastTroop( index_pos );
-            assert( unitOnCell != nullptr );
-
-            if ( unitOnCell->isWide() ) {
-                const Cell * headCell = Board::GetCell( unitOnCell->GetHeadIndex() );
-                const Cell * tailCell = Board::GetCell( unitOnCell->GetTailIndex() );
-                assert( headCell != nullptr && tailCell != nullptr );
-
-                // This dead unit is partially covered by an alive unit
-                if ( headCell->GetUnit() || tailCell->GetUnit() ) {
-                    unitOnCell = nullptr;
-                }
-            }
+            assert( unitOnCell != nullptr && !unitOnCell->isValid() );
         }
 
         // Check the Teleport spell first
