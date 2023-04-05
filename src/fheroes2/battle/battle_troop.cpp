@@ -711,7 +711,7 @@ void Battle::Unit::PostKilledAction()
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() )
 }
 
-uint32_t Battle::Unit::Resurrect( uint32_t points, bool allow_overflow, bool skip_dead )
+uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allow_overflow, const bool skip_dead )
 {
     uint32_t resurrect = Monster::GetCountFromHitPoints( *this, hp + points ) - GetCount();
 
