@@ -9336,9 +9336,9 @@ msgstr "Stenhud"
 
 msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
-"variant of Stoneskin."
+"version of Stoneskin."
 msgstr ""
-"Ökar Försvarförmågan för vald varelse. Detta är en förbättrad version "
+"Ökar Försvarförmågan för vald varelse. Detta är en förbättrad variant "
 "av Stenhud."
 
 msgid "Steelskin"
