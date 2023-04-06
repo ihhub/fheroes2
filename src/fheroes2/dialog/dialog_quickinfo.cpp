@@ -168,12 +168,9 @@ namespace
             str = MP2::StringObject( objectType );
         }
 
-        const bool isHauntedMine = ( objectType == MP2::OBJ_MINES && Maps::getSpellIdFromTile( tile ) == Spell::HAUNT );
-        const bool isAbandonedMine = ( objectType == MP2::OBJ_ABANDONED_MINE );
-
         const Troop & troop = tile.QuantityTroop();
 
-        if ( troop.isValid() && ( isOwned || isHauntedMine || isAbandonedMine ) ) {
+        if ( troop.isValid() ) {
             str.append( "\n \n" );
 
             if ( isOwned ) {
