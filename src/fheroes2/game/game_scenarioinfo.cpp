@@ -182,7 +182,10 @@ namespace
         coordDifficulty.emplace_back( rectPanel.x + 251, rectPanel.y + 91, ngextraWidth, ngextraHeight );
         coordDifficulty.emplace_back( rectPanel.x + 328, rectPanel.y + 91, ngextraWidth, ngextraHeight );
 
-        fheroes2::Button buttonSelectMaps( rectPanel.x + 309, rectPanel.y + 45, ICN::BUTTON_MAP_SELECT, 0, 1 );
+        // adjust for variable width of select button.
+        const int32_t buttonSelectWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT, 0 ).width();
+
+        fheroes2::Button buttonSelectMaps( rectPanel.x + 349 - buttonSelectWidth / 2, rectPanel.y + 45, ICN::BUTTON_MAP_SELECT, 0, 1 );
         fheroes2::Button buttonOk( rectPanel.x + 31, rectPanel.y + 380, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
         fheroes2::Button buttonCancel( rectPanel.x + 287, rectPanel.y + 380, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
