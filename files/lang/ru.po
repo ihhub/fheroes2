@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-06 10:28+0000\n"
-"PO-Revision-Date: 2023-04-04 19:13+0300\n"
+"PO-Revision-Date: 2023-04-06 19:14+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -8291,9 +8291,8 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr "Медаль Отваги"
 
-#, fuzzy
 msgid "The %{name} increases your morale by %{count}."
-msgstr "%{name} увеличивает Знания на %{count}."
+msgstr "%{name} увеличивает Вашу мораль на %{count}."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -8562,9 +8561,8 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr "Кроличья Лапка"
 
-#, fuzzy
 msgid "The %{name} increases your luck in combat by %{count}."
-msgstr "%{name} увеличивает Вашу удачу в бою."
+msgstr "%{name} увеличивает Вашу удачу в бою на %{count}."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
