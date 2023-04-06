@@ -114,6 +114,7 @@ namespace
                                                 ICN::BUTTON_MAPSIZE_LARGE,
                                                 ICN::BUTTON_MAPSIZE_XLARGE,
                                                 ICN::BUTTON_MAPSIZE_ALL,
+                                                ICN::BUTTON_MAP_SELECT,
                                                 ICN::BUTTON_STANDARD_GAME,
                                                 ICN::BUTTON_CAMPAIGN_GAME,
                                                 ICN::BUTTON_MULTIPLAYER_GAME,
@@ -1018,6 +1019,46 @@ namespace fheroes2
 
                 int32_t textWidth = 46;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "ALL" ), false );
+
+                break;
+            }
+            case ICN::BUTTON_MAP_SELECT: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::NGEXTRA, 64 );
+                    _icnVsSprite[id][1] = GetICN( ICN::NGEXTRA, 65 );
+                    break;
+                }
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+
+                    const Sprite & originalButton = GetICN( ICN::NGEXTRA, 64 + i );
+                    const int32_t originalHeight = originalButton.height();
+                    const int32_t originalWidth = originalButton.width();
+                    const int32_t extensionWidth = 5;
+                    out.resize( originalWidth + extensionWidth, originalHeight );
+                    out.reset();
+
+                    const int32_t rightPartWidth = 3 + i;
+                    const int32_t leftPartWidth = originalWidth - rightPartWidth;
+
+                    // copy left main body of button.
+                    fheroes2::Copy( originalButton, 0, 0, out, 0, 0, leftPartWidth, originalHeight );
+
+                    // copy middle extending part of button.
+                    fheroes2::Copy( originalButton, 9, 0, out, leftPartWidth, 0, extensionWidth, originalHeight );
+
+                    // copy terminating right margin of the button.
+                    fheroes2::Copy( originalButton, leftPartWidth, 0, out, leftPartWidth + extensionWidth, 0, rightPartWidth, originalHeight );
+
+                    // clean the button.
+                    const int32_t leftMarginWidth = 6 - i;
+                    Fill( out, leftMarginWidth, 2 + 2 * i, out.width() - rightPartWidth - leftMarginWidth, 15 - i, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SELECT" ), { 7, 3 }, { 6, 4 }, { 76, 15 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -2035,6 +2076,7 @@ namespace fheroes2
             case ICN::BUTTON_MAPSIZE_LARGE:
             case ICN::BUTTON_MAPSIZE_XLARGE:
             case ICN::BUTTON_MAPSIZE_ALL:
+            case ICN::BUTTON_MAP_SELECT:
             case ICN::BUTTON_STANDARD_GAME:
             case ICN::BUTTON_CAMPAIGN_GAME:
             case ICN::BUTTON_MULTIPLAYER_GAME:

@@ -1061,6 +1061,8 @@ namespace ICN
         BUTTON_MAPSIZE_XLARGE,
         BUTTON_MAPSIZE_ALL,
 
+        BUTTON_MAP_SELECT,
+
         GAME_OPTION_ICON,
 
         // IMPORTANT! Put any new entry just above this one.
