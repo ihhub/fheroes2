@@ -498,6 +498,13 @@ int Resource::getResourceTypeFromIconIndex( const uint32_t index )
     return UNKNOWN;
 }
 
+Funds Resource::CalculateEventResourceUpdate( const Funds & currentFunds, const Funds & eventFunds )
+{
+    Funds funds = currentFunds + eventFunds;
+    funds.Trim();
+    return funds - currentFunds;
+}
+
 int Funds::GetValidItems() const
 {
     int rs = 0;
