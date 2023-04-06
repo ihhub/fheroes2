@@ -244,7 +244,7 @@ namespace
         std::string str = MP2::StringObject( objectType );
 
         if ( isVisited ) {
-            const Spell & spell = tile.QuantitySpell();
+            const Spell & spell = getSpellFromTile( tile );
 
             str.append( "\n(" );
             str.append( spell.GetName() );

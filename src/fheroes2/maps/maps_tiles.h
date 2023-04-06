@@ -337,13 +337,9 @@ namespace Maps
         int QuantityVariant() const;
         int QuantityExt() const;
         int QuantityColor() const;
-        uint32_t QuantityGold() const;
-        Spell QuantitySpell() const;
         Skill::Secondary QuantitySkill() const;
-        Artifact QuantityArtifact() const;
         ResourceCount QuantityResourceCount() const;
         Funds QuantityFunds() const;
-        Monster QuantityMonster() const;
         Troop QuantityTroop() const;
 
         void SetObjectPassable( bool );
@@ -381,9 +377,6 @@ namespace Maps
         bool containsAnyObjectIcnType( const std::vector<MP2::ObjectIcnType> & objectIcnTypes ) const;
 
         bool containsSprite( const MP2::ObjectIcnType objectIcnType, const uint32_t imageIdx ) const;
-
-        static int getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
-        static int getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
 
         static std::pair<int, int> ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
         static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
@@ -508,6 +501,17 @@ namespace Maps
     void setMonsterOnTileJoinCondition( Tiles & tile, const int32_t condition );
     bool isMonsterOnTileJoinConditionSkip( const Tiles & tile );
     bool isMonsterOnTileJoinConditionFree( const Tiles & tile );
+
+    int getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
+    int getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
+
+    Monster getMonsterFromTile( const Tiles & tile );
+
+    Spell getSpellFromTile( const Tiles & tile );
+
+    Artifact getArtifactFromTile( const Tiles & tile );
+
+    uint32_t getGoldAmountFromTile( const Tiles & tile );
 }
 
 #endif
