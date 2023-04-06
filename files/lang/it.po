@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-01 13:46+0000\n"
+"POT-Creation-Date: 2023-04-06 10:28+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -694,10 +694,11 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "1 %{defender} perisce."
 msgstr[1] "%{count} %{defender} periscono."
 
-msgid "1 soul is absorbed."
-msgid_plural "%{count} souls are absorbed."
-msgstr[0] ""
-msgstr[1] ""
+#, fuzzy
+msgid "1 soul is incorporated."
+msgid_plural "%{count} souls are incorporated."
+msgstr[0] "Non esistono punti di salvataggio da caricare."
+msgstr[1] "Non esistono punti di salvataggio da caricare."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
@@ -7773,8 +7774,9 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr "La Medaglia al Valore"
 
-msgid "The %{name} increases your morale."
-msgstr "%{name} incrementa il morale delle tue truppe."
+#, fuzzy
+msgid "The %{name} increases your morale by %{count}."
+msgstr "%{name} incrementa di %{count} punti il sapere del tuo eroe."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -7988,7 +7990,8 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr "La Zampa del Coniglio Fortunato"
 
-msgid "The %{name} increases your luck in combat."
+#, fuzzy
+msgid "The %{name} increases your luck in combat by %{count}."
 msgstr "%{name} ti dà più fortuna in combattimento."
 
 msgid ""
@@ -9438,6 +9441,9 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "The %{name} increases your morale."
+#~ msgstr "%{name} incrementa il morale delle tue truppe."
 
 #~ msgid "Attention"
 #~ msgstr "Attenzione"

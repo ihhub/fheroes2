@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-01 13:46+0000\n"
+"POT-Creation-Date: 2023-04-06 10:28+0000\n"
 "PO-Revision-Date: 2023-01-25 17:06+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -709,10 +709,11 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "1 %{defender} omkommer."
 msgstr[1] "%{count} %{defender} omkommer."
 
-msgid "1 soul is absorbed."
-msgid_plural "%{count} souls are absorbed."
-msgstr[0] ""
-msgstr[1] ""
+#, fuzzy
+msgid "1 soul is incorporated."
+msgid_plural "%{count} souls are incorporated."
+msgstr[0] "Spejlbilledet er skabt."
+msgstr[1] "Spejlbilledet er skabt."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
@@ -7563,8 +7564,9 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr ""
 
-msgid "The %{name} increases your morale."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases your morale by %{count}."
+msgstr "%{name} øger dine væseners evne til at angribe med %{count} point."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -7782,8 +7784,9 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr ""
 
-msgid "The %{name} increases your luck in combat."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases your luck in combat by %{count}."
+msgstr "%{name} øger dine væseners evne til at angribe med %{count} point."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
