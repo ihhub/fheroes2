@@ -8459,8 +8459,10 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr "Balista Szybkości"
 
-msgid "The %{name} lets your catapult fire twice per combat round."
-msgstr "%{name} pozwala twojej katapulcie strzelić dwa razy na rundę %{count}."
+#, fuzzy
+msgid "The %{name} lets your catapult do one extra fire per combat round."
+msgstr ""
+"%{name} pozwala twojej katapulcie strzelić jeden dodatkowy strzał na rundę."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "

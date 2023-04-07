@@ -8447,8 +8447,10 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr "Катапулт на бързината"
 
-msgid "The %{name} lets your catapult fire twice per combat round."
-msgstr "%{name} позволява на твоя катапулт да стреля два пъти на боен рунд."
+msgid "The %{name} lets your catapult do one extra fire per combat round."
+msgstr ""
+"%{name} позволява на твоя катапулт да стреля по един допълнителен изстрел на "
+"боен рунд."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
