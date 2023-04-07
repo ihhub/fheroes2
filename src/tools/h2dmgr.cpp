@@ -47,6 +47,11 @@ namespace
 {
     constexpr size_t validPaletteSize = 768;
 
+    bool isH2DImageItem( const std::string_view name )
+    {
+        return std::filesystem::path( name ).extension() == ".image";
+    }
+
     bool isImageFile( const std::string_view fileName )
     {
         const std::string extension = StringLower( std::filesystem::path( fileName ).extension().string() );
@@ -59,7 +64,7 @@ namespace
         std::string baseName = System::GetBasename( argv[0] );
 
         std::cerr << baseName << " manages the contents of the specified H2D file(s)." << std::endl
-                  << "Syntax: " << baseName << " extract dst_dir input_file.h2d ..." << std::endl
+                  << "Syntax: " << baseName << " extract dst_dir palette_file.pal input_file.h2d ..." << std::endl
                   << "        " << baseName << " combine target_file.h2d palette_file.pal input_file ..." << std::endl;
     }
 
@@ -83,12 +88,16 @@ namespace
 
     int extractH2D( const int argc, char ** argv )
     {
-        assert( argc >= 4 );
+        assert( argc >= 5 );
 
         const char * dstDir = argv[2];
 
+        if ( !loadPalette( argv[3] ) ) {
+            return EXIT_FAILURE;
+        }
+
         std::vector<std::string> inputFileNames;
-        for ( int i = 3; i < argc; ++i ) {
+        for ( int i = 4; i < argc; ++i ) {
             if ( System::isShellLevelGlobbingSupported() ) {
                 inputFileNames.emplace_back( argv[i] );
             }
@@ -120,28 +129,53 @@ namespace
             }
 
             for ( const std::string & name : reader.getAllFileNames() ) {
-                static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
+                // Image files need special processing
+                if ( isH2DImageItem( name ) ) {
+                    fheroes2::Sprite image;
 
-                const std::vector<uint8_t> buf = reader.getFile( name );
+                    if ( !fheroes2::readImageFromH2D( reader, name, image ) ) {
+                        std::cerr << inputFileName << ": item " << name << " contains an invalid image" << std::endl;
+                        return EXIT_FAILURE;
+                    }
 
-                const std::filesystem::path outputFilePath = prefixPath / std::filesystem::path( name );
+                    std::string outputFileName = ( prefixPath / std::filesystem::path( name ).replace_extension() ).string();
 
-                std::ofstream outputStream( outputFilePath, std::ios_base::binary | std::ios_base::trunc );
-                if ( !outputStream ) {
-                    std::cerr << "Cannot open file " << outputFilePath << std::endl;
-                    return EXIT_FAILURE;
+                    if ( fheroes2::isPNGFormatSupported() ) {
+                        outputFileName += ".png";
+                    }
+                    else {
+                        outputFileName += ".bmp";
+                    }
+
+                    if ( !fheroes2::Save( image, outputFileName ) ) {
+                        std::cerr << inputFileName << ": error saving image " << name << std::endl;
+                        return EXIT_FAILURE;
+                    }
                 }
+                else {
+                    static_assert( std::is_same_v<uint8_t, unsigned char>, "uint8_t is not the same as char, check the logic below" );
 
-                const auto streamSize = fheroes2::checkedCast<std::streamsize>( buf.size() );
-                if ( !streamSize ) {
-                    std::cerr << inputFileName << ": item " << name << " is too large" << std::endl;
-                    return EXIT_FAILURE;
-                }
+                    const std::vector<uint8_t> buf = reader.getFile( name );
 
-                outputStream.write( reinterpret_cast<const char *>( buf.data() ), streamSize.value() );
-                if ( !outputStream ) {
-                    std::cerr << "Error writing to file " << outputFilePath << std::endl;
-                    return EXIT_FAILURE;
+                    const std::filesystem::path outputFilePath = prefixPath / std::filesystem::path( name );
+
+                    std::ofstream outputStream( outputFilePath, std::ios_base::binary | std::ios_base::trunc );
+                    if ( !outputStream ) {
+                        std::cerr << "Cannot open file " << outputFilePath << std::endl;
+                        return EXIT_FAILURE;
+                    }
+
+                    const auto streamSize = fheroes2::checkedCast<std::streamsize>( buf.size() );
+                    if ( !streamSize ) {
+                        std::cerr << inputFileName << ": item " << name << " is too large" << std::endl;
+                        return EXIT_FAILURE;
+                    }
+
+                    outputStream.write( reinterpret_cast<const char *>( buf.data() ), streamSize.value() );
+                    if ( !outputStream ) {
+                        std::cerr << "Error writing to file " << outputFilePath << std::endl;
+                        return EXIT_FAILURE;
+                    }
                 }
 
                 ++itemsExtracted;
@@ -283,7 +317,7 @@ namespace
 
 int main( int argc, char ** argv )
 {
-    if ( argc >= 4 && strcmp( argv[1], "extract" ) == 0 ) {
+    if ( argc >= 5 && strcmp( argv[1], "extract" ) == 0 ) {
         return extractH2D( argc, argv );
     }
 
