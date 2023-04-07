@@ -550,7 +550,10 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
 
     Rand::ShuffleWithGen( objs, gen );
 
-    const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::GetWithGen( 0, 4, gen ) ) );
+    const auto largeObstacleSize = std::count_if( begin(), end(), []( const Cell & cell ) { return cell.GetObject() == 0x40; } );
+    const uint8_t maxSmallObstacleCount = largeObstacleSize > 7 ? 3 : 4;
+
+    const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::GetWithGen( 0, maxSmallObstacleCount, gen ) ) );
 
     for ( size_t i = 0; i < objectsToPlace; ++i ) {
         const bool checkRightCell = isTwoHexObject( objs[i] );
