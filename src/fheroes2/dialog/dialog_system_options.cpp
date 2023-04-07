@@ -123,34 +123,29 @@ namespace
 
         // Scrolling speed.
         const int scrollSpeed = conf.ScrollSpeed();
-        int32_t scrollSpeedIconIcn = ICN::UNKNOWN;
+        const int32_t scrollSpeedIconIcn = ICN::SCREEN_SCROLL_ICON;
         uint32_t scrollSpeedIconId = 0;
         std::string scrollSpeedName;
 
         if ( scrollSpeed == SCROLL_SPEED_NONE ) {
             scrollSpeedName = _( "Off" );
-            scrollSpeedIconIcn = ICN::SPANEL;
-            scrollSpeedIconId = 9;
+            scrollSpeedIconId = 0;
         }
         else if ( scrollSpeed == SCROLL_SPEED_SLOW ) {
             scrollSpeedName = _( "Slow" );
-            scrollSpeedIconIcn = ICN::CSPANEL;
-            scrollSpeedIconId = 0;
+            scrollSpeedIconId = 1;
         }
         else if ( scrollSpeed == SCROLL_SPEED_NORMAL ) {
             scrollSpeedName = _( "Normal" );
-            scrollSpeedIconIcn = ICN::CSPANEL;
-            scrollSpeedIconId = 0;
+            scrollSpeedIconId = 1;
         }
         else if ( scrollSpeed == SCROLL_SPEED_FAST ) {
             scrollSpeedName = _( "Fast" );
-            scrollSpeedIconIcn = ICN::CSPANEL;
-            scrollSpeedIconId = 1;
+            scrollSpeedIconId = 2;
         }
         else if ( scrollSpeed == SCROLL_SPEED_VERY_FAST ) {
             scrollSpeedName = _( "Very Fast" );
-            scrollSpeedIconIcn = ICN::CSPANEL;
-            scrollSpeedIconId = 2;
+            scrollSpeedIconId = 3;
         }
 
         assert( scrollSpeedIconIcn != ICN::UNKNOWN );

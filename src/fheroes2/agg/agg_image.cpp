@@ -3369,6 +3369,15 @@ namespace fheroes2
                 h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
                 break;
             }
+            case ICN::SCREEN_SCROLL_ICON: {
+                _icnVsSprite[id].resize( 4 );
+
+                h2d::readImage( "scroll_icon_0.image", _icnVsSprite[id][0] );
+                h2d::readImage( "scroll_icon_1.image", _icnVsSprite[id][1] );
+                h2d::readImage( "scroll_icon_2.image", _icnVsSprite[id][2] );
+                h2d::readImage( "scroll_icon_3.image", _icnVsSprite[id][3] );
+                break;
+            }
             default:
                 break;
             }

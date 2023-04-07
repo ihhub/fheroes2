@@ -37,12 +37,15 @@
 
 #include "h2d_file.h"
 #include "image.h"
+#include "image_palette.h"
 #include "image_tool.h"
 #include "system.h"
 #include "tools.h"
 
 namespace
 {
+    constexpr size_t validPaletteSize = 768;
+
     bool isImageFile( const std::string_view fileName )
     {
         const std::string extension = StringLower( std::filesystem::path( fileName ).extension().string() );
@@ -55,18 +58,40 @@ namespace
         std::string baseName = System::GetBasename( argv[0] );
 
         std::cerr << baseName << " manages the contents of the specified H2D file(s)." << std::endl
-                  << "Syntax: " << baseName << " extract dst_dir input_file.h2d ..." << std::endl
-                  << "        " << baseName << " combine target_file.h2d input_file ..." << std::endl;
+                  << "Syntax: " << baseName << " extract palette_file.pal dst_dir input_file.h2d ..." << std::endl
+                  << "        " << baseName << " combine palette_file.pal target_file.h2d input_file ..." << std::endl;
+    }
+
+    bool loadPalette( const char * filePath )
+    {
+         StreamFile paletteStream;
+        if ( !paletteStream.open( filePath, "rb" ) ) {
+            std::cerr << "Cannot open file " << filePath << std::endl;
+            return false;
+        }
+
+        const std::vector<uint8_t> palette = paletteStream.getRaw();
+        if ( palette.size() != validPaletteSize ) {
+            std::cerr << "Invalid palette size of " << palette.size() << " instead of " << validPaletteSize << std::endl;
+            return false;
+        }
+
+        fheroes2::setGamePalette( palette );
+        return true;
     }
 
     int extractH2D( const int argc, char ** argv )
     {
-        assert( argc >= 4 );
+        assert( argc >= 5 );
 
-        const char * dstDir = argv[2];
+        if ( !loadPalette( argv[2] ) ) {
+            return EXIT_FAILURE;
+        }
+
+        const char * dstDir = argv[3];
 
         std::vector<std::string> inputFileNames;
-        for ( int i = 3; i < argc; ++i ) {
+        for ( int i = 4; i < argc; ++i ) {
             if ( System::isShellLevelGlobbingSupported() ) {
                 inputFileNames.emplace_back( argv[i] );
             }
@@ -133,12 +158,16 @@ namespace
 
     int combineH2D( const int argc, char ** argv )
     {
-        assert( argc >= 4 );
+        assert( argc >= 5 );
 
-        const char * h2dFileName = argv[2];
+        if ( !loadPalette( argv[2] ) ) {
+            return EXIT_FAILURE;
+        }
+
+        const char * h2dFileName = argv[3];
 
         std::vector<std::string> inputFileNames;
-        for ( int i = 3; i < argc; ++i ) {
+        for ( int i = 4; i < argc; ++i ) {
             if ( System::isShellLevelGlobbingSupported() ) {
                 inputFileNames.emplace_back( argv[i] );
             }
@@ -257,11 +286,11 @@ namespace
 
 int main( int argc, char ** argv )
 {
-    if ( argc >= 4 && strcmp( argv[1], "extract" ) == 0 ) {
+    if ( argc >= 5 && strcmp( argv[1], "extract" ) == 0 ) {
         return extractH2D( argc, argv );
     }
 
-    if ( argc >= 4 && strcmp( argv[1], "combine" ) == 0 ) {
+    if ( argc >= 5 && strcmp( argv[1], "combine" ) == 0 ) {
         return combineH2D( argc, argv );
     }
 
