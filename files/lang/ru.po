@@ -8395,7 +8395,7 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr "Баллиста"
 
-msgid "The %{name} lets your catapult do one extra fire per combat round."
+msgid "The %{name} gives your catapult one extra shot per combat round."
 msgstr ""
 "%{name} позволяет произвести один дополнительный выстрел из катапульты за "
 "ход."

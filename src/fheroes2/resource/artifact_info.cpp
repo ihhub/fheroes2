@@ -125,7 +125,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Ballista of Quickness" ),
-              gettext_noop( "The %{name} lets your catapult do one extra fire per combat round." ),
+              gettext_noop( "The %{name} gives your catapult one extra shot per combat round." ),
               gettext_noop( "Walking through the ruins of an ancient walled city, you find the instrument of the city's destruction, an elaborately crafted ballista." ),
               {},
               {} },
