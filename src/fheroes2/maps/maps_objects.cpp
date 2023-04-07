@@ -52,62 +52,127 @@ MapEvent::MapEvent()
     , colors( 0 )
 {}
 
-void MapEvent::LoadFromMP2( int32_t index, StreamBuf st )
+void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data )
 {
-    // id
-    if ( 1 == st.get() ) {
-        SetIndex( index );
-        SetUID( index );
+    assert( data.size() >= MP2::MP2_EVENT_STRUCTURE_MIN_SIZE );
 
-        // resource
-        resources.wood = st.getLE32();
-        resources.mercury = st.getLE32();
-        resources.ore = st.getLE32();
-        resources.sulfur = st.getLE32();
-        resources.crystal = st.getLE32();
-        resources.gems = st.getLE32();
-        resources.gold = st.getLE32();
+    assert( data[0] == 1 );
 
-        // artifact
-        artifact = st.getLE16();
+    // Structure containing information about a ground event.
+    //
+    // - uint8_t (1 byte)
+    //     Always 1 as an indicator that this indeed a ground event.
+    //
+    // - int32_t (4 bytes)
+    //     The amount of Wood to be given. Can be negative.
+    //
+    // - int32_t (4 bytes)
+    //     The amount of Mercury to be given. Can be negative.
+    //
+    // - int32_t (4 bytes)
+    //     The amount of Ore to be given. Can be negative.
+    //
+    // - int32_t (4 bytes)
+    //     The amount of Sulfur to be given. Can be negative.
+    //
+    // - int32_t (4 bytes)
+    //     The amount of Crystals to be given. Can be negative.
+    //
+    // - int32_t (4 bytes)
+    //     The amount of Gems to be given. Can be negative.
+    //
+    // - int32_t (4 bytes)
+    //     The amount of Gold to be given. Can be negative.
+    //
+    // - uint16_t (2 bytes)
+    //     An artifact to be given.
+    //
+    // - uint8_t (1 byte)
+    //     A flag whether the event is applicable for AI players as well.
+    //
+    // - uint8_t (1 bytes)
+    //     Does event occur only once?
+    //
+    // - unused 10 bytes
+    //    Always 0.
+    //
+    // - uint8_t (1 byte)
+    //     A flag to determine whether Blue player receives the event.
+    //
+    // - uint8_t (1 byte)
+    //     A flag to determine whether Green player receives the event.
+    //
+    // - uint8_t (1 byte)
+    //     A flag to determine whether Red player receives the event.
+    //
+    // - uint8_t (1 byte)
+    //     A flag to determine whether Yellow player receives the event.
+    //
+    // - uint8_t (1 byte)
+    //     A flag to determine whether Orange player receives the event.
+    //
+    // - uint8_t (1 byte)
+    //     A flag to determine whether Purple player receives the event.
+    //
+    // - string
+    //    Null terminated string containing the event text.
 
-        // allow computer
-        computer = ( st.get() != 0 );
+    SetIndex( index );
+    SetUID( index );
 
-        // cancel event after first visit
-        cancel = ( st.get() != 0 );
+    StreamBuf dataStream( data );
 
-        st.skip( 10 );
+    dataStream.skip( 1 );
 
-        colors = 0;
-        // blue
-        if ( st.get() )
-            colors |= Color::BLUE;
-        // green
-        if ( st.get() )
-            colors |= Color::GREEN;
-        // red
-        if ( st.get() )
-            colors |= Color::RED;
-        // yellow
-        if ( st.get() )
-            colors |= Color::YELLOW;
-        // orange
-        if ( st.get() )
-            colors |= Color::ORANGE;
-        // purple
-        if ( st.get() )
-            colors |= Color::PURPLE;
+    // Get the amount of resources.
+    resources.wood = static_cast<int32_t>( dataStream.getLE32() );
+    resources.mercury = static_cast<int32_t>( dataStream.getLE32() );
+    resources.ore = static_cast<int32_t>( dataStream.getLE32() );
+    resources.sulfur = static_cast<int32_t>( dataStream.getLE32() );
+    resources.crystal = static_cast<int32_t>( dataStream.getLE32() );
+    resources.gems = static_cast<int32_t>( dataStream.getLE32() );
+    resources.gold = static_cast<int32_t>( dataStream.getLE32() );
 
-        // message
-        message = st.toString();
-        DEBUG_LOG( DBG_GAME, DBG_INFO,
-                   "event"
-                       << ": " << message )
+    // An artifact to be given.
+    artifact = dataStream.getLE16();
+
+    // The event applies to AI players as well.
+    computer = ( dataStream.get() != 0 );
+
+    // Does event occur only once?
+    cancel = ( dataStream.get() != 0 );
+
+    dataStream.skip( 10 );
+
+    colors = 0;
+
+    if ( dataStream.get() ) {
+        colors |= Color::BLUE;
     }
-    else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" )
+
+    if ( dataStream.get() ) {
+        colors |= Color::GREEN;
     }
+
+    if ( dataStream.get() ) {
+        colors |= Color::RED;
+    }
+
+    if ( dataStream.get() ) {
+        colors |= Color::YELLOW;
+    }
+
+    if ( dataStream.get() ) {
+        colors |= Color::ORANGE;
+    }
+
+    if ( dataStream.get() ) {
+        colors |= Color::PURPLE;
+    }
+
+    message = dataStream.toString();
+
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Ground event at tile " << index << " has event message: " << message )
 }
 
 void MapEvent::SetVisited( int color )
@@ -276,21 +341,34 @@ MapSign::MapSign()
     : MapObjectSimple( MP2::OBJ_SIGN )
 {}
 
-void MapSign::LoadFromMP2( int32_t index, StreamBuf st )
+void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data )
 {
-    st.skip( 9 );
-    message = st.toString();
+    assert( data.size() >= MP2::MP2_SIGN_STRUCTURE_MIN_SIZE );
+    assert( data[0] == 0x1 );
+
+    // Structure containing information about a sign or bottle.
+    //
+    // - uint8_t (1 byte)
+    //     Always equal to 1.
+    //
+    // - unused 8 bytes
+    //    Unknown / unused. TODO: find out what these bytes used for.
+    //
+    // - string
+    //    Null terminated string.
+
+    StreamBuf dataStream( data );
+    dataStream.skip( 9 );
+    message = dataStream.toString();
 
     if ( message.empty() ) {
         const std::vector<std::string> randomMessage{ _( "Next sign 50 miles." ), _( "Burma shave." ), _( "See Rock City." ), _( "This space for rent." ) };
         message = Rand::Get( randomMessage );
     }
 
-    SetIndex( index );
-    SetUID( index );
-    DEBUG_LOG( DBG_GAME, DBG_INFO,
-               "sign"
-                   << ": " << message )
+    SetIndex( mapIndex );
+    SetUID( mapIndex );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Sign at location " << mapIndex << " has a message: " << message )
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapSign & obj )

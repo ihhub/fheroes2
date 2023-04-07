@@ -109,7 +109,7 @@ namespace
         }
 
         if ( MP2::isArtifactObject( objectType ) ) {
-            const Artifact art = tile.QuantityArtifact();
+            const Artifact art = Maps::getArtifactFromTile( tile );
             if ( art.isValid() ) {
                 if ( isFindArtifactVictoryConditionForHuman( art ) ) {
                     // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player.

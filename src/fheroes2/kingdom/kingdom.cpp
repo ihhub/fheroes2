@@ -236,7 +236,10 @@ void Kingdom::ActionNewDay()
 
     // Reset the effect of the "Identify Hero" spell
     ResetModes( IDENTIFYHERO );
+}
 
+void Kingdom::ActionNewDayResourceUpdate( const std::function<void( const EventDate & event, const Funds & funds )> & displayEventDialog )
+{
     // Skip the income for the first day
     if ( world.CountDay() > 1 ) {
         AddFundsResource( GetIncome() );
@@ -258,7 +261,10 @@ void Kingdom::ActionNewDay()
     // Resources from events
     const EventsDate events = world.GetEventsDate( GetColor() );
     for ( const EventDate & event : events ) {
-        AddFundsResource( event.resource );
+        const Funds fundsUpdate = Resource::CalculateEventResourceUpdate( GetFunds(), event.resource );
+        AddFundsResource( fundsUpdate );
+        if ( displayEventDialog )
+            displayEventDialog( event, fundsUpdate );
     }
 }
 

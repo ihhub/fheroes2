@@ -27,7 +27,6 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <list>
 #include <ostream>
 #include <string>
 #include <type_traits>
@@ -367,22 +366,6 @@ void ShowNewWeekDialog()
         message += _( " All dwellings increase population." );
 
     fheroes2::showStandardTextMessage( "", message, Dialog::OK );
-}
-
-void ShowEventDayDialog()
-{
-    const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    const EventsDate events = world.GetEventsDate( myKingdom.GetColor() );
-
-    for ( const EventDate & event : events ) {
-        if ( event.resource.GetValidItemsCount() ) {
-            fheroes2::showResourceMessage( fheroes2::Text( event.title, fheroes2::FontType::normalYellow() ),
-                                           fheroes2::Text( event.message, fheroes2::FontType::normalWhite() ), Dialog::OK, event.resource );
-        }
-        else if ( !event.message.empty() ) {
-            fheroes2::showStandardTextMessage( event.title, event.message, Dialog::OK );
-        }
-    }
 }
 
 void ShowWarningLostTownsDialog()
@@ -761,6 +744,10 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, hotSeatAIFogColors( player ) );
                     }
 
+                    if ( !loadedFromSave ) {
+                        kingdom.ActionNewDayResourceUpdate( nullptr );
+                    }
+
                     kingdom.ActionBeforeTurn();
 
                     AI::Get().KingdomTurn( kingdom );
@@ -848,7 +835,15 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             ShowNewWeekDialog();
         }
 
-        ShowEventDayDialog();
+        myKingdom.ActionNewDayResourceUpdate( []( const EventDate & event, const Funds & funds ) {
+            if ( funds.GetValidItemsCount() ) {
+                fheroes2::showResourceMessage( fheroes2::Text( event.title, fheroes2::FontType::normalYellow() ),
+                                               fheroes2::Text( event.message, fheroes2::FontType::normalWhite() ), Dialog::OK, funds );
+            }
+            else if ( !event.message.empty() ) {
+                fheroes2::showStandardTextMessage( event.title, event.message, Dialog::OK );
+            }
+        } );
 
         if ( conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
             Game::AutoSave();

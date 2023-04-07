@@ -3243,10 +3243,12 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
 void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos, const fheroes2::Point & endPos, double angle, uint32_t monsterID )
 {
     LocalEvent & le = LocalEvent::Get();
-    fheroes2::Sprite missile;
 
     const bool reverse = startPos.x > endPos.x;
     const bool isMage = ( monsterID == Monster::MAGE || monsterID == Monster::ARCHMAGE );
+
+    fheroes2::Sprite missile;
+    fheroes2::Point endPosShift{ 0, 0 };
 
     // Mage is channeling the bolt; doesn't have missile sprite
     if ( isMage ) {
@@ -3254,10 +3256,14 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     }
     else {
         missile = fheroes2::AGG::GetICN( Monster::GetMissileICN( monsterID ), static_cast<uint32_t>( Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) ) );
+
+        // The projectile has to hit the target but not go through it so its end position is shifted in the direction to the shooter.
+        endPosShift.x = reverse ? ( missile.width() / 2 ) : -( missile.width() / 2 );
+        endPosShift.y = ( startPos.y > endPos.y ) ? ( missile.height() / 2 ) : -( missile.height() / 2 );
     }
 
     // Lich/Power lich has projectile speed of 25
-    const std::vector<fheroes2::Point> points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.width(), 25 ) );
+    const std::vector<fheroes2::Point> points = GetEuclideanLine( startPos, endPos + endPosShift, isMage ? 50 : std::max( missile.width(), 25 ) );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
 
     // For most shooting creatures we do not render the first missile position to better imitate start position change depending on shooting angle.
@@ -3467,7 +3473,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
             };
 
             if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
-                msg = _n( "1 soul is absorbed.", "%{count} souls are absorbed.", resurrects );
+                msg = _n( "1 soul is incorporated.", "%{count} souls are incorporated.", resurrects );
                 updateStatusBar( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
             }
             else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {

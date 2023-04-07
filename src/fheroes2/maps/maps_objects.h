@@ -34,8 +34,6 @@
 
 class StreamBase;
 
-class StreamBuf;
-
 class MapObjectSimple : public MapPosition
 {
 public:
@@ -75,7 +73,7 @@ struct MapEvent : public MapObjectSimple
 {
     MapEvent();
 
-    void LoadFromMP2( int32_t index, StreamBuf );
+    void LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data );
 
     bool isAllow( int color ) const;
     void SetVisited( int color );
@@ -116,7 +114,7 @@ struct MapSign : public MapObjectSimple
 {
     MapSign();
 
-    void LoadFromMP2( int32_t index, StreamBuf );
+    void LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data );
 
     std::string message;
 };

@@ -174,7 +174,7 @@ namespace
 
         // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
         if ( MP2::isArtifactObject( objectType ) ) {
-            const Artifact art = tile.QuantityArtifact();
+            const Artifact art = getArtifactFromTile( tile );
 
             if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
                 return false;
@@ -268,7 +268,7 @@ namespace
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
         case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
-            const Spell & spell = tile.QuantitySpell();
+            const Spell & spell = getSpellFromTile( tile );
             if ( !spell.isValid() ) {
                 // The spell cannot be invalid!
                 assert( 0 );
@@ -349,7 +349,25 @@ namespace
         }
 
         case MP2::OBJ_MAGIC_WELL:
-            return !hero.isObjectTypeVisited( objectType ) && hero.HaveSpellBook() && hero.GetSpellPoints() < hero.GetMaxSpellPoints();
+            if ( hero.isObjectTypeVisited( objectType ) ) {
+                return false;
+            }
+
+            if ( !hero.HaveSpellBook() ) {
+                return false;
+            }
+
+            if ( hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
+                return false;
+            }
+
+            if ( pathfinder.getDistance( index ) > hero.GetMovePoints() && hero.getDailyRestoredSpellPoints() + hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
+                // The Well is located at a distance which cannot be reached by the hero at the current turn.
+                // But if the hero will restore all spell points by the next day there is no reason to even to visit the Well.
+                return false;
+            }
+
+            return true;
 
         case MP2::OBJ_ARTESIAN_SPRING:
             return !hero.isVisited( tile, Visit::GLOBAL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
@@ -686,12 +704,55 @@ namespace
     const double dangerousTaskPenalty = 20000.0;
     const double fogDiscoveryBaseValue = -10000.0;
 
-    double ScaleWithDistance( double value, uint32_t distance )
+    double getDistanceModifier( const MP2::MapObjectType objectType )
     {
-        if ( distance == 0 )
+        // The value above 1.0 means that the object is useful only if it is nearby.
+        // The value below 1.0 means that the object should remain in focus even on greater distances.
+        if ( !MP2::isActionObject( objectType ) ) {
+            return 1.0;
+        }
+
+        switch ( objectType ) {
+        case MP2::OBJ_CASTLE:
+            return 0.8;
+        case MP2::OBJ_ALCHEMIST_LAB:
+        case MP2::OBJ_ARTIFACT:
+        case MP2::OBJ_HEROES:
+        case MP2::OBJ_MINES:
+        case MP2::OBJ_SAWMILL:
+            return 0.9;
+        case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_FLOTSAM:
+        case MP2::OBJ_GENIE_LAMP:
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_SEA_CHEST:
+            return 0.95;
+        case MP2::OBJ_BUOY:
+        case MP2::OBJ_TEMPLE:
+        case MP2::OBJ_FAERIE_RING:
+        case MP2::OBJ_FOUNTAIN:
+        case MP2::OBJ_IDOL:
+        case MP2::OBJ_MERMAID:
+            // In most situations Luck and Morale modifier objects are useful to be visited when they are very close.
+            return 1.1;
+        default:
+            break;
+        }
+
+        return 1.0;
+    }
+
+    double ScaleWithDistance( const double value, const uint32_t distance, const MP2::MapObjectType objectType )
+    {
+        if ( distance == 0 ) {
             return value;
-        // scale non-linearly (more value lost as distance increases)
-        return value - ( distance * std::log10( distance ) );
+        }
+
+        // Some objects do not loose their value drastically over distances. This allows AI heroes to keep focus on important targets.
+        const double correctedDistance = distance * getDistanceModifier( objectType );
+
+        // Scale non-linearly (more value lost as distance increases)
+        return value - ( correctedDistance * std::log10( correctedDistance ) );
     }
 
     double getFogDiscoveryValue( const Heroes & hero )
@@ -829,7 +890,7 @@ namespace AI
             return 3000.0;
         }
         case MP2::OBJ_ARTIFACT: {
-            const Artifact art = tile.QuantityArtifact();
+            const Artifact art = getArtifactFromTile( tile );
             assert( art.isValid() );
 
             // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
@@ -844,8 +905,8 @@ namespace AI
         case MP2::OBJ_TREASURE_CHEST: {
             // TODO: add logic if the object contains an artifact and resources.
 
-            if ( tile.QuantityArtifact().isValid() ) {
-                const Artifact art = tile.QuantityArtifact();
+            if ( getArtifactFromTile( tile ).isValid() ) {
+                const Artifact art = getArtifactFromTile( tile );
 
                 // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
                 if ( isFindArtifactVictoryConditionForHuman( art ) ) {
@@ -864,12 +925,12 @@ namespace AI
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_SKELETON:
         case MP2::OBJ_WAGON: {
-            if ( !tile.QuantityArtifact().isValid() ) {
+            if ( !getArtifactFromTile( tile ).isValid() ) {
                 // Don't waste time to go here.
                 return -dangerousTaskPenalty;
             }
 
-            const Artifact art = tile.QuantityArtifact();
+            const Artifact art = getArtifactFromTile( tile );
 
             // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
             if ( isFindArtifactVictoryConditionForHuman( art ) ) {
@@ -903,7 +964,7 @@ namespace AI
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
         case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
-            const Spell & spell = tile.QuantitySpell();
+            const Spell & spell = getSpellFromTile( tile );
             return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() );
         }
         case MP2::OBJ_ARENA:
@@ -1244,7 +1305,7 @@ namespace AI
             return 5000.0;
         }
         case MP2::OBJ_ARTIFACT: {
-            const Artifact art = tile.QuantityArtifact();
+            const Artifact art = getArtifactFromTile( tile );
             assert( art.isValid() );
 
             // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
@@ -1275,7 +1336,7 @@ namespace AI
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
         case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
-            const Spell & spell = tile.QuantitySpell();
+            const Spell & spell = getSpellFromTile( tile );
             return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() ) * 1.1;
         }
         case MP2::OBJ_ARENA:
@@ -1562,7 +1623,7 @@ namespace AI
         ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
         auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero, leftMovePoints]( const int destination, uint32_t & distance, double & value,
-                                                                                                            const bool isDimensionDoor ) {
+                                                                                                            const MP2::MapObjectType type, const bool isDimensionDoor ) {
             if ( !isDimensionDoor ) {
                 // Dimension door path does not include any objects on the way.
                 const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( destination );
@@ -1593,7 +1654,7 @@ namespace AI
                 distance = leftMovePoints + ( distance - leftMovePoints ) * 2;
             }
 
-            value = ScaleWithDistance( value, distance );
+            value = ScaleWithDistance( value, distance, type );
         };
 
         // Set baseline target if it's a special role
@@ -1635,7 +1696,7 @@ namespace AI
                 }
 
                 double value = valueStorage.value( node, dist );
-                getObjectValue( node.first, dist, value, useDimensionDoor );
+                getObjectValue( node.first, dist, value, static_cast<MP2::MapObjectType>( node.second ), useDimensionDoor );
 
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
@@ -1671,16 +1732,19 @@ namespace AI
                 fogDiscoveryValue /= 2;
             }
 
-            getObjectValue( fogDiscoveryTarget, distanceToFogDiscovery, fogDiscoveryValue, useDimensionDoor );
+            getObjectValue( fogDiscoveryTarget, distanceToFogDiscovery, fogDiscoveryValue, MP2::OBJ_NONE, useDimensionDoor );
         }
 
         if ( priorityTarget != -1 ) {
             if ( fogDiscoveryTarget >= 0 && fogDiscoveryValue > maxPriority ) {
                 priorityTarget = fogDiscoveryTarget;
                 maxPriority = fogDiscoveryValue;
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (fog discovery)" )
             }
-            DEBUG_LOG( DBG_AI, DBG_INFO,
-                       hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" )
+            else {
+                DEBUG_LOG( DBG_AI, DBG_INFO,
+                           hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" )
+            }
         }
         else if ( !heroInPatrolMode ) {
             priorityTarget = fogDiscoveryTarget;

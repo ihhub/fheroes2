@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-01 13:46+0000\n"
+"POT-Creation-Date: 2023-04-06 10:28+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -720,10 +720,11 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "1 %{defender} загива."
 msgstr[1] "%{count} %{defender} загиват."
 
-msgid "1 soul is absorbed."
-msgid_plural "%{count} souls are absorbed."
-msgstr[0] ""
-msgstr[1] ""
+#, fuzzy
+msgid "1 soul is incorporated."
+msgid_plural "%{count} souls are incorporated."
+msgstr[0] "Създава се огледален образ."
+msgstr[1] "Създава се огледален образ."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
@@ -8341,8 +8342,9 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr "Медал за доблест"
 
-msgid "The %{name} increases your morale."
-msgstr "%{name} повишава морала ти."
+#, fuzzy
+msgid "The %{name} increases your morale by %{count}."
+msgstr "%{name} увеличава знанията ти с %{count}."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -8614,7 +8616,8 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr "Заешки крак на късмета"
 
-msgid "The %{name} increases your luck in combat."
+#, fuzzy
+msgid "The %{name} increases your luck in combat by %{count}."
 msgstr "%{name} увеличава късмета ти в битка."
 
 msgid ""
@@ -10301,6 +10304,9 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "The %{name} increases your morale."
+#~ msgstr "%{name} повишава морала ти."
 
 #~ msgid "Attention"
 #~ msgstr "Внимание"

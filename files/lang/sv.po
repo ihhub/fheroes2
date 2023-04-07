@@ -1,12 +1,12 @@
 # Swedish translation for fheroes2
-# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2023 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-01 13:46+0000\n"
+"POT-Creation-Date: 2023-04-06 10:28+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -50,7 +50,7 @@ msgid "INFO"
 msgstr "INFO"
 
 msgid "QUIT"
-msgstr "AVSLUTA"
+msgstr "AVSLUT."
 
 msgid "CANCEL"
 msgstr "AVBRYT"
@@ -83,10 +83,10 @@ msgid "DISMISS"
 msgstr "SPARKA"
 
 msgid "UPGRADE"
-msgstr "UPPGRADERA"
+msgstr "UPPG."
 
 msgid "RESTART"
-msgstr "ÅTERSTARTA"
+msgstr "OMSTART"
 
 msgid "S"
 msgstr "S"
@@ -101,7 +101,7 @@ msgid "X-L"
 msgstr "XL"
 
 msgid "ALL"
-msgstr "ALLA"
+msgstr "ALL"
 
 msgid ""
 "STANDARD\n"
@@ -121,9 +121,7 @@ msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
-msgstr ""
-"FLERSPELAR-\n"
-"SPEL"
+msgstr "MULTIPLAYSPEL"
 
 msgid "CONFIG"
 msgstr "ANPASSA"
@@ -290,9 +288,8 @@ msgstr "Alla %{race} trupper +1"
 msgid "Multiple"
 msgstr "Flera"
 
-#, fuzzy
 msgid "Troops of %{count} alignments -%{penalty}"
-msgstr "3 uppställningstrupper -1"
+msgstr "Armén består av trupper från %{count} olika klasser, ger -%{penalty}"
 
 msgid "Some undead in group -1"
 msgstr "Några odöda i armén -1"
@@ -324,19 +321,16 @@ msgstr "Flytta %{name}"
 msgid "Set Count"
 msgstr "Ange Antal"
 
-#, fuzzy
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
-msgstr[0] "%{name} halverar fiendetrupperna!"
-msgstr[1] "%{name} halverar fiendetrupperna!"
+msgstr[0] "%{name} förgör hälften av fiendetrupperna!"
+msgstr[1] "%{name} förgör hälften av fiendetrupperna!"
 
-#, fuzzy
 msgid "%{name} has turned off the auto battle"
-msgstr "Skadar alla odöda i striden."
+msgstr "%{name} har stängt av autom. strid"
 
-#, fuzzy
 msgid "%{name} has turned on the auto battle"
-msgstr "Skadar alla odöda i striden."
+msgstr "%{name} har aktiverat autom. strid"
 
 msgid "Spell failed!"
 msgstr "Besvärjelse misslyckades!"
@@ -359,12 +353,14 @@ msgstr "Du kan endast inkalla en elementtyp per strid."
 
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
 msgstr ""
-"Det finns ingen fri plats intill din hjälte för att inkalla ett element."
+"Det finns ingen fri plats intill din hjälte för att inkalla en elementande."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
 "half movement rate."
 msgstr ""
+"Vallgraven sänker Försvarsförmågan med -%{count} och halverar truppens "
+"hastighet."
 
 msgid "Speed: %{speed}"
 msgstr "Hastighet: %{speed}"
@@ -389,9 +385,8 @@ msgstr ""
 msgid "Grid"
 msgstr "Rutnät"
 
-#, fuzzy
 msgid "Shadow Movement"
-msgstr "Fortsätt förflyttning"
+msgstr "Skuggförflyttning"
 
 msgid "Shadow Cursor"
 msgstr "Skuggmarkör"
@@ -406,10 +401,14 @@ msgid "Configure"
 msgstr "Anpassa"
 
 msgid "Hot Keys"
-msgstr "Snabbtangenter"
+msgstr ""
+"Snabb-\n"
+"tangenter"
 
 msgid "Damage Info"
-msgstr "Skadeinformation"
+msgstr ""
+"Skade-\n"
+"information"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Ange hastigheten för animationer på slagfältet."
@@ -490,7 +489,7 @@ msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "När du försöker ta %{name}, så försvinner den plötsligt."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "När fienden försöker ta %{name}, så försvinner den plöstligt."
 
 msgid "You have captured an enemy artifact!"
 msgstr "Du har tillfångatagit fiendens artefakt!"
@@ -502,13 +501,14 @@ msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
+"Genom att utöva svartkonst, så återuppväcker du %{count} av fiendens stupade "
+"som %{monster} för att tjäna dig."
 
 msgid "%{name} the %{race}"
 msgstr "%{name} av %{race}"
 
-#, fuzzy
 msgid "Captain of %{name}"
-msgstr "Har inte råd med %{name}."
+msgstr "Kapten över %{name}"
 
 msgid "Attack"
 msgstr "Anfall"
@@ -575,9 +575,8 @@ msgstr ""
 "Att ge upp kostar guld. Men om du betalar lösensumman kommer hjälten och "
 "alla hans eller hennes överlevande kreatur kunna rekryteras igen."
 
-#, fuzzy
 msgid "Open Hero Screen to view full information about the hero."
-msgstr "Låter kastaren få detaljerad information om fiendehjältar."
+msgstr "Öppna Hjältevyn för att få full information om hjälten."
 
 msgid "Return to the battle."
 msgstr "Återgå till striden."
@@ -586,11 +585,10 @@ msgid "Not enough gold (%{gold})"
 msgstr "För lite guld (%{gold})"
 
 msgid "%{name} states:"
-msgstr "%{name}s tillstånd:"
+msgstr "%{name}s förklarar:"
 
-#, fuzzy
 msgid "Captain of %{name} states:"
-msgstr "Har inte råd med %{name}."
+msgstr "Kaptenen över %{name} förklarar:"
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
@@ -613,8 +611,8 @@ msgstr "Skjut %{monster}"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "(1 projektil kvar)"
+msgstr[1] "(%{count} projektiler kvar)"
 
 msgid "Attack %{monster}"
 msgstr "Anfall %{monster}"
@@ -638,10 +636,10 @@ msgid "Select spell target"
 msgstr "Välj besvärjelsemål"
 
 msgid "View Ballista info"
-msgstr ""
+msgstr "Visa Ballistinformation"
 
 msgid "Ballista"
-msgstr ""
+msgstr "Ballist"
 
 msgid "Enable auto combat"
 msgstr "Aktivera autom. strid"
@@ -656,7 +654,7 @@ msgid "Customize system options"
 msgstr "Skräddarsy systeminställningarna"
 
 msgid "Allows you to customize the combat screen."
-msgstr ""
+msgstr "Tillåter dig att skräddarsy stridsvyn."
 
 msgid "System Options"
 msgstr "Systemalternativ"
@@ -671,6 +669,8 @@ msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
 "get to go again until the next round."
 msgstr ""
+"Hoppar över nuvarande varelse. Nuvarande varelse avslutar sin runda och "
+"fortsätter först vid sin nästa runda."
 
 msgid "View Captain's options"
 msgstr "Visa Kaptensalternativ"
@@ -694,7 +694,7 @@ msgid "Message Bar"
 msgstr "Textfält"
 
 msgid "Shows the results of individual monster's actions."
-msgstr ""
+msgstr "Visa resultaten av en varelses handlingar."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Är du säker på att du vill fortsätta slaget i automatiskt läge?"
@@ -702,11 +702,10 @@ msgstr "Är du säker på att du vill fortsätta slaget i automatiskt läge?"
 msgid "%{name} skip their turn."
 msgstr "%{name} hoppar över rundan."
 
-#, fuzzy
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] "%{attacker} tar %{damage} skada."
-msgstr[1] "%{attacker} tar %{damage} skada."
+msgstr[0] "%{attacker} ger %{damage} skada."
+msgstr[1] "%{attacker} ger %{damage} skada."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -718,15 +717,16 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "en %{defender} stupar."
 msgstr[1] "%{count} %{defender} stupar."
 
-msgid "1 soul is absorbed."
-msgid_plural "%{count} souls are absorbed."
-msgstr[0] ""
-msgstr[1] ""
+#, fuzzy
+msgid "1 soul is incorporated."
+msgid_plural "%{count} souls are incorporated."
+msgstr[0] "1 själ absorberas."
+msgstr[1] "%{count} själar absorberas."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 %{unit} återuppväcks."
+msgstr[1] "%{count} %{unit} återuppväcks."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Flyttade %{monster}: från [%{src}] till [%{dst}]."
@@ -761,24 +761,20 @@ msgstr "Besvärjelsen %{spell} ger %{damage} skada till alla levande varelser."
 msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr "%{attacker}nas anfall förblindar %{target}na!"
 
-#, fuzzy
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "Medusas blick förvandlar %{name} till sten!"
+msgstr "%{attacker}nas blick förvandlar %{target} till sten!"
 
-#, fuzzy
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "Mumiens förbannelse har drabbat %{name}!"
+msgstr "%{attacker}nas förbannelse drabbar %{target}"
 
-#, fuzzy
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "%{name} blev paralyserad av Cykloperna!"
+msgstr "%{name} blev paralyserade av %{attacker}na!"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
+msgstr "%{attacker} skingrar alla godartade besvärjelser från %{target}!"
 
-#, fuzzy
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr "%{name} kastar %{spell} på %{troop}."
+msgstr "%{attacker} kastar %{spell} på %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "Otur drabbar %{attacker}."
@@ -826,10 +822,10 @@ msgid "Damage: %{min} - %{max}"
 msgstr "Skada: %{min} - %{max}"
 
 msgid "Perish: %{max}"
-msgstr ""
+msgstr "Stupar: %{max}"
 
 msgid "Perish: %{min} - %{max}"
-msgstr ""
+msgstr "Stupar: %{min} - %{max}"
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
@@ -845,27 +841,23 @@ msgstr "AI"
 msgid "Please select another hero."
 msgstr "Välj en annan hjälte."
 
-#, fuzzy
 msgid "Set Attack Skill"
-msgstr "Attackfärdighet"
+msgstr "Ange Anfallsförmåga"
 
-#, fuzzy
 msgid "Set Defense Skill"
-msgstr "Försvarsfärdighet"
+msgstr "Ange Försvarsförmåga"
 
-#, fuzzy
 msgid "Set Power Skill"
-msgstr "Besvärjelsestyrka"
+msgstr "Ange Trollkonst"
 
-#, fuzzy
 msgid "Set Knowledge Skill"
-msgstr "Kunskap"
+msgstr "Ange Kunskapsnivå"
 
 msgid "%{race1} %{name1}"
 msgstr "%{name1} (%{race1})"
 
 msgid "vs"
-msgstr ""
+msgstr "vs"
 
 msgid "%{race2} %{name2}"
 msgstr "%{name2} (%{race2})"
@@ -883,10 +875,10 @@ msgid "Right Turret"
 msgstr "Höger Torn"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr ""
+msgstr "%{name} avfyrar med styrkan av %{count} Bågskyttar"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr ""
+msgstr "varje med en +%{attack}bonus till deras Anfallsförmåga."
 
 msgid "The %{name} is destroyed."
 msgstr "%{name} förstörs."
@@ -898,11 +890,10 @@ msgstr ""
 "%{artifact}-artefakten är i effekt för denna strid och inaktiverar %{spell}-"
 "besvärjelsen."
 
-#, fuzzy
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
-msgstr[0] "%{count} %{name} uppstår från de döda!"
-msgstr[1] "%{count} %{name} uppstår från de döda!"
+msgstr[0] "%{count} %{name} återuppstår från de döda!"
+msgstr[1] "%{count} %{name} återuppstår från de döda!"
 
 msgid "Dwarven Alliance"
 msgstr "Dvärgallians"
@@ -2262,6 +2253,8 @@ msgid ""
 "The Coliseum provides inspiring spectacles to defending troops, raising "
 "their morale by two during combat."
 msgstr ""
+"Kolosseum erbjuder spännande och inspirerande gladiatorspel åt de "
+"försvarande trupperna, och höjer stridsmoralen med 2."
 
 msgid "The Garbage Heap increases production of Goblins by %{count} per week."
 msgstr "Kökkenmöddingen ökar produktionen av Vättar med %{count} per vecka."
@@ -2273,9 +2266,8 @@ msgid ""
 "The Crystal Garden increases production of Sprites by %{count} per week."
 msgstr "Kristallträdgården ökar produktionen av Féer med %{count} per vecka."
 
-#, fuzzy
 msgid "The Dungeon increases the income of the town by %{count} gold per day."
-msgstr "Fängelsehålan ökar stadens inkomst med %{count} per dag."
+msgstr "Fängelsehålan ökar stadens inkomst med %{count} guld per dag."
 
 msgid "The Waterfall increases production of Centaurs by %{count} per week."
 msgstr "Vattenfallet ökar produktionen av Kentaurer med %{count} per vecka."
@@ -2284,7 +2276,8 @@ msgid ""
 "The Library increases the number of spells in the Guild by one for each "
 "level of the guild."
 msgstr ""
-"Biblioteket ökar besvärjelser i Samfundet med ytterligare en för varje nivå."
+"Biblioteket ökar besvärjelser i Magisamfundet med ytterligare en för varje "
+"nivå."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
 msgstr "Fruktodlingen ökar produktionen av Hober med %{count} per vecka."
@@ -2327,24 +2320,25 @@ msgid "Captain's Quarters"
 msgstr "Kaptensbostad"
 
 msgid "Mage Guild, Level 1"
-msgstr "Magikersamfund, nivå 1"
+msgstr "Magisamfund, nivå 1"
 
 msgid "Mage Guild, Level 2"
-msgstr "Magikersamfund, nivå 2"
+msgstr "Magisamfund, nivå 2"
 
 msgid "Mage Guild, Level 3"
-msgstr "Magikersamfund, nivå 3"
+msgstr "Magisamfund, nivå 3"
 
 msgid "Mage Guild, Level 4"
-msgstr "Magikersamfund nivå 4"
+msgstr "Magisamfund, nivå 4"
 
 msgid "Mage Guild, Level 5"
-msgstr "Magikersamfund, nivå 5"
+msgstr "Magisamfund, nivå 5"
 
 msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
 "percent."
 msgstr ""
+"Helgedomen ökar Svartkonstförmågan hos dina svartkonstnärer med 10procent."
 
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
@@ -2366,9 +2360,8 @@ msgid ""
 msgstr ""
 "Brunnen ökar produktionen i alla bostäder med %{count} varelser per vecka."
 
-#, fuzzy
 msgid "The Statue increases your town's income by %{count} gold per day."
-msgstr "Statyn ökar din stads inkomst med %{count} per dag."
+msgstr "Statyn ökar din stads inkomst med %{count} guld per dag."
 
 msgid "The Left Turret provides extra firepower during castle combat."
 msgstr "Vänster Torn ger extra mycket eldkraft under slottstrid."
@@ -2380,8 +2373,8 @@ msgid ""
 "The Marketplace can be used to convert one type of resource into another. "
 "The more marketplaces you control, the better the exchange rate."
 msgstr ""
-"Marknaden används för att konvertera en resurs till en annan. Ju fler "
-"marknader du kontrollerar desto bättre växlingskurs."
+"Marknaden används för att växla en resurs till en annan. Ju fler marknader "
+"du kontrollerar desto bättre växlingskurs."
 
 msgid ""
 "The Moat slows attacking units. Any unit entering the moat must end its turn "
@@ -2415,7 +2408,7 @@ msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
 msgstr ""
-"Magikersamfundet låter hjältar att lära sig besvärjelser och återhämta "
+"Magisamfundet låter hjältar att lära sig besvärjelser och återhämta "
 "besvärjelsepoäng."
 
 msgid "Recruit %{name}"
@@ -2902,9 +2895,8 @@ msgstr "Klicka för att anta valt språk."
 msgid "%{name} has gained a level."
 msgstr "%{name} har gått upp en level."
 
-#, fuzzy
 msgid "%{skill} +1"
-msgstr "Färdighet %{skill} +1"
+msgstr "%{skill} +1"
 
 msgid "You have learned %{skill}."
 msgstr "Du har lärt dig %{skill}."
@@ -3257,13 +3249,17 @@ msgid "Jump"
 msgstr "Hoppa"
 
 msgid "Hero Speed"
-msgstr "Hjältehastighet"
+msgstr ""
+"Hjälte-\n"
+"hastighet"
 
 msgid "Don't Show"
 msgstr "Visa ej"
 
 msgid "Enemy Speed"
-msgstr "Fiendehastighet"
+msgstr ""
+"Fiende-\n"
+"hastighet"
 
 msgid "Slow"
 msgstr "Långsam"
@@ -3279,7 +3275,9 @@ msgid "Very Fast"
 msgstr "Riktigt snabb"
 
 msgid "Scroll Speed"
-msgstr "Skrollhastighet"
+msgstr ""
+"Skroll-\n"
+"hastighet"
 
 msgid "Evil"
 msgstr "Ond"
@@ -3288,7 +3286,9 @@ msgid "Good"
 msgstr "God"
 
 msgid "Interface Type"
-msgstr "Gränssnittstyp"
+msgstr ""
+"Gränssnitts-\n"
+"format"
 
 msgid "Hide"
 msgstr "Dölj"
@@ -4719,11 +4719,10 @@ msgid "Danish"
 msgstr "Danska"
 
 msgid "Slovak"
-msgstr ""
+msgstr "Slovakiska"
 
-#, fuzzy
 msgid "Vietnamese"
-msgstr "Visa %{name}"
+msgstr "Vietnamesiska"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -5687,7 +5686,7 @@ msgid ""
 msgstr ""
 "När du närmar dig den bubblande lerpölen börjar varelser stiga upp och "
 "ställa sig runt den. I samklang säger de: \"Moder Jord vill erbjuda dig "
-"några av hennes trupper. Vill du rekrytera Jordelement?\""
+"några av hennes trupper. Vill du rekrytera Jordandar?\""
 
 msgid "You enter the structure of white stone pillars, and find nothing."
 msgstr "Du kliver in i byggnaden av vita pelare, men du hittar ingenting."
@@ -5702,7 +5701,7 @@ msgid ""
 msgstr ""
 
 msgid "No Fire Elementals approach you from the lava pool."
-msgstr "Inga eldelement kommer upp ur lavapölen."
+msgstr "Inga Eldandar kommer upp ur lavapölen."
 
 msgid ""
 "Beneath a structure that serves to hold in heat, Fire Elementals move about "
@@ -6262,7 +6261,7 @@ msgid "View Experience Info"
 msgstr "Visa information för erfarenhet"
 
 msgid "View Spell Points Info"
-msgstr "Visa information för besvärlejsepoäng"
+msgstr "Visa information för besvärjelsepoäng"
 
 msgid "Set army combat formation to 'Spread'"
 msgstr "Ställ in arméns stridsformation på 'Utspridd'"
@@ -6270,9 +6269,8 @@ msgstr "Ställ in arméns stridsformation på 'Utspridd'"
 msgid "Set army combat formation to 'Grouped'"
 msgstr "Ställ in arméns stridsformation på 'Grupperad'"
 
-#, fuzzy
 msgid "Exit Hero Screen"
-msgstr "Hjältesskärm"
+msgstr "Lämna Hjältevyn"
 
 msgid "You cannot dismiss a hero in a castle"
 msgstr ""
@@ -6296,10 +6294,10 @@ msgid "Blood Morale"
 msgstr "Bra moral"
 
 msgid "%{morale} Morale"
-msgstr "%{morale} moral"
+msgstr "%{morale} Stridsmoral"
 
 msgid "%{luck} Luck"
-msgstr ""
+msgstr "%{luck} Tur"
 
 msgid "Current Luck Modifiers:"
 msgstr ""
@@ -6308,15 +6306,17 @@ msgid "Current Morale Modifiers:"
 msgstr ""
 
 msgid "Entire army is undead, so morale does not apply."
-msgstr "Hela gruppen är odöd, så moral gäller inte."
+msgstr "Hela armén är odöd, så moral gäller inte."
 
 msgid ""
 "Current experience %{exp1}.\n"
 " Next level %{exp2}."
-msgstr "Nuvarande erfarenhet: %{exp1}. Nästa level: %{exp2}."
+msgstr ""
+"Nuvarande erfarenhet: %{exp1}. \n"
+"Nästa nivå: %{exp2}."
 
 msgid "Level %{level}"
-msgstr "Level %{level}"
+msgstr "Nivå %{level}"
 
 msgid ""
 "%{name} currently has %{point} spell points out of a maximum of %{max}. The "
@@ -6377,14 +6377,13 @@ msgstr ""
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr ""
-"Din attackfärdighet är en bonus som läggs till på varje varelses "
-"attackfärdighet."
+"Din anfallsfärdighet är en bonus som läggs till på varje varelses anfall."
 
 msgid "Your defense skill is a bonus added to each creature's defense skill."
 msgstr ""
 
 msgid "Your spell power determines the length or power of a spell."
-msgstr "Din besvärjelsestyrka bestämmer besvärjelsens längd eller styrka."
+msgstr "Din Trollkonst bestämmer besvärjelsens längd eller styrka."
 
 msgid ""
 "Your knowledge determines how many spell points your hero may have. Under "
@@ -6396,16 +6395,16 @@ msgid "Current Modifiers:"
 msgstr ""
 
 msgid "skill|Basic"
-msgstr "Novis"
+msgstr "Basal"
 
 msgid "skill|Advanced"
 msgstr "Avancerad"
 
 msgid "skill|Expert"
-msgstr "Mästare"
+msgstr "Expert"
 
 msgid "Pathfinding"
-msgstr "Vägledning"
+msgstr "Vägvisning"
 
 msgid "Archery"
 msgstr "Bågskytte"
@@ -6441,149 +6440,149 @@ msgid "Necromancy"
 msgstr "Svartkonst"
 
 msgid "Estates"
-msgstr "Rang"
+msgstr "Ägor"
 
 msgid "Advanced Archery"
-msgstr "Avancerat bågskytte"
+msgstr "Avancerat Bågskytte"
 
 msgid "Advanced Pathfinding"
-msgstr "Avancerad vägledning"
+msgstr "Avancerad Vägvisning"
 
 msgid "Basic Archery"
-msgstr "Grundläggande bågskytte"
+msgstr "Basalt Bågskytte"
 
 msgid "Basic Pathfinding"
-msgstr "Grundläggande vägledning"
+msgstr "Basal Vägvisning"
 
 msgid "Expert Pathfinding"
-msgstr "Professionell vägledning"
+msgstr "Expert Vägvisning"
 
 msgid "Advanced Logistics"
-msgstr "Avancerad logistik"
+msgstr "Avancerad Logistik"
 
 msgid "Basic Logistics"
-msgstr "Grundläggande logistik"
+msgstr "Basal Logistik"
 
 msgid "Basic Scouting"
-msgstr ""
+msgstr "Basal Spaning"
 
 msgid "Expert Archery"
-msgstr "Professionellt bågskytte"
+msgstr "Expert Bågskytte"
 
 msgid "Expert Logistics"
-msgstr "Professionell logistik"
+msgstr "Expert Logistik"
 
 msgid "Advanced Diplomacy"
-msgstr ""
+msgstr "Avancerad Diplomati"
 
 msgid "Advanced Scouting"
-msgstr ""
+msgstr "Avancerad Spaning"
 
 msgid "Basic Diplomacy"
-msgstr ""
+msgstr "Basal Diplomati"
 
 msgid "Expert Diplomacy"
-msgstr ""
+msgstr "Expert Diplomati"
 
 msgid "Expert Scouting"
-msgstr ""
+msgstr "Expert Spaning"
 
 msgid "Advanced Leadership"
-msgstr ""
+msgstr "Avancerat Ledarskap"
 
 msgid "Advanced Navigation"
-msgstr "Avancerad navigering"
+msgstr "Avancerad Navigering"
 
 msgid "Basic Leadership"
-msgstr ""
+msgstr "Basalt Ledarskap"
 
 msgid "Basic Navigation"
-msgstr "Grundläggande navigering"
+msgstr "Basal Navigering"
 
 msgid "Expert Navigation"
-msgstr "Professionell navigering"
+msgstr "Expert Navigation"
 
 msgid "Advanced Wisdom"
-msgstr ""
+msgstr "Avancerad Visdom"
 
 msgid "Basic Mysticism"
-msgstr ""
+msgstr "Basal Mystik"
 
 msgid "Basic Wisdom"
-msgstr ""
+msgstr "Basal Visdom"
 
 msgid "Expert Leadership"
-msgstr "Professionellt ledarskap"
+msgstr "Expert Ledarskap"
 
 msgid "Expert Wisdom"
-msgstr ""
+msgstr "Expert Visdom"
 
 msgid "Advanced Luck"
-msgstr "Avancerad tur"
+msgstr "Avancerad Tur"
 
 msgid "Advanced Mysticism"
-msgstr ""
+msgstr "Avancerad Mystik"
 
 msgid "Basic Luck"
-msgstr "Grundläggande tur"
+msgstr "Basal Tur"
 
 msgid "Expert Luck"
-msgstr "Professionell tur"
+msgstr "Expert Tur"
 
 msgid "Expert Mysticism"
-msgstr ""
+msgstr "Expert Mystik"
 
 msgid "Advanced Ballistics"
-msgstr ""
+msgstr "Avancerad Ballistik"
 
 msgid "Advanced Eagle Eye"
-msgstr ""
+msgstr "Avancerad Falkblick"
 
 msgid "Basic Ballistics"
-msgstr ""
+msgstr "Basal Ballistik"
 
 msgid "Basic Eagle Eye"
-msgstr ""
+msgstr "Basal Falkblick"
 
 msgid "Expert Ballistics"
-msgstr ""
+msgstr "Expert Ballistik"
 
 msgid "Advanced Necromancy"
-msgstr ""
+msgstr "Avancerad Svartkonst"
 
 msgid "Basic Estates"
-msgstr ""
+msgstr "Basala Ägor"
 
 msgid "Basic Necromancy"
-msgstr ""
+msgstr "Basal Svartkonst"
 
 msgid "Expert Eagle Eye"
-msgstr ""
+msgstr "Expert Falkblick"
 
 msgid "Expert Necromancy"
-msgstr ""
+msgstr "Expert Svartkonst"
 
 msgid "Advanced Estates"
-msgstr ""
+msgstr "Avancerade Ägor"
 
 msgid "Expert Estates"
-msgstr ""
+msgstr "Expert Ägor"
 
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
 msgstr ""
-"%{skill} reducerar förflyttningsstraffet för grov terräng med %{count} "
+"%{skill} sänker förflyttningshandikappet för grov terräng med %{count} "
 "procent."
 
-#, fuzzy
 msgid "%{skill} eliminates the movement penalty for rough terrain."
-msgstr "Reducerar förflyttningsstraffet för grov terräng med %{count} procent."
+msgstr "%{skill} tar bort förflyttningshandikappet för grov terräng."
 
-#, fuzzy
 msgid ""
 "%{skill} increases the damage done by range attacking creatures by %{count} "
 "percent."
-msgstr "Höjer en varelses hastighet med %{count}."
+msgstr ""
+"%{skill} ökar skadan för varelser som avfyrar projektiler med %{count} "
+"procent."
 
 msgid "%{skill} increases your hero's movement points by %{count} percent."
 msgstr "%{skill} ökar din hjältes förflyttningspoäng med %{count} procent."
@@ -6591,21 +6590,21 @@ msgstr "%{skill} ökar din hjältes förflyttningspoäng med %{count} procent."
 msgid "%{skill} increases your hero's viewable area by one square."
 msgid_plural ""
 "%{skill} increases your hero's viewable area by %{count} squares."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{skill} ökar din hjältes sikt med %{count} ruta."
+msgstr[1] "%{skill} ökar din hjältes sikt med %{count} rutor."
 
 msgid ""
 "%{skill} allows you to negotiate with monsters who are weaker than your "
 "group. "
-msgstr ""
+msgstr "%{skill} låter dig förhandla med monster som är svagare än din armé. "
 
-#, fuzzy
 msgid "Approximately %{count} percent of the creatures may offer to join you."
-msgstr "Alla varelserna vill följa med oss..."
+msgstr ""
+"Uppskattningsvis så kan %{count} procent av varelserna välja att ansluta sig "
+"till dig."
 
-#, fuzzy
 msgid "All of the creatures may offer to join you."
-msgstr "Alla varelserna vill följa med oss..."
+msgstr "Alla varelserna kan ansluta sig till dig."
 
 msgid ""
 "%{skill} increases your hero's movement points over water by %{count} "
@@ -6614,29 +6613,27 @@ msgstr ""
 "%{skill} ökar din hjältes förflyttningspoäng över vatten med %{count} "
 "procent."
 
-#, fuzzy
 msgid "%{skill} increases your hero's troops morale by %{count}."
-msgstr "Höjer din hjältes tur med %{count}."
+msgstr "%{skill} höjer din armés stridsmoral med %{count}."
 
 msgid "%{skill} allows your hero to learn third level spells."
-msgstr "%{skill} låter din hjälte lära sig tredje nivåns besvärjelser."
+msgstr "%{skill} låter din hjälte att lära sig %{count}:e nivåns besvärjelser."
 
 msgid "%{skill} allows your hero to learn fourth level spells."
-msgstr "%{skill} låter din hjälte lära sig fjärde nivåns besvärjelser."
+msgstr "%{skill} låter din hjälte att lära sig %{count}:e nivåns besvärjelser."
 
 msgid "%{skill} allows your hero to learn fifth level spells."
-msgstr "%{skill} låter din hjälte lära sig femte nivåns besvärjelser."
+msgstr "%{skill} låter din hjälte att lära sig %{count}:e nivåns besvärjelser."
 
-#, fuzzy
 msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
 "%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] ""
-"Du får kontroll över en kristallgruva. Den kommer att förse dig med %{count} "
-"enheter av kristaller per dag."
+"%{skill} återhämtar ytterligare %{count} av hjältens besvärjelsepoäng per "
+"dag."
 msgstr[1] ""
-"Du får kontroll över en kristallgruva. Den kommer att förse dig med %{count} "
-"enheter av kristaller per dag."
+"%{skill} återhämtar ytterligare %{count} av hjältens besvärjelsepoäng per "
+"dag."
 
 msgid "%{skill} increases your hero's luck by %{count}."
 msgstr "%{skill} höjer din hjältes tur med %{count}."
@@ -6645,40 +6642,53 @@ msgid ""
 "%{skill} gives your hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
+"%{skill} ökar katapultens sannolikhet att träffa och skada slottsmurar."
 
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
+"%{skill} ger katapulten en extra avfyrning, och varje avfyrning har en "
+"större chans att träffa och skada slottsmurar."
 
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
+"%{skill} ger katapulten en extra avfyrning och varje avfyrning förstör muren "
+"förutom Riddarens uppgraderade slottsmur."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
 "2nd level enemy spell used against him in a combat."
 msgstr ""
+"%{skill} ger din hjälte en %{count}-procentschans att lära sig upp till 2:a "
+"nivåns besvärjelse som används mot honom eller henne i strid."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) used against him in combat."
 msgstr ""
+"%{skill} ger din hjälte en %{count}-procentschans att lära sig upp till 3:e "
+"nivåns besvärjelse som används mot honom eller henne i strid."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) used against him in combat."
 msgstr ""
+"%{skill} ger din hjälte en %{count}-procentschans att lära sig upp till 4:e "
+"nivåns besvärjelse som används mot honom eller henne i strid."
 
 msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
 "brought back from the dead as Skeletons."
 msgstr ""
+"%{skill} återuppväcker %{count}-procent av de stupade varelserna i strid som "
+"Skelett."
 
 msgid ""
 "Your hero produces %{count} gold pieces per day as tax revenue from estates."
-msgstr ""
+msgstr "Din hjälte får %{count} guld per dag i skatteintäkter från sina ägor."
 
 msgid "Blue"
 msgstr "Blå"
@@ -6965,85 +6975,85 @@ msgid "speed|Instant"
 msgstr "Ögonblicklig"
 
 msgid "week|Squirrel"
-msgstr "Ekorre"
+msgstr "Ekorrens"
 
 msgid "week|Rabbit"
-msgstr "Hare"
+msgstr "Harens"
 
 msgid "week|Gopher"
-msgstr "Sisel"
+msgstr "Siselns"
 
 msgid "week|Badger"
-msgstr "Grävling"
+msgstr "Grävlingens"
 
 msgid "week|Rat"
-msgstr "Råtta"
+msgstr "Råttans"
 
 msgid "week|Eagle"
-msgstr "Örn"
+msgstr "Örnens"
 
 msgid "week|Weasel"
-msgstr "Vessla"
+msgstr "Vesslans"
 
 msgid "week|Raven"
-msgstr "Korp"
+msgstr "Korpens"
 
 msgid "week|Mongoose"
-msgstr "Mungo"
+msgstr "Mungons"
 
 msgid "week|Dog"
-msgstr "Hund"
+msgstr "Hundens"
 
 msgid "week|Aardvark"
-msgstr "Jordsvin"
+msgstr "Jordsvinets"
 
 msgid "week|Lizard"
-msgstr "Ödla"
+msgstr "Ödlans"
 
 msgid "week|Tortoise"
-msgstr "Sköldpadda"
+msgstr "Sköldpaddans"
 
 msgid "week|Hedgehog"
-msgstr "Igelkott"
+msgstr "Igelkottens"
 
 msgid "week|Condor"
-msgstr "Kondor"
+msgstr "Kondorens"
 
 msgid "week|Ant"
-msgstr "Myra"
+msgstr "Myrans"
 
 msgid "week|Grasshopper"
-msgstr "Gräshoppa"
+msgstr "Gräshoppans"
 
 msgid "week|Dragonfly"
-msgstr "Trollslända"
+msgstr "Trollsländans"
 
 msgid "week|Spider"
-msgstr "Spindel"
+msgstr "Spindelns"
 
 msgid "week|Butterfly"
-msgstr "Fjäril"
+msgstr "Fjärilens"
 
 msgid "week|Bumblebee"
-msgstr "Humla"
+msgstr "Humlans"
 
 msgid "week|Locust"
-msgstr "Vandringsgräshoppa"
+msgstr "Vandringsgräshoppans"
 
 msgid "week|Earthworm"
-msgstr "Daggmask"
+msgstr "Daggmaskens"
 
 msgid "week|Hornet"
-msgstr "Bålgeting"
+msgstr "Bålgetingens"
 
 msgid "week|Beetle"
-msgstr "Skalbagge"
+msgstr "Skalbaggens"
 
 msgid "week|PLAGUE"
-msgstr "FARSOT"
+msgstr "FARSOTENS"
 
 msgid "week|Unnamed"
-msgstr "Namnlös"
+msgstr "de Namnlösas"
 
 msgid "Desert"
 msgstr "Öken"
@@ -7463,16 +7473,16 @@ msgid "Jail"
 msgstr "Fängelse"
 
 msgid "Fire Summoning Altar"
-msgstr "Eldinkallningsaltare"
+msgstr "Eldaltare"
 
 msgid "Air Summoning Altar"
-msgstr "Luftinkallningsaltare"
+msgstr "Luftaltare"
 
 msgid "Earth Summoning Altar"
-msgstr "Jordinkallningsaltare"
+msgstr "Jordaltare"
 
 msgid "Water Summoning Altar"
-msgstr "Vatteninkallningsaltare"
+msgstr "Vattenaltare"
 
 msgid "Unknown Monster"
 msgstr "Okänt Monster"
@@ -7849,33 +7859,29 @@ msgstr "Medusa"
 msgid "Medusas"
 msgstr "Medusor"
 
-#, fuzzy
 msgid "Earth Elemental"
-msgstr "Jordelement"
+msgstr "Jordande"
 
 msgid "Earth Elementals"
-msgstr "Jordelement"
+msgstr "Jordandar"
 
-#, fuzzy
 msgid "Air Elemental"
-msgstr "Luftelement"
+msgstr "Luftande"
 
 msgid "Air Elementals"
-msgstr "Luftelement"
+msgstr "Luftandar"
 
-#, fuzzy
 msgid "Fire Elemental"
-msgstr "Eldelement"
+msgstr "Eldande"
 
 msgid "Fire Elementals"
-msgstr "Eldelement"
+msgstr "Eldandar"
 
-#, fuzzy
 msgid "Water Elemental"
-msgstr "Vattenelement"
+msgstr "Vattenande"
 
 msgid "Water Elementals"
-msgstr "Vattenelement"
+msgstr "Vattenandar"
 
 msgid "Random Monsters"
 msgstr "Slumpade Monster"
@@ -7905,67 +7911,61 @@ msgid "Random Monsters 4"
 msgstr "Slumpade Monster 4"
 
 msgid "Double shot"
-msgstr ""
+msgstr "Dubbel avfyrning"
 
-#, fuzzy
 msgid "2-hex monster"
-msgstr ""
-"Mängder av\n"
-"%{monster}"
+msgstr "Stor varelse"
 
 msgid "Double strike"
-msgstr ""
+msgstr "Dubbelslag"
 
 msgid "Double damage to Undead"
-msgstr ""
+msgstr "Dubbel skada till Odöda"
 
 msgid "% magic resistance"
-msgstr ""
+msgstr "% besvärjelseresistens"
 
 msgid "Immune to Mind spells"
-msgstr ""
+msgstr "Immun mot Sinnesbesvärjelser"
 
-#, fuzzy
 msgid "Immune to Elemental spells"
-msgstr "Inkalla jordelement"
+msgstr "Immun mot Elementbesvärjelser"
 
 msgid "Immune to Fire spells"
-msgstr ""
+msgstr "Immun mot Eldbesvärjelser"
 
 msgid "Immune to Cold spells"
-msgstr ""
+msgstr "Immun mot Köldbesvärjelser"
 
 msgid "Immune to "
 msgstr "Immun mot "
 
 msgid "% immunity to %{spell} spell"
-msgstr ""
+msgstr "% resistens mot %{spell}besvärjelse"
 
-#, fuzzy
 msgid "% damage from Elemental spells"
-msgstr "Vattenelement"
+msgstr "% skada från Elementbesvärjelser"
 
 msgid "% chance to Dispel beneficial spells"
-msgstr ""
+msgstr "% chans att Skingra godartade besvärjelser"
 
 msgid "% chance to Paralyze"
-msgstr ""
+msgstr "% chans att Paralysera"
 
 msgid "% chance to Petrify"
-msgstr ""
+msgstr "% chans att Förstena"
 
 msgid "% chance to Blind"
-msgstr ""
+msgstr "% chans att Förblinda"
 
 msgid "% chance to Curse"
-msgstr ""
+msgstr "% chans att kasta Förbannelse"
 
-#, fuzzy
 msgid "% chance to cast %{spell} spell"
-msgstr "%{color} Kastar besvärjelse: %{spell}"
+msgstr "% chans att kasta %{spell}besvärjelse"
 
 msgid "HP regeneration"
-msgstr ""
+msgstr "Hälsoåterhämtning"
 
 msgid "Two hexes attack"
 msgstr "Två-rutsanfall"
@@ -7980,57 +7980,55 @@ msgid "Attacks all adjacent enemies"
 msgstr "Anfaller alla närliggande fiender"
 
 msgid "No melee penalty"
-msgstr ""
+msgstr "Inget närstridshandikapp"
 
 msgid "Dragon"
 msgstr "Drake"
 
 msgid "Undead"
-msgstr "Odöda"
+msgstr "Odöd"
 
 msgid "No enemy retaliation"
-msgstr ""
+msgstr "Ingen fiendevedergällning"
 
 msgid "HP drain"
-msgstr "Suger HP"
+msgstr "Suger hälsopoäng"
 
 msgid "Cloud attack"
 msgstr "Molnattack"
 
 msgid "Decreases enemy's morale by "
-msgstr ""
+msgstr "Sänker fiendens stridmoral med "
 
 msgid "% chance to halve enemy"
-msgstr ""
+msgstr "% chans att halvera fienden"
 
 msgid "Soul Eater"
 msgstr "Själslukare"
 
-#, fuzzy
 msgid "Elemental"
-msgstr "Luftelement"
+msgstr "Elementande"
 
 msgid "No Morale"
 msgstr "Ingen Stridsmoral"
 
 msgid "200% damage from Fire spells"
-msgstr ""
+msgstr "200% skada från Eldbesvärjelser"
 
 msgid "200% damage from Cold spells"
-msgstr ""
+msgstr "200% skada från Köldbesvärjelser"
 
 msgid "% damage from %{spell} spell"
-msgstr ""
+msgstr "% skada från %{spell}besvärjelse"
 
 msgid "% immunity to "
-msgstr ""
+msgstr "% resistens mot "
 
 msgid "Lightning"
 msgstr "Blixt"
 
-#, fuzzy
 msgid "% damage from "
-msgstr "Vattenelement"
+msgstr "% skada från "
 
 msgid "The three Anduran artifacts magically combine into one."
 msgstr "De tre Anduranartefakterna kombineras magiskt till en."
@@ -8038,12 +8036,11 @@ msgstr "De tre Anduranartefakterna kombineras magiskt till en."
 msgid "View Spells"
 msgstr "Visa Besvärjelser"
 
-#, fuzzy
 msgid "View %{name} Info"
-msgstr "Visa %{name}"
+msgstr "Visa %{name}information"
 
 msgid "Move %{name}"
-msgstr ""
+msgstr "Flytta %{name}"
 
 msgid "Cannot move the Spellbook"
 msgstr "Kan inte flytta Magibok"
@@ -8138,8 +8135,9 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr "Tapperhetens medalj"
 
-msgid "The %{name} increases your morale."
-msgstr "%{name} höjer din stridsmoral."
+#, fuzzy
+msgid "The %{name} increases your morale by %{count}."
+msgstr "%{name} minskar kraftigt din stridsmoral med %{count}."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -8353,8 +8351,9 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr "Hartass"
 
-msgid "The %{name} increases your luck in combat."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases your luck in combat by %{count}."
+msgstr "%{name} höjer din attackförmåga med %{count}."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
@@ -9044,6 +9043,10 @@ msgid ""
 "pain. It then tosses a glowing object at you. You put up your hands to block "
 "it, but it passes right through them and sears itself into your chest."
 msgstr ""
+"Du kliver in i en nyligen nerbrunnen glänta och stöter på en Eldande "
+"sittandes påett stenblock. Den tittar på dig med en plågad blick och kastar "
+"ett brinnande klot mot dig. Du försöker skydda dig med dina händer men du är "
+"för långsam och eldklotet träffar dig mitt på bröstet."
 
 msgid "Heart of Ice"
 msgstr "Ishjärta"
@@ -9214,11 +9217,11 @@ msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
 "creatures."
 msgstr ""
-"Skapar en stor eldboll som träffar ett utvalt område, tar skada på alla "
+"Skapar ett stort eldklot som träffar ett utvalt område och skadar alla "
 "varelser i närheten."
 
 msgid "Fireball"
-msgstr "Eldboll"
+msgstr "Eldklot"
 
 msgid "Fireblast"
 msgstr "Eldexplosion"
@@ -9227,17 +9230,17 @@ msgid ""
 "An improved version of fireball, fireblast affects two hexes around the "
 "center point of the spell, rather than one."
 msgstr ""
-"En förbättrad version av Eldboll. Eldexplosion angriper två hexagonaler "
+"En förbättrad version av Eldklot. Eldexplosion angriper två hexagonaler "
 "runtomkring den centrala punkten, istället för en."
 
 msgid "Causes a bolt of electrical energy to strike the selected creature."
-msgstr "Får en blixt att slå ned på en varelse."
+msgstr "Får en blixt att slå ned på vald varelse."
 
 msgid "Lightning Bolt"
 msgstr "Ljusblixt"
 
 msgid "Chain Lightning"
-msgstr ""
+msgstr "Kedjeblixt"
 
 msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
@@ -9264,6 +9267,8 @@ msgid ""
 "Removes all negative spells cast upon one of your units, and restores up to "
 "%{count} HP per level of spell power."
 msgstr ""
+"Skingrar all onda besvärjelser från en av dina varelser, återställer upp "
+"till %{count} hälsopoäng per Trollkonststyrka."
 
 msgid "Mass Cure"
 msgstr ""
@@ -9272,11 +9277,13 @@ msgid ""
 "Removes all negative spells cast upon your forces, and restores up to "
 "%{count} HP per level of spell power, per creature."
 msgstr ""
-"Tar bort alla negativa besvärjelser som har kastats på dina trupper och "
-"återställer upp till %{count} HP per besvärjelse-level, per varelse."
+"Tar bort alla onda besvärjelser som har kastats på dina trupper och "
+"återställer upp till %{count} hälsopoäng per Trollkonststyrka per varelse."
 
 msgid "Resurrect"
-msgstr "Återuppliva"
+msgstr ""
+"Åter-\n"
+"upplivning"
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
 msgstr ""
@@ -9284,12 +9291,14 @@ msgstr ""
 
 msgid "Resurrect True"
 msgstr ""
+"Äkta\n"
+"Återupplivning"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
-msgstr "Återupplivar varelser från en skadad eller död enhet permanent."
+msgstr "Återupplivar varelser från en skadad eller död varelse permanent."
 
 msgid "Haste"
-msgstr ""
+msgstr "Skynda"
 
 msgid "Increases the speed of any creature by %{count}."
 msgstr "Höjer en varelses hastighet med %{count}."
@@ -9299,25 +9308,28 @@ msgstr "Höjer alla dina varelsers hastighet med %{count}."
 
 msgid "Mass Haste"
 msgstr ""
+"Mass-\n"
+"skyndning"
 
 msgid "Slows target to half movement rate."
-msgstr "Saktar ned målet till hälften."
+msgstr "Saktar ned varelsens hastighet till hälften."
 
 msgid "spell|Slow"
-msgstr "Långsam"
+msgstr "Förslöa"
 
 msgid "Mass Slow"
 msgstr ""
+"Mass-\n"
+"förslöelse"
 
 msgid "Slows all enemies to half movement rate."
-msgstr "Saktar ned alla fiender till hälften."
+msgstr "Saktar ned alla fiendevarelser till hälften."
 
 msgid "Clouds the affected creatures' eyes, preventing them from moving."
 msgstr ""
 
-#, fuzzy
 msgid "spell|Blind"
-msgstr "Långsam"
+msgstr "Förblinda"
 
 msgid "Bless"
 msgstr "Välsignelse"
@@ -9326,24 +9338,28 @@ msgid "Causes the selected creatures to inflict maximum damage."
 msgstr "Får en varelse att tilldela maximal skada."
 
 msgid "Causes all of your units to inflict maximum damage."
-msgstr "Får alla dina enheter att tilldela maximal skada."
+msgstr "Får alla dina varelser att tilldela maximal skada."
 
 msgid "Mass Bless"
 msgstr ""
+"Mass-\n"
+"-välsignelse"
 
 msgid "Magically increases the defense skill of the selected creatures."
-msgstr ""
+msgstr "Ökar vald varelses Försvarsförmåga genom förtrollning."
 
 msgid "Stoneskin"
-msgstr "Stenskinn"
+msgstr "Stenhud"
 
 msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
 "version of Stoneskin."
 msgstr ""
+"Ökar Försvarförmågan för vald varelse. Detta är en förbättrad variant av "
+"Stenhud."
 
 msgid "Steelskin"
-msgstr "Stålskinn"
+msgstr "Stålhud"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Får en varelse att tilldela minimal skada."
@@ -9356,35 +9372,39 @@ msgstr "Får alla fiendetrupper att tilldela minimal skada."
 
 msgid "Mass Curse"
 msgstr ""
+"Mass-\n"
+"förbannelse"
 
 msgid "Damages all undead in the battle."
 msgstr "Skadar alla odöda i striden."
 
 msgid "Holy Word"
-msgstr "Heligt ord"
+msgstr "Heligt Ord"
 
 msgid ""
 "Damages all undead in the battle.  This is an improved version of Holy Word."
 msgstr ""
-"Skadar alla odöda i striden. Det är en förbättrad version av Heligt ord."
+"Skadar alla odöda i striden. Det är en förbättrad version av Heligt Ord."
 
 msgid "Holy Shout"
-msgstr "Heligt rop"
+msgstr "Heligt Rop"
 
 msgid "Anti-Magic"
 msgstr "Antimagi"
 
 msgid "Prevents harmful magic against the selected creatures."
-msgstr ""
+msgstr "Förhindrar onda besvärjelser mot vald varelse."
 
 msgid "Dispel Magic"
-msgstr "Skingra magi"
+msgstr "Skingra Magi"
 
 msgid "Removes all magic spells from a single target."
-msgstr ""
+msgstr "Skingrar alla besvärjelser, goda som onda från en vald varelse."
 
 msgid "Mass Dispel"
 msgstr ""
+"Mass-\n"
+"skingring"
 
 msgid "Removes all magic spells from all creatures."
 msgstr "Tar bort alla magiska besvärjelser från alla varelser."
@@ -9393,7 +9413,7 @@ msgid "Causes a magic arrow to strike the selected target."
 msgstr "Skjuter en magisk pil på valt mål."
 
 msgid "Magic Arrow"
-msgstr "Magisk pil"
+msgstr "Magisk Pil"
 
 msgid "Berserker"
 msgstr "Bärsärk"
@@ -9407,9 +9427,13 @@ msgstr "Harmageddon"
 msgid ""
 "Holy terror strikes the battlefield, causing severe damage to all creatures."
 msgstr ""
+"Gudomlig fasa drabbar slagfältet som orsakar stor skada till samtliga "
+"varelser."
 
 msgid "Elemental Storm"
-msgstr "Elementstorm"
+msgstr ""
+"Element-\n"
+"storm"
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
 msgstr "Magiska element vräker ned på slagfältet, skadar alla varelser."
@@ -9429,7 +9453,7 @@ msgstr "Paralysera"
 
 msgid "The targeted creatures are paralyzed, unable to move or retaliate."
 msgstr ""
-"Inriktade varelser är paralyserade, de kan varken förflytta sig eller hämnas."
+"Valda varelser är paralyserade, de kan varken förflytta sig eller hämnas."
 
 msgid "Hypnotize"
 msgstr "Hypnotisera"
@@ -9443,7 +9467,7 @@ msgid "Cold Ray"
 msgstr "Köldstråle"
 
 msgid "Drains body heat from a single enemy unit."
-msgstr "Tömmer kroppsvärme från en enskild fiendeenhet."
+msgstr "Tömmer kroppsvärme från en enskild fiendetrupp."
 
 msgid "Cold Ring"
 msgstr "Köldring"
@@ -9494,7 +9518,7 @@ msgid "Animate Dead"
 msgstr "Ge liv åt död"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
-msgstr ""
+msgstr "Återuppväcker skadade eller stupade odöda varelser permanent."
 
 msgid "Mirror Image"
 msgstr "Spegelbild"
@@ -9509,41 +9533,40 @@ msgstr ""
 "om de tar skada."
 
 msgid "Halves damage received from ranged attacks for a single unit."
-msgstr "Halverar skada från avståndsattacker för en enhet."
+msgstr "Halverar skada från projektilsattacker för en varelse."
 
 msgid "Shield"
 msgstr "Sköld"
 
 msgid "Halves damage received from ranged attacks for all of your units."
-msgstr ""
-"Halverar skadan som tas emot från avståndsattacker för alla dina enheter."
+msgstr "Halverar skadan till alla dina trupper från projektilattacker."
 
 msgid "Mass Shield"
-msgstr ""
+msgstr "Massköld"
 
 msgid "Summon Earth Elemental"
-msgstr "Inkalla jordelement"
+msgstr "Framkalla Jordandar"
 
 msgid "Summons Earth Elementals to fight for your army."
-msgstr "Kallar in Jordelement för att slåss för din armé."
+msgstr "Kallar in Jordandar för att strida för din armé."
 
 msgid "Summon Air Elemental"
-msgstr "Inkalla luftelement"
+msgstr "Framkalla Luftandar"
 
 msgid "Summons Air Elementals to fight for your army."
-msgstr "Kallar in Luftelement för att slåss för din armé."
+msgstr "Kallar in Luftelement för att strida för din armé."
 
 msgid "Summon Fire Elemental"
-msgstr "Inkalla eldelement"
+msgstr "Framkalla Eldandar"
 
 msgid "Summons Fire Elementals to fight for your army."
-msgstr "Kallar in Eldelement för att slåss för din armé."
+msgstr "Kallar in Eldandar för att strida för din armé."
 
 msgid "Summon Water Elemental"
-msgstr "Inkalla vattenelement"
+msgstr "Framkalla Vattenandar"
 
 msgid "Summons Water Elementals to fight for your army."
-msgstr "Kallar in Vattenelement för att slåss för din armé."
+msgstr "Kallar in Vattenandar för att strida för din armé."
 
 msgid "Damages castle walls."
 msgstr "Skadar slottsmurar."
@@ -9555,7 +9578,9 @@ msgid "Causes all mines across the land to become visible."
 msgstr "Gör alla gruvor synliga över hela landet."
 
 msgid "View Mines"
-msgstr "Visa Gruvor"
+msgstr ""
+"Visa\n"
+"Gruvor"
 
 msgid "Causes all resources across the land to become visible."
 msgstr "Gör alla resurser synliga över hela landet."
@@ -9579,7 +9604,9 @@ msgid "Causes all Heroes across the land to become visible."
 msgstr "Gör alla Hjältar synliga över hela landet."
 
 msgid "View Heroes"
-msgstr "Visa Hjältar"
+msgstr ""
+"Visa \n"
+"Hjältar"
 
 msgid "Causes the entire land to become visible."
 msgstr "Gör hela landet synligt."
@@ -9594,7 +9621,9 @@ msgid "Identify Hero"
 msgstr "Identifiera Hjälte"
 
 msgid "Summon Boat"
-msgstr "Inkalla Skepp"
+msgstr ""
+"Inkalla\n"
+"Skepp"
 
 msgid ""
 "Summons the nearest unoccupied, friendly boat to an adjacent shore "
@@ -9606,10 +9635,12 @@ msgid "Allows the caster to magically transport to a nearby location."
 msgstr "Låter kastaren magiskt transportera sig till en närliggande plats."
 
 msgid "Dimension Door"
-msgstr "Dimensionsdörr"
+msgstr ""
+"Dimensions-\n"
+"portal"
 
 msgid "Returns the caster to any town or castle currently owned."
-msgstr ""
+msgstr "För tillbaka Hjälten till någon stad eller slott som du kontrollerar."
 
 msgid "Town Gate"
 msgstr "Stadsport"
@@ -9617,14 +9648,16 @@ msgstr "Stadsport"
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
 "by you."
-msgstr ""
+msgstr "För tillbaka Hjälten till valfri stad eller slott som du kontrollerar."
 
 msgid "Visions"
-msgstr "Visioner"
+msgstr "Syner"
 
 msgid ""
 "Visions predicts the likely outcome of an encounter with a neutral army camp."
 msgstr ""
+"Syner förutspår det sannolika utfallet av en strid mot ett neutralt "
+"fiendeläger."
 
 msgid "Haunt"
 msgstr "Hemsök"
@@ -9637,33 +9670,29 @@ msgstr ""
 "producera resurser. (Om inte jag kan behålla den, kommer ingen att kunna "
 "det!)"
 
-#, fuzzy
 msgid "Set Earth Guardian"
-msgstr "Ange jordväktare"
+msgstr "Placera Jordväktare"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
-msgstr "Låter ett jordelement vakta en gruva mot fiendearméer."
+msgstr "Placerar Jordandar vakta en gruva mot fiendearméer."
 
-#, fuzzy
 msgid "Set Air Guardian"
-msgstr "Ange luftväktare"
+msgstr "Placera Luftväktare"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
-msgstr "Låter ett luftelement vakta en gruva mot fiendearméer."
+msgstr "Placerar Luftandar vakta en gruva mot fiendearméer."
 
-#, fuzzy
 msgid "Set Fire Guardian"
-msgstr "Ange eldväktare"
+msgstr "Placera Eldväktare"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
-msgstr "Låter ett eldelement vakta en gruva mot fiendearméer."
+msgstr "Placerar Eldandar vakta en gruva mot fiendearméer."
 
-#, fuzzy
 msgid "Set Water Guardian"
-msgstr "Ange vattenväktare"
+msgstr "Placera Vattenväktare"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
-msgstr "Låter ett vattenelement vakta en gruva mot fiendearméer."
+msgstr "Placerar Vattenandar vakta en gruva mot fiendearméer."
 
 msgid "Petrification"
 msgstr "Förstening"
@@ -9672,6 +9701,8 @@ msgid ""
 "Turns the affected creature into stone.  A petrified creature receives half "
 "damage from a direct attack."
 msgstr ""
+"Förvandlar varelsen till sten. En förstenad varelse mottar bara hälften "
+"skada från en direktattack."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
 msgstr ""
@@ -9680,11 +9711,10 @@ msgid "No spell to cast."
 msgstr "Inga besvärjelser att kasta."
 
 msgid "Your hero has %{point} spell points remaining."
-msgstr "Din hjälte har %{point} magipoäng kvar."
+msgstr "Din hjälte har %{point} besvärjelsepoäng kvar."
 
-#, fuzzy
 msgid "View Adventure Spells"
-msgstr "Äventyrsinställningar"
+msgstr "Visa Kartbesvärjelser"
 
 msgid "View Combat Spells"
 msgstr "Visa Stridsbesvärjelser"
@@ -9698,28 +9728,27 @@ msgstr "Visa nästa blad"
 msgid "Close Spellbook"
 msgstr "Stäng Magibok"
 
-#, fuzzy
 msgid "View %{spell}"
-msgstr "Visa %{name}"
+msgstr "Visa %{spell}"
 
-#, fuzzy
 msgid "This spell does %{damage} points of damage."
-msgstr "Besvärjelsen %{spell} ger %{damage} skada."
+msgstr "%{spell}besvärjelsen ger %{damage} skada."
 
-#, fuzzy
 msgid ""
 "This spell summons\n"
 "%{count} %{monster}."
-msgstr "Kasta %{spell} på %{monster}"
+msgstr ""
+"Denna besvärjelse framkallar\n"
+"%{count} %{monster}."
 
 msgid "This spell restores %{hp} HP."
 msgstr ""
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
-msgstr ""
+msgstr "Denna besvärjelse framkallar %{count} %{monster} för att vakta gruvan."
 
 msgid "The nearest town is %{town}."
-msgstr ""
+msgstr "Närmsta stad är %{town}."
 
 msgid "This town is occupied by your hero %{hero}."
 msgstr ""
@@ -9761,7 +9790,7 @@ msgid "south"
 msgstr "syd"
 
 msgid "south-east"
-msgstr "sydöst"
+msgstr "sydost"
 
 msgid "The truth is out there."
 msgstr "Sanningen finns där ute."
@@ -9793,3 +9822,6 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "The %{name} increases your morale."
+#~ msgstr "%{name} höjer din stridsmoral."

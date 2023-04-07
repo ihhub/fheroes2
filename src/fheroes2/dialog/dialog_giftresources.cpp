@@ -323,9 +323,9 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
         EventDate event;
 
         event.resource = funds2;
-        event.computer = true;
-        event.first = world.CountDay() + 1;
-        event.subsequent = 0;
+        event.isApplicableForAIPlayers = true;
+        event.firstOccurrenceDay = world.CountDay() + 1;
+        event.repeatPeriodInDays = 0;
         event.colors = selector.recipients;
         event.message = _( "Gift from %{name}" );
         const Player * player = Players::Get( kingdom.GetColor() );
