@@ -3105,7 +3105,7 @@ msgid "Click to apply the entered text."
 msgstr "Щёлкните, чтобы принять введённый текст."
 
 msgid "Click to open the Virtual Keyboard dialog."
-msgstr "Нажмите чтобы открыть окно виртуальной клавиатуры."
+msgstr "Щёлкните, чтобы открыть окно виртуальной клавиатуры."
 
 msgid "Open Virtual Keyboard"
 msgstr "Открыть виртуальную клавиатуру"
