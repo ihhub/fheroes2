@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-07 14:44+0000\n"
-"PO-Revision-Date: 2023-04-07 16:01+0300\n"
+"PO-Revision-Date: 2023-04-07 18:52+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -3101,15 +3101,14 @@ msgstr "Выбор разрешения экрана:"
 msgid "Click to apply the selected resolution."
 msgstr "Щёлкните, чтобы применить выбранное разрешение экрана."
 
-#, fuzzy
 msgid "Click to apply the entered text."
-msgstr "Щёлкните, чтобы применить выбранное разрешение экрана."
+msgstr "Щёлкните, чтобы принять введённый текст."
 
 msgid "Click to open the Virtual Keyboard dialog."
-msgstr ""
+msgstr "Нажмите чтобы открыть окно виртуальной клавиатуры."
 
 msgid "Open Virtual Keyboard"
-msgstr ""
+msgstr "Открыть виртуальную клавиатуру"
 
 msgid "How many troops to move?"
 msgstr "Сколько существ перенести?"
