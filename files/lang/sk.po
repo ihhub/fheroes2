@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-01 13:46+0000\n"
-"PO-Revision-Date: 2023-03-20 20:07+0100\n"
+"PO-Revision-Date: 2023-04-07 04:12+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -533,7 +533,7 @@ msgid "Hero's Options"
 msgstr "Ukáž hrdinu"
 
 msgid "Cast Spell"
-msgstr "Čaruj"
+msgstr "Kúzli"
 
 msgid "Retreat"
 msgstr "Uteč"
@@ -677,287 +677,288 @@ msgid "View Hero's options"
 msgstr "Zobraz možnosti hrdinu"
 
 msgid "View opposing Captain"
-msgstr ""
+msgstr "Zobraz kapitána nepriateľa"
 
 msgid "View opposing Hero"
-msgstr ""
+msgstr "Zobraz hrdinu nepriateľa"
 
 msgid "Hide logs"
-msgstr ""
+msgstr "Skry zápis"
 
 msgid "Show logs"
-msgstr ""
+msgstr "Ukáž zápis"
 
 msgid "Message Bar"
-msgstr ""
+msgstr "Panel správ"
 
 msgid "Shows the results of individual monster's actions."
-msgstr ""
+msgstr "Ukáže výsledky činností jednotlivých bojovníkov."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr ""
+msgstr "Určite chceš dokončiť boj v automatizovanom móde?"
 
 msgid "%{name} skip their turn."
-msgstr ""
+msgstr "%{name} vynecháva kolo."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%{attacker} pôsobí poškodenie veľkosti %{damage}."
+msgstr[1] "%{attacker} pôsobia poškodenie veľkosti %{damage}."
+msgstr[2] "%{attacker} pôsobí poškodenie veľkosti %{damage}."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Jeden bojovník zahynul."
+msgstr[1] "%{count} bojovníci zahynuli."
+msgstr[2] "%{count} bojovníkov zahynulo."
 
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 %{defender} zahynul/a."
+msgstr[1] "%{count} %{defender} zahynuli."
+msgstr[2] "%{count} %{defender} zahynulo."
 
 msgid "1 soul is absorbed."
 msgid_plural "%{count} souls are absorbed."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Jedna duša je absorbovaná."
+msgstr[1] "%{count} duše sú absorbované."
+msgstr[2] "%{count} duší je absorbovaných."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 %{unit} je oživený/á."
+msgstr[1] "%{count} %{unit} sú oživení/é."
+msgstr[2] "%{count} %{unit} je oživených."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
-msgstr ""
+msgstr "Presunuté - %{monster}: od [%{src}] na [%{dst}]."
 
 msgid "The %{name} resist the spell!"
-msgstr ""
+msgstr "Jednotka %{name} odoláva kúzlu!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
-msgstr ""
+msgstr "%{name} kúzli %{spell} na: %{troop}."
 
 msgid "%{name} casts %{spell}."
-msgstr ""
+msgstr "%{name} kúzli %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr ""
+msgstr "Kúzlo %{spell} pôsobí %{damage} poškodenia nemŕtvej jednotke."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr ""
+msgstr "Kúzlo %{spell} pôsobí %{damage} poškodenia všetkým nemŕtvym."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr ""
+msgstr "Kúzlo %{spell} pôsobí %{damage} poškodenia, %{count} jednotiek hynie."
 
 msgid "The %{spell} does %{damage} damage."
-msgstr ""
+msgstr "Kúzlo %{spell} pôsobí %{damage} poškodenia."
 
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr ""
+msgstr "Kúzlo %{spell} pôsobí %{damage} poškodenia živej jednotke."
 
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr ""
+msgstr "Kúzlo %{spell} pôsobí %{damage} poškodenia všetkým živým."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr ""
+msgstr "Útok od: %{attacker} oslepuje: %{target}!"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr ""
+msgstr "Pohľad od: %{attacker} mení: %{target} na kameň!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr ""
+msgstr "Kliatba: %{attacker} padá na: %{target}!"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr ""
+msgstr "Útok od: %{attacker} paralyzuje: %{target}!"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
+msgstr "Útok od: %{attacker} ruší všetky dobré kúzla, ktoré má: %{target}!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr ""
+msgstr "%{attacker} kúzli/a %{spell} na: %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
-msgstr ""
+msgstr "Smola padá na: %{attacker}."
 
 msgid "Good luck shines on the %{attacker}."
-msgstr ""
+msgstr "Šťastie je na strane: %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
-msgstr ""
+msgstr "Vysoká morálka umožňuje útočiť znovu pre: %{monster}."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
-msgstr ""
+msgstr "Nízka morálka spôsobuje, že jednotka %{monster} mrzne v panike."
 
 msgid "%{tower} does %{damage} damage."
-msgstr ""
+msgstr "%{tower} pôsobí %{damage} poškodenia."
 
 msgid "The mirror image is created."
-msgstr ""
+msgstr "Zrkadlový obraz je vytvorený."
 
 msgid "The mirror image is destroyed!"
-msgstr ""
+msgstr "Zrkadlový obraz je zničený!"
 
 msgid "Are you sure you want to interrupt the auto battle?"
-msgstr ""
+msgstr "Určite chceš prerušiť automatizovaný súboj?"
 
 msgid "Error"
-msgstr ""
+msgstr "Chyba"
 
 msgid "No spells to cast."
-msgstr ""
+msgstr "Žiadne kúzla na čarovanie."
 
 msgid "Are you sure you want to retreat?"
-msgstr ""
+msgstr "Určite chceš ustúpiť?"
 
 msgid "Retreat disabled"
-msgstr ""
+msgstr "Ústup znemožnený"
 
 msgid "Surrender disabled"
-msgstr ""
+msgstr "Vzdanie sa znemožnené"
 
 msgid "Damage: %{max}"
-msgstr ""
+msgstr "Poškodenie: %{max}"
 
 msgid "Damage: %{min} - %{max}"
-msgstr ""
+msgstr "Poškodenie: %{min} - %{max}"
 
 msgid "Perish: %{max}"
-msgstr ""
+msgstr "Zahynie: %{max}"
 
 msgid "Perish: %{min} - %{max}"
-msgstr ""
+msgstr "Zahynie: %{min} - %{max}"
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
-msgstr ""
+msgstr "Pozorovaním orlím zrakom, %{name} sa dokáže naučiť kúzlo %{spell}."
 
 msgid "Human"
-msgstr ""
+msgstr "Človek"
 
 msgid "AI"
-msgstr ""
+msgstr "UI"
 
 msgid "Please select another hero."
-msgstr ""
+msgstr "Prosím zvoľ ďalšieho hrdinu."
 
 msgid "Set Attack Skill"
-msgstr ""
+msgstr "Zvoľ zručnosť útoku"
 
 msgid "Set Defense Skill"
-msgstr ""
+msgstr "Zvoľ zručnosť obrany"
 
 msgid "Set Power Skill"
-msgstr ""
+msgstr "Zvoľ zručnosť moci"
 
 msgid "Set Knowledge Skill"
-msgstr ""
+msgstr "Zvoľ zručnosť vedomostí"
 
 msgid "%{race1} %{name1}"
-msgstr ""
+msgstr "%{race1} %{name1}"
 
 msgid "vs"
-msgstr ""
+msgstr "proti"
 
 msgid "%{race2} %{name2}"
-msgstr ""
+msgstr "%{race2} %{name2}"
 
 msgid "Monsters"
-msgstr ""
+msgstr "Bojovníci"
 
 msgid "N/A"
-msgstr ""
+msgstr "nie je"
 
 msgid "Left Turret"
-msgstr ""
+msgstr "Ľavá veža"
 
 msgid "Right Turret"
-msgstr ""
+msgstr "Pravá veža"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr ""
+msgstr "%{name} strieľa so silou %{count} lukostrelcov"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr ""
+msgstr "s bonusom +%{attack} k ich zručnosti útoku."
 
 msgid "The %{name} is destroyed."
-msgstr ""
+msgstr "%{name} je zničený/á."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
 "spell."
 msgstr ""
+"Artefakt %{artifact} je platný pre tento boj a znemožňuje kúzlo %{spell}."
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%{count} %{name} vstáva z mŕtvych!"
+msgstr[1] "%{count} %{name} vstávajú z mŕtvych!"
+msgstr[2] "%{count} %{name} vstáva z mŕtvych!"
 
 msgid "Dwarven Alliance"
-msgstr ""
+msgstr "Aliancia trpaslíkov"
 
 msgid "Sorceress Guild"
-msgstr ""
+msgstr "Cech čarodejníc"
 
 msgid "Necromancer Guild"
-msgstr ""
+msgstr "Cech nekromantov"
 
 msgid "Ogre Alliance"
-msgstr ""
+msgstr "Cech zlobrov"
 
 msgid "Dwarfbane"
-msgstr ""
+msgstr "Trpasličí zmar"
 
 msgid "Dragon Alliance"
-msgstr ""
+msgstr "Dračia aliancia"
 
 msgid "Elven Alliance"
-msgstr ""
+msgstr "Aliancia elfov"
 
 msgid "Kraeger defeated"
-msgstr ""
+msgstr "Kraeger porazený"
 
 msgid "Wayward Son"
-msgstr ""
+msgstr "Spurný syn"
 
 msgid "Uncle Ivan"
-msgstr ""
+msgstr "Strýko Ivan"
 
 msgid "Annexation"
-msgstr ""
+msgstr "Anexia"
 
 msgid "Force of Arms"
-msgstr ""
+msgstr "Sila zbraní"
 
 msgid "Save the Dwarves"
-msgstr ""
+msgstr "Zachráň trpaslíkov"
 
 msgid "Carator Mines"
-msgstr ""
+msgstr "Karátorské bane"
 
 msgid "Turning Point"
-msgstr ""
+msgstr "Bod otáčania"
 
 msgid "scenarioName|Defender"
 msgstr ""
 
 msgid "Corlagon's Defense"
-msgstr ""
+msgstr "Corlagonova obrana"
 
 msgid "The Crown"
-msgstr ""
+msgstr "Koruna"
 
 msgid "The Gauntlet"
-msgstr ""
+msgstr "Rukavica"
 
 msgid "Betrayal"
-msgstr ""
+msgstr "Zrada"
 
 msgid "Final Justice"
-msgstr ""
+msgstr "Konečná spravodlivosť"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -1027,31 +1028,31 @@ msgid ""
 msgstr ""
 
 msgid "Barbarian Wars"
-msgstr ""
+msgstr "Barbarské vojny"
 
 msgid "First Blood"
-msgstr ""
+msgstr "Prvá krv"
 
 msgid "Necromancers"
-msgstr ""
+msgstr "Nekromanti"
 
 msgid "Slay the Dwarves"
-msgstr ""
+msgstr "Pobi trpaslíkov"
 
 msgid "Country Lords"
-msgstr ""
+msgstr "Vládcovia krajov"
 
 msgid "Dragon Master"
-msgstr ""
+msgstr "Dračí majster"
 
 msgid "Rebellion"
-msgstr ""
+msgstr "Vzbura"
 
 msgid "Apocalypse"
-msgstr ""
+msgstr "Apokalypsa"
 
 msgid "Greater Glory"
-msgstr ""
+msgstr "Väčšia sláva"
 
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region.  "
