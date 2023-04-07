@@ -64,7 +64,7 @@ namespace
 
     bool loadPalette( const char * filePath )
     {
-         StreamFile paletteStream;
+        StreamFile paletteStream;
         if ( !paletteStream.open( filePath, "rb" ) ) {
             std::cerr << "Cannot open file " << filePath << std::endl;
             return false;
