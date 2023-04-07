@@ -63,11 +63,11 @@ namespace
                   << "        " << baseName << " combine palette_file.pal target_file.h2d input_file ..." << std::endl;
     }
 
-    bool loadPalette( const char * filePath )
+    bool loadPalette( const char * paletteFileName )
     {
         StreamFile paletteStream;
-        if ( !paletteStream.open( filePath, "rb" ) ) {
-            std::cerr << "Cannot open file " << filePath << std::endl;
+        if ( !paletteStream.open( paletteFileName, "rb" ) ) {
+            std::cerr << "Cannot open file " << paletteFileName << std::endl;
             return false;
         }
 
