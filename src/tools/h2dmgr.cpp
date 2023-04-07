@@ -39,6 +39,7 @@
 #include "image.h"
 #include "image_palette.h"
 #include "image_tool.h"
+#include "serialize.h"
 #include "system.h"
 #include "tools.h"
 
