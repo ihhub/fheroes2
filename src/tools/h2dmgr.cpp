@@ -59,8 +59,8 @@ namespace
         std::string baseName = System::GetBasename( argv[0] );
 
         std::cerr << baseName << " manages the contents of the specified H2D file(s)." << std::endl
-                  << "Syntax: " << baseName << " extract palette_file.pal dst_dir input_file.h2d ..." << std::endl
-                  << "        " << baseName << " combine palette_file.pal target_file.h2d input_file ..." << std::endl;
+                  << "Syntax: " << baseName << " extract dst_dir input_file.h2d ..." << std::endl
+                  << "        " << baseName << " combine target_file.h2d palette_file.pal input_file ..." << std::endl;
     }
 
     bool loadPalette( const char * paletteFileName )
@@ -83,16 +83,12 @@ namespace
 
     int extractH2D( const int argc, char ** argv )
     {
-        assert( argc >= 5 );
+        assert( argc >= 4 );
 
-        if ( !loadPalette( argv[2] ) ) {
-            return EXIT_FAILURE;
-        }
-
-        const char * dstDir = argv[3];
+        const char * dstDir = argv[2];
 
         std::vector<std::string> inputFileNames;
-        for ( int i = 4; i < argc; ++i ) {
+        for ( int i = 3; i < argc; ++i ) {
             if ( System::isShellLevelGlobbingSupported() ) {
                 inputFileNames.emplace_back( argv[i] );
             }
@@ -161,11 +157,11 @@ namespace
     {
         assert( argc >= 5 );
 
-        if ( !loadPalette( argv[2] ) ) {
+        const char * h2dFileName = argv[2];
+
+        if ( !loadPalette( argv[3] ) ) {
             return EXIT_FAILURE;
         }
-
-        const char * h2dFileName = argv[3];
 
         std::vector<std::string> inputFileNames;
         for ( int i = 4; i < argc; ++i ) {
@@ -287,7 +283,7 @@ namespace
 
 int main( int argc, char ** argv )
 {
-    if ( argc >= 5 && strcmp( argv[1], "extract" ) == 0 ) {
+    if ( argc >= 4 && strcmp( argv[1], "extract" ) == 0 ) {
         return extractH2D( argc, argv );
     }
 
