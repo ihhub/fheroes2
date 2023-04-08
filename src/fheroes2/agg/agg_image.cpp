@@ -1368,7 +1368,8 @@ namespace fheroes2
                     Fill( out, 6 - 2 * i, 2 + i, 52, 14, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "guildWell|EXIT" ), { 6, 2 }, { 4, 3 }, { 52, 14 }, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "guildWell|EXIT" ), { 6, 2 }, { 4, 3 }, { 52, 14 },
+                                    fheroes2::FontColor::WHITE );
 
                 break;
             }
