@@ -143,8 +143,6 @@ namespace
                                                 ICN::BUTTON_SMALL_MIN_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
-                                                ICN::BUTTON_BATTLE_SKIP,
-                                                ICN::BUTTON_BATTLE_AUTO,
                                                 ICN::BUTTON_DIFFICULTY_ARCHIBALD,
                                                 ICN::BUTTON_DIFFICULTY_ROLAND,
                                                 ICN::BUTTON_DIFFICULTY_POL };
@@ -1375,51 +1373,6 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BUTTON_BATTLE_SKIP: {
-                _icnVsSprite[id].resize( 2 );
-
-                if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( ICN::TEXTBAR, 0 );
-                    _icnVsSprite[id][1] = GetICN( ICN::TEXTBAR, 1 );
-                    break;
-                }
-
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-
-                    out = GetICN( ICN::TEXTBAR, 0 + i );
-
-                    // clean the button.
-                    Fill( out, 4 - i, 3, 41, 30, getButtonFillingColor( i == 0 ) );
-                }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SKIP" ), { 4, 3 }, { 3, 3 }, { 41, 30 },
-                                    fheroes2::FontColor::WHITE );
-
-                break;
-            }
-            case ICN::BUTTON_BATTLE_AUTO: {
-                _icnVsSprite[id].resize( 2 );
-
-                if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( ICN::TEXTBAR, 4 );
-                    _icnVsSprite[id][1] = GetICN( ICN::TEXTBAR, 5 );
-                    break;
-                }
-
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-
-                    out = GetICN( ICN::TEXTBAR, 4 + i );
-
-                    // clean the button.
-                    Fill( out, 4 - i, 2 + i, 41, 13, getButtonFillingColor( i == 0 ) );
-                }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "AUTO" ), { 4, 2 }, { 3, 3 }, { 41, 13 }, fheroes2::FontColor::WHITE );
-
-                break;
-            }
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD: {
                 _icnVsSprite[id].resize( 2 );
 
@@ -2176,8 +2129,6 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_MIN_GOOD:
             case ICN::BUTTON_SMALL_MAX_GOOD:
             case ICN::BUTTON_GUILDWELL_EXIT:
-            case ICN::BUTTON_BATTLE_SKIP:
-            case ICN::BUTTON_BATTLE_AUTO:
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD:
             case ICN::BUTTON_DIFFICULTY_POL:
             case ICN::BUTTON_DIFFICULTY_ROLAND:
