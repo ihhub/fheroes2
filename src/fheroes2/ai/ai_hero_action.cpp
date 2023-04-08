@@ -71,7 +71,6 @@
 #include "spell_info.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
 #include "visit.h"
 #include "world.h"
 
