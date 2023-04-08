@@ -1862,7 +1862,8 @@ namespace AI
                 if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI ) && Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
                     if ( fheroes2::showStandardTextMessage( _( "Warning" ),
                                                             _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
-                                                            Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+                                                            Dialog::YES | Dialog::NO )
+                         == Dialog::YES ) {
                         Players::Get( hero.GetColor() )->setAIAutoControlMode( false );
                         continue;
                     }
@@ -1992,7 +1993,8 @@ namespace AI
 #if defined( WITH_DEBUG )
         if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI ) && Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
             if ( fheroes2::showStandardTextMessage( _( "Warning" ), _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
-                                                    Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+                                                    Dialog::YES | Dialog::NO )
+                 == Dialog::YES ) {
                 Players::Get( hero.GetColor() )->setAIAutoControlMode( false );
                 return;
             }

@@ -1608,7 +1608,7 @@ namespace AI
     {
         Heroes & hero = *heroInfo.hero;
 
-        DEBUG_LOG( DBG_AI, DBG_INFO,"Find Adventure Map target for hero " << hero.GetName() << " at current position " << hero.GetIndex() )
+        DEBUG_LOG( DBG_AI, DBG_INFO, "Find Adventure Map target for hero " << hero.GetName() << " at current position " << hero.GetIndex() )
 
         const double lowestPossibleValue = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
         const bool heroInPatrolMode = heroInfo.patrolCenter != -1;
