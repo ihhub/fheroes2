@@ -139,7 +139,7 @@ namespace
                         return EXIT_FAILURE;
                     }
 
-                    std::string outputFileName = ( prefixPath / std::filesystem::path( name ).replace_extension() ).string();
+                    std::string outputFileName = ( prefixPath / std::filesystem::path( name ).stem() ).string();
 
                     if ( fheroes2::isPNGFormatSupported() ) {
                         outputFileName += ".png";
