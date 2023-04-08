@@ -1993,11 +1993,11 @@ namespace AI
         if ( Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
             LocalEvent::Get().HandleEvents( false );
             if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )
-                && fheroes2::showStandardTextMessage( _( "Warning" ), _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
-                                                      Dialog::YES | Dialog::NO )
-                       == Dialog::YES ) {
-                    Players::Get( hero.GetColor() )->setAIAutoControlMode( false );
-                    return;
+                 && fheroes2::showStandardTextMessage( _( "Warning" ), _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
+                                                       Dialog::YES | Dialog::NO )
+                        == Dialog::YES ) {
+                Players::Get( hero.GetColor() )->setAIAutoControlMode( false );
+                return;
             }
         }
 #endif
