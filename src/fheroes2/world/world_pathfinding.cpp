@@ -1092,14 +1092,45 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
     return {};
 }
 
+bool AIWorldPathfinder::isHeroJustInFrontOfDestination( const int currentIndex, const int targetIndex, const int color )
+{
+    // It could happen in 3 situations:
+    // 1. The target is unreachable for the hero.
+    // 2. Hero jumped using Dimension Door or Town Portal spell just in front of the object and this object requires to stay in front of it.
+    // 3. An enemy hero came just in front of the hero.
+    const bool isNeededToStayInFront = MP2::isNeedStayFront( world.GetTiles( targetIndex ).GetObject() );
+    if ( !isNeededToStayInFront ) {
+        // Object is not reachable.
+        return false;
+    }
+
+    const Maps::Tiles & heroTile = world.GetTiles( currentIndex );
+    const int direction = Maps::GetDirection( currentIndex, targetIndex );
+
+    if ( !world.GetTiles( targetIndex ).isPassableFrom( direction, heroTile.isWater(), false, color ) ) {
+        return false;
+    }
+
+    return true;
+}
+
 std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, const bool isPlanningMode /* = false */ ) const
 {
     assert( _pathStart != -1 && targetIndex != -1 );
 
     std::list<Route::Step> path;
 
-    // Destination is not reachable
     if ( _cache[targetIndex]._cost == 0 ) {
+        // It could happen in 3 situations:
+        // 1. The target is unreachable for the hero.
+        // 2. Hero jumped using Dimension Door or Town Portal spell just in front of the object and this object requires to stay in front of it.
+        // 3. An enemy hero came just in front of the hero.
+        if ( !isHeroJustInFrontOfDestination( _pathStart, targetIndex, _currentColor ) ) {
+            return path;
+        }
+
+        // This is case 2 or 3.
+        path.emplace_front( targetIndex, _pathStart, Maps::GetDirection( _pathStart, targetIndex ), 0 );
         return path;
     }
 

@@ -1860,11 +1860,9 @@ namespace AI
             while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
 #if defined( WITH_DEBUG )
                 if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI ) && Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
-                    if ( fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
-                                                fheroes2::Text( _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
-                                                                fheroes2::FontType::normalWhite() ),
-                                                Dialog::YES | Dialog::NO )
-                         == Dialog::YES ) {
+                    if ( fheroes2::showStandardTextMessage( _( "Warning" ),
+                                                            _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
+                                                            Dialog::YES | Dialog::NO ) == Dialog::YES ) {
                         Players::Get( hero.GetColor() )->setAIAutoControlMode( false );
                         continue;
                     }
@@ -1986,8 +1984,20 @@ namespace AI
 
         const Spell dimensionDoor( Spell::DIMENSIONDOOR );
         if ( !hero.CanCastSpell( dimensionDoor ) ) {
+            // How is it even possible to call this function if the hero does not have this spell?
+            assert( 0 );
             return;
         }
+
+#if defined( WITH_DEBUG )
+        if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI ) && Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
+            if ( fheroes2::showStandardTextMessage( _( "Warning" ), _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
+                                                    Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+                Players::Get( hero.GetColor() )->setAIAutoControlMode( false );
+                return;
+            }
+        }
+#endif
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );

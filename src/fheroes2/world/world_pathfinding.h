@@ -161,6 +161,8 @@ public:
     void setArmyStrengthMultiplier( const double multiplier );
     void setSpellPointReserve( const double reserve );
 
+    static bool isHeroJustInFrontOfDestination( const int currentIndex, const int targetIndex, const int color );
+
 private:
     void processWorldMap() override;
 

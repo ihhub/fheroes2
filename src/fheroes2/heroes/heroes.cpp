@@ -1686,7 +1686,7 @@ MP2::MapObjectType Heroes::GetMapsObject() const
 
 void Heroes::SetMapsObject( const MP2::MapObjectType objectType )
 {
-    save_maps_object = objectType != MP2::OBJ_HEROES ? objectType : MP2::OBJ_NONE;
+    save_maps_object = ( ( objectType != MP2::OBJ_HEROES ) ? objectType : MP2::OBJ_NONE );
 }
 
 void Heroes::ActionPreBattle()
