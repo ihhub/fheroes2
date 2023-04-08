@@ -46,6 +46,7 @@
 namespace
 {
     constexpr size_t validPaletteSize = 768;
+    constexpr uint8_t imageBackground = 142;
 
     bool isH2DImageItem( const std::string_view name )
     {
@@ -129,7 +130,7 @@ namespace
             }
 
             for ( const std::string & name : reader.getAllFileNames() ) {
-                // Image files need special processing
+                // Image items need special processing
                 if ( isH2DImageItem( name ) ) {
                     fheroes2::Sprite image;
 
@@ -147,7 +148,7 @@ namespace
                         outputFileName += ".bmp";
                     }
 
-                    if ( !fheroes2::Save( image, outputFileName ) ) {
+                    if ( !fheroes2::Save( image, outputFileName, imageBackground ) ) {
                         std::cerr << inputFileName << ": error saving image " << name << std::endl;
                         return EXIT_FAILURE;
                     }
