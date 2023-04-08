@@ -1223,7 +1223,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     // Shadow that fits the hexagon grid.
     _hexagonGridShadow = DrawHexagonShadow( 4, 1 );
 
-    btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
+    btn_auto.setICNInfo( ICN::BUTTON_BATTLE_AUTO, 0, 1 );
     btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
 
     // opponents
@@ -1240,7 +1240,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     btn_auto.setPosition( area.x, area.y + area.height - settingsRect.height - autoRect.height );
     btn_settings.setPosition( area.x, area.y + area.height - settingsRect.height );
 
-    btn_skip.setICNInfo( ICN::TEXTBAR, 0, 1 );
+    btn_skip.setICNInfo( ICN::BUTTON_BATTLE_SKIP, 0, 1 );
     btn_skip.setPosition( area.x + area.width - btn_skip.area().width, area.y + area.height - btn_skip.area().height );
 
     status.SetPosition( area.x + settingsRect.width, btn_auto.area().y );

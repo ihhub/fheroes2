@@ -1065,6 +1065,9 @@ namespace ICN
 
         BUTTON_GUILDWELL_EXIT,
 
+        BUTTON_BATTLE_SKIP,
+        BUTTON_BATTLE_AUTO,
+
         GAME_OPTION_ICON,
 
         // IMPORTANT! Put any new entry just above this one.
