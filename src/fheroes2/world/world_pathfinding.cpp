@@ -1093,6 +1093,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, cons
 
     std::list<Route::Step> path;
 
+    // Destination is not reachable
     if ( _cache[targetIndex]._cost == 0 ) {
         return path;
     }
