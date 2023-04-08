@@ -1393,8 +1393,7 @@ namespace fheroes2
                     Fill( out, 4 - i, 3, 41, 30, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SKIP" ), { 4, 3 }, { 3, 3 }, { 41, 30 },
-                                    fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SKIP" ), { 4, 4 }, { 3, 4 }, { 41, 30 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
