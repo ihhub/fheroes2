@@ -168,7 +168,7 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
 
     fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
 
-    // The original ICN::WELLEXTRA image does not have a yellow outer frame.
+    // The original ICN::WELLXTRA image does not have a yellow outer frame.
     const int32_t allowedBottomBarWidth = exitButtonOffsetX;
     const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
 
