@@ -1094,13 +1094,8 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
 
 bool AIWorldPathfinder::isHeroJustInFrontOfDestination( const int currentIndex, const int targetIndex, const int color )
 {
-    // It could happen in 3 situations:
-    // 1. The target is unreachable for the hero.
-    // 2. Hero jumped using Dimension Door or Town Portal spell just in front of the object and this object requires to stay in front of it.
-    // 3. An enemy hero came just in front of the hero.
     const bool isNeededToStayInFront = MP2::isNeedStayFront( world.GetTiles( targetIndex ).GetObject() );
     if ( !isNeededToStayInFront ) {
-        // Object is not reachable.
         return false;
     }
 
