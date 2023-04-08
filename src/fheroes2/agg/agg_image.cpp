@@ -142,6 +142,7 @@ namespace
                                                 ICN::NON_UNIFORM_GOOD_MIN_BUTTON,
                                                 ICN::BUTTON_SMALL_MIN_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
+                                                ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::BUTTON_DIFFICULTY_ARCHIBALD,
                                                 ICN::BUTTON_DIFFICULTY_ROLAND,
                                                 ICN::BUTTON_DIFFICULTY_POL };
@@ -1349,6 +1350,28 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_GUILDWELL_EXIT: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::WELLXTRA, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::WELLXTRA, 1 );
+                    break;
+                }
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+
+                    out = GetICN( ICN::WELLXTRA, 0 + i );
+
+                    // clean the button.
+                    Fill( out, 6 - 2 * i, 2 + i, 52, 14, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "guildWell|EXIT" ), { 6, 2 }, { 4, 3 }, { 52, 14 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD: {
                 _icnVsSprite[id].resize( 2 );
 
@@ -2104,6 +2127,7 @@ namespace fheroes2
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
             case ICN::BUTTON_SMALL_MIN_GOOD:
             case ICN::BUTTON_SMALL_MAX_GOOD:
+            case ICN::BUTTON_GUILDWELL_EXIT:
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD:
             case ICN::BUTTON_DIFFICULTY_POL:
             case ICN::BUTTON_DIFFICULTY_ROLAND:

@@ -1063,6 +1063,8 @@ namespace ICN
 
         BUTTON_MAP_SELECT,
 
+        BUTTON_GUILDWELL_EXIT,
+
         GAME_OPTION_ICON,
 
         // IMPORTANT! Put any new entry just above this one.

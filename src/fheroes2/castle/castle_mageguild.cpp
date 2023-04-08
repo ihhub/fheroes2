@@ -235,7 +235,7 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
     spells4.Redraw( display );
     spells5.Redraw( display );
 
-    fheroes2::Button buttonExit( cur_pt.x + exitButtonOffsetX, cur_pt.y + bottomBarOffsetY, ICN::WELLXTRA, 0, 1 );
+    fheroes2::Button buttonExit( cur_pt.x + exitButtonOffsetX, cur_pt.y + bottomBarOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
     buttonExit.draw();
 
     display.render();
