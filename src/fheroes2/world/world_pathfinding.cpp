@@ -1099,14 +1099,7 @@ bool AIWorldPathfinder::isHeroJustInFrontOfDestination( const int currentIndex, 
         return false;
     }
 
-    const Maps::Tiles & heroTile = world.GetTiles( currentIndex );
-    const int direction = Maps::GetDirection( currentIndex, targetIndex );
-
-    if ( !world.GetTiles( targetIndex ).isPassableFrom( direction, heroTile.isWater(), false, color ) ) {
-        return false;
-    }
-
-    return true;
+    return world.GetTiles( targetIndex ).isPassableFrom( Maps::GetDirection( currentIndex, targetIndex ), world.GetTiles( currentIndex ).isWater(), false, color );
 }
 
 std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, const bool isPlanningMode /* = false */ ) const
