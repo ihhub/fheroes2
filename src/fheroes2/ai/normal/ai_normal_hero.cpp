@@ -1922,7 +1922,7 @@ namespace AI
             if ( dimensionDoorDistance > 0 ) {
                 // AI hero is capable to use Dimension Door spell.
                 const uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
-                if ( ( moveDistance == 0 && !_pathfinder.isHeroJustInFrontOfDestination( bestHero->GetIndex(), bestTargetIndex, bestHero->GetColor() ) )
+                if ( ( moveDistance == 0 && !AIWorldPathfinder::isHeroJustInFrontOfDestination( bestHero->GetIndex(), bestTargetIndex, bestHero->GetColor() ) )
                      || ( dimensionDoorDistance < moveDistance / 2 ) ) {
                     allowToUseDimensionDoor = true;
                 }
