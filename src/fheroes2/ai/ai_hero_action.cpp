@@ -1997,7 +1997,6 @@ namespace AI
                                                        Dialog::YES | Dialog::NO )
                         == Dialog::YES ) {
                 Players::Get( hero.GetColor() )->setAIAutoControlMode( false );
-                return;
             }
         }
 #endif
