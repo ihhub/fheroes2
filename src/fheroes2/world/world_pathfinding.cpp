@@ -1010,8 +1010,7 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
         return {};
     }
 
-    const MapsIndexes & monsters = Maps::getMonstersProtectingTile( targetIndex );
-    for ( const int32_t monsterIndex : monsters ) {
+    for ( const int32_t monsterIndex : Maps::getMonstersProtectingTile( targetIndex ) ) {
         // Target tile is guarded by an overly strong nearby monster
         if ( isTileProtectedForAI( monsterIndex, _armyStrength, _advantage ) ) {
             return {};
