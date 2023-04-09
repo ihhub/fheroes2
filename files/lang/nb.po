@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-07 14:44+0000\n"
+"POT-Creation-Date: 2023-04-09 07:05+0000\n"
 "PO-Revision-Date: 2022-12-18 08:40+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -90,6 +90,14 @@ msgstr "OPPGRAD."
 msgid "RESTART"
 msgstr "OMSTART"
 
+msgid "HEROES"
+msgstr ""
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+
 msgid "S"
 msgstr "L"
 
@@ -104,6 +112,9 @@ msgstr "XS"
 
 msgid "ALL"
 msgstr "ALT"
+
+msgid "SELECT"
+msgstr ""
 
 msgid ""
 "STANDARD\n"
@@ -165,6 +176,9 @@ msgstr "6 SPILLERE"
 
 msgid "GIFT"
 msgstr "SEND"
+
+msgid "guildWell|EXIT"
+msgstr ""
 
 msgid "DIFFICULTY"
 msgstr "NIVÅ"
