@@ -107,11 +107,14 @@ namespace
                                                 ICN::BUTTON_SMALL_RESTART_GOOD,
                                                 ICN::BUTTON_SMALL_RESTART_EVIL,
                                                 ICN::BUTTON_KINGDOM_EXIT,
+                                                ICN::BUTTON_KINGDOM_HEROES,
+                                                ICN::BUTTON_KINGDOM_TOWNS,
                                                 ICN::BUTTON_MAPSIZE_SMALL,
                                                 ICN::BUTTON_MAPSIZE_MEDIUM,
                                                 ICN::BUTTON_MAPSIZE_LARGE,
                                                 ICN::BUTTON_MAPSIZE_XLARGE,
                                                 ICN::BUTTON_MAPSIZE_ALL,
+                                                ICN::BUTTON_MAP_SELECT,
                                                 ICN::BUTTON_STANDARD_GAME,
                                                 ICN::BUTTON_CAMPAIGN_GAME,
                                                 ICN::BUTTON_MULTIPLAYER_GAME,
@@ -139,6 +142,7 @@ namespace
                                                 ICN::NON_UNIFORM_GOOD_MIN_BUTTON,
                                                 ICN::BUTTON_SMALL_MIN_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
+                                                ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::BUTTON_DIFFICULTY_ARCHIBALD,
                                                 ICN::BUTTON_DIFFICULTY_ROLAND,
                                                 ICN::BUTTON_DIFFICULTY_POL };
@@ -905,6 +909,50 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_KINGDOM_HEROES: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::OVERVIEW, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::OVERVIEW, 1 );
+                    break;
+                }
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::OVERVIEW, 0 + i );
+
+                    // clean the button.
+                    Fill( out, 5, 10 + i, 89, 20, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HEROES" ), { 6, 5 }, { 6, 6 }, { 89, 34 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_KINGDOM_TOWNS: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::OVERVIEW, 2 );
+                    _icnVsSprite[id][1] = GetICN( ICN::OVERVIEW, 3 );
+                    break;
+                }
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::OVERVIEW, 2 + i );
+
+                    // clean the button.
+                    Fill( out, 6, 7 + i, 89 - i, 29, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWNS/\nCASTLES" ), { 6, 5 }, { 6, 6 }, { 90, 34 },
+                                    fheroes2::FontColor::WHITE );
+
+                break;
+            }
+
             case ICN::BUTTON_MAPSIZE_SMALL: {
                 _icnVsSprite[id].resize( 2 );
 
@@ -972,6 +1020,46 @@ namespace fheroes2
 
                 int32_t textWidth = 46;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "ALL" ), false );
+
+                break;
+            }
+            case ICN::BUTTON_MAP_SELECT: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::NGEXTRA, 64 );
+                    _icnVsSprite[id][1] = GetICN( ICN::NGEXTRA, 65 );
+                    break;
+                }
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+
+                    const Sprite & originalButton = GetICN( ICN::NGEXTRA, 64 + i );
+                    const int32_t originalHeight = originalButton.height();
+                    const int32_t originalWidth = originalButton.width();
+                    const int32_t extensionWidth = 5;
+                    out.resize( originalWidth + extensionWidth, originalHeight );
+                    out.reset();
+
+                    const int32_t rightPartWidth = 3 + i;
+                    const int32_t leftPartWidth = originalWidth - rightPartWidth;
+
+                    // copy left main body of button.
+                    fheroes2::Copy( originalButton, 0, 0, out, 0, 0, leftPartWidth, originalHeight );
+
+                    // copy middle extending part of button.
+                    fheroes2::Copy( originalButton, 9, 0, out, leftPartWidth, 0, extensionWidth, originalHeight );
+
+                    // copy terminating right margin of the button.
+                    fheroes2::Copy( originalButton, leftPartWidth, 0, out, leftPartWidth + extensionWidth, 0, rightPartWidth, originalHeight );
+
+                    // clean the button.
+                    const int32_t leftMarginWidth = 6 - i;
+                    Fill( out, leftMarginWidth, 2 + 2 * i, out.width() - rightPartWidth - leftMarginWidth, 15 - i, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SELECT" ), { 7, 3 }, { 6, 4 }, { 76, 15 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -1259,6 +1347,29 @@ namespace fheroes2
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ), { 7, 5 }, { 6, 6 }, { 86, 16 }, buttonFontColor );
+
+                break;
+            }
+            case ICN::BUTTON_GUILDWELL_EXIT: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::WELLXTRA, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::WELLXTRA, 1 );
+                    break;
+                }
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+
+                    out = GetICN( ICN::WELLXTRA, 0 + i );
+
+                    // clean the button.
+                    Fill( out, 6 - 2 * i, 2 + i, 52, 14, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "guildWell|EXIT" ), { 6, 2 }, { 4, 3 }, { 52, 14 },
+                                    fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -1982,11 +2093,14 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_RESTART_GOOD:
             case ICN::BUTTON_SMALL_RESTART_EVIL:
             case ICN::BUTTON_KINGDOM_EXIT:
+            case ICN::BUTTON_KINGDOM_HEROES:
+            case ICN::BUTTON_KINGDOM_TOWNS:
             case ICN::BUTTON_MAPSIZE_SMALL:
             case ICN::BUTTON_MAPSIZE_MEDIUM:
             case ICN::BUTTON_MAPSIZE_LARGE:
             case ICN::BUTTON_MAPSIZE_XLARGE:
             case ICN::BUTTON_MAPSIZE_ALL:
+            case ICN::BUTTON_MAP_SELECT:
             case ICN::BUTTON_STANDARD_GAME:
             case ICN::BUTTON_CAMPAIGN_GAME:
             case ICN::BUTTON_MULTIPLAYER_GAME:
@@ -2014,6 +2128,7 @@ namespace fheroes2
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
             case ICN::BUTTON_SMALL_MIN_GOOD:
             case ICN::BUTTON_SMALL_MAX_GOOD:
+            case ICN::BUTTON_GUILDWELL_EXIT:
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD:
             case ICN::BUTTON_DIFFICULTY_POL:
             case ICN::BUTTON_DIFFICULTY_ROLAND:
