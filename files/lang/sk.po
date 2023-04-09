@@ -952,7 +952,7 @@ msgid "The Crown"
 msgstr "Koruna"
 
 msgid "The Gauntlet"
-msgstr "Rukavica"
+msgstr "Výzva"
 
 msgid "Betrayal"
 msgstr "Zrada"
