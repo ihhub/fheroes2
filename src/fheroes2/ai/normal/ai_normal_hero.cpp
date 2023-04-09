@@ -1918,18 +1918,8 @@ namespace AI
             // check if we want to use Dimension Door spell or move regularly
             const std::list<Route::Step> & dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
             const uint32_t dimensionDoorDistance = AIWorldPathfinder::calculatePathPenalty( dimensionPath );
-            bool allowToUseDimensionDoor = false;
-
-            if ( dimensionDoorDistance > 0 ) {
-                // AI hero is capable to use Dimension Door spell.
-                const uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
-                if ( ( moveDistance == 0 && !AIWorldPathfinder::isHeroJustInFrontOfDestination( bestHero->GetIndex(), bestTargetIndex, bestHero->GetColor() ) )
-                     || ( dimensionDoorDistance < moveDistance / 2 ) ) {
-                    allowToUseDimensionDoor = true;
-                }
-            }
-
-            if ( allowToUseDimensionDoor ) {
+            const uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
+            if ( dimensionDoorDistance && ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) ) {
                 HeroesCastDimensionDoor( *bestHero, dimensionPath.front().GetIndex() );
             }
             else {
