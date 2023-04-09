@@ -7882,7 +7882,7 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr "La Ballista della Rapidità"
 
-msgid "The %{name} lets your catapult fire twice per combat round."
+msgid "The %{name} gives your catapult one extra shot per combat round."
 msgstr ""
 
 msgid ""

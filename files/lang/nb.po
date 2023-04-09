@@ -8616,8 +8616,9 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr "Ballisten av hurtighet"
 
-msgid "The %{name} lets your catapult fire twice per combat round."
-msgstr "%{name} lar katapulten din avfyre to ganger hver kamprunde."
+#, fuzzy
+msgid "The %{name} gives your catapult one extra shot per combat round."
+msgstr "%{name} lar katapulten din avfyre ett ekstra skudd per kamprunde."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "

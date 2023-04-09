@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-09 07:05+0000\n"
-"PO-Revision-Date: 2023-04-04 19:13+0300\n"
+"PO-Revision-Date: 2023-04-09 11:50+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -3113,17 +3113,16 @@ msgid "Select Game Resolution:"
 msgstr "Выбор разрешения экрана:"
 
 msgid "Click to apply the selected resolution."
-msgstr "Щёлкните, чтобы применить выбранное разрешение экрана."
+msgstr "Нажмите, чтобы применить выбранное разрешение экрана."
 
-#, fuzzy
 msgid "Click to apply the entered text."
-msgstr "Щёлкните, чтобы применить выбранное разрешение экрана."
+msgstr "Нажмите, чтобы принять введённый текст."
 
 msgid "Click to open the Virtual Keyboard dialog."
-msgstr ""
+msgstr "Нижмите, чтобы открыть окно виртуальной клавиатуры."
 
 msgid "Open Virtual Keyboard"
-msgstr ""
+msgstr "Открыть виртуальную клавиатуру"
 
 msgid "How many troops to move?"
 msgstr "Сколько существ перенести?"
@@ -8315,9 +8314,8 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr "Медаль Отваги"
 
-#, fuzzy
 msgid "The %{name} increases your morale by %{count}."
-msgstr "%{name} увеличивает Знания на %{count}."
+msgstr "%{name} увеличивает Вашу мораль на %{count}."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -8420,8 +8418,10 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr "Баллиста"
 
-msgid "The %{name} lets your catapult fire twice per combat round."
-msgstr "%{name} позволяет дважды произвести выстрел из катапульты за один ход."
+msgid "The %{name} gives your catapult one extra shot per combat round."
+msgstr ""
+"%{name} позволяет произвести один дополнительный выстрел из катапульты за "
+"ход."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
@@ -8586,9 +8586,8 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr "Кроличья Лапка"
 
-#, fuzzy
 msgid "The %{name} increases your luck in combat by %{count}."
-msgstr "%{name} увеличивает Вашу удачу в бою."
+msgstr "%{name} увеличивает Вашу удачу в бою на %{count}."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
