@@ -511,7 +511,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         }
 
         if ( le.MouseClickLeft( hero1Area ) ) {
-            Game::OpenHeroesDialog( *this, false, false, true );
+            Game::OpenHeroesDialog( *this, false, true, true );
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
@@ -532,7 +532,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             display.render();
         }
         else if ( le.MouseClickLeft( hero2Area ) ) {
-            Game::OpenHeroesDialog( otherHero, false, false, true );
+            Game::OpenHeroesDialog( otherHero, false, true, true );
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
