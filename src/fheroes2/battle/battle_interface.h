@@ -438,7 +438,8 @@ namespace Battle
         fheroes2::Point _flyingPos;
 
         int32_t index_pos;
-        int32_t teleport_src;
+        // Index of the cell selected as the source for the Teleport spell
+        int32_t _teleportSpellSrcIdx;
         fheroes2::Rect main_tower;
 
         std::unique_ptr<StatusListBox> listlog;

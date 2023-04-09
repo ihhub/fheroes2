@@ -117,11 +117,6 @@ namespace Battle
 
         bool isHaveDamage() const;
 
-        bool isMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const
-        {
-            return 100 <= GetMagicResist( spell, attackingArmySpellPower, attackingHero );
-        }
-
         bool OutOfWalls() const;
         bool canReach( int index ) const;
         bool canReach( const Unit & unit ) const;
