@@ -21,11 +21,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_board.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
+#include <iterator>
 #include <memory>
 #include <ostream>
 #include <set>
@@ -34,7 +37,6 @@
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
-#include "battle_board.h"
 #include "battle_bridge.h"
 #include "battle_troop.h"
 #include "castle.h"
@@ -552,6 +554,21 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
 
     const auto largeObstacleSize = std::count_if( begin(), end(), []( const Cell & cell ) { return cell.GetObject() == 0x40; } );
     const uint8_t maxSmallObstacleCount = largeObstacleSize > 7 ? 3 : 4;
+
+    // Ensure obstacles vector will only have maximum 2 TwoHexObjects
+    if ( largeObstacleSize > 0 ) {
+        uint8_t twoHexCount = 0;
+        for ( size_t i = 0; i < objs.size(); ) {
+            if ( isTwoHexObject( objs[i] ) ) {
+                twoHexCount++;
+                if ( twoHexCount > 2 ) {
+                    objs.erase( std::next( objs.begin(), i ) );
+                    continue;
+                }
+            }
+            i++;
+        }
+    }
 
     const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::GetWithGen( 0, maxSmallObstacleCount, gen ) ) );
 
