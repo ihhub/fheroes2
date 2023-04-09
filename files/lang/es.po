@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-07 14:44+0000\n"
+"POT-Creation-Date: 2023-04-09 07:05+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -80,6 +80,14 @@ msgstr ""
 msgid "RESTART"
 msgstr ""
 
+msgid "HEROES"
+msgstr ""
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+
 msgid "S"
 msgstr ""
 
@@ -93,6 +101,9 @@ msgid "X-L"
 msgstr ""
 
 msgid "ALL"
+msgstr ""
+
+msgid "SELECT"
 msgstr ""
 
 msgid ""
@@ -143,6 +154,9 @@ msgid "6 PLAYERS"
 msgstr ""
 
 msgid "GIFT"
+msgstr ""
+
+msgid "guildWell|EXIT"
 msgstr ""
 
 msgid "DIFFICULTY"
