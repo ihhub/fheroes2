@@ -4079,7 +4079,7 @@ msgid "hotkey|construction screen"
 msgstr "Bau-Bildschirm"
 
 msgid "hotkey|buy all monsters in well"
-msgstr "Alle Monster der Quelle kaufen"
+msgstr "Alle Monster im Brunnen kaufen"
 
 msgid "hotkey|split stack by half"
 msgstr "Stapel halbieren"
