@@ -3712,16 +3712,16 @@ msgid "hotkey|default down"
 msgstr "Standard: Ner"
 
 msgid "hotkey|toggle fullscreen"
-msgstr "Visa Fullskärm"
+msgstr "Visa fullskärm"
 
 msgid "hotkey|toggle text support mode"
-msgstr "Aktivera Textstöd"
+msgstr "Aktivera textstöd"
 
 msgid "hotkey|new game"
-msgstr "Nytt Spel"
+msgstr "Nytt spel"
 
 msgid "hotkey|load game"
-msgstr "Ladda Spel"
+msgstr "Ladda spel"
 
 msgid "hotkey|highscores"
 msgstr "Poänglista"
@@ -3745,7 +3745,7 @@ msgid "hotkey|quit"
 msgstr "Avsluta"
 
 msgid "hotkey|select map"
-msgstr "Välj Karta"
+msgstr "Välj karta"
 
 msgid "hotkey|select small map size"
 msgstr "Välj liten kartstorlek"
@@ -3763,22 +3763,22 @@ msgid "hotkey|select all map sizes"
 msgstr "Välj alla kartstorlekar"
 
 msgid "hotkey|hotseat game"
-msgstr "Heta Stolen"
+msgstr "Heta stolen"
 
 msgid "hotkey|battle only game"
-msgstr "Endast Strid"
+msgstr "Endast strid"
 
 msgid "hotkey|choose the original campaign"
-msgstr "Välj Orginalkampanj"
+msgstr "Välj orginalkampanj"
 
 msgid "hotkey|choose the expansion campaign"
-msgstr "Välj Expansionskampanj"
+msgstr "Välj expansionskampanj"
 
 msgid "hotkey|roland campaign"
-msgstr "Rolands Kampanj"
+msgstr "Rolands kampanj"
 
 msgid "hotkey|archibald campaign"
-msgstr "Archibalds Kampanj"
+msgstr "Archibalds kampanj"
 
 msgid "hotkey|the price of loyalty campaign"
 msgstr "Lojalitetens pris kampanj"
@@ -3835,7 +3835,7 @@ msgid "hotkey|world map down right"
 msgstr "Kartvy: Sydost"
 
 msgid "hotkey|save game"
-msgstr "Spara Spel"
+msgstr "Spara spel"
 
 msgid "hotkey|next hero"
 msgstr "Nästa hjälte"
@@ -3871,7 +3871,7 @@ msgid "hotkey|dig for artifact"
 msgstr "Gräv efter artefakt"
 
 msgid "hotkey|view world"
-msgstr "Visa Kartvy"
+msgstr "Visa kartvy"
 
 msgid "hotkey|kingdom summary"
 msgstr "Rikessammanfattning"
