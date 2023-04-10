@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-09 07:05+0000\n"
+"POT-Creation-Date: 2023-04-10 14:28+0000\n"
 "PO-Revision-Date: 2023-03-20 20:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -55,9 +55,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "ZRUŠIŤ"
-
-msgid "OKAY"
-msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "PRIJAŤ"
@@ -187,6 +184,9 @@ msgstr "MIN"
 
 msgid "MAX"
 msgstr "MAX"
+
+msgid "OKAY"
+msgstr "OK"
 
 msgid "Warrior"
 msgstr "Bojovník"
