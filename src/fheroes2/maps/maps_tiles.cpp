@@ -2502,8 +2502,10 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
     // Set the 'fogData' index offset from the tile index for the TOP LEFT direction from the tile.
     const int32_t topLeftDirectionOffset = -1 - fogDataWidth;
 
+#ifndef NDEBUG
     // Cache the maximum border for fogDataIndex corresponding the "CENTER" tile to use in assertion. Should be removed if assertion is removed.
     const int32_t centerfogDataIndexLimit = fogDataSize + topLeftDirectionOffset;
+#endif
 
     // Calculate fog directions using the cached 'isFog' data.
     for ( int32_t y = minY; y < maxY; ++y ) {
