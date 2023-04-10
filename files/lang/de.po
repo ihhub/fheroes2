@@ -113,7 +113,7 @@ msgid "ALL"
 msgstr "ALLE"
 
 msgid "SELECT"
-msgstr "AUSWAHL"
+msgstr "AUSW."
 
 msgid ""
 "STANDARD\n"
