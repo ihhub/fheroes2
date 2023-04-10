@@ -36,6 +36,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "players.h"
 #include "settings.h"
 #include "spell.h"
 #include "tools.h"
@@ -374,7 +375,7 @@ namespace fheroes2
 
     bool canCastIdentifyHero( const Heroes & hero )
     {
-        const Player * player = Settings::Get().GetPlayers().Get( hero.GetColor() );
+        const Player * player = Players::Get( hero.GetColor() );
         const int friends = player->GetFriends();
         for ( const Player * it : Settings::Get().GetPlayers() ) {
             const int currentColor = it->GetColor();

@@ -39,7 +39,6 @@
 #include "mp2.h"
 #include "race.h"
 #include "serialize.h"
-#include "settings.h"
 #include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
