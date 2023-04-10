@@ -365,7 +365,7 @@ void ShowNewWeekDialog()
     else
         message += _( " All dwellings increase population." );
 
-    fheroes2::showStandardTextMessage( "", message, Dialog::OK );
+    fheroes2::showStandardTextMessage( _("New Week!"), message, Dialog::OK );
 }
 
 void ShowWarningLostTownsDialog()
