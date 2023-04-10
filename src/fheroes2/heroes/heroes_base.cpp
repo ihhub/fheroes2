@@ -409,6 +409,14 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                 }
                 return false;
             }
+
+            MapsIndexes summonableBoats = fheroes2::getSummonableBoats(*hero);
+            if (summonableBoats.empty()) {
+                if ( res != nullptr ) {
+                    *res = _("There is no boat available to cast this spell.");
+                }
+                return false;
+            }
         }
 
         if ( spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) {
