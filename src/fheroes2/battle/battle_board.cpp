@@ -54,7 +54,7 @@ namespace
 {
     int GetRandomObstaclePosition( std::mt19937 & gen )
     {
-        return Rand::GetWithGen( 3, 6, gen ) + ( 11 * Rand::GetWithGen( 1, 7, gen ) );
+        return Rand::GetWithGen( 3, 7, gen ) + ( 11 * Rand::GetWithGen( 1, 7, gen ) );
     }
 
     bool isTwoHexObject( const int icnId )
@@ -552,31 +552,50 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
 
     Rand::ShuffleWithGen( objs, gen );
 
-    const auto largeObstacleSize = std::count_if( begin(), end(), []( const Cell & cell ) { return cell.GetObject() == 0x40; } );
-    const uint8_t maxSmallObstacleCount = largeObstacleSize > 7 ? 3 : 4;
+    const auto largeObstacleHexCount = std::count_if( begin(), end(), []( const Cell & cell ) { return cell.GetObject() == 0x40; } );
 
-    // Ensure obstacles vector will only have maximum 2 TwoHexObjects
-    if ( largeObstacleSize > 0 ) {
-        uint8_t twoHexCount = 0;
-        for ( size_t i = 0; i < objs.size(); ) {
-            if ( isTwoHexObject( objs[i] ) ) {
-                twoHexCount++;
-                if ( twoHexCount > 2 ) {
-                    objs.erase( std::next( objs.begin(), i ) );
-                    continue;
-                }
-            }
-            i++;
-        }
+    uint8_t maxSmallObstacleCount;
+    uint8_t maxTwoHexObstacleCount;
+
+    if ( largeObstacleHexCount == 0 ) {
+        maxSmallObstacleCount = 5;
+        maxTwoHexObstacleCount = 3;
+    }
+    else if ( largeObstacleHexCount <= 7 ) {
+        maxSmallObstacleCount = 4;
+        maxTwoHexObstacleCount = 2;
+    }
+    else if ( largeObstacleHexCount <= 13 ) {
+        maxSmallObstacleCount = 3;
+        maxTwoHexObstacleCount = 2;
+    }
+    else {
+        maxSmallObstacleCount = 2;
+        maxTwoHexObstacleCount = 1;
     }
 
-    const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::GetWithGen( 0, maxSmallObstacleCount, gen ) ) );
+    // Limit the number of two-hex obstacles to maxTwoHexObstacleCount
+    uint8_t twoHexCount = 0;
+    for ( size_t i = 0; i < objs.size(); ) {
+        if ( isTwoHexObject( objs[i] ) ) {
+            twoHexCount++;
+            if ( twoHexCount > maxTwoHexObstacleCount ) {
+                objs.erase( std::next( objs.begin(), i ) );
+                continue;
+            }
+        }
+        i++;
+    }
+
+    // TODO for testing only
+    //  const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::GetWithGen( 0, maxSmallObstacleCount, gen ) ) );
+    const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( maxSmallObstacleCount ) );
 
     for ( size_t i = 0; i < objectsToPlace; ++i ) {
         const bool checkRightCell = isTwoHexObject( objs[i] );
 
         int32_t dest = GetRandomObstaclePosition( gen );
-        while ( at( dest ).GetObject() != 0 || ( checkRightCell && at( dest + 1 ).GetObject() != 0 ) ) {
+        while ( at( dest ).GetObject() != 0 || ( checkRightCell && ( at( dest + 1 ).GetObject() != 0 || dest % 11 == 7 ) ) ) {
             dest = GetRandomObstaclePosition( gen );
         }
 
