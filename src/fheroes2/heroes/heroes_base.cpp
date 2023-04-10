@@ -450,10 +450,9 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( spell == Spell::IDENTIFYHERO ) {
-            const int opponentCount = Settings::Get().GetPlayers().getInPlayOpponentsCount( hero->GetColor() );
-            if ( opponentCount == 0 ) {
+            if ( !fheroes2::canCastIdentifyHero( *hero ) ) {
                 if ( res != nullptr ) {
-                    *res = _( "There are no opponents. Casting this spell will not bring any advantage." );
+                    *res = _( "No opponent can have heroes under his command anymore. Casting this spell will not bring any advantage." );
                 }
                 return false;
             }
@@ -493,7 +492,8 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                 const uint32_t currentCount = world.GetCapturedObject( tile.GetIndex() ).GetTroop().GetCount();
                 if ( newCount <= currentCount ) {
                     if ( res != nullptr ) {
-                        *res = _( "There are already more elementals guarding the mine than the spell can generate. Casting this spell will not bring any advantage." );
+                        *res = _(
+                            "There are already at least as many elementals guarding the mine than the spell can generate. Casting this spell will not bring any advantage." );
                     }
                     return false;
                 }

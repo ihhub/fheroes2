@@ -230,7 +230,6 @@ public:
     void SetStartGame();
     int GetColors( int control = 0xFF, bool strong = false ) const;
     int GetActualColors() const;
-    int getInPlayOpponentsCount( const int color ) const;
     std::string String() const;
 
     const std::vector<Player *> & getVector() const;

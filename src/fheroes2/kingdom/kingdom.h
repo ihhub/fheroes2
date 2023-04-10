@@ -88,6 +88,10 @@ public:
     bool isLoss() const;
     bool AllowPayment( const Funds & ) const;
     bool AllowRecruitHero( bool check_payment ) const;
+    // Return true if this kingdom has any heroes or can recruit more, false
+    // otherwise. For example this will return false when kingdom has no more
+    // heroes left and only have a town that cannot be upgraded to a castle.
+    bool hasOrCanRecruitHeroes() const;
 
     void SetLastBattleWinHero( const Heroes & hero );
     Heroes * GetLastBattleWinHero() const;

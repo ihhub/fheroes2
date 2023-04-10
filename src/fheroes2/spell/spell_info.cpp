@@ -36,6 +36,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "settings.h"
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
@@ -369,5 +370,18 @@ namespace fheroes2
         monsters.erase( std::remove_if( monsters.begin(), monsters.end(), [heroColor]( const int32_t index ) { return world.GetTiles( index ).isFog( heroColor ); } ),
                         monsters.end() );
         return monsters;
+    }
+
+    bool canCastIdentifyHero( const Heroes & hero )
+    {
+        const Player * player = Settings::Get().GetPlayers().Get( hero.GetColor() );
+        const int friends = player->GetFriends();
+        for ( const Player * it : Settings::Get().GetPlayers() ) {
+            const int currentColor = it->GetColor();
+            const Kingdom & kingdom = world.GetKingdom( currentColor );
+            if ( it->isPlay() && ( currentColor & friends ) == 0 && kingdom.hasOrCanRecruitHeroes() )
+                return true;
+        }
+        return false;
     }
 }

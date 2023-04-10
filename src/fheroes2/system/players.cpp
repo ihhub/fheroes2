@@ -390,17 +390,6 @@ int Players::GetActualColors() const
     return res;
 }
 
-int Players::getInPlayOpponentsCount( const int color ) const
-{
-    const Player * player = Get( color );
-    const int friends = player->GetFriends();
-    int count = 0;
-    for ( Player * it : *this )
-        if ( it->isPlay() && ( it->GetColor() & friends ) == 0 )
-            ++count;
-    return count;
-}
-
 const std::vector<Player *> & Players::getVector() const
 {
     return *this;

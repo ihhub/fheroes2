@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "kingdom.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -42,7 +44,6 @@
 #include "game_interface.h"
 #include "game_static.h"
 #include "interface_icons.h"
-#include "kingdom.h"
 #include "logging.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
@@ -576,6 +577,12 @@ bool Kingdom::IsVisitTravelersTent( int col ) const
 bool Kingdom::AllowRecruitHero( bool check_payment ) const
 {
     return ( heroes.size() < GetMaxHeroes() ) && ( !check_payment || AllowPayment( PaymentConditions::RecruitHero() ) );
+}
+
+bool Kingdom::hasOrCanRecruitHeroes() const
+{
+    return std::any_of( castles.begin(), castles.end(),
+                        [this]( Castle * castle ) { return ( castle->isCastle() || castle->Modes( Castle::ALLOWCASTLE ) || !heroes.empty() ); } );
 }
 
 void Kingdom::ApplyPlayWithStartingHero()
