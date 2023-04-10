@@ -139,6 +139,8 @@ namespace
                                                 ICN::UNIFORM_EVIL_OKAY_BUTTON,
                                                 ICN::UNIFORM_GOOD_CANCEL_BUTTON,
                                                 ICN::UNIFORM_EVIL_CANCEL_BUTTON,
+                                                ICN::UNIFORM_GOOD_EXIT_BUTTON,
+                                                ICN::UNIFORM_EVIL_EXIT_BUTTON,
                                                 ICN::NON_UNIFORM_GOOD_MIN_BUTTON,
                                                 ICN::BUTTON_SMALL_MIN_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
@@ -670,11 +672,13 @@ namespace fheroes2
                 }
 
                 int32_t textWidth = 86;
+                const char * text = "OKAY";
                 if ( id == ICN::BUTTON_SMALLER_OKAY_EVIL || id == ICN::BUTTON_SMALLER_OKAY_GOOD ) {
                     textWidth = 70;
+                    text = "smallerButton|OKAY";
                 }
 
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "OKAY" ), isEvilInterface );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( text ), isEvilInterface );
 
                 break;
             }
@@ -690,7 +694,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 106;
+                int32_t textWidth = 108;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "ACCEPT" ), isEvilInterface );
 
                 break;
@@ -707,7 +711,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 106;
+                int32_t textWidth = 108;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "DECLINE" ), isEvilInterface );
 
                 break;
@@ -747,8 +751,34 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 87;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "TRADE" ), isEvilInterface );
+                const int baseIcnID = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    const Sprite & originalButton = GetICN( baseIcnID, 11 + i );
+                    const int extendedAmount = 14;
+                    out.resize( originalButton.width() + extendedAmount, originalButton.height() );
+                    out.reset();
+
+                    const int widthEndPart = 4 + 2 * i;
+                    const int widthFirstPart = originalButton.width() - widthEndPart;
+                    const int widthMiddlePart = extendedAmount + i;
+                    const int offsetXEndPart = widthFirstPart + widthMiddlePart;
+                    const int startOffsetXMiddlePart = 36;
+
+                    // Copy left main body of button.
+                    fheroes2::Copy( originalButton, 0, 0, out, 0, 0, widthFirstPart, originalButton.height() );
+
+                    // Copy middle body of button.
+                    fheroes2::Copy( originalButton, originalButton.width() - startOffsetXMiddlePart, 0, out, widthFirstPart, 0, widthMiddlePart,
+                                    originalButton.height() );
+
+                    // Copy terminating right margin of the button.
+                    fheroes2::Copy( originalButton, originalButton.width() - widthEndPart, 0, out, offsetXEndPart, 0, widthEndPart, originalButton.height() );
+                }
+
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TRADE" ), { 6, 5 }, { 4, 6 }, { 100, 16 }, buttonFontColor );
 
                 break;
             }
@@ -848,7 +878,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 101;
+                int32_t textWidth = 110;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "DISMISS" ), isEvilInterface );
 
                 break;
@@ -865,7 +895,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 101;
+                int32_t textWidth = 110;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "UPGRADE" ), isEvilInterface );
 
                 break;
@@ -882,7 +912,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 98;
+                int32_t textWidth = 102;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "RESTART" ), isEvilInterface );
 
                 break;
@@ -1018,7 +1048,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 46;
+                int32_t textWidth = 58;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "ALL" ), false );
 
                 break;
@@ -1100,7 +1130,7 @@ namespace fheroes2
                     Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CAMPAIGN\nGAME" ), { 12, 5 }, { 11, 6 }, { 117, 47 },
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CAMPAIGN\nGAME" ), { 11, 5 }, { 10, 6 }, { 119, 47 },
                                     fheroes2::FontColor::WHITE );
 
                 break;
@@ -1346,7 +1376,7 @@ namespace fheroes2
                 }
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ), { 7, 5 }, { 6, 6 }, { 86, 16 }, buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ), { 5, 5 }, { 4, 6 }, { 88, 16 }, buttonFontColor );
 
                 break;
             }
@@ -1520,6 +1550,29 @@ namespace fheroes2
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), { 7, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
+
+                break;
+            }
+            case ICN::UNIFORM_GOOD_EXIT_BUTTON:
+            case ICN::UNIFORM_EVIL_EXIT_BUTTON: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::UNIFORM_EVIL_EXIT_BUTTON );
+                const int baseIcnId = isEvilInterface ? ICN::TRADPOSE : ICN::TRADPOST;
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( baseIcnId, 17 );
+                    _icnVsSprite[id][1] = GetICN( baseIcnId, 18 );
+                    break;
+                }
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 11 + i );
+                }
+
+                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), { 7, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
 
                 break;
             }
@@ -2125,6 +2178,8 @@ namespace fheroes2
             case ICN::UNIFORM_EVIL_OKAY_BUTTON:
             case ICN::UNIFORM_GOOD_CANCEL_BUTTON:
             case ICN::UNIFORM_EVIL_CANCEL_BUTTON:
+            case ICN::UNIFORM_GOOD_EXIT_BUTTON:
+            case ICN::UNIFORM_EVIL_EXIT_BUTTON:
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
             case ICN::BUTTON_SMALL_MIN_GOOD:
             case ICN::BUTTON_SMALL_MAX_GOOD:
