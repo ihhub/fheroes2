@@ -89,12 +89,13 @@ msgid "RESTART"
 msgstr "OMSTART"
 
 msgid "HEROES"
-msgstr ""
+msgstr "HJÄLTAR"
 
 msgid ""
 "TOWNS/\n"
 "CASTLES"
-msgstr ""
+msgstr "STÄDER/\n"
+"SLOTT"
 
 msgid "S"
 msgstr "S"
@@ -112,7 +113,7 @@ msgid "ALL"
 msgstr "ALL"
 
 msgid "SELECT"
-msgstr ""
+msgstr "VÄLJ"
 
 msgid ""
 "STANDARD\n"
@@ -173,7 +174,7 @@ msgid "GIFT"
 msgstr "GÅVA"
 
 msgid "guildWell|EXIT"
-msgstr ""
+msgstr "LÄMNA"
 
 msgid "DIFFICULTY"
 msgstr "SVÅRIGHETSGRAD"
@@ -3680,14 +3681,12 @@ msgstr ""
 msgid "Your Name"
 msgstr "Ditt Namn"
 
-#, fuzzy
 msgid "Standard"
 msgstr "Standardspel"
 
 msgid "View High Scores for Standard Maps."
 msgstr "Visa Poänglistan för standardkartor."
 
-#, fuzzy
 msgid "Campaign"
 msgstr "Kampanjspel"
 
@@ -3695,98 +3694,94 @@ msgid "View High Scores for Campaigns."
 msgstr "Visa Poänglistan för kampanjer."
 
 msgid "hotkey|default okay event"
-msgstr ""
+msgstr "Standardhändelse: Okej"
 
 msgid "hotkey|default cancel event"
-msgstr ""
+msgstr "Standardhändelse: Avbryt"
 
 msgid "hotkey|default left"
-msgstr ""
+msgstr "Standard: Vänster"
 
 msgid "hotkey|default right"
-msgstr ""
+msgstr "Standard: Höger"
 
 msgid "hotkey|default up"
-msgstr ""
+msgstr "Standard: Upp"
 
 msgid "hotkey|default down"
-msgstr ""
+msgstr "Standard: Ner"
 
 msgid "hotkey|toggle fullscreen"
-msgstr ""
+msgstr "Visa Fullskärm"
 
 msgid "hotkey|toggle text support mode"
-msgstr ""
+msgstr "Aktivera Textstöd"
 
 msgid "hotkey|new game"
-msgstr ""
+msgstr "Nytt Spel"
 
 msgid "hotkey|load game"
-msgstr ""
+msgstr "Ladda Spel"
 
 msgid "hotkey|highscores"
-msgstr ""
+msgstr "Poänglista"
 
 msgid "hotkey|credits"
-msgstr ""
+msgstr "Credits"
 
-#, fuzzy
 msgid "hotkey|standard game"
 msgstr "Standardspel"
 
-#, fuzzy
 msgid "hotkey|campaign game"
 msgstr "Kampanjspel"
 
-#, fuzzy
 msgid "hotkey|multi-player game"
-msgstr "Flerspelarläge"
+msgstr "Flerspelarspel"
 
-#, fuzzy
 msgid "hotkey|settings"
 msgstr "Inställningar"
 
 msgid "hotkey|quit"
-msgstr ""
+msgstr "Avsluta"
 
 msgid "hotkey|select map"
-msgstr ""
+msgstr "Välj Karta"
 
 msgid "hotkey|select small map size"
-msgstr ""
+msgstr "Välj liten kartstorlek"
 
 msgid "hotkey|select medium map size"
-msgstr ""
+msgstr "Välj medel kartstorlek"
 
 msgid "hotkey|select large map size"
-msgstr ""
+msgstr "Välj stor kartstorlek"
 
 msgid "hotkey|select extra large map size"
-msgstr ""
+msgstr "Välj extra stor kartstorlek"
 
 msgid "hotkey|select all map sizes"
-msgstr ""
+msgstr "Välj alla kartstorlekar"
 
 msgid "hotkey|hotseat game"
-msgstr ""
+msgstr "Heta Stolen"
 
 msgid "hotkey|battle only game"
-msgstr ""
+msgstr "Endast Strid"
 
 msgid "hotkey|choose the original campaign"
-msgstr ""
+msgstr "Välj Orginalkampanj"
 
 msgid "hotkey|choose the expansion campaign"
-msgstr ""
+msgstr "Välj Expansionskampanj"
 
 msgid "hotkey|roland campaign"
-msgstr ""
+msgstr "Rolands Kampanj"
 
 msgid "hotkey|archibald campaign"
-msgstr ""
+msgstr "Archibalds Kampanj"
 
 msgid "hotkey|the price of loyalty campaign"
-msgstr ""
+msgstr "Lojalitetens pris kampanj"
 
 msgid "hotkey|voyage home campaign"
 msgstr ""
@@ -3798,97 +3793,88 @@ msgid "hotkey|descendants campaign"
 msgstr ""
 
 msgid "hotkey|select first campaign bonus"
-msgstr ""
+msgstr "Välj första kampanjbonusen"
 
 msgid "hotkey|select second campaign bonus"
-msgstr ""
+msgstr "Välj andra kampanjbonusen"
 
 msgid "hotkey|select third campaign bonus"
-msgstr ""
+msgstr "Välj tredje kampanjbonusen"
 
 msgid "hotkey|view campaign intro"
-msgstr ""
+msgstr "Visa kampanjintro"
 
-#, fuzzy
 msgid "hotkey|select campaign difficulty"
-msgstr "Kampanjsvårighet"
+msgstr "Välj kampanjsvårighet"
 
 msgid "hotkey|restart campaign scenario"
-msgstr ""
+msgstr "Omstarta kampanjscenario"
 
 msgid "hotkey|world map left"
-msgstr ""
+msgstr "Kartvy: Väster"
 
 msgid "hotkey|world map right"
-msgstr ""
+msgstr "Kartvy: Öster"
 
 msgid "hotkey|world map up"
-msgstr ""
+msgstr "Kartvy: Norr"
 
 msgid "hotkey|world map down"
-msgstr ""
+msgstr "Kartvy: Söder"
 
 msgid "hotkey|world map up left"
-msgstr ""
+msgstr "Kartvy: Nordväst"
 
 msgid "hotkey|world map up right"
-msgstr ""
+msgstr "Kartvy: Nordost"
 
 msgid "hotkey|world map down left"
-msgstr ""
+msgstr "Kartvy: Sydväst"
 
 msgid "hotkey|world map down right"
-msgstr ""
+msgstr "Kartvy: Sydost"
 
 msgid "hotkey|save game"
-msgstr ""
+msgstr "Spara Spel"
 
-#, fuzzy
 msgid "hotkey|next hero"
-msgstr "Visa nästa hjälte"
+msgstr "Nästa hjälte"
 
-#, fuzzy
 msgid "hotkey|continue hero movement"
 msgstr "Fortsätt förflyttning"
 
-#, fuzzy
 msgid "hotkey|cast adventure spell"
 msgstr "Kasta en kartbesvärjelse."
 
 msgid "hotkey|put hero to sleep"
-msgstr ""
+msgstr "Söv hjälte"
 
-#, fuzzy
 msgid "hotkey|next town"
-msgstr "Visa nästa stad"
+msgstr "Nästa stad"
 
 msgid "hotkey|end turn"
-msgstr ""
+msgstr "Avsluta runda"
 
-#, fuzzy
 msgid "hotkey|file options"
 msgstr "Filalternativ"
 
-#, fuzzy
 msgid "hotkey|adventure options"
 msgstr "Äventyrsinställningar"
 
 msgid "hotkey|puzzle map"
-msgstr ""
+msgstr "Pusselkarta"
 
-#, fuzzy
 msgid "hotkey|scenario information"
 msgstr "Scenarioinformation"
 
 msgid "hotkey|dig for artifact"
-msgstr ""
+msgstr "Gräv efter artefakt"
 
 msgid "hotkey|view world"
-msgstr ""
+msgstr "Visa Kartvy"
 
-#, fuzzy
 msgid "hotkey|kingdom summary"
-msgstr "Kungarikessammanfattning"
+msgstr "Rikessammanfattning"
 
 msgid "hotkey|default action"
 msgstr ""
@@ -3896,21 +3882,20 @@ msgstr ""
 msgid "hotkey|open focus"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|system options"
-msgstr "Skräddarsy systeminställningarna"
+msgstr "Systeminställningar"
 
 msgid "hotkey|scroll left"
-msgstr ""
+msgstr "Skrolla vänster"
 
 msgid "hotkey|scroll right"
-msgstr ""
+msgstr "Skrolla höger"
 
 msgid "hotkey|scroll up"
-msgstr ""
+msgstr "Skrolla upp"
 
 msgid "hotkey|scroll down"
-msgstr ""
+msgstr "Skrolla ner"
 
 msgid "hotkey|toggle control panel"
 msgstr ""
@@ -3939,79 +3924,75 @@ msgstr ""
 msgid "hotkey|toggle battle auto mode"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|finish the battle in auto mode"
-msgstr "Är du säker på att du vill fortsätta slaget i automatiskt läge?"
+msgstr "Låt datorn fortsätta striden"
 
 #, fuzzy
 msgid "hotkey|battle options"
 msgstr "Slottalternativ"
 
 msgid "hotkey|skip turn in battle"
-msgstr ""
+msgstr "Hoppa över runda i strid"
 
 msgid "hotkey|cast battle spell"
-msgstr ""
+msgstr "Kasta stridsbesvärjelse"
 
 msgid "hotkey|dwelling level 1"
-msgstr ""
+msgstr "Bostad, nivå 1"
 
 msgid "hotkey|dwelling level 2"
-msgstr ""
+msgstr "Bostad, nivå 2"
 
 msgid "hotkey|dwelling level 3"
-msgstr ""
+msgstr "Bostad, nivå 3"
 
 msgid "hotkey|dwelling level 4"
-msgstr ""
+msgstr "Bostad, nivå 4"
 
 msgid "hotkey|dwelling level 5"
-msgstr ""
+msgstr "Bostad, nivå 5"
 
 msgid "hotkey|dwelling level 6"
-msgstr ""
+msgstr "Bostad, nivå 6"
 
 msgid "hotkey|well"
-msgstr ""
+msgstr "Brunn"
 
-#, fuzzy
 msgid "hotkey|marketplace"
 msgstr "Marknad"
 
 msgid "hotkey|mage guild"
-msgstr ""
+msgstr "Magisamfund"
 
-#, fuzzy
 msgid "hotkey|shipyard"
 msgstr "Skeppsvarv"
 
-#, fuzzy
 msgid "hotkey|thieves guild"
 msgstr "Tjuvgille"
 
 msgid "hotkey|tavern"
-msgstr ""
+msgstr "Värdshus"
 
 msgid "hotkey|construction screen"
-msgstr ""
+msgstr "Byggvy"
 
 msgid "hotkey|buy all monsters in well"
-msgstr ""
+msgstr "Rekrytera alla varelser i brunnen"
 
 msgid "hotkey|split stack by half"
-msgstr ""
+msgstr "Dela truppen till hälften"
 
 msgid "hotkey|split stack by one"
 msgstr ""
 
 msgid "hotkey|join stacks"
-msgstr ""
+msgstr "Anslut trupper"
 
 msgid "hotkey|upgrade troop"
-msgstr ""
+msgstr "Uppgradera trupp"
 
 msgid "hotkey|dismiss troop"
-msgstr ""
+msgstr "Sparka trupp"
 
 msgid "The save file is corrupted."
 msgstr "Sparfilen är korrupt."
