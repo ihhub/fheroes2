@@ -51,9 +51,9 @@ namespace fheroes2
 
     int32_t getPossibleBoatPosition( const Heroes & hero );
 
-    MapsIndexes getVisibleleMonstersAroundHero( const Heroes & hero );
+    MapsIndexes getVisibleMonstersAroundHero( const Heroes & hero );
 
-    bool canCastIdentifyHero( const Heroes & hero );
+    bool canCastIdentifyHeroSpell( const Heroes & hero );
 }
 
 #endif

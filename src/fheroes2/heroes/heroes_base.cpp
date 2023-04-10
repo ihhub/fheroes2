@@ -449,7 +449,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( spell == Spell::IDENTIFYHERO ) {
-            if ( !fheroes2::canCastIdentifyHero( *hero ) ) {
+            if ( !fheroes2::canCastIdentifyHeroSpell( *hero ) ) {
                 if ( res != nullptr ) {
                     *res = _( "No opponent can have heroes under his command anymore. Casting this spell will not bring any advantage." );
                 }
@@ -464,7 +464,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( spell == Spell::VISIONS ) {
-            MapsIndexes monsters = fheroes2::getVisibleleMonstersAroundHero( *hero );
+            MapsIndexes monsters = fheroes2::getVisibleMonstersAroundHero( *hero );
             const uint32_t dist = hero->GetVisionsDistance();
             if ( monsters.empty() ) {
                 if ( res != nullptr ) {
