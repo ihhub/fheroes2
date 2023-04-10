@@ -485,8 +485,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                 }
                 return false;
             }
-            if ( MP2::OBJ_MINES == object
-                 && ( spell == Spell::SETAGUARDIAN || spell == Spell::SETEGUARDIAN || spell == Spell::SETFGUARDIAN || spell == Spell::SETWGUARDIAN ) ) {
+            if ( MP2::OBJ_MINES == object && ( spell != Spell::HAUNT ) ) {
                 const uint32_t newCount = fheroes2::getGuardianMonsterCount( spell, hero->GetPower(), hero );
                 const uint32_t currentCount = world.GetCapturedObject( tile.GetIndex() ).GetTroop().GetCount();
                 if ( newCount <= currentCount ) {
