@@ -1,5 +1,10 @@
 # [**fheroes2**](README.md) privacy policy
 
+**fheroes2** is provided at no cost and is intended for use as is.
+This document is used to inform regarding our policies with the collection,
+use, and disclosure of Personal Information if anyone decided to use fheroes2.
+If you choose to use fheroes2, then you agree to this policy.
+
 ## General
 
 **fheroes2** is an open source project and it does not collect any personal
