@@ -9735,7 +9735,7 @@ msgid "View %{spell}"
 msgstr "Visa %{spell}"
 
 msgid "This spell does %{damage} points of damage."
-msgstr "%{spell}besvärjelsen ger %{damage} skada."
+msgstr "Denna besvärjelsen ger %{damage} skada."
 
 msgid ""
 "This spell summons\n"
