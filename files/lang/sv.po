@@ -1356,13 +1356,13 @@ msgid " bane"
 msgstr ""
 
 msgid " alliance"
-msgstr " allians"
+msgstr "allians"
 
 msgid "Carry-over forces"
 msgstr ""
 
 msgid " bonus"
-msgstr "bonus"
+msgstr " bonus"
 
 msgid " defeated"
 msgstr " besegrad"
@@ -1383,7 +1383,7 @@ msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr "Riket kommer få +%{count} %{resource} varje dag."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
-msgstr "%{spell}besvärjelsen kommer följa med till nästa scernario."
+msgstr "%{spell}besvärjelsen kommer följa med till nästa scenario."
 
 msgid "%{hero} can be hired in the scenario."
 msgstr "%{hero} kan rekryteras i detta scenario."
@@ -1782,7 +1782,7 @@ msgstr "För denna åtgärd är det nödvändigt att först bygga ett slott."
 
 msgid "Cannot build %{name} because castle is too far from water."
 msgstr ""
-"Kan inte bygga %{name} eftersom slottet är för långt borta från vatten."
+"Kan ej bygga %{name}. Slottet är för långt borta från vatten."
 
 msgid "disable build."
 msgstr ""
@@ -3342,7 +3342,7 @@ msgid "autoBattle|Manual"
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
-msgstr "Ändrar hastigheten för dina hjältars rörelser på kartan."
+msgstr "Ändra hastigheten för dina hjältars rörelser på kartan."
 
 msgid ""
 "Sets the speed that A.I. heroes move at.  You can also elect not to view A."
@@ -3408,7 +3408,7 @@ msgid "Number of Heroes:"
 msgstr "Antal Hjältar:"
 
 msgid "Gold in Treasury:"
-msgstr "Guld i skattkammaren:"
+msgstr "Guld i Skattkammaren:"
 
 msgid "Wood & Ore:"
 msgstr "Trä & Malm:"
@@ -3556,9 +3556,8 @@ msgstr "Behöver du hjälp med spelet?"
 msgid "Original project before 0.7"
 msgstr "Orginalprojekt före version 0.7"
 
-#, fuzzy
 msgid "Heroes of Might and Magic II: The Succession Wars team"
-msgstr "Avsluta fheroes2 och återgå till operativsystemet."
+msgstr "Heroes of Might and Magic II: The Succession Wars teamet"
 
 msgid "Designed and Directed"
 msgstr ""
@@ -3615,9 +3614,8 @@ msgstr ""
 msgid "Scenarios"
 msgstr "Scenario"
 
-#, fuzzy
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
-msgstr "Avsluta fheroes2 och återgå till operativsystemet."
+msgstr "Heroes of Might and Magic II: The Price of Loyalty teamet"
 
 msgid "Design Lead"
 msgstr ""
@@ -4023,7 +4021,7 @@ msgid "This saved game is localized to '"
 msgstr "Denna spelomgång är översatt till "
 
 msgid "' language, but the current language of the game is '"
-msgstr "' språk men nuvarande spelspråk är "
+msgstr "' men nuvarande spelspråk är "
 
 msgid "Hot Seat"
 msgstr "Heta stolen"
