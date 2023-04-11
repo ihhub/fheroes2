@@ -231,7 +231,7 @@ namespace Interface
         Basic();
         void ShowPathOrStartMoveHero( Heroes *, int32_t );
         void MoveHeroFromArrowKeys( Heroes & hero, int direct );
-        fheroes2::GameMode HumanTurn( bool );
+        fheroes2::GameMode HumanTurn( const bool isload );
 
         GameArea gameArea;
         Radar radar;

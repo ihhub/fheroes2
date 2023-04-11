@@ -28,6 +28,7 @@
 #include <memory>
 #include <ostream>
 #include <set>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -659,14 +660,14 @@ namespace
             , _ignoreValue( ignoreValue )
         {}
 
-        double value( const std::pair<int, int> & objectInfo, const uint32_t distance )
+        double value( std::pair<int, int> & objectInfo, const uint32_t distance )
         {
             auto iter = _objectValue.find( objectInfo );
             if ( iter != _objectValue.end() ) {
                 return iter->second;
             }
 
-            const double value = _ai.getObjectValue( _hero, objectInfo.first, _ignoreValue, distance );
+            const double value = _ai.getObjectValue( _hero, objectInfo.first, objectInfo.second, _ignoreValue, distance );
 
             _objectValue[objectInfo] = value;
             return value;
@@ -1503,8 +1504,11 @@ namespace AI
         return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
     }
 
-    double Normal::getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
+    double Normal::getObjectValue( const Heroes & hero, const int index, int & objectType, const double valueToIgnore, const uint32_t distanceToObject ) const
     {
+        const Maps::Tiles & tile = world.GetTiles( index );
+        objectType = tile.GetObject();
+
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
         case Heroes::Role::SCOUT:
@@ -1604,6 +1608,9 @@ namespace AI
     int AI::Normal::getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority )
     {
         Heroes & hero = *heroInfo.hero;
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, "Find Adventure Map target for hero " << hero.GetName() << " at current position " << hero.GetIndex() )
+
         const double lowestPossibleValue = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
         const bool heroInPatrolMode = heroInfo.patrolCenter != -1;
         const double heroStrength = hero.GetArmy().GetStrength();
@@ -1626,8 +1633,8 @@ namespace AI
                                                                                                             const MP2::MapObjectType type, const bool isDimensionDoor ) {
             if ( !isDimensionDoor ) {
                 // Dimension door path does not include any objects on the way.
-                const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( destination );
-                for ( const IndexObject & pair : list ) {
+                std::vector<IndexObject> list = _pathfinder.getObjectsOnTheWay( destination );
+                for ( IndexObject & pair : list ) {
                     if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) ) {
                         const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
                         if ( extraValue > 0 ) {
@@ -1668,7 +1675,7 @@ namespace AI
                 objectType = world.GetTiles( courierTarget ).GetObject();
 #endif
 
-                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " courier main task is " << courierTarget )
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " is a courier with a main target tile at " << courierTarget )
             }
             else {
                 // If there's nothing to do as a Courier reset the role
@@ -1676,7 +1683,7 @@ namespace AI
             }
         }
 
-        for ( const IndexObject & node : _mapObjects ) {
+        for ( IndexObject & node : _mapObjects ) {
             // Skip if hero in patrol mode and object outside of reach
             if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, heroInfo.patrolCenter ) > heroInfo.patrolDistance )
                 continue;
@@ -1739,16 +1746,19 @@ namespace AI
             if ( fogDiscoveryTarget >= 0 && fogDiscoveryValue > maxPriority ) {
                 priorityTarget = fogDiscoveryTarget;
                 maxPriority = fogDiscoveryValue;
-                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (fog discovery)" )
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ": selected target: " << priorityTarget << " value is " << maxPriority << " (fog discovery)" )
             }
             else {
                 DEBUG_LOG( DBG_AI, DBG_INFO,
-                           hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" )
+                           hero.GetName() << ": selected target: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" )
             }
         }
         else if ( !heroInPatrolMode ) {
             priorityTarget = fogDiscoveryTarget;
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget )
+        }
+        else {
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " is in Patrol mode. No movement is required." )
         }
 
         return priorityTarget;
