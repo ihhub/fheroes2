@@ -30,12 +30,12 @@ version 1.0.3 (11 April 2023)
 - fix boat's shadow being rendered over a boat while sailing diagonally
 - adjust recruitment window position on castle well and kingdom overview
 - apply the commanding hero/captain bonuses to the castle towers
-- fix the number of raises skeletons by Necromancy after battle
+- fix the number of raised skeletons by Necromancy after battle
 - update Polish translation
 - fix incorrect number of Ghosts present in Abandoned and Haunted Mines
 - add Slovak translation
 - properly handle the situation when wandering monsters and an AI hero eliminate each other
-- update battle log with special abilities of Lord Vampires and Ghosts
+- update battle log with special abilities of Vampire Lords and Ghosts
 - update Belarusian translation
 - add numeric speed of monsters in information window
 - fix quick info for non-action objects when their action tile is under fog

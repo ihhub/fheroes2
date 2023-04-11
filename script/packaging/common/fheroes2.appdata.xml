@@ -69,12 +69,12 @@
           <li>fix boat's shadow being rendered over a boat while sailing diagonally</li>
           <li>adjust recruitment window position on castle well and kingdom overview</li>
           <li>apply the commanding hero/captain bonuses to the castle towers</li>
-          <li>fix the number of raises skeletons by Necromancy after battle</li>
+          <li>fix the number of raised skeletons by Necromancy after battle</li>
           <li>update Polish translation</li>
           <li>fix incorrect number of Ghosts present in Abandoned and Haunted Mines</li>
           <li>add Slovak translation</li>
           <li>properly handle the situation when wandering monsters and an AI hero eliminate each other</li>
-          <li>update battle log with special abilities of Lord Vampires and Ghosts</li>
+          <li>update battle log with special abilities of Vampire Lords and Ghosts</li>
           <li>update Belarusian translation</li>
           <li>add numeric speed of monsters in information window</li>
           <li>fix quick info for non-action objects when their action tile is under fog</li>
