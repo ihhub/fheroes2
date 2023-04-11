@@ -737,7 +737,6 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "en %{defender} stupar."
 msgstr[1] "%{count} %{defender} stupar."
 
-#, fuzzy
 msgid "1 soul is incorporated."
 msgid_plural "%{count} souls are incorporated."
 msgstr[0] "1 själ absorberas."
