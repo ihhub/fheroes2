@@ -1432,7 +1432,7 @@ msgid ""
 msgstr ""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
-msgstr "Dvärgdräparen!!!! Spring för livet!\"
+msgstr "\"Dvärgdräparen!!!! Spring för livet!\""
 
 msgid "campaignBonus|Animate Dead"
 msgstr "Animera Död"
@@ -3244,7 +3244,7 @@ msgid ""
 "Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
 "of Loyalty\" version of the game."
 msgstr "Visar om kartan är gjord för \"The Succession Wars\" eller \n"
-"expansionen \"The Price of Loyalty\.""
+"expansionen \"The Price of Loyalty\"."
 
 msgid "Map Type"
 msgstr "Karttyp"
