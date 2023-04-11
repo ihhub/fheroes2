@@ -1,3 +1,55 @@
+version 1.0.3 (11 April 2023)
+- update German translation
+- update Norwegian translation
+- preparations for Google Play Market release
+- add missing frame for hero information dialog when it is opened from hero meeting dialog
+- improve the destination indication for Teleport spell
+- translate more UI buttons within the game
+- fix endless jumping AI hero behavior while using Dimension Door spell
+- add Virtual Keyboard open button to Save Game and Player Name dialogs
+- add values to Morale and Luck stats within artifact description
+- show approximate information about the mine guardians to a non-owner player
+- adjust number of resources subtracted in event messages
+- fix projectile render position when hitting the target creature
+- reduce AI obsession with Wells
+- optimize object priority logic for AI heroes to prioritize more important locations
+- remove path icon after a hero/boat makes a turn, not before
+- show mirrored monster image in army order
+- make hotkey names translatable
+- improve AI fog discovery logic
+- fix a case when a hero has the same secondary skill but different levels of it set by an author of a map
+- add gold missing in Statue and Dungeon building description
+- add Vietnamese translation
+- fix the number of regenerated spell points with the Mysticism skill
+- focus on the AI hero before he disappears due to boarding a boat or using a Dimension Door or Town Portal spell
+- add legacy game detection on Windows x64
+- fix clicks in Android MIDI music
+- speed up Adventure Map rendering
+- fix AI hero animation being interrupted while moving inside a fog for the current player
+- fix Alchemist Lab flag and Ghosts from Abandoned Mine rendering while rest of the object is not visible on the screen
+- fix boat's shadow being rendered over a boat while sailing diagonally
+- adjust recruitment window position on castle well and kingdom overview
+- apply the commanding hero/captain bonuses to the castle towers
+- fix the number of raises skeletons by Necromancy after battle
+- update Polish translation
+- fix incorrect number of Ghosts present in Abandoned and Haunted Mines
+- add Slovak translation
+- properly handle the situation when wandering monsters and an AI hero eliminate each other
+- update battle log with special abilities of Lord Vampires and Ghosts
+- update Belarusian translation
+- add numeric speed of monsters in information window
+- fix quick info for non-action objects when their action tile is under fog
+- block Chain Lightning if first target unit resists the spell
+- fix cases when Road sprite is drawn over a hero
+- fix Hero shadow rendering on Adventure Map
+- update Russian translation
+- show Spell Points for spells in Magic Book popup dialogs
+- fix necromancy and calculation of casualties with mirrors
+- properly track the Mirror Image spell duration
+- update documentation about Android
+- update Czech translation
+- update Swedish translation
+
 version 1.0.2 (12 March 2023)
 - fix display of Haunted Mines on mini-map and in View World
 - update the Norwegian translation
