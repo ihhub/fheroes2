@@ -435,7 +435,7 @@ msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
 "is on. (Note: This does not affect spell casting for computer players in any "
 "way, nor does it affect quick combat.)"
-msgstr "Låta datorn kasta besvärjelser för dig när automatisk strid är aktiverat. "
+msgstr "Låt datorn kasta besvärjelser för dig när automatisk strid är aktiverat. "
 "(Detta påverkar inte fiendedatorns besvärjelsekastning, inte heller påverkar det "
 "snabbstrid.)"
 
@@ -592,7 +592,7 @@ msgid ""
 "Surrendering costs gold. However if you pay the ransom, the hero and all of "
 "his or her surviving creatures will be available to recruit again."
 msgstr ""
-"Att ge upp kostar guld. Men om du betalar lösensumman kommer hjälten och "
+"Att kapitulera kostar guld. Men om du betalar lösensumman kommer hjälten och "
 "alla dennes överlevande varelser kunna rekryteras igen."
 
 msgid "Open Hero Screen to view full information about the hero."
@@ -1717,7 +1717,7 @@ msgstr "Spikad sköld"
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
 "scenario."
-msgstr "Huvudhjälten kommer ha \"%{artifact} i början av scenariot."
+msgstr "Huvudhjälten kommer ha \"%{artifact}\" i början av scenariot."
 
 msgid ""
 "The kingdom will receive %{amount} additional %{resource} at the start of "
@@ -1727,11 +1727,11 @@ msgstr "Riket kommer få ytterligare %{amount} %{resource} i början av scenario
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
-msgstr "Riket kommer få mindre %{amount} %{resource} i början av scenariot."
+msgstr "Riket kommer ha %{amount} mindre %{resource} i början av scenariot."
 
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
-msgstr "Huvudhjälten kommer ha %{count} % {monster} i början av scenariot."
+msgstr "Huvudhjälten kommer ha %{count} %{monster} i början av scenariot."
 
 msgid ""
 "The main hero will have \"%{spell}\" spell at the start of the scenario."
@@ -6607,13 +6607,13 @@ msgstr ""
 "procent."
 
 msgid "%{skill} increases your hero's movement points by %{count} percent."
-msgstr "%{skill} ökar din hjältes förflyttningspoäng med %{count} procent."
+msgstr "%{skill} ökar hjältens förflyttningspoäng med %{count} procent."
 
 msgid "%{skill} increases your hero's viewable area by one square."
 msgid_plural ""
 "%{skill} increases your hero's viewable area by %{count} squares."
-msgstr[0] "%{skill} ökar din hjältes sikt med %{count} ruta."
-msgstr[1] "%{skill} ökar din hjältes sikt med %{count} rutor."
+msgstr[0] "%{skill} ökar hjältens sikt med %{count} ruta."
+msgstr[1] "%{skill} ökar hjältens sikt med %{count} rutor."
 
 msgid ""
 "%{skill} allows you to negotiate with monsters who are weaker than your "
@@ -6658,7 +6658,7 @@ msgstr[1] ""
 "dag."
 
 msgid "%{skill} increases your hero's luck by %{count}."
-msgstr "%{skill} höjer hjälten tur med %{count}."
+msgstr "%{skill} höjer hjältens tur med %{count}."
 
 msgid ""
 "%{skill} gives your hero's catapult shots a greater chance to hit and do "
@@ -6739,9 +6739,8 @@ msgstr "Blå"
 msgid "barrier|Brown"
 msgstr "Brun"
 
-#, fuzzy
 msgid "barrier|Gold"
-msgstr "Barriär"
+msgstr "Gyllene"
 
 msgid "barrier|Green"
 msgstr "Grön"
@@ -6764,10 +6763,8 @@ msgstr "Blå"
 msgid "tent|Brown"
 msgstr "Brunt"
 
-#, fuzzy
 msgid "tent|Gold"
-msgstr "Guld"
-
+msgstr "Gyllene"
 
 msgid "tent|Green"
 msgstr "Grönt"
