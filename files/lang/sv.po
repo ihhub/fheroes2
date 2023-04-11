@@ -2687,7 +2687,7 @@ msgstr ""
 "Accepterar du det?"
 
 msgid "(Rate: %{percent})"
-msgstr "(Andel: %{percent} procent})"
+msgstr "(Andel: %{percent} procent)"
 
 msgid "off"
 msgstr "av"
@@ -2720,7 +2720,7 @@ msgid "Toggle foreground sounds level."
 msgstr ""
 
 msgid "Change the type of music."
-msgstr "Ändra musiktyp"
+msgstr "Ändra musiktyp."
 
 msgid "Toggle 3D effects of foreground sounds."
 msgstr "Aktivera 3D-funktion för ljudeffekter."
@@ -3610,9 +3610,8 @@ msgstr "Betyg"
 msgid "Manual and Helpfile"
 msgstr ""
 
-#, fuzzy
 msgid "Scenarios"
-msgstr "Scenario"
+msgstr "Scenarier"
 
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr "Heroes of Might and Magic II: The Price of Loyalty teamet"
