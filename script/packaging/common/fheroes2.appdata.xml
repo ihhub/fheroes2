@@ -37,6 +37,64 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2023-04-11" version="v1.0.3">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.3</url>
+      <description>
+        <p>Changes in v1.0.3 (11 April 2023):</p>
+        <ul>
+          <li>update German translation</li>
+          <li>update Norwegian translation</li>
+          <li>preparations for Google Play Market release</li>
+          <li>add missing frame for hero information dialog when it is opened from hero meeting dialog</li>
+          <li>improve the destination indication for Teleport spell</li>
+          <li>translate more UI buttons within the game</li>
+          <li>fix endless jumping AI hero behavior while using Dimension Door spell</li>
+          <li>add Virtual Keyboard open button to Save Game and Player Name dialogs</li>
+          <li>add values to Morale and Luck stats within artifact description</li>
+          <li>show approximate information about the mine guardians to a non-owner player</li>
+          <li>adjust number of resources subtracted in event messages</li>
+          <li>fix projectile render position when hitting the target creature</li>
+          <li>reduce AI obsession with Wells</li>
+          <li>optimize object priority logic for AI heroes to prioritize more important locations</li>
+          <li>remove path icon after a hero/boat makes a turn, not before</li>
+          <li>show mirrored monster image in army order</li>
+          <li>make hotkey names translatable</li>
+          <li>improve AI fog discovery logic</li>
+          <li>fix a case when a hero has the same secondary skill but different levels of it set by an author of a map</li>
+          <li>add gold missing in Statue and Dungeon building description</li>
+          <li>add Vietnamese translation</li>
+          <li>fix the number of regenerated spell points with the Mysticism skill</li>
+          <li>focus on the AI hero before he disappears due to boarding a boat or using a Dimension Door or Town Portal spell</li>
+          <li>add legacy game detection on Windows x64</li>
+          <li>fix clicks in Android MIDI music</li>
+          <li>speed up Adventure Map rendering</li>
+          <li>fix AI hero animation being interrupted while moving inside a fog for the current player</li>
+          <li>fix Alchemist Lab flag and Ghosts from Abandoned Mine rendering while rest of the object is not visible on the screen</li>
+          <li>fix boat's shadow being rendered over a boat while sailing diagonally</li>
+          <li>adjust recruitment window position on castle well and kingdom overview</li>
+          <li>apply the commanding hero/captain bonuses to the castle towers</li>
+          <li>fix the number of raised skeletons by Necromancy after battle</li>
+          <li>update Polish translation</li>
+          <li>fix incorrect number of Ghosts present in Abandoned and Haunted Mines</li>
+          <li>add Slovak translation</li>
+          <li>properly handle the situation when wandering monsters and an AI hero eliminate each other</li>
+          <li>update battle log with special abilities of Vampire Lords and Ghosts</li>
+          <li>update Belarusian translation</li>
+          <li>add numeric speed of monsters in information window</li>
+          <li>fix quick info for non-action objects when their action tile is under fog</li>
+          <li>block Chain Lightning if first target unit resists the spell</li>
+          <li>fix cases when Road sprite is drawn over a hero</li>
+          <li>fix Hero shadow rendering on Adventure Map</li>
+          <li>update Russian translation</li>
+          <li>show Spell Points for spells in Magic Book popup dialogs</li>
+          <li>fix necromancy and calculation of casualties with mirrors</li>
+          <li>properly track the Mirror Image spell duration</li>
+          <li>update documentation about Android</li>
+          <li>update Czech translation</li>
+          <li>update Swedish translation</li>
+        </ul>
+      </description>
+    </release>
     <release date="2023-03-12" version="v1.0.2">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.2</url>
       <description>
