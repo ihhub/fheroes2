@@ -479,7 +479,8 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         if ( spell == Spell::HAUNT || spell == Spell::SETAGUARDIAN || spell == Spell::SETEGUARDIAN || spell == Spell::SETFGUARDIAN || spell == Spell::SETWGUARDIAN ) {
             Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
             auto object = tile.GetObject( false );
-            if ( MP2::OBJ_ABANDONED_MINE == object ) {
+            const int monsterType = world.GetCapturedObject( tile.GetIndex() ).GetTroop().GetMonster().GetID();
+            if ( MP2::OBJ_MINES == object && monsterType == Monster::GHOST ) {
                 if ( res != nullptr ) {
                     *res = _( "You must first defeat the ghosts guarding the mine to cast this spell." );
                 }

@@ -380,7 +380,7 @@ namespace fheroes2
         for ( const Player * it : Settings::Get().GetPlayers() ) {
             const int currentColor = it->GetColor();
             const Kingdom & kingdom = world.GetKingdom( currentColor );
-            if ( it->isPlay() && ( currentColor & friends ) == 0 && kingdom.hasOrCanRecruitHeroes() )
+            if ( it->isPlay() && ( ( currentColor & friends ) == 0 ) && kingdom.hasOrCanRecruitHeroes() )
                 return true;
         }
         return false;

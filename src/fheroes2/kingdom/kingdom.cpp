@@ -581,8 +581,10 @@ bool Kingdom::AllowRecruitHero( bool check_payment ) const
 
 bool Kingdom::hasOrCanRecruitHeroes() const
 {
-    return std::any_of( castles.begin(), castles.end(),
-                        [this]( Castle * castle ) { return ( castle->isCastle() || castle->Modes( Castle::ALLOWCASTLE ) || !heroes.empty() ); } );
+    if ( !heroes.empty() ) {
+        return true;
+    }
+    return std::any_of( castles.begin(), castles.end(), []( Castle * castle ) { return ( castle->isCastle() || castle->Modes( Castle::ALLOWCASTLE ) ); } );
 }
 
 void Kingdom::ApplyPlayWithStartingHero()
