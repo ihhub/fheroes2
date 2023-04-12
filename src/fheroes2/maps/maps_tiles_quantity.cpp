@@ -1187,8 +1187,8 @@ namespace Maps
 
     Troop getTroopFromTile( const Tiles & tile )
     {
-        return MP2::isCaptureObject( tile.GetObject( false ) ) ? world.GetCapturedObject( tile.GetIndex() ).GetTroop() :
-                                                                 Troop( getMonsterFromTile( tile ), tile.MonsterCount() );
+        return MP2::isCaptureObject( tile.GetObject( false ) ) ? world.GetCapturedObject( tile.GetIndex() ).GetTroop()
+                                                               : Troop( getMonsterFromTile( tile ), tile.MonsterCount() );
     }
 
     int getColorTypeFromTile( const Tiles & tile )
