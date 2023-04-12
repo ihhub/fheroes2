@@ -1414,7 +1414,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
                 const int32_t spellId = Maps::getSpellIdFromTile( tile );
 
                 if ( spellId == Spell::HAUNT ) {
-                    const ResourceCount rc = tile.QuantityResourceCount();
+                    const ResourceCount rc = getResourcesFromTile( tile );
                     const int resource = rc.isValid() ? rc.first : Resource::GOLD;
 
                     Maps::Tiles::RestoreAbandonedMine( tile, resource );

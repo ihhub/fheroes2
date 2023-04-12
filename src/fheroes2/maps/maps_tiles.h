@@ -158,6 +158,11 @@ namespace Maps
             return quantity1;
         }
 
+        void setQuantity1( const uint8_t value )
+        {
+            quantity1 = value;
+        }
+
         // Get Tile metadata field #2 (used for things like animations or resource type )
         uint8_t GetQuantity2() const
         {
@@ -332,15 +337,8 @@ namespace Maps
         // Operations with tile quantities
         void QuantityUpdate( bool isFirstLoad = true );
         void QuantityReset();
-        bool QuantityIsValid() const;
-        void QuantitySetColor( int );
         int QuantityVariant() const;
         int QuantityExt() const;
-        int QuantityColor() const;
-        Skill::Secondary QuantitySkill() const;
-        ResourceCount QuantityResourceCount() const;
-        Funds QuantityFunds() const;
-        Troop QuantityTroop() const;
 
         void SetObjectPassable( bool );
 
@@ -512,6 +510,20 @@ namespace Maps
     Artifact getArtifactFromTile( const Tiles & tile );
 
     uint32_t getGoldAmountFromTile( const Tiles & tile );
+
+    Skill::Secondary getSecondarySkillFromTile( const Tiles & tile );
+
+    ResourceCount getResourcesFromTile( const Tiles & tile );
+
+    Funds getFundsFromTile( const Tiles & tile );
+
+    Troop getTroopFromTile( const Tiles & tile );
+
+    int getColorTypeFromTile( const Tiles & tile );
+
+    void setColorTypeOnTile( Tiles & tile, const int color );
+
+    bool doesTileContainValuableItems( const Tiles & tile );
 }
 
 #endif

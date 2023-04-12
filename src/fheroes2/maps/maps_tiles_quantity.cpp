@@ -49,46 +49,6 @@
 #include "week.h"
 #include "world.h"
 
-bool Maps::Tiles::QuantityIsValid() const
-{
-    switch ( GetObject( false ) ) {
-    case MP2::OBJ_ARTIFACT:
-    case MP2::OBJ_RESOURCE:
-    case MP2::OBJ_CAMPFIRE:
-    case MP2::OBJ_FLOTSAM:
-    case MP2::OBJ_SHIPWRECK_SURVIVOR:
-    case MP2::OBJ_TREASURE_CHEST:
-    case MP2::OBJ_SEA_CHEST:
-        return true;
-
-    case MP2::OBJ_PYRAMID:
-        return getSpellFromTile( *this ).isValid();
-
-    case MP2::OBJ_SHIPWRECK:
-    case MP2::OBJ_GRAVEYARD:
-    case MP2::OBJ_DERELICT_SHIP:
-    case MP2::OBJ_WATER_WHEEL:
-    case MP2::OBJ_WINDMILL:
-    case MP2::OBJ_LEAN_TO:
-    case MP2::OBJ_MAGIC_GARDEN:
-        return quantity2 != 0;
-
-    case MP2::OBJ_SKELETON:
-        return getArtifactFromTile( *this ) != Artifact::UNKNOWN;
-
-    case MP2::OBJ_WAGON:
-        return getArtifactFromTile( *this ) != Artifact::UNKNOWN || quantity2 != 0;
-
-    case MP2::OBJ_DAEMON_CAVE:
-        return QuantityVariant() != 0;
-
-    default:
-        break;
-    }
-
-    return false;
-}
-
 int Maps::Tiles::QuantityVariant() const
 {
     return quantity2 >> 4;
@@ -109,30 +69,6 @@ void Maps::Tiles::QuantitySetExt( int ext )
 {
     quantity2 &= 0xf0;
     quantity2 |= ( 0x0f & ext );
-}
-
-Skill::Secondary Maps::Tiles::QuantitySkill() const
-{
-    switch ( GetObject( false ) ) {
-    case MP2::OBJ_ARTIFACT:
-        switch ( QuantityVariant() ) {
-        case 4:
-            return Skill::Secondary( Skill::Secondary::LEADERSHIP, Skill::Level::BASIC );
-        case 5:
-            return Skill::Secondary( Skill::Secondary::WISDOM, Skill::Level::BASIC );
-        default:
-            break;
-        }
-        break;
-
-    case MP2::OBJ_WITCHS_HUT:
-        return Skill::Secondary( quantity1, Skill::Level::BASIC );
-
-    default:
-        break;
-    }
-
-    return Skill::Secondary();
 }
 
 void Maps::Tiles::QuantitySetSkill( int skill )
@@ -201,110 +137,6 @@ void Maps::Tiles::QuantitySetResource( int res, uint32_t count )
     assert( count >= std::numeric_limits<Quantity2Type>::min() && count <= std::numeric_limits<Quantity2Type>::max() );
 
     quantity2 = static_cast<Quantity2Type>( count );
-}
-
-ResourceCount Maps::Tiles::QuantityResourceCount() const
-{
-    switch ( GetObject( false ) ) {
-    case MP2::OBJ_ARTIFACT:
-        switch ( QuantityVariant() ) {
-        case 1:
-            return { Resource::GOLD, getGoldAmountFromTile( *this ) };
-        case 2:
-            return { Resource::getResourceTypeFromIconIndex( QuantityExt() - 1 ), 3 };
-        case 3:
-            return { Resource::getResourceTypeFromIconIndex( QuantityExt() - 1 ), 5 };
-        default:
-            break;
-        }
-        break;
-
-    case MP2::OBJ_SEA_CHEST:
-    case MP2::OBJ_TREASURE_CHEST:
-        return { Resource::GOLD, getGoldAmountFromTile( *this ) };
-
-    case MP2::OBJ_FLOTSAM:
-        return { Resource::WOOD, quantity1 };
-
-    default:
-        break;
-    }
-
-    return { quantity1, Resource::GOLD == quantity1 ? getGoldAmountFromTile( *this ) : quantity2 };
-}
-
-Funds Maps::Tiles::QuantityFunds() const
-{
-    const ResourceCount & rc = QuantityResourceCount();
-
-    switch ( GetObject( false ) ) {
-    case MP2::OBJ_ARTIFACT:
-        switch ( QuantityVariant() ) {
-        case 1:
-            return Funds( rc );
-        case 2:
-        case 3:
-            return Funds( Resource::GOLD, getGoldAmountFromTile( *this ) ) + Funds( rc );
-        default:
-            break;
-        }
-        break;
-
-    case MP2::OBJ_CAMPFIRE:
-        return Funds( Resource::GOLD, getGoldAmountFromTile( *this ) ) + Funds( rc );
-
-    case MP2::OBJ_FLOTSAM:
-        return Funds( Resource::GOLD, getGoldAmountFromTile( *this ) ) + Funds( Resource::WOOD, quantity1 );
-
-    case MP2::OBJ_SEA_CHEST:
-    case MP2::OBJ_TREASURE_CHEST:
-    case MP2::OBJ_DERELICT_SHIP:
-    case MP2::OBJ_SHIPWRECK:
-    case MP2::OBJ_GRAVEYARD:
-    case MP2::OBJ_DAEMON_CAVE:
-        return { Resource::GOLD, getGoldAmountFromTile( *this ) };
-
-    default:
-        break;
-    }
-
-    return Funds( rc );
-}
-
-void Maps::Tiles::QuantitySetColor( int col )
-{
-    using Quantity1Type = decltype( quantity1 );
-    static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
-
-    switch ( GetObject( false ) ) {
-    case MP2::OBJ_BARRIER:
-    case MP2::OBJ_TRAVELLER_TENT:
-        assert( col >= std::numeric_limits<Quantity1Type>::min() && col <= std::numeric_limits<Quantity1Type>::max() );
-
-        quantity1 = static_cast<Quantity1Type>( col );
-        break;
-
-    default:
-        world.CaptureObject( GetIndex(), col );
-        break;
-    }
-}
-
-int Maps::Tiles::QuantityColor() const
-{
-    switch ( GetObject( false ) ) {
-    case MP2::OBJ_BARRIER:
-    case MP2::OBJ_TRAVELLER_TENT:
-        return quantity1;
-
-    default:
-        return world.ColorCapturedObject( GetIndex() );
-    }
-}
-
-Troop Maps::Tiles::QuantityTroop() const
-{
-    return MP2::isCaptureObject( GetObject( false ) ) ? world.GetCapturedObject( GetIndex() ).GetTroop() : Troop( getMonsterFromTile( *this ), MonsterCount() );
 }
 
 void Maps::Tiles::QuantityReset()
@@ -690,11 +522,11 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_BARRIER:
-        QuantitySetColor( getColorFromBarrierSprite( _objectIcnType, _imageIndex ) );
+        setColorTypeOnTile( *this, getColorFromBarrierSprite( _objectIcnType, _imageIndex ) );
         break;
 
     case MP2::OBJ_TRAVELLER_TENT:
-        QuantitySetColor( getColorFromTravellerTentSprite( _objectIcnType, _imageIndex ) );
+        setColorTypeOnTile( *this, getColorFromTravellerTentSprite( _objectIcnType, _imageIndex ) );
         break;
 
     case MP2::OBJ_ALCHEMIST_LAB: {
@@ -1025,11 +857,11 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
 
     case MP2::OBJ_TROLL_BRIDGE:
     case MP2::OBJ_CITY_OF_DEAD:
-        count = isFirstLoad ? Rand::Get( 4, 6 ) : ( Color::NONE == tile.QuantityColor() ) ? count : count + Rand::Get( 1, 3 );
+        count = isFirstLoad ? Rand::Get( 4, 6 ) : ( Color::NONE == getColorTypeFromTile( tile ) ) ? count : count + Rand::Get( 1, 3 );
         break;
 
     case MP2::OBJ_DRAGON_CITY:
-        count = isFirstLoad ? 2 : ( Color::NONE == tile.QuantityColor() ) ? count : count + 1;
+        count = isFirstLoad ? 2 : ( Color::NONE == getColorTypeFromTile( tile ) ) ? count : count + 1;
         break;
 
     default:
@@ -1043,7 +875,7 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
 
 void Maps::Tiles::UpdateMonsterPopulation( Tiles & tile )
 {
-    const Troop & troop = tile.QuantityTroop();
+    const Troop & troop = getTroopFromTile( tile );
     const uint32_t troopCount = troop.GetCount();
 
     if ( troopCount == 0 ) {
@@ -1259,5 +1091,174 @@ namespace Maps
         }
 
         return 0;
+    }
+
+    Skill::Secondary getSecondarySkillFromTile( const Tiles & tile )
+    {
+        switch ( tile.GetObject( false ) ) {
+        case MP2::OBJ_ARTIFACT:
+            switch ( tile.QuantityVariant() ) {
+            case 4:
+                return Skill::Secondary( Skill::Secondary::LEADERSHIP, Skill::Level::BASIC );
+            case 5:
+                return Skill::Secondary( Skill::Secondary::WISDOM, Skill::Level::BASIC );
+            default:
+                break;
+            }
+            break;
+
+        case MP2::OBJ_WITCHS_HUT:
+            return Skill::Secondary( tile.GetQuantity1(), Skill::Level::BASIC );
+
+        default:
+            break;
+        }
+
+        return {};
+    }
+
+    ResourceCount getResourcesFromTile( const Tiles & tile )
+    {
+        switch ( tile.GetObject( false ) ) {
+        case MP2::OBJ_ARTIFACT:
+            switch ( tile.QuantityVariant() ) {
+            case 1:
+                return { Resource::GOLD, getGoldAmountFromTile( tile ) };
+            case 2:
+                return { Resource::getResourceTypeFromIconIndex( tile.QuantityExt() - 1 ), 3 };
+            case 3:
+                return { Resource::getResourceTypeFromIconIndex( tile.QuantityExt() - 1 ), 5 };
+            default:
+                break;
+            }
+            break;
+
+        case MP2::OBJ_SEA_CHEST:
+        case MP2::OBJ_TREASURE_CHEST:
+            return { Resource::GOLD, getGoldAmountFromTile( tile ) };
+
+        case MP2::OBJ_FLOTSAM:
+            return { Resource::WOOD, tile.GetQuantity1() };
+
+        default:
+            break;
+        }
+
+        return { tile.GetQuantity1(), Resource::GOLD == tile.GetQuantity1() ? getGoldAmountFromTile( tile ) : tile.GetQuantity2() };
+    }
+
+    Funds getFundsFromTile( const Tiles & tile )
+    {
+        const ResourceCount & rc = getResourcesFromTile( tile );
+
+        switch ( tile.GetObject( false ) ) {
+        case MP2::OBJ_ARTIFACT:
+            switch ( tile.QuantityVariant() ) {
+            case 1:
+                return Funds( rc );
+            case 2:
+            case 3:
+                return Funds( Resource::GOLD, getGoldAmountFromTile( tile ) ) + Funds( rc );
+            default:
+                break;
+            }
+            break;
+
+        case MP2::OBJ_CAMPFIRE:
+            return Funds( Resource::GOLD, getGoldAmountFromTile( tile ) ) + Funds( rc );
+
+        case MP2::OBJ_FLOTSAM:
+            return Funds( Resource::GOLD, getGoldAmountFromTile( tile ) ) + Funds( Resource::WOOD, tile.GetQuantity1() );
+
+        case MP2::OBJ_SEA_CHEST:
+        case MP2::OBJ_TREASURE_CHEST:
+        case MP2::OBJ_DERELICT_SHIP:
+        case MP2::OBJ_SHIPWRECK:
+        case MP2::OBJ_GRAVEYARD:
+        case MP2::OBJ_DAEMON_CAVE:
+            return { Resource::GOLD, getGoldAmountFromTile( tile ) };
+
+        default:
+            break;
+        }
+
+        return Funds( rc );
+    }
+
+    Troop getTroopFromTile( const Tiles & tile )
+    {
+        return MP2::isCaptureObject( tile.GetObject( false ) ) ? world.GetCapturedObject( tile.GetIndex() ).GetTroop() :
+                                                                 Troop( getMonsterFromTile( tile ), tile.MonsterCount() );
+    }
+
+    int getColorTypeFromTile( const Tiles & tile )
+    {
+        switch ( tile.GetObject( false ) ) {
+        case MP2::OBJ_BARRIER:
+        case MP2::OBJ_TRAVELLER_TENT:
+            return tile.GetQuantity1();
+
+        default:
+            return world.ColorCapturedObject( tile.GetIndex() );
+        }
+    }
+
+    void setColorTypeOnTile( Tiles & tile, const int color )
+    {
+        using Quantity1Type = decltype( tile.GetQuantity1() );
+        static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
+
+        switch ( tile.GetObject( false ) ) {
+        case MP2::OBJ_BARRIER:
+        case MP2::OBJ_TRAVELLER_TENT:
+            assert( color >= std::numeric_limits<Quantity1Type>::min() && color <= std::numeric_limits<Quantity1Type>::max() );
+
+            tile.setQuantity1( static_cast<Quantity1Type>( color ) );
+            break;
+
+        default:
+            world.CaptureObject( tile.GetIndex(), color );
+            break;
+        }
+    }
+
+    bool doesTileContainValuableItems( const Tiles & tile )
+    {
+        switch ( tile.GetObject( false ) ) {
+        case MP2::OBJ_ARTIFACT:
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_FLOTSAM:
+        case MP2::OBJ_SHIPWRECK_SURVIVOR:
+        case MP2::OBJ_TREASURE_CHEST:
+        case MP2::OBJ_SEA_CHEST:
+            return true;
+
+        case MP2::OBJ_PYRAMID:
+            return getSpellFromTile( tile ).isValid();
+
+        case MP2::OBJ_SHIPWRECK:
+        case MP2::OBJ_GRAVEYARD:
+        case MP2::OBJ_DERELICT_SHIP:
+        case MP2::OBJ_WATER_WHEEL:
+        case MP2::OBJ_WINDMILL:
+        case MP2::OBJ_LEAN_TO:
+        case MP2::OBJ_MAGIC_GARDEN:
+            return tile.GetQuantity2() != 0;
+
+        case MP2::OBJ_SKELETON:
+            return getArtifactFromTile( tile ) != Artifact::UNKNOWN;
+
+        case MP2::OBJ_WAGON:
+            return getArtifactFromTile( tile ) != Artifact::UNKNOWN || tile.GetQuantity2() != 0;
+
+        case MP2::OBJ_DAEMON_CAVE:
+            return tile.QuantityVariant() != 0;
+
+        default:
+            break;
+        }
+
+        return false;
     }
 }

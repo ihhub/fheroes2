@@ -417,7 +417,7 @@ namespace
     {
         bool destroy = false;
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        Troop troop = tile.QuantityTroop();
+        Troop troop = getTroopFromTile( tile );
 
         const NeutralMonsterJoiningCondition join = Army::GetJoinSolution( hero, tile, troop );
 
@@ -516,7 +516,7 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
         if ( objectType != MP2::OBJ_BOTTLE )
-            hero.GetKingdom().AddFundsResource( tile.QuantityFunds() );
+            hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
 
         tile.RemoveObjectSprite();
         tile.QuantityReset();
@@ -604,7 +604,7 @@ namespace
     {
         Maps::Tiles & tile = world.GetTiles( dstIndex );
 
-        if ( !hero.isFriends( tile.QuantityColor() ) ) {
+        if ( !hero.isFriends( getColorTypeFromTile( tile ) ) ) {
             auto removeObjectProtection = [&tile]() {
                 // Clear any metadata related to spells
                 tile.clearAdditionalMetadata();
@@ -613,7 +613,7 @@ namespace
             auto captureObject = [&hero, &tile, &removeObjectProtection]() {
                 removeObjectProtection();
 
-                tile.QuantitySetColor( hero.GetColor() );
+                setColorTypeOnTile( tile, hero.GetColor() );
             };
 
             if ( tile.isCaptureObjectProtected() ) {
@@ -658,7 +658,7 @@ namespace
     void AIToObjectResource( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        const ResourceCount & rc = tile.QuantityResourceCount();
+        const ResourceCount & rc = getResourcesFromTile( tile );
 
         if ( rc.isValid() )
             hero.GetKingdom().AddFundsResource( Funds( rc ) );
@@ -677,7 +677,7 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
         // artifact
-        if ( tile.QuantityIsValid() ) {
+        if ( doesTileContainValuableItems( tile ) ) {
             const Artifact & art = getArtifactFromTile( tile );
 
             if ( !hero.PickupArtifact( art ) ) {
@@ -697,13 +697,13 @@ namespace
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
-        if ( tile.QuantityIsValid() ) {
+        if ( doesTileContainValuableItems( tile ) ) {
             const Artifact & art = getArtifactFromTile( tile );
 
             if ( art.isValid() )
                 hero.PickupArtifact( art );
             else
-                hero.GetKingdom().AddFundsResource( tile.QuantityFunds() );
+                hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
 
             tile.QuantityReset();
         }
@@ -717,7 +717,7 @@ namespace
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
-        hero.GetKingdom().AddFundsResource( tile.QuantityFunds() );
+        hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
         tile.RemoveObjectSprite();
         tile.QuantityReset();
 
@@ -918,7 +918,7 @@ namespace
 
     void AIToWitchsHut( Heroes & hero, int32_t dst_index )
     {
-        const Skill::Secondary & skill = world.GetTiles( dst_index ).QuantitySkill();
+        const Skill::Secondary & skill = getSecondarySkillFromTile( world.GetTiles( dst_index ) );
 
         // check full
         if ( skill.isValid() && !hero.HasMaxSecondarySkill() && !hero.HasSecondarySkill( skill.Skill() ) )
@@ -1165,7 +1165,7 @@ namespace
         const Maps::Tiles & tile = world.GetTiles( dst_index );
 
         if ( !hero.isVisited( tile ) ) {
-            const Funds & funds = tile.QuantityFunds();
+            const Funds & funds = getFundsFromTile( tile );
 
             if ( 0 == funds.GetValidItemsCount() || hero.GetKingdom().AllowPayment( funds ) ) {
                 const int level = hero.GetLevel();
@@ -1185,7 +1185,7 @@ namespace
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
-        if ( tile.QuantityIsValid() ) {
+        if ( doesTileContainValuableItems( tile ) ) {
             Army army( tile );
 
             Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
@@ -1206,7 +1206,7 @@ namespace
     void AIToDwellingJoinMonster( Heroes & hero, int32_t dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        const Troop & troop = tile.QuantityTroop();
+        const Troop & troop = getTroopFromTile( tile );
         if ( !troop.isValid() ) {
             return;
         }
@@ -1229,7 +1229,7 @@ namespace
     void AIToDwellingRecruitMonster( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        const Troop & troop = tile.QuantityTroop();
+        const Troop & troop = getTroopFromTile( tile );
         if ( !troop.isValid() ) {
             return;
         }
@@ -1277,14 +1277,14 @@ namespace
         Maps::Tiles & tile = world.GetTiles( tileIndex );
         bool recruitmentAllowed = true;
 
-        if ( tile.QuantityColor() == Color::NONE ) {
+        if ( getColorTypeFromTile( tile ) == Color::NONE ) {
             Army army( tile );
 
             const Battle::Result res = Battle::Loader( hero.GetArmy(), army, tileIndex );
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
 
-                tile.QuantitySetColor( hero.GetColor() );
+                setColorTypeOnTile( tile, hero.GetColor() );
                 tile.SetObjectPassable( true );
             }
             else {
@@ -1295,7 +1295,7 @@ namespace
         }
 
         if ( recruitmentAllowed ) {
-            const Troop troop = tile.QuantityTroop();
+            const Troop troop = getTroopFromTile( tile );
 
             if ( troop.isValid() ) {
                 AIToDwellingRecruitMonster( hero, objectType, tileIndex );
@@ -1334,7 +1334,7 @@ namespace
 
             Maps::Tiles::RestoreAbandonedMine( tile, Resource::GOLD );
             hero.SetMapsObject( MP2::OBJ_MINES );
-            tile.QuantitySetColor( hero.GetColor() );
+            setColorTypeOnTile( tile, hero.GetColor() );
         }
         else {
             AIBattleLose( hero, result, true );
@@ -1348,7 +1348,7 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const Kingdom & kingdom = hero.GetKingdom();
 
-        if ( kingdom.IsVisitTravelersTent( tile.QuantityColor() ) ) {
+        if ( kingdom.IsVisitTravelersTent( getColorTypeFromTile( tile ) ) ) {
             tile.RemoveObjectSprite();
             tile.setAsEmpty();
         }
@@ -1361,7 +1361,7 @@ namespace
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         Kingdom & kingdom = hero.GetKingdom();
 
-        kingdom.SetVisitTravelersTent( tile.QuantityColor() );
+        kingdom.SetVisitTravelersTent( getColorTypeFromTile( tile ) );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
@@ -1393,7 +1393,7 @@ namespace
 
             // 1,2,3 - gold, gold + res
             if ( 0 < cond && cond < 4 ) {
-                Funds payment = tile.QuantityFunds();
+                const Funds payment = getFundsFromTile( tile );
 
                 if ( hero.GetKingdom().AllowPayment( payment ) ) {
                     result = true;

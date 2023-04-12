@@ -128,7 +128,7 @@ namespace
             return Army( tile ).GetStrength() > armyStrength;
 
         // Check if AI has the key for the barrier
-        if ( objectType == MP2::OBJ_BARRIER && world.GetKingdom( color ).IsVisitTravelersTent( tile.QuantityColor() ) )
+        if ( objectType == MP2::OBJ_BARRIER && world.GetKingdom( color ).IsVisitTravelersTent( getColorTypeFromTile( tile ) ) )
             return false;
 
         // AI can use boats to overcome water obstacles

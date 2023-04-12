@@ -324,7 +324,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
             case MP2::OBJ_SAWMILL:
                 // TODO: Why Lighthouse is in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {
-                    fillColor = GetPaletteIndexFromColor( tile.QuantityColor() );
+                    fillColor = GetPaletteIndexFromColor( getColorTypeFromTile( tile ) );
                     break;
                 }
                 continue;
@@ -336,7 +336,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
                 if ( visibleTile || revealMines ) {
                     const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
                     if ( mainTileIndex >= 0 ) {
-                        fillColor = GetPaletteIndexFromColor( world.GetTiles( mainTileIndex ).QuantityColor() );
+                        fillColor = GetPaletteIndexFromColor( getColorTypeFromTile( world.GetTiles( mainTileIndex ) ) );
                         break;
                     }
                 }

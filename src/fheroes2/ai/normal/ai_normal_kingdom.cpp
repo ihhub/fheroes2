@@ -530,7 +530,7 @@ namespace AI
             }
 
             if ( objectType == MP2::OBJ_CASTLE ) {
-                const int tileColor = tile.QuantityColor();
+                const int tileColor = getColorTypeFromTile( tile );
                 if ( myColor == tileColor || Players::isFriends( myColor, tileColor ) ) {
                     ++stats.friendlyCastles;
                 }

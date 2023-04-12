@@ -2074,7 +2074,7 @@ bool Maps::Tiles::isCaptureObjectProtected() const
         return false;
     }
 
-    return QuantityTroop().isValid();
+    return getTroopFromTile( *this ).isValid();
 }
 
 void Maps::Tiles::Remove( uint32_t uniqID )
