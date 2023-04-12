@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-10 14:28+0000\n"
-"PO-Revision-Date: 2023-03-20 20:07+0100\n"
+"PO-Revision-Date: 2023-04-13 00:33+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -87,12 +87,14 @@ msgid "RESTART"
 msgstr "REŠTART"
 
 msgid "HEROES"
-msgstr ""
+msgstr "HRDINOVIA"
 
 msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
+"MESTÁ/\n"
+"HRADY"
 
 msgid "S"
 msgstr "S"
@@ -110,7 +112,7 @@ msgid "ALL"
 msgstr "CELÝ"
 
 msgid "SELECT"
-msgstr ""
+msgstr "ZVOĽ"
 
 msgid ""
 "STANDARD\n"
@@ -174,7 +176,7 @@ msgid "GIFT"
 msgstr "DAR"
 
 msgid "guildWell|EXIT"
-msgstr ""
+msgstr "PREČ"
 
 msgid "DIFFICULTY"
 msgstr "OBTIAŽNOSŤ"
@@ -386,10 +388,10 @@ msgid "Army Order"
 msgstr "Poradie"
 
 msgid "Off"
-msgstr "Vyp"
+msgstr "Vypnuté"
 
 msgid "On"
-msgstr "Zap"
+msgstr "Zapnuté"
 
 msgid "Auto Spell Casting"
 msgstr "Kúzla počas auto boja"
@@ -957,7 +959,7 @@ msgid "Turning Point"
 msgstr "Bod otáčania"
 
 msgid "scenarioName|Defender"
-msgstr ""
+msgstr "Obránca"
 
 msgid "Corlagon's Defense"
 msgstr "Corlagonova obrana"
@@ -1682,52 +1684,52 @@ msgid "The main hero will have %{skill} at the start of the scenario."
 msgstr ""
 
 msgid "Roland"
-msgstr ""
+msgstr "Roland"
 
 msgid "Archibald"
-msgstr ""
+msgstr "Archibald"
 
 msgid "The Price of Loyalty"
-msgstr ""
+msgstr "Cena vernosti"
 
 msgid "Voyage Home"
-msgstr ""
+msgstr "Plavba domov"
 
 msgid "Wizard's Isle"
-msgstr ""
+msgstr "Čarodejov ostrov"
 
 msgid "Descendants"
-msgstr ""
+msgstr "Potomkovia"
 
 msgid "The %{building} produces %{monster}."
-msgstr ""
+msgstr "%{building} produkuje: %{monster}."
 
 msgid "Requires:"
-msgstr ""
+msgstr "Potrebuje:"
 
 msgid "Cannot build. You have already built here today."
-msgstr ""
+msgstr "Nedá sa stavať. Dnes tu už bola budova postavená."
 
 msgid "For this action it is necessary to build a castle first."
-msgstr ""
+msgstr "Pre tento krok je potrebné najprv postaviť hrad."
 
 msgid "Cannot build %{name} because castle is too far from water."
-msgstr ""
+msgstr "Nedá sa postaviť %{name} pretože hrad je priďaleko od vody."
 
 msgid "disable build."
 msgstr ""
 
 msgid "Cannot afford %{name}."
-msgstr ""
+msgstr "Budovu %{name} si nemôžeš dovoliť."
 
 msgid "%{name} is already built."
-msgstr ""
+msgstr "Budova %{name} je už postavená."
 
 msgid "Cannot build %{name}."
-msgstr ""
+msgstr "Nedá sa postaviť budovu %{name}."
 
 msgid "Build %{name}."
-msgstr ""
+msgstr "Postav budovu %{name}."
 
 msgid "Blackridge"
 msgstr ""
