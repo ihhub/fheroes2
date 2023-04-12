@@ -167,32 +167,37 @@ try {
 
     Write-Host "[3/3] copying game resources"
 
-    if ((Resolve-Path $homm2Path).Path -Eq (Resolve-Path $destPath).Path) {
-        Write-Host -ForegroundColor Green "Apparently fheroes2 was installed to the directory of the original game, there is no need to copy anything"
-    } else {
-        $shell = New-Object -ComObject "Shell.Application"
+    $shell = New-Object -ComObject "Shell.Application"
 
-        foreach ($homm2Dir in @($homm2Path, $homm2CD)) {
-            if ($null -Eq $homm2Dir) {
+    foreach ($homm2Dir in @($homm2Path, $homm2CD)) {
+        if ($null -Eq $homm2Dir) {
+            continue
+        }
+
+        if (-Not (Test-Path -Path "$homm2Dir\" -PathType Container)) {
+            continue
+        }
+
+        # fheroes2 can be installed to the HoMM2 directory, there is no need to copy files in this case
+        if ((Resolve-Path $homm2Dir).Path -Eq (Resolve-Path $destPath).Path) {
+            continue
+        }
+
+        foreach ($srcDir in @("HEROES2\ANIM", "ANIM", "DATA", "MAPS", "MUSIC")) {
+            if (-Not (Test-Path -Path "$homm2Dir\$srcDir" -PathType Container)) {
                 continue
             }
 
-            foreach ($srcDir in @("HEROES2\ANIM", "ANIM", "DATA", "MAPS", "MUSIC")) {
-                if (-Not (Test-Path -Path "$homm2Dir\$srcDir" -PathType Container)) {
-                    continue
-                }
+            $destDir = (Split-Path $srcDir -Leaf).ToLower()
 
-                $destDir = (Split-Path $srcDir -Leaf).ToLower()
+            if (-Not (Test-Path -Path "$destPath\$destDir" -PathType Container)) {
+                [void](New-Item -Path "$destPath\$destDir" -ItemType "directory")
+            }
 
-                if (-Not (Test-Path -Path "$destPath\$destDir" -PathType Container)) {
-                    [void](New-Item -Path "$destPath\$destDir" -ItemType "directory")
-                }
+            $content = $shell.NameSpace((Resolve-Path "$homm2Dir\$srcDir").Path)
 
-                $content = $shell.NameSpace((Resolve-Path "$homm2Dir\$srcDir").Path)
-
-                foreach ($item in $content.Items()) {
-                    $shell.Namespace((Resolve-Path "$destPath\$destDir").Path).CopyHere($item, 0x14)
-                }
+            foreach ($item in $content.Items()) {
+                $shell.Namespace((Resolve-Path "$destPath\$destDir").Path).CopyHere($item, 0x14)
             }
         }
     }
