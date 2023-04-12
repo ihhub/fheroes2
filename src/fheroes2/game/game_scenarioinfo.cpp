@@ -98,7 +98,8 @@ namespace
         fheroes2::Blit( panel, display, rt.x, rt.y );
 
         // Redraw select button as the original image has a wrong position of it
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, 64 ), display, rt.x + 309, rt.y + 45 );
+        const int32_t buttonSelectWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT, 0 ).width();
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT, 0 ), display, rt.x + 389 - buttonSelectWidth, rt.y + 45 );
 
         fheroes2::FontType normalWhiteFont = fheroes2::FontType::normalWhite();
 
@@ -182,7 +183,9 @@ namespace
         coordDifficulty.emplace_back( rectPanel.x + 251, rectPanel.y + 91, ngextraWidth, ngextraHeight );
         coordDifficulty.emplace_back( rectPanel.x + 328, rectPanel.y + 91, ngextraWidth, ngextraHeight );
 
-        fheroes2::Button buttonSelectMaps( rectPanel.x + 309, rectPanel.y + 45, ICN::NGEXTRA, 64, 65 );
+        const int32_t buttonSelectWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT, 0 ).width();
+
+        fheroes2::Button buttonSelectMaps( rectPanel.x + 389 - buttonSelectWidth, rectPanel.y + 45, ICN::BUTTON_MAP_SELECT, 0, 1 );
         fheroes2::Button buttonOk( rectPanel.x + 31, rectPanel.y + 380, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
         fheroes2::Button buttonCancel( rectPanel.x + 287, rectPanel.y + 380, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 

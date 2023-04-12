@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-07 14:44+0000\n"
+"POT-Creation-Date: 2023-04-10 14:28+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -55,9 +55,6 @@ msgstr ""
 msgid "CANCEL"
 msgstr "SORTIR"
 
-msgid "OKAY"
-msgstr "OK"
-
 msgid "ACCEPT"
 msgstr "ACCEPTER"
 
@@ -88,6 +85,14 @@ msgstr "AMÉLIORER"
 msgid "RESTART"
 msgstr "REJOUER"
 
+msgid "HEROES"
+msgstr ""
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+
 msgid "S"
 msgstr "S"
 
@@ -102,6 +107,9 @@ msgstr "XL"
 
 msgid "ALL"
 msgstr "T"
+
+msgid "SELECT"
+msgstr ""
 
 msgid ""
 "STANDARD\n"
@@ -164,6 +172,9 @@ msgstr "6 JOUEURS"
 msgid "GIFT"
 msgstr "DONNER"
 
+msgid "guildWell|EXIT"
+msgstr ""
+
 msgid "DIFFICULTY"
 msgstr "DIFFICULTÉ"
 
@@ -172,6 +183,9 @@ msgstr "MIN"
 
 msgid "MAX"
 msgstr "MAX"
+
+msgid "OKAY"
+msgstr "OK"
 
 msgid "Warrior"
 msgstr "Guerrier"
@@ -8598,9 +8612,11 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr "La baliste de rapidité"
 
-msgid "The %{name} lets your catapult fire twice per combat round."
+#, fuzzy
+msgid "The %{name} gives your catapult one extra shot per combat round."
 msgstr ""
-"%{name} permet à votre catapulte de tirer deux fois par round de combat."
+"%{name} permet à votre catapulte de tirer un coup supplémentaire par round "
+"de combat."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "

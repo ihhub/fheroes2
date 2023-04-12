@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "artifact_info.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -25,7 +27,6 @@
 #include <sstream>
 
 #include "artifact.h"
-#include "artifact_info.h"
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
@@ -124,7 +125,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Ballista of Quickness" ),
-              gettext_noop( "The %{name} lets your catapult fire twice per combat round." ),
+              gettext_noop( "The %{name} gives your catapult one extra shot per combat round." ),
               gettext_noop( "Walking through the ruins of an ancient walled city, you find the instrument of the city's destruction, an elaborately crafted ballista." ),
               {},
               {} },
