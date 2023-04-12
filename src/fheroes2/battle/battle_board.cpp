@@ -594,10 +594,14 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
     for ( size_t i = 0; i < objectsToPlace; ++i ) {
         const bool checkRightCell = isTwoHexObject( objs[i] );
 
-        int32_t dest = GetRandomObstaclePosition( gen );
-        while ( at( dest ).GetObject() != 0 || ( checkRightCell && ( at( dest + 1 ).GetObject() != 0 || dest % 11 == 7 ) ) ) {
+        int32_t dest;
+        Battle::Indexes around;
+        do {
             dest = GetRandomObstaclePosition( gen );
-        }
+            around = Board::GetAroundIndexes( dest );
+        } while (
+            at( dest ).GetObject() != 0 || ( checkRightCell && ( at( dest + 1 ).GetObject() != 0 || dest % 11 == 7 ) )
+            || ( std::any_of( around.begin(), around.end(), [this]( int index ) { return ( at( index ).GetObject() != 0 && at( index ).GetObject() != 0x40 ); } ) ) );
 
         SetCobjObject( objs[i], dest );
     }
