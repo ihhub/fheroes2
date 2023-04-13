@@ -1099,16 +1099,16 @@ namespace Maps
         case MP2::OBJ_ARTIFACT:
             switch ( tile.QuantityVariant() ) {
             case 4:
-                return Skill::Secondary( Skill::Secondary::LEADERSHIP, Skill::Level::BASIC );
+                return { Skill::Secondary::LEADERSHIP, Skill::Level::BASIC };
             case 5:
-                return Skill::Secondary( Skill::Secondary::WISDOM, Skill::Level::BASIC );
+                return { Skill::Secondary::WISDOM, Skill::Level::BASIC };
             default:
                 break;
             }
             break;
 
         case MP2::OBJ_WITCHS_HUT:
-            return Skill::Secondary( tile.GetQuantity1(), Skill::Level::BASIC );
+            return { tile.GetQuantity1(), Skill::Level::BASIC };
 
         default:
             break;
