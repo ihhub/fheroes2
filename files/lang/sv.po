@@ -3262,7 +3262,7 @@ msgid ""
 "determined by the scenario designer. More difficult maps might include more "
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
-msgstr "Kartans svårighetsgrad för valda kartan. Kartans svårighets bestäms av kartans kreatör. "
+msgstr "Svårighetsgraden för valda kartan. Kartans svårighets bestäms av kartans kreatör. "
 "Svårare kartor kan innehåller fler och/eller starkare fienden, färre resurser eller andra "
 "specialvillkor som gör det svårare för spelaren."
 
