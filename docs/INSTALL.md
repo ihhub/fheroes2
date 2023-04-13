@@ -219,9 +219,9 @@ If you use one of AUR helpers, e.g. `yay`, you can install the game by running t
 yay -S aur/fheroes2
 ```
 
-#### Install using official guide
+#### Install using the official guide
 
-Follow [**official guide**](https://wiki.archlinux.org/title/Arch_User_Repository#Installing_and_upgrading_packages).
+Follow the [**official guide**](https://wiki.archlinux.org/title/Arch_User_Repository#Installing_and_upgrading_packages).
 One of possible command sets:
 
 ```sh
