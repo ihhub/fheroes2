@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-10 14:28+0000\n"
+"POT-Creation-Date: 2023-04-13 05:15+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4458,6 +4458,9 @@ msgstr " Todas as população foi reduzidas a metade."
 
 msgid " All dwellings increase population."
 msgstr " Todas as populações aumentaram nas habitações."
+
+msgid "New Week!"
+msgstr ""
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
