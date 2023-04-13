@@ -204,7 +204,7 @@ void Castle::OpenWell()
     // button exit
     dst_pt.x = cur_pt.x + 578;
     dst_pt.y = cur_pt.y + bottomBarOffsetY;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::WELLXTRA, 0, 1 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
 
     dst_pt.x = cur_pt.x;
     dst_pt.y = cur_pt.y + bottomBarOffsetY;

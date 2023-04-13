@@ -71,7 +71,6 @@
 #include "spell_info.h"
 #include "translations.h"
 #include "ui_dialog.h"
-#include "ui_text.h"
 #include "visit.h"
 #include "world.h"
 
@@ -529,20 +528,20 @@ namespace
     void AIToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        uint32_t gold = tile.QuantityGold();
+        uint32_t gold = getGoldAmountFromTile( tile );
 
         Kingdom & kingdom = hero.GetKingdom();
 
         if ( tile.isWater() ) {
             if ( gold ) {
-                const Artifact & art = tile.QuantityArtifact();
+                const Artifact & art = getArtifactFromTile( tile );
 
                 if ( art.isValid() && !hero.PickupArtifact( art ) )
                     gold = GoldInsteadArtifact( objectType );
             }
         }
         else {
-            const Artifact & art = tile.QuantityArtifact();
+            const Artifact & art = getArtifactFromTile( tile );
 
             if ( gold ) {
                 const uint32_t experience = gold > 500 ? gold - 500 : 500;
@@ -630,7 +629,7 @@ namespace
                 else {
                     // The army should include only the original monsters
                     const uint32_t monstersLeft = army.getTotalCount();
-                    assert( monstersLeft == army.GetCountMonsters( tile.QuantityMonster() ) );
+                    assert( monstersLeft == army.GetCountMonsters( getMonsterFromTile( tile ) ) );
 
                     Troop & troop = world.GetCapturedObject( dstIndex ).GetTroop();
                     troop.SetCount( monstersLeft );
@@ -679,7 +678,7 @@ namespace
 
         // artifact
         if ( tile.QuantityIsValid() ) {
-            const Artifact & art = tile.QuantityArtifact();
+            const Artifact & art = getArtifactFromTile( tile );
 
             if ( !hero.PickupArtifact( art ) ) {
                 uint32_t gold = GoldInsteadArtifact( objectType );
@@ -699,7 +698,7 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
         if ( tile.QuantityIsValid() ) {
-            const Artifact & art = tile.QuantityArtifact();
+            const Artifact & art = getArtifactFromTile( tile );
 
             if ( art.isValid() )
                 hero.PickupArtifact( art );
@@ -931,7 +930,7 @@ namespace
 
     void AIToShrine( Heroes & hero, int32_t dst_index )
     {
-        const Spell & spell = world.GetTiles( dst_index ).QuantitySpell();
+        const Spell & spell = getSpellFromTile( world.GetTiles( dst_index ) );
         const uint32_t spell_level = spell.Level();
 
         if ( spell.isValid() &&
@@ -1078,7 +1077,7 @@ namespace
     void AIToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        uint32_t gold = tile.QuantityGold();
+        uint32_t gold = getGoldAmountFromTile( tile );
         bool complete = false;
 
         if ( gold ) {
@@ -1088,7 +1087,7 @@ namespace
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
                 complete = true;
-                const Artifact & art = tile.QuantityArtifact();
+                const Artifact & art = getArtifactFromTile( tile );
 
                 if ( art.isValid() && !hero.PickupArtifact( art ) )
                     gold = GoldInsteadArtifact( objectType );
@@ -1114,7 +1113,7 @@ namespace
     void AIToPyramid( Heroes & hero, int32_t dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        const Spell & spell = tile.QuantitySpell();
+        const Spell & spell = getSpellFromTile( tile );
 
         if ( spell.isValid() ) {
             // battle
@@ -1374,7 +1373,7 @@ namespace
         if ( hero.IsFullBagArtifacts() )
             hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, GoldInsteadArtifact( objectType ) ) );
         else
-            hero.PickupArtifact( tile.QuantityArtifact() );
+            hero.PickupArtifact( getArtifactFromTile( tile ) );
 
         tile.RemoveObjectSprite();
         tile.QuantityReset();
@@ -1388,7 +1387,7 @@ namespace
 
         if ( !hero.IsFullBagArtifacts() ) {
             uint32_t cond = tile.QuantityVariant();
-            Artifact art = tile.QuantityArtifact();
+            Artifact art = getArtifactFromTile( tile );
 
             bool result = false;
 
@@ -1860,10 +1859,9 @@ namespace AI
             while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
 #if defined( WITH_DEBUG )
                 if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI ) && Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
-                    if ( fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
-                                                fheroes2::Text( _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
-                                                                fheroes2::FontType::normalWhite() ),
-                                                Dialog::YES | Dialog::NO )
+                    if ( fheroes2::showStandardTextMessage( _( "Warning" ),
+                                                            _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
+                                                            Dialog::YES | Dialog::NO )
                          == Dialog::YES ) {
                         Players::Get( hero.GetColor() )->setAIAutoControlMode( false );
                         continue;
@@ -1986,8 +1984,22 @@ namespace AI
 
         const Spell dimensionDoor( Spell::DIMENSIONDOOR );
         if ( !hero.CanCastSpell( dimensionDoor ) ) {
+            // How is it even possible to call this function if the hero does not have this spell?
+            assert( 0 );
             return;
         }
+
+#if defined( WITH_DEBUG )
+        if ( Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
+            LocalEvent::Get().HandleEvents( false );
+            if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )
+                 && fheroes2::showStandardTextMessage( _( "Warning" ), _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
+                                                       Dialog::YES | Dialog::NO )
+                        == Dialog::YES ) {
+                Players::Get( hero.GetColor() )->setAIAutoControlMode( false );
+            }
+        }
+#endif
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );

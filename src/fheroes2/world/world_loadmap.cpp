@@ -431,38 +431,36 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     // castle or heroes or (events, rumors, etc)
     for ( uint32_t i = 0; i < infoBlockCount; ++i ) {
-        int32_t findobject = -1;
+        int32_t objectTileId = -1;
 
-        size_t sizeblock = fs.getLE16();
-        std::vector<uint8_t> pblock = fs.getRaw( sizeblock );
-
-        for ( MapsIndexes::const_iterator it_index = vec_object.begin(); it_index != vec_object.end() && findobject < 0; ++it_index ) {
-            const Maps::Tiles & tile = vec_tiles[*it_index];
-
-            // orders(quantity2, quantity1)
-            uint32_t orders = tile.GetQuantity2();
-            orders <<= 8;
-            orders |= tile.GetQuantity1();
-
-            // Witchcraft!!!
-            // TODO: change the code to be more readable.
-            if ( orders && !( orders % 0x08 ) && ( i + 1 == orders / 0x08 ) )
-                findobject = *it_index;
+        const size_t blockSize = fs.getLE16();
+        if ( blockSize == 0 ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 file format: received an empty block size " )
+            continue;
         }
 
-        if ( 0 <= findobject ) {
-            const Maps::Tiles & tile = vec_tiles[findobject];
+        const std::vector<uint8_t> pblock = fs.getRaw( blockSize );
+
+        for ( const int32_t tileId : vec_object ) {
+            const Maps::Tiles & tile = vec_tiles[tileId];
+            const uint32_t quantityValue = ( tile.GetQuantity2() << 8 ) + tile.GetQuantity1();
+            if ( ( quantityValue & 0x3 ) == Maps::OBJECT_LAYER && i + 1 == ( quantityValue >> 3 ) ) {
+                objectTileId = tileId;
+                break;
+            }
+        }
+
+        if ( 0 <= objectTileId ) {
+            const Maps::Tiles & tile = vec_tiles[objectTileId];
             const MP2::MapObjectType objectType = tile.GetObject();
 
             switch ( objectType ) {
             case MP2::OBJ_CASTLE:
                 if ( MP2::MP2_CASTLE_STRUCTURE_SIZE != pblock.size() ) {
-                    DEBUG_LOG( DBG_GAME, DBG_WARN,
-                               "read castle: "
-                                   << "incorrect size block: " << pblock.size() )
+                    DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 file format: received invalid castle structure size equal to " << pblock.size() )
                 }
                 else {
-                    Castle * castle = getCastleEntrance( Maps::GetPoint( findobject ) );
+                    Castle * castle = getCastleEntrance( Maps::GetPoint( objectTileId ) );
                     if ( castle ) {
                         castle->LoadFromMP2( pblock );
                         map_captureobj.SetColor( tile.GetIndex(), castle->GetColor() );
@@ -470,20 +468,18 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     else {
                         DEBUG_LOG( DBG_GAME, DBG_WARN,
                                    "load castle: "
-                                       << "not found, index: " << findobject )
+                                       << "not found, index: " << objectTileId )
                     }
                 }
                 break;
             case MP2::OBJ_RANDOM_TOWN:
             case MP2::OBJ_RANDOM_CASTLE:
                 if ( MP2::MP2_CASTLE_STRUCTURE_SIZE != pblock.size() ) {
-                    DEBUG_LOG( DBG_GAME, DBG_WARN,
-                               "read castle: "
-                                   << "incorrect size block: " << pblock.size() )
+                    DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 file format: received invalid castle structure size equal to " << pblock.size() )
                 }
                 else {
                     // Random castle's entrance tile is marked as OBJ_RNDCASTLE or OBJ_RNDTOWN instead of OBJ_CASTLE.
-                    Castle * castle = getCastle( Maps::GetPoint( findobject ) );
+                    Castle * castle = getCastle( Maps::GetPoint( objectTileId ) );
                     if ( castle ) {
                         castle->LoadFromMP2( pblock );
                         Maps::UpdateCastleSprite( castle->GetCenter(), castle->GetRace(), castle->isCastle(), true );
@@ -493,7 +489,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     else {
                         DEBUG_LOG( DBG_GAME, DBG_WARN,
                                    "load castle: "
-                                       << "not found, index: " << findobject )
+                                       << "not found, index: " << objectTileId )
                     }
                 }
                 break;
@@ -534,7 +530,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     Heroes * hero = GetFreemanHeroes( raceType );
 
                     if ( hero ) {
-                        hero->LoadFromMP2( findobject, Color::NONE, hero->GetRace(), pblock );
+                        hero->LoadFromMP2( objectTileId, Color::NONE, hero->GetRace(), pblock );
                         hero->SetModes( Heroes::JAIL );
                     }
                     else {
@@ -566,7 +562,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                             hero = GetFreemanHeroes( colorRace.second );
 
                         if ( hero )
-                            hero->LoadFromMP2( findobject, colorRace.first, colorRace.second, pblock );
+                            hero->LoadFromMP2( objectTileId, colorRace.first, colorRace.second, pblock );
                     }
                     else {
                         DEBUG_LOG( DBG_GAME, DBG_WARN, "load heroes maximum" )
@@ -577,21 +573,21 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
             case MP2::OBJ_BOTTLE:
                 if ( MP2::MP2_SIGN_STRUCTURE_MIN_SIZE <= pblock.size() && 0x01 == pblock[0] ) {
                     MapSign * obj = new MapSign();
-                    obj->LoadFromMP2( findobject, StreamBuf( pblock ) );
+                    obj->LoadFromMP2( objectTileId, pblock );
                     map_objects.add( obj );
                 }
                 break;
             case MP2::OBJ_EVENT:
                 if ( MP2::MP2_EVENT_STRUCTURE_MIN_SIZE <= pblock.size() && 0x01 == pblock[0] ) {
                     MapEvent * obj = new MapEvent();
-                    obj->LoadFromMP2( findobject, StreamBuf( pblock ) );
+                    obj->LoadFromMP2( objectTileId, pblock );
                     map_objects.add( obj );
                 }
                 break;
             case MP2::OBJ_SPHINX:
                 if ( MP2::MP2_RIDDLE_STRUCTURE_MIN_SIZE <= pblock.size() && 0x00 == pblock[0] ) {
                     MapSphinx * obj = new MapSphinx();
-                    obj->LoadFromMP2( findobject, pblock );
+                    obj->LoadFromMP2( objectTileId, pblock );
                     map_objects.add( obj );
                 }
                 break;
@@ -602,15 +598,26 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         }
         // other events
         else if ( 0x00 == pblock[0] ) {
-            // add event day
-            if ( MP2::MP2_EVENT_STRUCTURE_MIN_SIZE <= pblock.size() && 1 == pblock[42] ) {
+            // Daily event.
+            if ( MP2::MP2_EVENT_STRUCTURE_MIN_SIZE <= pblock.size() && pblock[42] == 1 ) {
                 vec_eventsday.emplace_back();
-                vec_eventsday.back().LoadFromMP2( StreamBuf( pblock ) );
+                vec_eventsday.back().LoadFromMP2( pblock );
             }
-            // add rumors
             else if ( MP2::MP2_RUMOR_STRUCTURE_MIN_SIZE <= pblock.size() ) {
-                if ( pblock[8] ) {
-                    _rumors.emplace_back( StreamBuf( &pblock[8], pblock.size() - 8 ).toString() );
+                // Structure containing information about a rumor.
+                //
+                // - uint8_t (1 byte)
+                //     Always equal to 0.
+                //
+                // - unused 7 bytes
+                //    Unknown / unused. TODO: find out what these bytes used for.
+                //
+                // - string
+                //    Null terminated string of the rumor.
+                std::string rumor( reinterpret_cast<const char *>( pblock.data() ) + 8 );
+
+                if ( !rumor.empty() ) {
+                    _rumors.emplace_back( std::move( rumor ) );
                     DEBUG_LOG( DBG_GAME, DBG_INFO, "MP2 format: add rumor " << _rumors.back() )
                 }
             }

@@ -624,26 +624,6 @@ bool Maps::TilesAddon::isArtifact( const TilesAddon & ta )
     return ( MP2::OBJ_ICN_TYPE_OBJNARTI == ta._objectIcnType ) && ( ta._imageIndex > 0x10 ) && ( ta._imageIndex % 2 );
 }
 
-int Maps::Tiles::getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
-{
-    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == objectIcnType && 60 <= icnIndex && 102 >= icnIndex ) {
-        // 60, 66, 72, 78, 84, 90, 96, 102
-        return ( ( icnIndex - 60 ) / 6 ) + 1;
-    }
-
-    return 0;
-}
-
-int Maps::Tiles::getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
-{
-    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == objectIcnType && 110 <= icnIndex && 138 >= icnIndex ) {
-        // 110, 114, 118, 122, 126, 130, 134, 138
-        return ( ( icnIndex - 110 ) / 4 ) + 1;
-    }
-
-    return 0;
-}
-
 bool Maps::TilesAddon::isShadow( const TilesAddon & ta )
 {
     return isShadowSprite( ta._objectIcnType, ta._imageIndex );
@@ -1349,7 +1329,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterSpritesPerTile
 {
     assert( GetObject() == MP2::OBJ_MONSTER );
 
-    const Monster & monster = QuantityMonster();
+    const Monster & monster = getMonsterFromTile( *this );
     const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
 
     const int icnId{ ICN::MINI_MONSTER_IMAGE };
@@ -1392,7 +1372,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterShadowSpritesP
 {
     assert( GetObject() == MP2::OBJ_MONSTER );
 
-    const Monster & monster = QuantityMonster();
+    const Monster & monster = getMonsterFromTile( *this );
     const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
 
     const int icnId{ ICN::MINI_MONSTER_SHADOW };
@@ -2522,8 +2502,10 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
     // Set the 'fogData' index offset from the tile index for the TOP LEFT direction from the tile.
     const int32_t topLeftDirectionOffset = -1 - fogDataWidth;
 
+#ifndef NDEBUG
     // Cache the maximum border for fogDataIndex corresponding the "CENTER" tile to use in assertion. Should be removed if assertion is removed.
     const int32_t centerfogDataIndexLimit = fogDataSize + topLeftDirectionOffset;
+#endif
 
     // Calculate fog directions using the cached 'isFog' data.
     for ( int32_t y = minY; y < maxY; ++y ) {
@@ -3271,4 +3253,24 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     }
 
     return msg;
+}
+
+int Maps::getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
+{
+    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == objectIcnType && 60 <= icnIndex && 102 >= icnIndex ) {
+        // 60, 66, 72, 78, 84, 90, 96, 102
+        return ( ( icnIndex - 60 ) / 6 ) + 1;
+    }
+
+    return 0;
+}
+
+int Maps::getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
+{
+    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == objectIcnType && 110 <= icnIndex && 138 >= icnIndex ) {
+        // 110, 114, 118, 122, 126, 130, 134, 138
+        return ( ( icnIndex - 110 ) / 4 ) + 1;
+    }
+
+    return 0;
 }

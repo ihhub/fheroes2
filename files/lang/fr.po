@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-01 13:46+0000\n"
+"POT-Creation-Date: 2023-04-13 05:15+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -55,9 +55,6 @@ msgstr ""
 msgid "CANCEL"
 msgstr "SORTIR"
 
-msgid "OKAY"
-msgstr "OK"
-
 msgid "ACCEPT"
 msgstr "ACCEPTER"
 
@@ -88,6 +85,14 @@ msgstr "AMÉLIORER"
 msgid "RESTART"
 msgstr "REJOUER"
 
+msgid "HEROES"
+msgstr ""
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+
 msgid "S"
 msgstr "S"
 
@@ -102,6 +107,9 @@ msgstr "XL"
 
 msgid "ALL"
 msgstr "T"
+
+msgid "SELECT"
+msgstr ""
 
 msgid ""
 "STANDARD\n"
@@ -164,6 +172,9 @@ msgstr "6 JOUEURS"
 msgid "GIFT"
 msgstr "DONNER"
 
+msgid "guildWell|EXIT"
+msgstr ""
+
 msgid "DIFFICULTY"
 msgstr "DIFFICULTÉ"
 
@@ -172,6 +183,9 @@ msgstr "MIN"
 
 msgid "MAX"
 msgstr "MAX"
+
+msgid "OKAY"
+msgstr "OK"
 
 msgid "Warrior"
 msgstr "Guerrier"
@@ -731,10 +745,11 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "1 %{defender} périt."
 msgstr[1] "%{count} %{defender} périssent."
 
-msgid "1 soul is absorbed."
-msgid_plural "%{count} souls are absorbed."
-msgstr[0] ""
-msgstr[1] ""
+#, fuzzy
+msgid "1 soul is incorporated."
+msgid_plural "%{count} souls are incorporated."
+msgstr[0] "L'image miroir est créée."
+msgstr[1] "L'image miroir est créée."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
@@ -3148,6 +3163,16 @@ msgstr "Choisir la résolution d'écran:"
 msgid "Click to apply the selected resolution."
 msgstr "Cliquez pour valider la résolution choisie."
 
+#, fuzzy
+msgid "Click to apply the entered text."
+msgstr "Cliquez pour valider la résolution choisie."
+
+msgid "Click to open the Virtual Keyboard dialog."
+msgstr ""
+
+msgid "Open Virtual Keyboard"
+msgstr ""
+
 msgid "How many troops to move?"
 msgstr "Troupes à déplacer :"
 
@@ -4539,6 +4564,9 @@ msgstr " Toutes les populations sont réduites de moitié."
 
 msgid " All dwellings increase population."
 msgstr " La population de toutes les demeures augmente."
+
+msgid "New Week!"
+msgstr ""
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
@@ -8480,8 +8508,9 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr "La médaille de la bravoure"
 
-msgid "The %{name} increases your morale."
-msgstr "La %{name} augmente votre moral."
+#, fuzzy
+msgid "The %{name} increases your morale by %{count}."
+msgstr "%{name} augmente votre connaissance de %{count}."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -8586,9 +8615,11 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr "La baliste de rapidité"
 
-msgid "The %{name} lets your catapult fire twice per combat round."
+#, fuzzy
+msgid "The %{name} gives your catapult one extra shot per combat round."
 msgstr ""
-"%{name} permet à votre catapulte de tirer deux fois par round de combat."
+"%{name} permet à votre catapulte de tirer un coup supplémentaire par round "
+"de combat."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
@@ -8761,7 +8792,8 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr "La patte de lapin porte-bonheur"
 
-msgid "The %{name} increases your luck in combat."
+#, fuzzy
+msgid "The %{name} increases your luck in combat by %{count}."
 msgstr "%{name} augmente votre chance en combat."
 
 msgid ""
@@ -10495,6 +10527,9 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "The %{name} increases your morale."
+#~ msgstr "La %{name} augmente votre moral."
 
 #~ msgid "Attention"
 #~ msgstr "Attention"

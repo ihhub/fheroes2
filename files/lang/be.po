@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-01 13:46+0000\n"
+"POT-Creation-Date: 2023-04-13 05:15+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -56,9 +56,6 @@ msgstr ""
 msgid "CANCEL"
 msgstr "НАЗАД"
 
-msgid "OKAY"
-msgstr "ДОБРА"
-
 msgid "ACCEPT"
 msgstr "ПРЫНЯЦЬ"
 
@@ -89,6 +86,14 @@ msgstr "ПАЛЕПШЫЦЬ"
 msgid "RESTART"
 msgstr "НАНОВА"
 
+msgid "HEROES"
+msgstr ""
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+
 msgid "S"
 msgstr ""
 
@@ -103,6 +108,9 @@ msgstr ""
 
 msgid "ALL"
 msgstr "УСЕ"
+
+msgid "SELECT"
+msgstr ""
 
 msgid ""
 "STANDARD\n"
@@ -161,6 +169,9 @@ msgstr "6 ГУЛЬЦОЎ"
 msgid "GIFT"
 msgstr "АДДАЦЬ"
 
+msgid "guildWell|EXIT"
+msgstr ""
+
 msgid "DIFFICULTY"
 msgstr "ЦЯЖКАСЦЬ"
 
@@ -169,6 +180,9 @@ msgstr "МІН"
 
 msgid "MAX"
 msgstr "МАКС"
+
+msgid "OKAY"
+msgstr "ДОБРА"
 
 msgid "Warrior"
 msgstr "Ваяр"
@@ -702,8 +716,8 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "1 soul is absorbed."
-msgid_plural "%{count} souls are absorbed."
+msgid "1 soul is incorporated."
+msgid_plural "%{count} souls are incorporated."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -2911,6 +2925,16 @@ msgstr "Абряры раздзяленне экранa:"
 msgid "Click to apply the selected resolution."
 msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
 
+#, fuzzy
+msgid "Click to apply the entered text."
+msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
+
+msgid "Click to open the Virtual Keyboard dialog."
+msgstr ""
+
+msgid "Open Virtual Keyboard"
+msgstr ""
+
 msgid "How many troops to move?"
 msgstr ""
 
@@ -4211,6 +4235,9 @@ msgid " All populations are halved."
 msgstr ""
 
 msgid " All dwellings increase population."
+msgstr ""
+
+msgid "New Week!"
 msgstr ""
 
 msgid ""
@@ -7601,8 +7628,9 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr ""
 
-msgid "The %{name} increases your morale."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases your morale by %{count}."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -7684,7 +7712,7 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr ""
 
-msgid "The %{name} lets your catapult fire twice per combat round."
+msgid "The %{name} gives your catapult one extra shot per combat round."
 msgstr ""
 
 msgid ""
@@ -7816,8 +7844,9 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr ""
 
-msgid "The %{name} increases your luck in combat."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases your luck in combat by %{count}."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "

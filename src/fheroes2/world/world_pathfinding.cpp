@@ -109,7 +109,7 @@ namespace
         }
 
         if ( MP2::isArtifactObject( objectType ) ) {
-            const Artifact art = tile.QuantityArtifact();
+            const Artifact art = Maps::getArtifactFromTile( tile );
             if ( art.isValid() ) {
                 if ( isFindArtifactVictoryConditionForHuman( art ) ) {
                     // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player.
@@ -1005,14 +1005,15 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
             return {};
     }
 
-    // The object requires to stand on it. In this case we need to check if it is protected by monsters.
-    if ( !MP2::isNeedStayFront( objectType ) ) {
-        const MapsIndexes & monsters = Maps::getMonstersProtectingTile( targetIndex );
-        for ( const int32_t monsterIndex : monsters ) {
-            if ( isTileProtectedForAI( monsterIndex, _armyStrength, _advantage ) ) {
-                // The tile is protected by monsters. No reason to try to get it.
-                return {};
-            }
+    // Target tile is guarded by an overly strong army
+    if ( isTileProtectedForAI( targetIndex, _armyStrength, _advantage ) ) {
+        return {};
+    }
+
+    for ( const int32_t monsterIndex : Maps::getMonstersProtectingTile( targetIndex ) ) {
+        // Target tile is guarded by an overly strong nearby monster
+        if ( isTileProtectedForAI( monsterIndex, _armyStrength, _advantage ) ) {
+            return {};
         }
     }
 

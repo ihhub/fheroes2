@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-01 13:46+0000\n"
+"POT-Creation-Date: 2023-04-13 05:15+0000\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -55,9 +55,6 @@ msgstr "KONEC"
 msgid "CANCEL"
 msgstr "ZRUŠIT"
 
-msgid "OKAY"
-msgstr "OKAY"
-
 msgid "ACCEPT"
 msgstr "PŘIJMI"
 
@@ -88,6 +85,14 @@ msgstr "VYLEPŠI"
 msgid "RESTART"
 msgstr "RESTART"
 
+msgid "HEROES"
+msgstr ""
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+
 msgid "S"
 msgstr "S"
 
@@ -102,6 +107,9 @@ msgstr "X-L"
 
 msgid "ALL"
 msgstr "VŠE"
+
+msgid "SELECT"
+msgstr ""
 
 msgid ""
 "STANDARD\n"
@@ -164,6 +172,9 @@ msgstr ""
 msgid "GIFT"
 msgstr "DARUJ"
 
+msgid "guildWell|EXIT"
+msgstr ""
+
 msgid "DIFFICULTY"
 msgstr "OBTÍŽNOST"
 
@@ -172,6 +183,9 @@ msgstr ""
 
 msgid "MAX"
 msgstr ""
+
+msgid "OKAY"
+msgstr "OKAY"
 
 msgid "Warrior"
 msgstr "Válečník"
@@ -719,11 +733,12 @@ msgstr[0] "1 %{defender} umírá."
 msgstr[1] "%{count} %{defender} umírají."
 msgstr[2] ""
 
-msgid "1 soul is absorbed."
-msgid_plural "%{count} souls are absorbed."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+#, fuzzy
+msgid "1 soul is incorporated."
+msgid_plural "%{count} souls are incorporated."
+msgstr[0] "Zrcadlová jednotka byla vytvořena."
+msgstr[1] "Zrcadlová jednotka byla vytvořena."
+msgstr[2] "Zrcadlová jednotka byla vytvořena."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
@@ -1182,43 +1197,49 @@ msgstr ""
 "nesmíš přijít o Archibalda!"
 
 msgid "Arrow's Flight"
-msgstr ""
+msgstr "Let Šípu"
 
 msgid "Island of Chaos"
-msgstr ""
+msgstr "Ostrov chaosu"
 
 msgid "The Abyss"
-msgstr ""
+msgstr "Propast"
 
 msgid "Uprising"
-msgstr ""
+msgstr "Povstání"
 
 msgid "Aurora Borealis"
 msgstr ""
 
 msgid "Betrayal's End"
-msgstr ""
+msgstr "Potlačení zrady"
 
 msgid "Corruption's Heart"
-msgstr ""
+msgstr "Srdce korupce"
 
 msgid "The Giant's Pass"
-msgstr ""
+msgstr "Obrův průsmyk"
 
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
 "to operate in this region."
 msgstr ""
+"Podmaň si neukázněné místní pány, tím poskytneš království potřebné zázemí "
+"pro fungování v tomto regionu."
 
 msgid ""
 "Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
+"Zlikviduj veškerou opozici v této oblasti. Pak bude první část artefaktu "
+"Tvoje."
 
 msgid ""
 "The sorceresses to the northeast are rebelling! For the good of the empire "
 "you must quash their feeble uprising on your way to the mountains."
 msgstr ""
+"Čarodějky na severovýchodě se bouří! Pro dobro říše musíš vyrazit do hor a "
+"potlačit jejich chabé povstání."
 
 msgid ""
 "Having prepared for your arrival, Kraeger has arranged for a force of "
@@ -1226,115 +1247,147 @@ msgid ""
 "before the first day of the third week, or the Necromancers will be too "
 "strong for you."
 msgstr ""
+"Kraeger se připravil na Tvůj vpád a sestavil celou armádu nekromantů, aby "
+"zmařili tvou výpravu. Musíš dobýt hrad Scabsdale do prvního dne třetího "
+"týdne, jinak už budou nekromanti k neporažení."
 
 msgid ""
 "The barbarian despot in this area is, as yet, ignorant of your presence. "
 "Quickly, build up your forces before you are discovered and attacked! Secure "
 "the region by subduing all enemy forces."
 msgstr ""
+"Barbarský despota v této oblasti o Tvé přítomnosti zatím neví. Rychle sestav "
+"své vojsko, dříve než budeš odhalen a napaden! Podmaněním všech "
+"nepřátelských síl si podrobíš a zabezpečíš tento kraj."
 
 msgid ""
 "The Empire is weak in this region. You will be unable to completely subdue "
 "all forces in this area, so take what you can before reprisal strikes. "
 "Remember, your true goal is to claim the Helmet of Anduran."
 msgstr ""
+"Říše je v této oblasti slabá. Nebudeš proto schopen si zcela podmanit "
+"všechny vojska v této oblasti, takže si vem co můžeš, než udeří odvetným "
+"útokem. Nezapomeň, že skutečným cílem je získat Anduranskou přilbu."
 
 msgid "For the good of the Empire, eliminate Kraeger."
-msgstr ""
+msgstr "Zabij Kreagera, pro slávu impéria."
 
 msgid ""
 "At last, you have the opportunity and the facilities to rid the Empire of "
 "the necromancer's evil. Eradicate them completely, and you will be sung as a "
 "hero for all time."
 msgstr ""
+"Konečně máš možnost a prostředky zbavit říši od onoho nekromantského zla. "
+"Když je zcela je vymýtíš, budeš navěky opěvován jako hrdina."
 
 msgid "Border Towns"
-msgstr ""
+msgstr "Pohraniční města"
 
 msgid "Conquer and Unify"
-msgstr ""
+msgstr "Dobyj a sjednoť"
 
 msgid "Crazy Uncle Ivan"
-msgstr ""
+msgstr "Šílený strýc Ivan"
 
 msgid "The Wayward Son"
-msgstr ""
+msgstr "Scestný syn"
 
 msgid "Ivory Gates"
 msgstr ""
 
 msgid "The Elven Lands"
-msgstr ""
+msgstr "Elfské území"
 
 msgid "The Epic Battle"
-msgstr ""
+msgstr "Epická bitva"
 
 msgid "The Southern War"
-msgstr ""
+msgstr "Jižní válka"
 
 msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
 "forefather of all descendants."
 msgstr ""
+"Dobyj a sjednoť všechny nepřátelské kmeny. Neztrať při tom hrdinu Jarkonase, "
+"praotce celého rodu."
 
 msgid ""
 "Your rival, the Kingdom of Harondale, is attacking weak towns on your "
 "border! Recover from their first strike and crush them completely!"
 msgstr ""
+"Tvůj protivník, království Harondalu, útočí na slabá města na hranicích! "
+"Vzpamatuj se z jejich prvního úderu a kompletně je rozdrť!"
 
 msgid ""
 "Find your wayward son Joseph who is rumored to be living in the desolate "
 "lands. Do it before the first day of the third month or it will be of no "
 "help to your family."
 msgstr ""
+"Najdi svého umíněného syna Josefa, o němž se povídá, že žije v pustých "
+"končinách. Musíš ho najít do prvního dne třetího měsíce, jinak to rodině již "
+"nepomůže."
 
 msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
 "month or it will be no help to your kingdom."
 msgstr ""
+"Zachraň svého šíleného strýce Ivana. Musíš ho najít do prvního dne čtvrtého "
+"měsíce, jinak to Tvému království již nepomůže."
 
 msgid ""
 "Destroy the barbarians who are attacking the southern border of your "
 "kingdom! Recover your fallen towns, and then invade the jungle kingdom. "
 "Leave no enemy standing."
 msgstr ""
+"Znič barbary, kteří útočí na jižní hranici království! Získej zpět svá padlá "
+"města a pak vtrhni do království džungle. Žádný z protivníků nesmí zůstat na "
+"živu."
 
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
-msgstr ""
+msgstr "Získej zpět hrad Ivory Gates, který padl kvůli zradě."
 
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
 "so they will send you wood every 2 weeks. You must complete your mission "
 "before the first day of the seventh month, or the kingdom will surely fall."
 msgstr ""
+"Získej si přízeň elfů. Kácení stromů je v tomto kraji zakázáno, ale každé "
+"dva týdny Ti nějaké dřevo pošlou. Svůj úkol musíš splnit do prvního dne "
+"sedmého měsíce, jinak království jistě padne."
 
 msgid ""
 "This is the final battle against your rival kingdom of Harondale. Eliminate "
 "everyone, and don't lose the hero Jarkonas VI."
 msgstr ""
+"Je tady poslední bitva proti nepřátelskému království Harondale. Poraž je "
+"všechny a neztrať při tom hrdinu Jarkonase VI."
 
 msgid "Fount of Wizardry"
-msgstr ""
+msgstr "Pramen kouzelnictví"
 
 msgid "Power's End"
-msgstr ""
+msgstr "Konec moci"
 
 msgid "The Eternal Scrolls"
-msgstr ""
+msgstr "Věčné svitky"
 
 msgid "The Shrouded Isles"
-msgstr ""
+msgstr "Zahalené ostrovy"
 
 msgid ""
 "Your mission is to vanquish the warring mages in the magical Shrouded Isles. "
 "The completion of this task will give you a fighting chance against your "
 "rivals."
 msgstr ""
+"Tvým úkolem je porazit bojové mágy na kouzelných Zahalených ostrovech. "
+"Splnění tohoto úkolu ti zaručí výhodu v boji proti tvým protivníkům."
 
 msgid ""
 "The location of the great library has been discovered! You must make your "
 "way to it, and reclaim the city of Chronos in which it lies."
 msgstr ""
+"Místo, kde se nachází velká knihovna, bylo objeveno! Musíš se za ní vydat a "
+"získat zpět město Chronos, ve kterém se nachází."
 
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
@@ -1342,94 +1395,110 @@ msgid ""
 "Find the orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
+"Najdi Sféru negace, která je prý pohřbena někde v této zemi. Na kamenných "
+"obeliscích jsou vepsány indicie, které Tě dovedou až k cíli. Najdi sféru do "
+"prvního dne šestého měsíce, jinak aftefakt jistě získají Tví protivníci."
 
 msgid ""
 "You must take control of the castle of Magic, where the fount of wizardry "
 "lies. Do this and your victory will be supreme."
 msgstr ""
+"Musíš ovládnout hrad Magic, ve kterém se nachází pramen kouzel. Dokaž to a "
+"Tvé vítězství bude to nejslavnější ze všech."
 
 msgid "Blood is Thicker"
-msgstr ""
+msgstr "Pokrevné pouto"
 
 msgid "King and Country"
-msgstr ""
+msgstr "Král a jeho země"
 
 msgid "Pirate Isles"
-msgstr ""
+msgstr "Pirátské ostrovy"
 
 msgid "Stranded"
-msgstr ""
+msgstr "Uvízlý"
 
 msgid ""
 "Capture the town on the island off the southeast shore in order to construct "
 "a boat and travel back towards the mainland. Do not lose the hero Gallavant."
 msgstr ""
+"Dobytí města na ostrově u jihovýchodního pobřeží Ti umožní postavit loď a "
+"doplout na pevninu. Neztrať hrdinu Gallavanta."
 
 msgid ""
 "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do "
 "not lose Gallavant or your quest will be over."
 msgstr ""
+"Najdi a poraz Martine, vůdkyni pirátů, která sídlí v městě Pirates Cove. "
+"Neztrať při tom Gallavanta, jinak bude vše ztraceno."
 
 msgid ""
 "Eliminate all the other forces who oppose the rule of Lord Alberon. "
 "Gallavant must not die."
 msgstr ""
+"Zlikviduj všechny, kteři se staví proti vládě lorda Alberona. Gallavant "
+"nesmí zemřít."
 
 msgid ""
 "Overthrow the entrenched monarchy of Lord Alberon, and claim all the land in "
 "your name. Gallavant must not die."
 msgstr ""
+"Svrhni zkůrnatělou monarchii lorda Alberona a prohlaš celou zemi za svou. "
+"Gallavant nesmí zemřít."
 
 msgid " bane"
-msgstr ""
+msgstr " zkáza"
 
 msgid " alliance"
-msgstr ""
+msgstr "aliance"
 
 msgid "Carry-over forces"
-msgstr ""
+msgstr "Převedené vojska"
 
 msgid " bonus"
-msgstr ""
+msgstr " bonus"
 
 msgid " defeated"
-msgstr ""
+msgstr " poražení"
 
 msgid " will always run away from your army."
-msgstr ""
+msgstr " vždy utečou před Tvými vojsky"
 
 msgid " will be willing to join your army."
-msgstr ""
+msgstr " se budou chtít k Tobě přidat."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
-msgstr ""
+msgstr "\"%{artifact}\" si poneseš s sebou do další hry."
 
 msgid "The army will be carried over the scenario."
-msgstr ""
+msgstr "Armáda bude přenesena do další hry."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
-msgstr ""
+msgstr "Kralovské příjmy budou vyšśí o %{count} %{resource} za den."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
-msgstr ""
+msgstr "\"%{spell}\" bude přeneseno do další hry."
 
 msgid "%{hero} can be hired in the scenario."
-msgstr ""
+msgstr "Ve hře bude možné najmout hrdinu %{hero}."
 
 msgid ""
 "%{hero} has been defeated and will not appear in the subsequent scenarios."
-msgstr ""
+msgstr "%{hero} byl poražen a už se v dalších krocích kampaně neobjeví."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
-msgstr ""
+msgstr "Skřítci poznají své spojence a rádi se připojí k Tvým silám."
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
 msgstr ""
+"Zlobři poznávají, že jsi ten kdo porazil skřítky a přidávají se k tobě."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
 "'Ally'."
 msgstr ""
+"Prskající a funící draci souhlasí, že spojí své síly s tebou, jejich "
+"'spojencem'."
 
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
@@ -1437,30 +1506,41 @@ msgid ""
 "fearless ally of ours?\"  The group explodes with cheers as they run to join "
 "your ranks."
 msgstr ""
+"Když se přiblížíš ke skupině elfů, jejich vůdce je všechny vyzve k "
+"pozornosti. Zakřičí na ně: \"Kdo z vás je dost odvážný, aby se přidal k "
+"našemu neohroženému spojenci?\"  Skupina propukne v jásot a běží aby se "
+"přidali k Tvým řadám."
 
 msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
 "pass.\""
 msgstr ""
+"Skřítci tě vítají, \"Každý Rolandův přítel je i náš přítel.  Můžeš projít.\""
 
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
-msgstr ""
+msgstr "Zlobři na tebe uznale zavrčí: \"Archibaldovi spojenci mohou projít.\""
 
 msgid ""
 "The dragons see you and call out.  \"Our alliance with Archibald compels us "
 "to join you.  Unfortunately you have no room.  A pity!\"  They quickly "
 "scatter."
 msgstr ""
+"Draci Tě vidí a zvolají. \"Naše spojenectví s Archibaldem nás zavazuje "
+"abychom se k Tobě připojili. Bohužel už nemáš místo. To je škoda!\" A rychle "
+"se rozprchli."
 
 msgid ""
 "The elves stand at attention as you approach.  Their leader calls to you and "
 "says, \"Let us not impede your progress, ally!  Move on, and may victory be "
 "yours.\""
 msgstr ""
+"Elfové stojí v pozoru, když se přiblížíš.  Jejich vůdce zvolá a řekne: "
+"\"Nebudeme Ti bránít v postupu, spojenče!  Pokračuj, věříme ve Tvé vítězství."
+"\""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
-msgstr ""
+msgstr "\"Skřítkobijec!!!!, běžte jako o život.\""
 
 msgid "campaignBonus|Animate Dead"
 msgstr ""
@@ -2277,7 +2357,6 @@ msgid ""
 "The Crystal Garden increases production of Sprites by %{count} per week."
 msgstr "Křišťálová zahrada zvyšuje produkci Víl o %{count} za týden."
 
-#, fuzzy
 msgid "The Dungeon increases the income of the town by %{count} gold per day."
 msgstr "Kobka zvyšuje městské příjmy o %{count} za den."
 
@@ -3058,6 +3137,16 @@ msgid "Select Game Resolution:"
 msgstr ""
 
 msgid "Click to apply the selected resolution."
+msgstr ""
+
+#, fuzzy
+msgid "Click to apply the entered text."
+msgstr "Klikni pro uložení aktuální hry."
+
+msgid "Click to open the Virtual Keyboard dialog."
+msgstr ""
+
+msgid "Open Virtual Keyboard"
 msgstr ""
 
 msgid "How many troops to move?"
@@ -4203,7 +4292,7 @@ msgid ""
 "You captured %{name}!\n"
 "You are victorious."
 msgstr ""
-"Dobil si %{name}!\n"
+"Dobyl si %{name}!\n"
 "Jsi vítěz."
 
 msgid ""
@@ -4294,10 +4383,10 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "Capture the castle '%{name}'."
-msgstr "Dobití hradu '%{name}'."
+msgstr "Dobytí hradu '%{name}'."
 
 msgid "Capture the town '%{name}'."
-msgstr "Dobití města '%{name}'."
+msgstr "Dobytí města '%{name}'."
 
 msgid "Defeat the hero '%{name}'."
 msgstr "Porážka hrdiny '%{name}'."
@@ -4409,6 +4498,9 @@ msgstr "Celá populace je na polovině."
 
 msgid " All dwellings increase population."
 msgstr "Všechna obydlí přináší novou populaci."
+
+msgid "New Week!"
+msgstr ""
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
@@ -7881,8 +7973,9 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr ""
 
-msgid "The %{name} increases your morale."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases your morale by %{count}."
+msgstr "Pomník zvyšuje příjem města o 250 za den."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -7964,7 +8057,7 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr ""
 
-msgid "The %{name} lets your catapult fire twice per combat round."
+msgid "The %{name} gives your catapult one extra shot per combat round."
 msgstr ""
 
 msgid ""
@@ -8097,7 +8190,7 @@ msgid "Lucky Rabbit's Foot"
 msgstr ""
 
 #, fuzzy
-msgid "The %{name} increases your luck in combat."
+msgid "The %{name} increases your luck in combat by %{count}."
 msgstr "Pomník zvyšuje příjem města o 250 za den."
 
 msgid ""

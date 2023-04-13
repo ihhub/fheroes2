@@ -13,7 +13,6 @@
     <string name="activity_toolset_last_task_status_lbl_text_completed_successfully">Zakończono sukcesem</string>
     <string name="activity_toolset_last_task_status_lbl_text_no_assets_found">Akcja zakończona sukcesem, ale nie znaleziono plików oryginalnej gry.</string>
     <string name="activity_toolset_last_task_status_lbl_text_failed">Napotkano błąd w czasie operacji: %s</string>
-    <string name="activity_toolset_homm2_demo_url" translatable="false">https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/h2demo.zip</string>
     <string name="activity_save_file_manager_label">fh2 Zapis Pliku</string>
     <string name="activity_save_file_manager_filter_standard_btn_text">Standardowa</string>
     <string name="activity_save_file_manager_filter_campaign_btn_text">Kampania</string>

@@ -711,7 +711,7 @@ void Battle::Unit::PostKilledAction()
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() )
 }
 
-uint32_t Battle::Unit::Resurrect( uint32_t points, bool allow_overflow, bool skip_dead )
+uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allow_overflow, const bool skip_dead )
 {
     uint32_t resurrect = Monster::GetCountFromHitPoints( *this, hp + points ) - GetCount();
 
@@ -746,17 +746,16 @@ uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t &
     }
 
     uint32_t resurrected = 0;
+
     if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
-        resurrected = killed * enemy.Monster::GetHitPoints();
-        enemy.Resurrect( resurrected, true, false );
+        resurrected = enemy.Resurrect( killed * enemy.Monster::GetHitPoints(), true, false );
     }
     else if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
-        resurrected = killed * Monster::GetHitPoints();
-        enemy.Resurrect( resurrected, false, false );
+        resurrected = enemy.Resurrect( killed * Monster::GetHitPoints(), false, false );
     }
 
     if ( resurrected > 0 ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrected )
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << ", resurrected: " << resurrected )
     }
 
     if ( ptrResurrected != nullptr ) {
@@ -776,12 +775,15 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
         return false;
     }
 
-    if ( hero && spell.isApplyToFriends() && GetColor() != hero->GetColor() )
+    if ( hero && spell.isApplyToFriends() && GetColor() != hero->GetColor() ) {
         return false;
-    if ( hero && spell.isApplyToEnemies() && GetColor() == hero->GetColor() && !forceApplyToAlly )
+    }
+    if ( hero && spell.isApplyToEnemies() && GetColor() == hero->GetColor() && !forceApplyToAlly ) {
         return false;
-    if ( isMagicResist( spell, ( hero ? hero->GetPower() : 0 ), hero ) )
+    }
+    if ( GetMagicResist( spell, ( hero ? hero->GetPower() : 0 ), hero ) >= 100 ) {
         return false;
+    }
 
     const HeroBase * myhero = GetCommander();
     if ( !myhero )

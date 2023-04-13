@@ -57,7 +57,6 @@ namespace
     {
         // Notice: Value 22050 causes music distortion on Windows.
         int frequency = 44100;
-
         uint16_t format = AUDIO_S16;
         // Stereo audio support
         int channels = 2;
