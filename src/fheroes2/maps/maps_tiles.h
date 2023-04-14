@@ -424,7 +424,6 @@ namespace Maps
         }
 
         void QuantitySetSpell( int );
-        void QuantitySetArtifact( int );
 
         bool isTallObject() const;
 
@@ -529,6 +528,8 @@ namespace Maps
     Spell getSpellFromTile( const Tiles & tile );
 
     Artifact getArtifactFromTile( const Tiles & tile );
+
+    void setArtifactOnTile( Tiles & tile, const int artifactId );
 
     uint32_t getGoldAmountFromTile( const Tiles & tile );
 

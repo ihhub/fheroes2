@@ -70,16 +70,6 @@ void Maps::Tiles::QuantitySetSpell( int spell )
     }
 }
 
-void Maps::Tiles::QuantitySetArtifact( int art )
-{
-    using Quantity1Type = decltype( quantity1 );
-    static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
-
-    assert( art >= std::numeric_limits<Quantity1Type>::min() && art <= std::numeric_limits<Quantity1Type>::max() );
-
-    quantity1 = static_cast<Quantity1Type>( art );
-}
-
 void Maps::Tiles::QuantityReset()
 {
     // TODO: don't modify first 2 bits of quantity1.
@@ -96,7 +86,7 @@ void Maps::Tiles::QuantityReset()
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_GRAVEYARD:
     case MP2::OBJ_DAEMON_CAVE:
-        QuantitySetArtifact( Artifact::UNKNOWN );
+        setArtifactOnTile( *this, Artifact::UNKNOWN );
         break;
 
     default:
@@ -135,7 +125,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         percents.Push( 1, 20 );
 
         if ( percents.Get() )
-            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) );
+            setArtifactOnTile( *this, Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) );
         else
             QuantityReset();
         break;
@@ -154,7 +144,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
         switch ( percents.Get() ) {
         case 1:
-            QuantitySetArtifact( Artifact::Rand( Rand::Get( 1 ) ? Artifact::ART_LEVEL_TREASURE : Artifact::ART_LEVEL_MINOR ) );
+            setArtifactOnTile( *this, Artifact::Rand( Rand::Get( 1 ) ? Artifact::ART_LEVEL_TREASURE : Artifact::ART_LEVEL_MINOR ) );
             break;
         case 2:
             setResourceOnTile( *this, Resource::Rand( false ), Rand::Get( 2, 5 ) );
@@ -191,7 +181,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
                 int cond = Rand::Get( 1, 10 ) < 4 ? Rand::Get( 1, 13 ) : 0;
 
                 QuantitySetVariant( cond );
-                QuantitySetArtifact( art );
+                setArtifactOnTile( *this, art );
 
                 if ( cond == 2 || cond == 3 ) {
                     // TODO: why do we use icon ICN index instead of map ICN index?
@@ -323,13 +313,13 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         // variant
         switch ( percents.Get() ) {
         case 1:
-            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL_TREASURE ) );
+            setArtifactOnTile( *this, Artifact::Rand( Artifact::ART_LEVEL_TREASURE ) );
             break;
         case 2:
-            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL_MINOR ) );
+            setArtifactOnTile( *this, Artifact::Rand( Artifact::ART_LEVEL_MINOR ) );
             break;
         default:
-            QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL_MAJOR ) );
+            setArtifactOnTile( *this, Artifact::Rand( Artifact::ART_LEVEL_MAJOR ) );
             break;
         }
         break;
@@ -361,7 +351,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         }
 
         setResourceOnTile( *this, Resource::GOLD, gold );
-        QuantitySetArtifact( art );
+        setArtifactOnTile( *this, art );
         break;
     }
 
@@ -401,7 +391,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             }
 
             setResourceOnTile( *this, Resource::GOLD, gold );
-            QuantitySetArtifact( art );
+            setArtifactOnTile( *this, art );
         }
         break;
 
@@ -423,14 +413,14 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         int cond = percents.Get();
 
         QuantitySetVariant( cond );
-        QuantitySetArtifact( cond == 4 ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) : Artifact::UNKNOWN );
+        setArtifactOnTile( *this, cond == 4 ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) : Artifact::UNKNOWN );
         break;
     }
 
     case MP2::OBJ_GRAVEYARD:
         // 1000 gold + art
         setResourceOnTile( *this, Resource::GOLD, 1000 );
-        QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) );
+        setArtifactOnTile( *this, Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) );
         break;
 
     case MP2::OBJ_PYRAMID: {
@@ -444,7 +434,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         // 1000 exp or 1000 exp + 2500 gold or 1000 exp + art or (-2500 or remove hero)
         const int cond = Rand::Get( 1, 4 );
         QuantitySetVariant( cond );
-        QuantitySetArtifact( cond == 3 ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) : Artifact::UNKNOWN );
+        setArtifactOnTile( *this, cond == 3 ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) : Artifact::UNKNOWN );
         break;
     }
 
@@ -970,6 +960,16 @@ namespace Maps
         }
 
         return { Artifact::UNKNOWN };
+    }
+
+    void setArtifactOnTile( Tiles & tile, const int artifactId )
+    {
+        using Quantity1Type = decltype( tile.GetQuantity1() );
+        static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
+
+        assert( artifactId >= std::numeric_limits<Quantity1Type>::min() && artifactId <= std::numeric_limits<Quantity1Type>::max() );
+
+        tile.setQuantity1( static_cast<Quantity1Type>( artifactId ) );
     }
 
     uint32_t getGoldAmountFromTile( const Tiles & tile )
