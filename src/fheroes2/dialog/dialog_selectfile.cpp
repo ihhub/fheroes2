@@ -31,6 +31,7 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include <system_error>
 #include <vector>
 
 #include "agg_image.h"
