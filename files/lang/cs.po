@@ -5254,7 +5254,7 @@ msgid ""
 "\"NOW GET OUT OF MY HOUSE!\""
 msgstr ""
 "Když se k ní přiblížíš, otočí se a upře na tebe své jediné skleněné oko.\n"
-"Už víš všechno, co si zasloužíš vědět!" vyjekla čarodějka. "
+"\"Už víš všechno, co si zasloužíš vědět!\" vyjekla čarodějka. "
 "\"A TEĎ VYPADNI Z MÉHO DOMU!\""
 
 msgid ""
