@@ -24,14 +24,12 @@
 #include <algorithm>
 #include <cstdint>
 #include <ctime>
-#include <filesystem>
 #include <iomanip>
 #include <iterator>
 #include <list>
 #include <memory>
 #include <sstream>
 #include <string>
-#include <system_error>
 #include <vector>
 
 #include "agg_image.h"
@@ -435,8 +433,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             msg.append( "\n \n" );
             msg.append( System::GetBasename( listbox.GetCurrent().file ) );
             if ( Dialog::YES == Dialog::Message( _( "Warning!" ), msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
-                std::error_code ec;
-                std::filesystem::remove( listbox.GetCurrent().file, ec );
+                System::Unlink( listbox.GetCurrent().file );
                 listbox.RemoveSelected();
                 if ( lists.empty() || filename.empty() ) {
                     buttonOk.disable();
