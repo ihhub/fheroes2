@@ -28,11 +28,11 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
-#include <initializer_list>
 #include <iostream>
 #include <limits>
 #include <map>
 #include <memory>
+#include <optional>
 #include <set>
 #include <type_traits>
 
@@ -63,11 +63,14 @@
 #include "objtown.h"
 #include "objwatr.h"
 #include "objxloc.h"
+#include "payment.h"
+#include "profit.h"
 #include "race.h"
 #include "save_format_version.h"
 #include "serialize.h"
 #include "spell.h"
 #include "til.h"
+#include "tools.h"
 #include "trees.h"
 #include "ui_object_rendering.h"
 #include "world.h"
@@ -621,74 +624,9 @@ bool Maps::TilesAddon::isArtifact( const TilesAddon & ta )
     return ( MP2::OBJ_ICN_TYPE_OBJNARTI == ta._objectIcnType ) && ( ta._imageIndex > 0x10 ) && ( ta._imageIndex % 2 );
 }
 
-int Maps::Tiles::getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
-{
-    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == objectIcnType && 60 <= icnIndex && 102 >= icnIndex ) {
-        // 60, 66, 72, 78, 84, 90, 96, 102
-        return ( ( icnIndex - 60 ) / 6 ) + 1;
-    }
-
-    return 0;
-}
-
-int Maps::Tiles::getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
-{
-    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == objectIcnType && 110 <= icnIndex && 138 >= icnIndex ) {
-        // 110, 114, 118, 122, 126, 130, 134, 138
-        return ( ( icnIndex - 110 ) / 4 ) + 1;
-    }
-
-    return 0;
-}
-
 bool Maps::TilesAddon::isShadow( const TilesAddon & ta )
 {
     return isShadowSprite( ta._objectIcnType, ta._imageIndex );
-}
-
-void Maps::Tiles::UpdateAbandonedMineLeftSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex, const int resource )
-{
-    if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 6 ) {
-        objectIcnType = MP2::OBJ_ICN_TYPE_MTNGRAS;
-        imageIndex = 82;
-    }
-    else if ( MP2::OBJ_ICN_TYPE_OBJNDIRT == objectIcnType && imageIndex == 8 ) {
-        objectIcnType = MP2::OBJ_ICN_TYPE_MTNDIRT;
-        imageIndex = 112;
-    }
-    else if ( MP2::OBJ_ICN_TYPE_EXTRAOVR == objectIcnType && imageIndex == 5 ) {
-        switch ( resource ) {
-        case Resource::ORE:
-            imageIndex = 0;
-            break;
-        case Resource::SULFUR:
-            imageIndex = 1;
-            break;
-        case Resource::CRYSTAL:
-            imageIndex = 2;
-            break;
-        case Resource::GEMS:
-            imageIndex = 3;
-            break;
-        case Resource::GOLD:
-            imageIndex = 4;
-            break;
-        default:
-            break;
-        }
-    }
-}
-
-void Maps::Tiles::UpdateAbandonedMineRightSprite( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex )
-{
-    if ( MP2::OBJ_ICN_TYPE_OBJNDIRT == objectIcnType && imageIndex == 9 ) {
-        objectIcnType = MP2::OBJ_ICN_TYPE_MTNDIRT;
-        imageIndex = 113;
-    }
-    else if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 7 ) {
-        objectIcnType = MP2::OBJ_ICN_TYPE_MTNGRAS;
-        imageIndex = 83;
-    }
 }
 
 std::pair<int, int> Maps::Tiles::ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex )
@@ -995,7 +933,7 @@ void Maps::Tiles::updatePassability()
                 }
             }
 
-            // If an object locates on land and the bottom tile is water mark the current tile as impassible. It's done for cases that a hero won't be able to
+            // If an object locates on land and the bottom tile is water mark the current tile as impassable. It's done for cases that a hero won't be able to
             // disembark on the tile.
             if ( !isWater() && bottomTile.isWater() ) {
                 tilePassable = 0;
@@ -1391,11 +1329,11 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterSpritesPerTile
 {
     assert( GetObject() == MP2::OBJ_MONSTER );
 
-    const Monster & monster = QuantityMonster();
-    const std::pair<uint32_t, uint32_t> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
+    const Monster & monster = getMonsterFromTile( *this );
+    const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
 
     const int icnId{ ICN::MINI_MONSTER_IMAGE };
-    const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndicies.first );
+    const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.first );
     const fheroes2::Point monsterSpriteOffset( monsterSprite.x() + 16, monsterSprite.y() + 30 );
 
     std::vector<fheroes2::Point> outputSquareInfo;
@@ -1406,15 +1344,15 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterSpritesPerTile
 
     std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
     for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndicies.first, false,
+        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndices.first, false,
                                  static_cast<uint8_t>( 255 ) );
     }
 
     outputSquareInfo.clear();
     outputImageInfo.clear();
 
-    if ( spriteIndicies.second > 0 ) {
-        const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndicies.second );
+    if ( spriteIndices.second > 0 ) {
+        const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.second );
         const fheroes2::Point secondaryMonsterSpriteOffset( secondaryMonsterSprite.x() + 16, secondaryMonsterSprite.y() + 30 );
 
         fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
@@ -1422,7 +1360,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterSpritesPerTile
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
         for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndicies.second, false,
+            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndices.second, false,
                                      static_cast<uint8_t>( 255 ) );
         }
     }
@@ -1434,11 +1372,11 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterShadowSpritesP
 {
     assert( GetObject() == MP2::OBJ_MONSTER );
 
-    const Monster & monster = QuantityMonster();
-    const std::pair<uint32_t, uint32_t> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
+    const Monster & monster = getMonsterFromTile( *this );
+    const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
 
     const int icnId{ ICN::MINI_MONSTER_SHADOW };
-    const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndicies.first );
+    const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.first );
     const fheroes2::Point monsterSpriteOffset( monsterSprite.x() + 16, monsterSprite.y() + 30 );
 
     std::vector<fheroes2::Point> outputSquareInfo;
@@ -1449,15 +1387,15 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterShadowSpritesP
 
     std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
     for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndicies.first, false,
+        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndices.first, false,
                                  static_cast<uint8_t>( 255 ) );
     }
 
     outputSquareInfo.clear();
     outputImageInfo.clear();
 
-    if ( spriteIndicies.second > 0 ) {
-        const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndicies.second );
+    if ( spriteIndices.second > 0 ) {
+        const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.second );
         const fheroes2::Point secondaryMonsterSpriteOffset( secondaryMonsterSprite.x() + 16, secondaryMonsterSprite.y() + 30 );
 
         fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
@@ -1465,7 +1403,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterShadowSpritesP
         assert( outputSquareInfo.size() == outputImageInfo.size() );
 
         for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndicies.second, false,
+            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndices.second, false,
                                      static_cast<uint8_t>( 255 ) );
         }
     }
@@ -1590,7 +1528,7 @@ void Maps::Tiles::redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool 
         case Spell::SETAGUARDIAN:
         case Spell::SETFGUARDIAN:
         case Spell::SETWGUARDIAN:
-            // The logic for these spells is done while rending the bottom layer. Nothing should be done here.
+            // The logic for these spells is done while rendering the bottom layer. Nothing should be done here.
             break;
         case Spell::HAUNT:
             renderFlyingGhosts = true;
@@ -2121,17 +2059,22 @@ bool Maps::Tiles::isCaptureObjectProtected() const
 {
     const MP2::MapObjectType objectType = GetObject( false );
 
-    if ( MP2::isCaptureObject( objectType ) ) {
-        if ( MP2::OBJ_CASTLE == objectType ) {
-            Castle * castle = world.getCastleEntrance( GetCenter() );
-            if ( castle )
-                return castle->GetArmy().isValid();
-        }
-        else
-            return QuantityTroop().isValid();
+    if ( !MP2::isCaptureObject( objectType ) ) {
+        return false;
     }
 
-    return false;
+    if ( MP2::OBJ_CASTLE == objectType ) {
+        Castle * castle = world.getCastleEntrance( GetCenter() );
+        assert( castle != nullptr );
+
+        if ( castle ) {
+            return castle->GetArmy().isValid();
+        }
+
+        return false;
+    }
+
+    return QuantityTroop().isValid();
 }
 
 void Maps::Tiles::Remove( uint32_t uniqID )
@@ -2274,62 +2217,125 @@ void Maps::Tiles::RemoveJailSprite()
     Remove( _uid );
 }
 
-void Maps::Tiles::UpdateAbandonedMineSprite( Tiles & tile )
+void Maps::Tiles::RestoreAbandonedMine( Tiles & tile, const int resource )
 {
-    if ( tile._uid ) {
-        const int type = tile.QuantityResourceCount().first;
+    assert( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE );
+    assert( tile._uid != 0 );
 
-        Tiles::UpdateAbandonedMineLeftSprite( tile._objectIcnType, tile._imageIndex, type );
-        for ( Addons::iterator it = tile.addons_level1.begin(); it != tile.addons_level1.end(); ++it )
-            Tiles::UpdateAbandonedMineLeftSprite( it->_objectIcnType, it->_imageIndex, type );
+    const payment_t info = ProfitConditions::FromMine( resource );
+    std::optional<uint32_t> resourceCount;
 
-        if ( Maps::isValidDirection( tile._index, Direction::RIGHT ) ) {
-            Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::RIGHT ) );
-            TilesAddon * mines = tile2.FindAddonLevel1( tile._uid );
+    switch ( resource ) {
+    case Resource::ORE:
+        resourceCount = fheroes2::checkedCast<uint32_t>( info.ore );
+        break;
+    case Resource::SULFUR:
+        resourceCount = fheroes2::checkedCast<uint32_t>( info.sulfur );
+        break;
+    case Resource::CRYSTAL:
+        resourceCount = fheroes2::checkedCast<uint32_t>( info.crystal );
+        break;
+    case Resource::GEMS:
+        resourceCount = fheroes2::checkedCast<uint32_t>( info.gems );
+        break;
+    case Resource::GOLD:
+        resourceCount = fheroes2::checkedCast<uint32_t>( info.gold );
+        break;
+    default:
+        assert( 0 );
+        break;
+    }
 
-            if ( mines )
-                Tiles::UpdateAbandonedMineRightSprite( mines->_objectIcnType, mines->_imageIndex );
+    assert( resourceCount.has_value() && resourceCount > 0U );
 
-            if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
-                tile2.SetObject( MP2::OBJ_NON_ACTION_MINES );
-                Tiles::UpdateAbandonedMineRightSprite( tile2._objectIcnType, tile2._imageIndex );
+    tile.QuantitySetResource( resource, resourceCount.value() );
+
+    auto restoreLeftSprite = [resource]( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex ) {
+        if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 6 ) {
+            objectIcnType = MP2::OBJ_ICN_TYPE_MTNGRAS;
+            imageIndex = 82;
+        }
+        else if ( MP2::OBJ_ICN_TYPE_OBJNDIRT == objectIcnType && imageIndex == 8 ) {
+            objectIcnType = MP2::OBJ_ICN_TYPE_MTNDIRT;
+            imageIndex = 112;
+        }
+        else if ( MP2::OBJ_ICN_TYPE_EXTRAOVR == objectIcnType && imageIndex == 5 ) {
+            switch ( resource ) {
+            case Resource::ORE:
+                imageIndex = 0;
+                break;
+            case Resource::SULFUR:
+                imageIndex = 1;
+                break;
+            case Resource::CRYSTAL:
+                imageIndex = 2;
+                break;
+            case Resource::GEMS:
+                imageIndex = 3;
+                break;
+            case Resource::GOLD:
+                imageIndex = 4;
+                break;
+            default:
+                break;
             }
+        }
+    };
+
+    auto restoreRightSprite = []( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex ) {
+        if ( MP2::OBJ_ICN_TYPE_OBJNDIRT == objectIcnType && imageIndex == 9 ) {
+            objectIcnType = MP2::OBJ_ICN_TYPE_MTNDIRT;
+            imageIndex = 113;
+        }
+        else if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 7 ) {
+            objectIcnType = MP2::OBJ_ICN_TYPE_MTNGRAS;
+            imageIndex = 83;
+        }
+    };
+
+    restoreLeftSprite( tile._objectIcnType, tile._imageIndex );
+    for ( TilesAddon & addon : tile.addons_level1 ) {
+        restoreLeftSprite( addon._objectIcnType, addon._imageIndex );
+    }
+
+    if ( Maps::isValidDirection( tile._index, Direction::RIGHT ) ) {
+        Tiles & rightTile = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::RIGHT ) );
+        TilesAddon * addon = rightTile.FindAddonLevel1( tile._uid );
+
+        if ( addon ) {
+            restoreRightSprite( addon->_objectIcnType, addon->_imageIndex );
+        }
+
+        if ( rightTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
+            rightTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
+            restoreRightSprite( rightTile._objectIcnType, rightTile._imageIndex );
         }
     }
 
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) );
-        if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
-            tile2.SetObject( MP2::OBJ_NON_ACTION_MINES );
+        Tiles & leftTile = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) );
+        if ( leftTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
+            leftTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
+        }
     }
 
     if ( Maps::isValidDirection( tile._index, Direction::TOP ) ) {
-        Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::TOP ) );
-        if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
-            tile2.SetObject( MP2::OBJ_NON_ACTION_MINES );
-
-        if ( Maps::isValidDirection( tile2._index, Direction::LEFT ) ) {
-            Tiles & tile3 = world.GetTiles( Maps::GetDirectionIndex( tile2._index, Direction::LEFT ) );
-            if ( tile3.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
-                tile3.SetObject( MP2::OBJ_NON_ACTION_MINES );
+        Tiles & upperTile = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::TOP ) );
+        if ( upperTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
+            upperTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
         }
 
-        if ( Maps::isValidDirection( tile2._index, Direction::RIGHT ) ) {
-            Tiles & tile3 = world.GetTiles( Maps::GetDirectionIndex( tile2._index, Direction::RIGHT ) );
-            if ( tile3.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
-                tile3.SetObject( MP2::OBJ_NON_ACTION_MINES );
+        if ( Maps::isValidDirection( upperTile._index, Direction::LEFT ) ) {
+            Tiles & upperLeftTile = world.GetTiles( Maps::GetDirectionIndex( upperTile._index, Direction::LEFT ) );
+            if ( upperLeftTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
+                upperLeftTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
+            }
         }
-    }
-}
 
-void Maps::Tiles::setAbandonedMineObjectType( const Tiles & tile )
-{
-    for ( const int32_t direction : { Direction::LEFT, Direction::TOP_LEFT, Direction::TOP, Direction::TOP_RIGHT, Direction::RIGHT } ) {
-        if ( Maps::isValidDirection( tile._index, direction ) ) {
-            Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, direction ) );
-
-            if ( tile2.GetObject() == MP2::OBJ_NON_ACTION_MINES ) {
-                tile2.SetObject( MP2::OBJ_NON_ACTION_ABANDONED_MINE );
+        if ( Maps::isValidDirection( upperTile._index, Direction::RIGHT ) ) {
+            Tiles & upperRightTile = world.GetTiles( Maps::GetDirectionIndex( upperTile._index, Direction::RIGHT ) );
+            if ( upperRightTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
+                upperRightTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
             }
         }
     }
@@ -2442,38 +2448,6 @@ std::pair<uint32_t, uint32_t> Maps::Tiles::GetMonsterSpriteIndices( const Tiles 
     return spriteIndices;
 }
 
-bool Maps::Tiles::isFogAllAround( const int color ) const
-{
-    const int32_t center = GetIndex();
-    const fheroes2::Point mp = Maps::GetPoint( center );
-    const int32_t width = world.w();
-    const int32_t height = world.h();
-
-    // Verify all tiles around the current one with radius of 2 to cover moving hero case as well.
-    for ( int32_t y = -2; y < 3; ++y ) {
-        const int32_t offsetY = mp.y + y;
-        if ( offsetY < 0 || offsetY >= height )
-            continue;
-
-        const int32_t centerY = center + y * width;
-
-        for ( int32_t x = -2; x < 3; ++x ) {
-            if ( x == 0 && y == 0 )
-                continue;
-
-            const int32_t offsetX = mp.x + x;
-            if ( offsetX < 0 || offsetX >= width )
-                continue;
-
-            if ( !world.GetTiles( centerY + x ).isFog( color ) ) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
 void Maps::Tiles::ClearFog( const int colors )
 {
     _fogColors &= ~colors;
@@ -2484,28 +2458,145 @@ void Maps::Tiles::ClearFog( const int colors )
     world.resetPathfinder();
 }
 
-int Maps::Tiles::GetFogDirections( int color ) const
+void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color )
 {
-    int around = 0;
-    const Directions & directions = Direction::All();
+    assert( ( minPos.x <= maxPos.x ) && ( minPos.y <= maxPos.y ) );
 
-    for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it )
-        if ( !Maps::isValidDirection( _index, *it ) || world.GetTiles( Maps::GetDirectionIndex( _index, *it ) ).isFog( color ) )
-            around |= *it;
+    const int32_t worldWidth = world.w();
+    const int32_t worldHeight = world.w();
 
-    if ( isFog( color ) )
-        around |= Direction::CENTER;
+    // Do not get over the world borders.
+    const int32_t minX = std::max( minPos.x, 0 );
+    const int32_t minY = std::max( minPos.y, 0 );
+    // Add extra 1 to reach the given maxPos point.
+    const int32_t maxX = std::min( maxPos.x + 1, worldWidth );
+    const int32_t maxY = std::min( maxPos.y + 1, worldHeight );
 
-    return around;
+    // Fog data range is 1 tile bigger from each side as for the fog directions we have to check all tiles around each tile in the area.
+    const int32_t fogMinX = std::max( minX - 1, 0 );
+    const int32_t fogMinY = std::max( minY - 1, 0 );
+    const int32_t fogMaxX = std::min( maxX + 1, worldWidth );
+    const int32_t fogMaxY = std::min( maxY + 1, worldHeight );
+
+    const int32_t fogDataWidth = maxX - minX + 2;
+    const int32_t fogDataSize = fogDataWidth * ( maxY - minY + 2 );
+
+    // A vector to cache 'isFog()' data. This vector type is not <bool> as using std::vector<uint8_t> gives the higher performance.
+    // 1 is for the 'true' state, 0 is for the 'false' state.
+    std::vector<uint8_t> fogData( fogDataSize, 1 );
+
+    // Set the 'fogData' index offset from the tile index.
+    const int32_t fogDataOffset = 1 - minX + ( 1 - minY ) * fogDataWidth;
+
+    // Cache the 'fogData' data for the given area to use it in fog direction calculation.
+    // The loops run only within the world area, if 'fogData' area includes tiles outside the world borders we do not update them as the are already set to 1.
+    for ( int32_t y = fogMinY; y < fogMaxY; ++y ) {
+        const int32_t fogTileOffsetY = y * worldWidth;
+        const int32_t fogDataOffsetY = y * fogDataWidth + fogDataOffset;
+
+        for ( int32_t x = fogMinX; x < fogMaxX; ++x ) {
+            fogData[x + fogDataOffsetY] = world.GetTiles( x + fogTileOffsetY ).isFog( color ) ? 1 : 0;
+        }
+    }
+
+    // Set the 'fogData' index offset from the tile index for the TOP LEFT direction from the tile.
+    const int32_t topLeftDirectionOffset = -1 - fogDataWidth;
+
+#ifndef NDEBUG
+    // Cache the maximum border for fogDataIndex corresponding the "CENTER" tile to use in assertion. Should be removed if assertion is removed.
+    const int32_t centerfogDataIndexLimit = fogDataSize + topLeftDirectionOffset;
+#endif
+
+    // Calculate fog directions using the cached 'isFog' data.
+    for ( int32_t y = minY; y < maxY; ++y ) {
+        const int32_t fogCenterDataOffsetY = y * fogDataWidth + fogDataOffset;
+
+        for ( int32_t x = minX; x < maxX; ++x ) {
+            Maps::Tiles & tile = world.GetTiles( x, y );
+
+            int32_t fogDataIndex = x + fogCenterDataOffsetY;
+
+            if ( fogData[fogDataIndex] == 0 ) {
+                // For the tile is without fog we set the UNKNOWN direction.
+                tile._setFogDirection( Direction::UNKNOWN );
+            }
+            else {
+                // The tile is under the fog so its CENTER direction for fog is true.
+                uint16_t fogDirection = Direction::CENTER;
+
+                // 'fogDataIndex' should not get out of maximum 'fogData' vector index after all increments.
+                assert( fogDataIndex < centerfogDataIndexLimit );
+
+                // Check all tiles around for 'fogData' starting from the top left direction and if it is true then logically add the direction to 'fogDirection'.
+                fogDataIndex += topLeftDirectionOffset;
+
+                assert( fogDataIndex >= 0 );
+
+                if ( fogData[fogDataIndex] == 1 ) {
+                    fogDirection |= Direction::TOP_LEFT;
+                }
+
+                ++fogDataIndex;
+
+                if ( fogData[fogDataIndex] == 1 ) {
+                    fogDirection |= Direction::TOP;
+                }
+
+                ++fogDataIndex;
+
+                if ( fogData[fogDataIndex] == 1 ) {
+                    fogDirection |= Direction::TOP_RIGHT;
+                }
+
+                // Set index to the left direction tile of the next fog data raw.
+                fogDataIndex += fogDataWidth - 2;
+
+                if ( fogData[fogDataIndex] == 1 ) {
+                    fogDirection |= Direction::LEFT;
+                }
+
+                // Skip the center tile as it was already checked.
+                fogDataIndex += 2;
+
+                if ( fogData[fogDataIndex] == 1 ) {
+                    fogDirection |= Direction::RIGHT;
+                }
+
+                fogDataIndex += fogDataWidth - 2;
+
+                if ( fogData[fogDataIndex] == 1 ) {
+                    fogDirection |= Direction::BOTTOM_LEFT;
+                }
+
+                ++fogDataIndex;
+
+                if ( fogData[fogDataIndex] == 1 ) {
+                    fogDirection |= Direction::BOTTOM;
+                }
+
+                ++fogDataIndex;
+
+                if ( fogData[fogDataIndex] == 1 ) {
+                    fogDirection |= Direction::BOTTOM_RIGHT;
+                }
+
+                tile._setFogDirection( fogDirection );
+            }
+        }
+    }
 }
 
-void Maps::Tiles::drawFog( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const
+void Maps::Tiles::drawFog( fheroes2::Image & dst, const Interface::GameArea & area ) const
 {
+    // This method should not be called for a tile without fog.
+    assert( _fogDirection & Direction::CENTER );
+
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
-    const int around = GetFogDirections( color );
+    // TODO: Cache all directions into a map: have an array which represents all conditions within this method. The index can be '_fogDirection', the value is index.
+    // And another array to store revert flag.
 
-    if ( DIRECTION_ALL == around ) {
+    if ( DIRECTION_ALL == _fogDirection ) {
         const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
         area.DrawTile( dst, sf, mp );
     }
@@ -2513,191 +2604,201 @@ void Maps::Tiles::drawFog( fheroes2::Image & dst, int color, const Interface::Ga
         uint32_t index = 0;
         bool revert = false;
 
-        if ( ( around & Direction::CENTER ) && !( around & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
+        if ( !( _fogDirection & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 10;
         }
-        else if ( ( contains( around, Direction::CENTER | Direction::TOP ) ) && !( around & ( Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
+        else if ( ( contains( _fogDirection, Direction::TOP ) ) && !( _fogDirection & ( Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 6;
         }
-        else if ( ( contains( around, Direction::CENTER | Direction::RIGHT ) ) && !( around & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT ) ) ) {
+        else if ( ( contains( _fogDirection, Direction::RIGHT ) ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT ) ) ) {
             index = 7;
         }
-        else if ( ( contains( around, Direction::CENTER | Direction::LEFT ) ) && !( around & ( Direction::TOP | Direction::BOTTOM | Direction::RIGHT ) ) ) {
+        else if ( ( contains( _fogDirection, Direction::LEFT ) ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM | Direction::RIGHT ) ) ) {
             index = 7;
             revert = true;
         }
-        else if ( ( contains( around, Direction::CENTER | Direction::BOTTOM ) ) && !( around & ( Direction::TOP | Direction::LEFT | Direction::RIGHT ) ) ) {
+        else if ( ( contains( _fogDirection, Direction::BOTTOM ) ) && !( _fogDirection & ( Direction::TOP | Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 8;
         }
-        else if ( ( contains( around, DIRECTION_CENTER_COL ) ) && !( around & ( Direction::LEFT | Direction::RIGHT ) ) ) {
+        else if ( ( contains( _fogDirection, DIRECTION_CENTER_COL ) ) && !( _fogDirection & ( Direction::LEFT | Direction::RIGHT ) ) ) {
             index = 9;
         }
-        else if ( ( contains( around, DIRECTION_CENTER_ROW ) ) && !( around & ( Direction::TOP | Direction::BOTTOM ) ) ) {
+        else if ( ( contains( _fogDirection, DIRECTION_CENTER_ROW ) ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM ) ) ) {
             index = 29;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~Direction::TOP_RIGHT ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~Direction::TOP_RIGHT ) ) ) {
             index = 15;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~Direction::TOP_LEFT ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~Direction::TOP_LEFT ) ) ) {
             index = 15;
             revert = true;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~Direction::BOTTOM_RIGHT ) ) ) {
             index = 22;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~Direction::BOTTOM_LEFT ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~Direction::BOTTOM_LEFT ) ) ) {
             index = 22;
             revert = true;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) ) {
             index = 16;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) ) {
             index = 16;
             revert = true;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT ) ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT ) ) ) ) {
             index = 17;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::BOTTOM_RIGHT ) ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::BOTTOM_RIGHT ) ) ) ) {
             index = 17;
             revert = true;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) ) {
             index = 18;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) ) {
             index = 23;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~DIRECTION_TOP_RIGHT_CORNER ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~DIRECTION_TOP_RIGHT_CORNER ) ) ) {
             index = 13;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~DIRECTION_TOP_LEFT_CORNER ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~DIRECTION_TOP_LEFT_CORNER ) ) ) {
             index = 13;
             revert = true;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~DIRECTION_BOTTOM_RIGHT_CORNER ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~DIRECTION_BOTTOM_RIGHT_CORNER ) ) ) {
             index = 14;
         }
-        else if ( around == ( DIRECTION_ALL & ( ~DIRECTION_BOTTOM_LEFT_CORNER ) ) ) {
+        else if ( _fogDirection == ( DIRECTION_ALL & ( ~DIRECTION_BOTTOM_LEFT_CORNER ) ) ) {
             index = 14;
             revert = true;
         }
-        else if ( contains( around, Direction::CENTER | Direction::LEFT | Direction::BOTTOM_LEFT | Direction::BOTTOM )
-                  && !( around & ( Direction::TOP | Direction::RIGHT ) ) ) {
+        else if ( contains( _fogDirection, Direction::LEFT | Direction::BOTTOM_LEFT | Direction::BOTTOM )
+                  && !( _fogDirection & ( Direction::TOP | Direction::RIGHT ) ) ) {
             index = 11;
         }
-        else if ( contains( around, Direction::CENTER | Direction::RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM )
-                  && !( around & ( Direction::TOP | Direction::LEFT ) ) ) {
+        else if ( contains( _fogDirection, Direction::RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM )
+                  && !( _fogDirection & ( Direction::TOP | Direction::LEFT ) ) ) {
             index = 11;
             revert = true;
         }
-        else if ( contains( around, Direction::CENTER | Direction::LEFT | Direction::TOP_LEFT | Direction::TOP )
-                  && !( around & ( Direction::BOTTOM | Direction::RIGHT ) ) ) {
+        else if ( contains( _fogDirection, Direction::LEFT | Direction::TOP_LEFT | Direction::TOP ) && !( _fogDirection & ( Direction::BOTTOM | Direction::RIGHT ) ) ) {
             index = 12;
         }
-        else if ( contains( around, Direction::CENTER | Direction::RIGHT | Direction::TOP_RIGHT | Direction::TOP )
-                  && !( around & ( Direction::BOTTOM | Direction::LEFT ) ) ) {
+        else if ( contains( _fogDirection, Direction::RIGHT | Direction::TOP_RIGHT | Direction::TOP ) && !( _fogDirection & ( Direction::BOTTOM | Direction::LEFT ) ) ) {
             index = 12;
             revert = true;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_LEFT )
-                  && !( around & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_LEFT )
+                  && !( _fogDirection & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_RIGHT ) ) ) {
             index = 19;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_RIGHT )
-                  && !( around & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_RIGHT )
+                  && !( _fogDirection & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_LEFT ) ) ) {
             index = 19;
             revert = true;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::BOTTOM_LEFT )
-                  && !( around & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::TOP_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::BOTTOM_LEFT )
+                  && !( _fogDirection & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::TOP_LEFT ) ) ) {
             index = 20;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::BOTTOM_RIGHT )
-                  && !( around & ( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::BOTTOM_RIGHT )
+                  && !( _fogDirection & ( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) ) {
             index = 20;
             revert = true;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP )
-                  && !( around & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP )
+                  && !( _fogDirection & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) ) {
             index = 22;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_LEFT ) && !( around & ( Direction::TOP | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_LEFT )
+                  && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM_RIGHT ) ) ) {
             index = 24;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_RIGHT ) && !( around & ( Direction::TOP | Direction::BOTTOM_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_RIGHT )
+                  && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM_LEFT ) ) ) {
             index = 24;
             revert = true;
         }
-        else if ( contains( around, DIRECTION_CENTER_COL | Direction::LEFT | Direction::TOP_LEFT ) && !( around & ( Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::LEFT | Direction::TOP_LEFT )
+                  && !( _fogDirection & ( Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
             index = 25;
         }
-        else if ( contains( around, DIRECTION_CENTER_COL | Direction::RIGHT | Direction::TOP_RIGHT ) && !( around & ( Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::RIGHT | Direction::TOP_RIGHT )
+                  && !( _fogDirection & ( Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 25;
             revert = true;
         }
-        else if ( contains( around, DIRECTION_CENTER_COL | Direction::BOTTOM_LEFT | Direction::LEFT ) && !( around & ( Direction::RIGHT | Direction::TOP_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::BOTTOM_LEFT | Direction::LEFT )
+                  && !( _fogDirection & ( Direction::RIGHT | Direction::TOP_LEFT ) ) ) {
             index = 26;
         }
-        else if ( contains( around, DIRECTION_CENTER_COL | Direction::BOTTOM_RIGHT | Direction::RIGHT ) && !( around & ( Direction::LEFT | Direction::TOP_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::BOTTOM_RIGHT | Direction::RIGHT )
+                  && !( _fogDirection & ( Direction::LEFT | Direction::TOP_RIGHT ) ) ) {
             index = 26;
             revert = true;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::TOP_LEFT | Direction::TOP ) && !( around & ( Direction::BOTTOM | Direction::TOP_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::TOP_LEFT | Direction::TOP )
+                  && !( _fogDirection & ( Direction::BOTTOM | Direction::TOP_RIGHT ) ) ) {
             index = 30;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::TOP_RIGHT | Direction::TOP ) && !( around & ( Direction::BOTTOM | Direction::TOP_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::TOP_RIGHT | Direction::TOP )
+                  && !( _fogDirection & ( Direction::BOTTOM | Direction::TOP_LEFT ) ) ) {
             index = 30;
             revert = true;
         }
-        else if ( contains( around, Direction::CENTER | Direction::BOTTOM | Direction::LEFT )
-                  && !( around & ( Direction::TOP | Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
+        else if ( contains( _fogDirection, Direction::BOTTOM | Direction::LEFT )
+                  && !( _fogDirection & ( Direction::TOP | Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
             index = 27;
         }
-        else if ( contains( around, Direction::CENTER | Direction::BOTTOM | Direction::RIGHT )
-                  && !( around & ( Direction::TOP | Direction::TOP_LEFT | Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, Direction::BOTTOM | Direction::RIGHT )
+                  && !( _fogDirection & ( Direction::TOP | Direction::TOP_LEFT | Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 27;
             revert = true;
         }
-        else if ( contains( around, Direction::CENTER | Direction::LEFT | Direction::TOP )
-                  && !( around & ( Direction::TOP_LEFT | Direction::RIGHT | Direction::BOTTOM | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, Direction::LEFT | Direction::TOP )
+                  && !( _fogDirection & ( Direction::TOP_LEFT | Direction::RIGHT | Direction::BOTTOM | Direction::BOTTOM_RIGHT ) ) ) {
             index = 28;
         }
-        else if ( contains( around, Direction::CENTER | Direction::RIGHT | Direction::TOP )
-                  && !( around & ( Direction::TOP_RIGHT | Direction::LEFT | Direction::BOTTOM | Direction::BOTTOM_LEFT ) ) ) {
+        else if ( contains( _fogDirection, Direction::RIGHT | Direction::TOP )
+                  && !( _fogDirection & ( Direction::TOP_RIGHT | Direction::LEFT | Direction::BOTTOM | Direction::BOTTOM_LEFT ) ) ) {
             index = 28;
             revert = true;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::TOP ) && !( around & ( Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::TOP )
+                  && !( _fogDirection & ( Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) {
             index = 31;
         }
-        else if ( contains( around, DIRECTION_CENTER_COL | Direction::RIGHT ) && !( around & ( Direction::LEFT | Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::RIGHT )
+                  && !( _fogDirection & ( Direction::LEFT | Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 32;
         }
-        else if ( contains( around, DIRECTION_CENTER_COL | Direction::LEFT ) && !( around & ( Direction::RIGHT | Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::LEFT )
+                  && !( _fogDirection & ( Direction::RIGHT | Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) {
             index = 32;
             revert = true;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | Direction::BOTTOM ) && !( around & ( Direction::TOP | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM )
+                  && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) {
             index = 33;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW ) && !( around & Direction::TOP ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW ) && !( _fogDirection & Direction::TOP ) ) {
             index = ( _index % 2 ) ? 0 : 1;
         }
-        else if ( contains( around, DIRECTION_CENTER_ROW | DIRECTION_TOP_ROW ) && !( around & Direction::BOTTOM ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | DIRECTION_TOP_ROW ) && !( _fogDirection & Direction::BOTTOM ) ) {
             index = ( _index % 2 ) ? 4 : 5;
         }
-        else if ( contains( around, DIRECTION_CENTER_COL | DIRECTION_LEFT_COL ) && !( around & Direction::RIGHT ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | DIRECTION_LEFT_COL ) && !( _fogDirection & Direction::RIGHT ) ) {
             index = ( _index % 2 ) ? 2 : 3;
         }
-        else if ( contains( around, DIRECTION_CENTER_COL | DIRECTION_RIGHT_COL ) && !( around & Direction::LEFT ) ) {
+        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | DIRECTION_RIGHT_COL ) && !( _fogDirection & Direction::LEFT ) ) {
             index = ( _index % 2 ) ? 2 : 3;
             revert = true;
         }
         else {
             // unknown
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << around )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << _fogDirection << ". Tile index: " << _index )
             const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
             area.DrawTile( dst, sf, mp );
             return;
@@ -3152,4 +3253,24 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     }
 
     return msg;
+}
+
+int Maps::getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
+{
+    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == objectIcnType && 60 <= icnIndex && 102 >= icnIndex ) {
+        // 60, 66, 72, 78, 84, 90, 96, 102
+        return ( ( icnIndex - 60 ) / 6 ) + 1;
+    }
+
+    return 0;
+}
+
+int Maps::getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
+{
+    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == objectIcnType && 110 <= icnIndex && 138 >= icnIndex ) {
+        // 110, 114, 118, 122, 126, 130, 134, 138
+        return ( ( icnIndex - 110 ) / 4 ) + 1;
+    }
+
+    return 0;
 }

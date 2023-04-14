@@ -751,7 +751,7 @@ namespace
         }
     }
 
-    void playPreviosScenarioVideo()
+    void playPreviousScenarioVideo()
     {
         const Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
         if ( saveData.isStarting() ) {
@@ -1207,7 +1207,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         }
     }
 
-    playPreviosScenarioVideo();
+    playPreviousScenarioVideo();
 
     if ( campaignData.isLastScenario( lastCompletedScenarioInfo ) ) {
         Game::ShowCredits();
@@ -1511,7 +1511,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         else if ( le.MouseClickLeft( buttonViewIntro.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_VIEW_INTRO ) ) {
             AudioManager::ResetAudio();
             fheroes2::ImageRestorer restorer( display, top.x, top.y, backgroundImage.width(), backgroundImage.height() );
-            playPreviosScenarioVideo();
+            playPreviousScenarioVideo();
             playCurrentScenarioVideo();
 
             restorer.restore();

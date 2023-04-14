@@ -58,6 +58,7 @@
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
+#include "spell.h"
 #include "tools.h"
 #include "translations.h"
 #include "week.h"
@@ -840,13 +841,11 @@ int32_t World::NextWhirlpool( const int32_t index ) const
     return Rand::Get( whilrpools );
 }
 
-/* return count captured object */
 uint32_t World::CountCapturedObject( int obj, int col ) const
 {
     return map_captureobj.GetCount( obj, col );
 }
 
-/* return count captured mines */
 uint32_t World::CountCapturedMines( int type, int color ) const
 {
     switch ( type ) {
@@ -861,21 +860,21 @@ uint32_t World::CountCapturedMines( int type, int color ) const
     return map_captureobj.GetCountMines( type, color );
 }
 
-/* capture object */
 void World::CaptureObject( int32_t index, int color )
 {
     const MP2::MapObjectType objectType = GetTiles( index ).GetObject( false );
     map_captureobj.Set( index, objectType, color );
 
     Castle * castle = getCastleEntrance( Maps::GetPoint( index ) );
-    if ( castle && castle->GetColor() != color )
+    if ( castle && castle->GetColor() != color ) {
         castle->ChangeColor( color );
+    }
 
-    if ( color & ( Color::ALL | Color::UNUSED ) )
+    if ( color & ( Color::ALL | Color::UNUSED ) ) {
         GetTiles( index ).setOwnershipFlag( objectType, color );
+    }
 }
 
-/* return color captured object */
 int World::ColorCapturedObject( int32_t index ) const
 {
     return map_captureobj.GetColor( index );
@@ -1408,84 +1407,200 @@ StreamBase & operator>>( StreamBase & msg, World & w )
 
     w.PostLoad( false );
 
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1003_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1003_RELEASE ) {
+        for ( Maps::Tiles & tile : w.vec_tiles ) {
+            if ( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE ) {
+                const int32_t spellId = Maps::getSpellIdFromTile( tile );
+
+                if ( spellId == Spell::HAUNT ) {
+                    const ResourceCount rc = tile.QuantityResourceCount();
+                    const int resource = rc.isValid() ? rc.first : Resource::GOLD;
+
+                    Maps::Tiles::RestoreAbandonedMine( tile, resource );
+
+                    Heroes * hero = tile.GetHeroes();
+                    if ( hero ) {
+                        hero->SetMapsObject( MP2::OBJ_MINES );
+                    }
+                    else {
+                        tile.SetObject( MP2::OBJ_MINES );
+                    }
+                }
+                else {
+                    Troop & guardians = w.GetCapturedObject( tile.GetIndex() ).GetTroop();
+
+                    tile.MonsterSetCount( guardians.isValid() ? guardians.GetCount() : 0 );
+
+                    guardians.Reset();
+                }
+            }
+        }
+    }
+
     return msg;
 }
 
-void EventDate::LoadFromMP2( StreamBuf st )
+void EventDate::LoadFromMP2( const std::vector<uint8_t> & data )
 {
-    // id
-    if ( 0 == st.get() ) {
-        // resource
-        resource.wood = st.getLE32();
-        resource.mercury = st.getLE32();
-        resource.ore = st.getLE32();
-        resource.sulfur = st.getLE32();
-        resource.crystal = st.getLE32();
-        resource.gems = st.getLE32();
-        resource.gold = st.getLE32();
+    assert( data.size() >= MP2::MP2_EVENT_STRUCTURE_MIN_SIZE );
 
-        st.skip( 2 );
+    assert( data[0] == 0 );
 
-        // allow computer
-        computer = ( st.getLE16() != 0 );
+    assert( data[42] == 1 );
 
-        // day of first occurrence
-        first = st.getLE16();
+    // Structure containing information about a timed global event.
+    //
+    // - uint8_t (1 byte)
+    //     Always 0 as an indicator that this indeed a timed global object.
+    //
+    // - int32_t (4 bytes)
+    //     The amount of Wood to be given. Can be negative.
+    //
+    // - int32_t (4 bytes)
+    //     The amount of Mercury to be given. Can be negative.
+    //
+    // - int32_t (4 bytes)
+    //     The amount of Ore to be given. Can be negative.
+    //
+    // - int32_t (4 bytes)
+    //     The amount of Sulfur to be given. Can be negative.
+    //
+    // - int32_t (4 bytes)
+    //     The amount of Crystals to be given. Can be negative.
+    //
+    // - int32_t (4 bytes)
+    //     The amount of Gems to be given. Can be negative.
+    //
+    // - int32_t (4 bytes)
+    //     The amount of Gold to be given. Can be negative.
+    //
+    // - uint16_t (2 bytes)
+    //     Possible artifacts to be given. Not in use.
+    //
+    // - uint16_t (2 bytes)
+    //     A flag whether the event is applicable for AI players as well.
+    //
+    // - uint16_t (2 bytes)
+    //     The first day of occurrence of the event.
+    //
+    // - uint16_t (2 bytes)
+    //     Period in days when the event repeats. 0 means that the event never repeats.
+    //
+    // - unused 5 bytes
+    //    Always 0.
+    //
+    // - unused 1 byte
+    //    Always 1.
+    //
+    // - uint8_t (1 byte)
+    //     A flag to determine whether Blue player receives the event.
+    //
+    // - uint8_t (1 byte)
+    //     A flag to determine whether Green player receives the event.
+    //
+    // - uint8_t (1 byte)
+    //     A flag to determine whether Red player receives the event.
+    //
+    // - uint8_t (1 byte)
+    //     A flag to determine whether Yellow player receives the event.
+    //
+    // - uint8_t (1 byte)
+    //     A flag to determine whether Orange player receives the event.
+    //
+    // - uint8_t (1 byte)
+    //     A flag to determine whether Purple player receives the event.
+    //
+    // - string
+    //    Null terminated string containing the event text.
 
-        // subsequent occurrences
-        subsequent = st.getLE16();
+    StreamBuf dataStream( data );
 
-        st.skip( 6 );
+    dataStream.skip( 1 );
 
-        colors = 0;
-        // blue
-        if ( st.get() )
-            colors |= Color::BLUE;
-        // green
-        if ( st.get() )
-            colors |= Color::GREEN;
-        // red
-        if ( st.get() )
-            colors |= Color::RED;
-        // yellow
-        if ( st.get() )
-            colors |= Color::YELLOW;
-        // orange
-        if ( st.get() )
-            colors |= Color::ORANGE;
-        // purple
-        if ( st.get() )
-            colors |= Color::PURPLE;
+    // Get the amount of resources.
+    resource.wood = static_cast<int32_t>( dataStream.getLE32() );
+    resource.mercury = static_cast<int32_t>( dataStream.getLE32() );
+    resource.ore = static_cast<int32_t>( dataStream.getLE32() );
+    resource.sulfur = static_cast<int32_t>( dataStream.getLE32() );
+    resource.crystal = static_cast<int32_t>( dataStream.getLE32() );
+    resource.gems = static_cast<int32_t>( dataStream.getLE32() );
+    resource.gold = static_cast<int32_t>( dataStream.getLE32() );
 
-        // message
-        message = st.toString();
-        DEBUG_LOG( DBG_GAME, DBG_INFO,
-                   "event"
-                       << ": " << message )
+    dataStream.skip( 2 );
+
+    // The event applies to AI players as well.
+    isApplicableForAIPlayers = ( dataStream.getLE16() != 0 );
+
+    // Get the first day of occurrence.
+    firstOccurrenceDay = dataStream.getLE16();
+
+    // Get the repeat period.
+    repeatPeriodInDays = dataStream.getLE16();
+
+    dataStream.skip( 6 );
+
+    colors = 0;
+
+    if ( dataStream.get() ) {
+        colors |= Color::BLUE;
     }
-    else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" )
+
+    if ( dataStream.get() ) {
+        colors |= Color::GREEN;
     }
+
+    if ( dataStream.get() ) {
+        colors |= Color::RED;
+    }
+
+    if ( dataStream.get() ) {
+        colors |= Color::YELLOW;
+    }
+
+    if ( dataStream.get() ) {
+        colors |= Color::ORANGE;
+    }
+
+    if ( dataStream.get() ) {
+        colors |= Color::PURPLE;
+    }
+
+    message = dataStream.toString();
+
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "A timed event which occurs at day " << firstOccurrenceDay << " contains a message: " << message )
 }
 
-bool EventDate::isDeprecated( uint32_t date ) const
+bool EventDate::isAllow( const int col, const uint32_t date ) const
 {
-    return 0 == subsequent && first < date;
-}
+    if ( ( col & colors ) == 0 ) {
+        // This player color is not allowed for the event.
+        return false;
+    }
 
-bool EventDate::isAllow( int col, uint32_t date ) const
-{
-    return ( ( first == date || ( subsequent && ( first < date && 0 == ( ( date - first ) % subsequent ) ) ) ) && ( col & colors ) );
+    if ( firstOccurrenceDay < date ) {
+        // The date has not come.
+        return false;
+    }
+
+    if ( firstOccurrenceDay == date ) {
+        return true;
+    }
+
+    if ( repeatPeriodInDays == 0 ) {
+        // This is not the same date and the event does not repeat.
+        return false;
+    }
+
+    return ( ( date - firstOccurrenceDay ) % repeatPeriodInDays ) == 0;
 }
 
 StreamBase & operator<<( StreamBase & msg, const EventDate & obj )
 {
-    return msg << obj.resource << obj.computer << obj.first << obj.subsequent << obj.colors << obj.message << obj.title;
+    return msg << obj.resource << obj.isApplicableForAIPlayers << obj.firstOccurrenceDay << obj.repeatPeriodInDays << obj.colors << obj.message << obj.title;
 }
 
 StreamBase & operator>>( StreamBase & msg, EventDate & obj )
 {
-    msg >> obj.resource >> obj.computer >> obj.first >> obj.subsequent >> obj.colors >> obj.message >> obj.title;
-
-    return msg;
+    return msg >> obj.resource >> obj.isApplicableForAIPlayers >> obj.firstOccurrenceDay >> obj.repeatPeriodInDays >> obj.colors >> obj.message >> obj.title;
 }

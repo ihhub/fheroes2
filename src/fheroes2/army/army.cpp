@@ -260,15 +260,21 @@ void Troops::UpgradeMonsters( const Monster & m )
     }
 }
 
-uint32_t Troops::GetCountMonsters( const Monster & m ) const
+uint32_t Troops::GetCountMonsters( const Monster & mons ) const
 {
-    uint32_t c = 0;
+    const int monsterId = mons.GetID();
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() && **it == m )
-            c += ( *it )->GetCount();
+    uint32_t result = 0;
 
-    return c;
+    for ( const Troop * troop : *this ) {
+        assert( troop != nullptr );
+
+        if ( troop->isValid() && troop->isMonster( monsterId ) ) {
+            result += troop->GetCount();
+        }
+    }
+
+    return result;
 }
 
 double Troops::getReinforcementValue( const Troops & reinforcement ) const
@@ -837,26 +843,31 @@ bool Troops::mergeWeakestTroopsIfNeeded()
     return true;
 }
 
-void Troops::AssignToFirstFreeSlot( const Troop & troop, const uint32_t splitCount )
+void Troops::AssignToFirstFreeSlot( const Troop & troopToAssign, const uint32_t count ) const
 {
-    for ( iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it )->isValid() )
-            continue;
+    for ( Troop * troop : *this ) {
+        assert( troop != nullptr );
 
-        ( *it )->Set( troop.GetMonster(), splitCount );
+        if ( troop->isValid() ) {
+            continue;
+        }
+
+        troop->Set( troopToAssign.GetMonster(), count );
         break;
     }
 }
 
-void Troops::JoinAllTroopsOfType( const Troop & targetTroop )
+void Troops::JoinAllTroopsOfType( const Troop & targetTroop ) const
 {
     const int troopID = targetTroop.GetID();
     const int totalMonsterCount = GetCountMonsters( troopID );
 
-    for ( iterator it = begin(); it != end(); ++it ) {
-        Troop * troop = *it;
-        if ( !troop->isValid() || troop->GetID() != troopID )
+    for ( Troop * troop : *this ) {
+        assert( troop != nullptr );
+
+        if ( !troop->isValid() || troop->GetID() != troopID ) {
             continue;
+        }
 
         if ( troop == &targetTroop ) {
             troop->SetCount( totalMonsterCount );
@@ -1029,15 +1040,6 @@ void Army::setFromTile( const Maps::Tiles & tile )
         at( 2 )->Set( Monster::EARTH_ELEMENT, 2 );
         at( 3 )->Set( Monster::EARTH_ELEMENT, 2 );
         break;
-
-    case MP2::OBJ_ABANDONED_MINE: {
-        const Troop & troop = world.GetCapturedObject( tile.GetIndex() ).GetTroop();
-        assert( troop.isValid() );
-
-        ArrangeForBattle( troop.GetMonster(), troop.GetCount(), tile.GetIndex(), false );
-
-        break;
-    }
 
     default:
         if ( isCaptureObject ) {

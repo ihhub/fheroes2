@@ -296,7 +296,7 @@ namespace Battle
 
         void RedrawActionNewTurn() const;
         void RedrawActionAttackPart1( Unit & attacker, const Unit & defender, const TargetsInfo & targets );
-        void RedrawActionAttackPart2( Unit & attacker, const Unit & defender, const TargetsInfo & targets );
+        void RedrawActionAttackPart2( Unit & attacker, const Unit & defender, const TargetsInfo & targets, const uint32_t resurrects );
         void RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets );
         void RedrawActionSpellCastPart1( const Spell & spell, int32_t dst, const HeroBase * caster, const TargetsInfo & targets );
         void RedrawActionSpellCastPart2( const Spell & spell, const TargetsInfo & targets );
@@ -438,7 +438,8 @@ namespace Battle
         fheroes2::Point _flyingPos;
 
         int32_t index_pos;
-        int32_t teleport_src;
+        // Index of the cell selected as the source for the Teleport spell
+        int32_t _teleportSpellSrcIdx;
         fheroes2::Rect main_tower;
 
         std::unique_ptr<StatusListBox> listlog;

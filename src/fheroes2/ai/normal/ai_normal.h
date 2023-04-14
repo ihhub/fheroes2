@@ -184,12 +184,12 @@ namespace AI
 
         SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & friendly,
                                            const Battle::Units & enemies, bool retreating ) const;
-        SpellcastOutcome spellDispellValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
+        SpellcastOutcome spellDispelValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
         SpellcastOutcome spellResurrectValue( const Spell & spell, const Battle::Arena & arena ) const;
         SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const int heroColor ) const;
         SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets ) const;
 
-        double spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const;
+        double spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispel ) const;
         double getSpellDisruptingRayRatio( const Battle::Unit & target ) const;
         double getSpellSlowRatio( const Battle::Unit & target ) const;
         double getSpellHasteRatio( const Battle::Unit & target ) const;
@@ -245,7 +245,7 @@ namespace AI
         std::set<int> findCastlesInDanger( const KingdomCastles & castles, const std::vector<std::pair<int, const Army *>> & enemyArmies, int myColor );
         std::vector<AICastle> getSortedCastleList( const KingdomCastles & castles, const std::set<int> & castlesInDanger );
 
-        double getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
+        double getObjectValue( const Heroes & hero, const int index, int & objectType, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority );
         void resetPathfinder() override;
 

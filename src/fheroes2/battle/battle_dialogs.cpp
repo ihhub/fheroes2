@@ -724,7 +724,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     return false;
 }
 
-void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount, const uint32_t raisedMonsterType ) const
+void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -764,7 +764,7 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount, const uin
     TextBox titleBox( _( "Necromancy!" ), Font::YELLOW_BIG, bsTextWidth );
     titleBox.Blit( xOffset, yOffset );
 
-    const Monster mons( raisedMonsterType );
+    const Monster mons( Monster::SKELETON );
     std::string msg = _( "Practicing the dark arts of necromancy, you are able to raise %{count} of the enemy's dead to return under your service as %{monster}." );
     StringReplace( msg, "%{count}", raiseCount );
     StringReplace( msg, "%{monster}", mons.GetPluralName( raiseCount ) );
@@ -783,7 +783,7 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount, const uin
     Game::PlayPickupSound();
 
     const int buttonOffset = 121;
-    const int buttonICN = isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB;
+    const int buttonICN = isEvilInterface ? ICN::BUTTON_SMALLER_OKAY_EVIL : ICN::BUTTON_SMALLER_OKAY_GOOD;
     fheroes2::Button buttonOk( renderArea.x + buttonOffset, renderArea.y + 410, buttonICN, 0, 1 );
     buttonOk.draw();
 

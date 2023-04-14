@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-11 16:34+0000\n"
+"POT-Creation-Date: 2023-04-13 05:15+0000\n"
 "PO-Revision-Date: 2023-01-25 17:06+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -51,9 +51,6 @@ msgstr ""
 msgid "CANCEL"
 msgstr ""
 
-msgid "OKAY"
-msgstr ""
-
 msgid "ACCEPT"
 msgstr ""
 
@@ -84,6 +81,14 @@ msgstr ""
 msgid "RESTART"
 msgstr ""
 
+msgid "HEROES"
+msgstr ""
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+
 msgid "S"
 msgstr ""
 
@@ -97,6 +102,9 @@ msgid "X-L"
 msgstr ""
 
 msgid "ALL"
+msgstr ""
+
+msgid "SELECT"
 msgstr ""
 
 msgid ""
@@ -149,6 +157,9 @@ msgstr ""
 msgid "GIFT"
 msgstr "FORÆR"
 
+msgid "guildWell|EXIT"
+msgstr ""
+
 msgid "DIFFICULTY"
 msgstr "SVÆRHEDSGRAD"
 
@@ -156,6 +167,9 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "MAX"
+msgstr ""
+
+msgid "OKAY"
 msgstr ""
 
 msgid "Warrior"
@@ -709,6 +723,17 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "1 %{defender} omkommer."
 msgstr[1] "%{count} %{defender} omkommer."
 
+#, fuzzy
+msgid "1 soul is incorporated."
+msgid_plural "%{count} souls are incorporated."
+msgstr[0] "Spejlbilledet er skabt."
+msgstr[1] "Spejlbilledet er skabt."
+
+msgid "1 %{unit} is revived."
+msgid_plural "%{count} %{unit} are revived."
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Flyttede %{monster}: fra [%{src}] til [%{dst}]."
 
@@ -1130,7 +1155,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 
@@ -2144,8 +2169,10 @@ msgid ""
 "The Crystal Garden increases production of Sprites by %{count} per week."
 msgstr ""
 
-msgid "The Dungeon increases the income of the town by %{count} / day."
+#, fuzzy
+msgid "The Dungeon increases the income of the town by %{count} gold per day."
 msgstr ""
+"%{name} øger dine væseners evne til at forsvare sig med %{count} point."
 
 msgid "The Waterfall increases production of Centaurs by %{count} per week."
 msgstr ""
@@ -2232,8 +2259,10 @@ msgid ""
 "per week."
 msgstr ""
 
-msgid "The Statue increases your town's income by %{count} per day."
+#, fuzzy
+msgid "The Statue increases your town's income by %{count} gold per day."
 msgstr ""
+"%{name} øger dine væseners evne til at forsvare sig med %{count} point."
 
 msgid "The Left Turret provides extra firepower during castle combat."
 msgstr ""
@@ -2874,6 +2903,15 @@ msgstr ""
 msgid "Click to apply the selected resolution."
 msgstr ""
 
+msgid "Click to apply the entered text."
+msgstr ""
+
+msgid "Click to open the Virtual Keyboard dialog."
+msgstr ""
+
+msgid "Open Virtual Keyboard"
+msgstr ""
+
 msgid "How many troops to move?"
 msgstr ""
 
@@ -3470,6 +3508,312 @@ msgstr ""
 msgid "View High Scores for Campaigns."
 msgstr ""
 
+msgid "hotkey|default okay event"
+msgstr ""
+
+msgid "hotkey|default cancel event"
+msgstr ""
+
+msgid "hotkey|default left"
+msgstr ""
+
+msgid "hotkey|default right"
+msgstr ""
+
+msgid "hotkey|default up"
+msgstr ""
+
+msgid "hotkey|default down"
+msgstr ""
+
+msgid "hotkey|toggle fullscreen"
+msgstr ""
+
+msgid "hotkey|toggle text support mode"
+msgstr ""
+
+msgid "hotkey|new game"
+msgstr ""
+
+msgid "hotkey|load game"
+msgstr ""
+
+msgid "hotkey|highscores"
+msgstr ""
+
+msgid "hotkey|credits"
+msgstr ""
+
+msgid "hotkey|standard game"
+msgstr ""
+
+msgid "hotkey|campaign game"
+msgstr ""
+
+msgid "hotkey|multi-player game"
+msgstr ""
+
+msgid "hotkey|settings"
+msgstr ""
+
+msgid "hotkey|quit"
+msgstr ""
+
+msgid "hotkey|select map"
+msgstr ""
+
+msgid "hotkey|select small map size"
+msgstr ""
+
+msgid "hotkey|select medium map size"
+msgstr ""
+
+msgid "hotkey|select large map size"
+msgstr ""
+
+msgid "hotkey|select extra large map size"
+msgstr ""
+
+msgid "hotkey|select all map sizes"
+msgstr ""
+
+msgid "hotkey|hotseat game"
+msgstr ""
+
+msgid "hotkey|battle only game"
+msgstr ""
+
+msgid "hotkey|choose the original campaign"
+msgstr ""
+
+msgid "hotkey|choose the expansion campaign"
+msgstr ""
+
+msgid "hotkey|roland campaign"
+msgstr ""
+
+msgid "hotkey|archibald campaign"
+msgstr ""
+
+msgid "hotkey|the price of loyalty campaign"
+msgstr ""
+
+msgid "hotkey|voyage home campaign"
+msgstr ""
+
+msgid "hotkey|wizard's isle campaign"
+msgstr ""
+
+msgid "hotkey|descendants campaign"
+msgstr ""
+
+msgid "hotkey|select first campaign bonus"
+msgstr ""
+
+msgid "hotkey|select second campaign bonus"
+msgstr ""
+
+msgid "hotkey|select third campaign bonus"
+msgstr ""
+
+msgid "hotkey|view campaign intro"
+msgstr ""
+
+msgid "hotkey|select campaign difficulty"
+msgstr ""
+
+msgid "hotkey|restart campaign scenario"
+msgstr ""
+
+msgid "hotkey|world map left"
+msgstr ""
+
+msgid "hotkey|world map right"
+msgstr ""
+
+msgid "hotkey|world map up"
+msgstr ""
+
+msgid "hotkey|world map down"
+msgstr ""
+
+msgid "hotkey|world map up left"
+msgstr ""
+
+msgid "hotkey|world map up right"
+msgstr ""
+
+msgid "hotkey|world map down left"
+msgstr ""
+
+msgid "hotkey|world map down right"
+msgstr ""
+
+msgid "hotkey|save game"
+msgstr ""
+
+msgid "hotkey|next hero"
+msgstr ""
+
+msgid "hotkey|continue hero movement"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|cast adventure spell"
+msgstr "Se eventyrmagi"
+
+msgid "hotkey|put hero to sleep"
+msgstr ""
+
+msgid "hotkey|next town"
+msgstr ""
+
+msgid "hotkey|end turn"
+msgstr ""
+
+msgid "hotkey|file options"
+msgstr ""
+
+msgid "hotkey|adventure options"
+msgstr ""
+
+msgid "hotkey|puzzle map"
+msgstr ""
+
+msgid "hotkey|scenario information"
+msgstr ""
+
+msgid "hotkey|dig for artifact"
+msgstr ""
+
+msgid "hotkey|view world"
+msgstr ""
+
+msgid "hotkey|kingdom summary"
+msgstr ""
+
+msgid "hotkey|default action"
+msgstr ""
+
+msgid "hotkey|open focus"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|system options"
+msgstr "Tilpas systemindstillinger"
+
+msgid "hotkey|scroll left"
+msgstr ""
+
+msgid "hotkey|scroll right"
+msgstr ""
+
+msgid "hotkey|scroll up"
+msgstr ""
+
+msgid "hotkey|scroll down"
+msgstr ""
+
+msgid "hotkey|toggle control panel"
+msgstr ""
+
+msgid "hotkey|toggle radar"
+msgstr ""
+
+msgid "hotkey|toggle buttons"
+msgstr ""
+
+msgid "hotkey|toggle status"
+msgstr ""
+
+msgid "hotkey|toggle icons"
+msgstr ""
+
+msgid "hotkey|transfer control to ai"
+msgstr ""
+
+msgid "hotkey|retreat from battle"
+msgstr ""
+
+msgid "hotkey|surrender during battle"
+msgstr ""
+
+msgid "hotkey|toggle battle auto mode"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|finish the battle in auto mode"
+msgstr "Er du sikker på du vil færdiggøre denne kamp automatisk?"
+
+msgid "hotkey|battle options"
+msgstr ""
+
+msgid "hotkey|skip turn in battle"
+msgstr ""
+
+msgid "hotkey|cast battle spell"
+msgstr ""
+
+msgid "hotkey|dwelling level 1"
+msgstr ""
+
+msgid "hotkey|dwelling level 2"
+msgstr ""
+
+msgid "hotkey|dwelling level 3"
+msgstr ""
+
+msgid "hotkey|dwelling level 4"
+msgstr ""
+
+msgid "hotkey|dwelling level 5"
+msgstr ""
+
+msgid "hotkey|dwelling level 6"
+msgstr ""
+
+msgid "hotkey|well"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|marketplace"
+msgstr "Markedsplads"
+
+msgid "hotkey|mage guild"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|shipyard"
+msgstr "Skipsvært"
+
+#, fuzzy
+msgid "hotkey|thieves guild"
+msgstr "Tyvelaug"
+
+msgid "hotkey|tavern"
+msgstr ""
+
+msgid "hotkey|construction screen"
+msgstr ""
+
+msgid "hotkey|buy all monsters in well"
+msgstr ""
+
+msgid "hotkey|split stack by half"
+msgstr ""
+
+msgid "hotkey|split stack by one"
+msgstr ""
+
+msgid "hotkey|join stacks"
+msgstr ""
+
+msgid "hotkey|upgrade troop"
+msgstr ""
+
+msgid "hotkey|dismiss troop"
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "Spejlbilledet er skabt."
@@ -3843,6 +4187,9 @@ msgstr ""
 msgid " All dwellings increase population."
 msgstr ""
 
+msgid "New Week!"
+msgstr ""
+
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
 "banished from this land."
@@ -4118,6 +4465,13 @@ msgstr ""
 
 msgid "Danish"
 msgstr ""
+
+msgid "Slovak"
+msgstr ""
+
+#, fuzzy
+msgid "Vietnamese"
+msgstr "Vis %{name}"
 
 msgid ", FPS: "
 msgstr ""
@@ -4831,9 +5185,6 @@ msgid ""
 "wood per day."
 msgstr ""
 
-msgid "You beat the Ghosts and are able to restore the mine to production."
-msgstr ""
-
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
@@ -4870,6 +5221,9 @@ msgstr ""
 msgid ""
 "You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
 "wish to enter?"
+msgstr ""
+
+msgid "You beat the Ghosts and are able to restore the mine to production."
 msgstr ""
 
 msgid ""
@@ -5753,9 +6107,10 @@ msgstr "%{skill} giver din helt mulighed for at lære magi på fjerde niveau."
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "%{skill} giver din helt mulighed for at lære magi på femte niveau."
 
-msgid "%{skill} regenerates one of your hero's spell points per day."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
-"%{skill} regenerates %{count} of your hero's spell points per day."
+"%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] "%{skill} regenerer ét af din helts magipoint per dag."
 msgstr[1] "%{skill} regenerer %{count} af din helts magipoint per dag."
 
@@ -7235,8 +7590,9 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr ""
 
-msgid "The %{name} increases your morale."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases your morale by %{count}."
+msgstr "%{name} øger dine væseners evne til at angribe med %{count} point."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -7322,7 +7678,7 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr ""
 
-msgid "The %{name} lets your catapult fire twice per combat round."
+msgid "The %{name} gives your catapult one extra shot per combat round."
 msgstr ""
 
 msgid ""
@@ -7454,8 +7810,9 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr ""
 
-msgid "The %{name} increases your luck in combat."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases your luck in combat by %{count}."
+msgstr "%{name} øger dine væseners evne til at angribe med %{count} point."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "

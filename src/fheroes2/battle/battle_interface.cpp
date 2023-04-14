@@ -1005,8 +1005,17 @@ void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::
 
     // Draw a monster's sprite.
     const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, unit.GetSpriteIndex() );
-    fheroes2::Blit( mons32, output, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ),
-                    revert );
+    if ( unit.Modes( Battle::CAP_MIRRORIMAGE ) ) {
+        fheroes2::Sprite mirroredMonster = mons32;
+
+        fheroes2::ApplyPalette( mirroredMonster, PAL::GetPalette( PAL::PaletteType::MIRROR_IMAGE ) );
+        fheroes2::Blit( mirroredMonster, output, pos.x + ( pos.width - mons32.width() ) / 2,
+                        pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ), revert );
+    }
+    else {
+        fheroes2::Blit( mons32, output, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ),
+                        revert );
+    }
 
     Text number( fheroes2::abbreviateNumber( unit.GetCount() ), Font::SMALL );
     number.Blit( pos.x + 2, pos.y + 2, output );
@@ -1136,7 +1145,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     , _flyingUnit( nullptr )
     , b_current_sprite( nullptr )
     , index_pos( -1 )
-    , teleport_src( -1 )
+    , _teleportSpellSrcIdx( -1 )
     , listlog( nullptr )
     , _cursorRestorer( true, Cursor::WAR_POINTER )
     , _bridgeAnimation( { false, BridgeMovementAnimation::UP_POSITION } )
@@ -1866,12 +1875,11 @@ void Battle::Interface::RedrawCover()
         fheroes2::Blit( bridgeImage, _mainSurface, bridgeImage.x(), bridgeImage.y() );
     }
 
-    // cursor
     const Cell * cell = Board::GetCell( index_pos );
     const int cursorType = Cursor::Get().Themes();
 
     if ( cell && _currentUnit && conf.BattleShowMouseShadow() ) {
-        std::set<const Cell *> highlightCells;
+        std::set<const Cell *> highlightedCells;
 
         if ( humanturn_spell.isValid() ) {
             switch ( humanturn_spell.GetID() ) {
@@ -1880,46 +1888,79 @@ void Battle::Interface::RedrawCover()
                 for ( size_t i = 0; i < around.size(); ++i ) {
                     const Cell * nearbyCell = Board::GetCell( around[i] );
                     if ( nearbyCell != nullptr ) {
-                        highlightCells.emplace( nearbyCell );
+                        highlightedCells.emplace( nearbyCell );
                     }
                 }
                 break;
             }
             case Spell::FIREBALL:
             case Spell::METEORSHOWER: {
-                highlightCells.emplace( cell );
+                highlightedCells.emplace( cell );
                 const Indexes around = Board::GetAroundIndexes( index_pos );
                 for ( size_t i = 0; i < around.size(); ++i ) {
                     const Cell * nearbyCell = Board::GetCell( around[i] );
                     if ( nearbyCell != nullptr ) {
-                        highlightCells.emplace( nearbyCell );
+                        highlightedCells.emplace( nearbyCell );
                     }
                 }
                 break;
             }
             case Spell::FIREBLAST: {
-                highlightCells.emplace( cell );
+                highlightedCells.emplace( cell );
                 const Indexes around = Board::GetDistanceIndexes( index_pos, 2 );
                 for ( size_t i = 0; i < around.size(); ++i ) {
                     const Cell * nearbyCell = Board::GetCell( around[i] );
                     if ( nearbyCell != nullptr ) {
-                        highlightCells.emplace( nearbyCell );
+                        highlightedCells.emplace( nearbyCell );
                     }
                 }
                 break;
             }
+            case Spell::TELEPORT: {
+                switch ( cursorType ) {
+                case Cursor::WAR_NONE:
+                    highlightedCells.emplace( cell );
+                    break;
+                case Cursor::SP_TELEPORT:
+                    if ( Board::isValidIndex( _teleportSpellSrcIdx ) ) {
+                        const Unit * unitToTeleport = arena.GetTroopBoard( _teleportSpellSrcIdx );
+                        assert( unitToTeleport != nullptr );
+
+                        const Position pos = Position::GetPosition( *unitToTeleport, index_pos );
+                        assert( pos.GetHead() != nullptr );
+
+                        highlightedCells.emplace( pos.GetHead() );
+
+                        if ( unitToTeleport->isWide() ) {
+                            assert( pos.GetTail() != nullptr );
+
+                            highlightedCells.emplace( pos.GetTail() );
+                        }
+                    }
+                    else {
+                        highlightedCells.emplace( cell );
+                    }
+                    break;
+                default:
+                    // This should never happen
+                    assert( 0 );
+                    break;
+                }
+                break;
+            }
             default:
-                highlightCells.emplace( cell );
+                highlightedCells.emplace( cell );
+                break;
             }
         }
         else if ( _currentUnit->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT )
                   && ( cursorType == Cursor::WAR_ARROW || cursorType == Cursor::WAR_BROKENARROW ) ) {
-            highlightCells.emplace( cell );
+            highlightedCells.emplace( cell );
             const Indexes around = Board::GetAroundIndexes( index_pos );
             for ( size_t i = 0; i < around.size(); ++i ) {
                 const Cell * nearbyCell = Board::GetCell( around[i] );
                 if ( nearbyCell != nullptr ) {
-                    highlightCells.emplace( nearbyCell );
+                    highlightedCells.emplace( nearbyCell );
                 }
             }
         }
@@ -1929,12 +1970,12 @@ void Battle::Interface::RedrawCover()
             assert( pos.GetHead() != nullptr );
             assert( pos.GetTail() != nullptr );
 
-            highlightCells.emplace( pos.GetHead() );
-            highlightCells.emplace( pos.GetTail() );
+            highlightedCells.emplace( pos.GetHead() );
+            highlightedCells.emplace( pos.GetTail() );
         }
         else if ( cursorType == Cursor::SWORD_TOPLEFT || cursorType == Cursor::SWORD_TOPRIGHT || cursorType == Cursor::SWORD_BOTTOMLEFT
                   || cursorType == Cursor::SWORD_BOTTOMRIGHT || cursorType == Cursor::SWORD_LEFT || cursorType == Cursor::SWORD_RIGHT ) {
-            highlightCells.emplace( cell );
+            highlightedCells.emplace( cell );
 
             int direction = 0;
             if ( cursorType == Cursor::SWORD_TOPLEFT ) {
@@ -1960,22 +2001,21 @@ void Battle::Interface::RedrawCover()
             }
 
             const Position pos = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) );
-
             assert( pos.GetHead() != nullptr );
 
-            highlightCells.emplace( pos.GetHead() );
+            highlightedCells.emplace( pos.GetHead() );
 
             if ( _currentUnit->isWide() ) {
                 assert( pos.GetTail() != nullptr );
 
-                highlightCells.emplace( pos.GetTail() );
+                highlightedCells.emplace( pos.GetTail() );
             }
 
             if ( _currentUnit->isDoubleCellAttack() ) {
                 const Cell * secondAttackedCell = Board::GetCell( index_pos, Board::GetReflectDirection( direction ) );
 
                 if ( secondAttackedCell ) {
-                    highlightCells.emplace( secondAttackedCell );
+                    highlightedCells.emplace( secondAttackedCell );
                 }
             }
             else if ( _currentUnit->isAllAdjacentCellsAttack() ) {
@@ -1991,32 +2031,32 @@ void Battle::Interface::RedrawCover()
                     const Unit * nearbyUnit = nearbyCell->GetUnit();
 
                     if ( nearbyUnit && nearbyUnit->GetColor() != _currentUnit->GetCurrentColor() ) {
-                        highlightCells.emplace( nearbyCell );
+                        highlightedCells.emplace( nearbyCell );
                     }
                 }
             }
         }
         else {
-            highlightCells.emplace( cell );
+            highlightedCells.emplace( cell );
         }
 
-        assert( !highlightCells.empty() );
+        assert( !highlightedCells.empty() );
 
         const HeroBase * currentCommander = arena.GetCurrentCommander();
-        const int spellPower = ( currentCommander == nullptr ) ? 0 : currentCommander->GetPower();
 
-        for ( const Cell * highlightCell : highlightCells ) {
-            bool isApplicable = highlightCell->isPassable( false );
+        for ( const Cell * highlightedCell : highlightedCells ) {
+            assert( highlightedCell != nullptr );
+
+            bool isApplicable = highlightedCell->isPassable( false );
 
             if ( isApplicable ) {
-                const Unit * highlightedUnit = highlightCell->GetUnit();
+                const Unit * highlightedUnit = highlightedCell->GetUnit();
 
-                isApplicable
-                    = highlightedUnit == nullptr || !humanturn_spell.isValid() || !highlightedUnit->isMagicResist( humanturn_spell, spellPower, currentCommander );
+                isApplicable = highlightedUnit == nullptr || !humanturn_spell.isValid() || highlightedUnit->AllowApplySpell( humanturn_spell, currentCommander );
             }
 
             if ( isApplicable ) {
-                fheroes2::Blit( _hexagonCursorShadow, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
+                fheroes2::Blit( _hexagonCursorShadow, _mainSurface, highlightedCell->GetPos().x, highlightedCell->GetPos().y );
             }
         }
     }
@@ -2189,7 +2229,7 @@ void Battle::Interface::RedrawCastle( const Castle & castle, int32_t cellId )
         fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
     }
     else if ( Arena::CASTLE_TOP_ARCHER_TOWER_POS == cellId ) {
-        const Tower * ltower = Arena::GetTower( TWR_LEFT );
+        const Tower * ltower = Arena::GetTower( TowerType::TWR_LEFT );
         uint32_t index = 17;
 
         if ( castle.isBuild( BUILD_LEFTTURRET ) && ltower )
@@ -2199,7 +2239,7 @@ void Battle::Interface::RedrawCastle( const Castle & castle, int32_t cellId )
         fheroes2::Blit( towerSprite, _mainSurface, 443 + towerSprite.x(), 153 + towerSprite.y() );
     }
     else if ( Arena::CASTLE_BOTTOM_ARCHER_TOWER_POS == cellId ) {
-        const Tower * rtower = Arena::GetTower( TWR_RIGHT );
+        const Tower * rtower = Arena::GetTower( TowerType::TWR_RIGHT );
         uint32_t index = 17;
 
         if ( castle.isBuild( BUILD_RIGHTTURRET ) && rtower )
@@ -2220,7 +2260,7 @@ void Battle::Interface::RedrawCastle( const Castle & castle, int32_t cellId )
 
 void Battle::Interface::RedrawCastleMainTower( const Castle & castle )
 {
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Castle( castle.GetRace() ), ( Arena::GetTower( TWR_CENTER )->isValid() ? 20 : 26 ) );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Castle( castle.GetRace() ), ( Arena::GetTower( TowerType::TWR_CENTER )->isValid() ? 20 : 26 ) );
 
     fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
 }
@@ -2505,42 +2545,42 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
     const Spell & spell = humanturn_spell;
 
     if ( cell && _currentUnit && spell.isValid() ) {
-        const Unit * b_stats = cell->GetUnit();
+        const Unit * unitOnCell = cell->GetUnit();
 
-        // over graveyard
-        if ( !b_stats && arena.GraveyardAllowResurrect( index_pos, spell ) ) {
-            b_stats = arena.GraveyardLastTroop( index_pos );
-            if ( b_stats->isWide() ) { // we need to check tail and head positions
-                const Cell * tailCell = Board::GetCell( b_stats->GetTailIndex() );
-                const Cell * headCell = Board::GetCell( b_stats->GetHeadIndex() );
-                if ( !tailCell || tailCell->GetUnit() || !headCell || headCell->GetUnit() )
-                    b_stats = nullptr;
-            }
+        // Cursor is over some dead unit that we can resurrect
+        if ( unitOnCell == nullptr && arena.GraveyardAllowResurrect( index_pos, spell ) ) {
+            unitOnCell = arena.GraveyardLastTroop( index_pos );
+            assert( unitOnCell != nullptr && !unitOnCell->isValid() );
         }
 
-        // teleport check first
-        if ( Board::isValidIndex( teleport_src ) ) {
-            const Unit * unitToTeleport = arena.GetTroopBoard( teleport_src );
-
+        // Check the Teleport spell first
+        if ( Board::isValidIndex( _teleportSpellSrcIdx ) ) {
+            const Unit * unitToTeleport = arena.GetTroopBoard( _teleportSpellSrcIdx );
             assert( unitToTeleport != nullptr );
 
-            if ( !b_stats && cell->isPassableForUnit( *unitToTeleport ) ) {
+            if ( unitOnCell == nullptr && cell->isPassableForUnit( *unitToTeleport ) ) {
                 statusMsg = _( "Teleport here" );
+
                 return Cursor::SP_TELEPORT;
             }
 
             statusMsg = _( "Invalid teleport destination" );
+
             return Cursor::WAR_NONE;
         }
-        else if ( b_stats && b_stats->AllowApplySpell( spell, _currentUnit->GetCurrentOrArmyCommander() ) ) {
+
+        if ( unitOnCell && unitOnCell->AllowApplySpell( spell, _currentUnit->GetCurrentOrArmyCommander() ) ) {
             statusMsg = _( "Cast %{spell} on %{monster}" );
             StringReplace( statusMsg, "%{spell}", spell.GetName() );
-            StringReplaceWithLowercase( statusMsg, "%{monster}", b_stats->GetName() );
+            StringReplaceWithLowercase( statusMsg, "%{monster}", unitOnCell->GetName() );
+
             return GetCursorFromSpell( spell.GetID() );
         }
-        else if ( !spell.isApplyToFriends() && !spell.isApplyToEnemies() && !spell.isApplyToAnyTroops() ) {
+
+        if ( !spell.isApplyToFriends() && !spell.isApplyToEnemies() && !spell.isApplyToAnyTroops() ) {
             statusMsg = _( "Cast %{spell}" );
             StringReplace( statusMsg, "%{spell}", spell.GetName() );
+
             return GetCursorFromSpell( spell.GetID() );
         }
     }
@@ -2693,7 +2733,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     // Add offsets to inner objects
     const fheroes2::Rect mainTowerRect = main_tower + _interfacePosition.getPosition();
     const fheroes2::Rect armiesOrderRect = armies_order + _interfacePosition.getPosition();
-    if ( Arena::GetTower( TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
+    if ( Arena::GetTower( TowerType::TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
         cursor.SetThemes( Cursor::WAR_INFO );
         msg = _( "View Ballista info" );
 
@@ -2874,7 +2914,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
     // reset cast
     if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
         humanturn_spell = Spell::NONE;
-        teleport_src = -1;
+        _teleportSpellSrcIdx = -1;
     }
     else if ( le.MouseCursor( _interfacePosition ) && humanturn_spell.isValid() ) {
         const int themes = GetBattleSpellCursor( msg );
@@ -2901,13 +2941,13 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << index_pos )
 
             if ( Cursor::SP_TELEPORT == cursor.Themes() ) {
-                if ( 0 > teleport_src )
-                    teleport_src = index_pos;
+                if ( 0 > _teleportSpellSrcIdx )
+                    _teleportSpellSrcIdx = index_pos;
                 else {
-                    a.emplace_back( CommandType::MSG_BATTLE_CAST, Spell::TELEPORT, teleport_src, index_pos );
+                    a.emplace_back( CommandType::MSG_BATTLE_CAST, Spell::TELEPORT, _teleportSpellSrcIdx, index_pos );
                     humanturn_spell = Spell::NONE;
                     humanturn_exit = true;
-                    teleport_src = -1;
+                    _teleportSpellSrcIdx = -1;
                 }
             }
             else if ( Cursor::SP_MIRRORIMAGE == cursor.Themes() ) {
@@ -3234,10 +3274,12 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
 void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos, const fheroes2::Point & endPos, double angle, uint32_t monsterID )
 {
     LocalEvent & le = LocalEvent::Get();
-    fheroes2::Sprite missile;
 
     const bool reverse = startPos.x > endPos.x;
     const bool isMage = ( monsterID == Monster::MAGE || monsterID == Monster::ARCHMAGE );
+
+    fheroes2::Sprite missile;
+    fheroes2::Point endPosShift{ 0, 0 };
 
     // Mage is channeling the bolt; doesn't have missile sprite
     if ( isMage ) {
@@ -3245,10 +3287,14 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     }
     else {
         missile = fheroes2::AGG::GetICN( Monster::GetMissileICN( monsterID ), static_cast<uint32_t>( Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) ) );
+
+        // The projectile has to hit the target but not go through it so its end position is shifted in the direction to the shooter.
+        endPosShift.x = reverse ? ( missile.width() / 2 ) : -( missile.width() / 2 );
+        endPosShift.y = ( startPos.y > endPos.y ) ? ( missile.height() / 2 ) : -( missile.height() / 2 );
     }
 
     // Lich/Power lich has projectile speed of 25
-    const std::vector<fheroes2::Point> points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.width(), 25 ) );
+    const std::vector<fheroes2::Point> points = GetEuclideanLine( startPos, endPos + endPosShift, isMage ? 50 : std::max( missile.width(), 25 ) );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
 
     // For most shooting creatures we do not render the first missile position to better imitate start position change depending on shooting angle.
@@ -3388,7 +3434,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
     }
 }
 
-void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & defender, const TargetsInfo & targets )
+void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & defender, const TargetsInfo & targets, const uint32_t resurrects )
 {
     // Reset the delay to wait till the next frame.
     if ( !Game::isDelayNeeded( { Game::DelayType::BATTLE_FRAME_DELAY } ) ) {
@@ -3447,6 +3493,25 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
 
         status.SetMessage( msg, true );
         status.SetMessage( "", false );
+
+        if ( resurrects != 0 ) {
+            auto updateStatusBar = []( Battle::Status & statusBar, std::string & localMsg, const uint32_t localRes, const char * localUnit ) {
+                StringReplace( localMsg, "%{count}", static_cast<int32_t>( localRes ) );
+                StringReplaceWithLowercase( localMsg, "%{unit}", localUnit );
+
+                statusBar.SetMessage( localMsg, true );
+                statusBar.SetMessage( "", false );
+            };
+
+            if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
+                msg = _n( "1 soul is incorporated.", "%{count} souls are incorporated.", resurrects );
+                updateStatusBar( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
+            }
+            else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
+                msg = _n( "1 %{unit} is revived.", "%{count} %{unit} are revived.", resurrects );
+                updateStatusBar( status, msg, resurrects, attacker.GetPluralName( resurrects ) );
+            }
+        }
     }
 
     _movingUnit = nullptr;

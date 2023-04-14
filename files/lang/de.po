@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-11 16:34+0000\n"
-"PO-Revision-Date: 2022-12-22 21:39+0100\n"
+"POT-Creation-Date: 2023-04-13 05:15+0000\n"
+"PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.1.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -54,9 +54,6 @@ msgstr "BEEND."
 msgid "CANCEL"
 msgstr "ABBR."
 
-msgid "OKAY"
-msgstr "OKAY"
-
 msgid "ACCEPT"
 msgstr "AKZEPT."
 
@@ -87,6 +84,16 @@ msgstr "AUFRÜST."
 msgid "RESTART"
 msgstr "NEUSTART"
 
+msgid "HEROES"
+msgstr "HELDEN"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"STÄDTE/\n"
+"BURGEN"
+
 msgid "S"
 msgstr "S"
 
@@ -101,6 +108,9 @@ msgstr "X-L"
 
 msgid "ALL"
 msgstr "ALLE"
+
+msgid "SELECT"
+msgstr "AUSW."
 
 msgid ""
 "STANDARD\n"
@@ -163,7 +173,10 @@ msgid "6 PLAYERS"
 msgstr "6 SPIELER"
 
 msgid "GIFT"
-msgstr "SPENDEN"
+msgstr "SPEND."
+
+msgid "guildWell|EXIT"
+msgstr "ENDE"
 
 msgid "DIFFICULTY"
 msgstr "SCHWIERIG."
@@ -173,6 +186,9 @@ msgstr "MIN"
 
 msgid "MAX"
 msgstr "MAX"
+
+msgid "OKAY"
+msgstr "OKAY"
 
 msgid "Warrior"
 msgstr "Krieger"
@@ -733,6 +749,16 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "1 %{defender} stirbt."
 msgstr[1] "%{count} %{defender} sterben."
 
+msgid "1 soul is incorporated."
+msgid_plural "%{count} souls are incorporated."
+msgstr[0] "1 Seele wird aufgenommen."
+msgstr[1] "%{count} Seelen werden aufgenommen."
+
+msgid "1 %{unit} is revived."
+msgid_plural "%{count} %{unit} are revived."
+msgstr[0] "1 %{unit} wird wiederbelebt."
+msgstr[1] "%{count} %{unit} werden wiederbelebt."
+
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Hat %{monster}: von [%{src}] nach [%{dst}] verschoben."
 
@@ -1225,7 +1251,7 @@ msgstr ""
 "Möglichkeit zu geben, in dieser Region zu operieren."
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 "Beseitigen Sie alle Gegner in diesem Gebiet. Dann gehört das erste Stück des "
@@ -1614,9 +1640,8 @@ msgstr "Fizbin des Pechs"
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Herausragendste Schriftrolle"
 
-#, fuzzy
 msgid "campaignBonus|Gauntlets"
-msgstr "Ballista"
+msgstr "Gepanzerter Handschuh"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr "Scheußliche Maske"
@@ -2331,8 +2356,8 @@ msgid ""
 msgstr ""
 "Der Kristallgarten erhöht die Produktion von Feen um %{count} pro Woche."
 
-msgid "The Dungeon increases the income of the town by %{count} / day."
-msgstr "Das Verlies erhöht das Einkommen der Stadt um %{count} / Tag."
+msgid "The Dungeon increases the income of the town by %{count} gold per day."
+msgstr "Der Dungeon erhöht das Einkommen der Stadt um %{count} Gold pro Tag."
 
 msgid "The Waterfall increases production of Centaurs by %{count} per week."
 msgstr ""
@@ -2431,8 +2456,8 @@ msgstr ""
 "Der Brunnen erhöht die Wachstumsrate aller Behausungen um %{count} Lebewesen "
 "pro Woche."
 
-msgid "The Statue increases your town's income by %{count} per day."
-msgstr "Die Statue erhöht das Einkommen Ihrer Stadt um %{count} pro Tag."
+msgid "The Statue increases your town's income by %{count} gold per day."
+msgstr "Die Statue erhöht das Einkommen ihrer Stadt um %{count} Gold pro Tag."
 
 msgid "The Left Turret provides extra firepower during castle combat."
 msgstr ""
@@ -3139,6 +3164,15 @@ msgstr "Spielauflösung wählen:"
 msgid "Click to apply the selected resolution."
 msgstr "Klicken Sie, um die ausgewählte Auflösung anzuwenden."
 
+msgid "Click to apply the entered text."
+msgstr "Klicken zur Übernahme des eingegebenen Textes."
+
+msgid "Click to open the Virtual Keyboard dialog."
+msgstr "Klicken Sie hier, um die virtuelle Tastatur zu öffnen."
+
+msgid "Open Virtual Keyboard"
+msgstr "Virtuelle Tastatur öffnen"
+
 msgid "How many troops to move?"
 msgstr "Wie viele Truppen sollen verlegt werden?"
 
@@ -3153,12 +3187,15 @@ msgid ""
 "\n"
 "Month: "
 msgstr ""
+"\n"
+"\n"
+"Monat: "
 
 msgid ", Week: "
-msgstr ""
+msgstr ", Woche: "
 
 msgid ", Day: "
-msgstr ""
+msgstr ", Tag: "
 
 msgid ""
 "\n"
@@ -3201,11 +3238,8 @@ msgstr "Zauberspruch auswählen:"
 msgid "Select Skill:"
 msgstr "Fähigkeit auswählen:"
 
-#, fuzzy
 msgid "Map Type:\n"
-msgstr ""
-"\n"
-"Kartentyp:\n"
+msgstr "Kartentyp:\n"
 
 msgid "The Succession Wars"
 msgstr "The Succession Wars"
@@ -3762,9 +3796,308 @@ msgstr "Feldzug"
 msgid "View High Scores for Campaigns."
 msgstr "Bestenliste für Feldzüge anzeigen."
 
-#, fuzzy
+msgid "hotkey|default okay event"
+msgstr "Standard-Event: Okay"
+
+msgid "hotkey|default cancel event"
+msgstr "Standard-Event: Abbrechen"
+
+msgid "hotkey|default left"
+msgstr "Standard: Links"
+
+msgid "hotkey|default right"
+msgstr "Standard: Rechts"
+
+msgid "hotkey|default up"
+msgstr "Standard: Hoch"
+
+msgid "hotkey|default down"
+msgstr "Standard: Runter"
+
+msgid "hotkey|toggle fullscreen"
+msgstr "Vollbild umschalten"
+
+msgid "hotkey|toggle text support mode"
+msgstr "Textunterstützungsmodus umschalten"
+
+msgid "hotkey|new game"
+msgstr "Neues Spiel"
+
+msgid "hotkey|load game"
+msgstr "Spiel laden"
+
+msgid "hotkey|highscores"
+msgstr "Highscores"
+
+msgid "hotkey|credits"
+msgstr "Credits"
+
+msgid "hotkey|standard game"
+msgstr "Standard-Spiel"
+
+msgid "hotkey|campaign game"
+msgstr "Feldzug-Spiel"
+
+msgid "hotkey|multi-player game"
+msgstr "Multi-Player Spiel"
+
+msgid "hotkey|settings"
+msgstr "Einstellungen"
+
+msgid "hotkey|quit"
+msgstr "Beenden"
+
+msgid "hotkey|select map"
+msgstr "Karte auswählen"
+
+msgid "hotkey|select small map size"
+msgstr "Kleine Karten auswählen"
+
+msgid "hotkey|select medium map size"
+msgstr "Mittelgroße Karten auswählen"
+
+msgid "hotkey|select large map size"
+msgstr "Große Karten auswählen"
+
+msgid "hotkey|select extra large map size"
+msgstr "Extra große Karten auswählen"
+
+msgid "hotkey|select all map sizes"
+msgstr "Alle Kartengrößen auswählen"
+
+msgid "hotkey|hotseat game"
+msgstr "\"Heißer Stuhl\" Spiel"
+
+msgid "hotkey|battle only game"
+msgstr "\"Nur Schlacht\" Spiel"
+
+msgid "hotkey|choose the original campaign"
+msgstr "Originaler Feldzug auswählen"
+
+msgid "hotkey|choose the expansion campaign"
+msgstr "Zusätzlicher Feldzug auswählen"
+
+msgid "hotkey|roland campaign"
+msgstr "Roland-Feldzug"
+
+msgid "hotkey|archibald campaign"
+msgstr "Archibald-Feldzug"
+
+msgid "hotkey|the price of loyalty campaign"
+msgstr "\"The Price of Loyalty\"-Feldzug"
+
+msgid "hotkey|voyage home campaign"
+msgstr "Heimreise-Feldzug"
+
+msgid "hotkey|wizard's isle campaign"
+msgstr "\"Die Insel der Zauberer\"-Feldzug"
+
+msgid "hotkey|descendants campaign"
+msgstr "Nachkommen-Feldzug"
+
+msgid "hotkey|select first campaign bonus"
+msgstr "Wähle ersten Feldzug-Bonus"
+
+msgid "hotkey|select second campaign bonus"
+msgstr "Wähle zweiten Feldzug-Bonus"
+
+msgid "hotkey|select third campaign bonus"
+msgstr "Wähle dritten Feldzug-Bonus"
+
+msgid "hotkey|view campaign intro"
+msgstr "Feldzug-Intro anzeigen"
+
+msgid "hotkey|select campaign difficulty"
+msgstr "Feldzugschwierigkeit"
+
+msgid "hotkey|restart campaign scenario"
+msgstr "Feldzug-Szenario neustarten"
+
+msgid "hotkey|world map left"
+msgstr "Weltkarte links"
+
+msgid "hotkey|world map right"
+msgstr "Weltkarte rechts"
+
+msgid "hotkey|world map up"
+msgstr "Weltkarte hoch"
+
+msgid "hotkey|world map down"
+msgstr "Weltkarte runter"
+
+msgid "hotkey|world map up left"
+msgstr "Weltkarte hoch links"
+
+msgid "hotkey|world map up right"
+msgstr "Weltkarte hoch rechts"
+
+msgid "hotkey|world map down left"
+msgstr "Weltkarte runter links"
+
+msgid "hotkey|world map down right"
+msgstr "Weltkarte runter rechts"
+
+msgid "hotkey|save game"
+msgstr "Spiel speichern"
+
+msgid "hotkey|next hero"
+msgstr "Nächster Held"
+
+msgid "hotkey|continue hero movement"
+msgstr "Bewegung fortsetzen"
+
+msgid "hotkey|cast adventure spell"
+msgstr "Abenteuer-Zauberspruch aussprechen"
+
+msgid "hotkey|put hero to sleep"
+msgstr "Held schlafen legen"
+
+msgid "hotkey|next town"
+msgstr "Nächste Stadt"
+
+msgid "hotkey|end turn"
+msgstr "Zug beenden"
+
+msgid "hotkey|file options"
+msgstr "Datei-Optionen"
+
+msgid "hotkey|adventure options"
+msgstr "Abenteuer-Optionen"
+
+msgid "hotkey|puzzle map"
+msgstr "Puzzlekarte"
+
+msgid "hotkey|scenario information"
+msgstr "Szenario-Informationen"
+
+msgid "hotkey|dig for artifact"
+msgstr "Nach dem Artefakt graben"
+
+msgid "hotkey|view world"
+msgstr "Weltkarte anzeigen"
+
+msgid "hotkey|kingdom summary"
+msgstr "Zusammenfassung des Königreichs"
+
+msgid "hotkey|default action"
+msgstr "Standardaktion"
+
+msgid "hotkey|open focus"
+msgstr "Fokus öffnen"
+
+msgid "hotkey|system options"
+msgstr "System-Optionen"
+
+msgid "hotkey|scroll left"
+msgstr "Links scrollen"
+
+msgid "hotkey|scroll right"
+msgstr "Rechts scrollen"
+
+msgid "hotkey|scroll up"
+msgstr "Nach oben scrollen"
+
+msgid "hotkey|scroll down"
+msgstr "Nach unten scrollen"
+
+msgid "hotkey|toggle control panel"
+msgstr "Bedienfeld umschalten"
+
+msgid "hotkey|toggle radar"
+msgstr "Radar umschalten"
+
+msgid "hotkey|toggle buttons"
+msgstr "Buttons umschalten"
+
+msgid "hotkey|toggle status"
+msgstr "Status umschalten"
+
+msgid "hotkey|toggle icons"
+msgstr "Icons umschalten"
+
+msgid "hotkey|transfer control to ai"
+msgstr "Kontrolle zur KI übertragen"
+
+msgid "hotkey|retreat from battle"
+msgstr "Vom Kampf zurückziehen"
+
+msgid "hotkey|surrender during battle"
+msgstr "Aufgeben während des Kampfes"
+
+msgid "hotkey|toggle battle auto mode"
+msgstr "Auto-Kampf-Modus umschalten"
+
+msgid "hotkey|finish the battle in auto mode"
+msgstr "Kampf im Automodus beenden"
+
+msgid "hotkey|battle options"
+msgstr "Kampf-Optionen"
+
+msgid "hotkey|skip turn in battle"
+msgstr "Runde im Kampf überspringen"
+
+msgid "hotkey|cast battle spell"
+msgstr "Kampfzauber wirken"
+
+msgid "hotkey|dwelling level 1"
+msgstr "Behausung Stufe 1"
+
+msgid "hotkey|dwelling level 2"
+msgstr "Behausung Stufe 2"
+
+msgid "hotkey|dwelling level 3"
+msgstr "Behausung Stufe 3"
+
+msgid "hotkey|dwelling level 4"
+msgstr "Behausung Stufe 4"
+
+msgid "hotkey|dwelling level 5"
+msgstr "Behausung Stufe 5"
+
+msgid "hotkey|dwelling level 6"
+msgstr "Behausung Stufe 6"
+
+msgid "hotkey|well"
+msgstr "Brunnen"
+
+msgid "hotkey|marketplace"
+msgstr "Marktplatz"
+
+msgid "hotkey|mage guild"
+msgstr "Magiergilde"
+
+msgid "hotkey|shipyard"
+msgstr "Schiffswerft"
+
+msgid "hotkey|thieves guild"
+msgstr "Diebesgilde"
+
+msgid "hotkey|tavern"
+msgstr "Taverne"
+
+msgid "hotkey|construction screen"
+msgstr "Bau-Bildschirm"
+
+msgid "hotkey|buy all monsters in well"
+msgstr "Alle Monster im Brunnen kaufen"
+
+msgid "hotkey|split stack by half"
+msgstr "Stapel halbieren"
+
+msgid "hotkey|split stack by one"
+msgstr "Stapel um eins aufteilen"
+
+msgid "hotkey|join stacks"
+msgstr "Stapel zusammenfügen"
+
+msgid "hotkey|upgrade troop"
+msgstr "Truppen aufrüsten"
+
+msgid "hotkey|dismiss troop"
+msgstr "Truppen entlassen"
+
 msgid "The save file is corrupted."
-msgstr "Das Spiegelbild wird erstellt."
+msgstr "Die Speicherdatei ist beschädigt."
 
 msgid "Unsupported save format: "
 msgstr "Unterstütztes Speicherformat: "
@@ -4213,6 +4546,9 @@ msgstr " Alle Bevölkerungen werden halbiert."
 msgid " All dwellings increase population."
 msgstr " Alle Wohnungen erhöhen die Bevölkerung."
 
+msgid "New Week!"
+msgstr ""
+
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
 "banished from this land."
@@ -4469,16 +4805,16 @@ msgid "View %{skill} Info"
 msgstr "Info über %{skill} anzeigen"
 
 msgid "Keyboard|123"
-msgstr ""
+msgstr "123"
 
 msgid "Keyboard|SPACE"
-msgstr ""
+msgstr "LEERTASTE"
 
 msgid "Keyboard|LANG"
-msgstr ""
+msgstr "SPRA."
 
 msgid "Keyboard|ABC"
-msgstr ""
+msgstr "ABC"
 
 msgid "Kingdom Income"
 msgstr "Einkommen"
@@ -4486,11 +4822,10 @@ msgstr "Einkommen"
 msgid "Kingdom Income per day."
 msgstr "Einkommen des Königreichs pro Tag."
 
-#, fuzzy
 msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr ""
-"Der Leuchtturm ist nun unter Ihrer Kontrolle, und alle Ihre Schiffe bewegen "
-"sich nun jeden Tag weiter."
+"Für jeden kontrollierten Leuchtturm bewegen sich Ihre Schiffe jeden Tag "
+"weiter."
 
 msgid "English"
 msgstr "Englisch"
@@ -4548,6 +4883,12 @@ msgstr "Ungarisch"
 
 msgid "Danish"
 msgstr "Dänisch"
+
+msgid "Slovak"
+msgstr "Slowakisch"
+
+msgid "Vietnamese"
+msgstr "Vietnamesisch"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -5455,10 +5796,6 @@ msgstr ""
 "Sie erhalten die Kontrolle über ein Sägewerk. Es wird Sie mit %{count} "
 "Einheiten Holz pro Tag versorgen."
 
-msgid "You beat the Ghosts and are able to restore the mine to production."
-msgstr ""
-"Sie haben die Geister besiegt und können die Mine wieder in Betrieb nehmen."
-
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
@@ -5510,6 +5847,10 @@ msgid ""
 msgstr ""
 "Sie stoßen auf eine verlassene Goldmine. In der Mine scheint es zu spuken. "
 "Möchten Sie sie betreten?"
+
+msgid "You beat the Ghosts and are able to restore the mine to production."
+msgstr ""
+"Sie haben die Geister besiegt und können die Mine wieder in Betrieb nehmen."
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -6640,12 +6981,14 @@ msgstr "%{skill} erlaubt es Ihrem Helden, Zauber der vierten Stufe zu lernen."
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "%{skill} erlaubt es Ihrem Helden, Zauber der fünften Stufe zu lernen."
 
-msgid "%{skill} regenerates one of your hero's spell points per day."
+msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
-"%{skill} regenerates %{count} of your hero's spell points per day."
-msgstr[0] "%{skill} regeneriert einen der Zauberpunkte Ihres Helden pro Tag."
+"%{skill} regenerates %{count} additional spell points per day to your hero."
+msgstr[0] ""
+"%{skill} regeneriert einen zusätzlichen Zauberpunkt pro Tag für Ihren Helden."
 msgstr[1] ""
-"%{skill} regeneriert %{count} der Zauberpunkte Ihres Helden pro Tag."
+"%{skill} regeneriert %{count} zusätzliche Zauberpunkte pro Tag für Ihren "
+"Helden."
 
 msgid "%{skill} increases your hero's luck by %{count}."
 msgstr "%{skill} erhöht das Glück Ihres Helden um %{count}."
@@ -7192,11 +7535,10 @@ msgstr "Ereignis"
 msgid "Dragon City"
 msgstr "Drachenstadt"
 
-#, fuzzy
 msgid "Lighthouse"
 msgid_plural "Lighthouses"
 msgstr[0] "Leuchtturm"
-msgstr[1] "Leuchtturm"
+msgstr[1] "Leuchttürme"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
@@ -8157,8 +8499,8 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr "Medaille der Tapferkeit"
 
-msgid "The %{name} increases your morale."
-msgstr "Der %{name} erhöht Ihre Moral."
+msgid "The %{name} increases your morale by %{count}."
+msgstr "Der %{name} erhöht Ihre Moral um %{count}."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -8266,8 +8608,9 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr "Balliste der Schnelligkeit"
 
-msgid "The %{name} lets your catapult fire twice per combat round."
-msgstr "Der %{name} lässt Ihre Katapult zweimal pro Kampfrunde feuern."
+msgid "The %{name} gives your catapult one extra shot per combat round."
+msgstr ""
+"Der %{name} gibt Ihrem Katapult einen zusätzlichen Schuss pro Kampfrunde."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
@@ -8442,8 +8785,8 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr "Glückbringende Hasenpfote"
 
-msgid "The %{name} increases your luck in combat."
-msgstr "Die %{name} erhöht Ihr Glück im Kampf."
+msgid "The %{name} increases your luck in combat by %{count}."
+msgstr "Der %{name} erhöht ihr Glück im Kampf um %{count}."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
@@ -10192,6 +10535,9 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "The %{name} increases your morale."
+#~ msgstr "Der %{name} erhöht Ihre Moral."
 
 #~ msgid "Attention"
 #~ msgstr "Achtung"

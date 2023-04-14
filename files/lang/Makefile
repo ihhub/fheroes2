@@ -28,8 +28,8 @@ all: $(patsubst %.po, %.mo, $(wildcard *.po))
 merge: ../../src/dist/fheroes2.pot
 	for i in $(wildcard *.po); do msgmerge -U --no-location $$i $<; done
 
-# Czech, Hungarian and Polish versions use CP1250
-cs.mo hu.mo pl.mo: %.mo: %.po
+# Czech, Hungarian, Polish and Slovak versions use CP1250
+cs.mo hu.mo pl.mo sk.mo: %.mo: %.po
 	$(call MSGFMT,CP1250)
 
 # Belarusian, Bulgarian, Ukrainian versions use CP1251
@@ -45,6 +45,10 @@ de.mo dk.mo es.mo fr.mo it.mo nb.mo pt.mo sv.mo nl.mo: %.mo: %.po
 # Turkish uses CP1254
 tr.mo: tr.po
 	$(call MSGFMT,CP1254)
+	
+# Vietnamese uses CP1258
+vi.mo: vi.po
+	$(call MSGFMT,CP1258)
 
 # Romanian uses ISO-8859-16
 ro.mo: ro.po

@@ -68,7 +68,7 @@ public:
     const Troop * GetTroop( size_t ) const;
 
     void UpgradeMonsters( const Monster & );
-    uint32_t GetCountMonsters( const Monster & ) const;
+    uint32_t GetCountMonsters( const Monster & mons ) const;
 
     double getReinforcementValue( const Troops & reinforcement ) const;
 
@@ -100,8 +100,8 @@ public:
     void SortStrongest();
 
     void SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots );
-    void AssignToFirstFreeSlot( const Troop &, const uint32_t splitCount );
-    void JoinAllTroopsOfType( const Troop & targetTroop );
+    void AssignToFirstFreeSlot( const Troop & troopToAssign, const uint32_t count ) const;
+    void JoinAllTroopsOfType( const Troop & targetTroop ) const;
 
     void addNewTroopsToFreeSlots( const Troop & troop, uint32_t maxSlots );
 

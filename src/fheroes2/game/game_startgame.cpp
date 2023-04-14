@@ -27,7 +27,6 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <list>
 #include <ostream>
 #include <string>
 #include <type_traits>
@@ -89,6 +88,44 @@ namespace
     {
         return ( player1->isControlHuman() && !player2->isControlHuman() )
                || ( ( player1->isControlHuman() == player2->isControlHuman() ) && ( player1->GetColor() < player2->GetColor() ) );
+    }
+
+    // Get colors value of players to use in fog directions update.
+    // For human allied AI returns colors of this alliance, for hostile AI - colors of all human players and their allies.
+    int32_t hotSeatAIFogColors( const Player * player )
+    {
+        assert( player != nullptr );
+
+        // This function should be called when AI makes a move.
+        assert( world.GetKingdom( player->GetColor() ).GetControl() == CONTROL_AI );
+
+        const int32_t humanColors = Players::HumanColors();
+        // Check if the current AI player is a friend of any of human players to fully show his move and revealed map,
+        // otherwise his revealed map will not be shown - instead of it we will show the revealed map by all human players.
+        const bool isFriendlyAI = Players::isFriends( player->GetColor(), humanColors );
+
+#if defined( WITH_DEBUG )
+        if ( isFriendlyAI || player->isAIAutoControlMode() ) {
+#else
+        if ( isFriendlyAI ) {
+#endif
+            // Fully update fog directions for allied AI players in Hot Seat mode as the previous move could be done by opposing player.
+            return player->GetFriends();
+        }
+
+        // If AI is hostile for all human players then fully update fog directions for all human players to see enemy AI hero move on tiles with
+        // discovered fog.
+
+        int32_t friendColors = 0;
+
+        for ( const int32_t color : Colors( humanColors ) ) {
+            const Player * humanPlayer = Players::Get( color );
+            if ( humanPlayer ) {
+                friendColors |= humanPlayer->GetFriends();
+            }
+        }
+
+        return friendColors;
     }
 }
 
@@ -328,23 +365,7 @@ void ShowNewWeekDialog()
     else
         message += _( " All dwellings increase population." );
 
-    fheroes2::showStandardTextMessage( "", message, Dialog::OK );
-}
-
-void ShowEventDayDialog()
-{
-    const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    const EventsDate events = world.GetEventsDate( myKingdom.GetColor() );
-
-    for ( const EventDate & event : events ) {
-        if ( event.resource.GetValidItemsCount() ) {
-            fheroes2::showResourceMessage( fheroes2::Text( event.title, fheroes2::FontType::normalYellow() ),
-                                           fheroes2::Text( event.message, fheroes2::FontType::normalWhite() ), Dialog::OK, event.resource );
-        }
-        else if ( !event.message.empty() ) {
-            fheroes2::showStandardTextMessage( event.title, event.message, Dialog::OK );
-        }
-    }
+    fheroes2::showStandardTextMessage( _( "New Week!" ), message, Dialog::OK );
 }
 
 void ShowWarningLostTownsDialog()
@@ -452,10 +473,13 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
 
 int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps::Tiles & tile )
 {
-    if ( from_hero.Modes( Heroes::ENABLEMOVE ) )
+    if ( from_hero.Modes( Heroes::ENABLEMOVE ) ) {
         return Cursor::Get().Themes();
-    else if ( from_hero.isShipMaster() )
+    }
+
+    if ( from_hero.isShipMaster() ) {
         return GetCursorFocusShipmaster( from_hero, tile );
+    }
 
     switch ( tile.GetObject() ) {
     case MP2::OBJ_MONSTER:
@@ -465,7 +489,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
 
-        if ( nullptr != castle ) {
+        if ( castle ) {
             if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE ) {
                 if ( tile.GetPassable() == 0 ) {
                     return ( from_hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
@@ -504,36 +528,41 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 return Cursor::HEROES;
             }
             else if ( from_hero.GetColor() == to_hero->GetColor() ) {
-                int newcur = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
-                return newcur != Cursor::POINTER ? newcur : Cursor::HEROES;
+                const int cursor = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+
+                return cursor != Cursor::POINTER ? cursor : Cursor::HEROES;
             }
             else if ( from_hero.isFriends( to_hero->GetColor() ) ) {
                 return Cursor::POINTER;
             }
-            else
+            else {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+            }
         }
         break;
     }
 
     case MP2::OBJ_BOAT:
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+
     case MP2::OBJ_BARRIER:
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+
     default:
         if ( MP2::isActionObject( tile.GetObject() ) ) {
             bool protection = false;
-            if ( !MP2::isPickupObject( tile.GetObject() ) && !MP2::isAbandonedMine( tile.GetObject() ) ) {
-                protection = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.isCaptureObjectProtected() ) );
+
+            if ( MP2::isPickupObject( tile.GetObject() ) ) {
+                protection = Maps::isTileUnderProtection( tile.GetIndex() );
             }
             else {
-                protection = Maps::isTileUnderProtection( tile.GetIndex() );
+                protection = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.isCaptureObjectProtected() ) );
             }
 
             return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION ), from_hero.getNumOfTravelDays( tile.GetIndex() ) );
         }
         else if ( tile.isPassableFrom( Direction::CENTER, from_hero.isShipMaster(), false, from_hero.GetColor() ) ) {
-            bool protection = Maps::isTileUnderProtection( tile.GetIndex() );
+            const bool protection = Maps::isTileUnderProtection( tile.GetIndex() );
 
             return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ), from_hero.getNumOfTravelDays( tile.GetIndex() ) );
         }
@@ -596,6 +625,19 @@ fheroes2::GameMode Interface::Basic::StartGame()
     std::vector<Player *> sortedPlayers = conf.GetPlayers().getVector();
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
 
+    if ( !loadedFromSave ) {
+        // Clear fog around heroes, castles and mines for all players when starting a new map.
+        for ( const Player * player : sortedPlayers ) {
+            world.ClearFog( player->GetColor() );
+        }
+    }
+
+    const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
+    if ( !isHotSeatGame ) {
+        // Fully update fog directions if there will be only one human player.
+        Interface::GameArea::updateMapFogDirections();
+    }
+
     while ( res == fheroes2::GameMode::END_TURN ) {
         if ( !loadedFromSave ) {
             world.NewDay();
@@ -633,12 +675,16 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     // Reset environment sounds and music theme at the beginning of the human turn
                     AudioManager::ResetAudio();
 
-                    if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
+                    if ( isHotSeatGame ) {
                         // we need to hide the world map in hot seat mode
                         conf.SetCurrentColor( -1 );
 
                         iconsPanel.HideIcons( ICON_ANY );
                         statusWindow.Reset();
+
+                        // Fully update fog directions in Hot Seat mode to cover the map with fog on player change.
+                        // TODO: Cover the Adventure map area with fog sprites without rendering the "Game Area" for player change.
+                        Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, Color::NONE );
 
                         Redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
                         display.render();
@@ -652,8 +698,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     }
 
                     conf.SetCurrentColor( player->GetColor() );
-
-                    world.ClearFog( player->GetColor() );
 
                     kingdom.ActionBeforeTurn();
 
@@ -671,9 +715,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     AudioManager::ResetAudio();
 
                     break;
-
-                // CONTROL_AI turn
-                default:
+                case CONTROL_AI:
                     // TODO: remove this temporary assertion
                     assert( res == fheroes2::GameMode::END_TURN );
 
@@ -695,12 +737,37 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     Redraw();
                     display.render();
 
-                    world.ClearFog( player->GetColor() );
+                    // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
+                    if ( isHotSeatGame ) {
+                        Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, hotSeatAIFogColors( player ) );
+                    }
+
+                    if ( !loadedFromSave ) {
+                        kingdom.ActionNewDayResourceUpdate( nullptr );
+                    }
 
                     kingdom.ActionBeforeTurn();
 
+#if defined( WITH_DEBUG )
+                    if ( !loadedFromSave && player->isAIAutoControlMode() && conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
+                        // This is a human player which gave control to AI so we need to do autosave here.
+                        Game::AutoSave();
+                    }
+#endif
+
                     AI::Get().KingdomTurn( kingdom );
 
+#if defined( WITH_DEBUG )
+                    if ( !loadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
+                        // This is a human player which gave control to AI so we need to do autosave here.
+                        Game::AutoSave();
+                    }
+#endif
+
+                    break;
+                default:
+                    // So far no other player type is supported so this should not happen.
+                    assert( 0 );
                     break;
                 }
 
@@ -746,15 +813,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
     return res;
 }
 
-fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
+fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
 {
-    fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
-
-    const Settings & conf = Settings::Get();
-
-    Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
-    const KingdomCastles & myCastles = myKingdom.GetCastles();
-
     if ( isload ) {
         updateFocus();
     }
@@ -766,18 +826,36 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     statusWindow.Reset();
     gameArea.SetUpdateCursor();
 
+    const Settings & conf = Settings::Get();
+    if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
+        // TODO: Cache fog directions for all Human players in array to not perform full update at every turn start.
+
+        // Fully update fog directions at the start of player's move in Hot Seat mode as the previous move could be done by opposing player.
+        Interface::GameArea::updateMapFogDirections();
+    }
+
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
     display.render();
 
+    Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
+
     if ( !isload ) {
         if ( 1 < world.CountWeek() && world.BeginWeek() ) {
             ShowNewWeekDialog();
         }
 
-        ShowEventDayDialog();
+        myKingdom.ActionNewDayResourceUpdate( []( const EventDate & event, const Funds & funds ) {
+            if ( funds.GetValidItemsCount() ) {
+                fheroes2::showResourceMessage( fheroes2::Text( event.title, fheroes2::FontType::normalYellow() ),
+                                               fheroes2::Text( event.message, fheroes2::FontType::normalWhite() ), Dialog::OK, funds );
+            }
+            else if ( !event.message.empty() ) {
+                fheroes2::showStandardTextMessage( event.title, event.message, Dialog::OK );
+            }
+        } );
 
         if ( conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
             Game::AutoSave();
@@ -787,8 +865,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     GameOver::Result & gameResult = GameOver::Result::Get();
 
     // check if the game is over at the beginning of each human-controlled player's turn
-    res = gameResult.LocalCheckGameOver();
+    fheroes2::GameMode res = gameResult.LocalCheckGameOver();
 
+    const KingdomCastles & myCastles = myKingdom.GetCastles();
     if ( res == fheroes2::GameMode::CANCEL && myCastles.empty() ) {
         ShowWarningLostTownsDialog();
     }
@@ -832,10 +911,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
 #if defined( WITH_DEBUG )
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI ) ) {
-                if ( fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
-                                            fheroes2::Text( _( "Do you want to transfer control from you to the AI? The effect will take place only on the next turn." ),
-                                                            fheroes2::FontType::normalWhite() ),
-                                            Dialog::YES | Dialog::NO )
+                if ( fheroes2::showStandardTextMessage( _( "Warning" ),
+                                                        _( "Do you want to transfer control from you to the AI? The effect will take place only on the next turn." ),
+                                                        Dialog::YES | Dialog::NO )
                      == Dialog::YES ) {
                     Players::Get( myKingdom.GetColor() )->setAIAutoControlMode( true );
                     return fheroes2::GameMode::END_TURN;

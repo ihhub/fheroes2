@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,10 +44,12 @@ namespace fheroes2
         Norwegian,
         Portuguese,
         Romanian,
+        Slovak,
         Spanish,
         Swedish,
         Turkish,
-        Ukrainian
+        Ukrainian,
+        Vietnamese
     };
 
     class LanguageSwitcher
