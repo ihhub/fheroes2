@@ -440,13 +440,10 @@ bool System::IsDirectory( const std::string & path, bool writable )
 #endif
 }
 
-bool System::Unlink( const std::string & path )
+bool System::Remove( const std::filesystem::path & path )
 {
-#if defined( _WIN32 )
-    return _unlink( path.c_str() ) == 0;
-#else
-    return unlink( path.c_str() ) == 0;
-#endif
+    std::error_code ec;
+    return std::filesystem::remove( path, ec );
 }
 
 #if !defined( _WIN32 ) && !defined( ANDROID )

@@ -433,21 +433,25 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             msg.append( "\n \n" );
             msg.append( System::GetBasename( listbox.GetCurrent().file ) );
             if ( Dialog::YES == Dialog::Message( _( "Warning!" ), msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
-                System::Unlink( listbox.GetCurrent().file );
-                listbox.RemoveSelected();
-                if ( lists.empty() || filename.empty() ) {
-                    buttonOk.disable();
-                    isListboxSelected = false;
-                    filename.clear();
+                if( System::Remove( listbox.GetCurrent().file ) ) {
+                    listbox.RemoveSelected();
+                    if ( lists.empty() || filename.empty() ) {
+                        buttonOk.disable();
+                	isListboxSelected = false;
+                	filename.clear();
+                    }
+
+                    const fheroes2::Image updatedScrollbarSlider
+                        = fheroes2::generateScrollbarSlider( originalSlider, false, 180, 11, static_cast<int32_t>( lists.size() ), { 0, 0, originalSlider.width(), 8 },
+                                                             { 0, 7, originalSlider.width(), 8 } );
+
+                    listbox.setScrollBarImage( updatedScrollbarSlider );
+
+                    listbox.SetListContent( lists );
                 }
-
-                const fheroes2::Image updatedScrollbarSlider
-                    = fheroes2::generateScrollbarSlider( originalSlider, false, 180, 11, static_cast<int32_t>( lists.size() ), { 0, 0, originalSlider.width(), 8 },
-                                                         { 0, 7, originalSlider.width(), 8 } );
-
-                listbox.setScrollBarImage( updatedScrollbarSlider );
-
-                listbox.SetListContent( lists );
+                else {
+                    Dialog::Message( _( "Warning!" ), _( "Can't remove the file!" ), Font::BIG, Dialog::OK );
+                }
             }
 
             needRedraw = true;

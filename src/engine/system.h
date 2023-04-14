@@ -25,6 +25,7 @@
 #define H2SYSTEM_H
 
 #include <ctime>
+#include <filesystem>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -51,7 +52,7 @@ namespace System
 
     bool IsFile( const std::string & path, bool writable = false );
     bool IsDirectory( const std::string & path, bool writable = false );
-    bool Unlink( const std::string & path );
+    bool Remove( const std::filesystem::path & path );
 
     bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
 
