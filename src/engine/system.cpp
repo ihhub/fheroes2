@@ -226,7 +226,8 @@ namespace
         if ( !System::GetCaseInsensitivePath( path, correctedPath ) )
             return false;
 
-        return ( st.type() == type ) && ( ( status( correctedPath ).permissions() & ( writable ? perms::owner_write : perms::owner_read ) ) != perms::none );
+        file_status st = status( correctedPath );
+        return ( st.type() == type ) && ( ( st.permissions() & ( writable ? perms::owner_write : perms::owner_read ) ) != perms::none );
     }
 }
 
