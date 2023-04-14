@@ -176,10 +176,10 @@ msgid "DIFFICULTY"
 msgstr "ĐỘ KHÓ"
 
 msgid "MIN"
-msgstr "MIN"
+msgstr ""
 
 msgid "MAX"
-msgstr "МАX"
+msgstr ""
 
 msgid "OKAY"
 msgstr "ĐƯỢC"
