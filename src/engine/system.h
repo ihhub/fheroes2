@@ -50,8 +50,8 @@ namespace System
     std::string GetDirname( std::string_view path );
     std::string GetBasename( std::string_view path );
 
-    bool IsFile( const std::string & path, bool writable = false );
-    bool IsDirectory( const std::string & path, bool writable = false );
+    bool IsFile( const std::filesystem::path & path, bool writable = false );
+    bool IsDirectory( const std::filesystem::path & path, bool writable = false );
     bool Remove( const std::filesystem::path & path );
 
     bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );

@@ -213,6 +213,21 @@ namespace
 
         return wildcardIdx == wildcard.length();
     }
+
+    bool checkFSObject( const std::filesystem::path & path, std::filesystem::file_type type, bool writable )
+    {
+        using namespace std::filesystem;
+
+        if ( path.empty() ) {
+            return false;
+        }
+
+        std::string correctedPath;
+        if ( !System::GetCaseInsensitivePath( path, correctedPath ) )
+            return false;
+
+        return ( st.type() == type ) && ( ( status( correctedPath ).permissions() & ( writable ? perms::owner_write : perms::owner_read ) ) != perms::none );
+    }
 }
 
 bool System::isHandheldDevice()
@@ -361,78 +376,14 @@ std::string System::GetBasename( std::string_view path )
     return std::string{ path.substr( pos + 1 ) };
 }
 
-bool System::IsFile( const std::string & path, bool writable )
+bool System::IsFile( const std::filesystem::path & path, bool writable )
 {
-    if ( path.empty() ) {
-        // An empty path cannot be a file.
-        return false;
-    }
-
-#if defined( _WIN32 )
-    const DWORD fileAttributes = GetFileAttributes( path.c_str() );
-    if ( fileAttributes == INVALID_FILE_ATTRIBUTES ) {
-        // This path doesn't exist.
-        return false;
-    }
-
-    if ( ( fileAttributes & FILE_ATTRIBUTE_DIRECTORY ) != 0 ) {
-        // This is a directory.
-        return false;
-    }
-
-    return writable ? ( 0 == _access( path.c_str(), 06 ) ) : ( 0 == _access( path.c_str(), 04 ) );
-#elif defined( TARGET_PS_VITA ) || defined( ANDROID )
-    // TODO: check if it is really a file.
-    return writable ? 0 == access( path.c_str(), W_OK ) : 0 == access( path.c_str(), R_OK );
-#else
-    std::string correctedPath;
-    if ( !GetCaseInsensitivePath( path, correctedPath ) )
-        return false;
-
-    struct stat fs;
-
-    if ( stat( correctedPath.c_str(), &fs ) || !S_ISREG( fs.st_mode ) )
-        return false;
-
-    return writable ? 0 == access( correctedPath.c_str(), W_OK ) : S_IRUSR & fs.st_mode;
-#endif
+    return checkFSObject( path, std::filesystem::file_type::regular, writable );
 }
 
-bool System::IsDirectory( const std::string & path, bool writable )
+bool System::IsDirectory( const std::filesystem::path & path, bool writable )
 {
-    if ( path.empty() ) {
-        // An empty path cannot be a directory.
-        return false;
-    }
-
-#if defined( _WIN32 )
-    const DWORD fileAttributes = GetFileAttributes( path.c_str() );
-    if ( fileAttributes == INVALID_FILE_ATTRIBUTES ) {
-        // This path doesn't exist.
-        return false;
-    }
-
-    if ( ( fileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == 0 ) {
-        // Not a directory.
-        return false;
-    }
-
-    return writable ? ( 0 == _access( path.c_str(), 06 ) ) : ( 0 == _access( path.c_str(), 00 ) );
-#elif defined( TARGET_PS_VITA ) || defined( ANDROID )
-    // TODO: check if it is really a directory.
-    return writable ? 0 == access( path.c_str(), W_OK ) : 0 == access( path.c_str(), R_OK );
-#else
-    std::string correctedPath;
-    if ( !GetCaseInsensitivePath( path, correctedPath ) )
-        return false;
-
-    struct stat fs;
-
-    if ( stat( correctedPath.c_str(), &fs ) || !S_ISDIR( fs.st_mode ) )
-        return false;
-
-    return writable ? 0 == access( correctedPath.c_str(), W_OK ) : S_IRUSR & fs.st_mode;
-#endif
+    return checkFSObject( path, std::filesystem::file_type::directory, writable );
 }
 
 bool System::Remove( const std::filesystem::path & path )
