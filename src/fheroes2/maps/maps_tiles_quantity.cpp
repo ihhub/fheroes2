@@ -1105,7 +1105,7 @@ namespace Maps
         return { tile.GetQuantity1(), Resource::GOLD == tile.GetQuantity1() ? getGoldAmountFromTile( tile ) : tile.GetQuantity2() };
     }
 
-    void setResourceOnTile( Tiles & tile, const int resourceType, int32_t value )
+    void setResourceOnTile( Tiles & tile, const int resourceType, uint32_t value )
     {
         using Quantity1Type = decltype( tile.GetQuantity1() );
         using Quantity2Type = decltype( tile.GetQuantity2() );

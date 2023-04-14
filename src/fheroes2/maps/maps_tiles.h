@@ -538,7 +538,7 @@ namespace Maps
 
     ResourceCount getResourcesFromTile( const Tiles & tile );
 
-    void setResourceOnTile( Tiles & tile, const int resourceType, int32_t value );
+    void setResourceOnTile( Tiles & tile, const int resourceType, uint32_t value );
 
     Funds getFundsFromTile( const Tiles & tile );
 
