@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-07 14:32+0000\n"
-"PO-Revision-Date: 2023-03-13 14:39+0700\n"
+"PO-Revision-Date: 2023-04-14 15:40+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -2573,13 +2573,11 @@ msgstr ""
 msgid "Thieves' Guild"
 msgstr "Гільдія злодіїв"
 
-#, fuzzy
 msgid "Tavern"
-msgstr "Таверна"
+msgstr "Tửu quán"
 
-#, fuzzy
 msgid "Shipyard"
-msgstr "Верф"
+msgstr "Xưởng tàu"
 
 msgid "Well"
 msgstr "Giếng"
@@ -2727,9 +2725,8 @@ msgstr ""
 "немає вільного місця під книгу. Спробуйте передати один із артефактів іншому "
 "герою."
 
-#, fuzzy
 msgid "Exit"
-msgstr "Вийти"
+msgstr "Thoát"
 
 #, fuzzy
 msgid "Click to show next town."
