@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-13 05:15+0000\n"
-"PO-Revision-Date: 2023-04-14 15:40+0700\n"
+"PO-Revision-Date: 2023-04-14 20:58+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -1763,7 +1763,7 @@ msgid "Archibald"
 msgstr ""
 
 msgid "The Price of Loyalty"
-msgstr ""
+msgstr "Giá của Lòng Trung Thành"
 
 msgid "Voyage Home"
 msgstr ""
@@ -1772,7 +1772,7 @@ msgid "Wizard's Isle"
 msgstr ""
 
 msgid "Descendants"
-msgstr ""
+msgstr "Huậ duệ"
 
 msgid "The %{building} produces %{monster}."
 msgstr ""
@@ -2048,7 +2048,7 @@ msgid "Upg. Archery Range"
 msgstr ""
 
 msgid "Blacksmith"
-msgstr ""
+msgstr "Lò rèn"
 
 msgid "Upg. Blacksmith"
 msgstr ""
@@ -4150,6 +4150,7 @@ msgid ""
 msgid_plural ""
 "The alliance consisting of %{allies} and you must defeat the enemy alliance "
 "of %{enemies}."
+msgstr[0] ""
 
 msgid "Capture the castle '%{name}'."
 msgstr ""
@@ -7695,7 +7696,6 @@ msgstr ""
 
 msgid "Ballista of Quickness"
 msgstr ""
-
 
 msgid "The %{name} gives your catapult one extra shot per combat round."
 msgstr ""
