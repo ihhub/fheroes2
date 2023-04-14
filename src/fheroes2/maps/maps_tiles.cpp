@@ -2248,7 +2248,7 @@ void Maps::Tiles::RestoreAbandonedMine( Tiles & tile, const int resource )
 
     assert( resourceCount.has_value() && resourceCount > 0U );
 
-    tile.QuantitySetResource( resource, resourceCount.value() );
+    setResourceOnTile( tile, resource, resourceCount.value() );
 
     auto restoreLeftSprite = [resource]( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex ) {
         if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 6 ) {

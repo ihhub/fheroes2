@@ -931,15 +931,11 @@ namespace
     void AIToShrine( Heroes & hero, int32_t dst_index )
     {
         const Spell & spell = getSpellFromTile( world.GetTiles( dst_index ) );
-        const uint32_t spell_level = spell.Level();
+        assert( spell.isValid() );
 
-        if ( spell.isValid() &&
-             // check spell book
-             hero.HaveSpellBook() &&
-             // check present spell (skip bag artifacts)
-             !hero.HaveSpell( spell, true ) &&
+        if ( hero.HaveSpellBook() && !hero.HaveSpell( spell, true ) &&
              // check valid level spell and wisdom skill
-             !( 3 == spell_level && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
+             !( 3 == spell.Level() && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
             hero.AppendSpellToBook( spell );
         }
 

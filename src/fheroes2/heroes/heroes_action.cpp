@@ -892,6 +892,8 @@ namespace
     void ActionToShrine( Heroes & hero, int32_t dst_index )
     {
         const Spell & spell = getSpellFromTile( world.GetTiles( dst_index ) );
+        assert( spell.isValid() );
+
         const uint32_t spell_level = spell.Level();
 
         std::string head;

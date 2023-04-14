@@ -163,6 +163,11 @@ namespace Maps
             quantity1 = value;
         }
 
+        void setQuantity2( const uint8_t value )
+        {
+            quantity2 = value;
+        }
+
         // Get Tile metadata field #2 (used for things like animations or resource type )
         uint8_t GetQuantity2() const
         {
@@ -337,8 +342,16 @@ namespace Maps
         // Operations with tile quantities
         void QuantityUpdate( bool isFirstLoad = true );
         void QuantityReset();
-        int QuantityVariant() const;
-        int QuantityExt() const;
+
+        int QuantityVariant() const
+        {
+            return quantity2 >> 4;
+        }
+
+        int QuantityExt() const
+        {
+            return 0x0f & quantity2;
+        }
 
         void SetObjectPassable( bool );
 
@@ -398,12 +411,20 @@ namespace Maps
         void updateFlag( const int color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer );
         void RemoveJailSprite();
 
-        void QuantitySetVariant( int );
-        void QuantitySetExt( int );
-        void QuantitySetSkill( int );
+        void QuantitySetVariant( const int variant )
+        {
+            quantity2 &= 0x0f;
+            quantity2 |= variant << 4;
+        }
+
+        void QuantitySetExt( int ext )
+        {
+            quantity2 &= 0xf0;
+            quantity2 |= ( 0x0f & ext );
+        }
+
         void QuantitySetSpell( int );
         void QuantitySetArtifact( int );
-        void QuantitySetResource( int, uint32_t );
 
         bool isTallObject() const;
 
@@ -513,7 +534,11 @@ namespace Maps
 
     Skill::Secondary getSecondarySkillFromTile( const Tiles & tile );
 
+    void setSecondarySkillOnTile( Tiles & tile, const int skillId );
+
     ResourceCount getResourcesFromTile( const Tiles & tile );
+
+    void setResourceOnTile( Tiles & tile, const int resourceType, int32_t value );
 
     Funds getFundsFromTile( const Tiles & tile );
 

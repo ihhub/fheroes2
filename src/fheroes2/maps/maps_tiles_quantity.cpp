@@ -49,45 +49,6 @@
 #include "week.h"
 #include "world.h"
 
-int Maps::Tiles::QuantityVariant() const
-{
-    return quantity2 >> 4;
-}
-
-int Maps::Tiles::QuantityExt() const
-{
-    return 0x0f & quantity2;
-}
-
-void Maps::Tiles::QuantitySetVariant( int variant )
-{
-    quantity2 &= 0x0f;
-    quantity2 |= variant << 4;
-}
-
-void Maps::Tiles::QuantitySetExt( int ext )
-{
-    quantity2 &= 0xf0;
-    quantity2 |= ( 0x0f & ext );
-}
-
-void Maps::Tiles::QuantitySetSkill( int skill )
-{
-    using Quantity1Type = decltype( quantity1 );
-    static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
-
-    switch ( GetObject( false ) ) {
-    case MP2::OBJ_WITCHS_HUT:
-        assert( skill >= std::numeric_limits<Quantity1Type>::min() && skill <= std::numeric_limits<Quantity1Type>::max() );
-
-        quantity1 = static_cast<Quantity1Type>( skill );
-        break;
-
-    default:
-        break;
-    }
-}
-
 void Maps::Tiles::QuantitySetSpell( int spell )
 {
     using Quantity1Type = decltype( quantity1 );
@@ -117,26 +78,6 @@ void Maps::Tiles::QuantitySetArtifact( int art )
     assert( art >= std::numeric_limits<Quantity1Type>::min() && art <= std::numeric_limits<Quantity1Type>::max() );
 
     quantity1 = static_cast<Quantity1Type>( art );
-}
-
-void Maps::Tiles::QuantitySetResource( int res, uint32_t count )
-{
-    using Quantity1Type = decltype( quantity1 );
-    using Quantity2Type = decltype( quantity2 );
-    static_assert( std::is_same_v<Quantity1Type, uint8_t> && std::is_same_v<Quantity2Type, uint8_t>,
-                   "Types of tile's quantities have been changed, check the logic below" );
-
-    assert( res >= std::numeric_limits<Quantity1Type>::min() && res <= std::numeric_limits<Quantity1Type>::max() );
-
-    quantity1 = static_cast<Quantity1Type>( res );
-
-    if ( res == Resource::GOLD ) {
-        count = count / 100;
-    }
-
-    assert( count >= std::numeric_limits<Quantity2Type>::min() && count <= std::numeric_limits<Quantity2Type>::max() );
-
-    quantity2 = static_cast<Quantity2Type>( count );
 }
 
 void Maps::Tiles::QuantityReset()
@@ -171,7 +112,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     // TODO: don't modify first 2 bits of quantity1.
     switch ( GetObject( false ) ) {
     case MP2::OBJ_WITCHS_HUT:
-        QuantitySetSkill( Skill::Secondary::RandForWitchsHut() );
+        setSecondarySkillOnTile( *this, Skill::Secondary::RandForWitchsHut() );
         break;
 
     case MP2::OBJ_SHRINE_FIRST_CIRCLE:
@@ -216,7 +157,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             QuantitySetArtifact( Artifact::Rand( Rand::Get( 1 ) ? Artifact::ART_LEVEL_TREASURE : Artifact::ART_LEVEL_MINOR ) );
             break;
         case 2:
-            QuantitySetResource( Resource::Rand( false ), Rand::Get( 2, 5 ) );
+            setResourceOnTile( *this, Resource::Rand( false ), Rand::Get( 2, 5 ) );
             break;
         default:
             QuantityReset();
@@ -309,26 +250,26 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             break;
         }
 
-        QuantitySetResource( resourceType, count );
+        setResourceOnTile( *this, resourceType, count );
         break;
     }
 
     case MP2::OBJ_CAMPFIRE:
         // 4-6 rnd resource and + 400-600 gold
-        QuantitySetResource( Resource::Rand( false ), Rand::Get( 4, 6 ) );
+        setResourceOnTile( *this, Resource::Rand( false ), Rand::Get( 4, 6 ) );
         break;
 
     case MP2::OBJ_MAGIC_GARDEN:
         // 5 gems or 500 gold
         if ( Rand::Get( 1 ) )
-            QuantitySetResource( Resource::GEMS, 5 );
+            setResourceOnTile( *this, Resource::GEMS, 5 );
         else
-            QuantitySetResource( Resource::GOLD, 500 );
+            setResourceOnTile( *this, Resource::GOLD, 500 );
         break;
 
     case MP2::OBJ_WATER_WHEEL:
         // first week 500 gold, next week 1000 gold
-        QuantitySetResource( Resource::GOLD, ( 0 == world.CountDay() ? 500 : 1000 ) );
+        setResourceOnTile( *this, Resource::GOLD, ( 0 == world.CountDay() ? 500 : 1000 ) );
         break;
 
     case MP2::OBJ_WINDMILL: {
@@ -338,13 +279,13 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         }
 
         // 2 rnd resource
-        QuantitySetResource( res, 2 );
+        setResourceOnTile( *this, res, 2 );
         break;
     }
 
     case MP2::OBJ_LEAN_TO:
         // 1-4 rnd resource
-        QuantitySetResource( Resource::Rand( false ), Rand::Get( 1, 4 ) );
+        setResourceOnTile( *this, Resource::Rand( false ), Rand::Get( 1, 4 ) );
         break;
 
     case MP2::OBJ_FLOTSAM: {
@@ -354,12 +295,12 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             break;
         // 25%: 500 gold + 10 wood
         case 1:
-            QuantitySetResource( Resource::GOLD, 500 );
+            setResourceOnTile( *this, Resource::GOLD, 500 );
             quantity1 = 10;
             break;
         // 25%: 200 gold + 5 wood
         case 2:
-            QuantitySetResource( Resource::GOLD, 200 );
+            setResourceOnTile( *this, Resource::GOLD, 200 );
             quantity1 = 5;
             break;
         // 25%: 5 wood
@@ -419,7 +360,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             break;
         }
 
-        QuantitySetResource( Resource::GOLD, gold );
+        setResourceOnTile( *this, Resource::GOLD, gold );
         QuantitySetArtifact( art );
         break;
     }
@@ -459,13 +400,13 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
                 break;
             }
 
-            QuantitySetResource( Resource::GOLD, gold );
+            setResourceOnTile( *this, Resource::GOLD, gold );
             QuantitySetArtifact( art );
         }
         break;
 
     case MP2::OBJ_DERELICT_SHIP:
-        QuantitySetResource( Resource::GOLD, 5000 );
+        setResourceOnTile( *this, Resource::GOLD, 5000 );
         break;
 
     case MP2::OBJ_SHIPWRECK: {
@@ -488,7 +429,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 
     case MP2::OBJ_GRAVEYARD:
         // 1000 gold + art
-        QuantitySetResource( Resource::GOLD, 1000 );
+        setResourceOnTile( *this, Resource::GOLD, 1000 );
         QuantitySetArtifact( Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) );
         break;
 
@@ -511,10 +452,10 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         // variant: 10 gems, 2000 gold or free
         switch ( Rand::Get( 1, 3 ) ) {
         case 1:
-            QuantitySetResource( Resource::GEMS, 10 );
+            setResourceOnTile( *this, Resource::GEMS, 10 );
             break;
         case 2:
-            QuantitySetResource( Resource::GOLD, 2000 );
+            setResourceOnTile( *this, Resource::GOLD, 2000 );
             break;
         default:
             break;
@@ -533,7 +474,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::MERCURY ).mercury );
         assert( resourceCount.has_value() && resourceCount > 0U );
 
-        QuantitySetResource( Resource::MERCURY, resourceCount.value() );
+        setResourceOnTile( *this, Resource::MERCURY, resourceCount.value() );
         break;
     }
 
@@ -541,7 +482,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::WOOD ).wood );
         assert( resourceCount.has_value() && resourceCount > 0U );
 
-        QuantitySetResource( Resource::WOOD, resourceCount.value() );
+        setResourceOnTile( *this, Resource::WOOD, resourceCount.value() );
         break;
     }
 
@@ -551,35 +492,35 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
             const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::ORE ).ore );
             assert( resourceCount.has_value() && resourceCount > 0U );
 
-            QuantitySetResource( Resource::ORE, resourceCount.value() );
+            setResourceOnTile( *this, Resource::ORE, resourceCount.value() );
             break;
         }
         case 1: {
             const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::SULFUR ).sulfur );
             assert( resourceCount.has_value() && resourceCount > 0U );
 
-            QuantitySetResource( Resource::SULFUR, resourceCount.value() );
+            setResourceOnTile( *this, Resource::SULFUR, resourceCount.value() );
             break;
         }
         case 2: {
             const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::CRYSTAL ).crystal );
             assert( resourceCount.has_value() && resourceCount > 0U );
 
-            QuantitySetResource( Resource::CRYSTAL, resourceCount.value() );
+            setResourceOnTile( *this, Resource::CRYSTAL, resourceCount.value() );
             break;
         }
         case 3: {
             const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::GEMS ).gems );
             assert( resourceCount.has_value() && resourceCount > 0U );
 
-            QuantitySetResource( Resource::GEMS, resourceCount.value() );
+            setResourceOnTile( *this, Resource::GEMS, resourceCount.value() );
             break;
         }
         case 4: {
             const auto resourceCount = fheroes2::checkedCast<uint32_t>( ProfitConditions::FromMine( Resource::GOLD ).gold );
             assert( resourceCount.has_value() && resourceCount > 0U );
 
-            QuantitySetResource( Resource::GOLD, resourceCount.value() );
+            setResourceOnTile( *this, Resource::GOLD, resourceCount.value() );
             break;
         }
         default:
@@ -1117,6 +1058,23 @@ namespace Maps
         return {};
     }
 
+    void setSecondarySkillOnTile( Tiles & tile, const int skillId )
+    {
+        using Quantity1Type = decltype( tile.GetQuantity1() );
+        static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
+
+        switch ( tile.GetObject( false ) ) {
+        case MP2::OBJ_WITCHS_HUT:
+            assert( skillId >= std::numeric_limits<Quantity1Type>::min() && skillId <= std::numeric_limits<Quantity1Type>::max() );
+
+            tile.setQuantity1( static_cast<Quantity1Type>( skillId ) );
+            break;
+
+        default:
+            break;
+        }
+    }
+
     ResourceCount getResourcesFromTile( const Tiles & tile )
     {
         switch ( tile.GetObject( false ) ) {
@@ -1145,6 +1103,26 @@ namespace Maps
         }
 
         return { tile.GetQuantity1(), Resource::GOLD == tile.GetQuantity1() ? getGoldAmountFromTile( tile ) : tile.GetQuantity2() };
+    }
+
+    void setResourceOnTile( Tiles & tile, const int resourceType, int32_t value )
+    {
+        using Quantity1Type = decltype( tile.GetQuantity1() );
+        using Quantity2Type = decltype( tile.GetQuantity2() );
+        static_assert( std::is_same_v<Quantity1Type, uint8_t> && std::is_same_v<Quantity2Type, uint8_t>,
+                       "Types of tile's quantities have been changed, check the logic below" );
+
+        assert( resourceType >= std::numeric_limits<Quantity1Type>::min() && resourceType <= std::numeric_limits<Quantity1Type>::max() );
+
+        tile.setQuantity1( static_cast<Quantity1Type>( resourceType ) );
+
+        if ( resourceType == Resource::GOLD ) {
+            value = value / 100;
+        }
+
+        assert( value >= std::numeric_limits<Quantity2Type>::min() && value <= std::numeric_limits<Quantity2Type>::max() );
+
+        tile.setQuantity2( static_cast<Quantity2Type>( value ) );
     }
 
     Funds getFundsFromTile( const Tiles & tile )
