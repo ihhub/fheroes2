@@ -450,7 +450,14 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( spell == Spell::IDENTIFYHERO ) {
-            if ( !fheroes2::canCastIdentifyHeroSpell( *hero ) ) {
+            bool opponentHasHeroes = fheroes2::opponentsHasHeroes( *hero );
+            if ( !opponentHasHeroes ) {
+                if ( res != nullptr ) {
+                    *res = _( "No opponent has a hero under his command at this time. Casting this spell will not bring any advantage." );
+                }
+                return false;
+            }
+            if ( !fheroes2::opponentsCanRecruitMoreHeroes( *hero ) && !opponentHasHeroes ) {
                 if ( res != nullptr ) {
                     *res = _( "No opponent can have heroes under his command anymore. Casting this spell will not bring any advantage." );
                 }

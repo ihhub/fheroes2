@@ -53,7 +53,9 @@ namespace fheroes2
 
     MapsIndexes getVisibleMonstersAroundHero( const Heroes & hero );
 
-    bool canCastIdentifyHeroSpell( const Heroes & hero );
+    bool opponentsCanRecruitMoreHeroes( const Heroes & hero );
+
+    bool opponentsHasHeroes( const Heroes & hero );
 }
 
 #endif

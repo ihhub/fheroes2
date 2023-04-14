@@ -373,14 +373,19 @@ namespace fheroes2
         return monsters;
     }
 
-    bool canCastIdentifyHeroSpell( const Heroes & hero )
+    bool opponentsCanRecruitMoreHeroes( const Heroes & hero )
     {
-        const Player * player = Players::Get( hero.GetColor() );
-        const int friends = player->GetFriends();
-        for ( const Player * it : Settings::Get().GetPlayers() ) {
-            const int currentColor = it->GetColor();
-            const Kingdom & kingdom = world.GetKingdom( currentColor );
-            if ( it->isPlay() && ( ( currentColor & friends ) == 0 ) && kingdom.hasOrCanRecruitHeroes() )
+        for ( int opponentColor : Players::getInPlayOpponents( hero.GetColor() ) ) {
+            if ( world.GetKingdom( opponentColor ).canRecruitHeroes() )
+                return true;
+        }
+        return false;
+    }
+
+    bool opponentsHasHeroes( const Heroes & hero )
+    {
+        for ( int opponentColor : Players::getInPlayOpponents( hero.GetColor() ) ) {
+            if ( world.GetKingdom( opponentColor ).hasHeroes() )
                 return true;
         }
         return false;

@@ -243,6 +243,7 @@ public:
     static int GetPlayerRace( int color );
     static int GetPlayerFriends( int color );
     static bool GetPlayerInGame( int color );
+    static std::vector<int> getInPlayOpponents( const int color );
     static bool isFriends( int player, int colors );
     static void SetPlayerRace( int color, int race );
     static void SetPlayerControl( int color, int ctrl );

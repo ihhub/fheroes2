@@ -579,12 +579,14 @@ bool Kingdom::AllowRecruitHero( bool check_payment ) const
     return ( heroes.size() < GetMaxHeroes() ) && ( !check_payment || AllowPayment( PaymentConditions::RecruitHero() ) );
 }
 
-bool Kingdom::hasOrCanRecruitHeroes() const
+bool Kingdom::canRecruitHeroes() const
 {
-    if ( !heroes.empty() ) {
-        return true;
-    }
     return std::any_of( castles.begin(), castles.end(), []( Castle * castle ) { return ( castle->isCastle() || castle->Modes( Castle::ALLOWCASTLE ) ); } );
+}
+
+bool Kingdom::hasHeroes() const
+{
+    return !heroes.empty();
 }
 
 void Kingdom::ApplyPlayWithStartingHero()

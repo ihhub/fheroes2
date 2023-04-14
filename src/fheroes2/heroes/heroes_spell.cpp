@@ -291,7 +291,7 @@ namespace
         assert( !hero.GetKingdom().Modes( Kingdom::IDENTIFYHERO ) );
 
         hero.GetKingdom().SetModes( Kingdom::IDENTIFYHERO );
-        Message( "", _( "Enemy heroes are now fully identifiable." ), Font::BIG, Dialog::OK );
+        Message( _( "Identify Hero" ), _( "Enemy heroes are now fully identifiable." ), Font::BIG, Dialog::OK );
 
         return true;
     }
