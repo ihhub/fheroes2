@@ -242,15 +242,10 @@ bool System::isShellLevelGlobbingSupported()
 #endif
 }
 
-bool System::MakeDirectory( const std::string & path )
+bool System::MakeDirectory( const std::filesystem::path & path )
 {
-#if defined( _WIN32 )
-    return _mkdir( path.c_str() ) == 0;
-#elif defined( TARGET_PS_VITA )
-    return sceIoMkdir( path.c_str(), 0777 ) == 0;
-#else
-    return mkdir( path.c_str(), S_IRWXU ) == 0;
-#endif
+    std::error_code ec;
+    return std::filesystem::create_directory( path, ec );
 }
 
 std::string System::concatPath( const std::string_view left, const std::string_view right )

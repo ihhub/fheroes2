@@ -40,7 +40,7 @@ namespace System
     // Otherwise returns false, which means that app need to resolve wildcard patterns itself (for example, on Windows).
     bool isShellLevelGlobbingSupported();
 
-    bool MakeDirectory( const std::string & path );
+    bool MakeDirectory( const std::filesystem::path & path );
     std::string concatPath( const std::string_view left, const std::string_view right );
 
     void appendOSSpecificDirectories( std::vector<std::string> & directories );
