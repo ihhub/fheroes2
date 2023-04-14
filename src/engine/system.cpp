@@ -440,15 +440,6 @@ bool System::IsDirectory( const std::string & path, bool writable )
 #endif
 }
 
-bool System::Unlink( const std::string & path )
-{
-#if defined( _WIN32 )
-    return _unlink( path.c_str() ) == 0;
-#else
-    return unlink( path.c_str() ) == 0;
-#endif
-}
-
 #if !defined( _WIN32 ) && !defined( ANDROID )
 // based on: https://github.com/OneSadCookie/fcaseopen
 bool System::GetCaseInsensitivePath( const std::string & path, std::string & correctedPath )

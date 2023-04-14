@@ -51,7 +51,6 @@ namespace System
 
     bool IsFile( const std::string & path, bool writable = false );
     bool IsDirectory( const std::string & path, bool writable = false );
-    bool Unlink( const std::string & path );
 
     bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
 
