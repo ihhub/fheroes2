@@ -433,7 +433,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             msg.append( "\n \n" );
             msg.append( System::GetBasename( listbox.GetCurrent().file ) );
             if ( Dialog::YES == Dialog::Message( _( "Warning!" ), msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
-                if( System::Remove( listbox.GetCurrent().file ) ) {
+                if ( System::Remove( listbox.GetCurrent().file ) ) {
                     listbox.RemoveSelected();
                     if ( lists.empty() || filename.empty() ) {
                         buttonOk.disable();
