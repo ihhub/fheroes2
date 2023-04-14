@@ -4764,7 +4764,7 @@ msgid "Kingdom Income per day."
 msgstr "Příjem království za den."
 
 msgid "For every lighthouse controlled, your ships will move further each day."
-msgstr "S každým dalším obsazeným majákem budou Tvé lodě moci doplout každý den a kus dál. "
+msgstr "S každým dalším obsazeným majákem budou Tvé lodě moci doplout každý den a kus dál."
 
 msgid "English"
 msgstr ""
