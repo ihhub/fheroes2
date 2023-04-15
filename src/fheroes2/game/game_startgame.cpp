@@ -857,6 +857,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
             }
         } );
 
+        // The amount of the kingdom resources has changed, the status window needs to be updated
+        Redraw( REDRAW_STATUS );
+        display.render();
+
         if ( conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
             Game::AutoSave();
         }

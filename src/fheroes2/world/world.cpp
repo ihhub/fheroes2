@@ -1578,7 +1578,7 @@ bool EventDate::isAllow( const int col, const uint32_t date ) const
         return false;
     }
 
-    if ( firstOccurrenceDay < date ) {
+    if ( firstOccurrenceDay > date ) {
         // The date has not come.
         return false;
     }
