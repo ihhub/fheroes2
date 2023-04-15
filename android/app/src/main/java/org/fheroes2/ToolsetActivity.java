@@ -29,6 +29,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -115,9 +117,16 @@ public final class ToolsetActivity extends AppCompatActivity
         }
     }
 
-    private static final int REQUEST_CODE_OPEN_HOMM2_ASSETS_ZIP = 1001;
-
     private ToolsetActivityViewModel viewModel = null;
+
+    private final ActivityResultLauncher<String> zipArchiveChooserLauncher = registerForActivityResult( new ActivityResultContracts.GetContent(), result -> {
+        // No ZIP archive was selected
+        if ( result == null ) {
+            return;
+        }
+
+        viewModel.extractAssets( getExternalFilesDir( null ), result, getContentResolver() );
+    } );
 
     @Override
     protected void onCreate( final Bundle savedInstanceState )
@@ -138,22 +147,6 @@ public final class ToolsetActivity extends AppCompatActivity
         viewModel.validateAssets( getExternalFilesDir( null ) );
     }
 
-    @Override
-    protected void onActivityResult( final int requestCode, final int resultCode, final Intent data )
-    {
-        super.onActivityResult( requestCode, resultCode, data );
-
-        switch ( requestCode ) {
-        case REQUEST_CODE_OPEN_HOMM2_ASSETS_ZIP:
-            if ( resultCode == RESULT_OK && data != null ) {
-                viewModel.extractAssets( getExternalFilesDir( null ), data.getData(), getContentResolver() );
-            }
-            break;
-        default:
-            break;
-        }
-    }
-
     public void startGameButtonClicked( final View view )
     {
         startActivity( new Intent( this, GameActivity.class ) );
@@ -164,11 +157,7 @@ public final class ToolsetActivity extends AppCompatActivity
 
     public void extractHoMM2AssetsButtonClicked( final View view )
     {
-        final Intent intent = new Intent( Intent.ACTION_OPEN_DOCUMENT );
-        intent.setType( "application/zip" );
-
-        startActivityForResult( Intent.createChooser( intent, getString( R.string.activity_toolset_extract_homm2_assets_chooser_title ) ),
-                                REQUEST_CODE_OPEN_HOMM2_ASSETS_ZIP );
+        zipArchiveChooserLauncher.launch( "application/zip" );
     }
 
     public void downloadHoMM2DemoButtonClicked( final View view )
