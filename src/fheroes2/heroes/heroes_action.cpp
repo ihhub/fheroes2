@@ -58,7 +58,7 @@
 #include "m82.h"
 #include "maps.h"
 #include "maps_objects.h"
-#include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
@@ -223,10 +223,11 @@ namespace
                     Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
                         std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-                    tile.MonsterSetCount( 0 );
+                    setMonsterCountOnTile( tile, 0 );
                 }
-                else
-                    tile.MonsterSetCount( troop.GetCount() - recruit );
+                else {
+                    setMonsterCountOnTile( tile, troop.GetCount() - recruit );
+                }
 
                 const payment_t paymentCosts = troop.GetMonster().GetCost() * recruit;
                 hero.GetKingdom().OddFundsResource( paymentCosts );
@@ -385,7 +386,7 @@ namespace
 #endif
 
                 if ( monstersLeft > 0 ) {
-                    tile.MonsterSetCount( monstersLeft );
+                    setMonsterCountOnTile( tile, monstersLeft );
 
                     if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
                         Maps::setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
@@ -404,7 +405,7 @@ namespace
             Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
                 std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-            tile.MonsterSetCount( 0 );
+            setMonsterCountOnTile( tile, 0 );
         }
 
         // Clear the hero's attacked monster tile index
@@ -671,7 +672,7 @@ namespace
 
         I.GetGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-        tile.QuantityReset();
+        resetObjectInfoOnTile( tile );
 
         if ( objectType == MP2::OBJ_RESOURCE ) {
             // Update the position of picked up resource on radar to remove its mark.
@@ -751,7 +752,7 @@ namespace
             Dialog::Message( caption, msg, Font::BIG, Dialog::OK );
         }
 
-        tile.QuantityReset();
+        resetObjectInfoOnTile( tile );
         hero.setVisitedForAllies( dst_index );
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
@@ -790,7 +791,7 @@ namespace
                 hero.PickupArtifact( art );
             }
 
-            tile.QuantityReset();
+            resetObjectInfoOnTile( tile );
         }
         else {
             message += '\n';
@@ -844,7 +845,7 @@ namespace
                 hero.GetKingdom().AddFundsResource( funds );
             }
 
-            tile.QuantityReset();
+            resetObjectInfoOnTile( tile );
         }
         else {
             message += '\n';
@@ -884,7 +885,7 @@ namespace
         Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
             std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-        tile.QuantityReset();
+        resetObjectInfoOnTile( tile );
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
     }
@@ -1111,7 +1112,7 @@ namespace
                         Dialog::Message( title, msg, Font::BIG, Dialog::OK );
                     }
 
-                    tile.QuantityReset();
+                    resetObjectInfoOnTile( tile );
                     hero.SetVisited( dst_index, Visit::GLOBAL );
                 }
                 else {
@@ -1332,7 +1333,7 @@ namespace
             }
 
             if ( complete ) {
-                tile.QuantityReset();
+                resetObjectInfoOnTile( tile );
                 hero.SetVisited( dst_index, Visit::GLOBAL );
             }
             else if ( 0 == gold ) {
@@ -1502,7 +1503,7 @@ namespace
         Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
             std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-        tile.QuantityReset();
+        resetObjectInfoOnTile( tile );
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
     }
@@ -1674,7 +1675,7 @@ namespace
 
                 I.GetGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-                tile.QuantityReset();
+                resetObjectInfoOnTile( tile );
 
                 const fheroes2::Point artifactPosition = Maps::GetPoint( dst_index );
 
@@ -1786,7 +1787,7 @@ namespace
         Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
             std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-        tile.QuantityReset();
+        resetObjectInfoOnTile( tile );
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
     }
@@ -2140,7 +2141,7 @@ namespace
                     Dialog::Message( troop.GetName(), _( "You are unable to recruit at this time, your ranks are full." ), Font::BIG, Dialog::OK );
                 }
                 else {
-                    tile.MonsterSetCount( 0 );
+                    setMonsterCountOnTile( tile, 0 );
                     hero.GetArmy().JoinTroop( troop );
 
                     Interface::Basic::Get().SetRedraw( Interface::REDRAW_STATUS );
@@ -3022,7 +3023,7 @@ namespace
                     break;
                 }
 
-                tile.QuantityReset();
+                resetObjectInfoOnTile( tile );
             }
 
             // Even if the hero has been defeated by a demon (and no longer belongs to any

@@ -142,9 +142,19 @@ namespace Maps
             return _objectIcnType;
         }
 
+        void setObjectIcnType( const MP2::ObjectIcnType type )
+        {
+            _objectIcnType = type;
+        }
+
         uint8_t GetObjectSpriteIndex() const
         {
             return _imageIndex;
+        }
+
+        void setObjectSpriteIndex( const uint8_t index )
+        {
+            _imageIndex = index;
         }
 
         uint32_t GetObjectUID() const
@@ -152,26 +162,14 @@ namespace Maps
             return _uid;
         }
 
-        // Get Tile metadata field #1 (used for things like monster count or resource amount)
-        uint8_t GetQuantity1() const
+        void setObjectUID( const uint32_t uid )
         {
-            return quantity1;
+            _uid = uid;
         }
 
-        void setQuantity1( const uint8_t value )
+        uint8_t getLayerType() const
         {
-            quantity1 = value;
-        }
-
-        void setQuantity2( const uint8_t value )
-        {
-            quantity2 = value;
-        }
-
-        // Get Tile metadata field #2 (used for things like animations or resource type )
-        uint8_t GetQuantity2() const
-        {
-            return quantity2;
+            return _layerType;
         }
 
         uint16_t GetPassable() const
@@ -310,6 +308,11 @@ namespace Maps
             return addons_level1;
         }
 
+        Addons & getLevel1Addons()
+        {
+            return addons_level1;
+        }
+
         const Addons & getLevel2Addons() const
         {
             return addons_level2;
@@ -332,16 +335,31 @@ namespace Maps
 
         void ClearFog( const int colors );
 
-        void MonsterSetCount( uint32_t count );
-        uint32_t MonsterCount() const;
-
         // Checks whether the object to be captured is guarded by its own forces
         // (castle has a hero or garrison, dwelling has creatures, etc)
         bool isCaptureObjectProtected() const;
 
-        // Operations with tile quantities
-        void QuantityUpdate( bool isFirstLoad = true );
-        void QuantityReset();
+        // Get Tile metadata field #1 (used for things like monster count or resource amount)
+        uint8_t GetQuantity1() const
+        {
+            return quantity1;
+        }
+
+        void setQuantity1( const uint8_t value )
+        {
+            quantity1 = value;
+        }
+
+        void setQuantity2( const uint8_t value )
+        {
+            quantity2 = value;
+        }
+
+        // Get Tile metadata field #2 (used for things like animations or resource type )
+        uint8_t GetQuantity2() const
+        {
+            return quantity2;
+        }
 
         int QuantityVariant() const
         {
@@ -351,6 +369,18 @@ namespace Maps
         int QuantityExt() const
         {
             return 0x0f & quantity2;
+        }
+
+        void QuantitySetVariant( const int variant )
+        {
+            quantity2 &= 0x0f;
+            quantity2 |= variant << 4;
+        }
+
+        void QuantitySetExt( int ext )
+        {
+            quantity2 &= 0xf0;
+            quantity2 |= ( 0x0f & ext );
         }
 
         void SetObjectPassable( bool );
@@ -391,7 +421,6 @@ namespace Maps
 
         static std::pair<int, int> ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
         static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
-        static void PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count );
 
         // Restores an abandoned mine whose main tile is 'tile', turning it into an ordinary mine that brings
         // resources of type 'resource'. This method updates all sprites and sets object types for non-action
@@ -404,26 +433,16 @@ namespace Maps
 
         static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
 
+        void swap( TilesAddon & addon );
+
+        static void updateTileById( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
+
     private:
         TilesAddon * getAddonWithFlag( const uint32_t uid );
 
         // Set or remove a flag which belongs to UID of the object.
         void updateFlag( const int color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer );
         void RemoveJailSprite();
-
-        void QuantitySetVariant( const int variant )
-        {
-            quantity2 &= 0x0f;
-            quantity2 |= variant << 4;
-        }
-
-        void QuantitySetExt( int ext )
-        {
-            quantity2 &= 0xf0;
-            quantity2 |= ( 0x0f & ext );
-        }
-
-        void QuantitySetSpell( int );
 
         bool isTallObject() const;
 
@@ -433,14 +452,6 @@ namespace Maps
         {
             _fogDirection = fogDirection;
         }
-
-        static void UpdateMonsterInfo( Tiles & );
-        static void UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad );
-        static void UpdateMonsterPopulation( Tiles & );
-        static void UpdateRNDArtifactSprite( Tiles & );
-        static void UpdateRNDResourceSprite( Tiles & );
-
-        static void updateTileById( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
 
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );
@@ -509,47 +520,6 @@ namespace Maps
     StreamBase & operator<<( StreamBase &, const Tiles & );
     StreamBase & operator>>( StreamBase &, TilesAddon & );
     StreamBase & operator>>( StreamBase &, Tiles & );
-
-    // In order to keep class Tiles small enough these helper functions exist.
-    // If you want to add a new method to the class and this is not a genetic one you must create a function instead.
-
-    void setSpellOnTile( Tiles & tile, const int32_t spellId );
-    int32_t getSpellIdFromTile( const Tiles & tile );
-
-    void setMonsterOnTileJoinCondition( Tiles & tile, const int32_t condition );
-    bool isMonsterOnTileJoinConditionSkip( const Tiles & tile );
-    bool isMonsterOnTileJoinConditionFree( const Tiles & tile );
-
-    int getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
-    int getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex );
-
-    Monster getMonsterFromTile( const Tiles & tile );
-
-    Spell getSpellFromTile( const Tiles & tile );
-
-    Artifact getArtifactFromTile( const Tiles & tile );
-
-    void setArtifactOnTile( Tiles & tile, const int artifactId );
-
-    uint32_t getGoldAmountFromTile( const Tiles & tile );
-
-    Skill::Secondary getSecondarySkillFromTile( const Tiles & tile );
-
-    void setSecondarySkillOnTile( Tiles & tile, const int skillId );
-
-    ResourceCount getResourcesFromTile( const Tiles & tile );
-
-    void setResourceOnTile( Tiles & tile, const int resourceType, uint32_t value );
-
-    Funds getFundsFromTile( const Tiles & tile );
-
-    Troop getTroopFromTile( const Tiles & tile );
-
-    int getColorTypeFromTile( const Tiles & tile );
-
-    void setColorTypeOnTile( Tiles & tile, const int color );
-
-    bool doesTileContainValuableItems( const Tiles & tile );
 }
 
 #endif

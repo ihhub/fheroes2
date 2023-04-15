@@ -51,7 +51,7 @@
 #include "logging.h"
 #include "m82.h"
 #include "maps.h"
-#include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
@@ -594,7 +594,7 @@ namespace
             return false;
         }
 
-        Maps::setSpellOnTile( tile, spell.GetID() );
+        Maps::setMineSpellOnTile( tile, spell.GetID() );
 
         if ( spell == Spell::HAUNT ) {
             world.CaptureObject( tile.GetIndex(), Color::NONE );

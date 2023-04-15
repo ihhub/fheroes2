@@ -48,6 +48,7 @@
 #include "interface_gamearea.h"
 #include "logging.h"
 #include "maps.h"
+#include "maps_tiles_helper.h" // TODO: This file should not be included
 #include "monster.h"
 #include "monster_anim.h"
 #include "mounts.h"
@@ -1473,7 +1474,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMineGuardianSpritesPe
 
     std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
 
-    const int32_t spellID = Maps::getSpellIdFromTile( *this );
+    const int32_t spellID = Maps::getMineSpellIdFromTile( *this );
     switch ( spellID ) {
     case Spell::SETEGUARDIAN:
     case Spell::SETAGUARDIAN:
@@ -1519,7 +1520,7 @@ void Maps::Tiles::redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool 
         renderFlyingGhosts = true;
     }
     else if ( objectType == MP2::OBJ_MINES ) {
-        const int32_t spellID = Maps::getSpellIdFromTile( *this );
+        const int32_t spellID = Maps::getMineSpellIdFromTile( *this );
 
         switch ( spellID ) {
         case Spell::NONE:
@@ -1629,7 +1630,7 @@ std::string Maps::Tiles::String() const
     case MP2::OBJ_HALFLING_HOLE:
     case MP2::OBJ_PEASANT_HUT:
     case MP2::OBJ_MONSTER:
-        os << "monster count   : " << MonsterCount() << std::endl;
+        os << "monster count   : " << getMonsterCountFromTile( *this ) << std::endl;
         break;
     case MP2::OBJ_HEROES: {
         const Heroes * hero = GetHeroes();
@@ -2341,72 +2342,6 @@ void Maps::Tiles::RestoreAbandonedMine( Tiles & tile, const int resource )
     }
 }
 
-void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
-{
-    Artifact art;
-
-    switch ( tile.GetObject() ) {
-    case MP2::OBJ_RANDOM_ARTIFACT:
-        art = Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL );
-        break;
-    case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
-        art = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
-        break;
-    case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
-        art = Artifact::Rand( Artifact::ART_LEVEL_MINOR );
-        break;
-    case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
-        art = Artifact::Rand( Artifact::ART_LEVEL_MAJOR );
-        break;
-    default:
-        return;
-    }
-
-    if ( !art.isValid() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set an artifact over a random artifact on tile " << tile.GetIndex() )
-        return;
-    }
-
-    tile.SetObject( MP2::OBJ_ARTIFACT );
-
-    uint32_t uidArtifact = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNARTI );
-    if ( uidArtifact == 0 ) {
-        uidArtifact = tile._uid;
-    }
-
-    static_assert( std::is_same_v<decltype( updateTileById ), void( Tiles &, uint32_t, uint8_t )>, "Type of updateTileById() has been changed, check the logic below" );
-
-    const uint32_t artSpriteIndex = art.IndexSprite();
-    assert( artSpriteIndex > std::numeric_limits<uint8_t>::min() && artSpriteIndex <= std::numeric_limits<uint8_t>::max() );
-
-    updateTileById( tile, uidArtifact, static_cast<uint8_t>( artSpriteIndex ) );
-
-    // replace artifact shadow
-    if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), uidArtifact, static_cast<uint8_t>( artSpriteIndex - 1 ) );
-    }
-}
-
-void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
-{
-    tile.SetObject( MP2::OBJ_RESOURCE );
-
-    const uint8_t resourceSprite = Resource::GetIndexSprite( Resource::Rand( true ) );
-
-    uint32_t uidResource = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNRSRC );
-    if ( uidResource == 0 ) {
-        uidResource = tile._uid;
-    }
-
-    updateTileById( tile, uidResource, resourceSprite );
-
-    // Replace shadow of the resource.
-    if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        assert( resourceSprite > 0 );
-        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), uidResource, resourceSprite - 1 );
-    }
-}
-
 std::pair<uint32_t, uint32_t> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex )
 {
     const int tileIndex = tile._index;
@@ -3073,6 +3008,16 @@ bool Maps::Tiles::isDetachedObject() const
     }
 
     return false;
+}
+
+void Maps::Tiles::swap( TilesAddon & addon )
+{
+    std::swap( addon._objectIcnType, _objectIcnType );
+    std::swap( addon._imageIndex, _imageIndex );
+    std::swap( addon._uid, _uid );
+    std::swap( addon._layerType, _layerType );
+    std::swap( addon._hasObjectAnimation, _hasObjectAnimation );
+    std::swap( addon._isMarkedAsRoad, _isMarkedAsRoad );
 }
 
 StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )

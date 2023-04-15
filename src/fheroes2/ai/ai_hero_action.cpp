@@ -52,7 +52,7 @@
 #include "m82.h"
 #include "maps.h"
 #include "maps_objects.h"
-#include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
@@ -492,7 +492,7 @@ namespace
 #endif
 
                 if ( monstersLeft > 0 ) {
-                    tile.MonsterSetCount( monstersLeft );
+                    setMonsterCountOnTile( tile, monstersLeft );
 
                     if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
                         Maps::setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
@@ -506,7 +506,7 @@ namespace
 
         if ( destroy ) {
             tile.RemoveObjectSprite();
-            tile.MonsterSetCount( 0 );
+            setMonsterCountOnTile( tile, 0 );
             tile.setAsEmpty();
         }
     }
@@ -519,7 +519,7 @@ namespace
             hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
 
         tile.RemoveObjectSprite();
-        tile.QuantityReset();
+        resetObjectInfoOnTile( tile );
         hero.GetPath().Reset();
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " pickup small resource" )
@@ -595,7 +595,7 @@ namespace
         }
 
         tile.RemoveObjectSprite();
-        tile.QuantityReset();
+        resetObjectInfoOnTile( tile );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
@@ -666,7 +666,7 @@ namespace
         if ( MP2::isCaptureObject( objectType ) )
             AIToCaptureObject( hero, objectType, dst_index );
 
-        tile.QuantityReset();
+        resetObjectInfoOnTile( tile );
         hero.setVisitedForAllies( dst_index );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
@@ -685,7 +685,7 @@ namespace
                 hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
             }
 
-            tile.QuantityReset();
+            resetObjectInfoOnTile( tile );
         }
 
         hero.SetVisitedWideTile( dst_index, objectType, Visit::GLOBAL );
@@ -705,7 +705,7 @@ namespace
             else
                 hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
 
-            tile.QuantityReset();
+            resetObjectInfoOnTile( tile );
         }
 
         hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -719,7 +719,7 @@ namespace
 
         hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
         tile.RemoveObjectSprite();
-        tile.QuantityReset();
+        resetObjectInfoOnTile( tile );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
@@ -1096,7 +1096,7 @@ namespace
         }
 
         if ( complete )
-            tile.QuantityReset();
+            resetObjectInfoOnTile( tile );
         else if ( 0 == gold && !hero.isObjectTypeVisited( objectType ) ) {
             // modify morale
             hero.SetVisited( dst_index );
@@ -1127,7 +1127,7 @@ namespace
                     hero.AppendSpellToBook( spell );
                 }
 
-                tile.QuantityReset();
+                resetObjectInfoOnTile( tile );
                 hero.SetVisited( dst_index, Visit::GLOBAL );
             }
             else {
@@ -1193,7 +1193,7 @@ namespace
                 AIBattleLose( hero, res, true );
             }
 
-            tile.QuantityReset();
+            resetObjectInfoOnTile( tile );
         }
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
@@ -1217,7 +1217,7 @@ namespace
             return;
         }
 
-        tile.MonsterSetCount( 0 );
+        setMonsterCountOnTile( tile, 0 );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
@@ -1256,7 +1256,7 @@ namespace
             return;
         }
 
-        tile.MonsterSetCount( availableTroopCount - recruitTroopCount );
+        setMonsterCountOnTile( tile, availableTroopCount - recruitTroopCount );
         kingdom.OddFundsResource( troopToHire.GetTotalCost() );
 
         // Remove genie lamp sprite if no genies are available to hire.
@@ -1372,7 +1372,7 @@ namespace
             hero.PickupArtifact( getArtifactFromTile( tile ) );
 
         tile.RemoveObjectSprite();
-        tile.QuantityReset();
+        resetObjectInfoOnTile( tile );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
@@ -1420,7 +1420,7 @@ namespace
 
             if ( result && hero.PickupArtifact( art ) ) {
                 tile.RemoveObjectSprite();
-                tile.QuantityReset();
+                resetObjectInfoOnTile( tile );
             }
         }
 
