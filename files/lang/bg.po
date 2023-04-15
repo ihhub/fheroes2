@@ -85,12 +85,14 @@ msgid "RESTART"
 msgstr "РЕСТАРТ"
 
 msgid "HEROES"
-msgstr ""
+msgstr "ГЕРОЙ"
 
 msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
+"ГРАДОВЕ/\n"
+"ЗАМЪЦИ"
 
 msgid "S"
 msgstr ""
@@ -108,7 +110,7 @@ msgid "ALL"
 msgstr ""
 
 msgid "SELECT"
-msgstr ""
+msgstr "ИЗБЕРИ"
 
 msgid ""
 "STANDARD\n"
@@ -172,7 +174,7 @@ msgid "GIFT"
 msgstr "ДАРИ"
 
 msgid "guildWell|EXIT"
-msgstr ""
+msgstr "guildWell|ИЗХОД"
 
 msgid "DIFFICULTY"
 msgstr "ТРУДНОСТ"
@@ -742,8 +744,8 @@ msgstr[1] "Създава се огледален образ."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 %{unit} е съживена."
+msgstr[1] "%{count} %{unit} са съживени."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Преместен %{monster}: %{src}, %{dst}"
@@ -3122,10 +3124,10 @@ msgid "Click to apply the entered text."
 msgstr "Кликни, за да приложиш избраната резолюция."
 
 msgid "Click to open the Virtual Keyboard dialog."
-msgstr ""
+msgstr "Щракни, за да отвориш диалоговия прозорец за виртуална клавиатура."
 
 msgid "Open Virtual Keyboard"
-msgstr ""
+msgstr "Отвори виртуална клавиатура"
 
 msgid "How many troops to move?"
 msgstr "Колко единици ще преместите?"
@@ -3141,12 +3143,15 @@ msgid ""
 "\n"
 "Month: "
 msgstr ""
+"\n"
+"\n"
+"Месец: "
 
 msgid ", Week: "
-msgstr ""
+msgstr ", Седмица: "
 
 msgid ", Day: "
-msgstr ""
+msgstr ", Ден: "
 
 msgid ""
 "\n"
@@ -3750,40 +3755,40 @@ msgid "View High Scores for Campaigns."
 msgstr "Вижте високите резултати за кампании."
 
 msgid "hotkey|default okay event"
-msgstr ""
+msgstr "hotkey|удобрение по подразбиране"
 
 msgid "hotkey|default cancel event"
-msgstr ""
+msgstr "hotkey|отказ по подразбиране"
 
 msgid "hotkey|default left"
-msgstr ""
+msgstr "hotkey|ляво по подразбиране"
 
 msgid "hotkey|default right"
-msgstr ""
+msgstr "hotkey|дясно по подразбиране"
 
 msgid "hotkey|default up"
-msgstr ""
+msgstr "hotkey|нагоре по подразбиране"
 
 msgid "hotkey|default down"
-msgstr ""
+msgstr "hotkey|надолу по подразбиране"
 
 msgid "hotkey|toggle fullscreen"
-msgstr ""
+msgstr "hotkey|превключване на цял екран"
 
 msgid "hotkey|toggle text support mode"
-msgstr ""
+msgstr "hotkey|превключване потдръжка на текст"
 
 msgid "hotkey|new game"
-msgstr ""
+msgstr "hotkey|нова игра"
 
 msgid "hotkey|load game"
-msgstr ""
+msgstr "hotkey|зареди игра"
 
 msgid "hotkey|highscores"
-msgstr ""
+msgstr "hotkey|резултати"
 
 msgid "hotkey|credits"
-msgstr ""
+msgstr "hotkey|участници"
 
 #, fuzzy
 msgid "hotkey|standard game"
@@ -3802,28 +3807,28 @@ msgid "hotkey|settings"
 msgstr "Настойки"
 
 msgid "hotkey|quit"
-msgstr ""
+msgstr "hotkey|напусни"
 
 msgid "hotkey|select map"
-msgstr ""
+msgstr "hotkey|избери карта"
 
 msgid "hotkey|select small map size"
-msgstr ""
+msgstr "hotkey|избери малка карта"
 
 msgid "hotkey|select medium map size"
-msgstr ""
+msgstr "hotkey|избери средна карта"
 
 msgid "hotkey|select large map size"
-msgstr ""
+msgstr "hotkey|избери голяма карта"
 
 msgid "hotkey|select extra large map size"
-msgstr ""
+msgstr "hotkey|избери много голяма карта"
 
 msgid "hotkey|select all map sizes"
-msgstr ""
+msgstr "hotkey|избери всички карти"
 
 msgid "hotkey|hotseat game"
-msgstr ""
+msgstr "hotkey|двойна игра"
 
 msgid "hotkey|battle only game"
 msgstr ""
