@@ -52,7 +52,7 @@ namespace
 
         for ( const std::vector<uint8_t> & audio : audioChannels ) {
             if ( !audio.empty() ) {
-                Mixer::Play( &audio[0], static_cast<uint32_t>( audio.size() ), -1, false );
+                Mixer::Play( audio.data(), static_cast<uint32_t>( audio.size() ), -1, false );
             }
         }
     }
@@ -101,8 +101,13 @@ namespace Video
         }
 
         SMKVideoSequence video( videoPath );
-        if ( video.frameCount() < 1 ) // nothing to show
+
+        const uint32_t frameCount = video.frameCount();
+
+        if ( frameCount < 1 ) {
+            // Nothing to show.
             return false;
+        }
 
         const std::vector<std::vector<uint8_t>> & audioChannels = video.getAudioChannels();
         const bool hasAudio = Audio::isValid() && !audioChannels.empty();
@@ -117,14 +122,14 @@ namespace Video
 
         const bool isLooped = ( action == VideoAction::LOOP_VIDEO || action == VideoAction::PLAY_TILL_AUDIO_END );
 
-        // setup cursor
+        // Hide mouse cursor.
         const CursorRestorer cursorRestorer( false, Cursor::Get().Themes() );
 
         fheroes2::Display & display = fheroes2::Display::instance();
         display.fill( 0 );
         display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
 
-        unsigned int currentFrame = 0;
+        uint32_t currentFrame = 0;
         fheroes2::Rect frameRoi( ( display.width() - video.width() ) / 2, ( display.height() - video.height() ) / 2, 0, 0 );
 
         const uint32_t delay = static_cast<uint32_t>( 1000.0 / video.fps() + 0.5 ); // This might be not very accurate but it's the best we can have now
@@ -132,80 +137,57 @@ namespace Video
         std::vector<uint8_t> palette;
         std::vector<uint8_t> prevPalette;
 
-        bool isFrameReady = false;
+        // Prepare the first frame.
+        video.resetFrame();
+        video.getNextFrame( display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, prevPalette );
+        screenRestorer.changePalette( prevPalette.data() );
+
+        LocalEvent & le = LocalEvent::Get();
 
         Game::passCustomAnimationDelay( delay );
         // Make sure that the first run is passed immediately.
         assert( !Game::isCustomDelayNeeded( delay ) );
-
-        bool userMadeAction = false;
 
         // Play audio just before rendering the frame. This is important to minimize synchronization issues between audio and video.
         if ( hasAudio ) {
             playAudio( audioChannels );
         }
 
-        LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents( Game::isCustomDelayNeeded( delay ) ) ) {
-            if ( action == VideoAction::PLAY_TILL_AUDIO_END ) {
-                if ( !Mixer::isPlaying( -1 ) ) {
-                    break;
-                }
-            }
-            else if ( action != VideoAction::LOOP_VIDEO ) {
-                if ( currentFrame >= video.frameCount() ) {
-                    break;
-                }
+            if ( ( action == VideoAction::PLAY_TILL_AUDIO_END ) && !Mixer::isPlaying( -1 ) ) {
+                break;
             }
 
             if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
-                userMadeAction = true;
                 Mixer::Stop();
                 break;
             }
 
             if ( Game::validateCustomAnimationDelay( delay ) ) {
-                if ( !isFrameReady ) {
-                    if ( currentFrame == 0 )
+                if ( currentFrame < frameCount ) {
+                    // Render the prepared frame.
+                    display.render( frameRoi );
+
+                    ++currentFrame;
+
+                    if ( ( currentFrame == frameCount ) && isLooped ) {
+                        currentFrame = 0;
                         video.resetFrame();
 
+                        if ( hasAudio ) {
+                            playAudio( audioChannels );
+                        }
+                    }
+
+                    // Prepare the next frame for render.
                     video.getNextFrame( display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, palette );
-                }
-                isFrameReady = false;
 
-                if ( prevPalette != palette ) {
-                    screenRestorer.changePalette( palette.data() );
-                    std::swap( prevPalette, palette );
-                }
-
-                display.render( frameRoi );
-
-                ++currentFrame;
-
-                if ( isLooped && currentFrame >= video.frameCount() ) {
-                    currentFrame = 0;
-
-                    if ( hasAudio ) {
-                        playAudio( audioChannels );
+                    if ( prevPalette != palette ) {
+                        screenRestorer.changePalette( palette.data() );
+                        std::swap( prevPalette, palette );
                     }
                 }
-            }
-            else {
-                // Don't waste CPU resources, do some calculations while we're waiting for the next frame time position
-                if ( !isFrameReady ) {
-                    if ( currentFrame == 0 )
-                        video.resetFrame();
-
-                    video.getNextFrame( display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, palette );
-
-                    isFrameReady = true;
-                }
-            }
-        }
-
-        if ( action == VideoAction::WAIT_FOR_USER_INPUT && !userMadeAction ) {
-            while ( le.HandleEvents() ) {
-                if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                else if ( action != VideoAction::WAIT_FOR_USER_INPUT ) {
                     break;
                 }
             }
@@ -248,11 +230,11 @@ namespace Video
             std::array<uint8_t, 768> endPalette{ 0 };
             for ( size_t i = 0; i < 256; ++i ) {
                 // Red color.
-                endPalette[i * 3] = originalPalette[assignedValue[i] * 3] * 4;
+                endPalette[i * 3] = originalPalette[static_cast<size_t>( assignedValue[i] ) * 3] * 4;
                 // Green color.
-                endPalette[i * 3 + 1] = originalPalette[assignedValue[i] * 3 + 1] * 4;
+                endPalette[i * 3 + 1] = originalPalette[static_cast<size_t>( assignedValue[i] ) * 3 + 1] * 4;
                 // Blue color.
-                endPalette[i * 3 + 2] = originalPalette[assignedValue[i] * 3 + 2] * 4;
+                endPalette[i * 3 + 2] = originalPalette[static_cast<size_t>( assignedValue[i] ) * 3 + 2] * 4;
             }
 
             // Gradually fade the palette.
@@ -270,12 +252,6 @@ namespace Video
                 display.render( frameRoi );
 
                 fheroes2::delayforMs( 20 );
-            }
-
-            while ( le.HandleEvents() ) {
-                if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
-                    break;
-                }
             }
         }
 
