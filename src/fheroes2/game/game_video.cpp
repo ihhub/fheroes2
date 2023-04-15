@@ -34,7 +34,6 @@
 #include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
-#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
 #include "smk_decoder.h"
@@ -90,6 +89,11 @@ namespace Video
 
     bool ShowVideo( const std::string & fileName, const VideoAction action, const bool fadeColorsOnEnd /* = false */ )
     {
+        return ShowVideo( fileName, action, nullptr, fadeColorsOnEnd );
+    }
+
+    bool ShowVideo( const std::string & fileName, const VideoAction action, std::vector<Subtitle> * subtitles /* = nullptr*/, const bool fadeColorsOnEnd /* = false */ )
+    {
         // Stop any cycling animation.
         const fheroes2::ScreenPaletteRestorer screenRestorer;
 
@@ -142,6 +146,14 @@ namespace Video
         video.getNextFrame( display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, prevPalette );
         screenRestorer.changePalette( prevPalette.data() );
 
+        // Prepare the subtitles.
+        if ( subtitles != nullptr ) {
+            // Generate subtitle images.
+            for ( Video::Subtitle & subtitle : *subtitles ) {
+                subtitle.makeSubtitleImage();
+            }
+        }
+
         LocalEvent & le = LocalEvent::Get();
 
         Game::passCustomAnimationDelay( delay );
@@ -185,6 +197,15 @@ namespace Video
                     if ( prevPalette != palette ) {
                         screenRestorer.changePalette( palette.data() );
                         std::swap( prevPalette, palette );
+                    }
+
+                    if ( subtitles != nullptr ) {
+                        for ( Video::Subtitle & subtitle : *subtitles ) {
+                            if ( subtitle.needRender( currentFrame ) ) {
+                                // TODO: make a function to adopt subtitles image for the changed palette colors when palette changes.
+                                subtitle.blitSubtitles( display, frameRoi );
+                            }
+                        }
                     }
                 }
                 else if ( action != VideoAction::WAIT_FOR_USER_INPUT ) {
@@ -238,7 +259,7 @@ namespace Video
             }
 
             // Gradually fade the palette.
-            const int32_t gradingSteps = 100;
+            const int32_t gradingSteps = 10;
             std::vector<uint8_t> gradingPalette( 768 );
 
             for ( int32_t gradingId = 1; gradingId < gradingSteps; ++gradingId ) {
@@ -251,13 +272,57 @@ namespace Video
 
                 display.render( frameRoi );
 
-                fheroes2::delayforMs( 20 );
+                // Do 8 FPS rendering.
+                fheroes2::delayforMs( 125 );
             }
-        }
 
-        display.fill( 0 );
+            // Convert all video frame colors to original game palette colors.
+            // TODO: Modify the ReplaceColorId to replace colors only in ROI.
+            for ( size_t id = 0; id < 256; ++id ) {
+                fheroes2::ReplaceColorId( display, static_cast<uint8_t>( id ), assignedValue[id] );
+            }
+
+            screenRestorer.changePalette( originalPalette );
+        }
+        else {
+            display.fill( 0 );
+        }
         display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
 
         return true;
+    }
+
+    Subtitle::Subtitle( const fheroes2::Text & subtitleText, const int32_t maxWidth, const int32_t offsetX, const int32_t offsetY, const uint32_t startFrame,
+                        const uint32_t endFrame /* = UINT32_MAX */ )
+        : _position( offsetX, offsetY )
+        , _startFrame( startFrame )
+        , _endFrame( endFrame )
+        , _maxWidth( maxWidth )
+    {
+        _text.add( subtitleText );
+    }
+
+    void Subtitle::makeSubtitleImage()
+    {
+        const int32_t textWidth = _text.width( _maxWidth );
+        // We add extra 1 to have space for contour
+        _subtitleImage.resize( textWidth + 1, _text.height( _maxWidth ) + 1 );
+        _subtitleImage.reset();
+
+        // Draw text and remove all shadow data is it could not be properly applied to video palette.
+        // We use the black color with id = 36 so no shadow will be applied to it.
+        const uint8_t blackColor = 36;
+        _subtitleImage.fill( blackColor );
+
+        // At the left and bottom there is space for contour left by original font shadows, we leave 1 extra pixel from the right and top.
+        _text.draw( 0, 1, textWidth, _subtitleImage );
+        fheroes2::ReplaceColorIdByTransformId( _subtitleImage, blackColor, 1 );
+        // Add black contour to the text.
+        fheroes2::Blit( fheroes2::CreateContour( _subtitleImage, blackColor ), _subtitleImage );
+    }
+
+    void Subtitle::blitSubtitles( fheroes2::Image & output, const fheroes2::Rect & frameRoi )
+    {
+        fheroes2::Blit( _subtitleImage, 0, 0, output, frameRoi.x + _position.x, frameRoi.y + _position.y, _subtitleImage.width(), _subtitleImage.height() );
     }
 }

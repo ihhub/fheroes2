@@ -41,6 +41,7 @@
 #include "game_video_type.h"
 #include "gamedefs.h"
 #include "heroes.h"
+#include "highscores.h"
 #include "kingdom.h"
 #include "mus.h"
 #include "players.h"
@@ -374,10 +375,32 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 }
                 else {
                     AudioManager::ResetAudio();
-                    Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, true );
-                    // TODO : Implement function that displays the last frame of win.smk and
-                    // a dialog for name entry. AudioManager::PlayMusic is run here in order to start playing
-                    // before displaying the high score.
+
+                    std::vector<Video::Subtitle> subtitles;
+
+                    // Get data for ratings text.
+                    const uint32_t difficulty = Game::GetRating();
+                    const uint32_t score = Game::GetGameOverScores();
+                    const Monster ratingMonster( fheroes2::HighScoreDataContainer::getMonsterByRating( score ) );
+
+                    // Make ratings text as a subtitle for WIN.SMK.
+                    Video::Subtitle ratingText( fheroes2::Text{ _( "Congratulations!\n\nDays: " ), fheroes2::FontType::normalWhite() }, 140, 405, 110, 40 );
+                    ratingText.addText( { std::to_string( world.CountDay() ), fheroes2::FontType::normalWhite() } );
+                    ratingText.addText( { _( "\nBase score: " ), fheroes2::FontType::smallWhite() } );
+                    ratingText.addText( { std::to_string( score * 100 / difficulty ), fheroes2::FontType::smallWhite() } );
+                    ratingText.addText( { _( "\nDifficulty: " ), fheroes2::FontType::smallWhite() } );
+                    ratingText.addText( { std::to_string( difficulty ), fheroes2::FontType::smallWhite() } );
+                    ratingText.addText( { _( "\n\nScore: " ), fheroes2::FontType::normalWhite() } );
+                    ratingText.addText( { std::to_string( score ), fheroes2::FontType::normalWhite() } );
+                    ratingText.addText( { _( "\n\nRating:\n" ), fheroes2::FontType::normalWhite() } );
+                    ratingText.addText( { ratingMonster.GetName(), fheroes2::FontType::normalWhite() } );
+
+                    subtitles.push_back( std::move( ratingText ) );
+
+                    Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, &subtitles, true );
+                    // TODO : Implement function that displays a dialog for name entry.
+
+                    // AudioManager::PlayMusic is run here in order to start playing before displaying the high score.
                     AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
 
                     res = fheroes2::GameMode::HIGHSCORES_STANDARD;
