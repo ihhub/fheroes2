@@ -52,9 +52,9 @@
 
 namespace
 {
-    int GetRandomObstaclePosition( std::mt19937 & gen )
+    uint32_t GetRandomObstaclePosition( std::mt19937 & gen )
     {
-        return Rand::GetWithGen( 3, 7, gen ) + ( 11 * Rand::GetWithGen( 1, 7, gen ) );
+        return Rand::GetWithGen( 3, 7, gen ) + ( 11 * Rand::GetWithGen( 0, 8, gen ) );
     }
 
     bool isTwoHexObject( const int icnId )
@@ -594,20 +594,16 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
     for ( size_t i = 0; i < objectsToPlace; ++i ) {
         const bool checkRightCell = isTwoHexObject( objs[i] );
 
-        int32_t dest;
-        Battle::Indexes around;
+        uint32_t dest;
         do {
             dest = GetRandomObstaclePosition( gen );
-            around = Board::GetAroundIndexes( dest );
-        } while (
-            at( dest ).GetObject() != 0 || ( checkRightCell && ( at( dest + 1 ).GetObject() != 0 || dest % 11 == 7 ) )
-            || ( std::any_of( around.begin(), around.end(), [this]( int index ) { return ( at( index ).GetObject() != 0 && at( index ).GetObject() != 0x40 ); } ) ) );
+        } while ( at( dest ).GetObject() != 0 || ( checkRightCell && ( at( dest + 1 ).GetObject() != 0 || dest % 11 == 7 ) ) );
 
         SetCobjObject( objs[i], dest );
     }
 }
 
-void Battle::Board::SetCobjObject( const int icn, const int32_t dst )
+void Battle::Board::SetCobjObject( const int icn, const uint32_t dst )
 {
     at( dst ).SetObject( 0x80 + ( icn - ICN::COBJ0000 ) );
 
