@@ -1180,11 +1180,12 @@ namespace Maps
         const uint32_t artSpriteIndex = art.IndexSprite();
         assert( artSpriteIndex > std::numeric_limits<uint8_t>::min() && artSpriteIndex <= std::numeric_limits<uint8_t>::max() );
 
-        tile.updateTileById( tile, uidArtifact, static_cast<uint8_t>( artSpriteIndex ) );
+        Maps::Tiles::updateTileById( tile, uidArtifact, static_cast<uint8_t>( artSpriteIndex ) );
 
         // replace artifact shadow
         if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
-            tile.updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ), uidArtifact, static_cast<uint8_t>( artSpriteIndex - 1 ) );
+            Maps::Tiles::updateTileById(
+                world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ), uidArtifact, static_cast<uint8_t>( artSpriteIndex - 1 ) );
         }
     }
 
@@ -1199,12 +1200,12 @@ namespace Maps
             uidResource = tile.GetObjectUID();
         }
 
-        tile.updateTileById( tile, uidResource, resourceSprite );
+        Maps::Tiles::updateTileById( tile, uidResource, resourceSprite );
 
         // Replace shadow of the resource.
         if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
             assert( resourceSprite > 0 );
-            tile.updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ), uidResource, resourceSprite - 1 );
+            Maps::Tiles::updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ), uidResource, resourceSprite - 1 );
         }
     }
 
