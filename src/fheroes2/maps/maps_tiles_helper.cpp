@@ -1216,19 +1216,19 @@ namespace Maps
 
         switch ( tile.GetObject() ) {
         case MP2::OBJ_RANDOM_MONSTER:
-            mons = Monster::Rand( Monster::LevelType::LEVEL_ANY ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_ANY );
             break;
         case MP2::OBJ_RANDOM_MONSTER_WEAK:
-            mons = Monster::Rand( Monster::LevelType::LEVEL_1 ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_1 );
             break;
         case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
-            mons = Monster::Rand( Monster::LevelType::LEVEL_2 ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_2 );
             break;
         case MP2::OBJ_RANDOM_MONSTER_STRONG:
-            mons = Monster::Rand( Monster::LevelType::LEVEL_3 ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_3 );
             break;
         case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
-            mons = Monster::Rand( Monster::LevelType::LEVEL_4 ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_4 );
             break;
         default:
             break;
