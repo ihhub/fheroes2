@@ -18,6 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game_video.h"
+
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -28,7 +31,7 @@
 #include "cursor.h"
 #include "dir.h"
 #include "game_delays.h"
-#include "game_video.h"
+#include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
 #include "math_base.h"
@@ -37,8 +40,6 @@
 #include "smk_decoder.h"
 #include "system.h"
 #include "ui_tool.h"
-
-#include <array>
 
 namespace
 {
@@ -87,7 +88,7 @@ namespace Video
         return false;
     }
 
-    bool ShowVideo( const std::string & fileName, const VideoAction action )
+    bool ShowVideo( const std::string & fileName, const VideoAction action, const bool fadeColorsOnEnd /* = false */ )
     {
         // Stop any cycling animation.
         const fheroes2::ScreenPaletteRestorer screenRestorer;
@@ -203,6 +204,74 @@ namespace Video
         }
 
         if ( action == VideoAction::WAIT_FOR_USER_INPUT && !userMadeAction ) {
+            while ( le.HandleEvents() ) {
+                if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                    break;
+                }
+            }
+        }
+
+        // Do a color fade only for valid palette.
+        if ( fadeColorsOnEnd && palette.size() == 768 ) {
+            // We rendered the frame and we got its palette. The biggest problem here is that the palette is not the same as in the game.
+            // Since we want to do color fading to gray-scale colors we take the original palette and
+            // find the nearest colors in video's palette to gray-scale colors of the original palette.
+            // Then we gradually change the current palette to be only gray-scale and after reaching the last frame change all colors of the frame to be only
+            // gray-scale colors of the original palette.
+
+            const uint8_t * originalPalette = fheroes2::getGamePalette();
+
+            // Yes, these values are hardcoded. There are ways to do it programmatically.
+            const int32_t startGrayScaleColorId = 10;
+            const int32_t endGrayScaleColorId = 36;
+
+            std::array<uint8_t, 256> assignedValue{ 0 };
+
+            for ( size_t id = 0; id < 256; ++id ) {
+                int32_t nearestDistance = INT32_MAX;
+
+                for ( uint8_t colorId = startGrayScaleColorId; colorId <= endGrayScaleColorId; ++colorId ) {
+                    const int32_t redDiff = static_cast<int32_t>( palette[id * 3] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3] ) * 4;
+                    const int32_t greenDiff
+                        = static_cast<int32_t>( palette[id * 3 + 1] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3 + 1] ) * 4;
+                    const int32_t blueDiff
+                        = static_cast<int32_t>( palette[id * 3 + 2] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3 + 2] ) * 4;
+
+                    const int32_t distance = redDiff * redDiff + greenDiff * greenDiff + blueDiff * blueDiff;
+                    if ( nearestDistance > distance ) {
+                        nearestDistance = distance;
+                        assignedValue[id] = colorId;
+                    }
+                }
+            }
+
+            std::array<uint8_t, 768> endPalette{ 0 };
+            for ( size_t i = 0; i < 256; ++i ) {
+                // Red color.
+                endPalette[i * 3] = originalPalette[assignedValue[i] * 3] * 4;
+                // Green color.
+                endPalette[i * 3 + 1] = originalPalette[assignedValue[i] * 3 + 1] * 4;
+                // Blue color.
+                endPalette[i * 3 + 2] = originalPalette[assignedValue[i] * 3 + 2] * 4;
+            }
+
+            // Gradually fade the palette.
+            const int32_t gradingSteps = 100;
+            std::vector<uint8_t> gradingPalette( 768 );
+
+            for ( int32_t gradingId = 1; gradingId < gradingSteps; ++gradingId ) {
+                for ( int32_t i = 0; i < 768; ++i ) {
+                    gradingPalette[i] = static_cast<uint8_t>( ( palette[i] * ( gradingSteps - gradingId ) + endPalette[i] * gradingId ) / gradingSteps );
+                }
+
+                screenRestorer.changePalette( gradingPalette.data() );
+                std::swap( prevPalette, gradingPalette );
+
+                display.render( frameRoi );
+
+                fheroes2::delayforMs( 20 );
+            }
+
             while ( le.HandleEvents() ) {
                 if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                     break;

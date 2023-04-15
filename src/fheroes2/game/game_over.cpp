@@ -374,7 +374,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 }
                 else {
                     AudioManager::ResetAudio();
-                    Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
+                    Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, true );
                     // TODO : Implement function that displays the last frame of win.smk and
                     // a dialog for name entry. AudioManager::PlayMusic is run here in order to start playing
                     // before displaying the high score.

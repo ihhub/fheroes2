@@ -30,5 +30,5 @@ namespace Video
     bool getVideoFilePath( const std::string & fileName, std::string & path );
 
     // Returns false if the video is not present or it is corrupted.
-    bool ShowVideo( const std::string & fileName, const VideoAction action );
+    bool ShowVideo( const std::string & fileName, const VideoAction action, const bool fadeColorsOnEnd = false );
 }
