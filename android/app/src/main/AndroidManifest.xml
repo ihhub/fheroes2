@@ -80,6 +80,6 @@
             android:icon="@mipmap/ic_launcher_toolset"
             android:label="@string/activity_save_file_manager_label"
             android:taskAffinity="org.fheroes2.ToolsetTask"
-            android:theme="@style/Theme.MaterialComponents.DayNight" />
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
     </application>
 </manifest>
