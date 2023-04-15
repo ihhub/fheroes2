@@ -3013,7 +3013,7 @@ bool Maps::Tiles::isDetachedObject() const
     return false;
 }
 
-void Maps::Tiles::swap( TilesAddon & addon )
+void Maps::Tiles::swap( TilesAddon & addon ) noexcept
 {
     std::swap( addon._objectIcnType, _objectIcnType );
     std::swap( addon._imageIndex, _imageIndex );

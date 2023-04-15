@@ -426,7 +426,7 @@ namespace Maps
 
         static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
 
-        void swap( TilesAddon & addon );
+        void swap( TilesAddon & addon ) noexcept;
 
         static void updateTileById( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
 
