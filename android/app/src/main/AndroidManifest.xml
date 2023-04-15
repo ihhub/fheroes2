@@ -66,7 +66,7 @@
             android:label="@string/activity_toolset_label"
             android:launchMode="singleTask"
             android:taskAffinity="org.fheroes2.ToolsetTask"
-            android:theme="@style/Theme.MaterialComponents.DayNight">
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
