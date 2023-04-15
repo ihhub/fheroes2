@@ -86,7 +86,7 @@ namespace Maps
     void setSpellOnTile( Tiles & tile, const int spellId )
     {
         using Quantity1Type = decltype( tile.GetQuantity1() );
-        static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
+        static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of GetQuantity1() has been changed, check the logic below" );
 
         switch ( tile.GetObject( false ) ) {
         case MP2::OBJ_ARTIFACT:
@@ -217,7 +217,7 @@ namespace Maps
     void setArtifactOnTile( Tiles & tile, const int artifactId )
     {
         using Quantity1Type = decltype( tile.GetQuantity1() );
-        static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
+        static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of GetQuantity1() has been changed, check the logic below" );
 
         assert( artifactId >= std::numeric_limits<Quantity1Type>::min() && artifactId <= std::numeric_limits<Quantity1Type>::max() );
 
@@ -313,7 +313,7 @@ namespace Maps
     void setSecondarySkillOnTile( Tiles & tile, const int skillId )
     {
         using Quantity1Type = decltype( tile.GetQuantity1() );
-        static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
+        static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of GetQuantity1() has been changed, check the logic below" );
 
         switch ( tile.GetObject( false ) ) {
         case MP2::OBJ_WITCHS_HUT:
@@ -436,7 +436,7 @@ namespace Maps
     void setColorTypeOnTile( Tiles & tile, const int color )
     {
         using Quantity1Type = decltype( tile.GetQuantity1() );
-        static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of quantity1 has been changed, check the logic below" );
+        static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of GetQuantity1() has been changed, check the logic below" );
 
         switch ( tile.GetObject( false ) ) {
         case MP2::OBJ_BARRIER:
@@ -1237,7 +1237,7 @@ namespace Maps
         tile.SetObject( MP2::OBJ_MONSTER );
 
         using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
-        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of _imageIndex has been changed, check the logic below" );
+        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
 
         assert( mons.GetID() > std::numeric_limits<TileImageIndexType>::min() && mons.GetID() <= std::numeric_limits<TileImageIndexType>::max() );
 
@@ -1276,7 +1276,7 @@ namespace Maps
         }
 
         using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
-        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of _imageIndex has been changed, check the logic below" );
+        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
 
         const uint32_t monsSpriteIndex = mons.GetSpriteIndex();
         assert( monsSpriteIndex >= std::numeric_limits<TileImageIndexType>::min() && monsSpriteIndex <= std::numeric_limits<TileImageIndexType>::max() );
