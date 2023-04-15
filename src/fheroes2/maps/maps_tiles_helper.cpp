@@ -27,7 +27,6 @@
 #include <list>
 #include <optional>
 #include <ostream>
-#include <string>
 #include <type_traits>
 
 #include "army_troop.h"
