@@ -381,7 +381,7 @@ namespace fheroes2
         return false;
     }
 
-    bool opponentsHasHeroes( const Heroes & hero )
+    bool opponentsHaveHeroes( const Heroes & hero )
     {
         for ( int opponentColor : Players::getInPlayOpponents( hero.GetColor() ) ) {
             if ( world.GetKingdom( opponentColor ).hasHeroes() )

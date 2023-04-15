@@ -450,16 +450,24 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( spell == Spell::IDENTIFYHERO ) {
-            bool opponentHasHeroes = fheroes2::opponentsHasHeroes( *hero );
-            if ( !opponentHasHeroes ) {
+            bool opponentsHaveHeroes = fheroes2::opponentsHaveHeroes( *hero );
+            bool opponentsCanRecruitHeroes = fheroes2::opponentsCanRecruitMoreHeroes( *hero );
+            // This text is show in two cases. First when there are no opponents
+            // left in the game. Second when opponent doesn't have heroes left
+            // and cannot recruit more. This will happen when all opponent
+            // heroes are defeated and has a town that cannot be upgraded to a
+            // castle
+            if ( !opponentsHaveHeroes && !opponentsCanRecruitHeroes ) {
                 if ( res != nullptr ) {
-                    *res = _( "No opponent has a hero under his command at this time. Casting this spell will not bring any advantage." );
+                    *res = _( "No opponent can have heroes under his command anymore. Casting this spell will not bring any advantage." );
                 }
                 return false;
             }
-            if ( !fheroes2::opponentsCanRecruitMoreHeroes( *hero ) && !opponentHasHeroes ) {
+            // This is shown when opponent exists, but doesn't have heroes at
+            // the moment and can recruit more.
+            if ( !opponentsHaveHeroes && opponentsCanRecruitHeroes ) {
                 if ( res != nullptr ) {
-                    *res = _( "No opponent can have heroes under his command anymore. Casting this spell will not bring any advantage." );
+                    *res = _( "No opponent has a hero under his command at this time. Casting this spell will not bring any advantage." );
                 }
                 return false;
             }

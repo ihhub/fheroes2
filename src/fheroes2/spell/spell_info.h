@@ -55,7 +55,7 @@ namespace fheroes2
 
     bool opponentsCanRecruitMoreHeroes( const Heroes & hero );
 
-    bool opponentsHasHeroes( const Heroes & hero );
+    bool opponentsHaveHeroes( const Heroes & hero );
 }
 
 #endif
