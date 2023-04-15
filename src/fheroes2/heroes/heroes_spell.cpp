@@ -51,6 +51,7 @@
 #include "logging.h"
 #include "m82.h"
 #include "maps.h"
+#include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "monster.h"

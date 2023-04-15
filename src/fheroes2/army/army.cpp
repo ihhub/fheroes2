@@ -48,6 +48,7 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
+#include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "morale.h"
 #include "mp2.h"

@@ -27,13 +27,15 @@
 #include <list>
 #include <optional>
 #include <ostream>
+#include <string>
 #include <type_traits>
-#include <utility>
 
 #include "army_troop.h"
 #include "artifact.h"
 #include "color.h"
+#include "direction.h"
 #include "logging.h"
+#include "maps.h"
 #include "maps_tiles.h"
 #include "monster.h"
 #include "mp2.h"

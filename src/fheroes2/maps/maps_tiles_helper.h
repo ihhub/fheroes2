@@ -20,23 +20,14 @@
 #pragma once
 
 #include <cstdint>
-#include <list>
-#include <string>
-#include <utility>
-#include <vector>
 
 #include "army_troop.h"
 #include "artifact.h"
-#include "color.h"
-#include "direction.h"
-#include "math_base.h"
 #include "mp2.h"
 #include "pairs.h"
 #include "resource.h"
 #include "skill.h"
-#include "world_regions.h"
 
-class Heroes;
 class Monster;
 class Spell;
 

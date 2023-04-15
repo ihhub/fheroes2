@@ -39,6 +39,7 @@
 #include "interface_gamearea.h"
 #include "localevent.h"
 #include "maps.h"
+#include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "players.h"
