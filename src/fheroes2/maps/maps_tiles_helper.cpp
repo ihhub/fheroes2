@@ -1184,8 +1184,8 @@ namespace Maps
 
         // replace artifact shadow
         if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
-            Maps::Tiles::updateTileById(
-                world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ), uidArtifact, static_cast<uint8_t>( artSpriteIndex - 1 ) );
+            Maps::Tiles::updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ), uidArtifact,
+                                         static_cast<uint8_t>( artSpriteIndex - 1 ) );
         }
     }
 
