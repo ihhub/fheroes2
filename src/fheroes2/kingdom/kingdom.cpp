@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "kingdom.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -42,7 +44,6 @@
 #include "game_interface.h"
 #include "game_static.h"
 #include "interface_icons.h"
-#include "kingdom.h"
 #include "logging.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
