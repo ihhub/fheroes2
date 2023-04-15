@@ -163,9 +163,9 @@ public final class SaveFileManagerActivity extends AppCompatActivity
 
     private ListView saveFileListView = null;
 
-    private ArrayAdapter<String> saveFileListViewAdapter = null;
-
     private SaveFileManagerActivityViewModel viewModel = null;
+
+    private ArrayAdapter<String> saveFileListViewAdapter = null;
 
     @Override
     protected void onCreate( final Bundle savedInstanceState )
