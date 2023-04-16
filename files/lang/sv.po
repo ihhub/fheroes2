@@ -2761,7 +2761,7 @@ msgid "Quit"
 msgstr "Avsluta"
 
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr "Avsluta fheroes2."
+msgstr "Avsluta Heroes of Might and Magic II."
 
 msgid "Language"
 msgstr "Språk"
@@ -4016,7 +4016,7 @@ msgstr "Denna fil är sparad för en The Price of Loyalty-karta men motsvarande 
 "finns inte."
 
 msgid "This saved game is localized to '"
-msgstr "Denna spelomgång är översatt till "
+msgstr "Denna spelomgång är översatt till '"
 
 msgid "' language, but the current language of the game is '"
 msgstr "' men nuvarande spelspråk är "
