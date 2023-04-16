@@ -1936,7 +1936,7 @@ msgid "Avalon"
 msgstr "Avalon"
 
 msgid "Roc Haven"
-msgstr "Roc Haven""
+msgstr "Roc Haven"
 
 msgid "South Mill"
 msgstr "South Mill"
@@ -8105,7 +8105,7 @@ msgid "The %{name} brings in an income of %{count} gold per day."
 msgstr "%{name} inbringar en intäkt på %{count} guld per dag."
 
 msgid "Arcane Necklace of Magic"
-msgstr "Mystiskt Halsband""
+msgstr "Mystiskt Halsband"
 
 msgid ""
 "After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
@@ -8123,7 +8123,7 @@ msgstr "När du genomsöker bråte vid en inrasad gruva, finner du en grupp Dvä
 "räddar. Tacksam för din hjälp, ger dess ledare ett armband av guld."
 
 msgid "Mage's Ring of Power"
-msgstr "Trollkarlens Ring""
+msgstr "Trollkarlens Ring"
 
 msgid ""
 "A cry of pain leads you to a Centaur, caught in a trap. Upon setting the "
@@ -8170,7 +8170,7 @@ msgid ""
 "After freeing a princess of a neighboring kingdom from the evil clutches of "
 "despicable slavers, she awards you with a Medal of Honor."
 msgstr "Efter att ha räddat en prinsessa från klorna av avskyvärda slavhandlare, så ger hon dig "
-"en Hedersmedalj.""
+"en Hedersmedalj."
 
 msgid "Medal of Distinction"
 msgstr "Utmärkelsemedalj"
@@ -8318,20 +8318,19 @@ msgid ""
 msgstr ""
 
 msgid "Endless Sack of Gold"
-msgstr "Bottenlös Guldsäck
+msgstr "Bottenlös Guldsäck"
 
 msgid "The %{name} provides you with %{count} gold per day."
-msgstr "%{name} förser dig med %{count} guld per dag.""
+msgstr "%{name} förser dig med %{count} guld per dag."
 
 msgid ""
 "A little leprechaun dances gleefully around a magic sack. Seeing you "
 "approach, he stops in mid-stride. The little man screams and stamps his foot "
 "ferociously, vanishing into thin air. Remembering the old leprechaun saying "
 "'Finders Keepers', you grab the sack and leave."
-msgstr ""En liten pyssling dansar glatt kring en magisk säck. När han upptäcker dig, stannar "
+msgstr "En liten pyssling dansar glatt kring en magisk säck. När han upptäcker dig, stannar "
 "han mitt i sin rörelse. Han skriker och stampar till med sin fot och försvinner upp i "
 "rök. Du minns det gamla pysslingsordspråket \"Funnet är vunnet\" och tar säcken och går."
-"
 
 msgid "Endless Bag of Gold"
 msgstr "Bottenlös Guldväska"
@@ -8465,7 +8464,7 @@ msgid ""
 msgstr ""
 
 msgid "Gold Watch"
-msgstr "Guldklocka""
+msgstr "Guldklocka"
 
 msgid "The %{name} doubles the effectiveness of your hypnotize spells."
 msgstr ""
@@ -8540,7 +8539,7 @@ msgid ""
 "attention. Intrigued, you break it off, and find that it does not melt in "
 "your hand."
 msgstr "En istapp fångar ditt intresse, den verkar helt kunna motstå eftermiddagsolens strålar. "
-"Du bryter loss den och den verkar inte heller smälta från värmen i din hand.""
+"Du bryter loss den och den verkar inte heller smälta från värmen i din hand."
 
 msgid "Everhot Lava Rock"
 msgstr "Skållhet Lavasten"
@@ -8623,7 +8622,7 @@ msgid ""
 "When you look in the nest, you find a collection of shiny stones and a ring."
 msgstr "Vid en rast ser du ett lodjur som klättrar i ett träd i ett försök att nå ett kråkbo. "
 "Impulsivt så klättrar du själv upp i trädet och skrämmer bort lodjuret. När du blickar "
-"ner i kråkboet så finner du en liten samling glänsande stenar och en ring.""
+"ner i kråkboet så finner du en liten samling glänsande stenar och en ring."
 
 msgid "Holy Pendant"
 msgstr ""
@@ -8909,7 +8908,7 @@ msgstr "Du har hittar en vapensmedja med vättar som gör vapen för att använd
 "malm."
 
 msgid "Endless Pouch of Crystal"
-msgstr "Bottenlös Kristallpung
+msgstr "Bottenlös Kristallpung"
 
 msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr ""
