@@ -438,7 +438,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                 if ( lists.empty() || filename.empty() ) {
                     buttonOk.disable();
                     isListboxSelected = false;
-                    filename = "";
+                    filename.clear()
                 }
 
                 const fheroes2::Image updatedScrollbarSlider
