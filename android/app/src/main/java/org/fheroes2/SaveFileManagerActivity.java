@@ -43,7 +43,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
 {
     public static final class SaveFileManagerActivityViewModel extends ViewModel
     {
-        public static final class Status
+        private static final class Status
         {
             public boolean isBackgroundTaskExecuting;
             public final ArrayList<String> saveFileNames;

@@ -49,7 +49,7 @@ public final class ToolsetActivity extends AppCompatActivity
         public static final int RESULT_NO_ASSETS = 2;
         public static final int RESULT_ERROR = 3;
 
-        public static final class Status
+        private static final class Status
         {
             public boolean isHoMM2AssetsPresent;
             public boolean isBackgroundTaskExecuting;
