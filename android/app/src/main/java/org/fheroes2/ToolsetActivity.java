@@ -88,14 +88,14 @@ public final class ToolsetActivity extends AppCompatActivity
 
         public void validateAssets( final File externalFilesDir )
         {
-            Status status = Objects.requireNonNull( liveStatus.getValue() );
+            final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
             liveStatus.setValue( status.setIsHoMM2AssetsPresent( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ) ) );
         }
 
         public void extractAssets( final File externalFilesDir, final Uri zipFileUri, final ContentResolver contentResolver )
         {
-            Status status = Objects.requireNonNull( liveStatus.getValue() );
+            final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 

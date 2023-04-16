@@ -71,7 +71,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
 
         public void updateSaveFileList( final File saveFileDir, final ArrayList<String> allowedSaveFileExtensions )
         {
-            Status status = Objects.requireNonNull( liveStatus.getValue() );
+            final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
@@ -89,7 +89,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
 
         public void deleteSaveFiles( final File saveFileDir, final ArrayList<String> allowedSaveFileExtensions, final ArrayList<String> saveFileNames )
         {
-            Status status = Objects.requireNonNull( liveStatus.getValue() );
+            final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
