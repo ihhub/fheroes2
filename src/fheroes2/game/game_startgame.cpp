@@ -1278,7 +1278,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                                          _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
                 }
                 else if ( lostTownDays == 1 ) {
-                    Game::DialogPlayers( conf.CurrentColor(), _( "Beware!" ), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
+                    Game::DialogPlayers( conf.CurrentColor(), _( "Defeat!" ), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
                 }
             }
 
