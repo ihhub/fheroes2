@@ -54,7 +54,7 @@ namespace System
     bool IsDirectory( const std::filesystem::path & path, bool writable = false );
     bool Remove( const std::filesystem::path & path );
 
-    bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
+    bool GetCaseInsensitivePath( const std::filesystem::path & path, std::filesystem::path & correctedPath );
 
     // Resolves the wildcard pattern 'glob' and appends matching paths to 'fileNames'. Supported wildcards are '?' and '*'.
     // These wildcards are resolved only if they are in the last element of the path. For example, they will be resolved

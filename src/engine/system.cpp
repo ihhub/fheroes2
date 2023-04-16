@@ -23,6 +23,7 @@
 
 #include "system.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <filesystem>
@@ -69,11 +70,7 @@
 #include <SDL_stdinc.h>
 #endif
 
-#if defined( _WIN32 )
-#define SEPARATOR '\\'
-#else
-#define SEPARATOR '/'
-#endif
+#define SEPARATOR std::filesystem::path::preferred_separator
 
 namespace
 {
@@ -128,36 +125,6 @@ namespace
 #endif
 
         return { "." };
-    }
-#endif
-
-#if !defined( _WIN32 ) && !defined( ANDROID )
-    std::vector<std::string> splitUnixPath( const std::string & path, const std::string_view delimiter )
-    {
-        std::vector<std::string> result;
-
-        if ( path.empty() ) {
-            return result;
-        }
-
-        size_t pos = 0;
-
-        while ( pos < path.size() ) {
-            const size_t nextPos = path.find( delimiter, pos );
-
-            if ( nextPos == std::string::npos ) {
-                result.push_back( path.substr( pos ) );
-
-                break;
-            }
-            if ( pos < nextPos ) {
-                result.push_back( path.substr( pos, nextPos - pos ) );
-            }
-
-            pos = nextPos + delimiter.size();
-        }
-
-        return result;
     }
 #endif
 
@@ -222,7 +189,7 @@ namespace
             return false;
         }
 
-        std::string correctedPath;
+        std::filesystem::path correctedPath;
         if ( !System::GetCaseInsensitivePath( path, correctedPath ) )
             return false;
 
@@ -395,7 +362,7 @@ bool System::Remove( const std::filesystem::path & path )
 
 #if !defined( _WIN32 ) && !defined( ANDROID )
 // based on: https://github.com/OneSadCookie/fcaseopen
-bool System::GetCaseInsensitivePath( const std::string & path, std::string & correctedPath )
+bool System::GetCaseInsensitivePath( const std::filesystem::path & path, std::filesystem::path & correctedPath )
 {
     correctedPath.clear();
 
@@ -403,35 +370,20 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
         return false;
     }
 
-    DIR * d;
-    bool last = false;
-    const char * curDir = ".";
-    const char * delimiter = "/";
-
-    if ( path[0] == delimiter[0] ) {
-        correctedPath.append( delimiter );
-
-        d = opendir( delimiter );
+    bool isAbsolute = path.is_absolute();
+    std::error_code ec;
+    std::filesystem::directory_iterator di;
+    if( isAbsolute ) {
+        correctedPath = path.root_path();
+	di = std::filesystem::directory_iterator( path.root_path(), ec );
     }
     else {
-        d = opendir( curDir );
+	di = std::filesystem::directory_iterator( ".", ec );
     }
+    if( ec.value() )
+	return false;
 
-    const std::vector<std::string> splittedPath = splitUnixPath( path, delimiter );
-    for ( std::vector<std::string>::const_iterator subPathIter = splittedPath.begin(); subPathIter != splittedPath.end(); ++subPathIter ) {
-        if ( !d ) {
-            return false;
-        }
-
-        if ( last ) {
-            closedir( d );
-            return false;
-        }
-
-        if ( subPathIter != splittedPath.begin() ) {
-            correctedPath.append( delimiter );
-        }
-
+    for ( const auto & subPath : ( isAbsolute ? path.relative_path() : path ) ) {
         // Avoid directory traversal and try to probe directory name directly.
         // Speeds up file lookup when intermediate directories have a lot of
         // files. Example is NixOS where file layout is:
@@ -444,47 +396,24 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
         // The idea is to try to open current subpath as a directory and avoid
         // directory traversal altogether. Otherwise fall back to linear
         // case-insensitive search.
-
-        std::string absSubpath = correctedPath + *subPathIter;
-        DIR * de = opendir( absSubpath.c_str() );
-        if ( de ) {
-            correctedPath = std::move( absSubpath );
-
-            closedir( d );
-            d = opendir( correctedPath.c_str() );
-
-            closedir( de );
+        std::filesystem::path absSubpath = correctedPath / subPath;
+        if( std::filesystem::exists( absSubpath, ec ) && !ec.value() ) {
+            correctedPath.swap( absSubpath );
             continue;
         }
-
-        const struct dirent * e = readdir( d );
-        while ( e ) {
-            if ( strcasecmp( ( *subPathIter ).c_str(), e->d_name ) == 0 ) {
-                correctedPath += e->d_name;
-
-                closedir( d );
-                d = opendir( correctedPath.c_str() );
-
-                break;
-            }
-
-            e = readdir( d );
+        const auto & result = std::find_if( di, end(di), [ &subPath ]( const auto & de ){ return strcasecmp( de.path().filename().c_str(), subPath.c_str() ) == 0; } );
+        if( result == end(di) ) {
+            correctedPath /= subPath;
+            return false;
         }
-
-        if ( !e ) {
-            correctedPath += *subPathIter;
-            last = true;
-        }
+        correctedPath /= result->path().filename();
+        di = std::filesystem::directory_iterator( correctedPath, ec );
+        if(ec.value()) return false;
     }
-
-    if ( d ) {
-        closedir( d );
-    }
-
-    return !last;
+    return true;
 }
 #else
-bool System::GetCaseInsensitivePath( const std::string & path, std::string & correctedPath )
+bool System::GetCaseInsensitivePath( const std::filesystem::path & path, std::filesystem::path & correctedPath )
 {
     correctedPath = path;
     return true;

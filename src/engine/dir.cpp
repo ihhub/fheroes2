@@ -118,7 +118,7 @@ namespace
         // clean up
         sceIoDclose( uid );
 #else
-        std::string correctedPath;
+        std::filesystem::path correctedPath;
         if ( !System::GetCaseInsensitivePath( path, correctedPath ) )
             return;
 
@@ -132,7 +132,7 @@ namespace
 
         const struct dirent * ep;
         while ( nullptr != ( ep = readdir( dp ) ) ) {
-            std::string fullname = System::concatPath( correctedPath, ep->d_name );
+            std::string fullname = correctedPath / ep->d_name;
 
             // if not regular file
             if ( !System::IsFile( fullname ) )
