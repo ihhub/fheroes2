@@ -373,15 +373,15 @@ bool System::GetCaseInsensitivePath( const std::filesystem::path & path, std::fi
     bool isAbsolute = path.is_absolute();
     std::error_code ec;
     std::filesystem::directory_iterator di;
-    if( isAbsolute ) {
+    if ( isAbsolute ) {
         correctedPath = path.root_path();
-	di = std::filesystem::directory_iterator( path.root_path(), ec );
+        di = std::filesystem::directory_iterator( path.root_path(), ec );
     }
     else {
-	di = std::filesystem::directory_iterator( ".", ec );
+        di = std::filesystem::directory_iterator( ".", ec );
     }
-    if( ec.value() )
-	return false;
+    if ( ec.value() )
+        return false;
 
     for ( const auto & subPath : ( isAbsolute ? path.relative_path() : path ) ) {
         // Avoid directory traversal and try to probe directory name directly.
@@ -397,18 +397,19 @@ bool System::GetCaseInsensitivePath( const std::filesystem::path & path, std::fi
         // directory traversal altogether. Otherwise fall back to linear
         // case-insensitive search.
         std::filesystem::path absSubpath = correctedPath / subPath;
-        if( std::filesystem::exists( absSubpath, ec ) && !ec.value() ) {
+        if ( std::filesystem::exists( absSubpath, ec ) && !ec.value() ) {
             correctedPath.swap( absSubpath );
             continue;
         }
-        const auto & result = std::find_if( di, end(di), [ &subPath ]( const auto & de ){ return strcasecmp( de.path().filename().c_str(), subPath.c_str() ) == 0; } );
-        if( result == end(di) ) {
+        const auto & result = std::find_if( di, end( di ), [&subPath]( const auto & de ){ return strcasecmp( de.path().filename().c_str(), subPath.c_str() ) == 0; } );
+        if( result == end( di ) ) {
             correctedPath /= subPath;
             return false;
         }
         correctedPath /= result->path().filename();
         di = std::filesystem::directory_iterator( correctedPath, ec );
-        if(ec.value()) return false;
+        if( ec.value() )
+            return false;
     }
     return true;
 }
