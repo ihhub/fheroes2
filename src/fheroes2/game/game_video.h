@@ -42,7 +42,7 @@ namespace Video
         {
             _text.add( subtitleText );
         }
-        
+
         // Generate the image from subtitles text and store it in Subtitle class.
         void makeSubtitleImage();
 
@@ -50,7 +50,7 @@ namespace Video
         void blitSubtitles( fheroes2::Image & output, const fheroes2::Rect & frameRoi );
 
         // Check if subtitles needs to be rendered on this frame number.
-        bool needRender( const uint32_t frameNumber )
+        bool needRender( const uint32_t frameNumber ) const
         {
             return ( frameNumber >= _startFrame ) && ( frameNumber <= _endFrame );
         }
