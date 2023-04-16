@@ -44,7 +44,6 @@
 #include "heroes.h"
 #include "highscores.h"
 #include "kingdom.h"
-#include "monster.h"
 #include "mus.h"
 #include "players.h"
 #include "serialize.h"
@@ -331,16 +330,6 @@ void GameOver::Result::Reset()
     result = GameOver::COND_NONE;
 }
 
-void GameOver::Result::ResetResult()
-{
-    result = GameOver::COND_NONE;
-}
-
-uint32_t GameOver::Result::GetResult() const
-{
-    return result;
-}
-
 fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 {
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
@@ -384,7 +373,6 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     // Get data for ratings text.
                     const uint32_t difficulty = Game::GetRating();
                     const uint32_t score = Game::GetGameOverScores();
-                    const Monster ratingMonster( fheroes2::HighScoreDataContainer::getMonsterByRating( score ) );
 
                     // Make ratings text as a subtitle for WIN.SMK.
                     Video::Subtitle ratingText( fheroes2::Text{ _( "Congratulations!\n\nDays: " ), fheroes2::FontType::normalWhite() }, 140, 405, 110, 40 );
@@ -396,7 +384,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     ratingText.addText( { _( "\n\nScore: " ), fheroes2::FontType::normalWhite() } );
                     ratingText.addText( { std::to_string( score ), fheroes2::FontType::normalWhite() } );
                     ratingText.addText( { _( "\n\nRating:\n" ), fheroes2::FontType::normalWhite() } );
-                    ratingText.addText( { ratingMonster.GetName(), fheroes2::FontType::normalWhite() } );
+                    ratingText.addText( { fheroes2::HighScoreDataContainer::getMonsterByRating( score ).GetName(), fheroes2::FontType::normalWhite() } );
 
                     subtitles.push_back( std::move( ratingText ) );
 
@@ -478,7 +466,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 DialogWins( multiplayerResult );
 
                 AudioManager::ResetAudio();
-                Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
+                Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, true );
 
                 res = fheroes2::GameMode::MAIN_MENU;
             }

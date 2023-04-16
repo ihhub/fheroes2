@@ -84,7 +84,8 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
 
         // Draw background.
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HSBKG, 0 ), display, offsetX, offsetY );
+        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
+        fheroes2::Copy( background, 0, 0, display, offsetX, offsetY, background.width(), background.height() );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HISCORE, titleImageIndex ), display, offsetX + 50, offsetY + 31 );
 
         fheroes2::Text text( "", fheroes2::FontType::normalWhite() );
@@ -193,12 +194,22 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         highScoreDataContainer.save( highScoreDataPath );
     }
 
+    int32_t selectedEntryIndex = -1;
     const bool isAfterGameCompletion = ( ( gameResult.GetResult() & GameOver::WINS ) != 0 );
+
     if ( isAfterGameCompletion ) {
+        auto inputPlayerName = []( std::string & playerName ) {
+            Dialog::InputString( _( "Your Name" ), playerName, std::string(), 15 );
+            if ( playerName.empty() ) {
+                playerName = _( "Unknown Hero" );
+            }
+        };
+
         // Check whether the game result is good enough to be put on high score board. If not then just skip showing the player name dialog.
         if ( isCampaign ) {
             const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
             const uint32_t rating = getCampaignRating( campaignSaveData );
+
             const auto & campaignHighscoreData = highScoreDataContainer.getHighScoresCampaign();
             assert( !campaignHighscoreData.empty() );
 
@@ -206,9 +217,17 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
                 gameResult.ResetResult();
                 return fheroes2::GameMode::MAIN_MENU;
             }
+
+            std::string playerName;
+            inputPlayerName( playerName );
+
+            selectedEntryIndex = highScoreDataContainer.registerScoreCampaign( { playerName, Campaign::getCampaignName( campaignSaveData.getCampaignID() ),
+                                                                                 fheroes2::HighscoreData::generateCompletionTime(), campaignSaveData.getDaysPassed(),
+                                                                                 rating, world.GetMapSeed() } );
         }
         else {
             const uint32_t rating = GetGameOverScores();
+
             const auto & standardHighscoreData = highScoreDataContainer.getHighScoresStandard();
             assert( !standardHighscoreData.empty() );
 
@@ -216,7 +235,18 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
                 gameResult.ResetResult();
                 return fheroes2::GameMode::MAIN_MENU;
             }
+
+            const uint32_t days = world.CountDay();
+            std::string playerName;
+            inputPlayerName( playerName );
+
+            selectedEntryIndex = highScoreDataContainer.registerScoreStandard(
+                { playerName, Settings::Get().CurrentFileInfo().name, fheroes2::HighscoreData::generateCompletionTime(), days, rating, world.GetMapSeed() } );
         }
+
+        highScoreDataContainer.save( highScoreDataPath );
+
+        gameResult.ResetResult();
     }
 
     // setup cursor
@@ -228,12 +258,13 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
     const fheroes2::Point top{ ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 };
     const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT, false );
 
-    int32_t selectedEntryIndex = -1;
     uint32_t monsterAnimationFrameId = 0;
-    if ( isCampaign )
+    if ( isCampaign ) {
         RedrawHighScoresCampaign( top.x, top.y, monsterAnimationFrameId, selectedEntryIndex );
-    else
+    }
+    else {
         RedrawHighScoresStandard( top.x, top.y, monsterAnimationFrameId, selectedEntryIndex );
+    }
 
     // button that goes to standard: releasedIndex == 2, pressedIndex == 3
     // button that goes to campaign: releasedIndex == 0, pressedIndex == 1
@@ -245,51 +276,17 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     display.render();
 
-    if ( isAfterGameCompletion ) {
-        std::string player( _( "Unknown Hero" ) );
-        Dialog::InputString( _( "Your Name" ), player, std::string(), 15 );
-        if ( player.empty() )
-            player = _( "Unknown Hero" );
-
-        const uint32_t completionTime = fheroes2::HighscoreData::generateCompletionTime();
-
-        if ( isCampaign ) {
-            const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
-            const uint32_t rating = getCampaignRating( campaignSaveData );
-
-            selectedEntryIndex = highScoreDataContainer.registerScoreCampaign(
-                { player, Campaign::getCampaignName( campaignSaveData.getCampaignID() ), completionTime, campaignSaveData.getDaysPassed(), rating, world.GetMapSeed() } );
-        }
-        else {
-            const uint32_t rating = GetGameOverScores();
-            const uint32_t days = world.CountDay();
-            selectedEntryIndex
-                = highScoreDataContainer.registerScoreStandard( { player, Settings::Get().CurrentFileInfo().name, completionTime, days, rating, world.GetMapSeed() } );
-        }
-
-        highScoreDataContainer.save( highScoreDataPath );
-
-        if ( isCampaign )
-            RedrawHighScoresCampaign( top.x, top.y, monsterAnimationFrameId, selectedEntryIndex );
-        else
-            RedrawHighScoresStandard( top.x, top.y, monsterAnimationFrameId, selectedEntryIndex );
-
-        buttonOtherHighScore.draw();
-        buttonExit.draw();
-        display.render();
-
-        gameResult.ResetResult();
-    }
-
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
         le.MousePressLeft( buttonOtherHighScore.area() ) ? buttonOtherHighScore.drawOnPress() : buttonOtherHighScore.drawOnRelease();
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow() ) {
             return fheroes2::GameMode::MAIN_MENU;
-        if ( le.MouseClickLeft( buttonOtherHighScore.area() ) )
+        }
+        if ( le.MouseClickLeft( buttonOtherHighScore.area() ) ) {
             return isCampaign ? fheroes2::GameMode::HIGHSCORES_STANDARD : fheroes2::GameMode::HIGHSCORES_CAMPAIGN;
+        }
 
         if ( le.MousePressRight( buttonExit.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Exit" ), fheroes2::FontType::normalYellow() ),
@@ -307,10 +304,12 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         }
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            if ( isCampaign )
+            if ( isCampaign ) {
                 RedrawHighScoresCampaign( top.x, top.y, monsterAnimationFrameId, selectedEntryIndex );
-            else
+            }
+            else {
                 RedrawHighScoresStandard( top.x, top.y, monsterAnimationFrameId, selectedEntryIndex );
+            }
 
             buttonOtherHighScore.draw();
             buttonExit.draw();

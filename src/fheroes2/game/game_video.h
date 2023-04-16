@@ -27,6 +27,7 @@
 #include "game_video_type.h"
 #include "image.h"
 #include "math_base.h"
+#include "screen.h"
 #include "ui_text.h"
 
 namespace Video
@@ -62,7 +63,7 @@ namespace Video
         fheroes2::MultiFontText _text;
         uint32_t _startFrame{ 0 };
         uint32_t _endFrame{ UINT32_MAX };
-        int32_t _maxWidth{ 640 };
+        int32_t _maxWidth{ fheroes2::Display::DEFAULT_WIDTH };
         fheroes2::Image _subtitleImage;
     };
 
