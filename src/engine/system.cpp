@@ -25,11 +25,11 @@
 
 #include <algorithm>
 #include <cassert>
+#include <chrono>
 #include <cstdlib>
 #include <filesystem>
 #include <initializer_list>
 #include <system_error>
-#include <utility>
 
 #if defined( _WIN32 )
 #include <clocale>
@@ -39,17 +39,6 @@
 #include <io.h>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#else
-#include <dirent.h>
-#include <unistd.h>
-
-#if defined( TARGET_PS_VITA )
-#include <algorithm>
-
-#include <psp2/io/stat.h>
-#else
-#include <sys/stat.h>
-#endif
 #endif
 
 #if defined( _WIN32 ) || defined( ANDROID )

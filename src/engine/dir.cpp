@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <cstring>
+#include <filesystem>
 #include <utility>
 
 #if !defined( _WIN32 )
