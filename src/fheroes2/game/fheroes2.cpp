@@ -28,6 +28,7 @@
 #include <memory>
 #include <set>
 #include <string>
+#include <vector>
 
 #include <SDL_events.h>
 #include <SDL_main.h> // IWYU pragma: keep
