@@ -191,23 +191,23 @@ public final class ToolsetActivity extends AppCompatActivity
         backgroundTaskProgressBar.setVisibility( !modelStatus.isBackgroundTaskExecuting ? View.GONE : View.VISIBLE );
         lastTaskStatusTextView.setVisibility( modelStatus.isBackgroundTaskExecuting ? View.GONE : View.VISIBLE );
 
-        String statusTextViewText;
+        String statusText;
 
         switch ( modelStatus.backgroundTaskResult ) {
         case ToolsetActivityViewModel.RESULT_NONE:
-            statusTextViewText = "";
+            statusText = "";
             break;
         case ToolsetActivityViewModel.RESULT_SUCCESS:
-            statusTextViewText = getString( R.string.activity_toolset_last_task_status_lbl_text_completed_successfully );
+            statusText = getString( R.string.activity_toolset_last_task_status_lbl_text_completed_successfully );
             break;
         case ToolsetActivityViewModel.RESULT_NO_ASSETS:
-            statusTextViewText = getString( R.string.activity_toolset_last_task_status_lbl_text_no_assets_found );
+            statusText = getString( R.string.activity_toolset_last_task_status_lbl_text_no_assets_found );
             break;
         default:
-            statusTextViewText = String.format( getString( R.string.activity_toolset_last_task_status_lbl_text_failed ), modelStatus.backgroundTaskError );
+            statusText = String.format( getString( R.string.activity_toolset_last_task_status_lbl_text_failed ), modelStatus.backgroundTaskError );
             break;
         }
 
-        lastTaskStatusTextView.setText( statusTextViewText );
+        lastTaskStatusTextView.setText( statusText );
     }
 }
