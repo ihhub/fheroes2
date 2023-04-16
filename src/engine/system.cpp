@@ -402,7 +402,7 @@ bool System::GetCaseInsensitivePath( const std::filesystem::path & path, std::fi
             continue;
         }
         const auto & result = std::find_if( di, end( di ), [&subPath]( const auto & de ) { return strcasecmp( de.path().filename().c_str(), subPath.c_str() ) == 0; } );
-        if( result == end( di ) ) {
+        if ( result == end( di ) ) {
             correctedPath /= subPath;
             return false;
         }
