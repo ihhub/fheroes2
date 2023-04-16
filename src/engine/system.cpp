@@ -401,14 +401,14 @@ bool System::GetCaseInsensitivePath( const std::filesystem::path & path, std::fi
             correctedPath.swap( absSubpath );
             continue;
         }
-        const auto & result = std::find_if( di, end( di ), [&subPath]( const auto & de ){ return strcasecmp( de.path().filename().c_str(), subPath.c_str() ) == 0; } );
+        const auto & result = std::find_if( di, end( di ), [&subPath]( const auto & de ) { return strcasecmp( de.path().filename().c_str(), subPath.c_str() ) == 0; } );
         if( result == end( di ) ) {
             correctedPath /= subPath;
             return false;
         }
         correctedPath /= result->path().filename();
         di = std::filesystem::directory_iterator( correctedPath, ec );
-        if( ec.value() )
+        if ( ec.value() )
             return false;
     }
     return true;
