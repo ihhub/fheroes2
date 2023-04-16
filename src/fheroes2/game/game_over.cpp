@@ -44,6 +44,7 @@
 #include "heroes.h"
 #include "highscores.h"
 #include "kingdom.h"
+#include "monster.h"
 #include "mus.h"
 #include "players.h"
 #include "serialize.h"
