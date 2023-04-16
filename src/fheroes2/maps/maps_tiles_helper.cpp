@@ -714,7 +714,7 @@ namespace Maps
                     // 4,5 - need to have skill wisdom or leadership,
                     // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4,
                     // 15 - spell
-                    int cond = Rand::Get( 1, 10 ) < 4 ? Rand::Get( 1, 13 ) : 0;
+                    const int cond = Rand::Get( 1, 10 ) < 4 ? Rand::Get( 1, 13 ) : 0;
 
                     tile.QuantitySetVariant( cond );
                     setArtifactOnTile( tile, art );
@@ -945,7 +945,7 @@ namespace Maps
             // 10% - 50ghost(2000g+art)
             percents.Push( 4, 10 );
 
-            int cond = percents.Get();
+            const int cond = percents.Get();
 
             tile.QuantitySetVariant( cond );
             setArtifactOnTile( tile, cond == 4 ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) : Artifact::UNKNOWN );
@@ -1246,7 +1246,7 @@ namespace Maps
 
     void updateMonsterInfoOnTile( Tiles & tile )
     {
-        Monster mons = Monster( tile.GetObjectSpriteIndex() + 1 ); // ICN::MONS32 start from PEASANT
+        const Monster mons = Monster( tile.GetObjectSpriteIndex() + 1 ); // ICN::MONS32 start from PEASANT
         uint32_t count = 0;
 
         // update count (mp2 format)
