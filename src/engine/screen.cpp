@@ -629,9 +629,9 @@ namespace
         {
             static const std::vector<fheroes2::ResolutionInfo> filteredResolutions = []() {
                 std::set<fheroes2::ResolutionInfo> resolutionSet;
-                resolutionSet.emplace( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, 1 );
-                resolutionSet.emplace( VITA_ASPECT_CORRECTED_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, 1 );
-                resolutionSet.emplace( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT, 1 );
+                resolutionSet.emplace( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+                resolutionSet.emplace( VITA_ASPECT_CORRECTED_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+                resolutionSet.emplace( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT );
                 resolutionSet = FilterResolutions( resolutionSet );
 
                 return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
@@ -895,7 +895,7 @@ namespace
 #if defined( TARGET_NINTENDO_SWITCH )
                 // Nintendo Switch supports arbitrary resolutions via the HW scaler
                 // 848x480 is the smallest resolution supported by fheroes2
-                resolutionSet.emplace( 848, 480, 1 );
+                resolutionSet.emplace( 848, 480 );
 #endif
                 resolutionSet = FilterResolutions( resolutionSet );
 
