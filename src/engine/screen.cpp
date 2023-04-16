@@ -705,7 +705,7 @@ namespace
             vita2d_texture_set_alloc_memblock_type( SCE_KERNEL_MEMBLOCK_TYPE_USER_CDRAM_RW );
             _texBuffer = vita2d_create_empty_texture_format( resolutionInfo.width, resolutionInfo.height, SCE_GXM_TEXTURE_FORMAT_P8_ABGR );
             _palettedTexturePointer = static_cast<uint8_t *>( vita2d_texture_get_datap( _texBuffer ) );
-            memset( _palettedTexturePointer, 0, resolutionInfo.width * resolutionInfo.height * sizeof( uint8_t ) );
+            memset( _palettedTexturePointer, 0, resolutionInfo.gameWidth * resolutionInfo.gameHeight * sizeof( uint8_t ) );
             _createPalette();
 
             _calculateScreenScaling( resolutionInfo.width, resolutionInfo.height, isFullScreen );
