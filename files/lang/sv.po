@@ -8800,7 +8800,7 @@ msgid "Ammo Cart"
 msgstr "Ammunitionsvagn"
 
 msgid "The %{name} provides endless ammunition for all your troops that shoot."
-msgstr "%{name} förser hjältens trupper oändligt med projektiler."
+msgstr "%{name} förser hjältens trupper med oändligt antal projektiler."
 
 msgid ""
 "An ammunition cart in the middle of an old battlefield catches your eye. "
