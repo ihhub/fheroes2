@@ -8598,7 +8598,7 @@ msgid "Book of Elements"
 msgstr "Elementbok"
 
 msgid "The %{name} doubles the effectiveness of all your summoning spells."
-msgstr "%{name} halverar kostnaden för Framkallningsbesvärjelser."
+msgstr "%{name} dubblerar styrkan för hjältens Framkallningsbesvärjelser."
 
 msgid ""
 "You come across a conjurer who begs to accompany you and your army awhile "
