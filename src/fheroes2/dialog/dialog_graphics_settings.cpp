@@ -69,8 +69,8 @@ namespace
             const int32_t integer = display.screenSize().width / display.width();
             const int32_t fraction = display.screenSize().width * 10 / display.width() - 10 * integer;
 
-            resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() ) + " (x" + std::to_string( integer ) + '.' +
-                             std::to_string( fraction ) + ')';
+            resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() ) + " (x" + std::to_string( integer ) + '.'
+                             + std::to_string( fraction ) + ')';
         }
         else {
             resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() );

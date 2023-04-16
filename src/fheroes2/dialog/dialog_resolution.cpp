@@ -57,8 +57,8 @@ namespace
             const int32_t integer = resolution.screenWidth / resolution.gameWidth;
             const int32_t fraction = resolution.screenWidth * 10 / resolution.gameWidth - 10 * integer;
 
-            return std::make_pair( std::to_string( resolution.gameWidth ), std::to_string( resolution.gameHeight ) + " (x" + std::to_string( integer ) +
-                                   "." + std::to_string( fraction ) + ')' );
+            return std::make_pair( std::to_string( resolution.gameWidth ),
+                                   std::to_string( resolution.gameHeight ) + " (x" + std::to_string( integer ) + "." + std::to_string( fraction ) + ')' );
         }
 
         return std::make_pair( std::to_string( resolution.gameWidth ), std::to_string( resolution.gameHeight ) );
@@ -261,8 +261,8 @@ namespace Dialog
             display.render();
         }
 
-        if ( selectedResolution.gameWidth > 0 && selectedResolution.gameHeight > 0 && selectedResolution.screenWidth >= selectedResolution.gameWidth &&
-             selectedResolution.screenHeight >= selectedResolution.gameHeight && selectedResolution != currentResolution ) {
+        if ( selectedResolution.gameWidth > 0 && selectedResolution.gameHeight > 0 && selectedResolution.screenWidth >= selectedResolution.gameWidth
+             && selectedResolution.screenHeight >= selectedResolution.gameHeight && selectedResolution != currentResolution ) {
             display.setResolution( selectedResolution );
 
 #if !defined( MACOS_APP_BUNDLE )

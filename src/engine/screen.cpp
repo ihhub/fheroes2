@@ -86,8 +86,8 @@ namespace
 
         std::vector<double> similarity( resolutions.size(), 0 );
         for ( size_t i = 0; i < resolutions.size(); ++i ) {
-            similarity[i] = std::fabs( resolutions[i].gameWidth - gameX ) / gameX + std::fabs( resolutions[i].gameHeight - gameY ) / gameY +
-                            std::fabs( resolutions[i].screenWidth - screenX ) / screenX + std::fabs( resolutions[i].screenHeight - screenY ) / screenY;
+            similarity[i] = std::fabs( resolutions[i].gameWidth - gameX ) / gameX + std::fabs( resolutions[i].gameHeight - gameY ) / gameY
+                            + std::fabs( resolutions[i].screenWidth - screenX ) / screenX + std::fabs( resolutions[i].screenHeight - screenY ) / screenY;
         }
 
         const std::vector<double>::difference_type id = std::distance( similarity.begin(), std::min_element( similarity.begin(), similarity.end() ) );
@@ -162,12 +162,15 @@ namespace
             for ( size_t biggerId = currentId + 1; biggerId < resolutionCountBefore; ++biggerId ) {
                 assert( resolutions[biggerId].gameWidth > 0 && resolutions[biggerId].gameHeight > 0 );
 
-                if ( ( resolutions[biggerId].gameWidth % resolutions[currentId].gameWidth ) == 0 && ( resolutions[biggerId].gameHeight % resolutions[currentId].gameHeight ) == 0
-                     && ( resolutions[biggerId].gameWidth / resolutions[currentId].gameWidth ) == ( resolutions[biggerId].gameHeight / resolutions[currentId].gameHeight ) ) {
+                if ( ( resolutions[biggerId].gameWidth % resolutions[currentId].gameWidth ) == 0
+                     && ( resolutions[biggerId].gameHeight % resolutions[currentId].gameHeight ) == 0
+                     && ( resolutions[biggerId].gameWidth / resolutions[currentId].gameWidth )
+                            == ( resolutions[biggerId].gameHeight / resolutions[currentId].gameHeight ) ) {
                     // IMPORTANT: we MUST do a copy of a vector element if we want to emplace it to the same vector.
                     const fheroes2::ResolutionInfo currentResolution = resolutions[currentId];
 
-                    resolutions.emplace_back( currentResolution.gameWidth, currentResolution.gameHeight, resolutions[biggerId].gameWidth, resolutions[biggerId].gameHeight );
+                    resolutions.emplace_back( currentResolution.gameWidth, currentResolution.gameHeight, resolutions[biggerId].gameWidth,
+                                              resolutions[biggerId].gameHeight );
                 }
             }
         }
@@ -1092,8 +1095,7 @@ namespace
 
             flags |= SDL_WINDOW_RESIZABLE;
 
-            _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth,
-                                        resolutionInfo.screenHeight, flags );
+            _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
             if ( _window == nullptr ) {
                 ERROR_LOG( "Failed to create an application window of " << resolutionInfo.screenWidth << " x " << resolutionInfo.screenHeight
                                                                         << " size. The error: " << SDL_GetError() )
@@ -1565,8 +1567,8 @@ namespace fheroes2
 
     void Display::setResolution( ResolutionInfo info )
     {
-        if ( width() > 0 && height() > 0 && info.gameWidth == width() && info.gameHeight == height() && info.screenWidth == _screenSize.width &&
-             info.screenHeight == _screenSize.height ) // nothing to resize
+        if ( width() > 0 && height() > 0 && info.gameWidth == width() && info.gameHeight == height() && info.screenWidth == _screenSize.width
+             && info.screenHeight == _screenSize.height ) // nothing to resize
             return;
 
         const bool isFullScreen = _engine->isFullScreen();
