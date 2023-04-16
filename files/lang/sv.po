@@ -9558,7 +9558,7 @@ msgid ""
 "Damages all living (non-undead) units in the battle.  This spell is an "
 "improved version of Death Ripple."
 msgstr ""
-"Skadar alla levande (icke-odöda) enheter på slagfältet. Denna besvärjelse är en "
+"Skadar alla levande (icke-odöda) varelser på slagfältet. Denna besvärjelse är en "
 "förbättrad variant av Dödskrusningen."
 
 msgid "Dragon Slayer"
