@@ -67,7 +67,7 @@ namespace GameOver
         static Result & Get();
 
         void Reset(); // Resets everything
-        
+
         // Reset game result to COND_NONE.
         void ResetResult()
         {
