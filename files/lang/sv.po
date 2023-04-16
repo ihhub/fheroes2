@@ -1532,16 +1532,15 @@ msgstr "Nomader"
 msgid "campaignBonus|Power Axe"
 msgstr ""
 
-#, fuzzy
 msgid "campaignBonus|Spiked Shield"
-msgstr "Spikad sköld"
+msgstr "Spiksköld"
 
 #, fuzzy
 msgid "campaignBonus|Stealth Shield"
-msgstr "Ultimata skölden"
+msgstr ""
 
 msgid "campaignBonus|Tax Lien"
-msgstr ""
+msgstr "Skuldebrev"
 
 #, fuzzy
 msgid "campaignBonus|Thunder Mace"
@@ -2571,7 +2570,7 @@ msgid "View information on the scenario you are currently playing."
 msgstr "Visa information om scenariot som du spelar."
 
 msgid "Dig for the Ultimate Artifact."
-msgstr "Gräv efter den Ultimata artefakten."
+msgstr "Gräv efter den Främsta Artefakten."
 
 msgid "Digging"
 msgstr "Gräver"
@@ -4214,7 +4213,7 @@ msgstr ""
 "Ditt uppdrag är slufört."
 
 msgid "Ultimate Artifact"
-msgstr "Den Ultimata artefakten"
+msgstr "Den Främsta Artefakten"
 
 msgid ""
 "The enemy is beaten.\n"
@@ -4293,7 +4292,7 @@ msgid "Defeat the hero '%{name}'."
 msgstr "Besegra hjälten '%{name}'."
 
 msgid "Find the ultimate artifact."
-msgstr "Hitta den Ultimata artefakten."
+msgstr "Hitta den Främsta Artefakten."
 
 msgid "Find the '%{name}' artifact."
 msgstr "Hitta artefakten '%{name}'."
@@ -5570,51 +5569,50 @@ msgid ""
 "You gain control of a sawmill. It will provide you with %{count} units of "
 "wood per day."
 msgstr ""
-"Du får kontroll över ett sågverk. Den kommer att förse dig med %{count} "
+"Du tar kontroll över ett sågverk. Den kommer att förse dig med %{count} "
 "enheter av ved per dag."
 
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
 msgstr ""
-"Du får kontroll över en malmgruva. Den kommer att förse dig med %{count} "
+"Du tar kontroll över en malmgruva. Den kommer att förse dig med %{count} "
 "enheter av malm per dag."
 
 msgid ""
 "You gain control of a sulfur mine. It will provide you with %{count} unit of "
 "sulfur per day."
 msgstr ""
-"Du får kontroll över en svavelgruva. Den kommer att förse dig med %{count} "
+"Du tar kontroll över en svavelgruva. Den kommer att förse dig med %{count} "
 "enheter av svavel per dag."
 
 msgid ""
 "You gain control of a crystal mine. It will provide you with %{count} unit "
 "of crystal per day."
 msgstr ""
-"Du får kontroll över en kristallgruva. Den kommer att förse dig med %{count} "
+"Du tar kontroll över en kristallgruva. Den kommer att förse dig med %{count} "
 "enheter av kristaller per dag."
 
 msgid ""
 "You gain control of a gem mine. It will provide you with %{count} unit of "
 "gems per day."
 msgstr ""
-"Du får kontroll över en ädelstensgruva. Den kommer att förse dig med "
+"Du tar kontroll över en ädelstensgruva. Den kommer att förse dig med "
 "%{count} enheter av ädelstenar per dag."
 
 msgid ""
 "You gain control of a gold mine. It will provide you with %{count} gold per "
 "day."
 msgstr ""
-"Du får kontroll över en guldgruva. Den kommer att förse dig med %{count} "
+"Du tar kontroll över en guldgruva. Den kommer att förse dig med %{count} "
 "enheter av guld per dag."
 
-#, fuzzy
 msgid ""
 "The lighthouse is now under your control, and all of your ships will now "
 "move further each day."
 msgstr ""
-"Fyret är nu under din kontroll och alla dina skepp kommer nu förflytta sig "
-"längre varje runda."
+"Fyrtornet är nu under din kontroll och alla dina skepp kommer nu förflytta sig "
+"längre per dag."
 
 msgid "You gain control of a %{name}."
 msgstr "Du fick kontroll över en %{name}."
@@ -5732,7 +5730,7 @@ msgstr ""
 "frågar: \"Vill du kalla på vattnets krafter?\""
 
 msgid "This burial site is deathly still."
-msgstr "Denna begravningsplats är dödligt tyst."
+msgstr "Denna begravningsplats är dödstyst."
 
 msgid ""
 "Restless spirits of long dead warriors seeking their final resting place "
@@ -5825,8 +5823,7 @@ msgid ""
 "A drink at the spring is supposed to give you twice your normal spell "
 "points, but you are already at that level."
 msgstr ""
-"En klunk från källan ska ge dig dubbelt så många magipoäng, men du är redan "
-"den leveln."
+"En klunk från källan ska ge hjälten dubbelt så många magipoäng, men hjälten har redan så många besvärjelsepoäng."
 
 msgid ""
 "A drink from the spring fills your blood with magic! You have twice your "
@@ -6214,13 +6211,13 @@ msgstr ""
 "lärde mig denna färdighet. Jag har svaret du söker.\""
 
 msgid "Spell book is not present."
-msgstr ""
+msgstr "Det finns ingen Magibok."
 
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
 msgstr ""
-"Den besvärjelsen kostar %{mana} mana. Du har bara %{point} mana, så du kan "
+"Den besvärjelsen kostar %{mana} besvärjelsepoäng. Hjälten har bara %{point} besvärjelsepoäng, så hjälten kan "
 "inte kasta besvärjelsen."
 
 #, fuzzy
@@ -6246,21 +6243,20 @@ msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
 
-#, fuzzy
 msgid "This hero is already in a town, so you can't cast the spell."
 msgstr ""
-"Den besvärjelsen kostar %{mana} mana. Du har bara %{point} mana, så du kan "
-"inte kasta besvärjelsen."
+"Hjälten är redan i en stad, så hjälten kan inte kasta besvärjelsen."
 
 msgid ""
 "The nearest town is %{town}.\n"
 " \n"
 "This town is occupied by your hero %{hero}."
-msgstr ""
+msgstr "Närmsta stad är %{town}.\n"
+"\n"
+"Denna stad besöks av din hjälte %{hero}."
 
-#, fuzzy
 msgid "%{name} the %{race} (Level %{level})"
-msgstr "%{race}n %{name} (Nivå %{level} )"
+msgstr "%{race}n %{name} (Nivå %{level})"
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Är du säker på att du vill avskeda denna Hjälte?"
@@ -6359,7 +6355,7 @@ msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
 "work."
 msgstr ""
-"Du måste befinna dig inom %{count} rutor från ett monster för att "
+"Hjälten måste befinna dig inom %{count} rutor från ett monster för att "
 "Synerbesvärjelsen ska ge effekt."
 
 msgid "The creatures are willing to join us!"
@@ -6390,7 +6386,7 @@ msgid ""
 "You must be standing on the entrance to a mine (sawmills and alchemists "
 "don't count) to cast this spell."
 msgstr ""
-"Du måste stå vid ingången till en gruva (sågverk och alkemistlabb räknas ej) "
+"Hjälten måste stå vid ingången till en gruva (sågverk och alkemistlabb räknas ej) "
 "för att kasta denna besvärjelse."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
@@ -6591,11 +6587,11 @@ msgstr "Expert Ägor"
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
 msgstr ""
-"%{skill} sänker förflyttningshandikappet för grov terräng med %{count} "
+"%{skill} sänker hjältens förflyttningshandikapp för grov terräng med %{count} "
 "procent."
 
 msgid "%{skill} eliminates the movement penalty for rough terrain."
-msgstr "%{skill} tar bort förflyttningshandikappet för grov terräng."
+msgstr "%{skill} tar bort hjältens förflyttningshandikapp för grov terräng."
 
 msgid ""
 "%{skill} increases the damage done by range attacking creatures by %{count} "
@@ -8053,47 +8049,47 @@ msgid "Cannot move the Spellbook"
 msgstr "Kan inte flytta Magibok"
 
 msgid "This item can't be traded."
-msgstr ""
+msgstr "Detta objekt kan inte bytas."
 
 msgid "The %{name} increases your knowledge by %{count}."
-msgstr ""
+msgstr "%{name} ökar hjältens Kunskap med %{count}."
 
 msgid "Ultimate Book of Knowledge"
 msgstr "Främsta Kunskapsboken"
 
 msgid "The %{name} increases your attack skill by %{count}."
-msgstr "%{name} höjer din attackförmåga med %{count}."
+msgstr "%{name} höjer hjältens Anfall med %{count}."
 
 msgid "Ultimate Sword of Dominion"
 msgstr "Främsta Herraväldessvärdet"
 
 msgid "The %{name} increases your defense skill by %{count}."
-msgstr "%{name} höjer din försvarsfärdighet med %{count}."
+msgstr "%{name} höjer hjältens Försvar med %{count}."
 
 msgid "Ultimate Cloak of Protection"
 msgstr "Främsta Skyddsmanteln"
 
 msgid "The %{name} increases your spell power by %{count}."
-msgstr "%{name} höjer din besvärjelsestyrka med %{count}."
+msgstr "%{name} höjer hjältens Trollkonst med %{count}."
 
 msgid "Ultimate Wand of Magic"
 msgstr "Främsta Trollstaven"
 
 msgid "The %{name} increases your attack and defense skills by %{count} each."
 msgstr ""
-"%{name} höjer dina attack- och försvarsfärdigheter med %{count} vardera."
+"%{name} höjer hjältens Anfall- och Försvarförmåga med %{count} vardera."
 
 msgid "Ultimate Shield"
 msgstr "Främsta Skölden"
 
 msgid "The %{name} increases your spell power and knowledge by %{count} each."
-msgstr "%{name} höjer din besvärjelsestyrka och kunskap med %{count} vardera."
+msgstr "%{name} höjer hjältens Trollkonst och Kunskap med %{count} vardera."
 
 msgid "Ultimate Staff"
 msgstr "Främsta Staven"
 
 msgid "The %{name} increases each of your basic skills by %{count} points."
-msgstr "%{name} höjer alla dina grundläggande färdigheter med %{count} poäng."
+msgstr "%{name} höjer alla av hjältens primära förmågor med %{count}."
 
 msgid "Ultimate Crown"
 msgstr "Främsta Kronan"
@@ -8185,7 +8181,7 @@ msgid "Fizbin of Misfortune"
 msgstr "Olycksfizbin"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
-msgstr "%{name} minskar kraftigt din stridsmoral med %{count}."
+msgstr "%{name} minskar kraftigt hjältens stridsmoral med %{count}."
 
 msgid ""
 "You stumble upon a medal lying alongside the empty road. Adding the medal to "
@@ -8208,7 +8204,7 @@ msgid "Armored Gauntlets of Protection"
 msgstr "Skyddstridshandskar"
 
 msgid "The %{name} increase your defense skill by %{count}."
-msgstr "%{name} ökar ditt Försvar med %{count}"
+msgstr "%{name} ökar hjältens Försvar med %{count}"
 
 msgid ""
 "You encounter the infamous Black Knight!  After a grueling duel ending in a "
@@ -8240,7 +8236,7 @@ msgid "Ballista of Quickness"
 msgstr "Snabbhetens Ballist"
 
 msgid "The %{name} gives your catapult one extra shot per combat round."
-msgstr "%{name} låter dig avfyra katapulten två gånger per runda."
+msgstr "%{name} låter hjälten att avfyra katapulten två gånger per runda."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
@@ -8455,7 +8451,7 @@ msgid "Enchanted Hourglass"
 msgstr "Förtrollat Timglas"
 
 msgid "The %{name} extends the duration of all your spells by %{count} turns."
-msgstr ""
+msgstr "%{name} förlänger hjältens besvärjelsers varaktighet med %{count} rundor."
 
 msgid ""
 "A surprise turn in the landscape finds you in the midst of a grisly scene:  "
@@ -8467,7 +8463,7 @@ msgid "Gold Watch"
 msgstr "Guldklocka"
 
 msgid "The %{name} doubles the effectiveness of your hypnotize spells."
-msgstr ""
+msgstr "%{name} fördubblar effektiviteten för hjältens Hynotiseringsbesvärjelser."
 
 msgid ""
 "In reward for helping his cart out of a ditch, a traveling potion salesman "
@@ -8481,7 +8477,7 @@ msgid "Skullcap"
 msgstr ""
 
 msgid "The %{name} halves the casting cost of all mind influencing spells."
-msgstr ""
+msgstr "%{name} halverar besvärjelsekostnaden för alla Sinnesbesvärjelser."
 
 msgid ""
 "A brief stop at an improbable rural inn yields an exchange of money, tales, "
@@ -8492,7 +8488,7 @@ msgid "Ice Cloak"
 msgstr "Ismantel"
 
 msgid "The %{name} halves all damage your troops take from cold spells."
-msgstr "%{name} halverar skadan dina trupper får från Köldbesvärjelser."
+msgstr "%{name} halverar skadan hjältens trupper får från Köldbesvärjelser."
 
 msgid ""
 "Responding to the panicked cries of a damsel in distress, you discover a "
@@ -8504,7 +8500,7 @@ msgid "Fire Cloak"
 msgstr "Eldmantel"
 
 msgid "The %{name} halves all damage your troops take from fire spells."
-msgstr "%{name} halverar skadan dina trupper får från Eldbesvärjelser."
+msgstr "%{name} halverar skadan hjältens trupper får från Eldbesvärjelser."
 
 msgid ""
 "You've come upon a fight between a Necromancer and a Paladin. The "
@@ -8517,7 +8513,7 @@ msgid "Lightning Helm"
 msgstr "Blixthjälm"
 
 msgid "The %{name} halves all damage your troops take from lightning spells."
-msgstr "%{name} halverar skadan dina trupper får från Blixtbesvärjelser."
+msgstr "%{name} halverar skadan hjältens trupper får från Blixtbesvärjelser."
 
 msgid ""
 "A traveling tinker in need of supplies offers you a helm with a thunderbolt "
@@ -8531,7 +8527,7 @@ msgstr "Osmältbar Istapp"
 msgid ""
 "The %{name} causes your cold spells to do %{count} percent more damage to "
 "enemy troops."
-msgstr "%{name} får dina köldbesvärjelser att göra %{count} procent mer skada till "
+msgstr "%{name} får hjältens köldbesvärjelser att göra %{count} procent mer skada till "
 "fiendetrupperna."
 
 msgid ""
@@ -8547,7 +8543,7 @@ msgstr "Skållhet Lavasten"
 msgid ""
 "The %{name} causes your fire spells to do %{count} percent more damage to "
 "enemy troops."
-msgstr "%{name} får dina eldbesvärjelsern att orsaka %{count} procent mer skada till "
+msgstr "%{name} får hjältens eldbesvärjelser att orsaka %{count} procent mer skada till "
 "fiendetrupperna."
 
 msgid ""
@@ -8614,7 +8610,7 @@ msgid "Elemental Ring"
 msgstr "Elementring"
 
 msgid "The %{name} halves the casting cost of all summoning spells."
-msgstr ""
+msgstr "%{name} halverar kostnaden för Framkallningsbesvärjelser."
 
 msgid ""
 "While pausing to rest, you notice a bobcat climbing a short tree to get at a "
@@ -8680,7 +8676,7 @@ msgid "Seeing-eye Pendant"
 msgstr ""
 
 msgid "The %{name} makes all your troops immune to blindness spells."
-msgstr ""
+msgstr "%{name}t gör hjältens trupper immuna mot Förblindningsbesvärjelser."
 
 msgid ""
 "You come upon a very old woman, long blind from cataracts and dying alone. "
@@ -8693,7 +8689,7 @@ msgid "Kinetic Pendant"
 msgstr ""
 
 msgid "The %{name} makes all your troops immune to paralyze spells."
-msgstr ""
+msgstr "%{name}t gör hjältens trupper immuna mot Paralyseringsbesvärjelser."
 
 msgid ""
 "You come across a golem wearing a glowing pendant and blocking your way. "
@@ -8705,7 +8701,7 @@ msgid "Pendant of Death"
 msgstr "Dödssmycke"
 
 msgid "The %{name} makes all your troops immune to holy spells."
-msgstr "%{name}t gör alla dina trupper immuna mot Heliga besvärjelser."
+msgstr "%{name}t gör hjältens trupper immuna mot Heliga besvärjelser."
 
 msgid ""
 "A quick and deadly battle with a Necromancer wins you his magical pendant. "
@@ -8757,7 +8753,7 @@ msgid ""
 msgstr ""
 
 msgid "Statesman's Quill"
-msgstr "Statsmannens fjäderpenna"
+msgstr "Statsmannens Fjäderpenna"
 
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
@@ -8774,7 +8770,7 @@ msgid "Wizard's Hat"
 msgstr "Trollkarlshatt"
 
 msgid "The %{name} increases the duration of your spells by %{count} turns."
-msgstr "%{name}en ökar längden för dina besvärjelser med %{count} rundor."
+msgstr "%{name}en ökar varaktigheten för hjältens besvärjelser med %{count} rundor."
 
 msgid ""
 "You see a Wizard fleeing from a Griffin and riding like the wind. The Wizard "
@@ -8804,7 +8800,7 @@ msgid "Ammo Cart"
 msgstr "Ammunitionsvagn"
 
 msgid "The %{name} provides endless ammunition for all your troops that shoot."
-msgstr "%{name} förser dina trupper oändligt med projektiler."
+msgstr "%{name} förser hjältens trupper oändligt med projektiler."
 
 msgid ""
 "An ammunition cart in the middle of an old battlefield catches your eye. "
@@ -8816,7 +8812,7 @@ msgid "Tax Lien"
 msgstr "Skuldebrev"
 
 msgid "The %{name} costs you %{count} gold pieces per day."
-msgstr "%{name} kostar dig -%{count} guld per dag."
+msgstr "%{name} kostar hjälten -%{count} guld per dag."
 
 msgid ""
 "Your big spending habits have earned you a massive tax bill that you can't "
@@ -8844,7 +8840,7 @@ msgid "Endless Pouch of Sulfur"
 msgstr "Bottenlös Svavelpåse"
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
-msgstr "%{name} förser dig med %{count} enheter Svavel per dag."
+msgstr "%{name} förser hjälten med %{count} enheter Svavel per dag."
 
 msgid ""
 "You visit an alchemist who, upon seeing your army, is swayed by the "
@@ -8856,7 +8852,7 @@ msgid "Endless Vial of Mercury"
 msgstr "Bottenlös Kvicksilverflaska"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
-msgstr "%{name} förser dig med %{count} enheter Kvicksilver per dag."
+msgstr "%{name} förser hjälten med %{count} enheter Kvicksilver per dag."
 
 msgid ""
 "A brief stop at a hastily abandoned Wizard's tower turns up a magical vial "
@@ -8868,7 +8864,7 @@ msgid "Endless Pouch of Gems"
 msgstr "Bottenlös Ädelstenspung"
 
 msgid "The %{name} provides %{count} unit of gems per day."
-msgstr "%{name} förser dig med %{count} enheter Ädelstenar per dag."
+msgstr "%{name} förser hjälten med %{count} enheter Ädelstenar per dag."
 
 msgid ""
 "A short rainstorm brings forth a rainbow...and you can see the end of it. "
@@ -8896,7 +8892,7 @@ msgid "Endless Cart of Ore"
 msgstr "Bottenlös Malmkärra"
 
 msgid "The %{name} provides %{count} unit of ore per day."
-msgstr "%{name} förser dig med %{count} enheter Malm per dag."
+msgstr "%{name} förser hjälten med %{count} enheter Malm per dag."
 
 msgid ""
 "You've found a Goblin weapon smithy making weapons for use against humans. "
@@ -8912,7 +8908,7 @@ msgstr "Bottenlös Kristallpung"
 
 msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr ""
-"%{name} förser dig med %{count} enheter med Kristaller per dag."
+"%{name} förser hjälten med %{count} enheter med Kristaller per dag."
 
 msgid ""
 "Taking shelter from a storm in a small cave,  you notice a small patch of "
@@ -9003,7 +8999,8 @@ msgstr "Martyrens arm"
 msgid ""
 "The %{name} increases your spell power by %{count} but adds the undead "
 "morale penalty."
-msgstr ""
+msgstr "%{name} ökar hjältens Trollkonst med %{count}, men sänker stridsmoralen för dennes levande "
+"trupper."
 
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
@@ -9011,13 +9008,16 @@ msgid ""
 "dismembered arm repulsive, but you cannot bring yourself to drop it: it "
 "seems to hold some sort of magical power that influences your decision "
 "making."
-msgstr ""
+msgstr "En av de mindre begåvade ur din armé plockar upp en avhuggen arm från marken. Trots att "
+"resten av kroppen saknas så rör den sig fortfarande. Dina trupper finner den avhuggna "
+"armen motbjudande. Men du kan inte förmå dig själv att göra dig av med den eftersom den "
+"verkar besitta någon förtrollning som påverkar din beslutsförmåga."
 
 msgid "Breastplate of Anduran"
-msgstr "Andurans bröstharnesk"
+msgstr "Andurans Bröstharnesk"
 
 msgid "The %{name} increases your defense by %{count}."
-msgstr ""
+msgstr "%{name} ökar hjältens Försvar med %{count}."
 
 msgid ""
 "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and "
@@ -9064,7 +9064,8 @@ msgstr "Kristallkula"
 msgid ""
 "The %{name} lets you get more specific information about monsters, enemy "
 "heroes, and castles nearby the hero who holds it."
-msgstr ""
+msgstr "%{name} ger mer specifik information om monster, fiendehjältar och slott för "
+"hjälten som har den."
 
 msgid ""
 "You come upon a caravan of gypsies who are feasting and fortifying their "
@@ -9072,7 +9073,10 @@ msgid ""
 "dance the Rama-Buta, we will reward you.\" You don't know it, but try "
 "anyway. They laugh hysterically, but admire your bravery, giving you a "
 "Crystal Ball."
-msgstr ""
+msgstr "Du stöter på en karavan med zigenare som festar och stärker sina kroppar med mjöd. De "
+"ropar på dig och säger \"Om du kan bevisa att du kan dansa Rama-Buta så belönar vi dig."
+"\" Det kan du inte men du försöker ändå. De skrattar hysteriskt, men de uppskattar ditt "
+"mod och ger dig en Kristallkula."
 
 msgid "Heart of Fire"
 msgstr "Eldhjärta"
@@ -9080,7 +9084,7 @@ msgstr "Eldhjärta"
 msgid ""
 "The %{name} provides %{count} percent protection from fire, but doubles the "
 "damage taken from cold."
-msgstr ""
+msgstr "%{name} ger hjältens trupper %{count} procents skydd mot Eld, men dubblar skadan från Köld."
 
 msgid ""
 "You enter a recently burned glade and come upon a Fire Elemental sitting "
@@ -9099,7 +9103,7 @@ msgstr "Ishjärta"
 msgid ""
 "The %{name} provides %{count} percent protection from cold, but doubles the "
 "damage taken from fire."
-msgstr ""
+msgstr "%{name} ger hjältens trupper %{count} procents skydd mot Köld, men dubblar skadan från Eld."
 
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
@@ -9107,10 +9111,13 @@ msgid ""
 "frozen.  As you pick yourself up off of the ground, you hear hearty "
 "laughter. You turn around just in time to see a Frost Giant run off into the "
 "woods and disappear."
-msgstr ""
+msgstr "Plötsligt så drabbas din kropp av en isande kylda. Du försöker härda ut men du faller "
+"från din häst. Smärtan försvinner men du känner fortfarande som om ditt bröst är "
+"fruset. När du försöker resa dig upp hör du ett hjärtligt skratt. Du vänder dig om och "
+"hinner precis se skymten av en Frostjätte innan den springer in i skogen och försvinner."
 
 msgid "Helmet of Anduran"
-msgstr "Andurans hjälm"
+msgstr "Andurans Hjälm"
 
 msgid ""
 "You spy a gleaming object poking up out of the ground. You send a member of "
@@ -9120,7 +9127,7 @@ msgid ""
 msgstr ""
 
 msgid "Holy Hammer"
-msgstr "Helig hammare"
+msgstr "Helig Hammare"
 
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
@@ -9130,10 +9137,10 @@ msgid ""
 msgstr ""
 
 msgid "Legendary Scepter"
-msgstr "Legendarisk spira"
+msgstr "Legendarisk Spira"
 
 msgid "The %{name} adds %{count} points to all attributes."
-msgstr ""
+msgstr "%{name} ger hjälten %{count} till alla dennes primära förmågor."
 
 msgid ""
 "Upon cresting a small hill, you come upon a ridiculous looking sight. A "
@@ -9149,35 +9156,39 @@ msgstr ""
 "den själv. Jag föredrar ändå att flyga.\""
 
 msgid "Masthead"
-msgstr ""
+msgstr "Mastlykta"
 
 msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
-msgstr ""
+msgstr "%{name} ökar dina truppers Tur och höjer deras Stridsmoral med %{count} i sjöstrider."
 
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
 "map that shows where he hid it. After much exploring, you find it stashed "
 "underneath a nearby dock."
-msgstr ""
+msgstr "En gammal sjöman berättar för din om en förtrollad Mastlykta som han i sina yngre dagar "
+"samlade sin besättnings kring i bråda tider. Sen visar han en gammal blekt karta och "
+"visar var han glömde den. Efter mycket letande hittar du den under en närliggande kaj."
 
 msgid "Sphere of Negation"
-msgstr ""
+msgstr "Upphävningsklot"
 
 msgid "The %{name} disables all spell casting, for both sides, in combat."
-msgstr ""
+msgstr "%{name} förhindrar all besvärjelsekastning i strid för både din och fiendens hjälte."
 
 msgid ""
 "You stop to help a Peasant catch a runaway mare. To show his gratitude, he "
 "hands you a tiny sphere. As soon as you grasp it, you feel the magical "
 "energy drain from your limbs..."
-msgstr ""
+msgstr "Du stannar för att hjälpa en bonde att infånga ett förrymt sto. För att visa sin "
+"uppskattning ger han din en liten kula. När du tar den i din hand känner du hur dina "
+"magiska krafter rinner ur dig..."
 
 msgid "Staff of Wizardry"
 msgstr ""
 
 msgid "The %{name} boosts your spell power by %{count}."
-msgstr ""
+msgstr "%{name} ökar hjältens Trollkonst med %{count}."
 
 msgid ""
 "While out scaring up game, your troops find a mysterious staff levitating "
@@ -9190,7 +9201,7 @@ msgid "Sword Breaker"
 msgstr "Svärdsbrytare"
 
 msgid "The %{name} increases your defense by %{count} and attack by 1."
-msgstr ""
+msgstr "%{name} ökar hjältens Försvar med %{count} och dennes Anfall med 1."
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
@@ -9217,17 +9228,17 @@ msgid "Spade of Necromancy"
 msgstr "Svartkonstens spade"
 
 msgid "The %{name} gives you increased necromancy skill."
-msgstr ""
+msgstr "%{name} ökar hjältens Svartkonstförmåga."
 
 msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
 "lost by mortals."
-msgstr ""
+msgstr "En skitig spade är nersatt bredvid en jordhög. Vid inspektion upptäcker du att det "
+"faktiskt är Dödgrävarnas förtrollande spade som sedan länge ansetts vara förlorad."
 
-#, fuzzy
 msgid "Invalid Artifact"
-msgstr "Artefakt"
+msgstr "Ogiltig Artefakt"
 
 msgid "Wood"
 msgstr "Trä"
@@ -9256,7 +9267,12 @@ msgid ""
 "virtually everything. Wood and ore are used for most buildings. Gems, "
 "Mercury, Sulfur and Crystal are rare magical resources used for the most "
 "powerful creatures and buildings."
-msgstr ""
+msgstr "Det finns 7 olika resurser i Heroes och Might and Magic 2 som används för att bygga och "
+"förbättra slott, rekrytera trupper och hjältar. Guld är den vanligaste, som behövs till "
+"det mesta. Trä och Malm används mest till byggnader. Ädelstenar, Kvicksilver, Svavel "
+"och Kristaller är sällsynta magiska resurser som används till de mest kraftfulla "
+"varelser och byggnader."
+"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
@@ -9275,7 +9291,7 @@ msgid ""
 "An improved version of fireball, fireblast affects two hexes around the "
 "center point of the spell, rather than one."
 msgstr ""
-"En förbättrad version av Eldklot. Eldexplosion angriper två hexagonaler "
+"En förbättrad variant av Eldklot. Eldexplosion angriper två hexagonaler "
 "runtomkring den centrala punkten, istället för en."
 
 msgid "Causes a bolt of electrical energy to strike the selected creature."
@@ -9312,11 +9328,11 @@ msgid ""
 "Removes all negative spells cast upon one of your units, and restores up to "
 "%{count} HP per level of spell power."
 msgstr ""
-"Skingrar all onda besvärjelser från en av dina varelser, återställer upp "
+"Skingrar alla onda besvärjelser från en av dina varelser, återställer upp "
 "till %{count} hälsopoäng per Trollkonststyrka."
 
 msgid "Mass Cure"
-msgstr ""
+msgstr "Masshelning"
 
 msgid ""
 "Removes all negative spells cast upon your forces, and restores up to "
@@ -9531,7 +9547,7 @@ msgid "Reduces the defense rating of an enemy unit by three."
 msgstr ""
 
 msgid "Damages all living (non-undead) units in the battle."
-msgstr "Skadar alla levande (icke-odöda) enheter i striden."
+msgstr "Skadar alla levande (icke-odöda) varelser på slagfältet."
 
 msgid "Death Ripple"
 msgstr "Dödskrusning"
@@ -9543,24 +9559,23 @@ msgid ""
 "Damages all living (non-undead) units in the battle.  This spell is an "
 "improved version of Death Ripple."
 msgstr ""
-"Skadar alla levande (icke-odöda) enheter i striden. Denna besvärjelse är en "
-"förbättrad version av Dödskrusningen."
+"Skadar alla levande (icke-odöda) enheter på slagfältet. Denna besvärjelse är en "
+"förbättrad variant av Dödskrusningen."
 
 msgid "Dragon Slayer"
 msgstr "Drakdräpare"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
-msgstr "Höjer en enhets attackfärdighet mot Drakar kraftigt."
+msgstr "Höjer kraftigt en varelses Anfallsförmåga mot Drakar."
 
 msgid "Blood Lust"
 msgstr "Blodtörst"
 
 msgid "Increases a unit's attack skill."
-msgstr "Höjer en enhets attackfärdighet."
+msgstr "Höjer en varelses Anfallsförmåga."
 
-#, fuzzy
 msgid "Animate Dead"
-msgstr "Ge liv åt död"
+msgstr "Animera Död"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
 msgstr "Återuppväcker skadade eller stupade odöda varelser permanent."
@@ -9593,25 +9608,25 @@ msgid "Summon Earth Elemental"
 msgstr "Framkalla Jordandar"
 
 msgid "Summons Earth Elementals to fight for your army."
-msgstr "Kallar in Jordandar för att strida för din armé."
+msgstr "Kallar in Jordandar för att strida för hjältens armé."
 
 msgid "Summon Air Elemental"
 msgstr "Framkalla Luftandar"
 
 msgid "Summons Air Elementals to fight for your army."
-msgstr "Kallar in Luftelement för att strida för din armé."
+msgstr "Kallar in Luftelement för att strida för hjältens armé."
 
 msgid "Summon Fire Elemental"
 msgstr "Framkalla Eldandar"
 
 msgid "Summons Fire Elementals to fight for your army."
-msgstr "Kallar in Eldandar för att strida för din armé."
+msgstr "Kallar in Eldandar för att strida för hjältens armé."
 
 msgid "Summon Water Elemental"
 msgstr "Framkalla Vattenandar"
 
 msgid "Summons Water Elementals to fight for your army."
-msgstr "Kallar in Vattenandar för att strida för din armé."
+msgstr "Kallar in Vattenandar för att strida för hjältens armé."
 
 msgid "Damages castle walls."
 msgstr "Skadar slottsmurar."
@@ -9750,13 +9765,13 @@ msgstr ""
 "skada från en direktattack."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
-msgstr "Du har ingen Magibok, så du kan inte kasta någon besvärjelse."
+msgstr "Hjälten har ingen Magibok, så hjälten kan inte kasta någon besvärjelse."
 
 msgid "No spell to cast."
 msgstr "Inga besvärjelser att kasta."
 
 msgid "Your hero has %{point} spell points remaining."
-msgstr "Din hjälte har %{point} besvärjelsepoäng kvar."
+msgstr "Hjälten har %{point} besvärjelsepoäng kvar."
 
 msgid "View Adventure Spells"
 msgstr "Visa Kartbesvärjelser"
@@ -9796,16 +9811,16 @@ msgid "The nearest town is %{town}."
 msgstr "Närmsta stad är %{town}."
 
 msgid "This town is occupied by your hero %{hero}."
-msgstr ""
+msgstr "Denna stad besöks av din hjälte %{hero}."
 
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
 msgstr ""
 
-#, fuzzy
+
 msgid "The ultimate artifact is really the %{name}."
-msgstr "Mumiens förbannelse har drabbat %{name}!"
+msgstr "Den Främsta Artefakten är %{name}."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
 msgstr ""
@@ -9858,13 +9873,12 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
 
-#, fuzzy
 msgid ""
 "Check the newest version of the game at\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-"Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
+"Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
