@@ -9272,7 +9272,6 @@ msgstr "Det finns 7 olika resurser i Heroes och Might and Magic 2 som används f
 "det mesta. Trä och Malm används mest till byggnader. Ädelstenar, Kvicksilver, Svavel "
 "och Kristaller är sällsynta magiska resurser som används till de mest kraftfulla "
 "varelser och byggnader."
-"
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
