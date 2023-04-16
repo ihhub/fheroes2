@@ -63,20 +63,31 @@ namespace
             return resolutionInfo;
         }
 
-        if ( resolutionInfo.width < 1 )
-            resolutionInfo.width = 1;
-        if ( resolutionInfo.height < 1 )
-            resolutionInfo.height = 1;
-        if ( resolutionInfo.scale < 1 )
-            resolutionInfo.scale = 1;
+        if ( resolutionInfo.gameWidth < 1 ) {
+            resolutionInfo.gameWidth = 1;
+        }
 
-        const double x = resolutionInfo.width;
-        const double y = resolutionInfo.height;
-        const double scale = resolutionInfo.scale;
+        if ( resolutionInfo.gameHeight < 1 ) {
+            resolutionInfo.gameHeight = 1;
+        }
+
+        if ( resolutionInfo.screenWidth < resolutionInfo.gameWidth ) {
+            resolutionInfo.screenWidth = resolutionInfo.gameWidth;
+        }
+
+        if ( resolutionInfo.screenHeight < resolutionInfo.gameHeight ) {
+            resolutionInfo.screenHeight = resolutionInfo.gameHeight;
+        }
+
+        const double gameX = resolutionInfo.gameWidth;
+        const double gameY = resolutionInfo.gameHeight;
+        const double screenX = resolutionInfo.screenWidth;
+        const double screenY = resolutionInfo.screenHeight;
 
         std::vector<double> similarity( resolutions.size(), 0 );
         for ( size_t i = 0; i < resolutions.size(); ++i ) {
-            similarity[i] = std::fabs( resolutions[i].width - x ) / x + std::fabs( resolutions[i].height - y ) / y + std::fabs( resolutions[i].scale - scale ) / scale;
+            similarity[i] = std::fabs( resolutions[i].gameWidth - gameX ) / gameX + std::fabs( resolutions[i].gameHeight - gameY ) / gameY +
+                            std::fabs( resolutions[i].screenWidth - screenX ) / screenX + std::fabs( resolutions[i].screenHeight - screenY ) / screenY;
         }
 
         const std::vector<double>::difference_type id = std::distance( similarity.begin(), std::min_element( similarity.begin(), similarity.end() ) );
@@ -86,7 +97,7 @@ namespace
 
     bool IsLowerThanDefaultRes( const fheroes2::ResolutionInfo & value )
     {
-        return value.width < fheroes2::Display::DEFAULT_WIDTH || value.height < fheroes2::Display::DEFAULT_HEIGHT;
+        return value.gameWidth < fheroes2::Display::DEFAULT_WIDTH || value.gameHeight < fheroes2::Display::DEFAULT_HEIGHT;
     }
 
     std::set<fheroes2::ResolutionInfo> FilterResolutions( const std::set<fheroes2::ResolutionInfo> & resolutionSet )
@@ -94,7 +105,7 @@ namespace
         static_assert( fheroes2::Display::DEFAULT_WIDTH == 640 && fheroes2::Display::DEFAULT_HEIGHT == 480, "Default resolution must be 640 x 480" );
 
         if ( resolutionSet.empty() ) {
-            return { { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, 1 } };
+            return { { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } };
         }
 
         std::vector<fheroes2::ResolutionInfo> resolutions;
@@ -108,20 +119,20 @@ namespace
         }
 
         if ( resolutions.empty() ) {
-            return { { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, 1 } };
+            return { { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } };
         }
 
         // Some operating systems do not work well with SDL so they return very limited number of high resolutions.
         // Populate missing resolutions into the list.
         const std::set<fheroes2::ResolutionInfo> possibleResolutions
-            = { { 640, 480, 1 },   { 800, 600, 1 },  { 1024, 768, 1 },  { 1152, 864, 1 }, { 1280, 600, 1 }, { 1280, 720, 1 },  { 1280, 768, 1 }, { 1280, 960, 1 },
-                { 1280, 1024, 1 }, { 1360, 768, 1 }, { 1400, 1050, 1 }, { 1440, 900, 1 }, { 1600, 900, 1 }, { 1680, 1050, 1 }, { 1920, 1080, 1 } };
+            = { { 640, 480 },   { 800, 600 },  { 1024, 768 },  { 1152, 864 }, { 1280, 600 }, { 1280, 720 },  { 1280, 768 }, { 1280, 960 },
+                { 1280, 1024 }, { 1360, 768 }, { 1400, 1050 }, { 1440, 900 }, { 1600, 900 }, { 1680, 1050 }, { 1920, 1080 } };
 
         const fheroes2::ResolutionInfo lowestResolution = resolutions.front();
         assert( *std::min_element( resolutions.begin(), resolutions.end() ) == resolutions.front() );
 
         for ( const fheroes2::ResolutionInfo & resolution : possibleResolutions ) {
-            if ( lowestResolution.width < resolution.width || lowestResolution.height < resolution.height || resolution == lowestResolution ) {
+            if ( lowestResolution.gameWidth < resolution.gameWidth || lowestResolution.gameHeight < resolution.gameHeight || resolution == lowestResolution ) {
                 continue;
             }
             resolutions.emplace_back( resolution );
@@ -135,23 +146,28 @@ namespace
 
         std::sort( resolutions.begin(), resolutions.end() );
 
+        // Wide screen devices support much higher resolutions but items on such resolutions are too tiny.
+        // In order to improve user experience on these devices we are adding a special non-standard resolution.
+        resolutions.emplace_back( resolutions.back().gameWidth * fheroes2::Display::DEFAULT_HEIGHT / resolutions.back().gameHeight, fheroes2::Display::DEFAULT_HEIGHT,
+                                  resolutions.back().gameWidth, resolutions.back().gameHeight );
+        std::sort( resolutions.begin(), resolutions.end() );
+
         // Add resolutions with scale factor. No need to run through the newly added elements so we remember the size of the array.
         const size_t resolutionCountBefore = resolutions.size();
 
         // Since all resolutions are sorted then the last resolution (which is the highest) cannot have any scale factor.
         for ( size_t currentId = 0; currentId < resolutionCountBefore - 1; ++currentId ) {
-            assert( resolutions[currentId].width > 0 && resolutions[currentId].height > 0 );
+            assert( resolutions[currentId].gameWidth > 0 && resolutions[currentId].gameHeight > 0 );
 
             for ( size_t biggerId = currentId + 1; biggerId < resolutionCountBefore; ++biggerId ) {
-                assert( resolutions[biggerId].width > 0 && resolutions[biggerId].height > 0 );
+                assert( resolutions[biggerId].gameWidth > 0 && resolutions[biggerId].gameHeight > 0 );
 
-                if ( ( resolutions[biggerId].width % resolutions[currentId].width ) == 0 && ( resolutions[biggerId].height % resolutions[currentId].height ) == 0
-                     && ( resolutions[biggerId].width / resolutions[currentId].width ) == ( resolutions[biggerId].height / resolutions[currentId].height ) ) {
+                if ( ( resolutions[biggerId].gameWidth % resolutions[currentId].gameWidth ) == 0 && ( resolutions[biggerId].gameHeight % resolutions[currentId].gameHeight ) == 0
+                     && ( resolutions[biggerId].gameWidth / resolutions[currentId].gameWidth ) == ( resolutions[biggerId].gameHeight / resolutions[currentId].gameHeight ) ) {
                     // IMPORTANT: we MUST do a copy of a vector element if we want to emplace it to the same vector.
                     const fheroes2::ResolutionInfo currentResolution = resolutions[currentId];
-                    const int32_t scaleFactor = resolutions[biggerId].width / currentResolution.width;
 
-                    resolutions.emplace_back( currentResolution.width, currentResolution.height, scaleFactor );
+                    resolutions.emplace_back( currentResolution.gameWidth, currentResolution.gameHeight, resolutions[biggerId].gameWidth, resolutions[biggerId].gameHeight );
                 }
             }
         }
@@ -823,8 +839,8 @@ namespace
 
                 const fheroes2::Display & display = fheroes2::Display::instance();
                 if ( display.width() != 0 && display.height() != 0 ) {
-                    assert( display.scale() > 0 );
-                    SDL_SetWindowSize( _window, display.width() * display.scale(), display.height() * display.scale() );
+                    assert( display.screenSize().width >= display.width() && display.screenSize().height >= display.height() );
+                    SDL_SetWindowSize( _window, display.screenSize().width, display.screenSize().height );
                 }
             }
 
@@ -868,7 +884,7 @@ namespace
                             ERROR_LOG( "Failed to get display mode. The error value: " << returnCode << ", description: " << SDL_GetError() )
                         }
                         else {
-                            resolutionSet.emplace( videoMode.w, videoMode.h, 1 );
+                            resolutionSet.emplace( videoMode.w, videoMode.h );
                         }
                     }
                 }
@@ -1076,10 +1092,10 @@ namespace
 
             flags |= SDL_WINDOW_RESIZABLE;
 
-            _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.width * resolutionInfo.scale,
-                                        resolutionInfo.height * resolutionInfo.scale, flags );
+            _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth,
+                                        resolutionInfo.screenHeight, flags );
             if ( _window == nullptr ) {
-                ERROR_LOG( "Failed to create an application window of " << resolutionInfo.width << " x " << resolutionInfo.height
+                ERROR_LOG( "Failed to create an application window of " << resolutionInfo.screenWidth << " x " << resolutionInfo.screenHeight
                                                                         << " size. The error: " << SDL_GetError() )
                 clear();
                 return false;
@@ -1124,21 +1140,21 @@ namespace
                 }
             }
 
-            _surface = SDL_CreateRGBSurface( 0, resolutionInfo.width, resolutionInfo.height, isPaletteModeSupported ? 8 : 32, 0, 0, 0, 0 );
+            _surface = SDL_CreateRGBSurface( 0, resolutionInfo.gameWidth, resolutionInfo.gameHeight, isPaletteModeSupported ? 8 : 32, 0, 0, 0, 0 );
             if ( _surface == nullptr ) {
-                ERROR_LOG( "Failed to create a surface of " << resolutionInfo.width << " x " << resolutionInfo.height << " size. The error: " << SDL_GetError() )
+                ERROR_LOG( "Failed to create a surface of " << resolutionInfo.gameWidth << " x " << resolutionInfo.gameHeight << " size. The error: " << SDL_GetError() )
                 clear();
                 return false;
             }
 
-            if ( _surface->w <= 0 || _surface->h <= 0 || _surface->w != resolutionInfo.width || _surface->h != resolutionInfo.height ) {
+            if ( _surface->w <= 0 || _surface->h <= 0 || _surface->w != resolutionInfo.gameWidth || _surface->h != resolutionInfo.gameHeight ) {
                 clear();
                 return false;
             }
 
             _createPalette();
 
-            return _createRenderer( resolutionInfo.width, resolutionInfo.height );
+            return _createRenderer( resolutionInfo.gameWidth, resolutionInfo.gameHeight );
         }
 
         void updatePalette( const std::vector<uint8_t> & colorIds ) override
@@ -1360,7 +1376,7 @@ namespace
                 SDL_Rect ** modes = SDL_ListModes( nullptr, SDL_FULLSCREEN | SDL_HWSURFACE );
                 if ( modes != nullptr && modes != reinterpret_cast<SDL_Rect **>( -1 ) ) {
                     for ( int i = 0; modes[i]; ++i ) {
-                        resolutionSet.emplace( modes[i]->w, modes[i]->h, 1 );
+                        resolutionSet.emplace( modes[i]->w, modes[i]->h );
                     }
                 }
 
@@ -1439,14 +1455,14 @@ namespace
             if ( isFullScreen )
                 flags |= SDL_FULLSCREEN;
 
-            _surface = SDL_SetVideoMode( resolutionInfo.width, resolutionInfo.height, _bitDepth, flags );
+            _surface = SDL_SetVideoMode( resolutionInfo.gameWidth, resolutionInfo.gameHeight, _bitDepth, flags );
             if ( _surface == nullptr ) {
                 return false;
             }
 
             _syncFullScreen();
 
-            if ( _surface->w <= 0 || _surface->h <= 0 || _surface->w != resolutionInfo.width || _surface->h != resolutionInfo.height ) {
+            if ( _surface->w <= 0 || _surface->h <= 0 || _surface->w != resolutionInfo.gameWidth || _surface->h != resolutionInfo.gameHeight ) {
                 clear();
                 return false;
             }
@@ -1533,7 +1549,6 @@ namespace fheroes2
         , _preprocessing( nullptr )
         , _postprocessing( nullptr )
         , _renderSurface( nullptr )
-        , _scale( 1 )
     {
         _disableTransformLayer();
     }
@@ -1550,7 +1565,8 @@ namespace fheroes2
 
     void Display::setResolution( ResolutionInfo info )
     {
-        if ( width() > 0 && height() > 0 && info.width == width() && info.height == height() && info.scale == _scale ) // nothing to resize
+        if ( width() > 0 && height() > 0 && info.gameWidth == width() && info.gameHeight == height() && info.screenWidth == _screenSize.width &&
+             info.screenHeight == _screenSize.height ) // nothing to resize
             return;
 
         const bool isFullScreen = _engine->isFullScreen();
@@ -1565,8 +1581,8 @@ namespace fheroes2
             clear();
         }
 
-        Image::resize( info.width, info.height );
-        _scale = info.scale;
+        Image::resize( info.gameWidth, info.gameHeight );
+        _screenSize = { info.screenWidth, info.screenHeight };
 
         // To detect some UI artifacts by invalid code let's put all transform data into pixel skipping mode.
         std::fill( transform(), transform() + width() * height(), static_cast<uint8_t>( 1 ) );
