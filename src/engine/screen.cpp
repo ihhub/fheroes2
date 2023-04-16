@@ -148,8 +148,9 @@ namespace
 
         // Wide screen devices support much higher resolutions but items on such resolutions are too tiny.
         // In order to improve user experience on these devices we are adding a special non-standard resolution.
-        resolutions.emplace_back( resolutions.back().gameWidth * fheroes2::Display::DEFAULT_HEIGHT / resolutions.back().gameHeight, fheroes2::Display::DEFAULT_HEIGHT,
-                                  resolutions.back().gameWidth, resolutions.back().gameHeight );
+        const fheroes2::ResolutionInfo biggestResolution = resolutions.back();
+        resolutions.emplace_back( biggestResolution.gameWidth * fheroes2::Display::DEFAULT_HEIGHT / biggestResolution.gameHeight, fheroes2::Display::DEFAULT_HEIGHT,
+                                  biggestResolution.gameWidth, biggestResolution.gameHeight );
         std::sort( resolutions.begin(), resolutions.end() );
 
         // Add resolutions with scale factor. No need to run through the newly added elements so we remember the size of the array.
