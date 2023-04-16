@@ -20,7 +20,9 @@
 
 #pragma once
 
+#include <cstdint>
 #include <string>
+#include <vector>
 
 #include "game_video_type.h"
 #include "image.h"

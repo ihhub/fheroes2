@@ -23,6 +23,7 @@
 
 #include "game_over.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <utility>
@@ -43,6 +44,7 @@
 #include "heroes.h"
 #include "highscores.h"
 #include "kingdom.h"
+#include "monster.h"
 #include "mus.h"
 #include "players.h"
 #include "serialize.h"
@@ -50,6 +52,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace
