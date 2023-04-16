@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-13 05:15+0000\n"
-"PO-Revision-Date: 2023-04-13 15:11+0200\n"
+"PO-Revision-Date: 2023-04-16 20:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -1428,7 +1428,6 @@ msgstr "Dødebesjæling"
 msgid "campaignBonus|Chain Lightning"
 msgstr "Kædelyn"
 
-# I PokéMON kaldes "fireblast" for "flammebrag" i tegnefilmen med dansk tale
 msgid "campaignBonus|Fireblast"
 msgstr "Flammebrag"
 
@@ -2631,7 +2630,7 @@ msgid "Quit"
 msgstr "Afslut"
 
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr "Afslut fheroes2"
+msgstr "Afslut Heroes of Might and Magic II."
 
 msgid "Language"
 msgstr "Sprog"
@@ -3919,7 +3918,8 @@ msgid ""
 msgstr ""
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
-msgstr "Afslut fheroes2 og vend tilbage til operativsystemet."
+msgstr ""
+"Afslut Heroes of Might and Magic II og vend tilbage til operativsystemet."
 
 msgid "Credits"
 msgstr ""
