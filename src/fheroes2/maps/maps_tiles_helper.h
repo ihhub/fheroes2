@@ -66,8 +66,8 @@ namespace Maps
 
     Troop getTroopFromTile( const Tiles & tile );
 
-    int getColorTypeFromTile( const Tiles & tile );
-    void setColorTypeOnTile( Tiles & tile, const int color );
+    int getColorFromTile( const Tiles & tile );
+    void setColorOnTile( Tiles & tile, const int color );
 
     bool doesTileContainValuableItems( const Tiles & tile );
 

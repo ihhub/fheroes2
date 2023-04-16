@@ -605,7 +605,7 @@ namespace
     {
         Maps::Tiles & tile = world.GetTiles( dstIndex );
 
-        if ( !hero.isFriends( getColorTypeFromTile( tile ) ) ) {
+        if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
             auto removeObjectProtection = [&tile]() {
                 // Clear any metadata related to spells
                 tile.clearAdditionalMetadata();
@@ -614,7 +614,7 @@ namespace
             auto captureObject = [&hero, &tile, &removeObjectProtection]() {
                 removeObjectProtection();
 
-                setColorTypeOnTile( tile, hero.GetColor() );
+                setColorOnTile( tile, hero.GetColor() );
             };
 
             if ( tile.isCaptureObjectProtected() ) {
@@ -1274,14 +1274,14 @@ namespace
         Maps::Tiles & tile = world.GetTiles( tileIndex );
         bool recruitmentAllowed = true;
 
-        if ( getColorTypeFromTile( tile ) == Color::NONE ) {
+        if ( getColorFromTile( tile ) == Color::NONE ) {
             Army army( tile );
 
             const Battle::Result res = Battle::Loader( hero.GetArmy(), army, tileIndex );
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
 
-                setColorTypeOnTile( tile, hero.GetColor() );
+                setColorOnTile( tile, hero.GetColor() );
                 tile.SetObjectPassable( true );
             }
             else {
@@ -1331,7 +1331,7 @@ namespace
 
             Maps::Tiles::RestoreAbandonedMine( tile, Resource::GOLD );
             hero.SetMapsObject( MP2::OBJ_MINES );
-            setColorTypeOnTile( tile, hero.GetColor() );
+            setColorOnTile( tile, hero.GetColor() );
         }
         else {
             AIBattleLose( hero, result, true );
@@ -1345,7 +1345,7 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const Kingdom & kingdom = hero.GetKingdom();
 
-        if ( kingdom.IsVisitTravelersTent( getColorTypeFromTile( tile ) ) ) {
+        if ( kingdom.IsVisitTravelersTent( getColorFromTile( tile ) ) ) {
             tile.RemoveObjectSprite();
             tile.setAsEmpty();
         }
@@ -1358,7 +1358,7 @@ namespace
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         Kingdom & kingdom = hero.GetKingdom();
 
-        kingdom.SetVisitTravelersTent( getColorTypeFromTile( tile ) );
+        kingdom.SetVisitTravelersTent( getColorFromTile( tile ) );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }

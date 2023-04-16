@@ -421,7 +421,7 @@ namespace Maps
                                                                : Troop( getMonsterFromTile( tile ), getMonsterCountFromTile( tile ) );
     }
 
-    int getColorTypeFromTile( const Tiles & tile )
+    int getColorFromTile( const Tiles & tile )
     {
         switch ( tile.GetObject( false ) ) {
         case MP2::OBJ_BARRIER:
@@ -433,7 +433,7 @@ namespace Maps
         }
     }
 
-    void setColorTypeOnTile( Tiles & tile, const int color )
+    void setColorOnTile( Tiles & tile, const int color )
     {
         using Quantity1Type = decltype( tile.GetQuantity1() );
         static_assert( std::is_same_v<Quantity1Type, uint8_t>, "Type of GetQuantity1() has been changed, check the logic below" );
@@ -617,11 +617,11 @@ namespace Maps
 
         case MP2::OBJ_TROLL_BRIDGE:
         case MP2::OBJ_CITY_OF_DEAD:
-            count = isFirstLoad ? Rand::Get( 4, 6 ) : ( Color::NONE == getColorTypeFromTile( tile ) ) ? count : count + Rand::Get( 1, 3 );
+            count = isFirstLoad ? Rand::Get( 4, 6 ) : ( Color::NONE == getColorFromTile( tile ) ) ? count : count + Rand::Get( 1, 3 );
             break;
 
         case MP2::OBJ_DRAGON_CITY:
-            count = isFirstLoad ? 2 : ( Color::NONE == getColorTypeFromTile( tile ) ) ? count : count + 1;
+            count = isFirstLoad ? 2 : ( Color::NONE == getColorFromTile( tile ) ) ? count : count + 1;
             break;
 
         default:
@@ -988,11 +988,11 @@ namespace Maps
             break;
 
         case MP2::OBJ_BARRIER:
-            setColorTypeOnTile( tile, getColorFromBarrierSprite( tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
+            setColorOnTile( tile, getColorFromBarrierSprite( tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
             break;
 
         case MP2::OBJ_TRAVELLER_TENT:
-            setColorTypeOnTile( tile, getColorFromTravellerTentSprite( tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
+            setColorOnTile( tile, getColorFromTravellerTentSprite( tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
             break;
 
         case MP2::OBJ_ALCHEMIST_LAB: {

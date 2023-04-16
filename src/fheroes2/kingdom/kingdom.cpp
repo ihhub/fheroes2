@@ -467,7 +467,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
 
     // Check castle first to ignore guest hero (tile with both Castle and Hero)
     if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
-        const int tileColor = getColorTypeFromTile( tile );
+        const int tileColor = getColorFromTile( tile );
 
         // Castle can only be visited if it either belongs to this kingdom or is an enemy castle (in the latter case, an attack may occur)
         return color == tileColor || !Players::isFriends( color, tileColor );
@@ -482,7 +482,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
     }
 
     if ( MP2::isCaptureObject( objectType ) )
-        return !Players::isFriends( color, getColorTypeFromTile( tile ) );
+        return !Players::isFriends( color, getColorFromTile( tile ) );
 
     if ( MP2::isQuantityObject( objectType ) )
         return doesTileContainValuableItems( tile );

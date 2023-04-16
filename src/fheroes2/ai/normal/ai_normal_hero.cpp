@@ -209,7 +209,7 @@ namespace
         case MP2::OBJ_LIGHTHOUSE:
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL:
-            if ( !hero.isFriends( getColorTypeFromTile( tile ) ) ) {
+            if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
                 if ( tile.isCaptureObjectProtected() ) {
                     return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_SMALL );
                 }
@@ -262,10 +262,10 @@ namespace
             return false;
 
         case MP2::OBJ_BARRIER:
-            return kingdom.IsVisitTravelersTent( getColorTypeFromTile( tile ) );
+            return kingdom.IsVisitTravelersTent( getColorFromTile( tile ) );
 
         case MP2::OBJ_TRAVELLER_TENT:
-            return !kingdom.IsVisitTravelersTent( getColorTypeFromTile( tile ) );
+            return !kingdom.IsVisitTravelersTent( getColorFromTile( tile ) );
 
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
@@ -443,7 +443,7 @@ namespace
         case MP2::OBJ_CITY_OF_DEAD:
         case MP2::OBJ_DRAGON_CITY:
         case MP2::OBJ_TROLL_BRIDGE: {
-            if ( Color::NONE == getColorTypeFromTile( tile ) ) {
+            if ( Color::NONE == getColorFromTile( tile ) ) {
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
 
@@ -883,7 +883,7 @@ namespace AI
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL: {
-            if ( getColorTypeFromTile( tile ) == hero.GetColor() ) {
+            if ( getColorFromTile( tile ) == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
             return ( getResourcesFromTile( tile ).first == Resource::GOLD ) ? 4000.0 : 2000.0;
@@ -955,7 +955,7 @@ namespace AI
         }
         case MP2::OBJ_LIGHTHOUSE: {
             // TODO: add more complex logic for cases when AI has boats.
-            if ( getColorTypeFromTile( tile ) == hero.GetColor() ) {
+            if ( getColorFromTile( tile ) == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
             return 500;
@@ -1298,7 +1298,7 @@ namespace AI
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL: {
-            if ( getColorTypeFromTile( tile ) == hero.GetColor() ) {
+            if ( getColorFromTile( tile ) == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
             return ( getResourcesFromTile( tile ).first == Resource::GOLD ) ? 3000.0 : 1500.0;
@@ -1327,7 +1327,7 @@ namespace AI
         }
         case MP2::OBJ_LIGHTHOUSE: {
             // TODO: add more complex logic for cases when AI has boats.
-            if ( getColorTypeFromTile( tile ) == hero.GetColor() ) {
+            if ( getColorFromTile( tile ) == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
             return 250;
@@ -1460,7 +1460,7 @@ namespace AI
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL: {
-            if ( getColorTypeFromTile( tile ) == hero.GetColor() ) {
+            if ( getColorFromTile( tile ) == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
             return ( getResourcesFromTile( tile ).first == Resource::GOLD ) ? tenTiles : fiveTiles;

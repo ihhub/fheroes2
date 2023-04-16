@@ -405,7 +405,7 @@ namespace
                     case MP2::OBJ_MINES:
                     case MP2::OBJ_SAWMILL:
                         if ( revealMines || !tile.isFog( color ) ) {
-                            const uint32_t colorOffset = colorToOffsetICN( getColorTypeFromTile( tile ) );
+                            const uint32_t colorOffset = colorToOffsetICN( getColorFromTile( tile ) );
                             // Do not render an unknown color.
                             if ( colorOffset != unknownIndex ) {
                                 renderResourceIcon( colorOffset, getResourcesFromTile( tile ).first, posX, posY );

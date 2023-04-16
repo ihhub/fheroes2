@@ -558,7 +558,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
             }
             else {
                 protection
-                    = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( getColorTypeFromTile( tile ) ) && tile.isCaptureObjectProtected() ) );
+                    = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( getColorFromTile( tile ) ) && tile.isCaptureObjectProtected() ) );
             }
 
             return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION ), from_hero.getNumOfTravelDays( tile.GetIndex() ) );

@@ -1908,7 +1908,7 @@ namespace
     {
         Maps::Tiles & tile = world.GetTiles( dstIndex );
 
-        if ( !hero.isFriends( getColorTypeFromTile( tile ) ) ) {
+        if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
             auto updateRadar = [objectType, dstIndex]() {
                 // TODO: make a function that will automatically get the object size in tiles and return a ROI for radar update.
                 // Set the radar update ROI according to captured object size and position.
@@ -1951,7 +1951,7 @@ namespace
             auto captureObject = [&hero, objectType, &tile, &updateRadar, &removeObjectProtection]() {
                 removeObjectProtection();
 
-                setColorTypeOnTile( tile, hero.GetColor() );
+                setColorOnTile( tile, hero.GetColor() );
 
                 updateRadar();
 
@@ -2087,7 +2087,7 @@ namespace
 
                 Maps::Tiles::RestoreAbandonedMine( tile, Resource::GOLD );
                 hero.SetMapsObject( MP2::OBJ_MINES );
-                setColorTypeOnTile( tile, hero.GetColor() );
+                setColorOnTile( tile, hero.GetColor() );
 
                 // TODO: make a function that will automatically get the object size in tiles and return a ROI for radar update.
                 // Set the radar update ROI according to captured object size and position.
@@ -2309,7 +2309,7 @@ namespace
         const Outcome outcome = [dst_index, &title, objectIsEmptyMsg, recruitmentAvailableMsg, warningMsg]() {
             const Maps::Tiles & tile = world.GetTiles( dst_index );
 
-            if ( getColorTypeFromTile( tile ) != Color::NONE ) {
+            if ( getColorFromTile( tile ) != Color::NONE ) {
                 const Troop troop = getTroopFromTile( tile );
 
                 if ( !troop.isValid() ) {
@@ -2365,7 +2365,7 @@ namespace
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
 
                 // Set ownership of the dwelling to a Neutral (gray) player so that any player can recruit troops without a fight.
-                setColorTypeOnTile( tile, Color::UNUSED );
+                setColorOnTile( tile, Color::UNUSED );
                 tile.SetObjectPassable( true );
 
                 if ( Dialog::Message( title, victoryMsg, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
@@ -3410,7 +3410,7 @@ namespace
 
         const std::string title = MP2::StringObject( objectType );
 
-        if ( kingdom.IsVisitTravelersTent( getColorTypeFromTile( tile ) ) ) {
+        if ( kingdom.IsVisitTravelersTent( getColorFromTile( tile ) ) ) {
             AudioManager::PlaySound( M82::EXPERNCE );
 
             Dialog::Message(
@@ -3445,7 +3445,7 @@ namespace
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         Kingdom & kingdom = hero.GetKingdom();
 
-        kingdom.SetVisitTravelersTent( getColorTypeFromTile( tile ) );
+        kingdom.SetVisitTravelersTent( getColorFromTile( tile ) );
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
     }

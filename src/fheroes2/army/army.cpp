@@ -919,7 +919,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
 
     const bool isCaptureObject = MP2::isCaptureObject( tile.GetObject( false ) );
     if ( isCaptureObject )
-        color = getColorTypeFromTile( tile );
+        color = getColorFromTile( tile );
 
     switch ( tile.GetObject( false ) ) {
     case MP2::OBJ_PYRAMID:

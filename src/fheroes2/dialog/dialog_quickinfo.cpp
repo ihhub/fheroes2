@@ -327,7 +327,7 @@ namespace
     std::string showBarrierInfo( const Maps::Tiles & tile )
     {
         std::string str = _( "%{color} Barrier" );
-        StringReplace( str, "%{color}", fheroes2::getBarrierColorName( getColorTypeFromTile( tile ) ) );
+        StringReplace( str, "%{color}", fheroes2::getBarrierColorName( getColorFromTile( tile ) ) );
 
         return str;
     }
@@ -335,7 +335,7 @@ namespace
     std::string showTentInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
     {
         std::string str = _( "%{color} Tent" );
-        const int32_t tentColor = getColorTypeFromTile( tile );
+        const int32_t tentColor = getColorFromTile( tile );
         StringReplace( str, "%{color}", fheroes2::getTentColorName( tentColor ) );
 
         if ( kingdom.IsVisitTravelersTent( tentColor ) ) {
@@ -418,7 +418,7 @@ namespace
         const MP2::MapObjectType objectType = tile.GetObject( false );
 
         if ( tile.isCaptureObjectProtected() || objectType == MP2::OBJ_ABANDONED_MINE ) {
-            return showGuardiansInfo( tile, playerColor == getColorTypeFromTile( tile ) );
+            return showGuardiansInfo( tile, playerColor == getColorFromTile( tile ) );
         }
 
         const Kingdom & kingdom = world.GetKingdom( playerColor );
@@ -455,12 +455,12 @@ namespace
             return Resource::String( tile.GetQuantity1() );
 
         case MP2::OBJ_MINES:
-            return showMineInfo( tile, playerColor == getColorTypeFromTile( tile ) );
+            return showMineInfo( tile, playerColor == getColorFromTile( tile ) );
 
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_SAWMILL: {
             std::string objectInfo = MP2::StringObject( objectType );
-            if ( playerColor == getColorTypeFromTile( tile ) ) {
+            if ( playerColor == getColorFromTile( tile ) ) {
                 objectInfo.append( getMinesIncomeString( getResourcesFromTile( tile ).first ) );
             }
             return objectInfo;
