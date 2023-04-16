@@ -119,8 +119,8 @@ public final class ToolsetActivity extends AppCompatActivity
 
     private ToolsetActivityViewModel viewModel = null;
 
-    private final ActivityResultLauncher<String> zipArchiveChooserLauncher = registerForActivityResult( new ActivityResultContracts.GetContent(), result -> {
-        // No ZIP archive was selected
+    private final ActivityResultLauncher<String> zipFileChooserLauncher = registerForActivityResult( new ActivityResultContracts.GetContent(), result -> {
+        // No ZIP file was selected
         if ( result == null ) {
             return;
         }
@@ -157,7 +157,7 @@ public final class ToolsetActivity extends AppCompatActivity
 
     public void extractHoMM2AssetsButtonClicked( final View view )
     {
-        zipArchiveChooserLauncher.launch( "application/zip" );
+        zipFileChooserLauncher.launch( "application/zip" );
     }
 
     public void downloadHoMM2DemoButtonClicked( final View view )
