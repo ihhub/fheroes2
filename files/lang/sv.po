@@ -8142,7 +8142,7 @@ msgid "Medal of Valor"
 msgstr "Tapperhetsmedalj"
 
 msgid "The %{name} increases your morale by %{count}."
-msgstr "%{name} höjer din stridsmoral med %{count}."
+msgstr "%{name} höjer hjältens stridsmoral med %{count}."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -8204,7 +8204,7 @@ msgid "Armored Gauntlets of Protection"
 msgstr "Skyddstridshandskar"
 
 msgid "The %{name} increase your defense skill by %{count}."
-msgstr "%{name} ökar hjältens Försvar med %{count}"
+msgstr "%{name} ökar hjältens Försvar med %{count}."
 
 msgid ""
 "You encounter the infamous Black Knight!  After a grueling duel ending in a "
@@ -8317,7 +8317,7 @@ msgid "Endless Sack of Gold"
 msgstr "Bottenlös Guldsäck"
 
 msgid "The %{name} provides you with %{count} gold per day."
-msgstr "%{name} förser dig med %{count} guld per dag."
+msgstr "%{name} förser hjälten med %{count} guld per dag."
 
 msgid ""
 "A little leprechaun dances gleefully around a magic sack. Seeing you "
@@ -8349,7 +8349,7 @@ msgid "Nomad Boots of Mobility"
 msgstr "Nomadens Kängor"
 
 msgid "The %{name} increase your movement on land."
-msgstr "%{name} ökar din förflyttning på mark."
+msgstr "%{name} ökar hjältens förflyttning på mark."
 
 msgid ""
 "A Nomad trader seeks protection from a tribe of Goblins. For your "
@@ -8374,7 +8374,7 @@ msgid "Lucky Rabbit's Foot"
 msgstr "Hartass"
 
 msgid "The %{name} increases your luck in combat by %{count}."
-msgstr "%{name} ökar din tur i strid med %{count}."
+msgstr "%{name} ökar hjältens Tur i strid med %{count}."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
@@ -8416,7 +8416,7 @@ msgid "True Compass of Mobility"
 msgstr "Mobilitetens Kompass"
 
 msgid "The %{name} increases your movement on land and sea."
-msgstr "%{name} ökar din förflyttningskapacitet på både land och hav."
+msgstr "%{name} ökar hjältens förflyttningskapacitet på både land och hav."
 
 msgid ""
 "An old man claiming to be an inventor asks you to try his latest invention. "
@@ -8572,7 +8572,7 @@ msgid "Snake-Ring"
 msgstr "Ormring"
 
 msgid "The %{name} halves the casting cost of all your bless spells."
-msgstr "%{name}en halverar kostnaden för alla dina välsignelsebesvärjelser."
+msgstr "%{name}en halverar kostnaden för alla hjältens välsignelsebesvärjelser."
 
 msgid ""
 "You've found an oddly shaped ring on the finger of a long dead traveler. The "
@@ -8624,7 +8624,7 @@ msgid "Holy Pendant"
 msgstr ""
 
 msgid "The %{name} makes all your troops immune to curse spells."
-msgstr "%{name} gör dina trupper immuna mot Förbannelsebesvärjelser."
+msgstr "%{name} gör hjältens trupper immuna mot Förbannelsebesvärjelser."
 
 msgid ""
 "In your wanderings you come across a hermit living in a small, tidy hut. "
@@ -8636,7 +8636,7 @@ msgid "Pendant of Free Will"
 msgstr ""
 
 msgid "The %{name} makes all your troops immune to hypnotize spells."
-msgstr "%{name} gör dina trupper immuna mot Hynotiseringsbesvärjelser."
+msgstr "%{name} gör hjältens trupper immuna mot Hynotiseringsbesvärjelser."
 
 msgid ""
 "Responding to cries for help, you find river Sprites making a sport of "
@@ -8649,7 +8649,7 @@ msgid "Pendant of Life"
 msgstr "Livsmycke"
 
 msgid "The %{name} makes all your troops immune to death spells."
-msgstr "%{name}t gör dina trupper immuna mot Dödsbesvärjelser."
+msgstr "%{name}t gör hjältens trupper immuna mot Dödsbesvärjelser."
 
 msgid ""
 "A brief roadside encounter with a small caravan and a game of knucklebones "
@@ -8663,7 +8663,7 @@ msgid "Serenity Pendant"
 msgstr ""
 
 msgid "The %{name} makes all your troops immune to berserk spells."
-msgstr ""
+msgstr "%{name}t gör hjältens trupper immuna mot Bärsärkbesvärjelser."
 
 msgid ""
 "The sounds of combat draw you to the scene of a fight between an old "
@@ -8715,7 +8715,7 @@ msgid "Wand of Negation"
 msgstr "Upphävningstrollstav"
 
 msgid "The %{name} protects your troops from the Dispel Magic spell."
-msgstr "%{name} skyddar dina trupper från Skingra magi-besvärjelser."
+msgstr "%{name} skyddar hjältens trupper från Skingra magi-besvärjelser."
 
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
@@ -9174,7 +9174,7 @@ msgid "Sphere of Negation"
 msgstr "Upphävningsklot"
 
 msgid "The %{name} disables all spell casting, for both sides, in combat."
-msgstr "%{name} förhindrar all besvärjelsekastning i strid för både din och fiendens hjälte."
+msgstr "%{name} förhindrar all besvärjelsekastning i strid för hjälten och fiendens besvärjelsekastare."
 
 msgid ""
 "You stop to help a Peasant catch a runaway mare. To show his gratitude, he "
