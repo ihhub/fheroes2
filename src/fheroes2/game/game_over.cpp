@@ -390,7 +390,6 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     subtitles.push_back( std::move( ratingText ) );
 
                     Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, &subtitles, true );
-                    // TODO : Implement function that displays a dialog for name entry.
 
                     // AudioManager::PlayMusic is run here in order to start playing before displaying the high score.
                     AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
