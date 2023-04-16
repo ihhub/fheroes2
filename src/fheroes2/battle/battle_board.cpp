@@ -558,7 +558,7 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
     uint8_t maxTwoHexObstacleCount;
 
     if ( largeObstacleHexCount == 0 ) {
-        maxSmallObstacleCount = 5;
+        maxSmallObstacleCount = 6;
         maxTwoHexObstacleCount = 3;
     }
     else if ( largeObstacleHexCount <= 7 ) {
