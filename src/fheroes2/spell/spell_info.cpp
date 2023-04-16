@@ -359,7 +359,8 @@ namespace fheroes2
         return boatDestination;
     }
 
-    Maps::Indexes getSummonableBoats(const Heroes & hero ) {
+    Maps::Indexes getSummonableBoats( const Heroes & hero )
+    {
         MapsIndexes result;
         const int32_t center = hero.GetIndex();
         for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
@@ -374,9 +375,15 @@ namespace fheroes2
 
             const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
             if ( distance > 1 ) {
-                result.emplace_back(boatSource);
+                result.emplace_back( boatSource );
             }
         }
         return result;
+    }
+
+    bool isHeroNearWater( const Heroes & hero )
+    {
+        const MapsIndexes tilesAround = Maps::getAroundIndexes( hero.GetIndex() );
+        return std::any_of( tilesAround.begin(), tilesAround.end(), []( const int32_t tileId ) { return world.GetTiles( tileId ).isWater(); } );
     }
 }

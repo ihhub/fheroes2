@@ -200,13 +200,6 @@ namespace
         fheroes2::Blit( lowerScrollbar, display, dst.x + 262, dst.y + offsetY );
     }
 
-    void DialogSpellFailed( const Spell & spell )
-    {
-        std::string str = _( "%{spell} failed!!!" );
-        StringReplace( str, "%{spell}", spell.GetName() );
-        Dialog::Message( "", str, Font::BIG, Dialog::OK );
-    }
-
     void HeroesTownGate( Heroes & hero, const Castle * castle )
     {
         assert( castle != nullptr );
@@ -303,7 +296,6 @@ namespace
     {
         assert( !hero.isShipMaster() );
 
-        const int32_t center = hero.GetIndex();
         const int32_t boatDestination = fheroes2::getPossibleBoatPosition( hero );
         assert( Maps::isValidAbsIndex( boatDestination ) );
 
@@ -314,7 +306,7 @@ namespace
 
         const int heroColor = hero.GetColor();
 
-        const uint32_t boatSource = summonableBoats.at(0);
+        const int32_t boatSource = summonableBoats.at(0);
         Maps::Tiles & tileSource = world.GetTiles( boatSource );
 
         Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
