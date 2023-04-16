@@ -91,7 +91,7 @@ namespace Game
 
     int GetKingdomColors();
     int GetActualKingdomColors();
-    void DialogPlayers( int color, std::string );
+    void DialogPlayers( int color, std::string title, std::string message );
 
     uint32_t getAdventureMapAnimationIndex();
 
