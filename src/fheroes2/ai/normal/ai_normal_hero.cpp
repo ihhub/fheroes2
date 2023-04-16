@@ -51,6 +51,7 @@
 #include "luck.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "monster.h"
 #include "morale.h"
@@ -208,7 +209,7 @@ namespace
         case MP2::OBJ_LIGHTHOUSE:
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL:
-            if ( !hero.isFriends( tile.QuantityColor() ) ) {
+            if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
                 if ( tile.isCaptureObjectProtected() ) {
                     return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_SMALL );
                 }
@@ -226,7 +227,7 @@ namespace
         case MP2::OBJ_WAGON:
         case MP2::OBJ_WATER_WHEEL:
         case MP2::OBJ_WINDMILL:
-            return tile.QuantityIsValid();
+            return doesTileContainValuableItems( tile );
 
         case MP2::OBJ_ARTIFACT: {
             const uint32_t variants = tile.QuantityVariant();
@@ -236,11 +237,11 @@ namespace
 
             // 1,2,3 - 2000g, 2500g+3res, 3000g+5res
             if ( 1 <= variants && 3 >= variants )
-                return kingdom.AllowPayment( tile.QuantityFunds() );
+                return kingdom.AllowPayment( getFundsFromTile( tile ) );
 
             // 4,5 - need to have skill wisdom or leadership
             if ( 3 < variants && 6 > variants )
-                return hero.HasSecondarySkill( tile.QuantitySkill().Skill() );
+                return hero.HasSecondarySkill( getSecondarySkillFromTile( tile ).Skill() );
 
             // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
             if ( 5 < variants && 14 > variants ) {
@@ -261,10 +262,10 @@ namespace
             return false;
 
         case MP2::OBJ_BARRIER:
-            return kingdom.IsVisitTravelersTent( tile.QuantityColor() );
+            return kingdom.IsVisitTravelersTent( getColorFromTile( tile ) );
 
         case MP2::OBJ_TRAVELLER_TENT:
-            return !kingdom.IsVisitTravelersTent( tile.QuantityColor() );
+            return !kingdom.IsVisitTravelersTent( getColorFromTile( tile ) );
 
         case MP2::OBJ_SHRINE_FIRST_CIRCLE:
         case MP2::OBJ_SHRINE_SECOND_CIRCLE:
@@ -301,7 +302,7 @@ namespace
 
         // One time visit Secondary Skill object.
         case MP2::OBJ_WITCHS_HUT: {
-            const Skill::Secondary & skill = tile.QuantitySkill();
+            const Skill::Secondary & skill = getSecondarySkillFromTile( tile );
             const int skillType = skill.Skill();
 
             if ( !skill.isValid() || hero.HasMaxSecondarySkill() || hero.HasSecondarySkill( skillType ) ) {
@@ -323,7 +324,7 @@ namespace
 
         case MP2::OBJ_TREE_OF_KNOWLEDGE:
             if ( !hero.isVisited( tile ) ) {
-                const ResourceCount & rc = tile.QuantityResourceCount();
+                const ResourceCount & rc = getResourcesFromTile( tile );
                 // If the payment is required do not waste all resources from the kingdom. Use them wisely.
                 if ( !rc.isValid() || kingdom.AllowPayment( Funds( rc ) * 5 ) ) {
                     return true;
@@ -386,7 +387,7 @@ namespace
         case MP2::OBJ_PEASANT_HUT:
         case MP2::OBJ_TREE_HOUSE:
         case MP2::OBJ_WATCH_TOWER: {
-            const Troop & troop = tile.QuantityTroop();
+            const Troop & troop = getTroopFromTile( tile );
             if ( !troop.isValid() ) {
                 return false;
             }
@@ -410,7 +411,7 @@ namespace
         case MP2::OBJ_TREE_CITY:
         case MP2::OBJ_WAGON_CAMP:
         case MP2::OBJ_WATER_ALTAR: {
-            const Troop & troop = tile.QuantityTroop();
+            const Troop & troop = getTroopFromTile( tile );
             if ( !troop.isValid() ) {
                 return false;
             }
@@ -442,11 +443,11 @@ namespace
         case MP2::OBJ_CITY_OF_DEAD:
         case MP2::OBJ_DRAGON_CITY:
         case MP2::OBJ_TROLL_BRIDGE: {
-            if ( Color::NONE == tile.QuantityColor() ) {
+            if ( Color::NONE == getColorFromTile( tile ) ) {
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
 
-            const Troop & troop = tile.QuantityTroop();
+            const Troop & troop = getTroopFromTile( tile );
             if ( !troop.isValid() ) {
                 return false;
             }
@@ -487,14 +488,14 @@ namespace
         case MP2::OBJ_DERELICT_SHIP:
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_SHIPWRECK:
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
+            if ( !hero.isVisited( tile, Visit::GLOBAL ) && doesTileContainValuableItems( tile ) ) {
                 Army enemy( tile );
                 return enemy.isValid() && isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, 2 );
             }
             break;
 
         case MP2::OBJ_PYRAMID:
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
+            if ( !hero.isVisited( tile, Visit::GLOBAL ) && doesTileContainValuableItems( tile ) ) {
                 Army enemy( tile );
                 return enemy.isValid() && Skill::Level::EXPERT == hero.GetLevelSkill( Skill::Secondary::WISDOM )
                        && isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
@@ -502,7 +503,7 @@ namespace
             break;
 
         case MP2::OBJ_DAEMON_CAVE:
-            if ( tile.QuantityIsValid() && 4 != tile.QuantityVariant() )
+            if ( doesTileContainValuableItems( tile ) && 4 != tile.QuantityVariant() )
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             break;
 
@@ -882,10 +883,10 @@ namespace AI
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL: {
-            if ( tile.QuantityColor() == hero.GetColor() ) {
+            if ( getColorFromTile( tile ) == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
-            return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 4000.0 : 2000.0;
+            return ( getResourcesFromTile( tile ).first == Resource::GOLD ) ? 4000.0 : 2000.0;
         }
         case MP2::OBJ_ABANDONED_MINE: {
             return 3000.0;
@@ -954,7 +955,7 @@ namespace AI
         }
         case MP2::OBJ_LIGHTHOUSE: {
             // TODO: add more complex logic for cases when AI has boats.
-            if ( tile.QuantityColor() == hero.GetColor() ) {
+            if ( getColorFromTile( tile ) == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
             return 500;
@@ -998,7 +999,7 @@ namespace AI
         case MP2::OBJ_WAGON_CAMP:
         case MP2::OBJ_WATCH_TOWER:
         case MP2::OBJ_WATER_ALTAR: {
-            return tile.QuantityTroop().GetStrength();
+            return getTroopFromTile( tile ).GetStrength();
         }
         case MP2::OBJ_STONE_LITHS: {
             // Stone lith is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
@@ -1155,7 +1156,7 @@ namespace AI
         case MP2::OBJ_MAGIC_GARDEN:
         case MP2::OBJ_WATER_WHEEL:
         case MP2::OBJ_WINDMILL: {
-            if ( tile.QuantityIsValid() ) {
+            if ( doesTileContainValuableItems( tile ) ) {
                 return 850;
             }
 
@@ -1297,10 +1298,10 @@ namespace AI
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL: {
-            if ( tile.QuantityColor() == hero.GetColor() ) {
+            if ( getColorFromTile( tile ) == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
-            return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 3000.0 : 1500.0;
+            return ( getResourcesFromTile( tile ).first == Resource::GOLD ) ? 3000.0 : 1500.0;
         }
         case MP2::OBJ_ABANDONED_MINE: {
             return 5000.0;
@@ -1326,7 +1327,7 @@ namespace AI
         }
         case MP2::OBJ_LIGHTHOUSE: {
             // TODO: add more complex logic for cases when AI has boats.
-            if ( tile.QuantityColor() == hero.GetColor() ) {
+            if ( getColorFromTile( tile ) == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
             return 250;
@@ -1459,10 +1460,10 @@ namespace AI
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL: {
-            if ( tile.QuantityColor() == hero.GetColor() ) {
+            if ( getColorFromTile( tile ) == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
-            return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? tenTiles : fiveTiles;
+            return ( getResourcesFromTile( tile ).first == Resource::GOLD ) ? tenTiles : fiveTiles;
         }
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:

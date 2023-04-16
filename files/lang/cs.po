@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-13 05:15+0000\n"
+"POT-Creation-Date: 2023-04-16 04:50+0000\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3490,7 +3490,7 @@ msgid "Wood & Ore:"
 msgstr "Dřevo & Ruda:"
 
 msgid "Gems, Cr, Slf & Mer:"
-msgstr ""
+msgstr "Drah., Kryst., Síra:"
 
 msgid "Obelisks Found:"
 msgstr "Nalezeno Obelisků:"
@@ -3534,66 +3534,66 @@ msgstr "Nemožné"
 msgid "and more..."
 msgstr "a víc..."
 
-#, fuzzy
 msgid "Campaign Difficulty"
-msgstr ""
-"Mapa\n"
-"Obtížnost"
+msgstr "Obtížnost kampaně"
 
 msgid ""
 "Choose this difficulty if you want to prefer game story over challenge. AI "
 "is weaker in comparison with normal difficulty."
 msgstr ""
+"Zvol tuto obtížnost pokud preferuješ příběh víc než výzvu. Umělá inteligence "
+"bude slabší v porovnání s nomální obtížností."
 
 msgid ""
 "Choose this difficulty to enjoy the campaign as per the original design."
 msgstr ""
+"Zvol tuto obtížnost a vychutnej si kampaň stejně jako v originální hře."
 
 msgid ""
 "Choose this difficulty if you want challenge. AI is stronger in comparison "
 "with normal difficulty."
 msgstr ""
+"Zvol tuto obtížnost pokud cheš pořádnou výzvu. Umělá inteligence bude "
+"silnější v porovnání s nomální obtížností."
 
 msgid "Easy"
-msgstr ""
+msgstr "Lehká"
 
 msgid "Hard"
-msgstr ""
+msgstr "Těžká"
 
 msgid "Start the selected scenario."
-msgstr ""
+msgstr "Odstartuj vybranou hru."
 
-#, fuzzy
 msgid "View Intro"
-msgstr "Zobrazit hrdinu"
+msgstr "Zobraz Intro"
 
 msgid "View Intro videos for the current state of the campaign."
-msgstr ""
+msgstr "Zobraz Intro k aktuálnímu pokroku v kampani."
 
 msgid "Select campaign difficulty. It cannot be changed after."
-msgstr ""
+msgstr "Zvol si obtížnost kampaně. Nemůže být později změněno."
 
 msgid "Restart"
 msgstr ""
 
 msgid "Restart the current scenario."
-msgstr ""
+msgstr "Restartuj aktuální hru."
 
-#, fuzzy
 msgid "Are you sure you want to restart this scenario?"
-msgstr "Jsi si jist, že chceš utéct?"
+msgstr "Jsi si jist, že chceš začit hrát od znovu?"
 
 msgid "Campaign Scenario loading failure"
-msgstr ""
+msgstr "Napodařilo se načíst hru kampaně"
 
 msgid "Please make sure that campaign files are correct and present."
-msgstr ""
+msgstr "Prosím ujistěte se, že jsou soubory v pořádku a k dispozici."
 
 msgid "Days spent"
-msgstr ""
+msgstr "Uběhlo dní"
 
 msgid "The number of days spent on this campaign."
-msgstr ""
+msgstr "Počet dní od začátku této kampaně."
 
 msgid "Project Coordination and Core Development"
 msgstr ""
@@ -4093,32 +4093,33 @@ msgstr ""
 msgid "hotkey|dismiss troop"
 msgstr ""
 
-#, fuzzy
 msgid "The save file is corrupted."
-msgstr "Zrcadlová jednotka byla vytvořena."
+msgstr "Soubor je požkozen."
 
 msgid "Unsupported save format: "
-msgstr ""
+msgstr "Nepodporovaný formát:"
 
 msgid "Current game version: "
-msgstr ""
+msgstr "Aktuální verze hry: "
 
 msgid "Last supported version: "
-msgstr ""
+msgstr "Poslední podporovaná verze: "
 
 msgid "This file contains a save with an invalid game type."
-msgstr ""
+msgstr "Soubor obsahuje údaje z neplatné verze hry."
 
 msgid ""
 "This file was saved for a \"The Price of Loyalty\" map, but the "
 "corresponding game assets have not been provided to the engine."
 msgstr ""
+"Hra byla uložena pro mapu z datadisku \"The Price of Loyalty\", nebyly ale "
+"poskytnuty odpovídající zdrojové soubory."
 
 msgid "This saved game is localized to '"
-msgstr ""
+msgstr "Tato hra je uložena s lokalizací pro '"
 
 msgid "' language, but the current language of the game is '"
-msgstr ""
+msgstr "' jazyk, aktuálně máš ale nastaven jazyk '"
 
 msgid "Hot Seat"
 msgstr ""
@@ -4210,20 +4211,24 @@ msgid ""
 "Required video files for campaign selection window are missing. Please make "
 "sure that all necessary files are present in the system."
 msgstr ""
+"Chybí potřebné video soubory pro výběr kampaně. Prosím ujistěte se, že "
+"všechny potřebné soubory jsou k dispozici."
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
 msgstr ""
+"Rolandova nebo Archibaldova kampaň z původního vydání hry Heroes of Might "
+"and Magic II."
 
 msgid "Original Campaign"
-msgstr ""
+msgstr "Originální kampaň"
 
 msgid "Expansion Campaign"
-msgstr ""
+msgstr "Kampaň datadisku"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-msgstr ""
+msgstr "Jedna ze čtyř nových kampaní z datadisku Price of Loyalty."
 
 msgid "Host"
 msgstr ""
@@ -4408,16 +4413,17 @@ msgstr ""
 "jejich měst a hradů."
 
 msgid "Lose the castle '%{name}'."
-msgstr ""
+msgstr "Ztráta hradu '%{name}'."
 
 msgid "Lose the town '%{name}'."
-msgstr ""
+msgstr "Ztráta města '%{name}'."
 
 msgid "Lose the hero: %{name}."
-msgstr ""
+msgstr "Ztráta hrdiny: %{name}'."
 
 msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
 msgstr ""
+"Nedosažení výhry před dovršením měsíc %{month}, týden %{week}, den %{day}."
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} hráč byl poražen!"
@@ -4451,14 +4457,19 @@ msgid ""
 "difficulty levels start you of with fewer resources, and at the higher "
 "settings, give extra resources to the computer."
 msgstr ""
+"Umožní Ti změnit obtížnost hry se kterou budeš hrát. Vyšší obtížnosti Ti "
+"dávají na záčatku hry míň zdrojů a čím vyšší obtížnost je, tím více zdrojů "
+"dostane protivník - počítač."
 
 msgid "Difficulty Rating"
-msgstr ""
+msgstr "Hodnocení obtížnosti"
 
 msgid ""
 "The difficulty rating reflects a combination of various settings for your "
 "game. This number will be applied to your final score."
 msgstr ""
+"Hodnocení obtížnosti odráži výslednou kombinaci voleb hry. Tento koeficient "
+"bude použit i při výpočtu finálního skóre."
 
 msgid "Click to accept these settings and start a new game."
 msgstr "Klikni pro potvrzení volby a spusti novou hru."
@@ -4500,7 +4511,7 @@ msgid " All dwellings increase population."
 msgstr "Všechna obydlí přináší novou populaci."
 
 msgid "New Week!"
-msgstr ""
+msgstr "Začal nový týden!"
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
@@ -4566,10 +4577,10 @@ msgid "End your turn and left the computer take its turn."
 msgstr "Ukonči svůj tah a nech táhnout počítač. "
 
 msgid "Adventure Options"
-msgstr ""
+msgstr "Možnosti hry"
 
 msgid "Bring up the adventure options menu."
-msgstr ""
+msgstr "Zobrazit možnosti hry."
 
 msgid ""
 "Bring up the file options menu, allowing you to load, save, start a new game "
@@ -4579,10 +4590,10 @@ msgstr ""
 "stávající."
 
 msgid "File Options"
-msgstr ""
+msgstr "Soubory"
 
 msgid "Bring up the system options menu, allowing you to customize your game."
-msgstr ""
+msgstr "Zobrazí systémové menu, s volbami pro úpravu chování hry."
 
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
@@ -4615,6 +4626,8 @@ msgid ""
 "Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
 "it even if he found it - all his artifact slots are full."
 msgstr ""
+"Hledání ultimátního artefaktu nemá cenu. Tvůj hrdina si ho nemůže vzít, ani "
+"kdyby ho našel - všechny jeho sloty pro artefakty jsou plné."
 
 msgid "Digging for artifacts requires a whole day, try again tomorrow."
 msgstr "Kopání vyžaduje celodenní úsilí, zkus to opět zítra."
@@ -4667,55 +4680,68 @@ msgid ""
 "This window provides information on the status of your hero or kingdom, and "
 "shows the date. Left click here to cycle through these windows."
 msgstr ""
+"Toto okénko poskytuje informaci o stavu Tvého království, zobrazuje datum. "
+"Levým kliknutím můžeš cyklovat zobrazované informace v okně."
 
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
 "played by a computer player or only by a human player."
 msgstr ""
+"Umožňuje měnit výchozí pozice a barvy hráčů. Konkrétní barva bude vždy "
+"začínat na určitém místě. Některé pozice může hrát pouze počítačový hráč "
+"nebo pouze lidský hráč."
 
 msgid ""
 "This lets you change the class of a player. Classes are not always "
 "changeable. Depending on the scenario, a player may receive additional towns "
 "and/or heroes not of their primary alignment."
 msgstr ""
+"Umožňuje změnit kastu hráče. Kasty nejdou změnit vždy. V závislosti na "
+"scénáři může hráč získat další města a/nebo hrdiny, kteří nepatří k jeho "
+"primárnímu začlenění."
 
 msgid "Handicap"
-msgstr ""
+msgstr "Hendikep"
 
-#
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
 "30% fewer resources per turn for mild and severe handicaps, respectively."
 msgstr ""
+"Tímto můžete změnit hendikep pro konkrétního hráče. Pouze lidé mohou být "
+"hendikepovaní. Hendikepovaní hráči začínají s menším počtem zdrojů a "
+"získávají o 15 nebo 30% méně zdrojů za den v případě lehkého resp. těžkého "
+"hendikepu."
 
 msgid "%{color} player"
-msgstr ""
+msgstr "%{color} hráč"
 
 msgid "No Handicap"
-msgstr ""
+msgstr "Bez hendikepu"
 
 msgid "No special restrictions on start resources and earning them per turn."
-msgstr ""
+msgstr "Žádná omezení zdrojů při startu nebo získávání zdrojů během hry."
 
 msgid "Mild Handicap"
-msgstr ""
+msgstr "Lehký hendikep"
 
-#
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
 msgstr ""
+"Lehce hendikepovaní hráči začínají s menším počtem zdrojů a získávají o 15% "
+"méně zdrojů za den."
 
 msgid "Severe Handicap"
-msgstr ""
+msgstr "Těžký hendikep"
 
-#
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."
 msgstr ""
+"Těžce hendikepovaní hráči začínají s menším počtem zdrojů a získávají o 30% "
+"méně zdrojů za den."
 
 #, fuzzy
 msgid "View %{skill} Info"
@@ -4733,16 +4759,16 @@ msgstr ""
 msgid "Keyboard|ABC"
 msgstr ""
 
-#, fuzzy
 msgid "Kingdom Income"
-msgstr "Příjem:"
+msgstr "Příjmy království"
 
-#, fuzzy
 msgid "Kingdom Income per day."
-msgstr "Příjem:"
+msgstr "Příjem království za den."
 
 msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr ""
+"S každým dalším obsazeným majákem budou Tvé lodě moci doplout každý den o "
+"kus dál."
 
 msgid "English"
 msgstr ""
@@ -4804,9 +4830,8 @@ msgstr ""
 msgid "Slovak"
 msgstr ""
 
-#, fuzzy
 msgid "Vietnamese"
-msgstr "Zobrazit %{name}"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""
@@ -4817,6 +4842,7 @@ msgstr ""
 msgid "%{object} raided"
 msgstr ""
 
+# Heroes names section - translate not needed
 msgid "Ector"
 msgstr ""
 
@@ -5222,17 +5248,25 @@ msgid ""
 "%{skill}.\n"
 " \n"
 msgstr ""
+"Vstoupíš do chýše a vidíš uvnitř čarodějku, jak studuje starobylý svazek o "
+"%{skill}.\n"
+" \n"
 
 msgid ""
 "As you approach, she turns and focuses her one glass eye on you.\n"
 "\"You already know everything you deserve to learn!\" the witch screeches. "
 "\"NOW GET OUT OF MY HOUSE!\""
 msgstr ""
+"Když se k ní přiblížíš, otočí se a upře na tebe své jediné skleněné oko.\n"
+"\"Už víš všechno, co si zasloužíš vědět!\" vyjekla čarodějka. \"A TEĎ "
+"VYPADNI Z MÉHO DOMU!\""
 
 msgid ""
 "As you approach, she turns and speaks.\n"
 "\"You already know that which I would teach you. I can help you no further.\""
 msgstr ""
+"Když se k ní přiblížíš, otočí se a promluví.\n"
+"\"To, co bych tě mohla naučit už víš. Nemohu Ti nijak pomoct.\""
 
 msgid ""
 "An ancient and immortal witch living in a hut with bird's legs for stilts "

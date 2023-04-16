@@ -48,6 +48,7 @@
 #include "logging.h"
 #include "maps_fileinfo.h"
 #include "maps_objects.h"
+#include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "pairs.h"
 #include "players.h"
@@ -550,7 +551,7 @@ void World::NewWeek()
     if ( week > 1 ) {
         for ( Maps::Tiles & tile : vec_tiles ) {
             if ( MP2::isWeekLife( tile.GetObject( false ) ) || tile.GetObject() == MP2::OBJ_MONSTER ) {
-                tile.QuantityUpdate( false );
+                updateObjectInfoTile( tile, false );
             }
         }
     }
@@ -675,7 +676,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 
     for ( uint32_t i = 0; i < primaryTileCount; ++i ) {
-        Maps::Tiles::PlaceMonsterOnTile( vec_tiles[primaryTargetTiles[i]], mons, 0 /* random */ );
+        setMonsterOnTile( vec_tiles[primaryTargetTiles[i]], mons, 0 /* random */ );
     }
 
     uint32_t secondaryTileCount = monstersToBePlaced * 10 / 100;
@@ -684,7 +685,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 
     for ( uint32_t i = 0; i < secondaryTileCount; ++i ) {
-        Maps::Tiles::PlaceMonsterOnTile( vec_tiles[secondaryTargetTiles[i]], mons, 0 /* random */ );
+        setMonsterOnTile( vec_tiles[secondaryTargetTiles[i]], mons, 0 /* random */ );
     }
 
     uint32_t tetriaryTileCount = monstersToBePlaced * 5 / 100;
@@ -693,7 +694,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 
     for ( uint32_t i = 0; i < tetriaryTileCount; ++i ) {
-        Maps::Tiles::PlaceMonsterOnTile( vec_tiles[tetriaryTargetTiles[i]], mons, 0 /* random */ );
+        setMonsterOnTile( vec_tiles[tetriaryTargetTiles[i]], mons, 0 /* random */ );
     }
 }
 
@@ -1411,10 +1412,10 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1003_RELEASE ) {
         for ( Maps::Tiles & tile : w.vec_tiles ) {
             if ( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE ) {
-                const int32_t spellId = Maps::getSpellIdFromTile( tile );
+                const int32_t spellId = Maps::getMineSpellIdFromTile( tile );
 
                 if ( spellId == Spell::HAUNT ) {
-                    const ResourceCount rc = tile.QuantityResourceCount();
+                    const ResourceCount rc = getResourcesFromTile( tile );
                     const int resource = rc.isValid() ? rc.first : Resource::GOLD;
 
                     Maps::Tiles::RestoreAbandonedMine( tile, resource );
@@ -1430,7 +1431,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
                 else {
                     Troop & guardians = w.GetCapturedObject( tile.GetIndex() ).GetTroop();
 
-                    tile.MonsterSetCount( guardians.isValid() ? guardians.GetCount() : 0 );
+                    setMonsterCountOnTile( tile, guardians.isValid() ? guardians.GetCount() : 0 );
 
                     guardians.Reset();
                 }
@@ -1578,7 +1579,7 @@ bool EventDate::isAllow( const int col, const uint32_t date ) const
         return false;
     }
 
-    if ( firstOccurrenceDay < date ) {
+    if ( firstOccurrenceDay > date ) {
         // The date has not come.
         return false;
     }
