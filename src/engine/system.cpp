@@ -25,10 +25,8 @@
 
 #include <algorithm>
 #include <cassert>
-#include <chrono>
 #include <cstdlib>
 #include <filesystem>
-#include <initializer_list>
 #include <system_error>
 
 #if defined( _WIN32 )

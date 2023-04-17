@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstring>
+#include <filesystem>
 #include <limits>
 #include <list>
 #include <locale>

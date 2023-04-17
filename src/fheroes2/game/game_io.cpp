@@ -27,6 +27,7 @@
 #include <cctype>
 #include <cstdint>
 #include <ctime>
+#include <filesystem>
 #include <ostream>
 
 #include "campaign_savedata.h"

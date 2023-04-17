@@ -24,6 +24,7 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
+#include <filesystem>
 #include <list>
 #include <map>
 #include <utility>
