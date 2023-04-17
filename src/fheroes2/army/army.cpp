@@ -49,6 +49,7 @@
 #include "logging.h"
 #include "luck.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "morale.h"
 #include "mp2.h"
 #include "payment.h"
@@ -918,7 +919,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
 
     const bool isCaptureObject = MP2::isCaptureObject( tile.GetObject( false ) );
     if ( isCaptureObject )
-        color = tile.QuantityColor();
+        color = getColorFromTile( tile );
 
     switch ( tile.GetObject( false ) ) {
     case MP2::OBJ_PYRAMID:
@@ -1051,7 +1052,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
             }
         }
         else {
-            const Troop troop = tile.QuantityTroop();
+            const Troop troop = getTroopFromTile( tile );
 
             if ( troop.isValid() ) {
                 ArrangeForBattle( troop.GetMonster(), troop.GetCount(), tile.GetIndex(), true );

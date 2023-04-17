@@ -48,6 +48,7 @@
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "mus.h"
 #include "pairs.h"
@@ -530,7 +531,7 @@ namespace AI
             }
 
             if ( objectType == MP2::OBJ_CASTLE ) {
-                const int tileColor = tile.QuantityColor();
+                const int tileColor = getColorFromTile( tile );
                 if ( myColor == tileColor || Players::isFriends( myColor, tileColor ) ) {
                     ++stats.friendlyCastles;
                 }
