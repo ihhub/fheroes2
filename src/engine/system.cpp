@@ -59,7 +59,7 @@
 #include <SDL_stdinc.h>
 #endif
 
-#define SEPARATOR std::filesystem::path::preferred_separator
+constexpr auto SEPARATOR = std::filesystem::path::preferred_separator;
 
 namespace
 {
@@ -117,15 +117,6 @@ namespace
     }
 #endif
 
-    std::string_view trimTrailingSeparators( std::string_view path )
-    {
-        while ( path.size() > 1 && path.back() == SEPARATOR ) {
-            path.remove_suffix( 1 );
-        }
-
-        return path;
-    }
-
     bool globMatch( const std::string_view string, const std::string_view wildcard )
     {
         size_t stringIdx = 0;
@@ -172,8 +163,6 @@ namespace
 
     bool checkFSObject( const std::filesystem::path & path, std::filesystem::file_type type, bool writable )
     {
-        using namespace std::filesystem;
-
         if ( path.empty() ) {
             return false;
         }
@@ -182,8 +171,8 @@ namespace
         if ( !System::GetCaseInsensitivePath( path, correctedPath ) )
             return false;
 
-        file_status st = status( correctedPath );
-        return ( st.type() == type ) && ( ( st.permissions() & ( writable ? perms::owner_write : perms::owner_read ) ) != perms::none );
+        std::filesystem::file_status st = status( correctedPath );
+        return ( st.type() == type ) && ( ( st.permissions() & ( writable ? std::filesystem::perms::owner_write : std::filesystem::perms::owner_read ) ) != std::filesystem::perms::none );
     }
 }
 
@@ -290,47 +279,23 @@ std::string System::GetDataDirectory( const std::string & prog )
 #endif
 }
 
-std::string System::GetDirname( std::string_view path )
+std::filesystem::path System::GetDirname( std::filesystem::path path )
 {
     if ( path.empty() ) {
         return { "." };
     }
 
-    path = trimTrailingSeparators( path );
-
-    const size_t pos = path.rfind( SEPARATOR );
-
-    if ( pos == std::string::npos ) {
-        return { "." };
-    }
-    if ( pos == 0 ) {
-        return { std::initializer_list<char>{ SEPARATOR } };
-    }
-
-    // Trailing separators should already be trimmed
-    assert( pos != path.size() - 1 );
-
-    return std::string{ trimTrailingSeparators( path.substr( 0, pos ) ) };
+    std::filesystem::path basePath = ( path.has_filename() ? path : path.parent_path() ).parent_path();
+    return basePath.empty() ? "." : basePath;
 }
 
-std::string System::GetBasename( std::string_view path )
+std::filesystem::path System::GetBasename( std::filesystem::path path )
 {
     if ( path.empty() ) {
         return { "." };
     }
 
-    path = trimTrailingSeparators( path );
-
-    const size_t pos = path.rfind( SEPARATOR );
-
-    if ( pos == std::string::npos || ( pos == 0 && path.size() == 1 ) ) {
-        return std::string{ path };
-    }
-
-    // Trailing separators should already be trimmed
-    assert( pos != path.size() - 1 );
-
-    return std::string{ path.substr( pos + 1 ) };
+    return ( path.has_filename() ? path : path.parent_path() ).filename();
 }
 
 bool System::IsFile( const std::filesystem::path & path, bool writable )
@@ -349,10 +314,10 @@ bool System::Remove( const std::filesystem::path & path )
     return std::filesystem::remove( path, ec );
 }
 
-#if !defined( _WIN32 ) && !defined( ANDROID )
-// based on: https://github.com/OneSadCookie/fcaseopen
 bool System::GetCaseInsensitivePath( const std::filesystem::path & path, std::filesystem::path & correctedPath )
 {
+#if !defined( _WIN32 ) && !defined( ANDROID )
+// based on: https://github.com/OneSadCookie/fcaseopen
     correctedPath.clear();
 
     if ( path.empty() ) {
@@ -401,14 +366,11 @@ bool System::GetCaseInsensitivePath( const std::filesystem::path & path, std::fi
             return false;
     }
     return true;
-}
 #else
-bool System::GetCaseInsensitivePath( const std::filesystem::path & path, std::filesystem::path & correctedPath )
-{
     correctedPath = path;
     return true;
-}
 #endif
+}
 
 void System::globFiles( const std::string_view glob, std::vector<std::string> & fileNames )
 {
