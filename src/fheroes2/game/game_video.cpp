@@ -56,6 +56,88 @@ namespace
             }
         }
     }
+
+    void colorFade( const std::vector<uint8_t> & palette, const fheroes2::Rect & frameRoi, const uint32_t durationMs, const uint32_t fps )
+    {
+        // Do a color fade only for valid palette.
+        if ( palette.size() != 768 ) {
+            return;
+        }
+
+        // The biggest problem here is that the palette can be not the same as in the game.
+        // Since we want to do color fading to gray-scale colors we take the original palette and
+        // find the nearest colors in video's palette to gray-scale colors of the original palette.
+        // Then we gradually change the current palette to be only gray-scale and after reaching the
+        // last frame change all colors of the frame to be only gray-scale colors of the original palette.
+
+        const uint8_t * originalPalette = fheroes2::getGamePalette();
+
+        // Yes, these values are hardcoded. There are ways to do it programmatically.
+        const int32_t startGrayScaleColorId = 10;
+        const int32_t endGrayScaleColorId = 36;
+
+        std::array<uint8_t, 256> assignedValue{ 0 };
+
+        for ( size_t id = 0; id < 256; ++id ) {
+            int32_t nearestDistance = INT32_MAX;
+
+            for ( uint8_t colorId = startGrayScaleColorId; colorId <= endGrayScaleColorId; ++colorId ) {
+                const int32_t redDiff = static_cast<int32_t>( palette[id * 3] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3] ) * 4;
+                const int32_t greenDiff
+                    = static_cast<int32_t>( palette[id * 3 + 1] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3 + 1] ) * 4;
+                const int32_t blueDiff
+                    = static_cast<int32_t>( palette[id * 3 + 2] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3 + 2] ) * 4;
+
+                const int32_t distance = redDiff * redDiff + greenDiff * greenDiff + blueDiff * blueDiff;
+                if ( nearestDistance > distance ) {
+                    nearestDistance = distance;
+                    assignedValue[id] = colorId;
+                }
+            }
+        }
+
+        std::array<uint8_t, 768> endPalette{ 0 };
+        for ( size_t i = 0; i < 256; ++i ) {
+            // Red color.
+            endPalette[i * 3] = originalPalette[static_cast<size_t>( assignedValue[i] ) * 3] * 4;
+            // Green color.
+            endPalette[i * 3 + 1] = originalPalette[static_cast<size_t>( assignedValue[i] ) * 3 + 1] * 4;
+            // Blue color.
+            endPalette[i * 3 + 2] = originalPalette[static_cast<size_t>( assignedValue[i] ) * 3 + 2] * 4;
+        }
+
+        // Gradually fade the palette.
+        const uint32_t delay = 1000 / fps;
+        const uint32_t gradingSteps = durationMs / delay;
+
+        std::vector<uint8_t> gradingPalette( 768 );
+        std::vector<uint8_t> prevPalette( 768 );
+
+        const fheroes2::ScreenPaletteRestorer screenRestorer;
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        for ( uint32_t gradingId = 1; gradingId < gradingSteps; ++gradingId ) {
+            for ( int32_t i = 0; i < 768; ++i ) {
+                gradingPalette[i] = static_cast<uint8_t>( ( palette[i] * ( gradingSteps - gradingId ) + endPalette[i] * gradingId ) / gradingSteps );
+            }
+
+            screenRestorer.changePalette( gradingPalette.data() );
+            // We need to swap the palettes so the next call of 'changePalette()' will think that the palette is new.
+            std::swap( prevPalette, gradingPalette );
+
+            display.render( frameRoi );
+
+            fheroes2::delayforMs( delay );
+        }
+
+        // Convert all video frame colors to original game palette colors.
+        for ( size_t id = 0; id < 256; ++id ) {
+            // TODO: Modify the ReplaceColorId to replace colors only in ROI.
+            fheroes2::ReplaceColorId( display, static_cast<uint8_t>( id ), assignedValue[id] );
+        }
+
+        screenRestorer.changePalette( originalPalette );
+    }
 }
 
 namespace Video
@@ -215,75 +297,8 @@ namespace Video
             }
         }
 
-        // Do a color fade only for valid palette.
-        if ( fadeColorsOnEnd && palette.size() == 768 ) {
-            // We rendered the frame and we got its palette. The biggest problem here is that the palette is not the same as in the game.
-            // Since we want to do color fading to gray-scale colors we take the original palette and
-            // find the nearest colors in video's palette to gray-scale colors of the original palette.
-            // Then we gradually change the current palette to be only gray-scale and after reaching the last frame change all colors of the frame to be only
-            // gray-scale colors of the original palette.
-
-            const uint8_t * originalPalette = fheroes2::getGamePalette();
-
-            // Yes, these values are hardcoded. There are ways to do it programmatically.
-            const int32_t startGrayScaleColorId = 10;
-            const int32_t endGrayScaleColorId = 36;
-
-            std::array<uint8_t, 256> assignedValue{ 0 };
-
-            for ( size_t id = 0; id < 256; ++id ) {
-                int32_t nearestDistance = INT32_MAX;
-
-                for ( uint8_t colorId = startGrayScaleColorId; colorId <= endGrayScaleColorId; ++colorId ) {
-                    const int32_t redDiff = static_cast<int32_t>( palette[id * 3] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3] ) * 4;
-                    const int32_t greenDiff
-                        = static_cast<int32_t>( palette[id * 3 + 1] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3 + 1] ) * 4;
-                    const int32_t blueDiff
-                        = static_cast<int32_t>( palette[id * 3 + 2] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3 + 2] ) * 4;
-
-                    const int32_t distance = redDiff * redDiff + greenDiff * greenDiff + blueDiff * blueDiff;
-                    if ( nearestDistance > distance ) {
-                        nearestDistance = distance;
-                        assignedValue[id] = colorId;
-                    }
-                }
-            }
-
-            std::array<uint8_t, 768> endPalette{ 0 };
-            for ( size_t i = 0; i < 256; ++i ) {
-                // Red color.
-                endPalette[i * 3] = originalPalette[static_cast<size_t>( assignedValue[i] ) * 3] * 4;
-                // Green color.
-                endPalette[i * 3 + 1] = originalPalette[static_cast<size_t>( assignedValue[i] ) * 3 + 1] * 4;
-                // Blue color.
-                endPalette[i * 3 + 2] = originalPalette[static_cast<size_t>( assignedValue[i] ) * 3 + 2] * 4;
-            }
-
-            // Gradually fade the palette.
-            const int32_t gradingSteps = 10;
-            std::vector<uint8_t> gradingPalette( 768 );
-
-            for ( int32_t gradingId = 1; gradingId < gradingSteps; ++gradingId ) {
-                for ( int32_t i = 0; i < 768; ++i ) {
-                    gradingPalette[i] = static_cast<uint8_t>( ( palette[i] * ( gradingSteps - gradingId ) + endPalette[i] * gradingId ) / gradingSteps );
-                }
-
-                screenRestorer.changePalette( gradingPalette.data() );
-                std::swap( prevPalette, gradingPalette );
-
-                display.render( frameRoi );
-
-                // Do 8 FPS rendering.
-                fheroes2::delayforMs( 125 );
-            }
-
-            // Convert all video frame colors to original game palette colors.
-            // TODO: Modify the ReplaceColorId to replace colors only in ROI.
-            for ( size_t id = 0; id < 256; ++id ) {
-                fheroes2::ReplaceColorId( display, static_cast<uint8_t>( id ), assignedValue[id] );
-            }
-
-            screenRestorer.changePalette( originalPalette );
+        if ( fadeColorsOnEnd ) {
+            colorFade( palette, frameRoi, 1500, 8 );
         }
         else {
             display.fill( 0 );
