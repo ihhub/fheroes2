@@ -47,8 +47,8 @@ namespace System
     std::string GetConfigDirectory( const std::string & prog );
     std::string GetDataDirectory( const std::string & prog );
 
-    std::filesystem::path GetDirname( std::filesystem::path path );
-    std::filesystem::path GetBasename( std::filesystem::path path );
+    std::filesystem::path GetDirname( const std::filesystem::path & path );
+    std::filesystem::path GetBasename( const std::filesystem::path & path );
 
     bool IsFile( const std::filesystem::path & path, bool writable = false );
     bool IsDirectory( const std::filesystem::path & path, bool writable = false );

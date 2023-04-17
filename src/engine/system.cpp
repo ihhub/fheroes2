@@ -280,7 +280,7 @@ std::string System::GetDataDirectory( const std::string & prog )
 #endif
 }
 
-std::filesystem::path System::GetDirname( std::filesystem::path path )
+std::filesystem::path System::GetDirname( const std::filesystem::path & path )
 {
     if ( path.empty() ) {
         return { "." };
@@ -290,7 +290,7 @@ std::filesystem::path System::GetDirname( std::filesystem::path path )
     return basePath.empty() ? "." : basePath;
 }
 
-std::filesystem::path System::GetBasename( std::filesystem::path path )
+std::filesystem::path System::GetBasename( const std::filesystem::path & path )
 {
     if ( path.empty() ) {
         return { "." };
