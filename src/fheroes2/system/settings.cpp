@@ -41,7 +41,6 @@
 #include "settings.h"
 #include "system.h"
 #include "tinyconfig.h"
-#include "tools.h"
 #include "translations.h"
 #include "ui_language.h"
 #include "version.h"
@@ -248,45 +247,10 @@ bool Settings::Read( const std::string & filePath )
         pos_stat = config.PointParams( "status window position", { -1, -1 } );
     }
 
-    // videomode
-    sval = config.StrParams( "videomode" );
-    if ( !sval.empty() ) {
-        const std::string value = StringLower( sval );
-        size_t pos = value.find( 'x' );
-
-        if ( pos != std::string::npos ) {
-            _resolutionInfo.gameWidth = GetInt( value.substr( 0, pos ) );
-
-            size_t prevXPos = pos;
-            pos = value.find( ':', prevXPos + 1 );
-            if ( pos != std::string::npos ) {
-                _resolutionInfo.gameHeight = GetInt( value.substr( prevXPos + 1, pos - prevXPos - 1 ) );
-
-                prevXPos = pos;
-                pos = value.find( 'x', prevXPos + 1 );
-                if ( pos != std::string::npos ) {
-                    _resolutionInfo.screenWidth = GetInt( value.substr( prevXPos + 1, pos - prevXPos - 1 ) );
-                    _resolutionInfo.screenHeight = GetInt( value.substr( pos + 1, value.length() - pos - 1 ) );
-                }
-                else {
-                    _resolutionInfo.screenWidth = _resolutionInfo.gameWidth;
-                    _resolutionInfo.screenHeight = _resolutionInfo.gameHeight;
-                }
-            }
-            else {
-                // This is old video mode setting without scale.
-                _resolutionInfo.gameHeight = GetInt( value.substr( prevXPos + 1, value.length() - prevXPos - 1 ) );
-                _resolutionInfo.screenWidth = _resolutionInfo.gameWidth;
-                _resolutionInfo.screenHeight = _resolutionInfo.gameHeight;
-            }
-        }
-        else {
-            _resolutionInfo = { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT };
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown video mode: " << value )
-        }
+    if ( config.Exists( "videomode" ) ) {
+        _resolutionInfo = config.ResolutionParams( "videomode", { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } );
     }
 
-    // full screen
     if ( config.Exists( "fullscreen" ) ) {
         setFullScreen( config.StrParams( "fullscreen" ) == "on" );
     }
@@ -397,7 +361,7 @@ std::string Settings::String() const
 
     const fheroes2::Display & display = fheroes2::Display::instance();
 
-    os << std::endl << "# video mode (game resolution)" << std::endl;
+    os << std::endl << "# video mode: in-game width x in-game height : on-screen width x on-screen height" << std::endl;
     os << "videomode = " << display.width() << "x" << display.height() << ":" << display.screenSize().width << "x" << display.screenSize().height << std::endl;
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
