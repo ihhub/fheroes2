@@ -52,6 +52,7 @@
 #include "m82.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
@@ -534,7 +535,7 @@ namespace
         for ( const int32_t monsterIndex : monsters ) {
             const Maps::Tiles & tile = world.GetTiles( monsterIndex );
 
-            Troop troop = tile.QuantityTroop();
+            const Troop troop = getTroopFromTile( tile );
             const NeutralMonsterJoiningCondition join = Army::GetJoinSolution( hero, tile, troop );
 
             std::string hdr;
@@ -594,7 +595,7 @@ namespace
             return false;
         }
 
-        Maps::setSpellOnTile( tile, spell.GetID() );
+        Maps::setMineSpellOnTile( tile, spell.GetID() );
 
         if ( spell == Spell::HAUNT ) {
             world.CaptureObject( tile.GetIndex(), Color::NONE );

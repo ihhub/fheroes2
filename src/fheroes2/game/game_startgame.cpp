@@ -65,6 +65,7 @@
 #include "m82.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
@@ -365,7 +366,7 @@ void ShowNewWeekDialog()
     else
         message += _( " All dwellings increase population." );
 
-    fheroes2::showStandardTextMessage( "", message, Dialog::OK );
+    fheroes2::showStandardTextMessage( _( "New Week!" ), message, Dialog::OK );
 }
 
 void ShowWarningLostTownsDialog()
@@ -556,7 +557,8 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 protection = Maps::isTileUnderProtection( tile.GetIndex() );
             }
             else {
-                protection = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.isCaptureObjectProtected() ) );
+                protection
+                    = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( getColorFromTile( tile ) ) && tile.isCaptureObjectProtected() ) );
             }
 
             return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION ), from_hero.getNumOfTravelDays( tile.GetIndex() ) );
@@ -715,9 +717,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     AudioManager::ResetAudio();
 
                     break;
-
-                // CONTROL_AI turn
-                default:
+                case CONTROL_AI:
                     // TODO: remove this temporary assertion
                     assert( res == fheroes2::GameMode::END_TURN );
 
@@ -750,8 +750,26 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     kingdom.ActionBeforeTurn();
 
+#if defined( WITH_DEBUG )
+                    if ( !loadedFromSave && player->isAIAutoControlMode() && conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
+                        // This is a human player which gave control to AI so we need to do autosave here.
+                        Game::AutoSave();
+                    }
+#endif
+
                     AI::Get().KingdomTurn( kingdom );
 
+#if defined( WITH_DEBUG )
+                    if ( !loadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
+                        // This is a human player which gave control to AI so we need to do autosave here.
+                        Game::AutoSave();
+                    }
+#endif
+
+                    break;
+                default:
+                    // So far no other player type is supported so this should not happen.
+                    assert( 0 );
                     break;
                 }
 
@@ -797,15 +815,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
     return res;
 }
 
-fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
+fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
 {
-    fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
-
-    const Settings & conf = Settings::Get();
-
-    Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
-    const KingdomCastles & myCastles = myKingdom.GetCastles();
-
     if ( isload ) {
         updateFocus();
     }
@@ -817,6 +828,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     statusWindow.Reset();
     gameArea.SetUpdateCursor();
 
+    const Settings & conf = Settings::Get();
     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
         // TODO: Cache fog directions for all Human players in array to not perform full update at every turn start.
 
@@ -829,6 +841,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     display.render();
+
+    Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
 
     if ( !isload ) {
         if ( 1 < world.CountWeek() && world.BeginWeek() ) {
@@ -845,6 +859,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             }
         } );
 
+        // The amount of the kingdom resources has changed, the status window needs to be updated
+        Redraw( REDRAW_STATUS );
+        display.render();
+
         if ( conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
             Game::AutoSave();
         }
@@ -853,8 +871,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     GameOver::Result & gameResult = GameOver::Result::Get();
 
     // check if the game is over at the beginning of each human-controlled player's turn
-    res = gameResult.LocalCheckGameOver();
+    fheroes2::GameMode res = gameResult.LocalCheckGameOver();
 
+    const KingdomCastles & myCastles = myKingdom.GetCastles();
     if ( res == fheroes2::GameMode::CANCEL && myCastles.empty() ) {
         ShowWarningLostTownsDialog();
     }
@@ -898,10 +917,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
 #if defined( WITH_DEBUG )
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI ) ) {
-                if ( fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
-                                            fheroes2::Text( _( "Do you want to transfer control from you to the AI? The effect will take place only on the next turn." ),
-                                                            fheroes2::FontType::normalWhite() ),
-                                            Dialog::YES | Dialog::NO )
+                if ( fheroes2::showStandardTextMessage( _( "Warning" ),
+                                                        _( "Do you want to transfer control from you to the AI? The effect will take place only on the next turn." ),
+                                                        Dialog::YES | Dialog::NO )
                      == Dialog::YES ) {
                     Players::Get( myKingdom.GetColor() )->setAIAutoControlMode( true );
                     return fheroes2::GameMode::END_TURN;
