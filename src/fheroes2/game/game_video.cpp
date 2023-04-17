@@ -231,8 +231,8 @@ namespace Video
         video.getNextFrame( display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, prevPalette );
         screenRestorer.changePalette( prevPalette.data() );
 
-        const bool hasSubtitles = ( subtitles.size() > 0 );
-        
+        const bool hasSubtitles = ( !subtitles.empty() );
+
         // Prepare the subtitles.
         if ( hasSubtitles ) {
             // Generate subtitle images.
@@ -287,7 +287,7 @@ namespace Video
                     }
 
                     if ( hasSubtitles ) {
-                        for ( Video::Subtitle subtitle : subtitles ) {
+                        for ( const Video::Subtitle & subtitle : subtitles ) {
                             if ( subtitle.needRender( currentFrame ) ) {
                                 // TODO: make a function to adopt subtitles image for the changed palette colors when palette changes.
                                 subtitle.blitSubtitles( display, frameRoi );
