@@ -172,7 +172,8 @@ namespace
             return false;
 
         std::filesystem::file_status st = status( correctedPath );
-        return ( st.type() == type ) && ( ( st.permissions() & ( writable ? std::filesystem::perms::owner_write : std::filesystem::perms::owner_read ) ) != std::filesystem::perms::none );
+        return ( st.type() == type )
+               && ( ( st.permissions() & ( writable ? std::filesystem::perms::owner_write : std::filesystem::perms::owner_read ) ) != std::filesystem::perms::none );
     }
 }
 
@@ -317,7 +318,7 @@ bool System::Remove( const std::filesystem::path & path )
 bool System::GetCaseInsensitivePath( const std::filesystem::path & path, std::filesystem::path & correctedPath )
 {
 #if !defined( _WIN32 ) && !defined( ANDROID )
-// based on: https://github.com/OneSadCookie/fcaseopen
+    // based on: https://github.com/OneSadCookie/fcaseopen
     correctedPath.clear();
 
     if ( path.empty() ) {
