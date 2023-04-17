@@ -172,10 +172,12 @@ namespace Video
 
     bool ShowVideo( const std::string & fileName, const VideoAction action, const bool fadeColorsOnEnd /* = false */ )
     {
-        return ShowVideo( fileName, action, nullptr, fadeColorsOnEnd );
+        // The video without subtitles will be rendered so create an empty subtitles vector.
+        std::vector<Subtitle> subtitles;
+        return ShowVideo( fileName, action, subtitles, fadeColorsOnEnd );
     }
 
-    bool ShowVideo( const std::string & fileName, const VideoAction action, std::vector<Subtitle> * subtitles /* = nullptr*/, const bool fadeColorsOnEnd /* = false */ )
+    bool ShowVideo( const std::string & fileName, const VideoAction action, std::vector<Subtitle> & subtitles, const bool fadeColorsOnEnd /* = false */ )
     {
         // Stop any cycling animation.
         const fheroes2::ScreenPaletteRestorer screenRestorer;
@@ -229,10 +231,12 @@ namespace Video
         video.getNextFrame( display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, prevPalette );
         screenRestorer.changePalette( prevPalette.data() );
 
+        const bool hasSubtitles = ( subtitles.size() > 0 );
+        
         // Prepare the subtitles.
-        if ( subtitles != nullptr ) {
+        if ( hasSubtitles ) {
             // Generate subtitle images.
-            for ( Video::Subtitle & subtitle : *subtitles ) {
+            for ( Video::Subtitle & subtitle : subtitles ) {
                 subtitle.makeSubtitleImage();
             }
         }
@@ -282,8 +286,8 @@ namespace Video
                         std::swap( prevPalette, palette );
                     }
 
-                    if ( subtitles != nullptr ) {
-                        for ( Video::Subtitle & subtitle : *subtitles ) {
+                    if ( hasSubtitles ) {
+                        for ( Video::Subtitle subtitle : subtitles ) {
                             if ( subtitle.needRender( currentFrame ) ) {
                                 // TODO: make a function to adopt subtitles image for the changed palette colors when palette changes.
                                 subtitle.blitSubtitles( display, frameRoi );
@@ -337,7 +341,7 @@ namespace Video
         fheroes2::Blit( fheroes2::CreateContour( _subtitleImage, blackColor ), _subtitleImage );
     }
 
-    void Subtitle::blitSubtitles( fheroes2::Image & output, const fheroes2::Rect & frameRoi )
+    void Subtitle::blitSubtitles( fheroes2::Image & output, const fheroes2::Rect & frameRoi ) const
     {
         fheroes2::Blit( _subtitleImage, 0, 0, output, frameRoi.x + _position.x, frameRoi.y + _position.y, _subtitleImage.width(), _subtitleImage.height() );
     }

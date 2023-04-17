@@ -50,7 +50,7 @@ namespace Video
         void makeSubtitleImage();
 
         // Render subtitles image to the output image.
-        void blitSubtitles( fheroes2::Image & output, const fheroes2::Rect & frameRoi );
+        void blitSubtitles( fheroes2::Image & output, const fheroes2::Rect & frameRoi ) const;
 
         // Check if subtitles needs to be rendered on this frame number.
         bool needRender( const uint32_t frameNumber ) const
@@ -71,7 +71,7 @@ namespace Video
     bool getVideoFilePath( const std::string & fileName, std::string & path );
 
     // Returns false if the video is not present or it is corrupted.
-    bool ShowVideo( const std::string & fileName, const VideoAction action, std::vector<Subtitle> * subtitles = nullptr, const bool fadeColorsOnEnd = false );
+    bool ShowVideo( const std::string & fileName, const VideoAction action, std::vector<Subtitle> & subtitles, const bool fadeColorsOnEnd = false );
 
-    bool ShowVideo( const std::string & fileName, const VideoAction action, const bool fadeColorsOnEnd /* = false */ );
+    bool ShowVideo( const std::string & fileName, const VideoAction action, const bool fadeColorsOnEnd = false );
 }

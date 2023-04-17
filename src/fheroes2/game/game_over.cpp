@@ -376,7 +376,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     const uint32_t score = Game::GetGameOverScores();
 
                     // Make ratings text as a subtitle for WIN.SMK.
-                    Video::Subtitle ratingText( fheroes2::Text{ _( "Congratulations!\n\nDays: " ), fheroes2::FontType::normalWhite() }, 140, 405, 110, 40 );
+                    Video::Subtitle ratingText( fheroes2::Text{ _( "Congratulations!\n\nDays: " ), fheroes2::FontType::normalWhite() }, 140, 405, 110, 39 );
                     ratingText.addText( { std::to_string( world.CountDay() ), fheroes2::FontType::normalWhite() } );
                     ratingText.addText( { _( "\nBase score: " ), fheroes2::FontType::smallWhite() } );
                     ratingText.addText( { std::to_string( score * 100 / difficulty ), fheroes2::FontType::smallWhite() } );
@@ -389,7 +389,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 
                     subtitles.push_back( std::move( ratingText ) );
 
-                    Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, &subtitles, true );
+                    Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, subtitles, true );
 
                     // AudioManager::PlayMusic is run here in order to start playing before displaying the high score.
                     AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
