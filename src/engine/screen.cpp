@@ -166,7 +166,8 @@ namespace
                 assert( resolutions[biggerId].gameWidth > 0 && resolutions[biggerId].gameHeight > 0 );
 
                 if ( resolutions[biggerId].screenWidth != resolutions[biggerId].gameWidth || resolutions[biggerId].screenHeight != resolutions[biggerId].gameHeight ) {
-                    assert( resolutions[biggerId].screenWidth >= resolutions[biggerId].gameWidth && resolutions[biggerId].screenHeight >= resolutions[biggerId].gameHeight );
+                    assert( resolutions[biggerId].screenWidth >= resolutions[biggerId].gameWidth
+                            && resolutions[biggerId].screenHeight >= resolutions[biggerId].gameHeight );
                     // This resolution has scaling. Ignore it.
                     continue;
                 }
