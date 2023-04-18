@@ -29,6 +29,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <utility>
 
 #include "agg_image.h"
 #include "campaign_savedata.h"
