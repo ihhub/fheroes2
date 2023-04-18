@@ -1189,7 +1189,7 @@ msgstr ""
 "cơ sở hoạt động trong khu vực này."
 
 msgid ""
-"Eliminate all oposition in this area. Then the first piece of the artifact "
+"Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
 "Loại bỏ tất cả các đối lập trong lĩnh vực này. Phần đầu tiên của hiện vật sẽ "
