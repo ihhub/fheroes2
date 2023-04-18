@@ -25,6 +25,7 @@
 #include <ctime>
 #include <memory>
 
+#include "campaign_scenariodata.h"
 #include "serialize.h"
 #include "translations.h"
 #include "ui_language.h"
@@ -334,15 +335,15 @@ namespace fheroes2
 
         const std::string lang = fheroes2::getLanguageAbbreviation( fheroes2::getCurrentLanguage() );
 
-        registerScoreCampaign( { lang, _( "Antoine" ), "Roland", currentTime, 600, 600, 0 } );
-        registerScoreCampaign( { lang, _( "Astra" ), "Archibald", currentTime, 650, 650, 0 } );
-        registerScoreCampaign( { lang, _( "Agar" ), "Roland", currentTime, 700, 700, 0 } );
-        registerScoreCampaign( { lang, _( "Vatawna" ), "Archibald", currentTime, 750, 750, 0 } );
-        registerScoreCampaign( { lang, _( "Vesper" ), "Roland", currentTime, 800, 800, 0 } );
-        registerScoreCampaign( { lang, _( "Ambrose" ), "Archibald", currentTime, 850, 850, 0 } );
-        registerScoreCampaign( { lang, _( "Troyan" ), "Roland", currentTime, 900, 900, 0 } );
-        registerScoreCampaign( { lang, _( "Jojosh" ), "Archibald", currentTime, 1000, 1000, 0 } );
-        registerScoreCampaign( { lang, _( "Wrathmont" ), "Roland", currentTime, 2000, 2000, 0 } );
-        registerScoreCampaign( { lang, _( "Maximus" ), "Archibald", currentTime, 3000, 3000, 0 } );
+        registerScoreCampaign( { lang, _( "Antoine" ), Campaign::getCampaignName( Campaign::ROLAND_CAMPAIGN ), currentTime, 600, 600, 0 } );
+        registerScoreCampaign( { lang, _( "Astra" ), Campaign::getCampaignName( Campaign::ARCHIBALD_CAMPAIGN ), currentTime, 650, 650, 0 } );
+        registerScoreCampaign( { lang, _( "Agar" ), Campaign::getCampaignName( Campaign::ROLAND_CAMPAIGN ), currentTime, 700, 700, 0 } );
+        registerScoreCampaign( { lang, _( "Vatawna" ), Campaign::getCampaignName( Campaign::ARCHIBALD_CAMPAIGN ), currentTime, 750, 750, 0 } );
+        registerScoreCampaign( { lang, _( "Vesper" ), Campaign::getCampaignName( Campaign::ROLAND_CAMPAIGN ), currentTime, 800, 800, 0 } );
+        registerScoreCampaign( { lang, _( "Ambrose" ), Campaign::getCampaignName( Campaign::ARCHIBALD_CAMPAIGN ), currentTime, 850, 850, 0 } );
+        registerScoreCampaign( { lang, _( "Troyan" ), Campaign::getCampaignName( Campaign::ROLAND_CAMPAIGN ), currentTime, 900, 900, 0 } );
+        registerScoreCampaign( { lang, _( "Jojosh" ), Campaign::getCampaignName( Campaign::ARCHIBALD_CAMPAIGN ), currentTime, 1000, 1000, 0 } );
+        registerScoreCampaign( { lang, _( "Wrathmont" ), Campaign::getCampaignName( Campaign::ROLAND_CAMPAIGN ), currentTime, 2000, 2000, 0 } );
+        registerScoreCampaign( { lang, _( "Maximus" ), Campaign::getCampaignName( Campaign::ARCHIBALD_CAMPAIGN ), currentTime, 3000, 3000, 0 } );
     }
 }
