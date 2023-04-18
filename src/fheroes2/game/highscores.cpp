@@ -18,12 +18,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "highscores.h"
+
 #include <algorithm>
 #include <array>
 #include <ctime>
 #include <memory>
 
-#include "highscores.h"
 #include "serialize.h"
 #include "translations.h"
 #include "ui_language.h"

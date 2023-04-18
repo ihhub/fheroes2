@@ -262,15 +262,14 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
             const uint32_t rating = getCampaignRating( campaignSaveData );
 
-            selectedEntryIndex = highScoreDataContainer.registerScoreCampaign( { std::move( lang ), player,
-                Campaign::getCampaignName( campaignSaveData.getCampaignID() ), completionTime, campaignSaveData.getDaysPassed(), rating, world.GetMapSeed() } );
+            selectedEntryIndex = highScoreDataContainer.registerScoreCampaign( { std::move( lang ), player, Campaign::getCampaignName( campaignSaveData.getCampaignID() ),
+                                                                                 completionTime, campaignSaveData.getDaysPassed(), rating, world.GetMapSeed() } );
         }
         else {
             const uint32_t rating = GetGameOverScores();
             const uint32_t days = world.CountDay();
-            selectedEntryIndex
-                = highScoreDataContainer.registerScoreStandard(
-                    { std::move( lang ), player, Settings::Get().CurrentFileInfo().name, completionTime, days, rating, world.GetMapSeed() } );
+            selectedEntryIndex = highScoreDataContainer.registerScoreStandard(
+                { std::move( lang ), player, Settings::Get().CurrentFileInfo().name, completionTime, days, rating, world.GetMapSeed() } );
         }
 
         highScoreDataContainer.save( highScoreDataPath );
