@@ -191,6 +191,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     if ( !highScoreDataContainer.load( highScoreDataPath ) ) {
         // Unable to load the file. Let's populate with the default values.
+        highScoreDataContainer.clear();
         highScoreDataContainer.populateStandardDefaultHighScores();
         highScoreDataContainer.populateCampaignDefaultHighScores();
     }

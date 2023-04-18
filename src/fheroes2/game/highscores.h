@@ -111,6 +111,12 @@ namespace fheroes2
         static Monster getMonsterByRating( const size_t rating );
         static Monster getMonsterByDay( const size_t dayCount );
 
+        void clear()
+        {
+            _highScoresStandard.clear();
+            _highScoresCampaign.clear();
+        }
+
     private:
         std::vector<HighscoreData> _highScoresStandard;
         std::vector<HighscoreData> _highScoresCampaign;

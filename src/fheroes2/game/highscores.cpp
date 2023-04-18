@@ -163,8 +163,6 @@ namespace fheroes2
         }
 
         if ( hdata.fail() ) {
-            _highScoresStandard.clear();
-            _highScoresCampaign.clear();
             return false;
         }
 
