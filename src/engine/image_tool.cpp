@@ -167,14 +167,19 @@ namespace fheroes2
 
     bool Load( const std::string & path, Image & image )
     {
+        std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> surface( nullptr, SDL_FreeSurface );
+
+        {
+            std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> loadedSurface( nullptr, SDL_FreeSurface );
+
 #if defined( ENABLE_PNG )
-        std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> loadedSurface( IMG_Load( path.c_str() ), SDL_FreeSurface );
+            loadedSurface.reset( IMG_Load( path.c_str() ) );
 #else
-        std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> loadedSurface( SDL_LoadBMP( path.c_str() ), SDL_FreeSurface );
+            loadedSurface.reset( SDL_LoadBMP( path.c_str() ) );
 #endif
-        if ( !loadedSurface ) {
-            return false;
-        }
+            if ( !loadedSurface ) {
+                return false;
+            }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 // SDL_PIXELFORMAT_BGRA32 and other RGBA color variants are only supported starting with SDL 2.0.5
@@ -182,23 +187,26 @@ namespace fheroes2
 #error Minimal supported SDL version is 2.0.5.
 #endif
 
-        // Image loading functions can theoretically return SDL_Surface in any supported color format, so we will convert it to a specific format for subsequent
-        // processing
-        std::unique_ptr<SDL_PixelFormat, void ( * )( SDL_PixelFormat * )> pixelFormat( SDL_AllocFormat( SDL_PIXELFORMAT_BGRA32 ), SDL_FreeFormat );
-        if ( !pixelFormat ) {
-            return false;
-        }
+            // Image loading functions can theoretically return SDL_Surface in any supported color format, so we will convert it to a specific format for subsequent
+            // processing
+            const std::unique_ptr<SDL_PixelFormat, void ( * )( SDL_PixelFormat * )> pixelFormat( SDL_AllocFormat( SDL_PIXELFORMAT_BGRA32 ), SDL_FreeFormat );
+            if ( !pixelFormat ) {
+                return false;
+            }
 
-        std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> surface( SDL_ConvertSurface( loadedSurface.get(), pixelFormat.get(), 0 ), SDL_FreeSurface );
-        if ( !surface ) {
-            return false;
-        }
+            surface.reset( SDL_ConvertSurface( loadedSurface.get(), pixelFormat.get(), 0 ) );
+            if ( !surface ) {
+                return false;
+            }
 
-        assert( surface->format->BytesPerPixel == 4 );
+            assert( surface->format->BytesPerPixel == 4 );
 #else
-        // With SDL1, we just use the loaded SDL_Surface as is and hope for the best
-        std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> surface = std::move( loadedSurface );
+            // With SDL1, we just use the loaded SDL_Surface as is and hope for the best
+            surface = std::move( loadedSurface );
 #endif
+        }
+
+        assert( surface );
 
         // TODO: with SDL2 we can use specific color format of SDL_Surface, therefore, most of this code will not be needed
         if ( surface->format->BytesPerPixel == 1 ) {
