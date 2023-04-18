@@ -312,6 +312,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         }
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+            // TODO: avoid redrawing the whole screen when only monster animation update is required.
             if ( isCampaign )
                 RedrawHighScoresCampaign( top.x, top.y, monsterAnimationFrameId, selectedEntryIndex );
             else
