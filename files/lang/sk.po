@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-13 05:15+0000\n"
-"PO-Revision-Date: 2023-04-18 18:13+0200\n"
+"PO-Revision-Date: 2023-04-18 18:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -2057,7 +2057,7 @@ msgid "Meramec"
 msgstr "Meramek"
 
 msgid "Quick Silver"
-msgstr ""
+msgstr "Ortutie"
 
 msgid "Westmoor"
 msgstr "Západný močiar"
@@ -9215,31 +9215,31 @@ msgid "The ultimate artifact may be found in the %{name} regions of the world."
 msgstr ""
 
 msgid "north-west"
-msgstr ""
+msgstr "severozápad"
 
 msgid "north"
-msgstr ""
+msgstr "sever"
 
 msgid "north-east"
-msgstr ""
+msgstr "severovýchod"
 
 msgid "west"
-msgstr ""
+msgstr "západ"
 
 msgid "center"
-msgstr ""
+msgstr "stred"
 
 msgid "east"
-msgstr ""
+msgstr "východ"
 
 msgid "south-west"
-msgstr ""
+msgstr "juhozápad"
 
 msgid "south"
-msgstr ""
+msgstr "juh"
 
 msgid "south-east"
-msgstr ""
+msgstr "juhovýchod"
 
 msgid "The truth is out there."
 msgstr ""
