@@ -28,8 +28,8 @@
 #include <functional>
 #include <memory>
 #include <string>
-#include <vector>
 #include <utility>
+#include <vector>
 
 #include "agg_image.h"
 #include "campaign_savedata.h"
