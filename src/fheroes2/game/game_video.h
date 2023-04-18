@@ -30,14 +30,40 @@
 #include "screen.h"
 #include "ui_text.h"
 
+namespace
+{
+    class SubtitleImage
+    {
+    public:
+        SubtitleImage( fheroes2::Image & subtitleImage, fheroes2::Point position, uint32_t endFrame )
+            : _subtitleImage( subtitleImage )
+            , _position( position )
+            , _endFrame( endFrame )
+        {}
+
+        // Render subtitles image to the output image.
+        void blitSubtitles( fheroes2::Image & output, const fheroes2::Rect & frameRoi ) const;
+
+        // Check if subtitles needs to be rendered on this frame number.
+        bool needRender( const uint32_t frameNumber ) const
+        {
+            return ( frameNumber <= _endFrame );
+        }
+
+    private:
+        fheroes2::Image _subtitleImage;
+        fheroes2::Point _position{ 0, 0 };
+        uint32_t _endFrame{ 0 };
+    };
+}
+
 namespace Video
 {
     class Subtitle
     {
     public:
         Subtitle() = default;
-        Subtitle( const fheroes2::Text & subtitleText, const int32_t maxWidth, const int32_t offsetX, const int32_t offsetY, const uint32_t startFrame,
-                  const uint32_t endFrame = UINT32_MAX );
+        Subtitle( const fheroes2::Text & subtitleText, const uint32_t startTimeMS, const uint32_t durationMS = UINT32_MAX );
         ~Subtitle() = default;
 
         // Add text string to subtitles.
@@ -46,25 +72,30 @@ namespace Video
             _text.add( subtitleText );
         }
 
-        // Generate the image from subtitles text and store it in Subtitle class.
-        void makeSubtitleImage();
-
-        // Render subtitles image to the output image.
-        void blitSubtitles( fheroes2::Image & output, const fheroes2::Rect & frameRoi ) const;
-
-        // Check if subtitles needs to be rendered on this frame number.
-        bool needRender( const uint32_t frameNumber ) const
+        void setPosition( const fheroes2::Point position )
         {
-            return ( frameNumber >= _startFrame ) && ( frameNumber <= _endFrame );
+            _position = position;
         }
+
+        void setMaxWidth( const int32_t maxWidth )
+        {
+            _maxWidth = maxWidth;
+        }
+
+        uint32_t getStartFrame( const uint32_t renderDelayMS )
+        {
+            return ( _startTimeMS / renderDelayMS );
+        }
+
+        // Generate the image from subtitles text and store it in Subtitle class.
+        SubtitleImage makeSubtitleImage( const uint32_t renderDelayMS );
 
     private:
         fheroes2::Point _position{ 0, 0 };
         fheroes2::MultiFontText _text;
-        uint32_t _startFrame{ 0 };
-        uint32_t _endFrame{ UINT32_MAX };
+        uint32_t _startTimeMS{ 0 };
+        uint32_t _durationMS{ UINT32_MAX };
         int32_t _maxWidth{ fheroes2::Display::DEFAULT_WIDTH };
-        fheroes2::Image _subtitleImage;
     };
 
     // Returns true if the file exists.

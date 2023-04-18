@@ -369,14 +369,12 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 else {
                     AudioManager::ResetAudio();
 
-                    std::vector<Video::Subtitle> subtitles;
-
                     // Get data for ratings text.
                     const uint32_t difficulty = Game::GetRating();
                     const uint32_t score = Game::GetGameOverScores();
 
                     // Make ratings text as a subtitle for WIN.SMK.
-                    Video::Subtitle ratingText( fheroes2::Text{ _( "Congratulations!\n\nDays: " ), fheroes2::FontType::normalWhite() }, 140, 405, 110, 39 );
+                    Video::Subtitle ratingText( fheroes2::Text{ _( "Congratulations!\n\nDays: " ), fheroes2::FontType::normalWhite() }, 5000 );
                     ratingText.addText( { std::to_string( world.CountDay() ), fheroes2::FontType::normalWhite() } );
                     ratingText.addText( { _( "\nBase score: " ), fheroes2::FontType::smallWhite() } );
                     ratingText.addText( { std::to_string( score * 100 / difficulty ), fheroes2::FontType::smallWhite() } );
@@ -386,8 +384,10 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     ratingText.addText( { std::to_string( score ), fheroes2::FontType::normalWhite() } );
                     ratingText.addText( { _( "\n\nRating:\n" ), fheroes2::FontType::normalWhite() } );
                     ratingText.addText( { fheroes2::HighScoreDataContainer::getMonsterByRating( score ).GetName(), fheroes2::FontType::normalWhite() } );
+                    ratingText.setPosition( { 405, 110 } );
+                    ratingText.setMaxWidth( 140 );
 
-                    subtitles.push_back( std::move( ratingText ) );
+                    std::vector<Video::Subtitle> subtitles{ ratingText };
 
                     Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, subtitles, true );
 
