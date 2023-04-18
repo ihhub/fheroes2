@@ -22,6 +22,7 @@
 #include <cassert>
 #include <cstdint>
 #include <cstring>
+#include <functional>
 #include <memory>
 #include <ostream>
 #include <string_view>
@@ -167,10 +168,10 @@ namespace fheroes2
 
     bool Load( const std::string & path, Image & image )
     {
-        std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> surface( nullptr, SDL_FreeSurface );
+        std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> surface( nullptr, SDL_FreeSurface );
 
         {
-            std::unique_ptr<SDL_Surface, void ( * )( SDL_Surface * )> loadedSurface( nullptr, SDL_FreeSurface );
+            std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> loadedSurface( nullptr, SDL_FreeSurface );
 
 #if defined( ENABLE_PNG )
             loadedSurface.reset( IMG_Load( path.c_str() ) );
@@ -189,7 +190,7 @@ namespace fheroes2
 
             // Image loading functions can theoretically return SDL_Surface in any supported color format, so we will convert it to a specific format for subsequent
             // processing
-            const std::unique_ptr<SDL_PixelFormat, void ( * )( SDL_PixelFormat * )> pixelFormat( SDL_AllocFormat( SDL_PIXELFORMAT_BGRA32 ), SDL_FreeFormat );
+            const std::unique_ptr<SDL_PixelFormat, std::function<void( SDL_PixelFormat * )>> pixelFormat( SDL_AllocFormat( SDL_PIXELFORMAT_BGRA32 ), SDL_FreeFormat );
             if ( !pixelFormat ) {
                 return false;
             }
