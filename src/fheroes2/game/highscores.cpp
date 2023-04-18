@@ -25,11 +25,15 @@
 
 #include "highscores.h"
 #include "serialize.h"
+#include "translations.h"
+#include "ui_language.h"
 #include "zzlib.h"
 
 namespace
 {
-    const uint32_t highscoreFileMagicValue = 0xBADC0DE;
+    const uint32_t highscoreFileMagicValueV1 = 0xBADC0DE;
+    const uint32_t highscoreFileMagicValueV2 = 0xBADC1DE;
+
     const size_t highscoreMaximumEntries = 10;
 
     const std::array<Monster::monster_t, 66> monstersInRanking = { Monster::PEASANT,       Monster::GOBLIN,
@@ -103,14 +107,21 @@ namespace fheroes2
         return static_cast<uint32_t>( std::time( nullptr ) );
     }
 
+    void HighscoreData::loadV1( StreamBase & msg )
+    {
+        languageAbbreviation = "en";
+
+        msg >> playerName >> scenarioName >> completionTime >> dayCount >> rating >> mapSeed;
+    }
+
     StreamBase & operator<<( StreamBase & msg, const HighscoreData & data )
     {
-        return msg << data.playerName << data.scenarioName << data.completionTime << data.dayCount << data.rating << data.mapSeed;
+        return msg << data.languageAbbreviation << data.playerName << data.scenarioName << data.completionTime << data.dayCount << data.rating << data.mapSeed;
     }
 
     StreamBase & operator>>( StreamBase & msg, HighscoreData & data )
     {
-        return msg >> data.playerName >> data.scenarioName >> data.completionTime >> data.dayCount >> data.rating >> data.mapSeed;
+        return msg >> data.languageAbbreviation >> data.playerName >> data.scenarioName >> data.completionTime >> data.dayCount >> data.rating >> data.mapSeed;
     }
 
     bool HighScoreDataContainer::load( const std::string & fileName )
@@ -125,12 +136,29 @@ namespace fheroes2
 
         hdata >> magicValue;
 
-        if ( magicValue != highscoreFileMagicValue ) {
+        if ( magicValue != highscoreFileMagicValueV1 && magicValue != highscoreFileMagicValueV2 ) {
             // It is not a highscore file.
             return false;
         }
 
-        hdata >> _highScoresStandard >> _highScoresCampaign;
+        if ( magicValue == highscoreFileMagicValueV1 ) {
+            uint32_t size = hdata.get32();
+            _highScoresStandard.resize( size );
+
+            for ( HighscoreData & data : _highScoresStandard ) {
+                data.loadV1( hdata );
+            }
+
+            size = hdata.get32();
+            _highScoresCampaign.resize( size );
+
+            for ( HighscoreData & data : _highScoresCampaign ) {
+                data.loadV1( hdata );
+            }
+        }
+        else {
+            hdata >> _highScoresStandard >> _highScoresCampaign;
+        }
 
         // Since the introduction of campaign difficulty we need to calculate rating of a campaign completion.
         // Before the change rating for campaigns was always 0. We need to set it to the number of days.
@@ -161,7 +189,7 @@ namespace fheroes2
     {
         ZStreamBuf hdata;
         hdata.setbigendian( true );
-        hdata << highscoreFileMagicValue << _highScoresStandard << _highScoresCampaign;
+        hdata << highscoreFileMagicValueV2 << _highScoresStandard << _highScoresCampaign;
 
         return !hdata.fail() && hdata.write( fileName );
     }
@@ -285,31 +313,35 @@ namespace fheroes2
     {
         const uint32_t currentTime = HighscoreData::generateCompletionTime();
 
-        registerScoreStandard( { "Lord Kilburn", "Beltway", currentTime, 70, 150, 0 } );
-        registerScoreStandard( { "Tsabu", "Deathgate", currentTime, 80, 140, 0 } );
-        registerScoreStandard( { "Sir Galant", "Enroth", currentTime, 90, 130, 0 } );
-        registerScoreStandard( { "Thundax", "Lost Continent", currentTime, 100, 120, 0 } );
-        registerScoreStandard( { "Lord Haart", "Mountain King", currentTime, 120, 110, 0 } );
-        registerScoreStandard( { "Ariel", "Pandemonium", currentTime, 140, 100, 0 } );
-        registerScoreStandard( { "Rebecca", "Terra Firma", currentTime, 160, 90, 0 } );
-        registerScoreStandard( { "Sandro", "The Clearing", currentTime, 180, 80, 0 } );
-        registerScoreStandard( { "Crodo", "Vikings!", currentTime, 200, 70, 0 } );
-        registerScoreStandard( { "Barock", "Wastelands", currentTime, 240, 60, 0 } );
+        const std::string lang = fheroes2::getLanguageAbbreviation( fheroes2::getCurrentLanguage() );
+
+        registerScoreStandard( { lang, _( "Lord Kilburn" ), "Beltway", currentTime, 70, 150, 0 } );
+        registerScoreStandard( { lang, _( "Tsabu" ), "Deathgate", currentTime, 80, 140, 0 } );
+        registerScoreStandard( { lang, _( "Sir Galant" ), "Enroth", currentTime, 90, 130, 0 } );
+        registerScoreStandard( { lang, _( "Thundax" ), "Lost Continent", currentTime, 100, 120, 0 } );
+        registerScoreStandard( { lang, _( "Lord Haart" ), "Mountain King", currentTime, 120, 110, 0 } );
+        registerScoreStandard( { lang, _( "Ariel" ), "Pandemonium", currentTime, 140, 100, 0 } );
+        registerScoreStandard( { lang, _( "Rebecca" ), "Terra Firma", currentTime, 160, 90, 0 } );
+        registerScoreStandard( { lang, _( "Sandro" ), "The Clearing", currentTime, 180, 80, 0 } );
+        registerScoreStandard( { lang, _( "Crodo" ), "Vikings!", currentTime, 200, 70, 0 } );
+        registerScoreStandard( { lang, _( "Barock" ), "Wastelands", currentTime, 240, 60, 0 } );
     }
 
     void HighScoreDataContainer::populateCampaignDefaultHighScores()
     {
         const uint32_t currentTime = HighscoreData::generateCompletionTime();
 
-        registerScoreCampaign( { "Antoine", "Roland", currentTime, 600, 600, 0 } );
-        registerScoreCampaign( { "Astra", "Archibald", currentTime, 650, 650, 0 } );
-        registerScoreCampaign( { "Agar", "Roland", currentTime, 700, 700, 0 } );
-        registerScoreCampaign( { "Vatawna", "Archibald", currentTime, 750, 750, 0 } );
-        registerScoreCampaign( { "Vesper", "Roland", currentTime, 800, 800, 0 } );
-        registerScoreCampaign( { "Ambrose", "Archibald", currentTime, 850, 850, 0 } );
-        registerScoreCampaign( { "Troyan", "Roland", currentTime, 900, 900, 0 } );
-        registerScoreCampaign( { "Jojosh", "Archibald", currentTime, 1000, 1000, 0 } );
-        registerScoreCampaign( { "Wrathmont", "Roland", currentTime, 2000, 2000, 0 } );
-        registerScoreCampaign( { "Maximus", "Archibald", currentTime, 3000, 3000, 0 } );
+        const std::string lang = fheroes2::getLanguageAbbreviation( fheroes2::getCurrentLanguage() );
+
+        registerScoreCampaign( { lang, _( "Antoine" ), "Roland", currentTime, 600, 600, 0 } );
+        registerScoreCampaign( { lang, _( "Astra" ), "Archibald", currentTime, 650, 650, 0 } );
+        registerScoreCampaign( { lang, _( "Agar" ), "Roland", currentTime, 700, 700, 0 } );
+        registerScoreCampaign( { lang, _( "Vatawna" ), "Archibald", currentTime, 750, 750, 0 } );
+        registerScoreCampaign( { lang, _( "Vesper" ), "Roland", currentTime, 800, 800, 0 } );
+        registerScoreCampaign( { lang, _( "Ambrose" ), "Archibald", currentTime, 850, 850, 0 } );
+        registerScoreCampaign( { lang, _( "Troyan" ), "Roland", currentTime, 900, 900, 0 } );
+        registerScoreCampaign( { lang, _( "Jojosh" ), "Archibald", currentTime, 1000, 1000, 0 } );
+        registerScoreCampaign( { lang, _( "Wrathmont" ), "Roland", currentTime, 2000, 2000, 0 } );
+        registerScoreCampaign( { lang, _( "Maximus" ), "Archibald", currentTime, 3000, 3000, 0 } );
     }
 }

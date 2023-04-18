@@ -37,9 +37,10 @@ namespace fheroes2
     {
     public:
         HighscoreData() = default;
-        HighscoreData( std::string playerName_, std::string scenarioName_, const uint32_t completionTime_, const uint32_t dayCount_, const uint32_t rating_,
-                       const uint32_t mapSeed_ )
-            : playerName( std::move( playerName_ ) )
+        HighscoreData( std::string languageAbbreviation_, std::string playerName_, std::string scenarioName_, const uint32_t completionTime_, const uint32_t dayCount_,
+                       const uint32_t rating_, const uint32_t mapSeed_ )
+            : languageAbbreviation( std::move( languageAbbreviation_ ) )
+            , playerName( std::move( playerName_ ) )
             , scenarioName( std::move( scenarioName_ ) )
             , completionTime( completionTime_ )
             , dayCount( dayCount_ )
@@ -63,6 +64,7 @@ namespace fheroes2
             return scenarioName == other.scenarioName && dayCount == other.dayCount && rating == other.rating && mapSeed == other.mapSeed;
         }
 
+        std::string languageAbbreviation;
         std::string playerName;
         std::string scenarioName;
         uint32_t completionTime{ 0 };
@@ -75,6 +77,8 @@ namespace fheroes2
         uint32_t mapSeed{ 0 };
 
         static uint32_t generateCompletionTime();
+
+        void loadV1( StreamBase & msg );
 
     private:
         friend StreamBase & operator<<( StreamBase &, const HighscoreData & );

@@ -55,6 +55,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
@@ -95,6 +96,8 @@ namespace
 
         for ( const fheroes2::HighscoreData & data : highScores ) {
             const fheroes2::FontType font = ( scoreIndex == selectedScoreIndex ) ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
+
+            const fheroes2::LanguageSwitcher languageSwitcher( fheroes2::getLanguageFromAbbreviation( data.languageAbbreviation ) );
 
             text.set( data.playerName, font );
             text.draw( offsetX + playerNameOffset, offsetY + initialHighScoreEntryOffsetY, display );
@@ -253,18 +256,21 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
         const uint32_t completionTime = fheroes2::HighscoreData::generateCompletionTime();
 
+        std::string lang = fheroes2::getLanguageAbbreviation( fheroes2::getCurrentLanguage() );
+
         if ( isCampaign ) {
             const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
             const uint32_t rating = getCampaignRating( campaignSaveData );
 
-            selectedEntryIndex = highScoreDataContainer.registerScoreCampaign(
-                { player, Campaign::getCampaignName( campaignSaveData.getCampaignID() ), completionTime, campaignSaveData.getDaysPassed(), rating, world.GetMapSeed() } );
+            selectedEntryIndex = highScoreDataContainer.registerScoreCampaign( { std::move( lang ), player,
+                Campaign::getCampaignName( campaignSaveData.getCampaignID() ), completionTime, campaignSaveData.getDaysPassed(), rating, world.GetMapSeed() } );
         }
         else {
             const uint32_t rating = GetGameOverScores();
             const uint32_t days = world.CountDay();
             selectedEntryIndex
-                = highScoreDataContainer.registerScoreStandard( { player, Settings::Get().CurrentFileInfo().name, completionTime, days, rating, world.GetMapSeed() } );
+                = highScoreDataContainer.registerScoreStandard(
+                    { std::move( lang ), player, Settings::Get().CurrentFileInfo().name, completionTime, days, rating, world.GetMapSeed() } );
         }
 
         highScoreDataContainer.save( highScoreDataPath );
