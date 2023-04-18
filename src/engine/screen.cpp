@@ -122,6 +122,7 @@ namespace
             return { { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } };
         }
 
+        // TODO: add resolutions which are close to the current screen aspect ratio.
         // Some operating systems do not work well with SDL so they return very limited number of high resolutions.
         // Populate missing resolutions into the list.
         const std::set<fheroes2::ResolutionInfo> possibleResolutions
