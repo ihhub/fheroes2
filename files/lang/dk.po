@@ -7,17 +7,17 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-13 05:15+0000\n"
-"PO-Revision-Date: 2023-01-25 17:06+0100\n"
+"PO-Revision-Date: 2023-04-16 20:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
-"Language: da_DK\n"
+"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Loco-Source-Locale: da_DK\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Loco-Parser: loco_parse_po\n"
 
 msgid ""
@@ -31,55 +31,61 @@ msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
+"NYT\n"
+"SPIL"
 
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
+"GEM\n"
+"SPIL"
 
 msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
+"INDLÆS\n"
+"SPIL"
 
 msgid "INFO"
-msgstr ""
+msgstr "INFO"
 
 msgid "QUIT"
-msgstr ""
+msgstr "AFSLUT"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "AFBRYD"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "ACCEPTER"
 
 msgid "DECLINE"
-msgstr ""
+msgstr "AFSLÅ"
 
 msgid "LEARN"
-msgstr ""
+msgstr "LÆR"
 
 msgid "TRADE"
-msgstr ""
+msgstr "HANDEL"
 
 msgid "YES"
-msgstr ""
+msgstr "JA"
 
 msgid "NO"
-msgstr ""
+msgstr "NEJ"
 
 msgid "EXIT"
-msgstr ""
+msgstr "GÅ"
 
 msgid "DISMISS"
-msgstr ""
+msgstr "AFSKEDIGE"
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "OPGRADER"
 
 msgid "RESTART"
-msgstr ""
+msgstr "GENSTART"
 
 msgid "HEROES"
 msgstr ""
@@ -90,19 +96,19 @@ msgid ""
 msgstr ""
 
 msgid "S"
-msgstr ""
+msgstr "S"
 
 msgid "M"
-msgstr ""
+msgstr "M"
 
 msgid "L"
-msgstr ""
+msgstr "L"
 
 msgid "X-L"
-msgstr ""
+msgstr "XL"
 
 msgid "ALL"
-msgstr ""
+msgstr "ALT"
 
 msgid "SELECT"
 msgstr ""
@@ -111,48 +117,59 @@ msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
+"STANDARD\n"
+"SPIL"
 
 msgid ""
 "CAMPAIGN\n"
 "GAME"
 msgstr ""
+"KAMPAGNE\n"
+"SPIL"
 
 msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
 msgstr ""
+"MULTI-\n"
+"PLAYER\n"
+"SPIL"
 
 msgid "CONFIG"
-msgstr ""
+msgstr "INDSTIL"
 
 msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
+"ORIGINAL\n"
+"KAMPAGNE"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
+"UDVIDELSES\n"
+"KAMPAGNE"
 
 msgid "HOT SEAT"
-msgstr ""
+msgstr "LOKALT"
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 SPILLERE"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 SPILLERE"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 SPILLERE"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 SPILLERE"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 SPILLERE"
 
 msgid "GIFT"
 msgstr "FORÆR"
@@ -161,16 +178,16 @@ msgid "guildWell|EXIT"
 msgstr ""
 
 msgid "DIFFICULTY"
-msgstr "SVÆRHEDSGRAD"
+msgstr "NIVEAU"
 
 msgid "MIN"
 msgstr "MIN"
 
 msgid "MAX"
-msgstr ""
+msgstr "MAKS"
 
 msgid "OKAY"
-msgstr ""
+msgstr "OKAY"
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -393,19 +410,19 @@ msgid "Shadow Cursor"
 msgstr "Skygge-markør"
 
 msgid "Audio"
-msgstr ""
+msgstr "Lyd"
 
 msgid "Settings"
-msgstr ""
+msgstr "Indstillinger"
 
 msgid "Configure"
-msgstr ""
+msgstr "Indstil"
 
 msgid "Hot Keys"
-msgstr ""
+msgstr "Genvejstaster"
 
 msgid "Damage Info"
-msgstr ""
+msgstr "Skadeinfo"
 
 msgid "Set the speed of combat actions and animations."
 msgstr "Indstil hastighed for kamphandlinger og animationer."
@@ -443,20 +460,19 @@ msgstr ""
 "lokation, eller ej."
 
 msgid "Change the audio settings of the game."
-msgstr ""
+msgstr "Ændr spillets lydindstillinger."
 
 msgid "Check and configure all the hot keys present in the game."
-msgstr ""
+msgstr "Tjek og indstil alle spillets nuværende genvejstaster."
 
-#, fuzzy
 msgid "Toggle to display damage information during the battle."
-msgstr "Vælg om kampens hærorden skal vises eller ej."
+msgstr "Vælg om kampens skadeinformationer skal vises eller ej."
 
 msgid "Exit this menu."
-msgstr ""
+msgstr "Forlad denne menu."
 
 msgid "Okay"
-msgstr ""
+msgstr "Okay"
 
 msgid "The enemy has surrendered!"
 msgstr "Fjenden har overgivet sig!"
@@ -551,7 +567,7 @@ msgid "Surrender"
 msgstr "Overgivelse"
 
 msgid "Cancel"
-msgstr "Anuller"
+msgstr "Afbryd"
 
 msgid "Hero Screen"
 msgstr "Helteskærm"
@@ -1407,230 +1423,229 @@ msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
 msgid "campaignBonus|Animate Dead"
-msgstr ""
+msgstr "Dødebesjæling"
 
 msgid "campaignBonus|Chain Lightning"
-msgstr ""
+msgstr "Kædelyn"
 
 msgid "campaignBonus|Fireblast"
-msgstr ""
+msgstr "Flammebrag"
 
 msgid "campaignBonus|Mass Curse"
-msgstr ""
+msgstr "Masseforbandelse"
 
 msgid "campaignBonus|Mass Haste"
-msgstr ""
+msgstr "Masseforhastning"
 
 msgid "campaignBonus|Mirror Image"
-msgstr ""
+msgstr "Spejlbillede"
 
 msgid "campaignBonus|Resurrect"
-msgstr ""
+msgstr "Genoplivelse"
 
 msgid "campaignBonus|Steelskin"
-msgstr ""
+msgstr "Stålhud"
 
 msgid "campaignBonus|Summon Earth"
-msgstr ""
+msgstr "Hidkald Jord-elemental"
 
 msgid "campaignBonus|View Heroes"
-msgstr ""
+msgstr "Vis helte"
 
 msgid "campaignBonus|Ballista"
-msgstr ""
+msgstr "Ballisten"
 
 msgid "campaignBonus|Black Pearl"
-msgstr ""
+msgstr "Den sorte perle"
 
 msgid "campaignBonus|Caster's Bracelet"
-msgstr ""
+msgstr "Besværgelsesarmbåndet"
 
 msgid "campaignBonus|Defender Helm"
-msgstr ""
+msgstr "Forsvarshjelmen"
 
 msgid "campaignBonus|Breastplate"
-msgstr ""
+msgstr "Brystpladen"
 
 msgid "campaignBonus|Dragon Sword"
-msgstr ""
+msgstr "Dragesværdet"
 
 msgid "campaignBonus|Fizbin Medal"
-msgstr ""
+msgstr "Fizbin-medaljen"
 
 msgid "campaignBonus|Foremost Scroll"
-msgstr ""
+msgstr "Yppersteskriftrullen"
 
-#, fuzzy
 msgid "campaignBonus|Gauntlets"
-msgstr "Avanceret Ørneblik"
+msgstr "Handsker"
 
 msgid "campaignBonus|Hideous Mask"
-msgstr ""
+msgstr "Den hæslige maske"
 
 msgid "campaignBonus|Mage's Ring"
-msgstr ""
+msgstr "Magikerens ring"
 
 msgid "campaignBonus|Major Scroll"
-msgstr ""
+msgstr "Den store skriftrulle"
 
 msgid "campaignBonus|Medal of Honor"
-msgstr ""
+msgstr "Æresmedaljen"
 
 msgid "campaignBonus|Medal of Valor"
-msgstr ""
+msgstr "Tapperhedsmedaljen"
 
 msgid "campaignBonus|Minor Scroll"
-msgstr ""
+msgstr "Den lille skriftrulle"
 
 msgid "campaignBonus|Nomad Boots"
-msgstr ""
+msgstr "Nomadens støvler"
 
 msgid "campaignBonus|Power Axe"
-msgstr ""
+msgstr "Kraftøksen"
 
 msgid "campaignBonus|Spiked Shield"
-msgstr ""
+msgstr "Pigskjoldet"
 
 msgid "campaignBonus|Stealth Shield"
-msgstr ""
+msgstr "Snigskjoldet"
 
 msgid "campaignBonus|Tax Lien"
-msgstr ""
+msgstr "Skattepant"
 
 msgid "campaignBonus|Thunder Mace"
-msgstr ""
+msgstr "Torden-morgenstjernen"
 
 msgid "campaignBonus|Traveler's Boots"
-msgstr ""
+msgstr "Traverens støvler"
 
 msgid "campaignBonus|White Pearl"
-msgstr ""
+msgstr "Den hvide perle"
 
 msgid "campaignBonus|Basic Archery"
-msgstr ""
+msgstr "Begynder skytte"
 
 msgid "campaignBonus|Advanced Archery"
-msgstr ""
+msgstr "Øvet skytte"
 
 msgid "campaignBonus|Expert Archery"
-msgstr ""
+msgstr "Ekspert skytte"
 
 msgid "campaignBonus|Basic Ballistics"
-msgstr ""
+msgstr "Begynder ballistik"
 
 msgid "campaignBonus|Advanced Ballistics"
-msgstr ""
+msgstr "Øvet ballistik"
 
 msgid "campaignBonus|Expert Ballistics"
-msgstr ""
+msgstr "Ekspert ballistik"
 
 msgid "campaignBonus|Basic Diplomacy"
-msgstr ""
+msgstr "Begynder diplomati"
 
 msgid "campaignBonus|Advanced Diplomacy"
-msgstr ""
+msgstr "Øvet diplomati"
 
 msgid "campaignBonus|Expert Diplomacy"
-msgstr ""
+msgstr "Ekspert diplomati"
 
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Begynder Ørneblik"
+msgstr "Begynder ørneblik"
 
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr "Avanceret Ørneblik"
+msgstr "Øvet ørneblik"
 
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr "Ekspert Ørneblik"
+msgstr "Ekspert ørneblik"
 
 msgid "campaignBonus|Basic Estates"
-msgstr ""
+msgstr "Begynder adelskab"
 
 msgid "campaignBonus|Advanced Estates"
-msgstr ""
+msgstr "Øvet adelskab"
 
 msgid "campaignBonus|Expert Estates"
-msgstr ""
+msgstr "Ekspert adelskab"
 
 msgid "campaignBonus|Basic Leadership"
-msgstr ""
+msgstr "Begynder lederskab"
 
 msgid "campaignBonus|Advanced Leadership"
-msgstr ""
+msgstr "Øvet lederskab"
 
 msgid "campaignBonus|Expert Leadership"
-msgstr ""
+msgstr "Ekspert lederskab"
 
 msgid "campaignBonus|Basic Logistics"
-msgstr ""
+msgstr "Begynder logistik"
 
 msgid "campaignBonus|Advanced Logistics"
-msgstr ""
+msgstr "Øvet logistik"
 
 msgid "campaignBonus|Expert Logistics"
-msgstr ""
+msgstr "Ekspert logistik"
 
 msgid "campaignBonus|Basic Luck"
-msgstr ""
+msgstr "Begynder held"
 
 msgid "campaignBonus|Advanced Luck"
-msgstr ""
+msgstr "Øvet held"
 
 msgid "campaignBonus|Expert Luck"
-msgstr ""
+msgstr "Ekspert held"
 
 msgid "campaignBonus|Basic Mysticism"
-msgstr ""
+msgstr "Begynder mysticisme"
 
 msgid "campaignBonus|Advanced Mysticism"
-msgstr ""
+msgstr "Øvet mysticisme"
 
 msgid "campaignBonus|Expert Mysticism"
-msgstr ""
+msgstr "Ekspert mysticisme"
 
 msgid "campaignBonus|Basic Navigation"
-msgstr ""
+msgstr "Begynder navigation"
 
 msgid "campaignBonus|Advanced Navigation"
-msgstr ""
+msgstr "Øvet navigation"
 
 msgid "campaignBonus|Expert Navigation"
-msgstr ""
+msgstr "Ekspert navigation"
 
 msgid "campaignBonus|Basic Necromancy"
-msgstr ""
+msgstr "Begynder nekromantik"
 
 msgid "campaignBonus|Advanced Necromancy"
-msgstr ""
+msgstr "Øvet nekromantik"
 
 msgid "campaignBonus|Expert Necromancy"
-msgstr ""
+msgstr "Ekspert nekromantik"
 
 msgid "campaignBonus|Basic Pathfinding"
-msgstr ""
+msgstr "Begynder stifinder"
 
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr ""
+msgstr "Øvet stifinder"
 
 msgid "campaignBonus|Expert Pathfinding"
-msgstr ""
+msgstr "Ekspert stifinder"
 
 msgid "campaignBonus|Basic Scouting"
-msgstr ""
+msgstr "Begynder opdager"
 
 msgid "campaignBonus|Advanced Scouting"
-msgstr ""
+msgstr "Øvet opdager"
 
 msgid "campaignBonus|Expert Scouting"
-msgstr ""
+msgstr "Ekspert opdager"
 
 msgid "campaignBonus|Basic Wisdom"
-msgstr ""
+msgstr "Begynder visdom"
 
 msgid "campaignBonus|Advanced Wisdom"
-msgstr ""
+msgstr "Øvet visdom"
 
 msgid "campaignBonus|Expert Wisdom"
-msgstr ""
+msgstr "Ekspert visdom"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -2198,7 +2213,7 @@ msgid "Tavern"
 msgstr "Værtshus"
 
 msgid "Shipyard"
-msgstr "Skipsvært"
+msgstr "Skipsværft"
 
 msgid "Well"
 msgstr "Brønd"
@@ -2312,7 +2327,7 @@ msgid ""
 msgstr ""
 
 msgid "Exit"
-msgstr ""
+msgstr "Gå"
 
 msgid "Click to show next town."
 msgstr ""
@@ -2333,10 +2348,10 @@ msgid "Town"
 msgstr ""
 
 msgid "Exit Castle"
-msgstr ""
+msgstr "Forlad borg"
 
 msgid "Exit Town"
-msgstr ""
+msgstr "Forlad by"
 
 msgid "Show Income"
 msgstr ""
@@ -2394,10 +2409,10 @@ msgid "Set garrison combat formation to 'Grouped'"
 msgstr ""
 
 msgid "Exit Castle Options"
-msgstr ""
+msgstr "Forlad borg-vindue"
 
 msgid "Castle Options"
-msgstr ""
+msgstr "Borg-vindue"
 
 msgid "Not enough resources to recruit creatures."
 msgstr ""
@@ -2460,7 +2475,7 @@ msgid "Digging"
 msgstr ""
 
 msgid "Exit this menu without doing anything."
-msgstr ""
+msgstr "Forlad denne menu, uden at gøre noget."
 
 msgid "Arena"
 msgstr ""
@@ -2543,106 +2558,106 @@ msgid "(Rate: %{percent})"
 msgstr ""
 
 msgid "off"
-msgstr ""
+msgstr "fra"
 
 msgid "Music"
-msgstr ""
+msgstr "Musik"
 
 msgid "Effects"
-msgstr ""
+msgstr "Effekter"
 
 msgid "MIDI"
-msgstr ""
+msgstr "MIDI"
 
 msgid "MIDI Expansion"
-msgstr ""
+msgstr "MIDI Udvidelse"
 
 msgid "External"
-msgstr ""
+msgstr "Ekstern"
 
 msgid "Music Type"
-msgstr ""
+msgstr "Musik type"
 
 msgid "3D Audio"
-msgstr ""
+msgstr "3D Lyd"
 
 msgid "Toggle ambient music level."
-msgstr ""
+msgstr "Indstil niveau for omgivelseslyde."
 
 msgid "Toggle foreground sounds level."
-msgstr ""
+msgstr "Indstil niveau for forgrundslyde."
 
 msgid "Change the type of music."
-msgstr ""
+msgstr "Ændr musikstil."
 
 msgid "Toggle 3D effects of foreground sounds."
-msgstr ""
+msgstr "Indstil 3D effekter for forgrundslyde."
 
 msgid "Build a new ship:"
-msgstr ""
+msgstr "Byg et nyt skib:"
 
 msgid "Resource cost:"
-msgstr ""
+msgstr "Resurseomkostninger:"
 
 msgid "Total: "
-msgstr ""
+msgstr "Total: "
 
 msgid "Need: "
-msgstr ""
+msgstr "Behov: "
 
 msgid "Load Game"
-msgstr ""
+msgstr "Indlæs spil"
 
 msgid "No save files to load."
-msgstr ""
+msgstr "Ingen gemte filer at indlæse."
 
 msgid "New Game"
-msgstr ""
+msgstr "Nyt spil"
 
 msgid "Start a single or multi-player game."
-msgstr ""
+msgstr "Start et single- eller multi-player spil."
 
 msgid "Load a previously saved game."
-msgstr ""
+msgstr "Indlæs et tidligere gemt spil."
 
 msgid "Save Game"
-msgstr ""
+msgstr "Gem spil"
 
 msgid "Save the current game."
-msgstr ""
+msgstr "Gem igangværende spil."
 
 msgid "Quit"
-msgstr ""
+msgstr "Afslut"
 
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr ""
+msgstr "Afslut Heroes of Might and Magic II."
 
 msgid "Language"
-msgstr ""
+msgstr "Sprog"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Grafik"
 
 msgid "Black & White"
-msgstr ""
+msgstr "Sort & Hvid"
 
 msgid "Mouse Cursor"
-msgstr ""
+msgstr "Musemarkør"
 
 msgid "Color"
-msgstr ""
+msgstr "Farve"
 
 msgid "Text Support"
-msgstr ""
+msgstr "Tekst support"
 
 msgid "Change the language of the game."
-msgstr ""
+msgstr "Ændr spillets sprogindstillinger."
 
 msgid "Select Game Language"
-msgstr ""
+msgstr "Vælg spillets sprog"
 
 msgid "Change the graphics settings of the game."
-msgstr ""
+msgstr "Ændr spillets grafikindstillinger."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
@@ -2940,16 +2955,16 @@ msgid ""
 msgstr ""
 
 msgid "File to Save:"
-msgstr ""
+msgstr "Fil som skal gemmes:"
 
 msgid "File to Load:"
-msgstr ""
+msgstr "Fil til indlæsning:"
 
 msgid "Click to save the current game."
-msgstr ""
+msgstr "Klik for at gemme igangværende spil."
 
 msgid "Click to load a previously saved game."
-msgstr ""
+msgstr "Klik for at indlæse et tidligere gemt spil."
 
 msgid "Are you sure you want to delete file:"
 msgstr ""
@@ -3116,9 +3131,8 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr ""
 
-#, fuzzy
 msgid "Slow"
-msgstr "Masseforsløvning"
+msgstr "Forsløvning"
 
 msgid "Normal"
 msgstr ""
@@ -3261,19 +3275,19 @@ msgid "Best Monster:"
 msgstr ""
 
 msgid "difficulty|Easy"
-msgstr ""
+msgstr "Let"
 
 msgid "difficulty|Normal"
-msgstr ""
+msgstr "Normal"
 
 msgid "difficulty|Hard"
-msgstr ""
+msgstr "Svær"
 
 msgid "difficulty|Expert"
-msgstr ""
+msgstr "Ekspert"
 
 msgid "difficulty|Impossible"
-msgstr ""
+msgstr "Umulig"
 
 msgid "and more..."
 msgstr ""
@@ -3323,7 +3337,7 @@ msgid "Are you sure you want to restart this scenario?"
 msgstr ""
 
 msgid "Campaign Scenario loading failure"
-msgstr ""
+msgstr "Indlæsningsfejl af kampagne-scenarie"
 
 msgid "Please make sure that campaign files are correct and present."
 msgstr ""
@@ -3816,10 +3830,10 @@ msgstr ""
 
 #, fuzzy
 msgid "The save file is corrupted."
-msgstr "Spejlbilledet er skabt."
+msgstr "Det gemte spil er korrupt."
 
 msgid "Unsupported save format: "
-msgstr ""
+msgstr "Ikke-understøttet gem-format: "
 
 msgid "Current game version: "
 msgstr ""
@@ -3828,15 +3842,17 @@ msgid "Last supported version: "
 msgstr ""
 
 msgid "This file contains a save with an invalid game type."
-msgstr ""
+msgstr "Denne fil indeholder et gemt spil af en invalid spiltype."
 
 msgid ""
 "This file was saved for a \"The Price of Loyalty\" map, but the "
 "corresponding game assets have not been provided to the engine."
 msgstr ""
+"Denne fil blev gemt som et \"The Price of Loyalty\" kort, men de tilsvarende "
+"spilaktiver er ikke blevet leveret til spilmotoren."
 
 msgid "This saved game is localized to '"
-msgstr ""
+msgstr "Dette gemte spil er lokaliseret til '"
 
 msgid "' language, but the current language of the game is '"
 msgstr ""
@@ -3850,7 +3866,7 @@ msgid ""
 msgstr ""
 
 msgid "Cancel back to the main menu."
-msgstr ""
+msgstr "Afbryd og gå tilbage til hovedmenuen."
 
 msgid "A single player game playing out a single map."
 msgstr ""
@@ -3903,6 +3919,7 @@ msgstr ""
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
+"Afslut Heroes of Might and Magic II og vend tilbage til operativsystemet."
 
 msgid "Credits"
 msgstr ""
@@ -3961,7 +3978,7 @@ msgid "Battle Only"
 msgstr ""
 
 msgid "Setup and play a battle without loading any map."
-msgstr ""
+msgstr "Opsæt og spil en kamp uden at indlæse et kort."
 
 msgid "2 Players"
 msgstr ""
@@ -4152,7 +4169,7 @@ msgid ""
 msgstr ""
 
 msgid "Click to accept these settings and start a new game."
-msgstr ""
+msgstr "Klik for at acceptere disse indstillinger og start et nyt spil."
 
 msgid "Click to return to the main menu."
 msgstr ""
@@ -4255,6 +4272,8 @@ msgid ""
 "Bring up the file options menu, allowing you to load, save, start a new game "
 "or quit."
 msgstr ""
+"Frembring filindstillingsmenuen, som tillader dig at indlæse, gemme, starte "
+"et nyt spil eller afslutte."
 
 msgid "File Options"
 msgstr ""
@@ -4267,13 +4286,13 @@ msgid ""
 msgstr ""
 
 msgid "Are you sure you want to quit?"
-msgstr ""
+msgstr "Er du sikker på, om du vil afslutte?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
 
 msgid "Are you sure you want to overwrite the save with this name?"
-msgstr ""
+msgstr "Er du sikker på, om du vil overskrive det gemte spil med dette navn?"
 
 msgid "Game saved successfully."
 msgstr ""
@@ -4284,6 +4303,8 @@ msgstr ""
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
 msgstr ""
+"Er du sikker på, om du vil indlæse et nyt spil? (Dit nuværende spil vil gå "
+"tabt.)"
 
 msgid "Try looking on land!!!"
 msgstr ""
@@ -4687,7 +4708,7 @@ msgid " gives you maximum luck"
 msgstr ""
 
 msgid "You cannot pick up this artifact, you already have a full load!"
-msgstr ""
+msgstr "Du kan ikke opsamle denne artefakt, da du allerede har fuld last!"
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr ""
@@ -5757,7 +5778,7 @@ msgid "Set army combat formation to 'Grouped'"
 msgstr ""
 
 msgid "Exit Hero Screen"
-msgstr ""
+msgstr "Forlad helteskærm"
 
 msgid "You cannot dismiss a hero in a castle"
 msgstr ""
@@ -5883,7 +5904,7 @@ msgid "skill|Basic"
 msgstr "Begynder"
 
 msgid "skill|Advanced"
-msgstr "Avanceret"
+msgstr "Øvet"
 
 msgid "skill|Expert"
 msgstr "Ekspert"
@@ -5901,157 +5922,157 @@ msgid "Scouting"
 msgstr ""
 
 msgid "Diplomacy"
-msgstr ""
+msgstr "Diplomati"
 
 msgid "Navigation"
-msgstr ""
+msgstr "Navigation"
 
 msgid "Leadership"
-msgstr ""
+msgstr "Lederskab"
 
 msgid "Wisdom"
-msgstr ""
+msgstr "Visdom"
 
 msgid "Mysticism"
 msgstr ""
 
 msgid "Ballistics"
-msgstr ""
+msgstr "Ballistik"
 
 msgid "Eagle Eye"
 msgstr "Ørneblik"
 
 msgid "Necromancy"
-msgstr ""
+msgstr "Nekromantik"
 
 msgid "Estates"
 msgstr ""
 
 msgid "Advanced Archery"
-msgstr "Avanceret Skytte"
+msgstr "Øvet skytte"
 
 msgid "Advanced Pathfinding"
-msgstr "Avanceret Stifinder"
+msgstr "Øvet stifinder"
 
 msgid "Basic Archery"
-msgstr "Begynder Skytte"
+msgstr "Begynder skytte"
 
 msgid "Basic Pathfinding"
-msgstr "Begynder Stifinder"
+msgstr "Begynder stifinder"
 
 msgid "Expert Pathfinding"
-msgstr "Ekspert Stifinder"
+msgstr "Ekspert stifinder"
 
 msgid "Advanced Logistics"
-msgstr "Avanceret Logistik"
+msgstr "Øvet logistik"
 
 msgid "Basic Logistics"
-msgstr "Begynder Logistik"
+msgstr "Begynder logistik"
 
 msgid "Basic Scouting"
-msgstr "Begynder Opdager"
+msgstr "Begynder opdager"
 
 msgid "Expert Archery"
-msgstr "Ekspert Skytte"
+msgstr "Ekspert skytte"
 
 msgid "Expert Logistics"
-msgstr "Ekspert Logistik"
+msgstr "Ekspert logistik"
 
 msgid "Advanced Diplomacy"
-msgstr "Avanceret Diplomatik"
+msgstr "Øvet diplomati"
 
 msgid "Advanced Scouting"
-msgstr "Avanceret Opdager"
+msgstr "Øvet opdager"
 
 msgid "Basic Diplomacy"
-msgstr "Begynder Diplomatik"
+msgstr "Begynder diplomati"
 
 msgid "Expert Diplomacy"
-msgstr "Ekspert Diplomatik"
+msgstr "Ekspert diplomati"
 
 msgid "Expert Scouting"
-msgstr "Ekspert Opdager"
+msgstr "Ekspert opdager"
 
 msgid "Advanced Leadership"
-msgstr "Avanceret Lederskab"
+msgstr "Øvet lederskab"
 
 msgid "Advanced Navigation"
-msgstr "Avanceret Navigation"
+msgstr "Øvet navigation"
 
 msgid "Basic Leadership"
-msgstr "Begynder Lederskab"
+msgstr "Begynder lederskab"
 
 msgid "Basic Navigation"
-msgstr "Begynder Navigation"
+msgstr "Begynder navigation"
 
 msgid "Expert Navigation"
-msgstr "Ekspert Navigation"
+msgstr "Ekspert navigation"
 
 msgid "Advanced Wisdom"
-msgstr "Avanceret Visdom"
+msgstr "Øvet visdom"
 
 msgid "Basic Mysticism"
-msgstr "Begynder Mysticisme"
+msgstr "Begynder mysticisme"
 
 msgid "Basic Wisdom"
-msgstr "Begynder Visdom"
+msgstr "Begynder visdom"
 
 msgid "Expert Leadership"
-msgstr "Ekspert Lederskab"
+msgstr "Ekspert lederskab"
 
 msgid "Expert Wisdom"
-msgstr "Ekspert Visdom"
+msgstr "Ekspert visdom"
 
 msgid "Advanced Luck"
-msgstr "Avanceret Held"
+msgstr "Øvet held"
 
 msgid "Advanced Mysticism"
-msgstr "Avanceret Mysticisme"
+msgstr "Øvet mysticisme"
 
 msgid "Basic Luck"
-msgstr "Begynder Held"
+msgstr "Begynder held"
 
 msgid "Expert Luck"
-msgstr "Ekspert Held"
+msgstr "Ekspert held"
 
 msgid "Expert Mysticism"
-msgstr "Ekspert Mysticisme"
+msgstr "Ekspert mysticisme"
 
 msgid "Advanced Ballistics"
-msgstr "Avanceret Ballistik"
+msgstr "Øvet ballistik"
 
 msgid "Advanced Eagle Eye"
-msgstr "Avanceret Ørneblik"
+msgstr "Øvet ørneblik"
 
 msgid "Basic Ballistics"
-msgstr "Begynder Ballistik"
+msgstr "Begynder ballistik"
 
 msgid "Basic Eagle Eye"
-msgstr "Begynder Ørneblik"
+msgstr "Begynder ørneblik"
 
 msgid "Expert Ballistics"
-msgstr "Ekspert Ballistik"
+msgstr "Ekspert ballistik"
 
 msgid "Advanced Necromancy"
-msgstr "Avanceret Nekromantik"
+msgstr "Øvet nekromantik"
 
 msgid "Basic Estates"
-msgstr "Begynder Adelskab"
+msgstr "Begynder adelskab"
 
 msgid "Basic Necromancy"
-msgstr "Begynder Nekromantik"
+msgstr "Begynder nekromantik"
 
 msgid "Expert Eagle Eye"
-msgstr "Ekspert Ørneblik"
+msgstr "Ekspert ørneblik"
 
 msgid "Expert Necromancy"
-msgstr "Ekspert Nekromantik"
+msgstr "Ekspert nekromantik"
 
 msgid "Advanced Estates"
-msgstr "Avanceret Adelskab"
+msgstr "Øvet adelskab"
 
 msgid "Expert Estates"
-msgstr "Ekspert Adelskab"
+msgstr "Ekspert adelskab"
 
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
@@ -6965,16 +6986,16 @@ msgid "Rangers"
 msgstr "Skovriddere"
 
 msgid "Pikeman"
-msgstr "Geddemand"
+msgstr "Pikenér"
 
 msgid "Pikemen"
-msgstr "Geddemænd"
+msgstr "Pikenérer"
 
 msgid "Veteran Pikeman"
-msgstr "Veteran geddemand"
+msgstr "Veteran pikenér"
 
 msgid "Veteran Pikemen"
-msgstr "Veteran geddemænd"
+msgstr "Veteran pikenérer"
 
 msgid "Swordsman"
 msgstr "Sværdkæmper"
@@ -8701,7 +8722,7 @@ msgid "Resurrects creatures from a damaged or dead unit until end of combat."
 msgstr ""
 
 msgid "Resurrect True"
-msgstr "Sand Genoplivelse"
+msgstr "Sand genoplivelse"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
 msgstr ""
@@ -8762,7 +8783,7 @@ msgstr ""
 "Stenskin."
 
 msgid "Steelskin"
-msgstr "Stålskind"
+msgstr "Stålhud"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr ""
@@ -8796,7 +8817,9 @@ msgid "Prevents harmful magic against the selected creatures."
 msgstr ""
 
 msgid "Dispel Magic"
-msgstr "Magiophævelse"
+msgstr ""
+"Magi\n"
+"ophævelse"
 
 msgid "Removes all magic spells from a single target."
 msgstr ""
@@ -8889,7 +8912,9 @@ msgid ""
 msgstr ""
 
 msgid "Dragon Slayer"
-msgstr "Dragedræber"
+msgstr ""
+"Drage\n"
+"dræber"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
 msgstr "Øger i høj grad en enheds angrebsevne mod drager."
@@ -8901,7 +8926,7 @@ msgid "Increases a unit's attack skill."
 msgstr "Øger en trops angrebsevne."
 
 msgid "Animate Dead"
-msgstr "Animer døde"
+msgstr "Dødebesjæling"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
 msgstr ""
