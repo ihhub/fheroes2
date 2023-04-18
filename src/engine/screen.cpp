@@ -140,18 +140,20 @@ namespace
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
         // Scaling is available only on SDL 2.
-        if ( resolutions.size() < 2 ) {
-            return { resolutions.begin(), resolutions.end() };
-        }
-
         std::sort( resolutions.begin(), resolutions.end() );
 
         // Wide screen devices support much higher resolutions but items on such resolutions are too tiny.
         // In order to improve user experience on these devices we are adding a special non-standard resolution.
         const fheroes2::Size biggestResolution{ resolutions.back().gameWidth, resolutions.back().gameHeight };
-        resolutions.emplace_back( biggestResolution.width * fheroes2::Display::DEFAULT_HEIGHT / biggestResolution.height, fheroes2::Display::DEFAULT_HEIGHT,
-                                  biggestResolution.width, biggestResolution.height );
-        std::sort( resolutions.begin(), resolutions.end() );
+        if ( biggestResolution.width > fheroes2::Display::DEFAULT_WIDTH && biggestResolution.height > fheroes2::Display::DEFAULT_HEIGHT ) {
+            resolutions.emplace_back( biggestResolution.width * fheroes2::Display::DEFAULT_HEIGHT / biggestResolution.height, fheroes2::Display::DEFAULT_HEIGHT,
+                                      biggestResolution.width, biggestResolution.height );
+            std::sort( resolutions.begin(), resolutions.end() );
+        }
+
+        if ( resolutions.size() < 2 ) {
+            return { resolutions.begin(), resolutions.end() };
+        }
 
         // Add resolutions with scale factor. No need to run through the newly added elements so we remember the size of the array.
         const size_t resolutionCountBefore = resolutions.size();
@@ -162,6 +164,11 @@ namespace
 
             for ( size_t biggerId = currentId + 1; biggerId < resolutionCountBefore; ++biggerId ) {
                 assert( resolutions[biggerId].gameWidth > 0 && resolutions[biggerId].gameHeight > 0 );
+
+                if ( resolutions[biggerId].screenWidth != resolutions[biggerId].gameWidth || resolutions[biggerId].screenHeight != resolutions[biggerId].gameHeight ) {
+                    // This resolution has scaling. Ignore it.
+                    continue;
+                }
 
                 if ( ( resolutions[biggerId].gameWidth % resolutions[currentId].gameWidth ) == 0
                      && ( resolutions[biggerId].gameHeight % resolutions[currentId].gameHeight ) == 0
