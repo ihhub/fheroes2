@@ -193,7 +193,6 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         // Unable to load the file. Let's populate with the default values.
         highScoreDataContainer.populateStandardDefaultHighScores();
         highScoreDataContainer.populateCampaignDefaultHighScores();
-        highScoreDataContainer.save( highScoreDataPath );
     }
 
     const bool isAfterGameCompletion = ( ( gameResult.GetResult() & GameOver::WINS ) != 0 );

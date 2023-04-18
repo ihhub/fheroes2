@@ -162,6 +162,12 @@ namespace fheroes2
             hdata >> _highScoresStandard >> _highScoresCampaign;
         }
 
+        if ( hdata.fail() ) {
+            _highScoresStandard.clear();
+            _highScoresCampaign.clear();
+            return false;
+        }
+
         // Since the introduction of campaign difficulty we need to calculate rating of a campaign completion.
         // Before the change rating for campaigns was always 0. We need to set it to the number of days.
         for ( fheroes2::HighscoreData & data : _highScoresCampaign ) {
@@ -184,7 +190,7 @@ namespace fheroes2
             _highScoresCampaign.resize( highscoreMaximumEntries );
         }
 
-        return !hdata.fail();
+        return true;
     }
 
     bool HighScoreDataContainer::save( const std::string & fileName ) const
