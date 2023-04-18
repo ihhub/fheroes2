@@ -111,7 +111,7 @@ namespace fheroes2
 
     void HighscoreData::loadV1( StreamBase & msg )
     {
-        languageAbbreviation = "en";
+        languageAbbreviation = fheroes2::getLanguageAbbreviation( fheroes2::SupportedLanguage::English );
 
         msg >> playerName >> scenarioName >> completionTime >> dayCount >> rating >> mapSeed;
     }
