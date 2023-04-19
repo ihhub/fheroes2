@@ -46,6 +46,7 @@
 #include "maps.h"
 #include "maps_objects.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "mp2_helper.h"
@@ -722,7 +723,7 @@ void World::ProcessNewMap()
         case MP2::OBJ_TROLL_BRIDGE:
         case MP2::OBJ_DRAGON_CITY:
         case MP2::OBJ_CITY_OF_DEAD:
-            tile.QuantityUpdate();
+            updateObjectInfoTile( tile, true );
             break;
 
         case MP2::OBJ_WATER_ALTAR:
@@ -730,8 +731,8 @@ void World::ProcessNewMap()
         case MP2::OBJ_FIRE_ALTAR:
         case MP2::OBJ_EARTH_ALTAR:
         case MP2::OBJ_BARROW_MOUNDS:
-            tile.QuantityReset();
-            tile.QuantityUpdate();
+            resetObjectInfoOnTile( tile );
+            updateObjectInfoTile( tile, true );
             break;
 
         case MP2::OBJ_HEROES: {

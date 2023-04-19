@@ -9,7 +9,6 @@
     <string name="activity_toolset_extract_homm2_assets_btn_text">Wypakuj pliki oryginalnej gry HoMM2</string>
     <string name="activity_toolset_download_homm2_demo_btn_text">Pobierz wersję demo</string>
     <string name="activity_toolset_save_file_manager_btn_text">Zapisy gier</string>
-    <string name="activity_toolset_extract_homm2_assets_chooser_title">Wskaż plik ZIP z danymi oryginalnej gry</string>
     <string name="activity_toolset_last_task_status_lbl_text_completed_successfully">Zakończono sukcesem</string>
     <string name="activity_toolset_last_task_status_lbl_text_no_assets_found">Akcja zakończona sukcesem, ale nie znaleziono plików oryginalnej gry.</string>
     <string name="activity_toolset_last_task_status_lbl_text_failed">Napotkano błąd w czasie operacji: %s</string>

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-13 05:15+0000\n"
+"POT-Creation-Date: 2023-04-19 02:55+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4544,6 +4544,69 @@ msgid ""
 msgstr ""
 "%{color} играч, теоите герои те изоставят и ти си прогонени от тази земя."
 
+msgid "Lord Kilburn"
+msgstr "Лорд Килбърн"
+
+msgid "Tsabu"
+msgstr "Сабу"
+
+#, fuzzy
+msgid "Sir Galant"
+msgstr "Сър Галант"
+
+msgid "Thundax"
+msgstr "Тъндакс"
+
+#, fuzzy
+msgid "Lord Haart"
+msgstr "Лорд Холтън"
+
+msgid "Ariel"
+msgstr "Ариел"
+
+msgid "Rebecca"
+msgstr "Ребека"
+
+msgid "Sandro"
+msgstr "Сандро"
+
+msgid "Crodo"
+msgstr "Кродо"
+
+#, fuzzy
+msgid "Barock"
+msgstr "Барок"
+
+msgid "Antoine"
+msgstr ""
+
+msgid "Astra"
+msgstr "Астра"
+
+msgid "Agar"
+msgstr "Егар"
+
+msgid "Vatawna"
+msgstr "Ватуна"
+
+msgid "Vesper"
+msgstr "Веспер"
+
+msgid "Ambrose"
+msgstr "Амброуз"
+
+msgid "Troyan"
+msgstr "Траяна"
+
+msgid "Jojosh"
+msgstr "Джоджош"
+
+msgid "Wrathmont"
+msgstr "Вратмунд"
+
+msgid "Maximus"
+msgstr "Максимус"
+
 msgid "Next Hero"
 msgstr "Следващият герой"
 
@@ -4855,23 +4918,14 @@ msgstr "Ектор"
 msgid "Gwenneth"
 msgstr "Гуенет"
 
-msgid "Lord Kilburn"
-msgstr "Лорд Килбърн"
-
 msgid "Sir Gallant"
 msgstr "Сър Галант"
 
 msgid "Tyro"
 msgstr "Тайро"
 
-msgid "Ambrose"
-msgstr "Амброуз"
-
 msgid "Dimitry"
 msgstr "Димитрий"
-
-msgid "Maximus"
-msgstr "Максимус"
 
 msgid "Ruby"
 msgstr "Руби"
@@ -4885,12 +4939,6 @@ msgstr "Финиас"
 msgid "Jezebel"
 msgstr "Джезабел"
 
-msgid "Jojosh"
-msgstr "Джоджош"
-
-msgid "Thundax"
-msgstr "Тъндакс"
-
 msgid "Atlas"
 msgstr "Атлас"
 
@@ -4900,29 +4948,11 @@ msgstr "Ергон"
 msgid "Jaclyn"
 msgstr "Жаклин"
 
-msgid "Tsabu"
-msgstr "Сабу"
-
-msgid "Astra"
-msgstr "Астра"
-
 msgid "Gem"
 msgstr "Джем"
 
 msgid "Natasha"
 msgstr "Наташа"
-
-msgid "Rebecca"
-msgstr "Ребека"
-
-msgid "Troyan"
-msgstr "Траяна"
-
-msgid "Vatawna"
-msgstr "Ватуна"
-
-msgid "Ariel"
-msgstr "Ариел"
 
 msgid "Carlawn"
 msgstr "Карлон"
@@ -4936,23 +4966,11 @@ msgstr "Ери"
 msgid "Barok"
 msgstr "Барок"
 
-msgid "Crodo"
-msgstr "Кродо"
-
 msgid "Kastore"
 msgstr "Кастор"
 
-msgid "Vesper"
-msgstr "Веспер"
-
-msgid "Agar"
-msgstr "Егар"
-
 msgid "Falagar"
 msgstr "Фалагар"
-
-msgid "Wrathmont"
-msgstr "Вратмунд"
 
 msgid "Dawn"
 msgstr "Доон"
@@ -5001,9 +5019,6 @@ msgstr "Силия"
 
 msgid "Roxana"
 msgstr "Роксана"
-
-msgid "Sandro"
-msgstr "Сандро"
 
 msgid "Lord Corlagon"
 msgstr "Лорд Корлагон"

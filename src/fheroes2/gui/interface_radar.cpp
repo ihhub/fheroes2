@@ -40,6 +40,7 @@
 #include "localevent.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "players.h"
 #include "screen.h"
@@ -324,7 +325,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
             case MP2::OBJ_SAWMILL:
                 // TODO: Why Lighthouse is in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {
-                    fillColor = GetPaletteIndexFromColor( tile.QuantityColor() );
+                    fillColor = GetPaletteIndexFromColor( getColorFromTile( tile ) );
                     break;
                 }
                 continue;
@@ -336,7 +337,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
                 if ( visibleTile || revealMines ) {
                     const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
                     if ( mainTileIndex >= 0 ) {
-                        fillColor = GetPaletteIndexFromColor( world.GetTiles( mainTileIndex ).QuantityColor() );
+                        fillColor = GetPaletteIndexFromColor( getColorFromTile( world.GetTiles( mainTileIndex ) ) );
                         break;
                     }
                 }
