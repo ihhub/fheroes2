@@ -189,8 +189,12 @@ namespace
         ratingText.add( { std::to_string( score ), fheroes2::FontType::normalWhite() } );
         ratingText.add( { _( "\n\nRating:\n" ), fheroes2::FontType::normalWhite() } );
         ratingText.add( { fheroes2::HighScoreDataContainer::getMonsterByRating( score ).GetName(), fheroes2::FontType::normalWhite() } );
-        Video::Subtitle ratingSubtitle( ratingText, 5000, 50000, 140 );
+
+        // Show results from the 5th second until end (forever) and set maximum width to 140 to fit the black area.
+        Video::Subtitle ratingSubtitle( ratingText, 5000, UINT32_MAX, 140 );
+        // Set position to render results over the black rectangle of burned picture in WIN.SMK video.
         ratingSubtitle.setPosition( { 405, 110 } );
+
         return ratingSubtitle;
     }
 }
@@ -390,7 +394,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     res = fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO;
                 }
                 else {
-                    std::vector<Video::Subtitle> gameResults{ std::move( standardGameResults() ) };
+                    std::vector<Video::Subtitle> gameResults{ standardGameResults() };
 
                     AudioManager::ResetAudio();
                     Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, gameResults, true );
@@ -469,7 +473,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
             if ( multiplayerResult & GameOver::WINS ) {
                 DialogWins( multiplayerResult );
 
-                std::vector<Video::Subtitle> gameResults{ std::move( standardGameResults() ) };
+                std::vector<Video::Subtitle> gameResults{ standardGameResults() };
 
                 AudioManager::ResetAudio();
                 Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, gameResults, true );

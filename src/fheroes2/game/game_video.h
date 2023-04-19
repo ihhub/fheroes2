@@ -28,7 +28,7 @@
 #include "image.h"
 #include "math_base.h"
 #include "screen.h"
-#include "ui_text.h"
+#include "ui_text.h" // IWYU pragma: keep
 
 namespace Video
 {
@@ -67,5 +67,6 @@ namespace Video
     // Returns false if the video is not present or it is corrupted.
     bool ShowVideo( const std::string & fileName, const VideoAction action, std::vector<Subtitle> & subtitles, const bool fadeColorsOnEnd = false );
 
+    // Returns false if the video is not present or it is corrupted.
     bool ShowVideo( const std::string & fileName, const VideoAction action, const bool fadeColorsOnEnd = false );
 }
