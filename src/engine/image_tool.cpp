@@ -200,14 +200,14 @@ namespace fheroes2
                 return false;
             }
 
-            assert( surface->format->BytesPerPixel == 4 );
+            assert( SDL_MUSTLOCK( surface.get() ) == SDL_FALSE && surface->format->BytesPerPixel == 4 );
 #else
             // With SDL1, we just use the loaded SDL_Surface as is and hope for the best
             surface = std::move( loadedSurface );
 #endif
         }
 
-        assert( surface );
+        assert( surface && SDL_MUSTLOCK( surface.get() ) == SDL_FALSE );
 
         // TODO: with SDL2 we can use specific color format of SDL_Surface, therefore, most of this code will not be needed
         if ( surface->format->BytesPerPixel == 1 ) {
