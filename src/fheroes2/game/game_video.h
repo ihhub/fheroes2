@@ -28,7 +28,6 @@
 #include "image.h"
 #include "math_base.h"
 #include "screen.h"
-#include "ui_text.h"
 
 namespace Video
 {

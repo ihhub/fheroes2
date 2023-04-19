@@ -20,6 +20,7 @@
 
 #include "game_video.h"
 
+#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
@@ -39,6 +40,7 @@
 #include "smk_decoder.h"
 #include "system.h"
 #include "timing.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 
 namespace

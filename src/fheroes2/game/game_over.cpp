@@ -23,7 +23,6 @@
 
 #include "game_over.h"
 
-#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <utility>
