@@ -138,11 +138,6 @@ namespace
 
         screenRestorer.changePalette( originalPalette );
     }
-
-    void SubtitleImage::blitSubtitles( fheroes2::Image & output, const fheroes2::Rect & frameRoi ) const
-    {
-        fheroes2::Blit( _subtitleImage, 0, 0, output, frameRoi.x + _position.x, frameRoi.y + _position.y, _subtitleImage.width(), _subtitleImage.height() );
-    }
 }
 
 namespace Video
@@ -236,19 +231,6 @@ namespace Video
         video.getNextFrame( display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, prevPalette );
         screenRestorer.changePalette( prevPalette.data() );
 
-        // Prepare the subtitles.
-        std::vector<SubtitleImage> subtitleImages;
-        for ( Video::Subtitle & subtitle : subtitles ) {
-            if ( subtitle.getStartFrame( delay ) == 0 ) {
-                // Generate subtitle images.
-                SubtitleImage subtitleImage = subtitle.makeSubtitleImage( delay );
-                if ( subtitleImages.empty() ) {
-                    subtitleImages.push_back( std::move( subtitleImage ) );
-                }
-                // TODO: Check the endFrame and put new subtitles in place that endFrame's will go in decimation order.
-            }
-        }
-
         LocalEvent & le = LocalEvent::Get();
 
         Game::passCustomAnimationDelay( delay );
@@ -294,23 +276,10 @@ namespace Video
                         std::swap( prevPalette, palette );
                     }
 
-                    for ( Video::Subtitle & subtitle : subtitles ) {
-                        if ( subtitle.getStartFrame( delay ) == currentFrame ) {
-                            // Generate subtitle images.
-                            SubtitleImage subtitleImage = subtitle.makeSubtitleImage( delay );
-                            if ( subtitleImages.empty() ) {
-                                subtitleImages.push_back( std::move( subtitleImage ) );
-                            }
-                            // TODO: Check the endFrame and put new subtitles in place that endFrame's will go in decimation order.
-                        }
-                    }
-
-                    for ( const SubtitleImage & subtitle : subtitleImages ) {
-                        if ( subtitle.needRender( currentFrame ) ) {
-                            // TODO: make a function to adopt subtitles image for the changed palette colors when palette changes.
+                    for ( const Video::Subtitle & subtitle : subtitles ) {
+                        if ( subtitle.needRender( currentFrame * delay ) ) {
                             subtitle.blitSubtitles( display, frameRoi );
                         }
-                        // TODO: pop SubtitleImage if !needRender.
                     }
                 }
                 else if ( action != VideoAction::WAIT_FOR_USER_INPUT ) {
@@ -330,39 +299,37 @@ namespace Video
         return true;
     }
 
-    Subtitle::Subtitle( const fheroes2::Text & subtitleText, const uint32_t startTimeMS, const uint32_t durationMS /* = UINT32_MAX */ )
+    Subtitle::Subtitle( const fheroes2::TextBase & subtitleText, const uint32_t startTimeMS, const uint32_t durationMS /* = UINT32_MAX */,
+                        const int32_t maxWidth /* = fheroes2::Display::DEFAULT_WIDTH */ )
         : _startTimeMS( startTimeMS )
         , _durationMS( durationMS )
     {
-        _text.add( subtitleText );
-        // TODO: Calculate the subtitles position and maximum width by screen size.
-    }
-
-    SubtitleImage Subtitle::makeSubtitleImage( const uint32_t renderDelayMS )
-    {
-        const int32_t textWidth = _text.width( _maxWidth );
+        const int32_t textWidth = subtitleText.width( maxWidth );
         // We add extra 1 to have space for contour.
-        fheroes2::Image subtitle{ textWidth + 1, _text.height( _maxWidth ) + 1 };
-        subtitle.reset();
+        _subtitleImage.resize( textWidth + 1, subtitleText.height( maxWidth ) + 1 );
+        _subtitleImage.reset();
 
         // Draw text and remove all shadow data is it could not be properly applied to video palette.
         // We use the black color with id = 36 so no shadow will be applied to it.
         const uint8_t blackColor = 36;
-        subtitle.fill( blackColor );
+        _subtitleImage.fill( blackColor );
 
         // At the left and bottom there is space for contour left by original font shadows, we leave 1 extra pixel from the right and top.
-        _text.draw( 0, 1, textWidth, subtitle );
-        fheroes2::ReplaceColorIdByTransformId( subtitle, blackColor, 1 );
+        subtitleText.draw( 0, 1, textWidth, _subtitleImage );
+        fheroes2::ReplaceColorIdByTransformId( _subtitleImage, blackColor, 1 );
         // Add black contour to the text.
-        fheroes2::Blit( fheroes2::CreateContour( subtitle, blackColor ), subtitle );
+        fheroes2::Blit( fheroes2::CreateContour( _subtitleImage, blackColor ), _subtitleImage );
 
-        // If duration is set to show until video end.
-        if ( _durationMS == UINT32_MAX ) {
-            return { subtitle, _position, UINT32_MAX };
-        }
+        // This is made to avoid overflow when calculating the end frame.
+        _durationMS = std::min( _durationMS, UINT32_MAX - _startTimeMS );
 
-        const uint32_t endFrame = ( _startTimeMS + _durationMS ) / renderDelayMS;
+        // Position subtitles at the bottom center by using default screen size (it is currently equal to video size).
+        _position.x = ( fheroes2::Display::DEFAULT_WIDTH - _subtitleImage.width() ) / 2;
+        _position.y = fheroes2::Display::DEFAULT_HEIGHT - _subtitleImage.height();
+    }
 
-        return { subtitle, _position, endFrame };
+    void Subtitle::blitSubtitles( fheroes2::Image & output, const fheroes2::Rect & frameRoi ) const
+    {
+        fheroes2::Blit( _subtitleImage, 0, 0, output, frameRoi.x + _position.x, frameRoi.y + _position.y, _subtitleImage.width(), _subtitleImage.height() );
     }
 }
