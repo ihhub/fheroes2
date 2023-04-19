@@ -1012,15 +1012,7 @@ void Battle::Unit::PostAttackAction()
         }
     }
 
-    // clean berserker spell
-    removeAffection( SP_BERSERKER );
-
-    // clean hypnotize spell
-    removeAffection( SP_HYPNOTIZE );
-
-    // clean luck capability
-    ResetModes( LUCK_GOOD );
-    ResetModes( LUCK_BAD );
+    ResetModes( LUCK_GOOD | LUCK_BAD );
 }
 
 void Battle::Unit::SetBlindAnswer( bool value )
