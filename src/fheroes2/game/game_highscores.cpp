@@ -209,7 +209,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             }
         };
 
-        const uint32_t completionTime = fheroes2::HighscoreData::generateCompletionTime();  
+        const uint32_t completionTime = fheroes2::HighscoreData::generateCompletionTime();
         std::string lang = fheroes2::getLanguageAbbreviation( fheroes2::getCurrentLanguage() );
 
         // Check whether the game result is good enough to be put on high score board. If not then just skip showing the player name dialog.
@@ -227,8 +227,10 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
             std::string playerName;
             inputPlayerName( playerName );
-            selectedEntryIndex = highScoreDataContainer.registerScoreCampaign( { std::move( lang ), player, Campaign::getCampaignName( campaignSaveData.getCampaignID() ),
-                                                                                 completionTime, campaignSaveData.getDaysPassed(), rating, world.GetMapSeed() } );
+
+            selectedEntryIndex
+                = highScoreDataContainer.registerScoreCampaign( { std::move( lang ), playerName, Campaign::getCampaignName( campaignSaveData.getCampaignID() ),
+                                                                  completionTime, campaignSaveData.getDaysPassed(), rating, world.GetMapSeed() } );
         }
         else {
             const uint32_t rating = GetGameOverScores();
@@ -244,9 +246,9 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             const uint32_t days = world.CountDay();
             std::string playerName;
             inputPlayerName( playerName );
-          
+
             selectedEntryIndex = highScoreDataContainer.registerScoreStandard(
-                { std::move( lang ), player, Settings::Get().CurrentFileInfo().name, completionTime, days, rating, world.GetMapSeed() } );
+                { std::move( lang ), playerName, Settings::Get().CurrentFileInfo().name, completionTime, days, rating, world.GetMapSeed() } );
         }
 
         highScoreDataContainer.save( highScoreDataPath );
