@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-13 05:15+0000\n"
+"POT-Creation-Date: 2023-04-19 02:55+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -4604,6 +4604,69 @@ msgid ""
 msgstr ""
 "Jugador %{color}, tus héroes te abandonan y eres desterrado de estas tierras."
 
+msgid "Lord Kilburn"
+msgstr "Lord Kilburn"
+
+msgid "Tsabu"
+msgstr "Tsabu"
+
+#, fuzzy
+msgid "Sir Galant"
+msgstr "Sir Gallanth"
+
+msgid "Thundax"
+msgstr "Thundax"
+
+#, fuzzy
+msgid "Lord Haart"
+msgstr "Lord Halton"
+
+msgid "Ariel"
+msgstr "Ariel"
+
+msgid "Rebecca"
+msgstr "Rebecca"
+
+msgid "Sandro"
+msgstr "Sandro"
+
+msgid "Crodo"
+msgstr "Crodo"
+
+#, fuzzy
+msgid "Barock"
+msgstr "Barok"
+
+msgid "Antoine"
+msgstr ""
+
+msgid "Astra"
+msgstr "Astra"
+
+msgid "Agar"
+msgstr "Agar"
+
+msgid "Vatawna"
+msgstr "Vatawna"
+
+msgid "Vesper"
+msgstr "Vesper"
+
+msgid "Ambrose"
+msgstr "Ambrose"
+
+msgid "Troyan"
+msgstr "Troyan"
+
+msgid "Jojosh"
+msgstr "Jojosh"
+
+msgid "Wrathmont"
+msgstr "Wrathmont"
+
+msgid "Maximus"
+msgstr "Maximus"
+
 msgid "Next Hero"
 msgstr "Siguiente Héroe"
 
@@ -4917,9 +4980,6 @@ msgstr "Ector"
 msgid "Gwenneth"
 msgstr "Gwenneth"
 
-msgid "Lord Kilburn"
-msgstr "Lord Kilburn"
-
 #, fuzzy
 msgid "Sir Gallant"
 msgstr "Sir Gallanth"
@@ -4927,14 +4987,8 @@ msgstr "Sir Gallanth"
 msgid "Tyro"
 msgstr "Tyro"
 
-msgid "Ambrose"
-msgstr "Ambrose"
-
 msgid "Dimitry"
 msgstr "Dimitry"
-
-msgid "Maximus"
-msgstr "Maximus"
 
 msgid "Ruby"
 msgstr "Ruby"
@@ -4948,12 +5002,6 @@ msgstr "Fineous"
 msgid "Jezebel"
 msgstr "Jezebel"
 
-msgid "Jojosh"
-msgstr "Jojosh"
-
-msgid "Thundax"
-msgstr "Thundax"
-
 msgid "Atlas"
 msgstr "Atlas"
 
@@ -4963,29 +5011,11 @@ msgstr "Ergon"
 msgid "Jaclyn"
 msgstr "Jaclyn"
 
-msgid "Tsabu"
-msgstr "Tsabu"
-
-msgid "Astra"
-msgstr "Astra"
-
 msgid "Gem"
 msgstr "Gem"
 
 msgid "Natasha"
 msgstr "Natasha"
-
-msgid "Rebecca"
-msgstr "Rebecca"
-
-msgid "Troyan"
-msgstr "Troyan"
-
-msgid "Vatawna"
-msgstr "Vatawna"
-
-msgid "Ariel"
-msgstr "Ariel"
 
 msgid "Carlawn"
 msgstr "Carlawn"
@@ -4999,23 +5029,11 @@ msgstr "Arie"
 msgid "Barok"
 msgstr "Barok"
 
-msgid "Crodo"
-msgstr "Crodo"
-
 msgid "Kastore"
 msgstr "Katore"
 
-msgid "Vesper"
-msgstr "Vesper"
-
-msgid "Agar"
-msgstr "Agar"
-
 msgid "Falagar"
 msgstr "Falagar"
-
-msgid "Wrathmont"
-msgstr "Wrathmont"
 
 msgid "Dawn"
 msgstr "Dawn"
@@ -5064,9 +5082,6 @@ msgstr "Celia"
 
 msgid "Roxana"
 msgstr "Roxana"
-
-msgid "Sandro"
-msgstr "Sandro"
 
 msgid "Lord Corlagon"
 msgstr "Lord Corlagon"
