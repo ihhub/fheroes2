@@ -45,11 +45,6 @@ namespace Video
             _position = position;
         }
 
-        uint32_t getStartFrame( const uint32_t renderDelayMS )
-        {
-            return ( _startTimeMS / renderDelayMS );
-        }
-
         // Check if subtitles needs to be rendered at the current time (in milliseconds).
         bool needRender( const uint32_t currentTimeMS ) const
         {
