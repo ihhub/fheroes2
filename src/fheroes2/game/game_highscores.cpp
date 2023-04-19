@@ -28,6 +28,7 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -55,6 +56,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
@@ -96,6 +98,8 @@ namespace
 
         for ( const fheroes2::HighscoreData & data : highScores ) {
             const fheroes2::FontType font = ( scoreIndex == selectedScoreIndex ) ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
+
+            const fheroes2::LanguageSwitcher languageSwitcher( fheroes2::getLanguageFromAbbreviation( data.languageAbbreviation ) );
 
             text.set( data.playerName, font );
             text.draw( offsetX + playerNameOffset, offsetY + initialHighScoreEntryOffsetY, display );
@@ -189,9 +193,9 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     if ( !highScoreDataContainer.load( highScoreDataPath ) ) {
         // Unable to load the file. Let's populate with the default values.
+        highScoreDataContainer.clear();
         highScoreDataContainer.populateStandardDefaultHighScores();
         highScoreDataContainer.populateCampaignDefaultHighScores();
-        highScoreDataContainer.save( highScoreDataPath );
     }
 
     int32_t selectedEntryIndex = -1;
@@ -204,6 +208,9 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
                 playerName = _( "Unknown Hero" );
             }
         };
+
+        const uint32_t completionTime = fheroes2::HighscoreData::generateCompletionTime();  
+        std::string lang = fheroes2::getLanguageAbbreviation( fheroes2::getCurrentLanguage() );
 
         // Check whether the game result is good enough to be put on high score board. If not then just skip showing the player name dialog.
         if ( isCampaign ) {
@@ -220,10 +227,8 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
             std::string playerName;
             inputPlayerName( playerName );
-
-            selectedEntryIndex = highScoreDataContainer.registerScoreCampaign( { playerName, Campaign::getCampaignName( campaignSaveData.getCampaignID() ),
-                                                                                 fheroes2::HighscoreData::generateCompletionTime(), campaignSaveData.getDaysPassed(),
-                                                                                 rating, world.GetMapSeed() } );
+            selectedEntryIndex = highScoreDataContainer.registerScoreCampaign( { std::move( lang ), player, Campaign::getCampaignName( campaignSaveData.getCampaignID() ),
+                                                                                 completionTime, campaignSaveData.getDaysPassed(), rating, world.GetMapSeed() } );
         }
         else {
             const uint32_t rating = GetGameOverScores();
@@ -239,9 +244,9 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             const uint32_t days = world.CountDay();
             std::string playerName;
             inputPlayerName( playerName );
-
+          
             selectedEntryIndex = highScoreDataContainer.registerScoreStandard(
-                { playerName, Settings::Get().CurrentFileInfo().name, fheroes2::HighscoreData::generateCompletionTime(), days, rating, world.GetMapSeed() } );
+                { std::move( lang ), player, Settings::Get().CurrentFileInfo().name, completionTime, days, rating, world.GetMapSeed() } );
         }
 
         highScoreDataContainer.save( highScoreDataPath );
@@ -304,6 +309,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         }
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+            // TODO: avoid redrawing the whole screen when only monster animation update is required.
             if ( isCampaign ) {
                 RedrawHighScoresCampaign( top.x, top.y, monsterAnimationFrameId, selectedEntryIndex );
             }

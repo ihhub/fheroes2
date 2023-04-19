@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-10 14:28+0000\n"
-"PO-Revision-Date: 2023-03-20 20:07+0100\n"
+"POT-Creation-Date: 2023-04-19 02:55+0000\n"
+"PO-Revision-Date: 2023-04-13 14:41+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -87,12 +87,14 @@ msgid "RESTART"
 msgstr "REŠTART"
 
 msgid "HEROES"
-msgstr ""
+msgstr "HRDINOVIA"
 
 msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
+"MESTÁ/\n"
+"HRADY"
 
 msgid "S"
 msgstr "S"
@@ -110,7 +112,7 @@ msgid "ALL"
 msgstr "CELÝ"
 
 msgid "SELECT"
-msgstr ""
+msgstr "ZVOĽ"
 
 msgid ""
 "STANDARD\n"
@@ -174,7 +176,7 @@ msgid "GIFT"
 msgstr "DAR"
 
 msgid "guildWell|EXIT"
-msgstr ""
+msgstr "PREČ"
 
 msgid "DIFFICULTY"
 msgstr "OBTIAŽNOSŤ"
@@ -386,10 +388,10 @@ msgid "Army Order"
 msgstr "Poradie"
 
 msgid "Off"
-msgstr "Vyp"
+msgstr "Vypnuté"
 
 msgid "On"
-msgstr "Zap"
+msgstr "Zapnuté"
 
 msgid "Auto Spell Casting"
 msgstr "Kúzla počas auto boja"
@@ -556,7 +558,7 @@ msgid "Surrender"
 msgstr "Vzdaj sa"
 
 msgid "Cancel"
-msgstr "Zruš"
+msgstr "Zrušiť"
 
 msgid "Hero Screen"
 msgstr "Okno hrdinu"
@@ -745,7 +747,7 @@ msgstr[1] "%{count} %{unit} sú oživení/é."
 msgstr[2] "%{count} %{unit} je oživených."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
-msgstr "Presunuté - %{monster}: od [%{src}] na [%{dst}]."
+msgstr "Presun - %{monster}: od [%{src}] na [%{dst}]."
 
 msgid "The %{name} resist the spell!"
 msgstr "Jednotka %{name} odoláva kúzlu!"
@@ -957,7 +959,7 @@ msgid "Turning Point"
 msgstr "Bod otáčania"
 
 msgid "scenarioName|Defender"
-msgstr ""
+msgstr "Obránca"
 
 msgid "Corlagon's Defense"
 msgstr "Corlagonova obrana"
@@ -1127,28 +1129,28 @@ msgid ""
 msgstr ""
 
 msgid "Arrow's Flight"
-msgstr ""
+msgstr "Let šípu"
 
 msgid "Island of Chaos"
-msgstr ""
+msgstr "Ostrov chaosu"
 
 msgid "The Abyss"
-msgstr ""
+msgstr "Priepasť"
 
 msgid "Uprising"
-msgstr ""
+msgstr "Povstanie"
 
 msgid "Aurora Borealis"
-msgstr ""
+msgstr "Polárna žiara"
 
 msgid "Betrayal's End"
-msgstr ""
+msgstr "Koniec zrady"
 
 msgid "Corruption's Heart"
-msgstr ""
+msgstr "Srdce korupcie"
 
 msgid "The Giant's Pass"
-msgstr ""
+msgstr "Obrov priesmyk"
 
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
@@ -1194,28 +1196,28 @@ msgid ""
 msgstr ""
 
 msgid "Border Towns"
-msgstr ""
+msgstr "Pohraničné mestá"
 
 msgid "Conquer and Unify"
-msgstr ""
+msgstr "Dobyť a zjednotiť"
 
 msgid "Crazy Uncle Ivan"
-msgstr ""
+msgstr "Bláznivý strýko Ivan"
 
 msgid "The Wayward Son"
-msgstr ""
+msgstr "Zblúdilý syn"
 
 msgid "Ivory Gates"
-msgstr ""
+msgstr "Brány zo slonoviny"
 
 msgid "The Elven Lands"
-msgstr ""
+msgstr "Krajiny elfov"
 
 msgid "The Epic Battle"
-msgstr ""
+msgstr "Epický boj"
 
 msgid "The Southern War"
-msgstr ""
+msgstr "Južná vojna"
 
 msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
@@ -1259,16 +1261,16 @@ msgid ""
 msgstr ""
 
 msgid "Fount of Wizardry"
-msgstr ""
+msgstr "Prameň čarodejníctva"
 
 msgid "Power's End"
-msgstr ""
+msgstr "Koniec moci"
 
 msgid "The Eternal Scrolls"
-msgstr ""
+msgstr "Večné zvitky"
 
 msgid "The Shrouded Isles"
-msgstr ""
+msgstr "Zahalené ostrovy"
 
 msgid ""
 "Your mission is to vanquish the warring mages in the magical Shrouded Isles. "
@@ -1294,16 +1296,16 @@ msgid ""
 msgstr ""
 
 msgid "Blood is Thicker"
-msgstr ""
+msgstr "Krv je hustejšia"
 
 msgid "King and Country"
-msgstr ""
+msgstr "Kráľ a krajina"
 
 msgid "Pirate Isles"
-msgstr ""
+msgstr "Pirátske ostrovy"
 
 msgid "Stranded"
-msgstr ""
+msgstr "Uviaznutý"
 
 msgid ""
 "Capture the town on the island off the southeast shore in order to construct "
@@ -1326,55 +1328,58 @@ msgid ""
 msgstr ""
 
 msgid " bane"
-msgstr ""
+msgstr " zmar"
 
 msgid " alliance"
-msgstr ""
+msgstr " aliancia"
 
 msgid "Carry-over forces"
-msgstr ""
+msgstr "Prenosné jednotky"
 
 msgid " bonus"
-msgstr ""
+msgstr " bonus"
 
 msgid " defeated"
-msgstr ""
+msgstr " porazený"
 
 msgid " will always run away from your army."
-msgstr ""
+msgstr " vždy utečú pred tvojou armádou."
 
 msgid " will be willing to join your army."
-msgstr ""
+msgstr " sa ochotne pridajú k tvojej armáde."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
-msgstr ""
+msgstr "\"%{artifact}\" artefact sa prenesie cez scenár."
 
 msgid "The army will be carried over the scenario."
-msgstr ""
+msgstr "Armáda sa prenesie cez scenár."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
-msgstr ""
+msgstr "Kráľovstvo bude každý deň mať zvýšené zásoby: +%{count} %{resource}."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
-msgstr ""
+msgstr "Kúzlo \"%{spell}\" sa prenesie cez scenár."
 
 msgid "%{hero} can be hired in the scenario."
-msgstr ""
+msgstr "%{hero} bude najatý/á v tomto scenári."
 
 msgid ""
 "%{hero} has been defeated and will not appear in the subsequent scenarios."
-msgstr ""
+msgstr "%{hero} bol porazený a neobjaví sa v nasledujúcich scenároch."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
+"Trpaslíci spoznávajú svojich spojencov a radi sa pridajú k tvojim silám."
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
 msgstr ""
+"Zlobri ťa poznajú ako Trpasličí zmar a pristupujú aby sa k tebe pridali."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
 "'Ally'."
 msgstr ""
+"Vrčiaci draci súhlasia s pridaním sa k tvojim jednotkám, ich 'Spojencom'."
 
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
@@ -1382,255 +1387,267 @@ msgid ""
 "fearless ally of ours?\"  The group explodes with cheers as they run to join "
 "your ranks."
 msgstr ""
+"Kým sa blížiš ku skupine elfov, ich vodca ich všetkých zvolá do pozornosti. "
+"Zvoláva na nich: \"Kto z vás má dosť odvahy, aby sa pridal k tomuto nášmu "
+"nebojácnemu spojencovi?\" Skupina jasá pričom sa hrnie pridať sa k tvojim "
+"radom."
 
 msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
 "pass.\""
 msgstr ""
+"Trpaslíci ťa zdravia: \"Každý priateľ Rolanda je našim priateľom. Smieš "
+"prejsť.\""
 
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
-msgstr ""
+msgstr "Zlobri ti dávajú uznanie: \"Spojenci Archibalda smú prejsť.\""
 
 msgid ""
 "The dragons see you and call out.  \"Our alliance with Archibald compels us "
 "to join you.  Unfortunately you have no room.  A pity!\"  They quickly "
 "scatter."
 msgstr ""
+"Draci ťa vidia a ozývajú sa: \"Naše spojenectvo s Archibaldom nás núti "
+"pridať sa k tebe. Žiaľ, nemáš pre nás miesto. Aká škoda.\" Rýchlo sa "
+"rozchádzajú."
 
 msgid ""
 "The elves stand at attention as you approach.  Their leader calls to you and "
 "says, \"Let us not impede your progress, ally!  Move on, and may victory be "
 "yours.\""
 msgstr ""
+"Kým sa približuješ, elfovia sa stavajú do strehu. Ich vodca na teba volá a "
+"hovorí: \"Nebudeme ti brániť v ceste, spojenec! Prejdi a nech je víťazstvo "
+"tvoje.\""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
-msgstr ""
+msgstr "\"Trpasličí zmar! Utekajte o život!\""
 
 msgid "campaignBonus|Animate Dead"
-msgstr ""
+msgstr "Animácia mŕtvych"
 
 msgid "campaignBonus|Chain Lightning"
-msgstr ""
+msgstr "Reťazový blesk"
 
 msgid "campaignBonus|Fireblast"
-msgstr ""
+msgstr "Výbuch ohňa"
 
 msgid "campaignBonus|Mass Curse"
-msgstr ""
+msgstr "Hromadná kliatba"
 
 msgid "campaignBonus|Mass Haste"
-msgstr ""
+msgstr "Hromadný zhon"
 
 msgid "campaignBonus|Mirror Image"
-msgstr ""
+msgstr "Zrkadlový obraz"
 
 msgid "campaignBonus|Resurrect"
-msgstr ""
+msgstr "Vzkriesenie"
 
 msgid "campaignBonus|Steelskin"
-msgstr ""
+msgstr "Oceľová koža"
 
 msgid "campaignBonus|Summon Earth"
-msgstr ""
+msgstr "Vyvolaj zem"
 
 msgid "campaignBonus|View Heroes"
-msgstr ""
+msgstr "Zobraz hrdinov"
 
 msgid "campaignBonus|Ballista"
-msgstr ""
+msgstr "Balista"
 
 msgid "campaignBonus|Black Pearl"
-msgstr ""
+msgstr "Čierna perla"
 
 msgid "campaignBonus|Caster's Bracelet"
-msgstr ""
+msgstr "Čarodejov náramok"
 
 msgid "campaignBonus|Defender Helm"
-msgstr ""
+msgstr "Helma obrancu"
 
 msgid "campaignBonus|Breastplate"
-msgstr ""
+msgstr "Náprsné brnenie"
 
 msgid "campaignBonus|Dragon Sword"
-msgstr ""
+msgstr "Dračí meč"
 
 msgid "campaignBonus|Fizbin Medal"
-msgstr ""
+msgstr "Fizbinova medaila"
 
 msgid "campaignBonus|Foremost Scroll"
-msgstr ""
+msgstr "Najprednejší zvitok"
 
 msgid "campaignBonus|Gauntlets"
-msgstr ""
+msgstr "Rukavice"
 
 msgid "campaignBonus|Hideous Mask"
-msgstr ""
+msgstr "Hnusná maska"
 
 msgid "campaignBonus|Mage's Ring"
-msgstr ""
+msgstr "Prsteň mága"
 
 msgid "campaignBonus|Major Scroll"
-msgstr ""
+msgstr "Hlavný zvitok"
 
 msgid "campaignBonus|Medal of Honor"
-msgstr ""
+msgstr "Medaila za česť"
 
 msgid "campaignBonus|Medal of Valor"
-msgstr ""
+msgstr "Medaila za odvahu"
 
 msgid "campaignBonus|Minor Scroll"
-msgstr ""
+msgstr "Menší zvitok"
 
 msgid "campaignBonus|Nomad Boots"
-msgstr ""
+msgstr "Nomádske čižmy"
 
 msgid "campaignBonus|Power Axe"
-msgstr ""
+msgstr "Sekera moci"
 
 msgid "campaignBonus|Spiked Shield"
-msgstr ""
+msgstr "Špicatý štít"
 
 msgid "campaignBonus|Stealth Shield"
-msgstr ""
+msgstr "Štít prikrádania"
 
 msgid "campaignBonus|Tax Lien"
-msgstr ""
+msgstr "Daňové záložné právo"
 
 msgid "campaignBonus|Thunder Mace"
-msgstr ""
+msgstr "Palcát hromu"
 
 msgid "campaignBonus|Traveler's Boots"
-msgstr ""
+msgstr "Cestovateľove čižmy"
 
 msgid "campaignBonus|White Pearl"
-msgstr ""
+msgstr "Biela perla"
 
 msgid "campaignBonus|Basic Archery"
-msgstr ""
+msgstr "Základná lukostreľba"
 
 msgid "campaignBonus|Advanced Archery"
-msgstr ""
+msgstr "Pokročilá lukostreľba"
 
 msgid "campaignBonus|Expert Archery"
-msgstr ""
+msgstr "Expert lukostreľby"
 
 msgid "campaignBonus|Basic Ballistics"
-msgstr ""
+msgstr "Základná balistika"
 
 msgid "campaignBonus|Advanced Ballistics"
-msgstr ""
+msgstr "Pokročilá balistika"
 
 msgid "campaignBonus|Expert Ballistics"
-msgstr ""
+msgstr "Expert balistiky"
 
 msgid "campaignBonus|Basic Diplomacy"
-msgstr ""
+msgstr "Základná diplomacia"
 
 msgid "campaignBonus|Advanced Diplomacy"
-msgstr ""
+msgstr "Pokročilá diplomacia"
 
 msgid "campaignBonus|Expert Diplomacy"
-msgstr ""
+msgstr "Expert diplomacie"
 
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr ""
+msgstr "Základný orlí zrak"
 
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr ""
+msgstr "Pokročilý orlí zrak"
 
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr ""
+msgstr "Expert orlieho zraku"
 
 msgid "campaignBonus|Basic Estates"
-msgstr ""
+msgstr "Základné statky"
 
 msgid "campaignBonus|Advanced Estates"
-msgstr ""
+msgstr "Pokročilé statky"
 
 msgid "campaignBonus|Expert Estates"
-msgstr ""
+msgstr "Expert statkov"
 
 msgid "campaignBonus|Basic Leadership"
-msgstr ""
+msgstr "Základné vedenie"
 
 msgid "campaignBonus|Advanced Leadership"
-msgstr ""
+msgstr "Pokročilé vedenie"
 
 msgid "campaignBonus|Expert Leadership"
-msgstr ""
+msgstr "Expert vedenia"
 
 msgid "campaignBonus|Basic Logistics"
-msgstr ""
+msgstr "Základná logistika"
 
 msgid "campaignBonus|Advanced Logistics"
-msgstr ""
+msgstr "Pokročilá logistika"
 
 msgid "campaignBonus|Expert Logistics"
-msgstr ""
+msgstr "Expert logistiky"
 
 msgid "campaignBonus|Basic Luck"
-msgstr ""
+msgstr "Základné šťastie"
 
 msgid "campaignBonus|Advanced Luck"
-msgstr ""
+msgstr "Pokročilé šťastie"
 
 msgid "campaignBonus|Expert Luck"
-msgstr ""
+msgstr "Expert šťastia"
 
 msgid "campaignBonus|Basic Mysticism"
-msgstr ""
+msgstr "Základná mystika"
 
 msgid "campaignBonus|Advanced Mysticism"
-msgstr ""
+msgstr "Pokročilá mystika"
 
 msgid "campaignBonus|Expert Mysticism"
-msgstr ""
+msgstr "Expert mystiky"
 
 msgid "campaignBonus|Basic Navigation"
-msgstr ""
+msgstr "Základná navigácia"
 
 msgid "campaignBonus|Advanced Navigation"
-msgstr ""
+msgstr "Pokročilá navigácia"
 
 msgid "campaignBonus|Expert Navigation"
-msgstr ""
+msgstr "Expert navigácie"
 
 msgid "campaignBonus|Basic Necromancy"
-msgstr ""
+msgstr "Základná nekromancia"
 
 msgid "campaignBonus|Advanced Necromancy"
-msgstr ""
+msgstr "Pokročilá nekromancia"
 
 msgid "campaignBonus|Expert Necromancy"
-msgstr ""
+msgstr "Expert nekromancie"
 
 msgid "campaignBonus|Basic Pathfinding"
-msgstr ""
+msgstr "Základné hľadanie cesty"
 
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr ""
+msgstr "Pokročilé hľadanie cesty"
 
 msgid "campaignBonus|Expert Pathfinding"
-msgstr ""
+msgstr "Expert hľadania cesty"
 
 msgid "campaignBonus|Basic Scouting"
-msgstr ""
+msgstr "Základný prieskum"
 
 msgid "campaignBonus|Advanced Scouting"
-msgstr ""
+msgstr "Pokročilý prieskum"
 
 msgid "campaignBonus|Expert Scouting"
-msgstr ""
+msgstr "Expert prieskumu"
 
 msgid "campaignBonus|Basic Wisdom"
-msgstr ""
+msgstr "Základná múdrosť"
 
 msgid "campaignBonus|Advanced Wisdom"
-msgstr ""
+msgstr "Pokročilá múdrosť"
 
 msgid "campaignBonus|Expert Wisdom"
-msgstr ""
+msgstr "Expert múdrosti"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -1667,52 +1684,52 @@ msgid "The main hero will have %{skill} at the start of the scenario."
 msgstr ""
 
 msgid "Roland"
-msgstr ""
+msgstr "Roland"
 
 msgid "Archibald"
-msgstr ""
+msgstr "Archibald"
 
 msgid "The Price of Loyalty"
-msgstr ""
+msgstr "Cena vernosti"
 
 msgid "Voyage Home"
-msgstr ""
+msgstr "Plavba domov"
 
 msgid "Wizard's Isle"
-msgstr ""
+msgstr "Čarodejov ostrov"
 
 msgid "Descendants"
-msgstr ""
+msgstr "Potomkovia"
 
 msgid "The %{building} produces %{monster}."
-msgstr ""
+msgstr "%{building} produkuje: %{monster}."
 
 msgid "Requires:"
-msgstr ""
+msgstr "Potrebuje:"
 
 msgid "Cannot build. You have already built here today."
-msgstr ""
+msgstr "Nedá sa stavať. Dnes tu už bola budova postavená."
 
 msgid "For this action it is necessary to build a castle first."
-msgstr ""
+msgstr "Pre tento krok je potrebné najprv postaviť hrad."
 
 msgid "Cannot build %{name} because castle is too far from water."
-msgstr ""
+msgstr "Nedá sa postaviť %{name} pretože hrad je priďaleko od vody."
 
 msgid "disable build."
-msgstr ""
+msgstr "Budovanie zakázané."
 
 msgid "Cannot afford %{name}."
-msgstr ""
+msgstr "Budovu %{name} si nemôžeš dovoliť."
 
 msgid "%{name} is already built."
-msgstr ""
+msgstr "Budova %{name} je už postavená."
 
 msgid "Cannot build %{name}."
-msgstr ""
+msgstr "Nedá sa postaviť budovu %{name}."
 
 msgid "Build %{name}."
-msgstr ""
+msgstr "Postav budovu %{name}."
 
 msgid "Blackridge"
 msgstr ""
@@ -4170,6 +4187,9 @@ msgstr ""
 msgid " All dwellings increase population."
 msgstr ""
 
+msgid "New Week!"
+msgstr ""
+
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
 "banished from this land."
@@ -4196,6 +4216,66 @@ msgstr ""
 msgid ""
 "%{color} player, your heroes abandon you, and you are banished from this "
 "land."
+msgstr ""
+
+msgid "Lord Kilburn"
+msgstr ""
+
+msgid "Tsabu"
+msgstr ""
+
+msgid "Sir Galant"
+msgstr ""
+
+msgid "Thundax"
+msgstr ""
+
+msgid "Lord Haart"
+msgstr ""
+
+msgid "Ariel"
+msgstr ""
+
+msgid "Rebecca"
+msgstr ""
+
+msgid "Sandro"
+msgstr ""
+
+msgid "Crodo"
+msgstr ""
+
+msgid "Barock"
+msgstr ""
+
+msgid "Antoine"
+msgstr ""
+
+msgid "Astra"
+msgstr ""
+
+msgid "Agar"
+msgstr ""
+
+msgid "Vatawna"
+msgstr ""
+
+msgid "Vesper"
+msgstr ""
+
+msgid "Ambrose"
+msgstr ""
+
+msgid "Troyan"
+msgstr ""
+
+msgid "Jojosh"
+msgstr ""
+
+msgid "Wrathmont"
+msgstr ""
+
+msgid "Maximus"
 msgstr ""
 
 msgid "Next Hero"
@@ -4470,22 +4550,13 @@ msgstr ""
 msgid "Gwenneth"
 msgstr ""
 
-msgid "Lord Kilburn"
-msgstr ""
-
 msgid "Sir Gallant"
 msgstr ""
 
 msgid "Tyro"
 msgstr ""
 
-msgid "Ambrose"
-msgstr ""
-
 msgid "Dimitry"
-msgstr ""
-
-msgid "Maximus"
 msgstr ""
 
 msgid "Ruby"
@@ -4500,12 +4571,6 @@ msgstr ""
 msgid "Jezebel"
 msgstr ""
 
-msgid "Jojosh"
-msgstr ""
-
-msgid "Thundax"
-msgstr ""
-
 msgid "Atlas"
 msgstr ""
 
@@ -4515,28 +4580,10 @@ msgstr ""
 msgid "Jaclyn"
 msgstr ""
 
-msgid "Tsabu"
-msgstr ""
-
-msgid "Astra"
-msgstr ""
-
 msgid "Gem"
 msgstr ""
 
 msgid "Natasha"
-msgstr ""
-
-msgid "Rebecca"
-msgstr ""
-
-msgid "Troyan"
-msgstr ""
-
-msgid "Vatawna"
-msgstr ""
-
-msgid "Ariel"
 msgstr ""
 
 msgid "Carlawn"
@@ -4551,22 +4598,10 @@ msgstr ""
 msgid "Barok"
 msgstr ""
 
-msgid "Crodo"
-msgstr ""
-
 msgid "Kastore"
 msgstr ""
 
-msgid "Vesper"
-msgstr ""
-
-msgid "Agar"
-msgstr ""
-
 msgid "Falagar"
-msgstr ""
-
-msgid "Wrathmont"
 msgstr ""
 
 msgid "Dawn"
@@ -4615,9 +4650,6 @@ msgid "Celia"
 msgstr ""
 
 msgid "Roxana"
-msgstr ""
-
-msgid "Sandro"
 msgstr ""
 
 msgid "Lord Corlagon"
