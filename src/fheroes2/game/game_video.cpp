@@ -303,11 +303,10 @@ namespace Video
     Subtitle::Subtitle( const fheroes2::TextBase & subtitleText, const uint32_t startTimeMS, const uint32_t durationMS /* = UINT32_MAX */,
                         const int32_t maxWidth /* = fheroes2::Display::DEFAULT_WIDTH */ )
         : _startTimeMS( startTimeMS )
-        , _durationMS( durationMS )
     {
-        const int32_t textWidth = subtitleText.width( maxWidth );
+        const int32_t textWidth = subtitleText.width( ( maxWidth > 0 ) ? maxWidth : fheroes2::Display::DEFAULT_WIDTH );
         // We add extra 1 to have space for contour.
-        _subtitleImage.resize( textWidth + 1, subtitleText.height( maxWidth ) + 1 );
+        _subtitleImage.resize( textWidth + 1, subtitleText.height( textWidth ) + 1 );
         _subtitleImage.reset();
 
         // Draw text and remove all shadow data is it could not be properly applied to video palette.
@@ -322,7 +321,7 @@ namespace Video
         fheroes2::Blit( fheroes2::CreateContour( _subtitleImage, blackColor ), _subtitleImage );
 
         // This is made to avoid overflow when calculating the end frame.
-        _durationMS = std::min( _durationMS, UINT32_MAX - _startTimeMS );
+        _endTimeMS = _startTimeMS + std::min( durationMS, UINT32_MAX - _startTimeMS );
 
         // Position subtitles at the bottom center by using default screen size (it is currently equal to video size).
         _position.x = ( fheroes2::Display::DEFAULT_WIDTH - _subtitleImage.width() ) / 2;

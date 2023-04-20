@@ -28,6 +28,7 @@
 #include "image.h"
 #include "math_base.h"
 #include "screen.h"
+// This include is needed for 'fheroes2::TextBase', but IWYU proposes to remove it.
 #include "ui_text.h" // IWYU pragma: keep
 
 namespace Video
@@ -48,7 +49,7 @@ namespace Video
         // Check if subtitles needs to be rendered at the current time (in milliseconds).
         bool needRender( const uint32_t currentTimeMS ) const
         {
-            return ( ( currentTimeMS >= _startTimeMS ) && ( currentTimeMS < ( _startTimeMS + _durationMS ) ) );
+            return ( ( currentTimeMS >= _startTimeMS ) && ( currentTimeMS < _endTimeMS ) );
         }
 
         // Render subtitles image to the output image.
@@ -58,7 +59,7 @@ namespace Video
         fheroes2::Point _position{ 0, 0 };
         fheroes2::Image _subtitleImage;
         uint32_t _startTimeMS{ 0 };
-        uint32_t _durationMS{ UINT32_MAX };
+        uint32_t _endTimeMS{ UINT32_MAX };
     };
 
     // Returns true if the file exists.
