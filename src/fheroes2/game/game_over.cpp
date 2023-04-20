@@ -175,14 +175,15 @@ namespace
     {
         // Get data for ratings text.
         const uint32_t difficulty = Game::GetRating();
-        const uint32_t score = Game::GetGameOverScores();
+        const uint32_t baseScore = Game::getGameOverScoreFactor();
+        const uint32_t score = difficulty * baseScore / 100;
 
         // Make ratings text as a subtitle for WIN.SMK.
         fheroes2::MultiFontText ratingText;
         ratingText.add( { _( "Congratulations!\n\nDays: " ), fheroes2::FontType::normalWhite() } );
         ratingText.add( { std::to_string( world.CountDay() ), fheroes2::FontType::normalWhite() } );
         ratingText.add( { _( "\nBase score: " ), fheroes2::FontType::smallWhite() } );
-        ratingText.add( { std::to_string( score * 100 / difficulty ), fheroes2::FontType::smallWhite() } );
+        ratingText.add( { std::to_string( baseScore ), fheroes2::FontType::smallWhite() } );
         ratingText.add( { _( "\nDifficulty: " ), fheroes2::FontType::smallWhite() } );
         ratingText.add( { std::to_string( difficulty ), fheroes2::FontType::smallWhite() } );
         ratingText.add( { _( "\n\nScore: " ), fheroes2::FontType::normalWhite() } );

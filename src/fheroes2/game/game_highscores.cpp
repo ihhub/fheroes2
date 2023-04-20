@@ -154,7 +154,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             msg += std::to_string( Campaign::CampaignSaveData::Get().getDaysPassed() );
         }
         else {
-            msg += std::to_string( GetGameOverScores() );
+            msg += std::to_string( GetRating() * getGameOverScoreFactor() / 100 );
         }
 
         fheroes2::showMessage( fheroes2::Text( "High Scores", fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
@@ -212,7 +212,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
                                                                   completionTime, daysPassed, rating, world.GetMapSeed() } );
         }
         else {
-            const uint32_t rating = GetGameOverScores();
+            const uint32_t rating = GetRating() * getGameOverScoreFactor() / 100;
 
             const auto & standardHighscoreData = highScoreDataContainer.getHighScoresStandard();
             assert( !standardHighscoreData.empty() );
