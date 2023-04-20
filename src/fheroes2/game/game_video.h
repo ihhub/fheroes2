@@ -28,8 +28,11 @@
 #include "image.h"
 #include "math_base.h"
 #include "screen.h"
-// This include is needed for 'fheroes2::TextBase', but IWYU proposes to remove it.
-#include "ui_text.h" // IWYU pragma: keep
+
+namespace fheroes2
+{
+    class TextBase;
+}
 
 namespace Video
 {
