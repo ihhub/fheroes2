@@ -383,6 +383,9 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
                 }
             }
 
+            // Berserk and Hypnotize spells should only be removed after an attack initiated by this unit, but not after its retaliatory attack
+            attacker->removeAffection( SP_BERSERKER | SP_HYPNOTIZE );
+
             // Reflect attacker only if he is alive.
             if ( attacker->isValid() ) {
                 attacker->UpdateDirection();
