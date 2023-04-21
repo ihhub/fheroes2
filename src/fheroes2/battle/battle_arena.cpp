@@ -292,7 +292,7 @@ bool Battle::Arena::isAnyTowerPresent()
 }
 
 Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const bool isShowInterface, Rand::DeterministicRandomGenerator & randomGenerator )
-    : current_color( Color::NONE )
+    : _currentColor( Color::NONE )
     , _lastActiveUnitArmyColor( -1 ) // Be aware of unknown color
     , castle( world.getCastleEntrance( Maps::GetPoint( tileIndex ) ) )
     , _isTown( castle != nullptr )
@@ -539,15 +539,10 @@ void Battle::Arena::Turns()
         bool catapultActed = false;
 
         while ( BattleValid() ) {
+            // This function may return nullptr if there are no units left waiting for their turn
             Unit * troop = GetCurrentUnit( *_army1, *_army2, GetOppositeColor( _lastActiveUnitArmyColor ) );
-            if ( troop == nullptr ) {
-                // All units have finished their turns
-                break;
-            }
 
-            current_color = troop->GetCurrentOrArmyColor();
-
-            if ( _orderOfUnits ) {
+            if ( _orderOfUnits && troop ) {
                 // Add unit to the history
                 orderHistory.push_back( troop );
 
@@ -555,15 +550,18 @@ void Battle::Arena::Turns()
                 UpdateOrderOfUnits( *_army1, *_army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *_orderOfUnits );
             }
 
-            // Castle towers and catapult are acting during the turn of the first unit from the corresponding army
             if ( castle ) {
-                if ( !catapultActed && troop->GetColor() == _army1->GetColor() ) {
+                // Catapult acts either during the turn of the first unit from the attacking army, or at the end of the
+                // turn if none of the units from the attacking army are able to act (for example, all are blinded)
+                if ( !catapultActed && ( troop == nullptr || troop->GetColor() == _army1->GetColor() ) ) {
                     CatapultAction();
 
                     catapultActed = true;
                 }
 
-                if ( !towersActed && troop->GetColor() == _army2->GetColor() ) {
+                // Castle towers act either during the turn of the first unit from the defending army, or at the end of
+                // the turn if none of the units from the defending army are able to act (for example, all are blinded)
+                if ( !towersActed && ( troop == nullptr || troop->GetColor() == _army2->GetColor() ) ) {
                     auto towerAction = [this, &orderHistory, troop]( const size_t idx ) {
                         assert( idx < std::size( _towers ) );
 
@@ -573,7 +571,7 @@ void Battle::Arena::Turns()
 
                         TowerAction( *_towers[idx] );
 
-                        if ( _orderOfUnits ) {
+                        if ( _orderOfUnits && troop ) {
                             // Tower could kill someone, update the order of units
                             UpdateOrderOfUnits( *_army1, *_army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *_orderOfUnits );
                         }
@@ -591,6 +589,13 @@ void Battle::Arena::Turns()
                     }
                 }
             }
+
+            if ( troop == nullptr ) {
+                // There are no units left waiting for their turn
+                break;
+            }
+
+            _currentColor = troop->GetCurrentOrArmyColor();
 
             TurnTroop( troop, orderHistory );
         }
@@ -771,7 +776,7 @@ int Battle::Arena::GetArmy2Color() const
 
 int Battle::Arena::GetCurrentColor() const
 {
-    return current_color;
+    return _currentColor;
 }
 
 int Battle::Arena::GetOppositeColor( const int col ) const
@@ -909,7 +914,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
                 return true;
             }
 
-            if ( 0 > GetFreePositionNearHero( current_color ) ) {
+            if ( 0 > GetFreePositionNearHero( _currentColor ) ) {
                 if ( msg ) {
                     *msg = _( "There is no open space adjacent to your hero to summon an Elemental to." );
                 }
@@ -1118,7 +1123,7 @@ const HeroBase * Battle::Arena::getEnemyCommander( const int color ) const
 
 const HeroBase * Battle::Arena::GetCurrentCommander() const
 {
-    return getCommander( current_color );
+    return getCommander( _currentColor );
 }
 
 Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
@@ -1129,7 +1134,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     const HeroBase * hero = GetCurrentCommander();
     assert( hero != nullptr );
 
-    const int32_t idx = GetFreePositionNearHero( current_color );
+    const int32_t idx = GetFreePositionNearHero( _currentColor );
     assert( Board::isValidIndex( idx ) );
 
     const Monster mons( spell );
@@ -1241,7 +1246,7 @@ Battle::Force & Battle::Arena::getEnemyForce( const int color ) const
 
 Battle::Force & Battle::Arena::GetCurrentForce() const
 {
-    return getForce( current_color );
+    return getForce( _currentColor );
 }
 
 Battle::Result & Battle::Arena::GetResult()
@@ -1251,7 +1256,7 @@ Battle::Result & Battle::Arena::GetResult()
 
 bool Battle::Arena::AutoBattleInProgress() const
 {
-    if ( _autoBattleColors & current_color ) {
+    if ( _autoBattleColors & _currentColor ) {
         // Auto battle mode cannot be enabled for a player controlled by AI
         assert( !( GetCurrentForce().GetControl() & CONTROL_AI ) );
 
