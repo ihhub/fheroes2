@@ -78,7 +78,7 @@ namespace
         const int32_t startGrayScaleColorId = 10;
         const int32_t endGrayScaleColorId = 36;
 
-        std::array<uint8_t, 256> assignedValue{ 0 };
+        std::vector<uint8_t> assignedValue( 256 );
 
         for ( size_t id = 0; id < 256; ++id ) {
             int32_t nearestDistance = INT32_MAX;
@@ -133,11 +133,7 @@ namespace
         }
 
         // Convert all video frame colors to original game palette colors.
-        for ( size_t id = 0; id < 256; ++id ) {
-            // TODO: Modify the ReplaceColorId to replace colors only in ROI.
-            fheroes2::ReplaceColorId( display, static_cast<uint8_t>( id ), assignedValue[id] );
-        }
-
+        fheroes2::ApplyPalette( display, frameRoi.x, frameRoi.y, display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, assignedValue );
         screenRestorer.changePalette( originalPalette );
     }
 }
