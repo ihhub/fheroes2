@@ -961,6 +961,7 @@ msgstr "Vương Miện"
 msgid "The Gauntlet"
 msgstr "Thách thức"
 
+
 msgid "Betrayal"
 msgstr "Sự phản bội"
 
