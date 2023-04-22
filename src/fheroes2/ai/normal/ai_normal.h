@@ -21,6 +21,7 @@
 #ifndef H2AI_NORMAL_H
 #define H2AI_NORMAL_H
 
+#include <array>
 #include <cassert>
 #include <cstdint>
 #include <map>
@@ -283,7 +284,7 @@ namespace AI
         std::vector<IndexObject> _mapObjects;
         std::map<int, PriorityTask> _priorityTargets;
         std::vector<RegionStats> _regions;
-        std::vector<BudgetEntry> _budget;
+        std::array<BudgetEntry, 7> _budget = { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
         AIWorldPathfinder _pathfinder;
         BattlePlanner _battlePlanner;
 

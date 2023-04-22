@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cassert>
+#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <vector>
@@ -225,6 +225,7 @@ namespace AI
                 }
             }
         }
+
         for ( BudgetEntry & budgetEntry : _budget ) {
             budgetEntry.requirement = requirements.Get( budgetEntry.resource );
 
