@@ -1252,10 +1252,8 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         // Set position to render results over the black rectangle of burned picture in WIN.SMK video.
         ratingSubtitle.setPosition( { 405, 110 } );
 
-        std::vector<Video::Subtitle> gameResults{ std::move( ratingSubtitle ) };
-
         AudioManager::ResetAudio();
-        Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, gameResults, true );
+        Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { std::move( ratingSubtitle ) }, true );
 
         // fheroes2::PlayMusic is run here in order to start playing before displaying the high score.
         AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
