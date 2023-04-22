@@ -539,7 +539,7 @@ void Battle::Arena::Turns()
         bool catapultActed = false;
 
         while ( BattleValid() ) {
-            // This function may return nullptr if there are no units left waiting for their turn
+            // We can get the nullptr here if there are no units left waiting for their turn
             Unit * troop = GetCurrentUnit( *_army1, *_army2, GetOppositeColor( _lastActiveUnitArmyColor ) );
 
             if ( _orderOfUnits && troop ) {
