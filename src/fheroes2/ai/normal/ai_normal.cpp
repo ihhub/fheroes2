@@ -69,6 +69,7 @@ namespace AI
 
     double Normal::getResourcePriorityModifier( const int resource ) const
     {
+        // Gold usually measured in 100s
         double prio = ( resource == Resource::GOLD ) ? 1.0 : 100.0;
         for ( const BudgetEntry & budget : _budget ) {
             if ( budget.resource != resource ) {

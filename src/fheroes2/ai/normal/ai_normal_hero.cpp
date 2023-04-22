@@ -946,14 +946,14 @@ namespace AI
             // A bottle is useless to AI as it contains only a message but it might block path.
             return 0;
         }
-        case MP2::OBJ_DERELICT_SHIP:
-        case MP2::OBJ_WATER_WHEEL:
-        case MP2::OBJ_WINDMILL:
-        case MP2::OBJ_MAGIC_GARDEN:
-        case MP2::OBJ_LEAN_TO:
         case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_DERELICT_SHIP:
         case MP2::OBJ_FLOTSAM:
-        case MP2::OBJ_RESOURCE: {
+        case MP2::OBJ_LEAN_TO:
+        case MP2::OBJ_MAGIC_GARDEN:
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_WATER_WHEEL:
+        case MP2::OBJ_WINDMILL: {
             const Funds & loot = getFundsFromTile( tile );
 
             double value = 0;
@@ -1316,13 +1316,13 @@ namespace AI
 
             return 1500.0 * art.getArtifactValue();
         }
-        case MP2::OBJ_WATER_WHEEL:
-        case MP2::OBJ_WINDMILL:
-        case MP2::OBJ_MAGIC_GARDEN:
-        case MP2::OBJ_LEAN_TO:
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
-        case MP2::OBJ_RESOURCE: {
+        case MP2::OBJ_LEAN_TO:
+        case MP2::OBJ_MAGIC_GARDEN:
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_WATER_WHEEL:
+        case MP2::OBJ_WINDMILL: {
             if ( anotherFriendlyHeroPresent ) {
                 return 100.0;
             }
@@ -1610,7 +1610,7 @@ namespace AI
         return targetIndex;
     }
 
-    int AI::Normal::getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority )
+    int Normal::getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority )
     {
         Heroes & hero = *heroInfo.hero;
 

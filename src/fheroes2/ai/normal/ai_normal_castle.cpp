@@ -237,6 +237,7 @@ namespace AI
     void Normal::CastleTurn( Castle & castle, const bool defensiveStrategy )
     {
         if ( defensiveStrategy ) {
+            // Avoid building monster dwellings when defensive as they will likely fall into enemy's hands
             const Kingdom & kingdom = castle.GetKingdom();
 
             Troops possibleReinforcement = castle.getAvailableArmy( kingdom.GetFunds() );
