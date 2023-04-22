@@ -194,8 +194,6 @@ namespace AI
 
     void Normal::updateKingdomBudget( const Kingdom & kingdom )
     {
-        assert( _budget.size() );
-
         // clean up first
         for ( BudgetEntry & budgetEntry : _budget ) {
             budgetEntry.reset();
