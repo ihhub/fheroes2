@@ -148,7 +148,7 @@ namespace
             }
 
             if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
-                    break;
+                break;
             }
         }
 
