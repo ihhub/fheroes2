@@ -39,7 +39,6 @@
 #include "settings.h"
 #include "smk_decoder.h"
 #include "system.h"
-#include "timing.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 
