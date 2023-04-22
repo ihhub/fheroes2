@@ -108,86 +108,80 @@ namespace
             return { { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } };
         }
 
-        std::vector<fheroes2::ResolutionInfo> resolutions;
-        resolutions.reserve( resolutionSet.size() );
-        for ( const auto & resolution : resolutionSet ) {
+        std::set<fheroes2::ResolutionInfo> resolutions;
+
+        for ( const fheroes2::ResolutionInfo & resolution : resolutionSet ) {
             if ( IsLowerThanDefaultRes( resolution ) ) {
                 continue;
             }
 
-            resolutions.emplace_back( resolution );
+            resolutions.emplace( resolution );
         }
 
         if ( resolutions.empty() ) {
             return { { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } };
         }
 
-        // TODO: add resolutions which are close to the current screen aspect ratio.
-        // Some operating systems do not work well with SDL so they return very limited number of high resolutions.
-        // Populate missing resolutions into the list.
-        const std::set<fheroes2::ResolutionInfo> possibleResolutions
-            = { { 640, 480 },   { 800, 600 },  { 1024, 768 },  { 1152, 864 }, { 1280, 600 }, { 1280, 720 },  { 1280, 768 }, { 1280, 960 },
-                { 1280, 1024 }, { 1360, 768 }, { 1400, 1050 }, { 1440, 900 }, { 1600, 900 }, { 1680, 1050 }, { 1920, 1080 } };
+        {
+            // TODO: add resolutions which are close to the current screen aspect ratio.
+            // Some operating systems do not work well with SDL so they return very limited number of high resolutions.
+            // Populate missing resolutions into the list.
+            const std::set<fheroes2::ResolutionInfo> possibleResolutions
+                = { { 640, 480 },   { 800, 600 },  { 1024, 768 },  { 1152, 864 }, { 1280, 600 }, { 1280, 720 },  { 1280, 768 }, { 1280, 960 },
+                    { 1280, 1024 }, { 1360, 768 }, { 1400, 1050 }, { 1440, 900 }, { 1600, 900 }, { 1680, 1050 }, { 1920, 1080 } };
 
-        const fheroes2::ResolutionInfo lowestResolution = resolutions.front();
-        assert( *std::min_element( resolutions.begin(), resolutions.end() ) == resolutions.front() );
+            assert( !resolutions.empty() );
+            const fheroes2::ResolutionInfo lowestResolution = *( resolutions.begin() );
 
-        for ( const fheroes2::ResolutionInfo & resolution : possibleResolutions ) {
-            if ( lowestResolution.gameWidth < resolution.gameWidth || lowestResolution.gameHeight < resolution.gameHeight || resolution == lowestResolution ) {
-                continue;
+            for ( const fheroes2::ResolutionInfo & resolution : possibleResolutions ) {
+                if ( lowestResolution < resolution || lowestResolution == resolution ) {
+                    continue;
+                }
+
+                resolutions.emplace( resolution );
             }
-            resolutions.emplace_back( resolution );
         }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
         // Scaling is available only on SDL 2.
-        std::sort( resolutions.begin(), resolutions.end() );
+        std::set<fheroes2::ResolutionInfo> scaledResolutions;
 
-        // Wide screen devices support much higher resolutions but items on such resolutions are too tiny.
-        // In order to improve user experience on these devices we are adding a special non-standard resolution.
-        const fheroes2::Size biggestResolution{ resolutions.back().gameWidth, resolutions.back().gameHeight };
-        if ( biggestResolution.width > fheroes2::Display::DEFAULT_WIDTH && biggestResolution.height > fheroes2::Display::DEFAULT_HEIGHT ) {
-            resolutions.emplace_back( biggestResolution.width * fheroes2::Display::DEFAULT_HEIGHT / biggestResolution.height, fheroes2::Display::DEFAULT_HEIGHT,
-                                      biggestResolution.width, biggestResolution.height );
-            std::sort( resolutions.begin(), resolutions.end() );
+        {
+            // Widescreen devices support much higher resolutions but items on such resolutions are too tiny. In order to improve user
+            // experience on these devices we are adding a special non-standard resolution with (potentially) non-integer scale.
+            assert( !resolutions.empty() );
+            const fheroes2::ResolutionInfo biggestResolution = *( std::prev( resolutions.end() ) );
+            assert( biggestResolution.gameWidth == biggestResolution.screenWidth && biggestResolution.gameHeight == biggestResolution.screenHeight );
+
+            // This resolution should be really "widescreen" (or at least square), i.e. the width should be not less than the height, otherwise
+            // the scaled resolution's in-game width will become less than DEFAULT_WIDTH
+            if ( biggestResolution.gameWidth > fheroes2::Display::DEFAULT_WIDTH && biggestResolution.gameWidth >= biggestResolution.gameHeight ) {
+                assert( biggestResolution.gameHeight >= fheroes2::Display::DEFAULT_HEIGHT );
+
+                scaledResolutions.emplace( biggestResolution.gameWidth * fheroes2::Display::DEFAULT_HEIGHT / biggestResolution.gameHeight,
+                                           fheroes2::Display::DEFAULT_HEIGHT, biggestResolution.gameWidth, biggestResolution.gameHeight );
+            }
         }
 
-        if ( resolutions.size() < 2 ) {
-            return { resolutions.begin(), resolutions.end() };
-        }
+        // Try to find and add scaled resolutions with integer scale (x2, x3, x4, etc) which correspond to existing "hardware" resolutions
+        for ( const fheroes2::ResolutionInfo & resolution : resolutions ) {
+            assert( resolution.gameWidth == resolution.screenWidth && resolution.gameHeight == resolution.screenHeight );
 
-        // Add resolutions with scale factor. No need to run through the newly added elements so we remember the size of the array.
-        const size_t resolutionCountBefore = resolutions.size();
+            const int32_t maxScale = std::min( resolution.gameWidth / fheroes2::Display::DEFAULT_WIDTH, resolution.gameHeight / fheroes2::Display::DEFAULT_HEIGHT );
 
-        // Since all resolutions are sorted then the last resolution (which is the highest) cannot have any scale factor.
-        for ( size_t currentId = 0; currentId < resolutionCountBefore - 1; ++currentId ) {
-            assert( resolutions[currentId].gameWidth > 0 && resolutions[currentId].gameHeight > 0 );
-
-            for ( size_t biggerId = currentId + 1; biggerId < resolutionCountBefore; ++biggerId ) {
-                assert( resolutions[biggerId].gameWidth > 0 && resolutions[biggerId].gameHeight > 0 );
-
-                if ( resolutions[biggerId].screenWidth != resolutions[biggerId].gameWidth || resolutions[biggerId].screenHeight != resolutions[biggerId].gameHeight ) {
-                    assert( resolutions[biggerId].screenWidth >= resolutions[biggerId].gameWidth
-                            && resolutions[biggerId].screenHeight >= resolutions[biggerId].gameHeight );
-                    // This resolution has scaling. Ignore it.
+            for ( int32_t scale = 2; scale <= maxScale; ++scale ) {
+                if ( resolution.gameWidth % scale != 0 || resolution.gameHeight % scale != 0 ) {
                     continue;
                 }
 
-                if ( ( resolutions[biggerId].gameWidth % resolutions[currentId].gameWidth ) == 0
-                     && ( resolutions[biggerId].gameHeight % resolutions[currentId].gameHeight ) == 0
-                     && ( resolutions[biggerId].gameWidth / resolutions[currentId].gameWidth )
-                            == ( resolutions[biggerId].gameHeight / resolutions[currentId].gameHeight ) ) {
-                    // IMPORTANT: we MUST do a copy of a vector element if we want to emplace it to the same vector.
-                    const fheroes2::ResolutionInfo currentResolution = resolutions[currentId];
-
-                    resolutions.emplace_back( currentResolution.gameWidth, currentResolution.gameHeight, resolutions[biggerId].gameWidth,
-                                              resolutions[biggerId].gameHeight );
-                }
+                scaledResolutions.emplace( resolution.gameWidth / scale, resolution.gameHeight / scale, resolution.gameWidth, resolution.gameHeight );
             }
         }
+
+        resolutions.merge( scaledResolutions );
 #endif
 
-        return { resolutions.begin(), resolutions.end() };
+        return resolutions;
     }
 
     std::vector<uint8_t> StandardPaletteIndexes()
