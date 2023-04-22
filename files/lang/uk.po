@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-13 05:15+0000\n"
-"PO-Revision-Date: 2023-04-13 21:41+0300\n"
+"PO-Revision-Date: 2023-04-22 12:32+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -166,7 +166,7 @@ msgid "MAX"
 msgstr "МАКС"
 
 msgid "OKAY"
-msgstr ""
+msgstr "Гаразд"
 
 msgid "Warrior"
 msgstr "Воїн"
@@ -241,7 +241,7 @@ msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
-"Тьма\n"
+"Безліч\n"
 "%{monster}"
 
 msgid ""
@@ -252,28 +252,28 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr "Мало"
+msgstr "мало"
 
 msgid "army|Several"
-msgstr "Кілька"
+msgstr "кілька"
 
 msgid "army|Pack"
-msgstr "Зграя"
+msgstr "зграя"
 
 msgid "army|Lots"
-msgstr "Багато"
+msgstr "багато"
 
 msgid "army|Horde"
-msgstr "Орда"
+msgstr "орда"
 
 msgid "army|Throng"
-msgstr "Натовп"
+msgstr "натовп"
 
 msgid "army|Swarm"
-msgstr "Купа"
+msgstr "купа"
 
 msgid "army|Zounds"
-msgstr "Тьма"
+msgstr "безліч"
 
 #, fuzzy
 msgid "army|Legion"
@@ -414,17 +414,18 @@ msgid "Shadow Cursor"
 msgstr "Тінь курсора"
 
 msgid "Audio"
-msgstr ""
+msgstr "Аудіо"
 
 msgid "Settings"
-msgstr ""
+msgstr "Налаштування"
 
 msgid "Configure"
-msgstr ""
+msgstr "Налаштувати"
 
 msgid "Hot Keys"
-msgstr ""
+msgstr "Гарячі клавіші"
 
+# Need to know where it used in game
 msgid "Damage Info"
 msgstr ""
 
@@ -432,9 +433,8 @@ msgstr ""
 msgid "Set the speed of combat actions and animations."
 msgstr "Встановити швидкість бойових дій та анімації."
 
-#, fuzzy
 msgid "Toggle to display army order during the battle."
-msgstr "Чи показувати черговість армій під час битви."
+msgstr "Перемкнути відображення черговості ходів підрозділів під час битви."
 
 #, fuzzy
 msgid ""
@@ -464,9 +464,8 @@ msgid ""
 "cursor."
 msgstr "Чи підсвічувати клітину, над якою знаходиться курсор миші."
 
-#, fuzzy
 msgid "Change the audio settings of the game."
-msgstr "Змінити мову гри."
+msgstr "Змінити звукові налаштування гри"
 
 msgid "Check and configure all the hot keys present in the game."
 msgstr ""
@@ -595,9 +594,8 @@ msgstr "Вміння героя"
 msgid "Cast Spell"
 msgstr "Накласти чари"
 
-#, fuzzy
 msgid "Retreat"
-msgstr "Втікти"
+msgstr "Відступити"
 
 #, fuzzy
 msgid "Surrender"
@@ -751,21 +749,17 @@ msgstr ""
 "Пропустити хід істоти. Поточна істота закінчить її хід і не отримає новий до "
 "наступного раунду."
 
-#, fuzzy
 msgid "View Captain's options"
-msgstr "Перегляд параметрів Героя"
+msgstr "Переглянути параметри Капітана"
 
-#, fuzzy
 msgid "View Hero's options"
-msgstr "Перегляд параметрів Героя"
+msgstr "Переглянути параметри Героя"
 
-#, fuzzy
 msgid "View opposing Captain"
-msgstr "Перегляд ворожого Героя"
+msgstr "Переглянути ворожого Капітана"
 
-#, fuzzy
 msgid "View opposing Hero"
-msgstr "Перегляд ворожого Героя"
+msgstr "Переглянути ворожого Героя"
 
 #, fuzzy
 msgid "Hide logs"
@@ -776,14 +770,13 @@ msgid "Show logs"
 msgstr "Дивитися журнал"
 
 msgid "Message Bar"
-msgstr ""
+msgstr "Табло повідомлень"
 
 msgid "Shows the results of individual monster's actions."
 msgstr ""
 
-#, fuzzy
 msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Ви впевнені, що хочете відступити?"
+msgstr "Ви впевнені, що хочете завершити бій в автоматичному режимі?"
 
 #, fuzzy
 msgid "%{name} skip their turn."
@@ -826,9 +819,8 @@ msgstr[2] ""
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr ""
 
-#, fuzzy
 msgid "The %{name} resist the spell!"
-msgstr "%{name} чинять опір чарам!"
+msgstr "%{name} опираються чарам!"
 
 #, fuzzy
 msgid "%{name} casts %{spell} on the %{troop}."
@@ -846,9 +838,8 @@ msgstr "%{spell} завдає %{damage} шкоди однієї істоти н�
 msgid "The %{spell} does %{damage} damage to all undead creatures."
 msgstr "%{spell} завдає %{damage} шкоди усім істотам нежиті."
 
-#, fuzzy
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr "%{spell} завдає %{damage} шкоди, %{count} чинять опір."
+msgstr "%{spell} завдає %{damage} шкоди, %{count} істот загинуло."
 
 #, fuzzy
 msgid "The %{spell} does %{damage} damage."
@@ -911,9 +902,8 @@ msgstr ""
 msgid "The mirror image is destroyed!"
 msgstr "Фантомний загін знищений!"
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto battle?"
-msgstr "Ви впевнені, що хочете відступити?"
+msgstr "Ви впевнені, що хочете перервати "
 
 #, fuzzy
 msgid "Error"
@@ -965,9 +955,8 @@ msgstr "Людина"
 msgid "AI"
 msgstr "Комп'ютер"
 
-#, fuzzy
 msgid "Please select another hero."
-msgstr "Будь ласка виберіть іншого героя."
+msgstr "Будь ласка, оберіть іншого героя."
 
 msgid "Set Attack Skill"
 msgstr ""
@@ -4136,9 +4125,8 @@ msgstr ""
 msgid "hotkey|toggle battle auto mode"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|finish the battle in auto mode"
-msgstr "Ви впевнені, що хочете відступити?"
+msgstr "Ви впевнені, що хочете завершити битву в автоматичному режимі?"
 
 msgid "hotkey|battle options"
 msgstr ""
@@ -6168,7 +6156,7 @@ msgid "Show next hero"
 msgstr ""
 
 msgid "Blood Morale"
-msgstr "Крові"
+msgstr "Кровожерлива"
 
 msgid "%{morale} Morale"
 msgstr ""
@@ -6266,9 +6254,8 @@ msgid ""
 "knowledge."
 msgstr ""
 
-#, fuzzy
 msgid "Current Modifiers:"
-msgstr "Наявні модифікатори:"
+msgstr "Поточні модифікатори:"
 
 #, fuzzy
 msgid "skill|Basic"
@@ -6662,69 +6649,53 @@ msgstr "Помаранчевий"
 msgid "Purple"
 msgstr "Фіолетовий"
 
-#, fuzzy
 msgid "barrier|Aqua"
-msgstr "Бірюзовий"
+msgstr "бірюзовий"
 
-#, fuzzy
 msgid "barrier|Blue"
-msgstr "Синій"
+msgstr "синій"
 
-#, fuzzy
 msgid "barrier|Brown"
-msgstr "Коричневий"
+msgstr "коричневий"
 
-#, fuzzy
 msgid "barrier|Gold"
-msgstr "Золотий"
+msgstr "золотий"
 
-#, fuzzy
 msgid "barrier|Green"
-msgstr "Зелений"
+msgstr "зелений"
 
-#, fuzzy
 msgid "barrier|Orange"
-msgstr "Помаранчевий"
+msgstr "помаранчевий"
 
-#, fuzzy
 msgid "barrier|Purple"
-msgstr "Фіолетовий"
+msgstr "фіолетовий"
 
-#, fuzzy
 msgid "barrier|Red"
-msgstr "Червоний"
+msgstr "червоний"
 
-#, fuzzy
 msgid "tent|Aqua"
-msgstr "Бірюзовий"
+msgstr "бірюзовий"
 
-#, fuzzy
 msgid "tent|Blue"
-msgstr "Синій"
+msgstr "синій"
 
-#, fuzzy
 msgid "tent|Brown"
-msgstr "Коричневий"
+msgstr "коричневий"
 
-#, fuzzy
 msgid "tent|Gold"
-msgstr "Золотий"
+msgstr "золотий"
 
-#, fuzzy
 msgid "tent|Green"
-msgstr "Зелений"
+msgstr "зелений"
 
-#, fuzzy
 msgid "tent|Orange"
-msgstr "Помаранчевий"
+msgstr "помаранчевий"
 
-#, fuzzy
 msgid "tent|Purple"
-msgstr "Фіолетовий"
+msgstr "фіолетовий"
 
-#, fuzzy
 msgid "tent|Red"
-msgstr "Червоний"
+msgstr "червоний"
 
 msgid "Experience"
 msgstr ""
@@ -6764,33 +6735,26 @@ msgstr ""
 msgid "View Towns and Castles."
 msgstr ""
 
-#, fuzzy
 msgid "luck|Cursed"
-msgstr "Проклята"
+msgstr "проклята"
 
-#, fuzzy
 msgid "luck|Awful"
-msgstr "Жахлива"
+msgstr "жахлива"
 
-#, fuzzy
 msgid "luck|Bad"
-msgstr "Погана"
+msgstr "погана"
 
-#, fuzzy
 msgid "luck|Normal"
-msgstr "Звичайна"
+msgstr "звичайна"
 
-#, fuzzy
 msgid "luck|Good"
-msgstr "Добра"
+msgstr "добра"
 
-#, fuzzy
 msgid "luck|Great"
-msgstr "Чудова"
+msgstr "чудова"
 
-#, fuzzy
 msgid "luck|Irish"
-msgstr "Ірландська"
+msgstr "ірландська"
 
 msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
@@ -6812,22 +6776,22 @@ msgid "morale|Treason"
 msgstr "Зрада"
 
 msgid "morale|Awful"
-msgstr "Жахлива"
+msgstr "жахлива"
 
 msgid "morale|Poor"
-msgstr "Погана"
+msgstr "погана"
 
 msgid "morale|Normal"
-msgstr "Звичайна"
+msgstr "звичайна"
 
 msgid "morale|Good"
-msgstr "Добра"
+msgstr "добра"
 
 msgid "morale|Great"
-msgstr "Чудова"
+msgstr "чудова"
 
 msgid "morale|Blood!"
-msgstr "Кров!"
+msgstr "кров!"
 
 msgid "Bad morale may cause your armies to freeze in combat."
 msgstr ""
@@ -6840,19 +6804,15 @@ msgstr ""
 msgid "Good morale may give your armies extra attacks in combat."
 msgstr ""
 
-#, fuzzy
 msgid "Knight"
 msgstr "Лицар"
 
-#, fuzzy
 msgid "Barbarian"
 msgstr "Варвар"
 
-#, fuzzy
 msgid "Sorceress"
 msgstr "Чарівниця"
 
-#, fuzzy
 msgid "Warlock"
 msgstr "Чорнокнижник"
 
@@ -6860,7 +6820,6 @@ msgstr "Чорнокнижник"
 msgid "Wizard"
 msgstr "Чаклун"
 
-#, fuzzy
 msgid "Necromancer"
 msgstr "Некромант"
 
@@ -7025,7 +6984,7 @@ msgid "Snow"
 msgstr "Сніг"
 
 msgid "Wasteland"
-msgstr "Пустощі"
+msgstr "Пустка"
 
 msgid "Beach"
 msgstr "Пляж"
@@ -7043,16 +7002,16 @@ msgid "Ocean"
 msgstr "Океан"
 
 msgid "maps|Small"
-msgstr "Мала"
+msgstr "мала"
 
 msgid "maps|Medium"
-msgstr "Середня"
+msgstr "середня"
 
 msgid "maps|Large"
-msgstr "Велика"
+msgstr "велика"
 
 msgid "maps|Extra Large"
-msgstr "Надвелика"
+msgstr "надвелика"
 
 #, fuzzy
 msgid "maps|Custom Size"
@@ -7094,94 +7053,74 @@ msgstr ""
 msgid "This space for rent."
 msgstr ""
 
-#, fuzzy
 msgid "No object"
-msgstr "Пусте місце"
+msgstr "Порожнє місце"
 
-#, fuzzy
 msgid "Alchemist Lab"
 msgstr "Алхімічна лабораторія"
 
-#, fuzzy
 msgid "Sign"
-msgstr "Показчик"
+msgstr "Вказівник"
 
-#, fuzzy
 msgid "Buoy"
 msgstr "Буй"
 
-#, fuzzy
 msgid "Skeleton"
 msgstr "Скелет"
 
-#, fuzzy
 msgid "Daemon Cave"
 msgstr "Печера Демона"
 
-#, fuzzy
 msgid "Treasure Chest"
-msgstr "Сундук зі скарбом"
+msgstr "Скринька зі скарбом"
 
-#, fuzzy
 msgid "Faerie Ring"
 msgstr "Коло Фей"
 
-#, fuzzy
 msgid "Campfire"
 msgstr "Вогнище"
 
-#, fuzzy
 msgid "Fountain"
 msgstr "Фонтан"
 
-#, fuzzy
 msgid "Gazebo"
 msgstr "Альтанка"
 
-#, fuzzy
 msgid "Genie Lamp"
 msgstr "Лампа джина"
 
-#, fuzzy
+# Other's monster's dwellings are named in singular form - Goblin, Dwarf, etc. This one looks like in plural - Archer's. 
+# I'd like to know, how developers want this to look like: House of some monster or monsters, in single, or in plural form?
 msgid "Archer's House"
-msgstr "Дім стрільця"
+msgstr "Дім лучників"
 
-#, fuzzy
 msgid "Goblin Hut"
 msgstr "Гоблінска хатина"
 
-#, fuzzy
 msgid "Dwarf Cottage"
 msgstr "Хатинка гнома"
 
-#, fuzzy
 msgid "Peasant Hut"
 msgstr "Селянська хата"
 
-#, fuzzy
 msgid "Stables"
 msgstr "Стайні"
 
-#, fuzzy
 msgid "Alchemist's Tower"
 msgstr "Вежа Алхіміка"
 
-#, fuzzy
 msgid "Event"
 msgstr "Подія"
 
-#, fuzzy
 msgid "Dragon City"
 msgstr "Місто Драконів"
 
-#, fuzzy
 msgid "Lighthouse"
 msgid_plural "Lighthouses"
 msgstr[0] "Маяк"
 msgstr[1] "Маяк"
 msgstr[2] "Маяк"
 
-#, fuzzy
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] "Водяне колесо"
@@ -7192,46 +7131,37 @@ msgstr[2] "Водяні колеса"
 msgid "Mines"
 msgstr "Шахти"
 
-#, fuzzy
 msgid "Monster"
-msgstr "Потвора"
+msgstr "Монстр"
 
-#, fuzzy
 msgid "Obelisk"
 msgstr "Обеліск"
 
-#, fuzzy
 msgid "Oasis"
-msgstr "Оазіс"
+msgstr "Оаза"
 
-#, fuzzy
 msgid "Resource"
 msgstr "Ресурс"
 
-#, fuzzy
 msgid "Sawmill"
 msgstr "Лісопильня"
 
-#, fuzzy
 msgid "Oracle"
 msgstr "Оракул"
 
-#, fuzzy
 msgid "Shrine of the First Circle"
 msgstr "Cвятиня 1-го кола"
 
-#, fuzzy
 msgid "Shipwreck"
 msgstr "Уламки корабля"
 
-#, fuzzy
 msgid "Sea Chest"
 msgstr "Морський сундук"
 
-#, fuzzy
 msgid "Desert Tent"
 msgstr "Пустельний намет"
 
+# Is "Stone Lith" used in the plural in game? Why Stone Lith, if it is Monolith? Name used in right-click message if I do remember right, this is single object.
 #, fuzzy
 msgid "Stone Liths"
 msgstr "Моноліти"
@@ -7244,26 +7174,21 @@ msgstr "Вагонний табір"
 msgid "Hut of the Magi"
 msgstr "Хатина волхвів"
 
-#, fuzzy
 msgid "Whirlpool"
 msgstr "Водоверть"
 
-#, fuzzy
 msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Вітряк"
 msgstr[1] "Вітряки"
 msgstr[2] "Вітряки"
 
-#, fuzzy
 msgid "Artifact"
 msgstr "Артефакт"
 
-#, fuzzy
 msgid "Mermaid"
 msgstr "Русалка"
 
-#, fuzzy
 msgid "Boat"
 msgstr "Човен"
 
@@ -7271,23 +7196,18 @@ msgstr "Човен"
 msgid "Random Ultimate Artifact"
 msgstr "Випадковий Унікальний артефакт"
 
-#, fuzzy
 msgid "Random Artifact"
 msgstr "Випадковий артефакт"
 
-#, fuzzy
 msgid "Random Resource"
 msgstr "Випадковий ресурс"
 
-#, fuzzy
 msgid "Random Monster"
-msgstr "Випадкова потвора"
+msgstr "Випадковий Монстр"
 
-#, fuzzy
 msgid "Random Town"
 msgstr "Випадкове місто"
 
-#, fuzzy
 msgid "Random Castle"
 msgstr "Випадковий замок"
 
@@ -7295,851 +7215,646 @@ msgstr "Випадковий замок"
 msgid "Eye of the Magi"
 msgstr "Око волхвів"
 
-#, fuzzy
 msgid "Random Monster - weak"
-msgstr "Випадкова слаба потвора"
+msgstr "Випадковий Монстр - слабкий"
 
-#, fuzzy
 msgid "Random Monster - medium"
-msgstr "Випадкова середня потвора"
+msgstr "Випадковий Монстр - середній"
 
-#, fuzzy
 msgid "Random Monster - strong"
-msgstr "Випадкова сильна потвора"
+msgstr "Випадковий Монстр - сильний"
 
-#, fuzzy
 msgid "Random Monster - very strong"
-msgstr "Випадкова велична потвора"
+msgstr "Випадковий Монстр - могутній"
 
-#, fuzzy
 msgid "Nothing Special"
 msgstr "Нічого особливого"
 
 msgid "Mossy Rock"
 msgstr ""
 
-#, fuzzy
 msgid "Watch Tower"
 msgstr "Вартова вежа"
 
-#, fuzzy
 msgid "Tree House"
 msgstr "Будинок на дереві"
 
-#, fuzzy
 msgid "Tree City"
-msgstr "Деревоград"
+msgstr "Місто на дереві"
 
-#, fuzzy
 msgid "Ruins"
 msgstr "Руїни"
 
-#, fuzzy
 msgid "Fort"
 msgstr "Форт"
 
-#, fuzzy
 msgid "Abandoned Mine"
-msgstr "Штольня"
+msgstr "Покинута Штольня"
 
-#, fuzzy
 msgid "Sirens"
 msgstr "Сирени"
 
-#, fuzzy
 msgid "Standing Stones"
 msgstr "Стоячі камені"
 
-#, fuzzy
 msgid "Idol"
 msgstr "Ідол"
 
-#, fuzzy
 msgid "Tree of Knowledge"
 msgstr "Дерево знань"
 
-#, fuzzy
 msgid "Witch Doctor's Hut"
 msgstr "Хатина знахаря"
 
-#, fuzzy
 msgid "Temple"
 msgstr "Храм"
 
-#, fuzzy
 msgid "Hill Fort"
 msgstr "Форт на пагорбі"
 
-#, fuzzy
 msgid "Halfling Hole"
-msgstr "Хобіцька нора"
+msgstr "Нора Напівросликів"
 
-#, fuzzy
 msgid "Mercenary Camp"
 msgstr "Табір найманців"
 
-#, fuzzy
 msgid "Shrine of the Second Circle"
 msgstr "Cвятиня 2-го кола"
 
-#, fuzzy
 msgid "Shrine of the Third Circle"
 msgstr "Cвятиня 3-го кола"
 
-#, fuzzy
 msgid "City of the Dead"
 msgstr "Місто Мертвих"
 
-#, fuzzy
 msgid "Sphinx"
 msgstr "Сфінкс"
 
-#, fuzzy
 msgid "Wagon"
 msgstr "Віз"
 
-#, fuzzy
 msgid "Tar Pit"
 msgstr "Смоляна яма"
 
-#, fuzzy
 msgid "Artesian Spring"
 msgstr "Артезіанське джерело"
 
-#, fuzzy
 msgid "Troll Bridge"
-msgstr "Троль під мостом"
+msgstr "Тролиний міст"
 
-#, fuzzy
 msgid "Watering Hole"
-msgstr "Яма з водою"
+msgstr "Джерело"
 
-#, fuzzy
 msgid "Witch's Hut"
-msgstr "Відьмина хата"
+msgstr "Хатина відьми"
 
-#, fuzzy
 msgid "Xanadu"
-msgstr "Ксанаду"
+msgstr "Занду"
 
-#, fuzzy
 msgid "Lean-To"
 msgstr "Навіс"
 
-#, fuzzy
 msgid "Magellan's Maps"
 msgstr "Мапи Магеллана"
 
-#, fuzzy
 msgid "Flotsam"
 msgstr "Уламки"
 
-#, fuzzy
 msgid "Derelict Ship"
 msgstr "Покинутий корабель"
 
-#, fuzzy
 msgid "Shipwreck Survivor"
 msgstr "Уцілілий з корабля"
 
-#, fuzzy
 msgid "Bottle"
 msgstr "Пляшка"
 
-#, fuzzy
 msgid "Magic Well"
 msgstr "Чарівна криниця"
 
-#, fuzzy
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Чарівний сад"
 msgstr[1] "Чарівні сади"
 msgstr[2] "Чарівних садів"
 
-#, fuzzy
 msgid "Observation Tower"
 msgstr "Оглядова вежа"
 
+# Name of object formed with two words. Straight translate sounds not very good: "Ливарня вільних людей". That phrase is not in use in ukrainian. 
+# Most simple way to translate - leave word "Foundry" - "Ливарня". But, full meaning of origin name will be lost. 
+# I suggest to use "Вільне Ливарство" First word used as adjective, means the same, as "Free". "Ливарство" - means Foundry. But, together "Вільне ливарство" can be perceived as organiztion, much bigger than one foundry, which player can see in game.
 #, fuzzy
 msgid "Freeman's Foundry"
 msgstr "Ливарня"
 
-#, fuzzy
 msgid "Reefs"
 msgstr "Рифи"
 
-#, fuzzy
 msgid "Trees"
 msgstr "Дерева"
 
-#, fuzzy
 msgid "Mountains"
 msgstr "Гори"
 
-#, fuzzy
 msgid "Volcano"
 msgstr "Вулкан"
 
-#, fuzzy
 msgid "Flowers"
 msgstr "Квіти"
 
-#, fuzzy
 msgid "Rock"
 msgstr "Скеля"
 
-#, fuzzy
 msgid "Water Lake"
 msgstr "Озеро"
 
-#, fuzzy
 msgid "Mandrake"
 msgstr "Мандрагора"
 
-#, fuzzy
 msgid "Dead Tree"
 msgstr "Мертве дерево"
 
-#, fuzzy
 msgid "Stump"
 msgstr "Пень"
 
-#, fuzzy
 msgid "Crater"
 msgstr "Кратер"
 
-#, fuzzy
 msgid "Cactus"
 msgstr "Кактус"
 
-#, fuzzy
 msgid "Mound"
 msgstr "Курган"
 
-#, fuzzy
 msgid "Dune"
 msgstr "Дюна"
 
-#, fuzzy
 msgid "Lava Pool"
 msgstr "Лавовий басейн"
 
-#, fuzzy
 msgid "Shrub"
 msgstr "Кущі"
 
-#, fuzzy
 msgid "Barrow Mounds"
 msgstr "Могильні кургани"
 
-#, fuzzy
 msgid "Random Artifact - Treasure"
-msgstr "Випадковий артефакт-скарб"
+msgstr "Випадковий артефакт - Реліквія"
 
-#, fuzzy
 msgid "Random Artifact - Minor"
-msgstr "Випадковий малий артефакт"
+msgstr "Випадковий артефакт - Малий"
 
-#, fuzzy
 msgid "Random Artifact - Major"
-msgstr "Випадковий великий артефакт"
+msgstr "Випадковий артефакт - Великий"
 
 #, fuzzy
 msgid "Barrier"
 msgstr "Бар'єр"
 
-#, fuzzy
 msgid "Traveller's Tent"
 msgstr "Намет мандрівника"
 
-#, fuzzy
 msgid "Jail"
 msgstr "В'язниця"
 
-#, fuzzy
 msgid "Fire Summoning Altar"
-msgstr "Вівтар призову вогню"
+msgstr "Вівтар виклику вогню"
 
-#, fuzzy
 msgid "Air Summoning Altar"
-msgstr "Вівтар призову повітря"
+msgstr "Вівтар виклику повітря"
 
-#, fuzzy
 msgid "Earth Summoning Altar"
-msgstr "Вівтар призову землі"
+msgstr "Вівтар виклику землі"
 
-#, fuzzy
 msgid "Water Summoning Altar"
-msgstr "Вівтар призову води"
+msgstr "Вівтар виклику води"
 
-#, fuzzy
 msgid "Unknown Monster"
-msgstr "Невідома потвора"
+msgstr "Невідомий монстр"
 
-#, fuzzy
 msgid "Unknown Monsters"
-msgstr "Невідомі потвори"
+msgstr "Невідомі монстри"
 
-#, fuzzy
 msgid "Peasant"
 msgstr "Cелянин"
 
-#, fuzzy
 msgid "Peasants"
 msgstr "Cеляни"
 
-#, fuzzy
 msgid "Archer"
-msgstr "Стрілець"
+msgstr "Лучник"
 
-#, fuzzy
 msgid "Archers"
-msgstr "Стрілці"
+msgstr "Лучники"
 
-#, fuzzy
 msgid "Ranger"
-msgstr "Лісник"
+msgstr "Рейнджер"
 
-#, fuzzy
 msgid "Rangers"
-msgstr "Лісники"
+msgstr "Рейнджери"
 
-#, fuzzy
 msgid "Pikeman"
-msgstr "Списоносець"
+msgstr "Пікенер"
 
-#, fuzzy
 msgid "Pikemen"
-msgstr "Списоносці"
+msgstr "Пікенери"
 
-#, fuzzy
 msgid "Veteran Pikeman"
-msgstr "Бувалий Списоносець"
+msgstr "Пікенер-ветеран"
 
-#, fuzzy
 msgid "Veteran Pikemen"
-msgstr "Бувалі Списоносці"
+msgstr "Пікенери-ветерани"
 
-#, fuzzy
 msgid "Swordsman"
 msgstr "Мечник"
 
-#, fuzzy
 msgid "Swordsmen"
 msgstr "Мечники"
 
-#, fuzzy
 msgid "Master Swordsman"
 msgstr "Майстер-мечник"
 
-#, fuzzy
 msgid "Master Swordsmen"
 msgstr "Майстри-мечники"
 
-#, fuzzy
 msgid "Cavalries"
 msgstr "Кавалерія"
 
-#, fuzzy
 msgid "Cavalry"
 msgstr "Кавалерист"
 
-#, fuzzy
 msgid "Champion"
 msgstr "Чемпіон"
 
-#, fuzzy
 msgid "Champions"
 msgstr "Чемпіони"
 
-#, fuzzy
 msgid "Paladin"
-msgstr "Паладін"
+msgstr "Паладин"
 
-#, fuzzy
 msgid "Paladins"
 msgstr "Паладини"
 
-#, fuzzy
 msgid "Crusader"
 msgstr "Хрестоносець"
 
-#, fuzzy
 msgid "Crusaders"
 msgstr "Хрестоносці"
 
-#, fuzzy
 msgid "Goblin"
 msgstr "Гоблін"
 
-#, fuzzy
 msgid "Goblins"
 msgstr "Гобліни"
 
-#, fuzzy
 msgid "Orc"
 msgstr "Орк"
 
-#, fuzzy
 msgid "Orcs"
 msgstr "Орки"
 
-#, fuzzy
 msgid "Orc Chief"
-msgstr "Вождь орків"
+msgstr "Вождь Орків"
 
-#, fuzzy
 msgid "Orc Chiefs"
-msgstr "Вожді орків"
+msgstr "Вожді Орків"
 
-#, fuzzy
 msgid "Wolf"
 msgstr "Вовк"
 
-#, fuzzy
 msgid "Wolves"
 msgstr "Вовки"
 
-#, fuzzy
 msgid "Ogre"
 msgstr "Огр"
 
-#, fuzzy
 msgid "Ogres"
 msgstr "Огри"
 
-#, fuzzy
 msgid "Ogre Lord"
-msgstr "Лорд огрів"
+msgstr "Лорд Огрів"
 
-#, fuzzy
 msgid "Ogre Lords"
-msgstr "Лорди огрів"
+msgstr "Лорди Огрів"
 
-#, fuzzy
 msgid "Troll"
 msgstr "Троль"
 
-#, fuzzy
 msgid "Trolls"
 msgstr "Тролі"
 
-#, fuzzy
 msgid "War Troll"
-msgstr "Бойовий троль"
+msgstr "Бойовий Троль"
 
-#, fuzzy
 msgid "War Trolls"
-msgstr "Бойові тролі"
+msgstr "Бойові Тролі"
 
-#, fuzzy
 msgid "Cyclopes"
 msgstr "Циклопи"
 
-#, fuzzy
 msgid "Cyclops"
 msgstr "Циклоп"
 
-#, fuzzy
 msgid "Sprite"
 msgstr "Фея"
 
-#, fuzzy
 msgid "Sprites"
 msgstr "Феї"
 
-#, fuzzy
 msgid "Dwarf"
 msgstr "Гном"
 
-#, fuzzy
 msgid "Dwarves"
 msgstr "Гноми"
 
-#, fuzzy
 msgid "Battle Dwarf"
-msgstr "Бойовий гном"
+msgstr "Бойовий Гном"
 
-#, fuzzy
 msgid "Battle Dwarves"
-msgstr "Бойові гноми"
+msgstr "Бойові Гноми"
 
-#, fuzzy
 msgid "Elf"
 msgstr "Ельф"
 
-#, fuzzy
 msgid "Elves"
 msgstr "Ельфи"
 
-#, fuzzy
 msgid "Grand Elf"
-msgstr "Високий ельф"
+msgstr "Вищий Ельф"
 
-#, fuzzy
 msgid "Grand Elves"
-msgstr "Високі ельфи"
+msgstr "Вищі Ельфи"
 
-#, fuzzy
 msgid "Druid"
 msgstr "Друїд"
 
-#, fuzzy
 msgid "Druids"
 msgstr "Друїди"
 
-#, fuzzy
 msgid "Greater Druid"
-msgstr "Старший друїд"
+msgstr "Старший Друїд"
 
-#, fuzzy
 msgid "Greater Druids"
-msgstr "Старші друїди"
+msgstr "Старші Друїди"
 
-#, fuzzy
 msgid "Unicorn"
 msgstr "Єдиноріг"
 
-#, fuzzy
 msgid "Unicorns"
 msgstr "Єдинороги"
 
-#, fuzzy
 msgid "Phoenix"
 msgstr "Фенікс"
 
-#, fuzzy
 msgid "Phoenixes"
 msgstr "Фенікси"
 
-#, fuzzy
 msgid "Centaur"
 msgstr "Кентавр"
 
-#, fuzzy
 msgid "Centaurs"
 msgstr "Кентаври"
 
-#, fuzzy
 msgid "Gargoyle"
 msgstr "Горгулья"
 
-#, fuzzy
 msgid "Gargoyles"
 msgstr "Горгульї"
 
-#, fuzzy
 msgid "Griffin"
 msgstr "Грифон"
 
-#, fuzzy
 msgid "Griffins"
 msgstr "Грифони"
 
-#, fuzzy
 msgid "Minotaur"
 msgstr "Мінотавр"
 
-#, fuzzy
 msgid "Minotaurs"
 msgstr "Мінотаври"
 
-#, fuzzy
 msgid "Minotaur King"
-msgstr "Король мінотаврів"
+msgstr "Король Мінотаврів"
 
-#, fuzzy
 msgid "Minotaur Kings"
-msgstr "Королі мінотаврів"
+msgstr "Королі Мінотаврів"
 
-#, fuzzy
 msgid "Hydra"
 msgstr "Гідра"
 
-#, fuzzy
 msgid "Hydras"
 msgstr "Гідри"
 
-#, fuzzy
 msgid "Green Dragon"
-msgstr "Зелений дракон"
+msgstr "Зелений Дракон"
 
-#, fuzzy
 msgid "Green Dragons"
-msgstr "Зелені дракони"
+msgstr "Зелені Дракони"
 
-#, fuzzy
 msgid "Red Dragon"
-msgstr "Червоний дракон"
+msgstr "Червоний Дракон"
 
-#, fuzzy
 msgid "Red Dragons"
-msgstr "Червоні дракони"
+msgstr "Червоні Дракони"
 
-#, fuzzy
 msgid "Black Dragon"
-msgstr "Чорний дракон"
+msgstr "Чорний Дракон"
 
-#, fuzzy
 msgid "Black Dragons"
-msgstr "Чорні дракони"
+msgstr "Чорні Дракони"
 
-#, fuzzy
 msgid "Halfling"
-msgstr "Хобіт"
+msgstr "Напіврослик"
 
-#, fuzzy
 msgid "Halflings"
-msgstr "Хобіти"
+msgstr "Напіврослики"
 
-#, fuzzy
 msgid "Boar"
 msgstr "Кабан"
 
-#, fuzzy
 msgid "Boars"
 msgstr "Кабани"
 
-#, fuzzy
 msgid "Iron Golem"
-msgstr "Залізний голем"
+msgstr "Залізний Голем"
 
-#, fuzzy
 msgid "Iron Golems"
-msgstr "Залізні големи"
+msgstr "Залізні Големи"
 
-#, fuzzy
 msgid "Steel Golem"
-msgstr "Сталевий голем"
+msgstr "Сталевий Голем"
 
-#, fuzzy
 msgid "Steel Golems"
-msgstr "Сталеві големи"
+msgstr "Сталеві Големи"
 
-#, fuzzy
 msgid "Roc"
 msgstr "Птах Рух"
 
-#, fuzzy
 msgid "Rocs"
 msgstr "Птахи Рух"
 
-#, fuzzy
 msgid "Mage"
 msgstr "Маг"
 
-#, fuzzy
 msgid "Magi"
 msgstr "Маги"
 
-#, fuzzy
 msgid "Archmage"
 msgstr "Архімаг"
 
-#, fuzzy
 msgid "Archmagi"
 msgstr "Архімаги"
 
-#, fuzzy
 msgid "Giant"
 msgstr "Гігант"
 
-#, fuzzy
 msgid "Giants"
 msgstr "Гіганти"
 
-#, fuzzy
 msgid "Titan"
 msgstr "Титан"
 
-#, fuzzy
 msgid "Titans"
 msgstr "Титани"
 
-#, fuzzy
 msgid "Skeletons"
 msgstr "Скелети"
 
-#, fuzzy
 msgid "Zombie"
 msgstr "Зомбі"
 
-#, fuzzy
 msgid "Zombies"
 msgstr "Зомбі"
 
-#, fuzzy
 msgid "Mutant Zombie"
 msgstr "Зомбі-мутант"
 
-#, fuzzy
 msgid "Mutant Zombies"
 msgstr "Зомбі-мутанти"
 
-#, fuzzy
 msgid "Mummies"
 msgstr "Мумії"
 
-#, fuzzy
 msgid "Mummy"
 msgstr "Мумія"
 
-#, fuzzy
 msgid "Royal Mummies"
-msgstr "Королівські мумії"
+msgstr "Королівські Мумії"
 
-#, fuzzy
 msgid "Royal Mummy"
-msgstr "Королівська мумія"
+msgstr "Королівська Мумія"
 
-#, fuzzy
 msgid "Vampire"
 msgstr "Вампір"
 
-#, fuzzy
 msgid "Vampires"
 msgstr "Вампіри"
 
-#, fuzzy
 msgid "Vampire Lord"
-msgstr "Лорд вампірів"
+msgstr "Лорд Вампірів"
 
-#, fuzzy
 msgid "Vampire Lords"
-msgstr "Лорди вампірів"
+msgstr "Лорди Вампірів"
 
-#, fuzzy
 msgid "Lich"
-msgstr "Лич"
+msgstr "Ліч"
 
-#, fuzzy
 msgid "Liches"
-msgstr "Личі"
+msgstr "Лічі"
 
-#, fuzzy
 msgid "Power Lich"
-msgstr "Могутній лич"
+msgstr "Могутній Ліч"
 
-#, fuzzy
 msgid "Power Liches"
-msgstr "Могутні личі"
+msgstr "Могутні Лічі"
 
-#, fuzzy
 msgid "Bone Dragon"
-msgstr "Костяний дракон"
+msgstr "Кістяний Дракон"
 
-#, fuzzy
 msgid "Bone Dragons"
-msgstr "Костяні дракони"
+msgstr "Кістяні Дракони"
 
-#, fuzzy
 msgid "Rogue"
 msgstr "Розбійник"
 
-#, fuzzy
 msgid "Rogues"
 msgstr "Розбійники"
 
-#, fuzzy
 msgid "Nomad"
 msgstr "Кочівник"
 
-#, fuzzy
 msgid "Nomads"
 msgstr "Кочівники"
 
-#, fuzzy
 msgid "Ghost"
 msgstr "Привид"
 
-#, fuzzy
 msgid "Ghosts"
 msgstr "Привиди"
 
-#, fuzzy
 msgid "Genie"
 msgstr "Джин"
 
-#, fuzzy
 msgid "Genies"
 msgstr "Джини"
 
-#, fuzzy
 msgid "Medusa"
 msgstr "Медуза"
 
-#, fuzzy
 msgid "Medusas"
 msgstr "Медузи"
 
-#, fuzzy
 msgid "Earth Elemental"
-msgstr "Земляний елементаль"
+msgstr "Земляний Елементаль"
 
-#, fuzzy
 msgid "Earth Elementals"
-msgstr "Земляні елементалі"
+msgstr "Земляні Елементалі"
 
-#, fuzzy
 msgid "Air Elemental"
-msgstr "Повітряний елементаль"
+msgstr "Повітряний Елементаль"
 
-#, fuzzy
 msgid "Air Elementals"
-msgstr "Повітряні елементалі"
+msgstr "Повітряні Елементалі"
 
-#, fuzzy
 msgid "Fire Elemental"
-msgstr "Вогняний елементаль"
+msgstr "Вогняний Елементаль"
 
-#, fuzzy
 msgid "Fire Elementals"
-msgstr "Вогняні елементалі"
+msgstr "Вогняні Елементалі"
 
-#, fuzzy
 msgid "Water Elemental"
-msgstr "Водяний елементаль"
+msgstr "Водний Елементаль"
 
-#, fuzzy
 msgid "Water Elementals"
-msgstr "Водяні елементалі"
+msgstr "Водні Елементалі"
 
-#, fuzzy
 msgid "Random Monsters"
-msgstr "Випадкові потвори"
+msgstr "Випадкові монстри"
 
-#, fuzzy
 msgid "Random Monster 1"
-msgstr "Випадкова потвора 1"
+msgstr "Випадковий монстр 1"
 
-#, fuzzy
 msgid "Random Monsters 1"
-msgstr "Випадкові потвори 1"
+msgstr "Випадкові монстри 1"
 
-#, fuzzy
 msgid "Random Monster 2"
-msgstr "Випадкова потвора 2"
+msgstr "Випадковий монстр 2"
 
-#, fuzzy
 msgid "Random Monsters 2"
-msgstr "Випадкові потвори 2"
+msgstr "Випадкові монстри 2"
 
-#, fuzzy
 msgid "Random Monster 3"
-msgstr "Випадкова потвора 3"
+msgstr "Випадковий монстр 3"
 
-#, fuzzy
 msgid "Random Monsters 3"
-msgstr "Випадкові потвори 3"
+msgstr "Випадкові монстри 3"
 
-#, fuzzy
 msgid "Random Monster 4"
-msgstr "Випадкова потвора 4"
+msgstr "Випадковий монстр 4"
 
-#, fuzzy
 msgid "Random Monsters 4"
-msgstr "Випадкові потвори 4"
+msgstr "Випадкові монстри 4"
 
 msgid "Double shot"
 msgstr ""
@@ -8364,9 +8079,8 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr ""
 
-#, fuzzy
 msgid "The %{name} increases your morale by %{count}."
-msgstr "%{skill} підвищує мораль військ Вашого героя на %{count}."
+msgstr "%{name} підвищує мораль військ Вашого героя на %{count}."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -8580,9 +8294,8 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr ""
 
-#, fuzzy
 msgid "The %{name} increases your luck in combat by %{count}."
-msgstr "%{skill} підвищує вдачу героя на %{count}."
+msgstr "%{name} підвищує вашу удачу у битві на %{count}."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
@@ -9380,31 +9093,24 @@ msgstr ""
 msgid "Invalid Artifact"
 msgstr ""
 
-#, fuzzy
 msgid "Wood"
 msgstr "Дерево"
 
-#, fuzzy
 msgid "Mercury"
 msgstr "Ртуть"
 
-#, fuzzy
 msgid "Ore"
 msgstr "Руда"
 
-#, fuzzy
 msgid "Sulfur"
 msgstr "Сірка"
 
-#, fuzzy
 msgid "Crystal"
 msgstr "Кристали"
 
-#, fuzzy
 msgid "Gems"
 msgstr "Самоцвіти"
 
-#, fuzzy
 msgid "Gold"
 msgstr "Золото"
 
@@ -9448,9 +9154,8 @@ msgid ""
 "harmful.  Warning:  This spell can hit your own creatures!"
 msgstr ""
 
-#, fuzzy
 msgid "Teleport"
-msgstr "Телепортуватися сюди"
+msgstr "Телепорт"
 
 msgid ""
 "Teleports the creature you select to any open position on the battlefield."
@@ -9730,7 +9435,6 @@ msgstr ""
 msgid "Damages castle walls."
 msgstr ""
 
-#, fuzzy
 msgid "Earthquake"
 msgstr "Землетрус"
 
@@ -9759,22 +9463,22 @@ msgid "View Towns"
 msgstr ""
 
 msgid "Causes all Heroes across the land to become visible."
-msgstr ""
+msgstr "Показує всіх героїв на карті"
 
 msgid "View Heroes"
-msgstr ""
+msgstr "Показати Героїв"
 
 msgid "Causes the entire land to become visible."
-msgstr ""
+msgstr "Відкриває всю карту"
 
 msgid "View All"
-msgstr ""
+msgstr "Показати Все"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
-msgstr ""
+msgstr "Дозволяє заклиначу побачити повну інформацію про ворожих Героїв."
 
 msgid "Identify Hero"
-msgstr ""
+msgstr "Ідентифікувати Героя"
 
 msgid "Summon Boat"
 msgstr ""
@@ -9786,28 +9490,28 @@ msgid ""
 msgstr ""
 
 msgid "Allows the caster to magically transport to a nearby location."
-msgstr ""
+msgstr "Магічно переносить заклинача на невелику відстань."
 
 msgid "Dimension Door"
-msgstr ""
+msgstr "Просторова Брама"
 
 msgid "Returns the caster to any town or castle currently owned."
-msgstr ""
+msgstr "Повертає заклинача до будь-якого міста або замку, що належить вам."
 
 msgid "Town Gate"
-msgstr ""
+msgstr "Міський портал"
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
 "by you."
-msgstr ""
+msgstr "Повертає героя до міста або замку на вибір, якщо ви його контролюєте."
 
 msgid "Visions"
-msgstr ""
+msgstr "Видіння"
 
 msgid ""
 "Visions predicts the likely outcome of an encounter with a neutral army camp."
-msgstr ""
+msgstr "Видіння передбачає ймовірний результат битви з нейтральною армією."
 
 msgid "Haunt"
 msgstr ""
@@ -9842,59 +9546,65 @@ msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
 
 msgid "Petrification"
-msgstr ""
+msgstr "Скам'яніння"
 
 msgid ""
 "Turns the affected creature into stone.  A petrified creature receives half "
 "damage from a direct attack."
 msgstr ""
+"Обертає уражену істоту на камінь. Скам'яніла істота отримує половину "
+"ушкоджень від безпосередньої атаки."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
-msgstr ""
+msgstr "У вас немає Магічної Книги, то ж ви не можете вичаклувати закляття. "
 
 msgid "No spell to cast."
-msgstr ""
+msgstr "Немає чарів для застосування."
 
 msgid "Your hero has %{point} spell points remaining."
 msgstr ""
 
 msgid "View Adventure Spells"
-msgstr ""
+msgstr "Показати Небойові Закляття"
 
 msgid "View Combat Spells"
-msgstr ""
+msgstr "Показати Бойові Закляття"
 
 msgid "View previous page"
-msgstr ""
+msgstr "Показати попередню сторінку"
 
 msgid "View next page"
-msgstr ""
+msgstr "Показати наступну сторінку"
 
 msgid "Close Spellbook"
-msgstr ""
+msgstr "Закрити Книгу Заклять"
 
 msgid "View %{spell}"
 msgstr ""
 
+#, fuzzy
 msgid "This spell does %{damage} points of damage."
-msgstr ""
+msgstr "Це закляття завдає %{damage} очок шкоди."
 
 msgid ""
 "This spell summons\n"
 "%{count} %{monster}."
 msgstr ""
+"Це закляття викликає \n"
+"%{count} %{monster}."
 
 msgid "This spell restores %{hp} HP."
 msgstr ""
 
+#, fuzzy
 msgid "This spell summons %{count} %{monster} to guard the mine."
-msgstr ""
+msgstr "Це закляття викликає %{count} %{monster} для охорони шахти."
 
 msgid "The nearest town is %{town}."
-msgstr ""
+msgstr "Найближче місто - %{town}."
 
 msgid "This town is occupied by your hero %{hero}."
-msgstr ""
+msgstr "Це місто вже зайняте вашим героєм %{hero}."
 
 msgid ""
 "This spell controls up to\n"
@@ -9908,52 +9618,52 @@ msgid "The ultimate artifact may be found in the %{name} regions of the world."
 msgstr ""
 
 msgid "north-west"
-msgstr ""
+msgstr "північний захід"
 
 msgid "north"
-msgstr ""
+msgstr "північ"
 
 msgid "north-east"
-msgstr ""
+msgstr "північний схід"
 
 msgid "west"
-msgstr ""
+msgstr "захід"
 
 msgid "center"
-msgstr ""
+msgstr "центр"
 
 msgid "east"
-msgstr ""
+msgstr "схід"
 
 msgid "south-west"
-msgstr ""
+msgstr "південний захід"
 
 msgid "south"
-msgstr ""
+msgstr "південь"
 
 msgid "south-east"
-msgstr ""
+msgstr "південний схід"
 
 msgid "The truth is out there."
-msgstr ""
+msgstr "Правда десь там."
 
 msgid "The dark side is stronger."
-msgstr ""
+msgstr "Темний бік сильніший."
 
 msgid "The end of the world is near."
-msgstr ""
+msgstr "Скоро настане кінець світу."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
-msgstr ""
+msgstr "Кістки Лорда Слейера поховані у фундаменті арени."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
-msgstr ""
+msgstr "Чорний Дракон залюбки здолає Титана."
 
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
-msgstr ""
+msgstr "Він сказав їй: Тинди-ринди... А тоді вона відповіла: Тари та бари..."
 
 msgid "An unknown force is being resurrected..."
-msgstr ""
+msgstr "Невідома сила постає знов..."
 
 msgid ""
 "Check the newest version of the game at\n"
