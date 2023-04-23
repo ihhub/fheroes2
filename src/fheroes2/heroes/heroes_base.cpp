@@ -361,8 +361,17 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
     }
 
     if ( !HaveSpellPoints( spell ) ) {
-        if ( res ) {
+        const Heroes * hero = dynamic_cast<const Heroes *>( this );
+        assert( hero != nullptr );
+
+        if ( hero->GetSpellPoints() == 0 && res ) {
+            *res = _( "That spell costs %{mana} mana. You have no mana, so you can't cast the spell." );
+            StringReplace( *res, "%{mana}", spell.spellPoints( hero ) );
+        }
+        else if ( res ) {
             *res = _( "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell." );
+            StringReplace( *res, "%{mana}", spell.spellPoints( hero ) );
+            StringReplace( *res, "%{point}", hero->GetSpellPoints() );
         }
         return false;
     }
