@@ -606,14 +606,14 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
 
 void Battle::Arena::ApplyActionRetreat( const Command & /*cmd*/ )
 {
-    if ( CanRetreatOpponent( current_color ) ) {
-        if ( _army1->GetColor() == current_color ) {
+    if ( CanRetreatOpponent( _currentColor ) ) {
+        if ( _army1->GetColor() == _currentColor ) {
             result_game.army1 = RESULT_RETREAT;
         }
-        else if ( _army2->GetColor() == current_color ) {
+        else if ( _army2->GetColor() == _currentColor ) {
             result_game.army2 = RESULT_RETREAT;
         }
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( current_color ) )
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( _currentColor ) )
     }
     else {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN, "CanRetreatOpponent check failed" )
@@ -622,26 +622,26 @@ void Battle::Arena::ApplyActionRetreat( const Command & /*cmd*/ )
 
 void Battle::Arena::ApplyActionSurrender( const Command & /*cmd*/ )
 {
-    if ( CanSurrenderOpponent( current_color ) ) {
+    if ( CanSurrenderOpponent( _currentColor ) ) {
         Funds cost;
 
-        if ( _army1->GetColor() == current_color )
+        if ( _army1->GetColor() == _currentColor )
             cost.gold = _army1->GetSurrenderCost();
-        else if ( _army2->GetColor() == current_color )
+        else if ( _army2->GetColor() == _currentColor )
             cost.gold = _army2->GetSurrenderCost();
 
-        if ( world.GetKingdom( current_color ).AllowPayment( cost ) ) {
-            if ( _army1->GetColor() == current_color ) {
+        if ( world.GetKingdom( _currentColor ).AllowPayment( cost ) ) {
+            if ( _army1->GetColor() == _currentColor ) {
                 result_game.army1 = RESULT_SURRENDER;
-                world.GetKingdom( current_color ).OddFundsResource( cost );
+                world.GetKingdom( _currentColor ).OddFundsResource( cost );
                 world.GetKingdom( _army2->GetColor() ).AddFundsResource( cost );
             }
-            else if ( _army2->GetColor() == current_color ) {
+            else if ( _army2->GetColor() == _currentColor ) {
                 result_game.army2 = RESULT_SURRENDER;
-                world.GetKingdom( current_color ).OddFundsResource( cost );
+                world.GetKingdom( _currentColor ).OddFundsResource( cost );
                 world.GetKingdom( _army1->GetColor() ).AddFundsResource( cost );
             }
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( current_color ) )
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( _currentColor ) )
         }
     }
     else {
