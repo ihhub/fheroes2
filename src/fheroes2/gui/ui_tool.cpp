@@ -32,6 +32,7 @@
 #include <string>
 #include <utility>
 
+#include "game_delays.h"
 #include "image_palette.h"
 #include "localevent.h"
 #include "screen.h"
@@ -225,6 +226,100 @@ namespace fheroes2
         if ( isEvilInterface != isOriginalEvilInterface ) {
             Settings::Get().setEvilInterface( isOriginalEvilInterface );
         }
+    }
+
+    void colorFade( const std::vector<uint8_t> & palette, const fheroes2::Rect & frameRoi, const uint32_t durationMs, const uint32_t fps )
+    {
+        // Game palette has 256 values for red, green and blue, so its size is: 256 * 3 = 768.
+        const int32_t paletteSize = 768;
+        // Do a color fade only for valid palette.
+        if ( palette.size() != paletteSize ) {
+            return;
+        }
+
+        // The biggest problem here is that the palette can be not the same as in the game.
+        // Since we want to do color fading to gray-scale colors we take the original palette and
+        // find the nearest colors in video's palette to gray-scale colors of the original palette.
+        // Then we gradually change the current palette to be only gray-scale and after reaching the
+        // last frame change all colors of the frame to be only gray-scale colors of the original palette.
+
+        const uint8_t * originalPalette = fheroes2::getGamePalette();
+
+        // Yes, these values are hardcoded. There are ways to do it programmatically.
+        const int32_t startGrayScaleColorId = 10;
+        const int32_t endGrayScaleColorId = 36;
+
+        // Game palette has 256 color indexes.
+        const int32_t paletteIndexes = 256;
+
+        std::vector<uint8_t> assignedValue( paletteIndexes );
+
+        for ( size_t id = 0; id < paletteIndexes; ++id ) {
+            int32_t nearestDistance = INT32_MAX;
+
+            for ( uint8_t colorId = startGrayScaleColorId; colorId <= endGrayScaleColorId; ++colorId ) {
+                const int32_t redDiff = static_cast<int32_t>( palette[id * 3] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3] ) * 4;
+                const int32_t greenDiff
+                    = static_cast<int32_t>( palette[id * 3 + 1] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3 + 1] ) * 4;
+                const int32_t blueDiff
+                    = static_cast<int32_t>( palette[id * 3 + 2] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3 + 2] ) * 4;
+
+                const int32_t distance = redDiff * redDiff + greenDiff * greenDiff + blueDiff * blueDiff;
+                if ( nearestDistance > distance ) {
+                    nearestDistance = distance;
+                    assignedValue[id] = colorId;
+                }
+            }
+        }
+
+        std::array<uint8_t, paletteSize> endPalette{ 0 };
+        for ( size_t i = 0; i < paletteIndexes; ++i ) {
+            const uint8_t valuePosition = assignedValue[i] * 3;
+            // Red color.
+            endPalette[i * 3] = originalPalette[valuePosition] * 4;
+            // Green color.
+            endPalette[i * 3 + 1] = originalPalette[valuePosition + 1] * 4;
+            // Blue color.
+            endPalette[i * 3 + 2] = originalPalette[valuePosition + 2] * 4;
+        }
+
+        // Gradually fade the palette.
+        const uint32_t delay = 1000 / fps;
+        const uint32_t gradingSteps = durationMs / delay;
+        uint32_t gradingId = 1;
+        std::vector<uint8_t> gradingPalette( paletteSize );
+        std::vector<uint8_t> prevPalette( paletteSize );
+
+        const fheroes2::ScreenPaletteRestorer screenRestorer;
+        fheroes2::Display & display = fheroes2::Display::instance();
+        LocalEvent & le = LocalEvent::Get();
+
+        Game::passCustomAnimationDelay( delay );
+
+        while ( le.HandleEvents( Game::isCustomDelayNeeded( delay ) ) ) {
+            if ( Game::validateCustomAnimationDelay( delay ) ) {
+                if ( gradingId == gradingSteps ) {
+                    break;
+                }
+
+                for ( int32_t i = 0; i < paletteSize; ++i ) {
+                    gradingPalette[i] = static_cast<uint8_t>( ( palette[i] * ( gradingSteps - gradingId ) + endPalette[i] * gradingId ) / gradingSteps );
+                }
+
+                screenRestorer.changePalette( gradingPalette.data() );
+
+                // We need to swap the palettes so the next call of 'changePalette()' will think that the palette is new.
+                std::swap( prevPalette, gradingPalette );
+
+                display.render( frameRoi );
+
+                ++gradingId;
+            }
+        }
+
+        // Convert all video frame colors to original game palette colors.
+        fheroes2::ApplyPalette( display, frameRoi.x, frameRoi.y, display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, assignedValue );
+        screenRestorer.changePalette( originalPalette );
     }
 
     void CreateDeathWaveEffect( Image & out, const Image & in, const int32_t x, const std::vector<int32_t> & deathWaveCurve )

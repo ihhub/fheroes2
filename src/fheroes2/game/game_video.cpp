@@ -57,104 +57,6 @@ namespace
             }
         }
     }
-
-    void colorFade( const std::vector<uint8_t> & palette, const fheroes2::Rect & frameRoi, const uint32_t durationMs, const uint32_t fps )
-    {
-        // Game palette has 256 values for red, green and blue, so its size is: 256 * 3 = 768.
-        const int32_t paletteSize = 768;
-        // Do a color fade only for valid palette.
-        if ( palette.size() != paletteSize ) {
-            return;
-        }
-
-        // The biggest problem here is that the palette can be not the same as in the game.
-        // Since we want to do color fading to gray-scale colors we take the original palette and
-        // find the nearest colors in video's palette to gray-scale colors of the original palette.
-        // Then we gradually change the current palette to be only gray-scale and after reaching the
-        // last frame change all colors of the frame to be only gray-scale colors of the original palette.
-
-        const uint8_t * originalPalette = fheroes2::getGamePalette();
-
-        // Yes, these values are hardcoded. There are ways to do it programmatically.
-        const int32_t startGrayScaleColorId = 10;
-        const int32_t endGrayScaleColorId = 36;
-
-        // Game palette has 256 color indexes.
-        const int32_t paletteIndexes = 256;
-
-        std::vector<uint8_t> assignedValue( paletteIndexes );
-
-        for ( size_t id = 0; id < paletteIndexes; ++id ) {
-            int32_t nearestDistance = INT32_MAX;
-
-            for ( uint8_t colorId = startGrayScaleColorId; colorId <= endGrayScaleColorId; ++colorId ) {
-                const int32_t redDiff = static_cast<int32_t>( palette[id * 3] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3] ) * 4;
-                const int32_t greenDiff
-                    = static_cast<int32_t>( palette[id * 3 + 1] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3 + 1] ) * 4;
-                const int32_t blueDiff
-                    = static_cast<int32_t>( palette[id * 3 + 2] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3 + 2] ) * 4;
-
-                const int32_t distance = redDiff * redDiff + greenDiff * greenDiff + blueDiff * blueDiff;
-                if ( nearestDistance > distance ) {
-                    nearestDistance = distance;
-                    assignedValue[id] = colorId;
-                }
-            }
-        }
-
-        std::array<uint8_t, paletteSize> endPalette{ 0 };
-        for ( size_t i = 0; i < paletteIndexes; ++i ) {
-            const uint8_t valuePosition = assignedValue[i] * 3;
-            // Red color.
-            endPalette[i * 3] = originalPalette[valuePosition] * 4;
-            // Green color.
-            endPalette[i * 3 + 1] = originalPalette[valuePosition + 1] * 4;
-            // Blue color.
-            endPalette[i * 3 + 2] = originalPalette[valuePosition + 2] * 4;
-        }
-
-        // Gradually fade the palette.
-        const uint32_t delay = 1000 / fps;
-        const uint32_t gradingSteps = durationMs / delay;
-        uint32_t gradingId = 1;
-        std::vector<uint8_t> gradingPalette( paletteSize );
-        std::vector<uint8_t> prevPalette( paletteSize );
-
-        const fheroes2::ScreenPaletteRestorer screenRestorer;
-        fheroes2::Display & display = fheroes2::Display::instance();
-        LocalEvent & le = LocalEvent::Get();
-
-        Game::passCustomAnimationDelay( delay );
-
-        while ( le.HandleEvents( Game::isCustomDelayNeeded( delay ) ) ) {
-            if ( Game::validateCustomAnimationDelay( delay ) ) {
-                if ( gradingId == gradingSteps ) {
-                    break;
-                }
-
-                for ( int32_t i = 0; i < paletteSize; ++i ) {
-                    gradingPalette[i] = static_cast<uint8_t>( ( palette[i] * ( gradingSteps - gradingId ) + endPalette[i] * gradingId ) / gradingSteps );
-                }
-
-                screenRestorer.changePalette( gradingPalette.data() );
-
-                // We need to swap the palettes so the next call of 'changePalette()' will think that the palette is new.
-                std::swap( prevPalette, gradingPalette );
-
-                display.render( frameRoi );
-
-                ++gradingId;
-            }
-
-            if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
-                break;
-            }
-        }
-
-        // Convert all video frame colors to original game palette colors.
-        fheroes2::ApplyPalette( display, frameRoi.x, frameRoi.y, display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, assignedValue );
-        screenRestorer.changePalette( originalPalette );
-    }
 }
 
 namespace Video
@@ -187,13 +89,7 @@ namespace Video
         return false;
     }
 
-    bool ShowVideo( const std::string & fileName, const VideoAction action, const bool fadeColorsOnEnd /* = false */ )
-    {
-        // The video without subtitles will be rendered so create an empty subtitles vector.
-        return ShowVideo( fileName, action, {}, fadeColorsOnEnd );
-    }
-
-    bool ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<Subtitle> & subtitles, const bool fadeColorsOnEnd /* = false */ )
+    bool ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<Subtitle> & subtitles /* = {} */, const bool fadeColorsOnEnd /* = false */ )
     {
         // Stop any cycling animation.
         const fheroes2::ScreenPaletteRestorer screenRestorer;
@@ -313,7 +209,8 @@ namespace Video
         }
 
         if ( fadeColorsOnEnd ) {
-            colorFade( palette, frameRoi, 1500, 8 );
+            // Do color fade for 1 second with 15 FPS.
+            fheroes2::colorFade( palette, frameRoi, 1000, 15 );
         }
         else {
             display.fill( 0 );
@@ -323,15 +220,16 @@ namespace Video
         return true;
     }
 
-    Subtitle::Subtitle( const fheroes2::TextBase & subtitleText, const uint32_t startTimeMS, const uint32_t durationMS /* = UINT32_MAX */,
-                        const int32_t maxWidth /* = fheroes2::Display::DEFAULT_WIDTH */ )
+    Subtitle::Subtitle( const fheroes2::TextBase & subtitleText, const uint32_t startTimeMS, const uint32_t durationMS,
+                        const fheroes2::Point & position /* = { -1, -1 } */, const int32_t maxWidth /* = fheroes2::Display::DEFAULT_WIDTH */ )
         : _startTimeMS( startTimeMS )
+        , _position( position )
     {
         assert( maxWidth > 0 );
         const int32_t textWidth = subtitleText.width( maxWidth );
+
         // We add extra 1 to have space for contour.
         _subtitleImage.resize( textWidth + 1, subtitleText.height( textWidth ) + 1 );
-        _subtitleImage.reset();
 
         // Draw text and remove all shadow data is it could not be properly applied to video palette.
         // We use the black color with id = 36 so no shadow will be applied to it.
@@ -347,8 +245,10 @@ namespace Video
         // This is made to avoid overflow when calculating the end frame.
         _endTimeMS = _startTimeMS + std::min( durationMS, UINT32_MAX - _startTimeMS );
 
-        // Position subtitles at the bottom center by using default screen size (it is currently equal to video size).
-        _position.x = ( fheroes2::Display::DEFAULT_WIDTH - _subtitleImage.width() ) / 2;
-        _position.y = fheroes2::Display::DEFAULT_HEIGHT - _subtitleImage.height();
+        // If position has negative value: position subtitles at the bottom center by using default screen size (it is currently equal to video size).
+        if ( ( _position.x < 0 ) || ( _position.y < 0 ) ) {
+            _position.x = ( fheroes2::Display::DEFAULT_WIDTH - _subtitleImage.width() ) / 2;
+            _position.y = fheroes2::Display::DEFAULT_HEIGHT - _subtitleImage.height();
+        }
     }
 }

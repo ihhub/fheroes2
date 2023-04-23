@@ -1248,9 +1248,8 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         ratingText.add( { fheroes2::HighScoreDataContainer::getMonsterByDay( daysPassed ).GetName(), fheroes2::FontType::normalWhite() } );
 
         // Show results from the 5th second until end (forever) and set maximum width to 140 to fit the black area.
-        Video::Subtitle ratingSubtitle( ratingText, 5000, UINT32_MAX, 140 );
-        // Set position to render results over the black rectangle of burned picture in WIN.SMK video.
-        ratingSubtitle.setPosition( { 405, 110 } );
+        // Set position (405,110) to render results over the black rectangle of burned picture in WIN.SMK video.
+        Video::Subtitle ratingSubtitle( ratingText, 5000, UINT32_MAX, { 405, 110 }, 140 );
 
         AudioManager::ResetAudio();
         Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { std::move( ratingSubtitle ) }, true );

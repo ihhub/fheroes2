@@ -40,14 +40,8 @@ namespace Video
     {
     public:
         // Generate the image from subtitles text and store it in Subtitle class.
-        Subtitle( const fheroes2::TextBase & subtitleText, const uint32_t startTimeMS, const uint32_t durationMS = UINT32_MAX,
+        Subtitle( const fheroes2::TextBase & subtitleText, const uint32_t startTimeMS, const uint32_t durationMS, const fheroes2::Point & position = { -1, -1 },
                   const int32_t maxWidth = fheroes2::Display::DEFAULT_WIDTH );
-
-        // Set subtitle position on screen relative to the top left corner of video image.
-        void setPosition( const fheroes2::Point & position )
-        {
-            _position = position;
-        }
 
         // Check if subtitles needs to be rendered at the current time (in milliseconds).
         bool needRender( const uint32_t currentTimeMS ) const
@@ -62,18 +56,15 @@ namespace Video
         }
 
     private:
-        fheroes2::Point _position;
+        fheroes2::Point _position{ -1, -1 };
         fheroes2::Image _subtitleImage;
         uint32_t _startTimeMS{ 0 };
-        uint32_t _endTimeMS{ UINT32_MAX };
+        uint32_t _endTimeMS{ 0 };
     };
 
     // Returns true if the file exists.
     bool getVideoFilePath( const std::string & fileName, std::string & path );
 
     // Returns false if the video is not present or it is corrupted.
-    bool ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<Subtitle> & subtitles, const bool fadeColorsOnEnd = false );
-
-    // Returns false if the video is not present or it is corrupted.
-    bool ShowVideo( const std::string & fileName, const VideoAction action, const bool fadeColorsOnEnd = false );
+    bool ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<Subtitle> & subtitles = {}, const bool fadeColorsOnEnd = false );
 }
