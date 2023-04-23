@@ -57,7 +57,6 @@ void Interface::Basic::SetFocus( Heroes * hero )
 
         Redraw( REDRAW_BUTTONS );
 
-        iconsPanel.Select( hero );
         gameArea.SetCenter( hero->GetCenter() );
         statusWindow.SetState( StatusType::STATUS_ARMY );
 
@@ -122,7 +121,7 @@ void Interface::Basic::updateFocus()
     }
 }
 
-void Interface::Basic::ResetFocus( int priority )
+void Interface::Basic::ResetFocus( int priority, const bool resetScrollBarPosition /* = true */ )
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
@@ -130,7 +129,7 @@ void Interface::Basic::ResetFocus( int priority )
         Focus & focus = player->GetFocus();
         Kingdom & myKingdom = world.GetKingdom( player->GetColor() );
 
-        iconsPanel.ResetIcons( ICON_ANY );
+        iconsPanel.ResetIcons( ICON_ANY, resetScrollBarPosition );
 
         switch ( priority ) {
         case GameFocus::FIRSTHERO: {
@@ -141,7 +140,7 @@ void Interface::Basic::ResetFocus( int priority )
             if ( it != heroes.end() )
                 SetFocus( *it );
             else
-                ResetFocus( GameFocus::CASTLE );
+                ResetFocus( GameFocus::CASTLE, resetScrollBarPosition );
             break;
         }
 

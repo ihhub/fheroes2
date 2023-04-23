@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -181,7 +181,7 @@ namespace Interface
         void Select( Castle * const );
 
         bool IsSelected( const icons_t type ) const;
-        void ResetIcons( const icons_t type );
+        void ResetIcons( const icons_t type, const bool resetScrollBarPosition = true );
         void HideIcons( const icons_t type );
         void ShowIcons( const icons_t type );
 

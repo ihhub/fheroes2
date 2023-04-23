@@ -1159,7 +1159,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                             Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
 
                             gameArea.SetCenter( hero->GetCenter() );
-                            ResetFocus( GameFocus::HEROES );
+                            ResetFocus( GameFocus::HEROES, false);
 
                             RedrawFocus();
 
@@ -1181,7 +1181,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                                 gameArea.ShiftCenter( movement );
 
                                 Game::SetUpdateSoundsOnFocusUpdate( false );
-                                ResetFocus( GameFocus::HEROES );
+                                ResetFocus( GameFocus::HEROES, false );
                                 Game::SetUpdateSoundsOnFocusUpdate( true );
                                 heroAnimationFrameCount = 32 - heroMovementSkipValue;
                                 heroAnimationSpriteId = hero->GetSpriteIndex();

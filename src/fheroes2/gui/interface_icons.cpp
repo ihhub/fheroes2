@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -409,11 +409,11 @@ void Interface::IconsPanel::Select( Castle * const cs )
     castleIcons.SetCurrent( cs );
 }
 
-void Interface::IconsPanel::ResetIcons( const icons_t type )
+void Interface::IconsPanel::ResetIcons( const icons_t type, const bool resetScrollBarPosition /* = true */ )
 {
     Kingdom & kingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
-    if ( !kingdom.isControlAI() ) {
+    if ( !kingdom.isControlAI() && resetScrollBarPosition ) {
         const int icnscroll = Settings::Get().isEvilInterfaceEnabled() ? ICN::SCROLLE : ICN::SCROLL;
 
         const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( icnscroll, 4 );
