@@ -1159,7 +1159,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                             Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
 
                             gameArea.SetCenter( hero->GetCenter() );
-                            ResetFocus( GameFocus::HEROES, false);
+                            ResetFocus( GameFocus::HEROES, false );
 
                             RedrawFocus();
 
