@@ -93,7 +93,7 @@ public final class ToolsetActivity extends AppCompatActivity
             liveStatus.setValue( status.setIsHoMM2AssetsPresent( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ) ) );
         }
 
-        public void extractAssets( final File externalFilesDir, final Uri zipFileUri, final ContentResolver contentResolver )
+        public void extractAssets( final File externalFilesDir, final File cacheDir, final Uri zipFileUri, final ContentResolver contentResolver )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
@@ -101,7 +101,7 @@ public final class ToolsetActivity extends AppCompatActivity
 
             new Thread( () -> {
                 try ( final InputStream iStream = contentResolver.openInputStream( zipFileUri ) ) {
-                    if ( HoMM2AssetManagement.extractHoMM2AssetsFromZip( externalFilesDir, iStream ) ) {
+                    if ( HoMM2AssetManagement.extractHoMM2AssetsFromZip( externalFilesDir, cacheDir, iStream ) ) {
                         liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, RESULT_SUCCESS, "" ) );
                     }
                     else {
@@ -125,7 +125,7 @@ public final class ToolsetActivity extends AppCompatActivity
             return;
         }
 
-        viewModel.extractAssets( getExternalFilesDir( null ), result, getContentResolver() );
+        viewModel.extractAssets( getExternalFilesDir( null ), getCacheDir(), result, getContentResolver() );
     } );
 
     @Override

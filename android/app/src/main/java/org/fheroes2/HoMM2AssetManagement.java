@@ -20,6 +20,8 @@
 
 package org.fheroes2;
 
+import com.github.stephenc.javaisotools.loopfs.iso9660.Iso9660FileEntry;
+import com.github.stephenc.javaisotools.loopfs.iso9660.Iso9660FileSystem;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -40,7 +42,7 @@ final class HoMM2AssetManagement
     }
 
     // Returns true if at least one asset was found and extracted, otherwise returns false
-    static boolean extractHoMM2AssetsFromZip( final File externalFilesDir, final InputStream iStream ) throws IOException
+    static boolean extractHoMM2AssetsFromZip( final File externalFilesDir, final File cacheDir, final InputStream iStream ) throws IOException
     {
         // It is allowed to extract only files located in these subdirectories
         final Set<String> allowedSubdirNames = new HashSet<>();
@@ -65,7 +67,29 @@ final class HoMM2AssetManagement
                 continue;
             }
 
-            final String assetSubpath = getHoMM2AssetSubpath( new File( zEntry.getName() ), allowedSubdirNames );
+            final File zEntryFile = new File( zEntry.getName() );
+
+            // CD image from GOG
+            if ( zEntryFile.getName().toLowerCase( Locale.ROOT ).equals( "homm2.gog" ) ) {
+                final File isoFile = new File( cacheDir, "homm2.iso" );
+
+                try {
+                    try ( final OutputStream iso = new FileOutputStream( isoFile ) ) {
+                        gogToISO( zStream, iso );
+                    }
+
+                    final boolean res = extractAnimationsFromISO( externalFilesDir, isoFile );
+
+                    result = result || res;
+                }
+                finally {
+                    isoFile.delete();
+                }
+
+                continue;
+            }
+
+            final String assetSubpath = getHoMM2AssetSubpath( zEntryFile, allowedSubdirNames );
             // No need to extract the file if its path does not contain any of the allowed subdirectories
             if ( assetSubpath.isEmpty() ) {
                 continue;
@@ -87,6 +111,56 @@ final class HoMM2AssetManagement
             }
 
             result = true;
+        }
+
+        return result;
+    }
+
+    private static boolean extractAnimationsFromISO( final File externalFilesDir, final File isoFile ) throws IOException
+    {
+        // It is allowed to extract only files located in these subdirectories
+        final Set<String> allowedSubdirNames = new HashSet<>();
+        allowedSubdirNames.add( "anim" );
+
+        final Set<File> allowedSubdirs = new HashSet<>();
+        for ( String name : allowedSubdirNames ) {
+            allowedSubdirs.add( new File( externalFilesDir, name ).getCanonicalFile() );
+        }
+
+        boolean result = false;
+
+        try ( final Iso9660FileSystem isoFileSystem = new Iso9660FileSystem( isoFile, true ) ) {
+            for ( final Iso9660FileEntry isoEntry : isoFileSystem ) {
+                // No need to extract empty directories
+                if ( isoEntry.isDirectory() ) {
+                    continue;
+                }
+
+                final File isoEntryFile = new File( isoEntry.getPath() );
+
+                final String assetSubpath = getHoMM2AssetSubpath( isoEntryFile, allowedSubdirNames );
+                // No need to extract the file if its path does not contain any of the allowed subdirectories
+                if ( assetSubpath.isEmpty() ) {
+                    continue;
+                }
+
+                final File outFile = new File( externalFilesDir, assetSubpath );
+                // Check the path for various trickery, such as 'data/../../../bin/file'
+                if ( !isValidHoMM2AssetPath( outFile, allowedSubdirs ) ) {
+                    continue;
+                }
+
+                final File outFileDir = outFile.getParentFile();
+                if ( outFileDir != null ) {
+                    outFileDir.mkdirs();
+                }
+
+                try ( final InputStream in = isoFileSystem.getInputStream( isoEntry ); final OutputStream out = new FileOutputStream( outFile ) ) {
+                    IOUtils.copy( in, out );
+                }
+
+                result = true;
+            }
         }
 
         return result;
@@ -124,5 +198,39 @@ final class HoMM2AssetManagement
         }
 
         return false;
+    }
+
+    // Converts HOMM2.GOG file to ISO format
+    private static void gogToISO( final InputStream gogStream, final OutputStream isoStream ) throws IOException
+    {
+        final int chunkSize = 2352;
+        final byte[] chunk = new byte[chunkSize];
+
+        int chunkOffset = 0;
+
+        while ( true ) {
+            final int bytesRead = gogStream.read( chunk, chunkOffset, chunkSize - chunkOffset );
+
+            // EOF
+            if ( bytesRead < 0 ) {
+                break;
+            }
+
+            // Partial read
+            if ( chunkOffset + bytesRead != chunkSize ) {
+                chunkOffset += bytesRead;
+
+                continue;
+            }
+
+            chunkOffset = 0;
+
+            if ( chunk[15] == 2 ) {
+                isoStream.write( chunk, 24, 2048 );
+            }
+            else {
+                isoStream.write( chunk, 16, 2048 );
+            }
+        }
     }
 }
