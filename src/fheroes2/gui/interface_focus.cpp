@@ -129,7 +129,9 @@ void Interface::Basic::ResetFocus( int priority, const bool resetScrollBarPositi
         Focus & focus = player->GetFocus();
         Kingdom & myKingdom = world.GetKingdom( player->GetColor() );
 
-        iconsPanel.ResetIcons( ICON_ANY, resetScrollBarPosition );
+        if (resetScrollBarPosition) {
+            iconsPanel.ResetIcons( ICON_ANY);
+        }
 
         switch ( priority ) {
         case GameFocus::FIRSTHERO: {
