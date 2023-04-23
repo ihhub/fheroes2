@@ -21,6 +21,7 @@
 #include "ui_tool.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <chrono>
 #include <cmath>

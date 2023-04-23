@@ -32,7 +32,6 @@
 #include "cursor.h"
 #include "dir.h"
 #include "game_delays.h"
-#include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
@@ -222,8 +221,8 @@ namespace Video
 
     Subtitle::Subtitle( const fheroes2::TextBase & subtitleText, const uint32_t startTimeMS, const uint32_t durationMS,
                         const fheroes2::Point & position /* = { -1, -1 } */, const int32_t maxWidth /* = fheroes2::Display::DEFAULT_WIDTH */ )
-        : _startTimeMS( startTimeMS )
-        , _position( position )
+        : _position( position )
+        , _startTimeMS( startTimeMS )
     {
         assert( maxWidth > 0 );
         const int32_t textWidth = subtitleText.width( maxWidth );
