@@ -1041,6 +1041,11 @@ void fheroes2::ExcludeArtifactFromRandom( const int artifactID )
     artifactGlobalStatus[id] |= ART_RNDDISABLED;
 }
 
+bool fheroes2::isPriceOfLoyaltyArtifact( const int artifactID )
+{
+    return artifactID >= Artifact::SPELL_SCROLL && artifactID <= Artifact::SPADE_NECROMANCY;
+}
+
 ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar )
     : _hero( hero )
     , use_mini_sprite( mini )

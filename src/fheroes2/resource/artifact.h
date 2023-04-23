@@ -261,6 +261,8 @@ namespace fheroes2
 {
     void ResetArtifactStats();
     void ExcludeArtifactFromRandom( const int artifactID );
+
+    bool isPriceOfLoyaltyArtifact( const int artifactID );
 }
 
 struct ArtifactSetData
