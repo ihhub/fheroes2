@@ -23,7 +23,8 @@
 
 package com.github.stephenc.javaisotools.loopfs.api;
 
-public interface FileEntry {
+public interface FileEntry
+{
     String getName();
     String getPath();
 

@@ -26,7 +26,8 @@ package com.github.stephenc.javaisotools.loopfs.spi;
 import com.github.stephenc.javaisotools.loopfs.api.FileEntry;
 import java.io.IOException;
 
-public interface VolumeDescriptorSet<T extends FileEntry> {
+public interface VolumeDescriptorSet<T extends FileEntry>
+{
     boolean deserialize( byte[] volumeDescriptor ) throws IOException;
 
     T getRootEntry();

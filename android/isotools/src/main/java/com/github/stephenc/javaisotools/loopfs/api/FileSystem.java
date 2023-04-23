@@ -26,7 +26,8 @@ package com.github.stephenc.javaisotools.loopfs.api;
 import java.io.Closeable;
 import java.io.InputStream;
 
-public interface FileSystem<T extends FileEntry> extends Iterable<T>, Closeable {
+public interface FileSystem<T extends FileEntry> extends Iterable<T>, Closeable
+{
     InputStream getInputStream( T entry );
 
     boolean isClosed();

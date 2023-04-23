@@ -23,7 +23,8 @@
 
 package com.github.stephenc.javaisotools.loopfs.iso9660;
 
-public interface Constants {
+public interface Constants
+{
     int DEFAULT_BLOCK_SIZE = 2 * 1024;
     int RESERVED_SECTORS = 16;
 

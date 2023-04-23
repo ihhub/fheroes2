@@ -25,7 +25,8 @@ package com.github.stephenc.javaisotools.loopfs.spi;
 
 import java.io.IOException;
 
-public interface SeekableInput {
+public interface SeekableInput
+{
     void seek( long pos ) throws IOException;
 
     int read( byte[] b, int off, int len ) throws IOException;

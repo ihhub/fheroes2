@@ -68,8 +68,7 @@ class EntryInputStream extends InputStream
 
         int read;
 
-        synchronized ( this.fileSystem )
-        {
+        synchronized ( this.fileSystem ) {
             if ( this.fileSystem.isClosed() ) {
                 throw new IOException( "ISO file closed." );
             }
