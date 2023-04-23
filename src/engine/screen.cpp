@@ -134,7 +134,7 @@ namespace
             const fheroes2::ResolutionInfo lowestResolution = *( resolutions.begin() );
 
             for ( const fheroes2::ResolutionInfo & resolution : possibleResolutions ) {
-                if ( lowestResolution < resolution || lowestResolution == resolution ) {
+                if ( lowestResolution.gameWidth < resolution.gameWidth || lowestResolution.gameHeight < resolution.gameHeight || lowestResolution == resolution ) {
                     continue;
                 }
 
