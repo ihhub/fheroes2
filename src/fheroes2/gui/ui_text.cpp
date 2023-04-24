@@ -212,6 +212,7 @@ namespace
                 ++character;
             }
             else {
+                // TODO: Do not allow lines with width higher than 'maxWidth'.
                 ++lineLength;
                 if ( validator.isValid( *character ) ) {
                     ++lastWordLength;
@@ -596,14 +597,14 @@ namespace fheroes2
                 correctedWidth = currentWidth;
                 endWidth = currentWidth;
             }
-
-            xOffset = ( maxWidth - correctedWidth ) / 2;
         }
         else {
-            // This is a single-line message. Find its length and center it according to the maximum width.
+            // This is a single-line message. Find its length.
             correctedWidth = width();
-            xOffset = ( maxWidth - correctedWidth ) / 2;
         }
+
+        // Center text according to the maximum width.
+        xOffset = ( maxWidth - correctedWidth ) / 2;
 
         offsets.clear();
         render( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x + xOffset, y, correctedWidth, output, _fontType, fontHeight,
