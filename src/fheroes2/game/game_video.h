@@ -40,6 +40,7 @@ namespace Video
     {
     public:
         // Generate the image from subtitles text and store it in Subtitle class.
+        // The 'position' represents the top-center of subtitles image. All subtitles are center aligned.
         Subtitle( const fheroes2::TextBase & subtitleText, const uint32_t startTimeMS, const uint32_t durationMS, const fheroes2::Point & position = { -1, -1 },
                   const int32_t maxWidth = fheroes2::Display::DEFAULT_WIDTH );
 

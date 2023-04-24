@@ -249,5 +249,8 @@ namespace Video
             _position.x = ( fheroes2::Display::DEFAULT_WIDTH - _subtitleImage.width() ) / 2;
             _position.y = fheroes2::Display::DEFAULT_HEIGHT - _subtitleImage.height();
         }
+        else {
+            _position.x -= _subtitleImage.width() / 2;
+        }
     }
 }
