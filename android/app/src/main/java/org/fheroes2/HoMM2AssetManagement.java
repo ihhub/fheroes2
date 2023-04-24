@@ -31,6 +31,8 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import android.util.Log;
+
 import org.apache.commons.io.IOUtils;
 
 import com.github.stephenc.javaisotools.loopfs.iso9660.Iso9660FileEntry;
@@ -234,6 +236,10 @@ final class HoMM2AssetManagement
             else {
                 isoStream.write( chunk, 16, 2048 );
             }
+        }
+
+        if ( chunkOffset != 0 ) {
+            Log.w( "fheroes2", "The last chunk of the GOG file was ignored due to the wrong size." );
         }
     }
 }
