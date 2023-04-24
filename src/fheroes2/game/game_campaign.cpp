@@ -69,6 +69,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "text.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_campaign.h"
@@ -1232,20 +1233,25 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
 
         // Get data for ratings text.
         const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
-        const uint32_t daysPassed = campaignSaveData.getDaysPassed();
+        const int32_t daysPassed = static_cast<int32_t>( campaignSaveData.getDaysPassed() );
         // Rating is calculated based on difficulty of campaign.
-        const uint32_t rating = daysPassed * campaignSaveData.getCampaignDifficultyPercent() / 100;
+        const int32_t score = daysPassed * static_cast<int32_t>( campaignSaveData.getCampaignDifficultyPercent() ) / 100;
 
         // Make ratings text as a subtitle for WIN.SMK.
         fheroes2::MultiFontText ratingText;
-        ratingText.add( { _( "Congratulations!\n\nDays: " ), fheroes2::FontType::normalWhite() } );
-        ratingText.add( { std::to_string( daysPassed ), fheroes2::FontType::normalWhite() } );
-        ratingText.add( { _( "\n\nDifficulty: " ), fheroes2::FontType::smallWhite() } );
-        ratingText.add( { getCampaignDifficultyText( campaignSaveData.getDifficulty() ), fheroes2::FontType::smallWhite() } );
-        ratingText.add( { _( "\n\nScore: " ), fheroes2::FontType::normalWhite() } );
-        ratingText.add( { std::to_string( rating ), fheroes2::FontType::normalWhite() } );
-        ratingText.add( { _( "\n\nRating:\n" ), fheroes2::FontType::normalWhite() } );
-        ratingText.add( { fheroes2::HighScoreDataContainer::getMonsterByDay( daysPassed ).GetName(), fheroes2::FontType::normalWhite() } );
+
+        std::string textBody = _( "Congratulations!\n\nDays: %{days}\n" );
+        StringReplace( textBody, "%{days}", daysPassed );
+        ratingText.add( { textBody, fheroes2::FontType::normalWhite() } );
+
+        textBody = _( "\nDifficulty: %{difficulty}\n\n" );
+        StringReplace( textBody, "%{difficulty}", getCampaignDifficultyText( campaignSaveData.getDifficulty() ) );
+        ratingText.add( { textBody, fheroes2::FontType::smallWhite() } );
+
+        textBody = _( "Score: %{score}\n\nRating:\n%{rating}" );
+        StringReplace( textBody, "%{score}", score );
+        StringReplace( textBody, "%{rating}", fheroes2::HighScoreDataContainer::getMonsterByDay( daysPassed ).GetName() );
+        ratingText.add( { textBody, fheroes2::FontType::normalWhite() } );
 
         // Show results from the 5th second until end (forever) and set maximum width to 140 to fit the black area.
         // Set position (405,110) to render results over the black rectangle of burned picture in WIN.SMK video.
