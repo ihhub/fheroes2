@@ -56,6 +56,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                 this.saveFileNames = saveFileNames;
             }
 
+            @SuppressWarnings( "SameParameterValue" )
             Status setIsBackgroundTaskExecuting( final boolean isBackgroundTaskExecuting )
             {
                 this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;

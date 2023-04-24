@@ -73,6 +73,7 @@ public final class ToolsetActivity extends AppCompatActivity
                 return this;
             }
 
+            @SuppressWarnings( "SameParameterValue" )
             Status setIsBackgroundTaskExecuting( final boolean isBackgroundTaskExecuting )
             {
                 this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;

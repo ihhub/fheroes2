@@ -74,6 +74,7 @@ public final class GameActivity extends SDLActivity
         System.exit( 0 );
     }
 
+    @SuppressWarnings( "IOStreamConstructor" ) // Files.newOutputStream() requires API level 26
     private void extractAssets( final String srcPath, final File dstDir )
     {
         final ArrayList<String> assetsPaths;

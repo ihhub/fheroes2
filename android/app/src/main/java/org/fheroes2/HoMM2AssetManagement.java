@@ -46,6 +46,7 @@ final class HoMM2AssetManagement
     }
 
     // Returns true if at least one asset was found and extracted, otherwise returns false
+    @SuppressWarnings( "IOStreamConstructor" ) // Files.newOutputStream() requires API level 26
     static boolean extractHoMM2AssetsFromZip( final File externalFilesDir, final File cacheDir, final InputStream iStream ) throws IOException
     {
         // It is allowed to extract only files located in these subdirectories
@@ -121,6 +122,7 @@ final class HoMM2AssetManagement
     }
 
     // Returns true if at least one animation was found and extracted, otherwise returns false
+    @SuppressWarnings( "IOStreamConstructor" ) // Files.newOutputStream() requires API level 26
     private static boolean extractAnimationsFromISO( final File externalFilesDir, final File isoFile ) throws IOException
     {
         // It is allowed to extract only files located in these subdirectories
@@ -194,6 +196,7 @@ final class HoMM2AssetManagement
         return "";
     }
 
+    @SuppressWarnings( "BooleanMethodIsAlwaysInverted" )
     private static boolean isValidHoMM2AssetPath( final File path, final Set<File> allowedSubdirs ) throws IOException
     {
         for ( File dir = path.getCanonicalFile().getParentFile(); dir != null; dir = dir.getParentFile() ) {
