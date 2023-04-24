@@ -58,7 +58,7 @@ namespace Video
     private:
         fheroes2::Point _position{ -1, -1 };
         fheroes2::Image _subtitleImage;
-        uint32_t _startTimeMS{ 0 };
+        const uint32_t _startTimeMS{ 0 };
         uint32_t _endTimeMS{ 0 };
     };
 

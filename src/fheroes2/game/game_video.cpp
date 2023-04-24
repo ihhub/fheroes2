@@ -209,7 +209,7 @@ namespace Video
 
         if ( fadeColorsOnEnd ) {
             // Do color fade for 1 second with 15 FPS.
-            fheroes2::colorFade( palette, frameRoi, 1000, 15 );
+            fheroes2::colorFade( palette, frameRoi, 1000, 15.0 );
         }
         else {
             display.fill( 0 );

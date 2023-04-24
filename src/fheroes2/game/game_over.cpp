@@ -193,9 +193,7 @@ namespace
 
         // Show results from the 5th second until end (forever) and set maximum width to 140 to fit the black area.
         // Set position (405,110) to render results over the black rectangle of burned picture in WIN.SMK video.
-        Video::Subtitle ratingSubtitle( ratingText, 5000, UINT32_MAX, { 405, 110 }, 140 );
-
-        return ratingSubtitle;
+        return { ratingText, 5000, UINT32_MAX, { 405, 110 }, 140 };
     }
 }
 
