@@ -23,8 +23,9 @@
 
 package com.github.stephenc.javaisotools.loopfs.iso9660;
 
-import com.github.stephenc.javaisotools.loopfs.util.LittleEndian;
 import java.io.UnsupportedEncodingException;
+
+import com.github.stephenc.javaisotools.loopfs.util.LittleEndian;
 
 public final class Util
 {

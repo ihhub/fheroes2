@@ -23,14 +23,15 @@
 
 package com.github.stephenc.javaisotools.loopfs.iso9660;
 
-import com.github.stephenc.javaisotools.loopfs.spi.AbstractBlockFileSystem;
-import com.github.stephenc.javaisotools.loopfs.spi.SeekableInput;
-import com.github.stephenc.javaisotools.loopfs.spi.SeekableInputFile;
-import com.github.stephenc.javaisotools.loopfs.spi.VolumeDescriptorSet;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
+
+import com.github.stephenc.javaisotools.loopfs.spi.AbstractBlockFileSystem;
+import com.github.stephenc.javaisotools.loopfs.spi.SeekableInput;
+import com.github.stephenc.javaisotools.loopfs.spi.SeekableInputFile;
+import com.github.stephenc.javaisotools.loopfs.spi.VolumeDescriptorSet;
 
 public class Iso9660FileSystem extends AbstractBlockFileSystem<Iso9660FileEntry>
 {

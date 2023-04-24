@@ -20,6 +20,11 @@
 
 package org.fheroes2;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Objects;
+
 import android.app.AlertDialog;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -29,15 +34,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ToggleButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Objects;
 
 public final class SaveFileManagerActivity extends AppCompatActivity
 {

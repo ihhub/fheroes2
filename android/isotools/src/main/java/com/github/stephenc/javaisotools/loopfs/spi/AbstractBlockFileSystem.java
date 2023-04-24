@@ -23,9 +23,10 @@
 
 package com.github.stephenc.javaisotools.loopfs.spi;
 
-import com.github.stephenc.javaisotools.loopfs.api.FileEntry;
 import java.io.IOException;
 import java.util.Iterator;
+
+import com.github.stephenc.javaisotools.loopfs.api.FileEntry;
 
 public abstract class AbstractBlockFileSystem<T extends FileEntry> extends AbstractFileSystem<T>
 {

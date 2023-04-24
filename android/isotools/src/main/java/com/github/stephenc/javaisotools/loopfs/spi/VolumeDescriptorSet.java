@@ -23,8 +23,9 @@
 
 package com.github.stephenc.javaisotools.loopfs.spi;
 
-import com.github.stephenc.javaisotools.loopfs.api.FileEntry;
 import java.io.IOException;
+
+import com.github.stephenc.javaisotools.loopfs.api.FileEntry;
 
 public interface VolumeDescriptorSet<T extends FileEntry>
 {

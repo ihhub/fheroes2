@@ -23,9 +23,10 @@
 
 package com.github.stephenc.javaisotools.loopfs.iso9660;
 
+import java.io.IOException;
+
 import com.github.stephenc.javaisotools.loopfs.api.LoopFileSystemException;
 import com.github.stephenc.javaisotools.loopfs.spi.VolumeDescriptorSet;
-import java.io.IOException;
 
 public class Iso9660VolumeDescriptorSet implements VolumeDescriptorSet<Iso9660FileEntry>
 {

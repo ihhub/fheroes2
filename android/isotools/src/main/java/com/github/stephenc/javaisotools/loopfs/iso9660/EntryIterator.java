@@ -23,12 +23,13 @@
 
 package com.github.stephenc.javaisotools.loopfs.iso9660;
 
-import com.github.stephenc.javaisotools.loopfs.util.LittleEndian;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import com.github.stephenc.javaisotools.loopfs.util.LittleEndian;
 
 class EntryIterator implements Iterator<Iso9660FileEntry>
 {

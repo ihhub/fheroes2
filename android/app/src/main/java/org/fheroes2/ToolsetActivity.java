@@ -20,6 +20,10 @@
 
 package org.fheroes2;
 
+import java.io.File;
+import java.io.InputStream;
+import java.util.Objects;
+
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
@@ -29,6 +33,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,9 +41,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import java.io.File;
-import java.io.InputStream;
-import java.util.Objects;
 
 public final class ToolsetActivity extends AppCompatActivity
 {
