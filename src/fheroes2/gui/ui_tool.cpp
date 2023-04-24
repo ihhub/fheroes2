@@ -238,11 +238,11 @@ namespace fheroes2
             return;
         }
 
-        // The biggest problem here is that the palette can be not the same as in the game.
-        // Since we want to do color fading to gray-scale colors we take the original palette and
-        // find the nearest colors in video's palette to gray-scale colors of the original palette.
-        // Then we gradually change the current palette to be only gray-scale and after reaching the
-        // last frame change all colors of the frame to be only gray-scale colors of the original palette.
+        // The biggest problem here is that the palette could be different from the one in the game.
+        // Since we want to do color fading to grayscale colors we take the original palette and
+        // find the nearest colors in video's palette to grayscale colors of the original palette.
+        // Then we gradually change the current palette to be only grayscale and after reaching the
+        // last frame change all colors of the frame to be only grayscale colors of the original palette.
 
         const uint8_t * originalPalette = fheroes2::getGamePalette();
 
@@ -250,7 +250,7 @@ namespace fheroes2
         const int32_t startGrayScaleColorId = 10;
         const int32_t endGrayScaleColorId = 36;
 
-        // Game palette has 256 color indexes.
+        // The game's palette has 256 color indexes.
         const int32_t paletteIndexes = 256;
 
         std::vector<uint8_t> assignedValue( paletteIndexes );

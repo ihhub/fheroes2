@@ -230,7 +230,7 @@ namespace Video
         // We add extra 1 to have space for contour.
         _subtitleImage.resize( textWidth + 1, subtitleText.height( textWidth ) + 1 );
 
-        // Draw text and remove all shadow data is it could not be properly applied to video palette.
+        // Draw text and remove all shadow data if it could not be properly applied to video palette.
         // We use the black color with id = 36 so no shadow will be applied to it.
         const uint8_t blackColor = 36;
         _subtitleImage.fill( blackColor );

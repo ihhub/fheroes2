@@ -43,7 +43,7 @@ namespace Video
         Subtitle( const fheroes2::TextBase & subtitleText, const uint32_t startTimeMS, const uint32_t durationMS, const fheroes2::Point & position = { -1, -1 },
                   const int32_t maxWidth = fheroes2::Display::DEFAULT_WIDTH );
 
-        // Check if subtitles needs to be rendered at the current time (in milliseconds).
+        // Check if subtitles need to be rendered at the current time (in milliseconds).
         bool needRender( const uint32_t currentTimeMS ) const
         {
             return ( ( currentTimeMS >= _startTimeMS ) && ( currentTimeMS < _endTimeMS ) );

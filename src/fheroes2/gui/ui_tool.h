@@ -109,7 +109,7 @@ namespace fheroes2
         const bool isOriginalEvilInterface;
     };
 
-    // Fade display image colors to greyscale part of default game palette.
+    // Fade display image colors to grayscale part of default game palette.
     void colorFade( const std::vector<uint8_t> & palette, const fheroes2::Rect & frameRoi, const uint32_t durationMs, const uint32_t fps );
 
     void CreateDeathWaveEffect( Image & out, const Image & in, const int32_t x, const std::vector<int32_t> & deathWaveCurve );
