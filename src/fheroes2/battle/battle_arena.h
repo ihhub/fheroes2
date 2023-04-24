@@ -270,7 +270,8 @@ namespace Battle
         std::unique_ptr<Force> _army2;
         std::shared_ptr<Units> _orderOfUnits;
 
-        int current_color;
+        // The color of the army, whose turn it is to perform an action
+        int _currentColor;
         // The color of the army of the last unit that performed a full-fledged action (skipping a turn due to
         // bad morale is not considered as such)
         int _lastActiveUnitArmyColor;
