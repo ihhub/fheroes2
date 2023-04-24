@@ -242,6 +242,11 @@ namespace
                         character -= lastWordLength - 1;
                     }
 
+                    if ( character == characterEnd ) {
+                        // We have reached the end of phrase and there is no need to make an empty line at the end.
+                        break;
+                    }
+
                     lineLength = 0;
                     lastWordLength = 0;
                     lineWidth = 0;
@@ -597,7 +602,6 @@ namespace fheroes2
         else {
             // This is a single-line message. Find its length and center it according to the maximum width.
             correctedWidth = width();
-            assert( correctedWidth <= maxWidth );
             xOffset = ( maxWidth - correctedWidth ) / 2;
         }
 
