@@ -1,12 +1,12 @@
 # Czech translation for fheroes2
 # Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-19 02:55+0000\n"
+"POT-Creation-Date: 2023-04-24 18:46+0300\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3534,6 +3534,12 @@ msgstr "Nemožné"
 msgid "and more..."
 msgstr "a víc..."
 
+msgid "Easy"
+msgstr "Lehká"
+
+msgid "Hard"
+msgstr "Těžká"
+
 msgid "Campaign Difficulty"
 msgstr "Obtížnost kampaně"
 
@@ -3556,11 +3562,25 @@ msgstr ""
 "Zvol tuto obtížnost pokud cheš pořádnou výzvu. Umělá inteligence bude "
 "silnější v porovnání s nomální obtížností."
 
-msgid "Easy"
-msgstr "Lehká"
+#, fuzzy
+msgid ""
+"Congratulations!\n"
+"\n"
+"Days: %{days}\n"
+msgstr "Gratulace!"
 
-msgid "Hard"
-msgstr "Těžká"
+msgid ""
+"\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
+msgid ""
+"Score: %{score}\n"
+"\n"
+"Rating:\n"
+"%{rating}"
+msgstr ""
 
 msgid "Start the selected scenario."
 msgstr "Odstartuj vybranou hru."
@@ -3757,10 +3777,10 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
-msgid "Unknown Hero"
+msgid "Your Name"
 msgstr ""
 
-msgid "Your Name"
+msgid "Unknown Hero"
 msgstr ""
 
 msgid "Standard"
@@ -4361,6 +4381,12 @@ msgid ""
 msgstr ""
 "Nepodařilo se Ti dokončit úkol včas.\n"
 "Vše je ztraceno."
+
+msgid ""
+"Base score: %{score}\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
 
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr "Porážka všech nepřátelských hrdinů a zabrání jejich měst a hradů."

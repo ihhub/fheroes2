@@ -3,12 +3,12 @@
 # Copyright (C) 2009 Igor Orlov <igororlov@inbox.ru>
 # Copyright (C) 2009 Andrey Afletdinov <afletdinov@mail.dc.baikal.ru>
 # This file is distributed under the same license as the fheroes2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-19 02:55+0000\n"
+"POT-Creation-Date: 2023-04-24 18:46+0300\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3511,6 +3511,12 @@ msgstr "Niemożliwy"
 msgid "and more..."
 msgstr "i więcej..."
 
+msgid "Easy"
+msgstr "Łatwa"
+
+msgid "Hard"
+msgstr "Trudna"
+
 msgid "Campaign Difficulty"
 msgstr "Stopień trudności kampanii"
 
@@ -3534,11 +3540,25 @@ msgstr ""
 "Wybierz tę opcję jeśli jesteś gotów na wyzwania. AI rozgrywa misje lepiej "
 "niż przy normalnym poziomie trudności."
 
-msgid "Easy"
-msgstr "Łatwa"
+#, fuzzy
+msgid ""
+"Congratulations!\n"
+"\n"
+"Days: %{days}\n"
+msgstr "Gratulacje!"
 
-msgid "Hard"
-msgstr "Trudna"
+msgid ""
+"\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
+msgid ""
+"Score: %{score}\n"
+"\n"
+"Rating:\n"
+"%{rating}"
+msgstr ""
 
 msgid "Start the selected scenario."
 msgstr "Rozpocznij wybrany scenariusz."
@@ -3730,11 +3750,11 @@ msgstr "Projektanci Map"
 msgid "Package Design"
 msgstr "Projekt opakowania"
 
-msgid "Unknown Hero"
-msgstr "Nieznany bohater"
-
 msgid "Your Name"
 msgstr "Twoje imię"
+
+msgid "Unknown Hero"
+msgstr "Nieznany bohater"
 
 msgid "Standard"
 msgstr "Standard"
@@ -4353,6 +4373,12 @@ msgid ""
 msgstr ""
 "Nie udaje ci się wypełnić misji w określonym czasie. Wszystko stracone."
 
+msgid ""
+"Base score: %{score}\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
 "Pokonaj wszystkich bohaterów przeciwnika oraz zajmij wszystkie miasta i "
@@ -4764,7 +4790,7 @@ msgstr ""
 msgid "Handicap"
 msgstr "Utrudnienie"
 
-#
+# 
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
@@ -4788,7 +4814,7 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr "Niewielkie utrudnienie"
 
-#
+# 
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -4799,7 +4825,7 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr "Znaczne utrudnienia"
 
-#
+# 
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."
