@@ -116,6 +116,7 @@ final class HoMM2AssetManagement
         return result;
     }
 
+    // Returns true if at least one animation was found and extracted, otherwise returns false
     private static boolean extractAnimationsFromISO( final File externalFilesDir, final File isoFile ) throws IOException
     {
         // It is allowed to extract only files located in these subdirectories
