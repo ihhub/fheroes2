@@ -81,7 +81,7 @@ namespace
             }
 
             double averageFps = 0;
-            for ( const double & value : _fps ) {
+            for ( const double value : _fps ) {
                 averageFps += value;
             }
 
