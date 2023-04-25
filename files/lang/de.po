@@ -1,12 +1,12 @@
 # German translation of fheroes2
 # Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-24 18:46+0300\n"
+"POT-Creation-Date: 2023-04-25 06:07+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4846,7 +4846,7 @@ msgstr ""
 msgid "Handicap"
 msgstr "Handicap"
 
-# 
+#
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
@@ -4871,7 +4871,7 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr "Leichtes Handicap"
 
-# 
+#
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -4882,7 +4882,7 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr "Schweres Handicap"
 
-# 
+#
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."
