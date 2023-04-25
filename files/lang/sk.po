@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-19 02:55+0000\n"
-"PO-Revision-Date: 2023-04-25 05:55+0200\n"
+"PO-Revision-Date: 2023-04-25 06:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -2604,25 +2604,25 @@ msgid "Puzzle"
 msgstr "Rébus"
 
 msgid "View the obelisk puzzle."
-msgstr ""
+msgstr "Ukáž rébus obeliskov."
 
 msgid "Scenario Information"
-msgstr ""
+msgstr "Informácie o hre"
 
 msgid "View information on the scenario you are currently playing."
-msgstr ""
+msgstr "Pozri si informácie o hre, ktorú práve hráš."
 
 msgid "Dig for the Ultimate Artifact."
-msgstr ""
+msgstr "Kop za ultimátnym artefaktom."
 
 msgid "Digging"
-msgstr ""
+msgstr "Kopanie"
 
 msgid "Exit this menu without doing anything."
-msgstr ""
+msgstr "Opusti túto ponuku bez vykonania akcie."
 
 msgid "Arena"
-msgstr ""
+msgstr "Aréna"
 
 msgid ""
 "You enter the arena and face a pack of vicious lions. You handily defeat "
@@ -2698,7 +2698,7 @@ msgid "(Rate: %{percent})"
 msgstr ""
 
 msgid "off"
-msgstr ""
+msgstr "vyp"
 
 msgid "Music"
 msgstr ""
@@ -2707,10 +2707,10 @@ msgid "Effects"
 msgstr ""
 
 msgid "MIDI"
-msgstr ""
+msgstr "MIDI"
 
 msgid "MIDI Expansion"
-msgstr ""
+msgstr "Rozšírenie MIDI"
 
 msgid "External"
 msgstr ""
@@ -2876,7 +2876,7 @@ msgid "V-Sync"
 msgstr ""
 
 msgid "on"
-msgstr ""
+msgstr "zap"
 
 msgid "FPS"
 msgstr ""
@@ -2923,7 +2923,7 @@ msgid "You may learn either:"
 msgstr ""
 
 msgid "or"
-msgstr ""
+msgstr "alebo"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -2942,7 +2942,7 @@ msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 
 msgid "Min"
-msgstr ""
+msgstr "Min"
 
 msgid "Qty to trade"
 msgstr ""
