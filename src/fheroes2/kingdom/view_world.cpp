@@ -42,6 +42,7 @@
 #include "localevent.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "pairs.h"
 #include "resource.h"
@@ -404,10 +405,10 @@ namespace
                     case MP2::OBJ_MINES:
                     case MP2::OBJ_SAWMILL:
                         if ( revealMines || !tile.isFog( color ) ) {
-                            const uint32_t colorOffset = colorToOffsetICN( tile.QuantityColor() );
+                            const uint32_t colorOffset = colorToOffsetICN( getColorFromTile( tile ) );
                             // Do not render an unknown color.
                             if ( colorOffset != unknownIndex ) {
-                                renderResourceIcon( colorOffset, tile.QuantityResourceCount().first, posX, posY );
+                                renderResourceIcon( colorOffset, getResourcesFromTile( tile ).first, posX, posY );
                             }
                         }
                         break;

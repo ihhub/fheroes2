@@ -6109,6 +6109,10 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                     };
 
                     const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, true, &statusCallback );
+
+                    // Reset battlefield grid cursor position after closing the spell book.
+                    index_pos = -1;
+
                     if ( spell.isValid() ) {
                         assert( spell.isCombat() );
 

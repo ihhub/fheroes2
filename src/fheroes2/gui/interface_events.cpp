@@ -231,7 +231,8 @@ fheroes2::GameMode Interface::Basic::EventEndTurn() const
 
     if ( !myKingdom.HeroesMayStillMove()
          || Dialog::YES
-                == fheroes2::showStandardTextMessage( "", _( "One or more heroes may still move, are you sure you want to end your turn?" ), Dialog::YES | Dialog::NO ) )
+                == fheroes2::showStandardTextMessage( _( "End Turn" ), _( "One or more heroes may still move, are you sure you want to end your turn?" ),
+                                                      Dialog::YES | Dialog::NO ) )
         return fheroes2::GameMode::END_TURN;
 
     return fheroes2::GameMode::CANCEL;

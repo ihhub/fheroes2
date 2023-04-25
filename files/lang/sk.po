@@ -1,20 +1,20 @@
 # Slovak translation of fheroes2
 # Copyright (C) 2023 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-13 05:15+0000\n"
-"PO-Revision-Date: 2023-03-20 20:07+0100\n"
+"POT-Creation-Date: 2023-04-19 02:55+0000\n"
+"PO-Revision-Date: 2023-04-22 14:41+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=((n>4) ? 2 : (n>1) ? 1 : (n>0) ? 0 : 2);\n"
 "X-Generator: Poedit 3.2.2\n"
 
 msgid ""
@@ -63,7 +63,7 @@ msgid "DECLINE"
 msgstr "ODMIETNUŤ"
 
 msgid "LEARN"
-msgstr "NAUČIŤ SA"
+msgstr "UČ SA"
 
 msgid "TRADE"
 msgstr "VYMENIŤ"
@@ -87,12 +87,14 @@ msgid "RESTART"
 msgstr "REŠTART"
 
 msgid "HEROES"
-msgstr ""
+msgstr "HRDINOVIA"
 
 msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
+"MESTÁ/\n"
+"HRADY"
 
 msgid "S"
 msgstr "S"
@@ -110,7 +112,7 @@ msgid "ALL"
 msgstr "CELÝ"
 
 msgid "SELECT"
-msgstr ""
+msgstr "ZVOĽ"
 
 msgid ""
 "STANDARD\n"
@@ -174,7 +176,7 @@ msgid "GIFT"
 msgstr "DAR"
 
 msgid "guildWell|EXIT"
-msgstr ""
+msgstr "PREČ"
 
 msgid "DIFFICULTY"
 msgstr "OBTIAŽNOSŤ"
@@ -314,7 +316,7 @@ msgid "View %{name}"
 msgstr "Zobraz: %{name}"
 
 msgid "Move the %{name} "
-msgstr "Premiestni %{name}"
+msgstr "Premiestni %{name} "
 
 msgid "Move or right click to redistribute %{name}"
 msgstr "Pohyb alebo pravý klik prerozdelí: %{name}"
@@ -339,8 +341,8 @@ msgstr "Nastav počet"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
-msgstr[0] "%{name} zničil polovicu nepriateľov!"
-msgstr[1] "%{name} zničili polovicu nepriateľov!"
+msgstr[0] "%{name} zničili polovicu nepriateľov!"
+msgstr[1] "%{name} zničil polovicu nepriateľov!"
 msgstr[2] "%{name} zničili polovicu nepriateľov!"
 
 msgid "%{name} has turned off the auto battle"
@@ -386,10 +388,10 @@ msgid "Army Order"
 msgstr "Poradie"
 
 msgid "Off"
-msgstr "Vyp"
+msgstr "Vypnuté"
 
 msgid "On"
-msgstr "Zap"
+msgstr "Zapnuté"
 
 msgid "Auto Spell Casting"
 msgstr "Kúzla počas auto boja"
@@ -556,7 +558,7 @@ msgid "Surrender"
 msgstr "Vzdaj sa"
 
 msgid "Cancel"
-msgstr "Zruš"
+msgstr "Zrušiť"
 
 msgid "Hero Screen"
 msgstr "Okno hrdinu"
@@ -622,9 +624,9 @@ msgstr "Strel do: %{monster}"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
-msgstr[0] "(ostáva 1 strela)"
-msgstr[1] "(ostávajú %{count} strely)"
-msgstr[2] "(ostáva %{count} striel)"
+msgstr[0] "(ostáva %{count} striel)"
+msgstr[1] "(ostáva posledná strela)"
+msgstr[2] "(ostávajú %{count} strely)"
 
 msgid "Attack %{monster}"
 msgstr "Útok na: %{monster}"
@@ -716,36 +718,36 @@ msgstr "%{name} vynecháva kolo."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] "%{attacker} pôsobí poškodenie veľkosti %{damage}."
-msgstr[1] "%{attacker} pôsobia poškodenie veľkosti %{damage}."
-msgstr[2] "Jednotka %{attacker} pôsobí poškodenie veľkosti %{damage}."
+msgstr[0] "Jednotka %{attacker} pôsobí %{damage} škôd."
+msgstr[1] "%{attacker} pôsobí %{damage} škôd."
+msgstr[2] "%{attacker} pôsobia %{damage} škôd."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
-msgstr[0] "1 bojovník zahynul."
-msgstr[1] "%{count} bojovníci zahynuli."
-msgstr[2] "%{count} bojovníkov zahynulo."
+msgstr[0] "%{count} bojovníkov zahynulo."
+msgstr[1] "Jeden bojovník zahynul."
+msgstr[2] "%{count} bojovníci zahynuli."
 
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
-msgstr[0] "1 %{defender} zahynul/a."
-msgstr[1] "%{count} %{defender} zahynuli."
-msgstr[2] "%{count} %{defender} zahynulo."
+msgstr[0] "%{count} %{defender} zahynulo."
+msgstr[1] "Jeden %{defender} zahynul/a."
+msgstr[2] "%{count} %{defender} zahynuli."
 
 msgid "1 soul is incorporated."
 msgid_plural "%{count} souls are incorporated."
-msgstr[0] "1 duša je začlenená."
-msgstr[1] "%{count} duše sú začlenené."
-msgstr[2] "%{count} duší je začlenených."
+msgstr[0] "%{count} duší je začlenených."
+msgstr[1] "Jedna duša je začlenená."
+msgstr[2] "%{count} duše sú začlenené."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
-msgstr[0] "1 %{unit} je oživený/á."
-msgstr[1] "%{count} %{unit} sú oživení/é."
-msgstr[2] "%{count} %{unit} je oživených."
+msgstr[0] "%{count} %{unit} je oživených."
+msgstr[1] "1 %{unit} je oživený/á."
+msgstr[2] "%{count} %{unit} sú oživení/é."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
-msgstr "Presunuté - %{monster}: od [%{src}] na [%{dst}]."
+msgstr "Presun - %{monster}: od [%{src}] na [%{dst}]."
 
 msgid "The %{name} resist the spell!"
 msgstr "Jednotka %{name} odoláva kúzlu!"
@@ -799,7 +801,7 @@ msgid "Good luck shines on the %{attacker}."
 msgstr "Šťastie je na strane: %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
-msgstr "Vysoká morálka umožňuje útočiť znovu pre: %{monster}."
+msgstr "Vysoká morálka umožňuje ťahať znovu pre: %{monster}."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
 msgstr "Nízka morálka spôsobuje, že jednotka %{monster} mrzne v panike."
@@ -908,8 +910,8 @@ msgstr ""
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
 msgstr[0] "%{count} %{name} vstáva z mŕtvych!"
-msgstr[1] "%{count} %{name} vstávajú z mŕtvych!"
-msgstr[2] "%{count} %{name} vstáva z mŕtvych!"
+msgstr[1] "%{count} %{name} vstáva z mŕtvych!"
+msgstr[2] "%{count} %{name} vstávajú z mŕtvych!"
 
 msgid "Dwarven Alliance"
 msgstr "Aliancia trpaslíkov"
@@ -957,7 +959,7 @@ msgid "Turning Point"
 msgstr "Bod otáčania"
 
 msgid "scenarioName|Defender"
-msgstr ""
+msgstr "Obránca"
 
 msgid "Corlagon's Defense"
 msgstr "Corlagonova obrana"
@@ -980,29 +982,44 @@ msgid ""
 "will spend most of their time fighting with one another.  Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
+"Roland potrebuje teba na porazenie lordov v blízkosti jeho hradu, aby mohol "
+"začať svoju vojnu vzbury proti jeho bratovi. Nie sú medzi sebou v "
+"spojenectve, takže mnoho času strávia bojom medzi sebou. Víťazstvo je tvoje, "
+"keď porazíš všetky ich hrady a hrdinov."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
 "They are wealthy and powerful, so be prepared for a tough fight. Capture all "
 "enemy castles to win."
 msgstr ""
+"Miestni lordi odmietajú prisahať vernosť Rolandovi a musia byť pokorení. Sú "
+"bohatí a mocní, takže sa priprav na tvrdý boj. Pre víťazstvo ovládni všetky "
+"nepriateľské hrady."
 
 msgid ""
 "Your task is to defend the Dwarves against Archibald's forces. Capture all "
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
+"Tvojou úlohou je ubrániť trpaslíkov proti Archibaldovým silám. Obsaď všetky "
+"nepriateľské mestá a hrady pre výhru, no uisti sa, že nestratíš všetky "
+"trpasličie mestá naraz, inak nepriateľ vyhrá."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
+"V priamom boji o zdroje a poklady budeš čeliť štyrom nepriateľom v "
+"spojenectve. Pre víťazstvo ovládni všetky nepriateľské hrady."
 
 msgid ""
 "Your enemies are allied against you and start close by, so be ready to come "
 "out fighting. You will need to own all four castles in this small valley to "
 "win."
 msgstr ""
+"Tvoji nepriatelia sú proti tebe v spojení a začínajú blízko, takže sa "
+"priprav vyraziť do boja. Ak chceš vyhrať, budeš musieť vlastniť všetky štyri "
+"hrady v tomto malom údolí."
 
 msgid ""
 "The Sorceress' guild of Noraston has requested Roland's aid against an "
@@ -1010,6 +1027,10 @@ msgid ""
 "don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy "
 "castle on an island in the ocean.)"
 msgstr ""
+"Cech čarodejníc z Norastonu požiadal Rolanda o pomoc proti útoku od "
+"Archibaldových spojencov. Obsaď všetky nepriateľské hrady pre výhru a "
+"nestrať Noraston, inak prehráš boj. (Tip: Na ostrove v oceáne je "
+"nepriateľský hrad.)"
 
 msgid ""
 "Gather as large an army as possible and capture the enemy castle within 8 "
@@ -1017,11 +1038,17 @@ msgid ""
 "to the enemy castle. Any troops you have in your army at the end of this "
 "scenario will be with you in the final battle."
 msgstr ""
+"Zhromaždi čo najväčšiu armádu a doby nepriateľský hrad do 8 týždňov. Proti "
+"tebe stojí iba jeden nepriateľ, ale musíš prejsť dlhú cestu kým dorazíš do "
+"nepriateľského hradu. Všetky jednotky, ktoré máš vo svojej armáde na konci "
+"tohto scenára, budú s tebou v záverečnom boji."
 
 msgid ""
 "Find the Crown before Archibald's heroes find it. Roland will need the Crown "
 "for the final battle against Archibald."
 msgstr ""
+"Nájdi Korunu skôr, ako ju nájdu Archibaldovi hrdinovia. Roland bude "
+"potrebovať Korunu na posledný boj proti Archibaldovi."
 
 msgid ""
 "Three allied enemies stand before you and victory, including Lord Corlagon. "
@@ -1029,17 +1056,26 @@ msgid ""
 "enemy. Remember that capturing Lord Corlagon will ensure that he will not "
 "fight against you in the final scenario."
 msgstr ""
+"Pred tebou a víťazstvom stoja traja nepriatelia v spojenectve, vrátane lorda "
+"Corlagona. Roland je v hrade na severozápade a prehráš, ak padne do rúk "
+"nepriateľa. Pamätaj, že zajatie lorda Corlagona zabezpečí, že v konečnom "
+"scenári nebude bojovať proti tebe."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Archibald to end the war!"
 msgstr ""
+"Toto je posledný boj. Ty aj tvoj nepriateľ ste po zuby ozbrojení a všetci sú "
+"proti tebe v spojenectve. Zajmi Archibalda a ukonči vojnu!"
 
 msgid ""
 "Switching sides leaves you with three castles against the enemy's one.  This "
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
+"Prejdením na druhú stranu získaš tri hrady proti jednému nepriateľskému. "
+"Tento boj bude ten najjednoduchší, ktorému budeš čeliť po zvyšok vojny... "
+"zradca."
 
 msgid "Barbarian Wars"
 msgstr "Barbarské vojny"
@@ -1074,6 +1110,10 @@ msgid ""
 "energy fighting amongst themselves.  You will win when you own all of the "
 "enemy castles and there are no more heroes left to fight."
 msgstr ""
+"Kráľ Archibald vyžaduje teba na porazenie troch nepriateľov v tejto oblasti. "
+"Nie sú medzi sebou spriaznení, takže mnoho svojej sily premrhajú bojom medzi "
+"sebou. Vyhráš, keď budeš vlastniť všetky nepriateľské hrady a už nezostanú "
+"žiadni hrdinovia, ktorí by oponovali."
 
 msgid ""
 "You must unify the barbarian tribes of the north by conquering them. As in "
@@ -1081,6 +1121,10 @@ msgid ""
 "more resources at their disposal. You will win when you own all of the enemy "
 "castles and there are no more heroes left to fight."
 msgstr ""
+"Musíš zjednotiť barbarské kmene na severe ich dobytím. Rovnako ako v "
+"predchádzajúcej misii, nepriateľ nie je proti tebe v spojení, ale má k "
+"dispozícii viac zdrojov. Vyhráš, keď budeš vlastniť všetky nepriateľské "
+"hrady a už nezostanú žiadni hrdinovia, ktorí by oponovali."
 
 msgid ""
 "Do-gooder wizards have taken the Necromancers' castle. You must retake it to "
@@ -1088,6 +1132,10 @@ msgid ""
 "have no castle and must take one within 7 days, or lose this battle. (Hint: "
 "The nearest castle is to the southeast.)"
 msgstr ""
+"Čarodejníci dobráčikovia obsadili nekromantov hrad. Musíš ho znovu získať "
+"pre dosiahnutie víťazstva. Pamätajš, že aj keď začínaš so silnou armádou, "
+"nemáš žiadny hrad a musíš nejaký dobyť do 7 dní, inak tento boj prehráš. "
+"(Tip: Najbližší hrad je na juhovýchode.)"
 
 msgid ""
 "The dwarves need conquering before they can interfere in King Archibald's "
@@ -1095,18 +1143,28 @@ msgid ""
 "so be ready for attack from multiple directions. You must capture all of the "
 "enemy towns and castles to claim victory."
 msgstr ""
+"Treba dobyť trpaslíkov, kým budú môcť zasiahnuť do plánov kráľa Archibalda. "
+"Rolandove sily majú na začiatok viac ako jedného hrdinu a veľa miest, takže "
+"buď v strehu a očakávaj útok z viacerých strán. Musíš dobyť všetky "
+"nepriateľské mestá a hrady pre zisk víťazstva."
 
 msgid ""
 "You must put down a peasant revolt led by Roland's forces. All are allied "
 "against you, but you have Lord Corlagon, an experienced hero, to help you. "
 "Capture all enemy castles to win."
 msgstr ""
+"Musíte potlačiť roľnícku vzburu vedenú Rolandovými silami. Všetci sú proti "
+"tebe v spojení, ale máš na pomoc skúseného hrdinu, lorda Corlagona. Pre "
+"víťazstvo ovládni všetky nepriateľské hrady."
 
 msgid ""
 "There are two enemies allied against you in this mission. Both are well "
 "armed and seek to evict you from their island. Avoid them and capture Dragon "
 "City to win."
 msgstr ""
+"V tejto misii sú proti tebe v spojení dvaja nepriatelia. Obaja sú dobre "
+"vyzbrojení a snažia sa ťa vyhnať zo svojho ostrova. Vyhni sa im a doby "
+"Dračie mesto, aby bola výhra dosiahnutá."
 
 msgid ""
 "Your orders are to conquer the country lords that have sworn to serve "
@@ -1114,56 +1172,70 @@ msgid ""
 "without a castle, you must hurry to capture one before the end of the week. "
 "Capture all enemy castles for victory."
 msgstr ""
+"Máš splniť rozkaz dobyť vládcov krajiny, ktorí prisahali slúžiť Rolandovi. "
+"Všetky nepriateľské hrady sú zjednotené proti tebe. Keďže začínaš bez hradu, "
+"musíš sa poponáhľať s dobytím jedného z nich do konca týždňa. Obsaď všetky "
+"nepriateľské hrady pre víťazstvo."
 
 msgid ""
 "Find the Crown before Roland's heroes find it. Archibald will need the Crown "
 "for the final battle against Roland."
 msgstr ""
+"Nájdi Korunu skôr, ako ju nájdu Rolandovi hrdinovia. Archibald bude "
+"potrebovať Korunu na posledný boj proti Rolandovi."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Roland to win the war, and be sure "
 "not to lose Archibald in the fight!"
 msgstr ""
+"Toto je posledný boj. Ty aj tvoj nepriateľ ste po zuby ozbrojení a všetci sú "
+"proti tebe v spojenectve. Zajmi Rolanda, aby vojna bola vyhratá, a uisti sa, "
+"že nestratíš Archibalda v boji!"
 
 msgid "Arrow's Flight"
-msgstr ""
+msgstr "Let šípu"
 
 msgid "Island of Chaos"
-msgstr ""
+msgstr "Ostrov chaosu"
 
 msgid "The Abyss"
-msgstr ""
+msgstr "Priepasť"
 
 msgid "Uprising"
-msgstr ""
+msgstr "Povstanie"
 
 msgid "Aurora Borealis"
-msgstr ""
+msgstr "Polárna žiara"
 
 msgid "Betrayal's End"
-msgstr ""
+msgstr "Koniec zrady"
 
 msgid "Corruption's Heart"
-msgstr ""
+msgstr "Srdce korupcie"
 
 msgid "The Giant's Pass"
-msgstr ""
+msgstr "Obrov priesmyk"
 
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
 "to operate in this region."
 msgstr ""
+"Podmaň si neposlušných miestnych lordov, aby bolo Impériu poskytnuté zázemie "
+"na pôsobenie v tomto regióne."
 
 msgid ""
 "Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
+"Odstráň protivníkov v tejto oblasti. Potom bude prvý kus artefaktu tvoj."
 
 msgid ""
 "The sorceresses to the northeast are rebelling! For the good of the empire "
 "you must quash their feeble uprising on your way to the mountains."
 msgstr ""
+"Čarodejnice na severovýchode sa búria! Pre dobro Impéria musíš potlačiť ich "
+"slabé povstanie na tvojej ceste do hôr."
 
 msgid ""
 "Having prepared for your arrival, Kraeger has arranged for a force of "
@@ -1171,115 +1243,147 @@ msgid ""
 "before the first day of the third week, or the Necromancers will be too "
 "strong for you."
 msgstr ""
+"S prípravou na tvoj príchod Kraeger zariadil, aby nekromanti prekazili tvoju "
+"výpravu. Musíš dobyť hrad Chrastodol pred prvým dňom tretieho týždňa, inak "
+"budú na teba nekromanti príliš silní."
 
 msgid ""
 "The barbarian despot in this area is, as yet, ignorant of your presence. "
 "Quickly, build up your forces before you are discovered and attacked! Secure "
 "the region by subduing all enemy forces."
 msgstr ""
+"Barbarský despota v tejto oblasti zatiaľ neuvažuje o tvojej prítomnosti. "
+"Rýchlo vybuduj svoje sily skôr, ako ťa objavia a zaútočia! Zabezpeč región "
+"podmanením všetkých nepriateľských síl."
 
 msgid ""
 "The Empire is weak in this region. You will be unable to completely subdue "
 "all forces in this area, so take what you can before reprisal strikes. "
 "Remember, your true goal is to claim the Helmet of Anduran."
 msgstr ""
+"Impérium je v tomto regióne slabé. Nebudeš mať schopnosť úplne si podmaniť "
+"všetky sily v tejto oblasti, takže si vezmi, čo môžeš, kým zaútočí odveta. "
+"Pamätaj, že tvojim skutočným cieľom je získať Anduranovu prilbu."
 
 msgid "For the good of the Empire, eliminate Kraeger."
-msgstr ""
+msgstr "Pre dobro Impéria zlikviduj Kraegera."
 
 msgid ""
 "At last, you have the opportunity and the facilities to rid the Empire of "
 "the necromancer's evil. Eradicate them completely, and you will be sung as a "
 "hero for all time."
 msgstr ""
+"Konečne máš príležitosť a možnosti zbaviť Impérium nekromantovho zla. Úplne "
+"ho vyhub a budeš navždy ospevovaný ako hrdina."
 
 msgid "Border Towns"
-msgstr ""
+msgstr "Pohraničné mestá"
 
 msgid "Conquer and Unify"
-msgstr ""
+msgstr "Dobyť a zjednotiť"
 
 msgid "Crazy Uncle Ivan"
-msgstr ""
+msgstr "Bláznivý strýko Ivan"
 
 msgid "The Wayward Son"
-msgstr ""
+msgstr "Zblúdilý syn"
 
 msgid "Ivory Gates"
-msgstr ""
+msgstr "Brány zo slonoviny"
 
 msgid "The Elven Lands"
-msgstr ""
+msgstr "Krajiny elfov"
 
 msgid "The Epic Battle"
-msgstr ""
+msgstr "Epický boj"
 
 msgid "The Southern War"
-msgstr ""
+msgstr "Južná vojna"
 
 msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
 "forefather of all descendants."
 msgstr ""
+"Doby a zjednoť všetky nepriateľské kmene. Nestrať hrdinu Jarkonasa, praotca "
+"všetkých potomkov."
 
 msgid ""
 "Your rival, the Kingdom of Harondale, is attacking weak towns on your "
 "border! Recover from their first strike and crush them completely!"
 msgstr ""
+"Tvoj súper, kráľovstvo Harondale, útočí na slabé mestá na tvojej hranici! "
+"Zotav sa z ich prvého úderu a rozdrv ich úplne!"
 
 msgid ""
 "Find your wayward son Joseph who is rumored to be living in the desolate "
 "lands. Do it before the first day of the third month or it will be of no "
 "help to your family."
 msgstr ""
+"Nájdi svojho neposlušného syna Jozefa, o ktorom sa hovorí, že žije v pustých "
+"krajinách. Urob tak pred prvým dňom tretieho mesiaca, inak to tvojej rodine "
+"nepomôže."
 
 msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
 "month or it will be no help to your kingdom."
 msgstr ""
+"Zachráň svojho bláznivého strýka Ivana. Nájdi ho pred prvým dňom štvrtého "
+"mesiaca, inak to tvojmu kráľovstvu nepomôže."
 
 msgid ""
 "Destroy the barbarians who are attacking the southern border of your "
 "kingdom! Recover your fallen towns, and then invade the jungle kingdom. "
 "Leave no enemy standing."
 msgstr ""
+"Znič barbarov, ktorí útočia na južnú hranicu tvojho kráľovstva! Obnov svoje "
+"padlé mestá a potom prepadni kráľovstvo džungle. Nenechaj žiadneho "
+"nepriateľa nažive."
 
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
-msgstr ""
+msgstr "Získaj späť hrad Brány zo slonoviny, ktorý padol v dôsledku zrady."
 
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
 "so they will send you wood every 2 weeks. You must complete your mission "
 "before the first day of the seventh month, or the kingdom will surely fall."
 msgstr ""
+"Získaj si priazeň elfov. Stromy rúbať nedovolia, preto ti pošlú drevo každé "
+"2 týždne. Svoju misiu musíš dokončiť pred prvým dňom siedmeho mesiaca, inak "
+"kráľovstvo určite padne."
 
 msgid ""
 "This is the final battle against your rival kingdom of Harondale. Eliminate "
 "everyone, and don't lose the hero Jarkonas VI."
 msgstr ""
+"Toto je posledný boj proti tvojmu súperiacemu kráľovstvu Harondale. "
+"Zneškodni všetkých a nestrať hrdinu Jarkonasa VI."
 
 msgid "Fount of Wizardry"
-msgstr ""
+msgstr "Prameň čarodejníctva"
 
 msgid "Power's End"
-msgstr ""
+msgstr "Koniec moci"
 
 msgid "The Eternal Scrolls"
-msgstr ""
+msgstr "Večné zvitky"
 
 msgid "The Shrouded Isles"
-msgstr ""
+msgstr "Zahalené ostrovy"
 
 msgid ""
 "Your mission is to vanquish the warring mages in the magical Shrouded Isles. "
 "The completion of this task will give you a fighting chance against your "
 "rivals."
 msgstr ""
+"Tvojou úlohou je poraziť bojujúcich mágov na čarovných Zahalených ostrovoch. "
+"Splnenie tejto úlohy ti dá šancu bojovať proti tvojim súperom."
 
 msgid ""
 "The location of the great library has been discovered! You must make your "
 "way to it, and reclaim the city of Chronos in which it lies."
 msgstr ""
+"Poloha veľkej knižnice bola odhalená! Musíš sa k nej dostať a získať mesto "
+"Chronos, v ktorom leží."
 
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
@@ -1287,94 +1391,111 @@ msgid ""
 "Find the orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
+"Nájdi Orb negácie, ktorý je údajne zakopaný v tejto krajine. Na kamenných "
+"obeliskoch sú napísané stopy, ktoré ťa dovedú k tvojej cene. Nájdi orb pred "
+"prvým dňom šiesteho mesiaca, inak sa tvoji súperi už určite dostali k nemu "
+"pred tebou."
 
 msgid ""
 "You must take control of the castle of Magic, where the fount of wizardry "
 "lies. Do this and your victory will be supreme."
 msgstr ""
+"Musíš prevziať kontrolu nad hradom mágie, kde leží prameň čarodejníctva. "
+"Urob tak a tvoje víťazstvo bude mimoriadne."
 
 msgid "Blood is Thicker"
-msgstr ""
+msgstr "Krv je hustejšia"
 
 msgid "King and Country"
-msgstr ""
+msgstr "Kráľ a krajina"
 
 msgid "Pirate Isles"
-msgstr ""
+msgstr "Pirátske ostrovy"
 
 msgid "Stranded"
-msgstr ""
+msgstr "Uviaznutý"
 
 msgid ""
 "Capture the town on the island off the southeast shore in order to construct "
 "a boat and travel back towards the mainland. Do not lose the hero Gallavant."
 msgstr ""
+"Obsaď mesto na ostrove pri juhovýchodnom pobreží za účelom postaviť loď a "
+"doplaviť sa späť na pevninu. Nestrať hrdinu Gallavanta."
 
 msgid ""
 "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do "
 "not lose Gallavant or your quest will be over."
 msgstr ""
+"Nájdi a poraz Martine, pirátsku vodkyňu, ktorá sídli v Zátoke pirátov. "
+"Nestrať Gallavanta lebo tvoje pátranie sa skončí."
 
 msgid ""
 "Eliminate all the other forces who oppose the rule of Lord Alberon. "
 "Gallavant must not die."
 msgstr ""
+"Zlikviduj všetky ostatné sily, ktoré sú proti vláde lorda Alberona. "
+"Gallavant nesmie padnúť."
 
 msgid ""
 "Overthrow the entrenched monarchy of Lord Alberon, and claim all the land in "
 "your name. Gallavant must not die."
 msgstr ""
+"Zvrhni zakorenenú monarchiu lorda Alberona a získaj všetku zem vo svojom "
+"mene. Gallavant nesmie padnúť."
 
 msgid " bane"
-msgstr ""
+msgstr " zmar"
 
 msgid " alliance"
-msgstr ""
+msgstr " aliancia"
 
 msgid "Carry-over forces"
-msgstr ""
+msgstr "Prenosné jednotky"
 
 msgid " bonus"
-msgstr ""
+msgstr " bonus"
 
 msgid " defeated"
-msgstr ""
+msgstr " porazený"
 
 msgid " will always run away from your army."
-msgstr ""
+msgstr " vždy utečú pred tvojou armádou."
 
 msgid " will be willing to join your army."
-msgstr ""
+msgstr " sa ochotne pridajú k tvojej armáde."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
-msgstr ""
+msgstr "\"%{artifact}\" artefact sa prenesie cez scenár."
 
 msgid "The army will be carried over the scenario."
-msgstr ""
+msgstr "Armáda sa prenesie cez scenár."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
-msgstr ""
+msgstr "Kráľovstvo bude každý deň mať zvýšené zásoby: +%{count} %{resource}."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
-msgstr ""
+msgstr "Kúzlo \"%{spell}\" sa prenesie cez scenár."
 
 msgid "%{hero} can be hired in the scenario."
-msgstr ""
+msgstr "%{hero} bude najatý/á v tomto scenári."
 
 msgid ""
 "%{hero} has been defeated and will not appear in the subsequent scenarios."
-msgstr ""
+msgstr "%{hero} bol/a porazený/á a neobjaví sa v nasledujúcich scenároch."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
+"Trpaslíci spoznávajú svojich spojencov a radi sa pridajú k tvojim silám."
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
 msgstr ""
+"Zlobri ťa poznajú ako Trpasličí zmar a pristupujú aby sa k tebe pridali."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
 "'Ally'."
 msgstr ""
+"Vrčiaci draci súhlasia s pridaním sa k tvojim jednotkám, ich 'Spojencom'."
 
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
@@ -1382,553 +1503,573 @@ msgid ""
 "fearless ally of ours?\"  The group explodes with cheers as they run to join "
 "your ranks."
 msgstr ""
+"Kým sa blížiš ku skupine elfov, ich vodca ich všetkých zvolá do pozornosti. "
+"Zvoláva na nich: \"Kto z vás má dosť odvahy, aby sa pridal k tomuto nášmu "
+"nebojácnemu spojencovi?\" Skupina jasá pričom sa hrnie pridať sa k tvojim "
+"radom."
 
 msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
 "pass.\""
 msgstr ""
+"Trpaslíci ťa zdravia: \"Každý priateľ Rolanda je našim priateľom. Smieš "
+"prejsť.\""
 
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
-msgstr ""
+msgstr "Zlobri ti dávajú uznanie: \"Spojenci Archibalda smú prejsť.\""
 
 msgid ""
 "The dragons see you and call out.  \"Our alliance with Archibald compels us "
 "to join you.  Unfortunately you have no room.  A pity!\"  They quickly "
 "scatter."
 msgstr ""
+"Draci ťa vidia a ozývajú sa: \"Naše spojenectvo s Archibaldom nás núti "
+"pridať sa k tebe. Žiaľ, nemáš pre nás miesto. Aká škoda.\" Rýchlo sa "
+"rozchádzajú."
 
 msgid ""
 "The elves stand at attention as you approach.  Their leader calls to you and "
 "says, \"Let us not impede your progress, ally!  Move on, and may victory be "
 "yours.\""
 msgstr ""
+"Kým sa približuješ, elfovia sa stavajú do strehu. Ich vodca na teba volá a "
+"hovorí: \"Nebudeme ti brániť v ceste, spojenec! Prejdi a nech je víťazstvo "
+"tvoje.\""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
-msgstr ""
+msgstr "\"Trpasličí zmar! Utekajte o život!\""
 
 msgid "campaignBonus|Animate Dead"
-msgstr ""
+msgstr "Animácia mŕtvych"
 
 msgid "campaignBonus|Chain Lightning"
-msgstr ""
+msgstr "Reťazový blesk"
 
 msgid "campaignBonus|Fireblast"
-msgstr ""
+msgstr "Výbuch ohňa"
 
 msgid "campaignBonus|Mass Curse"
-msgstr ""
+msgstr "Hromadná kliatba"
 
 msgid "campaignBonus|Mass Haste"
-msgstr ""
+msgstr "Hromadný zhon"
 
 msgid "campaignBonus|Mirror Image"
-msgstr ""
+msgstr "Zrkadlový obraz"
 
 msgid "campaignBonus|Resurrect"
-msgstr ""
+msgstr "Vzkriesenie"
 
 msgid "campaignBonus|Steelskin"
-msgstr ""
+msgstr "Oceľová koža"
 
 msgid "campaignBonus|Summon Earth"
-msgstr ""
+msgstr "Vyvolaj zem"
 
 msgid "campaignBonus|View Heroes"
-msgstr ""
+msgstr "Zobraz hrdinov"
 
 msgid "campaignBonus|Ballista"
-msgstr ""
+msgstr "Balista"
 
 msgid "campaignBonus|Black Pearl"
-msgstr ""
+msgstr "Čierna perla"
 
 msgid "campaignBonus|Caster's Bracelet"
-msgstr ""
+msgstr "Čarodejov náramok"
 
 msgid "campaignBonus|Defender Helm"
-msgstr ""
+msgstr "Helma obrancu"
 
 msgid "campaignBonus|Breastplate"
-msgstr ""
+msgstr "Náprsné brnenie"
 
 msgid "campaignBonus|Dragon Sword"
-msgstr ""
+msgstr "Dračí meč"
 
 msgid "campaignBonus|Fizbin Medal"
-msgstr ""
+msgstr "Fizbinova medaila"
 
 msgid "campaignBonus|Foremost Scroll"
-msgstr ""
+msgstr "Najprednejší zvitok"
 
 msgid "campaignBonus|Gauntlets"
-msgstr ""
+msgstr "Rukavice"
 
 msgid "campaignBonus|Hideous Mask"
-msgstr ""
+msgstr "Hnusná maska"
 
 msgid "campaignBonus|Mage's Ring"
-msgstr ""
+msgstr "Prsteň mága"
 
 msgid "campaignBonus|Major Scroll"
-msgstr ""
+msgstr "Hlavný zvitok"
 
 msgid "campaignBonus|Medal of Honor"
-msgstr ""
+msgstr "Medaila za česť"
 
 msgid "campaignBonus|Medal of Valor"
-msgstr ""
+msgstr "Medaila za odvahu"
 
 msgid "campaignBonus|Minor Scroll"
-msgstr ""
+msgstr "Menší zvitok"
 
 msgid "campaignBonus|Nomad Boots"
-msgstr ""
+msgstr "Nomádske čižmy"
 
 msgid "campaignBonus|Power Axe"
-msgstr ""
+msgstr "Sekera moci"
 
 msgid "campaignBonus|Spiked Shield"
-msgstr ""
+msgstr "Špicatý štít"
 
 msgid "campaignBonus|Stealth Shield"
-msgstr ""
+msgstr "Štít prikrádania"
 
 msgid "campaignBonus|Tax Lien"
-msgstr ""
+msgstr "Daňové záložné právo"
 
 msgid "campaignBonus|Thunder Mace"
-msgstr ""
+msgstr "Palcát hromu"
 
 msgid "campaignBonus|Traveler's Boots"
-msgstr ""
+msgstr "Cestovateľove čižmy"
 
 msgid "campaignBonus|White Pearl"
-msgstr ""
+msgstr "Biela perla"
 
 msgid "campaignBonus|Basic Archery"
-msgstr ""
+msgstr "Základná lukostreľba"
 
 msgid "campaignBonus|Advanced Archery"
-msgstr ""
+msgstr "Pokročilá lukostreľba"
 
 msgid "campaignBonus|Expert Archery"
-msgstr ""
+msgstr "Expert lukostreľby"
 
 msgid "campaignBonus|Basic Ballistics"
-msgstr ""
+msgstr "Základná balistika"
 
 msgid "campaignBonus|Advanced Ballistics"
-msgstr ""
+msgstr "Pokročilá balistika"
 
 msgid "campaignBonus|Expert Ballistics"
-msgstr ""
+msgstr "Expert balistiky"
 
 msgid "campaignBonus|Basic Diplomacy"
-msgstr ""
+msgstr "Základná diplomacia"
 
 msgid "campaignBonus|Advanced Diplomacy"
-msgstr ""
+msgstr "Pokročilá diplomacia"
 
 msgid "campaignBonus|Expert Diplomacy"
-msgstr ""
+msgstr "Expert diplomacie"
 
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr ""
+msgstr "Základný orlí zrak"
 
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr ""
+msgstr "Pokročilý orlí zrak"
 
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr ""
+msgstr "Expert orlieho zraku"
 
 msgid "campaignBonus|Basic Estates"
-msgstr ""
+msgstr "Základné statky"
 
 msgid "campaignBonus|Advanced Estates"
-msgstr ""
+msgstr "Pokročilé statky"
 
 msgid "campaignBonus|Expert Estates"
-msgstr ""
+msgstr "Expert statkov"
 
 msgid "campaignBonus|Basic Leadership"
-msgstr ""
+msgstr "Základné vedenie"
 
 msgid "campaignBonus|Advanced Leadership"
-msgstr ""
+msgstr "Pokročilé vedenie"
 
 msgid "campaignBonus|Expert Leadership"
-msgstr ""
+msgstr "Expert vedenia"
 
 msgid "campaignBonus|Basic Logistics"
-msgstr ""
+msgstr "Základná logistika"
 
 msgid "campaignBonus|Advanced Logistics"
-msgstr ""
+msgstr "Pokročilá logistika"
 
 msgid "campaignBonus|Expert Logistics"
-msgstr ""
+msgstr "Expert logistiky"
 
 msgid "campaignBonus|Basic Luck"
-msgstr ""
+msgstr "Základné šťastie"
 
 msgid "campaignBonus|Advanced Luck"
-msgstr ""
+msgstr "Pokročilé šťastie"
 
 msgid "campaignBonus|Expert Luck"
-msgstr ""
+msgstr "Expert šťastia"
 
 msgid "campaignBonus|Basic Mysticism"
-msgstr ""
+msgstr "Základná mystika"
 
 msgid "campaignBonus|Advanced Mysticism"
-msgstr ""
+msgstr "Pokročilá mystika"
 
 msgid "campaignBonus|Expert Mysticism"
-msgstr ""
+msgstr "Expert mystiky"
 
 msgid "campaignBonus|Basic Navigation"
-msgstr ""
+msgstr "Základná navigácia"
 
 msgid "campaignBonus|Advanced Navigation"
-msgstr ""
+msgstr "Pokročilá navigácia"
 
 msgid "campaignBonus|Expert Navigation"
-msgstr ""
+msgstr "Expert navigácie"
 
 msgid "campaignBonus|Basic Necromancy"
-msgstr ""
+msgstr "Základná nekromancia"
 
 msgid "campaignBonus|Advanced Necromancy"
-msgstr ""
+msgstr "Pokročilá nekromancia"
 
 msgid "campaignBonus|Expert Necromancy"
-msgstr ""
+msgstr "Expert nekromancie"
 
 msgid "campaignBonus|Basic Pathfinding"
-msgstr ""
+msgstr "Základné hľadanie cesty"
 
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr ""
+msgstr "Pokročilé hľadanie cesty"
 
 msgid "campaignBonus|Expert Pathfinding"
-msgstr ""
+msgstr "Expert hľadania cesty"
 
 msgid "campaignBonus|Basic Scouting"
-msgstr ""
+msgstr "Základný prieskum"
 
 msgid "campaignBonus|Advanced Scouting"
-msgstr ""
+msgstr "Pokročilý prieskum"
 
 msgid "campaignBonus|Expert Scouting"
-msgstr ""
+msgstr "Expert prieskumu"
 
 msgid "campaignBonus|Basic Wisdom"
-msgstr ""
+msgstr "Základná múdrosť"
 
 msgid "campaignBonus|Advanced Wisdom"
-msgstr ""
+msgstr "Pokročilá múdrosť"
 
 msgid "campaignBonus|Expert Wisdom"
-msgstr ""
+msgstr "Expert múdrosti"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
 "scenario."
-msgstr ""
+msgstr "Hlavný hrdina bude mať artefakt \"%{artifact}\" na začiatku scenára."
 
 msgid ""
 "The kingdom will receive %{amount} additional %{resource} at the start of "
 "the scenario."
 msgstr ""
+"Kráľovstvo dostane na začiatku scenára suroviny navyše: + %{amount} "
+"%{resource}."
 
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
 msgstr ""
+"Kráľovstvu budú na začiatku scenára odobrané suroviny: - %{amount} "
+"%{resource}."
 
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
 msgstr ""
+"Hlavný hrdina obdrží jednotky navyše na začiatku scenára: + %{count} "
+"%{monster}"
 
 msgid ""
 "The main hero will have \"%{spell}\" spell at the start of the scenario."
-msgstr ""
+msgstr "Hlavný hrdina bude ovládať kúzlo \"%{spell}\" na začiatku scenára."
 
 msgid "The starting race of the scenario will be %{race}."
-msgstr ""
+msgstr "Začiatočnou rasou scenára bude %{race}."
 
 msgid ""
 "The main hero will have additional %{count} %{skill} at the start of the "
 "scenario."
 msgstr ""
+"Hlavný hrdina obdrží skúsenosť navyše na začiatku scenára: + %{count} "
+"%{skill}"
 
 msgid "The main hero will have %{skill} at the start of the scenario."
-msgstr ""
+msgstr "Hlavný hrdina bude ovládať %{skill} na začiatku scenára."
 
 msgid "Roland"
-msgstr ""
+msgstr "Roland"
 
 msgid "Archibald"
-msgstr ""
+msgstr "Archibald"
 
 msgid "The Price of Loyalty"
-msgstr ""
+msgstr "Cena vernosti"
 
 msgid "Voyage Home"
-msgstr ""
+msgstr "Plavba domov"
 
 msgid "Wizard's Isle"
-msgstr ""
+msgstr "Čarodejov ostrov"
 
 msgid "Descendants"
-msgstr ""
+msgstr "Potomkovia"
 
 msgid "The %{building} produces %{monster}."
-msgstr ""
+msgstr "%{building} produkuje: %{monster}."
 
 msgid "Requires:"
-msgstr ""
+msgstr "Potrebuje:"
 
 msgid "Cannot build. You have already built here today."
-msgstr ""
+msgstr "Nedá sa stavať. Dnes tu už bola budova postavená."
 
 msgid "For this action it is necessary to build a castle first."
-msgstr ""
+msgstr "Pre tento krok je potrebné najprv postaviť hrad."
 
 msgid "Cannot build %{name} because castle is too far from water."
-msgstr ""
+msgstr "Nedá sa postaviť %{name} pretože hrad je priďaleko od vody."
 
 msgid "disable build."
-msgstr ""
+msgstr "Budovanie zakázané."
 
 msgid "Cannot afford %{name}."
-msgstr ""
+msgstr "Budovu %{name} si nemôžeš dovoliť."
 
 msgid "%{name} is already built."
-msgstr ""
+msgstr "Budova %{name} je už postavená."
 
 msgid "Cannot build %{name}."
-msgstr ""
+msgstr "Nedá sa postaviť budovu %{name}."
 
 msgid "Build %{name}."
-msgstr ""
+msgstr "Postav budovu %{name}."
 
 msgid "Blackridge"
-msgstr ""
+msgstr "Čierny hrebeň"
 
 msgid "Hillstone"
-msgstr ""
+msgstr "Horský kameň"
 
 msgid "Pinehurst"
-msgstr ""
+msgstr "Borovicový kopček"
 
 msgid "Whiteshield"
-msgstr ""
+msgstr "Biely štít"
 
 msgid "Woodhaven"
-msgstr ""
+msgstr "Drevený prístav"
 
 msgid "Blackwind"
-msgstr ""
+msgstr "Čierny vietor"
 
 msgid "Bloodreign"
-msgstr ""
+msgstr "Krvomoc"
 
 msgid "Dragontooth"
-msgstr ""
+msgstr "Dračí zub"
 
 msgid "Greywind"
-msgstr ""
+msgstr "Sivý vietor"
 
 msgid "Portsmith"
-msgstr ""
+msgstr "Kutý prístav"
 
 msgid "Atlantium"
-msgstr ""
+msgstr "Atlantium"
 
 msgid "Middle Gate"
-msgstr ""
+msgstr "Stredná brána"
 
 msgid "Sansobar"
-msgstr ""
+msgstr "Sansobar"
 
 msgid "Tundara"
-msgstr ""
+msgstr "Tundara"
 
 msgid "Vulcania"
-msgstr ""
+msgstr "Vulkánia"
 
 msgid "Baywatch"
-msgstr ""
+msgstr "Stráž zálivu"
 
 msgid "Fountainhead"
-msgstr ""
+msgstr "Fontánohlava"
 
 msgid "Vertigo"
-msgstr ""
+msgstr "Závrat"
 
 msgid "Wildabar"
-msgstr ""
+msgstr "Wildabar"
 
 msgid "Winterkill"
-msgstr ""
+msgstr "Zimomor"
 
 msgid "Brindamoor"
-msgstr ""
+msgstr "Brindamoč"
 
 msgid "Lakeside"
-msgstr ""
+msgstr "Pri jazere"
 
 msgid "Nightshadow"
-msgstr ""
+msgstr "Nočný tieň"
 
 msgid "Olympus"
-msgstr ""
+msgstr "Olympus"
 
 msgid "Sandcaster"
-msgstr ""
+msgstr "Pieskoval"
 
 msgid "Alamar"
-msgstr ""
+msgstr "Alamar"
 
 msgid "Burlock"
-msgstr ""
+msgstr "Burlock"
 
 msgid "Dragadune"
-msgstr ""
+msgstr "Dragaduna"
 
 msgid "Kalindra"
-msgstr ""
+msgstr "Kalindra"
 
 msgid "Xabran"
-msgstr ""
+msgstr "Xabran"
 
 msgid "Algary"
-msgstr ""
+msgstr "Algária"
 
 msgid "Basenji"
-msgstr ""
+msgstr "Basendži"
 
 msgid "Blackfang"
-msgstr ""
+msgstr "Čierny tesák"
 
 msgid "New Dawn"
-msgstr ""
+msgstr "Nový úsvit"
 
 msgid "Sorpigal"
-msgstr ""
+msgstr "Sorpigal"
 
 msgid "Avone"
-msgstr ""
+msgstr "Avone"
 
 msgid "Big Oak"
-msgstr ""
+msgstr "Veľký dub"
 
 msgid "Chandler"
-msgstr ""
+msgstr "Čendler"
 
 msgid "Erliquin"
-msgstr ""
+msgstr "Erlikín"
 
 msgid "Hampshire"
-msgstr ""
+msgstr "Hampshire"
 
 msgid "Antioch"
-msgstr ""
+msgstr "Antiocha"
 
 msgid "Avalon"
-msgstr ""
+msgstr "Avalon"
 
 msgid "Roc Haven"
-msgstr ""
+msgstr "Útočisko rocov"
 
 msgid "South Mill"
-msgstr ""
+msgstr "Južný mlyn"
 
 msgid "Weed Patch"
-msgstr ""
+msgstr "Záhon buriny"
 
 msgid "Brownston"
-msgstr ""
+msgstr "Hnedokam"
 
 msgid "Hilltop"
-msgstr ""
+msgstr "Vrchol"
 
 msgid "Weddington"
-msgstr ""
+msgstr "Weddington"
 
 msgid "Westfork"
-msgstr ""
+msgstr "Západné rozcestie"
 
 msgid "Whittingham"
-msgstr ""
+msgstr "Whittingham"
 
 msgid "Cathcart"
-msgstr ""
+msgstr "Cathvoz"
 
 msgid "Elk's Head"
-msgstr ""
+msgstr "Losia hlava"
 
 msgid "Roscomon"
-msgstr ""
+msgstr "Roscomon"
 
 msgid "Sherman"
-msgstr ""
+msgstr "Šerman"
 
 msgid "Yorksford"
-msgstr ""
+msgstr "Yorkobrod"
 
 msgid "Blackburn"
-msgstr ""
+msgstr "Černopal"
 
 msgid "Blacksford"
-msgstr ""
+msgstr "Černobrod"
 
 msgid "Burton"
-msgstr ""
+msgstr "Burton"
 
 msgid "Pig's Eye"
-msgstr ""
+msgstr "Svinské oko"
 
 msgid "Viper's Nest"
-msgstr ""
+msgstr "Hniezdo zmiji"
 
 msgid "Fenton"
-msgstr ""
+msgstr "Fenton"
 
 msgid "Lankershire"
-msgstr ""
+msgstr "Krivokraj"
 
 msgid "Lombard"
-msgstr ""
+msgstr "Lombard"
 
 msgid "Timberhill"
-msgstr ""
+msgstr "Drevený kopec"
 
 msgid "Troy"
-msgstr ""
+msgstr "Trója"
 
 msgid "Forder Oaks"
-msgstr ""
+msgstr "Dubobrod"
 
 msgid "Meramec"
-msgstr ""
+msgstr "Meramek"
 
 msgid "Quick Silver"
-msgstr ""
+msgstr "Ortutie"
 
 msgid "Westmoor"
-msgstr ""
+msgstr "Západný močiar"
 
 msgid "Willow"
-msgstr ""
+msgstr "Vrbina"
 
 msgid "Corackston"
-msgstr ""
+msgstr "Corackston"
 
 msgid "Sheltemburg"
-msgstr ""
+msgstr "Sheltemburg"
 
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr ""
@@ -3265,6 +3406,12 @@ msgstr ""
 msgid "and more..."
 msgstr ""
 
+msgid "Easy"
+msgstr ""
+
+msgid "Hard"
+msgstr ""
+
 msgid "Campaign Difficulty"
 msgstr ""
 
@@ -3282,10 +3429,23 @@ msgid ""
 "with normal difficulty."
 msgstr ""
 
-msgid "Easy"
+msgid ""
+"Congratulations!\n"
+"\n"
+"Days: %{days}\n"
 msgstr ""
 
-msgid "Hard"
+msgid ""
+"\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
+msgid ""
+"Score: %{score}\n"
+"\n"
+"Rating:\n"
+"%{rating}"
 msgstr ""
 
 msgid "Start the selected scenario."
@@ -3477,10 +3637,10 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
-msgid "Unknown Hero"
+msgid "Your Name"
 msgstr ""
 
-msgid "Your Name"
+msgid "Unknown Hero"
 msgstr ""
 
 msgid "Standard"
@@ -4035,6 +4195,12 @@ msgid ""
 "All is lost."
 msgstr ""
 
+msgid ""
+"Base score: %{score}\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
 
@@ -4201,6 +4367,66 @@ msgid ""
 "land."
 msgstr ""
 
+msgid "Lord Kilburn"
+msgstr ""
+
+msgid "Tsabu"
+msgstr ""
+
+msgid "Sir Galant"
+msgstr ""
+
+msgid "Thundax"
+msgstr ""
+
+msgid "Lord Haart"
+msgstr ""
+
+msgid "Ariel"
+msgstr ""
+
+msgid "Rebecca"
+msgstr ""
+
+msgid "Sandro"
+msgstr ""
+
+msgid "Crodo"
+msgstr ""
+
+msgid "Barock"
+msgstr ""
+
+msgid "Antoine"
+msgstr ""
+
+msgid "Astra"
+msgstr ""
+
+msgid "Agar"
+msgstr ""
+
+msgid "Vatawna"
+msgstr ""
+
+msgid "Vesper"
+msgstr ""
+
+msgid "Ambrose"
+msgstr ""
+
+msgid "Troyan"
+msgstr ""
+
+msgid "Jojosh"
+msgstr ""
+
+msgid "Wrathmont"
+msgstr ""
+
+msgid "Maximus"
+msgstr ""
+
 msgid "Next Hero"
 msgstr ""
 
@@ -4337,7 +4563,7 @@ msgstr ""
 msgid "Handicap"
 msgstr ""
 
-#
+# 
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
@@ -4356,7 +4582,7 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr ""
 
-#
+# 
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -4365,7 +4591,7 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr ""
 
-#
+# 
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."
@@ -4473,22 +4699,13 @@ msgstr ""
 msgid "Gwenneth"
 msgstr ""
 
-msgid "Lord Kilburn"
-msgstr ""
-
 msgid "Sir Gallant"
 msgstr ""
 
 msgid "Tyro"
 msgstr ""
 
-msgid "Ambrose"
-msgstr ""
-
 msgid "Dimitry"
-msgstr ""
-
-msgid "Maximus"
 msgstr ""
 
 msgid "Ruby"
@@ -4503,12 +4720,6 @@ msgstr ""
 msgid "Jezebel"
 msgstr ""
 
-msgid "Jojosh"
-msgstr ""
-
-msgid "Thundax"
-msgstr ""
-
 msgid "Atlas"
 msgstr ""
 
@@ -4518,28 +4729,10 @@ msgstr ""
 msgid "Jaclyn"
 msgstr ""
 
-msgid "Tsabu"
-msgstr ""
-
-msgid "Astra"
-msgstr ""
-
 msgid "Gem"
 msgstr ""
 
 msgid "Natasha"
-msgstr ""
-
-msgid "Rebecca"
-msgstr ""
-
-msgid "Troyan"
-msgstr ""
-
-msgid "Vatawna"
-msgstr ""
-
-msgid "Ariel"
 msgstr ""
 
 msgid "Carlawn"
@@ -4554,22 +4747,10 @@ msgstr ""
 msgid "Barok"
 msgstr ""
 
-msgid "Crodo"
-msgstr ""
-
 msgid "Kastore"
 msgstr ""
 
-msgid "Vesper"
-msgstr ""
-
-msgid "Agar"
-msgstr ""
-
 msgid "Falagar"
-msgstr ""
-
-msgid "Wrathmont"
 msgstr ""
 
 msgid "Dawn"
@@ -4618,9 +4799,6 @@ msgid "Celia"
 msgstr ""
 
 msgid "Roxana"
-msgstr ""
-
-msgid "Sandro"
 msgstr ""
 
 msgid "Lord Corlagon"
@@ -9074,31 +9252,31 @@ msgid "The ultimate artifact may be found in the %{name} regions of the world."
 msgstr ""
 
 msgid "north-west"
-msgstr ""
+msgstr "severozápad"
 
 msgid "north"
-msgstr ""
+msgstr "sever"
 
 msgid "north-east"
-msgstr ""
+msgstr "severovýchod"
 
 msgid "west"
-msgstr ""
+msgstr "západ"
 
 msgid "center"
-msgstr ""
+msgstr "stred"
 
 msgid "east"
-msgstr ""
+msgstr "východ"
 
 msgid "south-west"
-msgstr ""
+msgstr "juhozápad"
 
 msgid "south"
-msgstr ""
+msgstr "juh"
 
 msgid "south-east"
-msgstr ""
+msgstr "juhovýchod"
 
 msgid "The truth is out there."
 msgstr ""

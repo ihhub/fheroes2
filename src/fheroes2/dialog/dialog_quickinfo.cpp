@@ -51,6 +51,7 @@
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "pairs.h"
@@ -145,7 +146,7 @@ namespace
 
     std::string showMineInfo( const Maps::Tiles & tile, const bool isOwned )
     {
-        const int32_t resourceType = tile.QuantityResourceCount().first;
+        const int32_t resourceType = getResourcesFromTile( tile ).first;
         std::string objectInfo = Maps::GetMinesName( resourceType );
 
         if ( isOwned ) {
@@ -168,7 +169,7 @@ namespace
             str = MP2::StringObject( objectType );
         }
 
-        const Troop & troop = tile.QuantityTroop();
+        const Troop & troop = getTroopFromTile( tile );
 
         if ( troop.isValid() ) {
             str.append( "\n \n" );
@@ -194,7 +195,7 @@ namespace
 
     std::string showMonsterInfo( const Maps::Tiles & tile, const bool isVisibleFromCrystalBall )
     {
-        const Troop & troop = tile.QuantityTroop();
+        const Troop & troop = getTroopFromTile( tile );
 
         if ( isVisibleFromCrystalBall ) {
             std::string str = "%{count} %{monster}";
@@ -220,7 +221,7 @@ namespace
         if ( isOwned ) {
             str += "\n \n";
 
-            const Troop & troop = tile.QuantityTroop();
+            const Troop & troop = getTroopFromTile( tile );
 
             if ( troop.isValid() ) {
                 str.append( _( "(available: %{count})" ) );
@@ -264,7 +265,7 @@ namespace
         std::string str = MP2::StringObject( tile.GetObject( false ) );
 
         if ( isVisited ) {
-            const Skill::Secondary & skill = tile.QuantitySkill();
+            const Skill::Secondary & skill = getSecondarySkillFromTile( tile );
 
             str.append( "\n(" );
             str.append( Skill::Secondary::String( skill.Skill() ) );
@@ -326,7 +327,7 @@ namespace
     std::string showBarrierInfo( const Maps::Tiles & tile )
     {
         std::string str = _( "%{color} Barrier" );
-        StringReplace( str, "%{color}", fheroes2::getBarrierColorName( tile.QuantityColor() ) );
+        StringReplace( str, "%{color}", fheroes2::getBarrierColorName( getColorFromTile( tile ) ) );
 
         return str;
     }
@@ -334,7 +335,7 @@ namespace
     std::string showTentInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
     {
         std::string str = _( "%{color} Tent" );
-        const int32_t tentColor = tile.QuantityColor();
+        const int32_t tentColor = getColorFromTile( tile );
         StringReplace( str, "%{color}", fheroes2::getTentColorName( tentColor ) );
 
         if ( kingdom.IsVisitTravelersTent( tentColor ) ) {
@@ -417,7 +418,7 @@ namespace
         const MP2::MapObjectType objectType = tile.GetObject( false );
 
         if ( tile.isCaptureObjectProtected() || objectType == MP2::OBJ_ABANDONED_MINE ) {
-            return showGuardiansInfo( tile, playerColor == tile.QuantityColor() );
+            return showGuardiansInfo( tile, playerColor == getColorFromTile( tile ) );
         }
 
         const Kingdom & kingdom = world.GetKingdom( playerColor );
@@ -454,13 +455,13 @@ namespace
             return Resource::String( tile.GetQuantity1() );
 
         case MP2::OBJ_MINES:
-            return showMineInfo( tile, playerColor == tile.QuantityColor() );
+            return showMineInfo( tile, playerColor == getColorFromTile( tile ) );
 
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_SAWMILL: {
             std::string objectInfo = MP2::StringObject( objectType );
-            if ( playerColor == tile.QuantityColor() ) {
-                objectInfo.append( getMinesIncomeString( tile.QuantityResourceCount().first ) );
+            if ( playerColor == getColorFromTile( tile ) ) {
+                objectInfo.append( getMinesIncomeString( getResourcesFromTile( tile ).first ) );
             }
             return objectInfo;
         }
