@@ -19,8 +19,13 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
+    - uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 17
     - name: Install dependencies
       run: |
+        bash script/android/install_packages.sh
         sudo apt-get -y update
         sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
     - uses: SonarSource/sonarcloud-github-c-cpp@v1
@@ -37,11 +42,16 @@ jobs:
     - name: Prepare compile_commands.json
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DUSE_SDL_VERSION=SDL2 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    - name: Generate Java bytecode
+      run: |
+        cd android
+        ./gradlew compileDebugJavaWithJavac
     - name: Analyze
       run: |
         sonar-scanner -Dsonar.cfamily.compile-commands=build/compile_commands.json \
                       -Dsonar.cfamily.analysisCache.mode=fs \
                       -Dsonar.cfamily.analysisCache.path="$HOME"/.sonar-cfamily-cache \
+                      -Dsonar.java.binaries="android/*/build/**/classes" \
                       -Dsonar.host.url=https://sonarcloud.io
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
