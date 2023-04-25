@@ -1566,7 +1566,7 @@ msgid "campaignBonus|Steelskin"
 msgstr "Kůže z oceli"
 
 msgid "campaignBonus|Summon Earth"
-msgstr "Přiv. Půd. El."
+msgstr "Přiv. Půd. Elem."
 
 msgid "campaignBonus|View Heroes"
 msgstr "Zobraz Hrdiny"
