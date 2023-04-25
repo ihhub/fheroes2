@@ -1,12 +1,12 @@
 # Vietnamese translation of fheroes2
 # Copyright (C) 2023 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-19 02:55+0000\n"
+"POT-Creation-Date: 2023-04-24 18:46+0300\n"
 "PO-Revision-Date: 2023-04-19 20:35+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3363,6 +3363,12 @@ msgstr ""
 msgid "and more..."
 msgstr ""
 
+msgid "Easy"
+msgstr "Dễ"
+
+msgid "Hard"
+msgstr "Khó"
+
 msgid "Campaign Difficulty"
 msgstr "Độ khó Chiến Dịch"
 
@@ -3380,11 +3386,24 @@ msgid ""
 "with normal difficulty."
 msgstr ""
 
-msgid "Easy"
-msgstr "Dễ"
+msgid ""
+"Congratulations!\n"
+"\n"
+"Days: %{days}\n"
+msgstr ""
 
-msgid "Hard"
-msgstr "Khó"
+msgid ""
+"\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
+msgid ""
+"Score: %{score}\n"
+"\n"
+"Rating:\n"
+"%{rating}"
+msgstr ""
 
 msgid "Start the selected scenario."
 msgstr ""
@@ -3575,10 +3594,10 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
-msgid "Unknown Hero"
+msgid "Your Name"
 msgstr ""
 
-msgid "Your Name"
+msgid "Unknown Hero"
 msgstr ""
 
 msgid "Standard"
@@ -4134,6 +4153,12 @@ msgid ""
 "All is lost."
 msgstr ""
 
+msgid ""
+"Base score: %{score}\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
 
@@ -4490,7 +4515,7 @@ msgstr ""
 msgid "Handicap"
 msgstr "Chấp"
 
-#
+# 
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
@@ -4509,7 +4534,7 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr ""
 
-#
+# 
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -4518,7 +4543,7 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr ""
 
-#
+# 
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."

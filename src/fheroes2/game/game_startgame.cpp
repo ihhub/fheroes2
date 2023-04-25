@@ -1238,24 +1238,27 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
             }
         }
 
-        // map objects animation
-        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            Game::updateAdventureMapAnimationIndex();
-            gameArea.SetRedraw();
-        }
-
-        // check that the kingdom is not vanquished yet (has at least one hero or castle)
+        // Check that the kingdom is not vanquished yet (has at least one hero or castle).
         if ( res == fheroes2::GameMode::CANCEL && !myKingdom.isPlay() ) {
             res = fheroes2::GameMode::END_TURN;
         }
 
-        if ( NeedRedraw() ) {
-            Redraw();
+        // Render map only if the turn is not over.
+        if ( res == fheroes2::GameMode::CANCEL ) {
+            // map objects animation
+            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                Game::updateAdventureMapAnimationIndex();
+                gameArea.SetRedraw();
+            }
 
-            // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
-            assert( GetRedrawMask() == 0 );
+            if ( NeedRedraw() ) {
+                Redraw();
 
-            display.render();
+                // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
+                assert( GetRedrawMask() == 0 );
+
+                display.render();
+            }
         }
     }
 
