@@ -231,6 +231,8 @@ namespace fheroes2
 
     void colorFade( const std::vector<uint8_t> & palette, const fheroes2::Rect & frameRoi, const uint32_t durationMs, const double fps )
     {
+        assert( fps > 0 );
+
         // Game palette has 256 values for red, green and blue, so its size is: 256 * 3 = 768.
         const int32_t paletteSize = 768;
         // Do a color fade only for valid palette.
@@ -284,7 +286,6 @@ namespace fheroes2
             endPalette[i * 3 + 2] = originalPalette[valuePosition + 2] * 4;
         }
 
-        assert( fps > 0 );
         const uint32_t delay = static_cast<uint32_t>( std::round( 1000.0 / fps ) );
 
         // Gradually fade the palette.
