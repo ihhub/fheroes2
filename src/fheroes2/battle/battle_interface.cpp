@@ -4509,16 +4509,22 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         // We set the constant animation time for all rainbows: rainbowLength/30 fits the rainbow sound duration on '1' speed.
         const double drawStep = rainbowLength / 30.0;
 
-        AudioManager::PlaySound( M82::GOODLUCK );
+        // Don't waste time waiting for Good Luck sound if the game sounds are turned off
+        if ( Settings::Get().SoundVolume() > 0 ) {
+            AudioManager::PlaySound( M82::GOODLUCK );
+        }
 
         double x = 0;
         while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_MISSILE_DELAY } ) ) && ( Mixer::isPlaying( -1 ) || x < rainbowLength ) ) {
             CheckGlobalEvents( le );
 
-            if ( x < rainbowLength && Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
                 RedrawPartialStart();
 
-                x += drawStep;
+                if ( x < rainbowLength ) {
+                    x += drawStep;
+                }
+
                 const int32_t drawWidth = x > rainbowLength ? rainbowLength : static_cast<int32_t>( x );
 
                 // For different rainbow types use appropriate animation direction.
