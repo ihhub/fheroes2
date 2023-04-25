@@ -190,9 +190,8 @@ public:
 
     static bool isFadeEffectEnabled()
     {
-        // TODO: fix fading effect for the original resolution (640 x 480) and enable back this option.
-        // return video_mode == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
-        return false;
+        // TODO: Store fade effect setting in configuration file or remove this function.
+        return true;
     }
 
     bool LoadedGameVersion() const

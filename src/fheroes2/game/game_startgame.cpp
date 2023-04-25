@@ -267,7 +267,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    bool needFade = Settings::isFadeEffectEnabled() && fheroes2::Display::instance().isDefaultSize();
+    bool needFade = Settings::isFadeEffectEnabled();
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
 
@@ -809,8 +809,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
     assert( res != fheroes2::GameMode::END_TURN );
 
-    if ( Settings::isFadeEffectEnabled() )
+    if ( Settings::isFadeEffectEnabled() ) {
         fheroes2::FadeDisplay();
+    }
 
     return res;
 }

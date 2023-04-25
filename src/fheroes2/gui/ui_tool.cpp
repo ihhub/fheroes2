@@ -565,7 +565,7 @@ namespace fheroes2
         }
     }
 
-    void FadeDisplay( int32_t fadeTimeMs /* = 500 */ )
+    void FadeDisplay( int32_t fadeTimeMs /* = 250 */ )
     {
         Display & display = Display::instance();
         Image temp;

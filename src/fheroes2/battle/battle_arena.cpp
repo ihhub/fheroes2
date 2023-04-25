@@ -389,8 +389,9 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
     if ( _interface ) {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        if ( Settings::isFadeEffectEnabled() )
+        if ( Settings::isFadeEffectEnabled() && display.isDefaultSize() ) {
             fheroes2::FadeDisplay();
+        }
 
         _interface->fullRedraw();
         display.render();

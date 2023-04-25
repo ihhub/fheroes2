@@ -219,9 +219,12 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     // Fade screen.
-    if ( Settings::isFadeEffectEnabled() )
+    if ( Settings::isFadeEffectEnabled() && display.isDefaultSize() ) {
         fheroes2::FadeDisplay();
+    }
 
     const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
 
@@ -272,7 +275,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     // bottom small bar
     const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
-    fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( bar, display, cur_pt.x + buttonPrevCastle.area().width, cur_pt.y + statusBarOffsetY );
 
     StatusBar statusBar;

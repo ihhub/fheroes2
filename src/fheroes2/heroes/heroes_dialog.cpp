@@ -60,8 +60,9 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // fade
-    if ( fade && Settings::isFadeEffectEnabled() )
+    if ( fade && Settings::isFadeEffectEnabled() && fheroes2::Display::instance().isDefaultSize() ) {
         fheroes2::FadeDisplay();
+    }
 
     fheroes2::Display & display = fheroes2::Display::instance();
 

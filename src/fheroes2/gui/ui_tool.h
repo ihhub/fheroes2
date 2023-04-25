@@ -122,7 +122,7 @@ namespace fheroes2
 
     void FadeDisplayWithPalette( const Image & top, const Point & pos, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount );
 
-    void FadeDisplay( int32_t fadeTimeMs = 500 );
+    void FadeDisplay( int32_t fadeTimeMs = 250 );
 
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs,
                                   const int32_t frameCount );
