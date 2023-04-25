@@ -116,17 +116,18 @@ namespace fheroes2
 
     Image CreateHolyShoutEffect( const Image & in, const int32_t blurRadius, const uint8_t darkredStrength );
 
-    Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX = 0.05, double waveFrequency = 20.0 );
+    Image CreateRippleEffect( const Image & in, const int32_t frameId, const double scaleX = 0.05, const double waveFrequency = 20.0 );
 
-    void FadeDisplay( const Image & top, const Point & pos, uint8_t endAlpha, int delayMs );
+    void FadeDisplay( const Image & top, const Point & pos, const uint8_t endAlpha, const int32_t fadeTimeMs );
 
-    void FadeDisplayWithPalette( const Image & top, const Point & pos, uint8_t paletteId, int delayMs, int frameCount );
+    void FadeDisplayWithPalette( const Image & top, const Point & pos, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount );
 
-    void FadeDisplay( int delayMs = 500 );
+    void FadeDisplay( int32_t fadeTimeMs = 500 );
 
-    void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, uint8_t paletteId, int delayMs, int frameCount );
+    void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs,
+                                  const int32_t frameCount );
 
-    void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int paletteCount );
+    void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t paletteCount );
 
     // Display pre-render function to show screen system info
     void PreRenderSystemInfo();
