@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-19 02:55+0000\n"
-"PO-Revision-Date: 2023-04-22 14:41+0200\n"
+"PO-Revision-Date: 2023-04-25 05:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -2072,510 +2072,536 @@ msgid "Sheltemburg"
 msgstr "Sheltemburg"
 
 msgid "Cannot recruit - you already have a Hero in this town."
-msgstr ""
+msgstr "Nedá sa najať - v tomto meste už máš hrdinu."
 
 msgid "Cannot recruit - you have too many Heroes."
-msgstr ""
+msgstr "Nedá sa najať - máš príliš mnoho hrdinov."
 
 msgid "Cannot afford a Hero"
-msgstr ""
+msgstr "Hrdinu si nemôžeš dovoliť."
 
 msgid "There is no room in the garrison for this army."
-msgstr ""
+msgstr "V posádke nie je miesto pre túto armádu."
 
 msgid "Fortifications"
-msgstr ""
+msgstr "Opevnenia"
 
 msgid "Farm"
-msgstr ""
+msgstr "Farma"
 
 msgid "Thatched Hut"
-msgstr ""
+msgstr "Došková chatrč"
 
 msgid "Archery Range"
-msgstr ""
+msgstr "Luková strelnica"
 
 msgid "Upg. Archery Range"
-msgstr ""
+msgstr "Pov. Luková strelnica"
 
 msgid "Blacksmith"
-msgstr ""
+msgstr "Kováč"
 
 msgid "Upg. Blacksmith"
-msgstr ""
+msgstr "Pov. Kováč"
 
 msgid "Armory"
-msgstr ""
+msgstr "Zbrojnica"
 
 msgid "Upg. Armory"
-msgstr ""
+msgstr "Pov. Zbrojnica"
 
 msgid "Jousting Arena"
-msgstr ""
+msgstr "Turnajová aréna"
 
 msgid "Upg. Jousting Arena"
-msgstr ""
+msgstr "Pov. Turnajová aréna"
 
 msgid "Cathedral"
-msgstr ""
+msgstr "Katedrála"
 
 msgid "Upg. Cathedral"
-msgstr ""
+msgstr "Pov. Katedrála"
 
 msgid "Coliseum"
-msgstr ""
+msgstr "Koloseum"
 
 msgid "Garbage Heap"
-msgstr ""
+msgstr "Smetisko"
 
 msgid "Hut"
-msgstr ""
+msgstr "Chatrč"
 
 msgid "Stick Hut"
-msgstr ""
+msgstr "Drevenica"
 
 msgid "Upg. Stick Hut"
-msgstr ""
+msgstr "Pov. Drevenica"
 
 msgid "Den"
-msgstr ""
+msgstr "Brloh"
 
 msgid "Adobe"
-msgstr ""
+msgstr "Tehlový dom"
 
 msgid "Upg. Adobe"
-msgstr ""
+msgstr "Pov. Tehlový dom"
 
 msgid "Bridge"
-msgstr ""
+msgstr "Most"
 
 msgid "Upg. Bridge"
-msgstr ""
+msgstr "Pov. Most"
 
 msgid "Pyramid"
-msgstr ""
+msgstr "Pyramída"
 
 msgid "Rainbow"
-msgstr ""
+msgstr "Dúha"
 
 msgid "Crystal Garden"
-msgstr ""
+msgstr "Krištáľová záhrada"
 
 msgid "Treehouse"
-msgstr ""
+msgstr "Stromodom"
 
 msgid "Cottage"
-msgstr ""
+msgstr "Chalúpka"
 
 msgid "Upg. Cottage"
-msgstr ""
+msgstr "Chalupa"
 
 msgid "Stonehenge"
-msgstr ""
+msgstr "Stonehenge"
 
 msgid "Upg. Stonehenge"
-msgstr ""
+msgstr "Pov. Stonehenge"
 
 msgid "Fenced Meadow"
-msgstr ""
+msgstr "Oplotená lúka"
 
 msgid "sorceress|Red Tower"
-msgstr ""
+msgstr "Červená veža"
 
 msgid "Dungeon"
-msgstr ""
+msgstr "Žalár"
 
 msgid "Waterfall"
-msgstr ""
+msgstr "Vodopád"
 
 msgid "Cave"
-msgstr ""
+msgstr "Jaskyňa"
 
 msgid "Crypt"
-msgstr ""
+msgstr "Krypta"
 
 msgid "Nest"
-msgstr ""
+msgstr "Hniezdo"
 
 msgid "Maze"
-msgstr ""
+msgstr "Bludisko"
 
 msgid "Upg. Maze"
-msgstr ""
+msgstr "Labyrint"
 
 msgid "Swamp"
-msgstr ""
+msgstr "Močiar"
 
 msgid "Green Tower"
-msgstr ""
+msgstr "Zelená veža"
 
 msgid "warlock|Red Tower"
-msgstr ""
+msgstr "Červená veža"
 
 msgid "Black Tower"
-msgstr ""
+msgstr "Čierna veža"
 
 msgid "Library"
-msgstr ""
+msgstr "Knižnica"
 
 msgid "Orchard"
-msgstr ""
+msgstr "Ovocný sad"
 
 msgid "Habitat"
-msgstr ""
+msgstr "Hobitín"
 
 msgid "Pen"
-msgstr ""
+msgstr "Ohrada"
 
 msgid "Foundry"
-msgstr ""
+msgstr "Zlievareň"
 
 msgid "Upg. Foundry"
-msgstr ""
+msgstr "Pov. Zlievareň"
 
 msgid "Cliff Nest"
-msgstr ""
+msgstr "Hniezdo na útese"
 
 msgid "Ivory Tower"
-msgstr ""
+msgstr "Veža zo slonoviny"
 
 msgid "Upg. Ivory Tower"
-msgstr ""
+msgstr "Pov. Veža zo slonoviny"
 
 msgid "Cloud Castle"
-msgstr ""
+msgstr "Oblačné mesto"
 
 msgid "Upg. Cloud Castle"
-msgstr ""
+msgstr "Pov. Oblačné mesto"
 
 msgid "Storm"
-msgstr ""
+msgstr "Búrka"
 
 msgid "Skull Pile"
-msgstr ""
+msgstr "Hromada lebiek"
 
 msgid "Excavation"
-msgstr ""
+msgstr "Vykopávka"
 
 msgid "Graveyard"
-msgstr ""
+msgstr "Cintorín"
 
 msgid "Upg. Graveyard"
-msgstr ""
+msgstr "Pov. Cintorín"
 
 msgid "Upg. Pyramid"
-msgstr ""
+msgstr "Pov. Pyramída"
 
 msgid "Mansion"
-msgstr ""
+msgstr "Kaštieľ"
 
 msgid "Upg. Mansion"
-msgstr ""
+msgstr "Zámok"
 
 msgid "Mausoleum"
-msgstr ""
+msgstr "Mauzóleum"
 
 msgid "Upg. Mausoleum"
-msgstr ""
+msgstr "Pov. Mauzóleum"
 
 msgid "Laboratory"
-msgstr ""
+msgstr "Laboratórium"
 
 msgid "Shrine"
-msgstr ""
+msgstr "Svätyňa"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
 msgstr ""
+"Opevnenia zvyšujú húževnatosť múrov a zvyšujú počet kôl potrebných na ich "
+"zbúranie."
 
 msgid "The Farm increases production of Peasants by %{count} per week."
-msgstr ""
+msgstr "Farma zvyšuje produkciu roľníkov o %{count} za týždeň."
 
 msgid ""
 "The Coliseum provides inspiring spectacles to defending troops, raising "
 "their morale by two during combat."
 msgstr ""
+"Koloseum poskytuje obranným jednotkám inšpiratívne predstavenie, ktoré počas "
+"boja zvýši ich morálku o dve."
 
 msgid "The Garbage Heap increases production of Goblins by %{count} per week."
-msgstr ""
+msgstr "Smetisko zvyšuje produkciu goblinov o %{count} za týždeň."
 
 msgid "The Rainbow increases the luck of the defending units by two."
-msgstr ""
+msgstr "Rainbow zvyšuje šťastie obranných jednotiek o dve."
 
 msgid ""
 "The Crystal Garden increases production of Sprites by %{count} per week."
-msgstr ""
+msgstr "Krištáľová záhrada zvyšuje produkciu víl o %{count} za týždeň."
 
 msgid "The Dungeon increases the income of the town by %{count} gold per day."
-msgstr ""
+msgstr "Žalár zvyšuje príjem mesta o %{count} zlata za deň."
 
 msgid "The Waterfall increases production of Centaurs by %{count} per week."
-msgstr ""
+msgstr "Vodopád zvyšuje produkciu kentaurov o %{count} za týždeň."
 
 msgid ""
 "The Library increases the number of spells in the Guild by one for each "
 "level of the guild."
-msgstr ""
+msgstr "Knižnica zvyšuje počet kúziel v cechu o jedno za každú úroveň cechu."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr ""
+msgstr "Ovocný sad zvyšuje produkciu hobitov o %{count} za týždeň."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
-msgstr ""
+msgstr "Búrka pridáva +2 k sile kúziel brániaceho kúzelníka."
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
-msgstr ""
+msgstr "Hromada lebiek zvyšuje produkciu kostlivcov o %{count} za týždeň."
 
 msgid "Thieves' Guild"
-msgstr ""
+msgstr "Cech zlodejov"
 
 msgid "Tavern"
-msgstr ""
+msgstr "Krčma"
 
 msgid "Shipyard"
-msgstr ""
+msgstr "Lodenica"
 
 msgid "Well"
-msgstr ""
+msgstr "Studňa"
 
 msgid "Statue"
-msgstr ""
+msgstr "Socha"
 
 msgid "Marketplace"
-msgstr ""
+msgstr "Trhovisko"
 
 msgid "Moat"
-msgstr ""
+msgstr "Priekopa"
 
 msgid "Castle"
-msgstr ""
+msgstr "Hrad"
 
 msgid "Tent"
-msgstr ""
+msgstr "Stan"
 
 msgid "Captain's Quarters"
-msgstr ""
+msgstr "Kapitánova ubytovňa"
 
 msgid "Mage Guild, Level 1"
-msgstr ""
+msgstr "Cech mágov, úroveň 1"
 
 msgid "Mage Guild, Level 2"
-msgstr ""
+msgstr "Cech mágov, úroveň 2"
 
 msgid "Mage Guild, Level 3"
-msgstr ""
+msgstr "Cech mágov, úroveň 3"
 
 msgid "Mage Guild, Level 4"
-msgstr ""
+msgstr "Cech mágov, úroveň 4"
 
 msgid "Mage Guild, Level 5"
-msgstr ""
+msgstr "Cech mágov, úroveň 5"
 
 msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
 "percent."
 msgstr ""
+"Svätyňa zvyšuje zručnosť nekromancie všetkých tvojich nekromantov o 10 "
+"percent."
 
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
 "can also provide scouting information on enemy towns. Additional Guilds "
 "provide more information."
 msgstr ""
+"Cech zlodejov poskytuje informácie o nepriateľských hráčoch. Cech zlodejov "
+"tiež poskytuje prieskumné informácie o nepriateľských mestách. Dodatočné "
+"cechy poskytnú viac informácií."
 
 msgid "The Tavern increases morale for troops defending the castle."
-msgstr ""
+msgstr "Krčma zvyšuje morálku pre jednotky brániace hrad."
 
 msgid "The Shipyard allows ships to be built."
-msgstr ""
+msgstr "Lodenica umožňuje stavbu lodí."
 
 msgid ""
 "The Well increases the growth rate of all dwellings by %{count} creatures "
 "per week."
 msgstr ""
+"Studňa zvyšuje rýchlosť rastu všetkých obydlí o %{count} bojovníkov za "
+"týždeň."
 
 msgid "The Statue increases your town's income by %{count} gold per day."
-msgstr ""
+msgstr "Socha zvyšuje príjem tvojho mesta o %{count} zlata za deň."
 
 msgid "The Left Turret provides extra firepower during castle combat."
-msgstr ""
+msgstr "Ľavá veža poskytuje palebnú silu navyše počas boja o hrad."
 
 msgid "The Right Turret provides extra firepower during castle combat."
-msgstr ""
+msgstr "Pravá veža poskytuje palebnú silu navyše počas boja o hrad."
 
 msgid ""
 "The Marketplace can be used to convert one type of resource into another. "
 "The more marketplaces you control, the better the exchange rate."
 msgstr ""
+"Trhovisko možno použiť na zámenu jedného typu zdroja za iný. Čím viac "
+"trhovísk vlastníš, tým lepší je výmenný kurz."
 
 msgid ""
 "The Moat slows attacking units. Any unit entering the moat must end its turn "
 "there and becomes more vulnerable to attack."
 msgstr ""
+"Priekopa spomaľuje útočiace jednotky. Každá jednotka, ktorá vstúpi do "
+"priekopy, tam musí svoj ťah ukončiť a stane sa zraniteľnejšou voči útoku."
 
 msgid ""
 "The Castle improves town defense and increases income to %{count} gold per "
 "day."
-msgstr ""
+msgstr "Hrad zlepšuje obranu mesta a zvyšuje príjem na %{count} zlata za deň."
 
 msgid ""
 "The Tent provides workers to build a castle, provided the materials and the "
 "gold are available."
 msgstr ""
+"Stan poskytuje robotníkov na stavbu hradu za predpokladu, že sú k dispozícii "
+"materiály a zlato."
 
 msgid ""
 "The Captain's Quarters provides a captain to assist in the castle's defense "
 "when no hero is present."
 msgstr ""
+"Kapitánova ubytovňa poskytuje kapitána, ktorý pomáha pri obrane hradu, keď "
+"nie je prítomný žiadny hrdina."
 
 msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
-msgstr ""
+msgstr "Cech mágov umožňuje hrdinom učiť sa kúzla a dopĺňať si body kúziel."
 
 msgid "Recruit %{name}"
-msgstr ""
+msgstr "Najať: %{name}"
 
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
-msgstr ""
+msgstr "Mesiac: %{month}, Týždeň: %{week}, Deň: %{day}"
 
 msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
+"Ak chceš používať cech mágov, musíš si kúpiť knihu kúziel, ale momentálne "
+"nemáš miesto pre knihu kúziel. Skús dať jeden zo svojich artefaktov inému "
+"hrdinovi."
 
 msgid "Exit"
-msgstr ""
+msgstr "Preč"
 
 msgid "Click to show next town."
-msgstr ""
+msgstr "Kliknutím zobraz ďalšie mesto."
 
 msgid "Show next town"
-msgstr ""
+msgstr "Ukáž ďalšie mesto."
 
 msgid "Click to show previous town."
-msgstr ""
+msgstr "Kliknutím zobraz predošlé mesto."
 
 msgid "Show previous town"
-msgstr ""
+msgstr "Ukáž predošlé mesto."
 
 msgid "This town may not be upgraded to a castle."
-msgstr ""
+msgstr "Toto mesto nemôže byť povýšené na hrad."
 
 msgid "Town"
-msgstr ""
+msgstr "Mesto"
 
 msgid "Exit Castle"
-msgstr ""
+msgstr "Preč z hradu"
 
 msgid "Exit Town"
-msgstr ""
+msgstr "Preč z mesta"
 
 msgid "Show Income"
-msgstr ""
+msgstr "Ukáž príjem"
 
 msgid "View Hero"
-msgstr ""
+msgstr "Ukáž hrdinu"
 
 msgid "The above spells are available here."
-msgstr ""
+msgstr "Vyššie uvedené kúzla sú dostupné tu."
 
 msgid "The above spells have been added to your book."
-msgstr ""
+msgstr "Vyššie uvedené kúzla boli pridané do tvojej knihy kúziel."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
-msgstr ""
+msgstr "Štedré prepitné pre barmana prináša nasledujúcu fámu:"
 
 msgid "Recruit Hero"
-msgstr ""
+msgstr "Najať hrdinu"
 
 msgid "%{name} is a level %{value} %{race} "
-msgstr ""
+msgstr "%{name} je %{race} na úrovni %{value} "
 
 msgid "with %{count} artifacts."
-msgstr ""
+msgstr "s %{count} artefaktmi."
 
 msgid "with 1 artifact."
-msgstr ""
+msgstr "s jedným artefaktom."
 
 msgid "without artifacts."
-msgstr ""
+msgstr "bez artefaktov."
 
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
 msgstr ""
+"'Široká' bojová formácia rozprestiera tvoje armády zhora nadol na bojisko, "
+"pričom medzi každou armádou je aspoň jedno prázdne miesto."
 
 msgid ""
 "'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
+"'Zoskupená' bojová formácia spája tvoju armádu v strede tvojej strany "
+"bojiska."
 
 msgid "Spread Formation"
-msgstr ""
+msgstr "Široká formácia"
 
 msgid "Grouped Formation"
-msgstr ""
+msgstr "Zoskupená formácia"
 
 msgid "Recruit %{name} the %{race}"
-msgstr ""
+msgstr "Najmi: %{race} %{name} "
 
 msgid "Set garrison combat formation to 'Spread'"
-msgstr ""
+msgstr "Nastaviť bojovú formáciu posádky na 'Široká'"
 
 msgid "Set garrison combat formation to 'Grouped'"
-msgstr ""
+msgstr "Nastaviť bojovú formáciu posádky na 'Zoskupená'"
 
 msgid "Exit Castle Options"
-msgstr ""
+msgstr "Preč z možností hradu"
 
 msgid "Castle Options"
-msgstr ""
+msgstr "Možnosti hradu"
 
 msgid "Not enough resources to recruit creatures."
-msgstr ""
+msgstr "Nie je dostatok zdrojov na nábor bojovníkov."
 
 msgid "You are unable to recruit at this time, your ranks are full."
-msgstr ""
+msgstr "Momentálne nemôžeš robiť nábor, tvoje rady sú plné."
 
 msgid "No creatures available for purchase."
-msgstr ""
+msgstr "Žiadni bojovníci nie sú k dispozícii na nákup."
 
 msgid "Recruit Creatures"
-msgstr ""
+msgstr "Najať bojovníkov"
 
 msgid "Max"
-msgstr ""
+msgstr "Max"
 
 msgid "Hire all creatures in the town."
-msgstr ""
+msgstr "Najmi všetkých bojovníkov v meste."
 
 msgid "Town Population Information and Statistics"
-msgstr ""
+msgstr "Informácie o obyvateľstve a štatistika mesta"
 
 msgid "Damg"
-msgstr ""
+msgstr "Pošk"
 
 msgid "HP"
-msgstr ""
+msgstr "BZ"
 
 msgid "Growth"
-msgstr ""
+msgstr "Rast"
 
 msgid "week"
-msgstr ""
+msgstr "týždeň"
 
 msgid "Available"
-msgstr ""
+msgstr "Dostupné"
 
 msgid "View World"
-msgstr ""
+msgstr "Ukáž svet"
 
 msgid "View the entire world."
-msgstr ""
+msgstr "Ukáž celý svet."
 
 msgid "Puzzle"
-msgstr ""
+msgstr "Rébus"
 
 msgid "View the obelisk puzzle."
 msgstr ""
