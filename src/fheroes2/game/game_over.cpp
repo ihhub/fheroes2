@@ -41,7 +41,9 @@
 #include "game_video_type.h"
 #include "gamedefs.h"
 #include "heroes.h"
+#include "highscores.h"
 #include "kingdom.h"
+#include "monster.h"
 #include "mus.h"
 #include "players.h"
 #include "serialize.h"
@@ -49,6 +51,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -166,6 +169,35 @@ namespace
 
         if ( !body.empty() )
             fheroes2::showStandardTextMessage( "", body, Dialog::OK );
+    }
+
+    Video::Subtitle standardGameResults()
+    {
+        // Get data for ratings text.
+        const int32_t difficulty = static_cast<int32_t>( Game::GetRating() );
+        const int32_t baseScore = static_cast<int32_t>( Game::getGameOverScoreFactor() );
+        const int32_t score = difficulty * baseScore / 100;
+
+        // Make ratings text as a subtitle for WIN.SMK.
+        fheroes2::MultiFontText ratingText;
+
+        std::string textBody = _( "Congratulations!\n\nDays: %{days}\n" );
+        StringReplace( textBody, "%{days}", static_cast<int32_t>( world.CountDay() ) );
+        ratingText.add( { textBody, fheroes2::FontType::normalWhite() } );
+
+        textBody = _( "Base score: %{score}\nDifficulty: %{difficulty}\n\n" );
+        StringReplace( textBody, "%{score}", baseScore );
+        StringReplace( textBody, "%{difficulty}", difficulty );
+        ratingText.add( { textBody, fheroes2::FontType::smallWhite() } );
+
+        textBody = _( "Score: %{score}\n\nRating:\n%{rating}" );
+        StringReplace( textBody, "%{score}", score );
+        StringReplace( textBody, "%{rating}", fheroes2::HighScoreDataContainer::getMonsterByRating( score ).GetName() );
+        ratingText.add( { textBody, fheroes2::FontType::normalWhite() } );
+
+        // Show results from the 5th second until end (forever) and set maximum width to 140 to fit the black area.
+        // Set subtitles top-center position (475,110) to render results over the black rectangle of burned picture in WIN.SMK video.
+        return { ratingText, 5000, UINT32_MAX, { 475, 110 }, 140 };
     }
 }
 
@@ -327,16 +359,6 @@ void GameOver::Result::Reset()
     result = GameOver::COND_NONE;
 }
 
-void GameOver::Result::ResetResult()
-{
-    result = GameOver::COND_NONE;
-}
-
-uint32_t GameOver::Result::GetResult() const
-{
-    return result;
-}
-
 fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 {
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
@@ -364,7 +386,8 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
         const Kingdom & myKingdom = world.GetKingdom( humanColors );
 
         if ( myKingdom.isControlHuman() || Players::Get( humanColors )->isAIAutoControlMode() ) {
-            if ( GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
+            result = world.CheckKingdomWins( myKingdom );
+            if ( result != GameOver::COND_NONE ) {
                 DialogWins( result );
 
                 const Settings & conf = Settings::Get();
@@ -374,10 +397,10 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 }
                 else {
                     AudioManager::ResetAudio();
-                    Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
-                    // TODO : Implement function that displays the last frame of win.smk and
-                    // a dialog for name entry. AudioManager::PlayMusic is run here in order to start playing
-                    // before displaying the high score.
+
+                    Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
+
+                    // AudioManager::PlayMusic is run here in order to start playing before displaying the high score.
                     AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
 
                     res = fheroes2::GameMode::HIGHSCORES_STANDARD;
@@ -452,7 +475,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 DialogWins( multiplayerResult );
 
                 AudioManager::ResetAudio();
-                Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
+                Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
 
                 res = fheroes2::GameMode::MAIN_MENU;
             }

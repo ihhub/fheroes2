@@ -98,7 +98,7 @@ namespace Game
     void updateAdventureMapAnimationIndex();
 
     uint32_t GetRating();
-    uint32_t GetGameOverScores();
+    uint32_t getGameOverScoreFactor();
     uint32_t GetLostTownDays();
     uint32_t GetWhirlpoolPercent();
     uint32_t SelectCountPlayers();

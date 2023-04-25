@@ -381,7 +381,7 @@ uint32_t Game::GetRating()
     return rating;
 }
 
-uint32_t Game::GetGameOverScores()
+uint32_t Game::getGameOverScoreFactor()
 {
     const Settings & conf = Settings::Get();
 
@@ -424,7 +424,7 @@ uint32_t Game::GetGameOverScores()
         daysScore = 180;
     }
 
-    return GetRating() * ( 200 - daysScore ) / 100;
+    return ( 200 - daysScore );
 }
 
 uint32_t Game::GetLostTownDays()
