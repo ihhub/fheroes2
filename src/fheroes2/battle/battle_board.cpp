@@ -54,7 +54,7 @@ namespace
 {
     uint32_t GetRandomObstaclePosition( std::mt19937 & gen )
     {
-        return Rand::GetWithGen( 3, 7, gen ) + ( 11 * Rand::GetWithGen( 0, 8, gen ) );
+        return Rand::GetWithGen( 2, 8, gen ) + ( 11 * Rand::GetWithGen( 0, 8, gen ) );
     }
 
     bool isTwoHexObject( const int icnId )
@@ -72,6 +72,25 @@ namespace
         case ICN::COBJ0020:
         case ICN::COBJ0022:
         case ICN::COBJ0030:
+        case ICN::COBJ0031:
+            return true;
+
+        default:
+            break;
+        }
+
+        return false;
+    }
+
+    bool isTallObject( const int icnId )
+    {
+        switch ( icnId ) {
+        case ICN::COBJ0002:
+        case ICN::COBJ0009:
+        case ICN::COBJ0013:
+        case ICN::COBJ0021:
+        case ICN::COBJ0027:
+        case ICN::COBJ0028:
         case ICN::COBJ0031:
             return true;
 
@@ -594,10 +613,13 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
     for ( size_t i = 0; i < objectsToPlace; ++i ) {
         const bool checkRightCell = isTwoHexObject( objs[i] );
 
+        // tall obstacles like trees should not be placed on top 2 rows
+        const bool isTallObstacle = isTallObject( objs[i] );
+
         uint32_t dest;
         do {
             dest = GetRandomObstaclePosition( gen );
-        } while ( at( dest ).GetObject() != 0 || ( checkRightCell && ( at( dest + 1 ).GetObject() != 0 || dest % 11 == 7 ) ) );
+        } while ( at( dest ).GetObject() != 0 || ( checkRightCell && ( at( dest + 1 ).GetObject() != 0 || dest % 11 == 8 ) ) || ( isTallObstacle && dest <= 21 ) );
 
         SetCobjObject( objs[i], dest );
     }
