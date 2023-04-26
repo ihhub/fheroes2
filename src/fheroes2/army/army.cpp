@@ -882,7 +882,7 @@ void Troops::JoinAllTroopsOfType( const Troop & targetTroop ) const
     }
 }
 
-Army::Army( HeroBase * hero )
+Army::Army( HeroBase * hero /* = nullptr */ )
     : commander( hero )
     , combat_format( true )
     , color( Color::NONE )
