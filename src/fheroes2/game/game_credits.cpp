@@ -301,16 +301,18 @@ namespace
         const int32_t contributorCount = static_cast<int32_t>( name.row() );
         name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY, output );
 
-        std::string supporters( "William Hoskinson\n"
+        std::string supporters( "Aimi Lindschouw\n"
                                 "Aleksei Mazur\n"
-                                "Connor Townsend\n"
-                                "Brandon Wright\n"
-                                "Aimi Lindschouw\n"
-                                "Kiril Lipatov\n"
-                                "Matt Taylor\n"
                                 "Andrew Szucs\n"
+                                "Benjamin Hughes\n"
+                                "Brandon Wright\n"
+                                "Connor Townsend\n"
+                                "Kiril Lipatov\n"
                                 "Kresimir Condic\n"
-                                "slvclw\n" );
+                                "Kuza\n"
+                                "Matt Taylor\n"
+                                "slvclw\n"
+                                "William Hoskinson\n" );
 
         name.Set( supporters, Font::BIG, textWidth );
         const int32_t supportersHeight = name.h();

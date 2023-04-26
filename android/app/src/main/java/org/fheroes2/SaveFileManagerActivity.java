@@ -20,9 +20,7 @@
 
 package org.fheroes2;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,12 +29,132 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ToggleButton;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
-public final class SaveFileManagerActivity extends Activity
+public final class SaveFileManagerActivity extends AppCompatActivity
 {
+    public static final class SaveFileManagerActivityViewModel extends ViewModel
+    {
+        private static final class Status
+        {
+            public boolean isBackgroundTaskExecuting;
+            public final ArrayList<String> saveFileNames;
+
+            Status( final boolean isBackgroundTaskExecuting, final ArrayList<String> saveFileNames )
+            {
+                this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;
+                this.saveFileNames = saveFileNames;
+            }
+
+            Status setIsBackgroundTaskExecuting( final boolean isBackgroundTaskExecuting )
+            {
+                this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;
+
+                return this;
+            }
+        }
+
+        private final MutableLiveData<Status> liveStatus = new MutableLiveData<>( new Status( false, new ArrayList<>() ) );
+
+        public LiveData<Status> getLiveStatus()
+        {
+            return liveStatus;
+        }
+
+        public void updateSaveFileList( final File saveFileDir, final ArrayList<String> allowedSaveFileExtensions )
+        {
+            final Status status = Objects.requireNonNull( liveStatus.getValue() );
+
+            liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
+
+            new Thread( () -> {
+                try {
+                    liveStatus.postValue( new Status( false, getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                }
+                catch ( final Exception ex ) {
+                    Log.e( "fheroes2", "Failed to get a list of save files.", ex );
+
+                    liveStatus.postValue( new Status( false, new ArrayList<>() ) );
+                }
+            } ).start();
+        }
+
+        public void deleteSaveFiles( final File saveFileDir, final ArrayList<String> allowedSaveFileExtensions, final ArrayList<String> saveFileNames )
+        {
+            final Status status = Objects.requireNonNull( liveStatus.getValue() );
+
+            liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
+
+            new Thread( () -> {
+                try {
+                    for ( final String saveFileName : saveFileNames ) {
+                        final File saveFile = new File( saveFileDir, saveFileName );
+
+                        if ( !saveFile.isFile() ) {
+                            continue;
+                        }
+
+                        if ( !saveFile.delete() ) {
+                            Log.e( "fheroes2", "Unable to delete save file " + saveFile.getCanonicalPath() );
+                        }
+                    }
+                }
+                catch ( final Exception ex ) {
+                    Log.e( "fheroes2", "Failed to delete save files.", ex );
+                }
+                finally {
+                    try {
+                        liveStatus.postValue( new Status( false, getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                    }
+                    catch ( final Exception ex ) {
+                        Log.e( "fheroes2", "Failed to get a list of save files.", ex );
+
+                        liveStatus.postValue( new Status( false, new ArrayList<>() ) );
+                    }
+                }
+            } ).start();
+        }
+
+        private ArrayList<String> getSaveFileList( final File saveFileDir, final ArrayList<String> allowedSaveFileExtensions )
+        {
+            final ArrayList<String> saveFileNames = new ArrayList<>();
+
+            final File[] saveFilesList = saveFileDir.listFiles( ( dir, name ) -> {
+                if ( !dir.equals( saveFileDir ) ) {
+                    return false;
+                }
+
+                for ( final String extension : allowedSaveFileExtensions ) {
+                    if ( name.endsWith( extension ) ) {
+                        return true;
+                    }
+                }
+
+                return false;
+            } );
+
+            if ( saveFilesList != null ) {
+                for ( final File saveFile : saveFilesList ) {
+                    if ( saveFile.isFile() ) {
+                        saveFileNames.add( saveFile.getName() );
+                    }
+                }
+
+                Collections.sort( saveFileNames );
+            }
+
+            return saveFileNames;
+        }
+    }
+
     private File saveFileDir = null;
 
     private ToggleButton filterStandardToggleButton = null;
@@ -45,13 +163,9 @@ public final class SaveFileManagerActivity extends Activity
 
     private ListView saveFileListView = null;
 
-    private ImageButton selectAllButton = null;
-    private ImageButton unselectAllButton = null;
-    private ImageButton deleteButton = null;
+    private SaveFileManagerActivityViewModel viewModel = null;
 
     private ArrayAdapter<String> saveFileListViewAdapter = null;
-
-    private Thread backgroundTask = null;
 
     @Override
     protected void onCreate( final Bundle savedInstanceState )
@@ -68,9 +182,8 @@ public final class SaveFileManagerActivity extends Activity
 
         saveFileListView = findViewById( R.id.activity_save_file_manager_save_file_list );
 
-        selectAllButton = findViewById( R.id.activity_save_file_manager_select_all_btn );
-        unselectAllButton = findViewById( R.id.activity_save_file_manager_unselect_all_btn );
-        deleteButton = findViewById( R.id.activity_save_file_manager_delete_btn );
+        viewModel = new ViewModelProvider( this ).get( SaveFileManagerActivityViewModel.class );
+        viewModel.getLiveStatus().observe( this, this::updateUI );
 
         saveFileListViewAdapter = new ArrayAdapter<>( this, android.R.layout.simple_list_item_multiple_choice, new ArrayList<>() );
 
@@ -155,12 +268,8 @@ public final class SaveFileManagerActivity extends Activity
             .show();
     }
 
-    private void updateSaveFileList()
+    private ArrayList<String> getAllowedSaveFileExtensions()
     {
-        if ( backgroundTask != null ) {
-            return;
-        }
-
         final ArrayList<String> allowedSaveFileExtensions = new ArrayList<>();
 
         if ( filterStandardToggleButton.isChecked() ) {
@@ -173,55 +282,12 @@ public final class SaveFileManagerActivity extends Activity
             allowedSaveFileExtensions.add( ".savh" );
         }
 
-        backgroundTask = new Thread( () -> {
-            try {
-                final ArrayList<String> saveFileNames = new ArrayList<>();
+        return allowedSaveFileExtensions;
+    }
 
-                final File[] saveFilesList = saveFileDir.listFiles( ( dir, name ) -> {
-                    if ( !dir.equals( saveFileDir ) ) {
-                        return false;
-                    }
-
-                    for ( final String extension : allowedSaveFileExtensions ) {
-                        if ( name.endsWith( extension ) ) {
-                            return true;
-                        }
-                    }
-
-                    return false;
-                } );
-
-                if ( saveFilesList != null ) {
-                    for ( final File saveFile : saveFilesList ) {
-                        if ( saveFile.isFile() ) {
-                            saveFileNames.add( saveFile.getName() );
-                        }
-                    }
-
-                    Collections.sort( saveFileNames );
-                }
-
-                runOnUiThread( () -> {
-                    saveFileListViewAdapter.clear();
-                    saveFileListViewAdapter.addAll( saveFileNames );
-                    saveFileListViewAdapter.notifyDataSetChanged();
-                } );
-            }
-            catch ( final Exception ex ) {
-                Log.e( "fheroes2", "Failed to get a list of save files.", ex );
-            }
-            finally {
-                runOnUiThread( () -> {
-                    backgroundTask = null;
-
-                    updateUI();
-                } );
-            }
-        } );
-
-        updateUI();
-
-        backgroundTask.start();
+    private void updateSaveFileList()
+    {
+        viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() );
     }
 
     private void deleteSaveFiles( final ArrayList<String> saveFileNames )
@@ -230,52 +296,25 @@ public final class SaveFileManagerActivity extends Activity
             return;
         }
 
-        if ( backgroundTask != null ) {
-            return;
-        }
-
-        backgroundTask = new Thread( () -> {
-            try {
-                for ( final String saveFileName : saveFileNames ) {
-                    final File saveFile = new File( saveFileDir, saveFileName );
-
-                    if ( !saveFile.isFile() ) {
-                        continue;
-                    }
-
-                    if ( !saveFile.delete() ) {
-                        Log.e( "fheroes2", "Unable to delete save file " + saveFile.getCanonicalPath() );
-                    }
-                }
-            }
-            catch ( final Exception ex ) {
-                Log.e( "fheroes2", "Failed to delete save files.", ex );
-            }
-            finally {
-                runOnUiThread( () -> {
-                    backgroundTask = null;
-
-                    updateSaveFileList();
-                } );
-            }
-        } );
-
-        updateUI();
-
-        backgroundTask.start();
+        viewModel.deleteSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), saveFileNames );
     }
 
-    private void updateUI()
+    private void updateUI( final SaveFileManagerActivityViewModel.Status modelStatus )
     {
-        // A quick and dirty way to avoid the re-creation of this activity due to the screen orientation change while running a background task
-        setRequestedOrientation( backgroundTask == null ? ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED : ActivityInfo.SCREEN_ORIENTATION_LOCKED );
+        final ImageButton selectAllButton = findViewById( R.id.activity_save_file_manager_select_all_btn );
+        final ImageButton unselectAllButton = findViewById( R.id.activity_save_file_manager_unselect_all_btn );
+        final ImageButton deleteButton = findViewById( R.id.activity_save_file_manager_delete_btn );
 
-        filterStandardToggleButton.setEnabled( backgroundTask == null );
-        filterCampaignToggleButton.setEnabled( backgroundTask == null );
-        filterMultiplayerToggleButton.setEnabled( backgroundTask == null );
-        saveFileListView.setEnabled( backgroundTask == null );
-        selectAllButton.setEnabled( backgroundTask == null );
-        unselectAllButton.setEnabled( backgroundTask == null );
-        deleteButton.setEnabled( backgroundTask == null );
+        filterStandardToggleButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+        filterCampaignToggleButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+        filterMultiplayerToggleButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+        saveFileListView.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+        selectAllButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+        unselectAllButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+        deleteButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+
+        saveFileListViewAdapter.clear();
+        saveFileListViewAdapter.addAll( modelStatus.saveFileNames );
+        saveFileListViewAdapter.notifyDataSetChanged();
     }
 }

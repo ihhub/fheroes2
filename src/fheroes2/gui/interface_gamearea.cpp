@@ -165,6 +165,7 @@ namespace
         const bool isHeroInCastle = ( castle != nullptr && castle->GetCenter() == heroPos );
 
         const uint8_t heroAlphaValue = hero->getAlphaValue();
+        const int32_t worldHeight = world.h();
 
         auto spriteInfo = hero->getHeroSpritesPerTile();
         auto spriteShadowInfo = hero->getHeroShadowSpritesPerTile();
@@ -228,7 +229,12 @@ namespace
             }
 
             if ( imagePos.y > 0 && !isHeroInCastle ) {
-                // The very bottom part of hero (or hero on boat) image should not be rendered before it's fog so we place it in the extra deque.
+                // Hero horse or boat should not be rendered over the bottom map border.
+                if ( ( heroPos.y + imagePos.y ) >= worldHeight ) {
+                    continue;
+                }
+
+                // The very bottom part of hero (or hero on boat) image should not be rendered before it's shadow so we place it in the extra deque.
                 if ( imagePos.x < 0 ) {
                     tileUnfit.heroBackgroundImages[imagePos + heroPos].emplace_front( objectInfo );
                 }
@@ -258,7 +264,7 @@ namespace
             const fheroes2::Point imagePos = objectInfo.tileOffset + heroPos;
 
             // Shadows outside the game area should not be rendered.
-            if ( imagePos.x < 0 || imagePos.y < 0 ) {
+            if ( imagePos.x < 0 || imagePos.y < 0 || imagePos.y >= worldHeight ) {
                 continue;
             }
 

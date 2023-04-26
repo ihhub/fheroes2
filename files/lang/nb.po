@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-10 14:28+0000\n"
+"POT-Creation-Date: 2023-04-25 06:07+0000\n"
 "PO-Revision-Date: 2023-04-10 00:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3571,6 +3571,12 @@ msgstr "Umulig"
 msgid "and more..."
 msgstr "og mer..."
 
+msgid "Easy"
+msgstr "Enkel"
+
+msgid "Hard"
+msgstr "Vanskelig"
+
 msgid "Campaign Difficulty"
 msgstr "Vanskelighetsgrad"
 
@@ -3594,11 +3600,25 @@ msgstr ""
 "Velg denne vanskelighetsgraden hvis du ønsker en utfordring. KI'en vil være "
 "sterkere enn ved middels vanskelighetsgrad."
 
-msgid "Easy"
-msgstr "Enkel"
+#, fuzzy
+msgid ""
+"Congratulations!\n"
+"\n"
+"Days: %{days}\n"
+msgstr "Gratulerer!"
 
-msgid "Hard"
-msgstr "Vanskelig"
+msgid ""
+"\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
+msgid ""
+"Score: %{score}\n"
+"\n"
+"Rating:\n"
+"%{rating}"
+msgstr ""
 
 msgid "Start the selected scenario."
 msgstr "Begynn det kartet du har valgt."
@@ -3794,11 +3814,11 @@ msgstr "Karttegnere"
 msgid "Package Design"
 msgstr "Innpakningsdesign"
 
-msgid "Unknown Hero"
-msgstr "Ukjent helt"
-
 msgid "Your Name"
 msgstr "Ditt navn"
+
+msgid "Unknown Hero"
+msgstr "Ukjent helt"
 
 msgid "Standard"
 msgstr "Standard"
@@ -4400,6 +4420,12 @@ msgstr ""
 "Du klarte ikke å fullføre oppdraget innen tiden.\n"
 "Alt er tapt."
 
+msgid ""
+"Base score: %{score}\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
 "Slå ut alle fiendtlige helter og overta alle fiendtlige byer og borger."
@@ -4550,6 +4576,9 @@ msgstr " Alle befolkninger halveres."
 msgid " All dwellings increase population."
 msgstr " Alle bostedenes befolkninger opplever vanlig vekst."
 
+msgid "New Week!"
+msgstr ""
+
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
 "banished from this land."
@@ -4586,6 +4615,69 @@ msgid ""
 "land."
 msgstr ""
 "%{color} spiller, dine helter forlater deg og du er bannlyst fra landet."
+
+msgid "Lord Kilburn"
+msgstr "Baron Kilburn"
+
+msgid "Tsabu"
+msgstr "Sabu"
+
+#, fuzzy
+msgid "Sir Galant"
+msgstr "Sir Galant"
+
+msgid "Thundax"
+msgstr "Tordøks"
+
+#, fuzzy
+msgid "Lord Haart"
+msgstr "Baron Halton"
+
+msgid "Ariel"
+msgstr "Ariel"
+
+msgid "Rebecca"
+msgstr "Rebekka"
+
+msgid "Sandro"
+msgstr "Sandro"
+
+msgid "Crodo"
+msgstr "Krod"
+
+#, fuzzy
+msgid "Barock"
+msgstr "Bjarg"
+
+msgid "Antoine"
+msgstr ""
+
+msgid "Astra"
+msgstr "Astri"
+
+msgid "Agar"
+msgstr "Hagar"
+
+msgid "Vatawna"
+msgstr "Vatafna"
+
+msgid "Vesper"
+msgstr "Vesper"
+
+msgid "Ambrose"
+msgstr "Ambrose"
+
+msgid "Troyan"
+msgstr "Trojann"
+
+msgid "Jojosh"
+msgstr "Jojosva"
+
+msgid "Wrathmont"
+msgstr "Vredeberg"
+
+msgid "Maximus"
+msgstr "Maximus"
 
 msgid "Next Hero"
 msgstr "Neste helt"
@@ -4897,23 +4989,14 @@ msgstr "Hektor"
 msgid "Gwenneth"
 msgstr "Lycke"
 
-msgid "Lord Kilburn"
-msgstr "Baron Kilburn"
-
 msgid "Sir Gallant"
 msgstr "Sir Galant"
 
 msgid "Tyro"
 msgstr "Tyros"
 
-msgid "Ambrose"
-msgstr "Ambrose"
-
 msgid "Dimitry"
 msgstr "Dimitri"
-
-msgid "Maximus"
-msgstr "Maximus"
 
 msgid "Ruby"
 msgstr "Rubin"
@@ -4927,12 +5010,6 @@ msgstr "Finneas"
 msgid "Jezebel"
 msgstr "Isabell"
 
-msgid "Jojosh"
-msgstr "Jojosva"
-
-msgid "Thundax"
-msgstr "Tordøks"
-
 msgid "Atlas"
 msgstr "Atlas"
 
@@ -4942,29 +5019,11 @@ msgstr "Herkon"
 msgid "Jaclyn"
 msgstr "Bina"
 
-msgid "Tsabu"
-msgstr "Sabu"
-
-msgid "Astra"
-msgstr "Astri"
-
 msgid "Gem"
 msgstr "Edel"
 
 msgid "Natasha"
 msgstr "Natalie"
-
-msgid "Rebecca"
-msgstr "Rebekka"
-
-msgid "Troyan"
-msgstr "Trojann"
-
-msgid "Vatawna"
-msgstr "Vatafna"
-
-msgid "Ariel"
-msgstr "Ariel"
 
 msgid "Carlawn"
 msgstr "Karlana"
@@ -4978,23 +5037,11 @@ msgstr "Aris"
 msgid "Barok"
 msgstr "Bjarg"
 
-msgid "Crodo"
-msgstr "Krod"
-
 msgid "Kastore"
 msgstr "Kastor"
 
-msgid "Vesper"
-msgstr "Vesper"
-
-msgid "Agar"
-msgstr "Hagar"
-
 msgid "Falagar"
 msgstr "Falagar"
-
-msgid "Wrathmont"
-msgstr "Vredeberg"
 
 msgid "Dawn"
 msgstr "Morgengry"
@@ -5043,9 +5090,6 @@ msgstr "Celia"
 
 msgid "Roxana"
 msgstr "Roksana"
-
-msgid "Sandro"
-msgstr "Sandro"
 
 msgid "Lord Corlagon"
 msgstr "Baron Korlagon"

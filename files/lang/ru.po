@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-10 14:28+0000\n"
-"PO-Revision-Date: 2023-04-09 11:50+0300\n"
+"POT-Creation-Date: 2023-04-24 18:46+0300\n"
+"PO-Revision-Date: 2023-04-24 18:51+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3\n"
 
 msgid ""
 "BATTLE\n"
@@ -3509,6 +3509,12 @@ msgstr "Невозможная"
 msgid "and more..."
 msgstr "и т.д."
 
+msgid "Easy"
+msgstr "Лёгкая"
+
+msgid "Hard"
+msgstr "Тяжёлая"
+
 msgid "Campaign Difficulty"
 msgstr "Сложность кампании"
 
@@ -3532,11 +3538,34 @@ msgstr ""
 "Выберите данный уровень сложности, если хотите серьёзных сражений. ИИ "
 "сильнее, чем обычно."
 
-msgid "Easy"
-msgstr "Лёгкая"
+msgid ""
+"Congratulations!\n"
+"\n"
+"Days: %{days}\n"
+msgstr ""
+"Поздравляем!\n"
+"\n"
+"Дней: %{days}\n"
 
-msgid "Hard"
-msgstr "Тяжёлая"
+msgid ""
+"\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+"\n"
+"Сложность: %{difficulty}\n"
+"\n"
+
+msgid ""
+"Score: %{score}\n"
+"\n"
+"Rating:\n"
+"%{rating}"
+msgstr ""
+"Очки: %{score}\n"
+"\n"
+"Рейтинг:\n"
+"%{rating}"
 
 msgid "Start the selected scenario."
 msgstr "Начать выбранный сценарий."
@@ -3731,11 +3760,11 @@ msgstr "Разработка карт"
 msgid "Package Design"
 msgstr "Дизайн упаковки"
 
-msgid "Unknown Hero"
-msgstr "Неизвестный герой"
-
 msgid "Your Name"
 msgstr "Ваше имя"
+
+msgid "Unknown Hero"
+msgstr "Неизвестный герой"
 
 msgid "Standard"
 msgstr "Обычная игра"
@@ -4320,6 +4349,15 @@ msgstr ""
 "Вы не справились с заданием за отведённое время.\n"
 "Всё кончено."
 
+msgid ""
+"Base score: %{score}\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+"Базовые очки: %{score}\n"
+"Сложность: %{difficulty}\n"
+"\n"
+
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
 "Победите всех вражеских героев и захватите все вражеские города и замки."
@@ -4476,6 +4514,9 @@ msgstr " Всё население уменьшилось вдвое."
 msgid " All dwellings increase population."
 msgstr " Население всех жилищ возросло."
 
+msgid "New Week!"
+msgstr ""
+
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
 "banished from this land."
@@ -4513,6 +4554,69 @@ msgid ""
 msgstr ""
 "%{color} игрок, Ваши герои отвернулись от Вас, а Вы изгоняетесь из этих "
 "земель."
+
+msgid "Lord Kilburn"
+msgstr "Лорд Килбурн"
+
+msgid "Tsabu"
+msgstr "Тсабу"
+
+#, fuzzy
+msgid "Sir Galant"
+msgstr "Сэр Галант"
+
+msgid "Thundax"
+msgstr "Тандакс"
+
+#, fuzzy
+msgid "Lord Haart"
+msgstr "Лорд Халтон"
+
+msgid "Ariel"
+msgstr "Ариэль"
+
+msgid "Rebecca"
+msgstr "Ребекка"
+
+msgid "Sandro"
+msgstr "Сандро"
+
+msgid "Crodo"
+msgstr "Кродо"
+
+#, fuzzy
+msgid "Barock"
+msgstr "Барок"
+
+msgid "Antoine"
+msgstr ""
+
+msgid "Astra"
+msgstr "Астра"
+
+msgid "Agar"
+msgstr "Агар"
+
+msgid "Vatawna"
+msgstr "Ватавна"
+
+msgid "Vesper"
+msgstr "Веспер"
+
+msgid "Ambrose"
+msgstr "Амброс"
+
+msgid "Troyan"
+msgstr "Троян"
+
+msgid "Jojosh"
+msgstr "Йойош"
+
+msgid "Wrathmont"
+msgstr "Ратмонт"
+
+msgid "Maximus"
+msgstr "Максимус"
 
 msgid "Next Hero"
 msgstr "Следующий герой"
@@ -4817,23 +4921,14 @@ msgstr "Эктор"
 msgid "Gwenneth"
 msgstr "Гвинет"
 
-msgid "Lord Kilburn"
-msgstr "Лорд Килбурн"
-
 msgid "Sir Gallant"
 msgstr "Сэр Галант"
 
 msgid "Tyro"
 msgstr "Тиро"
 
-msgid "Ambrose"
-msgstr "Амброс"
-
 msgid "Dimitry"
 msgstr "Димитрий"
-
-msgid "Maximus"
-msgstr "Максимус"
 
 msgid "Ruby"
 msgstr "Руби"
@@ -4847,12 +4942,6 @@ msgstr "Финеус"
 msgid "Jezebel"
 msgstr "Изабэль"
 
-msgid "Jojosh"
-msgstr "Йойош"
-
-msgid "Thundax"
-msgstr "Тандакс"
-
 msgid "Atlas"
 msgstr "Атлас"
 
@@ -4862,29 +4951,11 @@ msgstr "Эргон"
 msgid "Jaclyn"
 msgstr "Жаклин"
 
-msgid "Tsabu"
-msgstr "Тсабу"
-
-msgid "Astra"
-msgstr "Астра"
-
 msgid "Gem"
 msgstr "Джэм"
 
 msgid "Natasha"
 msgstr "Наташа"
-
-msgid "Rebecca"
-msgstr "Ребекка"
-
-msgid "Troyan"
-msgstr "Троян"
-
-msgid "Vatawna"
-msgstr "Ватавна"
-
-msgid "Ariel"
-msgstr "Ариэль"
 
 msgid "Carlawn"
 msgstr "Карлан"
@@ -4898,23 +4969,11 @@ msgstr "Эйри"
 msgid "Barok"
 msgstr "Барок"
 
-msgid "Crodo"
-msgstr "Кродо"
-
 msgid "Kastore"
 msgstr "Кастор"
 
-msgid "Vesper"
-msgstr "Веспер"
-
-msgid "Agar"
-msgstr "Агар"
-
 msgid "Falagar"
 msgstr "Фалагар"
-
-msgid "Wrathmont"
-msgstr "Ратмонт"
 
 msgid "Dawn"
 msgstr "Дан"
@@ -4963,9 +5022,6 @@ msgstr "Целия"
 
 msgid "Roxana"
 msgstr "Роксана"
-
-msgid "Sandro"
-msgstr "Сандро"
 
 msgid "Lord Corlagon"
 msgstr "Лорд Корлагон"
