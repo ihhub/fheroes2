@@ -209,6 +209,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
 
     if ( it != myCastles.end() ) {
         Castle::CastleDialogReturnValue result = Castle::CastleDialogReturnValue::DoNothing;
+        bool needFade = Settings::isFadeEffectEnabled();
 
         while ( result != Castle::CastleDialogReturnValue::Close ) {
             assert( it != myCastles.end() );
@@ -216,17 +217,21 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
             const bool openConstructionWindow
                 = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
 
-            result = ( *it )->OpenDialog( openConstructionWindow );
+            result = ( *it )->OpenDialog( openConstructionWindow, needFade );
+
+            needFade = false;
 
             if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
-                if ( it == myCastles.begin() )
+                if ( it == myCastles.begin() ) {
                     it = myCastles.end();
+                }
                 --it;
             }
             else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextCostructionWindow ) {
                 ++it;
-                if ( it == myCastles.end() )
+                if ( it == myCastles.end() ) {
                     it = myCastles.begin();
+                }
             }
         }
     }
@@ -260,6 +265,12 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
 
     // The castle garrison can change
     basicInterface.RedrawFocus();
+
+    // TODO: Update display image if the castle was changed: we need to focus it before fading-in.
+    // Fade-in game screen only for 640x480 resolution.
+    if ( ( it == std::find( myCastles.begin(), myCastles.end(), &castle ) ) && Settings::isFadeEffectEnabled() && fheroes2::Display::instance().isDefaultSize() ) {
+        fheroes2::fadeInDisplay();
+    }
 }
 
 void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss /* = false */ )
@@ -328,6 +339,12 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 
     // The hero's army can change
     basicInterface.RedrawFocus();
+
+    // TODO: Update display image if the hero was changed: we need to focus him before fading-in.
+    // Fade-in game screen only for 640x480 resolution.
+    if ( ( it == std::find( myHeroes.begin(), myHeroes.end(), &hero ) ) && Settings::isFadeEffectEnabled() && fheroes2::Display::instance().isDefaultSize() ) {
+        fheroes2::fadeInDisplay();
+    }
 }
 
 void ShowNewWeekDialog()
@@ -809,9 +826,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
     assert( res != fheroes2::GameMode::END_TURN );
 
-    // Do not use fade effect when exiting to Highscores screen as in this case the 'WIN.SMK' was played earlier.
+    // Do not use fade effect when exiting to Highscores screen as in this case the 'WIN.SMK' was played and name input dialog will be rendered next.
     if ( Settings::isFadeEffectEnabled() && ( res != fheroes2::GameMode::HIGHSCORES_STANDARD ) ) {
-        fheroes2::FadeDisplay();
+        fheroes2::fadeOutDisplay();
     }
 
     return res;

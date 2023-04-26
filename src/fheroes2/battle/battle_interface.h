@@ -340,6 +340,7 @@ namespace Battle
         void RedrawInterface();
         void RedrawOpponents();
         void RedrawOpponentsFlags();
+        void redrawPreRender();
         void RedrawArmies();
         void RedrawTroopSprite( const Unit & unit );
 

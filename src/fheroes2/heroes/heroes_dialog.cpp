@@ -59,25 +59,28 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    // fade
-    if ( fade && Settings::isFadeEffectEnabled() && fheroes2::Display::instance().isDefaultSize() ) {
-        fheroes2::FadeDisplay();
-    }
-
     fheroes2::Display & display = fheroes2::Display::instance();
 
     fheroes2::Point cur_pt;
+    fheroes2::Rect roi;
     std::unique_ptr<fheroes2::StandardWindow> background;
     std::unique_ptr<fheroes2::ImageRestorer> restorer;
     if ( renderBackgroundDialog ) {
         background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
-        cur_pt = { background->activeArea().x, background->activeArea().y };
+        roi = background->activeArea();
     }
     else {
-        cur_pt = { ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2 };
-        restorer = std::make_unique<fheroes2::ImageRestorer>( display, cur_pt.x, cur_pt.y, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+        roi = { ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2,
+                fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT };
+        restorer = std::make_unique<fheroes2::ImageRestorer>( display, roi.x, roi.y, roi.width, roi.height );
     }
 
+    // Fade-out game screen only for 640x480 resolution.
+    if ( fade && Settings::isFadeEffectEnabled() && display.isDefaultSize() ) {
+        fheroes2::fadeDisplay( 255, 5, roi );
+    }
+
+    cur_pt = { roi.x, roi.y };
     fheroes2::Point dst_pt( cur_pt );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROBKG, 0 ), display, dst_pt.x, dst_pt.y );
@@ -245,7 +248,13 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     buttonDismiss.draw();
     buttonExit.draw();
 
-    display.render();
+    // Fade-in hero dialog.
+    if ( fade && Settings::isFadeEffectEnabled() ) {
+        fheroes2::fadeDisplay( 5, 255, roi );
+    }
+    else {
+        display.render();
+    }
 
     bool redrawMorale = false;
     bool redrawLuck = false;
@@ -266,8 +275,13 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         }
 
         // exit
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+            // Fade-out hero dialog.
+            if ( Settings::isFadeEffectEnabled() ) {
+                fheroes2::fadeDisplay( 255, 5, roi );
+            }
             return Dialog::CANCEL;
+        }
 
         // heroes troops
         if ( le.MouseCursor( selectArmy.GetArea() ) && selectArmy.QueueEventProcessing( &message ) ) {

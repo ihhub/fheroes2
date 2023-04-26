@@ -118,11 +118,16 @@ namespace fheroes2
 
     Image CreateRippleEffect( const Image & in, const int32_t frameId, const double scaleX = 0.05, const double waveFrequency = 20.0 );
 
-    void FadeDisplay( const Image & top, const Point & pos, const uint8_t endAlpha, const int32_t fadeTimeMs );
+    // Fade out the whole screen.
+    void fadeOutDisplay( int32_t fadeTimeMs = 100 );
+
+    // Fade in the prepared image in display instance on the whole screen.
+    void fadeInDisplay( int32_t fadeTimeMs = 100 );
+
+    // Fade display in the given alpha range in ROI.
+    void fadeDisplay( const uint8_t startAlpha, const uint8_t endAlpha, const Rect & roi, const int32_t fadeTimeMs = 100, const uint32_t frameCount = 6 );
 
     void FadeDisplayWithPalette( const Image & top, const Point & pos, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount );
-
-    void FadeDisplay( int32_t fadeTimeMs = 250 );
 
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs,
                                   const int32_t frameCount );

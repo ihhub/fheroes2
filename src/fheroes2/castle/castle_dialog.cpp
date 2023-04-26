@@ -214,19 +214,19 @@ namespace
     }
 }
 
-Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionWindow )
+Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionWindow, const bool fade /* = false */ )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // Fade screen.
-    if ( Settings::isFadeEffectEnabled() && display.isDefaultSize() ) {
-        fheroes2::FadeDisplay();
-    }
-
     const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
+
+    // Fade-out game screen only for 640x480 resolution.
+    if ( fade && Settings::isFadeEffectEnabled() && display.isDefaultSize() ) {
+        fheroes2::fadeDisplay( 255, 5, background.activeArea() );
+    }
 
     AudioManager::PlayMusicAsync( MUS::FromRace( race ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
@@ -340,6 +340,11 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     buttonNextCastle.draw();
     buttonExit.draw();
 
+    // Fade-in castle dialog.
+    if ( fade && Settings::isFadeEffectEnabled() ) {
+        fheroes2::fadeDisplay( 5, 255, background.activeArea() );
+    }
+
     CastleDialogReturnValue result = CastleDialogReturnValue::DoNothing;
     bool need_redraw = false;
 
@@ -365,6 +370,11 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             // Check buttons for closing this castle's window.
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 result = CastleDialogReturnValue::Close;
+
+                // Fade-out castle dialog.
+                if ( Settings::isFadeEffectEnabled() ) {
+                    fheroes2::fadeDisplay( 255, 5, background.activeArea() );
+                }
                 break;
             }
             if ( buttonPrevCastle.isEnabled()

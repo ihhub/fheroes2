@@ -233,6 +233,11 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         highScoreDataContainer.save( highScoreDataPath );
 
         gameResult.ResetResult();
+
+        // Fade-out game screen.
+        if ( Settings::isFadeEffectEnabled() ) {
+            fheroes2::fadeOutDisplay();
+        }
     }
 
     // setup cursor
@@ -260,7 +265,20 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
     buttonOtherHighScore.draw();
     buttonExit.draw();
 
-    display.render();
+    // Fade-in High Scores screen.
+    if ( Settings::isFadeEffectEnabled() ) {
+        // We need to expand the ROI for the next render to properly render window borders and shadow.
+        fheroes2::Rect roi( border.windowArea() );
+        roi.x -= BORDERWIDTH;
+        roi.width += BORDERWIDTH;
+        roi.height += BORDERWIDTH;
+        display.updateNextRenderRoi(roi);
+
+        fheroes2::fadeDisplay( 5, 255, border.activeArea() );
+    }
+    else {
+        display.render();
+    }
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {

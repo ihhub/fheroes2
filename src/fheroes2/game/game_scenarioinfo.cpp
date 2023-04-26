@@ -268,7 +268,7 @@ namespace
             if ( !le.HandleEvents( true, true ) ) {
                 if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                     if ( Settings::isFadeEffectEnabled() ) {
-                        fheroes2::FadeDisplay();
+                        fheroes2::fadeOutDisplay();
                     }
                     return fheroes2::GameMode::QUIT_GAME;
                 }
@@ -392,7 +392,7 @@ namespace
 
         conf.GetPlayers().SetStartGame();
         if ( Settings::isFadeEffectEnabled() ) {
-            fheroes2::FadeDisplay();
+            fheroes2::fadeOutDisplay();
         }
 
         // Load maps

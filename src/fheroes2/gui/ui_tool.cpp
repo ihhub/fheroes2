@@ -506,33 +506,52 @@ namespace fheroes2
         return out;
     }
 
-    void FadeDisplay( const Image & top, const Point & pos, const uint8_t endAlpha, const int32_t fadeTimeMs )
+    void fadeOutDisplay( int32_t fadeTimeMs /* = 100 */ )
     {
+        const Display & display = Display::instance();
+
+        fheroes2::fadeDisplay( 255, 5, { 0, 0, display.width(), display.height() }, fadeTimeMs );
+    }
+
+    void fadeInDisplay( int32_t fadeTimeMs /* = 100 */ )
+    {
+        const Display & display = Display::instance();
+
+        fheroes2::fadeDisplay( 5, 255, { 0, 0, display.width(), display.height() }, fadeTimeMs );
+    }
+
+    void fadeDisplay( const uint8_t startAlpha, const uint8_t endAlpha, const Rect & roi, const int32_t fadeTimeMs /* = 100 */, const uint32_t frameCount /* = 6 */ )
+    {
+        if ( ( frameCount < 2 ) || roi.height == 0 || roi.width == 0 ) {
+            return;
+        }
+
         Display & display = Display::instance();
 
-        Image shadow = top;
-        uint8_t alpha = 255;
-        const uint8_t step = 10;
-        const uint8_t min = step + 5;
-        const int32_t stepDelay = ( fadeTimeMs * step ) / ( alpha - min );
+        Image temp{ roi.width, roi.height };
+        Copy( display, roi.x, roi.y, temp, 0, 0, roi.width, roi.height );
 
-        const fheroes2::Rect roi{ pos.x, pos.y, shadow.width(), shadow.height() };
+        double alpha = startAlpha;
+        const uint32_t delay = fadeTimeMs / frameCount;
+        const double alphaStep = ( alpha - endAlpha ) / static_cast<double>( frameCount - 1 );
+
+        uint32_t frameNumber = 0;
 
         LocalEvent & le = LocalEvent::Get();
 
-        Game::passCustomAnimationDelay( stepDelay );
-        while ( le.HandleEvents( Game::isCustomDelayNeeded( stepDelay ) ) ) {
-            if ( Game::validateCustomAnimationDelay( stepDelay ) ) {
-                if ( alpha < ( min + endAlpha ) ) {
+        Game::passCustomAnimationDelay( delay );
+        while ( le.HandleEvents( Game::isCustomDelayNeeded( delay ) ) ) {
+            if ( Game::validateCustomAnimationDelay( delay ) ) {
+                if ( frameNumber == frameCount ) {
                     break;
                 }
 
-                ApplyAlpha( top, shadow, alpha );
-                Copy( shadow, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
+                ApplyAlpha( temp, 0, 0, display, roi.x, roi.y, roi.width, roi.height, static_cast<uint8_t>( alpha ) );
 
                 display.render( roi );
 
-                alpha -= step;
+                alpha -= alphaStep;
+                ++frameNumber;
             }
         }
     }
@@ -563,17 +582,6 @@ namespace fheroes2
                 ++frameNumber;
             }
         }
-    }
-
-    void FadeDisplay( int32_t fadeTimeMs /* = 250 */ )
-    {
-        Display & display = Display::instance();
-        Image temp;
-        Copy( display, temp );
-
-        FadeDisplay( temp, { 0, 0 }, 5, fadeTimeMs );
-
-        Copy( temp, display ); // restore the original image
     }
 
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount )

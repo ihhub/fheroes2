@@ -1150,8 +1150,6 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     , _cursorRestorer( true, Cursor::WAR_POINTER )
     , _bridgeAnimation( { false, BridgeMovementAnimation::UP_POSITION } )
 {
-    const Settings & conf = Settings::Get();
-
     // border
     const fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -1252,11 +1250,6 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     status.SetLogs( listlog.get() );
 
     AudioManager::ResetAudio();
-
-    // Don't waste time playing the pre-battle sound if the game sounds are turned off
-    if ( conf.SoundVolume() > 0 ) {
-        AudioManager::PlaySound( M82::PREBATTL );
-    }
 }
 
 Battle::Interface::~Interface()
@@ -1311,7 +1304,24 @@ void Battle::Interface::fullRedraw()
         _background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
     }
 
-    Redraw();
+    // Fade-out game screen only for 640x480 resolution.
+    if ( Settings::isFadeEffectEnabled() && fheroes2::Display::instance().isDefaultSize() ) {
+        fheroes2::fadeOutDisplay();
+    }
+
+    // Don't waste time playing the pre-battle sound if the game sounds are turned off.
+    if ( Settings::Get().SoundVolume() > 0 ) {
+        AudioManager::PlaySound( M82::PREBATTL );
+    }
+
+    RedrawPartialStart();
+    // We do not render battlefield display image to properly fade-out it.
+    redrawPreRender();
+
+    // Fade-in battlefield.
+    if ( Settings::isFadeEffectEnabled() ) {
+        fheroes2::fadeDisplay( 5, 255, _background->activeArea() );
+    }
 }
 
 void Battle::Interface::Redraw()
@@ -1328,8 +1338,13 @@ void Battle::Interface::RedrawPartialStart()
 
 void Battle::Interface::RedrawPartialFinish()
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
+    redrawPreRender();
 
+    fheroes2::Display::instance().render();
+}
+
+void Battle::Interface::redrawPreRender()
+{
     if ( Settings::Get().BattleShowArmyOrder() ) {
         armies_order.Redraw( _currentUnit, _contourColor, _mainSurface );
     }
@@ -1340,16 +1355,14 @@ void Battle::Interface::RedrawPartialFinish()
         assert( board != nullptr );
 
         for ( const Cell & cell : *board ) {
-            Text text( std::to_string( cell.GetIndex() ), Font::SMALL );
+            const Text text( std::to_string( cell.GetIndex() ), Font::SMALL );
             text.Blit( cell.GetPos().x + 20, cell.GetPos().y + 22, _mainSurface );
         }
     }
 #endif
 
-    fheroes2::Blit( _mainSurface, display, _interfacePosition.x, _interfacePosition.y );
+    fheroes2::Copy( _mainSurface, 0, 0, fheroes2::Display::instance(), _interfacePosition.x, _interfacePosition.y, _mainSurface.width(), _mainSurface.height() );
     RedrawInterface();
-
-    display.render();
 }
 
 void Battle::Interface::RedrawInterface()

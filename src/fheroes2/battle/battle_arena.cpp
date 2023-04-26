@@ -387,14 +387,7 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
     AI::Get().battleBegins();
 
     if ( _interface ) {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        if ( Settings::isFadeEffectEnabled() && display.isDefaultSize() ) {
-            fheroes2::FadeDisplay();
-        }
-
         _interface->fullRedraw();
-        display.render();
 
         // Wait for the end of M82::PREBATTL playback. Make sure that we check the music status first as HandleEvents() call is not instant.
         LocalEvent & le = LocalEvent::Get();
