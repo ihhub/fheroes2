@@ -62,14 +62,11 @@
 #include "monster.h"
 #include "players.h"
 #include "rand.h"
-#include "screen.h"
-#include "settings.h"
 #include "skill.h"
 #include "speed.h"
 #include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
-#include "ui_tool.h"
 #include "world.h"
 
 namespace

@@ -42,6 +42,7 @@
 #include "game_io.h"
 #include "game_mode.h"
 #include "game_over.h"
+#include "gamedefs.h"
 #include "highscores.h"
 #include "icn.h"
 #include "image.h"
@@ -58,6 +59,7 @@
 #include "ui_dialog.h"
 #include "ui_language.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
 
