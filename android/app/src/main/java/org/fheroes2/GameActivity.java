@@ -94,7 +94,7 @@ public final class GameActivity extends SDLActivity
 
                 final File outFileDir = outFile.getParentFile();
                 if ( outFileDir != null ) {
-                    outFileDir.mkdirs();
+                    Files.createDirectories( outFileDir.toPath() );
                 }
 
                 try ( final OutputStream out = Files.newOutputStream( outFile.toPath() ) ) {

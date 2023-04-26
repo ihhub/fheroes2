@@ -112,7 +112,7 @@ final class HoMM2AssetManagement
 
             final File outFileDir = outFile.getParentFile();
             if ( outFileDir != null ) {
-                outFileDir.mkdirs();
+                Files.createDirectories( outFileDir.toPath() );
             }
 
             try ( final OutputStream out = Files.newOutputStream( outFile.toPath() ) ) {
@@ -162,7 +162,7 @@ final class HoMM2AssetManagement
 
                 final File outFileDir = outFile.getParentFile();
                 if ( outFileDir != null ) {
-                    outFileDir.mkdirs();
+                    Files.createDirectories( outFileDir.toPath() );
                 }
 
                 try ( final InputStream in = isoFileSystem.getInputStream( isoEntry ); final OutputStream out = Files.newOutputStream( outFile.toPath() ) ) {
