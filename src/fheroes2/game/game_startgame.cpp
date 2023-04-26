@@ -250,7 +250,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
             }
         }
         else {
-            basicInterface.ResetFocus( GameFocus::HEROES );
+            basicInterface.ResetFocus( GameFocus::HEROES, true );
         }
     }
     else {
@@ -322,7 +322,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
             basicInterface.SetFocus( *it );
         }
         else {
-            basicInterface.ResetFocus( GameFocus::HEROES );
+            basicInterface.ResetFocus( GameFocus::HEROES, true );
         }
     }
 
@@ -821,7 +821,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
         updateFocus();
     }
     else {
-        ResetFocus( GameFocus::FIRSTHERO );
+        ResetFocus( GameFocus::FIRSTHERO, true );
     }
 
     radar.SetHide( false );

@@ -181,7 +181,7 @@ namespace Interface
 
         void SetFocus( Heroes * );
         void SetFocus( Castle * );
-        void ResetFocus( int priority, const bool resetScrollBarPosition = true );
+        void ResetFocus( const int priority, const bool resetScrollBarPosition );
         void RedrawFocus();
         void updateFocus();
 

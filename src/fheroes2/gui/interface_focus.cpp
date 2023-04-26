@@ -121,61 +121,62 @@ void Interface::Basic::updateFocus()
     }
 }
 
-void Interface::Basic::ResetFocus( int priority, const bool resetScrollBarPosition /* = true */ )
+void Interface::Basic::ResetFocus( const int priority, const bool resetScrollBarPosition )
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
+    if ( player == nullptr ) {
+        return;
+    }
 
-    if ( player ) {
-        Focus & focus = player->GetFocus();
-        Kingdom & myKingdom = world.GetKingdom( player->GetColor() );
+    Focus & focus = player->GetFocus();
+    Kingdom & myKingdom = world.GetKingdom( player->GetColor() );
 
-        if ( resetScrollBarPosition ) {
-            iconsPanel.ResetIcons( ICON_ANY );
+    if ( resetScrollBarPosition ) {
+        iconsPanel.ResetIcons( ICON_ANY );
+    }
+
+    switch ( priority ) {
+    case GameFocus::FIRSTHERO: {
+        const KingdomHeroes & heroes = myKingdom.GetHeroes();
+        // skip sleeping
+        KingdomHeroes::const_iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return !hero->Modes( Heroes::SLEEPER ); } );
+
+        if ( it != heroes.end() )
+            SetFocus( *it );
+        else
+            ResetFocus( GameFocus::CASTLE, resetScrollBarPosition );
+        break;
+    }
+
+    case GameFocus::HEROES:
+        if ( focus.GetHeroes() && focus.GetHeroes()->GetColor() == player->GetColor() )
+            SetFocus( focus.GetHeroes() );
+        else if ( !myKingdom.GetHeroes().empty() )
+            SetFocus( myKingdom.GetHeroes().front() );
+        else if ( !myKingdom.GetCastles().empty() ) {
+            iconsPanel.SetRedraw( ICON_HEROES );
+            SetFocus( myKingdom.GetCastles().front() );
         }
-
-        switch ( priority ) {
-        case GameFocus::FIRSTHERO: {
-            const KingdomHeroes & heroes = myKingdom.GetHeroes();
-            // skip sleeping
-            KingdomHeroes::const_iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return !hero->Modes( Heroes::SLEEPER ); } );
-
-            if ( it != heroes.end() )
-                SetFocus( *it );
-            else
-                ResetFocus( GameFocus::CASTLE, resetScrollBarPosition );
-            break;
-        }
-
-        case GameFocus::HEROES:
-            if ( focus.GetHeroes() && focus.GetHeroes()->GetColor() == player->GetColor() )
-                SetFocus( focus.GetHeroes() );
-            else if ( !myKingdom.GetHeroes().empty() )
-                SetFocus( myKingdom.GetHeroes().front() );
-            else if ( !myKingdom.GetCastles().empty() ) {
-                iconsPanel.SetRedraw( ICON_HEROES );
-                SetFocus( myKingdom.GetCastles().front() );
-            }
-            else
-                focus.Reset();
-            break;
-
-        case GameFocus::CASTLE:
-            if ( focus.GetCastle() && focus.GetCastle()->GetColor() == player->GetColor() )
-                SetFocus( focus.GetCastle() );
-            else if ( !myKingdom.GetCastles().empty() )
-                SetFocus( myKingdom.GetCastles().front() );
-            else if ( !myKingdom.GetHeroes().empty() ) {
-                iconsPanel.SetRedraw( ICON_CASTLES );
-                SetFocus( myKingdom.GetHeroes().front() );
-            }
-            else
-                focus.Reset();
-            break;
-
-        default:
+        else
             focus.Reset();
-            break;
+        break;
+
+    case GameFocus::CASTLE:
+        if ( focus.GetCastle() && focus.GetCastle()->GetColor() == player->GetColor() )
+            SetFocus( focus.GetCastle() );
+        else if ( !myKingdom.GetCastles().empty() )
+            SetFocus( myKingdom.GetCastles().front() );
+        else if ( !myKingdom.GetHeroes().empty() ) {
+            iconsPanel.SetRedraw( ICON_CASTLES );
+            SetFocus( myKingdom.GetHeroes().front() );
         }
+        else
+            focus.Reset();
+        break;
+
+    default:
+        focus.Reset();
+        break;
     }
 }
 

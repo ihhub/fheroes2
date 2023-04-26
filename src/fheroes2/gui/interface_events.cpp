@@ -217,7 +217,7 @@ void Interface::Basic::EventCastSpell()
 
         // The spell will consume the hero's spell points (and perhaps also movement points) and can move the
         // hero to another location, so we may have to update the terrain music theme and environment sounds
-        ResetFocus( GameFocus::HEROES );
+        ResetFocus( GameFocus::HEROES, true );
         RedrawFocus();
     }
 }
@@ -298,7 +298,7 @@ void Interface::Basic::EventNextTown()
             SetFocus( *it );
         }
         else
-            ResetFocus( GameFocus::CASTLE );
+            ResetFocus( GameFocus::CASTLE, true );
 
         RedrawFocus();
     }
@@ -467,7 +467,7 @@ fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMod
 
             // The action object can alter the status of the hero (e.g. Stables or Well) or
             // move it to another location (e.g. Stone Liths or Whirlpool)
-            ResetFocus( GameFocus::HEROES );
+            ResetFocus( GameFocus::HEROES, true );
             RedrawFocus();
 
             // If a hero completed an action we must verify the condition for the scenario.
