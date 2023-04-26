@@ -3539,18 +3539,23 @@ msgstr ""
 "Избери тази трудност, ако искаш предизвикателство. И.И. е по-силен в "
 "сравнение с нормалната трудност."
 
-#, fuzzy
 msgid ""
 "Congratulations!\n"
 "\n"
 "Days: %{days}\n"
-msgstr "Честито!"
+msgstr ""
+"Честито!\n"
+"\n"
+"Дни: %{days}\n"
 
 msgid ""
 "\n"
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
+"\n"
+"Трудност: %{difficulty}\n"
+"\n"
 
 msgid ""
 "Score: %{score}\n"
@@ -3558,6 +3563,10 @@ msgid ""
 "Rating:\n"
 "%{rating}"
 msgstr ""
+"Резултат: %{score}\n"
+"\n"
+"Рейтинг:\n"
+"%{rating}"
 
 msgid "Start the selected scenario."
 msgstr "Стартирай избрания сценарий."
@@ -3767,304 +3776,304 @@ msgid "View High Scores for Campaigns."
 msgstr "Вижте високите резултати за кампании."
 
 msgid "hotkey|default okay event"
-msgstr "hotkey|удобрение по подразбиране"
+msgstr "удобрение по подразбиране"
 
 msgid "hotkey|default cancel event"
-msgstr "hotkey|отказ по подразбиране"
+msgstr "отказ по подразбиране"
 
 msgid "hotkey|default left"
-msgstr "hotkey|ляво по подразбиране"
+msgstr "ляво по подразбиране"
 
 msgid "hotkey|default right"
-msgstr "hotkey|дясно по подразбиране"
+msgstr "дясно по подразбиране"
 
 msgid "hotkey|default up"
-msgstr "hotkey|нагоре по подразбиране"
+msgstr "нагоре по подразбиране"
 
 msgid "hotkey|default down"
-msgstr "hotkey|надолу по подразбиране"
+msgstr "надолу по подразбиране"
 
 msgid "hotkey|toggle fullscreen"
-msgstr "hotkey|превключване на цял екран"
+msgstr "превключване на цял екран"
 
 msgid "hotkey|toggle text support mode"
-msgstr "hotkey|превключване потдръжка на текст"
+msgstr "превключване потдръжка на текст"
 
 msgid "hotkey|new game"
-msgstr "hotkey|нова игра"
+msgstr "нова игра"
 
 msgid "hotkey|load game"
-msgstr "hotkey|зареди игра"
+msgstr "зареди игра"
 
 msgid "hotkey|highscores"
-msgstr "hotkey|резултати"
+msgstr "резултати"
 
 msgid "hotkey|credits"
-msgstr "hotkey|участници"
+msgstr "участници"
 
 msgid "hotkey|standard game"
-msgstr "hotkey|стандартна игра"
+msgstr "стандартна игра"
 
 msgid "hotkey|campaign game"
-msgstr "hotkey|име на кампания"
+msgstr "име на кампания"
 
 msgid "hotkey|multi-player game"
-msgstr "hotkey|мултиплейър игра"
+msgstr "мултиплейър игра"
 
 msgid "hotkey|settings"
-msgstr "hotkey|настойки"
+msgstr "настойки"
 
 msgid "hotkey|quit"
-msgstr "hotkey|напусни"
+msgstr "напусни"
 
 msgid "hotkey|select map"
-msgstr "hotkey|избери карта"
+msgstr "избери карта"
 
 msgid "hotkey|select small map size"
-msgstr "hotkey|избери малка карта"
+msgstr "избери малка карта"
 
 msgid "hotkey|select medium map size"
-msgstr "hotkey|избери средна карта"
+msgstr "избери средна карта"
 
 msgid "hotkey|select large map size"
-msgstr "hotkey|избери голяма карта"
+msgstr "избери голяма карта"
 
 msgid "hotkey|select extra large map size"
-msgstr "hotkey|избери много голяма карта"
+msgstr "избери много голяма карта"
 
 msgid "hotkey|select all map sizes"
-msgstr "hotkey|избери всички карти"
+msgstr "избери всички карти"
 
 msgid "hotkey|hotseat game"
-msgstr "hotkey|двойна игра"
+msgstr "двойна игра"
 
 msgid "hotkey|battle only game"
-msgstr "hotkey|игра само за битка"
+msgstr "игра само за битка"
 
 msgid "hotkey|choose the original campaign"
-msgstr "hotkey|избери оригиналната кампания"
+msgstr "избери оригиналната кампания"
 
 msgid "hotkey|choose the expansion campaign"
-msgstr "hotkey|избери кампанията за разширяване"
+msgstr "избери кампанията за разширяване"
 
 msgid "hotkey|roland campaign"
-msgstr "hotkey|кампания на роланд"
+msgstr "кампания на роланд"
 
 msgid "hotkey|archibald campaign"
-msgstr "hotkey|кампания на арчибалд"
+msgstr "кампания на арчибалд"
 
 msgid "hotkey|the price of loyalty campaign"
-msgstr "hotkey|цената на лоялността"
+msgstr "цената на лоялността"
 
 msgid "hotkey|voyage home campaign"
-msgstr "hotkey|кампания пътуване до дома"
+msgstr "кампания пътуване до дома"
 
 msgid "hotkey|wizard's isle campaign"
-msgstr "hotkey|кампания на острова на магьосника"
+msgstr "кампания на острова на магьосника"
 
 msgid "hotkey|descendants campaign"
-msgstr "hotkey|кампания на потомци"
+msgstr "кампания на потомци"
 
 msgid "hotkey|select first campaign bonus"
-msgstr "hotkey|избери бонус на първа кампания"
+msgstr "избери бонус на първа кампания"
 
 msgid "hotkey|select second campaign bonus"
-msgstr "hotkey|избери бонус на втора кампания"
+msgstr "избери бонус на втора кампания"
 
 msgid "hotkey|select third campaign bonus"
-msgstr "hotkey|избери бонус на трета кампания"
+msgstr "избери бонус на трета кампания"
 
 msgid "hotkey|view campaign intro"
-msgstr "hotkey|виж въведението на кампанията"
+msgstr "виж въведението на кампанията"
 
 msgid "hotkey|select campaign difficulty"
-msgstr "hotkey|избери трудност на кампанията"
+msgstr "избери трудност на кампанията"
 
 msgid "hotkey|restart campaign scenario"
-msgstr "hotkey|рестартирай сценария на кампанията"
+msgstr "рестартирай сценария на кампанията"
 
 msgid "hotkey|world map left"
-msgstr "hotkey|карта на света вляво"
+msgstr "карта на света вляво"
 
 msgid "hotkey|world map right"
-msgstr "hotkey|карта на света вдясно"
+msgstr "карта на света вдясно"
 
 msgid "hotkey|world map up"
-msgstr "hotkey|карта на света нагоре"
+msgstr "карта на света нагоре"
 
 msgid "hotkey|world map down"
-msgstr "hotkey|карта на света надолу"
+msgstr "карта на света надолу"
 
 msgid "hotkey|world map up left"
-msgstr "hotkey|карта на света нагоре и вляво"
+msgstr "карта на света нагоре и вляво"
 
 msgid "hotkey|world map up right"
-msgstr "hotkey|карта на света нагоре и вдясно"
+msgstr "карта на света нагоре и вдясно"
 
 msgid "hotkey|world map down left"
-msgstr "hotkey|карта на света надолу и вляво"
+msgstr "карта на света надолу и вляво"
 
 msgid "hotkey|world map down right"
-msgstr "hotkey|карта на света надолу и вдясно"
+msgstr "карта на света надолу и вдясно"
 
 msgid "hotkey|save game"
-msgstr "hotkey|запази играта"
+msgstr "запази играта"
 
 msgid "hotkey|next hero"
-msgstr "hotkey|следващия герой"
+msgstr "следващия герой"
 
 msgid "hotkey|continue hero movement"
-msgstr "hotkey|продължи движението на героя"
+msgstr "продължи движението на героя"
 
 msgid "hotkey|cast adventure spell"
-msgstr "hotkey|направи приключенско заклинание."
+msgstr "направи приключенско заклинание."
 
 msgid "hotkey|put hero to sleep"
-msgstr "hotkey|сложи героя да спи"
+msgstr "сложи героя да спи"
 
 msgid "hotkey|next town"
-msgstr "hotkey|следващия град"
+msgstr "следващия град"
 
 msgid "hotkey|end turn"
-msgstr "hotkey|завърши хода"
+msgstr "завърши хода"
 
 msgid "hotkey|file options"
-msgstr "hotkey|опции за файл"
+msgstr "опции за файл"
 
 msgid "hotkey|adventure options"
-msgstr "hotkey|опции за приключение"
+msgstr "опции за приключение"
 
 msgid "hotkey|puzzle map"
-msgstr "hotkey|карта на пъзела"
+msgstr "карта на пъзела"
 
 msgid "hotkey|scenario information"
-msgstr "hotkey|информация за сценария"
+msgstr "информация за сценария"
 
 msgid "hotkey|dig for artifact"
-msgstr "hotkey|копай за артефакт"
+msgstr "копай за артефакт"
 
 msgid "hotkey|view world"
-msgstr "hotkey|виж света"
+msgstr "виж света"
 
 msgid "hotkey|kingdom summary"
-msgstr "hotkey|резюме за кралството"
+msgstr "резюме за кралството"
 
 msgid "hotkey|default action"
-msgstr "hotkey|действие по подразбиране"
+msgstr "действие по подразбиране"
 
 msgid "hotkey|open focus"
-msgstr "hotkey|отворен фокус"
+msgstr "отворен фокус"
 
 msgid "hotkey|system options"
-msgstr "hotkey|системни опции"
+msgstr "системни опции"
 
 msgid "hotkey|scroll left"
-msgstr "hotkey|превъртете наляво"
+msgstr "превъртете наляво"
 
 msgid "hotkey|scroll right"
-msgstr "hotkey|превъртете надясно"
+msgstr "превъртете надясно"
 
 msgid "hotkey|scroll up"
-msgstr "hotkey|превъртете нагоре"
+msgstr "превъртете нагоре"
 
 msgid "hotkey|scroll down"
-msgstr "hotkey|превъртете надолу"
+msgstr "превъртете надолу"
 
 msgid "hotkey|toggle control panel"
-msgstr "hotkey|превключи контролния панел"
+msgstr "превключи контролния панел"
 
 msgid "hotkey|toggle radar"
-msgstr "hotkey|превключи радар"
+msgstr "превключи радар"
 
 msgid "hotkey|toggle buttons"
-msgstr "hotkey|превключи бутоните"
+msgstr "превключи бутоните"
 
 msgid "hotkey|toggle status"
-msgstr "hotkey|превключи състояние"
+msgstr "превключи състояние"
 
 msgid "hotkey|toggle icons"
-msgstr "hotkey|превключи иконите"
+msgstr "превключи иконите"
 
 msgid "hotkey|transfer control to ai"
-msgstr "hotkey|прехвърли контрола на ai"
+msgstr "прехвърли контрола на ai"
 
 msgid "hotkey|retreat from battle"
-msgstr "hotkey|отстъпление от битка"
+msgstr "отстъпление от битка"
 
 msgid "hotkey|surrender during battle"
-msgstr "hotkey|капитулация по време на битка"
+msgstr "капитулация по време на битка"
 
 msgid "hotkey|toggle battle auto mode"
-msgstr "hotkey|превключи автоматичния режим на битка"
+msgstr "превключи автоматичния режим на битка"
 
 msgid "hotkey|finish the battle in auto mode"
-msgstr "hotkey|завърши битката в автоматичен режим"
+msgstr "завърши битката в автоматичен режим"
 
 msgid "hotkey|battle options"
-msgstr "hotkey|опции на битка"
+msgstr "опции на битка"
 
 msgid "hotkey|skip turn in battle"
-msgstr "hotkey|пропусни ход в битка"
+msgstr "пропусни ход в битка"
 
 msgid "hotkey|cast battle spell"
-msgstr "hotkey|направи бойно заклинание"
+msgstr "направи бойно заклинание"
 
 msgid "hotkey|dwelling level 1"
-msgstr "hotkey|ниво на жилище 1"
+msgstr "ниво на жилище 1"
 
 msgid "hotkey|dwelling level 2"
-msgstr "hotkey|ниво на жилище 2"
+msgstr "ниво на жилище 2"
 
 msgid "hotkey|dwelling level 3"
-msgstr "hotkey|ниво на жилище 3"
+msgstr "ниво на жилище 3"
 
 msgid "hotkey|dwelling level 4"
-msgstr "hotkey|ниво на жилище 4"
+msgstr "ниво на жилище 4"
 
 msgid "hotkey|dwelling level 5"
-msgstr "hotkey|ниво на жилище 5"
+msgstr "ниво на жилище 5"
 
 msgid "hotkey|dwelling level 6"
-msgstr "hotkey|ниво на жилище 6"
+msgstr "ниво на жилище 6"
 
 msgid "hotkey|well"
-msgstr "hotkey|кладенец"
+msgstr "кладенец"
 
 msgid "hotkey|marketplace"
-msgstr "hotkey|пазар"
+msgstr "пазар"
 
 msgid "hotkey|mage guild"
-msgstr "hotkey|магическа гилдия"
+msgstr "магическа гилдия"
 
 msgid "hotkey|shipyard"
-msgstr "hotkey|корабостроителница"
+msgstr "корабостроителница"
 
 msgid "hotkey|thieves guild"
-msgstr "hotkey|гилдия на крадците"
+msgstr "гилдия на крадците"
 
 msgid "hotkey|tavern"
-msgstr "hotkey|кръчма"
+msgstr "кръчма"
 
 msgid "hotkey|construction screen"
-msgstr "hotkey|екран за изграждане"
+msgstr "екран за изграждане"
 
 msgid "hotkey|buy all monsters in well"
-msgstr "hotkey|купи всички налични чудовища"
+msgstr "купи всички налични чудовища"
 
 msgid "hotkey|split stack by half"
-msgstr "hotkey|раздели стека наполовина"
+msgstr "раздели стека наполовина"
 
 msgid "hotkey|split stack by one"
-msgstr "hotkey|раздели стека на един"
+msgstr "раздели стека на един"
 
 msgid "hotkey|join stacks"
-msgstr "hotkey|съедини стековете"
+msgstr "съедини стековете"
 
 msgid "hotkey|upgrade troop"
-msgstr "hotkey|надгради войските"
+msgstr "надгради войските"
 
 msgid "hotkey|dismiss troop"
-msgstr "hotkey|разпусни войските"
+msgstr "разпусни войските"
 
 msgid "The save file is corrupted."
 msgstr "Запазеният файл е повреден."
@@ -4359,6 +4368,9 @@ msgid ""
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
+"Основен резултат: %{score}\n"
+"Трудност: %{difficulty}\n"
+"\n"
 
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
@@ -4509,7 +4521,7 @@ msgid " All dwellings increase population."
 msgstr " Всички жилища увеличават населението."
 
 msgid "New Week!"
-msgstr ""
+msgstr "Нова Седмица!"
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
@@ -4552,16 +4564,14 @@ msgstr "Лорд Килбърн"
 msgid "Tsabu"
 msgstr "Сабу"
 
-#, fuzzy
 msgid "Sir Galant"
 msgstr "Сър Галант"
 
 msgid "Thundax"
 msgstr "Тъндакс"
 
-#, fuzzy
 msgid "Lord Haart"
-msgstr "Лорд Холтън"
+msgstr "Лорд Хаарт"
 
 msgid "Ariel"
 msgstr "Ариел"
@@ -4575,12 +4585,11 @@ msgstr "Сандро"
 msgid "Crodo"
 msgstr "Кродо"
 
-#, fuzzy
 msgid "Barock"
 msgstr "Барок"
 
 msgid "Antoine"
-msgstr ""
+msgstr "Antoine"
 
 msgid "Astra"
 msgstr "Астра"
