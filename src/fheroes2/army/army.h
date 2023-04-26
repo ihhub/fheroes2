@@ -151,7 +151,7 @@ struct NeutralMonsterJoiningCondition
     const char * fleeingMessage;
 };
 
-class Army : public Troops, public Control
+class Army final : public Troops, public Control
 {
 public:
     static const size_t maximumTroopCount = 5;
@@ -248,20 +248,19 @@ public:
     // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit to a separate slot, if possible)
     void ArrangeForWhirlpool();
 
-protected:
+private:
     friend StreamBase & operator<<( StreamBase &, const Army & );
     friend StreamBase & operator>>( StreamBase &, Army & );
 
-    HeroBase * commander;
-    bool _isSpreadCombatFormation;
-    int color;
-
-private:
     // Performs the pre-battle arrangement of given monsters in a given number, dividing them into a given number of stacks if possible
     void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const uint32_t stacksCount );
     // Performs the pre-battle arrangement of given monsters in a given number, dividing them into a random number of stacks (seeded by
     // the tile index) with a random chance to get an upgraded stack of monsters in the center (if allowed)
     void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const int32_t tileIndex, const bool allowUpgrade );
+
+    HeroBase * commander;
+    bool _isSpreadCombatFormation;
+    int color;
 };
 
 StreamBase & operator<<( StreamBase &, const Army & );
