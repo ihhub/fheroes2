@@ -40,6 +40,11 @@ import com.github.stephenc.javaisotools.loopfs.iso9660.Iso9660FileSystem;
 
 final class HoMM2AssetManagement
 {
+    private HoMM2AssetManagement()
+    {
+        throw new IllegalStateException( "Instantiation is not allowed" );
+    }
+
     static boolean isHoMM2AssetsPresent( final File externalFilesDir )
     {
         return ( new File( externalFilesDir, "data" + File.separator + "heroes2.agg" ) ).exists();
