@@ -49,8 +49,11 @@ class Troops : protected std::vector<Troop *>
 {
 public:
     Troops() = default;
+
     Troops( const Troops & troops );
+
     virtual ~Troops();
+
     Troops & operator=( const Troops & ) = delete;
 
     void Assign( const Troop *, const Troop * );
@@ -170,13 +173,16 @@ public:
     static void drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, bool isCompact, const bool isDetailedView,
                                           const bool isGarrisonView = false, const uint32_t thievesGuildsCount = 0 );
 
-    explicit Army( HeroBase * s = nullptr );
-    explicit Army( const Maps::Tiles & );
+    explicit Army( HeroBase * hero = nullptr );
+    explicit Army( const Maps::Tiles & tile );
+
     Army( const Army & ) = delete;
     Army( Army && ) = delete;
+
     Army & operator=( const Army & ) = delete;
     Army & operator=( Army && ) = delete;
-    ~Army() override;
+
+    ~Army() override = default;
 
     const Troops & getTroops() const;
     // Soft reset means reset to the default army (a few T1 and T2 units).
