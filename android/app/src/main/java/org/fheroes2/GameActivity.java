@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -76,7 +77,7 @@ public final class GameActivity extends SDLActivity
 
     private void extractAssets( final String srcPath, final File dstDir )
     {
-        final ArrayList<String> assetsPaths;
+        final List<String> assetsPaths;
 
         try {
             assetsPaths = getAssetsPaths( srcPath );
@@ -106,9 +107,9 @@ public final class GameActivity extends SDLActivity
         }
     }
 
-    private ArrayList<String> getAssetsPaths( final String path ) throws IOException
+    private List<String> getAssetsPaths( final String path ) throws IOException
     {
-        final ArrayList<String> result = new ArrayList<>();
+        final List<String> result = new ArrayList<>();
 
         final String[] assets = getAssets().list( path );
 

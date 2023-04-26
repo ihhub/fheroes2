@@ -23,6 +23,7 @@ package org.fheroes2;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import android.app.AlertDialog;
@@ -48,9 +49,9 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         private static final class Status
         {
             public boolean isBackgroundTaskExecuting;
-            public final ArrayList<String> saveFileNames;
+            public final List<String> saveFileNames;
 
-            Status( final boolean isBackgroundTaskExecuting, final ArrayList<String> saveFileNames )
+            Status( final boolean isBackgroundTaskExecuting, final List<String> saveFileNames )
             {
                 this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;
                 this.saveFileNames = saveFileNames;
@@ -72,7 +73,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             return liveStatus;
         }
 
-        public void updateSaveFileList( final File saveFileDir, final ArrayList<String> allowedSaveFileExtensions )
+        public void updateSaveFileList( final File saveFileDir, final List<String> allowedSaveFileExtensions )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
@@ -90,7 +91,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             } ).start();
         }
 
-        public void deleteSaveFiles( final File saveFileDir, final ArrayList<String> allowedSaveFileExtensions, final ArrayList<String> saveFileNames )
+        public void deleteSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final List<String> saveFileNames )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
@@ -126,9 +127,9 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             } ).start();
         }
 
-        private ArrayList<String> getSaveFileList( final File saveFileDir, final ArrayList<String> allowedSaveFileExtensions )
+        private List<String> getSaveFileList( final File saveFileDir, final List<String> allowedSaveFileExtensions )
         {
-            final ArrayList<String> saveFileNames = new ArrayList<>();
+            final List<String> saveFileNames = new ArrayList<>();
 
             final File[] saveFilesList = saveFileDir.listFiles( ( dir, name ) -> {
                 if ( !dir.equals( saveFileDir ) ) {
@@ -254,7 +255,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             .setMessage( res.getQuantityString( R.plurals.activity_save_file_manager_delete_confirmation_message, selectedSaveFilesCount, selectedSaveFilesCount ) )
             .setPositiveButton( R.string.activity_save_file_manager_delete_confirmation_positive_btn_text,
                                 ( dialog, which ) -> {
-                                    final ArrayList<String> saveFileNames = new ArrayList<>();
+                                    final List<String> saveFileNames = new ArrayList<>();
 
                                     for ( int i = 0; i < saveFileListView.getCount(); ++i ) {
                                         if ( saveFileListView.isItemChecked( i ) ) {
@@ -271,9 +272,9 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             .show();
     }
 
-    private ArrayList<String> getAllowedSaveFileExtensions()
+    private List<String> getAllowedSaveFileExtensions()
     {
-        final ArrayList<String> allowedSaveFileExtensions = new ArrayList<>();
+        final List<String> allowedSaveFileExtensions = new ArrayList<>();
 
         if ( filterStandardToggleButton.isChecked() ) {
             allowedSaveFileExtensions.add( ".sav" );
@@ -293,7 +294,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() );
     }
 
-    private void deleteSaveFiles( final ArrayList<String> saveFileNames )
+    private void deleteSaveFiles( final List<String> saveFileNames )
     {
         if ( saveFileNames.isEmpty() ) {
             return;
