@@ -272,7 +272,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         roi.x -= BORDERWIDTH;
         roi.width += BORDERWIDTH;
         roi.height += BORDERWIDTH;
-        display.updateNextRenderRoi(roi);
+        display.updateNextRenderRoi( roi );
 
         fheroes2::fadeDisplay( 5, 255, border.activeArea() );
     }
