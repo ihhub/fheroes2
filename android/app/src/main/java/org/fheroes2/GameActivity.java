@@ -21,10 +21,10 @@
 package org.fheroes2;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 import android.content.Intent;
@@ -74,7 +74,6 @@ public final class GameActivity extends SDLActivity
         System.exit( 0 );
     }
 
-    @SuppressWarnings( "IOStreamConstructor" ) // Files.newOutputStream() requires API level 26
     private void extractAssets( final String srcPath, final File dstDir )
     {
         final ArrayList<String> assetsPaths;
@@ -97,7 +96,7 @@ public final class GameActivity extends SDLActivity
                     outFileDir.mkdirs();
                 }
 
-                try ( final OutputStream out = new FileOutputStream( outFile ) ) {
+                try ( final OutputStream out = Files.newOutputStream( outFile.toPath() ) ) {
                     IOUtils.copy( in, out );
                 }
             }

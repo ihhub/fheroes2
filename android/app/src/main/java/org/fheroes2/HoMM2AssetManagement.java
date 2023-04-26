@@ -21,10 +21,10 @@
 package org.fheroes2;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -46,7 +46,6 @@ final class HoMM2AssetManagement
     }
 
     // Returns true if at least one asset was found and extracted, otherwise returns false
-    @SuppressWarnings( "IOStreamConstructor" ) // Files.newOutputStream() requires API level 26
     static boolean extractHoMM2AssetsFromZip( final File externalFilesDir, final File cacheDir, final InputStream iStream ) throws IOException
     {
         // It is allowed to extract only files located in these subdirectories
@@ -79,7 +78,7 @@ final class HoMM2AssetManagement
                 final File isoFile = new File( cacheDir, "homm2.iso" );
 
                 try {
-                    try ( final OutputStream iso = new FileOutputStream( isoFile ) ) {
+                    try ( final OutputStream iso = Files.newOutputStream( isoFile.toPath() ) ) {
                         gogToISO( zStream, iso );
                     }
 
@@ -111,7 +110,7 @@ final class HoMM2AssetManagement
                 outFileDir.mkdirs();
             }
 
-            try ( final OutputStream out = new FileOutputStream( outFile ) ) {
+            try ( final OutputStream out = Files.newOutputStream( outFile.toPath() ) ) {
                 IOUtils.copy( zStream, out );
             }
 
@@ -122,7 +121,6 @@ final class HoMM2AssetManagement
     }
 
     // Returns true if at least one animation was found and extracted, otherwise returns false
-    @SuppressWarnings( "IOStreamConstructor" ) // Files.newOutputStream() requires API level 26
     private static boolean extractAnimationsFromISO( final File externalFilesDir, final File isoFile ) throws IOException
     {
         // It is allowed to extract only files located in these subdirectories
@@ -162,7 +160,7 @@ final class HoMM2AssetManagement
                     outFileDir.mkdirs();
                 }
 
-                try ( final InputStream in = isoFileSystem.getInputStream( isoEntry ); final OutputStream out = new FileOutputStream( outFile ) ) {
+                try ( final InputStream in = isoFileSystem.getInputStream( isoEntry ); final OutputStream out = Files.newOutputStream( outFile.toPath() ) ) {
                     IOUtils.copy( in, out );
                 }
 
