@@ -884,7 +884,7 @@ void Troops::JoinAllTroopsOfType( const Troop & targetTroop ) const
 
 Army::Army( HeroBase * hero /* = nullptr */ )
     : commander( hero )
-    , combat_format( true )
+    , _isSpreadCombatFormation( true )
     , color( Color::NONE )
 {
     reserve( maximumTroopCount );
@@ -896,7 +896,7 @@ Army::Army( HeroBase * hero /* = nullptr */ )
 
 Army::Army( const Maps::Tiles & tile )
     : commander( nullptr )
-    , combat_format( true )
+    , _isSpreadCombatFormation( true )
     , color( Color::NONE )
 {
     reserve( maximumTroopCount );
@@ -1800,7 +1800,7 @@ StreamBase & operator<<( StreamBase & msg, const Army & army )
     for ( Army::const_iterator it = army.begin(); it != army.end(); ++it )
         msg << **it;
 
-    return msg << army.combat_format << army.color;
+    return msg << army._isSpreadCombatFormation << army.color;
 }
 
 StreamBase & operator>>( StreamBase & msg, Army & army )
@@ -1811,7 +1811,7 @@ StreamBase & operator>>( StreamBase & msg, Army & army )
     for ( Army::iterator it = army.begin(); it != army.end(); ++it )
         msg >> **it;
 
-    msg >> army.combat_format >> army.color;
+    msg >> army._isSpreadCombatFormation >> army.color;
 
     // set army
     for ( Army::iterator it = army.begin(); it != army.end(); ++it ) {

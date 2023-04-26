@@ -226,14 +226,14 @@ public:
     // Implements the necessary logic to move unit stacks from army to army in the hero's meeting dialog and in the castle dialog
     void MoveTroops( Army & from, const int monsterIdToKeep );
 
-    void SetSpreadFormat( bool f )
+    void SetSpreadFormation( const bool spread )
     {
-        combat_format = f;
+        _isSpreadCombatFormation = spread;
     }
 
-    bool isSpreadFormat() const
+    bool isSpreadFormation() const
     {
-        return combat_format;
+        return _isSpreadCombatFormation;
     }
 
     bool SaveLastTroop() const;
@@ -253,7 +253,7 @@ protected:
     friend StreamBase & operator>>( StreamBase &, Army & );
 
     HeroBase * commander;
-    bool combat_format;
+    bool _isSpreadCombatFormation;
     int color;
 
 private:

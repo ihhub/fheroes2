@@ -118,7 +118,7 @@ Battle::Force::Force( Army & parent, bool opposite, const Rand::DeterministicRan
             continue;
         }
 
-        int32_t idx = army.isSpreadFormat() ? static_cast<int32_t>( i ) * 22 : 22 + static_cast<int32_t>( i ) * 11;
+        int32_t idx = army.isSpreadFormation() ? static_cast<int32_t>( i ) * 22 : 22 + static_cast<int32_t>( i ) * 11;
 
         if ( opposite ) {
             idx += ( troop->isWide() ? 9 : 10 );
