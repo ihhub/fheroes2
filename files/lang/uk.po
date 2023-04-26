@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-10 14:28+0000\n"
-"PO-Revision-Date: 2022-09-23 16:14+0200\n"
+"POT-Creation-Date: 2023-04-25 06:07+0000\n"
+"PO-Revision-Date: 2023-04-13 21:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -162,7 +162,6 @@ msgstr ""
 msgid "MIN"
 msgstr ""
 
-#, fuzzy
 msgid "MAX"
 msgstr "МАКС"
 
@@ -189,7 +188,6 @@ msgid ""
 "the next turn."
 msgstr ""
 
-#, fuzzy
 msgid ""
 "A few\n"
 "%{monster}"
@@ -197,7 +195,6 @@ msgstr ""
 "Мало\n"
 "%{monster}"
 
-#, fuzzy
 msgid ""
 "Several\n"
 "%{monster}"
@@ -205,15 +202,13 @@ msgstr ""
 "Кілька\n"
 "%{monster}"
 
-#, fuzzy
 msgid ""
 "A pack of\n"
 "%{monster}"
 msgstr ""
-"Купка\n"
+"Зграя\n"
 "%{monster}"
 
-#, fuzzy
 msgid ""
 "Lots of\n"
 "%{monster}"
@@ -221,7 +216,6 @@ msgstr ""
 "Багато\n"
 "%{monster}"
 
-#, fuzzy
 msgid ""
 "A horde of\n"
 "%{monster}"
@@ -229,7 +223,6 @@ msgstr ""
 "Орда\n"
 "%{monster}"
 
-#, fuzzy
 msgid ""
 "A throng of\n"
 "%{monster}"
@@ -237,15 +230,13 @@ msgstr ""
 "Натовп\n"
 "%{monster}"
 
-#, fuzzy
 msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
-"Юрба\n"
+"Купа\n"
 "%{monster}"
 
-#, fuzzy
 msgid ""
 "Zounds of\n"
 "%{monster}"
@@ -253,7 +244,6 @@ msgstr ""
 "Тьма\n"
 "%{monster}"
 
-#, fuzzy
 msgid ""
 "A legion of\n"
 "%{monster}"
@@ -261,35 +251,27 @@ msgstr ""
 "Легіон\n"
 "%{monster}"
 
-#, fuzzy
 msgid "army|Few"
 msgstr "Мало"
 
-#, fuzzy
 msgid "army|Several"
 msgstr "Кілька"
 
-#, fuzzy
 msgid "army|Pack"
-msgstr "Купка"
+msgstr "Зграя"
 
-#, fuzzy
 msgid "army|Lots"
 msgstr "Багато"
 
-#, fuzzy
 msgid "army|Horde"
 msgstr "Орда"
 
-#, fuzzy
 msgid "army|Throng"
 msgstr "Натовп"
 
-#, fuzzy
 msgid "army|Swarm"
-msgstr "Юрба"
+msgstr "Купа"
 
-#, fuzzy
 msgid "army|Zounds"
 msgstr "Тьма"
 
@@ -3674,6 +3656,12 @@ msgstr ""
 msgid "and more..."
 msgstr ""
 
+msgid "Easy"
+msgstr ""
+
+msgid "Hard"
+msgstr ""
+
 #, fuzzy
 msgid "Campaign Difficulty"
 msgstr ""
@@ -3694,10 +3682,23 @@ msgid ""
 "with normal difficulty."
 msgstr ""
 
-msgid "Easy"
+msgid ""
+"Congratulations!\n"
+"\n"
+"Days: %{days}\n"
 msgstr ""
 
-msgid "Hard"
+msgid ""
+"\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
+msgid ""
+"Score: %{score}\n"
+"\n"
+"Rating:\n"
+"%{rating}"
 msgstr ""
 
 msgid "Start the selected scenario."
@@ -3895,12 +3896,12 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
-msgid "Unknown Hero"
-msgstr ""
-
 #, fuzzy
 msgid "Your Name"
 msgstr "Ваше Ім'я"
+
+msgid "Unknown Hero"
+msgstr ""
 
 #, fuzzy
 msgid "Standard"
@@ -4472,6 +4473,12 @@ msgid ""
 "All is lost."
 msgstr ""
 
+msgid ""
+"Base score: %{score}\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
 
@@ -4607,6 +4614,9 @@ msgstr ""
 msgid " All dwellings increase population."
 msgstr ""
 
+msgid "New Week!"
+msgstr ""
+
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
 "banished from this land."
@@ -4633,6 +4643,67 @@ msgstr ""
 msgid ""
 "%{color} player, your heroes abandon you, and you are banished from this "
 "land."
+msgstr ""
+
+msgid "Lord Kilburn"
+msgstr "Лорд Кілбурн"
+
+msgid "Tsabu"
+msgstr ""
+
+#, fuzzy
+msgid "Sir Galant"
+msgstr "Сір Галант"
+
+msgid "Thundax"
+msgstr ""
+
+msgid "Lord Haart"
+msgstr ""
+
+msgid "Ariel"
+msgstr ""
+
+msgid "Rebecca"
+msgstr ""
+
+msgid "Sandro"
+msgstr ""
+
+msgid "Crodo"
+msgstr ""
+
+msgid "Barock"
+msgstr ""
+
+msgid "Antoine"
+msgstr ""
+
+msgid "Astra"
+msgstr ""
+
+msgid "Agar"
+msgstr ""
+
+msgid "Vatawna"
+msgstr ""
+
+msgid "Vesper"
+msgstr ""
+
+msgid "Ambrose"
+msgstr ""
+
+msgid "Troyan"
+msgstr ""
+
+msgid "Jojosh"
+msgstr ""
+
+msgid "Wrathmont"
+msgstr ""
+
+msgid "Maximus"
 msgstr ""
 
 msgid "Next Hero"
@@ -4908,22 +4979,13 @@ msgstr "Ектор"
 msgid "Gwenneth"
 msgstr ""
 
-msgid "Lord Kilburn"
-msgstr "Лорд Кілбурн"
-
 msgid "Sir Gallant"
 msgstr "Сір Галант"
 
 msgid "Tyro"
 msgstr ""
 
-msgid "Ambrose"
-msgstr ""
-
 msgid "Dimitry"
-msgstr ""
-
-msgid "Maximus"
 msgstr ""
 
 msgid "Ruby"
@@ -4938,12 +5000,6 @@ msgstr ""
 msgid "Jezebel"
 msgstr ""
 
-msgid "Jojosh"
-msgstr ""
-
-msgid "Thundax"
-msgstr ""
-
 msgid "Atlas"
 msgstr ""
 
@@ -4953,28 +5009,10 @@ msgstr ""
 msgid "Jaclyn"
 msgstr ""
 
-msgid "Tsabu"
-msgstr ""
-
-msgid "Astra"
-msgstr ""
-
 msgid "Gem"
 msgstr ""
 
 msgid "Natasha"
-msgstr ""
-
-msgid "Rebecca"
-msgstr ""
-
-msgid "Troyan"
-msgstr ""
-
-msgid "Vatawna"
-msgstr ""
-
-msgid "Ariel"
 msgstr ""
 
 msgid "Carlawn"
@@ -4989,22 +5027,10 @@ msgstr ""
 msgid "Barok"
 msgstr ""
 
-msgid "Crodo"
-msgstr ""
-
 msgid "Kastore"
 msgstr ""
 
-msgid "Vesper"
-msgstr ""
-
-msgid "Agar"
-msgstr ""
-
 msgid "Falagar"
-msgstr ""
-
-msgid "Wrathmont"
 msgstr ""
 
 msgid "Dawn"
@@ -5054,9 +5080,6 @@ msgstr ""
 
 msgid "Roxana"
 msgstr "Роксана"
-
-msgid "Sandro"
-msgstr ""
 
 msgid "Lord Corlagon"
 msgstr ""

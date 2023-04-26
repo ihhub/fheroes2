@@ -51,6 +51,7 @@
 #include "game_video.h"
 #include "game_video_type.h"
 #include "heroes.h"
+#include "highscores.h"
 #include "icn.h"
 #include "image.h"
 #include "kingdom.h"
@@ -68,6 +69,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "text.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_campaign.h"
@@ -387,7 +389,7 @@ namespace
             scenarioId = betrayalScenarioId + 1;
         }
 
-        Text campaignMapId( std::to_string( scenarioId ), Font::BIG );
+        const Text campaignMapId( std::to_string( scenarioId ), Font::BIG );
         campaignMapId.Blit( top.x + 172 - campaignMapId.w() / 2, top.y + 97 - campaignMapId.h() / 2 );
 
         TextBox mapDescription( scenario.getDescription(), Font::BIG, 356 );
@@ -890,6 +892,23 @@ namespace
         return fheroes2::ButtonSprite( offset.x, offset.y, fheroes2::AGG::GetICN( icnId, 0 ), fheroes2::AGG::GetICN( icnId, 1 ) );
     }
 
+    std::string getCampaignDifficultyText( const int32_t difficulty )
+    {
+        switch ( difficulty ) {
+        case Campaign::CampaignDifficulty::Easy:
+            return { _( "Easy" ) };
+        case Campaign::CampaignDifficulty::Normal:
+            // Original campaign difficulty.
+            return { _( "Normal" ) };
+        case Campaign::CampaignDifficulty::Hard:
+            return { _( "Hard" ) };
+        default:
+            // Did you add a new campaign difficulty? Add the logic above!
+            assert( 0 );
+            return {};
+        }
+    }
+
     int32_t setCampaignDifficulty( int32_t currentDifficulty, const bool isSelectionAllowed )
     {
         const fheroes2::StandardWindow frameborder( 234, 270, true );
@@ -982,9 +1001,9 @@ namespace
         fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, textWidth, description.height( textWidth ) );
         description.draw( textOffset.x, textOffset.y, textWidth, display );
 
-        fheroes2::Text easyName( _( "Easy" ), fheroes2::FontType::normalWhite() );
-        fheroes2::Text normalName( _( "Normal" ), fheroes2::FontType::normalWhite() );
-        fheroes2::Text hardName( _( "Hard" ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text easyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Easy ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text normalName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Normal ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text hardName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Hard ), fheroes2::FontType::normalWhite() );
 
         easyName.draw( difficultyArea[0].x + ( difficultyArea[0].width - easyName.width() ) / 2, difficultyArea[0].y + difficultyArea[0].height + 5, display );
         normalName.draw( difficultyArea[1].x + ( difficultyArea[1].width - normalName.width() ) / 2, difficultyArea[1].y + difficultyArea[1].height + 5, display );
@@ -1001,26 +1020,26 @@ namespace
             }
 
             if ( le.MousePressRight( buttonOk.area() ) ) {
-                fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
+                const fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
+                const fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
             else if ( le.MousePressRight( difficultyArea[0] ) ) {
-                fheroes2::Text header( _( "Easy" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( easyDescription, fheroes2::FontType::normalWhite() );
+                const fheroes2::Text header( getCampaignDifficultyText( Campaign::CampaignDifficulty::Easy ), fheroes2::FontType::normalYellow() );
+                const fheroes2::Text body( easyDescription, fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
             else if ( le.MousePressRight( difficultyArea[1] ) ) {
-                fheroes2::Text header( _( "Normal" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( normalDescription, fheroes2::FontType::normalWhite() );
+                const fheroes2::Text header( getCampaignDifficultyText( Campaign::CampaignDifficulty::Normal ), fheroes2::FontType::normalYellow() );
+                const fheroes2::Text body( normalDescription, fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
             else if ( le.MousePressRight( difficultyArea[2] ) ) {
-                fheroes2::Text header( _( "Hard" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( hardDescription, fheroes2::FontType::normalWhite() );
+                const fheroes2::Text header( getCampaignDifficultyText( Campaign::CampaignDifficulty::Hard ), fheroes2::FontType::normalYellow() );
+                const fheroes2::Text body( hardDescription, fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
@@ -1212,11 +1231,36 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
     if ( campaignData.isLastScenario( lastCompletedScenarioInfo ) ) {
         Game::ShowCredits();
 
+        // Get data for ratings text.
+        const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+        const int32_t daysPassed = static_cast<int32_t>( campaignSaveData.getDaysPassed() );
+        // Rating is calculated based on difficulty of campaign.
+        const int32_t score = daysPassed * static_cast<int32_t>( campaignSaveData.getCampaignDifficultyPercent() ) / 100;
+
+        // Make ratings text as a subtitle for WIN.SMK.
+        fheroes2::MultiFontText ratingText;
+
+        std::string textBody = _( "Congratulations!\n\nDays: %{days}\n" );
+        StringReplace( textBody, "%{days}", daysPassed );
+        ratingText.add( { textBody, fheroes2::FontType::normalWhite() } );
+
+        textBody = _( "\nDifficulty: %{difficulty}\n\n" );
+        StringReplace( textBody, "%{difficulty}", getCampaignDifficultyText( campaignSaveData.getDifficulty() ) );
+        ratingText.add( { textBody, fheroes2::FontType::smallWhite() } );
+
+        textBody = _( "Score: %{score}\n\nRating:\n%{rating}" );
+        StringReplace( textBody, "%{score}", score );
+        StringReplace( textBody, "%{rating}", fheroes2::HighScoreDataContainer::getMonsterByDay( daysPassed ).GetName() );
+        ratingText.add( { textBody, fheroes2::FontType::normalWhite() } );
+
+        // Show results from the 5th second until end (forever) and set maximum width to 140 to fit the black area.
+        // Set subtitles top-center position (475,110) to render results over the black rectangle of burned picture in WIN.SMK video.
+        Video::Subtitle ratingSubtitle( ratingText, 5000, UINT32_MAX, { 475, 110 }, 140 );
+
         AudioManager::ResetAudio();
-        Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
-        // TODO : Implement function that displays the last frame of win.smk with score
-        // and a dialog for name entry. fheroes2::PlayMusic is run here in order to start
-        // playing before displaying the high score.
+        Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { std::move( ratingSubtitle ) }, true );
+
+        // fheroes2::PlayMusic is run here in order to start playing before displaying the high score.
         AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
         return fheroes2::GameMode::HIGHSCORES_CAMPAIGN;
     }
@@ -1245,7 +1289,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
     const Campaign::ScenarioData & scenario = scenarios[currentScenarioInfoId.scenarioId];
 
-    fheroes2::GameInterfaceTypeRestorer gameInterfaceRestorer( chosenCampaignID != Campaign::ROLAND_CAMPAIGN );
+    const fheroes2::GameInterfaceTypeRestorer gameInterfaceRestorer( chosenCampaignID != Campaign::ROLAND_CAMPAIGN );
 
     if ( !allowToRestart ) {
         playCurrentScenarioVideo();
@@ -1354,7 +1398,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     for ( uint32_t i = 0; i < bonusChoiceCount; ++i )
         buttonChoices.button( i ).draw();
 
-    Text textDaysSpent( std::to_string( campaignSaveData.getDaysPassed() ), Font::BIG );
+    const Text textDaysSpent( std::to_string( campaignSaveData.getDaysPassed() ), Font::BIG );
     textDaysSpent.Blit( top.x + 582 - textDaysSpent.w() / 2, top.y + 31 );
 
     DrawCampaignScenarioDescription( scenario, top );

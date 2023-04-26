@@ -38,17 +38,27 @@ namespace fheroes2
     {
         ResolutionInfo() = default;
 
-        ResolutionInfo( const int32_t width_, const int32_t height_, const int32_t scale_ )
-            : width( width_ )
-            , height( height_ )
-            , scale( scale_ )
+        ResolutionInfo( const int32_t gameWidth_, const int32_t gameHeight_ )
+            : gameWidth( gameWidth_ )
+            , gameHeight( gameHeight_ )
+            , screenWidth( gameWidth_ )
+            , screenHeight( gameHeight_ )
+        {
+            // Do nothing.
+        }
+
+        ResolutionInfo( const int32_t gameWidth_, const int32_t gameHeight_, const int32_t screenWidth_, const int32_t screenHeight_ )
+            : gameWidth( gameWidth_ )
+            , gameHeight( gameHeight_ )
+            , screenWidth( screenWidth_ )
+            , screenHeight( screenHeight_ )
         {
             // Do nothing.
         }
 
         bool operator==( const ResolutionInfo & info ) const
         {
-            return width == info.width && height == info.height && scale == info.scale;
+            return gameWidth == info.gameWidth && gameHeight == info.gameHeight && screenWidth == info.screenWidth && screenHeight == info.screenHeight;
         }
 
         bool operator!=( const ResolutionInfo & info ) const
@@ -58,14 +68,16 @@ namespace fheroes2
 
         bool operator<( const ResolutionInfo & info ) const
         {
-            return std::tie( width, height, scale ) < std::tie( info.width, info.height, info.scale );
+            return std::tie( gameWidth, gameHeight, screenWidth, screenHeight ) < std::tie( info.gameWidth, info.gameHeight, info.screenWidth, info.screenHeight );
         }
 
-        int32_t width{ 0 };
+        int32_t gameWidth{ 0 };
 
-        int32_t height{ 0 };
+        int32_t gameHeight{ 0 };
 
-        int32_t scale{ 1 };
+        int32_t screenWidth{ 0 };
+
+        int32_t screenHeight{ 0 };
     };
 
     class BaseRenderEngine
@@ -224,9 +236,9 @@ namespace fheroes2
         // nullptr input parameter is used to reset palette to default one.
         void changePalette( const uint8_t * palette = nullptr, const bool forceDefaultPaletteUpdate = false ) const;
 
-        int32_t scale() const
+        Size screenSize() const
         {
-            return _scale;
+            return _screenSize;
         }
 
         friend BaseRenderEngine & engine();
@@ -243,7 +255,7 @@ namespace fheroes2
         // Previous area drawn on the screen.
         Rect _prevRoi;
 
-        int32_t _scale;
+        Size _screenSize;
 
         // Only for cases of direct drawing on rendered 8-bit image.
         void linkRenderSurface( uint8_t * surface )
