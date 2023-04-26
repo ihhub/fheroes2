@@ -92,7 +92,7 @@ final class HoMM2AssetManagement
                     result = result || res;
                 }
                 finally {
-                    isoFile.delete();
+                    Files.deleteIfExists( isoFile.toPath() );
                 }
 
                 continue;

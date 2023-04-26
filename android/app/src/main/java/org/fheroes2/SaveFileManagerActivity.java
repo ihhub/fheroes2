@@ -21,6 +21,7 @@
 package org.fheroes2;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -102,13 +103,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                     for ( final String saveFileName : saveFileNames ) {
                         final File saveFile = new File( saveFileDir, saveFileName );
 
-                        if ( !saveFile.isFile() ) {
-                            continue;
-                        }
-
-                        if ( !saveFile.delete() ) {
-                            Log.e( "fheroes2", "Unable to delete save file " + saveFile.getCanonicalPath() );
-                        }
+                        Files.deleteIfExists( saveFile.toPath() );
                     }
                 }
                 catch ( final Exception ex ) {
