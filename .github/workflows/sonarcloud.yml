@@ -52,6 +52,7 @@ jobs:
                       -Dsonar.cfamily.analysisCache.mode=fs \
                       -Dsonar.cfamily.analysisCache.path="$HOME"/.sonar-cfamily-cache \
                       -Dsonar.java.binaries="android/*/build/**/classes" \
+                      -Dsonar.java.libraries="$ANDROID_HOME/**/*.jar,$HOME/.gradle/**/*.jar" \
                       -Dsonar.host.url=https://sonarcloud.io
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
