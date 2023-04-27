@@ -882,8 +882,8 @@ void Troops::JoinAllTroopsOfType( const Troop & targetTroop ) const
     }
 }
 
-Army::Army( HeroBase * hero /* = nullptr */ )
-    : commander( hero )
+Army::Army( HeroBase * cmdr /* = nullptr */ )
+    : commander( cmdr )
     , _isSpreadCombatFormation( true )
     , color( Color::NONE )
 {

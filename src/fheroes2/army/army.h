@@ -173,7 +173,7 @@ public:
     static void drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, bool isCompact, const bool isDetailedView,
                                           const bool isGarrisonView = false, const uint32_t thievesGuildsCount = 0 );
 
-    explicit Army( HeroBase * hero = nullptr );
+    explicit Army( HeroBase * cmdr = nullptr );
     explicit Army( const Maps::Tiles & tile );
 
     Army( const Army & ) = delete;
