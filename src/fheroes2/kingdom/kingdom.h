@@ -23,6 +23,7 @@
 #ifndef H2KINGDOM_H
 #define H2KINGDOM_H
 
+#include <algorithm>
 #include <cstdint>
 #include <functional>
 #include <list>

@@ -35,8 +35,6 @@
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "monster.h"
-#include "mp2.h"
-#include "players.h"
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
