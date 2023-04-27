@@ -269,14 +269,19 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     // Fade-in High Scores screen.
     if ( Settings::isFadeEffectEnabled() ) {
-        // We need to expand the ROI for the next render to properly render window borders and shadow.
-        fheroes2::Rect roi( border.windowArea() );
-        roi.x -= BORDERWIDTH;
-        roi.width += BORDERWIDTH;
-        roi.height += BORDERWIDTH;
-        display.updateNextRenderRoi( roi );
+        if ( isAfterGameCompletion ) {
+            fheroes2::fadeInDisplay();
+        }
+        else {
+            // We need to expand the ROI for the next render to properly render window borders and shadow.
+            fheroes2::Rect roi( border.windowArea() );
+            roi.x -= BORDERWIDTH;
+            roi.width += BORDERWIDTH;
+            roi.height += BORDERWIDTH;
+            display.updateNextRenderRoi( roi );
 
-        fheroes2::fadeDisplay( 5, 255, border.activeArea() );
+            fheroes2::fadeInDisplay( border.activeArea(), !display.isDefaultSize() );
+        }
     }
     else {
         display.render();

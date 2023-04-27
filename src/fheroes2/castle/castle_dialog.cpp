@@ -224,8 +224,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
 
     // Fade-out game screen only for 640x480 resolution.
-    if ( fade && Settings::isFadeEffectEnabled() && display.isDefaultSize() ) {
-        fheroes2::fadeDisplay( 255, 5, background.activeArea() );
+    const bool isDefaultScreenSize = display.isDefaultSize();
+    if ( fade && Settings::isFadeEffectEnabled() && isDefaultScreenSize ) {
+        fheroes2::fadeOutDisplay();
     }
 
     AudioManager::PlayMusicAsync( MUS::FromRace( race ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
@@ -342,7 +343,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     // Fade-in castle dialog.
     if ( fade && Settings::isFadeEffectEnabled() ) {
-        fheroes2::fadeDisplay( 5, 255, background.activeArea() );
+        fheroes2::fadeInDisplay( background.activeArea(), !isDefaultScreenSize );
     }
 
     CastleDialogReturnValue result = CastleDialogReturnValue::DoNothing;
@@ -373,7 +374,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
                 // Fade-out castle dialog.
                 if ( Settings::isFadeEffectEnabled() ) {
-                    fheroes2::fadeDisplay( 255, 5, background.activeArea() );
+                    fheroes2::fadeOutDisplay( background.activeArea(), !isDefaultScreenSize );
                 }
                 break;
             }

@@ -1305,7 +1305,8 @@ void Battle::Interface::fullRedraw()
     }
 
     // Fade-out game screen only for 640x480 resolution.
-    if ( Settings::isFadeEffectEnabled() && fheroes2::Display::instance().isDefaultSize() ) {
+    const bool isDefaultScreenSize = fheroes2::Display::instance().isDefaultSize();
+    if ( Settings::isFadeEffectEnabled() && isDefaultScreenSize ) {
         fheroes2::fadeOutDisplay();
     }
 
@@ -1320,7 +1321,7 @@ void Battle::Interface::fullRedraw()
 
     // Fade-in battlefield.
     if ( Settings::isFadeEffectEnabled() ) {
-        fheroes2::fadeDisplay( 5, 255, _background->activeArea() );
+        fheroes2::fadeInDisplay( _background->activeArea(), !isDefaultScreenSize );
     }
 }
 

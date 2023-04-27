@@ -76,8 +76,9 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     }
 
     // Fade-out game screen only for 640x480 resolution.
-    if ( fade && Settings::isFadeEffectEnabled() && display.isDefaultSize() ) {
-        fheroes2::fadeDisplay( 255, 5, roi );
+    const bool isDefaultScreenSize = display.isDefaultSize();
+    if ( fade && Settings::isFadeEffectEnabled() && isDefaultScreenSize ) {
+        fheroes2::fadeOutDisplay();
     }
 
     cur_pt = { roi.x, roi.y };
@@ -250,7 +251,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // Fade-in hero dialog.
     if ( fade && Settings::isFadeEffectEnabled() ) {
-        fheroes2::fadeDisplay( 5, 255, roi );
+        fheroes2::fadeInDisplay( roi, !isDefaultScreenSize );
     }
     else {
         display.render();
@@ -278,7 +279,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             // Fade-out hero dialog.
             if ( Settings::isFadeEffectEnabled() ) {
-                fheroes2::fadeDisplay( 255, 5, roi );
+                fheroes2::fadeOutDisplay( roi, !isDefaultScreenSize );
             }
             return Dialog::CANCEL;
         }

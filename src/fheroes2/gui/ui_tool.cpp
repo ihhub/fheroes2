@@ -506,18 +506,38 @@ namespace fheroes2
         return out;
     }
 
-    void fadeOutDisplay( int32_t fadeTimeMs /* = 100 */ )
+    void fadeOutDisplay( const int32_t fadeTimeMs /* = 100 */, const uint32_t frameCount /* = 6 */ )
     {
         const Display & display = Display::instance();
 
-        fheroes2::fadeDisplay( 255, 5, { 0, 0, display.width(), display.height() }, fadeTimeMs );
+        fadeDisplay( 255, 5, { 0, 0, display.width(), display.height() }, fadeTimeMs, frameCount );
     }
 
-    void fadeInDisplay( int32_t fadeTimeMs /* = 100 */ )
+    void fadeOutDisplay( const Rect & roi, const bool halfFade /* = false */, const int32_t fadeTimeMs /* = 100 */, const uint32_t frameCount /* = 6 */ )
+    {
+        if ( halfFade ) {
+            fadeDisplay( 255, 130, roi, fadeTimeMs / 2, frameCount / 2 );
+        }
+        else {
+            fadeDisplay( 255, 5, roi, fadeTimeMs, frameCount );
+        }
+    }
+
+    void fadeInDisplay( const int32_t fadeTimeMs /* = 100 */, const uint32_t frameCount /* = 6 */ )
     {
         const Display & display = Display::instance();
 
-        fheroes2::fadeDisplay( 5, 255, { 0, 0, display.width(), display.height() }, fadeTimeMs );
+        fadeDisplay( 5, 255, { 0, 0, display.width(), display.height() }, fadeTimeMs, frameCount );
+    }
+
+    void fadeInDisplay( const Rect & roi, const bool halfFade /* = false */, const int32_t fadeTimeMs /* = 100 */, const uint32_t frameCount /* = 6 */ )
+    {
+        if ( halfFade ) {
+            fadeDisplay( 130, 255, roi, fadeTimeMs / 2, frameCount / 2 );
+        }
+        else {
+            fadeDisplay( 5, 255, roi, fadeTimeMs, frameCount );
+        }
     }
 
     void fadeDisplay( const uint8_t startAlpha, const uint8_t endAlpha, const Rect & roi, const int32_t fadeTimeMs /* = 100 */, const uint32_t frameCount /* = 6 */ )
