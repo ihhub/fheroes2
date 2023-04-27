@@ -100,7 +100,7 @@ namespace AI
     struct BudgetEntry
     {
         int resource = Resource::UNKNOWN;
-        int requirement = 0;
+        int missing = 0;
         bool priority = false;
         bool recurringCost = false;
 
@@ -110,7 +110,7 @@ namespace AI
 
         void reset()
         {
-            requirement = 0;
+            missing = 0;
             priority = false;
             recurringCost = false;
         }

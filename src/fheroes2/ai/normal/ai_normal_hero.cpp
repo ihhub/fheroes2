@@ -887,8 +887,9 @@ namespace AI
             if ( getColorFromTile( tile ) == hero.GetColor() ) {
                 return -valueToIgnore; // don't even attempt to go here
             }
-            const double value = 20.0 * getResourcePriorityModifier( getResourcesFromTile( tile ).first );
-            return ( getResourcesFromTile( tile ).first == Resource::GOLD ) ? value * 100.0 : value;
+            const int resource = getResourcesFromTile( tile ).first;
+            const double value = 20.0 * getResourcePriorityModifier( resource );
+            return ( resource == Resource::GOLD ) ? value * 100.0 : value;
         }
         case MP2::OBJ_ABANDONED_MINE: {
             return 3000.0;

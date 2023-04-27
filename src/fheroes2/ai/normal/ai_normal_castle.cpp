@@ -212,7 +212,9 @@ namespace AI
             for ( const BuildOrder & order : buildOrder ) {
                 const int status = castle->CheckBuyBuilding( order.building );
                 if ( status == LACK_RESOURCES ) {
-                    requirements = requirements.max( PaymentConditions::BuyBuilding( race, order.building ) );
+                    Funds missing = PaymentConditions::BuyBuilding( race, order.building ) - kindgomFunds;
+
+                    requirements = requirements.max( missing );
                 }
             }
 
@@ -227,9 +229,9 @@ namespace AI
         }
 
         for ( BudgetEntry & budgetEntry : _budget ) {
-            budgetEntry.requirement = requirements.Get( budgetEntry.resource );
+            budgetEntry.missing = requirements.Get( budgetEntry.resource );
 
-            if ( kindgomFunds.Get( budgetEntry.resource ) < budgetEntry.requirement ) {
+            if ( budgetEntry.missing ) {
                 budgetEntry.priority = true;
             }
         }
