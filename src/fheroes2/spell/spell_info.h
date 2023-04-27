@@ -24,8 +24,6 @@
 #include <cstdint>
 #include <string>
 
-#include "maps.h"
-
 class Castle;
 class HeroBase;
 class Heroes;
@@ -50,12 +48,6 @@ namespace fheroes2
     std::string getSpellDescription( const Spell & spell, const HeroBase * hero );
 
     int32_t getPossibleBoatPosition( const Heroes & hero );
-
-    MapsIndexes getVisibleMonstersAroundHero( const Heroes & hero );
-
-    bool opponentsCanRecruitMoreHeroes( const Heroes & hero );
-
-    bool opponentsHaveHeroes( const Heroes & hero );
 }
 
 #endif

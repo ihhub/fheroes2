@@ -691,6 +691,35 @@ void Heroes::IncreasePrimarySkill( int skill )
     }
 }
 
+MapsIndexes Heroes::getVisibleMonstersAroundHero() const
+{
+    const uint32_t dist = GetVisionsDistance();
+    MapsIndexes monsters = Maps::ScanAroundObjectWithDistance( GetIndex(), dist, MP2::OBJ_MONSTER );
+
+    const int32_t heroColor = GetColor();
+    monsters.erase( std::remove_if( monsters.begin(), monsters.end(), [heroColor]( const int32_t index ) { return world.GetTiles( index ).isFog( heroColor ); } ),
+                    monsters.end() );
+    return monsters;
+}
+
+bool Heroes::opponentsCanRecruitMoreHeroes() const
+{
+    for ( int opponentColor : Players::getInPlayOpponents( GetColor() ) ) {
+        if ( world.GetKingdom( opponentColor ).canRecruitHeroes() )
+            return true;
+    }
+    return false;
+}
+
+bool Heroes::opponentsHaveHeroes() const
+{
+    for ( int opponentColor : Players::getInPlayOpponents( GetColor() ) ) {
+        if ( world.GetKingdom( opponentColor ).hasHeroes() )
+            return true;
+    }
+    return false;
+}
+
 uint32_t Heroes::GetMaxSpellPoints() const
 {
     return 10 * GetKnowledge();

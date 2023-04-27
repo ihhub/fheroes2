@@ -91,9 +91,15 @@ public:
     // Return true if this kingdom can recruit heroes, false otherwise. For
     // example this function will return false when kingdom has one town that
     // cannot be upgraded to a castle.
-    bool canRecruitHeroes() const;
+    bool canRecruitHeroes() const
+    {
+        return std::any_of( castles.begin(), castles.end(), []( Castle * castle ) { return ( castle->isCastle() || castle->Modes( Castle::ALLOWCASTLE ) ); } );
+    }
     // Return true if this kingdom has any heroes, false otherwise.
-    bool hasHeroes() const;
+    bool hasHeroes() const
+    {
+        return !heroes.empty();
+    }
 
     void SetLastBattleWinHero( const Heroes & hero );
     Heroes * GetLastBattleWinHero() const;

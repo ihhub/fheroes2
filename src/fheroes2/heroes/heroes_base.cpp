@@ -450,13 +450,21 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( spell == Spell::IDENTIFYHERO ) {
-            bool opponentsHaveHeroes = fheroes2::opponentsHaveHeroes( *hero );
-            bool opponentsCanRecruitHeroes = fheroes2::opponentsCanRecruitMoreHeroes( *hero );
+            if ( hero->GetKingdom().Modes( Kingdom::IDENTIFYHERO ) ) {
+                if ( res != nullptr ) {
+                    *res = _( "This spell is already in use." );
+                }
+                return false;
+            }
+
+            const bool opponentsHaveHeroes = hero->opponentsHaveHeroes();
+            const bool opponentsCanRecruitHeroes = hero->opponentsCanRecruitMoreHeroes();
             // This text is show in two cases. First when there are no opponents
             // left in the game. Second when opponent doesn't have heroes left
             // and cannot recruit more. This will happen when all opponent
-            // heroes are defeated and has a town that cannot be upgraded to a
-            // castle
+            // heroes are defeated and the opponent has a town that cannot be
+            // upgraded to a castle to recruit more heroes. Because having a
+            // town opponent is not defeated yet.
             if ( !opponentsHaveHeroes && !opponentsCanRecruitHeroes ) {
                 if ( res != nullptr ) {
                     *res = _( "No opponent can have heroes under his command anymore. Casting this spell will not bring any advantage." );
@@ -471,19 +479,13 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                 }
                 return false;
             }
-            if ( hero->GetKingdom().Modes( Kingdom::IDENTIFYHERO ) ) {
-                if ( res != nullptr ) {
-                    *res = _( "This spell is already in use." );
-                }
-                return false;
-            }
         }
 
         if ( spell == Spell::VISIONS ) {
-            MapsIndexes monsters = fheroes2::getVisibleMonstersAroundHero( *hero );
-            const uint32_t dist = hero->GetVisionsDistance();
+            MapsIndexes monsters = hero->getVisibleMonstersAroundHero();
             if ( monsters.empty() ) {
                 if ( res != nullptr ) {
+                    const uint32_t dist = hero->GetVisionsDistance();
                     std::string msg = _( "You must be within %{count} spaces of a monster for the Visions spell to work." );
                     StringReplace( msg, "%{count}", dist );
                     *res = msg;

@@ -514,7 +514,7 @@ namespace
 
     bool ActionSpellVisions( Heroes & hero )
     {
-        MapsIndexes monsters = fheroes2::getVisibleMonstersAroundHero( hero );
+        MapsIndexes monsters = hero.getVisibleMonstersAroundHero();
 
         assert( !monsters.empty() );
 
