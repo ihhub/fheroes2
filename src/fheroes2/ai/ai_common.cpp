@@ -139,6 +139,6 @@ namespace AI
 
     bool CanPurchaseHero( const Kingdom & kingdom )
     {
-        return kingdom.GetCountCastle() && kingdom.AllowRecruitHero( true );
+        return kingdom.GetCountCastle() > 0 && kingdom.AllowRecruitHero( true );
     }
 }

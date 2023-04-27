@@ -238,12 +238,13 @@ namespace AI
 
     bool BattlePlanner::checkRetreatCondition( const Heroes & hero ) const
     {
+        if ( !_considerRetreat || hero.isControlHuman() || hero.isLosingGame() || !isHeroWorthSaving( hero ) || !CanPurchaseHero( hero.GetKingdom() ) ) {
+            return false;
+        }
+
         // Retreat if remaining army strength is a fraction of enemy's
         // Consider taking speed/turn order into account in the future
-        const double ratio = Difficulty::GetAIRetreatRatio( Game::getDifficulty() );
-
-        return !hero.isLosingGame() && _considerRetreat && _myArmyStrength * ratio < _enemyArmyStrength && !hero.isControlHuman() && isHeroWorthSaving( hero )
-               && CanPurchaseHero( hero.GetKingdom() );
+        return _myArmyStrength * Difficulty::GetAIRetreatRatio( Game::getDifficulty() ) < _enemyArmyStrength;
     }
 
     bool BattlePlanner::isUnitFaster( const Unit & currentUnit, const Unit & target ) const
