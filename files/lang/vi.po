@@ -1,0 +1,9317 @@
+# Vietnamese translation of fheroes2
+# Copyright (C) 2023 fheroes2 team <fhomm2@gmail.com>
+# This file is distributed under the same license as the fheroes2 package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: fheroes2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-19 02:55+0000\n"
+"PO-Revision-Date: 2023-04-21 13:48+0700\n"
+"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
+"Language-Team: \n"
+"Language: vi_VN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.2.2\n"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"CHỈ\n"
+"CHIẾN ĐẤU"
+
+msgid ""
+"NEW\n"
+"GAME"
+msgstr ""
+"TẠO\n"
+"GAME"
+
+msgid ""
+"SAVE\n"
+"GAME"
+msgstr ""
+"LƯU\n"
+"GAME"
+
+msgid ""
+"LOAD\n"
+"GAME"
+msgstr ""
+"TẢI\n"
+"GAME"
+
+msgid "INFO"
+msgstr "THÔNG TIN"
+
+msgid "QUIT"
+msgstr "RỜI KHỎI"
+
+msgid "CANCEL"
+msgstr "TỪ BỎ"
+
+msgid "ACCEPT"
+msgstr "ĐỒNG Ý"
+
+msgid "DECLINE"
+msgstr "TỪ CHỐI"
+
+msgid "LEARN"
+msgstr "HỌC TẬP"
+
+msgid "TRADE"
+msgstr "TRAO ĐỔI"
+
+msgid "YES"
+msgstr "CÓ"
+
+msgid "NO"
+msgstr "KHÔNG"
+
+msgid "EXIT"
+msgstr "THOÁT"
+
+msgid "DISMISS"
+msgstr "GIẢI TÁN"
+
+msgid "UPGRADE"
+msgstr "NÂNG CẤP"
+
+msgid "RESTART"
+msgstr "LÀM LẠI"
+
+msgid "HEROES"
+msgstr "TƯỚNG"
+
+msgid ""
+"TOWNS/\n"
+"CASTLES"
+msgstr ""
+"THỊ TRẤN/\n"
+"LÂU ĐÀI"
+
+msgid "S"
+msgstr "S"
+
+msgid "M"
+msgstr "M"
+
+msgid "L"
+msgstr "L"
+
+msgid "X-L"
+msgstr "X-L"
+
+msgid "ALL"
+msgstr "TẤT CẢ"
+
+msgid "SELECT"
+msgstr "CHỌN"
+
+msgid ""
+"STANDARD\n"
+"GAME"
+msgstr ""
+"GAME\n"
+"THƯỜNG"
+
+msgid ""
+"CAMPAIGN\n"
+"GAME"
+msgstr ""
+"CHIẾN\n"
+"DỊCH"
+
+msgid ""
+"MULTI-\n"
+"PLAYER\n"
+"GAME"
+msgstr ""
+"CHƠI\n"
+"NHIỀU\n"
+"NGƯỜI"
+
+msgid "CONFIG"
+msgstr "ĐIỀU CHỈNH"
+
+msgid ""
+"ORIGINAL\n"
+"CAMPAIGN"
+msgstr ""
+"CHIẾN DỊCH\n"
+"THƯỜNG"
+
+msgid ""
+"EXPANSION\n"
+"CAMPAIGN"
+msgstr ""
+"CHIẾN DỊCH\n"
+"MỞ RỘNG"
+
+msgid "HOT SEAT"
+msgstr "GHẾ NÓNG"
+
+msgid "2 PLAYERS"
+msgstr "2 NGƯỜI CHƠI"
+
+msgid "3 PLAYERS"
+msgstr "3 NGƯỜI CHƠI"
+
+msgid "4 PLAYERS"
+msgstr "4 NGƯỜI CHƠI"
+
+msgid "5 PLAYERS"
+msgstr "5 NGƯỜI CHƠI"
+
+msgid "6 PLAYERS"
+msgstr "6 NGƯỜI CHƠI"
+
+msgid "GIFT"
+msgstr "QUÀ"
+
+msgid "guildWell|EXIT"
+msgstr "guildWell|THOÁT"
+
+msgid "DIFFICULTY"
+msgstr "ĐỘ KHÓ"
+
+msgid "MIN"
+msgstr "MIN"
+
+msgid "MAX"
+msgstr "MAX"
+
+msgid "OKAY"
+msgstr "ĐƯỢC"
+
+msgid "Warrior"
+msgstr "Chiến binh"
+
+msgid "Builder"
+msgstr "Thợ xây"
+
+msgid "Explorer"
+msgstr "Thám hiểm"
+
+msgid "None"
+msgstr "Không"
+
+msgid "Warning"
+msgstr "Cảnh báo"
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr "Bạn có muốn AI kiểm soát không? Hiệu quả sẽ bắt đầu ở lượt tiếp theo."
+
+msgid ""
+"A few\n"
+"%{monster}"
+msgstr ""
+"Một vài\n"
+"%{monster}"
+
+msgid ""
+"Several\n"
+"%{monster}"
+msgstr ""
+"Một số\n"
+"%{monster}"
+
+msgid ""
+"A pack of\n"
+"%{monster}"
+msgstr ""
+"Một nhóm\n"
+"%{monster}"
+
+msgid ""
+"Lots of\n"
+"%{monster}"
+msgstr ""
+"Khá nhiều\n"
+"%{monster}"
+
+msgid ""
+"A horde of\n"
+"%{monster}"
+msgstr ""
+"Một bầy\n"
+"%{monster}"
+
+msgid ""
+"A throng of\n"
+"%{monster}"
+msgstr ""
+"Một bầy đàn\n"
+"%{monster}"
+
+msgid ""
+"A swarm of\n"
+"%{monster}"
+msgstr ""
+"Rất nhiều đàn\n"
+"%{monster}"
+
+msgid ""
+"Zounds of\n"
+"%{monster}"
+msgstr ""
+"Quy mô\n"
+"%{monster}"
+
+msgid ""
+"A legion of\n"
+"%{monster}"
+msgstr ""
+"Quân đoàn\n"
+"%{monster}"
+
+msgid "army|Few"
+msgstr "army|Một vài"
+
+msgid "army|Several"
+msgstr "army|Một số"
+
+msgid "army|Pack"
+msgstr "army|Một nhóm"
+
+msgid "army|Lots"
+msgstr "army|Khá nhiều"
+
+msgid "army|Horde"
+msgstr "army|Một bầy"
+
+msgid "army|Throng"
+msgstr "army|Một bầy đàn"
+
+msgid "army|Swarm"
+msgstr "army|Rất nhiều đàn"
+
+msgid "army|Zounds"
+msgstr "army|Quy mô"
+
+msgid "army|Legion"
+msgstr "army|Quân đoàn"
+
+msgid "All %{race} troops +1"
+msgstr "Tất cả binh lính %{race} +1"
+
+msgid "Multiple"
+msgstr "Bội số"
+
+msgid "Troops of %{count} alignments -%{penalty}"
+msgstr "Quân của %{count} sắp hàng -%{penalty}"
+
+msgid "Some undead in group -1"
+msgstr "Trong đội có xác sống -1"
+
+msgid "View %{name}"
+msgstr "Nhìn %{name}"
+
+msgid "Move the %{name} "
+msgstr "Thuê %{name} "
+
+msgid "Move or right click to redistribute %{name}"
+msgstr "Kéo %{name} hoặc nhấp chuột phải để chia"
+
+msgid "Combine %{name} armies"
+msgstr "Gộp binh lính %{name}"
+
+msgid "Exchange %{name2} with %{name}"
+msgstr "Trao đổi %{name2} với %{name}"
+
+msgid "Select %{name}"
+msgstr "Chọn %{name}"
+
+msgid "Cannot move last troop"
+msgstr "Không thể di chuyển quân cuối cùng"
+
+msgid "Move the %{name}"
+msgstr "Di chuyển %{name}"
+
+msgid "Set Count"
+msgstr "Đặt Số lượng"
+
+msgid "%{name} destroys half the enemy troops!"
+msgid_plural "%{name} destroy half the enemy troops!"
+msgstr[0] "%{name} tiêu diệt một nửa quân địch!"
+
+msgid "%{name} has turned off the auto battle"
+msgstr "%{name} đã tắt tự động chiến đấu"
+
+msgid "%{name} has turned on the auto battle"
+msgstr "%{name} đã bật tự động chiến đấu"
+
+msgid "Spell failed!"
+msgstr "Niệm chú thất bại!"
+
+msgid ""
+"The Sphere of Negation artifact is in effect for this battle, disabling all "
+"combat spells."
+msgstr ""
+"Bảo vật Sphere of Negation có hiệu lực trong trận chiến này, vô hiệu hóa tất "
+"cả các phép thuật chiến đấu."
+
+msgid "You have already cast a spell this round."
+msgstr "Ngươi đã sử dụng một câu thần chú trong vòng này."
+
+msgid "That spell will affect no one!"
+msgstr "Câu thần chú đó sẽ không ảnh hưởng đến ai!"
+
+msgid "You may only summon one type of elemental per combat."
+msgstr "Ngươi chỉ có thể triệu hồi một loại nguyên tố trong mỗi trận chiến."
+
+msgid "There is no open space adjacent to your hero to summon an Elemental to."
+msgstr ""
+"Không có không gian trống nào gần tướng của ngươi để triệu hồi Elemental."
+
+msgid ""
+"The Moat reduces by -%{count} the defense skill of any unit and slows to "
+"half movement rate."
+msgstr ""
+"Hào giảm -%{count} kỹ năng phòng thủ của bất kỳ đơn vị nào và làm chậm một "
+"nửa tốc độ di chuyển."
+
+msgid "Speed: %{speed}"
+msgstr "Tốc độ: %{speed}"
+
+msgid "Speed"
+msgstr "Tốc độ"
+
+msgid "Army Order"
+msgstr "Thứ tự Quân"
+
+msgid "Off"
+msgstr "Tắt"
+
+msgid "On"
+msgstr "Bật"
+
+msgid "Auto Spell Casting"
+msgstr "Tự động Niệm Phép"
+
+msgid "Grid"
+msgstr "Lưới"
+
+msgid "Shadow Movement"
+msgstr "Bóng Di chuyển"
+
+msgid "Shadow Cursor"
+msgstr "Bóng Con trỏ"
+
+msgid "Audio"
+msgstr "Âm thanh"
+
+msgid "Settings"
+msgstr "Cài đặt"
+
+msgid "Configure"
+msgstr "Cấu hình"
+
+msgid "Hot Keys"
+msgstr "Phím tắt"
+
+msgid "Damage Info"
+msgstr "Thông tin Thiệt hại"
+
+msgid "Set the speed of combat actions and animations."
+msgstr "Đặt tốc độ của hành động chiến đấu và hình ảnh động."
+
+msgid "Toggle to display army order during the battle."
+msgstr "Chuyển đổi để hiển thị thứ tự quân đội trong trận chiến."
+
+msgid ""
+"Toggle whether or not the computer will cast spells for you when auto combat "
+"is on. (Note: This does not affect spell casting for computer players in any "
+"way, nor does it affect quick combat.)"
+msgstr ""
+"Chuyển đổi xem máy tính có sử dụng phép thuật cho ngươi khi bật chế độ tự "
+"động chiến đấu hay không. (Lưu ý: Điều này không ảnh hưởng đến việc sử dụng "
+"phép thuật cho người chơi máy tính theo bất kỳ cách nào, cũng như không ảnh "
+"hưởng đến chiến đấu nhanh.)"
+
+msgid ""
+"Toggle the hex grid on or off. The hex grid always underlies movement, even "
+"if turned off. This switch only determines if the grid is visible."
+msgstr ""
+"Bật hoặc tắt lưới lục giác. Lưới lục giác luôn làm cơ sở cho chuyển động, "
+"ngay cả khi bị tắt. Công tắc này chỉ xác định xem lưới có hiển thị hay không."
+
+msgid ""
+"Toggle on or off shadows showing where your creatures can move and attack."
+msgstr ""
+"Bật hoặc tắt bóng hiển thị nơi sinh vật của bạn có thể di chuyển và tấn công."
+
+msgid ""
+"Toggle on or off a shadow showing the current hex location of the mouse "
+"cursor."
+msgstr ""
+"Bật hoặc tắt bóng hiển thị vị trí của con trỏ chuột trên lưới lục giác."
+
+msgid "Change the audio settings of the game."
+msgstr "Thay đổi cài đặt âm thanh của trò chơi."
+
+msgid "Check and configure all the hot keys present in the game."
+msgstr "Kiểm tra và định cấu hình tất cả các phím nóng có trong trò chơi."
+
+msgid "Toggle to display damage information during the battle."
+msgstr "Chuyển đổi để hiển thị thông tin thiệt hại trong trận chiến."
+
+msgid "Exit this menu."
+msgstr "Thoát khỏi trình đơn này."
+
+msgid "Okay"
+msgstr "OK"
+
+msgid "The enemy has surrendered!"
+msgstr "Kẻ địch đã đầu hàng!"
+
+msgid "The enemy has fled!"
+msgstr "Kẻ thù đã bỏ chạy!"
+
+msgid "A glorious victory!"
+msgstr "Một chiến thắng vinh quang!"
+
+msgid "For valor in combat, %{name} receives %{exp} experience."
+msgstr ""
+"Với lòng dũng cảm trong chiến đấu, %{name} nhận được %{exp} kinh nghiệm."
+
+msgid "The cowardly %{name} flees from battle."
+msgstr "Kẻ hèn nhát %{name} chạy trốn khỏi trận chiến."
+
+msgid "%{name} surrenders to the enemy, and departs in shame."
+msgstr "%{name} đầu hàng kẻ thù và nhục nhã ra đi."
+
+msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+msgstr ""
+"Lực lượng của ngươi bị thất bại nặng nề và %{name} từ bỏ chính nghĩa của "
+"ngươi."
+
+msgid "Your force suffer a bitter defeat."
+msgstr "Lực lượng của ngươi bị thất bại nặng nề."
+
+msgid "Battlefield Casualties"
+msgstr "Thương vong Chiến trường"
+
+msgid "Attacker"
+msgstr "Bên công"
+
+msgid "Defender"
+msgstr "Bên thủ"
+
+msgid "As you reach for the %{name}, it mysteriously disappears."
+msgstr "Khi ngươi chạm tới %{name}, nó biến mất một cách bí ẩn."
+
+msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
+msgstr "Khi kẻ thù của ngươi chạm tới %{name}, nó biến mất một cách bí ẩn."
+
+msgid "You have captured an enemy artifact!"
+msgstr "Ngươi đã chiếm được một bảo vật của kẻ thù!"
+
+msgid "Necromancy!"
+msgstr ""
+
+msgid ""
+"Practicing the dark arts of necromancy, you are able to raise %{count} of "
+"the enemy's dead to return under your service as %{monster}."
+msgstr ""
+"Thi triển nghệ thuật chiêu hồn hắc ám, ngươi có thể hồi sinh %{count} kẻ thù "
+"đã chết để trở lại dưới sự phục vụ của ngươi với tư cách là %{monster}."
+
+msgid "%{name} the %{race}"
+msgstr ""
+
+msgid "Captain of %{name}"
+msgstr ""
+
+msgid "Attack"
+msgstr "Công"
+
+msgid "Defense"
+msgstr "Thủ"
+
+msgid "Spell Power"
+msgstr ""
+
+msgid "Knowledge"
+msgstr "Tri thức"
+
+msgid "Morale"
+msgstr "Đạo đức"
+
+msgid "Luck"
+msgstr "May mắn"
+
+msgid "Spell Points"
+msgstr ""
+
+msgid "Hero's Options"
+msgstr "Tùy chọn Tướng"
+
+msgid "Cast Spell"
+msgstr "Niệm Chú"
+
+msgid "Retreat"
+msgstr "Bỏ chạy"
+
+msgid "Surrender"
+msgstr "Đầu hàng"
+
+msgid "Cancel"
+msgstr "Từ bỏ"
+
+msgid "Hero Screen"
+msgstr ""
+
+msgid "Captain's Options"
+msgstr ""
+
+msgid ""
+"Cast a magical spell. You may only cast one spell per combat round. The "
+"round is reset when every creature has had a turn."
+msgstr ""
+"Niệm một phép thuật kỳ diệu. Ngươi chỉ có thể niệm một câu thần chú cho mỗi "
+"vòng chiến đấu. Vòng được đặt lại khi mọi sinh vật đã có một lượt."
+
+msgid ""
+"Retreat your hero, abandoning your creatures. Your hero will be available "
+"for you to recruit again, however, the hero will have only a novice hero's "
+"forces."
+msgstr ""
+"Rút lui tướng của ngươi, từ bỏ sinh vật của ngươi. Tướng của ngươi sẽ có sẵn "
+"để bạn chiêu mộ lại, tuy nhiên, tướng sẽ chỉ có lực lượng của một tướng mới."
+
+msgid ""
+"Surrendering costs gold. However if you pay the ransom, the hero and all of "
+"his or her surviving creatures will be available to recruit again."
+msgstr ""
+"Đầu hàng tốn vàng. Tuy nhiên, nếu ngươi trả tiền chuộc, tướng và tất cả "
+"những sinh vật còn sống sót của anh ta hoặc cô ta sẽ sẵn sàng để chiêu mộ "
+"lại."
+
+msgid "Open Hero Screen to view full information about the hero."
+msgstr "Mở Màn hình Tướng để xem thông tin đầy đủ về Tướng."
+
+msgid "Return to the battle."
+msgstr "Quay lại trận chiến."
+
+msgid "Not enough gold (%{gold})"
+msgstr "Không đủ vàng (%{gold})"
+
+msgid "%{name} states:"
+msgstr "%{name} tình trạng:"
+
+msgid "Captain of %{name} states:"
+msgstr ""
+
+msgid ""
+"\"I will accept your surrender and grant you and your troops safe passage "
+"for the price of %{price} gold.\""
+msgstr ""
+"\"Ta sẽ chấp nhận sự đầu hàng của ngươi và cấp cho ngươi và quân đội của "
+"ngươi lối đi an toàn với giá %{price} vàng.\""
+
+msgid "View %{monster} info"
+msgstr "Xem thông tin %{monster}"
+
+msgid "Fly %{monster} here"
+msgstr "Bay %{monster} tới đây"
+
+msgid "Move %{monster} here"
+msgstr "Chuyển %{monster} tới đây"
+
+msgid "Shoot %{monster}"
+msgstr "Bắn %{monster}"
+
+msgid "(1 shot left)"
+msgid_plural "(%{count} shots left)"
+msgstr[0] ""
+
+msgid "Attack %{monster}"
+msgstr "Tấn công %{monster}"
+
+msgid "Turn %{turn}"
+msgstr "Lượt %{turn}"
+
+msgid "Teleport here"
+msgstr "Dịch chuyển tới đây"
+
+msgid "Invalid teleport destination"
+msgstr "Điểm đến dịch chuyển tức thời không hợp lệ"
+
+msgid "Cast %{spell} on %{monster}"
+msgstr "Niệm %{spell} lên %{monster}"
+
+msgid "Cast %{spell}"
+msgstr "Niệm %{spell}"
+
+msgid "Select spell target"
+msgstr "Chọn mục tiêu niệm chú"
+
+msgid "View Ballista info"
+msgstr ""
+
+msgid "Ballista"
+msgstr ""
+
+msgid "Enable auto combat"
+msgstr "Kích hoạt tự động chiến đấu"
+
+msgid "Allows the computer to fight out the battle for you."
+msgstr "Cho phép máy tính chiến đấu thay ngươi."
+
+msgid "Auto Combat"
+msgstr "Tự động Chiến đấu"
+
+msgid "Customize system options"
+msgstr "Tùy chỉnh tùy chọn hệ thống"
+
+msgid "Allows you to customize the combat screen."
+msgstr "Cho phép ngươi tùy chỉnh màn hình chiến đấu."
+
+msgid "System Options"
+msgstr "Tùy chọn Hệ thống"
+
+msgid "Skip this unit"
+msgstr "Bỏ qua đơn vị này"
+
+msgid "Skip"
+msgstr "Bỏ qua"
+
+msgid ""
+"Skips the current creature. The current creature ends its turn and does not "
+"get to go again until the next round."
+msgstr ""
+"Bỏ qua sinh vật hiện tại. Sinh vật hiện tại kết thúc lượt của nó và không "
+"được đi tiếp cho đến vòng tiếp theo."
+
+msgid "View Captain's options"
+msgstr ""
+
+msgid "View Hero's options"
+msgstr "Xem tùy chọn Tướng"
+
+msgid "View opposing Captain"
+msgstr ""
+
+msgid "View opposing Hero"
+msgstr "Xem Tướng địch"
+
+msgid "Hide logs"
+msgstr "Ẩn ghi chép"
+
+msgid "Show logs"
+msgstr "Hiện ghi chép"
+
+msgid "Message Bar"
+msgstr ""
+
+msgid "Shows the results of individual monster's actions."
+msgstr "Hiển thị kết quả hành động của từng quái vật."
+
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Ngươi có chắc chắn muốn kết thúc trận chiến ở chế độ tự động không?"
+
+msgid "%{name} skip their turn."
+msgstr "%{name} bỏ lượt."
+
+msgid "%{attacker} does %{damage} damage."
+msgid_plural "%{attacker} do %{damage} damage."
+msgstr[0] ""
+
+msgid "1 creature perishes."
+msgid_plural "%{count} creatures perish."
+msgstr[0] "1 sinh vật bị tiêu diệt."
+
+msgid "1 %{defender} perishes."
+msgid_plural "%{count} %{defender} perish."
+msgstr[0] "1 %{defender} bị tiêu diệt."
+
+msgid "1 soul is incorporated."
+msgid_plural "%{count} souls are incorporated."
+msgstr[0] "1 linh hồn được kết hợp."
+
+msgid "1 %{unit} is revived."
+msgid_plural "%{count} %{unit} are revived."
+msgstr[0] "1 %{unit} được hồi sinh."
+
+msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
+msgstr ""
+
+msgid "The %{name} resist the spell!"
+msgstr ""
+
+msgid "%{name} casts %{spell} on the %{troop}."
+msgstr ""
+
+msgid "%{name} casts %{spell}."
+msgstr ""
+
+msgid "The %{spell} does %{damage} damage to one undead creature."
+msgstr ""
+
+msgid "The %{spell} does %{damage} damage to all undead creatures."
+msgstr ""
+
+msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
+msgstr ""
+
+msgid "The %{spell} does %{damage} damage."
+msgstr ""
+
+msgid "The %{spell} does %{damage} damage to one living creature."
+msgstr ""
+
+msgid "The %{spell} does %{damage} damage to all living creatures."
+msgstr ""
+
+msgid "The %{attacker}' attack blinds the %{target}!"
+msgstr ""
+
+msgid "The %{attacker}' gaze turns the %{target} to stone!"
+msgstr ""
+
+msgid "The %{attacker}' curse falls upon the %{target}!"
+msgstr ""
+
+msgid "The %{target} are paralyzed by the %{attacker}!"
+msgstr ""
+
+msgid "The %{attacker} dispel all good spells on your %{target}!"
+msgstr ""
+
+msgid "The %{attacker} cast %{spell} on %{target}!"
+msgstr ""
+
+msgid "Bad luck descends on the %{attacker}."
+msgstr ""
+
+msgid "Good luck shines on the %{attacker}."
+msgstr ""
+
+msgid "High morale enables the %{monster} to attack again."
+msgstr ""
+
+msgid "Low morale causes the %{monster} to freeze in panic."
+msgstr ""
+
+msgid "%{tower} does %{damage} damage."
+msgstr ""
+
+msgid "The mirror image is created."
+msgstr ""
+
+msgid "The mirror image is destroyed!"
+msgstr ""
+
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Ngươi có chắc chắn muốn làm gián đoạn trận chiến tự động không?"
+
+msgid "Error"
+msgstr "Lỗi"
+
+msgid "No spells to cast."
+msgstr "Không có phép thuật để niệm chú."
+
+msgid "Are you sure you want to retreat?"
+msgstr "Ngươi có chắc chắn muốn rút lui?"
+
+msgid "Retreat disabled"
+msgstr "Rút lui bị vô hiệu hóa"
+
+msgid "Surrender disabled"
+msgstr "Đầu hàng bị vô hiệu hóa"
+
+msgid "Damage: %{max}"
+msgstr "Thiệt hại: %{max}"
+
+msgid "Damage: %{min} - %{max}"
+msgstr "Thiệt hại: %{min} - %{max}"
+
+msgid "Perish: %{max}"
+msgstr "Chết %{max}"
+
+msgid "Perish: %{min} - %{max}"
+msgstr "Chết: %{min} - %{max}"
+
+msgid ""
+"Through eagle-eyed observation, %{name} is able to learn the magic spell "
+"%{spell}."
+msgstr ""
+
+msgid "Human"
+msgstr ""
+
+msgid "AI"
+msgstr ""
+
+msgid "Please select another hero."
+msgstr "Hãy chọn một tướng khác."
+
+msgid "Set Attack Skill"
+msgstr "Chọn Kỹ năng Tấn công"
+
+msgid "Set Defense Skill"
+msgstr "Chọn Kỹ năng Phòng thủ"
+
+msgid "Set Power Skill"
+msgstr "Chọn Kỹ năng Sức mạnh"
+
+msgid "Set Knowledge Skill"
+msgstr "Chọn Kỹ năng Tri thức"
+
+msgid "%{race1} %{name1}"
+msgstr ""
+
+msgid "vs"
+msgstr "vs"
+
+msgid "%{race2} %{name2}"
+msgstr ""
+
+msgid "Monsters"
+msgstr "Quái vật"
+
+msgid "N/A"
+msgstr ""
+
+msgid "Left Turret"
+msgstr "Tháp canh Trái"
+
+msgid "Right Turret"
+msgstr "Tháp canh Phải"
+
+msgid "The %{name} fires with the strength of %{count} Archers"
+msgstr ""
+
+msgid "each with a +%{attack} bonus to their attack skill."
+msgstr ""
+
+msgid "The %{name} is destroyed."
+msgstr ""
+
+msgid ""
+"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
+"spell."
+msgstr ""
+
+msgid "%{count} %{name} rises from the dead!"
+msgid_plural "%{count} %{name} rise from the dead!"
+msgstr[0] ""
+
+msgid "Dwarven Alliance"
+msgstr "Liên minh Người lùn"
+
+msgid "Sorceress Guild"
+msgstr ""
+
+msgid "Necromancer Guild"
+msgstr ""
+
+msgid "Ogre Alliance"
+msgstr "Liên minh Yêu tinh"
+
+msgid "Dwarfbane"
+msgstr ""
+
+msgid "Dragon Alliance"
+msgstr "Liên minh Rồng"
+
+msgid "Elven Alliance"
+msgstr ""
+
+msgid "Kraeger defeated"
+msgstr ""
+
+msgid "Wayward Son"
+msgstr ""
+
+msgid "Uncle Ivan"
+msgstr "Bác Ivan"
+
+msgid "Annexation"
+msgstr ""
+
+msgid "Force of Arms"
+msgstr ""
+
+msgid "Save the Dwarves"
+msgstr "Cứu Người lùn"
+
+msgid "Carator Mines"
+msgstr ""
+
+msgid "Turning Point"
+msgstr "Bước Ngoặt"
+
+msgid "scenarioName|Defender"
+msgstr "scenarioName|Bên thủ"
+
+msgid "Corlagon's Defense"
+msgstr ""
+
+msgid "The Crown"
+msgstr "Vương Miện"
+
+msgid "The Gauntlet"
+msgstr "Thách thức"
+
+
+msgid "Betrayal"
+msgstr "Sự phản bội"
+
+msgid "Final Justice"
+msgstr "Công lý Cuối cùng"
+
+msgid ""
+"Roland needs you to defeat the lords near his castle to begin his war of "
+"rebellion against his brother.  They are not allied with each other, so they "
+"will spend most of their time fighting with one another.  Victory is yours "
+"when you have defeated all of their castles and heroes."
+msgstr ""
+"Roland cần bạn đánh bại các lãnh chúa gần lâu đài của anh ta để bắt đầu cuộc "
+"chiến nổi dậy chống lại anh trai mình. Họ không liên minh với nhau, vì vậy "
+"họ sẽ dành phần lớn thời gian để chiến đấu với nhau. Chiến thắng là của bạn "
+"khi bạn đã đánh bại tất cả các lâu đài và anh hùng của họ."
+
+msgid ""
+"The local lords refuse to swear allegiance to Roland, and must be subdued. "
+"They are wealthy and powerful, so be prepared for a tough fight. Capture all "
+"enemy castles to win."
+msgstr ""
+"Các lãnh chúa địa phương từ chối thề trung thành với Roland, và phải khuất "
+"phục. Họ giàu có và quyền lực, vì vậy hãy chuẩn bị cho một cuộc chiến khó "
+"khăn. Đánh chiếm tất cả các lâu đài của kẻ thù để giành chiến thắng."
+
+msgid ""
+"Your task is to defend the Dwarves against Archibald's forces. Capture all "
+"of the enemy towns and castles to win, and be sure not to lose all of the "
+"dwarf towns at once, or the enemy will have won."
+msgstr ""
+"Nhiệm vụ của bạn là bảo vệ Người lùn chống lại lực lượng của Archibald. Đánh "
+"chiếm tất cả các thị trấn và lâu đài của kẻ thù để giành chiến thắng, đồng "
+"thời đảm bảo không để mất tất cả các thị trấn của người lùn cùng một lúc, "
+"nếu không kẻ thù sẽ chiến thắng."
+
+msgid ""
+"You will face four allied enemies in a straightforward fight for resource "
+"and treasure. Capture all of the enemy castles for victory."
+msgstr ""
+"Bạn sẽ đối mặt với bốn kẻ thù đồng minh trong một cuộc chiến đơn giản để "
+"giành lấy tài nguyên và kho báu. Nắm bắt tất cả các lâu đài của kẻ thù để "
+"giành chiến thắng."
+
+msgid ""
+"Your enemies are allied against you and start close by, so be ready to come "
+"out fighting. You will need to own all four castles in this small valley to "
+"win."
+msgstr ""
+"Kẻ thù của bạn đang liên minh chống lại bạn và bắt đầu áp sát, vì vậy hãy "
+"sẵn sàng chiến đấu. Bạn sẽ cần phải sở hữu cả bốn lâu đài trong thung lũng "
+"nhỏ này để giành chiến thắng."
+
+msgid ""
+"The Sorceress' guild of Noraston has requested Roland's aid against an "
+"attack from Archibald's allies. Capture all of the enemy castles to win, and "
+"don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy "
+"castle on an island in the ocean.)"
+msgstr ""
+"Hội phù thủy Noraston đã yêu cầu sự trợ giúp của Roland chống lại cuộc tấn "
+"công từ các đồng minh của Archibald. Đánh chiếm tất cả các lâu đài của kẻ "
+"thù để giành chiến thắng và đừng để mất Noraston, nếu không bạn sẽ thua kịch "
+"bản. (Gợi ý: Có một lâu đài của kẻ thù trên một hòn đảo giữa đại dương.)"
+
+msgid ""
+"Gather as large an army as possible and capture the enemy castle within 8 "
+"weeks. You are opposed by only one enemy, but must travel a long way to get "
+"to the enemy castle. Any troops you have in your army at the end of this "
+"scenario will be with you in the final battle."
+msgstr ""
+"Tập hợp một đội quân lớn nhất có thể và chiếm được lâu đài của kẻ thù trong "
+"vòng 8 tuần. Bạn chỉ bị một kẻ thù chống lại, nhưng phải đi một quãng đường "
+"dài để đến được lâu đài của kẻ thù. Bất kỳ đội quân nào bạn có trong quân "
+"đội của mình khi kết thúc kịch bản này sẽ ở bên bạn trong trận chiến cuối "
+"cùng."
+
+msgid ""
+"Find the Crown before Archibald's heroes find it. Roland will need the Crown "
+"for the final battle against Archibald."
+msgstr ""
+"Tìm Vương miện trước khi các anh hùng của Archibald tìm thấy nó. Roland sẽ "
+"cần Vương miện cho trận chiến cuối cùng với Archibald."
+
+msgid ""
+"Three allied enemies stand before you and victory, including Lord Corlagon. "
+"Roland is in a castle to the northwest, and you will lose if he falls to the "
+"enemy. Remember that capturing Lord Corlagon will ensure that he will not "
+"fight against you in the final scenario."
+msgstr ""
+"Ba kẻ thù đồng minh đứng trước bạn và chiến thắng, bao gồm cả Lord Corlagon. "
+"Roland đang ở trong một lâu đài ở phía tây bắc, và bạn sẽ thua nếu anh ta "
+"rơi vào tay kẻ thù. Hãy nhớ rằng việc bắt giữ Lord Corlagon sẽ đảm bảo rằng "
+"anh ta sẽ không chiến đấu chống lại bạn trong kịch bản cuối cùng."
+
+msgid ""
+"This is the final battle. Both you and your enemy are armed to the teeth, "
+"and all are allied against you. Capture Archibald to end the war!"
+msgstr ""
+"Đây là trận chiến cuối cùng. Cả bạn và kẻ thù của bạn đều được trang bị tận "
+"răng, và tất cả đều liên minh chống lại bạn. Bắt giữ Archibald để kết thúc "
+"chiến tranh!"
+
+msgid ""
+"Switching sides leaves you with three castles against the enemy's one.  This "
+"battle will be the easiest one you will face for the rest of the war..."
+"traitor."
+msgstr ""
+"Đổi bên để lại cho bạn ba lâu đài chống lại một lâu đài của kẻ thù. Trận "
+"chiến này sẽ là trận chiến dễ dàng nhất mà bạn phải đối mặt trong phần còn "
+"lại của cuộc chiến...kẻ phản bội."
+
+msgid "Barbarian Wars"
+msgstr ""
+
+msgid "First Blood"
+msgstr "Đầu Công trạng"
+
+msgid "Necromancers"
+msgstr ""
+
+msgid "Slay the Dwarves"
+msgstr ""
+
+msgid "Country Lords"
+msgstr ""
+
+msgid "Dragon Master"
+msgstr ""
+
+msgid "Rebellion"
+msgstr "Nổi loạn"
+
+msgid "Apocalypse"
+msgstr "Tận thế"
+
+msgid "Greater Glory"
+msgstr ""
+
+msgid ""
+"King Archibald requires you to defeat the three enemies in this region.  "
+"They are not allied with one another, so they will spend most of their "
+"energy fighting amongst themselves.  You will win when you own all of the "
+"enemy castles and there are no more heroes left to fight."
+msgstr ""
+"Vua Archibald yêu cầu bạn đánh bại ba kẻ thù trong khu vực này. Họ không "
+"liên minh với nhau, vì vậy họ sẽ dành phần lớn năng lượng để chiến đấu với "
+"nhau. Bạn sẽ giành chiến thắng khi sở hữu tất cả các lâu đài của kẻ thù và "
+"không còn anh hùng nào để chiến đấu."
+
+msgid ""
+"You must unify the barbarian tribes of the north by conquering them. As in "
+"the previous mission, the enemy is not allied against you, but they have "
+"more resources at their disposal. You will win when you own all of the enemy "
+"castles and there are no more heroes left to fight."
+msgstr ""
+"Bạn phải thống nhất các bộ lạc man rợ ở phía bắc bằng cách chinh phục họ. "
+"Như trong nhiệm vụ trước, kẻ thù không liên minh chống lại bạn, nhưng chúng "
+"có nhiều tài nguyên hơn để sử dụng. Bạn sẽ giành chiến thắng khi sở hữu tất "
+"cả các lâu đài của kẻ thù và không còn anh hùng nào để chiến đấu."
+
+msgid ""
+"Do-gooder wizards have taken the Necromancers' castle. You must retake it to "
+"achieve victory. Remember that while you start with a powerful army, you "
+"have no castle and must take one within 7 days, or lose this battle. (Hint: "
+"The nearest castle is to the southeast.)"
+msgstr ""
+"Các pháp sư làm điều tốt hơn đã chiếm lâu đài của các Necromancer. Bạn phải "
+"chiếm lại nó để đạt được chiến thắng. Hãy nhớ rằng trong khi bạn bắt đầu với "
+"một đội quân hùng mạnh, bạn không có lâu đài nào và phải chiếm lấy một lâu "
+"đài trong vòng 7 ngày, nếu không sẽ thua trận này. (Gợi ý: Lâu đài gần nhất "
+"nằm ở phía đông nam.)"
+
+msgid ""
+"The dwarves need conquering before they can interfere in King Archibald's "
+"plans. Roland's forces have more than one hero and many towns to start with, "
+"so be ready for attack from multiple directions. You must capture all of the "
+"enemy towns and castles to claim victory."
+msgstr ""
+"Những người lùn cần chinh phục trước khi họ có thể can thiệp vào kế hoạch "
+"của Vua Archibald. Lực lượng của Roland có nhiều hơn một anh hùng và nhiều "
+"thị trấn để bắt đầu, vì vậy hãy sẵn sàng tấn công từ nhiều hướng. Bạn phải "
+"chiếm được tất cả các thị trấn và lâu đài của kẻ thù để giành chiến thắng."
+
+msgid ""
+"You must put down a peasant revolt led by Roland's forces. All are allied "
+"against you, but you have Lord Corlagon, an experienced hero, to help you. "
+"Capture all enemy castles to win."
+msgstr ""
+"Bạn phải dập tắt cuộc nổi dậy của nông dân do lực lượng của Roland lãnh đạo. "
+"Tất cả đều liên minh chống lại bạn, nhưng bạn có Chúa Corlagon, một anh hùng "
+"giàu kinh nghiệm, để giúp bạn. Đánh chiếm tất cả các lâu đài của kẻ thù để "
+"giành chiến thắng."
+
+msgid ""
+"There are two enemies allied against you in this mission. Both are well "
+"armed and seek to evict you from their island. Avoid them and capture Dragon "
+"City to win."
+msgstr ""
+"Có hai kẻ thù liên minh chống lại bạn trong nhiệm vụ này. Cả hai đều được "
+"trang bị vũ khí tốt và tìm cách đuổi bạn khỏi hòn đảo của họ. Tránh chúng và "
+"chiếm Dragon City để giành chiến thắng."
+
+msgid ""
+"Your orders are to conquer the country lords that have sworn to serve "
+"Roland. All of the enemy castles are unified against you. Since you start "
+"without a castle, you must hurry to capture one before the end of the week. "
+"Capture all enemy castles for victory."
+msgstr ""
+"Mệnh lệnh của bạn là chinh phục các lãnh chúa đất nước đã thề phục vụ "
+"Roland. Tất cả các lâu đài của kẻ thù được thống nhất chống lại bạn. Vì bạn "
+"bắt đầu mà không có lâu đài, nên bạn phải nhanh chóng chiếm được một lâu đài "
+"trước cuối tuần. Nắm bắt tất cả các lâu đài của kẻ thù để giành chiến thắng."
+
+msgid ""
+"Find the Crown before Roland's heroes find it. Archibald will need the Crown "
+"for the final battle against Roland."
+msgstr ""
+"Tìm Vương miện trước khi các anh hùng của Roland tìm thấy nó. Archibald sẽ "
+"cần Vương miện cho trận chiến cuối cùng với Roland."
+
+msgid ""
+"This is the final battle. Both you and your enemy are armed to the teeth, "
+"and all are allied against you. Capture Roland to win the war, and be sure "
+"not to lose Archibald in the fight!"
+msgstr ""
+"Đây là trận chiến cuối cùng. Cả bạn và kẻ thù của bạn đều được trang bị tận "
+"răng, và tất cả đều liên minh chống lại bạn. Bắt giữ Roland để giành chiến "
+"thắng trong cuộc chiến và đảm bảo không để thua Archibald trong cuộc chiến!"
+
+msgid "Arrow's Flight"
+msgstr ""
+
+msgid "Island of Chaos"
+msgstr "Đảo Hỗn loạn"
+
+msgid "The Abyss"
+msgstr "Vực thẳm"
+
+msgid "Uprising"
+msgstr "Khởi nghĩa"
+
+msgid "Aurora Borealis"
+msgstr "Bình minh phương Bắc"
+
+msgid "Betrayal's End"
+msgstr "Kết thúc Phản bội"
+
+msgid "Corruption's Heart"
+msgstr "Trái tim Tham nhũng"
+
+msgid "The Giant's Pass"
+msgstr "Đèo Cả"
+
+msgid ""
+"Subdue the unruly local lords in order to provide the Empire with facilities "
+"to operate in this region."
+msgstr ""
+"Khuất phục các lãnh chúa địa phương ngang ngược để cung cấp cho Đế chế các "
+"cơ sở hoạt động trong khu vực này."
+
+msgid ""
+"Eliminate all opposition in this area. Then the first piece of the artifact "
+"will be yours."
+msgstr ""
+"Loại bỏ tất cả các đối lập trong lĩnh vực này. Phần đầu tiên của hiện vật sẽ "
+"là của bạn."
+
+msgid ""
+"The sorceresses to the northeast are rebelling! For the good of the empire "
+"you must quash their feeble uprising on your way to the mountains."
+msgstr ""
+"Các phù thủy ở phía đông bắc đang nổi dậy! Vì lợi ích của đế chế, bạn phải "
+"dập tắt cuộc nổi dậy yếu ớt của chúng trên đường đến vùng núi."
+
+msgid ""
+"Having prepared for your arrival, Kraeger has arranged for a force of "
+"necromancers to thwart your quest. You must capture the castle of Scabsdale "
+"before the first day of the third week, or the Necromancers will be too "
+"strong for you."
+msgstr ""
+"Sau khi chuẩn bị sẵn sàng cho sự xuất hiện của bạn, Kraeger đã sắp xếp một "
+"lực lượng các pháp sư gọi hồn để cản trở nhiệm vụ của bạn. Bạn phải chiếm "
+"được lâu đài Scabsdale trước ngày đầu tiên của tuần thứ ba, nếu không các "
+"Necromancer sẽ quá mạnh đối với bạn."
+
+msgid ""
+"The barbarian despot in this area is, as yet, ignorant of your presence. "
+"Quickly, build up your forces before you are discovered and attacked! Secure "
+"the region by subduing all enemy forces."
+msgstr ""
+"Kẻ chuyên quyền man rợ trong khu vực này vẫn không biết gì về sự hiện diện "
+"của bạn. Nhanh chóng, xây dựng lực lượng của bạn trước khi bạn bị phát hiện "
+"và tấn công! Bảo vệ khu vực bằng cách khuất phục tất cả các lực lượng của kẻ "
+"thù."
+
+msgid ""
+"The Empire is weak in this region. You will be unable to completely subdue "
+"all forces in this area, so take what you can before reprisal strikes. "
+"Remember, your true goal is to claim the Helmet of Anduran."
+msgstr ""
+"Đế chế yếu trong khu vực này. Bạn sẽ không thể khuất phục hoàn toàn tất cả "
+"các lực lượng trong khu vực này, vì vậy hãy lấy những gì bạn có thể trước "
+"khi tấn công trả đũa. Hãy nhớ rằng, mục tiêu thực sự của bạn là giành được "
+"Mũ bảo hiểm của Anduran."
+
+msgid "For the good of the Empire, eliminate Kraeger."
+msgstr "Vì lợi ích của Đế chế, hãy loại bỏ Kraeger."
+
+msgid ""
+"At last, you have the opportunity and the facilities to rid the Empire of "
+"the necromancer's evil. Eradicate them completely, and you will be sung as a "
+"hero for all time."
+msgstr ""
+"Cuối cùng, bạn có cơ hội và phương tiện để loại bỏ Đế chế khỏi cái ác của kẻ "
+"phá hoại. Tiêu diệt chúng hoàn toàn, và bạn sẽ được tôn vinh như một anh "
+"hùng mọi thời đại."
+
+msgid "Border Towns"
+msgstr "Trấn Biên thùy"
+
+msgid "Conquer and Unify"
+msgstr "Chinh phục và Thống nhất"
+
+msgid "Crazy Uncle Ivan"
+msgstr ""
+
+msgid "The Wayward Son"
+msgstr ""
+
+msgid "Ivory Gates"
+msgstr "Cổng Ngà"
+
+msgid "The Elven Lands"
+msgstr "Đảo Yêu quái"
+
+msgid "The Epic Battle"
+msgstr "Trận chiến Sử thi"
+
+msgid "The Southern War"
+msgstr "Cuộc chiến phương Nam"
+
+msgid ""
+"Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
+"forefather of all descendants."
+msgstr ""
+"Chinh phục và thống nhất tất cả các bộ lạc kẻ thù. Đừng đánh mất anh hùng "
+"Jarkonas, tổ tiên của tất cả con cháu."
+
+msgid ""
+"Your rival, the Kingdom of Harondale, is attacking weak towns on your "
+"border! Recover from their first strike and crush them completely!"
+msgstr ""
+"Đối thủ của bạn, Vương quốc Harondale, đang tấn công các thị trấn yếu ở biên "
+"giới của bạn! Phục hồi từ cuộc tấn công đầu tiên của họ và nghiền nát họ "
+"hoàn toàn!"
+
+msgid ""
+"Find your wayward son Joseph who is rumored to be living in the desolate "
+"lands. Do it before the first day of the third month or it will be of no "
+"help to your family."
+msgstr ""
+"Tìm đứa con trai bướng bỉnh Joseph của bạn, người được đồn đại là đang sống "
+"ở những vùng đất hoang vắng. Hãy làm điều đó trước ngày đầu tiên của tháng "
+"thứ ba nếu không nó sẽ chẳng giúp ích được gì cho gia đình bạn."
+
+msgid ""
+"Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
+"month or it will be no help to your kingdom."
+msgstr ""
+"Giải cứu chú Ivan điên rồ của bạn. Tìm anh ta trước ngày đầu tiên của tháng "
+"thứ tư, nếu không sẽ chẳng ích gì cho vương quốc của bạn."
+
+msgid ""
+"Destroy the barbarians who are attacking the southern border of your "
+"kingdom! Recover your fallen towns, and then invade the jungle kingdom. "
+"Leave no enemy standing."
+msgstr ""
+"Tiêu diệt những kẻ man rợ đang tấn công biên giới phía nam vương quốc của "
+"bạn! Khôi phục các thị trấn đã sụp đổ của bạn, sau đó xâm chiếm vương quốc "
+"rừng rậm. Không để kẻ thù đứng yên."
+
+msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
+msgstr "Chiếm lại lâu đài Ivory Gates đã sụp đổ do bị phản bội."
+
+msgid ""
+"Gain the favor of the elves. They will not allow trees to be chopped down, "
+"so they will send you wood every 2 weeks. You must complete your mission "
+"before the first day of the seventh month, or the kingdom will surely fall."
+msgstr ""
+"Giành được sự ưu ái của yêu tinh. Họ sẽ không cho phép chặt cây, vì vậy họ "
+"sẽ gửi cho bạn gỗ 2 tuần một lần. Bạn phải hoàn thành nhiệm vụ của mình "
+"trước ngày đầu tiên của tháng thứ bảy, nếu không vương quốc chắc chắn sẽ sụp "
+"đổ."
+
+msgid ""
+"This is the final battle against your rival kingdom of Harondale. Eliminate "
+"everyone, and don't lose the hero Jarkonas VI."
+msgstr ""
+"Đây là trận chiến cuối cùng chống lại vương quốc Harondale đối thủ của bạn. "
+"Loại bỏ tất cả mọi người và đừng để mất anh hùng Jarkonas VI."
+
+msgid "Fount of Wizardry"
+msgstr "Suối nguồn Ma thuật"
+
+msgid "Power's End"
+msgstr "Chấm dứt Quyền lực"
+
+msgid "The Eternal Scrolls"
+msgstr "Phép màu vĩnh cửu"
+
+msgid "The Shrouded Isles"
+msgstr ""
+
+msgid ""
+"Your mission is to vanquish the warring mages in the magical Shrouded Isles. "
+"The completion of this task will give you a fighting chance against your "
+"rivals."
+msgstr ""
+"Nhiệm vụ của bạn là đánh bại các pháp sư đang gây chiến trong Quần đảo "
+"Shrouded huyền diệu. Việc hoàn thành nhiệm vụ này sẽ cho bạn cơ hội chiến "
+"đấu chống lại các đối thủ của mình."
+
+msgid ""
+"The location of the great library has been discovered! You must make your "
+"way to it, and reclaim the city of Chronos in which it lies."
+msgstr ""
+"Vị trí của thư viện tuyệt vời đã được phát hiện! Bạn phải tìm đường đến đó "
+"và giành lại thành phố Chronos nơi nó tọa lạc."
+
+msgid ""
+"Find the Orb of negation, which is said to be buried in this land. There are "
+"clues inscribed on stone obelisks which will help lead you to your price. "
+"Find the orb before the first day of the sixth month, or your rivals will "
+"surely have gotten to the fount before you."
+msgstr ""
+"Tìm Orb of negation, được cho là bị chôn vùi ở vùng đất này. Có những manh "
+"mối được ghi trên các đài tưởng niệm bằng đá sẽ giúp dẫn bạn đến mức giá của "
+"mình. Tìm quả cầu trước ngày đầu tiên của tháng thứ sáu, nếu không các đối "
+"thủ của bạn chắc chắn sẽ đến được nguồn trước bạn."
+
+msgid ""
+"You must take control of the castle of Magic, where the fount of wizardry "
+"lies. Do this and your victory will be supreme."
+msgstr ""
+"Bạn phải kiểm soát lâu đài Phép thuật, nơi khởi nguồn của phép thuật. Làm "
+"điều này và chiến thắng của bạn sẽ là tối cao."
+
+msgid "Blood is Thicker"
+msgstr ""
+
+msgid "King and Country"
+msgstr "Vua và Đất nước"
+
+msgid "Pirate Isles"
+msgstr "Đảo Hải tặc"
+
+msgid "Stranded"
+msgstr "Mắc kẹt"
+
+msgid ""
+"Capture the town on the island off the southeast shore in order to construct "
+"a boat and travel back towards the mainland. Do not lose the hero Gallavant."
+msgstr ""
+"Đánh chiếm thị trấn trên hòn đảo ngoài khơi bờ biển phía đông nam để đóng "
+"một chiếc thuyền và quay trở lại đất liền. Đừng để mất anh hùng Gallavant."
+
+msgid ""
+"Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do "
+"not lose Gallavant or your quest will be over."
+msgstr ""
+"Tìm và đánh bại Martine, thủ lĩnh cướp biển, cư trú tại Pirates Cove. Đừng "
+"để mất Gallavant nếu không nhiệm vụ của bạn sẽ kết thúc."
+
+msgid ""
+"Eliminate all the other forces who oppose the rule of Lord Alberon. "
+"Gallavant must not die."
+msgstr ""
+"Loại bỏ tất cả các lực lượng khác chống lại sự cai trị của Chúa Alberon. "
+"Gallavant không được chết."
+
+msgid ""
+"Overthrow the entrenched monarchy of Lord Alberon, and claim all the land in "
+"your name. Gallavant must not die."
+msgstr ""
+"Lật đổ chế độ quân chủ cố thủ của Chúa Alberon và giành lấy toàn bộ đất đai "
+"dưới tên của bạn. Gallavant không được chết."
+
+msgid " bane"
+msgstr " tai ương"
+
+msgid " alliance"
+msgstr " đồng minh"
+
+msgid "Carry-over forces"
+msgstr "Lực lượng chuyển giao"
+
+msgid " bonus"
+msgstr " thưởng"
+
+msgid " defeated"
+msgstr " bị đánh bại"
+
+msgid " will always run away from your army."
+msgstr " sẽ luôn chạy trốn khỏi quân đội của ngươi."
+
+msgid " will be willing to join your army."
+msgstr " sẽ sẵn sàng gia nhập quân đội của ngươi."
+
+msgid "\"%{artifact}\" artifact will be carried over the scenario."
+msgstr ""
+
+msgid "The army will be carried over the scenario."
+msgstr ""
+
+msgid "The kingdom will have +%{count} %{resource} each day."
+msgstr ""
+
+msgid "\"%{spell}\" spell will be carried over the scenario."
+msgstr ""
+
+msgid "%{hero} can be hired in the scenario."
+msgstr ""
+
+msgid ""
+"%{hero} has been defeated and will not appear in the subsequent scenarios."
+msgstr ""
+
+msgid "The dwarves recognize their allies and gladly join your forces."
+msgstr ""
+
+msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
+msgstr ""
+
+msgid ""
+"The dragons, snarling and growling, agree to join forces with you, their "
+"'Ally'."
+msgstr ""
+
+msgid ""
+"As you approach the group of elves, their leader calls them all to "
+"attention.  He shouts to them, \"Who of you is brave enough to join this "
+"fearless ally of ours?\"  The group explodes with cheers as they run to join "
+"your ranks."
+msgstr ""
+
+msgid ""
+"The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
+"pass.\""
+msgstr ""
+
+msgid ""
+"The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
+msgstr ""
+
+msgid ""
+"The dragons see you and call out.  \"Our alliance with Archibald compels us "
+"to join you.  Unfortunately you have no room.  A pity!\"  They quickly "
+"scatter."
+msgstr ""
+
+msgid ""
+"The elves stand at attention as you approach.  Their leader calls to you and "
+"says, \"Let us not impede your progress, ally!  Move on, and may victory be "
+"yours.\""
+msgstr ""
+
+msgid "\"The Dwarfbane!!!!, run for your lives.\""
+msgstr ""
+
+msgid "campaignBonus|Animate Dead"
+msgstr ""
+
+msgid "campaignBonus|Chain Lightning"
+msgstr ""
+
+msgid "campaignBonus|Fireblast"
+msgstr ""
+
+msgid "campaignBonus|Mass Curse"
+msgstr ""
+
+msgid "campaignBonus|Mass Haste"
+msgstr ""
+
+msgid "campaignBonus|Mirror Image"
+msgstr ""
+
+msgid "campaignBonus|Resurrect"
+msgstr ""
+
+msgid "campaignBonus|Steelskin"
+msgstr ""
+
+msgid "campaignBonus|Summon Earth"
+msgstr ""
+
+msgid "campaignBonus|View Heroes"
+msgstr ""
+
+msgid "campaignBonus|Ballista"
+msgstr ""
+
+msgid "campaignBonus|Black Pearl"
+msgstr ""
+
+msgid "campaignBonus|Caster's Bracelet"
+msgstr ""
+
+msgid "campaignBonus|Defender Helm"
+msgstr ""
+
+msgid "campaignBonus|Breastplate"
+msgstr ""
+
+msgid "campaignBonus|Dragon Sword"
+msgstr ""
+
+msgid "campaignBonus|Fizbin Medal"
+msgstr ""
+
+msgid "campaignBonus|Foremost Scroll"
+msgstr ""
+
+msgid "campaignBonus|Gauntlets"
+msgstr ""
+
+msgid "campaignBonus|Hideous Mask"
+msgstr ""
+
+msgid "campaignBonus|Mage's Ring"
+msgstr ""
+
+msgid "campaignBonus|Major Scroll"
+msgstr ""
+
+msgid "campaignBonus|Medal of Honor"
+msgstr ""
+
+msgid "campaignBonus|Medal of Valor"
+msgstr ""
+
+msgid "campaignBonus|Minor Scroll"
+msgstr ""
+
+msgid "campaignBonus|Nomad Boots"
+msgstr ""
+
+msgid "campaignBonus|Power Axe"
+msgstr ""
+
+msgid "campaignBonus|Spiked Shield"
+msgstr ""
+
+msgid "campaignBonus|Stealth Shield"
+msgstr ""
+
+msgid "campaignBonus|Tax Lien"
+msgstr ""
+
+msgid "campaignBonus|Thunder Mace"
+msgstr ""
+
+msgid "campaignBonus|Traveler's Boots"
+msgstr ""
+
+msgid "campaignBonus|White Pearl"
+msgstr ""
+
+msgid "campaignBonus|Basic Archery"
+msgstr ""
+
+msgid "campaignBonus|Advanced Archery"
+msgstr ""
+
+msgid "campaignBonus|Expert Archery"
+msgstr ""
+
+msgid "campaignBonus|Basic Ballistics"
+msgstr ""
+
+msgid "campaignBonus|Advanced Ballistics"
+msgstr ""
+
+msgid "campaignBonus|Expert Ballistics"
+msgstr ""
+
+msgid "campaignBonus|Basic Diplomacy"
+msgstr ""
+
+msgid "campaignBonus|Advanced Diplomacy"
+msgstr ""
+
+msgid "campaignBonus|Expert Diplomacy"
+msgstr ""
+
+msgid "campaignBonus|Basic Eagle Eye"
+msgstr ""
+
+msgid "campaignBonus|Advanced Eagle Eye"
+msgstr ""
+
+msgid "campaignBonus|Expert Eagle Eye"
+msgstr ""
+
+msgid "campaignBonus|Basic Estates"
+msgstr ""
+
+msgid "campaignBonus|Advanced Estates"
+msgstr ""
+
+msgid "campaignBonus|Expert Estates"
+msgstr ""
+
+msgid "campaignBonus|Basic Leadership"
+msgstr ""
+
+msgid "campaignBonus|Advanced Leadership"
+msgstr ""
+
+msgid "campaignBonus|Expert Leadership"
+msgstr ""
+
+msgid "campaignBonus|Basic Logistics"
+msgstr ""
+
+msgid "campaignBonus|Advanced Logistics"
+msgstr ""
+
+msgid "campaignBonus|Expert Logistics"
+msgstr ""
+
+msgid "campaignBonus|Basic Luck"
+msgstr ""
+
+msgid "campaignBonus|Advanced Luck"
+msgstr ""
+
+msgid "campaignBonus|Expert Luck"
+msgstr ""
+
+msgid "campaignBonus|Basic Mysticism"
+msgstr ""
+
+msgid "campaignBonus|Advanced Mysticism"
+msgstr ""
+
+msgid "campaignBonus|Expert Mysticism"
+msgstr ""
+
+msgid "campaignBonus|Basic Navigation"
+msgstr ""
+
+msgid "campaignBonus|Advanced Navigation"
+msgstr ""
+
+msgid "campaignBonus|Expert Navigation"
+msgstr ""
+
+msgid "campaignBonus|Basic Necromancy"
+msgstr ""
+
+msgid "campaignBonus|Advanced Necromancy"
+msgstr ""
+
+msgid "campaignBonus|Expert Necromancy"
+msgstr ""
+
+msgid "campaignBonus|Basic Pathfinding"
+msgstr ""
+
+msgid "campaignBonus|Advanced Pathfinding"
+msgstr ""
+
+msgid "campaignBonus|Expert Pathfinding"
+msgstr ""
+
+msgid "campaignBonus|Basic Scouting"
+msgstr ""
+
+msgid "campaignBonus|Advanced Scouting"
+msgstr ""
+
+msgid "campaignBonus|Expert Scouting"
+msgstr ""
+
+msgid "campaignBonus|Basic Wisdom"
+msgstr ""
+
+msgid "campaignBonus|Advanced Wisdom"
+msgstr ""
+
+msgid "campaignBonus|Expert Wisdom"
+msgstr ""
+
+msgid ""
+"The main hero will have \"%{artifact}\" artifact at the start of the "
+"scenario."
+msgstr ""
+
+msgid ""
+"The kingdom will receive %{amount} additional %{resource} at the start of "
+"the scenario."
+msgstr ""
+
+msgid ""
+"The kingdom will have %{amount} less %{resource} at the start of the "
+"scenario."
+msgstr ""
+
+msgid ""
+"The main hero will have %{count} %{monster} at the start of the scenario."
+msgstr ""
+
+msgid ""
+"The main hero will have \"%{spell}\" spell at the start of the scenario."
+msgstr ""
+
+msgid "The starting race of the scenario will be %{race}."
+msgstr ""
+
+msgid ""
+"The main hero will have additional %{count} %{skill} at the start of the "
+"scenario."
+msgstr ""
+
+msgid "The main hero will have %{skill} at the start of the scenario."
+msgstr ""
+
+msgid "Roland"
+msgstr "Roland"
+
+msgid "Archibald"
+msgstr "Archibald"
+
+msgid "The Price of Loyalty"
+msgstr "Giá của Lòng Trung Thành"
+
+msgid "Voyage Home"
+msgstr "Trở về Nhà"
+
+msgid "Wizard's Isle"
+msgstr "Đảo phù thủy"
+
+msgid "Descendants"
+msgstr "Huậ duệ"
+
+msgid "The %{building} produces %{monster}."
+msgstr ""
+
+msgid "Requires:"
+msgstr "Đòi hỏi:"
+
+msgid "Cannot build. You have already built here today."
+msgstr "Không thể xây dựng. Ngươi đã xây dựng ở đây ngày hôm nay."
+
+msgid "For this action it is necessary to build a castle first."
+msgstr ""
+
+msgid "Cannot build %{name} because castle is too far from water."
+msgstr ""
+
+msgid "disable build."
+msgstr "xây dựng bị vô hiệu."
+
+msgid "Cannot afford %{name}."
+msgstr ""
+
+msgid "%{name} is already built."
+msgstr ""
+
+msgid "Cannot build %{name}."
+msgstr ""
+
+msgid "Build %{name}."
+msgstr ""
+
+msgid "Blackridge"
+msgstr ""
+
+msgid "Hillstone"
+msgstr ""
+
+msgid "Pinehurst"
+msgstr ""
+
+msgid "Whiteshield"
+msgstr ""
+
+msgid "Woodhaven"
+msgstr ""
+
+msgid "Blackwind"
+msgstr ""
+
+msgid "Bloodreign"
+msgstr ""
+
+msgid "Dragontooth"
+msgstr ""
+
+msgid "Greywind"
+msgstr ""
+
+msgid "Portsmith"
+msgstr ""
+
+msgid "Atlantium"
+msgstr ""
+
+msgid "Middle Gate"
+msgstr ""
+
+msgid "Sansobar"
+msgstr ""
+
+msgid "Tundara"
+msgstr ""
+
+msgid "Vulcania"
+msgstr ""
+
+msgid "Baywatch"
+msgstr ""
+
+msgid "Fountainhead"
+msgstr ""
+
+msgid "Vertigo"
+msgstr ""
+
+msgid "Wildabar"
+msgstr ""
+
+msgid "Winterkill"
+msgstr ""
+
+msgid "Brindamoor"
+msgstr ""
+
+msgid "Lakeside"
+msgstr ""
+
+msgid "Nightshadow"
+msgstr ""
+
+msgid "Olympus"
+msgstr ""
+
+msgid "Sandcaster"
+msgstr ""
+
+msgid "Alamar"
+msgstr ""
+
+msgid "Burlock"
+msgstr ""
+
+msgid "Dragadune"
+msgstr ""
+
+msgid "Kalindra"
+msgstr ""
+
+msgid "Xabran"
+msgstr ""
+
+msgid "Algary"
+msgstr ""
+
+msgid "Basenji"
+msgstr ""
+
+msgid "Blackfang"
+msgstr ""
+
+msgid "New Dawn"
+msgstr ""
+
+msgid "Sorpigal"
+msgstr ""
+
+msgid "Avone"
+msgstr ""
+
+msgid "Big Oak"
+msgstr ""
+
+msgid "Chandler"
+msgstr ""
+
+msgid "Erliquin"
+msgstr ""
+
+msgid "Hampshire"
+msgstr ""
+
+msgid "Antioch"
+msgstr ""
+
+msgid "Avalon"
+msgstr ""
+
+msgid "Roc Haven"
+msgstr ""
+
+msgid "South Mill"
+msgstr ""
+
+msgid "Weed Patch"
+msgstr ""
+
+msgid "Brownston"
+msgstr ""
+
+msgid "Hilltop"
+msgstr ""
+
+msgid "Weddington"
+msgstr ""
+
+msgid "Westfork"
+msgstr ""
+
+msgid "Whittingham"
+msgstr ""
+
+msgid "Cathcart"
+msgstr ""
+
+msgid "Elk's Head"
+msgstr ""
+
+msgid "Roscomon"
+msgstr ""
+
+msgid "Sherman"
+msgstr ""
+
+msgid "Yorksford"
+msgstr ""
+
+msgid "Blackburn"
+msgstr ""
+
+msgid "Blacksford"
+msgstr ""
+
+msgid "Burton"
+msgstr ""
+
+msgid "Pig's Eye"
+msgstr ""
+
+msgid "Viper's Nest"
+msgstr ""
+
+msgid "Fenton"
+msgstr ""
+
+msgid "Lankershire"
+msgstr ""
+
+msgid "Lombard"
+msgstr ""
+
+msgid "Timberhill"
+msgstr ""
+
+msgid "Troy"
+msgstr ""
+
+msgid "Forder Oaks"
+msgstr ""
+
+msgid "Meramec"
+msgstr ""
+
+msgid "Quick Silver"
+msgstr ""
+
+msgid "Westmoor"
+msgstr ""
+
+msgid "Willow"
+msgstr ""
+
+msgid "Corackston"
+msgstr ""
+
+msgid "Sheltemburg"
+msgstr ""
+
+msgid "Cannot recruit - you already have a Hero in this town."
+msgstr ""
+
+msgid "Cannot recruit - you have too many Heroes."
+msgstr ""
+
+msgid "Cannot afford a Hero"
+msgstr ""
+
+msgid "There is no room in the garrison for this army."
+msgstr ""
+
+msgid "Fortifications"
+msgstr ""
+
+msgid "Farm"
+msgstr ""
+
+msgid "Thatched Hut"
+msgstr ""
+
+msgid "Archery Range"
+msgstr ""
+
+msgid "Upg. Archery Range"
+msgstr ""
+
+msgid "Blacksmith"
+msgstr "Lò rèn"
+
+msgid "Upg. Blacksmith"
+msgstr "NC. Lò rèn"
+
+msgid "Armory"
+msgstr ""
+
+msgid "Upg. Armory"
+msgstr ""
+
+msgid "Jousting Arena"
+msgstr ""
+
+msgid "Upg. Jousting Arena"
+msgstr ""
+
+msgid "Cathedral"
+msgstr "Thánh đường"
+
+msgid "Upg. Cathedral"
+msgstr "NC. Thánh đường"
+
+msgid "Coliseum"
+msgstr "Đấu trường"
+
+msgid "Garbage Heap"
+msgstr ""
+
+msgid "Hut"
+msgstr ""
+
+msgid "Stick Hut"
+msgstr ""
+
+msgid "Upg. Stick Hut"
+msgstr ""
+
+msgid "Den"
+msgstr ""
+
+msgid "Adobe"
+msgstr ""
+
+msgid "Upg. Adobe"
+msgstr ""
+
+msgid "Bridge"
+msgstr "Cầu"
+
+msgid "Upg. Bridge"
+msgstr "NC. Cầu"
+
+msgid "Pyramid"
+msgstr "Kim tự tháp"
+
+msgid "Rainbow"
+msgstr "Cầu vồng"
+
+msgid "Crystal Garden"
+msgstr "Vườn Pha lê"
+
+msgid "Treehouse"
+msgstr ""
+
+msgid "Cottage"
+msgstr ""
+
+msgid "Upg. Cottage"
+msgstr ""
+
+msgid "Stonehenge"
+msgstr ""
+
+msgid "Upg. Stonehenge"
+msgstr ""
+
+msgid "Fenced Meadow"
+msgstr ""
+
+msgid "sorceress|Red Tower"
+msgstr ""
+
+msgid "Dungeon"
+msgstr "Ngục tối"
+
+msgid "Waterfall"
+msgstr "Thác nước"
+
+msgid "Cave"
+msgstr "Hang"
+
+msgid "Crypt"
+msgstr ""
+
+msgid "Nest"
+msgstr ""
+
+msgid "Maze"
+msgstr "Mê cung"
+
+msgid "Upg. Maze"
+msgstr "NC. Mê cung"
+
+msgid "Swamp"
+msgstr ""
+
+msgid "Green Tower"
+msgstr "Tháp Xanh"
+
+msgid "warlock|Red Tower"
+msgstr "warlock|Tháp Đỏ"
+
+msgid "Black Tower"
+msgstr "Tháp Đen"
+
+msgid "Library"
+msgstr "Thư viện"
+
+msgid "Orchard"
+msgstr ""
+
+msgid "Habitat"
+msgstr ""
+
+msgid "Pen"
+msgstr ""
+
+msgid "Foundry"
+msgstr "Xưởng đúc"
+
+msgid "Upg. Foundry"
+msgstr "NC. Xưởng đúc"
+
+msgid "Cliff Nest"
+msgstr ""
+
+msgid "Ivory Tower"
+msgstr "Tháp Ngà"
+
+msgid "Upg. Ivory Tower"
+msgstr "NC. Tháp Ngà"
+
+msgid "Cloud Castle"
+msgstr "Lâu đài Mây"
+
+msgid "Upg. Cloud Castle"
+msgstr "NC. Lâu đài Mây"
+
+msgid "Storm"
+msgstr ""
+
+msgid "Skull Pile"
+msgstr ""
+
+msgid "Excavation"
+msgstr ""
+
+msgid "Graveyard"
+msgstr ""
+
+msgid "Upg. Graveyard"
+msgstr ""
+
+msgid "Upg. Pyramid"
+msgstr "NC. Kim tự tháp"
+
+msgid "Mansion"
+msgstr "Biệt thự"
+
+msgid "Upg. Mansion"
+msgstr "NC. Biệt thự"
+
+msgid "Mausoleum"
+msgstr "Lăng mộ"
+
+msgid "Upg. Mausoleum"
+msgstr "NC. Lăng mộ"
+
+msgid "Laboratory"
+msgstr "Phòng thí nghiệm"
+
+msgid "Shrine"
+msgstr "Đền thờ"
+
+msgid ""
+"The Fortifications increase the toughness of the walls, increasing the "
+"number of turns it takes to knock them down."
+msgstr ""
+"Công sự tăng cường độ dẻo dai của các bức tường, tăng số lượt cần thiết để "
+"đánh sập chúng."
+
+msgid "The Farm increases production of Peasants by %{count} per week."
+msgstr ""
+
+msgid ""
+"The Coliseum provides inspiring spectacles to defending troops, raising "
+"their morale by two during combat."
+msgstr ""
+"Đấu trường La Mã cung cấp những cảnh tượng đầy cảm hứng cho quân phòng thủ, "
+"nâng cao tinh thần của họ lên gấp đôi trong khi chiến đấu."
+
+msgid "The Garbage Heap increases production of Goblins by %{count} per week."
+msgstr ""
+
+msgid "The Rainbow increases the luck of the defending units by two."
+msgstr "Cầu vồng tăng gấp đôi may mắn cho các đơn vị phòng thủ."
+
+msgid ""
+"The Crystal Garden increases production of Sprites by %{count} per week."
+msgstr ""
+
+msgid "The Dungeon increases the income of the town by %{count} gold per day."
+msgstr ""
+
+msgid "The Waterfall increases production of Centaurs by %{count} per week."
+msgstr ""
+
+msgid ""
+"The Library increases the number of spells in the Guild by one for each "
+"level of the guild."
+msgstr ""
+"Thư viện tăng số lượng phép thuật trong Bang hội lên một cho mỗi cấp độ của "
+"Bang hội."
+
+msgid "The Orchard increases production of Halflings by %{count} per week."
+msgstr ""
+
+msgid "The Storm adds +2 to the power of spells of a defending spell caster."
+msgstr ""
+
+msgid "The Skull Pile increases production of Skeletons by %{count} per week."
+msgstr ""
+
+msgid "Thieves' Guild"
+msgstr ""
+
+msgid "Tavern"
+msgstr "Tửu quán"
+
+msgid "Shipyard"
+msgstr "Xưởng tàu"
+
+msgid "Well"
+msgstr "Giếng"
+
+msgid "Statue"
+msgstr "Tượng"
+
+msgid "Marketplace"
+msgstr "Chợ"
+
+msgid "Moat"
+msgstr "Hào"
+
+msgid "Castle"
+msgstr "Lâu đài"
+
+msgid "Tent"
+msgstr "Lều"
+
+msgid "Captain's Quarters"
+msgstr ""
+
+msgid "Mage Guild, Level 1"
+msgstr ""
+
+msgid "Mage Guild, Level 2"
+msgstr ""
+
+msgid "Mage Guild, Level 3"
+msgstr ""
+
+msgid "Mage Guild, Level 4"
+msgstr ""
+
+msgid "Mage Guild, Level 5"
+msgstr ""
+
+msgid ""
+"The Shrine increases the necromancy skill of all your necromancers by 10 "
+"percent."
+msgstr ""
+
+msgid ""
+"The Thieves' Guild provides information on enemy players. Thieves' Guilds "
+"can also provide scouting information on enemy towns. Additional Guilds "
+"provide more information."
+msgstr ""
+
+msgid "The Tavern increases morale for troops defending the castle."
+msgstr "Tửu quán nâng cao tinh thần cho binh lính bảo vệ lâu đài."
+
+msgid "The Shipyard allows ships to be built."
+msgstr "Xưởng đóng tàu cho phép đóng tàu."
+
+msgid ""
+"The Well increases the growth rate of all dwellings by %{count} creatures "
+"per week."
+msgstr ""
+
+msgid "The Statue increases your town's income by %{count} gold per day."
+msgstr ""
+
+msgid "The Left Turret provides extra firepower during castle combat."
+msgstr "Tháp pháo Trái cung cấp thêm hỏa lực khi chiến đấu trong lâu đài."
+
+msgid "The Right Turret provides extra firepower during castle combat."
+msgstr "Tháp pháo Phải cung cấp thêm hỏa lực khi chiến đấu trong lâu đài."
+
+msgid ""
+"The Marketplace can be used to convert one type of resource into another. "
+"The more marketplaces you control, the better the exchange rate."
+msgstr ""
+"Chợ có thể được sử dụng để chuyển đổi một loại tài nguyên thành một loại tài "
+"nguyên khác. Ngươi càng kiểm soát nhiều chợ, tỷ giá hối đoái càng tốt."
+
+msgid ""
+"The Moat slows attacking units. Any unit entering the moat must end its turn "
+"there and becomes more vulnerable to attack."
+msgstr ""
+"Hào làm chậm các đơn vị tấn công. Bất kỳ đơn vị nào đi vào hào đều phải kết "
+"thúc lượt của mình ở đó và trở nên dễ bị tấn công hơn."
+
+msgid ""
+"The Castle improves town defense and increases income to %{count} gold per "
+"day."
+msgstr ""
+
+msgid ""
+"The Tent provides workers to build a castle, provided the materials and the "
+"gold are available."
+msgstr ""
+
+msgid ""
+"The Captain's Quarters provides a captain to assist in the castle's defense "
+"when no hero is present."
+msgstr ""
+
+msgid ""
+"The Mage Guild allows heroes to learn spells and replenish their spell "
+"points."
+msgstr ""
+
+msgid "Recruit %{name}"
+msgstr ""
+
+msgid "Month: %{month}, Week: %{week}, Day: %{day}"
+msgstr ""
+
+msgid ""
+"You must purchase a spell book to use the mage guild, but you currently have "
+"no room for a spell book. Try giving one of your artifacts to another hero."
+msgstr ""
+"Ngươi phải mua một cuốn sách thần chú để sử dụng hội pháp sư, nhưng hiện tại "
+"ngươi không có chỗ cho một cuốn sách thần chú. Hãy thử đưa một trong những "
+"cổ vật của ngươi cho một anh tướng khác."
+
+msgid "Exit"
+msgstr "Thoát"
+
+msgid "Click to show next town."
+msgstr ""
+
+msgid "Show next town"
+msgstr ""
+
+msgid "Click to show previous town."
+msgstr ""
+
+msgid "Show previous town"
+msgstr ""
+
+msgid "This town may not be upgraded to a castle."
+msgstr "Thị trấn này có thể không được nâng cấp thành lâu đài."
+
+msgid "Town"
+msgstr "Thị trấn"
+
+msgid "Exit Castle"
+msgstr ""
+
+msgid "Exit Town"
+msgstr ""
+
+msgid "Show Income"
+msgstr "Xem Thu nhập"
+
+msgid "View Hero"
+msgstr ""
+
+msgid "The above spells are available here."
+msgstr "Các phép thuật trên có sẵn ở đây."
+
+msgid "The above spells have been added to your book."
+msgstr "Các phép thuật trên đã được thêm vào cuốn sách của ngươi."
+
+msgid "A generous tip for the barkeep yields the following rumor:"
+msgstr ""
+"Một khoản tiền boa hào phóng cho người chủ quán rượu mang lại tin đồn như "
+"sau:"
+
+msgid "Recruit Hero"
+msgstr "Chiêu mộ Tướng"
+
+msgid "%{name} is a level %{value} %{race} "
+msgstr ""
+
+msgid "with %{count} artifacts."
+msgstr "với %{count} bảo vật."
+
+msgid "with 1 artifact."
+msgstr "với 1 bảo vật."
+
+msgid "without artifacts."
+msgstr "không có bảo vật."
+
+msgid ""
+"'Spread' combat formation spreads your armies from the top to the bottom of "
+"the battlefield, with at least one empty space between each army."
+msgstr ""
+"Đội hình chiến đấu 'Dàn trải' dàn quân của bạn từ trên xuống dưới của chiến "
+"trường, với ít nhất một khoảng trống giữa mỗi quân."
+
+msgid ""
+"'Grouped' combat formation bunches your army together in the center of your "
+"side of the battlefield."
+msgstr ""
+"Đội hình chiến đấu 'Tập trung' tập hợp quân đội của bạn lại với nhau ở trung "
+"tâm của phe bạn trên chiến trường."
+
+msgid "Spread Formation"
+msgstr "Đội hình Dàn trải"
+
+msgid "Grouped Formation"
+msgstr "Đội hình Tập trung"
+
+msgid "Recruit %{name} the %{race}"
+msgstr ""
+
+msgid "Set garrison combat formation to 'Spread'"
+msgstr ""
+
+msgid "Set garrison combat formation to 'Grouped'"
+msgstr ""
+
+msgid "Exit Castle Options"
+msgstr ""
+
+msgid "Castle Options"
+msgstr "Lựa chọn Lâu đài"
+
+msgid "Not enough resources to recruit creatures."
+msgstr "Không đủ tài nguyên để chiêu mộ sinh vật."
+
+msgid "You are unable to recruit at this time, your ranks are full."
+msgstr ""
+
+msgid "No creatures available for purchase."
+msgstr "Không có sinh vật nào sẵn có để mua."
+
+msgid "Recruit Creatures"
+msgstr "Chiêu mộ Quái"
+
+msgid "Max"
+msgstr "Max"
+
+msgid "Hire all creatures in the town."
+msgstr "Thuê tất cả các sinh vật trong thị trấn."
+
+msgid "Town Population Information and Statistics"
+msgstr ""
+
+msgid "Damg"
+msgstr "Thiệt hại"
+
+msgid "HP"
+msgstr ""
+
+msgid "Growth"
+msgstr ""
+
+msgid "week"
+msgstr "tuần"
+
+msgid "Available"
+msgstr "Có sẵn"
+
+msgid "View World"
+msgstr ""
+
+msgid "View the entire world."
+msgstr ""
+
+msgid "Puzzle"
+msgstr "Câu đố"
+
+msgid "View the obelisk puzzle."
+msgstr ""
+
+msgid "Scenario Information"
+msgstr "Thông tin Kịch bản"
+
+msgid "View information on the scenario you are currently playing."
+msgstr "Xem thông tin về kịch bản ngươi đang chơi."
+
+msgid "Dig for the Ultimate Artifact."
+msgstr "Đào kiếm Bảo vật Tối thượng."
+
+msgid "Digging"
+msgstr "Đang đào"
+
+msgid "Exit this menu without doing anything."
+msgstr "Thoát khỏi trình đơn này và không làm gì cả."
+
+msgid "Arena"
+msgstr "Đấu trường"
+
+msgid ""
+"You enter the arena and face a pack of vicious lions. You handily defeat "
+"them, to the wild cheers of the crowd.  Impressed by your skill, the aged "
+"trainer of gladiators agrees to train you in a skill of your choice."
+msgstr ""
+"Ngươi bước vào đấu trường và đối mặt với một bầy sư tử hung ác. Ngươi dễ "
+"dàng đánh bại họ trước sự cổ vũ cuồng nhiệt của đám đông. Ấn tượng với kỹ "
+"năng của ngươi, người huấn luyện đấu sĩ lâu năm đồng ý huấn luyện cho ngươi "
+"một kỹ năng do ngươi lựa chọn."
+
+msgid "Attack Skill"
+msgstr "Kỹ năng Tấn công"
+
+msgid "Defense Skill"
+msgstr "Kỹ năng Phòng thủ"
+
+msgid "Shots"
+msgstr ""
+
+msgid "Shots Left"
+msgstr ""
+
+msgid "Damage"
+msgstr "Thiệt hại"
+
+msgid "Hit Points"
+msgstr ""
+
+msgid "Hit Points Left"
+msgstr ""
+
+msgid "You can't afford to upgrade your troops!"
+msgstr "Ngươi không đủ khả năng để nâng cấp quân đội của mình!"
+
+msgid ""
+"Your troops can be upgraded, but it will cost you dearly. Do you wish to "
+"upgrade them?"
+msgstr ""
+"Quân đội của ngươi có thể được nâng cấp, nhưng ngươi sẽ phải trả giá đắt. "
+"Ngươi có muốn nâng cấp chúng?"
+
+msgid "Are you sure you want to dismiss this army?"
+msgstr "Ngươi có chắc chắn muốn giải tán đội quân này không?"
+
+msgid "Followers"
+msgstr ""
+
+msgid ""
+"A group of %{monster} with a desire for greater glory wish to join you.\n"
+"Do you accept?"
+msgstr ""
+
+msgid ""
+"The %{monster} is swayed by your diplomatic tongue, and offers to join your "
+"army for the sum of %{gold} gold.\n"
+"Do you accept?"
+msgstr ""
+
+msgid ""
+"The creatures are swayed by your diplomatic\n"
+"tongue, and make you an offer:\n"
+" \n"
+msgstr ""
+
+msgid ""
+"%{offer} of the %{total} %{monster} will join your army, and the rest will "
+"leave you alone, for the sum of %{gold} gold.\n"
+"Do you accept?"
+msgstr ""
+
+msgid ""
+"All %{offer} of the %{monster} will join your army for the sum of %{gold} "
+"gold.\n"
+"Do you accept?"
+msgstr ""
+
+msgid "(Rate: %{percent})"
+msgstr ""
+
+msgid "off"
+msgstr "tắt"
+
+msgid "Music"
+msgstr "Âm nhạc"
+
+msgid "Effects"
+msgstr "Hiệu ứng"
+
+msgid "MIDI"
+msgstr ""
+
+msgid "MIDI Expansion"
+msgstr ""
+
+msgid "External"
+msgstr ""
+
+msgid "Music Type"
+msgstr ""
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr "Chuyển đổi mức âm nhạc xung quanh."
+
+msgid "Toggle foreground sounds level."
+msgstr "Chuyển đổi mức âm thanh nền trước."
+
+msgid "Change the type of music."
+msgstr "Thay đổi loại nhạc."
+
+msgid "Toggle 3D effects of foreground sounds."
+msgstr ""
+
+msgid "Build a new ship:"
+msgstr "Đóng một tàu mới:"
+
+msgid "Resource cost:"
+msgstr "Chi phí tài nguyên:"
+
+msgid "Total: "
+msgstr "Tổng: "
+
+msgid "Need: "
+msgstr "Cần: "
+
+msgid "Load Game"
+msgstr "Tải Game"
+
+msgid "No save files to load."
+msgstr "Không có tệp lưu để tải."
+
+msgid "New Game"
+msgstr "Game Mới"
+
+msgid "Start a single or multi-player game."
+msgstr "Bắt đầu một trò chơi đơn hoặc nhiều người chơi."
+
+msgid "Load a previously saved game."
+msgstr "Tải một trò chơi đã lưu trước đó."
+
+msgid "Save Game"
+msgstr "Lưu Game"
+
+msgid "Save the current game."
+msgstr "Lưu trò chơi hiện tại."
+
+msgid "Quit"
+msgstr "Thoát"
+
+msgid "Quit out of Heroes of Might and Magic II."
+msgstr ""
+
+msgid "Language"
+msgstr "Ngôn ngữ"
+
+msgid "Graphics"
+msgstr "Đồ họa"
+
+msgid "Black & White"
+msgstr "Đen & Trắng"
+
+msgid "Mouse Cursor"
+msgstr ""
+
+msgid "Color"
+msgstr "Màu"
+
+msgid "Text Support"
+msgstr "Hỗ trợ Văn bản"
+
+msgid "Change the language of the game."
+msgstr "Thay đổi ngôn ngữ của game."
+
+msgid "Select Game Language"
+msgstr "Chọn Ngôn ngữ Game"
+
+msgid "Change the graphics settings of the game."
+msgstr "Thay đổi đồ họa của game."
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr "Bật hoặc tắt con trỏ màu. Đây chỉ là một sự lựa chọn thẩm mỹ."
+
+msgid ""
+"Toggle text support mode to output extra information about windows and "
+"events in the game."
+msgstr ""
+"Chuyển đổi chế độ hỗ trợ văn bản để xuất thêm thông tin về các cửa sổ và sự "
+"kiện trong trò chơi."
+
+msgid ""
+"Map\n"
+"Difficulty"
+msgstr ""
+"Độ khó\n"
+"Bản đồ"
+
+msgid ""
+"Game\n"
+"Difficulty"
+msgstr ""
+"Độ khó\n"
+"Game"
+
+msgid "Rating"
+msgstr "Xếp hạng"
+
+msgid "Map Size"
+msgstr "Cỡ Bản đồ"
+
+msgid "Opponents"
+msgstr "Đối thủ"
+
+msgid "Class"
+msgstr ""
+
+msgid ""
+"Victory\n"
+"Conditions"
+msgstr ""
+"Điều kiện\n"
+"Chiến thắng"
+
+msgid ""
+"Loss\n"
+"Conditions"
+msgstr ""
+"Điều kiện\n"
+"Thua"
+
+msgid "First select recipients!"
+msgstr "Đầu tiên chọn người nhận!"
+
+msgid "You cannot select %{resource}!"
+msgstr ""
+
+msgid "Select count %{resource}:"
+msgstr ""
+
+msgid "Select Recipients"
+msgstr "Chọn Người nhận"
+
+msgid "Your Funds"
+msgstr ""
+
+msgid "Planned Gift"
+msgstr ""
+
+msgid "Gift from %{name}"
+msgstr ""
+
+msgid "Resolution"
+msgstr "Phân giải"
+
+msgid "Fullscreen"
+msgstr "Toàn màn hình"
+
+msgid "window|Mode"
+msgstr ""
+
+msgid "Windowed"
+msgstr "Cửa sổ"
+
+msgid "V-Sync"
+msgstr ""
+
+msgid "on"
+msgstr "bật"
+
+msgid "FPS"
+msgstr ""
+
+msgid "System Info"
+msgstr "Thông tin Hệ thống"
+
+msgid "Change the resolution of the game."
+msgstr "Thay đổi độ phân giải của game."
+
+msgid "Select Game Resolution"
+msgstr "Chọn Độ phân giải Game"
+
+msgid "Toggle between fullscreen and windowed modes."
+msgstr "Chuyển đổi giữa chế độ toàn màn hình và cửa sổ."
+
+msgid ""
+"The V-Sync option can be enabled to resolve flickering issues on some "
+"monitors."
+msgstr ""
+
+msgid "Show extra information such as FPS and current time."
+msgstr ""
+
+msgid "Hot Keys:"
+msgstr "Phím tắt:"
+
+msgid "Select Game Language:"
+msgstr "Chọn Ngôn ngữ Game:"
+
+msgid "Click to choose the selected language."
+msgstr "Bấm để chọn ngôn ngữ đã chọn."
+
+msgid "%{name} has gained a level."
+msgstr ""
+
+msgid "%{skill} +1"
+msgstr ""
+
+msgid "You have learned %{skill}."
+msgstr ""
+
+msgid "You may learn either:"
+msgstr "Ngươi có thể học một trong hai:"
+
+msgid "or"
+msgstr "hoặc"
+
+msgid ""
+"Please inspect our fine wares. If you feel like offering a trade, click on "
+"the items you wish to trade with and for."
+msgstr ""
+"Hãy kiểm tra đồ tốt của chúng tôi. Nếu ngươi muốn cung cấp một giao dịch, "
+"hãy nhấp vào các mặt hàng bạn muốn giao dịch."
+
+msgid ""
+"You have received quite a bargain. I expect to make no profit on the deal. "
+"Can I interest you in any of my other wares?"
+msgstr ""
+"Ngươi đã nhận được khá hời. Ta hy vọng sẽ không kiếm được lợi nhuận từ thỏa "
+"thuận này. Ta có thể khiến ngươi quan tâm đến bất kỳ sản phẩm nào khác của "
+"ta?"
+
+msgid "I can offer you %{count} for 1 unit of %{resfrom}."
+msgstr ""
+
+msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
+msgstr ""
+
+msgid "Min"
+msgstr "Min"
+
+msgid "Qty to trade"
+msgstr "Số lượng trao đổi"
+
+msgid "Trading Post"
+msgstr "Trạm Giao dịch"
+
+msgid "Your Resources"
+msgstr "Tài nguyên của Ngươi"
+
+msgid "Available Trades"
+msgstr "Giao dịch Có sẵn"
+
+msgid "n/a"
+msgstr ""
+
+msgid "guarded by %{count} %{monster}"
+msgstr ""
+
+msgid "guarded by "
+msgstr ""
+
+msgid "(available: %{count})"
+msgstr ""
+
+msgid "(empty)"
+msgstr "(rỗng)"
+
+msgid "already learned"
+msgstr "đã học"
+
+msgid "already knows this skill"
+msgstr "đã biết kỹ năng này"
+
+msgid "already has max skills"
+msgstr ""
+
+msgid "(already visited)"
+msgstr "(đã tới)"
+
+msgid "(not visited)"
+msgstr "(chưa tới)"
+
+msgid "%{color} Barrier"
+msgstr ""
+
+msgid "%{color} Tent"
+msgstr ""
+
+msgid "Road"
+msgstr "Đường"
+
+msgid "(digging ok)"
+msgstr ""
+
+msgid "(no digging)"
+msgstr ""
+
+msgid "penalty: %{cost}"
+msgstr ""
+
+msgid "Uncharted Territory"
+msgstr "Lãnh thổ Chưa khám phá"
+
+msgid "Defenders:"
+msgstr "Bên thủ:"
+
+msgid "Unknown"
+msgstr ""
+
+msgid "%{name} (Level %{level})"
+msgstr ""
+
+msgid "Attack:"
+msgstr "Tấn công:"
+
+msgid "Defense:"
+msgstr "Phòng thủ:"
+
+msgid "Spell Power:"
+msgstr ""
+
+msgid "Knowledge:"
+msgstr ""
+
+msgid "Spell Points:"
+msgstr ""
+
+msgid "Move Points:"
+msgstr ""
+
+msgid "Cost per troop:"
+msgstr ""
+
+msgid "Available: %{count}"
+msgstr ""
+
+msgid "Number to buy:"
+msgstr ""
+
+msgid "Recruit selected monsters."
+msgstr ""
+
+msgid "Select maximum monsters to be recruited."
+msgstr ""
+
+msgid "Select only 1 monster to be recruited."
+msgstr ""
+
+msgid "Select Game Resolution:"
+msgstr "Chọn Độ phân giải:"
+
+msgid "Click to apply the selected resolution."
+msgstr ""
+
+msgid "Click to apply the entered text."
+msgstr ""
+
+msgid "Click to open the Virtual Keyboard dialog."
+msgstr ""
+
+msgid "Open Virtual Keyboard"
+msgstr ""
+
+msgid "How many troops to move?"
+msgstr ""
+
+msgid "Fast separation into slots:"
+msgstr ""
+
+msgid "Map: "
+msgstr "Bản đồ: "
+
+msgid ""
+"\n"
+"\n"
+"Month: "
+msgstr ""
+"\n"
+"\n"
+"Tháng: "
+
+msgid ", Week: "
+msgstr ", Tuần: "
+
+msgid ", Day: "
+msgstr ", Ngày: "
+
+msgid ""
+"\n"
+"\n"
+"Location: "
+msgstr ""
+"\n"
+"\n"
+"Vị trí: "
+
+msgid "File to Save:"
+msgstr ""
+
+msgid "File to Load:"
+msgstr ""
+
+msgid "Click to save the current game."
+msgstr ""
+
+msgid "Click to load a previously saved game."
+msgstr ""
+
+msgid "Are you sure you want to delete file:"
+msgstr ""
+
+msgid "Warning!"
+msgstr "Cảnh báo!"
+
+msgid "Select Monster:"
+msgstr "Chọn Quái:"
+
+msgid "Select Hero:"
+msgstr "Chọn Tướng:"
+
+msgid "Select Artifact:"
+msgstr "Chọn Bảo vật:"
+
+msgid "Select Spell:"
+msgstr "Chọn Phép:"
+
+msgid "Select Skill:"
+msgstr "Chọn Kỹ năng:"
+
+msgid "Map Type:\n"
+msgstr "Kiểu Bản đồ:\n"
+
+msgid "The Succession Wars"
+msgstr "Cuộc chiến Kế vị"
+
+msgid "Lose all your heroes and towns."
+msgstr "Mất tất cả các tướng và thành."
+
+msgid "Lose a specific town."
+msgstr "Mất một thành cụ thể."
+
+msgid "Lose a specific hero."
+msgstr "Mất một tướng cụ thể."
+
+msgid "Run out of time. Fail to win by a certain point."
+msgstr "Hết thời gian. Không thể giành chiến thắng với thời gian nhất định."
+
+msgid "Loss Condition"
+msgstr "Điều kiện Thua"
+
+msgid "Defeat all enemy heroes and towns."
+msgstr "Tiêu diệt tất cả các tướng và thành địch."
+
+msgid "Capture a specific town."
+msgstr "Chiếm một thành cụ thể."
+
+msgid "Defeat a specific hero."
+msgstr "Tiêu diệt một tướng cụ thể."
+
+msgid "Find a specific artifact."
+msgstr "Tìm một bảo vật cụ thể."
+
+msgid "Your side defeats the opposing side."
+msgstr "Phe của ngươi đánh bại phe đối lập."
+
+msgid "Accumulate a large amount of gold."
+msgstr "Tích lũy một lượng lớn vàng."
+
+msgid "Victory Condition"
+msgstr "Điều kiện Thắng"
+
+msgid "Map difficulty:"
+msgstr "Độ khó bản đồ:"
+
+msgid "N"
+msgstr ""
+
+msgid "No maps exist at that size"
+msgstr "Không có bản đồ nào ở cỡ này"
+
+msgid "Small Maps"
+msgstr "Bản đồ Nhỏ"
+
+msgid "View only maps of size small (36 x 36)."
+msgstr "Chỉ xem những bản đồ cỡ nhỏ (36x36)."
+
+msgid "Medium Maps"
+msgstr "Bản đồ Thường"
+
+msgid "View only maps of size medium (72 x 72)."
+msgstr "Chỉ xem những bản đồ cỡ thường (72x72)."
+
+msgid "Large Maps"
+msgstr "Bản đồ Rộng"
+
+msgid "View only maps of size large (108 x 108)."
+msgstr "Chỉ xem những bản đồ cỡ lớn (108x108)."
+
+msgid "Extra Large Maps"
+msgstr "Bản đồ Siêu rộng"
+
+msgid "View only maps of size extra large (144 x 144)."
+msgstr "Chỉ xem những bản đồ cỡ siêu lớn (144x144)."
+
+msgid "All Maps"
+msgstr "Tất cả Bản đồ"
+
+msgid "View all maps, regardless of size."
+msgstr "Xem tất cả các bản đồ, bất kể kích thước."
+
+msgid "Players Icon"
+msgstr ""
+
+msgid ""
+"Indicates how many players total are in the scenario. Any positions not "
+"occupied by humans will be occupied by computer players."
+msgstr ""
+"Cho biết tổng số người chơi trong kịch bản. Bất kỳ vị trí nào không có con "
+"người chiếm giữ sẽ do người chơi máy tính chiếm giữ."
+
+msgid ""
+"Indicates whether the map\n"
+"is small (36 x 36), medium\n"
+"(72 x 72), large (108 x 108),\n"
+"or extra large (144 x 144)."
+msgstr ""
+
+msgid "Size Icon"
+msgstr ""
+
+msgid ""
+"Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
+"of Loyalty\" version of the game."
+msgstr ""
+
+msgid "Map Type"
+msgstr "Kiểu Bản đồ"
+
+msgid "Selected Name"
+msgstr ""
+
+msgid "The name of the currently selected map."
+msgstr ""
+
+msgid "Selected Map Difficulty"
+msgstr ""
+
+msgid ""
+"The map difficulty of the currently selected map.  The map difficulty is "
+"determined by the scenario designer. More difficult maps might include more "
+"or stronger enemies, fewer resources, or other special conditions making "
+"things tougher for the human player."
+msgstr ""
+
+msgid "Selected Description"
+msgstr ""
+
+msgid "The description of the currently selected map."
+msgstr ""
+
+msgid "Accept the choice made."
+msgstr ""
+
+msgid "Jump"
+msgstr ""
+
+msgid "Hero Speed"
+msgstr "Tốc độ Tướng"
+
+msgid "Don't Show"
+msgstr "Không Hiện"
+
+msgid "Enemy Speed"
+msgstr "Tốc độ Địch"
+
+msgid "Slow"
+msgstr "Chậm"
+
+msgid "Normal"
+msgstr "Thường"
+
+msgid "Fast"
+msgstr "Nhanh"
+
+msgid "Very Fast"
+msgstr "Rất nhanh"
+
+msgid "Scroll Speed"
+msgstr "Tốc độ Cuộn"
+
+msgid "Evil"
+msgstr "Xấu"
+
+msgid "Good"
+msgstr "Tốt"
+
+msgid "Interface Type"
+msgstr "Kiểu Giao diện"
+
+msgid "Hide"
+msgstr "Ẩn"
+
+msgid "Show"
+msgstr "Hiện"
+
+msgid "Interface"
+msgstr "Giao diện"
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Battles"
+msgstr ""
+
+msgid "autoBattle|Manual"
+msgstr ""
+
+msgid "Change the speed at which your heroes move on the main screen."
+msgstr ""
+
+msgid ""
+"Sets the speed that A.I. heroes move at.  You can also elect not to view A."
+"I. movement at all."
+msgstr ""
+
+msgid "Sets the speed at which you scroll the window."
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle instant battle mode."
+msgstr ""
+
+msgid "Att."
+msgstr ""
+
+msgid "Def."
+msgstr ""
+
+msgid "Power"
+msgstr ""
+
+msgid "Knowl"
+msgstr ""
+
+msgid "1st"
+msgstr ""
+
+msgid "2nd"
+msgstr ""
+
+msgid "3rd"
+msgstr ""
+
+msgid "4th"
+msgstr ""
+
+msgid "5th"
+msgstr ""
+
+msgid "6th"
+msgstr ""
+
+msgid "Oracle: Player Rankings"
+msgstr ""
+
+msgid "Thieves' Guild: Player Rankings"
+msgstr ""
+
+msgid "Number of Towns:"
+msgstr ""
+
+msgid "Number of Castles:"
+msgstr ""
+
+msgid "Number of Heroes:"
+msgstr ""
+
+msgid "Gold in Treasury:"
+msgstr ""
+
+msgid "Wood & Ore:"
+msgstr ""
+
+msgid "Gems, Cr, Slf & Mer:"
+msgstr ""
+
+msgid "Obelisks Found:"
+msgstr ""
+
+msgid "Artifacts:"
+msgstr "Bảo vật:"
+
+msgid "Total Army Strength:"
+msgstr ""
+
+msgid "Income:"
+msgstr "Thu nhập:"
+
+msgid "Best Hero:"
+msgstr ""
+
+msgid "Best Hero Stats:"
+msgstr ""
+
+msgid "Personality:"
+msgstr ""
+
+msgid "Best Monster:"
+msgstr ""
+
+msgid "difficulty|Easy"
+msgstr ""
+
+msgid "difficulty|Normal"
+msgstr ""
+
+msgid "difficulty|Hard"
+msgstr ""
+
+msgid "difficulty|Expert"
+msgstr ""
+
+msgid "difficulty|Impossible"
+msgstr ""
+
+msgid "and more..."
+msgstr "và hơn thế nữa..."
+
+msgid "Easy"
+msgstr "Dễ"
+
+msgid "Hard"
+msgstr "Khó"
+
+msgid "Campaign Difficulty"
+msgstr "Độ khó Chiến dịch"
+
+msgid ""
+"Choose this difficulty if you want to prefer game story over challenge. AI "
+"is weaker in comparison with normal difficulty."
+msgstr ""
+
+msgid ""
+"Choose this difficulty to enjoy the campaign as per the original design."
+msgstr ""
+
+msgid ""
+"Choose this difficulty if you want challenge. AI is stronger in comparison "
+"with normal difficulty."
+msgstr ""
+
+msgid ""
+"Congratulations!\n"
+"\n"
+"Days: %{days}\n"
+msgstr ""
+
+msgid ""
+"\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
+msgid ""
+"Score: %{score}\n"
+"\n"
+"Rating:\n"
+"%{rating}"
+msgstr ""
+
+msgid "Start the selected scenario."
+msgstr "Bắt đầu kịch bản đã chọn."
+
+msgid "View Intro"
+msgstr "Xem Giới thiệu"
+
+msgid "View Intro videos for the current state of the campaign."
+msgstr ""
+
+msgid "Select campaign difficulty. It cannot be changed after."
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Restart the current scenario."
+msgstr ""
+
+msgid "Are you sure you want to restart this scenario?"
+msgstr ""
+
+msgid "Campaign Scenario loading failure"
+msgstr ""
+
+msgid "Please make sure that campaign files are correct and present."
+msgstr ""
+
+msgid "Days spent"
+msgstr ""
+
+msgid "The number of days spent on this campaign."
+msgstr ""
+
+msgid "Project Coordination and Core Development"
+msgstr ""
+
+msgid "Development"
+msgstr "Phát triển"
+
+msgid "Visit us at "
+msgstr ""
+
+msgid "QA and Support"
+msgstr ""
+
+msgid "Dev and Support"
+msgstr ""
+
+msgid "Special Thanks to"
+msgstr ""
+
+msgid "and many other contributors!"
+msgstr ""
+
+msgid "and many-many other supporters!"
+msgstr ""
+
+msgid "Support us at"
+msgstr ""
+
+msgid "local-donation-platform|https://www.patreon.com/fheroes2"
+msgstr ""
+
+msgid "Connect with us at"
+msgstr ""
+
+msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
+msgstr ""
+
+msgid "Need help with the game?"
+msgstr ""
+
+msgid "Original project before 0.7"
+msgstr ""
+
+msgid "Heroes of Might and Magic II: The Succession Wars team"
+msgstr ""
+
+msgid "Designed and Directed"
+msgstr ""
+
+msgid "Programming and Design"
+msgstr ""
+
+msgid "Executive Producer"
+msgstr ""
+
+msgid "Producer"
+msgstr ""
+
+msgid "Additional Design"
+msgstr ""
+
+msgid "Additional Programming"
+msgstr ""
+
+msgid "Musical Production"
+msgstr ""
+
+msgid "Music and Sound Design"
+msgstr ""
+
+msgid "Vocalists"
+msgstr ""
+
+msgid "Art Director"
+msgstr ""
+
+msgid "Assistant Art Director"
+msgstr ""
+
+msgid "Artists"
+msgstr ""
+
+msgid "QA Manager"
+msgstr ""
+
+msgid "QA"
+msgstr ""
+
+msgid "Writing"
+msgstr ""
+
+msgid "Manual and Helpfile"
+msgstr ""
+
+msgid "Scenarios"
+msgstr ""
+
+msgid "Heroes of Might and Magic II: The Price of Loyalty team"
+msgstr ""
+
+msgid "Design Lead"
+msgstr ""
+
+msgid "Designers"
+msgstr ""
+
+msgid "Programming Lead"
+msgstr ""
+
+msgid "Art Lead"
+msgstr ""
+
+msgid "Playtesters"
+msgstr ""
+
+msgid "Designer"
+msgstr ""
+
+msgid "Producers"
+msgstr ""
+
+msgid "QA Managers"
+msgstr ""
+
+msgid "Sound Design"
+msgstr ""
+
+msgid "Town Themes"
+msgstr ""
+
+msgid "Alto Sax"
+msgstr ""
+
+msgid "Harpsichord and Piano"
+msgstr ""
+
+msgid "Basso Vocal"
+msgstr ""
+
+msgid "Soprano Vocal"
+msgstr ""
+
+msgid "Recorded at %{recordingStudio}"
+msgstr ""
+
+msgid "credits|Manual"
+msgstr ""
+
+msgid "German Consultant"
+msgstr ""
+
+msgid "Map Designers"
+msgstr ""
+
+msgid "Package Design"
+msgstr ""
+
+msgid "Your Name"
+msgstr ""
+
+msgid "Unknown Hero"
+msgstr ""
+
+msgid "Standard"
+msgstr ""
+
+msgid "View High Scores for Standard Maps."
+msgstr ""
+
+msgid "Campaign"
+msgstr "Chiến dịch"
+
+msgid "View High Scores for Campaigns."
+msgstr ""
+
+msgid "hotkey|default okay event"
+msgstr ""
+
+msgid "hotkey|default cancel event"
+msgstr ""
+
+msgid "hotkey|default left"
+msgstr ""
+
+msgid "hotkey|default right"
+msgstr ""
+
+msgid "hotkey|default up"
+msgstr ""
+
+msgid "hotkey|default down"
+msgstr ""
+
+msgid "hotkey|toggle fullscreen"
+msgstr ""
+
+msgid "hotkey|toggle text support mode"
+msgstr ""
+
+msgid "hotkey|new game"
+msgstr ""
+
+msgid "hotkey|load game"
+msgstr ""
+
+msgid "hotkey|highscores"
+msgstr ""
+
+msgid "hotkey|credits"
+msgstr ""
+
+msgid "hotkey|standard game"
+msgstr ""
+
+msgid "hotkey|campaign game"
+msgstr ""
+
+msgid "hotkey|multi-player game"
+msgstr ""
+
+msgid "hotkey|settings"
+msgstr ""
+
+msgid "hotkey|quit"
+msgstr ""
+
+msgid "hotkey|select map"
+msgstr ""
+
+msgid "hotkey|select small map size"
+msgstr ""
+
+msgid "hotkey|select medium map size"
+msgstr ""
+
+msgid "hotkey|select large map size"
+msgstr ""
+
+msgid "hotkey|select extra large map size"
+msgstr ""
+
+msgid "hotkey|select all map sizes"
+msgstr ""
+
+msgid "hotkey|hotseat game"
+msgstr ""
+
+msgid "hotkey|battle only game"
+msgstr ""
+
+msgid "hotkey|choose the original campaign"
+msgstr ""
+
+msgid "hotkey|choose the expansion campaign"
+msgstr ""
+
+msgid "hotkey|roland campaign"
+msgstr ""
+
+msgid "hotkey|archibald campaign"
+msgstr ""
+
+msgid "hotkey|the price of loyalty campaign"
+msgstr ""
+
+msgid "hotkey|voyage home campaign"
+msgstr ""
+
+msgid "hotkey|wizard's isle campaign"
+msgstr ""
+
+msgid "hotkey|descendants campaign"
+msgstr ""
+
+msgid "hotkey|select first campaign bonus"
+msgstr ""
+
+msgid "hotkey|select second campaign bonus"
+msgstr ""
+
+msgid "hotkey|select third campaign bonus"
+msgstr ""
+
+msgid "hotkey|view campaign intro"
+msgstr ""
+
+msgid "hotkey|select campaign difficulty"
+msgstr ""
+
+msgid "hotkey|restart campaign scenario"
+msgstr ""
+
+msgid "hotkey|world map left"
+msgstr ""
+
+msgid "hotkey|world map right"
+msgstr ""
+
+msgid "hotkey|world map up"
+msgstr ""
+
+msgid "hotkey|world map down"
+msgstr ""
+
+msgid "hotkey|world map up left"
+msgstr ""
+
+msgid "hotkey|world map up right"
+msgstr ""
+
+msgid "hotkey|world map down left"
+msgstr ""
+
+msgid "hotkey|world map down right"
+msgstr ""
+
+msgid "hotkey|save game"
+msgstr ""
+
+msgid "hotkey|next hero"
+msgstr ""
+
+msgid "hotkey|continue hero movement"
+msgstr ""
+
+msgid "hotkey|cast adventure spell"
+msgstr ""
+
+msgid "hotkey|put hero to sleep"
+msgstr ""
+
+msgid "hotkey|next town"
+msgstr ""
+
+msgid "hotkey|end turn"
+msgstr ""
+
+msgid "hotkey|file options"
+msgstr ""
+
+msgid "hotkey|adventure options"
+msgstr ""
+
+msgid "hotkey|puzzle map"
+msgstr ""
+
+msgid "hotkey|scenario information"
+msgstr ""
+
+msgid "hotkey|dig for artifact"
+msgstr ""
+
+msgid "hotkey|view world"
+msgstr ""
+
+msgid "hotkey|kingdom summary"
+msgstr ""
+
+msgid "hotkey|default action"
+msgstr ""
+
+msgid "hotkey|open focus"
+msgstr ""
+
+msgid "hotkey|system options"
+msgstr ""
+
+msgid "hotkey|scroll left"
+msgstr ""
+
+msgid "hotkey|scroll right"
+msgstr ""
+
+msgid "hotkey|scroll up"
+msgstr ""
+
+msgid "hotkey|scroll down"
+msgstr ""
+
+msgid "hotkey|toggle control panel"
+msgstr ""
+
+msgid "hotkey|toggle radar"
+msgstr ""
+
+msgid "hotkey|toggle buttons"
+msgstr ""
+
+msgid "hotkey|toggle status"
+msgstr ""
+
+msgid "hotkey|toggle icons"
+msgstr ""
+
+msgid "hotkey|transfer control to ai"
+msgstr ""
+
+msgid "hotkey|retreat from battle"
+msgstr ""
+
+msgid "hotkey|surrender during battle"
+msgstr ""
+
+msgid "hotkey|toggle battle auto mode"
+msgstr ""
+
+msgid "hotkey|finish the battle in auto mode"
+msgstr ""
+
+msgid "hotkey|battle options"
+msgstr ""
+
+msgid "hotkey|skip turn in battle"
+msgstr ""
+
+msgid "hotkey|cast battle spell"
+msgstr ""
+
+msgid "hotkey|dwelling level 1"
+msgstr ""
+
+msgid "hotkey|dwelling level 2"
+msgstr ""
+
+msgid "hotkey|dwelling level 3"
+msgstr ""
+
+msgid "hotkey|dwelling level 4"
+msgstr ""
+
+msgid "hotkey|dwelling level 5"
+msgstr ""
+
+msgid "hotkey|dwelling level 6"
+msgstr ""
+
+msgid "hotkey|well"
+msgstr ""
+
+msgid "hotkey|marketplace"
+msgstr ""
+
+msgid "hotkey|mage guild"
+msgstr ""
+
+msgid "hotkey|shipyard"
+msgstr ""
+
+msgid "hotkey|thieves guild"
+msgstr ""
+
+msgid "hotkey|tavern"
+msgstr ""
+
+msgid "hotkey|construction screen"
+msgstr ""
+
+msgid "hotkey|buy all monsters in well"
+msgstr ""
+
+msgid "hotkey|split stack by half"
+msgstr ""
+
+msgid "hotkey|split stack by one"
+msgstr ""
+
+msgid "hotkey|join stacks"
+msgstr ""
+
+msgid "hotkey|upgrade troop"
+msgstr ""
+
+msgid "hotkey|dismiss troop"
+msgstr ""
+
+msgid "The save file is corrupted."
+msgstr ""
+
+msgid "Unsupported save format: "
+msgstr ""
+
+msgid "Current game version: "
+msgstr ""
+
+msgid "Last supported version: "
+msgstr ""
+
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
+msgid ""
+"This file was saved for a \"The Price of Loyalty\" map, but the "
+"corresponding game assets have not been provided to the engine."
+msgstr ""
+
+msgid "This saved game is localized to '"
+msgstr ""
+
+msgid "' language, but the current language of the game is '"
+msgstr ""
+
+msgid "Hot Seat"
+msgstr "Ghế Nóng"
+
+msgid ""
+"Play a Hot Seat game, where 2 to 4 players play around the same computer, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr ""
+
+msgid "A single player game playing out a single map."
+msgstr ""
+
+msgid "Standard Game"
+msgstr ""
+
+msgid "A single player game playing through a series of maps."
+msgstr ""
+
+msgid "Campaign Game"
+msgstr ""
+
+msgid ""
+"A multi-player game, with several human players completing against each "
+"other on a single map."
+msgstr ""
+
+msgid "Multi-Player Game"
+msgstr ""
+
+msgid "fheroes2 Resurrection Team presents"
+msgstr ""
+
+msgid "Greetings!"
+msgstr ""
+
+msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
+msgstr ""
+"Chào mừng tới Heroes of Might and Magic II cung cấp bởi mã nguồn fheroes2!"
+
+msgid ""
+"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
+"starting the game please choose game resolution."
+msgstr ""
+
+msgid "Please Remember"
+msgstr ""
+
+msgid "You can always change game resolution by clicking on the "
+msgstr ""
+
+msgid "door"
+msgstr "cửa"
+
+msgid ""
+" on the left side of main menu or by clicking on the configuration button. \n"
+"\n"
+"Enjoy the game!"
+msgstr ""
+
+msgid "Quit Heroes of Might and Magic II and return to the operating system."
+msgstr ""
+
+msgid "Credits"
+msgstr ""
+
+msgid "View the credits screen."
+msgstr ""
+
+msgid "High Scores"
+msgstr ""
+
+msgid "View the high scores screen."
+msgstr ""
+
+msgid "Change language, resolution and settings of the game."
+msgstr ""
+
+msgid "Game Settings"
+msgstr ""
+
+msgid ""
+"Required video files for campaign selection window are missing. Please make "
+"sure that all necessary files are present in the system."
+msgstr ""
+
+msgid ""
+"Either Roland's or Archibald's campaign from the original Heroes of Might "
+"and Magic II."
+msgstr ""
+
+msgid "Original Campaign"
+msgstr "Chiến dịch Gốc"
+
+msgid "Expansion Campaign"
+msgstr "Chiến dịch Mở rộng"
+
+msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr ""
+
+msgid "Host"
+msgstr ""
+
+msgid ""
+"The host sets up the game options. There can only be one host per network "
+"game."
+msgstr ""
+
+msgid "Guest"
+msgstr "Khách"
+
+msgid ""
+"The guest waits for the host to set up the game, then is automatically added "
+"in. There can be multiple guests for TCP/IP games."
+msgstr ""
+
+msgid "Battle Only"
+msgstr ""
+
+msgid "Setup and play a battle without loading any map."
+msgstr ""
+
+msgid "2 Players"
+msgstr "2 người chơi"
+
+msgid ""
+"Play with 2 human players, and optionally, up to 4 additional computer "
+"players."
+msgstr ""
+
+msgid "3 Players"
+msgstr "3 người chơi"
+
+msgid ""
+"Play with 3 human players, and optionally, up to 3 additional computer "
+"players."
+msgstr ""
+
+msgid "4 Players"
+msgstr "4 người chơi"
+
+msgid ""
+"Play with 4 human players, and optionally, up to 2 additional computer "
+"players."
+msgstr ""
+
+msgid "5 Players"
+msgstr "5 người chơi"
+
+msgid ""
+"Play with 5 human players, and optionally, up to 1 additional computer "
+"player."
+msgstr ""
+
+msgid "6 Players"
+msgstr "6 người chơi"
+
+msgid "Play with 6 human players."
+msgstr ""
+
+msgid "Dragon city has fallen!  You are now the Master of the Dragons."
+msgstr ""
+
+msgid ""
+"You captured %{name}!\n"
+"You are victorious."
+msgstr ""
+
+msgid ""
+"You have captured the enemy hero %{name}!\n"
+"Your quest is complete."
+msgstr ""
+
+msgid ""
+"You have found the %{name}.\n"
+"Your quest is complete."
+msgstr ""
+
+msgid "Ultimate Artifact"
+msgstr "Bảo vật Tối thượng"
+
+msgid ""
+"The enemy is beaten.\n"
+"Your side has triumphed!"
+msgstr ""
+
+msgid ""
+"You have built up over %{count} gold in your treasury.\n"
+"All enemies bow before your wealth and power."
+msgstr ""
+
+msgid ""
+"The enemy has captured %{name}!\n"
+"They are triumphant."
+msgstr ""
+
+msgid ""
+"The enemy has built up over %{count} gold in his treasury.\n"
+"You must bow done in defeat before his wealth and power."
+msgstr ""
+
+msgid "You have been eliminated from the game!!!"
+msgstr ""
+
+msgid ""
+"You have lost the hero %{name}.\n"
+"Your quest is over."
+msgstr ""
+
+msgid ""
+"You have failed to complete your quest in time.\n"
+"All is lost."
+msgstr ""
+
+msgid ""
+"Base score: %{score}\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
+msgid "Defeat all enemy heroes and capture all enemy towns and castles."
+msgstr ""
+
+msgid "Run out of time. (Fail to win by a certain point.)"
+msgstr ""
+
+msgid "You must defeat the enemy %{enemies}."
+msgid_plural "You must defeat the enemy alliance of %{enemies}."
+msgstr[0] ""
+
+msgid ""
+"The alliance consisting of %{allies} and you must defeat the enemy "
+"%{enemies}."
+msgid_plural ""
+"The alliance consisting of %{allies} and you must defeat the enemy alliance "
+"of %{enemies}."
+msgstr[0] ""
+
+msgid "Capture the castle '%{name}'."
+msgstr ""
+
+msgid "Capture the town '%{name}'."
+msgstr ""
+
+msgid "Defeat the hero '%{name}'."
+msgstr ""
+
+msgid "Find the ultimate artifact."
+msgstr ""
+
+msgid "Find the '%{name}' artifact."
+msgstr ""
+
+msgid "Accumulate %{count} gold."
+msgstr ""
+
+msgid ""
+", or you may win by defeating all enemy heroes and capturing all enemy towns "
+"and castles."
+msgstr ""
+
+msgid "Lose the castle '%{name}'."
+msgstr ""
+
+msgid "Lose the town '%{name}'."
+msgstr ""
+
+msgid "Lose the hero: %{name}."
+msgstr ""
+
+msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
+msgstr ""
+
+msgid "%{color} player has been vanquished!"
+msgstr ""
+
+msgid "Scenario:"
+msgstr "Kịch bản:"
+
+msgid "Game Difficulty:"
+msgstr "Độ khó Game:"
+
+msgid "Opponents:"
+msgstr "Đối thủ:"
+
+msgid "Class:"
+msgstr ""
+
+msgid "Rating %{rating}%"
+msgstr ""
+
+msgid "Click here to select which scenario to play."
+msgstr ""
+
+msgid "Scenario"
+msgstr "Kịch bản"
+
+msgid "Game Difficulty"
+msgstr "Độ khó Game"
+
+msgid ""
+"This lets you change the starting difficulty at which you will play. Higher "
+"difficulty levels start you of with fewer resources, and at the higher "
+"settings, give extra resources to the computer."
+msgstr ""
+
+msgid "Difficulty Rating"
+msgstr ""
+
+msgid ""
+"The difficulty rating reflects a combination of various settings for your "
+"game. This number will be applied to your final score."
+msgstr ""
+
+msgid "Click to accept these settings and start a new game."
+msgstr ""
+
+msgid "Click to return to the main menu."
+msgstr ""
+
+msgid "No maps available!"
+msgstr ""
+
+msgid "Astrologers proclaim the Month of the %{name}."
+msgstr ""
+
+msgid "Astrologers proclaim the Week of the %{name}."
+msgstr ""
+
+msgid "After regular growth, the population of %{monster} is doubled!"
+msgstr ""
+
+msgid ""
+"After regular growth, the population of %{monster} increases by %{count} "
+"percent!"
+msgid_plural ""
+"After regular growth, the population of %{monster} increases by %{count} "
+"percent!"
+msgstr[0] ""
+
+msgid "%{monster} growth +%{count}."
+msgstr ""
+
+msgid " All populations are halved."
+msgstr ""
+
+msgid " All dwellings increase population."
+msgstr ""
+
+msgid "New Week!"
+msgstr "Tuần Mới!"
+
+msgid ""
+"%{color} player, this is your last day to capture a town, or you will be "
+"banished from this land."
+msgstr ""
+
+msgid ""
+"%{color} player, you only have %{day} days left to capture a town, or you "
+"will be banished from this land."
+msgstr ""
+
+msgid "%{color} player's turn."
+msgstr ""
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
+msgid ""
+"%{color} player, you have lost your last town. If you do not conquer another "
+"town in next week, you will be eliminated."
+msgstr ""
+
+msgid ""
+"%{color} player, your heroes abandon you, and you are banished from this "
+"land."
+msgstr ""
+
+msgid "Lord Kilburn"
+msgstr ""
+
+msgid "Tsabu"
+msgstr ""
+
+msgid "Sir Galant"
+msgstr ""
+
+msgid "Thundax"
+msgstr ""
+
+msgid "Lord Haart"
+msgstr ""
+
+msgid "Ariel"
+msgstr ""
+
+msgid "Rebecca"
+msgstr ""
+
+msgid "Sandro"
+msgstr ""
+
+msgid "Crodo"
+msgstr ""
+
+msgid "Barock"
+msgstr ""
+
+msgid "Antoine"
+msgstr ""
+
+msgid "Astra"
+msgstr ""
+
+msgid "Agar"
+msgstr ""
+
+msgid "Vatawna"
+msgstr ""
+
+msgid "Vesper"
+msgstr ""
+
+msgid "Ambrose"
+msgstr ""
+
+msgid "Troyan"
+msgstr ""
+
+msgid "Jojosh"
+msgstr ""
+
+msgid "Wrathmont"
+msgstr ""
+
+msgid "Maximus"
+msgstr ""
+
+msgid "Next Hero"
+msgstr ""
+
+msgid "Select the next Hero."
+msgstr ""
+
+msgid "Continue Movement"
+msgstr ""
+
+msgid "Continue the Hero's movement along the current path."
+msgstr ""
+
+msgid "Kingdom Summary"
+msgstr ""
+
+msgid "View a Summary of your Kingdom."
+msgstr ""
+
+msgid "Cast an adventure spell."
+msgstr ""
+
+msgid "End Turn"
+msgstr ""
+
+msgid "End your turn and left the computer take its turn."
+msgstr ""
+
+msgid "Adventure Options"
+msgstr ""
+
+msgid "Bring up the adventure options menu."
+msgstr ""
+
+msgid ""
+"Bring up the file options menu, allowing you to load, save, start a new game "
+"or quit."
+msgstr ""
+
+msgid "File Options"
+msgstr ""
+
+msgid "Bring up the system options menu, allowing you to customize your game."
+msgstr ""
+
+msgid ""
+"One or more heroes may still move, are you sure you want to end your turn?"
+msgstr ""
+
+msgid "Are you sure you want to quit?"
+msgstr ""
+
+msgid "Are you sure you want to restart? (Your current game will be lost.)"
+msgstr ""
+
+msgid "Are you sure you want to overwrite the save with this name?"
+msgstr ""
+
+msgid "Game saved successfully."
+msgstr ""
+
+msgid "There was an issue during saving."
+msgstr ""
+
+msgid ""
+"Are you sure you want to load a new game? (Your current game will be lost.)"
+msgstr ""
+
+msgid "Try looking on land!!!"
+msgstr ""
+
+msgid ""
+"Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
+"it even if he found it - all his artifact slots are full."
+msgstr ""
+
+msgid "Digging for artifacts requires a whole day, try again tomorrow."
+msgstr ""
+
+msgid ""
+"After spending many hours digging here, you have uncovered the %{artifact}."
+msgstr ""
+
+msgid "Congratulations!"
+msgstr "Chúc mừng!"
+
+msgid "Nothing here. Where could it be?"
+msgstr ""
+
+msgid "Try searching on clear ground."
+msgstr ""
+
+msgid "A miniature view of the known world. Left click to move viewing area."
+msgstr ""
+
+msgid "World Map"
+msgstr ""
+
+msgid "Month: %{month} Week: %{week}"
+msgstr ""
+
+msgid "Day: %{day}"
+msgstr "Ngày: %{day}"
+
+msgid ""
+"You find a small\n"
+"quantity of %{resource}."
+msgstr ""
+
+msgid "Status Window"
+msgstr ""
+
+msgid ""
+"This window provides information on the status of your hero or kingdom, and "
+"shows the date."
+msgstr ""
+
+msgid ""
+"This window provides information on the status of your hero or kingdom, and "
+"shows the date. Left click here to cycle through these windows."
+msgstr ""
+
+msgid ""
+"This lets you change player starting positions and colors. A particular "
+"color will always start in a particular location. Some positions may only be "
+"played by a computer player or only by a human player."
+msgstr ""
+
+msgid ""
+"This lets you change the class of a player. Classes are not always "
+"changeable. Depending on the scenario, a player may receive additional towns "
+"and/or heroes not of their primary alignment."
+msgstr ""
+
+msgid "Handicap"
+msgstr "Chấp"
+
+#
+msgid ""
+"This lets you change the handicap of a particular player. Only humans may be "
+"handicapped. Handicapped players start with fewer resources and earn 15 or "
+"30% fewer resources per turn for mild and severe handicaps, respectively."
+msgstr ""
+
+msgid "%{color} player"
+msgstr ""
+
+msgid "No Handicap"
+msgstr "Không Chấp"
+
+msgid "No special restrictions on start resources and earning them per turn."
+msgstr ""
+
+msgid "Mild Handicap"
+msgstr ""
+
+#
+msgid ""
+"Mild handicapped players start with fewer resources and earn 15% fewer "
+"resources per turn."
+msgstr ""
+
+msgid "Severe Handicap"
+msgstr ""
+
+#
+msgid ""
+"Severe handicapped players start with fewer resources and earn 30% fewer "
+"resources per turn."
+msgstr ""
+
+msgid "View %{skill} Info"
+msgstr ""
+
+msgid "Keyboard|123"
+msgstr ""
+
+msgid "Keyboard|SPACE"
+msgstr ""
+
+msgid "Keyboard|LANG"
+msgstr ""
+
+msgid "Keyboard|ABC"
+msgstr ""
+
+msgid "Kingdom Income"
+msgstr "Thu nhập Vương quốc"
+
+msgid "Kingdom Income per day."
+msgstr "Thu nhập Vương quốc một ngày."
+
+msgid "For every lighthouse controlled, your ships will move further each day."
+msgstr ""
+"Với mỗi ngọn hải đăng được kiểm soát, tàu của ngươi sẽ di chuyển xa hơn mỗi "
+"ngày."
+
+msgid "English"
+msgstr "Tiếng Anh"
+
+msgid "French"
+msgstr "Tiếng Pháp"
+
+msgid "Polish"
+msgstr "Tiếng Ba Lan"
+
+msgid "German"
+msgstr "Tiếng Đức"
+
+msgid "Russian"
+msgstr "Tiếng Nga"
+
+msgid "Italian"
+msgstr "Tiếng Ý"
+
+msgid "Czech"
+msgstr ""
+
+msgid "Norwegian"
+msgstr "Tiếng Na Uy"
+
+msgid "Belarusian"
+msgstr "Tiếng Bê La Rút"
+
+msgid "Bulgarian"
+msgstr "Tiếng Bun Ga Ri"
+
+msgid "Ukrainian"
+msgstr "Tiếng U Cờ Rai Na"
+
+msgid "Romanian"
+msgstr "Tiếng Ru Ma Ni"
+
+msgid "Spanish"
+msgstr "Tiếng Tây Ban Nha"
+
+msgid "Swedish"
+msgstr "Tiếng Thụy Điển"
+
+msgid "Portuguese"
+msgstr "Tiếng Bồ Đào Nha"
+
+msgid "Turkish"
+msgstr "Tiếng Thổ Nhĩ Kỳ"
+
+msgid "Dutch"
+msgstr "Tiếng Hà Lan"
+
+msgid "Hungarian"
+msgstr "Tiếng Hung Ga Ri"
+
+msgid "Danish"
+msgstr "Tiếng Đan Mạch"
+
+msgid "Slovak"
+msgstr ""
+
+msgid "Vietnamese"
+msgstr "Tiếng Việt"
+
+msgid ", FPS: "
+msgstr ""
+
+msgid "%{object} robber"
+msgstr ""
+
+msgid "%{object} raided"
+msgstr ""
+
+msgid "Ector"
+msgstr ""
+
+msgid "Gwenneth"
+msgstr ""
+
+msgid "Sir Gallant"
+msgstr ""
+
+msgid "Tyro"
+msgstr ""
+
+msgid "Dimitry"
+msgstr ""
+
+msgid "Ruby"
+msgstr ""
+
+msgid "Crag Hack"
+msgstr ""
+
+msgid "Fineous"
+msgstr ""
+
+msgid "Jezebel"
+msgstr ""
+
+msgid "Atlas"
+msgstr ""
+
+msgid "Ergon"
+msgstr ""
+
+msgid "Jaclyn"
+msgstr ""
+
+msgid "Gem"
+msgstr ""
+
+msgid "Natasha"
+msgstr ""
+
+msgid "Carlawn"
+msgstr ""
+
+msgid "Luna"
+msgstr ""
+
+msgid "Arie"
+msgstr ""
+
+msgid "Barok"
+msgstr ""
+
+msgid "Kastore"
+msgstr ""
+
+msgid "Falagar"
+msgstr ""
+
+msgid "Dawn"
+msgstr ""
+
+msgid "Flint"
+msgstr ""
+
+msgid "Halon"
+msgstr ""
+
+msgid "Myra"
+msgstr ""
+
+msgid "Myrini"
+msgstr ""
+
+msgid "Wilfrey"
+msgstr ""
+
+msgid "Mandigal"
+msgstr ""
+
+msgid "Sarakin"
+msgstr ""
+
+msgid "Charity"
+msgstr ""
+
+msgid "Darlana"
+msgstr ""
+
+msgid "Ranloo"
+msgstr ""
+
+msgid "Rialdo"
+msgstr ""
+
+msgid "Zam"
+msgstr ""
+
+msgid "Zom"
+msgstr ""
+
+msgid "Celia"
+msgstr ""
+
+msgid "Roxana"
+msgstr ""
+
+msgid "Lord Corlagon"
+msgstr ""
+
+msgid "Lord Halton"
+msgstr ""
+
+msgid "Sister Eliza"
+msgstr ""
+
+msgid "Brother Brax"
+msgstr ""
+
+msgid "Dainwin"
+msgstr ""
+
+msgid "Joseph"
+msgstr ""
+
+msgid "Mog"
+msgstr ""
+
+msgid "Solmyr"
+msgstr ""
+
+msgid "Ceallach"
+msgstr ""
+
+msgid "Drakonia"
+msgstr ""
+
+msgid "Elderian"
+msgstr ""
+
+msgid "Gallavant"
+msgstr ""
+
+msgid "Jarkonas"
+msgstr ""
+
+msgid "Martine"
+msgstr ""
+
+msgid " gives you maximum morale"
+msgstr ""
+
+msgid " gives you maximum luck"
+msgstr ""
+
+msgid "You cannot pick up this artifact, you already have a full load!"
+msgstr ""
+
+msgid "To cast spells, you must first buy a spell book for %{gold} gold."
+msgstr ""
+
+msgid "Unfortunately, you seem to be a little short of cash at the moment."
+msgstr ""
+
+msgid "Do you wish to buy one?"
+msgstr ""
+
+msgid "%{count} / day"
+msgstr "%{count} / ngày"
+
+msgid "one"
+msgstr "một"
+
+msgid "two"
+msgstr "hai"
+
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
+msgstr ""
+
+msgid "Insulted by your refusal of their offer, the monsters attack!"
+msgstr ""
+
+msgid ""
+"The %{monster}, awed by the power of your forces, begin to scatter.\n"
+"Do you wish to pursue and engage them?"
+msgstr ""
+
+msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
+msgstr ""
+
+msgid ""
+"The keeper of the mill announces:\n"
+"\"Milord, I have been working very hard to provide you with these resources, "
+"come back next week for more.\""
+msgstr ""
+
+msgid ""
+"The keeper of the mill announces:\n"
+"\"Milord, I am sorry, there are no resources currently available. Please try "
+"again next week.\""
+msgstr ""
+
+msgid ""
+"The keeper of the mill announces:\n"
+"\"Milord, I have been working very hard to provide you with this gold, come "
+"back next week for more.\""
+msgstr ""
+
+msgid ""
+"The keeper of the mill announces:\n"
+"\"Milord, I am sorry, there is no gold currently available. Please try again "
+"next week.\""
+msgstr ""
+
+msgid ""
+"You've found an abandoned lean-to.\n"
+"Poking about, you discover some resources hidden nearby."
+msgstr ""
+
+msgid "The lean-to is long abandoned. There is nothing of value here."
+msgstr ""
+
+msgid ""
+"You catch a leprechaun foolishly sleeping amidst a cluster of magic "
+"mushrooms.\n"
+"In exchange for his freedom, he guides you to a small pot filled with "
+"precious things."
+msgstr ""
+
+msgid ""
+"You've found a magic garden, the kind of place that leprechauns and faeries "
+"like to cavort in, but there is no one here today.\n"
+"Perhaps you should try again next week."
+msgstr ""
+
+msgid "You come upon the remains of an unfortunate adventurer."
+msgstr ""
+
+msgid "Treasure"
+msgstr "Kho báu"
+
+msgid "Searching through the tattered clothing, you find the %{artifact}."
+msgstr ""
+
+msgid "Searching through the tattered clothing, you find nothing."
+msgstr ""
+
+msgid ""
+"You come across an old wagon left by a trader who didn't quite make it to "
+"safe terrain."
+msgstr ""
+
+msgid "Unfortunately, others have found it first, and the wagon is empty."
+msgstr ""
+
+msgid "Searching inside, you find the %{artifact}."
+msgstr ""
+
+msgid "Inside, you find some of the wagon's cargo still intact."
+msgstr ""
+
+msgid "You search through the flotsam, and find some wood and some gold."
+msgstr ""
+
+msgid "You search through the flotsam, and find some wood."
+msgstr ""
+
+msgid "You search through the flotsam, but find nothing."
+msgstr ""
+
+msgid "Shrine of the 1st Circle"
+msgstr ""
+
+msgid ""
+"You come across a small shrine attended by a group of novice acolytes.\n"
+"In exchange for your protection, they agree to teach you a simple spell - "
+"'%{spell}'."
+msgstr ""
+
+msgid "Shrine of the 2nd Circle"
+msgstr ""
+
+msgid ""
+"You come across an ornate shrine attended by a group of rotund friars.\n"
+"In exchange for your protection, they agree to teach you a spell - "
+"'%{spell}'."
+msgstr ""
+
+msgid "Shrine of the 3rd Circle"
+msgstr ""
+
+msgid ""
+"You come across a lavish shrine attended by a group of high priests.\n"
+"In exchange for your protection, they agree to teach you a sophisticated "
+"spell - '%{spell}'."
+msgstr ""
+
+msgid ""
+"\n"
+"Unfortunately, you do not have the wisdom to understand the spell, and you "
+"are unable to learn it."
+msgstr ""
+
+msgid ""
+"\n"
+"Unfortunately, you already have knowledge of this spell, so there is nothing "
+"more for them to teach you."
+msgstr ""
+
+msgid ""
+"\n"
+"Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+
+msgid ""
+"You approach the hut and observe a witch inside studying an ancient tome on "
+"%{skill}.\n"
+" \n"
+msgstr ""
+
+msgid ""
+"As you approach, she turns and focuses her one glass eye on you.\n"
+"\"You already know everything you deserve to learn!\" the witch screeches. "
+"\"NOW GET OUT OF MY HOUSE!\""
+msgstr ""
+
+msgid ""
+"As you approach, she turns and speaks.\n"
+"\"You already know that which I would teach you. I can help you no further.\""
+msgstr ""
+
+msgid ""
+"An ancient and immortal witch living in a hut with bird's legs for stilts "
+"teaches you %{skill} for her own inscrutable purposes."
+msgstr ""
+
+msgid "As you drink the sweet water, you gain luck for your next battle."
+msgstr ""
+
+msgid "You drink from the enchanted fountain, but nothing happens."
+msgstr ""
+
+msgid "You enter the faerie ring, but nothing happens."
+msgstr ""
+
+msgid ""
+"Upon entering the mystical faerie ring, your army gains luck for its next "
+"battle."
+msgstr ""
+
+msgid ""
+"You've found an ancient and weathered stone idol.\n"
+"It is supposed to grant luck to visitors, but since the stars are already "
+"smiling upon you, it does nothing."
+msgstr ""
+
+msgid ""
+"You've found an ancient and weathered stone idol.\n"
+"Kissing it is supposed to be lucky, so you do. The stone is very cold to the "
+"touch."
+msgstr ""
+
+msgid "The mermaids silently entice you to return later and be blessed again."
+msgstr ""
+
+msgid ""
+"The magical, soothing beauty of the Mermaids reaches you and your crew.\n"
+"Just for a moment, you forget your worries and bask in the beauty of the "
+"moment.\n"
+"The mermaids charms bless you with increased luck for your next combat."
+msgstr ""
+
+msgid ""
+"You come upon the pyramid of a great and ancient king.\n"
+"You are tempted to search it for treasure, but all the old stories warn of "
+"fearful curses and undead guardians.\n"
+"Will you search?"
+msgstr ""
+
+msgid ""
+"Upon defeating the monsters, you decipher an ancient glyph on the wall, "
+"telling the secret of the spell - '"
+msgstr ""
+
+msgid "Unfortunately, you have no Magic Book to record the spell with."
+msgstr ""
+
+msgid ""
+"Unfortunately, you do not have the wisdom to understand the spell, and you "
+"are unable to learn it."
+msgstr ""
+
+msgid ""
+"You come upon the pyramid of a great and ancient king.\n"
+"Routine exploration reveals that the pyramid is completely empty."
+msgstr ""
+
+msgid ""
+"A drink at the well is supposed to restore your spell points, but you are "
+"already at maximum."
+msgstr ""
+
+msgid "A second drink at the well in one day will not help you."
+msgstr ""
+
+msgid "A drink from the well has restored your spell points to maximum."
+msgstr ""
+
+msgid ""
+"\"I'm sorry sir,\" The leader of the soldiers says, \"but you already know "
+"everything we have to teach.\""
+msgstr ""
+
+msgid "The soldiers living in the fort teach you a few new defensive tricks."
+msgstr ""
+
+msgid ""
+"You've come upon a mercenary camp practicing their tactics. \"You're too "
+"advanced for us,\" the mercenary captain says. \"We can teach nothing more.\""
+msgstr ""
+
+msgid ""
+"You've come upon a mercenary camp practicing their tactics. The mercenaries "
+"welcome you and your troops and invite you to train with them."
+msgstr ""
+
+msgid "\"Go 'way!\", the witch doctor barks, \"you know all I know.\""
+msgstr ""
+
+msgid ""
+"An Orcish witch doctor living in the hut deepens your knowledge of magic by "
+"showing you how to cast stones, read portents, and decipher the intricacies "
+"of chicken entrails."
+msgstr ""
+
+msgid ""
+"You've found a group of Druids worshipping at one of their strange stone "
+"edifices. Silently, the Druids turn you away, indicating they have nothing "
+"new to teach you."
+msgstr ""
+
+msgid ""
+"You've found a group of Druids worshipping at one of their strange stone "
+"edifices. Silently, they teach you new ways to cast spells."
+msgstr ""
+
+msgid ""
+"You tentatively approach the burial ground of ancient warriors. Do you want "
+"to search the graves?"
+msgstr ""
+
+msgid ""
+"You spend several hours searching the graves and find nothing. Such a "
+"despicable act reduces your army's morale."
+msgstr ""
+
+msgid "Upon defeating the Zombies you search the graves and find something!"
+msgstr ""
+
+msgid ""
+"The rotting hulk of a great pirate ship creaks eerily as it is pushed "
+"against the rocks. Do you wish to search the shipwreck?"
+msgstr ""
+
+msgid ""
+"You spend several hours sifting through the debris and find nothing. Such a "
+"despicable act reduces your army's morale."
+msgstr ""
+
+msgid ""
+"Upon defeating the Ghosts you sift through the debris and find something!"
+msgstr ""
+
+msgid ""
+"The rotting hulk of a great pirate ship creaks eerily as it is pushed "
+"against the rocks. Do you wish to search the ship?"
+msgstr ""
+
+msgid ""
+"Upon defeating the Skeletons you sift through the debris and find something!"
+msgstr ""
+
+msgid "Your men spot a navigational buoy, confirming that you are on course."
+msgstr ""
+
+msgid ""
+"Your men spot a navigational buoy, confirming that you are on course and "
+"increasing their morale."
+msgstr ""
+
+msgid ""
+"The drink at the oasis is refreshing, but offers no further benefit. The "
+"oasis might help again if you fought a battle first."
+msgstr ""
+
+msgid ""
+"A drink at the oasis fills your troops with strength and lifts their "
+"spirits.  You can travel a bit further today."
+msgstr ""
+
+msgid ""
+"The drink at the watering hole is refreshing, but offers no further benefit. "
+"The watering hole might help again if you fought a battle first."
+msgstr ""
+
+msgid ""
+"A drink at the watering hole fills your troops with strength and lifts their "
+"spirits. You can travel a bit further today."
+msgstr ""
+
+msgid ""
+"It doesn't help to pray twice before a battle. Come back after you've fought."
+msgstr ""
+
+msgid "A visit and a prayer at the temple raises the morale of your troops."
+msgstr ""
+
+msgid ""
+"An old Knight appears on the steps of the gazebo. \"I am sorry, my liege, I "
+"have taught you all I can.\""
+msgstr ""
+
+msgid ""
+"An old Knight appears on the steps of the gazebo. \"My liege, I will teach "
+"you all that I know to aid you in your travels.\""
+msgstr ""
+
+msgid ""
+"You've pulled a shipwreck survivor from certain death in an unforgiving "
+"ocean. Grateful, he says, \"I would give you an artifact as a reward, but "
+"you're all full.\""
+msgstr ""
+
+msgid ""
+"You've pulled a shipwreck survivor from certain death in an unforgiving "
+"ocean. Grateful, he rewards you for your act of kindness by giving you the "
+"%{art}."
+msgstr ""
+
+msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
+msgstr ""
+
+msgid ""
+"A leprechaun offers you the %{art} for the small price of %{gold} Gold and "
+"%{count} %{res}."
+msgstr ""
+
+msgid "Do you wish to buy this artifact?"
+msgstr ""
+
+msgid ""
+"You try to pay the leprechaun, but realize that you can't afford it. The "
+"leprechaun stamps his foot and ignores you."
+msgstr ""
+
+msgid ""
+"Insulted by your refusal of his generous offer, the leprechaun stamps his "
+"foot and ignores you."
+msgstr ""
+
+msgid "You've found the artifact: "
+msgstr ""
+
+msgid ""
+"You've found the humble dwelling of a withered hermit. The hermit tells you "
+"that he is willing to give the %{art} to the first wise person he meets."
+msgstr ""
+
+msgid ""
+"You've come across the spartan quarters of a retired soldier. The soldier "
+"tells you that he is willing to pass on the %{art} to the first true leader "
+"he meets."
+msgstr ""
+
+msgid ""
+"You've encountered a strange person with a hat and an owl on it. He tells "
+"you that he is willing to give %{art} if you have %{skill}."
+msgstr ""
+
+msgid ""
+"You come upon an ancient artifact. As you reach for it, a pack of Rogues "
+"leap out of the brush to guard their stolen loot."
+msgstr ""
+
+msgid ""
+"Through a clearing you observe an ancient artifact. Unfortunately, it's "
+"guarded by a nearby %{monster}. Do you want to fight the %{monster} for the "
+"artifact?"
+msgstr ""
+
+msgid "Victorious, you take your prize, the %{art}."
+msgstr ""
+
+msgid ""
+"Discretion is the better part of valor, and you decide to avoid this fight "
+"for today."
+msgstr ""
+
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it "
+"and find %{gold} gold pieces."
+msgstr ""
+
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it "
+"and find %{gold} gold and the %{art}."
+msgstr ""
+
+msgid ""
+"After spending hours trying to fish the chest out of the sea, you open it, "
+"only to find it empty."
+msgstr ""
+
+msgid ""
+"After scouring the area, you fall upon a hidden treasure cache. You may take "
+"the gold or distribute the gold to the peasants for experience. Do you wish "
+"to keep the gold?"
+msgstr ""
+
+msgid ""
+"After scouring the area, you fall upon a hidden chest, containing the "
+"%{gold} gold pieces."
+msgstr ""
+
+msgid ""
+"After scouring the area, you fall upon a hidden chest, containing the "
+"ancient artifact %{art}."
+msgstr ""
+
+msgid ""
+"You stumble upon a dented and tarnished lamp lodged deep in the earth. Do "
+"you wish to rub the lamp?"
+msgstr ""
+
+msgid ""
+"You have taken control of the local Alchemist shop. It will provide you with "
+"%{count} unit of Mercury per day."
+msgstr ""
+
+msgid ""
+"You gain control of a sawmill. It will provide you with %{count} units of "
+"wood per day."
+msgstr ""
+
+msgid ""
+"You gain control of an ore mine. It will provide you with %{count} units of "
+"ore per day."
+msgstr ""
+
+msgid ""
+"You gain control of a sulfur mine. It will provide you with %{count} unit of "
+"sulfur per day."
+msgstr ""
+
+msgid ""
+"You gain control of a crystal mine. It will provide you with %{count} unit "
+"of crystal per day."
+msgstr ""
+
+msgid ""
+"You gain control of a gem mine. It will provide you with %{count} unit of "
+"gems per day."
+msgstr ""
+
+msgid ""
+"You gain control of a gold mine. It will provide you with %{count} gold per "
+"day."
+msgstr ""
+
+msgid ""
+"The lighthouse is now under your control, and all of your ships will now "
+"move further each day."
+msgstr ""
+
+msgid "You gain control of a %{name}."
+msgstr ""
+
+msgid ""
+"You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
+"wish to enter?"
+msgstr ""
+
+msgid "You beat the Ghosts and are able to restore the mine to production."
+msgstr ""
+
+msgid ""
+"A group of %{monster} with a desire for greater glory wish to join you. Do "
+"you accept?"
+msgstr ""
+
+msgid "As you approach the dwelling, you notice that there is no one here."
+msgstr ""
+
+msgid ""
+"You search the ruins, but the Medusas that used to live here are gone. "
+"Perhaps there will be more next week."
+msgstr ""
+
+msgid ""
+"You've found some Medusas living in the ruins. They are willing to join your "
+"army for a price. Do you want to recruit Medusas?"
+msgstr ""
+
+msgid ""
+"You've found a Sprite Tree City. Unfortunately, none of the Sprites living "
+"there wish to join an army. Maybe next week."
+msgstr ""
+
+msgid ""
+"Some of the Sprites living in the tree city are willing to join your army "
+"for a price. Do you want to recruit Sprites?"
+msgstr ""
+
+msgid ""
+"A colorful Rogues' wagon stands empty here. Perhaps more Rogues will be here "
+"later."
+msgstr ""
+
+msgid ""
+"Distant sounds of music and laughter draw you to a colorful wagon housing "
+"Rogues. Do you wish to have any Rogues join your army?"
+msgstr ""
+
+msgid ""
+"A group of tattered tents, billowing in the sandy wind, beckons you. The "
+"tents are unoccupied. Perhaps more Nomads will be here later."
+msgstr ""
+
+msgid ""
+"A group of tattered tents, billowing in the sandy wind, beckons you. Do you "
+"wish to have any Nomads join you during your travels?"
+msgstr ""
+
+msgid "The pit of mud bubbles for a minute and then lies still."
+msgstr ""
+
+msgid ""
+"As you approach the bubbling pit of mud, creatures begin to climb out and "
+"position themselves around it. In unison they say: \"Mother Earth would like "
+"to offer you a few of her troops. Do you want to recruit Earth Elementals?\""
+msgstr ""
+
+msgid "You enter the structure of white stone pillars, and find nothing."
+msgstr ""
+
+msgid ""
+"White stone pillars support a roof that rises up to the sky. As you enter "
+"the structure, the dead air of the outside gives way to a whirling gust that "
+"almost pushes you back out. The air current materializes into a barely "
+"visible form. The creature asks, in what can only be described as a loud "
+"whisper: \"Why have you come? Are you here to call upon the forces of the "
+"air?\""
+msgstr ""
+
+msgid "No Fire Elementals approach you from the lava pool."
+msgstr ""
+
+msgid ""
+"Beneath a structure that serves to hold in heat, Fire Elementals move about "
+"in a fiery pool of molten lava. A group of them approach you and offer their "
+"services. Would you like to recruit Fire Elementals?"
+msgstr ""
+
+msgid "A face forms in the water for a moment, and then is gone."
+msgstr ""
+
+msgid ""
+"Crystalline structures cast shadows over a small reflective pool of water. "
+"You peer into the pool, and a face that is not your own peers back. It asks: "
+"\"Would you like to call upon the powers of water?\""
+msgstr ""
+
+msgid "This burial site is deathly still."
+msgstr ""
+
+msgid ""
+"Restless spirits of long dead warriors seeking their final resting place "
+"offer to join you in hopes of finding peace. Do you wish to recruit ghosts?"
+msgstr ""
+
+msgid ""
+"The City of the Dead is empty of life, and empty of unlife as well. Perhaps "
+"some undead will move in next week."
+msgstr ""
+
+msgid ""
+"Some Liches living here are willing to join your army for a price. Do you "
+"want to recruit Liches?"
+msgstr ""
+
+msgid ""
+"You've found the ruins of an ancient city, now inhabited solely by the "
+"undead. Will you search?"
+msgstr ""
+
+msgid ""
+"Some of the surviving Liches are impressed by your victory over their "
+"fellows, and offer to join you for a price. Do you want to recruit Liches?"
+msgstr ""
+
+msgid ""
+"You've found one of those bridges that Trolls are so fond of living under, "
+"but there are none here. Perhaps there will be some next week."
+msgstr ""
+
+msgid ""
+"Some Trolls living under a bridge are willing to join your army, but for a "
+"price. Do you want to recruit Trolls?"
+msgstr ""
+
+msgid "Trolls living under the bridge challenge you. Will you fight them?"
+msgstr ""
+
+msgid ""
+"A few Trolls remain, cowering under the bridge. They approach you and offer "
+"to join your forces as mercenaries. Do you want to buy any Trolls?"
+msgstr ""
+
+msgid ""
+"The Dragon city has no Dragons willing to join you this week. Perhaps a "
+"Dragon will become available next week."
+msgstr ""
+
+msgid ""
+"The Dragon city is willing to offer some Dragons for your army for a price. "
+"Do you wish to recruit Dragons?"
+msgstr ""
+
+msgid ""
+"You stand before the Dragon City, a place off-limits to mere humans. Do you "
+"wish to violate this rule and challenge the Dragons to a fight?"
+msgstr ""
+
+msgid ""
+"Having defeated the Dragon champions, the city's leaders agree to supply "
+"some Dragons to your army for a price. Do you wish to recruit Dragons?"
+msgstr ""
+
+msgid "From the observation tower, you are able to see distant lands."
+msgstr ""
+
+msgid ""
+"The spring only refills once a week, and someone's already been here this "
+"week."
+msgstr ""
+
+msgid ""
+"A drink at the spring is supposed to give you twice your normal spell "
+"points, but you are already at that level."
+msgstr ""
+
+msgid ""
+"A drink from the spring fills your blood with magic! You have twice your "
+"normal spell points in reserve."
+msgstr ""
+
+msgid ""
+"Recognizing you, the butler refuses to admit you. \"The master,\" he says, "
+"\"will not see the same student twice.\""
+msgstr ""
+
+msgid ""
+"The butler admits you to see the master of the house. He trains you in the "
+"four skills a hero should know."
+msgstr ""
+
+msgid ""
+"The butler opens the door and looks you up and down. \"You are neither "
+"famous nor diplomatic enough to be admitted to see my master,\" he sniffs. "
+"\"Come back when you think yourself worthy.\""
+msgstr ""
+
+msgid " and "
+msgstr ""
+
+msgid ""
+"All of the %{monsters} you have in your army have been trained by the battle "
+"masters of the fort. Your army now contains %{monsters2}."
+msgstr ""
+
+msgid ""
+"An unusual alliance of Ogres, Orcs, and Dwarves offer to train (upgrade) any "
+"such troops brought to them. Unfortunately, you have none with you."
+msgstr ""
+
+msgid "All of your %{monsters} have been upgraded into %{monsters2}."
+msgstr ""
+
+msgid ""
+"A blacksmith working at the foundry offers to convert all Pikemen and "
+"Swordsmen's weapons brought to him from iron to steel. He also says that he "
+"knows a process that will convert Iron Golems into Steel Golems. "
+"Unfortunately, you have none of these troops in your army, so he can't help "
+"you."
+msgstr ""
+
+msgid ""
+"The captain looks at you with surprise and says:\n"
+"\"You already have all the maps I know about. Let me fish in peace now.\""
+msgstr ""
+
+msgid ""
+"A retired captain living on this refurbished fishing platform offers to sell "
+"you maps of the sea he made in his younger days for 1,000 gold. Do you wish "
+"to buy the maps?"
+msgstr ""
+
+msgid ""
+"The captain sighs. \"You don't have enough money, eh?  You can't expect me "
+"to give my maps away for free!\""
+msgstr ""
+
+msgid ""
+"You come upon an obelisk made from a type of stone you have never seen "
+"before. Staring at it intensely, the smooth surface suddenly changes to an "
+"inscription. The inscription is a piece of a lost ancient map. Quickly you "
+"copy down the piece and the inscription vanishes as abruptly as it appeared."
+msgstr ""
+
+msgid "You have already been to this obelisk."
+msgstr ""
+
+msgid ""
+"Upon your approach, the tree opens its eyes in delight. \"It is good to see "
+"you, my student. I hope my teachings have helped you.\""
+msgstr ""
+
+msgid ""
+"Upon your approach, the tree opens its eyes in delight. \"Ahh, an "
+"adventurer! Allow me to teach you a little of what I have learned over the "
+"ages.\""
+msgstr ""
+
+msgid "Upon your approach, the tree opens its eyes in delight."
+msgstr ""
+
+msgid ""
+"\"Ahh, an adventurer! I will be happy to teach you a little of what I have "
+"learned over the ages for a mere %{count} %{res}.\""
+msgstr ""
+
+msgid "(Just bury it around my roots.)"
+msgstr ""
+
+msgid "Tears brim in the eyes of the tree."
+msgstr ""
+
+msgid "\"I need %{count} %{res}.\""
+msgstr ""
+
+msgid "it whispers. (sniff) \"Well, come back when you can pay me.\""
+msgstr ""
+
+msgid ""
+"Nestled among the trees sits a blind seer. After you explain the intent of "
+"your journey, the seer activates his crystal ball, allowing you to see the "
+"strengths and weaknesses of your opponents."
+msgstr ""
+
+msgid ""
+"The entrance to the cave is dark, and a foul, sulfurous smell issues from "
+"the cave mouth. Will you enter?"
+msgstr ""
+
+msgid "Except for evidence of a terrible battle, the cave is empty."
+msgstr ""
+
+msgid ""
+"You find a powerful and grotesque Demon in the cave. \"Today,\" it rasps, "
+"\"you will fight and surely die. But I will give you a choice of deaths. You "
+"may fight me, or you may fight my servants. Do you prefer to fight my "
+"servants?\""
+msgstr ""
+
+msgid ""
+"The Demon screams its challenge and attacks! After a short, desperate "
+"battle, you slay the monster and receive %{exp} experience points."
+msgstr ""
+
+msgid ""
+"The Demon screams its challenge and attacks! After a short, desperate "
+"battle, you slay the monster and receive %{exp} experience points and "
+"%{count} gold."
+msgstr ""
+
+msgid ""
+"The Demon screams its challenge and attacks! After a short, desperate "
+"battle, you slay the monster and find the %{art} in the back of the cave."
+msgstr ""
+
+msgid ""
+"Seeing that you do not have %{count} gold, the demon slashes you with its "
+"claws, and the last thing you see is a red haze."
+msgstr ""
+
+msgid ""
+"The Demon leaps upon you and has its claws at your throat before you can "
+"even draw your sword. \"Your life is mine,\" it says. \"I will sell it back "
+"to you for %{count} gold.\""
+msgstr ""
+
+msgid ""
+"Upon defeating the daemon's servants, you find a hidden cache with %{count} "
+"gold."
+msgstr ""
+
+msgid ""
+"As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak "
+"makes his way towards you."
+msgstr ""
+
+msgid "He checks your pack, and sees that you have 1 cursed item."
+msgid_plural ""
+"He checks your pack, and sees that you have %{count} cursed items."
+msgstr[0] ""
+
+msgid "For %{gold} gold, the alchemist will remove it for you. Do you pay?"
+msgid_plural ""
+"For %{gold} gold, the alchemist will remove them for you. Do you pay?"
+msgstr[0] ""
+
+msgid ""
+"After you consent to pay the requested amount of gold, the alchemist grabs "
+"the cursed artifact and throws it into his magical cauldron."
+msgid_plural ""
+"After you consent to pay the requested amount of gold, the alchemist grabs "
+"all cursed artifacts and throws them into his magical cauldron."
+msgstr[0] ""
+
+msgid ""
+"You hear a voice from behind the locked door, \"You don't have enough gold "
+"to pay for my services.\""
+msgstr ""
+
+msgid ""
+"You hear a voice from high above in the tower, \"Go away! I can't help you!\""
+msgstr ""
+
+msgid ""
+"The head groom speaks to you, \"That is a fine looking horse you have. I am "
+"afraid we can give you no better, but the horses your cavalry are riding "
+"look to be of poor breeding stock. We have many trained war horses which "
+"would aid your riders greatly. I insist you take them.\""
+msgstr ""
+
+msgid ""
+"As you approach the stables, the head groom appears, leading a fine looking "
+"war horse. \"This steed will help speed you in your travels. Alas, he will "
+"grow tired in a week. You must also let me give better horses to your "
+"mounted soldiers, their horses look shoddy and weak.\""
+msgstr ""
+
+msgid ""
+"The head groom approaches you and speaks, \"You already have a fine horse, "
+"and have no inexperienced cavalry which might make use of our trained war "
+"horses.\""
+msgstr ""
+
+msgid ""
+"As you approach the stables, the head groom appears, leading a fine looking "
+"war horse. \"This steed will help speed you in your travels. Alas, his "
+"endurance will wane with a lot of heavy riding, and you must return for a "
+"fresh mount in a week. We also have many fine war horses which could benefit "
+"mounted soldiers, but you have none we can help.\""
+msgstr ""
+
+msgid "The Arena guards turn you away."
+msgstr ""
+
+msgid ""
+"You have your crew stop up their ears with wax before the sirens' eerie song "
+"has any chance of luring them to a watery grave."
+msgstr ""
+
+msgid ""
+"As the sirens sing their eerie song, your small, determined army manages to "
+"overcome the urge to dive headlong into the sea."
+msgstr ""
+
+msgid ""
+"An eerie wailing song emanates from the sirens perched upon the rocks. Many "
+"of your crew fall under its spell, and dive into the water where they drown. "
+"You are now wiser for the visit, and gain %{exp} experience."
+msgstr ""
+
+msgid ""
+"In a dazzling display of daring, you break into the local jail and free the "
+"hero imprisoned there, who, in return, pledges loyalty to your cause."
+msgstr ""
+
+msgid ""
+"You already have %{count} heroes, and regretfully must leave the prisoner in "
+"this jail to languish in agony for untold days."
+msgstr ""
+
+msgid ""
+"You enter a rickety hut and talk to the magician who lives there. He tells "
+"you of places near and far which may aid you in your journeys."
+msgstr ""
+
+msgid "This eye seems to be intently studying its surroundings."
+msgstr ""
+
+msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
+msgstr ""
+
+msgid ""
+"\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you "
+"shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept "
+"the challenge?\""
+msgstr ""
+
+msgid ""
+"The Sphinx asks you the following riddle:\n"
+" \n"
+"'%{riddle}'\n"
+" \n"
+"Your answer?"
+msgstr ""
+
+msgid ""
+"\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
+"you with a paw, knocking you to the ground. Another blow makes the world go "
+"black, and you know no more."
+msgstr ""
+
+msgid ""
+"Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
+"so here's your reward. Now begone.\""
+msgstr ""
+
+msgid ""
+"A magical barrier stands tall before you, blocking your way. Runes on the "
+"arch read,\n"
+"\"Speak the key and you may pass.\"\n"
+"As you speak the magic word, the glowing barrier dissolves into nothingness."
+msgstr ""
+
+msgid ""
+"A magical barrier stands tall before you, blocking your way. Runes on the "
+"arch read,\n"
+"\"Speak the key and you may pass.\"\n"
+"You speak, and nothing happens."
+msgstr ""
+
+msgid ""
+"You enter the tent and see an old woman gazing into a magic gem. She looks "
+"up and says,\n"
+"\"In my travels, I have learned much in the way of arcane magic. A great "
+"oracle taught me his skill. I have the answer you seek.\""
+msgstr ""
+
+msgid "Spell book is not present."
+msgstr ""
+
+msgid ""
+"That spell costs %{mana} mana. You only have %{point} mana, so you can't "
+"cast the spell."
+msgstr ""
+
+msgid "The spell was not found."
+msgstr ""
+
+msgid "Only heroes can cast this spell."
+msgstr ""
+
+msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
+msgstr ""
+
+msgid "This spell cannot be used on a boat."
+msgstr ""
+
+msgid "This spell can be casted only nearby water."
+msgstr ""
+
+msgid ""
+"You do not currently own any town or castle, so you can't cast the spell."
+msgstr ""
+
+msgid "This hero is already in a town, so you can't cast the spell."
+msgstr ""
+
+msgid ""
+"The nearest town is %{town}.\n"
+" \n"
+"This town is occupied by your hero %{hero}."
+msgstr ""
+
+msgid "%{name} the %{race} (Level %{level})"
+msgstr ""
+
+msgid "Are you sure you want to dismiss this Hero?"
+msgstr ""
+
+msgid "View Experience Info"
+msgstr ""
+
+msgid "View Spell Points Info"
+msgstr ""
+
+msgid "Set army combat formation to 'Spread'"
+msgstr ""
+
+msgid "Set army combat formation to 'Grouped'"
+msgstr ""
+
+msgid "Exit Hero Screen"
+msgstr ""
+
+msgid "You cannot dismiss a hero in a castle"
+msgstr ""
+
+msgid "Dismissal of %{name} the %{race} is prohibited by scenario"
+msgstr ""
+
+msgid "Dismiss %{name} the %{race}"
+msgstr ""
+
+msgid "Show previous hero"
+msgstr ""
+
+msgid "Show next hero"
+msgstr ""
+
+msgid "Blood Morale"
+msgstr ""
+
+msgid "%{morale} Morale"
+msgstr ""
+
+msgid "%{luck} Luck"
+msgstr ""
+
+msgid "Current Luck Modifiers:"
+msgstr ""
+
+msgid "Current Morale Modifiers:"
+msgstr ""
+
+msgid "Entire army is undead, so morale does not apply."
+msgstr ""
+
+msgid ""
+"Current experience %{exp1}.\n"
+" Next level %{exp2}."
+msgstr ""
+
+msgid "Level %{level}"
+msgstr ""
+
+msgid ""
+"%{name} currently has %{point} spell points out of a maximum of %{max}. The "
+"maximum number of spell points is 10 times your knowledge. It is "
+"occasionally possible to have more than your maximum spell points via "
+"special events."
+msgstr ""
+
+msgid "%{name1} meets %{name2}"
+msgstr ""
+
+msgid "Town Portal"
+msgstr ""
+
+msgid "Select town to port to."
+msgstr ""
+
+msgid "%{spell} failed!!!"
+msgstr ""
+
+msgid "This spell is already in use."
+msgstr ""
+
+msgid "Enemy heroes are now fully identifiable."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+
+msgid "The creatures are willing to join us!"
+msgstr ""
+
+msgid "All the creatures will join us..."
+msgstr ""
+
+msgid "The creature will join us..."
+msgid_plural "%{count} of the creatures will join us..."
+msgstr[0] ""
+
+msgid ""
+"\n"
+" for a fee of %{gold} gold."
+msgstr ""
+
+msgid "These weak creatures will surely flee before us."
+msgstr ""
+
+msgid "I fear these creatures are in the mood for a fight."
+msgstr ""
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+
+msgid "Your attack skill is a bonus added to each creature's attack skill."
+msgstr ""
+
+msgid "Your defense skill is a bonus added to each creature's defense skill."
+msgstr ""
+
+msgid "Your spell power determines the length or power of a spell."
+msgstr ""
+
+msgid ""
+"Your knowledge determines how many spell points your hero may have. Under "
+"normal circumstances, a hero is limited to 10 spell points per level of "
+"knowledge."
+msgstr ""
+
+msgid "Current Modifiers:"
+msgstr ""
+
+msgid "skill|Basic"
+msgstr ""
+
+msgid "skill|Advanced"
+msgstr ""
+
+msgid "skill|Expert"
+msgstr ""
+
+msgid "Pathfinding"
+msgstr ""
+
+msgid "Archery"
+msgstr ""
+
+msgid "Logistics"
+msgstr ""
+
+msgid "Scouting"
+msgstr ""
+
+msgid "Diplomacy"
+msgstr ""
+
+msgid "Navigation"
+msgstr ""
+
+msgid "Leadership"
+msgstr ""
+
+msgid "Wisdom"
+msgstr ""
+
+msgid "Mysticism"
+msgstr ""
+
+msgid "Ballistics"
+msgstr ""
+
+msgid "Eagle Eye"
+msgstr ""
+
+msgid "Necromancy"
+msgstr ""
+
+msgid "Estates"
+msgstr ""
+
+msgid "Advanced Archery"
+msgstr ""
+
+msgid "Advanced Pathfinding"
+msgstr ""
+
+msgid "Basic Archery"
+msgstr ""
+
+msgid "Basic Pathfinding"
+msgstr ""
+
+msgid "Expert Pathfinding"
+msgstr ""
+
+msgid "Advanced Logistics"
+msgstr ""
+
+msgid "Basic Logistics"
+msgstr ""
+
+msgid "Basic Scouting"
+msgstr ""
+
+msgid "Expert Archery"
+msgstr ""
+
+msgid "Expert Logistics"
+msgstr ""
+
+msgid "Advanced Diplomacy"
+msgstr ""
+
+msgid "Advanced Scouting"
+msgstr ""
+
+msgid "Basic Diplomacy"
+msgstr ""
+
+msgid "Expert Diplomacy"
+msgstr ""
+
+msgid "Expert Scouting"
+msgstr ""
+
+msgid "Advanced Leadership"
+msgstr ""
+
+msgid "Advanced Navigation"
+msgstr ""
+
+msgid "Basic Leadership"
+msgstr ""
+
+msgid "Basic Navigation"
+msgstr ""
+
+msgid "Expert Navigation"
+msgstr ""
+
+msgid "Advanced Wisdom"
+msgstr ""
+
+msgid "Basic Mysticism"
+msgstr ""
+
+msgid "Basic Wisdom"
+msgstr ""
+
+msgid "Expert Leadership"
+msgstr ""
+
+msgid "Expert Wisdom"
+msgstr ""
+
+msgid "Advanced Luck"
+msgstr ""
+
+msgid "Advanced Mysticism"
+msgstr ""
+
+msgid "Basic Luck"
+msgstr ""
+
+msgid "Expert Luck"
+msgstr ""
+
+msgid "Expert Mysticism"
+msgstr ""
+
+msgid "Advanced Ballistics"
+msgstr ""
+
+msgid "Advanced Eagle Eye"
+msgstr ""
+
+msgid "Basic Ballistics"
+msgstr ""
+
+msgid "Basic Eagle Eye"
+msgstr ""
+
+msgid "Expert Ballistics"
+msgstr ""
+
+msgid "Advanced Necromancy"
+msgstr ""
+
+msgid "Basic Estates"
+msgstr ""
+
+msgid "Basic Necromancy"
+msgstr ""
+
+msgid "Expert Eagle Eye"
+msgstr ""
+
+msgid "Expert Necromancy"
+msgstr ""
+
+msgid "Advanced Estates"
+msgstr ""
+
+msgid "Expert Estates"
+msgstr ""
+
+msgid ""
+"%{skill} reduces the movement penalty for rough terrain by %{count} percent."
+msgstr ""
+
+msgid "%{skill} eliminates the movement penalty for rough terrain."
+msgstr ""
+
+msgid ""
+"%{skill} increases the damage done by range attacking creatures by %{count} "
+"percent."
+msgstr ""
+
+msgid "%{skill} increases your hero's movement points by %{count} percent."
+msgstr ""
+
+msgid "%{skill} increases your hero's viewable area by one square."
+msgid_plural ""
+"%{skill} increases your hero's viewable area by %{count} squares."
+msgstr[0] ""
+
+msgid ""
+"%{skill} allows you to negotiate with monsters who are weaker than your "
+"group. "
+msgstr ""
+
+msgid "Approximately %{count} percent of the creatures may offer to join you."
+msgstr ""
+
+msgid "All of the creatures may offer to join you."
+msgstr ""
+
+msgid ""
+"%{skill} increases your hero's movement points over water by %{count} "
+"percent."
+msgstr ""
+
+msgid "%{skill} increases your hero's troops morale by %{count}."
+msgstr ""
+
+msgid "%{skill} allows your hero to learn third level spells."
+msgstr ""
+
+msgid "%{skill} allows your hero to learn fourth level spells."
+msgstr ""
+
+msgid "%{skill} allows your hero to learn fifth level spells."
+msgstr ""
+
+msgid "%{skill} regenerates one additional spell point per day to your hero."
+msgid_plural ""
+"%{skill} regenerates %{count} additional spell points per day to your hero."
+msgstr[0] ""
+
+msgid "%{skill} increases your hero's luck by %{count}."
+msgstr ""
+
+msgid ""
+"%{skill} gives your hero's catapult shots a greater chance to hit and do "
+"damage to castle walls."
+msgstr ""
+
+msgid ""
+"%{skill} gives your hero's catapult an extra shot, and each shot has a "
+"greater chance to hit and do damage to castle walls."
+msgstr ""
+
+msgid ""
+"%{skill} gives your hero's catapult an extra shot, and each shot "
+"automatically destroys any wall, except a fortified wall in a Knight castle."
+msgstr ""
+
+msgid ""
+"%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
+"2nd level enemy spell used against him in a combat."
+msgstr ""
+
+msgid ""
+"%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
+"level spell (or below) used against him in combat."
+msgstr ""
+
+msgid ""
+"%{skill} gives your hero a %{count} percent chance to learn any given 4th "
+"level spell (or below) used against him in combat."
+msgstr ""
+
+msgid ""
+"%{skill} allows %{count} percent of the creatures killed in combat to be "
+"brought back from the dead as Skeletons."
+msgstr ""
+
+msgid ""
+"Your hero produces %{count} gold pieces per day as tax revenue from estates."
+msgstr ""
+
+msgid "Blue"
+msgstr "Lục"
+
+msgid "Green"
+msgstr "Xanh"
+
+msgid "Red"
+msgstr "Đỏ"
+
+msgid "Yellow"
+msgstr "Vàng"
+
+msgid "Orange"
+msgstr "Cam"
+
+msgid "Purple"
+msgstr "Tím"
+
+msgid "barrier|Aqua"
+msgstr ""
+
+msgid "barrier|Blue"
+msgstr ""
+
+msgid "barrier|Brown"
+msgstr ""
+
+msgid "barrier|Gold"
+msgstr ""
+
+msgid "barrier|Green"
+msgstr ""
+
+msgid "barrier|Orange"
+msgstr ""
+
+msgid "barrier|Purple"
+msgstr ""
+
+msgid "barrier|Red"
+msgstr ""
+
+msgid "tent|Aqua"
+msgstr ""
+
+msgid "tent|Blue"
+msgstr ""
+
+msgid "tent|Brown"
+msgstr ""
+
+msgid "tent|Gold"
+msgstr ""
+
+msgid "tent|Green"
+msgstr ""
+
+msgid "tent|Orange"
+msgstr ""
+
+msgid "tent|Purple"
+msgstr ""
+
+msgid "tent|Red"
+msgstr ""
+
+msgid "Experience"
+msgstr ""
+
+msgid ""
+"Experience allows your heroes to go up levels, increasing their primary and "
+"secondary skills."
+msgstr ""
+
+msgid "Hero/Stats"
+msgstr ""
+
+msgid "Skills"
+msgstr ""
+
+msgid "Artifacts"
+msgstr ""
+
+msgid "Town/Castle"
+msgstr ""
+
+msgid "Garrison"
+msgstr ""
+
+msgid "Gold Per Day:"
+msgstr ""
+
+msgid "Heroes"
+msgstr "Tướng"
+
+msgid "View Heroes."
+msgstr ""
+
+msgid "Towns/Castles"
+msgstr ""
+
+msgid "View Towns and Castles."
+msgstr ""
+
+msgid "luck|Cursed"
+msgstr ""
+
+msgid "luck|Awful"
+msgstr ""
+
+msgid "luck|Bad"
+msgstr ""
+
+msgid "luck|Normal"
+msgstr ""
+
+msgid "luck|Good"
+msgstr ""
+
+msgid "luck|Great"
+msgstr ""
+
+msgid "luck|Irish"
+msgstr ""
+
+msgid ""
+"Bad luck sometimes falls on your armies in combat, causing their attacks to "
+"only do half damage."
+msgstr ""
+
+msgid ""
+"Neutral luck means your armies will never get lucky or unlucky attacks on "
+"the enemy."
+msgstr ""
+
+msgid ""
+"Good luck sometimes lets your armies get lucky attacks (double strength) in "
+"combat."
+msgstr ""
+
+msgid "morale|Treason"
+msgstr ""
+
+msgid "morale|Awful"
+msgstr "morale|Khủng hoảng"
+
+msgid "morale|Poor"
+msgstr "morale|Chán nản"
+
+msgid "morale|Normal"
+msgstr "morale|Bình thường"
+
+msgid "morale|Good"
+msgstr "morale|Rất tốt"
+
+msgid "morale|Great"
+msgstr "morale|Tuyệt vời"
+
+msgid "morale|Blood!"
+msgstr "morale|Máu chiến!"
+
+msgid "Bad morale may cause your armies to freeze in combat."
+msgstr ""
+
+msgid ""
+"Neutral morale means your armies will never be blessed with extra attacks or "
+"freeze in combat."
+msgstr ""
+
+msgid "Good morale may give your armies extra attacks in combat."
+msgstr ""
+
+msgid "Knight"
+msgstr ""
+
+msgid "Barbarian"
+msgstr ""
+
+msgid "Sorceress"
+msgstr ""
+
+msgid "Warlock"
+msgstr ""
+
+msgid "Wizard"
+msgstr ""
+
+msgid "Necromancer"
+msgstr ""
+
+msgid "Multi"
+msgstr ""
+
+msgid "race|Random"
+msgstr ""
+
+msgid "race|Neutral"
+msgstr ""
+
+msgid "doubleLined|Knight"
+msgstr ""
+
+msgid "doubleLined|Barbarian"
+msgstr ""
+
+msgid "doubleLined|Sorceress"
+msgstr ""
+
+msgid "doubleLined|Warlock"
+msgstr ""
+
+msgid "doubleLined|Wizard"
+msgstr ""
+
+msgid ""
+"doubleLined|Necro-\n"
+"mancer"
+msgstr ""
+
+msgid "doubleLinedRace|Multi"
+msgstr ""
+
+msgid "doubleLinedRace|Random"
+msgstr ""
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+
+msgid "speed|Standing"
+msgstr ""
+
+msgid "speed|Crawling"
+msgstr ""
+
+msgid "speed|Very Slow"
+msgstr ""
+
+msgid "speed|Slow"
+msgstr ""
+
+msgid "speed|Average"
+msgstr ""
+
+msgid "speed|Fast"
+msgstr ""
+
+msgid "speed|Very Fast"
+msgstr ""
+
+msgid "speed|Ultra Fast"
+msgstr ""
+
+msgid "speed|Blazing"
+msgstr ""
+
+msgid "speed|Instant"
+msgstr ""
+
+msgid "week|Squirrel"
+msgstr ""
+
+msgid "week|Rabbit"
+msgstr ""
+
+msgid "week|Gopher"
+msgstr ""
+
+msgid "week|Badger"
+msgstr ""
+
+msgid "week|Rat"
+msgstr ""
+
+msgid "week|Eagle"
+msgstr ""
+
+msgid "week|Weasel"
+msgstr ""
+
+msgid "week|Raven"
+msgstr ""
+
+msgid "week|Mongoose"
+msgstr ""
+
+msgid "week|Dog"
+msgstr ""
+
+msgid "week|Aardvark"
+msgstr ""
+
+msgid "week|Lizard"
+msgstr ""
+
+msgid "week|Tortoise"
+msgstr ""
+
+msgid "week|Hedgehog"
+msgstr ""
+
+msgid "week|Condor"
+msgstr ""
+
+msgid "week|Ant"
+msgstr ""
+
+msgid "week|Grasshopper"
+msgstr ""
+
+msgid "week|Dragonfly"
+msgstr ""
+
+msgid "week|Spider"
+msgstr ""
+
+msgid "week|Butterfly"
+msgstr ""
+
+msgid "week|Bumblebee"
+msgstr ""
+
+msgid "week|Locust"
+msgstr ""
+
+msgid "week|Earthworm"
+msgstr ""
+
+msgid "week|Hornet"
+msgstr ""
+
+msgid "week|Beetle"
+msgstr ""
+
+msgid "week|PLAGUE"
+msgstr ""
+
+msgid "week|Unnamed"
+msgstr ""
+
+msgid "Desert"
+msgstr "Sa mạc"
+
+msgid "Snow"
+msgstr "Tuyết"
+
+msgid "Wasteland"
+msgstr "Đất hoang"
+
+msgid "Beach"
+msgstr "Biển"
+
+msgid "Lava"
+msgstr "Nham thạch"
+
+msgid "Dirt"
+msgstr "Bùn"
+
+msgid "Grass"
+msgstr "Cỏ"
+
+msgid "Ocean"
+msgstr "Đại dương"
+
+msgid "maps|Small"
+msgstr "maps|Nhỏ"
+
+msgid "maps|Medium"
+msgstr "maps|Trung"
+
+msgid "maps|Large"
+msgstr "maps|Lớn"
+
+msgid "maps|Extra Large"
+msgstr "maps|Rất Lớn"
+
+msgid "maps|Custom Size"
+msgstr ""
+
+msgid "Ore Mine"
+msgstr "Mỏ Đá"
+
+msgid "Sulfur Mine"
+msgstr "Mỏ Sun-phua"
+
+msgid "Crystal Mine"
+msgstr "Mỏ Thạch anh"
+
+msgid "Gems Mine"
+msgstr "Mỏ Kim cương"
+
+msgid "Gold Mine"
+msgstr "Mỏ Vàng"
+
+msgid "Mine"
+msgstr "Mỏ"
+
+msgid "Burma shave."
+msgstr ""
+
+msgid "Next sign 50 miles."
+msgstr "Chỉ dẫn kế tiếp cách 50 dặm."
+
+msgid "See Rock City."
+msgstr ""
+
+msgid "This space for rent."
+msgstr ""
+
+msgid "No object"
+msgstr "Không có gì"
+
+msgid "Alchemist Lab"
+msgstr "Phòng thí nghiệm Hóa"
+
+msgid "Sign"
+msgstr "Chỉ dẫn"
+
+msgid "Buoy"
+msgstr "Phao"
+
+msgid "Skeleton"
+msgstr "Xương"
+
+msgid "Daemon Cave"
+msgstr ""
+
+msgid "Treasure Chest"
+msgstr "Rương Báu vật"
+
+msgid "Faerie Ring"
+msgstr ""
+
+msgid "Campfire"
+msgstr "Lửa trại"
+
+msgid "Fountain"
+msgstr "Đài nước"
+
+msgid "Gazebo"
+msgstr ""
+
+msgid "Genie Lamp"
+msgstr ""
+
+msgid "Archer's House"
+msgstr ""
+
+msgid "Goblin Hut"
+msgstr ""
+
+msgid "Dwarf Cottage"
+msgstr ""
+
+msgid "Peasant Hut"
+msgstr ""
+
+msgid "Stables"
+msgstr "Chuồng ngựa"
+
+msgid "Alchemist's Tower"
+msgstr ""
+
+msgid "Event"
+msgstr "Sự kiện"
+
+msgid "Dragon City"
+msgstr ""
+
+msgid "Lighthouse"
+msgid_plural "Lighthouses"
+msgstr[0] "Hải đăng"
+
+msgid "Water Wheel"
+msgid_plural "Water Wheels"
+msgstr[0] ""
+
+msgid "Mines"
+msgstr "Mỏ"
+
+msgid "Monster"
+msgstr "Quái"
+
+msgid "Obelisk"
+msgstr "Đài tưởng niệm"
+
+msgid "Oasis"
+msgstr "Ốc đảo"
+
+msgid "Resource"
+msgstr "Tài nguyên"
+
+msgid "Sawmill"
+msgstr "Xưởng cưa"
+
+msgid "Oracle"
+msgstr ""
+
+msgid "Shrine of the First Circle"
+msgstr ""
+
+msgid "Shipwreck"
+msgstr "Tàu đắm"
+
+msgid "Sea Chest"
+msgstr ""
+
+msgid "Desert Tent"
+msgstr ""
+
+msgid "Stone Liths"
+msgstr ""
+
+msgid "Wagon Camp"
+msgstr ""
+
+msgid "Hut of the Magi"
+msgstr ""
+
+msgid "Whirlpool"
+msgstr ""
+
+msgid "Windmill"
+msgid_plural "Windmills"
+msgstr[0] "Cối xay gió"
+
+msgid "Artifact"
+msgstr ""
+
+msgid "Mermaid"
+msgstr "Tiên cá"
+
+msgid "Boat"
+msgstr "Thuyền"
+
+msgid "Random Ultimate Artifact"
+msgstr ""
+
+msgid "Random Artifact"
+msgstr ""
+
+msgid "Random Resource"
+msgstr ""
+
+msgid "Random Monster"
+msgstr ""
+
+msgid "Random Town"
+msgstr ""
+
+msgid "Random Castle"
+msgstr ""
+
+msgid "Eye of the Magi"
+msgstr ""
+
+msgid "Random Monster - weak"
+msgstr ""
+
+msgid "Random Monster - medium"
+msgstr ""
+
+msgid "Random Monster - strong"
+msgstr ""
+
+msgid "Random Monster - very strong"
+msgstr ""
+
+msgid "Nothing Special"
+msgstr ""
+
+msgid "Mossy Rock"
+msgstr ""
+
+msgid "Watch Tower"
+msgstr "Tháp Canh"
+
+msgid "Tree House"
+msgstr ""
+
+msgid "Tree City"
+msgstr ""
+
+msgid "Ruins"
+msgstr "Tàn tích"
+
+msgid "Fort"
+msgstr ""
+
+msgid "Abandoned Mine"
+msgstr "Mỏ hoang"
+
+msgid "Sirens"
+msgstr ""
+
+msgid "Standing Stones"
+msgstr ""
+
+msgid "Idol"
+msgstr ""
+
+msgid "Tree of Knowledge"
+msgstr ""
+
+msgid "Witch Doctor's Hut"
+msgstr ""
+
+msgid "Temple"
+msgstr ""
+
+msgid "Hill Fort"
+msgstr ""
+
+msgid "Halfling Hole"
+msgstr ""
+
+msgid "Mercenary Camp"
+msgstr ""
+
+msgid "Shrine of the Second Circle"
+msgstr ""
+
+msgid "Shrine of the Third Circle"
+msgstr ""
+
+msgid "City of the Dead"
+msgstr ""
+
+msgid "Sphinx"
+msgstr ""
+
+msgid "Wagon"
+msgstr ""
+
+msgid "Tar Pit"
+msgstr ""
+
+msgid "Artesian Spring"
+msgstr ""
+
+msgid "Troll Bridge"
+msgstr ""
+
+msgid "Watering Hole"
+msgstr ""
+
+msgid "Witch's Hut"
+msgstr ""
+
+msgid "Xanadu"
+msgstr ""
+
+msgid "Lean-To"
+msgstr ""
+
+msgid "Magellan's Maps"
+msgstr ""
+
+msgid "Flotsam"
+msgstr ""
+
+msgid "Derelict Ship"
+msgstr ""
+
+msgid "Shipwreck Survivor"
+msgstr ""
+
+msgid "Bottle"
+msgstr "Chai"
+
+msgid "Magic Well"
+msgstr ""
+
+msgid "Magic Garden"
+msgid_plural "Magic Gardens"
+msgstr[0] ""
+
+msgid "Observation Tower"
+msgstr ""
+
+msgid "Freeman's Foundry"
+msgstr ""
+
+msgid "Reefs"
+msgstr "Đá ngầm"
+
+msgid "Trees"
+msgstr "Cây"
+
+msgid "Mountains"
+msgstr "Núi"
+
+msgid "Volcano"
+msgstr "Núi lửa"
+
+msgid "Flowers"
+msgstr "Hoa"
+
+msgid "Rock"
+msgstr "Đá"
+
+msgid "Water Lake"
+msgstr "Hồ Nước"
+
+msgid "Mandrake"
+msgstr ""
+
+msgid "Dead Tree"
+msgstr "Cây khô"
+
+msgid "Stump"
+msgstr ""
+
+msgid "Crater"
+msgstr ""
+
+msgid "Cactus"
+msgstr "Xương rồng"
+
+msgid "Mound"
+msgstr ""
+
+msgid "Dune"
+msgstr "Đụn cát"
+
+msgid "Lava Pool"
+msgstr "Vũng nham thạch"
+
+msgid "Shrub"
+msgstr ""
+
+msgid "Barrow Mounds"
+msgstr ""
+
+msgid "Random Artifact - Treasure"
+msgstr ""
+
+msgid "Random Artifact - Minor"
+msgstr ""
+
+msgid "Random Artifact - Major"
+msgstr ""
+
+msgid "Barrier"
+msgstr ""
+
+msgid "Traveller's Tent"
+msgstr ""
+
+msgid "Jail"
+msgstr "Ngục"
+
+msgid "Fire Summoning Altar"
+msgstr ""
+
+msgid "Air Summoning Altar"
+msgstr ""
+
+msgid "Earth Summoning Altar"
+msgstr ""
+
+msgid "Water Summoning Altar"
+msgstr ""
+
+msgid "Unknown Monster"
+msgstr ""
+
+msgid "Unknown Monsters"
+msgstr ""
+
+msgid "Peasant"
+msgstr "Nông dân"
+
+msgid "Peasants"
+msgstr "Nông dân"
+
+msgid "Archer"
+msgstr ""
+
+msgid "Archers"
+msgstr ""
+
+msgid "Ranger"
+msgstr ""
+
+msgid "Rangers"
+msgstr ""
+
+msgid "Pikeman"
+msgstr ""
+
+msgid "Pikemen"
+msgstr ""
+
+msgid "Veteran Pikeman"
+msgstr ""
+
+msgid "Veteran Pikemen"
+msgstr ""
+
+msgid "Swordsman"
+msgstr ""
+
+msgid "Swordsmen"
+msgstr ""
+
+msgid "Master Swordsman"
+msgstr ""
+
+msgid "Master Swordsmen"
+msgstr ""
+
+msgid "Cavalries"
+msgstr ""
+
+msgid "Cavalry"
+msgstr ""
+
+msgid "Champion"
+msgstr ""
+
+msgid "Champions"
+msgstr ""
+
+msgid "Paladin"
+msgstr ""
+
+msgid "Paladins"
+msgstr ""
+
+msgid "Crusader"
+msgstr ""
+
+msgid "Crusaders"
+msgstr ""
+
+msgid "Goblin"
+msgstr ""
+
+msgid "Goblins"
+msgstr ""
+
+msgid "Orc"
+msgstr ""
+
+msgid "Orcs"
+msgstr ""
+
+msgid "Orc Chief"
+msgstr ""
+
+msgid "Orc Chiefs"
+msgstr ""
+
+msgid "Wolf"
+msgstr ""
+
+msgid "Wolves"
+msgstr ""
+
+msgid "Ogre"
+msgstr ""
+
+msgid "Ogres"
+msgstr ""
+
+msgid "Ogre Lord"
+msgstr ""
+
+msgid "Ogre Lords"
+msgstr ""
+
+msgid "Troll"
+msgstr ""
+
+msgid "Trolls"
+msgstr ""
+
+msgid "War Troll"
+msgstr ""
+
+msgid "War Trolls"
+msgstr ""
+
+msgid "Cyclopes"
+msgstr ""
+
+msgid "Cyclops"
+msgstr ""
+
+msgid "Sprite"
+msgstr ""
+
+msgid "Sprites"
+msgstr ""
+
+msgid "Dwarf"
+msgstr ""
+
+msgid "Dwarves"
+msgstr ""
+
+msgid "Battle Dwarf"
+msgstr ""
+
+msgid "Battle Dwarves"
+msgstr ""
+
+msgid "Elf"
+msgstr ""
+
+msgid "Elves"
+msgstr ""
+
+msgid "Grand Elf"
+msgstr ""
+
+msgid "Grand Elves"
+msgstr ""
+
+msgid "Druid"
+msgstr ""
+
+msgid "Druids"
+msgstr ""
+
+msgid "Greater Druid"
+msgstr ""
+
+msgid "Greater Druids"
+msgstr ""
+
+msgid "Unicorn"
+msgstr ""
+
+msgid "Unicorns"
+msgstr ""
+
+msgid "Phoenix"
+msgstr ""
+
+msgid "Phoenixes"
+msgstr ""
+
+msgid "Centaur"
+msgstr ""
+
+msgid "Centaurs"
+msgstr ""
+
+msgid "Gargoyle"
+msgstr ""
+
+msgid "Gargoyles"
+msgstr ""
+
+msgid "Griffin"
+msgstr ""
+
+msgid "Griffins"
+msgstr ""
+
+msgid "Minotaur"
+msgstr ""
+
+msgid "Minotaurs"
+msgstr ""
+
+msgid "Minotaur King"
+msgstr ""
+
+msgid "Minotaur Kings"
+msgstr ""
+
+msgid "Hydra"
+msgstr ""
+
+msgid "Hydras"
+msgstr ""
+
+msgid "Green Dragon"
+msgstr "Rồng Xanh"
+
+msgid "Green Dragons"
+msgstr "Rồng Xanh"
+
+msgid "Red Dragon"
+msgstr "Rồng Đỏ"
+
+msgid "Red Dragons"
+msgstr "Rồng Đỏ"
+
+msgid "Black Dragon"
+msgstr "Rồng Đen"
+
+msgid "Black Dragons"
+msgstr "Rồng Đen"
+
+msgid "Halfling"
+msgstr ""
+
+msgid "Halflings"
+msgstr ""
+
+msgid "Boar"
+msgstr "Lợn rừng"
+
+msgid "Boars"
+msgstr "Lợn rừng"
+
+msgid "Iron Golem"
+msgstr ""
+
+msgid "Iron Golems"
+msgstr ""
+
+msgid "Steel Golem"
+msgstr ""
+
+msgid "Steel Golems"
+msgstr ""
+
+msgid "Roc"
+msgstr ""
+
+msgid "Rocs"
+msgstr ""
+
+msgid "Mage"
+msgstr ""
+
+msgid "Magi"
+msgstr ""
+
+msgid "Archmage"
+msgstr ""
+
+msgid "Archmagi"
+msgstr ""
+
+msgid "Giant"
+msgstr ""
+
+msgid "Giants"
+msgstr ""
+
+msgid "Titan"
+msgstr ""
+
+msgid "Titans"
+msgstr ""
+
+msgid "Skeletons"
+msgstr ""
+
+msgid "Zombie"
+msgstr ""
+
+msgid "Zombies"
+msgstr ""
+
+msgid "Mutant Zombie"
+msgstr ""
+
+msgid "Mutant Zombies"
+msgstr ""
+
+msgid "Mummies"
+msgstr "Xác ướp"
+
+msgid "Mummy"
+msgstr "Xác ướp"
+
+msgid "Royal Mummies"
+msgstr ""
+
+msgid "Royal Mummy"
+msgstr ""
+
+msgid "Vampire"
+msgstr ""
+
+msgid "Vampires"
+msgstr ""
+
+msgid "Vampire Lord"
+msgstr ""
+
+msgid "Vampire Lords"
+msgstr ""
+
+msgid "Lich"
+msgstr ""
+
+msgid "Liches"
+msgstr ""
+
+msgid "Power Lich"
+msgstr ""
+
+msgid "Power Liches"
+msgstr ""
+
+msgid "Bone Dragon"
+msgstr "Rồng Xương"
+
+msgid "Bone Dragons"
+msgstr "Rồng Xương"
+
+msgid "Rogue"
+msgstr ""
+
+msgid "Rogues"
+msgstr ""
+
+msgid "Nomad"
+msgstr ""
+
+msgid "Nomads"
+msgstr ""
+
+msgid "Ghost"
+msgstr "Ma"
+
+msgid "Ghosts"
+msgstr "Ma"
+
+msgid "Genie"
+msgstr ""
+
+msgid "Genies"
+msgstr ""
+
+msgid "Medusa"
+msgstr ""
+
+msgid "Medusas"
+msgstr ""
+
+msgid "Earth Elemental"
+msgstr ""
+
+msgid "Earth Elementals"
+msgstr ""
+
+msgid "Air Elemental"
+msgstr ""
+
+msgid "Air Elementals"
+msgstr ""
+
+msgid "Fire Elemental"
+msgstr ""
+
+msgid "Fire Elementals"
+msgstr ""
+
+msgid "Water Elemental"
+msgstr ""
+
+msgid "Water Elementals"
+msgstr ""
+
+msgid "Random Monsters"
+msgstr ""
+
+msgid "Random Monster 1"
+msgstr ""
+
+msgid "Random Monsters 1"
+msgstr ""
+
+msgid "Random Monster 2"
+msgstr ""
+
+msgid "Random Monsters 2"
+msgstr ""
+
+msgid "Random Monster 3"
+msgstr ""
+
+msgid "Random Monsters 3"
+msgstr ""
+
+msgid "Random Monster 4"
+msgstr ""
+
+msgid "Random Monsters 4"
+msgstr ""
+
+msgid "Double shot"
+msgstr ""
+
+msgid "2-hex monster"
+msgstr ""
+
+msgid "Double strike"
+msgstr ""
+
+msgid "Double damage to Undead"
+msgstr ""
+
+msgid "% magic resistance"
+msgstr ""
+
+msgid "Immune to Mind spells"
+msgstr ""
+
+msgid "Immune to Elemental spells"
+msgstr ""
+
+msgid "Immune to Fire spells"
+msgstr ""
+
+msgid "Immune to Cold spells"
+msgstr ""
+
+msgid "Immune to "
+msgstr ""
+
+msgid "% immunity to %{spell} spell"
+msgstr ""
+
+msgid "% damage from Elemental spells"
+msgstr ""
+
+msgid "% chance to Dispel beneficial spells"
+msgstr ""
+
+msgid "% chance to Paralyze"
+msgstr ""
+
+msgid "% chance to Petrify"
+msgstr ""
+
+msgid "% chance to Blind"
+msgstr ""
+
+msgid "% chance to Curse"
+msgstr ""
+
+msgid "% chance to cast %{spell} spell"
+msgstr ""
+
+msgid "HP regeneration"
+msgstr ""
+
+msgid "Two hexes attack"
+msgstr ""
+
+msgid "Flyer"
+msgstr ""
+
+msgid "Always retaliates"
+msgstr ""
+
+msgid "Attacks all adjacent enemies"
+msgstr ""
+
+msgid "No melee penalty"
+msgstr ""
+
+msgid "Dragon"
+msgstr "Rồng"
+
+msgid "Undead"
+msgstr ""
+
+msgid "No enemy retaliation"
+msgstr ""
+
+msgid "HP drain"
+msgstr ""
+
+msgid "Cloud attack"
+msgstr ""
+
+msgid "Decreases enemy's morale by "
+msgstr ""
+
+msgid "% chance to halve enemy"
+msgstr ""
+
+msgid "Soul Eater"
+msgstr ""
+
+msgid "Elemental"
+msgstr ""
+
+msgid "No Morale"
+msgstr ""
+
+msgid "200% damage from Fire spells"
+msgstr ""
+
+msgid "200% damage from Cold spells"
+msgstr ""
+
+msgid "% damage from %{spell} spell"
+msgstr ""
+
+msgid "% immunity to "
+msgstr ""
+
+msgid "Lightning"
+msgstr ""
+
+msgid "% damage from "
+msgstr ""
+
+msgid "The three Anduran artifacts magically combine into one."
+msgstr ""
+
+msgid "View Spells"
+msgstr ""
+
+msgid "View %{name} Info"
+msgstr ""
+
+msgid "Move %{name}"
+msgstr ""
+
+msgid "Cannot move the Spellbook"
+msgstr ""
+
+msgid "This item can't be traded."
+msgstr ""
+
+msgid "The %{name} increases your knowledge by %{count}."
+msgstr ""
+
+msgid "Ultimate Book of Knowledge"
+msgstr ""
+
+msgid "The %{name} increases your attack skill by %{count}."
+msgstr ""
+
+msgid "Ultimate Sword of Dominion"
+msgstr ""
+
+msgid "The %{name} increases your defense skill by %{count}."
+msgstr ""
+
+msgid "Ultimate Cloak of Protection"
+msgstr ""
+
+msgid "The %{name} increases your spell power by %{count}."
+msgstr ""
+
+msgid "Ultimate Wand of Magic"
+msgstr ""
+
+msgid "The %{name} increases your attack and defense skills by %{count} each."
+msgstr ""
+
+msgid "Ultimate Shield"
+msgstr "Khiên Tối thượng"
+
+msgid "The %{name} increases your spell power and knowledge by %{count} each."
+msgstr ""
+
+msgid "Ultimate Staff"
+msgstr "Quyền trượng Tối thượng"
+
+msgid "The %{name} increases each of your basic skills by %{count} points."
+msgstr ""
+
+msgid "Ultimate Crown"
+msgstr "Vương miện Tối thượng"
+
+msgid "Golden Goose"
+msgstr "Ngỗng Vàng"
+
+msgid "The %{name} brings in an income of %{count} gold per day."
+msgstr ""
+
+msgid "Arcane Necklace of Magic"
+msgstr ""
+
+msgid ""
+"After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
+"an exquisite jeweled necklace."
+msgstr ""
+
+msgid "Caster's Bracelet of Magic"
+msgstr ""
+
+msgid ""
+"While searching through the rubble of a caved-in mine, you free a group of "
+"trapped Dwarves. Grateful, the leader gives you a golden bracelet."
+msgstr ""
+
+msgid "Mage's Ring of Power"
+msgstr ""
+
+msgid ""
+"A cry of pain leads you to a Centaur, caught in a trap. Upon setting the "
+"creature free, he hands you a small pouch. Emptying the contents, you find a "
+"dazzling jeweled ring."
+msgstr ""
+
+msgid "Witch's Broach of Magic"
+msgstr ""
+
+msgid ""
+"Alongside the remains of a burnt witch lies a beautiful broach, intricately "
+"designed. Approaching the corpse with caution, you add the broach to your "
+"inventory."
+msgstr ""
+
+msgid "Medal of Valor"
+msgstr "Huân chương Anh dũng"
+
+msgid "The %{name} increases your morale by %{count}."
+msgstr ""
+
+msgid ""
+"Freeing a virtuous maiden from the clutches of an evil overlord, you are "
+"granted a Medal of Valor by the King's herald."
+msgstr ""
+
+msgid "Medal of Courage"
+msgstr "Huân chương Dũng cảm"
+
+msgid ""
+"After saving a young boy from a vicious pack of Wolves, you return him to "
+"his father's manor. The grateful nobleman awards you with a Medal of Courage."
+msgstr ""
+
+msgid "Medal of Honor"
+msgstr "Huân chương Danh dự"
+
+msgid ""
+"After freeing a princess of a neighboring kingdom from the evil clutches of "
+"despicable slavers, she awards you with a Medal of Honor."
+msgstr ""
+
+msgid "Medal of Distinction"
+msgstr "Huân chương Xuất chúng"
+
+msgid ""
+"Ridding the countryside of the hideous Minotaur who made a sport of eating "
+"noblemen's Knights, you are honored with the Medal of Distinction."
+msgstr ""
+
+msgid "Fizbin of Misfortune"
+msgstr ""
+
+msgid "The %{name} greatly decreases your morale by %{count}."
+msgstr ""
+
+msgid ""
+"You stumble upon a medal lying alongside the empty road. Adding the medal to "
+"your inventory, you become aware that you have acquired the undesirable "
+"Fizbin of Misfortune, greatly decreasing your army's morale."
+msgstr ""
+
+msgid "Thunder Mace of Dominion"
+msgstr ""
+
+msgid ""
+"During a sudden storm, a bolt of lightning strikes a tree, splitting it. "
+"Inside the tree you find a mysterious mace."
+msgstr ""
+
+msgid "Armored Gauntlets of Protection"
+msgstr ""
+
+msgid "The %{name} increase your defense skill by %{count}."
+msgstr ""
+
+msgid ""
+"You encounter the infamous Black Knight!  After a grueling duel ending in a "
+"draw, the Knight, out of respect, offers you a pair of armored gauntlets."
+msgstr ""
+
+msgid "Defender Helm of Protection"
+msgstr ""
+
+msgid ""
+"A glint of golden light catches your eye. Upon further investigation, you "
+"find a golden helm hidden under a bush."
+msgstr ""
+
+msgid "Giant Flail of Dominion"
+msgstr ""
+
+msgid ""
+"A clumsy Giant has killed himself with his own flail. Knowing your superior "
+"skill with this weapon, you confidently remove the spectacular flail from "
+"the fallen Giant."
+msgstr ""
+
+msgid "Ballista of Quickness"
+msgstr ""
+
+msgid "The %{name} gives your catapult one extra shot per combat round."
+msgstr ""
+
+msgid ""
+"Walking through the ruins of an ancient walled city, you find the instrument "
+"of the city's destruction, an elaborately crafted ballista."
+msgstr ""
+
+msgid "Stealth Shield of Protection"
+msgstr ""
+
+msgid ""
+"A stone statue of a warrior holds a silver shield. As you remove the shield, "
+"the statue crumbles into dust."
+msgstr ""
+
+msgid "Dragon Sword of Dominion"
+msgstr ""
+
+msgid ""
+"As you are walking along a narrow path, a nearby bush suddenly bursts into "
+"flames. Before your eyes the flames become the image of a beautiful woman. "
+"She holds out a magnificent sword to you."
+msgstr ""
+
+msgid "Power Axe of Dominion"
+msgstr ""
+
+msgid ""
+"You see a silver axe embedded deeply in the ground. After several "
+"unsuccessful attempts by your army to remove the axe, you tightly grip the "
+"handle of the axe and effortlessly pull it free."
+msgstr ""
+
+msgid "Divine Breastplate of Protection"
+msgstr ""
+
+msgid ""
+"A gang of Rogues is sifting through the possessions of dead warriors. "
+"Scaring off the scavengers, you note the Rogues had overlooked a beautiful "
+"breastplate."
+msgstr ""
+
+msgid "Minor Scroll of Knowledge"
+msgstr ""
+
+msgid ""
+"Before you appears a levitating glass case with a scroll, perched upon a bed "
+"of crimson velvet. At your touch, the lid opens and the scroll floats into "
+"your awaiting hands."
+msgstr ""
+
+msgid "Major Scroll of Knowledge"
+msgstr ""
+
+msgid ""
+"Visiting a local wiseman, you explain the intent of your journey. He reaches "
+"into a sack and withdraws a yellowed scroll and hands it to you."
+msgstr ""
+
+msgid "Superior Scroll of Knowledge"
+msgstr ""
+
+msgid ""
+"You come across the remains of an ancient Druid. Bones, yellowed with age, "
+"peer from the ragged folds of her robe. Searching the robe, you discover a "
+"scroll hidden in the folds."
+msgstr ""
+
+msgid "Foremost Scroll of Knowledge"
+msgstr ""
+
+msgid ""
+"Mangled bones, yellowed with age, peer from the ragged folds of a dead "
+"Druid's robe. Searching the robe, you discover a scroll hidden within."
+msgstr ""
+
+msgid "Endless Sack of Gold"
+msgstr ""
+
+msgid "The %{name} provides you with %{count} gold per day."
+msgstr ""
+
+msgid ""
+"A little leprechaun dances gleefully around a magic sack. Seeing you "
+"approach, he stops in mid-stride. The little man screams and stamps his foot "
+"ferociously, vanishing into thin air. Remembering the old leprechaun saying "
+"'Finders Keepers', you grab the sack and leave."
+msgstr ""
+
+msgid "Endless Bag of Gold"
+msgstr ""
+
+msgid ""
+"A noblewoman, separated from her traveling companions, asks for your help. "
+"After escorting her home, she rewards you with a bag filled with gold."
+msgstr ""
+
+msgid "Endless Purse of Gold"
+msgstr ""
+
+msgid ""
+"In your travels, you find a leather purse filled with gold that once "
+"belonged to a great warrior king who had the ability to transform any "
+"inanimate object into gold."
+msgstr ""
+
+msgid "Nomad Boots of Mobility"
+msgstr ""
+
+msgid "The %{name} increase your movement on land."
+msgstr ""
+
+msgid ""
+"A Nomad trader seeks protection from a tribe of Goblins. For your "
+"assistance, he gives you a finely crafted pair of boots made from the "
+"softest leather. Looking closely, you see fascinating ancient carvings "
+"engraved on the leather."
+msgstr ""
+
+msgid "Traveler's Boots of Mobility"
+msgstr ""
+
+msgid ""
+"Discovering a pair of beautifully beaded boots made from the finest and "
+"softest leather, you thank the anonymous donor and add the boots to your "
+"inventory."
+msgstr ""
+
+msgid "Lucky Rabbit's Foot"
+msgstr ""
+
+msgid "The %{name} increases your luck in combat by %{count}."
+msgstr ""
+
+msgid ""
+"A traveling merchant offers you a rabbit's foot, made of gleaming silver "
+"fur, for safe passage. The merchant explains the charm will increase your "
+"luck in combat."
+msgstr ""
+
+msgid "Golden Horseshoe"
+msgstr ""
+
+msgid ""
+"An ensnared Unicorn whinnies in fright. Murmuring soothing words, you set "
+"her free. Snorting and stamping her front hoof once, she gallops off. "
+"Looking down you see a golden horseshoe."
+msgstr ""
+
+msgid "Gambler's Lucky Coin"
+msgstr ""
+
+msgid ""
+"You have captured a mischievous imp who has been terrorizing the region. In "
+"exchange for his release, he rewards you with a magical coin."
+msgstr ""
+
+msgid "Four-Leaf Clover"
+msgstr ""
+
+msgid ""
+"In the middle of a patch of dead and dry vegetation, to your surprise you "
+"find a healthy green four-leaf clover."
+msgstr ""
+
+msgid "True Compass of Mobility"
+msgstr ""
+
+msgid "The %{name} increases your movement on land and sea."
+msgstr ""
+
+msgid ""
+"An old man claiming to be an inventor asks you to try his latest invention. "
+"He then hands you a compass."
+msgstr ""
+
+msgid "Sailor's Astrolabe of Mobility"
+msgstr ""
+
+msgid "The %{name} increases your movement on sea."
+msgstr ""
+
+msgid ""
+"An old sea captain is being tortured by Ogres. You save him, and in return "
+"he rewards you with a wondrous instrument to measure the distance of a star."
+msgstr ""
+
+msgid "Evil Eye"
+msgstr ""
+
+msgid "The %{name} reduces the casting cost of curse spells by half."
+msgstr ""
+
+msgid ""
+"While venturing into a decrepit hut you find the Skeleton of a long dead "
+"witch. Investigation of the remains reveals a glass eye rolling around "
+"inside an empty skull."
+msgstr ""
+
+msgid "Enchanted Hourglass"
+msgstr ""
+
+msgid "The %{name} extends the duration of all your spells by %{count} turns."
+msgstr ""
+
+msgid ""
+"A surprise turn in the landscape finds you in the midst of a grisly scene:  "
+"Vultures picking at the aftermath of a terrible battle. Your cursory search "
+"of the remains turns up an enchanted hourglass."
+msgstr ""
+
+msgid "Gold Watch"
+msgstr "Đồng hồ vàng"
+
+msgid "The %{name} doubles the effectiveness of your hypnotize spells."
+msgstr ""
+
+msgid ""
+"In reward for helping his cart out of a ditch, a traveling potion salesman "
+"gives you a \"magic\" gold watch. Unbeknownst to him, the watch really is "
+"magical."
+msgstr ""
+
+msgid "Skullcap"
+msgstr "Mũ đầu lâu"
+
+msgid "The %{name} halves the casting cost of all mind influencing spells."
+msgstr ""
+
+msgid ""
+"A brief stop at an improbable rural inn yields an exchange of money, tales, "
+"and accidentally, luggage. You find a magical skullcap in your new backpack."
+msgstr ""
+
+msgid "Ice Cloak"
+msgstr "Áo Băng"
+
+msgid "The %{name} halves all damage your troops take from cold spells."
+msgstr ""
+
+msgid ""
+"Responding to the panicked cries of a damsel in distress, you discover a "
+"young woman fleeing from a hungry bear. You slay the beast in the nick of "
+"time, and the grateful Sorceress weaves a magic cloak from the bear's hide."
+msgstr ""
+
+msgid "Fire Cloak"
+msgstr "Áo Lửa"
+
+msgid "The %{name} halves all damage your troops take from fire spells."
+msgstr ""
+
+msgid ""
+"You've come upon a fight between a Necromancer and a Paladin. The "
+"Necromancer blasts the Paladin with a fire bolt, bringing him to his knees. "
+"Acting quickly, you slay the evil one before the final blow. The grateful "
+"Paladin gives you the fire cloak that saved him."
+msgstr ""
+
+msgid "Lightning Helm"
+msgstr ""
+
+msgid "The %{name} halves all damage your troops take from lightning spells."
+msgstr ""
+
+msgid ""
+"A traveling tinker in need of supplies offers you a helm with a thunderbolt "
+"design on its top in exchange for food and water. Curious, you accept, and "
+"later find out that the helm is magical."
+msgstr ""
+
+msgid "Evercold Icicle"
+msgstr ""
+
+msgid ""
+"The %{name} causes your cold spells to do %{count} percent more damage to "
+"enemy troops."
+msgstr ""
+
+msgid ""
+"An icicle withstanding the full heat of the noonday sun attracts your "
+"attention. Intrigued, you break it off, and find that it does not melt in "
+"your hand."
+msgstr ""
+
+msgid "Everhot Lava Rock"
+msgstr ""
+
+msgid ""
+"The %{name} causes your fire spells to do %{count} percent more damage to "
+"enemy troops."
+msgstr ""
+
+msgid ""
+"Your wanderings bring you into contact with a tribe of ape-like beings using "
+"a magical lava rock that never cools to light their fires. You take pity on "
+"them and teach them to make fire with sticks. Believing you to be a god, the "
+"apes give you their rock."
+msgstr ""
+
+msgid "Lightning Rod"
+msgstr ""
+
+msgid ""
+"The %{name} causes your lightning spells to do %{count} percent more damage "
+"to enemy troops."
+msgstr ""
+
+msgid ""
+"While waiting out a storm, a lighting bolt strikes a nearby cottage's "
+"lightning rod, which melts and falls to the ground. The tip of the rod, "
+"however, survives intact and makes your hair stand on end when you touch it. "
+"Hmm..."
+msgstr ""
+
+msgid "Snake-Ring"
+msgstr ""
+
+msgid "The %{name} halves the casting cost of all your bless spells."
+msgstr ""
+
+msgid ""
+"You've found an oddly shaped ring on the finger of a long dead traveler. The "
+"ring looks like a snake biting its own tail."
+msgstr ""
+
+msgid "Ankh"
+msgstr ""
+
+msgid ""
+"The %{name} doubles the effectiveness of all your resurrect and animate "
+"spells."
+msgstr ""
+
+msgid ""
+"A fierce windstorm reveals the entrance to a buried tomb. Your investigation "
+"reveals that the tomb has already been looted, but the thieves overlooked an "
+"ankh on a silver chain in the dark."
+msgstr ""
+
+msgid "Book of Elements"
+msgstr ""
+
+msgid "The %{name} doubles the effectiveness of all your summoning spells."
+msgstr ""
+
+msgid ""
+"You come across a conjurer who begs to accompany you and your army awhile "
+"for safety. You agree, and he offers as payment a copy of the book of the "
+"elements."
+msgstr ""
+
+msgid "Elemental Ring"
+msgstr ""
+
+msgid "The %{name} halves the casting cost of all summoning spells."
+msgstr ""
+
+msgid ""
+"While pausing to rest, you notice a bobcat climbing a short tree to get at a "
+"crow's nest. On impulse, you climb the tree yourself and scare off the cat. "
+"When you look in the nest, you find a collection of shiny stones and a ring."
+msgstr ""
+
+msgid "Holy Pendant"
+msgstr ""
+
+msgid "The %{name} makes all your troops immune to curse spells."
+msgstr ""
+
+msgid ""
+"In your wanderings you come across a hermit living in a small, tidy hut. "
+"Impressed with your mission, he takes time out from his meditations to bless "
+"and give you a charm against curses."
+msgstr ""
+
+msgid "Pendant of Free Will"
+msgstr ""
+
+msgid "The %{name} makes all your troops immune to hypnotize spells."
+msgstr ""
+
+msgid ""
+"Responding to cries for help, you find river Sprites making a sport of "
+"dunking an old man. Feeling vengeful, you rescue the man and drag a Sprite "
+"onto dry land for awhile. The Sprite, uncomfortable in the air, gives you a "
+"magic pendant to let him go."
+msgstr ""
+
+msgid "Pendant of Life"
+msgstr ""
+
+msgid "The %{name} makes all your troops immune to death spells."
+msgstr ""
+
+msgid ""
+"A brief roadside encounter with a small caravan and a game of knucklebones "
+"wins a magic pendant. Its former owner says that it protects from "
+"Necromancers' death spells."
+msgstr ""
+
+msgid "Serenity Pendant"
+msgstr ""
+
+msgid "The %{name} makes all your troops immune to berserk spells."
+msgstr ""
+
+msgid ""
+"The sounds of combat draw you to the scene of a fight between an old "
+"Barbarian and an eight-headed Hydra. Your timely intervention swings the "
+"battle in favor of the man, and he rewards you with a pendant he used to use "
+"to calm his mind for battle."
+msgstr ""
+
+msgid "Seeing-eye Pendant"
+msgstr ""
+
+msgid "The %{name} makes all your troops immune to blindness spells."
+msgstr ""
+
+msgid ""
+"You come upon a very old woman, long blind from cataracts and dying alone. "
+"You tend to her final needs and promise a proper burial. Grateful, she gives "
+"you a magic pendant emblazoned with a stylized eye. It lets you see with "
+"your eyes closed."
+msgstr ""
+
+msgid "Kinetic Pendant"
+msgstr ""
+
+msgid "The %{name} makes all your troops immune to paralyze spells."
+msgstr ""
+
+msgid ""
+"You come across a golem wearing a glowing pendant and blocking your way. "
+"Acting on a hunch, you cut the pendant from its neck. Deprived of its power "
+"source, the golem breaks down, leaving you with the magical pendant."
+msgstr ""
+
+msgid "Pendant of Death"
+msgstr ""
+
+msgid "The %{name} makes all your troops immune to holy spells."
+msgstr ""
+
+msgid ""
+"A quick and deadly battle with a Necromancer wins you his magical pendant. "
+"Later, a Wizard tells you that the pendant protects undead under your "
+"control from holy word spells."
+msgstr ""
+
+msgid "Wand of Negation"
+msgstr ""
+
+msgid "The %{name} protects your troops from the Dispel Magic spell."
+msgstr ""
+
+msgid ""
+"You meet an old Wizard friend of yours traveling in the opposite direction. "
+"He presents  you with a gift:  A wand that prevents the use of the dispel "
+"magic spell on your allies."
+msgstr ""
+
+msgid "Golden Bow"
+msgstr "Cung Vàng"
+
+msgid ""
+"The %{name} eliminates the %{count} percent penalty for your troops shooting "
+"past obstacles (e.g. castle walls)."
+msgstr ""
+
+msgid ""
+"A chance meeting with a famous Archer finds you in a game of knucklebones "
+"pitting his bow against your horse. You win."
+msgstr ""
+
+msgid "Telescope"
+msgstr ""
+
+msgid ""
+"The %{name} increases the amount of terrain your hero reveals when "
+"adventuring by %{count} extra square."
+msgstr ""
+
+msgid ""
+"A merchant from far away lands trades you a new invention of his people for "
+"traveling supplies. It makes distant objects appear closer, and he calls "
+"it...\n"
+"\n"
+"a telescope."
+msgstr ""
+
+msgid "Statesman's Quill"
+msgstr ""
+
+msgid ""
+"The %{name} reduces the cost of surrender to %{count} percent of the total "
+"cost of troops you have in your army."
+msgstr ""
+
+msgid ""
+"You pause to help a diplomat with a broken axle fix his problem. In "
+"gratitude, he gives you a writing quill with magical properties which he "
+"says will \"help people see things your way\"."
+msgstr ""
+
+msgid "Wizard's Hat"
+msgstr "Mũ Phù thủy"
+
+msgid "The %{name} increases the duration of your spells by %{count} turns."
+msgstr ""
+
+msgid ""
+"You see a Wizard fleeing from a Griffin and riding like the wind. The Wizard "
+"opens a portal and rides through, getting his hat knocked off by the edge of "
+"the gate. The Griffin follows; the gate closes. You pick the hat up, dust it "
+"off, and put it on."
+msgstr ""
+
+msgid "Power Ring"
+msgstr ""
+
+msgid "The %{name} returns %{count} extra spell points per day to your hero."
+msgstr ""
+
+msgid ""
+"You find a small tree that closely resembles the great Warlock Carnauth with "
+"a ring around one of its twigs. Scraps of clothing and rotting leather lead "
+"you to suspect that it IS Carnauth, transformed. Since you can't help him, "
+"you take the magic ring."
+msgstr ""
+
+msgid "Ammo Cart"
+msgstr ""
+
+msgid "The %{name} provides endless ammunition for all your troops that shoot."
+msgstr ""
+
+msgid ""
+"An ammunition cart in the middle of an old battlefield catches your eye. "
+"Inspection shows it to be in good working order, so  you take it along."
+msgstr ""
+
+msgid "Tax Lien"
+msgstr ""
+
+msgid "The %{name} costs you %{count} gold pieces per day."
+msgstr ""
+
+msgid ""
+"Your big spending habits have earned you a massive tax bill that you can't "
+"hope to pay. The tax man takes pity and agrees to only take 250 gold a day "
+"from your account for life. Check here if you want one dollar to go to the "
+"presidential campaign election fund."
+msgstr ""
+
+msgid "Hideous Mask"
+msgstr ""
+
+msgid "The %{name} prevents all 'wandering' armies from joining your hero."
+msgstr ""
+
+msgid ""
+"Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
+"Warlock, unearths his fabled mask. Trembling, you put it on and it twists "
+"your visage into an awful grimace!  Oh no!  It's actually the hideous mask "
+"of Gromluck Greene, and you are stuck with it."
+msgstr ""
+
+msgid "Endless Pouch of Sulfur"
+msgstr ""
+
+msgid "The %{name} provides %{count} unit of sulfur per day."
+msgstr ""
+
+msgid ""
+"You visit an alchemist who, upon seeing your army, is swayed by the "
+"righteousness of your cause. The newly loyal subject gives you his endless "
+"pouch of sulfur to help with the war effort."
+msgstr ""
+
+msgid "Endless Vial of Mercury"
+msgstr ""
+
+msgid "The %{name} provides %{count} unit of mercury per day."
+msgstr ""
+
+msgid ""
+"A brief stop at a hastily abandoned Wizard's tower turns up a magical vial "
+"of mercury that always has a little left on the bottom. Recognizing a "
+"treasure when you see one, you cap it and slip it in your pocket."
+msgstr ""
+
+msgid "Endless Pouch of Gems"
+msgstr ""
+
+msgid "The %{name} provides %{count} unit of gems per day."
+msgstr ""
+
+msgid ""
+"A short rainstorm brings forth a rainbow...and you can see the end of it. "
+"Riding quickly, you seize the pot of gold you find there. The leprechaun who "
+"owns it, unable to stop you from taking it, offers an endless pouch of gems "
+"for the return of his gold. You accept."
+msgstr ""
+
+msgid "Endless Cord of Wood"
+msgstr ""
+
+msgid "The %{name} provides %{count} unit of wood per day."
+msgstr ""
+
+msgid ""
+"Pausing to rest and light a cook fire, you pull wood out of a nearby pile of "
+"dead wood. As you keep pulling wood from the pile, you notice that it "
+"doesn't shrink. You realize to your delight that the wood is enchanted, so "
+"you take it along."
+msgstr ""
+
+msgid "Endless Cart of Ore"
+msgstr ""
+
+msgid "The %{name} provides %{count} unit of ore per day."
+msgstr ""
+
+msgid ""
+"You've found a Goblin weapon smithy making weapons for use against humans. "
+"With a tremendous yell you and your army descend upon their camp and drive "
+"them away. A search finds a magic ore cart that never runs out of iron."
+msgstr ""
+
+msgid "Endless Pouch of Crystal"
+msgstr ""
+
+msgid "The %{name} provides %{count} unit of crystal per day."
+msgstr ""
+
+msgid ""
+"Taking shelter from a storm in a small cave,  you notice a small patch of "
+"crystal in one corner. Curious, you break a piece off and notice that the "
+"original crystal grows the lost piece back. You decide to stuff the entire "
+"patch into a pouch and take it with you."
+msgstr ""
+
+msgid "Spiked Helm"
+msgstr ""
+
+msgid ""
+"Your army is ambushed by a small tribe of wild (and none too bright) Orcs. "
+"You fend them off easily and the survivors flee in all directions. One of "
+"the Orcs was wearing a polished spiked helm. Figuring it will make a good "
+"souvenir, you take it."
+msgstr ""
+
+msgid "Spiked Shield"
+msgstr ""
+
+msgid ""
+"You come upon a bridge spanning a dry gully. Before you can cross, a Troll "
+"steps out from under the bridge and demands payment before it will permit "
+"you to pass. You refuse, and the Troll charges, forcing you to slay it. You "
+"take its spiked shield as a trophy."
+msgstr ""
+
+msgid "White Pearl"
+msgstr "Ngọc trai Trắng"
+
+msgid ""
+"A walk across a dry saltwater lake bed yields an unlikely prize:  A white "
+"pearl amidst shattered shells and debris."
+msgstr ""
+
+msgid "Black Pearl"
+msgstr "Ngọc trai Đen"
+
+msgid ""
+"Rumors of a Griffin of unusual size preying upon the countryside lead you to "
+"its cave lair. A quick, brutal fight dispatches the beast, and a search of "
+"its foul nest turns up a huge black pearl."
+msgstr ""
+
+msgid "Magic Book"
+msgstr "Sách Phép"
+
+msgid "The %{name} enables you to cast spells."
+msgstr ""
+
+msgid "Dummy 1"
+msgstr ""
+
+msgid "The reserved artifact."
+msgstr ""
+
+msgid "Dummy 2"
+msgstr ""
+
+msgid "Dummy 3"
+msgstr ""
+
+msgid "Dummy 4"
+msgstr ""
+
+msgid "Spell Scroll"
+msgstr ""
+
+msgid ""
+"This %{name} gives your hero the ability to cast the %{spell} spell if your "
+"hero has a Magic Book."
+msgstr ""
+
+msgid ""
+"You find an elaborate container which houses an old vellum scroll. The runes "
+"on the container are very old, and the artistry with which it was put "
+"together is stunning. As you pull the scroll out, you feel imbued with "
+"magical power."
+msgstr ""
+
+msgid "Arm of the Martyr"
+msgstr ""
+
+msgid ""
+"The %{name} increases your spell power by %{count} but adds the undead "
+"morale penalty."
+msgstr ""
+
+msgid ""
+"One of the less intelligent members of your party picks up an arm off of the "
+"ground. Despite its missing a body, it is still moving. Your troops find the "
+"dismembered arm repulsive, but you cannot bring yourself to drop it: it "
+"seems to hold some sort of magical power that influences your decision "
+"making."
+msgstr ""
+
+msgid "Breastplate of Anduran"
+msgstr ""
+
+msgid "The %{name} increases your defense by %{count}."
+msgstr ""
+
+msgid ""
+"You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and "
+"swear fealty, and you shall be rewarded.\" You decide to do as it says. As "
+"you stand up, you feel a coldness against your skin. Looking down, you find "
+"that you are suddenly wearing a gleaming, ornate breastplate."
+msgstr ""
+
+msgid "Broach of Shielding"
+msgstr ""
+
+msgid ""
+"The %{name} provides %{count} percent protection from Armageddon and "
+"Elemental Storm, but decreases spell power by 2."
+msgstr ""
+
+msgid ""
+"A kindly Sorceress thinks that your army's defenses could use a magical "
+"boost. She offers to enchant the Broach that you wear on your cloak, and you "
+"accept."
+msgstr ""
+
+msgid "Battle Garb of Anduran"
+msgstr ""
+
+msgid ""
+"The %{name} combines the powers of the three Anduran artifacts.  It provides "
+"maximum luck and morale for your troops and gives you the Town Portal spell."
+msgstr ""
+
+msgid ""
+"Out of pity for a poor peasant, you purchase a chest of old junk they are "
+"hawking for too much gold. Later, as you search through it, you find it "
+"contains the 3 pieces of the legendary battle garb of Anduran!"
+msgstr ""
+
+msgid "Crystal Ball"
+msgstr ""
+
+msgid ""
+"The %{name} lets you get more specific information about monsters, enemy "
+"heroes, and castles nearby the hero who holds it."
+msgstr ""
+
+msgid ""
+"You come upon a caravan of gypsies who are feasting and fortifying their "
+"bodies with mead. They call you forward and say \"If you prove that you can "
+"dance the Rama-Buta, we will reward you.\" You don't know it, but try "
+"anyway. They laugh hysterically, but admire your bravery, giving you a "
+"Crystal Ball."
+msgstr ""
+
+msgid "Heart of Fire"
+msgstr ""
+
+msgid ""
+"The %{name} provides %{count} percent protection from fire, but doubles the "
+"damage taken from cold."
+msgstr ""
+
+msgid ""
+"You enter a recently burned glade and come upon a Fire Elemental sitting "
+"atop a rock. It looks up, its flaming face contorted in a look of severe "
+"pain. It then tosses a glowing object at you. You put up your hands to block "
+"it, but it passes right through them and sears itself into your chest."
+msgstr ""
+
+msgid "Heart of Ice"
+msgstr ""
+
+msgid ""
+"The %{name} provides %{count} percent protection from cold, but doubles the "
+"damage taken from fire."
+msgstr ""
+
+msgid ""
+"Suddenly, a biting coldness engulfs your body. You seize up, falling from "
+"your horse. The pain subsides, but you still feel as if your chest is "
+"frozen.  As you pick yourself up off of the ground, you hear hearty "
+"laughter. You turn around just in time to see a Frost Giant run off into the "
+"woods and disappear."
+msgstr ""
+
+msgid "Helmet of Anduran"
+msgstr ""
+
+msgid ""
+"You spy a gleaming object poking up out of the ground. You send a member of "
+"your party over to investigate. He comes back with a golden helmet in his "
+"hands. You realize that it must be the helmet of the legendary Anduran, the "
+"only man who was known to wear solid gold armor."
+msgstr ""
+
+msgid "Holy Hammer"
+msgstr ""
+
+msgid ""
+"You come upon a battle where a Paladin has been mortally wounded by a group "
+"of Zombies. He asks you to take his hammer and finish what he started.  As "
+"you pick it up, it begins to hum, and then everything becomes a blur. The "
+"Zombies lie dead, the hammer dripping with blood. You strap it to your belt."
+msgstr ""
+
+msgid "Legendary Scepter"
+msgstr ""
+
+msgid "The %{name} adds %{count} points to all attributes."
+msgstr ""
+
+msgid ""
+"Upon cresting a small hill, you come upon a ridiculous looking sight. A "
+"Sprite is attempting to carry a Scepter that is almost as big as it is. "
+"Trying not to laugh, you ask, \"Need help?\" The Sprite glares at you and "
+"answers: \"You think this is funny? Fine. You can carry it. I much prefer "
+"flying anyway.\""
+msgstr ""
+
+msgid "Masthead"
+msgstr ""
+
+msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
+msgstr ""
+
+msgid ""
+"An old seaman tells you a tale of an enchanted masthead that he used in his "
+"youth to rally his crew during times of trouble. He then hands you a faded "
+"map that shows where he hid it. After much exploring, you find it stashed "
+"underneath a nearby dock."
+msgstr ""
+
+msgid "Sphere of Negation"
+msgstr ""
+
+msgid "The %{name} disables all spell casting, for both sides, in combat."
+msgstr ""
+
+msgid ""
+"You stop to help a Peasant catch a runaway mare. To show his gratitude, he "
+"hands you a tiny sphere. As soon as you grasp it, you feel the magical "
+"energy drain from your limbs..."
+msgstr ""
+
+msgid "Staff of Wizardry"
+msgstr ""
+
+msgid "The %{name} boosts your spell power by %{count}."
+msgstr ""
+
+msgid ""
+"While out scaring up game, your troops find a mysterious staff levitating "
+"about three feet off of the ground. They hand it to you, and you notice an "
+"inscription. It reads: \"Brains best brawn and magic beats might. Heed my "
+"words, and you'll win every fight.\""
+msgstr ""
+
+msgid "Sword Breaker"
+msgstr ""
+
+msgid "The %{name} increases your defense by %{count} and attack by 1."
+msgstr ""
+
+msgid ""
+"A former Captain of the Guard admires your quest and gives you the enchanted "
+"Sword Breaker that he relied on during his tour of duty."
+msgstr ""
+
+msgid ""
+"A Troll stops you and says: \"Pay me 5,000 gold, or the Sword of Anduran "
+"will slay you where you stand.\" You refuse. The troll grabs the sword "
+"hanging from its belt, screams in pain, and runs away. Picking up the fabled "
+"sword, you give thanks that half-witted Trolls tend to grab the wrong end of "
+"sharp objects."
+msgstr ""
+
+msgid "Sword of Anduran"
+msgstr ""
+
+msgid "Spade of Necromancy"
+msgstr ""
+
+msgid "The %{name} gives you increased necromancy skill."
+msgstr ""
+
+msgid ""
+"A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
+"you discover it to be the enchanted shovel of the Gravediggers, long thought "
+"lost by mortals."
+msgstr ""
+
+msgid "Invalid Artifact"
+msgstr ""
+
+msgid "Wood"
+msgstr "Gỗ"
+
+msgid "Mercury"
+msgstr "Thủy ngân"
+
+msgid "Ore"
+msgstr "Đá"
+
+msgid "Sulfur"
+msgstr "Sun-phua"
+
+msgid "Crystal"
+msgstr "Thạch anh"
+
+msgid "Gems"
+msgstr "Ngọc"
+
+msgid "Gold"
+msgstr "Vàng"
+
+msgid ""
+"There are seven resources in Heroes 2, used to build and improves castles, "
+"purchase troops and recruit heroes. Gold is the most common, required for "
+"virtually everything. Wood and ore are used for most buildings. Gems, "
+"Mercury, Sulfur and Crystal are rare magical resources used for the most "
+"powerful creatures and buildings."
+msgstr ""
+
+msgid ""
+"Causes a giant fireball to strike the selected area, damaging all nearby "
+"creatures."
+msgstr ""
+
+msgid "Fireball"
+msgstr "Cầu lửa"
+
+msgid "Fireblast"
+msgstr ""
+
+msgid ""
+"An improved version of fireball, fireblast affects two hexes around the "
+"center point of the spell, rather than one."
+msgstr ""
+
+msgid "Causes a bolt of electrical energy to strike the selected creature."
+msgstr ""
+
+msgid "Lightning Bolt"
+msgstr ""
+
+msgid "Chain Lightning"
+msgstr ""
+
+msgid ""
+"Causes a bolt of electrical energy to strike a selected creature, then "
+"strike the nearest creature with half damage, then strike the NEXT nearest "
+"creature with half again damage, and so on, until it becomes too weak to be "
+"harmful.  Warning:  This spell can hit your own creatures!"
+msgstr ""
+
+msgid "Teleport"
+msgstr "Dịch chuyển"
+
+msgid ""
+"Teleports the creature you select to any open position on the battlefield."
+msgstr ""
+
+msgid "Cure"
+msgstr ""
+
+msgid ""
+"Removes all negative spells cast upon one of your units, and restores up to "
+"%{count} HP per level of spell power."
+msgstr ""
+
+msgid "Mass Cure"
+msgstr ""
+
+msgid ""
+"Removes all negative spells cast upon your forces, and restores up to "
+"%{count} HP per level of spell power, per creature."
+msgstr ""
+
+msgid "Resurrect"
+msgstr ""
+
+msgid "Resurrects creatures from a damaged or dead unit until end of combat."
+msgstr ""
+
+msgid "Resurrect True"
+msgstr ""
+
+msgid "Resurrects creatures from a damaged or dead unit permanently."
+msgstr ""
+
+msgid "Haste"
+msgstr ""
+
+msgid "Increases the speed of any creature by %{count}."
+msgstr ""
+
+msgid "Increases the speed of all of your creatures by %{count}."
+msgstr ""
+
+msgid "Mass Haste"
+msgstr ""
+
+msgid "Slows target to half movement rate."
+msgstr ""
+
+msgid "spell|Slow"
+msgstr ""
+
+msgid "Mass Slow"
+msgstr ""
+
+msgid "Slows all enemies to half movement rate."
+msgstr ""
+
+msgid "Clouds the affected creatures' eyes, preventing them from moving."
+msgstr ""
+
+msgid "spell|Blind"
+msgstr ""
+
+msgid "Bless"
+msgstr ""
+
+msgid "Causes the selected creatures to inflict maximum damage."
+msgstr ""
+
+msgid "Causes all of your units to inflict maximum damage."
+msgstr ""
+
+msgid "Mass Bless"
+msgstr ""
+
+msgid "Magically increases the defense skill of the selected creatures."
+msgstr ""
+
+msgid "Stoneskin"
+msgstr "Thạch bì"
+
+msgid ""
+"Increases the defense skill of the targeted creatures.  This is an improved "
+"version of Stoneskin."
+msgstr ""
+
+msgid "Steelskin"
+msgstr ""
+
+msgid "Causes the selected creatures to inflict minimum damage."
+msgstr ""
+
+msgid "Curse"
+msgstr ""
+
+msgid "Causes all enemy troops to inflict minimum damage."
+msgstr ""
+
+msgid "Mass Curse"
+msgstr ""
+
+msgid "Damages all undead in the battle."
+msgstr ""
+
+msgid "Holy Word"
+msgstr ""
+
+msgid ""
+"Damages all undead in the battle.  This is an improved version of Holy Word."
+msgstr ""
+
+msgid "Holy Shout"
+msgstr ""
+
+msgid "Anti-Magic"
+msgstr ""
+
+msgid "Prevents harmful magic against the selected creatures."
+msgstr ""
+
+msgid "Dispel Magic"
+msgstr ""
+
+msgid "Removes all magic spells from a single target."
+msgstr ""
+
+msgid "Mass Dispel"
+msgstr ""
+
+msgid "Removes all magic spells from all creatures."
+msgstr ""
+
+msgid "Causes a magic arrow to strike the selected target."
+msgstr ""
+
+msgid "Magic Arrow"
+msgstr ""
+
+msgid "Berserker"
+msgstr ""
+
+msgid "Causes a creature to attack its nearest neighbor."
+msgstr ""
+
+msgid "Armageddon"
+msgstr ""
+
+msgid ""
+"Holy terror strikes the battlefield, causing severe damage to all creatures."
+msgstr ""
+
+msgid "Elemental Storm"
+msgstr ""
+
+msgid "Magical elements pour down on the battlefield, damaging all creatures."
+msgstr ""
+
+msgid ""
+"A rain of rocks strikes an area of the battlefield, damaging all nearby "
+"creatures."
+msgstr ""
+
+msgid "Meteor Shower"
+msgstr ""
+
+msgid "Paralyze"
+msgstr ""
+
+msgid "The targeted creatures are paralyzed, unable to move or retaliate."
+msgstr ""
+
+msgid "Hypnotize"
+msgstr ""
+
+msgid ""
+"Brings a single enemy unit under your control if its hits are less than "
+"%{count} times the caster's spell power."
+msgstr ""
+
+msgid "Cold Ray"
+msgstr ""
+
+msgid "Drains body heat from a single enemy unit."
+msgstr ""
+
+msgid "Cold Ring"
+msgstr ""
+
+msgid ""
+"Drains body heat from all units surrounding the center point, but not "
+"including the center point."
+msgstr ""
+
+msgid "Disrupting Ray"
+msgstr ""
+
+msgid "Reduces the defense rating of an enemy unit by three."
+msgstr ""
+
+msgid "Damages all living (non-undead) units in the battle."
+msgstr ""
+
+msgid "Death Ripple"
+msgstr ""
+
+msgid "Death Wave"
+msgstr ""
+
+msgid ""
+"Damages all living (non-undead) units in the battle.  This spell is an "
+"improved version of Death Ripple."
+msgstr ""
+
+msgid "Dragon Slayer"
+msgstr ""
+
+msgid "Greatly increases a unit's attack skill vs. Dragons."
+msgstr ""
+
+msgid "Blood Lust"
+msgstr ""
+
+msgid "Increases a unit's attack skill."
+msgstr ""
+
+msgid "Animate Dead"
+msgstr ""
+
+msgid "Resurrects creatures from a damaged or dead undead unit permanently."
+msgstr ""
+
+msgid "Mirror Image"
+msgstr ""
+
+msgid ""
+"Creates an illusionary unit that duplicates one of your existing units.  "
+"This illusionary unit does the same damages as the original, but will vanish "
+"if it takes any damage."
+msgstr ""
+
+msgid "Halves damage received from ranged attacks for a single unit."
+msgstr ""
+
+msgid "Shield"
+msgstr "Khiên"
+
+msgid "Halves damage received from ranged attacks for all of your units."
+msgstr ""
+
+msgid "Mass Shield"
+msgstr ""
+
+msgid "Summon Earth Elemental"
+msgstr ""
+
+msgid "Summons Earth Elementals to fight for your army."
+msgstr ""
+
+msgid "Summon Air Elemental"
+msgstr ""
+
+msgid "Summons Air Elementals to fight for your army."
+msgstr ""
+
+msgid "Summon Fire Elemental"
+msgstr ""
+
+msgid "Summons Fire Elementals to fight for your army."
+msgstr ""
+
+msgid "Summon Water Elemental"
+msgstr ""
+
+msgid "Summons Water Elementals to fight for your army."
+msgstr ""
+
+msgid "Damages castle walls."
+msgstr ""
+
+msgid "Earthquake"
+msgstr "Động đất"
+
+msgid "Causes all mines across the land to become visible."
+msgstr ""
+
+msgid "View Mines"
+msgstr ""
+
+msgid "Causes all resources across the land to become visible."
+msgstr ""
+
+msgid "View Resources"
+msgstr ""
+
+msgid "Causes all artifacts across the land to become visible."
+msgstr ""
+
+msgid "View Artifacts"
+msgstr ""
+
+msgid "Causes all towns and castles across the land to become visible."
+msgstr ""
+
+msgid "View Towns"
+msgstr ""
+
+msgid "Causes all Heroes across the land to become visible."
+msgstr ""
+
+msgid "View Heroes"
+msgstr ""
+
+msgid "Causes the entire land to become visible."
+msgstr ""
+
+msgid "View All"
+msgstr ""
+
+msgid "Allows the caster to view detailed information on enemy Heroes."
+msgstr ""
+
+msgid "Identify Hero"
+msgstr ""
+
+msgid "Summon Boat"
+msgstr ""
+
+msgid ""
+"Summons the nearest unoccupied, friendly boat to an adjacent shore "
+"location.  A friendly boat is one which you just built or were the most "
+"recent player to occupy."
+msgstr ""
+
+msgid "Allows the caster to magically transport to a nearby location."
+msgstr ""
+
+msgid "Dimension Door"
+msgstr ""
+
+msgid "Returns the caster to any town or castle currently owned."
+msgstr ""
+
+msgid "Town Gate"
+msgstr "Cổng Thành"
+
+msgid ""
+"Returns the hero to the town or castle of choice, provided it is controlled "
+"by you."
+msgstr ""
+
+msgid "Visions"
+msgstr ""
+
+msgid ""
+"Visions predicts the likely outcome of an encounter with a neutral army camp."
+msgstr ""
+
+msgid "Haunt"
+msgstr ""
+
+msgid ""
+"Haunts a mine you control with Ghosts.  This mine stops producing "
+"resources.  (If I can't keep it, nobody will!)"
+msgstr ""
+
+msgid "Set Earth Guardian"
+msgstr ""
+
+msgid "Sets Earth Elementals to guard a mine against enemy armies."
+msgstr ""
+
+msgid "Set Air Guardian"
+msgstr ""
+
+msgid "Sets Air Elementals to guard a mine against enemy armies."
+msgstr ""
+
+msgid "Set Fire Guardian"
+msgstr ""
+
+msgid "Sets Fire Elementals to guard a mine against enemy armies."
+msgstr ""
+
+msgid "Set Water Guardian"
+msgstr ""
+
+msgid "Sets Water Elementals to guard a mine against enemy armies."
+msgstr ""
+
+msgid "Petrification"
+msgstr ""
+
+msgid ""
+"Turns the affected creature into stone.  A petrified creature receives half "
+"damage from a direct attack."
+msgstr ""
+
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr ""
+
+msgid "No spell to cast."
+msgstr ""
+
+msgid "Your hero has %{point} spell points remaining."
+msgstr ""
+
+msgid "View Adventure Spells"
+msgstr ""
+
+msgid "View Combat Spells"
+msgstr ""
+
+msgid "View previous page"
+msgstr "Xem trang trước"
+
+msgid "View next page"
+msgstr "Xem trang sau"
+
+msgid "Close Spellbook"
+msgstr "Gấp sách phép"
+
+msgid "View %{spell}"
+msgstr ""
+
+msgid "This spell does %{damage} points of damage."
+msgstr ""
+
+msgid ""
+"This spell summons\n"
+"%{count} %{monster}."
+msgstr ""
+
+msgid "This spell restores %{hp} HP."
+msgstr ""
+
+msgid "This spell summons %{count} %{monster} to guard the mine."
+msgstr ""
+
+msgid "The nearest town is %{town}."
+msgstr ""
+
+msgid "This town is occupied by your hero %{hero}."
+msgstr ""
+
+msgid ""
+"This spell controls up to\n"
+"%{hp} HP."
+msgstr ""
+
+msgid "The ultimate artifact is really the %{name}."
+msgstr ""
+
+msgid "The ultimate artifact may be found in the %{name} regions of the world."
+msgstr ""
+
+msgid "north-west"
+msgstr "tây-bắc"
+
+msgid "north"
+msgstr "bắc"
+
+msgid "north-east"
+msgstr "đông-bắc"
+
+msgid "west"
+msgstr "tây"
+
+msgid "center"
+msgstr "trung tâm"
+
+msgid "east"
+msgstr "đông"
+
+msgid "south-west"
+msgstr "tây-nam"
+
+msgid "south"
+msgstr "nam"
+
+msgid "south-east"
+msgstr "đông-nam"
+
+msgid "The truth is out there."
+msgstr "Sự thật ngay ngoài kia."
+
+msgid "The dark side is stronger."
+msgstr "Lực lượng bóng tối đang lớn mạnh."
+
+msgid "The end of the world is near."
+msgstr "Kết thúc của thế giới đang đến gần."
+
+msgid "The bones of Lord Slayer are buried in the foundation of the arena."
+msgstr "Xương của Giết Chúa chôn vùi dưới móng của đấu trường."
+
+msgid "A Black Dragon will take out a Titan any day of the week."
+msgstr "Rồng Đen sẽ mang Khổng Lồ bất cứ ngày nào trong ngày."
+
+msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
+msgstr ""
+
+msgid "An unknown force is being resurrected..."
+msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+msgid ""
+"Check the newest version of the game at\n"
+"https://github.com/ihhub/\n"
+"fheroes2/releases"
+msgstr ""
+"Kiểm tra phiên bản mới nhất của trò chơi tại\n"
+"https://github.com/ihhub/\n"
+"fheroes2/releases"
