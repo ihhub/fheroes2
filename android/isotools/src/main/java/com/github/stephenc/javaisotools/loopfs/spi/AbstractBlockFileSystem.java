@@ -34,7 +34,7 @@ public abstract class AbstractBlockFileSystem<T extends FileEntry> extends Abstr
     private final int reservedBlocks;
     private VolumeDescriptorSet<T> volumeDescriptorSet;
 
-    protected AbstractBlockFileSystem( final SeekableInput seekable, final boolean readOnly, final int blockSize, final int reservedBlocks ) throws IOException
+    protected AbstractBlockFileSystem( final SeekableInput seekable, final boolean readOnly, final int blockSize, final int reservedBlocks )
     {
         super( seekable, readOnly );
 
