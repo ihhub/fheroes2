@@ -174,7 +174,7 @@ msgid "GIFT"
 msgstr "ДАРИ"
 
 msgid "guildWell|EXIT"
-msgstr "guildWell|ИЗХОД"
+msgstr "ИЗХОД"
 
 msgid "DIFFICULTY"
 msgstr "ТРУДНОСТ"
