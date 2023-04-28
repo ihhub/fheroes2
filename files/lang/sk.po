@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-25 06:07+0000\n"
-"PO-Revision-Date: 2023-04-26 17:33+0200\n"
+"PO-Revision-Date: 2023-04-28 16:04+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -214,64 +214,64 @@ msgid ""
 "A few\n"
 "%{monster}"
 msgstr ""
-"Zopár\n"
-"%{monster}"
+"%{monster}\n"
+"(zopár)"
 
 msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
-"Niekoľko\n"
-"%{monster}"
+"%{monster}\n"
+"(niekoľko)"
 
 msgid ""
 "A pack of\n"
 "%{monster}"
 msgstr ""
-"Skupina\n"
-"%{monster}"
+"%{monster}\n"
+"(skupina)"
 
 msgid ""
 "Lots of\n"
 "%{monster}"
 msgstr ""
-"Veľa\n"
-"%{monster}"
+"%{monster}\n"
+"(veľa)"
 
 msgid ""
 "A horde of\n"
 "%{monster}"
 msgstr ""
-"Horda\n"
-"%{monster}"
+"%{monster}\n"
+"(horda)"
 
 msgid ""
 "A throng of\n"
 "%{monster}"
 msgstr ""
-"Zástup\n"
-"%{monster}"
+"%{monster}\n"
+"(zástup)"
 
 msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
-"Dav\n"
-"%{monster}"
+"%{monster}\n"
+"(dav)"
 
 msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
-"Mračná\n"
-"%{monster}"
+"%{monster}\n"
+"(mračná)"
 
 msgid ""
 "A legion of\n"
 "%{monster}"
 msgstr ""
-"Légia\n"
-"%{monster}"
+"%{monster}\n"
+"(légia)"
 
 msgid "army|Few"
 msgstr "Zopár"
@@ -543,7 +543,7 @@ msgid "Luck"
 msgstr "Šťastie"
 
 msgid "Spell Points"
-msgstr "Body kúzlenia"
+msgstr "Body kúziel"
 
 msgid "Hero's Options"
 msgstr "Ukáž hrdinu"
@@ -2732,214 +2732,225 @@ msgid "MIDI Expansion"
 msgstr "Rozšírenie MIDI"
 
 msgid "External"
-msgstr ""
+msgstr "Externý"
 
 msgid "Music Type"
-msgstr ""
+msgstr "Typ hudby"
 
 msgid "3D Audio"
-msgstr ""
+msgstr "3D zvuk"
 
 msgid "Toggle ambient music level."
-msgstr ""
+msgstr "Zmeň úroveň zvukov okolia."
 
 msgid "Toggle foreground sounds level."
-msgstr ""
+msgstr "Zmeň úroveň zvukov popredia."
 
 msgid "Change the type of music."
-msgstr ""
+msgstr "Zmeň typ hudby."
 
 msgid "Toggle 3D effects of foreground sounds."
-msgstr ""
+msgstr "Zmeň 3D efekty zvukov popredia."
 
 msgid "Build a new ship:"
-msgstr ""
+msgstr "Postav novú loď:"
 
 msgid "Resource cost:"
-msgstr ""
+msgstr "Náklady:"
 
 msgid "Total: "
-msgstr ""
+msgstr "Celkovo: "
 
 msgid "Need: "
-msgstr ""
+msgstr "Potreba: "
 
 msgid "Load Game"
-msgstr ""
+msgstr "Nahraj hru"
 
 msgid "No save files to load."
-msgstr ""
+msgstr "Žiadne uložené hry."
 
 msgid "New Game"
-msgstr ""
+msgstr "Nová hra"
 
 msgid "Start a single or multi-player game."
-msgstr ""
+msgstr "Začni hru jedného alebo viac hráčov."
 
 msgid "Load a previously saved game."
-msgstr ""
+msgstr "Nahraj predošle uloženú hru."
 
 msgid "Save Game"
-msgstr ""
+msgstr "Ulož hru"
 
 msgid "Save the current game."
-msgstr ""
+msgstr "Ulož terajšiu hru."
 
 msgid "Quit"
-msgstr ""
+msgstr "Koniec"
 
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr ""
+msgstr "Odíď z Heroes of Might and Magic II."
 
 msgid "Language"
-msgstr ""
+msgstr "Jazyk"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Grafika"
 
 msgid "Black & White"
-msgstr ""
+msgstr "Čiernobiela"
 
 msgid "Mouse Cursor"
-msgstr ""
+msgstr "Kurzor myši"
 
 msgid "Color"
-msgstr ""
+msgstr "Farba"
 
 msgid "Text Support"
-msgstr ""
+msgstr "Podpora textu"
 
 msgid "Change the language of the game."
-msgstr ""
+msgstr "Zmeň jazyk hry."
 
 msgid "Select Game Language"
-msgstr ""
+msgstr "Vyber jazyk hry"
 
 msgid "Change the graphics settings of the game."
-msgstr ""
+msgstr "Zmeň nastavenie grafiky hry."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr ""
+msgstr "Prepni farebný kurzor. Toto je len estetická voľba."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
+"Prepni režim podpory textu na výstup dodatočných informácií o oknách a "
+"udalostiach v hre."
 
 msgid ""
 "Map\n"
 "Difficulty"
 msgstr ""
+"Obtiažnosť\n"
+"mapy"
 
 msgid ""
 "Game\n"
 "Difficulty"
 msgstr ""
+"Obtiažnosť\n"
+"hry"
 
 msgid "Rating"
-msgstr ""
+msgstr "Hodnotenie"
 
 msgid "Map Size"
-msgstr ""
+msgstr "Veľkosť mapy"
 
 msgid "Opponents"
-msgstr ""
+msgstr "Oponenti"
 
 msgid "Class"
-msgstr ""
+msgstr "Trieda"
 
 msgid ""
 "Victory\n"
 "Conditions"
 msgstr ""
+"Podmienky\n"
+"víťazstva"
 
 msgid ""
 "Loss\n"
 "Conditions"
 msgstr ""
+"Podmienky\n"
+"prehry"
 
 msgid "First select recipients!"
-msgstr ""
+msgstr "Najprv zvoľ príjemcov!"
 
 msgid "You cannot select %{resource}!"
-msgstr ""
+msgstr "Nemôžeš zvoliť %{resource}!"
 
 msgid "Select count %{resource}:"
-msgstr ""
+msgstr "Zvoľ počet - %{resource}:"
 
 msgid "Select Recipients"
-msgstr ""
+msgstr "Zvoľ príjemcov"
 
 msgid "Your Funds"
-msgstr ""
+msgstr "Tvoj majetok"
 
 msgid "Planned Gift"
-msgstr ""
+msgstr "Plánovaný dar"
 
 msgid "Gift from %{name}"
-msgstr ""
+msgstr "Dar od: %{name}"
 
 msgid "Resolution"
-msgstr ""
+msgstr "Rozlíšenie"
 
 msgid "Fullscreen"
-msgstr ""
+msgstr "Celá obrazovka"
 
 msgid "window|Mode"
-msgstr ""
+msgstr "Mód"
 
 msgid "Windowed"
-msgstr ""
+msgstr "Okno"
 
 msgid "V-Sync"
-msgstr ""
+msgstr "V-Sync"
 
 msgid "on"
 msgstr "zap"
 
 msgid "FPS"
-msgstr ""
+msgstr "FPS"
 
 msgid "System Info"
-msgstr ""
+msgstr "Systémové info"
 
 msgid "Change the resolution of the game."
-msgstr ""
+msgstr "Zmeň rozlíšenie hry."
 
 msgid "Select Game Resolution"
-msgstr ""
+msgstr "Zvoľ rozlíšenie hry"
 
 msgid "Toggle between fullscreen and windowed modes."
-msgstr ""
+msgstr "Prepni medzi módom celej obrazovky a oknom."
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
 "monitors."
 msgstr ""
+"Možnosť V-Sync dokáže vyriešiť problém s blikaním na niektorých monitoroch."
 
 msgid "Show extra information such as FPS and current time."
-msgstr ""
+msgstr "Ukáž informácie navyše ako FPS a momentálny čas."
 
 msgid "Hot Keys:"
-msgstr ""
+msgstr "Skratky:"
 
 msgid "Select Game Language:"
-msgstr ""
+msgstr "Zvoľ jazyk hry:"
 
 msgid "Click to choose the selected language."
-msgstr ""
+msgstr "Klikni pre výber zvoleného jazyka."
 
 msgid "%{name} has gained a level."
-msgstr ""
+msgstr "%{name} získal/a úroveň."
 
 msgid "%{skill} +1"
-msgstr ""
+msgstr "%{skill} +1"
 
 msgid "You have learned %{skill}."
-msgstr ""
+msgstr "Naučená zručnosť %{skill}."
 
 msgid "You may learn either:"
-msgstr ""
+msgstr "Smieš sa naučiť buď:"
 
 msgid "or"
 msgstr "alebo"
@@ -2948,209 +2959,219 @@ msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
+"Prosím, prezri si náš kvalitný tovar. Ak chceš ponúknuť výmenu, klikni na "
+"predmety, s ktorými chceš obchodovať."
 
 msgid ""
 "You have received quite a bargain. I expect to make no profit on the deal. "
 "Can I interest you in any of my other wares?"
 msgstr ""
+"Veľmi výhodná ponuka. Neočakávam z obchodu profit. Môžem vás zaujímať o "
+"nejaký môj ďalší tovar?"
 
 msgid "I can offer you %{count} for 1 unit of %{resfrom}."
-msgstr ""
+msgstr "Ponúkam %{count} za 1 kus typu %{resfrom}."
 
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
-msgstr ""
+msgstr "Ponúkam 1 kus typu %{resto} za %{count} kusov typu %{resfrom}."
 
 msgid "Min"
 msgstr "Min"
 
 msgid "Qty to trade"
-msgstr ""
+msgstr "Množstvo"
 
 msgid "Trading Post"
-msgstr ""
+msgstr "Obchodník"
 
 msgid "Your Resources"
-msgstr ""
+msgstr "Tvoje zdroje"
 
 msgid "Available Trades"
-msgstr ""
+msgstr "Možné obchody"
 
 msgid "n/a"
-msgstr ""
+msgstr "nie je"
 
 msgid "guarded by %{count} %{monster}"
-msgstr ""
+msgstr "strážené: %{monster} (%{count})"
 
 msgid "guarded by "
-msgstr ""
+msgstr "strážené: "
 
 msgid "(available: %{count})"
-msgstr ""
+msgstr "(dostupné: %{count})"
 
 msgid "(empty)"
-msgstr ""
+msgstr "(prázdne)"
 
 msgid "already learned"
-msgstr ""
+msgstr "už naučené"
 
 msgid "already knows this skill"
-msgstr ""
+msgstr "už má túto zručnosť"
 
 msgid "already has max skills"
-msgstr ""
+msgstr "už má plno zručností"
 
 msgid "(already visited)"
-msgstr ""
+msgstr "(už navštívené)"
 
 msgid "(not visited)"
-msgstr ""
+msgstr "(nenavštívené)"
 
 msgid "%{color} Barrier"
-msgstr ""
+msgstr "%{color} taras"
 
 msgid "%{color} Tent"
-msgstr ""
+msgstr "%{color} stan"
 
 msgid "Road"
-msgstr ""
+msgstr "Cesta"
 
 msgid "(digging ok)"
-msgstr ""
+msgstr "(dá sa kopať)"
 
 msgid "(no digging)"
-msgstr ""
+msgstr "(nedá sa kopať)"
 
 msgid "penalty: %{cost}"
-msgstr ""
+msgstr "penalta: %{cost}"
 
 msgid "Uncharted Territory"
-msgstr ""
+msgstr "Nepreskúmané územie"
 
 msgid "Defenders:"
-msgstr ""
+msgstr "Obrancovia:"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Neznáme"
 
 msgid "%{name} (Level %{level})"
-msgstr ""
+msgstr "%{name} na úrovni %{level}"
 
 msgid "Attack:"
-msgstr ""
+msgstr "Útok:"
 
 msgid "Defense:"
-msgstr ""
+msgstr "Obrana:"
 
 msgid "Spell Power:"
-msgstr ""
+msgstr "Sila kúziel:"
 
 msgid "Knowledge:"
-msgstr ""
+msgstr "Vedomosti:"
 
 msgid "Spell Points:"
-msgstr ""
+msgstr "Body kúziel:"
 
 msgid "Move Points:"
-msgstr ""
+msgstr "Body pohybu:"
 
 msgid "Cost per troop:"
-msgstr ""
+msgstr "Cena za jednotku:"
 
 msgid "Available: %{count}"
-msgstr ""
+msgstr "Dostupné: %{count}"
 
 msgid "Number to buy:"
-msgstr ""
+msgstr "Počet na nákup:"
 
 msgid "Recruit selected monsters."
-msgstr ""
+msgstr "Najmi zvolených bojovníkov."
 
 msgid "Select maximum monsters to be recruited."
-msgstr ""
+msgstr "Zvoľ najväčší možný počet bojovníkov k nájmu."
 
 msgid "Select only 1 monster to be recruited."
-msgstr ""
+msgstr "Zvoľ iba jedného bojovníka k nájmu."
 
 msgid "Select Game Resolution:"
-msgstr ""
+msgstr "Zvoľ rozlíšenie hry:"
 
 msgid "Click to apply the selected resolution."
-msgstr ""
+msgstr "Klikni pre výber zvoleného rozlíšenia."
 
 msgid "Click to apply the entered text."
-msgstr ""
+msgstr "Klikni pre použitie zadaného textu."
 
 msgid "Click to open the Virtual Keyboard dialog."
-msgstr ""
+msgstr "Klikni pre otvorenie dialógu virtuálnej klávesnice."
 
 msgid "Open Virtual Keyboard"
-msgstr ""
+msgstr "Otvor virtuálnu klávesnicu"
 
 msgid "How many troops to move?"
-msgstr ""
+msgstr "Koľko jednotiek na presun?"
 
 msgid "Fast separation into slots:"
-msgstr ""
+msgstr "Rýchle rozdelenie do polí:"
 
 msgid "Map: "
-msgstr ""
+msgstr "Mapa:"
 
 msgid ""
 "\n"
 "\n"
 "Month: "
 msgstr ""
+"\n"
+"\n"
+"Mesiac: "
 
 msgid ", Week: "
-msgstr ""
+msgstr ", Týždeň: "
 
 msgid ", Day: "
-msgstr ""
+msgstr ", Deň: "
 
 msgid ""
 "\n"
 "\n"
 "Location: "
 msgstr ""
+"\n"
+"\n"
+"Umiestnenie: "
 
 msgid "File to Save:"
-msgstr ""
+msgstr "Uložiť súbor:"
 
 msgid "File to Load:"
-msgstr ""
+msgstr "Nahrať súbor:"
 
 msgid "Click to save the current game."
-msgstr ""
+msgstr "Klikni pre uloženie terajšej hry."
 
 msgid "Click to load a previously saved game."
-msgstr ""
+msgstr "Klikni pre nahranie vopred uloženej hry."
 
 msgid "Are you sure you want to delete file:"
-msgstr ""
+msgstr "Určite chceš vymazať súbor:"
 
 msgid "Warning!"
-msgstr ""
+msgstr "Pozor!"
 
 msgid "Select Monster:"
-msgstr ""
+msgstr "Zvoľ bojovníka:"
 
 msgid "Select Hero:"
-msgstr ""
+msgstr "Zvoľ hrdinu:"
 
 msgid "Select Artifact:"
-msgstr ""
+msgstr "Zvoľ artefakt:"
 
 msgid "Select Spell:"
-msgstr ""
+msgstr "Zvoľ kúzlo:"
 
 msgid "Select Skill:"
-msgstr ""
+msgstr "Zvoľ zručnosť:"
 
 msgid "Map Type:\n"
-msgstr ""
+msgstr "Typ mapy:\n"
 
 msgid "The Succession Wars"
-msgstr ""
+msgstr "Vojna o dedičstvo"
 
 msgid "Lose all your heroes and towns."
 msgstr ""
