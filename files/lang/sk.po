@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-25 06:07+0000\n"
-"PO-Revision-Date: 2023-04-28 16:15+0200\n"
+"PO-Revision-Date: 2023-04-28 16:39+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -3210,51 +3210,53 @@ msgid "Victory Condition"
 msgstr "Podmienka výhry"
 
 msgid "Map difficulty:"
-msgstr ""
+msgstr "Obtiažnosť mapy:"
 
 msgid "N"
-msgstr ""
+msgstr "N"
 
 msgid "No maps exist at that size"
-msgstr ""
+msgstr "Mapy tejto veľkosti nie sú"
 
 msgid "Small Maps"
-msgstr ""
+msgstr "Malé mapy"
 
 msgid "View only maps of size small (36 x 36)."
-msgstr ""
+msgstr "Zobraz iba mapy malej veľkosti (36 x 36)."
 
 msgid "Medium Maps"
-msgstr ""
+msgstr "Stredné mapy"
 
 msgid "View only maps of size medium (72 x 72)."
-msgstr ""
+msgstr "Zobraz iba mapy strednej veľkosti (72 x 72)."
 
 msgid "Large Maps"
-msgstr ""
+msgstr "Veľké mapy"
 
 msgid "View only maps of size large (108 x 108)."
-msgstr ""
+msgstr "Zobraz iba mapy veľkej veľkosti (108 x 108)."
 
 msgid "Extra Large Maps"
-msgstr ""
+msgstr "Extra veľké"
 
 msgid "View only maps of size extra large (144 x 144)."
-msgstr ""
+msgstr "Zobraz iba mapy extra veľkej veľkosti (144 x 144)."
 
 msgid "All Maps"
-msgstr ""
+msgstr "Všetky mapy"
 
 msgid "View all maps, regardless of size."
-msgstr ""
+msgstr "Zobraz všetky mapy bez ohľadu na veľkosť."
 
 msgid "Players Icon"
-msgstr ""
+msgstr "Ikona hráča"
 
 msgid ""
 "Indicates how many players total are in the scenario. Any positions not "
 "occupied by humans will be occupied by computer players."
 msgstr ""
+"Značí, koľko hráčov je celkovo v scenári. Akékoľvek pozície, ktoré nie sú "
+"obsadené ľuďmi, budú obsadené počítačovými hráčmi."
 
 msgid ""
 "Indicates whether the map\n"
@@ -3262,26 +3264,30 @@ msgid ""
 "(72 x 72), large (108 x 108),\n"
 "or extra large (144 x 144)."
 msgstr ""
+"Značí, či je mapa malá (36 x 36), stredná (72 x 72), veľká (108 x 108), "
+"alebo extra veľká (144 x 144)."
 
 msgid "Size Icon"
-msgstr ""
+msgstr "Ikona veľkosti"
 
 msgid ""
 "Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
 "of Loyalty\" version of the game."
 msgstr ""
+"Značí, či je mapa tvorená pre verziu hry \"The Succession Wars\" alebo \"The "
+"Price of Loyalty\"."
 
 msgid "Map Type"
-msgstr ""
+msgstr "Typ mapy"
 
 msgid "Selected Name"
-msgstr ""
+msgstr "Zvolené meno"
 
 msgid "The name of the currently selected map."
-msgstr ""
+msgstr "Názov momentálne zvolenej mapy."
 
 msgid "Selected Map Difficulty"
-msgstr ""
+msgstr "Zvolená obtiažnosť mapy"
 
 msgid ""
 "The map difficulty of the currently selected map.  The map difficulty is "
