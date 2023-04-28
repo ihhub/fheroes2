@@ -189,7 +189,7 @@ int Interface::GetFocusType()
 
         if ( focus.GetHeroes() )
             return GameFocus::HEROES;
-        else if ( focus.GetCastle() )
+        if ( focus.GetCastle() )
             return GameFocus::CASTLE;
     }
 
@@ -223,11 +223,7 @@ void Interface::Basic::RedrawFocus()
         iconsPanel.SetRedraw();
     }
 
-    if ( type != FOCUS_CASTLE && iconsPanel.IsSelected( ICON_CASTLES ) ) {
-        iconsPanel.ResetIcons( ICON_CASTLES );
-        iconsPanel.SetRedraw();
-    }
-    else if ( type == FOCUS_CASTLE && !iconsPanel.IsSelected( ICON_CASTLES ) ) {
+    if ( type == FOCUS_CASTLE && !iconsPanel.IsSelected( ICON_CASTLES ) ) {
         iconsPanel.Select( GetFocusCastle() );
         iconsPanel.SetRedraw();
     }
