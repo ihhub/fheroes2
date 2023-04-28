@@ -115,7 +115,8 @@ namespace
 
     SystemInfoRenderer systemInfoRenderer;
 
-    void fadeDisplay( const uint8_t startAlpha, const uint8_t endAlpha, const fheroes2::Rect & roi, const int32_t fadeTimeMs /* = 100 */, const uint32_t frameCount /* = 6 */ )
+    void fadeDisplay( const uint8_t startAlpha, const uint8_t endAlpha, const fheroes2::Rect & roi, const int32_t fadeTimeMs /* = 100 */,
+                      const uint32_t frameCount /* = 6 */ )
     {
         if ( ( frameCount < 2 ) || roi.height == 0 || roi.width == 0 ) {
             return;
