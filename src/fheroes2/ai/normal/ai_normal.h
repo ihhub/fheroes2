@@ -21,6 +21,7 @@
 #ifndef H2AI_NORMAL_H
 #define H2AI_NORMAL_H
 
+#include <array>
 #include <cassert>
 #include <cstdint>
 #include <map>
@@ -32,11 +33,11 @@
 #include "color.h"
 #include "mp2.h"
 #include "pairs.h"
+#include "resource.h"
 #include "world_pathfinding.h"
 
 class Army;
 class Castle;
-class Funds;
 class HeroBase;
 class Heroes;
 class Kingdom;
@@ -93,6 +94,25 @@ namespace AI
             , buildingValue( inValue )
         {
             assert( castle != nullptr );
+        }
+    };
+
+    struct BudgetEntry
+    {
+        int resource = Resource::UNKNOWN;
+        int missing = 0;
+        bool priority = false;
+        bool recurringCost = false;
+
+        BudgetEntry( int type )
+            : resource( type )
+        {}
+
+        void reset()
+        {
+            missing = 0;
+            priority = false;
+            recurringCost = false;
         }
     };
 
@@ -264,6 +284,7 @@ namespace AI
         std::vector<IndexObject> _mapObjects;
         std::map<int, PriorityTask> _priorityTargets;
         std::vector<RegionStats> _regions;
+        std::array<BudgetEntry, 7> _budget = { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
         AIWorldPathfinder _pathfinder;
         BattlePlanner _battlePlanner;
 
@@ -278,8 +299,10 @@ namespace AI
         double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getCourierObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getCourierMainTarget( const Heroes & hero, double lowestPossibleValue ) const;
+        double getResourcePriorityModifier( const int resource ) const;
 
         void updatePriorityTargets( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType );
+        void updateKingdomBudget( const Kingdom & kingdom );
 
         bool purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
                                 bool moreTasksForHeroes );

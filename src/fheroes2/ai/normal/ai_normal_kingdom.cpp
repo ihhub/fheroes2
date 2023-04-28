@@ -559,6 +559,8 @@ namespace AI
 
         evaluateRegionSafety();
 
+        updateKingdomBudget( kingdom );
+
         DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapObjects.size() << " valid objects" )
 
         uint32_t progressStatus = 1;
