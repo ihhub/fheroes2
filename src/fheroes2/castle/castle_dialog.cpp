@@ -42,6 +42,7 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "icn.h"
@@ -343,6 +344,15 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     // Fade-in castle dialog.
     if ( fade && Settings::isFadeEffectEnabled() ) {
+        if ( !isDefaultScreenSize ) {
+            // We need to expand the ROI for the next render to properly render window borders and shadow.
+            fheroes2::Rect roi( background.windowArea() );
+            roi.x -= BORDERWIDTH;
+            roi.width += BORDERWIDTH;
+            roi.height += BORDERWIDTH;
+            display.updateNextRenderRoi( roi );
+        }
+
         fheroes2::fadeInDisplay( background.activeArea(), !isDefaultScreenSize );
     }
 

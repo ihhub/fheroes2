@@ -251,6 +251,11 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // Fade-in hero dialog.
     if ( fade && Settings::isFadeEffectEnabled() ) {
+        if ( !isDefaultScreenSize ) {
+            // We need to expand the ROI for the next render to properly render window borders and shadow.
+            display.updateNextRenderRoi( { roi.x - BORDERWIDTH, roi.y, roi.width + BORDERWIDTH, roi.height + BORDERWIDTH } );
+        }
+
         fheroes2::fadeInDisplay( roi, !isDefaultScreenSize );
     }
     else {

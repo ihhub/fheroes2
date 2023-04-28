@@ -273,12 +273,14 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             fheroes2::fadeInDisplay();
         }
         else {
-            // We need to expand the ROI for the next render to properly render window borders and shadow.
-            fheroes2::Rect roi( border.windowArea() );
-            roi.x -= BORDERWIDTH;
-            roi.width += BORDERWIDTH;
-            roi.height += BORDERWIDTH;
-            display.updateNextRenderRoi( roi );
+            if ( !display.isDefaultSize() ) {
+                // We need to expand the ROI for the next render to properly render window borders and shadow.
+                fheroes2::Rect roi( border.windowArea() );
+                roi.x -= BORDERWIDTH;
+                roi.width += BORDERWIDTH;
+                roi.height += BORDERWIDTH;
+                display.updateNextRenderRoi( roi );
+            }
 
             fheroes2::fadeInDisplay( border.activeArea(), !display.isDefaultSize() );
         }

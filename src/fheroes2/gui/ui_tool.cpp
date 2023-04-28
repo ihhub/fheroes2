@@ -114,6 +114,42 @@ namespace
     };
 
     SystemInfoRenderer systemInfoRenderer;
+
+    void fadeDisplay( const uint8_t startAlpha, const uint8_t endAlpha, const fheroes2::Rect & roi, const int32_t fadeTimeMs /* = 100 */, const uint32_t frameCount /* = 6 */ )
+    {
+        if ( ( frameCount < 2 ) || roi.height == 0 || roi.width == 0 ) {
+            return;
+        }
+
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        fheroes2::Image temp{ roi.width, roi.height };
+        Copy( display, roi.x, roi.y, temp, 0, 0, roi.width, roi.height );
+
+        double alpha = startAlpha;
+        const uint32_t delay = fadeTimeMs / frameCount;
+        const double alphaStep = ( alpha - endAlpha ) / static_cast<double>( frameCount - 1 );
+
+        uint32_t frameNumber = 0;
+
+        LocalEvent & le = LocalEvent::Get();
+
+        Game::passCustomAnimationDelay( delay );
+        while ( le.HandleEvents( Game::isCustomDelayNeeded( delay ) ) ) {
+            if ( Game::validateCustomAnimationDelay( delay ) ) {
+                if ( frameNumber == frameCount ) {
+                    break;
+                }
+
+                ApplyAlpha( temp, 0, 0, display, roi.x, roi.y, roi.width, roi.height, static_cast<uint8_t>( alpha ) );
+
+                display.render( roi );
+
+                alpha -= alphaStep;
+                ++frameNumber;
+            }
+        }
+    }
 }
 
 namespace fheroes2
@@ -537,42 +573,6 @@ namespace fheroes2
         }
         else {
             fadeDisplay( 5, 255, roi, fadeTimeMs, frameCount );
-        }
-    }
-
-    void fadeDisplay( const uint8_t startAlpha, const uint8_t endAlpha, const Rect & roi, const int32_t fadeTimeMs /* = 100 */, const uint32_t frameCount /* = 6 */ )
-    {
-        if ( ( frameCount < 2 ) || roi.height == 0 || roi.width == 0 ) {
-            return;
-        }
-
-        Display & display = Display::instance();
-
-        Image temp{ roi.width, roi.height };
-        Copy( display, roi.x, roi.y, temp, 0, 0, roi.width, roi.height );
-
-        double alpha = startAlpha;
-        const uint32_t delay = fadeTimeMs / frameCount;
-        const double alphaStep = ( alpha - endAlpha ) / static_cast<double>( frameCount - 1 );
-
-        uint32_t frameNumber = 0;
-
-        LocalEvent & le = LocalEvent::Get();
-
-        Game::passCustomAnimationDelay( delay );
-        while ( le.HandleEvents( Game::isCustomDelayNeeded( delay ) ) ) {
-            if ( Game::validateCustomAnimationDelay( delay ) ) {
-                if ( frameNumber == frameCount ) {
-                    break;
-                }
-
-                ApplyAlpha( temp, 0, 0, display, roi.x, roi.y, roi.width, roi.height, static_cast<uint8_t>( alpha ) );
-
-                display.render( roi );
-
-                alpha -= alphaStep;
-                ++frameNumber;
-            }
         }
     }
 
