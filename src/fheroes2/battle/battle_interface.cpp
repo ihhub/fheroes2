@@ -1304,8 +1304,10 @@ void Battle::Interface::fullRedraw()
         _background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
     }
 
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     // Fade-out game screen only for 640x480 resolution.
-    const bool isDefaultScreenSize = fheroes2::Display::instance().isDefaultSize();
+    const bool isDefaultScreenSize = display.isDefaultSize();
     if ( Settings::isFadeEffectEnabled() && isDefaultScreenSize ) {
         fheroes2::fadeOutDisplay();
     }
@@ -1321,6 +1323,15 @@ void Battle::Interface::fullRedraw()
 
     // Fade-in battlefield.
     if ( Settings::isFadeEffectEnabled() ) {
+        if ( !isDefaultScreenSize ) {
+            // We need to expand the ROI for the next render to properly render window borders and shadow.
+            fheroes2::Rect roi( _background->windowArea() );
+            roi.x -= BORDERWIDTH;
+            roi.width += BORDERWIDTH;
+            roi.height += BORDERWIDTH;
+            display.updateNextRenderRoi( roi );
+        }
+
         fheroes2::fadeInDisplay( _background->activeArea(), !isDefaultScreenSize );
     }
 }
