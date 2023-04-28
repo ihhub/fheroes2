@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-25 06:07+0000\n"
-"PO-Revision-Date: 2023-04-28 16:39+0200\n"
+"PO-Revision-Date: 2023-04-28 16:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -3108,7 +3108,7 @@ msgid "Fast separation into slots:"
 msgstr "Rýchle rozdelenie do polí:"
 
 msgid "Map: "
-msgstr "Mapa:"
+msgstr "Mapa: "
 
 msgid ""
 "\n"
@@ -3295,72 +3295,75 @@ msgid ""
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
 msgstr ""
+"Obtiažnosť aktuálne zvolenej mapy. Obtiažnosť mapy určuje tvorca scenára. "
+"Náročnejšie mapy môžu obsahovať viacero silnejších nepriateľov, menej "
+"zdrojov alebo iné špeciálne podmienky, ktoré ľudskému hráčovi sťažujú hru."
 
 msgid "Selected Description"
-msgstr ""
+msgstr "Zvolený opis"
 
 msgid "The description of the currently selected map."
-msgstr ""
+msgstr "Opis aktuálne zvolenej mapy."
 
 msgid "Accept the choice made."
-msgstr ""
+msgstr "Prijať uskutočnený výber."
 
 msgid "Jump"
-msgstr ""
+msgstr "Skok"
 
 msgid "Hero Speed"
-msgstr ""
+msgstr "Rýchlosť hrdinu"
 
 msgid "Don't Show"
-msgstr ""
+msgstr "Neukazuj"
 
 msgid "Enemy Speed"
-msgstr ""
+msgstr "Rýchlosť nepriateľa"
 
 msgid "Slow"
-msgstr ""
+msgstr "Pomaly"
 
 msgid "Normal"
-msgstr ""
+msgstr "Normálne"
 
 msgid "Fast"
-msgstr ""
+msgstr "Rýchlo"
 
 msgid "Very Fast"
-msgstr ""
+msgstr "Veľmi rýchlo"
 
 msgid "Scroll Speed"
-msgstr ""
+msgstr "Rýchlosť posunu"
 
 msgid "Evil"
-msgstr ""
+msgstr "Zlo"
 
 msgid "Good"
-msgstr ""
+msgstr "Dobro"
 
 msgid "Interface Type"
-msgstr ""
+msgstr "Typ rozhrania"
 
 msgid "Hide"
-msgstr ""
+msgstr "Skry"
 
 msgid "Show"
-msgstr ""
+msgstr "Ukáž"
 
 msgid "Interface"
-msgstr ""
+msgstr "Rozhranie"
 
 msgid "Auto Resolve"
-msgstr ""
+msgstr "Automaticky"
 
 msgid "Auto, No Spells"
-msgstr ""
+msgstr "Auto bez kúziel"
 
 msgid "Battles"
-msgstr ""
+msgstr "Boje"
 
 msgid "autoBattle|Manual"
-msgstr ""
+msgstr "Manuálne"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
