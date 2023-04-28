@@ -283,6 +283,21 @@ Funds & Funds::operator-=( const Funds & pm )
     return *this;
 }
 
+Funds Funds::max( const Funds & other ) const
+{
+    Funds max;
+
+    max.wood = std::max( wood, other.wood );
+    max.mercury = std::max( mercury, other.mercury );
+    max.ore = std::max( ore, other.ore );
+    max.sulfur = std::max( sulfur, other.sulfur );
+    max.crystal = std::max( crystal, other.crystal );
+    max.gems = std::max( gems, other.gems );
+    max.gold = std::max( gold, other.gold );
+
+    return max;
+}
+
 int Funds::getLowestQuotient( const Funds & divisor ) const
 {
     int result = ( divisor.gold ) ? gold / divisor.gold : gold;

@@ -89,6 +89,7 @@ public:
         return !operator>=( funds );
     }
 
+    Funds max( const Funds & ) const;
     int32_t Get( int rs ) const;
     int32_t * GetPtr( int rs );
 
