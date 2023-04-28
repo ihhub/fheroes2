@@ -243,6 +243,7 @@ namespace Interface
         uint32_t redraw;
 
         bool _lockRedraw;
+        bool _needFadeIn{ false };
     };
 }
 

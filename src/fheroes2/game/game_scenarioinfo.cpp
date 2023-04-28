@@ -391,9 +391,6 @@ namespace
         Settings & conf = Settings::Get();
 
         conf.GetPlayers().SetStartGame();
-        if ( Settings::isFadeEffectEnabled() ) {
-            fheroes2::fadeOutDisplay();
-        }
 
         // Load maps
         std::string lower = StringLower( conf.MapsFile() );

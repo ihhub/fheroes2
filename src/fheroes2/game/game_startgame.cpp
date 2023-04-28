@@ -618,6 +618,11 @@ int Interface::Basic::GetCursorTileIndex( int32_t dst_index )
 
 fheroes2::GameMode Interface::Basic::StartGame()
 {
+    // Fade-out previous screen (load/new game, campaign info).
+    if ( Settings::isFadeEffectEnabled() ) {
+        fheroes2::fadeOutDisplay();
+    }
+
     Settings & conf = Settings::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -633,12 +638,15 @@ fheroes2::GameMode Interface::Basic::StartGame()
     iconsPanel.HideIcons( ICON_ANY );
     statusWindow.Reset();
 
-    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
+    SetRedraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
     conf.SetCurrentColor( currentColor );
 
     bool loadedFromSave = conf.LoadedGameVersion();
     bool skipTurns = loadedFromSave;
+
+    // Set need of fade-in of game screen.
+    _needFadeIn = Settings::isFadeEffectEnabled();
 
     GameOver::Result & gameResult = GameOver::Result::Get();
     fheroes2::GameMode res = fheroes2::GameMode::END_TURN;
@@ -708,7 +716,15 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, Color::NONE );
 
                         Redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
-                        display.render();
+
+                        if ( _needFadeIn ) {
+                            _needFadeIn = false;
+
+                            fheroes2::fadeInDisplay();
+                        }
+                        else {
+                            display.render();
+                        }
 
                         // reset the music after closing the dialog
                         const AudioManager::MusicRestorer musicRestorer;
@@ -861,7 +877,14 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    display.render();
+    if ( _needFadeIn ) {
+        _needFadeIn = false;
+
+        fheroes2::fadeInDisplay();
+    }
+    else {
+        display.render();
+    }
 
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
 
@@ -1278,7 +1301,14 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                 // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
                 assert( GetRedrawMask() == 0 );
 
-                display.render();
+                if ( _needFadeIn ) {
+                    _needFadeIn = false;
+
+                    fheroes2::fadeInDisplay();
+                }
+                else {
+                    display.render();
+                }
             }
         }
     }
