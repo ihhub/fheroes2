@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game_credits.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
@@ -29,7 +31,6 @@
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
-#include "game_credits.h"
 #include "game_delays.h"
 #include "icn.h"
 #include "image.h"
@@ -42,6 +43,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -690,6 +692,10 @@ namespace
 
 void Game::ShowCredits()
 {
+    if ( Settings::isFadeEffectEnabled() ) {
+        fheroes2::fadeOutDisplay();
+    }
+
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 

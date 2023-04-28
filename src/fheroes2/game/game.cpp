@@ -146,6 +146,9 @@ fheroes2::GameMode Game::Credits()
 {
     ShowCredits();
 
+    // After showing the credits fade-in the main menu.
+    needFadeIn = true;
+
     return fheroes2::GameMode::MAIN_MENU;
 }
 

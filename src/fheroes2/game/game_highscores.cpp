@@ -180,6 +180,9 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
     int32_t selectedEntryIndex = -1;
     const bool isAfterGameCompletion = ( ( gameResult.GetResult() & GameOver::WINS ) != 0 );
 
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const bool isDefaultScreenSize = display.isDefaultSize();
+
     if ( isAfterGameCompletion ) {
         auto inputPlayerName = []( std::string & playerName ) {
             Dialog::InputString( _( "Your Name" ), playerName, std::string(), 15 );
@@ -241,13 +244,15 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             fheroes2::fadeOutDisplay();
         }
     }
+    else if ( isDefaultScreenSize && Settings::isFadeEffectEnabled() ) {
+        fheroes2::fadeOutDisplay();
+    }
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point top{ ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 };
     const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT, false );
 
@@ -273,7 +278,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             fheroes2::fadeInDisplay();
         }
         else {
-            if ( !display.isDefaultSize() ) {
+            if ( !isDefaultScreenSize ) {
                 // We need to expand the ROI for the next render to properly render window borders and shadow.
                 fheroes2::Rect roi( border.windowArea() );
                 roi.x -= BORDERWIDTH;
@@ -282,7 +287,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
                 display.updateNextRenderRoi( roi );
             }
 
-            fheroes2::fadeInDisplay( border.activeArea(), !display.isDefaultSize() );
+            fheroes2::fadeInDisplay( border.activeArea(), !isDefaultScreenSize );
         }
     }
     else {
@@ -295,6 +300,16 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow() ) {
+            if ( Settings::isFadeEffectEnabled() ) {
+                if ( isAfterGameCompletion || isDefaultScreenSize ) {
+                    fheroes2::fadeOutDisplay();
+                    Game::setNeedFadeIn();
+                }
+                else {
+                    fheroes2::fadeOutDisplay( border.activeArea(), true );
+                }
+            }
+
             return fheroes2::GameMode::MAIN_MENU;
         }
         if ( le.MouseClickLeft( buttonOtherHighScore.area() ) ) {

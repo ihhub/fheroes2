@@ -176,6 +176,9 @@ void Game::mainGameLoop( bool isFirstGameRun )
             break;
         }
     }
+
+    // We are quitting the game, so fade-out the screen.
+    fheroes2::fadeOutDisplay();
 }
 
 fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
