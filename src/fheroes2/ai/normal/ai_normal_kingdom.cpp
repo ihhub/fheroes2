@@ -517,7 +517,7 @@ namespace AI
                     if ( wisdomLevel + 2 > stats.spellLevel )
                         stats.spellLevel = wisdomLevel + 2;
                 }
-                else if ( !Players::isFriends( myColor, hero->GetColor() ) && ( !hero->Modes( Heroes::PATROL ) || hero->GetSquarePatrol() != 0 ) ) {
+                else if ( !Players::isFriends( myColor, hero->GetColor() ) && ( !hero->Modes( Heroes::PATROL ) || hero->GetPatrolDistance() != 0 ) ) {
                     const Army & heroArmy = hero->GetArmy();
                     enemyArmies.emplace_back( idx, &heroArmy );
 
