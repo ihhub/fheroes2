@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-25 06:07+0000\n"
-"PO-Revision-Date: 2023-04-28 16:04+0200\n"
+"PO-Revision-Date: 2023-04-28 16:15+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -3174,40 +3174,40 @@ msgid "The Succession Wars"
 msgstr "Vojna o dedičstvo"
 
 msgid "Lose all your heroes and towns."
-msgstr ""
+msgstr "Strať všetkých hrdinov a mestá."
 
 msgid "Lose a specific town."
-msgstr ""
+msgstr "Strať konkrétne mesto."
 
 msgid "Lose a specific hero."
-msgstr ""
+msgstr "Strať konkrétneho hrdinu."
 
 msgid "Run out of time. Fail to win by a certain point."
-msgstr ""
+msgstr "Po uplynutí určitej doby stále nevyhráš."
 
 msgid "Loss Condition"
-msgstr ""
+msgstr "Podmienka prehry"
 
 msgid "Defeat all enemy heroes and towns."
-msgstr ""
+msgstr "Poraz nepriateľských hrdinov a mestá."
 
 msgid "Capture a specific town."
-msgstr ""
+msgstr "Doby konkrétne mesto."
 
 msgid "Defeat a specific hero."
-msgstr ""
+msgstr "Poraz konkrétneho hrdinu."
 
 msgid "Find a specific artifact."
-msgstr ""
+msgstr "Nájdi konkrétny artefakt."
 
 msgid "Your side defeats the opposing side."
-msgstr ""
+msgstr "Tvoja strana porazí opozíciu."
 
 msgid "Accumulate a large amount of gold."
-msgstr ""
+msgstr "Nahromaď obrovské množstvo zlata."
 
 msgid "Victory Condition"
-msgstr ""
+msgstr "Podmienka výhry"
 
 msgid "Map difficulty:"
 msgstr ""
