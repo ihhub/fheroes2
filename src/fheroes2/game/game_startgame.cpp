@@ -844,9 +844,13 @@ fheroes2::GameMode Interface::Basic::StartGame()
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
     assert( res != fheroes2::GameMode::END_TURN );
 
-    // Do not use fade effect when exiting to Highscores screen as in this case the 'WIN.SMK' was played and name input dialog will be rendered next.
-    if ( Settings::isFadeEffectEnabled() && ( res != fheroes2::GameMode::HIGHSCORES_STANDARD ) ) {
-        fheroes2::fadeOutDisplay();
+    if ( Settings::isFadeEffectEnabled() ) {
+        Game::setNeedFadeIn();
+
+        // Do not use fade-out effect when exiting to Highscores screen as in this case name input dialog will be rendered next.
+        if ( res != fheroes2::GameMode::HIGHSCORES_STANDARD ) {
+            fheroes2::fadeOutDisplay();
+        }
     }
 
     return res;

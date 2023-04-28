@@ -89,6 +89,9 @@ namespace Game
     bool UpdateSoundsOnFocusUpdate();
     void SetUpdateSoundsOnFocusUpdate( const bool update );
 
+    bool isNeedFadeIn();
+    void setNeedFadeIn();
+
     int GetKingdomColors();
     int GetActualKingdomColors();
     void DialogPlayers( int color, std::string );

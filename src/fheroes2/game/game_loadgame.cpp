@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game.h"
+
 #include <cstddef>
 #include <cstdint>
 #include <memory>
@@ -34,7 +36,6 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dir.h"
-#include "game.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
 #include "game_mainmenu_ui.h"
@@ -49,6 +50,7 @@
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -188,7 +190,12 @@ fheroes2::GameMode Game::LoadGame()
     buttons.back().setPosition( buttonXPos, buttonYPos + buttonYStep * 5 );
     buttons.back().draw();
 
-    display.render();
+    if ( isNeedFadeIn() && Settings::isFadeEffectEnabled() ) {
+        fheroes2::fadeInDisplay();
+    }
+    else {
+        display.render();
+    }
 
     LocalEvent & le = LocalEvent::Get();
 

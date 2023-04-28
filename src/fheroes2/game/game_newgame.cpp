@@ -553,7 +553,12 @@ fheroes2::GameMode Game::NewGame()
     buttonSettings.draw();
     buttonCancelGame.draw();
 
-    display.render();
+    if ( isNeedFadeIn() && Settings::isFadeEffectEnabled() ) {
+        fheroes2::fadeInDisplay();
+    }
+    else {
+        display.render();
+    }
 
     LocalEvent & le = LocalEvent::Get();
 

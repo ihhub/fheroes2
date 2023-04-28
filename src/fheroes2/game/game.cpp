@@ -62,6 +62,7 @@ namespace
     std::vector<Player> savedPlayers;
 
     bool updateSoundsOnFocusUpdate = true;
+    bool needFadeIn{ true };
 
     uint32_t maps_animation_frame = 0;
 }
@@ -156,6 +157,21 @@ bool Game::UpdateSoundsOnFocusUpdate()
 void Game::SetUpdateSoundsOnFocusUpdate( const bool update )
 {
     updateSoundsOnFocusUpdate = update;
+}
+
+bool Game::isNeedFadeIn()
+{
+    if ( needFadeIn ) {
+        needFadeIn = false;
+        return true;
+    }
+
+    return false;
+}
+
+void Game::setNeedFadeIn()
+{
+    needFadeIn = true;
 }
 
 void Game::Init()
