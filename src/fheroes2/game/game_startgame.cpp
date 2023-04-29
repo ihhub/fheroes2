@@ -606,17 +606,11 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
     radar.Build();
     radar.SetHide( true );
-
-    // Hide the world map at the first drawing
-    const int currentColor = conf.CurrentColor();
-    conf.SetCurrentColor( -1 );
-
     iconsPanel.HideIcons( ICON_ANY );
     statusWindow.Reset();
 
+    // Prepare for render the whole game interface with adventure map filled with fog as it was not uncovered by 'updateMapFogDirections()'.
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
-
-    conf.SetCurrentColor( currentColor );
 
     bool loadedFromSave = conf.LoadedGameVersion();
     bool skipTurns = loadedFromSave;
@@ -683,9 +677,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     AudioManager::ResetAudio();
 
                     if ( isHotSeatGame ) {
-                        // we need to hide the world map in hot seat mode
-                        conf.SetCurrentColor( -1 );
-
                         iconsPanel.HideIcons( ICON_ANY );
                         statusWindow.Reset();
 
@@ -809,7 +800,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
         // don't carry the current color from the last player to the next turn
         if ( res == fheroes2::GameMode::END_TURN ) {
-            conf.SetCurrentColor( -1 );
+            conf.SetCurrentColor( Color::NONE );
         }
     }
 

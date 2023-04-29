@@ -251,7 +251,16 @@ public:
     // Return current player friends colors, if player does not exist he has no friends (returns 0).
     static int FriendColors();
 
-    int current_color;
+    int getCurrentColor() const
+    {
+        return _currentColor;
+    }
+
+    // The color should belong to one player or be NONE (neutral player).
+    void setCurrentColor( int color );
+
+private:
+    int _currentColor{ Color::NONE };
 };
 
 StreamBase & operator<<( StreamBase &, const Players & );
