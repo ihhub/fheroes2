@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-13 05:15+0000\n"
-"PO-Revision-Date: 2023-04-22 12:32+0300\n"
+"PO-Revision-Date: 2023-04-30 00:59+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -252,28 +252,28 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr "мало"
+msgstr "Мало"
 
 msgid "army|Several"
-msgstr "кілька"
+msgstr "Кілька"
 
 msgid "army|Pack"
-msgstr "зграя"
+msgstr "Зграя"
 
 msgid "army|Lots"
-msgstr "багато"
+msgstr "Багато"
 
 msgid "army|Horde"
-msgstr "орда"
+msgstr "Орда"
 
 msgid "army|Throng"
-msgstr "натовп"
+msgstr "Натовп"
 
 msgid "army|Swarm"
-msgstr "купа"
+msgstr "Купа"
 
 msgid "army|Zounds"
-msgstr "безліч"
+msgstr "Безліч"
 
 #, fuzzy
 msgid "army|Legion"
@@ -465,7 +465,7 @@ msgid ""
 msgstr "Чи підсвічувати клітину, над якою знаходиться курсор миші."
 
 msgid "Change the audio settings of the game."
-msgstr "Змінити звукові налаштування гри"
+msgstr "Змінити звукові налаштування гри."
 
 msgid "Check and configure all the hot keys present in the game."
 msgstr ""
@@ -903,7 +903,7 @@ msgid "The mirror image is destroyed!"
 msgstr "Фантомний загін знищений!"
 
 msgid "Are you sure you want to interrupt the auto battle?"
-msgstr "Ви впевнені, що хочете перервати "
+msgstr "Ви впевнені, що хочете перервати автоматичний бій?"
 
 #, fuzzy
 msgid "Error"
@@ -4126,7 +4126,7 @@ msgid "hotkey|toggle battle auto mode"
 msgstr ""
 
 msgid "hotkey|finish the battle in auto mode"
-msgstr "Ви впевнені, що хочете завершити битву в автоматичному режимі?"
+msgstr "завершити битву у автоматичному режимі"
 
 msgid "hotkey|battle options"
 msgstr ""
@@ -6650,52 +6650,52 @@ msgid "Purple"
 msgstr "Фіолетовий"
 
 msgid "barrier|Aqua"
-msgstr "бірюзовий"
+msgstr "Бірюзовий"
 
 msgid "barrier|Blue"
-msgstr "синій"
+msgstr "Синій"
 
 msgid "barrier|Brown"
-msgstr "коричневий"
+msgstr "Коричневий"
 
 msgid "barrier|Gold"
-msgstr "золотий"
+msgstr "Золотий"
 
 msgid "barrier|Green"
-msgstr "зелений"
+msgstr "Зелений"
 
 msgid "barrier|Orange"
-msgstr "помаранчевий"
+msgstr "Помаранчевий"
 
 msgid "barrier|Purple"
-msgstr "фіолетовий"
+msgstr "Фіолетовий"
 
 msgid "barrier|Red"
-msgstr "червоний"
+msgstr "Червоний"
 
 msgid "tent|Aqua"
-msgstr "бірюзовий"
+msgstr "Бірюзовий"
 
 msgid "tent|Blue"
-msgstr "синій"
+msgstr "Синій"
 
 msgid "tent|Brown"
-msgstr "коричневий"
+msgstr "Коричневий"
 
 msgid "tent|Gold"
-msgstr "золотий"
+msgstr "Золотий"
 
 msgid "tent|Green"
-msgstr "зелений"
+msgstr "Зелений"
 
 msgid "tent|Orange"
-msgstr "помаранчевий"
+msgstr "Помаранчевий"
 
 msgid "tent|Purple"
-msgstr "фіолетовий"
+msgstr "Фіолетовий"
 
 msgid "tent|Red"
-msgstr "червоний"
+msgstr "Червоний"
 
 msgid "Experience"
 msgstr ""
@@ -6736,25 +6736,25 @@ msgid "View Towns and Castles."
 msgstr ""
 
 msgid "luck|Cursed"
-msgstr "проклята"
+msgstr "Проклята"
 
 msgid "luck|Awful"
-msgstr "жахлива"
+msgstr "Жахлива"
 
 msgid "luck|Bad"
-msgstr "погана"
+msgstr "Погана"
 
 msgid "luck|Normal"
-msgstr "звичайна"
+msgstr "Звичайна"
 
 msgid "luck|Good"
-msgstr "добра"
+msgstr "Добра"
 
 msgid "luck|Great"
-msgstr "чудова"
+msgstr "Чудова"
 
 msgid "luck|Irish"
-msgstr "ірландська"
+msgstr "Ірландська"
 
 msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
@@ -6776,22 +6776,22 @@ msgid "morale|Treason"
 msgstr "Зрада"
 
 msgid "morale|Awful"
-msgstr "жахлива"
+msgstr "Жахлива"
 
 msgid "morale|Poor"
-msgstr "погана"
+msgstr "Погана"
 
 msgid "morale|Normal"
-msgstr "звичайна"
+msgstr "Звичайна"
 
 msgid "morale|Good"
-msgstr "добра"
+msgstr "Добра"
 
 msgid "morale|Great"
-msgstr "чудова"
+msgstr "Чудова"
 
 msgid "morale|Blood!"
-msgstr "кров!"
+msgstr "Кров!"
 
 msgid "Bad morale may cause your armies to freeze in combat."
 msgstr ""
@@ -7002,13 +7002,13 @@ msgid "Ocean"
 msgstr "Океан"
 
 msgid "maps|Small"
-msgstr "мала"
+msgstr "Мала"
 
 msgid "maps|Medium"
-msgstr "середня"
+msgstr "Середня"
 
 msgid "maps|Large"
-msgstr "велика"
+msgstr "Велика"
 
 msgid "maps|Extra Large"
 msgstr "надвелика"
@@ -7089,7 +7089,7 @@ msgstr "Альтанка"
 msgid "Genie Lamp"
 msgstr "Лампа джина"
 
-# Other's monster's dwellings are named in singular form - Goblin, Dwarf, etc. This one looks like in plural - Archer's. 
+# Other's monster's dwellings are named in singular form - Goblin, Dwarf, etc. This one looks like in plural - Archer's.
 # I'd like to know, how developers want this to look like: House of some monster or monsters, in single, or in plural form?
 msgid "Archer's House"
 msgstr "Дім лучників"
@@ -7341,8 +7341,8 @@ msgstr[2] "Чарівних садів"
 msgid "Observation Tower"
 msgstr "Оглядова вежа"
 
-# Name of object formed with two words. Straight translate sounds not very good: "Ливарня вільних людей". That phrase is not in use in ukrainian. 
-# Most simple way to translate - leave word "Foundry" - "Ливарня". But, full meaning of origin name will be lost. 
+# Name of object formed with two words. Straight translate sounds not very good: "Ливарня вільних людей". That phrase is not in use in ukrainian.
+# Most simple way to translate - leave word "Foundry" - "Ливарня". But, full meaning of origin name will be lost.
 # I suggest to use "Вільне Ливарство" First word used as adjective, means the same, as "Free". "Ливарство" - means Foundry. But, together "Вільне ливарство" can be perceived as organiztion, much bigger than one foundry, which player can see in game.
 #, fuzzy
 msgid "Freeman's Foundry"
@@ -9463,13 +9463,13 @@ msgid "View Towns"
 msgstr ""
 
 msgid "Causes all Heroes across the land to become visible."
-msgstr "Показує всіх героїв на карті"
+msgstr "Показує всіх героїв на карті."
 
 msgid "View Heroes"
 msgstr "Показати Героїв"
 
 msgid "Causes the entire land to become visible."
-msgstr "Відкриває всю карту"
+msgstr "Відкриває всю карту."
 
 msgid "View All"
 msgstr "Показати Все"
@@ -9556,7 +9556,7 @@ msgstr ""
 "ушкоджень від безпосередньої атаки."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
-msgstr "У вас немає Магічної Книги, то ж ви не можете вичаклувати закляття. "
+msgstr "У вас немає Магічної Книги, то ж ви не можете вичаклувати закляття."
 
 msgid "No spell to cast."
 msgstr "Немає чарів для застосування."
