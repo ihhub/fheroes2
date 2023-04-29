@@ -1256,12 +1256,8 @@ Battle::Interface::~Interface()
 {
     AudioManager::ResetAudio();
 
-    if ( opponent1 ) {
-        delete opponent1;
-    }
-    if ( opponent2 ) {
-        delete opponent2;
-    }
+    delete opponent1;
+    delete opponent2;
 
     // Fade-out battlefield.
     if ( Settings::isFadeEffectEnabled() ) {
