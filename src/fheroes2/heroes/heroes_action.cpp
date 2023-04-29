@@ -3502,7 +3502,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         focusUpdater = std::make_unique<FocusUpdater>();
 
         if ( isAIControlledForHumanPlayer ) {
-            Interface::Basic::Get().SetFocus( this );
+            Interface::Basic::Get().SetFocus( this, false );
         }
     }
 

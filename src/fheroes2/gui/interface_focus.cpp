@@ -40,11 +40,6 @@
 #include "settings.h"
 #include "world.h"
 
-void Interface::Basic::SetFocus( Heroes * hero )
-{
-    SetFocus( hero, false );
-}
-
 void Interface::Basic::SetFocus( Heroes * hero, const bool retainScrollBarPosition )
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
@@ -125,7 +120,7 @@ void Interface::Basic::updateFocus()
         Heroes * hero = GetFocusHeroes();
 
         if ( hero != nullptr ) {
-            SetFocus( hero );
+            SetFocus( hero, false );
         }
     }
 }
@@ -151,7 +146,7 @@ void Interface::Basic::ResetFocus( const int priority, const bool retainScrollBa
         KingdomHeroes::const_iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return !hero->Modes( Heroes::SLEEPER ); } );
 
         if ( it != heroes.end() )
-            SetFocus( *it );
+            SetFocus( *it, false );
         else
             ResetFocus( GameFocus::CASTLE, retainScrollBarPosition );
         break;
@@ -161,7 +156,7 @@ void Interface::Basic::ResetFocus( const int priority, const bool retainScrollBa
         if ( focus.GetHeroes() && focus.GetHeroes()->GetColor() == player->GetColor() )
             SetFocus( focus.GetHeroes(), retainScrollBarPosition );
         else if ( !myKingdom.GetHeroes().empty() )
-            SetFocus( myKingdom.GetHeroes().front() );
+            SetFocus( myKingdom.GetHeroes().front(), false );
         else if ( !myKingdom.GetCastles().empty() ) {
             iconsPanel.SetRedraw( ICON_HEROES );
             SetFocus( myKingdom.GetCastles().front() );
@@ -177,7 +172,7 @@ void Interface::Basic::ResetFocus( const int priority, const bool retainScrollBa
             SetFocus( myKingdom.GetCastles().front() );
         else if ( !myKingdom.GetHeroes().empty() ) {
             iconsPanel.SetRedraw( ICON_CASTLES );
-            SetFocus( myKingdom.GetHeroes().front() );
+            SetFocus( myKingdom.GetHeroes().front(), false );
         }
         else
             focus.Reset();
