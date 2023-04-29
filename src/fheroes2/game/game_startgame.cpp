@@ -806,9 +806,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
         }
 
         // don't carry the current color from the last player to the next turn
-        // if ( res == fheroes2::GameMode::END_TURN ) {
-        conf.SetCurrentColor( -1 );
-        //}
+        if ( res == fheroes2::GameMode::END_TURN ) {
+            conf.SetCurrentColor( -1 );
+        }
     }
 
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN

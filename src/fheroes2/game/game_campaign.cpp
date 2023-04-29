@@ -1525,9 +1525,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             Players & players = conf.GetPlayers();
             players.SetStartGame();
-
-            assert( players.current_color != -1);
-
             if ( Settings::isFadeEffectEnabled() )
                 fheroes2::FadeDisplay();
 
