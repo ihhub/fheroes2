@@ -1256,10 +1256,17 @@ Battle::Interface::~Interface()
 {
     AudioManager::ResetAudio();
 
-    if ( opponent1 )
+    if ( opponent1 ) {
         delete opponent1;
-    if ( opponent2 )
+    }
+    if ( opponent2 ) {
         delete opponent2;
+    }
+
+    // Fade-out battlefield.
+    if ( Settings::isFadeEffectEnabled() ) {
+        fheroes2::fadeOutDisplay( _background->activeArea(), !fheroes2::Display::instance().isDefaultSize() );
+    }
 }
 
 void Battle::Interface::SetOrderOfUnits( const std::shared_ptr<const Units> & units )
