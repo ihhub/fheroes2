@@ -752,7 +752,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
                     if ( isHotSeatGame ) {
                         // Reveal fog to be compatible with the old pre 1.0.2 saves.
-                        world.ClearFog( player->GetColor() );
+                        world.ClearFog( playerColor );
 
                         Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, hotSeatAIFogColors( player ) );
                     }
