@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -89,7 +89,7 @@ namespace AudioManager
 
     void playLoopSoundsAsync( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects );
 
-    void PlaySound( const int m82 );
+    int32_t PlaySound( const int32_t m82 );
     void PlaySoundAsync( const int m82 );
 
     void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode );
