@@ -636,6 +636,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
     const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
     if ( !isHotSeatGame ) {
+        assert( currentColor != -1 );
         // Fully update fog directions if there will be only one human player.
         Interface::GameArea::updateMapFogDirections();
     }
@@ -803,7 +804,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
         }
 
         // don't carry the current color from the last player to the next turn
-        conf.SetCurrentColor( -1 );
+        if ( res == fheroes2::GameMode::END_TURN ) {
+            conf.SetCurrentColor( -1 );
+        }
     }
 
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
