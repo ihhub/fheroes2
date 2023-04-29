@@ -660,6 +660,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
         for ( const Player * player : sortedPlayers ) {
             assert( player != nullptr );
 
+            int playerColor = player->GetColor();
+
             Kingdom & kingdom = world.GetKingdom( player->GetColor() );
 
             if ( skipTurns && !player->isColor( conf.CurrentColor() ) ) {
@@ -703,6 +705,11 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     }
 
                     conf.SetCurrentColor( player->GetColor() );
+
+                    // Update fog data to be compatible with the old pre 1.0.2 saves.
+                    if ( isHotSeatGame ) {
+                        world.ClearFog( player->GetColor() );
+                    }
 
                     kingdom.ActionBeforeTurn();
 
