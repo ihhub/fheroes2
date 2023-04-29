@@ -660,9 +660,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
         for ( const Player * player : sortedPlayers ) {
             assert( player != nullptr );
 
-            int playerColor = player->GetColor();
+            const int playerColor = player->GetColor();
 
-            Kingdom & kingdom = world.GetKingdom( player->GetColor() );
+            Kingdom & kingdom = world.GetKingdom( playerColor );
 
             if ( skipTurns && !player->isColor( conf.CurrentColor() ) ) {
                 continue;
@@ -672,7 +672,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
             skipTurns = false;
 
             if ( kingdom.isPlay() ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() )
+                DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( playerColor ) << ", resource: " << kingdom.GetFunds().String() )
 
                 radar.SetHide( true );
                 radar.SetRedraw( REDRAW_RADAR_CURSOR );
@@ -701,14 +701,14 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                         AudioManager::PlayMusic( MUS::NEW_MONTH, Music::PlaybackMode::PLAY_ONCE );
 
-                        Game::DialogPlayers( player->GetColor(), _( "%{color} player's turn." ) );
+                        Game::DialogPlayers( playerColor, _( "%{color} player's turn." ) );
                     }
 
-                    conf.SetCurrentColor( player->GetColor() );
+                    conf.SetCurrentColor( playerColor );
 
-                    // Update fog data to be compatible with the old pre 1.0.2 saves.
+                    // Reveal fog to be compatible with the old pre 1.0.2 saves.
                     if ( isHotSeatGame ) {
-                        world.ClearFog( player->GetColor() );
+                        world.ClearFog( playerColor );
                     }
 
                     kingdom.ActionBeforeTurn();
@@ -733,7 +733,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     Cursor::Get().SetThemes( Cursor::WAIT );
 
-                    conf.SetCurrentColor( player->GetColor() );
+                    conf.SetCurrentColor( playerColor );
 
                     statusWindow.Reset();
                     statusWindow.SetState( StatusType::STATUS_AITURN );
