@@ -213,7 +213,7 @@ namespace
     }
 
     // Returns sound Channel ID, when error - returns `-1`.
-    int32_t PlaySoundImp( const int32_t m82, const int32_t soundVolume );
+    int PlaySoundImp( const int m82, const int soundVolume );
     void PlayMusicImp( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode );
     void playLoopSoundsImp( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume, const bool is3DAudioEnabled );
 
@@ -472,7 +472,7 @@ namespace
 
     AsyncSoundManager g_asyncSoundManager;
 
-    int32_t PlaySoundImp( const int32_t m82, const int32_t soundVolume )
+    int PlaySoundImp( const int m82, const int soundVolume )
     {
         std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
@@ -857,7 +857,7 @@ namespace AudioManager
         g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
     }
 
-    int32_t PlaySound( const int32_t m82 )
+    int PlaySound( const int m82 )
     {
         if ( m82 == M82::UNKNOWN ) {
             return -1;

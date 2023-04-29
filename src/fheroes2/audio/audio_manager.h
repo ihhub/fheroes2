@@ -89,7 +89,7 @@ namespace AudioManager
 
     void playLoopSoundsAsync( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects );
 
-    int32_t PlaySound( const int32_t m82 );
+    int PlaySound( const int m82 );
     void PlaySoundAsync( const int m82 );
 
     void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode );

@@ -1316,6 +1316,10 @@ void Battle::Interface::fullRedraw()
 
 void Battle::Interface::Redraw()
 {
+    // Check that the pre-battle sound is over to start playing the battle music.
+    // IMPORTANT: This implementation may suffer from the race condition as the pre-battle sound channel may be reused by new sounds using 'playSoundAsync()':
+    // such a playback is performed in the background thread so it may take this channel before this check is performed.
+    // Although in this case here it will not lead to serious problems as in the worst case, the launch of battle music will be postponed for some time.
     if ( ( _preBattleSoundChannelId != -1 ) && !Music::isPlaying() && !Mixer::isPlaying( _preBattleSoundChannelId ) ) {
         _preBattleSoundChannelId = -1;
         AudioManager::PlayMusicAsync( MUS::GetBattleRandom(), Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
