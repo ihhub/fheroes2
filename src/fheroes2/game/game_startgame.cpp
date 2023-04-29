@@ -606,10 +606,17 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
     radar.Build();
     radar.SetHide( true );
+
+    // Hide the world map at the first drawing
+    const int currentColor = conf.CurrentColor();
+    conf.SetCurrentColor( -1 );
+
     iconsPanel.HideIcons( ICON_ANY );
     statusWindow.Reset();
 
-    SetRedraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
+    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
+
+    conf.SetCurrentColor( currentColor );
 
     bool loadedFromSave = conf.LoadedGameVersion();
     bool skipTurns = loadedFromSave;
@@ -799,9 +806,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
         }
 
         // don't carry the current color from the last player to the next turn
-        if ( res == fheroes2::GameMode::END_TURN ) {
-            conf.SetCurrentColor( -1 );
-        }
+        // if ( res == fheroes2::GameMode::END_TURN ) {
+        conf.SetCurrentColor( -1 );
+        //}
     }
 
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
