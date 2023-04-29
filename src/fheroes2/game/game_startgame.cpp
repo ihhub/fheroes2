@@ -636,7 +636,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
     const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
     if ( !isHotSeatGame ) {
-        assert( currentColor != -1 );
+        // It is not a Hot Seat (multiplayer) game so we set current color to the only human player.
+        conf.SetCurrentColor( Players::HumanColors() );
+
         // Fully update fog directions if there will be only one human player.
         Interface::GameArea::updateMapFogDirections();
     }
