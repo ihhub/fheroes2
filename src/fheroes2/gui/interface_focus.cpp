@@ -42,6 +42,11 @@
 
 void Interface::Basic::SetFocus( Heroes * hero )
 {
+    SetFocus( hero, false );
+}
+
+void Interface::Basic::SetFocus( Heroes * hero, const bool retainScrollBarPosition )
+{
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
     if ( player ) {
@@ -56,6 +61,10 @@ void Interface::Basic::SetFocus( Heroes * hero )
         focus.Set( hero );
 
         Redraw( REDRAW_BUTTONS );
+
+        if ( !retainScrollBarPosition ) {
+            iconsPanel.Select( hero );
+        }
 
         gameArea.SetCenter( hero->GetCenter() );
         statusWindow.SetState( StatusType::STATUS_ARMY );
@@ -121,7 +130,7 @@ void Interface::Basic::updateFocus()
     }
 }
 
-void Interface::Basic::ResetFocus( const int priority, const bool resetScrollBarPosition )
+void Interface::Basic::ResetFocus( const int priority, const bool retainScrollBarPosition )
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
     if ( player == nullptr ) {
@@ -131,7 +140,7 @@ void Interface::Basic::ResetFocus( const int priority, const bool resetScrollBar
     Focus & focus = player->GetFocus();
     Kingdom & myKingdom = world.GetKingdom( player->GetColor() );
 
-    if ( resetScrollBarPosition ) {
+    if ( !retainScrollBarPosition ) {
         iconsPanel.ResetIcons( ICON_ANY );
     }
 
@@ -144,13 +153,13 @@ void Interface::Basic::ResetFocus( const int priority, const bool resetScrollBar
         if ( it != heroes.end() )
             SetFocus( *it );
         else
-            ResetFocus( GameFocus::CASTLE, resetScrollBarPosition );
+            ResetFocus( GameFocus::CASTLE, retainScrollBarPosition );
         break;
     }
 
     case GameFocus::HEROES:
         if ( focus.GetHeroes() && focus.GetHeroes()->GetColor() == player->GetColor() )
-            SetFocus( focus.GetHeroes() );
+            SetFocus( focus.GetHeroes(), retainScrollBarPosition );
         else if ( !myKingdom.GetHeroes().empty() )
             SetFocus( myKingdom.GetHeroes().front() );
         else if ( !myKingdom.GetCastles().empty() ) {
@@ -223,7 +232,11 @@ void Interface::Basic::RedrawFocus()
         iconsPanel.SetRedraw();
     }
 
-    if ( type == FOCUS_CASTLE && !iconsPanel.IsSelected( ICON_CASTLES ) ) {
+    if ( type != FOCUS_CASTLE && iconsPanel.IsSelected( ICON_CASTLES ) ) {
+        iconsPanel.ResetIcons( ICON_CASTLES );
+        iconsPanel.SetRedraw();
+    }
+    else if ( type == FOCUS_CASTLE && !iconsPanel.IsSelected( ICON_CASTLES ) ) {
         iconsPanel.Select( GetFocusCastle() );
         iconsPanel.SetRedraw();
     }

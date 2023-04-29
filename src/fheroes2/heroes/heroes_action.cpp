@@ -3488,7 +3488,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         {
             Interface::Basic & I = Interface::Basic::Get();
 
-            I.ResetFocus( GameFocus::HEROES, false );
+            I.ResetFocus( GameFocus::HEROES, true );
             I.RedrawFocus();
         }
 
