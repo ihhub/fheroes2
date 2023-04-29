@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -248,6 +248,7 @@ public:
     static void SetPlayerControl( int color, int ctrl );
     static void SetPlayerInGame( int color, bool );
     static int HumanColors();
+    // Return current player friends colors, if player does not exist he has no friends (returns 0).
     static int FriendColors();
 
     int current_color;

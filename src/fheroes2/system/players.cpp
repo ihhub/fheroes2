@@ -460,21 +460,12 @@ int Players::HumanColors()
 
 int Players::FriendColors()
 {
-    const Players & players = Settings::Get().GetPlayers();
-    const int playerColor = players.current_color;
-
-    assert( playerColor >= 0 );
-
-    const int humanColors = Players::HumanColors();
-
-    if ( playerColor & humanColors ) {
-        const Player * player = players.GetCurrent();
-        if ( player ) {
-            return player->GetFriends();
-        }
+    const Player * player = Settings::Get().GetPlayers().GetCurrent();
+    if ( player ) {
+        return player->GetFriends();
     }
 
-    return humanColors;
+    return 0;
 }
 
 std::string Players::String() const
