@@ -165,7 +165,7 @@ namespace
         AudioManager::PlayMusic( MUS::LOSTGAME, Music::PlaybackMode::PLAY_ONCE );
 
         if ( !body.empty() )
-            fheroes2::showStandardTextMessage( _("Defeat!"), body, Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Defeat!" ), body, Dialog::OK );
     }
 }
 
