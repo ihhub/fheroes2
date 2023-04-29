@@ -798,10 +798,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
             res = fheroes2::GameMode::MAIN_MENU;
         }
 
-        // don't carry the current color from the last player to the next turn
-        if ( res == fheroes2::GameMode::END_TURN ) {
-            conf.SetCurrentColor( Color::NONE );
-        }
+        // Don't carry the current player color to the next turn.
+        conf.SetCurrentColor( Color::NONE );
     }
 
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN

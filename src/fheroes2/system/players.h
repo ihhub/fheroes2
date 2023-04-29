@@ -257,7 +257,7 @@ public:
     }
 
     // The color should belong to one player or be NONE (neutral player).
-    void setCurrentColor( int color );
+    void setCurrentColor( const int color );
 
 private:
     int _currentColor{ Color::NONE };

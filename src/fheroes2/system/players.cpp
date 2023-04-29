@@ -455,6 +455,7 @@ int Players::HumanColors()
     if ( humanColors == Color::NONE ) {
         humanColors = Settings::Get().GetPlayers().GetColors( CONTROL_HUMAN, true );
     }
+
     return humanColors;
 }
 
@@ -468,10 +469,11 @@ int Players::FriendColors()
     return 0;
 }
 
-void Players::setCurrentColor( int color )
+void Players::setCurrentColor( const int color )
 {
     // We can set only one of 6 player colors ( BLUE | GREEN | RED | YELLOW | ORANGE | PURPLE ) or NONE (neutral player).
     assert( Color::Count( color ) == 1 || color == Color::NONE );
+
     _currentColor = color;
 }
 

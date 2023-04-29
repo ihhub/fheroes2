@@ -314,7 +314,7 @@ public:
     }
 
     // The color should belong to one player or be NONE (neutral player).
-    void SetCurrentColor( int color )
+    void SetCurrentColor( const int color )
     {
         players.setCurrentColor( color );
     }
