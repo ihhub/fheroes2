@@ -627,8 +627,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
     std::vector<Player *> sortedPlayers = conf.GetPlayers().getVector();
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
 
-    if ( !loadedFromSave ) {
-        // Clear fog around heroes, castles and mines for all players when starting a new map.
+    if ( !loadedFromSave || world.CountDay() == 1 ) {
+        // Clear fog around heroes, castles and mines for all players when starting a new map or if the save was done at the first day.
         for ( const Player * player : sortedPlayers ) {
             world.ClearFog( player->GetColor() );
         }
@@ -706,11 +706,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     conf.SetCurrentColor( playerColor );
 
-                    // Reveal fog on the first day to be compatible with the old pre 1.0.2 saves.
-                    if ( world.CountDay() == 1 ) {
-                        world.ClearFog( playerColor );
-                    }
-
                     kingdom.ActionBeforeTurn();
 
                     iconsPanel.ShowIcons( ICON_ANY );
@@ -748,11 +743,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     Redraw();
                     display.render();
-
-                    // Reveal fog on the first day to be compatible with the old pre 1.0.2 saves.
-                    if ( world.CountDay() == 1 ) {
-                        world.ClearFog( playerColor );
-                    }
 
                     // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
                     if ( isHotSeatGame ) {
