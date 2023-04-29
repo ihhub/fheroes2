@@ -630,17 +630,10 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
     radar.Build();
     radar.SetHide( true );
-
-    // Hide the world map at the first drawing
-    const int currentColor = conf.CurrentColor();
-    conf.SetCurrentColor( -1 );
-
     iconsPanel.HideIcons( ICON_ANY );
     statusWindow.Reset();
 
     SetRedraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
-
-    conf.SetCurrentColor( currentColor );
 
     bool loadedFromSave = conf.LoadedGameVersion();
     bool skipTurns = loadedFromSave;
