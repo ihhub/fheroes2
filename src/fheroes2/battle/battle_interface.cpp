@@ -1321,7 +1321,7 @@ void Battle::Interface::Redraw()
     // by new sounds if they are played (one way or another) after the end of the pre-battle sound, but before calling
     // this method. Although in this case here it will not lead to serious problems as in the worst case, the launch of
     // battle music will be postponed for some time.
-    if ( ( _preBattleSoundChannelId != -2 ) && ( _preBattleSoundChannelId == -1 ) || !Mixer::isPlaying( _preBattleSoundChannelId ) && !Music::isPlaying() ) {
+    if ( ( _preBattleSoundChannelId != -2 ) && ( _preBattleSoundChannelId == -1 || !Mixer::isPlaying( _preBattleSoundChannelId ) ) && !Music::isPlaying() ) {
         // Set `_preBattleSoundChannelId` to `-2` to skip `isPlaying()` checks in future as these checks could freeze
         // the game for some time in certain cases (e.g. slow MIDI backend).
         _preBattleSoundChannelId = -2;
