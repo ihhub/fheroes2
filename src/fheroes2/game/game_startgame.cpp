@@ -706,8 +706,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     conf.SetCurrentColor( playerColor );
 
-                    // Reveal fog to be compatible with the old pre 1.0.2 saves.
-                    if ( isHotSeatGame ) {
+                    // Reveal fog on the first day to be compatible with the old pre 1.0.2 saves.
+                    if ( world.CountDay() == 1 ) {
                         world.ClearFog( playerColor );
                     }
 
@@ -749,11 +749,13 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     Redraw();
                     display.render();
 
+                    // Reveal fog on the first day to be compatible with the old pre 1.0.2 saves.
+                    if ( world.CountDay() == 1 ) {
+                        world.ClearFog( playerColor );
+                    }
+
                     // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
                     if ( isHotSeatGame ) {
-                        // Reveal fog to be compatible with the old pre 1.0.2 saves.
-                        world.ClearFog( playerColor );
-
                         Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, hotSeatAIFogColors( player ) );
                     }
 
