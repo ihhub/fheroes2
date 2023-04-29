@@ -492,6 +492,7 @@ namespace
         Mixer::Pause( channelId );
         Mixer::setVolume( channelId, 100 * soundVolume / 10 );
         Mixer::Resume( channelId );
+
         return channelId;
     }
 

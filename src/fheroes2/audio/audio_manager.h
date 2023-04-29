@@ -89,6 +89,7 @@ namespace AudioManager
 
     void playLoopSoundsAsync( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects );
 
+    // Returns the ID of the channel occupied by the sound being played, or a negative value (-1) in case of failure.
     int PlaySound( const int m82 );
     void PlaySoundAsync( const int m82 );
 
