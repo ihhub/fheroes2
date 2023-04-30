@@ -40,6 +40,7 @@
 #include "game.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
+#include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "icn.h"
@@ -52,6 +53,7 @@
 #include "mp2.h"
 #include "resource.h"
 #include "screen.h"
+#include "settings.h"
 #include "skill.h"
 #include "skill_bar.h"
 #include "text.h"
@@ -60,6 +62,7 @@
 #include "ui_button.h"
 #include "ui_kingdom.h"
 #include "ui_scrollbar.h"
+#include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
 
