@@ -283,8 +283,18 @@ namespace
                     const uint32_t * in = imageIn;
                     const uint32_t * transform = _palette32Bit.data();
 
-                    for ( ; out != outEnd; ++out, ++in )
-                        *out = *( transform + *in ); 
+                    for ( ; out != outEnd; ++out, ++in ) {
+                        // We assume that any uint32 value that is lower than 256 is in fact a uint8 (normal sprite).
+                        // The downside is that we won't be able to use pure-blue (e.g. [0-255]-0-0-0) pixels in our 32bit assets.
+                        // Maybe in the future we'll discriminate between the two by using a special flag in transform.
+                        if ( *in < 256 ) {
+                            *out = *( transform + *in ); 
+                        }
+                        else {
+                            *out = *in; 
+                        }
+                    }
+                        
                 }
                 else if ( surface->format->BitsPerPixel == 8 ) {
                     if ( surface->pixels != imageIn ) {
@@ -312,8 +322,16 @@ namespace
                         const uint32_t * outXEnd = outX + roi.width;
                         const uint32_t * inX = inY;
 
-                        for ( ; outX != outXEnd; ++outX, ++inX )
-                            *outX = *( transform + *inX );
+                        for ( ; outX != outXEnd; ++outX, ++inX ) {
+                            // As mentioned above, we assume that any uint32 value that is lower than 256 is in fact a uint8 (normal sprite).
+                            if ( *inX < 256 ) {
+                                *outX = *( transform + *inX );
+                            }
+                            else {
+                                *outX = *inX;
+                            }
+                        }
+                            
                     }
                 }
                 else if ( surface->format->BitsPerPixel == 8 ) {
