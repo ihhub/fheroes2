@@ -573,8 +573,8 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
 
     const auto largeObstacleHexCount = std::count_if( begin(), end(), []( const Cell & cell ) { return cell.GetObject() == 0x40; } );
 
-    uint8_t maxSmallObstacleCount;
-    uint8_t maxTwoHexObstacleCount;
+    uint8_t maxSmallObstacleCount = 0;
+    uint8_t maxTwoHexObstacleCount = 0;
 
     if ( largeObstacleHexCount == 0 ) {
         maxSmallObstacleCount = 6;
