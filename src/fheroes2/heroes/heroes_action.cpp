@@ -725,7 +725,6 @@ namespace
         }
 
         if ( funds.GetValidItemsCount() > 0 ) {
-
             {
                 const MusicalEffectPlayer musicalEffectPlayer;
 
@@ -2991,7 +2990,10 @@ namespace
                     if ( res.AttackerWins() ) {
                         hero.IncreaseExperience( res.GetExperienceAttacker() );
 
-                        const uint32_t gold = 2500;
+                        const Funds funds = getFundsFromTile( tile );
+                        assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
+
+                        const uint32_t gold = funds.gold;
 
                         std::string msg = _( "Upon defeating the daemon's servants, you find a hidden cache with %{count} gold." );
                         StringReplace( msg, "%{count}", gold );
@@ -3014,13 +3016,8 @@ namespace
 
                     break;
                 case Outcome::ExperienceAndGold: {
-                    const Funds funds = getFundsFromTile( tile );
-                    assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
-
-                    const uint32_t gold = funds.gold;
-
                     hero.IncreaseExperience( demonSlayingExperience );
-                    kingdom.AddFundsResource( Funds( Resource::GOLD, gold ) );
+                    kingdom.AddFundsResource( getFundsFromTile( tile ) );
 
                     break;
                 }
