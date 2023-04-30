@@ -110,20 +110,6 @@ Funds::Funds( const cost_t & cost )
     , gold( cost.gold )
 {}
 
-Funds::Funds( const ResourceCount & rs )
-    : wood( 0 )
-    , mercury( 0 )
-    , ore( 0 )
-    , sulfur( 0 )
-    , crystal( 0 )
-    , gems( 0 )
-    , gold( 0 )
-{
-    int32_t * ptr = GetPtr( rs.first );
-    if ( ptr )
-        *ptr = rs.second;
-}
-
 int Resource::Rand( const bool includeGold )
 {
     switch ( Rand::Get( 1, ( includeGold ? 7 : 6 ) ) ) {

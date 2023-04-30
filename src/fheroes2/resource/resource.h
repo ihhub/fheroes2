@@ -47,8 +47,6 @@ struct cost_t
         0, 0, 0, 0, 0, 0, 0                                                                                                                                              \
     }
 
-class ResourceCount;
-
 namespace Resource
 {
     enum
@@ -72,7 +70,6 @@ public:
     Funds( int32_t _ore, int32_t _wood, int32_t _mercury, int32_t _sulfur, int32_t _crystal, int32_t _gems, int32_t _gold );
     Funds( int rs, uint32_t count );
     explicit Funds( const cost_t & );
-    explicit Funds( const ResourceCount & );
 
     Funds operator+( const Funds & ) const;
     Funds operator*( uint32_t mul ) const;
