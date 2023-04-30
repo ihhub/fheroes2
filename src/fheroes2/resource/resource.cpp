@@ -35,7 +35,6 @@
 #include "icn.h"
 #include "image.h"
 #include "logging.h"
-#include "pairs.h"
 #include "rand.h"
 #include "screen.h"
 #include "serialize.h"
