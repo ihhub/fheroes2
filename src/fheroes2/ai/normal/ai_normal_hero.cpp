@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
@@ -886,9 +887,11 @@ namespace AI
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL: {
             if ( getColorFromTile( tile ) == hero.GetColor() ) {
-                return -dangerousTaskPenalty; // don't even attempt to go here
+                return -valueToIgnore; // don't even attempt to go here
             }
-            return ( getDailyIncomeObjectResources( tile ).gold > 0 ) ? 4000.0 : 2000.0;
+            const int resource = getDailyIncomeObjectResources( tile ).getFirstValidResource().first;
+            const double value = 20.0 * getResourcePriorityModifier( resource );
+            return ( resource == Resource::GOLD ) ? value * 100.0 : value;
         }
         case MP2::OBJ_ABANDONED_MINE: {
             return 3000.0;
@@ -905,10 +908,9 @@ namespace AI
 
             return 1000.0 * art.getArtifactValue();
         }
+        case MP2::OBJ_SEA_CHEST:
         case MP2::OBJ_SHIPWRECK_SURVIVOR:
         case MP2::OBJ_TREASURE_CHEST: {
-            // TODO: add logic if the object contains an artifact and resources.
-
             if ( getArtifactFromTile( tile ).isValid() ) {
                 const Artifact art = getArtifactFromTile( tile );
 
@@ -921,7 +923,7 @@ namespace AI
                 return 1000.0 * art.getArtifactValue();
             }
 
-            return 850.0;
+            return getGoldAmountFromTile( tile );
         }
 
         case MP2::OBJ_DAEMON_CAVE:
@@ -949,11 +951,27 @@ namespace AI
             return 0;
         }
         case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_DERELICT_SHIP:
         case MP2::OBJ_FLOTSAM:
-        case MP2::OBJ_GENIE_LAMP:
+        case MP2::OBJ_LEAN_TO:
+        case MP2::OBJ_MAGIC_GARDEN:
         case MP2::OBJ_RESOURCE:
-        case MP2::OBJ_SEA_CHEST: {
-            return 850.0;
+        case MP2::OBJ_WATER_WHEEL:
+        case MP2::OBJ_WINDMILL: {
+            const Funds & loot = getFundsFromTile( tile );
+
+            double value = 0;
+            for ( const BudgetEntry & budget : _budget ) {
+                const int amount = loot.Get( budget.resource );
+                if ( amount > 0 ) {
+                    value += amount * getResourcePriorityModifier( budget.resource );
+                }
+            }
+            // verify this object wasn't visited before
+            if ( value < 1 ) {
+                return -valueToIgnore;
+            }
+            return value;
         }
         case MP2::OBJ_LIGHTHOUSE: {
             // TODO: add more complex logic for cases when AI has boats.
@@ -991,6 +1009,7 @@ namespace AI
         case MP2::OBJ_EARTH_ALTAR:
         case MP2::OBJ_EXCAVATION:
         case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_GENIE_LAMP:
         case MP2::OBJ_GOBLIN_HUT:
         case MP2::OBJ_HALFLING_HOLE:
         case MP2::OBJ_PEASANT_HUT:
@@ -1153,17 +1172,6 @@ namespace AI
 
             return 100;
         }
-        case MP2::OBJ_DERELICT_SHIP:
-        case MP2::OBJ_LEAN_TO:
-        case MP2::OBJ_MAGIC_GARDEN:
-        case MP2::OBJ_WATER_WHEEL:
-        case MP2::OBJ_WINDMILL: {
-            if ( doesTileContainValuableItems( tile ) ) {
-                return 850;
-            }
-
-            return -dangerousTaskPenalty;
-        }
         case MP2::OBJ_ALCHEMIST_TOWER: {
             const BagArtifacts & bag = hero.GetBagArtifacts();
             const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.containsCurses(); } ) );
@@ -1297,14 +1305,6 @@ namespace AI
             // TODO: we should add logic to compare monsters and hero army strengths.
             return ( anotherFriendlyHeroPresent ? 4000.0 : 1000.0 ) + monsters.getTotalHP() / 100.0;
         }
-        case MP2::OBJ_ALCHEMIST_LAB:
-        case MP2::OBJ_MINES:
-        case MP2::OBJ_SAWMILL: {
-            if ( getColorFromTile( tile ) == hero.GetColor() ) {
-                return -dangerousTaskPenalty; // don't even attempt to go here
-            }
-            return ( getDailyIncomeObjectResources( tile ).gold > 0 ) ? 3000.0 : 1500.0;
-        }
         case MP2::OBJ_ABANDONED_MINE: {
             return 5000.0;
         }
@@ -1322,10 +1322,16 @@ namespace AI
         }
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
-        case MP2::OBJ_GENIE_LAMP:
+        case MP2::OBJ_LEAN_TO:
+        case MP2::OBJ_MAGIC_GARDEN:
         case MP2::OBJ_RESOURCE:
-        case MP2::OBJ_SEA_CHEST: {
-            return anotherFriendlyHeroPresent ? 100.0 : 500.0;
+        case MP2::OBJ_WATER_WHEEL:
+        case MP2::OBJ_WINDMILL: {
+            if ( anotherFriendlyHeroPresent ) {
+                return 100.0;
+            }
+            // fall through to the general value calculation
+            break;
         }
         case MP2::OBJ_LIGHTHOUSE: {
             // TODO: add more complex logic for cases when AI has boats.
@@ -1608,7 +1614,7 @@ namespace AI
         return targetIndex;
     }
 
-    int AI::Normal::getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority )
+    int Normal::getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority )
     {
         Heroes & hero = *heroInfo.hero;
 

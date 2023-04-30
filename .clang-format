@@ -57,6 +57,13 @@ IncludeCategories:
 IndentCaseLabels: false
 IndentWidth: 4
 IndentWrappedFunctionNames: true
+JavaImportGroups:
+  - 'java'
+  - 'android'
+  - 'androidx'
+  - 'org.apache'
+  - 'org.libsdl'
+  - 'com.github.stephenc'
 KeepEmptyLinesAtTheStartOfBlocks: false
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: All
