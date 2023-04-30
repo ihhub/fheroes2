@@ -264,10 +264,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
     // Fade-in game screen only for 640x480 resolution.
     if ( isFadeEnabled && fheroes2::Display::instance().isDefaultSize() ) {
-        if ( updateFocus ) {
-            basicInterface.Redraw();
-        }
-        fheroes2::fadeInDisplay();
+        basicInterface.setNeedFadeIn();
     }
 }
 
@@ -343,10 +340,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
 
     // Fade-in game screen only for 640x480 resolution.
     if ( Settings::isFadeEffectEnabled() && fheroes2::Display::instance().isDefaultSize() ) {
-        if ( updateFocus ) {
-            basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
-        }
-        fheroes2::fadeInDisplay();
+        basicInterface.setNeedFadeIn();
     }
 }
 

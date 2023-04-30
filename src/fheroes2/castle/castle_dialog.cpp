@@ -477,8 +477,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             if ( hero && le.MouseClickLeft( rectSign2 ) ) {
                 // View hero.
                 openHeroDialog( topArmyBar, bottomArmyBar, *hero );
-                // For 640x480 the fade-in effect is rendered in 'OpenHeroesDialog()' for other resolutions we do it here.
-                if ( isFadeEnabled && !isDefaultScreenSize ) {
+
+                if ( isFadeEnabled ) {
                     needFadeIn = true;
                 }
 

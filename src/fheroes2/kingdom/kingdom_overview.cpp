@@ -248,8 +248,7 @@ void StatsHeroesList::ActionListSingleClick( HeroRow & row, const fheroes2::Poin
     if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) ) {
         Game::OpenHeroesDialog( *row.hero, false, false );
 
-        // For 640x480 the fade-in effect is rendered in 'OpenHeroesDialog()' for other resolutions we do it in 'openOverviewDialog()'.
-        if ( Settings::isFadeEffectEnabled() && !fheroes2::Display::instance().isDefaultSize() ) {
+        if ( Settings::isFadeEffectEnabled() ) {
             needFadeIn = true;
         }
     }
@@ -508,7 +507,7 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const fheroes2::Poi
 
         row.Init( row.castle );
 
-        if ( Settings::isFadeEffectEnabled() && !fheroes2::Display::instance().isDefaultSize() ) {
+        if ( Settings::isFadeEffectEnabled() ) {
             needFadeIn = true;
         }
     }
@@ -877,12 +876,6 @@ void Kingdom::openOverviewDialog()
             fheroes2::showLighthouseInfo( *this, Dialog::OK );
         }
 
-        if ( needFadeIn && isFadeEnabled ) {
-            needFadeIn = false;
-
-            fheroes2::fadeInDisplay( background.activeArea() );
-        }
-
         if ( !listStats->IsNeedRedraw() && !redraw ) {
             continue;
         }
@@ -906,7 +899,15 @@ void Kingdom::openOverviewDialog()
         listStats->Redraw();
         RedrawIncomeInfo( cur_pt, *this );
         RedrawFundsInfo( cur_pt, *this );
-        display.render();
+
+        if ( needFadeIn && isFadeEnabled ) {
+            needFadeIn = false;
+
+            fheroes2::fadeInDisplay( background.activeArea() );
+        }
+        else {
+            display.render();
+        }
 
         redraw = false;
     }
