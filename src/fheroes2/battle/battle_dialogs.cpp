@@ -70,6 +70,7 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_option_item.h"
+#include "ui_tool.h"
 
 namespace
 {

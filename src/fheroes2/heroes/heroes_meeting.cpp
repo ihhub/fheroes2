@@ -250,6 +250,12 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     const fheroes2::Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
     fheroes2::ImageRestorer restorer( display, cur_pt.x, cur_pt.y, backSprite.width(), backSprite.height() );
 
+    // Fade-out game screen only for 640x480 resolution.
+    const bool isDefaultScreenSize = display.isDefaultSize();
+    if ( Settings::isFadeEffectEnabled() && isDefaultScreenSize ) {
+        fheroes2::fadeOutDisplay();
+    }
+
     fheroes2::Rect src_rt( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
     // background
@@ -401,7 +407,14 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     moveArtifactsToHero1.draw();
     buttonExit.draw();
 
-    display.render();
+    // Fade-in heroes meeting dialog.
+    if ( Settings::isFadeEffectEnabled() ) {
+        // Use half fade if game resolution is not 640x480.
+        fheroes2::fadeInDisplay( src_rt + cur_pt, !isDefaultScreenSize );
+    }
+    else {
+        display.render();
+    }
 
     const int32_t hero1ScoutAreaBonus = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
     const int32_t hero2ScoutAreaBonus = otherHero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
@@ -521,8 +534,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             fheroes2::Rect restorerRoi( cur_pt.x - 2 * BORDERWIDTH, cur_pt.y - BORDERWIDTH, src_rt.width + 3 * BORDERWIDTH, src_rt.height + 3 * BORDERWIDTH );
             fheroes2::ImageRestorer dialogRestorer( display, restorerRoi.x, restorerRoi.y, restorerRoi.width, restorerRoi.height );
-
-            const bool isDefaultScreenSize = display.isDefaultSize();
 
             if ( Settings::isFadeEffectEnabled() && !isDefaultScreenSize ) {
                 fheroes2::fadeOutDisplay( src_rt + cur_pt );
@@ -664,6 +675,12 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     backPrimary.reset();
     armyCountBackgroundRestorerLeft.reset();
     armyCountBackgroundRestorerRight.reset();
+
+    // Fade-out heroes meeting dialog.
+    if ( Settings::isFadeEffectEnabled() ) {
+        fheroes2::fadeOutDisplay( src_rt + cur_pt, !isDefaultScreenSize );
+    }
+
     restorer.restore();
 
     // If the scout area bonus is increased with the new artifact we reveal the fog and update the radar.
@@ -676,5 +693,11 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         otherHero.ScoutRadar();
     }
 
-    display.render();
+    // Fade-in game screen only for 640x480 resolution.
+    if ( Settings::isFadeEffectEnabled() && isDefaultScreenSize ) {
+        fheroes2::fadeInDisplay( src_rt + cur_pt, !isDefaultScreenSize );
+    }
+    else {
+        display.render();
+    }
 }

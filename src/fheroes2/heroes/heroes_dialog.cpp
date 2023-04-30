@@ -257,7 +257,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             display.updateNextRenderRoi( { roi.x - 2 * BORDERWIDTH, roi.y - BORDERWIDTH, roi.width + 3 * BORDERWIDTH, roi.height + 3 * BORDERWIDTH } );
         }
 
-        // Use half fade if game resolution is not 640x480 and  hero dialog was not called from an already opened dialog.
+        // Use half fade if game resolution is not 640x480 and hero dialog was not called from an already opened dialog.
         fheroes2::fadeInDisplay( roi, renderBackgroundDialog && !isDefaultScreenSize );
     }
     else {
