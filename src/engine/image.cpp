@@ -855,8 +855,8 @@ namespace fheroes2
                         inValue = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                     }
 
-                    const uint8_t * inPAL = gamePalette + inValue * 3;
-                    const uint8_t * outPAL = gamePalette + ( *imageOutX ) * 3;
+                    const uint8_t * inPAL = gamePalette + static_cast<uint8_t>(inValue) * 3;
+                    const uint8_t * outPAL = gamePalette + static_cast<uint8_t>( *imageOutX ) * 3;
 
                     const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                     const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
@@ -1019,7 +1019,7 @@ namespace fheroes2
                     for ( ; imageOutX != imageOutXEnd; --imageInX, --transformInX, ++imageOutX ) {
                         if ( *transformInX > 0 ) { // apply a transformation
                             if ( *transformInX != 1 ) { // skip pixel
-                                *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                                //*imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                             }
                         }
                         else { // copy a pixel
@@ -1044,7 +1044,7 @@ namespace fheroes2
                         }
 
                         if ( *transformInX > 0 && *transformOutX == 0 ) { // apply a transformation
-                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            //*imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                         }
                         else { // copy a pixel
                             *transformOutX = *transformInX;
@@ -1074,7 +1074,7 @@ namespace fheroes2
                     for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, ++imageOutX ) {
                         if ( *transformInX > 0 ) { // apply a transformation
                             if ( *transformInX != 1 ) { // skip pixel
-                                *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                                //*imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                             }
                         }
                         else { // copy a pixel
@@ -1099,7 +1099,7 @@ namespace fheroes2
                         }
 
                         if ( *transformInX > 0 && *transformOutX == 0 ) { // apply a transformation
-                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            //*imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                         }
                         else { // copy a pixel
                             *transformOutX = *transformInX;

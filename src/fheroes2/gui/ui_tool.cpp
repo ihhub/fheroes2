@@ -499,7 +499,7 @@ namespace fheroes2
             const double sinYEffect = sin( ( y % limitY ) / waveFrequency ) * 2.0 - 1;
             const int32_t offset = static_cast<int32_t>( rippleXModifier * sinYEffect ) + offsetX;
 
-            memcpy( outImageY + offset, inImageY, widthIn );
+            memcpy( outImageY + offset, inImageY, widthIn * 4 );
             memcpy( outTransformY + offset, inTransformY, widthIn );
         }
 

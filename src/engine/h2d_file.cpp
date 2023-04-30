@@ -190,7 +190,13 @@ namespace fheroes2
 
         const size_t size = static_cast<size_t>( width * height );
         image.resize( width, height );
-        memcpy( image.image(), data.data() + 4 + 4 + 4 + 4, size );
+
+        //memcpy( image.image(), data.data() + 4 + 4 + 4 + 4, size * 4 );
+        uint32_t * imageData = image.image();
+        const uint8_t * pixelData = data.data() + 4 + 4 + 4 + 4;
+        for ( size_t j = 0; j < size; ++j, ++imageData, ++pixelData ) {
+            *imageData = *pixelData;
+        }
         memcpy( image.transform(), data.data() + 4 + 4 + 4 + 4 + size, size );
 
         image.setPosition( x, y );

@@ -108,15 +108,16 @@ namespace
         SDL_SetPalette( surface, SDL_LOGPAL | SDL_PHYSPAL, paletteSDL.data(), 0, 256 );
 #endif
 
+        // TODO: test the changes in memcpy (multiplication by 4)
         if ( surface->pitch != width ) {
             const uint32_t * imageIn = image.image();
 
             for ( int32_t i = 0; i < height; ++i ) {
-                memcpy( static_cast<uint8_t *>( surface->pixels ) + surface->pitch * i, imageIn + width * i, static_cast<size_t>( width ) );
+                memcpy( static_cast<uint8_t *>( surface->pixels ) + surface->pitch * i, imageIn + width * i, static_cast<size_t>( width * 4) );
             }
         }
         else {
-            memcpy( surface->pixels, image.image(), static_cast<size_t>( width * height ) );
+            memcpy( surface->pixels, image.image(), static_cast<size_t>( width * height * 4 ) );
         }
 
 #if defined( ENABLE_PNG )
@@ -393,7 +394,12 @@ namespace fheroes2
             Image & tilImage = output[i];
             tilImage.resize( width, height );
             tilImage._disableTransformLayer();
-            memcpy( tilImage.image(), data + i * imageSize, imageSize );
+
+            // memcpy( tilImage.image(), data + i * imageSize, imageSize ); // this doesn't work
+            uint32_t * imageData = tilImage.image(); 
+            for ( size_t j = 0; j < imageSize; ++j, ++imageData, ++data ) {
+                *imageData = *data;
+            }
             std::fill( tilImage.transform(), tilImage.transform() + imageSize, static_cast<uint8_t>( 0 ) );
         }
     }
