@@ -1,13 +1,17 @@
 # Vietnamese translation of fheroes2
 # Copyright (C) 2023 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-19 02:55+0000\n"
+<<<<<<< HEAD
 "PO-Revision-Date: 2023-04-27 22:22+0700\n"
+=======
+"PO-Revision-Date: 2023-04-21 13:48+0700\n"
+>>>>>>> parent of 70009c14 (Update vi.po)
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -174,7 +178,7 @@ msgid "GIFT"
 msgstr "QUÀ"
 
 msgid "guildWell|EXIT"
-msgstr "THOÁT"
+msgstr "guildWell|THOÁT"
 
 msgid "DIFFICULTY"
 msgstr "ĐỘ KHÓ"
@@ -272,31 +276,31 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr "Một vài"
+msgstr "army|Một vài"
 
 msgid "army|Several"
-msgstr "Một số"
+msgstr "army|Một số"
 
 msgid "army|Pack"
-msgstr "Một nhóm"
+msgstr "army|Một nhóm"
 
 msgid "army|Lots"
-msgstr "Khá nhiều"
+msgstr "army|Khá nhiều"
 
 msgid "army|Horde"
-msgstr "Một bầy"
+msgstr "army|Một bầy"
 
 msgid "army|Throng"
-msgstr "Một bầy đàn"
+msgstr "army|Một bầy đàn"
 
 msgid "army|Swarm"
-msgstr "Rất nhiều đàn"
+msgstr "army|Rất nhiều đàn"
 
 msgid "army|Zounds"
-msgstr "Quy mô"
+msgstr "army|Quy mô"
 
 msgid "army|Legion"
-msgstr "Quân đoàn"
+msgstr "army|Quân đoàn"
 
 msgid "All %{race} troops +1"
 msgstr "Tất cả binh lính %{race} +1"
@@ -542,7 +546,7 @@ msgid "Knowledge"
 msgstr "Tri thức"
 
 msgid "Morale"
-msgstr "Tinh thần"
+msgstr "Đạo đức"
 
 msgid "Luck"
 msgstr "May mắn"
@@ -961,6 +965,7 @@ msgstr "Vương Miện"
 msgid "The Gauntlet"
 msgstr "Thách thức"
 
+
 msgid "Betrayal"
 msgstr "Sự phản bội"
 
@@ -973,10 +978,17 @@ msgid ""
 "will spend most of their time fighting with one another.  Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
+<<<<<<< HEAD
 "Roland cần ngươi đánh bại các lãnh chúa gần lâu đài của anh ta để bắt đầu "
 "cuộc chiến nổi dậy chống lại anh trai mình. Họ không liên minh với nhau, vì "
 "vậy họ sẽ dành phần lớn thời gian để chiến đấu với nhau. Chiến thắng là của "
 "ngươi khi ngươi đã đánh bại tất cả các lâu đài và tướng của họ."
+=======
+"Roland cần bạn đánh bại các lãnh chúa gần lâu đài của anh ta để bắt đầu cuộc "
+"chiến nổi dậy chống lại anh trai mình. Họ không liên minh với nhau, vì vậy "
+"họ sẽ dành phần lớn thời gian để chiến đấu với nhau. Chiến thắng là của bạn "
+"khi bạn đã đánh bại tất cả các lâu đài và anh hùng của họ."
+>>>>>>> parent of 70009c14 (Update vi.po)
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
@@ -992,16 +1004,16 @@ msgid ""
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
-"Nhiệm vụ của ngươi là bảo vệ Người lùn chống lại lực lượng của Archibald. "
-"Đánh chiếm tất cả các thị trấn và lâu đài của kẻ thù để giành chiến thắng, "
-"đồng thời đảm bảo không để mất tất cả các thị trấn của người lùn cùng một "
-"lúc, nếu không kẻ thù sẽ chiến thắng."
+"Nhiệm vụ của bạn là bảo vệ Người lùn chống lại lực lượng của Archibald. Đánh "
+"chiếm tất cả các thị trấn và lâu đài của kẻ thù để giành chiến thắng, đồng "
+"thời đảm bảo không để mất tất cả các thị trấn của người lùn cùng một lúc, "
+"nếu không kẻ thù sẽ chiến thắng."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
-"Ngươi sẽ đối mặt với bốn kẻ thù đồng minh trong một cuộc chiến đơn giản để "
+"Bạn sẽ đối mặt với bốn kẻ thù đồng minh trong một cuộc chiến đơn giản để "
 "giành lấy tài nguyên và kho báu. Nắm bắt tất cả các lâu đài của kẻ thù để "
 "giành chiến thắng."
 
@@ -1010,9 +1022,15 @@ msgid ""
 "out fighting. You will need to own all four castles in this small valley to "
 "win."
 msgstr ""
+<<<<<<< HEAD
 "Kẻ thù của ngươi đang liên minh chống lại ngươi và bắt đầu áp sát, vì vậy "
 "hãy sẵn sàng chiến đấu. Ngươi sẽ cần phải sở hữu cả bốn lâu đài trong thung "
 "lũng nhỏ này để giành chiến thắng."
+=======
+"Kẻ thù của bạn đang liên minh chống lại bạn và bắt đầu áp sát, vì vậy hãy "
+"sẵn sàng chiến đấu. Bạn sẽ cần phải sở hữu cả bốn lâu đài trong thung lũng "
+"nhỏ này để giành chiến thắng."
+>>>>>>> parent of 70009c14 (Update vi.po)
 
 msgid ""
 "The Sorceress' guild of Noraston has requested Roland's aid against an "
@@ -2814,7 +2832,7 @@ msgid "Opponents"
 msgstr "Đối thủ"
 
 msgid "Class"
-msgstr "Chủng tộc"
+msgstr ""
 
 msgid ""
 "Victory\n"
@@ -4588,7 +4606,7 @@ msgstr ""
 msgid "Handicap"
 msgstr "Chấp"
 
-#
+# 
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
@@ -4607,7 +4625,7 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr ""
 
-#
+# 
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -4616,7 +4634,7 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr ""
 
-#
+# 
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."
@@ -6458,22 +6476,22 @@ msgid "morale|Treason"
 msgstr ""
 
 msgid "morale|Awful"
-msgstr "Khủng hoảng"
+msgstr "morale|Khủng hoảng"
 
 msgid "morale|Poor"
-msgstr "Chán nản"
+msgstr "morale|Chán nản"
 
 msgid "morale|Normal"
-msgstr "Bình thường"
+msgstr "morale|Bình thường"
 
 msgid "morale|Good"
-msgstr "Rất tốt"
+msgstr "morale|Rất tốt"
 
 msgid "morale|Great"
-msgstr "Tuyệt vời"
+msgstr "morale|Tuyệt vời"
 
 msgid "morale|Blood!"
-msgstr "Máu chiến!"
+msgstr "morale|Máu chiến!"
 
 msgid "Bad morale may cause your armies to freeze in combat."
 msgstr ""
@@ -6678,16 +6696,16 @@ msgid "Ocean"
 msgstr "Đại dương"
 
 msgid "maps|Small"
-msgstr "Nhỏ"
+msgstr "maps|Nhỏ"
 
 msgid "maps|Medium"
-msgstr "Trung"
+msgstr "maps|Trung"
 
 msgid "maps|Large"
-msgstr "Lớn"
+msgstr "maps|Lớn"
 
 msgid "maps|Extra Large"
-msgstr "Rất Lớn"
+msgstr "maps|Rất Lớn"
 
 msgid "maps|Custom Size"
 msgstr ""
