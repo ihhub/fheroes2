@@ -443,6 +443,7 @@ namespace fheroes2
         : _width( 0 )
         , _height( 0 )
         , _data( std::move( image_._data ) )
+        , _dataTransform( std::move( image_._dataTransform ) )
         , _singleLayer( false )
     {
         std::swap( _singleLayer, image_._singleLayer );
@@ -468,6 +469,7 @@ namespace fheroes2
             std::swap( _width, image_._width );
             std::swap( _height, image_._height );
             std::swap( _data, image_._data );
+            std::swap( _dataTransform, image_._dataTransform );
         }
 
         return *this;
@@ -486,6 +488,7 @@ namespace fheroes2
     void Image::clear()
     {
         _data.reset();
+        _dataTransform.reset();
 
         _width = 0;
         _height = 0;
@@ -514,7 +517,8 @@ namespace fheroes2
 
         const size_t size = static_cast<size_t>( width_ * height_ );
 
-        _data.reset( new uint8_t[size * 2] );
+        _data.reset( new uint8_t[size] );
+        _dataTransform.reset( new uint8_t[size] );
 
         _width = width_;
         _height = height_;
@@ -543,13 +547,15 @@ namespace fheroes2
         const size_t size = static_cast<size_t>( image._width * image._height );
 
         if ( image._width != _width || image._height != _height ) {
-            _data.reset( new uint8_t[size * 2] );
+            _data.reset( new uint8_t[size] );
+            _dataTransform.reset( new uint8_t[size] );
 
             _width = image._width;
             _height = image._height;
         }
 
-        memcpy( _data.get(), image._data.get(), size * 2 );
+        memcpy( _data.get(), image._data.get(), size );
+        memcpy( _dataTransform.get(), image._dataTransform.get(), size );
     }
 
     Sprite::Sprite()

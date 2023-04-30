@@ -62,12 +62,12 @@ namespace fheroes2
 
         uint8_t * transform()
         {
-            return _data.get() + width() * height();
+            return _dataTransform.get();
         }
 
         const uint8_t * transform() const
         {
-            return _data.get() + width() * height();
+            return _dataTransform.get();
         }
 
         bool empty() const
@@ -99,7 +99,8 @@ namespace fheroes2
 
         int32_t _width;
         int32_t _height;
-        std::unique_ptr<uint8_t[]> _data; // holds 2 image layers
+        std::unique_ptr<uint8_t[]> _data; // holds 1 image layer
+        std::unique_ptr<uint8_t[]> _dataTransform; // holds 1 image layer
 
         bool _singleLayer; // only for images which are not used for any other operations except displaying on screen. Non-copyable member.
     };
