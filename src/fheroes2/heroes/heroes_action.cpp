@@ -896,12 +896,12 @@ namespace
         const Spell & spell = getSpellFromTile( world.GetTiles( dst_index ) );
         assert( spell.isValid() );
 
-        const uint32_t spell_level = spell.Level();
+        const int spellLevel = spell.Level();
 
         std::string head;
         std::string body;
 
-        switch ( spell_level ) {
+        switch ( spellLevel ) {
         case 1:
             head = _( "Shrine of the 1st Circle" );
             body = _(
@@ -927,7 +927,7 @@ namespace
 
         if ( hero.HaveSpellBook() ) {
             // check valid level spell and wisdom skill
-            if ( 3 == spell_level && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {
+            if ( 3 == spellLevel && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {
                 body += _( "\nUnfortunately, you do not have the wisdom to understand the spell, and you are unable to learn it." );
                 Dialog::Message( head, body, Font::BIG, Dialog::OK );
             }
