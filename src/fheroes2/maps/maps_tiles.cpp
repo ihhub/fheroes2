@@ -3461,7 +3461,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
 
     // Shipwreck Survivor has an artifact.
     case MP2::OBJ_SHIPWRECK_SURVIVOR:
-        _metadata[2] = quantityValue1;
+        _metadata[0] = quantityValue1;
         break;
 
     // Shipwreck contains Gold and Artifact. However, old format did not store the amount of Gold.
