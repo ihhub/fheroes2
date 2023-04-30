@@ -1316,6 +1316,8 @@ namespace Maps
                 break;
             }
             default:
+                // This is an unknown mine type. Most likely it was added by some hex editing.
+                tile.SetObject( MP2::OBJ_NONE );
                 break;
             }
             break;
