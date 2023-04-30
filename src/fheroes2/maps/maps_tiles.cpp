@@ -3074,8 +3074,8 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 
     return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid
                << static_cast<ObjectIcnTypeUnderlyingType>( tile._objectIcnType ) << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex
-               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile._metadata
-               << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._layerType << tile._boatOwnerColor;
+               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile._metadata << tile.heroID << tile.tileIsRoad
+               << tile.addons_level1 << tile.addons_level2 << tile._layerType << tile._boatOwnerColor;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
@@ -3262,7 +3262,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         _metadata[1] = quantityValue2;
         _metadata[2] = additionalMetadata;
         assert( _metadata[1] > 0 );
-    break;
+        break;
 
     // Monster dwellings always store only one value - the number of monsters.
     case MP2::OBJ_ABANDONED_MINE:

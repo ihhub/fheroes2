@@ -207,7 +207,7 @@ public:
         return *this;
     }
 
-   template <class Type, size_t Count>
+    template <class Type, size_t Count>
     StreamBase & operator<<( const std::array<Type, Count> & data )
     {
         put32( static_cast<uint32_t>( data.size() ) );

@@ -129,8 +129,8 @@ namespace
             return Army( tile ).GetStrength() > armyStrength;
         }
 
-        if ( objectType == MP2::OBJ_ARTIFACT && getArtifactCaptureCondition( tile ) >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES &&
-             getArtifactCaptureCondition( tile ) <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
+        if ( objectType == MP2::OBJ_ARTIFACT && getArtifactCaptureCondition( tile ) >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES
+             && getArtifactCaptureCondition( tile ) <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
             return Army( tile ).GetStrength() > armyStrength;
         }
 

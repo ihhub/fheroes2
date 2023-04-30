@@ -947,8 +947,8 @@ namespace Maps
 
                 tile.metadata()[2] = cond;
 
-                if ( cond == static_cast<uint32_t>( ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES ) ||
-                     cond == static_cast<uint32_t>( ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) ) {
+                if ( cond == static_cast<uint32_t>( ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES )
+                     || cond == static_cast<uint32_t>( ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) ) {
                     // TODO: why do we use icon ICN index instead of map ICN index?
                     tile.metadata()[1] = Resource::getIconIcnIndex( Resource::Rand( false ) ) + 1;
                 }
@@ -1195,7 +1195,8 @@ namespace Maps
             const int cond = percents.Get();
 
             tile.metadata()[0] = ( cond == static_cast<int>( ShipwreckCaptureCondition::FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT ) )
-                                 ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) : Artifact::UNKNOWN;
+                                     ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL )
+                                     : Artifact::UNKNOWN;
             tile.metadata()[2] = cond;
             break;
         }
@@ -1223,9 +1224,9 @@ namespace Maps
             // 1000 exp or 1000 exp + 2500 gold or 1000 exp + art or (-2500 or remove hero)
             const uint32_t cond = Rand::Get( 1, 4 );
 
-
             tile.metadata()[0] = ( cond == static_cast<uint32_t>( DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_ARTIFACT ) )
-                                 ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) : Artifact::UNKNOWN;
+                                     ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL )
+                                     : Artifact::UNKNOWN;
             tile.metadata()[2] = cond;
             break;
         }

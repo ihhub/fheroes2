@@ -2875,12 +2875,13 @@ namespace
 
             const Maps::DaemonCaveCaptureBonus originalDaemonBonus = getDaemonCaveBonus( tile );
 
-            const Maps::DaemonCaveCaptureBonus bonus =
-                ( originalDaemonBonus == Maps::DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_ARTIFACT && hero.IsFullBagArtifacts() ) ?
-                    Maps::DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_2500_GOLD : originalDaemonBonus;
+            const Maps::DaemonCaveCaptureBonus bonus
+                = ( originalDaemonBonus == Maps::DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_ARTIFACT && hero.IsFullBagArtifacts() )
+                      ? Maps::DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_2500_GOLD
+                      : originalDaemonBonus;
 
             switch ( bonus ) {
-            case Maps::DaemonCaveCaptureBonus::GET_1000_EXPERIENCE : {
+            case Maps::DaemonCaveCaptureBonus::GET_1000_EXPERIENCE: {
                 std::string msg
                     = _( "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points." );
                 StringReplace( msg, "%{exp}", std::to_string( demonSlayingExperience ) );
