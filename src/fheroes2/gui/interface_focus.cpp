@@ -155,8 +155,12 @@ void Interface::Basic::ResetFocus( const int priority, const bool retainScrollBa
     case GameFocus::HEROES:
         if ( focus.GetHeroes() && focus.GetHeroes()->GetColor() == player->GetColor() )
             SetFocus( focus.GetHeroes(), retainScrollBarPosition );
-        else if ( !myKingdom.GetHeroes().empty() )
+        else if ( !myKingdom.GetHeroes().empty() ) {
+            // Reset scrollbar here because the current focused hero might have
+            // lost a battle and is not in the heroes list anymore.
+            iconsPanel.ResetIcons( ICON_HEROES );
             SetFocus( myKingdom.GetHeroes().front(), false );
+        }
         else if ( !myKingdom.GetCastles().empty() ) {
             iconsPanel.SetRedraw( ICON_HEROES );
             SetFocus( myKingdom.GetCastles().front() );
@@ -168,8 +172,10 @@ void Interface::Basic::ResetFocus( const int priority, const bool retainScrollBa
     case GameFocus::CASTLE:
         if ( focus.GetCastle() && focus.GetCastle()->GetColor() == player->GetColor() )
             SetFocus( focus.GetCastle() );
-        else if ( !myKingdom.GetCastles().empty() )
+        else if ( !myKingdom.GetCastles().empty() ) {
+            iconsPanel.ResetIcons( ICON_CASTLES );
             SetFocus( myKingdom.GetCastles().front() );
+        }
         else if ( !myKingdom.GetHeroes().empty() ) {
             iconsPanel.SetRedraw( ICON_CASTLES );
             SetFocus( myKingdom.GetHeroes().front(), false );

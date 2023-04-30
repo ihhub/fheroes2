@@ -217,7 +217,7 @@ void Interface::Basic::EventCastSpell()
 
         // The spell will consume the hero's spell points (and perhaps also movement points) and can move the
         // hero to another location, so we may have to update the terrain music theme and environment sounds
-        ResetFocus( GameFocus::HEROES, false );
+        ResetFocus( GameFocus::HEROES, true );
         RedrawFocus();
     }
 }
