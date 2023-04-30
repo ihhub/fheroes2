@@ -3391,7 +3391,6 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         break;
 
     // Campfire contains some random resources and gold which has the same value as resource but multiplied by 100.
-    // TODO: verify that the amount of gold is always an equivalent of the amount of other resources multipled by 100.
     case MP2::OBJ_CAMPFIRE:
         _metadata[0] = quantityValue1;
         _metadata[1] = quantityValue2;

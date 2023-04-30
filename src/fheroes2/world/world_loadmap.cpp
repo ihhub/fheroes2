@@ -829,7 +829,6 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
     }
     // There is a tile with a predefined Ultimate Artifact, pick a tile nearby in the radius specified in the artifact's properties
     else {
-        // The radius can be in the range 0 - 127, it is represented by 2 low-order bits of quantity2 and 5 high-order bits of quantity1
         const int32_t radius = static_cast<int32_t>( ultArtTileIter->metadata()[0] );
 
         // Remove the predefined Ultimate Artifact object
