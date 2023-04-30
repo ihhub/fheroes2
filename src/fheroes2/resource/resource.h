@@ -25,6 +25,7 @@
 
 #include <cstdint>
 #include <string>
+#include <vector>
 
 #include "math_base.h"
 
@@ -96,6 +97,8 @@ public:
     int GetValidItems() const;
     uint32_t GetValidItemsCount() const;
     void Trim(); // set all values to be >= 0
+
+    std::pair<int, int32_t> getFirstValidResource() const;
 
     void Reset();
     std::string String() const;

@@ -146,7 +146,7 @@ namespace
 
     std::string showMineInfo( const Maps::Tiles & tile, const bool isOwned )
     {
-        const int32_t resourceType = getResourcesFromTile( tile ).first;
+        const int32_t resourceType = getDailyIncomeObjectResources( tile ).getFirstValidResource().first;
         std::string objectInfo = Maps::GetMinesName( resourceType );
 
         if ( isOwned ) {
@@ -452,7 +452,7 @@ namespace
             return showObjectVisitInfo( objectType, kingdom.isVisited( objectType ) );
 
         case MP2::OBJ_RESOURCE:
-            return Resource::String( getResourcesFromTile( tile ).first );
+            return Resource::String( getFundsFromTile( tile ).getFirstValidResource().first );
 
         case MP2::OBJ_MINES:
             return showMineInfo( tile, playerColor == getColorFromTile( tile ) );
@@ -461,7 +461,7 @@ namespace
         case MP2::OBJ_SAWMILL: {
             std::string objectInfo = MP2::StringObject( objectType );
             if ( playerColor == getColorFromTile( tile ) ) {
-                objectInfo.append( getMinesIncomeString( getResourcesFromTile( tile ).first ) );
+                objectInfo.append( getMinesIncomeString( getDailyIncomeObjectResources( tile ).getFirstValidResource().first ) );
             }
             return objectInfo;
         }

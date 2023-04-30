@@ -408,7 +408,7 @@ namespace
                             const uint32_t colorOffset = colorToOffsetICN( getColorFromTile( tile ) );
                             // Do not render an unknown color.
                             if ( colorOffset != unknownIndex ) {
-                                renderResourceIcon( colorOffset, getResourcesFromTile( tile ).first, posX, posY );
+                                renderResourceIcon( colorOffset, getDailyIncomeObjectResources( tile ).getFirstValidResource().first, posX, posY );
                             }
                         }
                         break;
@@ -421,7 +421,7 @@ namespace
 
                     case MP2::OBJ_RESOURCE:
                         if ( revealResources || !tile.isFog( color ) ) {
-                            renderResourceIcon( 13, getResourcesFromTile( tile ).first, posX, posY );
+                            renderResourceIcon( 13, getFundsFromTile( tile ).getFirstValidResource().first, posX, posY );
                         }
                         break;
 

@@ -3384,9 +3384,9 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         break;
 
     // Daemon Cave is tricky: it can contain experience, gold and artifact.
-    // However, we store only artifact and a variation of a prize.
     case MP2::OBJ_DAEMON_CAVE:
         _metadata[0] = quantityValue1;
+        _metadata[1] = ( 0x0f & quantityValue2 );
         _metadata[2] = ( quantityValue2 >> 4 );
         break;
 

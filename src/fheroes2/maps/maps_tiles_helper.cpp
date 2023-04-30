@@ -204,6 +204,23 @@ namespace Maps
         tile.metadata()[2] = 0;
     }
 
+    Funds getDailyIncomeObjectResources( const Tiles & tile )
+    {
+        switch ( tile.GetObject( false ) ) {
+        case MP2::OBJ_ALCHEMIST_LAB:
+        case MP2::OBJ_MINES:
+        case MP2::OBJ_SAWMILL:
+            if ( tile.metadata()[0] == Resource::GOLD ) {
+                return { static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] * 100 };
+            }
+            return { static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] };
+        }
+
+        // Why are you calling this function for an unsupported object type?
+        assert( 0 );
+        return {};
+    }
+
     Spell getSpellFromTile( const Tiles & tile )
     {
         switch ( tile.GetObject( false ) ) {
@@ -379,85 +396,16 @@ namespace Maps
                 art.SetSpell( static_cast<int32_t>( tile.metadata()[1] ) );
                 return art;
             }
-            else {
-                return { static_cast<int>( tile.metadata()[0] ) };
-            }
+
+            return { static_cast<int>( tile.metadata()[0] ) };
 
         default:
             break;
         }
 
+        // Why are you calling this function for an unsupported object type?
+        assert( 0 );
         return { Artifact::UNKNOWN };
-    }
-
-    void setArtifactOnTile( Tiles & tile, const int artifactId )
-    {
-        tile.metadata()[0] = artifactId;
-    }
-
-    uint32_t getGoldAmountFromTile( const Tiles & tile )
-    {
-        switch ( tile.GetObject( false ) ) {
-        case MP2::OBJ_ARTIFACT:
-            switch ( static_cast<ArtifactCaptureCondition>( tile.metadata()[2] ) ) {
-            case ArtifactCaptureCondition::PAY_2000_GOLD:
-                return 2000;
-            case ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES:
-                return 2500;
-            case ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES:
-                return 3000;
-            default:
-                break;
-            }
-            break;
-
-        case MP2::OBJ_RESOURCE:
-        case MP2::OBJ_MAGIC_GARDEN:
-        case MP2::OBJ_WATER_WHEEL:
-        case MP2::OBJ_TREE_OF_KNOWLEDGE:
-            if ( tile.metadata()[0] == Resource::GOLD ) {
-                return ( 100 * tile.metadata()[1] );
-            }
-            return 0;
-
-        case MP2::OBJ_FLOTSAM:
-        case MP2::OBJ_CAMPFIRE:
-        case MP2::OBJ_SEA_CHEST:
-        case MP2::OBJ_TREASURE_CHEST:
-        case MP2::OBJ_DERELICT_SHIP:
-        case MP2::OBJ_GRAVEYARD:
-            return 100 * tile.metadata()[1];
-
-        case MP2::OBJ_DAEMON_CAVE:
-            switch ( static_cast<DaemonCaveCaptureBonus>( tile.metadata()[2] ) ) {
-            case DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_2500_GOLD:
-            case DaemonCaveCaptureBonus::PAY_2500_GOLD:
-                return 2500;
-            default:
-                break;
-            }
-            break;
-
-        case MP2::OBJ_SHIPWRECK:
-            switch ( static_cast<ShipwreckCaptureCondition>( tile.metadata()[2] ) ) {
-            case ShipwreckCaptureCondition::FIGHT_10_GHOSTS_AND_GET_1000_GOLD:
-                return 1000;
-            case ShipwreckCaptureCondition::FIGHT_15_GHOSTS_AND_GET_2000_GOLD:
-            case ShipwreckCaptureCondition::FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT:
-                // Case 4 gives 2000 gold and an artifact.
-                return 2000;
-            case ShipwreckCaptureCondition::FIGHT_25_GHOSTS_AND_GET_5000_GOLD:
-                return 5000;
-            default:
-                break;
-            }
-            break;
-
-        default:
-            break;
-        }
-
-        return 0;
     }
 
     Skill::Secondary getArtifactSecondarySkillRequirement( const Tiles & tile )
@@ -493,7 +441,31 @@ namespace Maps
         return static_cast<ArtifactCaptureCondition>( tile.metadata()[2] );
     }
 
-    DaemonCaveCaptureBonus getDaemonCaveBonus( const Tiles & tile )
+    Funds getArtifactResourceRequirement( const Tiles & tile )
+    {
+        if ( tile.GetObject( false ) != MP2::OBJ_ARTIFACT ) {
+            // Why are you calling this for an unsupported object type?
+            assert( 0 );
+            return {};
+        }
+
+        switch ( static_cast<ArtifactCaptureCondition>( tile.metadata()[2] ) ) {
+        case ArtifactCaptureCondition::PAY_2000_GOLD:
+            return { Resource::GOLD, 2000 };
+        case ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES:
+            return Funds{ Resource::GOLD, 2500 } + Funds{ Resource::getResourceTypeFromIconIndex( tile.metadata()[1] - 1 ), 3 };
+        case ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES:
+            return Funds{ Resource::GOLD, 3000 } + Funds{ Resource::getResourceTypeFromIconIndex( tile.metadata()[1] - 1 ), 5 };
+        default:
+            break;
+        }
+
+        // Why are you calling this for invalid conditions?
+        assert( 0 );
+        return {};
+    }
+
+    DaemonCaveCaptureBonus getDaemonCaveBonusType( const Tiles & tile )
     {
         if ( tile.GetObject( false ) != MP2::OBJ_DAEMON_CAVE ) {
             // Why are you calling this for an unsupported object type?
@@ -502,6 +474,23 @@ namespace Maps
         }
 
         return static_cast<DaemonCaveCaptureBonus>( tile.metadata()[2] );
+    }
+
+    Funds getDaemonPaymentCondition( const Tiles & tile )
+    {
+        if ( tile.GetObject( false ) != MP2::OBJ_DAEMON_CAVE ) {
+            // Why are you calling this for an unsupported object type?
+            assert( 0 );
+            return {};
+        }
+
+        if ( static_cast<DaemonCaveCaptureBonus>( tile.metadata()[2] ) != DaemonCaveCaptureBonus::PAY_2500_GOLD ) {
+            // Why are you calling this for invalid conditions?
+            assert( 0 );
+            return {};
+        }
+
+        return { Resource::GOLD, tile.metadata()[1] };
     }
 
     ShipwreckCaptureCondition getShipwrechCaptureCondition( const Tiles & tile )
@@ -515,6 +504,21 @@ namespace Maps
         return static_cast<ShipwreckCaptureCondition>( tile.metadata()[2] );
     }
 
+    Funds getTreeOfKnowledgeRequirement( const Tiles & tile )
+    {
+        if ( tile.GetObject( false ) != MP2::OBJ_TREE_OF_KNOWLEDGE ) {
+            // Why are you calling this for an unsupported object type?
+            assert( 0 );
+            return {};
+        }
+
+        if ( tile.metadata()[0] == Resource::GOLD ) {
+            return { Resource::GOLD, tile.metadata()[1] * 100 };
+        }
+
+        return { static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] };
+    }
+
     Skill::Secondary getSecondarySkillFromWitchsHut( const Tiles & tile )
     {
         if ( tile.GetObject( false ) != MP2::OBJ_WITCHS_HUT ) {
@@ -524,37 +528,6 @@ namespace Maps
         }
 
         return { static_cast<int>( tile.metadata()[0] ), Skill::Level::BASIC };
-    }
-
-    ResourceCount getResourcesFromTile( const Tiles & tile )
-    {
-        switch ( tile.GetObject( false ) ) {
-        case MP2::OBJ_ARTIFACT:
-            switch ( static_cast<ArtifactCaptureCondition>( tile.metadata()[2] ) ) {
-            case ArtifactCaptureCondition::PAY_2000_GOLD:
-                return { Resource::GOLD, getGoldAmountFromTile( tile ) };
-            case ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES:
-                return { Resource::getResourceTypeFromIconIndex( tile.metadata()[1] - 1 ), 3 };
-            case ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES:
-                return { Resource::getResourceTypeFromIconIndex( tile.metadata()[1] - 1 ), 5 };
-            default:
-                break;
-            }
-            break;
-
-        case MP2::OBJ_SEA_CHEST:
-        case MP2::OBJ_TREASURE_CHEST:
-            return { Resource::GOLD, getGoldAmountFromTile( tile ) };
-
-        case MP2::OBJ_FLOTSAM:
-            return { Resource::WOOD, tile.metadata()[0] };
-
-        default:
-            break;
-        }
-
-        // TODO: check all types of objects!
-        return { static_cast<int>( tile.metadata()[0] ), ( Resource::GOLD == tile.metadata()[0] ) ? getGoldAmountFromTile( tile ) : tile.metadata()[1] };
     }
 
     void setResourceOnTile( Tiles & tile, const int resourceType, uint32_t value )
@@ -571,40 +544,39 @@ namespace Maps
 
     Funds getFundsFromTile( const Tiles & tile )
     {
-        const ResourceCount & rc = getResourcesFromTile( tile );
-
         switch ( tile.GetObject( false ) ) {
-        case MP2::OBJ_ARTIFACT:
-            switch ( static_cast<ArtifactCaptureCondition>( tile.metadata()[2] ) ) {
-            case ArtifactCaptureCondition::PAY_2000_GOLD:
-                return Funds( rc );
-            case ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES:
-            case ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES:
-                return Funds( Resource::GOLD, getGoldAmountFromTile( tile ) ) + Funds( rc );
-            default:
-                break;
-            }
-            break;
-
         case MP2::OBJ_CAMPFIRE:
-            return Funds( Resource::GOLD, getGoldAmountFromTile( tile ) ) + Funds( rc );
+            return Funds( tile.metadata()[0], tile.metadata()[1] ) + Funds( Resource::GOLD, tile.metadata()[1] * 100 );
 
         case MP2::OBJ_FLOTSAM:
-            return Funds( Resource::GOLD, getGoldAmountFromTile( tile ) ) + Funds( Resource::WOOD, tile.metadata()[0] );
+            return Funds( Resource::WOOD, tile.metadata()[0] ) + Funds( Resource::GOLD, tile.metadata()[1] * 100 );
 
-        case MP2::OBJ_SEA_CHEST:
-        case MP2::OBJ_TREASURE_CHEST:
-        case MP2::OBJ_DERELICT_SHIP:
-        case MP2::OBJ_SHIPWRECK:
-        case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_DAEMON_CAVE:
-            return { Resource::GOLD, getGoldAmountFromTile( tile ) };
+        case MP2::OBJ_GRAVEYARD:
+        case MP2::OBJ_SEA_CHEST:
+        case MP2::OBJ_SHIPWRECK:
+        case MP2::OBJ_TREASURE_CHEST:
+            return { Resource::GOLD, tile.metadata()[1] * 100 };
+
+        case MP2::OBJ_DERELICT_SHIP:
+        case MP2::OBJ_LEAN_TO:
+        case MP2::OBJ_MAGIC_GARDEN:
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_WINDMILL:
+        case MP2::OBJ_WATER_WHEEL:
+            if ( tile.metadata()[0] == Resource::GOLD ) {
+                return { Resource::GOLD, tile.metadata()[1] * 100 };
+            }
+
+            return { static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] };
 
         default:
             break;
         }
 
-        return Funds( rc );
+        // Why are you calling this for an unsupported object type?
+        assert( 0 );
+        return {};
     }
 
     Troop getTroopFromTile( const Tiles & tile )
@@ -641,24 +613,24 @@ namespace Maps
     {
         switch ( tile.GetObject( false ) ) {
         case MP2::OBJ_ARTIFACT:
-        case MP2::OBJ_RESOURCE:
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_SEA_CHEST:
         case MP2::OBJ_SHIPWRECK_SURVIVOR:
         case MP2::OBJ_TREASURE_CHEST:
-        case MP2::OBJ_SEA_CHEST:
             return true;
 
         case MP2::OBJ_PYRAMID:
             return getSpellFromTile( tile ).isValid();
 
-        case MP2::OBJ_SHIPWRECK:
-        case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_DERELICT_SHIP:
-        case MP2::OBJ_WATER_WHEEL:
-        case MP2::OBJ_WINDMILL:
+        case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_LEAN_TO:
         case MP2::OBJ_MAGIC_GARDEN:
+        case MP2::OBJ_SHIPWRECK:
+        case MP2::OBJ_WATER_WHEEL:
+        case MP2::OBJ_WINDMILL:
             return tile.metadata()[1] > 0;
 
         case MP2::OBJ_SKELETON:
@@ -695,7 +667,7 @@ namespace Maps
         case MP2::OBJ_SKELETON:
         case MP2::OBJ_TREASURE_CHEST:
         case MP2::OBJ_WAGON:
-            setArtifactOnTile( tile, Artifact::UNKNOWN );
+            tile.metadata()[0] = Artifact::UNKNOWN;
             break;
 
         default:
@@ -1053,9 +1025,6 @@ namespace Maps
             assert( isFirstLoad );
 
             switch ( Rand::Get( 1, 4 ) ) {
-            // 25%: empty
-            default:
-                break;
             // 25%: 500 gold + 10 wood
             case 1:
                 tile.metadata()[0] = 10;
@@ -1069,6 +1038,9 @@ namespace Maps
             // 25%: 5 wood
             case 3:
                 tile.metadata()[0] = 5;
+                break;
+            // 25%: empty
+            default:
                 break;
             }
             break;
@@ -1087,13 +1059,16 @@ namespace Maps
 
             switch ( percents.Get() ) {
             case 1:
-                setArtifactOnTile( tile, Artifact::Rand( Artifact::ART_LEVEL_TREASURE ) );
+                tile.metadata()[0] = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
                 break;
             case 2:
-                setArtifactOnTile( tile, Artifact::Rand( Artifact::ART_LEVEL_MINOR ) );
+                tile.metadata()[0] = Artifact::Rand( Artifact::ART_LEVEL_MINOR );
+                break;
+            case 3:
+                tile.metadata()[0] = Artifact::Rand( Artifact::ART_LEVEL_MAJOR );
                 break;
             default:
-                setArtifactOnTile( tile, Artifact::Rand( Artifact::ART_LEVEL_MAJOR ) );
+                assert( 0 );
                 break;
             }
             break;
@@ -1206,8 +1181,8 @@ namespace Maps
             assert( isFirstLoad );
 
             // 1000 gold + art
-            setResourceOnTile( tile, Resource::GOLD, 1000 );
-            setArtifactOnTile( tile, Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL ) );
+            tile.metadata()[0] = Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL );
+            tile.metadata()[1] = 10; // Gold is stored with division of 100.
             break;
 
         case MP2::OBJ_PYRAMID: {
@@ -1228,6 +1203,10 @@ namespace Maps
             tile.metadata()[0] = ( cond == static_cast<uint32_t>( DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_ARTIFACT ) )
                                      ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL )
                                      : Artifact::UNKNOWN;
+            tile.metadata()[1] = ( cond == static_cast<uint32_t>( DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_2500_GOLD ) ) ||
+                                 ( cond == static_cast<uint32_t>( DaemonCaveCaptureBonus::PAY_2500_GOLD ) )
+                                     ? 25
+                                     : 0;
             tile.metadata()[2] = cond;
             break;
         }

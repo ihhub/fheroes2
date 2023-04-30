@@ -567,6 +567,41 @@ void Funds::Trim()
         gold = 0;
 }
 
+std::pair<int, int32_t> Funds::getFirstValidResource() const
+{
+    if ( wood > 0 ) {
+        return { Resource::WOOD, wood };
+    }
+
+    if ( ore > 0 ) {
+        return { Resource::ORE, wood };
+    }
+
+    if ( mercury > 0 ) {
+        return { Resource::MERCURY, wood };
+    }
+
+    if ( sulfur > 0 ) {
+        return { Resource::SULFUR, wood };
+    }
+
+    if ( crystal > 0 ) {
+        return { Resource::CRYSTAL, wood };
+    }
+
+    if ( gems > 0 ) {
+        return { Resource::GEMS, wood };
+    }
+
+    if ( gold > 0 ) {
+        return { Resource::GOLD, wood };
+    }
+
+    // We shouldn't reach this point. Make sure that you are calling this method for valid Funds.
+    assert( 0 );
+    return { Resource::UNKNOWN, 0 };
+}
+
 void Funds::Reset()
 {
     wood = 0;

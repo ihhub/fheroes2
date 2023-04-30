@@ -237,7 +237,7 @@ namespace
 
             if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD || condition == Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES
                  || condition == Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
-                return kingdom.AllowPayment( getFundsFromTile( tile ) );
+                return kingdom.AllowPayment( getArtifactResourceRequirement( tile ) );
             }
 
             if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
@@ -325,9 +325,9 @@ namespace
 
         case MP2::OBJ_TREE_OF_KNOWLEDGE:
             if ( !hero.isVisited( tile ) ) {
-                const ResourceCount & rc = getResourcesFromTile( tile );
+                const Funds & rc = getTreeOfKnowledgeRequirement( tile );
                 // If the payment is required do not waste all resources from the kingdom. Use them wisely.
-                if ( !rc.isValid() || kingdom.AllowPayment( Funds( rc ) * 5 ) ) {
+                if ( rc.GetValidItemsCount() == 0 || kingdom.AllowPayment( rc * 5 ) ) {
                     return true;
                 }
             }
@@ -504,7 +504,7 @@ namespace
             break;
 
         case MP2::OBJ_DAEMON_CAVE:
-            if ( doesTileContainValuableItems( tile ) && getDaemonCaveBonus( tile ) != Maps::DaemonCaveCaptureBonus::PAY_2500_GOLD ) {
+            if ( doesTileContainValuableItems( tile ) && getDaemonCaveBonusType( tile ) != Maps::DaemonCaveCaptureBonus::PAY_2500_GOLD ) {
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
             break;
@@ -888,7 +888,7 @@ namespace AI
             if ( getColorFromTile( tile ) == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
-            return ( getResourcesFromTile( tile ).first == Resource::GOLD ) ? 4000.0 : 2000.0;
+            return ( getDailyIncomeObjectResources( tile ).gold > 0 ) ? 4000.0 : 2000.0;
         }
         case MP2::OBJ_ABANDONED_MINE: {
             return 3000.0;
@@ -1303,7 +1303,7 @@ namespace AI
             if ( getColorFromTile( tile ) == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
-            return ( getResourcesFromTile( tile ).first == Resource::GOLD ) ? 3000.0 : 1500.0;
+            return ( getDailyIncomeObjectResources( tile ).gold > 0 ) ? 3000.0 : 1500.0;
         }
         case MP2::OBJ_ABANDONED_MINE: {
             return 5000.0;
@@ -1465,7 +1465,7 @@ namespace AI
             if ( getColorFromTile( tile ) == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
-            return ( getResourcesFromTile( tile ).first == Resource::GOLD ) ? tenTiles : fiveTiles;
+            return ( getDailyIncomeObjectResources( tile ).gold > 0 ) ? tenTiles : fiveTiles;
         }
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:

@@ -77,7 +77,9 @@ namespace Maps
     void setMineSpellOnTile( Tiles & tile, const int32_t spellId );
     void removeMineSpellFromTile( Tiles & tile );
 
-    // Only for objects which always have spell(s).
+    Funds getDailyIncomeObjectResources( const Tiles & tile );
+
+    // Only for objects which always have spell(s): Shrine and Pyramid.
     Spell getSpellFromTile( const Tiles & tile );
     void setSpellOnTile( Tiles & tile, const int spellId );
 
@@ -93,21 +95,20 @@ namespace Maps
 
     Artifact getArtifactFromTile( const Tiles & tile );
 
-    void setArtifactOnTile( Tiles & tile, const int artifactId );
-
-    uint32_t getGoldAmountFromTile( const Tiles & tile );
-
     Skill::Secondary getArtifactSecondarySkillRequirement( const Tiles & tile );
     ArtifactCaptureCondition getArtifactCaptureCondition( const Tiles & tile );
+    Funds getArtifactResourceRequirement( const Tiles & tile );
 
-    DaemonCaveCaptureBonus getDaemonCaveBonus( const Tiles & tile );
+    DaemonCaveCaptureBonus getDaemonCaveBonusType( const Tiles & tile );
+    Funds getDaemonPaymentCondition( const Tiles & tile );
 
     ShipwreckCaptureCondition getShipwrechCaptureCondition( const Tiles & tile );
+
+    Funds getTreeOfKnowledgeRequirement( const Tiles & tile );
 
     // Only for MP2::OBJ_WITCHS_HUT.
     Skill::Secondary getSecondarySkillFromWitchsHut( const Tiles & tile );
 
-    ResourceCount getResourcesFromTile( const Tiles & tile );
     void setResourceOnTile( Tiles & tile, const int resourceType, uint32_t value );
 
     Funds getFundsFromTile( const Tiles & tile );
