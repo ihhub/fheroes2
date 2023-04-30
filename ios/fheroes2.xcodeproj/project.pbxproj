@@ -13,8 +13,249 @@
 		EA67D2C829FE04B70004F40F /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67D2B329FE04380004F40F /* SDL2.framework */; };
 		EA67D2C929FE04B70004F40F /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EA67D2B329FE04380004F40F /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EA67D2CC29FE05030004F40F /* SDL_uikit_main.c in Sources */ = {isa = PBXBuildFile; fileRef = EA67D2CB29FE05030004F40F /* SDL_uikit_main.c */; };
-		EA67D2CE29FE05180004F40F /* 52_hello_mobile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D2CD29FE05180004F40F /* 52_hello_mobile.cpp */; };
-		EA67D2D029FE051D0004F40F /* hello.bmp in Resources */ = {isa = PBXBuildFile; fileRef = EA67D2CF29FE051D0004F40F /* hello.bmp */; };
+		EA67D4D229FE09D20004F40F /* Makefile.mingw in Resources */ = {isa = PBXBuildFile; fileRef = EA67D2EF29FE09D20004F40F /* Makefile.mingw */; };
+		EA67D4D329FE09D20004F40F /* Makefile.vita in Resources */ = {isa = PBXBuildFile; fileRef = EA67D2F029FE09D20004F40F /* Makefile.vita */; };
+		EA67D4E829FE09D20004F40F /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = EA67D30729FE09D20004F40F /* Makefile */; };
+		EA67D4E929FE09D20004F40F /* Makefile.switch in Resources */ = {isa = PBXBuildFile; fileRef = EA67D30829FE09D20004F40F /* Makefile.switch */; };
+		EA67D4EA29FE09D20004F40F /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = EA67D30929FE09D20004F40F /* Makefile */; };
+		EA67D4EB29FE09D20004F40F /* fheroes2.icns in Resources */ = {isa = PBXBuildFile; fileRef = EA67D30B29FE09D20004F40F /* fheroes2.icns */; };
+		EA67D4EC29FE09D20004F40F /* fheroes2.png in Resources */ = {isa = PBXBuildFile; fileRef = EA67D30C29FE09D20004F40F /* fheroes2.png */; };
+		EA67D4ED29FE09D20004F40F /* fheroes2.rc in Resources */ = {isa = PBXBuildFile; fileRef = EA67D30D29FE09D20004F40F /* fheroes2.rc */; };
+		EA67D4EE29FE09D20004F40F /* fheroes2.ico in Resources */ = {isa = PBXBuildFile; fileRef = EA67D30E29FE09D20004F40F /* fheroes2.ico */; };
+		EA67D4EF29FE09D20004F40F /* Info.plist.in in Resources */ = {isa = PBXBuildFile; fileRef = EA67D30F29FE09D20004F40F /* Info.plist.in */; };
+		EA67D4F029FE09D20004F40F /* Makefile.osx in Resources */ = {isa = PBXBuildFile; fileRef = EA67D31029FE09D20004F40F /* Makefile.osx */; };
+		EA67D4F129FE09D20004F40F /* agg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D31329FE09D20004F40F /* agg.cpp */; };
+		EA67D4F229FE09D20004F40F /* m82.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D31529FE09D20004F40F /* m82.cpp */; };
+		EA67D4F329FE09D20004F40F /* bin_info.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D31829FE09D20004F40F /* bin_info.cpp */; };
+		EA67D4F429FE09D20004F40F /* xmi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D31B29FE09D20004F40F /* xmi.cpp */; };
+		EA67D4F529FE09D20004F40F /* icn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D31D29FE09D20004F40F /* icn.cpp */; };
+		EA67D4F629FE09D20004F40F /* mus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D31E29FE09D20004F40F /* mus.cpp */; };
+		EA67D4F729FE09D20004F40F /* agg_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D32029FE09D20004F40F /* agg_image.cpp */; };
+		EA67D4F829FE09D20004F40F /* battle_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D32329FE09D20004F40F /* battle_main.cpp */; };
+		EA67D4F929FE09D20004F40F /* battle_only.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D32629FE09D20004F40F /* battle_only.cpp */; };
+		EA67D4FA29FE09D20004F40F /* battle_pathfinding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D32729FE09D20004F40F /* battle_pathfinding.cpp */; };
+		EA67D4FB29FE09D20004F40F /* battle_board.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D32A29FE09D20004F40F /* battle_board.cpp */; };
+		EA67D4FC29FE09D20004F40F /* battle_army.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D32B29FE09D20004F40F /* battle_army.cpp */; };
+		EA67D4FD29FE09D20004F40F /* battle_arena.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D32C29FE09D20004F40F /* battle_arena.cpp */; };
+		EA67D4FE29FE09D20004F40F /* battle_tower.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D32F29FE09D20004F40F /* battle_tower.cpp */; };
+		EA67D4FF29FE09D20004F40F /* battle_bridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D33029FE09D20004F40F /* battle_bridge.cpp */; };
+		EA67D50029FE09D20004F40F /* battle_troop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D33129FE09D20004F40F /* battle_troop.cpp */; };
+		EA67D50129FE09D20004F40F /* battle_dialogs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D33329FE09D20004F40F /* battle_dialogs.cpp */; };
+		EA67D50229FE09D20004F40F /* battle_cell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D33529FE09D20004F40F /* battle_cell.cpp */; };
+		EA67D50329FE09D20004F40F /* battle_catapult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D33629FE09D20004F40F /* battle_catapult.cpp */; };
+		EA67D50429FE09D20004F40F /* battle_command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D33829FE09D20004F40F /* battle_command.cpp */; };
+		EA67D50529FE09D20004F40F /* battle_interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D33B29FE09D20004F40F /* battle_interface.cpp */; };
+		EA67D50629FE09D20004F40F /* battle_animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D33C29FE09D20004F40F /* battle_animation.cpp */; };
+		EA67D50729FE09D20004F40F /* battle_grave.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D33D29FE09D20004F40F /* battle_grave.cpp */; };
+		EA67D50829FE09D20004F40F /* battle_action.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D34129FE09D20004F40F /* battle_action.cpp */; };
+		EA67D50929FE09D20004F40F /* mp2_helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D34429FE09D20004F40F /* mp2_helper.cpp */; };
+		EA67D50A29FE09D20004F40F /* mp2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D34529FE09D20004F40F /* mp2.cpp */; };
+		EA67D50B29FE09D20004F40F /* maps.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D34729FE09D20004F40F /* maps.cpp */; };
+		EA67D50C29FE09D20004F40F /* visit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D34929FE09D20004F40F /* visit.cpp */; };
+		EA67D50D29FE09D20004F40F /* ground.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D34A29FE09D20004F40F /* ground.cpp */; };
+		EA67D50E29FE09D20004F40F /* maps_fileinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D34B29FE09D20004F40F /* maps_fileinfo.cpp */; };
+		EA67D50F29FE09D20004F40F /* maps_objects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D35129FE09D20004F40F /* maps_objects.cpp */; };
+		EA67D51029FE09D20004F40F /* maps_tiles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D35229FE09D20004F40F /* maps_tiles.cpp */; };
+		EA67D51129FE09D20004F40F /* maps_tiles_helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D35629FE09D20004F40F /* maps_tiles_helper.cpp */; };
+		EA67D51229FE09D20004F40F /* position.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D35829FE09D20004F40F /* position.cpp */; };
+		EA67D51429FE09D20004F40F /* profit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D36029FE09D20004F40F /* profit.cpp */; };
+		EA67D51529FE09D20004F40F /* kingdom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D36129FE09D20004F40F /* kingdom.cpp */; };
+		EA67D51629FE09D20004F40F /* color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D36229FE09D20004F40F /* color.cpp */; };
+		EA67D51729FE09D20004F40F /* view_world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D36329FE09D20004F40F /* view_world.cpp */; };
+		EA67D51829FE09D20004F40F /* kingdom_overview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D36429FE09D20004F40F /* kingdom_overview.cpp */; };
+		EA67D51929FE09D20004F40F /* puzzle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D36729FE09D20004F40F /* puzzle.cpp */; };
+		EA67D51A29FE09D20004F40F /* speed.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D36829FE09D20004F40F /* speed.cpp */; };
+		EA67D51B29FE09D20004F40F /* payment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D36A29FE09D20004F40F /* payment.cpp */; };
+		EA67D51C29FE09D20004F40F /* luck.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D36C29FE09D20004F40F /* luck.cpp */; };
+		EA67D51D29FE09D20004F40F /* race.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D36D29FE09D20004F40F /* race.cpp */; };
+		EA67D51E29FE09D20004F40F /* week.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D36F29FE09D20004F40F /* week.cpp */; };
+		EA67D51F29FE09D20004F40F /* morale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D37029FE09D20004F40F /* morale.cpp */; };
+		EA67D52029FE09D20004F40F /* experience.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D37329FE09D20004F40F /* experience.cpp */; };
+		EA67D52129FE09D20004F40F /* heroes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D37529FE09D20004F40F /* heroes.cpp */; };
+		EA67D52229FE09D20004F40F /* heroes_recruits.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D37729FE09D20004F40F /* heroes_recruits.cpp */; };
+		EA67D52329FE09D20004F40F /* heroes_meeting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D37929FE09D20004F40F /* heroes_meeting.cpp */; };
+		EA67D52429FE09D20004F40F /* heroes_spell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D37B29FE09D20004F40F /* heroes_spell.cpp */; };
+		EA67D52529FE09D20004F40F /* heroes_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D37D29FE09D20004F40F /* heroes_base.cpp */; };
+		EA67D52629FE09D20004F40F /* heroes_action.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D38029FE09D20004F40F /* heroes_action.cpp */; };
+		EA67D52729FE09D20004F40F /* route.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D38129FE09D20004F40F /* route.cpp */; };
+		EA67D52829FE09D20004F40F /* heroes_move.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D38229FE09D20004F40F /* heroes_move.cpp */; };
+		EA67D52929FE09D20004F40F /* skill.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D38329FE09D20004F40F /* skill.cpp */; };
+		EA67D52A29FE09D20004F40F /* direction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D38629FE09D20004F40F /* direction.cpp */; };
+		EA67D52B29FE09D20004F40F /* heroes_indicator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D38729FE09D20004F40F /* heroes_indicator.cpp */; };
+		EA67D52C29FE09D20004F40F /* heroes_dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D38829FE09D20004F40F /* heroes_dialog.cpp */; };
+		EA67D52D29FE09D20004F40F /* spell_info.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D38C29FE09D20004F40F /* spell_info.cpp */; };
+		EA67D52E29FE09D20004F40F /* spell_book.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D38E29FE09D20004F40F /* spell_book.cpp */; };
+		EA67D52F29FE09D20004F40F /* spell_storage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D39029FE09D20004F40F /* spell_storage.cpp */; };
+		EA67D53029FE09D20004F40F /* spell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D39129FE09D20004F40F /* spell.cpp */; };
+		EA67D53129FE09D20004F40F /* army_ui_helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D39529FE09D20004F40F /* army_ui_helper.cpp */; };
+		EA67D53229FE09D20004F40F /* army_bar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D39629FE09D20004F40F /* army_bar.cpp */; };
+		EA67D53329FE09D20004F40F /* army.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D39729FE09D20004F40F /* army.cpp */; };
+		EA67D53429FE09D20004F40F /* army_troop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D39A29FE09D20004F40F /* army_troop.cpp */; };
+		EA67D53529FE09D20004F40F /* objwatr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D39D29FE09D20004F40F /* objwatr.cpp */; };
+		EA67D53629FE09D20004F40F /* objdsrt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3A129FE09D20004F40F /* objdsrt.cpp */; };
+		EA67D53729FE09D20004F40F /* objsnow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3A229FE09D20004F40F /* objsnow.cpp */; };
+		EA67D53829FE09D20004F40F /* trees.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3A329FE09D20004F40F /* trees.cpp */; };
+		EA67D53929FE09D20004F40F /* objlava.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3A529FE09D20004F40F /* objlava.cpp */; };
+		EA67D53A29FE09D20004F40F /* objtown.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3A829FE09D20004F40F /* objtown.cpp */; };
+		EA67D53B29FE09D20004F40F /* objdirt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3A929FE09D20004F40F /* objdirt.cpp */; };
+		EA67D53C29FE09D20004F40F /* objmult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3AB29FE09D20004F40F /* objmult.cpp */; };
+		EA67D53D29FE09D20004F40F /* mounts.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3AD29FE09D20004F40F /* mounts.cpp */; };
+		EA67D53E29FE09D20004F40F /* objgras.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3AE29FE09D20004F40F /* objgras.cpp */; };
+		EA67D53F29FE09D20004F40F /* objswmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3B029FE09D20004F40F /* objswmp.cpp */; };
+		EA67D54029FE09D20004F40F /* objcrck.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3B229FE09D20004F40F /* objcrck.cpp */; };
+		EA67D54129FE09D20004F40F /* objxloc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3B529FE09D20004F40F /* objxloc.cpp */; };
+		EA67D54229FE09D20004F40F /* world_pathfinding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3B729FE09D20004F40F /* world_pathfinding.cpp */; };
+		EA67D54329FE09D20004F40F /* world_loadmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3B929FE09D20004F40F /* world_loadmap.cpp */; };
+		EA67D54429FE09D20004F40F /* world_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3BA29FE09D20004F40F /* world_regions.cpp */; };
+		EA67D54529FE09D20004F40F /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3BC29FE09D20004F40F /* world.cpp */; };
+		EA67D54629FE09D20004F40F /* game_newgame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3BF29FE09D20004F40F /* game_newgame.cpp */; };
+		EA67D54729FE09D20004F40F /* game_static.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3C029FE09D20004F40F /* game_static.cpp */; };
+		EA67D54829FE09D20004F40F /* game_over.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3C229FE09D20004F40F /* game_over.cpp */; };
+		EA67D54929FE09D20004F40F /* difficulty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3C429FE09D20004F40F /* difficulty.cpp */; };
+		EA67D54A29FE09D20004F40F /* game_hotkeys.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3CA29FE09D20004F40F /* game_hotkeys.cpp */; };
+		EA67D54B29FE09D20004F40F /* game_credits.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3CB29FE09D20004F40F /* game_credits.cpp */; };
+		EA67D54C29FE09D20004F40F /* game_highscores.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3CC29FE09D20004F40F /* game_highscores.cpp */; };
+		EA67D54D29FE09D20004F40F /* game_startgame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3CE29FE09D20004F40F /* game_startgame.cpp */; };
+		EA67D54E29FE09D20004F40F /* game_campaign.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3CF29FE09D20004F40F /* game_campaign.cpp */; };
+		EA67D54F29FE09D20004F40F /* game_mainmenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3D129FE09D20004F40F /* game_mainmenu.cpp */; };
+		EA67D55029FE09D20004F40F /* fheroes2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3D329FE09D20004F40F /* fheroes2.cpp */; };
+		EA67D55129FE09D20004F40F /* game_video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3D429FE09D20004F40F /* game_video.cpp */; };
+		EA67D55229FE09D20004F40F /* game_io.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3D629FE09D20004F40F /* game_io.cpp */; };
+		EA67D55329FE09D20004F40F /* game_loadgame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3D729FE09D20004F40F /* game_loadgame.cpp */; };
+		EA67D55429FE09D20004F40F /* game_interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3D829FE09D20004F40F /* game_interface.cpp */; };
+		EA67D55529FE09D20004F40F /* game_logo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3D929FE09D20004F40F /* game_logo.cpp */; };
+		EA67D55629FE09D20004F40F /* game_delays.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3DB29FE09D20004F40F /* game_delays.cpp */; };
+		EA67D55729FE09D20004F40F /* highscores.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3DD29FE09D20004F40F /* highscores.cpp */; };
+		EA67D55829FE09D20004F40F /* game_mainmenu_ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3DE29FE09D20004F40F /* game_mainmenu_ui.cpp */; };
+		EA67D55929FE09D20004F40F /* game_scenarioinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3E129FE09D20004F40F /* game_scenarioinfo.cpp */; };
+		EA67D55A29FE09D20004F40F /* game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3E229FE09D20004F40F /* game.cpp */; };
+		EA67D55B29FE09D20004F40F /* dialog_selectcount.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3E729FE09D20004F40F /* dialog_selectcount.cpp */; };
+		EA67D55C29FE09D20004F40F /* dialog_frameborder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3E929FE09D20004F40F /* dialog_frameborder.cpp */; };
+		EA67D55D29FE09D20004F40F /* dialog_selectfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3EB29FE09D20004F40F /* dialog_selectfile.cpp */; };
+		EA67D55E29FE09D20004F40F /* dialog_arena.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3ED29FE09D20004F40F /* dialog_arena.cpp */; };
+		EA67D55F29FE09D20004F40F /* dialog_language_selection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3EE29FE09D20004F40F /* dialog_language_selection.cpp */; };
+		EA67D56029FE09D20004F40F /* dialog_audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3EF29FE09D20004F40F /* dialog_audio.cpp */; };
+		EA67D56129FE09D20004F40F /* dialog_gameinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3F029FE09D20004F40F /* dialog_gameinfo.cpp */; };
+		EA67D56229FE09D20004F40F /* dialog_artifact.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3F129FE09D20004F40F /* dialog_artifact.cpp */; };
+		EA67D56329FE09D20004F40F /* dialog_game_settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3F229FE09D20004F40F /* dialog_game_settings.cpp */; };
+		EA67D56429FE09D20004F40F /* dialog_adventure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3F329FE09D20004F40F /* dialog_adventure.cpp */; };
+		EA67D56529FE09D20004F40F /* dialog_graphics_settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3F429FE09D20004F40F /* dialog_graphics_settings.cpp */; };
+		EA67D56629FE09D20004F40F /* dialog_resolution.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3F529FE09D20004F40F /* dialog_resolution.cpp */; };
+		EA67D56729FE09D20004F40F /* dialog_system_options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3F829FE09D20004F40F /* dialog_system_options.cpp */; };
+		EA67D56829FE09D20004F40F /* dialog_marketplace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3F929FE09D20004F40F /* dialog_marketplace.cpp */; };
+		EA67D56929FE09D20004F40F /* dialog_recruit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3FA29FE09D20004F40F /* dialog_recruit.cpp */; };
+		EA67D56A29FE09D20004F40F /* dialog_box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3FB29FE09D20004F40F /* dialog_box.cpp */; };
+		EA67D56B29FE09D20004F40F /* dialog_armyinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3FC29FE09D20004F40F /* dialog_armyinfo.cpp */; };
+		EA67D56C29FE09D20004F40F /* dialog_quickinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3FD29FE09D20004F40F /* dialog_quickinfo.cpp */; };
+		EA67D56D29FE09D20004F40F /* dialog_levelup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3FE29FE09D20004F40F /* dialog_levelup.cpp */; };
+		EA67D56E29FE09D20004F40F /* dialog_buyboat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D3FF29FE09D20004F40F /* dialog_buyboat.cpp */; };
+		EA67D56F29FE09D20004F40F /* dialog_selectitems.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D40029FE09D20004F40F /* dialog_selectitems.cpp */; };
+		EA67D57029FE09D20004F40F /* dialog_giftresources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D40129FE09D20004F40F /* dialog_giftresources.cpp */; };
+		EA67D57129FE09D20004F40F /* dialog_selectscenario.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D40429FE09D20004F40F /* dialog_selectscenario.cpp */; };
+		EA67D57229FE09D20004F40F /* dialog_thievesguild.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D40529FE09D20004F40F /* dialog_thievesguild.cpp */; };
+		EA67D57329FE09D20004F40F /* dialog_hotkeys.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D40729FE09D20004F40F /* dialog_hotkeys.cpp */; };
+		EA67D57429FE09D20004F40F /* dialog_file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D40829FE09D20004F40F /* dialog_file.cpp */; };
+		EA67D57529FE09D20004F40F /* dialog_chest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D40929FE09D20004F40F /* dialog_chest.cpp */; };
+		EA67D57629FE09D20004F40F /* dialog_message.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D40A29FE09D20004F40F /* dialog_message.cpp */; };
+		EA67D57729FE09D20004F40F /* bitmodes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D41029FE09D20004F40F /* bitmodes.cpp */; };
+		EA67D57829FE09D20004F40F /* players.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D41329FE09D20004F40F /* players.cpp */; };
+		EA67D57929FE09D20004F40F /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D41529FE09D20004F40F /* settings.cpp */; };
+		EA67D57A29FE09D20004F40F /* audio_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D41829FE09D20004F40F /* audio_manager.cpp */; };
+		EA67D57B29FE09D20004F40F /* h2d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D41A29FE09D20004F40F /* h2d.cpp */; };
+		EA67D57C29FE09D20004F40F /* ai_common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D41D29FE09D20004F40F /* ai_common.cpp */; };
+		EA67D57D29FE09D20004F40F /* ai_hero_action.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D41E29FE09D20004F40F /* ai_hero_action.cpp */; };
+		EA67D57E29FE09D20004F40F /* ai_normal_kingdom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D42129FE09D20004F40F /* ai_normal_kingdom.cpp */; };
+		EA67D57F29FE09D20004F40F /* ai_normal_battle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D42329FE09D20004F40F /* ai_normal_battle.cpp */; };
+		EA67D58029FE09D20004F40F /* ai_normal_spell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D42429FE09D20004F40F /* ai_normal_spell.cpp */; };
+		EA67D58129FE09D20004F40F /* ai_normal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D42529FE09D20004F40F /* ai_normal.cpp */; };
+		EA67D58229FE09D20004F40F /* ai_normal_hero.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D42629FE09D20004F40F /* ai_normal_hero.cpp */; };
+		EA67D58329FE09D20004F40F /* ai_normal_castle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D42729FE09D20004F40F /* ai_normal_castle.cpp */; };
+		EA67D58429FE09D20004F40F /* ai_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D42829FE09D20004F40F /* ai_base.cpp */; };
+		EA67D58529FE09D20004F40F /* ui_kingdom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D42A29FE09D20004F40F /* ui_kingdom.cpp */; };
+		EA67D58629FE09D20004F40F /* ui_scrollbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D42C29FE09D20004F40F /* ui_scrollbar.cpp */; };
+		EA67D58729FE09D20004F40F /* interface_buttons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D42E29FE09D20004F40F /* interface_buttons.cpp */; };
+		EA67D58829FE09D20004F40F /* ui_tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D42F29FE09D20004F40F /* ui_tool.cpp */; };
+		EA67D58929FE09D20004F40F /* player_info.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D43029FE09D20004F40F /* player_info.cpp */; };
+		EA67D58A29FE09D20004F40F /* text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D43129FE09D20004F40F /* text.cpp */; };
+		EA67D58B29FE09D20004F40F /* interface_status.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D43629FE09D20004F40F /* interface_status.cpp */; };
+		EA67D58C29FE09D20004F40F /* ui_castle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D43729FE09D20004F40F /* ui_castle.cpp */; };
+		EA67D58D29FE09D20004F40F /* interface_cpanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D43829FE09D20004F40F /* interface_cpanel.cpp */; };
+		EA67D58E29FE09D20004F40F /* ui_monster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D43929FE09D20004F40F /* ui_monster.cpp */; };
+		EA67D58F29FE09D20004F40F /* ui_keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D43A29FE09D20004F40F /* ui_keyboard.cpp */; };
+		EA67D59029FE09D20004F40F /* interface_icons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D43E29FE09D20004F40F /* interface_icons.cpp */; };
+		EA67D59129FE09D20004F40F /* statusbar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D43F29FE09D20004F40F /* statusbar.cpp */; };
+		EA67D59229FE09D20004F40F /* ui_campaign.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D44129FE09D20004F40F /* ui_campaign.cpp */; };
+		EA67D59329FE09D20004F40F /* ui_option_item.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D44429FE09D20004F40F /* ui_option_item.cpp */; };
+		EA67D59429FE09D20004F40F /* ui_window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D44729FE09D20004F40F /* ui_window.cpp */; };
+		EA67D59529FE09D20004F40F /* ui_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D44829FE09D20004F40F /* ui_base.cpp */; };
+		EA67D59629FE09D20004F40F /* interface_radar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D44A29FE09D20004F40F /* interface_radar.cpp */; };
+		EA67D59729FE09D20004F40F /* ui_dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D44B29FE09D20004F40F /* ui_dialog.cpp */; };
+		EA67D59829FE09D20004F40F /* interface_border.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D45129FE09D20004F40F /* interface_border.cpp */; };
+		EA67D59929FE09D20004F40F /* ui_font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D45229FE09D20004F40F /* ui_font.cpp */; };
+		EA67D59A29FE09D20004F40F /* interface_events.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D45529FE09D20004F40F /* interface_events.cpp */; };
+		EA67D59B29FE09D20004F40F /* ui_language.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D45629FE09D20004F40F /* ui_language.cpp */; };
+		EA67D59C29FE09D20004F40F /* interface_focus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D45829FE09D20004F40F /* interface_focus.cpp */; };
+		EA67D59D29FE09D20004F40F /* skill_bar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D45A29FE09D20004F40F /* skill_bar.cpp */; };
+		EA67D59E29FE09D20004F40F /* cursor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D45C29FE09D20004F40F /* cursor.cpp */; };
+		EA67D59F29FE09D20004F40F /* ui_text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D45F29FE09D20004F40F /* ui_text.cpp */; };
+		EA67D5A029FE09D20004F40F /* ui_button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D46029FE09D20004F40F /* ui_button.cpp */; };
+		EA67D5A129FE09D20004F40F /* interface_gamearea.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D46429FE09D20004F40F /* interface_gamearea.cpp */; };
+		EA67D5A229FE09D20004F40F /* campaign_scenariodata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D46829FE09D20004F40F /* campaign_scenariodata.cpp */; };
+		EA67D5A329FE09D20004F40F /* campaign_data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D46929FE09D20004F40F /* campaign_data.cpp */; };
+		EA67D5A429FE09D20004F40F /* campaign_savedata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D46A29FE09D20004F40F /* campaign_savedata.cpp */; };
+		EA67D5A529FE09D20004F40F /* castle_dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D46D29FE09D20004F40F /* castle_dialog.cpp */; };
+		EA67D5A629FE09D20004F40F /* castle_town.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D46E29FE09D20004F40F /* castle_town.cpp */; };
+		EA67D5A729FE09D20004F40F /* castle_building.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D47029FE09D20004F40F /* castle_building.cpp */; };
+		EA67D5A829FE09D20004F40F /* buildinginfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D47129FE09D20004F40F /* buildinginfo.cpp */; };
+		EA67D5A929FE09D20004F40F /* mageguild.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D47229FE09D20004F40F /* mageguild.cpp */; };
+		EA67D5AA29FE09D20004F40F /* castle_building_info.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D47429FE09D20004F40F /* castle_building_info.cpp */; };
+		EA67D5AB29FE09D20004F40F /* castle_tavern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D47529FE09D20004F40F /* castle_tavern.cpp */; };
+		EA67D5AC29FE09D20004F40F /* captain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D47629FE09D20004F40F /* captain.cpp */; };
+		EA67D5AD29FE09D20004F40F /* castle_well.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D47829FE09D20004F40F /* castle_well.cpp */; };
+		EA67D5AE29FE09D20004F40F /* castle_mageguild.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D47A29FE09D20004F40F /* castle_mageguild.cpp */; };
+		EA67D5AF29FE09D20004F40F /* castle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D47C29FE09D20004F40F /* castle.cpp */; };
+		EA67D5B029FE09D20004F40F /* artifact_ultimate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D47F29FE09D20004F40F /* artifact_ultimate.cpp */; };
+		EA67D5B129FE09D20004F40F /* artifact_info.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D48029FE09D20004F40F /* artifact_info.cpp */; };
+		EA67D5B229FE09D20004F40F /* resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D48129FE09D20004F40F /* resource.cpp */; };
+		EA67D5B329FE09D20004F40F /* artifact.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D48229FE09D20004F40F /* artifact.cpp */; };
+		EA67D5B429FE09D20004F40F /* monster_info.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D48729FE09D20004F40F /* monster_info.cpp */; };
+		EA67D5B529FE09D20004F40F /* monster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D48929FE09D20004F40F /* monster.cpp */; };
+		EA67D5B629FE09D20004F40F /* monster_anim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D48C29FE09D20004F40F /* monster_anim.cpp */; };
+		EA67D5B929FE09D20004F40F /* tinyconfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D49029FE09D20004F40F /* tinyconfig.cpp */; };
+		EA67D5BA29FE09D20004F40F /* serialize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D49229FE09D20004F40F /* serialize.cpp */; };
+		EA67D5BB29FE09D20004F40F /* thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D49429FE09D20004F40F /* thread.cpp */; };
+		EA67D5BC29FE09D20004F40F /* h2d_file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D49629FE09D20004F40F /* h2d_file.cpp */; };
+		EA67D5BE29FE09D20004F40F /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D49929FE09D20004F40F /* image.cpp */; };
+		EA67D5BF29FE09D20004F40F /* logging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D49A29FE09D20004F40F /* logging.cpp */; };
+		EA67D5C029FE09D20004F40F /* core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D49C29FE09D20004F40F /* core.cpp */; };
+		EA67D5C129FE09D20004F40F /* smk_decoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D49D29FE09D20004F40F /* smk_decoder.cpp */; };
+		EA67D5C229FE09D20004F40F /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = EA67D49E29FE09D20004F40F /* Makefile */; };
+		EA67D5C329FE09D20004F40F /* screen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D49F29FE09D20004F40F /* screen.cpp */; };
+		EA67D5C429FE09D20004F40F /* image_tool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D4A129FE09D20004F40F /* image_tool.cpp */; };
+		EA67D5C529FE09D20004F40F /* audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D4A229FE09D20004F40F /* audio.cpp */; };
+		EA67D5C629FE09D20004F40F /* pal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D4A429FE09D20004F40F /* pal.cpp */; };
+		EA67D5C729FE09D20004F40F /* translations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D4A529FE09D20004F40F /* translations.cpp */; };
+		EA67D5C829FE09D20004F40F /* zzlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D4A729FE09D20004F40F /* zzlib.cpp */; };
+		EA67D5C929FE09D20004F40F /* image_palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D4A829FE09D20004F40F /* image_palette.cpp */; };
+		EA67D5CA29FE09D20004F40F /* dir.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D4A929FE09D20004F40F /* dir.cpp */; };
+		EA67D5CB29FE09D20004F40F /* rand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D4AB29FE09D20004F40F /* rand.cpp */; };
+		EA67D5CC29FE09D20004F40F /* system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D4AC29FE09D20004F40F /* system.cpp */; };
+		EA67D5CD29FE09D20004F40F /* agg_file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D4AD29FE09D20004F40F /* agg_file.cpp */; };
+		EA67D5CE29FE09D20004F40F /* tools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D4AF29FE09D20004F40F /* tools.cpp */; };
+		EA67D5CF29FE09D20004F40F /* localevent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D4B529FE09D20004F40F /* localevent.cpp */; };
+		EA67D5D029FE09D20004F40F /* xmi2mid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D4B829FE09D20004F40F /* xmi2mid.cpp */; };
+		EA67D5D129FE09D20004F40F /* timing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA67D4BB29FE09D20004F40F /* timing.cpp */; };
+		EA67D5D229FE09D20004F40F /* configure.ac in Resources */ = {isa = PBXBuildFile; fileRef = EA67D4C429FE09D20004F40F /* configure.ac */; };
+		EA67D5D329FE09D20004F40F /* INSTALL in Resources */ = {isa = PBXBuildFile; fileRef = EA67D4C529FE09D20004F40F /* INSTALL */; };
+		EA67D5D429FE09D20004F40F /* smacker.c in Sources */ = {isa = PBXBuildFile; fileRef = EA67D4C629FE09D20004F40F /* smacker.c */; };
+		EA67D5D529FE09D20004F40F /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = EA67D4C729FE09D20004F40F /* Makefile */; };
+		EA67D5D829FE09D20004F40F /* Makefile.am in Resources */ = {isa = PBXBuildFile; fileRef = EA67D4CA29FE09D20004F40F /* Makefile.am */; };
+		EA67D5D929FE09D20004F40F /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = EA67D4CB29FE09D20004F40F /* COPYING */; };
+		EA67D5DA29FE09D20004F40F /* smacker.h.orig in Resources */ = {isa = PBXBuildFile; fileRef = EA67D4CC29FE09D20004F40F /* smacker.h.orig */; };
+		EA67D5DB29FE09D20004F40F /* smacker.c.orig in Resources */ = {isa = PBXBuildFile; fileRef = EA67D4CF29FE09D20004F40F /* smacker.c.orig */; };
+		EA67D5F029FE0B620004F40F /* SDL3_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67D5EA29FE0B350004F40F /* SDL3_mixer.framework */; };
+		EA67D5F129FE0B620004F40F /* SDL3_mixer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EA67D5EA29FE0B350004F40F /* SDL3_mixer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EA67D5F329FE0CD50004F40F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67D5F229FE0C8C0004F40F /* libz.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +336,27 @@
 			remoteGlobalIDString = BECDF6BE0761BA81005FE872;
 			remoteInfo = "Standard DMG";
 		};
+		EA67D5E929FE0B350004F40F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA67D5DE29FE0B350004F40F /* SDL_mixer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BE1FA90607AF96B2004B6283;
+			remoteInfo = Framework;
+		};
+		EA67D5EB29FE0B350004F40F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA67D5DE29FE0B350004F40F /* SDL_mixer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BE1FA95407AF96B2004B6283;
+			remoteInfo = "Static Library";
+		};
+		EA67D5ED29FE0B350004F40F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA67D5DE29FE0B350004F40F /* SDL_mixer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BE1FA95807AF96B3004B6283;
+			remoteInfo = "Create DMG";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -104,6 +366,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				EA67D5F129FE0B620004F40F /* SDL3_mixer.framework in Embed Frameworks */,
 				EA67D2C929FE04B70004F40F /* SDL2.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -119,8 +382,443 @@
 		EA5466A629FE02FF00A9D8B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EA67D2A229FE04380004F40F /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../../SDL-release-2.26.5/Xcode/SDL/SDL.xcodeproj"; sourceTree = "<group>"; };
 		EA67D2CB29FE05030004F40F /* SDL_uikit_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL_uikit_main.c; sourceTree = "<group>"; };
-		EA67D2CD29FE05180004F40F /* 52_hello_mobile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 52_hello_mobile.cpp; sourceTree = "<group>"; };
-		EA67D2CF29FE051D0004F40F /* hello.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = hello.bmp; sourceTree = "<group>"; };
+		EA67D2EF29FE09D20004F40F /* Makefile.mingw */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.mingw; sourceTree = "<group>"; };
+		EA67D2F029FE09D20004F40F /* Makefile.vita */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.vita; sourceTree = "<group>"; };
+		EA67D30529FE09D20004F40F /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		EA67D30729FE09D20004F40F /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		EA67D30829FE09D20004F40F /* Makefile.switch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.switch; sourceTree = "<group>"; };
+		EA67D30929FE09D20004F40F /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		EA67D30B29FE09D20004F40F /* fheroes2.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = fheroes2.icns; sourceTree = "<group>"; };
+		EA67D30C29FE09D20004F40F /* fheroes2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fheroes2.png; sourceTree = "<group>"; };
+		EA67D30D29FE09D20004F40F /* fheroes2.rc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fheroes2.rc; sourceTree = "<group>"; };
+		EA67D30E29FE09D20004F40F /* fheroes2.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = fheroes2.ico; sourceTree = "<group>"; };
+		EA67D30F29FE09D20004F40F /* Info.plist.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist.in; sourceTree = "<group>"; };
+		EA67D31029FE09D20004F40F /* Makefile.osx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.osx; sourceTree = "<group>"; };
+		EA67D31329FE09D20004F40F /* agg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = agg.cpp; sourceTree = "<group>"; };
+		EA67D31429FE09D20004F40F /* xmi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xmi.h; sourceTree = "<group>"; };
+		EA67D31529FE09D20004F40F /* m82.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = m82.cpp; sourceTree = "<group>"; };
+		EA67D31629FE09D20004F40F /* agg_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = agg_image.h; sourceTree = "<group>"; };
+		EA67D31729FE09D20004F40F /* icn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = icn.h; sourceTree = "<group>"; };
+		EA67D31829FE09D20004F40F /* bin_info.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bin_info.cpp; sourceTree = "<group>"; };
+		EA67D31929FE09D20004F40F /* m82.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m82.h; sourceTree = "<group>"; };
+		EA67D31A29FE09D20004F40F /* til.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = til.h; sourceTree = "<group>"; };
+		EA67D31B29FE09D20004F40F /* xmi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xmi.cpp; sourceTree = "<group>"; };
+		EA67D31C29FE09D20004F40F /* bin_info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bin_info.h; sourceTree = "<group>"; };
+		EA67D31D29FE09D20004F40F /* icn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = icn.cpp; sourceTree = "<group>"; };
+		EA67D31E29FE09D20004F40F /* mus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mus.cpp; sourceTree = "<group>"; };
+		EA67D31F29FE09D20004F40F /* mus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mus.h; sourceTree = "<group>"; };
+		EA67D32029FE09D20004F40F /* agg_image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = agg_image.cpp; sourceTree = "<group>"; };
+		EA67D32129FE09D20004F40F /* agg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = agg.h; sourceTree = "<group>"; };
+		EA67D32329FE09D20004F40F /* battle_main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_main.cpp; sourceTree = "<group>"; };
+		EA67D32429FE09D20004F40F /* battle_cell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battle_cell.h; sourceTree = "<group>"; };
+		EA67D32529FE09D20004F40F /* battle_tower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battle_tower.h; sourceTree = "<group>"; };
+		EA67D32629FE09D20004F40F /* battle_only.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_only.cpp; sourceTree = "<group>"; };
+		EA67D32729FE09D20004F40F /* battle_pathfinding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_pathfinding.cpp; sourceTree = "<group>"; };
+		EA67D32829FE09D20004F40F /* battle_catapult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battle_catapult.h; sourceTree = "<group>"; };
+		EA67D32929FE09D20004F40F /* battle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battle.h; sourceTree = "<group>"; };
+		EA67D32A29FE09D20004F40F /* battle_board.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_board.cpp; sourceTree = "<group>"; };
+		EA67D32B29FE09D20004F40F /* battle_army.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_army.cpp; sourceTree = "<group>"; };
+		EA67D32C29FE09D20004F40F /* battle_arena.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_arena.cpp; sourceTree = "<group>"; };
+		EA67D32D29FE09D20004F40F /* battle_pathfinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battle_pathfinding.h; sourceTree = "<group>"; };
+		EA67D32E29FE09D20004F40F /* battle_interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battle_interface.h; sourceTree = "<group>"; };
+		EA67D32F29FE09D20004F40F /* battle_tower.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_tower.cpp; sourceTree = "<group>"; };
+		EA67D33029FE09D20004F40F /* battle_bridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_bridge.cpp; sourceTree = "<group>"; };
+		EA67D33129FE09D20004F40F /* battle_troop.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_troop.cpp; sourceTree = "<group>"; };
+		EA67D33229FE09D20004F40F /* battle_troop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battle_troop.h; sourceTree = "<group>"; };
+		EA67D33329FE09D20004F40F /* battle_dialogs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_dialogs.cpp; sourceTree = "<group>"; };
+		EA67D33429FE09D20004F40F /* battle_army.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battle_army.h; sourceTree = "<group>"; };
+		EA67D33529FE09D20004F40F /* battle_cell.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_cell.cpp; sourceTree = "<group>"; };
+		EA67D33629FE09D20004F40F /* battle_catapult.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_catapult.cpp; sourceTree = "<group>"; };
+		EA67D33729FE09D20004F40F /* battle_only.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battle_only.h; sourceTree = "<group>"; };
+		EA67D33829FE09D20004F40F /* battle_command.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_command.cpp; sourceTree = "<group>"; };
+		EA67D33929FE09D20004F40F /* battle_animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battle_animation.h; sourceTree = "<group>"; };
+		EA67D33A29FE09D20004F40F /* battle_board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battle_board.h; sourceTree = "<group>"; };
+		EA67D33B29FE09D20004F40F /* battle_interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_interface.cpp; sourceTree = "<group>"; };
+		EA67D33C29FE09D20004F40F /* battle_animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_animation.cpp; sourceTree = "<group>"; };
+		EA67D33D29FE09D20004F40F /* battle_grave.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_grave.cpp; sourceTree = "<group>"; };
+		EA67D33E29FE09D20004F40F /* battle_bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battle_bridge.h; sourceTree = "<group>"; };
+		EA67D33F29FE09D20004F40F /* battle_command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battle_command.h; sourceTree = "<group>"; };
+		EA67D34029FE09D20004F40F /* battle_grave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battle_grave.h; sourceTree = "<group>"; };
+		EA67D34129FE09D20004F40F /* battle_action.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = battle_action.cpp; sourceTree = "<group>"; };
+		EA67D34229FE09D20004F40F /* battle_arena.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = battle_arena.h; sourceTree = "<group>"; };
+		EA67D34429FE09D20004F40F /* mp2_helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mp2_helper.cpp; sourceTree = "<group>"; };
+		EA67D34529FE09D20004F40F /* mp2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mp2.cpp; sourceTree = "<group>"; };
+		EA67D34629FE09D20004F40F /* mp2_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mp2_helper.h; sourceTree = "<group>"; };
+		EA67D34729FE09D20004F40F /* maps.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = maps.cpp; sourceTree = "<group>"; };
+		EA67D34829FE09D20004F40F /* visit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = visit.h; sourceTree = "<group>"; };
+		EA67D34929FE09D20004F40F /* visit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = visit.cpp; sourceTree = "<group>"; };
+		EA67D34A29FE09D20004F40F /* ground.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ground.cpp; sourceTree = "<group>"; };
+		EA67D34B29FE09D20004F40F /* maps_fileinfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = maps_fileinfo.cpp; sourceTree = "<group>"; };
+		EA67D34C29FE09D20004F40F /* maps_tiles_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = maps_tiles_helper.h; sourceTree = "<group>"; };
+		EA67D34D29FE09D20004F40F /* maps_fileinfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = maps_fileinfo.h; sourceTree = "<group>"; };
+		EA67D34E29FE09D20004F40F /* maps_tiles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = maps_tiles.h; sourceTree = "<group>"; };
+		EA67D34F29FE09D20004F40F /* mp2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mp2.h; sourceTree = "<group>"; };
+		EA67D35029FE09D20004F40F /* pairs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pairs.h; sourceTree = "<group>"; };
+		EA67D35129FE09D20004F40F /* maps_objects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = maps_objects.cpp; sourceTree = "<group>"; };
+		EA67D35229FE09D20004F40F /* maps_tiles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = maps_tiles.cpp; sourceTree = "<group>"; };
+		EA67D35329FE09D20004F40F /* maps_objects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = maps_objects.h; sourceTree = "<group>"; };
+		EA67D35429FE09D20004F40F /* ground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ground.h; sourceTree = "<group>"; };
+		EA67D35529FE09D20004F40F /* maps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = maps.h; sourceTree = "<group>"; };
+		EA67D35629FE09D20004F40F /* maps_tiles_helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = maps_tiles_helper.cpp; sourceTree = "<group>"; };
+		EA67D35729FE09D20004F40F /* position.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = position.h; sourceTree = "<group>"; };
+		EA67D35829FE09D20004F40F /* position.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = position.cpp; sourceTree = "<group>"; };
+		EA67D35929FE09D20004F40F /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		EA67D35B29FE09D20004F40F /* profit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = profit.h; sourceTree = "<group>"; };
+		EA67D35C29FE09D20004F40F /* speed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = speed.h; sourceTree = "<group>"; };
+		EA67D35D29FE09D20004F40F /* view_world.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = view_world.h; sourceTree = "<group>"; };
+		EA67D35E29FE09D20004F40F /* morale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = morale.h; sourceTree = "<group>"; };
+		EA67D35F29FE09D20004F40F /* color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = color.h; sourceTree = "<group>"; };
+		EA67D36029FE09D20004F40F /* profit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = profit.cpp; sourceTree = "<group>"; };
+		EA67D36129FE09D20004F40F /* kingdom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kingdom.cpp; sourceTree = "<group>"; };
+		EA67D36229FE09D20004F40F /* color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = color.cpp; sourceTree = "<group>"; };
+		EA67D36329FE09D20004F40F /* view_world.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = view_world.cpp; sourceTree = "<group>"; };
+		EA67D36429FE09D20004F40F /* kingdom_overview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kingdom_overview.cpp; sourceTree = "<group>"; };
+		EA67D36529FE09D20004F40F /* payment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = payment.h; sourceTree = "<group>"; };
+		EA67D36629FE09D20004F40F /* week.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = week.h; sourceTree = "<group>"; };
+		EA67D36729FE09D20004F40F /* puzzle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = puzzle.cpp; sourceTree = "<group>"; };
+		EA67D36829FE09D20004F40F /* speed.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = speed.cpp; sourceTree = "<group>"; };
+		EA67D36929FE09D20004F40F /* experience.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = experience.h; sourceTree = "<group>"; };
+		EA67D36A29FE09D20004F40F /* payment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = payment.cpp; sourceTree = "<group>"; };
+		EA67D36B29FE09D20004F40F /* luck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = luck.h; sourceTree = "<group>"; };
+		EA67D36C29FE09D20004F40F /* luck.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = luck.cpp; sourceTree = "<group>"; };
+		EA67D36D29FE09D20004F40F /* race.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = race.cpp; sourceTree = "<group>"; };
+		EA67D36E29FE09D20004F40F /* race.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = race.h; sourceTree = "<group>"; };
+		EA67D36F29FE09D20004F40F /* week.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = week.cpp; sourceTree = "<group>"; };
+		EA67D37029FE09D20004F40F /* morale.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = morale.cpp; sourceTree = "<group>"; };
+		EA67D37129FE09D20004F40F /* puzzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = puzzle.h; sourceTree = "<group>"; };
+		EA67D37229FE09D20004F40F /* kingdom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kingdom.h; sourceTree = "<group>"; };
+		EA67D37329FE09D20004F40F /* experience.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = experience.cpp; sourceTree = "<group>"; };
+		EA67D37529FE09D20004F40F /* heroes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = heroes.cpp; sourceTree = "<group>"; };
+		EA67D37629FE09D20004F40F /* skill_static.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = skill_static.h; sourceTree = "<group>"; };
+		EA67D37729FE09D20004F40F /* heroes_recruits.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = heroes_recruits.cpp; sourceTree = "<group>"; };
+		EA67D37829FE09D20004F40F /* skill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = skill.h; sourceTree = "<group>"; };
+		EA67D37929FE09D20004F40F /* heroes_meeting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = heroes_meeting.cpp; sourceTree = "<group>"; };
+		EA67D37A29FE09D20004F40F /* route.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = route.h; sourceTree = "<group>"; };
+		EA67D37B29FE09D20004F40F /* heroes_spell.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = heroes_spell.cpp; sourceTree = "<group>"; };
+		EA67D37C29FE09D20004F40F /* heroes_indicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = heroes_indicator.h; sourceTree = "<group>"; };
+		EA67D37D29FE09D20004F40F /* heroes_base.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = heroes_base.cpp; sourceTree = "<group>"; };
+		EA67D37E29FE09D20004F40F /* heroes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = heroes.h; sourceTree = "<group>"; };
+		EA67D37F29FE09D20004F40F /* direction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = direction.h; sourceTree = "<group>"; };
+		EA67D38029FE09D20004F40F /* heroes_action.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = heroes_action.cpp; sourceTree = "<group>"; };
+		EA67D38129FE09D20004F40F /* route.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = route.cpp; sourceTree = "<group>"; };
+		EA67D38229FE09D20004F40F /* heroes_move.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = heroes_move.cpp; sourceTree = "<group>"; };
+		EA67D38329FE09D20004F40F /* skill.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = skill.cpp; sourceTree = "<group>"; };
+		EA67D38429FE09D20004F40F /* heroes_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = heroes_base.h; sourceTree = "<group>"; };
+		EA67D38529FE09D20004F40F /* heroes_recruits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = heroes_recruits.h; sourceTree = "<group>"; };
+		EA67D38629FE09D20004F40F /* direction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = direction.cpp; sourceTree = "<group>"; };
+		EA67D38729FE09D20004F40F /* heroes_indicator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = heroes_indicator.cpp; sourceTree = "<group>"; };
+		EA67D38829FE09D20004F40F /* heroes_dialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = heroes_dialog.cpp; sourceTree = "<group>"; };
+		EA67D38A29FE09D20004F40F /* spell_storage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spell_storage.h; sourceTree = "<group>"; };
+		EA67D38B29FE09D20004F40F /* spell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spell.h; sourceTree = "<group>"; };
+		EA67D38C29FE09D20004F40F /* spell_info.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = spell_info.cpp; sourceTree = "<group>"; };
+		EA67D38D29FE09D20004F40F /* spell_book.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spell_book.h; sourceTree = "<group>"; };
+		EA67D38E29FE09D20004F40F /* spell_book.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = spell_book.cpp; sourceTree = "<group>"; };
+		EA67D38F29FE09D20004F40F /* spell_info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spell_info.h; sourceTree = "<group>"; };
+		EA67D39029FE09D20004F40F /* spell_storage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = spell_storage.cpp; sourceTree = "<group>"; };
+		EA67D39129FE09D20004F40F /* spell.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = spell.cpp; sourceTree = "<group>"; };
+		EA67D39329FE09D20004F40F /* army_ui_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = army_ui_helper.h; sourceTree = "<group>"; };
+		EA67D39429FE09D20004F40F /* army_troop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = army_troop.h; sourceTree = "<group>"; };
+		EA67D39529FE09D20004F40F /* army_ui_helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = army_ui_helper.cpp; sourceTree = "<group>"; };
+		EA67D39629FE09D20004F40F /* army_bar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = army_bar.cpp; sourceTree = "<group>"; };
+		EA67D39729FE09D20004F40F /* army.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = army.cpp; sourceTree = "<group>"; };
+		EA67D39829FE09D20004F40F /* army_bar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = army_bar.h; sourceTree = "<group>"; };
+		EA67D39929FE09D20004F40F /* army.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = army.h; sourceTree = "<group>"; };
+		EA67D39A29FE09D20004F40F /* army_troop.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = army_troop.cpp; sourceTree = "<group>"; };
+		EA67D39C29FE09D20004F40F /* objtown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objtown.h; sourceTree = "<group>"; };
+		EA67D39D29FE09D20004F40F /* objwatr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objwatr.cpp; sourceTree = "<group>"; };
+		EA67D39E29FE09D20004F40F /* objdirt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objdirt.h; sourceTree = "<group>"; };
+		EA67D39F29FE09D20004F40F /* objlava.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objlava.h; sourceTree = "<group>"; };
+		EA67D3A029FE09D20004F40F /* objgras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objgras.h; sourceTree = "<group>"; };
+		EA67D3A129FE09D20004F40F /* objdsrt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objdsrt.cpp; sourceTree = "<group>"; };
+		EA67D3A229FE09D20004F40F /* objsnow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objsnow.cpp; sourceTree = "<group>"; };
+		EA67D3A329FE09D20004F40F /* trees.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = trees.cpp; sourceTree = "<group>"; };
+		EA67D3A429FE09D20004F40F /* objcrck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objcrck.h; sourceTree = "<group>"; };
+		EA67D3A529FE09D20004F40F /* objlava.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objlava.cpp; sourceTree = "<group>"; };
+		EA67D3A629FE09D20004F40F /* trees.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trees.h; sourceTree = "<group>"; };
+		EA67D3A729FE09D20004F40F /* objxloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objxloc.h; sourceTree = "<group>"; };
+		EA67D3A829FE09D20004F40F /* objtown.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objtown.cpp; sourceTree = "<group>"; };
+		EA67D3A929FE09D20004F40F /* objdirt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objdirt.cpp; sourceTree = "<group>"; };
+		EA67D3AA29FE09D20004F40F /* objsnow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objsnow.h; sourceTree = "<group>"; };
+		EA67D3AB29FE09D20004F40F /* objmult.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objmult.cpp; sourceTree = "<group>"; };
+		EA67D3AC29FE09D20004F40F /* mounts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mounts.h; sourceTree = "<group>"; };
+		EA67D3AD29FE09D20004F40F /* mounts.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mounts.cpp; sourceTree = "<group>"; };
+		EA67D3AE29FE09D20004F40F /* objgras.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objgras.cpp; sourceTree = "<group>"; };
+		EA67D3AF29FE09D20004F40F /* objmult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objmult.h; sourceTree = "<group>"; };
+		EA67D3B029FE09D20004F40F /* objswmp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objswmp.cpp; sourceTree = "<group>"; };
+		EA67D3B129FE09D20004F40F /* objwatr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objwatr.h; sourceTree = "<group>"; };
+		EA67D3B229FE09D20004F40F /* objcrck.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objcrck.cpp; sourceTree = "<group>"; };
+		EA67D3B329FE09D20004F40F /* objswmp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objswmp.h; sourceTree = "<group>"; };
+		EA67D3B429FE09D20004F40F /* objdsrt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objdsrt.h; sourceTree = "<group>"; };
+		EA67D3B529FE09D20004F40F /* objxloc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objxloc.cpp; sourceTree = "<group>"; };
+		EA67D3B729FE09D20004F40F /* world_pathfinding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = world_pathfinding.cpp; sourceTree = "<group>"; };
+		EA67D3B829FE09D20004F40F /* world_pathfinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = world_pathfinding.h; sourceTree = "<group>"; };
+		EA67D3B929FE09D20004F40F /* world_loadmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = world_loadmap.cpp; sourceTree = "<group>"; };
+		EA67D3BA29FE09D20004F40F /* world_regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = world_regions.cpp; sourceTree = "<group>"; };
+		EA67D3BB29FE09D20004F40F /* world.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = world.h; sourceTree = "<group>"; };
+		EA67D3BC29FE09D20004F40F /* world.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = world.cpp; sourceTree = "<group>"; };
+		EA67D3BD29FE09D20004F40F /* world_regions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = world_regions.h; sourceTree = "<group>"; };
+		EA67D3BF29FE09D20004F40F /* game_newgame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_newgame.cpp; sourceTree = "<group>"; };
+		EA67D3C029FE09D20004F40F /* game_static.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_static.cpp; sourceTree = "<group>"; };
+		EA67D3C129FE09D20004F40F /* game_io.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game_io.h; sourceTree = "<group>"; };
+		EA67D3C229FE09D20004F40F /* game_over.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_over.cpp; sourceTree = "<group>"; };
+		EA67D3C329FE09D20004F40F /* game_delays.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game_delays.h; sourceTree = "<group>"; };
+		EA67D3C429FE09D20004F40F /* difficulty.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = difficulty.cpp; sourceTree = "<group>"; };
+		EA67D3C529FE09D20004F40F /* game_mainmenu_ui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game_mainmenu_ui.h; sourceTree = "<group>"; };
+		EA67D3C629FE09D20004F40F /* game_video_type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game_video_type.h; sourceTree = "<group>"; };
+		EA67D3C729FE09D20004F40F /* highscores.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = highscores.h; sourceTree = "<group>"; };
+		EA67D3C829FE09D20004F40F /* game_over.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game_over.h; sourceTree = "<group>"; };
+		EA67D3C929FE09D20004F40F /* game_credits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game_credits.h; sourceTree = "<group>"; };
+		EA67D3CA29FE09D20004F40F /* game_hotkeys.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_hotkeys.cpp; sourceTree = "<group>"; };
+		EA67D3CB29FE09D20004F40F /* game_credits.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_credits.cpp; sourceTree = "<group>"; };
+		EA67D3CC29FE09D20004F40F /* game_highscores.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_highscores.cpp; sourceTree = "<group>"; };
+		EA67D3CD29FE09D20004F40F /* game_static.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game_static.h; sourceTree = "<group>"; };
+		EA67D3CE29FE09D20004F40F /* game_startgame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_startgame.cpp; sourceTree = "<group>"; };
+		EA67D3CF29FE09D20004F40F /* game_campaign.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_campaign.cpp; sourceTree = "<group>"; };
+		EA67D3D029FE09D20004F40F /* game_logo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game_logo.h; sourceTree = "<group>"; };
+		EA67D3D129FE09D20004F40F /* game_mainmenu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_mainmenu.cpp; sourceTree = "<group>"; };
+		EA67D3D229FE09D20004F40F /* game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game.h; sourceTree = "<group>"; };
+		EA67D3D329FE09D20004F40F /* fheroes2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fheroes2.cpp; sourceTree = "<group>"; };
+		EA67D3D429FE09D20004F40F /* game_video.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_video.cpp; sourceTree = "<group>"; };
+		EA67D3D529FE09D20004F40F /* game_mode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game_mode.h; sourceTree = "<group>"; };
+		EA67D3D629FE09D20004F40F /* game_io.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_io.cpp; sourceTree = "<group>"; };
+		EA67D3D729FE09D20004F40F /* game_loadgame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_loadgame.cpp; sourceTree = "<group>"; };
+		EA67D3D829FE09D20004F40F /* game_interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_interface.cpp; sourceTree = "<group>"; };
+		EA67D3D929FE09D20004F40F /* game_logo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_logo.cpp; sourceTree = "<group>"; };
+		EA67D3DA29FE09D20004F40F /* game_hotkeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game_hotkeys.h; sourceTree = "<group>"; };
+		EA67D3DB29FE09D20004F40F /* game_delays.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_delays.cpp; sourceTree = "<group>"; };
+		EA67D3DC29FE09D20004F40F /* difficulty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = difficulty.h; sourceTree = "<group>"; };
+		EA67D3DD29FE09D20004F40F /* highscores.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = highscores.cpp; sourceTree = "<group>"; };
+		EA67D3DE29FE09D20004F40F /* game_mainmenu_ui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_mainmenu_ui.cpp; sourceTree = "<group>"; };
+		EA67D3DF29FE09D20004F40F /* game_video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game_video.h; sourceTree = "<group>"; };
+		EA67D3E029FE09D20004F40F /* game_interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game_interface.h; sourceTree = "<group>"; };
+		EA67D3E129FE09D20004F40F /* game_scenarioinfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game_scenarioinfo.cpp; sourceTree = "<group>"; };
+		EA67D3E229FE09D20004F40F /* game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game.cpp; sourceTree = "<group>"; };
+		EA67D3E429FE09D20004F40F /* embedded_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = embedded_image.h; sourceTree = "<group>"; };
+		EA67D3E629FE09D20004F40F /* dialog_selectitems.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dialog_selectitems.h; sourceTree = "<group>"; };
+		EA67D3E729FE09D20004F40F /* dialog_selectcount.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_selectcount.cpp; sourceTree = "<group>"; };
+		EA67D3E829FE09D20004F40F /* dialog_hotkeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dialog_hotkeys.h; sourceTree = "<group>"; };
+		EA67D3E929FE09D20004F40F /* dialog_frameborder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_frameborder.cpp; sourceTree = "<group>"; };
+		EA67D3EA29FE09D20004F40F /* dialog_game_settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dialog_game_settings.h; sourceTree = "<group>"; };
+		EA67D3EB29FE09D20004F40F /* dialog_selectfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_selectfile.cpp; sourceTree = "<group>"; };
+		EA67D3EC29FE09D20004F40F /* dialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dialog.h; sourceTree = "<group>"; };
+		EA67D3ED29FE09D20004F40F /* dialog_arena.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_arena.cpp; sourceTree = "<group>"; };
+		EA67D3EE29FE09D20004F40F /* dialog_language_selection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_language_selection.cpp; sourceTree = "<group>"; };
+		EA67D3EF29FE09D20004F40F /* dialog_audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_audio.cpp; sourceTree = "<group>"; };
+		EA67D3F029FE09D20004F40F /* dialog_gameinfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_gameinfo.cpp; sourceTree = "<group>"; };
+		EA67D3F129FE09D20004F40F /* dialog_artifact.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_artifact.cpp; sourceTree = "<group>"; };
+		EA67D3F229FE09D20004F40F /* dialog_game_settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_game_settings.cpp; sourceTree = "<group>"; };
+		EA67D3F329FE09D20004F40F /* dialog_adventure.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_adventure.cpp; sourceTree = "<group>"; };
+		EA67D3F429FE09D20004F40F /* dialog_graphics_settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_graphics_settings.cpp; sourceTree = "<group>"; };
+		EA67D3F529FE09D20004F40F /* dialog_resolution.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_resolution.cpp; sourceTree = "<group>"; };
+		EA67D3F629FE09D20004F40F /* dialog_language_selection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dialog_language_selection.h; sourceTree = "<group>"; };
+		EA67D3F729FE09D20004F40F /* dialog_system_options.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dialog_system_options.h; sourceTree = "<group>"; };
+		EA67D3F829FE09D20004F40F /* dialog_system_options.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_system_options.cpp; sourceTree = "<group>"; };
+		EA67D3F929FE09D20004F40F /* dialog_marketplace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_marketplace.cpp; sourceTree = "<group>"; };
+		EA67D3FA29FE09D20004F40F /* dialog_recruit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_recruit.cpp; sourceTree = "<group>"; };
+		EA67D3FB29FE09D20004F40F /* dialog_box.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_box.cpp; sourceTree = "<group>"; };
+		EA67D3FC29FE09D20004F40F /* dialog_armyinfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_armyinfo.cpp; sourceTree = "<group>"; };
+		EA67D3FD29FE09D20004F40F /* dialog_quickinfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_quickinfo.cpp; sourceTree = "<group>"; };
+		EA67D3FE29FE09D20004F40F /* dialog_levelup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_levelup.cpp; sourceTree = "<group>"; };
+		EA67D3FF29FE09D20004F40F /* dialog_buyboat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_buyboat.cpp; sourceTree = "<group>"; };
+		EA67D40029FE09D20004F40F /* dialog_selectitems.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_selectitems.cpp; sourceTree = "<group>"; };
+		EA67D40129FE09D20004F40F /* dialog_giftresources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_giftresources.cpp; sourceTree = "<group>"; };
+		EA67D40229FE09D20004F40F /* dialog_resolution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dialog_resolution.h; sourceTree = "<group>"; };
+		EA67D40329FE09D20004F40F /* dialog_graphics_settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dialog_graphics_settings.h; sourceTree = "<group>"; };
+		EA67D40429FE09D20004F40F /* dialog_selectscenario.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_selectscenario.cpp; sourceTree = "<group>"; };
+		EA67D40529FE09D20004F40F /* dialog_thievesguild.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_thievesguild.cpp; sourceTree = "<group>"; };
+		EA67D40629FE09D20004F40F /* dialog_selectscenario.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dialog_selectscenario.h; sourceTree = "<group>"; };
+		EA67D40729FE09D20004F40F /* dialog_hotkeys.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_hotkeys.cpp; sourceTree = "<group>"; };
+		EA67D40829FE09D20004F40F /* dialog_file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_file.cpp; sourceTree = "<group>"; };
+		EA67D40929FE09D20004F40F /* dialog_chest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_chest.cpp; sourceTree = "<group>"; };
+		EA67D40A29FE09D20004F40F /* dialog_message.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialog_message.cpp; sourceTree = "<group>"; };
+		EA67D40B29FE09D20004F40F /* dialog_audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dialog_audio.h; sourceTree = "<group>"; };
+		EA67D40D29FE09D20004F40F /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
+		EA67D40E29FE09D20004F40F /* settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = settings.h; sourceTree = "<group>"; };
+		EA67D40F29FE09D20004F40F /* save_format_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = save_format_version.h; sourceTree = "<group>"; };
+		EA67D41029FE09D20004F40F /* bitmodes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bitmodes.cpp; sourceTree = "<group>"; };
+		EA67D41129FE09D20004F40F /* gamedefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gamedefs.h; sourceTree = "<group>"; };
+		EA67D41229FE09D20004F40F /* bitmodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bitmodes.h; sourceTree = "<group>"; };
+		EA67D41329FE09D20004F40F /* players.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = players.cpp; sourceTree = "<group>"; };
+		EA67D41429FE09D20004F40F /* players.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = players.h; sourceTree = "<group>"; };
+		EA67D41529FE09D20004F40F /* settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = settings.cpp; sourceTree = "<group>"; };
+		EA67D41729FE09D20004F40F /* audio_manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audio_manager.h; sourceTree = "<group>"; };
+		EA67D41829FE09D20004F40F /* audio_manager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audio_manager.cpp; sourceTree = "<group>"; };
+		EA67D41A29FE09D20004F40F /* h2d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = h2d.cpp; sourceTree = "<group>"; };
+		EA67D41B29FE09D20004F40F /* h2d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = h2d.h; sourceTree = "<group>"; };
+		EA67D41D29FE09D20004F40F /* ai_common.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ai_common.cpp; sourceTree = "<group>"; };
+		EA67D41E29FE09D20004F40F /* ai_hero_action.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ai_hero_action.cpp; sourceTree = "<group>"; };
+		EA67D41F29FE09D20004F40F /* ai.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ai.h; sourceTree = "<group>"; };
+		EA67D42129FE09D20004F40F /* ai_normal_kingdom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ai_normal_kingdom.cpp; sourceTree = "<group>"; };
+		EA67D42229FE09D20004F40F /* ai_normal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ai_normal.h; sourceTree = "<group>"; };
+		EA67D42329FE09D20004F40F /* ai_normal_battle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ai_normal_battle.cpp; sourceTree = "<group>"; };
+		EA67D42429FE09D20004F40F /* ai_normal_spell.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ai_normal_spell.cpp; sourceTree = "<group>"; };
+		EA67D42529FE09D20004F40F /* ai_normal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ai_normal.cpp; sourceTree = "<group>"; };
+		EA67D42629FE09D20004F40F /* ai_normal_hero.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ai_normal_hero.cpp; sourceTree = "<group>"; };
+		EA67D42729FE09D20004F40F /* ai_normal_castle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ai_normal_castle.cpp; sourceTree = "<group>"; };
+		EA67D42829FE09D20004F40F /* ai_base.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ai_base.cpp; sourceTree = "<group>"; };
+		EA67D42A29FE09D20004F40F /* ui_kingdom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui_kingdom.cpp; sourceTree = "<group>"; };
+		EA67D42B29FE09D20004F40F /* ui_tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_tool.h; sourceTree = "<group>"; };
+		EA67D42C29FE09D20004F40F /* ui_scrollbar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui_scrollbar.cpp; sourceTree = "<group>"; };
+		EA67D42D29FE09D20004F40F /* ui_kingdom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_kingdom.h; sourceTree = "<group>"; };
+		EA67D42E29FE09D20004F40F /* interface_buttons.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface_buttons.cpp; sourceTree = "<group>"; };
+		EA67D42F29FE09D20004F40F /* ui_tool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui_tool.cpp; sourceTree = "<group>"; };
+		EA67D43029FE09D20004F40F /* player_info.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = player_info.cpp; sourceTree = "<group>"; };
+		EA67D43129FE09D20004F40F /* text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = text.cpp; sourceTree = "<group>"; };
+		EA67D43229FE09D20004F40F /* text.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = text.h; sourceTree = "<group>"; };
+		EA67D43329FE09D20004F40F /* interface_icons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interface_icons.h; sourceTree = "<group>"; };
+		EA67D43429FE09D20004F40F /* ui_castle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_castle.h; sourceTree = "<group>"; };
+		EA67D43529FE09D20004F40F /* ui_campaign.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_campaign.h; sourceTree = "<group>"; };
+		EA67D43629FE09D20004F40F /* interface_status.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface_status.cpp; sourceTree = "<group>"; };
+		EA67D43729FE09D20004F40F /* ui_castle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui_castle.cpp; sourceTree = "<group>"; };
+		EA67D43829FE09D20004F40F /* interface_cpanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface_cpanel.cpp; sourceTree = "<group>"; };
+		EA67D43929FE09D20004F40F /* ui_monster.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui_monster.cpp; sourceTree = "<group>"; };
+		EA67D43A29FE09D20004F40F /* ui_keyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui_keyboard.cpp; sourceTree = "<group>"; };
+		EA67D43B29FE09D20004F40F /* ui_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_base.h; sourceTree = "<group>"; };
+		EA67D43C29FE09D20004F40F /* interface_gamearea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interface_gamearea.h; sourceTree = "<group>"; };
+		EA67D43D29FE09D20004F40F /* statusbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = statusbar.h; sourceTree = "<group>"; };
+		EA67D43E29FE09D20004F40F /* interface_icons.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface_icons.cpp; sourceTree = "<group>"; };
+		EA67D43F29FE09D20004F40F /* statusbar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = statusbar.cpp; sourceTree = "<group>"; };
+		EA67D44029FE09D20004F40F /* ui_button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_button.h; sourceTree = "<group>"; };
+		EA67D44129FE09D20004F40F /* ui_campaign.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui_campaign.cpp; sourceTree = "<group>"; };
+		EA67D44229FE09D20004F40F /* ui_keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_keyboard.h; sourceTree = "<group>"; };
+		EA67D44329FE09D20004F40F /* interface_border.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interface_border.h; sourceTree = "<group>"; };
+		EA67D44429FE09D20004F40F /* ui_option_item.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui_option_item.cpp; sourceTree = "<group>"; };
+		EA67D44529FE09D20004F40F /* ui_font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_font.h; sourceTree = "<group>"; };
+		EA67D44629FE09D20004F40F /* cursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cursor.h; sourceTree = "<group>"; };
+		EA67D44729FE09D20004F40F /* ui_window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui_window.cpp; sourceTree = "<group>"; };
+		EA67D44829FE09D20004F40F /* ui_base.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui_base.cpp; sourceTree = "<group>"; };
+		EA67D44929FE09D20004F40F /* ui_object_rendering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_object_rendering.h; sourceTree = "<group>"; };
+		EA67D44A29FE09D20004F40F /* interface_radar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface_radar.cpp; sourceTree = "<group>"; };
+		EA67D44B29FE09D20004F40F /* ui_dialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui_dialog.cpp; sourceTree = "<group>"; };
+		EA67D44C29FE09D20004F40F /* ui_window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_window.h; sourceTree = "<group>"; };
+		EA67D44D29FE09D20004F40F /* interface_itemsbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interface_itemsbar.h; sourceTree = "<group>"; };
+		EA67D44E29FE09D20004F40F /* ui_language.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_language.h; sourceTree = "<group>"; };
+		EA67D44F29FE09D20004F40F /* ui_text.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_text.h; sourceTree = "<group>"; };
+		EA67D45029FE09D20004F40F /* interface_radar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interface_radar.h; sourceTree = "<group>"; };
+		EA67D45129FE09D20004F40F /* interface_border.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface_border.cpp; sourceTree = "<group>"; };
+		EA67D45229FE09D20004F40F /* ui_font.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui_font.cpp; sourceTree = "<group>"; };
+		EA67D45329FE09D20004F40F /* skill_bar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = skill_bar.h; sourceTree = "<group>"; };
+		EA67D45429FE09D20004F40F /* interface_status.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interface_status.h; sourceTree = "<group>"; };
+		EA67D45529FE09D20004F40F /* interface_events.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface_events.cpp; sourceTree = "<group>"; };
+		EA67D45629FE09D20004F40F /* ui_language.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui_language.cpp; sourceTree = "<group>"; };
+		EA67D45729FE09D20004F40F /* interface_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interface_list.h; sourceTree = "<group>"; };
+		EA67D45829FE09D20004F40F /* interface_focus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface_focus.cpp; sourceTree = "<group>"; };
+		EA67D45929FE09D20004F40F /* player_info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = player_info.h; sourceTree = "<group>"; };
+		EA67D45A29FE09D20004F40F /* skill_bar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = skill_bar.cpp; sourceTree = "<group>"; };
+		EA67D45B29FE09D20004F40F /* interface_buttons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interface_buttons.h; sourceTree = "<group>"; };
+		EA67D45C29FE09D20004F40F /* cursor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cursor.cpp; sourceTree = "<group>"; };
+		EA67D45D29FE09D20004F40F /* ui_dialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_dialog.h; sourceTree = "<group>"; };
+		EA67D45E29FE09D20004F40F /* ui_monster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_monster.h; sourceTree = "<group>"; };
+		EA67D45F29FE09D20004F40F /* ui_text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui_text.cpp; sourceTree = "<group>"; };
+		EA67D46029FE09D20004F40F /* ui_button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui_button.cpp; sourceTree = "<group>"; };
+		EA67D46129FE09D20004F40F /* ui_scrollbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_scrollbar.h; sourceTree = "<group>"; };
+		EA67D46229FE09D20004F40F /* ui_option_item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ui_option_item.h; sourceTree = "<group>"; };
+		EA67D46329FE09D20004F40F /* interface_cpanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interface_cpanel.h; sourceTree = "<group>"; };
+		EA67D46429FE09D20004F40F /* interface_gamearea.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interface_gamearea.cpp; sourceTree = "<group>"; };
+		EA67D46629FE09D20004F40F /* campaign_scenariodata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = campaign_scenariodata.h; sourceTree = "<group>"; };
+		EA67D46729FE09D20004F40F /* campaign_data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = campaign_data.h; sourceTree = "<group>"; };
+		EA67D46829FE09D20004F40F /* campaign_scenariodata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = campaign_scenariodata.cpp; sourceTree = "<group>"; };
+		EA67D46929FE09D20004F40F /* campaign_data.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = campaign_data.cpp; sourceTree = "<group>"; };
+		EA67D46A29FE09D20004F40F /* campaign_savedata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = campaign_savedata.cpp; sourceTree = "<group>"; };
+		EA67D46B29FE09D20004F40F /* campaign_savedata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = campaign_savedata.h; sourceTree = "<group>"; };
+		EA67D46D29FE09D20004F40F /* castle_dialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = castle_dialog.cpp; sourceTree = "<group>"; };
+		EA67D46E29FE09D20004F40F /* castle_town.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = castle_town.cpp; sourceTree = "<group>"; };
+		EA67D46F29FE09D20004F40F /* captain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = captain.h; sourceTree = "<group>"; };
+		EA67D47029FE09D20004F40F /* castle_building.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = castle_building.cpp; sourceTree = "<group>"; };
+		EA67D47129FE09D20004F40F /* buildinginfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = buildinginfo.cpp; sourceTree = "<group>"; };
+		EA67D47229FE09D20004F40F /* mageguild.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mageguild.cpp; sourceTree = "<group>"; };
+		EA67D47329FE09D20004F40F /* mageguild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mageguild.h; sourceTree = "<group>"; };
+		EA67D47429FE09D20004F40F /* castle_building_info.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = castle_building_info.cpp; sourceTree = "<group>"; };
+		EA67D47529FE09D20004F40F /* castle_tavern.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = castle_tavern.cpp; sourceTree = "<group>"; };
+		EA67D47629FE09D20004F40F /* captain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = captain.cpp; sourceTree = "<group>"; };
+		EA67D47729FE09D20004F40F /* buildinginfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = buildinginfo.h; sourceTree = "<group>"; };
+		EA67D47829FE09D20004F40F /* castle_well.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = castle_well.cpp; sourceTree = "<group>"; };
+		EA67D47929FE09D20004F40F /* castle_building_info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = castle_building_info.h; sourceTree = "<group>"; };
+		EA67D47A29FE09D20004F40F /* castle_mageguild.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = castle_mageguild.cpp; sourceTree = "<group>"; };
+		EA67D47B29FE09D20004F40F /* castle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = castle.h; sourceTree = "<group>"; };
+		EA67D47C29FE09D20004F40F /* castle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = castle.cpp; sourceTree = "<group>"; };
+		EA67D47E29FE09D20004F40F /* artifact_ultimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = artifact_ultimate.h; sourceTree = "<group>"; };
+		EA67D47F29FE09D20004F40F /* artifact_ultimate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = artifact_ultimate.cpp; sourceTree = "<group>"; };
+		EA67D48029FE09D20004F40F /* artifact_info.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = artifact_info.cpp; sourceTree = "<group>"; };
+		EA67D48129FE09D20004F40F /* resource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = resource.cpp; sourceTree = "<group>"; };
+		EA67D48229FE09D20004F40F /* artifact.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = artifact.cpp; sourceTree = "<group>"; };
+		EA67D48329FE09D20004F40F /* artifact_info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = artifact_info.h; sourceTree = "<group>"; };
+		EA67D48429FE09D20004F40F /* artifact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = artifact.h; sourceTree = "<group>"; };
+		EA67D48529FE09D20004F40F /* resource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = resource.h; sourceTree = "<group>"; };
+		EA67D48729FE09D20004F40F /* monster_info.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = monster_info.cpp; sourceTree = "<group>"; };
+		EA67D48829FE09D20004F40F /* monster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = monster.h; sourceTree = "<group>"; };
+		EA67D48929FE09D20004F40F /* monster.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = monster.cpp; sourceTree = "<group>"; };
+		EA67D48A29FE09D20004F40F /* monster_info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = monster_info.h; sourceTree = "<group>"; };
+		EA67D48B29FE09D20004F40F /* monster_anim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = monster_anim.h; sourceTree = "<group>"; };
+		EA67D48C29FE09D20004F40F /* monster_anim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = monster_anim.cpp; sourceTree = "<group>"; };
+		EA67D48D29FE09D20004F40F /* Makefile.all */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.all; sourceTree = "<group>"; };
+		EA67D48E29FE09D20004F40F /* Makefile.bsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.bsd; sourceTree = "<group>"; };
+		EA67D49029FE09D20004F40F /* tinyconfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyconfig.cpp; sourceTree = "<group>"; };
+		EA67D49129FE09D20004F40F /* pathfinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pathfinding.h; sourceTree = "<group>"; };
+		EA67D49229FE09D20004F40F /* serialize.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = serialize.cpp; sourceTree = "<group>"; };
+		EA67D49329FE09D20004F40F /* zzlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zzlib.h; sourceTree = "<group>"; };
+		EA67D49429FE09D20004F40F /* thread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = thread.cpp; sourceTree = "<group>"; };
+		EA67D49529FE09D20004F40F /* core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = core.h; sourceTree = "<group>"; };
+		EA67D49629FE09D20004F40F /* h2d_file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = h2d_file.cpp; sourceTree = "<group>"; };
+		EA67D49729FE09D20004F40F /* smk_decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smk_decoder.h; sourceTree = "<group>"; };
+		EA67D49829FE09D20004F40F /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		EA67D49929FE09D20004F40F /* image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
+		EA67D49A29FE09D20004F40F /* logging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logging.cpp; sourceTree = "<group>"; };
+		EA67D49B29FE09D20004F40F /* h2d_file.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = h2d_file.h; sourceTree = "<group>"; };
+		EA67D49C29FE09D20004F40F /* core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = core.cpp; sourceTree = "<group>"; };
+		EA67D49D29FE09D20004F40F /* smk_decoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = smk_decoder.cpp; sourceTree = "<group>"; };
+		EA67D49E29FE09D20004F40F /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		EA67D49F29FE09D20004F40F /* screen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = screen.cpp; sourceTree = "<group>"; };
+		EA67D4A029FE09D20004F40F /* timing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timing.h; sourceTree = "<group>"; };
+		EA67D4A129FE09D20004F40F /* image_tool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = image_tool.cpp; sourceTree = "<group>"; };
+		EA67D4A229FE09D20004F40F /* audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audio.cpp; sourceTree = "<group>"; };
+		EA67D4A329FE09D20004F40F /* audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audio.h; sourceTree = "<group>"; };
+		EA67D4A429FE09D20004F40F /* pal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pal.cpp; sourceTree = "<group>"; };
+		EA67D4A529FE09D20004F40F /* translations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = translations.cpp; sourceTree = "<group>"; };
+		EA67D4A629FE09D20004F40F /* logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logging.h; sourceTree = "<group>"; };
+		EA67D4A729FE09D20004F40F /* zzlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zzlib.cpp; sourceTree = "<group>"; };
+		EA67D4A829FE09D20004F40F /* image_palette.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = image_palette.cpp; sourceTree = "<group>"; };
+		EA67D4A929FE09D20004F40F /* dir.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dir.cpp; sourceTree = "<group>"; };
+		EA67D4AA29FE09D20004F40F /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread.h; sourceTree = "<group>"; };
+		EA67D4AB29FE09D20004F40F /* rand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rand.cpp; sourceTree = "<group>"; };
+		EA67D4AC29FE09D20004F40F /* system.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = system.cpp; sourceTree = "<group>"; };
+		EA67D4AD29FE09D20004F40F /* agg_file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = agg_file.cpp; sourceTree = "<group>"; };
+		EA67D4AE29FE09D20004F40F /* tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tools.h; sourceTree = "<group>"; };
+		EA67D4AF29FE09D20004F40F /* tools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tools.cpp; sourceTree = "<group>"; };
+		EA67D4B029FE09D20004F40F /* image_palette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = image_palette.h; sourceTree = "<group>"; };
+		EA67D4B129FE09D20004F40F /* rand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rand.h; sourceTree = "<group>"; };
+		EA67D4B229FE09D20004F40F /* system.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = system.h; sourceTree = "<group>"; };
+		EA67D4B329FE09D20004F40F /* math_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = math_base.h; sourceTree = "<group>"; };
+		EA67D4B429FE09D20004F40F /* agg_file.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = agg_file.h; sourceTree = "<group>"; };
+		EA67D4B529FE09D20004F40F /* localevent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = localevent.cpp; sourceTree = "<group>"; };
+		EA67D4B629FE09D20004F40F /* screen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = screen.h; sourceTree = "<group>"; };
+		EA67D4B729FE09D20004F40F /* pal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pal.h; sourceTree = "<group>"; };
+		EA67D4B829FE09D20004F40F /* xmi2mid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xmi2mid.cpp; sourceTree = "<group>"; };
+		EA67D4B929FE09D20004F40F /* serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = serialize.h; sourceTree = "<group>"; };
+		EA67D4BA29FE09D20004F40F /* endian_h2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = endian_h2.h; sourceTree = "<group>"; };
+		EA67D4BB29FE09D20004F40F /* timing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timing.cpp; sourceTree = "<group>"; };
+		EA67D4BC29FE09D20004F40F /* tinyconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinyconfig.h; sourceTree = "<group>"; };
+		EA67D4BD29FE09D20004F40F /* translations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = translations.h; sourceTree = "<group>"; };
+		EA67D4BE29FE09D20004F40F /* localevent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = localevent.h; sourceTree = "<group>"; };
+		EA67D4BF29FE09D20004F40F /* dir.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dir.h; sourceTree = "<group>"; };
+		EA67D4C029FE09D20004F40F /* image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = image.h; sourceTree = "<group>"; };
+		EA67D4C129FE09D20004F40F /* image_tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = image_tool.h; sourceTree = "<group>"; };
+		EA67D4C429FE09D20004F40F /* configure.ac */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = configure.ac; sourceTree = "<group>"; };
+		EA67D4C529FE09D20004F40F /* INSTALL */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = INSTALL; sourceTree = "<group>"; };
+		EA67D4C629FE09D20004F40F /* smacker.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = smacker.c; sourceTree = "<group>"; };
+		EA67D4C729FE09D20004F40F /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		EA67D4C829FE09D20004F40F /* smk2avi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = smk2avi.c; sourceTree = "<group>"; };
+		EA67D4C929FE09D20004F40F /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		EA67D4CA29FE09D20004F40F /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
+		EA67D4CB29FE09D20004F40F /* COPYING */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		EA67D4CC29FE09D20004F40F /* smacker.h.orig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = smacker.h.orig; sourceTree = "<group>"; };
+		EA67D4CD29FE09D20004F40F /* smk_malloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smk_malloc.h; sourceTree = "<group>"; };
+		EA67D4CE29FE09D20004F40F /* smacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smacker.h; sourceTree = "<group>"; };
+		EA67D4CF29FE09D20004F40F /* smacker.c.orig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = smacker.c.orig; sourceTree = "<group>"; };
+		EA67D4D029FE09D20004F40F /* driver.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = driver.c; sourceTree = "<group>"; };
+		EA67D4D129FE09D20004F40F /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		EA67D5DE29FE0B350004F40F /* SDL_mixer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_mixer.xcodeproj; path = ../../SDL_mixer/Xcode/SDL_mixer.xcodeproj; sourceTree = "<group>"; };
+		EA67D5F229FE0C8C0004F40F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +826,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA67D5F329FE0CD50004F40F /* libz.tbd in Frameworks */,
+				EA67D5F029FE0B620004F40F /* SDL3_mixer.framework in Frameworks */,
 				EA67D2C829FE04B70004F40F /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,10 +838,10 @@
 		EA54668B29FE02FF00A9D8B2 = {
 			isa = PBXGroup;
 			children = (
+				EA67D5DE29FE0B350004F40F /* SDL_mixer.xcodeproj */,
+				EA67D2EE29FE09D20004F40F /* src */,
 				EA67D2A229FE04380004F40F /* SDL.xcodeproj */,
 				EA54669929FE02FF00A9D8B2 /* ShaderTypes.h */,
-				EA67D2CD29FE05180004F40F /* 52_hello_mobile.cpp */,
-				EA67D2CF29FE051D0004F40F /* hello.bmp */,
 				EA67D2CB29FE05030004F40F /* SDL_uikit_main.c */,
 				EA54669E29FE02FF00A9D8B2 /* Shaders.metal */,
 				EA5466A329FE02FF00A9D8B2 /* Assets.xcassets */,
@@ -180,8 +880,686 @@
 		EA67D2C629FE04AE0004F40F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EA67D5F229FE0C8C0004F40F /* libz.tbd */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EA67D2EE29FE09D20004F40F /* src */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D2EF29FE09D20004F40F /* Makefile.mingw */,
+				EA67D2F029FE09D20004F40F /* Makefile.vita */,
+				EA67D30529FE09D20004F40F /* CMakeLists.txt */,
+				EA67D30629FE09D20004F40F /* dist */,
+				EA67D30829FE09D20004F40F /* Makefile.switch */,
+				EA67D30929FE09D20004F40F /* Makefile */,
+				EA67D30A29FE09D20004F40F /* resources */,
+				EA67D31029FE09D20004F40F /* Makefile.osx */,
+				EA67D31129FE09D20004F40F /* fheroes2 */,
+				EA67D48D29FE09D20004F40F /* Makefile.all */,
+				EA67D48E29FE09D20004F40F /* Makefile.bsd */,
+				EA67D48F29FE09D20004F40F /* engine */,
+				EA67D4C229FE09D20004F40F /* thirdparty */,
+			);
+			name = src;
+			path = ../src;
+			sourceTree = "<group>";
+		};
+		EA67D30629FE09D20004F40F /* dist */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D30729FE09D20004F40F /* Makefile */,
+			);
+			path = dist;
+			sourceTree = "<group>";
+		};
+		EA67D30A29FE09D20004F40F /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D30B29FE09D20004F40F /* fheroes2.icns */,
+				EA67D30C29FE09D20004F40F /* fheroes2.png */,
+				EA67D30D29FE09D20004F40F /* fheroes2.rc */,
+				EA67D30E29FE09D20004F40F /* fheroes2.ico */,
+				EA67D30F29FE09D20004F40F /* Info.plist.in */,
+			);
+			path = resources;
+			sourceTree = "<group>";
+		};
+		EA67D31129FE09D20004F40F /* fheroes2 */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D31229FE09D20004F40F /* agg */,
+				EA67D32229FE09D20004F40F /* battle */,
+				EA67D34329FE09D20004F40F /* maps */,
+				EA67D35929FE09D20004F40F /* CMakeLists.txt */,
+				EA67D35A29FE09D20004F40F /* kingdom */,
+				EA67D37429FE09D20004F40F /* heroes */,
+				EA67D38929FE09D20004F40F /* spell */,
+				EA67D39229FE09D20004F40F /* army */,
+				EA67D39B29FE09D20004F40F /* objects */,
+				EA67D3B629FE09D20004F40F /* world */,
+				EA67D3BE29FE09D20004F40F /* game */,
+				EA67D3E329FE09D20004F40F /* image */,
+				EA67D3E529FE09D20004F40F /* dialog */,
+				EA67D40C29FE09D20004F40F /* system */,
+				EA67D41629FE09D20004F40F /* audio */,
+				EA67D41929FE09D20004F40F /* h2d */,
+				EA67D41C29FE09D20004F40F /* ai */,
+				EA67D42929FE09D20004F40F /* gui */,
+				EA67D46529FE09D20004F40F /* campaign */,
+				EA67D46C29FE09D20004F40F /* castle */,
+				EA67D47D29FE09D20004F40F /* resource */,
+				EA67D48629FE09D20004F40F /* monster */,
+			);
+			path = fheroes2;
+			sourceTree = "<group>";
+		};
+		EA67D31229FE09D20004F40F /* agg */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D31329FE09D20004F40F /* agg.cpp */,
+				EA67D31429FE09D20004F40F /* xmi.h */,
+				EA67D31529FE09D20004F40F /* m82.cpp */,
+				EA67D31629FE09D20004F40F /* agg_image.h */,
+				EA67D31729FE09D20004F40F /* icn.h */,
+				EA67D31829FE09D20004F40F /* bin_info.cpp */,
+				EA67D31929FE09D20004F40F /* m82.h */,
+				EA67D31A29FE09D20004F40F /* til.h */,
+				EA67D31B29FE09D20004F40F /* xmi.cpp */,
+				EA67D31C29FE09D20004F40F /* bin_info.h */,
+				EA67D31D29FE09D20004F40F /* icn.cpp */,
+				EA67D31E29FE09D20004F40F /* mus.cpp */,
+				EA67D31F29FE09D20004F40F /* mus.h */,
+				EA67D32029FE09D20004F40F /* agg_image.cpp */,
+				EA67D32129FE09D20004F40F /* agg.h */,
+			);
+			path = agg;
+			sourceTree = "<group>";
+		};
+		EA67D32229FE09D20004F40F /* battle */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D32329FE09D20004F40F /* battle_main.cpp */,
+				EA67D32429FE09D20004F40F /* battle_cell.h */,
+				EA67D32529FE09D20004F40F /* battle_tower.h */,
+				EA67D32629FE09D20004F40F /* battle_only.cpp */,
+				EA67D32729FE09D20004F40F /* battle_pathfinding.cpp */,
+				EA67D32829FE09D20004F40F /* battle_catapult.h */,
+				EA67D32929FE09D20004F40F /* battle.h */,
+				EA67D32A29FE09D20004F40F /* battle_board.cpp */,
+				EA67D32B29FE09D20004F40F /* battle_army.cpp */,
+				EA67D32C29FE09D20004F40F /* battle_arena.cpp */,
+				EA67D32D29FE09D20004F40F /* battle_pathfinding.h */,
+				EA67D32E29FE09D20004F40F /* battle_interface.h */,
+				EA67D32F29FE09D20004F40F /* battle_tower.cpp */,
+				EA67D33029FE09D20004F40F /* battle_bridge.cpp */,
+				EA67D33129FE09D20004F40F /* battle_troop.cpp */,
+				EA67D33229FE09D20004F40F /* battle_troop.h */,
+				EA67D33329FE09D20004F40F /* battle_dialogs.cpp */,
+				EA67D33429FE09D20004F40F /* battle_army.h */,
+				EA67D33529FE09D20004F40F /* battle_cell.cpp */,
+				EA67D33629FE09D20004F40F /* battle_catapult.cpp */,
+				EA67D33729FE09D20004F40F /* battle_only.h */,
+				EA67D33829FE09D20004F40F /* battle_command.cpp */,
+				EA67D33929FE09D20004F40F /* battle_animation.h */,
+				EA67D33A29FE09D20004F40F /* battle_board.h */,
+				EA67D33B29FE09D20004F40F /* battle_interface.cpp */,
+				EA67D33C29FE09D20004F40F /* battle_animation.cpp */,
+				EA67D33D29FE09D20004F40F /* battle_grave.cpp */,
+				EA67D33E29FE09D20004F40F /* battle_bridge.h */,
+				EA67D33F29FE09D20004F40F /* battle_command.h */,
+				EA67D34029FE09D20004F40F /* battle_grave.h */,
+				EA67D34129FE09D20004F40F /* battle_action.cpp */,
+				EA67D34229FE09D20004F40F /* battle_arena.h */,
+			);
+			path = battle;
+			sourceTree = "<group>";
+		};
+		EA67D34329FE09D20004F40F /* maps */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D34429FE09D20004F40F /* mp2_helper.cpp */,
+				EA67D34529FE09D20004F40F /* mp2.cpp */,
+				EA67D34629FE09D20004F40F /* mp2_helper.h */,
+				EA67D34729FE09D20004F40F /* maps.cpp */,
+				EA67D34829FE09D20004F40F /* visit.h */,
+				EA67D34929FE09D20004F40F /* visit.cpp */,
+				EA67D34A29FE09D20004F40F /* ground.cpp */,
+				EA67D34B29FE09D20004F40F /* maps_fileinfo.cpp */,
+				EA67D34C29FE09D20004F40F /* maps_tiles_helper.h */,
+				EA67D34D29FE09D20004F40F /* maps_fileinfo.h */,
+				EA67D34E29FE09D20004F40F /* maps_tiles.h */,
+				EA67D34F29FE09D20004F40F /* mp2.h */,
+				EA67D35029FE09D20004F40F /* pairs.h */,
+				EA67D35129FE09D20004F40F /* maps_objects.cpp */,
+				EA67D35229FE09D20004F40F /* maps_tiles.cpp */,
+				EA67D35329FE09D20004F40F /* maps_objects.h */,
+				EA67D35429FE09D20004F40F /* ground.h */,
+				EA67D35529FE09D20004F40F /* maps.h */,
+				EA67D35629FE09D20004F40F /* maps_tiles_helper.cpp */,
+				EA67D35729FE09D20004F40F /* position.h */,
+				EA67D35829FE09D20004F40F /* position.cpp */,
+			);
+			path = maps;
+			sourceTree = "<group>";
+		};
+		EA67D35A29FE09D20004F40F /* kingdom */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D35B29FE09D20004F40F /* profit.h */,
+				EA67D35C29FE09D20004F40F /* speed.h */,
+				EA67D35D29FE09D20004F40F /* view_world.h */,
+				EA67D35E29FE09D20004F40F /* morale.h */,
+				EA67D35F29FE09D20004F40F /* color.h */,
+				EA67D36029FE09D20004F40F /* profit.cpp */,
+				EA67D36129FE09D20004F40F /* kingdom.cpp */,
+				EA67D36229FE09D20004F40F /* color.cpp */,
+				EA67D36329FE09D20004F40F /* view_world.cpp */,
+				EA67D36429FE09D20004F40F /* kingdom_overview.cpp */,
+				EA67D36529FE09D20004F40F /* payment.h */,
+				EA67D36629FE09D20004F40F /* week.h */,
+				EA67D36729FE09D20004F40F /* puzzle.cpp */,
+				EA67D36829FE09D20004F40F /* speed.cpp */,
+				EA67D36929FE09D20004F40F /* experience.h */,
+				EA67D36A29FE09D20004F40F /* payment.cpp */,
+				EA67D36B29FE09D20004F40F /* luck.h */,
+				EA67D36C29FE09D20004F40F /* luck.cpp */,
+				EA67D36D29FE09D20004F40F /* race.cpp */,
+				EA67D36E29FE09D20004F40F /* race.h */,
+				EA67D36F29FE09D20004F40F /* week.cpp */,
+				EA67D37029FE09D20004F40F /* morale.cpp */,
+				EA67D37129FE09D20004F40F /* puzzle.h */,
+				EA67D37229FE09D20004F40F /* kingdom.h */,
+				EA67D37329FE09D20004F40F /* experience.cpp */,
+			);
+			path = kingdom;
+			sourceTree = "<group>";
+		};
+		EA67D37429FE09D20004F40F /* heroes */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D37529FE09D20004F40F /* heroes.cpp */,
+				EA67D37629FE09D20004F40F /* skill_static.h */,
+				EA67D37729FE09D20004F40F /* heroes_recruits.cpp */,
+				EA67D37829FE09D20004F40F /* skill.h */,
+				EA67D37929FE09D20004F40F /* heroes_meeting.cpp */,
+				EA67D37A29FE09D20004F40F /* route.h */,
+				EA67D37B29FE09D20004F40F /* heroes_spell.cpp */,
+				EA67D37C29FE09D20004F40F /* heroes_indicator.h */,
+				EA67D37D29FE09D20004F40F /* heroes_base.cpp */,
+				EA67D37E29FE09D20004F40F /* heroes.h */,
+				EA67D37F29FE09D20004F40F /* direction.h */,
+				EA67D38029FE09D20004F40F /* heroes_action.cpp */,
+				EA67D38129FE09D20004F40F /* route.cpp */,
+				EA67D38229FE09D20004F40F /* heroes_move.cpp */,
+				EA67D38329FE09D20004F40F /* skill.cpp */,
+				EA67D38429FE09D20004F40F /* heroes_base.h */,
+				EA67D38529FE09D20004F40F /* heroes_recruits.h */,
+				EA67D38629FE09D20004F40F /* direction.cpp */,
+				EA67D38729FE09D20004F40F /* heroes_indicator.cpp */,
+				EA67D38829FE09D20004F40F /* heroes_dialog.cpp */,
+			);
+			path = heroes;
+			sourceTree = "<group>";
+		};
+		EA67D38929FE09D20004F40F /* spell */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D38A29FE09D20004F40F /* spell_storage.h */,
+				EA67D38B29FE09D20004F40F /* spell.h */,
+				EA67D38C29FE09D20004F40F /* spell_info.cpp */,
+				EA67D38D29FE09D20004F40F /* spell_book.h */,
+				EA67D38E29FE09D20004F40F /* spell_book.cpp */,
+				EA67D38F29FE09D20004F40F /* spell_info.h */,
+				EA67D39029FE09D20004F40F /* spell_storage.cpp */,
+				EA67D39129FE09D20004F40F /* spell.cpp */,
+			);
+			path = spell;
+			sourceTree = "<group>";
+		};
+		EA67D39229FE09D20004F40F /* army */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D39329FE09D20004F40F /* army_ui_helper.h */,
+				EA67D39429FE09D20004F40F /* army_troop.h */,
+				EA67D39529FE09D20004F40F /* army_ui_helper.cpp */,
+				EA67D39629FE09D20004F40F /* army_bar.cpp */,
+				EA67D39729FE09D20004F40F /* army.cpp */,
+				EA67D39829FE09D20004F40F /* army_bar.h */,
+				EA67D39929FE09D20004F40F /* army.h */,
+				EA67D39A29FE09D20004F40F /* army_troop.cpp */,
+			);
+			path = army;
+			sourceTree = "<group>";
+		};
+		EA67D39B29FE09D20004F40F /* objects */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D39C29FE09D20004F40F /* objtown.h */,
+				EA67D39D29FE09D20004F40F /* objwatr.cpp */,
+				EA67D39E29FE09D20004F40F /* objdirt.h */,
+				EA67D39F29FE09D20004F40F /* objlava.h */,
+				EA67D3A029FE09D20004F40F /* objgras.h */,
+				EA67D3A129FE09D20004F40F /* objdsrt.cpp */,
+				EA67D3A229FE09D20004F40F /* objsnow.cpp */,
+				EA67D3A329FE09D20004F40F /* trees.cpp */,
+				EA67D3A429FE09D20004F40F /* objcrck.h */,
+				EA67D3A529FE09D20004F40F /* objlava.cpp */,
+				EA67D3A629FE09D20004F40F /* trees.h */,
+				EA67D3A729FE09D20004F40F /* objxloc.h */,
+				EA67D3A829FE09D20004F40F /* objtown.cpp */,
+				EA67D3A929FE09D20004F40F /* objdirt.cpp */,
+				EA67D3AA29FE09D20004F40F /* objsnow.h */,
+				EA67D3AB29FE09D20004F40F /* objmult.cpp */,
+				EA67D3AC29FE09D20004F40F /* mounts.h */,
+				EA67D3AD29FE09D20004F40F /* mounts.cpp */,
+				EA67D3AE29FE09D20004F40F /* objgras.cpp */,
+				EA67D3AF29FE09D20004F40F /* objmult.h */,
+				EA67D3B029FE09D20004F40F /* objswmp.cpp */,
+				EA67D3B129FE09D20004F40F /* objwatr.h */,
+				EA67D3B229FE09D20004F40F /* objcrck.cpp */,
+				EA67D3B329FE09D20004F40F /* objswmp.h */,
+				EA67D3B429FE09D20004F40F /* objdsrt.h */,
+				EA67D3B529FE09D20004F40F /* objxloc.cpp */,
+			);
+			path = objects;
+			sourceTree = "<group>";
+		};
+		EA67D3B629FE09D20004F40F /* world */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D3B729FE09D20004F40F /* world_pathfinding.cpp */,
+				EA67D3B829FE09D20004F40F /* world_pathfinding.h */,
+				EA67D3B929FE09D20004F40F /* world_loadmap.cpp */,
+				EA67D3BA29FE09D20004F40F /* world_regions.cpp */,
+				EA67D3BB29FE09D20004F40F /* world.h */,
+				EA67D3BC29FE09D20004F40F /* world.cpp */,
+				EA67D3BD29FE09D20004F40F /* world_regions.h */,
+			);
+			path = world;
+			sourceTree = "<group>";
+		};
+		EA67D3BE29FE09D20004F40F /* game */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D3BF29FE09D20004F40F /* game_newgame.cpp */,
+				EA67D3C029FE09D20004F40F /* game_static.cpp */,
+				EA67D3C129FE09D20004F40F /* game_io.h */,
+				EA67D3C229FE09D20004F40F /* game_over.cpp */,
+				EA67D3C329FE09D20004F40F /* game_delays.h */,
+				EA67D3C429FE09D20004F40F /* difficulty.cpp */,
+				EA67D3C529FE09D20004F40F /* game_mainmenu_ui.h */,
+				EA67D3C629FE09D20004F40F /* game_video_type.h */,
+				EA67D3C729FE09D20004F40F /* highscores.h */,
+				EA67D3C829FE09D20004F40F /* game_over.h */,
+				EA67D3C929FE09D20004F40F /* game_credits.h */,
+				EA67D3CA29FE09D20004F40F /* game_hotkeys.cpp */,
+				EA67D3CB29FE09D20004F40F /* game_credits.cpp */,
+				EA67D3CC29FE09D20004F40F /* game_highscores.cpp */,
+				EA67D3CD29FE09D20004F40F /* game_static.h */,
+				EA67D3CE29FE09D20004F40F /* game_startgame.cpp */,
+				EA67D3CF29FE09D20004F40F /* game_campaign.cpp */,
+				EA67D3D029FE09D20004F40F /* game_logo.h */,
+				EA67D3D129FE09D20004F40F /* game_mainmenu.cpp */,
+				EA67D3D229FE09D20004F40F /* game.h */,
+				EA67D3D329FE09D20004F40F /* fheroes2.cpp */,
+				EA67D3D429FE09D20004F40F /* game_video.cpp */,
+				EA67D3D529FE09D20004F40F /* game_mode.h */,
+				EA67D3D629FE09D20004F40F /* game_io.cpp */,
+				EA67D3D729FE09D20004F40F /* game_loadgame.cpp */,
+				EA67D3D829FE09D20004F40F /* game_interface.cpp */,
+				EA67D3D929FE09D20004F40F /* game_logo.cpp */,
+				EA67D3DA29FE09D20004F40F /* game_hotkeys.h */,
+				EA67D3DB29FE09D20004F40F /* game_delays.cpp */,
+				EA67D3DC29FE09D20004F40F /* difficulty.h */,
+				EA67D3DD29FE09D20004F40F /* highscores.cpp */,
+				EA67D3DE29FE09D20004F40F /* game_mainmenu_ui.cpp */,
+				EA67D3DF29FE09D20004F40F /* game_video.h */,
+				EA67D3E029FE09D20004F40F /* game_interface.h */,
+				EA67D3E129FE09D20004F40F /* game_scenarioinfo.cpp */,
+				EA67D3E229FE09D20004F40F /* game.cpp */,
+			);
+			path = game;
+			sourceTree = "<group>";
+		};
+		EA67D3E329FE09D20004F40F /* image */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D3E429FE09D20004F40F /* embedded_image.h */,
+			);
+			path = image;
+			sourceTree = "<group>";
+		};
+		EA67D3E529FE09D20004F40F /* dialog */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D3E629FE09D20004F40F /* dialog_selectitems.h */,
+				EA67D3E729FE09D20004F40F /* dialog_selectcount.cpp */,
+				EA67D3E829FE09D20004F40F /* dialog_hotkeys.h */,
+				EA67D3E929FE09D20004F40F /* dialog_frameborder.cpp */,
+				EA67D3EA29FE09D20004F40F /* dialog_game_settings.h */,
+				EA67D3EB29FE09D20004F40F /* dialog_selectfile.cpp */,
+				EA67D3EC29FE09D20004F40F /* dialog.h */,
+				EA67D3ED29FE09D20004F40F /* dialog_arena.cpp */,
+				EA67D3EE29FE09D20004F40F /* dialog_language_selection.cpp */,
+				EA67D3EF29FE09D20004F40F /* dialog_audio.cpp */,
+				EA67D3F029FE09D20004F40F /* dialog_gameinfo.cpp */,
+				EA67D3F129FE09D20004F40F /* dialog_artifact.cpp */,
+				EA67D3F229FE09D20004F40F /* dialog_game_settings.cpp */,
+				EA67D3F329FE09D20004F40F /* dialog_adventure.cpp */,
+				EA67D3F429FE09D20004F40F /* dialog_graphics_settings.cpp */,
+				EA67D3F529FE09D20004F40F /* dialog_resolution.cpp */,
+				EA67D3F629FE09D20004F40F /* dialog_language_selection.h */,
+				EA67D3F729FE09D20004F40F /* dialog_system_options.h */,
+				EA67D3F829FE09D20004F40F /* dialog_system_options.cpp */,
+				EA67D3F929FE09D20004F40F /* dialog_marketplace.cpp */,
+				EA67D3FA29FE09D20004F40F /* dialog_recruit.cpp */,
+				EA67D3FB29FE09D20004F40F /* dialog_box.cpp */,
+				EA67D3FC29FE09D20004F40F /* dialog_armyinfo.cpp */,
+				EA67D3FD29FE09D20004F40F /* dialog_quickinfo.cpp */,
+				EA67D3FE29FE09D20004F40F /* dialog_levelup.cpp */,
+				EA67D3FF29FE09D20004F40F /* dialog_buyboat.cpp */,
+				EA67D40029FE09D20004F40F /* dialog_selectitems.cpp */,
+				EA67D40129FE09D20004F40F /* dialog_giftresources.cpp */,
+				EA67D40229FE09D20004F40F /* dialog_resolution.h */,
+				EA67D40329FE09D20004F40F /* dialog_graphics_settings.h */,
+				EA67D40429FE09D20004F40F /* dialog_selectscenario.cpp */,
+				EA67D40529FE09D20004F40F /* dialog_thievesguild.cpp */,
+				EA67D40629FE09D20004F40F /* dialog_selectscenario.h */,
+				EA67D40729FE09D20004F40F /* dialog_hotkeys.cpp */,
+				EA67D40829FE09D20004F40F /* dialog_file.cpp */,
+				EA67D40929FE09D20004F40F /* dialog_chest.cpp */,
+				EA67D40A29FE09D20004F40F /* dialog_message.cpp */,
+				EA67D40B29FE09D20004F40F /* dialog_audio.h */,
+			);
+			path = dialog;
+			sourceTree = "<group>";
+		};
+		EA67D40C29FE09D20004F40F /* system */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D40D29FE09D20004F40F /* version.h */,
+				EA67D40E29FE09D20004F40F /* settings.h */,
+				EA67D40F29FE09D20004F40F /* save_format_version.h */,
+				EA67D41029FE09D20004F40F /* bitmodes.cpp */,
+				EA67D41129FE09D20004F40F /* gamedefs.h */,
+				EA67D41229FE09D20004F40F /* bitmodes.h */,
+				EA67D41329FE09D20004F40F /* players.cpp */,
+				EA67D41429FE09D20004F40F /* players.h */,
+				EA67D41529FE09D20004F40F /* settings.cpp */,
+			);
+			path = system;
+			sourceTree = "<group>";
+		};
+		EA67D41629FE09D20004F40F /* audio */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D41729FE09D20004F40F /* audio_manager.h */,
+				EA67D41829FE09D20004F40F /* audio_manager.cpp */,
+			);
+			path = audio;
+			sourceTree = "<group>";
+		};
+		EA67D41929FE09D20004F40F /* h2d */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D41A29FE09D20004F40F /* h2d.cpp */,
+				EA67D41B29FE09D20004F40F /* h2d.h */,
+			);
+			path = h2d;
+			sourceTree = "<group>";
+		};
+		EA67D41C29FE09D20004F40F /* ai */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D41D29FE09D20004F40F /* ai_common.cpp */,
+				EA67D41E29FE09D20004F40F /* ai_hero_action.cpp */,
+				EA67D41F29FE09D20004F40F /* ai.h */,
+				EA67D42029FE09D20004F40F /* normal */,
+				EA67D42829FE09D20004F40F /* ai_base.cpp */,
+			);
+			path = ai;
+			sourceTree = "<group>";
+		};
+		EA67D42029FE09D20004F40F /* normal */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D42129FE09D20004F40F /* ai_normal_kingdom.cpp */,
+				EA67D42229FE09D20004F40F /* ai_normal.h */,
+				EA67D42329FE09D20004F40F /* ai_normal_battle.cpp */,
+				EA67D42429FE09D20004F40F /* ai_normal_spell.cpp */,
+				EA67D42529FE09D20004F40F /* ai_normal.cpp */,
+				EA67D42629FE09D20004F40F /* ai_normal_hero.cpp */,
+				EA67D42729FE09D20004F40F /* ai_normal_castle.cpp */,
+			);
+			path = normal;
+			sourceTree = "<group>";
+		};
+		EA67D42929FE09D20004F40F /* gui */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D42A29FE09D20004F40F /* ui_kingdom.cpp */,
+				EA67D42B29FE09D20004F40F /* ui_tool.h */,
+				EA67D42C29FE09D20004F40F /* ui_scrollbar.cpp */,
+				EA67D42D29FE09D20004F40F /* ui_kingdom.h */,
+				EA67D42E29FE09D20004F40F /* interface_buttons.cpp */,
+				EA67D42F29FE09D20004F40F /* ui_tool.cpp */,
+				EA67D43029FE09D20004F40F /* player_info.cpp */,
+				EA67D43129FE09D20004F40F /* text.cpp */,
+				EA67D43229FE09D20004F40F /* text.h */,
+				EA67D43329FE09D20004F40F /* interface_icons.h */,
+				EA67D43429FE09D20004F40F /* ui_castle.h */,
+				EA67D43529FE09D20004F40F /* ui_campaign.h */,
+				EA67D43629FE09D20004F40F /* interface_status.cpp */,
+				EA67D43729FE09D20004F40F /* ui_castle.cpp */,
+				EA67D43829FE09D20004F40F /* interface_cpanel.cpp */,
+				EA67D43929FE09D20004F40F /* ui_monster.cpp */,
+				EA67D43A29FE09D20004F40F /* ui_keyboard.cpp */,
+				EA67D43B29FE09D20004F40F /* ui_base.h */,
+				EA67D43C29FE09D20004F40F /* interface_gamearea.h */,
+				EA67D43D29FE09D20004F40F /* statusbar.h */,
+				EA67D43E29FE09D20004F40F /* interface_icons.cpp */,
+				EA67D43F29FE09D20004F40F /* statusbar.cpp */,
+				EA67D44029FE09D20004F40F /* ui_button.h */,
+				EA67D44129FE09D20004F40F /* ui_campaign.cpp */,
+				EA67D44229FE09D20004F40F /* ui_keyboard.h */,
+				EA67D44329FE09D20004F40F /* interface_border.h */,
+				EA67D44429FE09D20004F40F /* ui_option_item.cpp */,
+				EA67D44529FE09D20004F40F /* ui_font.h */,
+				EA67D44629FE09D20004F40F /* cursor.h */,
+				EA67D44729FE09D20004F40F /* ui_window.cpp */,
+				EA67D44829FE09D20004F40F /* ui_base.cpp */,
+				EA67D44929FE09D20004F40F /* ui_object_rendering.h */,
+				EA67D44A29FE09D20004F40F /* interface_radar.cpp */,
+				EA67D44B29FE09D20004F40F /* ui_dialog.cpp */,
+				EA67D44C29FE09D20004F40F /* ui_window.h */,
+				EA67D44D29FE09D20004F40F /* interface_itemsbar.h */,
+				EA67D44E29FE09D20004F40F /* ui_language.h */,
+				EA67D44F29FE09D20004F40F /* ui_text.h */,
+				EA67D45029FE09D20004F40F /* interface_radar.h */,
+				EA67D45129FE09D20004F40F /* interface_border.cpp */,
+				EA67D45229FE09D20004F40F /* ui_font.cpp */,
+				EA67D45329FE09D20004F40F /* skill_bar.h */,
+				EA67D45429FE09D20004F40F /* interface_status.h */,
+				EA67D45529FE09D20004F40F /* interface_events.cpp */,
+				EA67D45629FE09D20004F40F /* ui_language.cpp */,
+				EA67D45729FE09D20004F40F /* interface_list.h */,
+				EA67D45829FE09D20004F40F /* interface_focus.cpp */,
+				EA67D45929FE09D20004F40F /* player_info.h */,
+				EA67D45A29FE09D20004F40F /* skill_bar.cpp */,
+				EA67D45B29FE09D20004F40F /* interface_buttons.h */,
+				EA67D45C29FE09D20004F40F /* cursor.cpp */,
+				EA67D45D29FE09D20004F40F /* ui_dialog.h */,
+				EA67D45E29FE09D20004F40F /* ui_monster.h */,
+				EA67D45F29FE09D20004F40F /* ui_text.cpp */,
+				EA67D46029FE09D20004F40F /* ui_button.cpp */,
+				EA67D46129FE09D20004F40F /* ui_scrollbar.h */,
+				EA67D46229FE09D20004F40F /* ui_option_item.h */,
+				EA67D46329FE09D20004F40F /* interface_cpanel.h */,
+				EA67D46429FE09D20004F40F /* interface_gamearea.cpp */,
+			);
+			path = gui;
+			sourceTree = "<group>";
+		};
+		EA67D46529FE09D20004F40F /* campaign */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D46629FE09D20004F40F /* campaign_scenariodata.h */,
+				EA67D46729FE09D20004F40F /* campaign_data.h */,
+				EA67D46829FE09D20004F40F /* campaign_scenariodata.cpp */,
+				EA67D46929FE09D20004F40F /* campaign_data.cpp */,
+				EA67D46A29FE09D20004F40F /* campaign_savedata.cpp */,
+				EA67D46B29FE09D20004F40F /* campaign_savedata.h */,
+			);
+			path = campaign;
+			sourceTree = "<group>";
+		};
+		EA67D46C29FE09D20004F40F /* castle */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D46D29FE09D20004F40F /* castle_dialog.cpp */,
+				EA67D46E29FE09D20004F40F /* castle_town.cpp */,
+				EA67D46F29FE09D20004F40F /* captain.h */,
+				EA67D47029FE09D20004F40F /* castle_building.cpp */,
+				EA67D47129FE09D20004F40F /* buildinginfo.cpp */,
+				EA67D47229FE09D20004F40F /* mageguild.cpp */,
+				EA67D47329FE09D20004F40F /* mageguild.h */,
+				EA67D47429FE09D20004F40F /* castle_building_info.cpp */,
+				EA67D47529FE09D20004F40F /* castle_tavern.cpp */,
+				EA67D47629FE09D20004F40F /* captain.cpp */,
+				EA67D47729FE09D20004F40F /* buildinginfo.h */,
+				EA67D47829FE09D20004F40F /* castle_well.cpp */,
+				EA67D47929FE09D20004F40F /* castle_building_info.h */,
+				EA67D47A29FE09D20004F40F /* castle_mageguild.cpp */,
+				EA67D47B29FE09D20004F40F /* castle.h */,
+				EA67D47C29FE09D20004F40F /* castle.cpp */,
+			);
+			path = castle;
+			sourceTree = "<group>";
+		};
+		EA67D47D29FE09D20004F40F /* resource */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D47E29FE09D20004F40F /* artifact_ultimate.h */,
+				EA67D47F29FE09D20004F40F /* artifact_ultimate.cpp */,
+				EA67D48029FE09D20004F40F /* artifact_info.cpp */,
+				EA67D48129FE09D20004F40F /* resource.cpp */,
+				EA67D48229FE09D20004F40F /* artifact.cpp */,
+				EA67D48329FE09D20004F40F /* artifact_info.h */,
+				EA67D48429FE09D20004F40F /* artifact.h */,
+				EA67D48529FE09D20004F40F /* resource.h */,
+			);
+			path = resource;
+			sourceTree = "<group>";
+		};
+		EA67D48629FE09D20004F40F /* monster */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D48729FE09D20004F40F /* monster_info.cpp */,
+				EA67D48829FE09D20004F40F /* monster.h */,
+				EA67D48929FE09D20004F40F /* monster.cpp */,
+				EA67D48A29FE09D20004F40F /* monster_info.h */,
+				EA67D48B29FE09D20004F40F /* monster_anim.h */,
+				EA67D48C29FE09D20004F40F /* monster_anim.cpp */,
+			);
+			path = monster;
+			sourceTree = "<group>";
+		};
+		EA67D48F29FE09D20004F40F /* engine */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D49029FE09D20004F40F /* tinyconfig.cpp */,
+				EA67D49129FE09D20004F40F /* pathfinding.h */,
+				EA67D49229FE09D20004F40F /* serialize.cpp */,
+				EA67D49329FE09D20004F40F /* zzlib.h */,
+				EA67D49429FE09D20004F40F /* thread.cpp */,
+				EA67D49529FE09D20004F40F /* core.h */,
+				EA67D49629FE09D20004F40F /* h2d_file.cpp */,
+				EA67D49729FE09D20004F40F /* smk_decoder.h */,
+				EA67D49829FE09D20004F40F /* CMakeLists.txt */,
+				EA67D49929FE09D20004F40F /* image.cpp */,
+				EA67D49A29FE09D20004F40F /* logging.cpp */,
+				EA67D49B29FE09D20004F40F /* h2d_file.h */,
+				EA67D49C29FE09D20004F40F /* core.cpp */,
+				EA67D49D29FE09D20004F40F /* smk_decoder.cpp */,
+				EA67D49E29FE09D20004F40F /* Makefile */,
+				EA67D49F29FE09D20004F40F /* screen.cpp */,
+				EA67D4A029FE09D20004F40F /* timing.h */,
+				EA67D4A129FE09D20004F40F /* image_tool.cpp */,
+				EA67D4A229FE09D20004F40F /* audio.cpp */,
+				EA67D4A329FE09D20004F40F /* audio.h */,
+				EA67D4A429FE09D20004F40F /* pal.cpp */,
+				EA67D4A529FE09D20004F40F /* translations.cpp */,
+				EA67D4A629FE09D20004F40F /* logging.h */,
+				EA67D4A729FE09D20004F40F /* zzlib.cpp */,
+				EA67D4A829FE09D20004F40F /* image_palette.cpp */,
+				EA67D4A929FE09D20004F40F /* dir.cpp */,
+				EA67D4AA29FE09D20004F40F /* thread.h */,
+				EA67D4AB29FE09D20004F40F /* rand.cpp */,
+				EA67D4AC29FE09D20004F40F /* system.cpp */,
+				EA67D4AD29FE09D20004F40F /* agg_file.cpp */,
+				EA67D4AE29FE09D20004F40F /* tools.h */,
+				EA67D4AF29FE09D20004F40F /* tools.cpp */,
+				EA67D4B029FE09D20004F40F /* image_palette.h */,
+				EA67D4B129FE09D20004F40F /* rand.h */,
+				EA67D4B229FE09D20004F40F /* system.h */,
+				EA67D4B329FE09D20004F40F /* math_base.h */,
+				EA67D4B429FE09D20004F40F /* agg_file.h */,
+				EA67D4B529FE09D20004F40F /* localevent.cpp */,
+				EA67D4B629FE09D20004F40F /* screen.h */,
+				EA67D4B729FE09D20004F40F /* pal.h */,
+				EA67D4B829FE09D20004F40F /* xmi2mid.cpp */,
+				EA67D4B929FE09D20004F40F /* serialize.h */,
+				EA67D4BA29FE09D20004F40F /* endian_h2.h */,
+				EA67D4BB29FE09D20004F40F /* timing.cpp */,
+				EA67D4BC29FE09D20004F40F /* tinyconfig.h */,
+				EA67D4BD29FE09D20004F40F /* translations.h */,
+				EA67D4BE29FE09D20004F40F /* localevent.h */,
+				EA67D4BF29FE09D20004F40F /* dir.h */,
+				EA67D4C029FE09D20004F40F /* image.h */,
+				EA67D4C129FE09D20004F40F /* image_tool.h */,
+			);
+			path = engine;
+			sourceTree = "<group>";
+		};
+		EA67D4C229FE09D20004F40F /* thirdparty */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D4C329FE09D20004F40F /* libsmacker */,
+				EA67D4D129FE09D20004F40F /* CMakeLists.txt */,
+			);
+			path = thirdparty;
+			sourceTree = "<group>";
+		};
+		EA67D4C329FE09D20004F40F /* libsmacker */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D4C429FE09D20004F40F /* configure.ac */,
+				EA67D4C529FE09D20004F40F /* INSTALL */,
+				EA67D4C629FE09D20004F40F /* smacker.c */,
+				EA67D4C729FE09D20004F40F /* Makefile */,
+				EA67D4C829FE09D20004F40F /* smk2avi.c */,
+				EA67D4C929FE09D20004F40F /* README */,
+				EA67D4CA29FE09D20004F40F /* Makefile.am */,
+				EA67D4CB29FE09D20004F40F /* COPYING */,
+				EA67D4CC29FE09D20004F40F /* smacker.h.orig */,
+				EA67D4CD29FE09D20004F40F /* smk_malloc.h */,
+				EA67D4CE29FE09D20004F40F /* smacker.h */,
+				EA67D4CF29FE09D20004F40F /* smacker.c.orig */,
+				EA67D4D029FE09D20004F40F /* driver.c */,
+			);
+			path = libsmacker;
+			sourceTree = "<group>";
+		};
+		EA67D5DF29FE0B350004F40F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D5EA29FE0B350004F40F /* SDL3_mixer.framework */,
+				EA67D5EC29FE0B350004F40F /* libSDL3_mixer.a */,
+				EA67D5EE29FE0B350004F40F /* Create DMG */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -235,6 +1613,10 @@
 				{
 					ProductGroup = EA67D2A329FE04380004F40F /* Products */;
 					ProjectRef = EA67D2A229FE04380004F40F /* SDL.xcodeproj */;
+				},
+				{
+					ProductGroup = EA67D5DF29FE0B350004F40F /* Products */;
+					ProjectRef = EA67D5DE29FE0B350004F40F /* SDL_mixer.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -322,6 +1704,27 @@
 			remoteRef = EA67D2C429FE04380004F40F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		EA67D5EA29FE0B350004F40F /* SDL3_mixer.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SDL3_mixer.framework;
+			remoteRef = EA67D5E929FE0B350004F40F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EA67D5EC29FE0B350004F40F /* libSDL3_mixer.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL3_mixer.a;
+			remoteRef = EA67D5EB29FE0B350004F40F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EA67D5EE29FE0B350004F40F /* Create DMG */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = "Create DMG";
+			remoteRef = EA67D5ED29FE0B350004F40F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -329,8 +1732,22 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA67D4D229FE09D20004F40F /* Makefile.mingw in Resources */,
+				EA67D4D329FE09D20004F40F /* Makefile.vita in Resources */,
+				EA67D5D929FE09D20004F40F /* COPYING in Resources */,
+				EA67D4ED29FE09D20004F40F /* fheroes2.rc in Resources */,
+				EA67D5DA29FE09D20004F40F /* smacker.h.orig in Resources */,
+				EA67D5DB29FE09D20004F40F /* smacker.c.orig in Resources */,
+				EA67D4EE29FE09D20004F40F /* fheroes2.ico in Resources */,
+				EA67D5D229FE09D20004F40F /* configure.ac in Resources */,
+				EA67D4F029FE09D20004F40F /* Makefile.osx in Resources */,
+				EA67D5D329FE09D20004F40F /* INSTALL in Resources */,
 				EA5466A729FE02FF00A9D8B2 /* LaunchScreen.storyboard in Resources */,
-				EA67D2D029FE051D0004F40F /* hello.bmp in Resources */,
+				EA67D4EF29FE09D20004F40F /* Info.plist.in in Resources */,
+				EA67D4EB29FE09D20004F40F /* fheroes2.icns in Resources */,
+				EA67D4E929FE09D20004F40F /* Makefile.switch in Resources */,
+				EA67D4EC29FE09D20004F40F /* fheroes2.png in Resources */,
+				EA67D5D829FE09D20004F40F /* Makefile.am in Resources */,
 				EA5466A429FE02FF00A9D8B2 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -342,9 +1759,233 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA67D58429FE09D20004F40F /* ai_base.cpp in Sources */,
+				EA67D51C29FE09D20004F40F /* luck.cpp in Sources */,
+				EA67D56D29FE09D20004F40F /* dialog_levelup.cpp in Sources */,
+				EA67D52929FE09D20004F40F /* skill.cpp in Sources */,
+				EA67D5AC29FE09D20004F40F /* captain.cpp in Sources */,
+				EA67D52129FE09D20004F40F /* heroes.cpp in Sources */,
+				EA67D52E29FE09D20004F40F /* spell_book.cpp in Sources */,
+				EA67D51829FE09D20004F40F /* kingdom_overview.cpp in Sources */,
+				EA67D5B029FE09D20004F40F /* artifact_ultimate.cpp in Sources */,
+				EA67D55829FE09D20004F40F /* game_mainmenu_ui.cpp in Sources */,
+				EA67D5C529FE09D20004F40F /* audio.cpp in Sources */,
+				EA67D50C29FE09D20004F40F /* visit.cpp in Sources */,
+				EA67D5B329FE09D20004F40F /* artifact.cpp in Sources */,
+				EA67D57C29FE09D20004F40F /* ai_common.cpp in Sources */,
+				EA67D53029FE09D20004F40F /* spell.cpp in Sources */,
+				EA67D51929FE09D20004F40F /* puzzle.cpp in Sources */,
+				EA67D53C29FE09D20004F40F /* objmult.cpp in Sources */,
+				EA67D55E29FE09D20004F40F /* dialog_arena.cpp in Sources */,
+				EA67D5CD29FE09D20004F40F /* agg_file.cpp in Sources */,
+				EA67D52429FE09D20004F40F /* heroes_spell.cpp in Sources */,
+				EA67D52B29FE09D20004F40F /* heroes_indicator.cpp in Sources */,
+				EA67D4F829FE09D20004F40F /* battle_main.cpp in Sources */,
+				EA67D55429FE09D20004F40F /* game_interface.cpp in Sources */,
+				EA67D54929FE09D20004F40F /* difficulty.cpp in Sources */,
+				EA67D4F329FE09D20004F40F /* bin_info.cpp in Sources */,
+				EA67D55029FE09D20004F40F /* fheroes2.cpp in Sources */,
+				EA67D5A929FE09D20004F40F /* mageguild.cpp in Sources */,
+				EA67D54829FE09D20004F40F /* game_over.cpp in Sources */,
+				EA67D55F29FE09D20004F40F /* dialog_language_selection.cpp in Sources */,
+				EA67D59E29FE09D20004F40F /* cursor.cpp in Sources */,
+				EA67D59129FE09D20004F40F /* statusbar.cpp in Sources */,
+				EA67D5AF29FE09D20004F40F /* castle.cpp in Sources */,
+				EA67D55329FE09D20004F40F /* game_loadgame.cpp in Sources */,
+				EA67D57829FE09D20004F40F /* players.cpp in Sources */,
+				EA67D57729FE09D20004F40F /* bitmodes.cpp in Sources */,
+				EA67D58A29FE09D20004F40F /* text.cpp in Sources */,
+				EA67D59D29FE09D20004F40F /* skill_bar.cpp in Sources */,
+				EA67D54E29FE09D20004F40F /* game_campaign.cpp in Sources */,
+				EA67D4F729FE09D20004F40F /* agg_image.cpp in Sources */,
+				EA67D55C29FE09D20004F40F /* dialog_frameborder.cpp in Sources */,
+				EA67D58129FE09D20004F40F /* ai_normal.cpp in Sources */,
+				EA67D58629FE09D20004F40F /* ui_scrollbar.cpp in Sources */,
+				EA67D59429FE09D20004F40F /* ui_window.cpp in Sources */,
+				EA67D5AA29FE09D20004F40F /* castle_building_info.cpp in Sources */,
+				EA67D4F929FE09D20004F40F /* battle_only.cpp in Sources */,
+				EA67D50229FE09D20004F40F /* battle_cell.cpp in Sources */,
+				EA67D5CC29FE09D20004F40F /* system.cpp in Sources */,
+				EA67D4FF29FE09D20004F40F /* battle_bridge.cpp in Sources */,
+				EA67D58029FE09D20004F40F /* ai_normal_spell.cpp in Sources */,
+				EA67D56C29FE09D20004F40F /* dialog_quickinfo.cpp in Sources */,
+				EA67D5A229FE09D20004F40F /* campaign_scenariodata.cpp in Sources */,
+				EA67D56A29FE09D20004F40F /* dialog_box.cpp in Sources */,
+				EA67D51729FE09D20004F40F /* view_world.cpp in Sources */,
+				EA67D5B429FE09D20004F40F /* monster_info.cpp in Sources */,
+				EA67D5A429FE09D20004F40F /* campaign_savedata.cpp in Sources */,
+				EA67D57F29FE09D20004F40F /* ai_normal_battle.cpp in Sources */,
+				EA67D50829FE09D20004F40F /* battle_action.cpp in Sources */,
+				EA67D54329FE09D20004F40F /* world_loadmap.cpp in Sources */,
+				EA67D50629FE09D20004F40F /* battle_animation.cpp in Sources */,
+				EA67D59329FE09D20004F40F /* ui_option_item.cpp in Sources */,
+				EA67D5A629FE09D20004F40F /* castle_town.cpp in Sources */,
+				EA67D57629FE09D20004F40F /* dialog_message.cpp in Sources */,
+				EA67D5D029FE09D20004F40F /* xmi2mid.cpp in Sources */,
+				EA67D5C829FE09D20004F40F /* zzlib.cpp in Sources */,
+				EA67D56429FE09D20004F40F /* dialog_adventure.cpp in Sources */,
+				EA67D51029FE09D20004F40F /* maps_tiles.cpp in Sources */,
+				EA67D59629FE09D20004F40F /* interface_radar.cpp in Sources */,
+				EA67D53F29FE09D20004F40F /* objswmp.cpp in Sources */,
 				EA67D2A129FE03C60004F40F /* Shaders.metal in Sources */,
+				EA67D59729FE09D20004F40F /* ui_dialog.cpp in Sources */,
+				EA67D5BB29FE09D20004F40F /* thread.cpp in Sources */,
+				EA67D53229FE09D20004F40F /* army_bar.cpp in Sources */,
+				EA67D51A29FE09D20004F40F /* speed.cpp in Sources */,
+				EA67D57D29FE09D20004F40F /* ai_hero_action.cpp in Sources */,
+				EA67D51129FE09D20004F40F /* maps_tiles_helper.cpp in Sources */,
+				EA67D55729FE09D20004F40F /* highscores.cpp in Sources */,
+				EA67D57E29FE09D20004F40F /* ai_normal_kingdom.cpp in Sources */,
+				EA67D54429FE09D20004F40F /* world_regions.cpp in Sources */,
+				EA67D55629FE09D20004F40F /* game_delays.cpp in Sources */,
+				EA67D4FA29FE09D20004F40F /* battle_pathfinding.cpp in Sources */,
+				EA67D4E829FE09D20004F40F /* Makefile in Sources */,
+				EA67D50429FE09D20004F40F /* battle_command.cpp in Sources */,
+				EA67D59029FE09D20004F40F /* interface_icons.cpp in Sources */,
+				EA67D54029FE09D20004F40F /* objcrck.cpp in Sources */,
+				EA67D58329FE09D20004F40F /* ai_normal_castle.cpp in Sources */,
+				EA67D58B29FE09D20004F40F /* interface_status.cpp in Sources */,
+				EA67D4FB29FE09D20004F40F /* battle_board.cpp in Sources */,
+				EA67D56E29FE09D20004F40F /* dialog_buyboat.cpp in Sources */,
+				EA67D50B29FE09D20004F40F /* maps.cpp in Sources */,
+				EA67D52C29FE09D20004F40F /* heroes_dialog.cpp in Sources */,
+				EA67D56629FE09D20004F40F /* dialog_resolution.cpp in Sources */,
+				EA67D51B29FE09D20004F40F /* payment.cpp in Sources */,
+				EA67D57529FE09D20004F40F /* dialog_chest.cpp in Sources */,
+				EA67D51529FE09D20004F40F /* kingdom.cpp in Sources */,
+				EA67D57A29FE09D20004F40F /* audio_manager.cpp in Sources */,
+				EA67D53929FE09D20004F40F /* objlava.cpp in Sources */,
+				EA67D51229FE09D20004F40F /* position.cpp in Sources */,
+				EA67D5C629FE09D20004F40F /* pal.cpp in Sources */,
+				EA67D5D129FE09D20004F40F /* timing.cpp in Sources */,
+				EA67D5C729FE09D20004F40F /* translations.cpp in Sources */,
+				EA67D54529FE09D20004F40F /* world.cpp in Sources */,
+				EA67D55B29FE09D20004F40F /* dialog_selectcount.cpp in Sources */,
+				EA67D51E29FE09D20004F40F /* week.cpp in Sources */,
+				EA67D5A529FE09D20004F40F /* castle_dialog.cpp in Sources */,
+				EA67D58E29FE09D20004F40F /* ui_monster.cpp in Sources */,
+				EA67D5A829FE09D20004F40F /* buildinginfo.cpp in Sources */,
+				EA67D52329FE09D20004F40F /* heroes_meeting.cpp in Sources */,
+				EA67D5D429FE09D20004F40F /* smacker.c in Sources */,
+				EA67D58729FE09D20004F40F /* interface_buttons.cpp in Sources */,
+				EA67D53B29FE09D20004F40F /* objdirt.cpp in Sources */,
 				EA67D2CC29FE05030004F40F /* SDL_uikit_main.c in Sources */,
-				EA67D2CE29FE05180004F40F /* 52_hello_mobile.cpp in Sources */,
+				EA67D54729FE09D20004F40F /* game_static.cpp in Sources */,
+				EA67D56129FE09D20004F40F /* dialog_gameinfo.cpp in Sources */,
+				EA67D52829FE09D20004F40F /* heroes_move.cpp in Sources */,
+				EA67D59529FE09D20004F40F /* ui_base.cpp in Sources */,
+				EA67D57129FE09D20004F40F /* dialog_selectscenario.cpp in Sources */,
+				EA67D53429FE09D20004F40F /* army_troop.cpp in Sources */,
+				EA67D57B29FE09D20004F40F /* h2d.cpp in Sources */,
+				EA67D5BF29FE09D20004F40F /* logging.cpp in Sources */,
+				EA67D51D29FE09D20004F40F /* race.cpp in Sources */,
+				EA67D5B529FE09D20004F40F /* monster.cpp in Sources */,
+				EA67D53329FE09D20004F40F /* army.cpp in Sources */,
+				EA67D59A29FE09D20004F40F /* interface_events.cpp in Sources */,
+				EA67D57929FE09D20004F40F /* settings.cpp in Sources */,
+				EA67D58D29FE09D20004F40F /* interface_cpanel.cpp in Sources */,
+				EA67D54A29FE09D20004F40F /* game_hotkeys.cpp in Sources */,
+				EA67D5BE29FE09D20004F40F /* image.cpp in Sources */,
+				EA67D55A29FE09D20004F40F /* game.cpp in Sources */,
+				EA67D53629FE09D20004F40F /* objdsrt.cpp in Sources */,
+				EA67D57429FE09D20004F40F /* dialog_file.cpp in Sources */,
+				EA67D56B29FE09D20004F40F /* dialog_armyinfo.cpp in Sources */,
+				EA67D5A329FE09D20004F40F /* campaign_data.cpp in Sources */,
+				EA67D5BA29FE09D20004F40F /* serialize.cpp in Sources */,
+				EA67D58929FE09D20004F40F /* player_info.cpp in Sources */,
+				EA67D59229FE09D20004F40F /* ui_campaign.cpp in Sources */,
+				EA67D54129FE09D20004F40F /* objxloc.cpp in Sources */,
+				EA67D59B29FE09D20004F40F /* ui_language.cpp in Sources */,
+				EA67D5AE29FE09D20004F40F /* castle_mageguild.cpp in Sources */,
+				EA67D52729FE09D20004F40F /* route.cpp in Sources */,
+				EA67D4F129FE09D20004F40F /* agg.cpp in Sources */,
+				EA67D5A729FE09D20004F40F /* castle_building.cpp in Sources */,
+				EA67D5C129FE09D20004F40F /* smk_decoder.cpp in Sources */,
+				EA67D55129FE09D20004F40F /* game_video.cpp in Sources */,
+				EA67D55529FE09D20004F40F /* game_logo.cpp in Sources */,
+				EA67D50E29FE09D20004F40F /* maps_fileinfo.cpp in Sources */,
+				EA67D5CF29FE09D20004F40F /* localevent.cpp in Sources */,
+				EA67D5CB29FE09D20004F40F /* rand.cpp in Sources */,
+				EA67D56729FE09D20004F40F /* dialog_system_options.cpp in Sources */,
+				EA67D50A29FE09D20004F40F /* mp2.cpp in Sources */,
+				EA67D56029FE09D20004F40F /* dialog_audio.cpp in Sources */,
+				EA67D59F29FE09D20004F40F /* ui_text.cpp in Sources */,
+				EA67D53A29FE09D20004F40F /* objtown.cpp in Sources */,
+				EA67D59C29FE09D20004F40F /* interface_focus.cpp in Sources */,
+				EA67D51F29FE09D20004F40F /* morale.cpp in Sources */,
+				EA67D52F29FE09D20004F40F /* spell_storage.cpp in Sources */,
+				EA67D5C329FE09D20004F40F /* screen.cpp in Sources */,
+				EA67D54B29FE09D20004F40F /* game_credits.cpp in Sources */,
+				EA67D52A29FE09D20004F40F /* direction.cpp in Sources */,
+				EA67D5AD29FE09D20004F40F /* castle_well.cpp in Sources */,
+				EA67D50029FE09D20004F40F /* battle_troop.cpp in Sources */,
+				EA67D57229FE09D20004F40F /* dialog_thievesguild.cpp in Sources */,
+				EA67D54629FE09D20004F40F /* game_newgame.cpp in Sources */,
+				EA67D4F629FE09D20004F40F /* mus.cpp in Sources */,
+				EA67D57329FE09D20004F40F /* dialog_hotkeys.cpp in Sources */,
+				EA67D5BC29FE09D20004F40F /* h2d_file.cpp in Sources */,
+				EA67D57029FE09D20004F40F /* dialog_giftresources.cpp in Sources */,
+				EA67D5C029FE09D20004F40F /* core.cpp in Sources */,
+				EA67D51429FE09D20004F40F /* profit.cpp in Sources */,
+				EA67D5A029FE09D20004F40F /* ui_button.cpp in Sources */,
+				EA67D59929FE09D20004F40F /* ui_font.cpp in Sources */,
+				EA67D4F529FE09D20004F40F /* icn.cpp in Sources */,
+				EA67D5B629FE09D20004F40F /* monster_anim.cpp in Sources */,
+				EA67D50129FE09D20004F40F /* battle_dialogs.cpp in Sources */,
+				EA67D58229FE09D20004F40F /* ai_normal_hero.cpp in Sources */,
+				EA67D51629FE09D20004F40F /* color.cpp in Sources */,
+				EA67D52229FE09D20004F40F /* heroes_recruits.cpp in Sources */,
+				EA67D4FC29FE09D20004F40F /* battle_army.cpp in Sources */,
+				EA67D54F29FE09D20004F40F /* game_mainmenu.cpp in Sources */,
+				EA67D53729FE09D20004F40F /* objsnow.cpp in Sources */,
+				EA67D4FE29FE09D20004F40F /* battle_tower.cpp in Sources */,
+				EA67D5C429FE09D20004F40F /* image_tool.cpp in Sources */,
+				EA67D53829FE09D20004F40F /* trees.cpp in Sources */,
+				EA67D4EA29FE09D20004F40F /* Makefile in Sources */,
+				EA67D58829FE09D20004F40F /* ui_tool.cpp in Sources */,
+				EA67D50529FE09D20004F40F /* battle_interface.cpp in Sources */,
+				EA67D52629FE09D20004F40F /* heroes_action.cpp in Sources */,
+				EA67D5C229FE09D20004F40F /* Makefile in Sources */,
+				EA67D5D529FE09D20004F40F /* Makefile in Sources */,
+				EA67D50729FE09D20004F40F /* battle_grave.cpp in Sources */,
+				EA67D56229FE09D20004F40F /* dialog_artifact.cpp in Sources */,
+				EA67D5B229FE09D20004F40F /* resource.cpp in Sources */,
+				EA67D53D29FE09D20004F40F /* mounts.cpp in Sources */,
+				EA67D5CE29FE09D20004F40F /* tools.cpp in Sources */,
+				EA67D55229FE09D20004F40F /* game_io.cpp in Sources */,
+				EA67D59829FE09D20004F40F /* interface_border.cpp in Sources */,
+				EA67D52D29FE09D20004F40F /* spell_info.cpp in Sources */,
+				EA67D5B929FE09D20004F40F /* tinyconfig.cpp in Sources */,
+				EA67D4F229FE09D20004F40F /* m82.cpp in Sources */,
+				EA67D53129FE09D20004F40F /* army_ui_helper.cpp in Sources */,
+				EA67D56929FE09D20004F40F /* dialog_recruit.cpp in Sources */,
+				EA67D54D29FE09D20004F40F /* game_startgame.cpp in Sources */,
+				EA67D55929FE09D20004F40F /* game_scenarioinfo.cpp in Sources */,
+				EA67D5CA29FE09D20004F40F /* dir.cpp in Sources */,
+				EA67D53E29FE09D20004F40F /* objgras.cpp in Sources */,
+				EA67D56F29FE09D20004F40F /* dialog_selectitems.cpp in Sources */,
+				EA67D4F429FE09D20004F40F /* xmi.cpp in Sources */,
+				EA67D52529FE09D20004F40F /* heroes_base.cpp in Sources */,
+				EA67D50D29FE09D20004F40F /* ground.cpp in Sources */,
+				EA67D5A129FE09D20004F40F /* interface_gamearea.cpp in Sources */,
+				EA67D50929FE09D20004F40F /* mp2_helper.cpp in Sources */,
+				EA67D5B129FE09D20004F40F /* artifact_info.cpp in Sources */,
+				EA67D4FD29FE09D20004F40F /* battle_arena.cpp in Sources */,
+				EA67D50329FE09D20004F40F /* battle_catapult.cpp in Sources */,
+				EA67D53529FE09D20004F40F /* objwatr.cpp in Sources */,
+				EA67D54229FE09D20004F40F /* world_pathfinding.cpp in Sources */,
+				EA67D58F29FE09D20004F40F /* ui_keyboard.cpp in Sources */,
+				EA67D56529FE09D20004F40F /* dialog_graphics_settings.cpp in Sources */,
+				EA67D58C29FE09D20004F40F /* ui_castle.cpp in Sources */,
+				EA67D54C29FE09D20004F40F /* game_highscores.cpp in Sources */,
+				EA67D56329FE09D20004F40F /* dialog_game_settings.cpp in Sources */,
+				EA67D55D29FE09D20004F40F /* dialog_selectfile.cpp in Sources */,
+				EA67D50F29FE09D20004F40F /* maps_objects.cpp in Sources */,
+				EA67D5C929FE09D20004F40F /* image_palette.cpp in Sources */,
+				EA67D52029FE09D20004F40F /* experience.cpp in Sources */,
+				EA67D56829FE09D20004F40F /* dialog_marketplace.cpp in Sources */,
+				EA67D5AB29FE09D20004F40F /* castle_tavern.cpp in Sources */,
+				EA67D58529FE09D20004F40F /* ui_kingdom.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,7 +2142,11 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = ShaderTypes.h;
 				SWIFT_VERSION = 5.0;
-				SYSTEM_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../SDL-release-2.26.5/include\"";
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../SDL-release-2.26.5/include\"",
+					"\"$(SRCROOT)/../src\"/**",
+					"\"$(SRCROOT)/../../SDL_mixer/include\"/**",
+				);
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -531,7 +2176,11 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = ShaderTypes.h;
 				SWIFT_VERSION = 5.0;
-				SYSTEM_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../SDL-release-2.26.5/include\"";
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../SDL-release-2.26.5/include\"",
+					"\"$(SRCROOT)/../src\"/**",
+					"\"$(SRCROOT)/../../SDL_mixer/include\"/**",
+				);
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
