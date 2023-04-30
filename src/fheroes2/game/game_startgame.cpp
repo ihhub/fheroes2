@@ -155,10 +155,10 @@ fheroes2::GameMode Game::StartGame()
     return Interface::Basic::Get().StartGame();
 }
 
-void Game::DialogPlayers( int color, std::string str )
+void Game::DialogPlayers( int color, std::string title, std::string message )
 {
     const Player * player = Players::Get( color );
-    StringReplace( str, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
+    StringReplace( message, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
 
     const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
     fheroes2::Sprite sign = border;
@@ -189,7 +189,8 @@ void Game::DialogPlayers( int color, std::string str )
     }
 
     const fheroes2::CustomImageDialogElement imageUI( std::move( sign ) );
-    fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( std::move( str ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
+    fheroes2::showMessage( fheroes2::Text( std::move( title ), fheroes2::FontType::normalYellow() ),
+                           fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
 }
 
 void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
@@ -375,12 +376,13 @@ void ShowWarningLostTownsDialog()
     const uint32_t lostTownDays = myKingdom.GetLostTownDays();
 
     if ( lostTownDays == 1 ) {
-        Game::DialogPlayers( myKingdom.GetColor(), _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
+        Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ),
+                             _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
     }
     else if ( lostTownDays > 0 && lostTownDays <= Game::GetLostTownDays() ) {
         std::string str = _( "%{color} player, you only have %{day} days left to capture a town, or you will be banished from this land." );
         StringReplace( str, "%{day}", lostTownDays );
-        Game::DialogPlayers( myKingdom.GetColor(), str );
+        Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ), str );
     }
 }
 
@@ -696,7 +698,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                         AudioManager::PlayMusic( MUS::NEW_MONTH, Music::PlaybackMode::PLAY_ONCE );
 
-                        Game::DialogPlayers( player->GetColor(), _( "%{color} player's turn." ) );
+                        Game::DialogPlayers( player->GetColor(), "", _( "%{color} player's turn." ) );
                     }
 
                     conf.SetCurrentColor( player->GetColor() );
@@ -1275,11 +1277,11 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                 const uint32_t lostTownDays = myKingdom.GetLostTownDays();
 
                 if ( lostTownDays > Game::GetLostTownDays() ) {
-                    Game::DialogPlayers( conf.CurrentColor(),
+                    Game::DialogPlayers( conf.CurrentColor(), _( "Beware!" ),
                                          _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
                 }
                 else if ( lostTownDays == 1 ) {
-                    Game::DialogPlayers( conf.CurrentColor(), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
+                    Game::DialogPlayers( conf.CurrentColor(), _( "Defeat!" ), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
                 }
             }
 

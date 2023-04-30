@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <vector>
@@ -134,14 +135,14 @@ namespace AI
 {
     bool Build( Castle & castle, const std::vector<BuildOrder> & buildOrderList, int multiplier = 1 )
     {
-        for ( std::vector<BuildOrder>::const_iterator it = buildOrderList.begin(); it != buildOrderList.end(); ++it ) {
-            const int priority = it->priority * multiplier;
+        for ( const BuildOrder & order : buildOrderList ) {
+            const int priority = order.priority * multiplier;
             if ( priority == 1 ) {
-                if ( BuildIfAvailable( castle, it->building ) )
+                if ( BuildIfAvailable( castle, order.building ) )
                     return true;
             }
             else {
-                if ( BuildIfEnoughResources( castle, it->building, GetResourceMultiplier( priority, priority + 1 ) ) )
+                if ( BuildIfEnoughResources( castle, order.building, GetResourceMultiplier( priority, priority + 1 ) ) )
                     return true;
             }
         }
@@ -192,10 +193,54 @@ namespace AI
         return Build( castle, supportingDefensiveStructure, 10 );
     }
 
+    void Normal::updateKingdomBudget( const Kingdom & kingdom )
+    {
+        // clean up first
+        for ( BudgetEntry & budgetEntry : _budget ) {
+            budgetEntry.reset();
+        }
+
+        const Funds & kindgomFunds = kingdom.GetFunds();
+        Funds requirements;
+        for ( const Castle * castle : kingdom.GetCastles() ) {
+            if ( !castle ) {
+                continue;
+            }
+
+            const int race = castle->GetRace();
+            const std::vector<BuildOrder> & buildOrder = GetBuildOrder( race );
+            for ( const BuildOrder & order : buildOrder ) {
+                const int status = castle->CheckBuyBuilding( order.building );
+                if ( status == LACK_RESOURCES ) {
+                    Funds missing = PaymentConditions::BuyBuilding( race, order.building ) - kindgomFunds;
+
+                    requirements = requirements.max( missing );
+                }
+            }
+
+            if ( castle->isBuild( DWELLING_MONSTER6 ) ) {
+                Funds bestUnitCost = Monster( race, DWELLING_MONSTER6 ).GetUpgrade().GetCost();
+                for ( BudgetEntry & budgetEntry : _budget ) {
+                    if ( bestUnitCost.Get( budgetEntry.resource ) > 0 ) {
+                        budgetEntry.recurringCost = true;
+                    }
+                }
+            }
+        }
+
+        for ( BudgetEntry & budgetEntry : _budget ) {
+            budgetEntry.missing = requirements.Get( budgetEntry.resource );
+
+            if ( budgetEntry.missing ) {
+                budgetEntry.priority = true;
+            }
+        }
+    }
+
     void Normal::CastleTurn( Castle & castle, const bool defensiveStrategy )
     {
         if ( defensiveStrategy ) {
-            // TODO: add logic to build monster dwellings as they might add more monsters for defence.
+            // Avoid building monster dwellings when defensive as they will likely fall into enemy's hands
             const Kingdom & kingdom = castle.GetKingdom();
 
             Troops possibleReinforcement = castle.getAvailableArmy( kingdom.GetFunds() );

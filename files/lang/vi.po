@@ -6,12 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-19 02:55+0000\n"
-<<<<<<< HEAD
+"POT-Creation-Date: 2023-04-30 17:06+0000\n"
 "PO-Revision-Date: 2023-04-27 22:22+0700\n"
-=======
-"PO-Revision-Date: 2023-04-21 13:48+0700\n"
->>>>>>> parent of 70009c14 (Update vi.po)
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -178,7 +174,7 @@ msgid "GIFT"
 msgstr "QUÀ"
 
 msgid "guildWell|EXIT"
-msgstr "guildWell|THOÁT"
+msgstr "THOÁT"
 
 msgid "DIFFICULTY"
 msgstr "ĐỘ KHÓ"
@@ -546,7 +542,7 @@ msgid "Knowledge"
 msgstr "Tri thức"
 
 msgid "Morale"
-msgstr "Đạo đức"
+msgstr "Tinh thần"
 
 msgid "Luck"
 msgstr "May mắn"
@@ -965,7 +961,6 @@ msgstr "Vương Miện"
 msgid "The Gauntlet"
 msgstr "Thách thức"
 
-
 msgid "Betrayal"
 msgstr "Sự phản bội"
 
@@ -978,17 +973,10 @@ msgid ""
 "will spend most of their time fighting with one another.  Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
-<<<<<<< HEAD
 "Roland cần ngươi đánh bại các lãnh chúa gần lâu đài của anh ta để bắt đầu "
 "cuộc chiến nổi dậy chống lại anh trai mình. Họ không liên minh với nhau, vì "
 "vậy họ sẽ dành phần lớn thời gian để chiến đấu với nhau. Chiến thắng là của "
 "ngươi khi ngươi đã đánh bại tất cả các lâu đài và tướng của họ."
-=======
-"Roland cần bạn đánh bại các lãnh chúa gần lâu đài của anh ta để bắt đầu cuộc "
-"chiến nổi dậy chống lại anh trai mình. Họ không liên minh với nhau, vì vậy "
-"họ sẽ dành phần lớn thời gian để chiến đấu với nhau. Chiến thắng là của bạn "
-"khi bạn đã đánh bại tất cả các lâu đài và anh hùng của họ."
->>>>>>> parent of 70009c14 (Update vi.po)
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
@@ -1004,16 +992,16 @@ msgid ""
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
-"Nhiệm vụ của bạn là bảo vệ Người lùn chống lại lực lượng của Archibald. Đánh "
-"chiếm tất cả các thị trấn và lâu đài của kẻ thù để giành chiến thắng, đồng "
-"thời đảm bảo không để mất tất cả các thị trấn của người lùn cùng một lúc, "
-"nếu không kẻ thù sẽ chiến thắng."
+"Nhiệm vụ của ngươi là bảo vệ Người lùn chống lại lực lượng của Archibald. "
+"Đánh chiếm tất cả các thị trấn và lâu đài của kẻ thù để giành chiến thắng, "
+"đồng thời đảm bảo không để mất tất cả các thị trấn của người lùn cùng một "
+"lúc, nếu không kẻ thù sẽ chiến thắng."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
-"Bạn sẽ đối mặt với bốn kẻ thù đồng minh trong một cuộc chiến đơn giản để "
+"Ngươi sẽ đối mặt với bốn kẻ thù đồng minh trong một cuộc chiến đơn giản để "
 "giành lấy tài nguyên và kho báu. Nắm bắt tất cả các lâu đài của kẻ thù để "
 "giành chiến thắng."
 
@@ -1022,15 +1010,9 @@ msgid ""
 "out fighting. You will need to own all four castles in this small valley to "
 "win."
 msgstr ""
-<<<<<<< HEAD
 "Kẻ thù của ngươi đang liên minh chống lại ngươi và bắt đầu áp sát, vì vậy "
 "hãy sẵn sàng chiến đấu. Ngươi sẽ cần phải sở hữu cả bốn lâu đài trong thung "
 "lũng nhỏ này để giành chiến thắng."
-=======
-"Kẻ thù của bạn đang liên minh chống lại bạn và bắt đầu áp sát, vì vậy hãy "
-"sẵn sàng chiến đấu. Bạn sẽ cần phải sở hữu cả bốn lâu đài trong thung lũng "
-"nhỏ này để giành chiến thắng."
->>>>>>> parent of 70009c14 (Update vi.po)
 
 msgid ""
 "The Sorceress' guild of Noraston has requested Roland's aid against an "
@@ -2832,7 +2814,7 @@ msgid "Opponents"
 msgstr "Đối thủ"
 
 msgid "Class"
-msgstr ""
+msgstr "Chủng tộc"
 
 msgid ""
 "Victory\n"
@@ -4244,6 +4226,10 @@ msgid ""
 "All is lost."
 msgstr ""
 
+#, fuzzy
+msgid "Defeat!"
+msgstr " bị đánh bại"
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
@@ -4305,6 +4291,14 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr ""
+
+
+msgid "Scenario:"
+msgstr "Kịch bản:"
+
+msgid "Major Event!"
+msgstr ""
+
 
 msgid "Scenario:"
 msgstr "Kịch bản:"
@@ -4381,6 +4375,9 @@ msgstr ""
 
 msgid "New Week!"
 msgstr "Tuần Mới!"
+
+msgid "Beware!"
+msgstr ""
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "

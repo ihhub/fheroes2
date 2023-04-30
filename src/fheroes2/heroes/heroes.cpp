@@ -187,7 +187,7 @@ Heroes::Heroes()
     , path( *this )
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
-    , patrol_square( 0 )
+    , _patrolDistance( 0 )
     , _alphaValue( 255 )
     , _attackedMonsterTileIndex( -1 )
     , _aiRole( Role::HUNTER )
@@ -212,7 +212,7 @@ Heroes::Heroes( int heroid, int rc )
     , path( *this )
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
-    , patrol_square( 0 )
+    , _patrolDistance( 0 )
     , _alphaValue( 255 )
     , _attackedMonsterTileIndex( -1 )
     , _aiRole( Role::HUNTER )
@@ -512,11 +512,11 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     const bool doesAIHeroSetOnPatrol = ( dataStream.get() != 0 );
     if ( doesAIHeroSetOnPatrol ) {
         SetModes( PATROL );
-        patrol_center = GetCenter();
+        _patrolCenter = GetCenter();
     }
 
-    // Patrol square
-    patrol_square = dataStream.get();
+    // Patrol distance
+    _patrolDistance = dataStream.get();
 
     PostLoad();
 }
@@ -1846,7 +1846,7 @@ std::string Heroes::String() const
        << "flags           : " << ( Modes( SHIPMASTER ) ? "SHIPMASTER," : "" ) << ( Modes( PATROL ) ? "PATROL" : "" ) << std::endl;
 
     if ( Modes( PATROL ) ) {
-        os << "patrol square   : " << patrol_square << std::endl;
+        os << "patrol zone     : center: (" << _patrolCenter.x << ", " << _patrolCenter.y << "), distance " << _patrolDistance << std::endl;
     }
 
     if ( !visit_object.empty() ) {
@@ -2177,10 +2177,10 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
         << hero.direction << hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
-    const int16_t patrolX = static_cast<int16_t>( hero.patrol_center.x );
-    const int16_t patrolY = static_cast<int16_t>( hero.patrol_center.y );
+    const int16_t patrolX = static_cast<int16_t>( hero._patrolCenter.x );
+    const int16_t patrolY = static_cast<int16_t>( hero._patrolCenter.y );
 
-    msg << patrolX << patrolY << hero.patrol_square << hero.visit_object << hero._lastGroundRegion;
+    msg << patrolX << patrolY << hero._patrolDistance << hero.visit_object << hero._lastGroundRegion;
 
     return msg;
 }
@@ -2202,9 +2202,9 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     int16_t patrolY = 0;
 
     msg >> patrolX >> patrolY;
-    hero.patrol_center = fheroes2::Point( patrolX, patrolY );
+    hero._patrolCenter = fheroes2::Point( patrolX, patrolY );
 
-    msg >> hero.patrol_square >> hero.visit_object >> hero._lastGroundRegion;
+    msg >> hero._patrolDistance >> hero.visit_object >> hero._lastGroundRegion;
 
     hero.army.SetCommander( &hero );
     return msg;

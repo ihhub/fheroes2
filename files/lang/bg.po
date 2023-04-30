@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-25 06:07+0000\n"
+"POT-Creation-Date: 2023-04-30 17:06+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -85,12 +85,14 @@ msgid "RESTART"
 msgstr "РЕСТАРТ"
 
 msgid "HEROES"
-msgstr ""
+msgstr "ГЕРОЙ"
 
 msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
+"ГРАДОВЕ/\n"
+"ЗАМЪЦИ"
 
 msgid "S"
 msgstr ""
@@ -108,7 +110,7 @@ msgid "ALL"
 msgstr ""
 
 msgid "SELECT"
-msgstr ""
+msgstr "ИЗБЕРИ"
 
 msgid ""
 "STANDARD\n"
@@ -172,7 +174,7 @@ msgid "GIFT"
 msgstr "ДАРИ"
 
 msgid "guildWell|EXIT"
-msgstr ""
+msgstr "ИЗХОД"
 
 msgid "DIFFICULTY"
 msgstr "ТРУДНОСТ"
@@ -734,16 +736,15 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "1 %{defender} загива."
 msgstr[1] "%{count} %{defender} загиват."
 
-#, fuzzy
 msgid "1 soul is incorporated."
 msgid_plural "%{count} souls are incorporated."
-msgstr[0] "Създава се огледален образ."
-msgstr[1] "Създава се огледален образ."
+msgstr[0] "1 душа е включена."
+msgstr[1] "%{count} души са включени."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 %{unit} е съживена."
+msgstr[1] "%{count} %{unit} са съживени."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Преместен %{monster}: %{src}, %{dst}"
@@ -2319,9 +2320,8 @@ msgid ""
 msgstr ""
 "Кристалната градина увеличава производството на Фей с %{count} на седмица."
 
-#, fuzzy
 msgid "The Dungeon increases the income of the town by %{count} gold per day."
-msgstr "Подземието увеличава доходите на града с %{count} / ден."
+msgstr "Подземието увеличава доходите на града с %{count} злато на ден."
 
 msgid "The Waterfall increases production of Centaurs by %{count} per week."
 msgstr "Водопадът увеличава производството на Кентаври с %{count} на седмица."
@@ -2418,9 +2418,8 @@ msgstr ""
 "Кладенецът увеличава скоростта на растеж във всички жилища с %{count} "
 "същества на седмица."
 
-#, fuzzy
 msgid "The Statue increases your town's income by %{count} gold per day."
-msgstr "Статуята увеличава приходите на твоя град с %{count} на ден."
+msgstr "Статуята увеличава приходите на твоя град с %{count} злато на ден."
 
 msgid "The Left Turret provides extra firepower during castle combat."
 msgstr ""
@@ -3117,15 +3116,14 @@ msgstr "Изберете резолюция на играта:"
 msgid "Click to apply the selected resolution."
 msgstr "Кликни, за да приложиш избраната резолюция."
 
-#, fuzzy
 msgid "Click to apply the entered text."
-msgstr "Кликни, за да приложиш избраната резолюция."
+msgstr "Кликни, за да приложиш въведения текст."
 
 msgid "Click to open the Virtual Keyboard dialog."
-msgstr ""
+msgstr "Щракни, за да отвориш диалоговия прозорец за виртуална клавиатура."
 
 msgid "Open Virtual Keyboard"
-msgstr ""
+msgstr "Отвори виртуална клавиатура"
 
 msgid "How many troops to move?"
 msgstr "Колко единици ще преместите?"
@@ -3141,12 +3139,15 @@ msgid ""
 "\n"
 "Month: "
 msgstr ""
+"\n"
+"\n"
+"Месец: "
 
 msgid ", Week: "
-msgstr ""
+msgstr ", Седмица: "
 
 msgid ", Day: "
-msgstr ""
+msgstr ", Ден: "
 
 msgid ""
 "\n"
@@ -3190,12 +3191,8 @@ msgstr "Избери заклинание:"
 msgid "Select Skill:"
 msgstr "Избери умение:"
 
-#, fuzzy
 msgid "Map Type:\n"
-msgstr ""
-"\n"
-"\n"
-"Тип на карта:\n"
+msgstr "Тип на карта:\n"
 
 msgid "The Succession Wars"
 msgstr "Войните за наследство"
@@ -3542,18 +3539,23 @@ msgstr ""
 "Избери тази трудност, ако искаш предизвикателство. И.И. е по-силен в "
 "сравнение с нормалната трудност."
 
-#, fuzzy
 msgid ""
 "Congratulations!\n"
 "\n"
 "Days: %{days}\n"
-msgstr "Честито!"
+msgstr ""
+"Честито!\n"
+"\n"
+"Дни: %{days}\n"
 
 msgid ""
 "\n"
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
+"\n"
+"Трудност: %{difficulty}\n"
+"\n"
 
 msgid ""
 "Score: %{score}\n"
@@ -3561,6 +3563,10 @@ msgid ""
 "Rating:\n"
 "%{rating}"
 msgstr ""
+"Резултат: %{score}\n"
+"\n"
+"Рейтинг:\n"
+"%{rating}"
 
 msgid "Start the selected scenario."
 msgstr "Стартирай избрания сценарий."
@@ -3770,328 +3776,307 @@ msgid "View High Scores for Campaigns."
 msgstr "Вижте високите резултати за кампании."
 
 msgid "hotkey|default okay event"
-msgstr ""
+msgstr "удобрение по подразбиране"
 
 msgid "hotkey|default cancel event"
-msgstr ""
+msgstr "отказ по подразбиране"
 
 msgid "hotkey|default left"
-msgstr ""
+msgstr "ляво по подразбиране"
 
 msgid "hotkey|default right"
-msgstr ""
+msgstr "дясно по подразбиране"
 
 msgid "hotkey|default up"
-msgstr ""
+msgstr "нагоре по подразбиране"
 
 msgid "hotkey|default down"
-msgstr ""
+msgstr "надолу по подразбиране"
 
 msgid "hotkey|toggle fullscreen"
-msgstr ""
+msgstr "превключване на цял екран"
 
 msgid "hotkey|toggle text support mode"
-msgstr ""
+msgstr "превключване потдръжка на текст"
 
 msgid "hotkey|new game"
-msgstr ""
+msgstr "нова игра"
 
 msgid "hotkey|load game"
-msgstr ""
+msgstr "зареди игра"
 
 msgid "hotkey|highscores"
-msgstr ""
+msgstr "резултати"
 
 msgid "hotkey|credits"
-msgstr ""
+msgstr "участници"
 
-#, fuzzy
 msgid "hotkey|standard game"
-msgstr "Стандартна Игра"
+msgstr "стандартна игра"
 
-#, fuzzy
 msgid "hotkey|campaign game"
-msgstr "Кампания"
+msgstr "име на кампания"
 
-#, fuzzy
 msgid "hotkey|multi-player game"
-msgstr "Мултиплейър игра"
+msgstr "мултиплейър игра"
 
-#, fuzzy
 msgid "hotkey|settings"
-msgstr "Настойки"
+msgstr "настойки"
 
 msgid "hotkey|quit"
-msgstr ""
+msgstr "напусни"
 
 msgid "hotkey|select map"
-msgstr ""
+msgstr "избери карта"
 
 msgid "hotkey|select small map size"
-msgstr ""
+msgstr "избери малка карта"
 
 msgid "hotkey|select medium map size"
-msgstr ""
+msgstr "избери средна карта"
 
 msgid "hotkey|select large map size"
-msgstr ""
+msgstr "избери голяма карта"
 
 msgid "hotkey|select extra large map size"
-msgstr ""
+msgstr "избери много голяма карта"
 
 msgid "hotkey|select all map sizes"
-msgstr ""
+msgstr "избери всички карти"
 
 msgid "hotkey|hotseat game"
-msgstr ""
+msgstr "двойна игра"
 
 msgid "hotkey|battle only game"
-msgstr ""
+msgstr "игра само за битка"
 
 msgid "hotkey|choose the original campaign"
-msgstr ""
+msgstr "избери оригиналната кампания"
 
 msgid "hotkey|choose the expansion campaign"
-msgstr ""
+msgstr "избери кампанията за разширяване"
 
 msgid "hotkey|roland campaign"
-msgstr ""
+msgstr "кампания на роланд"
 
 msgid "hotkey|archibald campaign"
-msgstr ""
+msgstr "кампания на арчибалд"
 
-#, fuzzy
 msgid "hotkey|the price of loyalty campaign"
-msgstr "Цената на лоялността"
+msgstr "цената на лоялността"
 
 msgid "hotkey|voyage home campaign"
-msgstr ""
+msgstr "кампания пътуване до дома"
 
 msgid "hotkey|wizard's isle campaign"
-msgstr ""
+msgstr "кампания на острова на магьосника"
 
 msgid "hotkey|descendants campaign"
-msgstr ""
+msgstr "кампания на потомци"
 
 msgid "hotkey|select first campaign bonus"
-msgstr ""
+msgstr "избери бонус на първа кампания"
 
 msgid "hotkey|select second campaign bonus"
-msgstr ""
+msgstr "избери бонус на втора кампания"
 
 msgid "hotkey|select third campaign bonus"
-msgstr ""
+msgstr "избери бонус на трета кампания"
 
 msgid "hotkey|view campaign intro"
-msgstr ""
+msgstr "виж въведението на кампанията"
 
-#, fuzzy
 msgid "hotkey|select campaign difficulty"
-msgstr "Трудност на Кампанията"
+msgstr "избери трудност на кампанията"
 
 msgid "hotkey|restart campaign scenario"
-msgstr ""
+msgstr "рестартирай сценария на кампанията"
 
 msgid "hotkey|world map left"
-msgstr ""
+msgstr "карта на света вляво"
 
 msgid "hotkey|world map right"
-msgstr ""
+msgstr "карта на света вдясно"
 
 msgid "hotkey|world map up"
-msgstr ""
+msgstr "карта на света нагоре"
 
 msgid "hotkey|world map down"
-msgstr ""
+msgstr "карта на света надолу"
 
 msgid "hotkey|world map up left"
-msgstr ""
+msgstr "карта на света нагоре и вляво"
 
 msgid "hotkey|world map up right"
-msgstr ""
+msgstr "карта на света нагоре и вдясно"
 
 msgid "hotkey|world map down left"
-msgstr ""
+msgstr "карта на света надолу и вляво"
 
 msgid "hotkey|world map down right"
-msgstr ""
+msgstr "карта на света надолу и вдясно"
 
 msgid "hotkey|save game"
-msgstr ""
+msgstr "запази играта"
 
-#, fuzzy
 msgid "hotkey|next hero"
-msgstr "Покажи следващия герой"
+msgstr "следващия герой"
 
-#, fuzzy
 msgid "hotkey|continue hero movement"
-msgstr "Продължи движението"
+msgstr "продължи движението на героя"
 
-#, fuzzy
 msgid "hotkey|cast adventure spell"
-msgstr "Направи приключенско заклинание."
+msgstr "направи приключенско заклинание."
 
 msgid "hotkey|put hero to sleep"
-msgstr ""
+msgstr "сложи героя да спи"
 
-#, fuzzy
 msgid "hotkey|next town"
-msgstr "Покажи следващия град"
+msgstr "следващия град"
 
 msgid "hotkey|end turn"
-msgstr ""
+msgstr "завърши хода"
 
-#, fuzzy
 msgid "hotkey|file options"
-msgstr "Опции за файлове"
+msgstr "опции за файл"
 
-#, fuzzy
 msgid "hotkey|adventure options"
-msgstr "Опции за приключения"
+msgstr "опции за приключение"
 
 msgid "hotkey|puzzle map"
-msgstr ""
+msgstr "карта на пъзела"
 
-#, fuzzy
 msgid "hotkey|scenario information"
-msgstr "Информация за сценария"
+msgstr "информация за сценария"
 
 msgid "hotkey|dig for artifact"
-msgstr ""
+msgstr "копай за артефакт"
 
 msgid "hotkey|view world"
-msgstr ""
+msgstr "виж света"
 
-#, fuzzy
 msgid "hotkey|kingdom summary"
-msgstr "Резюме за Кралството"
+msgstr "резюме за кралството"
 
 msgid "hotkey|default action"
-msgstr ""
+msgstr "действие по подразбиране"
 
 msgid "hotkey|open focus"
-msgstr ""
+msgstr "отворен фокус"
 
-#, fuzzy
 msgid "hotkey|system options"
-msgstr "Персонализирай системните опции"
+msgstr "системни опции"
 
 msgid "hotkey|scroll left"
-msgstr ""
+msgstr "превъртете наляво"
 
 msgid "hotkey|scroll right"
-msgstr ""
+msgstr "превъртете надясно"
 
 msgid "hotkey|scroll up"
-msgstr ""
+msgstr "превъртете нагоре"
 
 msgid "hotkey|scroll down"
-msgstr ""
+msgstr "превъртете надолу"
 
 msgid "hotkey|toggle control panel"
-msgstr ""
+msgstr "превключи контролния панел"
 
 msgid "hotkey|toggle radar"
-msgstr ""
+msgstr "превключи радар"
 
 msgid "hotkey|toggle buttons"
-msgstr ""
+msgstr "превключи бутоните"
 
 msgid "hotkey|toggle status"
-msgstr ""
+msgstr "превключи състояние"
 
 msgid "hotkey|toggle icons"
-msgstr ""
+msgstr "превключи иконите"
 
 msgid "hotkey|transfer control to ai"
-msgstr ""
+msgstr "прехвърли контрола на ai"
 
 msgid "hotkey|retreat from battle"
-msgstr ""
+msgstr "отстъпление от битка"
 
 msgid "hotkey|surrender during battle"
-msgstr ""
+msgstr "капитулация по време на битка"
 
 msgid "hotkey|toggle battle auto mode"
-msgstr ""
+msgstr "превключи автоматичния режим на битка"
 
-#, fuzzy
 msgid "hotkey|finish the battle in auto mode"
-msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
+msgstr "завърши битката в автоматичен режим"
 
-#, fuzzy
 msgid "hotkey|battle options"
-msgstr "Опции на замъка"
+msgstr "опции на битка"
 
 msgid "hotkey|skip turn in battle"
-msgstr ""
+msgstr "пропусни ход в битка"
 
 msgid "hotkey|cast battle spell"
-msgstr ""
+msgstr "направи бойно заклинание"
 
 msgid "hotkey|dwelling level 1"
-msgstr ""
+msgstr "ниво на жилище 1"
 
 msgid "hotkey|dwelling level 2"
-msgstr ""
+msgstr "ниво на жилище 2"
 
 msgid "hotkey|dwelling level 3"
-msgstr ""
+msgstr "ниво на жилище 3"
 
 msgid "hotkey|dwelling level 4"
-msgstr ""
+msgstr "ниво на жилище 4"
 
 msgid "hotkey|dwelling level 5"
-msgstr ""
+msgstr "ниво на жилище 5"
 
 msgid "hotkey|dwelling level 6"
-msgstr ""
+msgstr "ниво на жилище 6"
 
 msgid "hotkey|well"
-msgstr ""
+msgstr "кладенец"
 
-#, fuzzy
 msgid "hotkey|marketplace"
-msgstr "Пазар"
+msgstr "пазар"
 
 msgid "hotkey|mage guild"
-msgstr ""
+msgstr "магическа гилдия"
 
-#, fuzzy
 msgid "hotkey|shipyard"
-msgstr "Корабостроителница"
+msgstr "корабостроителница"
 
-#, fuzzy
 msgid "hotkey|thieves guild"
-msgstr "Гилдия на крадците"
+msgstr "гилдия на крадците"
 
 msgid "hotkey|tavern"
-msgstr ""
+msgstr "кръчма"
 
 msgid "hotkey|construction screen"
-msgstr ""
+msgstr "екран за изграждане"
 
 msgid "hotkey|buy all monsters in well"
-msgstr ""
+msgstr "купи всички налични чудовища"
 
 msgid "hotkey|split stack by half"
-msgstr ""
+msgstr "раздели стека наполовина"
 
 msgid "hotkey|split stack by one"
-msgstr ""
+msgstr "раздели стека на един"
 
 msgid "hotkey|join stacks"
-msgstr ""
+msgstr "съедини стековете"
 
 msgid "hotkey|upgrade troop"
-msgstr ""
+msgstr "надгради войските"
 
 msgid "hotkey|dismiss troop"
-msgstr ""
+msgstr "разпусни войските"
 
-#, fuzzy
 msgid "The save file is corrupted."
-msgstr "Създава се огледален образ."
+msgstr "Запазеният файл е повреден."
 
 msgid "Unsupported save format: "
 msgstr "Неподдържан формат за запис: "
@@ -4378,11 +4363,18 @@ msgstr ""
 "Не успя да завършиш мисията си навреме.\n"
 "Всичко е загубено."
 
+#, fuzzy
+msgid "Defeat!"
+msgstr " победен"
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
+"Основен резултат: %{score}\n"
+"Трудност: %{difficulty}\n"
+"\n"
 
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
@@ -4448,6 +4440,9 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} играч е победен!"
+
+msgid "Major Event!"
+msgstr ""
 
 msgid "Scenario:"
 msgstr "Сценарий:"
@@ -4533,6 +4528,9 @@ msgid " All dwellings increase population."
 msgstr " Всички жилища увеличават населението."
 
 msgid "New Week!"
+msgstr "Нова Седмица!"
+
+msgid "Beware!"
 msgstr ""
 
 msgid ""
@@ -4576,16 +4574,14 @@ msgstr "Лорд Килбърн"
 msgid "Tsabu"
 msgstr "Сабу"
 
-#, fuzzy
 msgid "Sir Galant"
 msgstr "Сър Галант"
 
 msgid "Thundax"
 msgstr "Тъндакс"
 
-#, fuzzy
 msgid "Lord Haart"
-msgstr "Лорд Холтън"
+msgstr "Лорд Хаарт"
 
 msgid "Ariel"
 msgstr "Ариел"
@@ -4599,12 +4595,11 @@ msgstr "Сандро"
 msgid "Crodo"
 msgstr "Кродо"
 
-#, fuzzy
 msgid "Barock"
 msgstr "Барок"
 
 msgid "Antoine"
-msgstr ""
+msgstr "Antoine"
 
 msgid "Astra"
 msgstr "Астра"
@@ -4923,11 +4918,10 @@ msgid "Danish"
 msgstr "Датски"
 
 msgid "Slovak"
-msgstr ""
+msgstr "Словашки"
 
-#, fuzzy
 msgid "Vietnamese"
-msgstr "Виж %{name}"
+msgstr "Виетнамски"
 
 msgid ", FPS: "
 msgstr ""
@@ -6895,14 +6889,14 @@ msgstr "%{skill} позволява на твоя герой да научи з�
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "%{skill} позволява на твоя герой да научи заклинания от пето ниво."
 
-#, fuzzy
 msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
 "%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] ""
-"%{skill} регенерира по една от точките за заклинание на твоя герой на ден."
+"%{skill} регенерира една допълнителна точка заклинание на ден на твоя герой."
 msgstr[1] ""
-"%{skill} регенерира %{count} от заклинателните точки на твоя герой на ден."
+"%{skill} регенерира %{count} допълнителни заклинателни точки на ден за твоя "
+"герой."
 
 msgid "%{skill} increases your hero's luck by %{count}."
 msgstr "%{skill} увеличава късмета на твоя герой с %{count}."
@@ -8410,7 +8404,6 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr "Медал за доблест"
 
-#, fuzzy
 msgid "The %{name} increases your morale by %{count}."
 msgstr "%{name} увеличава знанията ти с %{count}."
 
@@ -8515,11 +8508,9 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr "Катапулт на бързината"
 
-#, fuzzy
 msgid "The %{name} gives your catapult one extra shot per combat round."
 msgstr ""
-"%{name} позволява на твоя катапулт да стреля по един допълнителен изстрел на "
-"боен рунд."
+"%{name} позволява на твоя катапулт един допълнителен изстрел на боен рунд."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
@@ -8687,9 +8678,8 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr "Заешки крак на късмета"
 
-#, fuzzy
 msgid "The %{name} increases your luck in combat by %{count}."
-msgstr "%{name} увеличава късмета ти в битка."
+msgstr "%{name} увеличава късмета ти в битка с %{count}."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
