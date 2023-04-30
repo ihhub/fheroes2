@@ -370,7 +370,6 @@ void World::Reset()
     _seed = 0;
 }
 
-/* new maps */
 void World::NewMaps( int32_t sw, int32_t sh )
 {
     Reset();

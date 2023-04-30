@@ -23,6 +23,7 @@
 #ifndef H2TILES_H
 #define H2TILES_H
 
+#include <array>
 #include <cstdint>
 #include <list>
 #include <string>
@@ -332,67 +333,16 @@ namespace Maps
         // (castle has a hero or garrison, dwelling has creatures, etc)
         bool isCaptureObjectProtected() const;
 
-        // Get Tile metadata field #1 (used for things like monster count or resource amount)
-        uint8_t GetQuantity1() const
-        {
-            return quantity1;
-        }
-
-        void setQuantity1( const uint8_t value )
-        {
-            quantity1 = value;
-        }
-
-        void setQuantity2( const uint8_t value )
-        {
-            quantity2 = value;
-        }
-
-        // Get Tile metadata field #2 (used for things like animations or resource type )
-        uint8_t GetQuantity2() const
-        {
-            return quantity2;
-        }
-
-        int QuantityVariant() const
-        {
-            return quantity2 >> 4;
-        }
-
-        int QuantityExt() const
-        {
-            return 0x0f & quantity2;
-        }
-
-        void QuantitySetVariant( const int variant )
-        {
-            quantity2 &= 0x0f;
-            quantity2 |= variant << 4;
-        }
-
-        void QuantitySetExt( int ext )
-        {
-            quantity2 &= 0xf0;
-            quantity2 |= ( 0x0f & ext );
-        }
-
         void SetObjectPassable( bool );
 
-        // Get additional metadata.
-        int32_t getAdditionalMetadata() const
+        const std::array<uint32_t, 3> & metadata() const
         {
-            return additionalMetadata;
+            return _metadata;
         }
 
-        // Set Tile additional metadata field.
-        void setAdditionalMetadata( const uint32_t value )
+        std::array<uint32_t, 3> & metadata()
         {
-            additionalMetadata = value;
-        }
-
-        void clearAdditionalMetadata()
-        {
-            additionalMetadata = 0;
+            return _metadata;
         }
 
         Heroes * GetHeroes() const;
@@ -457,6 +407,12 @@ namespace Maps
         static void renderAddonObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const TilesAddon & addon );
         void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset ) const;
 
+        static uint8_t convertOldMainObjectType( const uint8_t mainObjectType );
+
+        // The old code was using a weird quantity based values which were very hard to understand.
+        // Since we must have backwards compatibility we need to do the conversion.
+        void quantityIntoMetadata( const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata );
+
         Addons addons_level1; // bottom layer
         Addons addons_level2; // top layer
 
@@ -493,12 +449,7 @@ namespace Maps
 
         uint8_t heroID = 0;
 
-        // TODO: Combine quantity1 and quantity2 into a single 16/32-bit variable except first 2 bits of quantity1 which are used for level type of an object.
-        uint8_t quantity1 = 0;
-        uint8_t quantity2 = 0;
-
-        // Additional metadata is not set from map's information but during runtime like spells or monster joining conditions.
-        int32_t additionalMetadata = 0;
+        std::array<uint32_t, 3> _metadata{ 0 };
 
         bool tileIsRoad = false;
 

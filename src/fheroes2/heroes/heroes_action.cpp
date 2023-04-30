@@ -956,7 +956,7 @@ namespace
 
     void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
-        const Skill::Secondary & skill = getSecondarySkillFromTile( world.GetTiles( dst_index ) );
+        const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( world.GetTiles( dst_index ) );
 
         // If this assertion blows up the object is not set properly.
         assert( skill.isValid() );
@@ -1517,17 +1517,17 @@ namespace
         if ( hero.IsFullBagArtifacts() )
             Dialog::Message( title, _( "You cannot pick up this artifact, you already have a full load!" ), Font::BIG, Dialog::OK );
         else {
-            uint32_t cond = tile.QuantityVariant();
+            const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
             Artifact art = getArtifactFromTile( tile );
 
             bool result = false;
             std::string msg;
 
-            // 1,2,3 - gold, gold + res
-            if ( 0 < cond && cond < 4 ) {
-                Funds payment = getFundsFromTile( tile );
+            if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD || condition == Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES
+                 || condition == Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
+                const Funds payment = getFundsFromTile( tile );
 
-                if ( 1 == cond ) {
+                if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD ) {
                     msg = _( "A leprechaun offers you the %{art} for the small price of %{gold} Gold." );
                     StringReplace( msg, "%{gold}", payment.Get( Resource::GOLD ) );
                 }
@@ -1565,9 +1565,8 @@ namespace
                                      Dialog::OK );
                 }
             }
-            // 4,5 - need to have skill wisdom or leadership
-            else if ( 3 < cond && cond < 6 ) {
-                const Skill::Secondary & skill = getSecondarySkillFromTile( tile );
+            else if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
+                const Skill::Secondary & skill = getArtifactSecondarySkillRequirement( tile );
 
                 if ( hero.HasSecondarySkill( skill.Skill() ) ) {
                     const char * artifactDiscoveryDescription = Artifact::getDiscoveryDescription( art );
@@ -1609,8 +1608,7 @@ namespace
                     Dialog::Message( title, msg, Font::BIG, Dialog::OK );
                 }
             }
-            // 6 - 50 rogues, 7 - 1 genie, 8,9,10,11,12,13 - 1 monster level4
-            else if ( 5 < cond && cond < 14 ) {
+            else if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
                 bool battle = true;
                 Army army( tile );
                 const Troop * troop = army.GetFirstValid();
@@ -1945,7 +1943,7 @@ namespace
 
             auto removeObjectProtection = [&tile]() {
                 // Clear any metadata related to spells
-                tile.clearAdditionalMetadata();
+                removeMineSpellFromTile( tile );
             };
 
             auto captureObject = [&hero, objectType, &tile, &updateRadar, &removeObjectProtection]() {
@@ -2875,10 +2873,14 @@ namespace
                 return Outcome::BattleWithServants;
             }
 
-            const int variant = ( tile.QuantityVariant() == 3 && hero.IsFullBagArtifacts() ) ? 2 : tile.QuantityVariant();
+            const Maps::DaemonCaveCaptureBonus originalDaemonBonus = getDaemonCaveBonus( tile );
 
-            switch ( variant ) {
-            case 1: {
+            const Maps::DaemonCaveCaptureBonus bonus =
+                ( originalDaemonBonus == Maps::DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_ARTIFACT && hero.IsFullBagArtifacts() ) ?
+                    Maps::DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_2500_GOLD : originalDaemonBonus;
+
+            switch ( bonus ) {
+            case Maps::DaemonCaveCaptureBonus::GET_1000_EXPERIENCE : {
                 std::string msg
                     = _( "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points." );
                 StringReplace( msg, "%{exp}", std::to_string( demonSlayingExperience ) );
@@ -2889,7 +2891,7 @@ namespace
 
                 return Outcome::Experience;
             }
-            case 2: {
+            case Maps::DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_2500_GOLD: {
                 const uint32_t gold = getGoldAmountFromTile( tile );
 
                 std::string msg = _(
@@ -2904,7 +2906,7 @@ namespace
 
                 return Outcome::ExperienceAndGold;
             }
-            case 3: {
+            case Maps::DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_ARTIFACT: {
                 const Artifact art = getArtifactFromTile( tile );
                 if ( !art.isValid() ) {
                     return Outcome::Invalid;

@@ -941,20 +941,20 @@ void Army::setFromTile( const Maps::Tiles & tile )
     case MP2::OBJ_SHIPWRECK: {
         uint32_t count = 0;
 
-        switch ( tile.QuantityVariant() ) {
-        case 0:
+        switch ( getShipwrechCaptureCondition( tile ) ) {
+        case Maps::ShipwreckCaptureCondition::NO_BONUS:
             // Shipwreck guardians were defeated.
             return;
-        case 1:
+        case Maps::ShipwreckCaptureCondition::FIGHT_10_GHOSTS_AND_GET_1000_GOLD:
             count = 10;
             break;
-        case 2:
+        case Maps::ShipwreckCaptureCondition::FIGHT_15_GHOSTS_AND_GET_2000_GOLD:
             count = 15;
             break;
-        case 3:
+        case Maps::ShipwreckCaptureCondition::FIGHT_25_GHOSTS_AND_GET_5000_GOLD:
             count = 25;
             break;
-        case 4:
+        case Maps::ShipwreckCaptureCondition::FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT:
             count = 50;
             break;
         default:
@@ -972,29 +972,29 @@ void Army::setFromTile( const Maps::Tiles & tile )
         break;
 
     case MP2::OBJ_ARTIFACT:
-        switch ( tile.QuantityVariant() ) {
-        case 6:
+        switch ( getArtifactCaptureCondition( tile ) ) {
+        case Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES:
             ArrangeForBattle( Monster::ROGUE, 50, tile.GetIndex(), false );
             break;
-        case 7:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_GENIE:
             ArrangeForBattle( Monster::GENIE, 1, tile.GetIndex(), false );
             break;
-        case 8:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_PALADIN:
             ArrangeForBattle( Monster::PALADIN, 1, tile.GetIndex(), false );
             break;
-        case 9:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_CYCLOP:
             ArrangeForBattle( Monster::CYCLOPS, 1, tile.GetIndex(), false );
             break;
-        case 10:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_PHOENIX:
             ArrangeForBattle( Monster::PHOENIX, 1, tile.GetIndex(), false );
             break;
-        case 11:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_GREEN_DRAGON:
             ArrangeForBattle( Monster::GREEN_DRAGON, 1, tile.GetIndex(), false );
             break;
-        case 12:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_TITAN:
             ArrangeForBattle( Monster::TITAN, 1, tile.GetIndex(), false );
             break;
-        case 13:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON:
             ArrangeForBattle( Monster::BONE_DRAGON, 1, tile.GetIndex(), false );
             break;
         default:

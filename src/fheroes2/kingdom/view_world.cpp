@@ -421,7 +421,7 @@ namespace
 
                     case MP2::OBJ_RESOURCE:
                         if ( revealResources || !tile.isFog( color ) ) {
-                            renderResourceIcon( 13, tile.GetQuantity1(), posX, posY );
+                            renderResourceIcon( 13, getResourcesFromTile( tile ).first, posX, posY );
                         }
                         break;
 

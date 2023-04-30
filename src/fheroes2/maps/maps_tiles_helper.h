@@ -35,12 +35,53 @@ namespace Maps
 {
     class Tiles;
 
+    enum class ArtifactCaptureCondition : uint32_t
+    {
+        NO_CONDITIONS = 0,
+        PAY_2000_GOLD = 1,
+        PAY_2500_GOLD_AND_3_RESOURCES = 2,
+        PAY_3000_GOLD_AND_5_RESOURCES = 3,
+        HAVE_WISDOM_SKILL = 4,
+        HAVE_LEADERSHIP_SKILL = 5,
+        FIGHT_50_ROGUES = 6,
+        FIGHT_1_GENIE = 7,
+        FIGHT_1_PALADIN = 8,
+        FIGHT_1_CYCLOP = 9,
+        FIGHT_1_PHOENIX = 10,
+        FIGHT_1_GREEN_DRAGON = 11,
+        FIGHT_1_TITAN = 12,
+        FIGHT_1_BONE_DRAGON = 13,
+        CONTAINS_SPELL = 15
+    };
+
+    enum class DaemonCaveCaptureBonus : uint32_t
+    {
+        NO_BONUS = 0,
+        GET_1000_EXPERIENCE = 1,
+        GET_1000_EXPERIENCE_AND_2500_GOLD = 2,
+        GET_1000_EXPERIENCE_AND_ARTIFACT = 3,
+        PAY_2500_GOLD = 4
+    };
+
+    enum class ShipwreckCaptureCondition : uint32_t
+    {
+        NO_BONUS = 0,
+        FIGHT_10_GHOSTS_AND_GET_1000_GOLD = 1,
+        FIGHT_15_GHOSTS_AND_GET_2000_GOLD = 2,
+        FIGHT_25_GHOSTS_AND_GET_5000_GOLD = 3,
+        FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT = 4
+    };
+
+    // Only for MP2::OBJ_MINES.
     int32_t getMineSpellIdFromTile( const Tiles & tile );
     void setMineSpellOnTile( Tiles & tile, const int32_t spellId );
+    void removeMineSpellFromTile( Tiles & tile );
 
+    // Only for objects which always have spell(s).
     Spell getSpellFromTile( const Tiles & tile );
     void setSpellOnTile( Tiles & tile, const int spellId );
 
+    // Only for MP2::OBJ_MONSTER.
     void setMonsterOnTileJoinCondition( Tiles & tile, const int32_t condition );
     bool isMonsterOnTileJoinConditionSkip( const Tiles & tile );
     bool isMonsterOnTileJoinConditionFree( const Tiles & tile );
@@ -56,8 +97,15 @@ namespace Maps
 
     uint32_t getGoldAmountFromTile( const Tiles & tile );
 
-    Skill::Secondary getSecondarySkillFromTile( const Tiles & tile );
-    void setSecondarySkillOnTile( Tiles & tile, const int skillId );
+    Skill::Secondary getArtifactSecondarySkillRequirement( const Tiles & tile );
+    ArtifactCaptureCondition getArtifactCaptureCondition( const Tiles & tile );
+
+    DaemonCaveCaptureBonus getDaemonCaveBonus( const Tiles & tile );
+
+    ShipwreckCaptureCondition getShipwrechCaptureCondition( const Tiles & tile );
+
+    // Only for MP2::OBJ_WITCHS_HUT.
+    Skill::Secondary getSecondarySkillFromWitchsHut( const Tiles & tile );
 
     ResourceCount getResourcesFromTile( const Tiles & tile );
     void setResourceOnTile( Tiles & tile, const int resourceType, uint32_t value );
@@ -76,17 +124,9 @@ namespace Maps
     uint32_t getMonsterCountFromTile( const Tiles & tile );
     void setMonsterCountOnTile( Tiles & tile, uint32_t count );
 
-    void updateMonsterPopulationOnTile( Tiles & tile );
-
-    void updateDwellingPopulationOnTile( Tiles & tile, bool isFirstLoad );
+    void updateDwellingPopulationOnTile( Tiles & tile, const bool isFirstLoad );
 
     void updateObjectInfoTile( Tiles & tile, const bool isFirstLoad );
-
-    void updateRandomArtifact( Tiles & tile );
-
-    void updateRandomResource( Tiles & tile );
-
-    void updateRandomMonster( Tiles & tile );
 
     void updateMonsterInfoOnTile( Tiles & tile );
 

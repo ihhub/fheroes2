@@ -264,20 +264,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
         tile.AddonsSort();
 
-        switch ( mp2tile.mapObjectType ) {
-        case MP2::OBJ_BOTTLE:
-        case MP2::OBJ_CASTLE:
-        case MP2::OBJ_EVENT:
-        case MP2::OBJ_HEROES:
-        case MP2::OBJ_JAIL:
-        case MP2::OBJ_RANDOM_CASTLE:
-        case MP2::OBJ_RANDOM_TOWN:
-        case MP2::OBJ_SIGN:
-        case MP2::OBJ_SPHINX:
+        if ( MP2::doesObjectNeedExtendedMetadata( tile.GetObject() ) ) {
             vec_object.push_back( i );
-            break;
-        default:
-            break;
         }
     }
 
@@ -440,8 +428,11 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
         for ( const int32_t tileId : vec_object ) {
             const Maps::Tiles & tile = vec_tiles[tileId];
-            const uint32_t quantityValue = ( tile.GetQuantity2() << 8 ) + tile.GetQuantity1();
-            if ( ( quantityValue & 0x3 ) == Maps::OBJECT_LAYER && i + 1 == ( quantityValue >> 3 ) ) {
+            if ( ( tile.getLayerType() & 0x3 ) != Maps::OBJECT_LAYER ) {
+                continue;
+            }
+
+            if ( tile.metadata()[0] == i + 1 ) {
                 objectTileId = tileId;
                 break;
             }
@@ -654,7 +645,6 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
 bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObjects )
 {
-    // modify other objects
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
         Maps::Tiles & tile = vec_tiles[i];
         Maps::Tiles::fixTileObjectType( tile );
@@ -739,6 +729,7 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
         case MP2::OBJ_EARTH_ALTAR:
         case MP2::OBJ_FIRE_ALTAR:
         case MP2::OBJ_WATER_ALTAR:
+            // We need to clear metadata because it is being stored as a part of an MP2 object.
             resetObjectInfoOnTile( tile );
             updateObjectInfoTile( tile, true );
             break;
@@ -837,11 +828,8 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
     }
     // There is a tile with a predefined Ultimate Artifact, pick a tile nearby in the radius specified in the artifact's properties
     else {
-        static_assert( std::is_same_v<decltype( ultArtTileIter->GetQuantity1() ), uint8_t> && std::is_same_v<decltype( ultArtTileIter->GetQuantity2() ), uint8_t>,
-                       "Types of tile's quantities have been changed, check the bitwise arithmetic below" );
-
         // The radius can be in the range 0 - 127, it is represented by 2 low-order bits of quantity2 and 5 high-order bits of quantity1
-        const int32_t radius = ( ( ultArtTileIter->GetQuantity2() & 0x03 ) << 5 ) + ( ultArtTileIter->GetQuantity1() >> 3 );
+        const int32_t radius = ultArtTileIter->metadata()[0];
 
         // Remove the predefined Ultimate Artifact object
         ultArtTileIter->Remove( ultArtTileIter->GetObjectUID() );

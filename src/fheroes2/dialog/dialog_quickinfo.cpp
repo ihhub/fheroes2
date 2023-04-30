@@ -265,7 +265,7 @@ namespace
         std::string str = MP2::StringObject( tile.GetObject( false ) );
 
         if ( isVisited ) {
-            const Skill::Secondary & skill = getSecondarySkillFromTile( tile );
+            const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( tile );
 
             str.append( "\n(" );
             str.append( Skill::Secondary::String( skill.Skill() ) );
@@ -452,7 +452,7 @@ namespace
             return showObjectVisitInfo( objectType, kingdom.isVisited( objectType ) );
 
         case MP2::OBJ_RESOURCE:
-            return Resource::String( tile.GetQuantity1() );
+            return Resource::String( getResourcesFromTile( tile ).first );
 
         case MP2::OBJ_MINES:
             return showMineInfo( tile, playerColor == getColorFromTile( tile ) );

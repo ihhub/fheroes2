@@ -25,6 +25,7 @@
 #define H2SERIALIZE_H
 
 #include <algorithm>
+#include <array>
 #include <cstdint>
 #include <cstdio>
 #include <iterator>
@@ -112,25 +113,25 @@ public:
         put8( ch );
     }
 
-    StreamBase & operator>>( bool & );
-    StreamBase & operator>>( char & );
-    StreamBase & operator>>( uint8_t & );
-    StreamBase & operator>>( uint16_t & );
-    StreamBase & operator>>( int16_t & );
-    StreamBase & operator>>( uint32_t & );
-    StreamBase & operator>>( int32_t & );
-    StreamBase & operator>>( std::string & );
+    StreamBase & operator>>( bool & v );
+    StreamBase & operator>>( char & v );
+    StreamBase & operator>>( uint8_t & v );
+    StreamBase & operator>>( uint16_t & v );
+    StreamBase & operator>>( int16_t & v );
+    StreamBase & operator>>( uint32_t & v );
+    StreamBase & operator>>( int32_t & v );
+    StreamBase & operator>>( std::string & v );
 
     StreamBase & operator>>( fheroes2::Point & point_ );
 
-    StreamBase & operator<<( const bool );
-    StreamBase & operator<<( const char );
-    StreamBase & operator<<( const uint8_t );
-    StreamBase & operator<<( const uint16_t );
-    StreamBase & operator<<( const int16_t );
-    StreamBase & operator<<( const uint32_t );
-    StreamBase & operator<<( const int32_t );
-    StreamBase & operator<<( const std::string & );
+    StreamBase & operator<<( const bool v );
+    StreamBase & operator<<( const char v );
+    StreamBase & operator<<( const uint8_t v );
+    StreamBase & operator<<( const uint16_t v );
+    StreamBase & operator<<( const int16_t v );
+    StreamBase & operator<<( const uint32_t v );
+    StreamBase & operator<<( const int32_t v );
+    StreamBase & operator<<( const std::string & v );
 
     StreamBase & operator<<( const fheroes2::Point & point_ );
 
@@ -203,6 +204,16 @@ public:
         put32( static_cast<uint32_t>( v.size() ) );
         for ( typename std::map<Type1, Type2>::const_iterator it = v.begin(); it != v.end(); ++it )
             *this << *it;
+        return *this;
+    }
+
+   template <class Type, size_t Count>
+    StreamBase & operator<<( const std::array<Type, Count> & data )
+    {
+        put32( static_cast<uint32_t>( data.size() ) );
+        for ( const auto & value : data ) {
+            *this << value;
+        }
         return *this;
     }
 

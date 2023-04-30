@@ -230,25 +230,26 @@ namespace
             return doesTileContainValuableItems( tile );
 
         case MP2::OBJ_ARTIFACT: {
-            const uint32_t variants = tile.QuantityVariant();
-
             if ( hero.IsFullBagArtifacts() )
                 return false;
 
-            // 1,2,3 - 2000g, 2500g+3res, 3000g+5res
-            if ( 1 <= variants && 3 >= variants )
-                return kingdom.AllowPayment( getFundsFromTile( tile ) );
+            const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
 
-            // 4,5 - need to have skill wisdom or leadership
-            if ( 3 < variants && 6 > variants )
-                return hero.HasSecondarySkill( getSecondarySkillFromTile( tile ).Skill() );
+            if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD || condition == Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES
+                 || condition == Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
+                return kingdom.AllowPayment( getFundsFromTile( tile ) );
+            }
+
+            if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
+                return hero.HasSecondarySkill( getArtifactSecondarySkillRequirement( tile ).Skill() );
+            }
 
             // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
-            if ( 5 < variants && 14 > variants ) {
+            if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
             }
 
-            // It is a normal artifact.
+            // No conditions to capture an artifact exist.
             return true;
         }
 
@@ -302,7 +303,7 @@ namespace
 
         // One time visit Secondary Skill object.
         case MP2::OBJ_WITCHS_HUT: {
-            const Skill::Secondary & skill = getSecondarySkillFromTile( tile );
+            const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( tile );
             const int skillType = skill.Skill();
 
             if ( !skill.isValid() || hero.HasMaxSecondarySkill() || hero.HasSecondarySkill( skillType ) ) {
@@ -503,8 +504,9 @@ namespace
             break;
 
         case MP2::OBJ_DAEMON_CAVE:
-            if ( doesTileContainValuableItems( tile ) && 4 != tile.QuantityVariant() )
+            if ( doesTileContainValuableItems( tile ) && getDaemonCaveBonus( tile ) != Maps::DaemonCaveCaptureBonus::PAY_2500_GOLD ) {
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
+            }
             break;
 
         case MP2::OBJ_MONSTER:

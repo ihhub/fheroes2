@@ -608,7 +608,7 @@ namespace
         if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
             auto removeObjectProtection = [&tile]() {
                 // Clear any metadata related to spells
-                tile.clearAdditionalMetadata();
+                removeMineSpellFromTile( tile );
             };
 
             auto captureObject = [&hero, &tile, &removeObjectProtection]() {
@@ -919,7 +919,7 @@ namespace
 
     void AIToWitchsHut( Heroes & hero, int32_t dst_index )
     {
-        const Skill::Secondary & skill = getSecondarySkillFromTile( world.GetTiles( dst_index ) );
+        const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( world.GetTiles( dst_index ) );
 
         // check full
         if ( skill.isValid() && !hero.HasMaxSecondarySkill() && !hero.HasSecondarySkill( skill.Skill() ) )
@@ -1383,13 +1383,13 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
         if ( !hero.IsFullBagArtifacts() ) {
-            uint32_t cond = tile.QuantityVariant();
+            const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
             Artifact art = getArtifactFromTile( tile );
 
             bool result = false;
 
-            // 1,2,3 - gold, gold + res
-            if ( 0 < cond && cond < 4 ) {
+            if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD || condition == Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES
+                 || condition == Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
                 const Funds payment = getFundsFromTile( tile );
 
                 if ( hero.GetKingdom().AllowPayment( payment ) ) {
@@ -1397,12 +1397,10 @@ namespace
                     hero.GetKingdom().OddFundsResource( payment );
                 }
             }
-            // 4,5 - bypass wisdom and leadership requirement
-            else if ( 3 < cond && cond < 6 ) {
+            else if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
                 result = true;
             }
-            // 6 - 50 rogues, 7 - 1 genie, 8,9,10,11,12,13 - 1 monster level4
-            else if ( 5 < cond && cond < 14 ) {
+            else if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
                 Army army( tile );
 
                 // new battle
