@@ -923,7 +923,7 @@ namespace AI
                 return 1000.0 * art.getArtifactValue();
             }
 
-            return getGoldAmountFromTile( tile );
+            return getFundsFromTile( tile ).gold;
         }
 
         case MP2::OBJ_DAEMON_CAVE:

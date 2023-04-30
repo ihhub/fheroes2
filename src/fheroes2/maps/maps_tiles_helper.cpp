@@ -1203,8 +1203,8 @@ namespace Maps
             tile.metadata()[0] = ( cond == static_cast<uint32_t>( DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_ARTIFACT ) )
                                      ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL )
                                      : Artifact::UNKNOWN;
-            tile.metadata()[1] = ( cond == static_cast<uint32_t>( DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_2500_GOLD ) ) ||
-                                 ( cond == static_cast<uint32_t>( DaemonCaveCaptureBonus::PAY_2500_GOLD ) )
+            tile.metadata()[1] = ( cond == static_cast<uint32_t>( DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_2500_GOLD ) )
+                                         || ( cond == static_cast<uint32_t>( DaemonCaveCaptureBonus::PAY_2500_GOLD ) )
                                      ? 25
                                      : 0;
             tile.metadata()[2] = cond;

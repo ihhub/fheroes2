@@ -695,10 +695,10 @@ namespace
 
         switch ( objectType ) {
         case MP2::OBJ_WINDMILL:
-            msg = rc.GetValidItemsCount() > 0 ? _(
-                      "The keeper of the mill announces:\n\"Milord, I have been working very hard to provide you with these resources, come back next week for more.\"" )
-                               : _(
-                                   "The keeper of the mill announces:\n\"Milord, I am sorry, there are no resources currently available. Please try again next week.\"" );
+            msg = rc.GetValidItemsCount() > 0
+                      ? _(
+                          "The keeper of the mill announces:\n\"Milord, I have been working very hard to provide you with these resources, come back next week for more.\"" )
+                      : _( "The keeper of the mill announces:\n\"Milord, I am sorry, there are no resources currently available. Please try again next week.\"" );
             break;
 
         case MP2::OBJ_WATER_WHEEL:
