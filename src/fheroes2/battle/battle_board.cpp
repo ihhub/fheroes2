@@ -597,13 +597,13 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
     uint8_t twoHexCount = 0;
     for ( size_t i = 0; i < objs.size(); ) {
         if ( isTwoHexObject( objs[i] ) ) {
-            twoHexCount++;
+            ++twoHexCount;
             if ( twoHexCount > maxTwoHexObstacleCount ) {
                 objs.erase( std::next( objs.begin(), i ) );
                 continue;
             }
         }
-        i++;
+        ++i;
     }
 
     const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::GetWithGen( 0, maxSmallObstacleCount, gen ) ) );
