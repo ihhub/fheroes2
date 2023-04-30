@@ -885,6 +885,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
     if ( _needFadeIn ) {
         _needFadeIn = false;
 
+        fheroes2::fadeInDisplay();
+
         SetRedraw( REDRAW_GAMEAREA );
     }
     else {
