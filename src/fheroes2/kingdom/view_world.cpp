@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <utility>
 
 #include "agg_image.h"
 #include "castle.h"
@@ -44,7 +45,6 @@
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "mp2.h"
-#include "pairs.h"
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"

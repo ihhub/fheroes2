@@ -27,6 +27,7 @@
 #include <cstdlib>
 #include <ostream>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "army.h"
@@ -54,7 +55,6 @@
 #include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "mp2.h"
-#include "pairs.h"
 #include "payment.h"
 #include "profit.h"
 #include "resource.h"

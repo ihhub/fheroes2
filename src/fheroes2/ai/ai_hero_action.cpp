@@ -57,7 +57,6 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
-#include "pairs.h"
 #include "payment.h"
 #include "players.h"
 #include "puzzle.h"

@@ -24,7 +24,6 @@
 #include "army_troop.h"
 #include "artifact.h"
 #include "mp2.h"
-#include "pairs.h"
 #include "resource.h"
 #include "skill.h"
 
@@ -34,6 +33,9 @@ class Spell;
 namespace Maps
 {
     class Tiles;
+
+    // ATTENTION: If you add any new enumeration make sure that value 0 corresponds to empty / visited object
+    //            so we don't need to write special logic in resetObjectInfoOnTile().
 
     enum class ArtifactCaptureCondition : uint32_t
     {
@@ -56,7 +58,7 @@ namespace Maps
 
     enum class DaemonCaveCaptureBonus : uint32_t
     {
-        NO_BONUS = 0,
+        EMPTY = 0,
         GET_1000_EXPERIENCE = 1,
         GET_1000_EXPERIENCE_AND_2500_GOLD = 2,
         GET_1000_EXPERIENCE_AND_ARTIFACT = 3,
@@ -65,7 +67,7 @@ namespace Maps
 
     enum class ShipwreckCaptureCondition : uint32_t
     {
-        NO_BONUS = 0,
+        EMPTY = 0,
         FIGHT_10_GHOSTS_AND_GET_1000_GOLD = 1,
         FIGHT_15_GHOSTS_AND_GET_2000_GOLD = 2,
         FIGHT_25_GHOSTS_AND_GET_5000_GOLD = 3,

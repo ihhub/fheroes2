@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <initializer_list>
 #include <memory>
 #include <ostream>
 #include <string>
@@ -64,7 +65,6 @@
 #include "monster.h"
 #include "mp2.h"
 #include "mus.h"
-#include "pairs.h"
 #include "payment.h"
 #include "players.h"
 #include "profit.h"
@@ -2960,6 +2960,8 @@ namespace
 
                 return Outcome::Death;
             }
+            case Maps::DaemonCaveCaptureBonus::EMPTY:
+                break;
             default:
                 // This condition should never happen.
                 assert( 0 );

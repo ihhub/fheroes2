@@ -472,7 +472,7 @@ namespace Maps
         if ( tile.GetObject( false ) != MP2::OBJ_DAEMON_CAVE ) {
             // Why are you calling this for an unsupported object type?
             assert( 0 );
-            return DaemonCaveCaptureBonus::NO_BONUS;
+            return DaemonCaveCaptureBonus::EMPTY;
         }
 
         return static_cast<DaemonCaveCaptureBonus>( tile.metadata()[2] );
@@ -500,7 +500,7 @@ namespace Maps
         if ( tile.GetObject( false ) != MP2::OBJ_SHIPWRECK ) {
             // Why are you calling this for an unsupported object type?
             assert( 0 );
-            return ShipwreckCaptureCondition::NO_BONUS;
+            return ShipwreckCaptureCondition::EMPTY;
         }
 
         return static_cast<ShipwreckCaptureCondition>( tile.metadata()[2] );

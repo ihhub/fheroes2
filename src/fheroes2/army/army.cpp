@@ -942,7 +942,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
         uint32_t count = 0;
 
         switch ( getShipwrechCaptureCondition( tile ) ) {
-        case Maps::ShipwreckCaptureCondition::NO_BONUS:
+        case Maps::ShipwreckCaptureCondition::EMPTY:
             // Shipwreck guardians were defeated.
             return;
         case Maps::ShipwreckCaptureCondition::FIGHT_10_GHOSTS_AND_GET_1000_GOLD:
