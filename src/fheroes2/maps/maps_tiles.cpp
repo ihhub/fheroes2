@@ -303,7 +303,7 @@ namespace
             const uint8_t leftColor = ( ( passable & Direction::LEFT ) != 0 ) ? green : red;
             const uint8_t rightColor = ( ( passable & Direction::RIGHT ) != 0 ) ? green : red;
 
-            uint8_t * image = sf.image();
+            uint32_t * image = sf.image();
             uint8_t * transform = sf.transform();
 
             // Horizontal

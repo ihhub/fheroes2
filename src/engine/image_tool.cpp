@@ -109,7 +109,7 @@ namespace
 #endif
 
         if ( surface->pitch != width ) {
-            const uint8_t * imageIn = image.image();
+            const uint32_t * imageIn = image.image();
 
             for ( int32_t i = 0; i < height; ++i ) {
                 memcpy( static_cast<uint8_t *>( surface->pixels ) + surface->pitch * i, imageIn + width * i, static_cast<size_t>( width ) );
@@ -182,14 +182,14 @@ namespace fheroes2
             image.resize( surface->w, surface->h );
 
             const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
-            uint8_t * outY = image.image();
+            uint32_t * outY = image.image();
             uint8_t * transformY = image.transform();
 
             const uint8_t * inYEnd = inY + surface->h * surface->pitch;
 
             for ( ; inY != inYEnd; inY += surface->pitch, outY += surface->w, transformY += surface->w ) {
                 const uint8_t * inX = inY;
-                uint8_t * outX = outY;
+                uint32_t * outX = outY;
                 uint8_t * transformX = transformY;
                 const uint8_t * inXEnd = inX + surface->w;
 
@@ -228,13 +228,13 @@ namespace fheroes2
             memset( image.transform(), 0, surface->w * surface->h );
 
             const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
-            uint8_t * outY = image.image();
+            uint32_t * outY = image.image();
 
             const uint8_t * inYEnd = inY + surface->h * surface->pitch;
 
             for ( ; inY != inYEnd; inY += surface->pitch, outY += surface->w ) {
                 const uint8_t * inX = inY;
-                uint8_t * outX = outY;
+                uint32_t * outX = outY;
                 const uint8_t * inXEnd = inX + surface->w * 3;
 
                 for ( ; inX != inXEnd; inX += 3, ++outX ) {
@@ -247,14 +247,14 @@ namespace fheroes2
             image.reset();
 
             const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
-            uint8_t * outY = image.image();
+            uint32_t * outY = image.image();
             uint8_t * transformY = image.transform();
 
             const uint8_t * inYEnd = inY + surface->h * surface->pitch;
 
             for ( ; inY != inYEnd; inY += surface->pitch, outY += surface->w, transformY += surface->w ) {
                 const uint8_t * inX = inY;
-                uint8_t * outX = outY;
+                uint32_t * outX = outY;
                 uint8_t * transformX = transformY;
                 const uint8_t * inXEnd = inX + surface->w * 4;
 
@@ -296,7 +296,7 @@ namespace fheroes2
         Sprite sprite( width, height, offsetX, offsetY );
         sprite.reset();
 
-        uint8_t * imageData = sprite.image();
+        uint32_t * imageData = sprite.image();
         uint8_t * imageTransform = sprite.transform();
 
         uint32_t posX = 0;

@@ -270,8 +270,8 @@ namespace
 
             assert( ( width > 0 ) && ( height > 0 ) && ( x >= 0 ) && ( y >= 0 ) && ( ( x + width ) < displayWidth ) && ( ( y + height ) < display.height() ) );
 
-            uint8_t * imageY = display.image() + static_cast<ptrdiff_t>( y ) * displayWidth + x;
-            const uint8_t * imageYEnd = imageY + static_cast<ptrdiff_t>( height ) * displayWidth;
+            uint32_t * imageY = display.image() + static_cast<ptrdiff_t>( y ) * displayWidth + x;
+            const uint32_t * imageYEnd = imageY + static_cast<ptrdiff_t>( height ) * displayWidth;
 
             for ( ; imageY != imageYEnd; imageY += displayWidth ) {
                 std::fill( imageY, imageY + width, static_cast<uint8_t>( 0 ) );

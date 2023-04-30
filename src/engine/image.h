@@ -57,8 +57,8 @@ namespace fheroes2
             return _height;
         }
 
-        virtual uint8_t * image();
-        virtual const uint8_t * image() const;
+        virtual uint32_t * image();
+        virtual const uint32_t * image() const;
 
         uint8_t * transform()
         {
@@ -99,7 +99,7 @@ namespace fheroes2
 
         int32_t _width;
         int32_t _height;
-        std::unique_ptr<uint8_t[]> _data; // holds 1 image layer
+        std::unique_ptr<uint32_t[]> _data; // holds 1 image layer
         std::unique_ptr<uint8_t[]> _dataTransform; // holds 1 image layer
 
         bool _singleLayer; // only for images which are not used for any other operations except displaying on screen. Non-copyable member.

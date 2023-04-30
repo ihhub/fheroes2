@@ -274,17 +274,17 @@ namespace
 
             const bool fullFrame = ( roi.width == imageWidth ) && ( roi.height == imageHeight );
 
-            const uint8_t * imageIn = image.image();
+            const uint32_t * imageIn = image.image();
 
             if ( fullFrame ) {
                 if ( surface->format->BitsPerPixel == 32 ) {
                     uint32_t * out = static_cast<uint32_t *>( surface->pixels );
                     const uint32_t * outEnd = out + imageWidth * imageHeight;
-                    const uint8_t * in = imageIn;
+                    const uint32_t * in = imageIn;
                     const uint32_t * transform = _palette32Bit.data();
 
                     for ( ; out != outEnd; ++out, ++in )
-                        *out = *( transform + *in );
+                        *out = *( transform + *in ); 
                 }
                 else if ( surface->format->BitsPerPixel == 8 ) {
                     if ( surface->pixels != imageIn ) {
@@ -304,13 +304,13 @@ namespace
                 if ( surface->format->BitsPerPixel == 32 ) {
                     uint32_t * outY = static_cast<uint32_t *>( surface->pixels );
                     const uint32_t * outYEnd = outY + imageWidth * roi.height;
-                    const uint8_t * inY = imageIn + roi.x + roi.y * imageWidth;
+                    const uint32_t * inY = imageIn + roi.x + roi.y * imageWidth;
                     const uint32_t * transform = _palette32Bit.data();
 
                     for ( ; outY != outYEnd; outY += imageWidth, inY += imageWidth ) {
                         uint32_t * outX = outY;
                         const uint32_t * outXEnd = outX + roi.width;
-                        const uint8_t * inX = inY;
+                        const uint32_t * inX = inY;
 
                         for ( ; outX != outXEnd; ++outX, ++inX )
                             *outX = *( transform + *inX );
@@ -383,13 +383,13 @@ namespace
 
             uint32_t * out = static_cast<uint32_t *>( surface->pixels );
             const uint32_t * outEnd = out + width * height;
-            const uint8_t * in = icon.image();
+            const uint32_t * in = icon.image();
             const uint8_t * transform = icon.transform();
 
             if ( surface->format->Amask > 0 ) {
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
-                        const uint8_t * value = currentPalette + *in * 3;
+                        const uint8_t * value = currentPalette + static_cast<uint8_t>( *in ) * 3;
                         *out = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
                     }
                 }
@@ -397,7 +397,7 @@ namespace
             else {
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
-                        const uint8_t * value = currentPalette + *in * 3;
+                        const uint8_t * value = currentPalette + static_cast<uint8_t>( *in ) * 3;
                         *out = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
                     }
                     else {
@@ -468,7 +468,7 @@ namespace
 
             uint32_t * out = static_cast<uint32_t *>( surface->pixels );
             const uint32_t * outEnd = out + width * height;
-            const uint8_t * in = image.image();
+            const uint32_t * in = image.image();
             const uint8_t * transform = image.transform();
 
             if ( surface->format->Amask > 0 ) {
@@ -1225,7 +1225,7 @@ namespace
 
                     // Display class doesn't have support for image pitch so we mustn't link display to surface if width is not divisible by 4.
                     if ( _surface->w % 4 == 0 ) {
-                        linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
+                        linkRenderSurface( static_cast<uint32_t *>( _surface->pixels ) );
                     }
                 }
             }
@@ -1545,7 +1545,7 @@ namespace
 
 namespace fheroes2
 {
-    void BaseRenderEngine::linkRenderSurface( uint8_t * surface ) const
+    void BaseRenderEngine::linkRenderSurface( uint32_t * surface ) const
     {
         Display::instance().linkRenderSurface( surface );
     }
@@ -1669,12 +1669,12 @@ namespace fheroes2
         }
     }
 
-    uint8_t * Display::image()
+    uint32_t * Display::image()
     {
         return _renderSurface != nullptr ? _renderSurface : Image::image();
     }
 
-    const uint8_t * Display::image() const
+    const uint32_t * Display::image() const
     {
         return _renderSurface != nullptr ? _renderSurface : Image::image();
     }

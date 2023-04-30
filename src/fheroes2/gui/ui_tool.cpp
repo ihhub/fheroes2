@@ -357,9 +357,9 @@ namespace fheroes2
 
         // Set the input image horizontal offset from where to draw the wave.
         const int32_t offsetX = x < waveLength ? 0 : x - waveLength;
-        const uint8_t * inImageX = in.image() + offsetX;
+        const uint32_t * inImageX = in.image() + offsetX;
 
-        uint8_t * outImageX = out.image();
+        uint32_t * outImageX = out.image();
 
         // Set pointers to the start and the end of the death wave curve.
         std::vector<int32_t>::const_iterator pntX = deathWaveCurve.begin() + ( x < waveLength ? waveLength - x : 0 );
@@ -372,11 +372,11 @@ namespace fheroes2
                 continue;
             }
 
-            const uint8_t * outImageYEnd = outImageX + static_cast<ptrdiff_t>( inHeight + *pntX ) * outWidth;
-            const uint8_t * inImageY = inImageX - static_cast<ptrdiff_t>( *pntX + 1 ) * inWidth;
+            const uint32_t * outImageYEnd = outImageX + static_cast<ptrdiff_t>( inHeight + *pntX ) * outWidth;
+            const uint32_t * inImageY = inImageX - static_cast<ptrdiff_t>( *pntX + 1 ) * inWidth;
 
             // A loop to shift all horizontal pixels vertically.
-            uint8_t * outImageY = outImageX;
+            uint32_t * outImageY = outImageX;
             for ( ; outImageY != outImageYEnd; outImageY += outWidth ) {
                 inImageY += inWidth;
                 *outImageY = *inImageY;
@@ -412,8 +412,8 @@ namespace fheroes2
         Image out( width, height );
         std::fill( out.transform(), out.transform() + static_cast<size_t>( width * height ), static_cast<uint8_t>( 0 ) );
 
-        uint8_t * imageOutX = out.image();
-        const uint8_t * imageIn = in.image();
+        uint32_t * imageOutX = out.image();
+        const uint32_t * imageIn = in.image();
 
         const uint8_t * gamePalette = getGamePalette();
 
@@ -422,8 +422,8 @@ namespace fheroes2
         for ( int32_t y = 0; y < height; ++y ) {
             const int32_t startY = std::max( y - blurRadius, 0 );
             const int32_t rangeY = std::min( y + blurRadius + 1, height ) - startY;
-            const uint8_t * imageInXStart = imageIn + static_cast<ptrdiff_t>( y ) * width;
-            const uint8_t * imageInYStart = imageIn + static_cast<ptrdiff_t>( startY ) * width;
+            const uint32_t * imageInXStart = imageIn + static_cast<ptrdiff_t>( y ) * width;
+            const uint32_t * imageInYStart = imageIn + static_cast<ptrdiff_t>( startY ) * width;
 
             for ( int32_t x = 0; x < width; ++x, ++imageOutX ) {
                 const int32_t startX = std::max( x - blurRadius, 0 );
@@ -433,8 +433,8 @@ namespace fheroes2
                 uint32_t sumGreen = 0;
                 uint32_t sumBlue = 0;
 
-                const uint8_t * imageInX = imageInXStart + startX;
-                const uint8_t * imageInXEnd = imageInX + rangeX;
+                const uint32_t * imageInX = imageInXStart + startX;
+                const uint32_t * imageInXEnd = imageInX + rangeX;
 
                 for ( ; imageInX != imageInXEnd; ++imageInX ) {
                     const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *imageInX ) * 3;
@@ -444,9 +444,9 @@ namespace fheroes2
                     sumBlue += *( palette + 2 );
                 }
 
-                const uint8_t * imageInY = imageInYStart + x;
-                const uint8_t * imageInYEnd = imageInY + static_cast<ptrdiff_t>( rangeY ) * width;
-                const uint8_t * currentPixel = imageInXStart + x;
+                const uint32_t * imageInY = imageInYStart + x;
+                const uint32_t * imageInYEnd = imageInY + static_cast<ptrdiff_t>( rangeY ) * width;
+                const uint32_t * currentPixel = imageInXStart + x;
 
                 for ( ; imageInY != imageInYEnd; imageInY += width ) {
                     if ( imageInY != currentPixel ) {
@@ -488,10 +488,10 @@ namespace fheroes2
 
         const int32_t widthOut = out.width();
 
-        uint8_t * outImageY = out.image();
+        uint32_t * outImageY = out.image();
         uint8_t * outTransformY = out.transform();
 
-        const uint8_t * inImageY = in.image();
+        const uint32_t * inImageY = in.image();
         const uint8_t * inTransformY = in.transform();
 
         for ( int32_t y = 0; y < height; ++y, inImageY += widthIn, inTransformY += widthIn, outImageY += widthOut, outTransformY += widthOut ) {

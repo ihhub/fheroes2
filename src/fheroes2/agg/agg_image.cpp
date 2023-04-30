@@ -260,8 +260,8 @@ namespace
         output.reset();
 
         const uint8_t * input = data.data() + 6;
-        uint8_t * image = output.image();
-        const uint8_t * imageEnd = image + width * height;
+        uint32_t * image = output.image();
+        const uint32_t * imageEnd = image + width * height;
         uint8_t * transform = output.transform();
 
         for ( ; image != imageEnd; ++image, ++transform, ++input ) {
@@ -1439,7 +1439,7 @@ namespace fheroes2
                     // clean the button.
                     const int32_t pixelPosition = 5 * 132;
                     if ( pixelPosition < ( out.width() * out.height() ) ) {
-                        Fill( out, 4, 3 + i, 132 - i, 16, out.image()[pixelPosition] );
+                        Fill( out, 4, 3 + i, 132 - i, 16, static_cast<uint8_t>(out.image()[pixelPosition] ));
                     }
                 }
 

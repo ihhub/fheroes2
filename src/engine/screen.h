@@ -172,7 +172,7 @@ namespace fheroes2
             // Do nothing.
         }
 
-        void linkRenderSurface( uint8_t * surface ) const; // declaration of this method is in source file
+        void linkRenderSurface( uint32_t * surface ) const; // declaration of this method is in source file
 
     private:
         bool _isFullScreen;
@@ -227,8 +227,8 @@ namespace fheroes2
         }
 
         // For 8-bit mode we return a pointer to direct surface which we draw on screen
-        uint8_t * image() override;
-        const uint8_t * image() const override;
+        uint32_t * image() override;
+        const uint32_t * image() const override;
 
         void release(); // to release all allocated resources. Should be used at the end of the application
 
@@ -250,7 +250,7 @@ namespace fheroes2
         PreRenderProcessing _preprocessing;
         PostRenderProcessing _postprocessing;
 
-        uint8_t * _renderSurface;
+        uint32_t * _renderSurface;
 
         // Previous area drawn on the screen.
         Rect _prevRoi;
@@ -258,7 +258,7 @@ namespace fheroes2
         Size _screenSize;
 
         // Only for cases of direct drawing on rendered 8-bit image.
-        void linkRenderSurface( uint8_t * surface )
+        void linkRenderSurface( uint32_t * surface )
         {
             _renderSurface = surface;
         }

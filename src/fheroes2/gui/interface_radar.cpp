@@ -275,7 +275,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
     const bool revealAll = flags == ViewWorldMode::ViewAll;
 #endif
 
-    uint8_t * radarImage = _map.image();
+    uint32_t * radarImage = _map.image();
 
     assert( _roi.x >= 0 && _roi.y >= 0 && ( _roi.width + _roi.x ) <= world.w() && ( _roi.height + _roi.y ) <= world.h() );
 
@@ -299,7 +299,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
     const int32_t maxRoiY = _roi.height + _roi.y;
 
     for ( int32_t y = _roi.y; y < maxRoiY; ++y ) {
-        uint8_t * radarY = radarImage + static_cast<ptrdiff_t>( y * _zoom ) * radarWidth;
+        uint32_t * radarY = radarImage + static_cast<ptrdiff_t>( y * _zoom ) * radarWidth;
         const ptrdiff_t radarYStep = isZoomIn ? ( static_cast<ptrdiff_t>( ( y + 1 ) * _zoom ) * radarWidth ) : 0;
 
         for ( int32_t x = _roi.x; x < maxRoiX; ++x ) {
@@ -383,10 +383,10 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
                 }
             }
 
-            uint8_t * radarX = radarY + static_cast<ptrdiff_t>( x * _zoom );
+            uint32_t * radarX = radarY + static_cast<ptrdiff_t>( x * _zoom );
             if ( isZoomIn ) {
-                const uint8_t * radarYEnd = radarImage + radarYStep + static_cast<ptrdiff_t>( x * _zoom );
-                uint8_t * radarXEnd = radarY + static_cast<ptrdiff_t>( ( x + 1 ) * _zoom );
+                const uint32_t * radarYEnd = radarImage + radarYStep + static_cast<ptrdiff_t>( x * _zoom );
+                uint32_t * radarXEnd = radarY + static_cast<ptrdiff_t>( ( x + 1 ) * _zoom );
 
                 for ( ; radarX != radarYEnd; radarX += radarWidth, radarXEnd += radarWidth ) {
                     std::fill( radarX, radarXEnd, fillColor );

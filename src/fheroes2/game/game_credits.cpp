@@ -52,9 +52,9 @@ namespace
 
         assert( !out.singleLayer() );
 
-        uint8_t * image = out.image();
+        uint32_t * image = out.image();
         const uint8_t * transform = out.transform();
-        const uint8_t * imageEnd = image + out.width() * out.height();
+        const uint32_t * imageEnd = image + out.width() * out.height();
 
         for ( ; image != imageEnd; ++image, ++transform ) {
             if ( *transform == 0 ) {

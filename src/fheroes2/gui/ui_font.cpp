@@ -63,13 +63,13 @@ namespace
 
         const int32_t imageWidth = output.width();
 
-        uint8_t * imageOutY = output.image() + imageWidth * contourOffset.y;
+        uint32_t * imageOutY = output.image() + imageWidth * contourOffset.y;
         const uint8_t * transformInY = input.transform() - contourOffset.x;
         uint8_t * transformOutY = output.transform() + imageWidth * contourOffset.y;
         const uint8_t * transformOutYEnd = transformOutY + imageWidth * height;
 
         for ( ; transformOutY != transformOutYEnd; transformInY += imageWidth, transformOutY += imageWidth, imageOutY += imageWidth ) {
-            uint8_t * imageOutX = imageOutY;
+            uint32_t * imageOutX = imageOutY;
             const uint8_t * transformInX = transformInY;
             uint8_t * transformOutX = transformOutY;
             const uint8_t * transformOutXEnd = transformOutX + width;
@@ -1265,7 +1265,7 @@ namespace
             font[198 - 32].reset();
             fheroes2::Copy( font[56], 1, 0, font[198 - 32], 1, 0, 8, 11 );
             fheroes2::Copy( font[56], 9, 0, font[198 - 32], 10, 0, 6, 11 );
-            fheroes2::Fill( font[198 - 32], 9, 1, 1, 9, font[198 - 32].image()[1 + font[198 - 32].width()] );
+            fheroes2::Fill( font[198 - 32], 9, 1, 1, 9, static_cast<uint8_t>(font[198 - 32].image()[1 + font[198 - 32].width()]) );
             font[198 - 32].setPosition( font[56].x(), font[56].y() );
             updateNormalFontLetterShadow( font[198 - 32] );
 
@@ -1482,7 +1482,7 @@ namespace
             font[230 - 32].reset();
             fheroes2::Copy( font[88], 0, 0, font[230 - 32], 0, 0, 6, 7 );
             fheroes2::Copy( font[88], 5, 0, font[230 - 32], 7, 0, 5, 7 );
-            fheroes2::Fill( font[230 - 32], 6, 1, 1, 5, font[230 - 32].image()[3 + font[230 - 32].width()] );
+            fheroes2::Fill( font[230 - 32], 6, 1, 1, 5, static_cast<uint8_t>(font[230 - 32].image()[3 + font[230 - 32].width()]) );
             font[230 - 32].setPosition( font[88].x(), font[88].y() );
             updateNormalFontLetterShadow( font[230 - 32] );
 
