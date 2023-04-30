@@ -67,6 +67,8 @@ namespace
 {
     const int32_t scrollbarOffset = 626;
 
+    bool needFadeIn{ false };
+
     std::string CapturedExtInfoString( int res, int color, const Funds & funds )
     {
         std::string output = std::to_string( world.CountCapturedMines( res, color ) );
@@ -240,8 +242,13 @@ void StatsHeroesList::ActionListDoubleClick( HeroRow & row, const fheroes2::Poin
 
 void StatsHeroesList::ActionListSingleClick( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy )
 {
-    if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) )
+    if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) ) {
         Game::OpenHeroesDialog( *row.hero, false, false );
+
+        if ( Settings::isFadeEffectEnabled() && !fheroes2::Display::instance().isDefaultSize() ) {
+            needFadeIn = true;
+        }
+    }
 }
 
 void StatsHeroesList::ActionListPressRight( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy )
@@ -481,16 +488,24 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const fheroes2::Poi
     if ( row.castle ) {
         // click castle icon
         if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
-            Game::OpenCastleDialog( *row.castle, false );
-            row.Init( row.castle );
+            Game::OpenCastleDialog( *row.castle, false, false );
         }
+
         // click hero icon
         else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
             Heroes * hero = row.castle->GetHero();
             if ( hero ) {
                 Game::OpenHeroesDialog( *hero, false, false );
-                row.Init( row.castle );
             }
+        }
+        else {
+            return;
+        }
+
+        row.Init( row.castle );
+
+        if ( Settings::isFadeEffectEnabled() && !fheroes2::Display::instance().isDefaultSize() ) {
+            needFadeIn = true;
         }
     }
 }
@@ -713,6 +728,13 @@ void Kingdom::openOverviewDialog()
 
     fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT, false );
 
+    // Fade-out game screen only for 640x480 resolution.
+    const bool isDefaultScreenSize = display.isDefaultSize();
+    const bool isFadeEnabled = Settings::isFadeEffectEnabled();
+    if ( isFadeEnabled && isDefaultScreenSize ) {
+        fheroes2::fadeOutDisplay();
+    }
+
     const fheroes2::Point cur_pt( background.activeArea().x, background.activeArea().y );
     fheroes2::Point dst_pt( cur_pt );
 
@@ -771,7 +793,22 @@ void Kingdom::openOverviewDialog()
     buttonCastle.draw();
     buttonExit.draw();
 
-    display.render();
+    // Fade-in Kingdom overview dialog.
+    if ( isFadeEnabled ) {
+        if ( !isDefaultScreenSize ) {
+            // We need to expand the ROI for the next render to properly render window borders and shadow.
+            fheroes2::Rect roi( background.windowArea() );
+            roi.x -= BORDERWIDTH;
+            roi.width += BORDERWIDTH;
+            roi.height += BORDERWIDTH;
+            display.updateNextRenderRoi( roi );
+        }
+
+        fheroes2::fadeInDisplay( background.activeArea(), !isDefaultScreenSize );
+    }
+    else {
+        display.render();
+    }
 
     LocalEvent & le = LocalEvent::Get();
     bool redraw = true;
@@ -799,6 +836,14 @@ void Kingdom::openOverviewDialog()
 
         // Exit this dialog.
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+            // Fade-out Kingdom overview dialog.
+            if ( isFadeEnabled ) {
+                fheroes2::fadeOutDisplay( background.activeArea(), !isDefaultScreenSize );
+                if ( isDefaultScreenSize ) {
+                    Interface::Basic::Get().setNeedFadeIn();
+                }
+            }
+
             break;
         }
 
@@ -826,6 +871,12 @@ void Kingdom::openOverviewDialog()
 
         if ( le.MouseClickLeft( rectLighthouse ) ) {
             fheroes2::showLighthouseInfo( *this, Dialog::OK );
+        }
+
+        if ( needFadeIn && isFadeEnabled ) {
+            needFadeIn = false;
+
+            fheroes2::fadeInDisplay( background.activeArea() );
         }
 
         if ( !listStats->IsNeedRedraw() && !redraw ) {

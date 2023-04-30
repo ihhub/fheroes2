@@ -229,7 +229,7 @@ public:
 
     void DrawImageCastle( const fheroes2::Point & pt ) const;
 
-    CastleDialogReturnValue OpenDialog( const bool openConstructionWindow, const bool fade = false );
+    CastleDialogReturnValue OpenDialog( const bool openConstructionWindow, const bool fade = false, const bool renderBackgroundDialog = true );
 
     int GetAttackModificator( const std::string * ) const;
     int GetDefenseModificator( const std::string * ) const;

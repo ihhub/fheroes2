@@ -62,10 +62,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::Point cur_pt;
     fheroes2::Rect fadeRoi;
     std::unique_ptr<fheroes2::StandardWindow> background;
     std::unique_ptr<fheroes2::ImageRestorer> restorer;
+
     if ( renderBackgroundDialog ) {
         background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
         fadeRoi = background->activeArea();
@@ -83,7 +83,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         fheroes2::fadeOutDisplay( fadeRoi );
     }
 
-    cur_pt = { fadeRoi.x, fadeRoi.y };
+    fheroes2::Point cur_pt = { fadeRoi.x, fadeRoi.y };
     fheroes2::Point dst_pt( cur_pt );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROBKG, 0 ), display, dst_pt.x, dst_pt.y );

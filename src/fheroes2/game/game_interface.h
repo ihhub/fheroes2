@@ -128,6 +128,11 @@ namespace Interface
 
         void Redraw( const uint32_t force = 0 );
 
+        void setNeedFadeIn()
+        {
+            _needFadeIn = true;
+        }
+
         static bool isScrollLeft( const fheroes2::Point & cursorPos )
         {
             return cursorPos.x < BORDERWIDTH;

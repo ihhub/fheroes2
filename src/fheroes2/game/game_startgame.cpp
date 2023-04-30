@@ -192,7 +192,7 @@ void Game::DialogPlayers( int color, std::string str )
     fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( std::move( str ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
 }
 
-void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
+void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, const bool renderBackgroundDialog /* = true */ )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -211,7 +211,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
 
     const bool isFadeEnabled = Settings::isFadeEffectEnabled();
 
-    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( false, isFadeEnabled );
+    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( false, isFadeEnabled, renderBackgroundDialog );
 
     while ( result != Castle::CastleDialogReturnValue::Close ) {
         if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
@@ -271,7 +271,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
     }
 }
 
-void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss /* = false */ )
+void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderBackgroundDialog, const bool disableDismiss /* = false */ )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -286,7 +286,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     int result = Dialog::ZERO;
 
     while ( it != myHeroes.end() && result != Dialog::CANCEL ) {
-        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, windowIsGameWorld );
+        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, renderBackgroundDialog );
         if ( needFade ) {
             needFade = false;
         }
@@ -312,7 +312,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
             ( *it )->GetPath().Hide();
             basicInterface.SetRedraw( Interface::REDRAW_GAMEAREA );
 
-            if ( windowIsGameWorld ) {
+            if ( renderBackgroundDialog ) {
                 ( *it )->FadeOut();
             }
 
@@ -885,7 +885,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
     if ( _needFadeIn ) {
         _needFadeIn = false;
 
-        fheroes2::fadeInDisplay();
+        SetRedraw( REDRAW_GAMEAREA );
     }
     else {
         display.render();
@@ -1310,6 +1310,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                     _needFadeIn = false;
 
                     fheroes2::fadeInDisplay();
+
+                    SetRedraw( REDRAW_GAMEAREA );
                 }
                 else {
                     display.render();
