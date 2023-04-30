@@ -21,6 +21,7 @@
 #include "maps_tiles_helper.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstdint>
 #include <limits>
@@ -178,7 +179,7 @@ namespace Maps
             return Spell::NONE;
         }
 
-        return tile.metadata()[2];
+        return static_cast<int32_t>( tile.metadata()[2] );
     }
 
     void setMineSpellOnTile( Tiles & tile, const int32_t spellId )
@@ -269,7 +270,7 @@ namespace Maps
         return false;
     }
 
-    int Maps::getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
+    int getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
     {
         // The color of the barrier is actually being stored in tile metadata but as of now we use sprite information.
 
@@ -283,7 +284,7 @@ namespace Maps
         return 0;
     }
 
-    int Maps::getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
+    int getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
     {
         // The color of the barrier is actually being stored in tile metadata but as of now we use sprite information.
 
@@ -375,7 +376,7 @@ namespace Maps
         case MP2::OBJ_ARTIFACT:
             if ( tile.metadata()[2] == static_cast<uint32_t>( ArtifactCaptureCondition::CONTAINS_SPELL ) ) {
                 Artifact art( Artifact::SPELL_SCROLL );
-                art.SetSpell( tile.metadata()[1] );
+                art.SetSpell( static_cast<int32_t>( tile.metadata()[1] ) );
                 return art;
             }
             else {
@@ -617,7 +618,7 @@ namespace Maps
         switch ( tile.GetObject( false ) ) {
         case MP2::OBJ_BARRIER:
         case MP2::OBJ_TRAVELLER_TENT:
-            return tile.metadata()[0];
+            return static_cast<int>( tile.metadata()[0] );
         default:
             return world.ColorCapturedObject( tile.GetIndex() );
         }

@@ -39,6 +39,7 @@
 #include "agg_image.h"
 #include "army.h"
 #include "army_troop.h"
+#include "artifact.h"
 #include "castle.h"
 #include "game.h"
 #include "game_io.h"
@@ -3247,14 +3248,13 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
 
     // The object could be under a hero.
     const MP2::MapObjectType objectType = GetObject( false );
-
     if ( !MP2::isActionObject( objectType ) ) {
         // A non-action object have no metadata.
         return;
     }
 
     switch ( objectType ) {
-    // Alchemist Lab and Mines have first value as a resource type and the second value as resource value per day.
+    // Alchemist Lab, Sawmill and Mines have first value as a resource type and the second value as resource count per day.
     case MP2::OBJ_ALCHEMIST_LAB:
     case MP2::OBJ_MINES:
     case MP2::OBJ_SAWMILL:
