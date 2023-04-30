@@ -248,6 +248,7 @@ void StatsHeroesList::ActionListSingleClick( HeroRow & row, const fheroes2::Poin
     if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) ) {
         Game::OpenHeroesDialog( *row.hero, false, false );
 
+        // For 640x480 the fade-in effect is rendered in 'OpenHeroesDialog()' for other resolutions we do it in 'openOverviewDialog()'.
         if ( Settings::isFadeEffectEnabled() && !fheroes2::Display::instance().isDefaultSize() ) {
             needFadeIn = true;
         }

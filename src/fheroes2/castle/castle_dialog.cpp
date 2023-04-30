@@ -370,6 +370,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     CastleDialogReturnValue result = CastleDialogReturnValue::DoNothing;
     bool need_redraw = false;
+    bool needFadeIn = false;
 
     // dialog menu loop
     Game::passAnimationDelay( Game::CASTLE_AROUND_DELAY );
@@ -476,6 +477,11 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             if ( hero && le.MouseClickLeft( rectSign2 ) ) {
                 // View hero.
                 openHeroDialog( topArmyBar, bottomArmyBar, *hero );
+                // For 640x480 the fade-in effect is rendered in 'OpenHeroesDialog()' for other resolutions we do it here.
+                if ( isFadeEnabled && !isDefaultScreenSize ) {
+                    needFadeIn = true;
+                }
+
                 need_redraw = true;
             }
 
@@ -671,7 +677,14 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 buttonExit.draw();
             }
 
-            display.render();
+            if ( needFadeIn && isFadeEnabled ) {
+                needFadeIn = false;
+
+                fheroes2::fadeInDisplay( fadeRoi );
+            }
+            else {
+                display.render();
+            }
         }
 
         // Update status bar. It doesn't depend on animation status.
