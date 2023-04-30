@@ -364,6 +364,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
         fheroes2::fadeInDisplay( fadeRoi, renderBackgroundDialog && !isDefaultScreenSize );
     }
+    else {
+        display.render();
+    }
 
     CastleDialogReturnValue result = CastleDialogReturnValue::DoNothing;
     bool need_redraw = false;
