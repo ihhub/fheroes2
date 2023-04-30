@@ -232,7 +232,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
         const bool openConstructionWindow
             = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
 
-        result = ( *it )->OpenDialog( openConstructionWindow, false );
+        result = ( *it )->OpenDialog( openConstructionWindow, false, renderBackgroundDialog );
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
