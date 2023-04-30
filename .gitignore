@@ -94,5 +94,8 @@ android/.gradle
 # Automatically created Android assets
 android/app/src/main/assets/files/
 
+# Xcode per user files
+xcuserdata
+
 # Mac magic folders
 .DS_Store
