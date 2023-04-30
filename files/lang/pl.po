@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-25 06:07+0000\n"
+"POT-Creation-Date: 2023-04-30 17:06+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -4373,6 +4373,10 @@ msgid ""
 msgstr ""
 "Nie udaje ci się wypełnić misji w określonym czasie. Wszystko stracone."
 
+#, fuzzy
+msgid "Defeat!"
+msgstr " pokonany"
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
@@ -4443,6 +4447,9 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} gracz zostaje wygnany!"
+
+msgid "Major Event!"
+msgstr ""
 
 msgid "Scenario:"
 msgstr "Scenariusz:"
@@ -4532,6 +4539,9 @@ msgid " All dwellings increase population."
 msgstr " Populacja całego królestwa zwiększa się."
 
 msgid "New Week!"
+msgstr ""
+
+msgid "Beware!"
 msgstr ""
 
 msgid ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-25 15:24+0000\n"
+"POT-Creation-Date: 2023-04-30 17:06+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4280,6 +4280,10 @@ msgstr ""
 "Du har misslyckats att slutföra ditt uppdrag i tid.\n"
 "Allting är förlorat."
 
+#, fuzzy
+msgid "Defeat!"
+msgstr " besegrad"
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
@@ -4348,6 +4352,9 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} har blivit besegrad!"
+
+msgid "Major Event!"
+msgstr ""
 
 msgid "Scenario:"
 msgstr "Scenario:"
@@ -4428,6 +4435,9 @@ msgid " All dwellings increase population."
 msgstr " Alla bostäder höjer folkmängden."
 
 msgid "New Week!"
+msgstr ""
+
+msgid "Beware!"
 msgstr ""
 
 msgid ""
