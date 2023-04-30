@@ -1077,12 +1077,10 @@ namespace
                 resolutionInfo = GetNearestResolution( resolutionInfo, resolutions );
             }
 
-#if defined( ANDROID )
             // Same as ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
             if ( SDL_SetHint( SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight" ) == SDL_FALSE ) {
                 ERROR_LOG( "Failed to set a hint for screen orientation." )
             }
-#endif
 
             uint32_t flags = SDL_WINDOW_SHOWN;
             if ( isFullScreen ) {

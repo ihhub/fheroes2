@@ -60,12 +60,7 @@ namespace
         uint16_t format = AUDIO_S16;
         // Stereo audio support
         int channels = 2;
-#if defined( ANDROID )
-        // Value greater than 1024 causes audio distortion on Android
         int chunkSize = 1024;
-#else
-        int chunkSize = 2048;
-#endif
     };
 
     std::atomic<bool> isInitialized{ false };

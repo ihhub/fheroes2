@@ -256,6 +256,21 @@
 		EA67D5F029FE0B620004F40F /* SDL3_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67D5EA29FE0B350004F40F /* SDL3_mixer.framework */; };
 		EA67D5F129FE0B620004F40F /* SDL3_mixer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EA67D5EA29FE0B350004F40F /* SDL3_mixer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EA67D5F329FE0CD50004F40F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67D5F229FE0C8C0004F40F /* libz.tbd */; };
+		EA67D5FE29FE12470004F40F /* heroes2.agg in Resources */ = {isa = PBXBuildFile; fileRef = EA67D5FA29FE12470004F40F /* heroes2.agg */; };
+		EA67D5FF29FE12470004F40F /* standard.hs in Resources */ = {isa = PBXBuildFile; fileRef = EA67D5FB29FE12470004F40F /* standard.hs */; };
+		EA67D60029FE12470004F40F /* h2offer.smk in Resources */ = {isa = PBXBuildFile; fileRef = EA67D5FC29FE12470004F40F /* h2offer.smk */; };
+		EA67D60229FE186F0004F40F /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA67D60129FE186F0004F40F /* CoreFoundation.framework */; };
+		EA67D60429FE1FD20004F40F /* resurrection.h2d in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60329FE1FD20004F40F /* resurrection.h2d */; };
+		EA67D60629FE1FE90004F40F /* fheroes2.sf3 in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60529FE1FE90004F40F /* fheroes2.sf3 */; };
+		EA67D60F29FE22510004F40F /* heroes2x.agg in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60729FE22500004F40F /* heroes2x.agg */; };
+		EA67D61029FE22510004F40F /* IVYWIZ.SMK in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60829FE22500004F40F /* IVYWIZ.SMK */; };
+		EA67D61129FE22510004F40F /* IVYDES.SMK in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60929FE22500004F40F /* IVYDES.SMK */; };
+		EA67D61229FE22510004F40F /* netlodr.dat in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60A29FE22500004F40F /* netlodr.dat */; };
+		EA67D61329FE22510004F40F /* IVYVOY.SMK in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60B29FE22500004F40F /* IVYVOY.SMK */; };
+		EA67D61429FE22510004F40F /* campaign.hs in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60C29FE22510004F40F /* campaign.hs */; };
+		EA67D61529FE22510004F40F /* IVYPOL.SMK in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60D29FE22510004F40F /* IVYPOL.SMK */; };
+		EA67D61629FE22510004F40F /* H2XINTRO.SMK in Resources */ = {isa = PBXBuildFile; fileRef = EA67D60E29FE22510004F40F /* H2XINTRO.SMK */; };
+		EA67D61829FE26330004F40F /* Betrayal.mp2 in Resources */ = {isa = PBXBuildFile; fileRef = EA67D61729FE26330004F40F /* Betrayal.mp2 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -819,6 +834,21 @@
 		EA67D4D129FE09D20004F40F /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		EA67D5DE29FE0B350004F40F /* SDL_mixer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_mixer.xcodeproj; path = ../../SDL_mixer/Xcode/SDL_mixer.xcodeproj; sourceTree = "<group>"; };
 		EA67D5F229FE0C8C0004F40F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		EA67D5FA29FE12470004F40F /* heroes2.agg */ = {isa = PBXFileReference; lastKnownFileType = file; path = heroes2.agg; sourceTree = "<group>"; };
+		EA67D5FB29FE12470004F40F /* standard.hs */ = {isa = PBXFileReference; lastKnownFileType = file; path = standard.hs; sourceTree = "<group>"; };
+		EA67D5FC29FE12470004F40F /* h2offer.smk */ = {isa = PBXFileReference; lastKnownFileType = file; path = h2offer.smk; sourceTree = "<group>"; };
+		EA67D60129FE186F0004F40F /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		EA67D60329FE1FD20004F40F /* resurrection.h2d */ = {isa = PBXFileReference; lastKnownFileType = file; name = resurrection.h2d; path = ../files/data/resurrection.h2d; sourceTree = "<group>"; };
+		EA67D60529FE1FE90004F40F /* fheroes2.sf3 */ = {isa = PBXFileReference; lastKnownFileType = file; name = fheroes2.sf3; path = ../files/soundfonts/fheroes2.sf3; sourceTree = "<group>"; };
+		EA67D60729FE22500004F40F /* heroes2x.agg */ = {isa = PBXFileReference; lastKnownFileType = file; path = heroes2x.agg; sourceTree = "<group>"; };
+		EA67D60829FE22500004F40F /* IVYWIZ.SMK */ = {isa = PBXFileReference; lastKnownFileType = file; path = IVYWIZ.SMK; sourceTree = "<group>"; };
+		EA67D60929FE22500004F40F /* IVYDES.SMK */ = {isa = PBXFileReference; lastKnownFileType = file; path = IVYDES.SMK; sourceTree = "<group>"; };
+		EA67D60A29FE22500004F40F /* netlodr.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = netlodr.dat; sourceTree = "<group>"; };
+		EA67D60B29FE22500004F40F /* IVYVOY.SMK */ = {isa = PBXFileReference; lastKnownFileType = file; path = IVYVOY.SMK; sourceTree = "<group>"; };
+		EA67D60C29FE22510004F40F /* campaign.hs */ = {isa = PBXFileReference; lastKnownFileType = file; path = campaign.hs; sourceTree = "<group>"; };
+		EA67D60D29FE22510004F40F /* IVYPOL.SMK */ = {isa = PBXFileReference; lastKnownFileType = file; path = IVYPOL.SMK; sourceTree = "<group>"; };
+		EA67D60E29FE22510004F40F /* H2XINTRO.SMK */ = {isa = PBXFileReference; lastKnownFileType = file; path = H2XINTRO.SMK; sourceTree = "<group>"; };
+		EA67D61729FE26330004F40F /* Betrayal.mp2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Betrayal.mp2; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -826,6 +856,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA67D60229FE186F0004F40F /* CoreFoundation.framework in Frameworks */,
 				EA67D5F329FE0CD50004F40F /* libz.tbd in Frameworks */,
 				EA67D5F029FE0B620004F40F /* SDL3_mixer.framework in Frameworks */,
 				EA67D2C829FE04B70004F40F /* SDL2.framework in Frameworks */,
@@ -838,6 +869,9 @@
 		EA54668B29FE02FF00A9D8B2 = {
 			isa = PBXGroup;
 			children = (
+				EA67D60529FE1FE90004F40F /* fheroes2.sf3 */,
+				EA67D60329FE1FD20004F40F /* resurrection.h2d */,
+				EA67D5F829FE12370004F40F /* data */,
 				EA67D5DE29FE0B350004F40F /* SDL_mixer.xcodeproj */,
 				EA67D2EE29FE09D20004F40F /* src */,
 				EA67D2A229FE04380004F40F /* SDL.xcodeproj */,
@@ -880,6 +914,7 @@
 		EA67D2C629FE04AE0004F40F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EA67D60129FE186F0004F40F /* CoreFoundation.framework */,
 				EA67D5F229FE0C8C0004F40F /* libz.tbd */,
 			);
 			name = Frameworks;
@@ -1562,6 +1597,25 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		EA67D5F829FE12370004F40F /* data */ = {
+			isa = PBXGroup;
+			children = (
+				EA67D61729FE26330004F40F /* Betrayal.mp2 */,
+				EA67D60C29FE22510004F40F /* campaign.hs */,
+				EA67D60E29FE22510004F40F /* H2XINTRO.SMK */,
+				EA67D60729FE22500004F40F /* heroes2x.agg */,
+				EA67D60929FE22500004F40F /* IVYDES.SMK */,
+				EA67D60D29FE22510004F40F /* IVYPOL.SMK */,
+				EA67D60B29FE22500004F40F /* IVYVOY.SMK */,
+				EA67D60829FE22500004F40F /* IVYWIZ.SMK */,
+				EA67D60A29FE22500004F40F /* netlodr.dat */,
+				EA67D5FC29FE12470004F40F /* h2offer.smk */,
+				EA67D5FA29FE12470004F40F /* heroes2.agg */,
+				EA67D5FB29FE12470004F40F /* standard.hs */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1734,19 +1788,33 @@
 			files = (
 				EA67D4D229FE09D20004F40F /* Makefile.mingw in Resources */,
 				EA67D4D329FE09D20004F40F /* Makefile.vita in Resources */,
+				EA67D61129FE22510004F40F /* IVYDES.SMK in Resources */,
 				EA67D5D929FE09D20004F40F /* COPYING in Resources */,
 				EA67D4ED29FE09D20004F40F /* fheroes2.rc in Resources */,
+				EA67D60629FE1FE90004F40F /* fheroes2.sf3 in Resources */,
+				EA67D61229FE22510004F40F /* netlodr.dat in Resources */,
 				EA67D5DA29FE09D20004F40F /* smacker.h.orig in Resources */,
+				EA67D5FF29FE12470004F40F /* standard.hs in Resources */,
 				EA67D5DB29FE09D20004F40F /* smacker.c.orig in Resources */,
 				EA67D4EE29FE09D20004F40F /* fheroes2.ico in Resources */,
+				EA67D61529FE22510004F40F /* IVYPOL.SMK in Resources */,
+				EA67D60F29FE22510004F40F /* heroes2x.agg in Resources */,
+				EA67D61429FE22510004F40F /* campaign.hs in Resources */,
 				EA67D5D229FE09D20004F40F /* configure.ac in Resources */,
 				EA67D4F029FE09D20004F40F /* Makefile.osx in Resources */,
 				EA67D5D329FE09D20004F40F /* INSTALL in Resources */,
+				EA67D60429FE1FD20004F40F /* resurrection.h2d in Resources */,
+				EA67D60029FE12470004F40F /* h2offer.smk in Resources */,
 				EA5466A729FE02FF00A9D8B2 /* LaunchScreen.storyboard in Resources */,
+				EA67D5FE29FE12470004F40F /* heroes2.agg in Resources */,
 				EA67D4EF29FE09D20004F40F /* Info.plist.in in Resources */,
 				EA67D4EB29FE09D20004F40F /* fheroes2.icns in Resources */,
+				EA67D61629FE22510004F40F /* H2XINTRO.SMK in Resources */,
 				EA67D4E929FE09D20004F40F /* Makefile.switch in Resources */,
+				EA67D61329FE22510004F40F /* IVYVOY.SMK in Resources */,
 				EA67D4EC29FE09D20004F40F /* fheroes2.png in Resources */,
+				EA67D61829FE26330004F40F /* Betrayal.mp2 in Resources */,
+				EA67D61029FE22510004F40F /* IVYWIZ.SMK in Resources */,
 				EA67D5D829FE09D20004F40F /* Makefile.am in Resources */,
 				EA5466A429FE02FF00A9D8B2 /* Assets.xcassets in Resources */,
 			);
