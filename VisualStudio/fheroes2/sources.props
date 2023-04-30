@@ -185,7 +185,7 @@
     <ClCompile Include="src\fheroes2\maps\maps_fileinfo.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_objects.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_tiles.cpp" />
-    <ClCompile Include="src\fheroes2\maps\maps_tiles_quantity.cpp" />
+    <ClCompile Include="src\fheroes2\maps\maps_tiles_helper.cpp" />
     <ClCompile Include="src\fheroes2\maps\mp2.cpp" />
     <ClCompile Include="src\fheroes2\maps\mp2_helper.cpp" />
     <ClCompile Include="src\fheroes2\maps\position.cpp" />
@@ -369,6 +369,7 @@
     <ClInclude Include="src\fheroes2\maps\maps_fileinfo.h" />
     <ClInclude Include="src\fheroes2\maps\maps_objects.h" />
     <ClInclude Include="src\fheroes2\maps\maps_tiles.h" />
+    <ClInclude Include="src\fheroes2\maps\maps_tiles_helper.h" />
     <ClInclude Include="src\fheroes2\maps\mp2.h" />
     <ClInclude Include="src\fheroes2\maps\mp2_helper.h" />
     <ClInclude Include="src\fheroes2\maps\pairs.h" />

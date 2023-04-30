@@ -23,6 +23,10 @@ jobs:
         shell: bash
     steps:
     - uses: actions/checkout@v3
+    - uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 17
     - name: Install dependencies
       run: |
         bash script/android/install_packages.sh

@@ -65,6 +65,7 @@
 #include "m82.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
@@ -556,7 +557,8 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 protection = Maps::isTileUnderProtection( tile.GetIndex() );
             }
             else {
-                protection = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.isCaptureObjectProtected() ) );
+                protection
+                    = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( getColorFromTile( tile ) ) && tile.isCaptureObjectProtected() ) );
             }
 
             return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION ), from_hero.getNumOfTravelDays( tile.GetIndex() ) );
@@ -856,6 +858,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                 fheroes2::showStandardTextMessage( event.title, event.message, Dialog::OK );
             }
         } );
+
+        // The amount of the kingdom resources has changed, the status window needs to be updated
+        Redraw( REDRAW_STATUS );
+        display.render();
 
         if ( conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
             Game::AutoSave();
@@ -1232,24 +1238,27 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
             }
         }
 
-        // map objects animation
-        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            Game::updateAdventureMapAnimationIndex();
-            gameArea.SetRedraw();
-        }
-
-        // check that the kingdom is not vanquished yet (has at least one hero or castle)
+        // Check that the kingdom is not vanquished yet (has at least one hero or castle).
         if ( res == fheroes2::GameMode::CANCEL && !myKingdom.isPlay() ) {
             res = fheroes2::GameMode::END_TURN;
         }
 
-        if ( NeedRedraw() ) {
-            Redraw();
+        // Render map only if the turn is not over.
+        if ( res == fheroes2::GameMode::CANCEL ) {
+            // map objects animation
+            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                Game::updateAdventureMapAnimationIndex();
+                gameArea.SetRedraw();
+            }
 
-            // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
-            assert( GetRedrawMask() == 0 );
+            if ( NeedRedraw() ) {
+                Redraw();
 
-            display.render();
+                // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
+                assert( GetRedrawMask() == 0 );
+
+                display.render();
+            }
         }
     }
 

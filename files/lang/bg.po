@@ -1,12 +1,12 @@
 # Bulgarian translation of fheroes2
 # Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-13 05:15+0000\n"
+"POT-Creation-Date: 2023-04-24 18:46+0300\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3513,6 +3513,12 @@ msgstr "Невъзможна"
 msgid "and more..."
 msgstr "и още..."
 
+msgid "Easy"
+msgstr "Лесно"
+
+msgid "Hard"
+msgstr "Трудно"
+
 msgid "Campaign Difficulty"
 msgstr "Трудност на Кампанията"
 
@@ -3536,11 +3542,25 @@ msgstr ""
 "Избери тази трудност, ако искаш предизвикателство. И.И. е по-силен в "
 "сравнение с нормалната трудност."
 
-msgid "Easy"
-msgstr "Лесно"
+#, fuzzy
+msgid ""
+"Congratulations!\n"
+"\n"
+"Days: %{days}\n"
+msgstr "Честито!"
 
-msgid "Hard"
-msgstr "Трудно"
+msgid ""
+"\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
+msgid ""
+"Score: %{score}\n"
+"\n"
+"Rating:\n"
+"%{rating}"
+msgstr ""
 
 msgid "Start the selected scenario."
 msgstr "Стартирай избрания сценарий."
@@ -3731,11 +3751,11 @@ msgstr "Дизайнери на картите"
 msgid "Package Design"
 msgstr "Дизайн на опаковката"
 
-msgid "Unknown Hero"
-msgstr "Незнаен герой"
-
 msgid "Your Name"
 msgstr "Твоето име"
+
+msgid "Unknown Hero"
+msgstr "Незнаен герой"
 
 msgid "Standard"
 msgstr "Стандарт"
@@ -4358,6 +4378,12 @@ msgstr ""
 "Не успя да завършиш мисията си навреме.\n"
 "Всичко е загубено."
 
+msgid ""
+"Base score: %{score}\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
 "Победи всички вражески герои и превземи всички вражески градове и замъци."
@@ -4544,6 +4570,69 @@ msgid ""
 msgstr ""
 "%{color} играч, теоите герои те изоставят и ти си прогонени от тази земя."
 
+msgid "Lord Kilburn"
+msgstr "Лорд Килбърн"
+
+msgid "Tsabu"
+msgstr "Сабу"
+
+#, fuzzy
+msgid "Sir Galant"
+msgstr "Сър Галант"
+
+msgid "Thundax"
+msgstr "Тъндакс"
+
+#, fuzzy
+msgid "Lord Haart"
+msgstr "Лорд Холтън"
+
+msgid "Ariel"
+msgstr "Ариел"
+
+msgid "Rebecca"
+msgstr "Ребека"
+
+msgid "Sandro"
+msgstr "Сандро"
+
+msgid "Crodo"
+msgstr "Кродо"
+
+#, fuzzy
+msgid "Barock"
+msgstr "Барок"
+
+msgid "Antoine"
+msgstr ""
+
+msgid "Astra"
+msgstr "Астра"
+
+msgid "Agar"
+msgstr "Егар"
+
+msgid "Vatawna"
+msgstr "Ватуна"
+
+msgid "Vesper"
+msgstr "Веспер"
+
+msgid "Ambrose"
+msgstr "Амброуз"
+
+msgid "Troyan"
+msgstr "Траяна"
+
+msgid "Jojosh"
+msgstr "Джоджош"
+
+msgid "Wrathmont"
+msgstr "Вратмунд"
+
+msgid "Maximus"
+msgstr "Максимус"
+
 msgid "Next Hero"
 msgstr "Следващият герой"
 
@@ -4707,7 +4796,7 @@ msgstr ""
 msgid "Handicap"
 msgstr "Недъг"
 
-#
+# 
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
@@ -4731,7 +4820,7 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr "Лек недъг"
 
-#
+# 
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -4742,7 +4831,7 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr "Тежък недъг"
 
-#
+# 
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."
@@ -4855,23 +4944,14 @@ msgstr "Ектор"
 msgid "Gwenneth"
 msgstr "Гуенет"
 
-msgid "Lord Kilburn"
-msgstr "Лорд Килбърн"
-
 msgid "Sir Gallant"
 msgstr "Сър Галант"
 
 msgid "Tyro"
 msgstr "Тайро"
 
-msgid "Ambrose"
-msgstr "Амброуз"
-
 msgid "Dimitry"
 msgstr "Димитрий"
-
-msgid "Maximus"
-msgstr "Максимус"
 
 msgid "Ruby"
 msgstr "Руби"
@@ -4885,12 +4965,6 @@ msgstr "Финиас"
 msgid "Jezebel"
 msgstr "Джезабел"
 
-msgid "Jojosh"
-msgstr "Джоджош"
-
-msgid "Thundax"
-msgstr "Тъндакс"
-
 msgid "Atlas"
 msgstr "Атлас"
 
@@ -4900,29 +4974,11 @@ msgstr "Ергон"
 msgid "Jaclyn"
 msgstr "Жаклин"
 
-msgid "Tsabu"
-msgstr "Сабу"
-
-msgid "Astra"
-msgstr "Астра"
-
 msgid "Gem"
 msgstr "Джем"
 
 msgid "Natasha"
 msgstr "Наташа"
-
-msgid "Rebecca"
-msgstr "Ребека"
-
-msgid "Troyan"
-msgstr "Траяна"
-
-msgid "Vatawna"
-msgstr "Ватуна"
-
-msgid "Ariel"
-msgstr "Ариел"
 
 msgid "Carlawn"
 msgstr "Карлон"
@@ -4936,23 +4992,11 @@ msgstr "Ери"
 msgid "Barok"
 msgstr "Барок"
 
-msgid "Crodo"
-msgstr "Кродо"
-
 msgid "Kastore"
 msgstr "Кастор"
 
-msgid "Vesper"
-msgstr "Веспер"
-
-msgid "Agar"
-msgstr "Егар"
-
 msgid "Falagar"
 msgstr "Фалагар"
-
-msgid "Wrathmont"
-msgstr "Вратмунд"
 
 msgid "Dawn"
 msgstr "Доон"
@@ -5001,9 +5045,6 @@ msgstr "Силия"
 
 msgid "Roxana"
 msgstr "Роксана"
-
-msgid "Sandro"
-msgstr "Сандро"
 
 msgid "Lord Corlagon"
 msgstr "Лорд Корлагон"

@@ -28,6 +28,7 @@
 #include <memory>
 #include <set>
 #include <string>
+#include <vector>
 
 #include <SDL_events.h>
 #include <SDL_main.h> // IWYU pragma: keep
@@ -129,8 +130,23 @@ namespace
             const Settings & conf = Settings::Get();
 
             fheroes2::Display & display = fheroes2::Display::instance();
+            if ( conf.isFirstGameRun() && System::isHandheldDevice() ) {
+                // We do not show resolution dialog for first run on handheld devices. In this case it is wise to set 'widest' resolution by default.
+                const std::vector<fheroes2::ResolutionInfo> resolutions = fheroes2::engine().getAvailableResolutions();
+                fheroes2::ResolutionInfo bestResolution{ conf.currentResolutionInfo() };
 
-            display.setResolution( conf.currentResolutionInfo() );
+                for ( const fheroes2::ResolutionInfo & info : resolutions ) {
+                    if ( info.gameWidth > bestResolution.gameWidth && info.gameHeight == bestResolution.gameHeight ) {
+                        bestResolution = info;
+                    }
+                }
+
+                display.setResolution( bestResolution );
+            }
+            else {
+                display.setResolution( conf.currentResolutionInfo() );
+            }
+
             display.fill( 0 ); // start from a black screen
 
             fheroes2::engine().setTitle( GetCaption() );
