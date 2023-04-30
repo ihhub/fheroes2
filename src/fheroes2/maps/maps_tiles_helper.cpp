@@ -214,6 +214,8 @@ namespace Maps
                 return { static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] * 100 };
             }
             return { static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] };
+        default:
+            break;
         }
 
         // Why are you calling this function for an unsupported object type?
@@ -546,10 +548,10 @@ namespace Maps
     {
         switch ( tile.GetObject( false ) ) {
         case MP2::OBJ_CAMPFIRE:
-            return Funds( tile.metadata()[0], tile.metadata()[1] ) + Funds( Resource::GOLD, tile.metadata()[1] * 100 );
+            return Funds{ static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] } + Funds{ Resource::GOLD, tile.metadata()[1] * 100 };
 
         case MP2::OBJ_FLOTSAM:
-            return Funds( Resource::WOOD, tile.metadata()[0] ) + Funds( Resource::GOLD, tile.metadata()[1] * 100 );
+            return Funds{ Resource::WOOD, tile.metadata()[0] } + Funds{ Resource::GOLD, tile.metadata()[1] * 100 };
 
         case MP2::OBJ_DAEMON_CAVE:
         case MP2::OBJ_GRAVEYARD:

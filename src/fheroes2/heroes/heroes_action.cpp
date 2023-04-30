@@ -2958,6 +2958,10 @@ namespace
 
                 return Outcome::Death;
             }
+            default:
+                // This condition should never happen.
+                assert( 0 );
+                break;
             }
 
             return Outcome::Invalid;
