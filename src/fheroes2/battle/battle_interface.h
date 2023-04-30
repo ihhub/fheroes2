@@ -288,6 +288,12 @@ namespace Battle
             return _surfaceInnerArea;
         }
 
+        // Battlefield interface position on display image.
+        const fheroes2::Rect & GetIntrfacePosition() const
+        {
+            return _interfacePosition;
+        }
+
         fheroes2::Point GetMouseCursor() const;
 
         void SetStatus( const std::string &, bool = false );

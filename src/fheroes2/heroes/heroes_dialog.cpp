@@ -76,10 +76,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         restorer = std::make_unique<fheroes2::ImageRestorer>( display, roi.x, roi.y, roi.width, roi.height );
     }
 
-    // Fade-out game screen only for 640x480 resolution.
+    // Fade-out game screen only for 640x480 resolution and if 'renderBackgroundDialog' is false (we are replacing image in already opened dialog).
     const bool isDefaultScreenSize = display.isDefaultSize();
-    if ( fade && Settings::isFadeEffectEnabled() && isDefaultScreenSize ) {
-        fheroes2::fadeOutDisplay();
+    if ( fade && Settings::isFadeEffectEnabled() && ( isDefaultScreenSize || !renderBackgroundDialog ) ) {
+        fheroes2::fadeOutDisplay( roi );
     }
 
     cur_pt = { roi.x, roi.y };
@@ -252,12 +252,13 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // Fade-in hero dialog.
     if ( fade && Settings::isFadeEffectEnabled() ) {
-        if ( !isDefaultScreenSize ) {
+        if ( renderBackgroundDialog && !isDefaultScreenSize ) {
             // We need to expand the ROI for the next render to properly render window borders and shadow.
-            display.updateNextRenderRoi( { roi.x - BORDERWIDTH, roi.y, roi.width + BORDERWIDTH, roi.height + BORDERWIDTH } );
+            display.updateNextRenderRoi( { roi.x - 2 * BORDERWIDTH, roi.y - BORDERWIDTH, roi.width + 3 * BORDERWIDTH, roi.height + 3 * BORDERWIDTH } );
         }
 
-        fheroes2::fadeInDisplay( roi, !isDefaultScreenSize );
+        // Use half fade if game resolution is not 640x480 and  hero dialog was not called from an already opened dialog.
+        fheroes2::fadeInDisplay( roi, renderBackgroundDialog && !isDefaultScreenSize );
     }
     else {
         display.render();
@@ -285,7 +286,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             // Fade-out hero dialog.
             if ( Settings::isFadeEffectEnabled() ) {
-                fheroes2::fadeOutDisplay( roi, !isDefaultScreenSize );
+                fheroes2::fadeOutDisplay( roi, renderBackgroundDialog && !isDefaultScreenSize );
             }
             return Dialog::CANCEL;
         }

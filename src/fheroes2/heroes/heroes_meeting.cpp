@@ -40,6 +40,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "heroes_indicator.h"
@@ -49,6 +50,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "screen.h"
+#include "settings.h"
 #include "skill.h"
 #include "skill_bar.h"
 #include "text.h"
@@ -510,8 +512,30 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             LuckIndicator::QueueEventProcessing( luckIndicator2 );
         }
 
-        if ( le.MouseClickLeft( hero1Area ) ) {
-            Game::OpenHeroesDialog( *this, false, true, true );
+        const bool isHero1LeftClicked = le.MouseClickLeft( hero1Area );
+
+        if ( isHero1LeftClicked || le.MouseClickLeft( hero2Area ) ) {
+            // Currently we are calling hero dialog with borders from meeting dialog without borders
+            // so the engine thinks that we are opening there was now window before to fade-out.
+            // We also have to cache the display image to properly restore it after closing hero dialog.
+
+            fheroes2::Rect restorerRoi( cur_pt.x - 2 * BORDERWIDTH, cur_pt.y - BORDERWIDTH, src_rt.width + 3 * BORDERWIDTH, src_rt.height + 3 * BORDERWIDTH );
+            fheroes2::ImageRestorer dialogRestorer( display, restorerRoi.x, restorerRoi.y, restorerRoi.width, restorerRoi.height );
+            
+            const bool isDefaultScreenSize = display.isDefaultSize();
+            
+            if ( Settings::isFadeEffectEnabled() && !isDefaultScreenSize ) {
+                fheroes2::fadeOutDisplay( src_rt + cur_pt );
+            }
+
+            Game::OpenHeroesDialog( isHero1LeftClicked ? *this : otherHero, false, true, true );
+
+            if ( Settings::isFadeEffectEnabled() && !isDefaultScreenSize ) {
+                dialogRestorer.restore();
+            }
+            else {
+                dialogRestorer.reset();
+            }
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
@@ -527,30 +551,17 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             selectArmy2.Redraw( display );
 
             moraleIndicator1.Redraw();
-            luckIndicator1.Redraw();
-
-            display.render();
-        }
-        else if ( le.MouseClickLeft( hero2Area ) ) {
-            Game::OpenHeroesDialog( otherHero, false, true, true );
-
-            armyCountBackgroundRestorerLeft.restore();
-            armyCountBackgroundRestorerRight.restore();
-
-            selectArtifacts1.ResetSelected();
-            selectArtifacts2.ResetSelected();
-            selectArtifacts1.Redraw( display );
-            selectArtifacts2.Redraw( display );
-
-            selectArmy1.ResetSelected();
-            selectArmy2.ResetSelected();
-            selectArmy1.Redraw( display );
-            selectArmy2.Redraw( display );
-
             moraleIndicator2.Redraw();
+            luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
-            display.render();
+            if ( Settings::isFadeEffectEnabled() && !isDefaultScreenSize ) {
+                display.updateNextRenderRoi( restorerRoi );
+                fheroes2::fadeInDisplay( src_rt + cur_pt );
+            }
+            else {
+                display.render( restorerRoi );
+            }
         }
         else if ( le.MouseClickLeft( moveArmyToHero2.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
             const ArmyTroop * keep = nullptr;
