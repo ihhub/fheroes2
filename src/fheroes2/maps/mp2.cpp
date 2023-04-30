@@ -1006,6 +1006,8 @@ bool MP2::doesObjectContainMetadata( const MP2::MapObjectType type )
     // Ultimate artifact contains radius value to be placed by the engine.
     case OBJ_RANDOM_ULTIMATE_ARTIFACT:
         return true;
+    default:
+        break;
     }
 
     return false;
