@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-25 06:07+0000\n"
+"POT-Creation-Date: 2023-04-30 17:06+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4411,6 +4411,10 @@ msgstr ""
 "Sie haben es nicht geschafft, Ihr Abenteuer rechtzeitig zu beenden.\n"
 "Alles ist verloren."
 
+#, fuzzy
+msgid "Defeat!"
+msgstr " besiegt"
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
@@ -4485,6 +4489,9 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "Spieler %{color} wurde besiegt!"
+
+msgid "Major Event!"
+msgstr ""
 
 msgid "Scenario:"
 msgstr "Szenario:"
@@ -4573,6 +4580,9 @@ msgid " All dwellings increase population."
 msgstr " Alle Wohnungen erhöhen die Bevölkerung."
 
 msgid "New Week!"
+msgstr ""
+
+msgid "Beware!"
 msgstr ""
 
 msgid ""
