@@ -617,13 +617,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     }
     btnOk->draw();
 
-    // Fade-in display if resolution is 640x480 and the battle was quick finished (no RESART button and no battle interface).
-    if ( Settings::isFadeEffectEnabled() && !allowToCancel && !GetInterface() && display.isDefaultSize() ) {
-        fheroes2::fadeInDisplay();
-    }
-    else {
-        display.render();
-    }
+    display.render();
 
     while ( le.HandleEvents() ) {
         le.MousePressLeft( btnOk->area() ) ? btnOk->drawOnPress() : btnOk->drawOnRelease();

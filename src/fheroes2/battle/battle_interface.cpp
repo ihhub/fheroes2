@@ -1262,6 +1262,16 @@ Battle::Interface::~Interface()
     // Fade-out battlefield.
     if ( Settings::isFadeEffectEnabled() ) {
         fheroes2::fadeOutDisplay( _background->activeArea(), !fheroes2::Display::instance().isDefaultSize() );
+
+        // For 640x480 resolution we do screen fade-in.
+        if ( fheroes2::Display::instance().isDefaultSize() ) {
+            // Reset the battlefield dialog window to restore the previous display image from screen restorer.
+            // We have multiple return places after the battle: the adventure map, Main Menu (from Battle only),
+            // the battle results screen (if the battle was quick ended).
+            _background.reset();
+
+            fheroes2::fadeInDisplay();
+        }
     }
 }
 
