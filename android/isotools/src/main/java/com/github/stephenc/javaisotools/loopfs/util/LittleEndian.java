@@ -25,6 +25,11 @@ package com.github.stephenc.javaisotools.loopfs.util;
 
 public class LittleEndian
 {
+    private LittleEndian()
+    {
+        throw new IllegalStateException( "Instantiation is not allowed" );
+    }
+
     public static int getUInt8( byte[] src, int offset )
     {
         return src[offset] & 0xFF;

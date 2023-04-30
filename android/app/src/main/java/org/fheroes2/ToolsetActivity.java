@@ -150,6 +150,7 @@ public final class ToolsetActivity extends AppCompatActivity
         viewModel.validateAssets( getExternalFilesDir( null ) );
     }
 
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void startGameButtonClicked( final View view )
     {
         startActivity( new Intent( this, GameActivity.class ) );
@@ -158,16 +159,19 @@ public final class ToolsetActivity extends AppCompatActivity
         finish();
     }
 
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void extractHoMM2AssetsButtonClicked( final View view )
     {
         zipFileChooserLauncher.launch( "application/zip" );
     }
 
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void downloadHoMM2DemoButtonClicked( final View view )
     {
         startActivity( new Intent( Intent.ACTION_VIEW, Uri.parse( getString( R.string.activity_toolset_homm2_demo_url ) ) ) );
     }
 
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void saveFileManagerButtonClicked( final View view )
     {
         startActivity( new Intent( this, SaveFileManagerActivity.class ) );
