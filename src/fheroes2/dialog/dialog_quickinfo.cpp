@@ -451,8 +451,12 @@ namespace
         case MP2::OBJ_MAGELLANS_MAPS:
             return showObjectVisitInfo( objectType, kingdom.isVisited( objectType ) );
 
-        case MP2::OBJ_RESOURCE:
-            return Resource::String( getFundsFromTile( tile ).getFirstValidResource().first );
+        case MP2::OBJ_RESOURCE: {
+            const Funds funds = getFundsFromTile( tile );
+            assert( funds.GetValidItemsCount() == 1 );
+
+            return Resource::String( funds.getFirstValidResource().first );
+        }
 
         case MP2::OBJ_MINES:
             return showMineInfo( tile, playerColor == getColorFromTile( tile ) );
@@ -461,7 +465,10 @@ namespace
         case MP2::OBJ_SAWMILL: {
             std::string objectInfo = MP2::StringObject( objectType );
             if ( playerColor == getColorFromTile( tile ) ) {
-                objectInfo.append( getMinesIncomeString( getDailyIncomeObjectResources( tile ).getFirstValidResource().first ) );
+                const Funds funds = getDailyIncomeObjectResources( tile );
+                assert( funds.GetValidItemsCount() == 1 );
+
+                objectInfo.append( getMinesIncomeString( funds.getFirstValidResource().first ) );
             }
             return objectInfo;
         }

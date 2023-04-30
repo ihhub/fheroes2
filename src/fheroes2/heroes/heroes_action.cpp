@@ -688,32 +688,32 @@ namespace
     void ActionToObjectResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        Funds rc = getFundsFromTile( tile );
+        Funds funds = getFundsFromTile( tile );
 
         std::string msg;
         const std::string & caption = MP2::StringObject( objectType );
 
         switch ( objectType ) {
         case MP2::OBJ_WINDMILL:
-            msg = rc.GetValidItemsCount() > 0
+            msg = funds.GetValidItemsCount() > 0
                       ? _(
                           "The keeper of the mill announces:\n\"Milord, I have been working very hard to provide you with these resources, come back next week for more.\"" )
                       : _( "The keeper of the mill announces:\n\"Milord, I am sorry, there are no resources currently available. Please try again next week.\"" );
             break;
 
         case MP2::OBJ_WATER_WHEEL:
-            msg = rc.GetValidItemsCount() > 0
+            msg = funds.GetValidItemsCount() > 0
                       ? _( "The keeper of the mill announces:\n\"Milord, I have been working very hard to provide you with this gold, come back next week for more.\"" )
                       : _( "The keeper of the mill announces:\n\"Milord, I am sorry, there is no gold currently available. Please try again next week.\"" );
             break;
 
         case MP2::OBJ_LEAN_TO:
-            msg = rc.GetValidItemsCount() > 0 ? _( "You've found an abandoned lean-to.\nPoking about, you discover some resources hidden nearby." )
-                                              : _( "The lean-to is long abandoned. There is nothing of value here." );
+            msg = funds.GetValidItemsCount() > 0 ? _( "You've found an abandoned lean-to.\nPoking about, you discover some resources hidden nearby." )
+                                                 : _( "The lean-to is long abandoned. There is nothing of value here." );
             break;
 
         case MP2::OBJ_MAGIC_GARDEN:
-            msg = rc.GetValidItemsCount() > 0
+            msg = funds.GetValidItemsCount() > 0
                       ? _(
                           "You catch a leprechaun foolishly sleeping amidst a cluster of magic mushrooms.\nIn exchange for his freedom, he guides you to a small pot filled with precious things." )
                       : _(
@@ -724,8 +724,7 @@ namespace
             break;
         }
 
-        if ( rc.GetValidItemsCount() > 0 ) {
-            const Funds funds( rc );
+        if ( funds.GetValidItemsCount() > 0 ) {
 
             {
                 const MusicalEffectPlayer musicalEffectPlayer;
@@ -866,7 +865,7 @@ namespace
 
         const Funds & funds = getFundsFromTile( tile );
 
-        if ( 0 < funds.GetValidItemsCount() ) {
+        if ( funds.GetValidItemsCount() > 0 ) {
             msg = funds.wood && funds.gold ? _( "You search through the flotsam, and find some wood and some gold." )
                                            : _( "You search through the flotsam, and find some wood." );
 
@@ -1254,7 +1253,7 @@ namespace
         const Funds funds = getFundsFromTile( tile );
         assert( funds.GetValidItemsCount() == 0 || ( funds.GetValidItemsCount() == 1 && funds.gold > 0 ) );
 
-        uint32_t gold = getFundsFromTile( tile ).gold;
+        uint32_t gold = funds.gold;
         std::string ask;
         std::string msg;
         std::string win;
@@ -1703,7 +1702,10 @@ namespace
         const std::string & hdr = MP2::StringObject( objectType );
 
         std::string msg;
-        uint32_t gold = getFundsFromTile( tile ).gold;
+        const Funds funds = getFundsFromTile( tile );
+        assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
+
+        uint32_t gold = funds.gold;
 
         // dialog
         if ( tile.isWater() ) {
@@ -2906,7 +2908,10 @@ namespace
                 return Outcome::Experience;
             }
             case Maps::DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_2500_GOLD: {
-                const uint32_t gold = getFundsFromTile( tile ).gold;
+                const Funds funds = getFundsFromTile( tile );
+                assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
+
+                const uint32_t gold = funds.gold;
 
                 std::string msg = _(
                     "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points and %{count} gold." );
@@ -3009,7 +3014,10 @@ namespace
 
                     break;
                 case Outcome::ExperienceAndGold: {
-                    const uint32_t gold = getFundsFromTile( tile ).gold;
+                    const Funds funds = getFundsFromTile( tile );
+                    assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
+
+                    const uint32_t gold = funds.gold;
 
                     hero.IncreaseExperience( demonSlayingExperience );
                     kingdom.AddFundsResource( Funds( Resource::GOLD, gold ) );

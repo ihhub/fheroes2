@@ -39,7 +39,6 @@
 #include "maps_tiles.h"
 #include "monster.h"
 #include "mp2.h"
-#include "pairs.h"
 #include "payment.h"
 #include "profit.h"
 #include "rand.h"

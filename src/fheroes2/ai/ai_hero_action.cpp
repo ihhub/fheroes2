@@ -529,7 +529,10 @@ namespace
     void AIToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        uint32_t gold = getFundsFromTile( tile ).gold;
+        const Funds funds = getFundsFromTile( tile );
+
+        assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
+        uint32_t gold = funds.gold;
 
         Kingdom & kingdom = hero.GetKingdom();
 
@@ -1072,7 +1075,10 @@ namespace
     void AIToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        uint32_t gold = getFundsFromTile( tile ).gold;
+        const Funds funds = getFundsFromTile( tile );
+        assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
+
+        uint32_t gold = funds.gold;
         bool complete = false;
 
         if ( gold ) {

@@ -923,7 +923,10 @@ namespace AI
                 return 1000.0 * art.getArtifactValue();
             }
 
-            return getFundsFromTile( tile ).gold;
+            const Funds funds = getFundsFromTile( tile );
+            assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
+
+            return funds.gold;
         }
 
         case MP2::OBJ_DAEMON_CAVE:
