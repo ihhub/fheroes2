@@ -979,10 +979,10 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
 
             // Fade-in to restore the screen after closing the hero dialog.
             if ( Settings::isFadeEffectEnabled() ) {
-                fheroes2::fadeInDisplay( _interface.get()->GetIntrfacePosition() );
+                fheroes2::fadeInDisplay( _interface->GetIntrfacePosition() );
             }
             else {
-                display.render( _interface.get()->GetIntrfacePosition() );
+                display.render( _interface->GetIntrfacePosition() );
             }
         }
 

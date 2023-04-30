@@ -521,9 +521,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             fheroes2::Rect restorerRoi( cur_pt.x - 2 * BORDERWIDTH, cur_pt.y - BORDERWIDTH, src_rt.width + 3 * BORDERWIDTH, src_rt.height + 3 * BORDERWIDTH );
             fheroes2::ImageRestorer dialogRestorer( display, restorerRoi.x, restorerRoi.y, restorerRoi.width, restorerRoi.height );
-            
+
             const bool isDefaultScreenSize = display.isDefaultSize();
-            
+
             if ( Settings::isFadeEffectEnabled() && !isDefaultScreenSize ) {
                 fheroes2::fadeOutDisplay( src_rt + cur_pt );
             }
