@@ -226,7 +226,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     // Fade-out game screen only for 640x480 resolution.
     const bool isDefaultScreenSize = display.isDefaultSize();
-    if ( fade && Settings::isFadeEffectEnabled() && isDefaultScreenSize ) {
+    const bool isFadeEnabled = Settings::isFadeEffectEnabled();
+    if ( fade && isFadeEnabled && isDefaultScreenSize ) {
         fheroes2::fadeOutDisplay();
     }
 
@@ -343,7 +344,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     buttonExit.draw();
 
     // Fade-in castle dialog.
-    if ( fade && Settings::isFadeEffectEnabled() ) {
+    if ( fade && isFadeEnabled ) {
         if ( !isDefaultScreenSize ) {
             // We need to expand the ROI for the next render to properly render window borders and shadow.
             fheroes2::Rect roi( background.windowArea() );
@@ -383,7 +384,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 result = CastleDialogReturnValue::Close;
 
                 // Fade-out castle dialog.
-                if ( Settings::isFadeEffectEnabled() ) {
+                if ( isFadeEnabled ) {
                     fheroes2::fadeOutDisplay( background.activeArea(), !isDefaultScreenSize );
                 }
                 break;

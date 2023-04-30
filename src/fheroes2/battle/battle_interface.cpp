@@ -1261,10 +1261,12 @@ Battle::Interface::~Interface()
 
     // Fade-out battlefield.
     if ( Settings::isFadeEffectEnabled() ) {
-        fheroes2::fadeOutDisplay( _background->activeArea(), !fheroes2::Display::instance().isDefaultSize() );
+        const bool isDefaultScreenSize = fheroes2::Display::instance().isDefaultSize();
+
+        fheroes2::fadeOutDisplay( _background->activeArea(), !isDefaultScreenSize );
 
         // For 640x480 resolution we do screen fade-in.
-        if ( fheroes2::Display::instance().isDefaultSize() ) {
+        if ( isDefaultScreenSize ) {
             // Reset the battlefield dialog window to restore the previous display image from screen restorer.
             // We have multiple return places after the battle: the adventure map, Main Menu (from Battle only),
             // the battle results screen (if the battle was quick ended).
@@ -1321,7 +1323,8 @@ void Battle::Interface::fullRedraw()
 
     // Fade-out game screen only for 640x480 resolution.
     const bool isDefaultScreenSize = display.isDefaultSize();
-    if ( Settings::isFadeEffectEnabled() && isDefaultScreenSize ) {
+    const bool isFadeEnabled = Settings::isFadeEffectEnabled();
+    if ( isFadeEnabled && isDefaultScreenSize ) {
         fheroes2::fadeOutDisplay();
     }
 
@@ -1335,7 +1338,7 @@ void Battle::Interface::fullRedraw()
     redrawPreRender();
 
     // Fade-in battlefield.
-    if ( Settings::isFadeEffectEnabled() ) {
+    if ( isFadeEnabled ) {
         if ( !isDefaultScreenSize ) {
             // We need to expand the ROI for the next render to properly render window borders and shadow.
             fheroes2::Rect roi( _background->windowArea() );

@@ -209,8 +209,9 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
 
     assert( it != myCastles.end() );
 
-    // Open castle scree with fade effect.
-    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( false, Settings::isFadeEffectEnabled() );
+    const bool isFadeEnabled = Settings::isFadeEffectEnabled();
+
+    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( false, isFadeEnabled );
 
     while ( result != Castle::CastleDialogReturnValue::Close ) {
         if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
@@ -262,7 +263,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
     basicInterface.RedrawFocus();
 
     // Fade-in game screen only for 640x480 resolution.
-    if ( Settings::isFadeEffectEnabled() && fheroes2::Display::instance().isDefaultSize() ) {
+    if ( isFadeEnabled && fheroes2::Display::instance().isDefaultSize() ) {
         if ( updateFocus ) {
             basicInterface.Redraw();
         }

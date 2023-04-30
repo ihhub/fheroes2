@@ -288,8 +288,8 @@ namespace Battle
             return _surfaceInnerArea;
         }
 
-        // Battlefield interface position on display image.
-        const fheroes2::Rect & GetIntrfacePosition() const
+        // Battlefield interface ROI.
+        const fheroes2::Rect & GetIntrfaceRoi() const
         {
             return _interfacePosition;
         }

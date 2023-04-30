@@ -182,6 +182,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const bool isDefaultScreenSize = display.isDefaultSize();
+    const bool isFadeEnabled = Settings::isFadeEffectEnabled();
 
     if ( isAfterGameCompletion ) {
         auto inputPlayerName = []( std::string & playerName ) {
@@ -240,11 +241,11 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         gameResult.ResetResult();
 
         // Fade-out game screen.
-        if ( Settings::isFadeEffectEnabled() ) {
+        if ( isFadeEnabled ) {
             fheroes2::fadeOutDisplay();
         }
     }
-    else if ( isDefaultScreenSize && Settings::isFadeEffectEnabled() ) {
+    else if ( isDefaultScreenSize && isFadeEnabled ) {
         fheroes2::fadeOutDisplay();
     }
 
@@ -273,7 +274,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
     buttonExit.draw();
 
     // Fade-in High Scores screen.
-    if ( Settings::isFadeEffectEnabled() ) {
+    if ( isFadeEnabled ) {
         if ( isAfterGameCompletion ) {
             fheroes2::fadeInDisplay();
         }
@@ -300,7 +301,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow() ) {
-            if ( Settings::isFadeEffectEnabled() ) {
+            if ( isFadeEnabled ) {
                 if ( isAfterGameCompletion || isDefaultScreenSize ) {
                     fheroes2::fadeOutDisplay();
                     Game::setNeedFadeIn();
