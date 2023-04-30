@@ -1226,7 +1226,6 @@ namespace Maps
                 tile.metadata()[1] = 0;
                 break;
             }
-            
             break;
         }
 
