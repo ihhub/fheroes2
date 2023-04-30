@@ -1542,7 +1542,7 @@ namespace
                         const uint32_t count = payment.Get( res );
                         if ( count > 0 ) {
                             StringReplace( msg, "%{res}", Resource::String( res ) );
-                            StringReplace( msg, "%{count}", count );
+                            StringReplace( msg, "%{count}", static_cast<int>( count ) );
                             break;
                         }
                     }
