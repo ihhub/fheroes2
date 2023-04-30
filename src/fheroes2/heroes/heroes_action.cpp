@@ -1953,7 +1953,9 @@ namespace
 
             auto removeObjectProtection = [&tile]() {
                 // Clear any metadata related to spells
-                removeMineSpellFromTile( tile );
+                if ( tile.GetObject( false ) == MP2::OBJ_MINES ) {
+                    removeMineSpellFromTile( tile );
+                }
             };
 
             auto captureObject = [&hero, objectType, &tile, &updateRadar, &removeObjectProtection]() {

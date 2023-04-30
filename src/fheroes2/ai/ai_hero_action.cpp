@@ -609,7 +609,9 @@ namespace
         if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
             auto removeObjectProtection = [&tile]() {
                 // Clear any metadata related to spells
-                removeMineSpellFromTile( tile );
+                if ( tile.GetObject( false ) == MP2::OBJ_MINES ) {
+                    removeMineSpellFromTile( tile );
+                }
             };
 
             auto captureObject = [&hero, &tile, &removeObjectProtection]() {

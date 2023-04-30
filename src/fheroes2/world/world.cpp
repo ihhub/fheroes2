@@ -1411,7 +1411,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1003_RELEASE ) {
         for ( Maps::Tiles & tile : w.vec_tiles ) {
             if ( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE ) {
-                const int32_t spellId = Maps::getMineSpellIdFromTile( tile );
+                const int32_t spellId = tile.metadata()[2];
 
                 if ( spellId == Spell::HAUNT ) {
                     const Funds rc = getDailyIncomeObjectResources( tile );

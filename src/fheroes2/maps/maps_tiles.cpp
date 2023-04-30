@@ -3253,12 +3253,21 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         return;
     }
 
+    // Old format contained Gold values divided by 100 due to uint8_t limitation. We don't have such limitation anymore.
+
     switch ( objectType ) {
     // Alchemist Lab, Sawmill and Mines have first value as a resource type and the second value as resource count per day.
     case MP2::OBJ_ALCHEMIST_LAB:
     case MP2::OBJ_MINES:
     case MP2::OBJ_SAWMILL:
         _metadata[0] = quantityValue1;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
+
         _metadata[1] = quantityValue2;
         _metadata[2] = additionalMetadata;
         assert( _metadata[1] > 0 );
@@ -3266,6 +3275,9 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
 
     // Monster dwellings always store only one value - the number of monsters.
     case MP2::OBJ_ABANDONED_MINE:
+        _metadata[0] = ( static_cast<uint32_t>( quantityValue1 ) << 8 ) + quantityValue2;
+        _metadata[2] = additionalMetadata;
+        break;
     case MP2::OBJ_AIR_ALTAR:
     case MP2::OBJ_ARCHER_HOUSE:
     case MP2::OBJ_BARROW_MOUNDS:
@@ -3293,7 +3305,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
     // Genie's Lamp must have some monsters inside otherwise this object should not exist on Adventure Map.
     case MP2::OBJ_GENIE_LAMP:
         _metadata[0] = ( static_cast<uint32_t>( quantityValue1 ) << 8 ) + quantityValue2;
-        assert( 0 );
+        assert( _metadata[0] > 0 );
         break;
 
     // Shrines as well as Pyramid always contain one type of spell.
@@ -3313,7 +3325,12 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
     // Resource contains the type and the amount.
     case MP2::OBJ_RESOURCE:
         _metadata[0] = quantityValue1;
-        _metadata[1] = quantityValue2;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
         break;
 
     // Barrier and Traveler's Tent contain color.
@@ -3325,7 +3342,12 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
     // Tree of Knowledge contains either nothing for free level up or the amount of required resources.
     case MP2::OBJ_TREE_OF_KNOWLEDGE:
         _metadata[0] = quantityValue1;
-        _metadata[1] = quantityValue2;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
         break;
 
     // Witch's Hut contains a basic level of  a secondary skill.
@@ -3337,7 +3359,12 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
     case MP2::OBJ_MAGIC_GARDEN:
     case MP2::OBJ_WATER_WHEEL:
         _metadata[0] = quantityValue1;
-        _metadata[1] = quantityValue2;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
         break;
 
     // Skeleton contains an artifact.
@@ -3345,10 +3372,15 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         _metadata[0] = quantityValue1;
         break;
 
-    // Lean-To contains one resource type and it amount.
+    // Lean-To contains one resource type and its amount.
     case MP2::OBJ_LEAN_TO:
         _metadata[0] = quantityValue1;
-        _metadata[1] = quantityValue2;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
         break;
 
     // Wagon can contain either an artifact or a resource.
@@ -3356,7 +3388,12 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         if ( quantityValue2 > 0 ) {
             _metadata[0] = Artifact::UNKNOWN;
             _metadata[1] = quantityValue1;
-            _metadata[2] = quantityValue2;
+            if ( quantityValue1 == Resource::GOLD ) {
+                _metadata[2] = quantityValue2 * 100;
+            }
+            else {
+                _metadata[2] = quantityValue2;
+            }
         }
         else {
             _metadata[0] = quantityValue1;
@@ -3366,7 +3403,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
     // Flotsam can contain Wood and Gold.
     case MP2::OBJ_FLOTSAM:
         _metadata[0] = quantityValue1;
-        _metadata[1] = quantityValue2;
+        _metadata[1] = quantityValue2 * 100;
         break;
 
     // Treasure and Sea Chests can contain an artifact and gold.
@@ -3374,19 +3411,24 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
     case MP2::OBJ_SEA_CHEST:
     case MP2::OBJ_TREASURE_CHEST:
         _metadata[0] = quantityValue1;
-        _metadata[1] = quantityValue2;
+        _metadata[1] = quantityValue2 * 100;
         break;
 
     // Derelict Ship always have only Gold.
     case MP2::OBJ_DERELICT_SHIP:
         _metadata[0] = quantityValue1;
-        _metadata[1] = quantityValue2;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
         break;
 
     // Daemon Cave is tricky: it can contain experience, gold and artifact.
     case MP2::OBJ_DAEMON_CAVE:
         _metadata[0] = quantityValue1;
-        _metadata[1] = ( 0x0f & quantityValue2 );
+        _metadata[1] = ( 0x0f & quantityValue2 ) * 100;
         _metadata[2] = ( quantityValue2 >> 4 );
         break;
 
@@ -3399,7 +3441,12 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
     // Windmill contains some resources.
     case MP2::OBJ_WINDMILL:
         _metadata[0] = quantityValue1;
-        _metadata[1] = quantityValue2;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
         break;
 
     // Artifact contains artifact ID, possible resources and condition to grab it.
@@ -3414,7 +3461,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         _metadata[2] = quantityValue1;
         break;
 
-    // Shipwreck contains Gold and Artifact. However, we store only artifact and a variation of a prize.
+    // Shipwreck contains Gold and Artifact. However, old format did not store the amount of Gold.
     case MP2::OBJ_SHIPWRECK:
         _metadata[0] = quantityValue1;
         _metadata[2] = ( quantityValue2 >> 4 );

@@ -514,10 +514,6 @@ namespace Maps
             return {};
         }
 
-        if ( tile.metadata()[0] == Resource::GOLD ) {
-            return { Resource::GOLD, tile.metadata()[1] * 100 };
-        }
-
         return { static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] };
     }
 
@@ -535,13 +531,7 @@ namespace Maps
     void setResourceOnTile( Tiles & tile, const int resourceType, uint32_t value )
     {
         tile.metadata()[0] = resourceType;
-
-        if ( resourceType == Resource::GOLD ) {
-            tile.metadata()[1] = value / 100;
-        }
-        else {
-            tile.metadata()[1] = value;
-        }
+        tile.metadata()[1] = value;
     }
 
     Funds getFundsFromTile( const Tiles & tile )
@@ -551,14 +541,14 @@ namespace Maps
             return Funds{ static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] } + Funds{ Resource::GOLD, tile.metadata()[1] * 100 };
 
         case MP2::OBJ_FLOTSAM:
-            return Funds{ Resource::WOOD, tile.metadata()[0] } + Funds{ Resource::GOLD, tile.metadata()[1] * 100 };
+            return Funds{ Resource::WOOD, tile.metadata()[0] } + Funds{ Resource::GOLD, tile.metadata()[1] };
 
         case MP2::OBJ_DAEMON_CAVE:
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_SEA_CHEST:
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_TREASURE_CHEST:
-            return { Resource::GOLD, tile.metadata()[1] * 100 };
+            return { Resource::GOLD, tile.metadata()[1] };
 
         case MP2::OBJ_DERELICT_SHIP:
         case MP2::OBJ_LEAN_TO:
@@ -566,10 +556,6 @@ namespace Maps
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_WINDMILL:
         case MP2::OBJ_WATER_WHEEL:
-            if ( tile.metadata()[0] == Resource::GOLD ) {
-                return { Resource::GOLD, tile.metadata()[1] * 100 };
-            }
-
             return { static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] };
 
         default:
@@ -1030,12 +1016,12 @@ namespace Maps
             // 25%: 500 gold + 10 wood
             case 1:
                 tile.metadata()[0] = 10;
-                tile.metadata()[1] = 5;
+                tile.metadata()[1] = 500;
                 break;
             // 25%: 200 gold + 5 wood
             case 2:
                 tile.metadata()[0] = 5;
-                tile.metadata()[1] = 2;
+                tile.metadata()[1] = 200;
                 break;
             // 25%: 5 wood
             case 3:
@@ -1103,7 +1089,7 @@ namespace Maps
             }
 
             tile.metadata()[0] = art;
-            tile.metadata()[1] = gold / 100;
+            tile.metadata()[1] = gold;
             break;
         }
 
@@ -1147,7 +1133,7 @@ namespace Maps
                 }
 
                 tile.metadata()[0] = art;
-                tile.metadata()[1] = gold / 100;
+                tile.metadata()[1] = gold;
             }
             break;
 
@@ -1170,27 +1156,44 @@ namespace Maps
             // 10% - 50ghost(2000g+art)
             percents.Push( 4, 10 );
 
-            const int cond = percents.Get();
+            tile.metadata()[2] = percents.Get();
 
-            tile.metadata()[0] = ( cond == static_cast<int>( ShipwreckCaptureCondition::FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT ) )
-                                     ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL )
-                                     : Artifact::UNKNOWN;
-            tile.metadata()[2] = cond;
+            switch ( static_cast<ShipwreckCaptureCondition>( tile.metadata()[2] ) ) {
+            case ShipwreckCaptureCondition::FIGHT_10_GHOSTS_AND_GET_1000_GOLD:
+                tile.metadata()[0] = Artifact::UNKNOWN;
+                tile.metadata()[1] = 1000;
+                break;
+            case ShipwreckCaptureCondition::FIGHT_15_GHOSTS_AND_GET_2000_GOLD:
+                tile.metadata()[0] = Artifact::UNKNOWN;
+                tile.metadata()[1] = 2000;
+                break;
+            case ShipwreckCaptureCondition::FIGHT_25_GHOSTS_AND_GET_5000_GOLD:
+                tile.metadata()[0] = Artifact::UNKNOWN;
+                tile.metadata()[1] = 5000;
+                break;
+            case ShipwreckCaptureCondition::FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT:
+                tile.metadata()[0] = Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL );
+                tile.metadata()[1] = 2000;
+                break;
+            default:
+                tile.metadata()[0] = Artifact::UNKNOWN;
+                tile.metadata()[1] = 0;
+                break;
+            }
             break;
         }
 
         case MP2::OBJ_GRAVEYARD:
             assert( isFirstLoad );
 
-            // 1000 gold + art
             tile.metadata()[0] = Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL );
-            tile.metadata()[1] = 10; // Gold is stored with division of 100.
+            tile.metadata()[1] = 1000;
             break;
 
         case MP2::OBJ_PYRAMID: {
             assert( isFirstLoad );
 
-            // random spell level 5
+            // Random spell of level 5.
             const Spell & spell = Rand::Get( 1 ) ? Spell::RandCombat( 5 ) : Spell::RandAdventure( 5 );
             setSpellOnTile( tile, spell.GetID() );
             break;
@@ -1200,16 +1203,30 @@ namespace Maps
             assert( isFirstLoad );
 
             // 1000 exp or 1000 exp + 2500 gold or 1000 exp + art or (-2500 or remove hero)
-            const uint32_t cond = Rand::Get( 1, 4 );
-
-            tile.metadata()[0] = ( cond == static_cast<uint32_t>( DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_ARTIFACT ) )
-                                     ? Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL )
-                                     : Artifact::UNKNOWN;
-            tile.metadata()[1] = ( cond == static_cast<uint32_t>( DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_2500_GOLD ) )
-                                         || ( cond == static_cast<uint32_t>( DaemonCaveCaptureBonus::PAY_2500_GOLD ) )
-                                     ? 25
-                                     : 0;
-            tile.metadata()[2] = cond;
+            tile.metadata()[2] = Rand::Get( 1, 4 );
+            switch ( static_cast<DaemonCaveCaptureBonus>( tile.metadata()[2] ) ) {
+            case DaemonCaveCaptureBonus::GET_1000_EXPERIENCE:
+                tile.metadata()[0] = Artifact::UNKNOWN;
+                tile.metadata()[1] = 0;
+                break;
+            case DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_2500_GOLD:
+                tile.metadata()[0] = Artifact::UNKNOWN;
+                tile.metadata()[1] = 2500;
+                break;
+            case DaemonCaveCaptureBonus::GET_1000_EXPERIENCE_AND_ARTIFACT:
+                tile.metadata()[0] = Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL );
+                tile.metadata()[1] = 0;
+                break;
+            case DaemonCaveCaptureBonus::PAY_2500_GOLD:
+                tile.metadata()[0] = Artifact::UNKNOWN;
+                tile.metadata()[1] = 2500;
+                break;
+            default:
+                tile.metadata()[0] = Artifact::UNKNOWN;
+                tile.metadata()[1] = 0;
+                break;
+            }
+            
             break;
         }
 
