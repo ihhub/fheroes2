@@ -617,7 +617,7 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
         uint32_t dest;
         do {
             dest = GetRandomObstaclePosition( gen );
-        } while ( at( dest ).GetObject() != 0 || ( checkRightCell && ( at( dest + 1 ).GetObject() != 0 || dest % 11 == 8 ) ) || ( isTallObstacle && dest <= 21 ) );
+        } while ( at( dest ).GetObject() != 0 || ( checkRightCell && ( at( dest + 1 ).GetObject() != 0 || ( dest % 11 ) == 8 ) ) || ( isTallObstacle && dest <= 21 ) );
 
         SetCobjObject( objs[i], dest );
     }
