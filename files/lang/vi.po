@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-30 17:06+0000\n"
-"PO-Revision-Date: 2023-05-01 09:16+0700\n"
+"PO-Revision-Date: 2023-05-01 09:53+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -1484,7 +1484,7 @@ msgid "For this action it is necessary to build a castle first."
 msgstr "Đối với hành động này, trước tiên cần phải xây dựng một lâu đài."
 
 msgid "Cannot build %{name} because castle is too far from water."
-msgstr ""
+msgstr "Không thể xây %{name} vì lâu đài quá xa nguồn nước."
 
 msgid "disable build."
 msgstr "xây dựng bị vô hiệu."
@@ -1730,7 +1730,7 @@ msgid "There is no room in the garrison for this army."
 msgstr ""
 
 msgid "Fortifications"
-msgstr ""
+msgstr "Công sự"
 
 msgid "Farm"
 msgstr ""
@@ -1751,10 +1751,10 @@ msgid "Upg. Blacksmith"
 msgstr "NC. Lò rèn"
 
 msgid "Armory"
-msgstr ""
+msgstr "Kho vũ khí"
 
 msgid "Upg. Armory"
-msgstr ""
+msgstr "NC. Kho vũ khí"
 
 msgid "Jousting Arena"
 msgstr ""
@@ -4012,7 +4012,7 @@ msgid "Cast an adventure spell."
 msgstr ""
 
 msgid "End Turn"
-msgstr ""
+msgstr "Kết thúc Lượt"
 
 msgid "End your turn and left the computer take its turn."
 msgstr ""
