@@ -210,12 +210,11 @@ fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_
 
     fheroes2::Image out( width, height );
 
-    std::memcpy( out.image(), uncompressedData.data(), uncompressedSize );
-    if ( doubleLayer ) {
-        std::memcpy( out.transform(), uncompressedData.data() + uncompressedSize, uncompressedSize );
-    }
-    else {
-        std::fill( out.transform(), out.transform() + uncompressedSize, static_cast<uint8_t>( 0 ) );
+    uint32_t * outImage = out.image(); 
+    uint8_t * outTransform = out.transform();
+    for ( size_t i = 0; i < uncompressedSize; ++i, ++outImage, ++outTransform ) {
+        *outImage = static_cast<uint32_t>( uncompressedData.data()[i] );
+        *outTransform = static_cast<uint8_t>( doubleLayer ? uncompressedData.data()[i + uncompressedSize] : 0 );
     }
     return out;
 }
