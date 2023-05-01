@@ -3270,7 +3270,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
 
         if ( _metadata[1] == 0 ) {
             // This is a broken mine from old saves. Let's try to correct income.
-            if ( Funds{ static_cast<int>( _metadata[0] ), 1 }.GetValidItemsCount() == 1 ) { 
+            if ( Funds{ static_cast<int>( _metadata[0] ), 1 }.GetValidItemsCount() == 1 ) {
                 const payment_t income = ProfitConditions::FromMine( static_cast<int>( _metadata[0] ) );
                 _metadata[1] = income.Get( static_cast<int>( _metadata[0] ) );
             }
