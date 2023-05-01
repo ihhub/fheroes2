@@ -109,10 +109,11 @@ namespace
             }
         }
 
-        AudioManager::PlayMusic( MUS::VICTORY, Music::PlaybackMode::PLAY_ONCE );
+        if ( !body.empty() ) {
+            AudioManager::PlayMusic( MUS::VICTORY, Music::PlaybackMode::PLAY_ONCE );
 
-        if ( !body.empty() )
             fheroes2::showStandardTextMessage( "", body, Dialog::OK );
+        }
     }
 
     void DialogLoss( uint32_t cond )
@@ -165,10 +166,11 @@ namespace
             break;
         }
 
-        AudioManager::PlayMusic( MUS::LOSTGAME, Music::PlaybackMode::PLAY_ONCE );
+        if ( !body.empty() ) {
+            AudioManager::PlayMusic( MUS::LOSTGAME, Music::PlaybackMode::PLAY_ONCE );
 
-        if ( !body.empty() )
             fheroes2::showStandardTextMessage( _( "Defeat!" ), body, Dialog::OK );
+        }
     }
 
     Video::Subtitle standardGameResults()
@@ -363,16 +365,19 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 {
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
-    const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
+    const Settings & conf = Settings::Get();
     const int humanColors = Players::HumanColors();
+    const int currentColor = conf.CurrentColor();
+    const bool isSinglePlayer = ( Color::Count( humanColors ) == 1 );
 
     int activeHumanColors = 0;
 
     for ( const int color : Colors( colors ) ) {
         if ( !world.GetKingdom( color ).isPlay() ) {
-            if ( !isSinglePlayer || ( color & humanColors ) == 0 ) {
+            if ( ( !isSinglePlayer && color != currentColor ) || ( color & humanColors ) == 0 ) {
                 Game::DialogPlayers( color, _( "Major Event!" ), _( "%{color} player has been vanquished!" ) );
             }
+
             colors &= ( ~color );
         }
         else if ( color & humanColors ) {
@@ -387,10 +392,9 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 
         if ( myKingdom.isControlHuman() || Players::Get( humanColors )->isAIAutoControlMode() ) {
             result = world.CheckKingdomWins( myKingdom );
+
             if ( result != GameOver::COND_NONE ) {
                 DialogWins( result );
-
-                const Settings & conf = Settings::Get();
 
                 if ( conf.isCampaignGameType() ) {
                     res = fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO;
@@ -441,11 +445,21 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
         // Check the regular win/loss conditions
         else {
             auto checkWinLossConditions = []( const int color ) -> uint32_t {
+                // Don't check colors that don't belong to any kingdom (e.g. Color::NONE)
+                if ( Color::Count( color ) != 1 ) {
+                    return GameOver::COND_NONE;
+                }
+
                 const Kingdom & kingdom = world.GetKingdom( color );
 
-                // Check the win/loss conditions for active human-controlled players only
-                if ( !kingdom.isPlay() || ( !kingdom.isControlHuman() && !Players::Get( color )->isAIAutoControlMode() ) ) {
+                // Check the win/loss conditions for human-controlled players only
+                if ( !kingdom.isControlHuman() && !Players::Get( color )->isAIAutoControlMode() ) {
                     return GameOver::COND_NONE;
+                }
+
+                // If the player's kingdom has been vanquished, this particular player loses regardless of other conditions
+                if ( !kingdom.isPlay() ) {
+                    return GameOver::LOSS_ALL;
                 }
 
                 uint32_t condition = world.CheckKingdomWins( kingdom );
@@ -456,7 +470,6 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 
                 condition = world.CheckKingdomLoss( kingdom );
 
-                // LOSS_ALL fulfillment is not a reason to end the game, only this player is vanquished
                 // LOSS_TOWN is currently not supported in multiplayer
                 if ( condition == GameOver::LOSS_HERO || condition == GameOver::LOSS_TIME || ( condition & GameOver::LOSS_ENEMY_WINS ) ) {
                     return condition;
@@ -464,9 +477,6 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 
                 return GameOver::COND_NONE;
             };
-
-            // Check the win/loss conditions for the current player
-            const int currentColor = Settings::Get().CurrentColor();
 
             // The result of the multiplayer game shouldn't be stored by this class
             const uint32_t multiplayerResult = checkWinLossConditions( currentColor );
@@ -482,10 +492,13 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
             else if ( multiplayerResult & GameOver::LOSS ) {
                 DialogLoss( multiplayerResult );
 
-                AudioManager::ResetAudio();
-                Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
+                // LOSS_ALL fulfillment is not a reason to end the game, only this player is vanquished
+                if ( multiplayerResult != GameOver::LOSS_ALL ) {
+                    AudioManager::ResetAudio();
+                    Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
 
-                res = fheroes2::GameMode::MAIN_MENU;
+                    res = fheroes2::GameMode::MAIN_MENU;
+                }
             }
         }
     }
