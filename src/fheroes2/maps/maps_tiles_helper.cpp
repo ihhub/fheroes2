@@ -1055,7 +1055,9 @@ namespace Maps
                 tile.metadata()[0] = Artifact::Rand( Artifact::ART_LEVEL_MAJOR );
                 break;
             default:
+                // Check your logic above!
                 assert( 0 );
+                tile.metadata()[0] = Artifact::UNKNOWN;
                 break;
             }
             break;
@@ -1072,23 +1074,24 @@ namespace Maps
             // 10% - 1000 gold + art
             percents.Push( 2, 10 );
 
-            int art = Artifact::UNKNOWN;
-            uint32_t gold = 0;
-
             switch ( percents.Get() ) {
+            case 0:
+                tile.metadata()[0] = Artifact::UNKNOWN;
+                tile.metadata()[1] = 0;
+                break;
             case 1:
-                gold = 1500;
+                tile.metadata()[0] = Artifact::UNKNOWN;
+                tile.metadata()[1] = 1500;
                 break;
             case 2:
-                gold = 1000;
-                art = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
+                tile.metadata()[0] = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
+                tile.metadata()[1] = 1000;
                 break;
             default:
+                // Check your logic above!
+                assert( 0 );
                 break;
             }
-
-            tile.metadata()[0] = art;
-            tile.metadata()[1] = gold;
             break;
         }
 
@@ -1112,27 +1115,30 @@ namespace Maps
                 // 5% - art
                 percents.Push( 4, 5 );
 
-                int art = Artifact::UNKNOWN;
-                uint32_t gold = 0;
-
-                // variant
                 switch ( percents.Get() ) {
                 case 1:
-                    gold = 2000;
+                    tile.metadata()[0] = Artifact::UNKNOWN;
+                    tile.metadata()[1] = 2000;
                     break;
                 case 2:
-                    gold = 1500;
+                    tile.metadata()[0] = Artifact::UNKNOWN;
+                    tile.metadata()[1] = 1500;
                     break;
                 case 3:
-                    gold = 1000;
+                    tile.metadata()[0] = Artifact::UNKNOWN;
+                    tile.metadata()[1] = 1000;
+                    break;
+                case 4:
+                    tile.metadata()[0] = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
+                    tile.metadata()[1] = 0;
                     break;
                 default:
-                    art = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
+                    // Check your logic above!
+                    tile.metadata()[0] = Artifact::UNKNOWN;
+                    tile.metadata()[1] = 0;
+                    assert( 0 );
                     break;
                 }
-
-                tile.metadata()[0] = art;
-                tile.metadata()[1] = gold;
             }
             break;
 
@@ -1175,6 +1181,8 @@ namespace Maps
                 tile.metadata()[1] = 2000;
                 break;
             default:
+                // Check your logic above!
+                assert( 0 );
                 tile.metadata()[0] = Artifact::UNKNOWN;
                 tile.metadata()[1] = 0;
                 break;
@@ -1221,6 +1229,8 @@ namespace Maps
                 tile.metadata()[1] = 2500;
                 break;
             default:
+                // Check your logic above!
+                assert( 0 );
                 tile.metadata()[0] = Artifact::UNKNOWN;
                 tile.metadata()[1] = 0;
                 break;
