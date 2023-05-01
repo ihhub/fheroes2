@@ -557,6 +557,9 @@ namespace Maps
         case MP2::OBJ_WATER_WHEEL:
             return { static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] };
 
+        case MP2::OBJ_WAGON:
+            return { static_cast<int>( tile.metadata()[1] ), tile.metadata()[2] };
+
         default:
             break;
         }
