@@ -150,6 +150,7 @@ namespace
         std::string objectInfo = Maps::GetMinesName( resourceType );
 
         if ( isOwned ) {
+            // TODO: we should use the value from funds.
             objectInfo.append( getMinesIncomeString( resourceType ) );
         }
 
@@ -468,6 +469,7 @@ namespace
                 const Funds funds = getDailyIncomeObjectResources( tile );
                 assert( funds.GetValidItemsCount() == 1 );
 
+                // TODO: we should use the value from funds.
                 objectInfo.append( getMinesIncomeString( funds.getFirstValidResource().first ) );
             }
             return objectInfo;
