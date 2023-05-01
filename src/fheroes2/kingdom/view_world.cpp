@@ -424,7 +424,7 @@ namespace
 
                     case MP2::OBJ_RESOURCE:
                         if ( revealResources || !tile.isFog( color ) ) {
-                            const Funds funds = getDailyIncomeObjectResources( tile );
+                            const Funds funds = getFundsFromTile( tile );
                             assert( funds.GetValidItemsCount() == 1 );
 
                             renderResourceIcon( 13, funds.getFirstValidResource().first, posX, posY );
