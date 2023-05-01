@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-30 17:06+0000\n"
-"PO-Revision-Date: 2023-05-01 23:03+0200\n"
+"PO-Revision-Date: 2023-05-01 23:41+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -3889,97 +3889,97 @@ msgid "hotkey|world map down right"
 msgstr "mapa vpravo dole"
 
 msgid "hotkey|save game"
-msgstr ""
+msgstr "ulož hru"
 
 msgid "hotkey|next hero"
-msgstr ""
+msgstr "ďalší hrdina"
 
 msgid "hotkey|continue hero movement"
-msgstr ""
+msgstr "pokračuj v pohybe hrdinom"
 
 msgid "hotkey|cast adventure spell"
-msgstr ""
+msgstr "vyčaruj výpravné kúzlo"
 
 msgid "hotkey|put hero to sleep"
-msgstr ""
+msgstr "uspi hrdinu"
 
 msgid "hotkey|next town"
-msgstr ""
+msgstr "ďalšie mesto"
 
 msgid "hotkey|end turn"
-msgstr ""
+msgstr "ukonči kolo"
 
 msgid "hotkey|file options"
-msgstr ""
+msgstr "možnosti súboru"
 
 msgid "hotkey|adventure options"
-msgstr ""
+msgstr "možnosti výpravy"
 
 msgid "hotkey|puzzle map"
-msgstr ""
+msgstr "mapa rébusu"
 
 msgid "hotkey|scenario information"
-msgstr ""
+msgstr "informácie o scenári"
 
 msgid "hotkey|dig for artifact"
-msgstr ""
+msgstr "kop za artefaktom"
 
 msgid "hotkey|view world"
-msgstr ""
+msgstr "ukáž svet"
 
 msgid "hotkey|kingdom summary"
-msgstr ""
+msgstr "súhrn kráľovstva"
 
 msgid "hotkey|default action"
-msgstr ""
+msgstr "predvolená činnosť"
 
 msgid "hotkey|open focus"
-msgstr ""
+msgstr "otvor zaostrenie"
 
 msgid "hotkey|system options"
-msgstr ""
+msgstr "systémové možnosti"
 
 msgid "hotkey|scroll left"
-msgstr ""
+msgstr "posun naľavo"
 
 msgid "hotkey|scroll right"
-msgstr ""
+msgstr "posun napravo"
 
 msgid "hotkey|scroll up"
-msgstr ""
+msgstr "posun nahor"
 
 msgid "hotkey|scroll down"
-msgstr ""
+msgstr "posun nadol"
 
 msgid "hotkey|toggle control panel"
-msgstr ""
+msgstr "prepni kontrolný panel"
 
 msgid "hotkey|toggle radar"
-msgstr ""
+msgstr "prepni radar"
 
 msgid "hotkey|toggle buttons"
-msgstr ""
+msgstr "prepni klávesy"
 
 msgid "hotkey|toggle status"
-msgstr ""
+msgstr "prepni status"
 
 msgid "hotkey|toggle icons"
-msgstr ""
+msgstr "prepni ikony"
 
 msgid "hotkey|transfer control to ai"
-msgstr ""
+msgstr "presuň kontrolu počítaču"
 
 msgid "hotkey|retreat from battle"
-msgstr ""
+msgstr "uteč z boja"
 
 msgid "hotkey|surrender during battle"
-msgstr ""
+msgstr "vzdaj sa počas boja"
 
 msgid "hotkey|toggle battle auto mode"
-msgstr ""
+msgstr "prepni boj do automatického módu"
 
 msgid "hotkey|finish the battle in auto mode"
-msgstr ""
+msgstr "dokonči boj v automatickom móde"
 
 msgid "hotkey|battle options"
 msgstr ""
