@@ -3416,13 +3416,14 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         _metadata[1] = quantityValue2 * 100;
         break;
 
-    // Derelict Ship always have only Gold.
+    // Derelict Ship always has only Gold.
     case MP2::OBJ_DERELICT_SHIP:
         _metadata[0] = quantityValue1;
         if ( quantityValue1 == Resource::GOLD ) {
             _metadata[1] = quantityValue2 * 100;
         }
         else {
+            assert( 0 );
             _metadata[1] = quantityValue2;
         }
         break;
