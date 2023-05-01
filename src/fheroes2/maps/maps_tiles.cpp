@@ -3268,7 +3268,6 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
             _metadata[1] = quantityValue2;
         }
 
-        _metadata[1] = quantityValue2;
         _metadata[2] = additionalMetadata;
         assert( _metadata[1] > 0 );
         break;
