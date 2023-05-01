@@ -3463,10 +3463,32 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         _metadata[0] = quantityValue1;
         break;
 
-    // Shipwreck contains Gold and Artifact. However, old format did not store the amount of Gold.
+    // Shipwreck contains Gold, Artifact and winning conditions. However, old format did not store the amount of Gold, we need to add it.
     case MP2::OBJ_SHIPWRECK:
         _metadata[0] = quantityValue1;
         _metadata[2] = ( quantityValue2 >> 4 );
+        switch ( static_cast<ShipwreckCaptureCondition>( _metadata[2] ) ) {
+        case ShipwreckCaptureCondition::EMPTY:
+            assert( _metadata[0] == Artifact::UNKNOWN );
+            break;
+        case ShipwreckCaptureCondition::FIGHT_10_GHOSTS_AND_GET_1000_GOLD:
+            _metadata[1] = 1000;
+            break;
+        case ShipwreckCaptureCondition::FIGHT_15_GHOSTS_AND_GET_2000_GOLD:
+            _metadata[1] = 2000;
+            break;
+        case ShipwreckCaptureCondition::FIGHT_25_GHOSTS_AND_GET_5000_GOLD:
+            _metadata[1] = 5000;
+            break;
+        case ShipwreckCaptureCondition::FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT:
+            _metadata[1] = 2000;
+            break;
+        default:
+            // This is an invalid case!
+            assert( 0 );
+            break;
+        }
+
         break;
 
     // These objects should not have any metadata.
