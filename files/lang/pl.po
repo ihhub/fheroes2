@@ -3,12 +3,12 @@
 # Copyright (C) 2009 Igor Orlov <igororlov@inbox.ru>
 # Copyright (C) 2009 Andrey Afletdinov <afletdinov@mail.dc.baikal.ru>
 # This file is distributed under the same license as the fheroes2 package.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-24 18:46+0300\n"
+"POT-Creation-Date: 2023-04-30 17:06+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -4373,6 +4373,10 @@ msgid ""
 msgstr ""
 "Nie udaje ci się wypełnić misji w określonym czasie. Wszystko stracone."
 
+#, fuzzy
+msgid "Defeat!"
+msgstr " pokonany"
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
@@ -4443,6 +4447,9 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} gracz zostaje wygnany!"
+
+msgid "Major Event!"
+msgstr ""
 
 msgid "Scenario:"
 msgstr "Scenariusz:"
@@ -4532,6 +4539,9 @@ msgid " All dwellings increase population."
 msgstr " Populacja całego królestwa zwiększa się."
 
 msgid "New Week!"
+msgstr ""
+
+msgid "Beware!"
 msgstr ""
 
 msgid ""
@@ -4790,7 +4800,7 @@ msgstr ""
 msgid "Handicap"
 msgstr "Utrudnienie"
 
-# 
+#
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
@@ -4814,7 +4824,7 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr "Niewielkie utrudnienie"
 
-# 
+#
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -4825,7 +4835,7 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr "Znaczne utrudnienia"
 
-# 
+#
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."

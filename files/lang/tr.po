@@ -1,12 +1,12 @@
 # Turkish translation for fheroes2
 # Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-24 18:46+0300\n"
+"POT-Creation-Date: 2023-04-30 17:06+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -4048,6 +4048,10 @@ msgid ""
 "All is lost."
 msgstr ""
 
+#, fuzzy
+msgid "Defeat!"
+msgstr " yenildi"
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
@@ -4110,6 +4114,9 @@ msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
 msgstr ""
 
 msgid "%{color} player has been vanquished!"
+msgstr ""
+
+msgid "Major Event!"
 msgstr ""
 
 msgid "Scenario:"
@@ -4187,6 +4194,9 @@ msgid " All dwellings increase population."
 msgstr ""
 
 msgid "New Week!"
+msgstr ""
+
+msgid "Beware!"
 msgstr ""
 
 msgid ""
@@ -4413,7 +4423,7 @@ msgstr ""
 msgid "Handicap"
 msgstr ""
 
-# 
+#
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
@@ -4432,7 +4442,7 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr ""
 
-# 
+#
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -4441,7 +4451,7 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr ""
 
-# 
+#
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."

@@ -20,16 +20,20 @@
 
 package org.fheroes2;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
 import org.apache.commons.io.IOUtils;
+
 import org.libsdl.app.SDLActivity;
 
 public final class GameActivity extends SDLActivity
@@ -73,7 +77,7 @@ public final class GameActivity extends SDLActivity
 
     private void extractAssets( final String srcPath, final File dstDir )
     {
-        final ArrayList<String> assetsPaths;
+        final List<String> assetsPaths;
 
         try {
             assetsPaths = getAssetsPaths( srcPath );
@@ -90,10 +94,10 @@ public final class GameActivity extends SDLActivity
 
                 final File outFileDir = outFile.getParentFile();
                 if ( outFileDir != null ) {
-                    outFileDir.mkdirs();
+                    Files.createDirectories( outFileDir.toPath() );
                 }
 
-                try ( final OutputStream out = new FileOutputStream( outFile ) ) {
+                try ( final OutputStream out = Files.newOutputStream( outFile.toPath() ) ) {
                     IOUtils.copy( in, out );
                 }
             }
@@ -103,9 +107,9 @@ public final class GameActivity extends SDLActivity
         }
     }
 
-    private ArrayList<String> getAssetsPaths( final String path ) throws IOException
+    private List<String> getAssetsPaths( final String path ) throws IOException
     {
-        final ArrayList<String> result = new ArrayList<>();
+        final List<String> result = new ArrayList<>();
 
         final String[] assets = getAssets().list( path );
 

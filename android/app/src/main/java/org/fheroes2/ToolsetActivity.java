@@ -20,6 +20,10 @@
 
 package org.fheroes2;
 
+import java.io.File;
+import java.io.InputStream;
+import java.util.Objects;
+
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
@@ -29,6 +33,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,9 +41,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import java.io.File;
-import java.io.InputStream;
-import java.util.Objects;
 
 public final class ToolsetActivity extends AppCompatActivity
 {
@@ -71,6 +73,7 @@ public final class ToolsetActivity extends AppCompatActivity
                 return this;
             }
 
+            @SuppressWarnings( "SameParameterValue" )
             Status setIsBackgroundTaskExecuting( final boolean isBackgroundTaskExecuting )
             {
                 this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;
@@ -93,7 +96,7 @@ public final class ToolsetActivity extends AppCompatActivity
             liveStatus.setValue( status.setIsHoMM2AssetsPresent( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ) ) );
         }
 
-        public void extractAssets( final File externalFilesDir, final Uri zipFileUri, final ContentResolver contentResolver )
+        public void extractAssets( final File externalFilesDir, final File cacheDir, final Uri zipFileUri, final ContentResolver contentResolver )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
@@ -101,7 +104,7 @@ public final class ToolsetActivity extends AppCompatActivity
 
             new Thread( () -> {
                 try ( final InputStream iStream = contentResolver.openInputStream( zipFileUri ) ) {
-                    if ( HoMM2AssetManagement.extractHoMM2AssetsFromZip( externalFilesDir, iStream ) ) {
+                    if ( HoMM2AssetManagement.extractHoMM2AssetsFromZip( externalFilesDir, cacheDir, iStream ) ) {
                         liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, RESULT_SUCCESS, "" ) );
                     }
                     else {
@@ -125,7 +128,7 @@ public final class ToolsetActivity extends AppCompatActivity
             return;
         }
 
-        viewModel.extractAssets( getExternalFilesDir( null ), result, getContentResolver() );
+        viewModel.extractAssets( getExternalFilesDir( null ), getCacheDir(), result, getContentResolver() );
     } );
 
     @Override
@@ -147,6 +150,7 @@ public final class ToolsetActivity extends AppCompatActivity
         viewModel.validateAssets( getExternalFilesDir( null ) );
     }
 
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void startGameButtonClicked( final View view )
     {
         startActivity( new Intent( this, GameActivity.class ) );
@@ -155,16 +159,19 @@ public final class ToolsetActivity extends AppCompatActivity
         finish();
     }
 
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void extractHoMM2AssetsButtonClicked( final View view )
     {
         zipFileChooserLauncher.launch( "application/zip" );
     }
 
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void downloadHoMM2DemoButtonClicked( final View view )
     {
         startActivity( new Intent( Intent.ACTION_VIEW, Uri.parse( getString( R.string.activity_toolset_homm2_demo_url ) ) ) );
     }
 
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void saveFileManagerButtonClicked( final View view )
     {
         startActivity( new Intent( this, SaveFileManagerActivity.class ) );

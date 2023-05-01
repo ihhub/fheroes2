@@ -18,10 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "ai_normal.h"
+
 #include <algorithm>
 #include <cstdint>
 
-#include "ai_normal.h"
 #include "army.h"
 #include "maps_tiles.h"
 #include "pairs.h"
@@ -63,5 +64,21 @@ namespace AI
 
         auto newEntry = _neutralMonsterStrengthCache.emplace( tileId, Army( tile ).GetStrength() );
         return newEntry.first->second;
+    }
+
+    double Normal::getResourcePriorityModifier( const int resource ) const
+    {
+        // Gold usually measured in 100s
+        double prio = ( resource == Resource::GOLD ) ? 1.0 : 100.0;
+        for ( const BudgetEntry & budget : _budget ) {
+            if ( budget.resource != resource ) {
+                continue;
+            }
+            if ( budget.recurringCost ) {
+                prio *= 1.5;
+            }
+            return ( budget.priority ) ? prio * 2.0 : prio;
+        }
+        return prio;
     }
 }

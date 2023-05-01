@@ -1,12 +1,12 @@
 # French translation for fheroes2
 # Copyright (C) 2021 - 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-24 18:46+0300\n"
+"POT-Creation-Date: 2023-04-30 17:06+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4436,6 +4436,10 @@ msgstr ""
 "Vous n'avez pas réussi à terminer votre quête à temps.\n"
 "Tout est perdu."
 
+#, fuzzy
+msgid "Defeat!"
+msgstr " vaincu"
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
@@ -4505,6 +4509,9 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "Le joueur %{color} a été vaincu !"
+
+msgid "Major Event!"
+msgstr ""
 
 msgid "Scenario:"
 msgstr "Scénario :"
@@ -4592,6 +4599,9 @@ msgid " All dwellings increase population."
 msgstr " La population de toutes les demeures augmente."
 
 msgid "New Week!"
+msgstr ""
+
+msgid "Beware!"
 msgstr ""
 
 msgid ""
@@ -4864,7 +4874,7 @@ msgstr ""
 msgid "Handicap"
 msgstr "Pénalité"
 
-# 
+#
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
@@ -4888,7 +4898,7 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr "Pénalité légère"
 
-# 
+#
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -4899,7 +4909,7 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr "Pénalité sévère"
 
-# 
+#
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."
