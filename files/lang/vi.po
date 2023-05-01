@@ -5090,7 +5090,13 @@ msgstr ""
 msgid "Spell book is not present."
 msgstr "Không có sách phép"
 
-msgid "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell."
+msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
+msgstr ""
+
+msgid ""
+"That spell costs %{mana} mana. You only have %{point} mana, so you can't "
+"cast the spell."
 msgstr ""
 
 msgid "The spell was not found."

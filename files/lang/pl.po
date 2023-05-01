@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-30 17:06+0000\n"
+"POT-Creation-Date: 2023-05-01 11:22+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -6475,6 +6475,13 @@ msgstr ""
 
 msgid "Spell book is not present."
 msgstr "Nie posiadasz Księgi Zaklęć."
+
+#, fuzzy
+msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
+msgstr ""
+"To zaklęcie kosztuje %{mana} pkt. magii. Masz tylko %{point}, więc nie "
+"możesz go rzucić."
 
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
