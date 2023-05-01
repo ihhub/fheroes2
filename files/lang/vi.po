@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-30 17:06+0000\n"
-"PO-Revision-Date: 2023-05-01 09:03+0700\n"
+"PO-Revision-Date: 2023-05-01 09:16+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -820,13 +820,13 @@ msgid "Monsters"
 msgstr "Quái vật"
 
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 msgid "Left Turret"
-msgstr "Tháp canh Trái"
+msgstr "Tháp pháo Trái"
 
 msgid "Right Turret"
-msgstr "Tháp canh Phải"
+msgstr "Tháp pháo Phải"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
 msgstr ""
@@ -2183,7 +2183,7 @@ msgid "Available"
 msgstr "Có sẵn"
 
 msgid "View World"
-msgstr ""
+msgstr "Xem toàn bộ thế giới."
 
 msgid "View the entire world."
 msgstr "Xem toàn bộ thế giới."
@@ -2537,7 +2537,7 @@ msgid "Available Trades"
 msgstr "Giao dịch Có sẵn"
 
 msgid "n/a"
-msgstr ""
+msgstr "n/a"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "bảo vệ bởi %{count} %{monster}"
@@ -5906,7 +5906,7 @@ msgid "Skeleton"
 msgstr "Xương"
 
 msgid "Daemon Cave"
-msgstr ""
+msgstr "Hang Quỷ"
 
 msgid "Treasure Chest"
 msgstr "Rương Báu vật"
@@ -5962,7 +5962,7 @@ msgid "Mines"
 msgstr "Mỏ"
 
 msgid "Monster"
-msgstr "Quái"
+msgstr "Quái vật"
 
 msgid "Obelisk"
 msgstr "Đài tưởng niệm"
@@ -6381,13 +6381,13 @@ msgid "Dwarf"
 msgstr "Người lùn"
 
 msgid "Dwarves"
-msgstr ""
-
-msgid "Battle Dwarf"
 msgstr "Người lùn"
 
+msgid "Battle Dwarf"
+msgstr "Người lùn Chiến"
+
 msgid "Battle Dwarves"
-msgstr ""
+msgstr "Người lùn Chiến"
 
 msgid "Elf"
 msgstr ""
