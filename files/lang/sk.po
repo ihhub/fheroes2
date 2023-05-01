@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-30 17:06+0000\n"
-"PO-Revision-Date: 2023-05-01 22:42+0200\n"
+"PO-Revision-Date: 2023-05-01 23:03+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -3238,7 +3238,7 @@ msgid "View only maps of size large (108 x 108)."
 msgstr "Zobraz iba mapy veľkej veľkosti (108 x 108)."
 
 msgid "Extra Large Maps"
-msgstr "Extra veľké"
+msgstr "Extra veľké mapy"
 
 msgid "View only maps of size extra large (144 x 144)."
 msgstr "Zobraz iba mapy extra veľkej veľkosti (144 x 144)."
@@ -3748,145 +3748,145 @@ msgid "View High Scores for Campaigns."
 msgstr "Zobraz najvyššie skóre pre kampane."
 
 msgid "hotkey|default okay event"
-msgstr ""
+msgstr "predvolené okay"
 
 msgid "hotkey|default cancel event"
-msgstr ""
+msgstr "predvolené zruš"
 
 msgid "hotkey|default left"
-msgstr ""
+msgstr "predvolené vľavo"
 
 msgid "hotkey|default right"
-msgstr ""
+msgstr "predvolené vpravo"
 
 msgid "hotkey|default up"
-msgstr ""
+msgstr "predvolené hore"
 
 msgid "hotkey|default down"
-msgstr ""
+msgstr "predvolené dole"
 
 msgid "hotkey|toggle fullscreen"
-msgstr ""
+msgstr "prepni celú obrazovku"
 
 msgid "hotkey|toggle text support mode"
-msgstr ""
+msgstr "prepni mód podpory textu"
 
 msgid "hotkey|new game"
-msgstr ""
+msgstr "nová hra"
 
 msgid "hotkey|load game"
-msgstr ""
+msgstr "nahraj hru"
 
 msgid "hotkey|highscores"
-msgstr ""
+msgstr "najvyššie skóre"
 
 msgid "hotkey|credits"
-msgstr ""
+msgstr "zásluhy"
 
 msgid "hotkey|standard game"
-msgstr ""
+msgstr "bežná hra"
 
 msgid "hotkey|campaign game"
-msgstr ""
+msgstr "kampaň"
 
 msgid "hotkey|multi-player game"
-msgstr ""
+msgstr "hra viacero hráčov"
 
 msgid "hotkey|settings"
-msgstr ""
+msgstr "nastavenia"
 
 msgid "hotkey|quit"
-msgstr ""
+msgstr "ukonči"
 
 msgid "hotkey|select map"
-msgstr ""
+msgstr "zvoľ mapu"
 
 msgid "hotkey|select small map size"
-msgstr ""
+msgstr "zvoľ mapy veľkosti malá"
 
 msgid "hotkey|select medium map size"
-msgstr ""
+msgstr "zvoľ mapy veľkosti stredná"
 
 msgid "hotkey|select large map size"
-msgstr ""
+msgstr "zvoľ mapy veľkosti veľká"
 
 msgid "hotkey|select extra large map size"
-msgstr ""
+msgstr "zvoľ mapy veľkosti extra veľká"
 
 msgid "hotkey|select all map sizes"
-msgstr ""
+msgstr "zvoľ mapy všetkých veľkostí"
 
 msgid "hotkey|hotseat game"
-msgstr ""
+msgstr "horúce kreslo"
 
 msgid "hotkey|battle only game"
-msgstr ""
+msgstr "rýchly boj"
 
 msgid "hotkey|choose the original campaign"
-msgstr ""
+msgstr "zvoľ pôvodnú kampaň"
 
 msgid "hotkey|choose the expansion campaign"
-msgstr ""
+msgstr "zvoľ rozšírenú kampaň"
 
 msgid "hotkey|roland campaign"
-msgstr ""
+msgstr "kampaň roland"
 
 msgid "hotkey|archibald campaign"
-msgstr ""
+msgstr "kampaň archibald"
 
 msgid "hotkey|the price of loyalty campaign"
-msgstr ""
+msgstr "kampaň cena vernosti"
 
 msgid "hotkey|voyage home campaign"
-msgstr ""
+msgstr "kampaň plavba domov"
 
 msgid "hotkey|wizard's isle campaign"
-msgstr ""
+msgstr "kampaň čarodejov ostrov"
 
 msgid "hotkey|descendants campaign"
-msgstr ""
+msgstr "kampaň potomkovia"
 
 msgid "hotkey|select first campaign bonus"
-msgstr ""
+msgstr "zvoľ prvý bonus kampane"
 
 msgid "hotkey|select second campaign bonus"
-msgstr ""
+msgstr "zvoľ druhý bonus kampane"
 
 msgid "hotkey|select third campaign bonus"
-msgstr ""
+msgstr "zvoľ tretí bonus kampane"
 
 msgid "hotkey|view campaign intro"
-msgstr ""
+msgstr "ukáž intro kampane"
 
 msgid "hotkey|select campaign difficulty"
-msgstr ""
+msgstr "zvoľ obtiažnosť kampane"
 
 msgid "hotkey|restart campaign scenario"
-msgstr ""
+msgstr "reštartuj scenár kampane"
 
 msgid "hotkey|world map left"
-msgstr ""
+msgstr "mapa vľavo"
 
 msgid "hotkey|world map right"
-msgstr ""
+msgstr "mapa vpravo"
 
 msgid "hotkey|world map up"
-msgstr ""
+msgstr "mapa hore"
 
 msgid "hotkey|world map down"
-msgstr ""
+msgstr "mapa dole"
 
 msgid "hotkey|world map up left"
-msgstr ""
+msgstr "mapa vľavo hore"
 
 msgid "hotkey|world map up right"
-msgstr ""
+msgstr "mapa vpravo hore"
 
 msgid "hotkey|world map down left"
-msgstr ""
+msgstr "mapa vľavo dole"
 
 msgid "hotkey|world map down right"
-msgstr ""
+msgstr "mapa vpravo dole"
 
 msgid "hotkey|save game"
 msgstr ""
