@@ -44,6 +44,10 @@
 
 namespace
 {
+    // The parameters of display fade start and end alpha.
+    const uint8_t fullDarkAlpha = 5;
+    const uint8_t fullBrightAlpha = 255;
+
     // Renderer of current time and FPS on screen
     class SystemInfoRenderer
     {
@@ -546,16 +550,21 @@ namespace fheroes2
     {
         const Display & display = Display::instance();
 
-        fadeDisplay( 255, 5, { 0, 0, display.width(), display.height() }, fadeTimeMs, frameCount );
+        fadeOutDisplay( { 0, 0, display.width(), display.height() }, false, fadeTimeMs, frameCount );
     }
 
     void fadeOutDisplay( const Rect & roi, const bool halfFade /* = false */, const int32_t fadeTimeMs /* = 100 */, const uint32_t frameCount /* = 6 */ )
     {
+        assert( frameCount != 0 );
+
+        // As we are doing fade-out we already have the full bright picture so we skip it and calculate the startAlpha.
+        const uint8_t startAlpha = fullBrightAlpha - static_cast<uint8_t>( ( fullBrightAlpha - fullDarkAlpha ) / frameCount );
+
         if ( halfFade ) {
-            fadeDisplay( 255, 130, roi, fadeTimeMs / 2, frameCount / 2 );
+            fadeDisplay( startAlpha, ( fullBrightAlpha - fullDarkAlpha ) / 2, roi, fadeTimeMs / 2, frameCount / 2 );
         }
         else {
-            fadeDisplay( 255, 5, roi, fadeTimeMs, frameCount );
+            fadeDisplay( startAlpha, fullDarkAlpha, roi, fadeTimeMs, frameCount );
         }
     }
 
@@ -563,16 +572,21 @@ namespace fheroes2
     {
         const Display & display = Display::instance();
 
-        fadeDisplay( 5, 255, { 0, 0, display.width(), display.height() }, fadeTimeMs, frameCount );
+        fadeInDisplay( { 0, 0, display.width(), display.height() }, false, fadeTimeMs, frameCount );
     }
 
     void fadeInDisplay( const Rect & roi, const bool halfFade /* = false */, const int32_t fadeTimeMs /* = 100 */, const uint32_t frameCount /* = 6 */ )
     {
+        assert( frameCount != 0 );
+
+        // As we are doing fade-in we already have the full dark picture from the previous fade-out so we skip it and calculate the startAlpha.
+        const uint8_t startAlpha = fullBrightAlpha + static_cast<uint8_t>( ( fullBrightAlpha - fullDarkAlpha ) / frameCount );
+
         if ( halfFade ) {
-            fadeDisplay( 130, 255, roi, fadeTimeMs / 2, frameCount / 2 );
+            fadeDisplay( ( fullBrightAlpha - startAlpha ) / 2, fullBrightAlpha, roi, fadeTimeMs / 2, frameCount / 2 );
         }
         else {
-            fadeDisplay( 5, 255, roi, fadeTimeMs, frameCount );
+            fadeDisplay( startAlpha, fullBrightAlpha, roi, fadeTimeMs, frameCount );
         }
     }
 
