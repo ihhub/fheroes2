@@ -72,38 +72,55 @@ namespace
             switch ( cond ) {
             case GameOver::WINS_ALL:
                 break;
+
             case GameOver::WINS_TOWN: {
                 body = _( "You captured %{name}!\nYou are victorious." );
+
                 const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
-                if ( town )
+                assert( town != nullptr );
+
+                if ( town ) {
                     StringReplace( body, "%{name}", town->GetName() );
+                }
+
                 break;
             }
+
             case GameOver::WINS_HERO: {
                 body = _( "You have captured the enemy hero %{name}!\nYour quest is complete." );
+
                 const Heroes * hero = world.GetHeroesCondWins();
-                if ( hero )
+                assert( hero != nullptr );
+
+                if ( hero ) {
                     StringReplace( body, "%{name}", hero->GetName() );
+                }
+
                 break;
             }
-            case GameOver::WINS_ARTIFACT: {
+
+            case GameOver::WINS_ARTIFACT:
                 body = _( "You have found the %{name}.\nYour quest is complete." );
-                if ( conf.WinsFindUltimateArtifact() )
+
+                if ( conf.WinsFindUltimateArtifact() ) {
                     StringReplace( body, "%{name}", _( "Ultimate Artifact" ) );
+                }
                 else {
                     const Artifact art = conf.WinsFindArtifactID();
                     StringReplace( body, "%{name}", art.GetName() );
                 }
+
                 break;
-            }
+
             case GameOver::WINS_SIDE:
                 body = _( "The enemy is beaten.\nYour side has triumphed!" );
                 break;
-            case GameOver::WINS_GOLD: {
+
+            case GameOver::WINS_GOLD:
                 body = _( "You have built up over %{count} gold in your treasury.\nAll enemies bow before your wealth and power." );
                 StringReplace( body, "%{count}", conf.getWinningGoldAccumulationValue() );
                 break;
-            }
+
             default:
                 break;
             }
@@ -124,17 +141,21 @@ namespace
         switch ( cond ) {
         case GameOver::LOSS_ENEMY_WINS_TOWN: {
             body = _( "The enemy has captured %{name}!\nThey are triumphant." );
+
             const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
-            if ( town )
+            assert( town != nullptr );
+
+            if ( town ) {
                 StringReplace( body, "%{name}", town->GetName() );
+            }
+
             break;
         }
 
-        case GameOver::LOSS_ENEMY_WINS_GOLD: {
+        case GameOver::LOSS_ENEMY_WINS_GOLD:
             body = _( "The enemy has built up over %{count} gold in his treasury.\nYou must bow done in defeat before his wealth and power." );
             StringReplace( body, "%{count}", conf.getWinningGoldAccumulationValue() );
             break;
-        }
 
         case GameOver::LOSS_ALL:
             body = _( "You have been eliminated from the game!!!" );
@@ -142,19 +163,27 @@ namespace
 
         case GameOver::LOSS_TOWN: {
             body = _( "The enemy has captured %{name}!\nThey are triumphant." );
+
             const Castle * town = world.getCastleEntrance( conf.LossMapsPositionObject() );
-            if ( town )
+            assert( town != nullptr );
+
+            if ( town ) {
                 StringReplace( body, "%{name}", town->GetName() );
+            }
+
             break;
         }
 
         case GameOver::LOSS_HERO: {
             body = _( "You have lost the hero %{name}.\nYour quest is over." );
+
             const Heroes * hero = world.GetHeroesCondLoss();
-            if ( hero )
+            assert( hero != nullptr );
+
+            if ( hero ) {
                 StringReplace( body, "%{name}", hero->GetName() );
-            else
-                StringReplace( body, "%{name}", "" );
+            }
+
             break;
         }
 
@@ -285,6 +314,8 @@ std::string GameOver::GetActualDescription( uint32_t cond )
     }
     else if ( WINS_TOWN & cond ) {
         const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
+        assert( town != nullptr );
+
         if ( town ) {
             msg = town->isCastle() ? _( "Capture the castle '%{name}'." ) : _( "Capture the town '%{name}'." );
             StringReplace( msg, "%{name}", town->GetName() );
@@ -292,16 +323,20 @@ std::string GameOver::GetActualDescription( uint32_t cond )
     }
     else if ( WINS_HERO & cond ) {
         const Heroes * hero = world.GetHeroesCondWins();
+        assert( hero != nullptr );
+
         if ( hero ) {
             msg = _( "Defeat the hero '%{name}'." );
             StringReplace( msg, "%{name}", hero->GetName() );
         }
     }
     else if ( WINS_ARTIFACT & cond ) {
-        if ( conf.WinsFindUltimateArtifact() )
+        if ( conf.WinsFindUltimateArtifact() ) {
             msg = _( "Find the ultimate artifact." );
+        }
         else {
             const Artifact art = conf.WinsFindArtifactID();
+
             msg = _( "Find the '%{name}' artifact." );
             StringReplace( msg, "%{name}", art.GetName() );
         }
@@ -311,13 +346,17 @@ std::string GameOver::GetActualDescription( uint32_t cond )
         StringReplace( msg, "%{count}", conf.getWinningGoldAccumulationValue() );
     }
 
-    if ( WINS_ALL != cond && ( WINS_ALL & cond ) )
+    if ( WINS_ALL != cond && ( WINS_ALL & cond ) ) {
         msg.append( _( ", or you may win by defeating all enemy heroes and capturing all enemy towns and castles." ) );
+    }
 
-    if ( LOSS_ALL == cond )
+    if ( LOSS_ALL == cond ) {
         msg = GetString( LOSS_ALL );
+    }
     else if ( LOSS_TOWN & cond ) {
         const Castle * town = world.getCastleEntrance( conf.LossMapsPositionObject() );
+        assert( town != nullptr );
+
         if ( town ) {
             msg = town->isCastle() ? _( "Lose the castle '%{name}'." ) : _( "Lose the town '%{name}'." );
             StringReplace( msg, "%{name}", town->GetName() );
@@ -325,17 +364,20 @@ std::string GameOver::GetActualDescription( uint32_t cond )
     }
     else if ( LOSS_HERO & cond ) {
         const Heroes * hero = world.GetHeroesCondLoss();
+        assert( hero != nullptr );
+
         if ( hero ) {
             msg = _( "Lose the hero: %{name}." );
             StringReplace( msg, "%{name}", hero->GetName() );
         }
     }
     else if ( LOSS_TIME & cond ) {
-        msg = _( "Fail to win by the end of month %{month}, week %{week}, day %{day}." );
         const uint32_t dayCount = conf.LossCountDays() - 1;
         const uint32_t month = dayCount / ( DAYOFWEEK * WEEKOFMONTH );
         const uint32_t week = ( dayCount - month * ( DAYOFWEEK * WEEKOFMONTH ) ) / DAYOFWEEK;
         const uint32_t day = dayCount % DAYOFWEEK;
+
+        msg = _( "Fail to win by the end of month %{month}, week %{week}, day %{day}." );
         StringReplace( msg, "%{day}", day + 1 );
         StringReplace( msg, "%{week}", week + 1 );
         StringReplace( msg, "%{month}", month + 1 );
