@@ -7,14 +7,15 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-30 17:06+0000\n"
-"PO-Revision-Date: 2023-04-30 20:33+0200\n"
+"PO-Revision-Date: 2023-05-01 22:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=((n>4) ? 2 : (n>1) ? 1 : (n>0) ? 0 : 2);\n"
+"Plural-Forms: nplurals=3; plural=( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? "
+"1 : 2 );\n"
 "X-Generator: Poedit 3.2.2\n"
 
 msgid ""
@@ -3321,200 +3322,212 @@ msgid "Enemy Speed"
 msgstr "Rýchlosť nepriateľa"
 
 msgid "Slow"
-msgstr "Pomaly"
+msgstr "Pomalá"
 
 msgid "Normal"
-msgstr "Normálne"
+msgstr "Normálna"
 
 msgid "Fast"
-msgstr "Rýchlo"
+msgstr "Rýchla"
 
 msgid "Very Fast"
-msgstr "Veľmi rýchlo"
+msgstr "Veľmi rýchla"
 
 msgid "Scroll Speed"
 msgstr "Rýchlosť posunu"
 
 msgid "Evil"
-msgstr ""
+msgstr "Zlo"
 
 msgid "Good"
-msgstr ""
+msgstr "Dobro"
 
 msgid "Interface Type"
-msgstr ""
+msgstr "Typ rozhrania"
 
 msgid "Hide"
-msgstr ""
+msgstr "Skry"
 
 msgid "Show"
-msgstr ""
+msgstr "Zobraz"
 
 msgid "Interface"
-msgstr ""
+msgstr "Rozhranie"
 
 msgid "Auto Resolve"
-msgstr ""
+msgstr "Automaticky"
 
 msgid "Auto, No Spells"
-msgstr ""
+msgstr "Auto bez kúziel"
 
 msgid "Battles"
-msgstr ""
+msgstr "Boje"
 
 msgid "autoBattle|Manual"
 msgstr "Manuálne"
 
 msgid "Change the speed at which your heroes move on the main screen."
-msgstr ""
+msgstr "Zmeň rýchlosť, ktorou sa tvoji hrdinovia pohybujú v hlavnom okne."
 
 msgid ""
 "Sets the speed that A.I. heroes move at.  You can also elect not to view A."
 "I. movement at all."
 msgstr ""
+"Nastaví rýchlosť, ktorou sa počítačom riadení hrdinovia hýbu. Tento pohyb je "
+"možné nezobraziť."
 
 msgid "Sets the speed at which you scroll the window."
-msgstr ""
+msgstr "Nastaví rýchlosť, ktorou sa posúva okno."
 
 msgid "Toggle the type of interface you want to use."
-msgstr ""
+msgstr "Prepni typ rozhrania, ktorý chceš vidieť."
 
 msgid "Toggle interface visibility."
-msgstr ""
+msgstr "Prepni viditeľnosť rozhrania."
 
 msgid "Toggle instant battle mode."
-msgstr ""
+msgstr "Prepni mód rýchleho boja."
 
 msgid "Att."
-msgstr ""
+msgstr "Útok"
 
 msgid "Def."
-msgstr ""
+msgstr "Obr."
 
 msgid "Power"
-msgstr ""
+msgstr "Sila"
 
 msgid "Knowl"
-msgstr ""
+msgstr "Ved."
 
 msgid "1st"
-msgstr ""
+msgstr "1."
 
 msgid "2nd"
-msgstr ""
+msgstr "2."
 
 msgid "3rd"
-msgstr ""
+msgstr "3."
 
 msgid "4th"
-msgstr ""
+msgstr "4."
 
 msgid "5th"
-msgstr ""
+msgstr "5."
 
 msgid "6th"
-msgstr ""
+msgstr "6."
 
 msgid "Oracle: Player Rankings"
-msgstr ""
+msgstr "Prorok: Hodnosti hráčov"
 
 msgid "Thieves' Guild: Player Rankings"
-msgstr ""
+msgstr "Cech zlodejov: Hodnosti hráčov"
 
 msgid "Number of Towns:"
-msgstr ""
+msgstr "Počet miest:"
 
 msgid "Number of Castles:"
-msgstr ""
+msgstr "Počet hradov:"
 
 msgid "Number of Heroes:"
-msgstr ""
+msgstr "Počet hrdinov:"
 
 msgid "Gold in Treasury:"
-msgstr ""
+msgstr "Zlato v pokladnici:"
 
 msgid "Wood & Ore:"
-msgstr ""
+msgstr "Drevo a Ruda:"
 
 msgid "Gems, Cr, Slf & Mer:"
-msgstr ""
+msgstr "Špeciálne suroviny:"
 
 msgid "Obelisks Found:"
-msgstr ""
+msgstr "Nájdených obeliskov:"
 
 msgid "Artifacts:"
-msgstr ""
+msgstr "Artefakty:"
 
 msgid "Total Army Strength:"
-msgstr ""
+msgstr "Celková sila armády:"
 
 msgid "Income:"
-msgstr ""
+msgstr "Príjem:"
 
 msgid "Best Hero:"
-msgstr ""
+msgstr "Najlepší hrdina:"
 
 msgid "Best Hero Stats:"
-msgstr ""
+msgstr "Vl. naj hrdinu:"
 
 msgid "Personality:"
-msgstr ""
+msgstr "Osobnosť:"
 
 msgid "Best Monster:"
-msgstr ""
+msgstr "Naj bojovník:"
 
 msgid "difficulty|Easy"
-msgstr ""
+msgstr "Ľahká"
 
 msgid "difficulty|Normal"
-msgstr ""
+msgstr "Normálna"
 
 msgid "difficulty|Hard"
-msgstr ""
+msgstr "Ťažká"
 
 msgid "difficulty|Expert"
-msgstr ""
+msgstr "Expert"
 
 msgid "difficulty|Impossible"
-msgstr ""
+msgstr "Nemožná"
 
 msgid "and more..."
-msgstr ""
+msgstr "a viac..."
 
 msgid "Easy"
-msgstr ""
+msgstr "Ľahká"
 
 msgid "Hard"
-msgstr ""
+msgstr "Ťažká"
 
 msgid "Campaign Difficulty"
-msgstr ""
+msgstr "Obtiažnosť kampane"
 
 msgid ""
 "Choose this difficulty if you want to prefer game story over challenge. AI "
 "is weaker in comparison with normal difficulty."
 msgstr ""
+"Zvoľ túto obtiažnosť pokiaľ preferuješ príbeh nad výzvou. Počítač je slabší "
+"v porovnaní s normálnou obtiažnosťou."
 
 msgid ""
 "Choose this difficulty to enjoy the campaign as per the original design."
-msgstr ""
+msgstr "Zvoľ túto obtiažnosť pre pôžitok z pôvodne mieneného návrhu."
 
 msgid ""
 "Choose this difficulty if you want challenge. AI is stronger in comparison "
 "with normal difficulty."
 msgstr ""
+"Zvoľ túto obtiažnosť pokiaľ chceš výzvu. Počítač je silnejší v porovnaní s "
+"normálnou obtiažnosťou."
 
 msgid ""
 "Congratulations!\n"
 "\n"
 "Days: %{days}\n"
 msgstr ""
+"Gratulujem!\n"
+"\n"
+"Dni: %{days}\n"
 
 msgid ""
 "\n"
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
+"\n"
+"Obtiažnosť: %{difficulty}\n"
+"\n"
 
 msgid ""
 "Score: %{score}\n"
@@ -3522,213 +3535,217 @@ msgid ""
 "Rating:\n"
 "%{rating}"
 msgstr ""
+"Skóre: %{score}\n"
+"\n"
+"Hodnosť:\n"
+"%{rating}"
 
 msgid "Start the selected scenario."
-msgstr ""
+msgstr "Začni zvolený scenár."
 
 msgid "View Intro"
-msgstr ""
+msgstr "Ukáž intro"
 
 msgid "View Intro videos for the current state of the campaign."
-msgstr ""
+msgstr "Ukáž intro video pre terajší stav kampane."
 
 msgid "Select campaign difficulty. It cannot be changed after."
-msgstr ""
+msgstr "Zvoľ obtiažnosť kampane. Neskôr sa nebude dať zmeniť."
 
 msgid "Restart"
-msgstr ""
+msgstr "Reštart"
 
 msgid "Restart the current scenario."
-msgstr ""
+msgstr "Začni terajší scenár od začiatku."
 
 msgid "Are you sure you want to restart this scenario?"
-msgstr ""
+msgstr "Určite chceš začať terajší scenár od začiatku?"
 
 msgid "Campaign Scenario loading failure"
-msgstr ""
+msgstr "Chyba pri nahrávaní scenára kampane"
 
 msgid "Please make sure that campaign files are correct and present."
-msgstr ""
+msgstr "Uisti sa, že súbory kampane sú správne a sú prítomné."
 
 msgid "Days spent"
-msgstr ""
+msgstr "Strávené dni"
 
 msgid "The number of days spent on this campaign."
-msgstr ""
+msgstr "Počet dní strávených na tejto kampani."
 
 msgid "Project Coordination and Core Development"
-msgstr ""
+msgstr "Koordinácia projektu a hlavný vývoj"
 
 msgid "Development"
-msgstr ""
+msgstr "Vývoj"
 
 msgid "Visit us at "
-msgstr ""
+msgstr "Navštív nás na "
 
 msgid "QA and Support"
-msgstr ""
+msgstr "Otázky, odpovede a podpora"
 
 msgid "Dev and Support"
-msgstr ""
+msgstr "Vývoj a podpora"
 
 msgid "Special Thanks to"
-msgstr ""
+msgstr "Špeciálne poďakovanie pre"
 
 msgid "and many other contributors!"
-msgstr ""
+msgstr "a mnoho ďalších prispievateľov!"
 
 msgid "and many-many other supporters!"
-msgstr ""
+msgstr "a mnoho ďalších podporovateľov!"
 
 msgid "Support us at"
-msgstr ""
+msgstr "Prispej na"
 
 msgid "local-donation-platform|https://www.patreon.com/fheroes2"
-msgstr ""
+msgstr "local-donation-platform|https://www.patreon.com/fheroes2"
 
 msgid "Connect with us at"
-msgstr ""
+msgstr "Spoj sa s nami"
 
 msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
-msgstr ""
+msgstr "local-social-network|https://www.facebook.com/groups/fheroes2"
 
 msgid "Need help with the game?"
-msgstr ""
+msgstr "Potrebuješ pomoc s hrou?"
 
 msgid "Original project before 0.7"
-msgstr ""
+msgstr "Originálny projekt pred 0.7"
 
 msgid "Heroes of Might and Magic II: The Succession Wars team"
-msgstr ""
+msgstr "Heroes of Might and Magic II: The Succession Wars tím"
 
 msgid "Designed and Directed"
-msgstr ""
+msgstr "Navrhnuté a režírované"
 
 msgid "Programming and Design"
-msgstr ""
+msgstr "Programovanie a dizajn"
 
 msgid "Executive Producer"
-msgstr ""
+msgstr "Výkonný producent"
 
 msgid "Producer"
-msgstr ""
+msgstr "Producent"
 
 msgid "Additional Design"
-msgstr ""
+msgstr "Dodatočný dizajn"
 
 msgid "Additional Programming"
-msgstr ""
+msgstr "Dodatočné programovanie"
 
 msgid "Musical Production"
-msgstr ""
+msgstr "Hudobná produkcia"
 
 msgid "Music and Sound Design"
-msgstr ""
+msgstr "Hudobný a zvukový dizajn"
 
 msgid "Vocalists"
-msgstr ""
+msgstr "Vokalisti"
 
 msgid "Art Director"
-msgstr ""
+msgstr "Réžia umenia"
 
 msgid "Assistant Art Director"
-msgstr ""
+msgstr "Asistent réžii umenia"
 
 msgid "Artists"
-msgstr ""
+msgstr "Umelci"
 
 msgid "QA Manager"
-msgstr ""
+msgstr "Manažér otázok a odpovedí"
 
 msgid "QA"
-msgstr ""
+msgstr "Otázky a odpovede"
 
 msgid "Writing"
-msgstr ""
+msgstr "Písanie"
 
 msgid "Manual and Helpfile"
-msgstr ""
+msgstr "Manuál a súbor pomoci"
 
 msgid "Scenarios"
-msgstr ""
+msgstr "Scenáre"
 
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
-msgstr ""
+msgstr "Heroes of Might and Magic II: The Price of Loyalty tím"
 
 msgid "Design Lead"
-msgstr ""
+msgstr "Vedenie dizajnu"
 
 msgid "Designers"
-msgstr ""
+msgstr "Dizajnéri"
 
 msgid "Programming Lead"
-msgstr ""
+msgstr "Vedenie programovania"
 
 msgid "Art Lead"
-msgstr ""
+msgstr "Vedenie umenia"
 
 msgid "Playtesters"
-msgstr ""
+msgstr "Testovanie hry"
 
 msgid "Designer"
-msgstr ""
+msgstr "Dizajnér"
 
 msgid "Producers"
-msgstr ""
+msgstr "Producenti"
 
 msgid "QA Managers"
-msgstr ""
+msgstr "Manažéri otázok a odpovedí"
 
 msgid "Sound Design"
-msgstr ""
+msgstr "Zvukový dizajn"
 
 msgid "Town Themes"
-msgstr ""
+msgstr "Hudba miest"
 
 msgid "Alto Sax"
-msgstr ""
+msgstr "Alto Saxofón"
 
 msgid "Harpsichord and Piano"
-msgstr ""
+msgstr "Čembalo a klavír"
 
 msgid "Basso Vocal"
-msgstr ""
+msgstr "Basso spev"
 
 msgid "Soprano Vocal"
-msgstr ""
+msgstr "Sopránový spev"
 
 msgid "Recorded at %{recordingStudio}"
-msgstr ""
+msgstr "Nahrané v %{recordingStudio}"
 
 msgid "credits|Manual"
-msgstr ""
+msgstr "Manuál"
 
 msgid "German Consultant"
-msgstr ""
+msgstr "Nemecký konzultant"
 
 msgid "Map Designers"
-msgstr ""
+msgstr "Návrhári máp"
 
 msgid "Package Design"
-msgstr ""
+msgstr "Dizajn balíkov"
 
 msgid "Your Name"
-msgstr ""
+msgstr "Tvoje meno"
 
 msgid "Unknown Hero"
-msgstr ""
+msgstr "Neznámy hrdina"
 
 msgid "Standard"
-msgstr ""
+msgstr "Štandard"
 
 msgid "View High Scores for Standard Maps."
-msgstr ""
+msgstr "Zobraz najvyššie skóre pre štandardné mapy."
 
 msgid "Campaign"
-msgstr ""
+msgstr "Kampaň"
 
 msgid "View High Scores for Campaigns."
-msgstr ""
+msgstr "Zobraz najvyššie skóre pre kampane."
 
 msgid "hotkey|default okay event"
 msgstr ""
@@ -9388,6 +9405,6 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-"Pozrite si najnovšiu verziu hry na\n"
+"Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
