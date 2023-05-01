@@ -3268,8 +3268,13 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
             _metadata[1] = quantityValue2;
         }
 
+        if ( _metadata[1] == 0 ) {
+            // This is a broken mine from old saves. Let's set the correct income.
+            const payment_t income = ProfitConditions::FromMine( static_cast<int>( _metadata[0] ) );
+            _metadata[1] = income.Get( static_cast<int>( _metadata[0] ) );
+        }
+
         _metadata[2] = additionalMetadata;
-        assert( _metadata[1] > 0 );
         break;
 
     // Abandoned mine was mixed with Mines in the old save formats.
@@ -3423,7 +3428,6 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
             _metadata[1] = quantityValue2 * 100;
         }
         else {
-            assert( 0 );
             _metadata[1] = quantityValue2;
         }
         break;
