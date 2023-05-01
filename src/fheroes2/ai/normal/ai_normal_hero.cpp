@@ -595,7 +595,7 @@ namespace
     void addHeroToMove( Heroes * hero, std::vector<AI::HeroToMove> & availableHeroes )
     {
         if ( hero->Modes( Heroes::PATROL ) ) {
-            if ( hero->GetSquarePatrol() == 0 ) {
+            if ( hero->GetPatrolDistance() == 0 ) {
                 DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." )
                 return;
             }
@@ -607,8 +607,8 @@ namespace
             heroInfo.hero = hero;
 
             if ( hero->Modes( Heroes::PATROL ) ) {
-                heroInfo.patrolCenter = Maps::GetIndexFromAbsPoint( hero->GetCenterPatrol() );
-                heroInfo.patrolDistance = hero->GetSquarePatrol();
+                heroInfo.patrolCenter = Maps::GetIndexFromAbsPoint( hero->GetPatrolCenter() );
+                heroInfo.patrolDistance = hero->GetPatrolDistance();
             }
         }
     }

@@ -221,6 +221,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         updateSaveFileList();
     }
 
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void selectAllButtonClicked( final View view )
     {
         for ( int i = 0; i < saveFileListView.getCount(); ++i ) {
@@ -228,6 +229,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         }
     }
 
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void unselectAllButtonClicked( final View view )
     {
         for ( int i = 0; i < saveFileListView.getCount(); ++i ) {
@@ -235,6 +237,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         }
     }
 
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void deleteButtonClicked( final View view )
     {
         final int selectedSaveFilesCount = saveFileListView.getCheckedItemCount();

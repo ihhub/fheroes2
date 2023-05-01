@@ -330,19 +330,19 @@ public:
     MP2::MapObjectType GetMapsObject() const;
     void SetMapsObject( const MP2::MapObjectType objectType );
 
-    const fheroes2::Point & GetCenterPatrol() const
+    const fheroes2::Point & GetPatrolCenter() const
     {
-        return patrol_center;
+        return _patrolCenter;
     }
 
-    void SetCenterPatrol( const fheroes2::Point & pos )
+    void SetPatrolCenter( const fheroes2::Point & pos )
     {
-        patrol_center = pos;
+        _patrolCenter = pos;
     }
 
-    int GetSquarePatrol() const
+    int GetPatrolDistance() const
     {
-        return patrol_square;
+        return _patrolDistance;
     }
 
     uint32_t GetMaxSpellPoints() const override;
@@ -616,8 +616,8 @@ private:
     int sprite_index;
     fheroes2::Point _offset; // used only during hero's movement
 
-    fheroes2::Point patrol_center;
-    int patrol_square;
+    fheroes2::Point _patrolCenter;
+    int _patrolDistance;
 
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;

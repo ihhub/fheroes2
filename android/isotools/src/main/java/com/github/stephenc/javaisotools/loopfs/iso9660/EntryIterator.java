@@ -97,6 +97,7 @@ class EntryIterator implements Iterator<Iso9660FileEntry>
         return entry;
     }
 
+    @Override
     public void remove()
     {
         throw new UnsupportedOperationException();

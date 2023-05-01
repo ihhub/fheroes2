@@ -609,7 +609,7 @@ void Kingdom::ApplyPlayWithStartingHero()
 
             if ( patrol ) {
                 hero->SetModes( Heroes::PATROL );
-                hero->SetCenterPatrol( cp );
+                hero->SetPatrolCenter( cp );
             }
             foundHeroes = true;
         }
