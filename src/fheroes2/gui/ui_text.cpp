@@ -44,7 +44,7 @@ namespace
             : _charLimit( fheroes2::AGG::getCharacterLimit( fontSize ) )
         {}
 
-        bool isValid( const uint8_t character ) const
+        inline bool isValid( const uint8_t character ) const
         {
             return character >= 0x21 && character <= _charLimit;
         }
@@ -53,7 +53,7 @@ namespace
         const uint32_t _charLimit;
     };
 
-    bool isSpaceChar( const uint8_t character )
+    inline bool isSpaceChar( const uint8_t character )
     {
         return ( character == 0x20 );
     }
@@ -90,6 +90,7 @@ namespace
         const CharValidator validator( fontType.size );
 
         int32_t width = 0;
+        const int32_t spaceCharWidth = getSpaceCharWidth( fontType.size );
 
         const uint8_t * dataEnd = data + size;
         while ( data != dataEnd ) {
@@ -97,7 +98,7 @@ namespace
                 width += getCharWidth( *data, fontType );
             }
             else if ( isSpaceChar( *data ) ) {
-                width += getSpaceCharWidth( fontType.size );
+                width += spaceCharWidth;
             }
             else {
                 width += getCharWidth( invalidChar, fontType );
@@ -117,6 +118,7 @@ namespace
         int characterCount = 0;
 
         int32_t width = 0;
+        const int32_t spaceCharWidth = getSpaceCharWidth( fontType.size );
 
         const uint8_t * dataEnd = data + size;
         while ( data != dataEnd ) {
@@ -124,7 +126,7 @@ namespace
                 width += getCharWidth( *data, fontType );
             }
             else if ( isSpaceChar( *data ) ) {
-                width += getSpaceCharWidth( fontType.size );
+                width += spaceCharWidth;
             }
             else {
                 width += getCharWidth( invalidChar, fontType );
@@ -152,10 +154,12 @@ namespace
 
         int32_t spaceWidth = 0;
 
+        const int32_t spaceCharWidth = getSpaceCharWidth( fontType.size );
+
         const uint8_t * dataEnd = data + size;
         while ( data != dataEnd ) {
             if ( isSpaceChar( *data ) ) {
-                spaceWidth += getSpaceCharWidth( fontType.size );
+                spaceWidth += spaceCharWidth;
             }
             else {
                 width += spaceWidth;
@@ -174,6 +178,7 @@ namespace
         return width;
     }
 
+    // Returns text lines parameters (in pixels) in 'offsets': x - represents the line widths, y - represents vertical line shift.
     void getMultiRowInfo( const uint8_t * data, const int32_t size, const int32_t maxWidth, const fheroes2::FontType & fontType, const int32_t rowHeight,
                           std::deque<fheroes2::Point> & offsets )
     {
@@ -186,21 +191,19 @@ namespace
         const CharValidator validator( fontType.size );
 
         // We need to cut sentences not in the middle of a word but by a space or invalid characters.
-        const uint8_t * character = data;
-        const uint8_t * characterEnd = character + size;
+        const uint8_t * dataEnd = data + size;
 
+        const int32_t spaceCharWidth = getSpaceCharWidth( fontType.size );
         int32_t lineLength = 0;
         int32_t lastWordLength = 0;
         int32_t lineWidth = 0;
 
         fheroes2::Point * offset = &offsets.back();
 
-        while ( character != characterEnd ) {
-            if ( *character == lineSeparator ) {
-                // End of line.
+        while ( data != dataEnd ) {
+            if ( *data == lineSeparator ) {
                 if ( lineLength > 0 ) {
-                    const uint8_t * line = character - lineLength;
-                    offset->x += getLineWidth( line, lineLength, fontType );
+                    offset->x += lineWidth;
                     lineLength = 0;
                     lastWordLength = 0;
                     lineWidth = 0;
@@ -209,43 +212,43 @@ namespace
                 offsets.emplace_back( 0, offset->y + rowHeight );
                 offset = &offsets.back();
 
-                ++character;
+                ++data;
             }
             else {
-                // TODO: Do not allow lines with width higher than 'maxWidth'.
-                ++lineLength;
-                if ( validator.isValid( *character ) ) {
-                    ++lastWordLength;
-                    lineWidth += getCharWidth( *character, fontType );
-                }
-                else if ( isSpaceChar( *character ) ) {
-                    lastWordLength = 0;
-                    lineWidth += getSpaceCharWidth( fontType.size );
+                // This is another character in the line. Get its width.
+
+                int32_t charWidth{ 0 };
+                const bool isSpace = isSpaceChar( *data );
+
+                if ( isSpace ) {
+                    charWidth = spaceCharWidth;
                 }
                 else {
-                    ++lastWordLength;
-                    lineWidth += getCharWidth( invalidChar, fontType );
+                    charWidth = getCharWidth( validator.isValid( *data ) ? *data : invalidChar, fontType );
                 }
 
-                if ( offset->x + lineWidth > maxWidth ) {
-                    const uint8_t * line = character - ( lineLength - 1 );
-                    if ( lineLength == lastWordLength ) {
-                        offset->x += getLineWidth( line, lineLength, fontType );
-                        ++character;
+                if ( offset->x + lineWidth + charWidth > maxWidth ) {
+                    // Current character has exceeded the maximum line width.
 
-                        // It could be a case when the next character is line separator symbol. In this case we have to skip it.
-                        if ( character != characterEnd && *character == lineSeparator ) {
-                            ++character;
-                        }
+                    if ( lineLength == lastWordLength ) {
+                        // This is the only word in the line.
+                        offset->x += lineWidth;
                     }
                     else {
-                        offset->x += getLineWidth( line, lineLength - lastWordLength, fontType );
-                        character -= lastWordLength - 1;
-                    }
+                        if ( isSpace ) {
+                            // Current character could be a space character then current line is over.
+                            offset->x += lineWidth;
 
-                    if ( character == characterEnd ) {
-                        // We have reached the end of phrase and there is no need to make an empty line at the end.
-                        break;
+                            // We skip this space character.
+                            ++data;
+                        }
+                        else {
+                            // Exclude last word from this line.
+                            offset->x += getLineWidth( data - lineLength, lineLength - lastWordLength, fontType );
+
+                            // Go back to the start of the word.
+                            data -= lastWordLength;
+                        }
                     }
 
                     lineLength = 0;
@@ -256,7 +259,11 @@ namespace
                     offset = &offsets.back();
                 }
                 else {
-                    ++character;
+                    ++data;
+                    ++lineLength;
+                    lineWidth += charWidth;
+
+                    lastWordLength = isSpace ? 0 : ( lastWordLength + 1 );
                 }
             }
         }
@@ -272,16 +279,16 @@ namespace
 
         int32_t offsetX = x;
 
-        const uint8_t * character = data;
-        const uint8_t * characterEnd = character + size;
+        const int32_t spaceCharWidth = getSpaceCharWidth( fontType.size );
+        const uint8_t * dataEnd = data + size;
 
-        for ( ; character != characterEnd; ++character ) {
-            if ( isSpaceChar( *character ) ) {
-                offsetX += getSpaceCharWidth( fontType.size );
+        for ( ; data != dataEnd; ++data ) {
+            if ( isSpaceChar( *data ) ) {
+                offsetX += spaceCharWidth;
                 continue;
             }
 
-            const fheroes2::Sprite & charSprite = fheroes2::AGG::getChar( validator.isValid( *character ) ? *character : invalidChar, fontType );
+            const fheroes2::Sprite & charSprite = fheroes2::AGG::getChar( validator.isValid( *data ) ? *data : invalidChar, fontType );
             assert( !charSprite.empty() );
 
             fheroes2::Blit( charSprite, output, offsetX + charSprite.x(), y + charSprite.y() );
@@ -296,6 +303,9 @@ namespace
     {
         if ( align ) {
             const int32_t correctedLineWidth = getTruncatedLineWidth( data, size, fontType );
+
+            assert( correctedLineWidth <= maxWidth );
+
             render( data, size, x + ( maxWidth - correctedLineWidth ) / 2, y, output, fontType );
         }
         else {
@@ -311,8 +321,7 @@ namespace
         const CharValidator validator( fontType.size );
 
         // We need to cut sentences not in the middle of a word but by a space or invalid characters.
-        const uint8_t * character = data;
-        const uint8_t * characterEnd = character + size;
+        const uint8_t * dataEnd = data + size;
 
         int32_t lineLength = 0;
         int32_t lastWordLength = 0;
@@ -320,8 +329,9 @@ namespace
 
         fheroes2::Point staticOffset;
         fheroes2::Point * offset;
+        const bool hasInputOffsets = !offsets.empty();
 
-        if ( !offsets.empty() ) {
+        if ( hasInputOffsets ) {
             offset = &offsets.front();
         }
         else {
@@ -330,89 +340,93 @@ namespace
 
         const int32_t fontHeight = fheroes2::getFontHeight( fontType.size );
         const int32_t yPos = y + ( rowHeight - fontHeight ) / 2;
+        const int32_t spaceCharWidth = getSpaceCharWidth( fontType.size );
 
-        while ( character != characterEnd ) {
-            if ( *character == lineSeparator ) {
+        while ( data != dataEnd ) {
+            if ( *data == lineSeparator ) {
                 // End of line. Render the current line.
                 if ( lineLength > 0 ) {
-                    renderLine( character - lineLength, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
+                    renderLine( data - lineLength, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
                     lineLength = 0;
                     lastWordLength = 0;
                     lineWidth = 0;
                 }
 
-                if ( !offsets.empty() ) {
+                if ( hasInputOffsets ) {
                     offsets.pop_front();
                     assert( !offsets.empty() );
-                }
-                if ( !offsets.empty() ) {
+
                     offset = &offsets.front();
                 }
                 else {
-                    offset = &staticOffset;
                     offset->x = 0;
                     offset->y += rowHeight;
                 }
 
-                ++character;
+                ++data;
             }
             else {
-                ++lineLength;
-                if ( validator.isValid( *character ) ) {
-                    ++lastWordLength;
-                    lineWidth += getCharWidth( *character, fontType );
-                }
-                else if ( isSpaceChar( *character ) ) {
-                    lastWordLength = 0;
-                    lineWidth += getSpaceCharWidth( fontType.size );
+                int32_t charWidth{ 0 };
+                const bool isSpace = isSpaceChar( *data );
+
+                if ( isSpace ) {
+                    charWidth = spaceCharWidth;
                 }
                 else {
-                    ++lastWordLength;
-                    lineWidth += getCharWidth( invalidChar, fontType );
+                    charWidth = getCharWidth( validator.isValid( *data ) ? *data : invalidChar, fontType );
                 }
 
-                if ( offset->x + lineWidth > maxWidth ) {
-                    const uint8_t * line = character - ( lineLength - 1 );
+                if ( offset->x + lineWidth + charWidth > maxWidth ) {
+                    // Current character has exceeded the maximum line width.
+                    const uint8_t * line = data - lineLength;
                     if ( lineLength == lastWordLength ) {
-                        // Looks like a word is bigger than line width.
+                        // This is the only word in the line.
                         renderLine( line, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
-                        ++character;
-
-                        // It could be a case when the next character is line separator symbol. In this case we have to skip it.
-                        if ( character != characterEnd && *character == lineSeparator ) {
-                            ++character;
-                        }
                     }
                     else {
-                        renderLine( line, lineLength - lastWordLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
-                        character -= lastWordLength - 1;
+                        if ( isSpace ) {
+                            // Current character could be a space character then current line is over.
+                            renderLine( line, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
+
+                            // We skip this space character.
+                            ++data;
+                        }
+                        else {
+                            // Exclude last word from this line.
+                            renderLine( line, lineLength - lastWordLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
+
+                            // Go back to the start of the word.
+                            data -= lastWordLength;
+                        }
                     }
 
                     lineLength = 0;
                     lastWordLength = 0;
                     lineWidth = 0;
 
-                    if ( !offsets.empty() ) {
+                    if ( hasInputOffsets ) {
                         offsets.pop_front();
                         assert( !offsets.empty() );
-                    }
-                    if ( !offsets.empty() ) {
+
                         offset = &offsets.front();
                     }
                     else {
-                        offset = &staticOffset;
                         offset->x = 0;
                         offset->y += rowHeight;
                     }
                 }
                 else {
-                    ++character;
+                    ++data;
+                    ++lineLength;
+                    lineWidth += charWidth;
+
+                    lastWordLength = isSpace ? 0 : ( lastWordLength + 1 );
                 }
             }
         }
 
         if ( lineLength > 0 ) {
-            renderLine( character - lineLength, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
+            renderLine( data - lineLength, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
             offset->x += lineWidth;
         }
     }
