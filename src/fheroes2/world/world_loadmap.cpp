@@ -864,7 +864,7 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
         if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO )
             tile.Remove( tile.GetObjectUID() );
 
-        Heroes* chosenHero = GetHeroes( Maps::GetPoint( tile.GetIndex() ) );
+        Heroes * chosenHero = GetHeroes( Maps::GetPoint( tile.GetIndex() ) );
         assert( chosenHero != nullptr );
 
         tile.SetHeroes( chosenHero );
