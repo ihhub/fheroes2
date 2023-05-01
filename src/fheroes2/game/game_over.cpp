@@ -361,7 +361,7 @@ void GameOver::Result::Reset()
     result = GameOver::COND_NONE;
 }
 
-fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
+fheroes2::GameMode GameOver::Result::checkGameOver()
 {
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 

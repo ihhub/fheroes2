@@ -648,7 +648,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
         }
 
         // check if the game is over at the beginning of a new day
-        res = gameResult.LocalCheckGameOver();
+        res = gameResult.checkGameOver();
 
         if ( res != fheroes2::GameMode::CANCEL ) {
             break;
@@ -780,7 +780,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                 }
 
                 // check if the game is over after each player's turn
-                res = gameResult.LocalCheckGameOver();
+                res = gameResult.checkGameOver();
 
                 if ( res != fheroes2::GameMode::CANCEL ) {
                     break;
@@ -873,7 +873,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
     GameOver::Result & gameResult = GameOver::Result::Get();
 
     // check if the game is over at the beginning of each human-controlled player's turn
-    fheroes2::GameMode res = gameResult.LocalCheckGameOver();
+    fheroes2::GameMode res = gameResult.checkGameOver();
 
     const KingdomCastles & myCastles = myKingdom.GetCastles();
     if ( res == fheroes2::GameMode::CANCEL && myCastles.empty() ) {
@@ -1203,7 +1203,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
 
                         if ( hero->isAction() ) {
                             // check if the game is over after the hero's action
-                            res = gameResult.LocalCheckGameOver();
+                            res = gameResult.checkGameOver();
 
                             hero->ResetAction();
                         }

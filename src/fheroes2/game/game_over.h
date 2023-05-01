@@ -79,7 +79,7 @@ namespace GameOver
             return result;
         }
 
-        fheroes2::GameMode LocalCheckGameOver();
+        fheroes2::GameMode checkGameOver();
 
     private:
         friend StreamBase & operator<<( StreamBase &, const Result & );

@@ -449,7 +449,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
         fheroes2::Display::instance().render();
 
         // check if the game is over due to conditions related to the ultimate artifact
-        return GameOver::Result::Get().LocalCheckGameOver();
+        return GameOver::Result::Get().checkGameOver();
     }
 
     fheroes2::showStandardTextMessage( "", _( "Try searching on clear ground." ), Dialog::OK );
@@ -475,7 +475,7 @@ fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMod
             if ( hero->isAction() ) {
                 hero->ResetAction();
                 // check if the game is over after the hero's action
-                return GameOver::Result::Get().LocalCheckGameOver();
+                return GameOver::Result::Get().checkGameOver();
             }
         }
     }
