@@ -758,6 +758,8 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
         }
 
         default:
+            // Remove any metadata from other objects.
+            resetObjectInfoOnTile( tile );
             break;
         }
     }
