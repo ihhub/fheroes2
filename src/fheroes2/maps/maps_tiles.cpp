@@ -3278,10 +3278,17 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         break;
 
     // Abandoned mine was mixed with Mines in the old save formats.
-    // TODO: verify we convert data for Abandoned Mines properly before 1.0.3 and after.
     case MP2::OBJ_ABANDONED_MINE:
-        _metadata[0] = ( static_cast<uint32_t>( quantityValue1 ) << 8 ) + quantityValue2;
-        _metadata[2] = additionalMetadata;
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1003_RELEASE ) {
+            _metadata[0] = quantityValue1;
+            _metadata[1] = quantityValue2;
+            _metadata[2] = additionalMetadata;
+        }
+        else {
+            _metadata[0] = ( static_cast<uint32_t>( quantityValue1 ) << 8 ) + quantityValue2;
+            _metadata[2] = additionalMetadata;
+        }
+        
         break;
 
     // Monster dwellings always store only one value - the number of monsters.
