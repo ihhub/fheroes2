@@ -1019,7 +1019,7 @@ namespace fheroes2
                     for ( ; imageOutX != imageOutXEnd; --imageInX, --transformInX, ++imageOutX ) {
                         if ( *transformInX > 0 ) { // apply a transformation
                             if ( *transformInX != 1 ) { // skip pixel
-                                //*imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                                *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                             }
                         }
                         else { // copy a pixel
@@ -1044,7 +1044,7 @@ namespace fheroes2
                         }
 
                         if ( *transformInX > 0 && *transformOutX == 0 ) { // apply a transformation
-                            //*imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                         }
                         else { // copy a pixel
                             *transformOutX = *transformInX;
@@ -1074,7 +1074,7 @@ namespace fheroes2
                     for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, ++imageOutX ) {
                         if ( *transformInX > 0 ) { // apply a transformation
                             if ( *transformInX != 1 ) { // skip pixel
-                                //*imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                                *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                             }
                         }
                         else { // copy a pixel
@@ -1099,7 +1099,7 @@ namespace fheroes2
                         }
 
                         if ( *transformInX > 0 && *transformOutX == 0 ) { // apply a transformation
-                            //*imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                         }
                         else { // copy a pixel
                             *transformOutX = *transformInX;
