@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-30 17:06+0000\n"
-"PO-Revision-Date: 2023-05-01 08:56+0700\n"
+"PO-Revision-Date: 2023-05-01 09:03+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -2920,7 +2920,7 @@ msgid "Att."
 msgstr "Công."
 
 msgid "Def."
-msgstr "Thủ"
+msgstr "Thủ."
 
 msgid "Power"
 msgstr "Phép"
@@ -3781,7 +3781,7 @@ msgid ""
 msgstr ""
 
 msgid "Defeat!"
-msgstr "Bị đánh bại"
+msgstr "Bị đánh bại!"
 
 msgid ""
 "Base score: %{score}\n"
@@ -5595,22 +5595,22 @@ msgid "View Towns and Castles."
 msgstr "Xem Thị trấn và Lâu đài."
 
 msgid "luck|Cursed"
-msgstr ""
+msgstr "Nguyền rủa"
 
 msgid "luck|Awful"
-msgstr ""
+msgstr "Tồi tệ"
 
 msgid "luck|Bad"
-msgstr ""
+msgstr "Xấu"
 
 msgid "luck|Normal"
-msgstr ""
+msgstr "Thường"
 
 msgid "luck|Good"
-msgstr ""
+msgstr "Tốt"
 
 msgid "luck|Great"
-msgstr ""
+msgstr "Tuyệt"
 
 msgid "luck|Irish"
 msgstr ""
@@ -6068,7 +6068,7 @@ msgid "Ruins"
 msgstr "Tàn tích"
 
 msgid "Fort"
-msgstr ""
+msgstr "Pháo đài"
 
 msgid "Abandoned Mine"
 msgstr "Mỏ hoang"
@@ -7731,7 +7731,7 @@ msgid "Increases the defense skill of the targeted creatures.  This is an improv
 msgstr ""
 
 msgid "Steelskin"
-msgstr ""
+msgstr "Da sắt"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr ""
@@ -8013,10 +8013,10 @@ msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
 
 msgid "Petrification"
-msgstr ""
+msgstr "Hóa đá"
 
 msgid "Turns the affected creature into stone.  A petrified creature receives half damage from a direct attack."
-msgstr ""
+msgstr "Biến sinh vật bị ảnh hưởng thành đá. Một sinh vật hóa đá nhận một nửa sát thương từ đòn tấn công trực tiếp."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
 msgstr ""
