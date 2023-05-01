@@ -49,8 +49,11 @@ class Troops : protected std::vector<Troop *>
 {
 public:
     Troops() = default;
+
     Troops( const Troops & troops );
+
     virtual ~Troops();
+
     Troops & operator=( const Troops & ) = delete;
 
     void Assign( const Troop *, const Troop * );
@@ -148,7 +151,7 @@ struct NeutralMonsterJoiningCondition
     const char * fleeingMessage;
 };
 
-class Army : public Troops, public Control
+class Army final : public Troops, public Control
 {
 public:
     static const size_t maximumTroopCount = 5;
@@ -170,13 +173,16 @@ public:
     static void drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, bool isCompact, const bool isDetailedView,
                                           const bool isGarrisonView = false, const uint32_t thievesGuildsCount = 0 );
 
-    explicit Army( HeroBase * s = nullptr );
-    explicit Army( const Maps::Tiles & );
+    explicit Army( HeroBase * cmdr = nullptr );
+    explicit Army( const Maps::Tiles & tile );
+
     Army( const Army & ) = delete;
     Army( Army && ) = delete;
+
     Army & operator=( const Army & ) = delete;
     Army & operator=( Army && ) = delete;
-    ~Army() override;
+
+    ~Army() override = default;
 
     const Troops & getTroops() const;
     // Soft reset means reset to the default army (a few T1 and T2 units).
@@ -220,14 +226,14 @@ public:
     // Implements the necessary logic to move unit stacks from army to army in the hero's meeting dialog and in the castle dialog
     void MoveTroops( Army & from, const int monsterIdToKeep );
 
-    void SetSpreadFormat( bool f )
+    void SetSpreadFormation( const bool spread )
     {
-        combat_format = f;
+        _isSpreadCombatFormation = spread;
     }
 
-    bool isSpreadFormat() const
+    bool isSpreadFormation() const
     {
-        return combat_format;
+        return _isSpreadCombatFormation;
     }
 
     bool SaveLastTroop() const;
@@ -242,20 +248,19 @@ public:
     // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit to a separate slot, if possible)
     void ArrangeForWhirlpool();
 
-protected:
+private:
     friend StreamBase & operator<<( StreamBase &, const Army & );
     friend StreamBase & operator>>( StreamBase &, Army & );
 
-    HeroBase * commander;
-    bool combat_format;
-    int color;
-
-private:
     // Performs the pre-battle arrangement of given monsters in a given number, dividing them into a given number of stacks if possible
     void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const uint32_t stacksCount );
     // Performs the pre-battle arrangement of given monsters in a given number, dividing them into a random number of stacks (seeded by
     // the tile index) with a random chance to get an upgraded stack of monsters in the center (if allowed)
     void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const int32_t tileIndex, const bool allowUpgrade );
+
+    HeroBase * commander;
+    bool _isSpreadCombatFormation;
+    int color;
 };
 
 StreamBase & operator<<( StreamBase &, const Army & );
