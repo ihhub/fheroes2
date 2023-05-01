@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-30 17:06+0000\n"
-"PO-Revision-Date: 2023-05-01 23:41+0200\n"
+"PO-Revision-Date: 2023-05-01 23:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -3401,22 +3401,22 @@ msgid "Knowl"
 msgstr "Ved."
 
 msgid "1st"
-msgstr "1."
+msgstr ""
 
 msgid "2nd"
-msgstr "2."
+msgstr ""
 
 msgid "3rd"
-msgstr "3."
+msgstr ""
 
 msgid "4th"
-msgstr "4."
+msgstr ""
 
 msgid "5th"
-msgstr "5."
+msgstr ""
 
 msgid "6th"
-msgstr "6."
+msgstr ""
 
 msgid "Oracle: Player Rankings"
 msgstr "Prorok: Hodnosti hráčov"
@@ -3425,13 +3425,13 @@ msgid "Thieves' Guild: Player Rankings"
 msgstr "Cech zlodejov: Hodnosti hráčov"
 
 msgid "Number of Towns:"
-msgstr "Počet miest:"
+msgstr ""
 
 msgid "Number of Castles:"
-msgstr "Počet hradov:"
+msgstr ""
 
 msgid "Number of Heroes:"
-msgstr "Počet hrdinov:"
+msgstr ""
 
 msgid "Gold in Treasury:"
 msgstr "Zlato v pokladnici:"
@@ -3458,7 +3458,7 @@ msgid "Best Hero:"
 msgstr "Najlepší hrdina:"
 
 msgid "Best Hero Stats:"
-msgstr "Vl. naj hrdinu:"
+msgstr ""
 
 msgid "Personality:"
 msgstr "Osobnosť:"
@@ -3772,10 +3772,10 @@ msgid "hotkey|toggle text support mode"
 msgstr "prepni mód podpory textu"
 
 msgid "hotkey|new game"
-msgstr "nová hra"
+msgstr ""
 
 msgid "hotkey|load game"
-msgstr "nahraj hru"
+msgstr ""
 
 msgid "hotkey|highscores"
 msgstr "najvyššie skóre"
@@ -3787,16 +3787,16 @@ msgid "hotkey|standard game"
 msgstr "bežná hra"
 
 msgid "hotkey|campaign game"
-msgstr "kampaň"
+msgstr ""
 
 msgid "hotkey|multi-player game"
 msgstr "hra viacero hráčov"
 
 msgid "hotkey|settings"
-msgstr "nastavenia"
+msgstr ""
 
 msgid "hotkey|quit"
-msgstr "ukonči"
+msgstr ""
 
 msgid "hotkey|select map"
 msgstr "zvoľ mapu"
@@ -3979,7 +3979,7 @@ msgid "hotkey|toggle battle auto mode"
 msgstr "prepni boj do automatického módu"
 
 msgid "hotkey|finish the battle in auto mode"
-msgstr "dokonči boj v automatickom móde"
+msgstr "ukonči boj v automatickom móde"
 
 msgid "hotkey|battle options"
 msgstr ""
