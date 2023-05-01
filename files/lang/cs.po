@@ -879,7 +879,7 @@ msgid "%{race1} %{name1}"
 msgstr ""
 
 msgid "vs"
-msgstr "ptoti"
+msgstr "versus"
 
 msgid "%{race2} %{name2}"
 msgstr ""
