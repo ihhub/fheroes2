@@ -3294,7 +3294,6 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
             _metadata[0] = ( static_cast<uint32_t>( quantityValue1 ) << 8 ) + quantityValue2;
             _metadata[2] = additionalMetadata;
         }
-        
         break;
 
     // Monster dwellings always store only one value - the number of monsters.
