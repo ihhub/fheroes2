@@ -1414,7 +1414,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
                 const int32_t spellId = static_cast<int32_t>( tile.metadata()[2] );
 
                 if ( spellId == Spell::HAUNT ) {
-                    const Funds rc = getDailyIncomeObjectResources( tile );
+                    const Funds rc{ static_cast<int32_t>( tile.metadata()[0] ), 1 };
                     const int resource = ( rc.GetValidItemsCount() > 0 ) ? rc.getFirstValidResource().first : Resource::GOLD;
 
                     Maps::Tiles::RestoreAbandonedMine( tile, resource );
