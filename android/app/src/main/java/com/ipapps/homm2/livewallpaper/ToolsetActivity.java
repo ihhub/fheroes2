@@ -20,8 +20,10 @@
 
 package com.ipapps.homm2.livewallpaper;
 
-import android.app.WallpaperManager;
-import android.content.ComponentName;
+import java.io.File;
+import java.io.InputStream;
+import java.util.Objects;
+
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
@@ -41,17 +43,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.ipapps.homm2.livewallpaper.settings.MainActivity;
-
-import org.apache.commons.io.IOUtils;
-import org.fheroes2.SDLActivity;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Objects;
 
 public final class ToolsetActivity extends AppCompatActivity {
     public static final class ToolsetActivityViewModel extends ViewModel {
@@ -79,6 +70,7 @@ public final class ToolsetActivity extends AppCompatActivity {
                 return this;
             }
 
+            @SuppressWarnings("SameParameterValue")
             Status setIsBackgroundTaskExecuting(final boolean isBackgroundTaskExecuting) {
                 this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;
 
@@ -98,14 +90,14 @@ public final class ToolsetActivity extends AppCompatActivity {
             liveStatus.setValue(status.setIsHoMM2AssetsPresent(HoMM2AssetManagement.isHoMM2AssetsPresent(externalFilesDir)));
         }
 
-        public void extractAssets(final File externalFilesDir, final Uri zipFileUri, final ContentResolver contentResolver) {
+        public void extractAssets(final File externalFilesDir, final File cacheDir, final Uri zipFileUri, final ContentResolver contentResolver) {
             final Status status = Objects.requireNonNull(liveStatus.getValue());
 
             liveStatus.setValue(status.setIsBackgroundTaskExecuting(true));
 
             new Thread(() -> {
                 try (final InputStream iStream = contentResolver.openInputStream(zipFileUri)) {
-                    if (HoMM2AssetManagement.extractHoMM2AssetsFromZip(externalFilesDir, iStream)) {
+                    if (HoMM2AssetManagement.extractHoMM2AssetsFromZip(externalFilesDir, cacheDir, iStream)) {
                         liveStatus.postValue(new Status(HoMM2AssetManagement.isHoMM2AssetsPresent(externalFilesDir), false, RESULT_SUCCESS, ""));
                     } else {
                         liveStatus.postValue(new Status(HoMM2AssetManagement.isHoMM2AssetsPresent(externalFilesDir), false, RESULT_NO_ASSETS, ""));
@@ -127,87 +119,17 @@ public final class ToolsetActivity extends AppCompatActivity {
             return;
         }
 
-        viewModel.extractAssets(getExternalFilesDir(null), result, getContentResolver());
+        viewModel.extractAssets(getExternalFilesDir(null), getCacheDir(), result, getContentResolver());
     });
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-        copyBasicAssets();
-
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_toolset);
 
         viewModel = new ViewModelProvider(this).get(ToolsetActivityViewModel.class);
         viewModel.getLiveStatus().observe(this, this::updateUI);
-    }
-
-    void copyBasicAssets() {
-        final File filesDir = getFilesDir();
-        final File externalFilesDir = getExternalFilesDir(null);
-
-        extractAssets("instruments", filesDir);
-        extractAssets("files", externalFilesDir);
-        extractAssets("fheroes2.cfg", externalFilesDir);
-    }
-
-    private void extractAssets(final String srcPath, final File dstDir) {
-        final ArrayList<String> assetsPaths;
-
-        try {
-            assetsPaths = getAssetsPaths(srcPath);
-        } catch (final Exception ex) {
-            Log.e("fheroes2", "Failed to get a list of assets.", ex);
-
-            return;
-        }
-
-        for (final String path : assetsPaths) {
-            try (final InputStream in = getAssets().open(path)) {
-                final File outFile = new File(dstDir, path);
-
-                final File outFileDir = outFile.getParentFile();
-                if (outFileDir != null) {
-                    outFileDir.mkdirs();
-                }
-
-                if (outFile.exists()) {
-                    Log.i("fheroes2", String.format("Skip existing asset %s", outFile.getPath()));
-                    continue;
-                }
-
-                try (final OutputStream out = new FileOutputStream(outFile)) {
-                    IOUtils.copy(in, out);
-                }
-            } catch (final Exception ex) {
-                Log.e("fheroes2", "Failed to extract the asset.", ex);
-            }
-        }
-    }
-
-    private ArrayList<String> getAssetsPaths(final String path) throws IOException {
-        final ArrayList<String> result = new ArrayList<>();
-
-        final String[] assets = getAssets().list(path);
-
-        // There is no such path at all
-        if (assets == null) {
-            return result;
-        }
-
-        // Leaf node
-        if (assets.length == 0) {
-            result.add(path);
-
-            return result;
-        }
-
-        // Regular node
-        for (final String asset : assets) {
-            result.addAll(getAssetsPaths(path + File.separator + asset));
-        }
-
-        return result;
     }
 
     @Override
@@ -217,10 +139,12 @@ public final class ToolsetActivity extends AppCompatActivity {
         viewModel.validateAssets(getExternalFilesDir(null));
     }
 
+    @SuppressWarnings("java:S1172") // SonarQube warning "Remove unused method parameter"
     public void extractHoMM2AssetsButtonClicked(final View view) {
         zipFileChooserLauncher.launch("application/zip");
     }
 
+    @SuppressWarnings("java:S1172") // SonarQube warning "Remove unused method parameter"
     public void downloadHoMM2DemoButtonClicked(final View view) {
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.activity_toolset_homm2_demo_url))));
     }
