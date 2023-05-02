@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-24 18:46+0300\n"
+"POT-Creation-Date: 2023-05-01 11:22+0000\n"
 "PO-Revision-Date: 2023-04-24 18:51+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4349,6 +4349,10 @@ msgstr ""
 "Вы не справились с заданием за отведённое время.\n"
 "Всё кончено."
 
+#, fuzzy
+msgid "Defeat!"
+msgstr " поражение"
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
@@ -4429,6 +4433,9 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} игрок побеждён!"
+
+msgid "Major Event!"
+msgstr ""
 
 msgid "Scenario:"
 msgstr "Сценарий:"
@@ -4515,6 +4522,9 @@ msgid " All dwellings increase population."
 msgstr " Население всех жилищ возросло."
 
 msgid "New Week!"
+msgstr ""
+
+msgid "Beware!"
 msgstr ""
 
 msgid ""
@@ -6439,6 +6449,11 @@ msgstr ""
 
 msgid "Spell book is not present."
 msgstr "Книги заклинаний нет."
+
+#, fuzzy
+msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
+msgstr "Заклинание требует %{mana} очков магии. У Вас только %{point}."
 
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "

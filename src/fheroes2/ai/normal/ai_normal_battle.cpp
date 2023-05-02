@@ -512,7 +512,7 @@ namespace AI
             const bool attackerIgnoresCover
                 = arena.GetForce1().GetCommander()->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY );
 
-            auto getTowerStrength = [&currentUnit]( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetScoreQuality( currentUnit ) : 0; };
+            auto getTowerStrength = []( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetStrength() : 0; };
 
             double towerStr = getTowerStrength( Arena::GetTower( TowerType::TWR_CENTER ) );
             towerStr += getTowerStrength( Arena::GetTower( TowerType::TWR_LEFT ) );

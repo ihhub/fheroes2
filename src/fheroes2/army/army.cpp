@@ -190,8 +190,11 @@ Troops::Troops( const Troops & troops )
 
 Troops::~Troops()
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
+    std::for_each( begin(), end(), []( Troop * troop ) {
+        assert( troop != nullptr );
+
+        delete troop;
+    } );
 }
 
 void Troops::Assign( const Troop * it1, const Troop * it2 )
@@ -879,33 +882,30 @@ void Troops::JoinAllTroopsOfType( const Troop & targetTroop ) const
     }
 }
 
-Army::Army( HeroBase * s )
-    : commander( s )
-    , combat_format( true )
+Army::Army( HeroBase * cmdr /* = nullptr */ )
+    : commander( cmdr )
+    , _isSpreadCombatFormation( true )
     , color( Color::NONE )
 {
     reserve( maximumTroopCount );
-    for ( size_t i = 0; i < maximumTroopCount; ++i )
+
+    for ( size_t i = 0; i < maximumTroopCount; ++i ) {
         push_back( new ArmyTroop( this ) );
+    }
 }
 
-Army::Army( const Maps::Tiles & t )
+Army::Army( const Maps::Tiles & tile )
     : commander( nullptr )
-    , combat_format( true )
+    , _isSpreadCombatFormation( true )
     , color( Color::NONE )
 {
     reserve( maximumTroopCount );
-    for ( size_t i = 0; i < maximumTroopCount; ++i )
+
+    for ( size_t i = 0; i < maximumTroopCount; ++i ) {
         push_back( new ArmyTroop( this ) );
+    }
 
-    setFromTile( t );
-}
-
-Army::~Army()
-{
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
-    clear();
+    setFromTile( tile );
 }
 
 const Troops & Army::getTroops() const
@@ -1167,30 +1167,34 @@ int Army::GetMoraleModificator( std::string * strs ) const
 double Army::GetStrength() const
 {
     double result = 0;
-    const uint32_t archery = ( commander != nullptr ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
-    // Hero bonus calculation is slow, cache it
+
+    const uint32_t heroArchery = ( commander != nullptr ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
+
     const int bonusAttack = ( commander ? commander->GetAttack() : 0 );
     const int bonusDefense = ( commander ? commander->GetDefense() : 0 );
     const int armyMorale = GetMorale();
     const int armyLuck = GetLuck();
 
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        const Troop * troop = *it;
-        if ( troop != nullptr && troop->isValid() ) {
-            double strength = troop->GetStrengthWithBonus( bonusAttack, bonusDefense );
+    for ( const Troop * troop : *this ) {
+        assert( troop != nullptr );
 
-            if ( archery > 0 && troop->isArchers() ) {
-                strength *= sqrt( 1 + static_cast<double>( archery ) / 100 );
-            }
-
-            // GetMorale checks if unit is affected by it
-            if ( troop->isAffectedByMorale() )
-                strength *= 1 + ( ( armyMorale < 0 ) ? armyMorale / 12.0 : armyMorale / 24.0 );
-
-            strength *= 1 + armyLuck / 24.0;
-
-            result += strength;
+        if ( troop->isEmpty() ) {
+            continue;
         }
+
+        double strength = troop->GetStrengthWithBonus( bonusAttack, bonusDefense );
+
+        if ( heroArchery > 0 && troop->isArchers() ) {
+            strength *= sqrt( 1 + static_cast<double>( heroArchery ) / 100 );
+        }
+
+        if ( troop->isAffectedByMorale() ) {
+            strength *= 1 + ( ( armyMorale < 0 ) ? armyMorale / 12.0 : armyMorale / 24.0 );
+        }
+
+        strength *= 1 + armyLuck / 24.0;
+
+        result += strength;
     }
 
     if ( commander ) {
@@ -1796,7 +1800,7 @@ StreamBase & operator<<( StreamBase & msg, const Army & army )
     for ( Army::const_iterator it = army.begin(); it != army.end(); ++it )
         msg << **it;
 
-    return msg << army.combat_format << army.color;
+    return msg << army._isSpreadCombatFormation << army.color;
 }
 
 StreamBase & operator>>( StreamBase & msg, Army & army )
@@ -1807,7 +1811,7 @@ StreamBase & operator>>( StreamBase & msg, Army & army )
     for ( Army::iterator it = army.begin(); it != army.end(); ++it )
         msg >> **it;
 
-    msg >> army.combat_format >> army.color;
+    msg >> army._isSpreadCombatFormation >> army.color;
 
     // set army
     for ( Army::iterator it = army.begin(); it != army.end(); ++it ) {

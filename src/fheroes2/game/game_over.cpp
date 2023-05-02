@@ -168,7 +168,7 @@ namespace
         AudioManager::PlayMusic( MUS::LOSTGAME, Music::PlaybackMode::PLAY_ONCE );
 
         if ( !body.empty() )
-            fheroes2::showStandardTextMessage( "", body, Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Defeat!" ), body, Dialog::OK );
     }
 
     Video::Subtitle standardGameResults()
@@ -371,7 +371,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
     for ( const int color : Colors( colors ) ) {
         if ( !world.GetKingdom( color ).isPlay() ) {
             if ( !isSinglePlayer || ( color & humanColors ) == 0 ) {
-                Game::DialogPlayers( color, _( "%{color} player has been vanquished!" ) );
+                Game::DialogPlayers( color, _( "Major Event!" ), _( "%{color} player has been vanquished!" ) );
             }
             colors &= ( ~color );
         }

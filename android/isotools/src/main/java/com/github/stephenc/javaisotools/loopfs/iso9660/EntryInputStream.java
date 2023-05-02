@@ -48,6 +48,7 @@ class EntryInputStream extends InputStream
         this.rem = entry.getSize();
     }
 
+    @Override
     public int read( final byte[] b, final int off, final int len ) throws IOException
     {
         ensureOpen();
@@ -98,6 +99,7 @@ class EntryInputStream extends InputStream
         }
     }
 
+    @Override
     public long skip( final long n )
     {
         ensureOpen();
@@ -114,6 +116,7 @@ class EntryInputStream extends InputStream
         return len;
     }
 
+    @Override
     public int available()
     {
         if ( this.rem > Integer.MAX_VALUE ) {
@@ -134,6 +137,7 @@ class EntryInputStream extends InputStream
         return this.entry.getSize();
     }
 
+    @Override
     public void close()
     {
         this.rem = 0;
