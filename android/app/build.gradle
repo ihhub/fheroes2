@@ -90,6 +90,8 @@ dependencies {
     implementation project(':isotools')
     implementation project(':sdl2')
 
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+
     implementation "androidx.core:core-ktx:1.7.0"
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-tooling:$androidx_compose_version"
@@ -111,8 +113,6 @@ dependencies {
     implementation 'androidx.datastore:datastore:1.0.0'
     implementation "androidx.datastore:datastore-preferences:1.0.0"
     implementation 'com.google.android.material:material:1.8.0'
-
-    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
 }
 
 task copyH2D(type: Copy) {
