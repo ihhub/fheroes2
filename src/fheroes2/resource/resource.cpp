@@ -574,27 +574,27 @@ std::pair<int, int32_t> Funds::getFirstValidResource() const
     }
 
     if ( ore > 0 ) {
-        return { Resource::ORE, wood };
+        return { Resource::ORE, ore };
     }
 
     if ( mercury > 0 ) {
-        return { Resource::MERCURY, wood };
+        return { Resource::MERCURY, mercury };
     }
 
     if ( sulfur > 0 ) {
-        return { Resource::SULFUR, wood };
+        return { Resource::SULFUR, sulfur };
     }
 
     if ( crystal > 0 ) {
-        return { Resource::CRYSTAL, wood };
+        return { Resource::CRYSTAL, crystal };
     }
 
     if ( gems > 0 ) {
-        return { Resource::GEMS, wood };
+        return { Resource::GEMS, gems };
     }
 
     if ( gold > 0 ) {
-        return { Resource::GOLD, wood };
+        return { Resource::GOLD, gold };
     }
 
     // We shouldn't reach this point. Make sure that you are calling this method for valid Funds.
