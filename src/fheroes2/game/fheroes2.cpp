@@ -127,27 +127,9 @@ namespace
     public:
         DisplayInitializer()
         {
-            const Settings & conf = Settings::Get();
-
             fheroes2::Display & display = fheroes2::Display::instance();
-            if ( conf.isFirstGameRun() && System::isHandheldDevice() ) {
-                // We do not show resolution dialog for first run on handheld devices. In this case it is wise to set 'widest' resolution by default.
-                const std::vector<fheroes2::ResolutionInfo> resolutions = fheroes2::engine().getAvailableResolutions();
-                fheroes2::ResolutionInfo bestResolution{ conf.currentResolutionInfo() };
-
-                for ( const fheroes2::ResolutionInfo & info : resolutions ) {
-                    if ( info.gameWidth > bestResolution.gameWidth && info.gameHeight == bestResolution.gameHeight ) {
-                        bestResolution = info;
-                    }
-                }
-
-                display.setResolution( bestResolution );
-            }
-            else {
-                display.setResolution( conf.currentResolutionInfo() );
-            }
-
-            display.fill( 0 ); // start from a black screen
+            display.setResolution( display.getScaledScreenSize( Settings::Get().GetLWPScale() ) );
+            display.fill( 0 );
 
             fheroes2::engine().setTitle( GetCaption() );
 
@@ -260,8 +242,7 @@ int main( int argc, char ** argv )
         InitDataDir();
         ReadConfigs();
 
-        std::set<fheroes2::SystemInitializationComponent> coreComponents{ fheroes2::SystemInitializationComponent::Audio,
-                                                                          fheroes2::SystemInitializationComponent::Video };
+        std::set<fheroes2::SystemInitializationComponent> coreComponents{ fheroes2::SystemInitializationComponent::Video };
 
 #if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
         coreComponents.emplace( fheroes2::SystemInitializationComponent::GameController );
@@ -285,8 +266,6 @@ int main( int argc, char ** argv )
         }
 #endif
 
-        const AudioManager::AudioInitializer audioInitializer( dataInitializer.getOriginalAGGFilePath(), dataInitializer.getExpansionAGGFilePath(), midiSoundFonts );
-
         // Load palette.
         fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL" ) );
         fheroes2::Display::instance().changePalette( nullptr, true );
@@ -299,7 +278,7 @@ int main( int argc, char ** argv )
 
         conf.setGameLanguage( conf.getGameLanguage() );
 
-        if ( conf.isShowIntro() ) {
+        if ( conf.isShowIntro() && false ) {
             fheroes2::showTeamInfo();
 
             Video::ShowVideo( "NWCLOGO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );

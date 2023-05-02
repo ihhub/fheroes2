@@ -59,6 +59,8 @@ namespace
     // Returns nearest screen supported resolution
     fheroes2::ResolutionInfo GetNearestResolution( fheroes2::ResolutionInfo resolutionInfo, const std::vector<fheroes2::ResolutionInfo> & resolutions )
     {
+        return resolutionInfo;
+
         if ( resolutions.empty() ) {
             return resolutionInfo;
         }
@@ -966,6 +968,11 @@ namespace
             }
         }
 
+        void setBrightness( const int brightness ) override
+        {
+            _brightness = brightness;
+        }
+
     protected:
         RenderEngine()
             : _window( nullptr )
@@ -1063,6 +1070,8 @@ namespace
                 ERROR_LOG( "Failed to copy render.The error value: " << returnCode << ", description: " << SDL_GetError() )
                 return;
             }
+
+            _renderBrightnessOverlay();
 
             SDL_RenderPresent( _renderer );
         }
@@ -1199,6 +1208,8 @@ namespace
 
         bool _isVSyncEnabled;
 
+        int _brightness = SDL_ALPHA_TRANSPARENT;
+
         uint32_t renderFlags() const
         {
             if ( _isVSyncEnabled ) {
@@ -1282,6 +1293,11 @@ namespace
                 ERROR_LOG( "Failed to set default color for renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
 
+            returnCode = SDL_SetRenderDrawBlendMode(_renderer, SDL_BLENDMODE_BLEND);
+            if ( returnCode < 0 ) {
+                ERROR_LOG("Failed to set blend mode The error value: " << returnCode << ", description: " << SDL_GetError())
+            }
+
             returnCode = SDL_SetRenderTarget( _renderer, nullptr );
             if ( returnCode < 0 ) {
                 ERROR_LOG( "Failed to set render target to window. The error value: " << returnCode << ", description: " << SDL_GetError() )
@@ -1326,6 +1342,16 @@ namespace
 
                 assert( isFullScreen() == BaseRenderEngine::isFullScreen() );
             }
+        }
+
+        void _renderBrightnessOverlay() {
+            if (_surface == nullptr) {
+                return;
+            }
+
+            SDL_SetRenderDrawColor(_renderer, 0, 0, 0, _brightness);
+            SDL_Rect rect = { 0, 0, _surface->w, _surface->h };
+            SDL_RenderFillRect(_renderer, &rect);
         }
     };
 #else
@@ -1574,7 +1600,10 @@ namespace fheroes2
     {
         if ( width() > 0 && height() > 0 && info.gameWidth == width() && info.gameHeight == height() && info.screenWidth == _screenSize.width
              && info.screenHeight == _screenSize.height ) // nothing to resize
+        {
+            VERBOSE_LOG("setResolution nothing to resize w: " << info.screenWidth << " h:" << info.screenHeight)
             return;
+        }
 
         const bool isFullScreen = _engine->isFullScreen();
 
@@ -1587,6 +1616,8 @@ namespace fheroes2
         if ( !_engine->allocate( info, isFullScreen ) ) {
             clear();
         }
+
+        VERBOSE_LOG("setResolution w: " << info.screenWidth << " h:" << info.screenHeight)
 
         Image::resize( info.gameWidth, info.gameHeight );
         _screenSize = { info.screenWidth, info.screenHeight };
@@ -1711,5 +1742,33 @@ namespace fheroes2
     Cursor & cursor()
     {
         return *( Display::instance()._cursor );
+    }
+
+    ResolutionInfo Display::getScaledScreenSize(int scale) {
+        float ddpi = 1;
+        float hdpi = 1;
+        float vdpi = 1;
+
+        if (SDL_GetDisplayDPI(0, &ddpi, &hdpi, &vdpi) != 0) {
+            ERROR_LOG("getScaledScreenSize Failed to obtain DPI information for display 0");
+            ERROR_LOG(SDL_GetError());
+            exit(1);
+        }
+
+        SDL_DisplayMode displayMode;
+        SDL_GetCurrentDisplayMode(0, &displayMode);
+
+        float defaultDpi = 160;
+        float dpiScaling = defaultDpi / ddpi;
+        float scaleMultiplier = scale == 0 ? dpiScaling : (1.0F / scale);
+
+        int32_t width = static_cast<int32_t>(displayMode.w * scaleMultiplier);
+        int32_t height = static_cast<int32_t>(displayMode.h * scaleMultiplier);
+
+        __android_log_print(ANDROID_LOG_INFO, "SDL", "getScaledScreenSize scale %d multiplier %f dpiScaling %f", scale, scaleMultiplier, dpiScaling);
+        __android_log_print(ANDROID_LOG_INFO, "SDL", "getScaledScreenSize resizeDisplay ddpi %f, hdpi %f, vdpi %f", ddpi, hdpi, vdpi);
+        __android_log_print(ANDROID_LOG_INFO, "SDL", "getScaledScreenSize resizeDisplay w: %d h: %d scaled: w: %d h: %d", displayMode.w, displayMode.h, width, height);
+
+        return { width, height, width, height };
     }
 }

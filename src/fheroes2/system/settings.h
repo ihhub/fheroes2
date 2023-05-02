@@ -35,6 +35,7 @@
 #include "math_base.h"
 #include "players.h"
 #include "screen.h"
+#include "tinyconfig.h"
 
 class StreamBase;
 
@@ -60,6 +61,15 @@ enum class ZoomLevel : uint8_t
     ZoomLevel1 = 1,
     ZoomLevel2 = 2,
     ZoomLevel3 = 3, // Max zoom, but should only exists for debug builds
+};
+
+enum MapUpdateInterval : uint32_t
+{
+    EVERY_SWITCH = 0,
+    MINUTES_10 = 1,
+    MINUTES_30 = 2,
+    HOURS_2 = 3,
+    HOURS_24 = 4
 };
 
 class Settings
@@ -421,6 +431,48 @@ public:
         return _viewWorldZoomLevel;
     }
 
+    int GetLWPScale()
+    {
+        return lwp_scale;
+    }
+
+    void SetLWPScale(int scale) {
+        lwp_scale = scale;
+    }
+
+    int GetLWPMapUpdateInterval()
+    {
+        MapUpdateInterval interval = static_cast<MapUpdateInterval>(lwp_map_update_interval);
+
+        switch (interval) {
+            case MINUTES_10:
+                return 60 * 10;
+            case MINUTES_30:
+                return 60 * 30;
+            case HOURS_2:
+                return 60 * 60 * 2;
+            case HOURS_24:
+                return 60 * 60 * 24;
+            case EVERY_SWITCH:
+            default:
+                return 0;
+        }
+    }
+
+    void SetLWPMapUpdateInterval(int interval) {
+        lwp_map_update_interval = interval;
+    }
+
+    int GetLWPBrightness()
+    {
+        return lwp_brightness;
+    }
+
+    void SetLWPBrightness(int brightness)
+    {
+        lwp_brightness = brightness;
+    }
+
     void SetViewWorldZoomLevel( ZoomLevel zoomLevel )
     {
         _viewWorldZoomLevel = zoomLevel;
@@ -467,6 +519,10 @@ private:
     int scroll_speed;
     int battle_speed;
 
+    int lwp_brightness = 70;
+    int lwp_map_update_interval = 0;
+    int lwp_scale = 5;
+
     int game_type;
     int preferably_count_players;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
@@ -477,6 +533,10 @@ private:
     fheroes2::Point pos_stat{ -1, -1 };
 
     Players players;
+
+    void ReadSettingsForLiveWallpaper(TinyConfig &config);
+
+    void OverrideSettingsForLiveWallpaper();
 };
 
 StreamBase & operator<<( StreamBase &, const Settings & );

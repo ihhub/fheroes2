@@ -113,6 +113,8 @@ Settings::Settings()
     _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
     _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_RESOLVE );
 
+    OverrideSettingsForLiveWallpaper();
+
     if ( System::isHandheldDevice() ) {
         // Due to the nature of handheld devices having small screens in general it is good to make fullscreen option by default.
         _optGlobal.SetModes( GLOBAL_FULLSCREEN );
@@ -132,13 +134,50 @@ Settings & Settings::Get()
     return conf;
 }
 
+void Settings::OverrideSettingsForLiveWallpaper()
+{
+    VERBOSE_LOG("OverrideSettingsForLiveWallpaper")
+
+    SetSoundVolume(0);
+    SetMusicVolume(0);
+    set3DAudio( false );
+    setAutoSaveAtBeginningOfTurn(false);
+    setHideInterface(false);
+}
+
+void Settings::ReadSettingsForLiveWallpaper(TinyConfig & config)
+{
+    VERBOSE_LOG("ReadSettingsForLiveWallpaper")
+
+    if ( config.Exists( "lwp brightness" ) ) {
+        SetLWPBrightness(
+                std::clamp( config.IntParams( "lwp brightness" ), 0, 100 )
+        );
+    }
+
+    if ( config.Exists( "lwp scale" ) ) {
+        SetLWPScale(
+                std::clamp( config.IntParams( "lwp scale" ), 0, 5 )
+        );
+    }
+
+    if ( config.Exists( "lwp map update interval" ) ) {
+        SetLWPMapUpdateInterval(
+                std::clamp( config.IntParams( "lwp map update interval" ), 0, 5 )
+        );
+    }
+}
+
 bool Settings::Read( const std::string & filePath )
 {
+    VERBOSE_LOG("Settings::Read")
+
     TinyConfig config( '=', '#' );
 
     std::string sval;
 
     if ( !config.Load( filePath ) ) {
+        VERBOSE_LOG("No config file")
         return false;
     }
 
@@ -319,6 +358,9 @@ bool Settings::Read( const std::string & filePath )
         setScreenScalingTypeNearest( config.StrParams( "screen scaling type" ) == "nearest" );
     }
 
+    ReadSettingsForLiveWallpaper(config);
+    OverrideSettingsForLiveWallpaper();
+
     return true;
 }
 
@@ -465,6 +507,15 @@ std::string Settings::String() const
 
     os << std::endl << "# scaling type: nearest or linear (set by default)" << std::endl;
     os << "screen scaling type = " << ( _optGlobal.Modes( GLOBAL_SCREEN_SCALING_TYPE_NEAREST ) ? "nearest" : "linear" ) << std::endl;
+
+    os << std::endl << "# lwp: scale" << std::endl;
+    os << "lwp scale = " << lwp_scale << std::endl;
+
+    os << std::endl << "# lwp: brightness" << std::endl;
+    os << "lwp brightness = " << lwp_brightness << std::endl;
+
+    os << std::endl << "# lwp: map update interval" << std::endl;
+    os << "lwp map update interval = " << lwp_map_update_interval << std::endl;
 
     return os.str();
 }

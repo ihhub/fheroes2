@@ -128,6 +128,11 @@ namespace fheroes2
             // Do nothing.
         }
 
+        virtual void setBrightness( const int )
+        {
+            // Do nothing.
+        }
+
         void setNearestScaling( const bool enable )
         {
             _nearestScaling = enable;
@@ -208,6 +213,8 @@ namespace fheroes2
 
         // Do not call this method. It serves as a patch over the basic class.
         void resize( int32_t width_, int32_t height_ ) override;
+
+        ResolutionInfo getScaledScreenSize(int scale);
 
         void setResolution( ResolutionInfo info );
 

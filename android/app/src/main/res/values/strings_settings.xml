@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="assets_header">Wallpaper</string>
+    <string name="assets_select_button">Select file \"h3sprite.lod\"</string>
+    <string name="assets_permission_canceled">Can\'t read file without permission</string>
+    <string name="assets_select_file_activity_title">Select \"h3sprite.lod\"</string>
+    <string name="assets_parsing_progress">Parsing…\nCan take few minutes</string>
+    <string name="assets_parsing_done">Parsing successfully done!</string>
+    <string name="file_open_error">Can\'t open file.\nCheck app permissions.</string>
+    <string name="output_error">Can\'t save files.\nCheck free space or try reinstall the app.</string>
+    <string name="invalid_file_error">Error while reading while.\nTry another file.</string>
+    <string name="common_error">Something went wrong.\nTry another file or reinstall the app.</string>
+    <string name="wallpaper_change_limitation_title">Please note</string>
+    <string name="wallpaper_change_limitation_text">Some phones don\'t allow to set live wallpapers on the lock screen or don\'t allow to set live wallpapers at all!</string>
+
+    <string name="brightness_title">Brightness</string>
+
+    <string name="credits_header">Credits</string>
+    <string name="credits_button">Open</string>
+
+    <string name="credits_title">Credits</string>
+    <string name="source_code_title" translatable="false">App by Ilya Pomaskin</string>
+    <string name="source_code_summary" translatable="false">https://github.com/IlyaPomaskin/h3lwp</string>
+
+    <string name="map_author_title" translatable="false">Map by Fosgen</string>
+    <string name="map_author_summary" translatable="false">https://en.heroesportal.net/maps/view/1737</string>
+
+    <string name="scale_by_density">Based on display density</string>
+
+    <string name="update_timeout_10minutes">10 minutes</string>
+    <string name="update_timeout_30minutes">30 minutes</string>
+    <string name="update_timeout_2hour">2 hour</string>
+    <string name="update_timeout_24hours">24 hours</string>
+    <string name="update_timeout_every_switch">Every switch to home screen</string>
+
+    <string name="settings_screen_title">Settings</string>
+
+    <string name="phone_limitation_note">Please note few things:</string>
+    <string name="phone_limitation_miui">Some phones don\'t allow to set live wallpapers on the lock screen</string>
+    <string name="phone_limitation_no">And some phones don\'t allow to set live wallpapers at all</string>
+    <string name="phone_limitation_okay">Okay</string>
+
+    <string name="parsing_upload">At first you need to upload file with images from original game</string>
+    <string name="parsing_restictions">Due to copyright restrictions we can\'t distribute this file with the app</string>
+    <string name="parsing_how_to_upload_1">Upload file</string>
+    <string name="parsing_how_to_upload_2" translatable="false">\'Heroes 3/Data/H3Sprite.lod\'</string>
+    <string name="parsing_how_to_upload_3">to phone from your copy of </string>
+    <string name="parsing_how_to_upload_4">Heroes of Might and Magic® III Shadow of the Death.</string>
+    <string name="parsing_how_to_upload_5">Also you can upload your favorite maps.</string>
+    <string name="parsing_note">Please note that \'HD version\', \'The Restoration of Erathia\', \'Armageddon blade\' and \'WoG\' will not work. \'Complete Edition\' and HotA should be OK.</string>
+    <string name="parsing_button">Select H3Sprite.lod</string>
+    <string name="parsing_error_cant_parse_header">Can\'t parse file</string>
+    <string name="parsing_error_cant_parse_text">Check file permissions or make sure you are using file from Shadow of the Death</string>
+    <string name="parsing_error_cant_parse_button">Close</string>
+
+    <string name="maps_error_parse_title">Can\'t parse content of map</string>
+    <string name="maps_error_parse_text">Check version of the map. App only can read maps from "Shadow of the Death".</string>
+    <string name="maps_error_open_title">Can\'t open file</string>
+    <string name="maps_error_open_text">Check permission for reading files.</string>
+    <string name="maps_error_copy_title">Can\'t copy map</string>
+    <string name="maps_error_copy_text">Probably there are already same map or no free space on the phone.</string>
+    <string name="maps_error_button">Close</string>
+    <string name="maps_toast_too_much_maps">Too much maps</string>
+    <string name="maps_title">Maps</string>
+
+    <string name="file_selector_toast">Give permission to read files</string>
+    <string name="update_timeout_5minutes">5 minutes</string>
+    <string name="update_timeout_15minutes">15 minutes</string>
+    <string name="update_timeout_1hour">1 hour</string>
+    <string name="wallpaper_change_button">Set wallpaper</string>
+    <string name="preferences_header">Preferences</string>
+    <string name="scale_title">Scale</string>
+    <string name="scale_type_title">Scale type</string>
+    <string name="scale_type_sharp_title">Sharp</string>
+    <string name="scale_type_smooth_title">Smooth</string>
+    <string name="update_time_title">Update timeout</string>
+    <string name="use_scroll_title">Scroll map</string>
+    <string name="use_scroll_summary">Scroll map while switching screens\nNote: Some phones doesn\'t support it</string>
+    <string name="maps_button">Maps</string>
+    <string name="maps_item">Maps</string>
+    <string name="wallpaper_change_limitation_button">OK</string>
+</resources>

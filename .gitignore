@@ -96,3 +96,6 @@ android/app/src/main/assets/files/
 
 # Mac magic folders
 .DS_Store
+
+.gradle
+.idea

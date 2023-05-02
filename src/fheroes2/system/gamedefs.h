@@ -43,7 +43,7 @@
 
 // hardcore defines: interface
 #define RADARWIDTH 144
-#define BORDERWIDTH 16
+#define BORDERWIDTH 0
 
 // ai/hero speed
 #define DEFAULT_SPEED_DELAY 5

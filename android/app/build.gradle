@@ -1,12 +1,17 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
-    namespace 'org.fheroes2'
+    namespace 'com.ipapps.homm2.livewallpaper'
 
     compileSdkVersion 33
 
+    buildFeatures {
+        compose true
+    }
+
     defaultConfig {
-        applicationId 'org.fheroes2'
+        applicationId 'com.ipapps.homm2.livewallpaper'
 
         minSdkVersion 22
         targetSdkVersion 33
@@ -82,12 +87,31 @@ android {
 dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.0.3'
 
-    implementation project(':isotools')
-    implementation project(':sdl2')
+    implementation "androidx.core:core-ktx:1.7.0"
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling:$androidx_compose_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation "androidx.compose.runtime:runtime:$compose_version"
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+    implementation "androidx.compose.material:material:$androidx_compose_version"
+    implementation "androidx.compose.animation:animation:$androidx_compose_version"
+    implementation "androidx.preference:preference-ktx:1.1.1"
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
+    implementation "androidx.navigation:navigation-compose:2.4.0-rc01"
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'androidx.datastore:datastore:1.0.0'
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation 'com.google.android.material:material:1.8.0'
 
     implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
-
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation project(':isotools')
+//    implementation project(':sdl2')
 }
 
 task copyH2D(type: Copy) {

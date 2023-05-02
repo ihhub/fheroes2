@@ -93,10 +93,13 @@ namespace
 
 void Game::mainGameLoop( bool isFirstGameRun )
 {
-    fheroes2::GameMode result = fheroes2::GameMode::MAIN_MENU;
+    fheroes2::GameMode result = fheroes2::GameMode::WALLPAPER;
 
     while ( result != fheroes2::GameMode::QUIT_GAME ) {
         switch ( result ) {
+        case fheroes2::GameMode::WALLPAPER:
+            result = Game::Wallpaper();
+            break;
         case fheroes2::GameMode::MAIN_MENU:
             result = Game::MainMenu( isFirstGameRun );
             isFirstGameRun = false;

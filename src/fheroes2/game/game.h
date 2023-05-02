@@ -56,6 +56,8 @@ namespace Game
     void mainGameLoop( bool isFirstGameRun );
 
     fheroes2::GameMode MainMenu( bool isFirstGameRun );
+
+    fheroes2::GameMode Wallpaper();
     fheroes2::GameMode NewGame();
     fheroes2::GameMode LoadGame();
     fheroes2::GameMode Credits();
