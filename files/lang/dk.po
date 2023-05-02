@@ -132,7 +132,6 @@ msgid ""
 "PLAYER\n"
 "GAME"
 msgstr ""
-
 "FLER-\n"
 "SPILLER"
 
@@ -5998,7 +5997,7 @@ msgid "Estates"
 msgstr "Adelskab"
 
 msgid "Advanced Archery"
-sgstr "Øvet skydning"
+msgstr "Øvet skydning"
 
 msgid "Advanced Pathfinding"
 msgstr "Øvet stifinding"
