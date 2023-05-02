@@ -722,6 +722,7 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
     // There is a tile with a predefined Ultimate Artifact, pick a tile nearby in the radius specified in the artifact's properties
     else {
         const int32_t radius = static_cast<int32_t>( ultArtTileIter->metadata()[0] );
+        resetObjectMetadata( *ultArtTileIter );
 
         // Remove the predefined Ultimate Artifact object
         ultArtTileIter->Remove( ultArtTileIter->GetObjectUID() );
@@ -849,6 +850,7 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
     case MP2::OBJ_WITCHS_HUT:
         updateObjectInfoTile( tile, true );
         break;
+
     case MP2::OBJ_AIR_ALTAR:
     case MP2::OBJ_BARROW_MOUNDS:
     case MP2::OBJ_EARTH_ALTAR:
@@ -857,6 +859,10 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
         // We need to clear metadata because it is being stored as a part of an MP2 object.
         resetObjectInfoOnTile( tile );
         updateObjectInfoTile( tile, true );
+        break;
+
+    case MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT:
+        // We need information from an Ultimate artifact for later use. We will reset metadata later.
         break;
 
     case MP2::OBJ_HEROES: {
