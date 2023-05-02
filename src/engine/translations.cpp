@@ -485,7 +485,7 @@ namespace Translation
             case LocaleType::LOCALE_RO:
                 return current->ngettext( str, ( n == 1 ? 0 : n == 0 || ( n != 1 && n % 100 >= 1 && n % 100 <= 19 ) ? 1 : 2 ) );
             case LocaleType::LOCALE_SK:
-                return current->ngettext( str, ( ( n == 1 ) ? 1 : ( n >= 2 && n <= 4 ) ? 2 : 0 ) );
+                return current->ngettext( str, ( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? 1 : 2 ) );
             case LocaleType::LOCALE_SL:
                 return current->ngettext( str, ( n % 100 == 1 ? 0 : n % 100 == 2 ? 1 : n % 100 == 3 || n % 100 == 4 ? 2 : 3 ) );
             case LocaleType::LOCALE_SR:

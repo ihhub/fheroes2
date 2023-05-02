@@ -1012,15 +1012,7 @@ void Battle::Unit::PostAttackAction()
         }
     }
 
-    // clean berserker spell
-    removeAffection( SP_BERSERKER );
-
-    // clean hypnotize spell
-    removeAffection( SP_HYPNOTIZE );
-
-    // clean luck capability
-    ResetModes( LUCK_GOOD );
-    ResetModes( LUCK_BAD );
+    ResetModes( LUCK_GOOD | LUCK_BAD );
 }
 
 void Battle::Unit::SetBlindAnswer( bool value )
@@ -1250,13 +1242,12 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
         break;
 
     case Spell::BERSERKER:
-        addAffection( SP_BERSERKER, duration );
+        replaceAffection( SP_HYPNOTIZE, SP_BERSERKER, duration );
         break;
 
-    case Spell::HYPNOTIZE: {
-        addAffection( SP_HYPNOTIZE, duration );
+    case Spell::HYPNOTIZE:
+        replaceAffection( SP_BERSERKER, SP_HYPNOTIZE, duration );
         break;
-    }
 
     case Spell::PETRIFY:
         addAffection( SP_STONE, duration );

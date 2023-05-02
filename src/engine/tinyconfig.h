@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,6 +28,7 @@
 #include <string>
 
 #include "math_base.h"
+#include "screen.h"
 
 class TinyConfig : private std::multimap<std::string, std::string>
 {
@@ -43,6 +44,9 @@ public:
     // Tries to find and return a Point-type struct stored as a string "[ x, y ]" for a given key.
     // In case of any error, the fallback value is returned.
     fheroes2::Point PointParams( const std::string & key, const fheroes2::Point & fallbackValue ) const;
+    // Tries to find and return a ResolutionInfo-type struct (multiple formats are supported, see the implementation for details)
+    // for a given key. In case of any error, the fallback value is returned.
+    fheroes2::ResolutionInfo ResolutionParams( const std::string & key, const fheroes2::ResolutionInfo & fallbackValue ) const;
 
 private:
     char separator;

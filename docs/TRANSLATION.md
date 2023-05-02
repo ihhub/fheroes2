@@ -25,6 +25,7 @@ subdirectory of the project source tree. The current instruction is designed for
 ![Swedish](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_sv.json)
 ![Turkish](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_tr.json)
 ![Ukrainian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_uk.json)
+![Vietnamese](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_vi.json)
 
 ## Finding translatable strings in the codebase
 

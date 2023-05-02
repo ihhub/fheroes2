@@ -357,7 +357,7 @@ private:
     void Defaults();
     void Reset();
     void MonthOfMonstersAction( const Monster & );
-    void ProcessNewMap();
+    bool ProcessNewMap( const std::string & filename, const bool checkPoLObjects );
     void PostLoad( const bool setTilePassabilities );
 
     bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;

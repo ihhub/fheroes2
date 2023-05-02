@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,19 +21,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "tinyconfig.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cctype>
 #include <charconv>
 #include <cstddef>
+#include <cstdint>
+#include <limits>
 #include <regex>
+#include <string_view>
 #include <system_error>
 #include <type_traits>
 #include <utility>
 #include <vector>
 
 #include "serialize.h"
-#include "tinyconfig.h"
 #include "tools.h"
 
 namespace
@@ -51,6 +55,14 @@ namespace
             key.begin(), key.end(), []( const unsigned char c ) { return std::isspace( c ); }, '\x20' );
 
         return key;
+    }
+
+    template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
+    bool convertToInt( const std::string_view str, T & intValue )
+    {
+        const auto [ptr, ec] = std::from_chars( str.data(), str.data() + str.size(), intValue );
+
+        return ec == std::errc();
     }
 }
 
@@ -117,12 +129,6 @@ fheroes2::Point TinyConfig::PointParams( const std::string & key, const fheroes2
 
     assert( pointRegexMatch.size() == 3 );
 
-    auto convertToInt = []( const std::string & str, auto & intValue ) {
-        const auto [ptr, ec] = std::from_chars( str.data(), str.data() + str.size(), intValue );
-
-        return ec == std::errc();
-    };
-
     fheroes2::Point result;
 
     static_assert( std::is_integral<decltype( result.x )>::value && std::is_integral<decltype( result.y )>::value,
@@ -136,6 +142,107 @@ fheroes2::Point TinyConfig::PointParams( const std::string & key, const fheroes2
     }
 
     return result;
+}
+
+fheroes2::ResolutionInfo TinyConfig::ResolutionParams( const std::string & key, const fheroes2::ResolutionInfo & fallbackValue ) const
+{
+    const const_iterator it = find( ModifyKey( key ) );
+    if ( it == end() ) {
+        return fallbackValue;
+    }
+
+    {
+        // Current format: in-game width x in-game height : on-screen width x on-screen height
+        static const std::regex resolutionRegex( "^ *([0-9]+) *x *([0-9]+) *: *([0-9]+) *x *([0-9]+) *$", std::regex_constants::extended );
+
+        std::smatch resolutionRegexMatch;
+
+        if ( std::regex_match( it->second, resolutionRegexMatch, resolutionRegex ) ) {
+            assert( resolutionRegexMatch.size() == 5 );
+
+            int32_t gameWidth{ 0 };
+            int32_t gameHeight{ 0 };
+            int32_t screenWidth{ 0 };
+            int32_t screenHeight{ 0 };
+
+            if ( !convertToInt( resolutionRegexMatch[1].str(), gameWidth ) ) {
+                return fallbackValue;
+            }
+            if ( !convertToInt( resolutionRegexMatch[2].str(), gameHeight ) ) {
+                return fallbackValue;
+            }
+            if ( !convertToInt( resolutionRegexMatch[3].str(), screenWidth ) ) {
+                return fallbackValue;
+            }
+            if ( !convertToInt( resolutionRegexMatch[4].str(), screenHeight ) ) {
+                return fallbackValue;
+            }
+
+            return { gameWidth, gameHeight, screenWidth, screenHeight };
+        }
+    }
+
+    {
+        // Old format: in-game width x in-game height x on-screen multiplier
+        static const std::regex resolutionRegex( "^ *([0-9]+) *x *([0-9]+) *x *([0-9]+) *$", std::regex_constants::extended );
+
+        std::smatch resolutionRegexMatch;
+
+        if ( std::regex_match( it->second, resolutionRegexMatch, resolutionRegex ) ) {
+            assert( resolutionRegexMatch.size() == 4 );
+
+            int32_t gameWidth{ 0 };
+            int32_t gameHeight{ 0 };
+            int32_t screenMultiplier{ 0 };
+
+            if ( !convertToInt( resolutionRegexMatch[1].str(), gameWidth ) ) {
+                return fallbackValue;
+            }
+            if ( !convertToInt( resolutionRegexMatch[2].str(), gameHeight ) ) {
+                return fallbackValue;
+            }
+            if ( !convertToInt( resolutionRegexMatch[3].str(), screenMultiplier ) ) {
+                return fallbackValue;
+            }
+
+            assert( gameWidth >= 0 && gameHeight >= 0 && screenMultiplier >= 0 );
+
+            if ( screenMultiplier == 0 ) {
+                return fallbackValue;
+            }
+            // Check for potential signed overflow on multiplication
+            if ( gameWidth > std::numeric_limits<int32_t>::max() / screenMultiplier || gameHeight > std::numeric_limits<int32_t>::max() / screenMultiplier ) {
+                return fallbackValue;
+            }
+
+            return { gameWidth, gameHeight, gameWidth * screenMultiplier, gameHeight * screenMultiplier };
+        }
+    }
+
+    {
+        // Abbreviated format: in-game width x in-game height with on-screen multiplier 1
+        static const std::regex resolutionRegex( "^ *([0-9]+) *x *([0-9]+) *$", std::regex_constants::extended );
+
+        std::smatch resolutionRegexMatch;
+
+        if ( std::regex_match( it->second, resolutionRegexMatch, resolutionRegex ) ) {
+            assert( resolutionRegexMatch.size() == 3 );
+
+            int32_t gameWidth{ 0 };
+            int32_t gameHeight{ 0 };
+
+            if ( !convertToInt( resolutionRegexMatch[1].str(), gameWidth ) ) {
+                return fallbackValue;
+            }
+            if ( !convertToInt( resolutionRegexMatch[2].str(), gameHeight ) ) {
+                return fallbackValue;
+            }
+
+            return { gameWidth, gameHeight };
+        }
+    }
+
+    return fallbackValue;
 }
 
 bool TinyConfig::Exists( const std::string & key ) const

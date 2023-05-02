@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-13 05:15+0000\n"
+"POT-Creation-Date: 2023-05-01 11:22+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3474,6 +3474,12 @@ msgstr ""
 msgid "and more..."
 msgstr ""
 
+msgid "Easy"
+msgstr ""
+
+msgid "Hard"
+msgstr ""
+
 #, fuzzy
 msgid "Campaign Difficulty"
 msgstr "Dificuldade do Jogo"
@@ -3492,10 +3498,24 @@ msgid ""
 "with normal difficulty."
 msgstr ""
 
-msgid "Easy"
+#, fuzzy
+msgid ""
+"Congratulations!\n"
+"\n"
+"Days: %{days}\n"
+msgstr "Parabéns!"
+
+msgid ""
+"\n"
+"Difficulty: %{difficulty}\n"
+"\n"
 msgstr ""
 
-msgid "Hard"
+msgid ""
+"Score: %{score}\n"
+"\n"
+"Rating:\n"
+"%{rating}"
 msgstr ""
 
 msgid "Start the selected scenario."
@@ -3696,10 +3716,10 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
-msgid "Unknown Hero"
+msgid "Your Name"
 msgstr ""
 
-msgid "Your Name"
+msgid "Unknown Hero"
 msgstr ""
 
 #, fuzzy
@@ -4314,6 +4334,15 @@ msgstr ""
 "Você não conseguiu concluir sua missão no tempo.\n"
 "Tudo está acabado."
 
+msgid "Defeat!"
+msgstr ""
+
+msgid ""
+"Base score: %{score}\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
 #, fuzzy
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr "Derrotar todos os heróis inimigos e cidades."
@@ -4377,6 +4406,9 @@ msgstr ""
 #, fuzzy
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} foi derrotado!"
+
+msgid "Major Event!"
+msgstr ""
 
 msgid "Scenario:"
 msgstr "Cenário:"
@@ -4462,6 +4494,9 @@ msgstr " Todas as populações aumentaram nas habitações."
 msgid "New Week!"
 msgstr ""
 
+msgid "Beware!"
+msgstr ""
+
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
 "banished from this land."
@@ -4498,6 +4533,66 @@ msgid ""
 msgstr ""
 "Jogador %{color}, seus heróis abandonaram você, e você foi banido de sua "
 "terra."
+
+msgid "Lord Kilburn"
+msgstr ""
+
+msgid "Tsabu"
+msgstr ""
+
+msgid "Sir Galant"
+msgstr ""
+
+msgid "Thundax"
+msgstr ""
+
+msgid "Lord Haart"
+msgstr ""
+
+msgid "Ariel"
+msgstr ""
+
+msgid "Rebecca"
+msgstr ""
+
+msgid "Sandro"
+msgstr ""
+
+msgid "Crodo"
+msgstr ""
+
+msgid "Barock"
+msgstr ""
+
+msgid "Antoine"
+msgstr ""
+
+msgid "Astra"
+msgstr ""
+
+msgid "Agar"
+msgstr ""
+
+msgid "Vatawna"
+msgstr ""
+
+msgid "Vesper"
+msgstr ""
+
+msgid "Ambrose"
+msgstr ""
+
+msgid "Troyan"
+msgstr ""
+
+msgid "Jojosh"
+msgstr ""
+
+msgid "Wrathmont"
+msgstr ""
+
+msgid "Maximus"
+msgstr ""
 
 msgid "Next Hero"
 msgstr "Proximo Herói"
@@ -4802,22 +4897,13 @@ msgstr ""
 msgid "Gwenneth"
 msgstr ""
 
-msgid "Lord Kilburn"
-msgstr ""
-
 msgid "Sir Gallant"
 msgstr ""
 
 msgid "Tyro"
 msgstr ""
 
-msgid "Ambrose"
-msgstr ""
-
 msgid "Dimitry"
-msgstr ""
-
-msgid "Maximus"
 msgstr ""
 
 msgid "Ruby"
@@ -4832,12 +4918,6 @@ msgstr ""
 msgid "Jezebel"
 msgstr ""
 
-msgid "Jojosh"
-msgstr ""
-
-msgid "Thundax"
-msgstr ""
-
 msgid "Atlas"
 msgstr ""
 
@@ -4847,28 +4927,10 @@ msgstr ""
 msgid "Jaclyn"
 msgstr ""
 
-msgid "Tsabu"
-msgstr ""
-
-msgid "Astra"
-msgstr ""
-
 msgid "Gem"
 msgstr ""
 
 msgid "Natasha"
-msgstr ""
-
-msgid "Rebecca"
-msgstr ""
-
-msgid "Troyan"
-msgstr ""
-
-msgid "Vatawna"
-msgstr ""
-
-msgid "Ariel"
 msgstr ""
 
 msgid "Carlawn"
@@ -4883,22 +4945,10 @@ msgstr ""
 msgid "Barok"
 msgstr ""
 
-msgid "Crodo"
-msgstr ""
-
 msgid "Kastore"
 msgstr ""
 
-msgid "Vesper"
-msgstr ""
-
-msgid "Agar"
-msgstr ""
-
 msgid "Falagar"
-msgstr ""
-
-msgid "Wrathmont"
 msgstr ""
 
 msgid "Dawn"
@@ -4947,9 +4997,6 @@ msgid "Celia"
 msgstr ""
 
 msgid "Roxana"
-msgstr ""
-
-msgid "Sandro"
 msgstr ""
 
 msgid "Lord Corlagon"
@@ -6119,6 +6166,10 @@ msgid ""
 msgstr ""
 
 msgid "Spell book is not present."
+msgstr ""
+
+msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
 msgstr ""
 
 msgid ""

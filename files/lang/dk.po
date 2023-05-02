@@ -10,7 +10,7 @@ msgstr ""
 "PO-Revision-Date: 2023-05-02 09:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
-"Language: da_DK\n"
+"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -132,6 +132,7 @@ msgid ""
 "PLAYER\n"
 "GAME"
 msgstr ""
+
 "FLER-\n"
 "SPILLER"
 
@@ -1421,229 +1422,229 @@ msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
 msgid "campaignBonus|Animate Dead"
-msgstr ""
+msgstr "Dødebesjæling"
 
 msgid "campaignBonus|Chain Lightning"
-msgstr ""
+msgstr "Kædelyn"
 
 msgid "campaignBonus|Fireblast"
-msgstr ""
+msgstr "Flammebrag"
 
 msgid "campaignBonus|Mass Curse"
-msgstr ""
+msgstr "Masseforbandelse"
 
 msgid "campaignBonus|Mass Haste"
-msgstr ""
+msgstr "Masseforhastning"
 
 msgid "campaignBonus|Mirror Image"
-msgstr ""
+msgstr "Spejlbillede"
 
 msgid "campaignBonus|Resurrect"
-msgstr ""
+msgstr "Genoplivelse"
 
 msgid "campaignBonus|Steelskin"
-msgstr ""
+msgstr "Stålhud"
 
 msgid "campaignBonus|Summon Earth"
-msgstr ""
+msgstr "Hidkald Jord-elemental"
 
 msgid "campaignBonus|View Heroes"
-msgstr ""
+msgstr "Vis helte"
 
 msgid "campaignBonus|Ballista"
-msgstr ""
+msgstr "Ballisten"
 
 msgid "campaignBonus|Black Pearl"
-msgstr ""
+msgstr "Den sorte perle"
 
 msgid "campaignBonus|Caster's Bracelet"
-msgstr ""
+msgstr "Besværgelsesarmbåndet"
 
 msgid "campaignBonus|Defender Helm"
-msgstr ""
+msgstr "Forsvarshjelmen"
 
 msgid "campaignBonus|Breastplate"
-msgstr ""
+msgstr "Brystpladen"
 
 msgid "campaignBonus|Dragon Sword"
-msgstr ""
+msgstr "Dragesværdet"
 
 msgid "campaignBonus|Fizbin Medal"
-msgstr ""
+msgstr "Fizbin-medaljen"
 
 msgid "campaignBonus|Foremost Scroll"
-msgstr ""
+msgstr "Yppersteskriftrullen"
 
 msgid "campaignBonus|Gauntlets"
 msgstr "Handsker"
 
 msgid "campaignBonus|Hideous Mask"
-msgstr ""
+msgstr "Den hæslige maske"
 
 msgid "campaignBonus|Mage's Ring"
-msgstr ""
+msgstr "Magikerens ring"
 
 msgid "campaignBonus|Major Scroll"
-msgstr ""
+msgstr "Den store skriftrulle"
 
 msgid "campaignBonus|Medal of Honor"
-msgstr ""
+msgstr "Æresmedaljen"
 
 msgid "campaignBonus|Medal of Valor"
-msgstr ""
+msgstr "Tapperhedsmedaljen"
 
 msgid "campaignBonus|Minor Scroll"
-msgstr ""
+msgstr "Den lille skriftrulle"
 
 msgid "campaignBonus|Nomad Boots"
-msgstr ""
+msgstr "Nomadens støvler"
 
 msgid "campaignBonus|Power Axe"
-msgstr ""
+msgstr "Kraftøksen"
 
 msgid "campaignBonus|Spiked Shield"
-msgstr ""
+msgstr "Pigskjoldet"
 
 msgid "campaignBonus|Stealth Shield"
-msgstr ""
+msgstr "Snigskjoldet"
 
 msgid "campaignBonus|Tax Lien"
-msgstr ""
+msgstr "Skattepant"
 
 msgid "campaignBonus|Thunder Mace"
-msgstr ""
+msgstr "Torden-morgenstjernen"
 
 msgid "campaignBonus|Traveler's Boots"
-msgstr ""
+msgstr "Traverens støvler"
 
 msgid "campaignBonus|White Pearl"
-msgstr ""
+msgstr "Den hvide perle"
 
 msgid "campaignBonus|Basic Archery"
-msgstr ""
+msgstr "Begynder skytte"
 
 msgid "campaignBonus|Advanced Archery"
-msgstr ""
+msgstr "Øvet skytte"
 
 msgid "campaignBonus|Expert Archery"
-msgstr ""
+msgstr "Ekspert skytte"
 
 msgid "campaignBonus|Basic Ballistics"
-msgstr ""
+msgstr "Begynder ballistik"
 
 msgid "campaignBonus|Advanced Ballistics"
-msgstr ""
+msgstr "Øvet ballistik"
 
 msgid "campaignBonus|Expert Ballistics"
-msgstr ""
+msgstr "Ekspert ballistik"
 
 msgid "campaignBonus|Basic Diplomacy"
-msgstr ""
+msgstr "Begynder diplomati"
 
 msgid "campaignBonus|Advanced Diplomacy"
-msgstr ""
+msgstr "Øvet diplomati"
 
 msgid "campaignBonus|Expert Diplomacy"
-msgstr ""
+msgstr "Ekspert diplomati"
 
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr ""
+msgstr "Begynder ørneblik"
 
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr ""
+msgstr "Øvet ørneblik"
 
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr ""
+msgstr "Ekspert ørneblik"
 
 msgid "campaignBonus|Basic Estates"
-msgstr ""
+msgstr "Begynder adelskab"
 
 msgid "campaignBonus|Advanced Estates"
-msgstr ""
+msgstr "Øvet adelskab"
 
 msgid "campaignBonus|Expert Estates"
-msgstr ""
+msgstr "Ekspert adelskab"
 
 msgid "campaignBonus|Basic Leadership"
-msgstr ""
+msgstr "Begynder lederskab"
 
 msgid "campaignBonus|Advanced Leadership"
-msgstr ""
+msgstr "Øvet lederskab"
 
 msgid "campaignBonus|Expert Leadership"
-msgstr ""
+msgstr "Ekspert lederskab"
 
 msgid "campaignBonus|Basic Logistics"
-msgstr ""
+msgstr "Begynder logistik"
 
 msgid "campaignBonus|Advanced Logistics"
-msgstr ""
+msgstr "Øvet logistik"
 
 msgid "campaignBonus|Expert Logistics"
-msgstr ""
+msgstr "Ekspert logistik"
 
 msgid "campaignBonus|Basic Luck"
-msgstr ""
+msgstr "Begynder held"
 
 msgid "campaignBonus|Advanced Luck"
-msgstr ""
+msgstr "Øvet held"
 
 msgid "campaignBonus|Expert Luck"
-msgstr ""
+msgstr "Ekspert held"
 
 msgid "campaignBonus|Basic Mysticism"
-msgstr ""
+msgstr "Begynder mysticisme"
 
 msgid "campaignBonus|Advanced Mysticism"
-msgstr ""
+msgstr "Øvet mysticisme"
 
 msgid "campaignBonus|Expert Mysticism"
-msgstr ""
+msgstr "Ekspert mysticisme"
 
 msgid "campaignBonus|Basic Navigation"
-msgstr ""
+msgstr "Begynder navigation"
 
 msgid "campaignBonus|Advanced Navigation"
-msgstr ""
+msgstr "Øvet navigation"
 
 msgid "campaignBonus|Expert Navigation"
-msgstr ""
+msgstr "Ekspert navigation"
 
 msgid "campaignBonus|Basic Necromancy"
-msgstr ""
+msgstr "Begynder nekromantik"
 
 msgid "campaignBonus|Advanced Necromancy"
-msgstr ""
+msgstr "Øvet nekromantik"
 
 msgid "campaignBonus|Expert Necromancy"
-msgstr ""
+msgstr "Ekspert nekromantik"
 
 msgid "campaignBonus|Basic Pathfinding"
-msgstr ""
+msgstr "Begynder stifinder"
 
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr ""
+msgstr "Øvet stifinder"
 
 msgid "campaignBonus|Expert Pathfinding"
-msgstr ""
+msgstr "Ekspert stifinder"
 
 msgid "campaignBonus|Basic Scouting"
-msgstr ""
+msgstr "Begynder opdager"
 
 msgid "campaignBonus|Advanced Scouting"
-msgstr ""
+msgstr "Øvet opdager"
 
 msgid "campaignBonus|Expert Scouting"
-msgstr ""
+msgstr "Ekspert opdager"
 
 msgid "campaignBonus|Basic Wisdom"
-msgstr ""
+msgstr "Begynder visdom"
 
 msgid "campaignBonus|Advanced Wisdom"
-msgstr ""
+msgstr "Øvet visdom"
 
 msgid "campaignBonus|Expert Wisdom"
-msgstr ""
+msgstr "Ekspert visdom"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -2612,7 +2613,7 @@ msgid "Start a single or multi-player game."
 msgstr "Start et enkelt- eller et flerspiller-spil."
 
 msgid "Load a previously saved game."
-msgstr "Start et tidligere gemt spil."
+msgstr "Indlæs et tidligere gemt spil."
 
 msgid "Save Game"
 msgstr "Gem spil"
@@ -3292,6 +3293,12 @@ msgstr "Umulig"
 msgid "and more..."
 msgstr ""
 
+msgid "Easy"
+msgstr ""
+
+msgid "Hard"
+msgstr ""
+
 msgid "Campaign Difficulty"
 msgstr ""
 
@@ -3309,10 +3316,23 @@ msgid ""
 "with normal difficulty."
 msgstr ""
 
-msgid "Easy"
+msgid ""
+"Congratulations!\n"
+"\n"
+"Days: %{days}\n"
 msgstr ""
 
-msgid "Hard"
+msgid ""
+"\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
+msgid ""
+"Score: %{score}\n"
+"\n"
+"Rating:\n"
+"%{rating}"
 msgstr ""
 
 msgid "Start the selected scenario."
@@ -3504,10 +3524,10 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
-msgid "Unknown Hero"
+msgid "Your Name"
 msgstr ""
 
-msgid "Your Name"
+msgid "Unknown Hero"
 msgstr ""
 
 msgid "Standard"
@@ -4065,6 +4085,15 @@ msgid ""
 "All is lost."
 msgstr ""
 
+msgid "Defeat!"
+msgstr ""
+
+msgid ""
+"Base score: %{score}\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
 
@@ -4121,6 +4150,9 @@ msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
 msgstr ""
 
 msgid "%{color} player has been vanquished!"
+msgstr ""
+
+msgid "Major Event!"
 msgstr ""
 
 msgid "Scenario:"
@@ -4200,6 +4232,9 @@ msgstr ""
 msgid "New Week!"
 msgstr ""
 
+msgid "Beware!"
+msgstr ""
+
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
 "banished from this land."
@@ -4226,6 +4261,67 @@ msgstr ""
 msgid ""
 "%{color} player, your heroes abandon you, and you are banished from this "
 "land."
+msgstr ""
+
+msgid "Lord Kilburn"
+msgstr ""
+
+msgid "Tsabu"
+msgstr ""
+
+#, fuzzy
+msgid "Sir Galant"
+msgstr "Sæt Luft-bevogter"
+
+msgid "Thundax"
+msgstr ""
+
+msgid "Lord Haart"
+msgstr ""
+
+msgid "Ariel"
+msgstr ""
+
+msgid "Rebecca"
+msgstr ""
+
+msgid "Sandro"
+msgstr ""
+
+msgid "Crodo"
+msgstr ""
+
+msgid "Barock"
+msgstr ""
+
+msgid "Antoine"
+msgstr ""
+
+msgid "Astra"
+msgstr ""
+
+msgid "Agar"
+msgstr ""
+
+msgid "Vatawna"
+msgstr ""
+
+msgid "Vesper"
+msgstr ""
+
+msgid "Ambrose"
+msgstr ""
+
+msgid "Troyan"
+msgstr ""
+
+msgid "Jojosh"
+msgstr ""
+
+msgid "Wrathmont"
+msgstr ""
+
+msgid "Maximus"
 msgstr ""
 
 msgid "Next Hero"
@@ -4505,22 +4601,13 @@ msgstr ""
 msgid "Gwenneth"
 msgstr ""
 
-msgid "Lord Kilburn"
-msgstr ""
-
 msgid "Sir Gallant"
 msgstr ""
 
 msgid "Tyro"
 msgstr ""
 
-msgid "Ambrose"
-msgstr ""
-
 msgid "Dimitry"
-msgstr ""
-
-msgid "Maximus"
 msgstr ""
 
 msgid "Ruby"
@@ -4535,12 +4622,6 @@ msgstr ""
 msgid "Jezebel"
 msgstr ""
 
-msgid "Jojosh"
-msgstr ""
-
-msgid "Thundax"
-msgstr ""
-
 msgid "Atlas"
 msgstr ""
 
@@ -4550,28 +4631,10 @@ msgstr ""
 msgid "Jaclyn"
 msgstr ""
 
-msgid "Tsabu"
-msgstr ""
-
-msgid "Astra"
-msgstr ""
-
 msgid "Gem"
 msgstr ""
 
 msgid "Natasha"
-msgstr ""
-
-msgid "Rebecca"
-msgstr ""
-
-msgid "Troyan"
-msgstr ""
-
-msgid "Vatawna"
-msgstr ""
-
-msgid "Ariel"
 msgstr ""
 
 msgid "Carlawn"
@@ -4586,22 +4649,10 @@ msgstr ""
 msgid "Barok"
 msgstr ""
 
-msgid "Crodo"
-msgstr ""
-
 msgid "Kastore"
 msgstr ""
 
-msgid "Vesper"
-msgstr ""
-
-msgid "Agar"
-msgstr ""
-
 msgid "Falagar"
-msgstr ""
-
-msgid "Wrathmont"
 msgstr ""
 
 msgid "Dawn"
@@ -4650,9 +4701,6 @@ msgid "Celia"
 msgstr ""
 
 msgid "Roxana"
-msgstr ""
-
-msgid "Sandro"
 msgstr ""
 
 msgid "Lord Corlagon"
@@ -5722,6 +5770,11 @@ msgstr ""
 msgid "Spell book is not present."
 msgstr ""
 
+#, fuzzy
+msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
+msgstr "Du har ingen Magibog, så du kan ikke kaste magi."
+
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
@@ -5945,7 +5998,7 @@ msgid "Estates"
 msgstr "Adelskab"
 
 msgid "Advanced Archery"
-msgstr "Øvet skydning"
+sgstr "Øvet skydning"
 
 msgid "Advanced Pathfinding"
 msgstr "Øvet stifinding"

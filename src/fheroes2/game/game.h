@@ -91,14 +91,14 @@ namespace Game
 
     int GetKingdomColors();
     int GetActualKingdomColors();
-    void DialogPlayers( int color, std::string );
+    void DialogPlayers( int color, std::string title, std::string message );
 
     uint32_t getAdventureMapAnimationIndex();
 
     void updateAdventureMapAnimationIndex();
 
     uint32_t GetRating();
-    uint32_t GetGameOverScores();
+    uint32_t getGameOverScoreFactor();
     uint32_t GetLostTownDays();
     uint32_t GetWhirlpoolPercent();
     uint32_t SelectCountPlayers();
