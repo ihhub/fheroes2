@@ -88,7 +88,7 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.0.3'
 
     implementation project(':isotools')
-    implementation project(':sdl2')
+//    implementation project(':sdl2')
 
     implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
 

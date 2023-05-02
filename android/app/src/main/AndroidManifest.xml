@@ -42,14 +42,14 @@
 
         <activity
             android:name="com.ipapps.homm2.livewallpaper.settings.MainActivity"
-            android:parentActivityName="com.ipapps.homm2.livewallpaper.ToolsetActivity"
+            android:parentActivityName="com.ipapps.homm2.livewallpaper.org.fheroes2.ToolsetActivity"
             android:exported="true"
             android:icon="@mipmap/ic_launcher_toolset"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
         </activity>
 
         <activity
-            android:name="com.ipapps.homm2.livewallpaper.ToolsetActivity"
+            android:name="com.ipapps.homm2.livewallpaper.org.fheroes2.ToolsetActivity"
             android:exported="true"
             android:icon="@mipmap/ic_launcher_toolset"
             android:label="@string/activity_toolset_label"
