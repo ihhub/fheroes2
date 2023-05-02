@@ -890,7 +890,7 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
 
     default:
         // Remove any metadata from other objects.
-        resetObjectInfoOnTile( tile );
+        resetObjectMetadata( tile );
         break;
     }
 

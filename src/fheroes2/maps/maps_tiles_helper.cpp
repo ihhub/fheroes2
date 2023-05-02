@@ -639,7 +639,7 @@ namespace Maps
         return false;
     }
 
-    void resetObjectInfoOnTile( Tiles & tile )
+    void resetObjectMetadata( Tiles & tile )
     {
         for ( uint32_t & value : tile.metadata() ) {
             value = 0;
@@ -663,7 +663,13 @@ namespace Maps
         default:
             break;
         }
+    }
 
+    void resetObjectInfoOnTile( Tiles & tile )
+    {
+        resetObjectMetadata( tile );
+
+        const MP2::MapObjectType objectType = tile.GetObject( false );
         if ( MP2::isPickupObject( objectType ) ) {
             tile.setAsEmpty();
         }
@@ -860,7 +866,7 @@ namespace Maps
         case MP2::OBJ_WAGON: {
             assert( isFirstLoad );
 
-            resetObjectInfoOnTile( tile );
+            resetObjectMetadata( tile );
 
             Rand::Queue percents( 3 );
             // 20%: empty
@@ -1416,9 +1422,16 @@ namespace Maps
         case MP2::OBJ_WATER_ALTAR:
             updateDwellingPopulationOnTile( tile, isFirstLoad );
             break;
+
+        case MP2::OBJ_EVENT:
+            assert( isFirstLoad );
+            // Event should be invisible on Adventure Map.
+            tile.resetObjectSprite();
+            break;
+
         default:
             if ( isFirstLoad ) {
-                tile.resetObjectSprite();
+                resetObjectMetadata( tile );
             }
             break;
         }

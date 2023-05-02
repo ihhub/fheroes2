@@ -122,6 +122,8 @@ namespace Maps
 
     bool doesTileContainValuableItems( const Tiles & tile );
 
+    void resetObjectMetadata( Tiles & tile );
+
     void resetObjectInfoOnTile( Tiles & tile );
 
     uint32_t getMonsterCountFromTile( const Tiles & tile );
