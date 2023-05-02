@@ -1765,9 +1765,9 @@ namespace fheroes2
         int32_t width = static_cast<int32_t>(displayMode.w * scaleMultiplier);
         int32_t height = static_cast<int32_t>(displayMode.h * scaleMultiplier);
 
-        __android_log_print(ANDROID_LOG_INFO, "SDL", "getScaledScreenSize scale %d multiplier %f dpiScaling %f", scale, scaleMultiplier, dpiScaling);
-        __android_log_print(ANDROID_LOG_INFO, "SDL", "getScaledScreenSize resizeDisplay ddpi %f, hdpi %f, vdpi %f", ddpi, hdpi, vdpi);
-        __android_log_print(ANDROID_LOG_INFO, "SDL", "getScaledScreenSize resizeDisplay w: %d h: %d scaled: w: %d h: %d", displayMode.w, displayMode.h, width, height);
+//        __android_log_print(ANDROID_LOG_INFO, "SDL", "getScaledScreenSize scale %d multiplier %f dpiScaling %f", scale, scaleMultiplier, dpiScaling);
+//        __android_log_print(ANDROID_LOG_INFO, "SDL", "getScaledScreenSize resizeDisplay ddpi %f, hdpi %f, vdpi %f", ddpi, hdpi, vdpi);
+//        __android_log_print(ANDROID_LOG_INFO, "SDL", "getScaledScreenSize resizeDisplay w: %d h: %d scaled: w: %d h: %d", displayMode.w, displayMode.h, width, height);
 
         return { width, height, width, height };
     }
