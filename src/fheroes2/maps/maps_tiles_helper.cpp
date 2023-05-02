@@ -419,9 +419,9 @@ namespace Maps
 
         switch ( static_cast<ArtifactCaptureCondition>( tile.metadata()[2] ) ) {
         case ArtifactCaptureCondition::HAVE_WISDOM_SKILL:
-            return { Skill::Secondary::LEADERSHIP, Skill::Level::BASIC };
-        case ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL:
             return { Skill::Secondary::WISDOM, Skill::Level::BASIC };
+        case ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL:
+            return { Skill::Secondary::LEADERSHIP, Skill::Level::BASIC };
         default:
             break;
         }

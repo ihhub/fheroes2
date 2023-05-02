@@ -403,10 +403,10 @@ namespace
         if ( destroy ) {
             AudioManager::PlaySound( M82::KILLFADE );
 
+            setMonsterCountOnTile( tile, 0 );
+
             Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
                 std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
-
-            setMonsterCountOnTile( tile, 0 );
         }
 
         // Clear the hero's attacked monster tile index

@@ -505,8 +505,9 @@ namespace
         }
 
         if ( destroy ) {
-            tile.RemoveObjectSprite();
             setMonsterCountOnTile( tile, 0 );
+
+            tile.RemoveObjectSprite();
             tile.setAsEmpty();
         }
     }
