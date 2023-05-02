@@ -694,7 +694,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                         AudioManager::PlayMusic( MUS::NEW_MONTH, Music::PlaybackMode::PLAY_ONCE );
 
-                        Game::DialogPlayers( playerColor, _( "%{color} player's turn." ) );
+                        Game::DialogPlayers( playerColor, "", _( "%{color} player's turn." ) );
                     }
 
                     conf.SetCurrentColor( playerColor );
