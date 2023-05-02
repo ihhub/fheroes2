@@ -1427,6 +1427,7 @@ namespace Maps
             assert( isFirstLoad );
             // Event should be invisible on Adventure Map.
             tile.resetObjectSprite();
+            resetObjectMetadata( tile );
             break;
 
         default:
