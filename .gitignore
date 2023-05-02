@@ -99,3 +99,7 @@ android/app/src/main/assets/files/
 
 .gradle
 .idea
+*.sublime-project
+*.sublime-workspace
+/fheroes2
+/src/dist/fheroes2
