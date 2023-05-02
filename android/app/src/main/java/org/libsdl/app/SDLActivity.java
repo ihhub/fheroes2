@@ -221,7 +221,6 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
                 });
             dlgAlert.setCancelable(false);
             dlgAlert.create().show();
-
             return;
         }
 

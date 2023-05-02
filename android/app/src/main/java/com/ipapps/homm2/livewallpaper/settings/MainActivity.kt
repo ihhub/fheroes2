@@ -3,13 +3,11 @@ package com.ipapps.homm2.livewallpaper.settings;
 import android.app.WallpaperManager
 import android.content.ComponentName
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.LaunchedEffect
-import com.ipapps.homm2.livewallpaper.R
 import com.ipapps.homm2.livewallpaper.settings.data.MapsViewModel
 import com.ipapps.homm2.livewallpaper.settings.data.MapsViewModelFactory
 import com.ipapps.homm2.livewallpaper.settings.data.ParsingViewModel
@@ -17,7 +15,7 @@ import com.ipapps.homm2.livewallpaper.settings.data.SettingsViewModel
 import com.ipapps.homm2.livewallpaper.settings.data.WallpaperPreferencesRepository
 import com.ipapps.homm2.livewallpaper.settings.ui.components.NavigationHost
 import kotlinx.coroutines.flow.first
-import org.fheroes2.SDLActivity
+import org.libsdl.app.SDLActivity
 
 class MainActivity() : ComponentActivity() {
     private fun setWallpaper() {

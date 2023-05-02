@@ -1,4 +1,4 @@
-package org.fheroes2;
+package org.libsdl.app;
 
 import android.content.Context;
 

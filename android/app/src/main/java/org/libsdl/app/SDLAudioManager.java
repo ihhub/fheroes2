@@ -1,4 +1,4 @@
-package org.fheroes2;
+package org.libsdl.app;
 
 import android.media.AudioFormat;
 import android.media.AudioManager;
