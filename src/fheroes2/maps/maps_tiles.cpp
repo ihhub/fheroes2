@@ -3246,10 +3246,11 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
 {
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove this method." );
 
-    // The object could be under a hero.
+    // The object could be under a hero so ignore hero.
     const MP2::MapObjectType objectType = GetObject( false );
+
     if ( !MP2::isActionObject( objectType ) ) {
-        // A non-action object have no metadata.
+        // A non-action object has no metadata.
         return;
     }
 
@@ -3595,7 +3596,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         break;
 
     default:
-        // Did you add a new object on Adventure Map? Add the logic!
+        // Did you add a new action object on Adventure Map? Add the logic!
         assert( 0 );
         break;
     }

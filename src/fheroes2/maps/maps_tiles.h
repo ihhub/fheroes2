@@ -404,7 +404,7 @@ namespace Maps
 
         static uint8_t convertOldMainObjectType( const uint8_t mainObjectType );
 
-        // The old code was using a weird quantity based values which were very hard to understand.
+        // The old code was using weird quantity based values which were very hard to understand.
         // Since we must have backwards compatibility we need to do the conversion.
         void quantityIntoMetadata( const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata );
 

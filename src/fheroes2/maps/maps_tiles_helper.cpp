@@ -113,6 +113,7 @@ namespace
         if ( !art.isValid() ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set an artifact over a random artifact on tile " << tile.GetIndex() )
             resetObjectMetadata( tile );
+            tile.setAsEmpty();
             return;
         }
 
@@ -167,6 +168,7 @@ namespace
         if ( !mons.isValid() ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set a monster over a random monster on tile " << tile.GetIndex() )
             resetObjectMetadata( tile );
+            tile.setAsEmpty();
             return;
         }
 
