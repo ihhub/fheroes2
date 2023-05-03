@@ -876,6 +876,9 @@ namespace Maps
             if ( percents.Get() ) {
                 tile.metadata()[0] = Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL );
             }
+            else {
+                tile.metadata()[0] = Artifact::UNKNOWN;
+            }
             break;
         }
 
@@ -1115,6 +1118,9 @@ namespace Maps
             default:
                 // Check your logic above!
                 assert( 0 );
+
+                tile.metadata()[0] = Artifact::UNKNOWN;
+                tile.metadata()[1] = 0;
                 break;
             }
             break;
