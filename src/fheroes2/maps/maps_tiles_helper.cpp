@@ -67,6 +67,8 @@ namespace
 
     void updateRandomResource( Maps::Tiles & tile )
     {
+        assert( tile.GetObject() == MP2::OBJ_RANDOM_RESOURCE );
+
         tile.SetObject( MP2::OBJ_RESOURCE );
 
         const uint8_t resourceSprite = Resource::GetIndexSprite( Resource::Rand( true ) );
@@ -103,11 +105,14 @@ namespace
             art = Artifact::Rand( Artifact::ART_LEVEL_MAJOR );
             break;
         default:
+            // Did you add another random artifact type? Add the logic above!
+            assert( 0 );
             return;
         }
 
         if ( !art.isValid() ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set an artifact over a random artifact on tile " << tile.GetIndex() )
+            resetObjectMetadata( tile );
             return;
         }
 
@@ -154,7 +159,15 @@ namespace
             mons = Monster::Rand( Monster::LevelType::LEVEL_4 );
             break;
         default:
+            // Did you add another random monster type? Add the logic above!
+            assert( 0 );
             break;
+        }
+
+        if ( !mons.isValid() ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set a monster over a random monster on tile " << tile.GetIndex() )
+            resetObjectMetadata( tile );
+            return;
         }
 
         tile.SetObject( MP2::OBJ_MONSTER );
@@ -537,6 +550,7 @@ namespace Maps
     {
         switch ( tile.GetObject( false ) ) {
         case MP2::OBJ_CAMPFIRE:
+            // Campfire contains N of non-Gold resources and (N * 100) Gold.
             return Funds{ static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] } + Funds{ Resource::GOLD, tile.metadata()[1] * 100 };
 
         case MP2::OBJ_FLOTSAM:
