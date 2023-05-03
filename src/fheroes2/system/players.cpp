@@ -47,7 +47,7 @@ namespace
 {
     const int playersSize = KINGDOMMAX + 1;
     Player * _players[playersSize] = { nullptr };
-    int human_colors = 0;
+    int humanColors{ Color::NONE };
 
     enum
     {
@@ -259,7 +259,6 @@ StreamBase & operator>>( StreamBase & msg, Player & player )
 }
 
 Players::Players()
-    : current_color( 0 )
 {
     reserve( KINGDOMMAX );
 }
@@ -279,8 +278,8 @@ void Players::clear()
     for ( uint32_t ii = 0; ii < KINGDOMMAX + 1; ++ii )
         _players[ii] = nullptr;
 
-    current_color = 0;
-    human_colors = 0;
+    _currentColor = Color::NONE;
+    humanColors = Color::NONE;
 }
 
 void Players::Init( int colors )
@@ -397,12 +396,12 @@ const std::vector<Player *> & Players::getVector() const
 
 Player * Players::GetCurrent()
 {
-    return Get( current_color );
+    return Get( _currentColor );
 }
 
 const Player * Players::GetCurrent() const
 {
-    return Get( current_color );
+    return Get( _currentColor );
 }
 
 int Players::GetPlayerFriends( int color )
@@ -445,33 +444,37 @@ void Players::SetStartGame()
     for_each( begin(), end(), [&races]( Player * player ) { PlayerFixRandomRace( player, races ); } );
     for_each( begin(), end(), []( Player * player ) { PlayerFixMultiControl( player ); } );
 
-    current_color = Color::NONE;
-    human_colors = Color::NONE;
+    _currentColor = Color::NONE;
+    humanColors = Color::NONE;
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, String() )
 }
 
 int Players::HumanColors()
 {
-    if ( 0 == human_colors )
-        human_colors = Settings::Get().GetPlayers().GetColors( CONTROL_HUMAN, true );
-    return human_colors;
+    if ( humanColors == Color::NONE ) {
+        humanColors = Settings::Get().GetPlayers().GetColors( CONTROL_HUMAN, true );
+    }
+
+    return humanColors;
 }
 
 int Players::FriendColors()
 {
-    int colors = 0;
-    const Players & players = Settings::Get().GetPlayers();
-
-    if ( players.current_color & Players::HumanColors() ) {
-        const Player * player = players.GetCurrent();
-        if ( player )
-            colors = player->GetFriends();
+    const Player * player = Settings::Get().GetPlayers().GetCurrent();
+    if ( player ) {
+        return player->GetFriends();
     }
-    else
-        colors = Players::HumanColors();
 
-    return colors;
+    return 0;
+}
+
+void Players::setCurrentColor( const int color )
+{
+    // We can set only one of 6 player colors ( BLUE | GREEN | RED | YELLOW | ORANGE | PURPLE ) or NONE (neutral player).
+    assert( Color::Count( color ) == 1 || color == Color::NONE );
+
+    _currentColor = color;
 }
 
 std::string Players::String() const
@@ -513,7 +516,7 @@ std::string Players::String() const
 
 StreamBase & operator<<( StreamBase & msg, const Players & players )
 {
-    msg << players.GetColors() << players.current_color;
+    msg << players.GetColors() << players.getCurrentColor();
 
     for ( Players::const_iterator it = players.begin(); it != players.end(); ++it )
         msg << ( **it );
@@ -528,7 +531,7 @@ StreamBase & operator>>( StreamBase & msg, Players & players )
     msg >> colors >> current;
 
     players.clear();
-    players.current_color = current;
+    players.setCurrentColor( current );
     const Colors vcolors( colors );
 
     for ( uint32_t ii = 0; ii < vcolors.size(); ++ii ) {
