@@ -2990,10 +2990,8 @@ namespace
                     if ( res.AttackerWins() ) {
                         hero.IncreaseExperience( res.GetExperienceAttacker() );
 
-                        const Funds funds = getFundsFromTile( tile );
-                        assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
-
-                        const uint32_t gold = funds.gold;
+                        // Daemon Cave always gives 2500 Gold after a battle.
+                        const uint32_t gold = 2500;
 
                         std::string msg = _( "Upon defeating the daemon's servants, you find a hidden cache with %{count} gold." );
                         StringReplace( msg, "%{count}", gold );
