@@ -399,11 +399,6 @@ namespace Maps
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );
 
-        friend bool operator<( const Tiles & l, const Tiles & r )
-        {
-            return l.GetIndex() < r.GetIndex();
-        }
-
         static void renderAddonObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const TilesAddon & addon );
         void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset ) const;
 
