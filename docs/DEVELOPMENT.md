@@ -35,7 +35,7 @@ Please follow the instructions below to be able to build the project from source
 * Go to the directory `script/android` and run the file `install_packages.bat` if your development platform is Windows or
   `install_packages.sh` if your development platform is macOS or Linux. This script will install all the required packages
   to build the project using Android Studio.
-* Launch Android Studio, open the project in the `android` subdirectory and run the build.
+* Launch Android Studio, open the project in the `android` directory and run the build.
 
 <a name="playstation-vita"></a>
 ### PlayStation Vita
