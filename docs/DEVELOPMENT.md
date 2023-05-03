@@ -29,6 +29,14 @@ Please follow the instructions below to be able to build the project from source
 * Run the `make` command in the root directory of the project to build it with **SDL2** or `make FHEROES2_WITH_SDL1="ON"`
   to build it with **SDL1**.
 
+<a name="android"></a>
+### Android
+
+* Go to the directory `script/android` and run the file `install_packages.bat` if your development platform is Windows or
+  `install_packages.sh` if your development platform is macOS or Linux. This script will install all the required packages
+  to build the project using Android Studio.
+* Launch Android Studio, open the project in the `android` subdirectory and run the build.
+
 <a name="playstation-vita"></a>
 ### PlayStation Vita
 
