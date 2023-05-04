@@ -1923,11 +1923,28 @@ namespace AI
             _pathfinder.reEvaluateIfNeeded( *bestHero );
 
             // check if we want to use Dimension Door spell or move regularly
-            const std::list<Route::Step> & dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
-            const uint32_t dimensionDoorDistance = AIWorldPathfinder::calculatePathPenalty( dimensionPath );
-            const uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
+            std::list<Route::Step> dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
+            uint32_t dimensionDoorDistance = AIWorldPathfinder::calculatePathPenalty( dimensionPath );
+            uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
             if ( dimensionDoorDistance && ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) ) {
-                HeroesCastDimensionDoor( *bestHero, dimensionPath.front().GetIndex() );
+
+                while ( dimensionDoorDistance < moveDistance / 2 && !dimensionPath.empty() && bestHero->MayStillMove( false, false )
+                        && bestHero->CanCastSpell( Spell::DIMENSIONDOOR ) ) {
+                    HeroesCastDimensionDoor( *bestHero, dimensionPath.front().GetIndex() );
+                    dimensionDoorDistance -= dimensionPath.front().GetPenalty();
+
+                    _pathfinder.reEvaluateIfNeeded( *bestHero );
+                    moveDistance = _pathfinder.getDistance( bestTargetIndex );
+
+                    dimensionPath.pop_front();
+                }
+
+                if ( dimensionDoorDistance > 0 ) {
+                    // The rest of the path the hero should do by foot.
+                    bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
+
+                    HeroesMove( *bestHero );
+                }
             }
             else {
                 bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
