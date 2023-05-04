@@ -94,7 +94,9 @@ Funds::Funds( int rs, uint32_t count )
         break;
 
     default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" )
+        if ( count > 0 ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown resource is being added to Funds class. Ignore it." )
+        }
         break;
     }
 }

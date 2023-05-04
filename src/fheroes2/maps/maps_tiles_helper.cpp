@@ -528,11 +528,6 @@ namespace Maps
             return {};
         }
 
-        if ( tile.metadata()[0] == 0 && tile.metadata()[1] == 0 ) {
-            // No requirements.
-            return {};
-        }
-
         return { static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] };
     }
 
