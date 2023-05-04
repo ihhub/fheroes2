@@ -29,12 +29,8 @@ merge: ../../src/dist/fheroes2.pot
 	for i in $(wildcard *.po); do msgmerge -U --no-location $$i $<; done
 
 # Czech, Hungarian, Polish and Slovak versions use CP1250
-cs.mo hu.mo sk.mo: %.mo: %.po
+cs.mo hu.mo pl.mo sk.mo: %.mo: %.po
 	$(call MSGFMT,CP1250)
-
-pl.mo: %.mo: %.po
-	$(call MSGFMT,CP1250)
-	cp pl.mo /cygdrive/c/Users/NieJe/Documents/GitHub/fheroes2/build/x64/Debug-SDL2/files/lang/
 
 # Belarusian, Bulgarian, Ukrainian versions use CP1251
 # Russian versions from "Buka" and "XXI vek" use CP1251 encoding (supported)
