@@ -696,7 +696,7 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
     SetObject( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
 
     if ( !MP2::doesObjectContainMetadata( _mainObjectType ) ) {
-        // No metadata should exit for this object!
+        // No metadata should exist for this object!
         assert( ( ( ( mp2.quantity2 << 8 ) + mp2.quantity1 ) >> 3 ) == 0 );
     }
 

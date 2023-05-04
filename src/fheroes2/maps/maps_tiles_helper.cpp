@@ -509,7 +509,7 @@ namespace Maps
         return { Resource::GOLD, tile.metadata()[1] };
     }
 
-    ShipwreckCaptureCondition getShipwrechCaptureCondition( const Tiles & tile )
+    ShipwreckCaptureCondition getShipwreckCaptureCondition( const Tiles & tile )
     {
         if ( tile.GetObject( false ) != MP2::OBJ_SHIPWRECK ) {
             // Why are you calling this for an unsupported object type?
@@ -922,7 +922,7 @@ namespace Maps
             if ( art == Artifact::SPELL_SCROLL ) {
                 static_assert( Spell::FIREBALL < Spell::SETWGUARDIAN, "The order of spell IDs has been changed, check the logic below" );
 
-                // Spell ID is by 1 bigger than in the original game.
+                // Spell ID has a value of 1 bigger than in the original game.
                 const uint32_t spell = std::clamp( tile.metadata()[0] + 1, static_cast<uint32_t>( Spell::FIREBALL ), static_cast<uint32_t>( Spell::SETWGUARDIAN ) );
 
                 tile.metadata()[1] = spell;
@@ -1024,7 +1024,7 @@ namespace Maps
                 res = Resource::Rand( false );
             }
 
-            // 2 pieces of random resource.
+            // 2 pieces of random resources.
             setResourceOnTile( tile, res, 2 );
             break;
         }
@@ -1032,7 +1032,7 @@ namespace Maps
         case MP2::OBJ_LEAN_TO:
             assert( isFirstLoad );
 
-            // 1-4 pieces of random resource.
+            // 1-4 pieces of random resources.
             setResourceOnTile( tile, Resource::Rand( false ), Rand::Get( 1, 4 ) );
             break;
 

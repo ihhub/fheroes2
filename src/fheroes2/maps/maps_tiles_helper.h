@@ -104,7 +104,7 @@ namespace Maps
     DaemonCaveCaptureBonus getDaemonCaveBonusType( const Tiles & tile );
     Funds getDaemonPaymentCondition( const Tiles & tile );
 
-    ShipwreckCaptureCondition getShipwrechCaptureCondition( const Tiles & tile );
+    ShipwreckCaptureCondition getShipwreckCaptureCondition( const Tiles & tile );
 
     Funds getTreeOfKnowledgeRequirement( const Tiles & tile );
 

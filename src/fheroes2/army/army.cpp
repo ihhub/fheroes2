@@ -941,7 +941,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
     case MP2::OBJ_SHIPWRECK: {
         uint32_t count = 0;
 
-        switch ( getShipwrechCaptureCondition( tile ) ) {
+        switch ( getShipwreckCaptureCondition( tile ) ) {
         case Maps::ShipwreckCaptureCondition::EMPTY:
             // Shipwreck guardians were defeated.
             return;
