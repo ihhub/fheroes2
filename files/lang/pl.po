@@ -4457,7 +4457,7 @@ msgid "%{color} player has been vanquished!"
 msgstr "%{color} gracz zostaje wygnany!"
 
 msgid "Major Event!"
-msgstr ""
+msgstr "Gracz wygnany!"
 
 msgid "Scenario:"
 msgstr "Scenariusz:"
@@ -4547,10 +4547,10 @@ msgid " All dwellings increase population."
 msgstr " Populacja całego królestwa zwiększa się."
 
 msgid "New Week!"
-msgstr ""
+msgstr "Nowy tydzień!"
 
 msgid "Beware!"
-msgstr ""
+msgstr "Uwaga!"
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
@@ -4594,16 +4594,14 @@ msgstr "Lord Kilburn"
 msgid "Tsabu"
 msgstr "Tsabu"
 
-#, fuzzy
 msgid "Sir Galant"
-msgstr "Sir Gallant"
+msgstr "Sir Galant"
 
 msgid "Thundax"
 msgstr "Thundax"
 
-#, fuzzy
 msgid "Lord Haart"
-msgstr "Lord Halton"
+msgstr "Lord Haart"
 
 msgid "Ariel"
 msgstr "Ariel"
@@ -4617,12 +4615,11 @@ msgstr "Sandro"
 msgid "Crodo"
 msgstr "Crodo"
 
-#, fuzzy
 msgid "Barock"
-msgstr "Barok"
+msgstr "Barock"
 
 msgid "Antoine"
-msgstr ""
+msgstr "Antoine"
 
 msgid "Astra"
 msgstr "Astra"
@@ -4935,11 +4932,10 @@ msgid "Danish"
 msgstr "Duński"
 
 msgid "Slovak"
-msgstr ""
+msgstr "Słowacki"
 
-#, fuzzy
 msgid "Vietnamese"
-msgstr "Obejrzyj jednostkę (%{name})"
+msgstr "Wietnamski"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -6483,12 +6479,11 @@ msgstr ""
 msgid "Spell book is not present."
 msgstr "Nie posiadasz Księgi Zaklęć."
 
-#, fuzzy
 msgid ""
 "That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
 msgstr ""
-"To zaklęcie kosztuje %{mana} pkt. magii. Masz tylko %{point}, więc nie "
-"możesz go rzucić."
+"To zaklęcie kosztuje %{mana} pkt. magii. Nie masz w ogóle many, więc nie możesz "
+"go rzucić."
 
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
@@ -7589,7 +7584,7 @@ msgid "Nothing Special"
 msgstr "Nic specjalnego"
 
 msgid "Mossy Rock"
-msgstr ""
+msgstr "Mchła skała"
 
 msgid "Watch Tower"
 msgstr "Wieża strażnicza"
@@ -8551,7 +8546,6 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr "Balista Szybkości"
 
-#, fuzzy
 msgid "The %{name} gives your catapult one extra shot per combat round."
 msgstr ""
 "%{name} pozwala twojej katapulcie strzelić jeden dodatkowy strzał na rundę."
