@@ -60,6 +60,7 @@
 #include "pairs.h"
 #include "payment.h"
 #include "players.h"
+#include "profit.h"
 #include "rand.h"
 #include "resource.h"
 #include "route.h"
@@ -891,10 +892,19 @@ namespace AI
                 return -valueToIgnore; // don't even attempt to go here
             }
 
-            return 20.0 * getResourcePriorityModifier( getDailyIncomeObjectResources( tile ).getFirstValidResource().first );
+            const auto [resourceType, resourceAmount] = getDailyIncomeObjectResources( tile ).getFirstValidResource();
+
+            // Since mines constantly bring resources, they are valuable objects.
+            // Let's evaluate them in proportion to the amount of resources they bring in 3 days (TODO: a fairly arbitrary period).
+            return resourceAmount * getResourcePriorityModifier( resourceType ) * 3;
         }
         case MP2::OBJ_ABANDONED_MINE: {
-            return 3000.0;
+            // Abandoned mines are gold mines under the hood
+            const double goldMineIncome = ProfitConditions::FromMine( Resource::GOLD ).Get( Resource::GOLD );
+
+            // Since mines constantly bring resources, they are valuable objects.
+            // Let's evaluate them in proportion to the amount of resources they bring in 3 days (TODO: a fairly arbitrary period).
+            return goldMineIncome * getResourcePriorityModifier( Resource::GOLD ) * 3;
         }
         case MP2::OBJ_ARTIFACT: {
             const Artifact art = getArtifactFromTile( tile );

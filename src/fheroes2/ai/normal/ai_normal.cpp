@@ -26,6 +26,7 @@
 #include "army.h"
 #include "maps_tiles.h"
 #include "pairs.h"
+#include "profit.h"
 #include "rand.h"
 
 namespace AI
@@ -68,17 +69,61 @@ namespace AI
 
     double Normal::getResourcePriorityModifier( const int resource ) const
     {
-        // Gold usually measured in 100s
-        double prio = ( resource == Resource::GOLD ) ? 1.0 : 100.0;
+        // Not all resources are equally valuable. Let's determine the relative cost of resources based on the ratio
+        // of the amount of resources extracted by the respective mines. For example, if a gold mine produces 1000
+        // gold per day, an ore mine produces 2 units of ore per day, and a gem mine produces 1 gem per day, then
+        // the value of a unit of ore will be 500 gold, and the value of one gem will be 1000 gold.
+        static const std::map<int, double> defaultResourcePriorities = []() {
+            std::map<int, double> result;
+
+            const double goldMineIncome = ProfitConditions::FromMine( Resource::GOLD ).Get( Resource::GOLD );
+            assert( goldMineIncome > 0 );
+
+            static_assert( std::is_enum_v<decltype( Resource::ALL )> );
+            using ResourceUnderlyingType = std::underlying_type_t<decltype( Resource::ALL )>;
+            static_assert( std::numeric_limits<ResourceUnderlyingType>::radix == 2 );
+
+            for ( int i = 0; i < std::numeric_limits<ResourceUnderlyingType>::digits; ++i ) {
+                const int res = Resource::ALL & ( 1 << i );
+                if ( res == 0 ) {
+                    continue;
+                }
+
+                const int32_t resMineIncome = ProfitConditions::FromMine( res ).Get( res );
+                assert( resMineIncome > 0 );
+                if ( resMineIncome <= 0 ) {
+                    continue;
+                }
+
+                result[res] = goldMineIncome / resMineIncome;
+            }
+
+            return result;
+        }();
+
+        double prio = 1.0;
+
+        const auto prioIter = defaultResourcePriorities.find( resource );
+        if ( prioIter != defaultResourcePriorities.end() ) {
+            prio = prioIter->second;
+        }
+        else {
+            // This function was called for an unknown resource, this should never happen
+            assert( 0 );
+        }
+
         for ( const BudgetEntry & budget : _budget ) {
             if ( budget.resource != resource ) {
                 continue;
             }
+
             if ( budget.recurringCost ) {
                 prio *= 1.5;
             }
+
             return ( budget.priority ) ? prio * 2.0 : prio;
         }
+
         return prio;
     }
 }
