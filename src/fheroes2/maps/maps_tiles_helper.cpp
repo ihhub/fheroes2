@@ -224,9 +224,6 @@ namespace Maps
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL:
-            if ( tile.metadata()[0] == Resource::GOLD ) {
-                return { static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] };
-            }
             return { static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] };
         default:
             break;
