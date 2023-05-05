@@ -505,7 +505,8 @@ namespace
             break;
 
         case MP2::OBJ_DAEMON_CAVE:
-            if ( doesTileContainValuableItems( tile ) && getDaemonCaveBonusType( tile ) != Maps::DaemonCaveCaptureBonus::PAY_2500_GOLD ) {
+            if ( doesTileContainValuableItems( tile ) ) {
+                // AI always chooses to fight the demon's servants and doesn't roll the dice
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
             break;
