@@ -4510,15 +4510,19 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         const double drawStep = rainbowLength / 30.0;
 
         // Don't waste time waiting for Good Luck sound if the game sounds are turned off
-        if ( Settings::Get().SoundVolume() > 0 ) {
-            AudioManager::PlaySound( M82::GOODLUCK );
-        }
+        const bool soundOn = Settings::Get().SoundVolume() > 0;
+
+        AudioManager::PlaySound( M82::GOODLUCK );
 
         double x = 0;
-        while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_MISSILE_DELAY } ) ) && ( Mixer::isPlaying( -1 ) || x < rainbowLength ) ) {
+        while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_MISSILE_DELAY } ) ) && ( ( soundOn && Mixer::isPlaying( -1 ) ) || x < rainbowLength ) ) {
             CheckGlobalEvents( le );
 
             if ( Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+                // Reset all units idle animation delay during rainbow animation not to start new idle animations.
+                // This does not affect Zombies, Genies, Medusas and Ghosts as they have permanent idle animations.
+                ResetIdleTroopAnimation();
+
                 RedrawPartialStart();
 
                 if ( x < rainbowLength ) {
