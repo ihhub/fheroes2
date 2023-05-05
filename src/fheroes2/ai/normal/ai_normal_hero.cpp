@@ -942,7 +942,7 @@ namespace AI
             const Funds funds = getFundsFromTile( tile );
             assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
 
-            return funds.gold;
+            return funds.gold * getResourcePriorityModifier( Resource::GOLD );
         }
         case MP2::OBJ_DAEMON_CAVE: {
             // If this cave is already empty, then we should never come here
