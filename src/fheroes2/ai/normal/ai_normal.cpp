@@ -72,11 +72,12 @@ namespace AI
 
     double Normal::getResourcePriorityModifier( const int resource ) const
     {
-        // Not all resources are equally valuable. Let's determine the relative priority of resources based on the
-        // ratio of the amount of resources extracted by the respective mines. For example, if a gold mine produces
-        // 1000 gold per day, an ore mine produces 2 units of ore per day, and a gem mine produces 1 gem per day,
-        // then the priority of one unit of ore will correspond to the priority of 500 gold, and the priority of one
-        // gem will correspond to the priority of 1000 gold.
+        // Not all resources are equally valuable: 1 gold does not have the same value as 1 gemstone, so we need to
+        // normalize the value of various resources. Let's determine the default relative priority of resources based on
+        // the ratio of the amount of resources extracted by the respective mines. For example, if a gold mine produces
+        // 1000 gold per day, an ore mine produces 2 units of ore per day, and a gem mine produces 1 gem per day, then
+        // the priority of one unit of ore will correspond to the priority of 500 gold, and the priority of one gemstone
+        // will correspond to the priority of 1000 gold.
         static const std::map<int, double> defaultResourcePriorities = []() {
             std::map<int, double> result;
 
