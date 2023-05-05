@@ -1930,6 +1930,16 @@ namespace fheroes2
                 LoadOriginalICN( id );
 
                 auto & imageArray = _icnVsSprite[id];
+                if ( imageArray.size() < 96 ) {
+                    // 96 symbols is the minimum requirement for English.
+                    throw std::exception( "Damaged game resources: invalid font." );
+                }
+
+                // Compare '(' and ')' symbols. By size they are always the same. However, we play safe and fail if both dimensions are different.
+                if ( ( imageArray[8].width() != imageArray[9].width() ) && ( imageArray[8].height() != imageArray[9].height() ) ) {
+                    // This is most likely a corrupted font or a pirated translation to a non-English language which causes all sorts of rendering issues.
+                    throw std::exception( "Damaged game resources: invalid font." );
+                }
 
                 const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
                 const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
@@ -1943,8 +1953,8 @@ namespace fheroes2
                     }
                     modifyBaseSmallFont( _icnVsSprite[id] );
                 }
-
-                if ( id == ICN::FONT ) {
+                else {
+                    assert( id == ICN::FONT );
                     // The original images contain an issue: image layer has value 50 which is '2' in UTF-8. We must correct these (only 3) places
                     for ( size_t i = 0; i < imageArray.size(); ++i ) {
                         ReplaceColorIdByTransformId( imageArray[i], 50, 2 );
