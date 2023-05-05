@@ -22,10 +22,13 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <limits>
+#include <type_traits>
 
 #include "army.h"
 #include "maps_tiles.h"
 #include "pairs.h"
+#include "payment.h"
 #include "profit.h"
 #include "rand.h"
 
