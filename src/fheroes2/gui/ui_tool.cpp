@@ -47,6 +47,9 @@ namespace
     // The parameters of display fade start and end alpha.
     const uint8_t fullDarkAlpha = 5;
     const uint8_t fullBrightAlpha = 255;
+    const uint32_t screenFadeTimeMs = 100;
+    const uint32_t screenFadeFrameCount = 4;
+    const uint8_t screenFadeStep = ( fullBrightAlpha - fullDarkAlpha ) / screenFadeFrameCount;
 
     // Renderer of current time and FPS on screen
     class SystemInfoRenderer
@@ -119,7 +122,7 @@ namespace
 
     SystemInfoRenderer systemInfoRenderer;
 
-    void fadeDisplay( const uint8_t startAlpha, const uint8_t endAlpha, const fheroes2::Rect & roi, const int32_t fadeTimeMs, const uint32_t frameCount )
+    void fadeDisplay( const uint8_t startAlpha, const uint8_t endAlpha, const fheroes2::Rect & roi, const uint32_t fadeTimeMs, const uint32_t frameCount )
     {
         if ( ( frameCount < 2 ) || roi.height == 0 || roi.width == 0 ) {
             return;
@@ -546,47 +549,47 @@ namespace fheroes2
         return out;
     }
 
-    void fadeOutDisplay( const int32_t fadeTimeMs /* = 100 */, const uint32_t frameCount /* = 6 */ )
+    void fadeOutDisplay()
     {
         const Display & display = Display::instance();
 
-        fadeOutDisplay( { 0, 0, display.width(), display.height() }, false, fadeTimeMs, frameCount );
+        fadeOutDisplay( { 0, 0, display.width(), display.height() }, false );
     }
 
-    void fadeOutDisplay( const Rect & roi, const bool halfFade /* = false */, const int32_t fadeTimeMs /* = 100 */, const uint32_t frameCount /* = 6 */ )
+    void fadeOutDisplay( const Rect & roi, const bool halfFade /* = false */ )
     {
-        assert( frameCount != 0 );
+        static_assert( screenFadeFrameCount != 0 );
 
         // As we are doing fade-out we already have the full bright picture so we skip it and calculate the startAlpha.
-        const uint8_t startAlpha = fullBrightAlpha - static_cast<uint8_t>( ( fullBrightAlpha - fullDarkAlpha ) / frameCount );
+        const uint8_t startAlpha = fullBrightAlpha - screenFadeStep;
 
         if ( halfFade ) {
-            fadeDisplay( startAlpha, ( fullBrightAlpha - fullDarkAlpha ) / 2, roi, fadeTimeMs / 2, frameCount / 2 );
+            fadeDisplay( startAlpha, ( fullBrightAlpha - fullDarkAlpha ) / 2, roi, screenFadeTimeMs / 2, screenFadeFrameCount / 2 );
         }
         else {
-            fadeDisplay( startAlpha, fullDarkAlpha, roi, fadeTimeMs, frameCount );
+            fadeDisplay( startAlpha, fullDarkAlpha, roi, screenFadeTimeMs, screenFadeFrameCount );
         }
     }
 
-    void fadeInDisplay( const int32_t fadeTimeMs /* = 100 */, const uint32_t frameCount /* = 6 */ )
+    void fadeInDisplay()
     {
         const Display & display = Display::instance();
 
-        fadeInDisplay( { 0, 0, display.width(), display.height() }, false, fadeTimeMs, frameCount );
+        fadeInDisplay( { 0, 0, display.width(), display.height() }, false );
     }
 
-    void fadeInDisplay( const Rect & roi, const bool halfFade /* = false */, const int32_t fadeTimeMs /* = 100 */, const uint32_t frameCount /* = 6 */ )
+    void fadeInDisplay( const Rect & roi, const bool halfFade /* = false */ )
     {
-        assert( frameCount != 0 );
+        static_assert( screenFadeFrameCount != 0 );
 
         // As we are doing fade-in we already have the full dark picture from the previous fade-out so we skip it and calculate the startAlpha.
-        const uint8_t startAlpha = fullBrightAlpha + static_cast<uint8_t>( ( fullBrightAlpha - fullDarkAlpha ) / frameCount );
+        const uint8_t startAlpha = fullDarkAlpha + screenFadeStep;
 
         if ( halfFade ) {
-            fadeDisplay( ( fullBrightAlpha - startAlpha ) / 2, fullBrightAlpha, roi, fadeTimeMs / 2, frameCount / 2 );
+            fadeDisplay( ( fullBrightAlpha - startAlpha ) / 2, fullBrightAlpha, roi, screenFadeTimeMs / 2, screenFadeFrameCount / 2 );
         }
         else {
-            fadeDisplay( startAlpha, fullBrightAlpha, roi, fadeTimeMs, frameCount );
+            fadeDisplay( startAlpha, fullBrightAlpha, roi, screenFadeTimeMs, screenFadeFrameCount );
         }
     }
 

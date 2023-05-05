@@ -119,16 +119,16 @@ namespace fheroes2
     Image CreateRippleEffect( const Image & in, const int32_t frameId, const double scaleX = 0.05, const double waveFrequency = 20.0 );
 
     // Fade-out the whole screen.
-    void fadeOutDisplay( const int32_t fadeTimeMs = 150, const uint32_t frameCount = 6 );
+    void fadeOutDisplay();
 
     // Fade-out the display image in ROI. The 'halfFade' parameter sets to do only half of fade-out: till half-darkened image.
-    void fadeOutDisplay( const Rect & roi, const bool halfFade = false, const int32_t fadeTimeMs = 150, const uint32_t frameCount = 6 );
+    void fadeOutDisplay( const Rect & roi, const bool halfFade = false );
 
     // Fade-in the prepared image in display instance on the whole screen.
-    void fadeInDisplay( const int32_t fadeTimeMs = 150, const uint32_t frameCount = 6 );
+    void fadeInDisplay();
 
     // Fade-in the prepared display image in ROI. The 'halfFade' parameter sets to do only half of fade-in: from the half-darkened image.
-    void fadeInDisplay( const Rect & roi, const bool halfFade = false, const int32_t fadeTimeMs = 150, const uint32_t frameCount = 6 );
+    void fadeInDisplay( const Rect & roi, const bool halfFade = false );
 
     void FadeDisplayWithPalette( const Image & top, const Point & pos, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount );
 
