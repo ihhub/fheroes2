@@ -887,24 +887,29 @@ namespace AI
         }
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_MINES:
-        case MP2::OBJ_SAWMILL: {
-            if ( getColorFromTile( tile ) == hero.GetColor() ) {
-                return -valueToIgnore; // don't even attempt to go here
+        case MP2::OBJ_SAWMILL:
+        case MP2::OBJ_ABANDONED_MINE: {
+            int resourceType = Resource::UNKNOWN;
+            int32_t resourceAmount = 0;
+
+            // Abandoned mines are gold mines under the hood
+            if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
+                resourceType = Resource::GOLD;
+                resourceAmount = ProfitConditions::FromMine( Resource::GOLD ).Get( Resource::GOLD );
+            }
+            else {
+                if ( getColorFromTile( tile ) == hero.GetColor() ) {
+                    return -valueToIgnore; // don't even attempt to go here
+                }
+
+                std::tie( resourceType, resourceAmount ) = getDailyIncomeObjectResources( tile ).getFirstValidResource();
             }
 
-            const auto [resourceType, resourceAmount] = getDailyIncomeObjectResources( tile ).getFirstValidResource();
+            assert( resourceType != Resource::UNKNOWN && resourceAmount != 0 );
 
             // Since mines constantly bring resources, they are valuable objects.
             // Let's evaluate them in proportion to the amount of resources they bring in 3 days (TODO: a fairly arbitrary period).
             return resourceAmount * getResourcePriorityModifier( resourceType ) * 3;
-        }
-        case MP2::OBJ_ABANDONED_MINE: {
-            // Abandoned mines are gold mines under the hood
-            const double goldMineIncome = ProfitConditions::FromMine( Resource::GOLD ).Get( Resource::GOLD );
-
-            // Since mines constantly bring resources, they are valuable objects.
-            // Let's evaluate them in proportion to the amount of resources they bring in 3 days (TODO: a fairly arbitrary period).
-            return goldMineIncome * getResourcePriorityModifier( Resource::GOLD ) * 3;
         }
         case MP2::OBJ_ARTIFACT: {
             const Artifact art = getArtifactFromTile( tile );
