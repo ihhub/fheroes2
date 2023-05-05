@@ -45,7 +45,7 @@
 namespace
 {
     // The parameters of display fade start and end alpha.
-    const uint8_t fullDarkAlpha = 5;
+    const uint8_t fullDarkAlpha = 0;
     const uint8_t fullBrightAlpha = 255;
     const uint32_t screenFadeTimeMs = 100;
     const uint32_t screenFadeFrameCount = 4;
@@ -148,7 +148,19 @@ namespace
                     break;
                 }
 
-                ApplyAlpha( temp, 0, 0, display, roi.x, roi.y, roi.width, roi.height, static_cast<uint8_t>( alpha ) );
+                const uint8_t fadeAlpha = static_cast<uint8_t>( std::round( alpha ) );
+
+                if ( fadeAlpha == 255 ) {
+                    // This alpha is for fully bright image so there is no need to apply alpha.
+                    Copy( temp, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
+                }
+                else if ( fadeAlpha == 0 ) {
+                    // This alpha is for fully dark image so fill it with the black color.
+                    Fill( display, roi.x, roi.y, roi.width, roi.height, fheroes2::GetColorId( 0, 0, 0 ) );
+                }
+                else {
+                    ApplyAlpha( temp, 0, 0, display, roi.x, roi.y, roi.width, roi.height, fadeAlpha );
+                }
 
                 display.render( roi );
 
@@ -586,7 +598,8 @@ namespace fheroes2
         const uint8_t startAlpha = fullDarkAlpha + screenFadeStep;
 
         if ( halfFade ) {
-            fadeDisplay( ( fullBrightAlpha - startAlpha ) / 2, fullBrightAlpha, roi, screenFadeTimeMs / 2, screenFadeFrameCount / 2 );
+            // We add an extra frame to have a smoother fade effect taking into account that the last frame is fully bright to render the image.
+            fadeDisplay( ( fullBrightAlpha - startAlpha ) / 2, fullBrightAlpha, roi, screenFadeTimeMs * 3 / 4, screenFadeFrameCount / 2 + 1 );
         }
         else {
             fadeDisplay( startAlpha, fullBrightAlpha, roi, screenFadeTimeMs, screenFadeFrameCount );

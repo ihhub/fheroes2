@@ -40,6 +40,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
+#include "game_interface.h"
 #include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_base.h"
@@ -540,7 +541,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             // If game display resolution is 640x480 then all fade effects are done in 'OpenHeroesDialog()' except fade-in after dialog close.
             if ( isFadeEnabled && !isDefaultScreenSize ) {
-                fheroes2::fadeOutDisplay( fadeRoi );
+                fheroes2::fadeOutDisplay( fadeRoi, true );
             }
 
             Game::OpenHeroesDialog( isHero1LeftClicked ? *this : otherHero, false, true, true );
@@ -570,9 +571,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
-            if ( isFadeEnabled && !isDefaultScreenSize ) {
+            if ( isFadeEnabled ) {
                 display.updateNextRenderRoi( restorerRoi );
-                fheroes2::fadeInDisplay( fadeRoi );
+                fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
             }
             else {
                 display.render( restorerRoi );
@@ -697,9 +698,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         otherHero.ScoutRadar();
     }
 
-    // Fade-in game screen only for 640x480 resolution.
+    // Set fade-in game screen only for 640x480 resolution.
     if ( isFadeEnabled && isDefaultScreenSize ) {
-        fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
+        Interface::Basic::Get().setNeedFadeIn();
     }
     else {
         // Heroes meeting dialog currently does not have borders so its ROI is the same as fade ROI.
