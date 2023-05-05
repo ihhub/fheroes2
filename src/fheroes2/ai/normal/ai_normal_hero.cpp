@@ -985,19 +985,24 @@ namespace AI
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_WATER_WHEEL:
         case MP2::OBJ_WINDMILL: {
-            const Funds & loot = getFundsFromTile( tile );
+            const Funds loot = getFundsFromTile( tile );
 
             double value = 0;
-            for ( const BudgetEntry & budget : _budget ) {
-                const int amount = loot.Get( budget.resource );
-                if ( amount > 0 ) {
-                    value += amount * getResourcePriorityModifier( budget.resource );
+
+            Resource::forEach( loot.GetValidItems(), [this, &loot, &value]( const int res ) {
+                const int amount = loot.Get( res );
+                if ( amount <= 0 ) {
+                    return;
                 }
-            }
-            // verify this object wasn't visited before
+
+                value += amount * getResourcePriorityModifier( res );
+            } );
+
+            // This object could have already been visited
             if ( value < 1 ) {
                 return -valueToIgnore;
             }
+
             return value;
         }
         case MP2::OBJ_LIGHTHOUSE: {

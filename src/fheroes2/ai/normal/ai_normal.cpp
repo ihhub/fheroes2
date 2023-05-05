@@ -84,24 +84,15 @@ namespace AI
             const double goldMineIncome = ProfitConditions::FromMine( Resource::GOLD ).Get( Resource::GOLD );
             assert( goldMineIncome > 0 );
 
-            static_assert( std::is_enum_v<decltype( Resource::ALL )> );
-            using ResourceUnderlyingType = std::underlying_type_t<decltype( Resource::ALL )>;
-            static_assert( std::numeric_limits<ResourceUnderlyingType>::radix == 2 );
-
-            for ( int i = 0; i < std::numeric_limits<ResourceUnderlyingType>::digits; ++i ) {
-                const int res = Resource::ALL & ( 1 << i );
-                if ( res == 0 ) {
-                    continue;
-                }
-
+            Resource::forEach( Resource::ALL, [&result, goldMineIncome]( const int res ) {
                 const int32_t resMineIncome = ProfitConditions::FromMine( res ).Get( res );
                 assert( resMineIncome > 0 );
                 if ( resMineIncome <= 0 ) {
-                    continue;
+                    return;
                 }
 
                 result[res] = goldMineIncome / resMineIncome;
-            }
+            } );
 
             return result;
         }();

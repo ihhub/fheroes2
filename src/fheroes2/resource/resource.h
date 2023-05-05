@@ -143,6 +143,22 @@ namespace Resource
 
         const Funds rs;
     };
+
+    // Applies the given function object 'fn' to every valid resource in the 'resources' set
+    template <typename F>
+    void forEach( const int resources, const F & fn )
+    {
+        static_assert( std::numeric_limits<decltype( resources )>::radix == 2 );
+
+        for ( int i = 0; i < std::numeric_limits<decltype( resources )>::digits; ++i ) {
+            const int res = Resource::ALL & ( 1 << i );
+            if ( res == 0 ) {
+                continue;
+            }
+
+            fn( res );
+        }
+    }
 }
 
 #endif
