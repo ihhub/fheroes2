@@ -370,7 +370,6 @@ void World::Reset()
     _seed = 0;
 }
 
-/* new maps */
 void World::NewMaps( int32_t sw, int32_t sh )
 {
     Reset();
@@ -1412,11 +1411,11 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1003_RELEASE ) {
         for ( Maps::Tiles & tile : w.vec_tiles ) {
             if ( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE ) {
-                const int32_t spellId = Maps::getMineSpellIdFromTile( tile );
+                const int32_t spellId = static_cast<int32_t>( tile.metadata()[2] );
 
                 if ( spellId == Spell::HAUNT ) {
-                    const ResourceCount rc = getResourcesFromTile( tile );
-                    const int resource = rc.isValid() ? rc.first : Resource::GOLD;
+                    const Funds rc{ static_cast<int32_t>( tile.metadata()[0] ), 1 };
+                    const int resource = ( rc.GetValidItemsCount() > 0 ) ? rc.getFirstValidResource().first : Resource::GOLD;
 
                     Maps::Tiles::RestoreAbandonedMine( tile, resource );
 

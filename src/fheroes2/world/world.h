@@ -360,6 +360,8 @@ private:
     bool ProcessNewMap( const std::string & filename, const bool checkPoLObjects );
     void PostLoad( const bool setTilePassabilities );
 
+    bool updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects );
+
     bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
 
     friend class Radar;
