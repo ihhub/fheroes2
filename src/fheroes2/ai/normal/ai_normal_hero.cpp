@@ -1927,7 +1927,6 @@ namespace AI
             uint32_t dimensionDoorDistance = AIWorldPathfinder::calculatePathPenalty( dimensionPath );
             uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
             if ( dimensionDoorDistance && ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) ) {
-
                 while ( dimensionDoorDistance < moveDistance / 2 && !dimensionPath.empty() && bestHero->MayStillMove( false, false )
                         && bestHero->CanCastSpell( Spell::DIMENSIONDOOR ) ) {
                     HeroesCastDimensionDoor( *bestHero, dimensionPath.front().GetIndex() );
