@@ -48,7 +48,7 @@ namespace Maps
         FIGHT_50_ROGUES = 6,
         FIGHT_1_GENIE = 7,
         FIGHT_1_PALADIN = 8,
-        FIGHT_1_CYCLOP = 9,
+        FIGHT_1_CYCLOPS = 9,
         FIGHT_1_PHOENIX = 10,
         FIGHT_1_GREEN_DRAGON = 11,
         FIGHT_1_TITAN = 12,

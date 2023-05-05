@@ -982,7 +982,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
         case Maps::ArtifactCaptureCondition::FIGHT_1_PALADIN:
             ArrangeForBattle( Monster::PALADIN, 1, tile.GetIndex(), false );
             break;
-        case Maps::ArtifactCaptureCondition::FIGHT_1_CYCLOP:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_CYCLOPS:
             ArrangeForBattle( Monster::CYCLOPS, 1, tile.GetIndex(), false );
             break;
         case Maps::ArtifactCaptureCondition::FIGHT_1_PHOENIX:
