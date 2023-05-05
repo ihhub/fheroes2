@@ -929,8 +929,16 @@ namespace AI
 
             return funds.gold;
         }
+        case MP2::OBJ_DAEMON_CAVE: {
+            // If this cave is already empty, then we should never come here
+            if ( !doesTileContainValuableItems( tile ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
 
-        case MP2::OBJ_DAEMON_CAVE:
+            // Daemon Cave always gives 2500 Gold after a battle and AI always chooses to fight the demon's servants and doesn't roll the dice
+            return 2500 * getResourcePriorityModifier( Resource::GOLD );
+        }
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_SKELETON:
