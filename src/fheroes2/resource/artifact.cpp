@@ -37,10 +37,12 @@
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "gamedefs.h"
+#include "game_io.h"
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
 #include "rand.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "skill.h"
@@ -432,12 +434,12 @@ int Artifact::Rand( level_t lvl )
     v.reserve( 25 );
 
     // if possibly: make unique on map
-    for ( int art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
+    for ( int art = ULTIMATE_BOOK; art < ARTIFACT_COUNT; ++art )
         if ( ( lvl & Artifact( art ).Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) && !( artifactGlobalStatus[art] & ART_RNDUSED ) )
             v.push_back( art );
 
     if ( v.empty() ) {
-        for ( int art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
+        for ( int art = ULTIMATE_BOOK; art < ARTIFACT_COUNT; ++art )
             if ( ( lvl & Artifact( art ).Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) )
                 v.push_back( art );
     }
@@ -450,24 +452,31 @@ int Artifact::Rand( level_t lvl )
 
 Artifact Artifact::FromMP2IndexSprite( uint32_t index )
 {
+    // Add 1 to all values to properly convert from the old map format.
     if ( 0xA2 > index )
-        return Artifact( ( index - 1 ) / 2 );
-    else if ( Settings::Get().isPriceOfLoyaltySupported() && 0xAB < index && 0xCE > index )
-        return Artifact( ( index - 1 ) / 2 );
-    else if ( 0xA3 == index )
+        return { static_cast<int32_t>( index - 1 ) / 2 + 1 };
+
+    if ( Settings::Get().isPriceOfLoyaltySupported() && 0xAB < index && 0xCE > index )
+        return { static_cast<int32_t>( index - 1 ) / 2 + 1 };
+
+    if ( 0xA3 == index )
         return { Rand( ART_LEVEL_ALL_NORMAL ) };
-    else if ( 0xA4 == index )
+
+    if ( 0xA4 == index )
         return { Rand( ART_ULTIMATE ) };
-    else if ( 0xA7 == index )
+
+    if ( 0xA7 == index )
         return { Rand( ART_LEVEL_TREASURE ) };
-    else if ( 0xA9 == index )
+
+    if ( 0xA9 == index )
         return { Rand( ART_LEVEL_MINOR ) };
-    else if ( 0xAB == index )
+
+    if ( 0xAB == index )
         return { ART_LEVEL_MAJOR };
 
-    DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown index: " << static_cast<int>( index ) )
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown Artifact object index: " << index )
 
-    return Artifact( UNKNOWN );
+    return { UNKNOWN };
 }
 
 const char * Artifact::getDiscoveryDescription( const Artifact & art )
@@ -482,7 +491,20 @@ StreamBase & operator<<( StreamBase & msg, const Artifact & art )
 
 StreamBase & operator>>( StreamBase & msg, Artifact & art )
 {
-    return msg >> art.id >> art.ext;
+    msg >> art.id >> art.ext;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1005_RELEASE ) {
+        // Old save formats contain different values for artifacts.
+        if ( art.id == 103 ) {
+            art.id = Artifact::UNKNOWN;
+        }
+        else {
+            ++art.id;
+        }
+    }
+
+    return msg;
 }
 
 BagArtifacts::BagArtifacts()

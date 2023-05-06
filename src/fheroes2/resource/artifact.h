@@ -54,8 +54,12 @@ public:
         ART_NORANDOM = 0x20
     };
 
+    // All artifact IDs are by value 1 bigger than in the original game.
+    // This is done to support new artifact addition and also align with the rest of object types.
     enum type_t : int
     {
+        UNKNOWN = 0,
+
         ULTIMATE_BOOK,
         ULTIMATE_SWORD,
         ULTIMATE_CLOAK,
@@ -164,11 +168,11 @@ public:
         SPADE_NECROMANCY,
 
         // IMPORTANT! Put all new artifacts just above this line.
-        UNKNOWN
+        ARTIFACT_COUNT
     };
 
     Artifact( int art = UNKNOWN )
-        : id( art >= 0 && art < UNKNOWN ? art : UNKNOWN )
+        : id( art > UNKNOWN && art < ARTIFACT_COUNT ? art : UNKNOWN )
         , ext( 0 )
     {
         // Do nothing.

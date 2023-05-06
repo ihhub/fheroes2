@@ -660,25 +660,6 @@ namespace Maps
         for ( uint32_t & value : tile.metadata() ) {
             value = 0;
         }
-
-        const MP2::MapObjectType objectType = tile.GetObject( false );
-
-        switch ( objectType ) {
-        case MP2::OBJ_ARTIFACT:
-        case MP2::OBJ_DAEMON_CAVE:
-        case MP2::OBJ_GRAVEYARD:
-        case MP2::OBJ_SEA_CHEST:
-        case MP2::OBJ_SHIPWRECK:
-        case MP2::OBJ_SHIPWRECK_SURVIVOR:
-        case MP2::OBJ_SKELETON:
-        case MP2::OBJ_TREASURE_CHEST:
-        case MP2::OBJ_WAGON:
-            tile.metadata()[0] = Artifact::UNKNOWN;
-            break;
-
-        default:
-            break;
-        }
     }
 
     void resetObjectInfoOnTile( Tiles & tile )

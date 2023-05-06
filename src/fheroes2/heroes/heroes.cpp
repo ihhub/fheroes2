@@ -454,10 +454,10 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
         PickupArtifact( art );
     };
 
-    // 3 artifacts
-    addInitialArtifact( Artifact( dataStream.get() ) );
-    addInitialArtifact( Artifact( dataStream.get() ) );
-    addInitialArtifact( Artifact( dataStream.get() ) );
+    // 3 artifacts. Artifact IDs are by value 1 bigger than in the original game.
+    addInitialArtifact( Artifact( dataStream.get() + 1 ) );
+    addInitialArtifact( Artifact( dataStream.get() + 1 ) );
+    addInitialArtifact( Artifact( dataStream.get() + 1 ) );
 
     // Skip unused byte.
     dataStream.skip( 1 );

@@ -3160,6 +3160,11 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
         }
     }
 
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1005_RELEASE ) {
+        tile.fixOldArtifactIDs();
+    }
+
     msg >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2 >> tile._layerType;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1002_RELEASE, "Remove the check below." );
@@ -3598,6 +3603,38 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
     default:
         // Did you add a new action object on Adventure Map? Add the logic!
         assert( 0 );
+        break;
+    }
+}
+
+void Maps::Tiles::fixOldArtifactIDs()
+{
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove this method." );
+
+    // The object could be under a hero so ignore hero.
+    const MP2::MapObjectType objectType = GetObject( false );
+
+    switch ( objectType ) {
+    case MP2::OBJ_ARTIFACT:
+        assert( _metadata[0] < 103 );
+        ++_metadata[0];
+        break;
+    case MP2::OBJ_DAEMON_CAVE:
+    case MP2::OBJ_GRAVEYARD:
+    case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_SHIPWRECK:
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
+    case MP2::OBJ_SKELETON:
+    case MP2::OBJ_TREASURE_CHEST:
+    case MP2::OBJ_WAGON:
+        if ( _metadata[0] == 103 ) {
+            _metadata[0] = Artifact::UNKNOWN;
+        }
+        else {
+            ++_metadata[0];
+        }
+        break;
+    default:
         break;
     }
 }
