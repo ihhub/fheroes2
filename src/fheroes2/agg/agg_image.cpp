@@ -3628,7 +3628,7 @@ namespace fheroes2
                 resizedIcn.setPosition( std::lround( originalIcn.x() * scaleFactor ) + offsetX, std::lround( originalIcn.y() * scaleFactor ) );
                 Resize( originalIcn, resizedIcn, false );
             }
-            else if ( resizedIcn.width() != resizedWidth ) {
+            else {
                 // No need to resize but we have to update the offset.
                 resizedIcn.setPosition( std::lround( originalIcn.x() * scaleFactor ) + offsetX, std::lround( originalIcn.y() * scaleFactor ) );
             }
