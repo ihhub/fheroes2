@@ -130,7 +130,7 @@ msgstr ""
 "MULTI-\n"
 "JOUEUR"
 
-msgid "CONFIG"
+msgid "SETTINGS"
 msgstr ""
 "PARA-\n"
 "MÈTRES"

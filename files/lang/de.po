@@ -135,7 +135,7 @@ msgstr ""
 "SPIELER\n"
 "SPIEL"
 
-msgid "CONFIG"
+msgid "SETTINGS"
 msgstr "KONFIG."
 
 msgid ""

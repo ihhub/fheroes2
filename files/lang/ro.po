@@ -121,7 +121,7 @@ msgid ""
 "GAME"
 msgstr ""
 
-msgid "CONFIG"
+msgid "SETTINGS"
 msgstr ""
 
 msgid ""

@@ -133,7 +133,7 @@ msgstr ""
 "АСАБОВАЯ\n"
 "ГУЛЬНЯ"
 
-msgid "CONFIG"
+msgid "SETTINGS"
 msgstr "НАЛАДЫ"
 
 msgid ""

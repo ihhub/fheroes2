@@ -136,7 +136,7 @@ msgstr ""
 "СОВМЕСТНАЯ\n"
 "ИГРА"
 
-msgid "CONFIG"
+msgid "SETTINGS"
 msgstr "НАСТРОЙКИ"
 
 msgid ""

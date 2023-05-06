@@ -1179,12 +1179,6 @@ namespace fheroes2
             case ICN::BUTTON_LARGE_CONFIG: {
                 _icnVsSprite[id].resize( 2 );
 
-                if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( ICN::BTNDCCFG, 4 );
-                    _icnVsSprite[id][1] = GetICN( ICN::BTNDCCFG, 5 );
-                    break;
-                }
-
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNCOM, i );
@@ -1192,7 +1186,7 @@ namespace fheroes2
                     Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CONFIG" ), { 12, 5 }, { 11, 6 }, { 117, 47 }, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SETTINGS" ), { 12, 5 }, { 11, 6 }, { 117, 47 }, fheroes2::FontColor::WHITE );
 
                 break;
             }

@@ -135,7 +135,7 @@ msgstr ""
 "ПОВЕЧЕ\n"
 "ИГРАЧИ"
 
-msgid "CONFIG"
+msgid "SETTINGS"
 msgstr ""
 "КОНФИ-\n"
 "ГУРАЦИЯ"

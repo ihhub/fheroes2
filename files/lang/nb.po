@@ -135,7 +135,7 @@ msgstr ""
 "FLER-\n"
 "SPILLER"
 
-msgid "CONFIG"
+msgid "SETTINGS"
 msgstr "VALG"
 
 msgid ""

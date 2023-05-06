@@ -134,7 +134,7 @@ msgstr ""
 "PLAYER\n"
 "HRA"
 
-msgid "CONFIG"
+msgid "SETTINGS"
 msgstr "CONFIG"
 
 msgid ""

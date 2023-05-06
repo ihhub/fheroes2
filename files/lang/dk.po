@@ -136,7 +136,7 @@ msgstr ""
 "PLAYER\n"
 "SPIL"
 
-msgid "CONFIG"
+msgid "SETTINGS"
 msgstr "INDSTIL"
 
 msgid ""

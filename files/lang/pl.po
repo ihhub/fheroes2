@@ -136,7 +136,7 @@ msgstr ""
 "DLA WIELU\n"
 "OSÓB"
 
-msgid "CONFIG"
+msgid "SETTINGS"
 msgstr "KONFIGURACJA"
 
 msgid ""

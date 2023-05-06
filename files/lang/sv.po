@@ -133,7 +133,7 @@ msgid ""
 "GAME"
 msgstr "MULTIPLAYSPEL"
 
-msgid "CONFIG"
+msgid "SETTINGS"
 msgstr "ANPASSA"
 
 msgid ""
