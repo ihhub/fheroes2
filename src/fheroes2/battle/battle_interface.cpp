@@ -4513,7 +4513,9 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         // Don't waste time waiting for Good Luck sound if the game sounds are turned off
         const bool soundOn = Settings::Get().SoundVolume() > 0;
 
-        AudioManager::PlaySound( M82::GOODLUCK );
+        if ( soundOn ) {
+            AudioManager::PlaySound( M82::GOODLUCK );
+        }
 
         // If sound is turned off we still wait for the GOODLUCK sound to over but no more the twice the rainbow animation time.
         // So we start counting steps from '-rainbowDrawSteps' to 'rainbowDrawSteps'.
