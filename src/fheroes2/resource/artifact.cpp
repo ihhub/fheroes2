@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "artifact.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -33,11 +35,10 @@
 #include <utility>
 
 #include "agg_image.h"
-#include "artifact.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "gamedefs.h"
 #include "game_io.h"
+#include "gamedefs.h"
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
