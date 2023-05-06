@@ -33,6 +33,7 @@
 #include <optional>
 #include <set>
 #include <type_traits>
+#include <utility>
 
 #include "army.h"
 #include "army_troop.h"
@@ -61,7 +62,6 @@
 #include "pairs.h"
 #include "payment.h"
 #include "profit.h"
-#include "race.h"
 #include "resource.h"
 #include "save_format_version.h"
 #include "serialize.h"
