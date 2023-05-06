@@ -3621,21 +3621,23 @@ namespace fheroes2
             const double scaleFactorY = static_cast<double>( display.height() ) / Display::DEFAULT_HEIGHT;
 
             const double scaleFactor = std::min( scaleFactorX, scaleFactorY );
-            const int32_t resizedWidth = std::lround( originalIcn.width() * scaleFactor );
-            const int32_t resizedHeight = std::lround( originalIcn.height() * scaleFactor );
-            const int32_t offsetX = std::lround( display.width() - Display::DEFAULT_WIDTH * scaleFactor ) / 2;
-            const int32_t offsetY = std::lround( display.height() - Display::DEFAULT_HEIGHT * scaleFactor ) / 2;
+            const int32_t resizedWidth = static_cast<int32_t>( std::lround( originalIcn.width() * scaleFactor ) );
+            const int32_t resizedHeight = static_cast<int32_t>( std::lround( originalIcn.height() * scaleFactor ) );
+            const int32_t offsetX = static_cast<int32_t>( std::lround( display.width() - Display::DEFAULT_WIDTH * scaleFactor ) ) / 2;
+            const int32_t offsetY = static_cast<int32_t>( std::lround( display.height() - Display::DEFAULT_HEIGHT * scaleFactor ) ) / 2;
             assert( offsetX >= 0 && offsetY >= 0 );
 
             // Resize only if needed
             if ( resizedIcn.height() != resizedHeight || resizedIcn.width() != resizedWidth ) {
                 resizedIcn.resize( resizedWidth, resizedHeight );
-                resizedIcn.setPosition( std::lround( originalIcn.x() * scaleFactor ) + offsetX, std::lround( originalIcn.y() * scaleFactor ) + offsetY );
+                resizedIcn.setPosition( static_cast<int32_t>( std::lround( originalIcn.x() * scaleFactor ) ) + offsetX,
+                                        static_cast<int32_t>( std::lround( originalIcn.y() * scaleFactor ) ) + offsetY );
                 Resize( originalIcn, resizedIcn, false );
             }
             else {
                 // No need to resize but we have to update the offset.
-                resizedIcn.setPosition( std::lround( originalIcn.x() * scaleFactor ) + offsetX, std::lround( originalIcn.y() * scaleFactor ) + offsetY );
+                resizedIcn.setPosition( static_cast<int32_t>( std::lround( originalIcn.x() * scaleFactor ) ) + offsetX,
+                                        static_cast<int32_t>( std::lround( originalIcn.y() * scaleFactor ) ) + offsetY );
             }
 
             return resizedIcn;

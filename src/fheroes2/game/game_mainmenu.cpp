@@ -253,8 +253,8 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     const double scaleY = static_cast<double>( display.height() ) / fheroes2::Display::DEFAULT_HEIGHT;
 
     const double scale = std::min( scaleX, scaleY );
-    const int32_t offsetX = std::lround( display.width() - fheroes2::Display::DEFAULT_WIDTH * scale ) / 2;
-    const int32_t offsetY = std::lround( display.height() - fheroes2::Display::DEFAULT_HEIGHT * scale ) / 2;
+    const int32_t offsetX = static_cast<int32_t>( std::lround( display.width() - fheroes2::Display::DEFAULT_WIDTH * scale ) ) / 2;
+    const int32_t offsetY = static_cast<int32_t>( std::lround( display.height() - fheroes2::Display::DEFAULT_HEIGHT * scale ) ) / 2;
 
     const fheroes2::Rect settingsArea( static_cast<int32_t>( 63 * scale ) + offsetX, static_cast<int32_t>( 202 * scale ) + offsetY, static_cast<int32_t>( 90 * scale ),
                                        static_cast<int32_t>( 160 * scale ) );
