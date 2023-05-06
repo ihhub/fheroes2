@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <limits>
 #include <string>
+#include <type_traits>
 #include <utility>
 
 #include "math_base.h"
