@@ -25,6 +25,7 @@
 #include <cstdint>
 
 #include "agg_image.h"
+#include "dialog.h"
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
@@ -98,5 +99,24 @@ namespace fheroes2
             renderWindowBackground( display, { 0, mainMenuBackground.y() + mainMenuBackground.height(), display.width(),
                                                display.height() - mainMenuBackground.y() - mainMenuBackground.height() } );
         }
+    }
+
+    Point drawButtonPanel()
+    {
+        const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
+        const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
+
+        const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
+        const uint32_t panelXPos = back.width() + back.x() - ( panel.width() + panelOffset );
+        fheroes2::Blit( panel, fheroes2::Display::instance(), panelXPos, panelOffset + back.y() );
+
+        const int32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
+
+        const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
+        const int32_t buttonWidth = buttonSample.width();
+        const int32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
+        const int32_t buttonYPos = 46 + back.y();
+
+        return { buttonXPos, buttonYPos };
     }
 }
