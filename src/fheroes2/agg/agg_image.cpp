@@ -1933,13 +1933,13 @@ namespace fheroes2
                 auto & imageArray = _icnVsSprite[id];
                 if ( imageArray.size() < 96 ) {
                     // 96 symbols is the minimum requirement for English.
-                    throw std::logic_error( "Damaged game resources: invalid font." );
+                    throw std::logic_error( "The game resources are corrupted. Please use resources from a licensed version of Heroes of Might and Magic II." );
                 }
 
                 // Compare '(' and ')' symbols. By size they are always the same. However, we play safe and fail if both dimensions are different.
                 if ( ( imageArray[8].width() != imageArray[9].width() ) && ( imageArray[8].height() != imageArray[9].height() ) ) {
                     // This is most likely a corrupted font or a pirated translation to a non-English language which causes all sorts of rendering issues.
-                    throw std::logic_error( "Damaged game resources: invalid font." );
+                    throw std::logic_error( "The game resources are corrupted. Please use resources from a licensed version of Heroes of Might and Magic II." );
                 }
 
                 const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
