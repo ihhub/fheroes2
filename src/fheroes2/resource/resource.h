@@ -147,36 +147,45 @@ namespace Resource
     };
 
     // Applies the given function object 'fn' to every valid resource in the 'resources' set
-    template <typename F>
-    void forEach( const int resources, const F & fn )
+    template <typename T, typename F, typename = typename std::enable_if_t<std::is_integral_v<T> || std::is_enum_v<T>>>
+    void forEach( const T resources, const F & fn )
     {
-        constexpr int maxResourceIdBitNum = []() constexpr
-        {
-            static_assert( std::is_enum_v<decltype( Resource::ALL )> );
-            using ResourceUnderlyingType = std::underlying_type_t<decltype( Resource::ALL )>;
-            static_assert( std::numeric_limits<ResourceUnderlyingType>::radix == 2 );
+        const auto forEachLambda = [&fn]( const auto res ) {
+            constexpr int maxResourceIdBitNum = []() constexpr
+            {
+                static_assert( std::is_enum_v<decltype( Resource::ALL )> );
+                using ResourceUnderlyingType = std::underlying_type_t<decltype( Resource::ALL )>;
+                static_assert( std::numeric_limits<ResourceUnderlyingType>::radix == 2 );
 
-            for ( int i = std::numeric_limits<ResourceUnderlyingType>::digits - 1; i >= 0; --i ) {
-                if ( ( Resource::ALL & ( static_cast<ResourceUnderlyingType>( 1 ) << i ) ) != 0 ) {
-                    return i;
+                for ( int i = std::numeric_limits<ResourceUnderlyingType>::digits - 1; i >= 0; --i ) {
+                    if ( ( Resource::ALL & ( static_cast<ResourceUnderlyingType>( 1 ) << i ) ) != 0 ) {
+                        return i;
+                    }
                 }
-            }
 
-            return -1;
+                return -1;
+            }
+            ();
+
+            using ResType = decltype( res );
+
+            static_assert( std::numeric_limits<ResType>::radix == 2 && maxResourceIdBitNum >= 0 && maxResourceIdBitNum < std::numeric_limits<ResType>::digits );
+
+            for ( int i = 0; i <= maxResourceIdBitNum; ++i ) {
+                const ResType resItem = res & ( static_cast<ResType>( 1 ) << i );
+                if ( resItem == 0 ) {
+                    continue;
+                }
+
+                fn( resItem );
+            }
+        };
+
+        if constexpr ( std::is_enum_v<decltype( resources )> ) {
+            forEachLambda( static_cast<std::underlying_type_t<decltype( resources )>>( resources ) );
         }
-        ();
-
-        using ResourcesType = decltype( resources );
-
-        static_assert( std::numeric_limits<ResourcesType>::radix == 2 && maxResourceIdBitNum >= 0 && maxResourceIdBitNum < std::numeric_limits<ResourcesType>::digits );
-
-        for ( int i = 0; i <= maxResourceIdBitNum; ++i ) {
-            const int res = resources & ( static_cast<ResourcesType>( 1 ) << i );
-            if ( res == 0 ) {
-                continue;
-            }
-
-            fn( res );
+        else {
+            forEachLambda( resources );
         }
     }
 }
