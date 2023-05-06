@@ -157,9 +157,7 @@ namespace Resource
             static_assert( std::numeric_limits<ResourceUnderlyingType>::radix == 2 );
 
             for ( int i = std::numeric_limits<ResourceUnderlyingType>::digits - 1; i >= 0; --i ) {
-                const int res = Resource::ALL & ( 1 << i );
-
-                if ( res != 0 ) {
+                if ( ( Resource::ALL & ( 1 << i ) ) != 0 ) {
                     return i;
                 }
             }

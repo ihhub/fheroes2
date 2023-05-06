@@ -102,7 +102,7 @@ namespace AI
             prio = prioIter->second;
         }
         else {
-            // This function was called for an unknown resource, this should never happen
+            // This function has been called for an unknown resource, this should never happen
             assert( 0 );
         }
 
