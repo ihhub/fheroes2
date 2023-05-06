@@ -617,6 +617,8 @@ namespace fheroes2
             correctedWidth = width();
         }
 
+        assert( correctedWidth <= maxWidth );
+
         // Center text according to the maximum width.
         xOffset = ( maxWidth - correctedWidth ) / 2;
 
