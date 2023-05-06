@@ -28,7 +28,6 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
-#include <iterator>
 #include <memory>
 #include <ostream>
 #include <set>
@@ -595,20 +594,21 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
 
     // Limit the number of two-hex obstacles to maxTwoHexObstacleCount
     uint8_t twoHexCount = 0;
-    for ( size_t i = 0; i < objs.size(); ) {
-        if ( isTwoHexObject( objs[i] ) ) {
+    for ( auto iter = objs.begin(); iter != objs.end(); ) {
+        if ( isTwoHexObject( *iter ) ) {
             ++twoHexCount;
             if ( twoHexCount > maxTwoHexObstacleCount ) {
-                objs.erase( std::next( objs.begin(), i ) );
+                iter = objs.erase( iter );
                 continue;
             }
         }
-        ++i;
+        ++iter;
     }
 
     const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::GetWithGen( 0, maxSmallObstacleCount, gen ) ) );
 
     for ( size_t i = 0; i < objectsToPlace; ++i ) {
+        // two-hex obstacles are not allowed on column 8 as they would cover column 9 which is reserved for units
         const bool checkRightCell = isTwoHexObject( objs[i] );
 
         // tall obstacles like trees should not be placed on top 2 rows
@@ -617,7 +617,8 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
         uint32_t dest;
         do {
             dest = GetRandomObstaclePosition( gen );
-        } while ( at( dest ).GetObject() != 0 || ( checkRightCell && ( at( dest + 1 ).GetObject() != 0 || ( dest % 11 ) == 8 ) ) || ( isTallObstacle && dest <= 21 ) );
+        } while ( at( dest ).GetObject() != 0 || ( checkRightCell && ( at( dest + 1 ).GetObject() != 0 || ( dest % ARENAW ) == 8 ) )
+                  || ( isTallObstacle && dest < ( ARENAW * 2 ) ) );
 
         SetCobjObject( objs[i], dest );
     }
