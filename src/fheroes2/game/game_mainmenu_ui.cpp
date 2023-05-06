@@ -20,11 +20,13 @@
 
 #include "game_mainmenu_ui.h"
 
+#include <algorithm>
 #include <cstdint>
 
 #include "agg_image.h"
 #include "icn.h"
 #include "image.h"
+#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
 
