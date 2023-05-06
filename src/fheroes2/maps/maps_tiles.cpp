@@ -30,28 +30,21 @@
 #include <cstdlib>
 #include <iostream>
 #include <limits>
-#include <map>
-#include <memory>
 #include <optional>
 #include <set>
 #include <type_traits>
 
-#include "agg_image.h"
 #include "army.h"
 #include "army_troop.h"
 #include "artifact.h"
 #include "castle.h"
-#include "game.h"
 #include "game_io.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
-#include "image.h"
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles_helper.h" // TODO: This file should not be included
-#include "monster.h"
-#include "monster_anim.h"
 #include "mounts.h"
 #include "mp2.h"
 #include "objcrck.h"
@@ -72,8 +65,6 @@
 #include "resource.h"
 #include "save_format_version.h"
 #include "serialize.h"
-#include "spell.h"
-#include "til.h"
 #include "tools.h"
 #include "trees.h"
 #include "world.h"

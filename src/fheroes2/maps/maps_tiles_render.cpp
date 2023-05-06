@@ -20,15 +20,31 @@
 
 #include "maps_tiles_render.h"
 
+#include <assert.h>
+#include <algorithm>
+#include <array>
+#include <cstdint>
+#include <cstdlib>
+#include <list>
+#include <map>
+#include <memory>
+#include <ostream>
+#include <utility>
+
 #include "agg_image.h"
+#include "direction.h"
 #include "game.h"
+#include "heroes.h"
 #include "icn.h"
+#include "image.h"
 #include "interface_gamearea.h"
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
+#include "monster.h"
 #include "monster_anim.h"
+#include "spell.h"
 #include "til.h"
 #include "ui_object_rendering.h"
 #include "world.h"
@@ -582,6 +598,7 @@ namespace Maps
             area.BlitOnTile( dst, PassableViewSurface( tile.GetPassable() ), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }
 #else
+        (void)tile;
         (void)dst;
         (void)area;
         (void)friendColors;
