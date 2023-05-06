@@ -3617,20 +3617,25 @@ namespace fheroes2
 
             Sprite & resizedIcn = _icnVsScaledSprite[icnId][index];
 
-            const double scaleFactor = static_cast<double>( display.height() ) / Display::DEFAULT_HEIGHT;
+            const double scaleFactorX = static_cast<double>( display.width() ) / Display::DEFAULT_WIDTH;
+            const double scaleFactorY = static_cast<double>( display.height() ) / Display::DEFAULT_HEIGHT;
+
+            const double scaleFactor = std::min( scaleFactorX, scaleFactorY );
             const int32_t resizedWidth = std::lround( originalIcn.width() * scaleFactor );
             const int32_t resizedHeight = std::lround( originalIcn.height() * scaleFactor );
-            const int32_t offsetX = static_cast<int32_t>( display.width() - Display::DEFAULT_WIDTH * scaleFactor ) / 2;
+            const int32_t offsetX = std::lround( display.width() - Display::DEFAULT_WIDTH * scaleFactor ) / 2;
+            const int32_t offsetY = std::lround( display.height() - Display::DEFAULT_HEIGHT * scaleFactor ) / 2;
+            assert( offsetX >= 0 && offsetY >= 0 );
 
             // Resize only if needed
-            if ( resizedIcn.height() != resizedHeight ) {
+            if ( resizedIcn.height() != resizedHeight || resizedIcn.width() != resizedWidth ) {
                 resizedIcn.resize( resizedWidth, resizedHeight );
-                resizedIcn.setPosition( std::lround( originalIcn.x() * scaleFactor ) + offsetX, std::lround( originalIcn.y() * scaleFactor ) );
+                resizedIcn.setPosition( std::lround( originalIcn.x() * scaleFactor ) + offsetX, std::lround( originalIcn.y() * scaleFactor ) + offsetY );
                 Resize( originalIcn, resizedIcn, false );
             }
             else {
                 // No need to resize but we have to update the offset.
-                resizedIcn.setPosition( std::lround( originalIcn.x() * scaleFactor ) + offsetX, std::lround( originalIcn.y() * scaleFactor ) );
+                resizedIcn.setPosition( std::lround( originalIcn.x() * scaleFactor ) + offsetX, std::lround( originalIcn.y() * scaleFactor ) + offsetY );
             }
 
             return resizedIcn;

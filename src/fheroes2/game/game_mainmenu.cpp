@@ -249,9 +249,14 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
     display.render();
 
-    const double scale = static_cast<double>( display.height() ) / fheroes2::Display::DEFAULT_HEIGHT;
-    const int32_t offsetX = static_cast<int32_t>( display.width() - fheroes2::Display::DEFAULT_WIDTH * scale ) / 2;
-    const fheroes2::Rect settingsArea( static_cast<int32_t>( 63 * scale ) + offsetX, static_cast<int32_t>( 202 * scale ), static_cast<int32_t>( 90 * scale ),
+    const double scaleX = static_cast<double>( display.width() ) / fheroes2::Display::DEFAULT_WIDTH;
+    const double scaleY = static_cast<double>( display.height() ) / fheroes2::Display::DEFAULT_HEIGHT;
+
+    const double scale = std::min( scaleX, scaleY );
+    const int32_t offsetX = std::lround( display.width() - fheroes2::Display::DEFAULT_WIDTH * scale ) / 2;
+    const int32_t offsetY = std::lround( display.height() - fheroes2::Display::DEFAULT_HEIGHT * scale ) / 2;
+
+    const fheroes2::Rect settingsArea( static_cast<int32_t>( 63 * scale ) + offsetX, static_cast<int32_t>( 202 * scale ) + offsetY, static_cast<int32_t>( 90 * scale ),
                                        static_cast<int32_t>( 160 * scale ) );
 
     uint32_t lantern_frame = 0;
@@ -358,8 +363,9 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             ++lantern_frame;
             fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
             if ( le.MouseCursor( settingsArea ) ) {
-                const int32_t offsetY = static_cast<int32_t>( 55 * scale );
-                fheroes2::Blit( highlightDoor, 0, offsetY, display, highlightDoor.x(), highlightDoor.y() + offsetY, highlightDoor.width(), highlightDoor.height() );
+                const int32_t doorOffsetY = static_cast<int32_t>( 55 * scale ) + offsetY;
+                fheroes2::Blit(
+                    highlightDoor, 0, doorOffsetY, display, highlightDoor.x(), highlightDoor.y() + doorOffsetY, highlightDoor.width(), highlightDoor.height() );
             }
 
             display.render();

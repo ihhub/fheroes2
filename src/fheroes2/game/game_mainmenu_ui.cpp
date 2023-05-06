@@ -21,6 +21,7 @@
 #include "game_mainmenu_ui.h"
 
 #include <algorithm>
+#include <cassert>
 #include <cstdint>
 
 #include "agg_image.h"
@@ -85,8 +86,17 @@ namespace fheroes2
         drawSprite( display, ICN::BTNSHNGL, 13 );
         drawSprite( display, ICN::BTNSHNGL, 17 );
 
-        renderWindowBackground( display, { 0, 0, mainMenuBackground.x(), display.height() } );
-        renderWindowBackground( display, { mainMenuBackground.x() + mainMenuBackground.width(), 0, display.width() - mainMenuBackground.x() - mainMenuBackground.width(),
-                                           display.height() } );
+        if ( mainMenuBackground.y() == 0 ) {
+            renderWindowBackground( display, { 0, 0, mainMenuBackground.x(), display.height() } );
+            renderWindowBackground( display, { mainMenuBackground.x() + mainMenuBackground.width(), 0,
+                                               display.width() - mainMenuBackground.x() - mainMenuBackground.width(), display.height() } );
+        }
+        else {
+            assert( mainMenuBackground.x() == 0 );
+
+            renderWindowBackground( display, { 0, 0, display.width(), mainMenuBackground.y() } );
+            renderWindowBackground( display, { 0, mainMenuBackground.y() + mainMenuBackground.height(),
+                                               display.width(), display.height() - mainMenuBackground.y() - mainMenuBackground.height() } );
+        }
     }
 }
