@@ -533,7 +533,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                                    << "incorrect size block: " << pblock.size() )
                 }
                 else {
-                    std::pair<int, int> colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
+                    std::pair<int, int> colorRace = Maps::getColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
                     const Kingdom & kingdom = GetKingdom( colorRace.first );
 
                     if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE )

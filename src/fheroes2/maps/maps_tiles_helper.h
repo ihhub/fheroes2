@@ -136,4 +136,6 @@ namespace Maps
     void updateMonsterInfoOnTile( Tiles & tile );
 
     void setMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count );
+
+    std::pair<int, int> getColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
 }

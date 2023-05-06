@@ -109,7 +109,7 @@ namespace Maps
     public:
         Tiles() = default;
 
-        void Init( int32_t, const MP2::mp2tile_t & );
+        void Init( int32_t index, const MP2::mp2tile_t & mp2 );
 
         int32_t GetIndex() const
         {
@@ -251,6 +251,7 @@ namespace Maps
 
         // Determine the fog direction in the area between min and max positions for given player(s) color code and store it in corresponding tile data.
         static void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color );
+
         // Return fog direction of tile. A tile without fog returns "Direction::UNKNOWN".
         uint16_t getFogDirection() const
         {
@@ -304,7 +305,7 @@ namespace Maps
         // (castle has a hero or garrison, dwelling has creatures, etc)
         bool isCaptureObjectProtected() const;
 
-        void SetObjectPassable( bool );
+        void SetObjectPassable( bool pass );
 
         const std::array<uint32_t, 3> & metadata() const
         {
@@ -327,7 +328,7 @@ namespace Maps
         }
 
         Heroes * GetHeroes() const;
-        void SetHeroes( Heroes * );
+        void SetHeroes( Heroes * hero );
 
         // If tile is empty (MP2::OBJ_NONE) then verify whether it is a coast and update the tile if needed.
         void updateEmpty();
@@ -342,8 +343,6 @@ namespace Maps
         bool containsAnyObjectIcnType( const std::vector<MP2::ObjectIcnType> & objectIcnTypes ) const;
 
         bool containsSprite( const MP2::ObjectIcnType objectIcnType, const uint32_t imageIdx ) const;
-
-        static std::pair<int, int> ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
 
         // Restores an abandoned mine whose main tile is 'tile', turning it into an ordinary mine that brings
         // resources of type 'resource'. This method updates all sprites and sets object types for non-action
@@ -432,10 +431,10 @@ namespace Maps
         uint32_t _region = REGION_NODE_BLOCKED;
     };
 
-    StreamBase & operator<<( StreamBase &, const TilesAddon & );
-    StreamBase & operator<<( StreamBase &, const Tiles & );
-    StreamBase & operator>>( StreamBase &, TilesAddon & );
-    StreamBase & operator>>( StreamBase &, Tiles & );
+    StreamBase & operator<<( StreamBase & msg, const TilesAddon & ta );
+    StreamBase & operator<<( StreamBase & msg, const Tiles & tile );
+    StreamBase & operator>>( StreamBase & msg, TilesAddon & ta );
+    StreamBase & operator>>( StreamBase & msg, Tiles & tile );
 }
 
 #endif
