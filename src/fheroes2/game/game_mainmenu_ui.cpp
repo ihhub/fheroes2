@@ -57,7 +57,7 @@ namespace
 
             const int32_t height = std::min( background.height(), roi.height - y * background.height() );
 
-            for ( int x = 0; x < stepY; ++x ) {
+            for ( int x = 0; x < stepX; ++x ) {
                 fheroes2::Copy( background, 0, 0, output, offset.x, offset.y, std::min( background.width(), roi.width - x * background.width() ), height );
 
                 offset.x += background.width();
