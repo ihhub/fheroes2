@@ -19,7 +19,7 @@
  ***************************************************************************/
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
 #include <vector>
 
 #include "math_base.h"

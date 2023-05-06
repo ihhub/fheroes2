@@ -20,9 +20,9 @@
 
 #include "maps_tiles_render.h"
 
-#include <assert.h>
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <cstdint>
 #include <cstdlib>
 #include <list>
