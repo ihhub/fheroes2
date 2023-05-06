@@ -376,7 +376,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         fheroes2::Blit( spriteSpreadArmyFormat, display, rectSpreadArmyFormat.x, rectSpreadArmyFormat.y );
         fheroes2::Blit( spriteGroupedArmyFormat, display, rectGroupedArmyFormat.x, rectGroupedArmyFormat.y );
 
-        if ( army.isSpreadFormat() )
+        if ( army.isSpreadFormation() )
             cursorFormat.setPosition( pointSpreadArmyFormat.x, pointSpreadArmyFormat.y );
         else
             cursorFormat.setPosition( pointGroupedArmyFormat.x, pointGroupedArmyFormat.y );
@@ -598,15 +598,15 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             }
         }
         else if ( isBuild( BUILD_CAPTAIN ) ) {
-            if ( le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormat() ) {
+            if ( le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormation() ) {
                 cursorFormat.setPosition( pointSpreadArmyFormat.x, pointSpreadArmyFormat.y );
                 display.render();
-                army.SetSpreadFormat( true );
+                army.SetSpreadFormation( true );
             }
-            else if ( le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormat() ) {
+            else if ( le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormation() ) {
                 cursorFormat.setPosition( pointGroupedArmyFormat.x, pointGroupedArmyFormat.y );
                 display.render();
-                army.SetSpreadFormat( false );
+                army.SetSpreadFormation( false );
             }
         }
 

@@ -65,6 +65,7 @@
 #include "m82.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
@@ -154,10 +155,10 @@ fheroes2::GameMode Game::StartGame()
     return Interface::Basic::Get().StartGame();
 }
 
-void Game::DialogPlayers( int color, std::string str )
+void Game::DialogPlayers( int color, std::string title, std::string message )
 {
     const Player * player = Players::Get( color );
-    StringReplace( str, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
+    StringReplace( message, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
 
     const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
     fheroes2::Sprite sign = border;
@@ -188,7 +189,8 @@ void Game::DialogPlayers( int color, std::string str )
     }
 
     const fheroes2::CustomImageDialogElement imageUI( std::move( sign ) );
-    fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( std::move( str ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
+    fheroes2::showMessage( fheroes2::Text( std::move( title ), fheroes2::FontType::normalYellow() ),
+                           fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
 }
 
 void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
@@ -365,7 +367,7 @@ void ShowNewWeekDialog()
     else
         message += _( " All dwellings increase population." );
 
-    fheroes2::showStandardTextMessage( "", message, Dialog::OK );
+    fheroes2::showStandardTextMessage( _( "New Week!" ), message, Dialog::OK );
 }
 
 void ShowWarningLostTownsDialog()
@@ -374,12 +376,13 @@ void ShowWarningLostTownsDialog()
     const uint32_t lostTownDays = myKingdom.GetLostTownDays();
 
     if ( lostTownDays == 1 ) {
-        Game::DialogPlayers( myKingdom.GetColor(), _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
+        Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ),
+                             _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
     }
     else if ( lostTownDays > 0 && lostTownDays <= Game::GetLostTownDays() ) {
         std::string str = _( "%{color} player, you only have %{day} days left to capture a town, or you will be banished from this land." );
         StringReplace( str, "%{day}", lostTownDays );
-        Game::DialogPlayers( myKingdom.GetColor(), str );
+        Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ), str );
     }
 }
 
@@ -556,7 +559,8 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 protection = Maps::isTileUnderProtection( tile.GetIndex() );
             }
             else {
-                protection = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.isCaptureObjectProtected() ) );
+                protection
+                    = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( getColorFromTile( tile ) ) && tile.isCaptureObjectProtected() ) );
             }
 
             return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION ), from_hero.getNumOfTravelDays( tile.GetIndex() ) );
@@ -604,17 +608,11 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
     radar.Build();
     radar.SetHide( true );
-
-    // Hide the world map at the first drawing
-    const int currentColor = conf.CurrentColor();
-    conf.SetCurrentColor( -1 );
-
     iconsPanel.HideIcons( ICON_ANY );
     statusWindow.Reset();
 
+    // Prepare for render the whole game interface with adventure map filled with fog as it was not uncovered by 'updateMapFogDirections()'.
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
-
-    conf.SetCurrentColor( currentColor );
 
     bool loadedFromSave = conf.LoadedGameVersion();
     bool skipTurns = loadedFromSave;
@@ -625,8 +623,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
     std::vector<Player *> sortedPlayers = conf.GetPlayers().getVector();
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
 
-    if ( !loadedFromSave ) {
-        // Clear fog around heroes, castles and mines for all players when starting a new map.
+    if ( !loadedFromSave || world.CountDay() == 1 ) {
+        // Clear fog around heroes, castles and mines for all players when starting a new map or if the save was done at the first day.
         for ( const Player * player : sortedPlayers ) {
             world.ClearFog( player->GetColor() );
         }
@@ -634,6 +632,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
     const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
     if ( !isHotSeatGame ) {
+        // It is not a Hot Seat (multiplayer) game so we set current color to the only human player.
+        conf.SetCurrentColor( Players::HumanColors() );
+
         // Fully update fog directions if there will be only one human player.
         Interface::GameArea::updateMapFogDirections();
     }
@@ -655,7 +656,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
         for ( const Player * player : sortedPlayers ) {
             assert( player != nullptr );
 
-            Kingdom & kingdom = world.GetKingdom( player->GetColor() );
+            const int playerColor = player->GetColor();
+
+            Kingdom & kingdom = world.GetKingdom( playerColor );
 
             if ( skipTurns && !player->isColor( conf.CurrentColor() ) ) {
                 continue;
@@ -665,7 +668,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
             skipTurns = false;
 
             if ( kingdom.isPlay() ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() )
+                DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( playerColor ) << ", resource: " << kingdom.GetFunds().String() )
 
                 radar.SetHide( true );
                 radar.SetRedraw( REDRAW_RADAR_CURSOR );
@@ -676,9 +679,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     AudioManager::ResetAudio();
 
                     if ( isHotSeatGame ) {
-                        // we need to hide the world map in hot seat mode
-                        conf.SetCurrentColor( -1 );
-
                         iconsPanel.HideIcons( ICON_ANY );
                         statusWindow.Reset();
 
@@ -694,10 +694,10 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                         AudioManager::PlayMusic( MUS::NEW_MONTH, Music::PlaybackMode::PLAY_ONCE );
 
-                        Game::DialogPlayers( player->GetColor(), _( "%{color} player's turn." ) );
+                        Game::DialogPlayers( playerColor, "", _( "%{color} player's turn." ) );
                     }
 
-                    conf.SetCurrentColor( player->GetColor() );
+                    conf.SetCurrentColor( playerColor );
 
                     kingdom.ActionBeforeTurn();
 
@@ -721,7 +721,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     Cursor::Get().SetThemes( Cursor::WAIT );
 
-                    conf.SetCurrentColor( player->GetColor() );
+                    conf.SetCurrentColor( playerColor );
 
                     statusWindow.Reset();
                     statusWindow.SetState( StatusType::STATUS_AITURN );
@@ -800,8 +800,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
             res = fheroes2::GameMode::MAIN_MENU;
         }
 
-        // don't carry the current color from the last player to the next turn
-        conf.SetCurrentColor( -1 );
+        // Don't carry the current player color to the next turn.
+        conf.SetCurrentColor( Color::NONE );
     }
 
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
@@ -856,6 +856,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                 fheroes2::showStandardTextMessage( event.title, event.message, Dialog::OK );
             }
         } );
+
+        // The amount of the kingdom resources has changed, the status window needs to be updated
+        Redraw( REDRAW_STATUS );
+        display.render();
 
         if ( conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
             Game::AutoSave();
@@ -1232,24 +1236,27 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
             }
         }
 
-        // map objects animation
-        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            Game::updateAdventureMapAnimationIndex();
-            gameArea.SetRedraw();
-        }
-
-        // check that the kingdom is not vanquished yet (has at least one hero or castle)
+        // Check that the kingdom is not vanquished yet (has at least one hero or castle).
         if ( res == fheroes2::GameMode::CANCEL && !myKingdom.isPlay() ) {
             res = fheroes2::GameMode::END_TURN;
         }
 
-        if ( NeedRedraw() ) {
-            Redraw();
+        // Render map only if the turn is not over.
+        if ( res == fheroes2::GameMode::CANCEL ) {
+            // map objects animation
+            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                Game::updateAdventureMapAnimationIndex();
+                gameArea.SetRedraw();
+            }
 
-            // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
-            assert( GetRedrawMask() == 0 );
+            if ( NeedRedraw() ) {
+                Redraw();
 
-            display.render();
+                // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
+                assert( GetRedrawMask() == 0 );
+
+                display.render();
+            }
         }
     }
 
@@ -1266,11 +1273,11 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                 const uint32_t lostTownDays = myKingdom.GetLostTownDays();
 
                 if ( lostTownDays > Game::GetLostTownDays() ) {
-                    Game::DialogPlayers( conf.CurrentColor(),
+                    Game::DialogPlayers( conf.CurrentColor(), _( "Beware!" ),
                                          _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
                 }
                 else if ( lostTownDays == 1 ) {
-                    Game::DialogPlayers( conf.CurrentColor(), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
+                    Game::DialogPlayers( conf.CurrentColor(), _( "Defeat!" ), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
                 }
             }
 

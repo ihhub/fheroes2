@@ -38,6 +38,8 @@
 
 #include "agg_image.h"
 #include "army.h"
+#include "army_troop.h"
+#include "artifact.h"
 #include "castle.h"
 #include "game.h"
 #include "game_io.h"
@@ -48,6 +50,7 @@
 #include "interface_gamearea.h"
 #include "logging.h"
 #include "maps.h"
+#include "maps_tiles_helper.h" // TODO: This file should not be included
 #include "monster.h"
 #include "monster_anim.h"
 #include "mounts.h"
@@ -63,9 +66,11 @@
 #include "objtown.h"
 #include "objwatr.h"
 #include "objxloc.h"
+#include "pairs.h"
 #include "payment.h"
 #include "profit.h"
 #include "race.h"
+#include "resource.h"
 #include "save_format_version.h"
 #include "serialize.h"
 #include "spell.h"
@@ -681,9 +686,7 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
     tilePassable = DIRECTION_ALL;
 
     _layerType = mp2.quantity1 & 0x03;
-    quantity1 = mp2.quantity1;
-    quantity2 = mp2.quantity2;
-    additionalMetadata = 0;
+    _metadata[0] = ( ( ( mp2.quantity2 << 8 ) + mp2.quantity1 ) >> 3 );
     _fogColors = Color::ALL;
     _terrainImageIndex = mp2.terrainImageIndex;
     _terrainFlags = mp2.terrainFlags;
@@ -691,6 +694,11 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
 
     SetIndex( index );
     SetObject( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
+
+    if ( !MP2::doesObjectContainMetadata( _mainObjectType ) ) {
+        // No metadata should exist for this object!
+        assert( ( ( ( mp2.quantity2 << 8 ) + mp2.quantity1 ) >> 3 ) == 0 );
+    }
 
     addons_level1.clear();
     addons_level2.clear();
@@ -1292,7 +1300,7 @@ void Maps::Tiles::renderMainObject( fheroes2::Image & output, const Interface::G
 
     // Render possible animation image.
     // TODO: quantity2 is used in absolutely incorrect way! Fix all the logic for it. As of now (quantity2 != 0) expression is used only for Magic Garden.
-    const uint32_t mainObjectAnimationIndex = ICN::AnimationFrame( mainObjectIcn, _imageIndex, Game::getAdventureMapAnimationIndex(), quantity2 != 0 );
+    const uint32_t mainObjectAnimationIndex = ICN::AnimationFrame( mainObjectIcn, _imageIndex, Game::getAdventureMapAnimationIndex(), metadata()[1] != 0 );
     if ( mainObjectAnimationIndex > 0 ) {
         const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( mainObjectIcn, mainObjectAnimationIndex );
 
@@ -1473,7 +1481,7 @@ std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMineGuardianSpritesPe
 
     std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
 
-    const int32_t spellID = Maps::getSpellIdFromTile( *this );
+    const int32_t spellID = Maps::getMineSpellIdFromTile( *this );
     switch ( spellID ) {
     case Spell::SETEGUARDIAN:
     case Spell::SETAGUARDIAN:
@@ -1519,7 +1527,7 @@ void Maps::Tiles::redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool 
         renderFlyingGhosts = true;
     }
     else if ( objectType == MP2::OBJ_MINES ) {
-        const int32_t spellID = Maps::getSpellIdFromTile( *this );
+        const int32_t spellID = Maps::getMineSpellIdFromTile( *this );
 
         switch ( spellID ) {
         case Spell::NONE:
@@ -1594,9 +1602,9 @@ std::string Maps::Tiles::String() const
        << "passable from   : " << ( tilePassable ? Direction::String( tilePassable ) : "nowhere" );
 
     os << std::endl
-       << "quantity 1      : " << static_cast<int>( quantity1 ) << std::endl
-       << "quantity 2      : " << static_cast<int>( quantity2 ) << std::endl
-       << "add. metadata   : " << additionalMetadata << std::endl;
+       << "metadata value 1: " << _metadata[0] << std::endl
+       << "metadata value 2: " << _metadata[1] << std::endl
+       << "metadata value 3: " << _metadata[2] << std::endl;
 
     if ( objectType == MP2::OBJ_BOAT )
         os << "boat owner color: " << Color::String( _boatOwnerColor ) << std::endl;
@@ -1629,7 +1637,7 @@ std::string Maps::Tiles::String() const
     case MP2::OBJ_HALFLING_HOLE:
     case MP2::OBJ_PEASANT_HUT:
     case MP2::OBJ_MONSTER:
-        os << "monster count   : " << MonsterCount() << std::endl;
+        os << "monster count   : " << getMonsterCountFromTile( *this ) << std::endl;
         break;
     case MP2::OBJ_HEROES: {
         const Heroes * hero = GetHeroes();
@@ -2015,6 +2023,8 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
     case MP2::OBJ_NON_ACTION_EXPANSION_OBJECT:
     case MP2::OBJ_EXPANSION_DWELLING:
     case MP2::OBJ_EXPANSION_OBJECT: {
+        // The type of expansion action object or dwelling is stored in object metadata.
+        // However, we just ignore it.
         MP2::MapObjectType objectType = getLoyaltyObject( tile._objectIcnType, tile._imageIndex );
         if ( objectType != MP2::OBJ_NONE ) {
             tile.SetObject( objectType );
@@ -2074,7 +2084,7 @@ bool Maps::Tiles::isCaptureObjectProtected() const
         return false;
     }
 
-    return QuantityTroop().isValid();
+    return getTroopFromTile( *this ).isValid();
 }
 
 void Maps::Tiles::Remove( uint32_t uniqID )
@@ -2248,7 +2258,7 @@ void Maps::Tiles::RestoreAbandonedMine( Tiles & tile, const int resource )
 
     assert( resourceCount.has_value() && resourceCount > 0U );
 
-    tile.QuantitySetResource( resource, resourceCount.value() );
+    setResourceOnTile( tile, resource, resourceCount.value() );
 
     auto restoreLeftSprite = [resource]( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex ) {
         if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 6 ) {
@@ -2338,72 +2348,6 @@ void Maps::Tiles::RestoreAbandonedMine( Tiles & tile, const int resource )
                 upperRightTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
             }
         }
-    }
-}
-
-void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
-{
-    Artifact art;
-
-    switch ( tile.GetObject() ) {
-    case MP2::OBJ_RANDOM_ARTIFACT:
-        art = Artifact::Rand( Artifact::ART_LEVEL_ALL_NORMAL );
-        break;
-    case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
-        art = Artifact::Rand( Artifact::ART_LEVEL_TREASURE );
-        break;
-    case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
-        art = Artifact::Rand( Artifact::ART_LEVEL_MINOR );
-        break;
-    case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
-        art = Artifact::Rand( Artifact::ART_LEVEL_MAJOR );
-        break;
-    default:
-        return;
-    }
-
-    if ( !art.isValid() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set an artifact over a random artifact on tile " << tile.GetIndex() )
-        return;
-    }
-
-    tile.SetObject( MP2::OBJ_ARTIFACT );
-
-    uint32_t uidArtifact = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNARTI );
-    if ( uidArtifact == 0 ) {
-        uidArtifact = tile._uid;
-    }
-
-    static_assert( std::is_same_v<decltype( updateTileById ), void( Tiles &, uint32_t, uint8_t )>, "Type of updateTileById() has been changed, check the logic below" );
-
-    const uint32_t artSpriteIndex = art.IndexSprite();
-    assert( artSpriteIndex > std::numeric_limits<uint8_t>::min() && artSpriteIndex <= std::numeric_limits<uint8_t>::max() );
-
-    updateTileById( tile, uidArtifact, static_cast<uint8_t>( artSpriteIndex ) );
-
-    // replace artifact shadow
-    if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), uidArtifact, static_cast<uint8_t>( artSpriteIndex - 1 ) );
-    }
-}
-
-void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
-{
-    tile.SetObject( MP2::OBJ_RESOURCE );
-
-    const uint8_t resourceSprite = Resource::GetIndexSprite( Resource::Rand( true ) );
-
-    uint32_t uidResource = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNRSRC );
-    if ( uidResource == 0 ) {
-        uidResource = tile._uid;
-    }
-
-    updateTileById( tile, uidResource, resourceSprite );
-
-    // Replace shadow of the resource.
-    if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        assert( resourceSprite > 0 );
-        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), uidResource, resourceSprite - 1 );
     }
 }
 
@@ -3075,6 +3019,16 @@ bool Maps::Tiles::isDetachedObject() const
     return false;
 }
 
+void Maps::Tiles::swap( TilesAddon & addon ) noexcept
+{
+    std::swap( addon._objectIcnType, _objectIcnType );
+    std::swap( addon._imageIndex, _imageIndex );
+    std::swap( addon._uid, _uid );
+    std::swap( addon._layerType, _layerType );
+    std::swap( addon._hasObjectAnimation, _hasObjectAnimation );
+    std::swap( addon._isMarkedAsRoad, _isMarkedAsRoad );
+}
+
 StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 {
     using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
@@ -3121,8 +3075,8 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 
     return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid
                << static_cast<ObjectIcnTypeUnderlyingType>( tile._objectIcnType ) << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex
-               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile.quantity1 << tile.quantity2 << tile.additionalMetadata
-               << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._layerType << tile._boatOwnerColor;
+               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile._metadata << tile.heroID << tile.tileIsRoad
+               << tile.addons_level1 << tile.addons_level2 << tile._layerType << tile._boatOwnerColor;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
@@ -3176,76 +3130,37 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1001_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1001_RELEASE ) {
-        if ( mainObjectType == 128 ) {
-            // This is an old Sea Chest object type.
-            mainObjectType = MP2::OBJ_SEA_CHEST;
-        }
-        else if ( mainObjectType == 235 ) {
-            // This is an old non-action Stables object type.
-            mainObjectType = MP2::OBJ_NON_ACTION_STABLES;
-        }
-        else if ( mainObjectType == 241 ) {
-            // This is an old action Stables object type.
-            mainObjectType = MP2::OBJ_STABLES;
-        }
-        else if ( mainObjectType == 234 ) {
-            // This is an old non-action Alchemist Tower object type.
-            mainObjectType = MP2::OBJ_NON_ACTION_ALCHEMIST_TOWER;
-        }
-        else if ( mainObjectType == 240 ) {
-            // This is an old action Alchemist Tower object type.
-            mainObjectType = MP2::OBJ_ALCHEMIST_TOWER;
-        }
-        else if ( mainObjectType == 118 ) {
-            // This is an old non-action The Hut of Magi object type.
-            mainObjectType = MP2::OBJ_NON_ACTION_HUT_OF_MAGI;
-        }
-        else if ( mainObjectType == 238 ) {
-            // This is an old action The Hut of Magi object type.
-            mainObjectType = MP2::OBJ_HUT_OF_MAGI;
-        }
-        else if ( mainObjectType == 119 ) {
-            // This is an old non-action The Eye of Magi object type.
-            mainObjectType = MP2::OBJ_NON_ACTION_EYE_OF_MAGI;
-        }
-        else if ( mainObjectType == 239 ) {
-            // This is an old action The Eye of Magi object type.
-            mainObjectType = MP2::OBJ_EYE_OF_MAGI;
-        }
-        else if ( mainObjectType == 233 ) {
-            // This is an old non-action Reefs object type.
-            mainObjectType = MP2::OBJ_REEFS;
-        }
-        else if ( mainObjectType == 65 ) {
-            // This is an old non-action Thatched Hut object type.
-            mainObjectType = MP2::OBJ_NON_ACTION_PEASANT_HUT;
-        }
-        else if ( mainObjectType == 193 ) {
-            // This is an old action Thatched Hut object type.
-            mainObjectType = MP2::OBJ_PEASANT_HUT;
-        }
-        else if ( mainObjectType == 117 ) {
-            // This is an old non-action Sirens object type.
-            mainObjectType = MP2::OBJ_NON_ACTION_SIRENS;
-        }
-        else if ( mainObjectType == 237 ) {
-            // This is an old action Sirens object type.
-            mainObjectType = MP2::OBJ_SIRENS;
-        }
-        else if ( mainObjectType == 116 ) {
-            // This is an old non-action Mermaid object type.
-            mainObjectType = MP2::OBJ_NON_ACTION_MERMAID;
-        }
-        else if ( mainObjectType == 236 ) {
-            // This is an old non-action Mermaid object type.
-            mainObjectType = MP2::OBJ_MERMAID;
-        }
+        mainObjectType = Tiles::convertOldMainObjectType( mainObjectType );
     }
 
     tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
 
-    msg >> tile._fogColors >> tile.quantity1 >> tile.quantity2 >> tile.additionalMetadata >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2
-        >> tile._layerType;
+    msg >> tile._fogColors;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1004_RELEASE ) {
+        uint8_t quantity1 = 0;
+        uint8_t quantity2 = 0;
+        uint32_t additionalMetadata = 0;
+
+        msg >> quantity1 >> quantity2 >> additionalMetadata;
+
+        tile.quantityIntoMetadata( quantity1, quantity2, additionalMetadata );
+    }
+    else {
+        // We want to verify the size of array being present in the file.
+        std::vector<uint32_t> temp;
+        msg >> temp;
+
+        if ( tile._metadata.size() != temp.size() ) {
+            // This is a corrupted file!
+            assert( 0 );
+        }
+        else {
+            std::copy_n( temp.begin(), tile._metadata.size(), tile._metadata.begin() );
+        }
+    }
+
+    msg >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2 >> tile._layerType;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1002_RELEASE, "Remove the check below." );
     if ( Game::GetVersionOfCurrentSaveFile() >= FORMAT_VERSION_1002_RELEASE ) {
@@ -3255,22 +3170,434 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     return msg;
 }
 
-int Maps::getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
+uint8_t Maps::Tiles::convertOldMainObjectType( const uint8_t mainObjectType )
 {
-    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == objectIcnType && 60 <= icnIndex && 102 >= icnIndex ) {
-        // 60, 66, 72, 78, 84, 90, 96, 102
-        return ( ( icnIndex - 60 ) / 6 ) + 1;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1001_RELEASE, "Remove this method." );
+
+    if ( mainObjectType == 128 ) {
+        // This is an old Sea Chest object type.
+        return MP2::OBJ_SEA_CHEST;
+    }
+    if ( mainObjectType == 235 ) {
+        // This is an old non-action Stables object type.
+        return MP2::OBJ_NON_ACTION_STABLES;
+    }
+    if ( mainObjectType == 241 ) {
+        // This is an old action Stables object type.
+        return MP2::OBJ_STABLES;
+    }
+    if ( mainObjectType == 234 ) {
+        // This is an old non-action Alchemist Tower object type.
+        return MP2::OBJ_NON_ACTION_ALCHEMIST_TOWER;
+    }
+    if ( mainObjectType == 240 ) {
+        // This is an old action Alchemist Tower object type.
+        return MP2::OBJ_ALCHEMIST_TOWER;
+    }
+    if ( mainObjectType == 118 ) {
+        // This is an old non-action The Hut of Magi object type.
+        return MP2::OBJ_NON_ACTION_HUT_OF_MAGI;
+    }
+    if ( mainObjectType == 238 ) {
+        // This is an old action The Hut of Magi object type.
+        return MP2::OBJ_HUT_OF_MAGI;
+    }
+    if ( mainObjectType == 119 ) {
+        // This is an old non-action The Eye of Magi object type.
+        return MP2::OBJ_NON_ACTION_EYE_OF_MAGI;
+    }
+    if ( mainObjectType == 239 ) {
+        // This is an old action The Eye of Magi object type.
+        return MP2::OBJ_EYE_OF_MAGI;
+    }
+    if ( mainObjectType == 233 ) {
+        // This is an old non-action Reefs object type.
+        return MP2::OBJ_REEFS;
+    }
+    if ( mainObjectType == 65 ) {
+        // This is an old non-action Thatched Hut object type.
+        return MP2::OBJ_NON_ACTION_PEASANT_HUT;
+    }
+    if ( mainObjectType == 193 ) {
+        // This is an old action Thatched Hut object type.
+        return MP2::OBJ_PEASANT_HUT;
+    }
+    if ( mainObjectType == 117 ) {
+        // This is an old non-action Sirens object type.
+        return MP2::OBJ_NON_ACTION_SIRENS;
+    }
+    if ( mainObjectType == 237 ) {
+        // This is an old action Sirens object type.
+        return MP2::OBJ_SIRENS;
+    }
+    if ( mainObjectType == 116 ) {
+        // This is an old non-action Mermaid object type.
+        return MP2::OBJ_NON_ACTION_MERMAID;
+    }
+    if ( mainObjectType == 236 ) {
+        // This is an old non-action Mermaid object type.
+        return MP2::OBJ_MERMAID;
     }
 
-    return 0;
+    return mainObjectType;
 }
 
-int Maps::getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
+void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata )
 {
-    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == objectIcnType && 110 <= icnIndex && 138 >= icnIndex ) {
-        // 110, 114, 118, 122, 126, 130, 134, 138
-        return ( ( icnIndex - 110 ) / 4 ) + 1;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove this method." );
+
+    // The object could be under a hero so ignore hero.
+    const MP2::MapObjectType objectType = GetObject( false );
+
+    if ( !MP2::isActionObject( objectType ) ) {
+        // A non-action object has no metadata.
+        return;
     }
 
-    return 0;
+    // Old format contained Gold values divided by 100 due to uint8_t limitation. We don't have such limitation anymore.
+
+    switch ( objectType ) {
+    // Alchemist Lab, Sawmill and Mines have first value as a resource type and the second value as resource count per day.
+    case MP2::OBJ_ALCHEMIST_LAB:
+    case MP2::OBJ_MINES:
+    case MP2::OBJ_SAWMILL:
+        _metadata[0] = quantityValue1;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
+
+        if ( _metadata[1] == 0 ) {
+            // This is a broken mine from old saves. Let's try to correct income.
+            if ( Funds{ static_cast<int>( _metadata[0] ), 1 }.GetValidItemsCount() == 1 ) {
+                const payment_t income = ProfitConditions::FromMine( static_cast<int>( _metadata[0] ) );
+                _metadata[1] = income.Get( static_cast<int>( _metadata[0] ) );
+            }
+            else {
+                // This is definitely not a mine.
+                SetObject( MP2::OBJ_NONE );
+            }
+        }
+
+        _metadata[2] = additionalMetadata;
+        break;
+
+    // Abandoned mine was mixed with Mines in the old save formats.
+    case MP2::OBJ_ABANDONED_MINE:
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1003_RELEASE ) {
+            _metadata[0] = quantityValue1;
+            _metadata[1] = quantityValue2;
+            _metadata[2] = additionalMetadata;
+        }
+        else {
+            _metadata[0] = ( static_cast<uint32_t>( quantityValue1 ) << 8 ) + quantityValue2;
+            _metadata[2] = additionalMetadata;
+        }
+        break;
+
+    // Monster dwellings always store only one value - the number of monsters.
+    case MP2::OBJ_AIR_ALTAR:
+    case MP2::OBJ_ARCHER_HOUSE:
+    case MP2::OBJ_BARROW_MOUNDS:
+    case MP2::OBJ_CAVE:
+    case MP2::OBJ_CITY_OF_DEAD:
+    case MP2::OBJ_DESERT_TENT:
+    case MP2::OBJ_DRAGON_CITY:
+    case MP2::OBJ_DWARF_COTTAGE:
+    case MP2::OBJ_EARTH_ALTAR:
+    case MP2::OBJ_EXCAVATION:
+    case MP2::OBJ_FIRE_ALTAR:
+    case MP2::OBJ_GOBLIN_HUT:
+    case MP2::OBJ_HALFLING_HOLE:
+    case MP2::OBJ_PEASANT_HUT:
+    case MP2::OBJ_RUINS:
+    case MP2::OBJ_TREE_CITY:
+    case MP2::OBJ_TREE_HOUSE:
+    case MP2::OBJ_TROLL_BRIDGE:
+    case MP2::OBJ_WAGON_CAMP:
+    case MP2::OBJ_WATCH_TOWER:
+    case MP2::OBJ_WATER_ALTAR:
+        _metadata[0] = ( static_cast<uint32_t>( quantityValue1 ) << 8 ) + quantityValue2;
+        break;
+
+    // Genie's Lamp must have some monsters inside otherwise this object should not exist on Adventure Map.
+    case MP2::OBJ_GENIE_LAMP:
+        _metadata[0] = ( static_cast<uint32_t>( quantityValue1 ) << 8 ) + quantityValue2;
+        assert( _metadata[0] > 0 );
+        break;
+
+    // Shrines as well as Pyramid always contain one type of spell.
+    case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+    case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+    case MP2::OBJ_SHRINE_THIRD_CIRCLE:
+    case MP2::OBJ_PYRAMID:
+        _metadata[0] = quantityValue1;
+        break;
+
+    // Monster object store the number of monsters (which must be bigger than 0) and join condition type.
+    case MP2::OBJ_MONSTER:
+        _metadata[0] = ( static_cast<uint32_t>( quantityValue1 ) << 8 ) + quantityValue2;
+        _metadata[2] = additionalMetadata;
+        break;
+
+    // Resource contains the type and the amount.
+    case MP2::OBJ_RESOURCE:
+        _metadata[0] = quantityValue1;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
+        break;
+
+    // Barrier and Traveler's Tent contain color.
+    case MP2::OBJ_BARRIER:
+    case MP2::OBJ_TRAVELLER_TENT:
+        _metadata[0] = quantityValue1;
+        break;
+
+    // Tree of Knowledge contains either nothing for free level up or the amount of required resources.
+    case MP2::OBJ_TREE_OF_KNOWLEDGE:
+        _metadata[0] = quantityValue1;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
+        break;
+
+    // Witch's Hut contains a basic level of  a secondary skill.
+    case MP2::OBJ_WITCHS_HUT:
+        _metadata[0] = quantityValue1;
+        break;
+
+    // Magic Garden and Water Wheel either contain nothing when it was visited or some resources.
+    case MP2::OBJ_MAGIC_GARDEN:
+    case MP2::OBJ_WATER_WHEEL:
+        _metadata[0] = quantityValue1;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
+        break;
+
+    // Skeleton contains an artifact.
+    case MP2::OBJ_SKELETON:
+        _metadata[0] = quantityValue1;
+        break;
+
+    // Lean-To contains one resource type and its amount.
+    case MP2::OBJ_LEAN_TO:
+        _metadata[0] = quantityValue1;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
+        break;
+
+    // Wagon can contain either an artifact or a resource.
+    case MP2::OBJ_WAGON:
+        if ( quantityValue2 > 0 ) {
+            _metadata[0] = Artifact::UNKNOWN;
+            _metadata[1] = quantityValue1;
+            if ( quantityValue1 == Resource::GOLD ) {
+                _metadata[2] = quantityValue2 * 100;
+            }
+            else {
+                _metadata[2] = quantityValue2;
+            }
+        }
+        else {
+            _metadata[0] = quantityValue1;
+        }
+        break;
+
+    // Flotsam can contain Wood and Gold.
+    case MP2::OBJ_FLOTSAM:
+        _metadata[0] = quantityValue1;
+        _metadata[1] = quantityValue2 * 100;
+        break;
+
+    // Treasure and Sea Chests can contain an artifact and gold.
+    case MP2::OBJ_GRAVEYARD:
+    case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_TREASURE_CHEST:
+        _metadata[0] = quantityValue1;
+        _metadata[1] = quantityValue2 * 100;
+        break;
+
+    // Derelict Ship always has only Gold.
+    case MP2::OBJ_DERELICT_SHIP:
+        _metadata[0] = quantityValue1;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
+        break;
+
+    // Daemon Cave is tricky: it can contain experience, gold and artifact.
+    case MP2::OBJ_DAEMON_CAVE:
+        _metadata[0] = quantityValue1;
+        _metadata[1] = ( 0x0f & quantityValue2 ) * 100;
+        _metadata[2] = ( quantityValue2 >> 4 );
+        break;
+
+    // Campfire contains some random resources and gold which has the same value as resource but multiplied by 100.
+    case MP2::OBJ_CAMPFIRE:
+        _metadata[0] = quantityValue1;
+        _metadata[1] = quantityValue2;
+        break;
+
+    // Windmill contains some resources.
+    case MP2::OBJ_WINDMILL:
+        _metadata[0] = quantityValue1;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
+        break;
+
+    // Artifact contains artifact ID, possible resources and condition to grab it.
+    case MP2::OBJ_ARTIFACT:
+        _metadata[0] = quantityValue1;
+        _metadata[1] = ( 0x0f & quantityValue2 );
+        _metadata[2] = ( quantityValue2 >> 4 );
+        break;
+
+    // Shipwreck Survivor has an artifact.
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
+        _metadata[0] = quantityValue1;
+        break;
+
+    // Shipwreck contains Gold, Artifact and winning conditions. However, old format did not store the amount of Gold, we need to add it.
+    case MP2::OBJ_SHIPWRECK:
+        _metadata[0] = quantityValue1;
+        _metadata[2] = ( quantityValue2 >> 4 );
+        switch ( static_cast<ShipwreckCaptureCondition>( _metadata[2] ) ) {
+        case ShipwreckCaptureCondition::EMPTY:
+            assert( _metadata[0] == Artifact::UNKNOWN );
+            break;
+        case ShipwreckCaptureCondition::FIGHT_10_GHOSTS_AND_GET_1000_GOLD:
+            _metadata[1] = 1000;
+            break;
+        case ShipwreckCaptureCondition::FIGHT_15_GHOSTS_AND_GET_2000_GOLD:
+            _metadata[1] = 2000;
+            break;
+        case ShipwreckCaptureCondition::FIGHT_25_GHOSTS_AND_GET_5000_GOLD:
+            _metadata[1] = 5000;
+            break;
+        case ShipwreckCaptureCondition::FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT:
+            _metadata[1] = 2000;
+            break;
+        default:
+            // This is an invalid case!
+            assert( 0 );
+            break;
+        }
+
+        break;
+
+    // These objects should not have any metadata.
+    case MP2::OBJ_ACTION_CACTUS:
+    case MP2::OBJ_ACTION_COAST:
+    case MP2::OBJ_ACTION_CRATER:
+    case MP2::OBJ_ACTION_DEAD_TREE:
+    case MP2::OBJ_ACTION_DUNE:
+    case MP2::OBJ_ACTION_FLOWERS:
+    case MP2::OBJ_ACTION_LAVAPOOL:
+    case MP2::OBJ_ACTION_MANDRAKE:
+    case MP2::OBJ_ACTION_MOSSY_ROCK:
+    case MP2::OBJ_ACTION_MOUND:
+    case MP2::OBJ_ACTION_MOUNTAINS:
+    case MP2::OBJ_ACTION_NOTHING_SPECIAL:
+    case MP2::OBJ_ACTION_REEFS:
+    case MP2::OBJ_ACTION_ROCK:
+    case MP2::OBJ_ACTION_SHRUB:
+    case MP2::OBJ_ACTION_STUMP:
+    case MP2::OBJ_ACTION_TAR_PIT:
+    case MP2::OBJ_ACTION_TREES:
+    case MP2::OBJ_ACTION_VOLCANO:
+    case MP2::OBJ_ACTION_WATER_LAKE:
+    case MP2::OBJ_ALCHEMIST_TOWER:
+    case MP2::OBJ_ARENA:
+    case MP2::OBJ_ARTESIAN_SPRING:
+    case MP2::OBJ_BOAT:
+    case MP2::OBJ_BUOY:
+    case MP2::OBJ_EYE_OF_MAGI:
+    case MP2::OBJ_FAERIE_RING:
+    case MP2::OBJ_FORT:
+    case MP2::OBJ_FOUNTAIN:
+    case MP2::OBJ_FREEMANS_FOUNDRY:
+    case MP2::OBJ_GAZEBO:
+    case MP2::OBJ_HILL_FORT:
+    case MP2::OBJ_HUT_OF_MAGI:
+    case MP2::OBJ_IDOL:
+    case MP2::OBJ_LIGHTHOUSE:
+    case MP2::OBJ_MAGELLANS_MAPS:
+    case MP2::OBJ_MAGIC_WELL:
+    case MP2::OBJ_MERCENARY_CAMP:
+    case MP2::OBJ_MERMAID:
+    case MP2::OBJ_OASIS:
+    case MP2::OBJ_OBELISK:
+    case MP2::OBJ_OBSERVATION_TOWER:
+    case MP2::OBJ_ORACLE:
+    case MP2::OBJ_SIRENS:
+    case MP2::OBJ_STABLES:
+    case MP2::OBJ_STANDING_STONES:
+    case MP2::OBJ_STONE_LITHS:
+    case MP2::OBJ_TEMPLE:
+    case MP2::OBJ_TRADING_POST:
+    case MP2::OBJ_WATERING_HOLE:
+    case MP2::OBJ_WHIRLPOOL:
+    case MP2::OBJ_WITCH_DOCTORS_HUT:
+    case MP2::OBJ_XANADU:
+        break;
+
+    // Metadata for these objects is stored outside this class.
+    case MP2::OBJ_BOTTLE:
+    case MP2::OBJ_CASTLE:
+    case MP2::OBJ_EVENT:
+    case MP2::OBJ_HEROES:
+    case MP2::OBJ_JAIL:
+    case MP2::OBJ_SIGN:
+    case MP2::OBJ_SPHINX:
+        assert( MP2::doesObjectNeedExtendedMetadata( objectType ) );
+        break;
+
+    // These objects must not even exist in a save file.
+    case MP2::OBJ_EXPANSION_DWELLING:
+    case MP2::OBJ_EXPANSION_OBJECT:
+    case MP2::OBJ_RANDOM_ARTIFACT:
+    case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
+    case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
+    case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
+    case MP2::OBJ_RANDOM_CASTLE:
+    case MP2::OBJ_RANDOM_MONSTER:
+    case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
+    case MP2::OBJ_RANDOM_MONSTER_STRONG:
+    case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
+    case MP2::OBJ_RANDOM_MONSTER_WEAK:
+    case MP2::OBJ_RANDOM_RESOURCE:
+    case MP2::OBJ_RANDOM_TOWN:
+    case MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT:
+        assert( 0 );
+        break;
+
+    default:
+        // Did you add a new action object on Adventure Map? Add the logic!
+        assert( 0 );
+        break;
+    }
 }

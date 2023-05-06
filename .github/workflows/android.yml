@@ -23,6 +23,10 @@ jobs:
         shell: bash
     steps:
     - uses: actions/checkout@v3
+    - uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 17
     - name: Install dependencies
       run: |
         bash script/android/install_packages.sh
@@ -59,12 +63,17 @@ jobs:
       if: ${{ github.event_name == 'pull_request' }}
       run: |
         cd android
-        ./gradlew app:lint
+        ./gradlew app:lint isotools:lint
     - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' && ( success() || failure() ) }}
       with:
-        name: android-lint-report
+        name: android-app-lint-report
         path: android/app/build/reports/
+    - uses: actions/upload-artifact@v3
+      if: ${{ github.event_name == 'pull_request' && ( success() || failure() ) }}
+      with:
+        name: android-isotools-lint-report
+        path: android/isotools/build/reports/
     - name: Create package
       run: |
         7z a -bb1 -tzip -- fheroes2_android.zip LICENSE changelog.txt fheroes2.aab fheroes2.apk ./docs/README.txt ./docs/README_android.md
