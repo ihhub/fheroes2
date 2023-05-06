@@ -52,7 +52,6 @@
 #include "image.h"
 #include "localevent.h"
 #include "logging.h"
-#include "game_mainmenu_ui.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
 #include "mus.h"

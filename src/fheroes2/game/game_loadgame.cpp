@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game.h"
+
 #include <cstddef>
 #include <cstdint>
 #include <memory>
@@ -34,7 +36,6 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dir.h"
-#include "game.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
 #include "game_mainmenu_ui.h"
@@ -43,7 +44,6 @@
 #include "image.h"
 #include "localevent.h"
 #include "logging.h"
-#include "game_mainmenu_ui.h"
 #include "mus.h"
 #include "screen.h"
 #include "settings.h"
