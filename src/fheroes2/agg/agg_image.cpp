@@ -24,6 +24,7 @@
 #include <array>
 #include <cassert>
 #include <cstring>
+#include <cmath>
 #include <initializer_list>
 #include <map>
 #include <memory>
@@ -3617,21 +3618,19 @@ namespace fheroes2
             Sprite & resizedIcn = _icnVsScaledSprite[icnId][index];
 
             const double scaleFactor = static_cast<double>( display.height() ) / Display::DEFAULT_HEIGHT;
-            const int32_t resizedWidth = static_cast<int32_t>( originalIcn.width() * scaleFactor + 0.5 );
-            const int32_t resizedHeight = static_cast<int32_t>( originalIcn.height() * scaleFactor + 0.5 );
+            const int32_t resizedWidth = std::lround( originalIcn.width() * scaleFactor );
+            const int32_t resizedHeight = std::lround( originalIcn.height() * scaleFactor );
             const int32_t offsetX = static_cast<int32_t>( display.width() - Display::DEFAULT_WIDTH * scaleFactor ) / 2;
 
             // Resize only if needed
             if ( resizedIcn.height() != resizedHeight ) {
                 resizedIcn.resize( resizedWidth, resizedHeight );
-                resizedIcn.setPosition( static_cast<int32_t>( originalIcn.x() * scaleFactor + 0.5 ) + offsetX,
-                                        static_cast<int32_t>( originalIcn.y() * scaleFactor + 0.5 ) );
+                resizedIcn.setPosition( std::lround( originalIcn.x() * scaleFactor ) + offsetX, std::lround( originalIcn.y() * scaleFactor ) );
                 Resize( originalIcn, resizedIcn, false );
             }
             else if ( resizedIcn.width() != resizedWidth ) {
                 // No need to resize but we have to update the offset.
-                resizedIcn.setPosition( static_cast<int32_t>( originalIcn.x() * scaleFactor + 0.5 ) + offsetX,
-                                        static_cast<int32_t>( originalIcn.y() * scaleFactor + 0.5 ) );
+                resizedIcn.setPosition( std::lround( originalIcn.x() * scaleFactor ) + offsetX, std::lround( originalIcn.y() * scaleFactor ) );
             }
 
             return resizedIcn;
