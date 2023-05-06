@@ -22,8 +22,6 @@
 
 #include <algorithm>
 #include <cstdint>
-#include <limits>
-#include <type_traits>
 
 #include "army.h"
 #include "maps_tiles.h"
