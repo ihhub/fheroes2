@@ -95,8 +95,8 @@ namespace fheroes2
             assert( mainMenuBackground.x() == 0 );
 
             renderWindowBackground( display, { 0, 0, display.width(), mainMenuBackground.y() } );
-            renderWindowBackground( display, { 0, mainMenuBackground.y() + mainMenuBackground.height(),
-                                               display.width(), display.height() - mainMenuBackground.y() - mainMenuBackground.height() } );
+            renderWindowBackground( display, { 0, mainMenuBackground.y() + mainMenuBackground.height(), display.width(),
+                                               display.height() - mainMenuBackground.y() - mainMenuBackground.height() } );
         }
     }
 }

@@ -364,8 +364,8 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
             if ( le.MouseCursor( settingsArea ) ) {
                 const int32_t doorOffsetY = static_cast<int32_t>( 55 * scale ) + offsetY;
-                fheroes2::Blit(
-                    highlightDoor, 0, doorOffsetY, display, highlightDoor.x(), highlightDoor.y() + doorOffsetY, highlightDoor.width(), highlightDoor.height() );
+                fheroes2::Blit( highlightDoor, 0, doorOffsetY, display, highlightDoor.x(), highlightDoor.y() + doorOffsetY, highlightDoor.width(),
+                                highlightDoor.height() );
             }
 
             display.render();
