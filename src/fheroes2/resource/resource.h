@@ -150,7 +150,7 @@ namespace Resource
     template <typename T, typename F, typename = typename std::enable_if_t<std::is_integral_v<T> || std::is_enum_v<T>>>
     void forEach( const T resources, const F & fn )
     {
-        const auto forEachLambda = [&fn]( const auto res ) {
+        const auto forEachImp = [&fn]( const auto res ) {
             constexpr int maxResourceIdBitNum = []() constexpr
             {
                 static_assert( std::is_enum_v<decltype( Resource::ALL )> );
@@ -182,10 +182,10 @@ namespace Resource
         };
 
         if constexpr ( std::is_enum_v<decltype( resources )> ) {
-            forEachLambda( static_cast<std::underlying_type_t<decltype( resources )>>( resources ) );
+            forEachImp( static_cast<std::underlying_type_t<decltype( resources )>>( resources ) );
         }
         else {
-            forEachLambda( resources );
+            forEachImp( resources );
         }
     }
 }
