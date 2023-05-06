@@ -29,6 +29,7 @@
 #include <memory>
 #include <random>
 #include <set>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
