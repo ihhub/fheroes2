@@ -39,17 +39,6 @@
 class Heroes;
 class StreamBase;
 
-namespace fheroes2
-{
-    class Image;
-    struct ObjectRenderingInfo;
-}
-
-namespace Interface
-{
-    class GameArea;
-}
-
 namespace Maps
 {
     enum ObjectLayerType : uint8_t
@@ -178,8 +167,6 @@ namespace Maps
             return 30 > _terrainImageIndex;
         }
 
-        const fheroes2::Image & GetTileSurface() const;
-
         bool isSameMainObject( const MP2::MapObjectType objectType ) const
         {
             return objectType == _mainObjectType;
@@ -262,10 +249,6 @@ namespace Maps
 
         void removeOwnershipFlag( const MP2::MapObjectType objectType );
 
-        static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area );
-        void redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area ) const;
-        void redrawTopLayerObject( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon ) const;
-
         // Determine the fog direction in the area between min and max positions for given player(s) color code and store it in corresponding tile data.
         static void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color );
         // Return fog direction of tile. A tile without fog returns "Direction::UNKNOWN".
@@ -273,18 +256,6 @@ namespace Maps
         {
             return _fogDirection;
         }
-
-        void drawFog( fheroes2::Image & dst, const Interface::GameArea & area ) const;
-        void RedrawPassable( fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area ) const;
-        void redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level ) const;
-
-        void drawByObjectIcnType( fheroes2::Image & output, const Interface::GameArea & area, const MP2::ObjectIcnType objectIcnType ) const;
-
-        std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile() const;
-        std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile() const;
-        std::vector<fheroes2::ObjectRenderingInfo> getBoatSpritesPerTile() const;
-        std::vector<fheroes2::ObjectRenderingInfo> getBoatShadowSpritesPerTile() const;
-        std::vector<fheroes2::ObjectRenderingInfo> getMineGuardianSpritesPerTile() const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & mt );
         void AddonsPushLevel1( const MP2::mp2addon_t & ma );
@@ -345,6 +316,16 @@ namespace Maps
             return _metadata;
         }
 
+        uint8_t getTerrainFlags() const
+        {
+            return _terrainFlags;
+        }
+
+        uint16_t getTerrainImageIndex() const
+        {
+            return _terrainImageIndex;
+        }
+
         Heroes * GetHeroes() const;
         void SetHeroes( Heroes * );
 
@@ -363,7 +344,6 @@ namespace Maps
         bool containsSprite( const MP2::ObjectIcnType objectIcnType, const uint32_t imageIdx ) const;
 
         static std::pair<int, int> ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
-        static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
 
         // Restores an abandoned mine whose main tile is 'tile', turning it into an ordinary mine that brings
         // resources of type 'resource'. This method updates all sprites and sets object types for non-action
@@ -398,9 +378,6 @@ namespace Maps
 
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );
-
-        static void renderAddonObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const TilesAddon & addon );
-        void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset ) const;
 
         static uint8_t convertOldMainObjectType( const uint8_t mainObjectType );
 
