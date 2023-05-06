@@ -112,8 +112,8 @@ namespace
 
         // Render possible animation image.
         // TODO: quantity2 is used in absolutely incorrect way! Fix all the logic for it. As of now (quantity2 != 0) expression is used only for Magic Garden.
-        const uint32_t mainObjectAnimationIndex = ICN::AnimationFrame( mainObjectIcn, tile.GetObjectSpriteIndex(), Game::getAdventureMapAnimationIndex(),
-                                                                       tile.metadata()[1] != 0 );
+        const uint32_t mainObjectAnimationIndex
+            = ICN::AnimationFrame( mainObjectIcn, tile.GetObjectSpriteIndex(), Game::getAdventureMapAnimationIndex(), tile.metadata()[1] != 0 );
         if ( mainObjectAnimationIndex > 0 ) {
             const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( mainObjectIcn, mainObjectAnimationIndex );
 
@@ -263,7 +263,8 @@ namespace
         else {
             const fheroes2::Point & mp = Maps::GetPoint( tileIndex );
             const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
-            spriteIndices.second = monsterIndex * 9 + 1 + monsterAnimationSequence[( Game::getAdventureMapAnimationIndex() + mp.x * mp.y ) % monsterAnimationSequence.size()];
+            spriteIndices.second
+                = monsterIndex * 9 + 1 + monsterAnimationSequence[( Game::getAdventureMapAnimationIndex() + mp.x * mp.y ) % monsterAnimationSequence.size()];
         }
         return spriteIndices;
     }
@@ -356,7 +357,6 @@ namespace Maps
 
         // TODO: Cache all directions into a map: have an array which represents all conditions within this method. The index can be 'fogDirection', the value is index.
         // And another array to store revert flag.
-        
 
         if ( DIRECTION_ALL == fogDirection ) {
             const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
@@ -448,7 +448,8 @@ namespace Maps
             else if ( contains( fogDirection, Direction::LEFT | Direction::TOP_LEFT | Direction::TOP ) && !( fogDirection & ( Direction::BOTTOM | Direction::RIGHT ) ) ) {
                 index = 12;
             }
-            else if ( contains( fogDirection, Direction::RIGHT | Direction::TOP_RIGHT | Direction::TOP ) && !( fogDirection & ( Direction::BOTTOM | Direction::LEFT ) ) ) {
+            else if ( contains( fogDirection, Direction::RIGHT | Direction::TOP_RIGHT | Direction::TOP )
+                      && !( fogDirection & ( Direction::BOTTOM | Direction::LEFT ) ) ) {
                 index = 12;
                 revert = true;
             }
@@ -573,18 +574,18 @@ namespace Maps
 
     void redrawPassable( const Tiles & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area )
     {
-    #ifdef WITH_DEBUG
+#ifdef WITH_DEBUG
         if ( tile.isFog( friendColors ) ) {
             area.BlitOnTile( dst, getDebugFogImage(), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }
         if ( 0 == tile.GetPassable() || DIRECTION_ALL != tile.GetPassable() ) {
             area.BlitOnTile( dst, PassableViewSurface( tile.GetPassable() ), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }
-    #else
+#else
         (void)dst;
         (void)area;
         (void)friendColors;
-    #endif
+#endif
     }
 
     void redrawBottomLayerObjects( const Tiles & tile, fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level )
@@ -756,7 +757,8 @@ namespace Maps
         const uint32_t icnIndex = spriteIndex % 128;
         const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( icnId, icnIndex );
 
-        const fheroes2::Point boatSpriteOffset( ( isReflected ? ( TILEWIDTH + 1 - boatSprite.x() - boatSprite.width() ) : boatSprite.x() ), boatSprite.y() + TILEWIDTH - 11 );
+        const fheroes2::Point boatSpriteOffset( ( isReflected ? ( TILEWIDTH + 1 - boatSprite.x() - boatSprite.width() ) : boatSprite.x() ),
+                                                boatSprite.y() + TILEWIDTH - 11 );
 
         std::vector<fheroes2::Point> outputSquareInfo;
         std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
@@ -766,7 +768,8 @@ namespace Maps
 
         std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
         for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, isReflected, static_cast<uint8_t>( 255 ) );
+            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, isReflected,
+                                     static_cast<uint8_t>( 255 ) );
         }
 
         return objectInfo;
@@ -811,7 +814,8 @@ namespace Maps
         case Spell::SETAGUARDIAN:
         case Spell::SETFGUARDIAN:
         case Spell::SETWGUARDIAN: {
-            static_assert( Spell::SETAGUARDIAN - Spell::SETEGUARDIAN == 1 && Spell::SETFGUARDIAN - Spell::SETEGUARDIAN == 2 && Spell::SETWGUARDIAN - Spell::SETEGUARDIAN == 3,
+            static_assert( Spell::SETAGUARDIAN - Spell::SETEGUARDIAN == 1 && Spell::SETFGUARDIAN - Spell::SETEGUARDIAN == 2
+                               && Spell::SETWGUARDIAN - Spell::SETEGUARDIAN == 3,
                            "Why are you changing the order of spells?! Be extremely careful of what you are doing" );
 
             const int icnId{ ICN::OBJNXTRA };
