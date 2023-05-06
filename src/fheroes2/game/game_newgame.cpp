@@ -77,7 +77,7 @@ namespace
         const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
 
         const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
-        const uint32_t panelXPos = back.width() - ( panel.width() + panelOffset );
+        const uint32_t panelXPos = back.width() + back.x() - ( panel.width() + panelOffset );
         fheroes2::Blit( panel, fheroes2::Display::instance(), panelXPos, panelOffset );
 
         const int32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
