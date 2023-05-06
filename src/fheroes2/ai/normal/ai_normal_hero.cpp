@@ -907,9 +907,9 @@ namespace AI
 
             assert( resourceType != Resource::UNKNOWN && resourceAmount != 0 );
 
-            // Since mines constantly bring resources, they are valuable objects.
-            // Let's evaluate them in proportion to the amount of resources they bring in 3 days (TODO: a fairly arbitrary period).
-            return resourceAmount * getResourcePriorityModifier( resourceType ) * 3;
+            // Since mines constantly bring resources, they are valuable objects. Let's evaluate them in proportion to the amount of resources they
+            // bring in 2 days (they should be more valuable than chests or resource piles, but less valuable in general than castles or heroes).
+            return resourceAmount * getResourcePriorityModifier( resourceType ) * 2;
         }
         case MP2::OBJ_ARTIFACT: {
             const Artifact art = getArtifactFromTile( tile );
