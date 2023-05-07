@@ -1397,7 +1397,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1004_RELEASE ) {
-        w._oldTileQuantityData.resize( width * height );
+        w._oldTileQuantityData.resize( static_cast<size_t>( width ) * height );
     }
 
     msg >> w.vec_tiles >> w.vec_heroes;
