@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-01 11:22+0000\n"
+"POT-Creation-Date: 2023-05-07 10:26+0000\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -2703,6 +2703,19 @@ msgstr ""
 
 msgid "Are you sure you want to dismiss this army?"
 msgstr "Jsi si jist, že chceš jednotku propustit?"
+
+msgid "Upgrade"
+msgstr ""
+
+#, fuzzy
+msgid "Upgrade your troops."
+msgstr "Nemůžeš si dovolit vylepšit své jednotky!"
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
 
 msgid "Followers"
 msgstr "Následovníci"

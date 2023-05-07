@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-01 11:22+0000\n"
+"POT-Creation-Date: 2023-05-07 10:26+0000\n"
 "PO-Revision-Date: 2023-04-27 22:22+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2642,6 +2642,19 @@ msgstr ""
 
 msgid "Are you sure you want to dismiss this army?"
 msgstr "Ngươi có chắc chắn muốn giải tán đội quân này không?"
+
+msgid "Upgrade"
+msgstr ""
+
+#, fuzzy
+msgid "Upgrade your troops."
+msgstr "Ngươi không đủ khả năng để nâng cấp quân đội của mình!"
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
 
 msgid "Followers"
 msgstr ""
