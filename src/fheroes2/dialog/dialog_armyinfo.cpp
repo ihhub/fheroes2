@@ -377,7 +377,7 @@ namespace
         if ( !descriptions.empty() ) {
             const int32_t descriptionWidth = 210;
             const int32_t maximumRowCount = 3;
-            const int32_t rowHeight = fheroes2::Text( std::string(), fheroes2::FontType::smallWhite() ).height();
+            const int32_t rowHeight = fheroes2::getFontHeight( fheroes2::FontSize::SMALL );
 
             bool asSolidText = true;
             if ( descriptions.size() <= static_cast<size_t>( maximumRowCount ) ) {
