@@ -380,6 +380,10 @@ namespace Maps
 
         static void updateTileById( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
 
+        // The old code was using weird quantity based values which were very hard to understand.
+        // Since we must have backwards compatibility we need to do the conversion.
+        void quantityIntoMetadata( const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata );
+
     private:
         TilesAddon * getAddonWithFlag( const uint32_t uid );
 
@@ -403,10 +407,6 @@ namespace Maps
         void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset ) const;
 
         static uint8_t convertOldMainObjectType( const uint8_t mainObjectType );
-
-        // The old code was using weird quantity based values which were very hard to understand.
-        // Since we must have backwards compatibility we need to do the conversion.
-        void quantityIntoMetadata( const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata );
 
         Addons addons_level1; // bottom layer
         Addons addons_level2; // top layer

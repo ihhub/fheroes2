@@ -3144,7 +3144,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 
         msg >> quantity1 >> quantity2 >> additionalMetadata;
 
-        tile.quantityIntoMetadata( quantity1, quantity2, additionalMetadata );
+        world.setOldTileQuantityData( tile.GetIndex(), quantity1, quantity2, additionalMetadata );
     }
     else {
         // We want to verify the size of array being present in the file.

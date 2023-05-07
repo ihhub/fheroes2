@@ -351,6 +351,8 @@ public:
 
     bool isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const;
 
+    void setOldTileQuantityData( const int32_t tileIndex, const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata );
+
 private:
     World() = default;
 
@@ -398,6 +400,8 @@ private:
 
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
+
+    std::vector<std::tuple<uint8_t, uint8_t, uint32_t>> _oldTileQuantityData;
 };
 
 StreamBase & operator<<( StreamBase &, const CapturedObject & );
