@@ -3539,10 +3539,10 @@ msgid ""
 "Congratulations!\n"
 "\n"
 "Days: %{days}\n"
-msgstr "Gratulacje!"
+msgstr ""
+"Gratulacje!\n"
 "\n"
 "Liczba dni: %{days}\n"
-
 
 msgid ""
 "\n"
