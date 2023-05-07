@@ -37,7 +37,6 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -46,19 +45,20 @@ public final class ToolsetActivity extends AppCompatActivity
 {
     public static final class ToolsetActivityViewModel extends ViewModel
     {
-        public static final int RESULT_NONE = 0;
-        public static final int RESULT_SUCCESS = 1;
-        public static final int RESULT_NO_ASSETS = 2;
-        public static final int RESULT_ERROR = 3;
+        private static final int RESULT_NONE = 0;
+        private static final int RESULT_SUCCESS = 1;
+        private static final int RESULT_NO_ASSETS = 2;
+        private static final int RESULT_ERROR = 3;
 
         private static final class Status
         {
-            public boolean isHoMM2AssetsPresent;
-            public boolean isBackgroundTaskExecuting;
-            public final int backgroundTaskResult;
-            public final String backgroundTaskError;
+            private boolean isHoMM2AssetsPresent;
+            private boolean isBackgroundTaskExecuting;
+            private final int backgroundTaskResult;
+            private final String backgroundTaskError;
 
-            Status( final boolean isHoMM2AssetsPresent, final boolean isBackgroundTaskExecuting, final int backgroundTaskResult, final String backgroundTaskError )
+            private Status( final boolean isHoMM2AssetsPresent, final boolean isBackgroundTaskExecuting, final int backgroundTaskResult,
+                            final String backgroundTaskError )
             {
                 this.isHoMM2AssetsPresent = isHoMM2AssetsPresent;
                 this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;
@@ -66,7 +66,7 @@ public final class ToolsetActivity extends AppCompatActivity
                 this.backgroundTaskError = backgroundTaskError;
             }
 
-            Status setIsHoMM2AssetsPresent( final boolean isHoMM2AssetsPresent )
+            private Status setIsHoMM2AssetsPresent( final boolean isHoMM2AssetsPresent )
             {
                 this.isHoMM2AssetsPresent = isHoMM2AssetsPresent;
 
@@ -74,7 +74,7 @@ public final class ToolsetActivity extends AppCompatActivity
             }
 
             @SuppressWarnings( "SameParameterValue" )
-            Status setIsBackgroundTaskExecuting( final boolean isBackgroundTaskExecuting )
+            private Status setIsBackgroundTaskExecuting( final boolean isBackgroundTaskExecuting )
             {
                 this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;
 
@@ -84,19 +84,14 @@ public final class ToolsetActivity extends AppCompatActivity
 
         private final MutableLiveData<Status> liveStatus = new MutableLiveData<>( new Status( false, false, RESULT_NONE, "" ) );
 
-        public LiveData<Status> getLiveStatus()
-        {
-            return liveStatus;
-        }
-
-        public void validateAssets( final File externalFilesDir )
+        private void validateAssets( final File externalFilesDir )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
             liveStatus.setValue( status.setIsHoMM2AssetsPresent( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ) ) );
         }
 
-        public void extractAssets( final File externalFilesDir, final File cacheDir, final Uri zipFileUri, final ContentResolver contentResolver )
+        private void extractAssets( final File externalFilesDir, final File cacheDir, final Uri zipFileUri, final ContentResolver contentResolver )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
@@ -139,7 +134,7 @@ public final class ToolsetActivity extends AppCompatActivity
         setContentView( R.layout.activity_toolset );
 
         viewModel = new ViewModelProvider( this ).get( ToolsetActivityViewModel.class );
-        viewModel.getLiveStatus().observe( this, this::updateUI );
+        viewModel.liveStatus.observe( this, this::updateUI );
     }
 
     @Override
