@@ -28,7 +28,6 @@
 
 #include "color.h"
 #include "mp2.h"
-#include "resource.h"
 
 class IndexObject : public std::pair<int32_t, int>
 {
@@ -66,21 +65,6 @@ public:
     bool isColor( int colors ) const
     {
         return ( colors & second ) != 0;
-    }
-};
-
-class ResourceCount : public std::pair<int, uint32_t>
-{
-public:
-    ResourceCount() = delete;
-
-    ResourceCount( int res, uint32_t count )
-        : std::pair<int, uint32_t>( res, count )
-    {}
-
-    bool isValid() const
-    {
-        return ( first & Resource::ALL ) && second;
     }
 };
 

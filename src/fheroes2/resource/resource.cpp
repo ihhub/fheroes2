@@ -35,7 +35,6 @@
 #include "icn.h"
 #include "image.h"
 #include "logging.h"
-#include "pairs.h"
 #include "rand.h"
 #include "screen.h"
 #include "serialize.h"
@@ -95,7 +94,9 @@ Funds::Funds( int rs, uint32_t count )
         break;
 
     default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" )
+        if ( count > 0 ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown resource is being added to Funds class. Ignore it." )
+        }
         break;
     }
 }
@@ -109,20 +110,6 @@ Funds::Funds( const cost_t & cost )
     , gems( cost.gems )
     , gold( cost.gold )
 {}
-
-Funds::Funds( const ResourceCount & rs )
-    : wood( 0 )
-    , mercury( 0 )
-    , ore( 0 )
-    , sulfur( 0 )
-    , crystal( 0 )
-    , gems( 0 )
-    , gold( 0 )
-{
-    int32_t * ptr = GetPtr( rs.first );
-    if ( ptr )
-        *ptr = rs.second;
-}
 
 int Resource::Rand( const bool includeGold )
 {
@@ -580,6 +567,41 @@ void Funds::Trim()
         gems = 0;
     if ( gold < 0 )
         gold = 0;
+}
+
+std::pair<int, int32_t> Funds::getFirstValidResource() const
+{
+    if ( wood > 0 ) {
+        return { Resource::WOOD, wood };
+    }
+
+    if ( ore > 0 ) {
+        return { Resource::ORE, ore };
+    }
+
+    if ( mercury > 0 ) {
+        return { Resource::MERCURY, mercury };
+    }
+
+    if ( sulfur > 0 ) {
+        return { Resource::SULFUR, sulfur };
+    }
+
+    if ( crystal > 0 ) {
+        return { Resource::CRYSTAL, crystal };
+    }
+
+    if ( gems > 0 ) {
+        return { Resource::GEMS, gems };
+    }
+
+    if ( gold > 0 ) {
+        return { Resource::GOLD, gold };
+    }
+
+    // We shouldn't reach this point. Make sure that you are calling this method for valid Funds.
+    assert( 0 );
+    return { Resource::UNKNOWN, 0 };
 }
 
 void Funds::Reset()
