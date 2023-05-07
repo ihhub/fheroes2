@@ -236,11 +236,11 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         restorer = std::make_unique<fheroes2::ImageRestorer>( display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height );
     }
 
-    // Fade-out game screen only for 640x480 resolution.
+    // Fade-out game screen only for 640x480 resolution and if 'renderBackgroundDialog' is false (we are replacing image in already opened dialog).
     const bool isDefaultScreenSize = display.isDefaultSize();
     const bool isFadeEnabled = Settings::isFadeEffectEnabled();
     if ( fade && isFadeEnabled && ( isDefaultScreenSize || !renderBackgroundDialog ) ) {
-        fheroes2::fadeOutDisplay( fadeRoi );
+        fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
     }
 
     AudioManager::PlayMusicAsync( MUS::FromRace( race ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
@@ -362,7 +362,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             display.updateNextRenderRoi( { fadeRoi.x - 2 * BORDERWIDTH, fadeRoi.y - BORDERWIDTH, fadeRoi.width + 3 * BORDERWIDTH, fadeRoi.height + 3 * BORDERWIDTH } );
         }
 
-        fheroes2::fadeInDisplay( fadeRoi, renderBackgroundDialog && !isDefaultScreenSize );
+        // Use half fade if game resolution is not 640x480.
+        fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
     }
     else {
         display.render();
@@ -397,7 +398,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
                 // Fade-out castle dialog.
                 if ( isFadeEnabled ) {
-                    fheroes2::fadeOutDisplay( fadeRoi, renderBackgroundDialog && !isDefaultScreenSize );
+                    fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
                 }
                 break;
             }
@@ -680,7 +681,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             if ( needFadeIn && isFadeEnabled ) {
                 needFadeIn = false;
 
-                fheroes2::fadeInDisplay( fadeRoi );
+                fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
             }
             else {
                 display.render();

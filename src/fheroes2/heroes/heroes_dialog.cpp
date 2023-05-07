@@ -80,7 +80,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     const bool isDefaultScreenSize = display.isDefaultSize();
     const bool isFadeEnabled = Settings::isFadeEffectEnabled();
     if ( fade && isFadeEnabled && ( isDefaultScreenSize || !renderBackgroundDialog ) ) {
-        fheroes2::fadeOutDisplay( fadeRoi );
+        fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
     }
 
     fheroes2::Point cur_pt = { fadeRoi.x, fadeRoi.y };
@@ -258,8 +258,8 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             display.updateNextRenderRoi( { fadeRoi.x - 2 * BORDERWIDTH, fadeRoi.y - BORDERWIDTH, fadeRoi.width + 3 * BORDERWIDTH, fadeRoi.height + 3 * BORDERWIDTH } );
         }
 
-        // Use half fade if game resolution is not 640x480 and hero dialog was not called from an already opened dialog.
-        fheroes2::fadeInDisplay( fadeRoi, renderBackgroundDialog && !isDefaultScreenSize );
+        // Use half fade if game resolution is not 640x480.
+        fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
     }
     else {
         display.render();
@@ -287,7 +287,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             // Fade-out hero dialog.
             if ( isFadeEnabled ) {
-                fheroes2::fadeOutDisplay( fadeRoi, renderBackgroundDialog && !isDefaultScreenSize );
+                fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
             }
             return Dialog::CANCEL;
         }
