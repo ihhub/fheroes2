@@ -562,9 +562,11 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
         if ( buttonUpgrade.isEnabled() ) {
             le.MousePressLeft( buttonUpgrade.area() ) ? buttonUpgrade.drawOnPress() : buttonUpgrade.drawOnRelease();
         }
+
         if ( buttonDismiss.isEnabled() ) {
             le.MousePressLeft( buttonDismiss.area() ) ? buttonDismiss.drawOnPress() : buttonDismiss.drawOnRelease();
         }
+
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_UPGRADE_TROOP ) ) ) {
@@ -582,6 +584,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
                 }
             }
         }
+
         if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS_TROOP ) )
              && Dialog::YES
                     == Dialog::Message( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ), Font::BIG,
@@ -589,9 +592,20 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
             result = Dialog::DISMISS;
             break;
         }
+
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             result = Dialog::CANCEL;
             break;
+        }
+
+        if ( le.MousePressRight( buttonExit.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
+        }
+        else if ( buttonUpgrade.isEnabled() && le.MousePressRight( buttonUpgrade.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Upgrade" ), _( "Upgrade your troops." ), 0 );
+        }
+        else if ( buttonDismiss.isEnabled() && le.MousePressRight( buttonDismiss.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Dismiss" ), _( "Dismiss this army." ), 0 );
         }
 
         for ( const auto & spellInfo : spellAreas ) {
