@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-07 10:26+0000\n"
-"PO-Revision-Date: 2023-05-02 19:42+0700\n"
+"PO-Revision-Date: 2023-05-07 22:12+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -539,7 +539,7 @@ msgid "Spell Power"
 msgstr ""
 
 msgid "Knowledge"
-msgstr "Tri thức"
+msgstr "Trí thức"
 
 msgid "Morale"
 msgstr "Tinh thần"
@@ -860,10 +860,10 @@ msgid "Set Defense Skill"
 msgstr "Chọn Kỹ năng Phòng thủ"
 
 msgid "Set Power Skill"
-msgstr "Chọn Kỹ năng Sức mạnh"
+msgstr ""
 
 msgid "Set Knowledge Skill"
-msgstr "Chọn Kỹ năng Tri thức"
+msgstr "Chọn Kỹ năng Trí thức"
 
 msgid "%{race1} %{name1}"
 msgstr ""
@@ -3054,7 +3054,7 @@ msgid "Spell Power:"
 msgstr ""
 
 msgid "Knowledge:"
-msgstr "Tri thức:"
+msgstr "Trí thức:"
 
 msgid "Spell Points:"
 msgstr ""
@@ -3391,7 +3391,7 @@ msgid "Def."
 msgstr "Thủ."
 
 msgid "Power"
-msgstr "Phép"
+msgstr ""
 
 msgid "Knowl"
 msgstr "Trí"
