@@ -579,7 +579,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     const bool isEvilInterface = conf.isEvilInterfaceEnabled();
     const bool isHideInterface = conf.isHideInterfaceEnabled();
     const ZoomLevel zoomLevel = conf.ViewWorldZoomLevel();
-    const bool isFadeEnabled = conf.isFadeEffectEnabled();
+    const bool isFadeEnabled = Settings::isFadeEffectEnabled();
 
     fheroes2::Rect fadeRoi( { 0, 0 }, display.screenSize() );
 
