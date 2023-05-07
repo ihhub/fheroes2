@@ -44,7 +44,7 @@ namespace
             : _charLimit( fheroes2::AGG::getCharacterLimit( fontSize ) )
         {}
 
-        inline bool isValid( const uint8_t character ) const
+        bool isValid( const uint8_t character ) const
         {
             return character >= 0x21 && character <= _charLimit;
         }
@@ -53,7 +53,7 @@ namespace
         const uint32_t _charLimit;
     };
 
-    inline bool isSpaceChar( const uint8_t character )
+    bool isSpaceChar( const uint8_t character )
     {
         return ( character == 0x20 );
     }
