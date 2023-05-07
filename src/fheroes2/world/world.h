@@ -29,6 +29,7 @@
 #include <list>
 #include <map>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include "army_troop.h"
