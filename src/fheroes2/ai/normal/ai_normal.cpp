@@ -102,7 +102,7 @@ namespace AI
         // relative priority based on the ratio of the usual amount of resources in these sources.
         static const std::map<int, double> pilePriorities = { // The amount of gold on the map is usually ~500-1500
                                                               { Resource::GOLD, 1 },
-                                                              // The amount of wood and ore resources on the map is usually ~5-10
+                                                              // The amount of wood and ore on the map is usually ~5-10
                                                               { Resource::WOOD, 125 },
                                                               { Resource::ORE, 125 },
                                                               // The amount of other resources on the map is usually ~2-5
