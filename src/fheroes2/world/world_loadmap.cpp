@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -29,7 +30,6 @@
 #include <ostream>
 #include <set>
 #include <string>
-#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -264,20 +264,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
         tile.AddonsSort();
 
-        switch ( mp2tile.mapObjectType ) {
-        case MP2::OBJ_BOTTLE:
-        case MP2::OBJ_CASTLE:
-        case MP2::OBJ_EVENT:
-        case MP2::OBJ_HEROES:
-        case MP2::OBJ_JAIL:
-        case MP2::OBJ_RANDOM_CASTLE:
-        case MP2::OBJ_RANDOM_TOWN:
-        case MP2::OBJ_SIGN:
-        case MP2::OBJ_SPHINX:
+        if ( MP2::doesObjectNeedExtendedMetadata( tile.GetObject() ) ) {
             vec_object.push_back( i );
-            break;
-        default:
-            break;
         }
     }
 
@@ -440,8 +428,11 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
         for ( const int32_t tileId : vec_object ) {
             const Maps::Tiles & tile = vec_tiles[tileId];
-            const uint32_t quantityValue = ( tile.GetQuantity2() << 8 ) + tile.GetQuantity1();
-            if ( ( quantityValue & 0x3 ) == Maps::OBJECT_LAYER && i + 1 == ( quantityValue >> 3 ) ) {
+            if ( ( tile.getLayerType() & 0x3 ) != Maps::OBJECT_LAYER ) {
+                continue;
+            }
+
+            if ( tile.metadata()[0] == i + 1 ) {
                 objectTileId = tileId;
                 break;
             }
@@ -654,120 +645,13 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
 bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObjects )
 {
-    // modify other objects
-    for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
-        Maps::Tiles & tile = vec_tiles[i];
+    for ( Maps::Tiles & tile : vec_tiles ) {
         Maps::Tiles::fixTileObjectType( tile );
 
-        switch ( tile.GetObject() ) {
-        case MP2::OBJ_ARTIFACT:
-            updateObjectInfoTile( tile, true );
-            if ( checkPoLObjects ) {
-                const Artifact art = Maps::getArtifactFromTile( tile );
-                if ( fheroes2::isPriceOfLoyaltyArtifact( art.GetID() ) ) {
-                    ERROR_LOG( "Failed to load The Price of Loyalty map '" << filename << "' which is not supported by this version of the game." )
-                    // You are trying to load a PoL map named as a MP2 file.
-                    return false;
-                }
-            }
-
-            break;
-        case MP2::OBJ_ABANDONED_MINE:
-        case MP2::OBJ_ALCHEMIST_LAB:
-        case MP2::OBJ_ARCHER_HOUSE:
-        case MP2::OBJ_BARRIER:
-        case MP2::OBJ_BOAT:
-        case MP2::OBJ_CAMPFIRE:
-        case MP2::OBJ_CAVE:
-        case MP2::OBJ_CITY_OF_DEAD:
-        case MP2::OBJ_DAEMON_CAVE:
-        case MP2::OBJ_DERELICT_SHIP:
-        case MP2::OBJ_DESERT_TENT:
-        case MP2::OBJ_DRAGON_CITY:
-        case MP2::OBJ_DWARF_COTTAGE:
-        case MP2::OBJ_EVENT:
-        case MP2::OBJ_EXCAVATION:
-        case MP2::OBJ_FLOTSAM:
-        case MP2::OBJ_FOUNTAIN:
-        case MP2::OBJ_GENIE_LAMP:
-        case MP2::OBJ_GOBLIN_HUT:
-        case MP2::OBJ_GRAVEYARD:
-        case MP2::OBJ_HALFLING_HOLE:
-        case MP2::OBJ_LEAN_TO:
-        case MP2::OBJ_MAGIC_GARDEN:
-        case MP2::OBJ_MINES:
-        case MP2::OBJ_MONSTER:
-        case MP2::OBJ_PEASANT_HUT:
-        case MP2::OBJ_PYRAMID:
-        case MP2::OBJ_RANDOM_ARTIFACT:
-        case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
-        case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
-        case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
-        case MP2::OBJ_RANDOM_MONSTER:
-        case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
-        case MP2::OBJ_RANDOM_MONSTER_STRONG:
-        case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
-        case MP2::OBJ_RANDOM_MONSTER_WEAK:
-        case MP2::OBJ_RANDOM_RESOURCE:
-        case MP2::OBJ_RESOURCE:
-        case MP2::OBJ_RUINS:
-        case MP2::OBJ_SAWMILL:
-        case MP2::OBJ_SEA_CHEST:
-        case MP2::OBJ_SHRINE_FIRST_CIRCLE:
-        case MP2::OBJ_SHRINE_SECOND_CIRCLE:
-        case MP2::OBJ_SHRINE_THIRD_CIRCLE:
-        case MP2::OBJ_SHIPWRECK:
-        case MP2::OBJ_SHIPWRECK_SURVIVOR:
-        case MP2::OBJ_SKELETON:
-        case MP2::OBJ_STONE_LITHS:
-        case MP2::OBJ_TRAVELLER_TENT:
-        case MP2::OBJ_TREASURE_CHEST:
-        case MP2::OBJ_TREE_CITY:
-        case MP2::OBJ_TREE_HOUSE:
-        case MP2::OBJ_TREE_OF_KNOWLEDGE:
-        case MP2::OBJ_TROLL_BRIDGE:
-        case MP2::OBJ_WAGON:
-        case MP2::OBJ_WAGON_CAMP:
-        case MP2::OBJ_WATCH_TOWER:
-        case MP2::OBJ_WATER_WHEEL:
-        case MP2::OBJ_WINDMILL:
-        case MP2::OBJ_WITCHS_HUT:
-            updateObjectInfoTile( tile, true );
-            break;
-        case MP2::OBJ_AIR_ALTAR:
-        case MP2::OBJ_BARROW_MOUNDS:
-        case MP2::OBJ_EARTH_ALTAR:
-        case MP2::OBJ_FIRE_ALTAR:
-        case MP2::OBJ_WATER_ALTAR:
-            resetObjectInfoOnTile( tile );
-            updateObjectInfoTile( tile, true );
-            break;
-
-        case MP2::OBJ_HEROES: {
-            // remove map editor sprite
-            if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO )
-                tile.Remove( tile.GetObjectUID() );
-
-            tile.SetHeroes( GetHeroes( Maps::GetPoint( static_cast<int32_t>( i ) ) ) );
-
-            if ( checkPoLObjects ) {
-                Heroes * hero = tile.GetHeroes();
-                assert( hero );
-                const BagArtifacts & artifacts = hero->GetBagArtifacts();
-                for ( const Artifact & artifact : artifacts ) {
-                    if ( fheroes2::isPriceOfLoyaltyArtifact( artifact.GetID() ) ) {
-                        ERROR_LOG( "Failed to load The Price of Loyalty map '" << filename << "' which is not supported by this version of the game." )
-                        // You are trying to load a PoL map named as a MP2 file.
-                        return false;
-                    }
-                }
-            }
-
-            break;
-        }
-
-        default:
-            break;
+        if ( !updateTileMetadata( tile, tile.GetObject(), checkPoLObjects ) ) {
+            ERROR_LOG( "Failed to load The Price of Loyalty map '" << filename << "' which is not supported by this version of the game." )
+            // You are trying to load a PoL map named as a MP2 file.
+            return false;
         }
     }
 
@@ -837,11 +721,8 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
     }
     // There is a tile with a predefined Ultimate Artifact, pick a tile nearby in the radius specified in the artifact's properties
     else {
-        static_assert( std::is_same_v<decltype( ultArtTileIter->GetQuantity1() ), uint8_t> && std::is_same_v<decltype( ultArtTileIter->GetQuantity2() ), uint8_t>,
-                       "Types of tile's quantities have been changed, check the bitwise arithmetic below" );
-
-        // The radius can be in the range 0 - 127, it is represented by 2 low-order bits of quantity2 and 5 high-order bits of quantity1
-        const int32_t radius = ( ( ultArtTileIter->GetQuantity2() & 0x03 ) << 5 ) + ( ultArtTileIter->GetQuantity1() >> 3 );
+        const int32_t radius = static_cast<int32_t>( ultArtTileIter->metadata()[0] );
+        resetObjectMetadata( *ultArtTileIter );
 
         // Remove the predefined Ultimate Artifact object
         ultArtTileIter->Remove( ultArtTileIter->GetObjectUID() );
@@ -889,6 +770,134 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
                 hero->Recruit( castle->GetColor(), { cp.x, cp.y + 1 } );
             }
         }
+    }
+
+    return true;
+}
+
+bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects )
+{
+    switch ( objectType ) {
+    case MP2::OBJ_ARTIFACT:
+        updateObjectInfoTile( tile, true );
+        if ( checkPoLObjects ) {
+            const Artifact art = Maps::getArtifactFromTile( tile );
+            if ( fheroes2::isPriceOfLoyaltyArtifact( art.GetID() ) ) {
+                return false;
+            }
+        }
+
+        break;
+    case MP2::OBJ_ABANDONED_MINE:
+    case MP2::OBJ_ALCHEMIST_LAB:
+    case MP2::OBJ_ARCHER_HOUSE:
+    case MP2::OBJ_BARRIER:
+    case MP2::OBJ_BOAT:
+    case MP2::OBJ_CAMPFIRE:
+    case MP2::OBJ_CAVE:
+    case MP2::OBJ_CITY_OF_DEAD:
+    case MP2::OBJ_DAEMON_CAVE:
+    case MP2::OBJ_DERELICT_SHIP:
+    case MP2::OBJ_DESERT_TENT:
+    case MP2::OBJ_DRAGON_CITY:
+    case MP2::OBJ_DWARF_COTTAGE:
+    case MP2::OBJ_EVENT:
+    case MP2::OBJ_EXCAVATION:
+    case MP2::OBJ_FLOTSAM:
+    case MP2::OBJ_FOUNTAIN:
+    case MP2::OBJ_GENIE_LAMP:
+    case MP2::OBJ_GOBLIN_HUT:
+    case MP2::OBJ_GRAVEYARD:
+    case MP2::OBJ_HALFLING_HOLE:
+    case MP2::OBJ_LEAN_TO:
+    case MP2::OBJ_MAGIC_GARDEN:
+    case MP2::OBJ_MINES:
+    case MP2::OBJ_MONSTER:
+    case MP2::OBJ_PEASANT_HUT:
+    case MP2::OBJ_PYRAMID:
+    case MP2::OBJ_RANDOM_ARTIFACT:
+    case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
+    case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
+    case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
+    case MP2::OBJ_RANDOM_MONSTER:
+    case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
+    case MP2::OBJ_RANDOM_MONSTER_STRONG:
+    case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
+    case MP2::OBJ_RANDOM_MONSTER_WEAK:
+    case MP2::OBJ_RANDOM_RESOURCE:
+    case MP2::OBJ_RESOURCE:
+    case MP2::OBJ_RUINS:
+    case MP2::OBJ_SAWMILL:
+    case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+    case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+    case MP2::OBJ_SHRINE_THIRD_CIRCLE:
+    case MP2::OBJ_SHIPWRECK:
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
+    case MP2::OBJ_SKELETON:
+    case MP2::OBJ_STONE_LITHS:
+    case MP2::OBJ_TRAVELLER_TENT:
+    case MP2::OBJ_TREASURE_CHEST:
+    case MP2::OBJ_TREE_CITY:
+    case MP2::OBJ_TREE_HOUSE:
+    case MP2::OBJ_TREE_OF_KNOWLEDGE:
+    case MP2::OBJ_TROLL_BRIDGE:
+    case MP2::OBJ_WAGON:
+    case MP2::OBJ_WAGON_CAMP:
+    case MP2::OBJ_WATCH_TOWER:
+    case MP2::OBJ_WATER_WHEEL:
+    case MP2::OBJ_WINDMILL:
+    case MP2::OBJ_WITCHS_HUT:
+        updateObjectInfoTile( tile, true );
+        break;
+
+    case MP2::OBJ_AIR_ALTAR:
+    case MP2::OBJ_BARROW_MOUNDS:
+    case MP2::OBJ_EARTH_ALTAR:
+    case MP2::OBJ_FIRE_ALTAR:
+    case MP2::OBJ_WATER_ALTAR:
+        // We need to clear metadata because it is being stored as a part of an MP2 object.
+        resetObjectInfoOnTile( tile );
+        updateObjectInfoTile( tile, true );
+        break;
+
+    case MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT:
+        // We need information from an Ultimate artifact for later use. We will reset metadata later.
+        break;
+
+    case MP2::OBJ_HEROES: {
+        // remove map editor sprite
+        if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO )
+            tile.Remove( tile.GetObjectUID() );
+
+        Heroes * chosenHero = GetHeroes( Maps::GetPoint( tile.GetIndex() ) );
+        assert( chosenHero != nullptr );
+
+        tile.SetHeroes( chosenHero );
+
+        if ( checkPoLObjects ) {
+            Heroes * hero = tile.GetHeroes();
+            assert( hero );
+            const BagArtifacts & artifacts = hero->GetBagArtifacts();
+            for ( const Artifact & artifact : artifacts ) {
+                if ( fheroes2::isPriceOfLoyaltyArtifact( artifact.GetID() ) ) {
+                    return false;
+                }
+            }
+        }
+
+        const MP2::MapObjectType updatedObjectType = tile.GetObject( false );
+        if ( updatedObjectType != objectType ) {
+            return updateTileMetadata( tile, updatedObjectType, checkPoLObjects );
+        }
+
+        break;
+    }
+
+    default:
+        // Remove any metadata from other objects.
+        resetObjectMetadata( tile );
+        break;
     }
 
     return true;

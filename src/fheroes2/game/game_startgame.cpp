@@ -608,17 +608,11 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
     radar.Build();
     radar.SetHide( true );
-
-    // Hide the world map at the first drawing
-    const int currentColor = conf.CurrentColor();
-    conf.SetCurrentColor( -1 );
-
     iconsPanel.HideIcons( ICON_ANY );
     statusWindow.Reset();
 
+    // Prepare for render the whole game interface with adventure map filled with fog as it was not uncovered by 'updateMapFogDirections()'.
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
-
-    conf.SetCurrentColor( currentColor );
 
     bool loadedFromSave = conf.LoadedGameVersion();
     bool skipTurns = loadedFromSave;
@@ -629,8 +623,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
     std::vector<Player *> sortedPlayers = conf.GetPlayers().getVector();
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
 
-    if ( !loadedFromSave ) {
-        // Clear fog around heroes, castles and mines for all players when starting a new map.
+    if ( !loadedFromSave || world.CountDay() == 1 ) {
+        // Clear fog around heroes, castles and mines for all players when starting a new map or if the save was done at the first day.
         for ( const Player * player : sortedPlayers ) {
             world.ClearFog( player->GetColor() );
         }
@@ -638,6 +632,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
     const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
     if ( !isHotSeatGame ) {
+        // It is not a Hot Seat (multiplayer) game so we set current color to the only human player.
+        conf.SetCurrentColor( Players::HumanColors() );
+
         // Fully update fog directions if there will be only one human player.
         Interface::GameArea::updateMapFogDirections();
     }
@@ -659,7 +656,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
         for ( const Player * player : sortedPlayers ) {
             assert( player != nullptr );
 
-            Kingdom & kingdom = world.GetKingdom( player->GetColor() );
+            const int playerColor = player->GetColor();
+
+            Kingdom & kingdom = world.GetKingdom( playerColor );
 
             if ( skipTurns && !player->isColor( conf.CurrentColor() ) ) {
                 continue;
@@ -669,7 +668,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
             skipTurns = false;
 
             if ( kingdom.isPlay() ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() )
+                DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( playerColor ) << ", resource: " << kingdom.GetFunds().String() )
 
                 radar.SetHide( true );
                 radar.SetRedraw( REDRAW_RADAR_CURSOR );
@@ -680,9 +679,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     AudioManager::ResetAudio();
 
                     if ( isHotSeatGame ) {
-                        // we need to hide the world map in hot seat mode
-                        conf.SetCurrentColor( -1 );
-
                         iconsPanel.HideIcons( ICON_ANY );
                         statusWindow.Reset();
 
@@ -698,10 +694,10 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                         AudioManager::PlayMusic( MUS::NEW_MONTH, Music::PlaybackMode::PLAY_ONCE );
 
-                        Game::DialogPlayers( player->GetColor(), "", _( "%{color} player's turn." ) );
+                        Game::DialogPlayers( playerColor, "", _( "%{color} player's turn." ) );
                     }
 
-                    conf.SetCurrentColor( player->GetColor() );
+                    conf.SetCurrentColor( playerColor );
 
                     kingdom.ActionBeforeTurn();
 
@@ -725,7 +721,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     Cursor::Get().SetThemes( Cursor::WAIT );
 
-                    conf.SetCurrentColor( player->GetColor() );
+                    conf.SetCurrentColor( playerColor );
 
                     statusWindow.Reset();
                     statusWindow.SetState( StatusType::STATUS_AITURN );
@@ -804,8 +800,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
             res = fheroes2::GameMode::MAIN_MENU;
         }
 
-        // don't carry the current color from the last player to the next turn
-        conf.SetCurrentColor( -1 );
+        // Don't carry the current player color to the next turn.
+        conf.SetCurrentColor( Color::NONE );
     }
 
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
