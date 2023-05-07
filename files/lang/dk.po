@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-13 05:15+0000\n"
-"PO-Revision-Date: 2023-05-02 09:14+0200\n"
+"PO-Revision-Date: 2023-05-07 18:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -740,12 +740,12 @@ msgstr[1] "%{count} %{defender} omkommer."
 
 msgid "1 soul is incorporated."
 msgid_plural "%{count} souls are incorporated."
-msgstr[0] "1 sjæl er blevet opsamlet"
-msgstr[1] "%{count} sjæle er blevet indsamlet."
+msgstr[0] "1 sjæl blev indsamlet"
+msgstr[1] "%{count} sjæle blev indsamlet."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
-msgstr[0] "1 %{unit} er blevet genoplivet."
+msgstr[0] "1 %{unit} blev genoplivet."
 msgstr[1] "%{count} %{unit} blev genoplivet."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
@@ -1520,13 +1520,13 @@ msgid "campaignBonus|White Pearl"
 msgstr "Den hvide perle"
 
 msgid "campaignBonus|Basic Archery"
-msgstr "Begynder skytte"
+msgstr "Begynder skydning"
 
 msgid "campaignBonus|Advanced Archery"
-msgstr "Øvet skytte"
+msgstr "Øvet skydning"
 
 msgid "campaignBonus|Expert Archery"
-msgstr "Ekspert skytte"
+msgstr "Ekspert skydning"
 
 msgid "campaignBonus|Basic Ballistics"
 msgstr "Begynder ballistik"
@@ -1619,22 +1619,22 @@ msgid "campaignBonus|Expert Necromancy"
 msgstr "Ekspert nekromantik"
 
 msgid "campaignBonus|Basic Pathfinding"
-msgstr "Begynder stifinder"
+msgstr "Begynder stifinding"
 
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr "Øvet stifinder"
+msgstr "Øvet stifinding"
 
 msgid "campaignBonus|Expert Pathfinding"
-msgstr "Ekspert stifinder"
+msgstr "Ekspert stifinding"
 
 msgid "campaignBonus|Basic Scouting"
-msgstr "Begynder opdager"
+msgstr "Begynder udspejdning"
 
 msgid "campaignBonus|Advanced Scouting"
-msgstr "Øvet opdager"
+msgstr "Øvet udspejdning"
 
 msgid "campaignBonus|Expert Scouting"
-msgstr "Ekspert opdager"
+msgstr "Ekspert udspejdning"
 
 msgid "campaignBonus|Basic Wisdom"
 msgstr "Begynder visdom"
@@ -1951,7 +1951,7 @@ msgid "Cannot recruit - you have too many Heroes."
 msgstr "Umuligt at rekruttere - Du har for mange helte."
 
 msgid "Cannot afford a Hero"
-msgstr "Umuligt at rekruttere endnu en helt"
+msgstr "Umuligt at rekruttere en helt"
 
 msgid "There is no room in the garrison for this army."
 msgstr "Der er ikke plads i garnisonen til denne trop."
@@ -2183,7 +2183,7 @@ msgid ""
 msgstr ""
 
 msgid "The Dungeon increases the income of the town by %{count} gold per day."
-msgstr "Fangehullet øger din byens indkomst med %{count} guld om dagen."
+msgstr "Fangehullet øger byens indkomst med %{count} guld om dagen."
 
 msgid "The Waterfall increases production of Centaurs by %{count} per week."
 msgstr ""
@@ -3671,7 +3671,7 @@ msgid "hotkey|world map down"
 msgstr ""
 
 msgid "hotkey|world map up left"
-msgstr "Se eventyrmagi"
+msgstr "verdenskort op til venstre"
 
 msgid "hotkey|world map up right"
 msgstr ""
@@ -3860,8 +3860,8 @@ msgid ""
 "This file was saved for a \"The Price of Loyalty\" map, but the "
 "corresponding game assets have not been provided to the engine."
 msgstr ""
-"Denne fil blev gemt som et \\\"The Price of Loyalty\\\" kort, men de "
-"tilsvarende spilaktiver er ikke blevet leveret til spilmotoren."
+"Denne fil blev gemt som et \"Prisen for loyalitet\" kort, men de tilsvarende "
+"spilaktiver er ikke blevet leveret til spilmotoren."
 
 msgid "This saved game is localized to '"
 msgstr "Dette gemte spil er lokaliseret til '"
@@ -4385,7 +4385,7 @@ msgid "Are you sure you want to overwrite the save with this name?"
 msgstr "Er du sikker på, om du vil overskrive det gemte spil med dette navn?"
 
 msgid "Game saved successfully."
-msgstr "Spillet blev gemt"
+msgstr "Spillet blev gemt."
 
 msgid "There was an issue during saving."
 msgstr "Mens spillet forsøgtes gemt, opstod der et problem."
@@ -6012,7 +6012,7 @@ msgid "Expert Pathfinding"
 msgstr "Ekspert stifinding"
 
 msgid "Advanced Logistics"
-msgstr "øvet logistik"
+msgstr "Øvet logistik"
 
 msgid "Basic Logistics"
 msgstr "Begynder logistik"
@@ -6036,7 +6036,7 @@ msgid "Basic Diplomacy"
 msgstr "Begynder diplomati"
 
 msgid "Expert Diplomacy"
-msgstr "Ekspert Diplomati"
+msgstr "Ekspert diplomati"
 
 msgid "Expert Scouting"
 msgstr "Ekspert udspejdning"
@@ -6069,7 +6069,7 @@ msgid "Expert Leadership"
 msgstr "Ekspert lederskab"
 
 msgid "Expert Wisdom"
-msgstr "Ekspert Vlisdom"
+msgstr "Ekspert visdom"
 
 msgid "Advanced Luck"
 msgstr "Øvet held"
@@ -6154,7 +6154,7 @@ msgstr ""
 
 msgid "Approximately %{count} percent of the creatures may offer to join you."
 msgstr ""
-"Ca. %{count} procent af væsenerne kan tilbyde at tilslutte sig din hær."
+"Cirka %{count} procent af væsenerne kan tilbyde at tilslutte sig din hær."
 
 msgid "All of the creatures may offer to join you."
 msgstr "Alle disse væsener er villige til at slutte sig til dig."
