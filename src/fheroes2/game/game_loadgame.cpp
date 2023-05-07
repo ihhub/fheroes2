@@ -240,7 +240,12 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
     // image background
     fheroes2::drawMainMenuScreen();
 
-    fheroes2::Display::instance().render();
+    if ( isNeedFadeIn() && Settings::isFadeEffectEnabled() ) {
+        fheroes2::fadeInDisplay();
+    }
+    else {
+        fheroes2::Display::instance().render();
+    }
 
     const std::string file = Dialog::SelectFileLoad();
     if ( file.empty() ) {
@@ -250,6 +255,11 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
     const fheroes2::GameMode returnValue = Game::Load( file );
     if ( returnValue == fheroes2::GameMode::CANCEL ) {
         return fheroes2::GameMode::LOAD_GAME;
+    }
+
+    // We are loading a game so fade-out main menu screen.
+    if ( Settings::isFadeEffectEnabled() ) {
+        fheroes2::fadeOutDisplay();
     }
 
     return returnValue;

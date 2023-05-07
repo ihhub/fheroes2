@@ -1429,8 +1429,13 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     LocalEvent & le = LocalEvent::Get();
 
-    display.render();
-
+    // Fade-in campaign scenario info.
+    if ( Settings::isFadeEffectEnabled() ) {
+        fheroes2::fadeInDisplay( { top.x, top.y, backgroundImage.width(), backgroundImage.height() }, false );
+    }
+    else {
+        display.render();
+    }
     std::vector<fheroes2::Rect> choiceArea( bonusChoiceCount );
     for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
         choiceArea[i] = buttonChoices.button( i ).area();
@@ -1473,6 +1478,12 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 // Make sure to reset a state of the game if a user does not want to load it.
                 GameOver::Result::Get().Reset();
             }
+
+            if ( Settings::isFadeEffectEnabled() ) {
+                fheroes2::fadeOutDisplay( { top.x, top.y, backgroundImage.width(), backgroundImage.height() }, false );
+                setNeedFadeIn();
+            }
+
             return prevMode;
         }
 
@@ -1553,13 +1564,24 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         else if ( le.MouseClickLeft( buttonViewIntro.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_VIEW_INTRO ) ) {
             AudioManager::ResetAudio();
             fheroes2::ImageRestorer restorer( display, top.x, top.y, backgroundImage.width(), backgroundImage.height() );
+
+            if ( Settings::isFadeEffectEnabled() ) {
+                fheroes2::fadeOutDisplay( restorer.rect(), false );
+            }
+
             playPreviousScenarioVideo();
             playCurrentScenarioVideo();
 
-            restorer.restore();
-            display.render();
-
             playCampaignMusic( chosenCampaignID );
+
+            restorer.restore();
+
+            if ( Settings::isFadeEffectEnabled() ) {
+                fheroes2::fadeInDisplay( restorer.rect(), false );
+            }
+            else {
+                display.render( restorer.rect() );
+            }
         }
         else if ( le.MousePressRight( areaDaysSpent ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Days spent" ), fheroes2::FontType::normalYellow() ),

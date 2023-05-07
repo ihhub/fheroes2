@@ -243,9 +243,13 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
 
+    if ( Settings::isFadeEffectEnabled() ) {
+        fheroes2::fadeOutDisplay();
+    }
+
     display.fill( 0 );
 
-    const Text loadingScreen( "Loading video. Please wait...", Font::BIG );
+    const Text loadingScreen( _( "Loading video. Please wait..." ), Font::BIG );
     loadingScreen.Blit( display.width() / 2 - loadingScreen.w() / 2, display.height() / 2 - loadingScreen.h() / 2 );
     display.render();
 
@@ -343,6 +347,10 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
         // File doesn't exist. Fallback to PoL campaign.
         showMissingVideoFilesWindow();
         return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+    }
+
+    if ( Settings::isFadeEffectEnabled() ) {
+        fheroes2::fadeOutDisplay();
     }
 
     outputPriceOfLoyaltyCampaignInTextSupportMode();
