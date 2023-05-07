@@ -4505,20 +4505,37 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
 
         const fheroes2::Image luckSprite = DrawRainbow( rainbowArc, rainbowThickness, isVerticalRainbow, isRainbowFromRight );
 
+        const int32_t rainbowDrawSteps = 30;
         // Rainbow animation draw step (in original game it is random and about 7-11 pixels).
         // We set the constant animation time for all rainbows: rainbowLength/30 fits the rainbow sound duration on '1' speed.
-        const double drawStep = rainbowLength / 30.0;
+        const double drawStep = static_cast<double>( rainbowLength ) / rainbowDrawSteps;
 
-        AudioManager::PlaySound( M82::GOODLUCK );
+        // Don't waste time waiting for Good Luck sound if the game sounds are turned off
+        const bool soundOn = Settings::Get().SoundVolume() > 0;
 
+        if ( soundOn ) {
+            AudioManager::PlaySound( M82::GOODLUCK );
+        }
+
+        // If sound is turned off we still wait for the GOODLUCK sound to over but no more the twice the rainbow animation time.
+        // So we start counting steps from '-rainbowDrawSteps' to 'rainbowDrawSteps'.
+        int32_t step = -rainbowDrawSteps;
         double x = 0;
-        while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_MISSILE_DELAY } ) ) && ( Mixer::isPlaying( -1 ) || x < rainbowLength ) ) {
+        while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_MISSILE_DELAY } ) )
+                && ( ( ( soundOn || step < rainbowDrawSteps ) && Mixer::isPlaying( -1 ) ) || x < rainbowLength ) ) {
             CheckGlobalEvents( le );
 
-            if ( x < rainbowLength && Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+                // Reset all units idle animation delay during rainbow animation not to start new idle animations.
+                // This does not affect Zombies, Genies, Medusas and Ghosts as they have permanent idle animations.
+                ResetIdleTroopAnimation();
+
                 RedrawPartialStart();
 
-                x += drawStep;
+                if ( x < rainbowLength ) {
+                    x += drawStep;
+                }
+
                 const int32_t drawWidth = x > rainbowLength ? rainbowLength : static_cast<int32_t>( x );
 
                 // For different rainbow types use appropriate animation direction.
@@ -4536,6 +4553,8 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
                 }
 
                 RedrawPartialFinish();
+
+                ++step;
             }
         }
     }

@@ -27,7 +27,6 @@
 #include <cstdint>
 #include <list>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "color.h"
@@ -38,17 +37,6 @@
 
 class Heroes;
 class StreamBase;
-
-namespace fheroes2
-{
-    class Image;
-    struct ObjectRenderingInfo;
-}
-
-namespace Interface
-{
-    class GameArea;
-}
 
 namespace Maps
 {
@@ -120,7 +108,7 @@ namespace Maps
     public:
         Tiles() = default;
 
-        void Init( int32_t, const MP2::mp2tile_t & );
+        void Init( int32_t index, const MP2::mp2tile_t & mp2 );
 
         int32_t GetIndex() const
         {
@@ -177,8 +165,6 @@ namespace Maps
         {
             return 30 > _terrainImageIndex;
         }
-
-        const fheroes2::Image & GetTileSurface() const;
 
         bool isSameMainObject( const MP2::MapObjectType objectType ) const
         {
@@ -262,29 +248,14 @@ namespace Maps
 
         void removeOwnershipFlag( const MP2::MapObjectType objectType );
 
-        static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area );
-        void redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area ) const;
-        void redrawTopLayerObject( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon ) const;
-
         // Determine the fog direction in the area between min and max positions for given player(s) color code and store it in corresponding tile data.
         static void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color );
+
         // Return fog direction of tile. A tile without fog returns "Direction::UNKNOWN".
         uint16_t getFogDirection() const
         {
             return _fogDirection;
         }
-
-        void drawFog( fheroes2::Image & dst, const Interface::GameArea & area ) const;
-        void RedrawPassable( fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area ) const;
-        void redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level ) const;
-
-        void drawByObjectIcnType( fheroes2::Image & output, const Interface::GameArea & area, const MP2::ObjectIcnType objectIcnType ) const;
-
-        std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile() const;
-        std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile() const;
-        std::vector<fheroes2::ObjectRenderingInfo> getBoatSpritesPerTile() const;
-        std::vector<fheroes2::ObjectRenderingInfo> getBoatShadowSpritesPerTile() const;
-        std::vector<fheroes2::ObjectRenderingInfo> getMineGuardianSpritesPerTile() const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & mt );
         void AddonsPushLevel1( const MP2::mp2addon_t & ma );
@@ -333,7 +304,7 @@ namespace Maps
         // (castle has a hero or garrison, dwelling has creatures, etc)
         bool isCaptureObjectProtected() const;
 
-        void SetObjectPassable( bool );
+        void SetObjectPassable( bool pass );
 
         const std::array<uint32_t, 3> & metadata() const
         {
@@ -345,8 +316,18 @@ namespace Maps
             return _metadata;
         }
 
+        uint8_t getTerrainFlags() const
+        {
+            return _terrainFlags;
+        }
+
+        uint16_t getTerrainImageIndex() const
+        {
+            return _terrainImageIndex;
+        }
+
         Heroes * GetHeroes() const;
-        void SetHeroes( Heroes * );
+        void SetHeroes( Heroes * hero );
 
         // If tile is empty (MP2::OBJ_NONE) then verify whether it is a coast and update the tile if needed.
         void updateEmpty();
@@ -362,9 +343,6 @@ namespace Maps
 
         bool containsSprite( const MP2::ObjectIcnType objectIcnType, const uint32_t imageIdx ) const;
 
-        static std::pair<int, int> ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
-        static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
-
         // Restores an abandoned mine whose main tile is 'tile', turning it into an ordinary mine that brings
         // resources of type 'resource'. This method updates all sprites and sets object types for non-action
         // tiles. The object type for the action tile (i.e. the main tile) remains unchanged and should be
@@ -379,6 +357,10 @@ namespace Maps
         void swap( TilesAddon & addon ) noexcept;
 
         static void updateTileById( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
+
+        // The old code was using weird quantity based values which were very hard to understand.
+        // Since we must have backwards compatibility we need to do the conversion.
+        void quantityIntoMetadata( const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata );
 
     private:
         TilesAddon * getAddonWithFlag( const uint32_t uid );
@@ -399,14 +381,7 @@ namespace Maps
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );
 
-        static void renderAddonObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const TilesAddon & addon );
-        void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset ) const;
-
         static uint8_t convertOldMainObjectType( const uint8_t mainObjectType );
-
-        // The old code was using weird quantity based values which were very hard to understand.
-        // Since we must have backwards compatibility we need to do the conversion.
-        void quantityIntoMetadata( const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata );
 
         Addons addons_level1; // bottom layer
         Addons addons_level2; // top layer
@@ -455,10 +430,10 @@ namespace Maps
         uint32_t _region = REGION_NODE_BLOCKED;
     };
 
-    StreamBase & operator<<( StreamBase &, const TilesAddon & );
-    StreamBase & operator<<( StreamBase &, const Tiles & );
-    StreamBase & operator>>( StreamBase &, TilesAddon & );
-    StreamBase & operator>>( StreamBase &, Tiles & );
+    StreamBase & operator<<( StreamBase & msg, const TilesAddon & ta );
+    StreamBase & operator<<( StreamBase & msg, const Tiles & tile );
+    StreamBase & operator>>( StreamBase & msg, TilesAddon & ta );
+    StreamBase & operator>>( StreamBase & msg, Tiles & tile );
 }
 
 #endif
