@@ -41,6 +41,7 @@
 #include "mp2.h"
 #include "payment.h"
 #include "profit.h"
+#include "race.h"
 #include "rand.h"
 #include "resource.h"
 #include "skill.h"
@@ -1517,5 +1518,52 @@ namespace Maps
                 setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
             }
         }
+    }
+
+    std::pair<int, int> getColorRaceFromHeroSprite( const uint32_t heroSpriteIndex )
+    {
+        std::pair<int, int> res;
+
+        if ( 7 > heroSpriteIndex )
+            res.first = Color::BLUE;
+        else if ( 14 > heroSpriteIndex )
+            res.first = Color::GREEN;
+        else if ( 21 > heroSpriteIndex )
+            res.first = Color::RED;
+        else if ( 28 > heroSpriteIndex )
+            res.first = Color::YELLOW;
+        else if ( 35 > heroSpriteIndex )
+            res.first = Color::ORANGE;
+        else
+            res.first = Color::PURPLE;
+
+        switch ( heroSpriteIndex % 7 ) {
+        case 0:
+            res.second = Race::KNGT;
+            break;
+        case 1:
+            res.second = Race::BARB;
+            break;
+        case 2:
+            res.second = Race::SORC;
+            break;
+        case 3:
+            res.second = Race::WRLK;
+            break;
+        case 4:
+            res.second = Race::WZRD;
+            break;
+        case 5:
+            res.second = Race::NECR;
+            break;
+        case 6:
+            res.second = Race::RAND;
+            break;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return res;
     }
 }
