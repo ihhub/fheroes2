@@ -907,9 +907,8 @@ namespace AI
 
             assert( resourceType != Resource::UNKNOWN && resourceAmount != 0 );
 
-            // Since mines constantly bring resources, they are valuable objects. Let's evaluate them in proportion to the amount of resources they
-            // bring in 2 days (they should be more valuable than chests or resource piles, but less valuable in general than castles or heroes).
-            return resourceAmount * getResourcePriorityModifier( resourceType ) * 2;
+            // Since mines constantly bring resources, they are valuable objects
+            return resourceAmount * getResourcePriorityModifier( resourceType, true );
         }
         case MP2::OBJ_ARTIFACT: {
             const Artifact art = getArtifactFromTile( tile );
@@ -941,7 +940,7 @@ namespace AI
             const Funds funds = getFundsFromTile( tile );
             assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
 
-            return funds.gold * getResourcePriorityModifier( Resource::GOLD );
+            return funds.gold * getResourcePriorityModifier( Resource::GOLD, false );
         }
         case MP2::OBJ_DAEMON_CAVE: {
             // If this cave is already empty, then we should never come here
@@ -951,7 +950,7 @@ namespace AI
             }
 
             // Daemon Cave always gives 2500 Gold after a battle and AI always chooses to fight the demon's servants and doesn't roll the dice
-            return 2500 * getResourcePriorityModifier( Resource::GOLD );
+            return 2500 * getResourcePriorityModifier( Resource::GOLD, false );
         }
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_SHIPWRECK:
@@ -994,7 +993,7 @@ namespace AI
                     return;
                 }
 
-                value += amount * getResourcePriorityModifier( res );
+                value += amount * getResourcePriorityModifier( res, false );
             } );
 
             // This object could have already been visited

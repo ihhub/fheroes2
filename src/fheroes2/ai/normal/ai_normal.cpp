@@ -68,15 +68,18 @@ namespace AI
         return newEntry.first->second;
     }
 
-    double Normal::getResourcePriorityModifier( const int resource ) const
+    double Normal::getResourcePriorityModifier( const int resource, const bool isMine ) const
     {
         // Not all resources are equally valuable: 1 gold does not have the same value as 1 gemstone, so we need to
-        // normalize the value of various resources. Let's determine the default relative priority of resources based on
-        // the ratio of the amount of resources extracted by the respective mines. For example, if a gold mine produces
-        // 1000 gold per day, an ore mine produces 2 units of ore per day, and a gem mine produces 1 gem per day, then
-        // the priority of one unit of ore will correspond to the priority of 500 gold, and the priority of one gemstone
-        // will correspond to the priority of 1000 gold.
-        static const std::map<int, double> defaultResourcePriorities = []() {
+        // normalize the value of various resources.
+
+        // For mines, let's determine the default relative priority based on the ratio of the amount of resources
+        // extracted by these mines. For example, if a gold mine produces 1000 gold per day, an ore mine produces 2
+        // units of ore per day, and a gem mine produces 1 gem per day, then the priority of one unit of ore will
+        // correspond to the priority of 500 gold, and the priority of one gemstone will correspond to the priority
+        // of 1000 gold. Evaluate the resources from mines in proportion to the amount of resources that these mines
+        // bring in 2 days (mines should be more valuable than just resource piles).
+        static const std::map<int, double> minePriorities = []() {
             std::map<int, double> result;
 
             const double goldMineIncome = ProfitConditions::FromMine( Resource::GOLD ).Get( Resource::GOLD );
@@ -89,16 +92,31 @@ namespace AI
                     return;
                 }
 
-                result[res] = goldMineIncome / resMineIncome;
+                result[res] = goldMineIncome / resMineIncome * 2;
             } );
 
             return result;
         }();
 
+        // For one-time resource sources (such as piles, chests, campfires and so on), let's determine the default
+        // relative priority based on the ratio of the usual amount of resources in these sources.
+        static const std::map<int, double> pilePriorities = { // The amount of gold on the map is usually ~500-1500
+                                                              { Resource::GOLD, 1 },
+                                                              // The amount of wood and ore resources on the map is usually ~5-10
+                                                              { Resource::WOOD, 125 },
+                                                              { Resource::ORE, 125 },
+                                                              // The amount of other resources on the map is usually ~2-5
+                                                              { Resource::MERCURY, 250 },
+                                                              { Resource::SULFUR, 250 },
+                                                              { Resource::CRYSTAL, 250 },
+                                                              { Resource::GEMS, 250 } };
+
+        const std::map<int, double> & resourcePriorities = isMine ? minePriorities : pilePriorities;
+
         double prio = 1.0;
 
-        const auto prioIter = defaultResourcePriorities.find( resource );
-        if ( prioIter != defaultResourcePriorities.end() ) {
+        const auto prioIter = resourcePriorities.find( resource );
+        if ( prioIter != resourcePriorities.end() ) {
             prio = prioIter->second;
         }
         else {
