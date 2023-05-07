@@ -21,14 +21,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "interface_border.h"
-
 #include <algorithm>
 
 #include "agg_image.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_border.h"
 #include "localevent.h"
 #include "maps.h"
 #include "screen.h"
