@@ -240,7 +240,9 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
     // image background
     fheroes2::drawMainMenuScreen();
 
-    if ( isNeedFadeIn() && Settings::isFadeEffectEnabled() ) {
+    const bool isFadeEnabled = Settings::isFadeEffectEnabled();
+
+    if ( isNeedFadeIn() && isFadeEnabled ) {
         fheroes2::fadeInDisplay();
     }
     else {
@@ -258,7 +260,7 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
     }
 
     // We are loading a game so fade-out main menu screen.
-    if ( Settings::isFadeEffectEnabled() ) {
+    if ( isFadeEnabled ) {
         fheroes2::fadeOutDisplay();
     }
 

@@ -1429,8 +1429,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     LocalEvent & le = LocalEvent::Get();
 
+    const bool isFadeEnabled = Settings::isFadeEffectEnabled();
+
     // Fade-in campaign scenario info.
-    if ( Settings::isFadeEffectEnabled() ) {
+    if ( isFadeEnabled ) {
         fheroes2::fadeInDisplay( { top.x, top.y, backgroundImage.width(), backgroundImage.height() }, false );
     }
     else {
@@ -1479,7 +1481,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 GameOver::Result::Get().Reset();
             }
 
-            if ( Settings::isFadeEffectEnabled() ) {
+            if ( isFadeEnabled ) {
                 fheroes2::fadeOutDisplay( { top.x, top.y, backgroundImage.width(), backgroundImage.height() }, false );
                 setNeedFadeIn();
             }
@@ -1565,7 +1567,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             AudioManager::ResetAudio();
             fheroes2::ImageRestorer restorer( display, top.x, top.y, backgroundImage.width(), backgroundImage.height() );
 
-            if ( Settings::isFadeEffectEnabled() ) {
+            if ( isFadeEnabled ) {
                 fheroes2::fadeOutDisplay( restorer.rect(), false );
             }
 
@@ -1576,7 +1578,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             restorer.restore();
 
-            if ( Settings::isFadeEffectEnabled() ) {
+            if ( isFadeEnabled ) {
                 fheroes2::fadeInDisplay( restorer.rect(), false );
             }
             else {

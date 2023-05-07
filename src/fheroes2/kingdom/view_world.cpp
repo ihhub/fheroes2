@@ -49,6 +49,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "ui_button.h"
+#include "ui_tool.h"
 #include "world.h"
 
 // #define VIEWWORLD_DEBUG_ZOOM_LEVEL // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
@@ -572,17 +573,28 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::ImageRestorer restorer( display );
-
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    LocalEvent::PauseCycling();
+    fheroes2::ImageRestorer restorer( display );
 
     Settings & conf = Settings::Get();
     const bool isEvilInterface = conf.isEvilInterfaceEnabled();
     const bool isHideInterface = conf.isHideInterfaceEnabled();
     const ZoomLevel zoomLevel = conf.ViewWorldZoomLevel();
+    const bool isFadeEnabled = conf.isFadeEffectEnabled();
+
+    fheroes2::Rect fadeRoi( { 0, 0 }, display.screenSize() );
+
+    if ( !isHideInterface ) {
+        // If interface is on there is no need to fade the whole screen, just only map area.
+        fadeRoi.x += BORDERWIDTH;
+        fadeRoi.y += BORDERWIDTH;
+        fadeRoi.width -= 3 * BORDERWIDTH + RADARWIDTH;
+        fadeRoi.height -= 2 * BORDERWIDTH;
+    }
+
+    // Fade-out Adventure map screen.
+    if ( isFadeEnabled ) {
+        fheroes2::fadeOutDisplay( fadeRoi, false );
+    }
 
     // If the interface is currently hidden, we have to temporarily bring it back, because
     // the map generation in the World View mode heavily depends on the existing game area
@@ -590,6 +602,11 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         conf.setHideInterface( false );
         interface.Reset();
     }
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+    LocalEvent::PauseCycling();
 
     // Creates fixed radar on top-right, suitable for the View World window
     Interface::Radar radar( interface.GetRadar(), fheroes2::Display::instance() );
@@ -614,8 +631,11 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     CacheForMapWithResources cache( mode );
 
     DrawObjectsIcons( color, mode, cache );
-    DrawWorld( currentROI, cache );
-    Interface::GameBorderRedraw( true );
+
+    // We need to draw interface borders only if game interface is turned off on Adventure map.
+    if ( isHideInterface ) {
+        Interface::GameBorderRedraw( true );
+    }
 
     // Draw radar
     radar.RedrawForViewWorld( currentROI, mode, true );
@@ -634,7 +654,23 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     fheroes2::Button buttonExit( buttonExitPosition.x, buttonExitPosition.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 2, 3 );
     buttonExit.draw();
 
-    display.render();
+    // Fade-in View World screen.
+    if ( isFadeEnabled ) {
+        if ( !isHideInterface ) {
+            display.render( { display.width() - RADARWIDTH + BORDERWIDTH, BORDERWIDTH, display.height() - 2 * BORDERWIDTH, RADARWIDTH } );
+        }
+
+        // Render the View World map image.
+        DrawWorld( currentROI, cache );
+
+        fheroes2::fadeInDisplay( fadeRoi, false );
+    }
+    else {
+        // Render the View World map image.
+        DrawWorld( currentROI, cache );
+
+        display.render();
+    }
 
     // Use for dragging the map from main window
     bool isDrag = false;
@@ -694,14 +730,23 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         }
     }
 
+    // Memorize the last zoom level value.
+    conf.SetViewWorldZoomLevel( currentROI._zoomLevel );
+
+    LocalEvent::ResumeCycling();
+
+    // Fade-out View World screen and fade-in the Adventure map screen.
+    if ( isFadeEnabled ) {
+        fheroes2::fadeOutDisplay( fadeRoi, false );
+
+        restorer.restore();
+
+        fheroes2::fadeInDisplay( fadeRoi, false );
+    }
+
     // Don't forget to reset the interface settings back if necessary
     if ( isHideInterface ) {
         conf.setHideInterface( true );
         interface.Reset();
     }
-
-    // Memorize the last zoom level value.
-    conf.SetViewWorldZoomLevel( currentROI._zoomLevel );
-
-    LocalEvent::ResumeCycling();
 }
