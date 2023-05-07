@@ -309,12 +309,13 @@ public:
 
     int CurrentColor() const
     {
-        return players.current_color;
+        return players.getCurrentColor();
     }
 
-    void SetCurrentColor( int color )
+    // The color should belong to one player or be NONE (neutral player).
+    void SetCurrentColor( const int color )
     {
-        players.current_color = color;
+        players.setCurrentColor( color );
     }
 
     int PreferablyCountPlayers() const

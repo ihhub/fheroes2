@@ -70,26 +70,6 @@ namespace
 {
     const int32_t buttonYStep = 66;
 
-    // Draw button panel and return the position for a button.
-    fheroes2::Point drawButtonPanel()
-    {
-        const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
-        const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
-
-        const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
-        const uint32_t panelXPos = back.width() - ( panel.width() + panelOffset );
-        fheroes2::Blit( panel, fheroes2::Display::instance(), panelXPos, panelOffset );
-
-        const int32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
-
-        const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
-        const int32_t buttonWidth = buttonSample.width();
-        const int32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
-        const int32_t buttonYPos = 46;
-
-        return fheroes2::Point( buttonXPos, buttonYPos );
-    }
-
     std::unique_ptr<SMKVideoSequence> getVideo( const std::string & fileName )
     {
         std::string videoPath;
@@ -214,7 +194,7 @@ fheroes2::GameMode Game::CampaignSelection()
     outputNewCampaignSelectionInTextSupportMode();
 
     fheroes2::drawMainMenuScreen();
-    const fheroes2::Point buttonPos = drawButtonPanel();
+    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
     fheroes2::Button buttonSuccessionWars( buttonPos.x, buttonPos.y, ICN::BUTTON_ORIGINAL_CAMPAIGN, 0, 1 );
     fheroes2::Button buttonPriceOfLoyalty( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BUTTON_EXPANSION_CAMPAIGN, 0, 1 );
@@ -483,7 +463,7 @@ fheroes2::GameMode Game::NewNetwork()
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::drawMainMenuScreen();
-    const fheroes2::Point buttonPos = drawButtonPanel();
+    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
     fheroes2::Button buttonHost( buttonPos.x, buttonPos.y, ICN::BTNNET, 0, 1 );
     fheroes2::Button buttonGuest( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNNET, 2, 3 );
@@ -536,7 +516,7 @@ fheroes2::GameMode Game::NewGame()
     fheroes2::Display & display = fheroes2::Display::instance();
 
     fheroes2::drawMainMenuScreen();
-    const fheroes2::Point buttonPos = drawButtonPanel();
+    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
     fheroes2::Button buttonStandardGame( buttonPos.x, buttonPos.y, ICN::BUTTON_STANDARD_GAME, 0, 1 );
     fheroes2::ButtonSprite buttonCampaignGame( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 0 ),
@@ -621,7 +601,7 @@ fheroes2::GameMode Game::NewMulti()
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::drawMainMenuScreen();
-    const fheroes2::Point buttonPos = drawButtonPanel();
+    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
     fheroes2::Button buttonHotSeat( buttonPos.x, buttonPos.y, ICN::BUTTON_HOT_SEAT, 0, 1 );
     fheroes2::Button buttonNetwork( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNMP, 2, 3 );
@@ -662,7 +642,7 @@ uint32_t Game::SelectCountPlayers()
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::drawMainMenuScreen();
-    const fheroes2::Point buttonPos = drawButtonPanel();
+    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
     fheroes2::Button button2Players( buttonPos.x, buttonPos.y, ICN::BUTTON_2_PLAYERS, 0, 1 );
     fheroes2::Button button3Players( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BUTTON_3_PLAYERS, 0, 1 );

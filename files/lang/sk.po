@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-25 06:07+0000\n"
-"PO-Revision-Date: 2023-04-22 14:41+0200\n"
+"POT-Creation-Date: 2023-05-07 10:26+0000\n"
+"PO-Revision-Date: 2023-04-28 16:54+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -173,7 +173,7 @@ msgid "6 PLAYERS"
 msgstr "6 HRÁČOV"
 
 msgid "GIFT"
-msgstr "DAR"
+msgstr "DARUJ"
 
 msgid "guildWell|EXIT"
 msgstr "PREČ"
@@ -214,64 +214,64 @@ msgid ""
 "A few\n"
 "%{monster}"
 msgstr ""
-"Zopár\n"
-"%{monster}"
+"%{monster}\n"
+"(zopár)"
 
 msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
-"Niekoľko\n"
-"%{monster}"
+"%{monster}\n"
+"(niekoľko)"
 
 msgid ""
 "A pack of\n"
 "%{monster}"
 msgstr ""
-"Skupina\n"
-"%{monster}"
+"%{monster}\n"
+"(skupina)"
 
 msgid ""
 "Lots of\n"
 "%{monster}"
 msgstr ""
-"Veľa\n"
-"%{monster}"
+"%{monster}\n"
+"(veľa)"
 
 msgid ""
 "A horde of\n"
 "%{monster}"
 msgstr ""
-"Horda\n"
-"%{monster}"
+"%{monster}\n"
+"(horda)"
 
 msgid ""
 "A throng of\n"
 "%{monster}"
 msgstr ""
-"Zástup\n"
-"%{monster}"
+"%{monster}\n"
+"(zástup)"
 
 msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
-"Dav\n"
-"%{monster}"
+"%{monster}\n"
+"(dav)"
 
 msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
-"Mračná\n"
-"%{monster}"
+"%{monster}\n"
+"(mračná)"
 
 msgid ""
 "A legion of\n"
 "%{monster}"
 msgstr ""
-"Légia\n"
-"%{monster}"
+"%{monster}\n"
+"(légia)"
 
 msgid "army|Few"
 msgstr "Zopár"
@@ -543,7 +543,7 @@ msgid "Luck"
 msgstr "Šťastie"
 
 msgid "Spell Points"
-msgstr "Body kúzla"
+msgstr "Body kúziel"
 
 msgid "Hero's Options"
 msgstr "Ukáž hrdinu"
@@ -718,7 +718,7 @@ msgstr "%{name} vynecháva kolo."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] "Jednotka %{attacker} pôsobí %{damage} škôd."
+msgstr[0] "%{attacker} pôsobia %{damage} škôd."
 msgstr[1] "%{attacker} pôsobí %{damage} škôd."
 msgstr[2] "%{attacker} pôsobia %{damage} škôd."
 
@@ -1244,7 +1244,7 @@ msgid ""
 "strong for you."
 msgstr ""
 "S prípravou na tvoj príchod Kraeger zariadil, aby nekromanti prekazili tvoju "
-"výpravu. Musíš dobyť hrad Chrastodol pred prvým dňom tretieho týždňa, inak "
+"výpravu. Musíš dobyť hrad Scabsdale pred prvým dňom tretieho týždňa, inak "
 "budú na teba nekromanti príliš silní."
 
 msgid ""
@@ -2072,1123 +2072,1204 @@ msgid "Sheltemburg"
 msgstr "Sheltemburg"
 
 msgid "Cannot recruit - you already have a Hero in this town."
-msgstr ""
+msgstr "Nedá sa najať - v tomto meste už máš hrdinu."
 
 msgid "Cannot recruit - you have too many Heroes."
-msgstr ""
+msgstr "Nedá sa najať - máš príliš mnoho hrdinov."
 
 msgid "Cannot afford a Hero"
-msgstr ""
+msgstr "Hrdinu si nemôžeš dovoliť"
 
 msgid "There is no room in the garrison for this army."
-msgstr ""
+msgstr "V posádke nie je miesto pre túto armádu."
 
 msgid "Fortifications"
-msgstr ""
+msgstr "Opevnenia"
 
 msgid "Farm"
-msgstr ""
+msgstr "Farma"
 
 msgid "Thatched Hut"
-msgstr ""
+msgstr "Došková chatrč"
 
 msgid "Archery Range"
-msgstr ""
+msgstr "Luková strelnica"
 
 msgid "Upg. Archery Range"
-msgstr ""
+msgstr "Pov. Luková strelnica"
 
 msgid "Blacksmith"
-msgstr ""
+msgstr "Kováč"
 
 msgid "Upg. Blacksmith"
-msgstr ""
+msgstr "Pov. Kováč"
 
 msgid "Armory"
-msgstr ""
+msgstr "Zbrojnica"
 
 msgid "Upg. Armory"
-msgstr ""
+msgstr "Pov. Zbrojnica"
 
 msgid "Jousting Arena"
-msgstr ""
+msgstr "Turnajová aréna"
 
 msgid "Upg. Jousting Arena"
-msgstr ""
+msgstr "Pov. Turnajová aréna"
 
 msgid "Cathedral"
-msgstr ""
+msgstr "Katedrála"
 
 msgid "Upg. Cathedral"
-msgstr ""
+msgstr "Pov. Katedrála"
 
 msgid "Coliseum"
-msgstr ""
+msgstr "Koloseum"
 
 msgid "Garbage Heap"
-msgstr ""
+msgstr "Smetisko"
 
 msgid "Hut"
-msgstr ""
+msgstr "Chatrč"
 
 msgid "Stick Hut"
-msgstr ""
+msgstr "Drevenica"
 
 msgid "Upg. Stick Hut"
-msgstr ""
+msgstr "Pov. Drevenica"
 
 msgid "Den"
-msgstr ""
+msgstr "Brloh"
 
 msgid "Adobe"
-msgstr ""
+msgstr "Tehlový dom"
 
 msgid "Upg. Adobe"
-msgstr ""
+msgstr "Pov. Tehlový dom"
 
 msgid "Bridge"
-msgstr ""
+msgstr "Most"
 
 msgid "Upg. Bridge"
-msgstr ""
+msgstr "Pov. Most"
 
 msgid "Pyramid"
-msgstr ""
+msgstr "Pyramída"
 
 msgid "Rainbow"
-msgstr ""
+msgstr "Dúha"
 
 msgid "Crystal Garden"
-msgstr ""
+msgstr "Krištáľová záhrada"
 
 msgid "Treehouse"
-msgstr ""
+msgstr "Stromodom"
 
 msgid "Cottage"
-msgstr ""
+msgstr "Chalúpka"
 
 msgid "Upg. Cottage"
-msgstr ""
+msgstr "Chalupa"
 
 msgid "Stonehenge"
-msgstr ""
+msgstr "Stonehenge"
 
 msgid "Upg. Stonehenge"
-msgstr ""
+msgstr "Pov. Stonehenge"
 
 msgid "Fenced Meadow"
-msgstr ""
+msgstr "Oplotená lúka"
 
 msgid "sorceress|Red Tower"
-msgstr ""
+msgstr "Červená veža"
 
 msgid "Dungeon"
-msgstr ""
+msgstr "Žalár"
 
 msgid "Waterfall"
-msgstr ""
+msgstr "Vodopád"
 
 msgid "Cave"
-msgstr ""
+msgstr "Jaskyňa"
 
 msgid "Crypt"
-msgstr ""
+msgstr "Krypta"
 
 msgid "Nest"
-msgstr ""
+msgstr "Hniezdo"
 
 msgid "Maze"
-msgstr ""
+msgstr "Bludisko"
 
 msgid "Upg. Maze"
-msgstr ""
+msgstr "Labyrint"
 
 msgid "Swamp"
-msgstr ""
+msgstr "Močiar"
 
 msgid "Green Tower"
-msgstr ""
+msgstr "Zelená veža"
 
 msgid "warlock|Red Tower"
-msgstr ""
+msgstr "Červená veža"
 
 msgid "Black Tower"
-msgstr ""
+msgstr "Čierna veža"
 
 msgid "Library"
-msgstr ""
+msgstr "Knižnica"
 
 msgid "Orchard"
-msgstr ""
+msgstr "Ovocný sad"
 
 msgid "Habitat"
-msgstr ""
+msgstr "Hobitín"
 
 msgid "Pen"
-msgstr ""
+msgstr "Ohrada"
 
 msgid "Foundry"
-msgstr ""
+msgstr "Zlievareň"
 
 msgid "Upg. Foundry"
-msgstr ""
+msgstr "Pov. Zlievareň"
 
 msgid "Cliff Nest"
-msgstr ""
+msgstr "Hniezdo na útese"
 
 msgid "Ivory Tower"
-msgstr ""
+msgstr "Veža zo slonoviny"
 
 msgid "Upg. Ivory Tower"
-msgstr ""
+msgstr "Pov. Veža zo slonoviny"
 
 msgid "Cloud Castle"
-msgstr ""
+msgstr "Oblačné mesto"
 
 msgid "Upg. Cloud Castle"
-msgstr ""
+msgstr "Pov. Oblačné mesto"
 
 msgid "Storm"
-msgstr ""
+msgstr "Búrka"
 
 msgid "Skull Pile"
-msgstr ""
+msgstr "Hromada lebiek"
 
 msgid "Excavation"
-msgstr ""
+msgstr "Vykopávka"
 
 msgid "Graveyard"
-msgstr ""
+msgstr "Cintorín"
 
 msgid "Upg. Graveyard"
-msgstr ""
+msgstr "Pov. Cintorín"
 
 msgid "Upg. Pyramid"
-msgstr ""
+msgstr "Pov. Pyramída"
 
 msgid "Mansion"
-msgstr ""
+msgstr "Kaštieľ"
 
 msgid "Upg. Mansion"
-msgstr ""
+msgstr "Zámok"
 
 msgid "Mausoleum"
-msgstr ""
+msgstr "Mauzóleum"
 
 msgid "Upg. Mausoleum"
-msgstr ""
+msgstr "Pov. Mauzóleum"
 
 msgid "Laboratory"
-msgstr ""
+msgstr "Laboratórium"
 
 msgid "Shrine"
-msgstr ""
+msgstr "Svätyňa"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
 msgstr ""
+"Opevnenia zvyšujú húževnatosť múrov a zvyšujú počet kôl potrebných na ich "
+"zbúranie."
 
 msgid "The Farm increases production of Peasants by %{count} per week."
-msgstr ""
+msgstr "Farma zvyšuje produkciu roľníkov o %{count} za týždeň."
 
 msgid ""
 "The Coliseum provides inspiring spectacles to defending troops, raising "
 "their morale by two during combat."
 msgstr ""
+"Koloseum poskytuje obranným jednotkám inšpiratívne predstavenie, ktoré počas "
+"boja zvýši ich morálku o dve."
 
 msgid "The Garbage Heap increases production of Goblins by %{count} per week."
-msgstr ""
+msgstr "Smetisko zvyšuje produkciu goblinov o %{count} za týždeň."
 
 msgid "The Rainbow increases the luck of the defending units by two."
-msgstr ""
+msgstr "Dúha zvyšuje šťastie obranných jednotiek o dve."
 
 msgid ""
 "The Crystal Garden increases production of Sprites by %{count} per week."
-msgstr ""
+msgstr "Krištáľová záhrada zvyšuje produkciu víl o %{count} za týždeň."
 
 msgid "The Dungeon increases the income of the town by %{count} gold per day."
-msgstr ""
+msgstr "Žalár zvyšuje príjem mesta o %{count} zlata za deň."
 
 msgid "The Waterfall increases production of Centaurs by %{count} per week."
-msgstr ""
+msgstr "Vodopád zvyšuje produkciu kentaurov o %{count} za týždeň."
 
 msgid ""
 "The Library increases the number of spells in the Guild by one for each "
 "level of the guild."
-msgstr ""
+msgstr "Knižnica zvyšuje počet kúziel v cechu o jedno za každú úroveň cechu."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr ""
+msgstr "Ovocný sad zvyšuje produkciu hobitov o %{count} za týždeň."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
-msgstr ""
+msgstr "Búrka pridáva +2 k sile kúziel brániaceho kúzelníka."
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
-msgstr ""
+msgstr "Hromada lebiek zvyšuje produkciu kostlivcov o %{count} za týždeň."
 
 msgid "Thieves' Guild"
-msgstr ""
+msgstr "Cech zlodejov"
 
 msgid "Tavern"
-msgstr ""
+msgstr "Krčma"
 
 msgid "Shipyard"
-msgstr ""
+msgstr "Lodenica"
 
 msgid "Well"
-msgstr ""
+msgstr "Studňa"
 
 msgid "Statue"
-msgstr ""
+msgstr "Socha"
 
 msgid "Marketplace"
-msgstr ""
+msgstr "Trhovisko"
 
 msgid "Moat"
-msgstr ""
+msgstr "Priekopa"
 
 msgid "Castle"
-msgstr ""
+msgstr "Hrad"
 
 msgid "Tent"
-msgstr ""
+msgstr "Stan"
 
 msgid "Captain's Quarters"
-msgstr ""
+msgstr "Kapitánova ubytovňa"
 
 msgid "Mage Guild, Level 1"
-msgstr ""
+msgstr "Cech mágov, úroveň 1"
 
 msgid "Mage Guild, Level 2"
-msgstr ""
+msgstr "Cech mágov, úroveň 2"
 
 msgid "Mage Guild, Level 3"
-msgstr ""
+msgstr "Cech mágov, úroveň 3"
 
 msgid "Mage Guild, Level 4"
-msgstr ""
+msgstr "Cech mágov, úroveň 4"
 
 msgid "Mage Guild, Level 5"
-msgstr ""
+msgstr "Cech mágov, úroveň 5"
 
 msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
 "percent."
 msgstr ""
+"Svätyňa zvyšuje zručnosť nekromancie všetkých tvojich nekromantov o 10 "
+"percent."
 
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
 "can also provide scouting information on enemy towns. Additional Guilds "
 "provide more information."
 msgstr ""
+"Cech zlodejov poskytuje informácie o nepriateľských hráčoch. Cech zlodejov "
+"tiež poskytuje prieskumné informácie o nepriateľských mestách. Dodatočné "
+"cechy poskytnú viac informácií."
 
 msgid "The Tavern increases morale for troops defending the castle."
-msgstr ""
+msgstr "Krčma zvyšuje morálku pre jednotky brániace hrad."
 
 msgid "The Shipyard allows ships to be built."
-msgstr ""
+msgstr "Lodenica umožňuje stavbu lodí."
 
 msgid ""
 "The Well increases the growth rate of all dwellings by %{count} creatures "
 "per week."
 msgstr ""
+"Studňa zvyšuje rýchlosť nárastu bojovníkov všetkých obydlí o %{count} za "
+"týždeň."
 
 msgid "The Statue increases your town's income by %{count} gold per day."
-msgstr ""
+msgstr "Socha zvyšuje príjem tvojho mesta o %{count} zlata za deň."
 
 msgid "The Left Turret provides extra firepower during castle combat."
-msgstr ""
+msgstr "Ľavá veža poskytuje palebnú silu navyše počas boja o hrad."
 
 msgid "The Right Turret provides extra firepower during castle combat."
-msgstr ""
+msgstr "Pravá veža poskytuje palebnú silu navyše počas boja o hrad."
 
 msgid ""
 "The Marketplace can be used to convert one type of resource into another. "
 "The more marketplaces you control, the better the exchange rate."
 msgstr ""
+"Trhovisko možno použiť na zámenu jedného typu zdroja za iný. Čím viac "
+"trhovísk vlastníš, tým lepší je výmenný kurz."
 
 msgid ""
 "The Moat slows attacking units. Any unit entering the moat must end its turn "
 "there and becomes more vulnerable to attack."
 msgstr ""
+"Priekopa spomaľuje útočiace jednotky. Každá jednotka, ktorá vstúpi do "
+"priekopy, tam musí svoj ťah ukončiť a stane sa zraniteľnejšou voči útoku."
 
 msgid ""
 "The Castle improves town defense and increases income to %{count} gold per "
 "day."
-msgstr ""
+msgstr "Hrad zlepšuje obranu mesta a zvyšuje príjem na %{count} zlata za deň."
 
 msgid ""
 "The Tent provides workers to build a castle, provided the materials and the "
 "gold are available."
 msgstr ""
+"Stan poskytuje robotníkov na stavbu hradu za predpokladu, že sú k dispozícii "
+"materiály a zlato."
 
 msgid ""
 "The Captain's Quarters provides a captain to assist in the castle's defense "
 "when no hero is present."
 msgstr ""
+"Kapitánova ubytovňa poskytuje kapitána, ktorý pomáha pri obrane hradu, keď "
+"nie je prítomný žiadny hrdina."
 
 msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
-msgstr ""
+msgstr "Cech mágov umožňuje hrdinom učiť sa kúzla a dopĺňať si body kúziel."
 
 msgid "Recruit %{name}"
-msgstr ""
+msgstr "Najať: %{name}"
 
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
-msgstr ""
+msgstr "Mesiac: %{month}, Týždeň: %{week}, Deň: %{day}"
 
 msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
+"Ak chceš používať cech mágov, musíš si kúpiť knihu kúziel, ale momentálne "
+"nemáš miesto pre knihu kúziel. Skús dať jeden zo svojich artefaktov inému "
+"hrdinovi."
 
 msgid "Exit"
-msgstr ""
+msgstr "Preč"
 
 msgid "Click to show next town."
-msgstr ""
+msgstr "Kliknutím zobraz ďalšie mesto."
 
 msgid "Show next town"
-msgstr ""
+msgstr "Ukáž ďalšie mesto"
 
 msgid "Click to show previous town."
-msgstr ""
+msgstr "Kliknutím zobraz predošlé mesto."
 
 msgid "Show previous town"
-msgstr ""
+msgstr "Ukáž predošlé mesto"
 
 msgid "This town may not be upgraded to a castle."
-msgstr ""
+msgstr "Toto mesto nemôže byť povýšené na hrad."
 
 msgid "Town"
-msgstr ""
+msgstr "Mesto"
 
 msgid "Exit Castle"
-msgstr ""
+msgstr "Preč z hradu"
 
 msgid "Exit Town"
-msgstr ""
+msgstr "Preč z mesta"
 
 msgid "Show Income"
-msgstr ""
+msgstr "Ukáž príjem"
 
 msgid "View Hero"
-msgstr ""
+msgstr "Ukáž hrdinu"
 
 msgid "The above spells are available here."
-msgstr ""
+msgstr "Vyššie uvedené kúzla sú tu dostupné."
 
 msgid "The above spells have been added to your book."
-msgstr ""
+msgstr "Vyššie uvedené kúzla boli pridané do tvojej knihy kúziel."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
-msgstr ""
+msgstr "Štedré prepitné pre barmana prináša nasledujúcu fámu:"
 
 msgid "Recruit Hero"
-msgstr ""
+msgstr "Najať hrdinu"
 
 msgid "%{name} is a level %{value} %{race} "
-msgstr ""
+msgstr "%{name} je %{race} na úrovni %{value} "
 
 msgid "with %{count} artifacts."
-msgstr ""
+msgstr "s %{count} artefaktmi."
 
 msgid "with 1 artifact."
-msgstr ""
+msgstr "s jedným artefaktom."
 
 msgid "without artifacts."
-msgstr ""
+msgstr "bez artefaktov."
 
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
 msgstr ""
+"'Široká' bojová formácia rozprestiera tvoje armády zhora nadol na bojisko, "
+"pričom medzi každou armádou je aspoň jedno prázdne miesto."
 
 msgid ""
 "'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
+"'Zoskupená' bojová formácia spája tvoju armádu v strede tvojej strany "
+"bojiska."
 
 msgid "Spread Formation"
-msgstr ""
+msgstr "Široká formácia"
 
 msgid "Grouped Formation"
-msgstr ""
+msgstr "Zoskupená formácia"
 
 msgid "Recruit %{name} the %{race}"
-msgstr ""
+msgstr "Najmi: %{race} %{name}"
 
 msgid "Set garrison combat formation to 'Spread'"
-msgstr ""
+msgstr "Nastaviť bojovú formáciu posádky na 'Široká'"
 
 msgid "Set garrison combat formation to 'Grouped'"
-msgstr ""
+msgstr "Nastaviť bojovú formáciu posádky na 'Zoskupená'"
 
 msgid "Exit Castle Options"
-msgstr ""
+msgstr "Preč z možností hradu"
 
 msgid "Castle Options"
-msgstr ""
+msgstr "Možnosti hradu"
 
 msgid "Not enough resources to recruit creatures."
-msgstr ""
+msgstr "Nie je dostatok zdrojov na nábor bojovníkov."
 
 msgid "You are unable to recruit at this time, your ranks are full."
-msgstr ""
+msgstr "Momentálne nemôžeš robiť nábor, tvoje rady sú plné."
 
 msgid "No creatures available for purchase."
-msgstr ""
+msgstr "Žiadni bojovníci nie sú k dispozícii na nákup."
 
 msgid "Recruit Creatures"
-msgstr ""
+msgstr "Najať bojovníkov"
 
 msgid "Max"
-msgstr ""
+msgstr "Max"
 
 msgid "Hire all creatures in the town."
-msgstr ""
+msgstr "Najmi všetkých bojovníkov v meste."
 
 msgid "Town Population Information and Statistics"
-msgstr ""
+msgstr "Informácie o obyvateľstve a štatistika mesta"
 
 msgid "Damg"
-msgstr ""
+msgstr "Pošk"
 
 msgid "HP"
-msgstr ""
+msgstr "Zdravie"
 
 msgid "Growth"
-msgstr ""
+msgstr "Nárast"
 
 msgid "week"
-msgstr ""
+msgstr "týždeň"
 
 msgid "Available"
-msgstr ""
+msgstr "Dostupné"
 
 msgid "View World"
-msgstr ""
+msgstr "Ukáž svet"
 
 msgid "View the entire world."
-msgstr ""
+msgstr "Ukáž celý svet."
 
 msgid "Puzzle"
-msgstr ""
+msgstr "Rébus"
 
 msgid "View the obelisk puzzle."
-msgstr ""
+msgstr "Ukáž rébus obeliskov."
 
 msgid "Scenario Information"
-msgstr ""
+msgstr "Informácie o hre"
 
 msgid "View information on the scenario you are currently playing."
-msgstr ""
+msgstr "Pozri si informácie o hre, ktorú práve hráš."
 
 msgid "Dig for the Ultimate Artifact."
-msgstr ""
+msgstr "Kop za ultimátnym artefaktom."
 
 msgid "Digging"
-msgstr ""
+msgstr "Kopanie"
 
 msgid "Exit this menu without doing anything."
-msgstr ""
+msgstr "Opusti túto ponuku bez vykonania akcie."
 
 msgid "Arena"
-msgstr ""
+msgstr "Aréna"
 
 msgid ""
 "You enter the arena and face a pack of vicious lions. You handily defeat "
 "them, to the wild cheers of the crowd.  Impressed by your skill, the aged "
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
+"Po vstupe do arény čelíš svorke zlostných levov. Šikovne ich porážaš za "
+"divokého jasotu davu. Starý tréner gladiátorov, ohromený tvojou zručnosťou, "
+"súhlasí, že ťa vycvičí v zručnosti podľa tvojho výberu."
 
 msgid "Attack Skill"
-msgstr ""
+msgstr "Útok"
 
 msgid "Defense Skill"
-msgstr ""
+msgstr "Obrana"
 
 msgid "Shots"
-msgstr ""
+msgstr "Strely"
 
 msgid "Shots Left"
-msgstr ""
+msgstr "Ostáva striel"
 
 msgid "Damage"
-msgstr ""
+msgstr "Poškodenie"
 
 msgid "Hit Points"
-msgstr ""
+msgstr "Body zdravia"
 
 msgid "Hit Points Left"
-msgstr ""
+msgstr "Ostáva zdravia"
 
 msgid "You can't afford to upgrade your troops!"
-msgstr ""
+msgstr "Nemôžeš si dovoliť povýšiť svoje jednotky!"
 
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
 "upgrade them?"
 msgstr ""
+"Tvoje jednotky môžu byť vylepšené, ale bude ťa to stáť draho. Chceš ich "
+"povýšiť?"
 
 msgid "Are you sure you want to dismiss this army?"
+msgstr "Určite chceš prepustiť túto armádu?"
+
+msgid "Upgrade"
+msgstr ""
+
+#, fuzzy
+msgid "Upgrade your troops."
+msgstr "Nemôžeš si dovoliť povýšiť svoje jednotky!"
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
 msgstr ""
 
 msgid "Followers"
-msgstr ""
+msgstr "Nasledovníci"
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
 msgstr ""
+"%{monster}, s túžbou po väčšej sláve, sa k tebe chcú pridať.\n"
+"Prijímaš ich?"
 
 msgid ""
 "The %{monster} is swayed by your diplomatic tongue, and offers to join your "
 "army for the sum of %{gold} gold.\n"
 "Do you accept?"
 msgstr ""
+"%{monster} je ovplyvnený/á tvojim diplomatickým jazykom a ponúka ti vstup do "
+"tvojej armády za sumu %{gold} zlata.\n"
+"Prijímaš ponuku?"
 
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
 " \n"
 msgstr ""
+"Bojovníci sú pohnutí tvojim diplomatickým\n"
+"jazykom a ponúkajú:\n"
+"\n"
 
 msgid ""
 "%{offer} of the %{total} %{monster} will join your army, and the rest will "
 "leave you alone, for the sum of %{gold} gold.\n"
 "Do you accept?"
 msgstr ""
+"%{monster}, presnejšie %{offer} z celkových %{total} sa pripoja k tvojej "
+"armáde a zvyšok ťa nechá na pokoji za sumu %{gold} zlata.\n"
+"Prijímaš ponuku?"
 
 msgid ""
 "All %{offer} of the %{monster} will join your army for the sum of %{gold} "
 "gold.\n"
 "Do you accept?"
 msgstr ""
+"Celá skupina - %{offer} %{monster}, sa pripojí k tvojej armáde za sumu "
+"%{gold} zlata.\n"
+"Prijímaš ponuku?"
 
 msgid "(Rate: %{percent})"
-msgstr ""
+msgstr "(Rozsah: %{percent})"
 
 msgid "off"
-msgstr ""
+msgstr "vyp"
 
 msgid "Music"
-msgstr ""
+msgstr "Hudba"
 
 msgid "Effects"
-msgstr ""
+msgstr "Zvukové efekty"
 
 msgid "MIDI"
-msgstr ""
+msgstr "MIDI"
 
 msgid "MIDI Expansion"
-msgstr ""
+msgstr "Rozšírenie MIDI"
 
 msgid "External"
-msgstr ""
+msgstr "Externý"
 
 msgid "Music Type"
-msgstr ""
+msgstr "Typ hudby"
 
 msgid "3D Audio"
-msgstr ""
+msgstr "3D zvuk"
 
 msgid "Toggle ambient music level."
-msgstr ""
+msgstr "Zmeň úroveň zvukov okolia."
 
 msgid "Toggle foreground sounds level."
-msgstr ""
+msgstr "Zmeň úroveň zvukov popredia."
 
 msgid "Change the type of music."
-msgstr ""
+msgstr "Zmeň typ hudby."
 
 msgid "Toggle 3D effects of foreground sounds."
-msgstr ""
+msgstr "Zmeň 3D efekty zvukov popredia."
 
 msgid "Build a new ship:"
-msgstr ""
+msgstr "Postav novú loď:"
 
 msgid "Resource cost:"
-msgstr ""
+msgstr "Náklady:"
 
 msgid "Total: "
-msgstr ""
+msgstr "Celkovo: "
 
 msgid "Need: "
-msgstr ""
+msgstr "Potreba: "
 
 msgid "Load Game"
-msgstr ""
+msgstr "Nahraj hru"
 
 msgid "No save files to load."
-msgstr ""
+msgstr "Žiadne uložené hry."
 
 msgid "New Game"
-msgstr ""
+msgstr "Nová hra"
 
 msgid "Start a single or multi-player game."
-msgstr ""
+msgstr "Začni hru jedného alebo viac hráčov."
 
 msgid "Load a previously saved game."
-msgstr ""
+msgstr "Nahraj predošle uloženú hru."
 
 msgid "Save Game"
-msgstr ""
+msgstr "Ulož hru"
 
 msgid "Save the current game."
-msgstr ""
+msgstr "Ulož terajšiu hru."
 
 msgid "Quit"
-msgstr ""
+msgstr "Koniec"
 
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr ""
+msgstr "Odíď z Heroes of Might and Magic II."
 
 msgid "Language"
-msgstr ""
+msgstr "Jazyk"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Grafika"
 
 msgid "Black & White"
-msgstr ""
+msgstr "Čiernobiela"
 
 msgid "Mouse Cursor"
-msgstr ""
+msgstr "Kurzor myši"
 
 msgid "Color"
-msgstr ""
+msgstr "Farba"
 
 msgid "Text Support"
-msgstr ""
+msgstr "Podpora textu"
 
 msgid "Change the language of the game."
-msgstr ""
+msgstr "Zmeň jazyk hry."
 
 msgid "Select Game Language"
-msgstr ""
+msgstr "Vyber jazyk hry"
 
 msgid "Change the graphics settings of the game."
-msgstr ""
+msgstr "Zmeň nastavenie grafiky hry."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr ""
+msgstr "Prepni farebný kurzor. Toto je len estetická voľba."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
+"Prepni režim podpory textu na výstup dodatočných informácií o oknách a "
+"udalostiach v hre."
 
 msgid ""
 "Map\n"
 "Difficulty"
 msgstr ""
+"Obtiažnosť\n"
+"mapy"
 
 msgid ""
 "Game\n"
 "Difficulty"
 msgstr ""
+"Obtiažnosť\n"
+"hry"
 
 msgid "Rating"
-msgstr ""
+msgstr "Hodnotenie"
 
 msgid "Map Size"
-msgstr ""
+msgstr "Veľkosť mapy"
 
 msgid "Opponents"
-msgstr ""
+msgstr "Oponenti"
 
 msgid "Class"
-msgstr ""
+msgstr "Trieda"
 
 msgid ""
 "Victory\n"
 "Conditions"
 msgstr ""
+"Podmienky\n"
+"víťazstva"
 
 msgid ""
 "Loss\n"
 "Conditions"
 msgstr ""
+"Podmienky\n"
+"prehry"
 
 msgid "First select recipients!"
-msgstr ""
+msgstr "Najprv zvoľ príjemcov!"
 
 msgid "You cannot select %{resource}!"
-msgstr ""
+msgstr "Nemôžeš zvoliť %{resource}!"
 
 msgid "Select count %{resource}:"
-msgstr ""
+msgstr "Zvoľ počet - %{resource}:"
 
 msgid "Select Recipients"
-msgstr ""
+msgstr "Zvoľ príjemcov"
 
 msgid "Your Funds"
-msgstr ""
+msgstr "Tvoj majetok"
 
 msgid "Planned Gift"
-msgstr ""
+msgstr "Plánovaný dar"
 
 msgid "Gift from %{name}"
-msgstr ""
+msgstr "Dar od: %{name}"
 
 msgid "Resolution"
-msgstr ""
+msgstr "Rozlíšenie"
 
 msgid "Fullscreen"
-msgstr ""
+msgstr "Celá obrazovka"
 
 msgid "window|Mode"
-msgstr ""
+msgstr "Mód"
 
 msgid "Windowed"
-msgstr ""
+msgstr "Okno"
 
 msgid "V-Sync"
-msgstr ""
+msgstr "V-Sync"
 
 msgid "on"
-msgstr ""
+msgstr "zap"
 
 msgid "FPS"
-msgstr ""
+msgstr "FPS"
 
 msgid "System Info"
-msgstr ""
+msgstr "Systémové info"
 
 msgid "Change the resolution of the game."
-msgstr ""
+msgstr "Zmeň rozlíšenie hry."
 
 msgid "Select Game Resolution"
-msgstr ""
+msgstr "Zvoľ rozlíšenie hry"
 
 msgid "Toggle between fullscreen and windowed modes."
-msgstr ""
+msgstr "Prepni medzi módom celej obrazovky a oknom."
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
 "monitors."
 msgstr ""
+"Možnosť V-Sync dokáže vyriešiť problém s blikaním na niektorých monitoroch."
 
 msgid "Show extra information such as FPS and current time."
-msgstr ""
+msgstr "Ukáž informácie navyše ako FPS a momentálny čas."
 
 msgid "Hot Keys:"
-msgstr ""
+msgstr "Skratky:"
 
 msgid "Select Game Language:"
-msgstr ""
+msgstr "Zvoľ jazyk hry:"
 
 msgid "Click to choose the selected language."
-msgstr ""
+msgstr "Klikni pre výber zvoleného jazyka."
 
 msgid "%{name} has gained a level."
-msgstr ""
+msgstr "%{name} získal/a úroveň."
 
 msgid "%{skill} +1"
-msgstr ""
+msgstr "%{skill} +1"
 
 msgid "You have learned %{skill}."
-msgstr ""
+msgstr "Naučená zručnosť %{skill}."
 
 msgid "You may learn either:"
-msgstr ""
+msgstr "Smieš sa naučiť buď:"
 
 msgid "or"
-msgstr ""
+msgstr "alebo"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
+"Prosím, prezri si náš kvalitný tovar. Ak chceš ponúknuť výmenu, klikni na "
+"predmety, s ktorými chceš obchodovať."
 
 msgid ""
 "You have received quite a bargain. I expect to make no profit on the deal. "
 "Can I interest you in any of my other wares?"
 msgstr ""
+"Veľmi výhodná ponuka. Neočakávam z obchodu profit. Môžem vás zaujímať o "
+"nejaký môj ďalší tovar?"
 
 msgid "I can offer you %{count} for 1 unit of %{resfrom}."
-msgstr ""
+msgstr "Ponúkam %{count} za 1 kus typu %{resfrom}."
 
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
-msgstr ""
+msgstr "Ponúkam 1 kus typu %{resto} za %{count} kusov typu %{resfrom}."
 
 msgid "Min"
-msgstr ""
+msgstr "Min"
 
 msgid "Qty to trade"
-msgstr ""
+msgstr "Množstvo"
 
 msgid "Trading Post"
-msgstr ""
+msgstr "Obchodník"
 
 msgid "Your Resources"
-msgstr ""
+msgstr "Tvoje zdroje"
 
 msgid "Available Trades"
-msgstr ""
+msgstr "Možné obchody"
 
 msgid "n/a"
-msgstr ""
+msgstr "nie je"
 
 msgid "guarded by %{count} %{monster}"
-msgstr ""
+msgstr "strážené: %{monster} (%{count})"
 
 msgid "guarded by "
-msgstr ""
+msgstr "strážené: "
 
 msgid "(available: %{count})"
-msgstr ""
+msgstr "(dostupné: %{count})"
 
 msgid "(empty)"
-msgstr ""
+msgstr "(prázdne)"
 
 msgid "already learned"
-msgstr ""
+msgstr "už naučené"
 
 msgid "already knows this skill"
-msgstr ""
+msgstr "už má túto zručnosť"
 
 msgid "already has max skills"
-msgstr ""
+msgstr "už má plno zručností"
 
 msgid "(already visited)"
-msgstr ""
+msgstr "(už navštívené)"
 
 msgid "(not visited)"
-msgstr ""
+msgstr "(nenavštívené)"
 
 msgid "%{color} Barrier"
-msgstr ""
+msgstr "%{color} taras"
 
 msgid "%{color} Tent"
-msgstr ""
+msgstr "%{color} stan"
 
 msgid "Road"
-msgstr ""
+msgstr "Cesta"
 
 msgid "(digging ok)"
-msgstr ""
+msgstr "(dá sa kopať)"
 
 msgid "(no digging)"
-msgstr ""
+msgstr "(nedá sa kopať)"
 
 msgid "penalty: %{cost}"
-msgstr ""
+msgstr "penalta: %{cost}"
 
 msgid "Uncharted Territory"
-msgstr ""
+msgstr "Nepreskúmané územie"
 
 msgid "Defenders:"
-msgstr ""
+msgstr "Obrancovia:"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Neznáme"
 
 msgid "%{name} (Level %{level})"
-msgstr ""
+msgstr "%{name} na úrovni %{level}"
 
 msgid "Attack:"
-msgstr ""
+msgstr "Útok:"
 
 msgid "Defense:"
-msgstr ""
+msgstr "Obrana:"
 
 msgid "Spell Power:"
-msgstr ""
+msgstr "Sila kúziel:"
 
 msgid "Knowledge:"
-msgstr ""
+msgstr "Vedomosti:"
 
 msgid "Spell Points:"
-msgstr ""
+msgstr "Body kúziel:"
 
 msgid "Move Points:"
-msgstr ""
+msgstr "Body pohybu:"
 
 msgid "Cost per troop:"
-msgstr ""
+msgstr "Cena za jednotku:"
 
 msgid "Available: %{count}"
-msgstr ""
+msgstr "Dostupné: %{count}"
 
 msgid "Number to buy:"
-msgstr ""
+msgstr "Počet na nákup:"
 
 msgid "Recruit selected monsters."
-msgstr ""
+msgstr "Najmi zvolených bojovníkov."
 
 msgid "Select maximum monsters to be recruited."
-msgstr ""
+msgstr "Zvoľ najväčší možný počet bojovníkov k nájmu."
 
 msgid "Select only 1 monster to be recruited."
-msgstr ""
+msgstr "Zvoľ iba jedného bojovníka k nájmu."
 
 msgid "Select Game Resolution:"
-msgstr ""
+msgstr "Zvoľ rozlíšenie hry:"
 
 msgid "Click to apply the selected resolution."
-msgstr ""
+msgstr "Klikni pre výber zvoleného rozlíšenia."
 
 msgid "Click to apply the entered text."
-msgstr ""
+msgstr "Klikni pre použitie zadaného textu."
 
 msgid "Click to open the Virtual Keyboard dialog."
-msgstr ""
+msgstr "Klikni pre otvorenie dialógu virtuálnej klávesnice."
 
 msgid "Open Virtual Keyboard"
-msgstr ""
+msgstr "Otvor virtuálnu klávesnicu"
 
 msgid "How many troops to move?"
-msgstr ""
+msgstr "Koľko jednotiek na presun?"
 
 msgid "Fast separation into slots:"
-msgstr ""
+msgstr "Rýchle rozdelenie do polí:"
 
 msgid "Map: "
-msgstr ""
+msgstr "Mapa: "
 
 msgid ""
 "\n"
 "\n"
 "Month: "
 msgstr ""
+"\n"
+"\n"
+"Mesiac: "
 
 msgid ", Week: "
-msgstr ""
+msgstr ", Týždeň: "
 
 msgid ", Day: "
-msgstr ""
+msgstr ", Deň: "
 
 msgid ""
 "\n"
 "\n"
 "Location: "
 msgstr ""
+"\n"
+"\n"
+"Umiestnenie: "
 
 msgid "File to Save:"
-msgstr ""
+msgstr "Uložiť súbor:"
 
 msgid "File to Load:"
-msgstr ""
+msgstr "Nahrať súbor:"
 
 msgid "Click to save the current game."
-msgstr ""
+msgstr "Klikni pre uloženie terajšej hry."
 
 msgid "Click to load a previously saved game."
-msgstr ""
+msgstr "Klikni pre nahranie vopred uloženej hry."
 
 msgid "Are you sure you want to delete file:"
-msgstr ""
+msgstr "Určite chceš vymazať súbor:"
 
 msgid "Warning!"
-msgstr ""
+msgstr "Pozor!"
 
 msgid "Select Monster:"
-msgstr ""
+msgstr "Zvoľ bojovníka:"
 
 msgid "Select Hero:"
-msgstr ""
+msgstr "Zvoľ hrdinu:"
 
 msgid "Select Artifact:"
-msgstr ""
+msgstr "Zvoľ artefakt:"
 
 msgid "Select Spell:"
-msgstr ""
+msgstr "Zvoľ kúzlo:"
 
 msgid "Select Skill:"
-msgstr ""
+msgstr "Zvoľ zručnosť:"
 
 msgid "Map Type:\n"
-msgstr ""
+msgstr "Typ mapy:\n"
 
 msgid "The Succession Wars"
-msgstr ""
+msgstr "Vojna o dedičstvo"
 
 msgid "Lose all your heroes and towns."
-msgstr ""
+msgstr "Strať všetkých hrdinov a mestá."
 
 msgid "Lose a specific town."
-msgstr ""
+msgstr "Strať konkrétne mesto."
 
 msgid "Lose a specific hero."
-msgstr ""
+msgstr "Strať konkrétneho hrdinu."
 
 msgid "Run out of time. Fail to win by a certain point."
-msgstr ""
+msgstr "Po uplynutí určitej doby stále nevyhráš."
 
 msgid "Loss Condition"
-msgstr ""
+msgstr "Podmienka prehry"
 
 msgid "Defeat all enemy heroes and towns."
-msgstr ""
+msgstr "Poraz nepriateľských hrdinov a mestá."
 
 msgid "Capture a specific town."
-msgstr ""
+msgstr "Doby konkrétne mesto."
 
 msgid "Defeat a specific hero."
-msgstr ""
+msgstr "Poraz konkrétneho hrdinu."
 
 msgid "Find a specific artifact."
-msgstr ""
+msgstr "Nájdi konkrétny artefakt."
 
 msgid "Your side defeats the opposing side."
-msgstr ""
+msgstr "Tvoja strana porazí opozíciu."
 
 msgid "Accumulate a large amount of gold."
-msgstr ""
+msgstr "Nahromaď obrovské množstvo zlata."
 
 msgid "Victory Condition"
-msgstr ""
+msgstr "Podmienka výhry"
 
 msgid "Map difficulty:"
-msgstr ""
+msgstr "Obtiažnosť mapy:"
 
 msgid "N"
-msgstr ""
+msgstr "N"
 
 msgid "No maps exist at that size"
-msgstr ""
+msgstr "Mapy tejto veľkosti nie sú"
 
 msgid "Small Maps"
-msgstr ""
+msgstr "Malé mapy"
 
 msgid "View only maps of size small (36 x 36)."
-msgstr ""
+msgstr "Zobraz iba mapy malej veľkosti (36 x 36)."
 
 msgid "Medium Maps"
-msgstr ""
+msgstr "Stredné mapy"
 
 msgid "View only maps of size medium (72 x 72)."
-msgstr ""
+msgstr "Zobraz iba mapy strednej veľkosti (72 x 72)."
 
 msgid "Large Maps"
-msgstr ""
+msgstr "Veľké mapy"
 
 msgid "View only maps of size large (108 x 108)."
-msgstr ""
+msgstr "Zobraz iba mapy veľkej veľkosti (108 x 108)."
 
 msgid "Extra Large Maps"
-msgstr ""
+msgstr "Extra veľké"
 
 msgid "View only maps of size extra large (144 x 144)."
-msgstr ""
+msgstr "Zobraz iba mapy extra veľkej veľkosti (144 x 144)."
 
 msgid "All Maps"
-msgstr ""
+msgstr "Všetky mapy"
 
 msgid "View all maps, regardless of size."
-msgstr ""
+msgstr "Zobraz všetky mapy bez ohľadu na veľkosť."
 
 msgid "Players Icon"
-msgstr ""
+msgstr "Ikona hráča"
 
 msgid ""
 "Indicates how many players total are in the scenario. Any positions not "
 "occupied by humans will be occupied by computer players."
 msgstr ""
+"Značí, koľko hráčov je celkovo v scenári. Akékoľvek pozície, ktoré nie sú "
+"obsadené ľuďmi, budú obsadené počítačovými hráčmi."
 
 msgid ""
 "Indicates whether the map\n"
@@ -3196,26 +3277,30 @@ msgid ""
 "(72 x 72), large (108 x 108),\n"
 "or extra large (144 x 144)."
 msgstr ""
+"Značí, či je mapa malá (36 x 36), stredná (72 x 72), veľká (108 x 108), "
+"alebo extra veľká (144 x 144)."
 
 msgid "Size Icon"
-msgstr ""
+msgstr "Ikona veľkosti"
 
 msgid ""
 "Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
 "of Loyalty\" version of the game."
 msgstr ""
+"Značí, či je mapa tvorená pre verziu hry \"The Succession Wars\" alebo \"The "
+"Price of Loyalty\"."
 
 msgid "Map Type"
-msgstr ""
+msgstr "Typ mapy"
 
 msgid "Selected Name"
-msgstr ""
+msgstr "Zvolené meno"
 
 msgid "The name of the currently selected map."
-msgstr ""
+msgstr "Názov momentálne zvolenej mapy."
 
 msgid "Selected Map Difficulty"
-msgstr ""
+msgstr "Zvolená obtiažnosť mapy"
 
 msgid ""
 "The map difficulty of the currently selected map.  The map difficulty is "
@@ -3223,42 +3308,45 @@ msgid ""
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
 msgstr ""
+"Obtiažnosť aktuálne zvolenej mapy. Obtiažnosť mapy určuje tvorca scenára. "
+"Náročnejšie mapy môžu obsahovať viacero silnejších nepriateľov, menej "
+"zdrojov alebo iné špeciálne podmienky, ktoré ľudskému hráčovi sťažujú hru."
 
 msgid "Selected Description"
-msgstr ""
+msgstr "Zvolený opis"
 
 msgid "The description of the currently selected map."
-msgstr ""
+msgstr "Opis aktuálne zvolenej mapy."
 
 msgid "Accept the choice made."
-msgstr ""
+msgstr "Prijať uskutočnený výber."
 
 msgid "Jump"
-msgstr ""
+msgstr "Skok"
 
 msgid "Hero Speed"
-msgstr ""
+msgstr "Rýchlosť hrdinu"
 
 msgid "Don't Show"
-msgstr ""
+msgstr "Neukazuj"
 
 msgid "Enemy Speed"
-msgstr ""
+msgstr "Rýchlosť nepriateľa"
 
 msgid "Slow"
-msgstr ""
+msgstr "Pomaly"
 
 msgid "Normal"
-msgstr ""
+msgstr "Normálne"
 
 msgid "Fast"
-msgstr ""
+msgstr "Rýchlo"
 
 msgid "Very Fast"
-msgstr ""
+msgstr "Veľmi rýchlo"
 
 msgid "Scroll Speed"
-msgstr ""
+msgstr "Rýchlosť posunu"
 
 msgid "Evil"
 msgstr ""
@@ -3288,7 +3376,7 @@ msgid "Battles"
 msgstr ""
 
 msgid "autoBattle|Manual"
-msgstr ""
+msgstr "Manuálne"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -4195,6 +4283,10 @@ msgid ""
 "All is lost."
 msgstr ""
 
+#, fuzzy
+msgid "Defeat!"
+msgstr " porazený"
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
@@ -4259,6 +4351,9 @@ msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
 msgstr ""
 
 msgid "%{color} player has been vanquished!"
+msgstr ""
+
+msgid "Major Event!"
 msgstr ""
 
 msgid "Scenario:"
@@ -4337,6 +4432,9 @@ msgid " All dwellings increase population."
 msgstr ""
 
 msgid "New Week!"
+msgstr ""
+
+msgid "Beware!"
 msgstr ""
 
 msgid ""
@@ -5853,6 +5951,10 @@ msgid ""
 msgstr ""
 
 msgid "Spell book is not present."
+msgstr ""
+
+msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
 msgstr ""
 
 msgid ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-25 06:07+0000\n"
+"POT-Creation-Date: 2023-05-07 10:26+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2729,6 +2729,19 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr "Sind Sie sicher, dass Sie diese Armee entlassen wollen?"
 
+msgid "Upgrade"
+msgstr ""
+
+#, fuzzy
+msgid "Upgrade your troops."
+msgstr "Sie können es sich nicht leisten, Ihre Truppen aufzurüsten!"
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
+
 msgid "Followers"
 msgstr "Anhänger"
 
@@ -4411,6 +4424,10 @@ msgstr ""
 "Sie haben es nicht geschafft, Ihr Abenteuer rechtzeitig zu beenden.\n"
 "Alles ist verloren."
 
+#, fuzzy
+msgid "Defeat!"
+msgstr " besiegt"
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
@@ -4485,6 +4502,9 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "Spieler %{color} wurde besiegt!"
+
+msgid "Major Event!"
+msgstr ""
 
 msgid "Scenario:"
 msgstr "Szenario:"
@@ -4573,6 +4593,9 @@ msgid " All dwellings increase population."
 msgstr " Alle Wohnungen erhöhen die Bevölkerung."
 
 msgid "New Week!"
+msgstr ""
+
+msgid "Beware!"
 msgstr ""
 
 msgid ""
@@ -6586,6 +6609,13 @@ msgstr ""
 
 msgid "Spell book is not present."
 msgstr "Das Zauberbuch ist nicht vorhanden."
+
+#, fuzzy
+msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
+msgstr ""
+"Dieser Zauberspruch kostet %{mana} Mana. Sie haben nur %{point} Mana, also "
+"können Sie den Zauber nicht wirken."
 
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-25 06:07+0000\n"
+"POT-Creation-Date: 2023-05-07 10:26+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -2711,6 +2711,18 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr "¿Estás seguro de que desea descartar este ejército?"
 
+msgid "Upgrade"
+msgstr ""
+
+msgid "Upgrade your troops."
+msgstr ""
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
+
 #, fuzzy
 msgid "Followers"
 msgstr "Flores"
@@ -4430,6 +4442,9 @@ msgstr ""
 "Has fallado en completar tu búsqueda a tiempo.\n"
 "Todo está perdido."
 
+msgid "Defeat!"
+msgstr ""
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
@@ -4505,6 +4520,9 @@ msgstr ""
 #, fuzzy
 msgid "%{color} player has been vanquished!"
 msgstr "¡%{color} ha sido derrotado!"
+
+msgid "Major Event!"
+msgstr ""
 
 msgid "Scenario:"
 msgstr "Escenario:"
@@ -4592,6 +4610,9 @@ msgid " All dwellings increase population."
 msgstr " Todas las moradas aumentan su población."
 
 msgid "New Week!"
+msgstr ""
+
+msgid "Beware!"
 msgstr ""
 
 msgid ""
@@ -6527,6 +6548,13 @@ msgstr ""
 
 msgid "Spell book is not present."
 msgstr ""
+
+#, fuzzy
+msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
+msgstr ""
+"No puedes usar ese hechizo. Cuesta %{mana} puntos de Maná y sólo tienes "
+"&{point}."
 
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "

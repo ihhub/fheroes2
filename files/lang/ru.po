@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-24 18:46+0300\n"
-"PO-Revision-Date: 2023-04-24 18:51+0300\n"
+"POT-Creation-Date: 2023-05-07 10:26+0000\n"
+"PO-Revision-Date: 2023-05-06 15:07+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -91,12 +91,14 @@ msgid "RESTART"
 msgstr "СНАЧАЛА"
 
 msgid "HEROES"
-msgstr ""
+msgstr "ГЕРОИ"
 
 msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
+"ГОРДА/\n"
+"ЗАМКИ"
 
 msgid "S"
 msgstr "М"
@@ -114,7 +116,7 @@ msgid "ALL"
 msgstr "ВСЕ"
 
 msgid "SELECT"
-msgstr ""
+msgstr "ВЫБОР"
 
 msgid ""
 "STANDARD\n"
@@ -2682,6 +2684,19 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr "Вы уверены, что хотите распустить этот отряд?"
 
+msgid "Upgrade"
+msgstr ""
+
+#, fuzzy
+msgid "Upgrade your troops."
+msgstr "Вы не можете позволить себе улучшения для Вашей армии!"
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
+
 msgid "Followers"
 msgstr "Последователи"
 
@@ -4349,6 +4364,9 @@ msgstr ""
 "Вы не справились с заданием за отведённое время.\n"
 "Всё кончено."
 
+msgid "Defeat!"
+msgstr "Поражение!"
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
@@ -4429,6 +4447,9 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} игрок побеждён!"
+
+msgid "Major Event!"
+msgstr "Важное событие!"
 
 msgid "Scenario:"
 msgstr "Сценарий:"
@@ -4515,7 +4536,10 @@ msgid " All dwellings increase population."
 msgstr " Население всех жилищ возросло."
 
 msgid "New Week!"
-msgstr ""
+msgstr "Новая неделя!"
+
+msgid "Beware!"
+msgstr "Внимание!"
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
@@ -4561,16 +4585,14 @@ msgstr "Лорд Килбурн"
 msgid "Tsabu"
 msgstr "Тсабу"
 
-#, fuzzy
 msgid "Sir Galant"
 msgstr "Сэр Галант"
 
 msgid "Thundax"
 msgstr "Тандакс"
 
-#, fuzzy
 msgid "Lord Haart"
-msgstr "Лорд Халтон"
+msgstr "Лорд Хаарт"
 
 msgid "Ariel"
 msgstr "Ариэль"
@@ -4584,12 +4606,11 @@ msgstr "Сандро"
 msgid "Crodo"
 msgstr "Кродо"
 
-#, fuzzy
 msgid "Barock"
 msgstr "Барок"
 
 msgid "Antoine"
-msgstr ""
+msgstr "Антуан"
 
 msgid "Astra"
 msgstr "Астра"
@@ -6441,9 +6462,17 @@ msgid "Spell book is not present."
 msgstr "Книги заклинаний нет."
 
 msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
+msgstr ""
+"Заклинание требует %{mana} очков магии. У Вас нет очков магии, поэтому Вы не "
+"можете произнести заклинание."
+
+msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
-msgstr "Заклинание требует %{mana} очков магии. У Вас только %{point}."
+msgstr ""
+"Заклинание требует %{mana} очков магии. У Вас только %{point}, поэтому Вы не "
+"можете произнести заклинание."
 
 msgid "The spell was not found."
 msgstr "Заклинание не найдено."

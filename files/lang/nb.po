@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-25 06:07+0000\n"
+"POT-Creation-Date: 2023-05-07 10:26+0000\n"
 "PO-Revision-Date: 2023-04-10 00:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2742,6 +2742,19 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr "Er du sikker på at du vil bortvise denne troppen?"
 
+msgid "Upgrade"
+msgstr ""
+
+#, fuzzy
+msgid "Upgrade your troops."
+msgstr "Du har ikke råd til å oppgradere troppene dine!"
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
+
 msgid "Followers"
 msgstr "Følgere"
 
@@ -4420,6 +4433,10 @@ msgstr ""
 "Du klarte ikke å fullføre oppdraget innen tiden.\n"
 "Alt er tapt."
 
+#, fuzzy
+msgid "Defeat!"
+msgstr " fanget"
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
@@ -4490,6 +4507,9 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} spiller har blitt utslettet!"
+
+msgid "Major Event!"
+msgstr ""
 
 msgid "Scenario:"
 msgstr "Kart:"
@@ -4577,6 +4597,9 @@ msgid " All dwellings increase population."
 msgstr " Alle bostedenes befolkninger opplever vanlig vekst."
 
 msgid "New Week!"
+msgstr ""
+
+msgid "Beware!"
 msgstr ""
 
 msgid ""
@@ -6560,6 +6583,13 @@ msgstr ""
 
 msgid "Spell book is not present."
 msgstr "Ingen tryllebok er til å finne."
+
+#, fuzzy
+msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
+msgstr ""
+"Denne trolldommen koster %{mana} mana. Du har kun %{point} mana, så du kan "
+"ikke bruke denne trolldommen."
 
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "

@@ -148,7 +148,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // cursor format
     fheroes2::MovableSprite cursorFormat( fheroes2::AGG::GetICN( ICN::HSICONS, 11 ) );
-    const fheroes2::Point cursorFormatPos = army.isSpreadFormat() ? army1_pt : army2_pt;
+    const fheroes2::Point cursorFormatPos = army.isSpreadFormation() ? army1_pt : army2_pt;
     cursorFormat.setPosition( cursorFormatPos.x, cursorFormatPos.y );
 
     // experience
@@ -350,15 +350,15 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             spellPointsInfo.QueueEventProcessing();
 
         // left click info
-        if ( !readonly && le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormat() ) {
+        if ( !readonly && le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormation() ) {
             cursorFormat.setPosition( army1_pt.x, army1_pt.y );
             display.render();
-            army.SetSpreadFormat( true );
+            army.SetSpreadFormation( true );
         }
-        else if ( !readonly && le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormat() ) {
+        else if ( !readonly && le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormation() ) {
             cursorFormat.setPosition( army2_pt.x, army2_pt.y );
             display.render();
-            army.SetSpreadFormat( false );
+            army.SetSpreadFormation( false );
         }
         else if ( le.MouseCursor( secskill_bar.GetArea() ) && secskill_bar.QueueEventProcessing( &message ) ) {
             display.render();

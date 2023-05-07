@@ -30,28 +30,22 @@
 #include <cstdlib>
 #include <iostream>
 #include <limits>
-#include <map>
-#include <memory>
 #include <optional>
 #include <set>
 #include <type_traits>
+#include <utility>
 
-#include "agg_image.h"
 #include "army.h"
 #include "army_troop.h"
+#include "artifact.h"
 #include "castle.h"
-#include "game.h"
 #include "game_io.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
-#include "image.h"
-#include "interface_gamearea.h"
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles_helper.h" // TODO: This file should not be included
-#include "monster.h"
-#include "monster_anim.h"
 #include "mounts.h"
 #include "mp2.h"
 #include "objcrck.h"
@@ -68,15 +62,11 @@
 #include "pairs.h"
 #include "payment.h"
 #include "profit.h"
-#include "race.h"
 #include "resource.h"
 #include "save_format_version.h"
 #include "serialize.h"
-#include "spell.h"
-#include "til.h"
 #include "tools.h"
 #include "trees.h"
-#include "ui_object_rendering.h"
 #include "world.h"
 
 namespace
@@ -265,113 +255,6 @@ namespace
     }
 #endif
 
-    bool contains( const int base, const int value )
-    {
-        return ( base & value ) == value;
-    }
-
-#ifdef WITH_DEBUG
-    const fheroes2::Image & PassableViewSurface( const int passable )
-    {
-        static std::map<int, fheroes2::Image> imageMap;
-
-        auto iter = imageMap.find( passable );
-        if ( iter != imageMap.end() ) {
-            return iter->second;
-        }
-
-        const int32_t size = 31;
-        const uint8_t red = 0xBA;
-        const uint8_t green = 0x5A;
-
-        fheroes2::Image sf( size, size );
-        sf.reset();
-
-        if ( 0 == passable || Direction::CENTER == passable ) {
-            fheroes2::DrawBorder( sf, red );
-        }
-        else if ( DIRECTION_ALL == passable ) {
-            fheroes2::DrawBorder( sf, green );
-        }
-        else {
-            const uint8_t topLeftColor = ( ( passable & Direction::TOP_LEFT ) != 0 ) ? green : red;
-            const uint8_t bottomRightColor = ( ( passable & Direction::BOTTOM_RIGHT ) != 0 ) ? green : red;
-            const uint8_t topRightColor = ( ( passable & Direction::TOP_RIGHT ) != 0 ) ? green : red;
-            const uint8_t bottomLeftColor = ( ( passable & Direction::BOTTOM_LEFT ) != 0 ) ? green : red;
-            const uint8_t topColor = ( ( passable & Direction::TOP ) != 0 ) ? green : red;
-            const uint8_t bottomColor = ( ( passable & Direction::BOTTOM ) != 0 ) ? green : red;
-            const uint8_t leftColor = ( ( passable & Direction::LEFT ) != 0 ) ? green : red;
-            const uint8_t rightColor = ( ( passable & Direction::RIGHT ) != 0 ) ? green : red;
-
-            uint8_t * image = sf.image();
-            uint8_t * transform = sf.transform();
-
-            // Horizontal
-            for ( int32_t i = 0; i < 10; ++i ) {
-                *( image + i ) = topLeftColor;
-                *( transform + i ) = 0;
-
-                *( image + i + ( size - 1 ) * size ) = bottomLeftColor;
-                *( transform + i + ( size - 1 ) * size ) = 0;
-            }
-
-            for ( int32_t i = 10; i < 21; ++i ) {
-                *( image + i ) = topColor;
-                *( transform + i ) = 0;
-
-                *( image + i + ( size - 1 ) * size ) = bottomColor;
-                *( transform + i + ( size - 1 ) * size ) = 0;
-            }
-
-            for ( int32_t i = 21; i < size; ++i ) {
-                *( image + i ) = topRightColor;
-                *( transform + i ) = 0;
-
-                *( image + i + ( size - 1 ) * size ) = bottomRightColor;
-                *( transform + i + ( size - 1 ) * size ) = 0;
-            }
-
-            // Vertical
-            for ( int32_t i = 0; i < 10; ++i ) {
-                *( image + i * size ) = topLeftColor;
-                *( transform + i * size ) = 0;
-
-                *( image + size - 1 + i * size ) = topRightColor;
-                *( transform + size - 1 + i * size ) = 0;
-            }
-
-            for ( int32_t i = 10; i < 21; ++i ) {
-                *( image + i * size ) = leftColor;
-                *( transform + i * size ) = 0;
-
-                *( image + size - 1 + i * size ) = rightColor;
-                *( transform + size - 1 + i * size ) = 0;
-            }
-
-            for ( int32_t i = 21; i < size; ++i ) {
-                *( image + i * size ) = bottomLeftColor;
-                *( transform + i * size ) = 0;
-
-                *( image + size - 1 + i * size ) = bottomRightColor;
-                *( transform + size - 1 + i * size ) = 0;
-            }
-        }
-
-        return imageMap.try_emplace( passable, std::move( sf ) ).first->second;
-    }
-
-    const fheroes2::Image & getDebugFogImage()
-    {
-        static const fheroes2::Image fog = []() {
-            fheroes2::Image temp( 32, 32 );
-            fheroes2::FillTransform( temp, 0, 0, temp.width(), temp.height(), 2 );
-            return temp;
-        }();
-
-        return fog;
-    }
-#endif
-
     bool isShortObject( const MP2::MapObjectType objectType )
     {
         // Some objects allow middle moves even being attached to the bottom.
@@ -441,22 +324,6 @@ namespace
         switch ( objectType ) {
         case MP2::OBJ_TREES:
         case MP2::OBJ_CRATER:
-            return true;
-        default:
-            break;
-        }
-
-        return false;
-    }
-
-    bool isDirectRenderingRestricted( const int icnId )
-    {
-        switch ( icnId ) {
-        case ICN::UNKNOWN:
-        case ICN::MONS32:
-        case ICN::BOAT32:
-        case ICN::MINIHERO:
-            // Either it is an invalid sprite or a sprite which needs to be divided into tiles in order to properly render it.
             return true;
         default:
             break;
@@ -633,61 +500,12 @@ bool Maps::TilesAddon::isShadow( const TilesAddon & ta )
     return isShadowSprite( ta._objectIcnType, ta._imageIndex );
 }
 
-std::pair<int, int> Maps::Tiles::ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex )
-{
-    std::pair<int, int> res;
-
-    if ( 7 > heroSpriteIndex )
-        res.first = Color::BLUE;
-    else if ( 14 > heroSpriteIndex )
-        res.first = Color::GREEN;
-    else if ( 21 > heroSpriteIndex )
-        res.first = Color::RED;
-    else if ( 28 > heroSpriteIndex )
-        res.first = Color::YELLOW;
-    else if ( 35 > heroSpriteIndex )
-        res.first = Color::ORANGE;
-    else
-        res.first = Color::PURPLE;
-
-    switch ( heroSpriteIndex % 7 ) {
-    case 0:
-        res.second = Race::KNGT;
-        break;
-    case 1:
-        res.second = Race::BARB;
-        break;
-    case 2:
-        res.second = Race::SORC;
-        break;
-    case 3:
-        res.second = Race::WRLK;
-        break;
-    case 4:
-        res.second = Race::WZRD;
-        break;
-    case 5:
-        res.second = Race::NECR;
-        break;
-    case 6:
-        res.second = Race::RAND;
-        break;
-    default:
-        assert( 0 );
-        break;
-    }
-
-    return res;
-}
-
 void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
 {
     tilePassable = DIRECTION_ALL;
 
     _layerType = mp2.quantity1 & 0x03;
-    quantity1 = mp2.quantity1;
-    quantity2 = mp2.quantity2;
-    additionalMetadata = 0;
+    _metadata[0] = ( ( ( mp2.quantity2 << 8 ) + mp2.quantity1 ) >> 3 );
     _fogColors = Color::ALL;
     _terrainImageIndex = mp2.terrainImageIndex;
     _terrainFlags = mp2.terrainFlags;
@@ -695,6 +513,11 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
 
     SetIndex( index );
     SetObject( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
+
+    if ( !MP2::doesObjectContainMetadata( _mainObjectType ) ) {
+        // No metadata should exist for this object!
+        assert( ( ( ( mp2.quantity2 << 8 ) + mp2.quantity1 ) >> 3 ) == 0 );
+    }
 
     addons_level1.clear();
     addons_level2.clear();
@@ -851,11 +674,6 @@ int Maps::Tiles::getBoatDirection() const
     }
 
     return Direction::UNKNOWN;
-}
-
-const fheroes2::Image & Maps::Tiles::GetTileSurface() const
-{
-    return fheroes2::AGG::GetTIL( TIL::GROUND32, _terrainImageIndex, ( _terrainFlags & 0x3 ) );
 }
 
 int Maps::Tiles::getOriginalPassability() const
@@ -1156,414 +974,6 @@ int Maps::Tiles::GetGround() const
     return Maps::Ground::BEACH;
 }
 
-void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area )
-{
-    if ( mp.y == -1 && mp.x >= 0 && mp.x < world.w() ) { // top first row
-        area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 20 + ( mp.x % 4 ), 0 ), mp );
-    }
-    else if ( mp.x == world.w() && mp.y >= 0 && mp.y < world.h() ) { // right first row
-        area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 24 + ( mp.y % 4 ), 0 ), mp );
-    }
-    else if ( mp.y == world.h() && mp.x >= 0 && mp.x < world.w() ) { // bottom first row
-        area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 28 + ( mp.x % 4 ), 0 ), mp );
-    }
-    else if ( mp.x == -1 && mp.y >= 0 && mp.y < world.h() ) { // left first row
-        area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 32 + ( mp.y % 4 ), 0 ), mp );
-    }
-    else {
-        area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, ( std::abs( mp.y ) % 4 ) * 4 + std::abs( mp.x ) % 4, 0 ), mp );
-    }
-}
-
-void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area ) const
-{
-#ifdef WITH_DEBUG
-    if ( isFog( friendColors ) ) {
-        area.BlitOnTile( dst, getDebugFogImage(), 0, 0, Maps::GetPoint( _index ), false, 255 );
-    }
-    if ( 0 == tilePassable || DIRECTION_ALL != tilePassable ) {
-        area.BlitOnTile( dst, PassableViewSurface( tilePassable ), 0, 0, Maps::GetPoint( _index ), false, 255 );
-    }
-#else
-    (void)dst;
-    (void)area;
-    (void)friendColors;
-#endif
-}
-
-void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level ) const
-{
-    assert( level <= 0x03 );
-
-    const fheroes2::Point & mp = Maps::GetPoint( _index );
-
-    // Since the original game stores information about objects in a very weird way and this is how it is implemented for us we need to do the following procedure:
-    // - run through all bottom objects first which are stored in the addon stack
-    // - check the main object which is on the tile
-
-    // Some addons must be rendered after the main object on the tile. This applies for flags.
-    // Since this method is called intensively during rendering we have to avoid memory allocation on heap.
-    const size_t maxPostRenderAddons = 16;
-    std::array<const TilesAddon *, maxPostRenderAddons> postRenderingAddon{};
-    size_t postRenderAddonCount = 0;
-
-    for ( const TilesAddon & addon : addons_level1 ) {
-        if ( ( addon._layerType & 0x03 ) != level ) {
-            continue;
-        }
-
-        if ( isPuzzleDraw && MP2::isHiddenForPuzzle( GetGround(), addon._objectIcnType, addon._imageIndex ) ) {
-            continue;
-        }
-
-        if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_FLAG32 ) {
-            // Based on logically thinking it is impossible to have more than 16 flags on a single tile.
-            assert( postRenderAddonCount < maxPostRenderAddons );
-
-            postRenderingAddon[postRenderAddonCount] = &addon;
-            ++postRenderAddonCount;
-            continue;
-        }
-
-        renderAddonObject( dst, area, mp, addon );
-    }
-
-    if ( _objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && ( _layerType & 0x03 ) == level
-         && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( GetGround(), _objectIcnType, _imageIndex ) ) ) {
-        renderMainObject( dst, area, mp );
-    }
-
-    for ( size_t i = 0; i < postRenderAddonCount; ++i ) {
-        assert( postRenderingAddon[i] != nullptr );
-
-        renderAddonObject( dst, area, mp, *postRenderingAddon[i] );
-    }
-}
-
-void Maps::Tiles::renderAddonObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const TilesAddon & addon )
-{
-    assert( addon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && addon._imageIndex != 255 );
-
-    const int icn = MP2::getIcnIdFromObjectIcnType( addon._objectIcnType );
-    if ( isDirectRenderingRestricted( icn ) ) {
-        return;
-    }
-
-    const uint8_t alphaValue = area.getObjectAlphaValue( addon._uid );
-
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, addon._imageIndex );
-
-    // Ideally we need to check that the image is within a tile area. However, flags are among those for which this rule doesn't apply.
-    if ( icn == ICN::FLAG32 ) {
-        assert( sprite.width() <= TILEWIDTH && sprite.height() <= TILEWIDTH );
-    }
-    else {
-        assert( sprite.x() >= 0 && sprite.width() + sprite.x() <= TILEWIDTH && sprite.y() >= 0 && sprite.height() + sprite.y() <= TILEWIDTH );
-    }
-
-    area.BlitOnTile( output, sprite, sprite.x(), sprite.y(), offset, false, alphaValue );
-
-    const uint32_t animationIndex = ICN::AnimationFrame( icn, addon._imageIndex, Game::getAdventureMapAnimationIndex() );
-    if ( animationIndex > 0 ) {
-        const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
-
-        // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-        assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= TILEWIDTH && animationSprite.y() >= 0
-                && animationSprite.height() + animationSprite.y() <= TILEWIDTH );
-
-        area.BlitOnTile( output, animationSprite, animationSprite.x(), animationSprite.y(), offset, false, alphaValue );
-    }
-}
-
-void Maps::Tiles::renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset ) const
-{
-    assert( _objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _imageIndex != 255 );
-
-    const int mainObjectIcn = MP2::getIcnIdFromObjectIcnType( _objectIcnType );
-    if ( isDirectRenderingRestricted( mainObjectIcn ) ) {
-        return;
-    }
-
-    const uint8_t mainObjectAlphaValue = area.getObjectAlphaValue( _uid );
-
-    const fheroes2::Sprite & mainObjectSprite = fheroes2::AGG::GetICN( mainObjectIcn, _imageIndex );
-
-    // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-    assert( mainObjectSprite.x() >= 0 && mainObjectSprite.width() + mainObjectSprite.x() <= TILEWIDTH && mainObjectSprite.y() >= 0
-            && mainObjectSprite.height() + mainObjectSprite.y() <= TILEWIDTH );
-
-    area.BlitOnTile( output, mainObjectSprite, mainObjectSprite.x(), mainObjectSprite.y(), offset, false, mainObjectAlphaValue );
-
-    // Render possible animation image.
-    // TODO: quantity2 is used in absolutely incorrect way! Fix all the logic for it. As of now (quantity2 != 0) expression is used only for Magic Garden.
-    const uint32_t mainObjectAnimationIndex = ICN::AnimationFrame( mainObjectIcn, _imageIndex, Game::getAdventureMapAnimationIndex(), quantity2 != 0 );
-    if ( mainObjectAnimationIndex > 0 ) {
-        const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( mainObjectIcn, mainObjectAnimationIndex );
-
-        // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-        assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= TILEWIDTH && animationSprite.y() >= 0
-                && animationSprite.height() + animationSprite.y() <= TILEWIDTH );
-
-        area.BlitOnTile( output, animationSprite, animationSprite.x(), animationSprite.y(), offset, false, mainObjectAlphaValue );
-    }
-}
-
-void Maps::Tiles::drawByObjectIcnType( fheroes2::Image & output, const Interface::GameArea & area, const MP2::ObjectIcnType objectIcnType ) const
-{
-    const fheroes2::Point & tileOffset = Maps::GetPoint( _index );
-
-    for ( const TilesAddon & addon : addons_level1 ) {
-        if ( addon._objectIcnType == objectIcnType ) {
-            renderAddonObject( output, area, tileOffset, addon );
-        }
-    }
-
-    if ( _objectIcnType == objectIcnType ) {
-        renderMainObject( output, area, tileOffset );
-    }
-
-    for ( const TilesAddon & addon : addons_level2 ) {
-        if ( addon._objectIcnType == objectIcnType ) {
-            renderAddonObject( output, area, tileOffset, addon );
-        }
-    }
-}
-
-std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterSpritesPerTile() const
-{
-    assert( GetObject() == MP2::OBJ_MONSTER );
-
-    const Monster & monster = getMonsterFromTile( *this );
-    const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
-
-    const int icnId{ ICN::MINI_MONSTER_IMAGE };
-    const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.first );
-    const fheroes2::Point monsterSpriteOffset( monsterSprite.x() + 16, monsterSprite.y() + 30 );
-
-    std::vector<fheroes2::Point> outputSquareInfo;
-    std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-    fheroes2::DivideImageBySquares( monsterSpriteOffset, monsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
-
-    assert( outputSquareInfo.size() == outputImageInfo.size() );
-
-    std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
-    for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndices.first, false,
-                                 static_cast<uint8_t>( 255 ) );
-    }
-
-    outputSquareInfo.clear();
-    outputImageInfo.clear();
-
-    if ( spriteIndices.second > 0 ) {
-        const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.second );
-        const fheroes2::Point secondaryMonsterSpriteOffset( secondaryMonsterSprite.x() + 16, secondaryMonsterSprite.y() + 30 );
-
-        fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
-
-        assert( outputSquareInfo.size() == outputImageInfo.size() );
-
-        for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndices.second, false,
-                                     static_cast<uint8_t>( 255 ) );
-        }
-    }
-
-    return objectInfo;
-}
-
-std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMonsterShadowSpritesPerTile() const
-{
-    assert( GetObject() == MP2::OBJ_MONSTER );
-
-    const Monster & monster = getMonsterFromTile( *this );
-    const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
-
-    const int icnId{ ICN::MINI_MONSTER_SHADOW };
-    const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.first );
-    const fheroes2::Point monsterSpriteOffset( monsterSprite.x() + 16, monsterSprite.y() + 30 );
-
-    std::vector<fheroes2::Point> outputSquareInfo;
-    std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-    fheroes2::DivideImageBySquares( monsterSpriteOffset, monsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
-
-    assert( outputSquareInfo.size() == outputImageInfo.size() );
-
-    std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
-    for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndices.first, false,
-                                 static_cast<uint8_t>( 255 ) );
-    }
-
-    outputSquareInfo.clear();
-    outputImageInfo.clear();
-
-    if ( spriteIndices.second > 0 ) {
-        const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.second );
-        const fheroes2::Point secondaryMonsterSpriteOffset( secondaryMonsterSprite.x() + 16, secondaryMonsterSprite.y() + 30 );
-
-        fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
-
-        assert( outputSquareInfo.size() == outputImageInfo.size() );
-
-        for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, spriteIndices.second, false,
-                                     static_cast<uint8_t>( 255 ) );
-        }
-    }
-
-    return objectInfo;
-}
-
-std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getBoatSpritesPerTile() const
-{
-    // TODO: combine both boat image generation for heroes and empty boats.
-    assert( GetObject() == MP2::OBJ_BOAT );
-
-    const uint32_t spriteIndex = ( _imageIndex == 255 ) ? 18 : _imageIndex;
-
-    const bool isReflected = ( spriteIndex > 128 );
-
-    const int icnId{ ICN::BOAT32 };
-    const uint32_t icnIndex = spriteIndex % 128;
-    const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( icnId, icnIndex );
-
-    const fheroes2::Point boatSpriteOffset( ( isReflected ? ( TILEWIDTH + 1 - boatSprite.x() - boatSprite.width() ) : boatSprite.x() ), boatSprite.y() + TILEWIDTH - 11 );
-
-    std::vector<fheroes2::Point> outputSquareInfo;
-    std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-    fheroes2::DivideImageBySquares( boatSpriteOffset, boatSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
-
-    assert( outputSquareInfo.size() == outputImageInfo.size() );
-
-    std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
-    for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, isReflected, static_cast<uint8_t>( 255 ) );
-    }
-
-    return objectInfo;
-}
-
-std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getBoatShadowSpritesPerTile() const
-{
-    assert( GetObject() == MP2::OBJ_BOAT );
-
-    // TODO: boat shadow logic is more complex than this and it is not directly depend on spriteIndex. Find the proper logic and fix it!
-    const uint32_t spriteIndex = ( _imageIndex == 255 ) ? 18 : _imageIndex;
-
-    const int icnId{ ICN::BOATSHAD };
-    const uint32_t icnIndex = spriteIndex % 128;
-    const fheroes2::Sprite & boatShadowSprite = fheroes2::AGG::GetICN( icnId, icnIndex );
-    const fheroes2::Point boatShadowSpriteOffset( boatShadowSprite.x(), TILEWIDTH + boatShadowSprite.y() - 11 );
-
-    // Shadows cannot be flipped so flip flag is always false.
-    std::vector<fheroes2::Point> outputSquareInfo;
-    std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-    fheroes2::DivideImageBySquares( boatShadowSpriteOffset, boatShadowSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
-
-    assert( outputSquareInfo.size() == outputImageInfo.size() );
-
-    std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
-    for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, false, static_cast<uint8_t>( 255 ) );
-    }
-
-    return objectInfo;
-}
-
-std::vector<fheroes2::ObjectRenderingInfo> Maps::Tiles::getMineGuardianSpritesPerTile() const
-{
-    assert( GetObject( false ) == MP2::OBJ_MINES );
-
-    std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
-
-    const int32_t spellID = Maps::getMineSpellIdFromTile( *this );
-    switch ( spellID ) {
-    case Spell::SETEGUARDIAN:
-    case Spell::SETAGUARDIAN:
-    case Spell::SETFGUARDIAN:
-    case Spell::SETWGUARDIAN: {
-        static_assert( Spell::SETAGUARDIAN - Spell::SETEGUARDIAN == 1 && Spell::SETFGUARDIAN - Spell::SETEGUARDIAN == 2 && Spell::SETWGUARDIAN - Spell::SETEGUARDIAN == 3,
-                       "Why are you changing the order of spells?! Be extremely careful of what you are doing" );
-
-        const int icnId{ ICN::OBJNXTRA };
-        const uint32_t icnIndex = spellID - Spell::SETEGUARDIAN;
-        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
-
-        std::vector<fheroes2::Point> outputSquareInfo;
-        std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-        fheroes2::DivideImageBySquares( { image.x(), image.y() }, image, TILEWIDTH, outputSquareInfo, outputImageInfo );
-
-        assert( outputSquareInfo.size() == outputImageInfo.size() );
-
-        for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, false, static_cast<uint8_t>( 255 ) );
-        }
-        break;
-    }
-    default:
-        break;
-    }
-
-    return objectInfo;
-}
-
-void Maps::Tiles::redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area ) const
-{
-    if ( isPuzzleDraw ) {
-        // Extra objects should not be shown on Puzzle Map as they are temporary objects appearing under specific conditions like flags.
-        return;
-    }
-
-    // Ghost animation is unique and can be rendered in multiple cases.
-    bool renderFlyingGhosts = false;
-
-    const MP2::MapObjectType objectType = GetObject( false );
-    if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
-        renderFlyingGhosts = true;
-    }
-    else if ( objectType == MP2::OBJ_MINES ) {
-        const int32_t spellID = Maps::getMineSpellIdFromTile( *this );
-
-        switch ( spellID ) {
-        case Spell::NONE:
-            // No spell exists. Nothing we need to render.
-        case Spell::SETEGUARDIAN:
-        case Spell::SETAGUARDIAN:
-        case Spell::SETFGUARDIAN:
-        case Spell::SETWGUARDIAN:
-            // The logic for these spells is done while rendering the bottom layer. Nothing should be done here.
-            break;
-        case Spell::HAUNT:
-            renderFlyingGhosts = true;
-            break;
-        default:
-            // Did you add a new spell for mines? Add the rendering for it above!
-            assert( 0 );
-            break;
-        }
-    }
-
-    if ( renderFlyingGhosts ) {
-        // This sprite is bigger than TILEWIDTH but rendering is correct for heroes and boats.
-        // TODO: consider adding this sprite as a part of an addon.
-        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::getAdventureMapAnimationIndex() % 15 );
-
-        const uint8_t alphaValue = area.getObjectAlphaValue( _uid );
-
-        area.BlitOnTile( dst, image, image.x(), image.y(), Maps::GetPoint( _index ), false, alphaValue );
-    }
-}
-
-void Maps::Tiles::redrawTopLayerObject( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon ) const
-{
-    if ( isPuzzleDraw && MP2::isHiddenForPuzzle( GetGround(), addon._objectIcnType, addon._imageIndex ) ) {
-        return;
-    }
-
-    renderAddonObject( dst, area, Maps::GetPoint( _index ), addon );
-}
-
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( uint32_t uniq1 )
 {
     Addons::iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), [uniq1]( const TilesAddon & v ) { return v.isUniq( uniq1 ); } );
@@ -1598,9 +1008,9 @@ std::string Maps::Tiles::String() const
        << "passable from   : " << ( tilePassable ? Direction::String( tilePassable ) : "nowhere" );
 
     os << std::endl
-       << "quantity 1      : " << static_cast<int>( quantity1 ) << std::endl
-       << "quantity 2      : " << static_cast<int>( quantity2 ) << std::endl
-       << "add. metadata   : " << additionalMetadata << std::endl;
+       << "metadata value 1: " << _metadata[0] << std::endl
+       << "metadata value 2: " << _metadata[1] << std::endl
+       << "metadata value 3: " << _metadata[2] << std::endl;
 
     if ( objectType == MP2::OBJ_BOAT )
         os << "boat owner color: " << Color::String( _boatOwnerColor ) << std::endl;
@@ -2019,6 +1429,8 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
     case MP2::OBJ_NON_ACTION_EXPANSION_OBJECT:
     case MP2::OBJ_EXPANSION_DWELLING:
     case MP2::OBJ_EXPANSION_OBJECT: {
+        // The type of expansion action object or dwelling is stored in object metadata.
+        // However, we just ignore it.
         MP2::MapObjectType objectType = getLoyaltyObject( tile._objectIcnType, tile._imageIndex );
         if ( objectType != MP2::OBJ_NONE ) {
             tile.SetObject( objectType );
@@ -2345,47 +1757,6 @@ void Maps::Tiles::RestoreAbandonedMine( Tiles & tile, const int resource )
     }
 }
 
-std::pair<uint32_t, uint32_t> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex )
-{
-    const int tileIndex = tile._index;
-    int attackerIndex = -1;
-
-    // scan for a hero around
-    for ( const int32_t idx : ScanAroundObject( tileIndex, MP2::OBJ_HEROES, false ) ) {
-        const Heroes * hero = world.GetTiles( idx ).GetHeroes();
-        assert( hero != nullptr );
-
-        // hero is going to attack monsters on this tile
-        if ( hero->GetAttackedMonsterTileIndex() == tileIndex ) {
-            attackerIndex = idx;
-            break;
-        }
-    }
-
-    std::pair<uint32_t, uint32_t> spriteIndices( monsterIndex * 9, 0 );
-
-    // draw an attacking sprite if there is an attacking hero nearby
-    if ( attackerIndex != -1 ) {
-        spriteIndices.first += 7;
-
-        switch ( Maps::GetDirection( tileIndex, attackerIndex ) ) {
-        case Direction::TOP_LEFT:
-        case Direction::LEFT:
-        case Direction::BOTTOM_LEFT:
-            spriteIndices.first += 1;
-            break;
-        default:
-            break;
-        }
-    }
-    else {
-        const fheroes2::Point & mp = Maps::GetPoint( tileIndex );
-        const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
-        spriteIndices.second = monsterIndex * 9 + 1 + monsterAnimationSequence[( Game::getAdventureMapAnimationIndex() + mp.x * mp.y ) % monsterAnimationSequence.size()];
-    }
-    return spriteIndices;
-}
-
 void Maps::Tiles::ClearFog( const int colors )
 {
     _fogColors &= ~colors;
@@ -2521,229 +1892,6 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
                 tile._setFogDirection( fogDirection );
             }
         }
-    }
-}
-
-void Maps::Tiles::drawFog( fheroes2::Image & dst, const Interface::GameArea & area ) const
-{
-    // This method should not be called for a tile without fog.
-    assert( _fogDirection & Direction::CENTER );
-
-    const fheroes2::Point & mp = Maps::GetPoint( _index );
-
-    // TODO: Cache all directions into a map: have an array which represents all conditions within this method. The index can be '_fogDirection', the value is index.
-    // And another array to store revert flag.
-
-    if ( DIRECTION_ALL == _fogDirection ) {
-        const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
-        area.DrawTile( dst, sf, mp );
-    }
-    else {
-        uint32_t index = 0;
-        bool revert = false;
-
-        if ( !( _fogDirection & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
-            index = 10;
-        }
-        else if ( ( contains( _fogDirection, Direction::TOP ) ) && !( _fogDirection & ( Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {
-            index = 6;
-        }
-        else if ( ( contains( _fogDirection, Direction::RIGHT ) ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT ) ) ) {
-            index = 7;
-        }
-        else if ( ( contains( _fogDirection, Direction::LEFT ) ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM | Direction::RIGHT ) ) ) {
-            index = 7;
-            revert = true;
-        }
-        else if ( ( contains( _fogDirection, Direction::BOTTOM ) ) && !( _fogDirection & ( Direction::TOP | Direction::LEFT | Direction::RIGHT ) ) ) {
-            index = 8;
-        }
-        else if ( ( contains( _fogDirection, DIRECTION_CENTER_COL ) ) && !( _fogDirection & ( Direction::LEFT | Direction::RIGHT ) ) ) {
-            index = 9;
-        }
-        else if ( ( contains( _fogDirection, DIRECTION_CENTER_ROW ) ) && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM ) ) ) {
-            index = 29;
-        }
-        else if ( _fogDirection == ( DIRECTION_ALL & ( ~Direction::TOP_RIGHT ) ) ) {
-            index = 15;
-        }
-        else if ( _fogDirection == ( DIRECTION_ALL & ( ~Direction::TOP_LEFT ) ) ) {
-            index = 15;
-            revert = true;
-        }
-        else if ( _fogDirection == ( DIRECTION_ALL & ( ~Direction::BOTTOM_RIGHT ) ) ) {
-            index = 22;
-        }
-        else if ( _fogDirection == ( DIRECTION_ALL & ( ~Direction::BOTTOM_LEFT ) ) ) {
-            index = 22;
-            revert = true;
-        }
-        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) ) {
-            index = 16;
-        }
-        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) ) {
-            index = 16;
-            revert = true;
-        }
-        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT ) ) ) ) {
-            index = 17;
-        }
-        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::BOTTOM_RIGHT ) ) ) ) {
-            index = 17;
-            revert = true;
-        }
-        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) ) {
-            index = 18;
-        }
-        else if ( _fogDirection == ( DIRECTION_ALL & ( ~( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) ) {
-            index = 23;
-        }
-        else if ( _fogDirection == ( DIRECTION_ALL & ( ~DIRECTION_TOP_RIGHT_CORNER ) ) ) {
-            index = 13;
-        }
-        else if ( _fogDirection == ( DIRECTION_ALL & ( ~DIRECTION_TOP_LEFT_CORNER ) ) ) {
-            index = 13;
-            revert = true;
-        }
-        else if ( _fogDirection == ( DIRECTION_ALL & ( ~DIRECTION_BOTTOM_RIGHT_CORNER ) ) ) {
-            index = 14;
-        }
-        else if ( _fogDirection == ( DIRECTION_ALL & ( ~DIRECTION_BOTTOM_LEFT_CORNER ) ) ) {
-            index = 14;
-            revert = true;
-        }
-        else if ( contains( _fogDirection, Direction::LEFT | Direction::BOTTOM_LEFT | Direction::BOTTOM )
-                  && !( _fogDirection & ( Direction::TOP | Direction::RIGHT ) ) ) {
-            index = 11;
-        }
-        else if ( contains( _fogDirection, Direction::RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM )
-                  && !( _fogDirection & ( Direction::TOP | Direction::LEFT ) ) ) {
-            index = 11;
-            revert = true;
-        }
-        else if ( contains( _fogDirection, Direction::LEFT | Direction::TOP_LEFT | Direction::TOP ) && !( _fogDirection & ( Direction::BOTTOM | Direction::RIGHT ) ) ) {
-            index = 12;
-        }
-        else if ( contains( _fogDirection, Direction::RIGHT | Direction::TOP_RIGHT | Direction::TOP ) && !( _fogDirection & ( Direction::BOTTOM | Direction::LEFT ) ) ) {
-            index = 12;
-            revert = true;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_LEFT )
-                  && !( _fogDirection & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_RIGHT ) ) ) {
-            index = 19;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::TOP_RIGHT )
-                  && !( _fogDirection & ( Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT | Direction::TOP_LEFT ) ) ) {
-            index = 19;
-            revert = true;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::BOTTOM_LEFT )
-                  && !( _fogDirection & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::TOP_LEFT ) ) ) {
-            index = 20;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP | Direction::BOTTOM_RIGHT )
-                  && !( _fogDirection & ( Direction::TOP_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) ) {
-            index = 20;
-            revert = true;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP )
-                  && !( _fogDirection & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) ) {
-            index = 22;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_LEFT )
-                  && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM_RIGHT ) ) ) {
-            index = 24;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_RIGHT )
-                  && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM_LEFT ) ) ) {
-            index = 24;
-            revert = true;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::LEFT | Direction::TOP_LEFT )
-                  && !( _fogDirection & ( Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
-            index = 25;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::RIGHT | Direction::TOP_RIGHT )
-                  && !( _fogDirection & ( Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
-            index = 25;
-            revert = true;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::BOTTOM_LEFT | Direction::LEFT )
-                  && !( _fogDirection & ( Direction::RIGHT | Direction::TOP_LEFT ) ) ) {
-            index = 26;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::BOTTOM_RIGHT | Direction::RIGHT )
-                  && !( _fogDirection & ( Direction::LEFT | Direction::TOP_RIGHT ) ) ) {
-            index = 26;
-            revert = true;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::TOP_LEFT | Direction::TOP )
-                  && !( _fogDirection & ( Direction::BOTTOM | Direction::TOP_RIGHT ) ) ) {
-            index = 30;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::TOP_RIGHT | Direction::TOP )
-                  && !( _fogDirection & ( Direction::BOTTOM | Direction::TOP_LEFT ) ) ) {
-            index = 30;
-            revert = true;
-        }
-        else if ( contains( _fogDirection, Direction::BOTTOM | Direction::LEFT )
-                  && !( _fogDirection & ( Direction::TOP | Direction::RIGHT | Direction::BOTTOM_LEFT ) ) ) {
-            index = 27;
-        }
-        else if ( contains( _fogDirection, Direction::BOTTOM | Direction::RIGHT )
-                  && !( _fogDirection & ( Direction::TOP | Direction::TOP_LEFT | Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
-            index = 27;
-            revert = true;
-        }
-        else if ( contains( _fogDirection, Direction::LEFT | Direction::TOP )
-                  && !( _fogDirection & ( Direction::TOP_LEFT | Direction::RIGHT | Direction::BOTTOM | Direction::BOTTOM_RIGHT ) ) ) {
-            index = 28;
-        }
-        else if ( contains( _fogDirection, Direction::RIGHT | Direction::TOP )
-                  && !( _fogDirection & ( Direction::TOP_RIGHT | Direction::LEFT | Direction::BOTTOM | Direction::BOTTOM_LEFT ) ) ) {
-            index = 28;
-            revert = true;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::TOP )
-                  && !( _fogDirection & ( Direction::BOTTOM | Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) ) {
-            index = 31;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::RIGHT )
-                  && !( _fogDirection & ( Direction::LEFT | Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT ) ) ) {
-            index = 32;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | Direction::LEFT )
-                  && !( _fogDirection & ( Direction::RIGHT | Direction::TOP_LEFT | Direction::BOTTOM_LEFT ) ) ) {
-            index = 32;
-            revert = true;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM )
-                  && !( _fogDirection & ( Direction::TOP | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) ) ) {
-            index = 33;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW ) && !( _fogDirection & Direction::TOP ) ) {
-            index = ( _index % 2 ) ? 0 : 1;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_ROW | DIRECTION_TOP_ROW ) && !( _fogDirection & Direction::BOTTOM ) ) {
-            index = ( _index % 2 ) ? 4 : 5;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | DIRECTION_LEFT_COL ) && !( _fogDirection & Direction::RIGHT ) ) {
-            index = ( _index % 2 ) ? 2 : 3;
-        }
-        else if ( contains( _fogDirection, DIRECTION_CENTER_COL | DIRECTION_RIGHT_COL ) && !( _fogDirection & Direction::LEFT ) ) {
-            index = ( _index % 2 ) ? 2 : 3;
-            revert = true;
-        }
-        else {
-            // unknown
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << _fogDirection << ". Tile index: " << _index )
-            const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
-            area.DrawTile( dst, sf, mp );
-            return;
-        }
-
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CLOP32, index );
-        area.BlitOnTile( dst, sprite, ( revert ? TILEWIDTH - sprite.x() - sprite.width() : sprite.x() ), sprite.y(), mp, revert, 255 );
     }
 }
 
@@ -3069,8 +2217,8 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 
     return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid
                << static_cast<ObjectIcnTypeUnderlyingType>( tile._objectIcnType ) << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex
-               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile.quantity1 << tile.quantity2 << tile.additionalMetadata
-               << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._layerType << tile._boatOwnerColor;
+               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile._metadata << tile.heroID << tile.tileIsRoad
+               << tile.addons_level1 << tile.addons_level2 << tile._layerType << tile._boatOwnerColor;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
@@ -3124,76 +2272,37 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1001_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1001_RELEASE ) {
-        if ( mainObjectType == 128 ) {
-            // This is an old Sea Chest object type.
-            mainObjectType = MP2::OBJ_SEA_CHEST;
-        }
-        else if ( mainObjectType == 235 ) {
-            // This is an old non-action Stables object type.
-            mainObjectType = MP2::OBJ_NON_ACTION_STABLES;
-        }
-        else if ( mainObjectType == 241 ) {
-            // This is an old action Stables object type.
-            mainObjectType = MP2::OBJ_STABLES;
-        }
-        else if ( mainObjectType == 234 ) {
-            // This is an old non-action Alchemist Tower object type.
-            mainObjectType = MP2::OBJ_NON_ACTION_ALCHEMIST_TOWER;
-        }
-        else if ( mainObjectType == 240 ) {
-            // This is an old action Alchemist Tower object type.
-            mainObjectType = MP2::OBJ_ALCHEMIST_TOWER;
-        }
-        else if ( mainObjectType == 118 ) {
-            // This is an old non-action The Hut of Magi object type.
-            mainObjectType = MP2::OBJ_NON_ACTION_HUT_OF_MAGI;
-        }
-        else if ( mainObjectType == 238 ) {
-            // This is an old action The Hut of Magi object type.
-            mainObjectType = MP2::OBJ_HUT_OF_MAGI;
-        }
-        else if ( mainObjectType == 119 ) {
-            // This is an old non-action The Eye of Magi object type.
-            mainObjectType = MP2::OBJ_NON_ACTION_EYE_OF_MAGI;
-        }
-        else if ( mainObjectType == 239 ) {
-            // This is an old action The Eye of Magi object type.
-            mainObjectType = MP2::OBJ_EYE_OF_MAGI;
-        }
-        else if ( mainObjectType == 233 ) {
-            // This is an old non-action Reefs object type.
-            mainObjectType = MP2::OBJ_REEFS;
-        }
-        else if ( mainObjectType == 65 ) {
-            // This is an old non-action Thatched Hut object type.
-            mainObjectType = MP2::OBJ_NON_ACTION_PEASANT_HUT;
-        }
-        else if ( mainObjectType == 193 ) {
-            // This is an old action Thatched Hut object type.
-            mainObjectType = MP2::OBJ_PEASANT_HUT;
-        }
-        else if ( mainObjectType == 117 ) {
-            // This is an old non-action Sirens object type.
-            mainObjectType = MP2::OBJ_NON_ACTION_SIRENS;
-        }
-        else if ( mainObjectType == 237 ) {
-            // This is an old action Sirens object type.
-            mainObjectType = MP2::OBJ_SIRENS;
-        }
-        else if ( mainObjectType == 116 ) {
-            // This is an old non-action Mermaid object type.
-            mainObjectType = MP2::OBJ_NON_ACTION_MERMAID;
-        }
-        else if ( mainObjectType == 236 ) {
-            // This is an old non-action Mermaid object type.
-            mainObjectType = MP2::OBJ_MERMAID;
-        }
+        mainObjectType = Tiles::convertOldMainObjectType( mainObjectType );
     }
 
     tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
 
-    msg >> tile._fogColors >> tile.quantity1 >> tile.quantity2 >> tile.additionalMetadata >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2
-        >> tile._layerType;
+    msg >> tile._fogColors;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1004_RELEASE ) {
+        uint8_t quantity1 = 0;
+        uint8_t quantity2 = 0;
+        uint32_t additionalMetadata = 0;
+
+        msg >> quantity1 >> quantity2 >> additionalMetadata;
+
+        world.setOldTileQuantityData( tile.GetIndex(), quantity1, quantity2, additionalMetadata );
+    }
+    else {
+        // We want to verify the size of array being present in the file.
+        std::vector<uint32_t> temp;
+        msg >> temp;
+
+        if ( tile._metadata.size() != temp.size() ) {
+            // This is a corrupted file!
+            assert( 0 );
+        }
+        else {
+            std::copy_n( temp.begin(), tile._metadata.size(), tile._metadata.begin() );
+        }
+    }
+
+    msg >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2 >> tile._layerType;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1002_RELEASE, "Remove the check below." );
     if ( Game::GetVersionOfCurrentSaveFile() >= FORMAT_VERSION_1002_RELEASE ) {
@@ -3203,22 +2312,434 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     return msg;
 }
 
-int Maps::getColorFromBarrierSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
+uint8_t Maps::Tiles::convertOldMainObjectType( const uint8_t mainObjectType )
 {
-    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == objectIcnType && 60 <= icnIndex && 102 >= icnIndex ) {
-        // 60, 66, 72, 78, 84, 90, 96, 102
-        return ( ( icnIndex - 60 ) / 6 ) + 1;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1001_RELEASE, "Remove this method." );
+
+    if ( mainObjectType == 128 ) {
+        // This is an old Sea Chest object type.
+        return MP2::OBJ_SEA_CHEST;
+    }
+    if ( mainObjectType == 235 ) {
+        // This is an old non-action Stables object type.
+        return MP2::OBJ_NON_ACTION_STABLES;
+    }
+    if ( mainObjectType == 241 ) {
+        // This is an old action Stables object type.
+        return MP2::OBJ_STABLES;
+    }
+    if ( mainObjectType == 234 ) {
+        // This is an old non-action Alchemist Tower object type.
+        return MP2::OBJ_NON_ACTION_ALCHEMIST_TOWER;
+    }
+    if ( mainObjectType == 240 ) {
+        // This is an old action Alchemist Tower object type.
+        return MP2::OBJ_ALCHEMIST_TOWER;
+    }
+    if ( mainObjectType == 118 ) {
+        // This is an old non-action The Hut of Magi object type.
+        return MP2::OBJ_NON_ACTION_HUT_OF_MAGI;
+    }
+    if ( mainObjectType == 238 ) {
+        // This is an old action The Hut of Magi object type.
+        return MP2::OBJ_HUT_OF_MAGI;
+    }
+    if ( mainObjectType == 119 ) {
+        // This is an old non-action The Eye of Magi object type.
+        return MP2::OBJ_NON_ACTION_EYE_OF_MAGI;
+    }
+    if ( mainObjectType == 239 ) {
+        // This is an old action The Eye of Magi object type.
+        return MP2::OBJ_EYE_OF_MAGI;
+    }
+    if ( mainObjectType == 233 ) {
+        // This is an old non-action Reefs object type.
+        return MP2::OBJ_REEFS;
+    }
+    if ( mainObjectType == 65 ) {
+        // This is an old non-action Thatched Hut object type.
+        return MP2::OBJ_NON_ACTION_PEASANT_HUT;
+    }
+    if ( mainObjectType == 193 ) {
+        // This is an old action Thatched Hut object type.
+        return MP2::OBJ_PEASANT_HUT;
+    }
+    if ( mainObjectType == 117 ) {
+        // This is an old non-action Sirens object type.
+        return MP2::OBJ_NON_ACTION_SIRENS;
+    }
+    if ( mainObjectType == 237 ) {
+        // This is an old action Sirens object type.
+        return MP2::OBJ_SIRENS;
+    }
+    if ( mainObjectType == 116 ) {
+        // This is an old non-action Mermaid object type.
+        return MP2::OBJ_NON_ACTION_MERMAID;
+    }
+    if ( mainObjectType == 236 ) {
+        // This is an old non-action Mermaid object type.
+        return MP2::OBJ_MERMAID;
     }
 
-    return 0;
+    return mainObjectType;
 }
 
-int Maps::getColorFromTravellerTentSprite( const MP2::ObjectIcnType objectIcnType, const uint8_t icnIndex )
+void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata )
 {
-    if ( MP2::OBJ_ICN_TYPE_X_LOC3 == objectIcnType && 110 <= icnIndex && 138 >= icnIndex ) {
-        // 110, 114, 118, 122, 126, 130, 134, 138
-        return ( ( icnIndex - 110 ) / 4 ) + 1;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove this method." );
+
+    // The object could be under a hero so ignore hero.
+    const MP2::MapObjectType objectType = GetObject( false );
+
+    if ( !MP2::isActionObject( objectType ) ) {
+        // A non-action object has no metadata.
+        return;
     }
 
-    return 0;
+    // Old format contained Gold values divided by 100 due to uint8_t limitation. We don't have such limitation anymore.
+
+    switch ( objectType ) {
+    // Alchemist Lab, Sawmill and Mines have first value as a resource type and the second value as resource count per day.
+    case MP2::OBJ_ALCHEMIST_LAB:
+    case MP2::OBJ_MINES:
+    case MP2::OBJ_SAWMILL:
+        _metadata[0] = quantityValue1;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
+
+        if ( _metadata[1] == 0 ) {
+            // This is a broken mine from old saves. Let's try to correct income.
+            if ( Funds{ static_cast<int>( _metadata[0] ), 1 }.GetValidItemsCount() == 1 ) {
+                const payment_t income = ProfitConditions::FromMine( static_cast<int>( _metadata[0] ) );
+                _metadata[1] = income.Get( static_cast<int>( _metadata[0] ) );
+            }
+            else {
+                // This is definitely not a mine.
+                SetObject( MP2::OBJ_NONE );
+            }
+        }
+
+        _metadata[2] = additionalMetadata;
+        break;
+
+    // Abandoned mine was mixed with Mines in the old save formats.
+    case MP2::OBJ_ABANDONED_MINE:
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1003_RELEASE ) {
+            _metadata[0] = quantityValue1;
+            _metadata[1] = quantityValue2;
+            _metadata[2] = additionalMetadata;
+        }
+        else {
+            _metadata[0] = ( static_cast<uint32_t>( quantityValue1 ) << 8 ) + quantityValue2;
+            _metadata[2] = additionalMetadata;
+        }
+        break;
+
+    // Monster dwellings always store only one value - the number of monsters.
+    case MP2::OBJ_AIR_ALTAR:
+    case MP2::OBJ_ARCHER_HOUSE:
+    case MP2::OBJ_BARROW_MOUNDS:
+    case MP2::OBJ_CAVE:
+    case MP2::OBJ_CITY_OF_DEAD:
+    case MP2::OBJ_DESERT_TENT:
+    case MP2::OBJ_DRAGON_CITY:
+    case MP2::OBJ_DWARF_COTTAGE:
+    case MP2::OBJ_EARTH_ALTAR:
+    case MP2::OBJ_EXCAVATION:
+    case MP2::OBJ_FIRE_ALTAR:
+    case MP2::OBJ_GOBLIN_HUT:
+    case MP2::OBJ_HALFLING_HOLE:
+    case MP2::OBJ_PEASANT_HUT:
+    case MP2::OBJ_RUINS:
+    case MP2::OBJ_TREE_CITY:
+    case MP2::OBJ_TREE_HOUSE:
+    case MP2::OBJ_TROLL_BRIDGE:
+    case MP2::OBJ_WAGON_CAMP:
+    case MP2::OBJ_WATCH_TOWER:
+    case MP2::OBJ_WATER_ALTAR:
+        _metadata[0] = ( static_cast<uint32_t>( quantityValue1 ) << 8 ) + quantityValue2;
+        break;
+
+    // Genie's Lamp must have some monsters inside otherwise this object should not exist on Adventure Map.
+    case MP2::OBJ_GENIE_LAMP:
+        _metadata[0] = ( static_cast<uint32_t>( quantityValue1 ) << 8 ) + quantityValue2;
+        assert( _metadata[0] > 0 );
+        break;
+
+    // Shrines as well as Pyramid always contain one type of spell.
+    case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+    case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+    case MP2::OBJ_SHRINE_THIRD_CIRCLE:
+    case MP2::OBJ_PYRAMID:
+        _metadata[0] = quantityValue1;
+        break;
+
+    // Monster object store the number of monsters (which must be bigger than 0) and join condition type.
+    case MP2::OBJ_MONSTER:
+        _metadata[0] = ( static_cast<uint32_t>( quantityValue1 ) << 8 ) + quantityValue2;
+        _metadata[2] = additionalMetadata;
+        break;
+
+    // Resource contains the type and the amount.
+    case MP2::OBJ_RESOURCE:
+        _metadata[0] = quantityValue1;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
+        break;
+
+    // Barrier and Traveler's Tent contain color.
+    case MP2::OBJ_BARRIER:
+    case MP2::OBJ_TRAVELLER_TENT:
+        _metadata[0] = quantityValue1;
+        break;
+
+    // Tree of Knowledge contains either nothing for free level up or the amount of required resources.
+    case MP2::OBJ_TREE_OF_KNOWLEDGE:
+        _metadata[0] = quantityValue1;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
+        break;
+
+    // Witch's Hut contains a basic level of  a secondary skill.
+    case MP2::OBJ_WITCHS_HUT:
+        _metadata[0] = quantityValue1;
+        break;
+
+    // Magic Garden and Water Wheel either contain nothing when it was visited or some resources.
+    case MP2::OBJ_MAGIC_GARDEN:
+    case MP2::OBJ_WATER_WHEEL:
+        _metadata[0] = quantityValue1;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
+        break;
+
+    // Skeleton contains an artifact.
+    case MP2::OBJ_SKELETON:
+        _metadata[0] = quantityValue1;
+        break;
+
+    // Lean-To contains one resource type and its amount.
+    case MP2::OBJ_LEAN_TO:
+        _metadata[0] = quantityValue1;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
+        break;
+
+    // Wagon can contain either an artifact or a resource.
+    case MP2::OBJ_WAGON:
+        if ( quantityValue2 > 0 ) {
+            _metadata[0] = Artifact::UNKNOWN;
+            _metadata[1] = quantityValue1;
+            if ( quantityValue1 == Resource::GOLD ) {
+                _metadata[2] = quantityValue2 * 100;
+            }
+            else {
+                _metadata[2] = quantityValue2;
+            }
+        }
+        else {
+            _metadata[0] = quantityValue1;
+        }
+        break;
+
+    // Flotsam can contain Wood and Gold.
+    case MP2::OBJ_FLOTSAM:
+        _metadata[0] = quantityValue1;
+        _metadata[1] = quantityValue2 * 100;
+        break;
+
+    // Treasure and Sea Chests can contain an artifact and gold.
+    case MP2::OBJ_GRAVEYARD:
+    case MP2::OBJ_SEA_CHEST:
+    case MP2::OBJ_TREASURE_CHEST:
+        _metadata[0] = quantityValue1;
+        _metadata[1] = quantityValue2 * 100;
+        break;
+
+    // Derelict Ship always has only Gold.
+    case MP2::OBJ_DERELICT_SHIP:
+        _metadata[0] = quantityValue1;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
+        break;
+
+    // Daemon Cave is tricky: it can contain experience, gold and artifact.
+    case MP2::OBJ_DAEMON_CAVE:
+        _metadata[0] = quantityValue1;
+        _metadata[1] = ( 0x0f & quantityValue2 ) * 100;
+        _metadata[2] = ( quantityValue2 >> 4 );
+        break;
+
+    // Campfire contains some random resources and gold which has the same value as resource but multiplied by 100.
+    case MP2::OBJ_CAMPFIRE:
+        _metadata[0] = quantityValue1;
+        _metadata[1] = quantityValue2;
+        break;
+
+    // Windmill contains some resources.
+    case MP2::OBJ_WINDMILL:
+        _metadata[0] = quantityValue1;
+        if ( quantityValue1 == Resource::GOLD ) {
+            _metadata[1] = quantityValue2 * 100;
+        }
+        else {
+            _metadata[1] = quantityValue2;
+        }
+        break;
+
+    // Artifact contains artifact ID, possible resources and condition to grab it.
+    case MP2::OBJ_ARTIFACT:
+        _metadata[0] = quantityValue1;
+        _metadata[1] = ( 0x0f & quantityValue2 );
+        _metadata[2] = ( quantityValue2 >> 4 );
+        break;
+
+    // Shipwreck Survivor has an artifact.
+    case MP2::OBJ_SHIPWRECK_SURVIVOR:
+        _metadata[0] = quantityValue1;
+        break;
+
+    // Shipwreck contains Gold, Artifact and winning conditions. However, old format did not store the amount of Gold, we need to add it.
+    case MP2::OBJ_SHIPWRECK:
+        _metadata[0] = quantityValue1;
+        _metadata[2] = ( quantityValue2 >> 4 );
+        switch ( static_cast<ShipwreckCaptureCondition>( _metadata[2] ) ) {
+        case ShipwreckCaptureCondition::EMPTY:
+            assert( _metadata[0] == Artifact::UNKNOWN );
+            break;
+        case ShipwreckCaptureCondition::FIGHT_10_GHOSTS_AND_GET_1000_GOLD:
+            _metadata[1] = 1000;
+            break;
+        case ShipwreckCaptureCondition::FIGHT_15_GHOSTS_AND_GET_2000_GOLD:
+            _metadata[1] = 2000;
+            break;
+        case ShipwreckCaptureCondition::FIGHT_25_GHOSTS_AND_GET_5000_GOLD:
+            _metadata[1] = 5000;
+            break;
+        case ShipwreckCaptureCondition::FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT:
+            _metadata[1] = 2000;
+            break;
+        default:
+            // This is an invalid case!
+            assert( 0 );
+            break;
+        }
+
+        break;
+
+    // These objects should not have any metadata.
+    case MP2::OBJ_ACTION_CACTUS:
+    case MP2::OBJ_ACTION_COAST:
+    case MP2::OBJ_ACTION_CRATER:
+    case MP2::OBJ_ACTION_DEAD_TREE:
+    case MP2::OBJ_ACTION_DUNE:
+    case MP2::OBJ_ACTION_FLOWERS:
+    case MP2::OBJ_ACTION_LAVAPOOL:
+    case MP2::OBJ_ACTION_MANDRAKE:
+    case MP2::OBJ_ACTION_MOSSY_ROCK:
+    case MP2::OBJ_ACTION_MOUND:
+    case MP2::OBJ_ACTION_MOUNTAINS:
+    case MP2::OBJ_ACTION_NOTHING_SPECIAL:
+    case MP2::OBJ_ACTION_REEFS:
+    case MP2::OBJ_ACTION_ROCK:
+    case MP2::OBJ_ACTION_SHRUB:
+    case MP2::OBJ_ACTION_STUMP:
+    case MP2::OBJ_ACTION_TAR_PIT:
+    case MP2::OBJ_ACTION_TREES:
+    case MP2::OBJ_ACTION_VOLCANO:
+    case MP2::OBJ_ACTION_WATER_LAKE:
+    case MP2::OBJ_ALCHEMIST_TOWER:
+    case MP2::OBJ_ARENA:
+    case MP2::OBJ_ARTESIAN_SPRING:
+    case MP2::OBJ_BOAT:
+    case MP2::OBJ_BUOY:
+    case MP2::OBJ_EYE_OF_MAGI:
+    case MP2::OBJ_FAERIE_RING:
+    case MP2::OBJ_FORT:
+    case MP2::OBJ_FOUNTAIN:
+    case MP2::OBJ_FREEMANS_FOUNDRY:
+    case MP2::OBJ_GAZEBO:
+    case MP2::OBJ_HILL_FORT:
+    case MP2::OBJ_HUT_OF_MAGI:
+    case MP2::OBJ_IDOL:
+    case MP2::OBJ_LIGHTHOUSE:
+    case MP2::OBJ_MAGELLANS_MAPS:
+    case MP2::OBJ_MAGIC_WELL:
+    case MP2::OBJ_MERCENARY_CAMP:
+    case MP2::OBJ_MERMAID:
+    case MP2::OBJ_OASIS:
+    case MP2::OBJ_OBELISK:
+    case MP2::OBJ_OBSERVATION_TOWER:
+    case MP2::OBJ_ORACLE:
+    case MP2::OBJ_SIRENS:
+    case MP2::OBJ_STABLES:
+    case MP2::OBJ_STANDING_STONES:
+    case MP2::OBJ_STONE_LITHS:
+    case MP2::OBJ_TEMPLE:
+    case MP2::OBJ_TRADING_POST:
+    case MP2::OBJ_WATERING_HOLE:
+    case MP2::OBJ_WHIRLPOOL:
+    case MP2::OBJ_WITCH_DOCTORS_HUT:
+    case MP2::OBJ_XANADU:
+        break;
+
+    // Metadata for these objects is stored outside this class.
+    case MP2::OBJ_BOTTLE:
+    case MP2::OBJ_CASTLE:
+    case MP2::OBJ_EVENT:
+    case MP2::OBJ_HEROES:
+    case MP2::OBJ_JAIL:
+    case MP2::OBJ_SIGN:
+    case MP2::OBJ_SPHINX:
+        assert( MP2::doesObjectNeedExtendedMetadata( objectType ) );
+        break;
+
+    // These objects must not even exist in a save file.
+    case MP2::OBJ_EXPANSION_DWELLING:
+    case MP2::OBJ_EXPANSION_OBJECT:
+    case MP2::OBJ_RANDOM_ARTIFACT:
+    case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
+    case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
+    case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
+    case MP2::OBJ_RANDOM_CASTLE:
+    case MP2::OBJ_RANDOM_MONSTER:
+    case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
+    case MP2::OBJ_RANDOM_MONSTER_STRONG:
+    case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
+    case MP2::OBJ_RANDOM_MONSTER_WEAK:
+    case MP2::OBJ_RANDOM_RESOURCE:
+    case MP2::OBJ_RANDOM_TOWN:
+    case MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT:
+        assert( 0 );
+        break;
+
+    default:
+        // Did you add a new action object on Adventure Map? Add the logic!
+        assert( 0 );
+        break;
+    }
 }

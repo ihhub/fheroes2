@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-25 15:24+0000\n"
+"POT-Creation-Date: 2023-05-07 10:26+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2623,6 +2623,19 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr "Är du säker på att du vill avskeda denna armé?"
 
+msgid "Upgrade"
+msgstr ""
+
+#, fuzzy
+msgid "Upgrade your troops."
+msgstr "Du har inte råd att upgradera dina trupper!"
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
+
 msgid "Followers"
 msgstr "Anhängare"
 
@@ -4280,6 +4293,10 @@ msgstr ""
 "Du har misslyckats att slutföra ditt uppdrag i tid.\n"
 "Allting är förlorat."
 
+#, fuzzy
+msgid "Defeat!"
+msgstr " besegrad"
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
@@ -4348,6 +4365,9 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} har blivit besegrad!"
+
+msgid "Major Event!"
+msgstr ""
 
 msgid "Scenario:"
 msgstr "Scenario:"
@@ -4428,6 +4448,9 @@ msgid " All dwellings increase population."
 msgstr " Alla bostäder höjer folkmängden."
 
 msgid "New Week!"
+msgstr ""
+
+msgid "Beware!"
 msgstr ""
 
 msgid ""
@@ -6253,6 +6276,13 @@ msgstr ""
 
 msgid "Spell book is not present."
 msgstr "Det finns ingen Magibok."
+
+#, fuzzy
+msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
+msgstr ""
+"Den besvärjelsen kostar %{mana} besvärjelsepoäng. Hjälten har bara %{point} "
+"besvärjelsepoäng, så hjälten kan inte kasta besvärjelsen."
 
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "

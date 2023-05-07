@@ -238,10 +238,13 @@ namespace AI
 
     bool BattlePlanner::checkRetreatCondition( const Heroes & hero ) const
     {
+        if ( !_considerRetreat || hero.isControlHuman() || hero.isLosingGame() || !isHeroWorthSaving( hero ) || !CanPurchaseHero( hero.GetKingdom() ) ) {
+            return false;
+        }
+
         // Retreat if remaining army strength is a fraction of enemy's
         // Consider taking speed/turn order into account in the future
-        const double ratio = Difficulty::GetAIRetreatRatio( Game::getDifficulty() );
-        return !hero.isLosingGame() && _considerRetreat && _myArmyStrength * ratio < _enemyArmyStrength && !hero.isControlHuman() && isHeroWorthSaving( hero );
+        return _myArmyStrength * Difficulty::GetAIRetreatRatio( Game::getDifficulty() ) < _enemyArmyStrength;
     }
 
     bool BattlePlanner::isUnitFaster( const Unit & currentUnit, const Unit & target ) const
@@ -509,7 +512,7 @@ namespace AI
             const bool attackerIgnoresCover
                 = arena.GetForce1().GetCommander()->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY );
 
-            auto getTowerStrength = [&currentUnit]( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetScoreQuality( currentUnit ) : 0; };
+            auto getTowerStrength = []( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetStrength() : 0; };
 
             double towerStr = getTowerStrength( Arena::GetTower( TowerType::TWR_CENTER ) );
             towerStr += getTowerStrength( Arena::GetTower( TowerType::TWR_LEFT ) );

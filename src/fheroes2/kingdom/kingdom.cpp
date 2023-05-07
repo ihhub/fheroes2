@@ -484,7 +484,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
     if ( MP2::isCaptureObject( objectType ) )
         return !Players::isFriends( color, getColorFromTile( tile ) );
 
-    if ( MP2::isQuantityObject( objectType ) )
+    if ( MP2::isValuableResourceObject( objectType ) )
         return doesTileContainValuableItems( tile );
 
     return true;
@@ -609,7 +609,7 @@ void Kingdom::ApplyPlayWithStartingHero()
 
             if ( patrol ) {
                 hero->SetModes( Heroes::PATROL );
-                hero->SetCenterPatrol( cp );
+                hero->SetPatrolCenter( cp );
             }
             foundHeroes = true;
         }

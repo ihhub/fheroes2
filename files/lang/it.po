@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-25 06:07+0000\n"
+"POT-Creation-Date: 2023-05-07 10:26+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2565,6 +2565,18 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr "Sei sicuro di voler congedare queste forze?"
 
+msgid "Upgrade"
+msgstr ""
+
+msgid "Upgrade your troops."
+msgstr ""
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
+
 msgid "Followers"
 msgstr "Accoliti"
 
@@ -4231,6 +4243,9 @@ msgid ""
 "All is lost."
 msgstr ""
 
+msgid "Defeat!"
+msgstr ""
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
@@ -4296,6 +4311,9 @@ msgstr ""
 
 msgid "%{color} player has been vanquished!"
 msgstr "Giocatore %{color} è stato sconfitto!"
+
+msgid "Major Event!"
+msgstr ""
 
 msgid "Scenario:"
 msgstr "Scenario:"
@@ -4378,6 +4396,9 @@ msgid " All dwellings increase population."
 msgstr "Cresce il numero di truppe disponibili di ogni dimora."
 
 msgid "New Week!"
+msgstr ""
+
+msgid "Beware!"
 msgstr ""
 
 msgid ""
@@ -5956,6 +5977,10 @@ msgid ""
 msgstr ""
 
 msgid "Spell book is not present."
+msgstr ""
+
+msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
 msgstr ""
 
 msgid ""

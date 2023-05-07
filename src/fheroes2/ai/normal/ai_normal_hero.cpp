@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
@@ -230,25 +231,26 @@ namespace
             return doesTileContainValuableItems( tile );
 
         case MP2::OBJ_ARTIFACT: {
-            const uint32_t variants = tile.QuantityVariant();
-
             if ( hero.IsFullBagArtifacts() )
                 return false;
 
-            // 1,2,3 - 2000g, 2500g+3res, 3000g+5res
-            if ( 1 <= variants && 3 >= variants )
-                return kingdom.AllowPayment( getFundsFromTile( tile ) );
+            const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
 
-            // 4,5 - need to have skill wisdom or leadership
-            if ( 3 < variants && 6 > variants )
-                return hero.HasSecondarySkill( getSecondarySkillFromTile( tile ).Skill() );
+            if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD || condition == Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES
+                 || condition == Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
+                return kingdom.AllowPayment( getArtifactResourceRequirement( tile ) );
+            }
+
+            if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
+                return hero.HasSecondarySkill( getArtifactSecondarySkillRequirement( tile ).Skill() );
+            }
 
             // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
-            if ( 5 < variants && 14 > variants ) {
+            if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
             }
 
-            // It is a normal artifact.
+            // No conditions to capture an artifact exist.
             return true;
         }
 
@@ -302,7 +304,7 @@ namespace
 
         // One time visit Secondary Skill object.
         case MP2::OBJ_WITCHS_HUT: {
-            const Skill::Secondary & skill = getSecondarySkillFromTile( tile );
+            const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( tile );
             const int skillType = skill.Skill();
 
             if ( !skill.isValid() || hero.HasMaxSecondarySkill() || hero.HasSecondarySkill( skillType ) ) {
@@ -324,9 +326,9 @@ namespace
 
         case MP2::OBJ_TREE_OF_KNOWLEDGE:
             if ( !hero.isVisited( tile ) ) {
-                const ResourceCount & rc = getResourcesFromTile( tile );
+                const Funds & rc = getTreeOfKnowledgeRequirement( tile );
                 // If the payment is required do not waste all resources from the kingdom. Use them wisely.
-                if ( !rc.isValid() || kingdom.AllowPayment( Funds( rc ) * 5 ) ) {
+                if ( rc.GetValidItemsCount() == 0 || kingdom.AllowPayment( rc * 5 ) ) {
                     return true;
                 }
             }
@@ -503,8 +505,9 @@ namespace
             break;
 
         case MP2::OBJ_DAEMON_CAVE:
-            if ( doesTileContainValuableItems( tile ) && 4 != tile.QuantityVariant() )
+            if ( doesTileContainValuableItems( tile ) && getDaemonCaveBonusType( tile ) != Maps::DaemonCaveCaptureBonus::PAY_2500_GOLD ) {
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
+            }
             break;
 
         case MP2::OBJ_MONSTER:
@@ -592,7 +595,7 @@ namespace
     void addHeroToMove( Heroes * hero, std::vector<AI::HeroToMove> & availableHeroes )
     {
         if ( hero->Modes( Heroes::PATROL ) ) {
-            if ( hero->GetSquarePatrol() == 0 ) {
+            if ( hero->GetPatrolDistance() == 0 ) {
                 DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." )
                 return;
             }
@@ -604,8 +607,8 @@ namespace
             heroInfo.hero = hero;
 
             if ( hero->Modes( Heroes::PATROL ) ) {
-                heroInfo.patrolCenter = Maps::GetIndexFromAbsPoint( hero->GetCenterPatrol() );
-                heroInfo.patrolDistance = hero->GetSquarePatrol();
+                heroInfo.patrolCenter = Maps::GetIndexFromAbsPoint( hero->GetPatrolCenter() );
+                heroInfo.patrolDistance = hero->GetPatrolDistance();
             }
         }
     }
@@ -884,9 +887,11 @@ namespace AI
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL: {
             if ( getColorFromTile( tile ) == hero.GetColor() ) {
-                return -dangerousTaskPenalty; // don't even attempt to go here
+                return -valueToIgnore; // don't even attempt to go here
             }
-            return ( getResourcesFromTile( tile ).first == Resource::GOLD ) ? 4000.0 : 2000.0;
+            const int resource = getDailyIncomeObjectResources( tile ).getFirstValidResource().first;
+            const double value = 20.0 * getResourcePriorityModifier( resource );
+            return ( resource == Resource::GOLD ) ? value * 100.0 : value;
         }
         case MP2::OBJ_ABANDONED_MINE: {
             return 3000.0;
@@ -903,10 +908,9 @@ namespace AI
 
             return 1000.0 * art.getArtifactValue();
         }
+        case MP2::OBJ_SEA_CHEST:
         case MP2::OBJ_SHIPWRECK_SURVIVOR:
         case MP2::OBJ_TREASURE_CHEST: {
-            // TODO: add logic if the object contains an artifact and resources.
-
             if ( getArtifactFromTile( tile ).isValid() ) {
                 const Artifact art = getArtifactFromTile( tile );
 
@@ -919,7 +923,10 @@ namespace AI
                 return 1000.0 * art.getArtifactValue();
             }
 
-            return 850.0;
+            const Funds funds = getFundsFromTile( tile );
+            assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
+
+            return funds.gold;
         }
 
         case MP2::OBJ_DAEMON_CAVE:
@@ -947,11 +954,27 @@ namespace AI
             return 0;
         }
         case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_DERELICT_SHIP:
         case MP2::OBJ_FLOTSAM:
-        case MP2::OBJ_GENIE_LAMP:
+        case MP2::OBJ_LEAN_TO:
+        case MP2::OBJ_MAGIC_GARDEN:
         case MP2::OBJ_RESOURCE:
-        case MP2::OBJ_SEA_CHEST: {
-            return 850.0;
+        case MP2::OBJ_WATER_WHEEL:
+        case MP2::OBJ_WINDMILL: {
+            const Funds & loot = getFundsFromTile( tile );
+
+            double value = 0;
+            for ( const BudgetEntry & budget : _budget ) {
+                const int amount = loot.Get( budget.resource );
+                if ( amount > 0 ) {
+                    value += amount * getResourcePriorityModifier( budget.resource );
+                }
+            }
+            // verify this object wasn't visited before
+            if ( value < 1 ) {
+                return -valueToIgnore;
+            }
+            return value;
         }
         case MP2::OBJ_LIGHTHOUSE: {
             // TODO: add more complex logic for cases when AI has boats.
@@ -989,6 +1012,7 @@ namespace AI
         case MP2::OBJ_EARTH_ALTAR:
         case MP2::OBJ_EXCAVATION:
         case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_GENIE_LAMP:
         case MP2::OBJ_GOBLIN_HUT:
         case MP2::OBJ_HALFLING_HOLE:
         case MP2::OBJ_PEASANT_HUT:
@@ -1151,17 +1175,6 @@ namespace AI
 
             return 100;
         }
-        case MP2::OBJ_DERELICT_SHIP:
-        case MP2::OBJ_LEAN_TO:
-        case MP2::OBJ_MAGIC_GARDEN:
-        case MP2::OBJ_WATER_WHEEL:
-        case MP2::OBJ_WINDMILL: {
-            if ( doesTileContainValuableItems( tile ) ) {
-                return 850;
-            }
-
-            return -dangerousTaskPenalty;
-        }
         case MP2::OBJ_ALCHEMIST_TOWER: {
             const BagArtifacts & bag = hero.GetBagArtifacts();
             const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.containsCurses(); } ) );
@@ -1295,14 +1308,6 @@ namespace AI
             // TODO: we should add logic to compare monsters and hero army strengths.
             return ( anotherFriendlyHeroPresent ? 4000.0 : 1000.0 ) + monsters.getTotalHP() / 100.0;
         }
-        case MP2::OBJ_ALCHEMIST_LAB:
-        case MP2::OBJ_MINES:
-        case MP2::OBJ_SAWMILL: {
-            if ( getColorFromTile( tile ) == hero.GetColor() ) {
-                return -dangerousTaskPenalty; // don't even attempt to go here
-            }
-            return ( getResourcesFromTile( tile ).first == Resource::GOLD ) ? 3000.0 : 1500.0;
-        }
         case MP2::OBJ_ABANDONED_MINE: {
             return 5000.0;
         }
@@ -1320,10 +1325,16 @@ namespace AI
         }
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
-        case MP2::OBJ_GENIE_LAMP:
+        case MP2::OBJ_LEAN_TO:
+        case MP2::OBJ_MAGIC_GARDEN:
         case MP2::OBJ_RESOURCE:
-        case MP2::OBJ_SEA_CHEST: {
-            return anotherFriendlyHeroPresent ? 100.0 : 500.0;
+        case MP2::OBJ_WATER_WHEEL:
+        case MP2::OBJ_WINDMILL: {
+            if ( anotherFriendlyHeroPresent ) {
+                return 100.0;
+            }
+            // fall through to the general value calculation
+            break;
         }
         case MP2::OBJ_LIGHTHOUSE: {
             // TODO: add more complex logic for cases when AI has boats.
@@ -1463,7 +1474,7 @@ namespace AI
             if ( getColorFromTile( tile ) == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
-            return ( getResourcesFromTile( tile ).first == Resource::GOLD ) ? tenTiles : fiveTiles;
+            return ( getDailyIncomeObjectResources( tile ).gold > 0 ) ? tenTiles : fiveTiles;
         }
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
@@ -1606,7 +1617,7 @@ namespace AI
         return targetIndex;
     }
 
-    int AI::Normal::getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority )
+    int Normal::getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority )
     {
         Heroes & hero = *heroInfo.hero;
 
