@@ -42,7 +42,6 @@
 #include "game_io.h"
 #include "game_mode.h"
 #include "game_over.h"
-#include "gamedefs.h"
 #include "highscores.h"
 #include "icn.h"
 #include "image.h"
