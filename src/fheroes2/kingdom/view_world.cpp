@@ -729,11 +729,16 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
 
     restorer.restore();
 
+    display.updateNextRenderRoi( restorer.rect() );
+
     fheroes2::fadeInDisplay( fadeRoi, false );
 
     // Don't forget to reset the interface settings back if necessary
     if ( isHideInterface ) {
         conf.setHideInterface( true );
         interface.Reset();
+    }
+    else {
+        radar.SetRedraw( Interface::REDRAW_RADAR_CURSOR );
     }
 }
