@@ -568,7 +568,7 @@ namespace fheroes2
         fadeOutDisplay( { 0, 0, display.width(), display.height() }, false );
     }
 
-    void fadeOutDisplay( const Rect & roi, const bool halfFade /* = false */ )
+    void fadeOutDisplay( const Rect & roi, const bool halfFade )
     {
         static_assert( screenFadeFrameCount != 0 );
 
@@ -590,7 +590,7 @@ namespace fheroes2
         fadeInDisplay( { 0, 0, display.width(), display.height() }, false );
     }
 
-    void fadeInDisplay( const Rect & roi, const bool halfFade /* = false */ )
+    void fadeInDisplay( const Rect & roi, const bool halfFade )
     {
         static_assert( screenFadeFrameCount != 0 );
 

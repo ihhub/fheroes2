@@ -168,7 +168,7 @@ fheroes2::GameMode Game::LoadGame()
     buttons.back().setPosition( buttonPos.x, buttonPos.y + buttonYStep * 5 );
     buttons.back().draw();
 
-    if ( isNeedFadeIn() && Settings::isFadeEffectEnabled() ) {
+    if ( isNeedFadeIn() ) {
         fheroes2::fadeInDisplay();
     }
     else {
@@ -240,9 +240,7 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
     // image background
     fheroes2::drawMainMenuScreen();
 
-    const bool isFadeEnabled = Settings::isFadeEffectEnabled();
-
-    if ( isNeedFadeIn() && isFadeEnabled ) {
+    if ( isNeedFadeIn() ) {
         fheroes2::fadeInDisplay();
     }
     else {
@@ -260,9 +258,7 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
     }
 
     // We are loading a game so fade-out main menu screen.
-    if ( isFadeEnabled ) {
-        fheroes2::fadeOutDisplay();
-    }
+    fheroes2::fadeOutDisplay();
 
     return returnValue;
 }

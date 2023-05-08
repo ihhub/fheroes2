@@ -248,9 +248,7 @@ void StatsHeroesList::ActionListSingleClick( HeroRow & row, const fheroes2::Poin
     if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) ) {
         Game::OpenHeroesDialog( *row.hero, false, false );
 
-        if ( Settings::isFadeEffectEnabled() ) {
-            needFadeIn = true;
-        }
+        needFadeIn = true;
     }
 }
 
@@ -507,9 +505,7 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const fheroes2::Poi
 
         row.Init( row.castle );
 
-        if ( Settings::isFadeEffectEnabled() ) {
-            needFadeIn = true;
-        }
+        needFadeIn = true;
     }
 }
 
@@ -733,8 +729,7 @@ void Kingdom::openOverviewDialog()
 
     // Fade-out game screen only for 640x480 resolution.
     const bool isDefaultScreenSize = display.isDefaultSize();
-    const bool isFadeEnabled = Settings::isFadeEffectEnabled();
-    if ( isFadeEnabled && isDefaultScreenSize ) {
+    if ( isDefaultScreenSize ) {
         fheroes2::fadeOutDisplay();
     }
 
@@ -797,21 +792,12 @@ void Kingdom::openOverviewDialog()
     buttonExit.draw();
 
     // Fade-in Kingdom overview dialog.
-    if ( isFadeEnabled ) {
-        if ( !isDefaultScreenSize ) {
-            // We need to expand the ROI for the next render to properly render window borders and shadow.
-            fheroes2::Rect roi( background.windowArea() );
-            roi.x -= BORDERWIDTH;
-            roi.width += BORDERWIDTH;
-            roi.height += BORDERWIDTH;
-            display.updateNextRenderRoi( roi );
-        }
+    if ( !isDefaultScreenSize ) {
+        // We need to expand the ROI for the next render to properly render window borders and shadow.
+        display.updateNextRenderRoi( background.windowWithShadowArea() );
+    }
 
-        fheroes2::fadeInDisplay( background.activeArea(), !isDefaultScreenSize );
-    }
-    else {
-        display.render();
-    }
+    fheroes2::fadeInDisplay( background.activeArea(), !isDefaultScreenSize );
 
     LocalEvent & le = LocalEvent::Get();
     bool redraw = true;
@@ -840,11 +826,9 @@ void Kingdom::openOverviewDialog()
         // Exit this dialog.
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             // Fade-out Kingdom overview dialog.
-            if ( isFadeEnabled ) {
-                fheroes2::fadeOutDisplay( background.activeArea(), !isDefaultScreenSize );
-                if ( isDefaultScreenSize ) {
-                    Interface::Basic::Get().setNeedFadeIn();
-                }
+            fheroes2::fadeOutDisplay( background.activeArea(), !isDefaultScreenSize );
+            if ( isDefaultScreenSize ) {
+                Interface::Basic::Get().setNeedFadeIn();
             }
 
             break;
@@ -900,10 +884,10 @@ void Kingdom::openOverviewDialog()
         RedrawIncomeInfo( cur_pt, *this );
         RedrawFundsInfo( cur_pt, *this );
 
-        if ( needFadeIn && isFadeEnabled ) {
+        if ( needFadeIn ) {
             needFadeIn = false;
 
-            fheroes2::fadeInDisplay( background.activeArea() );
+            fheroes2::fadeInDisplay( background.activeArea(), false );
         }
         else {
             display.render();

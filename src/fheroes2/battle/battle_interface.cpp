@@ -1260,20 +1260,18 @@ Battle::Interface::~Interface()
     delete opponent2;
 
     // Fade-out battlefield.
-    if ( Settings::isFadeEffectEnabled() ) {
-        const bool isDefaultScreenSize = fheroes2::Display::instance().isDefaultSize();
+    const bool isDefaultScreenSize = fheroes2::Display::instance().isDefaultSize();
 
-        fheroes2::fadeOutDisplay( _background->activeArea(), !isDefaultScreenSize );
+    fheroes2::fadeOutDisplay( _background->activeArea(), !isDefaultScreenSize );
 
-        // For 640x480 resolution we do screen fade-in.
-        if ( isDefaultScreenSize ) {
-            // Reset the battlefield dialog window to restore the previous display image from screen restorer.
-            // We have multiple return places after the battle: the adventure map, Main Menu (from Battle only),
-            // the battle results screen (if the battle was quick ended).
-            _background.reset();
+    // For 640x480 resolution we do screen fade-in.
+    if ( isDefaultScreenSize ) {
+        // Reset the battlefield dialog window to restore the previous display image from screen restorer.
+        // We have multiple return places after the battle: the adventure map, Main Menu (from Battle only),
+        // the battle results screen (if the battle was quick ended).
+        _background.reset();
 
-            fheroes2::fadeInDisplay();
-        }
+        fheroes2::fadeInDisplay();
     }
 }
 
@@ -1323,8 +1321,7 @@ void Battle::Interface::fullRedraw()
 
     // Fade-out game screen only for 640x480 resolution.
     const bool isDefaultScreenSize = display.isDefaultSize();
-    const bool isFadeEnabled = Settings::isFadeEffectEnabled();
-    if ( isFadeEnabled && isDefaultScreenSize ) {
+    if ( isDefaultScreenSize ) {
         fheroes2::fadeOutDisplay();
     }
 
@@ -1338,18 +1335,12 @@ void Battle::Interface::fullRedraw()
     redrawPreRender();
 
     // Fade-in battlefield.
-    if ( isFadeEnabled ) {
-        if ( !isDefaultScreenSize ) {
-            // We need to expand the ROI for the next render to properly render window borders and shadow.
-            fheroes2::Rect roi( _background->windowArea() );
-            roi.x -= BORDERWIDTH;
-            roi.width += BORDERWIDTH;
-            roi.height += BORDERWIDTH;
-            display.updateNextRenderRoi( roi );
-        }
-
-        fheroes2::fadeInDisplay( _background->activeArea(), !isDefaultScreenSize );
+    if ( !isDefaultScreenSize ) {
+        // We need to expand the ROI for the next render to properly render window borders and shadow.
+        display.updateNextRenderRoi( _background->windowWithShadowArea() );
     }
+
+    fheroes2::fadeInDisplay( _background->activeArea(), !isDefaultScreenSize );
 }
 
 void Battle::Interface::Redraw()

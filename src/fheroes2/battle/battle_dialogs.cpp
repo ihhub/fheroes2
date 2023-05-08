@@ -976,15 +976,10 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
         if ( le.MouseClickLeft( portraitArea ) && actionHero != nullptr ) {
             LocalEvent::GetClean();
             // IMPORTANT!!! This is extremely dangerous but we have no choice with current code. Make sure that this trick doesn't allow user to modify the hero.
-            const_cast<Heroes *>( actionHero )->OpenDialog( true, true, true, true );
+            const_cast<Heroes *>( actionHero )->OpenDialog( true, true, true, true, false );
 
             // Fade-in to restore the screen after closing the hero dialog.
-            if ( Settings::isFadeEffectEnabled() ) {
-                fheroes2::fadeInDisplay( _interface->GetIntrfaceRoi(), !display.isDefaultSize() );
-            }
-            else {
-                display.render( _interface->GetIntrfaceRoi() );
-            }
+            fheroes2::fadeInDisplay( _interface->GetInterfaceRoi(), !display.isDefaultSize() );
         }
 
         if ( le.MousePressRight( btnCast.area() ) && _currentColor == hero.GetColor() ) {

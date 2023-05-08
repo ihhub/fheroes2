@@ -579,7 +579,6 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     const bool isEvilInterface = conf.isEvilInterfaceEnabled();
     const bool isHideInterface = conf.isHideInterfaceEnabled();
     const ZoomLevel zoomLevel = conf.ViewWorldZoomLevel();
-    const bool isFadeEnabled = Settings::isFadeEffectEnabled();
 
     fheroes2::Rect fadeRoi( { 0, 0 }, display.screenSize() );
 
@@ -592,9 +591,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     }
 
     // Fade-out Adventure map screen.
-    if ( isFadeEnabled ) {
-        fheroes2::fadeOutDisplay( fadeRoi, false );
-    }
+    fheroes2::fadeOutDisplay( fadeRoi, false );
 
     // If the interface is currently hidden, we have to temporarily bring it back, because
     // the map generation in the World View mode heavily depends on the existing game area
@@ -655,22 +652,14 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     buttonExit.draw();
 
     // Fade-in View World screen.
-    if ( isFadeEnabled ) {
-        if ( !isHideInterface ) {
-            display.render( { display.width() - RADARWIDTH + BORDERWIDTH, BORDERWIDTH, display.height() - 2 * BORDERWIDTH, RADARWIDTH } );
-        }
-
-        // Render the View World map image.
-        DrawWorld( currentROI, cache );
-
-        fheroes2::fadeInDisplay( fadeRoi, false );
+    if ( !isHideInterface ) {
+        display.render( { display.width() - RADARWIDTH + BORDERWIDTH, BORDERWIDTH, display.height() - 2 * BORDERWIDTH, RADARWIDTH } );
     }
-    else {
-        // Render the View World map image.
-        DrawWorld( currentROI, cache );
 
-        display.render();
-    }
+    // Render the View World map image.
+    DrawWorld( currentROI, cache );
+
+    fheroes2::fadeInDisplay( fadeRoi, false );
 
     // Use for dragging the map from main window
     bool isDrag = false;
@@ -736,13 +725,11 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     LocalEvent::ResumeCycling();
 
     // Fade-out View World screen and fade-in the Adventure map screen.
-    if ( isFadeEnabled ) {
-        fheroes2::fadeOutDisplay( fadeRoi, false );
+    fheroes2::fadeOutDisplay( fadeRoi, false );
 
-        restorer.restore();
+    restorer.restore();
 
-        fheroes2::fadeInDisplay( fadeRoi, false );
-    }
+    fheroes2::fadeInDisplay( fadeRoi, false );
 
     // Don't forget to reset the interface settings back if necessary
     if ( isHideInterface ) {

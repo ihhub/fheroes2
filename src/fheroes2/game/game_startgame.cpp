@@ -210,9 +210,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
     assert( it != myCastles.end() );
 
-    const bool isFadeEnabled = Settings::isFadeEffectEnabled();
-
-    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( false, isFadeEnabled, renderBackgroundDialog );
+    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( false, true, renderBackgroundDialog );
 
     while ( result != Castle::CastleDialogReturnValue::Close ) {
         if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
@@ -264,7 +262,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
     basicInterface.RedrawFocus();
 
     // Fade-in game screen only for 640x480 resolution.
-    if ( isFadeEnabled && fheroes2::Display::instance().isDefaultSize() ) {
+    if ( fheroes2::Display::instance().isDefaultSize() ) {
         basicInterface.setNeedFadeIn();
     }
 }
@@ -274,17 +272,16 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    bool needFade = Settings::isFadeEffectEnabled();
-
     Interface::Basic & basicInterface = Interface::Basic::Get();
 
     const KingdomHeroes & myHeroes = hero.GetKingdom().GetHeroes();
     KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
 
+    bool needFade = true;
     int result = Dialog::ZERO;
 
     while ( it != myHeroes.end() && result != Dialog::CANCEL ) {
-        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, renderBackgroundDialog );
+        result = ( *it )->OpenDialog( false, true, disableDismiss, false, renderBackgroundDialog );
         if ( needFade ) {
             needFade = false;
         }
@@ -340,7 +337,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     basicInterface.RedrawFocus();
 
     // Fade-in game screen only for 640x480 resolution.
-    if ( Settings::isFadeEffectEnabled() && fheroes2::Display::instance().isDefaultSize() ) {
+    if ( fheroes2::Display::instance().isDefaultSize() ) {
         basicInterface.setNeedFadeIn();
     }
 }
@@ -615,11 +612,6 @@ int Interface::Basic::GetCursorTileIndex( int32_t dst_index )
 
 fheroes2::GameMode Interface::Basic::StartGame()
 {
-    // Fade-out previous screen (load/new game, campaign info).
-    if ( Settings::isFadeEffectEnabled() ) {
-        fheroes2::fadeOutDisplay();
-    }
-
     Settings & conf = Settings::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -637,7 +629,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     bool skipTurns = loadedFromSave;
 
     // Set need of fade-in of game screen.
-    _needFadeIn = Settings::isFadeEffectEnabled();
+    _needFadeIn = true;
 
     GameOver::Result & gameResult = GameOver::Result::Get();
     fheroes2::GameMode res = fheroes2::GameMode::END_TURN;
@@ -837,13 +829,11 @@ fheroes2::GameMode Interface::Basic::StartGame()
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
     assert( res != fheroes2::GameMode::END_TURN );
 
-    if ( Settings::isFadeEffectEnabled() ) {
-        Game::setNeedFadeIn();
+    Game::setNeedFadeIn();
 
-        // Do not use fade-out effect when exiting to Highscores screen as in this case name input dialog will be rendered next.
-        if ( res != fheroes2::GameMode::HIGHSCORES_STANDARD ) {
-            fheroes2::fadeOutDisplay();
-        }
+    // Do not use fade-out effect when exiting to Highscores screen as in this case name input dialog will be rendered next.
+    if ( res != fheroes2::GameMode::HIGHSCORES_STANDARD ) {
+        fheroes2::fadeOutDisplay();
     }
 
     return res;

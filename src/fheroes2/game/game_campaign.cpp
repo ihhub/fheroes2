@@ -1429,15 +1429,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     LocalEvent & le = LocalEvent::Get();
 
-    const bool isFadeEnabled = Settings::isFadeEffectEnabled();
-
     // Fade-in campaign scenario info.
-    if ( isFadeEnabled ) {
-        fheroes2::fadeInDisplay( { top.x, top.y, backgroundImage.width(), backgroundImage.height() }, false );
-    }
-    else {
-        display.render();
-    }
+    fheroes2::fadeInDisplay( { top.x, top.y, backgroundImage.width(), backgroundImage.height() }, false );
+
     std::vector<fheroes2::Rect> choiceArea( bonusChoiceCount );
     for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
         choiceArea[i] = buttonChoices.button( i ).area();
@@ -1481,13 +1475,11 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 GameOver::Result::Get().Reset();
             }
 
-            if ( isFadeEnabled ) {
-                fheroes2::fadeOutDisplay( { top.x, top.y, backgroundImage.width(), backgroundImage.height() }, false );
+            fheroes2::fadeOutDisplay( { top.x, top.y, backgroundImage.width(), backgroundImage.height() }, false );
 
-                if ( prevMode == fheroes2::GameMode::LOAD_CAMPAIGN || prevMode == fheroes2::GameMode::MAIN_MENU ) {
-                    // We are going back to main menu.
-                    setNeedFadeIn();
-                }
+            if ( prevMode == fheroes2::GameMode::LOAD_CAMPAIGN || prevMode == fheroes2::GameMode::MAIN_MENU ) {
+                // We are going back to main menu.
+                setNeedFadeIn();
             }
 
             return prevMode;
@@ -1555,6 +1547,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 continue;
             }
 
+            // Fade-out screen before loading a scenario.
+            fheroes2::fadeOutDisplay();
+
             // meanwhile, the others should be called after players.SetStartGame()
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE ) {
                 SetScenarioBonus( currentScenarioInfoId, scenarioBonus );
@@ -1571,9 +1566,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             AudioManager::ResetAudio();
             fheroes2::ImageRestorer restorer( display, top.x, top.y, backgroundImage.width(), backgroundImage.height() );
 
-            if ( isFadeEnabled ) {
-                fheroes2::fadeOutDisplay( restorer.rect(), false );
-            }
+            fheroes2::fadeOutDisplay( restorer.rect(), false );
 
             playPreviousScenarioVideo();
             playCurrentScenarioVideo();
@@ -1582,12 +1575,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             restorer.restore();
 
-            if ( isFadeEnabled ) {
-                fheroes2::fadeInDisplay( restorer.rect(), false );
-            }
-            else {
-                display.render( restorer.rect() );
-            }
+            fheroes2::fadeInDisplay( restorer.rect(), false );
         }
         else if ( le.MousePressRight( areaDaysSpent ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Days spent" ), fheroes2::FontType::normalYellow() ),

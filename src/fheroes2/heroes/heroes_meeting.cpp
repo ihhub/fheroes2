@@ -256,8 +256,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     // Fade-out game screen only for 640x480 resolution.
     const fheroes2::Rect fadeRoi( src_rt + cur_pt );
     const bool isDefaultScreenSize = display.isDefaultSize();
-    const bool isFadeEnabled = Settings::isFadeEffectEnabled();
-    if ( isFadeEnabled && isDefaultScreenSize ) {
+    if ( isDefaultScreenSize ) {
         fheroes2::fadeOutDisplay();
     }
 
@@ -410,15 +409,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     moveArtifactsToHero1.draw();
     buttonExit.draw();
 
-    // Fade-in heroes meeting dialog.
-    if ( isFadeEnabled ) {
-        // Use half fade if game resolution is not 640x480.
-        fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
-    }
-    else {
-        // This dialog currently does not have borders so its ROI is the same as fade ROI.
-        display.render( fadeRoi );
-    }
+    // Fade-in heroes meeting dialog. Use half fade if game resolution is not 640x480.
+    // This dialog currently does not have borders so its ROI is the same as fade ROI.
+    fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
 
     const int32_t hero1ScoutAreaBonus = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
     const int32_t hero2ScoutAreaBonus = otherHero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
@@ -540,13 +533,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             fheroes2::ImageRestorer dialogRestorer( display, restorerRoi.x, restorerRoi.y, restorerRoi.width, restorerRoi.height );
 
             // If game display resolution is 640x480 then all fade effects are done in 'OpenHeroesDialog()' except fade-in after dialog close.
-            if ( isFadeEnabled && !isDefaultScreenSize ) {
+            if ( !isDefaultScreenSize ) {
                 fheroes2::fadeOutDisplay( fadeRoi, true );
             }
 
             Game::OpenHeroesDialog( isHero1LeftClicked ? *this : otherHero, false, true, true );
 
-            if ( isFadeEnabled && !isDefaultScreenSize ) {
+            if ( !isDefaultScreenSize ) {
                 dialogRestorer.restore();
             }
             else {
@@ -571,13 +564,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
-            if ( isFadeEnabled ) {
-                display.updateNextRenderRoi( restorerRoi );
-                fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
-            }
-            else {
-                display.render( restorerRoi );
-            }
+            display.updateNextRenderRoi( restorerRoi );
+            fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
         }
         else if ( le.MouseClickLeft( moveArmyToHero2.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
             const ArmyTroop * keep = nullptr;
@@ -682,9 +670,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     armyCountBackgroundRestorerRight.reset();
 
     // Fade-out heroes meeting dialog.
-    if ( isFadeEnabled ) {
-        fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
-    }
+    fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
 
     restorer.restore();
 
@@ -699,7 +685,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     }
 
     // Set fade-in game screen only for 640x480 resolution.
-    if ( isFadeEnabled && isDefaultScreenSize ) {
+    if ( isDefaultScreenSize ) {
         Interface::Basic::Get().setNeedFadeIn();
     }
     else {

@@ -267,9 +267,8 @@ namespace
         while ( true ) {
             if ( !le.HandleEvents( true, true ) ) {
                 if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
-                    if ( Settings::isFadeEffectEnabled() ) {
-                        fheroes2::fadeOutDisplay();
-                    }
+                    fheroes2::fadeOutDisplay();
+
                     return fheroes2::GameMode::QUIT_GAME;
                 }
 
@@ -312,6 +311,9 @@ namespace
             else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) )
                 result = fheroes2::GameMode::START_GAME;
+
+                // Fade-out screen before starting a scenario.
+                fheroes2::fadeOutDisplay();
                 break;
             }
             else if ( le.MouseClickLeft( rectPanel ) ) {

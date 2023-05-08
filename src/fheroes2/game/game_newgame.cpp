@@ -243,9 +243,8 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
 
-    if ( Settings::isFadeEffectEnabled() ) {
-        fheroes2::fadeOutDisplay();
-    }
+    // Fade-out screen before playing video.
+    fheroes2::fadeOutDisplay();
 
     display.fill( 0 );
 
@@ -349,9 +348,8 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
         return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
     }
 
-    if ( Settings::isFadeEffectEnabled() ) {
-        fheroes2::fadeOutDisplay();
-    }
+    // Fade-out display before playing video.
+    fheroes2::fadeOutDisplay();
 
     outputPriceOfLoyaltyCampaignInTextSupportMode();
 
@@ -545,7 +543,7 @@ fheroes2::GameMode Game::NewGame()
     buttonSettings.draw();
     buttonCancelGame.draw();
 
-    if ( isNeedFadeIn() && Settings::isFadeEffectEnabled() ) {
+    if ( isNeedFadeIn() ) {
         fheroes2::fadeInDisplay();
     }
     else {

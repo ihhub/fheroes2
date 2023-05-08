@@ -188,12 +188,6 @@ public:
     bool isHideInterfaceEnabled() const;
     bool isEvilInterfaceEnabled() const;
 
-    static bool isFadeEffectEnabled()
-    {
-        // TODO: Store fade effect setting in configuration file or remove this function.
-        return true;
-    }
-
     bool LoadedGameVersion() const
     {
         // 0x80 value should be same as in Game::TYPE_LOADFILE enumeration value

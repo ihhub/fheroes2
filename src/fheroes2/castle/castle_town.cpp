@@ -619,29 +619,17 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             Dialog::Message( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Font::BIG );
         else if ( hero1 && le.MousePressRight( rectHero1 ) ) {
             LocalEvent::GetClean();
-            hero1->OpenDialog( true, true, false, false );
+            hero1->OpenDialog( true, true, false, false, false );
 
-            if ( Settings::isFadeEffectEnabled() ) {
-                // Use half fade if game resolution is not 640x480.
-                fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
-            }
-            else {
-                // This dialog currently does not have borders so its ROI is the same as fade ROI.
-                display.render( restorer.rect() );
-            }
+            // Use half fade if game resolution is not 640x480.
+            fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
         }
         else if ( hero2 && le.MousePressRight( rectHero2 ) ) {
             LocalEvent::GetClean();
-            hero2->OpenDialog( true, true, false, false );
+            hero2->OpenDialog( true, true, false, false, false );
 
-            if ( Settings::isFadeEffectEnabled() ) {
-                // Use half fade if game resolution is not 640x480.
-                fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
-            }
-            else {
-                // This dialog currently does not have borders so its ROI is the same as fade ROI.
-                display.render( restorer.rect() );
-            }
+            // Use half fade if game resolution is not 640x480.
+            fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
         }
         else if ( le.MousePressRight( buttonNextCastle.area() ) ) {
             Dialog::Message( _( "Show next town" ), _( "Click to show next town." ), Font::BIG );

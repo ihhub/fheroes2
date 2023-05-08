@@ -122,14 +122,14 @@ namespace fheroes2
     void fadeOutDisplay();
 
     // Fade-out the display image in ROI. The 'halfFade' parameter sets to do only half of fade-out: till half-darkened image.
-    void fadeOutDisplay( const Rect & roi, const bool halfFade = false );
+    void fadeOutDisplay( const Rect & roi, const bool halfFade );
 
     // Fade-in the prepared image in display instance on the whole screen. The last frame is fully bright so it is a copy of original image.
     void fadeInDisplay();
 
     // Fade-in the prepared display image in ROI. The 'halfFade' parameter sets to do only half of fade-in: from the half-darkened image.
     // The last frame is fully bright so it is a copy of original image.
-    void fadeInDisplay( const Rect & roi, const bool halfFade = false );
+    void fadeInDisplay( const Rect & roi, const bool halfFade );
 
     void FadeDisplayWithPalette( const Image & top, const Point & pos, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount );
 

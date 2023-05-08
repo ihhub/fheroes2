@@ -692,9 +692,7 @@ namespace
 
 void Game::ShowCredits()
 {
-    if ( Settings::isFadeEffectEnabled() ) {
-        fheroes2::fadeOutDisplay();
-    }
+    fheroes2::fadeOutDisplay();
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );

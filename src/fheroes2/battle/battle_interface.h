@@ -290,7 +290,7 @@ namespace Battle
         }
 
         // Battlefield interface ROI.
-        const fheroes2::Rect & GetIntrfaceRoi() const
+        const fheroes2::Rect & GetInterfaceRoi() const
         {
             return _interfacePosition;
         }
