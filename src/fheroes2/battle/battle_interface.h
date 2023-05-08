@@ -26,6 +26,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -425,6 +426,9 @@ namespace Battle
         int catapult_frame;
 
         int _interruptAutoBattleForColor;
+
+        // The Channel ID of pre-battle sound. Used to check it is over to start the battle music.
+        std::optional<int> _preBattleSoundChannelId{ -1 };
 
         uint8_t _contourColor;
         bool _brightLandType; // used to determine current monster contour cycling colors
