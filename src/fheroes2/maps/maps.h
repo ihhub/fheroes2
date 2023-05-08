@@ -27,7 +27,6 @@
 #include <cstdint>
 #include <vector>
 
-#include "heroes_base.h"
 #include "math_base.h"
 #include "mp2.h"
 
