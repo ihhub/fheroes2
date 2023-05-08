@@ -398,7 +398,10 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
         // Wait for the end of M82::PREBATTL playback. Make sure that we check the music status first as HandleEvents() call is not instant.
         LocalEvent & le = LocalEvent::Get();
         while ( Mixer::isPlaying( -1 ) && le.HandleEvents() ) {
-            // Do nothing.
+            if ( le.KeyPress( fheroes2::Key::KEY_ESCAPE ) || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                // Cancel waiting for M82::PREBATTL to over and start the battle.
+                break;
+            }
         }
     }
 }
