@@ -38,7 +38,6 @@ import android.widget.ListView;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -49,17 +48,17 @@ public final class SaveFileManagerActivity extends AppCompatActivity
     {
         private static final class Status
         {
-            public boolean isBackgroundTaskExecuting;
-            public final List<String> saveFileNames;
+            private boolean isBackgroundTaskExecuting;
+            private final List<String> saveFileNames;
 
-            Status( final boolean isBackgroundTaskExecuting, final List<String> saveFileNames )
+            private Status( final boolean isBackgroundTaskExecuting, final List<String> saveFileNames )
             {
                 this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;
                 this.saveFileNames = saveFileNames;
             }
 
             @SuppressWarnings( "SameParameterValue" )
-            Status setIsBackgroundTaskExecuting( final boolean isBackgroundTaskExecuting )
+            private Status setIsBackgroundTaskExecuting( final boolean isBackgroundTaskExecuting )
             {
                 this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;
 
@@ -69,12 +68,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
 
         private final MutableLiveData<Status> liveStatus = new MutableLiveData<>( new Status( false, new ArrayList<>() ) );
 
-        public LiveData<Status> getLiveStatus()
-        {
-            return liveStatus;
-        }
-
-        public void updateSaveFileList( final File saveFileDir, final List<String> allowedSaveFileExtensions )
+        private void updateSaveFileList( final File saveFileDir, final List<String> allowedSaveFileExtensions )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
@@ -92,7 +86,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             } ).start();
         }
 
-        public void deleteSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final List<String> saveFileNames )
+        private void deleteSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final List<String> saveFileNames )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
@@ -182,7 +176,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         saveFileListView = findViewById( R.id.activity_save_file_manager_save_file_list );
 
         viewModel = new ViewModelProvider( this ).get( SaveFileManagerActivityViewModel.class );
-        viewModel.getLiveStatus().observe( this, this::updateUI );
+        viewModel.liveStatus.observe( this, this::updateUI );
 
         saveFileListViewAdapter = new ArrayAdapter<>( this, android.R.layout.simple_list_item_multiple_choice, new ArrayList<>() );
 

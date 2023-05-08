@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "audio_manager.h"
+
 #include <algorithm>
 #include <array>
 #include <atomic>
@@ -33,7 +35,6 @@
 #include <utility>
 
 #include "agg_file.h"
-#include "audio_manager.h"
 #include "dir.h"
 #include "logging.h"
 #include "m82.h"
@@ -211,7 +212,8 @@ namespace
         return v;
     }
 
-    void PlaySoundImp( const int m82, const int soundVolume );
+    // Returns sound Channel ID, when error - returns `-1`.
+    int PlaySoundImp( const int m82, const int soundVolume );
     void PlayMusicImp( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode );
     void playLoopSoundsImp( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume, const bool is3DAudioEnabled );
 
@@ -470,7 +472,7 @@ namespace
 
     AsyncSoundManager g_asyncSoundManager;
 
-    void PlaySoundImp( const int m82, const int soundVolume )
+    int PlaySoundImp( const int m82, const int soundVolume )
     {
         std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
@@ -478,18 +480,20 @@ namespace
 
         const std::vector<uint8_t> & v = GetWAV( m82 );
         if ( v.empty() ) {
-            return;
+            return -1;
         }
 
         const int channelId = Mixer::Play( &v[0], static_cast<uint32_t>( v.size() ), -1, false );
         if ( channelId < 0 ) {
             // Failed to get a free channel.
-            return;
+            return -1;
         }
 
         Mixer::Pause( channelId );
         Mixer::setVolume( channelId, 100 * soundVolume / 10 );
         Mixer::Resume( channelId );
+
+        return channelId;
     }
 
     uint64_t getMusicUID( const int trackId, const MusicSource musicType )
@@ -854,19 +858,19 @@ namespace AudioManager
         g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
     }
 
-    void PlaySound( const int m82 )
+    int PlaySound( const int m82 )
     {
         if ( m82 == M82::UNKNOWN ) {
-            return;
+            return -1;
         }
 
         if ( !Audio::isValid() ) {
-            return;
+            return -1;
         }
 
         g_asyncSoundManager.removeSoundTasks();
 
-        PlaySoundImp( m82, Settings::Get().SoundVolume() );
+        return PlaySoundImp( m82, Settings::Get().SoundVolume() );
     }
 
     void PlaySoundAsync( const int m82 )

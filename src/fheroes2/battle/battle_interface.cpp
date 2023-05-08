@@ -1328,9 +1328,9 @@ void Battle::Interface::fullRedraw()
         fheroes2::fadeOutDisplay();
     }
 
-    // Don't waste time playing the pre-battle sound if the game sounds are turned off.
-    if ( Settings::Get().SoundVolume() > 0 ) {
-        AudioManager::PlaySound( M82::PREBATTL );
+    // Don't waste time playing the pre-battle sound if the game sounds are turned off
+    if ( conf.SoundVolume() > 0 ) {
+        _preBattleSoundChannelId = AudioManager::PlaySound( M82::PREBATTL );
     }
 
     RedrawPartialStart();
@@ -1354,6 +1354,19 @@ void Battle::Interface::fullRedraw()
 
 void Battle::Interface::Redraw()
 {
+    // Check that the pre-battle sound is over to start playing the battle music.
+    // IMPORTANT: This implementation may suffer from the race condition as the pre-battle sound channel may be reused
+    // by new sounds if they are played (one way or another) after the end of the pre-battle sound, but before calling
+    // this method. Although in this case here it will not lead to serious problems as in the worst case, the launch of
+    // battle music will be postponed for some time.
+    if ( _preBattleSoundChannelId && ( _preBattleSoundChannelId < 0 || !Mixer::isPlaying( _preBattleSoundChannelId.value() ) ) && !Music::isPlaying() ) {
+        // Reset the value of _preBattleSoundChannelId to skip isPlaying() checks in future as these checks could freeze
+        // the game for some time in certain cases (e.g. slow MIDI backend).
+        _preBattleSoundChannelId.reset();
+
+        AudioManager::PlayMusicAsync( MUS::GetBattleRandom(), Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
+    }
+
     RedrawPartialStart();
     RedrawPartialFinish();
 }
@@ -3374,10 +3387,6 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
 
 void Battle::Interface::RedrawActionNewTurn() const
 {
-    if ( !Music::isPlaying() ) {
-        AudioManager::PlayMusicAsync( MUS::GetBattleRandom(), Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
-    }
-
     if ( listlog == nullptr ) {
         return;
     }
