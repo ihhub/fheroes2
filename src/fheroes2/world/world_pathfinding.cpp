@@ -915,6 +915,13 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
 
     const Maps::Tiles & heroTile = world.GetTiles( heroIndex );
 
+    // Hero in the boat can neither occupy nor block the Stone Liths
+    if ( heroTile.isWater() ) {
+        assert( heroTile.GetObject( false ) != MP2::OBJ_STONE_LITHS );
+
+        return false;
+    }
+
     // Does the hero potentially block the exit from Stone Liths for another hero?
     for ( const int32_t idx : Maps::ScanAroundObject( heroIndex, MP2::OBJ_STONE_LITHS ) ) {
         const Maps::Tiles & tile = world.GetTiles( idx );
