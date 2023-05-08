@@ -328,6 +328,11 @@ namespace
             _icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
         }
 
+        bool isPreserved() const
+        {
+            return _isPreserved;
+        }
+
     private:
         bool _isPreserved = false;
 
@@ -3846,7 +3851,13 @@ namespace fheroes2
         void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet )
         {
             if ( loadOriginalAlphabet || !isAlphabetSupported( language ) ) {
-                alphabetPreserver.restore();
+                if ( !alphabetPreserver.isPreserved() ) {
+                    // This can happen when we try to change a language without loading assets.
+                    alphabetPreserver.preserve();
+                }
+                else {
+                    alphabetPreserver.restore();
+                }
             }
             else {
                 alphabetPreserver.preserve();
