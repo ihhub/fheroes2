@@ -4100,7 +4100,7 @@ void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_
 
 void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t dst, const HeroBase * caster, const TargetsInfo & targets )
 {
-    // Stop target unit from beginning the idle animation.
+    // Reset the idle animation delay timer to prevent the target unit from starting the idle animation.
     for ( const TargetInfo & spellTarget : targets ) {
         spellTarget.defender->checkIdleDelay();
     }
@@ -4603,8 +4603,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
 void Battle::Interface::RedrawActionMorale( Unit & b, bool good )
 {
     std::string msg;
-
-    // Reset idle animation timer so the unit will not start idling during Morale animation.
+    // Reset the idle animation delay timer to prevent the unit from starting the idle animation.
     b.checkIdleDelay();
 
     if ( good ) {
@@ -5967,11 +5966,6 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & unit, int icn, int
     else if ( animation == RESURRECT ) {
         _currentUnit = nullptr;
         unit.SwitchAnimation( Monster_Info::KILL, true );
-    }
-
-    // Force set unit animation to 'STATIC' to stop idling.
-    if ( unit.isIdling() && ( icn == ICN::BLIND || icn == ICN::PARALYZE ) ) {
-        unit.SwitchAnimation( Monster_Info::STATIC );
     }
 
     _unitSpellEffectInfos.emplace_back( unit.GetUID(), icn, reflect );
