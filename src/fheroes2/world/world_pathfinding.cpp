@@ -48,6 +48,7 @@
 #include "settings.h"
 #include "spell.h"
 #include "spell_info.h"
+#include "tools.h"
 #include "world.h"
 
 namespace
@@ -912,15 +913,24 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
         return true;
     }
 
-    // Is the hero standing near the Stone Liths that are occupied by another hero?
+    const Maps::Tiles & heroTile = world.GetTiles( heroIndex );
+
+    // Does the hero potentially block the exit from Stone Liths for another hero?
     for ( const int32_t idx : Maps::ScanAroundObject( heroIndex, MP2::OBJ_STONE_LITHS ) ) {
-        if ( world.GetTiles( idx ).GetObject() == MP2::OBJ_HEROES ) {
-            return true;
+        const Maps::Tiles & tile = world.GetTiles( idx );
+
+        if ( tile.GetObject() == MP2::OBJ_HEROES ) {
+            const int direction = Maps::GetDirection( idx, heroIndex );
+            assert( CountBits( direction ) == 1 && direction != Direction::CENTER );
+
+            if ( tile.isPassableTo( direction ) && heroTile.isPassableFrom( Direction::Reflect( direction ) ) ) {
+                return true;
+            }
         }
     }
 
     // Is the hero standing on Stone Liths?
-    return world.GetTiles( heroIndex ).GetObject( false ) == MP2::OBJ_STONE_LITHS;
+    return heroTile.GetObject( false ) == MP2::OBJ_STONE_LITHS;
 }
 
 std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int targetIndex, const bool checkAdjacent /* = false */ ) const
