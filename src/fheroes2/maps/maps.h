@@ -27,11 +27,12 @@
 #include <cstdint>
 #include <vector>
 
-#include "heroes.h"
 #include "math_base.h"
 #include "mp2.h"
 
 #define TILEWIDTH 32
+
+class Heroes;
 
 using MapsIndexes = std::vector<int32_t>;
 
