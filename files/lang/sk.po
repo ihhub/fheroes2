@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-07 10:26+0000\n"
-"PO-Revision-Date: 2023-05-08 17:25+0200\n"
+"PO-Revision-Date: 2023-05-08 17:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -3034,7 +3034,7 @@ msgid "(not visited)"
 msgstr "(nenavštívené)"
 
 msgid "%{color} Barrier"
-msgstr "%{color} taras"
+msgstr "%{color} bariéra"
 
 msgid "%{color} Tent"
 msgstr "%{color} stan"
@@ -6435,52 +6435,52 @@ msgid "Purple"
 msgstr ""
 
 msgid "barrier|Aqua"
-msgstr ""
+msgstr "Tyrkysová"
 
 msgid "barrier|Blue"
-msgstr ""
+msgstr "Modrá"
 
 msgid "barrier|Brown"
-msgstr ""
+msgstr "Hnedá"
 
 msgid "barrier|Gold"
-msgstr ""
+msgstr "Zlatá"
 
 msgid "barrier|Green"
-msgstr ""
+msgstr "Zelená"
 
 msgid "barrier|Orange"
-msgstr ""
+msgstr "Oranžová"
 
 msgid "barrier|Purple"
-msgstr ""
+msgstr "Fialová"
 
 msgid "barrier|Red"
-msgstr ""
+msgstr "Červená"
 
 msgid "tent|Aqua"
-msgstr ""
+msgstr "Tyrkysový"
 
 msgid "tent|Blue"
-msgstr ""
+msgstr "Modrý"
 
 msgid "tent|Brown"
-msgstr ""
+msgstr "Hnedý"
 
 msgid "tent|Gold"
-msgstr ""
+msgstr "Zlatý"
 
 msgid "tent|Green"
-msgstr ""
+msgstr "Zelený"
 
 msgid "tent|Orange"
-msgstr ""
+msgstr "Oranžový"
 
 msgid "tent|Purple"
-msgstr ""
+msgstr "Fialový"
 
 msgid "tent|Red"
-msgstr ""
+msgstr "Červený"
 
 msgid "Experience"
 msgstr ""
@@ -7167,10 +7167,10 @@ msgid "Random Artifact - Major"
 msgstr ""
 
 msgid "Barrier"
-msgstr ""
+msgstr "Bariéra"
 
 msgid "Traveller's Tent"
-msgstr ""
+msgstr "Cestovateľský stan"
 
 msgid "Jail"
 msgstr ""
