@@ -295,10 +295,9 @@ bool Battle::Force::animateIdleUnits() const
 void Battle::Force::resetIdleAnimation() const
 {
     for ( Unit * unit : *this ) {
-
         // Check if unit is alive, not paralyzed or blinded and is in 'STATIC' animation state.
         if ( unit->isValid() && unit->GetAnimationState() == Monster_Info::STATIC && !unit->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
-                unit->checkIdleDelay();
+            unit->checkIdleDelay();
         }
     }
 }
