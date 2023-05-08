@@ -27,6 +27,7 @@
 #include <cstdint>
 #include <vector>
 
+#include "heroes_base.h"
 #include "math_base.h"
 #include "mp2.h"
 
@@ -64,6 +65,8 @@ namespace Maps
     int32_t GetIndexFromAbsPoint( const int32_t x, const int32_t y );
 
     Indexes getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile = 1 );
+
+    MapsIndexes getVisibleMonstersAroundHero( const Heroes & hero );
 
     Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType );
     Indexes ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const MP2::MapObjectType objectType );

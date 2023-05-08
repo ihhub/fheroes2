@@ -450,15 +450,16 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( spell == Spell::IDENTIFYHERO ) {
-            if ( hero->GetKingdom().Modes( Kingdom::IDENTIFYHERO ) ) {
+            const Kingdom & kingdom = hero->GetKingdom();
+            if ( kingdom.Modes( Kingdom::IDENTIFYHERO ) ) {
                 if ( res != nullptr ) {
                     *res = _( "This spell is already in use." );
                 }
                 return false;
             }
 
-            const bool opponentsHaveHeroes = hero->opponentsHaveHeroes();
-            const bool opponentsCanRecruitHeroes = hero->opponentsCanRecruitMoreHeroes();
+            const bool opponentsHaveHeroes = kingdom.opponentsHaveHeroes();
+            const bool opponentsCanRecruitHeroes = kingdom.opponentsCanRecruitMoreHeroes();
             // This text is show in two cases. First when there are no opponents
             // left in the game. Second when opponent doesn't have heroes left
             // and cannot recruit more. This will happen when all opponent
@@ -482,7 +483,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( spell == Spell::VISIONS ) {
-            MapsIndexes monsters = hero->getVisibleMonstersAroundHero();
+            MapsIndexes monsters = Maps::getVisibleMonstersAroundHero( *hero );
             if ( monsters.empty() ) {
                 if ( res != nullptr ) {
                     const uint32_t dist = hero->GetVisionsDistance();
@@ -497,7 +498,17 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         if ( spell == Spell::HAUNT || spell == Spell::SETAGUARDIAN || spell == Spell::SETEGUARDIAN || spell == Spell::SETFGUARDIAN || spell == Spell::SETWGUARDIAN ) {
             Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
             auto object = tile.GetObject( false );
-            const int monsterType = world.GetCapturedObject( tile.GetIndex() ).GetTroop().GetMonster().GetID();
+
+            if ( MP2::OBJ_MINES != object ) {
+                if ( res != nullptr ) {
+                    *res = _( "You must be standing on the entrance to a mine (sawmills and alchemists don't count) to cast this spell." );
+                }
+                return false;
+            }
+
+            const Troop & troop = world.GetCapturedObject( tile.GetIndex() ).GetTroop();
+            const int monsterType = troop.GetMonster().GetID();
+
             if ( MP2::OBJ_MINES == object && monsterType == Monster::GHOST ) {
                 if ( res != nullptr ) {
                     *res = _( "You must first defeat the ghosts guarding the mine to cast this spell." );
@@ -506,7 +517,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             }
             if ( MP2::OBJ_MINES == object && ( spell != Spell::HAUNT ) ) {
                 const uint32_t newCount = fheroes2::getGuardianMonsterCount( spell, hero->GetPower(), hero );
-                const uint32_t currentCount = world.GetCapturedObject( tile.GetIndex() ).GetTroop().GetCount();
+                const uint32_t currentCount = troop.GetCount();
                 if ( newCount <= currentCount ) {
                     if ( res != nullptr ) {
                         *res = _(
@@ -514,12 +525,6 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                     }
                     return false;
                 }
-            }
-            if ( MP2::OBJ_MINES != object ) {
-                if ( res != nullptr ) {
-                    *res = _( "You must be standing on the entrance to a mine (sawmills and alchemists don't count) to cast this spell." );
-                }
-                return false;
             }
         }
     }

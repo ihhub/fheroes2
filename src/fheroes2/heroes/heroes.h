@@ -38,7 +38,6 @@
 #include "color.h"
 #include "direction.h"
 #include "heroes_base.h"
-#include "maps.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "pairs.h"
@@ -345,10 +344,6 @@ public:
     {
         return patrol_square;
     }
-
-    MapsIndexes getVisibleMonstersAroundHero() const;
-    bool opponentsCanRecruitMoreHeroes() const;
-    bool opponentsHaveHeroes() const;
 
     uint32_t GetMaxSpellPoints() const override;
     uint32_t GetMaxMovePoints() const;

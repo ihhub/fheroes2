@@ -329,6 +329,17 @@ Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t max
     return results;
 }
 
+MapsIndexes Maps::getVisibleMonstersAroundHero( const Heroes & hero )
+{
+    const uint32_t dist = hero.GetVisionsDistance();
+    MapsIndexes monsters = Maps::ScanAroundObjectWithDistance( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
+
+    const int32_t heroColor = hero.GetColor();
+    monsters.erase( std::remove_if( monsters.begin(), monsters.end(), [heroColor]( const int32_t index ) { return world.GetTiles( index ).isFog( heroColor ); } ),
+                    monsters.end() );
+    return monsters;
+}
+
 void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int playerColor )
 {
     if ( scoutingDistance <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {

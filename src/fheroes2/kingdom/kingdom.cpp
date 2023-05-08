@@ -489,6 +489,24 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
     return true;
 }
 
+bool Kingdom::opponentsCanRecruitMoreHeroes() const
+{
+    for ( int opponentColor : Players::getInPlayOpponents( GetColor() ) ) {
+        if ( world.GetKingdom( opponentColor ).canRecruitHeroes() )
+            return true;
+    }
+    return false;
+}
+
+bool Kingdom::opponentsHaveHeroes() const
+{
+    for ( int opponentColor : Players::getInPlayOpponents( GetColor() ) ) {
+        if ( world.GetKingdom( opponentColor ).hasHeroes() )
+            return true;
+    }
+    return false;
+}
+
 bool Kingdom::HeroesMayStillMove() const
 {
     return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove( false, false ); } );

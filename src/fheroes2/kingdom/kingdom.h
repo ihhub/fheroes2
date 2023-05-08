@@ -89,6 +89,7 @@ public:
     bool isLoss() const;
     bool AllowPayment( const Funds & ) const;
     bool AllowRecruitHero( bool check_payment ) const;
+
     // Return true if this kingdom can recruit heroes, false otherwise. For
     // example this function will return false when kingdom has one town that
     // cannot be upgraded to a castle.
@@ -96,6 +97,7 @@ public:
     {
         return std::any_of( castles.begin(), castles.end(), []( Castle * castle ) { return ( castle->isCastle() || castle->Modes( Castle::ALLOWCASTLE ) ); } );
     }
+
     // Return true if this kingdom has any heroes, false otherwise.
     bool hasHeroes() const
     {
@@ -186,6 +188,9 @@ public:
     bool isVisited( int32_t, const MP2::MapObjectType objectType ) const;
 
     bool isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const;
+
+    bool opponentsCanRecruitMoreHeroes() const;
+    bool opponentsHaveHeroes() const;
 
     bool HeroesMayStillMove() const;
 
