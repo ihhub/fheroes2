@@ -97,7 +97,7 @@ msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
-"ГОРДА/\n"
+"ГОРОДА/\n"
 "ЗАМКИ"
 
 msgid "S"
