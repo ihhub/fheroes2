@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-07 10:26+0000\n"
-"PO-Revision-Date: 2023-05-08 17:40+0200\n"
+"PO-Revision-Date: 2023-05-08 18:21+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -7194,343 +7194,343 @@ msgid "Unknown Monsters"
 msgstr ""
 
 msgid "Peasant"
-msgstr ""
+msgstr "Roľník"
 
 msgid "Peasants"
-msgstr ""
+msgstr "Roľníci"
 
 msgid "Archer"
-msgstr ""
+msgstr "Lukostrelec"
 
 msgid "Archers"
-msgstr ""
+msgstr "Lukostrelci"
 
 msgid "Ranger"
-msgstr ""
+msgstr "Hraničiar"
 
 msgid "Rangers"
-msgstr ""
+msgstr "Hraničiari"
 
 msgid "Pikeman"
-msgstr ""
+msgstr "Kopijník"
 
 msgid "Pikemen"
-msgstr ""
+msgstr "Kopijníci"
 
 msgid "Veteran Pikeman"
-msgstr ""
+msgstr "Veterán kopijník"
 
 msgid "Veteran Pikemen"
-msgstr ""
+msgstr "Veteráni kopijníci"
 
 msgid "Swordsman"
-msgstr ""
+msgstr "Šermiar"
 
 msgid "Swordsmen"
-msgstr ""
+msgstr "Šermiari"
 
 msgid "Master Swordsman"
-msgstr ""
+msgstr "Majster šermiar"
 
 msgid "Master Swordsmen"
-msgstr ""
+msgstr "Majstri šermiari"
 
 msgid "Cavalries"
-msgstr ""
+msgstr "Kavaléri"
 
 msgid "Cavalry"
-msgstr ""
+msgstr "Kavalér"
 
 msgid "Champion"
-msgstr ""
+msgstr "Šampión"
 
 msgid "Champions"
-msgstr ""
+msgstr "Šampióni"
 
 msgid "Paladin"
-msgstr ""
+msgstr "Paladin"
 
 msgid "Paladins"
-msgstr ""
+msgstr "Paladini"
 
 msgid "Crusader"
-msgstr ""
+msgstr "Križiak"
 
 msgid "Crusaders"
-msgstr ""
+msgstr "Križiaci"
 
 msgid "Goblin"
-msgstr ""
+msgstr "Goblin"
 
 msgid "Goblins"
-msgstr ""
+msgstr "Goblini"
 
 msgid "Orc"
-msgstr ""
+msgstr "Ork"
 
 msgid "Orcs"
-msgstr ""
+msgstr "Orkovia"
 
 msgid "Orc Chief"
-msgstr ""
+msgstr "Náčelník orkov"
 
 msgid "Orc Chiefs"
-msgstr ""
+msgstr "Náčelníci orkov"
 
 msgid "Wolf"
-msgstr ""
+msgstr "Vlk"
 
 msgid "Wolves"
-msgstr ""
+msgstr "Vlci"
 
 msgid "Ogre"
-msgstr ""
+msgstr "Zlobor"
 
 msgid "Ogres"
-msgstr ""
+msgstr "Zlobri"
 
 msgid "Ogre Lord"
-msgstr ""
+msgstr "Lord zlobrov"
 
 msgid "Ogre Lords"
-msgstr ""
+msgstr "Lordi zlobrov"
 
 msgid "Troll"
-msgstr ""
+msgstr "Trol"
 
 msgid "Trolls"
-msgstr ""
+msgstr "Trolovia"
 
 msgid "War Troll"
-msgstr ""
+msgstr "Bojový trol"
 
 msgid "War Trolls"
-msgstr ""
+msgstr "Bojový trolovia"
 
 msgid "Cyclopes"
-msgstr ""
+msgstr "Kyklopi"
 
 msgid "Cyclops"
-msgstr ""
+msgstr "Kyklop"
 
 msgid "Sprite"
-msgstr ""
+msgstr "Víla"
 
 msgid "Sprites"
-msgstr ""
+msgstr "Víly"
 
 msgid "Dwarf"
-msgstr ""
+msgstr "Trpaslík"
 
 msgid "Dwarves"
-msgstr ""
+msgstr "Trpaslíci"
 
 msgid "Battle Dwarf"
-msgstr ""
+msgstr "Bojový trpaslík"
 
 msgid "Battle Dwarves"
-msgstr ""
+msgstr "Bojoví trpaslíci"
 
 msgid "Elf"
-msgstr ""
+msgstr "Elf"
 
 msgid "Elves"
-msgstr ""
+msgstr "Elfovia"
 
 msgid "Grand Elf"
-msgstr ""
+msgstr "Vznešený elf"
 
 msgid "Grand Elves"
-msgstr ""
+msgstr "Vznešení elfovia"
 
 msgid "Druid"
-msgstr ""
+msgstr "Druid"
 
 msgid "Druids"
-msgstr ""
+msgstr "Druidi"
 
 msgid "Greater Druid"
-msgstr ""
+msgstr "Arcidruid"
 
 msgid "Greater Druids"
-msgstr ""
+msgstr "Arcidruidi"
 
 msgid "Unicorn"
-msgstr ""
+msgstr "Jednorožec"
 
 msgid "Unicorns"
-msgstr ""
+msgstr "Jednorožci"
 
 msgid "Phoenix"
-msgstr ""
+msgstr "Fénix"
 
 msgid "Phoenixes"
-msgstr ""
+msgstr "Fénixovia"
 
 msgid "Centaur"
-msgstr ""
+msgstr "Kentaur"
 
 msgid "Centaurs"
-msgstr ""
+msgstr "Kentaury"
 
 msgid "Gargoyle"
-msgstr ""
+msgstr "Chrlič"
 
 msgid "Gargoyles"
-msgstr ""
+msgstr "Chrliče"
 
 msgid "Griffin"
-msgstr ""
+msgstr "Griffin"
 
 msgid "Griffins"
-msgstr ""
+msgstr "Griffini"
 
 msgid "Minotaur"
-msgstr ""
+msgstr "Minotaur"
 
 msgid "Minotaurs"
-msgstr ""
+msgstr "Minotaury"
 
 msgid "Minotaur King"
-msgstr ""
+msgstr "Minotaurí kráľ"
 
 msgid "Minotaur Kings"
-msgstr ""
+msgstr "Minotaurí králi"
 
 msgid "Hydra"
-msgstr ""
+msgstr "Hydra"
 
 msgid "Hydras"
-msgstr ""
+msgstr "Hydry"
 
 msgid "Green Dragon"
-msgstr ""
+msgstr "Zelený drak"
 
 msgid "Green Dragons"
-msgstr ""
+msgstr "Zelení draci"
 
 msgid "Red Dragon"
-msgstr ""
+msgstr "Červený drak"
 
 msgid "Red Dragons"
-msgstr ""
+msgstr "Červení draci"
 
 msgid "Black Dragon"
-msgstr ""
+msgstr "Čierny drak"
 
 msgid "Black Dragons"
-msgstr ""
+msgstr "Čierni draci"
 
 msgid "Halfling"
-msgstr ""
+msgstr "Hobit"
 
 msgid "Halflings"
-msgstr ""
+msgstr "Hobiti"
 
 msgid "Boar"
-msgstr ""
+msgstr "Kanec"
 
 msgid "Boars"
-msgstr ""
+msgstr "Kance"
 
 msgid "Iron Golem"
-msgstr ""
+msgstr "Železný golem"
 
 msgid "Iron Golems"
-msgstr ""
+msgstr "Železní golemovia"
 
 msgid "Steel Golem"
-msgstr ""
+msgstr "Oceľový golem"
 
 msgid "Steel Golems"
-msgstr ""
+msgstr "Oceľoví golemovia"
 
 msgid "Roc"
-msgstr ""
+msgstr "Roc"
 
 msgid "Rocs"
-msgstr ""
+msgstr "Roci"
 
 msgid "Mage"
-msgstr ""
+msgstr "Mág"
 
 msgid "Magi"
-msgstr ""
+msgstr "Mágovia"
 
 msgid "Archmage"
-msgstr ""
+msgstr "Arcimág"
 
 msgid "Archmagi"
-msgstr ""
+msgstr "Arcimágovia"
 
 msgid "Giant"
-msgstr ""
+msgstr "Obor"
 
 msgid "Giants"
-msgstr ""
+msgstr "Obri"
 
 msgid "Titan"
-msgstr ""
+msgstr "Titán"
 
 msgid "Titans"
-msgstr ""
+msgstr "Titáni"
 
 msgid "Skeletons"
-msgstr ""
+msgstr "Kostlivci"
 
 msgid "Zombie"
-msgstr ""
+msgstr "Zombík"
 
 msgid "Zombies"
-msgstr ""
+msgstr "Zombíci"
 
 msgid "Mutant Zombie"
-msgstr ""
+msgstr "Zombík mutant"
 
 msgid "Mutant Zombies"
-msgstr ""
+msgstr "Zombíci mutanti"
 
 msgid "Mummies"
-msgstr ""
+msgstr "Múmie"
 
 msgid "Mummy"
-msgstr ""
+msgstr "Múmia"
 
 msgid "Royal Mummies"
-msgstr ""
+msgstr "Kráľovské múmie"
 
 msgid "Royal Mummy"
-msgstr ""
+msgstr "Kráľovská múmia"
 
 msgid "Vampire"
-msgstr ""
+msgstr "Upír"
 
 msgid "Vampires"
-msgstr ""
+msgstr "Upíri"
 
 msgid "Vampire Lord"
-msgstr ""
+msgstr "Upíri lord"
 
 msgid "Vampire Lords"
-msgstr ""
+msgstr "Upíri lordi"
 
 msgid "Lich"
-msgstr ""
+msgstr "Kostej"
 
 msgid "Liches"
-msgstr ""
+msgstr "Kostejovia"
 
 msgid "Power Lich"
-msgstr ""
+msgstr "Mocný kostej"
 
 msgid "Power Liches"
-msgstr ""
+msgstr "Mocný kostejovia"
 
 msgid "Bone Dragon"
-msgstr ""
+msgstr "Kostnatý drak"
 
 msgid "Bone Dragons"
-msgstr ""
+msgstr "Kostnatí draci"
 
 msgid "Rogue"
 msgstr ""
