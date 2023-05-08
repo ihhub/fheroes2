@@ -33,7 +33,6 @@
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
-#include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "maps_tiles.h"
