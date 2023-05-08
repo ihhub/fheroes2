@@ -912,6 +912,13 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
         return true;
     }
 
+    // Is the hero standing near the Stone Liths that are occupied by another hero?
+    for ( const int32_t idx : Maps::ScanAroundObject( heroIndex, MP2::OBJ_STONE_LITHS ) ) {
+        if ( world.GetTiles( idx ).GetObject() == MP2::OBJ_HEROES ) {
+            return true;
+        }
+    }
+
     // Is the hero standing on Stone Liths?
     return world.GetTiles( heroIndex ).GetObject( false ) == MP2::OBJ_STONE_LITHS;
 }
