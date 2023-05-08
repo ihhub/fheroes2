@@ -1329,7 +1329,7 @@ void Battle::Interface::fullRedraw()
     }
 
     // Don't waste time playing the pre-battle sound if the game sounds are turned off
-    if ( conf.SoundVolume() > 0 ) {
+    if ( Settings::Get().SoundVolume() > 0 ) {
         _preBattleSoundChannelId = AudioManager::PlaySound( M82::PREBATTL );
     }
 
