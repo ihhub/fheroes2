@@ -111,7 +111,7 @@ namespace Battle
         static Indexes GetAdjacentEnemies( const Unit & unit );
 
     private:
-        void SetCobjObject( const int icn, const int32_t dst );
+        void SetCobjObject( const int icn, const uint32_t dst );
     };
 }
 

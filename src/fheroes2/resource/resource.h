@@ -25,6 +25,7 @@
 
 #include <cstdint>
 #include <string>
+#include <utility>
 
 #include "math_base.h"
 
@@ -45,8 +46,6 @@ struct cost_t
     {                                                                                                                                                                    \
         0, 0, 0, 0, 0, 0, 0                                                                                                                                              \
     }
-
-class ResourceCount;
 
 namespace Resource
 {
@@ -71,7 +70,6 @@ public:
     Funds( int32_t _ore, int32_t _wood, int32_t _mercury, int32_t _sulfur, int32_t _crystal, int32_t _gems, int32_t _gold );
     Funds( int rs, uint32_t count );
     explicit Funds( const cost_t & );
-    explicit Funds( const ResourceCount & );
 
     Funds operator+( const Funds & ) const;
     Funds operator*( uint32_t mul ) const;
@@ -97,6 +95,8 @@ public:
     int GetValidItems() const;
     uint32_t GetValidItemsCount() const;
     void Trim(); // set all values to be >= 0
+
+    std::pair<int, int32_t> getFirstValidResource() const;
 
     void Reset();
     std::string String() const;

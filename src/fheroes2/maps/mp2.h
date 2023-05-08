@@ -481,7 +481,7 @@ namespace MP2
 
     bool isWaterActionObject( const MapObjectType objectType );
 
-    bool isQuantityObject( const MapObjectType objectType );
+    bool isValuableResourceObject( const MapObjectType objectType );
     bool isCaptureObject( const MapObjectType objectType );
     bool isPickupObject( const MapObjectType objectType );
     bool isArtifactObject( const MapObjectType objectType );
@@ -501,6 +501,13 @@ namespace MP2
 
     bool getDiggingHoleSprite( const int terrainType, ObjectIcnType & objectIcnType, uint8_t & index );
     bool isDiggingHoleSprite( const int terrainType, const ObjectIcnType objectIcnType, const uint8_t index );
+
+    // Only specific objects from the original MP2 format require extended metadata.
+    // These objects store a UID in their initial metadata (quantity1 and quantity2 values).
+    bool doesObjectNeedExtendedMetadata( const MP2::MapObjectType type );
+
+    // Only specific objects from the original MP2 format contain metadata (quantity1 and quantity2 values).
+    bool doesObjectContainMetadata( const MP2::MapObjectType type );
 }
 
 #endif

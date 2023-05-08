@@ -44,6 +44,7 @@
 #include "logging.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "mp2_helper.h"
 #include "race.h"
@@ -333,7 +334,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
         Maps::Tiles tile;
         tile.Init( 0, mp2tile );
 
-        std::pair<int, int> colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
+        std::pair<int, int> colorRace = getColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
         if ( ( colorRace.first & colorsAvailableForHumans ) == 0 ) {
             const int side1 = colorRace.first | colorsAvailableForHumans;
             const int side2 = colorsAvailableForComp ^ colorRace.first;
