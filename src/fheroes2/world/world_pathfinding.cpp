@@ -774,8 +774,10 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
             continue;
         }
 
-        // Tile is reachable and the hero has enough army to defeat potential guards
-        if ( _cache[newIndex]._cost > 0 ) {
+        const WorldNode & node = _cache[newIndex];
+
+        // Tile is directly reachable (in one move) and the hero has enough army to defeat potential guards
+        if ( node._cost > 0 && node._from == start ) {
             return newIndex;
         }
     }
