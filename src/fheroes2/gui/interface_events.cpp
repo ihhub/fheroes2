@@ -355,10 +355,22 @@ fheroes2::GameMode Interface::Basic::EventScenarioInformation()
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
 
+        const bool isFadeEnabled = Settings::isFadeEffectEnabled();
+
+        if ( isFadeEnabled ) {
+            // We are opening campaign scenario info. It is a full screen image change. So do th Adventure map screen fade-out.
+            fheroes2::fadeOutDisplay();
+        }
+
         AudioManager::ResetAudio();
 
         const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
         if ( returnMode == fheroes2::GameMode::CANCEL ) {
+            if ( isFadeEnabled ) {
+                // We are going back to the Adventure map with fade-in.
+                Get().setNeedFadeIn();
+            }
+
             saver.restore();
 
             Game::restoreSoundsForCurrentFocus();
