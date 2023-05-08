@@ -27,8 +27,8 @@
 #include <cstdint>
 #include <vector>
 
-#include "math_base.h"
 #include "heroes.h"
+#include "math_base.h"
 #include "mp2.h"
 
 #define TILEWIDTH 32
