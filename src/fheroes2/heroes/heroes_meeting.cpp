@@ -51,7 +51,6 @@
 #include "math_base.h"
 #include "monster.h"
 #include "screen.h"
-#include "settings.h"
 #include "skill.h"
 #include "skill_bar.h"
 #include "text.h"

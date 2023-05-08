@@ -55,7 +55,6 @@
 #include "monster.h"
 #include "mus.h"
 #include "screen.h"
-#include "settings.h"
 #include "statusbar.h"
 #include "text.h"
 #include "tools.h"
