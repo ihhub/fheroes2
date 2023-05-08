@@ -273,7 +273,8 @@ bool Battle::Force::animateIdleUnits() const
         // Check if unit is alive.
         if ( unit->isValid() ) {
             if ( unit->isIdling() ) {
-                if ( unit->isFinishAnimFrame() ) {
+                // Go to 'STATIC' animation state if idle animation is over or if unit is blinded or paralyzed.
+                if ( unit->isFinishAnimFrame() || unit->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
                     redrawNeeded = unit->SwitchAnimation( Monster_Info::STATIC ) || redrawNeeded;
                 }
                 else {
