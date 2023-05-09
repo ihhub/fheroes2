@@ -467,7 +467,7 @@ fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMod
 
             // The action object can alter the status of the hero (e.g. Stables or Well) or
             // move it to another location (e.g. Stone Liths or Whirlpool)
-            ResetFocus( GameFocus::HEROES, false );
+            ResetFocus( GameFocus::HEROES, true );
             RedrawFocus();
 
             // If a hero completed an action we must verify the condition for the scenario.
