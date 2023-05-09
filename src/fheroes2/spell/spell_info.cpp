@@ -350,20 +350,20 @@ namespace fheroes2
             return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
         } );
 
-        int32_t boatDestination = -1;
         for ( const int32_t tileId : possibleBoatPositions ) {
             const Maps::Tiles & tile = world.GetTiles( tileId );
             if ( tile.isWater() ) {
-                boatDestination = tileId;
-                break;
+                return tileId;
             }
         }
-        return boatDestination;
+
+        return -1;
     }
 
     int32_t getSummonableBoat( const Heroes & hero )
     {
         const int32_t center = hero.GetIndex();
+
         for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
             assert( Maps::isValidAbsIndex( boatSource ) );
 
@@ -374,11 +374,12 @@ namespace fheroes2
                 continue;
             }
 
-            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
+            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, center );
             if ( distance > 1 ) {
                 return boatSource;
             }
         }
+
         return -1;
     }
 
