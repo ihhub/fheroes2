@@ -24,8 +24,6 @@
 #include <cstdint>
 #include <string>
 
-#include "maps.h"
-
 class Castle;
 class HeroBase;
 class Heroes;
@@ -51,7 +49,7 @@ namespace fheroes2
 
     int32_t getPossibleBoatPosition( const Heroes & hero );
 
-    Maps::Indexes getSummonableBoats( const Heroes & hero );
+    int32_t getSummonableBoat( const Heroes & hero );
 
     bool isHeroNearWater( const Heroes & hero );
 }

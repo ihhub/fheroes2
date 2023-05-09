@@ -299,14 +299,13 @@ namespace
         const int32_t boatDestination = fheroes2::getPossibleBoatPosition( hero );
         assert( Maps::isValidAbsIndex( boatDestination ) );
 
-        MapsIndexes summonableBoats = fheroes2::getSummonableBoats( hero );
+        int32_t boatSource = fheroes2::getSummonableBoat( hero );
 
         // Player should have summonable boats before calling this function.
-        assert( !summonableBoats.empty() );
+        assert( boatSource != -1 );
 
         const int heroColor = hero.GetColor();
 
-        const int32_t boatSource = summonableBoats.at( 0 );
         Maps::Tiles & tileSource = world.GetTiles( boatSource );
 
         Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();

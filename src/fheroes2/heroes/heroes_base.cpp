@@ -409,16 +409,16 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                 return false;
             }
 
-            const bool noBoatAvailable = fheroes2::getSummonableBoats( *hero ).empty();
+            const int32_t boatSource = fheroes2::getSummonableBoat( *hero );
             const int32_t boatDestination = fheroes2::getPossibleBoatPosition( *hero );
             const bool validBoatDestination = Maps::isValidAbsIndex( boatDestination );
-            if ( noBoatAvailable && !validBoatDestination ) {
+            if ( boatSource == -1 && !validBoatDestination ) {
                 if ( res != nullptr ) {
                     *res = _( "There is no boat available and no free ocean location near the hero to cast this spell." );
                 }
                 return false;
             }
-            if ( noBoatAvailable ) {
+            if ( boatSource == -1 ) {
                 if ( res != nullptr ) {
                     *res = _( "There is no boat available to cast this spell." );
                 }

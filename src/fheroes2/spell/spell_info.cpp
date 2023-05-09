@@ -361,9 +361,8 @@ namespace fheroes2
         return boatDestination;
     }
 
-    Maps::Indexes getSummonableBoats( const Heroes & hero )
+    int32_t getSummonableBoat( const Heroes & hero )
     {
-        MapsIndexes result;
         const int32_t center = hero.GetIndex();
         for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
             assert( Maps::isValidAbsIndex( boatSource ) );
@@ -377,10 +376,10 @@ namespace fheroes2
 
             const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
             if ( distance > 1 ) {
-                result.emplace_back( boatSource );
+                return boatSource;
             }
         }
-        return result;
+        return -1;
     }
 
     bool isHeroNearWater( const Heroes & hero )
