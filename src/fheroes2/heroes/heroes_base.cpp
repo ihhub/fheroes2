@@ -483,13 +483,12 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( spell == Spell::VISIONS ) {
-            MapsIndexes monsters = Maps::getVisibleMonstersAroundHero( *hero );
+            const MapsIndexes monsters = Maps::getVisibleMonstersAroundHero( *hero );
             if ( monsters.empty() ) {
                 if ( res != nullptr ) {
                     const uint32_t dist = hero->GetVisionsDistance();
-                    std::string msg = _( "You must be within %{count} spaces of a monster for the Visions spell to work." );
-                    StringReplace( msg, "%{count}", dist );
-                    *res = msg;
+                    *res = _( "You must be within %{count} spaces of a monster for the Visions spell to work." );
+                    StringReplace( *res, "%{count}", dist );
                 }
                 return false;
             }
@@ -509,13 +508,13 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             const Troop & troop = world.GetCapturedObject( tile.GetIndex() ).GetTroop();
             const int monsterType = troop.GetMonster().GetID();
 
-            if ( MP2::OBJ_MINES == object && monsterType == Monster::GHOST ) {
+            if ( monsterType == Monster::GHOST ) {
                 if ( res != nullptr ) {
                     *res = _( "You must first defeat the ghosts guarding the mine to cast this spell." );
                 }
                 return false;
             }
-            if ( MP2::OBJ_MINES == object && ( spell != Spell::HAUNT ) ) {
+            if ( spell != Spell::HAUNT ) {
                 const uint32_t newCount = fheroes2::getGuardianMonsterCount( spell, hero->GetPower(), hero );
                 const uint32_t currentCount = troop.GetCount();
                 if ( newCount <= currentCount ) {
