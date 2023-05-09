@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-07 10:26+0000\n"
-"PO-Revision-Date: 2023-05-07 22:12+0700\n"
+"PO-Revision-Date: 2023-05-09 09:31+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -472,7 +472,7 @@ msgid "The enemy has surrendered!"
 msgstr "Kẻ địch đã đầu hàng!"
 
 msgid "The enemy has fled!"
-msgstr "Kẻ thù đã bỏ chạy!"
+msgstr "Kẻ địch đã bỏ chạy!"
 
 msgid "A glorious victory!"
 msgstr "Một chiến thắng vinh quang!"
@@ -654,10 +654,10 @@ msgid "Select spell target"
 msgstr "Chọn mục tiêu niệm chú"
 
 msgid "View Ballista info"
-msgstr ""
+msgstr "Xem thông tin Máy bắn đá"
 
 msgid "Ballista"
-msgstr ""
+msgstr "Máy bắn đá"
 
 msgid "Enable auto combat"
 msgstr "Kích hoạt tự động chiến đấu"
@@ -722,7 +722,7 @@ msgstr "%{name} bỏ lượt."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] ""
+msgstr[0] "%{attacker} gây %{damage} thiệt hại."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -741,16 +741,16 @@ msgid_plural "%{count} %{unit} are revived."
 msgstr[0] "1 %{unit} được hồi sinh."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
-msgstr ""
+msgstr "Chuyển %{monster}: từ [%{src}] tới [%{dst}]."
 
 msgid "The %{name} resist the spell!"
-msgstr ""
+msgstr "Qoái vật %{name} kháng phép!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
-msgstr ""
+msgstr "%{name} niệm %{spell} lên %{troop}."
 
 msgid "%{name} casts %{spell}."
-msgstr ""
+msgstr "%{name} niệm %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
 msgstr ""
@@ -908,10 +908,10 @@ msgid "Dwarven Alliance"
 msgstr "Liên minh Người lùn"
 
 msgid "Sorceress Guild"
-msgstr ""
+msgstr "Hội Phù thủy"
 
 msgid "Necromancer Guild"
-msgstr ""
+msgstr "Hội Chiêu hồn"
 
 msgid "Ogre Alliance"
 msgstr "Liên minh Yêu tinh"
@@ -926,7 +926,7 @@ msgid "Elven Alliance"
 msgstr "Liên minh Ma quỷ"
 
 msgid "Kraeger defeated"
-msgstr ""
+msgstr "Đánh bại Kraeger"
 
 msgid "Wayward Son"
 msgstr "Đứa con Bướng bỉnh"
@@ -1079,7 +1079,7 @@ msgid "First Blood"
 msgstr ""
 
 msgid "Necromancers"
-msgstr ""
+msgstr "Chiêu hồn"
 
 msgid "Slay the Dwarves"
 msgstr "Tiêu diệt Người lùn"
@@ -1777,25 +1777,30 @@ msgstr ""
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
 "scenario."
-msgstr ""
+msgstr "Tướng chính sẽ có bảo vật \"%{artifact}\" khi bắt đầu kịch bản."
 
 msgid ""
 "The kingdom will receive %{amount} additional %{resource} at the start of "
 "the scenario."
 msgstr ""
+"Vương quốc sẽ nhận được thêm một lượng %{amount} tài nguyên %{resource} khi "
+"bắt đầu kịch bản."
 
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
 msgstr ""
+"Vương quốc sẽ bị giảm một lượng %{amount} tài nguyên %{resource} khi bắt đầu "
+"kịch bản."
 
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
 msgstr ""
+"Tướng chính sẽ có một lượng %{count} qoái %{monster} khi bắt đầu kịch bản."
 
 msgid ""
 "The main hero will have \"%{spell}\" spell at the start of the scenario."
-msgstr ""
+msgstr "Tướng chính sẽ có phép \"%{spell}\" khi bắt đầu kịch bản."
 
 msgid "The starting race of the scenario will be %{race}."
 msgstr ""
@@ -1804,9 +1809,10 @@ msgid ""
 "The main hero will have additional %{count} %{skill} at the start of the "
 "scenario."
 msgstr ""
+"Tướng chính sẽ có một lượng %{count} kỹ năng %{skill} khi bắt đầu kịch bản."
 
 msgid "The main hero will have %{skill} at the start of the scenario."
-msgstr ""
+msgstr "Tướng chính sẽ có kỹ năng %{skill} khi bắt đầu kịch bản."
 
 msgid "Roland"
 msgstr "Roland"
@@ -1827,7 +1833,7 @@ msgid "Descendants"
 msgstr "Huậ duệ"
 
 msgid "The %{building} produces %{monster}."
-msgstr ""
+msgstr "Nhà %{building} sản sinh ra quái %{monster}."
 
 msgid "Requires:"
 msgstr "Yêu cầu:"
@@ -1845,7 +1851,7 @@ msgid "disable build."
 msgstr "xây dựng bị vô hiệu."
 
 msgid "Cannot afford %{name}."
-msgstr ""
+msgstr "Không đủ khả năng %{name}."
 
 msgid "%{name} is already built."
 msgstr "%{name} đã được xây."
@@ -1857,220 +1863,220 @@ msgid "Build %{name}."
 msgstr "Xây %{name}."
 
 msgid "Blackridge"
-msgstr ""
+msgstr "Blackridge"
 
 msgid "Hillstone"
-msgstr ""
+msgstr "Hillstone"
 
 msgid "Pinehurst"
-msgstr ""
+msgstr "Pinehurst"
 
 msgid "Whiteshield"
-msgstr ""
+msgstr "Whiteshield"
 
 msgid "Woodhaven"
-msgstr ""
+msgstr "Woodhaven"
 
 msgid "Blackwind"
-msgstr ""
+msgstr "Blackwind"
 
 msgid "Bloodreign"
-msgstr ""
+msgstr "Bloodreign"
 
 msgid "Dragontooth"
-msgstr ""
+msgstr "Dragontooth"
 
 msgid "Greywind"
-msgstr ""
+msgstr "Greywind"
 
 msgid "Portsmith"
-msgstr ""
+msgstr "Portsmith"
 
 msgid "Atlantium"
-msgstr ""
+msgstr "Atlantium"
 
 msgid "Middle Gate"
-msgstr ""
+msgstr "Middle Gate"
 
 msgid "Sansobar"
-msgstr ""
+msgstr "Sansobar"
 
 msgid "Tundara"
-msgstr ""
+msgstr "Tundara"
 
 msgid "Vulcania"
-msgstr ""
+msgstr "Vulcania"
 
 msgid "Baywatch"
-msgstr ""
+msgstr "Baywatch"
 
 msgid "Fountainhead"
-msgstr ""
+msgstr "Fountainhead"
 
 msgid "Vertigo"
-msgstr ""
+msgstr "Vertigo"
 
 msgid "Wildabar"
-msgstr ""
+msgstr "Wildabar"
 
 msgid "Winterkill"
-msgstr ""
+msgstr "Winterkill"
 
 msgid "Brindamoor"
-msgstr ""
+msgstr "Brindamoor"
 
 msgid "Lakeside"
-msgstr ""
+msgstr "Lakeside"
 
 msgid "Nightshadow"
-msgstr ""
+msgstr "Nightshadow"
 
 msgid "Olympus"
-msgstr ""
+msgstr "Olympus"
 
 msgid "Sandcaster"
-msgstr ""
+msgstr "Sandcaster"
 
 msgid "Alamar"
-msgstr ""
+msgstr "Alamar"
 
 msgid "Burlock"
-msgstr ""
+msgstr "Burlock"
 
 msgid "Dragadune"
-msgstr ""
+msgstr "Dragadune"
 
 msgid "Kalindra"
-msgstr ""
+msgstr "Kalindra"
 
 msgid "Xabran"
-msgstr ""
+msgstr "Xabran"
 
 msgid "Algary"
-msgstr ""
+msgstr "Algary"
 
 msgid "Basenji"
-msgstr ""
+msgstr "Basenji"
 
 msgid "Blackfang"
-msgstr ""
+msgstr "Blackfang"
 
 msgid "New Dawn"
-msgstr ""
+msgstr "New Dawn"
 
 msgid "Sorpigal"
-msgstr ""
+msgstr "Sorpigal"
 
 msgid "Avone"
-msgstr ""
+msgstr "Avone"
 
 msgid "Big Oak"
-msgstr ""
+msgstr "Big Oak"
 
 msgid "Chandler"
-msgstr ""
+msgstr "Chandler"
 
 msgid "Erliquin"
-msgstr ""
+msgstr "Erliquin"
 
 msgid "Hampshire"
-msgstr ""
+msgstr "Hampshire"
 
 msgid "Antioch"
-msgstr ""
+msgstr "Antioch"
 
 msgid "Avalon"
-msgstr ""
+msgstr "Avalon"
 
 msgid "Roc Haven"
-msgstr ""
+msgstr "Roc Haven"
 
 msgid "South Mill"
-msgstr ""
+msgstr "South Mill"
 
 msgid "Weed Patch"
-msgstr ""
+msgstr "Weed Patch"
 
 msgid "Brownston"
-msgstr ""
+msgstr "Brownston"
 
 msgid "Hilltop"
-msgstr ""
+msgstr "Hilltop"
 
 msgid "Weddington"
-msgstr ""
+msgstr "Weddington"
 
 msgid "Westfork"
-msgstr ""
+msgstr "Westfork"
 
 msgid "Whittingham"
-msgstr ""
+msgstr "Whittingham"
 
 msgid "Cathcart"
-msgstr ""
+msgstr "Cathcart"
 
 msgid "Elk's Head"
-msgstr ""
+msgstr "Elk's Head"
 
 msgid "Roscomon"
-msgstr ""
+msgstr "Roscomon"
 
 msgid "Sherman"
-msgstr ""
+msgstr "Sherman"
 
 msgid "Yorksford"
-msgstr ""
+msgstr "Yorksford"
 
 msgid "Blackburn"
-msgstr ""
+msgstr "Blackburn"
 
 msgid "Blacksford"
-msgstr ""
+msgstr "Blacksford"
 
 msgid "Burton"
-msgstr ""
+msgstr "Burton"
 
 msgid "Pig's Eye"
-msgstr ""
+msgstr "Pig's Eye"
 
 msgid "Viper's Nest"
-msgstr ""
+msgstr "Viper's Nest"
 
 msgid "Fenton"
-msgstr ""
+msgstr "Fenton"
 
 msgid "Lankershire"
-msgstr ""
+msgstr "Lankershire"
 
 msgid "Lombard"
-msgstr ""
+msgstr "Lombard"
 
 msgid "Timberhill"
-msgstr ""
+msgstr "Timberhill"
 
 msgid "Troy"
-msgstr ""
+msgstr "Troy"
 
 msgid "Forder Oaks"
-msgstr ""
+msgstr "Forder Oaks"
 
 msgid "Meramec"
-msgstr ""
+msgstr "Meramec"
 
 msgid "Quick Silver"
-msgstr ""
+msgstr "Quick Silver"
 
 msgid "Westmoor"
-msgstr ""
+msgstr "Westmoor"
 
 msgid "Willow"
-msgstr ""
+msgstr "Willow"
 
 msgid "Corackston"
-msgstr ""
+msgstr "Corackston"
 
 msgid "Sheltemburg"
-msgstr ""
+msgstr "Sheltemburg"
 
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Không thể chiêu mộ - ngươi đang có một Tướng trong thị trấn."
@@ -2082,7 +2088,7 @@ msgid "Cannot afford a Hero"
 msgstr "Không thể có được một Tướng"
 
 msgid "There is no room in the garrison for this army."
-msgstr ""
+msgstr "Không còn khoảng trống trong căn cứ cho đội quân này."
 
 msgid "Fortifications"
 msgstr "Công sự"
@@ -2480,10 +2486,10 @@ msgid "Town"
 msgstr "Thị trấn"
 
 msgid "Exit Castle"
-msgstr ""
+msgstr "Thoát khỏi Lâu đài"
 
 msgid "Exit Town"
-msgstr ""
+msgstr "Thoát khỏi Thị trấn"
 
 msgid "Show Income"
 msgstr "Xem Thu nhập"
@@ -2665,18 +2671,17 @@ msgstr "Ngươi có chắc chắn muốn giải tán đội quân này không?"
 msgid "Upgrade"
 msgstr ""
 
-#, fuzzy
 msgid "Upgrade your troops."
-msgstr "Ngươi không đủ khả năng để nâng cấp quân đội của mình!"
+msgstr "Nâng cấp quân đội của ngươi."
 
 msgid "Dismiss"
-msgstr ""
+msgstr "Giải tán"
 
 msgid "Dismiss this army."
-msgstr ""
+msgstr "Giải tán đội quân này."
 
 msgid "Followers"
-msgstr ""
+msgstr "Xin theo"
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
@@ -3397,22 +3402,22 @@ msgid "Knowl"
 msgstr "Trí"
 
 msgid "1st"
-msgstr ""
+msgstr "Thứ 1"
 
 msgid "2nd"
-msgstr ""
+msgstr "Thứ 2"
 
 msgid "3rd"
-msgstr ""
+msgstr "Thứ 3"
 
 msgid "4th"
-msgstr ""
+msgstr "Thứ 4"
 
 msgid "5th"
-msgstr ""
+msgstr "Thứ 5"
 
 msgid "6th"
-msgstr ""
+msgstr "Thứ 6"
 
 msgid "Oracle: Player Rankings"
 msgstr "Tiên tri: Thứ hạng Người chơi"
@@ -3433,7 +3438,7 @@ msgid "Gold in Treasury:"
 msgstr ""
 
 msgid "Wood & Ore:"
-msgstr ""
+msgstr "Gỗ & Đá:"
 
 msgid "Gems, Cr, Slf & Mer:"
 msgstr ""
@@ -3445,7 +3450,7 @@ msgid "Artifacts:"
 msgstr "Bảo vật:"
 
 msgid "Total Army Strength:"
-msgstr ""
+msgstr "Tổng Sức mạnh Quân đội:"
 
 msgid "Income:"
 msgstr "Thu nhập:"
@@ -3512,6 +3517,9 @@ msgid ""
 "\n"
 "Days: %{days}\n"
 msgstr ""
+"Chúc mừng!\n"
+"\n"
+"Ngày: %{days}\n"
 
 msgid ""
 "\n"
@@ -4278,12 +4286,14 @@ msgid ""
 msgstr ""
 
 msgid "You have been eliminated from the game!!!"
-msgstr ""
+msgstr "Ngươi đã bị loại khỏi cuộc chơi!!!"
 
 msgid ""
 "You have lost the hero %{name}.\n"
 "Your quest is over."
 msgstr ""
+"Ngươi để mất tướng %{name}.\n"
+"Nhiệm vụ của ngươi kết thúc."
 
 msgid ""
 "You have failed to complete your quest in time.\n"
@@ -4318,22 +4328,22 @@ msgid_plural ""
 msgstr[0] ""
 
 msgid "Capture the castle '%{name}'."
-msgstr ""
+msgstr "Chiếm lâu đài '%{name}'."
 
 msgid "Capture the town '%{name}'."
-msgstr ""
+msgstr "Chiếm lấy thị trấn '%{name}'."
 
 msgid "Defeat the hero '%{name}'."
-msgstr ""
+msgstr "Tiêu diet tướng '%{name}'."
 
 msgid "Find the ultimate artifact."
-msgstr ""
+msgstr "Tìm bảo vật tối thượng."
 
 msgid "Find the '%{name}' artifact."
-msgstr ""
+msgstr "Tìm bảo vật '%{name}'."
 
 msgid "Accumulate %{count} gold."
-msgstr ""
+msgstr "Tích lũy một lượng %{count} vàng."
 
 msgid ""
 ", or you may win by defeating all enemy heroes and capturing all enemy towns "
@@ -4473,64 +4483,64 @@ msgid ""
 msgstr ""
 
 msgid "Lord Kilburn"
-msgstr ""
+msgstr "Lord Kilburn"
 
 msgid "Tsabu"
-msgstr ""
+msgstr "Tsabu"
 
 msgid "Sir Galant"
-msgstr ""
+msgstr "Ngài Galant"
 
 msgid "Thundax"
-msgstr ""
+msgstr "Thundax"
 
 msgid "Lord Haart"
-msgstr ""
+msgstr "Chúa Haart"
 
 msgid "Ariel"
-msgstr ""
+msgstr "Ariel"
 
 msgid "Rebecca"
-msgstr ""
+msgstr "Rebecca"
 
 msgid "Sandro"
-msgstr ""
+msgstr "Sandro"
 
 msgid "Crodo"
-msgstr ""
+msgstr "Crodo"
 
 msgid "Barock"
-msgstr ""
+msgstr "Barock"
 
 msgid "Antoine"
-msgstr ""
+msgstr "Antoine"
 
 msgid "Astra"
-msgstr ""
+msgstr "Astra"
 
 msgid "Agar"
-msgstr ""
+msgstr "Agar"
 
 msgid "Vatawna"
-msgstr ""
+msgstr "Vatawna"
 
 msgid "Vesper"
-msgstr ""
+msgstr "Vesper"
 
 msgid "Ambrose"
-msgstr ""
+msgstr "Ambrose"
 
 msgid "Troyan"
-msgstr ""
+msgstr "Troyan"
 
 msgid "Jojosh"
-msgstr ""
+msgstr "Jojosh"
 
 msgid "Wrathmont"
-msgstr ""
+msgstr "Wrathmont"
 
 msgid "Maximus"
-msgstr ""
+msgstr "Maximus"
 
 msgid "Next Hero"
 msgstr "Tướng Tiếp theo"
@@ -4706,16 +4716,16 @@ msgid "View %{skill} Info"
 msgstr "Xem Thông tin %{skill}"
 
 msgid "Keyboard|123"
-msgstr ""
+msgstr "123"
 
 msgid "Keyboard|SPACE"
-msgstr ""
+msgstr "SPACE"
 
 msgid "Keyboard|LANG"
-msgstr ""
+msgstr "LANG"
 
 msgid "Keyboard|ABC"
-msgstr ""
+msgstr "ABC"
 
 msgid "Kingdom Income"
 msgstr "Thu nhập Vương quốc"
@@ -4801,154 +4811,154 @@ msgid "%{object} raided"
 msgstr ""
 
 msgid "Ector"
-msgstr ""
+msgstr "Ector"
 
 msgid "Gwenneth"
-msgstr ""
+msgstr "Gwenneth"
 
 msgid "Sir Gallant"
-msgstr ""
+msgstr "Ngài Gallant"
 
 msgid "Tyro"
-msgstr ""
+msgstr "Tyro"
 
 msgid "Dimitry"
-msgstr ""
+msgstr "Dimitry"
 
 msgid "Ruby"
-msgstr ""
+msgstr "Ruby"
 
 msgid "Crag Hack"
-msgstr ""
+msgstr "Crag Hack"
 
 msgid "Fineous"
-msgstr ""
+msgstr "Fineous"
 
 msgid "Jezebel"
-msgstr ""
+msgstr "Jezebel"
 
 msgid "Atlas"
-msgstr ""
+msgstr "Atlas"
 
 msgid "Ergon"
-msgstr ""
+msgstr "Ergon"
 
 msgid "Jaclyn"
-msgstr ""
+msgstr "Jaclyn"
 
 msgid "Gem"
-msgstr ""
+msgstr "Gem"
 
 msgid "Natasha"
-msgstr ""
+msgstr "Natasha"
 
 msgid "Carlawn"
-msgstr ""
+msgstr "Carlawn"
 
 msgid "Luna"
-msgstr ""
+msgstr "Luna"
 
 msgid "Arie"
-msgstr ""
+msgstr "Arie"
 
 msgid "Barok"
-msgstr ""
+msgstr "Barok"
 
 msgid "Kastore"
-msgstr ""
+msgstr "Kastore"
 
 msgid "Falagar"
-msgstr ""
+msgstr "Falagar"
 
 msgid "Dawn"
-msgstr ""
+msgstr "Dawn"
 
 msgid "Flint"
-msgstr ""
+msgstr "Flint"
 
 msgid "Halon"
-msgstr ""
+msgstr "Halon"
 
 msgid "Myra"
-msgstr ""
+msgstr "Myra"
 
 msgid "Myrini"
-msgstr ""
+msgstr "Myrini"
 
 msgid "Wilfrey"
-msgstr ""
+msgstr "Wilfrey"
 
 msgid "Mandigal"
-msgstr ""
+msgstr "Mandigal"
 
 msgid "Sarakin"
-msgstr ""
+msgstr "Sarakin"
 
 msgid "Charity"
-msgstr ""
+msgstr "Charity"
 
 msgid "Darlana"
-msgstr ""
+msgstr "Darlana"
 
 msgid "Ranloo"
-msgstr ""
+msgstr "Ranloo"
 
 msgid "Rialdo"
-msgstr ""
+msgstr "Rialdo"
 
 msgid "Zam"
-msgstr ""
+msgstr "Zam"
 
 msgid "Zom"
-msgstr ""
+msgstr "Zom"
 
 msgid "Celia"
-msgstr ""
+msgstr "Celia"
 
 msgid "Roxana"
-msgstr ""
+msgstr "Roxana"
 
 msgid "Lord Corlagon"
-msgstr ""
+msgstr "Chúa Corlagon"
 
 msgid "Lord Halton"
-msgstr ""
+msgstr "Chúa Halton"
 
 msgid "Sister Eliza"
-msgstr ""
+msgstr "Sister Eliza"
 
 msgid "Brother Brax"
-msgstr ""
+msgstr "Brother Brax"
 
 msgid "Dainwin"
-msgstr ""
+msgstr "Dainwin"
 
 msgid "Joseph"
-msgstr ""
+msgstr "Joseph"
 
 msgid "Mog"
-msgstr ""
+msgstr "Mog"
 
 msgid "Solmyr"
-msgstr ""
+msgstr "Solmyr"
 
 msgid "Ceallach"
-msgstr ""
+msgstr "Ceallach"
 
 msgid "Drakonia"
-msgstr ""
+msgstr "Drakonia"
 
 msgid "Elderian"
-msgstr ""
+msgstr "Elderian"
 
 msgid "Gallavant"
-msgstr ""
+msgstr "Gallavant"
 
 msgid "Jarkonas"
-msgstr ""
+msgstr "Jarkonas"
 
 msgid "Martine"
-msgstr ""
+msgstr "Martine"
 
 msgid " gives you maximum morale"
 msgstr " cho ngươi tối đa tinh thần"
@@ -4961,9 +4971,12 @@ msgstr ""
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr ""
+"Để có thể niệm chú, trước tiên ngươi phải mua một cuốn sách phép với giá "
+"%{gold} vàng."
 
 msgid "Unfortunately, you seem to be a little short of cash at the moment."
 msgstr ""
+"Thật không may, ngươi dường như đang thiếu một chút tiền mặt vào lúc này."
 
 msgid "Do you wish to buy one?"
 msgstr ""
@@ -5057,7 +5070,7 @@ msgid "Unfortunately, others have found it first, and the wagon is empty."
 msgstr ""
 
 msgid "Searching inside, you find the %{artifact}."
-msgstr ""
+msgstr "Tìm kiếm bên trong, và ngươi tìm thấy bảo vật %{artifact}."
 
 msgid "Inside, you find some of the wagon's cargo still intact."
 msgstr ""
@@ -5351,7 +5364,7 @@ msgid ""
 msgstr ""
 
 msgid "Do you wish to buy this artifact?"
-msgstr ""
+msgstr "Ngươi có chắc muốn mua bảo vật này?"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
@@ -5364,7 +5377,7 @@ msgid ""
 msgstr ""
 
 msgid "You've found the artifact: "
-msgstr ""
+msgstr "Ngươi đã tìm thấy bảo vật: "
 
 msgid ""
 "You've found the humble dwelling of a withered hermit. The hermit tells you "
@@ -5956,7 +5969,7 @@ msgid ""
 msgstr ""
 
 msgid "Spell book is not present."
-msgstr "Không có sách phép"
+msgstr "Không có sách phép."
 
 msgid ""
 "That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
@@ -5971,16 +5984,16 @@ msgid "The spell was not found."
 msgstr "Không tìm thấy phép."
 
 msgid "Only heroes can cast this spell."
-msgstr ""
+msgstr "Chỉ có tướng mới sử dụng được phép này."
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
 msgid "This spell cannot be used on a boat."
-msgstr ""
+msgstr "Phép này không thể dùng trên thuyền."
 
 msgid "This spell can be casted only nearby water."
-msgstr ""
+msgstr "Phép này chỉ sử dung khi ở gần nước."
 
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
@@ -6017,7 +6030,7 @@ msgid "Exit Hero Screen"
 msgstr ""
 
 msgid "You cannot dismiss a hero in a castle"
-msgstr ""
+msgstr "Ngươi không thể giải tán một tướng đang trong lâu đài"
 
 msgid "Dismissal of %{name} the %{race} is prohibited by scenario"
 msgstr ""
@@ -6861,7 +6874,7 @@ msgid "Dwarf Cottage"
 msgstr ""
 
 msgid "Peasant Hut"
-msgstr ""
+msgstr "Lều Nông dân"
 
 msgid "Stables"
 msgstr "Chuồng ngựa"
@@ -6911,10 +6924,10 @@ msgid "Shipwreck"
 msgstr "Tàu đắm"
 
 msgid "Sea Chest"
-msgstr ""
+msgstr "Rương Biển"
 
 msgid "Desert Tent"
-msgstr ""
+msgstr "Lều Sa mạc"
 
 msgid "Stone Liths"
 msgstr ""
@@ -7032,7 +7045,7 @@ msgid "Shrine of the Third Circle"
 msgstr ""
 
 msgid "City of the Dead"
-msgstr ""
+msgstr "Thành phố của Người chết"
 
 msgid "Sphinx"
 msgstr "Nhân sư"
@@ -7693,10 +7706,10 @@ msgid "Soul Eater"
 msgstr ""
 
 msgid "Elemental"
-msgstr ""
+msgstr "Nguyên tố"
 
 msgid "No Morale"
-msgstr ""
+msgstr "Không Tinh thần"
 
 msgid "200% damage from Fire spells"
 msgstr ""
@@ -8091,7 +8104,7 @@ msgid ""
 msgstr ""
 
 msgid "Evil Eye"
-msgstr ""
+msgstr "Mắt Quỷ"
 
 msgid "The %{name} reduces the casting cost of curse spells by half."
 msgstr ""
@@ -8423,7 +8436,7 @@ msgid ""
 msgstr ""
 
 msgid "Power Ring"
-msgstr ""
+msgstr "Nhẫn Quyền lực"
 
 msgid "The %{name} returns %{count} extra spell points per day to your hero."
 msgstr ""
@@ -8975,7 +8988,7 @@ msgid "Magically increases the defense skill of the selected creatures."
 msgstr ""
 
 msgid "Stoneskin"
-msgstr "Thạch bì"
+msgstr "Da đá"
 
 msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
@@ -8989,10 +9002,10 @@ msgid "Causes the selected creatures to inflict minimum damage."
 msgstr ""
 
 msgid "Curse"
-msgstr ""
+msgstr "Nguyền rủa"
 
 msgid "Causes all enemy troops to inflict minimum damage."
-msgstr ""
+msgstr "Khiến tất cả quân địch gây sát thương tối thiểu."
 
 msgid "Mass Curse"
 msgstr ""
@@ -9011,13 +9024,13 @@ msgid "Holy Shout"
 msgstr ""
 
 msgid "Anti-Magic"
-msgstr ""
+msgstr "Kháng - Phép"
 
 msgid "Prevents harmful magic against the selected creatures."
 msgstr ""
 
 msgid "Dispel Magic"
-msgstr ""
+msgstr "Xua tan Ma thuật"
 
 msgid "Removes all magic spells from a single target."
 msgstr ""
@@ -9035,13 +9048,13 @@ msgid "Magic Arrow"
 msgstr ""
 
 msgid "Berserker"
-msgstr ""
+msgstr "Điên loạn"
 
 msgid "Causes a creature to attack its nearest neighbor."
 msgstr ""
 
 msgid "Armageddon"
-msgstr ""
+msgstr "Tận thế"
 
 msgid ""
 "Holy terror strikes the battlefield, causing severe damage to all creatures."
@@ -9059,7 +9072,7 @@ msgid ""
 msgstr ""
 
 msgid "Meteor Shower"
-msgstr ""
+msgstr "Mưa Sao băng"
 
 msgid "Paralyze"
 msgstr ""
@@ -9212,7 +9225,7 @@ msgid "Causes the entire land to become visible."
 msgstr ""
 
 msgid "View All"
-msgstr ""
+msgstr "Xem Tất cả"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr ""
