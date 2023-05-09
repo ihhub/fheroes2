@@ -4100,6 +4100,11 @@ void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_
 
 void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t dst, const HeroBase * caster, const TargetsInfo & targets )
 {
+    // Reset the idle animation delay timer to prevent the target unit from starting the idle animation.
+    for ( const TargetInfo & spellTarget : targets ) {
+        spellTarget.defender->checkIdleDelay();
+    }
+
     Unit * target = !targets.empty() ? targets.front().defender : nullptr;
 
     // set spell cast animation
@@ -4598,6 +4603,8 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
 void Battle::Interface::RedrawActionMorale( Unit & b, bool good )
 {
     std::string msg;
+    // Reset the idle animation delay timer to prevent the unit from starting the idle animation.
+    b.checkIdleDelay();
 
     if ( good ) {
         msg = _( "High morale enables the %{monster} to attack again." );
