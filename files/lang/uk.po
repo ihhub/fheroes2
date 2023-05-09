@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-30 17:06+0000\n"
-"PO-Revision-Date: 2023-04-13 21:41+0300\n"
+"PO-Revision-Date: 2023-05-09 11:24+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -296,7 +296,7 @@ msgstr "Деяка нежить в армії -1"
 
 #, fuzzy
 msgid "View %{name}"
-msgstr "Дивитися %{name}"
+msgstr "Переглянути %{name}"
 
 #, fuzzy
 msgid "Move the %{name} "
@@ -7208,7 +7208,6 @@ msgstr "Морський сундук"
 msgid "Desert Tent"
 msgstr "Пустельний намет"
 
-# Is "Stone Lith" used in the plural in game? Why Stone Lith, if it is Monolith? Name used in right-click message if I do remember right, this is single object.
 #, fuzzy
 msgid "Stone Liths"
 msgstr "Моноліти"
@@ -7388,9 +7387,6 @@ msgstr[2] "Чарівних садів"
 msgid "Observation Tower"
 msgstr "Оглядова вежа"
 
-# Name of object formed with two words. Straight translate sounds not very good: "Ливарня вільних людей". That phrase is not in use in ukrainian.
-# Most simple way to translate - leave word "Foundry" - "Ливарня". But, full meaning of origin name will be lost.
-# I suggest to use "Вільне Ливарство" First word used as adjective, means the same, as "Free". "Ливарство" - means Foundry. But, together "Вільне ливарство" can be perceived as organiztion, much bigger than one foundry, which player can see in game.
 #, fuzzy
 msgid "Freeman's Foundry"
 msgstr "Ливарня"
