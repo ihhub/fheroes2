@@ -3239,7 +3239,19 @@ void Battle::Interface::AnimateOpponents( OpponentSprite * target )
         return;
 
     LocalEvent & le = LocalEvent::Get();
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_OPPONENTS_DELAY } ) ) ) {
+
+    // Do not wait to render the first frame of hero animation as previous one is already rendered.
+    Game::passAnimationDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
+
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_OPPONENTS_DELAY, Game::BATTLE_IDLE_DELAY } ) ) ) {
+        // Animate the idling units.
+        if ( Game::validateAnimationDelay( Game::BATTLE_IDLE_DELAY ) ) {
+            // 'validateAnimationDelay()' resets the delay. We pass it as the same check is done during `Redraw()` and we need to do IDLE animation.
+            Game::passAnimationDelay( Game::DelayType::BATTLE_IDLE_DELAY );
+
+            Redraw();
+        }
+
         if ( Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
             // Render the first frame before waiting any delay.
             Redraw();
@@ -4106,9 +4118,6 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmy1Color() ? opponent1 : opponent2;
         if ( opponent ) {
-            // Reset the delay to wait till the next frame.
-            Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
-
             opponent->SetAnimation( spell.isApplyWithoutFocusObject() ? OP_CAST_MASS : OP_CAST_UP );
             AnimateOpponents( opponent );
         }
@@ -4259,9 +4268,6 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmy1Color() ? opponent1 : opponent2;
         if ( opponent ) {
-            // Reset the delay to wait till the next frame.
-            Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
-
             opponent->SetAnimation( ( target != nullptr ) ? OP_CAST_UP_RETURN : OP_CAST_MASS_RETURN );
             AnimateOpponents( opponent );
         }
