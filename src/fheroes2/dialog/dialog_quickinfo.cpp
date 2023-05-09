@@ -27,6 +27,7 @@
 #include <cstdlib>
 #include <ostream>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "army.h"
@@ -54,7 +55,6 @@
 #include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "mp2.h"
-#include "pairs.h"
 #include "payment.h"
 #include "profit.h"
 #include "resource.h"
@@ -146,10 +146,11 @@ namespace
 
     std::string showMineInfo( const Maps::Tiles & tile, const bool isOwned )
     {
-        const int32_t resourceType = getResourcesFromTile( tile ).first;
+        const int32_t resourceType = getDailyIncomeObjectResources( tile ).getFirstValidResource().first;
         std::string objectInfo = Maps::GetMinesName( resourceType );
 
         if ( isOwned ) {
+            // TODO: we should use the value from funds.
             objectInfo.append( getMinesIncomeString( resourceType ) );
         }
 
@@ -265,7 +266,7 @@ namespace
         std::string str = MP2::StringObject( tile.GetObject( false ) );
 
         if ( isVisited ) {
-            const Skill::Secondary & skill = getSecondarySkillFromTile( tile );
+            const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( tile );
 
             str.append( "\n(" );
             str.append( Skill::Secondary::String( skill.Skill() ) );
@@ -451,8 +452,12 @@ namespace
         case MP2::OBJ_MAGELLANS_MAPS:
             return showObjectVisitInfo( objectType, kingdom.isVisited( objectType ) );
 
-        case MP2::OBJ_RESOURCE:
-            return Resource::String( tile.GetQuantity1() );
+        case MP2::OBJ_RESOURCE: {
+            const Funds funds = getFundsFromTile( tile );
+            assert( funds.GetValidItemsCount() == 1 );
+
+            return Resource::String( funds.getFirstValidResource().first );
+        }
 
         case MP2::OBJ_MINES:
             return showMineInfo( tile, playerColor == getColorFromTile( tile ) );
@@ -461,7 +466,11 @@ namespace
         case MP2::OBJ_SAWMILL: {
             std::string objectInfo = MP2::StringObject( objectType );
             if ( playerColor == getColorFromTile( tile ) ) {
-                objectInfo.append( getMinesIncomeString( getResourcesFromTile( tile ).first ) );
+                const Funds funds = getDailyIncomeObjectResources( tile );
+                assert( funds.GetValidItemsCount() == 1 );
+
+                // TODO: we should use the value from funds.
+                objectInfo.append( getMinesIncomeString( funds.getFirstValidResource().first ) );
             }
             return objectInfo;
         }

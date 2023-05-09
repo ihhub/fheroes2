@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <utility>
 
 #include "agg_image.h"
 #include "castle.h"
@@ -44,7 +45,6 @@
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "mp2.h"
-#include "pairs.h"
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
@@ -408,7 +408,10 @@ namespace
                             const uint32_t colorOffset = colorToOffsetICN( getColorFromTile( tile ) );
                             // Do not render an unknown color.
                             if ( colorOffset != unknownIndex ) {
-                                renderResourceIcon( colorOffset, getResourcesFromTile( tile ).first, posX, posY );
+                                const Funds funds = getDailyIncomeObjectResources( tile );
+                                assert( funds.GetValidItemsCount() == 1 );
+
+                                renderResourceIcon( colorOffset, funds.getFirstValidResource().first, posX, posY );
                             }
                         }
                         break;
@@ -421,7 +424,10 @@ namespace
 
                     case MP2::OBJ_RESOURCE:
                         if ( revealResources || !tile.isFog( color ) ) {
-                            renderResourceIcon( 13, tile.GetQuantity1(), posX, posY );
+                            const Funds funds = getFundsFromTile( tile );
+                            assert( funds.GetValidItemsCount() == 1 );
+
+                            renderResourceIcon( 13, funds.getFirstValidResource().first, posX, posY );
                         }
                         break;
 

@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cmath>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
@@ -166,7 +168,7 @@ void Game::mainGameLoop( bool isFirstGameRun )
             break;
         case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO_FROM_LOAD_FILE:
             result = Game::CompleteCampaignScenario( true );
-            if ( result == fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO ) {
+            while ( result == fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO ) {
                 result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIGN, false );
             }
             break;
@@ -251,8 +253,13 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
     const double scaleX = static_cast<double>( display.width() ) / fheroes2::Display::DEFAULT_WIDTH;
     const double scaleY = static_cast<double>( display.height() ) / fheroes2::Display::DEFAULT_HEIGHT;
-    const fheroes2::Rect settingsArea( static_cast<int32_t>( 63 * scaleX ), static_cast<int32_t>( 202 * scaleY ), static_cast<int32_t>( 90 * scaleX ),
-                                       static_cast<int32_t>( 160 * scaleY ) );
+
+    const double scale = std::min( scaleX, scaleY );
+    const int32_t offsetX = static_cast<int32_t>( std::lround( display.width() - fheroes2::Display::DEFAULT_WIDTH * scale ) ) / 2;
+    const int32_t offsetY = static_cast<int32_t>( std::lround( display.height() - fheroes2::Display::DEFAULT_HEIGHT * scale ) ) / 2;
+
+    const fheroes2::Rect settingsArea( static_cast<int32_t>( 63 * scale ) + offsetX, static_cast<int32_t>( 202 * scale ) + offsetY, static_cast<int32_t>( 90 * scale ),
+                                       static_cast<int32_t>( 160 * scale ) );
 
     uint32_t lantern_frame = 0;
 
@@ -270,7 +277,6 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     fheroes2::Sprite highlightDoor = fheroes2::AGG::GetICN( ICN::SHNGANIM, 18 );
     fheroes2::ApplyPalette( highlightDoor, 8 );
 
-    // mainmenu loop
     while ( true ) {
         if ( !le.HandleEvents( true, true ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
@@ -359,8 +365,9 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             ++lantern_frame;
             fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
             if ( le.MouseCursor( settingsArea ) ) {
-                const int32_t offsetY = static_cast<int32_t>( 55 * scaleY );
-                fheroes2::Blit( highlightDoor, 0, offsetY, display, highlightDoor.x(), highlightDoor.y() + offsetY, highlightDoor.width(), highlightDoor.height() );
+                const int32_t doorOffsetY = static_cast<int32_t>( 55 * scale ) + offsetY;
+                fheroes2::Blit( highlightDoor, 0, doorOffsetY, display, highlightDoor.x(), highlightDoor.y() + doorOffsetY, highlightDoor.width(),
+                                highlightDoor.height() );
             }
 
             display.render();

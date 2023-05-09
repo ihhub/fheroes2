@@ -125,8 +125,14 @@ namespace
         }
 
         // Monster or artifact guarded by a monster
-        if ( objectType == MP2::OBJ_MONSTER || ( objectType == MP2::OBJ_ARTIFACT && tile.QuantityVariant() > 5 ) )
+        if ( objectType == MP2::OBJ_MONSTER ) {
             return Army( tile ).GetStrength() > armyStrength;
+        }
+
+        if ( objectType == MP2::OBJ_ARTIFACT && getArtifactCaptureCondition( tile ) >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES
+             && getArtifactCaptureCondition( tile ) <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
+            return Army( tile ).GetStrength() > armyStrength;
+        }
 
         // Check if AI has the key for the barrier
         if ( objectType == MP2::OBJ_BARRIER && world.GetKingdom( color ).IsVisitTravelersTent( getColorFromTile( tile ) ) )

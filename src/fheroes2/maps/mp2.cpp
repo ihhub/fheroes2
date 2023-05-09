@@ -640,7 +640,7 @@ MP2::MapObjectType MP2::getBaseActionObjectType( const MapObjectType objectType 
     return static_cast<MapObjectType>( objectType | OBJ_ACTION_OBJECT_TYPE );
 }
 
-bool MP2::isQuantityObject( const MapObjectType objectType )
+bool MP2::isValuableResourceObject( const MapObjectType objectType )
 {
     // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
@@ -958,4 +958,57 @@ bool MP2::isDiggingHoleSprite( const int terrainType, const ObjectIcnType object
     }
 
     return ( objectIcnType == terrainObjectIcnType ) && ( index == correctIndex );
+}
+
+bool MP2::doesObjectNeedExtendedMetadata( const MP2::MapObjectType type )
+{
+    switch ( type ) {
+    case OBJ_BOTTLE:
+    case OBJ_CASTLE:
+    case OBJ_EVENT:
+    case OBJ_HEROES:
+    case OBJ_JAIL:
+    case OBJ_RANDOM_CASTLE:
+    case OBJ_RANDOM_TOWN:
+    case OBJ_SIGN:
+    case OBJ_SPHINX:
+        return true;
+    default:
+        break;
+    }
+
+    return false;
+}
+
+bool MP2::doesObjectContainMetadata( const MP2::MapObjectType type )
+{
+    if ( doesObjectNeedExtendedMetadata( type ) ) {
+        // UID for an extended metadata data chunk which should be read outside Tiles object.
+        return true;
+    }
+
+    switch ( type ) {
+    // Only spell scrolls require additional metadata to store spell ID.
+    case OBJ_ARTIFACT:
+    // Traveller's tent and barriers contain a color of the object. As of now we don't use it at all.
+    case OBJ_BARRIER:
+    case OBJ_TRAVELLER_TENT:
+    // Expansion object and dwellings contain ID to identify object type. As of now we don't use it at all.
+    case OBJ_EXPANSION_DWELLING:
+    case OBJ_EXPANSION_OBJECT:
+    // The number of monsters.
+    case OBJ_MONSTER:
+    case OBJ_RANDOM_MONSTER:
+    case OBJ_RANDOM_MONSTER_MEDIUM:
+    case OBJ_RANDOM_MONSTER_STRONG:
+    case OBJ_RANDOM_MONSTER_VERY_STRONG:
+    case OBJ_RANDOM_MONSTER_WEAK:
+    // Ultimate artifact contains radius value to be placed by the engine.
+    case OBJ_RANDOM_ULTIMATE_ARTIFACT:
+        return true;
+    default:
+        break;
+    }
+
+    return false;
 }

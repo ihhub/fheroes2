@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-30 17:06+0000\n"
-"PO-Revision-Date: 2023-05-09 11:24+0300\n"
+"PO-Revision-Date: 2023-05-09 20:19+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -425,7 +425,6 @@ msgstr "Налаштувати"
 msgid "Hot Keys"
 msgstr "Гарячі клавіші"
 
-# Need to know where it used in game
 msgid "Damage Info"
 msgstr ""
 
@@ -2832,6 +2831,18 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr ""
 
+msgid "Upgrade"
+msgstr ""
+
+msgid "Upgrade your troops."
+msgstr ""
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
+
 msgid "Followers"
 msgstr ""
 
@@ -4839,7 +4850,6 @@ msgstr ""
 msgid "Handicap"
 msgstr ""
 
-#
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
@@ -4858,7 +4868,6 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr ""
 
-#
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -4867,7 +4876,6 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr ""
 
-#
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."
@@ -6131,6 +6139,10 @@ msgid ""
 msgstr ""
 
 msgid "Spell book is not present."
+msgstr ""
+
+msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
 msgstr ""
 
 msgid ""
