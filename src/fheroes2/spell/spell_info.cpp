@@ -363,13 +363,13 @@ namespace fheroes2
     int32_t getSummonableBoat( const Heroes & hero )
     {
         const int32_t center = hero.GetIndex();
+        const int heroColor = hero.GetColor();
 
         for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
             assert( Maps::isValidAbsIndex( boatSource ) );
 
             Maps::Tiles & tileSource = world.GetTiles( boatSource );
             const int boatColor = tileSource.getBoatOwnerColor();
-            const int heroColor = hero.GetColor();
             if ( boatColor != Color::NONE && boatColor != heroColor ) {
                 continue;
             }

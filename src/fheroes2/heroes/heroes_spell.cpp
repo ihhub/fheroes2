@@ -299,7 +299,7 @@ namespace
         const int32_t boatDestination = fheroes2::getPossibleBoatPosition( hero );
         assert( Maps::isValidAbsIndex( boatDestination ) );
 
-        int32_t boatSource = fheroes2::getSummonableBoat( hero );
+        const int32_t boatSource = fheroes2::getSummonableBoat( hero );
 
         // Player should have a summonable boat before calling this function.
         assert( boatSource != -1 );
