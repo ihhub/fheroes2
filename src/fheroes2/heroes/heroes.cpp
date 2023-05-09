@@ -1708,11 +1708,11 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
             MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinationIndex() );
 
             if ( it != targets.end() ) {
-                Action( *it, true );
+                Action( *it );
             }
             // otherwise fight the monsters on the first adjacent tile
             else {
-                Action( targets.front(), true );
+                Action( targets.front() );
             }
         }
     }
@@ -1721,7 +1721,7 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
         const MapEvent * event = world.GetMapEvent( GetCenter() );
 
         if ( event && event->isAllow( GetColor() ) ) {
-            Action( GetIndex(), false );
+            Action( GetIndex() );
             SetMove( false );
         }
     }

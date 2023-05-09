@@ -3496,7 +3496,7 @@ void Heroes::ScoutRadar() const
     I.SetRedraw( Interface::REDRAW_RADAR );
 }
 
-void Heroes::Action( int tileIndex, bool isDestination )
+void Heroes::Action( int tileIndex )
 {
     // Hero may be lost while performing the action, reset the focus after completing the action (and update environment sounds and music if necessary)
     struct FocusUpdater
@@ -3682,8 +3682,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         ActionToTeleports( *this, tileIndex );
         break;
     case MP2::OBJ_WHIRLPOOL:
-        if ( isDestination )
-            ActionToWhirlpools( *this, tileIndex );
+        ActionToWhirlpools( *this, tileIndex );
         break;
 
     case MP2::OBJ_OBSERVATION_TOWER:

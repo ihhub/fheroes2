@@ -464,7 +464,7 @@ fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMod
     if ( hero ) {
         // 1. action object
         if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) ) {
-            hero->Action( hero->GetIndex(), true );
+            hero->Action( hero->GetIndex() );
 
             // The action object can alter the status of the hero (e.g. Stables or Well) or
             // move it to another location (e.g. Stone Liths or Whirlpool)
