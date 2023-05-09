@@ -3240,7 +3240,7 @@ void Battle::Interface::AnimateOpponents( OpponentSprite * target )
 
     LocalEvent & le = LocalEvent::Get();
 
-    // We need to wait the delay before rendering the first frame of hero animation.
+    // We need to wait this delay before rendering the first frame of hero animation.
     Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
 
     // 'BATTLE_OPPONENTS_DELAY' is more than 2 times the value of 'BATTLE_IDLE_DELAY', so we need to handle the idle animation separately in this loop.
@@ -3251,7 +3251,7 @@ void Battle::Interface::AnimateOpponents( OpponentSprite * target )
         }
 
         if ( Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
-            // Render the first frame before waiting any delay.
+            // Render before switching to the next frame.
             Redraw();
 
             if ( target->isFinishFrame() ) {
