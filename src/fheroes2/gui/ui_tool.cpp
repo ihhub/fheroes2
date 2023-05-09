@@ -44,11 +44,13 @@
 
 namespace
 {
-    // The parameters of display fade start and end alpha.
+    // The parameters of display fade effect. Full dark and full bright alpha values.
     const uint8_t fullDarkAlpha = 0;
     const uint8_t fullBrightAlpha = 255;
+    // Fade-in and fade-out effects are made in separate functions. Here we set the duration of a single function.
     const uint32_t screenFadeTimeMs = 100;
-    const uint32_t screenFadeFrameCount = 4;
+    // For 100 ms duration 6 frames will result in 60 FPS.
+    const uint32_t screenFadeFrameCount = 6;
     const uint8_t screenFadeStep = ( fullBrightAlpha - fullDarkAlpha ) / screenFadeFrameCount;
 
     // Renderer of current time and FPS on screen
