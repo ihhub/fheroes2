@@ -38,7 +38,6 @@
 #include "pal.h"
 #include "screen.h"
 #include "settings.h"
-#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_language.h"

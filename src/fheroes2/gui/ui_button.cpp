@@ -31,7 +31,6 @@
 #include "localevent.h"
 #include "pal.h"
 #include "settings.h"
-#include "tools.h"
 #include "ui_text.h"
 
 namespace
