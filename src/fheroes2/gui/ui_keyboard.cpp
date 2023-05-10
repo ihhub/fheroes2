@@ -300,7 +300,7 @@ namespace
         assert( buttonLetters.size() == returnLetters.size() );
 
         // This is required in order to render proper text on buttons but do not change Okay button in the window.
-        fheroes2::LanguageSwitcher switcher( language );
+        const fheroes2::LanguageSwitcher switcher( language );
 
         std::vector<std::vector<KeyboardButton>> buttons;
         buttons.resize( buttonLetters.size() );
@@ -324,7 +324,7 @@ namespace
     {
         auto & lastButtonRow = buttons.emplace_back();
 
-        fheroes2::LanguageSwitcher switcher( language );
+        const fheroes2::LanguageSwitcher switcher( language );
 
         switch ( layoutType ) {
         case LayoutType::LowerCase:
