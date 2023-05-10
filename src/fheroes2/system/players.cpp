@@ -429,6 +429,20 @@ bool Players::GetPlayerInGame( int color )
     return player && player->isPlay();
 }
 
+std::vector<int> Players::getInPlayOpponents( const int color )
+{
+    std::vector<int> opponenColors;
+    const Player * player = Players::Get( color );
+    const int friends = player->GetFriends();
+    for ( const Player * it : Settings::Get().GetPlayers() ) {
+        const int currentColor = it->GetColor();
+        if ( it->isPlay() && ( ( currentColor & friends ) == 0 ) ) {
+            opponenColors.emplace_back( currentColor );
+        }
+    }
+    return opponenColors;
+}
+
 void Players::SetPlayerInGame( int color, bool f )
 {
     Player * player = Get( color );
