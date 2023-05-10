@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-30 17:06+0000\n"
-"PO-Revision-Date: 2023-05-10 21:05+0300\n"
+"PO-Revision-Date: 2023-05-09 20:19+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -294,11 +294,13 @@ msgstr ""
 msgid "Some undead in group -1"
 msgstr "Деяка нежить в армії -1"
 
+#, fuzzy
 msgid "View %{name}"
 msgstr "Переглянути %{name}"
 
+#, fuzzy
 msgid "Move the %{name} "
-msgstr ""
+msgstr "Найняти: %{name}"
 
 #, fuzzy
 msgid "Move or right click to redistribute %{name}"
@@ -407,6 +409,7 @@ msgstr "Сітка"
 msgid "Shadow Movement"
 msgstr "Тінь під час руху"
 
+#, fuzzy
 msgid "Shadow Cursor"
 msgstr "Тінь курсора"
 
@@ -422,7 +425,6 @@ msgstr "Налаштувати"
 msgid "Hot Keys"
 msgstr "Гарячі клавіші"
 
-# Need to know where it used in game
 msgid "Damage Info"
 msgstr ""
 
@@ -2829,6 +2831,18 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr ""
 
+msgid "Upgrade"
+msgstr ""
+
+msgid "Upgrade your troops."
+msgstr ""
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
+
 msgid "Followers"
 msgstr ""
 
@@ -4836,7 +4850,6 @@ msgstr ""
 msgid "Handicap"
 msgstr ""
 
-#
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
@@ -4855,7 +4868,6 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr ""
 
-#
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -4864,7 +4876,6 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr ""
 
-#
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."
@@ -6131,6 +6142,10 @@ msgid "Spell book is not present."
 msgstr ""
 
 msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
+msgstr ""
+
+msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
 msgstr ""
@@ -7133,6 +7148,8 @@ msgstr "Альтанка"
 msgid "Genie Lamp"
 msgstr "Лампа джина"
 
+# Other's monster's dwellings are named in singular form - Goblin, Dwarf, etc. This one looks like in plural - Archer's.
+# I'd like to know, how developers want this to look like: House of some monster or monsters, in single, or in plural form?
 msgid "Archer's House"
 msgstr "Дім лучників"
 
@@ -9620,6 +9637,7 @@ msgstr "Закрити Книгу Заклять"
 msgid "View %{spell}"
 msgstr ""
 
+#, fuzzy
 msgid "This spell does %{damage} points of damage."
 msgstr "Це закляття завдає %{damage} очок шкоди."
 
