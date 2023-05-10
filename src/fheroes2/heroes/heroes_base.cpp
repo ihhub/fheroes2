@@ -495,8 +495,8 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( spell == Spell::HAUNT || spell == Spell::SETAGUARDIAN || spell == Spell::SETEGUARDIAN || spell == Spell::SETFGUARDIAN || spell == Spell::SETWGUARDIAN ) {
-            Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
-            MP2::MapObjectType object = tile.GetObject( false );
+            const Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
+            const MP2::MapObjectType object = tile.GetObject( false );
 
             if ( MP2::OBJ_MINES != object ) {
                 if ( res != nullptr ) {
