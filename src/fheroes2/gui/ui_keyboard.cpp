@@ -196,7 +196,7 @@ namespace
     {
         switch ( language ) {
         case fheroes2::SupportedLanguage::English:
-            // English is a default language.
+            // English is a default language so it is not considered as an extra language.
             return false;
         case fheroes2::SupportedLanguage::Russian:
             return true;
