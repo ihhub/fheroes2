@@ -337,8 +337,7 @@ namespace
                 return DialogAction::AddLetter;
             } );
 
-            lastButtonRow.emplace_back( _( "Keyboard|LANG" ), defaultSpecialButtonWidth, isEvilInterface,
-                                        []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
+            lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonWidth, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
             if ( !isExtraLanguageSupported ) {
                 lastButtonRow.back().button.hide();
             }
@@ -360,7 +359,7 @@ namespace
                 return DialogAction::AddLetter;
             } );
 
-            lastButtonRow.emplace_back( _( "Keyboard|LANG" ), defaultSpecialButtonWidth, isEvilInterface,
+            lastButtonRow.emplace_back( _( "\x7F" ), defaultSpecialButtonWidth, isEvilInterface,
                                         []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
             if ( !isExtraLanguageSupported ) {
                 lastButtonRow.back().button.hide();
@@ -383,7 +382,7 @@ namespace
                 return DialogAction::AddLetter;
             } );
 
-            lastButtonRow.emplace_back( _( "Keyboard|LANG" ), defaultSpecialButtonWidth, isEvilInterface,
+            lastButtonRow.emplace_back( _( "\x7F" ), defaultSpecialButtonWidth, isEvilInterface,
                                         []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
             if ( !isExtraLanguageSupported ) {
                 lastButtonRow.back().button.hide();
