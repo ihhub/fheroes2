@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-30 17:06+0000\n"
-"PO-Revision-Date: 2023-05-10 23:29+0300\n"
+"PO-Revision-Date: 2023-05-11 00:03+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -422,7 +422,6 @@ msgstr "Налаштувати"
 msgid "Hot Keys"
 msgstr "Гарячі клавіші"
 
-# Need to know where it used in game
 msgid "Damage Info"
 msgstr ""
 
@@ -3328,7 +3327,7 @@ msgid "Select Skill:"
 msgstr ""
 
 msgid "Map Type:\n"
-msgstr "Тип мапи\n"
+msgstr "Тип мапи:\n"
 
 msgid "The Succession Wars"
 msgstr ""
@@ -9632,7 +9631,6 @@ msgstr ""
 msgid "This spell restores %{hp} HP."
 msgstr ""
 
-#, fuzzy
 msgid "This spell summons %{count} %{monster} to guard the mine."
 msgstr "Це закляття викликає %{count} %{monster} для охорони шахти."
 
