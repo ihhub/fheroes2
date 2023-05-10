@@ -577,8 +577,8 @@ namespace fheroes2
 
         const fheroes2::FontColor fontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
 
-        const fheroes2::Text releasedText( StringUpper( text ), { fheroes2::FontSize::BUTTON_RELEASED, fontColor } );
-        const fheroes2::Text pressedText( StringUpper( text ), { fheroes2::FontSize::BUTTON_PRESSED, fontColor } );
+        const fheroes2::Text releasedText( text, { fheroes2::FontSize::BUTTON_RELEASED, fontColor } );
+        const fheroes2::Text pressedText( text, { fheroes2::FontSize::BUTTON_PRESSED, fontColor } );
 
         const fheroes2::Point textOffset{ ( buttonWidth - releasedText.width() ) / 2, ( 16 - fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) ) / 2 };
 
