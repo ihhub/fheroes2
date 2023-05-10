@@ -309,10 +309,10 @@ namespace
             assert( buttonLetters[i].size() == returnLetters[i].size() );
             for ( size_t buttonId = 0; buttonId < buttonLetters[i].size(); ++buttonId ) {
                 buttons[i].emplace_back( std::string( 1, buttonLetters[i][buttonId] ), getDefaultButtonWidth( language ), isEvilInterface,
-                    [letter = returnLetters[i][buttonId]]( KeyboardRenderer & renderer ) {
-                    renderer.appendCharacter( letter );
-                    return DialogAction::AddLetter;
-                } );
+                                         [letter = returnLetters[i][buttonId]]( KeyboardRenderer & renderer ) {
+                                             renderer.appendCharacter( letter );
+                                             return DialogAction::AddLetter;
+                                         } );
             }
         }
 
