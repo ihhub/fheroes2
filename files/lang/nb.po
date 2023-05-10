@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 10:26+0000\n"
+"POT-Creation-Date: 2023-05-10 11:24+0000\n"
 "PO-Revision-Date: 2023-04-10 00:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6634,6 +6634,41 @@ msgstr ""
 "\n"
 "Denne byen er blokkert av helten din %{hero}."
 
+msgid "This spell is already in use."
+msgstr "Denne trolldommen er allerede i virkning."
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+"Du må være innenfor %{count} ruter av et monster for at trolldommen 'Syner' "
+"skal virke."
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+"Du må stå ved inngangen til ei gruve (sagbruk og alkymistlaber funker ikke) "
+"for å bruke denne trolldommen."
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
+msgstr ""
+
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race}en %{name} (level %{level})"
 
@@ -6720,18 +6755,11 @@ msgstr "Velg by å reise til."
 msgid "%{spell} failed!!!"
 msgstr "%{spell} mislyktes!"
 
-msgid "This spell is already in use."
-msgstr "Denne trolldommen er allerede i virkning."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "De fiendtlige heltene er nå helt kartlagte."
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
-msgstr ""
-"Du må være innenfor %{count} ruter av et monster for at trolldommen 'Syner' "
-"skal virke."
+msgid "Identify Hero"
+msgstr "Kartlegg helt"
 
 msgid "The creatures are willing to join us!"
 msgstr "Skapningene er villige til å bli med oss!"
@@ -6756,13 +6784,6 @@ msgstr "Disse svake skapningene vil uten tvil flykte fra oss."
 
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Jeg er redd for at disse skapningene er ute etter en kamp."
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
-msgstr ""
-"Du må stå ved inngangen til ei gruve (sagbruk og alkymistlaber funker ikke) "
-"for å bruke denne trolldommen."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr "Angrepsevnen til helten din legges til angrepsevnen til krigerne dine."
@@ -10361,9 +10382,6 @@ msgstr "Vis alt"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr "Lar magibrukeren se detaljert informasjon om fiendtlige helter."
-
-msgid "Identify Hero"
-msgstr "Kartlegg helt"
 
 msgid "Summon Boat"
 msgstr "Tilkall skip"
