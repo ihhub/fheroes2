@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-30 17:06+0000\n"
-"PO-Revision-Date: 2023-05-11 00:03+0300\n"
+"PO-Revision-Date: 2023-05-11 00:07+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3\n"
 
 msgid ""
 "BATTLE\n"
@@ -422,6 +422,7 @@ msgstr "Налаштувати"
 msgid "Hot Keys"
 msgstr "Гарячі клавіші"
 
+# Need to know where it used in game
 msgid "Damage Info"
 msgstr ""
 
@@ -2828,6 +2829,18 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr ""
 
+msgid "Upgrade"
+msgstr ""
+
+msgid "Upgrade your troops."
+msgstr ""
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
+
 msgid "Followers"
 msgstr ""
 
@@ -3327,7 +3340,7 @@ msgid "Select Skill:"
 msgstr ""
 
 msgid "Map Type:\n"
-msgstr "Тип мапи:\n"
+msgstr "Тип мапи\n"
 
 msgid "The Succession Wars"
 msgstr ""
@@ -6126,6 +6139,10 @@ msgid ""
 msgstr ""
 
 msgid "Spell book is not present."
+msgstr ""
+
+msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
 msgstr ""
 
 msgid ""
@@ -9631,6 +9648,7 @@ msgstr ""
 msgid "This spell restores %{hp} HP."
 msgstr ""
 
+#, fuzzy
 msgid "This spell summons %{count} %{monster} to guard the mine."
 msgstr "Це закляття викликає %{count} %{monster} для охорони шахти."
 
