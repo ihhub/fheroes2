@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 10:26+0000\n"
+"POT-Creation-Date: 2023-05-10 11:24+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -6326,6 +6326,41 @@ msgstr ""
 "\n"
 "Denna stad besöks av din hjälte %{hero}."
 
+msgid "This spell is already in use."
+msgstr "Denna besvärjelse används redan."
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+"Hjälten måste befinna sig inom %{count} rutor från ett monster för att "
+"Synerbesvärjelsen ska ge effekt."
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+"Hjälten måste stå vid ingången till en gruva (sågverk och alkemistlabb "
+"räknas ej) för att kasta denna besvärjelse."
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
+msgstr ""
+
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race}n %{name} (Nivå %{level})"
 
@@ -6416,18 +6451,11 @@ msgstr "Välj stad att teleportera till."
 msgid "%{spell} failed!!!"
 msgstr "%{spell} misslyckades!"
 
-msgid "This spell is already in use."
-msgstr "Denna besvärjelse används redan."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Fiendehjältar är nu fullt identifierade."
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
-msgstr ""
-"Hjälten måste befinna sig inom %{count} rutor från ett monster för att "
-"Synerbesvärjelsen ska ge effekt."
+msgid "Identify Hero"
+msgstr "Identifiera Hjälte"
 
 msgid "The creatures are willing to join us!"
 msgstr "Varelserna är villiga att följa med oss!"
@@ -6452,13 +6480,6 @@ msgstr "Dessa svaga varelser kommer säkert att fly från oss."
 
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Jag är rädd för att dessa varelser är sugna på strid."
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
-msgstr ""
-"Hjälten måste stå vid ingången till en gruva (sågverk och alkemistlabb "
-"räknas ej) för att kasta denna besvärjelse."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr "Hjältens Anfall ger bonus som läggs till på varje varelses Anfall."
@@ -9818,9 +9839,6 @@ msgstr "Visa Allt"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr "Låter kastaren få detaljerad information om fiendehjältar."
-
-msgid "Identify Hero"
-msgstr "Identifiera Hjälte"
 
 msgid "Summon Boat"
 msgstr ""
