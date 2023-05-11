@@ -104,7 +104,13 @@ namespace
 
         void appendCharacter( const char character )
         {
+            if ( _info.size() >= 255 ) {
+                // Do not add more characters as the string is already long enough.
+                return;
+            }
+
             _info += character;
+
             renderInputArea();
         }
 
