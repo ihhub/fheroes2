@@ -55,6 +55,8 @@ namespace
     const fheroes2::Size inputAreaSize{ 268, 21 };
     const int32_t inputAreaOffset{ 2 };
 
+    fheroes2::SupportedLanguage lastSelectedLanguage{ fheroes2::SupportedLanguage::English };
+
     enum class DialogAction : int
     {
         DoNothing,
@@ -596,6 +598,10 @@ namespace fheroes2
 
         const SupportedLanguage currentGameLanguage = getCurrentLanguage();
 
+        if ( currentGameLanguage == lastSelectedLanguage ) {
+            language = lastSelectedLanguage;
+        }
+
         KeyboardRenderer renderer( fheroes2::Display::instance(), output, Settings::Get().isEvilInterfaceEnabled() );
         renderer.fullRender();
 
@@ -627,6 +633,8 @@ namespace fheroes2
                     else {
                         language = SupportedLanguage::English;
                     }
+
+                    lastSelectedLanguage = language;
                 }
                 break;
             case DialogAction::Close:
