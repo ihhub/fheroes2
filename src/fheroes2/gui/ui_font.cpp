@@ -4682,10 +4682,10 @@ namespace
         fheroes2::DrawLine( released[95], { offset + 11, offset + 11 }, { offset + 12, offset + 10 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[95], { offset + 4, offset + 3 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[95], { offset + 9, offset + 3 }, { offset + 9, offset + 9 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[95], { offset + 5, offset + 1 }, { offset + 5, offset + 3 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[95], { offset + 8, offset + 1 }, { offset + 8, offset + 3 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[95], { offset + 5, offset + 9 }, { offset + 5, offset + 11 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[95], { offset + 8, offset + 9 }, { offset + 8, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 5, offset + 1 }, { offset + 5, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 8, offset + 1 }, { offset + 8, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 5, offset + 10 }, { offset + 5, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 8, offset + 10 }, { offset + 8, offset + 11 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[95], { offset + 0, offset + 5 }, { offset + 0, offset + 7 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[95], { offset + 13, offset + 5 }, { offset + 13, offset + 7 }, buttonGoodReleasedColor );
     }
