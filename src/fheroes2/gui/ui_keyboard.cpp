@@ -294,7 +294,7 @@ namespace
     }
 
     std::vector<std::vector<KeyboardButton>> generateButtons( const std::vector<std::string> & buttonLetters, const std::vector<std::string> & returnLetters,
-                                                              const fheroes2::SupportedLanguage language, const bool isEvilInterface )
+                                                              const LayoutType layoutType, const fheroes2::SupportedLanguage language, const bool isEvilInterface )
     {
         assert( buttonLetters.size() == returnLetters.size() );
 
@@ -304,10 +304,13 @@ namespace
         std::vector<std::vector<KeyboardButton>> buttons;
         buttons.resize( buttonLetters.size() );
 
+        const int32_t buttonWidth
+            = ( layoutType == LayoutType::Numeric ) ? getDefaultButtonWidth( fheroes2::SupportedLanguage::English ) : getDefaultButtonWidth( language );
+
         for ( size_t i = 0; i < buttonLetters.size(); ++i ) {
             assert( buttonLetters[i].size() == returnLetters[i].size() );
             for ( size_t buttonId = 0; buttonId < buttonLetters[i].size(); ++buttonId ) {
-                buttons[i].emplace_back( std::string( 1, buttonLetters[i][buttonId] ), getDefaultButtonWidth( language ), isEvilInterface,
+                buttons[i].emplace_back( std::string( 1, buttonLetters[i][buttonId] ), buttonWidth, isEvilInterface,
                                          [letter = returnLetters[i][buttonId]]( KeyboardRenderer & renderer ) {
                                              renderer.appendCharacter( letter );
                                              return DialogAction::AddLetter;
@@ -382,9 +385,7 @@ namespace
 
             lastButtonRow.emplace_back( _( "\x7F" ), defaultSpecialButtonWidth, isEvilInterface,
                                         []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
-            if ( !isExtraLanguageSupported ) {
-                lastButtonRow.back().button.hide();
-            }
+            lastButtonRow.back().button.hide();
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeLastCharacter();
@@ -529,7 +530,7 @@ namespace
         std::vector<std::string> returnLetters;
 
         getCharacterLayout( layoutType, language, buttonLetters, returnLetters );
-        auto buttons = generateButtons( buttonLetters, returnLetters, language, isEvilInterface );
+        auto buttons = generateButtons( buttonLetters, returnLetters, layoutType, language, isEvilInterface );
         addExtraButtons( buttons, layoutType, language, isEvilInterface, isExtraLanguageSupported );
 
         const fheroes2::Rect windowRoi{ renderer.getWindowRoi() };
