@@ -367,7 +367,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
             fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
             text.draw( text_rt.x + ( text_rt.width - text.width() ) / 2, text_rt.y + 3, display );
-            display.render();
+            display.render( box.GetArea() );
         }
     }
 

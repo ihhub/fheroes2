@@ -105,10 +105,6 @@ namespace
         void appendCharacter( const char character )
         {
             _info += character;
-            if ( fheroes2::Text( _info, fheroes2::FontType::normalWhite() ).width() > inputAreaSize.width - inputAreaOffset * 2 ) {
-                _info.pop_back();
-            }
-
             renderInputArea();
         }
 
@@ -145,6 +141,8 @@ namespace
             }
 
             fheroes2::Text textUI( _info, fheroes2::FontType::normalWhite() );
+            textUI.fitToOneRow( inputAreaSize.width - inputAreaOffset * 2 );
+
             textUI.draw( _window.activeArea().x + ( _window.activeArea().width - inputAreaSize.width ) / 2 + inputAreaOffset,
                          _window.activeArea().y + inputAreaSize.height + ( inputAreaSize.height - textUI.height() ) / 2 + inputAreaOffset, _output );
 
