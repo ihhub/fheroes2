@@ -420,7 +420,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             }
             if ( boatSource == -1 ) {
                 if ( res != nullptr ) {
-                    *res = _( "There is no boat available to cast this spell." );
+                    *res = _( "There is no more boat available to cast this spell." );
                 }
                 return false;
             }
