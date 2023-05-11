@@ -323,8 +323,6 @@ namespace
     {
         auto & lastButtonRow = buttons.emplace_back();
 
-        const fheroes2::LanguageSwitcher switcher( language );
-
         switch ( layoutType ) {
         case LayoutType::LowerCase:
             lastButtonRow.emplace_back( "|", defaultSpecialButtonWidth, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::UpperCase; } );
