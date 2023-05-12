@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-10 11:24+0000\n"
+"POT-Creation-Date: 2023-05-12 13:04+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4921,9 +4921,6 @@ msgstr "123"
 
 msgid "Keyboard|SPACE"
 msgstr "LEERTASTE"
-
-msgid "Keyboard|LANG"
-msgstr "SPRA."
 
 msgid "Keyboard|ABC"
 msgstr "ABC"
@@ -10624,6 +10621,9 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Keyboard|LANG"
+#~ msgstr "SPRA."
 
 #~ msgid "The %{name} increases your morale."
 #~ msgstr "Der %{name} erhöht Ihre Moral."
