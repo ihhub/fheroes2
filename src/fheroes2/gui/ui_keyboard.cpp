@@ -38,7 +38,6 @@
 #include "pal.h"
 #include "screen.h"
 #include "settings.h"
-#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_language.h"
@@ -48,7 +47,6 @@
 namespace
 {
     const int32_t buttonOffset{ 8 };
-    const int32_t defaultButtonWidth{ 30 };
     const int32_t defaultButtonHeight{ 25 };
     const int32_t defaultSpecialButtonWidth{ 54 };
     const int32_t spacebarButtonWidth{ 175 };
@@ -56,6 +54,8 @@ namespace
     const fheroes2::Point offsetFromWindowBorders{ 25, 50 };
     const fheroes2::Size inputAreaSize{ 268, 21 };
     const int32_t inputAreaOffset{ 2 };
+
+    fheroes2::SupportedLanguage lastSelectedLanguage{ fheroes2::SupportedLanguage::English };
 
     enum class DialogAction : int
     {
@@ -104,10 +104,12 @@ namespace
 
         void appendCharacter( const char character )
         {
-            _info += character;
-            if ( fheroes2::Text( _info, fheroes2::FontType::normalWhite() ).width() > inputAreaSize.width - inputAreaOffset * 2 ) {
-                _info.pop_back();
+            if ( _info.size() >= 255 ) {
+                // Do not add more characters as the string is already long enough.
+                return;
             }
+
+            _info += character;
 
             renderInputArea();
         }
@@ -145,6 +147,8 @@ namespace
             }
 
             fheroes2::Text textUI( _info, fheroes2::FontType::normalWhite() );
+            textUI.fitToOneRow( inputAreaSize.width - inputAreaOffset * 2 );
+
             textUI.draw( _window.activeArea().x + ( _window.activeArea().width - inputAreaSize.width ) / 2 + inputAreaOffset,
                          _window.activeArea().y + inputAreaSize.height + ( inputAreaSize.height - textUI.height() ) / 2 + inputAreaOffset, _output );
 
@@ -194,14 +198,31 @@ namespace
         bool isInvertedRenderingLogic{ false };
     };
 
+    bool isSupportedForLanguageSwitching( const fheroes2::SupportedLanguage language )
+    {
+        switch ( language ) {
+        case fheroes2::SupportedLanguage::English:
+            // English is a default language so it is not considered as an extra language.
+            return false;
+        case fheroes2::SupportedLanguage::Russian:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
+
     std::vector<std::string> getNumericCharacterLayout( const fheroes2::SupportedLanguage language )
     {
         // Numeric layout can be used for special letters as well.
         switch ( language ) {
         case fheroes2::SupportedLanguage::English:
+        case fheroes2::SupportedLanguage::Russian:
             return { "1234567890", "-:;()_+=", "[].,!'" };
         default:
             assert( 0 );
+            break;
         }
 
         return {};
@@ -212,34 +233,9 @@ namespace
         switch ( language ) {
         case fheroes2::SupportedLanguage::English:
             return { "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" };
+        case fheroes2::SupportedLanguage::Russian:
+            return { "\xC9\xD6\xD3\xCA\xC5\xCD\xC3\xD8\xD9\xC7\xD5\xDA", "\xD4\xDB\xC2\xC0\xCF\xD0\xCE\xCB\xC4\xC6\xDD", "\xDF\xD7\xD1\xCC\xC8\xD2\xDC\xC1\xDE\xA8" };
         default:
-            assert( 0 );
-        }
-
-        return {};
-    }
-
-    std::vector<std::string> getNonCapitalCharacterLayout( const fheroes2::SupportedLanguage language )
-    {
-        auto layout = getCapitalCharacterLayout( language );
-        for ( auto & letters : layout ) {
-            letters = StringLower( letters );
-        }
-
-        return layout;
-    }
-
-    std::vector<std::string> getCharacterLayout( const LayoutType layoutType, const fheroes2::SupportedLanguage language )
-    {
-        switch ( layoutType ) {
-        case LayoutType::LowerCase:
-            return getNonCapitalCharacterLayout( language );
-        case LayoutType::UpperCase:
-            return getCapitalCharacterLayout( language );
-        case LayoutType::Numeric:
-            return getNumericCharacterLayout( language );
-        default:
-            // Did you add a new layout type? Add the logic above!
             assert( 0 );
             break;
         }
@@ -247,28 +243,92 @@ namespace
         return {};
     }
 
-    std::vector<std::vector<KeyboardButton>> generateButtons( const std::vector<std::string> & letterRows, const fheroes2::SupportedLanguage language,
-                                                              const bool isEvilInterface )
+    std::vector<std::string> getNonCapitalCharacterLayout( const fheroes2::SupportedLanguage language )
     {
+        switch ( language ) {
+        case fheroes2::SupportedLanguage::English:
+            return { "qwertyuiop", "asdfghjkl", "zxcvbnm" };
+        case fheroes2::SupportedLanguage::Russian:
+            return { "\xE9\xF6\xF3\xEA\xE5\xED\xE3\xF8\xF9\xE7\xF5\xFA", "\xF4\xFB\xE2\xE0\xEF\xF0\xEE\xEB\xE4\xE6\xFD", "\xFF\xF7\xF1\xEC\xE8\xF2\xFC\xE1\xFE\xB8" };
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return {};
+    }
+
+    void getCharacterLayout( const LayoutType layoutType, const fheroes2::SupportedLanguage language, std::vector<std::string> & buttonLetters,
+                             std::vector<std::string> & returnLetters )
+    {
+        switch ( layoutType ) {
+        case LayoutType::LowerCase:
+            buttonLetters = getCapitalCharacterLayout( language );
+            returnLetters = getNonCapitalCharacterLayout( language );
+            break;
+        case LayoutType::UpperCase:
+            buttonLetters = getCapitalCharacterLayout( language );
+            returnLetters = buttonLetters;
+            break;
+        case LayoutType::Numeric:
+            buttonLetters = getNumericCharacterLayout( language );
+            returnLetters = buttonLetters;
+            break;
+        default:
+            // Did you add a new layout type? Add the logic above!
+            assert( 0 );
+            break;
+        }
+    }
+
+    int32_t getDefaultButtonWidth( const fheroes2::SupportedLanguage language )
+    {
+        // Different languages have different number of letters per row.
+        // We cannot expand the virtual keyboard window beyond 640 pixels but we can change the size of buttons.
+        switch ( language ) {
+        case fheroes2::SupportedLanguage::English:
+            return 30;
+        case fheroes2::SupportedLanguage::Russian:
+            return 24;
+        default:
+            // Did you add a new supported language? Add the value above!
+            assert( 0 );
+            break;
+        }
+
+        return {};
+    }
+
+    std::vector<std::vector<KeyboardButton>> generateButtons( const std::vector<std::string> & buttonLetters, const std::vector<std::string> & returnLetters,
+                                                              const LayoutType layoutType, const fheroes2::SupportedLanguage language, const bool isEvilInterface )
+    {
+        assert( buttonLetters.size() == returnLetters.size() );
+
         // This is required in order to render proper text on buttons but do not change Okay button in the window.
-        fheroes2::LanguageSwitcher switcher( language );
+        const fheroes2::LanguageSwitcher switcher( language );
 
         std::vector<std::vector<KeyboardButton>> buttons;
-        buttons.resize( letterRows.size() );
+        buttons.resize( buttonLetters.size() );
 
-        for ( size_t i = 0; i < letterRows.size(); ++i ) {
-            for ( const char letter : letterRows[i] ) {
-                buttons[i].emplace_back( std::string( 1, letter ), defaultButtonWidth, isEvilInterface, [letter]( KeyboardRenderer & renderer ) {
-                    renderer.appendCharacter( letter );
-                    return DialogAction::AddLetter;
-                } );
+        const int32_t buttonWidth
+            = ( layoutType == LayoutType::Numeric ) ? getDefaultButtonWidth( fheroes2::SupportedLanguage::English ) : getDefaultButtonWidth( language );
+
+        for ( size_t i = 0; i < buttonLetters.size(); ++i ) {
+            assert( buttonLetters[i].size() == returnLetters[i].size() );
+            for ( size_t buttonId = 0; buttonId < buttonLetters[i].size(); ++buttonId ) {
+                buttons[i].emplace_back( std::string( 1, buttonLetters[i][buttonId] ), buttonWidth, isEvilInterface,
+                                         [letter = returnLetters[i][buttonId]]( KeyboardRenderer & renderer ) {
+                                             renderer.appendCharacter( letter );
+                                             return DialogAction::AddLetter;
+                                         } );
             }
         }
 
         return buttons;
     }
 
-    void addExtraEnglishButtons( std::vector<std::vector<KeyboardButton>> & buttons, const LayoutType layoutType, const bool isEvilInterface )
+    void addExtraStandardButtons( std::vector<std::vector<KeyboardButton>> & buttons, const LayoutType layoutType, const bool isEvilInterface,
+                                  const bool isExtraLanguageSupported, const fheroes2::SupportedLanguage /* unused */ )
     {
         auto & lastButtonRow = buttons.emplace_back();
 
@@ -284,9 +344,10 @@ namespace
                 return DialogAction::AddLetter;
             } );
 
-            lastButtonRow.emplace_back( _( "Keyboard|LANG" ), defaultSpecialButtonWidth, isEvilInterface,
-                                        []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
-            lastButtonRow.back().button.hide();
+            lastButtonRow.emplace_back( "\x7F", defaultSpecialButtonWidth, isEvilInterface, []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
+            if ( !isExtraLanguageSupported ) {
+                lastButtonRow.back().button.hide();
+            }
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeLastCharacter();
@@ -305,9 +366,11 @@ namespace
                 return DialogAction::AddLetter;
             } );
 
-            lastButtonRow.emplace_back( _( "Keyboard|LANG" ), defaultSpecialButtonWidth, isEvilInterface,
-                                        []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
-            lastButtonRow.back().button.hide();
+            lastButtonRow.emplace_back( _( "\x7F" ), defaultSpecialButtonWidth, isEvilInterface,
+                                        []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
+            if ( !isExtraLanguageSupported ) {
+                lastButtonRow.back().button.hide();
+            }
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
                 renderer.removeLastCharacter();
@@ -326,8 +389,8 @@ namespace
                 return DialogAction::AddLetter;
             } );
 
-            lastButtonRow.emplace_back( _( "Keyboard|LANG" ), defaultSpecialButtonWidth, isEvilInterface,
-                                        []( const KeyboardRenderer & ) { return DialogAction::DoNothing; } );
+            lastButtonRow.emplace_back( _( "\x7F" ), defaultSpecialButtonWidth, isEvilInterface,
+                                        []( const KeyboardRenderer & ) { return DialogAction::ChangeLanguage; } );
             lastButtonRow.back().button.hide();
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
@@ -343,14 +406,16 @@ namespace
     }
 
     void addExtraButtons( std::vector<std::vector<KeyboardButton>> & buttons, const LayoutType layoutType, const fheroes2::SupportedLanguage language,
-                          const bool isEvilInterface )
+                          const bool isEvilInterface, const bool isExtraLanguageSupported )
     {
         switch ( language ) {
         case fheroes2::SupportedLanguage::English:
-            addExtraEnglishButtons( buttons, layoutType, isEvilInterface );
+        case fheroes2::SupportedLanguage::Russian:
+            addExtraStandardButtons( buttons, layoutType, isEvilInterface, isExtraLanguageSupported, language );
             break;
         default:
             assert( 0 );
+            break;
         }
     }
 
@@ -438,7 +503,7 @@ namespace
     {
         for ( const auto & buttonRow : buttonLayout ) {
             for ( const auto & buttonInfo : buttonRow ) {
-                if ( le.MouseClickLeft( buttonInfo.button.area() ) ) {
+                if ( buttonInfo.button.isVisible() && le.MouseClickLeft( buttonInfo.button.area() ) ) {
                     assert( buttonInfo.action );
                     return buttonInfo.action( renderer );
                 }
@@ -462,13 +527,17 @@ namespace
         }
     }
 
-    DialogAction processVirtualKeyboardEvent( const LayoutType layoutType, const fheroes2::SupportedLanguage language, KeyboardRenderer & renderer )
+    DialogAction processVirtualKeyboardEvent( const LayoutType layoutType, const fheroes2::SupportedLanguage language, const bool isExtraLanguageSupported,
+                                              KeyboardRenderer & renderer )
     {
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        auto currentLayout = getCharacterLayout( layoutType, language );
-        auto buttons = generateButtons( currentLayout, language, isEvilInterface );
-        addExtraButtons( buttons, layoutType, language, isEvilInterface );
+        std::vector<std::string> buttonLetters;
+        std::vector<std::string> returnLetters;
+
+        getCharacterLayout( layoutType, language, buttonLetters, returnLetters );
+        auto buttons = generateButtons( buttonLetters, returnLetters, layoutType, language, isEvilInterface );
+        addExtraButtons( buttons, layoutType, language, isEvilInterface, isExtraLanguageSupported );
 
         const fheroes2::Rect windowRoi{ renderer.getWindowRoi() };
         const fheroes2::Rect buttonsRoi = getButtonsRoi( buttons, windowRoi.getPosition() + offsetFromWindowBorders );
@@ -531,11 +600,17 @@ namespace fheroes2
         DialogAction action = DialogAction::AddLetter;
         LayoutType layoutType = LayoutType::LowerCase;
 
+        const SupportedLanguage currentGameLanguage = getCurrentLanguage();
+
+        if ( currentGameLanguage == lastSelectedLanguage ) {
+            language = lastSelectedLanguage;
+        }
+
         KeyboardRenderer renderer( fheroes2::Display::instance(), output, Settings::Get().isEvilInterfaceEnabled() );
         renderer.fullRender();
 
         while ( action != DialogAction::Close ) {
-            action = processVirtualKeyboardEvent( layoutType, language, renderer );
+            action = processVirtualKeyboardEvent( layoutType, language, isSupportedForLanguageSwitching( currentGameLanguage ), renderer );
             switch ( action ) {
             case DialogAction::DoNothing:
             case DialogAction::AddLetter:
@@ -553,7 +628,18 @@ namespace fheroes2
                 layoutType = LayoutType::Numeric;
                 break;
             case DialogAction::ChangeLanguage:
-                // TODO: do something here.
+                assert( isSupportedForLanguageSwitching( currentGameLanguage ) );
+
+                if ( currentGameLanguage != SupportedLanguage::English ) {
+                    if ( language == SupportedLanguage::English ) {
+                        language = currentGameLanguage;
+                    }
+                    else {
+                        language = SupportedLanguage::English;
+                    }
+
+                    lastSelectedLanguage = language;
+                }
                 break;
             case DialogAction::Close:
                 return;
