@@ -141,8 +141,6 @@ namespace
             _window->render();
 
             renderInputArea();
-
-            _output.render( _window->activeArea() );
         }
 
         void appendCharacter( const char character )
