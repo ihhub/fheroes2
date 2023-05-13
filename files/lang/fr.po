@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 10:26+0000\n"
+"POT-Creation-Date: 2023-05-12 13:04+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4939,9 +4939,6 @@ msgstr ""
 msgid "Keyboard|SPACE"
 msgstr ""
 
-msgid "Keyboard|LANG"
-msgstr ""
-
 msgid "Keyboard|ABC"
 msgstr ""
 
@@ -6673,6 +6670,41 @@ msgstr ""
 "\n"
 "Ce village est occupé par votre héros %{hero}."
 
+msgid "This spell is already in use."
+msgstr "Ce sort est déjà utilisé."
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+"Vous devez être à maximum %{count} de distance d'un monstre pour que le sort "
+"visions fonctionne."
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+"Vous devez être à l'entrée d'une mine (les scieries et les alchimistes ne "
+"comptent pas) pour lancer ce sort."
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
+msgstr ""
+
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} le %{race} (niveau %{level})"
 
@@ -6762,18 +6794,11 @@ msgstr "Sélectionnez la destination."
 msgid "%{spell} failed!!!"
 msgstr "%{spell} a échoué !"
 
-msgid "This spell is already in use."
-msgstr "Ce sort est déjà utilisé."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Les héros ennemis sont désormais parfaitement identifiables."
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
-msgstr ""
-"Vous devez être à maximum %{count} de distance d'un monstre pour que le sort "
-"visions fonctionne."
+msgid "Identify Hero"
+msgstr "Identifier héros"
 
 msgid "The creatures are willing to join us!"
 msgstr "Les créatures sont prêtes à nous rallier !"
@@ -6798,13 +6823,6 @@ msgstr "Ces faibles créatures vont sûrement fuir devant nous."
 
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Je crains que ces créatures ne soient d'humeur à se battre."
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
-msgstr ""
-"Vous devez être à l'entrée d'une mine (les scieries et les alchimistes ne "
-"comptent pas) pour lancer ce sort."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr ""
@@ -10382,9 +10400,6 @@ msgstr ""
 "Permet au lanceur du sort de visualiser des informations détaillées sur les "
 "héros ennemis."
 
-msgid "Identify Hero"
-msgstr "Identifier héros"
-
 msgid "Summon Boat"
 msgstr "Embarquement"
 
@@ -10598,19 +10613,3 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} increases your morale."
-#~ msgstr "La %{name} augmente votre moral."
-
-#~ msgid "Attention"
-#~ msgstr "Attention"
-
-#~ msgid ""
-#~ "Your version of Heroes of Might and Magic II does not support any other "
-#~ "languages than English."
-#~ msgstr ""
-#~ "Votre version de Heroes of Might and Magic II ne prend en charge aucune "
-#~ "langue autre que l'anglais."
-
-#~ msgid "Location: "
-#~ msgstr "Emplacement : "

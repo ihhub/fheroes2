@@ -176,6 +176,12 @@ namespace Maps
             return _hasObjectAnimation;
         }
 
+        // Checks whether it is possible to move into this tile from the specified direction
+        bool isPassableFrom( const int direction ) const
+        {
+            return ( direction & tilePassable ) != 0;
+        }
+
         // Checks whether it is possible to move into this tile from the specified direction under the specified conditions
         bool isPassableFrom( const int direction, const bool fromWater, const bool skipFog, const int heroColor ) const;
 

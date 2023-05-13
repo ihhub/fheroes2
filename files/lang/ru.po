@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 10:26+0000\n"
+"POT-Creation-Date: 2023-05-12 13:04+0000\n"
 "PO-Revision-Date: 2023-05-06 15:07+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4847,9 +4847,6 @@ msgstr "123"
 msgid "Keyboard|SPACE"
 msgstr "ПРОБЕЛ"
 
-msgid "Keyboard|LANG"
-msgstr "ЯЗЫК"
-
 msgid "Keyboard|ABC"
 msgstr "АБВ"
 
@@ -6509,6 +6506,39 @@ msgstr ""
 "\n"
 "В этом городе уже есть Ваш герой: %{hero}."
 
+msgid "This spell is already in use."
+msgstr "Это заклинание уже используется."
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+"Вы должны находиться не более %{count} ходов от армии монстров для магии "
+"Видение."
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr "Вы должны стать поближе к руднику, для использования этой магии."
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
+msgstr ""
+
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race} %{name} (уровень %{level})"
 
@@ -6596,18 +6626,11 @@ msgstr "Выберите, куда перенестись."
 msgid "%{spell} failed!!!"
 msgstr "Неудачный вызов %{spell}!"
 
-msgid "This spell is already in use."
-msgstr "Это заклинание уже используется."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Все вражеские Герои опознаны."
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
-msgstr ""
-"Вы должны находиться не более %{count} ходов от армии монстров для магии "
-"Видение."
+msgid "Identify Hero"
+msgstr "Опознать героя"
 
 msgid "The creatures are willing to join us!"
 msgstr "Эта армия монстров будет присоединяться!"
@@ -6633,11 +6656,6 @@ msgstr "Эта трусливая армия убежит от Вас..."
 
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Скорее всего, эта армия монстров будет сражаться."
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
-msgstr "Вы должны стать поближе к руднику, для использования этой магии."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr "Навык Атаки даёт бонус к навыку атаки каждого существа в армии героя."
@@ -10137,9 +10155,6 @@ msgstr "Показать всё"
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr "Позволяет получить подробную информацию о героях противника."
 
-msgid "Identify Hero"
-msgstr "Опознать героя"
-
 msgid "Summon Boat"
 msgstr "Призвать корабль"
 
@@ -10345,19 +10360,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} increases your morale."
-#~ msgstr "%{name} увеличивает Вашу мораль."
-
-#~ msgid "Attention"
-#~ msgstr "Внимание"
-
-#~ msgid ""
-#~ "Your version of Heroes of Might and Magic II does not support any other "
-#~ "languages than English."
-#~ msgstr ""
-#~ "Ваша версия Heroes of Might and Magic II не поддерживает никакие языки, "
-#~ "кроме английского."
-
-#~ msgid "Location: "
-#~ msgstr "Путь к файлу: "

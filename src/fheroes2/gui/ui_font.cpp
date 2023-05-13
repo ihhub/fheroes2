@@ -4662,6 +4662,32 @@ namespace
         fheroes2::DrawLine( released[94], { offset + 7, offset + 1 }, { offset + 13, offset + 7 }, 12 );
         fheroes2::DrawLine( released[94], { offset + 12, offset + 1 }, { offset + 6, offset + 7 }, 12 );
         fheroes2::DrawLine( released[94], { offset + 13, offset + 1 }, { offset + 7, offset + 7 }, 12 );
+
+        // Replaced with Change Language symbol for virtual keyboard
+        // TODO: put the Change Language symbol to a special font to not replace any other ASCII character.
+        released[95].resize( 14 + offset * 2, 13 + offset * 2 );
+        released[95].reset();
+        released[95].setPosition( buttonFontOffset.x, buttonFontOffset.y - 2 );
+        fheroes2::DrawLine( released[95], { offset + 4, offset + 0 }, { offset + 9, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 1, offset + 2 }, { offset + 2, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 1, offset + 3 }, { offset + 3, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 10, offset + 1 }, { offset + 12, offset + 3 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 11, offset + 1 }, { offset + 12, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 0, offset + 4 }, { offset + 13, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 0, offset + 8 }, { offset + 13, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 1, offset + 9 }, { offset + 3, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 1, offset + 10 }, { offset + 2, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 4, offset + 12 }, { offset + 9, offset + 12 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 10, offset + 11 }, { offset + 12, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 11, offset + 11 }, { offset + 12, offset + 10 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 4, offset + 3 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 9, offset + 3 }, { offset + 9, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 5, offset + 1 }, { offset + 5, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 8, offset + 1 }, { offset + 8, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 5, offset + 10 }, { offset + 5, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 8, offset + 10 }, { offset + 8, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 0, offset + 5 }, { offset + 0, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 13, offset + 5 }, { offset + 13, offset + 7 }, buttonGoodReleasedColor );
     }
 
     void generateCP1250GoodButtonFont( std::vector<fheroes2::Sprite> & released )
@@ -4674,14 +4700,18 @@ namespace
         const int32_t offset = 2;
 
         // Offset letters with diacritics above them.
-        released[108].setPosition( buttonFontOffset.x, -3 );
-        released[166].setPosition( buttonFontOffset.x, -3 );
+        released[108].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        released[111].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        released[143].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        released[166].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        released[177].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        released[179].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
 
         // S with caron. Only copied from S.
         released[106] = released[51];
 
         // S with acute accent.
-        released[108].resize( released[51].width(), released[51].height() + 4 );
+        released[108].resize( released[51].width(), released[51].height() + 3 );
         released[108].reset();
         fheroes2::Copy( released[51], 0, 0, released[108], 0, 3, released[51].width(), released[51].height() );
         fheroes2::DrawLine( released[108], { offset + 4, offset + 1 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
@@ -4692,20 +4722,32 @@ namespace
         // Z with caron. Only copied from Z.
         released[110] = released[58];
 
-        // Z with acute. Only copied from Z.
-        released[111] = released[58];
+        // Z with acute.
+        released[111].resize( released[58].width(), released[58].height() + 3 );
+        released[111].reset();
+        fheroes2::Copy( released[58], 0, 0, released[111], 0, 3, released[58].width(), released[58].height() );
+        fheroes2::DrawLine( released[111], { offset + 4, offset + 1 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
 
-        // L with stroke. Only copied from L.
+        // L with stroke.
         released[131] = released[44];
+        fheroes2::DrawLine( released[131], { offset + 1, offset + 6 }, { offset + 5, offset + 2 }, buttonGoodReleasedColor );
 
-        // A with ogonek. Only copied from A.
-        released[133] = released[33];
+        // A with ogonek.
+        released[133].resize( released[33].width(), released[33].height() + 3 );
+        released[133].reset();
+        fheroes2::Copy( released[33], 0, 0, released[133], 0, 0, released[33].width(), released[33].height() );
+        fheroes2::DrawLine( released[133], { offset + 9, offset + 11 }, { offset + 10, offset + 10 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[133], { offset + 10, offset + 12 }, { offset + 11, offset + 12 }, buttonGoodReleasedColor );
 
         // S with cedilla. Only copied from S.
         released[138] = released[51];
 
-        // Z with dot above. Only copied from Z.
-        released[143] = released[58];
+        // Z with dot above.
+        released[143].resize( released[58].width(), released[51].height() + 3 );
+        released[143].reset();
+        fheroes2::Copy( released[58], 0, 0, released[143], 0, 3, released[58].width(), released[58].height() );
+        fheroes2::DrawLine( released[143], { offset + 4, offset + 1 }, { offset + 5, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[143], { offset + 4, offset + 0 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
 
         // Y with diaerisis. Only copied from Y.
         released[156] = released[57];
@@ -4732,7 +4774,7 @@ namespace
         released[165] = released[44];
 
         // C with acute accent.
-        released[166].resize( released[35].width(), released[35].height() + 4 );
+        released[166].resize( released[35].width(), released[35].height() + 3 );
         released[166].reset();
         fheroes2::Copy( released[35], 0, 0, released[166], 0, 3, released[35].width(), released[35].height() );
         fheroes2::DrawLine( released[166], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
@@ -4746,8 +4788,12 @@ namespace
         // E with acute. Only copied from E.
         released[169] = released[37];
 
-        // E with ogonek. Only copied from E.
-        released[170] = released[37];
+        // E with ogonek.
+        released[170].resize( released[37].width(), released[37].height() + 3 );
+        released[170].reset();
+        fheroes2::Copy( released[37], 0, 0, released[170], 0, 0, released[37].width(), released[37].height() );
+        fheroes2::DrawLine( released[170], { offset + 6, offset + 11 }, { offset + 7, offset + 10 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[170], { offset + 7, offset + 12 }, { offset + 8, offset + 12 }, buttonGoodReleasedColor );
 
         // E with diaerisis. Only copied from E.
         released[171] = released[37];
@@ -4767,14 +4813,20 @@ namespace
         // D with stroke. Only copied from D.
         released[176] = released[36];
 
-        // N with acute. Only copied from N.
-        released[177] = released[46];
+        // N with acute.
+        released[177].resize( released[46].width(), released[46].height() + 3 );
+        released[177].reset();
+        fheroes2::Copy( released[46], 0, 0, released[177], 0, 3, released[46].width(), released[46].height() );
+        fheroes2::DrawLine( released[177], { offset + 6, offset + 1 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
 
         // N with caron. Only copied from N.
         released[178] = released[46];
 
-        // O with acute. Only copied from O.
-        released[179] = released[47];
+        // O with acute.
+        released[179].resize( released[47].width(), released[47].height() + 3 );
+        released[179].reset();
+        fheroes2::Copy( released[47], 0, 0, released[179], 0, 3, released[47].width(), released[47].height() );
+        fheroes2::DrawLine( released[179], { offset + 4, offset + 1 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
 
         // O with circumflex. Only copied from O.
         released[180] = released[47];

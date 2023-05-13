@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 10:26+0000\n"
+"POT-Creation-Date: 2023-05-12 13:04+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -4869,9 +4869,6 @@ msgstr ""
 msgid "Keyboard|SPACE"
 msgstr ""
 
-msgid "Keyboard|LANG"
-msgstr ""
-
 msgid "Keyboard|ABC"
 msgstr ""
 
@@ -6355,6 +6352,39 @@ msgid ""
 "This town is occupied by your hero %{hero}."
 msgstr ""
 
+msgid "This spell is already in use."
+msgstr ""
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+"A bánya bejáratánál kell állnod (a fűrészmalmot és az alkimista labort "
+"leszámítva), hogy használd ezt a varázslatot."
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
+msgstr ""
+
 #, fuzzy
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{level} szint"
@@ -6446,16 +6476,11 @@ msgstr ""
 msgid "%{spell} failed!!!"
 msgstr ""
 
-msgid "This spell is already in use."
-msgstr ""
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Az ellenséges hősök teljes mértékben azonosíthatóak."
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
-msgstr ""
+msgid "Identify Hero"
+msgstr "Hősazonosítás"
 
 msgid "The creatures are willing to join us!"
 msgstr "A lények csatlakozni akarnak hozzád!"
@@ -6478,13 +6503,6 @@ msgstr "Ezek a gyenge lények valószínű elmenekül előled."
 
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Félő, hogy ezek a lények készek harcolni."
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
-msgstr ""
-"A bánya bejáratánál kell állnod (a fűrészmalmot és az alkimista labort "
-"leszámítva), hogy használd ezt a varázslatot."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr ""
@@ -9870,9 +9888,6 @@ msgstr "Minden mutatása"
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr "Részletes információkat ad az ellenséges hősökről."
 
-msgid "Identify Hero"
-msgstr "Hősazonosítás"
-
 msgid "Summon Boat"
 msgstr "Hajó idézése"
 
@@ -10077,11 +10092,3 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Attention"
-#~ msgstr "animáció"
-
-#, fuzzy
-#~ msgid "Location: "
-#~ msgstr "Ásatás"
