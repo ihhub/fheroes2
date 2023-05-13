@@ -152,7 +152,7 @@ namespace
 
             _info += character;
 
-            renderInputArea();
+            _output.render( renderInputArea() );
         }
 
         void removeLastCharacter()
@@ -163,7 +163,7 @@ namespace
 
             _info.pop_back();
 
-            renderInputArea();
+            _output.render( renderInputArea() );
         }
 
     private:
@@ -172,7 +172,7 @@ namespace
         std::unique_ptr<fheroes2::StandardWindow> _window;
         const bool _isEvilInterface;
 
-        void renderInputArea()
+        fheroes2::Rect renderInputArea()
         {
             const int32_t offsetFromWindowTop{ 20 };
 
@@ -194,7 +194,7 @@ namespace
             textUI.draw( windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2 + inputAreaOffset,
                          windowRoi.y + inputAreaSize.height + ( inputAreaSize.height - textUI.height() ) / 2 + inputAreaOffset, _output );
 
-            _output.render( outputRoi );
+            return outputRoi;
         }
     };
 
