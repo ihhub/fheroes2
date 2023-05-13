@@ -10621,22 +10621,3 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Keyboard|LANG"
-#~ msgstr "SPRA."
-
-#~ msgid "The %{name} increases your morale."
-#~ msgstr "Der %{name} erhöht Ihre Moral."
-
-#~ msgid "Attention"
-#~ msgstr "Achtung"
-
-#~ msgid ""
-#~ "Your version of Heroes of Might and Magic II does not support any other "
-#~ "languages than English."
-#~ msgstr ""
-#~ "Ihre Version von Heroes of Might and Magic II unterstützt keine anderen "
-#~ "Sprachen als Englisch."
-
-#~ msgid "Location: "
-#~ msgstr "Ort: "

@@ -10360,22 +10360,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Keyboard|LANG"
-#~ msgstr "ЯЗЫК"
-
-#~ msgid "The %{name} increases your morale."
-#~ msgstr "%{name} увеличивает Вашу мораль."
-
-#~ msgid "Attention"
-#~ msgstr "Внимание"
-
-#~ msgid ""
-#~ "Your version of Heroes of Might and Magic II does not support any other "
-#~ "languages than English."
-#~ msgstr ""
-#~ "Ваша версия Heroes of Might and Magic II не поддерживает никакие языки, "
-#~ "кроме английского."
-
-#~ msgid "Location: "
-#~ msgstr "Путь к файлу: "
