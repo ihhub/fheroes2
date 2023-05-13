@@ -37,10 +37,10 @@
     <control>touch</control>
   </recommends>
   <releases>
-    <release date="2023-04-13" version="v1.0.4">
+    <release date="2023-05-13" version="v1.0.4">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.4</url>
       <description>
-        <p>Changes in v1.0.4 (13 April 2023):</p>
+        <p>Changes in v1.0.4 (13 May 2023):</p>
         <ul>
           <li>add Polish and Russian languages support for Virtual Keyboard</li>
           <li>fix absence of delay after animating creature wince and before making next move</li>
