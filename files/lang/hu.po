@@ -10092,11 +10092,3 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Attention"
-#~ msgstr "animáció"
-
-#, fuzzy
-#~ msgid "Location: "
-#~ msgstr "Ásatás"

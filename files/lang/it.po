@@ -9547,24 +9547,3 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} increases your morale."
-#~ msgstr "%{name} incrementa il morale delle tue truppe."
-
-#~ msgid "Attention"
-#~ msgstr "Attenzione"
-
-#, fuzzy
-#~ msgid ""
-#~ "Your version of Heroes of Might and Magic II does not support any other "
-#~ "languages than English."
-#~ msgstr ""
-#~ "La tua versione di Heroes of Might and Magic II non supporta altre lingue "
-#~ "che l'inglese."
-
-#, fuzzy
-#~ msgid "Location: "
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Percorso: "

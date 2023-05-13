@@ -10591,22 +10591,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Keyboard|LANG"
-#~ msgstr "SPRÅK"
-
-#~ msgid "The %{name} increases your morale."
-#~ msgstr "%{name} styrker kampånden din."
-
-#~ msgid "Attention"
-#~ msgstr "Advarsel"
-
-#~ msgid ""
-#~ "Your version of Heroes of Might and Magic II does not support any other "
-#~ "languages than English."
-#~ msgstr ""
-#~ "Din utgave av Heroes of Might and Magic II støtter ingen andre språk enn "
-#~ "engelsk."
-
-#~ msgid "Location: "
-#~ msgstr "Plassering: "
