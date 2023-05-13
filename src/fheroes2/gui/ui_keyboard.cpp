@@ -97,12 +97,12 @@ namespace
     class KeyboardRenderer
     {
     public:
-        KeyboardRenderer( fheroes2::Display & output, std::string & info, const bool isEvilInterface, const fheroes2::Size size )
+        KeyboardRenderer( fheroes2::Display & output, std::string & info, const bool isEvilInterface )
             : _output( output )
             , _info( info )
             , _isEvilInterface( isEvilInterface )
         {
-            resize( size );
+            // Do nothing.
         }
 
         fheroes2::Rect getWindowRoi() const
@@ -638,7 +638,7 @@ namespace fheroes2
             language = lastSelectedLanguage;
         }
 
-        KeyboardRenderer renderer( fheroes2::Display::instance(), output, Settings::Get().isEvilInterfaceEnabled(), { defaultWindowWidth, defaultWindowHeight } );
+        KeyboardRenderer renderer( fheroes2::Display::instance(), output, Settings::Get().isEvilInterfaceEnabled() );
 
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( layoutType, language, isSupportedForLanguageSwitching( currentGameLanguage ), renderer );
