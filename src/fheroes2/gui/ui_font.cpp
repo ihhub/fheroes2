@@ -4806,7 +4806,7 @@ namespace
         released[197 - 32].resize( released[76 - 32].width(), released[76 - 32].height() + 3 );
         released[197 - 32].reset();
         fheroes2::Copy( released[76 - 32], 0, 0, released[197 - 32], 0, 3, released[76 - 32].width(), released[76 - 32].height() );
-        fheroes2::DrawLine( released[197 - 32], { offset + 2, offset + 1 }, { offset + 3, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[197 - 32], { offset + 3, offset + 1 }, { offset + 4, offset + 0 }, buttonGoodReleasedColor );
 
         // C with acute accent.
         released[198 - 32].resize( released[67 - 32].width(), released[67 - 32].height() + 3 );
