@@ -72,6 +72,10 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
+            if ( status.isBackgroundTaskExecuting ) {
+                return;
+            }
+
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
             new Thread( () -> {
@@ -89,6 +93,10 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         private void deleteSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final List<String> saveFileNames )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
+
+            if ( status.isBackgroundTaskExecuting ) {
+                return;
+            }
 
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
@@ -189,7 +197,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
     {
         super.onResume();
 
-        updateSaveFileList();
+        viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() );
     }
 
     public void filterButtonClicked( final View view )
@@ -212,7 +220,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             saveFileListView.setItemChecked( i, false );
         }
 
-        updateSaveFileList();
+        viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() );
     }
 
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
@@ -257,7 +265,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                                         }
                                     }
 
-                                    deleteSaveFiles( saveFileNames );
+                                    viewModel.deleteSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), saveFileNames );
                                 } )
             .setNegativeButton( R.string.activity_save_file_manager_delete_confirmation_negative_btn_text, ( dialog, which ) -> {} )
             .create()
@@ -279,20 +287,6 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         }
 
         return allowedSaveFileExtensions;
-    }
-
-    private void updateSaveFileList()
-    {
-        viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() );
-    }
-
-    private void deleteSaveFiles( final List<String> saveFileNames )
-    {
-        if ( saveFileNames.isEmpty() ) {
-            return;
-        }
-
-        viewModel.deleteSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), saveFileNames );
     }
 
     private void updateUI( final SaveFileManagerActivityViewModel.Status modelStatus )
