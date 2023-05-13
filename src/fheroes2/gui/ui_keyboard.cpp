@@ -50,12 +50,30 @@ namespace
     const int32_t defaultButtonHeight{ 25 };
     const int32_t defaultSpecialButtonWidth{ 54 };
     const int32_t spacebarButtonWidth{ 175 };
-    const fheroes2::Size windowSize{ 520, 250 };
+    const int32_t defaultWindowWidth{ 520 };
+    const int32_t defaultWindowHeight{ 250 };
+    const int32_t defaultLetterRows{ 3 };
     const fheroes2::Point offsetFromWindowBorders{ 25, 50 };
     const fheroes2::Size inputAreaSize{ 268, 21 };
     const int32_t inputAreaOffset{ 2 };
 
     fheroes2::SupportedLanguage lastSelectedLanguage{ fheroes2::SupportedLanguage::English };
+
+    bool isSupportedForLanguageSwitching( const fheroes2::SupportedLanguage language )
+    {
+        switch ( language ) {
+        case fheroes2::SupportedLanguage::English:
+            // English is a default language so it is not considered as an extra language.
+            return false;
+        case fheroes2::SupportedLanguage::Polish:
+        case fheroes2::SupportedLanguage::Russian:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
 
     enum class DialogAction : int
     {
@@ -79,23 +97,37 @@ namespace
     class KeyboardRenderer
     {
     public:
-        KeyboardRenderer( fheroes2::Display & output, std::string & info, const bool isEvilInterface )
+        KeyboardRenderer( fheroes2::Display & output, std::string & info, const bool isEvilInterface, const fheroes2::Size size )
             : _output( output )
             , _info( info )
-            , _window( windowSize.width, windowSize.height, true, output )
             , _isEvilInterface( isEvilInterface )
         {
-            // Do nothing.
+            resize( size );
         }
 
-        fheroes2::Rect getWindowRoi() const
+        const fheroes2::Rect & getWindowRoi() const
         {
-            return _window.activeArea();
+            return _window->activeArea();
         }
 
-        void fullRender()
+        void resize( const fheroes2::Size size )
         {
-            _window.render();
+            if ( _window && size.width == _window->activeArea().width && size.height == _window->activeArea().height ) {
+                // This is the same window size. Nothing to do.
+                return;
+            }
+
+            assert( size.width > 0 && size.height > 0 );
+
+            const fheroes2::Point defaultOffset{ ( _output.width() - defaultWindowWidth ) / 2, ( _output.height() - defaultWindowHeight ) / 2 };
+            const fheroes2::Point offset{ defaultOffset.x - ( size.width - defaultWindowWidth ), defaultOffset.y - ( size.height - defaultWindowHeight ) };
+
+            // It is important to destroy the previous window to avoid rendering issues.
+            _window.reset();
+
+            _window = std::make_unique<fheroes2::StandardWindow>( offset.x, offset.y, size.width, size.height, true, _output );
+
+            _window->render();
 
             renderInputArea();
 
@@ -128,15 +160,16 @@ namespace
     private:
         fheroes2::Display & _output;
         std::string & _info;
-        fheroes2::StandardWindow _window;
+        std::unique_ptr<fheroes2::StandardWindow> _window;
         const bool _isEvilInterface;
 
         void renderInputArea()
         {
             const int32_t offsetFromWindowTop{ 20 };
 
-            const fheroes2::Rect outputRoi{ _window.activeArea().x + ( _window.activeArea().width - inputAreaSize.width ) / 2,
-                                            _window.activeArea().y + offsetFromWindowTop, inputAreaSize.width, inputAreaSize.height };
+            const fheroes2::Rect & windowRoi = _window->activeArea();
+            const fheroes2::Rect outputRoi{ windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2, windowRoi.y + offsetFromWindowTop, inputAreaSize.width,
+                                            inputAreaSize.height };
 
             const fheroes2::Sprite & initialWindow = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
             fheroes2::Copy( initialWindow, 40, 286, _output, outputRoi.x, outputRoi.y, outputRoi.width, outputRoi.height );
@@ -149,8 +182,8 @@ namespace
             fheroes2::Text textUI( _info, fheroes2::FontType::normalWhite() );
             textUI.fitToOneRow( inputAreaSize.width - inputAreaOffset * 2 );
 
-            textUI.draw( _window.activeArea().x + ( _window.activeArea().width - inputAreaSize.width ) / 2 + inputAreaOffset,
-                         _window.activeArea().y + inputAreaSize.height + ( inputAreaSize.height - textUI.height() ) / 2 + inputAreaOffset, _output );
+            textUI.draw( windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2 + inputAreaOffset,
+                         windowRoi.y + inputAreaSize.height + ( inputAreaSize.height - textUI.height() ) / 2 + inputAreaOffset, _output );
 
             _output.render( outputRoi );
         }
@@ -198,26 +231,12 @@ namespace
         bool isInvertedRenderingLogic{ false };
     };
 
-    bool isSupportedForLanguageSwitching( const fheroes2::SupportedLanguage language )
-    {
-        switch ( language ) {
-        case fheroes2::SupportedLanguage::English:
-            // English is a default language so it is not considered as an extra language.
-            return false;
-        case fheroes2::SupportedLanguage::Russian:
-            return true;
-        default:
-            break;
-        }
-
-        return false;
-    }
-
     std::vector<std::string> getNumericCharacterLayout( const fheroes2::SupportedLanguage language )
     {
         // Numeric layout can be used for special letters as well.
         switch ( language ) {
         case fheroes2::SupportedLanguage::English:
+        case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
             return { "1234567890", "-:;()_+=", "[].,!'" };
         default:
@@ -233,6 +252,8 @@ namespace
         switch ( language ) {
         case fheroes2::SupportedLanguage::English:
             return { "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" };
+        case fheroes2::SupportedLanguage::Polish:
+            return { "\x8C\x8F\xA3\xA5\xAF\xC6\xCA\xD1\xD3", "QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM" };
         case fheroes2::SupportedLanguage::Russian:
             return { "\xC9\xD6\xD3\xCA\xC5\xCD\xC3\xD8\xD9\xC7\xD5\xDA", "\xD4\xDB\xC2\xC0\xCF\xD0\xCE\xCB\xC4\xC6\xDD", "\xDF\xD7\xD1\xCC\xC8\xD2\xDC\xC1\xDE\xA8" };
         default:
@@ -248,6 +269,8 @@ namespace
         switch ( language ) {
         case fheroes2::SupportedLanguage::English:
             return { "qwertyuiop", "asdfghjkl", "zxcvbnm" };
+        case fheroes2::SupportedLanguage::Polish:
+            return { "\x9C\x9F\xB3\xB9\xBF\xE6\xEA\xF1\xF3", "qwertyuiop", "asdfghjkl", "zxcvbnm" };
         case fheroes2::SupportedLanguage::Russian:
             return { "\xE9\xF6\xF3\xEA\xE5\xED\xE3\xF8\xF9\xE7\xF5\xFA", "\xF4\xFB\xE2\xE0\xEF\xF0\xEE\xEB\xE4\xE6\xFD", "\xFF\xF7\xF1\xEC\xE8\xF2\xFC\xE1\xFE\xB8" };
         default:
@@ -287,6 +310,7 @@ namespace
         // We cannot expand the virtual keyboard window beyond 640 pixels but we can change the size of buttons.
         switch ( language ) {
         case fheroes2::SupportedLanguage::English:
+        case fheroes2::SupportedLanguage::Polish:
             return 30;
         case fheroes2::SupportedLanguage::Russian:
             return 24;
@@ -408,6 +432,7 @@ namespace
     {
         switch ( language ) {
         case fheroes2::SupportedLanguage::English:
+        case fheroes2::SupportedLanguage::Polish:
         case fheroes2::SupportedLanguage::Russian:
             addExtraStandardButtons( buttons, layoutType, isEvilInterface, isExtraLanguageSupported, language );
             break;
@@ -435,7 +460,7 @@ namespace
         }
 
         for ( int32_t & rowOffset : offsets ) {
-            rowOffset = ( windowSize.width - 2 * offsetFromWindowBorders.x - rowOffset ) / 2;
+            rowOffset = ( defaultWindowWidth - 2 * offsetFromWindowBorders.x - rowOffset ) / 2;
         }
 
         fheroes2::Rect roi{ offset.x + offsets.front(), offset.y, 1, 1 };
@@ -478,7 +503,7 @@ namespace
         }
 
         for ( int32_t & rowOffset : offsets ) {
-            rowOffset = ( windowSize.width - 2 * offsetFromWindowBorders.x - rowOffset ) / 2;
+            rowOffset = ( defaultWindowWidth - 2 * offsetFromWindowBorders.x - rowOffset ) / 2;
         }
 
         int32_t yOffset = offset.y;
@@ -528,12 +553,15 @@ namespace
     DialogAction processVirtualKeyboardEvent( const LayoutType layoutType, const fheroes2::SupportedLanguage language, const bool isExtraLanguageSupported,
                                               KeyboardRenderer & renderer )
     {
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
         std::vector<std::string> buttonLetters;
         std::vector<std::string> returnLetters;
 
         getCharacterLayout( layoutType, language, buttonLetters, returnLetters );
+
+        renderer.resize( { defaultWindowWidth,
+                           defaultWindowHeight + ( static_cast<int32_t>( buttonLetters.size() ) - defaultLetterRows ) * ( defaultButtonHeight + buttonOffset * 2 ) } );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         auto buttons = generateButtons( buttonLetters, returnLetters, layoutType, language, isEvilInterface );
         addExtraButtons( buttons, layoutType, language, isEvilInterface, isExtraLanguageSupported );
 
@@ -604,8 +632,7 @@ namespace fheroes2
             language = lastSelectedLanguage;
         }
 
-        KeyboardRenderer renderer( fheroes2::Display::instance(), output, Settings::Get().isEvilInterfaceEnabled() );
-        renderer.fullRender();
+        KeyboardRenderer renderer( fheroes2::Display::instance(), output, Settings::Get().isEvilInterfaceEnabled(), { defaultWindowWidth, defaultWindowHeight } );
 
         while ( action != DialogAction::Close ) {
             action = processVirtualKeyboardEvent( layoutType, language, isSupportedForLanguageSwitching( currentGameLanguage ), renderer );
