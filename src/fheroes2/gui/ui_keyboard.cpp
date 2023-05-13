@@ -105,8 +105,14 @@ namespace
             resize( size );
         }
 
-        const fheroes2::Rect & getWindowRoi() const
+        fheroes2::Rect getWindowRoi() const
         {
+            if ( !_window ) {
+                // You are calling this method for an empty renderer!
+                assert( 0 );
+                return {};
+            }
+
             return _window->activeArea();
         }
 
@@ -131,7 +137,7 @@ namespace
 
             renderInputArea();
 
-            _output.render( getWindowRoi() );
+            _output.render( _window->activeArea() );
         }
 
         void appendCharacter( const char character )
