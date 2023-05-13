@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-10 11:24+0000\n"
+"POT-Creation-Date: 2023-05-12 13:04+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -4866,9 +4866,6 @@ msgstr "123"
 
 msgid "Keyboard|SPACE"
 msgstr "SPACJA"
-
-msgid "Keyboard|LANG"
-msgstr "JĘZYK"
 
 msgid "Keyboard|ABC"
 msgstr "ABC"
@@ -10458,19 +10455,3 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} increases your morale."
-#~ msgstr "%{name} zwiększa twoje morale."
-
-#~ msgid "Attention"
-#~ msgstr "Uwaga"
-
-#~ msgid ""
-#~ "Your version of Heroes of Might and Magic II does not support any other "
-#~ "languages than English."
-#~ msgstr ""
-#~ "Twoja wersja gry Heroes of Might and Magic II wspiera tylko język "
-#~ "angielski."
-
-#~ msgid "Location: "
-#~ msgstr "Położenie pliku: "
