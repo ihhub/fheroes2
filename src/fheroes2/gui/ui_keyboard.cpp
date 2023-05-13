@@ -251,6 +251,7 @@ namespace
         case fheroes2::SupportedLanguage::Russian:
             return { "1234567890", "-:;()_+=", "[].,!'" };
         default:
+            // Did you add a new layout type? Add the logic above!
             assert( 0 );
             break;
         }
@@ -268,6 +269,7 @@ namespace
         case fheroes2::SupportedLanguage::Russian:
             return { "\xC9\xD6\xD3\xCA\xC5\xCD\xC3\xD8\xD9\xC7\xD5\xDA", "\xD4\xDB\xC2\xC0\xCF\xD0\xCE\xCB\xC4\xC6\xDD", "\xDF\xD7\xD1\xCC\xC8\xD2\xDC\xC1\xDE\xA8" };
         default:
+            // Did you add a new layout type? Add the logic above!
             assert( 0 );
             break;
         }
@@ -285,6 +287,7 @@ namespace
         case fheroes2::SupportedLanguage::Russian:
             return { "\xE9\xF6\xF3\xEA\xE5\xED\xE3\xF8\xF9\xE7\xF5\xFA", "\xF4\xFB\xE2\xE0\xEF\xF0\xEE\xEB\xE4\xE6\xFD", "\xFF\xF7\xF1\xEC\xE8\xF2\xFC\xE1\xFE\xB8" };
         default:
+            // Did you add a new layout type? Add the logic above!
             assert( 0 );
             break;
         }
