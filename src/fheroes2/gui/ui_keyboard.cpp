@@ -97,10 +97,10 @@ namespace
     class KeyboardRenderer
     {
     public:
-        KeyboardRenderer( fheroes2::Display & output, std::string & info, const bool isEvilInterface )
+        KeyboardRenderer( fheroes2::Display & output, std::string & info, const bool evilInterface )
             : _output( output )
             , _info( info )
-            , _isEvilInterface( isEvilInterface )
+            , _isEvilInterface( evilInterface )
         {
             // Do nothing.
         }
@@ -114,6 +114,11 @@ namespace
             }
 
             return _window->activeArea();
+        }
+
+        bool isEvilInterface() const
+        {
+            return _isEvilInterface;
         }
 
         void resize( const fheroes2::Size size )
@@ -567,7 +572,7 @@ namespace
         renderer.resize( { defaultWindowWidth,
                            defaultWindowHeight + ( static_cast<int32_t>( buttonLetters.size() ) - defaultLetterRows ) * ( defaultButtonHeight + buttonOffset * 2 ) } );
 
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        const bool isEvilInterface = renderer.isEvilInterface();
         auto buttons = generateButtons( buttonLetters, returnLetters, layoutType, language, isEvilInterface );
         addExtraButtons( buttons, layoutType, language, isEvilInterface, isExtraLanguageSupported );
 
