@@ -159,7 +159,7 @@ namespace
                                                                   MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::MAPPED ) };
 
         for ( size_t i = 0; i < musicFileTypes.size(); ++i ) {
-            const std::string fileName = tryMusicFileType( musicFileTypes[i] );
+            std::string fileName = tryMusicFileType( musicFileTypes[i] );
 
             if ( fileName.empty() ) {
                 continue;
