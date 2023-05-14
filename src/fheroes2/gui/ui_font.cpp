@@ -28,7 +28,6 @@
 
 #include "icn.h"
 #include "image.h"
-#include "image_tool.h"
 #include "math_base.h"
 
 namespace
@@ -1301,21 +1300,6 @@ namespace
             fheroes2::Copy( font[122 - 32], 2, 2, font[253 - 32], 4, 0, 2, 2 );
             font[253 - 32].setPosition( font[121 - 32].x(), font[121 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[253 - 32] );
-
-
-
-            fheroes2::Save( icnVsSprite[ICN::SMALFONT][157 - 32], std::to_string( 157 - 32 ) + ".bmp", 96 );
-            fheroes2::Save( icnVsSprite[ICN::SMALFONT][190 - 32], std::to_string( 190 - 32 ) + ".bmp", 96 );
-            fheroes2::Save( icnVsSprite[ICN::SMALFONT][192 - 32], std::to_string( 192 - 32 ) + ".bmp", 96 );
-            fheroes2::Save( icnVsSprite[ICN::SMALFONT][194 - 32], std::to_string( 194 - 32 ) + ".bmp", 96 );
-            fheroes2::Save( icnVsSprite[ICN::SMALFONT][196 - 32], std::to_string( 196 - 32 ) + ".bmp", 96 );
-            fheroes2::Save( icnVsSprite[ICN::SMALFONT][197 - 32], std::to_string( 197 - 32 ) + ".bmp", 96 );
-            fheroes2::Save( icnVsSprite[ICN::SMALFONT][212 - 32], std::to_string( 212 - 32 ) + ".bmp", 96 );
-            fheroes2::Save( icnVsSprite[ICN::SMALFONT][224 - 32], std::to_string( 224 - 32 ) + ".bmp", 96 );
-            fheroes2::Save( icnVsSprite[ICN::SMALFONT][228 - 32], std::to_string( 228 - 32 ) + ".bmp", 96 );
-            fheroes2::Save( icnVsSprite[ICN::SMALFONT][229 - 32], std::to_string( 229 - 32 ) + ".bmp", 96 );
-            fheroes2::Save( icnVsSprite[ICN::SMALFONT][226 - 32], std::to_string( 226 - 32 ) + ".bmp", 96 );
-            fheroes2::Save( icnVsSprite[ICN::SMALFONT][244 - 32], std::to_string( 244 - 32 ) + ".bmp", 96 );
 
         }
 
