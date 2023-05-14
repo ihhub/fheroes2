@@ -208,6 +208,7 @@ namespace Battle
         enum
         {
             CATAPULT_POS = 77,
+            CASTLE_BRIDGE_POS = 49,
             CASTLE_GATE_POS = 50,
             CASTLE_FIRST_TOP_WALL_POS = 8,
             CASTLE_SECOND_TOP_WALL_POS = 29,
@@ -216,8 +217,7 @@ namespace Battle
             CASTLE_TOP_ARCHER_TOWER_POS = 19,
             CASTLE_BOTTOM_ARCHER_TOWER_POS = 85,
             CASTLE_TOP_GATE_TOWER_POS = 40,
-            CASTLE_BOTTOM_GATE_TOWER_POS = 62,
-            CASTLE_BRIDGE_POS = 49
+            CASTLE_BOTTOM_GATE_TOWER_POS = 62
         };
 
     private:

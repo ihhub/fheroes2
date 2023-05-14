@@ -346,7 +346,7 @@ namespace Battle
         fheroes2::Point drawTroopSprite( const Unit & unit, const fheroes2::Sprite & troopSprite );
 
         void RedrawTroopCount( const Unit & unit );
-        void RedrawTroopMoat( const uint8_t moatCellId, const Unit & unit );
+        void RedrawTroopMoat( const int32_t moatCellId, const Unit & unit );
 
         void RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker = nullptr, const Unit * defender = nullptr );
         void RedrawActionArrowSpell( const Unit & );
