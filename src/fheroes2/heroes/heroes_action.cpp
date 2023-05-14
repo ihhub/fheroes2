@@ -119,6 +119,11 @@ namespace
                 return;
             }
 
+            // If there is no external music file for this effect, there is no point in continuing
+            if ( !AudioManager::isExternalMusicFileAvailable( trackId ) ) {
+                return;
+            }
+
             // "Musical" sound effects should use the volume of the sound effects instead of the volume of the music
             const int soundVolume = conf.SoundVolume();
 
