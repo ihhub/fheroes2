@@ -749,7 +749,6 @@ namespace
             fheroes2::Copy( font[140 - 32], 4, 0, font[253 - 32], 5, 0, 3, 2 );
             font[253 - 32].setPosition( font[121 - 32].x(), font[121 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[253 - 32] );
-
         }
         // Small font.
         {
