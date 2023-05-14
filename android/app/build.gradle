@@ -80,7 +80,8 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.0.3'
+    // TODO: version 2.0.3 does not emulate java.nio properly on Android 7 and below
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.0.2'
 
     implementation project(':isotools')
     implementation project(':sdl2')
