@@ -4844,7 +4844,7 @@ namespace
         released[203 - 32].resize( released[69 - 32].width(), released[69 - 32].height() + 3 );
         released[203 - 32].reset();
         fheroes2::Copy( released[69 - 32], 0, 0, released[203 - 32], 0, 3, released[69 - 32].width(), released[69 - 32].height() );
-        fheroes2::DrawLine( released[203 - 32], { offset + 3, offset + 1 }, { offset + 4, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[203 - 32], { offset + 2, offset + 1 }, { offset + 3, offset + 1 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[203 - 32], { offset + 6, offset + 1 }, { offset + 7, offset + 1 }, buttonGoodReleasedColor );
 
         // E with caron.
