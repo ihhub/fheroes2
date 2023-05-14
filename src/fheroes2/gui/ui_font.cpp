@@ -28,6 +28,7 @@
 
 #include "icn.h"
 #include "image.h"
+#include "image_tool.h"
 #include "math_base.h"
 
 namespace
@@ -211,11 +212,14 @@ namespace
             updateNormalFontLetterShadow( font[156 - 32] );
 
             // Lowercase t with caron
-            font[157 - 32].resize( font[116 - 32].width(), font[116 - 32].height() + 3 );
+            font[157 - 32].resize( font[116 - 32].width(), font[116 - 32].height() + 1 );
             font[157 - 32].reset();
-            fheroes2::Copy( font[116 - 32], 0, 0, font[157 - 32], 0, 3, font[116 - 32].width(), font[116 - 32].height() );
-            fheroes2::Copy( font[138 - 32], 4, 0, font[157 - 32], 1, 0, 3, 2 );
-            font[157 - 32].setPosition( font[116 - 32].x(), font[116 - 32].y() - 3 );
+            fheroes2::Copy( font[116 - 32], 0, 0, font[157 - 32], 0, 1, font[116 - 32].width(), font[116 - 32].height() );
+            fheroes2::Copy( font[65], 1, 1, font[157 - 32], 5, 1, 1, 1 );
+            fheroes2::Copy( font[65], 1, 1, font[157 - 32], 6, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[157 - 32], 4, 1, 1, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[157 - 32], 5, 0, 1, 1 );
+            font[157 - 32].setPosition( font[116 - 32].x(), font[116 - 32].y() - 1 );
             updateNormalFontLetterShadow( font[157 - 32] );
 
             // Lowercase z with caron
@@ -301,6 +305,19 @@ namespace
             // Shadows are already made for the ogonek.
             fheroes2::Copy( font[165 - 32], 10, 11, font[185 - 32], 5, 7, 5, 5 );
 
+            // Uppercase L with caron
+            font[190 - 32].resize( font[76 - 32].width(), font[76 - 32].height() + 1 );
+            font[190 - 32].reset();
+            fheroes2::Copy( font[76 - 32], 0, 0, font[190 - 32], 0, 1, font[76 - 32].width(), font[76 - 32].height() );
+            fheroes2::Copy( font[65], 1, 1, font[190 - 32], 9, 1, 1, 1 );
+            fheroes2::Copy( font[65], 1, 1, font[190 - 32], 10, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 1, font[190 - 32], 8, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[190 - 32], 8, 1, 1, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[190 - 32], 9, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[190 - 32], 7, 0, 1, 1 );
+            font[190 - 32].setPosition( font[76 - 32].x(), font[76 - 32].y() - 1 );
+            updateNormalFontLetterShadow( font[190 - 32] );
+
             // Lowercase z with dot above
             font[191 - 32].resize( font[122 - 32].width(), font[122 - 32].height() + 3 );
             font[191 - 32].reset();
@@ -309,6 +326,14 @@ namespace
             font[191 - 32].setPosition( font[122 - 32].x(), font[122 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[191 - 32] );
 
+            // Uppercase R with acute
+            font[192 - 32].resize( font[82 - 32].width(), font[82 - 32].height() + 3 );
+            font[192 - 32].reset();
+            fheroes2::Copy( font[82 - 32], 0, 0, font[192 - 32], 0, 3, font[82 - 32].width(), font[82 - 32].height() );
+            fheroes2::Copy( font[140 - 32], 4, 0, font[192 - 32], 7, 0, 3, 2 );
+            font[192 - 32].setPosition( font[82 - 32].x(), font[82 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[192 - 32] );
+
             // Uppercase A with acute
             font[193 - 32].resize( font[65 - 32].width(), font[65 - 32].height() + 3 );
             font[193 - 32].reset();
@@ -316,6 +341,35 @@ namespace
             fheroes2::Copy( font[140 - 32], 4, 0, font[193 - 32], 7, 0, 3, 2 );
             font[193 - 32].setPosition( font[65 - 32].x(), font[65 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[193 - 32] );
+
+            // Uppercase A with circumflex
+            font[194 - 32].resize( font[65 - 32].width(), font[65 - 32].height() + 3 );
+            font[194 - 32].reset();
+            fheroes2::Copy( font[65 - 32], 0, 0, font[194 - 32], 0, 3, font[65 - 32].width(), font[65 - 32].height() );
+            fheroes2::Copy( font[97 - 32], 7, 1, font[194 - 32], 7, 1, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 7, 1, font[194 - 32], 8, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 7, 1, font[194 - 32], 9, 1, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 1, 0, font[194 - 32], 7, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 1, 0, font[194 - 32], 9, 0, 1, 1 );
+            font[194 - 32].setPosition( font[65 - 32].x(), font[65 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[194 - 32] );
+
+            // Uppercase A with diaeresis
+            font[196 - 32].resize( font[65 - 32].width(), font[65 - 32].height() + 3 );
+            font[196 - 32].reset();
+            fheroes2::Copy( font[65 - 32], 0, 0, font[196 - 32], 0, 3, font[65 - 32].width(), font[65 - 32].height() );
+            fheroes2::Copy( font[175 - 32], 5, 0, font[196 - 32], 5, 0, 2, 2 );
+            fheroes2::Copy( font[175 - 32], 5, 0, font[196 - 32], 10, 0, 2, 2 );
+            font[196 - 32].setPosition( font[65 - 32].x(), font[65 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[196 - 32] );
+
+            // Uppercase L with acute
+            font[197 - 32].resize( font[76 - 32].width(), font[76 - 32].height() + 3 );
+            font[197 - 32].reset();
+            fheroes2::Copy( font[76 - 32], 0, 0, font[197 - 32], 0, 3, font[76 - 32].width(), font[76 - 32].height() );
+            fheroes2::Copy( font[140 - 32], 4, 0, font[197 - 32], 8, 0, 3, 2 );
+            font[197 - 32].setPosition( font[76 - 32].x(), font[76 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[197 - 32] );
 
             // Uppercase C with acute
             font[198 - 32].resize( font[67 - 32].width(), font[67 - 32].height() + 3 );
@@ -397,6 +451,14 @@ namespace
             fheroes2::Copy( font[140 - 32], 4, 0, font[211 - 32], 8, 0, 3, 2 );
             font[211 - 32].setPosition( font[79 - 32].x(), font[79 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[211 - 32] );
+
+            // Uppercase O with circumflex
+            font[212 - 32].resize( font[79 - 32].width(), font[79 - 32].height() + 3 );
+            font[212 - 32].reset();
+            fheroes2::Copy( font[79 - 32], 0, 0, font[212 - 32], 0, 3, font[79 - 32].width(), font[79 - 32].height() );
+            fheroes2::Copy( font[194 - 32], 7, 0, font[212 - 32], 7, 0, 3, 2 );
+            font[212 - 32].setPosition( font[79 - 32].x(), font[79 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[212 - 32] );
 
             // Uppercase O with double acute
             font[213 - 32].resize( font[79 - 32].width(), font[79 - 32].height() + 3 );
@@ -1080,6 +1142,21 @@ namespace
             font[253 - 32].setPosition( font[121 - 32].x(), font[121 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[253 - 32] );
         }
+
+        /*
+        for ( size_t i = 0; i < icnVsSprite[ICN::FONT].size(); ++i ) {
+            fheroes2::Save( icnVsSprite[ICN::FONT][i], std::to_string( i ) + ".bmp", 96 );
+        }
+        */
+
+        fheroes2::Save( icnVsSprite[ICN::FONT][157 - 32], std::to_string( 157 - 32 ) + ".bmp", 96 );
+        fheroes2::Save( icnVsSprite[ICN::FONT][190 - 32], std::to_string( 190 - 32 ) + ".bmp", 96 );
+        fheroes2::Save( icnVsSprite[ICN::FONT][192 - 32], std::to_string( 192 - 32 ) + ".bmp", 96 );
+        fheroes2::Save( icnVsSprite[ICN::FONT][194 - 32], std::to_string( 194 - 32 ) + ".bmp", 96 );
+        fheroes2::Save( icnVsSprite[ICN::FONT][196 - 32], std::to_string( 196 - 32 ) + ".bmp", 96 );
+        fheroes2::Save( icnVsSprite[ICN::FONT][197 - 32], std::to_string( 197 - 32 ) + ".bmp", 96 );
+        fheroes2::Save( icnVsSprite[ICN::FONT][212 - 32], std::to_string( 212 - 32 ) + ".bmp", 96 );
+
     }
 
     void generateFrenchAlphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
