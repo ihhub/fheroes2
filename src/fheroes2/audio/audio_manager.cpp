@@ -109,17 +109,11 @@ namespace
             return {};
         }
 
-        thread_local std::map<int, std::optional<std::string>> musicTrackIdToFilePath;
+        thread_local std::map<int, std::string> musicTrackIdToFilePath;
 
         const auto iter = musicTrackIdToFilePath.find( musicTrackId );
         if ( iter != musicTrackIdToFilePath.end() ) {
-            // Positive cache hit
-            if ( iter->second ) {
-                return *( iter->second );
-            }
-
-            // Negative cache hit
-            return {};
+            return iter->second;
         }
 
         auto tryMusicFileType = [musicTrackId]( MusicFileType & musicFileType ) -> std::string {
@@ -172,7 +166,7 @@ namespace
         }
 
         // Place the negative result to the cache
-        musicTrackIdToFilePath.emplace( musicTrackId, std::nullopt );
+        musicTrackIdToFilePath.emplace( musicTrackId, std::string{} );
 
         return {};
     }
