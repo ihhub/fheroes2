@@ -29,6 +29,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <iostream>
 
 #include "agg_image.h"
 #include "army.h"
@@ -244,14 +245,44 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
+    // Strategy for adding shadow is lifted from
+    // Dialog::RecruitMonster.
+
     const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+    const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::SWAPWIN, 1);
     const fheroes2::Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
-    fheroes2::ImageRestorer restorer( display, cur_pt.x, cur_pt.y, backSprite.width(), backSprite.height() );
+    const fheroes2::Point shadow_pt( cur_pt.x - BORDERWIDTH, cur_pt.y + BORDERWIDTH);
 
     fheroes2::Rect src_rt( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
+    // include shadow
+    std::cout << "restorer(display=" << &display
+              << ", x=" << shadow_pt.x
+              << ", y=" << shadow_pt.y
+              << ", w=" << backSprite.width() + BORDERWIDTH
+              << ", h=" << backSprite.height() + BORDERWIDTH
+              << ")\n";
+    fheroes2::ImageRestorer restorer( display, shadow_pt.x, shadow_pt.y, backSprite.width() + BORDERWIDTH, backSprite.height() + BORDERWIDTH);
+
+    // shadow comes first
+    std::cout << "Blit(boxShadow=" << &boxShadow
+              << ", display=" << &display
+              << ", x=" << shadow_pt.x
+              << ", y=" << shadow_pt.y
+              << ")\n";
+    fheroes2::Blit( boxShadow, display, shadow_pt.x, shadow_pt.y );
+
     // background
     fheroes2::Point dst_pt( cur_pt );
+    std::cout << "Blit(backSprite=" << &backSprite
+              << ", xoff=" << src_rt.x
+              << ", yoff=" << src_rt.y
+              << ", display=" << &display
+              << ", x=" << dst_pt.x
+              << ", y=" << dst_pt.y
+              << ", w=" << src_rt.width
+              << ", h=" << src_rt.height
+              << ")\n";
     fheroes2::Blit( backSprite, src_rt.x, src_rt.y, display, dst_pt.x, dst_pt.y, src_rt.width, src_rt.height );
 
     // header
