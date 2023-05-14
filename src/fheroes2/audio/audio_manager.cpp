@@ -63,21 +63,6 @@ namespace
 
     bool findMusicFile( const std::vector<std::string> & directories, const std::string & fileName, std::string & fullPath )
     {
-        thread_local std::map<std::string, std::optional<std::string>> fileNameToFullPath;
-
-        const auto iter = fileNameToFullPath.find( fileName );
-        if ( iter != fileNameToFullPath.end() ) {
-            // Positive cache hit
-            if ( iter->second ) {
-                fullPath = *( iter->second );
-
-                return true;
-            }
-
-            // Negative cache hit
-            return false;
-        }
-
         for ( const std::string & dir : directories ) {
             ListFiles musicFilePaths;
 
@@ -96,15 +81,9 @@ namespace
                 // Avoid string copy.
                 std::swap( fullPath, path );
 
-                // Place the full path to the cache
-                fileNameToFullPath.emplace( fileName, fullPath );
-
                 return true;
             }
         }
-
-        // Place the negative result to the cache
-        fileNameToFullPath.emplace( fileName, std::nullopt );
 
         return false;
     }
@@ -127,6 +106,19 @@ namespace
 
         if ( musicDirectories.empty() ) {
             // Nothing to search.
+            return {};
+        }
+
+        thread_local std::map<int, std::optional<std::string>> musicTrackIdToFilePath;
+
+        const auto iter = musicTrackIdToFilePath.find( musicTrackId );
+        if ( iter != musicTrackIdToFilePath.end() ) {
+            // Positive cache hit
+            if ( iter->second ) {
+                return *( iter->second );
+            }
+
+            // Negative cache hit
             return {};
         }
 
@@ -162,9 +154,9 @@ namespace
                                                                   MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::MAPPED ) };
 
         for ( size_t i = 0; i < musicFileTypes.size(); ++i ) {
-            std::string fileName = tryMusicFileType( musicFileTypes[i] );
+            std::string filePath = tryMusicFileType( musicFileTypes[i] );
 
-            if ( fileName.empty() ) {
+            if ( filePath.empty() ) {
                 continue;
             }
 
@@ -173,8 +165,14 @@ namespace
                 std::swap( musicFileTypes[0], musicFileTypes[i] );
             }
 
-            return fileName;
+            // Place the path to the cache
+            musicTrackIdToFilePath.emplace( musicTrackId, filePath );
+
+            return filePath;
         }
+
+        // Place the negative result to the cache
+        musicTrackIdToFilePath.emplace( musicTrackId, std::nullopt );
 
         return {};
     }
@@ -573,13 +571,13 @@ namespace
         }
 
         if ( musicType == MUSIC_EXTERNAL ) {
-            const std::string fileName = getExternalMusicFile( trackId );
+            const std::string filePath = getExternalMusicFile( trackId );
 
-            if ( fileName.empty() ) {
+            if ( filePath.empty() ) {
                 DEBUG_LOG( DBG_GAME, DBG_WARN, "Cannot find a file for " << trackId << " track." )
             }
             else {
-                Music::Play( musicUID, fileName, playbackMode );
+                Music::Play( musicUID, filePath, playbackMode );
 
                 currentMusicTrackId = trackId;
 
