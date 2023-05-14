@@ -122,25 +122,25 @@ namespace
             return {};
         }
 
-        auto tryMusicFileType = [musicTrackId]( MusicFileType & musicType ) -> std::string {
+        auto tryMusicFileType = [musicTrackId]( MusicFileType & musicFileType ) -> std::string {
             std::string fullPath;
 
-            std::string fileName = MUS::getFileName( musicTrackId, musicType.type, musicType.extension[0].c_str() );
+            std::string fileName = MUS::getFileName( musicTrackId, musicFileType.type, musicFileType.extension[0].c_str() );
             if ( findMusicFile( musicDirectories, fileName, fullPath ) ) {
                 return fullPath;
             }
 
-            fheroes2::replaceStringEnding( fileName, musicType.extension[0].c_str(), musicType.extension[1].c_str() );
+            fheroes2::replaceStringEnding( fileName, musicFileType.extension[0].c_str(), musicFileType.extension[1].c_str() );
             if ( findMusicFile( musicDirectories, fileName, fullPath ) ) {
                 // Swap extensions to improve cache hit.
-                std::swap( musicType.extension[0], musicType.extension[1] );
+                std::swap( musicFileType.extension[0], musicFileType.extension[1] );
                 return fullPath;
             }
 
-            fheroes2::replaceStringEnding( fileName, musicType.extension[1].c_str(), musicType.extension[2].c_str() );
+            fheroes2::replaceStringEnding( fileName, musicFileType.extension[1].c_str(), musicFileType.extension[2].c_str() );
             if ( findMusicFile( musicDirectories, fileName, fullPath ) ) {
                 // Swap extensions to improve cache hit.
-                std::swap( musicType.extension[0], musicType.extension[2] );
+                std::swap( musicFileType.extension[0], musicFileType.extension[2] );
                 return fullPath;
             }
 
