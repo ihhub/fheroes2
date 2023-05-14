@@ -61,33 +61,21 @@ namespace
         std::array<std::string, 3> extension{ ".ogg", ".mp3", ".flac" };
     };
 
-    const std::vector<std::string> & getMusicDirectories()
-    {
-        static const std::vector<std::string> directories = []() {
-            std::vector<std::string> result;
-
-            for ( const std::string & dir : Settings::GetRootDirs() ) {
-                std::string fullDirectoryPath = System::concatPath( dir, "music" );
-
-                if ( System::IsDirectory( fullDirectoryPath ) ) {
-                    result.emplace_back( std::move( fullDirectoryPath ) );
-                }
-            }
-
-            return result;
-        }();
-
-        return directories;
-    }
-
     bool findMusicFile( const std::vector<std::string> & directories, const std::string & fileName, std::string & fullPath )
     {
-        thread_local std::map<std::string, std::string> fileNameToFullPath;
+        thread_local std::map<std::string, std::optional<std::string>> fileNameToFullPath;
 
         const auto iter = fileNameToFullPath.find( fileName );
         if ( iter != fileNameToFullPath.end() ) {
-            fullPath = iter->second;
-            return true;
+            // Positive cache hit
+            if ( iter->second ) {
+                fullPath = *( iter->second );
+
+                return true;
+            }
+
+            // Negative cache hit
+            return false;
         }
 
         for ( const std::string & dir : directories ) {
@@ -115,19 +103,34 @@ namespace
             }
         }
 
+        // Place the negative result to the cache
+        fileNameToFullPath.emplace( fileName, std::nullopt );
+
         return false;
     }
 
     std::string getExternalMusicFile( const int musicTrackId )
     {
-        const std::vector<std::string> & musicDirectories = getMusicDirectories();
+        static const std::vector<std::string> musicDirectories = []() {
+            std::vector<std::string> result;
+
+            for ( const std::string & dir : Settings::GetRootDirs() ) {
+                std::string fullDirectoryPath = System::concatPath( dir, "music" );
+
+                if ( System::IsDirectory( fullDirectoryPath ) ) {
+                    result.emplace_back( std::move( fullDirectoryPath ) );
+                }
+            }
+
+            return result;
+        }();
 
         if ( musicDirectories.empty() ) {
             // Nothing to search.
             return {};
         }
 
-        auto tryMusicFileType = [musicTrackId, &musicDirectories]( MusicFileType & musicType ) -> std::string {
+        auto tryMusicFileType = [musicTrackId]( MusicFileType & musicType ) -> std::string {
             std::string fullPath;
 
             std::string fileName = MUS::getFileName( musicTrackId, musicType.type, musicType.extension[0].c_str() );
