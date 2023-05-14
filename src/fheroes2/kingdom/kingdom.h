@@ -95,7 +95,7 @@ public:
     // cannot be upgraded to a castle.
     bool canRecruitHeroes() const
     {
-        return std::any_of( castles.begin(), castles.end(), []( Castle * castle ) { return ( castle->isCastle() || castle->Modes( Castle::ALLOWCASTLE ) ); } );
+        return std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return ( castle->isCastle() || castle->Modes( Castle::ALLOWCASTLE ) ); } );
     }
 
     // Return true if this kingdom has any heroes, false otherwise.
