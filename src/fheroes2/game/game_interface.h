@@ -179,9 +179,9 @@ namespace Interface
             return controlPanel;
         }
 
-        void SetFocus( Heroes * );
+        void SetFocus( Heroes *, const bool retainScrollBarPosition );
         void SetFocus( Castle * );
-        void ResetFocus( int );
+        void ResetFocus( const int priority, const bool retainScrollBarPosition );
         void RedrawFocus();
         void updateFocus();
 

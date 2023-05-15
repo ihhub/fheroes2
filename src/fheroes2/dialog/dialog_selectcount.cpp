@@ -46,10 +46,13 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_keyboard.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 
 namespace
 {
+    const int32_t textOffset = 24;
+
     void SwitchMaxMinButtons( fheroes2::ButtonBase & minButton, fheroes2::ButtonBase & maxButton, uint32_t currentValue, uint32_t minimumValue )
     {
         const bool isMinValue = ( currentValue <= minimumValue );
@@ -263,9 +266,9 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     fheroes2::Blit( inputArea, display, dst_pt.x, dst_pt.y );
     const fheroes2::Rect text_rt( dst_pt.x, dst_pt.y, inputArea.width(), inputArea.height() );
 
-    Text text( "_", Font::BIG );
+    fheroes2::Text text( "_", fheroes2::FontType::normalWhite() );
     fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
-    text.Blit( dst_pt.x + ( inputArea.width() - text.w() ) / 2, dst_pt.y - 1 );
+    text.draw( dst_pt.x + ( inputArea.width() - text.width() ) / 2, dst_pt.y + 1, display );
 
     const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
@@ -306,7 +309,6 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
     const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
-    // message loop
     while ( le.HandleEvents() ) {
         bool redraw = false;
 
@@ -325,6 +327,9 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
         if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( text_rt ) ) ) {
             fheroes2::openVirtualKeyboard( res );
+            if ( charLimit > 0 && res.size() > charLimit ) {
+                res.resize( charLimit );
+            }
             charInsertPos = res.size();
             redraw = true;
         }
@@ -356,13 +361,12 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
                 buttonOk.draw();
             }
 
-            text.Set( InsertString( res, charInsertPos, "_" ) );
+            text.set( InsertString( res, charInsertPos, "_" ), fheroes2::FontType::normalWhite() );
+            text.fitToOneRow( inputArea.width() - textOffset );
 
-            if ( text.w() < inputArea.width() - 24 ) {
-                fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
-                text.Blit( text_rt.x + ( text_rt.width - text.w() ) / 2, text_rt.y + 1 );
-                display.render();
-            }
+            fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
+            text.draw( text_rt.x + ( text_rt.width - text.width() ) / 2, text_rt.y + 3, display );
+            display.render();
         }
     }
 

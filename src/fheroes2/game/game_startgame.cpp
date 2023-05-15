@@ -239,7 +239,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
 
     if ( updateFocus ) {
         if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
-            basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
+            basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore], false );
         }
         else if ( it != myCastles.end() ) {
             Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).GetHeroes();
@@ -247,11 +247,11 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
                 basicInterface.SetFocus( *it );
             }
             else {
-                basicInterface.SetFocus( heroInCastle );
+                basicInterface.SetFocus( heroInCastle, false );
             }
         }
         else {
-            basicInterface.ResetFocus( GameFocus::HEROES );
+            basicInterface.ResetFocus( GameFocus::HEROES, false );
         }
     }
     else {
@@ -320,10 +320,10 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 
     if ( updateFocus ) {
         if ( it != myHeroes.end() ) {
-            basicInterface.SetFocus( *it );
+            basicInterface.SetFocus( *it, false );
         }
         else {
-            basicInterface.ResetFocus( GameFocus::HEROES );
+            basicInterface.ResetFocus( GameFocus::HEROES, false );
         }
     }
 
@@ -819,7 +819,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
         updateFocus();
     }
     else {
-        ResetFocus( GameFocus::FIRSTHERO );
+        ResetFocus( GameFocus::FIRSTHERO, false );
     }
 
     radar.SetHide( false );
@@ -1157,7 +1157,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                             Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
 
                             gameArea.SetCenter( hero->GetCenter() );
-                            ResetFocus( GameFocus::HEROES );
+                            ResetFocus( GameFocus::HEROES, true );
 
                             RedrawFocus();
 
@@ -1179,7 +1179,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                                 gameArea.ShiftCenter( movement );
 
                                 Game::SetUpdateSoundsOnFocusUpdate( false );
-                                ResetFocus( GameFocus::HEROES );
+                                ResetFocus( GameFocus::HEROES, true );
                                 Game::SetUpdateSoundsOnFocusUpdate( true );
                                 heroAnimationFrameCount = 32 - heroMovementSkipValue;
                                 heroAnimationSpriteId = hero->GetSpriteIndex();
@@ -1301,7 +1301,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
         // focus change/open hero
         if ( nullptr != to_hero ) {
             if ( !from_hero || from_hero != to_hero ) {
-                SetFocus( to_hero );
+                SetFocus( to_hero, false );
                 CalculateHeroPath( to_hero, -1 );
                 RedrawFocus();
             }
