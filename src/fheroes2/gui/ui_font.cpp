@@ -304,7 +304,7 @@ namespace
             // Shadows are already made for the ogonek.
             fheroes2::Copy( font[165 - 32], 10, 11, font[185 - 32], 5, 7, 5, 5 );
 
-            // Uppercase L with caron
+            // Uppercase L with caron (NOT an uppercase Y with diaeresis)
             font[188 - 32].resize( font[76 - 32].width(), font[76 - 32].height() + 1 );
             font[188 - 32].reset();
             fheroes2::Copy( font[76 - 32], 0, 0, font[188 - 32], 0, 1, font[76 - 32].width(), font[76 - 32].height() );
@@ -317,7 +317,7 @@ namespace
             font[188 - 32].setPosition( font[76 - 32].x(), font[76 - 32].y() - 1 );
             updateNormalFontLetterShadow( font[188 - 32] );
 
-            // Lowercase l with caron
+            // Lowercase l with caron (NOT an uppercase L with caron)
             font[190 - 32].resize( font[108 - 32].width() + 2, font[108 - 32].height() );
             font[190 - 32].reset();
             fheroes2::Copy( font[108 - 32], 0, 0, font[190 - 32], 0, 0, font[108 - 32].width(), font[108 - 32].height() );
@@ -888,7 +888,7 @@ namespace
             font[185 - 32].setPosition( font[97 - 32].x(), font[97 - 32].y() );
             updateSmallFontLetterShadow( font[185 - 32] );
 
-            // Uppercase L with caron
+            // Uppercase L with caron (NOT an uppercase Y with diaeresis)
             font[188 - 32].resize( font[76 - 32].width(), font[76 - 32].height() + 3 );
             font[188 - 32].reset();
             fheroes2::Copy( font[76 - 32], 0, 0, font[188 - 32], 0, 3, font[76 - 32].width(), font[76 - 32].height() );
@@ -896,7 +896,7 @@ namespace
             font[188 - 32].setPosition( font[76 - 32].x(), font[76 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[188 - 32] );
 
-            // Lowercase l with caron
+            // Lowercase l with caron (NOT an uppercase L with caron)
             font[190 - 32].resize( font[108 - 32].width() + 1, font[108 - 32].height() );
             font[190 - 32].reset();
             fheroes2::Copy( font[108 - 32], 0, 0, font[190 - 32], 0, 0, font[108 - 32].width(), font[108 - 32].height() );
