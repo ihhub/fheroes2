@@ -28,7 +28,6 @@
 
 #include "icn.h"
 #include "image.h"
-#include "image_tool.h"
 #include "math_base.h"
 
 namespace
