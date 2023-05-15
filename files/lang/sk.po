@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 13:04+0000\n"
-"PO-Revision-Date: 2023-05-07 14:40+0200\n"
+"PO-Revision-Date: 2023-05-13 15:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? "
 "1 : 2 );\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3\n"
 
 msgid ""
 "BATTLE\n"
@@ -342,8 +342,8 @@ msgstr "Nastav počet"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
-msgstr[0] "%{name} zničili polovicu nepriateľov!"
-msgstr[1] "%{name} zničil polovicu nepriateľov!"
+msgstr[0] "%{name} zničil polovicu nepriateľov!"
+msgstr[1] "%{name} zničili polovicu nepriateľov!"
 msgstr[2] "%{name} zničili polovicu nepriateľov!"
 
 msgid "%{name} has turned off the auto battle"
@@ -625,9 +625,9 @@ msgstr "Strel do: %{monster}"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
-msgstr[0] "(ostáva %{count} striel)"
-msgstr[1] "(ostáva posledná strela)"
-msgstr[2] "(ostávajú %{count} strely)"
+msgstr[0] "(ostáva posledná strela)"
+msgstr[1] "(ostávajú %{count} strely)"
+msgstr[2] "(ostáva %{count} striel)"
 
 msgid "Attack %{monster}"
 msgstr "Útok na: %{monster}"
@@ -719,33 +719,33 @@ msgstr "%{name} vynecháva kolo."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] "%{attacker} pôsobia %{damage} škôd."
-msgstr[1] "%{attacker} pôsobí %{damage} škôd."
+msgstr[0] "%{attacker} pôsobí %{damage} škôd."
+msgstr[1] "%{attacker} pôsobia %{damage} škôd."
 msgstr[2] "%{attacker} pôsobia %{damage} škôd."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
-msgstr[0] "%{count} bojovníkov zahynulo."
-msgstr[1] "Jeden bojovník zahynul."
-msgstr[2] "%{count} bojovníci zahynuli."
+msgstr[0] "Jeden bojovník zahynul."
+msgstr[1] "%{count} bojovníci zahynuli."
+msgstr[2] "%{count} bojovníkov zahynulo."
 
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
-msgstr[0] "%{count} %{defender} zahynulo."
-msgstr[1] "Jeden %{defender} zahynul/a."
-msgstr[2] "%{count} %{defender} zahynuli."
+msgstr[0] "Jeden %{defender} zahynul/a."
+msgstr[1] "%{count} %{defender} zahynuli."
+msgstr[2] "%{count} %{defender} zahynulo."
 
 msgid "1 soul is incorporated."
 msgid_plural "%{count} souls are incorporated."
-msgstr[0] "%{count} duší je začlenených."
-msgstr[1] "Jedna duša je začlenená."
-msgstr[2] "%{count} duše sú začlenené."
+msgstr[0] "Jedna duša je začlenená."
+msgstr[1] "%{count} duše sú začlenené."
+msgstr[2] "%{count} duší je začlenených."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
-msgstr[0] "%{count} %{unit} je oživených."
-msgstr[1] "1 %{unit} je oživený/á."
-msgstr[2] "%{count} %{unit} sú oživení/é."
+msgstr[0] "1 %{unit} je oživený/á."
+msgstr[1] "%{count} %{unit} sú oživení/é."
+msgstr[2] "%{count} %{unit} je oživených."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Presun - %{monster}: od [%{src}] na [%{dst}]."
@@ -911,8 +911,8 @@ msgstr ""
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
 msgstr[0] "%{count} %{name} vstáva z mŕtvych!"
-msgstr[1] "%{count} %{name} vstáva z mŕtvych!"
-msgstr[2] "%{count} %{name} vstávajú z mŕtvych!"
+msgstr[1] "%{count} %{name} vstávajú z mŕtvych!"
+msgstr[2] "%{count} %{name} vstáva z mŕtvych!"
 
 msgid "Dwarven Alliance"
 msgstr "Aliancia trpaslíkov"
@@ -2669,17 +2669,16 @@ msgid "Are you sure you want to dismiss this army?"
 msgstr "Určite chceš prepustiť túto armádu?"
 
 msgid "Upgrade"
-msgstr ""
+msgstr "Povýš"
 
-#, fuzzy
 msgid "Upgrade your troops."
-msgstr "Nemôžeš si dovoliť povýšiť svoje jednotky!"
+msgstr "Povýš svoje jednotky."
 
 msgid "Dismiss"
-msgstr ""
+msgstr "Prepusti"
 
 msgid "Dismiss this army."
-msgstr ""
+msgstr "Prepusti túto armádu."
 
 msgid "Followers"
 msgstr "Nasledovníci"
@@ -3035,7 +3034,7 @@ msgid "(not visited)"
 msgstr "(nenavštívené)"
 
 msgid "%{color} Barrier"
-msgstr "%{color} taras"
+msgstr "%{color} bariéra"
 
 msgid "%{color} Tent"
 msgstr "%{color} stan"
@@ -3414,22 +3413,22 @@ msgid "Knowl"
 msgstr "Ved."
 
 msgid "1st"
-msgstr ""
+msgstr "Prvý"
 
 msgid "2nd"
-msgstr ""
+msgstr "Druhý"
 
 msgid "3rd"
-msgstr ""
+msgstr "Tretí"
 
 msgid "4th"
-msgstr ""
+msgstr "Štvrtý"
 
 msgid "5th"
-msgstr ""
+msgstr "Piaty"
 
 msgid "6th"
-msgstr ""
+msgstr "Šiesty"
 
 msgid "Oracle: Player Rankings"
 msgstr "Prorok: Rebríček hráčov"
@@ -3438,13 +3437,13 @@ msgid "Thieves' Guild: Player Rankings"
 msgstr "Cech zlodejov: Rebríček hráčov"
 
 msgid "Number of Towns:"
-msgstr ""
+msgstr "Počet miest:"
 
 msgid "Number of Castles:"
-msgstr ""
+msgstr "Počet hradov:"
 
 msgid "Number of Heroes:"
-msgstr ""
+msgstr "Počet hrdinov:"
 
 msgid "Gold in Treasury:"
 msgstr "Zlato v pokladnici:"
@@ -3471,7 +3470,7 @@ msgid "Best Hero:"
 msgstr "Najlepší hrdina:"
 
 msgid "Best Hero Stats:"
-msgstr ""
+msgstr "Vlastn. naj hrdinu:"
 
 msgid "Personality:"
 msgstr "Osobnosť:"
@@ -3785,10 +3784,10 @@ msgid "hotkey|toggle text support mode"
 msgstr "prepni mód podpory textu"
 
 msgid "hotkey|new game"
-msgstr ""
+msgstr "nová hra"
 
 msgid "hotkey|load game"
-msgstr ""
+msgstr "nahraj hru"
 
 msgid "hotkey|highscores"
 msgstr "najvyššie skóre"
@@ -3800,16 +3799,16 @@ msgid "hotkey|standard game"
 msgstr "bežná hra"
 
 msgid "hotkey|campaign game"
-msgstr ""
+msgstr "kampaň"
 
 msgid "hotkey|multi-player game"
 msgstr "hra viacero hráčov"
 
 msgid "hotkey|settings"
-msgstr ""
+msgstr "nastavenia"
 
 msgid "hotkey|quit"
-msgstr ""
+msgstr "ukonči"
 
 msgid "hotkey|select map"
 msgstr "zvoľ mapu"
@@ -3995,70 +3994,70 @@ msgid "hotkey|finish the battle in auto mode"
 msgstr "ukonči boj v automatickom móde"
 
 msgid "hotkey|battle options"
-msgstr ""
+msgstr "možnosti boja"
 
 msgid "hotkey|skip turn in battle"
-msgstr ""
+msgstr "preskoč kolo v boji"
 
 msgid "hotkey|cast battle spell"
-msgstr ""
+msgstr "vyčaruj bojové kúzlo"
 
 msgid "hotkey|dwelling level 1"
-msgstr ""
+msgstr "obydlie úrovne 1"
 
 msgid "hotkey|dwelling level 2"
-msgstr ""
+msgstr "obydlie úrovne 2"
 
 msgid "hotkey|dwelling level 3"
-msgstr ""
+msgstr "obydlie úrovne 3"
 
 msgid "hotkey|dwelling level 4"
-msgstr ""
+msgstr "obydlie úrovne 4"
 
 msgid "hotkey|dwelling level 5"
-msgstr ""
+msgstr "obydlie úrovne 5"
 
 msgid "hotkey|dwelling level 6"
-msgstr ""
+msgstr "obydlie úrovne 6"
 
 msgid "hotkey|well"
-msgstr ""
+msgstr "studňa"
 
 msgid "hotkey|marketplace"
-msgstr ""
+msgstr "trhovisko"
 
 msgid "hotkey|mage guild"
-msgstr ""
+msgstr "cech mágov"
 
 msgid "hotkey|shipyard"
-msgstr ""
+msgstr "lodenica"
 
 msgid "hotkey|thieves guild"
-msgstr ""
+msgstr "cech zlodejov"
 
 msgid "hotkey|tavern"
-msgstr ""
+msgstr "krčma"
 
 msgid "hotkey|construction screen"
-msgstr ""
+msgstr "okno stavania"
 
 msgid "hotkey|buy all monsters in well"
-msgstr ""
+msgstr "kúp všetkých v studni"
 
 msgid "hotkey|split stack by half"
-msgstr ""
+msgstr "rozdeľ skupinu na polovicu"
 
 msgid "hotkey|split stack by one"
-msgstr ""
+msgstr "rozdeľ skupinu po jednom"
 
 msgid "hotkey|join stacks"
-msgstr ""
+msgstr "zlúč skupinu"
 
 msgid "hotkey|upgrade troop"
-msgstr ""
+msgstr "povýš jednotku"
 
 msgid "hotkey|dismiss troop"
-msgstr ""
+msgstr "prepusti jednotku"
 
 msgid "The save file is corrupted."
 msgstr ""
@@ -6454,52 +6453,52 @@ msgid "Purple"
 msgstr ""
 
 msgid "barrier|Aqua"
-msgstr ""
+msgstr "Tyrkysová"
 
 msgid "barrier|Blue"
-msgstr ""
+msgstr "Modrá"
 
 msgid "barrier|Brown"
-msgstr ""
+msgstr "Hnedá"
 
 msgid "barrier|Gold"
-msgstr ""
+msgstr "Zlatá"
 
 msgid "barrier|Green"
-msgstr ""
+msgstr "Zelená"
 
 msgid "barrier|Orange"
-msgstr ""
+msgstr "Oranžová"
 
 msgid "barrier|Purple"
-msgstr ""
+msgstr "Fialová"
 
 msgid "barrier|Red"
-msgstr ""
+msgstr "Červená"
 
 msgid "tent|Aqua"
-msgstr ""
+msgstr "Tyrkysový"
 
 msgid "tent|Blue"
-msgstr ""
+msgstr "Modrý"
 
 msgid "tent|Brown"
-msgstr ""
+msgstr "Hnedý"
 
 msgid "tent|Gold"
-msgstr ""
+msgstr "Zlatý"
 
 msgid "tent|Green"
-msgstr ""
+msgstr "Zelený"
 
 msgid "tent|Orange"
-msgstr ""
+msgstr "Oranžový"
 
 msgid "tent|Purple"
-msgstr ""
+msgstr "Fialový"
 
 msgid "tent|Red"
-msgstr ""
+msgstr "Červený"
 
 msgid "Experience"
 msgstr ""
@@ -7186,10 +7185,10 @@ msgid "Random Artifact - Major"
 msgstr ""
 
 msgid "Barrier"
-msgstr ""
+msgstr "Bariéra"
 
 msgid "Traveller's Tent"
-msgstr ""
+msgstr "Cestovateľský stan"
 
 msgid "Jail"
 msgstr ""
@@ -7213,343 +7212,343 @@ msgid "Unknown Monsters"
 msgstr ""
 
 msgid "Peasant"
-msgstr ""
+msgstr "Roľník"
 
 msgid "Peasants"
-msgstr ""
+msgstr "Roľníci"
 
 msgid "Archer"
-msgstr ""
+msgstr "Lukostrelec"
 
 msgid "Archers"
-msgstr ""
+msgstr "Lukostrelci"
 
 msgid "Ranger"
-msgstr ""
+msgstr "Hraničiar"
 
 msgid "Rangers"
-msgstr ""
+msgstr "Hraničiari"
 
 msgid "Pikeman"
-msgstr ""
+msgstr "Kopijník"
 
 msgid "Pikemen"
-msgstr ""
+msgstr "Kopijníci"
 
 msgid "Veteran Pikeman"
-msgstr ""
+msgstr "Veterán kopijník"
 
 msgid "Veteran Pikemen"
-msgstr ""
+msgstr "Veteráni kopijníci"
 
 msgid "Swordsman"
-msgstr ""
+msgstr "Šermiar"
 
 msgid "Swordsmen"
-msgstr ""
+msgstr "Šermiari"
 
 msgid "Master Swordsman"
-msgstr ""
+msgstr "Majster šermiar"
 
 msgid "Master Swordsmen"
-msgstr ""
+msgstr "Majstri šermiari"
 
 msgid "Cavalries"
-msgstr ""
+msgstr "Kavaléri"
 
 msgid "Cavalry"
-msgstr ""
+msgstr "Kavalér"
 
 msgid "Champion"
-msgstr ""
+msgstr "Šampión"
 
 msgid "Champions"
-msgstr ""
+msgstr "Šampióni"
 
 msgid "Paladin"
-msgstr ""
+msgstr "Paladin"
 
 msgid "Paladins"
-msgstr ""
+msgstr "Paladini"
 
 msgid "Crusader"
-msgstr ""
+msgstr "Križiak"
 
 msgid "Crusaders"
-msgstr ""
+msgstr "Križiaci"
 
 msgid "Goblin"
-msgstr ""
+msgstr "Goblin"
 
 msgid "Goblins"
-msgstr ""
+msgstr "Goblini"
 
 msgid "Orc"
-msgstr ""
+msgstr "Ork"
 
 msgid "Orcs"
-msgstr ""
+msgstr "Orkovia"
 
 msgid "Orc Chief"
-msgstr ""
+msgstr "Náčelník orkov"
 
 msgid "Orc Chiefs"
-msgstr ""
+msgstr "Náčelníci orkov"
 
 msgid "Wolf"
-msgstr ""
+msgstr "Vlk"
 
 msgid "Wolves"
-msgstr ""
+msgstr "Vlci"
 
 msgid "Ogre"
-msgstr ""
+msgstr "Zlobor"
 
 msgid "Ogres"
-msgstr ""
+msgstr "Zlobri"
 
 msgid "Ogre Lord"
-msgstr ""
+msgstr "Lord zlobrov"
 
 msgid "Ogre Lords"
-msgstr ""
+msgstr "Lordi zlobrov"
 
 msgid "Troll"
-msgstr ""
+msgstr "Trol"
 
 msgid "Trolls"
-msgstr ""
+msgstr "Trolovia"
 
 msgid "War Troll"
-msgstr ""
+msgstr "Bojový trol"
 
 msgid "War Trolls"
-msgstr ""
+msgstr "Bojoví trolovia"
 
 msgid "Cyclopes"
-msgstr ""
+msgstr "Kyklopi"
 
 msgid "Cyclops"
-msgstr ""
+msgstr "Kyklop"
 
 msgid "Sprite"
-msgstr ""
+msgstr "Víla"
 
 msgid "Sprites"
-msgstr ""
+msgstr "Víly"
 
 msgid "Dwarf"
-msgstr ""
+msgstr "Trpaslík"
 
 msgid "Dwarves"
-msgstr ""
+msgstr "Trpaslíci"
 
 msgid "Battle Dwarf"
-msgstr ""
+msgstr "Bojový trpaslík"
 
 msgid "Battle Dwarves"
-msgstr ""
+msgstr "Bojoví trpaslíci"
 
 msgid "Elf"
-msgstr ""
+msgstr "Elf"
 
 msgid "Elves"
-msgstr ""
+msgstr "Elfovia"
 
 msgid "Grand Elf"
-msgstr ""
+msgstr "Vznešený elf"
 
 msgid "Grand Elves"
-msgstr ""
+msgstr "Vznešení elfovia"
 
 msgid "Druid"
-msgstr ""
+msgstr "Druid"
 
 msgid "Druids"
-msgstr ""
+msgstr "Druidi"
 
 msgid "Greater Druid"
-msgstr ""
+msgstr "Arcidruid"
 
 msgid "Greater Druids"
-msgstr ""
+msgstr "Arcidruidi"
 
 msgid "Unicorn"
-msgstr ""
+msgstr "Jednorožec"
 
 msgid "Unicorns"
-msgstr ""
+msgstr "Jednorožci"
 
 msgid "Phoenix"
-msgstr ""
+msgstr "Fénix"
 
 msgid "Phoenixes"
-msgstr ""
+msgstr "Fénixovia"
 
 msgid "Centaur"
-msgstr ""
+msgstr "Kentaur"
 
 msgid "Centaurs"
-msgstr ""
+msgstr "Kentaury"
 
 msgid "Gargoyle"
-msgstr ""
+msgstr "Chrlič"
 
 msgid "Gargoyles"
-msgstr ""
+msgstr "Chrliče"
 
 msgid "Griffin"
-msgstr ""
+msgstr "Griffin"
 
 msgid "Griffins"
-msgstr ""
+msgstr "Griffini"
 
 msgid "Minotaur"
-msgstr ""
+msgstr "Minotaur"
 
 msgid "Minotaurs"
-msgstr ""
+msgstr "Minotaury"
 
 msgid "Minotaur King"
-msgstr ""
+msgstr "Minotaurí kráľ"
 
 msgid "Minotaur Kings"
-msgstr ""
+msgstr "Minotaurí králi"
 
 msgid "Hydra"
-msgstr ""
+msgstr "Hydra"
 
 msgid "Hydras"
-msgstr ""
+msgstr "Hydry"
 
 msgid "Green Dragon"
-msgstr ""
+msgstr "Zelený drak"
 
 msgid "Green Dragons"
-msgstr ""
+msgstr "Zelení draci"
 
 msgid "Red Dragon"
-msgstr ""
+msgstr "Červený drak"
 
 msgid "Red Dragons"
-msgstr ""
+msgstr "Červení draci"
 
 msgid "Black Dragon"
-msgstr ""
+msgstr "Čierny drak"
 
 msgid "Black Dragons"
-msgstr ""
+msgstr "Čierni draci"
 
 msgid "Halfling"
-msgstr ""
+msgstr "Hobit"
 
 msgid "Halflings"
-msgstr ""
+msgstr "Hobiti"
 
 msgid "Boar"
-msgstr ""
+msgstr "Kanec"
 
 msgid "Boars"
-msgstr ""
+msgstr "Kance"
 
 msgid "Iron Golem"
-msgstr ""
+msgstr "Železný golem"
 
 msgid "Iron Golems"
-msgstr ""
+msgstr "Železní golemovia"
 
 msgid "Steel Golem"
-msgstr ""
+msgstr "Oceľový golem"
 
 msgid "Steel Golems"
-msgstr ""
+msgstr "Oceľoví golemovia"
 
 msgid "Roc"
-msgstr ""
+msgstr "Roc"
 
 msgid "Rocs"
-msgstr ""
+msgstr "Roci"
 
 msgid "Mage"
-msgstr ""
+msgstr "Mág"
 
 msgid "Magi"
-msgstr ""
+msgstr "Mágovia"
 
 msgid "Archmage"
-msgstr ""
+msgstr "Arcimág"
 
 msgid "Archmagi"
-msgstr ""
+msgstr "Arcimágovia"
 
 msgid "Giant"
-msgstr ""
+msgstr "Obor"
 
 msgid "Giants"
-msgstr ""
+msgstr "Obri"
 
 msgid "Titan"
-msgstr ""
+msgstr "Titán"
 
 msgid "Titans"
-msgstr ""
+msgstr "Titáni"
 
 msgid "Skeletons"
-msgstr ""
+msgstr "Kostlivci"
 
 msgid "Zombie"
-msgstr ""
+msgstr "Zombík"
 
 msgid "Zombies"
-msgstr ""
+msgstr "Zombíci"
 
 msgid "Mutant Zombie"
-msgstr ""
+msgstr "Zombík mutant"
 
 msgid "Mutant Zombies"
-msgstr ""
+msgstr "Zombíci mutanti"
 
 msgid "Mummies"
-msgstr ""
+msgstr "Múmie"
 
 msgid "Mummy"
-msgstr ""
+msgstr "Múmia"
 
 msgid "Royal Mummies"
-msgstr ""
+msgstr "Kráľovské múmie"
 
 msgid "Royal Mummy"
-msgstr ""
+msgstr "Kráľovská múmia"
 
 msgid "Vampire"
-msgstr ""
+msgstr "Upír"
 
 msgid "Vampires"
-msgstr ""
+msgstr "Upíri"
 
 msgid "Vampire Lord"
-msgstr ""
+msgstr "Upíri lord"
 
 msgid "Vampire Lords"
-msgstr ""
+msgstr "Upíri lordi"
 
 msgid "Lich"
-msgstr ""
+msgstr "Kostej"
 
 msgid "Liches"
-msgstr ""
+msgstr "Kostejovia"
 
 msgid "Power Lich"
-msgstr ""
+msgstr "Mocný kostej"
 
 msgid "Power Liches"
-msgstr ""
+msgstr "Mocný kostejovia"
 
 msgid "Bone Dragon"
-msgstr ""
+msgstr "Kostnatý drak"
 
 msgid "Bone Dragons"
-msgstr ""
+msgstr "Kostnatí draci"
 
 msgid "Rogue"
 msgstr ""
@@ -7564,10 +7563,10 @@ msgid "Nomads"
 msgstr ""
 
 msgid "Ghost"
-msgstr ""
+msgstr "Duch"
 
 msgid "Ghosts"
-msgstr ""
+msgstr "Duchovia"
 
 msgid "Genie"
 msgstr ""
