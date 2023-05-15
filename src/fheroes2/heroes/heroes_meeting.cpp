@@ -29,7 +29,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <iostream>
 
 #include "agg_image.h"
 #include "army.h"
@@ -41,6 +40,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "heroes_indicator.h"
@@ -90,6 +90,40 @@ namespace
                 std::swap( bagFrom[fromIdx], bagTo[toIdx] );
             }
         }
+    }
+
+    /// Draw shadow around an area
+    ///
+    /// @note This is a good candidate for becoming a generic drawing
+    /// function available system-wide.
+    ///
+    /// @param i Image to draw on
+    /// @param box Draw shadow on the left and bottom of this area
+    void DrawShadow( fheroes2::Image & i, fheroes2::Rect box )
+    {
+        auto x = box.x;     auto y = box.y;
+        auto w = box.width; auto h = box.height;
+        auto b = BORDERWIDTH;
+
+        // Use the shadow strategy outlined in StandardWindow::render()
+
+        // "left side" shadow
+        ApplyTransform( i, x-b  , y+b  , b  , 1    , 5 );
+        ApplyTransform( i, x-b  , y+b+1, 1  , h-2  , 5 );
+        ApplyTransform( i, x-b+1, y+b+1, b-1, 1    , 4 );
+        ApplyTransform( i, x-b+1, y+b+2, 1  , h-4  , 4 );
+        ApplyTransform( i, x-b+2, y+b+2, b-2, 1    , 3 );
+        ApplyTransform( i, x-b+2, y+b+3, 1  , h-6  , 3 );
+        ApplyTransform( i, x-b+3, y+b+3, b-3, h-b-3, 2 );
+
+        // "bottom side" shadow
+        ApplyTransform( i, x-b+3,   y+h,     w-6, b-3, 2 );
+        ApplyTransform( i, x-b+2,   y+h+b-3, w-4, 1,   3 );
+        ApplyTransform( i, x+w-b-3, y+h,     1,   b-3, 3 );
+        ApplyTransform( i, x-b+1,   y+h+b-2, w-2, 1,   4 );
+        ApplyTransform( i, x+w-b-2, y+h,     1,   b-2, 4 );
+        ApplyTransform( i, x-b,     y+h+b-1, w,   1,   5 );
+        ApplyTransform( i, x+w-b-1, y + h,   1,   b-1, 5 );
     }
 }
 
@@ -245,45 +279,22 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    // Strategy for adding shadow is lifted from
-    // Dialog::RecruitMonster.
-
     const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
-    const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::SWAPWIN, 1);
+
     const fheroes2::Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
-    const fheroes2::Point shadow_pt( cur_pt.x - BORDERWIDTH, cur_pt.y + BORDERWIDTH);
+    // include shadow
+    fheroes2::ImageRestorer restorer( display, cur_pt.x - BORDERWIDTH, cur_pt.y, backSprite.width() + BORDERWIDTH, backSprite.height() + BORDERWIDTH);
 
     fheroes2::Rect src_rt( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
-    // include shadow
-    std::cout << "restorer(display=" << &display
-              << ", x=" << shadow_pt.x
-              << ", y=" << shadow_pt.y
-              << ", w=" << backSprite.width() + BORDERWIDTH
-              << ", h=" << backSprite.height() + BORDERWIDTH
-              << ")\n";
-    fheroes2::ImageRestorer restorer( display, shadow_pt.x, shadow_pt.y, backSprite.width() + BORDERWIDTH, backSprite.height() + BORDERWIDTH);
-
-    // shadow comes first
-    std::cout << "Blit(boxShadow=" << &boxShadow
-              << ", display=" << &display
-              << ", x=" << shadow_pt.x
-              << ", y=" << shadow_pt.y
-              << ")\n";
-    fheroes2::Blit( boxShadow, display, shadow_pt.x, shadow_pt.y );
-
     // background
     fheroes2::Point dst_pt( cur_pt );
-    std::cout << "Blit(backSprite=" << &backSprite
-              << ", xoff=" << src_rt.x
-              << ", yoff=" << src_rt.y
-              << ", display=" << &display
-              << ", x=" << dst_pt.x
-              << ", y=" << dst_pt.y
-              << ", w=" << src_rt.width
-              << ", h=" << src_rt.height
-              << ")\n";
     fheroes2::Blit( backSprite, src_rt.x, src_rt.y, display, dst_pt.x, dst_pt.y, src_rt.width, src_rt.height );
+
+    // This ICN (SWAPWIN) does not have an associated shadow
+    // (typically the '1' index). Therefore, we will draw the shadow
+    // by hand.
+    DrawShadow( display, { dst_pt.x, dst_pt.y, src_rt.width, src_rt.height } );
 
     // header
     std::string message( _( "%{name1} meets %{name2}" ) );
