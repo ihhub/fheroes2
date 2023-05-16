@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 13:04+0000\n"
-"PO-Revision-Date: 2023-05-16 14:03+0200\n"
+"PO-Revision-Date: 2023-05-16 14:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -3413,22 +3413,22 @@ msgid "Knowl"
 msgstr "Ved."
 
 msgid "1st"
-msgstr "Prvý"
+msgstr ""
 
 msgid "2nd"
-msgstr "Druhý"
+msgstr ""
 
 msgid "3rd"
-msgstr "Tretí"
+msgstr ""
 
 msgid "4th"
-msgstr "Štvrtý"
+msgstr ""
 
 msgid "5th"
-msgstr "Piaty"
+msgstr ""
 
 msgid "6th"
-msgstr "Šiesty"
+msgstr ""
 
 msgid "Oracle: Player Rankings"
 msgstr "Prorok: Rebríček hráčov"
