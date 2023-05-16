@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 13:04+0000\n"
-"PO-Revision-Date: 2023-05-16 12:38+0200\n"
+"PO-Revision-Date: 2023-05-16 13:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <> <>\n"
 "Language: sk\n"
@@ -1635,7 +1635,7 @@ msgid "campaignBonus|Thunder Mace"
 msgstr "Palcát hromu"
 
 msgid "campaignBonus|Traveler's Boots"
-msgstr "Cestovateľove čižmy"
+msgstr "Cestovateľove topánky"
 
 msgid "campaignBonus|White Pearl"
 msgstr "Biela perla"
@@ -7815,7 +7815,7 @@ msgid "Golden Goose"
 msgstr "Zlatá hus"
 
 msgid "The %{name} brings in an income of %{count} gold per day."
-msgstr "%{name} zvyšuje príjem o %{count} zlata na deň."
+msgstr "%{name} zvyšuje príjem o %{count} zlata za deň."
 
 msgid "Arcane Necklace of Magic"
 msgstr "Tajomný magický náhrdelník"
@@ -7826,7 +7826,7 @@ msgid ""
 msgstr ""
 
 msgid "Caster's Bracelet of Magic"
-msgstr ""
+msgstr "Zaklínačov náramok mágie"
 
 msgid ""
 "While searching through the rubble of a caved-in mine, you free a group of "
@@ -7834,7 +7834,7 @@ msgid ""
 msgstr ""
 
 msgid "Mage's Ring of Power"
-msgstr ""
+msgstr "Čarodejov prsteň moci"
 
 msgid ""
 "A cry of pain leads you to a Centaur, caught in a trap. Upon setting the "
@@ -7843,7 +7843,7 @@ msgid ""
 msgstr ""
 
 msgid "Witch's Broach of Magic"
-msgstr ""
+msgstr "Bosorkina brošňa mágie"
 
 msgid ""
 "Alongside the remains of a burnt witch lies a beautiful broach, intricately "
@@ -7852,10 +7852,10 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Valor"
-msgstr ""
+msgstr "Medaila za odvahu"
 
 msgid "The %{name} increases your morale by %{count}."
-msgstr ""
+msgstr "%{name} zvyšuje tvoju morálku o %{count}."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -7863,7 +7863,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Courage"
-msgstr ""
+msgstr "Medaila za guráž"
 
 msgid ""
 "After saving a young boy from a vicious pack of Wolves, you return him to "
@@ -7871,7 +7871,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Honor"
-msgstr ""
+msgstr "Medaila za česť"
 
 msgid ""
 "After freeing a princess of a neighboring kingdom from the evil clutches of "
@@ -7879,7 +7879,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Distinction"
-msgstr ""
+msgstr "Medaila vyznamenania"
 
 msgid ""
 "Ridding the countryside of the hideous Minotaur who made a sport of eating "
@@ -7887,10 +7887,10 @@ msgid ""
 msgstr ""
 
 msgid "Fizbin of Misfortune"
-msgstr ""
+msgstr "Odznak nešťastia"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
-msgstr ""
+msgstr "%{name} znižuje tvoju morálku o %{count}."
 
 msgid ""
 "You stumble upon a medal lying alongside the empty road. Adding the medal to "
@@ -7899,7 +7899,7 @@ msgid ""
 msgstr ""
 
 msgid "Thunder Mace of Dominion"
-msgstr ""
+msgstr "Hromový palcát nadvlády"
 
 msgid ""
 "During a sudden storm, a bolt of lightning strikes a tree, splitting it. "
@@ -7907,10 +7907,10 @@ msgid ""
 msgstr ""
 
 msgid "Armored Gauntlets of Protection"
-msgstr ""
+msgstr "Obrnené ochranné rukavice"
 
 msgid "The %{name} increase your defense skill by %{count}."
-msgstr ""
+msgstr "%{name} zvyšuje tvoju obrannú zručnosť o %{count}."
 
 msgid ""
 "You encounter the infamous Black Knight!  After a grueling duel ending in a "
@@ -7918,7 +7918,7 @@ msgid ""
 msgstr ""
 
 msgid "Defender Helm of Protection"
-msgstr ""
+msgstr "Ochranná prilba obrancu"
 
 msgid ""
 "A glint of golden light catches your eye. Upon further investigation, you "
@@ -7926,7 +7926,7 @@ msgid ""
 msgstr ""
 
 msgid "Giant Flail of Dominion"
-msgstr ""
+msgstr "Obrovský cep nadvlády"
 
 msgid ""
 "A clumsy Giant has killed himself with his own flail. Knowing your superior "
@@ -7935,10 +7935,10 @@ msgid ""
 msgstr ""
 
 msgid "Ballista of Quickness"
-msgstr ""
+msgstr "Balista rýchlosti"
 
 msgid "The %{name} gives your catapult one extra shot per combat round."
-msgstr ""
+msgstr "%{name} dáva tvojmu katapultu jednu strelu navyše každé kolo boja."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
@@ -7946,7 +7946,7 @@ msgid ""
 msgstr ""
 
 msgid "Stealth Shield of Protection"
-msgstr ""
+msgstr "Ochranný štít prikrádania"
 
 msgid ""
 "A stone statue of a warrior holds a silver shield. As you remove the shield, "
@@ -7954,7 +7954,7 @@ msgid ""
 msgstr ""
 
 msgid "Dragon Sword of Dominion"
-msgstr ""
+msgstr "Dračí meč nadvlády"
 
 msgid ""
 "As you are walking along a narrow path, a nearby bush suddenly bursts into "
@@ -7963,7 +7963,7 @@ msgid ""
 msgstr ""
 
 msgid "Power Axe of Dominion"
-msgstr ""
+msgstr "Mocná sekera nadvlády"
 
 msgid ""
 "You see a silver axe embedded deeply in the ground. After several "
@@ -7972,7 +7972,7 @@ msgid ""
 msgstr ""
 
 msgid "Divine Breastplate of Protection"
-msgstr ""
+msgstr "Božský náprsník ochrany"
 
 msgid ""
 "A gang of Rogues is sifting through the possessions of dead warriors. "
@@ -7981,7 +7981,7 @@ msgid ""
 msgstr ""
 
 msgid "Minor Scroll of Knowledge"
-msgstr ""
+msgstr "Menší zvitok vedomostí"
 
 msgid ""
 "Before you appears a levitating glass case with a scroll, perched upon a bed "
@@ -7990,7 +7990,7 @@ msgid ""
 msgstr ""
 
 msgid "Major Scroll of Knowledge"
-msgstr ""
+msgstr "Hlavný zvitok vedomostí"
 
 msgid ""
 "Visiting a local wiseman, you explain the intent of your journey. He reaches "
@@ -7998,7 +7998,7 @@ msgid ""
 msgstr ""
 
 msgid "Superior Scroll of Knowledge"
-msgstr ""
+msgstr "Nadradený zvitok vedomostí"
 
 msgid ""
 "You come across the remains of an ancient Druid. Bones, yellowed with age, "
@@ -8007,7 +8007,7 @@ msgid ""
 msgstr ""
 
 msgid "Foremost Scroll of Knowledge"
-msgstr ""
+msgstr "Najprednejší zvitok vedomostí"
 
 msgid ""
 "Mangled bones, yellowed with age, peer from the ragged folds of a dead "
@@ -8015,10 +8015,10 @@ msgid ""
 msgstr ""
 
 msgid "Endless Sack of Gold"
-msgstr ""
+msgstr "Bezodné vrecko zlata"
 
 msgid "The %{name} provides you with %{count} gold per day."
-msgstr ""
+msgstr "%{name} ti poskytuje %{count} zlata za deň."
 
 msgid ""
 "A little leprechaun dances gleefully around a magic sack. Seeing you "
@@ -8028,7 +8028,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Bag of Gold"
-msgstr ""
+msgstr "Bezodný mešec zlata"
 
 msgid ""
 "A noblewoman, separated from her traveling companions, asks for your help. "
@@ -8036,7 +8036,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Purse of Gold"
-msgstr ""
+msgstr "Bezodné vrece zlata"
 
 msgid ""
 "In your travels, you find a leather purse filled with gold that once "
@@ -8045,7 +8045,7 @@ msgid ""
 msgstr ""
 
 msgid "Nomad Boots of Mobility"
-msgstr ""
+msgstr "Nomádske topánky mobility"
 
 msgid "The %{name} increase your movement on land."
 msgstr ""
@@ -8058,7 +8058,7 @@ msgid ""
 msgstr ""
 
 msgid "Traveler's Boots of Mobility"
-msgstr ""
+msgstr "Cestovateľove topánky mobility"
 
 msgid ""
 "Discovering a pair of beautifully beaded boots made from the finest and "
