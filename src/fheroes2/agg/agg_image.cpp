@@ -145,7 +145,9 @@ namespace
                                                 ICN::UNIFORM_EVIL_EXIT_BUTTON,
                                                 ICN::NON_UNIFORM_GOOD_MIN_BUTTON,
                                                 ICN::BUTTON_SMALL_MIN_GOOD,
+                                                ICN::BUTTON_SMALL_MIN_EVIL,
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
+                                                ICN::BUTTON_SMALL_MAX_EVIL,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::BUTTON_DIFFICULTY_ARCHIBALD,
                                                 ICN::BUTTON_DIFFICULTY_ROLAND,
@@ -1468,6 +1470,13 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_SMALL_MIN_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 61, gettext_noop( "MIN" ), true );
+
+                break;
+            }
             case ICN::BUTTON_SMALL_MAX_GOOD: {
                 _icnVsSprite[id].resize( 2 );
 
@@ -1479,6 +1488,13 @@ namespace fheroes2
 
                 int32_t textWidth = 61;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "MAX" ), false );
+
+                break;
+            }
+            case ICN::BUTTON_SMALL_MAX_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 61, gettext_noop( "MAX" ), true );
 
                 break;
             }
@@ -2199,7 +2215,9 @@ namespace fheroes2
             case ICN::UNIFORM_EVIL_EXIT_BUTTON:
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
             case ICN::BUTTON_SMALL_MIN_GOOD:
+            case ICN::BUTTON_SMALL_MIN_EVIL:
             case ICN::BUTTON_SMALL_MAX_GOOD:
+            case ICN::BUTTON_SMALL_MAX_EVIL:
             case ICN::BUTTON_GUILDWELL_EXIT:
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD:
             case ICN::BUTTON_DIFFICULTY_POL:

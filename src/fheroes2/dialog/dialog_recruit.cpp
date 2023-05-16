@@ -54,25 +54,29 @@
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
+#include "ui_window.h"
 #include "world.h"
 
 namespace
 {
-    void drawRecruitWindow( fheroes2::Image & output, const fheroes2::Point & offset, const int icnId )
+    void drawRecruitWindow( fheroes2::Image & output, const fheroes2::Point & offset )
     {
-        const fheroes2::Sprite & window = fheroes2::AGG::GetICN( icnId, 0 );
-        fheroes2::Blit( window, output, offset.x, offset.y );
+        const fheroes2::Sprite & originalBackground = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
+        const fheroes2::Sprite & recruitWindowTitle = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
 
-        const fheroes2::Rect backgroundArea( 144, 55, 120, 12 );
+        fheroes2::Image recruitWindow( 132, 67 );
+        recruitWindow.reset();
+        fheroes2::Copy( recruitWindowTitle, 3, 58, recruitWindow, 3, 0, 63, 14 );
+        fheroes2::Copy( recruitWindowTitle, recruitWindowTitle.width() - 66, 58, recruitWindow, 66, 0, 63, 14 );
+        fheroes2::Copy( originalBackground, 138, 54, recruitWindow, 0, 0, 3, 63 );
+        fheroes2::Copy( originalBackground, 267, 54, recruitWindow, 129, 0, 3, 63 );
+        fheroes2::Copy( originalBackground, 138, 117, recruitWindow, 0, 63, 132, 4 );
 
-        // Mask 'hardcoded' title to allow translation text appear.
-        const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
-        fheroes2::Copy( backgroundImage, 6, 59, output, offset.x + backgroundArea.x, offset.y + backgroundArea.y, backgroundArea.width / 2, backgroundArea.height );
-        fheroes2::Copy( backgroundImage, 6 + 65, 59, output, offset.x + backgroundArea.x + backgroundArea.width / 2, offset.y + backgroundArea.y,
-                        backgroundArea.width / 2, backgroundArea.height );
+        const fheroes2::Text recruitWindowText( _( "Cost per troop:" ), fheroes2::FontType::smallWhite() );
+        recruitWindowText.draw( ( recruitWindow.width() - recruitWindowText.width() ) / 2, 3, recruitWindow );
 
-        const fheroes2::Text text( _( "Cost per troop:" ), fheroes2::FontType::smallWhite() );
-        text.draw( offset.x + backgroundArea.x + ( backgroundArea.width - text.width() ) / 2, offset.y + backgroundArea.y + 2, output );
+        fheroes2::Blit( recruitWindow, output, offset.x + 138, offset.y + 54 );
+        fheroes2::addSoftShadow( recruitWindow, output, { offset.x + 138, offset.y + 54 }, { -5, 5 } );
     }
 }
 
@@ -211,10 +215,9 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, uin
     text.Set( str, Font::SMALL );
     text.Blit( pos.x + 80 - text.w() / 2, pos.y + 135 );
 }
-
-void RedrawStaticInfo( const fheroes2::Rect & pos, const Monster & monster, uint32_t available, const int windowIcnId )
+void RedrawStaticInfo( const fheroes2::Rect & pos, const Monster & monster, uint32_t available )
 {
-    drawRecruitWindow( fheroes2::Display::instance(), { pos.x, pos.y }, windowIcnId );
+    // drawRecruitWindow( fheroes2::Display::instance(), { pos.x, pos.y }, windowIcnId );
 
     RedrawMonsterInfo( pos, monster, available, true );
 
@@ -253,6 +256,10 @@ uint32_t CalculateMax( const Monster & monster, const Kingdom & kingdom, uint32_
 
 Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY )
 {
+    fheroes2::Size window{ 289, 272 };
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
 
@@ -269,39 +276,38 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
 
     payment_t paymentCosts( paymentMonster * result );
 
-    const int windowIcnId = ICN::RECRBKG;
+    const fheroes2::Point dialogOffset( ( display.width() - window.width ) / 2, ( display.height() - window.height ) / 2 + windowOffsetY );
 
-    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( windowIcnId, 0 );
-    const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( windowIcnId, 1 );
+    const fheroes2::Rect pos( dialogOffset.x - BORDERWIDTH, dialogOffset.y - BORDERWIDTH, window.width + 2 * BORDERWIDTH, window.height + 2 * BORDERWIDTH );
 
-    const fheroes2::Point dialogOffset( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 + windowOffsetY );
-    const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+    fheroes2::StandardWindow background( dialogOffset.x, dialogOffset.y, window.width, window.height, true, display );
 
-    fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, box.width() + BORDERWIDTH, box.height() + BORDERWIDTH );
-    const fheroes2::Rect pos( dialogOffset.x, dialogOffset.y, box.width(), box.height() );
+    const fheroes2::Sprite & originalBackground = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
 
-    fheroes2::Blit( boxShadow, display, pos.x - BORDERWIDTH, pos.y + BORDERWIDTH );
+    fheroes2::Image recruitCount( 68, 19 );
+    fheroes2::Copy( originalBackground, 134, 159, recruitCount, 0, 0, 68, 19 );
+    fheroes2::Copy( recruitCount, 0, 0, display, pos.x + 134, pos.y + 159, 68, 19 );
+    fheroes2::addSoftShadow( recruitCount, display, { pos.x + 134, pos.y + 159 }, { -5, 5 } );
 
-    drawRecruitWindow( display, { pos.x, pos.y }, windowIcnId );
+    drawRecruitWindow( display, { pos.x, pos.y } );
 
-    RedrawStaticInfo( pos, monster, available, windowIcnId );
+    RedrawStaticInfo( pos, monster, available );
 
     // buttons
     fheroes2::Point dst_pt;
 
     dst_pt.x = pos.x + 34;
     dst_pt.y = pos.y + 249;
-    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
+    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
 
     dst_pt.x = pos.x + 187;
     dst_pt.y = pos.y + 249;
-    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
+    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
     dst_pt.x = pos.x + 229;
     dst_pt.y = pos.y + 156;
-    fheroes2::ButtonSprite buttonMax( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MAX_GOOD, 0 ), fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_MAX_GOOD, 1 ),
-                                      fheroes2::AGG::GetICN( ICN::MAX_DISABLED_BUTTON, 0 ) );
-    fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, ICN::BUTTON_SMALL_MIN_GOOD, 0, 1 );
+    fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, isEvilInterface ? ICN::BUTTON_SMALL_MAX_EVIL : ICN::BUTTON_SMALL_MAX_GOOD, 0, 1 );
+    fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, isEvilInterface ? ICN::BUTTON_SMALL_MIN_EVIL : ICN::BUTTON_SMALL_MIN_GOOD, 0, 1 );
 
     dst_pt.x = pos.x + 205;
     dst_pt.y = pos.y + 154;
@@ -327,8 +333,11 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
         monsterSwitchLeft.setSprite( fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 0 ), fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 1 ) );
         monsterSwitchRight.setSprite( fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 0 ), fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 1 ) );
 
-        monsterSwitchLeft.setPosition( pos.x + 24, pos.y + 80 );
-        monsterSwitchRight.setPosition( pos.x + 121, pos.y + 80 );
+        dst_pt.x = pos.x + 24;
+        dst_pt.y = pos.y + 80;
+        monsterSwitchLeft.setPosition( dst_pt.x, dst_pt.y );
+        dst_pt.x = pos.x + 121;
+        monsterSwitchRight.setPosition( dst_pt.x, dst_pt.y );
     }
     else {
         monsterSwitchLeft.hide();
@@ -338,7 +347,14 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
         monsterSwitchRight.disable();
     }
 
-    const fheroes2::Rect monsterArea( pos.x + 40, pos.y + 35, 75, 95 );
+    // Render shadows for UI elements.
+    buttonOk.drawShadow();
+    buttonCancel.drawShadow();
+    buttonMax.drawShadow();
+    buttonUp.drawShadow();
+    buttonDn.drawShadow();
+    monsterSwitchLeft.drawShadow();
+    monsterSwitchRight.drawShadow();
 
     if ( 0 == result ) {
         buttonOk.disable();
@@ -353,6 +369,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
 
     buttonOk.draw();
     buttonCancel.draw();
+
     if ( buttonMax.isEnabled() ) {
         buttonMax.draw();
     }
@@ -364,7 +381,9 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
     monsterSwitchLeft.draw();
     monsterSwitchRight.draw();
 
-    display.render( back.rect() );
+    display.render( pos );
+
+    const fheroes2::Rect monsterArea( pos.x + 40, pos.y + 35, 75, 95 );
 
     std::vector<Monster> upgrades = { monster0 };
     while ( upgrades.back().GetDowngrade() != upgrades.back() ) {
@@ -518,7 +537,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
         }
 
         if ( redraw ) {
-            RedrawStaticInfo( pos, monster, available, windowIcnId );
+            RedrawStaticInfo( pos, monster, available );
             RedrawCurrentInfo( pos.getPosition(), result, paymentMonster, paymentCosts, funds, maxmin );
 
             if ( 0 == result ) {
@@ -540,7 +559,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
             monsterSwitchLeft.draw();
             monsterSwitchRight.draw();
 
-            display.render( back.rect() );
+            display.render( pos );
         }
 
         if ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) && !skipHotKeyCheck ) ) ) {
@@ -553,44 +572,30 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
         }
     }
 
-    back.restore();
-    display.render( back.rect() );
-
-    return Troop( monster, result );
+    return { monster, result };
 }
 
 void Dialog::DwellingInfo( const Monster & monster, uint32_t available )
 {
+    fheroes2::Size window{ 289, 139 };
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // setup cursor
+    // Set cursor.
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-    const int icnId = isEvilInterface ? ICN::RECR2BKG_EVIL : ICN::RECR2BKG;
+    const fheroes2::Point dialogOffset( ( display.width() - window.width ) / 2, display.height() / 2 - display.DEFAULT_HEIGHT / 2 + BORDERWIDTH );
+    const fheroes2::Rect pos( dialogOffset.x - BORDERWIDTH, dialogOffset.y - BORDERWIDTH, window.width + 2 * BORDERWIDTH, window.height + 2 * BORDERWIDTH );
 
-    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( icnId, 0 );
-    const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( icnId, 1 );
+    fheroes2::StandardWindow background( dialogOffset.x, dialogOffset.y, window.width, window.height, true, display );
 
-    const fheroes2::Point dialogOffset( ( display.width() - box.width() ) / 2, display.height() / 2 - display.DEFAULT_HEIGHT / 2 + BORDERWIDTH );
-    const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+    drawRecruitWindow( display, { pos.x, pos.y } );
+    RedrawMonsterInfo( pos, monster, available, false );
 
-    fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, box.width() + BORDERWIDTH, box.height() + BORDERWIDTH );
-    const fheroes2::Rect pos( dialogOffset.x, dialogOffset.y, box.width(), box.height() );
-
-    fheroes2::Blit( boxShadow, display, pos.x - BORDERWIDTH, pos.y + BORDERWIDTH );
-
-    drawRecruitWindow( display, { pos.x, pos.y }, icnId );
+    display.render( pos );
 
     LocalEvent & le = LocalEvent::Get();
 
-    RedrawMonsterInfo( pos, monster, available, false );
-
-    display.render();
-
     while ( le.HandleEvents() && le.MousePressRight() )
         ;
-
-    back.restore();
-    display.render();
 }
