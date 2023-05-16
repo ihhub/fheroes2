@@ -564,21 +564,21 @@ namespace fheroes2
             const int32_t backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
             const Sprite & background = AGG::GetICN( backgroundIcnId, 0 );
 
-        Image temp = resizeButton( originalReleased, width );
-        released.resize( temp.width(), temp.height() );
-        assert( background.width() >= temp.width() && background.height() >= temp.height() );
-        Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, released, 0, 0, temp.width(), temp.height() );
-        Blit( temp, released );
-        released.setPosition( originalReleased.x(), originalReleased.y() );
+            Image temp = resizeButton( originalReleased, width );
+            released.resize( temp.width(), temp.height() );
+            assert( background.width() >= temp.width() && background.height() >= temp.height() );
+            Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, released, 0, 0, temp.width(), temp.height() );
+            Blit( temp, released );
+            released.setPosition( originalReleased.x(), originalReleased.y() );
 
-        temp = resizeButton( originalPressed, width );
-        pressed.resize( temp.width(), temp.height() );
-        assert( background.width() >= temp.width() && background.height() >= temp.height() );
-        Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, pressed, 0, 0, temp.width(), temp.height() );
-        Blit( temp, pressed );
-        pressed.setPosition( originalPressed.x(), originalPressed.y() );
+            temp = resizeButton( originalPressed, width );
+            pressed.resize( temp.width(), temp.height() );
+            assert( background.width() >= temp.width() && background.height() >= temp.height() );
+            Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, pressed, 0, 0, temp.width(), temp.height() );
+            Blit( temp, pressed );
+            pressed.setPosition( originalPressed.x(), originalPressed.y() );
+        }
     }
-}
 
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface,
                             const bool isTransparentBackground )
