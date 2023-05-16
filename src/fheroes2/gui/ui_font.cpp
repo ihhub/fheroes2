@@ -880,7 +880,7 @@ namespace
             updateSmallFontLetterShadow( font[185 - 32] );
 
             // Uppercase L with caron (NOT an uppercase Y with diaeresis)
-            font[188 - 32].resize( font[76 - 32].width(), font[76 - 32].height());
+            font[188 - 32].resize( font[76 - 32].width(), font[76 - 32].height() );
             font[188 - 32].reset();
             fheroes2::Copy( font[76 - 32], 0, 0, font[188 - 32], 0, 0, font[76 - 32].width(), font[76 - 32].height() );
             fheroes2::Copy( font[97 - 32], 2, 0, font[188 - 32], 6, 0, 1, 1 );
