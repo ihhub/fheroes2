@@ -305,27 +305,22 @@ namespace
             fheroes2::Copy( font[165 - 32], 10, 11, font[185 - 32], 5, 7, 5, 5 );
 
             // Uppercase L with caron (NOT an uppercase Y with diaeresis)
-            font[188 - 32].resize( font[76 - 32].width(), font[76 - 32].height() + 1 );
+            font[188 - 32].resize( font[76 - 32].width(), font[76 - 32].height() );
             font[188 - 32].reset();
-            fheroes2::Copy( font[76 - 32], 0, 0, font[188 - 32], 0, 1, font[76 - 32].width(), font[76 - 32].height() );
+            fheroes2::Copy( font[76 - 32], 0, 0, font[188 - 32], 0, 0, font[76 - 32].width(), font[76 - 32].height() );
+            fheroes2::Copy( font[65], 1, 1, font[188 - 32], 9, 0, 1, 1 );
             fheroes2::Copy( font[65], 1, 1, font[188 - 32], 9, 1, 1, 1 );
             fheroes2::Copy( font[65], 1, 1, font[188 - 32], 10, 0, 1, 1 );
-            fheroes2::Copy( font[65], 1, 1, font[188 - 32], 8, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[188 - 32], 8, 0, 1, 1 );
             fheroes2::Copy( font[65], 1, 0, font[188 - 32], 8, 1, 1, 1 );
-            fheroes2::Copy( font[65], 1, 0, font[188 - 32], 9, 0, 1, 1 );
-            fheroes2::Copy( font[65], 1, 0, font[188 - 32], 7, 0, 1, 1 );
-            font[188 - 32].setPosition( font[76 - 32].x(), font[76 - 32].y() - 1 );
+            font[188 - 32].setPosition( font[76 - 32].x(), font[76 - 32].y() );
             updateNormalFontLetterShadow( font[188 - 32] );
 
             // Lowercase l with caron (NOT an uppercase L with caron)
             font[190 - 32].resize( font[108 - 32].width() + 2, font[108 - 32].height() );
             font[190 - 32].reset();
             fheroes2::Copy( font[108 - 32], 0, 0, font[190 - 32], 0, 0, font[108 - 32].width(), font[108 - 32].height() );
-            fheroes2::Copy( font[65], 1, 1, font[190 - 32], 5, 0, 1, 1 );
-            fheroes2::Copy( font[65], 1, 1, font[190 - 32], 5, 1, 1, 1 );
-            fheroes2::Copy( font[65], 1, 1, font[190 - 32], 6, 0, 1, 1 );
-            fheroes2::Copy( font[65], 1, 0, font[190 - 32], 4, 0, 1, 1 );
-            fheroes2::Copy( font[65], 1, 0, font[190 - 32], 4, 1, 1, 1 );
+            fheroes2::Copy( font[188 - 32], 8, 0, font[190 - 32], 4, 0, 3, 2 );
             font[190 - 32].setPosition( font[108 - 32].x(), font[108 - 32].y() );
             updateNormalFontLetterShadow( font[190 - 32] );
 
@@ -568,11 +563,7 @@ namespace
             font[226 - 32].resize( font[97 - 32].width(), font[97 - 32].height() + 3 );
             font[226 - 32].reset();
             fheroes2::Copy( font[97 - 32], 0, 0, font[226 - 32], 0, 3, font[97 - 32].width(), font[97 - 32].height() );
-            fheroes2::Copy( font[97 - 32], 7, 1, font[226 - 32], 3, 1, 1, 1 );
-            fheroes2::Copy( font[97 - 32], 7, 1, font[226 - 32], 4, 0, 1, 1 );
-            fheroes2::Copy( font[97 - 32], 7, 1, font[226 - 32], 5, 1, 1, 1 );
-            fheroes2::Copy( font[97 - 32], 1, 0, font[226 - 32], 3, 0, 1, 1 );
-            fheroes2::Copy( font[97 - 32], 1, 0, font[226 - 32], 5, 0, 1, 1 );
+            fheroes2::Copy( font[194 - 32], 7, 0, font[226 - 32], 3, 0, 3, 2 );
             font[226 - 32].setPosition( font[97 - 32].x(), font[97 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[226 - 32] );
 
@@ -889,11 +880,13 @@ namespace
             updateSmallFontLetterShadow( font[185 - 32] );
 
             // Uppercase L with caron (NOT an uppercase Y with diaeresis)
-            font[188 - 32].resize( font[76 - 32].width(), font[76 - 32].height() + 3 );
+            font[188 - 32].resize( font[76 - 32].width(), font[76 - 32].height());
             font[188 - 32].reset();
-            fheroes2::Copy( font[76 - 32], 0, 0, font[188 - 32], 0, 3, font[76 - 32].width(), font[76 - 32].height() );
-            fheroes2::Copy( font[116 - 32], 2, 5, font[188 - 32], 3, 0, 3, 2 );
-            font[188 - 32].setPosition( font[76 - 32].x(), font[76 - 32].y() - 3 );
+            fheroes2::Copy( font[76 - 32], 0, 0, font[188 - 32], 0, 0, font[76 - 32].width(), font[76 - 32].height() );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[188 - 32], 6, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[188 - 32], 7, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[188 - 32], 6, 1, 1, 1 );
+            font[188 - 32].setPosition( font[76 - 32].x(), font[76 - 32].y() );
             updateSmallFontLetterShadow( font[188 - 32] );
 
             // Lowercase l with caron (NOT an uppercase L with caron)
