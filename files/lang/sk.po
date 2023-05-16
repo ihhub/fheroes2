@@ -7,9 +7,9 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 13:04+0000\n"
-"PO-Revision-Date: 2023-05-13 15:40+0200\n"
+"PO-Revision-Date: 2023-05-16 \n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
-"Language-Team: \n"
+"Language-Team: <> <>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -64,7 +64,7 @@ msgid "DECLINE"
 msgstr "ODMIETNUŤ"
 
 msgid "LEARN"
-msgstr "UČ SA"
+msgstr "UČIŤ"
 
 msgid "TRADE"
 msgstr "VYMENIŤ"
@@ -150,8 +150,8 @@ msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
-"ROZŠÍRENÁ\n"
-"KAMPAŇ"
+"KAMPAŇ\n"
+"EXPANZIE"
 
 msgid "HOT SEAT"
 msgstr ""
@@ -177,7 +177,7 @@ msgid "GIFT"
 msgstr "DARUJ"
 
 msgid "guildWell|EXIT"
-msgstr "PREČ"
+msgstr "OK"
 
 msgid "DIFFICULTY"
 msgstr "OBTIAŽNOSŤ"
@@ -413,7 +413,7 @@ msgid "Settings"
 msgstr "Nastavenia"
 
 msgid "Configure"
-msgstr "Konfiguruj"
+msgstr "Usporiadaj"
 
 msgid "Hot Keys"
 msgstr "Skratky"
@@ -608,11 +608,11 @@ msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
-"\"Prijmem tvoje vzdanie sa a umožním tebe a tvojim vojskám prechod za "
-"%{price} zlata.\""
+"\"Prijmem tvoje vzdanie sa a umožním tebe a tvojim vojskám prechod za %"
+"{price} zlata.\""
 
 msgid "View %{monster} info"
-msgstr "Zobraz info o: %{monster}"
+msgstr "Zobraz info: %{monster}"
 
 msgid "Fly %{monster} here"
 msgstr "Leť sem s: %{monster}"
@@ -731,9 +731,9 @@ msgstr[2] "%{count} bojovníkov zahynulo."
 
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
-msgstr[0] "Jeden %{defender} zahynul/a."
+msgstr[0] "1 %{defender} hynie."
 msgstr[1] "%{count} %{defender} zahynuli."
-msgstr[2] "%{count} %{defender} zahynulo."
+msgstr[2] "%{defender} zahynuli (%{count})."
 
 msgid "1 soul is incorporated."
 msgid_plural "%{count} souls are incorporated."
@@ -743,9 +743,9 @@ msgstr[2] "%{count} duší je začlenených."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
-msgstr[0] "1 %{unit} je oživený/á."
-msgstr[1] "%{count} %{unit} sú oživení/é."
-msgstr[2] "%{count} %{unit} je oživených."
+msgstr[0] "Oživenie: 1 %{unit}."
+msgstr[1] "Oživenie: %{count} %{unit}."
+msgstr[2] "Oživenie: %{unit} (%{count} )."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Presun - %{monster}: od [%{src}] na [%{dst}]."
@@ -847,8 +847,8 @@ msgid "Perish: %{min} - %{max}"
 msgstr "Zahynie: %{min} - %{max}"
 
 msgid ""
-"Through eagle-eyed observation, %{name} is able to learn the magic spell "
-"%{spell}."
+"Through eagle-eyed observation, %{name} is able to learn the magic spell %"
+"{spell}."
 msgstr "Pozorovaním orlím zrakom, %{name} sa dokáže naučiť kúzlo %{spell}."
 
 msgid "Human"
@@ -1775,21 +1775,21 @@ msgid ""
 "The kingdom will receive %{amount} additional %{resource} at the start of "
 "the scenario."
 msgstr ""
-"Kráľovstvo dostane na začiatku scenára suroviny navyše: + %{amount} "
-"%{resource}."
+"Kráľovstvo dostane na začiatku scenára suroviny navyše: + %{amount} %"
+"{resource}."
 
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
 msgstr ""
-"Kráľovstvu budú na začiatku scenára odobrané suroviny: - %{amount} "
-"%{resource}."
+"Kráľovstvu budú na začiatku scenára odobrané suroviny: - %{amount} %"
+"{resource}."
 
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
 msgstr ""
-"Hlavný hrdina obdrží jednotky navyše na začiatku scenára: + %{count} "
-"%{monster}"
+"Hlavný hrdina obdrží jednotky navyše na začiatku scenára: + %{count} %"
+"{monster}"
 
 msgid ""
 "The main hero will have \"%{spell}\" spell at the start of the scenario."
@@ -1802,8 +1802,8 @@ msgid ""
 "The main hero will have additional %{count} %{skill} at the start of the "
 "scenario."
 msgstr ""
-"Hlavný hrdina obdrží skúsenosť navyše na začiatku scenára: + %{count} "
-"%{skill}"
+"Hlavný hrdina obdrží skúsenosť navyše na začiatku scenára: + %{count} %"
+"{skill}"
 
 msgid "The main hero will have %{skill} at the start of the scenario."
 msgstr "Hlavný hrdina bude ovládať %{skill} na začiatku scenára."
@@ -1905,7 +1905,7 @@ msgid "Baywatch"
 msgstr "Stráž zálivu"
 
 msgid "Fountainhead"
-msgstr "Fontánohlava"
+msgstr "Hlava fontány"
 
 msgid "Vertigo"
 msgstr "Závrat"
@@ -2650,10 +2650,10 @@ msgid "Damage"
 msgstr "Poškodenie"
 
 msgid "Hit Points"
-msgstr "Body zdravia"
+msgstr "Zdravie max"
 
 msgid "Hit Points Left"
-msgstr "Ostáva zdravia"
+msgstr "Zdravie teraz"
 
 msgid "You can't afford to upgrade your troops!"
 msgstr "Nemôžeš si dovoliť povýšiť svoje jednotky!"
@@ -2722,15 +2722,15 @@ msgid ""
 "gold.\n"
 "Do you accept?"
 msgstr ""
-"Celá skupina - %{offer} %{monster}, sa pripojí k tvojej armáde za sumu "
-"%{gold} zlata.\n"
+"Celá skupina - %{offer} %{monster}, sa pripojí k tvojej armáde za sumu %"
+"{gold} zlata.\n"
 "Prijímaš ponuku?"
 
 msgid "(Rate: %{percent})"
 msgstr "(Rozsah: %{percent})"
 
 msgid "off"
-msgstr "vyp"
+msgstr "vypnuté"
 
 msgid "Music"
 msgstr "Hudba"
@@ -2918,7 +2918,7 @@ msgid "V-Sync"
 msgstr "V-Sync"
 
 msgid "on"
-msgstr "zap"
+msgstr "zapnuté"
 
 msgid "FPS"
 msgstr "FPS"
@@ -4321,8 +4321,8 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid ""
-"The alliance consisting of %{allies} and you must defeat the enemy "
-"%{enemies}."
+"The alliance consisting of %{allies} and you must defeat the enemy %"
+"{enemies}."
 msgid_plural ""
 "The alliance consisting of %{allies} and you must defeat the enemy alliance "
 "of %{enemies}."
@@ -5079,8 +5079,8 @@ msgstr ""
 
 msgid ""
 "You come across a small shrine attended by a group of novice acolytes.\n"
-"In exchange for your protection, they agree to teach you a simple spell - "
-"'%{spell}'."
+"In exchange for your protection, they agree to teach you a simple spell - '%"
+"{spell}'."
 msgstr ""
 
 msgid "Shrine of the 2nd Circle"
@@ -5088,8 +5088,8 @@ msgstr ""
 
 msgid ""
 "You come across an ornate shrine attended by a group of rotund friars.\n"
-"In exchange for your protection, they agree to teach you a spell - "
-"'%{spell}'."
+"In exchange for your protection, they agree to teach you a spell - '%"
+"{spell}'."
 msgstr ""
 
 msgid "Shrine of the 3rd Circle"
@@ -5119,8 +5119,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You approach the hut and observe a witch inside studying an ancient tome on "
-"%{skill}.\n"
+"You approach the hut and observe a witch inside studying an ancient tome on %"
+"{skill}.\n"
 " \n"
 msgstr ""
 
@@ -5339,16 +5339,16 @@ msgstr ""
 
 msgid ""
 "You've pulled a shipwreck survivor from certain death in an unforgiving "
-"ocean. Grateful, he rewards you for your act of kindness by giving you the "
-"%{art}."
+"ocean. Grateful, he rewards you for your act of kindness by giving you the %"
+"{art}."
 msgstr ""
 
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr ""
 
 msgid ""
-"A leprechaun offers you the %{art} for the small price of %{gold} Gold and "
-"%{count} %{res}."
+"A leprechaun offers you the %{art} for the small price of %{gold} Gold and %"
+"{count} %{res}."
 msgstr ""
 
 msgid "Do you wish to buy this artifact?"
@@ -5424,8 +5424,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"After scouring the area, you fall upon a hidden chest, containing the "
-"%{gold} gold pieces."
+"After scouring the area, you fall upon a hidden chest, containing the %"
+"{gold} gold pieces."
 msgstr ""
 
 msgid ""
@@ -5785,8 +5785,8 @@ msgstr ""
 
 msgid ""
 "The Demon screams its challenge and attacks! After a short, desperate "
-"battle, you slay the monster and receive %{exp} experience points and "
-"%{count} gold."
+"battle, you slay the monster and receive %{exp} experience points and %"
+"{count} gold."
 msgstr ""
 
 msgid ""
@@ -7551,16 +7551,16 @@ msgid "Bone Dragons"
 msgstr "Kostnatí draci"
 
 msgid "Rogue"
-msgstr ""
+msgstr "Gauner"
 
 msgid "Rogues"
-msgstr ""
+msgstr "Gauneri"
 
 msgid "Nomad"
-msgstr ""
+msgstr "Nomád"
 
 msgid "Nomads"
-msgstr ""
+msgstr "Nomádi"
 
 msgid "Ghost"
 msgstr "Duch"
@@ -7569,205 +7569,205 @@ msgid "Ghosts"
 msgstr "Duchovia"
 
 msgid "Genie"
-msgstr ""
+msgstr "Džin"
 
 msgid "Genies"
-msgstr ""
+msgstr "Džinovia"
 
 msgid "Medusa"
-msgstr ""
+msgstr "Medúza"
 
 msgid "Medusas"
-msgstr ""
+msgstr "Medúzy"
 
 msgid "Earth Elemental"
-msgstr ""
+msgstr "Zemský elementál"
 
 msgid "Earth Elementals"
-msgstr ""
+msgstr "Zemskí elementáli"
 
 msgid "Air Elemental"
-msgstr ""
+msgstr "Vzdušný elementál"
 
 msgid "Air Elementals"
-msgstr ""
+msgstr "Vzdušní elementáli"
 
 msgid "Fire Elemental"
-msgstr ""
+msgstr "Ohnivý elementál"
 
 msgid "Fire Elementals"
-msgstr ""
+msgstr "Ohniví elementáli"
 
 msgid "Water Elemental"
-msgstr ""
+msgstr "Vodný elementál"
 
 msgid "Water Elementals"
-msgstr ""
+msgstr "Vodní elementáli"
 
 msgid "Random Monsters"
-msgstr ""
+msgstr "Náhodní bojovníci"
 
 msgid "Random Monster 1"
-msgstr ""
+msgstr "Náhodný bojovník 1"
 
 msgid "Random Monsters 1"
-msgstr ""
+msgstr "Náhodní bojovníci 1"
 
 msgid "Random Monster 2"
-msgstr ""
+msgstr "Náhodný bojovník 2"
 
 msgid "Random Monsters 2"
-msgstr ""
+msgstr "Náhodní bojovníci 2"
 
 msgid "Random Monster 3"
-msgstr ""
+msgstr "Náhodný bojovník 3"
 
 msgid "Random Monsters 3"
-msgstr ""
+msgstr "Náhodní bojovníci 3"
 
 msgid "Random Monster 4"
-msgstr ""
+msgstr "Náhodný bojovník 4"
 
 msgid "Random Monsters 4"
-msgstr ""
+msgstr "Náhodní bojovníci 4"
 
 msgid "Double shot"
-msgstr ""
+msgstr "Dvojitý výstrel"
 
 msgid "2-hex monster"
-msgstr ""
+msgstr "Cez dve polia"
 
 msgid "Double strike"
-msgstr ""
+msgstr "Dvojitý úder"
 
 msgid "Double damage to Undead"
-msgstr ""
+msgstr "Dvojité poškodenie nemŕtvym"
 
 msgid "% magic resistance"
-msgstr ""
+msgstr "% magická odolnosť"
 
 msgid "Immune to Mind spells"
-msgstr ""
+msgstr "Imunita voči kúzlam mysli"
 
 msgid "Immune to Elemental spells"
-msgstr ""
+msgstr "Imunita voči elementálnym kúzlam"
 
 msgid "Immune to Fire spells"
-msgstr ""
+msgstr "Imunita voči kúzlam ohňa"
 
 msgid "Immune to Cold spells"
-msgstr ""
+msgstr "Imunita voči kúzlam chladu"
 
 msgid "Immune to "
-msgstr ""
+msgstr "Imunita voči efektu "
 
 msgid "% immunity to %{spell} spell"
-msgstr ""
+msgstr "% imunity voči kúzlu %{spell}"
 
 msgid "% damage from Elemental spells"
-msgstr ""
+msgstr "% poškodenia od elementálnych kúziel"
 
 msgid "% chance to Dispel beneficial spells"
-msgstr ""
+msgstr "% šanca na rozptýlenie prospešných kúziel"
 
 msgid "% chance to Paralyze"
-msgstr ""
+msgstr "% šanca na paralyzovanie"
 
 msgid "% chance to Petrify"
-msgstr ""
+msgstr "% šanca na vydesenie"
 
 msgid "% chance to Blind"
-msgstr ""
+msgstr "% šanca na oslepenie"
 
 msgid "% chance to Curse"
-msgstr ""
+msgstr "% šanca na prekliatie"
 
 msgid "% chance to cast %{spell} spell"
-msgstr ""
+msgstr "% šanca na vyčarovanie kúzla %{spell}"
 
 msgid "HP regeneration"
-msgstr ""
+msgstr "Regenerácia zdravia"
 
 msgid "Two hexes attack"
-msgstr ""
+msgstr "Útok cez dve polia"
 
 msgid "Flyer"
-msgstr ""
+msgstr "Lieta"
 
 msgid "Always retaliates"
-msgstr ""
+msgstr "Vždy odvetí"
 
 msgid "Attacks all adjacent enemies"
-msgstr ""
+msgstr "Útočí na všetkých susedných nepriateľov"
 
 msgid "No melee penalty"
-msgstr ""
+msgstr "Bez penalizácie na blízko"
 
 msgid "Dragon"
-msgstr ""
+msgstr "Drak"
 
 msgid "Undead"
-msgstr ""
+msgstr "Nemŕtvy"
 
 msgid "No enemy retaliation"
-msgstr ""
+msgstr "Žiadna nepriateľská odveta"
 
 msgid "HP drain"
-msgstr ""
+msgstr "Čerpanie zdravia"
 
 msgid "Cloud attack"
-msgstr ""
+msgstr "Útok mračna"
 
 msgid "Decreases enemy's morale by "
-msgstr ""
+msgstr "Znižuje morálku nepriateľa o "
 
 msgid "% chance to halve enemy"
-msgstr ""
+msgstr "% šanca na rozpolenie nepriateľa"
 
 msgid "Soul Eater"
-msgstr ""
+msgstr "Hltač duší"
 
 msgid "Elemental"
-msgstr ""
+msgstr "Elementál"
 
 msgid "No Morale"
-msgstr ""
+msgstr "Žiadna morálka"
 
 msgid "200% damage from Fire spells"
-msgstr ""
+msgstr "Dvojité poškodenie od kúziel ohňa"
 
 msgid "200% damage from Cold spells"
-msgstr ""
+msgstr "Dvojité poškodenie od kúziel chladu"
 
 msgid "% damage from %{spell} spell"
-msgstr ""
+msgstr "% poškodenia od kúzla %{spell}"
 
 msgid "% immunity to "
-msgstr ""
+msgstr "% imunity voči: "
 
 msgid "Lightning"
-msgstr ""
+msgstr "Blesk"
 
 msgid "% damage from "
-msgstr ""
+msgstr "% poškodenie od: "
 
 msgid "The three Anduran artifacts magically combine into one."
-msgstr ""
+msgstr "Tri Anduranove artefakty sa čarovne spojili do jedného."
 
 msgid "View Spells"
-msgstr ""
+msgstr "Zobraz kúzla"
 
 msgid "View %{name} Info"
-msgstr ""
+msgstr "Zobraz info: %{name}"
 
 msgid "Move %{name}"
-msgstr ""
+msgstr "Presuň %{name}"
 
 msgid "Cannot move the Spellbook"
-msgstr ""
+msgstr "Kniha kúziel sa nedá presunúť"
 
 msgid "This item can't be traded."
-msgstr ""
+msgstr "Tento predmet sa nedá zameniť."
 
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
@@ -8940,16 +8940,16 @@ msgid "Cure"
 msgstr ""
 
 msgid ""
-"Removes all negative spells cast upon one of your units, and restores up to "
-"%{count} HP per level of spell power."
+"Removes all negative spells cast upon one of your units, and restores up to %"
+"{count} HP per level of spell power."
 msgstr ""
 
 msgid "Mass Cure"
 msgstr ""
 
 msgid ""
-"Removes all negative spells cast upon your forces, and restores up to "
-"%{count} HP per level of spell power, per creature."
+"Removes all negative spells cast upon your forces, and restores up to %"
+"{count} HP per level of spell power, per creature."
 msgstr ""
 
 msgid "Resurrect"
@@ -9106,8 +9106,8 @@ msgid "Hypnotize"
 msgstr ""
 
 msgid ""
-"Brings a single enemy unit under your control if its hits are less than "
-"%{count} times the caster's spell power."
+"Brings a single enemy unit under your control if its hits are less than %"
+"{count} times the caster's spell power."
 msgstr ""
 
 msgid "Cold Ray"
