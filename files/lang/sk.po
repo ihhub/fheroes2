@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 13:04+0000\n"
-"PO-Revision-Date: 2023-05-16 13:50+0200\n"
+"PO-Revision-Date: 2023-05-16 14:03+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -8462,10 +8462,10 @@ msgid ""
 msgstr ""
 
 msgid "Wizard's Hat"
-msgstr ""
+msgstr "Čarodejníkov klobúk"
 
 msgid "The %{name} increases the duration of your spells by %{count} turns."
-msgstr ""
+msgstr "%{name} predlžuje dobu trvania tvojich kúziel o %{count} kôl."
 
 msgid ""
 "You see a Wizard fleeing from a Griffin and riding like the wind. The Wizard "
@@ -8475,10 +8475,10 @@ msgid ""
 msgstr ""
 
 msgid "Power Ring"
-msgstr ""
+msgstr "Prsteň moci"
 
 msgid "The %{name} returns %{count} extra spell points per day to your hero."
-msgstr ""
+msgstr "%{name} vráti %{count} bodov kúziel za deň tvojmu hrdinovi."
 
 msgid ""
 "You find a small tree that closely resembles the great Warlock Carnauth with "
@@ -8488,10 +8488,12 @@ msgid ""
 msgstr ""
 
 msgid "Ammo Cart"
-msgstr ""
+msgstr "Muničný vozík"
 
 msgid "The %{name} provides endless ammunition for all your troops that shoot."
 msgstr ""
+"%{name} poskytuje nekonečnú muníciu všetkým tvojim jednotkám, ktoré "
+"strieľajú."
 
 msgid ""
 "An ammunition cart in the middle of an old battlefield catches your eye. "
@@ -8499,10 +8501,10 @@ msgid ""
 msgstr ""
 
 msgid "Tax Lien"
-msgstr ""
+msgstr "Daňové záložné právo"
 
 msgid "The %{name} costs you %{count} gold pieces per day."
-msgstr ""
+msgstr "%{name} ťa stojí %{count} zlata za deň."
 
 msgid ""
 "Your big spending habits have earned you a massive tax bill that you can't "
@@ -8512,10 +8514,12 @@ msgid ""
 msgstr ""
 
 msgid "Hideous Mask"
-msgstr ""
+msgstr "Ohavná maska"
 
 msgid "The %{name} prevents all 'wandering' armies from joining your hero."
 msgstr ""
+"%{name} zabraňuje všetkým putovným jednotkám, aby sa pridali k tvojmu "
+"hrdinovi."
 
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
