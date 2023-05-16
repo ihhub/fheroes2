@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 13:04+0000\n"
-"PO-Revision-Date: 2023-05-16 14:05+0200\n"
+"PO-Revision-Date: 2023-05-16 14:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -3413,22 +3413,22 @@ msgid "Knowl"
 msgstr "Ved."
 
 msgid "1st"
-msgstr ""
+msgstr "Prvý"
 
 msgid "2nd"
-msgstr ""
+msgstr "Druhý"
 
 msgid "3rd"
-msgstr ""
+msgstr "Tretí"
 
 msgid "4th"
-msgstr ""
+msgstr "Štvrtý"
 
 msgid "5th"
-msgstr ""
+msgstr "Piaty"
 
 msgid "6th"
-msgstr ""
+msgstr "Šiesty"
 
 msgid "Oracle: Player Rankings"
 msgstr "Prorok: Rebríček hráčov"
@@ -7614,22 +7614,22 @@ msgid "Random Monsters 1"
 msgstr "Náhodní bojovníci 1"
 
 msgid "Random Monster 2"
-msgstr "Náhodný bojovník 2"
+msgstr ""
 
 msgid "Random Monsters 2"
-msgstr "Náhodní bojovníci 2"
+msgstr ""
 
 msgid "Random Monster 3"
-msgstr "Náhodný bojovník 3"
+msgstr ""
 
 msgid "Random Monsters 3"
-msgstr "Náhodní bojovníci 3"
+msgstr ""
 
 msgid "Random Monster 4"
-msgstr "Náhodný bojovník 4"
+msgstr ""
 
 msgid "Random Monsters 4"
-msgstr "Náhodní bojovníci 4"
+msgstr ""
 
 msgid "Double shot"
 msgstr "Dvojitý výstrel"
