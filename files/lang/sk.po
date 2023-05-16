@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 13:04+0000\n"
-"PO-Revision-Date: 2023-05-16 12:23+0200\n"
+"PO-Revision-Date: 2023-05-16 12:38+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <> <>\n"
 "Language: sk\n"
@@ -7770,55 +7770,55 @@ msgid "This item can't be traded."
 msgstr "Tento predmet sa nedá zameniť."
 
 msgid "The %{name} increases your knowledge by %{count}."
-msgstr ""
+msgstr "%{name} zvyšuje tvoje vedomosti o %{count}."
 
 msgid "Ultimate Book of Knowledge"
-msgstr ""
+msgstr "Ultimátna kniha vedomostí"
 
 msgid "The %{name} increases your attack skill by %{count}."
-msgstr ""
+msgstr "%{name} zvyšuje tvoju útočnú zručnosť o %{count}."
 
 msgid "Ultimate Sword of Dominion"
-msgstr ""
+msgstr "Ultimátny meč nadvlády"
 
 msgid "The %{name} increases your defense skill by %{count}."
-msgstr ""
+msgstr "%{name} zvyšuje tvoju obrannú zručnosť o %{count}."
 
 msgid "Ultimate Cloak of Protection"
-msgstr ""
+msgstr "Ultimátny plášť ochrany"
 
 msgid "The %{name} increases your spell power by %{count}."
-msgstr ""
+msgstr "%{name} zvyšuje tvoju silu kúziel o %{count}."
 
 msgid "Ultimate Wand of Magic"
-msgstr ""
+msgstr "Ultimátna čarovná palička"
 
 msgid "The %{name} increases your attack and defense skills by %{count} each."
-msgstr ""
+msgstr "%{name} zvyšuje tvoju útočnú aj obrannú zručnosť o %{count}."
 
 msgid "Ultimate Shield"
-msgstr ""
+msgstr "Ultimátny štít"
 
 msgid "The %{name} increases your spell power and knowledge by %{count} each."
-msgstr ""
+msgstr "%{name} zvyšuje tvoje vedomosti aj silu kúziel o %{count}."
 
 msgid "Ultimate Staff"
-msgstr ""
+msgstr "Ultimátna palica"
 
 msgid "The %{name} increases each of your basic skills by %{count} points."
-msgstr ""
+msgstr "%{name} zvyšuje všetky tvoje zručnosti o %{count}."
 
 msgid "Ultimate Crown"
-msgstr ""
+msgstr "Ultimátna koruna"
 
 msgid "Golden Goose"
-msgstr ""
+msgstr "Zlatá hus"
 
 msgid "The %{name} brings in an income of %{count} gold per day."
-msgstr ""
+msgstr "%{name} zvyšuje príjem o %{count} zlata na deň."
 
 msgid "Arcane Necklace of Magic"
-msgstr ""
+msgstr "Tajomný magický náhrdelník"
 
 msgid ""
 "After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
