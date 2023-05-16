@@ -292,7 +292,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
     fheroes2::Image recruitCount( 68, 19 );
     fheroes2::Copy( originalBackground, 134, 159, recruitCount, 0, 0, 68, 19 );
     if ( Settings::Get().isEvilInterfaceEnabled() ) {
-            fheroes2::ApplyPalette( recruitCount, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+        fheroes2::ApplyPalette( recruitCount, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
     }
     fheroes2::Copy( recruitCount, 0, 0, display, pos.x + 134, pos.y + 159, 68, 19 );
     fheroes2::addSoftShadow( recruitCount, display, { pos.x + 134, pos.y + 159 }, { -5, 5 } );
