@@ -22,6 +22,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
+#include <cstddef>
 #include <cstdlib>
 #include <cstring>
 #include <type_traits>
