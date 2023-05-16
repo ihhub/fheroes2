@@ -752,6 +752,97 @@ namespace fheroes2
         return out;
     }
 
+    void addSoftShadow( const Sprite & in, Image & out, const Point & outPos, const Point & shadowOffset )
+    {
+        const int32_t outWidth = out.width();
+        if ( in.empty() || ( shadowOffset.x == 0 && shadowOffset.y == 0 ) || ( outPos.x < 0 ) || ( outPos.y < 0 ) ) {
+            return;
+        }
+
+        const int32_t inWidth = in.width();
+        const int32_t inHeight = in.height();
+        const int32_t absOffsetX = std::abs( shadowOffset.x );
+        const int32_t absOffsetY = std::abs( shadowOffset.y );
+        const int32_t shadowOffsetX = std::min( shadowOffset.x, 0 );
+        const int32_t shadowOffsetY = std::min( shadowOffset.y, 0 );
+
+        // Calculate shadow line from the object.
+        const double slopeFactor = static_cast<double>( shadowOffset.y ) / shadowOffset.x;
+
+        std::vector<Point> shadowLine;
+        shadowLine.reserve( std::max( absOffsetX, absOffsetY ) + 1 );
+
+        if ( absOffsetX >= absOffsetY ) {
+            const int32_t maxX = absOffsetX + shadowOffsetX;
+            for ( int32_t x = shadowOffsetX; x <= maxX; ++x ) {
+                shadowLine.emplace_back( x, static_cast<int32_t>( std::round( x * slopeFactor ) ) );
+            }
+        }
+        else {
+            const int32_t maxY = absOffsetY + shadowOffsetY;
+            for ( int32_t y = shadowOffsetY; y <= maxY; ++y ) {
+                shadowLine.emplace_back( static_cast<int32_t>( std::round( y / slopeFactor ) ), y );
+            }
+        }
+
+        const int32_t maxX = inWidth + absOffsetX;
+        const int32_t maxY = inHeight + absOffsetY;
+        const bool isInNonSingleLayer = !in.singleLayer();
+        const bool isOutNonSingleLayer = !out.singleLayer();
+
+        const uint8_t * transformIn = in.transform();
+        uint8_t * transformOut = out.transform();
+        uint8_t * imageOut = out.image() + outPos.x + shadowOffsetX + in.x() + static_cast<ptrdiff_t>( outPos.y + shadowOffsetY + in.y() ) * outWidth;
+
+        for ( int32_t y = 0; y < maxY; ++y ) {
+            const int32_t offsetY = y + shadowOffsetY;
+            for ( int32_t x = 0; x < maxX; ++x ) {
+                const int32_t offsetX = x + shadowOffsetX;
+                const int32_t inOffset = offsetX + offsetY * inWidth;
+                const bool isTransparent = ( ( offsetX < 0 ) || ( offsetY < 0 ) || ( offsetX >= inWidth ) || ( offsetY >= inHeight ) )
+                                           || ( isInNonSingleLayer && ( *( transformIn + inOffset ) == 1 ) );
+                if ( isTransparent ) {
+                    // We add shadow only to visible parts of the background image.
+                    // There are 4 shadow tables: 2, 3, 4, 5. The strongest shadow is in table ID 2.
+                    uint8_t transformTableId = 6;
+                    for ( const Point & shadowLineOffset : shadowLine ) {
+                        const int32_t shadowLineOffsetX = offsetX - shadowLineOffset.x;
+                        const int32_t shadowLineOffsetY = offsetY - shadowLineOffset.y;
+                        const int32_t transformInOffset = shadowLineOffsetX + shadowLineOffsetY * inWidth;
+
+                        const bool isTransparent2
+                            = ( ( shadowLineOffsetX < 0 ) || ( shadowLineOffsetY < 0 ) || ( shadowLineOffsetX >= inWidth ) || ( shadowLineOffsetY >= inHeight ) )
+                              || ( isInNonSingleLayer && ( *( transformIn + transformInOffset ) == 1 ) );
+
+                        if ( !isTransparent2 && ( transformTableId > 2 ) ) {
+                            // Increase the strength of shadow by reducing the table ID.
+                            --transformTableId;
+                        }
+                    }
+
+                    // If the shadow has to be applied.
+                    if ( transformTableId < 6 ) {
+                        const int32_t outOffset = x + y * outWidth;
+                        uint8_t * transformOutX = transformOut + outOffset;
+
+                        if ( isOutNonSingleLayer || *transformOutX == 0 ) {
+                            // Apply shadow transform to the out image.
+                            uint8_t * imageOutX = imageOut + outOffset;
+                            *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ 256 } + *imageOutX );
+                        }
+                        else if ( *transformOutX > 1 && *transformOutX < 6 ) {
+                            // Out image trasform layer already has shadow data. We add the shadow strength by substract the 'transformTableId', limited to 2.
+                            *transformOutX = ( *transformOutX < 2 + transformTableId ) ? 2 : ( *transformOutX - transformTableId );
+                        }
+                        else {
+                            *transformOutX = transformTableId;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     void AddTransparency( Image & image, uint8_t valueToReplace )
     {
         ReplaceColorIdByTransformId( image, valueToReplace, 1 );
