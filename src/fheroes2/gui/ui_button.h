@@ -92,6 +92,9 @@ namespace fheroes2
 
         bool draw( Image & output = Display::instance() ) const; // will draw on screen by default
 
+        // Render a button shadow on output image. 'Display::instance()' is used by default.
+        bool drawShadow( Image & output = Display::instance() ) const;
+
         // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
         bool drawOnPress( Display & output = Display::instance() );
 
