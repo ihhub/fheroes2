@@ -101,29 +101,36 @@ namespace
     /// @param box Draw shadow on the left and bottom of this area
     void DrawShadow( fheroes2::Image & i, fheroes2::Rect box )
     {
-        auto x = box.x;     auto y = box.y;
-        auto w = box.width; auto h = box.height;
+        auto x = box.x;
+        auto y = box.y;
+        auto w = box.width;
+        auto h = box.height;
         auto b = BORDERWIDTH;
 
         // Use the shadow strategy outlined in StandardWindow::render()
 
+        // The table format makes it easier to understand what the
+        // multiple transform calls do and how they relate to each other.
+        // clang-format off
+
         // "left side" shadow
-        ApplyTransform( i, x-b  , y+b  , b  , 1    , 5 );
-        ApplyTransform( i, x-b  , y+b+1, 1  , h-2  , 5 );
-        ApplyTransform( i, x-b+1, y+b+1, b-1, 1    , 4 );
-        ApplyTransform( i, x-b+1, y+b+2, 1  , h-4  , 4 );
-        ApplyTransform( i, x-b+2, y+b+2, b-2, 1    , 3 );
-        ApplyTransform( i, x-b+2, y+b+3, 1  , h-6  , 3 );
-        ApplyTransform( i, x-b+3, y+b+3, b-3, h-b-3, 2 );
+        ApplyTransform( i, x - b    , y + b    , b    , 1        , 5 );
+        ApplyTransform( i, x - b    , y + b + 1, 1    , h - 2    , 5 );
+        ApplyTransform( i, x - b + 1, y + b + 1, b - 1, 1        , 4 );
+        ApplyTransform( i, x - b + 1, y + b + 2, 1    , h - 4    , 4 );
+        ApplyTransform( i, x - b + 2, y + b + 2, b - 2, 1        , 3 );
+        ApplyTransform( i, x - b + 2, y + b + 3, 1    , h - 6    , 3 );
+        ApplyTransform( i, x - b + 3, y + b + 3, b - 3, h - b - 3, 2 );
 
         // "bottom side" shadow
-        ApplyTransform( i, x-b+3,   y+h,     w-6, b-3, 2 );
-        ApplyTransform( i, x-b+2,   y+h+b-3, w-4, 1,   3 );
-        ApplyTransform( i, x+w-b-3, y+h,     1,   b-3, 3 );
-        ApplyTransform( i, x-b+1,   y+h+b-2, w-2, 1,   4 );
-        ApplyTransform( i, x+w-b-2, y+h,     1,   b-2, 4 );
-        ApplyTransform( i, x-b,     y+h+b-1, w,   1,   5 );
-        ApplyTransform( i, x+w-b-1, y + h,   1,   b-1, 5 );
+        ApplyTransform( i, x - b + 3    , y + h        , w - 6, b - 3, 2 );
+        ApplyTransform( i, x - b + 2    , y + h + b - 3, w - 4, 1    , 3 );
+        ApplyTransform( i, x + w - b - 3, y + h        , 1    , b - 3, 3 );
+        ApplyTransform( i, x - b + 1    , y + h + b - 2, w - 2, 1    , 4 );
+        ApplyTransform( i, x + w - b - 2, y + h        , 1    , b - 2, 4 );
+        ApplyTransform( i, x - b        , y + h + b - 1, w    , 1    , 5 );
+        ApplyTransform( i, x + w - b - 1, y + h        , 1    , b - 1, 5 );
+        // clang-format on
     }
 }
 
@@ -283,7 +290,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     const fheroes2::Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
     // include shadow
-    fheroes2::ImageRestorer restorer( display, cur_pt.x - BORDERWIDTH, cur_pt.y, backSprite.width() + BORDERWIDTH, backSprite.height() + BORDERWIDTH);
+    fheroes2::ImageRestorer restorer( display, cur_pt.x - BORDERWIDTH, cur_pt.y, backSprite.width() + BORDERWIDTH, backSprite.height() + BORDERWIDTH );
 
     fheroes2::Rect src_rt( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
