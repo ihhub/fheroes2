@@ -342,11 +342,14 @@ void StreamBuf::reallocbuf( size_t sz )
 
 void StreamBuf::put8( const uint8_t v )
 {
-    if ( sizep() == 0 )
+    if ( sizep() == 0 ) {
         reallocbuf( capacity() + capacity() / 2 );
+    }
 
-    if ( sizep() > 0 )
-        *itput++ = v;
+    if ( sizep() > 0 ) {
+        *itput = v;
+        ++itput;
+    }
 }
 
 uint8_t StreamBuf::get8()
