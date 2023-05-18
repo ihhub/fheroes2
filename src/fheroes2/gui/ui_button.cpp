@@ -556,27 +556,26 @@ namespace fheroes2
         const Sprite & originalReleased = AGG::GetICN( icnId, 0 );
         const Sprite & originalPressed = AGG::GetICN( icnId, 1 );
 
-        if ( isTransparentBackground ) {
-            released = resizeButton( originalReleased, width );
-            pressed = resizeButton( originalPressed, width );
-        }
-        else {
+        released = resizeButton( originalReleased, width );
+        pressed = resizeButton( originalPressed, width );
+
+        if ( !isTransparentBackground ) {
+            // We need to copy the background image to pressed button only where it does not overlay the image of released button.
             const int32_t backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
             const Sprite & background = AGG::GetICN( backgroundIcnId, 0 );
 
-            Image temp = resizeButton( originalReleased, width );
-            released.resize( temp.width(), temp.height() );
-            assert( background.width() >= temp.width() && background.height() >= temp.height() );
-            Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, released, 0, 0, temp.width(), temp.height() );
-            Blit( temp, released );
-            released.setPosition( originalReleased.x(), originalReleased.y() );
+            const uint8_t * releasedTransform = released.transform();
+            uint8_t * pressedTransform = pressed.transform();
+            uint8_t * pressedImage = pressed.image();
+            const uint8_t * backgroundImage
+                = background.image() + ( background.width() - pressed.width() ) / 2 + ( background.height() - pressed.height() ) * background.width() / 2;
 
-            temp = resizeButton( originalPressed, width );
-            pressed.resize( temp.width(), temp.height() );
-            assert( background.width() >= temp.width() && background.height() >= temp.height() );
-            Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, pressed, 0, 0, temp.width(), temp.height() );
-            Blit( temp, pressed );
-            pressed.setPosition( originalPressed.x(), originalPressed.y() );
+            for ( int32_t x = 0; x < pressed.width() * pressed.height(); ++x ) {
+                if ( ( *( pressedTransform + x ) == 1 ) && ( *( releasedTransform + x ) == 0 ) ) {
+                    *( pressedImage + x ) = *( backgroundImage + x % pressed.width() + static_cast<ptrdiff_t>( x / pressed.width() ) * background.width() );
+                    *( pressedTransform + x ) = 0;
+                }
+            }
         }
     }
 

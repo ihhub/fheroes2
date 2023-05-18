@@ -279,7 +279,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
     // Prepare buttons.
     fheroes2::Button buttonOk( pos.x + 34, pos.y + 249, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-    fheroes2::Button buttonCancel( pos.x + 187, pos.y + 249, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
+    fheroes2::Button buttonCancel( pos.x + 197, pos.y + 249, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
     fheroes2::Point dst_pt( pos.x + 234, pos.y + 156 );
 

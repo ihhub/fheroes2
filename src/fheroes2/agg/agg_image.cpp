@@ -143,7 +143,6 @@ namespace
                                                 ICN::UNIFORM_EVIL_CANCEL_BUTTON,
                                                 ICN::UNIFORM_GOOD_EXIT_BUTTON,
                                                 ICN::UNIFORM_EVIL_EXIT_BUTTON,
-                                                ICN::NON_UNIFORM_GOOD_MIN_BUTTON,
                                                 ICN::BUTTON_SMALL_MIN_GOOD,
                                                 ICN::BUTTON_SMALL_MIN_EVIL,
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
@@ -444,6 +443,23 @@ namespace
         fheroes2::Copy( original, 0, original.height() - 16, image, roi.x, roi.y + roi.height - 16, 16, 16 );
         fheroes2::Copy( original, 16, original.height() - 13, image, roi.x + 16, roi.y + roi.height - 13, 27, 13 );
     }
+
+    // Set 'out' Sprite trensparency like in 'in' image. Sprites should have the same width and height.
+    void setTransparentAsIn( const fheroes2::Sprite & in, fheroes2::Sprite & out )
+    {
+        const int32_t inWidth = in.width();
+        const int32_t inHeight = in.height();
+        assert( inWidth == out.width() || inHeight == out.height() );
+
+        const int32_t imageSize = inWidth * inHeight;
+        uint8_t * outTransform = out.transform();
+        const uint8_t * inTransform = in.transform();
+        for ( int32_t i = 0; i < imageSize; ++i ) {
+            if ( *( inTransform + i ) == 1 ) {
+                *( outTransform + i ) = 1;
+            }
+        }
+    }
 }
 
 namespace fheroes2
@@ -652,6 +668,10 @@ namespace fheroes2
                 if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::CPANELE : ICN::CPANEL, 8 );
                     _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::CPANELE : ICN::CPANEL, 9 );
+
+                    // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
+                    setTransparentAsIn( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+
                     break;
                 }
 
@@ -672,6 +692,10 @@ namespace fheroes2
                 if ( isSameResourceAsLanguage && ( id == ICN::BUTTON_SMALL_OKAY_EVIL || id == ICN::BUTTON_SMALL_OKAY_GOOD ) ) {
                     _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0 );
                     _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 1 );
+
+                    // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
+                    setTransparentAsIn( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+
                     break;
                 }
                 if ( isSameResourceAsLanguage && ( id == ICN::BUTTON_SMALLER_OKAY_EVIL || id == ICN::BUTTON_SMALLER_OKAY_GOOD ) ) {
@@ -700,6 +724,10 @@ namespace fheroes2
                 if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 0 );
                     _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 1 );
+
+                    // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
+                    setTransparentAsIn( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+
                     break;
                 }
 
@@ -717,6 +745,10 @@ namespace fheroes2
                 if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 2 );
                     _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 3 );
+
+                    // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
+                    setTransparentAsIn( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+
                     break;
                 }
 
@@ -1460,13 +1492,20 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( ICN::NON_UNIFORM_GOOD_MIN_BUTTON, 0 );
-                    _icnVsSprite[id][1] = GetICN( ICN::NON_UNIFORM_GOOD_MIN_BUTTON, 1 );
+                    // Write the "MIN" text on original assets ICNs.
+                    for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                        _icnVsSprite[id][i] = GetICN( ICN::BUTTON_SMALL_MAX_GOOD, 0 + i );
+
+                        // Clean the button text.
+                        Blit( GetICN( ICN::SYSTEM, 11 + i ), 10 - i, 4 + i, _icnVsSprite[id][i], 6 - i, 4 + i, 50, 16 );
+                    }
+
+                    renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), { 6, 5 }, { 5, 6 }, { 52, 16 }, fheroes2::FontColor::WHITE );
+
                     break;
                 }
 
-                int32_t textWidth = 61;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "MIN" ), false );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 61, gettext_noop( "MIN" ), false );
 
                 break;
             }
@@ -1481,13 +1520,44 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( ICN::RECRUIT, 4 );
-                    _icnVsSprite[id][1] = GetICN( ICN::RECRUIT, 5 );
+                    // The original assets ICN contains button with shadow. We crop only the button.
+                    _icnVsSprite[id][0] = fheroes2::Crop( GetICN( ICN::RECRUIT, 4 ), 5, 0, 60, 25 );
+                    _icnVsSprite[id][1] = fheroes2::Crop( GetICN( ICN::RECRUIT, 5 ), 5, 0, 60, 25 );
+
+                    // To properly generate shadows and Blit the button we need to make some pixels transparent.
+                    for ( fheroes2::Sprite & image : _icnVsSprite[id] ) {
+                        const ptrdiff_t imageWidth = image.width();
+                        const int32_t imageHeight = image.width();
+                        uint8_t * imageTransform = image.transform();
+                        *imageTransform = 1;
+                        *( imageTransform + 1 ) = 1;
+                        *( imageTransform + 2 ) = 1;
+                        *( imageTransform + 3 ) = 1;
+                        *( imageTransform + imageWidth - 2 ) = 1;
+                        *( imageTransform + imageWidth - 1 ) = 1;
+                        *( imageTransform + imageWidth ) = 1;
+                        *( imageTransform + imageWidth + 1 ) = 1;
+                        *( imageTransform + imageWidth + 2 ) = 1;
+                        *( imageTransform + 2 * imageWidth - 1 ) = 1;
+                        *( imageTransform + 3 * imageWidth ) = 1;
+                        *( imageTransform + 3 * imageWidth + 1 ) = 1;
+                        *( imageTransform + 4 * imageWidth ) = 1;
+                        *( imageTransform + ( imageHeight - 3 ) * imageWidth - 1 ) = 1;
+                        *( imageTransform + ( imageHeight - 2 ) * imageWidth - 2 ) = 1;
+                        *( imageTransform + ( imageHeight - 2 ) * imageWidth - 1 ) = 1;
+                        *( imageTransform + ( imageHeight - 1 ) * imageWidth - 3 ) = 1;
+                        *( imageTransform + ( imageHeight - 1 ) * imageWidth - 2 ) = 1;
+                        *( imageTransform + ( imageHeight - 1 ) * imageWidth - 1 ) = 1;
+                        *( imageTransform + imageHeight * imageWidth - 4 ) = 1;
+                        *( imageTransform + imageHeight * imageWidth - 3 ) = 1;
+                        *( imageTransform + imageHeight * imageWidth - 2 ) = 1;
+                        *( imageTransform + imageHeight * imageWidth - 1 ) = 1;
+                    }
+
                     break;
                 }
 
-                int32_t textWidth = 61;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "MAX" ), false );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 61, gettext_noop( "MAX" ), false );
 
                 break;
             }
@@ -1596,21 +1666,6 @@ namespace fheroes2
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), { 7, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
-
-                break;
-            }
-            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON: {
-                _icnVsSprite[id].resize( 2 );
-
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::RECRUIT, 4 + i );
-
-                    // clean the button.
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10 - i, 4 + i, out, 11 - i, 4 + i, 50, 16 );
-                }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), { 11, 5 }, { 10, 6 }, { 52, 16 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -2213,7 +2268,6 @@ namespace fheroes2
             case ICN::UNIFORM_EVIL_CANCEL_BUTTON:
             case ICN::UNIFORM_GOOD_EXIT_BUTTON:
             case ICN::UNIFORM_EVIL_EXIT_BUTTON:
-            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
             case ICN::BUTTON_SMALL_MIN_GOOD:
             case ICN::BUTTON_SMALL_MIN_EVIL:
             case ICN::BUTTON_SMALL_MAX_GOOD:
