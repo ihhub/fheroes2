@@ -344,10 +344,10 @@ void StreamBuf::put8( const uint8_t v )
 {
     if ( sizep() == 0 ) {
         reallocbuf( capacity() + capacity() / 2 );
+        assert( itput != nullptr );
     }
 
     if ( sizep() > 0 ) {
-        assert( itput != nullptr );
         *itput = v;
         ++itput;
     }
