@@ -347,6 +347,7 @@ void StreamBuf::put8( const uint8_t v )
     }
 
     if ( sizep() > 0 ) {
+        assert( itput != nullptr );
         *itput = v;
         ++itput;
     }
