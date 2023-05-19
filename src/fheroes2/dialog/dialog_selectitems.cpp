@@ -389,7 +389,8 @@ Artifact Dialog::SelectArtifact( int cur )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    std::vector<int> artifacts( static_cast<int>( Settings::Get().isCurrentMapPriceOfLoyalty() ? Artifact::ARTIFACT_COUNT - 1 : Artifact::MAGIC_BOOK ), Artifact::UNKNOWN );
+    std::vector<int> artifacts( static_cast<int>( Settings::Get().isCurrentMapPriceOfLoyalty() ? Artifact::ARTIFACT_COUNT - 1 : Artifact::MAGIC_BOOK ),
+                                Artifact::UNKNOWN );
 
     for ( size_t i = 0; i < artifacts.size(); ++i )
         artifacts[i] = static_cast<int>( i + 1 ); // safe to do this as the number of artifacts can't be more than 2 billion
