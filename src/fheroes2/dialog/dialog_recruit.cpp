@@ -79,8 +79,8 @@ namespace
             fheroes2::ApplyPalette( recruitWindow, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
         }
 
-        fheroes2::Blit( recruitWindow, output, offset.x + 138, offset.y + 54 );
-        fheroes2::addSoftShadow( recruitWindow, output, { offset.x + 138, offset.y + 54 }, { -5, 5 } );
+        fheroes2::Blit( recruitWindow, output, offset.x, offset.y );
+        fheroes2::addSoftShadow( recruitWindow, output, { offset.x, offset.y }, { -5, 5 } );
     }
 }
 
@@ -129,11 +129,14 @@ void RedrawResourceInfo( const int resourceIcnIndex, const fheroes2::Point & pos
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
+    // In recruit dialog (where the total sum is also shown) the resource info is shifted by 10 pixels to the right.
+    const int32_t offsetX = showTotalSum ? 10 : 0;
+
     const fheroes2::Sprite & sres = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::getIconIcnIndex( resourceIcnIndex ) );
-    fheroes2::Blit( sres, fheroes2::Display::instance(), pos.x + px1, pos.y + py1 );
+    fheroes2::Blit( sres, fheroes2::Display::instance(), pos.x + px1 + offsetX, pos.y + py1 );
 
     const fheroes2::Text text( std::to_string( value ), fheroes2::FontType::smallWhite() );
-    text.draw( pos.x + px2 - text.width() / 2, pos.y + py2, display );
+    text.draw( pos.x + px2 - text.width() / 2 + offsetX, pos.y + py2, display );
 
     if ( showTotalSum ) {
         fheroes2::Blit( sres, display, pos.x + px1 - 45, pos.y + py1 + 125 );
@@ -150,7 +153,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, con
     std::string str = _( "Recruit %{name}" );
     StringReplace( str, "%{name}", monster.GetMultiName() );
     fheroes2::Text text( str, fheroes2::FontType::normalYellow() );
-    fheroes2::Point dst_pt( pos.x + ( pos.width - text.width() ) / 2, pos.y + 27 );
+    fheroes2::Point dst_pt( pos.x + ( pos.width - text.width() ) / 2, pos.y + 11 );
     text.draw( dst_pt.x, dst_pt.y, display );
 
     // Monster sprite.
@@ -159,8 +162,8 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, con
     assert( !monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC].empty() );
 
     const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( monster.GetMonsterSprite(), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
-    dst_pt.x = pos.x + 80 + smon.x() - ( monster.isWide() ? 22 : 0 );
-    dst_pt.y = pos.y + 135 - smon.height();
+    dst_pt.x = pos.x + 64 + smon.x() - ( monster.isWide() ? 22 : 0 );
+    dst_pt.y = pos.y + 119 - smon.height();
 
     if ( monsterId == Monster::CHAMPION ) {
         ++dst_pt.x;
@@ -170,40 +173,40 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, con
 
     // Resources needed to buy monster.
     if ( needExtraResources ) {
-        RedrawResourceInfo( Resource::GOLD, pos.getPosition(), paymentMonster.gold, 150, 75, 183, 105, showTotalSum );
+        RedrawResourceInfo( Resource::GOLD, pos.getPosition(), paymentMonster.gold, 134, 59, 167, 89, showTotalSum );
 
         if ( paymentMonster.crystal > 0 ) {
-            RedrawResourceInfo( Resource::CRYSTAL, pos.getPosition(), paymentMonster.crystal, 222, 69, 240, 105, showTotalSum );
+            RedrawResourceInfo( Resource::CRYSTAL, pos.getPosition(), paymentMonster.crystal, 206, 53, 224, 89, showTotalSum );
         }
         else if ( paymentMonster.mercury > 0 ) {
-            RedrawResourceInfo( Resource::MERCURY, pos.getPosition(), paymentMonster.mercury, 225, 72, 240, 105, showTotalSum );
+            RedrawResourceInfo( Resource::MERCURY, pos.getPosition(), paymentMonster.mercury, 209, 56, 224, 89, showTotalSum );
         }
         else if ( paymentMonster.wood > 0 ) {
-            RedrawResourceInfo( Resource::WOOD, pos.getPosition(), paymentMonster.wood, 225, 72, 240, 105, showTotalSum );
+            RedrawResourceInfo( Resource::WOOD, pos.getPosition(), paymentMonster.wood, 209, 56, 224, 89, showTotalSum );
         }
         else if ( paymentMonster.ore > 0 ) {
-            RedrawResourceInfo( Resource::ORE, pos.getPosition(), paymentMonster.ore, 225, 72, 240, 105, showTotalSum );
+            RedrawResourceInfo( Resource::ORE, pos.getPosition(), paymentMonster.ore, 209, 56, 224, 89, showTotalSum );
         }
         else if ( paymentMonster.sulfur > 0 ) {
-            RedrawResourceInfo( Resource::SULFUR, pos.getPosition(), paymentMonster.sulfur, 225, 75, 240, 105, showTotalSum );
+            RedrawResourceInfo( Resource::SULFUR, pos.getPosition(), paymentMonster.sulfur, 209, 59, 224, 89, showTotalSum );
         }
         else if ( paymentMonster.gems > 0 ) {
-            RedrawResourceInfo( Resource::GEMS, pos.getPosition(), paymentMonster.gems, 225, 75, 240, 105, showTotalSum );
+            RedrawResourceInfo( Resource::GEMS, pos.getPosition(), paymentMonster.gems, 209, 59, 224, 89, showTotalSum );
         }
     }
     else {
         // Only gold is needed.
-        RedrawResourceInfo( Resource::GOLD, pos.getPosition(), paymentMonster.gold, 175, 75, 205, 105, showTotalSum );
+        RedrawResourceInfo( Resource::GOLD, pos.getPosition(), paymentMonster.gold, 159, 59, 189, 89, showTotalSum );
     }
 
     str = _( "Available: %{count}" );
     StringReplace( str, "%{count}", available );
     text.set( str, fheroes2::FontType::smallWhite() );
-    text.draw( pos.x + 80 - text.width() / 2, pos.y + 137, display );
+    text.draw( pos.x + 64 - text.width() / 2, pos.y + 121, display );
 
     if ( showTotalSum ) {
         text.set( _( "Number to buy:" ), fheroes2::FontType::smallWhite() );
-        text.draw( pos.x + 29, pos.y + 165, display );
+        text.draw( pos.x + 107 - text.width(), pos.y + 149, display );
     }
 }
 
@@ -258,9 +261,12 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
     const fheroes2::Size windowSize{ 299, 272 };
     const fheroes2::Point dialogOffset( ( display.width() - windowSize.width ) / 2, ( display.height() - windowSize.height ) / 2 + windowOffsetY );
-    const fheroes2::Rect pos( dialogOffset.x - BORDERWIDTH, dialogOffset.y - BORDERWIDTH, windowSize.width + 2 * BORDERWIDTH, windowSize.height + 2 * BORDERWIDTH );
 
     const fheroes2::StandardWindow window( dialogOffset.x, dialogOffset.y, windowSize.width, windowSize.height, true, display );
+
+    const fheroes2::Rect roi( window.windowWithShadowArea() );
+
+    const fheroes2::Rect windowActiveArea( window.activeArea() );
 
     const fheroes2::Sprite & originalBackground = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
 
@@ -272,25 +278,29 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         fheroes2::ApplyPalette( background, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
     }
 
-    fheroes2::Copy( background, 0, 0, display, pos.x + 134, pos.y + 159, 68, 19 );
-    fheroes2::addSoftShadow( background, display, { pos.x + 134, pos.y + 159 }, { -5, 5 } );
+    fheroes2::Point dst_pt( dialogOffset.x + 118, dialogOffset.y + 143 );
+    fheroes2::Copy( background, 0, 0, display, dst_pt.x, dst_pt.y, 68, 19 );
+    fheroes2::addSoftShadow( background, display, dst_pt, { -5, 5 } );
 
-    drawRecruitWindow( display, { pos.x, pos.y } );
+    dst_pt.x = dialogOffset.x + 132;
+    dst_pt.y = dialogOffset.y + 38;
+    drawRecruitWindow( display, dst_pt );
 
     // Prepare buttons.
-    fheroes2::Button buttonOk( pos.x + 34, pos.y + 249, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-    fheroes2::Button buttonCancel( pos.x + 197, pos.y + 249, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
+    fheroes2::Button buttonOk( dialogOffset.x + 18, dialogOffset.y + 233, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
+    fheroes2::Button buttonCancel( dialogOffset.x + 181, dialogOffset.y + 233, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
-    fheroes2::Point dst_pt( pos.x + 234, pos.y + 156 );
+    dst_pt.x = dialogOffset.x + 218;
+    dst_pt.y = dialogOffset.y + 140;
 
     fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, isEvilInterface ? ICN::BUTTON_SMALL_MAX_EVIL : ICN::BUTTON_SMALL_MAX_GOOD, 0, 1 );
     fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, isEvilInterface ? ICN::BUTTON_SMALL_MIN_EVIL : ICN::BUTTON_SMALL_MIN_GOOD, 0, 1 );
 
-    dst_pt.x = pos.x + 205;
-    dst_pt.y = pos.y + 154;
+    dst_pt.x = dialogOffset.x + 189;
+    dst_pt.y = dialogOffset.y + 138;
     fheroes2::Button buttonUp( dst_pt.x, dst_pt.y, ICN::RECRUIT, 0, 1 );
 
-    dst_pt.y = pos.y + 169;
+    dst_pt.y = dialogOffset.y + 153;
     fheroes2::Button buttonDn( dst_pt.x, dst_pt.y, ICN::RECRUIT, 2, 3 );
 
     fheroes2::TimedEventValidator timedButtonUp( [&buttonUp]() { return buttonUp.isPressed(); } );
@@ -299,7 +309,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
     buttonDn.subscribe( &timedButtonDn );
     buttonUp.subscribe( &timedButtonUp );
 
-    const fheroes2::Rect rtWheel( pos.x + 130, pos.y + 155, 100, 30 );
+    const fheroes2::Rect rtWheel( dialogOffset.x + 114, dialogOffset.y + 139, 100, 30 );
 
     // Create monster switching arrows
     fheroes2::ButtonSprite monsterSwitchLeft;
@@ -309,10 +319,10 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         monsterSwitchLeft.setSprite( fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 0 ), fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 1 ) );
         monsterSwitchRight.setSprite( fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 0 ), fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 1 ) );
 
-        dst_pt.x = pos.x + 24;
-        dst_pt.y = pos.y + 80;
+        dst_pt.x = dialogOffset.x + 6;
+        dst_pt.y = dialogOffset.y + 64;
         monsterSwitchLeft.setPosition( dst_pt.x, dst_pt.y );
-        dst_pt.x = pos.x + 121;
+        dst_pt.x = dialogOffset.x + 105;
         monsterSwitchRight.setPosition( dst_pt.x, dst_pt.y );
     }
     else {
@@ -340,7 +350,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
     background.resize( windowSize.width, windowSize.height );
     fheroes2::Copy( display, dialogOffset.x, dialogOffset.y, background, 0, 0, windowSize.width, windowSize.height );
 
-    RedrawMonsterInfo( pos, monster, available, true );
+    RedrawMonsterInfo( windowActiveArea, monster, available, true );
 
     if ( 0 == result ) {
         buttonOk.disable();
@@ -365,18 +375,18 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
     monsterSwitchLeft.draw();
     monsterSwitchRight.draw();
 
-    display.render( pos );
+    display.render( roi );
 
-    const fheroes2::Rect monsterArea( pos.x + 40, pos.y + 35, 75, 95 );
+    const fheroes2::Rect monsterArea( dialogOffset.x + 24, dialogOffset.y + 19, 75, 95 );
 
     auto buttonUpDownRelease = [&display, &background, &dialogOffset]( fheroes2::Button & button ) {
         // When the "Up"/"Down" button is pressed it is shifted 1 pixel down so we need to properly restore the background.
-        const fheroes2::Rect roi = button.area();
+        const fheroes2::Rect buttonRoi = button.area();
         button.release();
 
-        fheroes2::Copy( background, roi.x - dialogOffset.x, roi.y - dialogOffset.y, display, roi.x, roi.y, roi.width, roi.height );
+        fheroes2::Copy( background, buttonRoi.x - dialogOffset.x, buttonRoi.y - dialogOffset.y, display, buttonRoi.x, buttonRoi.y, buttonRoi.width, buttonRoi.height );
         // A the non-pressed button is already on the "background" copy so we do not render the button.
-        display.render( roi );
+        display.render( buttonRoi );
     };
 
     std::vector<Monster> upgrades = { monster0 };
@@ -461,7 +471,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             redraw = true;
             maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
 
-            RedrawMonsterInfo( pos, monster, available, true );
+            RedrawMonsterInfo( windowActiveArea, monster, available, true );
         }
 
         if ( le.MousePressRight( monsterArea ) ) {
@@ -570,7 +580,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             monsterSwitchLeft.draw();
             monsterSwitchRight.draw();
 
-            display.render( pos );
+            display.render( windowActiveArea );
         }
 
         if ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) ) ) {
@@ -583,27 +593,28 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         }
     }
 
+    display.updateNextRenderRoi( roi );
+
     return { monster, result };
 }
 
 void Dialog::DwellingInfo( const Monster & monster, const uint32_t available )
 {
-    const fheroes2::Size window{ 289, 139 };
+    const fheroes2::Size windowSize{ 289, 139 };
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // Set cursor.
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
-    const fheroes2::Point dialogOffset( ( display.width() - window.width ) / 2, display.height() / 2 - display.DEFAULT_HEIGHT / 2 + BORDERWIDTH );
-    const fheroes2::Rect pos( dialogOffset.x - BORDERWIDTH, dialogOffset.y - BORDERWIDTH, window.width + 2 * BORDERWIDTH, window.height + 2 * BORDERWIDTH );
+    const fheroes2::Point dialogOffset( ( display.width() - windowSize.width ) / 2, display.height() / 2 - display.DEFAULT_HEIGHT / 2 + BORDERWIDTH );
 
-    const fheroes2::StandardWindow background( dialogOffset.x, dialogOffset.y, window.width, window.height, true, display );
+    const fheroes2::StandardWindow window( dialogOffset.x, dialogOffset.y, windowSize.width, windowSize.height, true, display );
 
-    drawRecruitWindow( display, pos.getPosition() );
-    RedrawMonsterInfo( pos, monster, available, false );
+    drawRecruitWindow( display, { dialogOffset.x + 122, dialogOffset.y + 38 } );
+    RedrawMonsterInfo( window.activeArea(), monster, available, false );
 
-    display.render( pos );
+    display.render( window.windowWithShadowArea() );
 
     LocalEvent & le = LocalEvent::Get();
 

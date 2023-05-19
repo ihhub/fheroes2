@@ -444,21 +444,38 @@ namespace
         fheroes2::Copy( original, 16, original.height() - 13, image, roi.x + 16, roi.y + roi.height - 13, 27, 13 );
     }
 
-    // Set 'out' Sprite trensparency like in 'in' image. Sprites should have the same width and height.
-    void setTransparentAsIn( const fheroes2::Sprite & in, fheroes2::Sprite & out )
+    // Sets the upper left (offset 3 pixels), upper right (offset 2 pixels), lower right (offset 3 pixels) corners transparent.
+    void setButtonTransparentCorners( fheroes2::Sprite & buttonSprite )
     {
-        const int32_t inWidth = in.width();
-        const int32_t inHeight = in.height();
-        assert( inWidth == out.width() || inHeight == out.height() );
+        const ptrdiff_t imageWidth = buttonSprite.width();
+        const ptrdiff_t imageHeight = buttonSprite.height();
 
-        const int32_t imageSize = inWidth * inHeight;
-        uint8_t * outTransform = out.transform();
-        const uint8_t * inTransform = in.transform();
-        for ( int32_t i = 0; i < imageSize; ++i ) {
-            if ( *( inTransform + i ) == 1 ) {
-                *( outTransform + i ) = 1;
-            }
-        }
+        assert( imageWidth > 3 && imageHeight > 3 );
+
+        uint8_t * imageTransform = buttonSprite.transform();
+        *imageTransform = 1;
+        *( imageTransform + 1 ) = 1;
+        *( imageTransform + 2 ) = 1;
+        *( imageTransform + 3 ) = 1;
+        *( imageTransform + imageWidth - 2 ) = 1;
+        *( imageTransform + imageWidth - 1 ) = 1;
+        *( imageTransform + imageWidth ) = 1;
+        *( imageTransform + imageWidth + 1 ) = 1;
+        *( imageTransform + imageWidth + 2 ) = 1;
+        *( imageTransform + 2 * imageWidth - 1 ) = 1;
+        *( imageTransform + 2 * imageWidth ) = 1;
+        *( imageTransform + 2 * imageWidth + 1 ) = 1;
+        *( imageTransform + 3 * imageWidth ) = 1;
+        *( imageTransform + ( imageHeight - 3 ) * imageWidth - 1 ) = 1;
+        *( imageTransform + ( imageHeight - 2 ) * imageWidth - 2 ) = 1;
+        *( imageTransform + ( imageHeight - 2 ) * imageWidth - 1 ) = 1;
+        *( imageTransform + ( imageHeight - 1 ) * imageWidth - 3 ) = 1;
+        *( imageTransform + ( imageHeight - 1 ) * imageWidth - 2 ) = 1;
+        *( imageTransform + ( imageHeight - 1 ) * imageWidth - 1 ) = 1;
+        *( imageTransform + imageHeight * imageWidth - 4 ) = 1;
+        *( imageTransform + imageHeight * imageWidth - 3 ) = 1;
+        *( imageTransform + imageHeight * imageWidth - 2 ) = 1;
+        *( imageTransform + imageHeight * imageWidth - 1 ) = 1;
     }
 }
 
@@ -670,7 +687,7 @@ namespace fheroes2
                     _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::CPANELE : ICN::CPANEL, 9 );
 
                     // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
-                    setTransparentAsIn( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+                    CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
 
                     break;
                 }
@@ -694,7 +711,7 @@ namespace fheroes2
                     _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 1 );
 
                     // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
-                    setTransparentAsIn( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+                    CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
 
                     break;
                 }
@@ -726,7 +743,7 @@ namespace fheroes2
                     _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 1 );
 
                     // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
-                    setTransparentAsIn( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+                    CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
 
                     break;
                 }
@@ -747,7 +764,7 @@ namespace fheroes2
                     _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 3 );
 
                     // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
-                    setTransparentAsIn( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+                    CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
 
                     break;
                 }
@@ -1526,32 +1543,7 @@ namespace fheroes2
 
                     // To properly generate shadows and Blit the button we need to make some pixels transparent.
                     for ( fheroes2::Sprite & image : _icnVsSprite[id] ) {
-                        const ptrdiff_t imageWidth = image.width();
-                        const int32_t imageHeight = image.width();
-                        uint8_t * imageTransform = image.transform();
-                        *imageTransform = 1;
-                        *( imageTransform + 1 ) = 1;
-                        *( imageTransform + 2 ) = 1;
-                        *( imageTransform + 3 ) = 1;
-                        *( imageTransform + imageWidth - 2 ) = 1;
-                        *( imageTransform + imageWidth - 1 ) = 1;
-                        *( imageTransform + imageWidth ) = 1;
-                        *( imageTransform + imageWidth + 1 ) = 1;
-                        *( imageTransform + imageWidth + 2 ) = 1;
-                        *( imageTransform + 2 * imageWidth - 1 ) = 1;
-                        *( imageTransform + 3 * imageWidth ) = 1;
-                        *( imageTransform + 3 * imageWidth + 1 ) = 1;
-                        *( imageTransform + 4 * imageWidth ) = 1;
-                        *( imageTransform + ( imageHeight - 3 ) * imageWidth - 1 ) = 1;
-                        *( imageTransform + ( imageHeight - 2 ) * imageWidth - 2 ) = 1;
-                        *( imageTransform + ( imageHeight - 2 ) * imageWidth - 1 ) = 1;
-                        *( imageTransform + ( imageHeight - 1 ) * imageWidth - 3 ) = 1;
-                        *( imageTransform + ( imageHeight - 1 ) * imageWidth - 2 ) = 1;
-                        *( imageTransform + ( imageHeight - 1 ) * imageWidth - 1 ) = 1;
-                        *( imageTransform + imageHeight * imageWidth - 4 ) = 1;
-                        *( imageTransform + imageHeight * imageWidth - 3 ) = 1;
-                        *( imageTransform + imageHeight * imageWidth - 2 ) = 1;
-                        *( imageTransform + imageHeight * imageWidth - 1 ) = 1;
+                        setButtonTransparentCorners( image );
                     }
 
                     break;
