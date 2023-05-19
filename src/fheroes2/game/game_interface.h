@@ -233,6 +233,9 @@ namespace Interface
         void MoveHeroFromArrowKeys( Heroes & hero, int direct );
         fheroes2::GameMode HumanTurn( const bool isload );
 
+        // If display fade-in state is set reset it to false and fade-in the full display image. Otherwise render full display image without fade-in.
+        void validateFadeInAndRender();
+
         GameArea gameArea;
         Radar radar;
         IconsPanel iconsPanel;

@@ -519,8 +519,6 @@ fheroes2::GameMode Game::NewGame()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
@@ -543,12 +541,7 @@ fheroes2::GameMode Game::NewGame()
     buttonSettings.draw();
     buttonCancelGame.draw();
 
-    if ( validateDisplayFadeIn() ) {
-        fheroes2::fadeInDisplay();
-    }
-    else {
-        display.render();
-    }
+    fheroes2::validateFadeInAndRender();
 
     LocalEvent & le = LocalEvent::Get();
 

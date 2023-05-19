@@ -613,7 +613,6 @@ int Interface::Basic::GetCursorTileIndex( int32_t dst_index )
 fheroes2::GameMode Interface::Basic::StartGame()
 {
     Settings & conf = Settings::Get();
-    fheroes2::Display & display = fheroes2::Display::instance();
 
     Reset();
 
@@ -702,12 +701,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                         Redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
 
-                        if ( Game::validateDisplayFadeIn() ) {
-                            fheroes2::fadeInDisplay();
-                        }
-                        else {
-                            display.render();
-                        }
+                        validateFadeInAndRender();
 
                         // reset the music after closing the dialog
                         const AudioManager::MusicRestorer musicRestorer;
@@ -755,7 +749,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 #endif
 
                     Redraw();
-                    display.render();
+                    validateFadeInAndRender();
 
                     // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
                     if ( isHotSeatGame ) {
@@ -860,16 +854,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
 
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    if ( Game::validateDisplayFadeIn() ) {
-        fheroes2::fadeInDisplay();
-
-        SetRedraw( REDRAW_GAMEAREA );
-    }
-    else {
-        display.render();
-    }
+    validateFadeInAndRender();
 
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
 
@@ -890,7 +875,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
 
         // The amount of the kingdom resources has changed, the status window needs to be updated
         Redraw( REDRAW_STATUS );
-        display.render();
+        fheroes2::Display::instance().render();
 
         if ( conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
             Game::AutoSave();
@@ -1084,8 +1069,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
             }
 
             // if the hero is currently moving, pressing any mouse button should stop him
-            const fheroes2::Rect displayArea{ 0, 0, display.width(), display.height() };
-            if ( le.MouseClickLeft( displayArea ) || le.MousePressRight( displayArea ) ) {
+            if ( le.MouseClickLeft() || le.MousePressRight() ) {
                 stopHero = true;
             }
         }
@@ -1286,14 +1270,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                 // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
                 assert( GetRedrawMask() == 0 );
 
-                if ( Game::validateDisplayFadeIn() ) {
-                    fheroes2::fadeInDisplay();
-
-                    SetRedraw( REDRAW_GAMEAREA );
-                }
-                else {
-                    display.render();
-                }
+                validateFadeInAndRender();
             }
         }
     }
@@ -1326,6 +1303,18 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
     }
 
     return res;
+}
+
+void Interface::Basic::validateFadeInAndRender()
+{
+    if ( Game::validateDisplayFadeIn() ) {
+        fheroes2::fadeInDisplay();
+
+        SetRedraw( REDRAW_GAMEAREA );
+    }
+    else {
+        fheroes2::Display::instance().render();
+    }
 }
 
 void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )

@@ -142,8 +142,6 @@ fheroes2::GameMode Game::LoadGame()
 
     AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -168,12 +166,7 @@ fheroes2::GameMode Game::LoadGame()
     buttons.back().setPosition( buttonPos.x, buttonPos.y + buttonYStep * 5 );
     buttons.back().draw();
 
-    if ( validateDisplayFadeIn() ) {
-        fheroes2::fadeInDisplay();
-    }
-    else {
-        display.render();
-    }
+    fheroes2::validateFadeInAndRender();
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -240,12 +233,7 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
     // image background
     fheroes2::drawMainMenuScreen();
 
-    if ( validateDisplayFadeIn() ) {
-        fheroes2::fadeInDisplay();
-    }
-    else {
-        fheroes2::Display::instance().render();
-    }
+    fheroes2::validateFadeInAndRender();
 
     const std::string file = Dialog::SelectFileLoad();
     if ( file.empty() ) {

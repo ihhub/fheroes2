@@ -253,12 +253,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     buttonCredits.draw();
     buttonQuit.draw();
 
-    if ( validateDisplayFadeIn() ) {
-        fheroes2::fadeInDisplay();
-    }
-    else {
-        display.render();
-    }
+    fheroes2::validateFadeInAndRender();
 
     const double scaleX = static_cast<double>( display.width() ) / fheroes2::Display::DEFAULT_WIDTH;
     const double scaleY = static_cast<double>( display.height() ) / fheroes2::Display::DEFAULT_HEIGHT;
