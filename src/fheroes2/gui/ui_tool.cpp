@@ -126,14 +126,16 @@ namespace
 
     void fadeDisplay( const uint8_t startAlpha, const uint8_t endAlpha, const fheroes2::Rect & roi, const uint32_t fadeTimeMs, const uint32_t frameCount )
     {
-        if ( ( frameCount < 2 ) || roi.height == 0 || roi.width == 0 ) {
+        if ( frameCount < 2 || roi.height <= 0 || roi.width <= 0 ) {
             return;
         }
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::Image temp{ roi.width, roi.height };
-        Copy( display, roi.x, roi.y, temp, 0, 0, roi.width, roi.height );
+        fheroes2::Rect fadeRoi( roi ^ fheroes2::Rect( 0, 0, display.width(), display.height() ) );
+
+        fheroes2::Image temp{ fadeRoi.width, fadeRoi.height };
+        Copy( display, fadeRoi.x, fadeRoi.y, temp, 0, 0, fadeRoi.width, fadeRoi.height );
 
         double alpha = startAlpha;
         const uint32_t delay = fadeTimeMs / frameCount;
@@ -150,21 +152,23 @@ namespace
                     break;
                 }
 
+                assert( alpha >= 0 && alpha <= 255 );
+
                 const uint8_t fadeAlpha = static_cast<uint8_t>( std::round( alpha ) );
 
                 if ( fadeAlpha == 255 ) {
                     // This alpha is for fully bright image so there is no need to apply alpha.
-                    Copy( temp, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
+                    Copy( temp, 0, 0, display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height );
                 }
                 else if ( fadeAlpha == 0 ) {
                     // This alpha is for fully dark image so fill it with the black color.
-                    Fill( display, roi.x, roi.y, roi.width, roi.height, fheroes2::GetColorId( 0, 0, 0 ) );
+                    Fill( display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height, fheroes2::GetColorId( 0, 0, 0 ) );
                 }
                 else {
-                    ApplyAlpha( temp, 0, 0, display, roi.x, roi.y, roi.width, roi.height, fadeAlpha );
+                    ApplyAlpha( temp, 0, 0, display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height, fadeAlpha );
                 }
 
-                display.render( roi );
+                display.render( fadeRoi );
 
                 alpha -= alphaStep;
                 ++frameNumber;
