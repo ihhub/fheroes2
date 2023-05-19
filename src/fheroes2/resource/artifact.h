@@ -225,8 +225,7 @@ public:
     // artfx.icn
     uint32_t IndexSprite32() const
     {
-        if ( id == UNKNOWN )
-        {
+        if ( id == UNKNOWN ) {
             return 255;
         }
 
