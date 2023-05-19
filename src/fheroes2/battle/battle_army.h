@@ -92,8 +92,8 @@ namespace Battle
         int GetControl() const;
         uint32_t GetSurrenderCost() const;
         Troops GetKilledTroops() const;
-        bool animateIdleUnits();
-        void resetIdleAnimation();
+        bool animateIdleUnits() const;
+        void resetIdleAnimation() const;
 
         void NewTurn();
         void SyncArmyCount();

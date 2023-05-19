@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_board.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -34,7 +36,6 @@
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
-#include "battle_board.h"
 #include "battle_bridge.h"
 #include "battle_troop.h"
 #include "castle.h"
@@ -50,9 +51,9 @@
 
 namespace
 {
-    int GetRandomObstaclePosition( std::mt19937 & gen )
+    uint32_t GetRandomObstaclePosition( std::mt19937 & gen )
     {
-        return Rand::GetWithGen( 3, 6, gen ) + ( 11 * Rand::GetWithGen( 1, 7, gen ) );
+        return Rand::GetWithGen( 2, 8, gen ) + ( 11 * Rand::GetWithGen( 0, 8, gen ) );
     }
 
     bool isTwoHexObject( const int icnId )
@@ -70,6 +71,25 @@ namespace
         case ICN::COBJ0020:
         case ICN::COBJ0022:
         case ICN::COBJ0030:
+        case ICN::COBJ0031:
+            return true;
+
+        default:
+            break;
+        }
+
+        return false;
+    }
+
+    bool isTallObject( const int icnId )
+    {
+        switch ( icnId ) {
+        case ICN::COBJ0002:
+        case ICN::COBJ0009:
+        case ICN::COBJ0013:
+        case ICN::COBJ0021:
+        case ICN::COBJ0027:
+        case ICN::COBJ0028:
         case ICN::COBJ0031:
             return true;
 
@@ -550,21 +570,61 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen
 
     Rand::ShuffleWithGen( objs, gen );
 
-    const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::GetWithGen( 0, 4, gen ) ) );
+    const auto largeObstacleHexCount = std::count_if( begin(), end(), []( const Cell & cell ) { return cell.GetObject() == 0x40; } );
+
+    uint8_t maxSmallObstacleCount = 0;
+    uint8_t maxTwoHexObstacleCount = 0;
+
+    if ( largeObstacleHexCount == 0 ) {
+        maxSmallObstacleCount = 6;
+        maxTwoHexObstacleCount = 3;
+    }
+    else if ( largeObstacleHexCount <= 7 ) {
+        maxSmallObstacleCount = 4;
+        maxTwoHexObstacleCount = 2;
+    }
+    else if ( largeObstacleHexCount <= 13 ) {
+        maxSmallObstacleCount = 3;
+        maxTwoHexObstacleCount = 2;
+    }
+    else {
+        maxSmallObstacleCount = 2;
+        maxTwoHexObstacleCount = 1;
+    }
+
+    // Limit the number of two-hex obstacles to maxTwoHexObstacleCount
+    uint8_t twoHexCount = 0;
+    for ( auto iter = objs.begin(); iter != objs.end(); ) {
+        if ( isTwoHexObject( *iter ) ) {
+            ++twoHexCount;
+            if ( twoHexCount > maxTwoHexObstacleCount ) {
+                iter = objs.erase( iter );
+                continue;
+            }
+        }
+        ++iter;
+    }
+
+    const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::GetWithGen( 0, maxSmallObstacleCount, gen ) ) );
 
     for ( size_t i = 0; i < objectsToPlace; ++i ) {
+        // two-hex obstacles are not allowed on column 8 as they would cover column 9 which is reserved for units
         const bool checkRightCell = isTwoHexObject( objs[i] );
 
-        int32_t dest = GetRandomObstaclePosition( gen );
-        while ( at( dest ).GetObject() != 0 || ( checkRightCell && at( dest + 1 ).GetObject() != 0 ) ) {
+        // tall obstacles like trees should not be placed on top 2 rows
+        const bool isTallObstacle = isTallObject( objs[i] );
+
+        uint32_t dest;
+        do {
             dest = GetRandomObstaclePosition( gen );
-        }
+        } while ( at( dest ).GetObject() != 0 || ( checkRightCell && ( at( dest + 1 ).GetObject() != 0 || ( dest % ARENAW ) == 8 ) )
+                  || ( isTallObstacle && dest < ( ARENAW * 2 ) ) );
 
         SetCobjObject( objs[i], dest );
     }
 }
 
-void Battle::Board::SetCobjObject( const int icn, const int32_t dst )
+void Battle::Board::SetCobjObject( const int icn, const uint32_t dst )
 {
     at( dst ).SetObject( 0x80 + ( icn - ICN::COBJ0000 ) );
 

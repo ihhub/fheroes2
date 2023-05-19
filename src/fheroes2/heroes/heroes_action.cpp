@@ -3509,7 +3509,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         {
             Interface::Basic & I = Interface::Basic::Get();
 
-            I.ResetFocus( GameFocus::HEROES );
+            I.ResetFocus( GameFocus::HEROES, true );
             I.RedrawFocus();
         }
 
@@ -3523,7 +3523,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         focusUpdater = std::make_unique<FocusUpdater>();
 
         if ( isAIControlledForHumanPlayer ) {
-            Interface::Basic::Get().SetFocus( this );
+            Interface::Basic::Get().SetFocus( this, false );
         }
     }
 

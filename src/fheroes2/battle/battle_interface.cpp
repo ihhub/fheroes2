@@ -1255,7 +1255,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
 
     // Don't waste time playing the pre-battle sound if the game sounds are turned off
     if ( conf.SoundVolume() > 0 ) {
-        AudioManager::PlaySound( M82::PREBATTL );
+        _preBattleSoundChannelId = AudioManager::PlaySound( M82::PREBATTL );
     }
 }
 
@@ -1316,6 +1316,19 @@ void Battle::Interface::fullRedraw()
 
 void Battle::Interface::Redraw()
 {
+    // Check that the pre-battle sound is over to start playing the battle music.
+    // IMPORTANT: This implementation may suffer from the race condition as the pre-battle sound channel may be reused
+    // by new sounds if they are played (one way or another) after the end of the pre-battle sound, but before calling
+    // this method. Although in this case here it will not lead to serious problems as in the worst case, the launch of
+    // battle music will be postponed for some time.
+    if ( _preBattleSoundChannelId && ( _preBattleSoundChannelId < 0 || !Mixer::isPlaying( _preBattleSoundChannelId.value() ) ) && !Music::isPlaying() ) {
+        // Reset the value of _preBattleSoundChannelId to skip isPlaying() checks in future as these checks could freeze
+        // the game for some time in certain cases (e.g. slow MIDI backend).
+        _preBattleSoundChannelId.reset();
+
+        AudioManager::PlayMusicAsync( MUS::GetBattleRandom(), Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
+    }
+
     RedrawPartialStart();
     RedrawPartialFinish();
 }
@@ -1369,6 +1382,9 @@ void Battle::Interface::RedrawInterface()
 
 void Battle::Interface::RedrawArmies()
 {
+    // Continue the idle animation for all troops on the battlefield: update idle animation frames before rendering the troops.
+    IdleTroopsAnimation();
+
     const Castle * castle = Arena::GetCastle();
 
     const int32_t wallCellIds[ARENAH]
@@ -1623,9 +1639,6 @@ void Battle::Interface::RedrawArmies()
     if ( _flyingUnit ) {
         RedrawTroopSprite( *_flyingUnit );
     }
-
-    // Continue the idle animation for all troops on the battlefield.
-    IdleTroopsAnimation();
 }
 
 void Battle::Interface::RedrawOpponents()
@@ -3226,9 +3239,19 @@ void Battle::Interface::AnimateOpponents( OpponentSprite * target )
         return;
 
     LocalEvent & le = LocalEvent::Get();
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_OPPONENTS_DELAY } ) ) ) {
+
+    // We need to wait this delay before rendering the first frame of hero animation.
+    Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
+
+    // 'BATTLE_OPPONENTS_DELAY' is more than 2 times the value of 'BATTLE_IDLE_DELAY', so we need to handle the idle animation separately in this loop.
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_OPPONENTS_DELAY, Game::BATTLE_IDLE_DELAY } ) ) ) {
+        // Animate the idling units.
+        if ( IdleTroopsAnimation() ) {
+            Redraw();
+        }
+
         if ( Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
-            // Render the first frame before waiting any delay.
+            // Render before switching to the next frame.
             Redraw();
 
             if ( target->isFinishFrame() ) {
@@ -3333,10 +3356,6 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
 
 void Battle::Interface::RedrawActionNewTurn() const
 {
-    if ( !Music::isPlaying() ) {
-        AudioManager::PlayMusicAsync( MUS::GetBattleRandom(), Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
-    }
-
     if ( listlog == nullptr ) {
         return;
     }
@@ -3614,34 +3633,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
         RedrawPartialFinish();
 
-        if ( attacker != nullptr ) {
-            if ( attacker->isFinishAnimFrame() ) {
-                attacker->SwitchAnimation( Monster_Info::STATIC );
-            }
-            else {
-                attacker->IncreaseAnimFrame();
-            }
-        }
-
-        for ( const Battle::TargetInfo & target : targets ) {
-            if ( target.defender ) {
-                if ( target.defender->isFinishAnimFrame()
-                     && ( target.defender->GetAnimationState() == Monster_Info::WNCE || target.defender->GetAnimationState() == Monster_Info::WNCE_DOWN ) ) {
-                    target.defender->SwitchAnimation( Monster_Info::STATIC );
-                }
-                else if ( drawLichCloud && lichCloudFrame == wnceUpStartFrame && ( target.defender->GetAnimationState() == Monster_Info::STAND_STILL ) ) {
-                    target.defender->SwitchAnimation( Monster_Info::WNCE_UP );
-                    AudioManager::PlaySound( target.defender->M82Wnce() );
-                }
-                else if ( drawLichCloud && lichCloudFrame == wnceDownStartFrame && ( target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) ) {
-                    target.defender->SwitchAnimation( Monster_Info::WNCE_DOWN );
-                }
-                else {
-                    target.defender->IncreaseAnimFrame();
-                }
-            }
-        }
-
+        // Make a check if all animation sequences are over (after rendering the last frame) to break this render loop.
         const ptrdiff_t finishedAnimationCount = std::count_if( targets.begin(), targets.end(), [&resistantTarget]( const TargetInfo & info ) {
             if ( info.defender == nullptr ) {
                 return false;
@@ -3677,6 +3669,35 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                   || ( attacker->animation.getCurrentState() == Monster_Info::IDLE ) ) ) {
             // All unit animation frames are rendered and if it was a Lich attack then also its cloud frames are rendered too.
             break;
+        }
+
+        // Progress all units animations.
+        if ( attacker != nullptr ) {
+            if ( attacker->isFinishAnimFrame() ) {
+                attacker->SwitchAnimation( Monster_Info::STATIC );
+            }
+            else {
+                attacker->IncreaseAnimFrame();
+            }
+        }
+
+        for ( const Battle::TargetInfo & target : targets ) {
+            if ( target.defender ) {
+                if ( target.defender->isFinishAnimFrame()
+                     && ( target.defender->GetAnimationState() == Monster_Info::WNCE || target.defender->GetAnimationState() == Monster_Info::WNCE_DOWN ) ) {
+                    target.defender->SwitchAnimation( Monster_Info::STATIC );
+                }
+                else if ( drawLichCloud && lichCloudFrame == wnceUpStartFrame && ( target.defender->GetAnimationState() == Monster_Info::STAND_STILL ) ) {
+                    target.defender->SwitchAnimation( Monster_Info::WNCE_UP );
+                    AudioManager::PlaySound( target.defender->M82Wnce() );
+                }
+                else if ( drawLichCloud && lichCloudFrame == wnceDownStartFrame && ( target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) ) {
+                    target.defender->SwitchAnimation( Monster_Info::WNCE_DOWN );
+                }
+                else {
+                    target.defender->IncreaseAnimFrame();
+                }
+            }
         }
     }
 
@@ -4091,15 +4112,17 @@ void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_
 
 void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t dst, const HeroBase * caster, const TargetsInfo & targets )
 {
+    // Reset the idle animation delay timer to prevent the target unit from starting the idle animation.
+    for ( const TargetInfo & spellTarget : targets ) {
+        spellTarget.defender->checkIdleDelay();
+    }
+
     Unit * target = !targets.empty() ? targets.front().defender : nullptr;
 
     // set spell cast animation
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmy1Color() ? opponent1 : opponent2;
         if ( opponent ) {
-            // Reset the delay to wait till the next frame.
-            Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
-
             opponent->SetAnimation( spell.isApplyWithoutFocusObject() ? OP_CAST_MASS : OP_CAST_UP );
             AnimateOpponents( opponent );
         }
@@ -4250,9 +4273,6 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmy1Color() ? opponent1 : opponent2;
         if ( opponent ) {
-            // Reset the delay to wait till the next frame.
-            Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
-
             opponent->SetAnimation( ( target != nullptr ) ? OP_CAST_UP_RETURN : OP_CAST_MASS_RETURN );
             AnimateOpponents( opponent );
         }
@@ -4505,20 +4525,37 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
 
         const fheroes2::Image luckSprite = DrawRainbow( rainbowArc, rainbowThickness, isVerticalRainbow, isRainbowFromRight );
 
+        const int32_t rainbowDrawSteps = 30;
         // Rainbow animation draw step (in original game it is random and about 7-11 pixels).
         // We set the constant animation time for all rainbows: rainbowLength/30 fits the rainbow sound duration on '1' speed.
-        const double drawStep = rainbowLength / 30.0;
+        const double drawStep = static_cast<double>( rainbowLength ) / rainbowDrawSteps;
 
-        AudioManager::PlaySound( M82::GOODLUCK );
+        // Don't waste time waiting for Good Luck sound if the game sounds are turned off
+        const bool soundOn = Settings::Get().SoundVolume() > 0;
 
+        if ( soundOn ) {
+            AudioManager::PlaySound( M82::GOODLUCK );
+        }
+
+        // If sound is turned off we still wait for the GOODLUCK sound to over but no more the twice the rainbow animation time.
+        // So we start counting steps from '-rainbowDrawSteps' to 'rainbowDrawSteps'.
+        int32_t step = -rainbowDrawSteps;
         double x = 0;
-        while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_MISSILE_DELAY } ) ) && ( Mixer::isPlaying( -1 ) || x < rainbowLength ) ) {
+        while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_MISSILE_DELAY } ) )
+                && ( ( ( soundOn || step < rainbowDrawSteps ) && Mixer::isPlaying( -1 ) ) || x < rainbowLength ) ) {
             CheckGlobalEvents( le );
 
-            if ( x < rainbowLength && Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+                // Reset all units idle animation delay during rainbow animation not to start new idle animations.
+                // This does not affect Zombies, Genies, Medusas and Ghosts as they have permanent idle animations.
+                ResetIdleTroopAnimation();
+
                 RedrawPartialStart();
 
-                x += drawStep;
+                if ( x < rainbowLength ) {
+                    x += drawStep;
+                }
+
                 const int32_t drawWidth = x > rainbowLength ? rainbowLength : static_cast<int32_t>( x );
 
                 // For different rainbow types use appropriate animation direction.
@@ -4536,6 +4573,8 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
                 }
 
                 RedrawPartialFinish();
+
+                ++step;
             }
         }
     }
@@ -4570,6 +4609,8 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
 void Battle::Interface::RedrawActionMorale( Unit & b, bool good )
 {
     std::string msg;
+    // Reset the idle animation delay timer to prevent the unit from starting the idle animation.
+    b.checkIdleDelay();
 
     if ( good ) {
         msg = _( "High morale enables the %{monster} to attack again." );

@@ -23,12 +23,14 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <cmath>
 #include <cstring>
 #include <initializer_list>
 #include <map>
 #include <memory>
 #include <random>
 #include <set>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -325,6 +327,11 @@ namespace
             _icnVsSprite[ICN::GRAY_FONT].clear();
             _icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
             _icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
+        }
+
+        bool isPreserved() const
+        {
+            return _isPreserved;
         }
 
     private:
@@ -1930,6 +1937,16 @@ namespace fheroes2
                 LoadOriginalICN( id );
 
                 auto & imageArray = _icnVsSprite[id];
+                if ( imageArray.size() < 96 ) {
+                    // 96 symbols is the minimum requirement for English.
+                    throw std::logic_error( "The game resources are corrupted. Please use resources from a licensed version of Heroes of Might and Magic II." );
+                }
+
+                // Compare '(' and ')' symbols. By size they are always the same. However, we play safe and fail if both dimensions are different.
+                if ( ( imageArray[8].width() != imageArray[9].width() ) && ( imageArray[8].height() != imageArray[9].height() ) ) {
+                    // This is most likely a corrupted font or a pirated translation to a non-English language which causes all sorts of rendering issues.
+                    throw std::logic_error( "The game resources are corrupted. Please use resources from a licensed version of Heroes of Might and Magic II." );
+                }
 
                 const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
                 const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
@@ -1943,8 +1960,8 @@ namespace fheroes2
                     }
                     modifyBaseSmallFont( _icnVsSprite[id] );
                 }
-
-                if ( id == ICN::FONT ) {
+                else {
+                    assert( id == ICN::FONT );
                     // The original images contain an issue: image layer has value 50 which is '2' in UTF-8. We must correct these (only 3) places
                     for ( size_t i = 0; i < imageArray.size(); ++i ) {
                         ReplaceColorIdByTransformId( imageArray[i], 50, 2 );
@@ -3596,16 +3613,17 @@ namespace fheroes2
         }
 
         // We have few ICNs which we need to scale like some related to main screen
-        bool IsScalableICN( int id )
+        bool IsScalableICN( const int id )
         {
             return id == ICN::HEROES || id == ICN::BTNSHNGL || id == ICN::SHNGANIM;
         }
 
-        const Sprite & GetScaledICN( int icnId, uint32_t index )
+        const Sprite & GetScaledICN( const int icnId, const uint32_t index )
         {
             const Sprite & originalIcn = _icnVsSprite[icnId][index];
+            const Display & display = Display::instance();
 
-            if ( Display::DEFAULT_WIDTH == Display::instance().width() && Display::DEFAULT_HEIGHT == Display::instance().height() ) {
+            if ( display.width() == Display::DEFAULT_WIDTH && display.height() == Display::DEFAULT_HEIGHT ) {
                 return originalIcn;
             }
 
@@ -3615,16 +3633,27 @@ namespace fheroes2
 
             Sprite & resizedIcn = _icnVsScaledSprite[icnId][index];
 
-            const double scaleFactorX = static_cast<double>( Display::instance().width() ) / Display::DEFAULT_WIDTH;
-            const double scaleFactorY = static_cast<double>( Display::instance().height() ) / Display::DEFAULT_HEIGHT;
+            const double scaleFactorX = static_cast<double>( display.width() ) / Display::DEFAULT_WIDTH;
+            const double scaleFactorY = static_cast<double>( display.height() ) / Display::DEFAULT_HEIGHT;
 
-            const int32_t resizedWidth = static_cast<int32_t>( originalIcn.width() * scaleFactorX + 0.5 );
-            const int32_t resizedHeight = static_cast<int32_t>( originalIcn.height() * scaleFactorY + 0.5 );
+            const double scaleFactor = std::min( scaleFactorX, scaleFactorY );
+            const int32_t resizedWidth = static_cast<int32_t>( std::lround( originalIcn.width() * scaleFactor ) );
+            const int32_t resizedHeight = static_cast<int32_t>( std::lround( originalIcn.height() * scaleFactor ) );
+            const int32_t offsetX = static_cast<int32_t>( std::lround( display.width() - Display::DEFAULT_WIDTH * scaleFactor ) ) / 2;
+            const int32_t offsetY = static_cast<int32_t>( std::lround( display.height() - Display::DEFAULT_HEIGHT * scaleFactor ) ) / 2;
+            assert( offsetX >= 0 && offsetY >= 0 );
+
             // Resize only if needed
-            if ( resizedIcn.width() != resizedWidth || resizedIcn.height() != resizedHeight ) {
+            if ( resizedIcn.height() != resizedHeight || resizedIcn.width() != resizedWidth ) {
                 resizedIcn.resize( resizedWidth, resizedHeight );
-                resizedIcn.setPosition( static_cast<int32_t>( originalIcn.x() * scaleFactorX + 0.5 ), static_cast<int32_t>( originalIcn.y() * scaleFactorY + 0.5 ) );
+                resizedIcn.setPosition( static_cast<int32_t>( std::lround( originalIcn.x() * scaleFactor ) ) + offsetX,
+                                        static_cast<int32_t>( std::lround( originalIcn.y() * scaleFactor ) ) + offsetY );
                 Resize( originalIcn, resizedIcn, false );
+            }
+            else {
+                // No need to resize but we have to update the offset.
+                resizedIcn.setPosition( static_cast<int32_t>( std::lround( originalIcn.x() * scaleFactor ) ) + offsetX,
+                                        static_cast<int32_t>( std::lround( originalIcn.y() * scaleFactor ) ) + offsetY );
             }
 
             return resizedIcn;
@@ -3835,7 +3864,13 @@ namespace fheroes2
         void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet )
         {
             if ( loadOriginalAlphabet || !isAlphabetSupported( language ) ) {
-                alphabetPreserver.restore();
+                if ( !alphabetPreserver.isPreserved() ) {
+                    // This can happen when we try to change a language without loading assets.
+                    alphabetPreserver.preserve();
+                }
+                else {
+                    alphabetPreserver.restore();
+                }
             }
             else {
                 alphabetPreserver.preserve();

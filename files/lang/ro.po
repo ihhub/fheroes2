@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-01 11:22+0000\n"
+"POT-Creation-Date: 2023-05-12 13:04+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2538,6 +2538,18 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr ""
 
+msgid "Upgrade"
+msgstr ""
+
+msgid "Upgrade your troops."
+msgstr ""
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
+
 msgid "Followers"
 msgstr ""
 
@@ -4522,9 +4534,6 @@ msgstr ""
 msgid "Keyboard|SPACE"
 msgstr ""
 
-msgid "Keyboard|LANG"
-msgstr ""
-
 msgid "Keyboard|ABC"
 msgstr ""
 
@@ -5809,6 +5818,37 @@ msgid ""
 "This town is occupied by your hero %{hero}."
 msgstr ""
 
+msgid "This spell is already in use."
+msgstr ""
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
+msgstr ""
+
 msgid "%{name} the %{race} (Level %{level})"
 msgstr ""
 
@@ -5890,15 +5930,10 @@ msgstr ""
 msgid "%{spell} failed!!!"
 msgstr ""
 
-msgid "This spell is already in use."
-msgstr ""
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr ""
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
+msgid "Identify Hero"
 msgstr ""
 
 msgid "The creatures are willing to join us!"
@@ -5922,11 +5957,6 @@ msgid "These weak creatures will surely flee before us."
 msgstr ""
 
 msgid "I fear these creatures are in the mood for a fight."
-msgstr ""
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
 msgstr ""
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
@@ -9036,9 +9066,6 @@ msgid "View All"
 msgstr ""
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
-msgstr ""
-
-msgid "Identify Hero"
 msgstr ""
 
 msgid "Summon Boat"

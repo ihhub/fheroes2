@@ -38,7 +38,6 @@ import android.widget.ListView;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -49,17 +48,17 @@ public final class SaveFileManagerActivity extends AppCompatActivity
     {
         private static final class Status
         {
-            public boolean isBackgroundTaskExecuting;
-            public final List<String> saveFileNames;
+            private boolean isBackgroundTaskExecuting;
+            private final List<String> saveFileNames;
 
-            Status( final boolean isBackgroundTaskExecuting, final List<String> saveFileNames )
+            private Status( final boolean isBackgroundTaskExecuting, final List<String> saveFileNames )
             {
                 this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;
                 this.saveFileNames = saveFileNames;
             }
 
             @SuppressWarnings( "SameParameterValue" )
-            Status setIsBackgroundTaskExecuting( final boolean isBackgroundTaskExecuting )
+            private Status setIsBackgroundTaskExecuting( final boolean isBackgroundTaskExecuting )
             {
                 this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;
 
@@ -69,14 +68,13 @@ public final class SaveFileManagerActivity extends AppCompatActivity
 
         private final MutableLiveData<Status> liveStatus = new MutableLiveData<>( new Status( false, new ArrayList<>() ) );
 
-        public LiveData<Status> getLiveStatus()
-        {
-            return liveStatus;
-        }
-
-        public void updateSaveFileList( final File saveFileDir, final List<String> allowedSaveFileExtensions )
+        private void updateSaveFileList( final File saveFileDir, final List<String> allowedSaveFileExtensions )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
+
+            if ( status.isBackgroundTaskExecuting ) {
+                return;
+            }
 
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
@@ -92,9 +90,13 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             } ).start();
         }
 
-        public void deleteSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final List<String> saveFileNames )
+        private void deleteSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final List<String> saveFileNames )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
+
+            if ( status.isBackgroundTaskExecuting ) {
+                return;
+            }
 
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
@@ -182,7 +184,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         saveFileListView = findViewById( R.id.activity_save_file_manager_save_file_list );
 
         viewModel = new ViewModelProvider( this ).get( SaveFileManagerActivityViewModel.class );
-        viewModel.getLiveStatus().observe( this, this::updateUI );
+        viewModel.liveStatus.observe( this, this::updateUI );
 
         saveFileListViewAdapter = new ArrayAdapter<>( this, android.R.layout.simple_list_item_multiple_choice, new ArrayList<>() );
 
@@ -195,7 +197,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
     {
         super.onResume();
 
-        updateSaveFileList();
+        viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() );
     }
 
     public void filterButtonClicked( final View view )
@@ -218,7 +220,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             saveFileListView.setItemChecked( i, false );
         }
 
-        updateSaveFileList();
+        viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() );
     }
 
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
@@ -263,7 +265,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                                         }
                                     }
 
-                                    deleteSaveFiles( saveFileNames );
+                                    viewModel.deleteSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), saveFileNames );
                                 } )
             .setNegativeButton( R.string.activity_save_file_manager_delete_confirmation_negative_btn_text, ( dialog, which ) -> {} )
             .create()
@@ -285,20 +287,6 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         }
 
         return allowedSaveFileExtensions;
-    }
-
-    private void updateSaveFileList()
-    {
-        viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() );
-    }
-
-    private void deleteSaveFiles( final List<String> saveFileNames )
-    {
-        if ( saveFileNames.isEmpty() ) {
-            return;
-        }
-
-        viewModel.deleteSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), saveFileNames );
     }
 
     private void updateUI( final SaveFileManagerActivityViewModel.Status modelStatus )

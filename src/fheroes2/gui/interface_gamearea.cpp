@@ -47,6 +47,7 @@
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_render.h"
 #include "pal.h"
 #include "players.h"
 #include "route.h"
@@ -404,9 +405,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     int32_t maxY = tileROI.y + tileROI.height;
 
 #ifdef WITH_DEBUG
-    const bool drawFog = ( ( flag & LEVEL_FOG ) == LEVEL_FOG ) && !IS_DEVEL();
+    const bool renderFog = ( ( flag & LEVEL_FOG ) == LEVEL_FOG ) && !IS_DEVEL();
 #else
-    const bool drawFog = ( flag & LEVEL_FOG ) == LEVEL_FOG;
+    const bool renderFog = ( flag & LEVEL_FOG ) == LEVEL_FOG;
 #endif
 
     // Render terrain.
@@ -415,19 +416,19 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
         if ( offset.y < 0 || offset.y >= world.h() ) {
             for ( ; offset.x < maxX; ++offset.x ) {
-                Maps::Tiles::RedrawEmptyTile( dst, offset, *this );
+                Maps::redrawEmptyTile( dst, offset, *this );
             }
         }
         else {
             for ( ; offset.x < maxX; ++offset.x ) {
                 if ( offset.x < 0 || offset.x >= world.w() ) {
-                    Maps::Tiles::RedrawEmptyTile( dst, offset, *this );
+                    Maps::redrawEmptyTile( dst, offset, *this );
                 }
                 else {
                     const Maps::Tiles & tile = world.GetTiles( offset.x, offset.y );
                     // Do not render terrain on the tiles fully covered with the fog.
-                    if ( tile.getFogDirection() != DIRECTION_ALL || !drawFog ) {
-                        DrawTile( dst, tile.GetTileSurface(), offset );
+                    if ( tile.getFogDirection() != DIRECTION_ALL || !renderFog ) {
+                        DrawTile( dst, getTileSurface( tile ), offset );
                     }
                 }
             }
@@ -487,7 +488,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             MP2::MapObjectType objectType = tile.GetObject();
 
             // We will skip objects which are fully under the fog.
-            const bool isTileUnderFog = ( tile.getFogDirection() == DIRECTION_ALL ) && drawFog;
+            const bool isTileUnderFog = ( tile.getFogDirection() == DIRECTION_ALL ) && renderFog;
 
             switch ( objectType ) {
             case MP2::OBJ_HEROES: {
@@ -528,8 +529,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_MONSTER );
 
-                auto spriteInfo = tile.getMonsterSpritesPerTile();
-                auto spriteShadowInfo = tile.getMonsterShadowSpritesPerTile();
+                auto spriteInfo = getMonsterSpritesPerTile( tile );
+                auto spriteShadowInfo = getMonsterShadowSpritesPerTile( tile );
 
                 populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, tile.GetCenter(), alphaValue );
 
@@ -547,8 +548,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_BOAT );
 
-                auto spriteInfo = tile.getBoatSpritesPerTile();
-                auto spriteShadowInfo = tile.getBoatShadowSpritesPerTile();
+                auto spriteInfo = getBoatSpritesPerTile( tile );
+                auto spriteShadowInfo = getBoatShadowSpritesPerTile( tile );
 
                 populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, tile.GetCenter(), alphaValue );
 
@@ -561,7 +562,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             // These are parts of original action objects which must be rendered under heroes.
             if ( objectType == MP2::OBJ_MINES ) {
-                auto spriteInfo = tile.getMineGuardianSpritesPerTile();
+                auto spriteInfo = getMineGuardianSpritesPerTile( tile );
                 if ( !spriteInfo.empty() ) {
                     const uint8_t alphaValue = getObjectAlphaValue( tile.GetObjectUID() );
                     populateStaticTileUnfitBackgroundObjectInfo( tileUnfit, spriteInfo, tile.GetCenter(), alphaValue );
@@ -575,14 +576,14 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog ) {
+            if ( tile.getFogDirection() == DIRECTION_ALL && renderFog ) {
                 continue;
             }
 
             // Draw roads, rivers and cracks.
-            tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::TERRAIN_LAYER );
+            redrawBottomLayerObjects( tile, dst, isPuzzleDraw, *this, Maps::TERRAIN_LAYER );
 
-            tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::BACKGROUND_LAYER );
+            redrawBottomLayerObjects( tile, dst, isPuzzleDraw, *this, Maps::BACKGROUND_LAYER );
         }
     }
 
@@ -593,11 +594,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog ) {
+            if ( tile.getFogDirection() == DIRECTION_ALL && renderFog ) {
                 continue;
             }
 
-            tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::SHADOW_LAYER );
+            redrawBottomLayerObjects( tile, dst, isPuzzleDraw, *this, Maps::SHADOW_LAYER );
         }
     }
 
@@ -614,12 +615,12 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            if ( tile.getFogDirection() == DIRECTION_ALL && drawFog ) {
+            if ( tile.getFogDirection() == DIRECTION_ALL && renderFog ) {
                 continue;
             }
 
             // TODO: some action objects have tiles above which are still on bottom layer. These images must be drawn last.
-            tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::OBJECT_LAYER );
+            redrawBottomLayerObjects( tile, dst, isPuzzleDraw, *this, Maps::OBJECT_LAYER );
         }
     }
 
@@ -637,7 +638,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = roiToRenderMinX; x < roiExtraObjectsMaxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            const bool isTileUnderFog = ( tile.getFogDirection() == DIRECTION_ALL ) && drawFog;
+            const bool isTileUnderFog = ( tile.getFogDirection() == DIRECTION_ALL ) && renderFog;
             if ( isTileUnderFog ) {
                 // To correctly render tall extra objects (ghosts over abandoned mine) it is needed to analyze one tile to the bottom direction under fog.
                 const bool isUpperTileUnderFog = ( y > 0 ) ? ( world.GetTiles( x, y - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
@@ -646,7 +647,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     continue;
                 }
 
-                tile.redrawTopLayerExtraObjects( dst, isPuzzleDraw, *this );
+                redrawTopLayerExtraObjects( tile, dst, isPuzzleDraw, *this );
                 continue;
             }
 
@@ -660,14 +661,14 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     topLayerTallObjects.emplace_back( &addon );
                 }
                 else {
-                    tile.redrawTopLayerObject( dst, isPuzzleDraw, *this, addon );
+                    redrawTopLayerObject( tile, dst, isPuzzleDraw, *this, addon );
                 }
             }
 
-            tile.redrawTopLayerExtraObjects( dst, isPuzzleDraw, *this );
+            redrawTopLayerExtraObjects( tile, dst, isPuzzleDraw, *this );
 
             for ( const Maps::TilesAddon * addon : topLayerTallObjects ) {
-                tile.redrawTopLayerObject( dst, isPuzzleDraw, *this, *addon );
+                redrawTopLayerObject( tile, dst, isPuzzleDraw, *this, *addon );
             }
         }
     }
@@ -732,7 +733,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             for ( int32_t y = minY; y < maxY; ++y ) {
                 for ( int32_t x = minX; x < maxX; ++x ) {
-                    world.GetTiles( x, y ).RedrawPassable( dst, friendColors, *this );
+                    redrawPassable( world.GetTiles( x, y ), dst, friendColors, *this );
                 }
             }
         }
@@ -740,26 +741,26 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     else
 #endif
         // redraw fog
-        if ( drawFog ) {
-        for ( int32_t y = minY; y < maxY; ++y ) {
-            for ( int32_t x = minX; x < maxX; ++x ) {
-                const Maps::Tiles & tile = world.GetTiles( x, y );
+        if ( renderFog ) {
+            for ( int32_t y = minY; y < maxY; ++y ) {
+                for ( int32_t x = minX; x < maxX; ++x ) {
+                    const Maps::Tiles & tile = world.GetTiles( x, y );
 
-                if ( tile.getFogDirection() != Direction::UNKNOWN ) {
-                    tile.drawFog( dst, *this );
+                    if ( tile.getFogDirection() != Direction::UNKNOWN ) {
+                        drawFog( tile, dst, *this );
 
-                    if ( drawTowns ) {
-                        tile.drawByObjectIcnType( dst, *this, MP2::OBJ_ICN_TYPE_OBJNTWBA );
+                        if ( drawTowns ) {
+                            drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTWBA );
 
-                        const MP2::MapObjectType objectType = tile.GetObject( false );
-                        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
-                            tile.drawByObjectIcnType( dst, *this, MP2::OBJ_ICN_TYPE_OBJNTOWN );
+                            const MP2::MapObjectType objectType = tile.GetObject( false );
+                            if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
+                                drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTOWN );
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
     updateObjectAnimationInfo();
 }
