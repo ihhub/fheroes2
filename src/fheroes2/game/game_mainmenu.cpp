@@ -253,7 +253,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     buttonCredits.draw();
     buttonQuit.draw();
 
-    if ( isNeedFadeIn() ) {
+    if ( validateDisplayFadeIn() ) {
         fheroes2::fadeInDisplay();
     }
     else {

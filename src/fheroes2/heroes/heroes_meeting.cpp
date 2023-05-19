@@ -685,7 +685,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     // Set fade-in game screen only for 640x480 resolution.
     if ( isDefaultScreenSize ) {
-        Interface::Basic::Get().setNeedFadeIn();
+        Game::setDisplayFadeIn();
     }
     else {
         // Heroes meeting dialog currently does not have borders so its ROI is the same as fade ROI.

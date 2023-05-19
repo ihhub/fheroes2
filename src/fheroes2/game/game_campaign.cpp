@@ -1479,7 +1479,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             if ( prevMode == fheroes2::GameMode::LOAD_CAMPAIGN || prevMode == fheroes2::GameMode::MAIN_MENU ) {
                 // We are going back to main menu.
-                setNeedFadeIn();
+                setDisplayFadeIn();
             }
 
             return prevMode;

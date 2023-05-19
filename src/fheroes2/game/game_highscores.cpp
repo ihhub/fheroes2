@@ -290,7 +290,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow() ) {
             if ( isAfterGameCompletion || isDefaultScreenSize ) {
                 fheroes2::fadeOutDisplay();
-                Game::setNeedFadeIn();
+                Game::setDisplayFadeIn();
             }
             else {
                 fheroes2::fadeOutDisplay( border.activeArea(), true );

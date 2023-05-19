@@ -263,7 +263,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
     // Fade-in game screen only for 640x480 resolution.
     if ( fheroes2::Display::instance().isDefaultSize() ) {
-        basicInterface.setNeedFadeIn();
+        setDisplayFadeIn();
     }
 }
 
@@ -338,7 +338,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
 
     // Fade-in game screen only for 640x480 resolution.
     if ( fheroes2::Display::instance().isDefaultSize() ) {
-        basicInterface.setNeedFadeIn();
+        setDisplayFadeIn();
     }
 }
 
@@ -629,7 +629,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     bool skipTurns = loadedFromSave;
 
     // Set need of fade-in of game screen.
-    _needFadeIn = true;
+    Game::setDisplayFadeIn();
 
     GameOver::Result & gameResult = GameOver::Result::Get();
     fheroes2::GameMode res = fheroes2::GameMode::END_TURN;
@@ -702,9 +702,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                         Redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
 
-                        if ( _needFadeIn ) {
-                            _needFadeIn = false;
-
+                        if ( Game::validateDisplayFadeIn() ) {
                             fheroes2::fadeInDisplay();
                         }
                         else {
@@ -829,7 +827,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
     assert( res != fheroes2::GameMode::END_TURN );
 
-    Game::setNeedFadeIn();
+    Game::setDisplayFadeIn();
 
     // Do not use fade-out effect when exiting to Highscores screen as in this case name input dialog will be rendered next.
     if ( res != fheroes2::GameMode::HIGHSCORES_STANDARD ) {
@@ -864,9 +862,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    if ( _needFadeIn ) {
-        _needFadeIn = false;
-
+    if ( Game::validateDisplayFadeIn() ) {
         fheroes2::fadeInDisplay();
 
         SetRedraw( REDRAW_GAMEAREA );
@@ -1290,9 +1286,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                 // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
                 assert( GetRedrawMask() == 0 );
 
-                if ( _needFadeIn ) {
-                    _needFadeIn = false;
-
+                if ( Game::validateDisplayFadeIn() ) {
                     fheroes2::fadeInDisplay();
 
                     SetRedraw( REDRAW_GAMEAREA );

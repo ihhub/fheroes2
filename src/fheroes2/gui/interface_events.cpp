@@ -364,7 +364,7 @@ fheroes2::GameMode Interface::Basic::EventScenarioInformation()
         const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
         if ( returnMode == fheroes2::GameMode::CANCEL ) {
             // We are going back to the Adventure map with fade-in.
-            Get().setNeedFadeIn();
+            Game::setDisplayFadeIn();
 
             saver.restore();
 

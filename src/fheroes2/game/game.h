@@ -89,10 +89,10 @@ namespace Game
     bool UpdateSoundsOnFocusUpdate();
     void SetUpdateSoundsOnFocusUpdate( const bool update );
 
-    // Return the need of fade-in and reset it to 'false'.
-    bool isNeedFadeIn();
-    // Set the need of fade-in to 'true'.
-    void setNeedFadeIn();
+    // If display fade-in state is set reset it to false and return true. Otherwise return false.
+    bool validateDisplayFadeIn();
+    // Set display fade-in state to true.
+    void setDisplayFadeIn();
 
     int GetKingdomColors();
     int GetActualKingdomColors();

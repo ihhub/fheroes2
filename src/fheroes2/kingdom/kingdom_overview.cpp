@@ -826,7 +826,7 @@ void Kingdom::openOverviewDialog()
             // Fade-out Kingdom overview dialog.
             fheroes2::fadeOutDisplay( background.activeArea(), !isDefaultScreenSize );
             if ( isDefaultScreenSize ) {
-                Interface::Basic::Get().setNeedFadeIn();
+                Game::setDisplayFadeIn();
             }
 
             break;

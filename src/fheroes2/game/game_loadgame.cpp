@@ -168,7 +168,7 @@ fheroes2::GameMode Game::LoadGame()
     buttons.back().setPosition( buttonPos.x, buttonPos.y + buttonYStep * 5 );
     buttons.back().draw();
 
-    if ( isNeedFadeIn() ) {
+    if ( validateDisplayFadeIn() ) {
         fheroes2::fadeInDisplay();
     }
     else {
@@ -240,7 +240,7 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
     // image background
     fheroes2::drawMainMenuScreen();
 
-    if ( isNeedFadeIn() ) {
+    if ( validateDisplayFadeIn() ) {
         fheroes2::fadeInDisplay();
     }
     else {
