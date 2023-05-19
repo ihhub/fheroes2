@@ -445,7 +445,7 @@ namespace
     }
 
     // Sets the upper left (offset 3 pixels), upper right (offset 2 pixels), lower right (offset 3 pixels) corners transparent.
-    void setButtonTransparentCorners( fheroes2::Sprite & buttonSprite )
+    void setButtonCornersTransparent( fheroes2::Sprite & buttonSprite )
     {
         const ptrdiff_t imageWidth = buttonSprite.width();
         const ptrdiff_t imageHeight = buttonSprite.height();
@@ -453,29 +453,15 @@ namespace
         assert( imageWidth > 3 && imageHeight > 3 );
 
         uint8_t * imageTransform = buttonSprite.transform();
-        *imageTransform = 1;
-        *( imageTransform + 1 ) = 1;
-        *( imageTransform + 2 ) = 1;
-        *( imageTransform + 3 ) = 1;
-        *( imageTransform + imageWidth - 2 ) = 1;
-        *( imageTransform + imageWidth - 1 ) = 1;
-        *( imageTransform + imageWidth ) = 1;
-        *( imageTransform + imageWidth + 1 ) = 1;
-        *( imageTransform + imageWidth + 2 ) = 1;
-        *( imageTransform + 2 * imageWidth - 1 ) = 1;
-        *( imageTransform + 2 * imageWidth ) = 1;
-        *( imageTransform + 2 * imageWidth + 1 ) = 1;
-        *( imageTransform + 3 * imageWidth ) = 1;
-        *( imageTransform + ( imageHeight - 3 ) * imageWidth - 1 ) = 1;
-        *( imageTransform + ( imageHeight - 2 ) * imageWidth - 2 ) = 1;
-        *( imageTransform + ( imageHeight - 2 ) * imageWidth - 1 ) = 1;
-        *( imageTransform + ( imageHeight - 1 ) * imageWidth - 3 ) = 1;
-        *( imageTransform + ( imageHeight - 1 ) * imageWidth - 2 ) = 1;
-        *( imageTransform + ( imageHeight - 1 ) * imageWidth - 1 ) = 1;
-        *( imageTransform + imageHeight * imageWidth - 4 ) = 1;
-        *( imageTransform + imageHeight * imageWidth - 3 ) = 1;
-        *( imageTransform + imageHeight * imageWidth - 2 ) = 1;
-        *( imageTransform + imageHeight * imageWidth - 1 ) = 1;
+        const uint8_t transparencyValue = 1;
+        std::fill( imageTransform, imageTransform + 3, transparencyValue );
+        std::fill( imageTransform + imageWidth - 2, imageTransform + imageWidth + 2, transparencyValue );
+        std::fill( imageTransform + 2 * imageWidth - 1, imageTransform + 2 * imageWidth + 1, transparencyValue );
+        *( imageTransform + 3 * imageWidth ) = transparencyValue;
+        *( imageTransform + ( imageHeight - 3 ) * imageWidth - 1 ) = transparencyValue;
+        std::fill( imageTransform + ( imageHeight - 2 ) * imageWidth - 2, imageTransform + ( imageHeight - 2 ) * imageWidth - 1, transparencyValue );
+        std::fill( imageTransform + ( imageHeight - 1 ) * imageWidth - 3, imageTransform + ( imageHeight - 1 ) * imageWidth - 1, transparencyValue );
+        std::fill( imageTransform + imageHeight * imageWidth - 4, imageTransform + imageHeight * imageWidth - 1, transparencyValue );
     }
 }
 
@@ -1543,7 +1529,7 @@ namespace fheroes2
 
                     // To properly generate shadows and Blit the button we need to make some pixels transparent.
                     for ( fheroes2::Sprite & image : _icnVsSprite[id] ) {
-                        setButtonTransparentCorners( image );
+                        setButtonCornersTransparent( image );
                     }
 
                     break;
