@@ -41,6 +41,7 @@ namespace
         assert( artifactData.empty() );
 
         artifactData = {
+            { gettext_noop( "Invalid Artifact" ), gettext_noop( "Invalid Artifact" ), nullptr, {}, {} },
             // Ultimate artifacts do not have discovery event description as they are not supposed to be found on map.
             { gettext_noop( "Ultimate Book of Knowledge" ), gettext_noop( "The %{name} increases your knowledge by %{count}." ), nullptr, {}, {} },
             { gettext_noop( "Ultimate Sword of Dominion" ), gettext_noop( "The %{name} increases your attack skill by %{count}." ), nullptr, {}, {} },
@@ -568,8 +569,6 @@ namespace
                   "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, you discover it to be the enchanted shovel of the Gravediggers, long thought lost by mortals." ),
               {},
               {} },
-
-            { gettext_noop( "Invalid Artifact" ), gettext_noop( "Invalid Artifact" ), nullptr, {}, {} },
         };
 
         assert( artifactData.size() == ( Artifact::ARTIFACT_COUNT ) );

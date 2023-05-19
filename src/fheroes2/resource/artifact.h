@@ -219,19 +219,19 @@ public:
     // return index of the sprite from objnarti.icn
     uint32_t IndexSprite() const
     {
-        return id < UNKNOWN ? id * 2 + 1 : 0;
+        return id < ARTIFACT_COUNT ? id * 2 + 1 : 0;
     }
 
     // artfx.icn
     uint32_t IndexSprite32() const
     {
-        return id;
+        return id - 1;
     }
 
     // return index from artifact.icn
     uint32_t IndexSprite64() const
     {
-        return id + 1;
+        return id;
     }
 
     void SetSpell( const int v );

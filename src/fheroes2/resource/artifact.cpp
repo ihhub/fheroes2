@@ -61,7 +61,7 @@ namespace
         = { { ArtifactSetData( Artifact::BATTLE_GARB, gettext_noop( "The three Anduran artifacts magically combine into one." ) ),
               { Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
 
-    std::array<uint8_t, Artifact::UNKNOWN + 1> artifactGlobalStatus = {};
+    std::array<uint8_t, Artifact::ARTIFACT_COUNT> artifactGlobalStatus = {};
 
     enum
     {
