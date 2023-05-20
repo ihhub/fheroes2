@@ -2345,7 +2345,7 @@ msgstr ""
 "заклинание для каждого уровня."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr "Фруктовый сад увеличивает прирост Хоббитов на %{count} в неделю."
+msgstr "Фруктовый сад увеличивает прирост Полуросликов на %{count} в неделю."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
 msgstr "Буря добавляет 2 очка к силе магии заклинателя, обороняющего замок."
@@ -7607,7 +7607,7 @@ msgid "Hill Fort"
 msgstr "Форт на холме"
 
 msgid "Halfling Hole"
-msgstr "Нора"
+msgstr "Нора полуросликов"
 
 msgid "Mercenary Camp"
 msgstr "Лагерь наёмников"
@@ -7994,10 +7994,10 @@ msgid "Black Dragons"
 msgstr "Чёрные драконы"
 
 msgid "Halfling"
-msgstr "Хоббит"
+msgstr "Полурослик"
 
 msgid "Halflings"
-msgstr "Хоббиты"
+msgstr "Полурослики"
 
 msgid "Boar"
 msgstr "Боров"
