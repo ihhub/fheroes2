@@ -145,15 +145,15 @@ msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
-"ВОЙНЫ ЗА\n"
-"ПРЕСТОЛ"
+"ИЗНАЧАЛЬНАЯ\n"
+"КАМПАНИЯ"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
-"ЦЕНА\n"
-"ВЕРНОСТИ"
+"КАМПАНИЯ\n"
+"РАСШИРЕНИЙ"
 
 msgid "HOT SEAT"
 msgstr ""
@@ -176,7 +176,7 @@ msgid "6 PLAYERS"
 msgstr "6 ИГРОКОВ"
 
 msgid "GIFT"
-msgstr "ОТДАТЬ"
+msgstr "ПОДАРИТЬ"
 
 msgid "guildWell|EXIT"
 msgstr ""
@@ -366,7 +366,7 @@ msgstr ""
 "Сфера Отрицания лишила возможности использовать любые заклинания в битве."
 
 msgid "You have already cast a spell this round."
-msgstr "Вы уже использовали магию на этом ходу."
+msgstr "Вы уже пускали заклинания в этом ходу."
 
 msgid "That spell will affect no one!"
 msgstr "Это заклинание ни на кого не подействует!"
@@ -437,8 +437,8 @@ msgid ""
 "is on. (Note: This does not affect spell casting for computer players in any "
 "way, nor does it affect quick combat.)"
 msgstr ""
-"Включить/выключить использование заклинаний компьютером в режиме автобитвы. "
-"(Эта опция не влияет на использование заклинаний компьютерным игроком и на "
+"Включить/выключить испускание заклинаний компьютером в режиме автобитвы. "
+"(Эта опция не влияет на испускание заклинаний компьютерным игроком и на "
 "режим быстрой битвы.)"
 
 msgid ""
@@ -563,7 +563,7 @@ msgid "Hero's Options"
 msgstr "Возможности героя"
 
 msgid "Cast Spell"
-msgstr "Произнести заклинание"
+msgstr "Пустить заклинание"
 
 msgid "Retreat"
 msgstr "Отступить"
@@ -584,7 +584,7 @@ msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
 msgstr ""
-"Магическое заклинание. Вы можете произносить только одно заклинание в "
+"Пустить магическое заклинание. Вы можете пустить только одно заклинание в "
 "течение раунда. Новый раунд начинается после того, как каждое существо "
 "сделает ход."
 
@@ -655,11 +655,11 @@ msgstr "Телепортироваться сюда"
 msgid "Invalid teleport destination"
 msgstr "Неверная цель телепорта"
 
-msgid "Cast %{spell} on %{monster}"
-msgstr "Применить \"%{spell}\" (цель: %{monster})"
+msgid "Запустить %{spell} on %{monster}"
+msgstr "Применить \"%{spell}\" в %{monster}"
 
 msgid "Cast %{spell}"
-msgstr "Произнести \"%{spell}\""
+msgstr "Пустить \"%{spell}\""
 
 msgid "Select spell target"
 msgstr "Выберите цель заклинания"
@@ -809,7 +809,7 @@ msgid "The %{attacker} dispel all good spells on your %{target}!"
 msgstr "Сняты хорошие чары с противника \"%{target}\"!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr "%{attacker} применяет \"%{spell}\" (цель: %{target})."
+msgstr "%{attacker} запускает \"%{spell}\" в %{target}."
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "Удача отвернулась от %{attacker}."
@@ -839,7 +839,7 @@ msgid "Error"
 msgstr "Ошибка"
 
 msgid "No spells to cast."
-msgstr "Нет заклинаний."
+msgstr "Нет заклинаний чтобы запустить."
 
 msgid "Are you sure you want to retreat?"
 msgstr "Вы действительно хотите отступить?"
@@ -2616,10 +2616,10 @@ msgid "View World"
 msgstr "Обзор мира"
 
 msgid "View the entire world."
-msgstr "Увидеть мир с высоты птичьего полёта."
+msgstr "Обозреть весь мир."
 
 msgid "Puzzle"
-msgstr "Карта-Загадка"
+msgstr "Головоломка"
 
 msgid "View the obelisk puzzle."
 msgstr "Посмотреть найденные фрагменты карты."
@@ -2631,7 +2631,7 @@ msgid "View information on the scenario you are currently playing."
 msgstr "Описание текущего сценария."
 
 msgid "Dig for the Ultimate Artifact."
-msgstr "Копать в поисках великого артефакта."
+msgstr "Копать в поисках Наилучшего Артефакта."
 
 msgid "Digging"
 msgstr "Копать"
@@ -2661,7 +2661,7 @@ msgid "Shots"
 msgstr "Выстрелов"
 
 msgid "Shots Left"
-msgstr "Выстрелов"
+msgstr "Ост. выстрелов"
 
 msgid "Damage"
 msgstr "Урон"
@@ -2685,17 +2685,17 @@ msgid "Are you sure you want to dismiss this army?"
 msgstr "Вы уверены, что хотите распустить этот отряд?"
 
 msgid "Upgrade"
-msgstr ""
+msgstr "Улучшить"
 
 #, fuzzy
 msgid "Upgrade your troops."
 msgstr "Вы не можете позволить себе улучшения для Вашей армии!"
 
 msgid "Dismiss"
-msgstr ""
+msgstr "Распустить"
 
 msgid "Dismiss this army."
-msgstr ""
+msgstr "Распустить эту армию"
 
 msgid "Followers"
 msgstr "Последователи"
@@ -2788,25 +2788,25 @@ msgid "Resource cost:"
 msgstr "Стоимость:"
 
 msgid "Total: "
-msgstr "В казне: "
+msgstr "Всего: "
 
 msgid "Need: "
-msgstr "Необходимо: "
+msgstr "Нужно: "
 
 msgid "Load Game"
 msgstr "Загрузка игры"
 
 msgid "No save files to load."
-msgstr "Нет сохранённых игр."
+msgstr "Нет файлов сохранений для загрузки."
 
 msgid "New Game"
 msgstr "Новая игра"
 
 msgid "Start a single or multi-player game."
-msgstr "Начало одиночной или сетевой игры."
+msgstr "Начать одиночную или сетевую игру."
 
 msgid "Load a previously saved game."
-msgstr "Загрузка ранее сохранённой игры."
+msgstr "Загрузить ранее сохранённую игру."
 
 msgid "Save Game"
 msgstr "Сохранить игру"
@@ -2848,7 +2848,7 @@ msgid "Change the graphics settings of the game."
 msgstr "Настроить параметры графики."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr "Включить или выключить цветной курсор. Это эстетический выбор."
+msgstr "Включить или выключить цветной курсор. Это лишь эстетический выбор."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -2903,10 +2903,10 @@ msgid "First select recipients!"
 msgstr "Сначала выберите получателя!"
 
 msgid "You cannot select %{resource}!"
-msgstr "Вы не можете подарить %{resource}!"
+msgstr "Вы не можете выбрать %{resource}!"
 
 msgid "Select count %{resource}:"
-msgstr "Подарить %{resource}:"
+msgstr "Выберите количество %{resource}:"
 
 msgid "Select Recipients"
 msgstr "Выберите получателя"
@@ -2945,10 +2945,10 @@ msgid "System Info"
 msgstr "Системная информация"
 
 msgid "Change the resolution of the game."
-msgstr "Изменить разрешение экрана."
+msgstr "Изменить разрешение игры."
 
 msgid "Select Game Resolution"
-msgstr "Выбор разрешения экрана"
+msgstr "Выборите разрешение игры"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Переключение между полноэкранным и оконным режимами."
@@ -2975,13 +2975,13 @@ msgid "Click to choose the selected language."
 msgstr "Нажмите, чтобы применить выбранный язык интерфейса игры."
 
 msgid "%{name} has gained a level."
-msgstr "%{name} получает уровень."
+msgstr "%{name} получил уровень."
 
 msgid "%{skill} +1"
 msgstr "%{skill} +1"
 
 msgid "You have learned %{skill}."
-msgstr "Вы изучили %{skill}."
+msgstr "Вы выучили %{skill}."
 
 msgid "You may learn either:"
 msgstr "Вы можете выучить:"
@@ -3015,7 +3015,7 @@ msgid "Min"
 msgstr "Минимум"
 
 msgid "Qty to trade"
-msgstr "Обмен"
+msgstr "Кол-во к обмену"
 
 msgid "Trading Post"
 msgstr "Базар"
@@ -3030,7 +3030,7 @@ msgid "n/a"
 msgstr "н/д"
 
 msgid "guarded by %{count} %{monster}"
-msgstr "охраняет %{count} %{monster}"
+msgstr "охраняемая %{count} %{monster}"
 
 msgid "guarded by "
 msgstr "охраняемая "
@@ -3045,10 +3045,10 @@ msgid "already learned"
 msgstr "уже выучено"
 
 msgid "already knows this skill"
-msgstr "уже знаете"
+msgstr "уже знает этот навык"
 
 msgid "already has max skills"
-msgstr "максимум навыков"
+msgstr "уже имеет максимум навыков"
 
 msgid "(already visited)"
 msgstr "(посещено)"
@@ -3062,7 +3062,7 @@ msgstr "%{color} барьер"
 msgid "%{color} Tent"
 msgstr ""
 "%{color}\n"
-"шатёр путника"
+"шатёр"
 
 msgid "Road"
 msgstr "Дорога"
@@ -3074,7 +3074,7 @@ msgid "(no digging)"
 msgstr "(нельзя копать)"
 
 msgid "penalty: %{cost}"
-msgstr "Штраф: %{cost}"
+msgstr "штраф: %{cost}"
 
 msgid "Uncharted Territory"
 msgstr "Неизведанная территория"
@@ -3095,13 +3095,13 @@ msgid "Defense:"
 msgstr "Защита:"
 
 msgid "Spell Power:"
-msgstr "Сила магии:"
+msgstr "Сила заклинаний:"
 
 msgid "Knowledge:"
 msgstr "Знания:"
 
 msgid "Spell Points:"
-msgstr "Очки магии:"
+msgstr "Очки заклинаний:"
 
 msgid "Move Points:"
 msgstr "Запас хода:"
@@ -3143,7 +3143,7 @@ msgid "How many troops to move?"
 msgstr "Сколько существ перенести?"
 
 msgid "Fast separation into slots:"
-msgstr "Быстрое разделение:"
+msgstr "Быстрое разделение по слотам:"
 
 msgid "Map: "
 msgstr "Карта: "
@@ -3209,7 +3209,7 @@ msgid "Map Type:\n"
 msgstr "Тип карты:\n"
 
 msgid "The Succession Wars"
-msgstr "Война за престол"
+msgstr "Войны Престолонаследия"
 
 msgid "Lose all your heroes and towns."
 msgstr "Потерять всех героев и все города."
@@ -3239,7 +3239,7 @@ msgid "Find a specific artifact."
 msgstr "Найти определённый артефакт."
 
 msgid "Your side defeats the opposing side."
-msgstr "Победить вместе с союзником всех противников."
+msgstr "Ваша сторона побеждает противоположную сторону."
 
 msgid "Accumulate a large amount of gold."
 msgstr "Накопить крупные запасы золота."
@@ -3314,7 +3314,7 @@ msgid ""
 "Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
 "of Loyalty\" version of the game."
 msgstr ""
-"Указывает, создана ли карта для версии игры \"Война за престол\" или \"Цена "
+"Указывает, создана ли карта для версии игры \"Войны Престолонаследия\" или \"Цена "
 "верности\"."
 
 msgid "Map Type"
@@ -3340,13 +3340,13 @@ msgstr ""
 "ресурсов или другие особые условия, осложняющие игру человеку."
 
 msgid "Selected Description"
-msgstr "Описание"
+msgstr "Выбранное описание"
 
 msgid "The description of the currently selected map."
 msgstr "Расширенное описание выбранной карты."
 
 msgid "Accept the choice made."
-msgstr "Принять изменения."
+msgstr "Принять сделанный выбор."
 
 msgid "Jump"
 msgstr "Прыжком"
@@ -3513,7 +3513,7 @@ msgid "difficulty|Normal"
 msgstr "Нормальная"
 
 msgid "difficulty|Hard"
-msgstr "Сложная"
+msgstr "Трудная"
 
 msgid "difficulty|Expert"
 msgstr "Эксперт"
@@ -3525,10 +3525,10 @@ msgid "and more..."
 msgstr "и т.д."
 
 msgid "Easy"
-msgstr "Лёгкая"
+msgstr "Простая"
 
 msgid "Hard"
-msgstr "Тяжёлая"
+msgstr "Трудная"
 
 msgid "Campaign Difficulty"
 msgstr "Сложность кампании"
@@ -3619,7 +3619,7 @@ msgid "Project Coordination and Core Development"
 msgstr "Координатор проекта и основной разработчик"
 
 msgid "Development"
-msgstr "Разработчик"
+msgstr "Разработка"
 
 msgid "Visit us at "
 msgstr "Посетите нас"
@@ -3665,7 +3665,7 @@ msgid "Heroes of Might and Magic II: The Succession Wars team"
 msgstr "Разработчики Heroes of Might and Magic II: The Succession Wars"
 
 msgid "Designed and Directed"
-msgstr "Геймдизайнер"
+msgstr "Проектировка и руководство"
 
 msgid "Programming and Design"
 msgstr "Программист и дизайнер"
@@ -3869,10 +3869,10 @@ msgid "hotkey|battle only game"
 msgstr "режим битвы"
 
 msgid "hotkey|choose the original campaign"
-msgstr "выбрать кампанию: войны за престол"
+msgstr "выбрать изначальную кампанию"
 
 msgid "hotkey|choose the expansion campaign"
-msgstr "выбрать кампании дополнения цена верности"
+msgstr "выбрать кампании расширений"
 
 msgid "hotkey|roland campaign"
 msgstr "кампания за роланда"
@@ -3944,7 +3944,7 @@ msgid "hotkey|continue hero movement"
 msgstr "продолжить движение героя"
 
 msgid "hotkey|cast adventure spell"
-msgstr "произнести заклинание приключения"
+msgstr "испустить заклинание приключения"
 
 msgid "hotkey|put hero to sleep"
 msgstr "усыпить/разбудить героя"
@@ -3971,10 +3971,10 @@ msgid "hotkey|dig for artifact"
 msgstr "выкопать артефакт"
 
 msgid "hotkey|view world"
-msgstr "обзор мира"
+msgstr "показать мир"
 
 msgid "hotkey|kingdom summary"
-msgstr "обзор королевства"
+msgstr "сводка о королевстве"
 
 msgid "hotkey|default action"
 msgstr "действие по умолчанию"
@@ -4016,7 +4016,7 @@ msgid "hotkey|transfer control to ai"
 msgstr "передать управление ии"
 
 msgid "hotkey|retreat from battle"
-msgstr "отступление из битвы"
+msgstr "отступить из битвы"
 
 msgid "hotkey|surrender during battle"
 msgstr "сдаться в битве"
@@ -4034,7 +4034,7 @@ msgid "hotkey|skip turn in battle"
 msgstr "пропустить ход в битве"
 
 msgid "hotkey|cast battle spell"
-msgstr "произнести боевое заклинание"
+msgstr "запустить боевыи заклинанием"
 
 msgid "hotkey|dwelling level 1"
 msgstr "поселение 1 уровня"
@@ -4220,16 +4220,16 @@ msgid ""
 msgstr "Кампании Роланда и Арчибальда из оригинальных Героев Меча и Магии II."
 
 msgid "Original Campaign"
-msgstr "Старая кампания"
+msgstr "Изначальная кампания"
 
 msgid "Expansion Campaign"
-msgstr "Новая кампания"
+msgstr "Расширенная кампания"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr "Одна из четырёх новых кампаний из набора дополнений \"Цена верности\"."
 
 msgid "Host"
-msgstr "Хост"
+msgstr "Хозяин (сервер)"
 
 msgid ""
 "The host sets up the game options. There can only be one host per network "
@@ -4239,7 +4239,7 @@ msgstr ""
 "один хост."
 
 msgid "Guest"
-msgstr "Гость"
+msgstr "Гость (клиент)"
 
 msgid ""
 "The guest waits for the host to set up the game, then is automatically added "
@@ -4317,7 +4317,7 @@ msgstr ""
 "Ваше задание выполнено."
 
 msgid "Ultimate Artifact"
-msgstr "Великий артефакт"
+msgstr "Наилучший Артефакт"
 
 msgid ""
 "The enemy is beaten.\n"
@@ -4416,7 +4416,7 @@ msgid "Defeat the hero '%{name}'."
 msgstr "Победить героя '%{name}'."
 
 msgid "Find the ultimate artifact."
-msgstr "Найти великий артефакт."
+msgstr "Найти наилучший артефакт."
 
 msgid "Find the '%{name}' artifact."
 msgstr "Найти артефакт '${name}'."
@@ -4652,13 +4652,13 @@ msgid "Continue the Hero's movement along the current path."
 msgstr "Продолжить движение по намеченному пути."
 
 msgid "Kingdom Summary"
-msgstr "Обзор королевства"
+msgstr "Сводка по королевству"
 
 msgid "View a Summary of your Kingdom."
-msgstr "Осмотреть Ваши владения."
+msgstr "Посмотреть сводку по вашему королевству."
 
 msgid "Cast an adventure spell."
-msgstr "Произнести заклинание приключения."
+msgstr "Испустить заклинание приключения."
 
 msgid "End Turn"
 msgstr "Окончить ход"
@@ -4718,7 +4718,7 @@ msgid ""
 "Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
 "it even if he found it - all his artifact slots are full."
 msgstr ""
-"Поиски великого артефакта будут бесполезными. Если даже Ваш герой и найдёт "
+"Поиски Наилучшего Артефакта будут бесполезными. Если даже Ваш герой и найдёт "
 "его, то у него попросту нет места, чтобы его унести. Весь инвентарь героя "
 "занят."
 
@@ -5094,7 +5094,7 @@ msgstr "Вы не можете забрать этот артефакт, у Ва
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr ""
-"Чтобы Вас пропустили в гильдию магов, Вы должны купить книгу заклинаний за "
+"Чтобы испускать заклинания, Вы должны купить книгу заклинаний за "
 "%{gold} золотых."
 
 msgid "Unfortunately, you seem to be a little short of cash at the moment."
@@ -5126,7 +5126,7 @@ msgstr ""
 "Изволите преследовать их и заставить драться?"
 
 msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
-msgstr "Обыскав вражеский лагерь, Вы находите спрятанный клад."
+msgstr "Разграбляя вражеский лагерь, Вы находите спрятанный клад."
 
 msgid ""
 "The keeper of the mill announces:\n"
@@ -5143,7 +5143,7 @@ msgid ""
 "again next week.\""
 msgstr ""
 "Мельник обращается к Вам со словами:\n"
-"\"Сожалею, милорд, но сегодня у меня нет ресурсов. Приходите на следующей "
+"\"Сожалею, милорд, но сейчас у меня нет ресурсов. Приходите на следующей "
 "неделе.\""
 
 msgid ""
@@ -5161,7 +5161,7 @@ msgid ""
 "next week.\""
 msgstr ""
 "Мельник обращается к Вам со словами:\n"
-"\"Сожалею, милорд, но сегодня золота у меня нет. Приходите на следующей "
+"\"Сожалею, милорд, но сейчас золота у меня нет. Приходите на следующей "
 "неделе.\""
 
 msgid ""
@@ -5423,7 +5423,7 @@ msgid ""
 "\"I'm sorry sir,\" The leader of the soldiers says, \"but you already know "
 "everything we have to teach.\""
 msgstr ""
-"\"Простите, милорд\" - сказал предводитель воинов, - \"но Вы уже знаете всё, "
+"\"Простите, сэр\" - сказал предводитель воинов, - \"но Вы уже знаете всё, "
 "чему мы способны научить.\""
 
 msgid "The soldiers living in the fort teach you a few new defensive tricks."
@@ -5434,8 +5434,8 @@ msgid ""
 "advanced for us,\" the mercenary captain says. \"We can teach nothing more.\""
 msgstr ""
 "Вы пришли в лагерь наёмников, где воины оттачивают тактику. \"Для нас Вы "
-"слишком умелый боец,\" - сказал капитан наёмников. - \"Больше мы ничему "
-"научить Вас не можем.\""
+"слишком умелый боец,\" - сказал капитан наёмников. - \"Нам нечему "
+"научить Вас.\""
 
 msgid ""
 "You've come upon a mercenary camp practicing their tactics. The mercenaries "
@@ -5470,7 +5470,7 @@ msgid ""
 "edifices. Silently, they teach you new ways to cast spells."
 msgstr ""
 "Вы застали группу друидов за обрядом в одном из их диковинных каменных "
-"сооружений. Не нарушая безмолвия, они научили Вас новым способам колдовства."
+"сооружений. Не нарушая безмолвия, они научили Вас новым способам испускания заклинаний."
 
 msgid ""
 "You tentatively approach the burial ground of ancient warriors. Do you want "
@@ -5500,12 +5500,12 @@ msgid ""
 "You spend several hours sifting through the debris and find nothing. Such a "
 "despicable act reduces your army's morale."
 msgstr ""
-"Вы тратите несколько часов, обыскивая останки, но ничего не находите. Сей "
+"Вы тратите несколько часов, обыскивая обломки, но ничего не находите. Сей "
 "презренный акт снижает мораль Вашей армии."
 
 msgid ""
 "Upon defeating the Ghosts you sift through the debris and find something!"
-msgstr "Одолев призраков, Вы обыскали останки кораблекрушения и кое-что нашли!"
+msgstr "Одолев призраков, Вы обыскали обломки и кое-что нашли!"
 
 msgid ""
 "The rotting hulk of a great pirate ship creaks eerily as it is pushed "
@@ -5516,7 +5516,7 @@ msgstr ""
 
 msgid ""
 "Upon defeating the Skeletons you sift through the debris and find something!"
-msgstr "Совладав со скелетами, Вы обыскали останки корабля и кое-что нашли!"
+msgstr "Совладав со скелетами, Вы обыскали обломки и кое-что нашли!"
 
 msgid "Your men spot a navigational buoy, confirming that you are on course."
 msgstr "Ваши спутники замечают морской буй. Он указывает верный курс."
@@ -5567,22 +5567,22 @@ msgid ""
 "An old Knight appears on the steps of the gazebo. \"I am sorry, my liege, I "
 "have taught you all I can.\""
 msgstr ""
-"На ступенях беседки появляется старый рыцарь. \"Мне жаль храбрый воин, но я "
-"уже научил тебя всему, что знаю сам.\""
+"На ступенях беседки появляется старый рыцарь. \"Мне жаль, мой сеньор, но я "
+"уже научил вас всему, что знаю сам.\""
 
 msgid ""
 "An old Knight appears on the steps of the gazebo. \"My liege, I will teach "
 "you all that I know to aid you in your travels.\""
 msgstr ""
-"На ступенях беседки появляется старый рыцарь. \"О храбрый воин, я научу тебя "
-"всему, что знаю сам: пусть мой опыт поможет тебе в твоих странствиях.\""
+"На ступенях беседки появляется старый рыцарь. \"Мой сеньор, я научу вас "
+"всему, что знаю сам, чтобы помочь вам в ваших странствиях.\""
 
 msgid ""
 "You've pulled a shipwreck survivor from certain death in an unforgiving "
 "ocean. Grateful, he says, \"I would give you an artifact as a reward, but "
 "you're all full.\""
 msgstr ""
-"Вы спасли жертву кораблекрушения от неминуемой гибели в безжалостном океане. "
+"Вы спасли выжившего в кораблекрушении от неминуемой гибели в безжалостном океане. "
 "Матрос сказал, \"За своё спасение я хотел отблагодарить Вас артефактом, но я "
 "вижу, что Ваша сумка и так переполнена.\""
 
@@ -5591,7 +5591,7 @@ msgid ""
 "ocean. Grateful, he rewards you for your act of kindness by giving you the "
 "%{art}."
 msgstr ""
-"Вы спасли жертву кораблекрушения от неминуемой гибели в безжалостном океане. "
+"Вы спасли выжившего в кораблекрушении от неминуемой гибели в безжалостном океане. "
 "Награда за вашу доброту - %{art}."
 
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
@@ -5645,7 +5645,7 @@ msgid ""
 "You've encountered a strange person with a hat and an owl on it. He tells "
 "you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
-"Вы столкнулись со странным человеком в шляпе, на которой сидит сова. Он "
+"Вы столкнулись со странным человеком в шляпе с совой на ней. Он "
 "говорит Вам, что готов отдать %{art}, если у Вас есть %{skill}."
 
 msgid ""
@@ -6462,25 +6462,25 @@ msgid ""
 "That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
 msgstr ""
 "Заклинание требует %{mana} очков магии. У Вас нет очков магии, поэтому Вы не "
-"можете произнести заклинание."
+"можете испустить заклинание."
 
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
 msgstr ""
 "Заклинание требует %{mana} очков магии. У Вас только %{point}, поэтому Вы не "
-"можете произнести заклинание."
+"можете испустить (это) заклинание."
 
 msgid "The spell was not found."
 msgstr "Заклинание не найдено."
 
 msgid "Only heroes can cast this spell."
-msgstr "Только герои могут колдовать данное заклинание."
+msgstr "Только герои могут направлять это заклинание."
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
-"Ваш герой очень устал, и не сможет применять магию сегодня. Попробуйте ещё "
-"раз завтра."
+"Ваш герой очень устал, и не сможет испускать это заклинание сегодня. "
+"Попробуйте снова завтра."
 
 msgid "This spell cannot be used on a boat."
 msgstr "Это заклинание не действует в море."
@@ -6491,11 +6491,11 @@ msgstr "Это заклинание действует только у воды.
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
-"Вы не владеете ни одним городом или замком. Потому это заклинание не "
-"сработает."
+"Вы не владеете ни одним городом или замком. Потому вы не можете направлять"
+"(это) заклинание."
 
 msgid "This hero is already in a town, so you can't cast the spell."
-msgstr "Этот герой уже в замке, поэтому Вам не произнести данное заклинание."
+msgstr "Этот герой уже в замке, поэтому Вы не можете испустить (это) заклинание."
 
 msgid ""
 "The nearest town is %{town}.\n"
@@ -6529,7 +6529,7 @@ msgstr ""
 msgid ""
 "You must be standing on the entrance to a mine (sawmills and alchemists "
 "don't count) to cast this spell."
-msgstr "Вы должны стать поближе к руднику, для использования этой магии."
+msgstr "Вы должны стать поближе к руднику, чтобы испустить это заклинание."
 
 msgid "You must first defeat the ghosts guarding the mine to cast this spell."
 msgstr ""
@@ -7529,7 +7529,7 @@ msgid "Boat"
 msgstr "Корабль"
 
 msgid "Random Ultimate Artifact"
-msgstr "Случайный великий артефакт"
+msgstr "Случайный Наилучший Артефакт"
 
 msgid "Random Artifact"
 msgstr "Случайный артефакт"
@@ -8234,10 +8234,10 @@ msgid "% chance to Blind"
 msgstr "% шанс ослепить"
 
 msgid "% chance to Curse"
-msgstr "% шанс наложить проклятие"
+msgstr "% шанс проклясть"
 
 msgid "% chance to cast %{spell} spell"
-msgstr "% шанс наложить заклинание %{spell}"
+msgstr "% шанс запустить %{spell}"
 
 msgid "HP regeneration"
 msgstr "Регенерация здоровья"
@@ -8330,43 +8330,43 @@ msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} увеличивает Знания на %{count}."
 
 msgid "Ultimate Book of Knowledge"
-msgstr "Книга Всезнания"
+msgstr "Наилучшая Книга Знаний"
 
 msgid "The %{name} increases your attack skill by %{count}."
 msgstr "%{name} увеличивает Атаку на %{count}."
 
 msgid "Ultimate Sword of Dominion"
-msgstr "Меч Всевластия"
+msgstr "Наилучший Меч Власти"
 
 msgid "The %{name} increases your defense skill by %{count}."
 msgstr "%{name} увеличивает Защиту на %{count}."
 
 msgid "Ultimate Cloak of Protection"
-msgstr "Защитная Накидка"
+msgstr "Наилучшая Защитная Накидка"
 
 msgid "The %{name} increases your spell power by %{count}."
 msgstr "%{name} увеличивает Силу магии на %{count}."
 
 msgid "Ultimate Wand of Magic"
-msgstr "Жезл Магии"
+msgstr "Наилучший Жезл Магии"
 
 msgid "The %{name} increases your attack and defense skills by %{count} each."
 msgstr "%{name} увеличивает Вашу Атаку и Защиту на %{count}."
 
 msgid "Ultimate Shield"
-msgstr "Всемогущий Щит"
+msgstr "Наилучший Щит"
 
 msgid "The %{name} increases your spell power and knowledge by %{count} each."
 msgstr "%{name} увеличивает Вашу Силу магии и Знания на %{count}."
 
 msgid "Ultimate Staff"
-msgstr "Всемогущий Посох"
+msgstr "Наилучший Посох"
 
 msgid "The %{name} increases each of your basic skills by %{count} points."
 msgstr "%{name} увеличивает все основные параметры на %{count}."
 
 msgid "Ultimate Crown"
-msgstr "Корона Всевластия"
+msgstr "Наилучшая Корона"
 
 msgid "Golden Goose"
 msgstr "Золотой Гусь"
@@ -9403,7 +9403,7 @@ msgid "Magic Book"
 msgstr "Волшебная Книга"
 
 msgid "The %{name} enables you to cast spells."
-msgstr "%{name} позволяет использовать заклинания."
+msgstr "%{name} позволяет испускать заклинания."
 
 msgid "Dummy 1"
 msgstr "Болванка 1"
@@ -9427,7 +9427,7 @@ msgid ""
 "This %{name} gives your hero the ability to cast the %{spell} spell if your "
 "hero has a Magic Book."
 msgstr ""
-"%{name} позволяет Вашему герою произносить заклинание %{spell}, если он "
+"%{name} позволяет Вашему герою испускать заклинание %{spell}, если он "
 "имеет Волшебную Книгу."
 
 msgid ""
@@ -9810,7 +9810,7 @@ msgid ""
 "Removes all negative spells cast upon one of your units, and restores up to "
 "%{count} HP per level of spell power."
 msgstr ""
-"Убирает все негативные заклинания (кроме разрушающего луча) с Вашего отряда "
+"Убирает все отрицательные заклинания, наложенные на один из ваших отрядов "
 "и восстанавливает %{count}*SP здоровья."
 
 msgid "Mass Cure"
@@ -9820,11 +9820,11 @@ msgid ""
 "Removes all negative spells cast upon your forces, and restores up to "
 "%{count} HP per level of spell power, per creature."
 msgstr ""
-"Убирает все негативные заклинания (кроме разрушающего луча) с Ваших отрядов, "
-"и восстанавливает %{count}*SP здоровья."
+"Убирает все негативные заклинания, напущенные на ваши силы"
+"и восстанавливает %{count} здоровья на каждый уровень силы заклинаний, на существо."
 
 msgid "Resurrect"
-msgstr "Оживление"
+msgstr "Воскресить"
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
 msgstr ""
@@ -9832,11 +9832,11 @@ msgstr ""
 "был уничтожен."
 
 msgid "Resurrect True"
-msgstr "Воскрешение"
+msgstr "Воистинну Воскресить"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
 msgstr ""
-"Навсегда оживляет воинов в отряде, которому был нанесён урон или который был "
+"Навсегда оживляет существ в отряде, которому был нанесён урон или который был "
 "уничтожен."
 
 msgid "Haste"
@@ -10245,7 +10245,7 @@ msgid "You have no Magic Book, so you cannot cast a spell."
 msgstr "У Вас нет Волшебной Книги, поэтому Вы не можете применять заклинания."
 
 msgid "No spell to cast."
-msgstr "Нет заклинаний для применения."
+msgstr "Нет заклинаний для испускания."
 
 msgid "Your hero has %{point} spell points remaining."
 msgstr "У Вашего героя осталось %{point} очков магии."
@@ -10299,10 +10299,10 @@ msgstr ""
 "%{hp} здоровья."
 
 msgid "The ultimate artifact is really the %{name}."
-msgstr "Уникальный Артефакт - это %{name}."
+msgstr "Наилучший артефакт - это %{name}."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr "Уникальный Артефакт спрятан на %{name}е."
+msgstr "Наилучший артефакт спрятан на %{name}е."
 
 msgid "north-west"
 msgstr "северо-запад"
