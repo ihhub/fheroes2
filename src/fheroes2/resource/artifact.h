@@ -202,7 +202,7 @@ public:
 
     bool isValid() const
     {
-        return id != UNKNOWN;
+        return id != UNKNOWN && id < ARTIFACT_COUNT && ( id < DUMMY1 || id > DUMMY4 );
     }
 
     void Reset()
