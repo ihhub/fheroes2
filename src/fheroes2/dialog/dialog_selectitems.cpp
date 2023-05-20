@@ -394,8 +394,10 @@ Artifact Dialog::SelectArtifact( int cur )
     std::vector<int> artifacts;
     artifacts.reserve( Artifact::ARTIFACT_COUNT - 1 );
 
+    const bool isPriceofLoyaltyArtifactAllowed = Settings::Get().isCurrentMapPriceOfLoyalty();
+
     for ( int artifactId = Artifact::UNKNOWN + 1; artifactId < Artifact::ARTIFACT_COUNT; ++artifactId ) {
-        if ( Artifact( artifactId ).isValid() ) {
+        if ( Artifact( artifactId ).isValid() && ( isPriceofLoyaltyArtifactAllowed || !fheroes2::isPriceOfLoyaltyArtifact( artifactId ) ) ) {
             artifacts.emplace_back( artifactId );
         }
     }
