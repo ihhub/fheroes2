@@ -119,7 +119,8 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     fheroes2::Point dstpt;
     const fheroes2::Sprite & icnadv = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
 
-    // TOP BORDER
+    auto drawTopBorder = [&](){
+    // leftElement
     srcrt.x = 0;
     srcrt.y = 0;
     srcrt.width = isEvilInterface ? 153 : 193;
@@ -163,8 +164,10 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     // right large block overlapping map right panel border
     srcrt.width = icnadv.width() - srcrt.x;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    };
+    drawTopBorder();
 
-    // LEFT BORDER
+    auto drawLeftBorder = [&](){
     srcrt.x = 0;
     srcrt.y = BORDERWIDTH;
     srcrt.width = BORDERWIDTH;
@@ -236,8 +239,10 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     // good: column lower piece with vines, evil: element is not present
     srcrt.height = icnadv.height() - BORDERWIDTH - srcrt.y;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    };
+    drawLeftBorder();
 
-    // MIDDLE BORDER
+    auto drawMiddleBorder = [&](){
     srcrt.x = icnadv.width() - RADARWIDTH - 2 * BORDERWIDTH;
     srcrt.y = BORDERWIDTH;
     srcrt.width = BORDERWIDTH;
@@ -320,8 +325,10 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     // good - blocks with vine and leaves, evil - nothing
     srcrt.height = icnadv.height() - BORDERWIDTH - srcrt.y;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    };
+    drawMiddleBorder();
 
-    // RIGHT BORDER
+    auto drawRightBorder = [&](){
     srcrt.x = icnadv.width() - BORDERWIDTH;
     srcrt.y = BORDERWIDTH;
     srcrt.width = BORDERWIDTH;
@@ -402,8 +409,10 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     // good - blocks with vine and leaves, evil - nothing
     srcrt.height = icnadv.height() - BORDERWIDTH - srcrt.y;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    };
+    drawRightBorder();
 
-    // BOTTOM BORDER
+    auto drawBottomBorder = [&](){
     srcrt.x = 0;
     srcrt.y = icnadv.height() - BORDERWIDTH;
     srcrt.width = isEvilInterface ? 129 : 193;
@@ -447,8 +456,10 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     // right large block overlapping map right panel border
     srcrt.width = icnadv.width() - srcrt.x;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    };
+    drawBottomBorder();
 
-    // ICON BORDER
+    auto drawHeroesAndTownsHorizontalBorders = [&](){
     // bottom border of the map, top border of heroes and towns
     srcrt.x = icnadv.width() - RADARWIDTH - BORDERWIDTH;
     srcrt.y = RADARWIDTH + BORDERWIDTH;
@@ -464,6 +475,8 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         srcrt.y = srcrt.y + BORDERWIDTH + 4 * 32;
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     }
+    };
+    drawHeroesAndTownsHorizontalBorders();
 }
 
 Interface::BorderWindow::BorderWindow( const fheroes2::Rect & rt )
