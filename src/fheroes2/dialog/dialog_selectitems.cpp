@@ -383,7 +383,7 @@ Spell Dialog::SelectSpell( int cur )
     return result == Dialog::OK || listbox.ok ? Spell( listbox.GetCurrent() ) : Spell( Spell::NONE );
 }
 
-Artifact Dialog::SelectArtifact( int cur )
+Artifact Dialog::SelectArtifact()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -408,7 +408,8 @@ Artifact Dialog::SelectArtifact( int cur )
     SelectEnumArtifact listbox( area );
 
     listbox.SetListContent( artifacts );
-    listbox.SetCurrent( cur );
+    // Force to select the first artifact in the list.
+    listbox.SetCurrent( static_cast<size_t>( 0 ) );
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups( area, Dialog::OK | Dialog::CANCEL );
@@ -429,7 +430,7 @@ Artifact Dialog::SelectArtifact( int cur )
         display.render();
     }
 
-    return ( ( result == Dialog::OK || listbox.ok ) && listbox.isSelected() ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
+    return ( result == Dialog::OK || listbox.ok ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
 }
 
 Monster Dialog::SelectMonster( int id )
