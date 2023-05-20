@@ -404,8 +404,7 @@ Artifact Dialog::SelectArtifact( int cur )
     SelectEnumArtifact listbox( area );
 
     listbox.SetListContent( artifacts );
-    if ( cur != Artifact::UNKNOWN )
-        listbox.SetCurrent( cur );
+    listbox.SetCurrent( cur );
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups( area, Dialog::OK | Dialog::CANCEL );

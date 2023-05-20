@@ -2634,7 +2634,8 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         _metadata[2] = ( quantityValue2 >> 4 );
         switch ( static_cast<ShipwreckCaptureCondition>( _metadata[2] ) ) {
         case ShipwreckCaptureCondition::EMPTY:
-            assert( _metadata[0] == Artifact::UNKNOWN );
+            // 103 is old Artifact::UNKNOWN value.
+            assert( _metadata[0] == 103 );
             break;
         case ShipwreckCaptureCondition::FIGHT_10_GHOSTS_AND_GET_1000_GOLD:
             _metadata[1] = 1000;

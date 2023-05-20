@@ -60,6 +60,7 @@ public:
     {
         UNKNOWN = 0,
 
+        // The Succession Wars artifacts.
         ULTIMATE_BOOK,
         ULTIMATE_SWORD,
         ULTIMATE_CLOAK,
@@ -144,11 +145,13 @@ public:
 
         MAGIC_BOOK,
 
+        // Editor-related artifacts.
         DUMMY1,
         DUMMY2,
         DUMMY3,
         DUMMY4,
 
+        // The Price of Loyalty artifacts.
         SPELL_SCROLL,
         ARM_MARTYR,
         BREASTPLATE_ANDURAN,
@@ -166,6 +169,8 @@ public:
         SWORD_BREAKER,
         SWORD_ANDURAN,
         SPADE_NECROMANCY,
+
+        // Resurrection artifacts.
 
         // IMPORTANT! Put all new artifacts just above this line.
         ARTIFACT_COUNT
@@ -275,9 +280,14 @@ namespace fheroes2
 
 struct ArtifactSetData
 {
-    ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage );
+    ArtifactSetData( const int32_t artifactID, std::string assembleMessage )
+        : _assembledArtifactID( artifactID )
+        , _assembleMessage( std::move( assembleMessage ) )
+    {
+        // Do nothing.
+    }
 
-    uint32_t _assembledArtifactID = Artifact::UNKNOWN;
+    int32_t _assembledArtifactID = Artifact::UNKNOWN;
     std::string _assembleMessage;
 
     bool operator<( const ArtifactSetData & other ) const;

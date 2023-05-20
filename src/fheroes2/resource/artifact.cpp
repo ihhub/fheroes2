@@ -57,11 +57,11 @@
 
 namespace
 {
-    const std::map<ArtifactSetData, std::vector<uint32_t>> artifactSets
+    const std::map<ArtifactSetData, std::vector<int32_t>> artifactSets
         = { { ArtifactSetData( Artifact::BATTLE_GARB, gettext_noop( "The three Anduran artifacts magically combine into one." ) ),
               { Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
 
-    std::array<uint8_t, Artifact::ARTIFACT_COUNT> artifactGlobalStatus = {};
+    std::array<uint8_t, Artifact::ARTIFACT_COUNT> artifactGlobalStatus = { 0 };
 
     enum
     {
@@ -428,21 +428,28 @@ int32_t Artifact::getSpellId() const
     return Spell::NONE;
 }
 
-/* get rand all artifact */
 int Artifact::Rand( level_t lvl )
 {
     std::vector<int> v;
     v.reserve( 25 );
 
     // if possibly: make unique on map
-    for ( int art = ULTIMATE_BOOK; art < ARTIFACT_COUNT; ++art )
-        if ( ( lvl & Artifact( art ).Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) && !( artifactGlobalStatus[art] & ART_RNDUSED ) )
+    for ( int art = UNKNOWN + 1; art < ARTIFACT_COUNT; ++art ) {
+        const Artifact artifact{ art };
+
+        if ( artifact.isValid() && ( lvl & artifact.Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) && !( artifactGlobalStatus[art] & ART_RNDUSED ) ) {
             v.push_back( art );
+        }
+    }
 
     if ( v.empty() ) {
-        for ( int art = ULTIMATE_BOOK; art < ARTIFACT_COUNT; ++art )
-            if ( ( lvl & Artifact( art ).Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) )
+        for ( int art = UNKNOWN + 1; art < ARTIFACT_COUNT; ++art ) {
+            const Artifact artifact{ art };
+
+            if ( artifact.isValid() && ( lvl & artifact.Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) ) {
                 v.push_back( art );
+            }
+        }
     }
 
     int res = !v.empty() ? Rand::Get( v ) : Artifact::UNKNOWN;
@@ -1335,11 +1342,6 @@ void ArtifactsBar::messageMagicBookAbortTrading() const
 {
     fheroes2::showStandardTextMessage( "", _( "This item can't be traded." ), Dialog::OK );
 }
-
-ArtifactSetData::ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage )
-    : _assembledArtifactID( artifactID )
-    , _assembleMessage( assembleMessage )
-{}
 
 std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
 {
