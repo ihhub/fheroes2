@@ -368,6 +368,8 @@ namespace Maps
         // Since we must have backwards compatibility we need to do the conversion.
         void quantityIntoMetadata( const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata );
 
+        void fixOldArtifactIDs();
+
     private:
         TilesAddon * getAddonWithFlag( const uint32_t uid );
 
@@ -388,8 +390,6 @@ namespace Maps
         friend StreamBase & operator>>( StreamBase &, Tiles & );
 
         static uint8_t convertOldMainObjectType( const uint8_t mainObjectType );
-
-        void fixOldArtifactIDs();
 
         Addons addons_level1; // bottom layer
         Addons addons_level2; // top layer

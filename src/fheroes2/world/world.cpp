@@ -1412,6 +1412,13 @@ StreamBase & operator>>( StreamBase & msg, World & w )
         w._oldTileQuantityData.clear();
     }
 
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1005_RELEASE ) {
+        for ( Maps::Tiles & tile : w.vec_tiles ) {
+            tile.fixOldArtifactIDs();
+        }
+    }
+
     msg >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week >> w.month >> w.heroes_cond_wins
         >> w.heroes_cond_loss;
 
