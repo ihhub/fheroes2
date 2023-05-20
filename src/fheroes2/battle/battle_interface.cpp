@@ -35,6 +35,7 @@
 #include <iterator>
 #include <ostream>
 #include <set>
+#include <type_traits>
 
 #include "agg_image.h"
 #include "audio.h"
