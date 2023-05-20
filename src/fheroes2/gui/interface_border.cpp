@@ -247,14 +247,15 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     };
     drawLeftBorder();
 
-    auto drawMiddleBorder = [&]() {
-        srcrt.x = icnadv.width() - RADARWIDTH - 2 * BORDERWIDTH;
+    auto drawPanelBorder = [&]( const bool isMiddle ) {
+        const int32_t xOffset = isMiddle ? ( RADARWIDTH + BORDERWIDTH ) : 0;
+        srcrt.x = icnadv.width() - BORDERWIDTH - xOffset;
         srcrt.y = BORDERWIDTH;
         srcrt.width = BORDERWIDTH;
         srcrt.height = 255 - BORDERWIDTH;
-        dstpt.x = displayWidth - RADARWIDTH - 2 * BORDERWIDTH;
+        dstpt.x = displayWidth - BORDERWIDTH - xOffset;
 
-        // top of the column with vines/rubis, left border of the map and bit further
+        // top of the column
         dstpt.y = srcrt.y;
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += srcrt.height;
@@ -266,14 +267,14 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         dstpt.y += vertRepeatHeightTop;
         srcrt.y += TILEWIDTH;
 
-        // top-to-right angle (evil) - "T" to right (good), the lower angle of heroes area, column, in the evil border - with gems
+        // top-to-horizontal angle (evil) - "T" (good), the lower angle of heroes area, column, in the evil border - with gems
         srcrt.height = isEvilInterface ? 35 : 50;
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
         // hide embranchment
         if ( viewWorldMode ) {
-            fheroes2::Rect fixrt( 478, isEvilInterface ? 137 : 345, 3, isEvilInterface ? 15 : 20 );
-            fheroes2::Point fixpt( dstpt.x + 14, dstpt.y + 18 );
+            fheroes2::Rect fixrt( ( isMiddle ? 478 : 624 ), isEvilInterface ? ( isMiddle ? 137 : 139 ) : 345, 3, isEvilInterface ? 15 : 20 );
+            fheroes2::Point fixpt( dstpt.x + ( isMiddle ? 14 : 0 ), dstpt.y + 18 );
             fheroes2::Blit( icnadv, fixrt.x, fixrt.y, display, fixpt.x, fixpt.y, fixrt.width, fixrt.height );
         }
 
@@ -321,7 +322,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
             srcrt.y += srcrt.height;
 
             // piece of colunn covered with wine
-            srcrt.height = 8; // middle border is special on good interface due to all the green leaves
+            srcrt.height = ( isMiddle ? 8 : 4 ); // middle border is special on good interface due to all the green leaves
             repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
             dstpt.y += srcrt.height + vertPadHeight;
             srcrt.y += srcrt.height;
@@ -331,91 +332,8 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         srcrt.height = icnadv.height() - BORDERWIDTH - srcrt.y;
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     };
-    drawMiddleBorder();
-
-    auto drawRightBorder = [&]() {
-        srcrt.x = icnadv.width() - BORDERWIDTH;
-        srcrt.y = BORDERWIDTH;
-        srcrt.width = BORDERWIDTH;
-        srcrt.height = 255 - BORDERWIDTH;
-        dstpt.x = displayWidth - BORDERWIDTH;
-        dstpt.y = srcrt.y;
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-        dstpt.y += srcrt.height;
-        srcrt.y += srcrt.height;
-
-        // column piece
-        srcrt.height = TILEWIDTH;
-        repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightTop );
-        dstpt.y += vertRepeatHeightTop;
-        srcrt.y += TILEWIDTH;
-
-        // top-to-left angle (evil) - "T" to left (good), the lower angle of heroes area, column, in the evil border - with gems
-        srcrt.height = isEvilInterface ? 35 : 50;
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-
-        // hide embranchment
-        if ( viewWorldMode ) {
-            fheroes2::Rect fixrt( 624, isEvilInterface ? 139 : 345, 3, isEvilInterface ? 15 : 20 );
-            fheroes2::Point fixpt( dstpt.x, dstpt.y + 18 );
-            fheroes2::Blit( icnadv, fixrt.x, fixrt.y, display, fixpt.x, fixpt.y, fixrt.width, fixrt.height );
-        }
-
-        dstpt.y += srcrt.height;
-        srcrt.y += srcrt.height;
-
-        if ( isEvilInterface ) {
-            // stright lines, transition area
-            srcrt.height = 6;
-            repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
-            dstpt.y += srcrt.height + vertPadHeight;
-            srcrt.y += srcrt.height;
-
-            // lower button to calendar area, column head with scull and gem
-            srcrt.height = 103;
-            fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-            dstpt.y += srcrt.height;
-            srcrt.y += srcrt.height;
-
-            // A single brick about the first row of resources
-            srcrt.height = TILEWIDTH;
-            fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-            dstpt.y += TILEWIDTH;
-
-            // bricks untill the bottom
-            repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightBottom );
-            dstpt.y += vertRepeatHeightBottom;
-            srcrt.y += TILEWIDTH;
-        }
-        else {
-            // Piece of column exactly in the middle of buttons
-            srcrt.height = TILEWIDTH;
-            fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-            dstpt.y += TILEWIDTH;
-
-            // column from the lower row of buttons till some distance from the bottom
-            repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, vertRepeatHeightBottom );
-            dstpt.y += vertRepeatHeightBottom;
-            srcrt.y += TILEWIDTH;
-
-            // bottom middle - transition to column covered with vine
-            srcrt.height = 43;
-            fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-            dstpt.y += srcrt.height;
-            srcrt.y += srcrt.height;
-
-            // piece of colunn covered with wine
-            srcrt.height = 4;
-            repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, BORDERWIDTH, srcrt.height + vertPadHeight );
-            dstpt.y += srcrt.height + vertPadHeight;
-            srcrt.y += srcrt.height;
-        }
-
-        // good - blocks with vine and leaves, evil - nothing
-        srcrt.height = icnadv.height() - BORDERWIDTH - srcrt.y;
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-    };
-    drawRightBorder();
+    drawPanelBorder( true );
+    drawPanelBorder( false );
 
     auto drawHeroesAndTownsHorizontalBorders = [&]() {
         // bottom border of the map, top border of heroes and towns
