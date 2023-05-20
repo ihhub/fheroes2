@@ -368,6 +368,8 @@ namespace Maps
         // Since we must have backwards compatibility we need to do the conversion.
         void quantityIntoMetadata( const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata );
 
+        // The old code stored an unknown artifact ID as 103. This prevented from adding new artifacts without breaking compatibility every time we do such.
+        // This method serves to fix incorrect artifact IDs.
         void fixOldArtifactIDs();
 
     private:
