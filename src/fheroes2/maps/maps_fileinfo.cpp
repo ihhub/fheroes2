@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "maps_fileinfo.h"
+
 #if defined( _WIN32 )
 #include <locale>
 #endif
@@ -35,14 +37,12 @@
 #include <type_traits>
 #include <utility>
 
-#include "artifact.h"
 #include "color.h"
 #include "difficulty.h"
 #include "dir.h"
 #include "game_io.h"
 #include "game_over.h"
 #include "logging.h"
-#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "mp2.h"
