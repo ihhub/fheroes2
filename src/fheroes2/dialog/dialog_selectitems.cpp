@@ -429,7 +429,7 @@ Artifact Dialog::SelectArtifact( int cur )
         display.render();
     }
 
-    return result == Dialog::OK || listbox.ok ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
+    return ( ( result == Dialog::OK || listbox.ok ) && listbox.isSelected() ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
 }
 
 Monster Dialog::SelectMonster( int id )
