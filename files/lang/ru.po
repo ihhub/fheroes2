@@ -8000,10 +8000,10 @@ msgid "Halflings"
 msgstr "Хоббиты"
 
 msgid "Boar"
-msgstr "Боров"
+msgstr "Вепрь"
 
 msgid "Boars"
-msgstr "Боровы"
+msgstr "Вепри"
 
 msgid "Iron Golem"
 msgstr "Железный голем"
