@@ -165,7 +165,54 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         srcrt.width = icnadv.width() - srcrt.x;
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     };
+    auto drawBottomBorder = [&]() {
+        srcrt.x = 0;
+        srcrt.y = icnadv.height() - BORDERWIDTH;
+        srcrt.width = isEvilInterface ? 129 : 193;
+        srcrt.height = BORDERWIDTH;
+        dstpt.x = srcrt.x;
+        dstpt.y = displayHeight - BORDERWIDTH;
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.x += srcrt.width;
+        srcrt.x += srcrt.width;
+
+        // transitioning line to the left block
+        srcrt.width = 6;
+        repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + bottomPadWidthLeft, BORDERWIDTH );
+        dstpt.x += srcrt.width + bottomPadWidthLeft;
+        srcrt.x += srcrt.width;
+
+        // left middle block
+        srcrt.width = isEvilInterface ? 90 : 24;
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.x += srcrt.width;
+        srcrt.x += srcrt.width;
+
+        // sculls/diamonds pattern
+        srcrt.width = bottomTileWidth;
+        repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, bottomRepeatWidth, BORDERWIDTH );
+        dstpt.x += bottomRepeatWidth;
+        srcrt.x += srcrt.width;
+
+        // right middle block
+        srcrt.width = isEvilInterface ? 86 : 25; // evil bottom border is asymmetric
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        dstpt.x += srcrt.width;
+        srcrt.x += srcrt.width;
+
+        // transitioning line to the right block
+        srcrt.width = 6;
+        repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + bottomPadWidthRight, BORDERWIDTH );
+        dstpt.x += srcrt.width + bottomPadWidthRight;
+        srcrt.x += srcrt.width;
+
+        // right large block overlapping map right panel border
+        srcrt.width = icnadv.width() - srcrt.x;
+        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    };
+
     drawTopBorder();
+    drawBottomBorder();
 
     auto drawLeftBorder = [&]() {
         srcrt.x = 0;
@@ -411,53 +458,6 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     };
     drawRightBorder();
-
-    auto drawBottomBorder = [&]() {
-        srcrt.x = 0;
-        srcrt.y = icnadv.height() - BORDERWIDTH;
-        srcrt.width = isEvilInterface ? 129 : 193;
-        srcrt.height = BORDERWIDTH;
-        dstpt.x = srcrt.x;
-        dstpt.y = displayHeight - BORDERWIDTH;
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-        dstpt.x += srcrt.width;
-        srcrt.x += srcrt.width;
-
-        // transitioning line to the left block
-        srcrt.width = 6;
-        repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + bottomPadWidthLeft, BORDERWIDTH );
-        dstpt.x += srcrt.width + bottomPadWidthLeft;
-        srcrt.x += srcrt.width;
-
-        // left middle block
-        srcrt.width = isEvilInterface ? 90 : 24;
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-        dstpt.x += srcrt.width;
-        srcrt.x += srcrt.width;
-
-        // sculls/diamonds pattern
-        srcrt.width = bottomTileWidth;
-        repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, bottomRepeatWidth, BORDERWIDTH );
-        dstpt.x += bottomRepeatWidth;
-        srcrt.x += srcrt.width;
-
-        // right middle block
-        srcrt.width = isEvilInterface ? 86 : 25; // evil bottom border is asymmetric
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-        dstpt.x += srcrt.width;
-        srcrt.x += srcrt.width;
-
-        // transitioning line to the right block
-        srcrt.width = 6;
-        repeatPattern( icnadv, srcrt.x, srcrt.y, srcrt.width, srcrt.height, display, dstpt.x, dstpt.y, srcrt.width + bottomPadWidthRight, BORDERWIDTH );
-        dstpt.x += srcrt.width + bottomPadWidthRight;
-        srcrt.x += srcrt.width;
-
-        // right large block overlapping map right panel border
-        srcrt.width = icnadv.width() - srcrt.x;
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-    };
-    drawBottomBorder();
 
     auto drawHeroesAndTownsHorizontalBorders = [&]() {
         // bottom border of the map, top border of heroes and towns
