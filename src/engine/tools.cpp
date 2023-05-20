@@ -190,15 +190,21 @@ void StringReplaceWithLowercase( std::string & workString, const char * pattern,
     }
 }
 
-void StringReplace( std::string & dst, const char * pred, const std::string & src )
+void StringReplace( std::string & dst, const char * pred, const std::string_view & src )
 {
     size_t pos;
 
-    while ( std::string::npos != ( pos = dst.find( pred ) ) )
+    while ( std::string::npos != ( pos = dst.find( pred ) ) ) {
         dst.replace( pos, std::strlen( pred ), src );
+    }
 }
 
-void StringReplace( std::string & dst, const char * pred, int value )
+void StringReplace( std::string & dst, const char * pred, const unsigned int value )
+{
+    StringReplace( dst, pred, std::to_string( value ) );
+}
+
+void StringReplace( std::string & dst, const char * pred, const int value )
 {
     StringReplace( dst, pred, std::to_string( value ) );
 }
