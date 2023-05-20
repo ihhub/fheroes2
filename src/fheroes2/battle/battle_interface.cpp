@@ -437,11 +437,12 @@ namespace Battle
             const fheroes2::Rect & borderRect = border.GetRect();
             Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ), borderRect );
 
-            for ( int32_t i = 0; i < ( ah / sp3.height() ); ++i )
-                fheroes2::Blit( sp3, display, ax, buttonPgUp.area().y + buttonPgUp.area().height + ( sp3.height() * i ) );
+            for ( int32_t i = 0; i < ( ah / sp3.height() ); ++i ) {
+                fheroes2::Copy( sp3, 0, 0, display, ax, buttonPgUp.area().y + buttonPgUp.area().height + ( sp3.height() * i ), sp3.width(), sp3.height() );
+            }
 
-            fheroes2::Blit( sp1, display, ax, buttonPgUp.area().y + buttonPgUp.area().height );
-            fheroes2::Blit( sp2, display, ax, buttonPgDn.area().y - sp2.height() );
+            fheroes2::Copy( sp1, 0, 0, display, ax, buttonPgUp.area().y + buttonPgUp.area().height, sp1.width(), sp1.height() );
+            fheroes2::Copy( sp2, 0, 0, display, ax, buttonPgDn.area().y - sp2.height(), sp2.width(), sp2.height() );
         }
 
         void ActionCurrentUp() override
@@ -940,13 +941,15 @@ void Battle::Status::SetMessage( const std::string & str, bool top )
 
 void Battle::Status::Redraw( fheroes2::Image & output ) const
 {
-    fheroes2::Blit( back1, output, x, y );
-    fheroes2::Blit( back2, output, x, y + back1.height() );
+    fheroes2::Copy( back1, 0, 0, output, x, y, back1.width(), back1.height() );
+    fheroes2::Copy( back2, 0, 0, output, x, y + back1.height(), back2.width(), back2.height() );
 
-    if ( bar1.Size() )
+    if ( bar1.Size() ) {
         bar1.Blit( x + ( back1.width() - bar1.w() ) / 2, y + 2 );
-    if ( bar2.Size() )
+    }
+    if ( bar2.Size() ) {
         bar2.Blit( x + ( back2.width() - bar2.w() ) / 2, y + back1.height() - 2 );
+    }
 }
 
 void Battle::Status::clear()
@@ -1223,6 +1226,9 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     // Shadow that fits the hexagon grid.
     _hexagonGridShadow = DrawHexagonShadow( 4, 1 );
 
+    // As '_mainSurface' is used to prepare battlefield screen to render on display it does not need to have a transform layer.
+    _mainSurface._disableTransformLayer();
+
     btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
     btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
 
@@ -1341,6 +1347,9 @@ void Battle::Interface::RedrawPartialStart()
 
 void Battle::Interface::RedrawPartialFinish()
 {
+    fheroes2::Time counter;
+    counter.reset();
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     if ( Settings::Get().BattleShowArmyOrder() ) {
@@ -1353,13 +1362,17 @@ void Battle::Interface::RedrawPartialFinish()
         assert( board != nullptr );
 
         for ( const Cell & cell : *board ) {
-            Text text( std::to_string( cell.GetIndex() ), Font::SMALL );
+            const Text text( std::to_string( cell.GetIndex() ), Font::SMALL );
             text.Blit( cell.GetPos().x + 20, cell.GetPos().y + 22, _mainSurface );
         }
     }
 #endif
 
-    fheroes2::Blit( _mainSurface, display, _interfacePosition.x, _interfacePosition.y );
+    fheroes2::Copy( _mainSurface, 0, 0, display, _interfacePosition.x, _interfacePosition.y, _mainSurface.width(), _mainSurface.height() );
+
+    double tmp = counter.getS() * 1000;
+    COUT( "RedrawPartialFinish render: " << tmp << " ms." )
+
     RedrawInterface();
 
     display.render();
@@ -1367,6 +1380,9 @@ void Battle::Interface::RedrawPartialFinish()
 
 void Battle::Interface::RedrawInterface()
 {
+    fheroes2::Time counter;
+    counter.reset();
+
     status.Redraw( fheroes2::Display::instance() );
 
     btn_auto.draw();
@@ -1378,10 +1394,16 @@ void Battle::Interface::RedrawInterface()
     if ( listlog && listlog->isOpenLog() ) {
         listlog->Redraw();
     }
+
+    double tmp = counter.getS() * 1000;
+    COUT( "RedrawInterface render: " << tmp << " ms." )
 }
 
 void Battle::Interface::RedrawArmies()
 {
+    fheroes2::Time counter;
+    counter.reset();
+
     // Continue the idle animation for all troops on the battlefield: update idle animation frames before rendering the troops.
     IdleTroopsAnimation();
 
@@ -1639,6 +1661,8 @@ void Battle::Interface::RedrawArmies()
     if ( _flyingUnit ) {
         RedrawTroopSprite( *_flyingUnit );
     }
+    double tmp = counter.getS() * 1000;
+    COUT( "RedrawArmies render: " << tmp << " ms." )
 }
 
 void Battle::Interface::RedrawOpponents()
@@ -1863,18 +1887,25 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 
     sx += isReflected ? -xOffset : xOffset;
 
-    fheroes2::Blit( bar, _mainSurface, sx, sy );
+    fheroes2::Copy( bar, 0, 0, _mainSurface, sx, sy, bar.width(), bar.height() );
 
-    Text text( fheroes2::abbreviateNumber( unit.GetCount() ), Font::SMALL );
+    const Text text( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), Font::SMALL );
     text.Blit( sx + ( bar.width() - text.w() ) / 2, sy, _mainSurface );
 }
 
 void Battle::Interface::RedrawCover()
 {
+    fheroes2::Time counter;
+    counter.reset();
+
     const Settings & conf = Settings::Get();
     const Board & board = *Arena::GetBoard();
 
     RedrawCoverStatic( conf, board );
+
+    double tmp = counter.getS() * 1000;
+    COUT( "RedrawCoverStatic render: " << tmp << " ms." )
+    counter.reset();
 
     const Bridge * bridge = Arena::GetBridge();
     if ( bridge && ( bridge->isDown() || _bridgeAnimation.animationIsRequired ) ) {
@@ -2073,6 +2104,9 @@ void Battle::Interface::RedrawCover()
             }
         }
     }
+
+    tmp = counter.getS() * 1000;
+    COUT( "RedrawCover render: " << tmp << " ms." )
 }
 
 void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & board )
@@ -5368,11 +5402,11 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
             const fheroes2::Rect renderArea( _interfacePosition.x + restorePositionX, _interfacePosition.y + area.y, waveWidth + restoreWidth, area.height );
 
             // Place a copy of the original image where the Death Wave effect was on the previous frame.
-            fheroes2::Blit( battleFieldCopy, restorePositionX, area.y, display, renderArea.x, renderArea.y, restoreWidth, renderArea.height );
+            fheroes2::Copy( battleFieldCopy, restorePositionX, area.y, display, renderArea.x, renderArea.y, restoreWidth, renderArea.height );
 
             // Place the Death Wave effect to its new position.
             fheroes2::CreateDeathWaveEffect( spellEffect, battleFieldCopy, position, deathWaveCurve );
-            fheroes2::Blit( spellEffect, 0, 0, display, renderArea.x + restoreWidth, renderArea.y, waveWidth, area.height );
+            fheroes2::Copy( spellEffect, 0, 0, display, renderArea.x + restoreWidth, renderArea.y, waveWidth, area.height );
 
             // Render only the changed screen area.
             display.render( renderArea );
@@ -5684,7 +5718,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
                 shifted.y = 0;
             }
 
-            fheroes2::Blit( sprite, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
+            fheroes2::Copy( sprite, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
 
             RedrawPartialFinish();
             ++frame;
