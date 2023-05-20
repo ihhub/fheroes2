@@ -190,7 +190,7 @@ void StringReplaceWithLowercase( std::string & workString, const char * pattern,
     }
 }
 
-void StringReplace( std::string & dst, const char * pred, const std::string_view & src )
+void StringReplace( std::string & dst, const char * pred, const std::string & src )
 {
     size_t pos;
 
