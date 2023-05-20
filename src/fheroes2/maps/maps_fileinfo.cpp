@@ -460,15 +460,15 @@ uint32_t Maps::FileInfo::ConditionWins() const
     case VICTORY_DEFEAT_EVERYONE:
         return GameOver::WINS_ALL;
     case VICTORY_CAPTURE_TOWN:
-        return allowNormalVictory ? GameOver::WINS_TOWN | GameOver::WINS_ALL : GameOver::WINS_TOWN;
+        return allowNormalVictory ? ( GameOver::WINS_TOWN | GameOver::WINS_ALL ) : GameOver::WINS_TOWN;
     case VICTORY_KILL_HERO:
-        return allowNormalVictory ? GameOver::WINS_HERO | GameOver::WINS_ALL : GameOver::WINS_HERO;
+        return allowNormalVictory ? ( GameOver::WINS_HERO | GameOver::WINS_ALL ) : GameOver::WINS_HERO;
     case VICTORY_OBTAIN_ARTIFACT:
-        return allowNormalVictory ? GameOver::WINS_ARTIFACT | GameOver::WINS_ALL : GameOver::WINS_ARTIFACT;
+        return allowNormalVictory ? ( GameOver::WINS_ARTIFACT | GameOver::WINS_ALL ) : GameOver::WINS_ARTIFACT;
     case VICTORY_DEFEAT_OTHER_SIDE:
         return GameOver::WINS_SIDE;
     case VICTORY_COLLECT_ENOUGH_GOLD:
-        return allowNormalVictory ? GameOver::WINS_GOLD | GameOver::WINS_ALL : GameOver::WINS_GOLD;
+        return allowNormalVictory ? ( GameOver::WINS_GOLD | GameOver::WINS_ALL ) : GameOver::WINS_GOLD;
     default:
         // This is an unsupported winning condition! Please add the logic to handle it.
         assert( 0 );
@@ -505,7 +505,8 @@ bool Maps::FileInfo::WinsCompAlsoWins() const
 
 int Maps::FileInfo::WinsFindArtifactID() const
 {
-    return victoryConditionsParam1 ? victoryConditionsParam1 - 1 : Artifact::UNKNOWN;
+    // In the original game artifact IDs start from 0 but for the victory condition it starts from 1 which aligns with fheroes2 artifact enumeration.
+    return victoryConditionsParam1;
 }
 
 bool Maps::FileInfo::isAllowCountPlayers( int playerCount ) const

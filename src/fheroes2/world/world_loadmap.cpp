@@ -630,9 +630,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     // do not let the player get a random artifact that allows him to win the game
     if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !conf.WinsFindUltimateArtifact() ) {
-        const Artifact art = conf.WinsFindArtifactID();
-
-        fheroes2::ExcludeArtifactFromRandom( art.GetID() );
+        fheroes2::ExcludeArtifactFromRandom( conf.WinsFindArtifactID() );
     }
 
     if ( !ProcessNewMap( filename, checkPoLObjects ) ) {
