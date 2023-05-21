@@ -293,6 +293,7 @@ namespace Battle
 
         void SetStatus( const std::string &, bool = false );
         void SetOrderOfUnits( const std::shared_ptr<const Units> & units );
+
         void FadeArena( bool clearMessageLog );
 
         void RedrawActionNewTurn() const;
@@ -332,6 +333,7 @@ namespace Battle
         void HumanCastSpellTurn( const Unit &, Actions &, std::string & );
 
         void RedrawCover();
+        void redrawBattleGround( const Settings & conf, const Board & board );
         void RedrawCoverStatic( const Settings & conf, const Board & board );
         void RedrawLowObjects( int32_t );
         void RedrawHighObjects( int32_t );
@@ -403,10 +405,13 @@ namespace Battle
         fheroes2::Rect _interfacePosition;
         fheroes2::Rect _surfaceInnerArea;
         fheroes2::Image _mainSurface;
+        fheroes2::Image _battleGround;
         fheroes2::Image _hexagonGrid;
         fheroes2::Image _hexagonShadow;
         fheroes2::Image _hexagonGridShadow;
         fheroes2::Image _hexagonCursorShadow;
+
+        bool _updateBattleGround{ true };
 
         int icn_cbkg;
         int icn_frng;

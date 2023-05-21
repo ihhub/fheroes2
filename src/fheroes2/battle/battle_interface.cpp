@@ -1131,7 +1131,6 @@ void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUni
 Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     : arena( battleArena )
     , _surfaceInnerArea( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
-    , _mainSurface( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , icn_cbkg( ICN::UNKNOWN )
     , icn_frng( ICN::UNKNOWN )
     , humanturn_spell( Spell::NONE )
@@ -1226,9 +1225,6 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     // Shadow that fits the hexagon grid.
     _hexagonGridShadow = DrawHexagonShadow( 4, 1 );
 
-    // As '_mainSurface' is used to prepare battlefield screen to render on display it does not need to have a transform layer.
-    _mainSurface._disableTransformLayer();
-
     btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
     btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
 
@@ -1236,26 +1232,38 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     opponent1 = arena.GetCommander1() ? new OpponentSprite( _surfaceInnerArea, arena.GetCommander1(), false ) : nullptr;
     opponent2 = arena.GetCommander2() ? new OpponentSprite( _surfaceInnerArea, arena.GetCommander2(), true ) : nullptr;
 
-    if ( Arena::GetCastle() )
+    if ( Arena::GetCastle() ) {
         main_tower = { 570, 145, 70, 160 };
+    }
 
     const fheroes2::Rect & area = border.GetArea();
 
-    const fheroes2::Rect autoRect = btn_auto.area();
     const fheroes2::Rect settingsRect = btn_settings.area();
-    btn_auto.setPosition( area.x, area.y + area.height - settingsRect.height - autoRect.height );
+    const int32_t satusOffsetY = area.y + area.height - settingsRect.height - btn_auto.area().height;
+    btn_auto.setPosition( area.x, satusOffsetY );
     btn_settings.setPosition( area.x, area.y + area.height - settingsRect.height );
 
     btn_skip.setICNInfo( ICN::TEXTBAR, 0, 1 );
     btn_skip.setPosition( area.x + area.width - btn_skip.area().width, area.y + area.height - btn_skip.area().height );
 
-    status.SetPosition( area.x + settingsRect.width, btn_auto.area().y );
+    status.SetPosition( area.x + settingsRect.width, satusOffsetY );
 
     listlog = std::make_unique<StatusListBox>();
 
-    if ( listlog )
-        listlog->SetPosition( area.x, area.y + area.height - status.height );
+    const int32_t battlefieldHeight = area.height - status.height;
+
+    if ( listlog ) {
+        listlog->SetPosition( area.x, area.y + battlefieldHeight );
+    }
     status.SetLogs( listlog.get() );
+
+    // Battlefield area excludes the lower part where the status log is located.
+    _mainSurface.resize( area.width, battlefieldHeight );
+    _battleGround.resize( area.width, battlefieldHeight );
+
+    // As `_battleGround` and '_mainSurface' are used to prepare battlefield screen to render on display they does not need to have a transform layer.
+    _battleGround._disableTransformLayer();
+    _mainSurface._disableTransformLayer();
 
     AudioManager::ResetAudio();
 
@@ -2109,27 +2117,31 @@ void Battle::Interface::RedrawCover()
     COUT( "RedrawCover render: " << tmp << " ms." )
 }
 
-void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & board )
+void Battle::Interface::redrawBattleGround( const Settings & conf, const Board & board )
 {
+    // Battlefield background image.
     if ( icn_cbkg != ICN::UNKNOWN ) {
         const fheroes2::Sprite & cbkg = fheroes2::AGG::GetICN( icn_cbkg, 0 );
-        fheroes2::Copy( cbkg, _mainSurface );
+        fheroes2::Copy( cbkg, _battleGround );
     }
 
+    // Objects near the left and right borders of the Battlefield.
     if ( icn_frng != ICN::UNKNOWN ) {
         const fheroes2::Sprite & frng = fheroes2::AGG::GetICN( icn_frng, 0 );
-        fheroes2::Blit( frng, _mainSurface, frng.x(), frng.y() );
+        fheroes2::Blit( frng, _battleGround, frng.x(), frng.y() );
     }
 
+    // Big obstacles in the center of the Battlefield.
     if ( arena.GetICNCovr() != ICN::UNKNOWN ) {
         const fheroes2::Sprite & cover = fheroes2::AGG::GetICN( arena.GetICNCovr(), 0 );
-        fheroes2::Blit( cover, _mainSurface, cover.x(), cover.y() );
+        fheroes2::Blit( cover, _battleGround, cover.x(), cover.y() );
     }
 
     const Castle * castle = Arena::GetCastle();
     int castleBackgroundIcnId = ICN::UNKNOWN;
 
     if ( castle != nullptr ) {
+        // Castle ground.
         switch ( castle->GetRace() ) {
         case Race::BARB:
             castleBackgroundIcnId = ICN::CASTBKGB;
@@ -2150,44 +2162,55 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
             castleBackgroundIcnId = ICN::CASTBKGZ;
             break;
         default:
-            // DId you add a new race? Add the appropriate logic for it.
+            // Did you add a new race? Add the appropriate logic for it.
             assert( 0 );
             break;
         }
 
         const fheroes2::Sprite & castleBackground = fheroes2::AGG::GetICN( castleBackgroundIcnId, 1 );
-        fheroes2::Blit( castleBackground, _mainSurface, castleBackground.x(), castleBackground.y() );
+        fheroes2::Blit( castleBackground, _battleGround, castleBackground.x(), castleBackground.y() );
 
-        // moat
+        // Moat.
         if ( castle->isBuild( BUILD_MOAT ) ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MOATWHOL, 0 );
-            fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
+            fheroes2::Blit( sprite, _battleGround, sprite.x(), sprite.y() );
         }
     }
 
-    const bool isGridEnabled = conf.BattleShowGrid();
-
-    // grid
-    if ( isGridEnabled ) {
+    // Battlefield grid.
+    if ( conf.BattleShowGrid() ) {
         for ( const Cell & cell : board ) {
-            fheroes2::Blit( _hexagonGrid, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+            fheroes2::Blit( _hexagonGrid, _battleGround, cell.GetPos().x, cell.GetPos().y );
         }
     }
 
-    // ground obstacles
+    // Ground obstacles.
     for ( int32_t cellId = 0; cellId < ARENASIZE; ++cellId ) {
         RedrawLowObjects( cellId );
     }
 
+    // Castle top wall.
     if ( castle != nullptr ) {
-        // top wall
         const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( castleBackgroundIcnId, castle->isFortificationBuild() ? 4 : 3 );
-        fheroes2::Blit( sprite2, _mainSurface, sprite2.x(), sprite2.y() );
+        fheroes2::Blit( sprite2, _battleGround, sprite2.x(), sprite2.y() );
     }
+
+    // The render of Battlefield ground is done.
+    _updateBattleGround = false;
+}
+
+void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & board )
+{
+    // If the Battlefield ground needs to be updated.
+    if ( _updateBattleGround ) {
+        redrawBattleGround( conf, board );
+    }
+
+    fheroes2::Copy( _battleGround, _mainSurface );
 
     // shadow
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) {
-        const fheroes2::Image & shadowImage = isGridEnabled ? _hexagonGridShadow : _hexagonShadow;
+        const fheroes2::Image & shadowImage = conf.BattleShowGrid() ? _hexagonGridShadow : _hexagonShadow;
 
         for ( const Cell & cell : board ) {
             const Position pos = Position::GetReachable( *_currentUnit, cell.GetIndex() );
@@ -3106,7 +3129,16 @@ void Battle::Interface::ButtonSettingsAction()
     le.MousePressLeft( btn_settings.area() ) ? btn_settings.drawOnPress() : btn_settings.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_settings.area() ) ) {
+        const Settings & conf = Settings::Get();
+        const bool showGrid = conf.BattleShowGrid();
+
         DialogBattleSettings();
+
+        if ( showGrid != conf.BattleShowGrid() ) {
+            // The grid setting has changed. Set update for the Battlefield ground on the next render.
+            _updateBattleGround = true;
+        }
+
         humanturn_redraw = true;
     }
 }
