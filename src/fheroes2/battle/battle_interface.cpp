@@ -1355,9 +1355,6 @@ void Battle::Interface::RedrawPartialStart()
 
 void Battle::Interface::RedrawPartialFinish()
 {
-    fheroes2::Time counter;
-    counter.reset();
-
     fheroes2::Display & display = fheroes2::Display::instance();
 
     if ( Settings::Get().BattleShowArmyOrder() ) {
@@ -1378,9 +1375,6 @@ void Battle::Interface::RedrawPartialFinish()
 
     fheroes2::Copy( _mainSurface, 0, 0, display, _interfacePosition.x, _interfacePosition.y, _mainSurface.width(), _mainSurface.height() );
 
-    double tmp = counter.getS() * 1000;
-    COUT( "RedrawPartialFinish render: " << tmp << " ms." )
-
     RedrawInterface();
 
     display.render();
@@ -1388,9 +1382,6 @@ void Battle::Interface::RedrawPartialFinish()
 
 void Battle::Interface::RedrawInterface()
 {
-    fheroes2::Time counter;
-    counter.reset();
-
     status.Redraw( fheroes2::Display::instance() );
 
     btn_auto.draw();
@@ -1402,16 +1393,10 @@ void Battle::Interface::RedrawInterface()
     if ( listlog && listlog->isOpenLog() ) {
         listlog->Redraw();
     }
-
-    double tmp = counter.getS() * 1000;
-    COUT( "RedrawInterface render: " << tmp << " ms." )
 }
 
 void Battle::Interface::RedrawArmies()
 {
-    fheroes2::Time counter;
-    counter.reset();
-
     // Continue the idle animation for all troops on the battlefield: update idle animation frames before rendering the troops.
     IdleTroopsAnimation();
 
@@ -1669,8 +1654,6 @@ void Battle::Interface::RedrawArmies()
     if ( _flyingUnit ) {
         RedrawTroopSprite( *_flyingUnit );
     }
-    double tmp = counter.getS() * 1000;
-    COUT( "RedrawArmies render: " << tmp << " ms." )
 }
 
 void Battle::Interface::RedrawOpponents()
@@ -1903,17 +1886,10 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 
 void Battle::Interface::RedrawCover()
 {
-    fheroes2::Time counter;
-    counter.reset();
-
     const Settings & conf = Settings::Get();
     const Board & board = *Arena::GetBoard();
 
     RedrawCoverStatic( conf, board );
-
-    double tmp = counter.getS() * 1000;
-    COUT( "RedrawCoverStatic render: " << tmp << " ms." )
-    counter.reset();
 
     const Bridge * bridge = Arena::GetBridge();
     if ( bridge && ( bridge->isDown() || _bridgeAnimation.animationIsRequired ) ) {
@@ -2112,9 +2088,6 @@ void Battle::Interface::RedrawCover()
             }
         }
     }
-
-    tmp = counter.getS() * 1000;
-    COUT( "RedrawCover render: " << tmp << " ms." )
 }
 
 void Battle::Interface::redrawBattleGround( const Settings & conf, const Board & board )
