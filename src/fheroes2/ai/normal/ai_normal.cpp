@@ -46,8 +46,11 @@ namespace AI
     void Normal::revealFog( const Maps::Tiles & tile )
     {
         const MP2::MapObjectType object = tile.GetObject();
-        if ( object != MP2::OBJ_NONE )
-            _mapObjects.emplace_back( tile.GetIndex(), object );
+        if ( object != MP2::OBJ_NONE ) {
+            const IndexObject indexObject{ tile.GetIndex(), static_cast<int>( object ) };
+
+            _mapObjects.emplace( std::upper_bound( _mapObjects.begin(), _mapObjects.end(), indexObject ), indexObject );
+        }
     }
 
     double Normal::getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType )
