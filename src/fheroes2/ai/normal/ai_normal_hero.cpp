@@ -1658,6 +1658,9 @@ namespace AI
         maxPriority = lowestPossibleValue;
 #ifdef WITH_DEBUG
         MP2::MapObjectType objectType = MP2::OBJ_NONE;
+
+        // If this assertion blows up then the array is not sorted and the logic below will not work as intended.
+        assert( std::is_sorted( _mapObjects.begin(), _mapObjects.end() ) );
 #endif
 
         // pre-cache the pathfinder

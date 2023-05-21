@@ -49,6 +49,8 @@ namespace AI
         if ( object != MP2::OBJ_NONE ) {
             const IndexObject indexObject{ tile.GetIndex(), static_cast<int>( object ) };
 
+            // _mapObjects must in a sorted ascending order as we use std::binary_search later in the code.
+            // std::upper_bound is used in order to find the correct spot for insertion in a sorted array.
             _mapObjects.emplace( std::upper_bound( _mapObjects.begin(), _mapObjects.end(), indexObject ), indexObject );
         }
     }
