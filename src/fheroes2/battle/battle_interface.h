@@ -293,7 +293,6 @@ namespace Battle
 
         void SetStatus( const std::string &, bool = false );
         void SetOrderOfUnits( const std::shared_ptr<const Units> & units );
-
         void FadeArena( bool clearMessageLog );
 
         void RedrawActionNewTurn() const;
