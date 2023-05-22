@@ -222,12 +222,6 @@ public:
 
     double getArtifactValue() const;
 
-    // return index of the sprite from objnarti.icn
-    uint32_t IndexSprite() const
-    {
-        return id < ARTIFACT_COUNT ? id * 2 + 1 : 0;
-    }
-
     // artfx.icn
     uint32_t IndexSprite32() const
     {
