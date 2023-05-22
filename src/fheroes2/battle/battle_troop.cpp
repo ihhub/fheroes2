@@ -1265,6 +1265,7 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
         break;
 
     default:
+        assert( 0 );
         break;
     }
 }
@@ -1496,6 +1497,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spell
     }
 
     default:
+        assert( 0 );
         break;
     }
 }
