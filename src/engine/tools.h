@@ -60,8 +60,12 @@ std::vector<std::string> StringSplit( const std::string &, const std::string & )
 // Function to replace the pattern in workString with patternReplacement. Here the patternReplacement is converted to lowercase except for the first word in a sentence.
 void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement );
 void StringReplace( std::string & dst, const char * pred, const std::string & src );
-void StringReplace( std::string & dst, const char * pred, const unsigned int value );
-void StringReplace( std::string & dst, const char * pred, const int value );
+
+template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
+void StringReplace( std::string & dst, const char * pred, const T value )
+{
+    StringReplace( dst, pred, std::to_string( value ) );
+}
 
 int CountBits( uint32_t );
 
