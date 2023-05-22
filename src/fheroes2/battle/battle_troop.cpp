@@ -906,10 +906,12 @@ bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, Targe
 
     const uint32_t spoint = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
 
-    if ( spell.isDamage() )
+    if ( spell.isDamage() ) {
         SpellApplyDamage( spell, spoint, hero, target );
-    else if ( spell.isRestore() )
+    }
+    else if ( spell.isRestore() || spell.isResurrect() ) {
         SpellRestoreAction( spell, spoint, hero );
+    }
     else {
         SpellModesAction( spell, spoint, hero );
     }
@@ -1267,7 +1269,7 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
     }
 }
 
-void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, TargetInfo & target )
+void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * hero, TargetInfo & target )
 {
     const uint32_t dmg = CalculateSpellDamage( spell, spellPoints, hero, target.damage, false /* ignore defending hero */ );
 
@@ -1453,7 +1455,7 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
     return dmg;
 }
 
-void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, const HeroBase * hero )
+void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spellPoints, const HeroBase * hero )
 {
     switch ( spell.GetID() ) {
     case Spell::CURE:
@@ -1462,7 +1464,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
         removeAffection( IS_BAD_MAGIC );
 
         // restore
-        hp += ( spell.Restore() * spoint );
+        hp += fheroes2::getHPRestorePoints( spell, spellPoints, hero );
         if ( hp > ArmyTroop::GetHitPoints() ) {
             hp = ArmyTroop::GetHitPoints();
         }
@@ -1478,7 +1480,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
             graveyard->RemoveTroop( *this );
         }
 
-        const uint32_t restore = fheroes2::getResurrectPoints( spell, spoint, hero );
+        const uint32_t restore = fheroes2::getResurrectPoints( spell, spellPoints, hero );
         const uint32_t resurrect = Resurrect( restore, false, ( spell == Spell::RESURRECT ) );
 
         // Put the unit back on the board
