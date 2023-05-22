@@ -1272,6 +1272,8 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
 
 void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * hero, TargetInfo & target )
 {
+    assert( spell.isDamage() );
+
     const uint32_t dmg = CalculateSpellDamage( spell, spellPoints, hero, target.damage, false /* ignore defending hero */ );
 
     // apply damage
@@ -1283,6 +1285,8 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPo
 
 uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, uint32_t targetDamage, bool ignoreDefendingHero ) const
 {
+    assert( spell.isDamage() );
+
     // TODO: use fheroes2::getSpellDamage function to remove code duplication.
     uint32_t dmg = spell.Damage() * spellPoints;
 
