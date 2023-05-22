@@ -1265,6 +1265,9 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     _battleGround._disableTransformLayer();
     _mainSurface._disableTransformLayer();
 
+    // Prepare the Battlefield ground.
+    _redrawBattleGround( conf );
+
     AudioManager::ResetAudio();
 
     // Don't waste time playing the pre-battle sound if the game sounds are turned off
@@ -1887,9 +1890,8 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 void Battle::Interface::RedrawCover()
 {
     const Settings & conf = Settings::Get();
-    const Board & board = *Arena::GetBoard();
 
-    RedrawCoverStatic( conf, board );
+    _redrawCoverStatic( conf );
 
     const Bridge * bridge = Arena::GetBridge();
     if ( bridge && ( bridge->isDown() || _bridgeAnimation.animationIsRequired ) ) {
@@ -2090,7 +2092,7 @@ void Battle::Interface::RedrawCover()
     }
 }
 
-void Battle::Interface::redrawBattleGround( const Settings & conf, const Board & board )
+void Battle::Interface::_redrawBattleGround( const Settings & conf )
 {
     // Battlefield background image.
     if ( icn_cbkg != ICN::UNKNOWN ) {
@@ -2152,6 +2154,8 @@ void Battle::Interface::redrawBattleGround( const Settings & conf, const Board &
 
     // Battlefield grid.
     if ( conf.BattleShowGrid() ) {
+        const Board & board = *Arena::GetBoard();
+
         for ( const Cell & cell : board ) {
             fheroes2::Blit( _hexagonGrid, _battleGround, cell.GetPos().x, cell.GetPos().y );
         }
@@ -2167,23 +2171,16 @@ void Battle::Interface::redrawBattleGround( const Settings & conf, const Board &
         const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( castleBackgroundIcnId, castle->isFortificationBuild() ? 4 : 3 );
         fheroes2::Blit( sprite2, _battleGround, sprite2.x(), sprite2.y() );
     }
-
-    // The render of Battlefield ground is done.
-    _updateBattleGround = false;
 }
 
-void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & board )
+void Battle::Interface::_redrawCoverStatic( const Settings & conf )
 {
-    // If the Battlefield ground needs to be updated.
-    if ( _updateBattleGround ) {
-        redrawBattleGround( conf, board );
-    }
-
     fheroes2::Copy( _battleGround, _mainSurface );
 
-    // shadow
+    // Movement shadow.
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) {
         const fheroes2::Image & shadowImage = conf.BattleShowGrid() ? _hexagonGridShadow : _hexagonShadow;
+        const Board & board = *Arena::GetBoard();
 
         for ( const Cell & cell : board ) {
             const Position pos = Position::GetReachable( *_currentUnit, cell.GetIndex() );
@@ -3050,10 +3047,23 @@ int Battle::GetIndexIndicator( const Unit & b )
     return 10;
 }
 
+void Battle::Interface::_openBattleSettingsDialog()
+{
+    const Settings & conf = Settings::Get();
+    const bool showGrid = conf.BattleShowGrid();
+
+    DialogBattleSettings();
+
+    if ( showGrid != conf.BattleShowGrid() ) {
+        // The grid setting has changed. Update for the Battlefield ground.
+        _redrawBattleGround( conf );
+    }
+}
+
 void Battle::Interface::EventShowOptions()
 {
     btn_settings.drawOnPress();
-    DialogBattleSettings();
+    _openBattleSettingsDialog();
     btn_settings.drawOnRelease();
     humanturn_redraw = true;
 }
@@ -3102,15 +3112,7 @@ void Battle::Interface::ButtonSettingsAction()
     le.MousePressLeft( btn_settings.area() ) ? btn_settings.drawOnPress() : btn_settings.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_settings.area() ) ) {
-        const Settings & conf = Settings::Get();
-        const bool showGrid = conf.BattleShowGrid();
-
-        DialogBattleSettings();
-
-        if ( showGrid != conf.BattleShowGrid() ) {
-            // The grid setting has changed. Set update for the Battlefield ground on the next render.
-            _updateBattleGround = true;
-        }
+        _openBattleSettingsDialog();
 
         humanturn_redraw = true;
     }

@@ -332,8 +332,8 @@ namespace Battle
         void HumanCastSpellTurn( const Unit &, Actions &, std::string & );
 
         void RedrawCover();
-        void redrawBattleGround( const Settings & conf, const Board & board );
-        void RedrawCoverStatic( const Settings & conf, const Board & board );
+        void _redrawBattleGround( const Settings & conf );
+        void _redrawCoverStatic( const Settings & conf );
         void RedrawLowObjects( int32_t );
         void RedrawHighObjects( int32_t );
         void RedrawCastle( const Castle &, int32_t );
@@ -388,6 +388,7 @@ namespace Battle
 
         void EventAutoSwitch( const Unit &, Actions & );
         void EventAutoFinish( Actions & a );
+        void _openBattleSettingsDialog();
         void EventShowOptions();
         void ButtonAutoAction( const Unit &, Actions & );
         void ButtonSettingsAction();
@@ -409,8 +410,6 @@ namespace Battle
         fheroes2::Image _hexagonShadow;
         fheroes2::Image _hexagonGridShadow;
         fheroes2::Image _hexagonCursorShadow;
-
-        bool _updateBattleGround{ true };
 
         int icn_cbkg;
         int icn_frng;
