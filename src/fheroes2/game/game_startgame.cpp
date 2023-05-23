@@ -566,13 +566,8 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & hero, const Maps::Til
 
     default:
         if ( MP2::isActionObject( tile.GetObject() ) ) {
-            const bool isProtected = [&hero, &tile]() {
-                if ( MP2::isPickupObject( tile.GetObject() ) ) {
-                    return Maps::isTileUnderProtection( tile.GetIndex() );
-                }
-
-                return ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !hero.isFriends( getColorFromTile( tile ) ) && tile.isCaptureObjectProtected() ) );
-            }();
+            const bool isProtected
+                = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !hero.isFriends( getColorFromTile( tile ) ) && tile.isCaptureObjectProtected() ) );
 
             return Cursor::DistanceThemes( isProtected ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION, hero.getNumOfTravelDays( tile.GetIndex() ) );
         }
