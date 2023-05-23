@@ -68,13 +68,17 @@ namespace
         return result;
     }
 
-    bool isTileUnderMonsterProtection( const int32_t tileIndex, const int32_t monsterTileIndex )
+    bool isTileUnderMonsterProtection( const int32_t tileIndex, const int32_t monsterTileIndex, const bool checkObjectOnTile )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const Maps::Tiles & monsterTile = world.GetTiles( monsterTileIndex );
 
-        // A pickupable object can be accessed without triggering a monster attack
-        if ( MP2::isPickupObject( tile.GetObject() ) || monsterTile.GetObject() != MP2::OBJ_MONSTER || tile.isWater() != monsterTile.isWater() ) {
+        if ( monsterTile.GetObject() != MP2::OBJ_MONSTER || tile.isWater() != monsterTile.isWater() ) {
+            return false;
+        }
+
+        // If a tile contains an object that you can interact with without visiting this tile, then this interaction doesn't trigger a monster attack
+        if ( checkObjectOnTile && MP2::isNeedStayFront( tile.GetObject() ) ) {
             return false;
         }
 
@@ -500,48 +504,60 @@ bool Maps::isTileUnderProtection( const int32_t tileIndex )
     return world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_MONSTER ? true : !getMonstersProtectingTile( tileIndex ).empty();
 }
 
-Maps::Indexes Maps::getMonstersProtectingTile( const int32_t tileIndex )
+Maps::Indexes Maps::getMonstersProtectingTile( const int32_t tileIndex, const bool checkObjectOnTile /* = true */ )
 {
     Indexes result;
-    if ( !isValidAbsIndex( tileIndex ) )
+
+    if ( !isValidAbsIndex( tileIndex ) ) {
         return result;
+    }
 
     result.reserve( 9 );
+
     const int width = world.w();
     const int x = tileIndex % width;
     const int y = tileIndex / width;
 
-    auto validateAndInsert = [&result, tileIndex]( const int monsterTileIndex ) {
-        if ( isTileUnderMonsterProtection( tileIndex, monsterTileIndex ) ) {
+    auto validateAndInsert = [&result, tileIndex, checkObjectOnTile]( const int monsterTileIndex ) {
+        if ( isTileUnderMonsterProtection( tileIndex, monsterTileIndex, checkObjectOnTile ) ) {
             result.push_back( monsterTileIndex );
         }
     };
 
     if ( y > 0 ) {
-        if ( x > 0 )
+        if ( x > 0 ) {
             validateAndInsert( tileIndex - width - 1 );
+        }
 
         validateAndInsert( tileIndex - width );
 
-        if ( x < width - 1 )
+        if ( x < width - 1 ) {
             validateAndInsert( tileIndex - width + 1 );
+        }
     }
 
-    if ( x > 0 )
+    if ( x > 0 ) {
         validateAndInsert( tileIndex - 1 );
-    if ( MP2::OBJ_MONSTER == world.GetTiles( tileIndex ).GetObject() )
+    }
+
+    if ( world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_MONSTER ) {
         result.push_back( tileIndex );
-    if ( x < width - 1 )
+    }
+
+    if ( x < width - 1 ) {
         validateAndInsert( tileIndex + 1 );
+    }
 
     if ( y < world.h() - 1 ) {
-        if ( x > 0 )
+        if ( x > 0 ) {
             validateAndInsert( tileIndex + width - 1 );
+        }
 
         validateAndInsert( tileIndex + width );
 
-        if ( x < width - 1 )
+        if ( x < width - 1 ) {
             validateAndInsert( tileIndex + width + 1 );
+        }
     }
 
     return result;

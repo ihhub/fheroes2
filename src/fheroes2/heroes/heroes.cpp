@@ -1698,7 +1698,7 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
 {
     if ( allowMonsterAttack ) {
         // scan for monsters around
-        const MapsIndexes targets = Maps::getMonstersProtectingTile( GetIndex() );
+        const MapsIndexes targets = Maps::getMonstersProtectingTile( GetIndex(), false );
 
         if ( !targets.empty() ) {
             SetMove( false );
