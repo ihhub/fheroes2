@@ -564,9 +564,6 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & hero, const Maps::Til
     case MP2::OBJ_BOAT:
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
-    case MP2::OBJ_BARRIER:
-        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, hero.getNumOfTravelDays( tile.GetIndex() ) );
-
     default:
         if ( MP2::isActionObject( tile.GetObject() ) ) {
             const bool isProtected = [&hero, &tile]() {
