@@ -419,7 +419,7 @@ int Interface::Basic::GetCursorFocusCastle( const Castle & castle, const Maps::T
 
 int Interface::Basic::GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile )
 {
-    const bool water = tile.isWater();
+    const bool isWater = tile.isWater();
 
     switch ( tile.GetObject() ) {
     case MP2::OBJ_NON_ACTION_CASTLE:
@@ -427,7 +427,7 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & hero, const Maps:
         const Castle * castle = world.getCastle( tile.GetCenter() );
 
         if ( castle ) {
-            if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE && water && tile.isPassableFrom( Direction::CENTER, true, false, hero.GetColor() ) ) {
+            if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE && isWater && tile.isPassableFrom( Direction::CENTER, true, false, hero.GetColor() ) ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
 
@@ -475,7 +475,7 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & hero, const Maps:
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
     default:
-        if ( water ) {
+        if ( isWater ) {
             if ( MP2::isWaterActionObject( tile.GetObject() ) ) {
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT_ACTION, hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
@@ -590,7 +590,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & hero, const Maps::Til
 
 int Interface::Basic::GetCursorTileIndex( int32_t dstIndex )
 {
-    if ( dstIndex < 0 || dstIndex >= world.w() * world.h() ) {
+    if ( !Maps::isValidAbsIndex( dstIndex ) ) {
         return Cursor::POINTER;
     }
 
