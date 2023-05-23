@@ -45,27 +45,42 @@ language abbreviations. Then to have font support, you will have to specify what
 the language to the font generation code found in `src/fheroes2/gui/ui_font.cpp`. If a compatible font encoding has not currently
 been implemented, then code for that will need to be written.
 
-## Editing translations
+
+## Editing translations - Before you start
+
+Before start, you will have to prepare your working environment: fork the fheroes2 repository and prepare an application where you
+will edit your translation. Then you will have to create a branch. Now you can provide the translation. After you finish your work,
+and you are happy to share it, you will have to prepare a Pull Request.
+
+
+### Fork the fheroes2 repository
+
+https://docs.github.com/en/get-started/quickstart/fork-a-repo
+
+
+### Software to edit translation files
 
 We encourage you to use [**poedit**](https://poedit.net/) or [**gtranslator**](https://wiki.gnome.org/Apps/Gtranslator) to
-edit translations.
+edit translations. Currently all implemented languages, except French, adhere to a standardized font encoding/charset.
 
-Currently all implemented languages, except French, adhere to a standardized font encoding/charset.
 
-NOTE: The fheroes2 team has set a maximum of 400 total modified lines for any Pull Request (PR) for translations. For contributors wanting to
-add translated lines to a new language this has a maximum of 30 total modified lines for that first PR.
+## Editing translations - Your first/next translation
 
-These limitations have been set because every PR needs to be reviewed by our team, and so changing too many lines at once will only slow this
-process down. In addition, GitHub becomes increasingly difficult to navigate once too many changes, comments and so on are present within the
-same PR page, further slowing down the process of reviewing it.
+### Sync your fork
 
-Furthermore, we have decided on a minimum amount of 15 changed strings for a translation PR. For languages that have translations that are more
-or less complete, less than this amount can be accepted.
+Before you start working on the first/next translation, make sure that your fork has recent changes. To do this, [**sync your fork**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork).
 
-Preferably a PR should contain a small amount of changes, about 100 lines, all focused on translating a specific part of the game - for
-example creature names or castle buildings.
+### Create a branch
 
-## Build binary translation files
+Now you will create a space for your work. Brach is a special place . Read more [about branches](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches).
+
+To create a branch, please follow the GitHub's instruction about [creating a branch within your repo](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository)
+
+### Now provide your changes
+
+Now it is time to use your favorive software, that allows you to update the translation and suits you best.
+
+### Test your changes
 
 Once the translation files have been modified, for Linux/MacOS run the `make` command below in the `files/lang` subdirectory to create
 machine object (MO) binary files which can be used by the fheroes2 engine.
@@ -88,6 +103,38 @@ set to.
 
 For example, for German you will have to set font encoding to CP1252, while for Russian this would be CP1251. Later when submitting
 a PR with your changes, you will have to save the PO file in UTF-8 encoding because this is what Github supports.
+
+
+### Share your work with the team
+
+When you are happy about your work, share it. The first step is to commit it into your repository. Then, create a pull request.
+
+How to [commit](https://github.com/git-guides/git-commit). 
+
+How to [create a pull request from your form your fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork).
+
+Try to add a meaningfull PR title, this will allow the team to quickly identify the scope of your work, ie. "Update Slovak translation".
+
+
+<details>
+
+<summary>PR restrictions</summary>
+
+The fheroes2 team has set a maximum of 400 total modified lines for any Pull Request (PR) for translations. For contributors wanting to
+add translated lines to a new language this has a maximum of 30 total modified lines for that first PR.
+
+These limitations have been set because every PR needs to be reviewed by our team, and so changing too many lines at once will only slow this
+process down. In addition, GitHub becomes increasingly difficult to navigate once too many changes, comments and so on are present within the
+same PR page, further slowing down the process of reviewing it.
+
+Furthermore, we have decided on a minimum amount of 15 changed strings for a translation PR. For languages that have translations that are more
+or less complete, less than this amount can be accepted.
+
+Preferably a PR should contain a small amount of changes, about 100 lines, all focused on translating a specific part of the game - for
+example creature names or castle buildings.
+
+</details>
+
 
 ## Updating PO templates and translatable strings in PO files
 
