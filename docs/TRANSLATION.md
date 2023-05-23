@@ -27,15 +27,6 @@ subdirectory of the project source tree. The current instruction is designed for
 ![Ukrainian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_uk.json)
 ![Vietnamese](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_vi.json)
 
-## Finding translatable strings in the codebase
-
-Translatable strings can be found in the source code as arguments to the `_` function (a short name for `gettext`),
-`_n` function (a short name for `ngettext`) and `gettext_noop` function used only as indicator for the future string
-translation. The string below, for example, can be translated in PO files:
-
-```cpp
-_( "Are you sure you want to quit?" )
-```
 
 ## Adding new translations/localizations
 
@@ -72,13 +63,24 @@ Before you start working on the first/next translation, make sure that your fork
 
 ### Create a branch
 
-Now you will create a space for your work. Brach is a special place . Read more [about branches](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches).
+Now you will create a space for your work. Brach is a special place where you can safely prepare, test and share your changes. Read more [about branches](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches).
 
-To create a branch, please follow the GitHub's instruction about [creating a branch within your repo](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository)
+To create a branch, please follow the GitHub's instruction about [creating a branch within your repo](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository).
 
 ### Now provide your changes
 
-Now it is time to use your favorive software, that allows you to update the translation and suits you best.
+Now it is time to use your favourite software, which allows you to update the translation and suits you best.
+
+
+#### Finding translatable strings in the codebase
+
+Translatable strings can be found in the source code as arguments to the `_` function (a short name for `gettext`),
+`_n` function (a short name for `ngettext`) and `gettext_noop` function used only as indicator for the future string
+translation. The string below, for example, can be translated in PO files:
+
+```cpp
+_( "Are you sure you want to quit?" )
+```
 
 ### Test your changes
 
