@@ -108,7 +108,8 @@ a PR with your changes, you will have to save the PO file in UTF-8 encoding beca
 
 ### Share your work with the team
 
-When you are happy about your work, share it. The first step is to commit it into your repository. Then, create a pull request.
+When you are happy about your work, share it. The first step is to commit your work into your fork. Then, create a pull request that 
+introduces your changes into the fheroes2 repository.
 
 How to [commit](https://github.com/git-guides/git-commit). 
 
