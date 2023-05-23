@@ -46,7 +46,7 @@ and you are happy to share it, you will have to prepare a Pull Request.
 
 ### Fork the fheroes2 repository
 
-https://docs.github.com/en/get-started/quickstart/fork-a-repo
+A fork is your copy of the fheroes2 repository. It gives you a safe space to prepare and test your changes. You can read here how to [create a fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
 
 
 ### Software to edit translation files
@@ -55,22 +55,21 @@ We encourage you to use [**poedit**](https://poedit.net/) or [**gtranslator**](h
 edit translations. Currently all implemented languages, except French, adhere to a standardized font encoding/charset.
 
 
-## Editing translations - Your first/next translation
+## Editing translations - Your first or next translation
 
 ### Sync your fork
 
-Before you start working on the first/next translation, make sure that your fork has recent changes. To do this, [**sync your fork**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork).
+Before you start working on the first or next translation, make sure that your fork has all recent changes for the fhereos2 repo. To do this, [**sync your fork**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork).
 
 ### Create a branch
 
-Now you will create a space for your work. Brach is a special place where you can safely prepare, test and share your changes. Read more [about branches](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches).
+Now create a space for your work where you can safely prepare, test and share your changes. Read more [about branches](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches).
 
 To create a branch, please follow the GitHub's instruction about [creating a branch within your repo](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository).
 
 ### Now provide your changes
 
 Now it is time to use your favourite software, which allows you to update the translation and suits you best.
-
 
 #### Finding translatable strings in the codebase
 
