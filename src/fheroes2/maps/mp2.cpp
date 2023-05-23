@@ -600,8 +600,8 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
     case OBJ_SIRENS:
     case OBJ_WHIRLPOOL:
         return true;
-    case OBJ_CASTLE:
     case OBJ_BOAT:
+    case OBJ_CASTLE:
         return false;
     default:
         break;
