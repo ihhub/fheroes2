@@ -315,7 +315,9 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
     fheroes2::ButtonSprite monsterSwitchLeft;
     fheroes2::ButtonSprite monsterSwitchRight;
 
-    if ( allowDowngradedMonster && monster0.GetDowngrade() != monster0 ) {
+    const bool showDowngradedMonsterSwitchButtons = allowDowngradedMonster && ( monster0.GetDowngrade() != monster0 );
+
+    if ( showDowngradedMonsterSwitchButtons ) {
         monsterSwitchLeft.setSprite( fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 0 ), fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 1 ) );
         monsterSwitchRight.setSprite( fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 0 ), fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 1 ) );
 
@@ -324,6 +326,13 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         monsterSwitchLeft.setPosition( dst_pt.x, dst_pt.y );
         dst_pt.x = dialogOffset.x + 105;
         monsterSwitchRight.setPosition( dst_pt.x, dst_pt.y );
+
+        monsterSwitchLeft.drawShadow();
+        monsterSwitchRight.drawShadow();
+
+        // Render Left and Right buttons to restore their initial state later.
+        monsterSwitchLeft.draw();
+        monsterSwitchRight.draw();
     }
     else {
         monsterSwitchLeft.hide();
@@ -333,14 +342,12 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         monsterSwitchRight.disable();
     }
 
-    // Render shadows for UI elements.
+    // Render shadows for UI buttons.
     buttonOk.drawShadow();
     buttonCancel.drawShadow();
     buttonMax.drawShadow();
     buttonUp.drawShadow();
     buttonDn.drawShadow();
-    monsterSwitchLeft.drawShadow();
-    monsterSwitchRight.drawShadow();
 
     // Render Up and Down buttons to restore their initial state later.
     buttonUp.draw();
@@ -372,14 +379,16 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
     if ( buttonMin.isEnabled() ) {
         buttonMin.draw();
     }
-    monsterSwitchLeft.draw();
-    monsterSwitchRight.draw();
 
     display.render( roi );
 
     const fheroes2::Rect monsterArea( dialogOffset.x + 24, dialogOffset.y + 19, 75, 95 );
 
-    auto buttonUpDownRelease = [&display, &background, &dialogOffset]( fheroes2::Button & button ) {
+    auto buttonReleaseRestore = [&display, &background, &dialogOffset]( fheroes2::ButtonBase & button ) {
+        if ( !button.isPressed() ) {
+            return;
+        }
+
         // When the "Up"/"Down" button is pressed it is shifted 1 pixel down so we need to properly restore the background.
         const fheroes2::Rect buttonRoi = button.area();
         button.release();
@@ -406,19 +415,16 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         if ( le.MousePressLeft( buttonUp.area() ) ) {
             buttonUp.drawOnPress();
         }
-        else if ( buttonUp.isPressed() ) {
-            buttonUpDownRelease( buttonUp );
+        else {
+            buttonReleaseRestore( buttonUp );
         }
 
         if ( le.MousePressLeft( buttonDn.area() ) ) {
             buttonDn.drawOnPress();
         }
-        else if ( buttonDn.isPressed() ) {
-            buttonUpDownRelease( buttonDn );
+        else {
+            buttonReleaseRestore( buttonDn );
         }
-
-        le.MousePressLeft( monsterSwitchLeft.area() ) ? monsterSwitchLeft.drawOnPress() : monsterSwitchLeft.drawOnRelease();
-        le.MousePressLeft( monsterSwitchRight.area() ) ? monsterSwitchRight.drawOnPress() : monsterSwitchRight.drawOnRelease();
 
         if ( buttonMax.isEnabled() ) {
             le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
@@ -427,9 +433,23 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
         }
 
-        bool updateCost = false;
+        bool updateMonsterInfo = false;
 
-        if ( allowDowngradedMonster && upgrades.size() > 1 ) {
+        if ( showDowngradedMonsterSwitchButtons ) {
+            if ( le.MousePressLeft( monsterSwitchLeft.area() ) ) {
+                monsterSwitchLeft.drawOnPress();
+            }
+            else {
+                buttonReleaseRestore( monsterSwitchLeft );
+            }
+
+            if ( le.MousePressLeft( monsterSwitchRight.area() ) ) {
+                monsterSwitchRight.drawOnPress();
+            }
+            else {
+                buttonReleaseRestore( monsterSwitchRight );
+            }
+
             if ( le.MouseClickLeft( monsterSwitchLeft.area() ) || le.KeyPress( fheroes2::Key::KEY_LEFT ) ) {
                 for ( size_t i = 0; i < upgrades.size(); ++i ) {
                     if ( upgrades[i] == monster ) {
@@ -442,7 +462,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
                         break;
                     }
                 }
-                updateCost = true;
+                updateMonsterInfo = true;
             }
             else if ( le.MouseClickLeft( monsterSwitchRight.area() ) || le.KeyPress( fheroes2::Key::KEY_RIGHT ) ) {
                 for ( size_t i = 0; i < upgrades.size(); ++i ) {
@@ -456,11 +476,11 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
                         break;
                     }
                 }
-                updateCost = true;
+                updateMonsterInfo = true;
             }
         }
 
-        if ( updateCost ) {
+        if ( updateMonsterInfo ) {
             // Restore the recruit dialog background.
             fheroes2::Copy( background, 0, 0, display, dialogOffset.x, dialogOffset.y, windowSize.width, windowSize.height );
 
