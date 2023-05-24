@@ -90,12 +90,14 @@ msgid "RESTART"
 msgstr "OD NOWA"
 
 msgid "HEROES"
-msgstr ""
+msgstr "BOHATEROWIE"
 
 msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
+"MIASTA/\n"
+"ZAMKI"
 
 msgid "S"
 msgstr "M"
@@ -113,7 +115,7 @@ msgid "ALL"
 msgstr "CAŁOŚĆ"
 
 msgid "SELECT"
-msgstr ""
+msgstr "WYBIERZ"
 
 msgid ""
 "STANDARD\n"
@@ -177,7 +179,7 @@ msgid "GIFT"
 msgstr "WYŚLIJ"
 
 msgid "guildWell|EXIT"
-msgstr ""
+msgstr "WYJŚCIE"
 
 msgid "DIFFICULTY"
 msgstr "TRUDNOŚĆ"
@@ -3786,254 +3788,238 @@ msgid "View High Scores for Campaigns."
 msgstr "Obejrzyj najlepsze wyniki dla kampanii."
 
 msgid "hotkey|default okay event"
-msgstr ""
+msgstr "zatwierdź"
 
 msgid "hotkey|default cancel event"
-msgstr ""
+msgstr "anuluj"
 
 msgid "hotkey|default left"
-msgstr ""
+msgstr "w lewo"
 
 msgid "hotkey|default right"
-msgstr ""
+msgstr "w prawo"
 
 msgid "hotkey|default up"
-msgstr ""
+msgstr "w górę"
 
 msgid "hotkey|default down"
-msgstr ""
+msgstr "w dół"
 
 msgid "hotkey|toggle fullscreen"
-msgstr ""
+msgstr "pełny ekran/okno"
 
 msgid "hotkey|toggle text support mode"
-msgstr ""
+msgstr "wł./wył. dodatkowe informacje"
 
 msgid "hotkey|new game"
-msgstr ""
+msgstr "nowa gra"
 
 msgid "hotkey|load game"
-msgstr ""
+msgstr "wczytaj grę"
 
 msgid "hotkey|highscores"
-msgstr ""
+msgstr "najlepsze wyniki"
 
 msgid "hotkey|credits"
-msgstr ""
+msgstr "autorzy"
 
-#, fuzzy
 msgid "hotkey|standard game"
-msgstr "Gra standardowa"
+msgstr "gra standardowa"
 
-#, fuzzy
 msgid "hotkey|campaign game"
-msgstr "Kampania"
+msgstr "kampania"
 
-#, fuzzy
 msgid "hotkey|multi-player game"
-msgstr "Gra dla wielu osób"
+msgstr "gra dla wielu osób"
 
-#, fuzzy
 msgid "hotkey|settings"
-msgstr "Ustawienia"
+msgstr "ustawienia"
 
 msgid "hotkey|quit"
-msgstr ""
+msgstr "wyjdź"
 
 msgid "hotkey|select map"
-msgstr ""
+msgstr "wybierz mapę"
 
 msgid "hotkey|select small map size"
-msgstr ""
+msgstr "wybierz małe mapy"
 
 msgid "hotkey|select medium map size"
-msgstr ""
+msgstr "wybierz średnie mapy"
 
 msgid "hotkey|select large map size"
-msgstr ""
+msgstr "wybierz duże mapy"
 
 msgid "hotkey|select extra large map size"
-msgstr ""
+msgstr "wybierz bardzo duże mapy"
 
 msgid "hotkey|select all map sizes"
-msgstr ""
+msgstr "wybierz wszystkie mapy"
 
 msgid "hotkey|hotseat game"
-msgstr ""
+msgstr "zmiana miejsc"
 
 msgid "hotkey|battle only game"
-msgstr ""
+msgstr "tylko walka"
 
 msgid "hotkey|choose the original campaign"
-msgstr ""
+msgstr "wybierz oryginalną kampanię"
 
 msgid "hotkey|choose the expansion campaign"
-msgstr ""
+msgstr "wybierz kampanię z rozszerzenia"
 
 msgid "hotkey|roland campaign"
-msgstr ""
+msgstr "kampania Rolanda"
 
 msgid "hotkey|archibald campaign"
-msgstr ""
+msgstr "kampania Archibalda"
 
-#, fuzzy
 msgid "hotkey|the price of loyalty campaign"
-msgstr "Cena Lojalności"
+msgstr "kampania Cena Lojalności"
 
 msgid "hotkey|voyage home campaign"
-msgstr ""
+msgstr "kampania Podróż do Domu"
 
 msgid "hotkey|wizard's isle campaign"
-msgstr ""
+msgstr "kampania Wyspa Czarodzieja"
 
 msgid "hotkey|descendants campaign"
-msgstr ""
+msgstr "kampania Potomkowie"
 
 msgid "hotkey|select first campaign bonus"
-msgstr ""
+msgstr "wybierz pierwszy bonus w kampanii"
 
 msgid "hotkey|select second campaign bonus"
-msgstr ""
+msgstr "wybierz drugi bonus w kampanii"
 
 msgid "hotkey|select third campaign bonus"
-msgstr ""
+msgstr "wybierz trzeci bonus w kampanii"
 
 msgid "hotkey|view campaign intro"
-msgstr ""
+msgstr "obejrzyj intro kampanii"
 
-#, fuzzy
 msgid "hotkey|select campaign difficulty"
-msgstr "Stopień trudności kampanii"
+msgstr "stopień trudności kampanii"
 
 msgid "hotkey|restart campaign scenario"
-msgstr ""
+msgstr "rozpocznij od nowa scenariusz kampanii"
 
 msgid "hotkey|world map left"
-msgstr ""
+msgstr "porusz bohatera w lewo"
 
 msgid "hotkey|world map right"
-msgstr ""
+msgstr "porusz bohatera w prawo"
 
 msgid "hotkey|world map up"
-msgstr ""
+msgstr "porusz bohatera do góry"
 
 msgid "hotkey|world map down"
-msgstr ""
+msgstr "porusz bohatera w dów"
 
 msgid "hotkey|world map up left"
-msgstr ""
+msgstr "porusz bohatera do góry w lewo"
 
 msgid "hotkey|world map up right"
-msgstr ""
+msgstr "porusz bohatera do góry w prawo"
 
 msgid "hotkey|world map down left"
-msgstr ""
+msgstr "porusz bohatera w dół w lewo"
 
 msgid "hotkey|world map down right"
-msgstr ""
+msgstr "porusz bohatera w dół w prawo"
 
 msgid "hotkey|save game"
-msgstr ""
+msgstr "zapisz grę"
 
-#, fuzzy
 msgid "hotkey|next hero"
-msgstr "Pokaż następnego bohatera"
+msgstr "pokaż następnego bohatera"
 
-#, fuzzy
 msgid "hotkey|continue hero movement"
-msgstr "Kontynuuj ruch"
+msgstr "kontynuuj ruch"
 
-#, fuzzy
 msgid "hotkey|cast adventure spell"
-msgstr "Rzuć zaklęcie podróżne."
+msgstr "rzuć zaklęcie podróżne."
 
 msgid "hotkey|put hero to sleep"
-msgstr ""
+msgstr "uśpij bohatera"
 
-#, fuzzy
 msgid "hotkey|next town"
-msgstr "Pokaż następne miasto"
+msgstr "następne miasto"
 
 msgid "hotkey|end turn"
-msgstr ""
+msgstr "zakończ turę"
 
-#, fuzzy
 msgid "hotkey|file options"
-msgstr "Opcje plików"
+msgstr "opcje plików"
 
-#, fuzzy
 msgid "hotkey|adventure options"
-msgstr "Opcje przygody"
+msgstr "opcje przygody"
 
 msgid "hotkey|puzzle map"
-msgstr ""
+msgstr "mapa puzzli z obelisków"
 
-#, fuzzy
 msgid "hotkey|scenario information"
-msgstr "Informacje o scenariuszu"
+msgstr "informacje o scenariuszu"
 
 msgid "hotkey|dig for artifact"
-msgstr ""
+msgstr "kop w poszukiwaniu Najpotężniejszego Artefaktu"
 
 msgid "hotkey|view world"
-msgstr ""
+msgstr "pokaż świat"
 
-#, fuzzy
 msgid "hotkey|kingdom summary"
-msgstr "Przegląd królestwa"
+msgstr "przegląd królestwa"
 
 msgid "hotkey|default action"
-msgstr ""
+msgstr "domyślna akcja"
 
 msgid "hotkey|open focus"
-msgstr ""
+msgstr "szczegóły bohatera lub zamku"
 
-#, fuzzy
 msgid "hotkey|system options"
-msgstr "Dostosuj ustawienia systemowe"
+msgstr "ustawienia systemowe"
 
 msgid "hotkey|scroll left"
-msgstr ""
+msgstr "skroluj w lewo"
 
 msgid "hotkey|scroll right"
-msgstr ""
+msgstr "skroluj w prawo"
 
 msgid "hotkey|scroll up"
-msgstr ""
+msgstr "skroluj w górę"
 
 msgid "hotkey|scroll down"
-msgstr ""
+msgstr "skroluj w dół"
 
 msgid "hotkey|toggle control panel"
-msgstr ""
+msgstr "pokaż/ukryj panel sterowania"
 
 msgid "hotkey|toggle radar"
-msgstr ""
+msgstr "pokaż/ukryj minimapę"
 
 msgid "hotkey|toggle buttons"
-msgstr ""
+msgstr "pokaż/ukryj przyciski"
 
 msgid "hotkey|toggle status"
-msgstr ""
+msgstr "pokaż/ukryj okno statusu"
 
 msgid "hotkey|toggle icons"
-msgstr ""
+msgstr "pokaż/ukryj ikony miast i bohaterów"
 
 msgid "hotkey|transfer control to ai"
-msgstr ""
+msgstr "przekaż kontrolę do AI"
 
 msgid "hotkey|retreat from battle"
-msgstr ""
+msgstr "ucieknij z walki"
 
 msgid "hotkey|surrender during battle"
-msgstr ""
+msgstr "poddaj walkę"
 
 msgid "hotkey|toggle battle auto mode"
-msgstr ""
+msgstr "włącz/wyłącz automatyczny tryb walki"
 
-#, fuzzy
 msgid "hotkey|finish the battle in auto mode"
-msgstr "Czy na pewno chcesz dokończyć walkę w trybie automatycznym?"
+msgstr "zakończ walkę w automatycznym trybie walki"
 
 #, fuzzy
 msgid "hotkey|battle options"
