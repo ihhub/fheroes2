@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 13:04+0000\n"
+"POT-Creation-Date: 2023-05-24 01:33+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -7798,6 +7798,10 @@ msgstr "Impossibile spostare l'ultima unità"
 msgid "This item can't be traded."
 msgstr "Questo oggetto non si può spostare."
 
+#, fuzzy
+msgid "Invalid Artifact"
+msgstr "Artefatto casuale"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} incrementa di %{count} punti il sapere del tuo eroe."
 
@@ -8904,10 +8908,6 @@ msgid ""
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
 "lost by mortals."
 msgstr ""
-
-#, fuzzy
-msgid "Invalid Artifact"
-msgstr "Artefatto casuale"
 
 msgid "Wood"
 msgstr "Legno"
