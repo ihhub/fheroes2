@@ -194,13 +194,9 @@ void StringReplace( std::string & dst, const char * pred, const std::string & sr
 {
     size_t pos;
 
-    while ( std::string::npos != ( pos = dst.find( pred ) ) )
+    while ( std::string::npos != ( pos = dst.find( pred ) ) ) {
         dst.replace( pos, std::strlen( pred ), src );
-}
-
-void StringReplace( std::string & dst, const char * pred, int value )
-{
-    StringReplace( dst, pred, std::to_string( value ) );
+    }
 }
 
 std::vector<std::string> StringSplit( const std::string & str, const std::string & sep )
