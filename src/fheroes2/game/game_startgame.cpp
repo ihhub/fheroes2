@@ -467,10 +467,6 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & hero, const Maps:
         // TODO: Can monsters be placed on water?
         return isWater ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, hero.getNumOfTravelDays( tile.GetIndex() ) ) : Cursor::POINTER;
 
-    case MP2::OBJ_BOAT:
-        // Empty boats cannot be used by a shipmaster hero
-        return Cursor::POINTER;
-
     case MP2::OBJ_COAST:
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
