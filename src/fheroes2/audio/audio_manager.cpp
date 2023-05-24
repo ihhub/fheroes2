@@ -160,13 +160,13 @@ namespace
             }
 
             // Place the path to the cache
-            musicTrackIdToFilePath.emplace( musicTrackId, filePath );
+            musicTrackIdToFilePath.try_emplace( musicTrackId, filePath );
 
             return filePath;
         }
 
         // Place the negative result to the cache
-        musicTrackIdToFilePath.emplace( musicTrackId, std::string{} );
+        musicTrackIdToFilePath.try_emplace( musicTrackId, std::string{} );
 
         return {};
     }
