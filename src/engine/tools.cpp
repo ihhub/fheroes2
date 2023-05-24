@@ -30,7 +30,12 @@
 #include <cstdlib>
 #include <cstring>
 #include <fstream> // IWYU pragma: keep
+#include <limits>
 #include <memory>
+#include <system_error>
+
+#include <zconf.h>
+#include <zlib.h>
 
 #include "translations.h"
 
@@ -189,13 +194,9 @@ void StringReplace( std::string & dst, const char * pred, const std::string & sr
 {
     size_t pos;
 
-    while ( std::string::npos != ( pos = dst.find( pred ) ) )
+    while ( std::string::npos != ( pos = dst.find( pred ) ) ) {
         dst.replace( pos, std::strlen( pred ), src );
-}
-
-void StringReplace( std::string & dst, const char * pred, int value )
-{
-    StringReplace( dst, pred, std::to_string( value ) );
+    }
 }
 
 std::vector<std::string> StringSplit( const std::string & str, const std::string & sep )
@@ -395,17 +396,12 @@ namespace fheroes2
 
     uint32_t calculateCRC32( const uint8_t * data, const size_t length )
     {
-        uint32_t crc = 0xFFFFFFFF;
-        for ( size_t i = 0; i < length; ++i ) {
-            crc ^= static_cast<uint32_t>( data[i] );
-
-            for ( int bit = 0; bit < 8; ++bit ) {
-                const uint32_t poly = ( crc & 1 ) ? 0xEDB88320 : 0x0;
-                crc = ( crc >> 1 ) ^ poly;
-            }
+        if ( length > std::numeric_limits<uInt>::max() ) {
+            throw std::
+                system_error( std::make_error_code( std::errc::value_too_large ),
+                              "Too large `length` provided to `calculateCRC32`. Must be no larger than `std::numeric_limits<uInt>::max()` (usually `(1 << 32) - 1`)." );
         }
-
-        return ~crc;
+        return crc32( 0, data, static_cast<uInt>( length ) );
     }
 
     void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding )

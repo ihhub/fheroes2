@@ -106,21 +106,28 @@ namespace
 
         MusicalEffectPlayer & operator=( const MusicalEffectPlayer & ) = delete;
 
-        static void play( const int trackId )
+        static bool canBePlayed( const int trackId )
         {
             if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
-                return;
+                return false;
             }
 
-            const Settings & conf = Settings::Get();
-
             // There are no "musical" effects in MIDI format
-            if ( conf.MusicMIDI() ) {
+            if ( Settings::Get().MusicMIDI() ) {
+                return false;
+            }
+
+            return AudioManager::isExternalMusicFileAvailable( trackId );
+        }
+
+        static void play( const int trackId )
+        {
+            if ( !canBePlayed( trackId ) ) {
                 return;
             }
 
             // "Musical" sound effects should use the volume of the sound effects instead of the volume of the music
-            const int soundVolume = conf.SoundVolume();
+            const int soundVolume = Settings::Get().SoundVolume();
 
             // Play the sound effect only if the volume of the sound effect is not set to 0
             if ( soundVolume <= 0 ) {
@@ -729,7 +736,7 @@ namespace
                 const MusicalEffectPlayer musicalEffectPlayer;
 
                 // The Magic Garden has a special sound
-                if ( objectType == MP2::OBJ_MAGIC_GARDEN && !Settings::Get().MusicMIDI() ) {
+                if ( objectType == MP2::OBJ_MAGIC_GARDEN && MusicalEffectPlayer::canBePlayed( MUS::TREEHOUSE ) ) {
                     MusicalEffectPlayer::play( MUS::TREEHOUSE );
                 }
                 // The Lean-To has a special sound
@@ -1448,11 +1455,11 @@ namespace
             {
                 const MusicalEffectPlayer musicalEffectPlayer;
 
-                if ( Settings::Get().MusicMIDI() ) {
-                    AudioManager::PlaySound( M82::EXPERNCE );
+                if ( MusicalEffectPlayer::canBePlayed( MUS::EXPERIENCE ) ) {
+                    MusicalEffectPlayer::play( MUS::EXPERIENCE );
                 }
                 else {
-                    MusicalEffectPlayer::play( MUS::EXPERIENCE );
+                    AudioManager::PlaySound( M82::EXPERNCE );
                 }
 
                 const fheroes2::ExperienceDialogElement experienceUI( exp );
@@ -2138,7 +2145,7 @@ namespace
                 const MusicalEffectPlayer musicalEffectPlayer;
 
                 // The Tree House has a special sound
-                if ( objectType == MP2::OBJ_TREE_HOUSE && !Settings::Get().MusicMIDI() ) {
+                if ( objectType == MP2::OBJ_TREE_HOUSE && MusicalEffectPlayer::canBePlayed( MUS::TREEHOUSE ) ) {
                     MusicalEffectPlayer::play( MUS::TREEHOUSE );
                 }
                 else {
@@ -2245,11 +2252,11 @@ namespace
                 const MusicalEffectPlayer musicalEffectPlayer;
 
                 // The Tree City and the Wagon Camp have a special sound
-                if ( ( objectType == MP2::OBJ_TREE_CITY || objectType == MP2::OBJ_WAGON_CAMP ) && !Settings::Get().MusicMIDI() ) {
+                if ( ( objectType == MP2::OBJ_TREE_CITY || objectType == MP2::OBJ_WAGON_CAMP ) && MusicalEffectPlayer::canBePlayed( MUS::TREEHOUSE ) ) {
                     MusicalEffectPlayer::play( MUS::TREEHOUSE );
                 }
                 // Changed OG selection to something more appropriate
-                else if ( objectType == MP2::OBJ_DESERT_TENT && !Settings::Get().MusicMIDI() ) {
+                else if ( objectType == MP2::OBJ_DESERT_TENT && MusicalEffectPlayer::canBePlayed( MUS::ARABIAN ) ) {
                     MusicalEffectPlayer::play( MUS::ARABIAN );
                 }
                 else {
@@ -3496,7 +3503,7 @@ void Heroes::ScoutRadar() const
     I.SetRedraw( Interface::REDRAW_RADAR );
 }
 
-void Heroes::Action( int tileIndex, bool isDestination )
+void Heroes::Action( int tileIndex )
 {
     // Hero may be lost while performing the action, reset the focus after completing the action (and update environment sounds and music if necessary)
     struct FocusUpdater
@@ -3682,8 +3689,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         ActionToTeleports( *this, tileIndex );
         break;
     case MP2::OBJ_WHIRLPOOL:
-        if ( isDestination )
-            ActionToWhirlpools( *this, tileIndex );
+        ActionToWhirlpools( *this, tileIndex );
         break;
 
     case MP2::OBJ_OBSERVATION_TOWER:

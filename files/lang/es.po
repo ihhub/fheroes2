@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 13:04+0000\n"
+"POT-Creation-Date: 2023-05-24 01:33+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -8472,6 +8472,10 @@ msgstr "Lanzar hechizo"
 msgid "This item can't be traded."
 msgstr ""
 
+#, fuzzy
+msgid "Invalid Artifact"
+msgstr "Artefacto"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
@@ -9660,10 +9664,6 @@ msgstr ""
 "Una sucia pala ha sido clavada en un montón de tierra cercano. Tras "
 "investigarla, descubres que es la pala encantada de los Enterradores, que se "
 "creía perdida hacía tiempo por los mortales."
-
-#, fuzzy
-msgid "Invalid Artifact"
-msgstr "Artefacto"
 
 msgid "Wood"
 msgstr "Madera"

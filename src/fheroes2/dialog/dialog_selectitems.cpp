@@ -21,6 +21,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "dialog_selectitems.h"
+
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <string>
@@ -30,7 +33,6 @@
 #include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "dialog_selectitems.h"
 #include "gamedefs.h"
 #include "heroes_base.h"
 #include "icn.h"
@@ -381,7 +383,7 @@ Spell Dialog::SelectSpell( int cur )
     return result == Dialog::OK || listbox.ok ? Spell( listbox.GetCurrent() ) : Spell( Spell::NONE );
 }
 
-Artifact Dialog::SelectArtifact( int cur )
+Artifact Dialog::SelectArtifact()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -389,10 +391,16 @@ Artifact Dialog::SelectArtifact( int cur )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    std::vector<int> artifacts( static_cast<int>( Settings::Get().isCurrentMapPriceOfLoyalty() ? Artifact::UNKNOWN : Artifact::SPELL_SCROLL ), Artifact::UNKNOWN );
+    std::vector<int> artifacts;
+    artifacts.reserve( Artifact::ARTIFACT_COUNT - 1 );
 
-    for ( size_t i = 0; i < artifacts.size(); ++i )
-        artifacts[i] = static_cast<int>( i ); // safe to do this as the number of artifacts can't be more than 2 billion
+    const bool isPriceofLoyaltyArtifactAllowed = Settings::Get().isCurrentMapPriceOfLoyalty();
+
+    for ( int artifactId = Artifact::UNKNOWN + 1; artifactId < Artifact::ARTIFACT_COUNT; ++artifactId ) {
+        if ( Artifact( artifactId ).isValid() && ( isPriceofLoyaltyArtifactAllowed || !fheroes2::isPriceOfLoyaltyArtifact( artifactId ) ) ) {
+            artifacts.emplace_back( artifactId );
+        }
+    }
 
     Dialog::FrameBorder frameborder( { 370, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const fheroes2::Rect & area = frameborder.GetArea();
@@ -400,8 +408,8 @@ Artifact Dialog::SelectArtifact( int cur )
     SelectEnumArtifact listbox( area );
 
     listbox.SetListContent( artifacts );
-    if ( cur != Artifact::UNKNOWN )
-        listbox.SetCurrent( cur );
+    // Force to select the first artifact in the list.
+    listbox.SetCurrent( static_cast<size_t>( 0 ) );
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups( area, Dialog::OK | Dialog::CANCEL );
@@ -422,7 +430,7 @@ Artifact Dialog::SelectArtifact( int cur )
         display.render();
     }
 
-    return result == Dialog::OK || listbox.ok ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
+    return ( result == Dialog::OK || listbox.ok ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
 }
 
 Monster Dialog::SelectMonster( int id )

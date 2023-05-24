@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 13:04+0000\n"
+"POT-Creation-Date: 2023-05-24 01:33+0000\n"
 "PO-Revision-Date: 2023-04-10 00:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -8483,6 +8483,9 @@ msgstr "Trylleboken kan ikke flyttes"
 msgid "This item can't be traded."
 msgstr "Denne tingen kan ikke byttes."
 
+msgid "Invalid Artifact"
+msgstr "Ugyldig skatt"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} øker kunnskapen din med %{count}."
 
@@ -9922,9 +9925,6 @@ msgstr ""
 "En skitten spade har blitt kjørt inn i en jordhaug i nærheten. Ved en "
 "nærmere titt oppdager du at det er den fortryllede spaden til Gravleggerne, "
 "lenge trodd å være forsvunnet av de dødelige."
-
-msgid "Invalid Artifact"
-msgstr "Ugyldig skatt"
 
 msgid "Wood"
 msgstr "Ved"
