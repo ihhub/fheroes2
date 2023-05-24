@@ -1261,7 +1261,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     _mainSurface.resize( area.width, battlefieldHeight );
     _battleGround.resize( area.width, battlefieldHeight );
 
-    // As `_battleGround` and '_mainSurface' are used to prepare battlefield screen to render on display they does not need to have a transform layer.
+    // As `_battleGround` and '_mainSurface' are used to prepare battlefield screen to render on display they do not need to have a transform layer.
     _battleGround._disableTransformLayer();
     _mainSurface._disableTransformLayer();
 
