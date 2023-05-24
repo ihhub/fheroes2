@@ -1273,7 +1273,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     _mainSurface._disableTransformLayer();
 
     // Prepare the Battlefield ground.
-    _redrawBattleGround( conf );
+    _redrawBattleGround();
 
     AudioManager::ResetAudio();
 
@@ -1890,9 +1890,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 
 void Battle::Interface::RedrawCover()
 {
-    const Settings & conf = Settings::Get();
-
-    _redrawCoverStatic( conf );
+    _redrawCoverStatic();
 
     const Bridge * bridge = Arena::GetBridge();
     if ( bridge && ( bridge->isDown() || _bridgeAnimation.animationIsRequired ) ) {
@@ -1909,7 +1907,7 @@ void Battle::Interface::RedrawCover()
     const Cell * cell = Board::GetCell( index_pos );
     const int cursorType = Cursor::Get().Themes();
 
-    if ( cell && _currentUnit && conf.BattleShowMouseShadow() ) {
+    if ( cell && _currentUnit && Settings::Get().BattleShowMouseShadow() ) {
         std::set<const Cell *> highlightedCells;
 
         if ( humanturn_spell.isValid() ) {
@@ -2089,7 +2087,7 @@ void Battle::Interface::RedrawCover()
     }
 }
 
-void Battle::Interface::_redrawBattleGround( const Settings & conf )
+void Battle::Interface::_redrawBattleGround()
 {
     // Battlefield background image.
     if ( icn_cbkg != ICN::UNKNOWN ) {
@@ -2150,7 +2148,7 @@ void Battle::Interface::_redrawBattleGround( const Settings & conf )
     }
 
     // Battlefield grid.
-    if ( conf.BattleShowGrid() ) {
+    if ( Settings::Get().BattleShowGrid() ) {
         const Board & board = *Arena::GetBoard();
 
         for ( const Cell & cell : board ) {
@@ -2170,9 +2168,11 @@ void Battle::Interface::_redrawBattleGround( const Settings & conf )
     }
 }
 
-void Battle::Interface::_redrawCoverStatic( const Settings & conf )
+void Battle::Interface::_redrawCoverStatic()
 {
     fheroes2::Copy( _battleGround, _mainSurface );
+
+    const Settings & conf = Settings::Get();
 
     // Movement shadow.
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) {
@@ -3060,7 +3060,7 @@ void Battle::Interface::_openBattleSettingsDialog()
 
     if ( showGrid != conf.BattleShowGrid() ) {
         // The grid setting has changed. Update for the Battlefield ground.
-        _redrawBattleGround( conf );
+        _redrawBattleGround();
     }
 }
 
