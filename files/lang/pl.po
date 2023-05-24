@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 13:04+0000\n"
+"POT-Creation-Date: 2023-05-24 01:33+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -8371,6 +8371,9 @@ msgstr "Nie można przenieść Księgi Zaklęć"
 msgid "This item can't be traded."
 msgstr "Nie można wymienić tego przedmiotu."
 
+msgid "Invalid Artifact"
+msgstr "Nieprawidłowy artefakt"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} zwiększa twoją wiedzę o %{count}."
 
@@ -9807,9 +9810,6 @@ msgstr ""
 "Ktoś wbił brudny szpadel w pobliski kopiec ziemi. Po dokładniejszym zbadaniu "
 "przedmiotu odkrywasz, że jest to zaklęty szpadel Grabarzy, zaginiony dawno "
 "temu."
-
-msgid "Invalid Artifact"
-msgstr "Nieprawidłowy artefakt"
 
 msgid "Wood"
 msgstr "Drewno"

@@ -432,7 +432,7 @@ uint32_t Spell::Restore() const
         break;
     }
 
-    return Resurrect();
+    return 0;
 }
 
 uint32_t Spell::Resurrect() const

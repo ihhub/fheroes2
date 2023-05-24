@@ -128,7 +128,9 @@ namespace
         static_assert( std::is_same_v<decltype( Maps::Tiles::updateTileById ), void( Maps::Tiles &, uint32_t, uint8_t )>,
                        "Type of updateTileById() has been changed, check the logic below" );
 
-        const uint32_t artSpriteIndex = art.IndexSprite();
+        // Please refer to ICN::OBJNARTI for artifact images. Since in the original game artifact UID start from 0 we have to deduct 1 from the current artifact ID.
+        const uint32_t artSpriteIndex = ( art.GetID() - 1 ) * 2 + 1;
+
         assert( artSpriteIndex > std::numeric_limits<uint8_t>::min() && artSpriteIndex <= std::numeric_limits<uint8_t>::max() );
 
         Maps::Tiles::updateTileById( tile, uidArtifact, static_cast<uint8_t>( artSpriteIndex ) );
@@ -657,25 +659,6 @@ namespace Maps
     {
         for ( uint32_t & value : tile.metadata() ) {
             value = 0;
-        }
-
-        const MP2::MapObjectType objectType = tile.GetObject( false );
-
-        switch ( objectType ) {
-        case MP2::OBJ_ARTIFACT:
-        case MP2::OBJ_DAEMON_CAVE:
-        case MP2::OBJ_GRAVEYARD:
-        case MP2::OBJ_SEA_CHEST:
-        case MP2::OBJ_SHIPWRECK:
-        case MP2::OBJ_SHIPWRECK_SURVIVOR:
-        case MP2::OBJ_SKELETON:
-        case MP2::OBJ_TREASURE_CHEST:
-        case MP2::OBJ_WAGON:
-            tile.metadata()[0] = Artifact::UNKNOWN;
-            break;
-
-        default:
-            break;
         }
     }
 

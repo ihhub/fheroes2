@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 13:04+0000\n"
+"POT-Creation-Date: 2023-05-24 01:33+0000\n"
 "PO-Revision-Date: 2023-05-06 15:07+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -8323,6 +8323,9 @@ msgstr "Невозможно переместить книгу заклинан�
 msgid "This item can't be traded."
 msgstr "Эту вещь нельзя продать."
 
+msgid "Invalid Artifact"
+msgstr "Некорректный артефакт"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} увеличивает Знания на %{count}."
 
@@ -9718,9 +9721,6 @@ msgstr ""
 "Грязная лопата торчала из могильного холма. После исследования, оказалось, "
 "что это зачарованная лопата гробокопателей, считавшаяся давным-давно "
 "потерянной смертными."
-
-msgid "Invalid Artifact"
-msgstr "Некорректный артефакт"
 
 msgid "Wood"
 msgstr "Древесина"
