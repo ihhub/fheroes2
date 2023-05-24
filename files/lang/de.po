@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 13:04+0000\n"
+"POT-Creation-Date: 2023-05-24 01:33+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -8489,6 +8489,9 @@ msgstr "Das Zauberbuch kann nicht umgestellt werden"
 msgid "This item can't be traded."
 msgstr "Dieser Gegenstand kann nicht gehandelt werden."
 
+msgid "Invalid Artifact"
+msgstr "Ungültiges Artefakt"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "Die %{name} erhöht Ihr Wissen um %{count}."
 
@@ -9965,9 +9968,6 @@ msgstr ""
 "In der Nähe wurde eine schmutzige Spaten in einen Erdhügel gestoßen. Bei der "
 "Untersuchung entdecken Sie, dass es sich um die verzauberte Spaten der "
 "Totengräber handelt, die die Sterblichen schon lange verloren glaubten."
-
-msgid "Invalid Artifact"
-msgstr "Ungültiges Artefakt"
 
 msgid "Wood"
 msgstr "Holz"

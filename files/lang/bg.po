@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 13:04+0000\n"
+"POT-Creation-Date: 2023-05-24 01:33+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -8348,6 +8348,9 @@ msgstr "Не може да се премести книгата с магий"
 msgid "This item can't be traded."
 msgstr "Този артикул не може да се търгува."
 
+msgid "Invalid Artifact"
+msgstr "Неработещ артефакт"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} увеличава знанията ти с %{count}."
 
@@ -9769,9 +9772,6 @@ msgstr ""
 "Мръсна лопата е забита в земна могила наблизо. След проучване откриваш, че "
 "това е омагьосаната лопата на Гробарите, дълго смятана за изгубена от "
 "смъртните."
-
-msgid "Invalid Artifact"
-msgstr "Неработещ артефакт"
 
 msgid "Wood"
 msgstr "Дърво"
