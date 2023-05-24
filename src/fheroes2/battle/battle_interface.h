@@ -46,7 +46,6 @@ class Castle;
 class HeroBase;
 class Kingdom;
 class LocalEvent;
-class Settings;
 
 namespace fheroes2
 {
