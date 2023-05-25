@@ -156,19 +156,6 @@ namespace fheroes2
         return true;
     }
 
-    bool ButtonBase::drawShadow( Image & output ) const
-    {
-        if ( !isVisible() ) {
-            return false;
-        }
-
-        const Sprite & sprite = isPressed() ? _getPressed() : ( isEnabled() ? _getReleased() : _getDisabled() );
-
-        fheroes2::addSoftShadow( sprite, output, { _offsetX, _offsetY }, { -5, 5 } );
-
-        return true;
-    }
-
     bool ButtonBase::drawOnPress( Display & output )
     {
         if ( isPressed() ) {

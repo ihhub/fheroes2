@@ -59,13 +59,23 @@
 
 namespace
 {
-    void drawRecruitWindow( fheroes2::Image & output, const fheroes2::Point & offset )
+    void drawButtonShadow( fheroes2::Image & output, const int buttonIcn, const uint32_t icnId, const fheroes2::Point offset )
+    {
+        const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcn, icnId );
+
+        fheroes2::addSoftShadow( buttonSprite, output, offset, { -5, 5 } );
+    }
+
+    void drawCostPerTroopFrame( fheroes2::Image & output, const fheroes2::Point & offset )
     {
         const fheroes2::Sprite & originalBackground = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
         const fheroes2::Sprite & recruitWindowTitle = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
 
         fheroes2::Image recruitWindow( 132, 67 );
+        // Reset the transparent layer.
         recruitWindow.reset();
+
+        // Copy recruit cost title background and borders to make shadows for it and to Blit it to the Recruit dialog.
         fheroes2::Copy( recruitWindowTitle, 3, 58, recruitWindow, 3, 0, 63, 14 );
         fheroes2::Copy( recruitWindowTitle, recruitWindowTitle.width() - 66, 58, recruitWindow, 66, 0, 63, 14 );
         fheroes2::Copy( originalBackground, 138, 54, recruitWindow, 0, 0, 3, 63 );
@@ -272,36 +282,50 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
     // Render the recruit count background from original recruit dialog ICN.
     fheroes2::Image background( 68, 19 );
-    fheroes2::Copy( originalBackground, 134, 159, background, 0, 0, 68, 19 );
+    fheroes2::Copy( originalBackground, 134, 159, background, 0, 0, background.width(), background.height() );
 
     if ( isEvilInterface ) {
         fheroes2::ApplyPalette( background, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
     }
 
     fheroes2::Point dst_pt( dialogOffset.x + 118, dialogOffset.y + 143 );
-    fheroes2::Copy( background, 0, 0, display, dst_pt.x, dst_pt.y, 68, 19 );
+    fheroes2::Copy( background, 0, 0, display, dst_pt.x, dst_pt.y, background.width(), background.height() );
     fheroes2::addSoftShadow( background, display, dst_pt, { -5, 5 } );
 
     dst_pt.x = dialogOffset.x + 132;
     dst_pt.y = dialogOffset.y + 38;
-    drawRecruitWindow( display, dst_pt );
+    drawCostPerTroopFrame( display, dst_pt );
 
     // Prepare buttons.
-    fheroes2::Button buttonOk( dialogOffset.x + 18, dialogOffset.y + 233, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-    fheroes2::Button buttonCancel( dialogOffset.x + 181, dialogOffset.y + 233, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
+    dst_pt.x = dialogOffset.x + 18;
+    dst_pt.y = dialogOffset.y + 233;
+
+    int buttonId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, buttonId, 0, 1 );
+    drawButtonShadow( display, buttonId, 0, dst_pt );
+
+    dst_pt.x = dialogOffset.x + 181;
+
+    buttonId = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
+    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, buttonId, 0, 1 );
+    drawButtonShadow( display, buttonId, 0, dst_pt );
 
     dst_pt.x = dialogOffset.x + 218;
     dst_pt.y = dialogOffset.y + 140;
 
-    fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, isEvilInterface ? ICN::BUTTON_SMALL_MAX_EVIL : ICN::BUTTON_SMALL_MAX_GOOD, 0, 1 );
+    buttonId = isEvilInterface ? ICN::BUTTON_SMALL_MAX_EVIL : ICN::BUTTON_SMALL_MAX_GOOD;
+    fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, buttonId, 0, 1 );
     fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, isEvilInterface ? ICN::BUTTON_SMALL_MIN_EVIL : ICN::BUTTON_SMALL_MIN_GOOD, 0, 1 );
+    drawButtonShadow( display, buttonId, 0, dst_pt );
 
     dst_pt.x = dialogOffset.x + 189;
     dst_pt.y = dialogOffset.y + 138;
     fheroes2::Button buttonUp( dst_pt.x, dst_pt.y, ICN::RECRUIT, 0, 1 );
+    drawButtonShadow( display, ICN::RECRUIT, 0, dst_pt );
 
     dst_pt.y = dialogOffset.y + 153;
     fheroes2::Button buttonDn( dst_pt.x, dst_pt.y, ICN::RECRUIT, 2, 3 );
+    drawButtonShadow( display, ICN::RECRUIT, 2, dst_pt );
 
     fheroes2::TimedEventValidator timedButtonUp( [&buttonUp]() { return buttonUp.isPressed(); } );
     fheroes2::TimedEventValidator timedButtonDn( [&buttonDn]() { return buttonDn.isPressed(); } );
@@ -318,17 +342,19 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
     const bool showDowngradedMonsterSwitchButtons = allowDowngradedMonster && ( monster0.GetDowngrade() != monster0 );
 
     if ( showDowngradedMonsterSwitchButtons ) {
-        monsterSwitchLeft.setSprite( fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 0 ), fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 1 ) );
-        monsterSwitchRight.setSprite( fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 0 ), fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 1 ) );
+        const fheroes2::Sprite & leftButtonSprite = fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 0 );
+        monsterSwitchLeft.setSprite( leftButtonSprite, fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 1 ) );
 
         dst_pt.x = dialogOffset.x + 6;
         dst_pt.y = dialogOffset.y + 64;
         monsterSwitchLeft.setPosition( dst_pt.x, dst_pt.y );
+        fheroes2::addSoftShadow( leftButtonSprite, display, dst_pt, { -5, 5 } );
+
+        const fheroes2::Sprite & rightButtonSprite = fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 0 );
+        monsterSwitchRight.setSprite( rightButtonSprite, fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 1 ) );
         dst_pt.x = dialogOffset.x + 105;
         monsterSwitchRight.setPosition( dst_pt.x, dst_pt.y );
-
-        monsterSwitchLeft.drawShadow();
-        monsterSwitchRight.drawShadow();
+        fheroes2::addSoftShadow( rightButtonSprite, display, dst_pt, { -5, 5 } );
 
         // Render Left and Right buttons to restore their initial state later.
         monsterSwitchLeft.draw();
@@ -341,13 +367,6 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         monsterSwitchLeft.disable();
         monsterSwitchRight.disable();
     }
-
-    // Render shadows for UI buttons.
-    buttonOk.drawShadow();
-    buttonCancel.drawShadow();
-    buttonMax.drawShadow();
-    buttonUp.drawShadow();
-    buttonDn.drawShadow();
 
     // Render Up and Down buttons to restore their initial state later.
     buttonUp.draw();
@@ -631,7 +650,7 @@ void Dialog::DwellingInfo( const Monster & monster, const uint32_t available )
 
     const fheroes2::StandardWindow window( dialogOffset.x, dialogOffset.y, windowSize.width, windowSize.height, true, display );
 
-    drawRecruitWindow( display, { dialogOffset.x + 122, dialogOffset.y + 38 } );
+    drawCostPerTroopFrame( display, { dialogOffset.x + 122, dialogOffset.y + 38 } );
     RedrawMonsterInfo( window.activeArea(), monster, available, false );
 
     display.render( window.windowWithShadowArea() );
