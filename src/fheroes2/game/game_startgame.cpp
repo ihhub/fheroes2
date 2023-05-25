@@ -1290,47 +1290,52 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
     return res;
 }
 
-void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
+void Interface::Basic::MouseCursorAreaClickLeft( const int32_t tileIndex )
 {
-    Heroes * from_hero = GetFocusHeroes();
-    const Maps::Tiles & tile = world.GetTiles( index_maps );
+    Heroes * focusedHero = GetFocusHeroes();
+    const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
     switch ( Cursor::WithoutDistanceThemes( Cursor::Get().Themes() ) ) {
     case Cursor::HEROES: {
-        Heroes * to_hero = tile.GetHeroes();
-        // focus change/open hero
-        if ( nullptr != to_hero ) {
-            if ( !from_hero || from_hero != to_hero ) {
-                SetFocus( to_hero, false );
-                RedrawFocus();
-            }
-            else {
-                Game::OpenHeroesDialog( *to_hero, true, true );
-                Cursor::Get().SetThemes( Cursor::HEROES );
-            }
+        Heroes * otherHero = tile.GetHeroes();
+        if ( otherHero == nullptr ) {
+            break;
         }
+
+        if ( focusedHero == nullptr || focusedHero != otherHero ) {
+            SetFocus( otherHero, false );
+            RedrawFocus();
+        }
+        else {
+            Game::OpenHeroesDialog( *otherHero, true, true );
+            Cursor::Get().SetThemes( Cursor::HEROES );
+        }
+
         break;
     }
 
     case Cursor::CASTLE: {
-        // correct index for castle
         const MP2::MapObjectType objectType = tile.GetObject();
-        if ( MP2::OBJ_NON_ACTION_CASTLE != objectType && MP2::OBJ_CASTLE != objectType )
+        if ( MP2::OBJ_NON_ACTION_CASTLE != objectType && MP2::OBJ_CASTLE != objectType ) {
             break;
+        }
 
-        Castle * to_castle = world.getCastle( tile.GetCenter() );
-        if ( to_castle == nullptr )
+        Castle * otherCastle = world.getCastle( tile.GetCenter() );
+        if ( otherCastle == nullptr ) {
             break;
+        }
 
-        const Castle * from_castle = GetFocusCastle();
-        if ( !from_castle || from_castle != to_castle ) {
-            SetFocus( to_castle );
+        const Castle * focusedCastle = GetFocusCastle();
+
+        if ( focusedCastle == nullptr || focusedCastle != otherCastle ) {
+            SetFocus( otherCastle );
             RedrawFocus();
         }
         else {
-            Game::OpenCastleDialog( *to_castle );
+            Game::OpenCastleDialog( *otherCastle );
             Cursor::Get().SetThemes( Cursor::CASTLE );
         }
+
         break;
     }
     case Cursor::CURSOR_HERO_FIGHT:
@@ -1339,19 +1344,28 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
     case Cursor::CURSOR_HERO_ANCHOR:
     case Cursor::CURSOR_HERO_MEET:
     case Cursor::CURSOR_HERO_ACTION:
-    case Cursor::CURSOR_HERO_BOAT_ACTION:
-        if ( from_hero == nullptr )
+    case Cursor::CURSOR_HERO_BOAT_ACTION: {
+        if ( focusedHero == nullptr ) {
             break;
+        }
 
-        if ( from_hero->isMoveEnabled() )
-            from_hero->SetMove( false );
-        else
-            ShowPathOrStartMoveHero( from_hero, index_maps );
+        if ( focusedHero->isMoveEnabled() ) {
+            focusedHero->SetMove( false );
+        }
+        else {
+            ShowPathOrStartMoveHero( focusedHero, tileIndex );
+        }
+
         break;
+    }
 
     default:
-        if ( from_hero )
-            from_hero->SetMove( false );
+        if ( focusedHero == nullptr ) {
+            break;
+        }
+
+        focusedHero->SetMove( false );
+
         break;
     }
 }
@@ -1360,7 +1374,6 @@ void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
 {
     Heroes * hero = GetFocusHeroes();
 
-    // stop hero
     if ( hero && hero->isMoveEnabled() ) {
         hero->SetMove( false );
         Cursor::Get().SetThemes( GetCursorTileIndex( index_maps ) );
@@ -1371,27 +1384,32 @@ void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
 
         DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
 
-        if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) )
+        if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) ) {
             Dialog::QuickInfo( tile );
-        else
+        }
+        else {
             switch ( tile.GetObject() ) {
             case MP2::OBJ_NON_ACTION_CASTLE:
             case MP2::OBJ_CASTLE: {
                 const Castle * castle = world.getCastle( tile.GetCenter() );
+
                 if ( castle ) {
                     Dialog::QuickInfo( *castle );
                 }
                 else {
                     Dialog::QuickInfo( tile );
                 }
+
                 break;
             }
 
             case MP2::OBJ_HEROES: {
                 const Heroes * heroes = tile.GetHeroes();
+
                 if ( heroes ) {
                     Dialog::QuickInfo( *heroes );
                 }
+
                 break;
             }
 
@@ -1399,5 +1417,6 @@ void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
                 Dialog::QuickInfo( tile );
                 break;
             }
+        }
     }
 }

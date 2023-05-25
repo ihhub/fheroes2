@@ -215,7 +215,7 @@ namespace Interface
 
         fheroes2::GameMode StartGame();
 
-        void MouseCursorAreaClickLeft( const int32_t index_maps );
+        void MouseCursorAreaClickLeft( const int32_t tileIndex );
         void MouseCursorAreaPressRight( int32_t ) const;
 
         static int GetCursorTileIndex( int32_t );
