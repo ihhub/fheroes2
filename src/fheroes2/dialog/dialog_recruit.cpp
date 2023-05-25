@@ -59,9 +59,9 @@
 
 namespace
 {
-    void drawButtonShadow( fheroes2::Image & output, const int buttonIcn, const uint32_t icnId, const fheroes2::Point offset )
+    void drawButtonShadow( fheroes2::Image & output, const int buttonIcn, const uint32_t icnIndex, const fheroes2::Point offset )
     {
-        const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcn, icnId );
+        const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcn, icnIndex );
 
         fheroes2::addSoftShadow( buttonSprite, output, offset, { -5, 5 } );
     }
