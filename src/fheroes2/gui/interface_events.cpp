@@ -154,19 +154,23 @@ void Interface::Basic::EventNextHero()
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     const KingdomHeroes & myHeroes = myKingdom.GetHeroes();
 
-    if ( myHeroes.empty() )
+    if ( myHeroes.empty() ) {
         return;
+    }
 
     if ( GetFocusHeroes() ) {
         KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), GetFocusHeroes() );
         KingdomHeroes::const_iterator currentHero = it;
+
         do {
             ++it;
-            if ( it == myHeroes.end() )
+
+            if ( it == myHeroes.end() ) {
                 it = myHeroes.begin();
+            }
+
             if ( ( *it )->MayStillMove( true, false ) ) {
                 SetFocus( *it, false );
-                CalculateHeroPath( *it, -1 );
                 break;
             }
         } while ( it != currentHero );
@@ -175,11 +179,11 @@ void Interface::Basic::EventNextHero()
         for ( Heroes * hero : myHeroes ) {
             if ( hero->MayStillMove( true, false ) ) {
                 SetFocus( hero, false );
-                CalculateHeroPath( hero, -1 );
                 break;
             }
         }
     }
+
     RedrawFocus();
 }
 

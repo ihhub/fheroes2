@@ -222,15 +222,17 @@ namespace Interface
         static int GetCursorFocusCastle( const Castle &, const Maps::Tiles & );
         static int GetCursorFocusHeroes( const Heroes &, const Maps::Tiles & );
         static int GetCursorFocusShipmaster( const Heroes &, const Maps::Tiles & );
-        void CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const;
 
         // Regenerates the game area and updates the panel positions depending on the UI settings
         void Reset();
 
     private:
         Basic();
+
+        void CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const;
         void ShowPathOrStartMoveHero( Heroes *, int32_t );
         void MoveHeroFromArrowKeys( Heroes & hero, int direct );
+
         fheroes2::GameMode HumanTurn( const bool isload );
 
         GameArea gameArea;

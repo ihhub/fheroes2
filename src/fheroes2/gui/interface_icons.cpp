@@ -240,7 +240,6 @@ void Interface::HeroesIcons::ActionListSingleClick( HEROES & item )
         Interface::Basic & I = Interface::Basic::Get();
 
         I.SetFocus( item, false );
-        I.CalculateHeroPath( item, -1 );
         I.RedrawFocus();
     }
 }
