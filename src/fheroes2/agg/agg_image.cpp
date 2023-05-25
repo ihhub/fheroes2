@@ -2517,7 +2517,7 @@ namespace fheroes2
                     out.resize( source.height(), source.width() );
                     Transpose( source, out );
                     out = Flip( out, false, true );
-                    out.setPosition( source.y(), source.x() );
+                    out.setPosition( source.y() - i, source.x() );
                 }
                 return true;
             case ICN::MONSTER_SWITCH_RIGHT_ARROW:
