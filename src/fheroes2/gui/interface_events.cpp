@@ -32,7 +32,6 @@
 #include "artifact_ultimate.h"
 #include "audio.h"
 #include "audio_manager.h"
-#include "cursor.h"
 #include "dialog.h"
 #include "dialog_system_options.h"
 #include "direction.h"
@@ -49,12 +48,10 @@
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "kingdom.h"
-#include "localevent.h"
 #include "logging.h"
 #include "m82.h"
 #include "maps.h"
 #include "maps_tiles.h"
-#include "math_base.h"
 #include "mp2.h"
 #include "mus.h"
 #include "puzzle.h"
@@ -88,12 +85,6 @@ void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, const int32_t des
 
         gameArea.SetRedraw();
         buttonsArea.SetRedraw();
-
-        const fheroes2::Point & mousePos = LocalEvent::Get().GetMouseCursor();
-
-        if ( gameArea.GetROI() & mousePos ) {
-            Cursor::Get().SetThemes( GetCursorTileIndex( gameArea.GetValidTileIdFromPoint( mousePos ) ) );
-        }
     }
     // Start the hero's movement
     else if ( path.isValid() && hero->MayStillMove( false, true ) ) {
