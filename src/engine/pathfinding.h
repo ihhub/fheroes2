@@ -59,14 +59,14 @@ public:
 
     virtual uint32_t getDistance( int targetIndex ) const
     {
-        assert( targetIndex >= 0 && targetIndex < _cache.size() );
+        assert( targetIndex >= 0 && static_cast<size_t>( targetIndex ) < _cache.size() );
 
         return _cache[targetIndex]._cost;
     }
 
     virtual const T & getNode( int targetIndex ) const
     {
-        assert( targetIndex >= 0 && targetIndex < _cache.size() );
+        assert( targetIndex >= 0 && static_cast<size_t>( targetIndex ) < _cache.size() );
 
         return _cache[targetIndex];
     }
