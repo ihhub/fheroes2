@@ -229,8 +229,7 @@ namespace Interface
     private:
         Basic();
 
-        void CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const;
-        void ShowPathOrStartMoveHero( Heroes *, int32_t );
+        void ShowPathOrStartMoveHero( Heroes * hero, const int32_t destinationIdx );
         void MoveHeroFromArrowKeys( Heroes & hero, int direct );
 
         fheroes2::GameMode HumanTurn( const bool isload );

@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <cassert>
 #include <cstdint>
 #include <vector>
 
@@ -58,11 +59,15 @@ public:
 
     virtual uint32_t getDistance( int targetIndex ) const
     {
+        assert( targetIndex >= 0 && targetIndex < _cache.size() );
+
         return _cache[targetIndex]._cost;
     }
 
     virtual const T & getNode( int targetIndex ) const
     {
+        assert( targetIndex >= 0 && targetIndex < _cache.size() );
+
         return _cache[targetIndex];
     }
 

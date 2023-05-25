@@ -71,50 +71,31 @@
 #include "view_world.h"
 #include "world.h"
 
-void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const
+void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, const int32_t destinationIdx )
 {
-    if ( hero == nullptr ) {
-        return;
-    }
-
-    hero->SetMove( false );
-    hero->calculatePath( destinationIdx );
-
-    const Route::Path & path = hero->GetPath();
-
-    if ( destinationIdx < 0 ) {
-        destinationIdx = path.GetDestinationIndex();
-    }
-
-    if ( destinationIdx < 0 ) {
-        return;
-    }
-
-    DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
-
-    gameArea.SetRedraw();
-    buttonsArea.SetRedraw();
-
-    const fheroes2::Point & mousePos = LocalEvent::Get().GetMouseCursor();
-    if ( gameArea.GetROI() & mousePos ) {
-        const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( mousePos );
-        Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
-    }
-}
-
-void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, int32_t destinationIdx )
-{
-    if ( hero == nullptr ) {
+    if ( hero == nullptr || !Maps::isValidAbsIndex( destinationIdx ) ) {
         return;
     }
 
     const Route::Path & path = hero->GetPath();
 
-    // show path
+    // Calculate and show the hero's path
     if ( path.GetDestinationIndex() != destinationIdx ) {
-        CalculateHeroPath( hero, destinationIdx );
+        hero->SetMove( false );
+        hero->calculatePath( destinationIdx );
+
+        DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
+
+        gameArea.SetRedraw();
+        buttonsArea.SetRedraw();
+
+        const fheroes2::Point & mousePos = LocalEvent::Get().GetMouseCursor();
+
+        if ( gameArea.GetROI() & mousePos ) {
+            Cursor::Get().SetThemes( GetCursorTileIndex( gameArea.GetValidTileIdFromPoint( mousePos ) ) );
+        }
     }
-    // start move
+    // Start the hero's movement
     else if ( path.isValid() && hero->MayStillMove( false, true ) ) {
         SetFocus( hero, true );
         RedrawFocus();
