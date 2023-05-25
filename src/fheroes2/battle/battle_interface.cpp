@@ -1569,7 +1569,7 @@ void Battle::Interface::RedrawArmies()
             }
 
             for ( const Unit * unit : troopCounterAfterWall ) {
-                RedrawTroopSprite( *unit );
+                RedrawTroopCount( *unit );
             }
 
             for ( const Unit * unit : movingTroopAfterWall ) {
