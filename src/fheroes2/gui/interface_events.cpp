@@ -104,30 +104,22 @@ void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, const int32_t des
     }
 }
 
-void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, int direct )
+void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, const int direction )
 {
-    const bool fromWater = hero.isShipMaster();
-    if ( Maps::isValidDirection( hero.GetIndex(), direct ) ) {
-        int32_t dst = Maps::GetDirectionIndex( hero.GetIndex(), direct );
-        const Maps::Tiles & tile = world.GetTiles( dst );
-        bool allow = false;
+    const int32_t heroIndex = hero.GetIndex();
 
-        switch ( tile.GetObject() ) {
-        case MP2::OBJ_BOAT:
-        case MP2::OBJ_CASTLE:
-        case MP2::OBJ_HEROES:
-        case MP2::OBJ_MONSTER:
-            allow = true;
-            break;
-
-        default:
-            allow = ( tile.isPassableFrom( Direction::CENTER, fromWater, false, hero.GetColor() ) || MP2::isActionObject( tile.GetObject(), fromWater ) );
-            break;
-        }
-
-        if ( allow )
-            ShowPathOrStartMoveHero( &hero, dst );
+    if ( !Maps::isValidDirection( heroIndex, direction ) ) {
+        return;
     }
+
+    const int32_t dstIndex = Maps::GetDirectionIndex( heroIndex, direction );
+    const Maps::Tiles & tile = world.GetTiles( dstIndex );
+
+    if ( !tile.isPassableFrom( Direction::CENTER, hero.isShipMaster(), false, hero.GetColor() ) ) {
+        return;
+    }
+
+    ShowPathOrStartMoveHero( &hero, dstIndex );
 }
 
 void Interface::Basic::EventNextHero()

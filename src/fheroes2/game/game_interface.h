@@ -230,7 +230,7 @@ namespace Interface
         Basic();
 
         void ShowPathOrStartMoveHero( Heroes * hero, const int32_t destinationIdx );
-        void MoveHeroFromArrowKeys( Heroes & hero, int direct );
+        void MoveHeroFromArrowKeys( Heroes & hero, const int direction );
 
         fheroes2::GameMode HumanTurn( const bool isload );
 
