@@ -162,7 +162,8 @@ namespace
                 }
                 else if ( fadeAlpha == 0 ) {
                     // This alpha is for fully dark image so fill it with the black color.
-                    Fill( display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height, fheroes2::GetColorId( 0, 0, 0 ) );
+                    // Color index '0' in all game palettes (including videos) corresponds to the black color.
+                    Fill( display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height, 0 );
                 }
                 else {
                     ApplyAlpha( temp, 0, 0, display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height, fadeAlpha );

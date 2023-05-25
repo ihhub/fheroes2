@@ -246,8 +246,6 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     // Fade-out screen before playing video.
     fheroes2::fadeOutDisplay();
 
-    display.fill( 0 );
-
     const Text loadingScreen( _( "Loading video. Please wait..." ), Font::BIG );
     loadingScreen.Blit( display.width() / 2 - loadingScreen.w() / 2, display.height() / 2 - loadingScreen.h() / 2 );
     display.render();
@@ -364,8 +362,6 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
-
-    display.fill( 0 );
 
     const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::X_IVY, 1 );
     fheroes2::Blit( background, 0, 0, display, roiOffset.x, roiOffset.y, background.width(), background.height() );

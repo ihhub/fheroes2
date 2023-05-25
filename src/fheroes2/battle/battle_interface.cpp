@@ -1393,7 +1393,7 @@ void Battle::Interface::RedrawPartialFinish()
 {
     redrawPreRender();
 
-    fheroes2::Display::instance().render();
+    fheroes2::Display::instance().render( _interfacePosition );
 }
 
 void Battle::Interface::redrawPreRender()
