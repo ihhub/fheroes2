@@ -651,6 +651,11 @@ namespace fheroes2
             return;
         }
 
+        if ( _text.empty() ) {
+            // Nothing needs to be done.
+            return;
+        }
+
         const int32_t originalTextWidth = getTruncatedLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
         if ( originalTextWidth <= maxWidth ) {
             // Nothing to do. The text is not longer than the provided maximum width.

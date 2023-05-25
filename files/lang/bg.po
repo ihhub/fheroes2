@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 10:26+0000\n"
+"POT-Creation-Date: 2023-05-24 01:33+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4856,9 +4856,6 @@ msgstr ""
 msgid "Keyboard|SPACE"
 msgstr ""
 
-msgid "Keyboard|LANG"
-msgstr ""
-
 msgid "Keyboard|ABC"
 msgstr ""
 
@@ -6517,6 +6514,41 @@ msgstr ""
 " \n"
 "Този град е окупиран от твоя герой %{hero}."
 
+msgid "This spell is already in use."
+msgstr "Това заклинание вече се използва."
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+"Трябва да си в рамките на %{count} интервали от чудовище, за да работи "
+"заклинанието Видения."
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+"Трябва да стоиш на входа на мина (дъскорезниците и алхимиците не се броят), "
+"за да направиш това заклинание."
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
+msgstr ""
+
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} е %{race} (Ниво %{level})"
 
@@ -6604,18 +6636,11 @@ msgstr "Избери град за пристанище."
 msgid "%{spell} failed!!!"
 msgstr "%{spell} е неуспешна!!!"
 
-msgid "This spell is already in use."
-msgstr "Това заклинание вече се използва."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Вражеските герои вече могат да бъдат идентифицирани напълно."
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
-msgstr ""
-"Трябва да си в рамките на %{count} интервали от чудовище, за да работи "
-"заклинанието Видения."
+msgid "Identify Hero"
+msgstr "Идентифицирай героя"
 
 msgid "The creatures are willing to join us!"
 msgstr "Съществата са готови да се присъединят към нас!"
@@ -6640,13 +6665,6 @@ msgstr "Тези слаби създания със сигурност ще из
 
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Страхувам се, че тези същества са в настроение за битка."
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
-msgstr ""
-"Трябва да стоиш на входа на мина (дъскорезниците и алхимиците не се броят), "
-"за да направиш това заклинание."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr ""
@@ -8330,6 +8348,9 @@ msgstr "Не може да се премести книгата с магий"
 msgid "This item can't be traded."
 msgstr "Този артикул не може да се търгува."
 
+msgid "Invalid Artifact"
+msgstr "Неработещ артефакт"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} увеличава знанията ти с %{count}."
 
@@ -9752,9 +9773,6 @@ msgstr ""
 "това е омагьосаната лопата на Гробарите, дълго смятана за изгубена от "
 "смъртните."
 
-msgid "Invalid Artifact"
-msgstr "Неработещ артефакт"
-
 msgid "Wood"
 msgstr "Дърво"
 
@@ -10182,9 +10200,6 @@ msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr ""
 "Позволява на заклинателя да вижда подробна информация за вражеските герои."
 
-msgid "Identify Hero"
-msgstr "Идентифицирай героя"
-
 msgid "Summon Boat"
 msgstr "Призови кораб"
 
@@ -10385,19 +10400,3 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} increases your morale."
-#~ msgstr "%{name} повишава морала ти."
-
-#~ msgid "Attention"
-#~ msgstr "Внимание"
-
-#~ msgid ""
-#~ "Your version of Heroes of Might and Magic II does not support any other "
-#~ "languages than English."
-#~ msgstr ""
-#~ "Твоята версия на Heroes of Might and Magic II не поддържа други езици "
-#~ "освен английски."
-
-#~ msgid "Location: "
-#~ msgstr "Местоположение: "

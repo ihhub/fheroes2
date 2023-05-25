@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 10:26+0000\n"
+"POT-Creation-Date: 2023-05-24 01:33+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4922,9 +4922,6 @@ msgstr "123"
 msgid "Keyboard|SPACE"
 msgstr "LEERTASTE"
 
-msgid "Keyboard|LANG"
-msgstr "SPRA."
-
 msgid "Keyboard|ABC"
 msgstr "ABC"
 
@@ -6661,6 +6658,41 @@ msgstr ""
 " \n"
 "Diese Stadt ist von deinem Helden %{hero} besetzt."
 
+msgid "This spell is already in use."
+msgstr "Dieser Zauber ist bereits in Gebrauch."
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+"Sie müssen sich innerhalb von %{count} Feldern eines Monsters befinden, "
+"damit die Vision wirkt."
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+"Sie müssen am Eingang einer Mine stehen (Sägewerke und Alchemisten zählen "
+"nicht), um diesen Zauber zu wirken."
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
+msgstr ""
+
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} (Stufe %{level} %{race})"
 
@@ -6748,18 +6780,11 @@ msgstr "Wählen Sie die Zielstadt aus."
 msgid "%{spell} failed!!!"
 msgstr "%{spell} fehlgeschlagen!!!"
 
-msgid "This spell is already in use."
-msgstr "Dieser Zauber ist bereits in Gebrauch."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Feindliche Helden sind jetzt vollständig identifizierbar."
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
-msgstr ""
-"Sie müssen sich innerhalb von %{count} Feldern eines Monsters befinden, "
-"damit die Vision wirkt."
+msgid "Identify Hero"
+msgstr "Held identifiz."
 
 msgid "The creatures are willing to join us!"
 msgstr "Die Kreaturen sind bereit, sich uns anzuschließen!"
@@ -6784,13 +6809,6 @@ msgstr "Diese schwachen Kreaturen werden sicher vor uns fliehen."
 
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Ich fürchte, diese Kreaturen sind in der Stimmung für einen Kampf."
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
-msgstr ""
-"Sie müssen am Eingang einer Mine stehen (Sägewerke und Alchemisten zählen "
-"nicht), um diesen Zauber zu wirken."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr ""
@@ -8471,6 +8489,9 @@ msgstr "Das Zauberbuch kann nicht umgestellt werden"
 msgid "This item can't be traded."
 msgstr "Dieser Gegenstand kann nicht gehandelt werden."
 
+msgid "Invalid Artifact"
+msgstr "Ungültiges Artefakt"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "Die %{name} erhöht Ihr Wissen um %{count}."
 
@@ -9948,9 +9969,6 @@ msgstr ""
 "Untersuchung entdecken Sie, dass es sich um die verzauberte Spaten der "
 "Totengräber handelt, die die Sterblichen schon lange verloren glaubten."
 
-msgid "Invalid Artifact"
-msgstr "Ungültiges Artefakt"
-
 msgid "Wood"
 msgstr "Holz"
 
@@ -10396,9 +10414,6 @@ msgstr ""
 "Ermöglicht es dem Zaubernden, detaillierte Informationen über feindliche "
 "Helden einzusehen."
 
-msgid "Identify Hero"
-msgstr "Held identifiz."
-
 msgid "Summon Boat"
 msgstr "Boot herbeirufen"
 
@@ -10606,19 +10621,3 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} increases your morale."
-#~ msgstr "Der %{name} erhöht Ihre Moral."
-
-#~ msgid "Attention"
-#~ msgstr "Achtung"
-
-#~ msgid ""
-#~ "Your version of Heroes of Might and Magic II does not support any other "
-#~ "languages than English."
-#~ msgstr ""
-#~ "Ihre Version von Heroes of Might and Magic II unterstützt keine anderen "
-#~ "Sprachen als Englisch."
-
-#~ msgid "Location: "
-#~ msgstr "Ort: "

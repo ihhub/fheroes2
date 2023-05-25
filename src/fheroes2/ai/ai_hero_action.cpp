@@ -1198,7 +1198,8 @@ namespace
             Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
-                hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
+                // Daemon Cave always gives 2500 Gold after a battle
+                hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, 2500 ) );
             }
             else {
                 AIBattleLose( hero, res, true );
@@ -1977,7 +1978,7 @@ namespace AI
             }
             else if ( MP2::isActionObject( hero.GetMapsObject(), hero.isShipMaster() ) ) {
                 // use the action object hero is standing on (Stone Liths)
-                hero.Action( hero.GetIndex(), true );
+                hero.Action( hero.GetIndex() );
             }
         }
     }

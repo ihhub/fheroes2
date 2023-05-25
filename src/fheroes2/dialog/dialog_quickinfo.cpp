@@ -678,20 +678,22 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     dst_pt.y += castleIcon.height() + 2;
     text.draw( dst_pt.x, dst_pt.y, display );
 
-    const uint32_t count = castle.GetArmy().GetOccupiedSlotCount();
-
     // draw defenders
-    if ( count == 0 ) {
-        text.set( _( "None" ), fheroes2::FontType::smallWhite() );
-        dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
-        dst_pt.y += 47;
-        text.draw( dst_pt.x, dst_pt.y, display );
-    }
-    else if ( isDetailedView || thievesGuildsCount > 0 ) {
-        dst_pt.x = cur_rt.x - 1;
-        dst_pt.y += 21;
+    if ( isDetailedView || thievesGuildsCount > 0 ) {
+        const Army & castleArmy = castle.GetArmy();
 
-        Army::drawMultipleMonsterLines( castle.GetArmy(), dst_pt.x, dst_pt.y, 192, false, isDetailedView, true, thievesGuildsCount );
+        if ( castleArmy.isValid() ) {
+            dst_pt.x = cur_rt.x - 1;
+            dst_pt.y += 21;
+
+            Army::drawMultipleMonsterLines( castleArmy, dst_pt.x, dst_pt.y, 192, false, isDetailedView, true, thievesGuildsCount );
+        }
+        else {
+            text.set( _( "None" ), fheroes2::FontType::smallWhite() );
+            dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
+            dst_pt.y += 47;
+            text.draw( dst_pt.x, dst_pt.y, display );
+        }
     }
     else {
         text.set( _( "Unknown" ), fheroes2::FontType::smallWhite() );

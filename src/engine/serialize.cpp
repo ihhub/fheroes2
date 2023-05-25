@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -342,11 +342,15 @@ void StreamBuf::reallocbuf( size_t sz )
 
 void StreamBuf::put8( const uint8_t v )
 {
-    if ( sizep() == 0 )
+    if ( sizep() == 0 ) {
         reallocbuf( capacity() + capacity() / 2 );
+        assert( itput != nullptr );
+    }
 
-    if ( sizep() > 0 )
-        *itput++ = v;
+    if ( sizep() > 0 ) {
+        *itput = v;
+        ++itput;
+    }
 }
 
 uint8_t StreamBuf::get8()

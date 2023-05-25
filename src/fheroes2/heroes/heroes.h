@@ -457,7 +457,7 @@ public:
     void SetMove( bool );
     bool isAction() const;
     void ResetAction();
-    void Action( int tileIndex, bool isDestination );
+    void Action( int tileIndex );
     void ActionNewPosition( const bool allowMonsterAttack );
     void ApplyPenaltyMovement( uint32_t penalty );
     void ActionSpellCast( const Spell & spell );
@@ -574,7 +574,6 @@ private:
     void LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect = false );
     void AngleStep( int );
     bool MoveStep( const bool jumpToNextTile );
-    static void MoveStep( Heroes &, int32_t to, bool newpos );
     static uint32_t GetStartingXp();
     bool isInVisibleMapArea() const;
 

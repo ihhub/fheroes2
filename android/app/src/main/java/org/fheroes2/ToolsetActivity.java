@@ -95,6 +95,10 @@ public final class ToolsetActivity extends AppCompatActivity
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
+            if ( status.isBackgroundTaskExecuting ) {
+                return;
+            }
+
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
             new Thread( () -> {

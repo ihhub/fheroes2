@@ -47,6 +47,7 @@
 #endif
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_manager.h"
 #include "bin_info.h"
 #include "core.h"
@@ -58,6 +59,7 @@
 #include "game_video.h"
 #include "game_video_type.h"
 #include "h2d.h"
+#include "icn.h"
 #include "image.h"
 #include "image_palette.h"
 #include "localevent.h"
@@ -185,6 +187,9 @@ namespace
                 _aggInitializer.reset( new AGG::AGGInitializer );
 
                 _h2dInitializer.reset( new fheroes2::h2d::H2DInitializer );
+
+                // Verify that the font is present and it is not corrupted.
+                fheroes2::AGG::GetICN( ICN::FONT, 0 );
             }
             catch ( ... ) {
                 fheroes2::Display & display = fheroes2::Display::instance();
