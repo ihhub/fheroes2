@@ -42,6 +42,7 @@
 #include "icn.h"
 #include "image.h"
 #include "image_tool.h"
+#include "logging.h"
 #include "math_base.h"
 #include "pal.h"
 #include "rand.h"
@@ -480,6 +481,12 @@ namespace fheroes2
                 }
                 else {
                     sizeData = blockSize - header1.offsetData;
+                }
+
+                if ( headerSize + header1.offsetData + sizeData > body.size() ) {
+                    // This is possibly a corrupted data.
+                    ERROR_LOG( "ICN Id" << id << ", index " << i << " is being corrupted. Make sure that you own an official version of the game." )
+                    continue;
                 }
 
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
