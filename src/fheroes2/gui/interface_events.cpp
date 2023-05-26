@@ -65,6 +65,7 @@
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "view_world.h"
 #include "world.h"
 
@@ -323,10 +324,16 @@ fheroes2::GameMode Interface::Basic::EventScenarioInformation()
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
 
+        // We are opening campaign scenario info. It is a full screen image change. So do th Adventure map screen fade-out.
+        fheroes2::fadeOutDisplay();
+
         AudioManager::ResetAudio();
 
         const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
         if ( returnMode == fheroes2::GameMode::CANCEL ) {
+            // We are going back to the Adventure map with fade-in.
+            Game::setDisplayFadeIn();
+
             saver.restore();
 
             Game::restoreSoundsForCurrentFocus();

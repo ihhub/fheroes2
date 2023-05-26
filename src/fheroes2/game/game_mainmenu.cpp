@@ -58,6 +58,7 @@
 #include "ui_dialog.h"
 #include "ui_language.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -177,6 +178,9 @@ void Game::mainGameLoop( bool isFirstGameRun )
             break;
         }
     }
+
+    // We are quitting the game, so fade-out the screen.
+    fheroes2::fadeOutDisplay();
 }
 
 fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
@@ -249,7 +253,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     buttonCredits.draw();
     buttonQuit.draw();
 
-    display.render();
+    fheroes2::validateFadeInAndRender();
 
     const double scaleX = static_cast<double>( display.width() ) / fheroes2::Display::DEFAULT_WIDTH;
     const double scaleY = static_cast<double>( display.height() ) / fheroes2::Display::DEFAULT_HEIGHT;

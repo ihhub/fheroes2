@@ -27,4 +27,7 @@ namespace fheroes2
     void drawMainMenuScreen();
 
     Point drawButtonPanel();
+
+    // If display fade-in state is set reset it to false and fade-in the full display image. Otherwise render full display image without fade-in.
+    void validateFadeInAndRender();
 }

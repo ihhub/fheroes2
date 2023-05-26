@@ -45,12 +45,18 @@ namespace fheroes2
             return _windowArea;
         }
 
+        const Rect & windowWithShadowArea() const
+        {
+            return _windowWithShadowArea;
+        }
+
         void render();
 
     private:
         Image & _output;
         const Rect _activeArea;
         const Rect _windowArea;
+        const Rect _windowWithShadowArea;
         ImageRestorer _restorer;
         const bool _hasBackground{ true };
 
