@@ -59,11 +59,11 @@
 
 namespace
 {
-    void drawButtonShadow( fheroes2::Image & output, const int buttonIcn, const uint32_t icnIndex, const fheroes2::Point offset )
+    void drawButtonShadow( fheroes2::Image & output, const int buttonIcn, const uint32_t icnIndex, const fheroes2::Point & offset )
     {
         const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcn, icnIndex );
 
-        fheroes2::addSoftShadow( buttonSprite, output, offset, { -5, 5 } );
+        fheroes2::addGradientShadow( buttonSprite, output, offset, { -5, 5 } );
     }
 
     void drawCostPerTroopFrame( fheroes2::Image & output, const fheroes2::Point & offset )
@@ -90,7 +90,7 @@ namespace
         }
 
         fheroes2::Blit( recruitWindow, output, offset.x, offset.y );
-        fheroes2::addSoftShadow( recruitWindow, output, { offset.x, offset.y }, { -5, 5 } );
+        fheroes2::addGradientShadow( recruitWindow, output, { offset.x, offset.y }, { -5, 5 } );
     }
 }
 
@@ -290,7 +290,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
     fheroes2::Point dst_pt( dialogOffset.x + 118, dialogOffset.y + 143 );
     fheroes2::Copy( background, 0, 0, display, dst_pt.x, dst_pt.y, background.width(), background.height() );
-    fheroes2::addSoftShadow( background, display, dst_pt, { -5, 5 } );
+    fheroes2::addGradientShadow( background, display, dst_pt, { -5, 5 } );
 
     dst_pt.x = dialogOffset.x + 132;
     dst_pt.y = dialogOffset.y + 38;
@@ -348,13 +348,13 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
         dst_pt.x = dialogOffset.x + 6;
         dst_pt.y = dialogOffset.y + 64;
         monsterSwitchLeft.setPosition( dst_pt.x, dst_pt.y );
-        fheroes2::addSoftShadow( leftButtonSprite, display, dst_pt, { -5, 5 } );
+        fheroes2::addGradientShadow( leftButtonSprite, display, dst_pt, { -5, 5 } );
 
         const fheroes2::Sprite & rightButtonSprite = fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 0 );
         monsterSwitchRight.setSprite( rightButtonSprite, fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 1 ) );
         dst_pt.x = dialogOffset.x + 105;
         monsterSwitchRight.setPosition( dst_pt.x, dst_pt.y );
-        fheroes2::addSoftShadow( rightButtonSprite, display, dst_pt, { -5, 5 } );
+        fheroes2::addGradientShadow( rightButtonSprite, display, dst_pt, { -5, 5 } );
 
         // Render Left and Right buttons to restore their initial state later.
         monsterSwitchLeft.draw();
@@ -404,7 +404,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
     const fheroes2::Rect monsterArea( dialogOffset.x + 24, dialogOffset.y + 19, 75, 95 );
 
     auto buttonReleaseRestore = [&display, &background, &dialogOffset]( fheroes2::ButtonBase & button ) {
-        if ( !button.isPressed() ) {
+        if ( button.isReleased() ) {
             return;
         }
 

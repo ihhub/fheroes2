@@ -743,18 +743,7 @@ namespace fheroes2
         }
     }
 
-    Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )
-    {
-        if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 )
-            return in;
-
-        Sprite out = makeShadow( in, shadowOffset, transformId );
-        Blit( in, out, -shadowOffset.x, 0 );
-
-        return out;
-    }
-
-    void addSoftShadow( const Sprite & in, Image & out, const Point & outPos, const Point & shadowOffset )
+    void addGradientShadow( const Sprite & in, Image & out, const Point & outPos, const Point & shadowOffset )
     {
         if ( in.empty() || ( shadowOffset.x == 0 && shadowOffset.y == 0 ) || ( outPos.x < 0 ) || ( outPos.y < 0 ) ) {
             return;
@@ -844,34 +833,47 @@ namespace fheroes2
                     }
                 }
 
-                // If the shadow has to be applied.
-                if ( transformTableId < 6 ) {
-                    const int32_t outOffset = x + y * outWidth;
+                if ( transformTableId == 6 ) {
+                    continue;
+                }
 
-                    if ( isOutNonSingleLayer ) {
-                        uint8_t * transformOutX = transformOut + outOffset;
+                // The transformTableId is less than 6 so the shadow has to be applied.
+                const int32_t outOffset = x + y * outWidth;
 
-                        if ( *transformOutX == 0 ) {
-                            // Apply shadow transform to the out image.
-                            uint8_t * imageOutX = imageOut + outOffset;
-                            *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ 256 } + *imageOutX );
-                        }
-                        else if ( *transformOutX > 1 && *transformOutX < 6 ) {
-                            // Out image transform layer already has shadow data. We add the shadow strength by subtract the 'transformTableId', limited to 2.
-                            *transformOutX = ( *transformOutX < 2 + transformTableId ) ? 2 : ( *transformOutX - transformTableId );
-                        }
-                        else {
-                            *transformOutX = transformTableId;
-                        }
-                    }
-                    else {
-                        // For single layer 'out' image apply shadow transform to the image data.
+                if ( isOutNonSingleLayer ) {
+                    uint8_t * transformOutX = transformOut + outOffset;
+
+                    if ( *transformOutX == 0 ) {
+                        // Apply shadow transform to the out image.
                         uint8_t * imageOutX = imageOut + outOffset;
                         *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ 256 } + *imageOutX );
                     }
+                    else if ( *transformOutX > 1 && *transformOutX < 6 ) {
+                        // Out image transform layer already has shadow data. We add the shadow strength by subtract the 'transformTableId', limited to 2.
+                        *transformOutX = ( *transformOutX < 2 + transformTableId ) ? 2 : ( *transformOutX - transformTableId );
+                    }
+                    else {
+                        *transformOutX = transformTableId;
+                    }
+                }
+                else {
+                    // For single layer 'out' image apply shadow transform to the image data.
+                    uint8_t * imageOutX = imageOut + outOffset;
+                    *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ 256 } + *imageOutX );
                 }
             }
         }
+    }
+
+    Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )
+    {
+        if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 )
+            return in;
+
+        Sprite out = makeShadow( in, shadowOffset, transformId );
+        Blit( in, out, -shadowOffset.x, 0 );
+
+        return out;
     }
 
     void AddTransparency( Image & image, uint8_t valueToReplace )
