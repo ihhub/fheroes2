@@ -124,6 +124,22 @@ namespace
             System::MakeDirectory( dataFilesSave );
     }
 
+    void displayMissingResourceWindow()
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
+
+        display.fill( 0 );
+        fheroes2::Resize( image, display );
+
+        display.render();
+
+        LocalEvent & le = LocalEvent::Get();
+        while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() ) {
+            // Do nothing.
+        }
+    }
+
     class DisplayInitializer
     {
     public:
@@ -192,18 +208,7 @@ namespace
                 fheroes2::AGG::GetICN( ICN::FONT, 0 );
             }
             catch ( ... ) {
-                fheroes2::Display & display = fheroes2::Display::instance();
-                const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
-
-                display.fill( 0 );
-                fheroes2::Resize( image, display );
-
-                display.render();
-
-                LocalEvent & le = LocalEvent::Get();
-                while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() ) {
-                    // Do nothing.
-                }
+                displayMissingResourceWindow();
 
                 throw;
             }
@@ -312,13 +317,23 @@ int main( int argc, char ** argv )
             Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
         }
 
-        // init cursor
-        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+        try {
+            const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        Game::mainGameLoop( conf.isFirstGameRun() );
+            Game::mainGameLoop( conf.isFirstGameRun() );
+        }
+        catch ( const fheroes2::InvalidDataResources & ex ) {
+            ERROR_LOG( ex.what() )
+            displayMissingResourceWindow();
+            return EXIT_FAILURE;
+        }
     }
     catch ( const std::exception & ex ) {
         ERROR_LOG( "Exception '" << ex.what() << "' occurred during application runtime." )
+        return EXIT_FAILURE;
+    }
+    catch ( ... ) {
+        ERROR_LOG( "An unknown exception occurred during application runtime." )
         return EXIT_FAILURE;
     }
 
