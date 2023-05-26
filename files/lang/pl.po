@@ -4021,75 +4021,71 @@ msgstr "włącz/wyłącz automatyczny tryb walki"
 msgid "hotkey|finish the battle in auto mode"
 msgstr "zakończ walkę w automatycznym trybie walki"
 
-#, fuzzy
 msgid "hotkey|battle options"
-msgstr "Opcje zamku"
+msgstr "opcje walki"
 
 msgid "hotkey|skip turn in battle"
-msgstr ""
+msgstr "pomiń turę w walce"
 
 msgid "hotkey|cast battle spell"
-msgstr ""
+msgstr "rzuć zaklęcie bojowe"
 
 msgid "hotkey|dwelling level 1"
-msgstr ""
+msgstr "siedlisko poziom 1"
 
 msgid "hotkey|dwelling level 2"
-msgstr ""
+msgstr "siedlisko poziom 2"
 
 msgid "hotkey|dwelling level 3"
-msgstr ""
+msgstr "siedlisko poziom 3"
 
 msgid "hotkey|dwelling level 4"
-msgstr ""
+msgstr "siedlisko poziom 4"
 
 msgid "hotkey|dwelling level 5"
-msgstr ""
+msgstr "siedlisko poziom 5"
 
 msgid "hotkey|dwelling level 6"
-msgstr ""
+msgstr "siedlisko poziom 6"
 
 msgid "hotkey|well"
-msgstr ""
+msgstr "studnia"
 
-#, fuzzy
 msgid "hotkey|marketplace"
-msgstr "Targowisko"
+msgstr "targowisko"
 
 msgid "hotkey|mage guild"
-msgstr ""
+msgstr "gildia magów"
 
-#, fuzzy
 msgid "hotkey|shipyard"
-msgstr "Stocznia"
+msgstr "stocznia"
 
-#, fuzzy
 msgid "hotkey|thieves guild"
-msgstr "Gildia złodziei"
+msgstr "gildia złodziei"
 
 msgid "hotkey|tavern"
-msgstr ""
+msgstr "tawerna"
 
 msgid "hotkey|construction screen"
-msgstr ""
+msgstr "ekran budowy zamku/miasta"
 
 msgid "hotkey|buy all monsters in well"
-msgstr ""
+msgstr "rekrutuj wszystkie stworzenia"
 
 msgid "hotkey|split stack by half"
-msgstr ""
+msgstr "podziel jednostki na pół"
 
 msgid "hotkey|split stack by one"
-msgstr ""
+msgstr "podziel jednostki po jednej"
 
 msgid "hotkey|join stacks"
-msgstr ""
+msgstr "połącz jednostki"
 
 msgid "hotkey|upgrade troop"
-msgstr ""
+msgstr "ulepsz stworzenie"
 
 msgid "hotkey|dismiss troop"
-msgstr ""
+msgstr "zwolnij stworzenie"
 
 msgid "The save file is corrupted."
 msgstr "Plik z zapisaną grą jest uszkodzony."
