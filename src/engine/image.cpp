@@ -768,22 +768,30 @@ namespace fheroes2
         const int32_t shadowOffsetX = std::min( shadowOffset.x, 0 );
         const int32_t shadowOffsetY = std::min( shadowOffset.y, 0 );
 
-        // Calculate shadow line from the object.
-        const double slopeFactor = static_cast<double>( shadowOffset.y ) / shadowOffset.x;
-
         std::vector<Point> shadowLine;
         shadowLine.reserve( std::max( absOffsetX, absOffsetY ) + 1 );
 
-        if ( absOffsetX >= absOffsetY ) {
-            const int32_t maxX = absOffsetX + shadowOffsetX;
-            for ( int32_t x = shadowOffsetX; x <= maxX; ++x ) {
-                shadowLine.emplace_back( x, static_cast<int32_t>( std::round( x * slopeFactor ) ) );
+        // Calculate shadow line from the object.
+        if ( shadowOffset.x == 0 ) {
+            const int32_t maxY = absOffsetY + shadowOffsetY;
+            for ( int32_t y = shadowOffsetY; y <= maxY; ++y ) {
+                shadowLine.emplace_back( 0, y );
             }
         }
         else {
-            const int32_t maxY = absOffsetY + shadowOffsetY;
-            for ( int32_t y = shadowOffsetY; y <= maxY; ++y ) {
-                shadowLine.emplace_back( static_cast<int32_t>( std::round( y / slopeFactor ) ), y );
+            const double slopeFactor = static_cast<double>( shadowOffset.y ) / shadowOffset.x;
+
+            if ( absOffsetX >= absOffsetY ) {
+                const int32_t maxX = absOffsetX + shadowOffsetX;
+                for ( int32_t x = shadowOffsetX; x <= maxX; ++x ) {
+                    shadowLine.emplace_back( x, static_cast<int32_t>( std::round( x * slopeFactor ) ) );
+                }
+            }
+            else {
+                const int32_t maxY = absOffsetY + shadowOffsetY;
+                for ( int32_t y = shadowOffsetY; y <= maxY; ++y ) {
+                    shadowLine.emplace_back( static_cast<int32_t>( std::round( y / slopeFactor ) ), y );
+                }
             }
         }
 
