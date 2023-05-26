@@ -559,7 +559,7 @@ namespace fheroes2
             return;
         }
 
-        const size_t size = _width * _height;
+        const size_t size = static_cast<size_t>( _width ) * _height;
         if ( size > 0 ) {
             // Free the transform layer memory.
             std::unique_ptr<uint8_t[]> newData;
@@ -1546,8 +1546,8 @@ namespace fheroes2
             }
 
             // bottom side
-            data = dataPointer + width * ( height - 1 );
-            transform = transformPointer + width * ( height - 1 );
+            data = dataPointer + width * static_cast<ptrdiff_t>( height - 1 );
+            transform = transformPointer + width * static_cast<ptrdiff_t>( height - 1 );
             dataEnd = data + width;
             for ( ; data != dataEnd; ++data, ++transform ) {
                 *transform = 0;
@@ -1606,8 +1606,8 @@ namespace fheroes2
             }
 
             // bottom side
-            data = dataPointer + width * ( height - 1 ) + width - 1;
-            transform = transformPointer + width * ( height - 1 ) + width - 1;
+            data = dataPointer + width * static_cast<ptrdiff_t>( height - 1 ) + width - 1;
+            transform = transformPointer + width * static_cast<ptrdiff_t>( height - 1 ) + width - 1;
             dataEnd = data - width;
             for ( ; data != dataEnd; --data, --transform ) {
                 if ( counter != skipFactor ) {
@@ -1621,8 +1621,8 @@ namespace fheroes2
             }
 
             // left side
-            data = dataPointer + width * ( height - 2 );
-            transform = transformPointer + width * ( height - 2 );
+            data = dataPointer + width * static_cast<ptrdiff_t>( height - 2 );
+            transform = transformPointer + width * static_cast<ptrdiff_t>( height - 2 );
             dataEnd = dataPointer;
             for ( ; data != dataEnd; data -= width, transform -= width ) {
                 if ( counter != skipFactor ) {
@@ -1872,7 +1872,7 @@ namespace fheroes2
             }
         }
         else {
-            uint8_t * transformY = image.transform() + y * imageWidth + x;
+            uint8_t * transformY = image.transform() + static_cast<ptrdiff_t>( y ) * imageWidth + x;
             for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
                 std::fill( imageY, imageY + width, colorId );
                 std::fill( transformY, transformY + width, static_cast<uint8_t>( 0 ) );
@@ -2097,7 +2097,7 @@ namespace fheroes2
                 }
             }
             else {
-                const uint8_t * transformInY = in.transform() + offsetIn + ( height - 1 ) * widthIn;
+                const uint8_t * transformInY = in.transform() + offsetIn + static_cast<ptrdiff_t>( height - 1 ) * widthIn;
 
                 if ( isOutSingleLayer ) {
                     for ( ; imageOutY != imageOutYEnd; imageOutY += widthOut, imageInY -= widthIn, transformInY -= widthIn ) {
@@ -2126,7 +2126,7 @@ namespace fheroes2
         else {
             // Flip horizonally and vertically.
             if ( in.singleLayer() ) {
-                const uint8_t * imageInY = in.image() + offsetIn + ( height - 1 ) * widthIn + widthIn - 1;
+                const uint8_t * imageInY = in.image() + offsetIn + static_cast<ptrdiff_t>( height - 1 ) * widthIn + widthIn - 1;
 
                 for ( ; imageOutY != imageOutYEnd; imageOutY += widthOut, transformOutY += widthOut, imageInY -= widthIn ) {
                     uint8_t * imageOutX = imageOutY;
@@ -2150,8 +2150,8 @@ namespace fheroes2
                 }
             }
             else {
-                const uint8_t * imageInY = in.image() + offsetIn + ( height - 1 ) * widthIn + widthIn - 1;
-                const uint8_t * transformInY = in.transform() + offsetIn + ( height - 1 ) * widthIn + widthIn - 1;
+                const uint8_t * imageInY = in.image() + offsetIn + static_cast<ptrdiff_t>( height - 1 ) * widthIn + widthIn - 1;
+                const uint8_t * transformInY = in.transform() + offsetIn + static_cast<ptrdiff_t>( height - 1 ) * widthIn + widthIn - 1;
 
                 for ( ; imageOutY != imageOutYEnd; imageOutY += widthOut, transformOutY += widthOut, imageInY -= widthIn, transformInY -= widthIn ) {
                     uint8_t * imageOutX = imageOutY;
