@@ -93,6 +93,9 @@ namespace AudioManager
     int PlaySound( const int m82 );
     void PlaySoundAsync( const int m82 );
 
+    // Returns true if an external music file is available for the music track with the specified ID, otherwise returns false.
+    bool isExternalMusicFileAvailable( const int trackId );
+
     void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode );
     void PlayMusicAsync( const int trackId, const Music::PlaybackMode playbackMode );
 

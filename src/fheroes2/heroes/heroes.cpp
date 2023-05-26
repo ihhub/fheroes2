@@ -454,10 +454,10 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
         PickupArtifact( art );
     };
 
-    // 3 artifacts
-    addInitialArtifact( Artifact( dataStream.get() ) );
-    addInitialArtifact( Artifact( dataStream.get() ) );
-    addInitialArtifact( Artifact( dataStream.get() ) );
+    // 3 artifacts. Artifact IDs are by value 1 bigger than in the original game.
+    addInitialArtifact( Artifact( dataStream.get() + 1 ) );
+    addInitialArtifact( Artifact( dataStream.get() + 1 ) );
+    addInitialArtifact( Artifact( dataStream.get() + 1 ) );
 
     // Skip unused byte.
     dataStream.skip( 1 );
@@ -1154,7 +1154,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
         // If there were artifacts assembled we check them for scout area bonus.
         for ( const ArtifactSetData & assembledArtifact : assembledArtifacts ) {
-            if ( scout( static_cast<int32_t>( assembledArtifact._assembledArtifactID ) ) ) {
+            if ( scout( assembledArtifact._assembledArtifactID ) ) {
                 return true;
             }
         }
@@ -1708,11 +1708,11 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
             MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinationIndex() );
 
             if ( it != targets.end() ) {
-                Action( *it, true );
+                Action( *it );
             }
             // otherwise fight the monsters on the first adjacent tile
             else {
-                Action( targets.front(), true );
+                Action( targets.front() );
             }
         }
     }
@@ -1721,7 +1721,7 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
         const MapEvent * event = world.GetMapEvent( GetCenter() );
 
         if ( event && event->isAllow( GetColor() ) ) {
-            Action( GetIndex(), false );
+            Action( GetIndex() );
             SetMove( false );
         }
     }
