@@ -3887,13 +3887,13 @@ msgid "hotkey|descendants campaign"
 msgstr "kampania Potomkowie"
 
 msgid "hotkey|select first campaign bonus"
-msgstr "wybierz pierwszy bonus w kampanii"
+msgstr "pierwszy bonus w kampanii"
 
 msgid "hotkey|select second campaign bonus"
-msgstr "wybierz drugi bonus w kampanii"
+msgstr "drugi bonus w kampanii"
 
 msgid "hotkey|select third campaign bonus"
-msgstr "wybierz trzeci bonus w kampanii"
+msgstr "trzeci bonus w kampanii"
 
 msgid "hotkey|view campaign intro"
 msgstr "obejrzyj intro kampanii"
@@ -3938,7 +3938,7 @@ msgid "hotkey|continue hero movement"
 msgstr "kontynuuj ruch"
 
 msgid "hotkey|cast adventure spell"
-msgstr "rzuć zaklęcie podróżne."
+msgstr "rzuć zaklęcie podróżne"
 
 msgid "hotkey|put hero to sleep"
 msgstr "uśpij bohatera"
