@@ -28,6 +28,7 @@
 #include <initializer_list>
 #include <map>
 #include <memory>
+#include <ostream>
 #include <random>
 #include <set>
 #include <stdexcept>
@@ -485,7 +486,7 @@ namespace fheroes2
 
                 if ( headerSize + header1.offsetData + sizeData > body.size() ) {
                     // This is possibly a corrupted data chunk.
-                    ERROR_LOG( "ICN Id" << id << ", index " << i << " is being corrupted. Make sure that you own an official version of the game." )
+                    ERROR_LOG( "ICN Id " << id << ", index " << i << " is being corrupted. Make sure that you own an official version of the game." )
                     continue;
                 }
 
