@@ -792,7 +792,7 @@ void Kingdom::openOverviewDialog()
     // Fade-in Kingdom overview dialog.
     if ( !isDefaultScreenSize ) {
         // We need to expand the ROI for the next render to properly render window borders and shadow.
-        display.updateNextRenderRoi( background.windowWithShadowArea() );
+        display.updateNextRenderRoi( background.totalArea() );
     }
 
     fheroes2::fadeInDisplay( background.activeArea(), !isDefaultScreenSize );

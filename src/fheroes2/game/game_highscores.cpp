@@ -276,7 +276,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
     else {
         if ( !isDefaultScreenSize ) {
             // We need to expand the ROI for the next render to properly render window borders and shadow.
-            display.updateNextRenderRoi( border.windowWithShadowArea() );
+            display.updateNextRenderRoi( border.totalArea() );
         }
 
         fheroes2::fadeInDisplay( border.activeArea(), !isDefaultScreenSize );

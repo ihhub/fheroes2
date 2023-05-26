@@ -230,7 +230,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     if ( renderBackgroundDialog ) {
         background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
         fadeRoi = background->activeArea();
-        dialodWithShadowRoi = background->windowWithShadowArea();
+        dialodWithShadowRoi = background->totalArea();
     }
     else {
         fadeRoi = { ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2,

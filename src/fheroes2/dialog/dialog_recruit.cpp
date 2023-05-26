@@ -274,7 +274,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
     const fheroes2::StandardWindow window( dialogOffset.x, dialogOffset.y, windowSize.width, windowSize.height, true, display );
 
-    const fheroes2::Rect roi( window.windowWithShadowArea() );
+    const fheroes2::Rect roi( window.totalArea() );
 
     const fheroes2::Rect windowActiveArea( window.activeArea() );
 
@@ -653,7 +653,7 @@ void Dialog::DwellingInfo( const Monster & monster, const uint32_t available )
     drawCostPerTroopFrame( display, { dialogOffset.x + 122, dialogOffset.y + 38 } );
     RedrawMonsterInfo( window.activeArea(), monster, available, false );
 
-    display.render( window.windowWithShadowArea() );
+    display.render( window.totalArea() );
 
     LocalEvent & le = LocalEvent::Get();
 

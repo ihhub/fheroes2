@@ -239,7 +239,7 @@ namespace
         drawPuzzle( pzl, sf, blitArea.x, blitArea.y );
         drawControlPanel();
 
-        display.updateNextRenderRoi( border.windowWithShadowArea() );
+        display.updateNextRenderRoi( border.totalArea() );
         fheroes2::fadeInDisplay( border.activeArea(), true );
 
         revealPuzzle( pzl, sf, blitArea.x, blitArea.y, isHideInterface ? &drawControlPanel : nullptr );
