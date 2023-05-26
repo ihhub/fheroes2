@@ -317,20 +317,17 @@ int main( int argc, char ** argv )
             Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
         }
 
-        try
-        {
+        try {
             const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
             Game::mainGameLoop( conf.isFirstGameRun() );
         }
-        catch ( const fheroes2::InvalidDataResources & ex )
-        {
+        catch ( const fheroes2::InvalidDataResources & ex ) {
             ERROR_LOG( ex.what() )
             displayMissingResourceWindow();
             return EXIT_FAILURE;
         }
-        catch ( ... )
-        {
+        catch ( ... ) {
             throw;
         }
     }
