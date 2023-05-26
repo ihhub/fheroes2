@@ -778,7 +778,6 @@ namespace fheroes2
             return;
         }
 
-        // Blitting one image onto another can be done only for image layer so we don't consider transform part of the output image
         const int32_t widthIn = in.width();
         const int32_t widthOut = out.width();
 
@@ -2060,7 +2059,7 @@ namespace fheroes2
 
                     if ( isOutSingleLayer ) {
                         for ( ; imageOutX != imageOutXEnd; ++imageOutX, --imageInX, --transformInX ) {
-                            // Copy image data only for non-transarent pixels.
+                            // Copy image data only for non-transparent pixels.
                             if ( *transformInX == 0 ) {
                                 *imageOutX = *imageInX;
                             }
@@ -2108,7 +2107,7 @@ namespace fheroes2
                         const uint8_t * transformInX = transformInY;
 
                         for ( ; imageOutX != imageOutXEnd; ++imageOutX, ++imageInX, ++transformInX ) {
-                            // Copy image data only for non-transarent pixels.
+                            // Copy image data only for non-transparent pixels.
                             if ( *transformInX == 0 ) {
                                 *imageOutX = *imageInX;
                             }
@@ -2125,7 +2124,7 @@ namespace fheroes2
             }
         }
         else {
-            // Flip horizonally and vertically.
+            // Flip horizontally and vertically.
             if ( in.singleLayer() ) {
                 const uint8_t * imageInY = in.image() + offsetIn + static_cast<ptrdiff_t>( height - 1 ) * widthIn + widthIn - 1;
 
@@ -2162,7 +2161,7 @@ namespace fheroes2
 
                     if ( isOutSingleLayer ) {
                         for ( ; imageOutX != imageOutXEnd; ++imageOutX, --imageInX, --transformInX ) {
-                            // Copy image data only for non-transarent pixels.
+                            // Copy image data only for non-transparent pixels.
                             if ( *transformInX == 0 ) {
                                 *imageOutX = *imageInX;
                             }
@@ -2554,7 +2553,7 @@ namespace fheroes2
             const uint8_t * imageOutYEnd = imageOutY + widthOut * heightRoiOut;
             int32_t idY = 0;
 
-            // Precalculation of X position
+            // Pre-calculation of X position
             std::vector<int32_t> positionX( widthRoiOut );
             for ( int32_t x = 0; x < widthRoiOut; ++x ) {
                 positionX[x] = ( x * widthRoiIn ) / widthRoiOut;
@@ -2758,7 +2757,7 @@ namespace fheroes2
 
                     const uint8_t * transformInX = transformInY;
                     for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, imageOutY += height ) {
-                        // Copy image data only for non-transarent pixels.
+                        // Copy image data only for non-transparent pixels.
                         if ( *transformInX == 0 ) {
                             *imageOutY = *imageInX;
                         }
