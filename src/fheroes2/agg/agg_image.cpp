@@ -483,6 +483,13 @@ namespace fheroes2
                     sizeData = blockSize - header1.offsetData;
                 }
 
+                if ( headerSize + header1.offsetData + sizeData > body.size() ) {
+                    // This is a corrupted AGG file.
+                    throw fheroes2::InvalidDataResources( "ICN Id " + std::to_string( id ) + ", index " + std::to_string( i )
+                                                          + " is being corrupted. "
+                                                            "Make sure that you own an official version of the game." );
+                }
+
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
 
                 _icnVsSprite[id][i] = decodeICNSprite( data, sizeData, header1.width, header1.height, header1.offsetX, header1.offsetY );

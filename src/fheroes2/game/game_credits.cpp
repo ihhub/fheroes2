@@ -43,6 +43,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -690,6 +691,8 @@ namespace
 
 void Game::ShowCredits()
 {
+    fheroes2::fadeOutDisplay();
+
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 

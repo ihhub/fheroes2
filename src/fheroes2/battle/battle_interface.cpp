@@ -1156,8 +1156,6 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     , _cursorRestorer( true, Cursor::WAR_POINTER )
     , _bridgeAnimation( { false, BridgeMovementAnimation::UP_POSITION } )
 {
-    const Settings & conf = Settings::Get();
-
     // border
     const fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -1273,16 +1271,26 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     _redrawBattleGround();
 
     AudioManager::ResetAudio();
-
-    // Don't waste time playing the pre-battle sound if the game sounds are turned off
-    if ( conf.SoundVolume() > 0 ) {
-        _preBattleSoundChannelId = AudioManager::PlaySound( M82::PREBATTL );
-    }
 }
 
 Battle::Interface::~Interface()
 {
     AudioManager::ResetAudio();
+
+    // Fade-out battlefield.
+    const bool isDefaultScreenSize = fheroes2::Display::instance().isDefaultSize();
+
+    fheroes2::fadeOutDisplay( _background->activeArea(), !isDefaultScreenSize );
+
+    // For 640x480 resolution we do screen fade-in.
+    if ( isDefaultScreenSize ) {
+        // Reset the battlefield dialog window to restore the previous display image from screen restorer.
+        // We have multiple return places after the battle: the adventure map, Main Menu (from Battle only),
+        // the battle results screen (if the battle was quick ended).
+        _background.reset();
+
+        fheroes2::fadeInDisplay();
+    }
 }
 
 void Battle::Interface::SetOrderOfUnits( const std::shared_ptr<const Units> & units )
@@ -1327,7 +1335,30 @@ void Battle::Interface::fullRedraw()
         _background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
     }
 
-    Redraw();
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    // Fade-out game screen only for 640x480 resolution.
+    const bool isDefaultScreenSize = display.isDefaultSize();
+    if ( isDefaultScreenSize ) {
+        fheroes2::fadeOutDisplay();
+    }
+
+    // Don't waste time playing the pre-battle sound if the game sounds are turned off
+    if ( Settings::Get().SoundVolume() > 0 ) {
+        _preBattleSoundChannelId = AudioManager::PlaySound( M82::PREBATTL );
+    }
+
+    RedrawPartialStart();
+    // We do not render battlefield display image to properly fade-out it.
+    redrawPreRender();
+
+    // Fade-in battlefield.
+    if ( !isDefaultScreenSize ) {
+        // We need to expand the ROI for the next render to properly render window borders and shadow.
+        display.updateNextRenderRoi( _background->windowWithShadowArea() );
+    }
+
+    fheroes2::fadeInDisplay( _background->activeArea(), !isDefaultScreenSize );
 }
 
 void Battle::Interface::Redraw()
@@ -1357,8 +1388,13 @@ void Battle::Interface::RedrawPartialStart()
 
 void Battle::Interface::RedrawPartialFinish()
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
+    redrawPreRender();
 
+    fheroes2::Display::instance().render( _interfacePosition );
+}
+
+void Battle::Interface::redrawPreRender()
+{
     if ( Settings::Get().BattleShowArmyOrder() ) {
         armies_order.Redraw( _currentUnit, _contourColor, _mainSurface );
     }
@@ -1375,11 +1411,8 @@ void Battle::Interface::RedrawPartialFinish()
     }
 #endif
 
-    fheroes2::Copy( _mainSurface, 0, 0, display, _interfacePosition.x, _interfacePosition.y, _mainSurface.width(), _mainSurface.height() );
-
+    fheroes2::Copy( _mainSurface, 0, 0, fheroes2::Display::instance(), _interfacePosition.x, _interfacePosition.y, _mainSurface.width(), _mainSurface.height() );
     RedrawInterface();
-
-    display.render();
 }
 
 void Battle::Interface::RedrawInterface()
