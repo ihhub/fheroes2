@@ -175,6 +175,8 @@ namespace fheroes2
             return false;
         }
 
+        assert( !image.singleLayer() );
+
         if ( surface->format->BytesPerPixel == 1 ) {
             const SDL_Palette * palette = surface->format->palette;
             assert( palette != nullptr );
@@ -391,10 +393,9 @@ namespace fheroes2
 
         for ( size_t i = 0; i < imageCount; ++i ) {
             Image & tilImage = output[i];
-            tilImage.resize( width, height );
             tilImage._disableTransformLayer();
+            tilImage.resize( width, height );
             memcpy( tilImage.image(), data + i * imageSize, imageSize );
-            std::fill( tilImage.transform(), tilImage.transform() + imageSize, static_cast<uint8_t>( 0 ) );
         }
     }
 

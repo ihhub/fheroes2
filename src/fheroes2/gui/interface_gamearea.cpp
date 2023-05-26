@@ -742,25 +742,25 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 #endif
         // redraw fog
         if ( renderFog ) {
-            for ( int32_t y = minY; y < maxY; ++y ) {
-                for ( int32_t x = minX; x < maxX; ++x ) {
-                    const Maps::Tiles & tile = world.GetTiles( x, y );
+        for ( int32_t y = minY; y < maxY; ++y ) {
+            for ( int32_t x = minX; x < maxX; ++x ) {
+                const Maps::Tiles & tile = world.GetTiles( x, y );
 
-                    if ( tile.getFogDirection() != Direction::UNKNOWN ) {
-                        drawFog( tile, dst, *this );
+                if ( tile.getFogDirection() != Direction::UNKNOWN ) {
+                    drawFog( tile, dst, *this );
 
-                        if ( drawTowns ) {
-                            drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTWBA );
+                    if ( drawTowns ) {
+                        drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTWBA );
 
-                            const MP2::MapObjectType objectType = tile.GetObject( false );
-                            if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
-                                drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTOWN );
-                            }
+                        const MP2::MapObjectType objectType = tile.GetObject( false );
+                        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
+                            drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTOWN );
                         }
                     }
                 }
             }
         }
+    }
 
     updateObjectAnimationInfo();
 }
@@ -815,7 +815,7 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
         return fheroes2::Image();
     }
 
-    fheroes2::Image result( 448, 448 );
+    fheroes2::Image result( 448, 448, true );
     result.reset();
 
     // Make a temporary copy
@@ -834,7 +834,6 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
 
     fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
     fheroes2::ApplyPalette( result, PAL::GetPalette( PAL::PaletteType::TAN ) );
-    result._disableTransformLayer();
 
     return result;
 }

@@ -177,6 +177,8 @@ namespace
         if ( image.empty() )
             return false;
 
+        assert( !image.singleLayer() );
+
         const uint8_t * data = image.transform();
         const uint8_t * dataEnd = data + image.width() * image.height();
 

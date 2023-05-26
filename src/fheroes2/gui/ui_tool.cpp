@@ -347,10 +347,9 @@ namespace fheroes2
         const int32_t inHeight = in.height();
         const int32_t outWaveWidth = x > waveLength ? ( x > inWidth ? ( waveLength - x + inWidth ) : waveLength ) : x;
 
-        // If the out image is small for the Death Wave spell effect, resize it and fill the transform layer with "0".
+        // If the out image is small for the Death Wave spell effect, resize it.
         if ( out.width() < outWaveWidth || out.height() < inHeight ) {
             out.resize( outWaveWidth, inHeight );
-            std::fill( out.transform(), out.transform() + static_cast<size_t>( outWaveWidth * inHeight ), static_cast<uint8_t>( 0 ) );
         }
 
         const int32_t outWidth = out.width();
@@ -409,8 +408,7 @@ namespace fheroes2
         const double redCoeff = 4.0 - darkredStrength / 280.0;
         const double greenBlueCoeff = 4.0 - darkredStrength / 80.0;
 
-        Image out( width, height );
-        std::fill( out.transform(), out.transform() + static_cast<size_t>( width * height ), static_cast<uint8_t>( 0 ) );
+        Image out( width, height, true );
 
         uint8_t * imageOutX = out.image();
         const uint8_t * imageIn = in.image();
@@ -471,6 +469,8 @@ namespace fheroes2
         if ( in.empty() ) {
             return {};
         }
+
+        assert( !in.singleLayer() );
 
         const int32_t widthIn = in.width();
         const int32_t height = in.height();

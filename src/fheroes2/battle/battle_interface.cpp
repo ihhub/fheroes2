@@ -1229,9 +1229,6 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     // Shadow that fits the hexagon grid.
     _hexagonGridShadow = DrawHexagonShadow( 4, 1 );
 
-    // As '_mainSurface' is used to prepare battlefield screen to render on display it does not need to have a transform layer.
-    _mainSurface._disableTransformLayer();
-
     btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
     btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
 
@@ -1264,13 +1261,13 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     }
     status.SetLogs( listlog.get() );
 
-    // Battlefield area excludes the lower part where the status log is located.
-    _mainSurface.resize( area.width, battlefieldHeight );
-    _battleGround.resize( area.width, battlefieldHeight );
-
     // As `_battleGround` and '_mainSurface' are used to prepare battlefield screen to render on display they do not need to have a transform layer.
     _battleGround._disableTransformLayer();
     _mainSurface._disableTransformLayer();
+
+    // Battlefield area excludes the lower part where the status log is located.
+    _mainSurface.resize( area.width, battlefieldHeight );
+    _battleGround.resize( area.width, battlefieldHeight );
 
     // Prepare the Battlefield ground.
     _redrawBattleGround();
@@ -5375,7 +5372,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
         area.height -= listlog->GetArea().height;
     }
 
-    fheroes2::Image battleFieldCopy( area.width, area.height );
+    fheroes2::Image battleFieldCopy( area.width, area.height, true );
     fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     // The death wave horizontal length in pixels.
@@ -5400,8 +5397,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // Prepare the blank image for the Death Wave spell effect with the transform layer equal to "0"
-    fheroes2::Image spellEffect( waveLength, area.height );
-    std::fill( spellEffect.transform(), spellEffect.transform() + static_cast<size_t>( waveLength * area.height ), static_cast<uint8_t>( 0 ) );
+    fheroes2::Image spellEffect( waveLength, area.height, true );
 
     AudioManager::PlaySound( M82::MNRDEATH );
 
@@ -5504,7 +5500,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
         area.height -= listlog->GetArea().height;
     }
 
-    fheroes2::Image battleFieldCopy( area.width, area.height );
+    fheroes2::Image battleFieldCopy( area.width, area.height, true );
     fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;

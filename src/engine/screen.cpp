@@ -378,6 +378,8 @@ namespace
                 return nullptr;
             }
 
+            assert( !icon.singleLayer() );
+
             const uint32_t width = icon.width();
             const uint32_t height = icon.height();
 
@@ -446,8 +448,9 @@ namespace
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
-            if ( image.empty() ) {
+            if ( image.empty() || image.singleLayer() ) {
                 // What are you trying to do? Set an invisible cursor? Use hide() method!
+                // Cursor image should have the transform layer.
                 assert( 0 );
                 return;
             }
@@ -1573,8 +1576,10 @@ namespace fheroes2
     void Display::setResolution( ResolutionInfo info )
     {
         if ( width() > 0 && height() > 0 && info.gameWidth == width() && info.gameHeight == height() && info.screenWidth == _screenSize.width
-             && info.screenHeight == _screenSize.height ) // nothing to resize
+             && info.screenHeight == _screenSize.height ) {
+            // Nothing to resize.
             return;
+        }
 
         const bool isFullScreen = _engine->isFullScreen();
 
@@ -1590,9 +1595,6 @@ namespace fheroes2
 
         Image::resize( info.gameWidth, info.gameHeight );
         _screenSize = { info.screenWidth, info.screenHeight };
-
-        // To detect some UI artifacts by invalid code let's put all transform data into pixel skipping mode.
-        std::fill( transform(), transform() + width() * height(), static_cast<uint8_t>( 1 ) );
     }
 
     Display & Display::instance()

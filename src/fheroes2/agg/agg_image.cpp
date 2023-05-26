@@ -214,6 +214,7 @@ namespace
 
     void replaceTransformPixel( fheroes2::Image & image, const int32_t position, const uint8_t value )
     {
+        assert( !image.singleLayer() );
         if ( ( position < ( image.width() * image.height() ) ) && ( image.transform()[position] != 0 ) ) {
             image.transform()[position] = 0;
             image.image()[position] = value;
@@ -3549,6 +3550,25 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::CBKGBEAC:
+            case ICN::CBKGCRCK:
+            case ICN::CBKGDIMT:
+            case ICN::CBKGDITR:
+            case ICN::CBKGDSRT:
+            case ICN::CBKGGRAV:
+            case ICN::CBKGGRMT:
+            case ICN::CBKGGRTR:
+            case ICN::CBKGLAVA:
+            case ICN::CBKGSNMT:
+            case ICN::CBKGSNTR:
+            case ICN::CBKGSWMP:
+            case ICN::CBKGWATR: {
+                LoadOriginalICN( id );
+
+                // This is a battle ground and it does not need a transform layer.
+                _icnVsSprite[id][0]._disableTransformLayer();
+                break;
+            }
             case ICN::GAME_OPTION_ICON: {
                 _icnVsSprite[id].resize( 2 );
 
@@ -3632,6 +3652,10 @@ namespace fheroes2
             }
 
             Sprite & resizedIcn = _icnVsScaledSprite[icnId][index];
+
+            if ( originalIcn.singleLayer() && !resizedIcn.singleLayer() ) {
+                resizedIcn._disableTransformLayer();
+            }
 
             const double scaleFactorX = static_cast<double>( display.width() ) / Display::DEFAULT_WIDTH;
             const double scaleFactorY = static_cast<double>( display.height() ) / Display::DEFAULT_HEIGHT;

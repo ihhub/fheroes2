@@ -53,8 +53,11 @@ namespace
 
     fheroes2::Sprite addContour( fheroes2::Sprite & input, const fheroes2::Point & contourOffset, const uint8_t colorId )
     {
-        if ( input.empty() || contourOffset.x > 0 || contourOffset.y < 0 || ( -contourOffset.x >= input.width() ) || ( contourOffset.y >= input.height() ) )
+        assert( !input.singleLayer() );
+        if ( input.empty() || input.singleLayer() || contourOffset.x > 0 || contourOffset.y < 0 || ( -contourOffset.x >= input.width() )
+             || ( contourOffset.y >= input.height() ) ) {
             return input;
+        }
 
         fheroes2::Sprite output = input;
 
