@@ -800,22 +800,29 @@ namespace fheroes2
         const bool isInNonSingleLayer = !in.singleLayer();
         const bool isOutNonSingleLayer = !out.singleLayer();
 
-        const uint8_t * transformIn = in.transform();
-        uint8_t * transformOut = out.transform();
+        const uint8_t * transformIn = nullptr;
+        if ( isInNonSingleLayer ) {
+            transformIn = in.transform();
+        }
+
+        uint8_t * transformOut = nullptr;
+        if ( isOutNonSingleLayer ) {
+            transformOut = out.transform();
+        }
+
         uint8_t * imageOut = out.image() + outPos.x + shadowOffsetX + in.x() + static_cast<ptrdiff_t>( outPos.y + shadowOffsetY + in.y() ) * outWidth;
 
-        auto isTransparent = [inWidth, inHeight, isInNonSingleLayer, transformIn]( const int32_t offsetX, const int32_t offsetY, const int32_t inOffset ) {
+        auto isTransparent = [inWidth, inHeight, transformIn]( const int32_t offsetX, const int32_t offsetY ) {
             return ( ( offsetX < 0 ) || ( offsetY < 0 ) || ( offsetX >= inWidth ) || ( offsetY >= inHeight ) )
-                   || ( isInNonSingleLayer && ( *( transformIn + inOffset ) == 1 ) );
+                   || ( transformIn && ( *( transformIn + offsetX + static_cast<ptrdiff_t>( offsetY ) * inWidth ) == 1 ) );
         };
 
         for ( int32_t y = 0; y < maxY; ++y ) {
             const int32_t offsetY = y + shadowOffsetY;
             for ( int32_t x = 0; x < maxX; ++x ) {
                 const int32_t offsetX = x + shadowOffsetX;
-                const int32_t inOffset = offsetX + offsetY * inWidth;
 
-                if ( !isTransparent( offsetX, offsetY, inOffset ) ) {
+                if ( !isTransparent( offsetX, offsetY ) ) {
                     // We add shadow only to visible parts of the background image.
                     continue;
                 }
@@ -825,9 +832,8 @@ namespace fheroes2
                 for ( const Point & shadowLineOffset : shadowLine ) {
                     const int32_t shadowLineOffsetX = offsetX - shadowLineOffset.x;
                     const int32_t shadowLineOffsetY = offsetY - shadowLineOffset.y;
-                    const int32_t transformInOffset = shadowLineOffsetX + shadowLineOffsetY * inWidth;
 
-                    if ( !isTransparent( shadowLineOffsetX, shadowLineOffsetY, transformInOffset ) ) {
+                    if ( !isTransparent( shadowLineOffsetX, shadowLineOffsetY ) ) {
                         // Increase the strength of shadow by reducing the table ID.
                         --transformTableId;
 
@@ -841,19 +847,27 @@ namespace fheroes2
                 // If the shadow has to be applied.
                 if ( transformTableId < 6 ) {
                     const int32_t outOffset = x + y * outWidth;
-                    uint8_t * transformOutX = transformOut + outOffset;
 
-                    if ( isOutNonSingleLayer || *transformOutX == 0 ) {
-                        // Apply shadow transform to the out image.
-                        uint8_t * imageOutX = imageOut + outOffset;
-                        *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ 256 } + *imageOutX );
-                    }
-                    else if ( *transformOutX > 1 && *transformOutX < 6 ) {
-                        // Out image trasform layer already has shadow data. We add the shadow strength by substract the 'transformTableId', limited to 2.
-                        *transformOutX = ( *transformOutX < 2 + transformTableId ) ? 2 : ( *transformOutX - transformTableId );
+                    if ( isOutNonSingleLayer ) {
+                        uint8_t * transformOutX = transformOut + outOffset;
+
+                        if ( *transformOutX == 0 ) {
+                            // Apply shadow transform to the out image.
+                            uint8_t * imageOutX = imageOut + outOffset;
+                            *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ 256 } + *imageOutX );
+                        }
+                        else if ( *transformOutX > 1 && *transformOutX < 6 ) {
+                            // Out image transform layer already has shadow data. We add the shadow strength by subtract the 'transformTableId', limited to 2.
+                            *transformOutX = ( *transformOutX < 2 + transformTableId ) ? 2 : ( *transformOutX - transformTableId );
+                        }
+                        else {
+                            *transformOutX = transformTableId;
+                        }
                     }
                     else {
-                        *transformOutX = transformTableId;
+                        // For single layer 'out' image apply shadow transform to the image data.
+                        uint8_t * imageOutX = imageOut + outOffset;
+                        *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ 256 } + *imageOutX );
                     }
                 }
             }
