@@ -22,6 +22,7 @@
 
 #include <cstdint>
 #include <stdexcept>
+#include <string>
 
 namespace fheroes2
 {
