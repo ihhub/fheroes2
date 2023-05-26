@@ -28,7 +28,6 @@
 #include <initializer_list>
 #include <map>
 #include <memory>
-#include <ostream>
 #include <random>
 #include <set>
 #include <stdexcept>
@@ -43,7 +42,6 @@
 #include "icn.h"
 #include "image.h"
 #include "image_tool.h"
-#include "logging.h"
 #include "math_base.h"
 #include "pal.h"
 #include "rand.h"
@@ -485,9 +483,9 @@ namespace fheroes2
                 }
 
                 if ( headerSize + header1.offsetData + sizeData > body.size() ) {
-                    // This is possibly a corrupted data chunk.
-                    ERROR_LOG( "ICN Id " << id << ", index " << i << " is being corrupted. Make sure that you own an official version of the game." )
-                    continue;
+                    // This is a corrupted AGG file.
+                    throw fheroes2::InvalidDataResources( "ICN Id " + std::to_string( id ) + ", index " + std::to_string( i ) + " is being corrupted. "
+                                                          "Make sure that you own an official version of the game." );
                 }
 
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;

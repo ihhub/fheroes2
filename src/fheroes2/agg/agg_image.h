@@ -21,6 +21,7 @@
 #pragma once
 
 #include <cstdint>
+#include <stdexcept>
 
 namespace fheroes2
 {
@@ -50,4 +51,14 @@ namespace fheroes2
         // This function must be called only at the type of setting up a new language.
         void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet );
     }
+
+    class InvalidDataResources : public std::logic_error
+    {
+    public:
+        explicit InvalidDataResources( const std::string & str )
+            : std::logic_error( str )
+        {
+            // Do nothing.
+        }
+    };
 }
