@@ -55,11 +55,6 @@ namespace fheroes2
 
     class InvalidDataResources : public std::logic_error
     {
-    public:
-        explicit InvalidDataResources( const std::string & str )
-            : std::logic_error( str )
-        {
-            // Do nothing.
-        }
+        using std::logic_error::logic_error;
     };
 }
