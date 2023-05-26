@@ -21,8 +21,8 @@
 #include "image.h"
 
 #include <algorithm>
-#include <cstdlib>
 #include <cstddef>
+#include <cstdlib>
 #include <cstring>
 #include <type_traits>
 
