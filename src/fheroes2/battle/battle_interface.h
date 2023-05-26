@@ -288,6 +288,12 @@ namespace Battle
             return _surfaceInnerArea;
         }
 
+        // Battlefield interface ROI.
+        const fheroes2::Rect & GetInterfaceRoi() const
+        {
+            return _interfacePosition;
+        }
+
         fheroes2::Point GetMouseCursor() const;
 
         void SetStatus( const std::string & message, const bool top = false );
@@ -341,6 +347,7 @@ namespace Battle
         void RedrawInterface();
         void RedrawOpponents();
         void RedrawOpponentsFlags();
+        void redrawPreRender();
         void RedrawArmies();
         void RedrawTroopSprite( const Unit & unit );
 

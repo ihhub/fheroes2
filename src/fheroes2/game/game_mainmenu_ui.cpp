@@ -26,11 +26,13 @@
 
 #include "agg_image.h"
 #include "dialog.h"
+#include "game.h"
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
 #include "screen.h"
 #include "settings.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -118,5 +120,15 @@ namespace fheroes2
         const int32_t buttonYPos = 46 + back.y();
 
         return { buttonXPos, buttonYPos };
+    }
+
+    void validateFadeInAndRender()
+    {
+        if ( Game::validateDisplayFadeIn() ) {
+            fheroes2::fadeInDisplay();
+        }
+        else {
+            fheroes2::Display::instance().render();
+        }
     }
 }

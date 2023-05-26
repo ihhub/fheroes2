@@ -49,6 +49,7 @@
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -141,8 +142,6 @@ fheroes2::GameMode Game::LoadGame()
 
     AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -167,7 +166,7 @@ fheroes2::GameMode Game::LoadGame()
     buttons.back().setPosition( buttonPos.x, buttonPos.y + buttonYStep * 5 );
     buttons.back().draw();
 
-    display.render();
+    fheroes2::validateFadeInAndRender();
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -234,7 +233,7 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
     // image background
     fheroes2::drawMainMenuScreen();
 
-    fheroes2::Display::instance().render();
+    fheroes2::validateFadeInAndRender();
 
     const std::string file = Dialog::SelectFileLoad();
     if ( file.empty() ) {
@@ -245,6 +244,9 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
     if ( returnValue == fheroes2::GameMode::CANCEL ) {
         return fheroes2::GameMode::LOAD_GAME;
     }
+
+    // We are loading a game so fade-out main menu screen.
+    fheroes2::fadeOutDisplay();
 
     return returnValue;
 }
