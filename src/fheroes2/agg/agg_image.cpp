@@ -2592,13 +2592,14 @@ namespace fheroes2::AGG
         case ICN::SWAP_ARROW_RIGHT_TO_LEFT: {
             // Since the original game does not have such resources we could generate it from hero meeting sprite.
             const Sprite & original = GetICN( ICN::SWAPWIN, 0 );
-            std::vector<Image> input( 4 );
+            std::array<Image, 4> input;
 
             const int32_t width = 45;
             const int32_t height = 20;
 
-            for ( Image & image : input )
+            for ( Image & image : input ) {
                 image.resize( width, height );
+            }
 
             Copy( original, 295, 270, input[0], 0, 0, width, height );
             Copy( original, 295, 291, input[1], 0, 0, width, height );
@@ -3639,9 +3640,9 @@ namespace fheroes2::AGG
         case ICN::EVIWRTFX:
         case ICN::EVIWTWNS:
         case ICN::EVIWWRLD:
+        case ICN::GROUND12:
         case ICN::GROUND4:
         case ICN::GROUND6:
-        case ICN::GROUND12:
         case ICN::HEROES:
         case ICN::HEROLOGE:
         case ICN::HEROLOGO:

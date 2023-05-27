@@ -779,18 +779,10 @@ namespace fheroes2
 
         const int32_t maxX = inWidth + absOffsetX;
         const int32_t maxY = inHeight + absOffsetY;
-        const bool isInNonSingleLayer = !in.singleLayer();
         const bool isOutNonSingleLayer = !out.singleLayer();
 
-        const uint8_t * transformIn = nullptr;
-        if ( isInNonSingleLayer ) {
-            transformIn = in.transform();
-        }
-
-        uint8_t * transformOut = nullptr;
-        if ( isOutNonSingleLayer ) {
-            transformOut = out.transform();
-        }
+        const uint8_t * transformIn = in.singleLayer() ? nullptr : in.transform();
+        uint8_t * transformOut = out.singleLayer() ? nullptr : out.transform();
 
         uint8_t * imageOut = out.image() + outPos.x + shadowOffsetX + in.x() + static_cast<ptrdiff_t>( outPos.y + shadowOffsetY + in.y() ) * outWidth;
 
@@ -1383,31 +1375,22 @@ namespace fheroes2
         const int32_t widthIn = in.width();
         const int32_t offsetIn = inY * widthIn + inX;
         const uint8_t * imageIn = in.image() + offsetIn;
-        const uint8_t * transformIn = nullptr;
-
-        // TODO: rewrite function to properly work with single layer images.
-        if ( !in.singleLayer() ) {
-            transformIn = in.transform() + offsetIn;
-        }
+        const uint8_t * transformIn = in.singleLayer() ? nullptr : in.transform() + offsetIn;
 
         const int32_t widthOut = out.width();
         const int32_t offsetOut = outY * widthOut + outX;
         uint8_t * imageOut = out.image() + offsetOut;
-        uint8_t * transformOut = nullptr;
-
-        if ( !out.singleLayer() ) {
-            transformOut = out.transform() + offsetOut;
-        }
+        uint8_t * transformOut = out.singleLayer() ? nullptr : out.transform() + offsetOut;
 
         const bool isInNonSinglelayerToOutSinglelayer = !in.singleLayer() && out.singleLayer();
 
         if ( isVertical ) {
             // We also go in a loop from the right part of the image to its center.
             const uint8_t * imageInRightPoint = imageIn + width - 1;
-            const uint8_t * transformInRightPoint = transformIn + width - 1;
-
             uint8_t * imageOutRightPoint = imageOut + width - 1;
-            uint8_t * transformOutRightPoint = transformOut + width - 1;
+
+            const uint8_t * transformInRightPoint = transformIn ? transformIn + width - 1 : nullptr;
+            uint8_t * transformOutRightPoint = transformOut ? transformOut + width - 1 : nullptr;
 
             const int32_t halfWidth = width / 2;
 
@@ -1415,15 +1398,25 @@ namespace fheroes2
             if ( ( width % 2 ) == 1 ) {
                 if ( isReverse ) {
                     --imageOutRightPoint;
-                    --transformOutRightPoint;
                     --imageInRightPoint;
-                    --transformInRightPoint;
+
+                    if ( transformOutRightPoint ) {
+                        --transformOutRightPoint;
+                    }
+                    if ( transformInRightPoint ) {
+                        --transformInRightPoint;
+                    }
                 }
                 else {
                     ++imageOut;
-                    ++transformOut;
                     ++imageIn;
-                    ++transformIn;
+
+                    if ( transformOut ) {
+                        ++transformOut;
+                    }
+                    if ( transformIn ) {
+                        ++transformIn;
+                    }
                 }
             }
 
@@ -1458,6 +1451,7 @@ namespace fheroes2
                             *( transformOut + offsetOutX ) = 0;
                         }
                         else {
+                            // 'in' and 'out' images have the transform layer.
                             *( transformOut + offsetOutX ) = *( transformIn + offsetInX );
                         }
                     }
@@ -1479,6 +1473,7 @@ namespace fheroes2
                             *( transformOutRightPoint + offsetOutX ) = 0;
                         }
                         else {
+                            // 'in' and 'out' images have the transform layer.
                             *( transformOutRightPoint + offsetOutX ) = *( transformInRightPoint + offsetInX );
                         }
                     }
@@ -1486,24 +1481,29 @@ namespace fheroes2
 
                 ++imageOut;
                 --imageOutRightPoint;
-                ++transformOut;
-                --transformOutRightPoint;
-
                 ++imageIn;
                 --imageInRightPoint;
-                ++transformIn;
-                --transformInRightPoint;
+
+                if ( transformOut ) {
+                    ++transformOut;
+                    --transformOutRightPoint;
+                }
+
+                if ( transformIn ) {
+                    ++transformIn;
+                    --transformInRightPoint;
+                }
             }
         }
         else {
             // We also go in a loop from the bottom part of the image to its center.
             const int32_t offsetInBottomOffset = ( height - 1 ) * widthIn;
-            const uint8_t * imageInBottomPoint = imageIn + offsetInBottomOffset;
-            const uint8_t * transformInBottomPoint = transformIn + offsetInBottomOffset;
-
             const int32_t offsetOutYBottomOffset = ( height - 1 ) * widthOut;
+            const uint8_t * imageInBottomPoint = imageIn + offsetInBottomOffset;
             uint8_t * imageOutBottomPoint = imageOut + offsetOutYBottomOffset;
-            uint8_t * transformOutBottomPoint = transformOut + offsetOutYBottomOffset;
+
+            const uint8_t * transformInBottomPoint = transformIn ? transformIn + offsetInBottomOffset : nullptr;
+            uint8_t * transformOutBottomPoint = transformOut ? transformOut + offsetOutYBottomOffset : nullptr;
 
             const int32_t halfHeight = height / 2;
 
@@ -1511,15 +1511,25 @@ namespace fheroes2
             if ( ( height % 2 ) == 1 ) {
                 if ( isReverse ) {
                     imageOutBottomPoint -= widthOut;
-                    transformOutBottomPoint -= widthOut;
                     imageInBottomPoint -= widthIn;
-                    transformInBottomPoint -= widthIn;
+
+                    if ( transformOutBottomPoint ) {
+                        transformOutBottomPoint -= widthOut;
+                    }
+                    if ( transformInBottomPoint ) {
+                        transformInBottomPoint -= widthIn;
+                    }
                 }
                 else {
                     imageOut += widthOut;
-                    transformOut += widthOut;
                     imageIn += widthIn;
-                    transformIn += widthIn;
+
+                    if ( transformOut ) {
+                        transformOut += widthOut;
+                    }
+                    if ( transformIn ) {
+                        transformIn += widthIn;
+                    }
                 }
             }
 
@@ -1552,6 +1562,7 @@ namespace fheroes2
                             *( transformOut + x ) = 0;
                         }
                         else {
+                            // 'in' and 'out' images have the transform layer.
                             *( transformOut + x ) = *( transformIn + x );
                         }
                     }
@@ -1572,6 +1583,7 @@ namespace fheroes2
                             *( transformOutBottomPoint + x ) = 0;
                         }
                         else {
+                            // 'in' and 'out' images have the transform layer.
                             *( transformOutBottomPoint + x ) = *( transformInBottomPoint + x );
                         }
                     }
@@ -1579,13 +1591,18 @@ namespace fheroes2
 
                 imageOut += widthOut;
                 imageOutBottomPoint -= widthOut;
-                transformOut += widthOut;
-                transformOutBottomPoint -= widthOut;
-
                 imageIn += widthIn;
                 imageInBottomPoint -= widthIn;
-                transformIn += widthIn;
-                transformInBottomPoint -= widthIn;
+
+                if ( transformOut ) {
+                    transformOut += widthOut;
+                    transformOutBottomPoint -= widthOut;
+                }
+
+                if ( transformIn ) {
+                    transformIn += widthIn;
+                    transformInBottomPoint -= widthIn;
+                }
             }
         }
     }
@@ -1637,7 +1654,7 @@ namespace fheroes2
         return out;
     }
 
-    void DrawBorder( Image & image, const uint8_t value, const uint32_t skipFactor )
+    void DrawBorder( Image & image, const uint8_t value, const uint32_t skipFactor /* =0 */ )
     {
         if ( image.empty() || image.width() < 2 || image.height() < 2 ) {
             return;
@@ -1645,118 +1662,165 @@ namespace fheroes2
 
         const int32_t width = image.width();
         const int32_t height = image.height();
+        const bool isSingleLayer = image.singleLayer();
 
         uint8_t * dataPointer = image.image();
-        uint8_t * transformPointer;
-
-        // This function is rare called for single layer images so we do not complicate the draw logic and simply
-        // set 'transform' pointer to 'data' not to go out of assigned memory.
-        // TODO: rewrite function to properly work with single layer images.
-        if ( image.singleLayer() ) {
-            transformPointer = dataPointer;
-        }
-        else {
-            transformPointer = image.transform();
-        }
+        uint8_t * transformPointer = isSingleLayer ? nullptr : image.transform();
 
         if ( skipFactor < 2 ) {
             // top side
             uint8_t * data = dataPointer;
             uint8_t * transform = transformPointer;
             const uint8_t * dataEnd = data + width;
-            for ( ; data != dataEnd; ++data, ++transform ) {
-                *transform = 0;
-                *data = value;
+            if ( isSingleLayer ) {
+                for ( ; data != dataEnd; ++data ) {
+                    *data = value;
+                }
+            }
+            else {
+                for ( ; data != dataEnd; ++data, ++transform ) {
+                    *data = value;
+                    *transform = 0;
+                }
             }
 
             // bottom side
             data = dataPointer + width * static_cast<ptrdiff_t>( height - 1 );
-            transform = transformPointer + width * static_cast<ptrdiff_t>( height - 1 );
             dataEnd = data + width;
-            for ( ; data != dataEnd; ++data, ++transform ) {
-                *transform = 0;
-                *data = value;
+            if ( isSingleLayer ) {
+                for ( ; data != dataEnd; ++data ) {
+                    *data = value;
+                }
+            }
+            else {
+                transform = transformPointer + width * static_cast<ptrdiff_t>( height - 1 );
+                for ( ; data != dataEnd; ++data, ++transform ) {
+                    *data = value;
+                    *transform = 0;
+                }
             }
 
             // left side
             data = dataPointer + width;
-            transform = transformPointer + width;
             dataEnd = data + width * ( height - 2 );
-            for ( ; data != dataEnd; data += width, transform += width ) {
-                *transform = 0;
-                *data = value;
+            if ( isSingleLayer ) {
+                for ( ; data != dataEnd; data += width ) {
+                    *data = value;
+                }
+            }
+            else {
+                transform = transformPointer + width;
+                for ( ; data != dataEnd; data += width, transform += width ) {
+                    *data = value;
+                    *transform = 0;
+                }
             }
 
             // right side
             data = dataPointer + width + width - 1;
-            transform = transformPointer + width + width - 1;
             dataEnd = data + width * ( height - 2 );
-            for ( ; data != dataEnd; data += width, transform += width ) {
-                *transform = 0;
-                *data = value;
+            if ( isSingleLayer ) {
+                for ( ; data != dataEnd; data += width ) {
+                    *data = value;
+                }
+            }
+            else {
+                transform = transformPointer + width + width - 1;
+                for ( ; data != dataEnd; data += width, transform += width ) {
+                    *data = value;
+                    *transform = 0;
+                }
             }
         }
         else {
-            uint32_t counter = 0;
+            uint32_t counter = 1;
 
             // top side
             uint8_t * data = dataPointer;
             uint8_t * transform = transformPointer;
             const uint8_t * dataEnd = data + width;
-            for ( ; data != dataEnd; ++data, ++transform ) {
-                if ( counter != skipFactor ) {
-                    *transform = 0;
-                    *data = value;
+            if ( isSingleLayer ) {
+                for ( ; data != dataEnd; ++data ) {
+                    if ( counter % skipFactor != 0 ) {
+                        *data = value;
+                    }
+                    ++counter;
                 }
-                else {
-                    counter = 0;
+            }
+            else {
+                for ( ; data != dataEnd; ++data, ++transform ) {
+                    if ( counter % skipFactor != 0 ) {
+                        *data = value;
+                        *transform = 0;
+                    }
+                    ++counter;
                 }
-                ++counter;
             }
 
             // right side
             data = dataPointer + width + width - 1;
-            transform = transformPointer + width + width - 1;
             dataEnd = data + width * ( height - 2 );
-            for ( ; data != dataEnd; data += width, transform += width ) {
-                if ( counter != skipFactor ) {
-                    *transform = 0;
-                    *data = value;
+            if ( isSingleLayer ) {
+                for ( ; data != dataEnd; data += width ) {
+                    if ( counter % skipFactor != 0 ) {
+                        *data = value;
+                    }
+                    ++counter;
                 }
-                else {
-                    counter = 0;
+            }
+            else {
+                transform = transformPointer + width + width - 1;
+                for ( ; data != dataEnd; data += width, transform += width ) {
+                    if ( counter % skipFactor != 0 ) {
+                        *data = value;
+                        *transform = 0;
+                    }
+                    ++counter;
                 }
-                ++counter;
             }
 
             // bottom side
             data = dataPointer + width * static_cast<ptrdiff_t>( height - 1 ) + width - 1;
-            transform = transformPointer + width * static_cast<ptrdiff_t>( height - 1 ) + width - 1;
             dataEnd = data - width;
-            for ( ; data != dataEnd; --data, --transform ) {
-                if ( counter != skipFactor ) {
-                    *transform = 0;
-                    *data = value;
+            if ( isSingleLayer ) {
+                for ( ; data != dataEnd; --data ) {
+                    if ( counter % skipFactor != 0 ) {
+                        *data = value;
+                    }
+                    ++counter;
                 }
-                else {
-                    counter = 0;
+            }
+            else {
+                transform = transformPointer + width * static_cast<ptrdiff_t>( height - 1 ) + width - 1;
+                for ( ; data != dataEnd; --data, --transform ) {
+                    if ( counter % skipFactor != 0 ) {
+                        *data = value;
+                        *transform = 0;
+                    }
+                    ++counter;
                 }
-                ++counter;
             }
 
             // left side
             data = dataPointer + width * static_cast<ptrdiff_t>( height - 2 );
-            transform = transformPointer + width * static_cast<ptrdiff_t>( height - 2 );
             dataEnd = dataPointer;
-            for ( ; data != dataEnd; data -= width, transform -= width ) {
-                if ( counter != skipFactor ) {
-                    *transform = 0;
-                    *data = value;
+            if ( isSingleLayer ) {
+                for ( ; data != dataEnd; data -= width ) {
+                    if ( counter % skipFactor != 0 ) {
+                        *data = value;
+                    }
+                    ++counter;
                 }
-                else {
-                    counter = 0;
+            }
+            else {
+                transform = transformPointer + width * static_cast<ptrdiff_t>( height - 2 );
+                for ( ; data != dataEnd; data -= width, transform -= width ) {
+                    if ( counter % skipFactor != 0 ) {
+                        *data = value;
+                        *transform = 0;
+                    }
+                    ++counter;
                 }
-                ++counter;
             }
         }
     }
@@ -1798,49 +1862,78 @@ namespace fheroes2
         }
 
         uint8_t * data = image.image();
-        uint8_t * transform;
 
-        // This function is rare called for single layer images so we do not complicate the draw logic and simply
-        // set 'transform' pointer to 'data' not to go out of assigned memory.
         // TODO: Rewrite the line generation code to simplify it.
+
         if ( image.singleLayer() ) {
-            transform = data;
-        }
-        else {
-            transform = image.transform();
-        }
+            if ( dx >= dy ) {
+                int32_t ns = dx / 2;
 
-        if ( dx >= dy ) {
-            int32_t ns = dx / 2;
-
-            for ( int32_t i = 0; i <= dx; ++i ) {
-                if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
-                    const int32_t offset = x1 + y1 * width;
-                    *( transform + offset ) = 0;
-                    *( data + offset ) = value;
+                for ( int32_t i = 0; i <= dx; ++i ) {
+                    if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
+                        const int32_t offset = x1 + y1 * width;
+                        *( data + offset ) = value;
+                    }
+                    x1 < x2 ? ++x1 : --x1;
+                    ns -= dy;
+                    if ( ns < 0 ) {
+                        y1 < y2 ? ++y1 : --y1;
+                        ns += dx;
+                    }
                 }
-                x1 < x2 ? ++x1 : --x1;
-                ns -= dy;
-                if ( ns < 0 ) {
+            }
+            else {
+                int32_t ns = dy / 2;
+
+                for ( int32_t i = 0; i <= dy; ++i ) {
+                    if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
+                        const int32_t offset = x1 + y1 * width;
+                        *( data + offset ) = value;
+                    }
                     y1 < y2 ? ++y1 : --y1;
-                    ns += dx;
+                    ns -= dx;
+                    if ( ns < 0 ) {
+                        x1 < x2 ? ++x1 : --x1;
+                        ns += dy;
+                    }
                 }
             }
         }
         else {
-            int32_t ns = dy / 2;
+            uint8_t * transform = image.transform();
 
-            for ( int32_t i = 0; i <= dy; ++i ) {
-                if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
-                    const int32_t offset = x1 + y1 * width;
-                    *( transform + offset ) = 0;
-                    *( data + offset ) = value;
-                }
-                y1 < y2 ? ++y1 : --y1;
-                ns -= dx;
-                if ( ns < 0 ) {
+            if ( dx >= dy ) {
+                int32_t ns = dx / 2;
+
+                for ( int32_t i = 0; i <= dx; ++i ) {
+                    if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
+                        const int32_t offset = x1 + y1 * width;
+                        *( data + offset ) = value;
+                        *( transform + offset ) = 0;
+                    }
                     x1 < x2 ? ++x1 : --x1;
-                    ns += dy;
+                    ns -= dy;
+                    if ( ns < 0 ) {
+                        y1 < y2 ? ++y1 : --y1;
+                        ns += dx;
+                    }
+                }
+            }
+            else {
+                int32_t ns = dy / 2;
+
+                for ( int32_t i = 0; i <= dy; ++i ) {
+                    if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
+                        const int32_t offset = x1 + y1 * width;
+                        *( data + offset ) = value;
+                        *( transform + offset ) = 0;
+                    }
+                    y1 < y2 ? ++y1 : --y1;
+                    ns -= dx;
+                    if ( ns < 0 ) {
+                        x1 < x2 ? ++x1 : --x1;
+                        ns += dy;
+                    }
                 }
             }
         }
@@ -1935,9 +2028,7 @@ namespace fheroes2
         for ( size_t i = 0; i < input.size(); ++i ) {
             imageIn[i] = input[i]->image();
 
-            // TODO: rewrite function to properly work with single layer images.
-            assert( !input[i]->singleLayer() );
-            transformIn[i] = input[i]->transform();
+            transformIn[i] = input[i]->singleLayer() ? nullptr : input[i]->transform();
         }
 
         Image out( inputFrontWidth, inputFrontHeight );
@@ -1953,7 +2044,7 @@ namespace fheroes2
             isEqual = true;
 
             for ( size_t i = 1; i < input.size(); ++i ) {
-                if ( *imageIn[0] != *imageIn[i] || *transformIn[0] != *transformIn[i] ) {
+                if ( *imageIn[0] != *imageIn[i] || ( transformIn[0] && transformIn[i] && ( *transformIn[0] != *transformIn[i] ) ) ) {
                     isEqual = false;
                     break;
                 }
@@ -1961,12 +2052,14 @@ namespace fheroes2
 
             if ( isEqual ) {
                 *imageOut = *imageIn[0];
-                *transformOut = *transformIn[0];
+                *transformOut = transformIn[0] ? *transformIn[0] : 0;
             }
 
             for ( size_t i = 0; i < input.size(); ++i ) {
                 ++imageIn[i];
-                ++transformIn[i];
+                if ( transformIn[i] ) {
+                    ++transformIn[i];
+                }
             }
         }
 
@@ -2140,10 +2233,7 @@ namespace fheroes2
         const uint8_t * imageOutYEnd = imageOutY + widthOut * height;
 
         const bool isOutSingleLayer = out.singleLayer();
-        uint8_t * transformOutY = nullptr;
-        if ( !isOutSingleLayer ) {
-            transformOutY = out.transform() + offsetOut;
-        }
+        uint8_t * transformOutY = isOutSingleLayer ? nullptr : out.transform() + offsetOut;
 
         if ( horizontally && !vertically ) {
             const uint8_t * imageInY = in.image() + offsetIn + width - 1;
