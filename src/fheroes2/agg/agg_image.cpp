@@ -2640,6 +2640,7 @@ namespace fheroes2
                 if ( !_icnVsSprite[id].empty() ) {
                     // This is the Editor main menu background which shouldn't have any transform layer.
                     _icnVsSprite[id][0]._disableTransformLayer();
+                    // Fix the cycling colors in original editor main menu background.
                     fheroes2::ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
                 }
                 return true;
