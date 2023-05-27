@@ -110,7 +110,7 @@
     <ClCompile Include="src\fheroes2\game\game_campaign.cpp" />
     <ClCompile Include="src\fheroes2\game\game_credits.cpp" />
     <ClCompile Include="src\fheroes2\game\game_delays.cpp" />
-	<ClCompile Include="src\fheroes2\game\game_editor_mainmenu.cpp" />
+    <ClCompile Include="src\fheroes2\game\game_editor_mainmenu.cpp" />
     <ClCompile Include="src\fheroes2\game\game_highscores.cpp" />
     <ClCompile Include="src\fheroes2\game\game_hotkeys.cpp" />
     <ClCompile Include="src\fheroes2\game\game_interface.cpp" />
