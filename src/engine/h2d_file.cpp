@@ -191,7 +191,9 @@ namespace fheroes2
         const size_t size = static_cast<size_t>( width * height );
         image.resize( width, height );
         memcpy( image.image(), data.data() + 4 + 4 + 4 + 4, size );
-        memcpy( image.transform(), data.data() + 4 + 4 + 4 + 4 + size, size );
+        if ( !image.singleLayer() ) {
+            memcpy( image.transform(), data.data() + 4 + 4 + 4 + 4 + size, size );
+        }
 
         image.setPosition( x, y );
 
@@ -200,7 +202,7 @@ namespace fheroes2
 
     bool writeImageToH2D( H2DWriter & writer, const std::string & name, const Sprite & image )
     {
-        assert( !image.empty() );
+        assert( !image.empty() && !image.singleLayer() );
 
         StreamBuf stream;
         stream.putLE32( static_cast<uint32_t>( image.width() ) );
