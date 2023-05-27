@@ -356,8 +356,9 @@ fheroes2::GameMode Interface::Basic::EventScenarioInformation()
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
 
-        // We are opening campaign scenario info. It is a full screen image change. So do th Adventure map screen fade-out.
+        // We are opening campaign scenario info. It is a full screen image change. So do fade-out and set the fade-in.
         fheroes2::fadeOutDisplay();
+        Game::setDisplayFadeIn();
 
         AudioManager::ResetAudio();
 

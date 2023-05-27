@@ -212,12 +212,15 @@ fheroes2::GameMode Game::CampaignSelection()
         le.MousePressLeft( buttonPriceOfLoyalty.area() ) ? buttonPriceOfLoyalty.drawOnPress() : buttonPriceOfLoyalty.drawOnRelease();
         le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonSuccessionWars.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_ORIGINAL_CAMPAIGN ) )
+        if ( le.MouseClickLeft( buttonSuccessionWars.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_ORIGINAL_CAMPAIGN ) ) {
             return fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN;
-        if ( le.MouseClickLeft( buttonPriceOfLoyalty.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_EXPANSION_CAMPAIGN ) )
+        }
+        if ( le.MouseClickLeft( buttonPriceOfLoyalty.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_EXPANSION_CAMPAIGN ) ) {
             return fheroes2::GameMode::NEW_PRICE_OF_LOYALTY_CAMPAIGN;
-        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelGame.area() ) )
+        }
+        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelGame.area() ) ) {
             return fheroes2::GameMode::MAIN_MENU;
+        }
 
         if ( le.MousePressRight( buttonSuccessionWars.area() ) ) {
             Dialog::Message( _( "Original Campaign" ), _( "Either Roland's or Archibald's campaign from the original Heroes of Might and Magic II." ), Font::BIG );
@@ -325,8 +328,12 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
 
     screenRestorer.changePalette( nullptr );
 
+    // Update the frame but do not render it.
     display.fill( 0 );
-    display.render();
+    display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
+
+    // Set the fade-in for the Campaign scenario info.
+    setDisplayFadeIn();
 
     return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
@@ -452,6 +459,9 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     // Update the frame but do not render it.
     display.fill( 0 );
     display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
+
+    // Set the fade-in for the Campaign scenario info.
+    setDisplayFadeIn();
 
     return gameChoice;
 }
