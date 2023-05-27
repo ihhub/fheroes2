@@ -121,7 +121,7 @@ public:
     {
         return resource;
     }
-    Funds GetIncome( int = INCOME_ALL ) const;
+    Funds GetIncome( int type = INCOME_ALL ) const;
 
     double GetArmiesStrength() const;
 
