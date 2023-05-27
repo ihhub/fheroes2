@@ -1355,7 +1355,7 @@ void Battle::Interface::fullRedraw()
     // Fade-in battlefield.
     if ( !isDefaultScreenSize ) {
         // We need to expand the ROI for the next render to properly render window borders and shadow.
-        display.updateNextRenderRoi( _background->windowWithShadowArea() );
+        display.updateNextRenderRoi( _background->totalArea() );
     }
 
     fheroes2::fadeInDisplay( _background->activeArea(), !isDefaultScreenSize );

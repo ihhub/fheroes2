@@ -35,19 +35,22 @@ namespace fheroes2
         StandardWindow( const int32_t width, const int32_t height, const bool renderBackground, Image & output = Display::instance() );
         StandardWindow( const int32_t x, const int32_t y, const int32_t width, const int32_t height, const bool renderBackground, Image & output = Display::instance() );
 
+        // Returns the window background ROI.
         const Rect & activeArea() const
         {
             return _activeArea;
         }
 
+        // Returns ROI that includes window background and window borders.
         const Rect & windowArea() const
         {
             return _windowArea;
         }
 
-        const Rect & windowWithShadowArea() const
+        // Returns ROI that includes window background, borders and window shadow.
+        const Rect & totalArea() const
         {
-            return _windowWithShadowArea;
+            return _totalArea;
         }
 
         void render();
@@ -56,7 +59,7 @@ namespace fheroes2
         Image & _output;
         const Rect _activeArea;
         const Rect _windowArea;
-        const Rect _windowWithShadowArea;
+        const Rect _totalArea;
         ImageRestorer _restorer;
         const bool _hasBackground{ true };
 
