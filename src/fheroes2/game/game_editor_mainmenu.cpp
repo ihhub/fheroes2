@@ -24,7 +24,6 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 #include <string>
 
 #include "audio.h"
@@ -39,6 +38,7 @@
 #include "icn.h"
 #include "localevent.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "math_base.h"
 #include "mus.h"
 #include "settings.h"
@@ -75,7 +75,7 @@ namespace
 
         for ( uint32_t i = 0; i < buttonCount; ++i ) {
             buttons[i].setICNInfo( ICN::BTNESIZE, 0 + i * 2, 1 + i * 2 );
-            buttons[i].setPosition( buttonPos.x, buttonPos.y + buttonYStep * i );
+            buttons[i].setPosition( buttonPos.x, buttonPos.y + buttonYStep * static_cast<int32_t>( i ) );
             buttons[i].draw();
         }
 
@@ -95,10 +95,11 @@ namespace
                 }
 
                 if ( le.MousePressRight( buttons[i].area() ) ) {
-                    const std::string mapSize = std::to_string( buttonMapSize[i] );
+                    std::string mapSize = std::to_string( buttonMapSize[i] );
                     std::string message = _( "Create a map that is %{size} squares wide and %{size} squares high." );
                     StringReplace( message, "%{size}", mapSize );
-                    Dialog::Message( mapSize + " x " + mapSize, message, Font::BIG );
+                    mapSize += " x " + mapSize;
+                    Dialog::Message( mapSize, message, Font::BIG );
                 }
             }
 
