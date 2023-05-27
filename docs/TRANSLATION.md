@@ -47,7 +47,7 @@ and you are happy to share it, you will have to prepare a pull request.
 ### Fork the fheroes2 repository
 
 A fork is your copy of the fheroes2 repository. It gives you a safe space to prepare and test your changes.
-You can read here how to [create a fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
+You can read here how to [**create a fork**](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
 
 
 ### Software to edit translation files
@@ -71,8 +71,6 @@ To create a branch, please follow the GitHub's instruction about [**creating a b
 ### Now provide your translations
 
 Now it is time to use your favourite software, which allows you to update the translation and suits you best.
-
-#### Finding translatable strings in the codebase
 
 All original translatable strings are located in the source code of the project. If you need to clarify where this string is being used
 you can search for it. The string below, for example, can be translated in PO files:
