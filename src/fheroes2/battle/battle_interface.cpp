@@ -1270,9 +1270,6 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     _battleGround._disableTransformLayer();
     _mainSurface._disableTransformLayer();
 
-    // Prepare the Battlefield ground.
-    _redrawBattleGround();
-
     AudioManager::ResetAudio();
 }
 
@@ -1351,8 +1348,11 @@ void Battle::Interface::fullRedraw()
         _preBattleSoundChannelId = AudioManager::PlaySound( M82::PREBATTL );
     }
 
+    // Prepare the Battlefield ground.
+    _redrawBattleGround();
+
     RedrawPartialStart();
-    // We do not render battlefield display image to properly fade-out it.
+    // We do not render battlefield display image to properly fade-in it.
     redrawPreRender();
 
     // Fade-in battlefield.
@@ -2371,7 +2371,7 @@ void Battle::Interface::RedrawLowObjects( const int32_t cellId )
 
     const fheroes2::Sprite & objectSprite = fheroes2::AGG::GetICN( objectIcnId, 0 );
     const fheroes2::Rect & pt = cell->GetPos();
-    fheroes2::Blit( objectSprite, _mainSurface, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
+    fheroes2::Blit( objectSprite, _battleGround, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
 }
 
 void Battle::Interface::RedrawHighObjects( const int32_t cellId )
