@@ -1176,8 +1176,8 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
     const std::vector<Campaign::CampaignAwardData> obtainableAwards = Campaign::CampaignAwardData::getCampaignAwardData( lastCompletedScenarioInfo );
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
-    for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
-        const int32_t awardType = obtainableAwards[i]._type;
+    for ( const auto & obtainableAward : obtainableAwards ) {
+        const int32_t awardType = obtainableAward._type;
 
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_DEFEAT_ENEMY_HERO ) {
             // This award must be granted only after defeating a hero in a battle.
@@ -1193,7 +1193,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
                 saveData.setCarryOverTroops( lastBattleWinHero->GetArmy() );
         }
 
-        saveData.addCampaignAward( obtainableAwards[i]._id );
+        saveData.addCampaignAward( obtainableAward._id );
 
         // after adding an artifact award, check whether the artifacts can be assembled into something else
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT ) {

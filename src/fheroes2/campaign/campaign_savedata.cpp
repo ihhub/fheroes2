@@ -52,12 +52,12 @@ namespace Campaign
         const ScenarioInfoId & currentScenarioInfo = getCurrentScenarioInfoId();
         const std::vector<CampaignAwardData> obtainableAwards = CampaignAwardData::getCampaignAwardData( currentScenarioInfo );
 
-        for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
-            const int32_t awardType = obtainableAwards[i]._type;
+        for ( const auto & obtainableAward : obtainableAwards ) {
+            const int32_t awardType = obtainableAward._type;
 
             if ( awardType == CampaignAwardData::AwardType::TYPE_DEFEAT_ENEMY_HERO ) {
-                if ( obtainableAwards[i]._subType == heroId ) {
-                    addCampaignAward( obtainableAwards[i]._id );
+                if ( obtainableAward._subType == heroId ) {
+                    addCampaignAward( obtainableAward._id );
                 }
                 break;
             }
