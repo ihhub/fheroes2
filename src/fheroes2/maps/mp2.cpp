@@ -811,6 +811,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_COAST:
     case OBJ_BOAT:
     case OBJ_HEROES:
+    case OBJ_SKELETON:
         return DIRECTION_ALL;
     case OBJ_DERELICT_SHIP:
     case OBJ_TROLL_BRIDGE:
@@ -836,7 +837,6 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_SHRINE_THIRD_CIRCLE:
     case OBJ_TREE_HOUSE:
     case OBJ_ARTESIAN_SPRING:
-    case OBJ_SKELETON:
     case OBJ_TREE_OF_KNOWLEDGE:
     case OBJ_ORACLE:
     case OBJ_OASIS:
