@@ -1177,7 +1177,12 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
     for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
-        const uint32_t awardType = obtainableAwards[i]._type;
+        const int32_t awardType = obtainableAwards[i]._type;
+
+        if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_DEFEAT_ENEMY_HERO ) {
+            // This award must be granted only after defeating a hero in a battle.
+            continue;
+        }
 
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
             const Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );

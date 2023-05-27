@@ -47,6 +47,23 @@ namespace Campaign
         _obtainedCampaignAwards.erase( std::remove( _obtainedCampaignAwards.begin(), _obtainedCampaignAwards.end(), awardID ), _obtainedCampaignAwards.end() );
     }
 
+    void CampaignSaveData::setEnemyDefeatedAward( const int heroId )
+    {
+        const ScenarioInfoId & currentScenarioInfo = getCurrentScenarioInfoId();
+        const std::vector<CampaignAwardData> obtainableAwards = CampaignAwardData::getCampaignAwardData( currentScenarioInfo );
+
+        for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
+            const int32_t awardType = obtainableAwards[i]._type;
+
+            if ( awardType == CampaignAwardData::AwardType::TYPE_DEFEAT_ENEMY_HERO ) {
+                if ( obtainableAwards[i]._subType == heroId ) {
+                    addCampaignAward( obtainableAwards[i]._id );
+                }
+                break;
+            }
+        }
+    }
+
     void CampaignSaveData::setCurrentScenarioBonus( const ScenarioBonusData & bonus )
     {
         _currentScenarioBonus = bonus;
