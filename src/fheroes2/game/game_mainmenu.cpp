@@ -173,6 +173,9 @@ void Game::mainGameLoop( bool isFirstGameRun )
                 result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIGN, false );
             }
             break;
+        case fheroes2::GameMode::EDITOR_MAIN_MENU:
+            result = Game::editorMainMenu();
+            break;
 
         default:
             break;
@@ -348,6 +351,9 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             fheroes2::openGameSettings();
 
             return fheroes2::GameMode::MAIN_MENU;
+        }
+        else if ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) ) {
+            return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
         // right info

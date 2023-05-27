@@ -174,6 +174,11 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_EXPANSION_CAMPAIGN )]
             = { HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|choose the expansion campaign" ), fheroes2::Key::KEY_E };
 
+#if defined( WITH_DEBUG )
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_MAIN_MENU )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|map editor main menu" ), fheroes2::Key::KEY_E };
+#endif
+
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ROLAND )]
             = { HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|roland campaign" ), fheroes2::Key::KEY_1 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ARCHIBALD )]

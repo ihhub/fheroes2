@@ -2635,6 +2635,14 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::EDITOR:
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    // This is the Editor main menu background which shouldn't have any transform layer.
+                    _icnVsSprite[id][0]._disableTransformLayer();
+                    fheroes2::ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
+                }
+                return true;
             case ICN::HEROES:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
@@ -3672,7 +3680,7 @@ namespace fheroes2
         // We have few ICNs which we need to scale like some related to main screen
         bool IsScalableICN( const int id )
         {
-            return id == ICN::HEROES || id == ICN::BTNSHNGL || id == ICN::SHNGANIM;
+            return id == ICN::EDITOR || id == ICN::HEROES || id == ICN::BTNSHNGL || id == ICN::SHNGANIM;
         }
 
         const Sprite & GetScaledICN( const int icnId, const uint32_t index )

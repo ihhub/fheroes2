@@ -25,6 +25,7 @@
 namespace fheroes2
 {
     void drawMainMenuScreen();
+    void drawEditorMainMenuScreen();
 
     Point drawButtonPanel();
 
