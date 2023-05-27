@@ -58,6 +58,7 @@
 #include "ui_dialog.h"
 #include "ui_language.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -178,6 +179,9 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
     int32_t selectedEntryIndex = -1;
     const bool isAfterGameCompletion = ( ( gameResult.GetResult() & GameOver::WINS ) != 0 );
 
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const bool isDefaultScreenSize = display.isDefaultSize();
+
     if ( isAfterGameCompletion ) {
         auto inputPlayerName = []( std::string & playerName ) {
             Dialog::InputString( _( "Your Name" ), playerName, std::string(), 15 );
@@ -233,6 +237,12 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         highScoreDataContainer.save( highScoreDataPath );
 
         gameResult.ResetResult();
+
+        // Fade-out game screen.
+        fheroes2::fadeOutDisplay();
+    }
+    else if ( isDefaultScreenSize ) {
+        fheroes2::fadeOutDisplay();
     }
 
     // setup cursor
@@ -240,7 +250,6 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point top{ ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 };
     const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT, false );
 
@@ -260,7 +269,18 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
     buttonOtherHighScore.draw();
     buttonExit.draw();
 
-    display.render();
+    // Fade-in High Scores screen.
+    if ( isAfterGameCompletion ) {
+        fheroes2::fadeInDisplay();
+    }
+    else {
+        if ( !isDefaultScreenSize ) {
+            // We need to expand the ROI for the next render to properly render window borders and shadow.
+            display.updateNextRenderRoi( border.totalArea() );
+        }
+
+        fheroes2::fadeInDisplay( border.activeArea(), !isDefaultScreenSize );
+    }
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
@@ -268,6 +288,14 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow() ) {
+            if ( isAfterGameCompletion || isDefaultScreenSize ) {
+                fheroes2::fadeOutDisplay();
+                Game::setDisplayFadeIn();
+            }
+            else {
+                fheroes2::fadeOutDisplay( border.activeArea(), true );
+            }
+
             return fheroes2::GameMode::MAIN_MENU;
         }
         if ( le.MouseClickLeft( buttonOtherHighScore.area() ) ) {

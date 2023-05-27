@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-24 01:33+0000\n"
+"POT-Creation-Date: 2023-05-26 14:46+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2688,17 +2688,16 @@ msgid "Are you sure you want to dismiss this army?"
 msgstr "Сигурен ли си, че искаш да разпуснеш тази армия?"
 
 msgid "Upgrade"
-msgstr ""
+msgstr "Подобри"
 
-#, fuzzy
 msgid "Upgrade your troops."
-msgstr "Не можеш да си позволиш да надграждиш войските си!"
+msgstr "Надградете войските си."
 
 msgid "Dismiss"
-msgstr ""
+msgstr "Отсвободи"
 
 msgid "Dismiss this army."
-msgstr ""
+msgstr "Освободи тази войска."
 
 msgid "Followers"
 msgstr "Последователи"
@@ -4236,6 +4235,9 @@ msgstr ""
 "Една от четирите нови кампании от комплекта за разширение на \"Цената на "
 "Лоялността\"."
 
+msgid "Loading video. Please wait..."
+msgstr ""
+
 msgid "Host"
 msgstr "Домакин"
 
@@ -4376,9 +4378,8 @@ msgstr ""
 "Не успя да завършиш мисията си навреме.\n"
 "Всичко е загубено."
 
-#, fuzzy
 msgid "Defeat!"
-msgstr " победен"
+msgstr "Победен!"
 
 msgid ""
 "Base score: %{score}\n"
@@ -4455,7 +4456,7 @@ msgid "%{color} player has been vanquished!"
 msgstr "%{color} играч е победен!"
 
 msgid "Major Event!"
-msgstr ""
+msgstr "Голямо събитие!"
 
 msgid "Scenario:"
 msgstr "Сценарий:"
@@ -4544,7 +4545,7 @@ msgid "New Week!"
 msgstr "Нова Седмица!"
 
 msgid "Beware!"
-msgstr ""
+msgstr "Внимавай!"
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
@@ -6465,12 +6466,11 @@ msgstr ""
 msgid "Spell book is not present."
 msgstr "Нямаш книга със заклинания."
 
-#, fuzzy
 msgid ""
 "That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
 msgstr ""
-"Това заклинание струва %{mana} мана. Имаш само %{point} мана, така че не "
-"можеш да направиш заклинанието."
+"Това заклинание се нуждае от %{mana} мана. Нямаш мана, така че не можеш да "
+"направиш заклинанието."
 
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
@@ -6521,11 +6521,15 @@ msgid ""
 "No opponent can have heroes under his command anymore. Casting this spell "
 "will not bring any advantage."
 msgstr ""
+"Никой противник вече не може да има герои под свое командване. Изричането на "
+"това заклинание няма да донесе никаква полза."
 
 msgid ""
 "No opponent has a hero under his command at this time. Casting this spell "
 "will not bring any advantage."
 msgstr ""
+"Никой противник няма герой под свое командване в момента. Изричането на това "
+"заклинание няма да донесе никаква полза."
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -6543,11 +6547,15 @@ msgstr ""
 
 msgid "You must first defeat the ghosts guarding the mine to cast this spell."
 msgstr ""
+"Първо трябва да победиш призраците, които пазят мината, за да направиш това "
+"заклинание."
 
 msgid ""
 "There are already at least as many elementals guarding the mine than the "
 "spell can generate. Casting this spell will not bring any advantage."
 msgstr ""
+"Вече има толкова елементали, които пазят мината, отколкото заклинанието може "
+"да генерира. Изричането на това заклинание няма да донесе никаква полза."
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} е %{race} (Ниво %{level})"

@@ -188,13 +188,6 @@ public:
     bool isHideInterfaceEnabled() const;
     bool isEvilInterfaceEnabled() const;
 
-    static bool isFadeEffectEnabled()
-    {
-        // TODO: fix fading effect for the original resolution (640 x 480) and enable back this option.
-        // return video_mode == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
-        return false;
-    }
-
     bool LoadedGameVersion() const
     {
         // 0x80 value should be same as in Game::TYPE_LOADFILE enumeration value

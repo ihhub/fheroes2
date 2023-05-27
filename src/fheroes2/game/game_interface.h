@@ -215,11 +215,10 @@ namespace Interface
 
         fheroes2::GameMode StartGame();
 
-        void MouseCursorAreaClickLeft( const int32_t index_maps );
+        void MouseCursorAreaClickLeft( const int32_t tileIndex );
         void MouseCursorAreaPressRight( int32_t ) const;
 
         static int GetCursorTileIndex( int32_t dstIndex );
-        void CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const;
 
         // Regenerates the game area and updates the panel positions depending on the UI settings
         void Reset();
@@ -231,10 +230,13 @@ namespace Interface
         static int GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile );
         static int GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile );
 
-        void ShowPathOrStartMoveHero( Heroes *, int32_t );
-        void MoveHeroFromArrowKeys( Heroes & hero, int direct );
+        void ShowPathOrStartMoveHero( Heroes * hero, const int32_t destinationIdx );
+        void MoveHeroFromArrowKeys( Heroes & hero, const int direction );
 
         fheroes2::GameMode HumanTurn( const bool isload );
+
+        // If display fade-in state is set reset it to false and fade-in the full display image. Otherwise render full display image without fade-in.
+        void validateFadeInAndRender();
 
         GameArea gameArea;
         Radar radar;
