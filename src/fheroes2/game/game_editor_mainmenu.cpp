@@ -56,7 +56,8 @@ namespace
     void showWIPInfo()
     {
         fheroes2::showMessage( fheroes2::Text{ _( "Warning!" ), fheroes2::FontType::normalYellow() },
-                               fheroes2::Text{ "The Map Editor is still in WIP. This function is not available yet.", fheroes2::FontType::normalWhite() }, Dialog::OK );
+                               fheroes2::Text{ "The Map Editor is still in development. This function is not available yet.", fheroes2::FontType::normalWhite() },
+                               Dialog::OK );
     }
 
     Maps::mapsize_t selectMapSize()
@@ -110,7 +111,7 @@ namespace
             }
 
             if ( le.MousePressRight( cancel.area() ) ) {
-                Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
+                Dialog::Message( _( "Cancel" ), _( "Cancel back to the New Map menu." ), Font::BIG );
             }
         }
 
@@ -224,7 +225,7 @@ fheroes2::GameMode Game::editorNewMap()
             Dialog::Message( _( "Random" ), _( "Create a randomly generated map." ), Font::BIG );
         }
         else if ( le.MousePressRight( cancel.area() ) ) {
-            Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
+            Dialog::Message( _( "Cancel" ), _( "Cancel back to the Map Editor main menu." ), Font::BIG );
         }
     }
 
@@ -250,7 +251,7 @@ fheroes2::GameMode Game::editorLoadMap()
     if ( fileInfo
          && fheroes2::showMessage( fheroes2::Text{ _( "Warning!" ), fheroes2::FontType::normalYellow() },
                                    fheroes2::Text{ "You have selected:\n" + fileInfo->name
-                                                       + "\n But the Map Editor is still in WIP.\nDo you want to play a single player game?",
+                                                       + "\n But the Map Editor is still in development.\nDo you want to play a single player game?",
                                                    fheroes2::FontType::normalWhite() },
                                    Dialog::YES | Dialog::NO )
                 == Dialog::YES ) {
