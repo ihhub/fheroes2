@@ -293,90 +293,142 @@ namespace fheroes2
         return true;
     }
 
-    Sprite decodeICNSprite( const uint8_t * data, const uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY )
+    Sprite decodeICNSprite( const uint8_t * data, const uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY,
+                            const bool loadAsSingleLayer /* = false */ )
     {
-        Sprite sprite( width, height, offsetX, offsetY );
+        Sprite sprite( width, height, offsetX, offsetY, loadAsSingleLayer );
         sprite.reset();
 
         uint8_t * imageData = sprite.image();
-        uint8_t * imageTransform = sprite.transform();
 
         uint32_t posX = 0;
 
         const uint8_t * dataEnd = data + sizeData;
 
-        while ( true ) {
-            if ( 0 == *data ) { // 0x00 - end of row
-                imageData += width;
-                imageTransform += width;
-                posX = 0;
-                ++data;
-            }
-            else if ( 0x80 > *data ) { // 0x01-0x7F - repeat a pixel N times
-                uint32_t pixelCount = *data;
-                ++data;
-                while ( pixelCount > 0 && data != dataEnd ) {
-                    imageData[posX] = *data;
-                    imageTransform[posX] = 0;
-                    ++posX;
+        if ( loadAsSingleLayer ) {
+            while ( true ) {
+                if ( 0 == *data ) { // 0x00 - end of row
+                    imageData += width;
+                    posX = 0;
                     ++data;
-                    --pixelCount;
                 }
-            }
-            else if ( 0x80 == *data ) { // 0x80 - end of image
-                break;
-            }
-            else if ( 0xC0 > *data ) { // 0xBF - empty (transparent) pixels
-                posX += *data - 0x80;
-                ++data;
-            }
-            else if ( 0xC0 == *data ) { // 0xC0 - transform layer
-                ++data;
+                else if ( 0x80 > *data ) { // 0x01-0x7F - repeat a pixel N times
+                    assert( dataEnd - data - 2 >= 0 );
 
-                const uint8_t transformValue = *data;
-                const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) << 6 ) / 256 + 2 ); // 1 is for skipping
+                    const uint32_t pixelCount = std::min( static_cast<uint32_t>( *data ), static_cast<uint32_t>( dataEnd - data - 2 ) );
+                    ++data;
 
-                uint32_t pixelCount = *data % 4 ? *data % 4 : *( ++data );
-
-                if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
-                    while ( pixelCount > 0 ) {
-                        imageTransform[posX] = transformType;
-                        ++posX;
-                        --pixelCount;
-                    }
-                }
-                else {
+                    memcpy( imageData + posX, data, pixelCount );
+                    data += pixelCount;
                     posX += pixelCount;
                 }
-
-                ++data;
-            }
-            else if ( 0xC1 == *data ) { // 0xC1
-                ++data;
-                uint32_t pixelCount = *data;
-                ++data;
-                while ( pixelCount > 0 ) {
-                    imageData[posX] = *data;
-                    imageTransform[posX] = 0;
-                    ++posX;
-                    --pixelCount;
+                else if ( 0x80 == *data ) { // 0x80 - end of image
+                    break;
                 }
-                ++data;
-            }
-            else {
-                uint32_t pixelCount = *data - 0xC0;
-                ++data;
-                while ( pixelCount > 0 ) {
-                    imageData[posX] = *data;
-                    imageTransform[posX] = 0;
-                    ++posX;
-                    --pixelCount;
+                else if ( 0xC0 > *data ) { // 0xBF - empty (transparent) pixels
+                    posX += *data - 0x80;
+                    ++data;
                 }
-                ++data;
-            }
+                else if ( 0xC0 == *data ) { // 0xC0 - transform layer
+                    ++data;
+                    uint32_t pixelCount = *data % 4 ? *data % 4 : *( ++data );
+                    posX += pixelCount;
+                    ++data;
+                }
+                else if ( 0xC1 == *data ) { // 0xC1
+                    ++data;
+                    const uint32_t pixelCount = *data;
+                    ++data;
 
-            if ( data >= dataEnd ) {
-                break;
+                    std::fill( imageData + posX, imageData + posX + pixelCount, *data );
+                    posX += pixelCount;
+
+                    ++data;
+                }
+                else {
+                    const uint32_t pixelCount = *data - 0xC0;
+                    ++data;
+
+                    std::fill( imageData + posX, imageData + posX + pixelCount, *data );
+                    posX += pixelCount;
+
+                    ++data;
+                }
+
+                if ( data >= dataEnd ) {
+                    break;
+                }
+            }
+        }
+        else {
+            uint8_t * imageTransform = sprite.transform();
+
+            while ( true ) {
+                if ( 0 == *data ) { // 0x00 - end of row
+                    imageData += width;
+                    imageTransform += width;
+                    posX = 0;
+                    ++data;
+                }
+                else if ( 0x80 > *data ) { // 0x01-0x7F - repeat a pixel N times
+                    assert( dataEnd - data - 2 >= 0 );
+
+                    const uint32_t pixelCount = std::min( static_cast<uint32_t>( *data ), static_cast<uint32_t>( dataEnd - data - 2 ) );
+                    ++data;
+
+                    memcpy( imageData + posX, data, pixelCount );
+                    std::fill( imageTransform + posX, imageTransform + posX + pixelCount, static_cast<uint8_t>( 0 ) );
+                    data += pixelCount;
+                    posX += pixelCount;
+                }
+                else if ( 0x80 == *data ) { // 0x80 - end of image
+                    break;
+                }
+                else if ( 0xC0 > *data ) { // 0xBF - empty (transparent) pixels
+                    posX += *data - 0x80;
+                    ++data;
+                }
+                else if ( 0xC0 == *data ) { // 0xC0 - transform layer
+                    ++data;
+
+                    const uint8_t transformValue = *data;
+                    const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) << 6 ) / 256 + 2 ); // 1 is for skipping
+
+                    uint32_t pixelCount = *data % 4 ? *data % 4 : *( ++data );
+
+                    if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
+                        std::fill( imageTransform + posX, imageTransform + posX + pixelCount, transformType );
+                    }
+
+                    posX += pixelCount;
+
+                    ++data;
+                }
+                else if ( 0xC1 == *data ) { // 0xC1
+                    ++data;
+                    const uint32_t pixelCount = *data;
+                    ++data;
+
+                    std::fill( imageData + posX, imageData + posX + pixelCount, *data );
+                    std::fill( imageTransform + posX, imageTransform + posX + pixelCount, static_cast<uint8_t>( 0 ) );
+                    posX += pixelCount;
+
+                    ++data;
+                }
+                else {
+                    const uint32_t pixelCount = *data - 0xC0;
+                    ++data;
+
+                    std::fill( imageData + posX, imageData + posX + pixelCount, *data );
+                    std::fill( imageTransform + posX, imageTransform + posX + pixelCount, static_cast<uint8_t>( 0 ) );
+                    posX += pixelCount;
+
+                    ++data;
+                }
+
+                if ( data >= dataEnd ) {
+                    break;
+                }
             }
         }
 

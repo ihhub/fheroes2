@@ -470,7 +470,7 @@ namespace fheroes2
 {
     namespace AGG
     {
-        void LoadOriginalICN( int id )
+        void LoadOriginalICN( const int id, const bool loadAsSingleLayer = false )
         {
             const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
 
@@ -513,7 +513,7 @@ namespace fheroes2
 
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
 
-                _icnVsSprite[id][i] = decodeICNSprite( data, sizeData, header1.width, header1.height, header1.offsetX, header1.offsetY );
+                _icnVsSprite[id][i] = decodeICNSprite( data, sizeData, header1.width, header1.height, header1.offsetX, header1.offsetY, loadAsSingleLayer );
             }
         }
 
@@ -2430,10 +2430,10 @@ namespace fheroes2
                 }
                 return true;
             case ICN::TOWNBKG2:
-                LoadOriginalICN( id );
+                LoadOriginalICN( id, true );
                 if ( _icnVsSprite[id].size() == 1 ) {
                     Sprite & out = _icnVsSprite[id][0];
-                    out._disableTransformLayer();
+                    // out._disableTransformLayer();
                     // The first pixel of the original sprite has incorrect color and a skip value (transform = 1).
                     if ( !out.empty() ) {
                         out.image()[0] = 10;
@@ -2636,19 +2636,12 @@ namespace fheroes2
 
                 return true;
             }
-            case ICN::HEROES:
-                LoadOriginalICN( id );
-                if ( !_icnVsSprite[id].empty() ) {
-                    // This is the main menu image which shouldn't have any transform layer.
-                    _icnVsSprite[id][0]._disableTransformLayer();
-                }
-                return true;
             case ICN::TOWNBKG3:
                 // Warlock town background image contains 'empty' pixels leading to appear them as black.
-                LoadOriginalICN( id );
+                LoadOriginalICN( id, true );
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
-                    original._disableTransformLayer();
+                    // original._disableTransformLayer();
                     if ( original.width() == 640 && original.height() == 256 ) {
                         original.image()[51945] = 17;
                         original.image()[61828] = 25;
@@ -3621,17 +3614,20 @@ namespace fheroes2
             case ICN::CBKGSNTR:
             case ICN::CBKGSWMP:
             case ICN::CBKGWATR:
+            case ICN::EDITOR:
+            case ICN::HEROES:
             case ICN::TOWNBKG0:
             case ICN::TOWNBKG1:
             case ICN::TOWNBKG4:
             case ICN::TOWNBKG5:
             case ICN::STONEBAK: {
-                LoadOriginalICN( id );
-
+                LoadOriginalICN( id, true );
+                assert( !_icnVsSprite[id].empty() && _icnVsSprite[id][0].singleLayer() );
                 // This is a Battlefield/Castle background images and it does not need a transform layer.
-                if ( !_icnVsSprite[id].empty() ) {
-                    _icnVsSprite[id][0]._disableTransformLayer();
-                }
+                // if ( !_icnVsSprite[id].empty() ) {
+
+                //_icnVsSprite[id][0]._disableTransformLayer();
+                //}
                 return true;
             }
             case ICN::GAME_OPTION_ICON: {
