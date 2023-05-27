@@ -44,31 +44,37 @@ void Interface::Basic::SetFocus( Heroes * hero, const bool retainScrollBarPositi
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
-    if ( player ) {
-        Focus & focus = player->GetFocus();
+    if ( player == nullptr ) {
+        return;
+    }
 
-        if ( focus.GetHeroes() && focus.GetHeroes() != hero ) {
-            focus.GetHeroes()->SetMove( false );
-            focus.GetHeroes()->ShowPath( false );
-        }
+    Focus & focus = player->GetFocus();
 
-        hero->ShowPath( true );
-        focus.Set( hero );
+    if ( focus.GetHeroes() && focus.GetHeroes() != hero ) {
+        focus.GetHeroes()->SetMove( false );
+        focus.GetHeroes()->ShowPath( false );
+    }
 
-        Redraw( REDRAW_BUTTONS );
+    if ( !hero->isMoveEnabled() ) {
+        hero->calculatePath( -1 );
+    }
 
-        if ( !retainScrollBarPosition ) {
-            iconsPanel.Select( hero );
-        }
+    hero->ShowPath( true );
+    focus.Set( hero );
 
-        gameArea.SetCenter( hero->GetCenter() );
-        statusWindow.SetState( StatusType::STATUS_ARMY );
+    Redraw( REDRAW_BUTTONS );
 
-        const int heroIndex = hero->GetIndex();
-        if ( Game::UpdateSoundsOnFocusUpdate() && heroIndex >= 0 ) {
-            Game::EnvironmentSoundMixer();
-            AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
-        }
+    if ( !retainScrollBarPosition ) {
+        iconsPanel.Select( hero );
+    }
+
+    gameArea.SetCenter( hero->GetCenter() );
+    statusWindow.SetState( StatusType::STATUS_ARMY );
+
+    const int heroIndex = hero->GetIndex();
+    if ( Game::UpdateSoundsOnFocusUpdate() && heroIndex >= 0 ) {
+        Game::EnvironmentSoundMixer();
+        AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
 }
 
@@ -76,26 +82,28 @@ void Interface::Basic::SetFocus( Castle * castle )
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
-    if ( player ) {
-        Focus & focus = player->GetFocus();
+    if ( player == nullptr ) {
+        return;
+    }
 
-        if ( focus.GetHeroes() ) {
-            focus.GetHeroes()->SetMove( false );
-            focus.GetHeroes()->ShowPath( false );
-        }
+    Focus & focus = player->GetFocus();
 
-        focus.Set( castle );
+    if ( focus.GetHeroes() ) {
+        focus.GetHeroes()->SetMove( false );
+        focus.GetHeroes()->ShowPath( false );
+    }
 
-        Redraw( REDRAW_BUTTONS );
+    focus.Set( castle );
 
-        iconsPanel.Select( castle );
-        gameArea.SetCenter( castle->GetCenter() );
-        statusWindow.SetState( StatusType::STATUS_FUNDS );
+    Redraw( REDRAW_BUTTONS );
 
-        if ( Game::UpdateSoundsOnFocusUpdate() ) {
-            Game::EnvironmentSoundMixer();
-            AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( castle->GetIndex() ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
-        }
+    iconsPanel.Select( castle );
+    gameArea.SetCenter( castle->GetCenter() );
+    statusWindow.SetState( StatusType::STATUS_FUNDS );
+
+    if ( Game::UpdateSoundsOnFocusUpdate() ) {
+        Game::EnvironmentSoundMixer();
+        AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( castle->GetIndex() ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
 }
 
