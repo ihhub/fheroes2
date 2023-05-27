@@ -176,6 +176,12 @@ void Game::mainGameLoop( bool isFirstGameRun )
         case fheroes2::GameMode::EDITOR_MAIN_MENU:
             result = Game::editorMainMenu();
             break;
+        case fheroes2::GameMode::EDITOR_NEW_MAP:
+            result = Game::editorNewMap();
+            break;
+        case fheroes2::GameMode::EDITOR_LOAD_MAP:
+            result = Game::editorLoadMap();
+            break;
 
         default:
             break;

@@ -21,26 +21,39 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg_image.h"
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <vector>
+
+#include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
 #include "game_mainmenu_ui.h"
+#include "game_mode.h"
 #include "icn.h"
-#include "image.h"
 #include "localevent.h"
+#include "math_base.h"
 #include "mus.h"
-#include "screen.h"
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
-#include "ui_tool.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 
 namespace
 {
     const int32_t buttonYStep = 66;
+
+    void showWIPInfo()
+    {
+        fheroes2::showMessage( fheroes2::Text{ _( "Warning!" ), fheroes2::FontType::normalYellow() },
+                               fheroes2::Text{ "The Map Editor is still in WIP. This function is not available yet.", fheroes2::FontType::normalWhite() }, Dialog::OK );
+    }
+
 }
 
 fheroes2::GameMode Game::editorMainMenu()
@@ -57,45 +70,105 @@ fheroes2::GameMode Game::editorMainMenu()
 
     const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
-    std::vector<fheroes2::Button> buttons( 3 );
-    const size_t buttonCount = buttons.size();
+    fheroes2::Button newMap( buttonPos.x, buttonPos.y, ICN::BTNEMAIN, 0, 1 );
+    fheroes2::Button loadMap( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNEMAIN, 2, 3 );
+    fheroes2::Button cancel( buttonPos.x, buttonPos.y + 5 * buttonYStep, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
-    buttons[0].setICNInfo( ICN::BTNEMAIN, 0, 1 );
-    buttons[1].setICNInfo( ICN::BTNEMAIN, 2, 3 );
-    buttons[2].setICNInfo( ICN::BUTTON_LARGE_CANCEL, 0, 1 );
-
-    for ( size_t i = 0; i < buttonCount - 1; ++i ) {
-        buttons[i].setPosition( buttonPos.x, buttonPos.y + buttonYStep * static_cast<int32_t>( i ) );
-        buttons[i].draw();
-    }
-
-    // following the cancel button in newgame
-    buttons.back().setPosition( buttonPos.x, buttonPos.y + buttonYStep * 5 );
-    buttons.back().draw();
+    newMap.draw();
+    loadMap.draw();
+    cancel.draw();
 
     fheroes2::validateFadeInAndRender();
 
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        for ( size_t i = 0; i < buttonCount; ++i ) {
-            le.MousePressLeft( buttons[i].area() ) ? buttons[i].drawOnPress() : buttons[i].drawOnRelease();
-        }
+        le.MousePressLeft( newMap.area() ) ? newMap.drawOnPress() : newMap.drawOnRelease();
+        le.MousePressLeft( loadMap.area() ) ? loadMap.drawOnPress() : loadMap.drawOnRelease();
+        le.MousePressLeft( cancel.area() ) ? cancel.drawOnPress() : cancel.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttons[2].area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) ) {
+        if ( le.MouseClickLeft( newMap.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_STANDARD ) ) {
+            return fheroes2::GameMode::EDITOR_NEW_MAP;
+        }
+        else if ( le.MouseClickLeft( loadMap.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_CAMPAIGN ) ) {
+            return fheroes2::GameMode::EDITOR_LOAD_MAP;
+        }
+        else if ( le.MouseClickLeft( cancel.area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) ) {
             return fheroes2::GameMode::MAIN_MENU;
         }
 
-        if ( le.MousePressRight( buttons[0].area() ) ) {
+        if ( le.MousePressRight( newMap.area() ) ) {
             Dialog::Message( _( "New Map" ), _( "Create a new map either from scratch or using the random map generator." ), Font::BIG );
         }
-        else if ( le.MousePressRight( buttons[1].area() ) ) {
+        else if ( le.MousePressRight( loadMap.area() ) ) {
             Dialog::Message( _( "Load Map" ), _( "Load an existing map." ), Font::BIG );
         }
-        else if ( le.MousePressRight( buttons[2].area() ) ) {
+        else if ( le.MousePressRight( cancel.area() ) ) {
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
         }
     }
 
     return fheroes2::GameMode::MAIN_MENU;
+}
+
+fheroes2::GameMode Game::editorNewMap()
+{
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+    fheroes2::drawEditorMainMenuScreen();
+
+    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
+
+    fheroes2::Button scratchMap( buttonPos.x, buttonPos.y, ICN::BTNENEW, 0, 1 );
+    fheroes2::Button randomMap( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNENEW, 2, 3 );
+    fheroes2::Button cancel( buttonPos.x, buttonPos.y + 5 * buttonYStep, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
+
+    scratchMap.draw();
+    randomMap.draw();
+    cancel.draw();
+
+    fheroes2::validateFadeInAndRender();
+
+    LocalEvent & le = LocalEvent::Get();
+
+    while ( le.HandleEvents() ) {
+        le.MousePressLeft( scratchMap.area() ) ? scratchMap.drawOnPress() : scratchMap.drawOnRelease();
+        le.MousePressLeft( randomMap.area() ) ? randomMap.drawOnPress() : randomMap.drawOnRelease();
+        le.MousePressLeft( cancel.area() ) ? cancel.drawOnPress() : cancel.drawOnRelease();
+
+        if ( le.MouseClickLeft( scratchMap.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_STANDARD ) ) {
+            showWIPInfo();
+        }
+        else if ( le.MouseClickLeft( randomMap.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_CAMPAIGN ) ) {
+            showWIPInfo();
+        }
+        else if ( le.MouseClickLeft( cancel.area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) ) {
+            return fheroes2::GameMode::EDITOR_MAIN_MENU;
+        }
+
+        if ( le.MousePressRight( scratchMap.area() ) ) {
+            Dialog::Message( _( "From Scratch" ), _( "Start from scratch with a blank map." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( randomMap.area() ) ) {
+            Dialog::Message( _( "Random" ), _( "Create a randomly generated map." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( cancel.area() ) ) {
+            Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
+        }
+    }
+
+    return fheroes2::GameMode::EDITOR_MAIN_MENU;
+}
+
+fheroes2::GameMode Game::editorLoadMap()
+{
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+    fheroes2::drawEditorMainMenuScreen();
+
+    fheroes2::validateFadeInAndRender();
+
+    showWIPInfo();
+
+    return fheroes2::GameMode::EDITOR_MAIN_MENU;
 }
