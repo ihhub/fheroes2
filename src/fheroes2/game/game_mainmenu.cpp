@@ -358,9 +358,12 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
             return fheroes2::GameMode::MAIN_MENU;
         }
+#if defined( WITH_DEBUG )
+        // Editor is still in development.
         else if ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) ) {
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
+#endif
 
         // right info
         if ( le.MousePressRight( buttonQuit.area() ) )
