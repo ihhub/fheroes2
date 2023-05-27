@@ -217,8 +217,6 @@ void Castle::OpenWell()
     const fheroes2::Rect rectMonster5( cur_pt.x + 334, cur_pt.y + 168, 288, 124 );
     const fheroes2::Rect rectMonster6( cur_pt.x + 334, cur_pt.y + 318, 288, 124 );
 
-    buttonExit.draw();
-
     std::vector<fheroes2::RandomMonsterAnimation> monsterAnimInfo;
     monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER1 ) ) );
     monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ) );
@@ -229,6 +227,7 @@ void Castle::OpenWell()
 
     WellRedrawInfoArea( cur_pt, monsterAnimInfo );
 
+    buttonExit.draw();
     buttonMax.draw();
 
     std::vector<uint32_t> allDwellings;
@@ -287,6 +286,7 @@ void Castle::OpenWell()
             for ( size_t i = 0; i < monsterAnimInfo.size(); ++i )
                 monsterAnimInfo[i].increment();
 
+            buttonExit.draw();
             buttonMax.draw();
             display.render();
         }
