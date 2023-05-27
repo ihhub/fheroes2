@@ -3052,7 +3052,7 @@ void Battle::Interface::FadeArena( const bool clearMessageLog )
     Redraw();
 
     const fheroes2::Rect srt = border.GetArea();
-    fheroes2::Image top( srt.width, srt.height );
+    fheroes2::Image top( srt.width, srt.height, true );
 
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.width, srt.height );
     fheroes2::FadeDisplayWithPalette( top, srt.getPosition(), 5, 300, 5 );
@@ -5668,8 +5668,8 @@ void Battle::Interface::RedrawActionArmageddonSpell()
 
     area.height -= 37;
 
-    fheroes2::Image spriteWhitening( area.width, area.height );
-    fheroes2::Image spriteReddish( area.width, area.height );
+    fheroes2::Image spriteWhitening( area.width, area.height, true );
+    fheroes2::Image spriteReddish( area.width, area.height, true );
     fheroes2::Copy( _mainSurface, area.x, area.y, spriteWhitening, 0, 0, area.width, area.height );
     fheroes2::Copy( _mainSurface, area.x, area.y, spriteReddish, 0, 0, area.width, area.height );
 
@@ -5686,7 +5686,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             fheroes2::ApplyPalette( spriteWhitening, 9 );
-            fheroes2::Blit( spriteWhitening, _mainSurface, area.x, area.y );
+            fheroes2::Copy( spriteWhitening, 0, 0, _mainSurface, area.x, area.y, area.width, area.height );
             RedrawPartialFinish();
 
             alpha += 10;
@@ -5720,7 +5720,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
                 shifted.height -= offset;
                 shifted.y = 0;
             }
-            fheroes2::Blit( spriteReddish, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
+            fheroes2::Copy( spriteReddish, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
 
             RedrawPartialFinish();
         }
@@ -5738,7 +5738,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
 
     cursor.SetThemes( Cursor::WAR_POINTER );
 
-    fheroes2::Image sprite( area.width, area.height );
+    fheroes2::Image sprite( area.width, area.height, true );
     fheroes2::Copy( _mainSurface, area.x, area.y, sprite, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;
