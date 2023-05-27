@@ -3,7 +3,7 @@
 This project uses portable object (PO) files to handle localization in various languages. The PO files are located in the `files/lang`
 subdirectory of the project source tree. The current instruction is designed for Linux, MacOS and Windows users.
 
-# Current status
+## Current status
 
 ![Belarusian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_be.json)
 ![Bulgarian](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_bg.json)
@@ -28,7 +28,7 @@ subdirectory of the project source tree. The current instruction is designed for
 ![Vietnamese](https://img.shields.io/endpoint?url=https://ihhub.github.io/fheroes2/json/lang_vi.json)
 
 
-# Adding new translations/localizations
+## Adding new translations/localizations
 
 If you want to add a new localization, you will first need to add it to the `SupportedLanguage` list/enumeration in the source code.
 Afterwards, a new PO file for it will need to be added. It will have to be named according to the ISO standard's two-character
@@ -37,51 +37,51 @@ the language to the font generation code found in `src/fheroes2/gui/ui_font.cpp`
 been implemented, then code for that will need to be written.
 
 
-# Editing translations - Before you start
+## Editing translations - Before you start
 
 Before start, you will have to prepare your working environment: fork the fheroes2 repository and prepare an application where you
 will edit your translation. Then you will have to create a branch. Now you can provide the translation. After you finish your work,
-and you are happy to share it, you will have to prepare a Pull Request.
+and you are happy to share it, you will have to prepare a pull request.
 
 
-## Fork the fheroes2 repository
+### Fork the fheroes2 repository
 
-A fork is your copy of the fheroes2 repository. It gives you a safe space to prepare and test your changes. You can read here how to [create a fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
+A fork is your copy of the fheroes2 repository. It gives you a safe space to prepare and test your changes.
+You can read here how to [create a fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
 
 
-## Software to edit translation files
+### Software to edit translation files
 
 We encourage you to use [**poedit**](https://poedit.net/) or [**gtranslator**](https://wiki.gnome.org/Apps/Gtranslator) to
 edit translations. Currently all implemented languages, except French, adhere to a standardized font encoding/charset.
 
 
-# Editing translations - Your first or next translation
+## Editing translations - Your first or next translation
 
-## Sync your fork
+### Sync your fork
 
 Before you start working on the first or next translation, make sure that your fork has all recent changes for the fhereos2 repo. To do this, [**sync your fork**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork).
 
-## Create a branch
+### Create a branch
 
-Now create a space for your work where you can safely prepare, test and share your changes. Read more [about branches](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches).
+Now create a space for your work where you can safely prepare, test and share your changes. Read more [**about branches**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches).
 
-To create a branch, please follow the GitHub's instruction about [creating a branch within your repo](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository).
+To create a branch, please follow the GitHub's instruction about [**creating a branch within your repo**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository).
 
-## Now provide your changes
+### Now provide your translations
 
 Now it is time to use your favourite software, which allows you to update the translation and suits you best.
 
-### Finding translatable strings in the codebase
+#### Finding translatable strings in the codebase
 
-Translatable strings can be found in the source code as arguments to the `_` function (a short name for `gettext`),
-`_n` function (a short name for `ngettext`) and `gettext_noop` function used only as indicator for the future string
-translation. The string below, for example, can be translated in PO files:
+All original translatable strings are located in the source code of the project. If you need to clarify where this string is being used
+you can search for it. The string below, for example, can be translated in PO files:
 
 ```cpp
 _( "Are you sure you want to quit?" )
 ```
 
-## Test your changes
+### Test your changes
 
 Once the translation files have been modified, for Linux/MacOS run the `make` command below in the `files/lang` subdirectory to create
 machine object (MO) binary files which can be used by the fheroes2 engine.
@@ -103,26 +103,26 @@ the program will need to be set to compile the MO file in the font encoding/Char
 set to.
 
 For example, for German you will have to set font encoding to CP1252, while for Russian this would be CP1251. Later when submitting
-a PR with your changes, you will have to save the PO file in UTF-8 encoding because this is what Github supports.
+a pull request with your changes, you will have to save the PO file in UTF-8 encoding because this is what Github supports.
 
 
-## Share your work with the team
+### Share your work with the team
 
 When you are happy about your work, share it. The first step is to commit your work into your fork. Then, create a pull request that 
 introduces your changes into the fheroes2 repository.
 
-How to [commit](https://github.com/git-guides/git-commit). 
+How to [**commit**](https://github.com/git-guides/git-commit). 
 
-How to [create a pull request from your form your fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork).
+How to [**create a pull request from your form your fork**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork).
 
-Try to add a meaningfull PR title, this will allow the team to quickly identify the scope of your work, ie. "Update Slovak translation".
+Try to add a meaningfull pull request title, this will allow the team to quickly identify the scope of your work, ie. "Update Slovak translation".
 
 
 <details>
 
-<summary>PR restrictions</summary>
+<summary>Pull request (PR) restrictions</summary>
 
-The fheroes2 team has set a maximum of 400 total modified lines for any Pull Request (PR) for translations. For contributors wanting to
+The fheroes2 team has set a maximum of 400 total modified lines for any PR for translations. For contributors wanting to
 add translated lines to a new language this has a maximum of 30 total modified lines for that first PR.
 
 These limitations have been set because every PR needs to be reviewed by our team, and so changing too many lines at once will only slow this
@@ -138,12 +138,12 @@ example creature names or castle buildings.
 </details>
 
 
-# Updating PO templates and translatable strings in PO files
+## Updating PO templates and translatable strings in PO files
 
 Currently all PO files are automatically updated with new strings after each commit that brings changes to the ingame text. If for whatever
 reason you still need to update strings locally, this can be achieved by running the command below in `src/dist` to generate a new portable
 object template (POT) file. Windows users will need to setup an environment that lets them run `make`, like Windows Subsystem for Linux (WSL)
-or [Cygwin](https://www.cygwin.com/)/[MSYS2](https://www.msys2.org/).
+or [**Cygwin**](https://www.cygwin.com/)/[**MSYS2**](https://www.msys2.org/).
 
 ```bash
 make pot
