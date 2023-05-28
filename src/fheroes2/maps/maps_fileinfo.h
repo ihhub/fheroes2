@@ -199,7 +199,6 @@ namespace Maps
 
     // Creates the list of fheroes2 Resurrection map files.
     MapsFileInfoList prepareResurrectionMapsFileInfoList();
-
 }
 
 #endif
