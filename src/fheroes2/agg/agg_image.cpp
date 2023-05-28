@@ -3783,11 +3783,12 @@ namespace fheroes2
             case ICN::GAME_OPTION_ICON: {
                 _icnVsSprite[id].resize( 2 );
 
+                h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
+                h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
+
                 _icnVsSprite[id][0]._disableTransformLayer();
                 _icnVsSprite[id][1]._disableTransformLayer();
 
-                h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
-                h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
                 break;
             }
             default:
