@@ -3645,10 +3645,10 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
     unitSounds.reserve( targets.size() );
 
     // Play sound only if it is not already playing.
-    auto playSoundIfNotPlaying = [&unitSounds]( const int uintSound ) {
-        if ( std::find( unitSounds.begin(), unitSounds.end(), uintSound ) == unitSounds.end() ) {
-            AudioManager::PlaySound( uintSound );
-            unitSounds.push_back( uintSound );
+    auto playSoundIfNotPlaying = [&unitSounds]( const int unitSound ) {
+        if ( std::find( unitSounds.begin(), unitSounds.end(), unitSound ) == unitSounds.end() ) {
+            AudioManager::PlaySound( unitSound );
+            unitSounds.push_back( unitSound );
         }
     };
 
@@ -5928,10 +5928,10 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     std::vector<int> unitSounds;
     unitSounds.reserve( targets.size() );
 
-    auto playSoundIfNotPlaying = [&unitSounds]( const int uintSound ) {
-        if ( std::find( unitSounds.begin(), unitSounds.end(), uintSound ) == unitSounds.end() ) {
-            AudioManager::PlaySound( uintSound );
-            unitSounds.push_back( uintSound );
+    auto playSoundIfNotPlaying = [&unitSounds]( const int unitSound ) {
+        if ( std::find( unitSounds.begin(), unitSounds.end(), unitSound ) == unitSounds.end() ) {
+            AudioManager::PlaySound( unitSound );
+            unitSounds.push_back( unitSound );
         }
     };
 
