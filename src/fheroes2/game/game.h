@@ -80,10 +80,6 @@ namespace Game
     fheroes2::GameMode CompleteCampaignScenario( const bool isLoadingSaveFile );
     fheroes2::GameMode DisplayHighScores( const bool isCampaign );
 
-    fheroes2::GameMode editorMainMenu();
-    fheroes2::GameMode editorNewMap();
-    fheroes2::GameMode editorLoadMap();
-
     bool isSuccessionWarsCampaignPresent();
     bool isPriceOfLoyaltyCampaignPresent();
 

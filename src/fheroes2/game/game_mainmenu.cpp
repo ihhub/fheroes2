@@ -38,6 +38,7 @@
 #include "dialog_game_settings.h"
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
+#include "editor.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
@@ -174,13 +175,13 @@ void Game::mainGameLoop( bool isFirstGameRun )
             }
             break;
         case fheroes2::GameMode::EDITOR_MAIN_MENU:
-            result = Game::editorMainMenu();
+            result = Editor::menuMain();
             break;
         case fheroes2::GameMode::EDITOR_NEW_MAP:
-            result = Game::editorNewMap();
+            result = Editor::menuNewMap();
             break;
         case fheroes2::GameMode::EDITOR_LOAD_MAP:
-            result = Game::editorLoadMap();
+            result = Editor::menuLoadMap();
             break;
 
         default:

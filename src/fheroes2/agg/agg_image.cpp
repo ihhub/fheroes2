@@ -3681,7 +3681,15 @@ namespace fheroes2
         // We have few ICNs which we need to scale like some related to main screen
         bool IsScalableICN( const int id )
         {
-            return id == ICN::EDITOR || id == ICN::HEROES || id == ICN::BTNSHNGL || id == ICN::SHNGANIM;
+            switch ( id ) {
+            case ICN::EDITOR:
+            case ICN::HEROES:
+            case ICN::BTNSHNGL:
+            case ICN::SHNGANIM:
+                return true;
+            default:
+                return false;
+            }
         }
 
         const Sprite & GetScaledICN( const int icnId, const uint32_t index )
