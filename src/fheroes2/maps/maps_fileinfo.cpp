@@ -650,8 +650,8 @@ MapsFileInfoList Maps::prepareResurrectionMapsFileInfoList()
     for ( const std::string & mapFile : maps ) {
         Maps::FileInfo fi;
 
-        // This are test data values.
-        // TODO: make a function to read resurrection map info data.
+        // These are test data values.
+        // TODO: make a function to read resurrection map info data and remove the test values.
         fi.width = 36;
         fi.height = 36;
         fi.name = "Test name";
