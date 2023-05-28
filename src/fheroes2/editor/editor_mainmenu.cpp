@@ -34,6 +34,7 @@
 #include "editor.h"
 #include "game_hotkeys.h"
 #include "game_mainmenu_ui.h"
+#include "game_mode.h"
 #include "icn.h"
 #include "localevent.h"
 #include "maps.h"
