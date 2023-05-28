@@ -248,5 +248,7 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
     // We are loading a game so fade-out main menu screen.
     fheroes2::fadeOutDisplay();
 
+    setDisplayFadeIn();
+
     return returnValue;
 }
