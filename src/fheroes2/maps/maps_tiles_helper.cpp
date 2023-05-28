@@ -801,11 +801,23 @@ namespace Maps
 
         case MP2::OBJ_TROLL_BRIDGE:
         case MP2::OBJ_CITY_OF_DEAD:
-            count = isFirstLoad ? Rand::Get( 4, 6 ) : ( Color::NONE == getColorFromTile( tile ) ) ? count : count + Rand::Get( 1, 3 );
+            if ( isFirstLoad ) {
+                count = Rand::Get( 4, 6 );
+            }
+            else if ( getColorFromTile( tile ) != Color::NONE || count == 0 ) {
+                // If the Troll Bridge or City of Dead has been captured or has 0 creatures, its population is increased by 1-3 creature per week.
+                count += Rand::Get( 1, 3 );
+            }
             break;
 
         case MP2::OBJ_DRAGON_CITY:
-            count = isFirstLoad ? 2 : ( Color::NONE == getColorFromTile( tile ) ) ? count : count + 1;
+            if ( isFirstLoad ) {
+                count = 2;
+            }
+            else if ( getColorFromTile( tile ) != Color::NONE || count == 0 ) {
+                // If the Dragon City has been captured or has 0 creatures, its population is increased by 1 dragon per week.
+                ++count;
+            }
             break;
 
         default:
