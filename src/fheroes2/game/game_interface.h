@@ -218,16 +218,17 @@ namespace Interface
         void MouseCursorAreaClickLeft( const int32_t tileIndex );
         void MouseCursorAreaPressRight( int32_t ) const;
 
-        static int GetCursorTileIndex( int32_t );
-        static int GetCursorFocusCastle( const Castle &, const Maps::Tiles & );
-        static int GetCursorFocusHeroes( const Heroes &, const Maps::Tiles & );
-        static int GetCursorFocusShipmaster( const Heroes &, const Maps::Tiles & );
+        static int GetCursorTileIndex( int32_t dstIndex );
 
         // Regenerates the game area and updates the panel positions depending on the UI settings
         void Reset();
 
     private:
         Basic();
+
+        static int GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile );
+        static int GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile );
+        static int GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile );
 
         void ShowPathOrStartMoveHero( Heroes * hero, const int32_t destinationIdx );
         void MoveHeroFromArrowKeys( Heroes & hero, const int direction );
