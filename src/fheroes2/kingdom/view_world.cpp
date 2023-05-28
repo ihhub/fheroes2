@@ -212,7 +212,9 @@ namespace
             const int32_t redrawAreaCenterY = blockSizeY * TILEWIDTH / 2;
 
             // Create temporary image where we will draw blocks of the main map on
-            fheroes2::Image temporaryImg( redrawAreaWidth, redrawAreaHeight, true );
+            fheroes2::Image temporaryImg;
+            temporaryImg._disableTransformLayer();
+            temporaryImg.resize( redrawAreaWidth, redrawAreaHeight );
 
             Interface::GameArea gamearea = Interface::Basic::Get().GetGameArea();
             gamearea.SetAreaPosition( 0, 0, redrawAreaWidth, redrawAreaHeight );

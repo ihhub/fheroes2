@@ -101,7 +101,7 @@ namespace Interface
         RadarType _radarType;
         Basic & _interface;
 
-        fheroes2::Image _map{ RADARWIDTH, RADARWIDTH, true };
+        fheroes2::Image _map;
         fheroes2::MovableSprite _cursorArea;
         fheroes2::Rect _roi;
         double _zoom{ 1.0 };

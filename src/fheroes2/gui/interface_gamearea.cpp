@@ -817,8 +817,9 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
         return fheroes2::Image();
     }
 
-    fheroes2::Image result( 448, 448, true );
-    result.reset();
+    fheroes2::Image result;
+    result._disableTransformLayer();
+    result.resize( 448, 448 );
 
     // Make a temporary copy
     GameArea gamearea = Basic::Get().GetGameArea();

@@ -147,7 +147,9 @@ Interface::Radar::Radar( Basic & basic )
     , _radarType( RadarType::WorldMap )
     , _interface( basic )
 {
-    // Do nothing.
+    // Initialize _map as single-layer image.
+    _map._disableTransformLayer();
+    _map.resize( RADARWIDTH, RADARWIDTH );
 }
 
 Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display )
@@ -158,7 +160,9 @@ Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display 
     , _zoom( radar._zoom )
     , _hide( false )
 {
-    // Do nothing.
+    // Initialize _map as single-layer image.
+    _map._disableTransformLayer();
+    _map.resize( RADARWIDTH, RADARWIDTH );
 }
 
 void Interface::Radar::SavePosition()

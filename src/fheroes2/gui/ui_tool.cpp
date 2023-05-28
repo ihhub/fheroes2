@@ -470,7 +470,9 @@ namespace fheroes2
         const double redCoeff = 4.0 - darkredStrength / 280.0;
         const double greenBlueCoeff = 4.0 - darkredStrength / 80.0;
 
-        Image out( width, height, true );
+        Image out;
+        out._disableTransformLayer();
+        out.resize( width, height );
 
         uint8_t * imageOutX = out.image();
         const uint8_t * imageIn = in.image();

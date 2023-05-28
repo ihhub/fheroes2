@@ -437,8 +437,7 @@ namespace
 
 namespace fheroes2
 {
-    Image::Image( const int32_t width_, const int32_t height_, const bool singleLayer_ /* = false */ )
-        : _singleLayer( singleLayer_ )
+    Image::Image( const int32_t width_, const int32_t height_ )
     {
         Image::resize( width_, height_ );
     }
@@ -581,8 +580,8 @@ namespace fheroes2
         _singleLayer = true;
     }
 
-    Sprite::Sprite( const int32_t width_, const int32_t height_, const int32_t x_ /* = 0 */, const int32_t y_ /* = 0 */, const bool singleLayer_ /* = false */ )
-        : Image( width_, height_, singleLayer_ )
+    Sprite::Sprite( const int32_t width_, const int32_t height_, const int32_t x_ /* = 0 */, const int32_t y_ /* = 0 */ )
+        : Image( width_, height_ )
         , _x( x_ )
         , _y( y_ )
     {
@@ -1654,7 +1653,12 @@ namespace fheroes2
             height -= offsetY;
         }
 
-        Sprite out( width, height, 0, 0, image.singleLayer() );
+        Sprite out;
+        if ( image.singleLayer() ) {
+            // The result of Crop should have the same layers as the input image.
+            out._disableTransformLayer();
+        }
+        out.resize( width, height );
 
         Copy( image, x, y, out, 0, 0, width, height );
         out.setPosition( x, y );
@@ -2132,7 +2136,11 @@ namespace fheroes2
         const int32_t height = input.height();
         const bool isSingleLayer = input.singleLayer();
 
-        Image output( width, height, isSingleLayer );
+        Image output;
+        if ( isSingleLayer ) {
+            output._disableTransformLayer();
+        }
+        output.resize( width, height );
         output.reset();
 
         const uint8_t * imageInY = input.image();
@@ -2869,7 +2877,11 @@ namespace fheroes2
             return {};
         }
 
-        Image out( widthOut, heightOut, in.singleLayer() );
+        Image out;
+        if ( in.singleLayer() ) {
+            out._disableTransformLayer();
+        }
+        out.resize( widthOut, heightOut );
 
         const int32_t minWidth = widthIn < widthOut ? widthIn : widthOut;
         const int32_t minHeight = heightIn < heightOut ? heightIn : heightOut;

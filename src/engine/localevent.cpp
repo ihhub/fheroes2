@@ -1401,7 +1401,8 @@ void LocalEvent::HandleRenderDeviceResetEvent()
 {
     // All textures has to be recreated. The only way to do it is to reset everything and render it back.
     fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::Image temp( display.width(), display.height(), display.singleLayer() );
+    fheroes2::Image temp;
+    temp._disableTransformLayer();
 
     fheroes2::Copy( display, temp );
     display.release();

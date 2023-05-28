@@ -150,7 +150,9 @@ namespace
         const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::CBKGLAVA, 0 );
         assert( background.height() < fheroes2::Display::DEFAULT_HEIGHT );
 
-        fheroes2::Sprite output( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT - background.height(), 0, 0, true );
+        fheroes2::Sprite output;
+        output._disableTransformLayer();
+        output.resize( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT - background.height() );
         output.fill( 0 );
 
         Text caption( "fheroes2 engine (" + Settings::GetVersion() + ")", Font::YELLOW_BIG );
@@ -698,11 +700,12 @@ void Game::ShowCredits()
 
     AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
 
-    fheroes2::Image blackScreen( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, true );
+    fheroes2::Image blackScreen;
+    blackScreen._disableTransformLayer();
+    blackScreen.resize( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
     blackScreen.fill( 0 );
 
-    fheroes2::Image output( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, true );
-    output.reset();
+    fheroes2::Image output = blackScreen;
 
     const uint64_t animationDelay = 50;
 
