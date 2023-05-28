@@ -1320,10 +1320,18 @@ namespace fheroes2
 
     void CopyTransformLayer( const Image & in, Image & out )
     {
-        if ( in.empty() || out.empty() || in.singleLayer() || out.singleLayer() || in.width() != out.width() || in.height() != out.height() ) {
+        if ( in.empty() || out.empty() || in.singleLayer() || in.width() != out.width() || in.height() != out.height() ) {
             assert( 0 );
             return;
         }
+
+        if ( out.singleLayer() ) {
+            // Add the transform layer.
+            Image temp;
+            Copy( out, temp );
+            out = std::move( temp );
+        }
+
         memcpy( out.transform(), in.transform(), in.width() * in.height() );
     }
 

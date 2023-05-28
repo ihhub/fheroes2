@@ -42,6 +42,7 @@
 #include "icn.h"
 #include "image.h"
 #include "image_tool.h"
+#include "logging.h"
 #include "math_base.h"
 #include "pal.h"
 #include "rand.h"
@@ -514,7 +515,28 @@ namespace fheroes2
 
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
 
-                _icnVsSprite[id][i] = decodeICNSprite( data, sizeData, header1.width, header1.height, header1.offsetX, header1.offsetY, loadAsSingleLayer );
+                _icnVsSprite[id][i] = decodeICNSprite( data, sizeData, header1.width, header1.height, header1.offsetX, header1.offsetY );
+
+                bool isSingleLayer = true;
+                const uint8_t * transform = _icnVsSprite[id][i].transform();
+                for ( int transformIndex = 0; transformIndex < _icnVsSprite[id][i].width() * _icnVsSprite[id][i].height(); ++transformIndex ) {
+                    if ( transform[transformIndex] != 0 ) {
+                        isSingleLayer = false;
+                        break;
+                    }
+                }
+
+                if ( isSingleLayer ) {
+                    _icnVsSprite[id][i]._disableTransformLayer();
+                    COUT( "Sprite #" << id << " image " << i << " is set as singleLayer" );
+                }
+                else {
+                    if ( !_icnVsSprite[id][i].empty() ) {
+                        if ( loadAsSingleLayer != false ) {
+                            COUT( "Sprite #" << id << " image " << i << " must be forced to singleLayer" );
+                        }
+                    }
+                }
             }
         }
 
