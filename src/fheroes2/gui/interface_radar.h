@@ -26,7 +26,6 @@
 
 #include <cstdint>
 
-#include "gamedefs.h"
 #include "image.h"
 #include "interface_border.h"
 #include "math_base.h"
