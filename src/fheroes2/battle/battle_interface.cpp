@@ -3670,10 +3670,10 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
             }
 
             unit->SwitchAnimation( Monster_Info::KILL );
-            ++animatingTargets;
-            deathColor = unit->GetArmyColor();
-
             playSoundIfNotPlaying( unit->M82Kill() );
+            ++animatingTargets;
+
+            deathColor = unit->GetArmyColor();
         }
         else if ( target.damage ) {
             // wince animation
@@ -3684,7 +3684,6 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
             }
             else {
                 unit->SwitchAnimation( Monster_Info::WNCE );
-
                 playSoundIfNotPlaying( unit->M82Wnce() );
             }
             ++animatingTargets;
@@ -3692,7 +3691,6 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
         else {
             // have immunity
             resistantTarget.insert( target.defender );
-
             playSoundIfNotPlaying( M82::RSBRYFZL );
         }
     }
