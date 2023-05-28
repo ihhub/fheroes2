@@ -3641,6 +3641,17 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
     const bool drawLichCloud = ( attacker != nullptr ) && ( defender != nullptr ) && attacker->isArchers() && !attacker->isHandFighting()
                                && attacker->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT );
 
+    std::vector<int> unitSounds;
+    unitSounds.reserve( targets.size() );
+
+    // Play sound only if it is not already playing.
+    auto playSoundIfNotPlaying = [&unitSounds]( const int uintSound ) {
+        if ( std::find( unitSounds.begin(), unitSounds.end(), uintSound ) == unitSounds.end() ) {
+            AudioManager::PlaySound( uintSound );
+            unitSounds.push_back( uintSound );
+        }
+    };
+
     for ( const Battle::TargetInfo & target : targets ) {
         Unit * unit = target.defender;
         if ( unit == nullptr ) {
@@ -3659,10 +3670,10 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
             }
 
             unit->SwitchAnimation( Monster_Info::KILL );
-            AudioManager::PlaySound( unit->M82Kill() );
             ++animatingTargets;
-
             deathColor = unit->GetArmyColor();
+
+            playSoundIfNotPlaying( unit->M82Kill() );
         }
         else if ( target.damage ) {
             // wince animation
@@ -3673,14 +3684,16 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
             }
             else {
                 unit->SwitchAnimation( Monster_Info::WNCE );
-                AudioManager::PlaySound( unit->M82Wnce() );
+
+                playSoundIfNotPlaying( unit->M82Wnce() );
             }
             ++animatingTargets;
         }
         else {
             // have immunity
             resistantTarget.insert( target.defender );
-            AudioManager::PlaySound( M82::RSBRYFZL );
+
+            playSoundIfNotPlaying( M82::RSBRYFZL );
         }
     }
 
@@ -3773,7 +3786,8 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                 }
                 else if ( drawLichCloud && lichCloudFrame == wnceUpStartFrame && ( target.defender->GetAnimationState() == Monster_Info::STAND_STILL ) ) {
                     target.defender->SwitchAnimation( Monster_Info::WNCE_UP );
-                    AudioManager::PlaySound( target.defender->M82Wnce() );
+
+                    playSoundIfNotPlaying( target.defender->M82Wnce() );
                 }
                 else if ( drawLichCloud && lichCloudFrame == wnceDownStartFrame && ( target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) ) {
                     target.defender->SwitchAnimation( Monster_Info::WNCE_DOWN );
@@ -5913,6 +5927,16 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
     _currentUnit = nullptr;
 
+    std::vector<int> unitSounds;
+    unitSounds.reserve( targets.size() );
+
+    auto playSoundIfNotPlaying = [&unitSounds]( const int uintSound ) {
+        if ( std::find( unitSounds.begin(), unitSounds.end(), uintSound ) == unitSounds.end() ) {
+            AudioManager::PlaySound( uintSound );
+            unitSounds.push_back( uintSound );
+        }
+    };
+
     if ( wnce ) {
         int32_t deathColor = Color::UNUSED;
 
@@ -5934,7 +5958,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                 }
 
                 defender->SwitchAnimation( Monster_Info::KILL );
-                AudioManager::PlaySound( defender->M82Kill() );
+                playSoundIfNotPlaying( defender->M82Kill() );
 
                 // Set the color of the dead creature to tell heroes about it.
                 deathColor = defender->GetArmyColor();
@@ -5942,7 +5966,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
             // If the creature is damaged but is still alive set its wince animation.
             else if ( target.damage ) {
                 defender->SwitchAnimation( Monster_Info::WNCE_UP );
-                AudioManager::PlaySound( defender->M82Wnce() );
+                playSoundIfNotPlaying( defender->M82Wnce() );
             }
 
             SetHeroAnimationReactionToTroopDeath( deathColor );
