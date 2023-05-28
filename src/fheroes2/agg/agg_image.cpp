@@ -42,7 +42,6 @@
 #include "icn.h"
 #include "image.h"
 #include "image_tool.h"
-#include "logging.h"
 #include "math_base.h"
 #include "pal.h"
 #include "rand.h"
@@ -466,13 +465,32 @@ namespace
         std::fill( imageTransform + ( imageHeight - 1 ) * imageWidth - 3, imageTransform + ( imageHeight - 1 ) * imageWidth - 1, transparencyValue );
         std::fill( imageTransform + imageHeight * imageWidth - 4, imageTransform + imageHeight * imageWidth - 1, transparencyValue );
     }
+
+    // Checks if all values in transform layer are 0 (zero). For single-layer images returns true.
+    bool isTransformLayerNotUsed( const fheroes2::Sprite & image )
+    {
+        if ( image.singleLayer() ) {
+            return true;
+        }
+
+        const uint8_t * transformLayer = image.transform();
+        const size_t size = static_cast<size_t>( image.width() ) * image.height();
+
+        for ( size_t transformIndex = 0; transformIndex < size; ++transformIndex ) {
+            if ( transformLayer[transformIndex] != 0 ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
 
 namespace fheroes2
 {
     namespace AGG
     {
-        void LoadOriginalICN( const int id, const bool loadAsSingleLayer = false )
+        void LoadOriginalICN( const int id )
         {
             const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
 
@@ -517,25 +535,9 @@ namespace fheroes2
 
                 _icnVsSprite[id][i] = decodeICNSprite( data, sizeData, header1.width, header1.height, header1.offsetX, header1.offsetY );
 
-                bool isSingleLayer = true;
-                const uint8_t * transform = _icnVsSprite[id][i].transform();
-                for ( int transformIndex = 0; transformIndex < _icnVsSprite[id][i].width() * _icnVsSprite[id][i].height(); ++transformIndex ) {
-                    if ( transform[transformIndex] != 0 ) {
-                        isSingleLayer = false;
-                        break;
-                    }
-                }
-
-                if ( isSingleLayer ) {
+                // Disable transform layer if it is not needed (contains only zeros).
+                if ( isTransformLayerNotUsed( _icnVsSprite[id][i] ) ) {
                     _icnVsSprite[id][i]._disableTransformLayer();
-                    COUT( "Sprite #" << id << " image " << i << " is set as singleLayer" );
-                }
-                else {
-                    if ( !_icnVsSprite[id][i].empty() ) {
-                        if ( loadAsSingleLayer != false ) {
-                            COUT( "Sprite #" << id << " image " << i << " must be forced to singleLayer" );
-                        }
-                    }
                 }
             }
         }
@@ -2453,11 +2455,12 @@ namespace fheroes2
                 }
                 return true;
             case ICN::TOWNBKG2:
-                LoadOriginalICN( id, true );
+                LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() == 1 ) {
                     Sprite & out = _icnVsSprite[id][0];
                     // The first pixel of the original sprite has incorrect color.
                     if ( !out.empty() ) {
+                        out._disableTransformLayer();
                         out.image()[0] = 10;
                     }
                 }
@@ -2662,12 +2665,20 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::HEROES:
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    // This is the main menu image which shouldn't have any transform layer.
+                    _icnVsSprite[id][0]._disableTransformLayer();
+                }
+                return true;
             case ICN::TOWNBKG3:
                 // Warlock town background image contains 'empty' pixels leading to appear them as black.
-                LoadOriginalICN( id, true );
+                LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 640 && original.height() == 256 ) {
+                        original._disableTransformLayer();
                         original.image()[51945] = 17;
                         original.image()[61828] = 25;
                         original.image()[64918] = 164;
@@ -2676,22 +2687,48 @@ namespace fheroes2
                     }
                 }
                 return true;
+            case ICN::MINIPORT:
+                // Some heroes portraits have incorrect transparent pixels.
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 67 ) {
+                    for ( const int32_t i : { 60, 61, 65, 67 } ) {
+                        Sprite & original = _icnVsSprite[id][i];
+                        if ( !original.empty() ) {
+                            // Fix it by disabling the transform layer.
+                            original._disableTransformLayer();
+                        }
+                    }
+                }
+                return true;
+            case ICN::MINICAPT:
+                // Barbarian captain mini icon has some bad pixels.
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 1 ) {
+                    Sprite & original = _icnVsSprite[id][1];
+                    if ( !original.empty() ) {
+                        // Fix it by disabling the transform layer.
+                        original._disableTransformLayer();
+                    }
+                }
+                return true;
             case ICN::PORT0091:
                 // Barbarian captain has one bad pixel.
-                LoadOriginalICN( id, true );
+                LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 101 && original.height() == 93 ) {
+                        original._disableTransformLayer();
                         original.image()[9084] = 77;
                     }
                 }
                 return true;
             case ICN::PORT0090:
                 // Knight captain has multiple bad pixels.
-                LoadOriginalICN( id, true );
+                LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 101 && original.height() == 93 ) {
+                        original._disableTransformLayer();
                         original.image()[2314] = 70;
                         original.image()[5160] = 71;
                         original.image()[5827] = 18;
@@ -2699,12 +2736,25 @@ namespace fheroes2
                     }
                 }
                 return true;
+            case ICN::PORT0092:
+            case ICN::PORT0095:
+                // Sorceress and Necromancer captains have incorrect transparent pixels.
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( !original.empty() ) {
+                        // Fix it by disabling the transform layer.
+                        original._disableTransformLayer();
+                    }
+                }
+                return true;
             case ICN::CSTLWZRD:
-                LoadOriginalICN( id, true );
+                LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() >= 8 ) {
                     // Statue image has bad pixels.
                     Sprite & original = _icnVsSprite[id][7];
                     if ( original.width() == 135 && original.height() == 57 ) {
+                        assert( original.singleLayer() );
                         original.image()[3687] = 50;
                         original.image()[5159] = 108;
                         original.image()[5294] = 108;
@@ -2727,20 +2777,22 @@ namespace fheroes2
                 return true;
             case ICN::CSTLCAPK:
                 // Knight captain has a bad pixel.
-                LoadOriginalICN( id, true );
+                LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() >= 2 ) {
                     Sprite & original = _icnVsSprite[id][1];
                     if ( original.width() == 84 && original.height() == 81 ) {
+                        assert( original.singleLayer() );
                         original.image()[4934] = 18;
                     }
                 }
                 return true;
             case ICN::CSTLCAPW:
                 // Warlock captain quarters have bad pixels.
-                LoadOriginalICN( id, true );
+                LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 84 && original.height() == 81 ) {
+                        assert( original.singleLayer() );
                         original.image()[1692] = 26;
                         original.image()[2363] = 32;
                         original.image()[2606] = 21;
@@ -2749,11 +2801,12 @@ namespace fheroes2
                 }
                 return true;
             case ICN::CSTLSORC:
-                LoadOriginalICN( id, true );
+                LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() >= 14 ) {
                     // Rainbow has bad pixels.
                     Sprite & original = _icnVsSprite[id][13];
                     if ( original.width() == 135 && original.height() == 57 ) {
+                        assert( original.singleLayer() );
                         original.image()[2047] = 160;
                         original.image()[2052] = 159;
                         original.image()[2055] = 160;
@@ -2910,8 +2963,11 @@ namespace fheroes2
                 return true;
             }
             case ICN::ESCROLL:
-                // Load as a singleLayer image. This also fixes missing black border on the right side of the "up" button.
-                LoadOriginalICN( id, true );
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 4 ) {
+                    // Convert 4th image to single-layer. This fixes missing black border on the right side of the "up" button.
+                    _icnVsSprite[id][4]._disableTransformLayer();
+                }
                 return true;
             case ICN::MAP_TYPE_ICON: {
                 // TODO: add a new icon for the Resurrection add-on map type.
@@ -3162,11 +3218,14 @@ namespace fheroes2
                 }
                 return true;
             }
-            case ICN::ARTFX:
             case ICN::ARTIFACT:
-                // Artifact in hero's bag ICNs are non-transparent so load them as singleLayer image.
-                // This also fixes "Arm of the Martyr" artifact rendering which initially has some incorrect transparent pixels.
-                LoadOriginalICN( id, true );
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 99 ) {
+                    // Convert 88 and 99 images to single-layer.
+                    // This fixes "Arm of the Martyr" artifact rendering which initially has some incorrect transparent pixels.
+                    _icnVsSprite[id][88]._disableTransformLayer();
+                    _icnVsSprite[id][99]._disableTransformLayer();
+                }
                 return true;
             case ICN::TWNSDW_5:
                 LoadOriginalICN( id );
@@ -3266,7 +3325,7 @@ namespace fheroes2
                 }
                 return true;
             case ICN::CSTLCAPS:
-                LoadOriginalICN( id, true );
+                LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() && _icnVsSprite[id][0].width() == 84 && _icnVsSprite[id][0].height() == 81 ) {
                     const Sprite & castle = GetICN( ICN::TWNSCSTL, 0 );
                     if ( !castle.empty() ) {
@@ -3572,8 +3631,8 @@ namespace fheroes2
                 Sprite & released = _icnVsSprite[id][0];
                 Sprite & pressed = _icnVsSprite[id][1];
 
-                released = _icnVsSprite[originalId][11];
-                pressed = _icnVsSprite[originalId][12];
+                Copy( _icnVsSprite[originalId][11], released );
+                Copy( _icnVsSprite[originalId][12], pressed );
 
                 if ( pressed.width() > 2 && pressed.height() > 2 ) {
                     // Make the background transparent.
@@ -3629,177 +3688,19 @@ namespace fheroes2
                 }
                 return true;
             }
-            case ICN::BIGBAR:
-            case ICN::BUILDING:
-            case ICN::CAMPBKGE:
-            case ICN::CAMPBKGG:
-            case ICN::CAPTCOVR:
-            case ICN::CASLBAR:
-            case ICN::CASLXTRA:
-            case ICN::CBKGBEAC:
-            case ICN::CBKGCRCK:
-            case ICN::CBKGDIMT:
-            case ICN::CBKGDITR:
-            case ICN::CBKGDSRT:
-            case ICN::CBKGGRAV:
-            case ICN::CBKGGRMT:
-            case ICN::CBKGGRTR:
-            case ICN::CBKGLAVA:
-            case ICN::CBKGSNMT:
-            case ICN::CBKGSNTR:
-            case ICN::CBKGSWMP:
             case ICN::CBKGWATR:
-            case ICN::CONGRATS:
-            case ICN::CREST:
-            case ICN::CSPANEL:
-            case ICN::CSTLBARB:
-            case ICN::CSTLCAPB:
-            case ICN::CSTLCAPN:
-            case ICN::CSTLCAPZ:
-            case ICN::CSTLKNGT:
-            case ICN::CSTLNECR:
-            case ICN::CSTLWRLK:
-            case ICN::DROPLISL:
-            case ICN::DROPLIST:
-            case ICN::EDITOR:
-            case ICN::EDITPANL:
-            case ICN::ESPANEL:
-            case ICN::EVIW_ALL:
-            case ICN::EVIWDDOR:
-            case ICN::EVIWHROS:
-            case ICN::EVIWMINE:
-            case ICN::EVIWPUZL:
-            case ICN::EVIWRSRC:
-            case ICN::EVIWRTFX:
-            case ICN::EVIWTWNS:
-            case ICN::EVIWWRLD:
-            case ICN::GROUND12:
-            case ICN::GROUND4:
-            case ICN::GROUND6:
-            case ICN::HEROES:
-            case ICN::HEROLOGE:
-            case ICN::HEROLOGO:
-            case ICN::HSBKG:
-            case ICN::LISTBOX:
-            case ICN::LISTBOXS:
-            case ICN::MANA:
-            case ICN::MINICAPT:
-            case ICN::MINIPORT:
-            case ICN::MINISS:
-            case ICN::MINITOWN:
-            case ICN::MOBILITY:
-            case ICN::OBJPALET:
-            case ICN::PORT0000:
-            case ICN::PORT0001:
-            case ICN::PORT0002:
-            case ICN::PORT0003:
-            case ICN::PORT0004:
-            case ICN::PORT0005:
-            case ICN::PORT0006:
-            case ICN::PORT0007:
-            case ICN::PORT0008:
-            case ICN::PORT0009:
-            case ICN::PORT0010:
-            case ICN::PORT0011:
-            case ICN::PORT0012:
-            case ICN::PORT0013:
-            case ICN::PORT0014:
-            case ICN::PORT0015:
-            case ICN::PORT0016:
-            case ICN::PORT0017:
-            case ICN::PORT0018:
-            case ICN::PORT0019:
-            case ICN::PORT0020:
-            case ICN::PORT0021:
-            case ICN::PORT0022:
-            case ICN::PORT0023:
-            case ICN::PORT0024:
-            case ICN::PORT0025:
-            case ICN::PORT0026:
-            case ICN::PORT0027:
-            case ICN::PORT0028:
-            case ICN::PORT0029:
-            case ICN::PORT0030:
-            case ICN::PORT0031:
-            case ICN::PORT0032:
-            case ICN::PORT0033:
-            case ICN::PORT0034:
-            case ICN::PORT0035:
-            case ICN::PORT0036:
-            case ICN::PORT0037:
-            case ICN::PORT0038:
-            case ICN::PORT0039:
-            case ICN::PORT0040:
-            case ICN::PORT0041:
-            case ICN::PORT0042:
-            case ICN::PORT0043:
-            case ICN::PORT0044:
-            case ICN::PORT0045:
-            case ICN::PORT0046:
-            case ICN::PORT0047:
-            case ICN::PORT0048:
-            case ICN::PORT0049:
-            case ICN::PORT0050:
-            case ICN::PORT0051:
-            case ICN::PORT0052:
-            case ICN::PORT0053:
-            case ICN::PORT0054:
-            case ICN::PORT0055:
-            case ICN::PORT0056:
-            case ICN::PORT0057:
-            case ICN::PORT0058:
-            case ICN::PORT0059:
-            case ICN::PORT0060:
-            case ICN::PORT0061:
-            case ICN::PORT0062:
-            case ICN::PORT0063:
-            case ICN::PORT0064:
-            case ICN::PORT0065:
-            case ICN::PORT0066:
-            case ICN::PORT0067:
-            case ICN::PORT0068:
-            case ICN::PORT0069:
-            case ICN::PORT0070:
-            case ICN::PORT0092:
-            case ICN::PORT0093:
-            case ICN::PORT0094:
-            case ICN::PORT0095:
-            case ICN::PORTMEDI:
-            case ICN::SCROLL:
-            case ICN::SCROLL2:
-            case ICN::SCROLLCN:
-            case ICN::SCROLLE:
-            case ICN::SPANEL:
-            case ICN::STONBACK:
-            case ICN::STONBAKE:
-            case ICN::STONEBAK:
-            case ICN::SUNMOON:
-            case ICN::SUNMOONE:
             case ICN::SWAPWIN:
-            case ICN::TEXTBACK:
-            case ICN::TEXTBAK2:
-            case ICN::TEXTBAR:
-            case ICN::TOWNBKG0:
-            case ICN::TOWNBKG1:
-            case ICN::TOWNBKG4:
-            case ICN::TOWNBKG5:
-            case ICN::TOWNNAME:
-            case ICN::VIEW_ALL:
-            case ICN::VIEWDDOR:
-            case ICN::VIEWGEN:
-            case ICN::VIEWHROS:
-            case ICN::VIEWMINE:
-            case ICN::VIEWPUZL:
-            case ICN::VIEWRSRC:
-            case ICN::VIEWRTFX:
-            case ICN::VIEWTWNS:
-            case ICN::VIEWWRLD:
-            case ICN::WELLBKG:
-            case ICN::WELLXTRA:
-            case ICN::X_CMPBKG:
-            case ICN::XPRIMARY: {
-                // These images are used in GUI and initially has no transparency or shadows so there is no need for the transform layer.
-                LoadOriginalICN( id, true );
+            case ICN::WELLBKG: {
+                // Ship battlefield background has some incorrect transparent pixels.
+                // Also Hero Meeting dialog and Castle Well images can e used with disabled transform layer.
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( !original.empty() ) {
+                        // Fix it by disabling the transform layer.
+                        original._disableTransformLayer();
+                    }
+                }
                 return true;
             }
             case ICN::GAME_OPTION_ICON: {
@@ -3808,8 +3709,11 @@ namespace fheroes2
                 h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
                 h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
 
-                _icnVsSprite[id][0]._disableTransformLayer();
-                _icnVsSprite[id][1]._disableTransformLayer();
+                for ( fheroes2::Sprite & sprite : _icnVsSprite[id] ) {
+                    if ( isTransformLayerNotUsed( sprite ) ) {
+                        sprite._disableTransformLayer();
+                    }
+                }
 
                 break;
             }

@@ -29,7 +29,7 @@
 
 namespace fheroes2
 {
-    // Image contains image layer and transform layer.
+    // Image contains always contains an image layer and if image is not a single-layer than also a transform layer:
     // - image layer contains visible pixels which are copy to a destination image
     // - transform layer is used to apply some transformation to an image on which we draw the current one. For example, shadowing
     class Image
@@ -92,8 +92,7 @@ namespace fheroes2
         // Fill 'image' layer with given value, setting the non single layer images 'transform' layer to 0.
         void fill( const uint8_t value );
 
-        // This is an optional indicator for image processing functions.
-        // The whole image still consists of 2 layers but transform layer might be ignored in computations.
+        // This is an indicator for image processing functions. The single-layer image does not contain transform layer.
         bool singleLayer() const
         {
             return _singleLayer;

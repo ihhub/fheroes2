@@ -1882,8 +1882,6 @@ namespace fheroes2
 
         uint8_t * data = image.image();
 
-        // TODO: Rewrite the line generation code to simplify it.
-
         if ( image.singleLayer() ) {
             if ( dx >= dy ) {
                 int32_t ns = dx / 2;
