@@ -58,15 +58,9 @@ namespace fheroes2
             return _height;
         }
 
-        virtual uint8_t * image()
-        {
-            return _data.get();
-        }
+        virtual uint8_t * image();
 
-        virtual const uint8_t * image() const
-        {
-            return _data.get();
-        }
+        virtual const uint8_t * image() const;
 
         uint8_t * transform()
         {
@@ -202,8 +196,8 @@ namespace fheroes2
 
         int32_t _x{ 0 };
         int32_t _y{ 0 };
-        int32_t _width;
-        int32_t _height;
+        int32_t _width{ 0 };
+        int32_t _height{ 0 };
 
         void _updateRoi();
 

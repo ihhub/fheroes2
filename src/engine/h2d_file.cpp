@@ -173,6 +173,7 @@ namespace fheroes2
 
     bool readImageFromH2D( H2DReader & reader, const std::string & name, Sprite & image )
     {
+        assert( !image.singleLayer() );
         const std::vector<uint8_t> & data = reader.getFile( name );
         if ( data.size() < 4 + 4 + 4 + 4 + 1 ) {
             // Empty or invalid image.
@@ -191,9 +192,7 @@ namespace fheroes2
         const size_t size = static_cast<size_t>( width * height );
         image.resize( width, height );
         memcpy( image.image(), data.data() + 4 + 4 + 4 + 4, size );
-        if ( !image.singleLayer() ) {
-            memcpy( image.transform(), data.data() + 4 + 4 + 4 + 4 + size, size );
-        }
+        memcpy( image.transform(), data.data() + 4 + 4 + 4 + 4 + size, size );
 
         image.setPosition( x, y );
 

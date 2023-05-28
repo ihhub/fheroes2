@@ -468,9 +468,6 @@ namespace fheroes2
     Image & Image::operator=( Image && image_ ) noexcept
     {
         if ( this != &image_ ) {
-            // We shouldn't move different types of images.
-            // assert( _singleLayer == image_._singleLayer );
-
             std::swap( _width, image_._width );
             std::swap( _height, image_._height );
             std::swap( _data, image_._data );
@@ -514,12 +511,22 @@ namespace fheroes2
         }
 
         // For single layer images do not allocate memory for the second (transform) layer.
-        const size_t size = _singleLayer ? static_cast<size_t>( width_ * height_ ) : static_cast<size_t>( width_ * height_ ) * 2;
+        const size_t size = _singleLayer ? static_cast<size_t>( width_ ) * height_ : static_cast<size_t>( width_ ) * height_ * 2;
 
         _data.reset( new uint8_t[size] );
 
         _width = width_;
         _height = height_;
+    }
+
+    uint8_t * Image::image()
+    {
+        return _data.get();
+    }
+
+    const uint8_t * Image::image() const
+    {
+        return _data.get();
     }
 
     void Image::reset()
@@ -1324,7 +1331,7 @@ namespace fheroes2
     Sprite CreateContour( const Image & image, const uint8_t value )
     {
         if ( image.empty() || image.singleLayer() ) {
-            // Contour can be created only for non zero images with transform layer.
+            // A contour can be created only for non-empty images with the transform layer.
             assert( 0 );
             return {};
         }
