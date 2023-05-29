@@ -77,8 +77,10 @@ namespace Maps
     bool isValidForDimensionDoor( int32_t targetIndex, bool isWater );
     // Checks if the tile is guarded by a monster
     bool isTileUnderProtection( const int32_t tileIndex );
-    // Returns a list of indexes of tiles with monsters guarding the specified tile
-    Indexes getMonstersProtectingTile( const int32_t tileIndex );
+    // Returns a list of indexes of tiles with monsters guarding the specified tile. If the 'checkObjectOnTile' parameter
+    // is set to true, then an additional check is performed to see if it is possible to interact with an object on this
+    // tile without triggering a monster attack.
+    Indexes getMonstersProtectingTile( const int32_t tileIndex, const bool checkObjectOnTile = true );
 
     Indexes GetObjectPositions( const MP2::MapObjectType objectType, bool ignoreHeroes );
     Indexes GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes );

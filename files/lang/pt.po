@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 13:04+0000\n"
+"POT-Creation-Date: 2023-05-26 14:46+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -4202,6 +4202,9 @@ msgstr ""
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
 
+msgid "Loading video. Please wait..."
+msgstr ""
+
 msgid "Host"
 msgstr "Host"
 
@@ -8032,6 +8035,10 @@ msgstr "Não é possível mover o último exército à fortaleza"
 msgid "This item can't be traded."
 msgstr ""
 
+#, fuzzy
+msgid "Invalid Artifact"
+msgstr "Artefato"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
@@ -9128,10 +9135,6 @@ msgid ""
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
 "lost by mortals."
 msgstr ""
-
-#, fuzzy
-msgid "Invalid Artifact"
-msgstr "Artefato"
 
 msgid "Wood"
 msgstr "Madeira"

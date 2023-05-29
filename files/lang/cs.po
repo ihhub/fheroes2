@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 13:04+0000\n"
+"POT-Creation-Date: 2023-05-26 14:46+0000\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -4210,6 +4210,9 @@ msgstr "Kampaň datadisku"
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr "Jedna ze čtyř nových kampaní z datadisku Price of Loyalty."
 
+msgid "Loading video. Please wait..."
+msgstr ""
+
 msgid "Host"
 msgstr ""
 
@@ -7954,6 +7957,9 @@ msgstr "Seslat kouzlo"
 msgid "This item can't be traded."
 msgstr ""
 
+msgid "Invalid Artifact"
+msgstr "Nesprávný Artefakt"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
@@ -9053,9 +9059,6 @@ msgid ""
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
 "lost by mortals."
 msgstr ""
-
-msgid "Invalid Artifact"
-msgstr "Nesprávný Artefakt"
 
 msgid "Wood"
 msgstr "Dřevo"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 13:04+0000\n"
+"POT-Creation-Date: 2023-05-26 14:46+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4304,6 +4304,9 @@ msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
 "L'une des quatre nouvelles campagnes de l'extension The Price of Loyalty."
 
+msgid "Loading video. Please wait..."
+msgstr ""
+
 msgid "Host"
 msgstr "Hôte"
 
@@ -8498,6 +8501,9 @@ msgstr "Impossible de déplacer le grimoire"
 msgid "This item can't be traded."
 msgstr "Cet objet ne peut pas être échangé."
 
+msgid "Invalid Artifact"
+msgstr "Artéfact non valide"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} augmente votre connaissance de %{count}."
 
@@ -9957,9 +9963,6 @@ msgstr ""
 "Une pelle sale a été enfoncée dans un monticule de terre à proximité. Après "
 "enquête, vous découvrez qu'il s'agit de la pelle enchantée du fossoyeur, "
 "longtemps pensée perdue par les mortels."
-
-msgid "Invalid Artifact"
-msgstr "Artéfact non valide"
 
 msgid "Wood"
 msgstr "Bois"

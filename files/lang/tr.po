@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 13:04+0000\n"
+"POT-Creation-Date: 2023-05-26 14:46+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3946,6 +3946,9 @@ msgstr ""
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
 
+msgid "Loading video. Please wait..."
+msgstr ""
+
 msgid "Host"
 msgstr ""
 
@@ -7519,6 +7522,9 @@ msgstr ""
 msgid "This item can't be traded."
 msgstr ""
 
+msgid "Invalid Artifact"
+msgstr ""
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
@@ -8613,9 +8619,6 @@ msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
 "lost by mortals."
-msgstr ""
-
-msgid "Invalid Artifact"
 msgstr ""
 
 msgid "Wood"

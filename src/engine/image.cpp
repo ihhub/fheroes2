@@ -22,6 +22,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
+#include <cstddef>
 #include <cstdlib>
 #include <cstring>
 #include <type_traits>
@@ -738,6 +740,128 @@ namespace fheroes2
                 return;
             }
             _height -= offsetY;
+        }
+    }
+
+    void addGradientShadow( const Sprite & in, Image & out, const Point & outPos, const Point & shadowOffset )
+    {
+        if ( in.empty() || ( shadowOffset.x == 0 && shadowOffset.y == 0 ) || ( outPos.x < 0 ) || ( outPos.y < 0 ) ) {
+            return;
+        }
+
+        const int32_t outWidth = out.width();
+        const int32_t inWidth = in.width();
+        const int32_t inHeight = in.height();
+        const int32_t absOffsetX = std::abs( shadowOffset.x );
+        const int32_t absOffsetY = std::abs( shadowOffset.y );
+        const int32_t shadowOffsetX = std::min( shadowOffset.x, 0 );
+        const int32_t shadowOffsetY = std::min( shadowOffset.y, 0 );
+
+        std::vector<Point> shadowLine;
+        shadowLine.reserve( std::max( absOffsetX, absOffsetY ) + 1 );
+
+        // Calculate shadow line from the object.
+        if ( shadowOffset.x == 0 ) {
+            const int32_t maxY = absOffsetY + shadowOffsetY;
+            for ( int32_t y = shadowOffsetY; y <= maxY; ++y ) {
+                shadowLine.emplace_back( 0, y );
+            }
+        }
+        else {
+            const double slopeFactor = static_cast<double>( shadowOffset.y ) / shadowOffset.x;
+
+            if ( absOffsetX >= absOffsetY ) {
+                const int32_t maxX = absOffsetX + shadowOffsetX;
+                for ( int32_t x = shadowOffsetX; x <= maxX; ++x ) {
+                    shadowLine.emplace_back( x, static_cast<int32_t>( std::round( x * slopeFactor ) ) );
+                }
+            }
+            else {
+                const int32_t maxY = absOffsetY + shadowOffsetY;
+                for ( int32_t y = shadowOffsetY; y <= maxY; ++y ) {
+                    shadowLine.emplace_back( static_cast<int32_t>( std::round( y / slopeFactor ) ), y );
+                }
+            }
+        }
+
+        const int32_t maxX = inWidth + absOffsetX;
+        const int32_t maxY = inHeight + absOffsetY;
+        const bool isInNonSingleLayer = !in.singleLayer();
+        const bool isOutNonSingleLayer = !out.singleLayer();
+
+        const uint8_t * transformIn = nullptr;
+        if ( isInNonSingleLayer ) {
+            transformIn = in.transform();
+        }
+
+        uint8_t * transformOut = nullptr;
+        if ( isOutNonSingleLayer ) {
+            transformOut = out.transform();
+        }
+
+        uint8_t * imageOut = out.image() + outPos.x + shadowOffsetX + in.x() + static_cast<ptrdiff_t>( outPos.y + shadowOffsetY + in.y() ) * outWidth;
+
+        auto isTransparent = [inWidth, inHeight, transformIn]( const int32_t offsetX, const int32_t offsetY ) {
+            return ( ( offsetX < 0 ) || ( offsetY < 0 ) || ( offsetX >= inWidth ) || ( offsetY >= inHeight ) )
+                   || ( transformIn && ( *( transformIn + offsetX + static_cast<ptrdiff_t>( offsetY ) * inWidth ) == 1 ) );
+        };
+
+        for ( int32_t y = 0; y < maxY; ++y ) {
+            const int32_t offsetY = y + shadowOffsetY;
+            for ( int32_t x = 0; x < maxX; ++x ) {
+                const int32_t offsetX = x + shadowOffsetX;
+
+                if ( !isTransparent( offsetX, offsetY ) ) {
+                    // We add shadow only to visible parts of the background image.
+                    continue;
+                }
+
+                // There are 4 shadow tables: 2, 3, 4, 5. The strongest shadow is in table ID 2.
+                uint8_t transformTableId = 6;
+                for ( const Point & shadowLineOffset : shadowLine ) {
+                    const int32_t shadowLineOffsetX = offsetX - shadowLineOffset.x;
+                    const int32_t shadowLineOffsetY = offsetY - shadowLineOffset.y;
+
+                    if ( !isTransparent( shadowLineOffsetX, shadowLineOffsetY ) ) {
+                        // Increase the strength of shadow by reducing the table ID.
+                        --transformTableId;
+
+                        if ( transformTableId == 2 ) {
+                            // We reached the strongest shadow table ID.
+                            break;
+                        }
+                    }
+                }
+
+                if ( transformTableId == 6 ) {
+                    continue;
+                }
+
+                // The transformTableId is less than 6 so the shadow has to be applied.
+                const int32_t outOffset = x + y * outWidth;
+
+                if ( isOutNonSingleLayer ) {
+                    uint8_t * transformOutX = transformOut + outOffset;
+
+                    if ( *transformOutX == 0 ) {
+                        // Apply shadow transform to the out image.
+                        uint8_t * imageOutX = imageOut + outOffset;
+                        *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ 256 } + *imageOutX );
+                    }
+                    else if ( *transformOutX > 1 && *transformOutX < 6 ) {
+                        // Out image transform layer already has shadow data. We add the shadow strength by subtract the 'transformTableId', limited to 2.
+                        *transformOutX = ( *transformOutX < 2 + transformTableId ) ? 2 : ( *transformOutX - transformTableId );
+                    }
+                    else {
+                        *transformOutX = transformTableId;
+                    }
+                }
+                else {
+                    // For single layer 'out' image apply shadow transform to the image data.
+                    uint8_t * imageOutX = imageOut + outOffset;
+                    *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ 256 } + *imageOutX );
+                }
+            }
         }
     }
 

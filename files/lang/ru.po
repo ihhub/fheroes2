@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-12 13:04+0000\n"
+"POT-Creation-Date: 2023-05-26 14:46+0000\n"
 "PO-Revision-Date: 2023-05-06 15:07+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2345,7 +2345,7 @@ msgstr ""
 "заклинание для каждого уровня."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr "Фруктовый сад увеличивает прирост Хоббитов на %{count} в неделю."
+msgstr "Фруктовый сад увеличивает прирост Полуросликов на %{count} в неделю."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
 msgstr "Буря добавляет 2 очка к силе магии заклинателя, обороняющего замок."
@@ -4227,6 +4227,9 @@ msgstr "Новая кампания"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr "Одна из четырёх новых кампаний из набора дополнений \"Цена верности\"."
+
+msgid "Loading video. Please wait..."
+msgstr ""
 
 msgid "Host"
 msgstr "Хост"
@@ -7607,7 +7610,7 @@ msgid "Hill Fort"
 msgstr "Форт на холме"
 
 msgid "Halfling Hole"
-msgstr "Нора"
+msgstr "Нора полуросликов"
 
 msgid "Mercenary Camp"
 msgstr "Лагерь наёмников"
@@ -7994,10 +7997,10 @@ msgid "Black Dragons"
 msgstr "Чёрные драконы"
 
 msgid "Halfling"
-msgstr "Хоббит"
+msgstr "Полурослик"
 
 msgid "Halflings"
-msgstr "Хоббиты"
+msgstr "Полурослики"
 
 msgid "Boar"
 msgstr "Боров"
@@ -8322,6 +8325,9 @@ msgstr "Невозможно переместить книгу заклинан�
 
 msgid "This item can't be traded."
 msgstr "Эту вещь нельзя продать."
+
+msgid "Invalid Artifact"
+msgstr "Некорректный артефакт"
 
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} увеличивает Знания на %{count}."
@@ -9718,9 +9724,6 @@ msgstr ""
 "Грязная лопата торчала из могильного холма. После исследования, оказалось, "
 "что это зачарованная лопата гробокопателей, считавшаяся давным-давно "
 "потерянной смертными."
-
-msgid "Invalid Artifact"
-msgstr "Некорректный артефакт"
 
 msgid "Wood"
 msgstr "Древесина"
