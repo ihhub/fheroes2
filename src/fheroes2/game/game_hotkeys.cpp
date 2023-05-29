@@ -177,6 +177,14 @@ namespace
 #if defined( WITH_DEBUG )
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_MAIN_MENU )]
             = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|map editor main menu" ), fheroes2::Key::KEY_E };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new map menu" ), fheroes2::Key::KEY_N };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_LOAD_MAP_MENU )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|load map menu" ), fheroes2::Key::KEY_L };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new map from scratch" ), fheroes2::Key::KEY_S };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new random map" ), fheroes2::Key::KEY_R };
 #endif
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ROLAND )]

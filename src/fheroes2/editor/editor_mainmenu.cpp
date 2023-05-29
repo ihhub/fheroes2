@@ -34,6 +34,7 @@
 #include "game_mode.h"
 #include "icn.h"
 #include "localevent.h"
+#include "logging.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
@@ -47,6 +48,50 @@
 namespace
 {
     const int32_t buttonYStep = 66;
+    const size_t mapSizeCount = 4;
+    const std::array<Game::HotKeyEvent, mapSizeCount> mapSizeHotkeys = { Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL, Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM,
+                                                                         Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE, Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE };
+    const std::array<Maps::mapsize_t, mapSizeCount> mapSizes = { Maps::SMALL, Maps::MEDIUM, Maps::LARGE, Maps::XLARGE };
+
+    void outputEditorMainMenuInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+
+        COUT( "Map Editor\n" )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU )
+                       << " to create a new map either from scratch or using the random map generator." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::EDITOR_LOAD_MAP_MENU ) << " to load an existing map." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to go back to Main Menu." )
+    }
+
+    void outputEditorNewMapMenuInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+
+        COUT( "New Map\n" )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) << " to create a blank map from scratch." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU ) << " to create a randomly generated map." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to go back to Map Editor main menu." )
+    }
+
+    void outputEditorMapSizeMenuInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+
+        COUT( "Map Size\n" )
+
+        const size_t buttonCount = mapSizeHotkeys.size();
+        for ( size_t i = 0; i < buttonCount; ++i ) {
+            std::string message = " to create a map that is %{size} squares wide and %{size} squares high.";
+            StringReplace( message, "%{size}", std::to_string( mapSizes[i] ) );
+
+            COUT( "Press " << Game::getHotKeyNameByEventId( mapSizeHotkeys[i] ) << message )
+        }
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to go back to New Map menu." )
+    }
 
     void showWIPInfo()
     {
@@ -55,19 +100,17 @@ namespace
 
     Maps::mapsize_t selectMapSize()
     {
+        outputEditorMapSizeMenuInTextSupportMode();
+
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::drawEditorMainMenuScreen();
 
         const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
-        std::array<fheroes2::Button, 4> buttons;
-        std::array<Game::HotKeyEvent, 4> buttonHotkey = { Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL, Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM,
-                                                          Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE, Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE };
-        std::array<Maps::mapsize_t, 4> buttonMapSize = { Maps::SMALL, Maps::MEDIUM, Maps::LARGE, Maps::XLARGE };
-        const size_t buttonCount = buttons.size();
+        std::array<fheroes2::Button, mapSizeCount> buttons;
 
-        for ( uint32_t i = 0; i < buttonCount; ++i ) {
+        for ( uint32_t i = 0; i < mapSizeCount; ++i ) {
             buttons[i].setICNInfo( ICN::BTNESIZE, 0 + i * 2, 1 + i * 2 );
             buttons[i].setPosition( buttonPos.x, buttonPos.y + buttonYStep * static_cast<int32_t>( i ) );
             buttons[i].draw();
@@ -81,15 +124,15 @@ namespace
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() ) {
-            for ( size_t i = 0; i < buttonCount; ++i ) {
+            for ( size_t i = 0; i < mapSizeCount; ++i ) {
                 le.MousePressLeft( buttons[i].area() ) ? buttons[i].drawOnPress() : buttons[i].drawOnRelease();
 
-                if ( le.MouseClickLeft( buttons[i].area() ) || Game::HotKeyPressEvent( buttonHotkey[i] ) ) {
-                    return buttonMapSize[i];
+                if ( le.MouseClickLeft( buttons[i].area() ) || Game::HotKeyPressEvent( mapSizeHotkeys[i] ) ) {
+                    return mapSizes[i];
                 }
 
                 if ( le.MousePressRight( buttons[i].area() ) ) {
-                    std::string mapSize = std::to_string( buttonMapSize[i] );
+                    std::string mapSize = std::to_string( mapSizes[i] );
                     std::string message = _( "Create a map that is %{size} squares wide and %{size} squares high." );
                     StringReplace( message, "%{size}", mapSize );
                     mapSize += " x " + mapSize;
@@ -116,6 +159,8 @@ namespace Editor
 {
     fheroes2::GameMode menuMain()
     {
+        outputEditorMainMenuInTextSupportMode();
+
         // Stop all sounds, but not the music
         AudioManager::stopSounds();
 
@@ -145,10 +190,10 @@ namespace Editor
             le.MousePressLeft( loadMap.area() ) ? loadMap.drawOnPress() : loadMap.drawOnRelease();
             le.MousePressLeft( cancel.area() ) ? cancel.drawOnPress() : cancel.drawOnRelease();
 
-            if ( le.MouseClickLeft( newMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) ) {
+            if ( le.MouseClickLeft( newMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                 return fheroes2::GameMode::EDITOR_NEW_MAP;
             }
-            if ( le.MouseClickLeft( loadMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
+            if ( le.MouseClickLeft( loadMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_LOAD_MAP_MENU ) ) {
                 return fheroes2::GameMode::EDITOR_LOAD_MAP;
             }
             if ( le.MouseClickLeft( cancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
@@ -171,6 +216,8 @@ namespace Editor
 
     fheroes2::GameMode menuNewMap()
     {
+        outputEditorNewMapMenuInTextSupportMode();
+
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::drawEditorMainMenuScreen();
@@ -212,13 +259,13 @@ namespace Editor
                 return fheroes2::GameMode::EDITOR_MAIN_MENU;
             }
 
-            if ( le.MousePressRight( scratchMap.area() ) ) {
+            if ( le.MousePressRight( scratchMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) ) {
                 Dialog::Message( _( "From Scratch" ), _( "Start from scratch with a blank map." ), Font::BIG );
             }
-            else if ( le.MousePressRight( randomMap.area() ) ) {
+            else if ( le.MousePressRight( randomMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU ) ) {
                 Dialog::Message( _( "Random" ), _( "Create a randomly generated map." ), Font::BIG );
             }
-            else if ( le.MousePressRight( cancel.area() ) ) {
+            else if ( le.MousePressRight( cancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 Dialog::Message( _( "Cancel" ), _( "Cancel back to the Map Editor main menu." ), Font::BIG );
             }
         }
