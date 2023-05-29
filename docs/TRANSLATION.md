@@ -39,46 +39,45 @@ been implemented, then code for that will need to be written.
 
 ## Editing translations - Before you start
 
-Before starting, you will have to set up the necessary environment: fork the fheroes2 repository and install an application used for translating. When you have your own fork of fheroes2 you should create a branch. At this point you can start translating. After you finish your work,
-and you are ready to share it, you will have to prepare a pull request.
+Before starting, you will have to set up the necessary environment: fork the fheroes2 repository and install an application used 
+for translating. When you have your own fork of fheroes2 you should create a branch. At this point you can start translating. 
+After you finish your work, and you are ready to share it, you will have to prepare a pull request.
 
 
-### Fork the fheroes2 repository
+### Forking the fheroes2 repository
 
 A fork is your copy of the fheroes2 repository. It gives you a safe environment to prepare and test your changes.
 You can read here how to [**create a fork**](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
 
 
-### Software to edit translation files
+### Translation editing software
 
 We encourage you to use [**poedit**](https://poedit.net/) or [**gtranslator**](https://wiki.gnome.org/Apps/Gtranslator) to
-edit translations. Currently all implemented languages, except French, adhere to a standardized font encoding/charset.
+edit translations. Currently all implemented languages adhere to a standardized font encoding/charset.
 
 
 ## Editing translations - Your first or next translation
 
 ### Sync your fork
 
-Before you start working on the first or next translation, make sure that your fork has all recent changes for the fhereos2 repo. To do this, [**sync your fork**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork).
+Before you start working on the first or next translation, make sure that your fork has all the recent changes from the fheroes2 repo. To do this, [**sync your fork**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork).
 
-### Create a branch
+### Creating a branch
 
-Now create a space for your work where you can safely prepare, test and share your changes. Read more [**about branches**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches).
+Next you will set up an environment for working on your translation, in addition to testing and sharing your changes. Read more [**about branches**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches).
 
-To create a branch, please follow the GitHub's instruction about [**creating a branch within your repo**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository).
+To create a branch, please follow GitHub's instructions on [**creating a branch within your repo**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository).
 
-### Now provide your translations
+### Submitting translations
 
-Now it is time to use your favourite software, which allows you to update the translation and suits you best.
-
-All original translatable strings are located in the source code of the project. If you need to clarify where this string is being used
-you can search for it. The string below, for example, can be translated in PO files:
+Finally you will use your translation software of choice to make changes to the translation. All original translatable strings are located in the source code of the project. 
+If you need to clarify where this string is being used you can search for it. The string below, for example, can be translated in PO files:
 
 ```cpp
 _( "Are you sure you want to quit?" )
 ```
 
-### Test your changes
+### Testing your changes
 
 Once the translation files have been modified, for Linux/MacOS run the `make` command below in the `files/lang` subdirectory to create
 machine object (MO) binary files which can be used by the fheroes2 engine.
@@ -103,17 +102,17 @@ For example, for German you will have to set font encoding to CP1252, while for 
 a pull request with your changes, you will have to save the PO file in UTF-8 encoding because this is what Github supports.
 
 
-### Share your work with the team
+### Sharing your translation work
 
-When you are happy about your work, share it. The first step is to commit your work into your fork. Then, create a pull request that 
-introduces your changes into the fheroes2 repository.
+When you are satisfied with your work, you can proceed with sharing it. The first step is to commit your work into the branch you made of 
+your own fheroes2 fork. Then, create a PR that proposes to introduce your changes into the fheroes2 repository.
 
 How to [**commit**](https://github.com/git-guides/git-commit). 
 
 How to [**create a pull request from your form your fork**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork).
 
-Try to add a meaningfull pull request title, this will allow the team to quickly identify the scope of your work, ie. "Update Slovak translation".
-
+The pull request title has to be something human-understandable. This allows the team to quickly identify the purpose of 
+your work, I.E. "Update the Slovak translation".
 
 <details>
 
