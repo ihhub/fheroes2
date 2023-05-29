@@ -45,7 +45,7 @@ and you are ready to share it, you will have to prepare a pull request.
 
 ### Fork the fheroes2 repository
 
-A fork is your copy of the fheroes2 repository. It gives you a safe space to prepare and test your changes.
+A fork is your copy of the fheroes2 repository. It gives you a safe environment to prepare and test your changes.
 You can read here how to [**create a fork**](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
 
 
