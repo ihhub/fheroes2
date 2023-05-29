@@ -39,9 +39,8 @@ been implemented, then code for that will need to be written.
 
 ## Editing translations - Before you start
 
-Before start, you will have to prepare your working environment: fork the fheroes2 repository and prepare an application where you
-will edit your translation. Then you will have to create a branch. Now you can provide the translation. After you finish your work,
-and you are happy to share it, you will have to prepare a pull request.
+Before starting, you will have to set up the necessary environment: fork the fheroes2 repository and install an application used for translating. When you have your own fork of fheroes2 you should create a branch. At this point you can start translating. After you finish your work,
+and you are ready to share it, you will have to prepare a pull request.
 
 
 ### Fork the fheroes2 repository
