@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-12 13:04+0000\n"
-"PO-Revision-Date: 2023-05-07 22:12+0700\n"
+"PO-Revision-Date: 2023-05-29 21:55+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -2681,7 +2681,7 @@ msgid "Dismiss this army."
 msgstr "Giải tán đội quân này."
 
 msgid "Followers"
-msgstr "Xin theo"
+msgstr "Followers"
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
@@ -2734,7 +2734,7 @@ msgid "External"
 msgstr ""
 
 msgid "Music Type"
-msgstr ""
+msgstr "Kiểu Nhạc"
 
 msgid "3D Audio"
 msgstr ""
@@ -4365,11 +4365,11 @@ msgstr ""
 msgid "%{color} player has been vanquished!"
 msgstr ""
 
-msgid "Scenario:"
-msgstr "Kịch bản:"
-
 msgid "Major Event!"
 msgstr "Sự kiện Chính!"
+
+msgid "Scenario:"
+msgstr "Kịch bản:"
 
 msgid "Game Difficulty:"
 msgstr "Độ khó Game:"
@@ -4489,13 +4489,13 @@ msgid "Tsabu"
 msgstr "Tsabu"
 
 msgid "Sir Galant"
-msgstr "Ngài Galant"
+msgstr "Sir Galant"
 
 msgid "Thundax"
 msgstr "Thundax"
 
 msgid "Lord Haart"
-msgstr "Chúa Haart"
+msgstr "Lord Haart"
 
 msgid "Ariel"
 msgstr "Ariel"
@@ -4600,7 +4600,7 @@ msgid "Are you sure you want to overwrite the save with this name?"
 msgstr ""
 
 msgid "Game saved successfully."
-msgstr ""
+msgstr "Lưu Game thành công."
 
 msgid "There was an issue during saving."
 msgstr ""
@@ -4622,7 +4622,7 @@ msgstr "Đào báu vật cần cả một ngày, hãy thử lại vào ngày mai
 
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
-msgstr ""
+msgstr "Sau nhiều giờ đào ở chỗ này, ngươi đã tìm thấy %{artifact}."
 
 msgid "Congratulations!"
 msgstr "Chúc mừng!"
@@ -4722,7 +4722,7 @@ msgid "Keyboard|SPACE"
 msgstr "SPACE"
 
 msgid "Keyboard|LANG"
-msgstr "LANG"
+msgstr ""
 
 msgid "Keyboard|ABC"
 msgstr "ABC"
@@ -4817,7 +4817,7 @@ msgid "Gwenneth"
 msgstr "Gwenneth"
 
 msgid "Sir Gallant"
-msgstr "Ngài Gallant"
+msgstr "Sir Gallant"
 
 msgid "Tyro"
 msgstr "Tyro"
@@ -4919,10 +4919,10 @@ msgid "Roxana"
 msgstr "Roxana"
 
 msgid "Lord Corlagon"
-msgstr "Chúa Corlagon"
+msgstr "Lord Corlagon"
 
 msgid "Lord Halton"
-msgstr "Chúa Halton"
+msgstr "Lord Halton"
 
 msgid "Sister Eliza"
 msgstr "Sister Eliza"
@@ -4967,7 +4967,7 @@ msgid " gives you maximum luck"
 msgstr " cho ngươi tối đa may mắn"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
-msgstr ""
+msgstr "Ngươi không thể nhặt bảo vật này, tải trọng của ngươi đã đủ!"
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr ""
@@ -4979,7 +4979,7 @@ msgstr ""
 "Thật không may, ngươi dường như đang thiếu một chút tiền mặt vào lúc này."
 
 msgid "Do you wish to buy one?"
-msgstr ""
+msgstr "Ngươi có muốn mua một cái không?"
 
 msgid "%{count} / day"
 msgstr "%{count} / ngày"
@@ -8414,7 +8414,7 @@ msgid ""
 msgstr ""
 
 msgid "Telescope"
-msgstr ""
+msgstr "Kính viễn vọng"
 
 msgid ""
 "The %{name} increases the amount of terrain your hero reveals when "
@@ -8952,7 +8952,7 @@ msgid ""
 msgstr ""
 
 msgid "Resurrect"
-msgstr ""
+msgstr "Hồi sinh"
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
 msgstr ""
@@ -9096,13 +9096,13 @@ msgid "Meteor Shower"
 msgstr "Mưa Sao băng"
 
 msgid "Paralyze"
-msgstr ""
+msgstr "Tê liệt"
 
 msgid "The targeted creatures are paralyzed, unable to move or retaliate."
 msgstr ""
 
 msgid "Hypnotize"
-msgstr ""
+msgstr "Thôi miên"
 
 msgid ""
 "Brings a single enemy unit under your control if its hits are less than "
@@ -9162,7 +9162,7 @@ msgid "Resurrects creatures from a damaged or dead undead unit permanently."
 msgstr ""
 
 msgid "Mirror Image"
-msgstr ""
+msgstr "Ảnh Phản chiếu"
 
 msgid ""
 "Creates an illusionary unit that duplicates one of your existing units.  "
@@ -9252,7 +9252,7 @@ msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr ""
 
 msgid "Summon Boat"
-msgstr ""
+msgstr "Triệu hồi Thuyền"
 
 msgid ""
 "Summons the nearest unoccupied, friendly boat to an adjacent shore "
