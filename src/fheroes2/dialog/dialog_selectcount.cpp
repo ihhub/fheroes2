@@ -33,6 +33,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_delays.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -52,6 +53,31 @@
 namespace
 {
     const int32_t textOffset = 24;
+
+    size_t GetInsertPosition( const std::string & text, const size_t currentInsertPosition, const int32_t cursorPosition, const int32_t startXPosition )
+    {
+        if ( text.empty() || cursorPosition <= startXPosition ) {
+            // The text is empty or mouse cursor position is to the left of input field.
+            return 0;
+        }
+
+        const int32_t maxOffset = cursorPosition - startXPosition;
+        int32_t positionOffset = 0;
+        for ( size_t i = 0; i < text.size(); ++i ) {
+            positionOffset += Text::getCharacterWidth( static_cast<uint8_t>( text[i] ), Font::BIG );
+
+            if ( positionOffset > maxOffset ) {
+                return i;
+            }
+
+            // If the mouse cursor is to the right of the current text cursor position we take its width into account
+            if ( i == currentInsertPosition ) {
+                positionOffset += Text::getCharacterWidth( '_', Font::BIG );
+            }
+        }
+
+        return text.size();
+    }
 
     void SwitchMaxMinButtons( fheroes2::ButtonBase & minButton, fheroes2::ButtonBase & maxButton, uint32_t currentValue, uint32_t minimumValue )
     {
@@ -307,9 +333,14 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
     LocalEvent & le = LocalEvent::Get();
 
+    const uint64_t cursorBlinkDelay = COLOR_CYCLING_TIME_MS * uint64_t{ 2 };
+    bool isCursorVisible = false;
+
+    Game::passCustomAnimationDelay( cursorBlinkDelay );
+
     const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
-    while ( le.HandleEvents() ) {
+    while ( le.HandleEvents( Game::isCustomDelayNeeded( cursorBlinkDelay ) ) ) {
         bool redraw = false;
 
         buttonOk.isEnabled() && le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -339,6 +370,11 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
                 redraw = true;
             }
         }
+        else if ( le.MouseClickLeft( text_rt ) ) {
+            charInsertPos = GetInsertPosition( res, charInsertPos, le.GetMouseCursor().x, text_rt.x + ( text_rt.width - text.width() ) / 2 );
+
+            redraw = true;
+        }
 
         if ( le.MousePressRight( buttonCancel.area() ) ) {
             Dialog::Message( _( "Cancel" ), _( "Exit this menu without doing anything." ), Font::BIG );
@@ -348,6 +384,12 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
         }
         else if ( le.MousePressRight( buttonVirtualKB.area() ) ) {
             Dialog::Message( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Font::BIG );
+        }
+
+        // Text input cursor blink.
+        if ( Game::validateCustomAnimationDelay( cursorBlinkDelay ) ) {
+            isCursorVisible = !isCursorVisible;
+            redraw = true;
         }
 
         if ( redraw ) {
@@ -361,7 +403,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
                 buttonOk.draw();
             }
 
-            text.set( InsertString( res, charInsertPos, "_" ), fheroes2::FontType::normalWhite() );
+            text.set( InsertString( res, charInsertPos, isCursorVisible ? "_" : "\x7F" ), fheroes2::FontType::normalWhite() );
             text.fitToOneRow( inputArea.width() - textOffset );
 
             fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );

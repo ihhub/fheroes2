@@ -5816,6 +5816,10 @@ namespace fheroes2
         fheroes2::Copy( icnVsSprite[43], 6, 6, icnVsSprite[75], 4, 8, 4, 1 );
         icnVsSprite[75].setPosition( icnVsSprite[75].x(), icnVsSprite[75].y() );
         updateNormalFontLetterShadow( icnVsSprite[75] );
+
+        // System call 'DELETE' is never used as character. We make it a transparent character with width of "_" for blinking cursor.
+        icnVsSprite[127 - 32].resize( icnVsSprite[95 - 32].width(), 1 );
+        icnVsSprite[127 - 32].reset();
     }
 
     void modifyBaseSmallFont( std::vector<fheroes2::Sprite> & icnVsSprite )

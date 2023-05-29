@@ -30,6 +30,7 @@
 #include <vector>
 
 #include "agg_image.h"
+#include "game_delays.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -166,11 +167,18 @@ namespace
             _output.render( renderInputArea() );
         }
 
+        void changeCursorState( const bool isVisible )
+        {
+            _cursor = isVisible ? "_" : "\x7F";
+            renderInputArea();
+        }
+
     private:
         fheroes2::Display & _output;
         std::string & _info;
         std::unique_ptr<fheroes2::StandardWindow> _window;
         const bool _isEvilInterface;
+        std::string _cursor = "_";
 
         fheroes2::Rect renderInputArea()
         {
@@ -188,7 +196,7 @@ namespace
                                         PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
             }
 
-            fheroes2::Text textUI( _info, fheroes2::FontType::normalWhite() );
+            fheroes2::Text textUI( _info + _cursor, fheroes2::FontType::normalWhite() );
             textUI.fitToOneRow( inputAreaSize.width - inputAreaOffset * 2 );
 
             textUI.draw( windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2 + inputAreaOffset,
@@ -599,7 +607,18 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
 
-        while ( le.HandleEvents() ) {
+        const uint64_t cursorBlinkDelay = COLOR_CYCLING_TIME_MS * uint64_t{ 2 };
+        bool isCursorVisible = false;
+
+        Game::passCustomAnimationDelay( cursorBlinkDelay );
+
+        while ( le.HandleEvents( Game::isCustomDelayNeeded( cursorBlinkDelay ) ) ) {
+            // Text input cursor blink.
+            if ( Game::validateCustomAnimationDelay( cursorBlinkDelay ) ) {
+                isCursorVisible = !isCursorVisible;
+                renderer.changeCursorState( isCursorVisible );
+            }
+
             if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }

@@ -36,6 +36,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dir.h"
+#include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
 #include "gamedefs.h"
@@ -59,22 +60,25 @@
 
 namespace
 {
-    size_t GetInsertPosition( const std::string & text, const int32_t cursorPosition, const int32_t startXPosition )
+    size_t GetInsertPosition( const std::string & text, const size_t currentInsertPosition, const int32_t cursorPosition, const int32_t startXPosition )
     {
-        if ( text.empty() ) {
-            // The text is empty, return start position.
+        if ( text.empty() || cursorPosition <= startXPosition ) {
+            // The text is empty or mouse cursor position is to the left of input field.
             return 0;
         }
 
-        if ( cursorPosition <= startXPosition ) {
-            return 0;
-        }
-
+        const int32_t maxOffset = cursorPosition - startXPosition;
         int32_t positionOffset = 0;
         for ( size_t i = 0; i < text.size(); ++i ) {
             positionOffset += Text::getCharacterWidth( static_cast<uint8_t>( text[i] ), Font::BIG );
-            if ( positionOffset + startXPosition > cursorPosition ) {
+
+            if ( positionOffset > maxOffset ) {
                 return i;
+            }
+
+            // If the mouse cursor is to the right of the current text cursor position we take its width into account
+            if ( i == currentInsertPosition ) {
+                positionOffset += Text::getCharacterWidth( '_', Font::BIG );
             }
         }
 
@@ -358,17 +362,21 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
     const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
-    while ( le.HandleEvents() && result.empty() ) {
+    const uint64_t cursorBlinkDelay = COLOR_CYCLING_TIME_MS * uint64_t{ 2 };
+    bool isCursorVisible = false;
+
+    Game::passCustomAnimationDelay( cursorBlinkDelay );
+
+    while ( le.HandleEvents( !isEditing || Game::isCustomDelayNeeded( cursorBlinkDelay ) ) && result.empty() ) {
         le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
         if ( isEditing ) {
             le.MousePressLeft( buttonVirtualKB.area() ) ? buttonVirtualKB.drawOnPress() : buttonVirtualKB.drawOnRelease();
         }
 
-        listbox.QueueEventProcessing();
+        bool isListboxSelected = listbox.QueueEventProcessing();
 
         bool needRedraw = false;
-        bool isListboxSelected = listbox.isSelected();
 
         if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
              || listbox.isDoubleClicked() ) {
@@ -391,14 +399,15 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                 needRedraw = true;
             }
             else if ( le.MouseClickLeft( enter_field ) ) {
-                charInsertPos = GetInsertPosition( filename, le.GetMouseCursor().x, enter_field.x );
+                charInsertPos = GetInsertPosition( filename, charInsertPos, le.GetMouseCursor().x, enter_field.x );
                 if ( filename.empty() ) {
                     buttonOk.disable();
                 }
 
                 needRedraw = true;
             }
-            else if ( le.KeyPress() && ( !is_limit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() ) ) {
+            else if ( le.KeyPress() && ( fheroes2::Key::KEY_UP != le.KeyValue() ) && ( fheroes2::Key::KEY_DOWN != le.KeyValue() )
+                      && ( !is_limit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() ) ) {
                 charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
                 if ( filename.empty() ) {
                     buttonOk.disable();
@@ -453,6 +462,12 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             needRedraw = true;
         }
 
+        // Text input cursor blink.
+        if ( isEditing && Game::validateCustomAnimationDelay( cursorBlinkDelay ) ) {
+            isCursorVisible = !isCursorVisible;
+            needRedraw = true;
+        }
+
         if ( !needRedraw && !listbox.IsNeedRedraw() ) {
             continue;
         }
@@ -471,7 +486,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             lastSelectedSaveFileName = "";
         }
 
-        is_limit = isEditing ? RedrawExtraInfo( rt.getPosition(), header, InsertString( filename, charInsertPos, "_" ), enter_field )
+        is_limit = isEditing ? RedrawExtraInfo( rt.getPosition(), header, InsertString( filename, charInsertPos, isCursorVisible ? "_" : "\x7F" ), enter_field )
                              : RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
 
         buttonOk.draw();
