@@ -23,6 +23,7 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <ostream>
 #include <string>
 
 #include "audio.h"
