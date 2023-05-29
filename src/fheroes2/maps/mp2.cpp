@@ -794,98 +794,98 @@ bool MP2::isNeedStayFront( const MapObjectType objectType )
 int MP2::getActionObjectDirection( const MapObjectType objectType )
 {
     switch ( objectType ) {
-    case OBJ_JAIL:
-    case OBJ_BARRIER:
     case OBJ_ARTIFACT:
-    case OBJ_RESOURCE:
-    case OBJ_TREASURE_CHEST:
-    case OBJ_MONSTER:
-    case OBJ_GENIE_LAMP:
-    case OBJ_CAMPFIRE:
-    case OBJ_SHIPWRECK_SURVIVOR:
-    case OBJ_FLOTSAM:
-    case OBJ_SEA_CHEST:
-    case OBJ_BUOY:
-    case OBJ_WHIRLPOOL:
-    case OBJ_BOTTLE:
-    case OBJ_COAST:
+    case OBJ_BARRIER:
     case OBJ_BOAT:
+    case OBJ_BOTTLE:
+    case OBJ_BUOY:
+    case OBJ_CAMPFIRE:
+    case OBJ_COAST:
+    case OBJ_FLOTSAM:
+    case OBJ_GENIE_LAMP:
     case OBJ_HEROES:
+    case OBJ_JAIL:
+    case OBJ_MONSTER:
+    case OBJ_RESOURCE:
+    case OBJ_SEA_CHEST:
+    case OBJ_SHIPWRECK_SURVIVOR:
+    case OBJ_SKELETON:
+    case OBJ_TREASURE_CHEST:
+    case OBJ_WHIRLPOOL:
         return DIRECTION_ALL;
-    case OBJ_DERELICT_SHIP:
-    case OBJ_TROLL_BRIDGE:
+    case OBJ_ABANDONED_MINE:
+    case OBJ_AIR_ALTAR:
+    case OBJ_ALCHEMIST_LAB:
+    case OBJ_ALCHEMIST_TOWER:
     case OBJ_ARCHER_HOUSE:
-    case OBJ_WITCH_DOCTORS_HUT:
+    case OBJ_ARENA:
+    case OBJ_ARTESIAN_SPRING:
+    case OBJ_BARROW_MOUNDS:
+    case OBJ_CAVE:
+    case OBJ_CITY_OF_DEAD:
+    case OBJ_DAEMON_CAVE:
+    case OBJ_DERELICT_SHIP:
+    case OBJ_DESERT_TENT:
+    case OBJ_DRAGON_CITY:
     case OBJ_DWARF_COTTAGE:
+    case OBJ_EARTH_ALTAR:
+    case OBJ_EXCAVATION:
+    case OBJ_EYE_OF_MAGI:
+    case OBJ_FAERIE_RING:
+    case OBJ_FIRE_ALTAR:
+    case OBJ_FORT:
     case OBJ_FOUNTAIN:
-    case OBJ_IDOL:
-    case OBJ_LIGHTHOUSE:
-    case OBJ_OBELISK:
-    case OBJ_SIGN:
-    case OBJ_WATCH_TOWER:
-    case OBJ_WITCHS_HUT:
+    case OBJ_FREEMANS_FOUNDRY:
     case OBJ_GAZEBO:
-    case OBJ_MAGIC_WELL:
-    case OBJ_OBSERVATION_TOWER:
-    case OBJ_PEASANT_HUT:
-    case OBJ_STONE_LITHS:
-    case OBJ_STANDING_STONES:
     case OBJ_GOBLIN_HUT:
+    case OBJ_GRAVEYARD:
+    case OBJ_HALFLING_HOLE:
+    case OBJ_HILL_FORT:
+    case OBJ_HUT_OF_MAGI:
+    case OBJ_IDOL:
+    case OBJ_LEAN_TO:
+    case OBJ_LIGHTHOUSE:
+    case OBJ_MAGELLANS_MAPS:
+    case OBJ_MAGIC_GARDEN:
+    case OBJ_MAGIC_WELL:
+    case OBJ_MERCENARY_CAMP:
+    case OBJ_MERMAID:
+    case OBJ_MINES:
+    case OBJ_OASIS:
+    case OBJ_OBELISK:
+    case OBJ_OBSERVATION_TOWER:
+    case OBJ_ORACLE:
+    case OBJ_PEASANT_HUT:
+    case OBJ_PYRAMID:
+    case OBJ_RUINS:
+    case OBJ_SAWMILL:
+    case OBJ_SHIPWRECK:
     case OBJ_SHRINE_FIRST_CIRCLE:
     case OBJ_SHRINE_SECOND_CIRCLE:
     case OBJ_SHRINE_THIRD_CIRCLE:
-    case OBJ_TREE_HOUSE:
-    case OBJ_ARTESIAN_SPRING:
-    case OBJ_SKELETON:
-    case OBJ_TREE_OF_KNOWLEDGE:
-    case OBJ_ORACLE:
-    case OBJ_OASIS:
-    case OBJ_LEAN_TO:
-    case OBJ_MAGIC_GARDEN:
-    case OBJ_WAGON:
-    case OBJ_TRAVELLER_TENT:
-    case OBJ_ALCHEMIST_TOWER:
-    case OBJ_HUT_OF_MAGI:
-    case OBJ_EYE_OF_MAGI:
-    case OBJ_MERCENARY_CAMP:
-    case OBJ_WINDMILL:
-    case OBJ_WATERING_HOLE:
-    case OBJ_TRADING_POST:
-    case OBJ_EXCAVATION:
-    case OBJ_DESERT_TENT:
-    case OBJ_DAEMON_CAVE:
-    case OBJ_PYRAMID:
-    case OBJ_FORT:
-    case OBJ_RUINS:
-    case OBJ_HILL_FORT:
-    case OBJ_FREEMANS_FOUNDRY:
-    case OBJ_SAWMILL:
-    case OBJ_TREE_CITY:
-    case OBJ_SPHINX:
-    case OBJ_TEMPLE:
-    case OBJ_FAERIE_RING:
-    case OBJ_BARROW_MOUNDS:
-    case OBJ_STABLES:
-    case OBJ_ABANDONED_MINE:
-    case OBJ_MINES:
-    case OBJ_ALCHEMIST_LAB:
-    case OBJ_CAVE:
-    case OBJ_CITY_OF_DEAD:
-    case OBJ_GRAVEYARD:
-    case OBJ_DRAGON_CITY:
-    case OBJ_XANADU:
-    case OBJ_HALFLING_HOLE:
-    case OBJ_WAGON_CAMP:
-    case OBJ_WATER_ALTAR:
-    case OBJ_AIR_ALTAR:
-    case OBJ_FIRE_ALTAR:
-    case OBJ_EARTH_ALTAR:
-    case OBJ_ARENA:
+    case OBJ_SIGN:
     case OBJ_SIRENS:
-    case OBJ_MERMAID:
+    case OBJ_SPHINX:
+    case OBJ_STABLES:
+    case OBJ_STANDING_STONES:
+    case OBJ_STONE_LITHS:
+    case OBJ_TEMPLE:
+    case OBJ_TRADING_POST:
+    case OBJ_TRAVELLER_TENT:
+    case OBJ_TREE_CITY:
+    case OBJ_TREE_HOUSE:
+    case OBJ_TREE_OF_KNOWLEDGE:
+    case OBJ_TROLL_BRIDGE:
+    case OBJ_WAGON:
+    case OBJ_WAGON_CAMP:
+    case OBJ_WATCH_TOWER:
+    case OBJ_WATER_ALTAR:
     case OBJ_WATER_WHEEL:
-    case OBJ_MAGELLANS_MAPS:
-    case OBJ_SHIPWRECK:
+    case OBJ_WATERING_HOLE:
+    case OBJ_WINDMILL:
+    case OBJ_WITCH_DOCTORS_HUT:
+    case OBJ_WITCHS_HUT:
+    case OBJ_XANADU:
         return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
     case OBJ_CASTLE:
         return Direction::CENTER | Direction::BOTTOM;
