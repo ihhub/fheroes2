@@ -174,6 +174,7 @@ void Game::mainGameLoop( bool isFirstGameRun )
                 result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIGN, false );
             }
             break;
+#if defined( WITH_DEBUG )
         case fheroes2::GameMode::EDITOR_MAIN_MENU:
             result = Editor::menuMain();
             break;
@@ -183,6 +184,7 @@ void Game::mainGameLoop( bool isFirstGameRun )
         case fheroes2::GameMode::EDITOR_LOAD_MAP:
             result = Editor::menuLoadMap();
             break;
+#endif
 
         default:
             break;

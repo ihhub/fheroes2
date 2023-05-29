@@ -20,6 +20,7 @@
 
 #pragma once
 
+#if defined( WITH_DEBUG )
 #include "game.h"
 #include "game_mode.h"
 
@@ -29,3 +30,4 @@ namespace Editor
     fheroes2::GameMode menuNewMap();
     fheroes2::GameMode menuLoadMap();
 }
+#endif
