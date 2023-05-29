@@ -3635,20 +3635,18 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
     std::vector<Unit *> mirrorImages;
     std::set<Unit *> resistantTarget;
+    std::set<int> unitSounds;
 
     // If this was a Lich attack, we should render an explosion cloud over the target unit immediately after the projectile hits the target,
     // along with the unit kill/wince animation.
     const bool drawLichCloud = ( attacker != nullptr ) && ( defender != nullptr ) && attacker->isArchers() && !attacker->isHandFighting()
                                && attacker->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT );
 
-    std::vector<int> unitSounds;
-    unitSounds.reserve( targets.size() );
-
     // Play sound only if it is not already playing.
     auto playSoundIfNotPlaying = [&unitSounds]( const int unitSound ) {
-        if ( std::find( unitSounds.begin(), unitSounds.end(), unitSound ) == unitSounds.end() ) {
+        const std::pair insertState = unitSounds.insert( unitSound );
+        if ( insertState.second ) {
             AudioManager::PlaySound( unitSound );
-            unitSounds.push_back( unitSound );
         }
     };
 
@@ -5925,13 +5923,12 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
     _currentUnit = nullptr;
 
-    std::vector<int> unitSounds;
-    unitSounds.reserve( targets.size() );
+    std::set<int> unitSounds;
 
     auto playSoundIfNotPlaying = [&unitSounds]( const int unitSound ) {
-        if ( std::find( unitSounds.begin(), unitSounds.end(), unitSound ) == unitSounds.end() ) {
+        const std::pair insertState = unitSounds.insert( unitSound );
+        if ( insertState.second ) {
             AudioManager::PlaySound( unitSound );
-            unitSounds.push_back( unitSound );
         }
     };
 
