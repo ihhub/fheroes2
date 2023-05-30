@@ -146,15 +146,10 @@ namespace AI
 
         if ( kingdom.GetColor() == Settings::Get().CurrentColor() ) {
             // This is the AI's current turn.
-            return kingdom.AllowRecruitHero( true );
+            return kingdom.AllowPayment( PaymentConditions::RecruitHero() );
         }
 
-        // This is not the current turn for the AI so we need to calculate the possible future income on the next day.
-        if ( !kingdom.AllowRecruitHero( false ) ) {
-            return false;
-        }
-
-        // This is a very rough estimation of the next kingdom resources but we can't predict the whole future at the moment.
+        // This is not the current turn for the AI so we need to roughly calculate the possible future income on the next day.
         return kingdom.AllowPayment( PaymentConditions::RecruitHero() - kingdom.GetIncome() );
     }
 }
