@@ -30,6 +30,7 @@ namespace Game
     {
         SCROLL_DELAY = 0,
         SCROLL_START_DELAY,
+        CURSOR_BLINK_DELAY,
         MAIN_MENU_DELAY,
         MAPS_DELAY,
         CASTLE_TAVERN_DELAY,

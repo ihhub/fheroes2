@@ -39,10 +39,12 @@
 #include "pal.h"
 #include "screen.h"
 #include "settings.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_language.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "ui_window.h"
 
 namespace
@@ -56,7 +58,8 @@ namespace
     const int32_t defaultLetterRows{ 3 };
     const fheroes2::Point offsetFromWindowBorders{ 25, 50 };
     const fheroes2::Size inputAreaSize{ 268, 21 };
-    const int32_t inputAreaOffset{ 2 };
+    const int32_t inputAreaBorders{ 2 };
+    const int32_t inputAreaOffsetFromWindowTop{ 20 };
 
     fheroes2::SupportedLanguage lastSelectedLanguage{ fheroes2::SupportedLanguage::English };
 
@@ -102,6 +105,7 @@ namespace
             : _output( output )
             , _info( info )
             , _isEvilInterface( evilInterface )
+            , _cursorPosition( info.size() )
         {
             // Do nothing.
         }
@@ -151,25 +155,44 @@ namespace
                 return;
             }
 
-            _info += character;
+            _info.insert( _cursorPosition, 1, character );
+
+            ++_cursorPosition;
 
             _output.render( renderInputArea() );
         }
 
         void removeLastCharacter()
         {
-            if ( _info.empty() ) {
+            if ( _info.empty() || _cursorPosition == 0 ) {
                 return;
             }
 
-            _info.pop_back();
+            if ( _cursorPosition >= _info.size() ) {
+                _info.pop_back();
+            }
+            else {
+                _info.erase( _cursorPosition - 1, 1 );
+            }
+
+            --_cursorPosition;
 
             _output.render( renderInputArea() );
         }
 
-        void changeCursorState( const bool isVisible )
+        void changeCursorState()
         {
-            _cursor = isVisible ? "_" : "\x7F";
+            _isCursorVisible = !_isCursorVisible;
+
+            _cursor = _isCursorVisible ? '_' : '\x7F';
+
+            renderInputArea();
+        }
+
+        void setCursortPosition( const int32_t clickXPosition, const int32_t startXPosition )
+        {
+            _cursorPosition = fheroes2::getTextInputCursorPosition( _info, _cursorPosition, clickXPosition, startXPosition );
+
             renderInputArea();
         }
 
@@ -177,15 +200,15 @@ namespace
         fheroes2::Display & _output;
         std::string & _info;
         std::unique_ptr<fheroes2::StandardWindow> _window;
-        const bool _isEvilInterface;
-        std::string _cursor = "_";
+        const bool _isEvilInterface{ false };
+        bool _isCursorVisible{ true };
+        char _cursor{ '_' };
+        size_t _cursorPosition{ 0 };
 
         fheroes2::Rect renderInputArea()
         {
-            const int32_t offsetFromWindowTop{ 20 };
-
             const fheroes2::Rect & windowRoi = _window->activeArea();
-            const fheroes2::Rect outputRoi{ windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2, windowRoi.y + offsetFromWindowTop, inputAreaSize.width,
+            const fheroes2::Rect outputRoi{ windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2, windowRoi.y + inputAreaOffsetFromWindowTop, inputAreaSize.width,
                                             inputAreaSize.height };
 
             const fheroes2::Sprite & initialWindow = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
@@ -196,11 +219,11 @@ namespace
                                         PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
             }
 
-            fheroes2::Text textUI( _info + _cursor, fheroes2::FontType::normalWhite() );
-            textUI.fitToOneRow( inputAreaSize.width - inputAreaOffset * 2 );
+            fheroes2::Text textUI( InsertString( _info, _cursorPosition, &_cursor ), fheroes2::FontType::normalWhite() );
+            textUI.fitToOneRow( inputAreaSize.width - inputAreaBorders * 2 );
 
-            textUI.draw( windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2 + inputAreaOffset,
-                         windowRoi.y + inputAreaSize.height + ( inputAreaSize.height - textUI.height() ) / 2 + inputAreaOffset, _output );
+            textUI.draw( windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2 + inputAreaBorders,
+                         windowRoi.y + inputAreaSize.height + ( inputAreaSize.height - textUI.height() ) / 2 + inputAreaBorders, _output );
 
             return outputRoi;
         }
@@ -587,9 +610,12 @@ namespace
 
         const fheroes2::Rect windowRoi{ renderer.getWindowRoi() };
         const fheroes2::Rect buttonsRoi = getButtonsRoi( buttons, windowRoi.getPosition() + offsetFromWindowBorders );
+        const fheroes2::Rect textRoi{ windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2 + inputAreaBorders,
+                                      windowRoi.y + inputAreaOffsetFromWindowTop + inputAreaBorders, inputAreaSize.width - inputAreaBorders * 2,
+                                      inputAreaSize.height - inputAreaBorders * 2 };
 
         fheroes2::Display & display = fheroes2::Display::instance();
-        fheroes2::ImageRestorer restorer( display, buttonsRoi.x, buttonsRoi.y, buttonsRoi.width, buttonsRoi.height );
+        const fheroes2::ImageRestorer restorer( display, buttonsRoi.x, buttonsRoi.y, buttonsRoi.width, buttonsRoi.height );
 
         renderButtons( buttons, windowRoi.getPosition() + offsetFromWindowBorders, display );
 
@@ -607,18 +633,9 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
 
-        const uint64_t cursorBlinkDelay = COLOR_CYCLING_TIME_MS * uint64_t{ 2 };
-        bool isCursorVisible = false;
+        Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
 
-        Game::passCustomAnimationDelay( cursorBlinkDelay );
-
-        while ( le.HandleEvents( Game::isCustomDelayNeeded( cursorBlinkDelay ) ) ) {
-            // Text input cursor blink.
-            if ( Game::validateCustomAnimationDelay( cursorBlinkDelay ) ) {
-                isCursorVisible = !isCursorVisible;
-                renderer.changeCursorState( isCursorVisible );
-            }
-
+        while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
             if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
@@ -641,6 +658,15 @@ namespace
             }
             else {
                 okayButton.drawOnRelease();
+            }
+
+            if ( le.MouseClickLeft( textRoi ) ) {
+                renderer.setCursortPosition( le.GetMouseCursor().x, textRoi.x );
+            }
+
+            // Text input cursor blink.
+            if ( Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
+                renderer.changeCursorState();
             }
         }
 

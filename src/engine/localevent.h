@@ -24,8 +24,6 @@
 #ifndef H2LOCALEVENT_H
 #define H2LOCALEVENT_H
 
-#define COLOR_CYCLING_TIME_MS 220
-
 #include <cstddef>
 #include <cstdint>
 #include <functional>

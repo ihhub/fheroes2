@@ -96,6 +96,7 @@ void Game::AnimateDelaysInitialize()
 {
     delays[SCROLL_DELAY].setDelay( 20 );
     delays[SCROLL_START_DELAY].setDelay( 20 );
+    delays[CURSOR_BLINK_DELAY].setDelay( 440 );
     delays[MAIN_MENU_DELAY].setDelay( 250 );
     delays[MAPS_DELAY].setDelay( 250 );
     delays[CASTLE_TAVERN_DELAY].setDelay( 75 );

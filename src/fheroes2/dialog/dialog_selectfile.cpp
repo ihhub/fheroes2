@@ -56,35 +56,11 @@
 #include "ui_keyboard.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "world.h"
 
 namespace
 {
-    size_t GetInsertPosition( const std::string & text, const size_t currentInsertPosition, const int32_t cursorPosition, const int32_t startXPosition )
-    {
-        if ( text.empty() || cursorPosition <= startXPosition ) {
-            // The text is empty or mouse cursor position is to the left of input field.
-            return 0;
-        }
-
-        const int32_t maxOffset = cursorPosition - startXPosition;
-        int32_t positionOffset = 0;
-        for ( size_t i = 0; i < text.size(); ++i ) {
-            positionOffset += Text::getCharacterWidth( static_cast<uint8_t>( text[i] ), Font::BIG );
-
-            if ( positionOffset > maxOffset ) {
-                return i;
-            }
-
-            // If the mouse cursor is to the right of the current text cursor position we take its width into account
-            if ( i == currentInsertPosition ) {
-                positionOffset += Text::getCharacterWidth( '_', Font::BIG );
-            }
-        }
-
-        return text.size();
-    }
-
     std::string ResizeToShortName( const std::string & str )
     {
         std::string res = System::GetBasename( str );
@@ -352,6 +328,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         buttonVirtualKB = makeButtonWithShadow( rt.x + 315, rt.y + 283, released, pressed, display, { -4, 4 } );
 
         buttonVirtualKB.draw();
+
+        Game::passAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY );
     }
 
     display.render();
@@ -362,12 +340,9 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
     const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
-    const uint64_t cursorBlinkDelay = COLOR_CYCLING_TIME_MS * uint64_t{ 2 };
-    bool isCursorVisible = false;
+    bool isCursorVisible = true;
 
-    Game::passCustomAnimationDelay( cursorBlinkDelay );
-
-    while ( le.HandleEvents( !isEditing || Game::isCustomDelayNeeded( cursorBlinkDelay ) ) && result.empty() ) {
+    while ( le.HandleEvents( !isEditing || Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) && result.empty() ) {
         le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
         if ( isEditing ) {
@@ -399,7 +374,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                 needRedraw = true;
             }
             else if ( le.MouseClickLeft( enter_field ) ) {
-                charInsertPos = GetInsertPosition( filename, charInsertPos, le.GetMouseCursor().x, enter_field.x );
+                charInsertPos = fheroes2::getTextInputCursorPosition( filename, charInsertPos, le.GetMouseCursor().x, enter_field.x );
                 if ( filename.empty() ) {
                     buttonOk.disable();
                 }
@@ -463,7 +438,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         }
 
         // Text input cursor blink.
-        if ( isEditing && Game::validateCustomAnimationDelay( cursorBlinkDelay ) ) {
+        if ( isEditing && Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
             isCursorVisible = !isCursorVisible;
             needRedraw = true;
         }

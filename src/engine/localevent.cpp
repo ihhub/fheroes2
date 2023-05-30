@@ -765,7 +765,7 @@ namespace
             if ( _preRenderDrawing != nullptr )
                 _preRenderDrawing();
 
-            if ( _timer.getMs() >= COLOR_CYCLING_TIME_MS ) {
+            if ( _timer.getMs() >= 220 ) {
                 _timer.reset();
                 palette = PAL::GetCyclingPalette( _counter );
                 ++_counter;
@@ -784,7 +784,7 @@ namespace
 
         bool isRedrawRequired() const
         {
-            return !_isPaused && _prevDraw.getMs() >= COLOR_CYCLING_TIME_MS;
+            return !_isPaused && _prevDraw.getMs() >= 220;
         }
 
         void registerDrawing( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() )

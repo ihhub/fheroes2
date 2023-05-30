@@ -641,6 +641,32 @@ namespace fheroes2
         }
     }
 
+    size_t getTextInputCursorPosition( const std::string & text, const size_t currentTextCursorPosition, const int32_t pointerCursorXPosition,
+                                       const int32_t textStartXPosition )
+    {
+        if ( text.empty() || pointerCursorXPosition <= textStartXPosition ) {
+            // The text is empty or mouse cursor position is to the left of input field.
+            return 0;
+        }
+
+        const int32_t maxOffset = pointerCursorXPosition - textStartXPosition;
+        int32_t positionOffset = 0;
+        for ( size_t i = 0; i < text.size(); ++i ) {
+            positionOffset += Text::getCharacterWidth( static_cast<uint8_t>( text[i] ), Font::BIG );
+
+            if ( positionOffset > maxOffset ) {
+                return i;
+            }
+
+            // If the mouse cursor is to the right of the current text cursor position we take its width into account
+            if ( i == currentTextCursorPosition ) {
+                positionOffset += Text::getCharacterWidth( '_', Font::BIG );
+            }
+        }
+
+        return text.size();
+    }
+
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount )
     {
         Display & display = Display::instance();
