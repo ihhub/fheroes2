@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-26 14:46+0000\n"
+"POT-Creation-Date: 2023-05-30 00:59+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3555,6 +3555,50 @@ msgstr "Personalidad:"
 msgid "Best Monster:"
 msgstr "Mejor monstruo:"
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Cancelar y volver al menú principal."
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Dawn"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Cargar juego"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr "Cancelar y volver al menú principal."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Cualquier torre"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Cancelar y volver al menú principal."
+
+msgid "No maps available!"
+msgstr "¡Ningún mapa disponible!"
+
 msgid "difficulty|Easy"
 msgstr "Fácil"
 
@@ -3924,6 +3968,25 @@ msgstr ""
 msgid "hotkey|choose the expansion campaign"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "Partida de Campaña."
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "Mostrar el siguiente héroe"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "Juego estandar"
+
+msgid "hotkey|new map from scratch"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "Resumen del reino"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4195,9 +4258,6 @@ msgid ""
 msgstr ""
 "Juega una partida de \"Asiento caliente\" donde de 2 a 4 jugadores juegan en "
 "el mismo PC por turnos."
-
-msgid "Cancel back to the main menu."
-msgstr "Cancelar y volver al menú principal."
 
 msgid "A single player game playing out a single map."
 msgstr "Un solo jugador jugando un único mapa."
@@ -4576,9 +4636,6 @@ msgstr ""
 
 msgid "Click to return to the main menu."
 msgstr "Haz clic para volver al menú principal"
-
-msgid "No maps available!"
-msgstr "¡Ningún mapa disponible!"
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Los Astrólogos proclaman el Mes de  %{name}."
