@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-26 14:46+0000\n"
+"POT-Creation-Date: 2023-05-30 00:59+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3555,6 +3555,50 @@ msgstr "Person:"
 msgid "Best Monster:"
 msgstr "Bestes Monster:"
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Abbrechen und zurück zum Hauptmenü."
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "New Dawn"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Spiel laden"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr "Abbrechen und zurück zum Hauptmenü."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Zufällig"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Abbrechen und zurück zum Hauptmenü."
+
+msgid "No maps available!"
+msgstr "Keine Karten vorhanden!"
+
 msgid "difficulty|Easy"
 msgstr "Leicht"
 
@@ -3910,6 +3954,26 @@ msgstr "Originaler Feldzug auswählen"
 msgid "hotkey|choose the expansion campaign"
 msgstr "Zusätzlicher Feldzug auswählen"
 
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "Feldzug-Spiel"
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "Neues Spiel"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "Spiel laden"
+
+#, fuzzy
+msgid "hotkey|new map from scratch"
+msgstr "Vom Kampf zurückziehen"
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "Neues Spiel"
+
 msgid "hotkey|roland campaign"
 msgstr "Roland-Feldzug"
 
@@ -4166,9 +4230,6 @@ msgid ""
 msgstr ""
 "\"Heißen Stuhl\" spielen, bei dem 2 bis 4 Spieler spielen an einem Rechner "
 "abwechselnd gegeneinander."
-
-msgid "Cancel back to the main menu."
-msgstr "Abbrechen und zurück zum Hauptmenü."
 
 msgid "A single player game playing out a single map."
 msgstr "Ein Einzelspieler-Spiel, das auf einer einzigen Karte spielt."
@@ -4559,9 +4620,6 @@ msgstr "Diese Einstellungen übernehmen und ein neues Spiel beginnen."
 
 msgid "Click to return to the main menu."
 msgstr "Klicken, um zum Hauptmenü zurückzukehren."
-
-msgid "No maps available!"
-msgstr "Keine Karten vorhanden!"
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologen verkündigen den Monat des %{name}."
