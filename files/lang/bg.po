@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-26 14:46+0000\n"
+"POT-Creation-Date: 2023-05-30 00:59+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3504,6 +3504,50 @@ msgstr "Личност:"
 msgid "Best Monster:"
 msgstr "Най-добро чудовище:"
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Отказ обратно към главното меню."
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Нова Зора"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Зареди Игра"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr "Отказ обратно към главното меню."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Случаен"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Отказ обратно към главното меню."
+
+msgid "No maps available!"
+msgstr "Няма налични карти!"
+
 msgid "difficulty|Easy"
 msgstr "Лесна"
 
@@ -3868,6 +3912,26 @@ msgstr "избери оригиналната кампания"
 msgid "hotkey|choose the expansion campaign"
 msgstr "избери кампанията за разширяване"
 
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "име на кампания"
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "нова игра"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "зареди игра"
+
+#, fuzzy
+msgid "hotkey|new map from scratch"
+msgstr "отстъпление от битка"
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "нова игра"
+
 msgid "hotkey|roland campaign"
 msgstr "кампания на роланд"
 
@@ -4124,9 +4188,6 @@ msgid ""
 msgstr ""
 "Играй игра на \"Гореща седалка\", при която от 2-4 играчи играят на един и "
 "същ компютър, превключвайки на \"Гореща седалка\", когато им дойде реда."
-
-msgid "Cancel back to the main menu."
-msgstr "Отказ обратно към главното меню."
 
 msgid "A single player game playing out a single map."
 msgstr "Игра за един играч, играещ на една карта."
@@ -4506,9 +4567,6 @@ msgstr "Кликни, за да приемеш тези настройки и д
 
 msgid "Click to return to the main menu."
 msgstr "Кликни, за да се върнеш към главното меню."
-
-msgid "No maps available!"
-msgstr "Няма налични карти!"
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Астролозите обявяват месеца на %{name}."

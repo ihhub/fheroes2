@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-26 14:46+0000\n"
+"POT-Creation-Date: 2023-05-30 00:59+0000\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3476,6 +3476,49 @@ msgstr "Osobnost:"
 msgid "Best Monster:"
 msgstr "Nejlepší Stvůra:"
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+msgid "Cancel back to the New Map menu."
+msgstr ""
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "New Dawn"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Načíst Hru"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr ""
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Náhodné město"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Klikni pro návrat do hlavního menu."
+
+msgid "No maps available!"
+msgstr "Žádné mapy k dispo!"
+
 msgid "difficulty|Easy"
 msgstr "Lehká"
 
@@ -3838,6 +3881,23 @@ msgstr ""
 msgid "hotkey|choose the expansion campaign"
 msgstr ""
 
+msgid "hotkey|map editor main menu"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "Zobrazit následující město"
+
+msgid "hotkey|load map menu"
+msgstr ""
+
+msgid "hotkey|new map from scratch"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "Přehled Království"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4107,9 +4167,6 @@ msgstr ""
 msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
-msgstr ""
-
-msgid "Cancel back to the main menu."
 msgstr ""
 
 msgid "A single player game playing out a single map."
@@ -4472,9 +4529,6 @@ msgstr "Klikni pro potvrzení volby a spusti novou hru."
 
 msgid "Click to return to the main menu."
 msgstr "Klikni pro návrat do hlavního menu."
-
-msgid "No maps available!"
-msgstr "Žádné mapy k dispo!"
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologická předpověď, měsíc %{name}."

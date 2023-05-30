@@ -638,3 +638,38 @@ MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
 
     return result;
 }
+
+MapsFileInfoList Maps::prepareResurrectionMapsFileInfoList()
+{
+    // TODO: set the proper resurrection map extension.
+    const ListFiles maps = Settings::FindFiles( "maps", ".mpr", false );
+
+    // Create a list of unique maps (based on the map file name).
+    std::map<std::string, Maps::FileInfo> uniqueMaps;
+
+    for ( const std::string & mapFile : maps ) {
+        Maps::FileInfo fi;
+
+        // These are test data values.
+        // TODO: make a function to read resurrection map info data and remove the test values.
+        fi.width = 36;
+        fi.height = 36;
+        fi.name = "Test name";
+        fi.description = "Resurrection map test description.\nThe Map Editor is currently in development.";
+        fi.difficulty = 3;
+
+        uniqueMaps[System::GetBasename( mapFile )] = fi;
+    }
+
+    MapsFileInfoList result;
+
+    result.reserve( uniqueMaps.size() );
+
+    for ( const auto & item : uniqueMaps ) {
+        result.push_back( item.second );
+    }
+
+    std::sort( result.begin(), result.end(), Maps::FileInfo::NameSorting );
+
+    return result;
+}

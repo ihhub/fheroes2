@@ -558,7 +558,7 @@ namespace
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attacks " << otherHero->GetName() )
 
-        Battle::Result res = Battle::Loader( hero.GetArmy(), otherHero->GetArmy(), dstIndex );
+        const Battle::Result res = Battle::Loader( hero.GetArmy(), otherHero->GetArmy(), dstIndex );
 
         // TODO: make fading animation of both heroes together.
 

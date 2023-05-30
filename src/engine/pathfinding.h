@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <cassert>
+#include <cstddef>
 #include <cstdint>
 #include <vector>
 
@@ -58,11 +60,15 @@ public:
 
     virtual uint32_t getDistance( int targetIndex ) const
     {
+        assert( targetIndex >= 0 && static_cast<size_t>( targetIndex ) < _cache.size() );
+
         return _cache[targetIndex]._cost;
     }
 
     virtual const T & getNode( int targetIndex ) const
     {
+        assert( targetIndex >= 0 && static_cast<size_t>( targetIndex ) < _cache.size() );
+
         return _cache[targetIndex];
     }
 
