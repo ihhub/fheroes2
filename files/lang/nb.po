@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-24 01:33+0000\n"
+"POT-Creation-Date: 2023-05-30 00:59+0000\n"
 "PO-Revision-Date: 2023-04-10 00:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3566,6 +3566,50 @@ msgstr "Rolle:"
 msgid "Best Monster:"
 msgstr "Beste skapning:"
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Avbryt og dra tilbake til hovedmenyen."
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Morgengry"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Last inn et parti"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr "Avbryt og dra tilbake til hovedmenyen."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Tilfeldig"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Avbryt og dra tilbake til hovedmenyen."
+
+msgid "No maps available!"
+msgstr "Ingen kart er tilgjengelige!"
+
 msgid "difficulty|Easy"
 msgstr "Lett"
 
@@ -3926,6 +3970,26 @@ msgstr "Velg Krigen om tronen"
 msgid "hotkey|choose the expansion campaign"
 msgstr "Velg Prisen for Lojalitet"
 
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "Felttog"
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "Nytt parti"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "Last inn parti"
+
+#, fuzzy
+msgid "hotkey|new map from scratch"
+msgstr "Trekk tilbake fra kamp"
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "Nytt parti"
+
 msgid "hotkey|roland campaign"
 msgstr "Rolands felttog"
 
@@ -4183,9 +4247,6 @@ msgstr ""
 "Spill en runde byttespilling hvor 2 til 4 spillere rullerer på å spille på "
 "den samme datamaskinen og bytter plass når det er nestemann sin tur."
 
-msgid "Cancel back to the main menu."
-msgstr "Avbryt og dra tilbake til hovedmenyen."
-
 msgid "A single player game playing out a single map."
 msgstr "Et enkeltspillerparti som spilles ut på et enkelt kart."
 
@@ -4289,6 +4350,9 @@ msgstr "Utvidelsesfelttog"
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
 "En av de fire nye utvidelsesfelttogene fra utvidelsen Prisen for trofasthet."
+
+msgid "Loading video. Please wait..."
+msgstr ""
 
 msgid "Host"
 msgstr "Vert"
@@ -4561,9 +4625,6 @@ msgstr "Klikk her for å bekrefte disse valgene og begynne på et nytt parti."
 
 msgid "Click to return to the main menu."
 msgstr "Klikk her for å dra tilbake til hovedmenyen."
-
-msgid "No maps available!"
-msgstr "Ingen kart er tilgjengelige!"
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologene kunngjør at det er måneden av %{name}."

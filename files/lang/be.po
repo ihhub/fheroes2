@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-24 01:33+0000\n"
+"POT-Creation-Date: 2023-05-30 00:59+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3305,6 +3305,52 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Вярнуцца ў галоўнае меню."
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Новая гульня"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Загрузіць гульню"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr "Вярнуцца ў галоўнае меню."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr ""
+"Выпад-\n"
+"ковы"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Вярнуцца ў галоўнае меню."
+
+msgid "No maps available!"
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Лёгка"
 
@@ -3658,6 +3704,25 @@ msgstr ""
 msgid "hotkey|choose the expansion campaign"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "Кампанія"
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "Звычайная гульня"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "Звычайная гульня"
+
+msgid "hotkey|new map from scratch"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "Зводка аб каралеўстве"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -3921,9 +3986,6 @@ msgstr ""
 "Гуляй за адным кампутарам з адной-пяццю іншымі асобамі, перадаючы кіраванне "
 "па чарзе."
 
-msgid "Cancel back to the main menu."
-msgstr "Вярнуцца ў галоўнае меню."
-
 msgid "A single player game playing out a single map."
 msgstr "Гульня для адной асобы на адной мапе."
 
@@ -4014,6 +4076,9 @@ msgid "Expansion Campaign"
 msgstr "Дадатковыя сцэнары"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr ""
+
+msgid "Loading video. Please wait..."
 msgstr ""
 
 msgid "Host"
@@ -4248,9 +4313,6 @@ msgstr "Пстрыкні, каб ухваліць налады і пачаць �
 
 msgid "Click to return to the main menu."
 msgstr "Пстрыкні, каб вярнуцца ў галоўнае меню."
-
-msgid "No maps available!"
-msgstr ""
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr ""

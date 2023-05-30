@@ -98,8 +98,8 @@ namespace Dialog
     int SelectSkillFromArena();
     bool SelectCount( const std::string & header, uint32_t min, uint32_t max, uint32_t & cur, int step = 1 );
     bool InputString( const std::string & header, std::string & result, const std::string & title = std::string(), const size_t charLimit = 0 );
-    Troop RecruitMonster( const Monster & monster0, uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
-    void DwellingInfo( const Monster &, uint32_t available );
+    Troop RecruitMonster( const Monster & monster0, const uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
+    void DwellingInfo( const Monster &, const uint32_t available );
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false, const int32_t windowOffsetY = 0 );
     int ArmyJoinFree( const Troop & troop );
     int ArmyJoinWithCost( const Troop &, const uint32_t join, const uint32_t gold );

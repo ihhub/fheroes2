@@ -439,11 +439,11 @@ namespace Battle
             Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ), borderRect );
 
             for ( int32_t i = 0; i < ( ah / sp3.height() ); ++i ) {
-                fheroes2::Blit( sp3, display, ax, buttonPgUp.area().y + buttonPgUp.area().height + ( sp3.height() * i ) );
+                fheroes2::Copy( sp3, 0, 0, display, ax, buttonPgUp.area().y + buttonPgUp.area().height + ( sp3.height() * i ), sp3.width(), sp3.height() );
             }
 
-            fheroes2::Blit( sp1, display, ax, buttonPgUp.area().y + buttonPgUp.area().height );
-            fheroes2::Blit( sp2, display, ax, buttonPgDn.area().y - sp2.height() );
+            fheroes2::Copy( sp1, 0, 0, display, ax, buttonPgUp.area().y + buttonPgUp.area().height, sp1.width(), sp1.height() );
+            fheroes2::Copy( sp2, 0, 0, display, ax, buttonPgDn.area().y - sp2.height(), sp2.width(), sp2.height() );
         }
 
         void ActionCurrentUp() override
@@ -947,8 +947,8 @@ void Battle::Status::SetMessage( const std::string & messageString, const bool t
 
 void Battle::Status::Redraw( fheroes2::Image & output ) const
 {
-    fheroes2::Blit( back1, output, x, y );
-    fheroes2::Blit( back2, output, x, y + back1.height() );
+    fheroes2::Copy( back1, 0, 0, output, x, y, back1.width(), back1.height() );
+    fheroes2::Copy( back2, 0, 0, output, x, y + back1.height(), back2.width(), back2.height() );
 
     if ( bar1.Size() ) {
         bar1.Blit( x + ( back1.width() - bar1.w() ) / 2, y + 2 );
@@ -1135,7 +1135,6 @@ void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUni
 Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     : arena( battleArena )
     , _surfaceInnerArea( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
-    , _mainSurface( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , icn_cbkg( ICN::UNKNOWN )
     , icn_frng( ICN::UNKNOWN )
     , humanturn_spell( Spell::NONE )
@@ -1157,8 +1156,6 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     , _cursorRestorer( true, Cursor::WAR_POINTER )
     , _bridgeAnimation( { false, BridgeMovementAnimation::UP_POSITION } )
 {
-    const Settings & conf = Settings::Get();
-
     // border
     const fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -1240,39 +1237,60 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     _opponent1 = arena.GetCommander1() ? std::make_unique<OpponentSprite>( _surfaceInnerArea, arena.GetCommander1(), false ) : nullptr;
     _opponent2 = arena.GetCommander2() ? std::make_unique<OpponentSprite>( _surfaceInnerArea, arena.GetCommander2(), true ) : nullptr;
 
-    if ( Arena::GetCastle() )
+    if ( Arena::GetCastle() ) {
         main_tower = { 570, 145, 70, 160 };
+    }
 
     const fheroes2::Rect & area = border.GetArea();
 
-    const fheroes2::Rect autoRect = btn_auto.area();
     const fheroes2::Rect settingsRect = btn_settings.area();
-    btn_auto.setPosition( area.x, area.y + area.height - settingsRect.height - autoRect.height );
+    const int32_t satusOffsetY = area.y + area.height - settingsRect.height - btn_auto.area().height;
+    btn_auto.setPosition( area.x, satusOffsetY );
     btn_settings.setPosition( area.x, area.y + area.height - settingsRect.height );
 
     btn_skip.setICNInfo( ICN::TEXTBAR, 0, 1 );
     btn_skip.setPosition( area.x + area.width - btn_skip.area().width, area.y + area.height - btn_skip.area().height );
 
-    status.SetPosition( area.x + settingsRect.width, btn_auto.area().y );
+    status.SetPosition( area.x + settingsRect.width, satusOffsetY );
 
     listlog = std::make_unique<StatusListBox>();
 
+    const int32_t battlefieldHeight = area.height - status.height;
+
     if ( listlog ) {
-        listlog->SetPosition( area.x, area.y + area.height - status.height );
+        listlog->SetPosition( area.x, area.y + battlefieldHeight );
     }
     status.SetLogs( listlog.get() );
 
-    AudioManager::ResetAudio();
+    // Battlefield area excludes the lower part where the status log is located.
+    _mainSurface.resize( area.width, battlefieldHeight );
+    _battleGround.resize( area.width, battlefieldHeight );
 
-    // Don't waste time playing the pre-battle sound if the game sounds are turned off
-    if ( conf.SoundVolume() > 0 ) {
-        _preBattleSoundChannelId = AudioManager::PlaySound( M82::PREBATTL );
-    }
+    // As `_battleGround` and '_mainSurface' are used to prepare battlefield screen to render on display they do not need to have a transform layer.
+    _battleGround._disableTransformLayer();
+    _mainSurface._disableTransformLayer();
+
+    AudioManager::ResetAudio();
 }
 
 Battle::Interface::~Interface()
 {
     AudioManager::ResetAudio();
+
+    // Fade-out battlefield.
+    const bool isDefaultScreenSize = fheroes2::Display::instance().isDefaultSize();
+
+    fheroes2::fadeOutDisplay( _background->activeArea(), !isDefaultScreenSize );
+
+    // For 640x480 resolution we do screen fade-in.
+    if ( isDefaultScreenSize ) {
+        // Reset the battlefield dialog window to restore the previous display image from screen restorer.
+        // We have multiple return places after the battle: the adventure map, Main Menu (from Battle only),
+        // the battle results screen (if the battle was quick ended).
+        _background.reset();
+
+        fheroes2::fadeInDisplay();
+    }
 }
 
 void Battle::Interface::SetOrderOfUnits( const std::shared_ptr<const Units> & units )
@@ -1317,7 +1335,33 @@ void Battle::Interface::fullRedraw()
         _background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
     }
 
-    Redraw();
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    // Fade-out game screen only for 640x480 resolution.
+    const bool isDefaultScreenSize = display.isDefaultSize();
+    if ( isDefaultScreenSize ) {
+        fheroes2::fadeOutDisplay();
+    }
+
+    // Don't waste time playing the pre-battle sound if the game sounds are turned off
+    if ( Settings::Get().SoundVolume() > 0 ) {
+        _preBattleSoundChannelId = AudioManager::PlaySound( M82::PREBATTL );
+    }
+
+    // Prepare the Battlefield ground.
+    _redrawBattleGround();
+
+    RedrawPartialStart();
+    // We do not render battlefield display image to properly fade-in it.
+    redrawPreRender();
+
+    // Fade-in battlefield.
+    if ( !isDefaultScreenSize ) {
+        // We need to expand the ROI for the next render to properly render window borders and shadow.
+        display.updateNextRenderRoi( _background->totalArea() );
+    }
+
+    fheroes2::fadeInDisplay( _background->activeArea(), !isDefaultScreenSize );
 }
 
 void Battle::Interface::Redraw()
@@ -1347,8 +1391,13 @@ void Battle::Interface::RedrawPartialStart()
 
 void Battle::Interface::RedrawPartialFinish()
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
+    redrawPreRender();
 
+    fheroes2::Display::instance().render( _interfacePosition );
+}
+
+void Battle::Interface::redrawPreRender()
+{
     if ( Settings::Get().BattleShowArmyOrder() ) {
         armies_order.Redraw( _currentUnit, _contourColor, _mainSurface );
     }
@@ -1365,11 +1414,8 @@ void Battle::Interface::RedrawPartialFinish()
     }
 #endif
 
-    fheroes2::Blit( _mainSurface, display, _interfacePosition.x, _interfacePosition.y );
-
+    fheroes2::Copy( _mainSurface, 0, 0, fheroes2::Display::instance(), _interfacePosition.x, _interfacePosition.y, _mainSurface.width(), _mainSurface.height() );
     RedrawInterface();
-
-    display.render();
 }
 
 void Battle::Interface::RedrawInterface()
@@ -1556,7 +1602,7 @@ void Battle::Interface::RedrawArmies()
             }
 
             for ( const Unit * unit : troopCounterAfterWall ) {
-                RedrawTroopSprite( *unit );
+                RedrawTroopCount( *unit );
             }
 
             for ( const Unit * unit : movingTroopAfterWall ) {
@@ -1869,7 +1915,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 
     sx += isReflected ? -xOffset : xOffset;
 
-    fheroes2::Blit( bar, _mainSurface, sx, sy );
+    fheroes2::Copy( bar, 0, 0, _mainSurface, sx, sy, bar.width(), bar.height() );
 
     const Text text( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), Font::SMALL );
     text.Blit( sx + ( bar.width() - text.w() ) / 2, sy, _mainSurface );
@@ -1877,10 +1923,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 
 void Battle::Interface::RedrawCover()
 {
-    const Settings & conf = Settings::Get();
-    const Board & board = *Arena::GetBoard();
-
-    RedrawCoverStatic( conf, board );
+    _redrawCoverStatic();
 
     const Bridge * bridge = Arena::GetBridge();
     if ( bridge && ( bridge->isDown() || _bridgeAnimation.animationIsRequired ) ) {
@@ -1897,7 +1940,7 @@ void Battle::Interface::RedrawCover()
     const Cell * cell = Board::GetCell( index_pos );
     const int cursorType = Cursor::Get().Themes();
 
-    if ( cell && _currentUnit && conf.BattleShowMouseShadow() ) {
+    if ( cell && _currentUnit && Settings::Get().BattleShowMouseShadow() ) {
         std::set<const Cell *> highlightedCells;
 
         if ( humanturn_spell.isValid() ) {
@@ -2077,27 +2120,31 @@ void Battle::Interface::RedrawCover()
     }
 }
 
-void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & board )
+void Battle::Interface::_redrawBattleGround()
 {
+    // Battlefield background image.
     if ( icn_cbkg != ICN::UNKNOWN ) {
         const fheroes2::Sprite & cbkg = fheroes2::AGG::GetICN( icn_cbkg, 0 );
-        fheroes2::Copy( cbkg, _mainSurface );
+        fheroes2::Copy( cbkg, _battleGround );
     }
 
+    // Objects near the left and right borders of the Battlefield.
     if ( icn_frng != ICN::UNKNOWN ) {
         const fheroes2::Sprite & frng = fheroes2::AGG::GetICN( icn_frng, 0 );
-        fheroes2::Blit( frng, _mainSurface, frng.x(), frng.y() );
+        fheroes2::Blit( frng, _battleGround, frng.x(), frng.y() );
     }
 
+    // Big obstacles in the center of the Battlefield.
     if ( arena.GetICNCovr() != ICN::UNKNOWN ) {
         const fheroes2::Sprite & cover = fheroes2::AGG::GetICN( arena.GetICNCovr(), 0 );
-        fheroes2::Blit( cover, _mainSurface, cover.x(), cover.y() );
+        fheroes2::Blit( cover, _battleGround, cover.x(), cover.y() );
     }
 
     const Castle * castle = Arena::GetCastle();
     int castleBackgroundIcnId = ICN::UNKNOWN;
 
     if ( castle != nullptr ) {
+        // Castle ground.
         switch ( castle->GetRace() ) {
         case Race::BARB:
             castleBackgroundIcnId = ICN::CASTBKGB;
@@ -2124,38 +2171,46 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
         }
 
         const fheroes2::Sprite & castleBackground = fheroes2::AGG::GetICN( castleBackgroundIcnId, 1 );
-        fheroes2::Blit( castleBackground, _mainSurface, castleBackground.x(), castleBackground.y() );
+        fheroes2::Blit( castleBackground, _battleGround, castleBackground.x(), castleBackground.y() );
 
-        // moat
+        // Moat.
         if ( castle->isBuild( BUILD_MOAT ) ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MOATWHOL, 0 );
-            fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
+            fheroes2::Blit( sprite, _battleGround, sprite.x(), sprite.y() );
         }
     }
 
-    const bool isGridEnabled = conf.BattleShowGrid();
+    // Battlefield grid.
+    if ( Settings::Get().BattleShowGrid() ) {
+        const Board & board = *Arena::GetBoard();
 
-    // grid
-    if ( isGridEnabled ) {
         for ( const Cell & cell : board ) {
-            fheroes2::Blit( _hexagonGrid, _mainSurface, cell.GetPos().x, cell.GetPos().y );
+            fheroes2::Blit( _hexagonGrid, _battleGround, cell.GetPos().x, cell.GetPos().y );
         }
     }
 
-    // ground obstacles
+    // Ground obstacles.
     for ( int32_t cellId = 0; cellId < ARENASIZE; ++cellId ) {
         RedrawLowObjects( cellId );
     }
 
+    // Castle top wall.
     if ( castle != nullptr ) {
-        // top wall
         const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( castleBackgroundIcnId, castle->isFortificationBuild() ? 4 : 3 );
-        fheroes2::Blit( sprite2, _mainSurface, sprite2.x(), sprite2.y() );
+        fheroes2::Blit( sprite2, _battleGround, sprite2.x(), sprite2.y() );
     }
+}
 
-    // shadow
+void Battle::Interface::_redrawCoverStatic()
+{
+    fheroes2::Copy( _battleGround, _mainSurface );
+
+    const Settings & conf = Settings::Get();
+
+    // Movement shadow.
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) {
-        const fheroes2::Image & shadowImage = isGridEnabled ? _hexagonGridShadow : _hexagonShadow;
+        const fheroes2::Image & shadowImage = conf.BattleShowGrid() ? _hexagonGridShadow : _hexagonShadow;
+        const Board & board = *Arena::GetBoard();
 
         for ( const Cell & cell : board ) {
             const Position pos = Position::GetReachable( *_currentUnit, cell.GetIndex() );
@@ -2316,7 +2371,7 @@ void Battle::Interface::RedrawLowObjects( const int32_t cellId )
 
     const fheroes2::Sprite & objectSprite = fheroes2::AGG::GetICN( objectIcnId, 0 );
     const fheroes2::Rect & pt = cell->GetPos();
-    fheroes2::Blit( objectSprite, _mainSurface, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
+    fheroes2::Blit( objectSprite, _battleGround, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
 }
 
 void Battle::Interface::RedrawHighObjects( const int32_t cellId )
@@ -3029,10 +3084,23 @@ int Battle::GetIndexIndicator( const Unit & unit )
     return 10;
 }
 
+void Battle::Interface::_openBattleSettingsDialog()
+{
+    const Settings & conf = Settings::Get();
+    const bool showGrid = conf.BattleShowGrid();
+
+    DialogBattleSettings();
+
+    if ( showGrid != conf.BattleShowGrid() ) {
+        // The grid setting has changed. Update for the Battlefield ground.
+        _redrawBattleGround();
+    }
+}
+
 void Battle::Interface::EventShowOptions()
 {
     btn_settings.drawOnPress();
-    DialogBattleSettings();
+    _openBattleSettingsDialog();
     btn_settings.drawOnRelease();
     humanturn_redraw = true;
 }
@@ -3082,7 +3150,8 @@ void Battle::Interface::ButtonSettingsAction()
     le.MousePressLeft( btn_settings.area() ) ? btn_settings.drawOnPress() : btn_settings.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_settings.area() ) ) {
-        DialogBattleSettings();
+        _openBattleSettingsDialog();
+
         humanturn_redraw = true;
     }
 }
@@ -5381,11 +5450,11 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
             const fheroes2::Rect renderArea( _interfacePosition.x + restorePositionX, _interfacePosition.y + area.y, waveWidth + restoreWidth, area.height );
 
             // Place a copy of the original image where the Death Wave effect was on the previous frame.
-            fheroes2::Blit( battleFieldCopy, restorePositionX, area.y, display, renderArea.x, renderArea.y, restoreWidth, renderArea.height );
+            fheroes2::Copy( battleFieldCopy, restorePositionX, area.y, display, renderArea.x, renderArea.y, restoreWidth, renderArea.height );
 
             // Place the Death Wave effect to its new position.
             fheroes2::CreateDeathWaveEffect( spellEffect, battleFieldCopy, position, deathWaveCurve );
-            fheroes2::Blit( spellEffect, 0, 0, display, renderArea.x + restoreWidth, renderArea.y, waveWidth, area.height );
+            fheroes2::Copy( spellEffect, 0, 0, display, renderArea.x + restoreWidth, renderArea.y, waveWidth, area.height );
 
             // Render only the changed screen area.
             display.render( renderArea );
@@ -5707,7 +5776,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
                 shifted.y = 0;
             }
 
-            fheroes2::Blit( sprite, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
+            fheroes2::Copy( sprite, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
 
             RedrawPartialFinish();
             ++frame;

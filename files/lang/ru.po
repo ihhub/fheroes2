@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-24 01:33+0000\n"
+"POT-Creation-Date: 2023-05-30 00:59+0000\n"
 "PO-Revision-Date: 2023-05-06 15:07+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2345,7 +2345,7 @@ msgstr ""
 "заклинание для каждого уровня."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr "Фруктовый сад увеличивает прирост Хоббитов на %{count} в неделю."
+msgstr "Фруктовый сад увеличивает прирост Полуросликов на %{count} в неделю."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
 msgstr "Буря добавляет 2 очка к силе магии заклинателя, обороняющего замок."
@@ -3506,6 +3506,50 @@ msgstr "Характер:"
 msgid "Best Monster:"
 msgstr "Лучший отряд:"
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Вернуться в главное меню."
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Нью-Давн"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Загрузка игры"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr "Вернуться в главное меню."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Случайно"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Вернуться в главное меню."
+
+msgid "No maps available!"
+msgstr "Нет доступных карт!"
+
 msgid "difficulty|Easy"
 msgstr "Простая"
 
@@ -3874,6 +3918,26 @@ msgstr "выбрать кампанию: войны за престол"
 msgid "hotkey|choose the expansion campaign"
 msgstr "выбрать кампании дополнения цена верности"
 
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "кампания"
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "новая игра"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "загрузить игру"
+
+#, fuzzy
+msgid "hotkey|new map from scratch"
+msgstr "отступление из битвы"
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "новая игра"
+
 msgid "hotkey|roland campaign"
 msgstr "кампания за роланда"
 
@@ -4129,9 +4193,6 @@ msgid ""
 "switching into the 'Hot Seat' when it is their turn."
 msgstr "Позволяет нескольким игрокам играть за одним компьютером."
 
-msgid "Cancel back to the main menu."
-msgstr "Вернуться в главное меню."
-
 msgid "A single player game playing out a single map."
 msgstr "Одиночная игра на одиночной карте."
 
@@ -4227,6 +4288,9 @@ msgstr "Новая кампания"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr "Одна из четырёх новых кампаний из набора дополнений \"Цена верности\"."
+
+msgid "Loading video. Please wait..."
+msgstr ""
 
 msgid "Host"
 msgstr "Хост"
@@ -4499,9 +4563,6 @@ msgstr "Подтверждает заданные установки и начи
 
 msgid "Click to return to the main menu."
 msgstr "Нажмите для возврата в главное меню."
-
-msgid "No maps available!"
-msgstr "Нет доступных карт!"
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Астрологи объявили Месяц %{name}."
@@ -7607,7 +7668,7 @@ msgid "Hill Fort"
 msgstr "Форт на холме"
 
 msgid "Halfling Hole"
-msgstr "Нора"
+msgstr "Нора полуросликов"
 
 msgid "Mercenary Camp"
 msgstr "Лагерь наёмников"
@@ -7994,10 +8055,10 @@ msgid "Black Dragons"
 msgstr "Чёрные драконы"
 
 msgid "Halfling"
-msgstr "Хоббит"
+msgstr "Полурослик"
 
 msgid "Halflings"
-msgstr "Хоббиты"
+msgstr "Полурослики"
 
 msgid "Boar"
 msgstr "Боров"

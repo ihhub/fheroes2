@@ -46,7 +46,6 @@ class Castle;
 class HeroBase;
 class Kingdom;
 class LocalEvent;
-class Settings;
 
 namespace fheroes2
 {
@@ -289,6 +288,12 @@ namespace Battle
             return _surfaceInnerArea;
         }
 
+        // Battlefield interface ROI.
+        const fheroes2::Rect & GetInterfaceRoi() const
+        {
+            return _interfacePosition;
+        }
+
         fheroes2::Point GetMouseCursor() const;
 
         void SetStatus( const std::string & message, const bool top = false );
@@ -332,7 +337,8 @@ namespace Battle
         void HumanCastSpellTurn( const Unit & /* unused */, Actions & actions, std::string & msg );
 
         void RedrawCover();
-        void RedrawCoverStatic( const Settings & conf, const Board & board );
+        void _redrawBattleGround();
+        void _redrawCoverStatic();
         void RedrawLowObjects( const int32_t cellId );
         void RedrawHighObjects( const int32_t cellId );
         void RedrawCastle( const Castle & castle, const int32_t cellId );
@@ -341,6 +347,7 @@ namespace Battle
         void RedrawInterface();
         void RedrawOpponents();
         void RedrawOpponentsFlags();
+        void redrawPreRender();
         void RedrawArmies();
         void RedrawTroopSprite( const Unit & unit );
 
@@ -385,6 +392,7 @@ namespace Battle
 
         void ProcessingHeroDialogResult( const int result, Actions & actions );
 
+        void _openBattleSettingsDialog();
         void EventAutoSwitch( const Unit & unit, Actions & actions );
         void EventAutoFinish( Actions & actions );
         void EventShowOptions();
@@ -403,6 +411,7 @@ namespace Battle
         fheroes2::Rect _interfacePosition;
         fheroes2::Rect _surfaceInnerArea;
         fheroes2::Image _mainSurface;
+        fheroes2::Image _battleGround;
         fheroes2::Image _hexagonGrid;
         fheroes2::Image _hexagonShadow;
         fheroes2::Image _hexagonGridShadow;

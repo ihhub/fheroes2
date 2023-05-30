@@ -107,6 +107,8 @@ namespace Campaign
         void addDaysPassed( const uint32_t days );
         void removeCampaignAward( const int awardID );
 
+        void setEnemyDefeatedAward( const int heroId );
+
         void removeAllAwards()
         {
             _obtainedCampaignAwards.clear();
