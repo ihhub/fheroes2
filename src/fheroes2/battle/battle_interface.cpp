@@ -5923,17 +5923,17 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
     _currentUnit = nullptr;
 
-    std::set<int> unitSounds;
-
-    auto playSoundIfNotPlaying = [&unitSounds]( const int unitSound ) {
-        const std::pair insertState = unitSounds.insert( unitSound );
-        if ( insertState.second ) {
-            AudioManager::PlaySound( unitSound );
-        }
-    };
-
     if ( wnce ) {
         int32_t deathColor = Color::UNUSED;
+
+        std::set<int> unitSounds;
+
+        auto playSoundIfNotPlaying = [&unitSounds]( const int unitSound ) {
+            const std::pair insertState = unitSounds.insert( unitSound );
+            if ( insertState.second ) {
+                AudioManager::PlaySound( unitSound );
+            }
+        };
 
         for ( const TargetInfo & target : targets ) {
             Unit * defender = target.defender;
