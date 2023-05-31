@@ -149,7 +149,7 @@ msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
-"UDVIDELSES\n"
+"UDVIDELSE\n"
 "FELTTOG"
 
 msgid "HOT SEAT"
@@ -2560,6 +2560,18 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr "Er du sikker på du vil bortvise denne hær?"
 
+msgid "Upgrade"
+msgstr ""
+
+msgid "Upgrade your troops."
+msgstr ""
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
+
 msgid "Followers"
 msgstr "Følgere"
 
@@ -3357,6 +3369,21 @@ msgstr "Ekspert"
 msgid "difficulty|Impossible"
 msgstr "Umulig"
 
+msgid "difficulty|Easy"
+msgstr "Let"
+
+msgid "difficulty|Normal"
+msgstr "Normal"
+
+msgid "difficulty|Hard"
+msgstr "Svær"
+
+msgid "difficulty|Expert"
+msgstr "Ekspert"
+
+msgid "difficulty|Impossible"
+msgstr "Umulig"
+
 msgid "and more..."
 msgstr "og mere..."
 
@@ -3365,6 +3392,12 @@ msgstr "Let"
 
 msgid "Hard"
 msgstr "Svær"
+
+msgid "Easy"
+msgstr ""
+
+msgid "Hard"
+msgstr ""
 
 msgid "Campaign Difficulty"
 msgstr ""
@@ -3689,6 +3722,24 @@ msgstr ""
 
 msgid "hotkey|choose the expansion campaign"
 msgstr ""
+
+msgid "hotkey|map editor main menu"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "verdenskort op til venstre"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "verdenskort op til venstre"
+
+msgid "hotkey|new map from scratch"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "verdenskort op til venstre"
 
 msgid "hotkey|roland campaign"
 msgstr ""
@@ -4038,6 +4089,9 @@ msgstr ""
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
 
+msgid "Loading video. Please wait..."
+msgstr ""
+
 msgid "Host"
 msgstr ""
 
@@ -4150,6 +4204,15 @@ msgstr ""
 msgid ""
 "You have failed to complete your quest in time.\n"
 "All is lost."
+msgstr ""
+
+msgid "Defeat!"
+msgstr ""
+
+msgid ""
+"Base score: %{score}\n"
+"Difficulty: %{difficulty}\n"
+"\n"
 msgstr ""
 
 msgid "Defeat!"
@@ -4573,9 +4636,6 @@ msgid "Keyboard|123"
 msgstr ""
 
 msgid "Keyboard|SPACE"
-msgstr ""
-
-msgid "Keyboard|LANG"
 msgstr ""
 
 msgid "Keyboard|ABC"
@@ -5862,6 +5922,11 @@ msgstr ""
 msgid "Spell book is not present."
 msgstr ""
 
+#, fuzzy
+msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
+msgstr "Du har ingen Magibog, så du kan ikke kaste magi."
+
 msgid ""
 "That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
 msgstr ""
@@ -5900,6 +5965,37 @@ msgid ""
 "The nearest town is %{town}.\n"
 " \n"
 "This town is occupied by your hero %{hero}."
+msgstr ""
+
+msgid "This spell is already in use."
+msgstr ""
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
 msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
@@ -5983,16 +6079,11 @@ msgstr ""
 msgid "%{spell} failed!!!"
 msgstr ""
 
-msgid "This spell is already in use."
-msgstr ""
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr ""
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
-msgstr ""
+msgid "Identify Hero"
+msgstr "Identificer helt"
 
 msgid "The creatures are willing to join us!"
 msgstr ""
@@ -6014,11 +6105,6 @@ msgid "These weak creatures will surely flee before us."
 msgstr ""
 
 msgid "I fear these creatures are in the mood for a fight."
-msgstr ""
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
 msgstr ""
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
@@ -7676,6 +7762,9 @@ msgstr ""
 msgid "This item can't be traded."
 msgstr ""
 
+msgid "Invalid Artifact"
+msgstr ""
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
@@ -8775,9 +8864,6 @@ msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
 "lost by mortals."
-msgstr ""
-
-msgid "Invalid Artifact"
 msgstr ""
 
 msgid "Wood"

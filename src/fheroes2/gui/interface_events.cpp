@@ -32,7 +32,6 @@
 #include "artifact_ultimate.h"
 #include "audio.h"
 #include "audio_manager.h"
-#include "cursor.h"
 #include "dialog.h"
 #include "dialog_system_options.h"
 #include "direction.h"
@@ -49,12 +48,10 @@
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "kingdom.h"
-#include "localevent.h"
 #include "logging.h"
 #include "m82.h"
 #include "maps.h"
 #include "maps_tiles.h"
-#include "math_base.h"
 #include "mp2.h"
 #include "mus.h"
 #include "puzzle.h"
@@ -68,85 +65,53 @@
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "view_world.h"
 #include "world.h"
 
-void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const
+void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, const int32_t destinationIdx )
 {
-    if ( hero == nullptr ) {
-        return;
-    }
-
-    hero->SetMove( false );
-    hero->calculatePath( destinationIdx );
-
-    const Route::Path & path = hero->GetPath();
-
-    if ( destinationIdx < 0 ) {
-        destinationIdx = path.GetDestinationIndex();
-    }
-
-    if ( destinationIdx < 0 ) {
-        return;
-    }
-
-    DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
-
-    gameArea.SetRedraw();
-    buttonsArea.SetRedraw();
-
-    const fheroes2::Point & mousePos = LocalEvent::Get().GetMouseCursor();
-    if ( gameArea.GetROI() & mousePos ) {
-        const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( mousePos );
-        Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
-    }
-}
-
-void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, int32_t destinationIdx )
-{
-    if ( hero == nullptr ) {
+    if ( hero == nullptr || !Maps::isValidAbsIndex( destinationIdx ) ) {
         return;
     }
 
     const Route::Path & path = hero->GetPath();
 
-    // show path
+    // Calculate and show the hero's path
     if ( path.GetDestinationIndex() != destinationIdx ) {
-        CalculateHeroPath( hero, destinationIdx );
+        hero->SetMove( false );
+        hero->calculatePath( destinationIdx );
+
+        DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
+
+        gameArea.SetRedraw();
+        buttonsArea.SetRedraw();
     }
-    // start move
+    // Start the hero's movement
     else if ( path.isValid() && hero->MayStillMove( false, true ) ) {
-        SetFocus( hero );
+        SetFocus( hero, true );
         RedrawFocus();
 
         hero->SetMove( true );
     }
 }
 
-void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, int direct )
+void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, const int direction )
 {
-    const bool fromWater = hero.isShipMaster();
-    if ( Maps::isValidDirection( hero.GetIndex(), direct ) ) {
-        int32_t dst = Maps::GetDirectionIndex( hero.GetIndex(), direct );
-        const Maps::Tiles & tile = world.GetTiles( dst );
-        bool allow = false;
+    const int32_t heroIndex = hero.GetIndex();
 
-        switch ( tile.GetObject() ) {
-        case MP2::OBJ_BOAT:
-        case MP2::OBJ_CASTLE:
-        case MP2::OBJ_HEROES:
-        case MP2::OBJ_MONSTER:
-            allow = true;
-            break;
-
-        default:
-            allow = ( tile.isPassableFrom( Direction::CENTER, fromWater, false, hero.GetColor() ) || MP2::isActionObject( tile.GetObject(), fromWater ) );
-            break;
-        }
-
-        if ( allow )
-            ShowPathOrStartMoveHero( &hero, dst );
+    if ( !Maps::isValidDirection( heroIndex, direction ) ) {
+        return;
     }
+
+    const int32_t dstIndex = Maps::GetDirectionIndex( heroIndex, direction );
+    const Maps::Tiles & tile = world.GetTiles( dstIndex );
+
+    if ( !tile.isPassableFrom( Direction::CENTER, hero.isShipMaster(), false, hero.GetColor() ) ) {
+        return;
+    }
+
+    ShowPathOrStartMoveHero( &hero, dstIndex );
 }
 
 void Interface::Basic::EventNextHero()
@@ -154,19 +119,23 @@ void Interface::Basic::EventNextHero()
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     const KingdomHeroes & myHeroes = myKingdom.GetHeroes();
 
-    if ( myHeroes.empty() )
+    if ( myHeroes.empty() ) {
         return;
+    }
 
     if ( GetFocusHeroes() ) {
         KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), GetFocusHeroes() );
         KingdomHeroes::const_iterator currentHero = it;
+
         do {
             ++it;
-            if ( it == myHeroes.end() )
+
+            if ( it == myHeroes.end() ) {
                 it = myHeroes.begin();
+            }
+
             if ( ( *it )->MayStillMove( true, false ) ) {
-                SetFocus( *it );
-                CalculateHeroPath( *it, -1 );
+                SetFocus( *it, false );
                 break;
             }
         } while ( it != currentHero );
@@ -174,12 +143,12 @@ void Interface::Basic::EventNextHero()
     else {
         for ( Heroes * hero : myHeroes ) {
             if ( hero->MayStillMove( true, false ) ) {
-                SetFocus( hero );
-                CalculateHeroPath( hero, -1 );
+                SetFocus( hero, false );
                 break;
             }
         }
     }
+
     RedrawFocus();
 }
 
@@ -217,7 +186,7 @@ void Interface::Basic::EventCastSpell()
 
         // The spell will consume the hero's spell points (and perhaps also movement points) and can move the
         // hero to another location, so we may have to update the terrain music theme and environment sounds
-        ResetFocus( GameFocus::HEROES );
+        ResetFocus( GameFocus::HEROES, true );
         RedrawFocus();
     }
 }
@@ -231,7 +200,8 @@ fheroes2::GameMode Interface::Basic::EventEndTurn() const
 
     if ( !myKingdom.HeroesMayStillMove()
          || Dialog::YES
-                == fheroes2::showStandardTextMessage( "", _( "One or more heroes may still move, are you sure you want to end your turn?" ), Dialog::YES | Dialog::NO ) )
+                == fheroes2::showStandardTextMessage( _( "End Turn" ), _( "One or more heroes may still move, are you sure you want to end your turn?" ),
+                                                      Dialog::YES | Dialog::NO ) )
         return fheroes2::GameMode::END_TURN;
 
     return fheroes2::GameMode::CANCEL;
@@ -298,7 +268,7 @@ void Interface::Basic::EventNextTown()
             SetFocus( *it );
         }
         else
-            ResetFocus( GameFocus::CASTLE );
+            ResetFocus( GameFocus::CASTLE, false );
 
         RedrawFocus();
     }
@@ -354,10 +324,17 @@ fheroes2::GameMode Interface::Basic::EventScenarioInformation()
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
 
+        // We are opening campaign scenario info. It is a full screen image change. So do fade-out and set the fade-in.
+        fheroes2::fadeOutDisplay();
+        Game::setDisplayFadeIn();
+
         AudioManager::ResetAudio();
 
         const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
         if ( returnMode == fheroes2::GameMode::CANCEL ) {
+            // We are going back to the Adventure map with fade-in.
+            Game::setDisplayFadeIn();
+
             saver.restore();
 
             Game::restoreSoundsForCurrentFocus();
@@ -463,11 +440,11 @@ fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMod
     if ( hero ) {
         // 1. action object
         if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) ) {
-            hero->Action( hero->GetIndex(), true );
+            hero->Action( hero->GetIndex() );
 
             // The action object can alter the status of the hero (e.g. Stables or Well) or
             // move it to another location (e.g. Stone Liths or Whirlpool)
-            ResetFocus( GameFocus::HEROES );
+            ResetFocus( GameFocus::HEROES, true );
             RedrawFocus();
 
             // If a hero completed an action we must verify the condition for the scenario.

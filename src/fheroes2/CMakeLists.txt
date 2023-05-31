@@ -97,6 +97,7 @@ target_include_directories(
 	campaign
 	castle
 	dialog
+	editor
 	game
 	gui
 	h2d

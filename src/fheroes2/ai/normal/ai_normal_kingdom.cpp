@@ -48,6 +48,7 @@
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "mus.h"
 #include "pairs.h"
@@ -516,7 +517,7 @@ namespace AI
                     if ( wisdomLevel + 2 > stats.spellLevel )
                         stats.spellLevel = wisdomLevel + 2;
                 }
-                else if ( !Players::isFriends( myColor, hero->GetColor() ) && ( !hero->Modes( Heroes::PATROL ) || hero->GetSquarePatrol() != 0 ) ) {
+                else if ( !Players::isFriends( myColor, hero->GetColor() ) && ( !hero->Modes( Heroes::PATROL ) || hero->GetPatrolDistance() != 0 ) ) {
                     const Army & heroArmy = hero->GetArmy();
                     enemyArmies.emplace_back( idx, &heroArmy );
 
@@ -530,7 +531,7 @@ namespace AI
             }
 
             if ( objectType == MP2::OBJ_CASTLE ) {
-                const int tileColor = tile.QuantityColor();
+                const int tileColor = getColorFromTile( tile );
                 if ( myColor == tileColor || Players::isFriends( myColor, tileColor ) ) {
                     ++stats.friendlyCastles;
                 }
@@ -557,6 +558,8 @@ namespace AI
         }
 
         evaluateRegionSafety();
+
+        updateKingdomBudget( kingdom );
 
         DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapObjects.size() << " valid objects" )
 

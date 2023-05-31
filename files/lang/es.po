@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-13 05:15+0000\n"
+"POT-Creation-Date: 2023-05-30 00:59+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -2711,6 +2711,18 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr "¿Estás seguro de que desea descartar este ejército?"
 
+msgid "Upgrade"
+msgstr ""
+
+msgid "Upgrade your troops."
+msgstr ""
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
+
 #, fuzzy
 msgid "Followers"
 msgstr "Flores"
@@ -3543,6 +3555,50 @@ msgstr "Personalidad:"
 msgid "Best Monster:"
 msgstr "Mejor monstruo:"
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Cancelar y volver al menú principal."
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Dawn"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Cargar juego"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr "Cancelar y volver al menú principal."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Cualquier torre"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Cancelar y volver al menú principal."
+
+msgid "No maps available!"
+msgstr "¡Ningún mapa disponible!"
+
 msgid "difficulty|Easy"
 msgstr "Fácil"
 
@@ -3559,6 +3615,12 @@ msgid "difficulty|Impossible"
 msgstr "Imposible"
 
 msgid "and more..."
+msgstr ""
+
+msgid "Easy"
+msgstr ""
+
+msgid "Hard"
 msgstr ""
 
 #, fuzzy
@@ -3579,10 +3641,24 @@ msgid ""
 "with normal difficulty."
 msgstr ""
 
-msgid "Easy"
+#, fuzzy
+msgid ""
+"Congratulations!\n"
+"\n"
+"Days: %{days}\n"
+msgstr "¡Enhorabuena!"
+
+msgid ""
+"\n"
+"Difficulty: %{difficulty}\n"
+"\n"
 msgstr ""
 
-msgid "Hard"
+msgid ""
+"Score: %{score}\n"
+"\n"
+"Rating:\n"
+"%{rating}"
 msgstr ""
 
 msgid "Start the selected scenario."
@@ -3786,10 +3862,10 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
-msgid "Unknown Hero"
+msgid "Your Name"
 msgstr ""
 
-msgid "Your Name"
+msgid "Unknown Hero"
 msgstr ""
 
 #, fuzzy
@@ -3891,6 +3967,25 @@ msgstr ""
 
 msgid "hotkey|choose the expansion campaign"
 msgstr ""
+
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "Partida de Campaña."
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "Mostrar el siguiente héroe"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "Juego estandar"
+
+msgid "hotkey|new map from scratch"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "Resumen del reino"
 
 msgid "hotkey|roland campaign"
 msgstr ""
@@ -4164,9 +4259,6 @@ msgstr ""
 "Juega una partida de \"Asiento caliente\" donde de 2 a 4 jugadores juegan en "
 "el mismo PC por turnos."
 
-msgid "Cancel back to the main menu."
-msgstr "Cancelar y volver al menú principal."
-
 msgid "A single player game playing out a single map."
 msgstr "Un solo jugador jugando un único mapa."
 
@@ -4261,6 +4353,9 @@ msgid "Expansion Campaign"
 msgstr ""
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr ""
+
+msgid "Loading video. Please wait..."
 msgstr ""
 
 msgid "Host"
@@ -4410,6 +4505,15 @@ msgstr ""
 "Has fallado en completar tu búsqueda a tiempo.\n"
 "Todo está perdido."
 
+msgid "Defeat!"
+msgstr ""
+
+msgid ""
+"Base score: %{score}\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
 
@@ -4480,6 +4584,9 @@ msgstr ""
 msgid "%{color} player has been vanquished!"
 msgstr "¡%{color} ha sido derrotado!"
 
+msgid "Major Event!"
+msgstr ""
+
 msgid "Scenario:"
 msgstr "Escenario:"
 
@@ -4530,9 +4637,6 @@ msgstr ""
 msgid "Click to return to the main menu."
 msgstr "Haz clic para volver al menú principal"
 
-msgid "No maps available!"
-msgstr "¡Ningún mapa disponible!"
-
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Los Astrólogos proclaman el Mes de  %{name}."
 
@@ -4566,6 +4670,9 @@ msgid " All dwellings increase population."
 msgstr " Todas las moradas aumentan su población."
 
 msgid "New Week!"
+msgstr ""
+
+msgid "Beware!"
 msgstr ""
 
 msgid ""
@@ -4603,6 +4710,69 @@ msgid ""
 "land."
 msgstr ""
 "Jugador %{color}, tus héroes te abandonan y eres desterrado de estas tierras."
+
+msgid "Lord Kilburn"
+msgstr "Lord Kilburn"
+
+msgid "Tsabu"
+msgstr "Tsabu"
+
+#, fuzzy
+msgid "Sir Galant"
+msgstr "Sir Gallanth"
+
+msgid "Thundax"
+msgstr "Thundax"
+
+#, fuzzy
+msgid "Lord Haart"
+msgstr "Lord Halton"
+
+msgid "Ariel"
+msgstr "Ariel"
+
+msgid "Rebecca"
+msgstr "Rebecca"
+
+msgid "Sandro"
+msgstr "Sandro"
+
+msgid "Crodo"
+msgstr "Crodo"
+
+#, fuzzy
+msgid "Barock"
+msgstr "Barok"
+
+msgid "Antoine"
+msgstr ""
+
+msgid "Astra"
+msgstr "Astra"
+
+msgid "Agar"
+msgstr "Agar"
+
+msgid "Vatawna"
+msgstr "Vatawna"
+
+msgid "Vesper"
+msgstr "Vesper"
+
+msgid "Ambrose"
+msgstr "Ambrose"
+
+msgid "Troyan"
+msgstr "Troyan"
+
+msgid "Jojosh"
+msgstr "Jojosh"
+
+msgid "Wrathmont"
+msgstr "Wrathmont"
+
+msgid "Maximus"
+msgstr "Maximus"
 
 msgid "Next Hero"
 msgstr "Siguiente Héroe"
@@ -4812,9 +4982,6 @@ msgstr ""
 msgid "Keyboard|SPACE"
 msgstr ""
 
-msgid "Keyboard|LANG"
-msgstr ""
-
 msgid "Keyboard|ABC"
 msgstr ""
 
@@ -4917,9 +5084,6 @@ msgstr "Ector"
 msgid "Gwenneth"
 msgstr "Gwenneth"
 
-msgid "Lord Kilburn"
-msgstr "Lord Kilburn"
-
 #, fuzzy
 msgid "Sir Gallant"
 msgstr "Sir Gallanth"
@@ -4927,14 +5091,8 @@ msgstr "Sir Gallanth"
 msgid "Tyro"
 msgstr "Tyro"
 
-msgid "Ambrose"
-msgstr "Ambrose"
-
 msgid "Dimitry"
 msgstr "Dimitry"
-
-msgid "Maximus"
-msgstr "Maximus"
 
 msgid "Ruby"
 msgstr "Ruby"
@@ -4948,12 +5106,6 @@ msgstr "Fineous"
 msgid "Jezebel"
 msgstr "Jezebel"
 
-msgid "Jojosh"
-msgstr "Jojosh"
-
-msgid "Thundax"
-msgstr "Thundax"
-
 msgid "Atlas"
 msgstr "Atlas"
 
@@ -4963,29 +5115,11 @@ msgstr "Ergon"
 msgid "Jaclyn"
 msgstr "Jaclyn"
 
-msgid "Tsabu"
-msgstr "Tsabu"
-
-msgid "Astra"
-msgstr "Astra"
-
 msgid "Gem"
 msgstr "Gem"
 
 msgid "Natasha"
 msgstr "Natasha"
-
-msgid "Rebecca"
-msgstr "Rebecca"
-
-msgid "Troyan"
-msgstr "Troyan"
-
-msgid "Vatawna"
-msgstr "Vatawna"
-
-msgid "Ariel"
-msgstr "Ariel"
 
 msgid "Carlawn"
 msgstr "Carlawn"
@@ -4999,23 +5133,11 @@ msgstr "Arie"
 msgid "Barok"
 msgstr "Barok"
 
-msgid "Crodo"
-msgstr "Crodo"
-
 msgid "Kastore"
 msgstr "Katore"
 
-msgid "Vesper"
-msgstr "Vesper"
-
-msgid "Agar"
-msgstr "Agar"
-
 msgid "Falagar"
 msgstr "Falagar"
-
-msgid "Wrathmont"
-msgstr "Wrathmont"
 
 msgid "Dawn"
 msgstr "Dawn"
@@ -5064,9 +5186,6 @@ msgstr "Celia"
 
 msgid "Roxana"
 msgstr "Roxana"
-
-msgid "Sandro"
-msgstr "Sandro"
 
 msgid "Lord Corlagon"
 msgstr "Lord Corlagon"
@@ -6487,6 +6606,13 @@ msgstr ""
 msgid "Spell book is not present."
 msgstr ""
 
+#, fuzzy
+msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
+msgstr ""
+"No puedes usar ese hechizo. Cuesta %{mana} puntos de Maná y sólo tienes "
+"&{point}."
+
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
@@ -6527,6 +6653,41 @@ msgid ""
 "The nearest town is %{town}.\n"
 " \n"
 "This town is occupied by your hero %{hero}."
+msgstr ""
+
+msgid "This spell is already in use."
+msgstr ""
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+"Debes estar a %{count} casillas  de un monstruo para que el hechizo Visiones "
+"funcione."
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+"Has de estar en la entrada de una mina para lanzar este hechizo (las "
+"serrerías y las casas de alquimia no cuentan)."
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
 msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
@@ -6623,18 +6784,11 @@ msgstr "Seleccione la ciudad a la que transportarse."
 msgid "%{spell} failed!!!"
 msgstr "¡%{spell} fallido!"
 
-msgid "This spell is already in use."
-msgstr ""
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Ahora se identifica totalmente a los héroes enemigos."
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
-msgstr ""
-"Debes estar a %{count} casillas  de un monstruo para que el hechizo Visiones "
-"funcione."
+msgid "Identify Hero"
+msgstr "Identificar Héroe"
 
 msgid "The creatures are willing to join us!"
 msgstr "¡Las criaturas quieren unirse a nosotros!"
@@ -6657,13 +6811,6 @@ msgstr "Esas débiles criaturas seguramente huirán nada más vernos."
 
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Me temo que esas criaturas tienen ganas de luchar."
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
-msgstr ""
-"Has de estar en la entrada de una mina para lanzar este hechizo (las "
-"serrerías y las casas de alquimia no cuentan)."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr ""
@@ -8385,6 +8532,10 @@ msgstr "Lanzar hechizo"
 msgid "This item can't be traded."
 msgstr ""
 
+#, fuzzy
+msgid "Invalid Artifact"
+msgstr "Artefacto"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
@@ -9574,10 +9725,6 @@ msgstr ""
 "investigarla, descubres que es la pala encantada de los Enterradores, que se "
 "creía perdida hacía tiempo por los mortales."
 
-#, fuzzy
-msgid "Invalid Artifact"
-msgstr "Artefacto"
-
 msgid "Wood"
 msgstr "Madera"
 
@@ -10008,9 +10155,6 @@ msgstr "Ver Todo"
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr "Permite al lanzador ver información detallada de los héroes enemigos."
 
-msgid "Identify Hero"
-msgstr "Identificar Héroe"
-
 msgid "Summon Boat"
 msgstr "LLamar Barco"
 
@@ -10227,11 +10371,3 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Attention"
-#~ msgstr "\"Anexión\""
-
-#, fuzzy
-#~ msgid "Location: "
-#~ msgstr "Excavación"

@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <set>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "artifact_info.h"
@@ -54,8 +55,13 @@ public:
         ART_NORANDOM = 0x20
     };
 
+    // All artifact IDs are by value 1 bigger than in the original game.
+    // This is done to support new artifact addition and also align with the rest of object types.
     enum type_t : int
     {
+        UNKNOWN = 0,
+
+        // The Succession Wars artifacts.
         ULTIMATE_BOOK,
         ULTIMATE_SWORD,
         ULTIMATE_CLOAK,
@@ -140,11 +146,13 @@ public:
 
         MAGIC_BOOK,
 
+        // Editor-related artifacts.
         DUMMY1,
         DUMMY2,
         DUMMY3,
         DUMMY4,
 
+        // The Price of Loyalty artifacts.
         SPELL_SCROLL,
         ARM_MARTYR,
         BREASTPLATE_ANDURAN,
@@ -163,12 +171,14 @@ public:
         SWORD_ANDURAN,
         SPADE_NECROMANCY,
 
+        // Resurrection artifacts.
+
         // IMPORTANT! Put all new artifacts just above this line.
-        UNKNOWN
+        ARTIFACT_COUNT
     };
 
     Artifact( int art = UNKNOWN )
-        : id( art >= 0 && art < UNKNOWN ? art : UNKNOWN )
+        : id( art > UNKNOWN && art < ARTIFACT_COUNT ? art : UNKNOWN )
         , ext( 0 )
     {
         // Do nothing.
@@ -198,7 +208,7 @@ public:
 
     bool isValid() const
     {
-        return id != UNKNOWN;
+        return id != UNKNOWN && id < ARTIFACT_COUNT && ( id < DUMMY1 || id > DUMMY4 );
     }
 
     void Reset()
@@ -212,22 +222,20 @@ public:
 
     double getArtifactValue() const;
 
-    // return index of the sprite from objnarti.icn
-    uint32_t IndexSprite() const
-    {
-        return id < UNKNOWN ? id * 2 + 1 : 0;
-    }
-
     // artfx.icn
     uint32_t IndexSprite32() const
     {
-        return id;
+        if ( id == UNKNOWN ) {
+            return 255;
+        }
+
+        return id - 1;
     }
 
     // return index from artifact.icn
     uint32_t IndexSprite64() const
     {
-        return id + 1;
+        return id;
     }
 
     void SetSpell( const int v );
@@ -261,13 +269,20 @@ namespace fheroes2
 {
     void ResetArtifactStats();
     void ExcludeArtifactFromRandom( const int artifactID );
+
+    bool isPriceOfLoyaltyArtifact( const int artifactID );
 }
 
 struct ArtifactSetData
 {
-    ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage );
+    ArtifactSetData( const int32_t artifactID, std::string assembleMessage )
+        : _assembledArtifactID( artifactID )
+        , _assembleMessage( std::move( assembleMessage ) )
+    {
+        // Do nothing.
+    }
 
-    uint32_t _assembledArtifactID = Artifact::UNKNOWN;
+    int32_t _assembledArtifactID = Artifact::UNKNOWN;
     std::string _assembleMessage;
 
     bool operator<( const ArtifactSetData & other ) const;

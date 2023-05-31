@@ -93,7 +93,7 @@ If you are using [**Homebrew**](https://brew.sh/), you can install the game by r
 brew install fheroes2
 ```
 
-Follow the [instructions below](#macos-resources) to gather resources necessary for `fheroes2` to function as expected.
+Follow the [**instructions below**](#macos-resources) to gather resources necessary for fheroes2 to function as expected.
 
 <a name="macports"></a>
 ### MacPorts
@@ -106,7 +106,7 @@ port install fheroes2
 
 Then follow the instructions on the screen.
 
-Follow the [instructions below](#macos-resources) to gather resources necessary for `fheroes2` to function as expected.
+Follow the [**instructions below**](#macos-resources) to gather resources necessary for fheroes2 to function as expected.
 
 <a name="macos-zip-archive"></a>
 ### macOS ZIP archive
@@ -119,7 +119,7 @@ Follow the [instructions below](#macos-resources) to gather resources necessary 
 * After downloading the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl_2.sh` from
   the `script/macos` subdirectory. This will install the SDL libraries required to run the game.
 
-Follow the [instructions below](#macos-resources) to gather resources necessary for `fheroes2` to function as expected.
+Follow the [**instructions below**](#macos-resources) to gather resources necessary for fheroes2 to function as expected.
 
 <a name="macos-native-app"></a>
 ### macOS native app
@@ -131,7 +131,7 @@ make FHEROES2_MACOS_APP_BUNDLE=ON
 make FHEROES2_MACOS_APP_BUNDLE=ON bundle
 ```
 
-Follow the [instructions below](#macos-resources) to gather resources necessary for `fheroes2` to function as expected.
+Follow the [**instructions below**](#macos-resources) to gather resources necessary for fheroes2 to function as expected.
 
 <a name="macos-resources"></a>
 ### Gathering game resources
@@ -144,7 +144,7 @@ Once you obtain the fheroes2 executable using any of the options above, you shou
 
 * If you have a legally purchased copy of the original game, run the extract resources script which will prompt you to enter 
   the location of the original game, and will extract all the necessary resource files. The script can be run from the following paths depending on
-  how you installed `fheroes2`:
+  how you installed fheroes2:
   * `fheroes2-extract-resources` if you used a package manager (MacPorts or Homebrew);
   * `script/homm2/extract_homm2_resources_for_app_bundle.sh` if you built from source using the [**macOS native app**](#macos-native-app) method;
   * `script/homm2/extract_homm2_resources.sh` for all other cases.
@@ -155,7 +155,7 @@ Once you obtain the fheroes2 executable using any of the options above, you shou
   * `~/.fheroes2` for all other cases.
 
 * If you don't have a legally purchased copy of the original game, you can download and install the demo version of the original game
-  by running the download demo script. The script can be run from the following paths depending on how you installed `fheroes2`:
+  by running the download demo script. The script can be run from the following paths depending on how you installed fheroes2:
   * `fheroes2-install-demo` if you used a package manager (MacPorts or Homebrew);
   * `script/homm2/download_demo_version_for_app_bundles.sh` if you built from source using the [**macOS native app**](#macos-native-app) method;
   * `script/homm2/download_demo_version.sh` for all other cases.
@@ -208,7 +208,7 @@ be missing depending on the version of the original game) from the original game
 <a name="aur-package"></a>
 ### AUR package
 
-If you are using Arch Linux or compatible distribution, you can install [fheroes2 package](https://aur.archlinux.org/packages/fheroes2)
+If you are using Arch Linux or compatible distribution, you can install [**fheroes2 package**](https://aur.archlinux.org/packages/fheroes2)
 from AUR (Arch User Repository).
 
 #### Install using AUR helper
@@ -219,9 +219,9 @@ If you use one of AUR helpers, e.g. `yay`, you can install the game by running t
 yay -S aur/fheroes2
 ```
 
-#### Install using official guide
+#### Install using the official guide
 
-Follow [official guide](https://wiki.archlinux.org/title/Arch_User_Repository#Installing_and_upgrading_packages).
+Follow the [**official guide**](https://wiki.archlinux.org/title/Arch_User_Repository#Installing_and_upgrading_packages).
 One of possible command sets:
 
 ```sh
@@ -263,7 +263,8 @@ makepkg -si
 <a name="android"></a>
 ## Android
 
-* Download the [**Android ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_android.zip).
+* Install the fheroes2 app from [**Google Play**](https://play.google.com/store/apps/details?id=org.fheroes2) or download the
+  [**Android ZIP archive**](https://github.com/ihhub/fheroes2/releases/latest/download/fheroes2_android.zip).
 
 * Follow the [**instructions**](README_android.md).
 

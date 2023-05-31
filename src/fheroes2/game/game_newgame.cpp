@@ -70,26 +70,6 @@ namespace
 {
     const int32_t buttonYStep = 66;
 
-    // Draw button panel and return the position for a button.
-    fheroes2::Point drawButtonPanel()
-    {
-        const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
-        const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
-
-        const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
-        const uint32_t panelXPos = back.width() - ( panel.width() + panelOffset );
-        fheroes2::Blit( panel, fheroes2::Display::instance(), panelXPos, panelOffset );
-
-        const int32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
-
-        const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
-        const int32_t buttonWidth = buttonSample.width();
-        const int32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
-        const int32_t buttonYPos = 46;
-
-        return fheroes2::Point( buttonXPos, buttonYPos );
-    }
-
     std::unique_ptr<SMKVideoSequence> getVideo( const std::string & fileName )
     {
         std::string videoPath;
@@ -188,6 +168,10 @@ fheroes2::GameMode Game::NewHotSeat()
     if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
         conf.SetPreferablyCountPlayers( 2 );
         world.NewMaps( 10, 10 );
+
+        // Redraw the main menu screen without multiplayer sub-menu to show it after the battle using screen restorer.
+        fheroes2::drawMainMenuScreen();
+
         return StartBattleOnly();
     }
     else {
@@ -210,7 +194,7 @@ fheroes2::GameMode Game::CampaignSelection()
     outputNewCampaignSelectionInTextSupportMode();
 
     fheroes2::drawMainMenuScreen();
-    const fheroes2::Point buttonPos = drawButtonPanel();
+    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
     fheroes2::Button buttonSuccessionWars( buttonPos.x, buttonPos.y, ICN::BUTTON_ORIGINAL_CAMPAIGN, 0, 1 );
     fheroes2::Button buttonPriceOfLoyalty( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BUTTON_EXPANSION_CAMPAIGN, 0, 1 );
@@ -228,12 +212,15 @@ fheroes2::GameMode Game::CampaignSelection()
         le.MousePressLeft( buttonPriceOfLoyalty.area() ) ? buttonPriceOfLoyalty.drawOnPress() : buttonPriceOfLoyalty.drawOnRelease();
         le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonSuccessionWars.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_ORIGINAL_CAMPAIGN ) )
+        if ( le.MouseClickLeft( buttonSuccessionWars.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_ORIGINAL_CAMPAIGN ) ) {
             return fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN;
-        if ( le.MouseClickLeft( buttonPriceOfLoyalty.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_EXPANSION_CAMPAIGN ) )
+        }
+        if ( le.MouseClickLeft( buttonPriceOfLoyalty.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_EXPANSION_CAMPAIGN ) ) {
             return fheroes2::GameMode::NEW_PRICE_OF_LOYALTY_CAMPAIGN;
-        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelGame.area() ) )
+        }
+        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelGame.area() ) ) {
             return fheroes2::GameMode::MAIN_MENU;
+        }
 
         if ( le.MousePressRight( buttonSuccessionWars.area() ) ) {
             Dialog::Message( _( "Original Campaign" ), _( "Either Roland's or Archibald's campaign from the original Heroes of Might and Magic II." ), Font::BIG );
@@ -259,9 +246,10 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
 
-    display.fill( 0 );
+    // Fade-out screen before playing video.
+    fheroes2::fadeOutDisplay();
 
-    const Text loadingScreen( "Loading video. Please wait...", Font::BIG );
+    const Text loadingScreen( _( "Loading video. Please wait..." ), Font::BIG );
     loadingScreen.Blit( display.width() / 2 - loadingScreen.w() / 2, display.height() / 2 - loadingScreen.h() / 2 );
     display.render();
 
@@ -340,8 +328,12 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
 
     screenRestorer.changePalette( nullptr );
 
+    // Update the frame but do not render it.
     display.fill( 0 );
-    display.render();
+    display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
+
+    // Set the fade-in for the Campaign scenario info.
+    setDisplayFadeIn();
 
     return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
@@ -361,6 +353,9 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
         return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
     }
 
+    // Fade-out display before playing video.
+    fheroes2::fadeOutDisplay();
+
     outputPriceOfLoyaltyCampaignInTextSupportMode();
 
     const fheroes2::ScreenPaletteRestorer screenRestorer;
@@ -374,8 +369,6 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
-
-    display.fill( 0 );
 
     const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::X_IVY, 1 );
     fheroes2::Blit( background, 0, 0, display, roiOffset.x, roiOffset.y, background.width(), background.height() );
@@ -467,6 +460,9 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     display.fill( 0 );
     display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
 
+    // Set the fade-in for the Campaign scenario info.
+    setDisplayFadeIn();
+
     return gameChoice;
 }
 
@@ -479,7 +475,7 @@ fheroes2::GameMode Game::NewNetwork()
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::drawMainMenuScreen();
-    const fheroes2::Point buttonPos = drawButtonPanel();
+    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
     fheroes2::Button buttonHost( buttonPos.x, buttonPos.y, ICN::BTNNET, 0, 1 );
     fheroes2::Button buttonGuest( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNNET, 2, 3 );
@@ -529,10 +525,8 @@ fheroes2::GameMode Game::NewGame()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     fheroes2::drawMainMenuScreen();
-    const fheroes2::Point buttonPos = drawButtonPanel();
+    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
     fheroes2::Button buttonStandardGame( buttonPos.x, buttonPos.y, ICN::BUTTON_STANDARD_GAME, 0, 1 );
     fheroes2::ButtonSprite buttonCampaignGame( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BUTTON_CAMPAIGN_GAME, 0 ),
@@ -553,7 +547,7 @@ fheroes2::GameMode Game::NewGame()
     buttonSettings.draw();
     buttonCancelGame.draw();
 
-    display.render();
+    fheroes2::validateFadeInAndRender();
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -612,7 +606,7 @@ fheroes2::GameMode Game::NewMulti()
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::drawMainMenuScreen();
-    const fheroes2::Point buttonPos = drawButtonPanel();
+    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
     fheroes2::Button buttonHotSeat( buttonPos.x, buttonPos.y, ICN::BUTTON_HOT_SEAT, 0, 1 );
     fheroes2::Button buttonNetwork( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNMP, 2, 3 );
@@ -653,7 +647,7 @@ uint32_t Game::SelectCountPlayers()
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::drawMainMenuScreen();
-    const fheroes2::Point buttonPos = drawButtonPanel();
+    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
     fheroes2::Button button2Players( buttonPos.x, buttonPos.y, ICN::BUTTON_2_PLAYERS, 0, 1 );
     fheroes2::Button button3Players( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BUTTON_3_PLAYERS, 0, 1 );

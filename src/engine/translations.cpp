@@ -484,8 +484,6 @@ namespace Translation
                 return current->ngettext( str, ( n == 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5 ) );
             case LocaleType::LOCALE_RO:
                 return current->ngettext( str, ( n == 1 ? 0 : n == 0 || ( n != 1 && n % 100 >= 1 && n % 100 <= 19 ) ? 1 : 2 ) );
-            case LocaleType::LOCALE_SK:
-                return current->ngettext( str, ( ( n == 1 ) ? 1 : ( n >= 2 && n <= 4 ) ? 2 : 0 ) );
             case LocaleType::LOCALE_SL:
                 return current->ngettext( str, ( n % 100 == 1 ? 0 : n % 100 == 2 ? 1 : n % 100 == 3 || n % 100 == 4 ? 2 : 3 ) );
             case LocaleType::LOCALE_SR:
@@ -494,6 +492,7 @@ namespace Translation
                                                  : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1
                                                                                                                    : 2 ) );
             case LocaleType::LOCALE_CS:
+            case LocaleType::LOCALE_SK:
                 return current->ngettext( str, ( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? 1 : 2 ) );
             case LocaleType::LOCALE_HR:
             case LocaleType::LOCALE_LV:

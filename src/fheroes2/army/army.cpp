@@ -49,6 +49,7 @@
 #include "logging.h"
 #include "luck.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "morale.h"
 #include "mp2.h"
 #include "payment.h"
@@ -189,8 +190,11 @@ Troops::Troops( const Troops & troops )
 
 Troops::~Troops()
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
+    std::for_each( begin(), end(), []( Troop * troop ) {
+        assert( troop != nullptr );
+
+        delete troop;
+    } );
 }
 
 void Troops::Assign( const Troop * it1, const Troop * it2 )
@@ -878,33 +882,30 @@ void Troops::JoinAllTroopsOfType( const Troop & targetTroop ) const
     }
 }
 
-Army::Army( HeroBase * s )
-    : commander( s )
-    , combat_format( true )
+Army::Army( HeroBase * cmdr /* = nullptr */ )
+    : commander( cmdr )
+    , _isSpreadCombatFormation( true )
     , color( Color::NONE )
 {
     reserve( maximumTroopCount );
-    for ( size_t i = 0; i < maximumTroopCount; ++i )
+
+    for ( size_t i = 0; i < maximumTroopCount; ++i ) {
         push_back( new ArmyTroop( this ) );
+    }
 }
 
-Army::Army( const Maps::Tiles & t )
+Army::Army( const Maps::Tiles & tile )
     : commander( nullptr )
-    , combat_format( true )
+    , _isSpreadCombatFormation( true )
     , color( Color::NONE )
 {
     reserve( maximumTroopCount );
-    for ( size_t i = 0; i < maximumTroopCount; ++i )
+
+    for ( size_t i = 0; i < maximumTroopCount; ++i ) {
         push_back( new ArmyTroop( this ) );
+    }
 
-    setFromTile( t );
-}
-
-Army::~Army()
-{
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
-    clear();
+    setFromTile( tile );
 }
 
 const Troops & Army::getTroops() const
@@ -918,7 +919,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
 
     const bool isCaptureObject = MP2::isCaptureObject( tile.GetObject( false ) );
     if ( isCaptureObject )
-        color = tile.QuantityColor();
+        color = getColorFromTile( tile );
 
     switch ( tile.GetObject( false ) ) {
     case MP2::OBJ_PYRAMID:
@@ -940,20 +941,20 @@ void Army::setFromTile( const Maps::Tiles & tile )
     case MP2::OBJ_SHIPWRECK: {
         uint32_t count = 0;
 
-        switch ( tile.QuantityVariant() ) {
-        case 0:
+        switch ( getShipwreckCaptureCondition( tile ) ) {
+        case Maps::ShipwreckCaptureCondition::EMPTY:
             // Shipwreck guardians were defeated.
             return;
-        case 1:
+        case Maps::ShipwreckCaptureCondition::FIGHT_10_GHOSTS_AND_GET_1000_GOLD:
             count = 10;
             break;
-        case 2:
+        case Maps::ShipwreckCaptureCondition::FIGHT_15_GHOSTS_AND_GET_2000_GOLD:
             count = 15;
             break;
-        case 3:
+        case Maps::ShipwreckCaptureCondition::FIGHT_25_GHOSTS_AND_GET_5000_GOLD:
             count = 25;
             break;
-        case 4:
+        case Maps::ShipwreckCaptureCondition::FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT:
             count = 50;
             break;
         default:
@@ -971,29 +972,29 @@ void Army::setFromTile( const Maps::Tiles & tile )
         break;
 
     case MP2::OBJ_ARTIFACT:
-        switch ( tile.QuantityVariant() ) {
-        case 6:
+        switch ( getArtifactCaptureCondition( tile ) ) {
+        case Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES:
             ArrangeForBattle( Monster::ROGUE, 50, tile.GetIndex(), false );
             break;
-        case 7:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_GENIE:
             ArrangeForBattle( Monster::GENIE, 1, tile.GetIndex(), false );
             break;
-        case 8:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_PALADIN:
             ArrangeForBattle( Monster::PALADIN, 1, tile.GetIndex(), false );
             break;
-        case 9:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_CYCLOPS:
             ArrangeForBattle( Monster::CYCLOPS, 1, tile.GetIndex(), false );
             break;
-        case 10:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_PHOENIX:
             ArrangeForBattle( Monster::PHOENIX, 1, tile.GetIndex(), false );
             break;
-        case 11:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_GREEN_DRAGON:
             ArrangeForBattle( Monster::GREEN_DRAGON, 1, tile.GetIndex(), false );
             break;
-        case 12:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_TITAN:
             ArrangeForBattle( Monster::TITAN, 1, tile.GetIndex(), false );
             break;
-        case 13:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON:
             ArrangeForBattle( Monster::BONE_DRAGON, 1, tile.GetIndex(), false );
             break;
         default:
@@ -1051,7 +1052,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
             }
         }
         else {
-            const Troop troop = tile.QuantityTroop();
+            const Troop troop = getTroopFromTile( tile );
 
             if ( troop.isValid() ) {
                 ArrangeForBattle( troop.GetMonster(), troop.GetCount(), tile.GetIndex(), true );
@@ -1166,30 +1167,34 @@ int Army::GetMoraleModificator( std::string * strs ) const
 double Army::GetStrength() const
 {
     double result = 0;
-    const uint32_t archery = ( commander != nullptr ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
-    // Hero bonus calculation is slow, cache it
+
+    const uint32_t heroArchery = ( commander != nullptr ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
+
     const int bonusAttack = ( commander ? commander->GetAttack() : 0 );
     const int bonusDefense = ( commander ? commander->GetDefense() : 0 );
     const int armyMorale = GetMorale();
     const int armyLuck = GetLuck();
 
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        const Troop * troop = *it;
-        if ( troop != nullptr && troop->isValid() ) {
-            double strength = troop->GetStrengthWithBonus( bonusAttack, bonusDefense );
+    for ( const Troop * troop : *this ) {
+        assert( troop != nullptr );
 
-            if ( archery > 0 && troop->isArchers() ) {
-                strength *= sqrt( 1 + static_cast<double>( archery ) / 100 );
-            }
-
-            // GetMorale checks if unit is affected by it
-            if ( troop->isAffectedByMorale() )
-                strength *= 1 + ( ( armyMorale < 0 ) ? armyMorale / 12.0 : armyMorale / 24.0 );
-
-            strength *= 1 + armyLuck / 24.0;
-
-            result += strength;
+        if ( troop->isEmpty() ) {
+            continue;
         }
+
+        double strength = troop->GetStrengthWithBonus( bonusAttack, bonusDefense );
+
+        if ( heroArchery > 0 && troop->isArchers() ) {
+            strength *= sqrt( 1 + static_cast<double>( heroArchery ) / 100 );
+        }
+
+        if ( troop->isAffectedByMorale() ) {
+            strength *= 1 + ( ( armyMorale < 0 ) ? armyMorale / 12.0 : armyMorale / 24.0 );
+        }
+
+        strength *= 1 + armyLuck / 24.0;
+
+        result += strength;
     }
 
     if ( commander ) {
@@ -1795,7 +1800,7 @@ StreamBase & operator<<( StreamBase & msg, const Army & army )
     for ( Army::const_iterator it = army.begin(); it != army.end(); ++it )
         msg << **it;
 
-    return msg << army.combat_format << army.color;
+    return msg << army._isSpreadCombatFormation << army.color;
 }
 
 StreamBase & operator>>( StreamBase & msg, Army & army )
@@ -1806,7 +1811,7 @@ StreamBase & operator>>( StreamBase & msg, Army & army )
     for ( Army::iterator it = army.begin(); it != army.end(); ++it )
         msg >> **it;
 
-    msg >> army.combat_format >> army.color;
+    msg >> army._isSpreadCombatFormation >> army.color;
 
     // set army
     for ( Army::iterator it = army.begin(); it != army.end(); ++it ) {

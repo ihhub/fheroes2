@@ -40,6 +40,7 @@
 #include "kingdom.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "pairs.h"
 #include "rand.h"
@@ -47,6 +48,7 @@
 #include "settings.h"
 #include "spell.h"
 #include "spell_info.h"
+#include "tools.h"
 #include "world.h"
 
 namespace
@@ -124,11 +126,17 @@ namespace
         }
 
         // Monster or artifact guarded by a monster
-        if ( objectType == MP2::OBJ_MONSTER || ( objectType == MP2::OBJ_ARTIFACT && tile.QuantityVariant() > 5 ) )
+        if ( objectType == MP2::OBJ_MONSTER ) {
             return Army( tile ).GetStrength() > armyStrength;
+        }
+
+        if ( objectType == MP2::OBJ_ARTIFACT && getArtifactCaptureCondition( tile ) >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES
+             && getArtifactCaptureCondition( tile ) <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
+            return Army( tile ).GetStrength() > armyStrength;
+        }
 
         // Check if AI has the key for the barrier
-        if ( objectType == MP2::OBJ_BARRIER && world.GetKingdom( color ).IsVisitTravelersTent( tile.QuantityColor() ) )
+        if ( objectType == MP2::OBJ_BARRIER && world.GetKingdom( color ).IsVisitTravelersTent( getColorFromTile( tile ) ) )
             return false;
 
         // AI can use boats to overcome water obstacles
@@ -766,8 +774,10 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
             continue;
         }
 
-        // Tile is reachable and the hero has enough army to defeat potential guards
-        if ( _cache[newIndex]._cost > 0 ) {
+        const WorldNode & node = _cache[newIndex];
+
+        // Tile is directly reachable (in one move) and the hero has enough army to defeat potential guards
+        if ( node._cost > 0 && node._from == start ) {
             return newIndex;
         }
     }
@@ -905,8 +915,31 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
         return true;
     }
 
+    const Maps::Tiles & heroTile = world.GetTiles( heroIndex );
+
+    // Hero in the boat can neither occupy nor block the Stone Liths
+    if ( heroTile.isWater() ) {
+        assert( heroTile.GetObject( false ) != MP2::OBJ_STONE_LITHS );
+
+        return false;
+    }
+
+    // Does the hero potentially block the exit from Stone Liths for another hero?
+    for ( const int32_t idx : Maps::ScanAroundObject( heroIndex, MP2::OBJ_STONE_LITHS ) ) {
+        const Maps::Tiles & tile = world.GetTiles( idx );
+
+        if ( tile.GetObject() == MP2::OBJ_HEROES ) {
+            const int direction = Maps::GetDirection( idx, heroIndex );
+            assert( CountBits( direction ) == 1 && direction != Direction::CENTER );
+
+            if ( tile.isPassableTo( direction ) && heroTile.isPassableFrom( Direction::Reflect( direction ) ) ) {
+                return true;
+            }
+        }
+    }
+
     // Is the hero standing on Stone Liths?
-    return world.GetTiles( heroIndex ).GetObject( false ) == MP2::OBJ_STONE_LITHS;
+    return heroTile.GetObject( false ) == MP2::OBJ_STONE_LITHS;
 }
 
 std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int targetIndex, const bool checkAdjacent /* = false */ ) const

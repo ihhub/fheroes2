@@ -330,19 +330,19 @@ public:
     MP2::MapObjectType GetMapsObject() const;
     void SetMapsObject( const MP2::MapObjectType objectType );
 
-    const fheroes2::Point & GetCenterPatrol() const
+    const fheroes2::Point & GetPatrolCenter() const
     {
-        return patrol_center;
+        return _patrolCenter;
     }
 
-    void SetCenterPatrol( const fheroes2::Point & pos )
+    void SetPatrolCenter( const fheroes2::Point & pos )
     {
-        patrol_center = pos;
+        _patrolCenter = pos;
     }
 
-    int GetSquarePatrol() const
+    int GetPatrolDistance() const
     {
-        return patrol_square;
+        return _patrolDistance;
     }
 
     uint32_t GetMaxSpellPoints() const override;
@@ -382,7 +382,7 @@ public:
     // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
     int GetManaIndexSprite() const;
 
-    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog = false );
+    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog );
     void MeetingDialog( Heroes & );
 
     bool Recruit( const int col, const fheroes2::Point & pt );
@@ -457,7 +457,7 @@ public:
     void SetMove( bool );
     bool isAction() const;
     void ResetAction();
-    void Action( int tileIndex, bool isDestination );
+    void Action( int tileIndex );
     void ActionNewPosition( const bool allowMonsterAttack );
     void ApplyPenaltyMovement( uint32_t penalty );
     void ActionSpellCast( const Spell & spell );
@@ -574,7 +574,6 @@ private:
     void LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect = false );
     void AngleStep( int );
     bool MoveStep( const bool jumpToNextTile );
-    static void MoveStep( Heroes &, int32_t to, bool newpos );
     static uint32_t GetStartingXp();
     bool isInVisibleMapArea() const;
 
@@ -616,8 +615,8 @@ private:
     int sprite_index;
     fheroes2::Point _offset; // used only during hero's movement
 
-    fheroes2::Point patrol_center;
-    int patrol_square;
+    fheroes2::Point _patrolCenter;
+    int _patrolDistance;
 
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;

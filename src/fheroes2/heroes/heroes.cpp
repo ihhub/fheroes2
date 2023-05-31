@@ -187,7 +187,7 @@ Heroes::Heroes()
     , path( *this )
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
-    , patrol_square( 0 )
+    , _patrolDistance( 0 )
     , _alphaValue( 255 )
     , _attackedMonsterTileIndex( -1 )
     , _aiRole( Role::HUNTER )
@@ -212,7 +212,7 @@ Heroes::Heroes( int heroid, int rc )
     , path( *this )
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
-    , patrol_square( 0 )
+    , _patrolDistance( 0 )
     , _alphaValue( 255 )
     , _attackedMonsterTileIndex( -1 )
     , _aiRole( Role::HUNTER )
@@ -454,10 +454,10 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
         PickupArtifact( art );
     };
 
-    // 3 artifacts
-    addInitialArtifact( Artifact( dataStream.get() ) );
-    addInitialArtifact( Artifact( dataStream.get() ) );
-    addInitialArtifact( Artifact( dataStream.get() ) );
+    // 3 artifacts. Artifact IDs are by value 1 bigger than in the original game.
+    addInitialArtifact( Artifact( dataStream.get() + 1 ) );
+    addInitialArtifact( Artifact( dataStream.get() + 1 ) );
+    addInitialArtifact( Artifact( dataStream.get() + 1 ) );
 
     // Skip unused byte.
     dataStream.skip( 1 );
@@ -512,11 +512,11 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     const bool doesAIHeroSetOnPatrol = ( dataStream.get() != 0 );
     if ( doesAIHeroSetOnPatrol ) {
         SetModes( PATROL );
-        patrol_center = GetCenter();
+        _patrolCenter = GetCenter();
     }
 
-    // Patrol square
-    patrol_square = dataStream.get();
+    // Patrol distance
+    _patrolDistance = dataStream.get();
 
     PostLoad();
 }
@@ -1154,7 +1154,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
         // If there were artifacts assembled we check them for scout area bonus.
         for ( const ArtifactSetData & assembledArtifact : assembledArtifacts ) {
-            if ( scout( static_cast<int32_t>( assembledArtifact._assembledArtifactID ) ) ) {
+            if ( scout( assembledArtifact._assembledArtifactID ) ) {
                 return true;
             }
         }
@@ -1698,7 +1698,7 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
 {
     if ( allowMonsterAttack ) {
         // scan for monsters around
-        const MapsIndexes targets = Maps::getMonstersProtectingTile( GetIndex() );
+        const MapsIndexes targets = Maps::getMonstersProtectingTile( GetIndex(), false );
 
         if ( !targets.empty() ) {
             SetMove( false );
@@ -1708,11 +1708,11 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
             MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinationIndex() );
 
             if ( it != targets.end() ) {
-                Action( *it, true );
+                Action( *it );
             }
             // otherwise fight the monsters on the first adjacent tile
             else {
-                Action( targets.front(), true );
+                Action( targets.front() );
             }
         }
     }
@@ -1721,7 +1721,7 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
         const MapEvent * event = world.GetMapEvent( GetCenter() );
 
         if ( event && event->isAllow( GetColor() ) ) {
-            Action( GetIndex(), false );
+            Action( GetIndex() );
             SetMove( false );
         }
     }
@@ -1846,7 +1846,7 @@ std::string Heroes::String() const
        << "flags           : " << ( Modes( SHIPMASTER ) ? "SHIPMASTER," : "" ) << ( Modes( PATROL ) ? "PATROL" : "" ) << std::endl;
 
     if ( Modes( PATROL ) ) {
-        os << "patrol square   : " << patrol_square << std::endl;
+        os << "patrol zone     : center: (" << _patrolCenter.x << ", " << _patrolCenter.y << "), distance " << _patrolDistance << std::endl;
     }
 
     if ( !visit_object.empty() ) {
@@ -2177,10 +2177,10 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
         << hero.direction << hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
-    const int16_t patrolX = static_cast<int16_t>( hero.patrol_center.x );
-    const int16_t patrolY = static_cast<int16_t>( hero.patrol_center.y );
+    const int16_t patrolX = static_cast<int16_t>( hero._patrolCenter.x );
+    const int16_t patrolY = static_cast<int16_t>( hero._patrolCenter.y );
 
-    msg << patrolX << patrolY << hero.patrol_square << hero.visit_object << hero._lastGroundRegion;
+    msg << patrolX << patrolY << hero._patrolDistance << hero.visit_object << hero._lastGroundRegion;
 
     return msg;
 }
@@ -2202,9 +2202,9 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     int16_t patrolY = 0;
 
     msg >> patrolX >> patrolY;
-    hero.patrol_center = fheroes2::Point( patrolX, patrolY );
+    hero._patrolCenter = fheroes2::Point( patrolX, patrolY );
 
-    msg >> hero.patrol_square >> hero.visit_object >> hero._lastGroundRegion;
+    msg >> hero._patrolDistance >> hero.visit_object >> hero._lastGroundRegion;
 
     hero.army.SetCommander( &hero );
     return msg;

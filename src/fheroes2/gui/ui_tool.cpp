@@ -21,6 +21,7 @@
 #include "ui_tool.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <chrono>
 #include <cmath>
@@ -32,6 +33,7 @@
 #include <string>
 #include <utility>
 
+#include "game_delays.h"
 #include "image_palette.h"
 #include "localevent.h"
 #include "screen.h"
@@ -42,6 +44,15 @@
 
 namespace
 {
+    // The parameters of display fade effect. Full dark and full bright alpha values.
+    const uint8_t fullDarkAlpha = 0;
+    const uint8_t fullBrightAlpha = 255;
+    // Fade-in and fade-out effects are made in separate functions. Here we set the duration of a single function.
+    const uint32_t screenFadeTimeMs = 100;
+    // For 100 ms duration 6 frames will result in 60 FPS.
+    const uint32_t screenFadeFrameCount = 6;
+    const uint8_t screenFadeStep = ( fullBrightAlpha - fullDarkAlpha ) / screenFadeFrameCount;
+
     // Renderer of current time and FPS on screen
     class SystemInfoRenderer
     {
@@ -52,20 +63,21 @@ namespace
 
         void preRender()
         {
-            if ( !Settings::Get().isSystemInfoEnabled() )
+            if ( !Settings::Get().isSystemInfoEnabled() ) {
                 return;
+            }
 
             const int32_t offsetX = 26;
             const int32_t offsetY = fheroes2::Display::instance().height() - 30;
 
             const tm tmi = System::GetTM( std::time( nullptr ) );
 
-            char mbstr[10] = { 0 };
-            std::strftime( mbstr, sizeof( mbstr ), "%H:%M:%S", &tmi );
+            std::array<char, 9> mbstr{ 0 };
+            std::strftime( mbstr.data(), mbstr.size(), "%H:%M:%S", &tmi );
 
-            std::string info( mbstr );
+            std::string info( mbstr.data() );
 
-            std::chrono::time_point<std::chrono::steady_clock> endTime = std::chrono::steady_clock::now();
+            const std::chrono::time_point<std::chrono::steady_clock> endTime = std::chrono::steady_clock::now();
             const std::chrono::duration<double> time = endTime - _startTime;
             _startTime = endTime;
 
@@ -73,21 +85,23 @@ namespace
             const double fps = totalTime < 1 ? 0 : 1000 / totalTime;
 
             _fps.push_front( fps );
-            while ( _fps.size() > 10 )
+            while ( _fps.size() > 10 ) {
                 _fps.pop_back();
+            }
 
             double averageFps = 0;
-            for ( const double value : _fps )
+            for ( const double value : _fps ) {
                 averageFps += value;
+            }
 
             averageFps /= static_cast<double>( _fps.size() );
-            const int currentFps = static_cast<int>( averageFps );
+            const int32_t currentFps = static_cast<int32_t>( averageFps );
 
             info += _( ", FPS: " );
             info += std::to_string( currentFps );
             if ( averageFps < 10 ) {
                 info += '.';
-                info += std::to_string( static_cast<int>( ( averageFps - currentFps ) * 10 ) );
+                info += std::to_string( static_cast<int32_t>( ( averageFps - currentFps ) * 10 ) );
             }
 
             _text.SetPos( offsetX, offsetY );
@@ -97,8 +111,9 @@ namespace
 
         void postRender()
         {
-            if ( _text.isShow() )
+            if ( _text.isShow() ) {
                 _text.Hide();
+            }
         }
 
     private:
@@ -108,6 +123,59 @@ namespace
     };
 
     SystemInfoRenderer systemInfoRenderer;
+
+    void fadeDisplay( const uint8_t startAlpha, const uint8_t endAlpha, const fheroes2::Rect & roi, const uint32_t fadeTimeMs, const uint32_t frameCount )
+    {
+        if ( frameCount < 2 || roi.height <= 0 || roi.width <= 0 ) {
+            return;
+        }
+
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        fheroes2::Rect fadeRoi( roi ^ fheroes2::Rect( 0, 0, display.width(), display.height() ) );
+
+        fheroes2::Image temp{ fadeRoi.width, fadeRoi.height };
+        Copy( display, fadeRoi.x, fadeRoi.y, temp, 0, 0, fadeRoi.width, fadeRoi.height );
+
+        double alpha = startAlpha;
+        const uint32_t delay = fadeTimeMs / frameCount;
+        const double alphaStep = ( alpha - endAlpha ) / static_cast<double>( frameCount - 1 );
+
+        uint32_t frameNumber = 0;
+
+        LocalEvent & le = LocalEvent::Get();
+
+        Game::passCustomAnimationDelay( delay );
+        while ( le.HandleEvents( Game::isCustomDelayNeeded( delay ) ) ) {
+            if ( Game::validateCustomAnimationDelay( delay ) ) {
+                if ( frameNumber == frameCount ) {
+                    break;
+                }
+
+                assert( alpha >= 0 && alpha <= 255 );
+
+                const uint8_t fadeAlpha = static_cast<uint8_t>( std::round( alpha ) );
+
+                if ( fadeAlpha == 255 ) {
+                    // This alpha is for fully bright image so there is no need to apply alpha.
+                    Copy( temp, 0, 0, display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height );
+                }
+                else if ( fadeAlpha == 0 ) {
+                    // This alpha is for fully dark image so fill it with the black color.
+                    // Color index '0' in all game palettes (including videos) corresponds to the black color.
+                    Fill( display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height, 0 );
+                }
+                else {
+                    ApplyAlpha( temp, 0, 0, display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height, fadeAlpha );
+                }
+
+                display.render( fadeRoi );
+
+                alpha -= alphaStep;
+                ++frameNumber;
+            }
+        }
+    }
 }
 
 namespace fheroes2
@@ -225,6 +293,103 @@ namespace fheroes2
         if ( isEvilInterface != isOriginalEvilInterface ) {
             Settings::Get().setEvilInterface( isOriginalEvilInterface );
         }
+    }
+
+    void colorFade( const std::vector<uint8_t> & palette, const fheroes2::Rect & frameRoi, const uint32_t durationMs, const double fps )
+    {
+        assert( fps > 0 );
+
+        // Game palette has 256 values for red, green and blue, so its size is: 256 * 3 = 768.
+        const int32_t paletteSize = 768;
+        // Do a color fade only for valid palette.
+        if ( palette.size() != paletteSize ) {
+            return;
+        }
+
+        // The biggest problem here is that the palette could be different from the one in the game.
+        // Since we want to do color fading to grayscale colors we take the original palette and
+        // find the nearest colors in video's palette to grayscale colors of the original palette.
+        // Then we gradually change the current palette to be only grayscale and after reaching the
+        // last frame change all colors of the frame to be only grayscale colors of the original palette.
+
+        const uint8_t * originalPalette = fheroes2::getGamePalette();
+
+        // Yes, these values are hardcoded. There are ways to do it programmatically.
+        const int32_t startGrayScaleColorId = 10;
+        const int32_t endGrayScaleColorId = 36;
+
+        // The game's palette has 256 color indexes.
+        const int32_t paletteIndexes = 256;
+
+        std::vector<uint8_t> assignedValue( paletteIndexes );
+
+        for ( size_t id = 0; id < paletteIndexes; ++id ) {
+            int32_t nearestDistance = INT32_MAX;
+
+            for ( uint8_t colorId = startGrayScaleColorId; colorId <= endGrayScaleColorId; ++colorId ) {
+                const int32_t redDiff = static_cast<int32_t>( palette[id * 3] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3] ) * 4;
+                const int32_t greenDiff
+                    = static_cast<int32_t>( palette[id * 3 + 1] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3 + 1] ) * 4;
+                const int32_t blueDiff
+                    = static_cast<int32_t>( palette[id * 3 + 2] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3 + 2] ) * 4;
+
+                const int32_t distance = redDiff * redDiff + greenDiff * greenDiff + blueDiff * blueDiff;
+                if ( nearestDistance > distance ) {
+                    nearestDistance = distance;
+                    assignedValue[id] = colorId;
+                }
+            }
+        }
+
+        std::array<uint8_t, paletteSize> endPalette{ 0 };
+        for ( size_t i = 0; i < paletteIndexes; ++i ) {
+            const uint8_t valuePosition = assignedValue[i] * 3;
+            // Red color.
+            endPalette[i * 3] = originalPalette[valuePosition] * 4;
+            // Green color.
+            endPalette[i * 3 + 1] = originalPalette[valuePosition + 1] * 4;
+            // Blue color.
+            endPalette[i * 3 + 2] = originalPalette[valuePosition + 2] * 4;
+        }
+
+        const uint32_t delay = static_cast<uint32_t>( std::round( 1000.0 / fps ) );
+
+        // Gradually fade the palette.
+        const uint32_t gradingSteps = durationMs / delay;
+        uint32_t gradingId = 1;
+        std::vector<uint8_t> gradingPalette( paletteSize );
+        std::vector<uint8_t> prevPalette( paletteSize );
+
+        const fheroes2::ScreenPaletteRestorer screenRestorer;
+        fheroes2::Display & display = fheroes2::Display::instance();
+        LocalEvent & le = LocalEvent::Get();
+
+        Game::passCustomAnimationDelay( delay );
+
+        while ( le.HandleEvents( Game::isCustomDelayNeeded( delay ) ) ) {
+            if ( Game::validateCustomAnimationDelay( delay ) ) {
+                if ( gradingId == gradingSteps ) {
+                    break;
+                }
+
+                for ( int32_t i = 0; i < paletteSize; ++i ) {
+                    gradingPalette[i] = static_cast<uint8_t>( ( palette[i] * ( gradingSteps - gradingId ) + endPalette[i] * gradingId ) / gradingSteps );
+                }
+
+                screenRestorer.changePalette( gradingPalette.data() );
+
+                // We need to swap the palettes so the next call of 'changePalette()' will think that the palette is new.
+                std::swap( prevPalette, gradingPalette );
+
+                display.render( frameRoi );
+
+                ++gradingId;
+            }
+        }
+
+        // Convert all video frame colors to original game palette colors.
+        fheroes2::ApplyPalette( display, frameRoi.x, frameRoi.y, display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, assignedValue );
+        screenRestorer.changePalette( originalPalette );
     }
 
     void CreateDeathWaveEffect( Image & out, const Image & in, const int32_t x, const std::vector<int32_t> & deathWaveCurve )
@@ -363,10 +528,11 @@ namespace fheroes2
         return out;
     }
 
-    Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX, double waveFrequency )
+    Image CreateRippleEffect( const Image & in, const int32_t frameId, const double scaleX /* = 0.05 */, const double waveFrequency /* = 20.0 */ )
     {
-        if ( in.empty() )
-            return Image();
+        if ( in.empty() ) {
+            return {};
+        }
 
         const int32_t widthIn = in.width();
         const int32_t height = in.height();
@@ -377,8 +543,7 @@ namespace fheroes2
 
         const double rippleXModifier = ( progress * scaleX + 0.3 ) * linearWave;
         const int32_t offsetX = static_cast<int32_t>( std::abs( rippleXModifier ) );
-        const double pi = std::acos( -1 );
-        const int32_t limitY = static_cast<int32_t>( waveFrequency * pi );
+        const int32_t limitY = static_cast<int32_t>( waveFrequency * M_PI );
 
         Image out( widthIn + offsetX * 2, height );
         out.reset();
@@ -403,74 +568,104 @@ namespace fheroes2
         return out;
     }
 
-    void FadeDisplay( const Image & top, const Point & pos, uint8_t endAlpha, int delayMs )
+    void fadeOutDisplay()
+    {
+        const Display & display = Display::instance();
+
+        fadeOutDisplay( { 0, 0, display.width(), display.height() }, false );
+    }
+
+    void fadeOutDisplay( const Rect & roi, const bool halfFade )
+    {
+        static_assert( screenFadeFrameCount != 0 );
+
+        // As we are doing fade-out we already have the full bright picture so we skip it and calculate the startAlpha.
+        const uint8_t startAlpha = fullBrightAlpha - screenFadeStep;
+
+        if ( halfFade ) {
+            fadeDisplay( startAlpha, ( fullBrightAlpha - fullDarkAlpha ) / 2, roi, screenFadeTimeMs / 2, screenFadeFrameCount / 2 );
+        }
+        else {
+            fadeDisplay( startAlpha, fullDarkAlpha, roi, screenFadeTimeMs, screenFadeFrameCount );
+        }
+    }
+
+    void fadeInDisplay()
+    {
+        const Display & display = Display::instance();
+
+        fadeInDisplay( { 0, 0, display.width(), display.height() }, false );
+    }
+
+    void fadeInDisplay( const Rect & roi, const bool halfFade )
+    {
+        static_assert( screenFadeFrameCount != 0 );
+
+        // As we are doing fade-in we already have the full dark picture from the previous fade-out so we skip it and calculate the startAlpha.
+        const uint8_t startAlpha = fullDarkAlpha + screenFadeStep;
+
+        if ( halfFade ) {
+            // We add an extra frame to have a smoother fade effect taking into account that the last frame is fully bright to render the image.
+            fadeDisplay( ( fullBrightAlpha - startAlpha ) / 2, fullBrightAlpha, roi, screenFadeTimeMs * 3 / 4, screenFadeFrameCount / 2 + 1 );
+        }
+        else {
+            fadeDisplay( startAlpha, fullBrightAlpha, roi, screenFadeTimeMs, screenFadeFrameCount );
+        }
+    }
+
+    void FadeDisplayWithPalette( const Image & top, const Point & pos, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount )
     {
         Display & display = Display::instance();
+        const int32_t stepDelay = fadeTimeMs / frameCount;
 
         Image shadow = top;
-        uint8_t alpha = 255;
-        const uint8_t step = 10;
-        const uint8_t min = step + 5;
-        const int stepDelay = ( delayMs * step ) / ( alpha - min );
-
         const fheroes2::Rect roi{ pos.x, pos.y, shadow.width(), shadow.height() };
 
-        while ( alpha > min + endAlpha ) {
-            ApplyAlpha( top, shadow, alpha );
-            Copy( shadow, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
+        LocalEvent & le = LocalEvent::Get();
+        int32_t frameNumber = 0;
 
-            display.render( roi );
+        Game::passCustomAnimationDelay( stepDelay );
+        while ( le.HandleEvents( Game::isCustomDelayNeeded( stepDelay ) ) ) {
+            if ( Game::validateCustomAnimationDelay( stepDelay ) ) {
+                if ( frameNumber == frameCount ) {
+                    break;
+                }
 
-            alpha -= step;
-            // TODO: we should deduct from sleeping delay the time we spent for preparing and rendering the frame.
-            delayforMs( stepDelay );
+                ApplyPalette( shadow, paletteId );
+                Copy( shadow, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
+
+                display.render( roi );
+
+                ++frameNumber;
+            }
         }
     }
 
-    void FadeDisplayWithPalette( const Image & top, const Point & pos, uint8_t paletteId, int delayMs, int frameCount )
+    void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount )
     {
         Display & display = Display::instance();
-        const int stepDelay = delayMs / frameCount;
+        const int32_t stepDelay = fadeTimeMs / frameCount;
 
-        Image shadow = top;
-        const fheroes2::Rect roi{ pos.x, pos.y, shadow.width(), shadow.height() };
+        LocalEvent & le = LocalEvent::Get();
+        int32_t frameNumber = 0;
 
-        for ( int i = 0; i < frameCount; ++i ) {
-            ApplyPalette( shadow, paletteId );
-            Copy( shadow, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
+        Game::passCustomAnimationDelay( stepDelay );
+        while ( le.HandleEvents( Game::isCustomDelayNeeded( stepDelay ) ) ) {
+            if ( Game::validateCustomAnimationDelay( stepDelay ) ) {
+                if ( frameNumber == frameCount ) {
+                    break;
+                }
 
-            display.render( roi );
-            // TODO: we should deduct from sleeping delay the time we spent for preparing and rendering the frame.
-            delayforMs( stepDelay );
+                InvertedShadow( image, roi, excludedRoi, paletteId, 1 );
+
+                display.render( roi );
+
+                ++frameNumber;
+            }
         }
     }
 
-    void FadeDisplay( int delayMs )
-    {
-        Display & display = Display::instance();
-        Image temp;
-        Copy( display, temp );
-
-        FadeDisplay( temp, { 0, 0 }, 5, delayMs );
-
-        Copy( temp, display ); // restore the original image
-    }
-
-    void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, uint8_t paletteId, int delayMs, int frameCount )
-    {
-        Display & display = Display::instance();
-        const int stepDelay = delayMs / frameCount;
-
-        for ( int i = 0; i < frameCount; ++i ) {
-            InvertedShadow( image, roi, excludedRoi, paletteId, 1 );
-
-            display.render( roi );
-            // TODO: we should deduct from sleeping delay the time we spent for preparing and rendering the frame.
-            delayforMs( stepDelay );
-        }
-    }
-
-    void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int paletteCount )
+    void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t paletteCount )
     {
         // Identify 4 areas around excluded ROI to be used for palette application.
         const Rect topRoi( roi.x, roi.y, roi.width, excludedRoi.y - roi.y );

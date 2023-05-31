@@ -141,6 +141,7 @@ namespace AI
     bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator );
     uint32_t GetResourceMultiplier( uint32_t min, uint32_t max );
     void OptimizeTroopsOrder( Army & hero );
+    bool CanPurchaseHero( const Kingdom & kingdom );
 
     StreamBase & operator<<( StreamBase &, const AI::Base & );
     StreamBase & operator>>( StreamBase &, AI::Base & );

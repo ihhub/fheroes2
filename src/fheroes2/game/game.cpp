@@ -62,6 +62,7 @@ namespace
     std::vector<Player> savedPlayers;
 
     bool updateSoundsOnFocusUpdate = true;
+    bool needFadeIn{ true };
 
     uint32_t maps_animation_frame = 0;
 }
@@ -145,6 +146,9 @@ fheroes2::GameMode Game::Credits()
 {
     ShowCredits();
 
+    // After showing the credits fade-in the main menu.
+    needFadeIn = true;
+
     return fheroes2::GameMode::MAIN_MENU;
 }
 
@@ -156,6 +160,21 @@ bool Game::UpdateSoundsOnFocusUpdate()
 void Game::SetUpdateSoundsOnFocusUpdate( const bool update )
 {
     updateSoundsOnFocusUpdate = update;
+}
+
+bool Game::validateDisplayFadeIn()
+{
+    if ( needFadeIn ) {
+        needFadeIn = false;
+        return true;
+    }
+
+    return false;
+}
+
+void Game::setDisplayFadeIn()
+{
+    needFadeIn = true;
 }
 
 void Game::Init()
@@ -381,7 +400,7 @@ uint32_t Game::GetRating()
     return rating;
 }
 
-uint32_t Game::GetGameOverScores()
+uint32_t Game::getGameOverScoreFactor()
 {
     const Settings & conf = Settings::Get();
 
@@ -424,7 +443,7 @@ uint32_t Game::GetGameOverScores()
         daysScore = 180;
     }
 
-    return GetRating() * ( 200 - daysScore ) / 100;
+    return ( 200 - daysScore );
 }
 
 uint32_t Game::GetLostTownDays()

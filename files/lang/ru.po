@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-13 05:15+0000\n"
-"PO-Revision-Date: 2023-04-09 11:50+0300\n"
+"POT-Creation-Date: 2023-05-30 00:59+0000\n"
+"PO-Revision-Date: 2023-05-06 15:07+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3\n"
 
 msgid ""
 "BATTLE\n"
@@ -91,12 +91,14 @@ msgid "RESTART"
 msgstr "СНАЧАЛА"
 
 msgid "HEROES"
-msgstr ""
+msgstr "ГЕРОИ"
 
 msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
+"ГОРОДА/\n"
+"ЗАМКИ"
 
 msgid "S"
 msgstr "М"
@@ -114,7 +116,7 @@ msgid "ALL"
 msgstr "ВСЕ"
 
 msgid "SELECT"
-msgstr ""
+msgstr "ВЫБОР"
 
 msgid ""
 "STANDARD\n"
@@ -2343,7 +2345,7 @@ msgstr ""
 "заклинание для каждого уровня."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr "Фруктовый сад увеличивает прирост Хоббитов на %{count} в неделю."
+msgstr "Фруктовый сад увеличивает прирост Полуросликов на %{count} в неделю."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
 msgstr "Буря добавляет 2 очка к силе магии заклинателя, обороняющего замок."
@@ -2681,6 +2683,19 @@ msgstr ""
 
 msgid "Are you sure you want to dismiss this army?"
 msgstr "Вы уверены, что хотите распустить этот отряд?"
+
+msgid "Upgrade"
+msgstr ""
+
+#, fuzzy
+msgid "Upgrade your troops."
+msgstr "Вы не можете позволить себе улучшения для Вашей армии!"
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
 
 msgid "Followers"
 msgstr "Последователи"
@@ -3491,6 +3506,50 @@ msgstr "Характер:"
 msgid "Best Monster:"
 msgstr "Лучший отряд:"
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Вернуться в главное меню."
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Нью-Давн"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Загрузка игры"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr "Вернуться в главное меню."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Случайно"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Вернуться в главное меню."
+
+msgid "No maps available!"
+msgstr "Нет доступных карт!"
+
 msgid "difficulty|Easy"
 msgstr "Простая"
 
@@ -3508,6 +3567,12 @@ msgstr "Невозможная"
 
 msgid "and more..."
 msgstr "и т.д."
+
+msgid "Easy"
+msgstr "Лёгкая"
+
+msgid "Hard"
+msgstr "Тяжёлая"
 
 msgid "Campaign Difficulty"
 msgstr "Сложность кампании"
@@ -3532,11 +3597,34 @@ msgstr ""
 "Выберите данный уровень сложности, если хотите серьёзных сражений. ИИ "
 "сильнее, чем обычно."
 
-msgid "Easy"
-msgstr "Лёгкая"
+msgid ""
+"Congratulations!\n"
+"\n"
+"Days: %{days}\n"
+msgstr ""
+"Поздравляем!\n"
+"\n"
+"Дней: %{days}\n"
 
-msgid "Hard"
-msgstr "Тяжёлая"
+msgid ""
+"\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+"\n"
+"Сложность: %{difficulty}\n"
+"\n"
+
+msgid ""
+"Score: %{score}\n"
+"\n"
+"Rating:\n"
+"%{rating}"
+msgstr ""
+"Очки: %{score}\n"
+"\n"
+"Рейтинг:\n"
+"%{rating}"
 
 msgid "Start the selected scenario."
 msgstr "Начать выбранный сценарий."
@@ -3731,11 +3819,11 @@ msgstr "Разработка карт"
 msgid "Package Design"
 msgstr "Дизайн упаковки"
 
-msgid "Unknown Hero"
-msgstr "Неизвестный герой"
-
 msgid "Your Name"
 msgstr "Ваше имя"
+
+msgid "Unknown Hero"
+msgstr "Неизвестный герой"
 
 msgid "Standard"
 msgstr "Обычная игра"
@@ -3829,6 +3917,26 @@ msgstr "выбрать кампанию: войны за престол"
 
 msgid "hotkey|choose the expansion campaign"
 msgstr "выбрать кампании дополнения цена верности"
+
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "кампания"
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "новая игра"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "загрузить игру"
+
+#, fuzzy
+msgid "hotkey|new map from scratch"
+msgstr "отступление из битвы"
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "новая игра"
 
 msgid "hotkey|roland campaign"
 msgstr "кампания за роланда"
@@ -4085,9 +4193,6 @@ msgid ""
 "switching into the 'Hot Seat' when it is their turn."
 msgstr "Позволяет нескольким игрокам играть за одним компьютером."
 
-msgid "Cancel back to the main menu."
-msgstr "Вернуться в главное меню."
-
 msgid "A single player game playing out a single map."
 msgstr "Одиночная игра на одиночной карте."
 
@@ -4183,6 +4288,9 @@ msgstr "Новая кампания"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr "Одна из четырёх новых кампаний из набора дополнений \"Цена верности\"."
+
+msgid "Loading video. Please wait..."
+msgstr ""
 
 msgid "Host"
 msgstr "Хост"
@@ -4320,6 +4428,18 @@ msgstr ""
 "Вы не справились с заданием за отведённое время.\n"
 "Всё кончено."
 
+msgid "Defeat!"
+msgstr "Поражение!"
+
+msgid ""
+"Base score: %{score}\n"
+"Difficulty: %{difficulty}\n"
+"\n"
+msgstr ""
+"Базовые очки: %{score}\n"
+"Сложность: %{difficulty}\n"
+"\n"
+
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
 "Победите всех вражеских героев и захватите все вражеские города и замки."
@@ -4392,6 +4512,9 @@ msgstr ""
 msgid "%{color} player has been vanquished!"
 msgstr "%{color} игрок побеждён!"
 
+msgid "Major Event!"
+msgstr "Важное событие!"
+
 msgid "Scenario:"
 msgstr "Сценарий:"
 
@@ -4441,9 +4564,6 @@ msgstr "Подтверждает заданные установки и начи
 msgid "Click to return to the main menu."
 msgstr "Нажмите для возврата в главное меню."
 
-msgid "No maps available!"
-msgstr "Нет доступных карт!"
-
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Астрологи объявили Месяц %{name}."
 
@@ -4477,7 +4597,10 @@ msgid " All dwellings increase population."
 msgstr " Население всех жилищ возросло."
 
 msgid "New Week!"
-msgstr ""
+msgstr "Новая неделя!"
+
+msgid "Beware!"
+msgstr "Внимание!"
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
@@ -4516,6 +4639,66 @@ msgid ""
 msgstr ""
 "%{color} игрок, Ваши герои отвернулись от Вас, а Вы изгоняетесь из этих "
 "земель."
+
+msgid "Lord Kilburn"
+msgstr "Лорд Килбурн"
+
+msgid "Tsabu"
+msgstr "Тсабу"
+
+msgid "Sir Galant"
+msgstr "Сэр Галант"
+
+msgid "Thundax"
+msgstr "Тандакс"
+
+msgid "Lord Haart"
+msgstr "Лорд Хаарт"
+
+msgid "Ariel"
+msgstr "Ариэль"
+
+msgid "Rebecca"
+msgstr "Ребекка"
+
+msgid "Sandro"
+msgstr "Сандро"
+
+msgid "Crodo"
+msgstr "Кродо"
+
+msgid "Barock"
+msgstr "Барок"
+
+msgid "Antoine"
+msgstr "Антуан"
+
+msgid "Astra"
+msgstr "Астра"
+
+msgid "Agar"
+msgstr "Агар"
+
+msgid "Vatawna"
+msgstr "Ватавна"
+
+msgid "Vesper"
+msgstr "Веспер"
+
+msgid "Ambrose"
+msgstr "Амброс"
+
+msgid "Troyan"
+msgstr "Троян"
+
+msgid "Jojosh"
+msgstr "Йойош"
+
+msgid "Wrathmont"
+msgstr "Ратмонт"
+
+msgid "Maximus"
+msgstr "Максимус"
 
 msgid "Next Hero"
 msgstr "Следующий герой"
@@ -4725,9 +4908,6 @@ msgstr "123"
 msgid "Keyboard|SPACE"
 msgstr "ПРОБЕЛ"
 
-msgid "Keyboard|LANG"
-msgstr "ЯЗЫК"
-
 msgid "Keyboard|ABC"
 msgstr "АБВ"
 
@@ -4820,23 +5000,14 @@ msgstr "Эктор"
 msgid "Gwenneth"
 msgstr "Гвинет"
 
-msgid "Lord Kilburn"
-msgstr "Лорд Килбурн"
-
 msgid "Sir Gallant"
 msgstr "Сэр Галант"
 
 msgid "Tyro"
 msgstr "Тиро"
 
-msgid "Ambrose"
-msgstr "Амброс"
-
 msgid "Dimitry"
 msgstr "Димитрий"
-
-msgid "Maximus"
-msgstr "Максимус"
 
 msgid "Ruby"
 msgstr "Руби"
@@ -4850,12 +5021,6 @@ msgstr "Финеус"
 msgid "Jezebel"
 msgstr "Изабэль"
 
-msgid "Jojosh"
-msgstr "Йойош"
-
-msgid "Thundax"
-msgstr "Тандакс"
-
 msgid "Atlas"
 msgstr "Атлас"
 
@@ -4865,29 +5030,11 @@ msgstr "Эргон"
 msgid "Jaclyn"
 msgstr "Жаклин"
 
-msgid "Tsabu"
-msgstr "Тсабу"
-
-msgid "Astra"
-msgstr "Астра"
-
 msgid "Gem"
 msgstr "Джэм"
 
 msgid "Natasha"
 msgstr "Наташа"
-
-msgid "Rebecca"
-msgstr "Ребекка"
-
-msgid "Troyan"
-msgstr "Троян"
-
-msgid "Vatawna"
-msgstr "Ватавна"
-
-msgid "Ariel"
-msgstr "Ариэль"
 
 msgid "Carlawn"
 msgstr "Карлан"
@@ -4901,23 +5048,11 @@ msgstr "Эйри"
 msgid "Barok"
 msgstr "Барок"
 
-msgid "Crodo"
-msgstr "Кродо"
-
 msgid "Kastore"
 msgstr "Кастор"
 
-msgid "Vesper"
-msgstr "Веспер"
-
-msgid "Agar"
-msgstr "Агар"
-
 msgid "Falagar"
 msgstr "Фалагар"
-
-msgid "Wrathmont"
-msgstr "Ратмонт"
 
 msgid "Dawn"
 msgstr "Дан"
@@ -4966,9 +5101,6 @@ msgstr "Целия"
 
 msgid "Roxana"
 msgstr "Роксана"
-
-msgid "Sandro"
-msgstr "Сандро"
 
 msgid "Lord Corlagon"
 msgstr "Лорд Корлагон"
@@ -6388,9 +6520,17 @@ msgid "Spell book is not present."
 msgstr "Книги заклинаний нет."
 
 msgid ""
+"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
+msgstr ""
+"Заклинание требует %{mana} очков магии. У Вас нет очков магии, поэтому Вы не "
+"можете произнести заклинание."
+
+msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
-msgstr "Заклинание требует %{mana} очков магии. У Вас только %{point}."
+msgstr ""
+"Заклинание требует %{mana} очков магии. У Вас только %{point}, поэтому Вы не "
+"можете произнести заклинание."
 
 msgid "The spell was not found."
 msgstr "Заклинание не найдено."
@@ -6426,6 +6566,39 @@ msgstr ""
 "Ближайший к Вам город: %{town}.\n"
 "\n"
 "В этом городе уже есть Ваш герой: %{hero}."
+
+msgid "This spell is already in use."
+msgstr "Это заклинание уже используется."
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+"Вы должны находиться не более %{count} ходов от армии монстров для магии "
+"Видение."
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr "Вы должны стать поближе к руднику, для использования этой магии."
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
+msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race} %{name} (уровень %{level})"
@@ -6514,18 +6687,11 @@ msgstr "Выберите, куда перенестись."
 msgid "%{spell} failed!!!"
 msgstr "Неудачный вызов %{spell}!"
 
-msgid "This spell is already in use."
-msgstr "Это заклинание уже используется."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Все вражеские Герои опознаны."
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
-msgstr ""
-"Вы должны находиться не более %{count} ходов от армии монстров для магии "
-"Видение."
+msgid "Identify Hero"
+msgstr "Опознать героя"
 
 msgid "The creatures are willing to join us!"
 msgstr "Эта армия монстров будет присоединяться!"
@@ -6551,11 +6717,6 @@ msgstr "Эта трусливая армия убежит от Вас..."
 
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Скорее всего, эта армия монстров будет сражаться."
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
-msgstr "Вы должны стать поближе к руднику, для использования этой магии."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr "Навык Атаки даёт бонус к навыку атаки каждого существа в армии героя."
@@ -7507,7 +7668,7 @@ msgid "Hill Fort"
 msgstr "Форт на холме"
 
 msgid "Halfling Hole"
-msgstr "Нора"
+msgstr "Нора полуросликов"
 
 msgid "Mercenary Camp"
 msgstr "Лагерь наёмников"
@@ -7894,10 +8055,10 @@ msgid "Black Dragons"
 msgstr "Чёрные драконы"
 
 msgid "Halfling"
-msgstr "Хоббит"
+msgstr "Полурослик"
 
 msgid "Halflings"
-msgstr "Хоббиты"
+msgstr "Полурослики"
 
 msgid "Boar"
 msgstr "Боров"
@@ -8222,6 +8383,9 @@ msgstr "Невозможно переместить книгу заклинан�
 
 msgid "This item can't be traded."
 msgstr "Эту вещь нельзя продать."
+
+msgid "Invalid Artifact"
+msgstr "Некорректный артефакт"
 
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} увеличивает Знания на %{count}."
@@ -9619,9 +9783,6 @@ msgstr ""
 "что это зачарованная лопата гробокопателей, считавшаяся давным-давно "
 "потерянной смертными."
 
-msgid "Invalid Artifact"
-msgstr "Некорректный артефакт"
-
 msgid "Wood"
 msgstr "Древесина"
 
@@ -10055,9 +10216,6 @@ msgstr "Показать всё"
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr "Позволяет получить подробную информацию о героях противника."
 
-msgid "Identify Hero"
-msgstr "Опознать героя"
-
 msgid "Summon Boat"
 msgstr "Призвать корабль"
 
@@ -10263,19 +10421,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} increases your morale."
-#~ msgstr "%{name} увеличивает Вашу мораль."
-
-#~ msgid "Attention"
-#~ msgstr "Внимание"
-
-#~ msgid ""
-#~ "Your version of Heroes of Might and Magic II does not support any other "
-#~ "languages than English."
-#~ msgstr ""
-#~ "Ваша версия Heroes of Might and Magic II не поддерживает никакие языки, "
-#~ "кроме английского."
-
-#~ msgid "Location: "
-#~ msgstr "Путь к файлу: "

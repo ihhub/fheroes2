@@ -297,12 +297,8 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                             curspell = *spell;
                             break;
                         }
-                        else {
-                            StringReplace( str, "%{mana}", ( *spell ).spellPoints( &hero ) );
-                            StringReplace( str, "%{point}", hero.GetSpellPoints() );
-                            Dialog::Message( spell->GetName(), str, Font::BIG, Dialog::OK );
-                            display.render();
-                        }
+                        Dialog::Message( spell->GetName(), str, Font::BIG, Dialog::OK );
+                        display.render();
                     }
                     else {
                         fheroes2::SpellDialogElement( *spell, &hero ).showPopup( Dialog::OK );

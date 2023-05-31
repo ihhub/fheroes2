@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "audio_manager.h"
+
 #include <algorithm>
 #include <array>
 #include <atomic>
@@ -33,7 +35,6 @@
 #include <utility>
 
 #include "agg_file.h"
-#include "audio_manager.h"
 #include "dir.h"
 #include "logging.h"
 #include "m82.h"
@@ -60,75 +61,113 @@ namespace
         std::array<std::string, 3> extension{ ".ogg", ".mp3", ".flac" };
     };
 
-    const std::string externalMusicDirectory( "music" );
-
-    std::vector<std::string> getMusicDirectories()
-    {
-        std::vector<std::string> directories;
-        for ( const std::string & dir : Settings::GetRootDirs() ) {
-            std::string fullDirectoryPath = System::concatPath( dir, externalMusicDirectory );
-            if ( System::IsDirectory( fullDirectoryPath ) ) {
-                directories.emplace_back( std::move( fullDirectoryPath ) );
-            }
-        }
-
-        return directories;
-    }
-
     bool findMusicFile( const std::vector<std::string> & directories, const std::string & fileName, std::string & fullPath )
     {
         for ( const std::string & dir : directories ) {
             ListFiles musicFilePaths;
+
             musicFilePaths.ReadDir( dir, fileName, false );
             if ( musicFilePaths.empty() ) {
                 continue;
             }
 
-            std::string correctFilePath = System::concatPath( dir, fileName );
-            correctFilePath = StringLower( correctFilePath );
+            const std::string correctFilePath = StringLower( System::concatPath( dir, fileName ) );
 
             for ( std::string & path : musicFilePaths ) {
-                const std::string temp = StringLower( path );
-                if ( temp == correctFilePath ) {
-                    // Avoid string copy.
-                    std::swap( fullPath, path );
-                    return true;
+                if ( StringLower( path ) != correctFilePath ) {
+                    continue;
                 }
+
+                // Avoid string copy.
+                std::swap( fullPath, path );
+
+                return true;
             }
         }
 
         return false;
     }
 
-    std::string getExternalMusicFile( const int musicTrackId, const std::vector<std::string> & directories, MusicFileType & musicType )
+    std::string getExternalMusicFile( const int musicTrackId )
     {
-        if ( directories.empty() ) {
+        static const std::vector<std::string> musicDirectories = []() {
+            std::vector<std::string> result;
+
+            for ( const std::string & dir : Settings::GetRootDirs() ) {
+                std::string fullDirectoryPath = System::concatPath( dir, "music" );
+
+                if ( System::IsDirectory( fullDirectoryPath ) ) {
+                    result.emplace_back( std::move( fullDirectoryPath ) );
+                }
+            }
+
+            return result;
+        }();
+
+        if ( musicDirectories.empty() ) {
             // Nothing to search.
             return {};
         }
 
-        std::string fullPath;
+        thread_local std::map<int, std::string> musicTrackIdToFilePath;
 
-        std::string fileName = MUS::getFileName( musicTrackId, musicType.type, musicType.extension[0].c_str() );
-        if ( findMusicFile( directories, fileName, fullPath ) ) {
-            return fullPath;
+        const auto iter = musicTrackIdToFilePath.find( musicTrackId );
+        if ( iter != musicTrackIdToFilePath.end() ) {
+            return iter->second;
         }
 
-        fheroes2::replaceStringEnding( fileName, musicType.extension[0].c_str(), musicType.extension[1].c_str() );
-        if ( findMusicFile( directories, fileName, fullPath ) ) {
-            // Swap extensions to improve cache hit.
-            std::swap( musicType.extension[0], musicType.extension[1] );
-            return fullPath;
+        auto tryMusicFileType = [musicTrackId]( MusicFileType & musicFileType ) -> std::string {
+            std::string fullPath;
+
+            std::string fileName = MUS::getFileName( musicTrackId, musicFileType.type, musicFileType.extension[0].c_str() );
+            if ( findMusicFile( musicDirectories, fileName, fullPath ) ) {
+                return fullPath;
+            }
+
+            fheroes2::replaceStringEnding( fileName, musicFileType.extension[0].c_str(), musicFileType.extension[1].c_str() );
+            if ( findMusicFile( musicDirectories, fileName, fullPath ) ) {
+                // Swap extensions to improve cache hit.
+                std::swap( musicFileType.extension[0], musicFileType.extension[1] );
+                return fullPath;
+            }
+
+            fheroes2::replaceStringEnding( fileName, musicFileType.extension[1].c_str(), musicFileType.extension[2].c_str() );
+            if ( findMusicFile( musicDirectories, fileName, fullPath ) ) {
+                // Swap extensions to improve cache hit.
+                std::swap( musicFileType.extension[0], musicFileType.extension[2] );
+                return fullPath;
+            }
+
+            // Looks like music file does not exist.
+            return {};
+        };
+
+        // To avoid extra I/O calls to data storage it might be useful to remember the last successful type of music and try to search for it next time.
+        thread_local std::array<MusicFileType, 3> musicFileTypes{ MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::DOS_VERSION ),
+                                                                  MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::WIN_VERSION ),
+                                                                  MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::MAPPED ) };
+
+        for ( size_t i = 0; i < musicFileTypes.size(); ++i ) {
+            std::string filePath = tryMusicFileType( musicFileTypes[i] );
+
+            if ( filePath.empty() ) {
+                continue;
+            }
+
+            if ( i > 0 ) {
+                // Swap music types to improve cache hit.
+                std::swap( musicFileTypes[0], musicFileTypes[i] );
+            }
+
+            // Place the path to the cache
+            musicTrackIdToFilePath.try_emplace( musicTrackId, filePath );
+
+            return filePath;
         }
 
-        fheroes2::replaceStringEnding( fileName, musicType.extension[1].c_str(), musicType.extension[2].c_str() );
-        if ( findMusicFile( directories, fileName, fullPath ) ) {
-            // Swap extensions to improve cache hit.
-            std::swap( musicType.extension[0], musicType.extension[2] );
-            return fullPath;
-        }
+        // Place the negative result to the cache
+        musicTrackIdToFilePath.try_emplace( musicTrackId, std::string{} );
 
-        // Looks like music file does not exist.
         return {};
     }
 
@@ -211,7 +250,8 @@ namespace
         return v;
     }
 
-    void PlaySoundImp( const int m82, const int soundVolume );
+    // Returns sound Channel ID, when error - returns `-1`.
+    int PlaySoundImp( const int m82, const int soundVolume );
     void PlayMusicImp( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode );
     void playLoopSoundsImp( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume, const bool is3DAudioEnabled );
 
@@ -470,7 +510,7 @@ namespace
 
     AsyncSoundManager g_asyncSoundManager;
 
-    void PlaySoundImp( const int m82, const int soundVolume )
+    int PlaySoundImp( const int m82, const int soundVolume )
     {
         std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
@@ -478,18 +518,20 @@ namespace
 
         const std::vector<uint8_t> & v = GetWAV( m82 );
         if ( v.empty() ) {
-            return;
+            return -1;
         }
 
         const int channelId = Mixer::Play( &v[0], static_cast<uint32_t>( v.size() ), -1, false );
         if ( channelId < 0 ) {
             // Failed to get a free channel.
-            return;
+            return -1;
         }
 
         Mixer::Pause( channelId );
         Mixer::setVolume( channelId, 100 * soundVolume / 10 );
         Mixer::Resume( channelId );
+
+        return channelId;
     }
 
     uint64_t getMusicUID( const int trackId, const MusicSource musicType )
@@ -523,31 +565,13 @@ namespace
         }
 
         if ( musicType == MUSIC_EXTERNAL ) {
-            const std::vector<std::string> & musicDirectories = getMusicDirectories();
+            const std::string filePath = getExternalMusicFile( trackId );
 
-            // To avoid extra I/O calls to data storage it might be useful to remember the last successful type of music and try to search for it next time.
-            static std::array<MusicFileType, 3> musicFileTypes{ MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::DOS_VERSION ),
-                                                                MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::WIN_VERSION ),
-                                                                MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::MAPPED ) };
-
-            std::string filename;
-
-            for ( size_t i = 0; i < musicFileTypes.size(); ++i ) {
-                filename = getExternalMusicFile( trackId, musicDirectories, musicFileTypes[i] );
-                if ( !filename.empty() ) {
-                    if ( i > 0 ) {
-                        // Swap music types to improve cache hit.
-                        std::swap( musicFileTypes[0], musicFileTypes[i] );
-                    }
-                    break;
-                }
-            }
-
-            if ( filename.empty() ) {
+            if ( filePath.empty() ) {
                 DEBUG_LOG( DBG_GAME, DBG_WARN, "Cannot find a file for " << trackId << " track." )
             }
             else {
-                Music::Play( musicUID, filename, playbackMode );
+                Music::Play( musicUID, filePath, playbackMode );
 
                 currentMusicTrackId = trackId;
 
@@ -854,19 +878,19 @@ namespace AudioManager
         g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
     }
 
-    void PlaySound( const int m82 )
+    int PlaySound( const int m82 )
     {
         if ( m82 == M82::UNKNOWN ) {
-            return;
+            return -1;
         }
 
         if ( !Audio::isValid() ) {
-            return;
+            return -1;
         }
 
         g_asyncSoundManager.removeSoundTasks();
 
-        PlaySoundImp( m82, Settings::Get().SoundVolume() );
+        return PlaySoundImp( m82, Settings::Get().SoundVolume() );
     }
 
     void PlaySoundAsync( const int m82 )
@@ -880,6 +904,11 @@ namespace AudioManager
         }
 
         g_asyncSoundManager.pushSound( m82, Settings::Get().SoundVolume() );
+    }
+
+    bool isExternalMusicFileAvailable( const int trackId )
+    {
+        return !getExternalMusicFile( trackId ).empty();
     }
 
     void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode )

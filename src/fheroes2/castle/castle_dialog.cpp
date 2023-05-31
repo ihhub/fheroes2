@@ -24,6 +24,7 @@
 #include <cassert>
 #include <cstdint>
 #include <functional>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -42,6 +43,7 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "icn.h"
@@ -53,7 +55,6 @@
 #include "monster.h"
 #include "mus.h"
 #include "screen.h"
-#include "settings.h"
 #include "statusbar.h"
 #include "text.h"
 #include "tools.h"
@@ -214,16 +215,35 @@ namespace
     }
 }
 
-Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionWindow )
+Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionWindow, const bool fade, const bool renderBackgroundDialog )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    // Fade screen.
-    if ( Settings::isFadeEffectEnabled() )
-        fheroes2::FadeDisplay();
+    fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
+    fheroes2::Rect fadeRoi;
+    fheroes2::Rect dialodWithShadowRoi;
+    std::unique_ptr<fheroes2::StandardWindow> background;
+    std::unique_ptr<fheroes2::ImageRestorer> restorer;
+
+    if ( renderBackgroundDialog ) {
+        background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
+        fadeRoi = background->activeArea();
+        dialodWithShadowRoi = background->totalArea();
+    }
+    else {
+        fadeRoi = { ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2,
+                    fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT };
+        dialodWithShadowRoi = { fadeRoi.x - 2 * BORDERWIDTH, fadeRoi.y - BORDERWIDTH, fadeRoi.width + 3 * BORDERWIDTH, fadeRoi.height + 3 * BORDERWIDTH };
+        restorer = std::make_unique<fheroes2::ImageRestorer>( display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height );
+    }
+
+    // Fade-out game screen only for 640x480 resolution and if 'renderBackgroundDialog' is false (we are replacing image in already opened dialog).
+    const bool isDefaultScreenSize = display.isDefaultSize();
+    if ( fade && ( isDefaultScreenSize || !renderBackgroundDialog ) ) {
+        fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
+    }
 
     AudioManager::PlayMusicAsync( MUS::FromRace( race ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
@@ -260,7 +280,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         }
     }
 
-    const fheroes2::Point cur_pt( background.activeArea().x, background.activeArea().y );
+    const fheroes2::Point cur_pt( fadeRoi.x, fadeRoi.y );
     const std::string currentDate = getDateString();
 
     // button prev castle
@@ -272,7 +292,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     // bottom small bar
     const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
-    fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( bar, display, cur_pt.x + buttonPrevCastle.area().width, cur_pt.y + statusBarOffsetY );
 
     StatusBar statusBar;
@@ -338,8 +357,23 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     buttonNextCastle.draw();
     buttonExit.draw();
 
+    // Fade-in castle dialog.
+    if ( fade ) {
+        if ( renderBackgroundDialog && !isDefaultScreenSize ) {
+            // We need to expand the ROI for the next render to properly render window borders and shadow.
+            display.updateNextRenderRoi( dialodWithShadowRoi );
+        }
+
+        // Use half fade if game resolution is not 640x480.
+        fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
+    }
+    else {
+        display.render();
+    }
+
     CastleDialogReturnValue result = CastleDialogReturnValue::DoNothing;
     bool need_redraw = false;
+    bool needFadeIn = false;
 
     // dialog menu loop
     Game::passAnimationDelay( Game::CASTLE_AROUND_DELAY );
@@ -363,6 +397,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             // Check buttons for closing this castle's window.
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 result = CastleDialogReturnValue::Close;
+
+                // Fade-out castle dialog.
+                fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
                 break;
             }
             if ( buttonPrevCastle.isEnabled()
@@ -441,6 +478,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             if ( hero && le.MouseClickLeft( rectSign2 ) ) {
                 // View hero.
                 openHeroDialog( topArmyBar, bottomArmyBar, *hero );
+
+                needFadeIn = true;
                 need_redraw = true;
             }
 
@@ -636,7 +675,14 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 buttonExit.draw();
             }
 
-            display.render();
+            if ( needFadeIn ) {
+                needFadeIn = false;
+
+                fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
+            }
+            else {
+                display.render();
+            }
         }
 
         // Update status bar. It doesn't depend on animation status.

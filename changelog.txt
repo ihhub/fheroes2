@@ -1,3 +1,57 @@
+version 1.0.4 (13 May 2023)
+- add Polish and Russian languages support for Virtual Keyboard
+- fix absence of delay after animating creature wince and before making next move
+- make haunt, set elemental guardian, identify hero and visions spells gray out when cannot be used
+- do not stop hero's movement after the first Dimension Door jump
+- do not show that enemy town or castle has no garrison if kingdom has no Thieves' Guilds
+- fix idle animation lag while casting any spell
+- fix creature idle animation freeze during Blind / Paralyze spell casting
+- fix an issue that caused an AI-controlled hero standing next to Stone Liths to block the path of another AI-controlled hero standing on these Stone Liths
+- add checks to detect corrupted data resources
+- improve the resource value estimation algorithm for AI
+- fix logic and reward of Daemon Cave object for AI
+- add an ability to cancel waiting for the end of the pre-battle sound
+- update Polish translation
+- create small and large obstacles on the battlefield at the same time
+- do not make an empty text line at the end of phrase and fix text rendering in a wider area than given maximum width
+- fix Battlefield animations freeze while waiting for Good Luck sound to end
+- add popup windows for monster dialog buttons
+- fill main menu with background when we do not stretch the main menu main image
+- update Russian translation
+- fix not returning to load menu while switching between campaign scenarios
+- fix Shipwreck Survivor bonuses
+- fix AI pathfinding when Spell Scroll was considered as an artifact which requires to defeat an army
+- rework logic for all Adventure Map objects' metadata
+- fix adventure map fog reveal on campaign scenario restart and when loading a Hot Seat save made in the first game day
+- adjust spell info message when hero has zero (0) mana
+- fix calculation of castle towers strength for AI
+- improve dialog titles related to losing the game
+- update Bulgarian translation
+- strategic AI economy update
+- AI should check for castles and funds before retreat
+- fix software cursor freezes during certain fading animations
+- rework the search algorithm for available scaled resolutions
+- show map ratings in victory video, add subtitles and color fading animation
+- add extra checks to prevent loading renamed MX2 maps on demo version
+- add "End Turn" title to dialog when heroes can move and you are ending your turn
+- catapult and castle towers should still act, even if there are no troops in the respective armies capable of taking any action
+- update Vietnamese translation
+- fix the behavior of Berserk and Hypnotize spells
+- add language support for highscores
+- expand wide screen support
+- properly handle absolute and relative paths in the CDDrive registry key for Windows scripts
+- update Danish translation
+- update Swedish translation
+- reset battlefield grid cursor position after using the spell book
+- fix a crash on deleting last save file
+- update Czech translation
+- update Slovak translation
+- update Ukrainian translation
+- fix recurring global events
+- redraw the status window after the amount of kingdom resources has changed at the beginning of the day
+- do not render hero/boat over the bottom map border
+- add "New week!" title to dialog showing start of a new week
+
 version 1.0.3 (11 April 2023)
 - update German translation
 - update Norwegian translation

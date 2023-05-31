@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "maps_fileinfo.h"
+
 #if defined( _WIN32 )
 #include <locale>
 #endif
@@ -35,15 +37,14 @@
 #include <type_traits>
 #include <utility>
 
-#include "artifact.h"
 #include "color.h"
 #include "difficulty.h"
 #include "dir.h"
 #include "game_io.h"
 #include "game_over.h"
 #include "logging.h"
-#include "maps_fileinfo.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "mp2_helper.h"
 #include "race.h"
@@ -333,7 +334,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
         Maps::Tiles tile;
         tile.Init( 0, mp2tile );
 
-        std::pair<int, int> colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
+        std::pair<int, int> colorRace = getColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
         if ( ( colorRace.first & colorsAvailableForHumans ) == 0 ) {
             const int side1 = colorRace.first | colorsAvailableForHumans;
             const int side2 = colorsAvailableForComp ^ colorRace.first;
@@ -459,15 +460,15 @@ uint32_t Maps::FileInfo::ConditionWins() const
     case VICTORY_DEFEAT_EVERYONE:
         return GameOver::WINS_ALL;
     case VICTORY_CAPTURE_TOWN:
-        return allowNormalVictory ? GameOver::WINS_TOWN | GameOver::WINS_ALL : GameOver::WINS_TOWN;
+        return allowNormalVictory ? ( GameOver::WINS_TOWN | GameOver::WINS_ALL ) : GameOver::WINS_TOWN;
     case VICTORY_KILL_HERO:
-        return allowNormalVictory ? GameOver::WINS_HERO | GameOver::WINS_ALL : GameOver::WINS_HERO;
+        return allowNormalVictory ? ( GameOver::WINS_HERO | GameOver::WINS_ALL ) : GameOver::WINS_HERO;
     case VICTORY_OBTAIN_ARTIFACT:
-        return allowNormalVictory ? GameOver::WINS_ARTIFACT | GameOver::WINS_ALL : GameOver::WINS_ARTIFACT;
+        return allowNormalVictory ? ( GameOver::WINS_ARTIFACT | GameOver::WINS_ALL ) : GameOver::WINS_ARTIFACT;
     case VICTORY_DEFEAT_OTHER_SIDE:
         return GameOver::WINS_SIDE;
     case VICTORY_COLLECT_ENOUGH_GOLD:
-        return allowNormalVictory ? GameOver::WINS_GOLD | GameOver::WINS_ALL : GameOver::WINS_GOLD;
+        return allowNormalVictory ? ( GameOver::WINS_GOLD | GameOver::WINS_ALL ) : GameOver::WINS_GOLD;
     default:
         // This is an unsupported winning condition! Please add the logic to handle it.
         assert( 0 );
@@ -504,7 +505,8 @@ bool Maps::FileInfo::WinsCompAlsoWins() const
 
 int Maps::FileInfo::WinsFindArtifactID() const
 {
-    return victoryConditionsParam1 ? victoryConditionsParam1 - 1 : Artifact::UNKNOWN;
+    // In the original game artifact IDs start from 0 but for the victory condition it starts from 1 which aligns with fheroes2 artifact enumeration.
+    return victoryConditionsParam1;
 }
 
 bool Maps::FileInfo::isAllowCountPlayers( int playerCount ) const
@@ -620,6 +622,41 @@ MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
                 fi.removeHumanColors( fi.AllowCompHumanColors() );
             }
         }
+
+        uniqueMaps[System::GetBasename( mapFile )] = fi;
+    }
+
+    MapsFileInfoList result;
+
+    result.reserve( uniqueMaps.size() );
+
+    for ( const auto & item : uniqueMaps ) {
+        result.push_back( item.second );
+    }
+
+    std::sort( result.begin(), result.end(), Maps::FileInfo::NameSorting );
+
+    return result;
+}
+
+MapsFileInfoList Maps::prepareResurrectionMapsFileInfoList()
+{
+    // TODO: set the proper resurrection map extension.
+    const ListFiles maps = Settings::FindFiles( "maps", ".mpr", false );
+
+    // Create a list of unique maps (based on the map file name).
+    std::map<std::string, Maps::FileInfo> uniqueMaps;
+
+    for ( const std::string & mapFile : maps ) {
+        Maps::FileInfo fi;
+
+        // These are test data values.
+        // TODO: make a function to read resurrection map info data and remove the test values.
+        fi.width = 36;
+        fi.height = 36;
+        fi.name = "Test name";
+        fi.description = "Resurrection map test description.\nThe Map Editor is currently in development.";
+        fi.difficulty = 3;
 
         uniqueMaps[System::GetBasename( mapFile )] = fi;
     }

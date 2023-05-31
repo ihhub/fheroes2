@@ -72,8 +72,9 @@ public:
     virtual uint32_t GetHitPointsLeft() const;
     virtual uint32_t GetSpeed() const;
     virtual uint32_t GetAffectedDuration( uint32_t ) const;
-    virtual double GetStrength() const;
-    virtual double GetStrengthWithBonus( int bonusAttack, int bonusDefense ) const;
+
+    double GetStrength() const;
+    double GetStrengthWithBonus( int bonusAttack, int bonusDefense ) const;
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const Troop & );

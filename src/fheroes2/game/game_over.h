@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -67,9 +67,18 @@ namespace GameOver
         static Result & Get();
 
         void Reset(); // Resets everything
-        void ResetResult(); // Resets just the result
 
-        uint32_t GetResult() const;
+        // Reset game result to COND_NONE.
+        void ResetResult()
+        {
+            result = GameOver::COND_NONE;
+        }
+
+        uint32_t GetResult() const
+        {
+            return result;
+        }
+
         fheroes2::GameMode LocalCheckGameOver();
 
     private:

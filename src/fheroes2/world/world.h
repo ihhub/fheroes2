@@ -29,6 +29,7 @@
 #include <list>
 #include <map>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include "army_troop.h"
@@ -351,14 +352,18 @@ public:
 
     bool isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const;
 
+    void setOldTileQuantityData( const int32_t tileIndex, const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata );
+
 private:
     World() = default;
 
     void Defaults();
     void Reset();
     void MonthOfMonstersAction( const Monster & );
-    void ProcessNewMap();
+    bool ProcessNewMap( const std::string & filename, const bool checkPoLObjects );
     void PostLoad( const bool setTilePassabilities );
+
+    bool updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects );
 
     bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
 
@@ -396,6 +401,8 @@ private:
 
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
+
+    std::vector<std::tuple<uint8_t, uint8_t, uint32_t>> _oldTileQuantityData;
 };
 
 StreamBase & operator<<( StreamBase &, const CapturedObject & );

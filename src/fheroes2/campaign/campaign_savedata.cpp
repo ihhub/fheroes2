@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "campaign_savedata.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -25,7 +27,6 @@
 
 #include "army.h"
 #include "campaign_data.h"
-#include "campaign_savedata.h"
 #include "serialize.h"
 
 namespace Campaign
@@ -44,6 +45,23 @@ namespace Campaign
     void CampaignSaveData::removeCampaignAward( const int awardID )
     {
         _obtainedCampaignAwards.erase( std::remove( _obtainedCampaignAwards.begin(), _obtainedCampaignAwards.end(), awardID ), _obtainedCampaignAwards.end() );
+    }
+
+    void CampaignSaveData::setEnemyDefeatedAward( const int heroId )
+    {
+        const ScenarioInfoId & currentScenarioInfo = getCurrentScenarioInfoId();
+        const std::vector<CampaignAwardData> obtainableAwards = CampaignAwardData::getCampaignAwardData( currentScenarioInfo );
+
+        for ( const auto & obtainableAward : obtainableAwards ) {
+            const int32_t awardType = obtainableAward._type;
+
+            if ( awardType == CampaignAwardData::AwardType::TYPE_DEFEAT_ENEMY_HERO ) {
+                if ( obtainableAward._subType == heroId ) {
+                    addCampaignAward( obtainableAward._id );
+                }
+                break;
+            }
+        }
     }
 
     void CampaignSaveData::setCurrentScenarioBonus( const ScenarioBonusData & bonus )
@@ -92,6 +110,23 @@ namespace Campaign
     {
         assert( !_finishedMaps.empty() );
         return _finishedMaps.back();
+    }
+
+    uint32_t CampaignSaveData::getCampaignDifficultyPercent() const
+    {
+        switch ( _difficulty ) {
+        case CampaignDifficulty::Easy:
+            return 125;
+        case CampaignDifficulty::Normal:
+            // Original campaign difficulty.
+            return 100;
+        case CampaignDifficulty::Hard:
+            return 75;
+        default:
+            // Did you add a new campaign difficulty? Add the logic above!
+            assert( 0 );
+            return 100;
+        }
     }
 
     std::vector<Campaign::CampaignAwardData> CampaignSaveData::getObtainedCampaignAwards() const

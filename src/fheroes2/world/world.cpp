@@ -48,6 +48,7 @@
 #include "logging.h"
 #include "maps_fileinfo.h"
 #include "maps_objects.h"
+#include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "pairs.h"
 #include "players.h"
@@ -369,7 +370,6 @@ void World::Reset()
     _seed = 0;
 }
 
-/* new maps */
 void World::NewMaps( int32_t sw, int32_t sh )
 {
     Reset();
@@ -550,7 +550,7 @@ void World::NewWeek()
     if ( week > 1 ) {
         for ( Maps::Tiles & tile : vec_tiles ) {
             if ( MP2::isWeekLife( tile.GetObject( false ) ) || tile.GetObject() == MP2::OBJ_MONSTER ) {
-                tile.QuantityUpdate( false );
+                updateObjectInfoTile( tile, false );
             }
         }
     }
@@ -675,7 +675,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 
     for ( uint32_t i = 0; i < primaryTileCount; ++i ) {
-        Maps::Tiles::PlaceMonsterOnTile( vec_tiles[primaryTargetTiles[i]], mons, 0 /* random */ );
+        setMonsterOnTile( vec_tiles[primaryTargetTiles[i]], mons, 0 /* random */ );
     }
 
     uint32_t secondaryTileCount = monstersToBePlaced * 10 / 100;
@@ -684,7 +684,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 
     for ( uint32_t i = 0; i < secondaryTileCount; ++i ) {
-        Maps::Tiles::PlaceMonsterOnTile( vec_tiles[secondaryTargetTiles[i]], mons, 0 /* random */ );
+        setMonsterOnTile( vec_tiles[secondaryTargetTiles[i]], mons, 0 /* random */ );
     }
 
     uint32_t tetriaryTileCount = monstersToBePlaced * 5 / 100;
@@ -693,7 +693,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 
     for ( uint32_t i = 0; i < tetriaryTileCount; ++i ) {
-        Maps::Tiles::PlaceMonsterOnTile( vec_tiles[tetriaryTargetTiles[i]], mons, 0 /* random */ );
+        setMonsterOnTile( vec_tiles[tetriaryTargetTiles[i]], mons, 0 /* random */ );
     }
 }
 
@@ -1283,6 +1283,12 @@ bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int3
     return false;
 }
 
+void World::setOldTileQuantityData( const int32_t tileIndex, const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata )
+{
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove this method and _oldTileQuantityData member." );
+    _oldTileQuantityData[tileIndex] = std::make_tuple( quantityValue1, quantityValue2, additionalMetadata );
+}
+
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
 {
     return msg << obj.objcol << obj.guardians;
@@ -1389,8 +1395,32 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.width = width;
     w.height = height;
 
-    msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1004_RELEASE ) {
+        w._oldTileQuantityData.resize( static_cast<size_t>( width ) * height );
+    }
+
+    msg >> w.vec_tiles >> w.vec_heroes;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1004_RELEASE ) {
+        for ( Maps::Tiles & tile : w.vec_tiles ) {
+            const auto & oldMetadata = w._oldTileQuantityData[tile.GetIndex()];
+            tile.quantityIntoMetadata( std::get<0>( oldMetadata ), std::get<1>( oldMetadata ), std::get<2>( oldMetadata ) );
+        }
+
+        w._oldTileQuantityData.clear();
+    }
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1005_RELEASE ) {
+        for ( Maps::Tiles & tile : w.vec_tiles ) {
+            tile.fixOldArtifactIDs();
+        }
+    }
+
+    msg >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week >> w.month >> w.heroes_cond_wins
+        >> w.heroes_cond_loss;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1002_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1002_RELEASE ) {
@@ -1411,11 +1441,11 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1003_RELEASE ) {
         for ( Maps::Tiles & tile : w.vec_tiles ) {
             if ( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE ) {
-                const int32_t spellId = Maps::getSpellIdFromTile( tile );
+                const int32_t spellId = static_cast<int32_t>( tile.metadata()[2] );
 
                 if ( spellId == Spell::HAUNT ) {
-                    const ResourceCount rc = tile.QuantityResourceCount();
-                    const int resource = rc.isValid() ? rc.first : Resource::GOLD;
+                    const Funds rc{ static_cast<int32_t>( tile.metadata()[0] ), 1 };
+                    const int resource = ( rc.GetValidItemsCount() > 0 ) ? rc.getFirstValidResource().first : Resource::GOLD;
 
                     Maps::Tiles::RestoreAbandonedMine( tile, resource );
 
@@ -1430,7 +1460,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
                 else {
                     Troop & guardians = w.GetCapturedObject( tile.GetIndex() ).GetTroop();
 
-                    tile.MonsterSetCount( guardians.isValid() ? guardians.GetCount() : 0 );
+                    setMonsterCountOnTile( tile, guardians.isValid() ? guardians.GetCount() : 0 );
 
                     guardians.Reset();
                 }
@@ -1578,7 +1608,7 @@ bool EventDate::isAllow( const int col, const uint32_t date ) const
         return false;
     }
 
-    if ( firstOccurrenceDay < date ) {
+    if ( firstOccurrenceDay > date ) {
         // The date has not come.
         return false;
     }
