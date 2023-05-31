@@ -1586,6 +1586,9 @@ namespace AI
             break;
         case MP2::OBJ_COAST:
             AIToCoast( hero, dst_index );
+
+            // Coast is not an action object by definition.
+            isAction = false;
             break;
 
         case MP2::OBJ_MONSTER:

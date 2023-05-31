@@ -170,12 +170,6 @@ namespace
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
 
-        if ( !MP2::isActionObject( objectType ) ) {
-            // TODO: add logic to verify if all parts of puzzle are opened and the location is known.
-            // TODO: once it is done, check if the tile does not have a hole. If it does not mark it as a valid object.
-            return false;
-        }
-
         // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
         if ( MP2::isArtifactObject( objectType ) ) {
             const Artifact art = getArtifactFromTile( tile );
@@ -578,11 +572,6 @@ namespace
         case MP2::OBJ_TRADING_POST:
         // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
         case MP2::OBJ_WHIRLPOOL:
-            return false;
-
-        case MP2::OBJ_COAST:
-            // Coast is not an action object. If this assertion blows up then something is wrong with the logic above.
-            assert( 0 );
             return false;
 
         default:
@@ -1660,6 +1649,19 @@ namespace AI
 
         // If this assertion blows up then the array is not sorted and the logic below will not work as intended.
         assert( std::is_sorted( _mapActionObjects.begin(), _mapActionObjects.end() ) );
+
+        std::set<int> objectIndexes;
+
+        for ( const auto & actionObject : _mapActionObjects ) {
+            if ( actionObject.second == MP2::OBJ_HEROES ) {
+                const Maps::Tiles & tile = world.GetTiles( actionObject.first );
+                const Heroes * tileHero = tile.GetHeroes();
+                assert( tileHero != nullptr );
+            }
+
+            assert( objectIndexes.count( actionObject.first ) == 0 );
+            objectIndexes.emplace( actionObject.first );
+        }
 #endif
 
         // pre-cache the pathfinder
