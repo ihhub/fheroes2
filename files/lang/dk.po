@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-30 00:59+0000\n"
-"PO-Revision-Date: 2023-04-16 20:42+0200\n"
+"POT-Creation-Date: 2023-04-13 05:15+0000\n"
+"PO-Revision-Date: 2023-05-31 12:10+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Loco-Source-Locale: da_DK\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.1\n"
 "X-Loco-Parser: loco_parse_po\n"
 
 msgid ""
@@ -1354,13 +1354,13 @@ msgid " defeated"
 msgstr ""
 
 msgid " will always run away from your army."
-msgstr ""
+msgstr " vil altid flygte i rædsel for din hær."
 
 msgid " will be willing to join your army."
-msgstr ""
+msgstr " vil velvilligt tilslutte sig din hær."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
-msgstr ""
+msgstr "\"%{artifact}\" artefaktet vil blive brakt videre til næste scenarie."
 
 msgid "The army will be carried over the scenario."
 msgstr ""
@@ -1957,7 +1957,7 @@ msgid "There is no room in the garrison for this army."
 msgstr "Der er ikke plads i garnisonen til denne trop."
 
 msgid "Fortifications"
-msgstr "Fortifikationer"
+msgstr "Befæstninger"
 
 msgid "Farm"
 msgstr "Mark"
@@ -1996,7 +1996,7 @@ msgid "Upg. Cathedral"
 msgstr "Opg. katedral"
 
 msgid "Coliseum"
-msgstr "Colosseum"
+msgstr "Amfiteater"
 
 msgid "Garbage Heap"
 msgstr "Affaldsbunke"
@@ -2163,44 +2163,51 @@ msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
 msgstr ""
+"Befæstningerne styrker ringmurene, så de kan modstå mindst ét ekstra angreb, "
+"før muren væltes."
 
 msgid "The Farm increases production of Peasants by %{count} per week."
-msgstr "Marken øger produktionen af Bønder med %{count} om ugen."
+msgstr "Marken øger produktionen af bønder med %{count} om ugen."
 
 msgid ""
 "The Coliseum provides inspiring spectacles to defending troops, raising "
 "their morale by two during combat."
 msgstr ""
+"I amfiteatret inspirerer gladiatorkampe de forsvarende styrkers kampgejst, "
+"så deres moral under kamp løftes med to point."
 
 msgid "The Garbage Heap increases production of Goblins by %{count} per week."
-msgstr ""
+msgstr "Affaldsbunken øger tilvæksten af vætter med %{count} om ugen."
 
 msgid "The Rainbow increases the luck of the defending units by two."
-msgstr ""
+msgstr "Regnbuen øger de forsvarende styrkers held med to point."
 
 msgid ""
 "The Crystal Garden increases production of Sprites by %{count} per week."
-msgstr ""
+msgstr "Krystalhaven øger tilvæksten af feer med %{count} om ugen."
 
 msgid "The Dungeon increases the income of the town by %{count} gold per day."
 msgstr "Fangehullet øger byens indkomst med %{count} guld om dagen."
 
 msgid "The Waterfall increases production of Centaurs by %{count} per week."
-msgstr ""
+msgstr "Vandfaldet øger tilvæksten af kentaurer med %{count} om ugen."
 
 msgid ""
 "The Library increases the number of spells in the Guild by one for each "
 "level of the guild."
 msgstr ""
+"Biblioteket øger antallet af besværgelser i magikerlauget med én for hvert "
+"niveau."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr ""
+msgstr "Frugthaven øger tilvæksten af halvlange med %{count} om ugen."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
 msgstr ""
+"Stormen øger en forsvarende besværgers magikraft med 2 point under kamp."
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
-msgstr ""
+msgstr "Kraniebunken øger tilvæksten af skeletter med %{count} om ugen."
 
 msgid "Thieves' Guild"
 msgstr "Tyvelaug"
@@ -2258,56 +2265,81 @@ msgid ""
 "can also provide scouting information on enemy towns. Additional Guilds "
 "provide more information."
 msgstr ""
+"Tyvelauget skaffer informationer om hvordan andre spillere klarer sig i "
+"forhold til dig. Desuden udspejdes fjendtlige byer og borge også. Jo flere "
+"Tyvelaug du har, jo flere information får du (maks 5)."
 
 msgid "The Tavern increases morale for troops defending the castle."
-msgstr ""
+msgstr "Kroen øger de forsvarende styrkers moral med 2 point."
 
 msgid "The Shipyard allows ships to be built."
-msgstr ""
+msgstr "Skibsværftet gør det muligt at bygge skibe."
 
 msgid ""
 "The Well increases the growth rate of all dwellings by %{count} creatures "
 "per week."
 msgstr ""
+"Brønden øger den ugentlige tilvækst af byens bosteder med %{count}. Brønden "
+"gør det også muligt at få en oversigt over byens væsener. Du kan desuden "
+"hverve dem herfra."
 
 msgid "The Statue increases your town's income by %{count} gold per day."
 msgstr "Statuen øger din bys indkomst med %{count} guld om dagen."
 
 msgid "The Left Turret provides extra firepower during castle combat."
 msgstr ""
+"Venstre tårn frembringer et ekstra skydetårn, som øger ildkraft under "
+"belejring af borgen."
 
 msgid "The Right Turret provides extra firepower during castle combat."
 msgstr ""
+"Højre tårn frembringer et ekstra skydetårn, som øger ildkraft under "
+"belejring af borgen."
 
 msgid ""
 "The Marketplace can be used to convert one type of resource into another. "
 "The more marketplaces you control, the better the exchange rate."
 msgstr ""
+"På markedspladsen kan man bytte én resursetype til en anden. Du opnår mere "
+"og mere fordelagtige byttehandlinger, jo flere markedspladser du har i dit "
+"rige (maks 5)."
 
 msgid ""
 "The Moat slows attacking units. Any unit entering the moat must end its turn "
 "there and becomes more vulnerable to attack."
 msgstr ""
+"Voldgraven forsinker angribende tropper. Enhver trop, som træder ned i "
+"voldgraven, ender sin tur dér. Så længe den befinder sig her, vil den "
+"desuden være mere sårbar overfor angreb."
 
 msgid ""
 "The Castle improves town defense and increases income to %{count} gold per "
 "day."
 msgstr ""
+"Borgen forstærker byens forsvar mod angreb. Borgen øger desuden dit riges "
+"indkomst med %{count} om dagen."
 
 msgid ""
 "The Tent provides workers to build a castle, provided the materials and the "
 "gold are available."
 msgstr ""
+"Teltet frembringer arbejdere til at bygge en borg, såfremt de fornødne "
+"resurser og guld er på plads."
 
 msgid ""
 "The Captain's Quarters provides a captain to assist in the castle's defense "
 "when no hero is present."
 msgstr ""
+"Kaptajnens kvarter frembringer en kaptajn til at assisterer de forsvarende "
+"styrker, når der ikke er en helt tilstede."
 
 msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
 msgstr ""
+"Helte kan købe en magibog og lære besværgelser, når de besøger magilauget. "
+"Desuden fornyes heltes maksimale antal magipoint automatisk, hvis de ender "
+"deres tur stående i byen."
 
 msgid "Recruit %{name}"
 msgstr "Rekruttér %{name}"
@@ -2319,6 +2351,9 @@ msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
+"Din helt er nødt til at købe en magibog, før denne må træde ind i "
+"magilauget. Men helten har desværre ikke plads til at bære en magibog. Prøv "
+"at afgive én af dine artefakter til en anden helt."
 
 msgid "Exit"
 msgstr "Gå"
@@ -2514,18 +2549,6 @@ msgid ""
 msgstr ""
 
 msgid "Are you sure you want to dismiss this army?"
-msgstr ""
-
-msgid "Upgrade"
-msgstr ""
-
-msgid "Upgrade your troops."
-msgstr ""
-
-msgid "Dismiss"
-msgstr ""
-
-msgid "Dismiss this army."
 msgstr ""
 
 msgid "Followers"
@@ -3286,50 +3309,6 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr ""
-
-#, fuzzy
-msgid "Cancel back to the New Map menu."
-msgstr "Afbryd og gå tilbage til hovedmenuen."
-
-msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
-
-#, fuzzy
-msgid "New Map"
-msgstr "Nyt spil"
-
-#, fuzzy
-msgid "Load Map"
-msgstr "Indlæs spil"
-
-msgid "Load an existing map."
-msgstr ""
-
-msgid "Cancel back to the main menu."
-msgstr "Afbryd og gå tilbage til hovedmenuen."
-
-msgid "From Scratch"
-msgstr ""
-
-msgid "Start from scratch with a blank map."
-msgstr ""
-
-msgid "Create a randomly generated map."
-msgstr ""
-
-#, fuzzy
-msgid "Random"
-msgstr "Tilfældigt monster"
-
-#, fuzzy
-msgid "Cancel back to the Map Editor main menu."
-msgstr "Afbryd og gå tilbage til hovedmenuen."
-
-msgid "No maps available!"
-msgstr ""
-
 msgid "difficulty|Easy"
 msgstr "Let"
 
@@ -3678,24 +3657,6 @@ msgstr ""
 msgid "hotkey|choose the expansion campaign"
 msgstr ""
 
-msgid "hotkey|map editor main menu"
-msgstr ""
-
-#, fuzzy
-msgid "hotkey|new map menu"
-msgstr "verdenskort op til venstre"
-
-#, fuzzy
-msgid "hotkey|load map menu"
-msgstr "verdenskort op til venstre"
-
-msgid "hotkey|new map from scratch"
-msgstr ""
-
-#, fuzzy
-msgid "hotkey|new random map"
-msgstr "verdenskort op til venstre"
-
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -3951,6 +3912,9 @@ msgid ""
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
 
+msgid "Cancel back to the main menu."
+msgstr "Afbryd og gå tilbage til hovedmenuen."
+
 msgid "A single player game playing out a single map."
 msgstr ""
 
@@ -4039,9 +4003,6 @@ msgid "Expansion Campaign"
 msgstr ""
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-msgstr ""
-
-msgid "Loading video. Please wait..."
 msgstr ""
 
 msgid "Host"
@@ -4270,6 +4231,9 @@ msgid "Click to accept these settings and start a new game."
 msgstr "Klik for at acceptere disse indstillinger og start et nyt spil."
 
 msgid "Click to return to the main menu."
+msgstr ""
+
+msgid "No maps available!"
 msgstr ""
 
 msgid "Astrologers proclaim the Month of the %{name}."
@@ -4576,6 +4540,9 @@ msgid "Keyboard|123"
 msgstr ""
 
 msgid "Keyboard|SPACE"
+msgstr ""
+
+msgid "Keyboard|LANG"
 msgstr ""
 
 msgid "Keyboard|ABC"
@@ -5875,37 +5842,6 @@ msgid ""
 "This town is occupied by your hero %{hero}."
 msgstr ""
 
-msgid "This spell is already in use."
-msgstr ""
-
-msgid ""
-"No opponent can have heroes under his command anymore. Casting this spell "
-"will not bring any advantage."
-msgstr ""
-
-msgid ""
-"No opponent has a hero under his command at this time. Casting this spell "
-"will not bring any advantage."
-msgstr ""
-
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
-msgstr ""
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
-msgstr ""
-
-msgid "You must first defeat the ghosts guarding the mine to cast this spell."
-msgstr ""
-
-msgid ""
-"There are already at least as many elementals guarding the mine than the "
-"spell can generate. Casting this spell will not bring any advantage."
-msgstr ""
-
 msgid "%{name} the %{race} (Level %{level})"
 msgstr ""
 
@@ -5987,11 +5923,16 @@ msgstr ""
 msgid "%{spell} failed!!!"
 msgstr ""
 
+msgid "This spell is already in use."
+msgstr ""
+
 msgid "Enemy heroes are now fully identifiable."
 msgstr ""
 
-msgid "Identify Hero"
-msgstr "Identificer helt"
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
 
 msgid "The creatures are willing to join us!"
 msgstr ""
@@ -6013,6 +5954,11 @@ msgid "These weak creatures will surely flee before us."
 msgstr ""
 
 msgid "I fear these creatures are in the mood for a fight."
+msgstr ""
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
 msgstr ""
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
@@ -7662,9 +7608,6 @@ msgstr ""
 msgid "This item can't be traded."
 msgstr ""
 
-msgid "Invalid Artifact"
-msgstr ""
-
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
@@ -8764,6 +8707,9 @@ msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
 "lost by mortals."
+msgstr ""
+
+msgid "Invalid Artifact"
 msgstr ""
 
 msgid "Wood"
