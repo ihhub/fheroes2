@@ -23,7 +23,6 @@
 
 #include "zzlib.h"
 
-#include <algorithm>
 #include <cstring>
 #include <ostream>
 #include <vector>
@@ -206,7 +205,7 @@ fheroes2::Image CreateImageFromZlib( const int32_t width, const int32_t height, 
 
     const size_t uncompressedSize = doubleLayer ? uncompressedData.size() / 2 : uncompressedData.size();
 
-    if ( static_cast<size_t>( width * height ) != uncompressedSize ) {
+    if ( static_cast<size_t>( width ) * height != uncompressedSize ) {
         return {};
     }
 
