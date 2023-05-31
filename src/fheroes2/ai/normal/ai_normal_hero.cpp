@@ -1545,8 +1545,7 @@ namespace AI
 
     double Normal::getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const
     {
-        const Maps::Tiles & tile = world.GetTiles( index );
-        assert( objectType == tile.GetObject() );
+        assert( objectType == world.GetTiles( index ).GetObject() );
 
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
