@@ -655,7 +655,7 @@ namespace
             , _ignoreValue( ignoreValue )
         {}
 
-        double value( std::pair<int, int> & objectInfo, const uint32_t distance )
+        double value( const std::pair<int, int> & objectInfo, const uint32_t distance )
         {
             auto iter = _objectValue.find( objectInfo );
             if ( iter != _objectValue.end() ) {
@@ -1677,7 +1677,7 @@ namespace AI
             if ( !isDimensionDoor ) {
                 // Dimension door path does not include any objects on the way.
                 std::vector<IndexObject> list = _pathfinder.getObjectsOnTheWay( destination );
-                for ( IndexObject & pair : list ) {
+                for ( const IndexObject & pair : list ) {
                     if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapActionObjects.begin(), _mapActionObjects.end(), pair ) ) {
                         const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
                         if ( extraValue > 0 ) {
@@ -1726,7 +1726,7 @@ namespace AI
             }
         }
 
-        for ( IndexObject & node : _mapActionObjects ) {
+        for ( const IndexObject & node : _mapActionObjects ) {
             // Skip if hero in patrol mode and object outside of reach
             if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, heroInfo.patrolCenter ) > heroInfo.patrolDistance )
                 continue;
