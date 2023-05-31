@@ -24,12 +24,13 @@
 #include <array>
 #include <cassert>
 #include <cmath>
-#include <cstring>
+#include <cstddef>
 #include <initializer_list>
 #include <map>
 #include <memory>
 #include <random>
 #include <set>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -142,9 +143,10 @@ namespace
                                                 ICN::UNIFORM_EVIL_CANCEL_BUTTON,
                                                 ICN::UNIFORM_GOOD_EXIT_BUTTON,
                                                 ICN::UNIFORM_EVIL_EXIT_BUTTON,
-                                                ICN::NON_UNIFORM_GOOD_MIN_BUTTON,
                                                 ICN::BUTTON_SMALL_MIN_GOOD,
+                                                ICN::BUTTON_SMALL_MIN_EVIL,
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
+                                                ICN::BUTTON_SMALL_MAX_EVIL,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::BUTTON_DIFFICULTY_ARCHIBALD,
                                                 ICN::BUTTON_DIFFICULTY_ROLAND,
@@ -328,6 +330,11 @@ namespace
             _icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
         }
 
+        bool isPreserved() const
+        {
+            return _isPreserved;
+        }
+
     private:
         bool _isPreserved = false;
 
@@ -436,6 +443,26 @@ namespace
         fheroes2::Copy( original, 0, original.height() - 16, image, roi.x, roi.y + roi.height - 16, 16, 16 );
         fheroes2::Copy( original, 16, original.height() - 13, image, roi.x + 16, roi.y + roi.height - 13, 27, 13 );
     }
+
+    // Sets the upper left (offset 3 pixels), upper right (offset 2 pixels), lower right (offset 3 pixels) corners transparent.
+    void setButtonCornersTransparent( fheroes2::Sprite & buttonSprite )
+    {
+        const ptrdiff_t imageWidth = buttonSprite.width();
+        const ptrdiff_t imageHeight = buttonSprite.height();
+
+        assert( imageWidth > 3 && imageHeight > 3 );
+
+        uint8_t * imageTransform = buttonSprite.transform();
+        const uint8_t transparencyValue = 1;
+        std::fill( imageTransform, imageTransform + 3, transparencyValue );
+        std::fill( imageTransform + imageWidth - 2, imageTransform + imageWidth + 2, transparencyValue );
+        std::fill( imageTransform + 2 * imageWidth - 1, imageTransform + 2 * imageWidth + 1, transparencyValue );
+        *( imageTransform + 3 * imageWidth ) = transparencyValue;
+        *( imageTransform + ( imageHeight - 3 ) * imageWidth - 1 ) = transparencyValue;
+        std::fill( imageTransform + ( imageHeight - 2 ) * imageWidth - 2, imageTransform + ( imageHeight - 2 ) * imageWidth - 1, transparencyValue );
+        std::fill( imageTransform + ( imageHeight - 1 ) * imageWidth - 3, imageTransform + ( imageHeight - 1 ) * imageWidth - 1, transparencyValue );
+        std::fill( imageTransform + imageHeight * imageWidth - 4, imageTransform + imageHeight * imageWidth - 1, transparencyValue );
+    }
 }
 
 namespace fheroes2
@@ -474,6 +501,13 @@ namespace fheroes2
                 }
                 else {
                     sizeData = blockSize - header1.offsetData;
+                }
+
+                if ( headerSize + header1.offsetData + sizeData > body.size() ) {
+                    // This is a corrupted AGG file.
+                    throw fheroes2::InvalidDataResources( "ICN Id " + std::to_string( id ) + ", index " + std::to_string( i )
+                                                          + " is being corrupted. "
+                                                            "Make sure that you own an official version of the game." );
                 }
 
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
@@ -644,6 +678,10 @@ namespace fheroes2
                 if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::CPANELE : ICN::CPANEL, 8 );
                     _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::CPANELE : ICN::CPANEL, 9 );
+
+                    // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
+                    CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+
                     break;
                 }
 
@@ -664,6 +702,10 @@ namespace fheroes2
                 if ( isSameResourceAsLanguage && ( id == ICN::BUTTON_SMALL_OKAY_EVIL || id == ICN::BUTTON_SMALL_OKAY_GOOD ) ) {
                     _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0 );
                     _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 1 );
+
+                    // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
+                    CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+
                     break;
                 }
                 if ( isSameResourceAsLanguage && ( id == ICN::BUTTON_SMALLER_OKAY_EVIL || id == ICN::BUTTON_SMALLER_OKAY_GOOD ) ) {
@@ -692,6 +734,10 @@ namespace fheroes2
                 if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 0 );
                     _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 1 );
+
+                    // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
+                    CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+
                     break;
                 }
 
@@ -709,6 +755,10 @@ namespace fheroes2
                 if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 2 );
                     _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR, 3 );
+
+                    // To properly generate shadows and Blit the button we need to make transparent pixels in its released state the same as in the pressed state.
+                    CopyTransformLayer( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+
                     break;
                 }
 
@@ -1452,13 +1502,27 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( ICN::NON_UNIFORM_GOOD_MIN_BUTTON, 0 );
-                    _icnVsSprite[id][1] = GetICN( ICN::NON_UNIFORM_GOOD_MIN_BUTTON, 1 );
+                    // Write the "MIN" text on original assets ICNs.
+                    for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                        _icnVsSprite[id][i] = GetICN( ICN::BUTTON_SMALL_MAX_GOOD, 0 + i );
+
+                        // Clean the button text.
+                        Blit( GetICN( ICN::SYSTEM, 11 + i ), 10 - i, 4 + i, _icnVsSprite[id][i], 6 - i, 4 + i, 50, 16 );
+                    }
+
+                    renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), { 6, 5 }, { 5, 6 }, { 52, 16 }, fheroes2::FontColor::WHITE );
+
                     break;
                 }
 
-                int32_t textWidth = 61;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "MIN" ), false );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 61, gettext_noop( "MIN" ), false );
+
+                break;
+            }
+            case ICN::BUTTON_SMALL_MIN_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 61, gettext_noop( "MIN" ), true );
 
                 break;
             }
@@ -1466,13 +1530,26 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( ICN::RECRUIT, 4 );
-                    _icnVsSprite[id][1] = GetICN( ICN::RECRUIT, 5 );
+                    // The original assets ICN contains button with shadow. We crop only the button.
+                    _icnVsSprite[id][0] = fheroes2::Crop( GetICN( ICN::RECRUIT, 4 ), 5, 0, 60, 25 );
+                    _icnVsSprite[id][1] = fheroes2::Crop( GetICN( ICN::RECRUIT, 5 ), 5, 0, 60, 25 );
+
+                    // To properly generate shadows and Blit the button we need to make some pixels transparent.
+                    for ( fheroes2::Sprite & image : _icnVsSprite[id] ) {
+                        setButtonCornersTransparent( image );
+                    }
+
                     break;
                 }
 
-                int32_t textWidth = 61;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "MAX" ), false );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 61, gettext_noop( "MAX" ), false );
+
+                break;
+            }
+            case ICN::BUTTON_SMALL_MAX_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 61, gettext_noop( "MAX" ), true );
 
                 break;
             }
@@ -1574,21 +1651,6 @@ namespace fheroes2
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), { 7, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
-
-                break;
-            }
-            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON: {
-                _icnVsSprite[id].resize( 2 );
-
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::RECRUIT, 4 + i );
-
-                    // clean the button.
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10 - i, 4 + i, out, 11 - i, 4 + i, 50, 16 );
-                }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), { 11, 5 }, { 10, 6 }, { 52, 16 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -1931,6 +1993,16 @@ namespace fheroes2
                 LoadOriginalICN( id );
 
                 auto & imageArray = _icnVsSprite[id];
+                if ( imageArray.size() < 96 ) {
+                    // 96 symbols is the minimum requirement for English.
+                    throw std::logic_error( "The game resources are corrupted. Please use resources from a licensed version of Heroes of Might and Magic II." );
+                }
+
+                // Compare '(' and ')' symbols. By size they are always the same. However, we play safe and fail if both dimensions are different.
+                if ( ( imageArray[8].width() != imageArray[9].width() ) && ( imageArray[8].height() != imageArray[9].height() ) ) {
+                    // This is most likely a corrupted font or a pirated translation to a non-English language which causes all sorts of rendering issues.
+                    throw std::logic_error( "The game resources are corrupted. Please use resources from a licensed version of Heroes of Might and Magic II." );
+                }
 
                 const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
                 const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
@@ -1944,8 +2016,8 @@ namespace fheroes2
                     }
                     modifyBaseSmallFont( _icnVsSprite[id] );
                 }
-
-                if ( id == ICN::FONT ) {
+                else {
+                    assert( id == ICN::FONT );
                     // The original images contain an issue: image layer has value 50 which is '2' in UTF-8. We must correct these (only 3) places
                     for ( size_t i = 0; i < imageArray.size(); ++i ) {
                         ReplaceColorIdByTransformId( imageArray[i], 50, 2 );
@@ -2181,9 +2253,10 @@ namespace fheroes2
             case ICN::UNIFORM_EVIL_CANCEL_BUTTON:
             case ICN::UNIFORM_GOOD_EXIT_BUTTON:
             case ICN::UNIFORM_EVIL_EXIT_BUTTON:
-            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
             case ICN::BUTTON_SMALL_MIN_GOOD:
+            case ICN::BUTTON_SMALL_MIN_EVIL:
             case ICN::BUTTON_SMALL_MAX_GOOD:
+            case ICN::BUTTON_SMALL_MAX_EVIL:
             case ICN::BUTTON_GUILDWELL_EXIT:
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD:
             case ICN::BUTTON_DIFFICULTY_POL:
@@ -2451,7 +2524,7 @@ namespace fheroes2
                     out.resize( source.height(), source.width() );
                     Transpose( source, out );
                     out = Flip( out, false, true );
-                    out.setPosition( source.y(), source.x() );
+                    out.setPosition( source.y() - static_cast<int32_t>( i ), source.x() );
                 }
                 return true;
             case ICN::MONSTER_SWITCH_RIGHT_ARROW:
@@ -2562,6 +2635,15 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::EDITOR:
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    // This is the Editor main menu background which shouldn't have any transform layer.
+                    _icnVsSprite[id][0]._disableTransformLayer();
+                    // Fix the cycling colors in original editor main menu background.
+                    fheroes2::ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
+                }
+                return true;
             case ICN::HEROES:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
@@ -3599,7 +3681,15 @@ namespace fheroes2
         // We have few ICNs which we need to scale like some related to main screen
         bool IsScalableICN( const int id )
         {
-            return id == ICN::HEROES || id == ICN::BTNSHNGL || id == ICN::SHNGANIM;
+            switch ( id ) {
+            case ICN::EDITOR:
+            case ICN::HEROES:
+            case ICN::BTNSHNGL:
+            case ICN::SHNGANIM:
+                return true;
+            default:
+                return false;
+            }
         }
 
         const Sprite & GetScaledICN( const int icnId, const uint32_t index )
@@ -3848,7 +3938,13 @@ namespace fheroes2
         void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet )
         {
             if ( loadOriginalAlphabet || !isAlphabetSupported( language ) ) {
-                alphabetPreserver.restore();
+                if ( !alphabetPreserver.isPreserved() ) {
+                    // This can happen when we try to change a language without loading assets.
+                    alphabetPreserver.preserve();
+                }
+                else {
+                    alphabetPreserver.restore();
+                }
             }
             else {
                 alphabetPreserver.preserve();

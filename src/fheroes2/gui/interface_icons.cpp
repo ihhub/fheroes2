@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -219,12 +219,12 @@ void Interface::HeroesIcons::RedrawBackground( const fheroes2::Point & pos )
 
 void Interface::HeroesIcons::ActionCurrentUp()
 {
-    Interface::Basic::Get().SetFocus( GetCurrent() );
+    Interface::Basic::Get().SetFocus( GetCurrent(), false );
 }
 
 void Interface::HeroesIcons::ActionCurrentDn()
 {
-    Interface::Basic::Get().SetFocus( GetCurrent() );
+    Interface::Basic::Get().SetFocus( GetCurrent(), false );
 }
 
 void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
@@ -239,8 +239,7 @@ void Interface::HeroesIcons::ActionListSingleClick( HEROES & item )
     if ( item ) {
         Interface::Basic & I = Interface::Basic::Get();
 
-        I.SetFocus( item );
-        I.CalculateHeroPath( item, -1 );
+        I.SetFocus( item, false );
         I.RedrawFocus();
     }
 }

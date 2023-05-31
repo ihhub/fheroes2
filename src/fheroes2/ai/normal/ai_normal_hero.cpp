@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
@@ -30,6 +29,7 @@
 #include <ostream>
 #include <set>
 #include <string>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -60,6 +60,7 @@
 #include "pairs.h"
 #include "payment.h"
 #include "players.h"
+#include "profit.h"
 #include "rand.h"
 #include "resource.h"
 #include "route.h"
@@ -505,7 +506,8 @@ namespace
             break;
 
         case MP2::OBJ_DAEMON_CAVE:
-            if ( doesTileContainValuableItems( tile ) && getDaemonCaveBonusType( tile ) != Maps::DaemonCaveCaptureBonus::PAY_2500_GOLD ) {
+            if ( doesTileContainValuableItems( tile ) ) {
+                // AI always chooses to fight the demon's servants and doesn't roll the dice
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
             break;
@@ -885,16 +887,28 @@ namespace AI
         }
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_MINES:
-        case MP2::OBJ_SAWMILL: {
-            if ( getColorFromTile( tile ) == hero.GetColor() ) {
-                return -valueToIgnore; // don't even attempt to go here
-            }
-            const int resource = getDailyIncomeObjectResources( tile ).getFirstValidResource().first;
-            const double value = 20.0 * getResourcePriorityModifier( resource );
-            return ( resource == Resource::GOLD ) ? value * 100.0 : value;
-        }
+        case MP2::OBJ_SAWMILL:
         case MP2::OBJ_ABANDONED_MINE: {
-            return 3000.0;
+            int resourceType = Resource::UNKNOWN;
+            int32_t resourceAmount = 0;
+
+            // Abandoned mines are gold mines under the hood
+            if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
+                resourceType = Resource::GOLD;
+                resourceAmount = ProfitConditions::FromMine( Resource::GOLD ).Get( Resource::GOLD );
+            }
+            else {
+                if ( getColorFromTile( tile ) == hero.GetColor() ) {
+                    return -valueToIgnore; // don't even attempt to go here
+                }
+
+                std::tie( resourceType, resourceAmount ) = getDailyIncomeObjectResources( tile ).getFirstValidResource();
+            }
+
+            assert( resourceType != Resource::UNKNOWN && resourceAmount != 0 );
+
+            // Since mines constantly bring resources, they are valuable objects
+            return resourceAmount * getResourcePriorityModifier( resourceType, true );
         }
         case MP2::OBJ_ARTIFACT: {
             const Artifact art = getArtifactFromTile( tile );
@@ -926,10 +940,18 @@ namespace AI
             const Funds funds = getFundsFromTile( tile );
             assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
 
-            return funds.gold;
+            return funds.gold * getResourcePriorityModifier( Resource::GOLD, false );
         }
+        case MP2::OBJ_DAEMON_CAVE: {
+            // If this cave is already empty, then we should never come here
+            if ( !doesTileContainValuableItems( tile ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
 
-        case MP2::OBJ_DAEMON_CAVE:
+            // Daemon Cave always gives 2500 Gold after a battle and AI always chooses to fight the demon's servants and doesn't roll the dice
+            return 2500 * getResourcePriorityModifier( Resource::GOLD, false );
+        }
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_SKELETON:
@@ -961,19 +983,24 @@ namespace AI
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_WATER_WHEEL:
         case MP2::OBJ_WINDMILL: {
-            const Funds & loot = getFundsFromTile( tile );
+            const Funds loot = getFundsFromTile( tile );
 
             double value = 0;
-            for ( const BudgetEntry & budget : _budget ) {
-                const int amount = loot.Get( budget.resource );
-                if ( amount > 0 ) {
-                    value += amount * getResourcePriorityModifier( budget.resource );
+
+            Resource::forEach( loot.GetValidItems(), [this, &loot, &value]( const int res ) {
+                const int amount = loot.Get( res );
+                if ( amount <= 0 ) {
+                    return;
                 }
-            }
-            // verify this object wasn't visited before
+
+                value += amount * getResourcePriorityModifier( res, false );
+            } );
+
+            // This object could have already been visited
             if ( value < 1 ) {
                 return -valueToIgnore;
             }
+
             return value;
         }
         case MP2::OBJ_LIGHTHOUSE: {
@@ -1631,6 +1658,9 @@ namespace AI
         maxPriority = lowestPossibleValue;
 #ifdef WITH_DEBUG
         MP2::MapObjectType objectType = MP2::OBJ_NONE;
+
+        // If this assertion blows up then the array is not sorted and the logic below will not work as intended.
+        assert( std::is_sorted( _mapObjects.begin(), _mapObjects.end() ) );
 #endif
 
         // pre-cache the pathfinder
@@ -1928,11 +1958,27 @@ namespace AI
             _pathfinder.reEvaluateIfNeeded( *bestHero );
 
             // check if we want to use Dimension Door spell or move regularly
-            const std::list<Route::Step> & dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
-            const uint32_t dimensionDoorDistance = AIWorldPathfinder::calculatePathPenalty( dimensionPath );
-            const uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
+            std::list<Route::Step> dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
+            uint32_t dimensionDoorDistance = AIWorldPathfinder::calculatePathPenalty( dimensionPath );
+            uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
             if ( dimensionDoorDistance && ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) ) {
-                HeroesCastDimensionDoor( *bestHero, dimensionPath.front().GetIndex() );
+                while ( ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) && !dimensionPath.empty() && bestHero->MayStillMove( false, false )
+                        && bestHero->CanCastSpell( Spell::DIMENSIONDOOR ) ) {
+                    HeroesCastDimensionDoor( *bestHero, dimensionPath.front().GetIndex() );
+                    dimensionDoorDistance -= dimensionPath.front().GetPenalty();
+
+                    _pathfinder.reEvaluateIfNeeded( *bestHero );
+                    moveDistance = _pathfinder.getDistance( bestTargetIndex );
+
+                    dimensionPath.pop_front();
+                }
+
+                if ( dimensionDoorDistance > 0 ) {
+                    // The rest of the path the hero should do by foot.
+                    bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
+
+                    HeroesMove( *bestHero );
+                }
             }
             else {
                 bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );

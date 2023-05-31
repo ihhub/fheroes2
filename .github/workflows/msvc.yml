@@ -132,6 +132,7 @@ jobs:
                                .\\"$BUILD_DIR"\\pal2img.exe \
                                .\\"$BUILD_DIR"\\til2img.exe \
                                .\\"$BUILD_DIR"\\xmi2midi.exe \
+                               .\\"$BUILD_DIR"\\zlib1.dll \
                                LICENSE \
                                .\\docs\\GRAPHICAL_ASSETS.md \
                                .\\script\\agg\\extract_agg.bat

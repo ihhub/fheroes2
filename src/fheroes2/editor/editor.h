@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,49 +20,14 @@
 
 #pragma once
 
-#include <cstdint>
+#if defined( WITH_DEBUG )
+#include "game.h"
+#include "game_mode.h"
 
-#include "image.h"
-#include "math_base.h"
-#include "screen.h"
-
-namespace fheroes2
+namespace Editor
 {
-    // Standard window with shadow
-    class StandardWindow
-    {
-    public:
-        StandardWindow( const int32_t width, const int32_t height, const bool renderBackground, Image & output = Display::instance() );
-        StandardWindow( const int32_t x, const int32_t y, const int32_t width, const int32_t height, const bool renderBackground, Image & output = Display::instance() );
-
-        // Returns the window background ROI.
-        const Rect & activeArea() const
-        {
-            return _activeArea;
-        }
-
-        // Returns ROI that includes window background and window borders.
-        const Rect & windowArea() const
-        {
-            return _windowArea;
-        }
-
-        // Returns ROI that includes window background, borders and window shadow.
-        const Rect & totalArea() const
-        {
-            return _totalArea;
-        }
-
-        void render();
-
-    private:
-        Image & _output;
-        const Rect _activeArea;
-        const Rect _windowArea;
-        const Rect _totalArea;
-        ImageRestorer _restorer;
-        const bool _hasBackground{ true };
-
-        void _renderBackground( const bool isEvilInterface );
-    };
+    fheroes2::GameMode menuMain();
+    fheroes2::GameMode menuNewMap();
+    fheroes2::GameMode menuLoadMap();
 }
+#endif

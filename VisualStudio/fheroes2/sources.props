@@ -104,6 +104,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_selectscenario.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_system_options.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_thievesguild.cpp" />
+    <ClCompile Include="src\fheroes2\editor\editor_mainmenu.cpp" />
     <ClCompile Include="src\fheroes2\game\difficulty.cpp" />
     <ClCompile Include="src\fheroes2\game\fheroes2.cpp" />
     <ClCompile Include="src\fheroes2\game\game.cpp" />
@@ -298,6 +299,7 @@
     <ClInclude Include="src\fheroes2\dialog\dialog_selectitems.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_selectscenario.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_system_options.h" />
+    <ClInclude Include="src\fheroes2\editor\editor.h" />
     <ClInclude Include="src\fheroes2\game\difficulty.h" />
     <ClInclude Include="src\fheroes2\game\game.h" />
     <ClInclude Include="src\fheroes2\game\game_credits.h" />

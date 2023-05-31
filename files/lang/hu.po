@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 10:26+0000\n"
+"POT-Creation-Date: 2023-05-30 00:59+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3547,6 +3547,50 @@ msgstr "Személyiség:"
 msgid "Best Monster:"
 msgstr "Legjobb szörny:"
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Vissza a főmenübe."
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Dawn"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Játék betöltése"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr "Vissza a főmenübe."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Véletlenszerű város"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Vissza a főmenübe."
+
+msgid "No maps available!"
+msgstr "Nincs használható térkép!"
+
 msgid "difficulty|Easy"
 msgstr "Könnyű"
 
@@ -3919,6 +3963,25 @@ msgstr ""
 msgid "hotkey|choose the expansion campaign"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "Hadjárat"
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "Következő hősök"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "Szimpla játék"
+
+msgid "hotkey|new map from scratch"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "Királyság összesítése"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4188,9 +4251,6 @@ msgid ""
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
 
-msgid "Cancel back to the main menu."
-msgstr "Vissza a főmenübe."
-
 msgid "A single player game playing out a single map."
 msgstr "Egyjátékos mód egy pályán."
 
@@ -4284,6 +4344,9 @@ msgid "Expansion Campaign"
 msgstr ""
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr ""
+
+msgid "Loading video. Please wait..."
 msgstr ""
 
 msgid "Host"
@@ -4539,9 +4602,6 @@ msgstr "Kattints a beállítások elfogadásához és új játék indításához
 
 msgid "Click to return to the main menu."
 msgstr "Kattints a főmenübe való visszatéréshez."
-
-msgid "No maps available!"
-msgstr "Nincs használható térkép!"
 
 #, fuzzy
 msgid "Astrologers proclaim the Month of the %{name}."
@@ -4867,9 +4927,6 @@ msgid "Keyboard|123"
 msgstr ""
 
 msgid "Keyboard|SPACE"
-msgstr ""
-
-msgid "Keyboard|LANG"
 msgstr ""
 
 msgid "Keyboard|ABC"
@@ -6355,6 +6412,39 @@ msgid ""
 "This town is occupied by your hero %{hero}."
 msgstr ""
 
+msgid "This spell is already in use."
+msgstr ""
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+"A bánya bejáratánál kell állnod (a fűrészmalmot és az alkimista labort "
+"leszámítva), hogy használd ezt a varázslatot."
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
+msgstr ""
+
 #, fuzzy
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{level} szint"
@@ -6446,16 +6536,11 @@ msgstr ""
 msgid "%{spell} failed!!!"
 msgstr ""
 
-msgid "This spell is already in use."
-msgstr ""
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Az ellenséges hősök teljes mértékben azonosíthatóak."
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
-msgstr ""
+msgid "Identify Hero"
+msgstr "Hősazonosítás"
 
 msgid "The creatures are willing to join us!"
 msgstr "A lények csatlakozni akarnak hozzád!"
@@ -6478,13 +6563,6 @@ msgstr "Ezek a gyenge lények valószínű elmenekül előled."
 
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Félő, hogy ezek a lények készek harcolni."
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
-msgstr ""
-"A bánya bejáratánál kell állnod (a fűrészmalmot és az alkimista labort "
-"leszámítva), hogy használd ezt a varázslatot."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr ""
@@ -8357,6 +8435,10 @@ msgstr "A sereg utolsó egységét nem lehet áthelyezni."
 msgid "This item can't be traded."
 msgstr ""
 
+#, fuzzy
+msgid "Invalid Artifact"
+msgstr "Varázstárgy"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
@@ -9468,10 +9550,6 @@ msgid ""
 "lost by mortals."
 msgstr ""
 
-#, fuzzy
-msgid "Invalid Artifact"
-msgstr "Varázstárgy"
-
 msgid "Wood"
 msgstr "Fa"
 
@@ -9870,9 +9948,6 @@ msgstr "Minden mutatása"
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr "Részletes információkat ad az ellenséges hősökről."
 
-msgid "Identify Hero"
-msgstr "Hősazonosítás"
-
 msgid "Summon Boat"
 msgstr "Hajó idézése"
 
@@ -10077,11 +10152,3 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Attention"
-#~ msgstr "animáció"
-
-#, fuzzy
-#~ msgid "Location: "
-#~ msgstr "Ásatás"

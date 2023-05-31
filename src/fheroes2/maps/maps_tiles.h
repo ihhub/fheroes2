@@ -176,6 +176,12 @@ namespace Maps
             return _hasObjectAnimation;
         }
 
+        // Checks whether it is possible to move into this tile from the specified direction
+        bool isPassableFrom( const int direction ) const
+        {
+            return ( direction & tilePassable ) != 0;
+        }
+
         // Checks whether it is possible to move into this tile from the specified direction under the specified conditions
         bool isPassableFrom( const int direction, const bool fromWater, const bool skipFog, const int heroColor ) const;
 
@@ -361,6 +367,10 @@ namespace Maps
         // The old code was using weird quantity based values which were very hard to understand.
         // Since we must have backwards compatibility we need to do the conversion.
         void quantityIntoMetadata( const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata );
+
+        // The old code stored an unknown artifact ID as 103. This prevented from adding new artifacts without breaking compatibility every time we do such.
+        // This method serves to fix incorrect artifact IDs.
+        void fixOldArtifactIDs();
 
     private:
         TilesAddon * getAddonWithFlag( const uint32_t uid );

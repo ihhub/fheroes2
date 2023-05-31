@@ -38,6 +38,7 @@
 #include "dialog_game_settings.h"
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
+#include "editor.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
@@ -58,6 +59,7 @@
 #include "ui_dialog.h"
 #include "ui_language.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -172,11 +174,25 @@ void Game::mainGameLoop( bool isFirstGameRun )
                 result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIGN, false );
             }
             break;
+#if defined( WITH_DEBUG )
+        case fheroes2::GameMode::EDITOR_MAIN_MENU:
+            result = Editor::menuMain();
+            break;
+        case fheroes2::GameMode::EDITOR_NEW_MAP:
+            result = Editor::menuNewMap();
+            break;
+        case fheroes2::GameMode::EDITOR_LOAD_MAP:
+            result = Editor::menuLoadMap();
+            break;
+#endif
 
         default:
             break;
         }
     }
+
+    // We are quitting the game, so fade-out the screen.
+    fheroes2::fadeOutDisplay();
 }
 
 fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
@@ -249,7 +265,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     buttonCredits.draw();
     buttonQuit.draw();
 
-    display.render();
+    fheroes2::validateFadeInAndRender();
 
     const double scaleX = static_cast<double>( display.width() ) / fheroes2::Display::DEFAULT_WIDTH;
     const double scaleY = static_cast<double>( display.height() ) / fheroes2::Display::DEFAULT_HEIGHT;
@@ -345,6 +361,12 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
             return fheroes2::GameMode::MAIN_MENU;
         }
+#if defined( WITH_DEBUG )
+        // Editor is still in development.
+        else if ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) ) {
+            return fheroes2::GameMode::EDITOR_MAIN_MENU;
+        }
+#endif
 
         // right info
         if ( le.MousePressRight( buttonQuit.area() ) )

@@ -193,7 +193,7 @@ void Game::DialogPlayers( int color, std::string title, std::string message )
                            fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
 }
 
-void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
+void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, const bool renderBackgroundDialog /* = true */ )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -208,38 +208,37 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
 
     const size_t heroCountBefore = myKingdom.GetHeroes().size();
 
-    if ( it != myCastles.end() ) {
-        Castle::CastleDialogReturnValue result = Castle::CastleDialogReturnValue::DoNothing;
+    assert( it != myCastles.end() );
 
-        while ( result != Castle::CastleDialogReturnValue::Close ) {
-            assert( it != myCastles.end() );
+    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( false, true, renderBackgroundDialog );
 
-            const bool openConstructionWindow
-                = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
-
-            result = ( *it )->OpenDialog( openConstructionWindow );
-
-            if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
-                if ( it == myCastles.begin() )
-                    it = myCastles.end();
-                --it;
+    while ( result != Castle::CastleDialogReturnValue::Close ) {
+        if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
+            if ( it == myCastles.begin() ) {
+                it = myCastles.end();
             }
-            else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextCostructionWindow ) {
-                ++it;
-                if ( it == myCastles.end() )
-                    it = myCastles.begin();
+            --it;
+        }
+        else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextCostructionWindow ) {
+            ++it;
+            if ( it == myCastles.end() ) {
+                it = myCastles.begin();
             }
         }
-    }
-    else {
-        assert( 0 );
+
+        assert( it != myCastles.end() );
+
+        const bool openConstructionWindow
+            = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
+
+        result = ( *it )->OpenDialog( openConstructionWindow, false, renderBackgroundDialog );
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
 
     if ( updateFocus ) {
         if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
-            basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
+            basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore], false );
         }
         else if ( it != myCastles.end() ) {
             Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).GetHeroes();
@@ -247,11 +246,11 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
                 basicInterface.SetFocus( *it );
             }
             else {
-                basicInterface.SetFocus( heroInCastle );
+                basicInterface.SetFocus( heroInCastle, false );
             }
         }
         else {
-            basicInterface.ResetFocus( GameFocus::HEROES );
+            basicInterface.ResetFocus( GameFocus::HEROES, false );
         }
     }
     else {
@@ -261,38 +260,45 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
 
     // The castle garrison can change
     basicInterface.RedrawFocus();
+
+    // Fade-in game screen only for 640x480 resolution.
+    if ( fheroes2::Display::instance().isDefaultSize() ) {
+        setDisplayFadeIn();
+    }
 }
 
-void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss /* = false */ )
+void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderBackgroundDialog, const bool disableDismiss /* = false */ )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    bool needFade = Settings::isFadeEffectEnabled() && fheroes2::Display::instance().isDefaultSize();
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
 
     const KingdomHeroes & myHeroes = hero.GetKingdom().GetHeroes();
     KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
 
+    bool needFade = true;
     int result = Dialog::ZERO;
 
     while ( it != myHeroes.end() && result != Dialog::CANCEL ) {
-        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, windowIsGameWorld );
-        if ( needFade )
+        result = ( *it )->OpenDialog( false, true, disableDismiss, false, renderBackgroundDialog );
+        if ( needFade ) {
             needFade = false;
+        }
 
         switch ( result ) {
         case Dialog::PREV:
-            if ( it == myHeroes.begin() )
+            if ( it == myHeroes.begin() ) {
                 it = myHeroes.end();
+            }
             --it;
             break;
 
         case Dialog::NEXT:
             ++it;
-            if ( it == myHeroes.end() )
+            if ( it == myHeroes.end() ) {
                 it = myHeroes.begin();
+            }
             break;
 
         case Dialog::DISMISS:
@@ -301,7 +307,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
             ( *it )->GetPath().Hide();
             basicInterface.SetRedraw( Interface::REDRAW_GAMEAREA );
 
-            if ( windowIsGameWorld ) {
+            if ( renderBackgroundDialog ) {
                 ( *it )->FadeOut();
             }
 
@@ -320,15 +326,20 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 
     if ( updateFocus ) {
         if ( it != myHeroes.end() ) {
-            basicInterface.SetFocus( *it );
+            basicInterface.SetFocus( *it, false );
         }
         else {
-            basicInterface.ResetFocus( GameFocus::HEROES );
+            basicInterface.ResetFocus( GameFocus::HEROES, false );
         }
     }
 
     // The hero's army can change
     basicInterface.RedrawFocus();
+
+    // Fade-in game screen only for 640x480 resolution.
+    if ( fheroes2::Display::instance().isDefaultSize() ) {
+        setDisplayFadeIn();
+    }
 }
 
 void ShowNewWeekDialog()
@@ -386,23 +397,27 @@ void ShowWarningLostTownsDialog()
     }
 }
 
-int Interface::Basic::GetCursorFocusCastle( const Castle & from_castle, const Maps::Tiles & tile )
+int Interface::Basic::GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile )
 {
     switch ( tile.GetObject() ) {
     case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
-        const Castle * to_castle = world.getCastle( tile.GetCenter() );
+        const Castle * otherCastle = world.getCastle( tile.GetCenter() );
 
-        if ( nullptr != to_castle )
-            return to_castle->GetColor() == from_castle.GetColor() ? Cursor::CASTLE : Cursor::POINTER;
+        if ( otherCastle ) {
+            return otherCastle->GetColor() == castle.GetColor() ? Cursor::CASTLE : Cursor::POINTER;
+        }
+
         break;
     }
 
     case MP2::OBJ_HEROES: {
-        const Heroes * heroes = tile.GetHeroes();
+        const Heroes * hero = tile.GetHeroes();
 
-        if ( nullptr != heroes )
-            return heroes->GetColor() == from_castle.GetColor() ? Cursor::HEROES : Cursor::POINTER;
+        if ( hero ) {
+            return hero->GetColor() == castle.GetColor() ? Cursor::HEROES : Cursor::POINTER;
+        }
+
         break;
     }
 
@@ -413,81 +428,87 @@ int Interface::Basic::GetCursorFocusCastle( const Castle & from_castle, const Ma
     return Cursor::POINTER;
 }
 
-int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const Maps::Tiles & tile )
+int Interface::Basic::GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile )
 {
-    const bool water = tile.isWater();
+    const bool isWater = tile.isWater();
 
     switch ( tile.GetObject() ) {
-    case MP2::OBJ_MONSTER:
-        return water ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( tile.GetIndex() ) ) : Cursor::POINTER;
-
-    case MP2::OBJ_BOAT:
-        return Cursor::POINTER;
-
     case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
 
         if ( castle ) {
-            if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE && water && tile.isPassableFrom( Direction::CENTER, true, false, from_hero.GetColor() ) ) {
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+            if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE && isWater && tile.isPassableFrom( Direction::CENTER, true, false, hero.GetColor() ) ) {
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
 
-            return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
+            return hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
         }
+
         break;
     }
 
     case MP2::OBJ_HEROES: {
-        const Heroes * to_hero = tile.GetHeroes();
+        const Heroes * otherHero = tile.GetHeroes();
 
-        if ( to_hero ) {
-            if ( !to_hero->isShipMaster() )
-                return from_hero.GetColor() == to_hero->GetColor() ? Cursor::HEROES : Cursor::POINTER;
-            else if ( to_hero->GetCenter() == from_hero.GetCenter() )
+        if ( otherHero ) {
+            if ( !otherHero->isShipMaster() ) {
+                return hero.GetColor() == otherHero->GetColor() ? Cursor::HEROES : Cursor::POINTER;
+            }
+
+            if ( otherHero->GetCenter() == hero.GetCenter() ) {
                 return Cursor::HEROES;
-            else if ( from_hero.GetColor() == to_hero->GetColor() )
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
-            else if ( from_hero.isFriends( to_hero->GetColor() ) )
+            }
+
+            if ( hero.GetColor() == otherHero->GetColor() ) {
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, hero.getNumOfTravelDays( tile.GetIndex() ) );
+            }
+
+            if ( hero.isFriends( otherHero->GetColor() ) ) {
                 return Cursor::POINTER;
-            else
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+            }
+
+            return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, hero.getNumOfTravelDays( tile.GetIndex() ) );
         }
+
         break;
     }
 
+    case MP2::OBJ_MONSTER:
+        // TODO: Can monsters be placed on water?
+        return isWater ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, hero.getNumOfTravelDays( tile.GetIndex() ) ) : Cursor::POINTER;
+
     case MP2::OBJ_COAST:
-        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
     default:
-        if ( water ) {
+        if ( isWater ) {
             if ( MP2::isWaterActionObject( tile.GetObject() ) ) {
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT_ACTION, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT_ACTION, hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
-            if ( tile.isPassableFrom( Direction::CENTER, true, false, from_hero.GetColor() ) ) {
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+
+            if ( tile.isPassableFrom( Direction::CENTER, true, false, hero.GetColor() ) ) {
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
         }
+
         break;
     }
 
     return Cursor::POINTER;
 }
 
-int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps::Tiles & tile )
+int Interface::Basic::GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile )
 {
-    if ( from_hero.Modes( Heroes::ENABLEMOVE ) ) {
+    if ( hero.Modes( Heroes::ENABLEMOVE ) ) {
         return Cursor::Get().Themes();
     }
 
-    if ( from_hero.isShipMaster() ) {
-        return GetCursorFocusShipmaster( from_hero, tile );
+    if ( hero.isShipMaster() ) {
+        return GetCursorFocusShipmaster( hero, tile );
     }
 
     switch ( tile.GetObject() ) {
-    case MP2::OBJ_MONSTER:
-        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
-
     case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
@@ -495,95 +516,91 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
         if ( castle ) {
             if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE ) {
                 if ( tile.GetPassable() == 0 ) {
-                    return ( from_hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
+                    return ( hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
                 }
-                else {
-                    const bool protection = Maps::isTileUnderProtection( tile.GetIndex() );
 
-                    return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ),
-                                                   from_hero.getNumOfTravelDays( tile.GetIndex() ) );
-                }
+                return Cursor::DistanceThemes( Maps::isTileUnderProtection( tile.GetIndex() ) ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE,
+                                               hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
-            else if ( from_hero.GetIndex() == castle->GetIndex() ) {
-                return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
+
+            if ( hero.GetIndex() == castle->GetIndex() ) {
+                return hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
             }
-            else if ( from_hero.GetColor() == castle->GetColor() ) {
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.getNumOfTravelDays( castle->GetIndex() ) );
+
+            if ( hero.GetColor() == castle->GetColor() ) {
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, hero.getNumOfTravelDays( castle->GetIndex() ) );
             }
-            else if ( from_hero.isFriends( castle->GetColor() ) ) {
+
+            if ( hero.isFriends( castle->GetColor() ) ) {
                 return Cursor::POINTER;
             }
-            else if ( castle->GetActualArmy().isValid() ) {
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( castle->GetIndex() ) );
+
+            if ( castle->GetActualArmy().isValid() ) {
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, hero.getNumOfTravelDays( castle->GetIndex() ) );
             }
-            else {
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.getNumOfTravelDays( castle->GetIndex() ) );
-            }
+
+            return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, hero.getNumOfTravelDays( castle->GetIndex() ) );
         }
+
         break;
     }
 
     case MP2::OBJ_HEROES: {
-        const Heroes * to_hero = tile.GetHeroes();
+        const Heroes * otherHero = tile.GetHeroes();
 
-        if ( nullptr != to_hero ) {
-            if ( to_hero->GetCenter() == from_hero.GetCenter() ) {
+        if ( otherHero ) {
+            if ( otherHero->GetCenter() == hero.GetCenter() ) {
                 return Cursor::HEROES;
             }
-            else if ( from_hero.GetColor() == to_hero->GetColor() ) {
-                const int cursor = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+
+            if ( hero.GetColor() == otherHero->GetColor() ) {
+                const int cursor = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
                 return cursor != Cursor::POINTER ? cursor : Cursor::HEROES;
             }
-            else if ( from_hero.isFriends( to_hero->GetColor() ) ) {
+
+            if ( hero.isFriends( otherHero->GetColor() ) ) {
                 return Cursor::POINTER;
             }
-            else {
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
-            }
+
+            return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, hero.getNumOfTravelDays( tile.GetIndex() ) );
         }
         break;
     }
 
     case MP2::OBJ_BOAT:
-        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
-
-    case MP2::OBJ_BARRIER:
-        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
     default:
         if ( MP2::isActionObject( tile.GetObject() ) ) {
-            bool protection = false;
+            const bool isProtected
+                = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !hero.isFriends( getColorFromTile( tile ) ) && tile.isCaptureObjectProtected() ) );
 
-            if ( MP2::isPickupObject( tile.GetObject() ) ) {
-                protection = Maps::isTileUnderProtection( tile.GetIndex() );
-            }
-            else {
-                protection
-                    = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( getColorFromTile( tile ) ) && tile.isCaptureObjectProtected() ) );
-            }
-
-            return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION ), from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+            return Cursor::DistanceThemes( isProtected ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION, hero.getNumOfTravelDays( tile.GetIndex() ) );
         }
-        else if ( tile.isPassableFrom( Direction::CENTER, from_hero.isShipMaster(), false, from_hero.GetColor() ) ) {
-            const bool protection = Maps::isTileUnderProtection( tile.GetIndex() );
 
-            return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ), from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+        if ( tile.isPassableFrom( Direction::CENTER, hero.isShipMaster(), false, hero.GetColor() ) ) {
+            return Cursor::DistanceThemes( Maps::isTileUnderProtection( tile.GetIndex() ) ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE,
+                                           hero.getNumOfTravelDays( tile.GetIndex() ) );
         }
+
         break;
     }
 
     return Cursor::POINTER;
 }
 
-int Interface::Basic::GetCursorTileIndex( int32_t dst_index )
+int Interface::Basic::GetCursorTileIndex( int32_t dstIndex )
 {
-    if ( dst_index < 0 || dst_index >= world.w() * world.h() )
+    if ( !Maps::isValidAbsIndex( dstIndex ) ) {
         return Cursor::POINTER;
+    }
 
-    const Maps::Tiles & tile = world.GetTiles( dst_index );
-    if ( tile.isFog( Settings::Get().CurrentColor() ) )
+    const Maps::Tiles & tile = world.GetTiles( dstIndex );
+
+    if ( tile.isFog( Settings::Get().CurrentColor() ) ) {
         return Cursor::POINTER;
+    }
 
     switch ( GetFocusType() ) {
     case GameFocus::HEROES:
@@ -602,7 +619,6 @@ int Interface::Basic::GetCursorTileIndex( int32_t dst_index )
 fheroes2::GameMode Interface::Basic::StartGame()
 {
     Settings & conf = Settings::Get();
-    fheroes2::Display & display = fheroes2::Display::instance();
 
     Reset();
 
@@ -616,6 +632,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
     bool loadedFromSave = conf.LoadedGameVersion();
     bool skipTurns = loadedFromSave;
+
+    // Set need of fade-in of game screen.
+    Game::setDisplayFadeIn();
 
     GameOver::Result & gameResult = GameOver::Result::Get();
     fheroes2::GameMode res = fheroes2::GameMode::END_TURN;
@@ -687,7 +706,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, Color::NONE );
 
                         Redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
-                        display.render();
+
+                        validateFadeInAndRender();
 
                         // reset the music after closing the dialog
                         const AudioManager::MusicRestorer musicRestorer;
@@ -735,7 +755,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 #endif
 
                     Redraw();
-                    display.render();
+                    validateFadeInAndRender();
 
                     // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
                     if ( isHotSeatGame ) {
@@ -807,8 +827,12 @@ fheroes2::GameMode Interface::Basic::StartGame()
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
     assert( res != fheroes2::GameMode::END_TURN );
 
-    if ( Settings::isFadeEffectEnabled() )
-        fheroes2::FadeDisplay();
+    Game::setDisplayFadeIn();
+
+    // Do not use fade-out effect when exiting to Highscores screen as in this case name input dialog will be rendered next.
+    if ( res != fheroes2::GameMode::HIGHSCORES_STANDARD ) {
+        fheroes2::fadeOutDisplay();
+    }
 
     return res;
 }
@@ -819,7 +843,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
         updateFocus();
     }
     else {
-        ResetFocus( GameFocus::FIRSTHERO );
+        ResetFocus( GameFocus::FIRSTHERO, false );
     }
 
     radar.SetHide( false );
@@ -836,9 +860,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
 
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    display.render();
+    validateFadeInAndRender();
 
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
 
@@ -859,7 +881,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
 
         // The amount of the kingdom resources has changed, the status window needs to be updated
         Redraw( REDRAW_STATUS );
-        display.render();
+        fheroes2::Display::instance().render();
 
         if ( conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
             Game::AutoSave();
@@ -1053,8 +1075,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
             }
 
             // if the hero is currently moving, pressing any mouse button should stop him
-            const fheroes2::Rect displayArea{ 0, 0, display.width(), display.height() };
-            if ( le.MouseClickLeft( displayArea ) || le.MousePressRight( displayArea ) ) {
+            if ( le.MouseClickLeft() || le.MousePressRight() ) {
                 stopHero = true;
             }
         }
@@ -1157,7 +1178,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                             Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
 
                             gameArea.SetCenter( hero->GetCenter() );
-                            ResetFocus( GameFocus::HEROES );
+                            ResetFocus( GameFocus::HEROES, true );
 
                             RedrawFocus();
 
@@ -1179,7 +1200,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                                 gameArea.ShiftCenter( movement );
 
                                 Game::SetUpdateSoundsOnFocusUpdate( false );
-                                ResetFocus( GameFocus::HEROES );
+                                ResetFocus( GameFocus::HEROES, true );
                                 Game::SetUpdateSoundsOnFocusUpdate( true );
                                 heroAnimationFrameCount = 32 - heroMovementSkipValue;
                                 heroAnimationSpriteId = hero->GetSpriteIndex();
@@ -1255,7 +1276,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                 // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
                 assert( GetRedrawMask() == 0 );
 
-                display.render();
+                validateFadeInAndRender();
             }
         }
     }
@@ -1290,48 +1311,64 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
     return res;
 }
 
-void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
+void Interface::Basic::validateFadeInAndRender()
 {
-    Heroes * from_hero = GetFocusHeroes();
-    const Maps::Tiles & tile = world.GetTiles( index_maps );
+    if ( Game::validateDisplayFadeIn() ) {
+        fheroes2::fadeInDisplay();
+
+        SetRedraw( REDRAW_GAMEAREA );
+    }
+    else {
+        fheroes2::Display::instance().render();
+    }
+}
+
+void Interface::Basic::MouseCursorAreaClickLeft( const int32_t tileIndex )
+{
+    Heroes * focusedHero = GetFocusHeroes();
+    const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
     switch ( Cursor::WithoutDistanceThemes( Cursor::Get().Themes() ) ) {
     case Cursor::HEROES: {
-        Heroes * to_hero = tile.GetHeroes();
-        // focus change/open hero
-        if ( nullptr != to_hero ) {
-            if ( !from_hero || from_hero != to_hero ) {
-                SetFocus( to_hero );
-                CalculateHeroPath( to_hero, -1 );
-                RedrawFocus();
-            }
-            else {
-                Game::OpenHeroesDialog( *to_hero, true, true );
-                Cursor::Get().SetThemes( Cursor::HEROES );
-            }
+        Heroes * otherHero = tile.GetHeroes();
+        if ( otherHero == nullptr ) {
+            break;
         }
+
+        if ( focusedHero == nullptr || focusedHero != otherHero ) {
+            SetFocus( otherHero, false );
+            RedrawFocus();
+        }
+        else {
+            Game::OpenHeroesDialog( *otherHero, true, true );
+            Cursor::Get().SetThemes( Cursor::HEROES );
+        }
+
         break;
     }
 
     case Cursor::CASTLE: {
-        // correct index for castle
         const MP2::MapObjectType objectType = tile.GetObject();
-        if ( MP2::OBJ_NON_ACTION_CASTLE != objectType && MP2::OBJ_CASTLE != objectType )
+        if ( MP2::OBJ_NON_ACTION_CASTLE != objectType && MP2::OBJ_CASTLE != objectType ) {
             break;
+        }
 
-        Castle * to_castle = world.getCastle( tile.GetCenter() );
-        if ( to_castle == nullptr )
+        Castle * otherCastle = world.getCastle( tile.GetCenter() );
+        if ( otherCastle == nullptr ) {
             break;
+        }
 
-        const Castle * from_castle = GetFocusCastle();
-        if ( !from_castle || from_castle != to_castle ) {
-            SetFocus( to_castle );
+        const Castle * focusedCastle = GetFocusCastle();
+
+        if ( focusedCastle == nullptr || focusedCastle != otherCastle ) {
+            SetFocus( otherCastle );
             RedrawFocus();
         }
         else {
-            Game::OpenCastleDialog( *to_castle );
+            Game::OpenCastleDialog( *otherCastle );
             Cursor::Get().SetThemes( Cursor::CASTLE );
         }
+
         break;
     }
     case Cursor::CURSOR_HERO_FIGHT:
@@ -1340,19 +1377,28 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
     case Cursor::CURSOR_HERO_ANCHOR:
     case Cursor::CURSOR_HERO_MEET:
     case Cursor::CURSOR_HERO_ACTION:
-    case Cursor::CURSOR_HERO_BOAT_ACTION:
-        if ( from_hero == nullptr )
+    case Cursor::CURSOR_HERO_BOAT_ACTION: {
+        if ( focusedHero == nullptr ) {
             break;
+        }
 
-        if ( from_hero->isMoveEnabled() )
-            from_hero->SetMove( false );
-        else
-            ShowPathOrStartMoveHero( from_hero, index_maps );
+        if ( focusedHero->isMoveEnabled() ) {
+            focusedHero->SetMove( false );
+        }
+        else {
+            ShowPathOrStartMoveHero( focusedHero, tileIndex );
+        }
+
         break;
+    }
 
     default:
-        if ( from_hero )
-            from_hero->SetMove( false );
+        if ( focusedHero == nullptr ) {
+            break;
+        }
+
+        focusedHero->SetMove( false );
+
         break;
     }
 }
@@ -1361,7 +1407,6 @@ void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
 {
     Heroes * hero = GetFocusHeroes();
 
-    // stop hero
     if ( hero && hero->isMoveEnabled() ) {
         hero->SetMove( false );
         Cursor::Get().SetThemes( GetCursorTileIndex( index_maps ) );
@@ -1372,27 +1417,32 @@ void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
 
         DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
 
-        if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) )
+        if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) ) {
             Dialog::QuickInfo( tile );
-        else
+        }
+        else {
             switch ( tile.GetObject() ) {
             case MP2::OBJ_NON_ACTION_CASTLE:
             case MP2::OBJ_CASTLE: {
                 const Castle * castle = world.getCastle( tile.GetCenter() );
+
                 if ( castle ) {
                     Dialog::QuickInfo( *castle );
                 }
                 else {
                     Dialog::QuickInfo( tile );
                 }
+
                 break;
             }
 
             case MP2::OBJ_HEROES: {
                 const Heroes * heroes = tile.GetHeroes();
+
                 if ( heroes ) {
                     Dialog::QuickInfo( *heroes );
                 }
+
                 break;
             }
 
@@ -1400,5 +1450,6 @@ void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
                 Dialog::QuickInfo( tile );
                 break;
             }
+        }
     }
 }

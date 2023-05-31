@@ -1176,8 +1176,13 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
     const std::vector<Campaign::CampaignAwardData> obtainableAwards = Campaign::CampaignAwardData::getCampaignAwardData( lastCompletedScenarioInfo );
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
-    for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
-        const uint32_t awardType = obtainableAwards[i]._type;
+    for ( const auto & obtainableAward : obtainableAwards ) {
+        const int32_t awardType = obtainableAward._type;
+
+        if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_DEFEAT_ENEMY_HERO ) {
+            // This award must be granted only after defeating a hero in a battle.
+            continue;
+        }
 
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
             const Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
@@ -1188,7 +1193,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
                 saveData.setCarryOverTroops( lastBattleWinHero->GetArmy() );
         }
 
-        saveData.addCampaignAward( obtainableAwards[i]._id );
+        saveData.addCampaignAward( obtainableAward._id );
 
         // after adding an artifact award, check whether the artifacts can be assembled into something else
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT ) {
@@ -1429,7 +1434,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     LocalEvent & le = LocalEvent::Get();
 
-    display.render();
+    // Fade-in campaign scenario info.
+    if ( validateDisplayFadeIn() ) {
+        fheroes2::fadeInDisplay( { top.x, top.y, backgroundImage.width(), backgroundImage.height() }, false );
+    }
 
     std::vector<fheroes2::Rect> choiceArea( bonusChoiceCount );
     for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
@@ -1473,6 +1481,14 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 // Make sure to reset a state of the game if a user does not want to load it.
                 GameOver::Result::Get().Reset();
             }
+
+            fheroes2::fadeOutDisplay( { top.x, top.y, backgroundImage.width(), backgroundImage.height() }, false );
+
+            if ( prevMode == fheroes2::GameMode::LOAD_CAMPAIGN || prevMode == fheroes2::GameMode::MAIN_MENU ) {
+                // We are going back to main menu.
+                setDisplayFadeIn();
+            }
+
             return prevMode;
         }
 
@@ -1525,8 +1541,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             Players & players = conf.GetPlayers();
             players.SetStartGame();
-            if ( Settings::isFadeEffectEnabled() )
-                fheroes2::FadeDisplay();
 
             conf.SetGameType( Game::TYPE_CAMPAIGN );
 
@@ -1539,6 +1553,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 conf.SetCurrentFileInfo( Maps::FileInfo() );
                 continue;
             }
+
+            // Fade-out screen before loading a scenario.
+            fheroes2::fadeOutDisplay();
 
             // meanwhile, the others should be called after players.SetStartGame()
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE ) {
@@ -1555,13 +1572,17 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         else if ( le.MouseClickLeft( buttonViewIntro.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_VIEW_INTRO ) ) {
             AudioManager::ResetAudio();
             fheroes2::ImageRestorer restorer( display, top.x, top.y, backgroundImage.width(), backgroundImage.height() );
+
+            fheroes2::fadeOutDisplay( restorer.rect(), false );
+
             playPreviousScenarioVideo();
             playCurrentScenarioVideo();
 
-            restorer.restore();
-            display.render();
-
             playCampaignMusic( chosenCampaignID );
+
+            restorer.restore();
+
+            fheroes2::fadeInDisplay( restorer.rect(), false );
         }
         else if ( le.MousePressRight( areaDaysSpent ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Days spent" ), fheroes2::FontType::normalYellow() ),

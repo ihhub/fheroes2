@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 10:26+0000\n"
+"POT-Creation-Date: 2023-05-30 00:59+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3305,6 +3305,52 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Вярнуцца ў галоўнае меню."
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Новая гульня"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Загрузіць гульню"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr "Вярнуцца ў галоўнае меню."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr ""
+"Выпад-\n"
+"ковы"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Вярнуцца ў галоўнае меню."
+
+msgid "No maps available!"
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Лёгка"
 
@@ -3658,6 +3704,25 @@ msgstr ""
 msgid "hotkey|choose the expansion campaign"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "Кампанія"
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "Звычайная гульня"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "Звычайная гульня"
+
+msgid "hotkey|new map from scratch"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "Зводка аб каралеўстве"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -3921,9 +3986,6 @@ msgstr ""
 "Гуляй за адным кампутарам з адной-пяццю іншымі асобамі, перадаючы кіраванне "
 "па чарзе."
 
-msgid "Cancel back to the main menu."
-msgstr "Вярнуцца ў галоўнае меню."
-
 msgid "A single player game playing out a single map."
 msgstr "Гульня для адной асобы на адной мапе."
 
@@ -4014,6 +4076,9 @@ msgid "Expansion Campaign"
 msgstr "Дадатковыя сцэнары"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr ""
+
+msgid "Loading video. Please wait..."
 msgstr ""
 
 msgid "Host"
@@ -4248,9 +4313,6 @@ msgstr "Пстрыкні, каб ухваліць налады і пачаць �
 
 msgid "Click to return to the main menu."
 msgstr "Пстрыкні, каб вярнуцца ў галоўнае меню."
-
-msgid "No maps available!"
-msgstr ""
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr ""
@@ -4560,9 +4622,6 @@ msgid "Keyboard|123"
 msgstr ""
 
 msgid "Keyboard|SPACE"
-msgstr ""
-
-msgid "Keyboard|LANG"
 msgstr ""
 
 msgid "Keyboard|ABC"
@@ -5849,6 +5908,37 @@ msgid ""
 "This town is occupied by your hero %{hero}."
 msgstr ""
 
+msgid "This spell is already in use."
+msgstr ""
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
+msgstr ""
+
 msgid "%{name} the %{race} (Level %{level})"
 msgstr ""
 
@@ -5930,15 +6020,10 @@ msgstr ""
 msgid "%{spell} failed!!!"
 msgstr ""
 
-msgid "This spell is already in use."
-msgstr ""
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr ""
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
+msgid "Identify Hero"
 msgstr ""
 
 msgid "The creatures are willing to join us!"
@@ -5962,11 +6047,6 @@ msgid "These weak creatures will surely flee before us."
 msgstr ""
 
 msgid "I fear these creatures are in the mood for a fight."
-msgstr ""
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
 msgstr ""
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
@@ -7605,6 +7685,9 @@ msgstr ""
 msgid "This item can't be traded."
 msgstr ""
 
+msgid "Invalid Artifact"
+msgstr ""
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
@@ -8703,9 +8786,6 @@ msgid ""
 "lost by mortals."
 msgstr ""
 
-msgid "Invalid Artifact"
-msgstr ""
-
 msgid "Wood"
 msgstr ""
 
@@ -9088,9 +9168,6 @@ msgid "View All"
 msgstr ""
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
-msgstr ""
-
-msgid "Identify Hero"
 msgstr ""
 
 msgid "Summon Boat"

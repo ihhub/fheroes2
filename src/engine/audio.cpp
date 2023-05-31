@@ -55,8 +55,13 @@ namespace
 {
     struct AudioSpec
     {
+#if defined( TARGET_PS_VITA )
+        // Notice: The PS Vita sound resampler is CPU intensive if the value is not 22050.
+        int frequency = 22050;
+#else
         // Notice: Value 22050 causes music distortion on Windows.
         int frequency = 44100;
+#endif
         uint16_t format = AUDIO_S16;
         // Stereo audio support
         int channels = 2;

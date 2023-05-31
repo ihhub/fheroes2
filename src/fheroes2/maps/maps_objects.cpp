@@ -134,7 +134,7 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
     resources.gold = static_cast<int32_t>( dataStream.getLE32() );
 
     // An artifact to be given.
-    artifact = dataStream.getLE16();
+    artifact = dataStream.getLE16() + 1;
 
     // The event applies to AI players as well.
     computer = ( dataStream.get() != 0 );
@@ -273,7 +273,7 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
     resources.gold = dataStream.getLE32();
 
     // Retrieve an artifact to be given while answering the Sphinx riddle correctly.
-    artifact = dataStream.getLE16();
+    artifact = dataStream.getLE16() + 1;
 
     uint8_t answerCount = dataStream.get();
 

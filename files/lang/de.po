@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 10:26+0000\n"
+"POT-Creation-Date: 2023-05-30 00:59+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3555,6 +3555,50 @@ msgstr "Person:"
 msgid "Best Monster:"
 msgstr "Bestes Monster:"
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Abbrechen und zurück zum Hauptmenü."
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "New Dawn"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Spiel laden"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr "Abbrechen und zurück zum Hauptmenü."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Zufällig"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Abbrechen und zurück zum Hauptmenü."
+
+msgid "No maps available!"
+msgstr "Keine Karten vorhanden!"
+
 msgid "difficulty|Easy"
 msgstr "Leicht"
 
@@ -3910,6 +3954,26 @@ msgstr "Originaler Feldzug auswählen"
 msgid "hotkey|choose the expansion campaign"
 msgstr "Zusätzlicher Feldzug auswählen"
 
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "Feldzug-Spiel"
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "Neues Spiel"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "Spiel laden"
+
+#, fuzzy
+msgid "hotkey|new map from scratch"
+msgstr "Vom Kampf zurückziehen"
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "Neues Spiel"
+
 msgid "hotkey|roland campaign"
 msgstr "Roland-Feldzug"
 
@@ -4167,9 +4231,6 @@ msgstr ""
 "\"Heißen Stuhl\" spielen, bei dem 2 bis 4 Spieler spielen an einem Rechner "
 "abwechselnd gegeneinander."
 
-msgid "Cancel back to the main menu."
-msgstr "Abbrechen und zurück zum Hauptmenü."
-
 msgid "A single player game playing out a single map."
 msgstr "Ein Einzelspieler-Spiel, das auf einer einzigen Karte spielt."
 
@@ -4277,6 +4338,9 @@ msgstr "Zusätzlicher Feldzug"
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
 "Ein der vier neuen Feldzüge aus dem Erweiterungsset \"The Price of Loyalty\"."
+
+msgid "Loading video. Please wait..."
+msgstr ""
 
 msgid "Host"
 msgstr "Gastgeber"
@@ -4556,9 +4620,6 @@ msgstr "Diese Einstellungen übernehmen und ein neues Spiel beginnen."
 
 msgid "Click to return to the main menu."
 msgstr "Klicken, um zum Hauptmenü zurückzukehren."
-
-msgid "No maps available!"
-msgstr "Keine Karten vorhanden!"
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologen verkündigen den Monat des %{name}."
@@ -4921,9 +4982,6 @@ msgstr "123"
 
 msgid "Keyboard|SPACE"
 msgstr "LEERTASTE"
-
-msgid "Keyboard|LANG"
-msgstr "SPRA."
 
 msgid "Keyboard|ABC"
 msgstr "ABC"
@@ -6661,6 +6719,41 @@ msgstr ""
 " \n"
 "Diese Stadt ist von deinem Helden %{hero} besetzt."
 
+msgid "This spell is already in use."
+msgstr "Dieser Zauber ist bereits in Gebrauch."
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+"Sie müssen sich innerhalb von %{count} Feldern eines Monsters befinden, "
+"damit die Vision wirkt."
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+"Sie müssen am Eingang einer Mine stehen (Sägewerke und Alchemisten zählen "
+"nicht), um diesen Zauber zu wirken."
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
+msgstr ""
+
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} (Stufe %{level} %{race})"
 
@@ -6748,18 +6841,11 @@ msgstr "Wählen Sie die Zielstadt aus."
 msgid "%{spell} failed!!!"
 msgstr "%{spell} fehlgeschlagen!!!"
 
-msgid "This spell is already in use."
-msgstr "Dieser Zauber ist bereits in Gebrauch."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Feindliche Helden sind jetzt vollständig identifizierbar."
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
-msgstr ""
-"Sie müssen sich innerhalb von %{count} Feldern eines Monsters befinden, "
-"damit die Vision wirkt."
+msgid "Identify Hero"
+msgstr "Held identifiz."
 
 msgid "The creatures are willing to join us!"
 msgstr "Die Kreaturen sind bereit, sich uns anzuschließen!"
@@ -6784,13 +6870,6 @@ msgstr "Diese schwachen Kreaturen werden sicher vor uns fliehen."
 
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Ich fürchte, diese Kreaturen sind in der Stimmung für einen Kampf."
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
-msgstr ""
-"Sie müssen am Eingang einer Mine stehen (Sägewerke und Alchemisten zählen "
-"nicht), um diesen Zauber zu wirken."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr ""
@@ -8471,6 +8550,9 @@ msgstr "Das Zauberbuch kann nicht umgestellt werden"
 msgid "This item can't be traded."
 msgstr "Dieser Gegenstand kann nicht gehandelt werden."
 
+msgid "Invalid Artifact"
+msgstr "Ungültiges Artefakt"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "Die %{name} erhöht Ihr Wissen um %{count}."
 
@@ -9948,9 +10030,6 @@ msgstr ""
 "Untersuchung entdecken Sie, dass es sich um die verzauberte Spaten der "
 "Totengräber handelt, die die Sterblichen schon lange verloren glaubten."
 
-msgid "Invalid Artifact"
-msgstr "Ungültiges Artefakt"
-
 msgid "Wood"
 msgstr "Holz"
 
@@ -10396,9 +10475,6 @@ msgstr ""
 "Ermöglicht es dem Zaubernden, detaillierte Informationen über feindliche "
 "Helden einzusehen."
 
-msgid "Identify Hero"
-msgstr "Held identifiz."
-
 msgid "Summon Boat"
 msgstr "Boot herbeirufen"
 
@@ -10606,19 +10682,3 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} increases your morale."
-#~ msgstr "Der %{name} erhöht Ihre Moral."
-
-#~ msgid "Attention"
-#~ msgstr "Achtung"
-
-#~ msgid ""
-#~ "Your version of Heroes of Might and Magic II does not support any other "
-#~ "languages than English."
-#~ msgstr ""
-#~ "Ihre Version von Heroes of Might and Magic II unterstützt keine anderen "
-#~ "Sprachen als Englisch."
-
-#~ msgid "Location: "
-#~ msgstr "Ort: "

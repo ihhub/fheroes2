@@ -33,6 +33,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "heroes_indicator.h"
@@ -54,29 +55,37 @@
 #include "ui_tool.h"
 #include "ui_window.h"
 
-int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog /*= false*/ )
+int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    // fade
-    if ( fade && Settings::isFadeEffectEnabled() )
-        fheroes2::FadeDisplay();
-
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::Point cur_pt;
+    fheroes2::Rect fadeRoi;
+    fheroes2::Rect dialodWithShadowRoi;
     std::unique_ptr<fheroes2::StandardWindow> background;
     std::unique_ptr<fheroes2::ImageRestorer> restorer;
+
     if ( renderBackgroundDialog ) {
         background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
-        cur_pt = { background->activeArea().x, background->activeArea().y };
+        fadeRoi = background->activeArea();
+        dialodWithShadowRoi = background->totalArea();
     }
     else {
-        cur_pt = { ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2 };
-        restorer = std::make_unique<fheroes2::ImageRestorer>( display, cur_pt.x, cur_pt.y, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+        fadeRoi = { ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2,
+                    fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT };
+        dialodWithShadowRoi = { fadeRoi.x - 2 * BORDERWIDTH, fadeRoi.y - BORDERWIDTH, fadeRoi.width + 3 * BORDERWIDTH, fadeRoi.height + 3 * BORDERWIDTH };
+        restorer = std::make_unique<fheroes2::ImageRestorer>( display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height );
     }
 
+    // Fade-out game screen only for 640x480 resolution and if 'renderBackgroundDialog' is false (we are replacing image in already opened dialog).
+    const bool isDefaultScreenSize = display.isDefaultSize();
+    if ( fade && ( isDefaultScreenSize || !renderBackgroundDialog ) ) {
+        fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
+    }
+
+    fheroes2::Point cur_pt = { fadeRoi.x, fadeRoi.y };
     fheroes2::Point dst_pt( cur_pt );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROBKG, 0 ), display, dst_pt.x, dst_pt.y );
@@ -93,7 +102,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     StringReplace( message, "%{name}", name );
     StringReplace( message, "%{race}", Race::String( _race ) );
     StringReplace( message, "%{level}", GetLevel() );
-    Text text( message, Font::BIG );
+    const Text text( message, Font::BIG );
     text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 1 );
 
     PrimarySkillsBar primskill_bar( this, false );
@@ -244,7 +253,19 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     buttonDismiss.draw();
     buttonExit.draw();
 
-    display.render();
+    // Fade-in hero dialog.
+    if ( fade ) {
+        if ( renderBackgroundDialog && !isDefaultScreenSize ) {
+            // We need to expand the ROI for the next render to properly render window borders and shadow.
+            display.updateNextRenderRoi( dialodWithShadowRoi );
+        }
+
+        // Use half fade if game resolution is not 640x480.
+        fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
+    }
+    else {
+        display.render();
+    }
 
     bool redrawMorale = false;
     bool redrawLuck = false;
@@ -265,8 +286,11 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         }
 
         // exit
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+            // Fade-out hero dialog.
+            fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
             return Dialog::CANCEL;
+        }
 
         // heroes troops
         if ( le.MouseCursor( selectArmy.GetArea() ) && selectArmy.QueueEventProcessing( &message ) ) {

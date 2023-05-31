@@ -44,6 +44,7 @@
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
+#include "save_format_version.h"
 #include "skill.h"
 #include "spell.h"
 #include "tools.h"
@@ -128,7 +129,9 @@ namespace
         static_assert( std::is_same_v<decltype( Maps::Tiles::updateTileById ), void( Maps::Tiles &, uint32_t, uint8_t )>,
                        "Type of updateTileById() has been changed, check the logic below" );
 
-        const uint32_t artSpriteIndex = art.IndexSprite();
+        // Please refer to ICN::OBJNARTI for artifact images. Since in the original game artifact UID start from 0 we have to deduct 1 from the current artifact ID.
+        const uint32_t artSpriteIndex = ( art.GetID() - 1 ) * 2 + 1;
+
         assert( artSpriteIndex > std::numeric_limits<uint8_t>::min() && artSpriteIndex <= std::numeric_limits<uint8_t>::max() );
 
         Maps::Tiles::updateTileById( tile, uidArtifact, static_cast<uint8_t>( artSpriteIndex ) );
@@ -225,9 +228,6 @@ namespace Maps
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL:
-            if ( tile.metadata()[0] == Resource::GOLD ) {
-                return { static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] };
-            }
             return { static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] };
         default:
             break;
@@ -661,25 +661,6 @@ namespace Maps
         for ( uint32_t & value : tile.metadata() ) {
             value = 0;
         }
-
-        const MP2::MapObjectType objectType = tile.GetObject( false );
-
-        switch ( objectType ) {
-        case MP2::OBJ_ARTIFACT:
-        case MP2::OBJ_DAEMON_CAVE:
-        case MP2::OBJ_GRAVEYARD:
-        case MP2::OBJ_SEA_CHEST:
-        case MP2::OBJ_SHIPWRECK:
-        case MP2::OBJ_SHIPWRECK_SURVIVOR:
-        case MP2::OBJ_SKELETON:
-        case MP2::OBJ_TREASURE_CHEST:
-        case MP2::OBJ_WAGON:
-            tile.metadata()[0] = Artifact::UNKNOWN;
-            break;
-
-        default:
-            break;
-        }
     }
 
     void resetObjectInfoOnTile( Tiles & tile )
@@ -821,11 +802,37 @@ namespace Maps
 
         case MP2::OBJ_TROLL_BRIDGE:
         case MP2::OBJ_CITY_OF_DEAD:
-            count = isFirstLoad ? Rand::Get( 4, 6 ) : ( Color::NONE == getColorFromTile( tile ) ) ? count : count + Rand::Get( 1, 3 );
+            if ( isFirstLoad ) {
+                count = Rand::Get( 4, 6 );
+            }
+            else if ( getColorFromTile( tile ) != Color::NONE ) {
+                // If the Troll Bridge or City of Dead has been captured, its population is increased by 1-3 creature per week.
+                count += Rand::Get( 1, 3 );
+            }
+
+            static_assert( LAST_SUPPORTED_FORMAT_VERSION <= FORMAT_VERSION_1005_RELEASE, "Remove the check below." );
+            if ( count == 0 ) {
+                // The fix for the case when the Troll Bridge or City of Dead with NONE tile color, has 0 creatures (fixed in PR #7246).
+                count += Rand::Get( 1, 3 );
+            }
+
             break;
 
         case MP2::OBJ_DRAGON_CITY:
-            count = isFirstLoad ? 2 : ( Color::NONE == getColorFromTile( tile ) ) ? count : count + 1;
+            if ( isFirstLoad ) {
+                count = 2;
+            }
+            else if ( getColorFromTile( tile ) != Color::NONE ) {
+                // If the Dragon City has been captured or has 0 creatures, its population is increased by 1 dragon per week.
+                ++count;
+            }
+
+            static_assert( LAST_SUPPORTED_FORMAT_VERSION <= FORMAT_VERSION_1005_RELEASE, "Remove the check below." );
+            if ( count == 0 ) {
+                // The fix for the case when the Dragon City with NONE tile color, has 0 creatures (fixed in PR #7246).
+                ++count;
+            }
+
             break;
 
         default:

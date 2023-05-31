@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 10:26+0000\n"
+"POT-Creation-Date: 2023-05-30 00:59+0000\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3555,6 +3555,50 @@ msgstr "Personalidad:"
 msgid "Best Monster:"
 msgstr "Mejor monstruo:"
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Cancelar y volver al menú principal."
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Dawn"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Cargar juego"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr "Cancelar y volver al menú principal."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Cualquier torre"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Cancelar y volver al menú principal."
+
+msgid "No maps available!"
+msgstr "¡Ningún mapa disponible!"
+
 msgid "difficulty|Easy"
 msgstr "Fácil"
 
@@ -3924,6 +3968,25 @@ msgstr ""
 msgid "hotkey|choose the expansion campaign"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "Partida de Campaña."
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "Mostrar el siguiente héroe"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "Juego estandar"
+
+msgid "hotkey|new map from scratch"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "Resumen del reino"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4196,9 +4259,6 @@ msgstr ""
 "Juega una partida de \"Asiento caliente\" donde de 2 a 4 jugadores juegan en "
 "el mismo PC por turnos."
 
-msgid "Cancel back to the main menu."
-msgstr "Cancelar y volver al menú principal."
-
 msgid "A single player game playing out a single map."
 msgstr "Un solo jugador jugando un único mapa."
 
@@ -4293,6 +4353,9 @@ msgid "Expansion Campaign"
 msgstr ""
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr ""
+
+msgid "Loading video. Please wait..."
 msgstr ""
 
 msgid "Host"
@@ -4573,9 +4636,6 @@ msgstr ""
 
 msgid "Click to return to the main menu."
 msgstr "Haz clic para volver al menú principal"
-
-msgid "No maps available!"
-msgstr "¡Ningún mapa disponible!"
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Los Astrólogos proclaman el Mes de  %{name}."
@@ -4920,9 +4980,6 @@ msgid "Keyboard|123"
 msgstr ""
 
 msgid "Keyboard|SPACE"
-msgstr ""
-
-msgid "Keyboard|LANG"
 msgstr ""
 
 msgid "Keyboard|ABC"
@@ -6598,6 +6655,41 @@ msgid ""
 "This town is occupied by your hero %{hero}."
 msgstr ""
 
+msgid "This spell is already in use."
+msgstr ""
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+"Debes estar a %{count} casillas  de un monstruo para que el hechizo Visiones "
+"funcione."
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+"Has de estar en la entrada de una mina para lanzar este hechizo (las "
+"serrerías y las casas de alquimia no cuentan)."
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
+msgstr ""
+
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name}, %{race} ( Nivel %{level} )"
 
@@ -6692,18 +6784,11 @@ msgstr "Seleccione la ciudad a la que transportarse."
 msgid "%{spell} failed!!!"
 msgstr "¡%{spell} fallido!"
 
-msgid "This spell is already in use."
-msgstr ""
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Ahora se identifica totalmente a los héroes enemigos."
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
-msgstr ""
-"Debes estar a %{count} casillas  de un monstruo para que el hechizo Visiones "
-"funcione."
+msgid "Identify Hero"
+msgstr "Identificar Héroe"
 
 msgid "The creatures are willing to join us!"
 msgstr "¡Las criaturas quieren unirse a nosotros!"
@@ -6726,13 +6811,6 @@ msgstr "Esas débiles criaturas seguramente huirán nada más vernos."
 
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Me temo que esas criaturas tienen ganas de luchar."
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
-msgstr ""
-"Has de estar en la entrada de una mina para lanzar este hechizo (las "
-"serrerías y las casas de alquimia no cuentan)."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr ""
@@ -8454,6 +8532,10 @@ msgstr "Lanzar hechizo"
 msgid "This item can't be traded."
 msgstr ""
 
+#, fuzzy
+msgid "Invalid Artifact"
+msgstr "Artefacto"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
@@ -9643,10 +9725,6 @@ msgstr ""
 "investigarla, descubres que es la pala encantada de los Enterradores, que se "
 "creía perdida hacía tiempo por los mortales."
 
-#, fuzzy
-msgid "Invalid Artifact"
-msgstr "Artefacto"
-
 msgid "Wood"
 msgstr "Madera"
 
@@ -10077,9 +10155,6 @@ msgstr "Ver Todo"
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr "Permite al lanzador ver información detallada de los héroes enemigos."
 
-msgid "Identify Hero"
-msgstr "Identificar Héroe"
-
 msgid "Summon Boat"
 msgstr "LLamar Barco"
 
@@ -10296,11 +10371,3 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Attention"
-#~ msgstr "\"Anexión\""
-
-#, fuzzy
-#~ msgid "Location: "
-#~ msgstr "Excavación"

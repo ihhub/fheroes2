@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-07 10:26+0000\n"
+"POT-Creation-Date: 2023-05-30 00:59+0000\n"
 "PO-Revision-Date: 2023-04-10 00:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3566,6 +3566,50 @@ msgstr "Rolle:"
 msgid "Best Monster:"
 msgstr "Beste skapning:"
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Avbryt og dra tilbake til hovedmenyen."
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Morgengry"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Last inn et parti"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr "Avbryt og dra tilbake til hovedmenyen."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Tilfeldig"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Avbryt og dra tilbake til hovedmenyen."
+
+msgid "No maps available!"
+msgstr "Ingen kart er tilgjengelige!"
+
 msgid "difficulty|Easy"
 msgstr "Lett"
 
@@ -3926,6 +3970,26 @@ msgstr "Velg Krigen om tronen"
 msgid "hotkey|choose the expansion campaign"
 msgstr "Velg Prisen for Lojalitet"
 
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "Felttog"
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "Nytt parti"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "Last inn parti"
+
+#, fuzzy
+msgid "hotkey|new map from scratch"
+msgstr "Trekk tilbake fra kamp"
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "Nytt parti"
+
 msgid "hotkey|roland campaign"
 msgstr "Rolands felttog"
 
@@ -4183,9 +4247,6 @@ msgstr ""
 "Spill en runde byttespilling hvor 2 til 4 spillere rullerer på å spille på "
 "den samme datamaskinen og bytter plass når det er nestemann sin tur."
 
-msgid "Cancel back to the main menu."
-msgstr "Avbryt og dra tilbake til hovedmenyen."
-
 msgid "A single player game playing out a single map."
 msgstr "Et enkeltspillerparti som spilles ut på et enkelt kart."
 
@@ -4289,6 +4350,9 @@ msgstr "Utvidelsesfelttog"
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
 "En av de fire nye utvidelsesfelttogene fra utvidelsen Prisen for trofasthet."
+
+msgid "Loading video. Please wait..."
+msgstr ""
 
 msgid "Host"
 msgstr "Vert"
@@ -4561,9 +4625,6 @@ msgstr "Klikk her for å bekrefte disse valgene og begynne på et nytt parti."
 
 msgid "Click to return to the main menu."
 msgstr "Klikk her for å dra tilbake til hovedmenyen."
-
-msgid "No maps available!"
-msgstr "Ingen kart er tilgjengelige!"
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologene kunngjør at det er måneden av %{name}."
@@ -4916,9 +4977,6 @@ msgstr ""
 
 msgid "Keyboard|SPACE"
 msgstr "MELLOMROM"
-
-msgid "Keyboard|LANG"
-msgstr "SPRÅK"
 
 msgid "Keyboard|ABC"
 msgstr ""
@@ -6634,6 +6692,41 @@ msgstr ""
 "\n"
 "Denne byen er blokkert av helten din %{hero}."
 
+msgid "This spell is already in use."
+msgstr "Denne trolldommen er allerede i virkning."
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+"Du må være innenfor %{count} ruter av et monster for at trolldommen 'Syner' "
+"skal virke."
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+"Du må stå ved inngangen til ei gruve (sagbruk og alkymistlaber funker ikke) "
+"for å bruke denne trolldommen."
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
+msgstr ""
+
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race}en %{name} (level %{level})"
 
@@ -6720,18 +6813,11 @@ msgstr "Velg by å reise til."
 msgid "%{spell} failed!!!"
 msgstr "%{spell} mislyktes!"
 
-msgid "This spell is already in use."
-msgstr "Denne trolldommen er allerede i virkning."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "De fiendtlige heltene er nå helt kartlagte."
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
-msgstr ""
-"Du må være innenfor %{count} ruter av et monster for at trolldommen 'Syner' "
-"skal virke."
+msgid "Identify Hero"
+msgstr "Kartlegg helt"
 
 msgid "The creatures are willing to join us!"
 msgstr "Skapningene er villige til å bli med oss!"
@@ -6756,13 +6842,6 @@ msgstr "Disse svake skapningene vil uten tvil flykte fra oss."
 
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Jeg er redd for at disse skapningene er ute etter en kamp."
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
-msgstr ""
-"Du må stå ved inngangen til ei gruve (sagbruk og alkymistlaber funker ikke) "
-"for å bruke denne trolldommen."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr "Angrepsevnen til helten din legges til angrepsevnen til krigerne dine."
@@ -8465,6 +8544,9 @@ msgstr "Trylleboken kan ikke flyttes"
 msgid "This item can't be traded."
 msgstr "Denne tingen kan ikke byttes."
 
+msgid "Invalid Artifact"
+msgstr "Ugyldig skatt"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} øker kunnskapen din med %{count}."
 
@@ -9905,9 +9987,6 @@ msgstr ""
 "nærmere titt oppdager du at det er den fortryllede spaden til Gravleggerne, "
 "lenge trodd å være forsvunnet av de dødelige."
 
-msgid "Invalid Artifact"
-msgstr "Ugyldig skatt"
-
 msgid "Wood"
 msgstr "Ved"
 
@@ -10362,9 +10441,6 @@ msgstr "Vis alt"
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr "Lar magibrukeren se detaljert informasjon om fiendtlige helter."
 
-msgid "Identify Hero"
-msgstr "Kartlegg helt"
-
 msgid "Summon Boat"
 msgstr "Tilkall skip"
 
@@ -10576,19 +10652,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} increases your morale."
-#~ msgstr "%{name} styrker kampånden din."
-
-#~ msgid "Attention"
-#~ msgstr "Advarsel"
-
-#~ msgid ""
-#~ "Your version of Heroes of Might and Magic II does not support any other "
-#~ "languages than English."
-#~ msgstr ""
-#~ "Din utgave av Heroes of Might and Magic II støtter ingen andre språk enn "
-#~ "engelsk."
-
-#~ msgid "Location: "
-#~ msgstr "Plassering: "
