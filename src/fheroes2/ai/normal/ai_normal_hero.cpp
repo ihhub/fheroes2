@@ -1659,7 +1659,7 @@ namespace AI
 
             const auto [dummy, inserted] = objectIndexes.emplace( actionObject.first );
             if ( !inserted ) {
-              assert( 0 );
+                assert( 0 );
             }
         }
 #endif
