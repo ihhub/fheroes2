@@ -1197,7 +1197,7 @@ double Army::GetStrength() const
         result += strength;
     }
 
-    if ( commander ) {
+    if ( commander != nullptr && result > 0.1 ) {
         result += commander->GetMagicStrategicValue( result );
     }
 
