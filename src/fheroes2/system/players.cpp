@@ -439,6 +439,8 @@ std::vector<int> Players::getInPlayOpponents( const int color )
     const int friends = playerOfColor->GetFriends();
 
     for ( const Player * player : Settings::Get().GetPlayers() ) {
+        assert( player != nullptr );
+
         const int currentColor = player->GetColor();
 
         if ( player->isPlay() && ( ( currentColor & friends ) == 0 ) ) {
