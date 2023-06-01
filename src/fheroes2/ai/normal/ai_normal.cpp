@@ -47,21 +47,11 @@ namespace AI
     void Normal::revealFog( const Maps::Tiles & tile )
     {
         const MP2::MapObjectType object = tile.GetObject();
-        if ( MP2::isActionObject( object ) ) {
-            const IndexObject indexObject{ tile.GetIndex(), static_cast<int>( object ) };
-
-            // _mapActionObjects must in a sorted ascending order as we use std::binary_search later in the code.
-            // std::lower_bound is used in order to find the correct spot for insertion in a sorted array.
-            auto iter = std::lower_bound( _mapActionObjects.begin(), _mapActionObjects.end(), indexObject,
-                                          []( const IndexObject & left, const IndexObject & right ) { return left.first < right.first; } );
-            if ( iter != _mapActionObjects.end() && iter->first == indexObject.first ) {
-                // The object exist! Most likely because of View All spell.
-                iter->second = indexObject.second;
-            }
-            else {
-                _mapActionObjects.emplace( iter, indexObject );
-            }
+        if ( !MP2::isActionObject( object ) ) {
+            return;
         }
+
+        updateMapActionObjectCache( tile.GetIndex() );
     }
 
     double Normal::getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType )
