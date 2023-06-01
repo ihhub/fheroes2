@@ -356,6 +356,9 @@ double HeroBase::GetMagicStrategicValue( const double armyStrength ) const
 
 bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr */ ) const
 {
+    // This method should not be called for an invalid hero or a hero who is not hired by any kingdom
+    assert( isValid() && GetColor() != Color::NONE );
+
     if ( !HaveSpellBook() ) {
         if ( res ) {
             // This should not happen for a human-controlled hero (for which this method is usually called with the non-null res)
