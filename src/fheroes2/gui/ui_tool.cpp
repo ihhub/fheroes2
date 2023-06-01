@@ -131,7 +131,7 @@ namespace
             return;
         }
 
-        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+        Cursor::Get().SetThemes( Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
