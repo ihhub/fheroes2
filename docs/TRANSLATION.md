@@ -109,7 +109,7 @@ your own fheroes2 fork. Then, create a PR that proposes to introduce your change
 
 How to [**commit**](https://github.com/git-guides/git-commit). 
 
-How to [**create a pull request from your form your fork**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork).
+How to [**create a pull request from your fork**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork).
 
 The pull request title has to be something human-understandable. This allows the team to quickly identify the purpose of 
 your work, I.E. "Update the Slovak translation".
