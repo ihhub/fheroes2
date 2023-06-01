@@ -234,36 +234,40 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
         result = ( *it )->OpenDialog( openConstructionWindow, false, renderBackgroundDialog );
     }
 
-    Interface::Basic & basicInterface = Interface::Basic::Get();
+    // If Castle dialog background was not rendered than we have opened it from other dialog (Kingdom Overview)
+    // and there is no need update Adventure map interface at this time.
+    if ( renderBackgroundDialog ) {
+        Interface::Basic & basicInterface = Interface::Basic::Get();
 
-    if ( updateFocus ) {
-        if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
-            basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore], false );
-        }
-        else if ( it != myCastles.end() ) {
-            Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).GetHeroes();
-            if ( heroInCastle == nullptr ) {
-                basicInterface.SetFocus( *it );
+        if ( updateFocus ) {
+            if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
+                basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore], false );
+            }
+            else if ( it != myCastles.end() ) {
+                Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).GetHeroes();
+                if ( heroInCastle == nullptr ) {
+                    basicInterface.SetFocus( *it );
+                }
+                else {
+                    basicInterface.SetFocus( heroInCastle, false );
+                }
             }
             else {
-                basicInterface.SetFocus( heroInCastle, false );
+                basicInterface.ResetFocus( GameFocus::HEROES, false );
             }
         }
         else {
-            basicInterface.ResetFocus( GameFocus::HEROES, false );
+            // If we don't update focus, we still have to restore environment sounds and terrain music theme
+            restoreSoundsForCurrentFocus();
         }
-    }
-    else {
-        // If we don't update focus, we still have to restore environment sounds and terrain music theme
-        restoreSoundsForCurrentFocus();
-    }
 
-    // The castle garrison can change
-    basicInterface.RedrawFocus();
+        // The castle garrison can change
+        basicInterface.RedrawFocus();
 
-    // Fade-in game screen only for 640x480 resolution.
-    if ( fheroes2::Display::instance().isDefaultSize() ) {
-        setDisplayFadeIn();
+        // Fade-in game screen only for 640x480 resolution.
+        if ( fheroes2::Display::instance().isDefaultSize() ) {
+            setDisplayFadeIn();
+        }
     }
 }
 
@@ -337,21 +341,25 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
         }
     }
 
-    if ( updateFocus ) {
-        if ( it != myHeroes.end() ) {
-            basicInterface.SetFocus( *it, false );
+    // If Hero dialog background was not rendered than we have opened it from other dialog (Kingdom Overview or Castle dialog)
+    // and there is no need update Adventure map interface at this time.
+    if ( renderBackgroundDialog ) {
+        if ( updateFocus ) {
+            if ( it != myHeroes.end() ) {
+                basicInterface.SetFocus( *it, false );
+            }
+            else {
+                basicInterface.ResetFocus( GameFocus::HEROES, false );
+            }
         }
-        else {
-            basicInterface.ResetFocus( GameFocus::HEROES, false );
+
+        // The hero's army can change
+        basicInterface.RedrawFocus();
+
+        // Fade-in game screen only for 640x480 resolution.
+        if ( needFade && renderBackgroundDialog && isDefaultScreenSize ) {
+            setDisplayFadeIn();
         }
-    }
-
-    // The hero's army can change
-    basicInterface.RedrawFocus();
-
-    // Fade-in game screen only for 640x480 resolution.
-    if ( needFade && renderBackgroundDialog && isDefaultScreenSize ) {
-        setDisplayFadeIn();
     }
 }
 
