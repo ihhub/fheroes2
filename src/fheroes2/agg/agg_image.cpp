@@ -2763,7 +2763,7 @@ namespace fheroes2
                     // Statue image has bad pixels.
                     Sprite & original = _icnVsSprite[id][7];
                     if ( original.width() == 135 && original.height() == 57 ) {
-                        assert( original.singleLayer() );
+                        original._disableTransformLayer();
                         original.image()[3687] = 50;
                         original.image()[5159] = 108;
                         original.image()[5294] = 108;
@@ -2790,7 +2790,7 @@ namespace fheroes2
                 if ( _icnVsSprite[id].size() >= 2 ) {
                     Sprite & original = _icnVsSprite[id][1];
                     if ( original.width() == 84 && original.height() == 81 ) {
-                        assert( original.singleLayer() );
+                        original._disableTransformLayer();
                         original.image()[4934] = 18;
                     }
                 }
@@ -2801,7 +2801,7 @@ namespace fheroes2
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 84 && original.height() == 81 ) {
-                        assert( original.singleLayer() );
+                        original._disableTransformLayer();
                         original.image()[1692] = 26;
                         original.image()[2363] = 32;
                         original.image()[2606] = 21;
@@ -2815,7 +2815,7 @@ namespace fheroes2
                     // Rainbow has bad pixels.
                     Sprite & original = _icnVsSprite[id][13];
                     if ( original.width() == 135 && original.height() == 57 ) {
-                        assert( original.singleLayer() );
+                        original._disableTransformLayer();
                         original.image()[2047] = 160;
                         original.image()[2052] = 159;
                         original.image()[2055] = 160;
