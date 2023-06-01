@@ -1654,13 +1654,13 @@ namespace AI
 
         for ( const auto & actionObject : _mapActionObjects ) {
             if ( actionObject.second == MP2::OBJ_HEROES ) {
-                const Maps::Tiles & tile = world.GetTiles( actionObject.first );
-                const Heroes * tileHero = tile.GetHeroes();
-                assert( tileHero != nullptr );
+                assert( world.GetTiles( actionObject.first ).GetHeroes() != nullptr );
             }
 
-            assert( objectIndexes.count( actionObject.first ) == 0 );
-            objectIndexes.emplace( actionObject.first );
+            const auto [dummy, inserted] = objectIndexes.emplace( actionObject.first );
+            if ( !inserted ) {
+              assert( 0 );
+            }
         }
 #endif
 
