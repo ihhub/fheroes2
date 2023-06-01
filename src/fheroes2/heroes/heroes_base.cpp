@@ -400,6 +400,8 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( !hero->MayCastAdventureSpells() ) {
+            // This should never happen
+            assert( 0 );
             if ( res ) {
                 *res = _( "This hero is not able to cast adventure spells." );
             }
