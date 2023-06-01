@@ -31,7 +31,6 @@
 #include "army_troop.h"
 #include "artifact_info.h"
 #include "castle.h"
-#include "color.h"
 #include "gamedefs.h"
 #include "heroes.h"
 #include "kingdom.h"
