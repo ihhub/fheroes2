@@ -1175,12 +1175,16 @@ double Army::GetStrength() const
     const int armyMorale = GetMorale();
     const int armyLuck = GetLuck();
 
+    bool troopsExist = false;
+
     for ( const Troop * troop : *this ) {
         assert( troop != nullptr );
 
         if ( troop->isEmpty() ) {
             continue;
         }
+
+        troopsExist = true;
 
         double strength = troop->GetStrengthWithBonus( bonusAttack, bonusDefense );
 
@@ -1197,7 +1201,7 @@ double Army::GetStrength() const
         result += strength;
     }
 
-    if ( commander != nullptr && result > 0.1 ) {
+    if ( commander != nullptr && troopsExist ) {
         result += commander->GetMagicStrategicValue( result );
     }
 
