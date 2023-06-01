@@ -915,7 +915,9 @@ const Troops & Army::getTroops() const
 
 void Army::setFromTile( const Maps::Tiles & tile )
 {
-    Reset();
+    assert( commander == nullptr );
+
+    Troops::Clean();
 
     const bool isCaptureObject = MP2::isCaptureObject( tile.GetObject( false ) );
     if ( isCaptureObject ) {
