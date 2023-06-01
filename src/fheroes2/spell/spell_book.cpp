@@ -82,7 +82,7 @@ namespace
     }
 
     void SpellBookRedrawSpells( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, const int32_t px, const int32_t py,
-                                const HeroBase & hero, bool isRight, fheroes2::Image & output, fheroes2::Point outputOffset )
+                                const HeroBase & hero, const bool canCastSpell, const bool isRight, fheroes2::Image & output, const fheroes2::Point & outputOffset )
     {
         for ( int32_t i = 0; i < spellsPerPage; ++i ) {
             if ( spells.size() <= index + i )
@@ -94,7 +94,8 @@ namespace
             const Spell & spell = spells[i + index];
             const std::string & spellName = spell.GetName();
             const uint32_t spellCost = spell.spellPoints( &hero );
-            const bool isAvailable = hero.CanCastSpell( spell );
+            // If casting spells is prohibited in principle, it makes no sense to check whether this hero can cast them and highlight them in gray if not
+            const bool isAvailable = !canCastSpell || hero.CanCastSpell( spell );
 
             const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
             int vertOffset = 49 - icon.height();
@@ -133,7 +134,7 @@ namespace
     }
 
     void SpellBookRedrawLists( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, const fheroes2::Point & pt, uint32_t manaPoints,
-                               const SpellBook::Filter displayableSpells, const HeroBase & hero )
+                               const SpellBook::Filter displayableSpells, const HeroBase & hero, const bool canCastSpell )
     {
         const fheroes2::Sprite & bookPage = fheroes2::AGG::GetICN( ICN::BOOK, 0 );
         const fheroes2::Sprite & bookmark_info = fheroes2::AGG::GetICN( ICN::BOOK, 6 );
@@ -161,8 +162,8 @@ namespace
         SpellBookRedrawManaPoints( bookmarkInfoOffset, manaPoints, output );
 
         coords.clear();
-        SpellBookRedrawSpells( spells, coords, index, 0, 0, hero, false, output, pt );
-        SpellBookRedrawSpells( spells, coords, index + spellsPerPage, 220, 0, hero, true, output, pt );
+        SpellBookRedrawSpells( spells, coords, index, 0, 0, hero, canCastSpell, false, output, pt );
+        SpellBookRedrawSpells( spells, coords, index + spellsPerPage, 220, 0, hero, canCastSpell, true, output, pt );
 
         output = fheroes2::addShadow( output, spellBookShadow, 3 );
 
@@ -229,7 +230,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
     std::vector<fheroes2::Rect> coords;
     coords.reserve( spellsPerPage * 2 );
 
-    SpellBookRedrawLists( displayedSpells, coords, _startSpellIndex, pos.getPosition(), hero.GetSpellPoints(), displayableSpells, hero );
+    SpellBookRedrawLists( displayedSpells, coords, _startSpellIndex, pos.getPosition(), hero.GetSpellPoints(), displayableSpells, hero, canCastSpell );
     bool redraw = false;
 
     display.render();
@@ -365,7 +366,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
         if ( redraw ) {
             restorer.restore();
             restorer.update( restorerRoi.x, restorerRoi.y, restorerRoi.width, restorerRoi.height );
-            SpellBookRedrawLists( displayedSpells, coords, _startSpellIndex, pos.getPosition(), hero.GetSpellPoints(), displayableSpells, hero );
+            SpellBookRedrawLists( displayedSpells, coords, _startSpellIndex, pos.getPosition(), hero.GetSpellPoints(), displayableSpells, hero, canCastSpell );
             display.render();
             redraw = false;
         }
@@ -406,7 +407,7 @@ void SpellBook::Edit( const HeroBase & hero )
     std::vector<fheroes2::Rect> coords;
     coords.reserve( spellsPerPage * 2 );
 
-    SpellBookRedrawLists( displayedSpells, coords, current_index, pos.getPosition(), hero.GetSpellPoints(), Filter::ALL, hero );
+    SpellBookRedrawLists( displayedSpells, coords, current_index, pos.getPosition(), hero.GetSpellPoints(), Filter::ALL, hero, false );
     bool redraw = false;
 
     display.render();
@@ -460,7 +461,7 @@ void SpellBook::Edit( const HeroBase & hero )
         if ( redraw ) {
             restorer.restore();
             restorer.update( restorerRoi.x, restorerRoi.y, restorerRoi.width, restorerRoi.height );
-            SpellBookRedrawLists( displayedSpells, coords, current_index, pos.getPosition(), hero.GetSpellPoints(), Filter::ALL, hero );
+            SpellBookRedrawLists( displayedSpells, coords, current_index, pos.getPosition(), hero.GetSpellPoints(), Filter::ALL, hero, false );
             display.render();
             redraw = false;
         }
