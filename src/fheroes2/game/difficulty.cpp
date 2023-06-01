@@ -94,18 +94,18 @@ double Difficulty::GetUnitGrowthBonusForAI( int difficulty )
     // Also this bonus can be abused by players while capturing AI castles on a first day of a week.
     //
     // Completely removing these bonuses might break some maps and they become unplayable.
-    // Therefore, these bonuses are reduced by approximately 5% which is the value of noise in many processes / systems.
+    // Therefore, these bonuses are reduced by 5% which is the value of noise in many processes / systems.
 
     switch ( difficulty ) {
     case Difficulty::EASY:
     case Difficulty::NORMAL:
         return 1.0;
     case Difficulty::HARD:
-        return 1.15;
+        return 1.14;
     case Difficulty::EXPERT:
-        return 1.26;
+        return 1.254;
     case Difficulty::IMPOSSIBLE:
-        return 1.37;
+        return 1.368;
     default:
         // Did you add a new difficulty level? Add the logic above!
         assert( 0 );
