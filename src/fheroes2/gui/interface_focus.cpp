@@ -48,6 +48,8 @@ void Interface::Basic::SetFocus( Heroes * hero, const bool retainScrollBarPositi
         return;
     }
 
+    assert( player->isControlHuman() || ( player->isControlAI() && player->isAIAutoControlMode() ) );
+
     Focus & focus = player->GetFocus();
 
     if ( focus.GetHeroes() && focus.GetHeroes() != hero ) {
@@ -55,7 +57,8 @@ void Interface::Basic::SetFocus( Heroes * hero, const bool retainScrollBarPositi
         focus.GetHeroes()->ShowPath( false );
     }
 
-    if ( !hero->isMoveEnabled() ) {
+    // Heroes::calculatePath() uses PlayerWorldPathfinder and should not be used for an AI-controlled hero
+    if ( !hero->isMoveEnabled() && hero->isControlHuman() ) {
         hero->calculatePath( -1 );
     }
 
@@ -85,6 +88,8 @@ void Interface::Basic::SetFocus( Castle * castle )
     if ( player == nullptr ) {
         return;
     }
+
+    assert( player->isControlHuman() );
 
     Focus & focus = player->GetFocus();
 
