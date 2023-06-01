@@ -918,8 +918,12 @@ void Army::setFromTile( const Maps::Tiles & tile )
     Reset();
 
     const bool isCaptureObject = MP2::isCaptureObject( tile.GetObject( false ) );
-    if ( isCaptureObject )
+    if ( isCaptureObject ) {
         color = getColorFromTile( tile );
+    }
+    else {
+        color = Color::NONE;
+    }
 
     switch ( tile.GetObject( false ) ) {
     case MP2::OBJ_PYRAMID:
@@ -1044,8 +1048,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
 
     default:
         if ( isCaptureObject ) {
-            CapturedObject & capturedObject = world.GetCapturedObject( tile.GetIndex() );
-            const Troop & troop = capturedObject.GetTroop();
+            const Troop & troop = world.GetCapturedObject( tile.GetIndex() ).GetTroop();
 
             if ( troop.isValid() ) {
                 ArrangeForBattle( troop.GetMonster(), troop.GetCount(), tile.GetIndex(), false );

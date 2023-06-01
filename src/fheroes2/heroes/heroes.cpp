@@ -1619,7 +1619,7 @@ bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) con
 
 bool Heroes::MayCastAdventureSpells() const
 {
-    return !isFreeman();
+    return isValid() && GetColor() != Color::NONE;
 }
 
 bool Heroes::isValid() const
@@ -1629,7 +1629,7 @@ bool Heroes::isValid() const
 
 bool Heroes::isFreeman() const
 {
-    return isValid() && Color::NONE == GetColor() && !Modes( JAIL );
+    return isValid() && GetColor() == Color::NONE && !Modes( JAIL );
 }
 
 void Heroes::SetFreeman( int reason )
