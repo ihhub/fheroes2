@@ -1634,37 +1634,39 @@ bool Heroes::isFreeman() const
 
 void Heroes::SetFreeman( int reason )
 {
-    if ( !isFreeman() ) {
-        // if not surrendering, reset army
-        if ( ( reason & Battle::RESULT_SURRENDER ) == 0 ) {
-            army.Reset( true );
-        }
+    if ( isFreeman() ) {
+        return;
+    }
 
-        const int heroColor = GetColor();
-        Kingdom & kingdom = GetKingdom();
+    // if not surrendering, reset army
+    if ( ( reason & Battle::RESULT_SURRENDER ) == 0 ) {
+        army.Reset( true );
+    }
+
+    const int heroColor = GetColor();
+    Kingdom & kingdom = GetKingdom();
+
+    if ( heroColor != Color::NONE ) {
+        kingdom.RemoveHeroes( this );
+    }
+    SetColor( Color::NONE );
+
+    world.GetTiles( GetIndex() ).SetHeroes( nullptr );
+    SetIndex( -1 );
+
+    modes = 0;
+
+    path.Reset();
+
+    SetMove( false );
+
+    SetModes( ACTION );
+
+    if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
+        SetModes( SAVEMP );
 
         if ( heroColor != Color::NONE ) {
-            kingdom.RemoveHeroes( this );
-        }
-        SetColor( Color::NONE );
-
-        world.GetTiles( GetIndex() ).SetHeroes( nullptr );
-        SetIndex( -1 );
-
-        modes = 0;
-
-        path.Reset();
-
-        SetMove( false );
-
-        SetModes( ACTION );
-
-        if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
-            SetModes( SAVEMP );
-
-            if ( heroColor != Color::NONE ) {
-                kingdom.appendSurrenderedHero( *this );
-            }
+            kingdom.appendSurrenderedHero( *this );
         }
     }
 }
