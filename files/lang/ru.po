@@ -3209,7 +3209,7 @@ msgid "Map Type:\n"
 msgstr "Тип карты:\n"
 
 msgid "The Succession Wars"
-msgstr "Война за престол"
+msgstr "Войны Престолонаследия"
 
 msgid "Lose all your heroes and towns."
 msgstr "Потерять всех героев и все города."
@@ -3314,7 +3314,7 @@ msgid ""
 "Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
 "of Loyalty\" version of the game."
 msgstr ""
-"Указывает, создана ли карта для версии игры \"Война за престол\" или \"Цена "
+"Указывает, создана ли карта для версии игры \"Войны Престолонаследия\" или \"Цена "
 "верности\"."
 
 msgid "Map Type"
