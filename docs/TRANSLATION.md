@@ -105,7 +105,7 @@ a pull request with your changes, you will have to save the PO file in UTF-8 enc
 ### Sharing your translation work
 
 When you are satisfied with your work, you can proceed with sharing it. The first step is to commit your work into the branch you made of 
-your own fheroes2 fork. Then, create a PR that proposes to introduce your changes into the fheroes2 repository.
+your own fheroes2 fork. Then, create a pull request that proposes to introduce your changes into the fheroes2 repository.
 
 How to [**commit**](https://github.com/git-guides/git-commit). 
 
@@ -116,19 +116,19 @@ your work, I.E. "Update the Slovak translation".
 
 <details>
 
-<summary>Pull request (PR) restrictions</summary>
+<summary>Pull request restrictions</summary>
 
-The fheroes2 team has set a maximum of 400 total modified lines for any PR for translations. For contributors wanting to
-add translated lines to a new language this has a maximum of 30 total modified lines for that first PR.
+The fheroes2 team has set a maximum of 400 total modified lines for any pull request for translations. For contributors wanting to
+add translated lines to a new language this has a maximum of 30 total modified lines for that first pull request.
 
-These limitations have been set because every PR needs to be reviewed by our team, and so changing too many lines at once will only slow this
+These limitations have been set because every pull request needs to be reviewed by our team, and so changing too many lines at once will only slow this
 process down. In addition, GitHub becomes increasingly difficult to navigate once too many changes, comments and so on are present within the
-same PR page, further slowing down the process of reviewing it.
+same pull request page, further slowing down the process of reviewing it.
 
-Furthermore, we have decided on a minimum amount of 15 changed strings for a translation PR. For languages that have translations that are more
+Furthermore, we have decided on a minimum amount of 15 changed strings for a translation pull request. For languages that have translations that are more
 or less complete, less than this amount can be accepted.
 
-Preferably a PR should contain a small amount of changes, about 100 lines, all focused on translating a specific part of the game - for
+Preferably a pull request should contain a small amount of changes, about 100 lines, all focused on translating a specific part of the game - for
 example creature names or castle buildings.
 
 </details>
