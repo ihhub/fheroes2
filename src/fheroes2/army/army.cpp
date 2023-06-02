@@ -444,16 +444,25 @@ void Troops::Clean()
 
 void Troops::UpgradeTroops( const Castle & castle )
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() ) {
-            payment_t payment = ( *it )->GetTotalUpgradeCost();
+    for ( Troop * troop : *this ) {
+        if ( troop->isValid() && troop->isAllowUpgrade() ) {
             Kingdom & kingdom = castle.GetKingdom();
+            if ( castle.GetRace() != troop->GetRace() ) {
+                continue;
+            }
 
-            if ( castle.GetRace() == ( *it )->GetRace() && castle.isBuild( ( *it )->GetUpgrade().GetDwelling() ) && kingdom.AllowPayment( payment ) ) {
+            if ( !castle.isBuild( troop->GetUpgrade().GetDwelling() ) ) {
+                continue;
+            }
+
+            const payment_t payment = troop->GetTotalUpgradeCost();
+
+            if ( kingdom.AllowPayment( payment ) ) {
                 kingdom.OddFundsResource( payment );
-                ( *it )->Upgrade();
+                troop->Upgrade();
             }
         }
+    }
 }
 
 Troop * Troops::GetFirstValid()

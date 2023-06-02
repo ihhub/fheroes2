@@ -644,10 +644,17 @@ double Castle::getVisitValue( const Heroes & hero ) const
 
     for ( size_t i = 0; i < futureArmy.Size(); ++i ) {
         Troop * troop = futureArmy.GetTroop( i );
-        if ( troop != nullptr && troop->isValid() ) {
-            const payment_t payment = troop->GetTotalUpgradeCost();
+        if ( troop != nullptr && troop->isValid() && troop->isAllowUpgrade() ) {
+            if ( GetRace() != troop->GetRace() ) {
+                continue;
+            }
 
-            if ( GetRace() == troop->GetRace() && isBuild( troop->GetUpgrade().GetDwelling() ) && potentialFunds >= payment ) {
+            if ( !isBuild( troop->GetUpgrade().GetDwelling() ) ) {
+                continue;
+            }
+
+            const payment_t payment = troop->GetTotalUpgradeCost();
+            if ( potentialFunds >= payment ) {
                 potentialFunds -= payment;
                 troop->Upgrade();
             }
@@ -2442,7 +2449,7 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
     }
 
     // Add castle bonuses if there are any troops defending the castle
-    if ( isCastle() && totalStrength > 1 ) {
+    if ( isCastle() && totalStrength > 0.1 ) {
         const Battle::Tower tower( *this, Battle::TowerType::TWR_CENTER, Rand::DeterministicRandomGenerator( 0 ), 0 );
         const double towerStr = tower.GetStrengthWithBonus( tower.GetAttackBonus(), 0 );
 
