@@ -43,13 +43,14 @@
 
 void Interface::Basic::SetFocus( Heroes * hero, const bool retainScrollBarPosition )
 {
-    Player * player = Settings::Get().GetPlayers().GetCurrent();
+    assert( hero != nullptr );
 
+    Player * player = Settings::Get().GetPlayers().GetCurrent();
     if ( player == nullptr ) {
         return;
     }
 
-    assert( player->isControlHuman() || ( player->isControlAI() && player->isAIAutoControlMode() ) );
+    assert( player->GetColor() == hero->GetColor() && ( player->isControlHuman() || ( player->isControlAI() && player->isAIAutoControlMode() ) ) );
 
     Focus & focus = player->GetFocus();
 
@@ -84,13 +85,14 @@ void Interface::Basic::SetFocus( Heroes * hero, const bool retainScrollBarPositi
 
 void Interface::Basic::SetFocus( Castle * castle )
 {
-    Player * player = Settings::Get().GetPlayers().GetCurrent();
+    assert( castle != nullptr );
 
+    Player * player = Settings::Get().GetPlayers().GetCurrent();
     if ( player == nullptr ) {
         return;
     }
 
-    assert( player->isControlHuman() );
+    assert( player->GetColor() == castle->GetColor() && player->isControlHuman() );
 
     Focus & focus = player->GetFocus();
 
