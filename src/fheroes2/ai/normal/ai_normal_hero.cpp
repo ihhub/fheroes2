@@ -126,6 +126,8 @@ namespace
     {
         const Castle * castle = world.getCastleEntrance( Maps::GetPoint( castleIndex ) );
         if ( castle == nullptr ) {
+            // How is it possible that a castle does not exist?
+            assert( 0 );
             return false;
         }
 
@@ -144,7 +146,9 @@ namespace
         }
 
         const double advantage = hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_MEDIUM;
-        return heroArmyStrength > castle->GetGarrisonStrength( &hero ) * advantage;
+        const double castleStrength = castle->GetGarrisonStrength( &hero ) * advantage;
+
+        return heroArmyStrength > castleStrength;
     }
 
     bool isHeroStrongerThan( const Maps::Tiles & tile, const MP2::MapObjectType objectType, AI::Normal & ai, const double heroArmyStrength,
@@ -518,16 +522,20 @@ namespace
             if ( hero.GetColor() == otherHero->GetColor() && !hero.hasMetWithHero( otherHero->GetID() ) ) {
                 return !otherHeroInCastle;
             }
+
             if ( hero.isFriends( otherHero->GetColor() ) ) {
                 return false;
             }
+
             // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
             if ( otherHero == world.GetHeroesCondWins() ) {
                 return false;
             }
+
             if ( otherHeroInCastle ) {
                 return AIShouldVisitCastle( hero, index, heroArmyStrength );
             }
+
             if ( army.isStrongerThan( otherHero->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL ) ) {
                 return true;
             }
@@ -536,7 +544,7 @@ namespace
         }
 
         case MP2::OBJ_CASTLE:
-            return AIShouldVisitCastle( hero, index, heroArmyStrength );
+            return AIShouldVisitCastle( hero, index, heroArmyStrength ) || ai.isPriorityTask( index );
 
         case MP2::OBJ_JAIL:
             return kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
@@ -786,16 +794,20 @@ namespace AI
         switch ( objectType ) {
         case MP2::OBJ_CASTLE: {
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
-            if ( !castle )
+            if ( !castle ) {
+                // How is it even possible?
+                assert( 0 );
                 return valueToIgnore;
+            }
 
+            const bool priority = isPriorityTask( index );
             const bool critical = isCriticalTask( index );
             if ( hero.GetColor() == castle->GetColor() ) {
                 double value = castle->getVisitValue( hero );
                 if ( critical )
                     return 10000 + value;
 
-                if ( value < 500 )
+                if ( !priority && value < 500 )
                     return valueToIgnore;
 
                 return value;
@@ -830,6 +842,7 @@ namespace AI
             const Heroes * otherHero = tile.GetHeroes();
             assert( otherHero );
             if ( !otherHero ) {
+                // How is it even possible?
                 return valueToIgnore;
             }
 
@@ -1236,16 +1249,19 @@ namespace AI
         switch ( objectType ) {
         case MP2::OBJ_CASTLE: {
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
-            if ( !castle )
+            if ( !castle ) {
+                // How is it even possible?
                 return valueToIgnore;
+            }
 
+            const bool priority = isPriorityTask( index );
             const bool critical = isCriticalTask( index );
             if ( hero.GetColor() == castle->GetColor() ) {
                 double value = castle->getVisitValue( hero );
                 if ( critical )
                     return 15000 + value;
 
-                if ( value < 500 )
+                if ( !priority && value < 500 )
                     return valueToIgnore;
 
                 return value / 2;
@@ -1815,14 +1831,20 @@ namespace AI
         }
 
         const PriorityTask & task = it->second;
-        if ( task.type == PriorityTaskType::DEFEND ) {
+
+        switch ( task.type ) {
+        case PriorityTaskType::DEFEND: {
+            // TODO: sort the army between the castle and hero to have maximum movement points for the next day
+            // TODO: but also have enough army to defend the castle.
             if ( objectType == MP2::OBJ_CASTLE ) {
                 hero.SetModes( Heroes::SLEEPER );
             }
 
             _priorityTargets.erase( tileIndex );
+            break;
+
         }
-        else if ( task.type == PriorityTaskType::ATTACK ) {
+        case PriorityTaskType::ATTACK: {
             // check if battle was actually won or attacker still there
             const Heroes * attackHero = world.GetTiles( tileIndex ).GetHeroes();
             const Castle * attackCastle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
@@ -1846,6 +1868,22 @@ namespace AI
                 }
                 _priorityTargets.erase( tileIndex );
             }
+
+            break;
+        }
+        case PriorityTaskType::REINFORCE:
+            // TODO: sort the army between the castle and hero to have maximum movement points for the next day
+            // TODO: but also have enough army to defend the castle.
+            if ( objectType == MP2::OBJ_CASTLE ) {
+                hero.SetModes( Heroes::SLEEPER );
+            }
+
+            _priorityTargets.erase( tileIndex );
+            break;
+        default:
+            // Did you add a new type of priority task? Add the logic above!
+            assert( 0 );
+            break;
         }
     }
 
@@ -1859,6 +1897,7 @@ namespace AI
         if ( isMonsterStrengthCacheable( objectType ) ) {
             _neutralMonsterStrengthCache.erase( tileIndex );
         }
+
         if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES ) {
             updatePriorityTargets( hero, tileIndex, objectType );
         }

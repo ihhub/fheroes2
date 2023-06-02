@@ -478,7 +478,7 @@ namespace AI
 
         const int mapSize = world.w() * world.h();
         _priorityTargets.clear();
-        _mapActionObjects.clear();
+        _mapObjects.clear();
         _regions.clear();
         _regions.resize( world.getRegionCount() );
 
@@ -499,11 +499,11 @@ namespace AI
                 continue;
             }
 
-            if ( !MP2::isActionObject( objectType ) ) {
+            if ( objectType == MP2::OBJ_NONE || objectType == MP2::OBJ_COAST )
                 continue;
-            }
 
-            _mapActionObjects.emplace_back( idx, objectType );
+            stats.validObjects.emplace_back( idx, objectType );
+            _mapObjects.emplace_back( idx, objectType );
 
             if ( objectType == MP2::OBJ_HEROES ) {
                 const Heroes * hero = tile.GetHeroes();
@@ -561,7 +561,7 @@ namespace AI
 
         updateKingdomBudget( kingdom );
 
-        DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapActionObjects.size() << " valid objects" )
+        DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapObjects.size() << " valid objects" )
 
         uint32_t progressStatus = 1;
         status.DrawAITurnProgress( progressStatus );
@@ -584,7 +584,7 @@ namespace AI
             const uint32_t startProgressValue = progressStatus;
             const uint32_t endProgressValue = ( progressStatus == 1 ) ? 8 : std::max( progressStatus + 1U, 9U );
 
-            const bool moreTaskForHeroes = HeroesTurn( heroes, startProgressValue, endProgressValue );
+            bool moreTaskForHeroes = HeroesTurn( heroes, startProgressValue, endProgressValue );
 
             if ( progressStatus == 1 ) {
                 progressStatus = 8;
@@ -592,14 +592,32 @@ namespace AI
             }
 
             // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
-            if ( !purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
-                break;
+            if ( purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
+                assert( !heroes.empty() && heroes.back() != nullptr );
+                updateMapActionObjectCache( heroes.back()->GetIndex() );
+                ++availableHeroCount;
+                continue;
             }
 
-            assert( !heroes.empty() && heroes.back() != nullptr );
-            updateMapActionObjectCache( heroes.back()->GetIndex() );
+            if ( !moreTaskForHeroes && world.LastDay() ) {
+                // Heroes have nothing to do. In this case it is wise to move heroes to castles especially if it is the last day of a week.
+                // So for the next day a hero with a maximum amount of spell points as well as new troops can explore the surroundings.
+                for ( Castle * castle : castles ) {
+                    if ( castle->GetHero() == nullptr ) {
+                        const auto [dummy, inserted] = _priorityTargets.emplace( castle->GetIndex(), PriorityTask{ PriorityTaskType::REINFORCE, 0 } );
+                        if ( inserted ) {
+                            moreTaskForHeroes = true;
+                            VERBOSE_LOG( Color::String( myColor ) << " heroes have nothing to go so move them into castles." )
+                        }
+                    }
+                }
 
-            ++availableHeroCount;
+                if ( moreTaskForHeroes ) {
+                    continue;
+                }
+            }
+
+            break;
         }
 
         status.DrawAITurnProgress( 9 );
@@ -620,8 +638,8 @@ namespace AI
         status.DrawAITurnProgress( 10 );
     }
 
-    bool Normal::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
-                                    bool moreTasksForHeroes )
+    bool Normal::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, const int32_t availableHeroCount,
+                                    const bool moreTasksForHeroes )
     {
         const bool slowEarlyGame = world.CountDay() < 5 && sortedCastleList.size() == 1;
         int32_t heroLimit = world.w() / Maps::SMALL + 1;
