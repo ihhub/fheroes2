@@ -442,7 +442,7 @@ void Troops::Clean()
     std::for_each( begin(), end(), []( Troop * troop ) { troop->Reset(); } );
 }
 
-void Troops::UpgradeTroops( const Castle & castle )
+void Troops::UpgradeTroops( const Castle & castle ) const
 {
     for ( Troop * troop : *this ) {
         assert( troop != nullptr );
