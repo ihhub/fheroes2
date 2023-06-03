@@ -148,7 +148,7 @@ namespace
             renderInputArea();
         }
 
-        void appendCharacter( const char character )
+        void insertCharacter( const char character )
         {
             if ( _info.size() >= 255 ) {
                 // Do not add more characters as the string is already long enough.
@@ -162,7 +162,7 @@ namespace
             _output.render( renderInputArea() );
         }
 
-        void removeLastCharacter()
+        void removeCharacter()
         {
             if ( _info.empty() || _cursorPosition == 0 ) {
                 return;
@@ -189,7 +189,7 @@ namespace
             renderInputArea();
         }
 
-        void setCursortPosition( const int32_t clickXPosition, const int32_t startXPosition )
+        void setCursorPosition( const int32_t clickXPosition, const int32_t startXPosition )
         {
             _cursorPosition = fheroes2::getTextInputCursorPosition( _info, fheroes2::FontType::normalWhite(), _cursorPosition, clickXPosition, startXPosition );
 
@@ -385,7 +385,7 @@ namespace
             for ( size_t buttonId = 0; buttonId < buttonLetters[i].size(); ++buttonId ) {
                 buttons[i].emplace_back( std::string( 1, buttonLetters[i][buttonId] ), buttonWidth, isEvilInterface,
                                          [letter = returnLetters[i][buttonId]]( KeyboardRenderer & renderer ) {
-                                             renderer.appendCharacter( letter );
+                                             renderer.insertCharacter( letter );
                                              return DialogAction::AddLetter;
                                          } );
             }
@@ -407,7 +407,7 @@ namespace
                                         []( const KeyboardRenderer & ) { return DialogAction::Numeric; } );
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
-                renderer.appendCharacter( ' ' );
+                renderer.insertCharacter( ' ' );
                 return DialogAction::AddLetter;
             } );
 
@@ -417,7 +417,7 @@ namespace
             }
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
-                renderer.removeLastCharacter();
+                renderer.removeCharacter();
                 return DialogAction::Backspace;
             } );
             break;
@@ -429,7 +429,7 @@ namespace
                                         []( const KeyboardRenderer & ) { return DialogAction::Numeric; } );
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
-                renderer.appendCharacter( ' ' );
+                renderer.insertCharacter( ' ' );
                 return DialogAction::AddLetter;
             } );
 
@@ -439,7 +439,7 @@ namespace
             }
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
-                renderer.removeLastCharacter();
+                renderer.removeCharacter();
                 return DialogAction::Backspace;
             } );
             break;
@@ -451,7 +451,7 @@ namespace
                                         []( const KeyboardRenderer & ) { return DialogAction::LowerCase; } );
 
             lastButtonRow.emplace_back( _( "Keyboard|SPACE" ), spacebarButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
-                renderer.appendCharacter( ' ' );
+                renderer.insertCharacter( ' ' );
                 return DialogAction::AddLetter;
             } );
 
@@ -459,7 +459,7 @@ namespace
             lastButtonRow.back().button.hide();
 
             lastButtonRow.emplace_back( "~", defaultSpecialButtonWidth, isEvilInterface, []( KeyboardRenderer & renderer ) {
-                renderer.removeLastCharacter();
+                renderer.removeCharacter();
                 return DialogAction::Backspace;
             } );
             break;
@@ -661,7 +661,7 @@ namespace
             }
 
             if ( le.MouseClickLeft( textRoi ) ) {
-                renderer.setCursortPosition( le.GetMouseCursor().x, textRoi.x );
+                renderer.setCursorPosition( le.GetMouseCursor().x, textRoi.x );
             }
 
             // Text input cursor blink.
