@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-26 14:46+0000\n"
+"POT-Creation-Date: 2023-06-03 06:46+0000\n"
 "PO-Revision-Date: 2023-05-07 22:12+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3462,6 +3462,48 @@ msgstr "Nhân cách:"
 msgid "Best Monster:"
 msgstr "Quái vật Mạnh nhất:"
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+msgid "Cancel back to the New Map menu."
+msgstr ""
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Game Mới"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Tải Game"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr ""
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Ngẫu nhiên Thị trấn"
+
+msgid "Cancel back to the Map Editor main menu."
+msgstr ""
+
+msgid "No maps available!"
+msgstr "Không có bản đồ nào!"
+
 msgid "difficulty|Easy"
 msgstr "Dễ"
 
@@ -3817,6 +3859,21 @@ msgstr ""
 msgid "hotkey|choose the expansion campaign"
 msgstr ""
 
+msgid "hotkey|map editor main menu"
+msgstr ""
+
+msgid "hotkey|new map menu"
+msgstr ""
+
+msgid "hotkey|load map menu"
+msgstr ""
+
+msgid "hotkey|new map from scratch"
+msgstr ""
+
+msgid "hotkey|new random map"
+msgstr ""
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4071,9 +4128,6 @@ msgid ""
 msgstr ""
 "Chơi chế độ Ghế nóng, trong đó 2 đến 4 người chơi cùng chơi quanh một máy "
 "tính, chuyển sang 'Ghế nóng' khi đến lượt của họ."
-
-msgid "Cancel back to the main menu."
-msgstr ""
 
 msgid "A single player game playing out a single map."
 msgstr ""
@@ -4409,9 +4463,6 @@ msgstr "Nhấp để chấp nhận các cài đặt này và bắt đầu trò c
 
 msgid "Click to return to the main menu."
 msgstr ""
-
-msgid "No maps available!"
-msgstr "Không có bản đồ nào!"
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Các nhà chiêm tinh công bố Tháng của %{name}."
@@ -5971,6 +6022,9 @@ msgid "The spell was not found."
 msgstr "Không tìm thấy phép."
 
 msgid "Only heroes can cast this spell."
+msgstr ""
+
+msgid "This hero is not able to cast adventure spells."
 msgstr ""
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."

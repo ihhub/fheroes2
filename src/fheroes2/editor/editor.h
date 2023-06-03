@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,15 +20,14 @@
 
 #pragma once
 
-#include "math_base.h"
+#if defined( WITH_DEBUG )
+#include "game.h"
+#include "game_mode.h"
 
-namespace fheroes2
+namespace Editor
 {
-    void drawMainMenuScreen();
-    void drawEditorMainMenuScreen();
-
-    Point drawButtonPanel();
-
-    // If display fade-in state is set reset it to false and fade-in the full display image. Otherwise render full display image without fade-in.
-    void validateFadeInAndRender();
+    fheroes2::GameMode menuMain();
+    fheroes2::GameMode menuNewMap();
+    fheroes2::GameMode menuLoadMap();
 }
+#endif

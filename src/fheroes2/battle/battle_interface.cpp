@@ -1270,9 +1270,6 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     _battleGround._disableTransformLayer();
     _mainSurface._disableTransformLayer();
 
-    // Prepare the Battlefield ground.
-    _redrawBattleGround();
-
     AudioManager::ResetAudio();
 }
 
@@ -1351,8 +1348,11 @@ void Battle::Interface::fullRedraw()
         _preBattleSoundChannelId = AudioManager::PlaySound( M82::PREBATTL );
     }
 
+    // Prepare the Battlefield ground.
+    _redrawBattleGround();
+
     RedrawPartialStart();
-    // We do not render battlefield display image to properly fade-out it.
+    // We do not render battlefield display image to properly fade-in it.
     redrawPreRender();
 
     // Fade-in battlefield.
@@ -2371,7 +2371,7 @@ void Battle::Interface::RedrawLowObjects( const int32_t cellId )
 
     const fheroes2::Sprite & objectSprite = fheroes2::AGG::GetICN( objectIcnId, 0 );
     const fheroes2::Rect & pt = cell->GetPos();
-    fheroes2::Blit( objectSprite, _mainSurface, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
+    fheroes2::Blit( objectSprite, _battleGround, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
 }
 
 void Battle::Interface::RedrawHighObjects( const int32_t cellId )
@@ -3635,11 +3635,20 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
     std::vector<Unit *> mirrorImages;
     std::set<Unit *> resistantTarget;
+    std::set<int> unitSounds;
 
     // If this was a Lich attack, we should render an explosion cloud over the target unit immediately after the projectile hits the target,
     // along with the unit kill/wince animation.
     const bool drawLichCloud = ( attacker != nullptr ) && ( defender != nullptr ) && attacker->isArchers() && !attacker->isHandFighting()
                                && attacker->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT );
+
+    // Play sound only if it is not already playing.
+    auto playSoundIfNotPlaying = [&unitSounds]( const int unitSound ) {
+        const auto [dummy, isUnique] = unitSounds.insert( unitSound );
+        if ( isUnique ) {
+            AudioManager::PlaySound( unitSound );
+        }
+    };
 
     for ( const Battle::TargetInfo & target : targets ) {
         Unit * unit = target.defender;
@@ -3659,7 +3668,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
             }
 
             unit->SwitchAnimation( Monster_Info::KILL );
-            AudioManager::PlaySound( unit->M82Kill() );
+            playSoundIfNotPlaying( unit->M82Kill() );
             ++animatingTargets;
 
             deathColor = unit->GetArmyColor();
@@ -3673,14 +3682,14 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
             }
             else {
                 unit->SwitchAnimation( Monster_Info::WNCE );
-                AudioManager::PlaySound( unit->M82Wnce() );
+                playSoundIfNotPlaying( unit->M82Wnce() );
             }
             ++animatingTargets;
         }
         else {
             // have immunity
             resistantTarget.insert( target.defender );
-            AudioManager::PlaySound( M82::RSBRYFZL );
+            playSoundIfNotPlaying( M82::RSBRYFZL );
         }
     }
 
@@ -3773,7 +3782,8 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                 }
                 else if ( drawLichCloud && lichCloudFrame == wnceUpStartFrame && ( target.defender->GetAnimationState() == Monster_Info::STAND_STILL ) ) {
                     target.defender->SwitchAnimation( Monster_Info::WNCE_UP );
-                    AudioManager::PlaySound( target.defender->M82Wnce() );
+
+                    playSoundIfNotPlaying( target.defender->M82Wnce() );
                 }
                 else if ( drawLichCloud && lichCloudFrame == wnceDownStartFrame && ( target.defender->GetAnimationState() == Monster_Info::WNCE_UP ) ) {
                     target.defender->SwitchAnimation( Monster_Info::WNCE_DOWN );
@@ -5916,6 +5926,15 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     if ( wnce ) {
         int32_t deathColor = Color::UNUSED;
 
+        std::set<int> unitSounds;
+
+        auto playSoundIfNotPlaying = [&unitSounds]( const int unitSound ) {
+            const auto [dummy, isUnique] = unitSounds.insert( unitSound );
+            if ( isUnique ) {
+                AudioManager::PlaySound( unitSound );
+            }
+        };
+
         for ( const TargetInfo & target : targets ) {
             Unit * defender = target.defender;
             if ( defender == nullptr ) {
@@ -5934,7 +5953,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
                 }
 
                 defender->SwitchAnimation( Monster_Info::KILL );
-                AudioManager::PlaySound( defender->M82Kill() );
+                playSoundIfNotPlaying( defender->M82Kill() );
 
                 // Set the color of the dead creature to tell heroes about it.
                 deathColor = defender->GetArmyColor();
@@ -5942,7 +5961,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
             // If the creature is damaged but is still alive set its wince animation.
             else if ( target.damage ) {
                 defender->SwitchAnimation( Monster_Info::WNCE_UP );
-                AudioManager::PlaySound( defender->M82Wnce() );
+                playSoundIfNotPlaying( defender->M82Wnce() );
             }
 
             SetHeroAnimationReactionToTroopDeath( deathColor );

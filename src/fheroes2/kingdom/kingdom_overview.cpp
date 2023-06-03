@@ -493,9 +493,12 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const fheroes2::Poi
         // click hero icon
         else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
             Heroes * hero = row.castle->GetHero();
-            if ( hero ) {
-                Game::OpenHeroesDialog( *hero, false, false );
+
+            if ( !hero ) {
+                return;
             }
+
+            Game::OpenHeroesDialog( *hero, false, false );
         }
         else {
             return;

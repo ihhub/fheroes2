@@ -821,9 +821,11 @@ int Monster::ICNMonh() const
 payment_t Monster::GetUpgradeCost() const
 {
     const Monster upgr = GetUpgrade();
-    const payment_t pay = ( id != upgr.id ) ? ( upgr.GetCost() - GetCost() ) * 2 : GetCost();
+    if ( id == upgr.id ) {
+        return {};
+    }
 
-    return pay;
+    return ( upgr.GetCost() - GetCost() ) * 2;
 }
 
 uint32_t Monster::GetCountFromHitPoints( const Monster & mons, uint32_t hp )

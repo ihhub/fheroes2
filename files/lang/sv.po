@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-26 14:46+0000\n"
+"POT-Creation-Date: 2023-06-03 06:46+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3440,6 +3440,50 @@ msgstr "Personlighet:"
 msgid "Best Monster:"
 msgstr "Bästa Monster:"
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Avbryt och gå tillbaka till huvudmenyn."
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "New Dawn"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Ladda Spel"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr "Avbryt och gå tillbaka till huvudmenyn."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Slumpad"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Avbryt och gå tillbaka till huvudmenyn."
+
+msgid "No maps available!"
+msgstr "Inga kartor tillgängliga!"
+
 msgid "difficulty|Easy"
 msgstr "Lätt"
 
@@ -3795,6 +3839,26 @@ msgstr "Välj orginalkampanj"
 msgid "hotkey|choose the expansion campaign"
 msgstr "Välj expansionskampanj"
 
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "Kampanjspel"
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "Nytt spel"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "Ladda spel"
+
+#, fuzzy
+msgid "hotkey|new map from scratch"
+msgstr "Kartvy: Sydost"
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "Nytt spel"
+
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"
 
@@ -4052,9 +4116,6 @@ msgid ""
 msgstr ""
 "Spela Heta stolen, där 2 till 4 spelare spelar på samma dator och sätter sig "
 "i den 'Heta stolen' när det är sin tur."
-
-msgid "Cancel back to the main menu."
-msgstr "Avbryt och gå tillbaka till huvudmenyn."
 
 msgid "A single player game playing out a single map."
 msgstr "En ensam spelare går igenom en karta."
@@ -4417,9 +4478,6 @@ msgstr "Klicka för att acceptera dessa inställningar och starta ett nytt spel.
 
 msgid "Click to return to the main menu."
 msgstr "Klicka för att gå tillbaka till huvudmenyn."
-
-msgid "No maps available!"
-msgstr "Inga kartor tillgängliga!"
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologerna utropar %{name} månad."
@@ -6297,6 +6355,10 @@ msgstr "Den besvärjelsen kommer inte att påverka någon!"
 
 msgid "Only heroes can cast this spell."
 msgstr ""
+
+#, fuzzy
+msgid "This hero is not able to cast adventure spells."
+msgstr "Kasta en kartbesvärjelse."
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""

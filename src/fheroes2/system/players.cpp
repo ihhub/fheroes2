@@ -431,16 +431,24 @@ bool Players::GetPlayerInGame( int color )
 
 std::vector<int> Players::getInPlayOpponents( const int color )
 {
-    std::vector<int> opponenColors;
-    const Player * player = Players::Get( color );
-    const int friends = player->GetFriends();
-    for ( const Player * it : Settings::Get().GetPlayers() ) {
-        const int currentColor = it->GetColor();
-        if ( it->isPlay() && ( ( currentColor & friends ) == 0 ) ) {
-            opponenColors.emplace_back( currentColor );
+    std::vector<int> opponentColors;
+
+    const Player * playerOfColor = Players::Get( color );
+    assert( playerOfColor != nullptr );
+
+    const int friends = playerOfColor->GetFriends();
+
+    for ( const Player * player : Settings::Get().GetPlayers() ) {
+        assert( player != nullptr );
+
+        const int currentColor = player->GetColor();
+
+        if ( player->isPlay() && ( ( currentColor & friends ) == 0 ) ) {
+            opponentColors.emplace_back( currentColor );
         }
     }
-    return opponenColors;
+
+    return opponentColors;
 }
 
 void Players::SetPlayerInGame( int color, bool f )

@@ -38,6 +38,7 @@
 #include "dialog_game_settings.h"
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
+#include "editor.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
@@ -173,6 +174,17 @@ void Game::mainGameLoop( bool isFirstGameRun )
                 result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIGN, false );
             }
             break;
+#if defined( WITH_DEBUG )
+        case fheroes2::GameMode::EDITOR_MAIN_MENU:
+            result = Editor::menuMain();
+            break;
+        case fheroes2::GameMode::EDITOR_NEW_MAP:
+            result = Editor::menuNewMap();
+            break;
+        case fheroes2::GameMode::EDITOR_LOAD_MAP:
+            result = Editor::menuLoadMap();
+            break;
+#endif
 
         default:
             break;
@@ -349,6 +361,12 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
             return fheroes2::GameMode::MAIN_MENU;
         }
+#if defined( WITH_DEBUG )
+        // Editor is still in development.
+        else if ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) ) {
+            return fheroes2::GameMode::EDITOR_MAIN_MENU;
+        }
+#endif
 
         // right info
         if ( le.MousePressRight( buttonQuit.area() ) )

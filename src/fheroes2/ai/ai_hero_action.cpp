@@ -1292,7 +1292,8 @@ namespace
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
 
-                setColorOnTile( tile, hero.GetColor() );
+                // Set ownership of the dwelling to a Neutral (gray) player so that any player can recruit troops without a fight.
+                setColorOnTile( tile, Color::UNUSED );
                 tile.SetObjectPassable( true );
             }
             else {
@@ -1573,7 +1574,6 @@ namespace AI
 
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         const MP2::MapObjectType objectType = tile.GetObject( dst_index != hero.GetIndex() );
-        bool isAction = true;
 
         const bool isActionObject = MP2::isActionObject( objectType, hero.isShipMaster() );
         if ( isActionObject )
@@ -1584,6 +1584,7 @@ namespace AI
             AIToBoat( hero, dst_index );
             break;
         case MP2::OBJ_COAST:
+            // Coast is not an action object by definition but we need to do hero's animation.
             AIToCoast( hero, dst_index );
             break;
 
@@ -1823,8 +1824,8 @@ namespace AI
             AIToSirens( hero, objectType, dst_index );
             break;
         default:
-            assert( !isActionObject ); // AI should know what to do with this type of action object! Please add logic for it.
-            isAction = false;
+            // AI should know what to do with this type of action object! Please add logic for it.
+            assert( !isActionObject );
             break;
         }
 
@@ -1832,7 +1833,7 @@ namespace AI
             hero.GetPath().Reset();
 
         // ignore empty tiles
-        if ( isAction )
+        if ( isActionObject )
             AI::Get().HeroesActionComplete( hero, dst_index, objectType );
     }
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -288,7 +288,6 @@ public:
         return payment_t( fheroes2::getMonsterData( id ).generalStats.cost );
     }
 
-    payment_t GetUpgradeCost() const;
     uint32_t GetDwelling() const;
 
     int GetMonsterSprite() const
@@ -303,6 +302,9 @@ public:
     static uint32_t GetMissileICN( uint32_t monsterID );
 
 protected:
+    // Returns the cost of an upgrade if a monster has an upgrade. Otherwise returns no resources.
+    payment_t GetUpgradeCost() const;
+
     static Monster FromDwelling( int race, uint32_t dw );
 
     int id;

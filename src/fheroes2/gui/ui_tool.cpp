@@ -33,6 +33,7 @@
 #include <utility>
 
 #include "agg_image.h"
+#include "cursor.h"
 #include "game_delays.h"
 #include "image_palette.h"
 #include "localevent.h"
@@ -129,6 +130,8 @@ namespace
         if ( frameCount < 2 || roi.height <= 0 || roi.width <= 0 ) {
             return;
         }
+
+        Cursor::Get().SetThemes( Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
 

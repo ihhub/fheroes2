@@ -78,7 +78,6 @@ namespace AI
         int fogCount = 0;
         int safetyFactor = 0;
         int spellLevel = 2;
-        std::vector<IndexObject> validObjects;
     };
 
     struct AICastle
@@ -265,7 +264,7 @@ namespace AI
         std::set<int> findCastlesInDanger( const KingdomCastles & castles, const std::vector<std::pair<int, const Army *>> & enemyArmies, int myColor );
         std::vector<AICastle> getSortedCastleList( const KingdomCastles & castles, const std::set<int> & castlesInDanger );
 
-        double getObjectValue( const Heroes & hero, const int index, int & objectType, const double valueToIgnore, const uint32_t distanceToObject ) const;
+        double getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority );
         void resetPathfinder() override;
 
@@ -281,7 +280,7 @@ namespace AI
     private:
         // following data won't be saved/serialized
         double _combinedHeroStrength = 0;
-        std::vector<IndexObject> _mapObjects;
+        std::vector<IndexObject> _mapActionObjects;
         std::map<int, PriorityTask> _priorityTargets;
         std::vector<RegionStats> _regions;
         std::array<BudgetEntry, 7> _budget = { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
@@ -311,6 +310,8 @@ namespace AI
         {
             return objectType == MP2::OBJ_MONSTER;
         }
+
+        void updateMapActionObjectCache( const int mapIndex );
     };
 }
 

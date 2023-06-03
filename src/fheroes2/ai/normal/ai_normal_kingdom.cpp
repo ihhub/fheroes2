@@ -478,7 +478,7 @@ namespace AI
 
         const int mapSize = world.w() * world.h();
         _priorityTargets.clear();
-        _mapObjects.clear();
+        _mapActionObjects.clear();
         _regions.clear();
         _regions.resize( world.getRegionCount() );
 
@@ -499,11 +499,11 @@ namespace AI
                 continue;
             }
 
-            if ( objectType == MP2::OBJ_NONE || objectType == MP2::OBJ_COAST )
+            if ( !MP2::isActionObject( objectType ) ) {
                 continue;
+            }
 
-            stats.validObjects.emplace_back( idx, objectType );
-            _mapObjects.emplace_back( idx, objectType );
+            _mapActionObjects.emplace_back( idx, objectType );
 
             if ( objectType == MP2::OBJ_HEROES ) {
                 const Heroes * hero = tile.GetHeroes();
@@ -561,7 +561,7 @@ namespace AI
 
         updateKingdomBudget( kingdom );
 
-        DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapObjects.size() << " valid objects" )
+        DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapActionObjects.size() << " valid objects" )
 
         uint32_t progressStatus = 1;
         status.DrawAITurnProgress( progressStatus );
@@ -595,6 +595,10 @@ namespace AI
             if ( !purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
                 break;
             }
+
+            assert( !heroes.empty() && heroes.back() != nullptr );
+            updateMapActionObjectCache( heroes.back()->GetIndex() );
+
             ++availableHeroCount;
         }
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-26 14:46+0000\n"
+"POT-Creation-Date: 2023-06-03 06:46+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3547,6 +3547,50 @@ msgstr "Személyiség:"
 msgid "Best Monster:"
 msgstr "Legjobb szörny:"
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Vissza a főmenübe."
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Dawn"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Játék betöltése"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr "Vissza a főmenübe."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Véletlenszerű város"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Vissza a főmenübe."
+
+msgid "No maps available!"
+msgstr "Nincs használható térkép!"
+
 msgid "difficulty|Easy"
 msgstr "Könnyű"
 
@@ -3919,6 +3963,25 @@ msgstr ""
 msgid "hotkey|choose the expansion campaign"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "Hadjárat"
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "Következő hősök"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "Szimpla játék"
+
+msgid "hotkey|new map from scratch"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "Királyság összesítése"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4187,9 +4250,6 @@ msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-
-msgid "Cancel back to the main menu."
-msgstr "Vissza a főmenübe."
 
 msgid "A single player game playing out a single map."
 msgstr "Egyjátékos mód egy pályán."
@@ -4542,9 +4602,6 @@ msgstr "Kattints a beállítások elfogadásához és új játék indításához
 
 msgid "Click to return to the main menu."
 msgstr "Kattints a főmenübe való visszatéréshez."
-
-msgid "No maps available!"
-msgstr "Nincs használható térkép!"
 
 #, fuzzy
 msgid "Astrologers proclaim the Month of the %{name}."
@@ -6330,6 +6387,10 @@ msgstr "Ez a varázslat nem fog senkire se hatni!"
 
 msgid "Only heroes can cast this spell."
 msgstr ""
+
+#, fuzzy
+msgid "This hero is not able to cast adventure spells."
+msgstr "Kalandozó varázslat elsütése."
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
