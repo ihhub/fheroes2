@@ -442,18 +442,33 @@ void Troops::Clean()
     std::for_each( begin(), end(), []( Troop * troop ) { troop->Reset(); } );
 }
 
-void Troops::UpgradeTroops( const Castle & castle )
+void Troops::UpgradeTroops( const Castle & castle ) const
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() ) {
-            payment_t payment = ( *it )->GetTotalUpgradeCost();
-            Kingdom & kingdom = castle.GetKingdom();
-
-            if ( castle.GetRace() == ( *it )->GetRace() && castle.isBuild( ( *it )->GetUpgrade().GetDwelling() ) && kingdom.AllowPayment( payment ) ) {
-                kingdom.OddFundsResource( payment );
-                ( *it )->Upgrade();
-            }
+    for ( Troop * troop : *this ) {
+        assert( troop != nullptr );
+        if ( !troop->isValid() ) {
+            continue;
         }
+
+        if ( !troop->isAllowUpgrade() ) {
+            continue;
+        }
+
+        Kingdom & kingdom = castle.GetKingdom();
+        if ( castle.GetRace() != troop->GetRace() ) {
+            continue;
+        }
+
+        if ( !castle.isBuild( troop->GetUpgrade().GetDwelling() ) ) {
+            continue;
+        }
+
+        const payment_t payment = troop->GetTotalUpgradeCost();
+        if ( kingdom.AllowPayment( payment ) ) {
+            kingdom.OddFundsResource( payment );
+            troop->Upgrade();
+        }
+    }
 }
 
 Troop * Troops::GetFirstValid()
