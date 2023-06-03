@@ -60,18 +60,22 @@ edit translations. Currently all implemented languages adhere to a standardized 
 
 ### Sync your fork
 
-Before you start working on the first or next translation, make sure that your fork has all the recent changes from the fheroes2 repo. To do this, [**sync your fork**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork).
+Before you start working on the first or next translation, make sure that your fork has all the recent changes from the fheroes2 repo.
+To do this, [**sync your fork**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork).
 
 ### Creating a branch
 
-Next you will set up an environment for working on your translation, in addition to testing and sharing your changes. Read more [**about branches**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches).
+Next you will set up an environment for working on your translation, in addition to testing and sharing your changes.
+Read more [**about branches**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches).
 
-To create a branch, please follow GitHub's instructions on [**creating a branch within your repo**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository).
+To create a branch, please follow GitHub's instructions on
+[**creating a branch within your repo**](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository).
 
 ### Submitting translations
 
-Finally you will use your translation software of choice to make changes to the translation. All original translatable strings are located in the source code of the project. 
-If you need to clarify where this string is being used you can search for it. The string below, for example, can be translated in PO files:
+Finally you will use your translation software of choice to make changes to the translation. All original translatable strings are
+located in the source code of the project. If you need to clarify where this string is being used you can search for it.
+The string below, for example, can be translated in PO files:
 
 ```cpp
 _( "Are you sure you want to quit?" )
