@@ -600,14 +600,14 @@ namespace
         const fheroes2::Sprite & okayButtonReleasedImage = fheroes2::AGG::GetICN( buttonIcnId, 0 );
         const fheroes2::Sprite & okayButtonPressedImage = fheroes2::AGG::GetICN( buttonIcnId, 1 );
 
-        fheroes2::ButtonSprite okayButton( windowRoi.x + ( windowRoi.width - okayButtonReleasedImage.width() ) / 2, windowRoi.y + windowRoi.height - 35,
-                                           okayButtonReleasedImage, okayButtonPressedImage );
+        const fheroes2::Point okayButtonPosition{ windowRoi.x + ( windowRoi.width - okayButtonReleasedImage.width() ) / 2, windowRoi.y + windowRoi.height - 35 };
+
+        fheroes2::ButtonSprite okayButton( okayButtonPosition.x, okayButtonPosition.y, okayButtonReleasedImage, okayButtonPressedImage );
 
         // Render OKAY button and its shadow only if the keyboard dialog was resized.
         if ( isResized ) {
             okayButton.draw();
-            fheroes2::addGradientShadow( okayButtonReleasedImage, display,
-                                         { windowRoi.x + ( windowRoi.width - okayButtonReleasedImage.width() ) / 2, windowRoi.y + windowRoi.height - 35 }, { -5, 5 } );
+            fheroes2::addGradientShadow( okayButtonReleasedImage, display, okayButtonPosition, buttonShadowOffset );
         }
 
         display.render();
