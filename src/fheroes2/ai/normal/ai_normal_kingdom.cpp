@@ -610,11 +610,13 @@ namespace AI
                         }
                     }
                 }
+
+                if ( moreTaskForHeroes ) {
+                    continue;
+                }
             }
 
-            if ( !moreTaskForHeroes ) {
-                break;
-            }
+            break;
         }
 
         status.DrawAITurnProgress( 9 );
