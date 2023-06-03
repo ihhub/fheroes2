@@ -1842,7 +1842,6 @@ namespace AI
 
             _priorityTargets.erase( tileIndex );
             break;
-
         }
         case PriorityTaskType::ATTACK: {
             // check if battle was actually won or attacker still there
