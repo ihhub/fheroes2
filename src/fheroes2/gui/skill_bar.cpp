@@ -290,22 +290,22 @@ namespace fheroes2
 {
     void RedrawPrimarySkillInfo( const fheroes2::Point & pos, PrimarySkillsBar * bar1, PrimarySkillsBar * bar2 )
     {
-        fheroes2::Display & display = fheroes2::Display::instance();
+        Display & display = Display::instance();
 
         // attack skill
-        Text text( Skill::Primary::String( Skill::Primary::ATTACK ), fheroes2::FontType::smallWhite() );
+        Text text( Skill::Primary::String( Skill::Primary::ATTACK ), FontType::smallWhite() );
         text.draw( pos.x + 320 - text.width() / 2, pos.y + 62, display );
 
         // defense skill
-        text.set( Skill::Primary::String( Skill::Primary::DEFENSE ), fheroes2::FontType::smallWhite() );
+        text.set( Skill::Primary::String( Skill::Primary::DEFENSE ), FontType::smallWhite() );
         text.draw( pos.x + 320 - text.width() / 2, pos.y + 95, display );
 
         // spell power
-        text.set( Skill::Primary::String( Skill::Primary::POWER ), fheroes2::FontType::smallWhite() );
+        text.set( Skill::Primary::String( Skill::Primary::POWER ), FontType::smallWhite() );
         text.draw( pos.x + 320 - text.width() / 2, pos.y + 128, display );
 
         // knowledge
-        text.set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ), fheroes2::FontType::smallWhite() );
+        text.set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ), FontType::smallWhite() );
         text.draw( pos.x + 320 - text.width() / 2, pos.y + 161, display );
 
         if ( bar1 ) {

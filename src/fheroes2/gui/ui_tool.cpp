@@ -644,15 +644,15 @@ namespace fheroes2
         }
     }
 
-    size_t getTextInputCursorPosition( const std::string & text, const FontType & fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXPosition,
-                                       const int32_t textStartXPosition )
+    size_t getTextInputCursorPosition( const std::string & text, const FontType & fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
+                                       const int32_t textStartXOffset )
     {
-        if ( text.empty() || pointerCursorXPosition <= textStartXPosition ) {
+        if ( text.empty() || pointerCursorXOffset <= textStartXOffset ) {
             // The text is empty or mouse cursor position is to the left of input field.
             return 0;
         }
 
-        const int32_t maxOffset = pointerCursorXPosition - textStartXPosition;
+        const int32_t maxOffset = pointerCursorXOffset - textStartXOffset;
         const size_t textSize = text.size();
         int32_t positionOffset = 0;
         for ( size_t i = 0; i < textSize; ++i ) {
