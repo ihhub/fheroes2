@@ -3644,8 +3644,8 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
     // Play sound only if it is not already playing.
     auto playSoundIfNotPlaying = [&unitSounds]( const int unitSound ) {
-        const std::pair insertState = unitSounds.insert( unitSound );
-        if ( insertState.second ) {
+        const auto [dummy, isUnique] = unitSounds.insert( unitSound );
+        if ( isUnique ) {
             AudioManager::PlaySound( unitSound );
         }
     };
@@ -5929,8 +5929,8 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
         std::set<int> unitSounds;
 
         auto playSoundIfNotPlaying = [&unitSounds]( const int unitSound ) {
-            const std::pair insertState = unitSounds.insert( unitSound );
-            if ( insertState.second ) {
+            const auto [dummy, isUnique] = unitSounds.insert( unitSound );
+            if ( isUnique ) {
                 AudioManager::PlaySound( unitSound );
             }
         };
