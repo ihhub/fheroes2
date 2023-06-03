@@ -30,10 +30,11 @@
 #include "math_base.h"
 #include "timing.h"
 #include "ui_base.h"
-#include "ui_text.h"
 
 namespace fheroes2
 {
+    struct FontType;
+
     class MovableSprite : public Sprite
     {
     public:
