@@ -69,6 +69,7 @@ namespace Interface
 
     private:
         friend Basic;
+        friend class Editor;
 
         // Do not call this method directly, use Interface::Basic::Redraw() instead
         // to avoid issues in the "no interface" mode

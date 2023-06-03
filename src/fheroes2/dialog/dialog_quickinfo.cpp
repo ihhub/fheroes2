@@ -564,7 +564,9 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 
     std::string infoString;
 
-    if ( tile.isFog( Settings::Get().CurrentColor() ) ) {
+    const int32_t playerColor = Settings::Get().CurrentColor();
+
+    if ( ( playerColor != 0 ) && tile.isFog( playerColor ) ) {
         infoString = _( "Uncharted Territory" );
     }
     else {

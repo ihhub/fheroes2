@@ -147,8 +147,9 @@ Interface::Radar::Radar( Basic & basic )
     , _radarType( RadarType::WorldMap )
     , _interface( basic )
 {
-    // Radar image can not be transparent so we disable the transform layer to speed up rendering.
+    // Initialize _map as single-layer image.
     _map._disableTransformLayer();
+    _map.resize( RADARWIDTH, RADARWIDTH );
 }
 
 Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display )
@@ -159,8 +160,9 @@ Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display 
     , _zoom( radar._zoom )
     , _hide( false )
 {
-    // Radar image can not be transparent so we disable the transform layer to speed up rendering.
+    // Initialize _map as single-layer image.
     _map._disableTransformLayer();
+    _map.resize( RADARWIDTH, RADARWIDTH );
 }
 
 void Interface::Radar::SavePosition()
@@ -265,6 +267,21 @@ void Interface::Radar::RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, cons
     const fheroes2::Rect roiInTiles = roi.GetROIinTiles();
     _cursorArea.show();
     RedrawCursor( &roiInTiles );
+}
+
+void Interface::Radar::redrawForEditor( const bool renderMapObjects )
+{
+    _cursorArea.hide();
+
+    if ( renderMapObjects ) {
+        RedrawObjects( Players::FriendColors(), ViewWorldMode::ViewAll );
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Rect & rect = GetArea();
+        fheroes2::Copy( _map, 0, 0, display, rect.x, rect.y, _map.width(), _map.height() );
+    }
+
+    _cursorArea.show();
+    RedrawCursor();
 }
 
 void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorldMode flags )

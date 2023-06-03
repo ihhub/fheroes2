@@ -224,6 +224,7 @@ namespace Interface
         void Reset();
 
     private:
+        friend class Editor;
         Basic();
 
         static int GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile );
