@@ -32,6 +32,7 @@
 #include "payment.h"
 #include "rand.h"
 #include "resource.h"
+#include "settings.h"
 
 namespace AI
 {
@@ -139,6 +140,16 @@ namespace AI
 
     bool CanPurchaseHero( const Kingdom & kingdom )
     {
-        return kingdom.GetCountCastle() > 0 && kingdom.AllowRecruitHero( true );
+        if ( kingdom.GetCountCastle() == 0 ) {
+            return false;
+        }
+
+        if ( kingdom.GetColor() == Settings::Get().CurrentColor() ) {
+            // This is the AI's current turn.
+            return kingdom.AllowPayment( PaymentConditions::RecruitHero() );
+        }
+
+        // This is not the current turn for the AI so we need to roughly calculate the possible future income on the next day.
+        return kingdom.AllowPayment( PaymentConditions::RecruitHero() - kingdom.GetIncome() );
     }
 }

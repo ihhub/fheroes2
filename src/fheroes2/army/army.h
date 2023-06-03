@@ -94,7 +94,7 @@ public:
     uint32_t getTotalHP() const;
 
     void Clean();
-    void UpgradeTroops( const Castle & );
+    void UpgradeTroops( const Castle & castle ) const;
 
     Troop * GetFirstValid();
     Troop * GetWeakestTroop() const;

@@ -442,18 +442,33 @@ void Troops::Clean()
     std::for_each( begin(), end(), []( Troop * troop ) { troop->Reset(); } );
 }
 
-void Troops::UpgradeTroops( const Castle & castle )
+void Troops::UpgradeTroops( const Castle & castle ) const
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() ) {
-            payment_t payment = ( *it )->GetTotalUpgradeCost();
-            Kingdom & kingdom = castle.GetKingdom();
-
-            if ( castle.GetRace() == ( *it )->GetRace() && castle.isBuild( ( *it )->GetUpgrade().GetDwelling() ) && kingdom.AllowPayment( payment ) ) {
-                kingdom.OddFundsResource( payment );
-                ( *it )->Upgrade();
-            }
+    for ( Troop * troop : *this ) {
+        assert( troop != nullptr );
+        if ( !troop->isValid() ) {
+            continue;
         }
+
+        if ( !troop->isAllowUpgrade() ) {
+            continue;
+        }
+
+        Kingdom & kingdom = castle.GetKingdom();
+        if ( castle.GetRace() != troop->GetRace() ) {
+            continue;
+        }
+
+        if ( !castle.isBuild( troop->GetUpgrade().GetDwelling() ) ) {
+            continue;
+        }
+
+        const payment_t payment = troop->GetTotalUpgradeCost();
+        if ( kingdom.AllowPayment( payment ) ) {
+            kingdom.OddFundsResource( payment );
+            troop->Upgrade();
+        }
+    }
 }
 
 Troop * Troops::GetFirstValid()
@@ -915,11 +930,17 @@ const Troops & Army::getTroops() const
 
 void Army::setFromTile( const Maps::Tiles & tile )
 {
-    Reset();
+    assert( commander == nullptr );
+
+    Troops::Clean();
 
     const bool isCaptureObject = MP2::isCaptureObject( tile.GetObject( false ) );
-    if ( isCaptureObject )
+    if ( isCaptureObject ) {
         color = getColorFromTile( tile );
+    }
+    else {
+        color = Color::NONE;
+    }
 
     switch ( tile.GetObject( false ) ) {
     case MP2::OBJ_PYRAMID:
@@ -1044,8 +1065,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
 
     default:
         if ( isCaptureObject ) {
-            CapturedObject & capturedObject = world.GetCapturedObject( tile.GetIndex() );
-            const Troop & troop = capturedObject.GetTroop();
+            const Troop & troop = world.GetCapturedObject( tile.GetIndex() ).GetTroop();
 
             if ( troop.isValid() ) {
                 ArrangeForBattle( troop.GetMonster(), troop.GetCount(), tile.GetIndex(), false );
@@ -1175,12 +1195,16 @@ double Army::GetStrength() const
     const int armyMorale = GetMorale();
     const int armyLuck = GetLuck();
 
+    bool troopsExist = false;
+
     for ( const Troop * troop : *this ) {
         assert( troop != nullptr );
 
         if ( troop->isEmpty() ) {
             continue;
         }
+
+        troopsExist = true;
 
         double strength = troop->GetStrengthWithBonus( bonusAttack, bonusDefense );
 
@@ -1197,7 +1221,7 @@ double Army::GetStrength() const
         result += strength;
     }
 
-    if ( commander ) {
+    if ( commander != nullptr && troopsExist ) {
         result += commander->GetMagicStrategicValue( result );
     }
 

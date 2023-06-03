@@ -170,12 +170,6 @@ namespace
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
 
-        if ( !MP2::isActionObject( objectType ) ) {
-            // TODO: add logic to verify if all parts of puzzle are opened and the location is known.
-            // TODO: once it is done, check if the tile does not have a hole. If it does not mark it as a valid object.
-            return false;
-        }
-
         // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
         if ( MP2::isArtifactObject( objectType ) ) {
             const Artifact art = getArtifactFromTile( tile );
@@ -580,11 +574,6 @@ namespace
         case MP2::OBJ_WHIRLPOOL:
             return false;
 
-        case MP2::OBJ_COAST:
-            // Coast is not an action object. If this assertion blows up then something is wrong with the logic above.
-            assert( 0 );
-            return false;
-
         default:
             // Did you add a new action object but forget to add AI interaction for it?
             assert( 0 );
@@ -666,7 +655,7 @@ namespace
             , _ignoreValue( ignoreValue )
         {}
 
-        double value( std::pair<int, int> & objectInfo, const uint32_t distance )
+        double value( const std::pair<int, int> & objectInfo, const uint32_t distance )
         {
             auto iter = _objectValue.find( objectInfo );
             if ( iter != _objectValue.end() ) {
@@ -1543,10 +1532,9 @@ namespace AI
         return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
     }
 
-    double Normal::getObjectValue( const Heroes & hero, const int index, int & objectType, const double valueToIgnore, const uint32_t distanceToObject ) const
+    double Normal::getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const
     {
-        const Maps::Tiles & tile = world.GetTiles( index );
-        objectType = tile.GetObject();
+        assert( objectType == world.GetTiles( index ).GetObject() );
 
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
@@ -1660,7 +1648,20 @@ namespace AI
         MP2::MapObjectType objectType = MP2::OBJ_NONE;
 
         // If this assertion blows up then the array is not sorted and the logic below will not work as intended.
-        assert( std::is_sorted( _mapObjects.begin(), _mapObjects.end() ) );
+        assert( std::is_sorted( _mapActionObjects.begin(), _mapActionObjects.end() ) );
+
+        std::set<int> objectIndexes;
+
+        for ( const auto & actionObject : _mapActionObjects ) {
+            if ( actionObject.second == MP2::OBJ_HEROES ) {
+                assert( world.GetTiles( actionObject.first ).GetHeroes() != nullptr );
+            }
+
+            const auto [dummy, inserted] = objectIndexes.emplace( actionObject.first );
+            if ( !inserted ) {
+                assert( 0 );
+            }
+        }
 #endif
 
         // pre-cache the pathfinder
@@ -1676,8 +1677,8 @@ namespace AI
             if ( !isDimensionDoor ) {
                 // Dimension door path does not include any objects on the way.
                 std::vector<IndexObject> list = _pathfinder.getObjectsOnTheWay( destination );
-                for ( IndexObject & pair : list ) {
-                    if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) ) {
+                for ( const IndexObject & pair : list ) {
+                    if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapActionObjects.begin(), _mapActionObjects.end(), pair ) ) {
                         const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
                         if ( extraValue > 0 ) {
                             // There is no need to reduce the quality of the object even if the path has others.
@@ -1725,7 +1726,7 @@ namespace AI
             }
         }
 
-        for ( IndexObject & node : _mapObjects ) {
+        for ( const IndexObject & node : _mapActionObjects ) {
             // Skip if hero in patrol mode and object outside of reach
             if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, heroInfo.patrolCenter ) > heroInfo.patrolDistance )
                 continue;
@@ -1861,6 +1862,8 @@ namespace AI
         if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES ) {
             updatePriorityTargets( hero, tileIndex, objectType );
         }
+
+        updateMapActionObjectCache( tileIndex );
     }
 
     bool Normal::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue )
@@ -1957,6 +1960,8 @@ namespace AI
             const size_t heroesBefore = heroes.size();
             _pathfinder.reEvaluateIfNeeded( *bestHero );
 
+            const int prevHeroPosition = bestHero->GetIndex();
+
             // check if we want to use Dimension Door spell or move regularly
             std::list<Route::Step> dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
             uint32_t dimensionDoorDistance = AIWorldPathfinder::calculatePathPenalty( dimensionPath );
@@ -1984,6 +1989,16 @@ namespace AI
                 bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
 
                 HeroesMove( *bestHero );
+            }
+
+            if ( bestHero->isFreeman() || bestHero->GetIndex() != prevHeroPosition ) {
+                // The hero died or moved to another position. We have to update the action object cache.
+                updateMapActionObjectCache( prevHeroPosition );
+
+                if ( !bestHero->isFreeman() ) {
+                    // Hero moved to another position and is still alive.
+                    updateMapActionObjectCache( bestHero->GetIndex() );
+                }
             }
 
             if ( heroes.size() > heroesBefore ) {
