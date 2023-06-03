@@ -1833,7 +1833,8 @@ namespace AI
         const PriorityTask & task = it->second;
 
         switch ( task.type ) {
-        case PriorityTaskType::DEFEND: {
+        case PriorityTaskType::DEFEND:
+        case PriorityTaskType::REINFORCE: {
             // TODO: sort the army between the castle and hero to have maximum movement points for the next day
             // TODO: but also have enough army to defend the castle.
             if ( objectType == MP2::OBJ_CASTLE ) {
@@ -1870,15 +1871,6 @@ namespace AI
 
             break;
         }
-        case PriorityTaskType::REINFORCE:
-            // TODO: sort the army between the castle and hero to have maximum movement points for the next day
-            // TODO: but also have enough army to defend the castle.
-            if ( objectType == MP2::OBJ_CASTLE ) {
-                hero.SetModes( Heroes::SLEEPER );
-            }
-
-            _priorityTargets.erase( tileIndex );
-            break;
         default:
             // Did you add a new type of priority task? Add the logic above!
             assert( 0 );
