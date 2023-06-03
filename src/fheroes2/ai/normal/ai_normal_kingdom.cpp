@@ -602,9 +602,9 @@ namespace AI
             if ( !moreTaskForHeroes && world.LastDay() ) {
                 // Heroes have nothing to do. In this case it is wise to move heroes to castles especially if it is the last day of a week.
                 // So for the next day a hero will have a maximum amount of spell points as well as new troops.
-                for ( Castle * castle : castles ) {
+                for ( const Castle * castle : castles ) {
                     if ( castle->GetHero() == nullptr ) {
-                        const auto [dummy, inserted] = _priorityTargets.emplace( castle->GetIndex(), PriorityTask{ PriorityTaskType::REINFORCE, 0 } );
+                        const auto [dummy, inserted] = _priorityTargets.try_emplace( castle->GetIndex(), PriorityTask{ PriorityTaskType::REINFORCE, 0 } );
                         if ( inserted ) {
                             moreTaskForHeroes = true;
                         }

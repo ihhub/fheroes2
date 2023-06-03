@@ -287,16 +287,6 @@ namespace AI
             return iter->second.type == PriorityTaskType::ATTACK || iter->second.type == PriorityTaskType::DEFEND;
         }
 
-        bool isNonCriticalTask( const int index ) const
-        {
-            const auto iter = _priorityTargets.find( index );
-            if ( iter == _priorityTargets.end() ) {
-                return false;
-            }
-
-            return iter->second.type == PriorityTaskType::REINFORCE;
-        }
-
     private:
         // following data won't be saved/serialized
         double _combinedHeroStrength = 0;
