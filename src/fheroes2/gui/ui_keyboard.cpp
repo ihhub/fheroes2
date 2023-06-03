@@ -121,6 +121,13 @@ namespace
             return _window->activeArea();
         }
 
+        fheroes2::Rect getTextRoi() const
+        {
+            const fheroes2::Rect windowRoi{ getWindowRoi() };
+            return { windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2 + inputAreaBorders, windowRoi.y + inputAreaOffsetFromWindowTop + inputAreaBorders,
+                     inputAreaSize.width - inputAreaBorders * 2, inputAreaSize.height - inputAreaBorders * 2 };
+        }
+
         bool isEvilInterface() const
         {
             return _isEvilInterface;
@@ -610,9 +617,7 @@ namespace
 
         const fheroes2::Rect windowRoi{ renderer.getWindowRoi() };
         const fheroes2::Rect buttonsRoi = getButtonsRoi( buttons, windowRoi.getPosition() + offsetFromWindowBorders );
-        const fheroes2::Rect textRoi{ windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2 + inputAreaBorders,
-                                      windowRoi.y + inputAreaOffsetFromWindowTop + inputAreaBorders, inputAreaSize.width - inputAreaBorders * 2,
-                                      inputAreaSize.height - inputAreaBorders * 2 };
+        const fheroes2::Rect textRoi{ renderer.getTextRoi() };
 
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::ImageRestorer restorer( display, buttonsRoi.x, buttonsRoi.y, buttonsRoi.width, buttonsRoi.height );
