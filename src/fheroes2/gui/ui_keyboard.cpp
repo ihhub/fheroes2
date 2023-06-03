@@ -218,7 +218,7 @@ namespace
             // Make Image with shadow for button to Blit it during render.
             buttonShadow.resize( released.width() + std::abs( buttonShadowOffset.x ), released.height() + std::abs( buttonShadowOffset.y ) );
             buttonShadow.reset();
-            fheroes2::addGradientShadow( released, buttonShadow, { 0, 0 }, buttonShadowOffset );
+            fheroes2::addGradientShadow( released, buttonShadow, { -std::min( 0, buttonShadowOffset.x ), -std::min( 0, buttonShadowOffset.y ) }, buttonShadowOffset );
         }
 
         KeyboardButton( const KeyboardButton & ) = delete;
