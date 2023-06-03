@@ -5817,7 +5817,8 @@ namespace fheroes2
         icnVsSprite[75].setPosition( icnVsSprite[75].x(), icnVsSprite[75].y() );
         updateNormalFontLetterShadow( icnVsSprite[75] );
 
-        // System call 'DELETE' is never used as character. We make it a transparent character with width of "_" for blinking cursor.
+        // System call 'DELETE' (0x7F) is never used as character.
+        // To make blinking text cursor we have make a transparent character with the width of the cursor '_'.
         icnVsSprite[127 - 32].resize( icnVsSprite[95 - 32].width(), 1 );
         icnVsSprite[127 - 32].reset();
     }

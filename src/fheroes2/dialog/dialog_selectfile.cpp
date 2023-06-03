@@ -349,7 +349,9 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             le.MousePressLeft( buttonVirtualKB.area() ) ? buttonVirtualKB.drawOnPress() : buttonVirtualKB.drawOnRelease();
         }
 
-        bool isListboxSelected = listbox.QueueEventProcessing();
+        const bool listboxEvent = listbox.QueueEventProcessing();
+
+        bool isListboxSelected = listbox.isSelected();
 
         bool needRedraw = false;
 
@@ -381,8 +383,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
                 needRedraw = true;
             }
-            else if ( le.KeyPress() && ( fheroes2::Key::KEY_UP != le.KeyValue() ) && ( fheroes2::Key::KEY_DOWN != le.KeyValue() )
-                      && ( !is_limit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() ) ) {
+            else if ( !listboxEvent && le.KeyPress() && ( !is_limit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() ) ) {
                 charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
                 if ( filename.empty() ) {
                     buttonOk.disable();
