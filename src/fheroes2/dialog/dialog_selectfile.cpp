@@ -374,7 +374,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                 needRedraw = true;
             }
             else if ( le.MouseClickLeft( enter_field ) ) {
-                charInsertPos = fheroes2::getTextInputCursorPosition( filename, charInsertPos, le.GetMouseCursor().x, enter_field.x );
+                charInsertPos = fheroes2::getTextInputCursorPosition( filename, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x, enter_field.x );
                 if ( filename.empty() ) {
                     buttonOk.disable();
                 }

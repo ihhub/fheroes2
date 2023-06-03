@@ -345,7 +345,8 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
             }
         }
         else if ( le.MouseClickLeft( text_rt ) ) {
-            charInsertPos = fheroes2::getTextInputCursorPosition( res, charInsertPos, le.GetMouseCursor().x, text_rt.x + ( text_rt.width - text.width() ) / 2 );
+            charInsertPos = fheroes2::getTextInputCursorPosition( res, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x,
+                                                                  text_rt.x + ( text_rt.width - text.width() ) / 2 );
 
             redraw = true;
         }

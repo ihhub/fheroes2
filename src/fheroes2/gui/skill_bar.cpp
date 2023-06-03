@@ -33,6 +33,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -289,25 +290,29 @@ namespace fheroes2
 {
     void RedrawPrimarySkillInfo( const fheroes2::Point & pos, PrimarySkillsBar * bar1, PrimarySkillsBar * bar2 )
     {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
         // attack skill
-        Text text( Skill::Primary::String( Skill::Primary::ATTACK ), Font::SMALL );
-        text.Blit( pos.x + 320 - text.w() / 2, pos.y + 64 );
+        Text text( Skill::Primary::String( Skill::Primary::ATTACK ), fheroes2::FontType::smallWhite() );
+        text.draw( pos.x + 320 - text.width() / 2, pos.y + 62, display );
 
         // defense skill
-        text.Set( Skill::Primary::String( Skill::Primary::DEFENSE ) );
-        text.Blit( pos.x + 320 - text.w() / 2, pos.y + 96 );
+        text.set( Skill::Primary::String( Skill::Primary::DEFENSE ), fheroes2::FontType::smallWhite() );
+        text.draw( pos.x + 320 - text.width() / 2, pos.y + 95, display );
 
         // spell power
-        text.Set( Skill::Primary::String( Skill::Primary::POWER ) );
-        text.Blit( pos.x + 320 - text.w() / 2, pos.y + 128 );
+        text.set( Skill::Primary::String( Skill::Primary::POWER ), fheroes2::FontType::smallWhite() );
+        text.draw( pos.x + 320 - text.width() / 2, pos.y + 128, display );
 
         // knowledge
-        text.Set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ) );
-        text.Blit( pos.x + 320 - text.w() / 2, pos.y + 160 );
+        text.set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ), fheroes2::FontType::smallWhite() );
+        text.draw( pos.x + 320 - text.width() / 2, pos.y + 161, display );
 
-        if ( bar1 )
-            bar1->Redraw( fheroes2::Display::instance() );
-        if ( bar2 )
-            bar2->Redraw( fheroes2::Display::instance() );
+        if ( bar1 ) {
+            bar1->Redraw( display );
+        }
+        if ( bar2 ) {
+            bar2->Redraw( display );
+        }
     }
 }

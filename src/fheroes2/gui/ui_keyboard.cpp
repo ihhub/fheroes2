@@ -191,7 +191,7 @@ namespace
 
         void setCursortPosition( const int32_t clickXPosition, const int32_t startXPosition )
         {
-            _cursorPosition = fheroes2::getTextInputCursorPosition( _info, _cursorPosition, clickXPosition, startXPosition );
+            _cursorPosition = fheroes2::getTextInputCursorPosition( _info, fheroes2::FontType::normalWhite(), _cursorPosition, clickXPosition, startXPosition );
 
             renderInputArea();
         }

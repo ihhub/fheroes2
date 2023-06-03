@@ -30,6 +30,7 @@
 #include "math_base.h"
 #include "timing.h"
 #include "ui_base.h"
+#include "ui_text.h"
 
 namespace fheroes2
 {
@@ -136,7 +137,7 @@ namespace fheroes2
     void FadeDisplayWithPalette( const Image & top, const Point & pos, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount );
 
     // Returns the character position number in the 'text' string.
-    size_t getTextInputCursorPosition( const std::string & text, const size_t currentTextCursorPosition, const int32_t pointerCursorXPosition,
+    size_t getTextInputCursorPosition( const std::string & text, const FontType & fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXPosition,
                                        const int32_t textStartXPosition );
 
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs,
