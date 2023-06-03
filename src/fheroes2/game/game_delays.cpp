@@ -187,8 +187,8 @@ void Game::UpdateGameSpeed()
     const int32_t battleSpeed = conf.BattleSpeed();
     // For the battle speed = 10 avoid the zero delay and set animation speed to the 1/3 of battleSpeedAdjustment step.
     const double adjustedBattleSpeed = ( battleSpeed < 10 ) ? ( ( 10 - battleSpeed ) * battleSpeedAdjustment ) : ( battleSpeedAdjustment / 3 );
-    // For the battle speed =  5 .. 10 adjust the Idle animation not to have insane high animation speed.
-    const double adjustedIdleAnimationSpeed = ( adjustedBattleSpeed < 1 ) ? ( adjustedBattleSpeed + 1 ) / 2 : adjustedBattleSpeed;
+    // Reduce the Idle animation adjustment interval to (0.5 .. 1).
+    const double adjustedIdleAnimationSpeed = ( 19 - battleSpeed ) / 18.0;
 
     delays[BATTLE_FRAME_DELAY].setDelay( static_cast<uint64_t>( 120 * adjustedBattleSpeed ) );
     delays[BATTLE_MISSILE_DELAY].setDelay( static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
