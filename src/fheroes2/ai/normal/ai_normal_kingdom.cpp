@@ -607,7 +607,6 @@ namespace AI
                         const auto [dummy, inserted] = _priorityTargets.emplace( castle->GetIndex(), PriorityTask{ PriorityTaskType::REINFORCE, 0 } );
                         if ( inserted ) {
                             moreTaskForHeroes = true;
-                            VERBOSE_LOG( Color::String( myColor ) << " heroes have nothing to go so move them into castles." )
                         }
                     }
                 }
