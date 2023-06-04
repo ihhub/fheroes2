@@ -584,7 +584,7 @@ namespace AI
             const uint32_t startProgressValue = progressStatus;
             const uint32_t endProgressValue = ( progressStatus == 1 ) ? 8 : std::max( progressStatus + 1U, 9U );
 
-            const bool moreTaskForHeroes = HeroesTurn( heroes, startProgressValue, endProgressValue );
+            bool moreTaskForHeroes = HeroesTurn( heroes, startProgressValue, endProgressValue );
 
             if ( progressStatus == 1 ) {
                 progressStatus = 8;
@@ -592,14 +592,31 @@ namespace AI
             }
 
             // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
-            if ( !purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
-                break;
+            if ( purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
+                assert( !heroes.empty() && heroes.back() != nullptr );
+                updateMapActionObjectCache( heroes.back()->GetIndex() );
+                ++availableHeroCount;
+                continue;
             }
 
-            assert( !heroes.empty() && heroes.back() != nullptr );
-            updateMapActionObjectCache( heroes.back()->GetIndex() );
+            if ( !moreTaskForHeroes && world.LastDay() ) {
+                // Heroes have nothing to do. In this case it is wise to move heroes to castles especially if it is the last day of a week.
+                // So for the next day a hero will have a maximum amount of spell points as well as new troops.
+                for ( const Castle * castle : castles ) {
+                    if ( castle->GetHero() == nullptr ) {
+                        const auto [dummy, inserted] = _priorityTargets.try_emplace( castle->GetIndex(), PriorityTask{ PriorityTaskType::REINFORCE, 0 } );
+                        if ( inserted ) {
+                            moreTaskForHeroes = true;
+                        }
+                    }
+                }
 
-            ++availableHeroCount;
+                if ( moreTaskForHeroes ) {
+                    continue;
+                }
+            }
+
+            break;
         }
 
         status.DrawAITurnProgress( 9 );
@@ -620,8 +637,8 @@ namespace AI
         status.DrawAITurnProgress( 10 );
     }
 
-    bool Normal::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
-                                    bool moreTasksForHeroes )
+    bool Normal::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, const int32_t availableHeroCount,
+                                    const bool moreTasksForHeroes )
     {
         const bool slowEarlyGame = world.CountDay() < 5 && sortedCastleList.size() == 1;
         int32_t heroLimit = world.w() / Maps::SMALL + 1;

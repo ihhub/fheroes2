@@ -272,9 +272,19 @@ namespace AI
 
         double getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType );
 
-        bool isCriticalTask( const int index ) const
+        bool isPriorityTask( const int index ) const
         {
             return _priorityTargets.find( index ) != _priorityTargets.end();
+        }
+
+        bool isCriticalTask( const int index ) const
+        {
+            const auto iter = _priorityTargets.find( index );
+            if ( iter == _priorityTargets.end() ) {
+                return false;
+            }
+
+            return iter->second.type == PriorityTaskType::ATTACK || iter->second.type == PriorityTaskType::DEFEND;
         }
 
     private:
@@ -292,6 +302,8 @@ namespace AI
         std::map<int32_t, double> _neutralMonsterStrengthCache;
 
         void CastleTurn( Castle & castle, const bool defensiveStrategy );
+
+        // Returns true if heroes can still do tasks but they have no move points.
         bool HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue );
 
         double getGeneralObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
@@ -303,8 +315,8 @@ namespace AI
         void updatePriorityTargets( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType );
         void updateKingdomBudget( const Kingdom & kingdom );
 
-        bool purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
-                                bool moreTasksForHeroes );
+        bool purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, const int32_t availableHeroCount,
+                                const bool moreTasksForHeroes );
 
         static bool isMonsterStrengthCacheable( const MP2::MapObjectType objectType )
         {
