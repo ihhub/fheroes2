@@ -95,6 +95,7 @@ namespace Campaign
         _currentScenarioInfoId = { -1, -1 };
         _daysPassed = 0;
         _difficulty = CampaignDifficulty::Normal;
+        _currentScenarioBonus = {};
     }
 
     void CampaignSaveData::setCarryOverTroops( const Troops & troops )
