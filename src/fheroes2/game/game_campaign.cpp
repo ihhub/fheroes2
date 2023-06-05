@@ -1386,6 +1386,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
     }
 
+    optionButtonGroup.draw();
+
     buttonViewIntro.draw();
     buttonDifficulty.draw();
 
@@ -1417,9 +1419,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     assert( buttonRestart.isHidden() != buttonOk.isHidden() );
 
     buttonCancel.draw();
-
-    for ( uint32_t i = 0; i < bonusChoiceCount; ++i )
-        buttonChoices.button( i ).draw();
 
     const Text textDaysSpent( std::to_string( campaignSaveData.getDaysPassed() ), Font::BIG );
     textDaysSpent.Blit( top.x + 582 - textDaysSpent.w() / 2, top.y + 31 );
