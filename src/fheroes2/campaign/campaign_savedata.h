@@ -60,6 +60,11 @@ namespace Campaign
             return _currentScenarioInfoId.scenarioId;
         }
 
+        const ScenarioBonusData & getCurrentScenarioBonus() const
+        {
+            return _currentScenarioBonus;
+        }
+
         const ScenarioInfoId & getCurrentScenarioInfoId() const
         {
             return _currentScenarioInfoId;

@@ -1360,12 +1360,30 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
         buttonChoices.createButton( optionButtonOffset.x + top.x, optionButtonOffset.y + optionButtonStep * i + top.y, releaseButton, pressedButton, i );
         optionButtonGroup.addButton( &buttonChoices.button( i ) );
+
+        if ( allowToRestart && campaignSaveData.getCurrentScenarioBonus() == bonusChoices[i] ) {
+            scenarioBonus = bonusChoices[i];
+            buttonChoices.button( i ).press();
+        }
     }
 
-    // in case there's no bonus for the map
     if ( bonusChoiceCount > 0 ) {
-        scenarioBonus = bonusChoices[0];
-        buttonChoices.button( 0 ).press();
+        if ( allowToRestart ) {
+            // If the campaign scenario is already in progress, then one of the bonuses should be selected
+            assert( ( [&buttonChoices, bonusChoiceCount]() {
+                for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
+                    if ( buttonChoices.button( i ).isPressed() ) {
+                        return true;
+                    }
+                }
+                return false;
+            }() ) );
+        }
+        else {
+            // If this is the beginning of a new campaign scenario, then just select the first bonus (if any)
+            scenarioBonus = bonusChoices[0];
+            buttonChoices.button( 0 ).press();
+        }
     }
 
     buttonViewIntro.draw();
