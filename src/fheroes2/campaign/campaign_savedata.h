@@ -60,14 +60,14 @@ namespace Campaign
             return _currentScenarioInfoId.scenarioId;
         }
 
-        const ScenarioBonusData & getCurrentScenarioBonus() const
-        {
-            return _currentScenarioBonus;
-        }
-
         const ScenarioInfoId & getCurrentScenarioInfoId() const
         {
             return _currentScenarioInfoId;
+        }
+
+        int32_t getCurrentScenarioBonusId() const
+        {
+            return _currentScenarioBonusId;
         }
 
         // Make sure that this is not the first scenario in the campaign. Please call isStarting to verify this.
@@ -103,8 +103,7 @@ namespace Campaign
 
         std::vector<Campaign::CampaignAwardData> getObtainedCampaignAwards() const;
 
-        void setCurrentScenarioBonus( const ScenarioBonusData & bonus );
-        void setCurrentScenarioInfoId( const ScenarioInfoId & scenarioInfoId );
+        void setCurrentScenarioInfo( const ScenarioInfoId & scenarioInfoId, const int32_t bonusId = -1 );
         void addCurrentMapToFinished();
         void addCampaignAward( const int awardID );
         void setCarryOverTroops( const Troops & troops );
@@ -128,15 +127,15 @@ namespace Campaign
         CampaignSaveData() = default;
 
         std::vector<ScenarioInfoId> _finishedMaps;
+        std::vector<int32_t> _bonusesForFinishedMaps;
         std::vector<int> _obtainedCampaignAwards;
         std::vector<Troop> _carryOverTroops;
 
         ScenarioInfoId _currentScenarioInfoId;
+        int32_t _currentScenarioBonusId{ -1 };
 
         uint32_t _daysPassed{ 0 };
         int32_t _difficulty{ CampaignDifficulty::Normal };
-
-        ScenarioBonusData _currentScenarioBonus;
     };
 
     // Call this function only when playing campaign scenario.

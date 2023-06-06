@@ -23,7 +23,6 @@
 
 #include <cstdint>
 #include <string>
-#include <tuple>
 #include <vector>
 
 #include "game_video_type.h"
@@ -109,12 +108,6 @@ namespace Campaign
         ScenarioBonusData();
         ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount );
         ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount, const int32_t spellId );
-
-        friend bool operator==( const ScenarioBonusData & lhs, const ScenarioBonusData & rhs )
-        {
-            return std::make_tuple( lhs._type, lhs._subType, lhs._amount, lhs._artifactSpellId )
-                   == std::make_tuple( rhs._type, rhs._subType, rhs._amount, rhs._artifactSpellId );
-        }
 
         friend StreamBase & operator<<( StreamBase & msg, const ScenarioBonusData & data );
         friend StreamBase & operator>>( StreamBase & msg, ScenarioBonusData & data );
