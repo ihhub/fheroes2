@@ -1366,7 +1366,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             optionButtonGroup.addButton( &buttonChoices.button( i ) );
 
             if ( allowToRestart && saveDataBonusId >= 0 && static_cast<uint32_t>( saveDataBonusId ) == i ) {
-                scenarioBonusId = i;
+                scenarioBonusId = saveDataBonusId;
                 buttonChoices.button( i ).press();
             }
         }
@@ -1550,8 +1550,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             conf.SetCurrentFileInfo( mapInfo );
 
-            const Campaign::ScenarioBonusData scenarioBonus
-                = ( scenarioBonusId >= 0 && scenarioBonusId < bonusChoices.size() ) ? bonusChoices[scenarioBonusId] : Campaign::ScenarioBonusData{};
+            const Campaign::ScenarioBonusData scenarioBonus = ( scenarioBonusId >= 0 && static_cast<size_t>( scenarioBonusId ) < bonusChoices.size() )
+                                                                  ? bonusChoices[scenarioBonusId]
+                                                                  : Campaign::ScenarioBonusData{};
 
             // starting faction scenario bonus has to be called before players.SetStartGame()
             if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE || scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY ) {
