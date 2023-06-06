@@ -92,7 +92,7 @@ void Interface::Basic::SetFocus( Castle * castle )
         return;
     }
 
-    assert( player->GetColor() == castle->GetColor() && player->isControlHuman() );
+    assert( player->GetColor() == castle->GetColor() && ( player->isControlHuman() || ( player->isControlAI() && player->isAIAutoControlMode() ) ) );
 
     Focus & focus = player->GetFocus();
 
