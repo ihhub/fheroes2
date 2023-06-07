@@ -1376,14 +1376,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     if ( bonusChoiceCount > 0 ) {
         if ( allowToRestart ) {
             // If the campaign scenario is already in progress, then one of the bonuses should be selected
-            assert( ( [&buttonChoices, bonusChoiceCount]() {
-                for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
-                    if ( buttonChoices.button( i ).isPressed() ) {
-                        return true;
-                    }
-                }
-                return false;
-            }() ) );
+            assert( scenarioBonusId.has_value() );
         }
         else {
             // If this is the beginning of a new campaign scenario, then just select the first bonus (if any)
