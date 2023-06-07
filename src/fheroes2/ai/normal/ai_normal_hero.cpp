@@ -1705,7 +1705,6 @@ namespace AI
             }
 
             const Maps::Tiles & destinationTile = world.GetTiles( destination );
-            const MP2::MapObjectType objectType = destinationTile.GetObject();
 
             // TODO: use nearby enemy heroes as a treat instead of a region.
             const RegionStats & regionStats = _regions[destinationTile.GetRegion()];
@@ -1714,7 +1713,7 @@ namespace AI
 
             // Go into scared mode only if the treat is real. Equal by strength heroes rarely attack each other.
             if ( heroStrength * AI::ARMY_ADVANTAGE_SMALL < regionStats.highestThreat ) {
-                switch ( objectType ) {
+                switch ( type ) {
                 case MP2::OBJ_CASTLE: {
                     const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
                     assert( castle != nullptr );
