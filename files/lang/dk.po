@@ -2330,14 +2330,14 @@ msgid ""
 "The Captain's Quarters provides a captain to assist in the castle's defense "
 "when no hero is present."
 msgstr ""
-"Kaptajnens kvarter frembringer en kaptajn til at assisterer de forsvarende "
+"Kaptajnens kvarter frembringer en kaptajn til at assistere de forsvarende "
 "styrker, når der ikke er en helt tilstede."
 
 msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
 msgstr ""
-"Helte kan købe en magibog og lære besværgelser, når de besøger magilauget. "
+"Helte kan købe en magibog og lære besværgelser, når de besøger magikerlauget. "
 "Desuden fornyes heltes maksimale antal magipoint automatisk, hvis de ender "
 "deres tur stående i byen."
 
@@ -2352,7 +2352,7 @@ msgid ""
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
 "Din helt er nødt til at købe en magibog, før denne må træde ind i "
-"magilauget. Men helten har desværre ikke plads til at bære en magibog. Prøv "
+"magikerlauget. Men helten har desværre ikke plads til at bære en magibog. Prøv "
 "at afgive én af dine artefakter til en anden helt."
 
 msgid "Exit"
@@ -2549,6 +2549,18 @@ msgid ""
 msgstr ""
 
 msgid "Are you sure you want to dismiss this army?"
+msgstr ""
+
+msgid "Upgrade"
+msgstr ""
+
+msgid "Upgrade your troops."
+msgstr ""
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
 msgstr ""
 
 msgid "Followers"
@@ -3309,6 +3321,50 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Afbryd og gå tilbage til hovedmenuen."
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Nyt spil"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Indlæs spil"
+
+msgid "Load an existing map."
+msgstr ""
+
+msgid "Cancel back to the main menu."
+msgstr "Afbryd og gå tilbage til hovedmenuen."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Tilfældigt monster"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Afbryd og gå tilbage til hovedmenuen."
+
+msgid "No maps available!"
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Let"
 
@@ -3657,6 +3713,24 @@ msgstr ""
 msgid "hotkey|choose the expansion campaign"
 msgstr ""
 
+msgid "hotkey|map editor main menu"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "verdenskort op til venstre"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "verdenskort op til venstre"
+
+msgid "hotkey|new map from scratch"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "verdenskort op til venstre"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4003,6 +4077,9 @@ msgid "Expansion Campaign"
 msgstr ""
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr ""
+
+msgid "Loading video. Please wait..."
 msgstr ""
 
 msgid "Host"
@@ -5842,6 +5919,32 @@ msgid ""
 "This town is occupied by your hero %{hero}."
 msgstr ""
 
+msgid "This spell is already in use."
+msgstr ""
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
+msgstr ""
+
 msgid "%{name} the %{race} (Level %{level})"
 msgstr ""
 
@@ -5928,6 +6031,9 @@ msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr ""
+
+msgid "Identify Hero"
+msgstr "Identificer helt"
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -7608,6 +7714,9 @@ msgstr ""
 msgid "This item can't be traded."
 msgstr ""
 
+msgid "Invalid Artifact"
+msgstr ""
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
@@ -8709,9 +8818,6 @@ msgid ""
 "lost by mortals."
 msgstr ""
 
-msgid "Invalid Artifact"
-msgstr ""
-
 msgid "Wood"
 msgstr "Træ"
 
@@ -9115,9 +9221,6 @@ msgstr "Vis alt"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr ""
-
-msgid "Identify Hero"
-msgstr "Identificer helt"
 
 msgid "Summon Boat"
 msgstr "Hidkald båd"
