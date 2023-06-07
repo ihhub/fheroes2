@@ -1708,11 +1708,11 @@ namespace AI
 
             if ( heroStrength < regionStats.highestThreat ) {
                 const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
-
-                if ( castle && ( castle->GetGarrisonStrength( &hero ) <= 0 || castle->GetColor() == hero.GetColor() ) )
-                    value -= dangerousTaskPenalty / 2;
-                else
-                    value -= dangerousTaskPenalty;
+                if ( castle != nullptr ) {
+                    if ( castle->GetColor() != hero.GetColor() && castle->GetGarrisonStrength( &hero ) > 0.1 ) {
+                        value -= dangerousTaskPenalty / 4;
+                    }
+                }
             }
 
             if ( distance > leftMovePoints ) {
