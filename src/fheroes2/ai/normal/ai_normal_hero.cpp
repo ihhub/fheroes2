@@ -1709,7 +1709,7 @@ namespace AI
             // TODO: check nearby enemy heroes and distance to them instead of relying on a region.
             const RegionStats & regionStats = _regions[destinationTile.GetRegion()];
 
-            const bool isObjectReachableAtThisTurn = ( distance > leftMovePoints );
+            const bool isObjectReachableAtThisTurn = ( distance <= leftMovePoints );
 
             // Go into scared mode only if the treat is real. Equal by strength heroes rarely attack each other.
             if ( heroStrength * AI::ARMY_ADVANTAGE_SMALL < regionStats.highestThreat ) {
@@ -1717,12 +1717,25 @@ namespace AI
                 case MP2::OBJ_CASTLE: {
                     const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
                     assert( castle != nullptr );
+                    if ( castle == nullptr ) {
+                        break;
+                    }
 
-                    if ( castle != nullptr && ( castle->GetColor() != hero.GetColor() )
-                         && ( ( castle->GetGarrisonStrength( &hero ) > heroStrength / 2 ) || !isObjectReachableAtThisTurn ) ) {
-                        // If the castle is not reachable within a single turn or it has more or less powerful army
-                        // then the priority should be lower for the castle.
-                        value -= dangerousTaskPenalty / 3;
+                    if ( ( castle->GetColor() != hero.GetColor() ) ) {
+                        if ( isObjectReachableAtThisTurn ) {
+                            if ( castle->GetGarrisonStrength( &hero ) > heroStrength / 2 ) {
+                                value -= dangerousTaskPenalty / 4;
+                            }
+                            else {
+                                value -= dangerousTaskPenalty / 10;
+                            }
+                        }
+                        else if ( castle->GetGarrisonStrength( &hero ) > heroStrength / 2 ) {
+                            value -= dangerousTaskPenalty / 2;
+                        }
+                        else {
+                            value -= dangerousTaskPenalty / 3;
+                        }
                     }
 
                     // Friendly castles as well as empty enemy castles are good stuff to capture.
@@ -1731,11 +1744,27 @@ namespace AI
                 case MP2::OBJ_HEROES: {
                     const Heroes * anotherHero = destinationTile.GetHeroes();
                     assert( anotherHero != nullptr );
-                    if ( anotherHero != nullptr && anotherHero->GetColor() != hero.GetColor() && !isObjectReachableAtThisTurn ) {
-                        value -= dangerousTaskPenalty / 2;
+                    if ( anotherHero == nullptr ) {
+                        break;
                     }
 
-                    // Meeting friendly heroes usually increases defense of the army so no penalty of doing such.
+                    if ( anotherHero->GetColor() != hero.GetColor() ) {
+                        if ( isObjectReachableAtThisTurn ) {
+                            value -= dangerousTaskPenalty / 8;
+                        }
+                        else {
+                            value -= dangerousTaskPenalty / 2;
+                        }
+                    }
+                    else {
+                        if ( isObjectReachableAtThisTurn ) {
+                            value -= dangerousTaskPenalty / 8;
+                        }
+                        else {
+                            value -= dangerousTaskPenalty / 4;
+                        }
+                    }
+
                     break;
                 }
                 default:
@@ -1745,7 +1774,7 @@ namespace AI
                 }
             }
 
-            if ( isObjectReachableAtThisTurn ) {
+            if ( !isObjectReachableAtThisTurn ) {
                 // Distant object which is out of reach for the current turn must have lower priority.
                 distance = leftMovePoints + ( distance - leftMovePoints ) * 2;
             }
