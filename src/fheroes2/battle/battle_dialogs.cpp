@@ -385,6 +385,7 @@ namespace
             if ( redrawScreen ) {
                 fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
                 RedrawBattleSettings( optionAreas );
+                buttonOkay.draw();
                 display.render();
 
                 saveConfiguration = true;
