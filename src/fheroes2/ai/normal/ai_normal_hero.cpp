@@ -1706,12 +1706,12 @@ namespace AI
 
             const Maps::Tiles & destinationTile = world.GetTiles( destination );
 
-            // TODO: check nearby enemy heroes and distance to them instead of relying on a region.
+            // TODO: check nearby enemy heroes and distance to them instead of relying on region stats.
             const RegionStats & regionStats = _regions[destinationTile.GetRegion()];
 
             const bool isObjectReachableAtThisTurn = ( distance <= leftMovePoints );
 
-            // Go into "coward" mode only if the treat is real. Equal by strength heroes rarely attack each other.
+            // Go into "coward" mode only if the threat is real. Equal by strength heroes rarely attack each other.
             if ( heroStrength * AI::ARMY_ADVANTAGE_SMALL < regionStats.highestThreat ) {
                 switch ( type ) {
                 case MP2::OBJ_CASTLE: {

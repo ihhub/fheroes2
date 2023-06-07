@@ -567,7 +567,7 @@ namespace AI
                         continue;
 
                     if ( !castle->isCastle() ) {
-                        // If it is just a town the opponent cannot hire heroes and do any damage.
+                        // If it is just a town then there is no way to hire heroes which can be a threat.
                         continue;
                     }
 
