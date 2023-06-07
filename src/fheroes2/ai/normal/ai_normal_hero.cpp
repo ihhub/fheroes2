@@ -1707,6 +1707,7 @@ namespace AI
             const Maps::Tiles & destinationTile = world.GetTiles( destination );
             const MP2::MapObjectType objectType = destinationTile.GetObject();
 
+            // TODO: use nearby enemy heroes as a treat instead of a region.
             const RegionStats & regionStats = _regions[destinationTile.GetRegion()];
 
             if ( heroStrength < regionStats.highestThreat ) {
