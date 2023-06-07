@@ -1710,13 +1710,15 @@ namespace AI
             // TODO: use nearby enemy heroes as a treat instead of a region.
             const RegionStats & regionStats = _regions[destinationTile.GetRegion()];
 
+            const bool isObjectReachableAtThisTurn = ( distance > leftMovePoints );
+
             // Go into scared mode only if the treat is real. Equal by strength heroes rarely attack each other.
             if ( heroStrength * AI::ARMY_ADVANTAGE_SMALL < regionStats.highestThreat ) {
                 switch ( objectType ) {
                 case MP2::OBJ_CASTLE: {
                     const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
                     assert( castle != nullptr );
-                    if ( castle != nullptr && castle->GetColor() != hero.GetColor() && castle->GetGarrisonStrength( &hero ) > 0.1 ) {
+                    if ( castle != nullptr && castle->GetColor() != hero.GetColor() && ( castle->GetGarrisonStrength( &hero ) > 0.1 || !isObjectReachableAtThisTurn ) ) {
                         // This is a non-empty enemy castle.
                         value -= dangerousTaskPenalty / 4;
                     }
@@ -1727,7 +1729,7 @@ namespace AI
                 case MP2::OBJ_HEROES: {
                     const Heroes * anotherHero = destinationTile.GetHeroes();
                     assert( anotherHero != nullptr );
-                    if ( anotherHero != nullptr && anotherHero->GetColor() != hero.GetColor() ) {
+                    if ( anotherHero != nullptr && anotherHero->GetColor() != hero.GetColor() && !isObjectReachableAtThisTurn ) {
                         value -= dangerousTaskPenalty / 2;
                     }
 
@@ -1741,7 +1743,7 @@ namespace AI
                 }
             }
 
-            if ( distance > leftMovePoints ) {
+            if ( isObjectReachableAtThisTurn ) {
                 // Distant object which is out of reach for the current turn must have lower priority.
                 distance = leftMovePoints + ( distance - leftMovePoints ) * 2;
             }
