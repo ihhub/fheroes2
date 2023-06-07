@@ -423,6 +423,9 @@ namespace AI
                     continue;
                 }
 
+                // TODO: if a hero (even a weak one) is blocking the path then the function call below will return 0.
+                // TODO: For example if a friendly hero stands just below the castle entrance then the distance will be 0.
+                // TODO: Which is not the case as an enemy hero can be very powerful to kill the hero and capture the castle.
                 const uint32_t dist = _pathfinder.getDistance( enemyIndex, castleIndex, myColor, attackerStrength );
                 if ( dist == 0 || dist >= threatDistanceLimit ) {
                     continue;
