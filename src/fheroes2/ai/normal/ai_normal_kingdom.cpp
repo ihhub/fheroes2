@@ -382,49 +382,60 @@ namespace AI
         const uint32_t threatDistanceLimit = 3000; // 30 tiles, roughly how much maxed out hero can move in a turn
         std::set<int> castlesInDanger;
 
-        for ( const std::pair<int, const Army *> & enemy : enemyArmies ) {
-            if ( enemy.second == nullptr )
+        for ( const auto & [enemyIndex, enemyArmy] : enemyArmies ) {
+            if ( enemyArmy == nullptr ) {
+                // How is it even possible? Check the logic!
+                assert( 0 );
                 continue;
+            }
 
-            const double attackerStrength = enemy.second->GetStrength();
+            const double attackerStrength = enemyArmy->GetStrength();
 
             for ( const Castle * castle : castles ) {
-                if ( !castle )
+                if ( castle == nullptr ) {
+                    // How is it even possible? Check the logic!
+                    assert( 0 );
                     continue;
+                }
 
                 const int castleIndex = castle->GetIndex();
                 // skip precise distance check if army is too far to be a threat
-                if ( Maps::GetApproximateDistance( enemy.first, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit )
+                if ( Maps::GetApproximateDistance( enemyIndex, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit )
                     continue;
 
                 const double defenders = castle->GetArmy().GetStrength();
 
                 const double attackerThreat = attackerStrength - defenders;
-                if ( attackerThreat > 0 ) {
-                    const uint32_t dist = _pathfinder.getDistance( enemy.first, castleIndex, myColor, attackerStrength );
-                    if ( dist && dist < threatDistanceLimit ) {
-                        // castle is under threat
-                        castlesInDanger.insert( castleIndex );
+                if ( attackerThreat < 0.1 ) {
+                    continue;
+                }
 
-                        auto attackTask = _priorityTargets.find( enemy.first );
-                        if ( attackTask == _priorityTargets.end() ) {
-                            _priorityTargets[enemy.first] = { PriorityTaskType::ATTACK, attackerStrength, castleIndex };
-                        }
-                        else {
-                            attackTask->second.secondaryTaskTileId.insert( castleIndex );
-                        }
+                const uint32_t dist = _pathfinder.getDistance( enemyIndex, castleIndex, myColor, attackerStrength );
+                if ( dist == 0 || dist >= threatDistanceLimit ) {
+                    continue;
+                }
 
-                        auto defenseTask = _priorityTargets.find( castleIndex );
-                        if ( defenseTask == _priorityTargets.end() ) {
-                            _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, attackerThreat, enemy.first };
-                        }
-                        else {
-                            defenseTask->second.secondaryTaskTileId.insert( enemy.first );
-                        }
-                    }
+                // The castle is under threat.
+                castlesInDanger.insert( castleIndex );
+
+                auto attackTask = _priorityTargets.find( enemyIndex );
+                if ( attackTask == _priorityTargets.end() ) {
+                    _priorityTargets[enemyIndex] = { PriorityTaskType::ATTACK, attackerStrength, castleIndex };
+                }
+                else {
+                    attackTask->second.secondaryTaskTileId.insert( castleIndex );
+                }
+
+                auto defenseTask = _priorityTargets.find( castleIndex );
+                if ( defenseTask == _priorityTargets.end() ) {
+                    _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, attackerThreat, enemyIndex };
+                }
+                else {
+                    defenseTask->second.secondaryTaskTileId.insert( enemyIndex );
                 }
             }
         }
+
         return castlesInDanger;
     }
 
@@ -542,6 +553,11 @@ namespace AI
                     if ( !castle )
                         continue;
 
+                    if ( !castle->isCastle() ) {
+                        // If it is just a town the opponent cannot hire heroes and do any damage.
+                        continue;
+                    }
+
                     const Army & castleArmy = castle->GetArmy();
                     enemyArmies.emplace_back( idx, &castleArmy );
 
@@ -579,6 +595,16 @@ namespace AI
             setHeroRoles( heroes );
 
             castlesInDanger = findCastlesInDanger( castles, enemyArmies, myColor );
+            for ( Heroes * hero : heroes ) {
+                if ( hero->GetMapsObject() == MP2::OBJ_CASTLE && _priorityTargets.find( hero->GetIndex() ) != _priorityTargets.end() ) {
+                    // If a hero is in a castle and it is in danger then the hero is very weak to defend it.
+                    // Therefore let's make him stay in the castle.
+                    // TODO: allow the hero to still do some actions but always return to the castle at the end of the turn.
+
+                    HeroesActionComplete( *hero, hero->GetIndex(), hero->GetMapsObject() );
+                }
+            }
+
             sortedCastleList = getSortedCastleList( castles, castlesInDanger );
 
             const uint32_t startProgressValue = progressStatus;
