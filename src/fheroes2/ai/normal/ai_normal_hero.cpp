@@ -1706,7 +1706,7 @@ namespace AI
 
             const Maps::Tiles & destinationTile = world.GetTiles( destination );
 
-            // TODO: use nearby enemy heroes as a treat instead of a region.
+            // TODO: check nearby enemy heroes and distance to them instead of relying on a region.
             const RegionStats & regionStats = _regions[destinationTile.GetRegion()];
 
             const bool isObjectReachableAtThisTurn = ( distance > leftMovePoints );
@@ -1717,12 +1717,15 @@ namespace AI
                 case MP2::OBJ_CASTLE: {
                     const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
                     assert( castle != nullptr );
-                    if ( castle != nullptr && castle->GetColor() != hero.GetColor() && ( castle->GetGarrisonStrength( &hero ) > 0.1 || !isObjectReachableAtThisTurn ) ) {
-                        // This is a non-empty enemy castle.
+
+                    if ( castle != nullptr && ( castle->GetColor() != hero.GetColor() ) &&
+                         ( ( castle->GetGarrisonStrength( &hero ) > heroStrength / 2 ) || !isObjectReachableAtThisTurn ) ) {
+                        // If the castle is not reachable within a single turn or it has more or less powerful army
+                        // then the priority should be lower for the castle.
                         value -= dangerousTaskPenalty / 4;
                     }
 
-                    // Friendly castles as well as empty enemy castles are good opportunity to stay there.
+                    // Friendly castles as well as empty enemy castles are good stuff to capture.
                     break;
                 }
                 case MP2::OBJ_HEROES: {
@@ -1737,7 +1740,14 @@ namespace AI
                 }
                 default:
                     // It is better to avoid all other objects if the current hero under a big threat.
-                    value -= dangerousTaskPenalty;
+                    if ( distance > leftMovePoints / 3 && leftMovePoints > hero.GetMaxMovePoints() / 2 ) {
+                        // Since this object is reachable within a third of the turn for the hero we reduce the threat.
+                        // This is done because the hero can do something and still run away.
+                        value -= dangerousTaskPenalty / 2;
+                    }
+                    else {
+                        value -= dangerousTaskPenalty;
+                    }
                     break;
                 }
             }
