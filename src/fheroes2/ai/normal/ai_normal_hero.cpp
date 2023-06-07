@@ -1728,6 +1728,8 @@ namespace AI
                     if ( anotherHero != nullptr && anotherHero->GetColor() != hero.GetColor() ) {
                         value -= dangerousTaskPenalty / 2;
                     }
+
+                    // Meeting friendly heroes usually increases defense of the army so no penalty of doing such.
                     break;
                 }
                 default:
