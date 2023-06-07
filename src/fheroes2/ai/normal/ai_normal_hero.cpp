@@ -1710,7 +1710,8 @@ namespace AI
             // TODO: use nearby enemy heroes as a treat instead of a region.
             const RegionStats & regionStats = _regions[destinationTile.GetRegion()];
 
-            if ( heroStrength < regionStats.highestThreat ) {
+            // Go into scared mode only if the treat is real. Equal by strength heroes rarely attack each other.
+            if ( heroStrength * AI::ARMY_ADVANTAGE_SMALL < regionStats.highestThreat ) {
                 switch ( objectType ) {
                 case MP2::OBJ_CASTLE: {
                     const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
@@ -1720,6 +1721,7 @@ namespace AI
                         value -= dangerousTaskPenalty / 4;
                     }
 
+                    // Friendly castles as well as empty enemy castles are good opportunity to stay there.
                     break;
                 }
                 case MP2::OBJ_HEROES: {
@@ -1733,7 +1735,8 @@ namespace AI
                     break;
                 }
                 default:
-                    value -= dangerousTaskPenalty / 2;
+                    // It is better to avoid all other objects if the current hero under a big threat.
+                    value -= dangerousTaskPenalty;
                     break;
                 }
             }
