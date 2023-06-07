@@ -1551,12 +1551,13 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             conf.SetCurrentFileInfo( mapInfo );
 
+            assert( !scenarioBonusId || ( scenarioBonusId >= 0 && static_cast<size_t>( *scenarioBonusId ) < bonusChoices.size() ) );
+
             const Campaign::ScenarioBonusData scenarioBonus = [scenarioBonusId, &bonusChoices = std::as_const( bonusChoices )]() -> Campaign::ScenarioBonusData {
                 if ( !scenarioBonusId ) {
                     return {};
                 }
 
-                assert( scenarioBonusId >= 0 && static_cast<size_t>( *scenarioBonusId ) < bonusChoices.size() );
                 if ( scenarioBonusId < 0 || static_cast<size_t>( *scenarioBonusId ) >= bonusChoices.size() ) {
                     return {};
                 }
@@ -1600,7 +1601,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             applyObtainedCampaignAwards( currentScenarioInfoId, campaignSaveData.getObtainedCampaignAwards() );
 
-            assert( !scenarioBonusId.has_value() || scenarioBonusId >= 0 );
             campaignSaveData.setCurrentScenarioInfo( currentScenarioInfoId, scenarioBonusId.value_or( -1 ) );
 
             return fheroes2::GameMode::START_GAME;
