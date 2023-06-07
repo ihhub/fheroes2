@@ -6219,8 +6219,11 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
         UpdateContourColor();
     }
 
-    // Animation of heroes
-    if ( Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
+    // Animation of flags and heroes idle.
+    if ( Game::validateAnimationDelay( Game::BATTLE_FLAGS_DELAY ) ) {
+        ++animation_flags_frame;
+        humanturn_redraw = true;
+
         if ( _opponent1 && _opponent1->updateAnimationState() ) {
             humanturn_redraw = true;
         }
@@ -6228,12 +6231,6 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
         if ( _opponent2 && _opponent2->updateAnimationState() ) {
             humanturn_redraw = true;
         }
-    }
-
-    // Animation of flags
-    if ( Game::validateAnimationDelay( Game::BATTLE_FLAGS_DELAY ) ) {
-        ++animation_flags_frame;
-        humanturn_redraw = true;
     }
 
     // Interrupting auto battle
