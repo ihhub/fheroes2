@@ -1722,15 +1722,15 @@ namespace AI
                     break;
                 }
                 case MP2::OBJ_HEROES: {
-                    const Heroes* anotherHero = destinationTile.GetHeroes();
+                    const Heroes * anotherHero = destinationTile.GetHeroes();
                     assert( anotherHero != nullptr );
                     if ( anotherHero != nullptr && anotherHero->GetColor() != hero.GetColor() ) {
-                        value -= dangerousTaskPenalty / 4;
+                        value -= dangerousTaskPenalty / 2;
                     }
                     break;
                 }
                 default:
-                    value -= dangerousTaskPenalty / 4;
+                    value -= dangerousTaskPenalty / 2;
                     break;
                 }
             }
