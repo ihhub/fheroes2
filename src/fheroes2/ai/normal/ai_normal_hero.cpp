@@ -1704,14 +1704,34 @@ namespace AI
                 }
             }
 
-            const RegionStats & regionStats = _regions[world.GetTiles( destination ).GetRegion()];
+            const Maps::Tiles & destinationTile = world.GetTiles( destination );
+            const MP2::MapObjectType objectType = destinationTile.GetObject();
+
+            const RegionStats & regionStats = _regions[destinationTile.GetRegion()];
 
             if ( heroStrength < regionStats.highestThreat ) {
-                const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
-                if ( castle != nullptr ) {
-                    if ( castle->GetColor() != hero.GetColor() && castle->GetGarrisonStrength( &hero ) > 0.1 ) {
+                switch ( objectType ) {
+                case MP2::OBJ_CASTLE: {
+                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
+                    assert( castle != nullptr );
+                    if ( castle != nullptr && castle->GetColor() != hero.GetColor() && castle->GetGarrisonStrength( &hero ) > 0.1 ) {
+                        // This is a non-empty enemy castle.
                         value -= dangerousTaskPenalty / 4;
                     }
+
+                    break;
+                }
+                case MP2::OBJ_HEROES: {
+                    const Heroes* anotherHero = destinationTile.GetHeroes();
+                    assert( anotherHero != nullptr );
+                    if ( anotherHero != nullptr && anotherHero->GetColor() != hero.GetColor() ) {
+                        value -= dangerousTaskPenalty / 4;
+                    }
+                    break;
+                }
+                default:
+                    value -= dangerousTaskPenalty / 4;
+                    break;
                 }
             }
 
