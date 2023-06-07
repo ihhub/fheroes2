@@ -217,7 +217,15 @@ namespace AI
         Army & heroArmy = hero.GetArmy();
         Army & garrison = castle.GetArmy();
 
+        // Merge all troops in the castle to have the best army.
+        heroArmy.JoinStrongestFromArmy( garrison );
+
+        // Upgrade troops and try to merge them again.
         heroArmy.UpgradeTroops( castle );
+        garrison.UpgradeTroops( castle );
+        heroArmy.JoinStrongestFromArmy( garrison );
+
+        // Recruit more troops and also merge them.
         castle.recruitBestAvailable( budget );
         heroArmy.JoinStrongestFromArmy( garrison );
 
@@ -253,6 +261,7 @@ namespace AI
                     }
                 }
             }
+
             if ( unitToSwap ) {
                 const uint32_t count = unitToSwap->GetCount();
                 const uint32_t toMove = onlyHalf ? count / 2 : count;
@@ -263,14 +272,18 @@ namespace AI
                     else {
                         unitToSwap->SetCount( count - toMove );
                     }
-
-                    // TODO: redistribute troops properly.
-                    OptimizeTroopsOrder( garrison );
                 }
             }
         }
 
         OptimizeTroopsOrder( heroArmy );
+
+        if ( garrison.GetOccupiedSlotCount() == 1 ) {
+            garrison.splitWeakestTroopsIfPossible();
+        }
+        else {
+            OptimizeTroopsOrder( garrison );
+        }
     }
 
     void Normal::evaluateRegionSafety()
