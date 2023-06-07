@@ -25,6 +25,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -1345,7 +1346,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     fheroes2::ButtonGroup buttonChoices;
     fheroes2::OptionButtonGroup optionButtonGroup;
 
-    int32_t scenarioBonusId = -1;
+    std::optional<int32_t> scenarioBonusId;
     const std::vector<Campaign::ScenarioBonusData> & bonusChoices = scenario.getBonuses();
 
     const fheroes2::Point optionButtonOffset( 590, 199 );
@@ -1482,7 +1483,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
         for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
             if ( le.MousePressLeft( choiceArea[i] ) || ( i < hotKeyBonusChoice.size() && HotKeyPressEvent( hotKeyBonusChoice[i] ) ) ) {
-                scenarioBonusId = i;
+                scenarioBonusId = fheroes2::checkedCast<int32_t>( i );
                 buttonChoices.button( i ).press();
                 optionButtonGroup.draw();
                 display.render();
@@ -1550,9 +1551,18 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             conf.SetCurrentFileInfo( mapInfo );
 
-            const Campaign::ScenarioBonusData scenarioBonus = ( scenarioBonusId >= 0 && static_cast<size_t>( scenarioBonusId ) < bonusChoices.size() )
-                                                                  ? bonusChoices[scenarioBonusId]
-                                                                  : Campaign::ScenarioBonusData{};
+            const Campaign::ScenarioBonusData scenarioBonus = [scenarioBonusId, &bonusChoices = std::as_const( bonusChoices )]() -> Campaign::ScenarioBonusData {
+                if ( !scenarioBonusId ) {
+                    return {};
+                }
+
+                assert( scenarioBonusId >= 0 && static_cast<size_t>( *scenarioBonusId ) < bonusChoices.size() );
+                if ( scenarioBonusId < 0 || static_cast<size_t>( *scenarioBonusId ) >= bonusChoices.size() ) {
+                    return {};
+                }
+
+                return bonusChoices[*scenarioBonusId];
+            }();
 
             // starting faction scenario bonus has to be called before players.SetStartGame()
             if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE || scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY ) {
@@ -1590,7 +1600,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             applyObtainedCampaignAwards( currentScenarioInfoId, campaignSaveData.getObtainedCampaignAwards() );
 
-            campaignSaveData.setCurrentScenarioInfo( currentScenarioInfoId, scenarioBonusId );
+            assert( !scenarioBonusId.has_value() || scenarioBonusId >= 0 );
+            campaignSaveData.setCurrentScenarioInfo( currentScenarioInfoId, scenarioBonusId.value_or( -1 ) );
 
             return fheroes2::GameMode::START_GAME;
         }
