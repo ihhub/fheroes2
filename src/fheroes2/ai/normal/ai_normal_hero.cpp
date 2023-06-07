@@ -1721,24 +1721,26 @@ namespace AI
                         break;
                     }
 
-                    if ( ( castle->GetColor() != hero.GetColor() ) ) {
-                        if ( isObjectReachableAtThisTurn ) {
-                            if ( castle->GetGarrisonStrength( &hero ) > heroStrength / 2 ) {
-                                value -= dangerousTaskPenalty / 4;
-                            }
-                            else {
-                                value -= dangerousTaskPenalty / 10;
-                            }
-                        }
-                        else if ( castle->GetGarrisonStrength( &hero ) > heroStrength / 2 ) {
-                            value -= dangerousTaskPenalty / 2;
-                        }
-                        else {
-                            value -= dangerousTaskPenalty / 3;
-                        }
+                    if ( castle->GetColor() == hero.GetColor() ) {
+                        // Friendly castles are always the priority so no penalty for them.
+                        break;
                     }
 
-                    // Friendly castles are always the priority so no penalty for them.
+                    if ( isObjectReachableAtThisTurn ) {
+                        if ( castle->GetGarrisonStrength( &hero ) > heroStrength / 2 ) {
+                            value -= dangerousTaskPenalty / 4;
+                        }
+                        else {
+                            value -= dangerousTaskPenalty / 10;
+                        }
+                    }
+                    else if ( castle->GetGarrisonStrength( &hero ) > heroStrength / 2 ) {
+                        value -= dangerousTaskPenalty / 2;
+                    }
+                    else {
+                        value -= dangerousTaskPenalty / 3;
+                    }
+
                     break;
                 }
                 case MP2::OBJ_HEROES: {
@@ -1748,12 +1750,12 @@ namespace AI
                         break;
                     }
 
-                    if ( anotherHero->GetColor() != hero.GetColor() ) {
+                    if ( anotherHero->GetColor() == hero.GetColor() ) {
                         if ( isObjectReachableAtThisTurn ) {
                             value -= dangerousTaskPenalty / 8;
                         }
                         else {
-                            value -= dangerousTaskPenalty / 2;
+                            value -= dangerousTaskPenalty / 4;
                         }
                     }
                     else {
@@ -1761,7 +1763,7 @@ namespace AI
                             value -= dangerousTaskPenalty / 8;
                         }
                         else {
-                            value -= dangerousTaskPenalty / 4;
+                            value -= dangerousTaskPenalty / 2;
                         }
                     }
 
