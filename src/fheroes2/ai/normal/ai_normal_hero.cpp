@@ -1711,7 +1711,7 @@ namespace AI
 
             const bool isObjectReachableAtThisTurn = ( distance <= leftMovePoints );
 
-            // Go into scared mode only if the treat is real. Equal by strength heroes rarely attack each other.
+            // Go into "coward" mode only if the treat is real. Equal by strength heroes rarely attack each other.
             if ( heroStrength * AI::ARMY_ADVANTAGE_SMALL < regionStats.highestThreat ) {
                 switch ( type ) {
                 case MP2::OBJ_CASTLE: {
@@ -1738,7 +1738,7 @@ namespace AI
                         }
                     }
 
-                    // Friendly castles as well as empty enemy castles are good stuff to capture.
+                    // Friendly castles are always the priority so no penalty for them.
                     break;
                 }
                 case MP2::OBJ_HEROES: {
@@ -1768,7 +1768,7 @@ namespace AI
                     break;
                 }
                 default:
-                    // It is better to avoid all other objects if the current hero under a big threat.
+                    // It is better to avoid all other objects if the current hero is under a big threat.
                     value -= dangerousTaskPenalty;
                     break;
                 }
