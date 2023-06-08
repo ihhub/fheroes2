@@ -284,7 +284,6 @@ namespace AI
 
                     heroStrength = heroArmy.GetStrength();
                     castleStrength = garrison.GetStrength();
-
                 } while ( castleStrength < minStrength );
 
                 if ( castleStrength >= minStrength ) {
