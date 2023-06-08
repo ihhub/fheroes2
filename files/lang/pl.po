@@ -1805,7 +1805,7 @@ msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
 msgstr ""
-"Królestwo otrzyma dodatkowe %{amount}] mniej %{resource} na starcie "
+"Królestwo otrzyma dodatkowe %{amount} mniej %{resource} na starcie "
 "scenariusza."
 
 msgid ""
@@ -2700,7 +2700,7 @@ msgid "Upgrade"
 msgstr "Ulepsz"
 
 msgid "Upgrade your troops."
-msgstr "Ulepsz swoje oddziały."
+msgstr "Ulepsz oddział."
 
 msgid "Dismiss"
 msgstr "Zwolnij"
