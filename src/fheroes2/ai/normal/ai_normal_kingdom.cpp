@@ -244,8 +244,7 @@ namespace AI
 
                 const double minStrength = defenseTask->second.threatLevel * AI::ARMY_ADVANTAGE_DESPERATE;
 
-                do
-                {
+                do {
                     Troop * weakestTroop = heroArmy.GetWeakestTroop();
                     const double weakestTroopStrength = weakestTroop->GetStrength();
                     uint32_t count = std::max( weakestTroop->GetCount() / 2, 1u );
