@@ -229,7 +229,76 @@ namespace AI
         castle.recruitBestAvailable( budget );
         heroArmy.JoinStrongestFromArmy( garrison );
 
-        const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
+        const int32_t castleIndex = castle.GetIndex();
+
+        if ( isPriorityTask( castleIndex ) ) {
+            double heroStrength = heroArmy.GetStrength();
+            double castleStrength = garrison.GetStrength();
+
+            auto defenseTask = _priorityTargets.find( castleIndex );
+            assert( defenseTask != _priorityTargets.end() );
+
+            if ( heroStrength + castleStrength > defenseTask->second.threatLevel * AI::ARMY_ADVANTAGE_MEDIUM ) {
+                // The enemy army is so-so. Feed some monsters to the castle and continue exploring the map.
+                garrison.MergeSameMonsterTroops();
+
+                const double minStrength = defenseTask->second.threatLevel * AI::ARMY_ADVANTAGE_DESPERATE;
+
+                do
+                {
+                    Troop * weakestTroop = heroArmy.GetWeakestTroop();
+                    const double weakestTroopStrength = weakestTroop->GetStrength();
+                    uint32_t count = std::max( weakestTroop->GetCount() / 2, 1u );
+                    if ( weakestTroopStrength < heroStrength * 0.1 ) {
+                        count = weakestTroop->GetCount();
+                    }
+
+                    if ( heroArmy.GetOccupiedSlotCount() == 1 ) {
+                        // This is the last slot. Make sure to still leave some army for the hero.
+                        if ( weakestTroop->GetCount() == 1 ) {
+                            break;
+                        }
+
+                        if ( count == weakestTroop->GetCount() ) {
+                            --count;
+                        }
+                    }
+
+                    const double singleMonsterStrength = weakestTroopStrength / weakestTroop->GetCount();
+
+                    if ( singleMonsterStrength * ( count - 1 ) > minStrength - castleStrength ) {
+                        // We are giving too much army to the castle. Adjust it.
+                        count = static_cast<uint32_t>( ( minStrength - castleStrength + singleMonsterStrength - 1 ) / singleMonsterStrength );
+                    }
+
+                    if ( !garrison.JoinTroop( weakestTroop->GetID(), count, false ) ) {
+                        // TODO: there could be more monsters in the hero's army but for now we ignore them.
+                        break;
+                    }
+
+                    if ( count == weakestTroop->GetCount() ) {
+                        weakestTroop->Reset();
+                    }
+                    else {
+                        weakestTroop->SetCount( weakestTroop->GetCount() - count );
+                    }
+
+                    heroStrength = heroArmy.GetStrength();
+                    castleStrength = garrison.GetStrength();
+
+                } while ( castleStrength < minStrength );
+
+                if ( castleStrength >= minStrength ) {
+                    _priorityTargets.erase( castleIndex );
+                }
+                else {
+                    // Failed to secure the castle. Rearrange the army back.
+                    heroArmy.JoinStrongestFromArmy( garrison );
+                }
+            }
+        }
+
+        const uint32_t regionID = world.GetTiles( castleIndex ).GetRegion();
         // check if we should leave some troops in the garrison
         // TODO: amount of troops left could depend on region's safetyFactor
         if ( castle.isCastle() && _regions[regionID].safetyFactor <= 100 && !garrison.isValid() ) {
@@ -452,6 +521,10 @@ namespace AI
                 auto defenseTask = _priorityTargets.find( castleIndex );
                 if ( defenseTask == _priorityTargets.end() ) {
                     _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, attackerThreat, enemyArmy.index };
+                }
+                else if ( defenseTask->second.threatLevel < attackerThreat ) {
+                    defenseTask->second.secondaryTaskTileId.insert( defenseTask->first );
+                    defenseTask->second.threatLevel = attackerThreat;
                 }
                 else {
                     defenseTask->second.secondaryTaskTileId.insert( enemyArmy.index );
