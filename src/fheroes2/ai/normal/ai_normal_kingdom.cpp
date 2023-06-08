@@ -247,7 +247,7 @@ namespace AI
                 do {
                     Troop * weakestTroop = heroArmy.GetWeakestTroop();
                     const double weakestTroopStrength = weakestTroop->GetStrength();
-                    uint32_t count = std::max( weakestTroop->GetCount() / 2, 1u );
+                    uint32_t count = std::max( weakestTroop->GetCount() / 2, 1U );
                     if ( weakestTroopStrength < heroStrength * 0.1 ) {
                         count = weakestTroop->GetCount();
                     }
