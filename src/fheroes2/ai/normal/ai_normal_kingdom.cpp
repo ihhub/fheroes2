@@ -417,7 +417,7 @@ namespace AI
                     continue;
                 }
 
-                int32_t daysToReach = ( dist + enemyArmy.movePoints - 1 ) / enemyArmy.movePoints;
+                uint32_t daysToReach = ( dist + enemyArmy.movePoints - 1 ) / enemyArmy.movePoints;
                 if ( daysToReach > 3 ) {
                     // It is too far away. Ignore it.
                     continue;
@@ -427,8 +427,8 @@ namespace AI
 
                 --daysToReach;
                 while ( daysToReach > 0 ) {
-                    // Each day reduces enemy strength by 33%. If an enemy is too far away then there is no reason to panic.
-                    enemyStrength = enemyStrength * 2 / 3;
+                    // Each day reduces enemy strength by 50%. If an enemy is too far away then there is no reason to panic.
+                    enemyStrength /= 2;
                     --daysToReach;
                 }
 
