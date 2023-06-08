@@ -1379,7 +1379,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             assert( scenarioBonusId.has_value() );
         }
         else {
-            // If this is the beginning of a new campaign scenario, then just select the first bonus (if any)
+            // If this is the beginning of a new campaign scenario, then just select the first bonus
             scenarioBonusId = 0;
             buttonChoices.button( 0 ).press();
         }
