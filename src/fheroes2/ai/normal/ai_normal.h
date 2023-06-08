@@ -36,7 +36,6 @@
 #include "resource.h"
 #include "world_pathfinding.h"
 
-class Army;
 class Castle;
 class HeroBase;
 class Heroes;

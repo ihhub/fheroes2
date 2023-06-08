@@ -652,6 +652,7 @@ namespace AI
                     }
 
                     const double castleThreat = castle->GetArmy().GetStrength();
+                    // 1500 is slightly more than a fresh hero's maximum move points hired in a castle.
                     enemyArmies.emplace_back( idx, castleThreat, 1500 );
 
                     if ( stats.highestThreat < castleThreat ) {
