@@ -22,8 +22,8 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cstddef>
 #include <cstdint>
+#include <cstdlib>
 #include <functional>
 #include <memory>
 #include <utility>
@@ -56,6 +56,7 @@ namespace
     const int32_t defaultWindowWidth{ 520 };
     const int32_t defaultWindowHeight{ 250 };
     const int32_t defaultLetterRows{ 3 };
+    const fheroes2::Point buttonShadowOffset{ -5, 5 };
     const fheroes2::Point offsetFromWindowBorders{ 25, 50 };
     const fheroes2::Size inputAreaSize{ 268, 21 };
     const int32_t inputAreaBorders{ 2 };
@@ -133,11 +134,12 @@ namespace
             return _isEvilInterface;
         }
 
-        void resize( const fheroes2::Size size )
+        // Returns true if keyboard dialog resize was made.
+        bool resize( const fheroes2::Size size )
         {
             if ( _window && size.width == _window->activeArea().width && size.height == _window->activeArea().height ) {
                 // This is the same window size. Nothing to do.
-                return;
+                return false;
             }
 
             assert( size.width > 0 && size.height > 0 );
@@ -153,6 +155,8 @@ namespace
             _window->render();
 
             renderInputArea();
+
+            return true;
         }
 
         void insertCharacter( const char character )
@@ -236,16 +240,6 @@ namespace
         }
     };
 
-    fheroes2::ButtonSprite generateButton( const std::string & info, const int32_t buttonWidth, const bool isEvilInterface )
-    {
-        fheroes2::Sprite released;
-        fheroes2::Sprite pressed;
-
-        makeButtonSprites( released, pressed, info, buttonWidth, isEvilInterface, false );
-
-        return { 0, 0, released, pressed };
-    }
-
     struct KeyboardButton
     {
         KeyboardButton() = default;
@@ -253,9 +247,16 @@ namespace
         KeyboardButton( std::string input, const int32_t buttonWidth, const bool isEvilInterface, std::function<DialogAction( KeyboardRenderer & )> actionEvent )
             : text( std::move( input ) )
             , action( std::move( actionEvent ) )
-            , button( generateButton( text, buttonWidth, isEvilInterface ) )
         {
-            // Do nothing.
+            fheroes2::Sprite released;
+            fheroes2::Sprite pressed;
+            makeButtonSprites( released, pressed, text, buttonWidth, isEvilInterface, false );
+            button.setSprite( released, pressed );
+
+            // Make Image with shadow for button to Blit it during render.
+            buttonShadow.resize( released.width() + std::abs( buttonShadowOffset.x ), released.height() + std::abs( buttonShadowOffset.y ) );
+            buttonShadow.reset();
+            fheroes2::addGradientShadow( released, buttonShadow, { -std::min( 0, buttonShadowOffset.x ), -std::min( 0, buttonShadowOffset.y ) }, buttonShadowOffset );
         }
 
         KeyboardButton( const KeyboardButton & ) = delete;
@@ -273,6 +274,7 @@ namespace
         std::function<DialogAction( KeyboardRenderer & )> action;
 
         fheroes2::ButtonSprite button;
+        fheroes2::Image buttonShadow;
 
         // This is used only for buttons which should have pressed state for some layouts.
         bool isInvertedRenderingLogic{ false };
@@ -515,8 +517,9 @@ namespace
 
         fheroes2::Rect roi{ offset.x + offsets.front(), offset.y, 1, 1 };
 
-        int32_t yOffset = offset.y;
-        for ( size_t i = 0; i < buttonLayout.size(); ++i ) {
+        const size_t buttonRows = buttonLayout.size();
+
+        for ( size_t i = 0; i < buttonRows; ++i ) {
             int32_t xOffset = offset.x + offsets[i];
             const int32_t newX = std::min( xOffset, roi.x );
             roi.width = ( roi.x - newX ) + roi.width;
@@ -526,11 +529,16 @@ namespace
                 xOffset += buttonInfo.button.area().width + buttonOffset;
             }
 
-            yOffset += defaultButtonHeight + buttonOffset * 2;
             roi.width = std::max( xOffset - buttonOffset - roi.x, roi.width );
         }
 
-        roi.height = yOffset - roi.y;
+        const int32_t yOffset = offset.y + static_cast<int32_t>( buttonRows * defaultButtonHeight + ( buttonRows - 1 ) * buttonOffset * 2 );
+
+        // Take button shadow offset into account.
+        roi.x += std::min( 0, buttonShadowOffset.x );
+        roi.y += std::min( 0, buttonShadowOffset.y );
+        roi.width += std::abs( buttonShadowOffset.x );
+        roi.height = yOffset - roi.y + std::abs( buttonShadowOffset.y );
 
         return roi;
     }
@@ -564,7 +572,9 @@ namespace
                 if ( buttonInfo.isInvertedRenderingLogic ) {
                     buttonInfo.button.press();
                 }
-                buttonInfo.button.draw( output );
+                if ( buttonInfo.button.draw( output ) ) {
+                    fheroes2::Blit( buttonInfo.buttonShadow, output, xOffset + buttonShadowOffset.x, yOffset );
+                }
                 xOffset += buttonInfo.button.area().width + buttonOffset;
             }
 
@@ -608,8 +618,9 @@ namespace
 
         getCharacterLayout( layoutType, language, buttonLetters, returnLetters );
 
-        renderer.resize( { defaultWindowWidth,
-                           defaultWindowHeight + ( static_cast<int32_t>( buttonLetters.size() ) - defaultLetterRows ) * ( defaultButtonHeight + buttonOffset * 2 ) } );
+        const bool isResized = renderer.resize(
+            { defaultWindowWidth,
+              defaultWindowHeight + ( static_cast<int32_t>( buttonLetters.size() ) - defaultLetterRows ) * ( defaultButtonHeight + buttonOffset * 2 ) } );
 
         const bool isEvilInterface = renderer.isEvilInterface();
         auto buttons = generateButtons( buttonLetters, returnLetters, layoutType, language, isEvilInterface );
@@ -628,9 +639,15 @@ namespace
         const fheroes2::Sprite & okayButtonReleasedImage = fheroes2::AGG::GetICN( buttonIcnId, 0 );
         const fheroes2::Sprite & okayButtonPressedImage = fheroes2::AGG::GetICN( buttonIcnId, 1 );
 
-        fheroes2::ButtonSprite okayButton( windowRoi.x + ( windowRoi.width - okayButtonReleasedImage.width() ) / 2, windowRoi.y + windowRoi.height - 35,
-                                           okayButtonReleasedImage, okayButtonPressedImage );
-        okayButton.draw();
+        const fheroes2::Point okayButtonPosition{ windowRoi.x + ( windowRoi.width - okayButtonReleasedImage.width() ) / 2, windowRoi.y + windowRoi.height - 35 };
+
+        fheroes2::ButtonSprite okayButton( okayButtonPosition.x, okayButtonPosition.y, okayButtonReleasedImage, okayButtonPressedImage );
+
+        // Render OKAY button and its shadow only if the keyboard dialog was resized.
+        if ( isResized ) {
+            okayButton.draw();
+            fheroes2::addGradientShadow( okayButtonReleasedImage, display, okayButtonPosition, buttonShadowOffset );
+        }
 
         display.render();
 

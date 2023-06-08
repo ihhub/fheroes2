@@ -685,7 +685,7 @@ void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotFor
     }
 
     if ( !keepAtLeastOneSlotForGiver || giverArmy.isValid() ) {
-        // Either the giver army does no need extra army or it already has some.
+        // Either the giver army does not need an extra army or it already has some.
         return;
     }
 
@@ -732,22 +732,7 @@ void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotFor
     }
 
     // Make sure that this hero can survive an attack by splitting a single stack of monsters into multiple.
-    Troop * firstValidStack = giverArmy.GetFirstValid();
-    assert( firstValidStack != nullptr );
-
-    if ( firstValidStack->GetCount() > 1 ) {
-        const uint32_t stackCount = std::min( static_cast<uint32_t>( giverArmy.size() ), firstValidStack->GetCount() );
-
-        Troop temp( *firstValidStack );
-        firstValidStack->Reset();
-
-        giverArmy.addNewTroopsToFreeSlots( temp, stackCount );
-    }
-
-    // Make it less predictable to guess where troops would be. It makes human players to suffer by constantly adjusting the position of their troops.
-    if ( giverArmy.GetOccupiedSlotCount() < giverArmy.size() ) {
-        Rand::Shuffle( giverArmy );
-    }
+    splitWeakestTroopsIfPossible();
 }
 
 void Troops::SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots )
@@ -860,6 +845,31 @@ bool Troops::mergeWeakestTroopsIfNeeded()
     addNewTroopsToFreeSlots( Troop( weakestMonsterToMerge, monsterCount ), monsterIdVsSlotCount[weakestMonsterToMerge] - 1 );
 
     return true;
+}
+
+void Troops::splitWeakestTroopsIfPossible()
+{
+    if ( GetOccupiedSlotCount() == size() ) {
+        // Nothing to do as all slots are being occupied.
+        return;
+    }
+
+    Troop * weakestStack = GetWeakestTroop();
+    assert( weakestStack != nullptr );
+
+    if ( weakestStack->GetCount() > 1 ) {
+        const uint32_t stackCount = std::min( static_cast<uint32_t>( size() + 1 - GetOccupiedSlotCount() ), weakestStack->GetCount() );
+
+        Troop temp( *weakestStack );
+        weakestStack->Reset();
+
+        addNewTroopsToFreeSlots( temp, stackCount );
+    }
+
+    // Make it less predictable to guess where troops would be. It makes human players to suffer by constantly adjusting the position of their troops.
+    if ( GetOccupiedSlotCount() < size() ) {
+        Rand::Shuffle( *this );
+    }
 }
 
 void Troops::AssignToFirstFreeSlot( const Troop & troopToAssign, const uint32_t count ) const
