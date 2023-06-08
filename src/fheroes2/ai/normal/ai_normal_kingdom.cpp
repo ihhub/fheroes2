@@ -287,7 +287,7 @@ namespace AI
                 } while ( castleStrength < minStrength );
 
                 if ( castleStrength >= minStrength ) {
-                    _priorityTargets.erase( castleIndex );
+                    _priorityTargets.erase( defenseTask );
                 }
                 else {
                     // Failed to secure the castle. Rearrange the army back.
