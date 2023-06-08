@@ -2706,7 +2706,7 @@ msgid "Dismiss"
 msgstr "Zwolnij"
 
 msgid "Dismiss this army."
-msgstr "Zwolnij tę armię."
+msgstr "Zwolnij ten oddział."
 
 msgid "Followers"
 msgstr "Sprzymierzeńcy"
