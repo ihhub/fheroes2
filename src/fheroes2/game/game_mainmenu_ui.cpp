@@ -42,7 +42,7 @@ namespace
         fheroes2::Blit( sprite, 0, 0, output, sprite.x(), sprite.y(), sprite.width(), sprite.height() );
     }
 
-    void renderWindowBackground( fheroes2::Image & output, const fheroes2::Rect roi )
+    void renderWindowBackground( fheroes2::Image & output, const fheroes2::Rect & roi )
     {
         if ( roi.width == 0 || roi.height == 0 ) {
             // Nothing to render.
@@ -72,6 +72,20 @@ namespace
             offset.y += background.height();
         }
     }
+
+    void fillScreenBorders( fheroes2::Image & output, const fheroes2::Rect & backgroundRoi )
+    {
+        if ( backgroundRoi.y == 0 ) {
+            renderWindowBackground( output, { 0, 0, backgroundRoi.x, output.height() } );
+            renderWindowBackground( output, { backgroundRoi.x + backgroundRoi.width, 0, output.width() - backgroundRoi.x - backgroundRoi.width, output.height() } );
+        }
+        else {
+            assert( backgroundRoi.x == 0 );
+
+            renderWindowBackground( output, { 0, 0, output.width(), backgroundRoi.y } );
+            renderWindowBackground( output, { 0, backgroundRoi.y + backgroundRoi.height, output.width(), output.height() - backgroundRoi.y - backgroundRoi.height } );
+        }
+    }
 }
 
 namespace fheroes2
@@ -89,18 +103,17 @@ namespace fheroes2
         drawSprite( display, ICN::BTNSHNGL, 13 );
         drawSprite( display, ICN::BTNSHNGL, 17 );
 
-        if ( mainMenuBackground.y() == 0 ) {
-            renderWindowBackground( display, { 0, 0, mainMenuBackground.x(), display.height() } );
-            renderWindowBackground( display, { mainMenuBackground.x() + mainMenuBackground.width(), 0,
-                                               display.width() - mainMenuBackground.x() - mainMenuBackground.width(), display.height() } );
-        }
-        else {
-            assert( mainMenuBackground.x() == 0 );
+        fillScreenBorders( display, { mainMenuBackground.x(), mainMenuBackground.y(), mainMenuBackground.width(), mainMenuBackground.height() } );
+    }
 
-            renderWindowBackground( display, { 0, 0, display.width(), mainMenuBackground.y() } );
-            renderWindowBackground( display, { 0, mainMenuBackground.y() + mainMenuBackground.height(), display.width(),
-                                               display.height() - mainMenuBackground.y() - mainMenuBackground.height() } );
-        }
+    void drawEditorMainMenuScreen()
+    {
+        Display & display = Display::instance();
+
+        const Sprite & background = AGG::GetICN( ICN::EDITOR, 0 );
+        Copy( background, 0, 0, display, background.x(), background.y(), background.width(), background.height() );
+
+        fillScreenBorders( display, { background.x(), background.y(), background.width(), background.height() } );
     }
 
     Point drawButtonPanel()

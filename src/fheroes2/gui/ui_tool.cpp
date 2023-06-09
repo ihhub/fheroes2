@@ -25,7 +25,6 @@
 #include <cassert>
 #include <chrono>
 #include <cmath>
-#include <cstddef>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
@@ -33,6 +32,8 @@
 #include <string>
 #include <utility>
 
+#include "agg_image.h"
+#include "cursor.h"
 #include "game_delays.h"
 #include "image_palette.h"
 #include "localevent.h"
@@ -129,6 +130,8 @@ namespace
         if ( frameCount < 2 || roi.height <= 0 || roi.width <= 0 ) {
             return;
         }
+
+        Cursor::Get().SetThemes( Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -639,6 +642,33 @@ namespace fheroes2
                 ++frameNumber;
             }
         }
+    }
+
+    size_t getTextInputCursorPosition( const std::string & text, const FontType & fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
+                                       const int32_t textStartXOffset )
+    {
+        if ( text.empty() || pointerCursorXOffset <= textStartXOffset ) {
+            // The text is empty or mouse cursor position is to the left of input field.
+            return 0;
+        }
+
+        const int32_t maxOffset = pointerCursorXOffset - textStartXOffset;
+        const size_t textSize = text.size();
+        int32_t positionOffset = 0;
+        for ( size_t i = 0; i < textSize; ++i ) {
+            positionOffset += AGG::getChar( static_cast<uint8_t>( text[i] ), fontType ).width();
+
+            if ( positionOffset > maxOffset ) {
+                return i;
+            }
+
+            // If the mouse cursor is to the right of the current text cursor position we take its width into account
+            if ( i == currentTextCursorPosition ) {
+                positionOffset += AGG::getChar( '_', fontType ).width();
+            }
+        }
+
+        return textSize;
     }
 
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount )

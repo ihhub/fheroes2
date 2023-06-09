@@ -398,6 +398,15 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             return false;
         }
 
+        if ( !hero->MayCastAdventureSpells() ) {
+            // This should never happen
+            assert( 0 );
+            if ( res ) {
+                *res = _( "This hero is not able to cast adventure spells." );
+            }
+            return false;
+        }
+
         if ( !haveMovePoints( spell ) ) {
             if ( res ) {
                 *res = _( "Your hero is too tired to cast this spell today. Try again tomorrow." );
@@ -466,7 +475,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 
             const bool opponentsHaveHeroes = kingdom.opponentsHaveHeroes();
             const bool opponentsCanRecruitHeroes = kingdom.opponentsCanRecruitMoreHeroes();
-            // This text is show in two cases. First when there are no opponents
+            // This text is shown in two cases. First when there are no opponents
             // left in the game. Second when opponent doesn't have heroes left
             // and cannot recruit more. This will happen when all opponent
             // heroes are defeated and the opponent has a town that cannot be

@@ -289,6 +289,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             // Fade-out hero dialog.
             fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
+
             return Dialog::CANCEL;
         }
 
@@ -337,6 +338,9 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         // dismiss
         if ( buttonDismiss.isEnabled() && buttonDismiss.isVisible() && le.MouseClickLeft( buttonDismiss.area() )
              && Dialog::YES == Dialog::Message( GetName(), _( "Are you sure you want to dismiss this Hero?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
+            // Fade-out hero dialog.
+            fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
+
             return Dialog::DISMISS;
         }
 

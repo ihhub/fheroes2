@@ -36,6 +36,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dir.h"
+#include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
 #include "gamedefs.h"
@@ -55,32 +56,11 @@
 #include "ui_keyboard.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "world.h"
 
 namespace
 {
-    size_t GetInsertPosition( const std::string & text, const int32_t cursorPosition, const int32_t startXPosition )
-    {
-        if ( text.empty() ) {
-            // The text is empty, return start position.
-            return 0;
-        }
-
-        if ( cursorPosition <= startXPosition ) {
-            return 0;
-        }
-
-        int32_t positionOffset = 0;
-        for ( size_t i = 0; i < text.size(); ++i ) {
-            positionOffset += Text::getCharacterWidth( static_cast<uint8_t>( text[i] ), Font::BIG );
-            if ( positionOffset + startXPosition > cursorPosition ) {
-                return i;
-            }
-        }
-
-        return text.size();
-    }
-
     std::string ResizeToShortName( const std::string & str )
     {
         std::string res = System::GetBasename( str );
@@ -348,6 +328,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         buttonVirtualKB = makeButtonWithShadow( rt.x + 315, rt.y + 283, released, pressed, display, { -4, 4 } );
 
         buttonVirtualKB.draw();
+
+        Game::passAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY );
     }
 
     display.render();
@@ -358,17 +340,20 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
     const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
-    while ( le.HandleEvents() && result.empty() ) {
+    bool isCursorVisible = true;
+
+    while ( le.HandleEvents( !isEditing || Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) && result.empty() ) {
         le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
         if ( isEditing ) {
             le.MousePressLeft( buttonVirtualKB.area() ) ? buttonVirtualKB.drawOnPress() : buttonVirtualKB.drawOnRelease();
         }
 
-        listbox.QueueEventProcessing();
+        const bool listboxEvent = listbox.QueueEventProcessing();
+
+        bool isListboxSelected = listbox.isSelected();
 
         bool needRedraw = false;
-        bool isListboxSelected = listbox.isSelected();
 
         if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
              || listbox.isDoubleClicked() ) {
@@ -391,14 +376,14 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                 needRedraw = true;
             }
             else if ( le.MouseClickLeft( enter_field ) ) {
-                charInsertPos = GetInsertPosition( filename, le.GetMouseCursor().x, enter_field.x );
+                charInsertPos = fheroes2::getTextInputCursorPosition( filename, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x, enter_field.x );
                 if ( filename.empty() ) {
                     buttonOk.disable();
                 }
 
                 needRedraw = true;
             }
-            else if ( le.KeyPress() && ( !is_limit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() ) ) {
+            else if ( !listboxEvent && le.KeyPress() && ( !is_limit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() ) ) {
                 charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
                 if ( filename.empty() ) {
                     buttonOk.disable();
@@ -453,6 +438,12 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             needRedraw = true;
         }
 
+        // Text input cursor blink.
+        if ( isEditing && Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
+            isCursorVisible = !isCursorVisible;
+            needRedraw = true;
+        }
+
         if ( !needRedraw && !listbox.IsNeedRedraw() ) {
             continue;
         }
@@ -471,7 +462,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             lastSelectedSaveFileName = "";
         }
 
-        is_limit = isEditing ? RedrawExtraInfo( rt.getPosition(), header, InsertString( filename, charInsertPos, "_" ), enter_field )
+        is_limit = isEditing ? RedrawExtraInfo( rt.getPosition(), header, InsertString( filename, charInsertPos, isCursorVisible ? "_" : "\x7F" ), enter_field )
                              : RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
 
         buttonOk.draw();

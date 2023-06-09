@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <vector>
 
 #include "audio.h"
@@ -42,11 +43,14 @@
 
 void Interface::Basic::SetFocus( Heroes * hero, const bool retainScrollBarPosition )
 {
-    Player * player = Settings::Get().GetPlayers().GetCurrent();
+    assert( hero != nullptr );
 
+    Player * player = Settings::Get().GetPlayers().GetCurrent();
     if ( player == nullptr ) {
         return;
     }
+
+    assert( player->GetColor() == hero->GetColor() && ( player->isControlHuman() || ( player->isControlAI() && player->isAIAutoControlMode() ) ) );
 
     Focus & focus = player->GetFocus();
 
@@ -55,7 +59,8 @@ void Interface::Basic::SetFocus( Heroes * hero, const bool retainScrollBarPositi
         focus.GetHeroes()->ShowPath( false );
     }
 
-    if ( !hero->isMoveEnabled() ) {
+    // Heroes::calculatePath() uses PlayerWorldPathfinder and should not be used for an AI-controlled hero
+    if ( !hero->isMoveEnabled() && hero->isControlHuman() ) {
         hero->calculatePath( -1 );
     }
 
@@ -80,11 +85,14 @@ void Interface::Basic::SetFocus( Heroes * hero, const bool retainScrollBarPositi
 
 void Interface::Basic::SetFocus( Castle * castle )
 {
-    Player * player = Settings::Get().GetPlayers().GetCurrent();
+    assert( castle != nullptr );
 
+    Player * player = Settings::Get().GetPlayers().GetCurrent();
     if ( player == nullptr ) {
         return;
     }
+
+    assert( player->GetColor() == castle->GetColor() && ( player->isControlHuman() || ( player->isControlAI() && player->isAIAutoControlMode() ) ) );
 
     Focus & focus = player->GetFocus();
 

@@ -401,7 +401,8 @@ namespace fheroes2
                 system_error( std::make_error_code( std::errc::value_too_large ),
                               "Too large `length` provided to `calculateCRC32`. Must be no larger than `std::numeric_limits<uInt>::max()` (usually `(1 << 32) - 1`)." );
         }
-        return crc32( 0, data, static_cast<uInt>( length ) );
+
+        return static_cast<uint32_t>( crc32( 0, data, static_cast<uInt>( length ) ) );
     }
 
     void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding )
