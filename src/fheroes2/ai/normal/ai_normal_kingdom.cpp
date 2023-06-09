@@ -646,8 +646,8 @@ namespace AI
                     if ( !castle )
                         continue;
 
-                    if ( !castle->isCastle() ) {
-                        // If it is just a town then there is no way to hire heroes which can be a threat.
+                    if ( !castle->isCastle() && !castle->AllowBuyBuilding( BUILD_CASTLE ) ) {
+                        // If it is just a town with no possibility to build a castle then there is no way to hire heroes which can be a threat.
                         continue;
                     }
 
