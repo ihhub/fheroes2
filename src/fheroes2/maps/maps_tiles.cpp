@@ -2749,7 +2749,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
 
 void Maps::Tiles::fixOldArtifactIDs()
 {
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove this method." );
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1005_RELEASE, "Remove this method." );
 
     // The object could be under a hero so ignore hero.
     const MP2::MapObjectType objectType = GetObject( false );

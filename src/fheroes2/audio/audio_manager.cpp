@@ -166,7 +166,7 @@ namespace
         }
 
         // Place the negative result to the cache
-        musicTrackIdToFilePath.try_emplace( musicTrackId, std::string{} );
+        musicTrackIdToFilePath.try_emplace( musicTrackId );
 
         return {};
     }

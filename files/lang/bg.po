@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-30 00:59+0000\n"
+"POT-Creation-Date: 2023-06-03 06:46+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6542,6 +6542,10 @@ msgstr "Заклинанието не беше намерено."
 
 msgid "Only heroes can cast this spell."
 msgstr "Само герои могат да правят това заклинание."
+
+#, fuzzy
+msgid "This hero is not able to cast adventure spells."
+msgstr "направи приключенско заклинание."
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""

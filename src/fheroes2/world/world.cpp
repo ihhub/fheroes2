@@ -969,10 +969,16 @@ uint32_t World::CountObeliskOnMaps()
 
 void World::ActionForMagellanMaps( int color )
 {
+    const bool isAIPlayer = world.GetKingdom( color ).isControlAI();
+
     const int alliedColors = Players::GetPlayerFriends( color );
 
     for ( Maps::Tiles & tile : vec_tiles ) {
         if ( tile.isWater() ) {
+            if ( isAIPlayer && tile.isFog( color ) ) {
+                AI::Get().revealFog( tile );
+            }
+
             tile.ClearFog( alliedColors );
         }
     }
@@ -1412,8 +1418,8 @@ StreamBase & operator>>( StreamBase & msg, World & w )
         w._oldTileQuantityData.clear();
     }
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1005_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1005_RELEASE ) {
         for ( Maps::Tiles & tile : w.vec_tiles ) {
             tile.fixOldArtifactIDs();
         }

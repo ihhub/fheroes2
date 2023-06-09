@@ -744,17 +744,23 @@ namespace fheroes2
 
     void addGradientShadow( const Sprite & in, Image & out, const Point & outPos, const Point & shadowOffset )
     {
-        if ( in.empty() || ( shadowOffset.x == 0 && shadowOffset.y == 0 ) || ( outPos.x < 0 ) || ( outPos.y < 0 ) ) {
+        if ( in.empty() || out.empty() || ( shadowOffset.x == 0 && shadowOffset.y == 0 ) || ( outPos.x < 0 ) || ( outPos.y < 0 ) ) {
             return;
         }
 
         const int32_t outWidth = out.width();
         const int32_t inWidth = in.width();
         const int32_t inHeight = in.height();
-        const int32_t absOffsetX = std::abs( shadowOffset.x );
-        const int32_t absOffsetY = std::abs( shadowOffset.y );
         const int32_t shadowOffsetX = std::min( shadowOffset.x, 0 );
         const int32_t shadowOffsetY = std::min( shadowOffset.y, 0 );
+        const int32_t outStartOffset = outPos.x + shadowOffsetX + in.x() + ( outPos.y + shadowOffsetY + in.y() ) * outWidth;
+
+        // The shadow should not be outside of 'out' image.
+        assert( outStartOffset >= 0 && outWidth >= ( inWidth + outPos.x + std::max( shadowOffset.x, 0 ) )
+                && out.height() >= ( inHeight + outPos.y + std::max( shadowOffset.y, 0 ) ) );
+
+        const int32_t absOffsetX = std::abs( shadowOffset.x );
+        const int32_t absOffsetY = std::abs( shadowOffset.y );
 
         std::vector<Point> shadowLine;
         shadowLine.reserve( std::max( absOffsetX, absOffsetY ) + 1 );
@@ -788,9 +794,9 @@ namespace fheroes2
         const bool isOutNonSingleLayer = !out.singleLayer();
 
         const uint8_t * transformIn = in.singleLayer() ? nullptr : in.transform();
-        uint8_t * transformOut = out.singleLayer() ? nullptr : out.transform();
+        uint8_t * transformOut = isOutNonSingleLayer ? ( out.transform() + outStartOffset ) : nullptr;
 
-        uint8_t * imageOut = out.image() + outPos.x + shadowOffsetX + in.x() + static_cast<ptrdiff_t>( outPos.y + shadowOffsetY + in.y() ) * outWidth;
+        uint8_t * imageOut = out.image() + outStartOffset;
 
         auto isTransparent = [inWidth, inHeight, transformIn]( const int32_t offsetX, const int32_t offsetY ) {
             return ( ( offsetX < 0 ) || ( offsetY < 0 ) || ( offsetX >= inWidth ) || ( offsetY >= inHeight ) )

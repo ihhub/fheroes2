@@ -78,7 +78,6 @@ namespace AI
         int fogCount = 0;
         int safetyFactor = 0;
         int spellLevel = 2;
-        std::vector<IndexObject> validObjects;
     };
 
     struct AICastle
@@ -265,7 +264,7 @@ namespace AI
         std::set<int> findCastlesInDanger( const KingdomCastles & castles, const std::vector<std::pair<int, const Army *>> & enemyArmies, int myColor );
         std::vector<AICastle> getSortedCastleList( const KingdomCastles & castles, const std::set<int> & castlesInDanger );
 
-        double getObjectValue( const Heroes & hero, const int index, int & objectType, const double valueToIgnore, const uint32_t distanceToObject ) const;
+        double getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority );
         void resetPathfinder() override;
 
@@ -273,15 +272,25 @@ namespace AI
 
         double getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType );
 
-        bool isCriticalTask( const int index ) const
+        bool isPriorityTask( const int index ) const
         {
             return _priorityTargets.find( index ) != _priorityTargets.end();
+        }
+
+        bool isCriticalTask( const int index ) const
+        {
+            const auto iter = _priorityTargets.find( index );
+            if ( iter == _priorityTargets.end() ) {
+                return false;
+            }
+
+            return iter->second.type == PriorityTaskType::ATTACK || iter->second.type == PriorityTaskType::DEFEND;
         }
 
     private:
         // following data won't be saved/serialized
         double _combinedHeroStrength = 0;
-        std::vector<IndexObject> _mapObjects;
+        std::vector<IndexObject> _mapActionObjects;
         std::map<int, PriorityTask> _priorityTargets;
         std::vector<RegionStats> _regions;
         std::array<BudgetEntry, 7> _budget = { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
@@ -293,6 +302,8 @@ namespace AI
         std::map<int32_t, double> _neutralMonsterStrengthCache;
 
         void CastleTurn( Castle & castle, const bool defensiveStrategy );
+
+        // Returns true if heroes can still do tasks but they have no move points.
         bool HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue );
 
         double getGeneralObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
@@ -304,13 +315,15 @@ namespace AI
         void updatePriorityTargets( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType );
         void updateKingdomBudget( const Kingdom & kingdom );
 
-        bool purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
-                                bool moreTasksForHeroes );
+        bool purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, const int32_t availableHeroCount,
+                                const bool moreTasksForHeroes );
 
         static bool isMonsterStrengthCacheable( const MP2::MapObjectType objectType )
         {
             return objectType == MP2::OBJ_MONSTER;
         }
+
+        void updateMapActionObjectCache( const int mapIndex );
     };
 }
 

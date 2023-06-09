@@ -343,7 +343,7 @@ double Artifact::getArtifactValue() const
         case fheroes2::ArtifactBonusType::NONE:
             break;
         default:
-            // Did you add a new artifact ? Add your logic here.
+            // Did you add a new artifact bonus? Add your logic here.
             assert( 0 );
             break;
         }
@@ -367,7 +367,7 @@ double Artifact::getArtifactValue() const
             artifactValue -= curse.value;
             break;
         default:
-            // Did you add a new artifact ? Add your logic here.
+            // Did you add a new artifact curse? Add your logic here.
             assert( 0 );
             break;
         }
@@ -501,8 +501,8 @@ StreamBase & operator>>( StreamBase & msg, Artifact & art )
 {
     msg >> art.id >> art.ext;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1005_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1005_RELEASE ) {
         // Old save formats contain different values for artifacts.
         if ( art.id == 103 ) {
             art.id = Artifact::UNKNOWN;
