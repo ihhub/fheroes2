@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-30 00:59+0000\n"
+"POT-Creation-Date: 2023-06-03 06:46+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -5954,6 +5954,9 @@ msgid "The spell was not found."
 msgstr ""
 
 msgid "Only heroes can cast this spell."
+msgstr ""
+
+msgid "This hero is not able to cast adventure spells."
 msgstr ""
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."

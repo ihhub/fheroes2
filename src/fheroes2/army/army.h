@@ -94,7 +94,7 @@ public:
     uint32_t getTotalHP() const;
 
     void Clean();
-    void UpgradeTroops( const Castle & );
+    void UpgradeTroops( const Castle & castle ) const;
 
     Troop * GetFirstValid();
     Troop * GetWeakestTroop() const;
@@ -115,6 +115,8 @@ public:
 
     // If the army has no slot find 2 or more slots of the same monster which is the weakest and merge them releasing one slot in troops.
     bool mergeWeakestTroopsIfNeeded();
+
+    void splitWeakestTroopsIfPossible();
 
 protected:
     void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver );

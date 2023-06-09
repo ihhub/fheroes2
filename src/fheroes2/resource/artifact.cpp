@@ -343,7 +343,7 @@ double Artifact::getArtifactValue() const
         case fheroes2::ArtifactBonusType::NONE:
             break;
         default:
-            // Did you add a new artifact ? Add your logic here.
+            // Did you add a new artifact bonus? Add your logic here.
             assert( 0 );
             break;
         }
@@ -367,7 +367,7 @@ double Artifact::getArtifactValue() const
             artifactValue -= curse.value;
             break;
         default:
-            // Did you add a new artifact ? Add your logic here.
+            // Did you add a new artifact curse? Add your logic here.
             assert( 0 );
             break;
         }
