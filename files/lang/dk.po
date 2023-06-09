@@ -7,7 +7,11 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-13 05:15+0000\n"
+<<<<<<< Updated upstream
 "PO-Revision-Date: 2023-06-09 16:32+0200\n"
+=======
+"PO-Revision-Date: 2023-05-31 10:03+0200\n"
+>>>>>>> Stashed changes
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -149,7 +153,11 @@ msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
+<<<<<<< Updated upstream
 "UDVIDELSES\n"
+=======
+"UDVIDELSE\n"
+>>>>>>> Stashed changes
 "FELTTOG"
 
 msgid "HOT SEAT"
@@ -2580,7 +2588,10 @@ msgid ""
 msgstr ""
 "En gruppe %{monster} med drømme om magt og ære ønsker at forene sig med din "
 "hær.\n"
+<<<<<<< Updated upstream
 "\n"
+=======
+>>>>>>> Stashed changes
 "Godtager du disse betingleser?"
 
 msgid ""
@@ -3370,6 +3381,12 @@ msgstr "Svær"
 
 msgid "difficulty|Expert"
 msgstr "Ekspert"
+<<<<<<< Updated upstream
+=======
+
+msgid "difficulty|Impossible"
+msgstr "Umulig"
+>>>>>>> Stashed changes
 
 msgid "difficulty|Impossible"
 msgstr "Umulig"
@@ -5412,14 +5429,22 @@ msgid ""
 "wood per day."
 msgstr ""
 "Denne savmølle er nu under din kontrol. Den forsyner dit rige med %{count} "
+<<<<<<< Updated upstream
 "mængder træ om dagen."
+=======
+"mængde træ om dagen."
+>>>>>>> Stashed changes
 
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
 msgstr ""
 "Denne malmmine er nu under din kontrol. Den forsyner dit rige med %{count} "
+<<<<<<< Updated upstream
 "mængder malm om dagen."
+=======
+"mængde malm om dagen."
+>>>>>>> Stashed changes
 
 msgid ""
 "You gain control of a sulfur mine. It will provide you with %{count} unit of "
