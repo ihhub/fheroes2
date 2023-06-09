@@ -799,8 +799,8 @@ namespace Campaign
     {
         msg >> data._type >> data._subType;
 
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove the logic below." );
-        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1005_RELEASE ) {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1005_RELEASE ) {
             if ( data._type == ScenarioBonusData::BonusType::ARTIFACT ) {
                 // Old save formats contain different values for artifacts.
                 assert( data._subType < 103 );

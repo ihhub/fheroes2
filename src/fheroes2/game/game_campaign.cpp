@@ -25,6 +25,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -1271,7 +1272,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
     }
 
     const Campaign::ScenarioInfoId firstNextMap = Campaign::CampaignData::getScenariosAfter( lastCompletedScenarioInfo ).front();
-    saveData.setCurrentScenarioInfoId( firstNextMap );
+    saveData.setCurrentScenarioInfo( firstNextMap );
     return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
 
@@ -1345,7 +1346,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     fheroes2::ButtonGroup buttonChoices;
     fheroes2::OptionButtonGroup optionButtonGroup;
 
-    Campaign::ScenarioBonusData scenarioBonus;
+    std::optional<int32_t> scenarioBonusId;
     const std::vector<Campaign::ScenarioBonusData> & bonusChoices = scenario.getBonuses();
 
     const fheroes2::Point optionButtonOffset( 590, 199 );
@@ -1356,17 +1357,35 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     fheroes2::Copy( backgroundImage, optionButtonOffset.x + pressedButton.x(), optionButtonOffset.y + pressedButton.y(), releaseButton, 0, 0, releaseButton.width(),
                     releaseButton.height() );
 
-    const uint32_t bonusChoiceCount = static_cast<uint32_t>( scenario.getBonuses().size() );
-    for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
-        buttonChoices.createButton( optionButtonOffset.x + top.x, optionButtonOffset.y + optionButtonStep * i + top.y, releaseButton, pressedButton, i );
-        optionButtonGroup.addButton( &buttonChoices.button( i ) );
+    const uint32_t bonusChoiceCount = static_cast<uint32_t>( bonusChoices.size() );
+
+    {
+        const int32_t saveDataBonusId = campaignSaveData.getCurrentScenarioBonusId();
+
+        for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
+            buttonChoices.createButton( optionButtonOffset.x + top.x, optionButtonOffset.y + optionButtonStep * i + top.y, releaseButton, pressedButton, i );
+            optionButtonGroup.addButton( &buttonChoices.button( i ) );
+
+            if ( allowToRestart && saveDataBonusId >= 0 && static_cast<uint32_t>( saveDataBonusId ) == i ) {
+                scenarioBonusId = saveDataBonusId;
+                buttonChoices.button( i ).press();
+            }
+        }
     }
 
-    // in case there's no bonus for the map
     if ( bonusChoiceCount > 0 ) {
-        scenarioBonus = bonusChoices[0];
-        buttonChoices.button( 0 ).press();
+        if ( allowToRestart ) {
+            // If the campaign scenario is already in progress, then one of the bonuses should be selected
+            assert( scenarioBonusId.has_value() );
+        }
+        else {
+            // If this is the beginning of a new campaign scenario, then just select the first bonus
+            scenarioBonusId = 0;
+            buttonChoices.button( 0 ).press();
+        }
     }
+
+    optionButtonGroup.draw();
 
     buttonViewIntro.draw();
     buttonDifficulty.draw();
@@ -1399,9 +1418,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     assert( buttonRestart.isHidden() != buttonOk.isHidden() );
 
     buttonCancel.draw();
-
-    for ( uint32_t i = 0; i < bonusChoiceCount; ++i )
-        buttonChoices.button( i ).draw();
 
     const Text textDaysSpent( std::to_string( campaignSaveData.getDaysPassed() ), Font::BIG );
     textDaysSpent.Blit( top.x + 582 - textDaysSpent.w() / 2, top.y + 31 );
@@ -1460,9 +1476,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
         for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
             if ( le.MousePressLeft( choiceArea[i] ) || ( i < hotKeyBonusChoice.size() && HotKeyPressEvent( hotKeyBonusChoice[i] ) ) ) {
+                scenarioBonusId = fheroes2::checkedCast<int32_t>( i );
                 buttonChoices.button( i ).press();
                 optionButtonGroup.draw();
-                scenarioBonus = bonusChoices[i];
                 display.render();
 
                 break;
@@ -1471,7 +1487,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
         for ( uint32_t i = 0; i < selectableScenariosCount; ++i ) {
             if ( currentScenarioInfoId != selectableScenarios[i] && le.MouseClickLeft( selectableScenarioButtons.button( i ).area() ) ) {
-                campaignSaveData.setCurrentScenarioInfoId( selectableScenarios[i] );
+                campaignSaveData.setCurrentScenarioInfo( selectableScenarios[i] );
                 return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             }
         }
@@ -1528,6 +1544,20 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             conf.SetCurrentFileInfo( mapInfo );
 
+            assert( !scenarioBonusId || ( scenarioBonusId >= 0 && static_cast<size_t>( *scenarioBonusId ) < bonusChoices.size() ) );
+
+            const Campaign::ScenarioBonusData scenarioBonus = [scenarioBonusId, &bonusChoices = std::as_const( bonusChoices )]() -> Campaign::ScenarioBonusData {
+                if ( !scenarioBonusId ) {
+                    return {};
+                }
+
+                if ( scenarioBonusId < 0 || static_cast<size_t>( *scenarioBonusId ) >= bonusChoices.size() ) {
+                    return {};
+                }
+
+                return bonusChoices[*scenarioBonusId];
+            }();
+
             // starting faction scenario bonus has to be called before players.SetStartGame()
             if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE || scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY ) {
                 // but the army has to be set after starting the game, so first only set the race
@@ -1564,8 +1594,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             applyObtainedCampaignAwards( currentScenarioInfoId, campaignSaveData.getObtainedCampaignAwards() );
 
-            campaignSaveData.setCurrentScenarioBonus( scenarioBonus );
-            campaignSaveData.setCurrentScenarioInfoId( currentScenarioInfoId );
+            campaignSaveData.setCurrentScenarioInfo( currentScenarioInfoId, scenarioBonusId.value_or( -1 ) );
 
             return fheroes2::GameMode::START_GAME;
         }
