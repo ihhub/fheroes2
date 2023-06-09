@@ -6224,12 +6224,15 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
         ++animation_flags_frame;
         humanturn_redraw = true;
 
-        if ( _opponent1 && _opponent1->updateAnimationState() ) {
-            humanturn_redraw = true;
-        }
+        // Perform heroes idle animation only if heroes are not performing any other animation (e.g. spell casting).
+        if ( Game::hasEveryDelayPassed( { Game::BATTLE_OPPONENTS_DELAY } ) ) {
+            if ( _opponent1 && _opponent1->updateAnimationState() ) {
+                humanturn_redraw = true;
+            }
 
-        if ( _opponent2 && _opponent2->updateAnimationState() ) {
-            humanturn_redraw = true;
+            if ( _opponent2 && _opponent2->updateAnimationState() ) {
+                humanturn_redraw = true;
+            }
         }
     }
 
