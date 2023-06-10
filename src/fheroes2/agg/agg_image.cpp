@@ -42,7 +42,6 @@
 #include "icn.h"
 #include "image.h"
 #include "image_tool.h"
-#include "logging.h"
 #include "math_base.h"
 #include "pal.h"
 #include "rand.h"
