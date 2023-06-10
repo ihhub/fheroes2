@@ -1886,6 +1886,8 @@ namespace AI
 
     void Normal::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType )
     {
+        assert( !hero.isFreeman() );
+
         const auto it = _priorityTargets.find( tileIndex );
         if ( it == _priorityTargets.end() ) {
             return;
@@ -1939,19 +1941,23 @@ namespace AI
         }
     }
 
-    void Normal::HeroesActionComplete( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType )
+    void Normal::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType )
     {
-        Castle * castle = hero.inCastleMutable();
-        if ( castle ) {
-            reinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
+        // This method is called upon action completion and the hero could no longer be available.
+        // So it is to check if the hero is still present.
+        if ( !hero.isFreeman() ) {
+            Castle * castle = hero.inCastleMutable();
+            if ( castle ) {
+                reinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
+            }
+
+            if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES ) {
+                updatePriorityTargets( hero, tileIndex, objectType );
+            }
         }
 
         if ( isMonsterStrengthCacheable( objectType ) ) {
             _neutralMonsterStrengthCache.erase( tileIndex );
-        }
-
-        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES ) {
-            updatePriorityTargets( hero, tileIndex, objectType );
         }
 
         updateMapActionObjectCache( tileIndex );

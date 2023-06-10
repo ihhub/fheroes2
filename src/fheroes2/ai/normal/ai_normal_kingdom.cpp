@@ -207,6 +207,8 @@ namespace AI
 
     void Normal::reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )
     {
+        assert( !hero.isFreeman() );
+
         const Heroes::AIHeroMeetingUpdater heroMeetingUpdater( hero );
 
         if ( !hero.HaveSpellBook() && castle.GetLevelMageGuild() > 0 && !hero.IsFullBagArtifacts() ) {
@@ -630,6 +632,8 @@ namespace AI
                         stats.highestThreat = heroThreat;
                     }
                 }
+
+                // TODO: we should combine strength of both hero's and castle's armies to calculate the final strength.
                 // check object underneath the hero as well (maybe a castle)
                 objectType = tile.GetObject( false );
             }
