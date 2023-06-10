@@ -64,7 +64,7 @@ namespace fheroes2
 
         uint8_t * transform()
         {
-            // Why do you want to get transform layer from the single layer image?
+            // Why do you want to get transform layer from the single-layer image?
             assert( !_singleLayer );
 
             return _data.get() + width() * height();
@@ -72,7 +72,7 @@ namespace fheroes2
 
         const uint8_t * transform() const
         {
-            // Why do you want to get transform layer from the single layer image?
+            // Why do you want to get transform layer from the single-layer image?
             assert( !_singleLayer );
 
             return _data.get() + width() * height();
@@ -83,13 +83,13 @@ namespace fheroes2
             return !_data;
         }
 
-        // Set all data int the image layer to 0 and make non single layer images fully transparent (transform layer is set to 1).
+        // Set all data in the image layer to 0 and make double-layer images fully transparent (transform layer is set to 1).
         void reset();
 
         // Make the image empty.
         void clear();
 
-        // Fill 'image' layer with given value, setting the non single layer images 'transform' layer to 0.
+        // Fill 'image' layer with given value, setting the double-layer images 'transform' layer to 0.
         void fill( const uint8_t value );
 
         // This is an indicator for image processing functions. The single-layer image does not contain transform layer.
@@ -111,7 +111,7 @@ namespace fheroes2
         // 'data' contains 2 image layers: the image itself and a transform layer (if it is not disabled).
         std::unique_ptr<uint8_t[]> _data;
 
-        // Image may be set as single layer only for images which are not used for any other operations except displaying on screen.
+        // Image may be set as single-layer only for images which are not used for any other operations except displaying on screen.
         bool _singleLayer{ false };
     };
 

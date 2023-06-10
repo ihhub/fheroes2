@@ -42,6 +42,7 @@
 #include "icn.h"
 #include "image.h"
 #include "image_tool.h"
+#include "logging.h"
 #include "math_base.h"
 #include "pal.h"
 #include "rand.h"
@@ -534,11 +535,6 @@ namespace fheroes2
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
 
                 _icnVsSprite[id][i] = decodeICNSprite( data, sizeData, header1.width, header1.height, header1.offsetX, header1.offsetY );
-
-                // Disable transform layer if it is not needed (contains only zeros).
-                if ( isTransformLayerNotUsed( _icnVsSprite[id][i] ) ) {
-                    _icnVsSprite[id][i]._disableTransformLayer();
-                }
             }
         }
 
@@ -2668,8 +2664,6 @@ namespace fheroes2
             case ICN::EDITOR:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
-                    // This is the Editor main menu background which shouldn't have any transform layer.
-                    _icnVsSprite[id][0]._disableTransformLayer();
                     // Fix the cycling colors in original editor main menu background.
                     fheroes2::ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
                 }
@@ -2679,6 +2673,8 @@ namespace fheroes2
                 if ( !_icnVsSprite[id].empty() ) {
                     // This is the main menu image which shouldn't have any transform layer.
                     _icnVsSprite[id][0]._disableTransformLayer();
+                    // Fix incorrect pixel at position 260x305.
+                    _icnVsSprite[id][0].image()[195460] = 31;
                 }
                 return true;
             case ICN::TOWNBKG3:
@@ -2699,24 +2695,52 @@ namespace fheroes2
             case ICN::MINIPORT:
                 // Some heroes portraits have incorrect transparent pixels.
                 LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 60 ) {
+                    Sprite & original = _icnVsSprite[id][60];
+                    original._disableTransformLayer();
+                    if ( original.width() == 30 && original.height() == 22 ) {
+                        original.image()[5] = 75;
+                        original.image()[310] = 48;
+                        original.image()[358] = 64;
+                        original.image()[424] = 65;
+                    }
+                }
+                if ( _icnVsSprite[id].size() > 61 ) {
+                    Sprite & original = _icnVsSprite[id][61];
+                    original._disableTransformLayer();
+                    if ( original.width() == 30 && original.height() == 22 ) {
+                        original.image()[51] = 30;
+                        original.image()[80] = 28;
+                        original.image()[81] = 30;
+                        original.image()[383] = 24;
+                        original.image()[445] = 24;
+                    }
+                }
+                if ( _icnVsSprite[id].size() > 65 ) {
+                    Sprite & original = _icnVsSprite[id][65];
+                    original._disableTransformLayer();
+                    if ( original.width() == 30 && original.height() == 22 ) {
+                        original.image()[499] = 60;
+                        original.image()[601] = 24;
+                        original.image()[631] = 28;
+                    }
+                }
                 if ( _icnVsSprite[id].size() > 67 ) {
-                    for ( const int32_t i : { 60, 61, 65, 67 } ) {
-                        Sprite & original = _icnVsSprite[id][i];
-                        if ( !original.empty() ) {
-                            // Fix it by disabling the transform layer.
-                            original._disableTransformLayer();
-                        }
+                    Sprite & original = _icnVsSprite[id][67];
+                    original._disableTransformLayer();
+                    if ( original.width() == 30 && original.height() == 22 ) {
+                        original.image()[42] = 28;
                     }
                 }
                 return true;
             case ICN::MINICAPT:
-                // Barbarian captain mini icon has some bad pixels.
+                // Barbarian captain mini icon has  bad pixel at position 22x2.
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 1 ) {
                     Sprite & original = _icnVsSprite[id][1];
-                    if ( !original.empty() ) {
-                        // Fix it by disabling the transform layer.
+                    if ( original.width() == 30 && original.height() == 22 ) {
                         original._disableTransformLayer();
+                        original.image()[82] = 244;
                     }
                 }
                 return true;
@@ -2746,14 +2770,25 @@ namespace fheroes2
                 }
                 return true;
             case ICN::PORT0092:
-            case ICN::PORT0095:
-                // Sorceress and Necromancer captains have incorrect transparent pixels.
+                // Sorceress captain has two bad transparent pixels (8x20 and 8x66).
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
-                    if ( !original.empty() ) {
-                        // Fix it by disabling the transform layer.
+                    if ( original.width() == 101 && original.height() == 93 ) {
                         original._disableTransformLayer();
+                        original.image()[2028] = 42;
+                        original.image()[6674] = 100;
+                    }
+                }
+                return true;
+            case ICN::PORT0095:
+                // Necromancer captain have incorrect transparent pixel at position 8x22.
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 101 && original.height() == 93 ) {
+                        original._disableTransformLayer();
+                        original.image()[2230] = 212;
                     }
                 }
                 return true;
@@ -2984,7 +3019,6 @@ namespace fheroes2
                 for ( Sprite & icon : _icnVsSprite[id] ) {
                     icon._disableTransformLayer();
                     icon.resize( 17, 17 );
-                    // icon.fill( 0 );
                 }
 
                 const Sprite & successionWarsIcon = GetICN( ICN::ARTFX, 6 );
@@ -3231,7 +3265,7 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 99 ) {
                     // Convert 88 and 99 images to single-layer.
-                    // This fixes "Arm of the Martyr" artifact rendering which initially has some incorrect transparent pixels.
+                    // This fixes "Arm of the Martyr" (#88) and " Sphere of Negation" (#99) artifacts rendering which initially has some incorrect transparent pixels.
                     _icnVsSprite[id][88]._disableTransformLayer();
                     _icnVsSprite[id][99]._disableTransformLayer();
                 }
@@ -3610,9 +3644,6 @@ namespace fheroes2
 
                     Copy( temp, 0, 0, _icnVsSprite[id][7], 215 - 57, 0, temp.width(), imageHeight );
                     Copy( _icnVsSprite[id][6], 324, 0, _icnVsSprite[id][7], 324, 0, _icnVsSprite[id][6].width() - 324, imageHeight );
-
-                    // This is a background for the rating column with animating monsters.
-                    _icnVsSprite[id][8]._disableTransformLayer();
                 }
                 return true;
             }
@@ -3689,26 +3720,35 @@ namespace fheroes2
             }
             case ICN::BRCREST: {
                 LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() == 7 ) {
-                    // All sprites except the last in this ICN are non-transparent.
-                    for ( int32_t i = 0; i < 6; ++i ) {
-                        _icnVsSprite[id][i]._disableTransformLayer();
+                // First sprite in this ICN has incorrect transparent pixel at position 30x5.
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    original._disableTransformLayer();
+                    if ( original.width() == 50 && original.height() == 47 ) {
+                        original.image()[280] = 117;
                     }
                 }
                 return true;
             }
-            case ICN::CBKGWATR:
-            case ICN::SWAPWIN:
-            case ICN::WELLBKG: {
-                // Ship battlefield background has some incorrect transparent pixels.
-                // Also Hero Meeting dialog and Castle Well images can e used with disabled transform layer.
+            case ICN::CBKGWATR: {
+                // Ship battlefield background has incorrect transparent pixel at position 125x36.
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( !original.empty() ) {
-                        // Fix it by disabling the transform layer.
                         original._disableTransformLayer();
+                        original.image()[23165] = 24;
                     }
+                }
+                return true;
+            }
+
+            case ICN::SWAPWIN:
+            case ICN::WELLBKG: {
+                // Hero Meeting dialog and Castle Well images can be used with disabled transform layer.
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    _icnVsSprite[id][0]._disableTransformLayer();
                 }
                 return true;
             }

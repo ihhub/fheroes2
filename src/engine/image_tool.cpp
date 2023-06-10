@@ -305,8 +305,15 @@ namespace fheroes2
 
         const uint8_t * dataEnd = data + sizeData;
 
+        // The need for a transform layer can only be determined during ICN decoding.
+        bool needTransformLayer = false;
+
         while ( true ) {
             if ( 0 == *data ) { // 0x00 - end of row
+                if ( static_cast<int32_t>( posX ) < width ) {
+                    needTransformLayer = true;
+                }
+
                 imageData += width;
                 imageTransform += width;
                 posX = 0;
@@ -324,13 +331,21 @@ namespace fheroes2
                 posX += pixelCount;
             }
             else if ( 0x80 == *data ) { // 0x80 - end of image
+                if ( static_cast<int32_t>( posX ) < width ) {
+                    needTransformLayer = true;
+                }
+
                 break;
             }
             else if ( 0xC0 > *data ) { // 0xBF - empty (transparent) pixels
+                needTransformLayer = true;
+
                 posX += *data - 0x80;
                 ++data;
             }
             else if ( 0xC0 == *data ) { // 0xC0 - transform layer
+                needTransformLayer = true;
+
                 ++data;
 
                 const uint8_t transformValue = *data;
@@ -371,6 +386,10 @@ namespace fheroes2
             if ( data >= dataEnd ) {
                 break;
             }
+        }
+
+        if ( !needTransformLayer ) {
+            sprite._disableTransformLayer();
         }
 
         return sprite;

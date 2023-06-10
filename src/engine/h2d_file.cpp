@@ -173,7 +173,11 @@ namespace fheroes2
 
     bool readImageFromH2D( H2DReader & reader, const std::string & name, Sprite & image )
     {
+        // TODO: Add the transform layer presence flag in H2D images and read H2D single-layer images properly without the transform layer.
+
+        // Currently all H2D images are double-layer images so the out 'image' should not be single-layer.
         assert( !image.singleLayer() );
+
         const std::vector<uint8_t> & data = reader.getFile( name );
         if ( data.size() < 4 + 4 + 4 + 4 + 1 ) {
             // Empty or invalid image.
@@ -201,6 +205,9 @@ namespace fheroes2
 
     bool writeImageToH2D( H2DWriter & writer, const std::string & name, const Sprite & image )
     {
+        // TODO: Add the transform layer presence flag in H2D images and write single-layer images properly without the transform layer.
+
+        // Currently all H2D images are double-layer images so the out 'image' should not be single-layer.
         assert( !image.empty() && !image.singleLayer() );
 
         StreamBuf stream;

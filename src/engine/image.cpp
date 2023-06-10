@@ -405,7 +405,7 @@ namespace
         const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
         if ( in.singleLayer() ) {
-            // All pixels in a single layer image do not have any transform values so there is no need to check for them.
+            // All pixels in a single-layer image do not have any transform values so there is no need to check for them.
             for ( ; imageInY != imageInYEnd; imageInY += widthIn, imageOutY += widthOut ) {
                 const uint8_t * imageInX = imageInY;
                 uint8_t * imageOutX = imageOutY;
@@ -509,8 +509,11 @@ namespace fheroes2
             return;
         }
 
-        // For single layer images do not allocate memory for the second (transform) layer.
-        const size_t size = _singleLayer ? static_cast<size_t>( width_ ) * height_ : static_cast<size_t>( width_ ) * height_ * 2;
+        size_t size = static_cast<size_t>( width_ ) * height_;
+        if ( !_singleLayer ) {
+            // For double-layer images we also allocate memory for the second (transform) layer.
+            size *= 2;
+        }
 
         _data.reset( new uint8_t[size] );
 
@@ -549,7 +552,11 @@ namespace fheroes2
             return;
         }
 
-        const size_t size = image._singleLayer ? static_cast<size_t>( image._width * image._height ) : static_cast<size_t>( image._width * image._height ) * 2;
+        size_t size = static_cast<size_t>( image._width ) * image._height;
+        if ( !image._singleLayer ) {
+            // For double-layer images we also allocate memory for the second (transform) layer.
+            size *= 2;
+        }
 
         if ( image._width != _width || image._height != _height || _singleLayer != image._singleLayer ) {
             _data.reset( new uint8_t[size] );
@@ -570,7 +577,7 @@ namespace fheroes2
 
         const size_t size = static_cast<size_t>( _width ) * _height;
         if ( size > 0 ) {
-            // Free the transform layer memory.
+            // Free the transform layer memory preserving the image layer data.
             std::unique_ptr<uint8_t[]> newData;
             newData.reset( new uint8_t[size] );
             memcpy( newData.get(), _data.get(), size );
@@ -639,8 +646,12 @@ namespace fheroes2
         , _height( image.height() )
     {
         _updateRoi();
-        // Since the restorer is used to restore the screen part, the transform layer is not needed.
-        _copy._disableTransformLayer();
+
+        if ( image.singleLayer() ) {
+            // The restorer is used to restore the image without the transform layer so we make a single-layer copy.
+            _copy._disableTransformLayer();
+        }
+
         _copy.resize( _width, _height );
 
         Copy( _image, 0, 0, _copy, 0, 0, _width, _height );
@@ -654,8 +665,12 @@ namespace fheroes2
         , _height( height )
     {
         _updateRoi();
-        // Since the restorer is used to restore the screen part, the transform layer is not needed.
-        _copy._disableTransformLayer();
+
+        if ( image.singleLayer() ) {
+            // The restorer is used to restore the image without the transform layer so we make a single-layer copy.
+            _copy._disableTransformLayer();
+        }
+
         _copy.resize( _width, _height );
 
         Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
@@ -791,10 +806,10 @@ namespace fheroes2
 
         const int32_t maxX = inWidth + absOffsetX;
         const int32_t maxY = inHeight + absOffsetY;
-        const bool isOutNonSingleLayer = !out.singleLayer();
+        const bool isOutDoubleLayer = !out.singleLayer();
 
         const uint8_t * transformIn = in.singleLayer() ? nullptr : in.transform();
-        uint8_t * transformOut = isOutNonSingleLayer ? ( out.transform() + outStartOffset ) : nullptr;
+        uint8_t * transformOut = isOutDoubleLayer ? ( out.transform() + outStartOffset ) : nullptr;
 
         uint8_t * imageOut = out.image() + outStartOffset;
 
@@ -837,7 +852,7 @@ namespace fheroes2
                 // The transformTableId is less than 6 so the shadow has to be applied.
                 const int32_t outOffset = x + y * outWidth;
 
-                if ( isOutNonSingleLayer ) {
+                if ( isOutDoubleLayer ) {
                     uint8_t * transformOutX = transformOut + outOffset;
 
                     if ( *transformOutX == 0 ) {
@@ -854,7 +869,7 @@ namespace fheroes2
                     }
                 }
                 else {
-                    // For single layer 'out' image apply shadow transform to the image data.
+                    // For single-layer 'out' image apply shadow transform to the image data.
                     uint8_t * imageOutX = imageOut + outOffset;
                     *imageOutX = *( transformTable + transformTableId * ptrdiff_t{ 256 } + *imageOutX );
                 }
@@ -1402,7 +1417,7 @@ namespace fheroes2
         uint8_t * imageOut = out.image() + offsetOut;
         uint8_t * transformOut = out.singleLayer() ? nullptr : out.transform() + offsetOut;
 
-        const bool isInNonSinglelayerToOutSinglelayer = !in.singleLayer() && out.singleLayer();
+        const bool isInDoubleLayerToOutSingleLayer = !in.singleLayer() && out.singleLayer();
 
         if ( isVertical ) {
             // We also go in a loop from the right part of the image to its center.
@@ -1455,7 +1470,7 @@ namespace fheroes2
                     const int32_t offsetY = y % stepY;
 
                     if ( isReverse == ( patternPoint != offsetY ) ) {
-                        if ( isInNonSinglelayerToOutSinglelayer && ( *( transformIn + offsetInX ) == 1 ) ) {
+                        if ( isInDoubleLayerToOutSingleLayer && ( *( transformIn + offsetInX ) == 1 ) ) {
                             // Skip pixel.
                             continue;
                         }
@@ -1476,7 +1491,7 @@ namespace fheroes2
                         }
                     }
                     else {
-                        if ( isInNonSinglelayerToOutSinglelayer && ( *( transformInRightPoint + offsetInX ) == 1 ) ) {
+                        if ( isInDoubleLayerToOutSingleLayer && ( *( transformInRightPoint + offsetInX ) == 1 ) ) {
                             // Skip pixel.
                             continue;
                         }
@@ -1566,7 +1581,7 @@ namespace fheroes2
                     const int32_t offsetX = x % stepX;
 
                     if ( isReverse == ( patternPoint != offsetX ) ) {
-                        if ( isInNonSinglelayerToOutSinglelayer && ( *( transformIn + x ) == 1 ) ) {
+                        if ( isInDoubleLayerToOutSingleLayer && ( *( transformIn + x ) == 1 ) ) {
                             // Skip pixel.
                             continue;
                         }
@@ -1587,7 +1602,7 @@ namespace fheroes2
                         }
                     }
                     else {
-                        if ( isInNonSinglelayerToOutSinglelayer && ( *( transformInBottomPoint + x ) == 1 ) ) {
+                        if ( isInDoubleLayerToOutSingleLayer && ( *( transformInBottomPoint + x ) == 1 ) ) {
                             // Skip pixel.
                             continue;
                         }
@@ -2277,7 +2292,7 @@ namespace fheroes2
                         }
                     }
                     else {
-                        // 'in' image is single layer, 'out' image is with transform layer.
+                        // 'in' image is single-layer, 'out' image is double-layer (with the  transform layer).
                         for ( ; imageOutX != imageOutXEnd; ++imageOutX, --imageInX ) {
                             *imageOutX = *imageInX;
                         }
@@ -2328,7 +2343,7 @@ namespace fheroes2
                     }
                 }
                 else {
-                    // 'in' image is single layer, 'out' image is with transform layer.
+                    // 'in' image is single-layer, 'out' image is double-layer (with the  transform layer).
                     for ( ; imageOutY != imageOutYEnd; imageOutY += widthOut, transformOutY += widthOut, imageInY -= widthIn ) {
                         memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
 
@@ -2380,7 +2395,7 @@ namespace fheroes2
                         }
                     }
                     else {
-                        // 'in' image is single layer, 'out' image is with transform layer.
+                        // 'in' image is single-layer, 'out' image is double-layer (with the  transform layer).
                         for ( ; imageOutX != imageOutXEnd; ++imageOutX, --imageInX ) {
                             *imageOutX = *imageInX;
                         }
@@ -2857,7 +2872,7 @@ namespace fheroes2
 
         const int32_t width = image.width();
         const int32_t height = image.height();
-        const bool isNonSingleLayer = !image.singleLayer();
+        const bool isDoubleLayer = !image.singleLayer();
 
         for ( const Point & point : points ) {
             if ( point.x >= width || point.y >= height || point.x < 0 || point.y < 0 ) {
@@ -2866,7 +2881,7 @@ namespace fheroes2
 
             const int32_t offset = point.y * width + point.x;
             *( image.image() + offset ) = value;
-            if ( isNonSingleLayer ) {
+            if ( isDoubleLayer ) {
                 *( image.transform() + offset ) = 0;
             }
         }
