@@ -22,7 +22,8 @@
 
 #include "editor_interface.h"
 
-#include <algorithm>
+#include <cassert>
+#include <vector>
 
 #include "agg_image.h"
 #include "audio_manager.h"
@@ -31,19 +32,22 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_border.h"
+#include "interface_gamearea.h"
+#include "interface_radar.h"
+#include "interface_status.h"
 #include "localevent.h"
-#include "maps.h"
 #include "math_base.h"
+#include "screen.h"
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_tool.h"
 #include "view_world.h"
-#include "world.h"
 
 namespace Interface
 {

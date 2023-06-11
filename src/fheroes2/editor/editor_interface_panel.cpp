@@ -20,29 +20,23 @@
 
 #if defined( WITH_DEBUG )
 
-#include <algorithm>
+#include <array>
+#include <cstdint>
+#include <memory>
 
 #include "agg_image.h"
-#include "audio_manager.h"
-#include "cursor.h"
 #include "dialog.h"
 #include "editor_interface.h"
-#include "game.h"
-#include "game_delays.h"
-#include "game_hotkeys.h"
+#include "game_interface.h"
+#include "game_mode.h"
 #include "icn.h"
 #include "image.h"
-#include "interface_border.h"
 #include "localevent.h"
-#include "maps.h"
 #include "math_base.h"
-#include "settings.h"
+#include "screen.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
-#include "ui_tool.h"
-#include "view_world.h"
-#include "world.h"
 
 namespace Interface
 {
@@ -70,7 +64,7 @@ namespace Interface
     {
         int32_t offsetX = displayX;
 
-        for ( int32_t i = 0; i < buttonsInGroup; ++i ) {
+        for ( size_t i = 0; i < _instrumentButtons.size(); ++i ) {
             _instrumentButtons[i].setPosition( offsetX, displayY );
             _instrumentButtonsRect[i] = _instrumentButtons[i].area();
 
@@ -148,7 +142,7 @@ namespace Interface
         fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
         if ( le.MousePressLeft( _rectInstruments ) ) {
-            for ( int32_t i = 0; i < buttonsInGroup; ++i ) {
+            for ( int32_t i = 0; i < _instrumentButtons.size(); ++i ) {
                 if ( le.MousePressLeft( _instrumentButtonsRect[i] ) ) {
                     if ( _instrumentButtons[i].drawOnPress() ) {
                         _selectedInstrument = i;
@@ -178,7 +172,7 @@ namespace Interface
             res = Editor::eventNewMap();
         }
         else if ( le.MouseClickLeft( _rectSpecs ) ) {
-            res = _interface.EventScenarioInformation();
+            res = Basic::EventScenarioInformation();
         }
         else if ( le.MouseClickLeft( _rectFile ) ) {
             res = _interface.eventFileDialog();

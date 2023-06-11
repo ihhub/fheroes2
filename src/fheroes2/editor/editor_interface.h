@@ -22,17 +22,13 @@
 
 #if defined( WITH_DEBUG )
 
+#include <array>
 #include <cstdint>
 
 #include "game_interface.h"
 #include "game_mode.h"
-#include "interface_gamearea.h"
-#include "interface_radar.h"
-
-namespace
-{
-    constexpr int32_t buttonsInGroup = 6;
-}
+#include "math_base.h"
+#include "ui_button.h"
 
 namespace Interface
 {
@@ -44,8 +40,6 @@ namespace Interface
         explicit EditorPanel( Editor & interface_ );
 
         ~EditorPanel() = default;
-
-        ButtonsArea & operator=( const ButtonsArea & ) = delete;
 
         const fheroes2::Rect & getRect() const
         {
@@ -68,8 +62,8 @@ namespace Interface
 
         int32_t _selectedInstrument{ 0 };
 
-        std::array<fheroes2::Button, buttonsInGroup> _instrumentButtons;
-        std::array<fheroes2::Rect, buttonsInGroup> _instrumentButtonsRect;
+        std::array<fheroes2::Button, 6> _instrumentButtons;
+        std::array<fheroes2::Rect, 6> _instrumentButtonsRect;
 
         fheroes2::Button _buttonMagnify;
         fheroes2::Button _buttonUndo;
