@@ -60,7 +60,7 @@ namespace Interface
 
         Editor & _interface;
 
-        int32_t _selectedInstrument{ 0 };
+        uint32_t _selectedInstrument{ 0 };
 
         std::array<fheroes2::Button, 6> _instrumentButtons;
         std::array<fheroes2::Rect, 6> _instrumentButtonsRect;

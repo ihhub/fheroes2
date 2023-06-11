@@ -142,7 +142,7 @@ namespace Interface
         fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
         if ( le.MousePressLeft( _rectInstruments ) ) {
-            for ( int32_t i = 0; i < _instrumentButtons.size(); ++i ) {
+            for ( uint32_t i = 0; i < _instrumentButtons.size(); ++i ) {
                 if ( le.MousePressLeft( _instrumentButtonsRect[i] ) ) {
                     if ( _instrumentButtons[i].drawOnPress() ) {
                         _selectedInstrument = i;
