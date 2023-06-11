@@ -341,6 +341,8 @@ namespace AI
         void updateMapActionObjectCache( const int mapIndex );
 
         std::set<int> findCastlesInDanger( const KingdomCastles & castles, const std::vector<EnemyArmy> & enemyArmies, int myColor );
+
+        void removePriorityTarget( const int32_t tileIndex );
     };
 }
 

@@ -1886,7 +1886,10 @@ namespace AI
 
     void Normal::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType )
     {
-        assert( !hero.isFreeman() );
+        if ( objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_HEROES ) {
+            // Priorities are only for castles and heroes.
+            return;
+        }
 
         const auto it = _priorityTargets.find( tileIndex );
         if ( it == _priorityTargets.end() ) {
@@ -1894,42 +1897,46 @@ namespace AI
         }
 
         const PriorityTask & task = it->second;
-
         switch ( task.type ) {
         case PriorityTaskType::DEFEND:
         case PriorityTaskType::REINFORCE: {
+            // These tasks are only for castles at the moment!
+            assert( objectType == MP2::OBJ_CASTLE );
+
+            // How is it even possible that a hero died while simply moving into a castle?
+            assert( !hero.isFreeman() );
+
             // TODO: sort the army between the castle and hero to have maximum movement points for the next day
             // TODO: but also have enough army to defend the castle.
-            if ( objectType == MP2::OBJ_CASTLE ) {
-                hero.SetModes( Heroes::SLEEPER );
-            }
 
+            hero.SetModes( Heroes::SLEEPER );
             _priorityTargets.erase( tileIndex );
+
             break;
         }
         case PriorityTaskType::ATTACK: {
-            // check if battle was actually won or attacker still there
-            const Heroes * attackHero = world.GetTiles( tileIndex ).GetHeroes();
-            const Castle * attackCastle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
-
-            if ( !attackHero && ( !attackCastle || attackCastle->GetColor() == hero.GetColor() ) ) {
-                for ( const int secondaryTaskId : task.secondaryTaskTileId ) {
-                    assert( secondaryTaskId != tileIndex );
-
-                    auto defense = _priorityTargets.find( secondaryTaskId );
-                    if ( defense == _priorityTargets.end() ) {
-                        continue;
-                    }
-
-                    // check if a secondary task still present
-                    std::set<int> & defenseSecondaries = defense->second.secondaryTaskTileId;
-                    defenseSecondaries.erase( tileIndex );
-                    if ( defenseSecondaries.empty() ) {
-                        // if no one else was threatening this then we no longer have to defend
-                        _priorityTargets.erase( secondaryTaskId );
-                    }
+            if ( objectType == MP2::OBJ_HEROES ) {
+                const Heroes * attackHero = world.GetTiles( tileIndex ).GetHeroes();
+                if ( attackHero == nullptr ) {
+                    removePriorityTarget( tileIndex );
                 }
-                _priorityTargets.erase( tileIndex );
+                else {
+                    // TODO: update priorities.
+                }
+            }
+            else if ( objectType == MP2::OBJ_CASTLE ) {
+                const Castle * attackCastle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
+                if ( attackCastle == nullptr ) {
+                    // How is it even possible that a castle does no exist?
+                    assert( 0 );
+                    removePriorityTarget( tileIndex );
+                    return;
+                }
+
+                if ( attackCastle->GetColor() == hero.GetColor() ) {
+                    // The castle was captured.
+                    removePriorityTarget( tileIndex );
+                }
             }
 
             break;
@@ -1941,6 +1948,35 @@ namespace AI
         }
     }
 
+    void Normal::removePriorityTarget( const int32_t tileIndex )
+    {
+        const auto it = _priorityTargets.find( tileIndex );
+        if ( it == _priorityTargets.end() ) {
+            return;
+        }
+
+        const PriorityTask & task = it->second;
+
+        for ( const int secondaryTaskId : task.secondaryTaskTileId ) {
+            assert( secondaryTaskId != tileIndex );
+
+            auto defense = _priorityTargets.find( secondaryTaskId );
+            if ( defense == _priorityTargets.end() ) {
+                continue;
+            }
+
+            // check if a secondary task still present
+            std::set<int> & defenseSecondaries = defense->second.secondaryTaskTileId;
+            defenseSecondaries.erase( tileIndex );
+            if ( defenseSecondaries.empty() ) {
+                // if no one else was threatening this then we no longer have to defend
+                _priorityTargets.erase( secondaryTaskId );
+            }
+        }
+
+        _priorityTargets.erase( tileIndex );
+    }
+
     void Normal::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType )
     {
         // This method is called upon action completion and the hero could no longer be available.
@@ -1950,11 +1986,9 @@ namespace AI
             if ( castle ) {
                 reinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
             }
-
-            if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES ) {
-                updatePriorityTargets( hero, tileIndex, objectType );
-            }
         }
+
+        updatePriorityTargets( hero, tileIndex, objectType );
 
         if ( isMonsterStrengthCacheable( objectType ) ) {
             _neutralMonsterStrengthCache.erase( tileIndex );
