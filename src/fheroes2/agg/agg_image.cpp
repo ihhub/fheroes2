@@ -3070,9 +3070,12 @@ namespace fheroes2
             case ICN::GOOD_MARKET_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
+                LoadOriginalICN( ICN::ADVBTNS );
                 const int releasedIndex = ( id == ICN::GOOD_ARMY_BUTTON ) ? 0 : 4;
-                _icnVsSprite[id][0] = GetICN( ICN::ADVBTNS, releasedIndex );
-                _icnVsSprite[id][1] = GetICN( ICN::ADVBTNS, releasedIndex + 1 );
+                Copy( _icnVsSprite[ICN::ADVBTNS][releasedIndex], _icnVsSprite[id][0] );
+                Copy( _icnVsSprite[ICN::ADVBTNS][releasedIndex + 1], _icnVsSprite[id][1] );
+
+                // Make all black pixels transparent.
                 AddTransparency( _icnVsSprite[id][0], 36 );
                 AddTransparency( _icnVsSprite[id][1], 36 );
                 AddTransparency( _icnVsSprite[id][1], 61 ); // remove the extra brown border
@@ -3083,20 +3086,22 @@ namespace fheroes2
             case ICN::EVIL_MARKET_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
+                LoadOriginalICN( ICN::ADVEBTNS );
                 const int releasedIndex = ( id == ICN::EVIL_ARMY_BUTTON ) ? 0 : 4;
-                _icnVsSprite[id][0] = GetICN( ICN::ADVEBTNS, releasedIndex );
+                Copy( _icnVsSprite[ICN::ADVEBTNS][releasedIndex], _icnVsSprite[id][0] );
+                Copy( _icnVsSprite[ICN::ADVEBTNS][releasedIndex + 1], _icnVsSprite[id][1] );
+
+                // Make all black pixels transparent.
                 AddTransparency( _icnVsSprite[id][0], 36 );
+                AddTransparency( _icnVsSprite[id][1], 36 );
 
-                Sprite pressed = GetICN( ICN::ADVEBTNS, releasedIndex + 1 );
-                AddTransparency( pressed, 36 );
-                AddTransparency( pressed, 61 ); // remove the extra brown border
+                // Add the bottom-left dark border.
+                Fill( _icnVsSprite[id][1], 1, 4, 1, 30, 36 );
+                Fill( _icnVsSprite[id][1], 1, 34, 31, 1, 36 );
 
-                _icnVsSprite[id][1] = Sprite( pressed.width(), pressed.height(), pressed.x(), pressed.y() );
-                _icnVsSprite[id][1].reset();
-
-                // put back pixels that actually should be black
-                Fill( _icnVsSprite[id][1], 1, 4, 31, 31, 36 );
-                Blit( pressed, _icnVsSprite[id][1] );
+                // Restore back black pixels in the middle of the image.
+                Copy( _icnVsSprite[ICN::ADVEBTNS][releasedIndex], 9, 6, _icnVsSprite[id][0], 9, 6, 20, 22 );
+                Copy( _icnVsSprite[ICN::ADVEBTNS][releasedIndex + 1], 8, 7, _icnVsSprite[id][1], 8, 7, 20, 22 );
 
                 return true;
             }
