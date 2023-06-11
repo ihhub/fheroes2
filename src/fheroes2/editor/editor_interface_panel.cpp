@@ -21,6 +21,7 @@
 #if defined( WITH_DEBUG )
 
 #include <array>
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 
