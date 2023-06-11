@@ -36,10 +36,12 @@ namespace
 
 namespace Interface
 {
+    class Editor;
+
     class EditorPanel
     {
     public:
-        explicit EditorPanel( Editor & );
+        explicit EditorPanel( Editor & interface_ );
 
         ~EditorPanel() = default;
 
@@ -60,7 +62,7 @@ namespace Interface
 
         // Do not call this method directly, use Interface::Basic::Redraw() instead
         // to avoid issues in the "no interface" mode
-        void _redraw();
+        void _redraw() const;
 
         Editor & _interface;
 
@@ -99,8 +101,8 @@ namespace Interface
         void Reset();
 
         fheroes2::GameMode startEdit();
-        fheroes2::GameMode eventLoadMap() const;
-        fheroes2::GameMode eventNewMap() const;
+        static fheroes2::GameMode eventLoadMap();
+        static fheroes2::GameMode eventNewMap();
         fheroes2::GameMode eventFileDialog() const;
         void EventViewWorld();
 

@@ -321,7 +321,7 @@ namespace Interface
         return res;
     }
 
-    fheroes2::GameMode Editor::eventLoadMap() const
+    fheroes2::GameMode Editor::eventLoadMap()
     {
         return Dialog::YES
                        == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to load a new map? (Any unsaved changes to the current map will be lost.)" ),
@@ -330,7 +330,7 @@ namespace Interface
                    : fheroes2::GameMode::CANCEL;
     }
 
-    fheroes2::GameMode Editor::eventNewMap() const
+    fheroes2::GameMode Editor::eventNewMap()
     {
         return Dialog::YES
                        == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to create a new map? (Any unsaved changes to the current map will be lost.)" ),

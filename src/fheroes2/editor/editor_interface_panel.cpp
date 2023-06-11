@@ -124,9 +124,9 @@ namespace Interface
         _interface.SetRedraw( REDRAW_BUTTONS );
     }
 
-    void EditorPanel::_redraw()
+    void EditorPanel::_redraw() const
     {
-        for ( fheroes2::Button & button : _instrumentButtons ) {
+        for ( const fheroes2::Button & button : _instrumentButtons ) {
             button.draw();
         }
 
@@ -175,7 +175,7 @@ namespace Interface
             fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. This function is not available yet.", Dialog::OK );
         }
         else if ( le.MouseClickLeft( _rectNew ) ) {
-            res = _interface.eventNewMap();
+            res = Editor::eventNewMap();
         }
         else if ( le.MouseClickLeft( _rectSpecs ) ) {
             res = _interface.EventScenarioInformation();
