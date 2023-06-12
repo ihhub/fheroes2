@@ -3505,45 +3505,42 @@ msgid "Best Monster:"
 msgstr "Най-добро чудовище:"
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr ""
+msgstr "Създай карта с ширина %{size} квадрата и височина %{size} квадрата."
 
-#, fuzzy
 msgid "Cancel back to the New Map menu."
-msgstr "Отказ обратно към главното меню."
+msgstr "Отказ обратно към Меню за нова карта."
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr ""
+"Създай нова карта или от начало, или като използваш генератора на произволни "
+"карти."
 
-#, fuzzy
 msgid "New Map"
-msgstr "Нова Зора"
+msgstr "Нова Карта"
 
-#, fuzzy
 msgid "Load Map"
-msgstr "Зареди Игра"
+msgstr "Зареди Карта"
 
 msgid "Load an existing map."
-msgstr ""
+msgstr "Зареди съществуваща карта."
 
 msgid "Cancel back to the main menu."
 msgstr "Отказ обратно към главното меню."
 
 msgid "From Scratch"
-msgstr ""
+msgstr "От начало"
 
 msgid "Start from scratch with a blank map."
-msgstr ""
+msgstr "Започни от начало с празна карта."
 
 msgid "Create a randomly generated map."
-msgstr ""
+msgstr "Създай произволно генерирана карта."
 
-#, fuzzy
 msgid "Random"
 msgstr "Случаен"
 
-#, fuzzy
 msgid "Cancel back to the Map Editor main menu."
-msgstr "Отказ обратно към главното меню."
+msgstr "Отказ обратно към главното меню на Създателя на карти."
 
 msgid "No maps available!"
 msgstr "Няма налични карти!"
@@ -3912,25 +3909,20 @@ msgstr "избери оригиналната кампания"
 msgid "hotkey|choose the expansion campaign"
 msgstr "избери кампанията за разширяване"
 
-#, fuzzy
 msgid "hotkey|map editor main menu"
-msgstr "име на кампания"
+msgstr "създател на карти основно меню"
 
-#, fuzzy
 msgid "hotkey|new map menu"
-msgstr "нова игра"
+msgstr "ново меню на карта"
 
-#, fuzzy
 msgid "hotkey|load map menu"
-msgstr "зареди игра"
+msgstr "зареди меню за карта"
 
-#, fuzzy
 msgid "hotkey|new map from scratch"
-msgstr "отстъпление от битка"
+msgstr "нова карта от начало"
 
-#, fuzzy
 msgid "hotkey|new random map"
-msgstr "нова игра"
+msgstr "нова случайна игра"
 
 msgid "hotkey|roland campaign"
 msgstr "кампания на роланд"
@@ -4297,7 +4289,7 @@ msgstr ""
 "Лоялността\"."
 
 msgid "Loading video. Please wait..."
-msgstr ""
+msgstr "Видеото се зарежда. Моля изчакай..."
 
 msgid "Host"
 msgstr "Домакин"
@@ -6543,9 +6535,8 @@ msgstr "Заклинанието не беше намерено."
 msgid "Only heroes can cast this spell."
 msgstr "Само герои могат да правят това заклинание."
 
-#, fuzzy
 msgid "This hero is not able to cast adventure spells."
-msgstr "направи приключенско заклинание."
+msgstr "Този герой не може да прави приключенски магии."
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
