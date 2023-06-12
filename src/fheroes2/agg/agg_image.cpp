@@ -1025,7 +1025,7 @@ namespace fheroes2
                     out = GetICN( ICN::OVERVIEW, 2 + i );
 
                     // clean the button.
-                    Fill( out, 6, 7 + i, 89 - i, 29, getButtonFillingColor( i == 0 ) );
+                    Fill( out, 6, 6 + i, 89 - i, 30, getButtonFillingColor( i == 0 ) );
                 }
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWNS/\nCASTLES" ), { 6, 5 }, { 6, 6 }, { 90, 34 },
