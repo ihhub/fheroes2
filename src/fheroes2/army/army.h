@@ -198,7 +198,7 @@ public:
     uint32_t getTotalCount() const;
 
     double GetStrength() const override;
-    bool isStrongerThan( const Army & target, double safetyRatio = 1.0 ) const;
+    bool isStrongerThan( const Army & target, const double safetyRatio = 1.0 ) const;
     bool isMeleeDominantArmy() const;
 
     void SetColor( int cl )
