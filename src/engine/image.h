@@ -67,7 +67,7 @@ namespace fheroes2
             // Why do you want to get transform layer from the single-layer image?
             assert( !_singleLayer );
 
-            return _data.get() + width() * height();
+            return _transformData.get();
         }
 
         const uint8_t * transform() const
@@ -75,12 +75,12 @@ namespace fheroes2
             // Why do you want to get transform layer from the single-layer image?
             assert( !_singleLayer );
 
-            return _data.get() + width() * height();
+            return _transformData.get();
         }
 
         bool empty() const
         {
-            return !_data;
+            return !_imageData;
         }
 
         // Set all data in the image layer to 0 and make double-layer images fully transparent (transform layer is set to 1).
@@ -100,7 +100,13 @@ namespace fheroes2
 
         // BE CAREFUL! This method disables transform layer usage. Use only for display / video related images which are for end rendering purposes!
         // The name of this method starts from _ on purpose to do not mix with other public methods.
-        void _disableTransformLayer();
+        void _disableTransformLayer()
+        {
+            // Free the transform layer memory preserving the image layer data.
+            _transformData.reset();
+
+            _singleLayer = true;
+        }
 
     private:
         void copy( const Image & image );
@@ -108,8 +114,8 @@ namespace fheroes2
         int32_t _width{ 0 };
         int32_t _height{ 0 };
 
-        // 'data' contains 2 image layers: the image itself and a transform layer (if it is not disabled).
-        std::unique_ptr<uint8_t[]> _data;
+        std::unique_ptr<uint8_t[]> _imageData;
+        std::unique_ptr<uint8_t[]> _transformData;
 
         // Image may be set as single-layer only for images which are not used for any other operations except displaying on screen.
         bool _singleLayer{ false };

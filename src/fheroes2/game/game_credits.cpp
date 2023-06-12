@@ -177,7 +177,6 @@ namespace
     fheroes2::Sprite generateResurrectionCreditsFirstPage()
     {
         fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGLAVA, 0 );
-        output._disableTransformLayer();
 
         const int32_t columnStep = 210;
         const int32_t textInitialOffsetY = 40;
@@ -273,7 +272,6 @@ namespace
     fheroes2::Sprite generateResurrectionCreditsSecondPage()
     {
         fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGLAVA, 0 );
-        output._disableTransformLayer();
 
         const int32_t textInitialOffsetX = 320;
         const int32_t textInitialOffsetY = 60;
@@ -344,7 +342,6 @@ namespace
     fheroes2::Sprite generateResurrectionCreditsThirdPage()
     {
         fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGSWMP, 0 );
-        output._disableTransformLayer();
 
         const int32_t textInitialOffsetX = 320;
         const int32_t textInitialOffsetY = 80;
@@ -409,7 +406,6 @@ namespace
     {
         fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGWATR, 0 );
         fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
-        output._disableTransformLayer();
 
         const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
 
@@ -472,7 +468,6 @@ namespace
     {
         fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGWATR, 0 );
         fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
-        output._disableTransformLayer();
 
         const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
 
@@ -532,7 +527,6 @@ namespace
     {
         fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGGRAV, 0 );
         fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
-        output._disableTransformLayer();
 
         const fheroes2::FontType titleFontType = fheroes2::FontType::normalYellow();
         const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
@@ -583,7 +577,6 @@ namespace
     {
         fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGGRAV, 0 );
         fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
-        output._disableTransformLayer();
 
         const fheroes2::FontType titleFontType = fheroes2::FontType::normalYellow();
         const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
@@ -643,7 +636,6 @@ namespace
     {
         fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGGRAV, 0 );
         fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
-        output._disableTransformLayer();
 
         const fheroes2::FontType titleFontType = fheroes2::FontType::normalYellow();
         const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();

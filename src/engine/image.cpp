@@ -448,7 +448,8 @@ namespace fheroes2
     }
 
     Image::Image( Image && image_ ) noexcept
-        : _data( std::move( image_._data ) )
+        : _imageData( std::move( image_._imageData ) )
+        , _transformData( std::move( image_._transformData ) )
     {
         std::swap( _singleLayer, image_._singleLayer );
         std::swap( _width, image_._width );
@@ -469,7 +470,8 @@ namespace fheroes2
         if ( this != &image_ ) {
             std::swap( _width, image_._width );
             std::swap( _height, image_._height );
-            std::swap( _data, image_._data );
+            std::swap( _imageData, image_._imageData );
+            std::swap( _transformData, image_._transformData );
             std::swap( _singleLayer, image_._singleLayer );
         }
 
@@ -478,7 +480,8 @@ namespace fheroes2
 
     void Image::clear()
     {
-        _data.reset();
+        _imageData.reset();
+        _transformData.reset();
 
         _width = 0;
         _height = 0;
@@ -510,12 +513,12 @@ namespace fheroes2
         }
 
         size_t size = static_cast<size_t>( width_ ) * height_;
+        _imageData.reset( new uint8_t[size] );
+
         if ( !_singleLayer ) {
             // For double-layer images we also allocate memory for the second (transform) layer.
-            size *= 2;
+            _transformData.reset( new uint8_t[size] );
         }
-
-        _data.reset( new uint8_t[size] );
 
         _width = width_;
         _height = height_;
@@ -523,12 +526,12 @@ namespace fheroes2
 
     uint8_t * Image::image()
     {
-        return _data.get();
+        return _imageData.get();
     }
 
     const uint8_t * Image::image() const
     {
-        return _data.get();
+        return _imageData.get();
     }
 
     void Image::reset()
@@ -546,45 +549,45 @@ namespace fheroes2
 
     void Image::copy( const Image & image )
     {
-        if ( !image._data ) {
+        if ( !image._imageData ) {
             clear();
 
             return;
         }
 
         size_t size = static_cast<size_t>( image._width ) * image._height;
-        if ( !image._singleLayer ) {
-            // For double-layer images we also allocate memory for the second (transform) layer.
-            size *= 2;
-        }
 
-        if ( image._width != _width || image._height != _height || _singleLayer != image._singleLayer ) {
-            _data.reset( new uint8_t[size] );
+        if ( image._width != _width || image._height != _height ) {
+            _imageData.reset( new uint8_t[size] );
 
             _width = image._width;
             _height = image._height;
+
+            if ( !image._singleLayer ) {
+                _transformData.reset( new uint8_t[size] );
+            }
+            else if ( !_singleLayer ) {
+                _transformData.reset();
+            }
+
             _singleLayer = image._singleLayer;
         }
+        else if ( _singleLayer != image._singleLayer ) {
+            _singleLayer = image._singleLayer;
 
-        memcpy( _data.get(), image._data.get(), size );
-    }
-
-    void Image::_disableTransformLayer()
-    {
-        if ( _singleLayer ) {
-            return;
+            if ( _singleLayer ) {
+                _transformData.reset( new uint8_t[size] );
+            }
+            else {
+                _transformData.reset();
+            }
         }
 
-        const size_t size = static_cast<size_t>( _width ) * _height;
-        if ( size > 0 ) {
-            // Free the transform layer memory preserving the image layer data.
-            std::unique_ptr<uint8_t[]> newData;
-            newData.reset( new uint8_t[size] );
-            memcpy( newData.get(), _data.get(), size );
-            std::swap( _data, newData );
-        }
+        memcpy( _imageData.get(), image._imageData.get(), size );
 
-        _singleLayer = true;
+        if ( !_singleLayer ) {
+            memcpy( _transformData.get(), image._transformData.get(), size );
+        }
     }
 
     Sprite::Sprite( const int32_t width_, const int32_t height_, const int32_t x_ /* = 0 */, const int32_t y_ /* = 0 */ )
