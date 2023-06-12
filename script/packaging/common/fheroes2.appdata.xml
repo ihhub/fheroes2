@@ -76,9 +76,9 @@
           <li>update Russian translation</li>
           <li>speed up battlefield rendering</li>
           <li>fix incorrect spell efficiency display for resurrection spells</li>
-          <li>set music type to MIDI is no MUSIC directory exist</li>
+          <li>set music type to MIDI if no MUSIC directory exist</li>
           <li>fix cases with dropping audio volume when MUSIC directory is not present</li>
-          <li>fix crashes for Android devices due to usage a buggy third-party package</li>
+          <li>fix crashes for Android devices due to using a buggy third-party package</li>
           <li>fix cases when AI ignores some objects during path evaluation</li>
           <li>use 22050 sound sample rate for PS Vita to fix high CPU load</li>
           <li>add diacritic signs to CP-1250 button font</li>
