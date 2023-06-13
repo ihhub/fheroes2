@@ -37,10 +37,10 @@
     <control>touch</control>
   </recommends>
   <releases>
-    <release date="2023-06-13" version="v1.0.5">
+    <release date="2023-06-14" version="v1.0.5">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.5</url>
       <description>
-        <p>Changes in v1.0.5 (13 June 2023):</p>
+        <p>Changes in v1.0.5 (14 June 2023):</p>
         <ul>
           <li>improve AI castle defensive strategy on Adventure Map</li>
           <li>fix rating in campaign congratulations text in win video</li>

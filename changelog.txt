@@ -1,4 +1,4 @@
-version 1.0.5 (13 June 2023)
+version 1.0.5 (14 June 2023)
 - improve AI castle defensive strategy on Adventure Map
 - fix rating in campaign congratulations text in win video
 - update Danish translation
