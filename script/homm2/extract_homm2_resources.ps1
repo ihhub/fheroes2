@@ -203,21 +203,26 @@ try {
     }
 
     # Special case - CD image from GOG
-    if ((Test-Path -Path "$homm2Path\MUSIC" -PathType Container) -And
-        (Test-Path -Path "$homm2Path\homm2.ins" -PathType Leaf) -And
-        (Test-Path -Path "$homm2Path\homm2.gog" -PathType Leaf) -And
-        (Test-Path -Path "$homm2Path\DOSBOX\DOSBox.exe" -PathType Leaf)) {
-        if (-Not (Test-Path -Path "$destPath\anim" -PathType Container)) {
-            [void](New-Item -Path "$destPath\anim" -ItemType "directory")
+    if (Test-Path -Path "$homm2Path\homm2.gog" -PathType Leaf) {
+        foreach ($dosboxExe in @("DOSBox.exe", "DOSBOX\DOSBox.exe")) {
+            if (-Not (Test-Path -Path "$homm2Path\$dosboxExe" -PathType Leaf)) {
+                continue
+            }
+
+            if (-Not (Test-Path -Path "$destPath\anim" -PathType Container)) {
+                [void](New-Item -Path "$destPath\anim" -ItemType "directory")
+            }
+
+            Write-Host -ForegroundColor Green "Running DOSBOX to extract animation resources, please wait..."
+
+            Start-Process -FilePath "$homm2Path\$dosboxExe" -ArgumentList @("-c", "`"imgmount D '$homm2Path\homm2.gog' -t iso -fs iso`"", `
+                                                                            "-c", "`"mount E '$destPath'`"", `
+                                                                            "-c", "`"copy D:\HEROES2\ANIM\*.* E:\ANIM`"", `
+                                                                            "-c", "exit") `
+                          -Wait
+
+            break
         }
-
-        Write-Host -ForegroundColor Green "Running DOSBOX to extract animation resources, please wait..."
-
-        Start-Process -FilePath "$homm2Path\DOSBOX\DOSBox.exe" -ArgumentList @("-c", "`"imgmount D '$homm2Path\homm2.ins' -t iso -fs iso`"", `
-                                                                               "-c", "`"mount E '$destPath'`"", `
-                                                                               "-c", "`"copy D:\HEROES2\ANIM\*.* E:\ANIM`"", `
-                                                                               "-c", "exit") `
-                      -Wait
     }
 } catch {
     Write-Host -ForegroundColor Red (-Join("FATAL ERROR: ", ($_ | Out-String)))

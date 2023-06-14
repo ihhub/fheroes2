@@ -246,54 +246,66 @@ namespace AI
 
                 const double minStrength = defenseTask->second.threatLevel * AI::ARMY_ADVANTAGE_DESPERATE;
 
-                do {
+                while ( castleStrength < minStrength ) {
                     Troop * weakestTroop = heroArmy.GetWeakestTroop();
+                    assert( weakestTroop != nullptr );
+
+                    const uint32_t initialCount = weakestTroop->GetCount();
                     const double weakestTroopStrength = weakestTroop->GetStrength();
-                    uint32_t count = std::max( weakestTroop->GetCount() / 2, 1U );
+
+                    uint32_t count = std::max( initialCount / 2, 1U );
                     if ( weakestTroopStrength < heroStrength * 0.1 ) {
-                        count = weakestTroop->GetCount();
+                        count = initialCount;
                     }
 
                     if ( heroArmy.GetOccupiedSlotCount() == 1 ) {
                         // This is the last slot. Make sure to still leave some army for the hero.
-                        if ( weakestTroop->GetCount() == 1 ) {
+                        if ( initialCount == 1 ) {
                             break;
                         }
 
-                        if ( count == weakestTroop->GetCount() ) {
+                        if ( count == initialCount ) {
                             --count;
                         }
                     }
 
-                    const double singleMonsterStrength = weakestTroopStrength / weakestTroop->GetCount();
+                    const double singleMonsterStrength = weakestTroopStrength / initialCount;
+                    const double strengthDifference = ( minStrength - castleStrength );
 
-                    if ( singleMonsterStrength * ( count - 1 ) > minStrength - castleStrength ) {
+                    assert( count > 0 );
+
+                    if ( singleMonsterStrength * ( count - 1 ) > strengthDifference ) {
                         // We are giving too much army to the castle. Adjust it.
-                        count = static_cast<uint32_t>( ( minStrength - castleStrength + singleMonsterStrength - 1 ) / singleMonsterStrength );
+                        count = static_cast<uint32_t>( strengthDifference / singleMonsterStrength );
+                        if ( count * singleMonsterStrength < strengthDifference ) {
+                            ++count;
+                        }
                     }
+
+                    assert( count <= initialCount && count > 0 );
 
                     if ( !garrison.JoinTroop( weakestTroop->GetID(), count, false ) ) {
                         // TODO: there could be more monsters in the hero's army but for now we ignore them.
                         break;
                     }
 
-                    if ( count == weakestTroop->GetCount() ) {
+                    if ( count == initialCount ) {
                         weakestTroop->Reset();
                     }
                     else {
-                        weakestTroop->SetCount( weakestTroop->GetCount() - count );
+                        weakestTroop->SetCount( initialCount - count );
                     }
 
                     heroStrength = heroArmy.GetStrength();
                     castleStrength = garrison.GetStrength();
-                } while ( castleStrength < minStrength );
-
-                if ( castleStrength >= minStrength ) {
-                    _priorityTargets.erase( defenseTask );
                 }
-                else {
+
+                if ( castleStrength < minStrength ) {
                     // Failed to secure the castle. Rearrange the army back.
                     heroArmy.JoinStrongestFromArmy( garrison );
+                }
+                else {
+                    _priorityTargets.erase( defenseTask );
                 }
             }
         }
