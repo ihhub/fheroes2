@@ -22,5 +22,7 @@
 
 namespace Game
 {
-    void ShowCredits();
+    // Setting keepMainMenuBorders to 'true' will keep screen borders without fade
+    // and restore the main menu image during fade after the credits.
+    void ShowCredits( const bool keepMainMenuBorders );
 }
