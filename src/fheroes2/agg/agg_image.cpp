@@ -101,7 +101,8 @@ namespace
                                                 ICN::BUTTON_SMALL_NO_EVIL,
                                                 ICN::BUTTON_SMALL_EXIT_GOOD,
                                                 ICN::BUTTON_SMALL_EXIT_EVIL,
-                                                ICN::BUTTON_SMALLER_EXIT,
+                                                ICN::BUTTON_SMALLER_EXIT_GOOD,
+                                                ICN::BUTTON_SMALLER_EXIT_EVIL,
                                                 ICN::BUTTON_SMALL_DISMISS_GOOD,
                                                 ICN::BUTTON_SMALL_DISMISS_EVIL,
                                                 ICN::BUTTON_SMALL_UPGRADE_GOOD,
@@ -896,24 +897,20 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BUTTON_SMALLER_EXIT: {
+            case ICN::BUTTON_SMALLER_EXIT_GOOD:
+            case ICN::BUTTON_SMALLER_EXIT_EVIL: {
                 _icnVsSprite[id].resize( 2 );
 
+                const bool isEvilInterface = ( id == ICN::BUTTON_SMALLER_EXIT_EVIL );
+
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( ICN::TREASURY, 1 );
-                    _icnVsSprite[id][1] = GetICN( ICN::TREASURY, 2 );
+                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA, 4 );
+                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA, 5 );
                     break;
                 }
 
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TREASURY, 1 + i );
-
-                    // clean the button.
-                    Fill( out, 6 - i, 4 + i, 70, 16, getButtonFillingColor( i == 0 ) );
-                }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), { 6, 5 }, { 5, 6 }, { 70, 16 }, fheroes2::FontColor::WHITE );
+                int32_t textWidth = 70;
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "EXIT" ), isEvilInterface );
 
                 break;
             }
@@ -2211,7 +2208,8 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_NO_EVIL:
             case ICN::BUTTON_SMALL_EXIT_GOOD:
             case ICN::BUTTON_SMALL_EXIT_EVIL:
-            case ICN::BUTTON_SMALLER_EXIT:
+            case ICN::BUTTON_SMALLER_EXIT_GOOD:
+            case ICN::BUTTON_SMALLER_EXIT_EVIL:
             case ICN::BUTTON_SMALL_DISMISS_GOOD:
             case ICN::BUTTON_SMALL_DISMISS_EVIL:
             case ICN::BUTTON_SMALL_UPGRADE_GOOD:
