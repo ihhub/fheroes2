@@ -368,8 +368,7 @@ namespace fheroes2
         for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
             assert( Maps::isValidAbsIndex( boatSource ) );
 
-            Maps::Tiles & tileSource = world.GetTiles( boatSource );
-            const int boatColor = tileSource.getBoatOwnerColor();
+            const int boatColor = world.GetTiles( boatSource ).getBoatOwnerColor();
             if ( boatColor != Color::NONE && boatColor != heroColor ) {
                 continue;
             }
