@@ -287,11 +287,6 @@ void Text::Blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst ) const
     return message->blit( ax, ay, maxw, dst );
 }
 
-int32_t Text::getCharacterWidth( const uint8_t character, const int fontType )
-{
-    return TextAscii::charWidth( character, fontType );
-}
-
 int32_t Text::getFitWidth( const std::string & text, const int fontId, const int32_t width_ )
 {
     if ( text.empty() || width_ < 1 )
