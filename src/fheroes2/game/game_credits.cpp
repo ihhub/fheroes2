@@ -189,6 +189,7 @@ namespace
         int32_t offsetX = 0;
 
         offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Project Coordination and Core Development" ), "Ihar Hubchyk" );
+        offsetY += 10;
 
         const fheroes2::Sprite & blackDragon = fheroes2::AGG::GetICN( ICN::DRAGBLAK, 5 );
         fheroes2::Blit( blackDragon, output, ( columnStep - blackDragon.width() ) / 2, offsetY );
@@ -197,6 +198,7 @@ namespace
         const int32_t secondAuthorLayerY = offsetY;
 
         offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Development" ), "Sergei Ivanov" );
+        offsetY += 10;
 
         const fheroes2::Sprite & minotaur = fheroes2::AGG::GetICN( ICN::MINOTAUR, 14 );
         fheroes2::Blit( minotaur, output, ( columnStep - minotaur.width() ) / 2, offsetY );
@@ -222,6 +224,7 @@ namespace
         offsetX += columnStep;
 
         offsetY += renderText( output, offsetX, offsetY, textWidth, _( "QA and Support" ), "Igor Tsivilko" );
+        offsetY += 10;
 
         const fheroes2::Sprite & cyclop = fheroes2::AGG::GetICN( ICN::CYCLOPS, 38 );
         fheroes2::Blit( cyclop, output, offsetX + ( columnStep - cyclop.width() ) / 2, offsetY );
@@ -229,6 +232,7 @@ namespace
         offsetY = secondAuthorLayerY;
 
         offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Development" ), "Ivan Shibanov" );
+        offsetY += 10;
 
         const fheroes2::Sprite & crusader = fheroes2::AGG::GetICN( ICN::PALADIN2, 23 );
         fheroes2::Blit( crusader, output, offsetX + ( columnStep - crusader.width() ) / 2, offsetY );
@@ -237,6 +241,7 @@ namespace
         offsetX += columnStep;
 
         offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Development" ), "Oleg Derevenetz" );
+        offsetY += 10;
 
         const fheroes2::Sprite & mage = fheroes2::AGG::GetICN( ICN::MAGE1, 24 );
         fheroes2::Blit( mage, output, offsetX + ( columnStep - mage.width() ) / 2, offsetY );
@@ -244,6 +249,7 @@ namespace
         offsetY = secondAuthorLayerY;
 
         offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Dev and Support" ), "Zense" );
+        offsetY += 10;
 
         const fheroes2::Sprite & phoenix = fheroes2::AGG::GetICN( ICN::PHOENIX, 4 );
         fheroes2::Blit( phoenix, output, offsetX + ( columnStep - phoenix.width() ) / 2, offsetY - 10 );
