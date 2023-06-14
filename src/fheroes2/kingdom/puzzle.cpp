@@ -163,7 +163,8 @@ namespace
 
         fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarArea.x, radarArea.y );
 
-        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
+        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
+                                     ( isEvilInterface ? ICN::BUTTON_SMALLER_EXIT_GOOD : ICN::BUTTON_SMALLER_EXIT_EVIL ), 0, 1 );
         buttonExit.draw();
 
         drawPuzzle( pzl, sf, BORDERWIDTH, BORDERWIDTH );
@@ -222,7 +223,8 @@ namespace
         const fheroes2::Rect & radarRect = radar.GetRect();
         const fheroes2::Rect & radarArea = radar.GetArea();
 
-        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
+        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
+                                     ( isEvilInterface ? ICN::BUTTON_SMALLER_EXIT_EVIL : ICN::BUTTON_SMALLER_EXIT_GOOD ), 0, 1 );
 
         std::function<fheroes2::Rect()> drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
             if ( isHideInterface ) {
