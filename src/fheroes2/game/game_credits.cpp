@@ -25,6 +25,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -32,10 +33,10 @@
 #include "audio_manager.h"
 #include "cursor.h"
 #include "game_delays.h"
-#include "game_mainmenu_ui.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
+#include "math_base.h"
 #include "mus.h"
 #include "pal.h"
 #include "screen.h"
