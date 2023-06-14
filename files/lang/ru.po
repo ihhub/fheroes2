@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-03 06:46+0000\n"
+"POT-Creation-Date: 2023-06-14 20:35+0000\n"
 "PO-Revision-Date: 2023-05-06 15:07+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -6550,8 +6550,21 @@ msgstr ""
 msgid "This spell cannot be used on a boat."
 msgstr "Это заклинание не действует в море."
 
-msgid "This spell can be casted only nearby water."
+#, fuzzy
+msgid "This spell can be casted only nearby ocean."
 msgstr "Это заклинание действует только у воды."
+
+msgid ""
+"There is no boat available and no free ocean location near the hero to cast "
+"this spell."
+msgstr ""
+
+#, fuzzy
+msgid "There is no more boat available to cast this spell."
+msgstr "произнести заклинание приключения"
+
+msgid "There is no free ocean location near the hero to cast this spell."
+msgstr ""
 
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
@@ -6687,9 +6700,6 @@ msgstr "Портал города"
 
 msgid "Select town to port to."
 msgstr "Выберите, куда перенестись."
-
-msgid "%{spell} failed!!!"
-msgstr "Неудачный вызов %{spell}!"
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Все вражеские Герои опознаны."
@@ -10425,3 +10435,6 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{spell} failed!!!"
+#~ msgstr "Неудачный вызов %{spell}!"
