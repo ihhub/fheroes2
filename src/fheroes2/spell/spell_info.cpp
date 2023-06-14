@@ -27,6 +27,7 @@
 #include "artifact.h"
 #include "artifact_info.h"
 #include "castle.h"
+#include "color.h"
 #include "direction.h"
 #include "heroes.h"
 #include "heroes_base.h"
@@ -35,6 +36,7 @@
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "monster.h"
+#include "mp2.h"
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
@@ -348,14 +350,42 @@ namespace fheroes2
             return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
         } );
 
-        int32_t boatDestination = -1;
         for ( const int32_t tileId : possibleBoatPositions ) {
             const Maps::Tiles & tile = world.GetTiles( tileId );
             if ( tile.isWater() ) {
-                boatDestination = tileId;
-                break;
+                return tileId;
             }
         }
-        return boatDestination;
+
+        return -1;
+    }
+
+    int32_t getSummonableBoat( const Heroes & hero )
+    {
+        const int32_t center = hero.GetIndex();
+        const int heroColor = hero.GetColor();
+
+        for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
+            assert( Maps::isValidAbsIndex( boatSource ) );
+
+            Maps::Tiles & tileSource = world.GetTiles( boatSource );
+            const int boatColor = tileSource.getBoatOwnerColor();
+            if ( boatColor != Color::NONE && boatColor != heroColor ) {
+                continue;
+            }
+
+            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, center );
+            if ( distance > 1 ) {
+                return boatSource;
+            }
+        }
+
+        return -1;
+    }
+
+    bool isHeroNearWater( const Heroes & hero )
+    {
+        const MapsIndexes tilesAround = Maps::getAroundIndexes( hero.GetIndex() );
+        return std::any_of( tilesAround.begin(), tilesAround.end(), []( const int32_t tileId ) { return world.GetTiles( tileId ).isWater(); } );
     }
 }
