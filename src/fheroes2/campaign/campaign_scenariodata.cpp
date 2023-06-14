@@ -790,13 +790,10 @@ namespace Campaign
         return std::vector<Campaign::ScenarioBonusData>();
     }
 
-    StreamBase & operator<<( StreamBase & msg, const Campaign::ScenarioBonusData & data )
-    {
-        return msg << data._type << data._subType << data._amount << data._artifactSpellId;
-    }
-
     StreamBase & operator>>( StreamBase & msg, Campaign::ScenarioBonusData & data )
     {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove this operator." );
+
         msg >> data._type >> data._subType;
 
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the logic below." );
