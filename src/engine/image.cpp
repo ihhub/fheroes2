@@ -365,10 +365,11 @@ namespace
                 int32_t minDistance = 3 * 255 * 255;
                 uint32_t bestPos = 0;
 
-                const uint8_t * correctorX = transformTable + 256 * 15;
+                // 6400 = 256 * 15. This is the offset of "No cycle" transform table.
+                const uint8_t * correctorX = transformTable + 6400;
 
                 for ( uint32_t i = 0; i < 256; ++i, ++correctorX ) {
-                    const uint8_t * palette = gamePalette + *correctorX * 3;
+                    const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *correctorX ) * 3;
 
                     const int32_t offsetRed = static_cast<int32_t>( *palette ) - static_cast<int32_t>( r );
                     ++palette;
@@ -400,9 +401,9 @@ namespace
         const int32_t widthIn = in.width();
         const int32_t widthOut = out.width();
 
-        const uint8_t * imageInY = in.image() + inY * widthIn + inX;
-        uint8_t * imageOutY = out.image() + outY * widthOut + outX;
-        const uint8_t * imageInYEnd = imageInY + height * widthIn;
+        const uint8_t * imageInY = in.image() + static_cast<ptrdiff_t>( inY ) * widthIn + inX;
+        uint8_t * imageOutY = out.image() + static_cast<ptrdiff_t>( outY ) * widthOut + outX;
+        const uint8_t * imageInYEnd = imageInY + static_cast<ptrdiff_t>( height ) * widthIn;
 
         if ( in.singleLayer() ) {
             // All pixels in a single-layer image do not have any transform values so there is no need to check for them.
@@ -417,7 +418,7 @@ namespace
             }
         }
         else {
-            const uint8_t * transformInY = in.transform() + inY * widthIn + inX;
+            const uint8_t * transformInY = in.transform() + static_cast<ptrdiff_t>( inY ) * widthIn + inX;
 
             for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
                 const uint8_t * imageInX = imageInY;
@@ -515,7 +516,7 @@ namespace fheroes2
             return;
         }
 
-        size_t size = static_cast<size_t>( width_ ) * height_;
+        const size_t size = static_cast<size_t>( width_ ) * height_;
 
         _data.reset( new uint8_t[size * 2] );
 
@@ -902,7 +903,7 @@ namespace fheroes2
 
             const int32_t offsetOutY = outY * widthOut + outX;
             uint8_t * imageOutY = out.image() + offsetOutY;
-            const uint8_t * imageOutYEnd = imageOutY + height * widthOut;
+            const uint8_t * imageOutYEnd = imageOutY + static_cast<ptrdiff_t>( height ) * widthOut;
 
             if ( in.singleLayer() ) {
                 for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, imageOutY += widthOut ) {
@@ -911,8 +912,8 @@ namespace fheroes2
                     const uint8_t * imageOutXEnd = imageOutX + width;
 
                     for ( ; imageOutX != imageOutXEnd; --imageInX, ++imageOutX ) {
-                        const uint8_t * inPAL = gamePalette + ( *imageInX ) * 3;
-                        const uint8_t * outPAL = gamePalette + ( *imageOutX ) * 3;
+                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( *imageInX ) * 3;
+                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
 
                         const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                         const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
@@ -937,11 +938,11 @@ namespace fheroes2
 
                         uint8_t inValue = *imageInX;
                         if ( *transformInX > 1 ) {
-                            inValue = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            inValue = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * 256 + *imageOutX );
                         }
 
-                        const uint8_t * inPAL = gamePalette + inValue * 3;
-                        const uint8_t * outPAL = gamePalette + ( *imageOutX ) * 3;
+                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( inValue ) * 3;
+                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
 
                         const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                         const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
@@ -955,8 +956,8 @@ namespace fheroes2
             const int32_t offsetInY = inY * widthIn + inX;
             const uint8_t * imageInY = in.image() + offsetInY;
 
-            uint8_t * imageOutY = out.image() + outY * widthOut + outX;
-            const uint8_t * imageInYEnd = imageInY + height * widthIn;
+            uint8_t * imageOutY = out.image() + static_cast<ptrdiff_t>( outY ) * widthOut + outX;
+            const uint8_t * imageInYEnd = imageInY + static_cast<ptrdiff_t>( height ) * widthIn;
 
             if ( in.singleLayer() ) {
                 for ( ; imageInY != imageInYEnd; imageInY += widthIn, imageOutY += widthOut ) {
@@ -965,8 +966,8 @@ namespace fheroes2
                     const uint8_t * imageInXEnd = imageInX + width;
 
                     for ( ; imageInX != imageInXEnd; ++imageInX, ++imageOutX ) {
-                        const uint8_t * inPAL = gamePalette + ( *imageInX ) * 3;
-                        const uint8_t * outPAL = gamePalette + ( *imageOutX ) * 3;
+                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( *imageInX ) * 3;
+                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
 
                         const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                         const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
@@ -991,11 +992,11 @@ namespace fheroes2
 
                         uint8_t inValue = *imageInX;
                         if ( *transformInX > 1 ) {
-                            inValue = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            inValue = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * 256 + *imageOutX );
                         }
 
-                        const uint8_t * inPAL = gamePalette + inValue * 3;
-                        const uint8_t * outPAL = gamePalette + ( *imageOutX ) * 3;
+                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t> (inValue) * 3;
+                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
 
                         const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                         const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
