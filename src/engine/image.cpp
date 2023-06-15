@@ -995,7 +995,7 @@ namespace fheroes2
                             inValue = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * 256 + *imageOutX );
                         }
 
-                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t> (inValue) * 3;
+                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( inValue ) * 3;
                         const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
 
                         const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
