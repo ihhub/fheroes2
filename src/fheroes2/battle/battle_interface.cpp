@@ -3952,6 +3952,9 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         }
     }
 
+    // We allow to play maximum 2 simultaneous walk sounds. '-1' means that the channel is not set.
+    std::array<int, 2> walkSounds{ -1, -1 };
+
     while ( dst != pathEnd ) {
         // Check if a wide unit changes its horizontal direction.
         if ( isWide && unit.GetTailIndex() == *dst ) {
@@ -3994,7 +3997,30 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
         // Render the unit movement with the movement sound.
         // TODO: adjust sounds calls and synchronize them with frames. Take into account that some sounds (like for Cavalry) consists of a sequence of steps.
-        AudioManager::PlaySound( unit.M82Move() );
+
+        // The first audio channel plays sound until it ends, sound in the second channel is interrupted at every step.
+        if ( ( walkSounds[0] != -1 ) && Mixer ::isPlaying( walkSounds[0] ) ) {
+            // The walk sound is playing in the first channel.
+            if ( walkSounds[1] != -1 && Mixer ::isPlaying( walkSounds[1] ) ) {
+                // The walk sound is also playing in the second channel. Stop it.
+                Mixer::Stop( walkSounds[1] );
+            }
+
+            // Start a new walk sound in the second channel.
+            walkSounds[1] = AudioManager::PlaySound( unit.M82Move() );
+        }
+        else {
+            if ( ( walkSounds[1] != -1 ) || Mixer::isPlaying( walkSounds[1] ) ) {
+                // The walk sound playing is playing only in the second channel. Make it the first channel and start walk sound in the second one.
+                walkSounds[0] = walkSounds[1];
+                walkSounds[1] = AudioManager::PlaySound( unit.M82Move() );
+            }
+            else {
+                // There is no walk sound playing in both channels. Start walk sound in the first channel.
+                walkSounds[0] = AudioManager::PlaySound( unit.M82Move() );
+            }
+        }
+
         AnimateUnitWithDelay( unit );
         unit.SetPosition( *dst );
 
@@ -4031,6 +4057,11 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
                 unit.SwitchAnimation( Monster_Info::MOVING );
             }
         }
+    }
+
+    if ( Mixer::isPlaying( walkSounds[0] ) && Mixer::isPlaying( walkSounds[1] ) ) {
+        // Both sound channels are playing walk sound. Stop sound in the second channel.
+        Mixer::Stop( walkSounds[1] );
     }
 
     // Slowed flying creature has to land.
