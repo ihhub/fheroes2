@@ -735,7 +735,7 @@ namespace AI
                 // So for the next day a hero will have a maximum amount of spell points as well as new troops.
                 for ( const Castle * castle : castles ) {
                     if ( castle->GetHero() == nullptr ) {
-                        const auto [dummy, inserted] = _priorityTargets.try_emplace( castle->GetIndex(), PriorityTask{ PriorityTaskType::REINFORCE, 0 } );
+                        const auto [dummy, inserted] = _priorityTargets.try_emplace( castle->GetIndex(), PriorityTaskType::REINFORCE, 0 );
                         if ( inserted ) {
                             moreTaskForHeroes = true;
                         }
