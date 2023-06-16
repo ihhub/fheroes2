@@ -3954,6 +3954,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     // We allow to play maximum 2 simultaneous walk sounds. '-1' means that the channel is not set.
     std::array<int, 2> walkSounds{ -1, -1 };
+    // Set sound fade out time: 325 ms for battle speed 1 - 100 ms for battle speed 10.
+    const int soundFateTimeMs = 1300 / ( Settings::Get().BattleSpeed() + 3 );
 
     while ( dst != pathEnd ) {
         // Check if a wide unit changes its horizontal direction.
@@ -4002,8 +4004,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         if ( ( walkSounds[0] != -1 ) && Mixer ::isPlaying( walkSounds[0] ) ) {
             // The walk sound is playing in the first channel.
             if ( walkSounds[1] != -1 && Mixer ::isPlaying( walkSounds[1] ) ) {
-                // The walk sound is also playing in the second channel. Stop it.
-                Mixer::Stop( walkSounds[1] );
+                // The walk sound is also playing in the second channel. Fade it out and stop.
+                Mixer::fadeOutChannel( walkSounds[1], soundFateTimeMs );
             }
 
             // Start a new walk sound in the second channel.
@@ -4060,8 +4062,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     }
 
     if ( Mixer::isPlaying( walkSounds[0] ) && Mixer::isPlaying( walkSounds[1] ) ) {
-        // Both sound channels are playing walk sound. Stop sound in the second channel.
-        Mixer::Stop( walkSounds[1] );
+        // Both sound channels are playing walk sound. Stop sound in the second channel with fade.
+        Mixer::fadeOutChannel( walkSounds[1], soundFateTimeMs );
     }
 
     // Slowed flying creature has to land.
