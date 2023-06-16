@@ -922,12 +922,7 @@ void Mixer::fadeOutChannel( const int channelId, const int timeMs )
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
     if ( isInitialized ) {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
         Mix_FadeOutChannel( channelId, timeMs );
-#else
-        // SDL1 does not have sound fade functions so we stop the sound in this channel.
-        Mix_HaltChannel( channelId );
-#endif
     }
 }
 
