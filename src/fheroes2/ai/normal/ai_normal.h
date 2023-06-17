@@ -252,7 +252,7 @@ namespace AI
         void KingdomTurn( Kingdom & kingdom ) override;
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) override;
 
-        void revealFog( const Maps::Tiles & tile ) override;
+        void revealFog( const Kingdom & kingdom, const Maps::Tiles & tile ) override;
 
         void HeroesPreBattle( HeroBase & hero, bool isAttacking ) override;
         void HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType ) override;
@@ -290,8 +290,9 @@ namespace AI
         {
             EnemyArmy() = default;
 
-            EnemyArmy( const int index_, const double strength_, const uint32_t movePoints_ )
+            EnemyArmy( const int index_, const MP2::MapObjectType type_, const double strength_, const uint32_t movePoints_ )
                 : index( index_ )
+                , type( type_ )
                 , strength( strength_ )
                 , movePoints( movePoints_ )
             {
@@ -299,17 +300,26 @@ namespace AI
             }
 
             int index{ -1 };
+            MP2::MapObjectType type{ MP2::OBJ_NONE };
             double strength{ 0 };
             uint32_t movePoints{ 0 };
         };
 
         // following data won't be saved/serialized
         double _combinedHeroStrength = 0;
+
         std::vector<IndexObject> _mapActionObjects;
+
         std::map<int, PriorityTask> _priorityTargets;
+
+        std::vector<EnemyArmy> _enemyArmies;
+
         std::vector<RegionStats> _regions;
+
         std::array<BudgetEntry, 7> _budget = { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
+
         AIWorldPathfinder _pathfinder;
+
         BattlePlanner _battlePlanner;
 
         // Monster strength is constant over the same turn for AI but its calculation is a heavy operation.
@@ -340,9 +350,18 @@ namespace AI
 
         void updateMapActionObjectCache( const int mapIndex );
 
-        std::set<int> findCastlesInDanger( const KingdomCastles & castles, const std::vector<EnemyArmy> & enemyArmies, int myColor );
+        std::set<int> findCastlesInDanger( const KingdomCastles & castles );
 
-        void removePriorityTarget( const int32_t tileIndex );
+        void updatePriorityForEnemyArmy( const KingdomCastles & castles, const EnemyArmy & enemyArmy );
+
+        // Return true if the castle is in danger.
+        bool updatePriorityForCastle( const Castle & castle, const EnemyArmy & enemyArmy );
+
+        void removePriorityAttackTarget( const int32_t tileIndex );
+
+        void updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tiles & tile );
+
+        void updateEnemyArmy( const EnemyArmy & enemyArmy );
     };
 }
 

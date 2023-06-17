@@ -44,7 +44,7 @@ namespace AI
         _pathfinder.reset();
     }
 
-    void Normal::revealFog( const Maps::Tiles & tile )
+    void Normal::revealFog( const Kingdom & kingdom, const Maps::Tiles & tile )
     {
         const MP2::MapObjectType object = tile.GetObject();
         if ( !MP2::isActionObject( object ) ) {
@@ -52,6 +52,7 @@ namespace AI
         }
 
         updateMapActionObjectCache( tile.GetIndex() );
+        updatePriorityAttackTarget( kingdom, tile );
     }
 
     double Normal::getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType )

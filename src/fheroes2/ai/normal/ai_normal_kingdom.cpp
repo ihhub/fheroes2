@@ -471,12 +471,11 @@ namespace AI
         return sortedCastleList;
     }
 
-    std::set<int> Normal::findCastlesInDanger( const KingdomCastles & castles, const std::vector<EnemyArmy> & enemyArmies, int myColor )
+    std::set<int> Normal::findCastlesInDanger( const KingdomCastles & castles )
     {
-        const uint32_t threatDistanceLimit = 3000; // 30 tiles, roughly how much maxed out hero can move in a turn
         std::set<int> castlesInDanger;
 
-        for ( const EnemyArmy & enemyArmy : enemyArmies ) {
+        for ( const EnemyArmy & enemyArmy : _enemyArmies ) {
             for ( const Castle * castle : castles ) {
                 if ( castle == nullptr ) {
                     // How is it even possible? Check the logic!
@@ -484,67 +483,164 @@ namespace AI
                     continue;
                 }
 
-                const int castleIndex = castle->GetIndex();
-                // skip precise distance check if army is too far to be a threat
-                if ( Maps::GetApproximateDistance( enemyArmy.index, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit ) {
-                    continue;
-                }
-
-                // TODO: if a hero (even a weak one) is blocking the path then the function call below will return 0.
-                // TODO: For example if a friendly hero stands just below the castle entrance then the distance will be 0.
-                // TODO: Which is not the case as an enemy hero can be very powerful to kill the hero and capture the castle.
-                const uint32_t dist = _pathfinder.getDistance( enemyArmy.index, castleIndex, myColor, enemyArmy.strength );
-                if ( dist == 0 || dist >= threatDistanceLimit ) {
-                    continue;
-                }
-
-                uint32_t daysToReach = ( dist + enemyArmy.movePoints - 1 ) / enemyArmy.movePoints;
-                if ( daysToReach > 3 ) {
-                    // It is too far away. Ignore it.
-                    continue;
-                }
-
-                double enemyStrength = enemyArmy.strength;
-
-                --daysToReach;
-                while ( daysToReach > 0 ) {
-                    // Each day reduces enemy strength by 50%. If an enemy is too far away then there is no reason to panic.
-                    enemyStrength /= 2;
-                    --daysToReach;
-                }
-
-                const double defenders = castle->GetArmy().GetStrength();
-                const double attackerThreat = enemyStrength - defenders;
-                if ( attackerThreat < 0.1 ) {
-                    continue;
-                }
-
-                // The castle is under threat.
-                castlesInDanger.insert( castleIndex );
-
-                auto attackTask = _priorityTargets.find( enemyArmy.index );
-                if ( attackTask == _priorityTargets.end() ) {
-                    _priorityTargets[enemyArmy.index] = { PriorityTaskType::ATTACK, enemyArmy.strength, castleIndex };
-                }
-                else {
-                    attackTask->second.secondaryTaskTileId.insert( castleIndex );
-                }
-
-                auto defenseTask = _priorityTargets.find( castleIndex );
-                if ( defenseTask == _priorityTargets.end() ) {
-                    _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, attackerThreat, enemyArmy.index };
-                }
-                else if ( defenseTask->second.threatLevel < attackerThreat ) {
-                    defenseTask->second.secondaryTaskTileId.insert( defenseTask->first );
-                    defenseTask->second.threatLevel = attackerThreat;
-                }
-                else {
-                    defenseTask->second.secondaryTaskTileId.insert( enemyArmy.index );
+                if ( updatePriorityForCastle( *castle, enemyArmy ) ) {
+                    castlesInDanger.insert( castle->GetIndex() );
                 }
             }
         }
 
         return castlesInDanger;
+    }
+
+    void Normal::updatePriorityForEnemyArmy( const KingdomCastles & castles, const EnemyArmy & enemyArmy )
+    {
+        for ( const Castle * castle : castles ) {
+            if ( castle == nullptr ) {
+                // How is it even possible? Check the logic!
+                assert( 0 );
+                continue;
+            }
+
+            updatePriorityForCastle( *castle, enemyArmy );
+        }
+    }
+
+    bool Normal::updatePriorityForCastle( const Castle & castle, const EnemyArmy & enemyArmy )
+    {
+        // 30 tiles, roughly how much maxed out hero can move in a turn.
+        const uint32_t threatDistanceLimit = 3000;
+
+        const int castleIndex = castle.GetIndex();
+        // skip precise distance check if army is too far to be a threat
+        if ( Maps::GetApproximateDistance( enemyArmy.index, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit ) {
+            return false;
+        }
+
+        // TODO: if a hero (even a weak one) is blocking the path then the function call below will return 0.
+        // TODO: For example if a friendly hero stands just below the castle entrance then the distance will be 0.
+        // TODO: Which is not the case as an enemy hero can be very powerful to kill the hero and capture the castle.
+        const uint32_t dist = _pathfinder.getDistance( enemyArmy.index, castleIndex, castle.GetColor(), enemyArmy.strength );
+        if ( dist == 0 || dist >= threatDistanceLimit ) {
+            return false;
+        }
+
+        uint32_t daysToReach = ( dist + enemyArmy.movePoints - 1 ) / enemyArmy.movePoints;
+        if ( daysToReach > 3 ) {
+            // It is too far away. Ignore it.
+            return false;
+        }
+
+        double enemyStrength = enemyArmy.strength;
+
+        --daysToReach;
+        while ( daysToReach > 0 ) {
+            // Each day reduces enemy strength by 50%. If an enemy is too far away then there is no reason to panic.
+            enemyStrength /= 2;
+            --daysToReach;
+        }
+
+        const double defenders = castle.GetArmy().GetStrength();
+        const double attackerThreat = enemyStrength - defenders;
+        if ( attackerThreat < 0.1 ) {
+            return false;
+        }
+
+        auto attackTask = _priorityTargets.find( enemyArmy.index );
+        if ( attackTask == _priorityTargets.end() ) {
+            _priorityTargets[enemyArmy.index] = { PriorityTaskType::ATTACK, enemyArmy.strength, castleIndex };
+        }
+        else {
+            attackTask->second.secondaryTaskTileId.insert( castleIndex );
+        }
+
+        auto defenseTask = _priorityTargets.find( castleIndex );
+        if ( defenseTask == _priorityTargets.end() ) {
+            _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, attackerThreat, enemyArmy.index };
+        }
+        else if ( defenseTask->second.threatLevel < attackerThreat ) {
+            defenseTask->second.secondaryTaskTileId.insert( defenseTask->first );
+            defenseTask->second.threatLevel = attackerThreat;
+        }
+        else {
+            defenseTask->second.secondaryTaskTileId.insert( enemyArmy.index );
+        }
+
+        return true;
+    }
+
+    void Normal::removePriorityAttackTarget( const int32_t tileIndex )
+    {
+        const auto it = _priorityTargets.find( tileIndex );
+        if ( it == _priorityTargets.end() ) {
+            return;
+        }
+
+        const PriorityTask & attackTask = it->second;
+        if ( attackTask.type != PriorityTaskType::ATTACK ) {
+            return;
+        }
+
+        for ( const int secondaryTaskId : attackTask.secondaryTaskTileId ) {
+            // If this assertion blows then you are attacking and defending the same tile!
+            assert( secondaryTaskId != tileIndex );
+
+            auto defenseTask = _priorityTargets.find( secondaryTaskId );
+            if ( defenseTask == _priorityTargets.end() ) {
+                continue;
+            }
+
+            if ( defenseTask->second.type != PriorityTaskType::DEFEND ) {
+                continue;
+            }
+
+            // check if a secondary task still present
+            std::set<int> & defenseSecondaries = defenseTask->second.secondaryTaskTileId;
+            defenseSecondaries.erase( tileIndex );
+            if ( defenseSecondaries.empty() ) {
+                // if no one else was threatening this then we no longer have to defend
+                _priorityTargets.erase( secondaryTaskId );
+            }
+        }
+
+        _priorityTargets.erase( tileIndex );
+    }
+
+    void Normal::updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tiles & tile )
+    {
+        MP2::MapObjectType object = tile.GetObject();
+        const int32_t tileIndex = tile.GetIndex();
+
+        if ( object == MP2::OBJ_HEROES ) {
+            const Heroes * enemyHero = tile.GetHeroes();
+            if ( enemyHero != nullptr && enemyHero->GetColor() != kingdom.GetColor() ) {
+                const EnemyArmy enemyArmy{ tileIndex, MP2::OBJ_HEROES, enemyHero->GetArmy().GetStrength(), enemyHero->GetMaxMovePoints() };
+                updateEnemyArmy( enemyArmy );
+                updatePriorityForEnemyArmy( kingdom.GetCastles(), enemyArmy );
+            }
+
+            object = tile.GetObject( false );
+        }
+
+        if ( object == MP2::OBJ_CASTLE ) {
+            const Castle * enemyCastle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
+            if ( enemyCastle != nullptr && enemyCastle->GetColor() != kingdom.GetColor() ) {
+                const EnemyArmy enemyArmy{ tileIndex, MP2::OBJ_CASTLE, enemyCastle->GetArmy().GetStrength(), 1500 };
+                updateEnemyArmy( enemyArmy );
+                updatePriorityForEnemyArmy( kingdom.GetCastles(), enemyArmy );
+            }
+        }
+    }
+
+    void Normal::updateEnemyArmy( const EnemyArmy & enemyArmy )
+    {
+        for ( EnemyArmy & army : _enemyArmies ) {
+            if ( enemyArmy.index == army.index && enemyArmy.type == army.type ) {
+                army = enemyArmy;
+                return;
+            }
+        }
+
+        _enemyArmies.emplace_back( enemyArmy );
     }
 
     void Normal::KingdomTurn( Kingdom & kingdom )
@@ -593,10 +689,9 @@ namespace AI
             underViewSpell = true;
         }
 
-        std::vector<EnemyArmy> enemyArmies;
-
         const int mapSize = world.w() * world.h();
         _priorityTargets.clear();
+        _enemyArmies.clear();
         _mapActionObjects.clear();
         _regions.clear();
         _regions.resize( world.getRegionCount() );
@@ -639,7 +734,7 @@ namespace AI
                 else if ( !Players::isFriends( myColor, hero->GetColor() ) && ( !hero->Modes( Heroes::PATROL ) || hero->GetPatrolDistance() != 0 ) ) {
                     const double heroThreat = hero->GetArmy().GetStrength();
 
-                    enemyArmies.emplace_back( idx, heroThreat, hero->GetMaxMovePoints() );
+                    _enemyArmies.emplace_back( idx, MP2::OBJ_HEROES, heroThreat, hero->GetMaxMovePoints() );
                     if ( stats.highestThreat < heroThreat ) {
                         stats.highestThreat = heroThreat;
                     }
@@ -669,7 +764,7 @@ namespace AI
 
                     const double castleThreat = castle->GetArmy().GetStrength();
                     // 1500 is slightly more than a fresh hero's maximum move points hired in a castle.
-                    enemyArmies.emplace_back( idx, castleThreat, 1500 );
+                    _enemyArmies.emplace_back( idx, MP2::OBJ_CASTLE, castleThreat, 1500 );
 
                     if ( stats.highestThreat < castleThreat ) {
                         stats.highestThreat = castleThreat;
@@ -703,7 +798,7 @@ namespace AI
             // Step 3. Reassign heroes roles
             setHeroRoles( heroes );
 
-            castlesInDanger = findCastlesInDanger( castles, enemyArmies, myColor );
+            castlesInDanger = findCastlesInDanger( castles );
             for ( Heroes * hero : heroes ) {
                 if ( hero->GetMapsObject() == MP2::OBJ_CASTLE && _priorityTargets.find( hero->GetIndex() ) != _priorityTargets.end() ) {
                     // If a hero is in a castle and it is in danger then the hero is very weak to defend it.

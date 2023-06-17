@@ -1915,30 +1915,9 @@ namespace AI
             break;
         }
         case PriorityTaskType::ATTACK: {
-            if ( objectType == MP2::OBJ_HEROES ) {
-                const Heroes * attackHero = world.GetTiles( tileIndex ).GetHeroes();
-                if ( attackHero == nullptr ) {
-                    removePriorityTarget( tileIndex );
-                }
-                else {
-                    // TODO: update priorities.
-                }
-            }
-            else if ( objectType == MP2::OBJ_CASTLE ) {
-                const Castle * attackCastle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
-                if ( attackCastle == nullptr ) {
-                    // How is it even possible that a castle does no exist?
-                    assert( 0 );
-                    removePriorityTarget( tileIndex );
-                    return;
-                }
+            removePriorityAttackTarget( tileIndex );
 
-                if ( attackCastle->GetColor() == hero.GetColor() ) {
-                    // The castle was captured.
-                    removePriorityTarget( tileIndex );
-                }
-            }
-
+            updatePriorityAttackTarget( hero.GetKingdom(), world.GetTiles( tileIndex ) );
             break;
         }
         default:
@@ -1946,35 +1925,6 @@ namespace AI
             assert( 0 );
             break;
         }
-    }
-
-    void Normal::removePriorityTarget( const int32_t tileIndex )
-    {
-        const auto it = _priorityTargets.find( tileIndex );
-        if ( it == _priorityTargets.end() ) {
-            return;
-        }
-
-        const PriorityTask & task = it->second;
-
-        for ( const int secondaryTaskId : task.secondaryTaskTileId ) {
-            assert( secondaryTaskId != tileIndex );
-
-            auto defense = _priorityTargets.find( secondaryTaskId );
-            if ( defense == _priorityTargets.end() ) {
-                continue;
-            }
-
-            // check if a secondary task still present
-            std::set<int> & defenseSecondaries = defense->second.secondaryTaskTileId;
-            defenseSecondaries.erase( tileIndex );
-            if ( defenseSecondaries.empty() ) {
-                // if no one else was threatening this then we no longer have to defend
-                _priorityTargets.erase( secondaryTaskId );
-            }
-        }
-
-        _priorityTargets.erase( tileIndex );
     }
 
     void Normal::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType )
