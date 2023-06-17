@@ -347,14 +347,14 @@ namespace
         int32_t offsetX = ( textInitialOffsetX - textWidth ) / 2;
         int32_t offsetY = textInitialOffsetY;
 
-        offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Support us at" ), "local-donation-platform|https://www.patreon.com/fheroes2" );
+        offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Support us at" ), _( "local-donation-platform|https://www.patreon.com/fheroes2" ) );
         offsetY += 30;
 
         const fheroes2::Sprite & wizard = fheroes2::AGG::GetICN( ICN::CMBTCAPZ, 4 );
         fheroes2::Blit( wizard, output, ( textInitialOffsetX - wizard.width() ) / 2, offsetY );
         offsetY += wizard.height() + 20;
 
-        offsetY += renderText( output, offsetX, offsetY, textWidth - 10, _( "Connect with us at" ), "local-social-network|https://www.facebook.com/groups/fheroes2" );
+        offsetY += renderText( output, offsetX, offsetY, textWidth - 10, _( "Connect with us at" ), _( "local-social-network|https://www.facebook.com/groups/fheroes2" ) );
         offsetY += 20;
 
         const fheroes2::Sprite & vampireLord = fheroes2::AGG::GetICN( ICN::VAMPIRE2, 22 );
