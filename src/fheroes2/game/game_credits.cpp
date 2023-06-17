@@ -354,7 +354,8 @@ namespace
         fheroes2::Blit( wizard, output, ( textInitialOffsetX - wizard.width() ) / 2, offsetY );
         offsetY += wizard.height() + 20;
 
-        offsetY += renderText( output, offsetX, offsetY, textWidth - 10, _( "Connect with us at" ), _( "local-social-network|https://www.facebook.com/groups/fheroes2" ) );
+        offsetY
+            += renderText( output, offsetX, offsetY, textWidth - 10, _( "Connect with us at" ), _( "local-social-network|https://www.facebook.com/groups/fheroes2" ) );
         offsetY += 20;
 
         const fheroes2::Sprite & vampireLord = fheroes2::AGG::GetICN( ICN::VAMPIRE2, 22 );
