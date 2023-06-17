@@ -374,7 +374,8 @@ namespace
 
         const int32_t miniMonsterXOffset = textInitialOffsetX * 3 / 2;
 
-        renderText( output, offsetX, offsetY, textWidth - 10, _( "Original project before 0.7" ), "Andrey Afletdinov\nhttps://sourceforge.net/\nprojects/fheroes2/" );
+        const fheroes2::Text name( "Andrey Afletdinov\nhttps://sourceforge.net/\nprojects/fheroes2/", fheroes2::FontType::smallWhite() );
+        name.draw( offsetX, offsetY, textWidth - 10, output );
 
         fheroes2::Sprite creature = fheroes2::AGG::GetICN( ICN::MAGE2, 4 );
         transformToBlack( creature );
@@ -712,7 +713,7 @@ void Game::ShowCredits( const bool keepMainMenuBorders )
     pages.emplace_back( generateSuccessionWarsCreditsFirstPage() );
     pages.emplace_back( generateSuccessionWarsCreditsSecondPage() );
 
-    // Resize the credits pages.
+    // Resize the credits pages. 'creditsRoi' is made using MAin Menu background parameters that were already properly calculated for the current resolution.
     const int32_t resizedPageHeight = creditsRoi.width * pages.front().height() / pages.front().width();
     for ( fheroes2::Sprite & page : pages ) {
         fheroes2::Sprite resizedPage( creditsRoi.width, resizedPageHeight );
