@@ -374,7 +374,10 @@ namespace
 
         const int32_t miniMonsterXOffset = textInitialOffsetX * 3 / 2;
 
-        const fheroes2::Text name( "Andrey Afletdinov\nhttps://sourceforge.net/\nprojects/fheroes2/", fheroes2::FontType::smallWhite() );
+        fheroes2::Text name( _( "Original project before 0.7" ), fheroes2::FontType::smallYellow() );
+        name.draw( offsetX, offsetY, textWidth - 10, output );
+        offsetY += name.height( textWidth - 10 );
+        name.set( "Andrey Afletdinov\nhttps://sourceforge.net/\nprojects/fheroes2/", fheroes2::FontType::smallWhite() );
         name.draw( offsetX, offsetY, textWidth - 10, output );
 
         fheroes2::Sprite creature = fheroes2::AGG::GetICN( ICN::MAGE2, 4 );
@@ -382,8 +385,8 @@ namespace
 
         const int32_t creatureOffsetY = output.height() - 95;
         fheroes2::Blit( creature, 0, 0, output, miniMonsterXOffset - creature.width() / 2, creatureOffsetY, creature.width(), creature.height() );
-        const fheroes2::Text marker( "?", fheroes2::FontType::normalYellow() );
-        marker.draw( miniMonsterXOffset - marker.width() / 2, creatureOffsetY + creature.height() / 2 - 5, output );
+        name.set( "?", fheroes2::FontType::normalYellow() );
+        name.draw( miniMonsterXOffset - name.width() / 2, creatureOffsetY + creature.height() / 2 - 5, output );
 
         return output;
     }
