@@ -717,7 +717,7 @@ void Game::ShowCredits( const bool keepMainMenuBorders )
     pages.emplace_back( generateSuccessionWarsCreditsFirstPage() );
     pages.emplace_back( generateSuccessionWarsCreditsSecondPage() );
 
-    // Resize the credits pages. 'creditsRoi' is made using MAin Menu background parameters that were already properly calculated for the current resolution.
+    // Resize the credits pages. 'creditsRoi' is made using Main Menu background parameters that were already properly calculated for the current resolution.
     const int32_t resizedPageHeight = creditsRoi.width * pages.front().height() / pages.front().width();
     for ( fheroes2::Sprite & page : pages ) {
         fheroes2::Sprite resizedPage( creditsRoi.width, resizedPageHeight );
