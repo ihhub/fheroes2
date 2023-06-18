@@ -195,8 +195,6 @@ namespace
         {
             _isCursorVisible = !_isCursorVisible;
 
-            _cursor = _isCursorVisible ? '_' : '\x7F';
-
             renderInputArea();
         }
 
@@ -213,7 +211,6 @@ namespace
         std::unique_ptr<fheroes2::StandardWindow> _window;
         const bool _isEvilInterface{ false };
         bool _isCursorVisible{ true };
-        char _cursor{ '_' };
         size_t _cursorPosition{ 0 };
 
         fheroes2::Rect renderInputArea()
@@ -230,7 +227,7 @@ namespace
                                         PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
             }
 
-            fheroes2::Text textUI( InsertString( _info, _cursorPosition, &_cursor ), fheroes2::FontType::normalWhite() );
+            fheroes2::Text textUI( insertCharToString( _info, _cursorPosition, _isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
             textUI.fitToOneRow( inputAreaSize.width - inputAreaBorders * 2 );
 
             textUI.draw( windowRoi.x + ( windowRoi.width - inputAreaSize.width ) / 2 + inputAreaBorders,
