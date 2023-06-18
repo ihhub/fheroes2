@@ -311,11 +311,16 @@ namespace fheroes2
                 ++data;
             }
             else if ( 0x80 > *data ) { // 0x01-0x7F - repeat a pixel N times
-                const uint32_t pixelCount = std::min( static_cast<uint32_t>( *data ), static_cast<uint32_t>( dataEnd - data - 2 ) );
+                const uint8_t pixelCount = *data;
                 ++data;
 
+                if ( data + pixelCount > dataEnd ) {
+                    // Image data is corrupted - we can not read data beyond dataEnd.
+                    break;
+                }
+
                 memcpy( imageData + posX, data, pixelCount );
-                std::fill( imageTransform + posX, imageTransform + posX + pixelCount, static_cast<uint8_t>( 0 ) );
+                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
                 data += pixelCount;
                 posX += pixelCount;
             }
@@ -335,7 +340,7 @@ namespace fheroes2
                 const uint32_t pixelCount = *data % 4 ? *data % 4 : *( ++data );
 
                 if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
-                    std::fill( imageTransform + posX, imageTransform + posX + pixelCount, transformType );
+                    memset( imageTransform + posX, transformType, pixelCount );
                 }
 
                 posX += pixelCount;
@@ -347,8 +352,8 @@ namespace fheroes2
                 const uint32_t pixelCount = *data;
                 ++data;
 
-                std::fill( imageData + posX, imageData + posX + pixelCount, *data );
-                std::fill( imageTransform + posX, imageTransform + posX + pixelCount, static_cast<uint8_t>( 0 ) );
+                memset( imageData + posX, *data, pixelCount );
+                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
                 posX += pixelCount;
 
                 ++data;
@@ -357,8 +362,8 @@ namespace fheroes2
                 const uint32_t pixelCount = *data - 0xC0;
                 ++data;
 
-                std::fill( imageData + posX, imageData + posX + pixelCount, *data );
-                std::fill( imageTransform + posX, imageTransform + posX + pixelCount, static_cast<uint8_t>( 0 ) );
+                memset( imageData + posX, *data, pixelCount );
+                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
                 posX += pixelCount;
 
                 ++data;

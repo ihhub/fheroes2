@@ -206,7 +206,6 @@ namespace
     void populateCursorIcons( std::vector<fheroes2::Sprite> & output, const fheroes2::Sprite & origin, const std::vector<fheroes2::Image> & digits,
                               const fheroes2::Point & offset )
     {
-        output.reserve( digits.size() + 1 );
         output.emplace_back( origin );
         for ( const fheroes2::Image & digit : digits ) {
             output.emplace_back( addDigit( origin, digit, offset ) );
@@ -527,8 +526,8 @@ namespace fheroes2
 
             _icnVsSprite[icnId] = _icnVsSprite[originalIcnId];
             const std::vector<uint8_t> & palette = PAL::GetPalette( paletteType );
-            for ( fheroes2::Sprite & vsSprite : _icnVsSprite[icnId] ) {
-                ApplyPalette( vsSprite, palette );
+            for ( fheroes2::Sprite & sprite : _icnVsSprite[icnId] ) {
+                ApplyPalette( sprite, palette );
             }
         }
 
@@ -2458,8 +2457,8 @@ namespace fheroes2
                 return true;
             case ICN::LISTBOX_EVIL:
                 CopyICNWithPalette( id, ICN::LISTBOX, PAL::PaletteType::GRAY );
-                for ( fheroes2::Sprite & vsSprite : _icnVsSprite[id] ) {
-                    ApplyPalette( vsSprite, 2 );
+                for ( fheroes2::Sprite & sprite : _icnVsSprite[id] ) {
+                    ApplyPalette( sprite, 2 );
                 }
                 return true;
             case ICN::MONS32:
@@ -2648,10 +2647,13 @@ namespace fheroes2
             case ICN::HEROES:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 640 && original.height() == 480 ) {
+                        // Fix incorrect pixel at position 260x305.
+                        replaceTransformPixel( original, 195460, 31 );
+                    }
                     // This is the main menu image which shouldn't have any transform layer.
-                    _icnVsSprite[id][0]._disableTransformLayer();
-                    // Fix incorrect pixel at position 260x305.
-                    _icnVsSprite[id][0].image()[195460] = 31;
+                    original._disableTransformLayer();
                 }
                 return true;
             case ICN::TOWNBKG3:
@@ -3039,8 +3041,8 @@ namespace fheroes2
 
                 LoadOriginalICN( ICN::ADVBTNS );
                 const int releasedIndex = ( id == ICN::GOOD_ARMY_BUTTON ) ? 0 : 4;
-                Copy( _icnVsSprite[ICN::ADVBTNS][releasedIndex], _icnVsSprite[id][0] );
-                Copy( _icnVsSprite[ICN::ADVBTNS][releasedIndex + 1], _icnVsSprite[id][1] );
+                _icnVsSprite[id][0] = GetICN( ICN::ADVBTNS, releasedIndex );
+                _icnVsSprite[id][1] = GetICN( ICN::ADVBTNS, releasedIndex + 1 );
 
                 // Make all black pixels transparent.
                 AddTransparency( _icnVsSprite[id][0], 36 );
@@ -3055,8 +3057,8 @@ namespace fheroes2
 
                 LoadOriginalICN( ICN::ADVEBTNS );
                 const int releasedIndex = ( id == ICN::EVIL_ARMY_BUTTON ) ? 0 : 4;
-                Copy( _icnVsSprite[ICN::ADVEBTNS][releasedIndex], _icnVsSprite[id][0] );
-                Copy( _icnVsSprite[ICN::ADVEBTNS][releasedIndex + 1], _icnVsSprite[id][1] );
+                _icnVsSprite[id][0] = GetICN( ICN::ADVBTNS, releasedIndex );
+                _icnVsSprite[id][1] = GetICN( ICN::ADVBTNS, releasedIndex + 1 );
 
                 // Make all black pixels transparent.
                 AddTransparency( _icnVsSprite[id][0], 36 );
@@ -3236,7 +3238,7 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 99 ) {
                     // This fixes "Arm of the Martyr" (#88) and " Sphere of Negation" (#99) artifacts rendering which initially has some incorrect transparent pixels.
-                    for ( int32_t index : { 88, 99 } ) {
+                    for ( const int32_t index : { 88, 99 } ) {
                         Sprite & originalImage = _icnVsSprite[id][index];
                         Sprite temp( originalImage.width(), originalImage.height() );
                         temp.setPosition( originalImage.x(), originalImage.y() );
@@ -3647,8 +3649,8 @@ namespace fheroes2
                 Sprite & released = _icnVsSprite[id][0];
                 Sprite & pressed = _icnVsSprite[id][1];
 
-                Copy( _icnVsSprite[originalId][11], released );
-                Copy( _icnVsSprite[originalId][12], pressed );
+                released = _icnVsSprite[originalId][11];
+                pressed = _icnVsSprite[originalId][12];
 
                 if ( pressed.width() > 2 && pressed.height() > 2 ) {
                     // Make the background transparent.
@@ -3710,7 +3712,7 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
-                    if ( !original.empty() ) {
+                    if ( original.width() == 640 && original.height() == 443 ) {
                         replaceTransformPixel( original, 23165, 24 );
                     }
                 }
