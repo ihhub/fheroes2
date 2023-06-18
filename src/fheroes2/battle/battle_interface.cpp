@@ -4068,7 +4068,6 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     if ( ( walkSounds[1] != -1 ) && Mixer::isPlaying( walkSounds[0] ) && Mixer::isPlaying( walkSounds[1] ) ) {
         // Both sound channels are playing walk sound. Stop sound in the second channel with fade.
         Mixer::fadeOutChannel( walkSounds[1], soundFadeTimeMs );
-        COUT( "fade [1] = " << walkSounds[1] )
     }
 
     // Slowed flying creature has to land.
