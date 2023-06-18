@@ -69,7 +69,7 @@ void StringReplace( std::string & dst, const char * pred, const T value )
 
 int CountBits( uint32_t );
 
-// Insert one character to the input string at specified position.
+// Returns a new text string with the inserted character in the input string at the specified position.
 std::string insertCharToString( const std::string & inputString, const size_t position, const char character );
 
 namespace fheroes2
