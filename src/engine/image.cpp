@@ -499,8 +499,8 @@ namespace fheroes2
     {
         if ( !empty() ) {
             const size_t totalSize = static_cast<size_t>( _width ) * _height;
-            std::fill( image(), image() + totalSize, value );
-            std::fill( transform(), transform() + totalSize, static_cast<uint8_t>( 0 ) );
+            memset( image(), value, totalSize );
+            memset( transform(), static_cast<uint8_t>( 0 ), totalSize );
         }
     }
 
@@ -528,9 +528,9 @@ namespace fheroes2
     {
         if ( !empty() ) {
             const size_t totalSize = static_cast<size_t>( _width ) * _height;
-            std::fill( image(), image() + totalSize, static_cast<uint8_t>( 0 ) );
+            memset( image(), static_cast<uint8_t>( 0 ), totalSize );
             // Set the transform layer to skip all data.
-            std::fill( transform(), transform() + totalSize, static_cast<uint8_t>( 1 ) );
+            memset( transform(), static_cast<uint8_t>( 1 ), totalSize );
         }
     }
 
@@ -1294,7 +1294,7 @@ namespace fheroes2
 
             for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
                 memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
-                std::fill( transformOutY, transformOutY + width, static_cast<uint8_t>( 0 ) );
+                memset( transformOutY, static_cast<uint8_t>( 0 ), width );
             }
         }
         else {
@@ -2092,14 +2092,14 @@ namespace fheroes2
 
         if ( image.singleLayer() ) {
             for ( ; imageY != imageYEnd; imageY += imageWidth ) {
-                std::fill( imageY, imageY + width, colorId );
+                memset( imageY, colorId, width );
             }
         }
         else {
             uint8_t * transformY = image.transform() + static_cast<ptrdiff_t>( y ) * imageWidth + x;
             for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
-                std::fill( imageY, imageY + width, colorId );
-                std::fill( transformY, transformY + width, static_cast<uint8_t>( 0 ) );
+                memset( imageY, colorId, width );
+                memset( transformY, static_cast<uint8_t>( 0 ), width );
             }
         }
     }
@@ -2117,8 +2117,8 @@ namespace fheroes2
         const uint8_t * imageYEnd = imageY + height * imageWidth;
 
         for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
-            std::fill( imageY, imageY + width, static_cast<uint8_t>( 0 ) );
-            std::fill( transformY, transformY + width, transformId );
+            memset( imageY, static_cast<uint8_t>( 0 ), width );
+            memset( transformY, transformId, width );
         }
     }
 
@@ -2267,7 +2267,7 @@ namespace fheroes2
                         }
 
                         // Set 'in' image transform data not to skip image data.
-                        std::fill( transformOutY, transformOutY + width, static_cast<uint8_t>( 0 ) );
+                        memset( transformOutY, static_cast<uint8_t>( 0 ), width );
 
                         transformOutY += widthOut;
                     }
@@ -2317,7 +2317,7 @@ namespace fheroes2
                         memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
 
                         // Set 'in' image transform data not to skip image data.
-                        std::fill( transformOutY, transformOutY + width, static_cast<uint8_t>( 0 ) );
+                        memset( transformOutY, static_cast<uint8_t>( 0 ), width );
                     }
                 }
             }
@@ -2370,7 +2370,7 @@ namespace fheroes2
                         }
 
                         // Set 'in' image transform data not to skip image data.
-                        std::fill( transformOutY, transformOutY + width, static_cast<uint8_t>( 0 ) );
+                        memset( transformOutY, static_cast<uint8_t>( 0 ), width );
                     }
                 }
             }
