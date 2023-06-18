@@ -69,7 +69,8 @@ void StringReplace( std::string & dst, const char * pred, const T value )
 
 int CountBits( uint32_t );
 
-std::string InsertString( const std::string &, size_t, const char * );
+// Insert one character to the input string at specified position.
+std::string insertCharToString( const std::string & inputString, const size_t position, const char character );
 
 namespace fheroes2
 {
