@@ -151,6 +151,10 @@ namespace
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::BUTTON_VIEWWORLD_EXIT_GOOD,
                                                 ICN::BUTTON_VIEWWORLD_EXIT_EVIL,
+                                                ICN::BUTTON_VIEW_INTRO_POL,
+                                                ICN::BUTTON_RESTART_POL,
+                                                ICN::BUTTON_OKAY_POL,
+                                                ICN::BUTTON_CANCEL_POL,
                                                 ICN::BUTTON_DIFFICULTY_ARCHIBALD,
                                                 ICN::BUTTON_DIFFICULTY_ROLAND,
                                                 ICN::BUTTON_DIFFICULTY_POL };
@@ -1472,6 +1476,106 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_CANCEL_POL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const int baseIcnId = ICN::X_CMPBTN;
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( baseIcnId, 6 );
+                    _icnVsSprite[id][1] = GetICN( baseIcnId, 7 );
+                    break;
+                }
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnId, 6 + i );
+
+                    // clean the button.
+                    const int32_t pixelPosition = 4 * 94 + 6;
+                    if ( pixelPosition < ( out.width() * out.height() ) ) {
+                        Fill( out, 4, 3 + i, 87 - i, 18 - i, out.image()[pixelPosition] );
+                    }
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), { 5, 5 }, { 5, 5 }, { 87, 17 }, fheroes2::FontColor::GRAY );
+
+                break;
+            }
+            case ICN::BUTTON_OKAY_POL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const int baseIcnId = ICN::X_CMPBTN;
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( baseIcnId, 4 );
+                    _icnVsSprite[id][1] = GetICN( baseIcnId, 5 );
+                    break;
+                }
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnId, 4 + i );
+
+                    // clean the button.
+                    const int32_t pixelPosition = 4 * 94 + 6;
+                    if ( pixelPosition < ( out.width() * out.height() ) ) {
+                        Fill( out, 4, 3 + i, 87 - i, 18 - i, out.image()[pixelPosition] );
+                    }
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ), { 5, 5 }, { 5, 5 }, { 87, 17 }, fheroes2::FontColor::GRAY );
+
+                break;
+            }
+            case ICN::BUTTON_RESTART_POL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const int baseIcnId = ICN::X_CMPBTN;
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( baseIcnId, 2 );
+                    _icnVsSprite[id][1] = GetICN( baseIcnId, 3 );
+                    break;
+                }
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnId, 2 + i );
+
+                    // clean the button.
+                    const int32_t pixelPosition = 4 * 106 + 5;
+                    if ( pixelPosition < ( out.width() * out.height() ) ) {
+                        Fill( out, 4, 3 + i, 99 - i, 17, out.image()[pixelPosition] );
+                    }
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESTART" ), { 5, 5 }, { 5, 5 }, { 100, 17 }, fheroes2::FontColor::GRAY );
+
+                break;
+            }
+            case ICN::BUTTON_VIEW_INTRO_POL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const int baseIcnId = ICN::X_CMPBTN;
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( baseIcnId, 0 );
+                    _icnVsSprite[id][1] = GetICN( baseIcnId, 1 );
+                    break;
+                }
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( baseIcnId, 0 + i );
+
+                    // clean the button.
+                    const int32_t pixelPosition = 5 * 132;
+                    if ( pixelPosition < ( out.width() * out.height() ) ) {
+                        Fill( out, 4, 3 + i, 132 - i, 16, out.image()[pixelPosition] );
+                    }
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "VIEW INTRO" ), { 5, 5 }, { 5, 5 }, { 132, 17 }, fheroes2::FontColor::GRAY );
+
+                break;
+            }
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD: {
                 _icnVsSprite[id].resize( 2 );
 
@@ -2279,6 +2383,10 @@ namespace fheroes2
             case ICN::BUTTON_GUILDWELL_EXIT:
             case ICN::BUTTON_VIEWWORLD_EXIT_GOOD:
             case ICN::BUTTON_VIEWWORLD_EXIT_EVIL:
+            case ICN::BUTTON_VIEW_INTRO_POL:
+            case ICN::BUTTON_RESTART_POL:
+            case ICN::BUTTON_OKAY_POL:
+            case ICN::BUTTON_CANCEL_POL:
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD:
             case ICN::BUTTON_DIFFICULTY_POL:
             case ICN::BUTTON_DIFFICULTY_ROLAND:
@@ -3435,6 +3543,22 @@ namespace fheroes2
 
                     // Restore content of the pressed state image.
                     Copy( original, 0, 0, resized, original.x(), original.y(), original.width() + offsetEvilX, original.height() );
+                }
+
+                return true;
+            }
+            case ICN::POL_CAMPAIGN_BUTTONS: {
+                auto & image = _icnVsSprite[id];
+                image.resize( 8 );
+
+                for ( int32_t i = 0; i < 2; ++i ) {
+                    image[0 + i] = GetICN( ICN::BUTTON_VIEW_INTRO_POL, i );
+
+                    image[2 + i] = GetICN( ICN::BUTTON_RESTART_POL, i );
+
+                    image[4 + i] = GetICN( ICN::BUTTON_OKAY_POL, i );
+
+                    image[6 + i] = GetICN( ICN::BUTTON_CANCEL_POL, i );
                 }
 
                 return true;
