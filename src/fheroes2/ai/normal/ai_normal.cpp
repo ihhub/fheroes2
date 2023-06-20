@@ -24,11 +24,14 @@
 #include <cstdint>
 
 #include "army.h"
+#include "heroes.h"
+#include "kingdom.h"
 #include "maps_tiles.h"
 #include "pairs.h"
 #include "payment.h"
 #include "profit.h"
 #include "rand.h"
+#include "route.h"
 #include "world.h"
 
 namespace AI
