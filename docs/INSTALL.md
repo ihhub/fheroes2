@@ -206,7 +206,7 @@ sudo emerge -av games-strategy/homm2-gold-gog
 ```
 
 It will ask you to put the .exe installer of the game and optionally the zip file with FLAC music to your distfiles directory,
-and if it's there, it will unpack everything to the correct places, and it will pull `games-engines/fheroes2` as a dependency.
+and if it's there, it will unpack everything to the correct places and pull `games-engines/fheroes2` as a dependency.
 
 USE-flag `flac` determines whether the game will use FLAC music or OGG music.
 
