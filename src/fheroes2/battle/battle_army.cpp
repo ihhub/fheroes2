@@ -282,7 +282,8 @@ bool Battle::Force::hasArchers() const
     return std::any_of( begin(), end(), predicate );
 }
 
-bool Battle::Force::hasDragons() const {
+bool Battle::Force::hasDragons() const
+{
     const auto predicate = []( const Unit * unit ) { return unit->isDragons() && unit->GetCount() != 0; };
     return std::any_of( begin(), end(), predicate );
 }

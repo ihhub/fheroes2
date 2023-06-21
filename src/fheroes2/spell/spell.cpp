@@ -468,7 +468,8 @@ bool Spell::canCastCombatSpell( std::string * res ) const
             }
             return false;
         }
-    } else if ( *this == Spell::DRAGONSLAYER ) {
+    }
+    else if ( *this == Spell::DRAGONSLAYER ) {
         if ( !opposingForce.hasDragons() ) {
             if ( res != nullptr ) {
                 *res = _( "The spell will affect no one. Opposing side does not have dragons" );
