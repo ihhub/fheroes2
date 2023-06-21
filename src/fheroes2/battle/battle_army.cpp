@@ -272,13 +272,18 @@ bool Battle::Force::HasMonster( const Monster & mons ) const
 bool Battle::Force::onlyHasMonster( const Monster & monster ) const
 {
     const int monsterID = monster.GetID();
-    auto predicate = [&monsterID]( const Troop * troop ) { return ( ( troop->isEmpty() ) || ( troop->isValid() && troop->isMonster( monsterID ) ) ); };
+    const auto predicate = [&monsterID]( const Troop * troop ) { return ( ( troop->isEmpty() ) || ( troop->isValid() && troop->isMonster( monsterID ) ) ); };
     return std::all_of( begin(), end(), predicate );
 }
 
 bool Battle::Force::hasArchers() const
 {
-    auto predicate = []( const Unit * unit ) { return unit->isArchers() && unit->GetCount() != 0; };
+    const auto predicate = []( const Unit * unit ) { return unit->isArchers() && unit->GetCount() != 0; };
+    return std::any_of( begin(), end(), predicate );
+}
+
+bool Battle::Force::hasDragons() const {
+    const auto predicate = []( const Unit * unit ) { return unit->isDragons() && unit->GetCount() != 0; };
     return std::any_of( begin(), end(), predicate );
 }
 

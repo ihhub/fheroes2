@@ -27,6 +27,7 @@
 #include <cassert>
 #include <vector>
 
+#include "army.h"
 #include "artifact.h"
 #include "artifact_info.h"
 #include "battle_arena.h"
@@ -437,9 +438,8 @@ uint32_t Spell::IndexSprite() const
     return spells[id].imageId;
 }
 
-bool Spell::canCastCombetSpell( std::string * res ) const
+bool Spell::canCastCombatSpell( std::string * res ) const
 {
-    // const Troops & troops = hero.GetArmy().getTroops();
     const Battle::Arena * arena = Battle::GetArena();
     assert( arena != nullptr );
     const Battle::Force & playerForce = arena->GetForce1();
@@ -465,6 +465,13 @@ bool Spell::canCastCombetSpell( std::string * res ) const
         if ( !opposingForce.hasArchers() ) {
             if ( res != nullptr ) {
                 *res = _( "The spell will affect no one. Opposing side does not have archers" );
+            }
+            return false;
+        }
+    } else if ( *this == Spell::DRAGONSLAYER ) {
+        if ( !opposingForce.hasDragons() ) {
+            if ( res != nullptr ) {
+                *res = _( "The spell will affect no one. Opposing side does not have dragons" );
             }
             return false;
         }

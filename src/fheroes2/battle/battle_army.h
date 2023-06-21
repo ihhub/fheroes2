@@ -134,6 +134,7 @@ namespace Battle
         bool HasMonster( const Monster & ) const;
         bool onlyHasMonster( const Monster & monster ) const;
         bool hasArchers() const;
+        bool hasDragons() const;
         uint32_t GetDeadHitPoints() const;
         uint32_t GetDeadCounts() const;
 

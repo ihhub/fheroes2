@@ -238,12 +238,11 @@ public:
     static Spell Rand( const int level, const bool isAdventure );
     static Spell RandCombat( const int level );
     static Spell RandAdventure( const int level );
+    bool canCastCombatSpell( std::string * res ) const;
 
     // Returns the IDs of all spells of a given level that are suitable for the spell book (i.e. no placeholders or exclusive
     // built-in spells for monsters are returned). If 'spellLevel' is less than 1, suitable spells of all levels are returned.
     static std::vector<int> getAllSpellIdsSuitableForSpellBook( const int spellLevel = -1 );
-
-    bool canCastCombetSpell( const HeroBase & her, std::string * res ) const;
 
     static int32_t CalculateDimensionDoorDistance();
 

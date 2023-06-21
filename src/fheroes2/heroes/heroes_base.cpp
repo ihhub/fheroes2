@@ -403,20 +403,21 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         return false;
     }
 
-    const Heroes * hero = dynamic_cast<const Heroes *>( this );
-    if ( hero == nullptr ) {
-        // How is it possible that a captain can access this spell?
-        assert( 0 );
-        if ( res != nullptr ) {
-            *res = _( "Only heroes can cast this spell." );
-        }
-        return false;
+    if ( spell.isCombat() ) {
+        return spell.canCastCombatSpell( res );
     }
 
-    if ( spell.isCombat() ) {
-        return spell.canCastCombetSpell( res );
-    }
-    else if ( spell.isAdventure() ) {
+    if ( spell.isAdventure() ) {
+        const Heroes * hero = dynamic_cast<const Heroes *>( this );
+        if ( hero == nullptr ) {
+            // How is it possible that a captain can access this spell?
+            assert( 0 );
+            if ( res != nullptr ) {
+                *res = _( "Only heroes can cast this spell." );
+            }
+            return false;
+        }
+
         if ( !hero->MayCastAdventureSpells() ) {
             // This should never happen
             assert( 0 );
