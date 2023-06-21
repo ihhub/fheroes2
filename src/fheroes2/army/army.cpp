@@ -390,6 +390,13 @@ bool Troops::HasMonster( const Monster & mons ) const
     return false;
 }
 
+bool Troops::onlyHasMonster( const Monster & monster ) const
+{
+    const int monsterID = monster.GetID();
+    auto predicate = [&monsterID]( const Troop * troop ) { return ( ( troop->isEmpty() ) || ( troop->isValid() && troop->isMonster( monsterID ) ) ); };
+    return std::all_of( begin(), end(), predicate );
+}
+
 bool Troops::AllTroopsAreUndead() const
 {
     for ( const_iterator it = begin(); it != end(); ++it ) {

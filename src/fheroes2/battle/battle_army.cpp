@@ -269,6 +269,19 @@ bool Battle::Force::HasMonster( const Monster & mons ) const
     return std::any_of( begin(), end(), [&mons]( const Unit * unit ) { return unit->isMonster( mons.GetID() ); } );
 }
 
+bool Battle::Force::onlyHasMonster( const Monster & monster ) const
+{
+    const int monsterID = monster.GetID();
+    auto predicate = [&monsterID]( const Troop * troop ) { return ( ( troop->isEmpty() ) || ( troop->isValid() && troop->isMonster( monsterID ) ) ); };
+    return std::all_of( begin(), end(), predicate );
+}
+
+bool Battle::Force::hasArchers() const
+{
+    auto predicate = []( const Unit * unit ) { return unit->isArchers() && unit->GetCount() != 0; };
+    return std::any_of( begin(), end(), predicate );
+}
+
 uint32_t Battle::Force::GetDeadCounts() const
 {
     uint32_t res = 0;

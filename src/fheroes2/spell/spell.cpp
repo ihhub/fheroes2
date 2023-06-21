@@ -27,8 +27,11 @@
 #include <cassert>
 #include <vector>
 
+#include "army.h"
 #include "artifact.h"
 #include "artifact_info.h"
+#include "battle_arena.h"
+#include "battle_army.h"
 #include "heroes_base.h"
 #include "monster.h"
 #include "race.h"
@@ -433,6 +436,41 @@ bool Spell::isMindInfluence() const
 uint32_t Spell::IndexSprite() const
 {
     return spells[id].imageId;
+}
+
+bool Spell::canCastCombetSpell( const HeroBase & hero, std::string * res ) const
+{
+    // const Troops & troops = hero.GetArmy().getTroops();
+    const Battle::Arena * arena = Battle::GetArena();
+    assert( arena != nullptr );
+    const Battle::Force & playerForce = arena->GetForce1();
+    const Battle::Force & opposingForce = arena->GetForce2();
+
+    if ( *this == Spell::BLESS || *this == Spell::MASSBLESS ) {
+        if ( playerForce.onlyHasMonster( Monster::PEASANT ) ) {
+            if ( res != nullptr ) {
+                *res = _( "The spell will affect no one" );
+            }
+            return false;
+        }
+    }
+    else if ( *this == Spell::CURSE || *this == Spell::MASSCURSE ) {
+        if ( opposingForce.onlyHasMonster( Monster::PEASANT ) ) {
+            if ( res != nullptr ) {
+                *res = _( "The spell will affect no one on the opposing side" );
+            }
+            return false;
+        }
+    }
+    else if ( *this == Spell::SHIELD || *this == Spell::MASSSHIELD ) {
+        if ( !opposingForce.hasArchers() ) {
+            if ( res != nullptr ) {
+                *res = _( "The spell will affect no one. Opposing side does not have archers" );
+            }
+            return false;
+        }
+    }
+    return true;
 }
 
 uint32_t Spell::Restore() const

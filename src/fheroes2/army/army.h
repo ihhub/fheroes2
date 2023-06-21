@@ -78,6 +78,7 @@ public:
     uint32_t GetOccupiedSlotCount() const;
     bool isValid() const;
     bool HasMonster( const Monster & ) const;
+    bool onlyHasMonster( const Monster & monster ) const;
 
     bool areAllTroopsUnique() const;
 
