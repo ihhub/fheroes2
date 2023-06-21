@@ -27,7 +27,6 @@
 #include <cassert>
 #include <vector>
 
-#include "army.h"
 #include "artifact.h"
 #include "artifact_info.h"
 #include "battle_arena.h"
@@ -438,7 +437,7 @@ uint32_t Spell::IndexSprite() const
     return spells[id].imageId;
 }
 
-bool Spell::canCastCombetSpell( const HeroBase & hero, std::string * res ) const
+bool Spell::canCastCombetSpell( std::string * res ) const
 {
     // const Troops & troops = hero.GetArmy().getTroops();
     const Battle::Arena * arena = Battle::GetArena();

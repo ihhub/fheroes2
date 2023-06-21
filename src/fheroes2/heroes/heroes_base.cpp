@@ -414,7 +414,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
     }
 
     if ( spell.isCombat() ) {
-        return spell.canCastCombetSpell( *hero, res );
+        return spell.canCastCombetSpell( res );
     }
     else if ( spell.isAdventure() ) {
         if ( !hero->MayCastAdventureSpells() ) {
