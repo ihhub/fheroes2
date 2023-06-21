@@ -3980,8 +3980,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     // We allow to play maximum 2 simultaneous walk sounds. '-1' means that the channel is not set.
     std::array<int, 2> walkSounds{ -1, -1 };
-    // Set sound fade out time: 375 ms for battle speed 1 - 150 ms for battle speed 10.
-    const int soundFadeTimeMs = 2250 / ( Settings::Get().BattleSpeed() + 5 );
+    // Set sound fade out time: 400 ms for battle speed 1 - 200 ms for battle speed 10.
+    const int soundFadeTimeMs = 3600 / ( Settings::Get().BattleSpeed() + 8 );
 
     while ( dst != pathEnd ) {
         // Check if a wide unit changes its horizontal direction.
@@ -4024,8 +4024,15 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         }
 
         // Render the unit movement with the movement sound.
-        // TODO: adjust sounds calls and synchronize them with frames. Take into account that some sounds (like for Cavalry) consists of a sequence of steps.
-        playMoveSound( walkSounds, unit, soundFadeTimeMs );
+        // TODO: adjust sounds calls and synchronize them with frames.
+        if ( canFly ) {
+            // Play sounds entirely for the slowed flying creatures.
+            AudioManager::PlaySound( unit.M82Move() );
+        }
+        else {
+            // Limit the simultaneous walk sounds as they consist of many steps.
+            playMoveSound( walkSounds, unit, soundFadeTimeMs );
+        }
 
         AnimateUnitWithDelay( unit );
         unit.SetPosition( *dst );
@@ -4166,16 +4173,11 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         ++currentPoint;
     }
 
-    // We allow to play maximum 2 simultaneous walk sounds. '-1' means that the channel is not set.
-    std::array<int, 2> flySounds{ -1, -1 };
-    // Set sound fade out time: 375 ms for battle speed 1 - 150 ms for battle speed 10.
-    const int soundFadeTimeMs = 2250 / ( Settings::Get().BattleSpeed() + 5 );
-
     unit.SwitchAnimation( Monster_Info::MOVING );
     while ( currentPoint != points.end() ) {
         _movingPos = *currentPoint;
 
-        playMoveSound( flySounds, unit, soundFadeTimeMs );
+        AudioManager::PlaySound( unit.M82Move() );
 
         unit.animation.restartAnimation();
         AnimateUnitWithDelay( unit );
@@ -4185,11 +4187,6 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     }
 
     unit.SetPosition( destIndex );
-
-    if ( ( flySounds[1] != -1 ) && Mixer::isPlaying( flySounds[0] ) && Mixer::isPlaying( flySounds[1] ) ) {
-        // Both sound channels are playing walk sound. Stop sound in the second channel with fade.
-        Mixer::fadeOutChannel( flySounds[1], soundFadeTimeMs );
-    }
 
     // Landing
     _flyingUnit = nullptr;
