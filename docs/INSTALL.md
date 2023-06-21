@@ -227,7 +227,7 @@ sudo emerge -av games-engines/fheroes2
 /usr/share/fheroes2/extract_homm2_resources.sh
 ```
 
-The second command (run it without root) will ask you where your data files are.
+The second command (Note: run it without root) will ask you where your data files are.
 
 <a name="homebrew-linux"></a>
 ### Homebrew
