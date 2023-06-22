@@ -1718,13 +1718,13 @@ void Maps::Tiles::RestoreAbandonedMine( Tiles & tile, const int resource )
         Tiles & rightTile = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::RIGHT ) );
         TilesAddon * addon = rightTile.FindAddonLevel1( tile._uid );
 
+        restoreRightSprite( rightTile._objectIcnType, rightTile._imageIndex );
         if ( addon ) {
             restoreRightSprite( addon->_objectIcnType, addon->_imageIndex );
         }
 
         if ( rightTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
             rightTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
-            restoreRightSprite( rightTile._objectIcnType, rightTile._imageIndex );
         }
     }
 
