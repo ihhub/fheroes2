@@ -2496,7 +2496,7 @@ namespace fheroes2
 
                     if ( modified.width() == 20 && modified.height() == 36 ) {
                         // We update these pixels: 6x16, 7x16, 8x16, 5x17, 6x17, 7x17, 8x17, 6x18, 7x18, 14x18, 14x19.
-                        for ( const uint32_t & pixelNumber : { 326, 327, 328, 345, 346, 347, 348, 366, 367, 374, 394 } ) {
+                        for ( const uint32_t pixelNumber : { 326, 327, 328, 345, 346, 347, 348, 366, 367, 374, 394 } ) {
                             // The gold color gradient has -42 offset from blue color gradient.
                             modified.image()[pixelNumber] -= 42;
                         }
@@ -3516,39 +3516,39 @@ namespace fheroes2
                     // The gold color gradient has -42 offset from blue color gradient.
                     if ( _icnVsSprite[ICN::MINIMON][297].width() == 38 && _icnVsSprite[ICN::MINIMON][297].height() == 34 ) {
                         // We update these pixels: 29x15, 30x15, 31x15, 30x16.
-                        for ( const uint32_t & pixelNumber : { 599, 600, 601, 638 } ) {
+                        for ( const uint32_t pixelNumber : { 599, 600, 601, 638 } ) {
                             _icnVsSprite[ICN::MINIMON][297].image()[pixelNumber] -= 42;
                         }
                     }
                     for ( uint32_t icnNumber = 298; icnNumber < 300; ++icnNumber ) {
                         if ( _icnVsSprite[ICN::MINIMON][icnNumber].width() == 44 && _icnVsSprite[ICN::MINIMON][icnNumber].height() == 32 ) {
                             // We update these pixels: 29x17, 30x17, 32x17, 30x18, 31x18, 38x18, 38x19, 38x20.
-                            for ( const uint32_t & pixelNumber : { 777, 778, 780, 822, 823, 830, 874, 918 } ) {
+                            for ( const uint32_t pixelNumber : { 777, 778, 780, 822, 823, 830, 874, 918 } ) {
                                 _icnVsSprite[ICN::MINIMON][icnNumber].image()[pixelNumber] -= 42;
                             }
                         }
                     }
                     if ( _icnVsSprite[ICN::MINIMON][300].width() == 45 && _icnVsSprite[ICN::MINIMON][300].height() == 32 ) {
                         // We update these pixels: 30x17, 31x17, 33x17, 31x18, 32x18, 39x18, 39x19, 39x20
-                        for ( const uint32_t & pixelNumber : { 795, 796, 798, 841, 842, 849, 894, 939 } ) {
+                        for ( const uint32_t pixelNumber : { 795, 796, 798, 841, 842, 849, 894, 939 } ) {
                             _icnVsSprite[ICN::MINIMON][300].image()[pixelNumber] -= 42;
                         }
                     }
                     if ( _icnVsSprite[ICN::MINIMON][301].width() == 45 && _icnVsSprite[ICN::MINIMON][301].height() == 32 ) {
                         // We update these pixels: 29x17, 30x17, 32x17, 30x18, 31x18, 39x18, 39x19, 39x20
-                        for ( const uint32_t & pixelNumber : { 794, 795, 797, 840, 841, 849, 894, 939 } ) {
+                        for ( const uint32_t pixelNumber : { 794, 795, 797, 840, 841, 849, 894, 939 } ) {
                             _icnVsSprite[ICN::MINIMON][301].image()[pixelNumber] -= 42;
                         }
                     }
                     if ( _icnVsSprite[ICN::MINIMON][302].width() == 45 && _icnVsSprite[ICN::MINIMON][302].height() == 32 ) {
                         // We update these pixels: 35x16, 29x17, 30x17, 32x17, 33x17, 34x17, 30x18, 31x18, 31x19, 32x20.
-                        for ( const uint32_t & pixelNumber : { 755, 794, 795, 797, 798, 799, 840, 841, 886, 932 } ) {
+                        for ( const uint32_t pixelNumber : { 755, 794, 795, 797, 798, 799, 840, 841, 886, 932 } ) {
                             _icnVsSprite[ICN::MINIMON][302].image()[pixelNumber] -= 42;
                         }
                     }
                     if ( _icnVsSprite[ICN::MINIMON][303].width() == 44 && _icnVsSprite[ICN::MINIMON][303].height() == 32 ) {
                         // We update these pixels: 29x17, 30x17, 30x18, 31x18, 31x19.
-                        for ( const uint32_t & pixelNumber : { 777, 778, 822, 823, 867 } ) {
+                        for ( const uint32_t pixelNumber : { 777, 778, 822, 823, 867 } ) {
                             _icnVsSprite[ICN::MINIMON][303].image()[pixelNumber] -= 42;
                         }
                     }
