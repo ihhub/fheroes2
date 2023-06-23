@@ -54,7 +54,6 @@ namespace Interface
     Interface::Editor::Editor()
         : _editorPanel( *this )
     {
-        redraw = 0;
         Reset();
     }
 
@@ -88,7 +87,7 @@ namespace Interface
     {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
-        const uint32_t combinedRedraw = redraw | force;
+        const uint32_t combinedRedraw = _redraw | force;
 
         if ( combinedRedraw & REDRAW_GAMEAREA ) {
             // Render all except the fog.
@@ -114,7 +113,7 @@ namespace Interface
             statusWindow.Redraw();
         }
 
-        redraw = 0;
+        _redraw = 0;
     }
 
     Interface::Editor & Interface::Editor::Get()
@@ -139,7 +138,7 @@ namespace Interface
 
         gameArea.SetUpdateCursor();
 
-        SetRedraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
+        setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
         int32_t fastScrollRepeatCount = 0;
         const int32_t fastScrollStartThreshold = 2;
@@ -295,7 +294,7 @@ namespace Interface
 
                     gameArea.Scroll();
 
-                    redraw |= REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR;
+                    _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR;
                 }
             }
 
@@ -304,14 +303,14 @@ namespace Interface
                 // map objects animation
                 if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                     Game::updateAdventureMapAnimationIndex();
-                    redraw |= REDRAW_GAMEAREA;
+                    _redraw |= REDRAW_GAMEAREA;
                 }
 
-                if ( NeedRedraw() ) {
+                if ( needRedraw() ) {
                     Redraw();
 
                     // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
-                    assert( GetRedrawMask() == 0 );
+                    assert( getRedrawMask() == 0 );
 
                     validateFadeInAndRender();
                 }
@@ -402,7 +401,7 @@ namespace Interface
                 return EventSaveGame();
             }
             else if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
-                if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+                if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                     result = fheroes2::GameMode::QUIT_GAME;
                     break;
                 }

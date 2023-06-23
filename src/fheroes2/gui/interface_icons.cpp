@@ -126,12 +126,12 @@ void Interface::CastleIcons::RedrawBackground( const fheroes2::Point & pos )
 
 void Interface::CastleIcons::ActionCurrentUp()
 {
-    Interface::Basic::Get().SetFocus( GetCurrent() );
+    Interface::AdventureMap::Get().SetFocus( GetCurrent() );
 }
 
 void Interface::CastleIcons::ActionCurrentDn()
 {
-    Interface::Basic::Get().SetFocus( GetCurrent() );
+    Interface::AdventureMap::Get().SetFocus( GetCurrent() );
 }
 
 void Interface::CastleIcons::ActionListDoubleClick( CASTLE & item )
@@ -144,7 +144,7 @@ void Interface::CastleIcons::ActionListDoubleClick( CASTLE & item )
 void Interface::CastleIcons::ActionListSingleClick( CASTLE & item )
 {
     if ( item ) {
-        Interface::Basic & I = Interface::Basic::Get();
+        Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
         I.SetFocus( item );
         I.RedrawFocus();
@@ -219,12 +219,12 @@ void Interface::HeroesIcons::RedrawBackground( const fheroes2::Point & pos )
 
 void Interface::HeroesIcons::ActionCurrentUp()
 {
-    Interface::Basic::Get().SetFocus( GetCurrent(), false );
+    Interface::AdventureMap::Get().SetFocus( GetCurrent(), false );
 }
 
 void Interface::HeroesIcons::ActionCurrentDn()
 {
-    Interface::Basic::Get().SetFocus( GetCurrent(), false );
+    Interface::AdventureMap::Get().SetFocus( GetCurrent(), false );
 }
 
 void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
@@ -237,7 +237,7 @@ void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
 void Interface::HeroesIcons::ActionListSingleClick( HEROES & item )
 {
     if ( item ) {
-        Interface::Basic & I = Interface::Basic::Get();
+        Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
         I.SetFocus( item, false );
         I.RedrawFocus();
@@ -295,7 +295,7 @@ void Interface::HeroesIcons::SetPos( int32_t px, int32_t py )
     }
 }
 
-Interface::IconsPanel::IconsPanel( Basic & basic )
+Interface::IconsPanel::IconsPanel( AdventureMap & basic )
     : BorderWindow( { 0, 0, 144, 128 } )
     , interface( basic )
     , castleIcons( 4, sfMarker )
@@ -320,16 +320,16 @@ void Interface::IconsPanel::SetRedraw( const icons_t type ) const
     if ( IconsBar::IsVisible() ) {
         switch ( type ) {
         case ICON_HEROES:
-            interface.SetRedraw( REDRAW_HEROES );
+            interface.setRedraw( REDRAW_HEROES );
             break;
         case ICON_CASTLES:
-            interface.SetRedraw( REDRAW_CASTLES );
+            interface.setRedraw( REDRAW_CASTLES );
             break;
         default:
             break;
         }
 
-        interface.SetRedraw( REDRAW_ICONS );
+        interface.setRedraw( REDRAW_ICONS );
     }
 }
 

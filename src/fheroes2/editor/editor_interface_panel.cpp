@@ -116,7 +116,7 @@ namespace Interface
 
     void EditorPanel::setRedraw() const
     {
-        _interface.SetRedraw( REDRAW_BUTTONS );
+        _interface.setRedraw( REDRAW_BUTTONS );
     }
 
     void EditorPanel::_redraw() const
@@ -173,7 +173,7 @@ namespace Interface
             res = Editor::eventNewMap();
         }
         else if ( le.MouseClickLeft( _rectSpecs ) ) {
-            res = Basic::EventScenarioInformation();
+            res = AdventureMap::EventScenarioInformation();
         }
         else if ( le.MouseClickLeft( _rectFile ) ) {
             res = _interface.eventFileDialog();

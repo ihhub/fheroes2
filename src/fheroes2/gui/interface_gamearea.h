@@ -37,7 +37,7 @@
 
 namespace Interface
 {
-    class Basic;
+    class AdventureMap;
 
     enum ScrollingType
     {
@@ -150,7 +150,7 @@ namespace Interface
     class GameArea
     {
     public:
-        explicit GameArea( Basic & basic );
+        explicit GameArea( AdventureMap & basic );
         GameArea( const GameArea & ) = default;
         GameArea( GameArea && ) = delete;
 
@@ -262,7 +262,7 @@ namespace Interface
         }
 
     private:
-        Basic & interface;
+        AdventureMap & interface;
 
         fheroes2::Rect _windowROI; // visible to draw area of World Map in pixels
         fheroes2::Point _topLeftTileOffset; // offset of tiles to be drawn (from here we can find any tile ID)

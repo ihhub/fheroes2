@@ -142,7 +142,7 @@ namespace
     }
 }
 
-Interface::Radar::Radar( Basic & basic )
+Interface::Radar::Radar( AdventureMap & basic )
     : BorderWindow( { 0, 0, RADARWIDTH, RADARWIDTH } )
     , _radarType( RadarType::WorldMap )
     , _interface( basic )
@@ -200,7 +200,7 @@ void Interface::Radar::SetRedraw( const uint32_t redrawMode ) const
     // Only radar redraws are allowed here.
     assert( ( redrawMode & ~( REDRAW_RADAR_CURSOR | REDRAW_RADAR ) ) == 0 );
 
-    _interface.SetRedraw( redrawMode );
+    _interface.setRedraw( redrawMode );
 }
 
 void Interface::Radar::SetRenderArea( const fheroes2::Rect & roi )
@@ -472,7 +472,7 @@ void Interface::Radar::QueueEventProcessing()
     // Move border window
     if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
         _cursorArea.hide();
-        _interface.SetRedraw( REDRAW_RADAR_CURSOR );
+        _interface.setRedraw( REDRAW_RADAR_CURSOR );
     }
     else if ( le.MouseCursor( rect ) ) {
         // move cursor
@@ -487,7 +487,7 @@ void Interface::Radar::QueueEventProcessing()
                 gamearea.SetCenter( { ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height } );
                 visibleROI = gamearea.GetVisibleTileROI();
                 if ( prev.x != visibleROI.x || prev.y != visibleROI.y ) {
-                    _interface.SetRedraw( REDRAW_RADAR_CURSOR );
+                    _interface.setRedraw( REDRAW_RADAR_CURSOR );
                     gamearea.SetRedraw();
                 }
             }

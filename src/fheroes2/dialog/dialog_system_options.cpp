@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "dialog_system_options.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
@@ -28,7 +30,6 @@
 #include "cursor.h"
 #include "dialog_audio.h"
 #include "dialog_hotkeys.h"
-#include "dialog_system_options.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
@@ -416,7 +417,7 @@ namespace fheroes2
                 conf.setEvilInterface( !conf.isEvilInterfaceEnabled() );
                 saveConfiguration = true;
 
-                Interface::Basic & basicInterface = Interface::Basic::Get();
+                Interface::AdventureMap & basicInterface = Interface::AdventureMap::Get();
                 basicInterface.Reset();
                 basicInterface.Redraw( Interface::REDRAW_ALL );
 
@@ -427,7 +428,7 @@ namespace fheroes2
                 conf.setHideInterface( !conf.isHideInterfaceEnabled() );
                 saveConfiguration = true;
 
-                Interface::Basic & basicInterface = Interface::Basic::Get();
+                Interface::AdventureMap & basicInterface = Interface::AdventureMap::Get();
                 basicInterface.Reset();
 
                 // We need to redraw radar first due to the nature of restorers. Only then we can redraw everything.

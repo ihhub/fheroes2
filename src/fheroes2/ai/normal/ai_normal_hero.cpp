@@ -1975,7 +1975,7 @@ namespace AI
         const int monsterStrengthMultiplierCount = 2;
         const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_ADVANTAGE_MEDIUM, ARMY_ADVANTAGE_SMALL };
 
-        Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
+        Interface::StatusWindow & status = Interface::AdventureMap::Get().GetStatusWindow();
 
         uint32_t currentProgressValue = startProgressValue;
 

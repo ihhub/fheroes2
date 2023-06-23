@@ -41,20 +41,19 @@
 #include "ui_tool.h"
 #include "world.h"
 
-Interface::Basic::Basic()
+Interface::AdventureMap::AdventureMap()
     : gameArea( *this )
     , radar( *this )
     , iconsPanel( *this )
     , buttonsArea( *this )
     , statusWindow( *this )
     , controlPanel( *this )
-    , redraw( 0 )
     , _lockRedraw( false )
 {
     Reset();
 }
 
-void Interface::Basic::Reset()
+void Interface::AdventureMap::Reset()
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -107,22 +106,22 @@ void Interface::Basic::Reset()
                                 - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
 }
 
-Interface::Basic & Interface::Basic::Get()
+Interface::AdventureMap & Interface::AdventureMap::Get()
 {
-    static Basic basic;
+    static AdventureMap basic;
     return basic;
 }
 
-void Interface::Basic::Redraw( const uint32_t force /* = 0 */ )
+void Interface::AdventureMap::Redraw( const uint32_t force /* = 0 */ )
 {
     if ( _lockRedraw ) {
-        SetRedraw( force );
+        setRedraw( force );
         return;
     }
 
     const Settings & conf = Settings::Get();
 
-    const uint32_t combinedRedraw = redraw | force;
+    const uint32_t combinedRedraw = _redraw | force;
     const bool hideInterface = conf.isHideInterfaceEnabled();
 
     if ( combinedRedraw & REDRAW_GAMEAREA ) {
@@ -160,10 +159,10 @@ void Interface::Basic::Redraw( const uint32_t force /* = 0 */ )
         GameBorderRedraw( false );
     }
 
-    redraw = 0;
+    _redraw = 0;
 }
 
-int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water )
+int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -294,7 +293,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     }
 
     if ( isFadingEnabled ) {
-        SetRedraw( REDRAW_GAMEAREA );
+        setRedraw( REDRAW_GAMEAREA );
     }
 
     if ( isHideInterface ) {
@@ -303,7 +302,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
         conf.SetShowStatus( isStatusVisible );
         conf.SetShowControlPanel( isControlPanelVisible );
 
-        SetRedraw( REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_GAMEAREA );
+        setRedraw( REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_GAMEAREA );
     }
 
     Redraw( REDRAW_RADAR_CURSOR );

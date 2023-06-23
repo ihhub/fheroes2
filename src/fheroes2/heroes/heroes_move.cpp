@@ -492,7 +492,7 @@ bool Heroes::isInVisibleMapArea() const
 {
     // TODO: this is not entirely correct. Consider a hero being outside the visible are but his shadow is still inside. The visible tile ROI should be extended by
     // TODO: at least 1 tile in each direction.
-    return Interface::Basic::Get().GetGameArea().GetVisibleTileROI() & GetCenter();
+    return Interface::AdventureMap::Get().GetGameArea().GetVisibleTileROI() & GetCenter();
 }
 
 bool Heroes::isInDeepOcean() const
@@ -907,7 +907,7 @@ void Heroes::FadeOut( const fheroes2::Point & offset ) const
     if ( !isInVisibleMapArea() )
         return;
 
-    Interface::Basic & iface = Interface::Basic::Get();
+    Interface::AdventureMap & iface = Interface::AdventureMap::Get();
     Interface::GameArea & gamearea = iface.GetGameArea();
 
     int multiplier = std::max( offset.x < 0 ? -offset.x : offset.x, offset.y < 0 ? -offset.y : offset.y );
@@ -942,7 +942,7 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
     if ( !isInVisibleMapArea() )
         return;
 
-    Interface::Basic & iface = Interface::Basic::Get();
+    Interface::AdventureMap & iface = Interface::AdventureMap::Get();
     Interface::GameArea & gamearea = iface.GetGameArea();
 
     int multiplier = std::max( offset.x < 0 ? -offset.x : offset.x, offset.y < 0 ? -offset.y : offset.y );

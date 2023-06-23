@@ -153,7 +153,7 @@ namespace
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
+        const Interface::Radar & radar = Interface::AdventureMap::Get().GetRadar();
         const fheroes2::Rect & radarArea = radar.GetArea();
 
         fheroes2::ImageRestorer back( display, BORDERWIDTH, BORDERWIDTH, sf.width(), sf.height() );
@@ -196,7 +196,7 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Rect & gameArea = Interface::Basic::Get().GetGameArea().GetROI();
+        const fheroes2::Rect & gameArea = Interface::AdventureMap::Get().GetGameArea().GetROI();
 
         const fheroes2::StandardWindow border( gameArea.x + ( gameArea.width - sf.width() ) / 2, gameArea.y + ( gameArea.height - sf.height() ) / 2, sf.width(),
                                                sf.height(), false );
@@ -218,7 +218,7 @@ namespace
 
         fheroes2::Blit( background, display, blitArea.x, blitArea.y );
 
-        const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
+        const Interface::Radar & radar = Interface::AdventureMap::Get().GetRadar();
         const fheroes2::Rect & radarRect = radar.GetRect();
         const fheroes2::Rect & radarArea = radar.GetArea();
 

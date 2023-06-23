@@ -85,7 +85,7 @@ namespace
     // based on given zoom level and initial center
     fheroes2::Rect computeROI( const fheroes2::Point & centerInPixel, const ZoomLevel zoomLevel )
     {
-        const fheroes2::Rect sizeInPixels = Interface::Basic::Get().GetGameArea().GetROI();
+        const fheroes2::Rect sizeInPixels = Interface::AdventureMap::Get().GetGameArea().GetROI();
 
         // how many pixels from "world map" we can see in "view world" window, given current zoom
         const int32_t pixelsW = sizeInPixels.width * TILEWIDTH / tileSizePerZoomLevel[static_cast<uint8_t>( zoomLevel )];
@@ -215,7 +215,7 @@ namespace
             fheroes2::Image temporaryImg( redrawAreaWidth, redrawAreaHeight );
             temporaryImg._disableTransformLayer();
 
-            Interface::GameArea gamearea = Interface::Basic::Get().GetGameArea();
+            Interface::GameArea gamearea = Interface::AdventureMap::Get().GetGameArea();
             gamearea.SetAreaPosition( 0, 0, redrawAreaWidth, redrawAreaHeight );
 
             int32_t drawingFlags = Interface::RedrawLevelType::LEVEL_ALL & ~Interface::RedrawLevelType::LEVEL_ROUTES;
@@ -254,7 +254,7 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Image & image = cache.cachedImages[static_cast<uint8_t>( ROI._zoomLevel )];
 
-        const fheroes2::Rect roiScreen = Interface::Basic::Get().GetGameArea().GetROI();
+        const fheroes2::Rect roiScreen = Interface::AdventureMap::Get().GetGameArea().GetROI();
 
         const int32_t offsetPixelsX = tileSizePerZoomLevel[static_cast<uint8_t>( ROI._zoomLevel )] * ROI.GetROIinPixels().x / TILEWIDTH;
         const int32_t offsetPixelsY = tileSizePerZoomLevel[static_cast<uint8_t>( ROI._zoomLevel )] * ROI.GetROIinPixels().y / TILEWIDTH;
@@ -569,7 +569,7 @@ fheroes2::Rect ViewWorld::ZoomROIs::GetROIinTiles() const
     return result;
 }
 
-void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, Interface::Basic & interface )
+void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, Interface::AdventureMap & interface )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 

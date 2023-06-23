@@ -152,7 +152,7 @@ fheroes2::GameMode Game::StartGame()
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();
 
-    return Interface::Basic::Get().StartGame();
+    return Interface::AdventureMap::Get().StartGame();
 }
 
 void Game::DialogPlayers( int color, std::string title, std::string message )
@@ -237,7 +237,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
     // If Castle dialog background was not rendered than we have opened it from other dialog (Kingdom Overview)
     // and there is no need update Adventure map interface at this time.
     if ( renderBackgroundDialog ) {
-        Interface::Basic & basicInterface = Interface::Basic::Get();
+        Interface::AdventureMap & basicInterface = Interface::AdventureMap::Get();
 
         if ( updateFocus ) {
             if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
@@ -280,7 +280,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    Interface::Basic & basicInterface = Interface::Basic::Get();
+    Interface::AdventureMap & basicInterface = Interface::AdventureMap::Get();
 
     const KingdomHeroes & myHeroes = hero.GetKingdom().GetHeroes();
     KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
@@ -422,7 +422,7 @@ void ShowWarningLostTownsDialog()
     }
 }
 
-int Interface::Basic::GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile )
+int Interface::AdventureMap::GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile )
 {
     switch ( tile.GetObject() ) {
     case MP2::OBJ_NON_ACTION_CASTLE:
@@ -453,7 +453,7 @@ int Interface::Basic::GetCursorFocusCastle( const Castle & castle, const Maps::T
     return Cursor::POINTER;
 }
 
-int Interface::Basic::GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile )
+int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile )
 {
     const bool isWater = tile.isWater();
 
@@ -523,7 +523,7 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & hero, const Maps:
     return Cursor::POINTER;
 }
 
-int Interface::Basic::GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile )
+int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile )
 {
     if ( hero.Modes( Heroes::ENABLEMOVE ) ) {
         return Cursor::Get().Themes();
@@ -615,7 +615,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & hero, const Maps::Til
     return Cursor::POINTER;
 }
 
-int Interface::Basic::GetCursorTileIndex( int32_t dstIndex )
+int Interface::AdventureMap::GetCursorTileIndex( int32_t dstIndex )
 {
     if ( !Maps::isValidAbsIndex( dstIndex ) ) {
         return Cursor::POINTER;
@@ -641,7 +641,7 @@ int Interface::Basic::GetCursorTileIndex( int32_t dstIndex )
     return Cursor::POINTER;
 }
 
-fheroes2::GameMode Interface::Basic::StartGame()
+fheroes2::GameMode Interface::AdventureMap::StartGame()
 {
     Settings & conf = Settings::Get();
 
@@ -862,7 +862,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     return res;
 }
 
-fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
+fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 {
     if ( isload ) {
         updateFocus();
@@ -1200,7 +1200,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                     if ( hero->isMoveEnabled() ) {
                         if ( hero->Move( 10 == conf.HeroesMoveSpeed() ) ) {
                             // Do not generate a frame as we are going to do it later.
-                            Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
+                            Interface::AdventureMap::RedrawLocker redrawLocker( Interface::AdventureMap::Get() );
 
                             gameArea.SetCenter( hero->GetCenter() );
                             ResetFocus( GameFocus::HEROES, true );
@@ -1217,7 +1217,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                             const fheroes2::Point movement( hero->MovementDirection() );
                             if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
                                 // Do not generate a frame as we are going to do it later.
-                                Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
+                                Interface::AdventureMap::RedrawLocker redrawLocker( Interface::AdventureMap::Get() );
 
                                 const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
 
@@ -1295,11 +1295,11 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                 gameArea.SetRedraw();
             }
 
-            if ( NeedRedraw() ) {
+            if ( needRedraw() ) {
                 Redraw();
 
                 // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
-                assert( GetRedrawMask() == 0 );
+                assert( getRedrawMask() == 0 );
 
                 validateFadeInAndRender();
             }
@@ -1310,7 +1310,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
         if ( GetFocusHeroes() ) {
             GetFocusHeroes()->ShowPath( false );
 
-            SetRedraw( REDRAW_GAMEAREA );
+            setRedraw( REDRAW_GAMEAREA );
         }
 
         if ( myKingdom.isPlay() ) {
@@ -1336,19 +1336,19 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
     return res;
 }
 
-void Interface::Basic::validateFadeInAndRender()
+void Interface::AdventureMap::validateFadeInAndRender()
 {
     if ( Game::validateDisplayFadeIn() ) {
         fheroes2::fadeInDisplay();
 
-        SetRedraw( REDRAW_GAMEAREA );
+        setRedraw( REDRAW_GAMEAREA );
     }
     else {
         fheroes2::Display::instance().render();
     }
 }
 
-void Interface::Basic::MouseCursorAreaClickLeft( const int32_t tileIndex )
+void Interface::AdventureMap::MouseCursorAreaClickLeft( const int32_t tileIndex )
 {
     Heroes * focusedHero = GetFocusHeroes();
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
@@ -1428,7 +1428,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t tileIndex )
     }
 }
 
-void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
+void Interface::AdventureMap::MouseCursorAreaPressRight( int32_t index_maps ) const
 {
     Heroes * hero = GetFocusHeroes();
 

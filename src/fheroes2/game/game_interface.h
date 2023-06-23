@@ -28,6 +28,7 @@
 
 #include "game_mode.h"
 #include "gamedefs.h"
+#include "interface_base.h"
 #include "interface_buttons.h"
 #include "interface_cpanel.h"
 #include "interface_gamearea.h"
@@ -59,28 +60,11 @@ namespace GameFocus
 
 namespace Interface
 {
-    enum redraw_t : uint32_t
-    {
-        // To render the cursor over the previously generated radar map image.
-        REDRAW_RADAR_CURSOR = 0x01,
-        // To render radar map fully or in ROI and then the cursor over it.
-        REDRAW_RADAR = 0x02,
-        REDRAW_HEROES = 0x04,
-        REDRAW_CASTLES = 0x08,
-        REDRAW_BUTTONS = 0x10,
-        REDRAW_STATUS = 0x20,
-        REDRAW_BORDER = 0x40,
-        REDRAW_GAMEAREA = 0x80,
-
-        REDRAW_ICONS = REDRAW_HEROES | REDRAW_CASTLES,
-        REDRAW_ALL = 0xFF
-    };
-
     Castle * GetFocusCastle();
     Heroes * GetFocusHeroes();
     int GetFocusType();
 
-    class Basic
+    class AdventureMap : public BaseInterface
     {
     public:
         // This class is used to lock rendering of Basic class. This is useful when we have to generate only a single frame.
@@ -88,10 +72,10 @@ namespace Interface
         class RedrawLocker
         {
         public:
-            explicit RedrawLocker( Basic & basic )
-                : _basic( basic )
+            explicit RedrawLocker( AdventureMap & interface_ )
+                : _interface( interface_ )
             {
-                _basic._lockRedraw = true;
+                _interface._lockRedraw = true;
             }
 
             RedrawLocker( const RedrawLocker & ) = delete;
@@ -102,55 +86,16 @@ namespace Interface
 
             ~RedrawLocker()
             {
-                _basic._lockRedraw = false;
+                _interface._lockRedraw = false;
             }
 
         private:
-            Basic & _basic;
+            AdventureMap & _interface;
         };
 
-        static Basic & Get();
-
-        bool NeedRedraw() const
-        {
-            return redraw != 0;
-        }
-
-        void SetRedraw( const uint32_t r )
-        {
-            redraw |= r;
-        }
-
-        uint32_t GetRedrawMask() const
-        {
-            return redraw;
-        }
+        static AdventureMap & Get();
 
         void Redraw( const uint32_t force = 0 );
-
-        static bool isScrollLeft( const fheroes2::Point & cursorPos )
-        {
-            return cursorPos.x < BORDERWIDTH;
-        }
-
-        static bool isScrollRight( const fheroes2::Point & cursorPos )
-        {
-            const fheroes2::Display & display = fheroes2::Display::instance();
-
-            return cursorPos.x >= display.width() - BORDERWIDTH;
-        }
-
-        static bool isScrollTop( const fheroes2::Point & cursorPos )
-        {
-            return cursorPos.y < BORDERWIDTH;
-        }
-
-        static bool isScrollBottom( const fheroes2::Point & cursorPos )
-        {
-            const fheroes2::Display & display = fheroes2::Display::instance();
-
-            return cursorPos.y >= display.height() - BORDERWIDTH;
-        }
 
         int32_t GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water );
 
@@ -225,7 +170,7 @@ namespace Interface
 
     private:
         friend class Editor;
-        Basic();
+        AdventureMap();
 
         static int GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile );
         static int GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile );
@@ -245,8 +190,6 @@ namespace Interface
         ButtonsArea buttonsArea;
         StatusWindow statusWindow;
         ControlPanel controlPanel;
-
-        uint32_t redraw;
 
         bool _lockRedraw;
     };

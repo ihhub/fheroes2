@@ -308,7 +308,7 @@ namespace
     }
 }
 
-Interface::GameArea::GameArea( Basic & basic )
+Interface::GameArea::GameArea( AdventureMap & basic )
     : interface( basic )
     , _minLeftOffset( 0 )
     , _maxLeftOffset( 0 )
@@ -742,25 +742,25 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 #endif
         // redraw fog
         if ( renderFog ) {
-            for ( int32_t y = minY; y < maxY; ++y ) {
-                for ( int32_t x = minX; x < maxX; ++x ) {
-                    const Maps::Tiles & tile = world.GetTiles( x, y );
+        for ( int32_t y = minY; y < maxY; ++y ) {
+            for ( int32_t x = minX; x < maxX; ++x ) {
+                const Maps::Tiles & tile = world.GetTiles( x, y );
 
-                    if ( tile.getFogDirection() != Direction::UNKNOWN ) {
-                        drawFog( tile, dst, *this );
+                if ( tile.getFogDirection() != Direction::UNKNOWN ) {
+                    drawFog( tile, dst, *this );
 
-                        if ( drawTowns ) {
-                            drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTWBA );
+                    if ( drawTowns ) {
+                        drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTWBA );
 
-                            const MP2::MapObjectType objectType = tile.GetObject( false );
-                            if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
-                                drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTOWN );
-                            }
+                        const MP2::MapObjectType objectType = tile.GetObject( false );
+                        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
+                            drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTOWN );
                         }
                     }
                 }
             }
         }
+    }
 
     updateObjectAnimationInfo();
 }
@@ -805,7 +805,7 @@ void Interface::GameArea::Scroll()
 
 void Interface::GameArea::SetRedraw() const
 {
-    interface.SetRedraw( REDRAW_GAMEAREA );
+    interface.setRedraw( REDRAW_GAMEAREA );
 }
 
 fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset )
@@ -819,7 +819,7 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
     result.reset();
 
     // Make a temporary copy
-    GameArea gamearea = Basic::Get().GetGameArea();
+    GameArea gamearea = AdventureMap::Get().GetGameArea();
 
     gamearea.SetAreaPosition( 0, 0, result.width(), result.height() );
 
@@ -933,7 +933,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 
     // change cursor if need
     if ( ( updateCursor || index != _prevIndexPos ) && isCursorOverGamearea ) {
-        Cursor::Get().SetThemes( Interface::Basic::GetCursorTileIndex( index ) );
+        Cursor::Get().SetThemes( Interface::AdventureMap::GetCursorTileIndex( index ) );
         _prevIndexPos = index;
         updateCursor = false;
     }
@@ -1055,7 +1055,7 @@ void Interface::GameArea::runSingleObjectAnimation( const std::shared_ptr<BaseOb
 
     LocalEvent & le = LocalEvent::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
-    Interface::Basic & basicInterface = Interface::Basic::Get();
+    Interface::AdventureMap & basicInterface = Interface::AdventureMap::Get();
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_PICKUP_DELAY } ) ) && !info->isAnimationCompleted() ) {
         if ( Game::validateAnimationDelay( Game::HEROES_PICKUP_DELAY ) ) {

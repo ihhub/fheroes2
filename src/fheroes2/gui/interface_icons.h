@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -44,7 +44,7 @@ enum icons_t
 
 namespace Interface
 {
-    class Basic;
+    class AdventureMap;
 
     using HEROES = Heroes *;
     using CASTLE = Castle *;
@@ -163,7 +163,7 @@ namespace Interface
     class IconsPanel final : public BorderWindow
     {
     public:
-        explicit IconsPanel( Basic & basic );
+        explicit IconsPanel( AdventureMap & basic );
         IconsPanel( const IconsPanel & ) = delete;
 
         ~IconsPanel() override = default;
@@ -186,14 +186,14 @@ namespace Interface
         void ShowIcons( const icons_t type );
 
     private:
-        friend Basic;
+        friend AdventureMap;
 
         // Do not call these methods directly, use Interface::Basic::Redraw() instead
         // to avoid issues in the "no interface" mode
         void Redraw();
         void RedrawIcons( const icons_t type );
 
-        Basic & interface;
+        AdventureMap & interface;
 
         fheroes2::Image sfMarker;
 

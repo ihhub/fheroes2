@@ -84,7 +84,7 @@ namespace Interface
         fheroes2::Rect _rectEditorPanel;
     };
 
-    class Editor : public Basic
+    class Editor : public AdventureMap
     {
     public:
         static Editor & Get();
