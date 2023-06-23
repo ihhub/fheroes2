@@ -217,16 +217,18 @@ std::vector<std::string> StringSplit( const std::string & str, const std::string
     return vec;
 }
 
-std::string InsertString( const std::string & src, size_t pos, const char * c )
+std::string insertCharToString( const std::string & inputString, const size_t position, const char character )
 {
-    std::string res = src;
+    std::string outputString = inputString;
 
-    if ( pos >= src.size() )
-        res.append( c );
-    else
-        res.insert( pos, c );
+    if ( position >= inputString.size() ) {
+        outputString.append( 1, character );
+    }
+    else {
+        outputString.insert( position, 1, character );
+    }
 
-    return res;
+    return outputString;
 }
 
 int Sign( int s )
@@ -401,7 +403,8 @@ namespace fheroes2
                 system_error( std::make_error_code( std::errc::value_too_large ),
                               "Too large `length` provided to `calculateCRC32`. Must be no larger than `std::numeric_limits<uInt>::max()` (usually `(1 << 32) - 1`)." );
         }
-        return crc32( 0, data, static_cast<uInt>( length ) );
+
+        return static_cast<uint32_t>( crc32( 0, data, static_cast<uInt>( length ) ) );
     }
 
     void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding )

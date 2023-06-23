@@ -852,7 +852,7 @@ namespace fheroes2
                 }
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "YES" ), { 6, 5 }, { 4, 6 }, { 86, 16 }, buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "YES" ), { 6, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
 
                 break;
             }
@@ -875,7 +875,7 @@ namespace fheroes2
                 }
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NO" ), { 6, 5 }, { 4, 6 }, { 86, 16 }, buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "NO" ), { 6, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
 
                 break;
             }
@@ -1007,7 +1007,7 @@ namespace fheroes2
                     Fill( out, 5, 10 + i, 89, 20, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HEROES" ), { 6, 5 }, { 6, 6 }, { 89, 34 }, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "HEROES" ), { 6, 5 }, { 5, 6 }, { 89, 34 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -1025,10 +1025,10 @@ namespace fheroes2
                     out = GetICN( ICN::OVERVIEW, 2 + i );
 
                     // clean the button.
-                    Fill( out, 6, 7 + i, 89 - i, 29, getButtonFillingColor( i == 0 ) );
+                    Fill( out, 6, 6 + i, 89 - i, 30, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWNS/\nCASTLES" ), { 6, 5 }, { 6, 6 }, { 90, 34 },
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TOWNS/\nCASTLES" ), { 6, 5 }, { 5, 6 }, { 90, 34 },
                                     fheroes2::FontColor::WHITE );
 
                 break;
@@ -1449,7 +1449,7 @@ namespace fheroes2
                     Fill( out, 6 - 2 * i, 2 + i, 52, 14, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "guildWell|EXIT" ), { 6, 2 }, { 4, 3 }, { 52, 14 },
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "guildWell|EXIT" ), { 6, 3 }, { 5, 4 }, { 52, 14 },
                                     fheroes2::FontColor::WHITE );
 
                 break;
@@ -1604,7 +1604,7 @@ namespace fheroes2
                 }
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ), { 6, 5 }, { 4, 6 }, { 86, 16 }, buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "OKAY" ), { 6, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
 
                 break;
             }
@@ -1627,7 +1627,7 @@ namespace fheroes2
                 }
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), { 7, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), { 7, 5 }, { 6, 6 }, { 86, 16 }, buttonFontColor );
 
                 break;
             }
@@ -1650,7 +1650,7 @@ namespace fheroes2
                 }
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), { 7, 5 }, { 5, 6 }, { 86, 16 }, buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), { 7, 5 }, { 6, 6 }, { 86, 16 }, buttonFontColor );
 
                 break;
             }

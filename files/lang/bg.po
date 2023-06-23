@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-30 00:59+0000\n"
+"POT-Creation-Date: 2023-06-14 20:35+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3505,45 +3505,42 @@ msgid "Best Monster:"
 msgstr "Най-добро чудовище:"
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr ""
+msgstr "Създай карта с ширина %{size} квадрата и височина %{size} квадрата."
 
-#, fuzzy
 msgid "Cancel back to the New Map menu."
-msgstr "Отказ обратно към главното меню."
+msgstr "Отказ обратно към Меню за нова карта."
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr ""
+"Създай нова карта или от начало, или като използваш генератора на произволни "
+"карти."
 
-#, fuzzy
 msgid "New Map"
-msgstr "Нова Зора"
+msgstr "Нова Карта"
 
-#, fuzzy
 msgid "Load Map"
-msgstr "Зареди Игра"
+msgstr "Зареди Карта"
 
 msgid "Load an existing map."
-msgstr ""
+msgstr "Зареди съществуваща карта."
 
 msgid "Cancel back to the main menu."
 msgstr "Отказ обратно към главното меню."
 
 msgid "From Scratch"
-msgstr ""
+msgstr "От начало"
 
 msgid "Start from scratch with a blank map."
-msgstr ""
+msgstr "Започни от начало с празна карта."
 
 msgid "Create a randomly generated map."
-msgstr ""
+msgstr "Създай произволно генерирана карта."
 
-#, fuzzy
 msgid "Random"
 msgstr "Случаен"
 
-#, fuzzy
 msgid "Cancel back to the Map Editor main menu."
-msgstr "Отказ обратно към главното меню."
+msgstr "Отказ обратно към главното меню на Създателя на карти."
 
 msgid "No maps available!"
 msgstr "Няма налични карти!"
@@ -3912,25 +3909,20 @@ msgstr "избери оригиналната кампания"
 msgid "hotkey|choose the expansion campaign"
 msgstr "избери кампанията за разширяване"
 
-#, fuzzy
 msgid "hotkey|map editor main menu"
-msgstr "име на кампания"
+msgstr "създател на карти основно меню"
 
-#, fuzzy
 msgid "hotkey|new map menu"
-msgstr "нова игра"
+msgstr "ново меню на карта"
 
-#, fuzzy
 msgid "hotkey|load map menu"
-msgstr "зареди игра"
+msgstr "зареди меню за карта"
 
-#, fuzzy
 msgid "hotkey|new map from scratch"
-msgstr "отстъпление от битка"
+msgstr "нова карта от начало"
 
-#, fuzzy
 msgid "hotkey|new random map"
-msgstr "нова игра"
+msgstr "нова случайна игра"
 
 msgid "hotkey|roland campaign"
 msgstr "кампания на роланд"
@@ -4297,7 +4289,7 @@ msgstr ""
 "Лоялността\"."
 
 msgid "Loading video. Please wait..."
-msgstr ""
+msgstr "Видеото се зарежда. Моля изчакай..."
 
 msgid "Host"
 msgstr "Домакин"
@@ -6543,6 +6535,9 @@ msgstr "Заклинанието не беше намерено."
 msgid "Only heroes can cast this spell."
 msgstr "Само герои могат да правят това заклинание."
 
+msgid "This hero is not able to cast adventure spells."
+msgstr "Този герой не може да прави приключенски магии."
+
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 "Твоят герой е твърде уморен, за да направи това заклинание днес. Опитай "
@@ -6551,8 +6546,24 @@ msgstr ""
 msgid "This spell cannot be used on a boat."
 msgstr "Това заклинание не може да се използва на лодка."
 
-msgid "This spell can be casted only nearby water."
+#, fuzzy
+msgid "This spell can be casted only nearby ocean."
 msgstr "Това заклинание може да се направи само в близост до вода."
+
+msgid ""
+"There is no boat available and no free ocean location near the hero to cast "
+"this spell."
+msgstr ""
+
+#, fuzzy
+msgid "There is no more boat available to cast this spell."
+msgstr "Този герой не може да прави приключенски магии."
+
+#, fuzzy
+msgid "There is no free ocean location near the hero to cast this spell."
+msgstr ""
+"Първо трябва да победиш призраците, които пазят мината, за да направиш това "
+"заклинание."
 
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
@@ -6698,9 +6709,6 @@ msgstr "Градски портал"
 
 msgid "Select town to port to."
 msgstr "Избери град за пристанище."
-
-msgid "%{spell} failed!!!"
-msgstr "%{spell} е неуспешна!!!"
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Вражеските герои вече могат да бъдат идентифицирани напълно."
@@ -10466,3 +10474,6 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{spell} failed!!!"
+#~ msgstr "%{spell} е неуспешна!!!"

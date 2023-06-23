@@ -1418,8 +1418,8 @@ StreamBase & operator>>( StreamBase & msg, World & w )
         w._oldTileQuantityData.clear();
     }
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1005_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1005_RELEASE ) {
         for ( Maps::Tiles & tile : w.vec_tiles ) {
             tile.fixOldArtifactIDs();
         }

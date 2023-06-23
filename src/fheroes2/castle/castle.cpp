@@ -1075,36 +1075,45 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
 
 bool Castle::RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force )
 {
-    Monster monster( race, GetActualDwelling( dw ) );
-    Troop troop( monster, std::min( count, getRecruitLimit( monster, GetKingdom().GetFunds() ) ) );
+    const Monster monster( race, GetActualDwelling( dw ) );
+    assert( count <= getRecruitLimit( monster, GetKingdom().GetFunds() ) );
 
-    if ( !RecruitMonster( troop, false ) ) {
-        if ( force ) {
-            Troop * weak = GetArmy().GetWeakestTroop();
-            if ( weak && weak->GetStrength() < troop.GetStrength() ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO,
-                           name << ": " << troop.GetCount() << " " << troop.GetMultiName() << " replace " << weak->GetCount() << " " << weak->GetMultiName() )
-                weak->Set( troop );
-                return true;
-            }
-        }
+    const Troop troop( monster, std::min( count, getRecruitLimit( monster, GetKingdom().GetFunds() ) ) );
 
-        return false;
+    if ( RecruitMonster( troop, false ) ) {
+        return true;
     }
-    return true;
+
+    // TODO: before removing an existing stack of monsters try to upgrade them and also merge some stacks.
+
+    if ( force ) {
+        Troop * weak = GetArmy().GetWeakestTroop();
+        if ( weak && weak->GetStrength() < troop.GetStrength() ) {
+            DEBUG_LOG( DBG_GAME, DBG_INFO,
+                       name << ": " << troop.GetCount() << " " << troop.GetMultiName() << " replace " << weak->GetCount() << " " << weak->GetMultiName() )
+            weak->Set( troop );
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void Castle::recruitBestAvailable( Funds budget )
 {
     for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
-        if ( isBuild( dw ) ) {
-            const Monster monster( race, GetActualDwelling( dw ) );
-            const uint32_t willRecruit = getRecruitLimit( monster, budget );
+        if ( !isBuild( dw ) ) {
+            continue;
+        }
 
-            if ( RecruitMonsterFromDwelling( dw, willRecruit, true ) ) {
-                // success, reduce the budget
-                budget -= ( monster.GetCost() * willRecruit );
-            }
+        const Monster monster( race, GetActualDwelling( dw ) );
+        const uint32_t willRecruit = getRecruitLimit( monster, budget );
+        if ( willRecruit == 0 ) {
+            continue;
+        }
+
+        if ( RecruitMonsterFromDwelling( dw, willRecruit, true ) ) {
+            budget -= ( monster.GetCost() * willRecruit );
         }
     }
 }

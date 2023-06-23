@@ -22,6 +22,7 @@ Precompiled binaries of the release version are currently available for the foll
   * [**macOS native app**](#macos-native-app)
 * [**Linux**](#linux)
   * [**Flatpak**](#flatpak-linux)
+  * [**Gentoo**](#gentoo-package)
   * [**Homebrew**](#homebrew-linux)
   * [**AUR package**](#aur-package)
   * [**Linux ZIP archive**](#linux-zip-archive)
@@ -190,6 +191,43 @@ The recommended option requires the Heroes of Might and Magic II installer file 
 
 For the manual installation you have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the original game or demo directory to the
 `~/.var/app/io.github.ihhub.Fheroes2/data/fheroes2` directory. The destination folder will be opened when this option is selected.
+
+<a name="gentoo-package"></a>
+### Gentoo package
+
+If you are using [**Gentoo**](https://gentoo.org), you can install the game using package manager. There are several options:
+
+#### GOG version
+
+If you purchased the game from GOG, add `games-strategy/homm2-gold-gog GOG-EULA` line to your `/etc/portage/package.license`, then use the following command:
+
+```sh
+sudo emerge -av games-strategy/homm2-gold-gog
+```
+
+It will ask you to put the .exe installer of the game and optionally the zip file with FLAC music to your distfiles directory,
+and if it's there, it will unpack everything to the correct places and pull `games-engines/fheroes2` as a dependency.
+
+USE-flag `flac` determines whether the game will use FLAC music or OGG music.
+
+#### Demo version
+
+You can install the demo version for free by adding `games-strategy/homm2-demo HoMM2-Demo` line to your `/etc/portage/package.license`, then using the following command:
+
+```sh
+sudo emerge -av games-strategy/homm2-demo
+```
+
+#### Another legal installation
+
+If you installed the game from original CD, use the following commands:
+
+```sh
+sudo emerge -av games-engines/fheroes2
+/usr/share/fheroes2/extract_homm2_resources.sh
+```
+
+The second command (Note: run it without root) will ask you where your data files are.
 
 <a name="homebrew-linux"></a>
 ### Homebrew

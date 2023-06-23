@@ -37,6 +37,58 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2023-06-14" version="v1.0.5">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.5</url>
+      <description>
+        <p>Changes in v1.0.5 (14 June 2023):</p>
+        <ul>
+          <li>improve AI castle defensive strategy on Adventure Map</li>
+          <li>fix rating in campaign congratulations text in win video</li>
+          <li>update Danish translation</li>
+          <li>adjust battlefield Idle and Flag animation speed and avoid setting 0 animation delay for battlefield actions</li>
+          <li>show the currently selected bonus in the campaign scenario UI if the campaign scenario is already in progress</li>
+          <li>update Polish translation</li>
+          <li>add shadows for the Virtual Keyboard buttons</li>
+          <li>fix okay button not being redrawn in battle options dialog</li>
+          <li>improve army distribution in castles for AI players</li>
+          <li>make the text input cursor blink and add the ability to set the cursor position anywhere in the edited string</li>
+          <li>move jobless AI heroes into castles on a last day of a week</li>
+          <li>fix monster upgrade logic when AI was wasting resources for nothing</li>
+          <li>do not check whether a hero can cast a spell if spellcasting is prohibited in principle</li>
+          <li>fix AI heroes behavior ignoring empty castles with commanders</li>
+          <li>speed up AI decision making on Adventure Map</li>
+          <li>fix Magellan's Maps visit by AI heroes when discovered objects were not being added for exploration</li>
+          <li>fix missing logic for AI heroes to meet each other in the middle of a turn</li>
+          <li>reduce unit growth bonus for AI</li>
+          <li>do not play the same kill/wince sounds simultaneously</li>
+          <li>allow AI heroes to retreat when the kingdom has full house of heroes and when there are enough resources on the next turn</li>
+          <li>fix a crash when AI heroes capture a dwelling protected by monsters</li>
+          <li>add Editor Main Menu (only for development builds)</li>
+          <li>fix the Skeleton passability</li>
+          <li>fix the logic for defeated heroes in campaign scenarios</li>
+          <li>fix the logic of recognizing objects guarded by neighboring monsters</li>
+          <li>update hero's path after inspecting a castle</li>
+          <li>add Evil interface version of Monster recruitment dialog</li>
+          <li>update Bulgarian translation</li>
+          <li>add screen fade effect for transiting between game sections</li>
+          <li>add a check to avoid a crash for corrupted game resources</li>
+          <li>fix the rendering of the number of units during the castle siege</li>
+          <li>update Russian translation</li>
+          <li>speed up battlefield rendering</li>
+          <li>fix incorrect spell efficiency display for resurrection spells</li>
+          <li>set music type to MIDI if no MUSIC directory exist</li>
+          <li>fix cases with dropping audio volume when MUSIC directory is not present</li>
+          <li>fix crashes for Android devices due to using a buggy third-party package</li>
+          <li>fix cases when AI ignores some objects during path evaluation</li>
+          <li>use 22050 sound sample rate for PS Vita to fix high CPU load</li>
+          <li>add diacritic signs to CP-1250 button font</li>
+          <li>update Slovak translation</li>
+          <li>update Ukrainian translation</li>
+          <li>fix Android version for Android 7 or lower devices </li>
+          <li>do not reset castle or heroes scrollbars when hero moves</li>
+        </ul>
+      </description>
+    </release>
     <release date="2023-05-13" version="v1.0.4">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.4</url>
       <description>
