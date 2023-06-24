@@ -651,7 +651,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
     _radar.Build();
     _radar.SetHide( true );
     iconsPanel.HideIcons( ICON_ANY );
-    statusWindow.Reset();
+    _statusWindow.Reset();
 
     // Prepare for render the whole game interface with adventure map filled with fog as it was not uncovered by 'updateMapFogDirections()'.
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
@@ -725,7 +725,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                     if ( isHotSeatGame ) {
                         iconsPanel.HideIcons( ICON_ANY );
-                        statusWindow.Reset();
+                        _statusWindow.Reset();
 
                         // Fully update fog directions in Hot Seat mode to cover the map with fog on player change.
                         // TODO: Cover the Adventure map area with fog sprites without rendering the "Game Area" for player change.
@@ -769,8 +769,8 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                     conf.SetCurrentColor( playerColor );
 
-                    statusWindow.Reset();
-                    statusWindow.SetState( StatusType::STATUS_AITURN );
+                    _statusWindow.Reset();
+                    _statusWindow.SetState( StatusType::STATUS_AITURN );
 
 #if defined( WITH_DEBUG )
                     if ( player->isAIAutoControlMode() ) {
@@ -873,7 +873,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
     }
 
     _radar.SetHide( false );
-    statusWindow.Reset();
+    _statusWindow.Reset();
     _gameArea.SetUpdateCursor();
 
     const Settings & conf = Settings::Get();
@@ -952,7 +952,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         }
 
         // pending timer events
-        statusWindow.TimerEventProcessing();
+        _statusWindow.TimerEventProcessing();
 
         // hotkeys
         if ( le.KeyPress() ) {
@@ -1106,10 +1106,10 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             }
         }
         // cursor is over the status window
-        else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( statusWindow.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( _statusWindow.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            statusWindow.QueueEventProcessing();
+            _statusWindow.QueueEventProcessing();
         }
         // cursor is over the buttons area
         else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.MouseCursor( buttonsArea.GetRect() ) ) {

@@ -56,9 +56,9 @@ namespace
     const uint32_t resourceWindowExpireTime = 2500;
 }
 
-Interface::StatusWindow::StatusWindow( AdventureMap & basic )
+Interface::StatusWindow::StatusWindow( BaseInterface & interface )
     : BorderWindow( { 0, 0, 144, 72 } )
-    , interface( basic )
+    , interface( interface )
     , _state( StatusType::STATUS_UNKNOWN )
     , lastResource( Resource::UNKNOWN )
     , countLastResource( 0 )

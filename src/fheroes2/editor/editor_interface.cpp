@@ -68,7 +68,7 @@ namespace Interface
 
         if ( display.height() > display.DEFAULT_HEIGHT + BORDERWIDTH ) {
             _editorPanel.setPos( xOffset, _radar.GetArea().y + _radar.GetArea().height + BORDERWIDTH );
-            statusWindow.SetPos( xOffset, _editorPanel.getRect().y + _editorPanel.getRect().height );
+            _statusWindow.SetPos( xOffset, _editorPanel.getRect().y + _editorPanel.getRect().height );
         }
         else {
             _editorPanel.setPos( xOffset, _radar.GetArea().y + _radar.GetArea().height );
@@ -112,7 +112,7 @@ namespace Interface
         }
 
         if ( ( combinedRedraw & REDRAW_STATUS ) && ( display.height() > display.DEFAULT_HEIGHT + BORDERWIDTH ) ) {
-            statusWindow.Redraw();
+            _statusWindow.Redraw();
         }
 
         _redraw = 0;

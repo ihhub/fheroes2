@@ -515,7 +515,7 @@ void Interface::AdventureMap::EventSwitchShowStatus() const
         }
         else {
             conf.SetShowStatus( true );
-            statusWindow.SetRedraw();
+            _statusWindow.SetRedraw();
         }
     }
 }

@@ -37,6 +37,7 @@
 #include "interface_border.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
+#include "interface_status.h"
 #include "localevent.h"
 #include "maps.h"
 #include "math_base.h"
@@ -49,7 +50,6 @@
 Interface::AdventureMap::AdventureMap()
     : iconsPanel( *this )
     , buttonsArea( *this )
-    , statusWindow( *this )
     , controlPanel( *this )
     , _lockRedraw( false )
 {
@@ -79,14 +79,14 @@ void Interface::AdventureMap::Reset()
             _radar.SetPos( radrPos.x, radrPos.y );
             iconsPanel.SetPos( iconPos.x, iconPos.y );
             buttonsArea.SetPos( bttnPos.x, bttnPos.y );
-            statusWindow.SetPos( statPos.x, statPos.y );
+            _statusWindow.SetPos( statPos.x, statPos.y );
         }
         else {
             _radar.SetPos( 0, 0 );
             // It's OK to use display.width() for the X coordinate here, panel will be docked to the right edge
             iconsPanel.SetPos( display.width(), _radar.GetRect().y + _radar.GetRect().height );
             buttonsArea.SetPos( display.width(), iconsPanel.GetRect().y + iconsPanel.GetRect().height );
-            statusWindow.SetPos( display.width(), buttonsArea.GetRect().y + buttonsArea.GetRect().height );
+            _statusWindow.SetPos( display.width(), buttonsArea.GetRect().y + buttonsArea.GetRect().height );
         }
     }
     else {
@@ -95,7 +95,7 @@ void Interface::AdventureMap::Reset()
         _radar.SetPos( px, BORDERWIDTH );
         iconsPanel.SetPos( px, _radar.GetArea().y + _radar.GetArea().height + BORDERWIDTH );
         buttonsArea.SetPos( px, iconsPanel.GetArea().y + iconsPanel.GetArea().height + BORDERWIDTH );
-        statusWindow.SetPos( px, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
+        _statusWindow.SetPos( px, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
     }
 
     const fheroes2::Point prevCenter = _gameArea.getCurrentCenterInPixels();
@@ -155,7 +155,7 @@ void Interface::AdventureMap::Redraw( const uint32_t force /* = 0 */ )
     }
 
     if ( ( hideInterface && conf.ShowStatus() ) || ( combinedRedraw & REDRAW_STATUS ) ) {
-        statusWindow.Redraw();
+        _statusWindow.Redraw();
     }
 
     if ( combinedRedraw & REDRAW_BORDER ) {

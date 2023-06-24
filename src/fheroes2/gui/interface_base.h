@@ -25,6 +25,7 @@
 #include "gamedefs.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
+#include "interface_status.h"
 #include "math_base.h"
 #include "screen.h"
 
@@ -53,6 +54,8 @@ namespace Interface
     {
     public:
         virtual ~BaseInterface() = default;
+
+        virtual void Redraw( const uint32_t force = 0 ) = 0;
 
         bool needRedraw() const
         {
@@ -98,9 +101,14 @@ namespace Interface
             return _gameArea;
         }
 
-        Radar & GetRadar()
+        Radar & getRadar()
         {
             return _radar;
+        }
+
+        StatusWindow & getStatusWindow()
+        {
+            return _statusWindow;
         }
 
         virtual ControlPanel & getControlPanel() = 0;
@@ -113,6 +121,7 @@ namespace Interface
 
         GameArea _gameArea;
         Radar _radar;
+        StatusWindow _statusWindow;
 
         uint32_t _redraw{ 0 };
     };

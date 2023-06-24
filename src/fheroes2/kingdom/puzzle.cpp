@@ -154,7 +154,7 @@ namespace
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        const Interface::Radar & radar = Interface::AdventureMap::Get().GetRadar();
+        const Interface::Radar & radar = Interface::AdventureMap::Get().getRadar();
         const fheroes2::Rect & radarArea = radar.GetArea();
 
         fheroes2::ImageRestorer back( display, BORDERWIDTH, BORDERWIDTH, sf.width(), sf.height() );
@@ -219,7 +219,7 @@ namespace
 
         fheroes2::Blit( background, display, blitArea.x, blitArea.y );
 
-        const Interface::Radar & radar = Interface::AdventureMap::Get().GetRadar();
+        const Interface::Radar & radar = Interface::AdventureMap::Get().getRadar();
         const fheroes2::Rect & radarRect = radar.GetRect();
         const fheroes2::Rect & radarArea = radar.GetArea();
 

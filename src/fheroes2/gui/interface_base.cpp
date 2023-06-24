@@ -25,5 +25,6 @@ namespace Interface
     BaseInterface::BaseInterface()
         : _gameArea( *this )
         , _radar( *this )
+        , _statusWindow( *this )
     {}
 }

@@ -82,7 +82,7 @@ namespace Interface
         }
 
     private:
-        friend AdventureMap;
+        friend class AdventureMap;
 
         enum class RadarType : char
         {

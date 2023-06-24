@@ -31,7 +31,6 @@
 #include "interface_buttons.h"
 #include "interface_cpanel.h"
 #include "interface_icons.h"
-#include "interface_status.h"
 #include "players.h"
 
 class Castle;
@@ -90,18 +89,13 @@ namespace Interface
 
         static AdventureMap & Get();
 
-        void Redraw( const uint32_t force = 0 );
+        void Redraw( const uint32_t force = 0 ) override;
 
         int32_t GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water );
 
         IconsPanel & GetIconsPanel()
         {
             return iconsPanel;
-        }
-
-        StatusWindow & GetStatusWindow()
-        {
-            return statusWindow;
         }
 
         ControlPanel & getControlPanel() override
@@ -171,7 +165,6 @@ namespace Interface
 
         IconsPanel iconsPanel;
         ButtonsArea buttonsArea;
-        StatusWindow statusWindow;
         ControlPanel controlPanel;
 
         bool _lockRedraw;

@@ -31,7 +31,7 @@
 
 namespace Interface
 {
-    class AdventureMap;
+    class BaseInterface;
 
     enum class StatusType : int
     {
@@ -46,7 +46,7 @@ namespace Interface
     class StatusWindow final : public BorderWindow
     {
     public:
-        explicit StatusWindow( AdventureMap & basic );
+        explicit StatusWindow( BaseInterface & interface );
         StatusWindow( const StatusWindow & ) = delete;
 
         ~StatusWindow() override = default;
@@ -68,7 +68,7 @@ namespace Interface
         void TimerEventProcessing();
 
     private:
-        friend AdventureMap;
+        friend class AdventureMap;
         friend class Editor;
 
         // Do not call this method directly, use Interface::Basic::Redraw() instead
@@ -81,7 +81,7 @@ namespace Interface
         void DrawBackground() const;
         void DrawAITurns() const;
 
-        AdventureMap & interface;
+        BaseInterface & interface;
 
         StatusType _state;
         int lastResource;

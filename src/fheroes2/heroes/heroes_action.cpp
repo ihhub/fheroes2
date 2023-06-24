@@ -211,7 +211,7 @@ namespace
         if ( !hero.GetKingdom().isLoss() ) {
             // If the enemy is not vanquished we update only position of defeated hero on radar to remove hero mark.
             const fheroes2::Point heroPosition = hero.GetCenter();
-            I.GetRadar().SetRenderArea( { heroPosition.x, heroPosition.y, 1, 1 } );
+            I.getRadar().SetRenderArea( { heroPosition.x, heroPosition.y, 1, 1 } );
         }
         // If the enemy is vanquished we do not set radar ROI and fully redraw the radar map image as there might be color reset of enemy's objects.
 
@@ -467,7 +467,7 @@ namespace
                 const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
                 const fheroes2::Point castlePosition = Maps::GetPoint( dstIndex );
 
-                I.GetRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
+                I.getRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
             }
             // Otherwise we fully redraw the radar map image as there might be color reset of enemy's objects.
             I.setRedraw( Interface::REDRAW_CASTLES | Interface::REDRAW_RADAR );
@@ -604,7 +604,7 @@ namespace
 
         // Update the radar map image before changing the direction of the hero.
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.getRadar().SetRenderArea( hero.GetScoutRoi() );
         I.Redraw( Interface::REDRAW_RADAR );
 
         // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
@@ -639,7 +639,7 @@ namespace
 
         // Clear hero position marker from the boat and scout the area on radar after disembarking.
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.getRadar().SetRenderArea( hero.GetScoutRoi() );
         I.setRedraw( Interface::REDRAW_RADAR );
 
         hero.GetPath().Reset();
@@ -670,7 +670,7 @@ namespace
             else {
                 const auto resource = funds.getFirstValidResource();
 
-                I.GetStatusWindow().SetResource( resource.first, resource.second );
+                I.getStatusWindow().SetResource( resource.first, resource.second );
                 I.setRedraw( Interface::REDRAW_STATUS );
             }
 
@@ -686,7 +686,7 @@ namespace
         if ( objectType == MP2::OBJ_RESOURCE ) {
             // Update the position of picked up resource on radar to remove its mark.
             const fheroes2::Point resourcePosition = Maps::GetPoint( dst_index );
-            I.GetRadar().SetRenderArea( { resourcePosition.x, resourcePosition.y, 1, 1 } );
+            I.getRadar().SetRenderArea( { resourcePosition.x, resourcePosition.y, 1, 1 } );
             I.setRedraw( Interface::REDRAW_RADAR );
         }
 
@@ -1695,7 +1695,7 @@ namespace
                 const fheroes2::Point artifactPosition = Maps::GetPoint( dst_index );
 
                 // Update the position of picked up artifact on radar to remove its mark.
-                I.GetRadar().SetRenderArea( { artifactPosition.x, artifactPosition.y, 1, 1 } );
+                I.getRadar().SetRenderArea( { artifactPosition.x, artifactPosition.y, 1, 1 } );
                 I.setRedraw( Interface::REDRAW_RADAR );
             }
         }
@@ -1860,11 +1860,11 @@ namespace
 
         // Clear the previous hero position
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
-        I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
+        I.getRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
         I.Redraw( Interface::REDRAW_RADAR );
 
         I.getGameArea().SetCenter( hero.GetCenter() );
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.getRadar().SetRenderArea( hero.GetScoutRoi() );
         I.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
@@ -1900,11 +1900,11 @@ namespace
 
         // Clear the previous hero position
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
-        I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
+        I.getRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
         I.Redraw( Interface::REDRAW_RADAR );
 
         I.getGameArea().SetCenter( hero.GetCenter() );
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.getRadar().SetRenderArea( hero.GetScoutRoi() );
         I.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
@@ -1956,7 +1956,7 @@ namespace
                 Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
                 // Update the object on radar.
-                I.GetRadar().SetRenderArea( radarRoi );
+                I.getRadar().SetRenderArea( radarRoi );
                 I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
             };
 
@@ -2116,7 +2116,7 @@ namespace
                 Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
                 // Update the object on radar.
-                I.GetRadar().SetRenderArea( radarRoi );
+                I.getRadar().SetRenderArea( radarRoi );
                 I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
                 Dialog::Message( MP2::StringObject( objectType ), _( "You beat the Ghosts and are able to restore the mine to production." ), Font::BIG, Dialog::OK );
@@ -2424,7 +2424,7 @@ namespace
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
         const fheroes2::Point towerPosition = Maps::GetPoint( dst_index );
         const fheroes2::Rect towerRoi( towerPosition.x - scoutRange, towerPosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 );
-        I.GetRadar().SetRenderArea( towerRoi );
+        I.getRadar().SetRenderArea( towerRoi );
         I.setRedraw( Interface::REDRAW_RADAR );
     }
 
@@ -3268,7 +3268,7 @@ namespace
 
                     const fheroes2::Rect eyeRoi( eyePosition.x - scoutRange, eyePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 );
 
-                    I.GetRadar().SetRenderArea( eyeRoi );
+                    I.getRadar().SetRenderArea( eyeRoi );
                     I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
                     display.render();
@@ -3494,7 +3494,7 @@ void Heroes::ScoutRadar() const
         if ( !player->isAIAutoControlMode() ) {
 #endif
 
-            I.GetRadar().SetRenderArea( GetScoutRoi() );
+            I.getRadar().SetRenderArea( GetScoutRoi() );
 
 #if defined( WITH_DEBUG )
         }
