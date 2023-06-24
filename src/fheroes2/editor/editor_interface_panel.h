@@ -25,37 +25,62 @@
 #include <array>
 #include <cstdint>
 
-#include "editor_interface_panel.h"
 #include "game_mode.h"
-#include "interface_base.h"
 #include "math_base.h"
 #include "ui_button.h"
 
 namespace Interface
 {
-    class Editor : public BaseInterface
+    class Editor;
+
+    class EditorPanel
     {
     public:
-        static Editor & Get();
+        explicit EditorPanel( Editor & interface_ );
 
-        void redraw( const uint32_t force = 0 ) override;
+        ~EditorPanel() = default;
 
-        // Regenerates the game area and updates the panel positions depending on the UI settings
-        void reset() override;
+        const fheroes2::Rect & getRect() const
+        {
+            return _rectEditorPanel;
+        }
 
-        fheroes2::GameMode startEdit();
-        static fheroes2::GameMode eventLoadMap();
-        static fheroes2::GameMode eventNewMap();
-        static fheroes2::GameMode eventFileDialog();
-        void eventViewWorld();
+        void setPos( const int32_t displayX, int32_t displayY );
+        void setRedraw() const;
 
-        void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
-        void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
+        fheroes2::GameMode queueEventProcessing();
 
     private:
-        Editor();
+        friend class Editor;
 
-        EditorPanel _editorPanel;
+        // Do not call this method directly, use Interface::Basic::Redraw() instead
+        // to avoid issues in the "no interface" mode
+        void _redraw() const;
+
+        Editor & _interface;
+
+        uint32_t _selectedInstrument{ 0 };
+
+        std::array<fheroes2::Button, 6> _instrumentButtons;
+        std::array<fheroes2::Rect, 6> _instrumentButtonsRect;
+
+        fheroes2::Button _buttonMagnify;
+        fheroes2::Button _buttonUndo;
+        fheroes2::Button _buttonNew;
+        fheroes2::Button _buttonSpecs;
+        fheroes2::Button _buttonFile;
+        fheroes2::Button _buttonSystem;
+
+        fheroes2::Rect _rectMagnify;
+        fheroes2::Rect _rectUndo;
+        fheroes2::Rect _rectNew;
+        fheroes2::Rect _rectSpecs;
+        fheroes2::Rect _rectFile;
+        fheroes2::Rect _rectSystem;
+
+        fheroes2::Rect _rectInstruments;
+        fheroes2::Rect _rectInstrumentPanel;
+        fheroes2::Rect _rectEditorPanel;
     };
 }
 #endif

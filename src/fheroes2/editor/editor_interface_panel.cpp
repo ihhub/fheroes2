@@ -20,9 +20,9 @@
 
 #if defined( WITH_DEBUG )
 
-#include <array>
+#include "editor_interface_panel.h"
+
 #include <cstddef>
-#include <cstdint>
 #include <memory>
 
 #include "agg_image.h"
@@ -30,12 +30,10 @@
 #include "dialog_system_options.h"
 #include "editor_interface.h"
 #include "game_interface.h"
-#include "game_mode.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_base.h"
 #include "localevent.h"
-#include "math_base.h"
 #include "screen.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -166,7 +164,7 @@ namespace Interface
         le.MousePressLeft( _rectSystem ) ? _buttonSystem.drawOnPress() : _buttonSystem.drawOnRelease();
 
         if ( le.MouseClickLeft( _rectMagnify ) ) {
-            _interface.EventViewWorld();
+            _interface.eventViewWorld();
         }
         else if ( le.MouseClickLeft( _rectUndo ) ) {
             fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. This function is not available yet.", Dialog::OK );

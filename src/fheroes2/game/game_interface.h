@@ -147,7 +147,6 @@ namespace Interface
         void reset() override;
 
     private:
-        friend class Editor;
         AdventureMap();
 
         static int GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile );

@@ -190,7 +190,7 @@ namespace Interface
                     Dialog::GameInfo();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
-                    EventViewWorld();
+                    eventViewWorld();
                 }
                 // map scrolling control
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
@@ -446,7 +446,7 @@ namespace Interface
         return result;
     }
 
-    void Editor::EventViewWorld()
+    void Editor::eventViewWorld()
     {
         ViewWorld::ViewWorldWindow( 0, ViewWorldMode::ViewAll, *this );
     }
