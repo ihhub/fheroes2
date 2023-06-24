@@ -309,8 +309,8 @@ namespace
     }
 }
 
-Interface::GameArea::GameArea( BaseInterface & basic )
-    : interface( basic )
+Interface::GameArea::GameArea( BaseInterface & interface )
+    : _interface( interface )
     , _minLeftOffset( 0 )
     , _maxLeftOffset( 0 )
     , _minTopOffset( 0 )
@@ -809,7 +809,7 @@ void Interface::GameArea::Scroll()
 
 void Interface::GameArea::SetRedraw() const
 {
-    interface.setRedraw( REDRAW_GAMEAREA );
+    _interface.setRedraw( REDRAW_GAMEAREA );
 }
 
 fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset )
@@ -947,7 +947,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         return;
 
     const Settings & conf = Settings::Get();
-    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( interface.getControlPanel().GetArea() ) )
+    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( _interface.getControlPanel().GetArea() ) )
         return;
 
     const fheroes2::Point tileOffset = _topLeftTileOffset + mousePosition - _windowROI.getPosition();
@@ -957,9 +957,9 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     const fheroes2::Rect tileROI( tilePos.x, tilePos.y, TILEWIDTH, TILEWIDTH );
 
     if ( le.MouseClickLeft( tileROI ) )
-        interface.mouseCursorAreaClickLeft( index );
+        _interface.mouseCursorAreaClickLeft( index );
     else if ( le.MousePressRight( tileROI ) && isCursorOverGamearea )
-        interface.mouseCursorAreaPressRight( index );
+        _interface.mouseCursorAreaPressRight( index );
 }
 
 fheroes2::Point Interface::GameArea::_getStartTileId() const

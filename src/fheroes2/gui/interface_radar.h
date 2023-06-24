@@ -40,12 +40,12 @@ namespace fheroes2
 
 namespace Interface
 {
-    class AdventureMap;
+    class BaseInterface;
 
     class Radar final : public BorderWindow
     {
     public:
-        explicit Radar( AdventureMap & );
+        explicit Radar( BaseInterface & interface );
         // Creates a radar with a fixed position at the top right of the screen,
         // based on an existing radar and suitable for the View World window
         Radar( const Radar & radar, const fheroes2::Display & display );
@@ -100,7 +100,7 @@ namespace Interface
         void RedrawCursor( const fheroes2::Rect * roiRectangle = nullptr );
 
         RadarType _radarType;
-        AdventureMap & _interface;
+        BaseInterface & _interface;
 
         fheroes2::Image _map{ RADARWIDTH, RADARWIDTH };
         fheroes2::MovableSprite _cursorArea;

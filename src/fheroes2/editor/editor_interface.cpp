@@ -64,14 +64,14 @@ namespace Interface
         const fheroes2::Display & display = fheroes2::Display::instance();
 
         const int32_t xOffset = display.width() - BORDERWIDTH - RADARWIDTH;
-        radar.SetPos( xOffset, BORDERWIDTH );
+        _radar.SetPos( xOffset, BORDERWIDTH );
 
         if ( display.height() > display.DEFAULT_HEIGHT + BORDERWIDTH ) {
-            _editorPanel.setPos( xOffset, radar.GetArea().y + radar.GetArea().height + BORDERWIDTH );
+            _editorPanel.setPos( xOffset, _radar.GetArea().y + _radar.GetArea().height + BORDERWIDTH );
             statusWindow.SetPos( xOffset, _editorPanel.getRect().y + _editorPanel.getRect().height );
         }
         else {
-            _editorPanel.setPos( xOffset, radar.GetArea().y + radar.GetArea().height );
+            _editorPanel.setPos( xOffset, _radar.GetArea().y + _radar.GetArea().height );
         }
 
         const fheroes2::Point prevCenter = _gameArea.getCurrentCenterInPixels();
@@ -99,7 +99,7 @@ namespace Interface
         }
 
         if ( combinedRedraw & ( REDRAW_RADAR_CURSOR | REDRAW_RADAR ) ) {
-            radar.redrawForEditor( combinedRedraw & REDRAW_RADAR );
+            _radar.redrawForEditor( combinedRedraw & REDRAW_RADAR );
         }
 
         if ( combinedRedraw & REDRAW_BORDER ) {
@@ -133,8 +133,8 @@ namespace Interface
 
         const Settings & conf = Settings::Get();
 
-        radar.Build();
-        radar.SetHide( false );
+        _radar.Build();
+        _radar.SetHide( false );
 
         fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
@@ -212,7 +212,7 @@ namespace Interface
                 break;
             }
 
-            if ( fheroes2::cursor().isFocusActive() && !_gameArea.isDragScroll() && !radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
+            if ( fheroes2::cursor().isFocusActive() && !_gameArea.isDragScroll() && !_radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
                 int scrollPosition = SCROLL_NONE;
 
                 if ( isScrollLeft( le.GetMouseCursor() ) )
@@ -246,12 +246,12 @@ namespace Interface
             isCursorOverGamearea = false;
 
             // cursor is over the radar
-            if ( le.MouseCursor( radar.GetRect() ) ) {
+            if ( le.MouseCursor( _radar.GetRect() ) ) {
                 if ( Cursor::POINTER != cursor.Themes() ) {
                     cursor.SetThemes( Cursor::POINTER );
                 }
                 if ( !_gameArea.isDragScroll() ) {
-                    radar.QueueEventProcessing();
+                    _radar.QueueEventProcessing();
                 }
             }
             // cursor is over the game area
@@ -277,11 +277,11 @@ namespace Interface
 
             // gamearea
             if ( !_gameArea.NeedScroll() ) {
-                if ( !radar.isDragRadar() ) {
+                if ( !_radar.isDragRadar() ) {
                     _gameArea.QueueEventProcessing( isCursorOverGamearea );
                 }
                 else if ( !le.MousePressLeft() ) {
-                    radar.QueueEventProcessing();
+                    _radar.QueueEventProcessing();
                 }
             }
 

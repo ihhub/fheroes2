@@ -648,8 +648,8 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
     Reset();
 
-    radar.Build();
-    radar.SetHide( true );
+    _radar.Build();
+    _radar.SetHide( true );
     iconsPanel.HideIcons( ICON_ANY );
     statusWindow.Reset();
 
@@ -715,8 +715,8 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
             if ( kingdom.isPlay() ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( playerColor ) << ", resource: " << kingdom.GetFunds().String() )
 
-                radar.SetHide( true );
-                radar.SetRedraw( REDRAW_RADAR_CURSOR );
+                _radar.SetHide( true );
+                _radar.SetRedraw( REDRAW_RADAR_CURSOR );
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
@@ -775,8 +775,8 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 #if defined( WITH_DEBUG )
                     if ( player->isAIAutoControlMode() ) {
                         // If player gave control to AI we show the radar image and update it fully at the start of player's turn.
-                        radar.SetHide( false );
-                        radar.SetRedraw( REDRAW_RADAR );
+                        _radar.SetHide( false );
+                        _radar.SetRedraw( REDRAW_RADAR );
                     }
 #endif
 
@@ -872,7 +872,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         ResetFocus( GameFocus::FIRSTHERO, false );
     }
 
-    radar.SetHide( false );
+    _radar.SetHide( false );
     statusWindow.Reset();
     _gameArea.SetUpdateCursor();
 
@@ -1058,7 +1058,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             break;
         }
 
-        if ( fheroes2::cursor().isFocusActive() && !_gameArea.isDragScroll() && !radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
+        if ( fheroes2::cursor().isFocusActive() && !_gameArea.isDragScroll() && !_radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
             int scrollPosition = SCROLL_NONE;
 
             if ( isScrollLeft( le.GetMouseCursor() ) )
@@ -1125,11 +1125,11 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             iconsPanel.QueueEventProcessing();
         }
         // cursor is over the radar
-        else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( _radar.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             if ( !_gameArea.isDragScroll() )
-                radar.QueueEventProcessing();
+                _radar.QueueEventProcessing();
         }
         // cursor is over the control panel
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
@@ -1150,10 +1150,10 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
         // gamearea
         if ( !_gameArea.NeedScroll() && !isMovingHero ) {
-            if ( !radar.isDragRadar() )
+            if ( !_radar.isDragRadar() )
                 _gameArea.QueueEventProcessing( isCursorOverGamearea );
             else if ( !le.MousePressLeft() )
-                radar.QueueEventProcessing();
+                _radar.QueueEventProcessing();
         }
 
         if ( prevIsCursorOverButtons && !isCursorOverButtons ) {
@@ -1279,7 +1279,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 _gameArea.Scroll();
 
                 _gameArea.SetRedraw();
-                radar.SetRedraw( REDRAW_RADAR_CURSOR );
+                _radar.SetRedraw( REDRAW_RADAR_CURSOR );
             }
         }
 

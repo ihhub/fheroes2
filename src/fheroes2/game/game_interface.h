@@ -31,7 +31,6 @@
 #include "interface_buttons.h"
 #include "interface_cpanel.h"
 #include "interface_icons.h"
-#include "interface_radar.h"
 #include "interface_status.h"
 #include "players.h"
 
@@ -94,11 +93,6 @@ namespace Interface
         void Redraw( const uint32_t force = 0 );
 
         int32_t GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water );
-
-        Radar & GetRadar()
-        {
-            return radar;
-        }
 
         IconsPanel & GetIconsPanel()
         {
@@ -175,7 +169,6 @@ namespace Interface
         // If display fade-in state is set reset it to false and fade-in the full display image. Otherwise render full display image without fade-in.
         void validateFadeInAndRender();
 
-        Radar radar;
         IconsPanel iconsPanel;
         ButtonsArea buttonsArea;
         StatusWindow statusWindow;

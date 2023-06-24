@@ -143,10 +143,10 @@ namespace
     }
 }
 
-Interface::Radar::Radar( AdventureMap & basic )
+Interface::Radar::Radar( BaseInterface & interface )
     : BorderWindow( { 0, 0, RADARWIDTH, RADARWIDTH } )
     , _radarType( RadarType::WorldMap )
-    , _interface( basic )
+    , _interface( interface )
 {
     // Radar image can not be transparent so we disable the transform layer to speed up rendering.
     _map._disableTransformLayer();

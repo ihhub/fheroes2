@@ -483,7 +483,7 @@ void Interface::AdventureMap::EventSwitchShowRadar() const
         }
         else {
             conf.SetShowRadar( true );
-            radar.SetRedraw( REDRAW_RADAR );
+            _radar.SetRedraw( REDRAW_RADAR );
         }
     }
 }

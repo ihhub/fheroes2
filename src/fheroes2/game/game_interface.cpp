@@ -36,6 +36,7 @@
 #include "image.h"
 #include "interface_border.h"
 #include "interface_gamearea.h"
+#include "interface_radar.h"
 #include "localevent.h"
 #include "maps.h"
 #include "math_base.h"
@@ -46,8 +47,7 @@
 #include "world.h"
 
 Interface::AdventureMap::AdventureMap()
-    : radar( *this )
-    , iconsPanel( *this )
+    : iconsPanel( *this )
     , buttonsArea( *this )
     , statusWindow( *this )
     , controlPanel( *this )
@@ -76,15 +76,15 @@ void Interface::AdventureMap::Reset()
         auto isPosValid = []( const fheroes2::Point & pos ) { return pos.x >= 0 && pos.y >= 0; };
 
         if ( isPosValid( radrPos ) && isPosValid( bttnPos ) && isPosValid( iconPos ) && isPosValid( statPos ) ) {
-            radar.SetPos( radrPos.x, radrPos.y );
+            _radar.SetPos( radrPos.x, radrPos.y );
             iconsPanel.SetPos( iconPos.x, iconPos.y );
             buttonsArea.SetPos( bttnPos.x, bttnPos.y );
             statusWindow.SetPos( statPos.x, statPos.y );
         }
         else {
-            radar.SetPos( 0, 0 );
+            _radar.SetPos( 0, 0 );
             // It's OK to use display.width() for the X coordinate here, panel will be docked to the right edge
-            iconsPanel.SetPos( display.width(), radar.GetRect().y + radar.GetRect().height );
+            iconsPanel.SetPos( display.width(), _radar.GetRect().y + _radar.GetRect().height );
             buttonsArea.SetPos( display.width(), iconsPanel.GetRect().y + iconsPanel.GetRect().height );
             statusWindow.SetPos( display.width(), buttonsArea.GetRect().y + buttonsArea.GetRect().height );
         }
@@ -92,8 +92,8 @@ void Interface::AdventureMap::Reset()
     else {
         const int32_t px = display.width() - BORDERWIDTH - RADARWIDTH;
 
-        radar.SetPos( px, BORDERWIDTH );
-        iconsPanel.SetPos( px, radar.GetArea().y + radar.GetArea().height + BORDERWIDTH );
+        _radar.SetPos( px, BORDERWIDTH );
+        iconsPanel.SetPos( px, _radar.GetArea().y + _radar.GetArea().height + BORDERWIDTH );
         buttonsArea.SetPos( px, iconsPanel.GetArea().y + iconsPanel.GetArea().height + BORDERWIDTH );
         statusWindow.SetPos( px, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
     }
@@ -137,7 +137,7 @@ void Interface::AdventureMap::Redraw( const uint32_t force /* = 0 */ )
 
     if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & ( REDRAW_RADAR_CURSOR | REDRAW_RADAR ) ) ) {
         // Redraw radar map only if `REDRAW_RADAR` is set.
-        radar.Redraw( combinedRedraw & REDRAW_RADAR );
+        _radar.Redraw( combinedRedraw & REDRAW_RADAR );
     }
 
     if ( ( hideInterface && conf.ShowIcons() ) || ( combinedRedraw & REDRAW_ICONS ) ) {
@@ -177,8 +177,8 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
     const bool isStatusVisible = conf.ShowStatus();
     const bool isControlPanelVisible = conf.ShowControlPanel();
 
-    const fheroes2::Rect & radarRect = radar.GetRect();
-    const fheroes2::Rect & radarArea = radar.GetArea();
+    const fheroes2::Rect & radarRect = _radar.GetRect();
+    const fheroes2::Rect & radarArea = _radar.GetArea();
 
     fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
 

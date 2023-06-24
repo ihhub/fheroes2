@@ -24,6 +24,7 @@
 
 #include "gamedefs.h"
 #include "interface_gamearea.h"
+#include "interface_radar.h"
 #include "math_base.h"
 #include "screen.h"
 
@@ -97,6 +98,11 @@ namespace Interface
             return _gameArea;
         }
 
+        Radar & GetRadar()
+        {
+            return _radar;
+        }
+
         virtual ControlPanel & getControlPanel() = 0;
 
         virtual void mouseCursorAreaClickLeft( const int32_t tileIndex ) = 0;
@@ -104,8 +110,10 @@ namespace Interface
 
     protected:
         BaseInterface();
-        uint32_t _redraw{ 0 };
 
         GameArea _gameArea;
+        Radar _radar;
+
+        uint32_t _redraw{ 0 };
     };
 }
