@@ -98,7 +98,7 @@ namespace Interface
             return iconsPanel;
         }
 
-        ControlPanel & getControlPanel() override
+        ControlPanel & getControlPanel()
         {
             return controlPanel;
         }

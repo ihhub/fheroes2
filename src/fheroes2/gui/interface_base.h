@@ -31,8 +31,6 @@
 
 namespace Interface
 {
-    class ControlPanel;
-
     enum redraw_t : uint32_t
     {
         // To render the cursor over the previously generated radar map image.
@@ -110,8 +108,6 @@ namespace Interface
         {
             return _statusWindow;
         }
-
-        virtual ControlPanel & getControlPanel() = 0;
 
         virtual void mouseCursorAreaClickLeft( const int32_t tileIndex ) = 0;
         virtual void mouseCursorAreaPressRight( const int32_t tileIndex ) const = 0;
