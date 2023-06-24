@@ -22,14 +22,11 @@
 
 #if defined( WITH_DEBUG )
 
-#include <array>
 #include <cstdint>
 
 #include "editor_interface_panel.h"
 #include "game_mode.h"
 #include "interface_base.h"
-#include "math_base.h"
-#include "ui_button.h"
 
 namespace Interface
 {
