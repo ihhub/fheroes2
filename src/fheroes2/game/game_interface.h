@@ -133,7 +133,6 @@ namespace Interface
         void EventViewWorld();
         fheroes2::GameMode EventFileDialog() const;
         fheroes2::GameMode EventEndTurn() const;
-        static fheroes2::GameMode EventExit();
         fheroes2::GameMode EventDigArtifact();
         void EventKeyArrowPress( int direct );
 
@@ -145,7 +144,7 @@ namespace Interface
         static int GetCursorTileIndex( int32_t dstIndex );
 
         // Regenerates the game area and updates the panel positions depending on the UI settings
-        void Reset();
+        void reset() override;
 
     private:
         friend class Editor;
@@ -159,9 +158,6 @@ namespace Interface
         void MoveHeroFromArrowKeys( Heroes & hero, const int direction );
 
         fheroes2::GameMode HumanTurn( const bool isload );
-
-        // If display fade-in state is set reset it to false and fade-in the full display image. Otherwise render full display image without fade-in.
-        void validateFadeInAndRender();
 
         IconsPanel iconsPanel;
         ButtonsArea buttonsArea;

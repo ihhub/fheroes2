@@ -50,16 +50,17 @@
 #include "ui_dialog.h"
 #include "ui_tool.h"
 #include "view_world.h"
+#include "world.h"
 
 namespace Interface
 {
     Interface::Editor::Editor()
         : _editorPanel( *this )
     {
-        Reset();
+        reset();
     }
 
-    void Editor::Reset()
+    void Editor::reset()
     {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -126,7 +127,7 @@ namespace Interface
 
     fheroes2::GameMode Interface::Editor::startEdit()
     {
-        Reset();
+        reset();
 
         // Stop all sounds and music.
         AudioManager::ResetAudio();
@@ -171,7 +172,7 @@ namespace Interface
                     res = eventNewMap();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
-                    EventSaveGame();
+                    fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. Save function is not implemented yet.", Dialog::OK );
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                     res = eventLoadMap();
@@ -180,7 +181,8 @@ namespace Interface
                     res = eventFileDialog();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCENARIO_INFORMATION ) ) {
-                    res = EventScenarioInformation();
+                    // TODO: Make the scenario info editor.
+                    Dialog::GameInfo();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
                     EventViewWorld();
@@ -200,11 +202,12 @@ namespace Interface
                 }
                 // default action
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DEFAULT_ACTION ) ) {
-                    res = EventDefaultAction( res );
+                    fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. No actions are available yet.", Dialog::OK );
                 }
                 // open focus
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_OPEN_FOCUS ) ) {
-                    EventOpenFocus();
+                    fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. Open focused object dialog is not implemented yet.",
+                                                       Dialog::OK );
                 }
             }
 
@@ -400,10 +403,12 @@ namespace Interface
             else if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                 back.restore();
 
-                return EventSaveGame();
+                fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. Save function is not implemented yet.", Dialog::OK );
+
+                break;
             }
             else if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
-                if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+                if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                     result = fheroes2::GameMode::QUIT_GAME;
                     break;
                 }
@@ -439,6 +444,56 @@ namespace Interface
     void Editor::EventViewWorld()
     {
         ViewWorld::ViewWorldWindow( 0, ViewWorldMode::ViewAll, *this );
+    }
+    void Editor::mouseCursorAreaClickLeft( const int32_t tileIndex )
+    {
+        const Maps::Tiles & tile = world.GetTiles( tileIndex );
+
+        Heroes * otherHero = tile.GetHeroes();
+        if ( otherHero ) {
+            // TODO: Make hero edit dialog: like Battle only dialog, but only for one hero.
+            Game::OpenHeroesDialog( *otherHero, true, true );
+            Cursor::Get().SetThemes( Cursor::HEROES );
+        }
+
+        Castle * otherCastle = world.getCastle( tile.GetCenter() );
+        if ( otherCastle ) {
+            // TODO: Make Castle edit dialog: like original build dialog.
+            Game::OpenCastleDialog( *otherCastle );
+            Cursor::Get().SetThemes( Cursor::CASTLE );
+        }
+    }
+    void Editor::mouseCursorAreaPressRight( const int32_t tileIndex ) const
+    {
+        const Maps::Tiles & tile = world.GetTiles( tileIndex );
+
+        switch ( tile.GetObject() ) {
+        case MP2::OBJ_NON_ACTION_CASTLE:
+        case MP2::OBJ_CASTLE: {
+            const Castle * castle = world.getCastle( tile.GetCenter() );
+
+            if ( castle ) {
+                Dialog::QuickInfo( *castle );
+            }
+            else {
+                Dialog::QuickInfo( tile );
+            }
+
+            break;
+        }
+        case MP2::OBJ_HEROES: {
+            const Heroes * heroes = tile.GetHeroes();
+
+            if ( heroes ) {
+                Dialog::QuickInfo( *heroes );
+            }
+
+            break;
+        }
+        default:
+            Dialog::QuickInfo( tile );
+            break;
+        }
     }
 }
 #endif

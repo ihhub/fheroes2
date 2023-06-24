@@ -25,8 +25,8 @@
 #include <array>
 #include <cstdint>
 
-#include "game_interface.h"
 #include "game_mode.h"
+#include "interface_base.h"
 #include "math_base.h"
 #include "ui_button.h"
 
@@ -84,21 +84,24 @@ namespace Interface
         fheroes2::Rect _rectEditorPanel;
     };
 
-    class Editor : public AdventureMap
+    class Editor : public BaseInterface
     {
     public:
         static Editor & Get();
 
-        void redraw( const uint32_t force = 0 );
+        void redraw( const uint32_t force = 0 ) override;
 
         // Regenerates the game area and updates the panel positions depending on the UI settings
-        void Reset();
+        void reset() override;
 
         fheroes2::GameMode startEdit();
         static fheroes2::GameMode eventLoadMap();
         static fheroes2::GameMode eventNewMap();
         fheroes2::GameMode eventFileDialog() const;
         void EventViewWorld();
+
+        void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
+        void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
 
     private:
         Editor();

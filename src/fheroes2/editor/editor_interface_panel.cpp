@@ -27,6 +27,7 @@
 
 #include "agg_image.h"
 #include "dialog.h"
+#include "dialog_system_options.h"
 #include "editor_interface.h"
 #include "game_interface.h"
 #include "game_mode.h"
@@ -180,7 +181,8 @@ namespace Interface
             res = _interface.eventFileDialog();
         }
         else if ( le.MouseClickLeft( _rectSystem ) ) {
-            _interface.EventSystemDialog();
+            // Replace this with Editor options dialog.
+            fheroes2::showSystemOptionsDialog();
         }
 
         if ( le.MousePressRight( _rectInstrumentPanel ) || le.MouseClickLeft( _rectInstrumentPanel ) ) {

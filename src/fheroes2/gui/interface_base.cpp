@@ -20,11 +20,28 @@
 
 #include "interface_base.h"
 
+#include "game.h"
+
 namespace Interface
 {
     BaseInterface::BaseInterface()
         : _gameArea( *this )
         , _radar( *this )
         , _statusWindow( *this )
-    {}
+    {
+        // Do nothing;
+    }
+
+    void Interface::BaseInterface::validateFadeInAndRender()
+    {
+        if ( Game::validateDisplayFadeIn() ) {
+            fheroes2::fadeInDisplay();
+
+            setRedraw( REDRAW_GAMEAREA );
+        }
+        else {
+            fheroes2::Display::instance().render();
+        }
+    }
+
 }

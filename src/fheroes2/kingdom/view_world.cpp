@@ -570,7 +570,7 @@ fheroes2::Rect ViewWorld::ZoomROIs::GetROIinTiles() const
     return result;
 }
 
-void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, Interface::AdventureMap & interface )
+void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, Interface::BaseInterface & interface )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -598,7 +598,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     // the map generation in the World View mode heavily depends on the existing game area
     if ( isHideInterface ) {
         conf.setHideInterface( false );
-        interface.Reset();
+        interface.reset();
     }
 
     // setup cursor
@@ -737,7 +737,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     // Don't forget to reset the interface settings back if necessary
     if ( isHideInterface ) {
         conf.setHideInterface( true );
-        interface.Reset();
+        interface.reset();
     }
     else {
         radar.SetRedraw( Interface::REDRAW_RADAR_CURSOR );

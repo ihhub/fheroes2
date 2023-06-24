@@ -109,11 +109,19 @@ namespace Interface
             return _statusWindow;
         }
 
+        static fheroes2::GameMode EventExit();
+
         virtual void mouseCursorAreaClickLeft( const int32_t tileIndex ) = 0;
         virtual void mouseCursorAreaPressRight( const int32_t tileIndex ) const = 0;
 
+        // Regenerates the game area and updates the panel positions depending on the UI settings
+        virtual void reset() = 0;
+
     protected:
         BaseInterface();
+
+        // If display fade-in state is set reset it to false and fade-in the full display image. Otherwise render full display image without fade-in.
+        void validateFadeInAndRender();
 
         GameArea _gameArea;
         Radar _radar;

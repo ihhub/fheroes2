@@ -29,7 +29,7 @@
 
 namespace Interface
 {
-    class AdventureMap;
+    class BaseInterface;
 }
 
 enum class ViewWorldMode : int32_t
@@ -48,7 +48,7 @@ enum class ViewWorldMode : int32_t
 class ViewWorld
 {
 public:
-    static void ViewWorldWindow( const int32_t color, const ViewWorldMode mode, Interface::AdventureMap & interface );
+    static void ViewWorldWindow( const int32_t color, const ViewWorldMode mode, Interface::BaseInterface & interface );
 
     struct ZoomROIs
     {

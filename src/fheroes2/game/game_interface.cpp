@@ -53,10 +53,10 @@ Interface::AdventureMap::AdventureMap()
     , controlPanel( *this )
     , _lockRedraw( false )
 {
-    Reset();
+    reset();
 }
 
-void Interface::AdventureMap::Reset()
+void Interface::AdventureMap::reset()
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
 

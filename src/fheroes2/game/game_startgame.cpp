@@ -646,7 +646,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 {
     Settings & conf = Settings::Get();
 
-    Reset();
+    reset();
 
     _radar.Build();
     _radar.SetHide( true );
@@ -1335,18 +1335,6 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
     }
 
     return res;
-}
-
-void Interface::AdventureMap::validateFadeInAndRender()
-{
-    if ( Game::validateDisplayFadeIn() ) {
-        fheroes2::fadeInDisplay();
-
-        setRedraw( REDRAW_GAMEAREA );
-    }
-    else {
-        fheroes2::Display::instance().render();
-    }
 }
 
 void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex )
