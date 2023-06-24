@@ -928,7 +928,7 @@ void Heroes::FadeOut( const fheroes2::Point & offset ) const
                 gamearea.ShiftCenter( offset );
             }
 
-            iface.Redraw( Interface::REDRAW_GAMEAREA );
+            iface.redraw( Interface::REDRAW_GAMEAREA );
 
             display.render();
             _alphaValue -= 8 * multiplier;
@@ -963,7 +963,7 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
                 gamearea.ShiftCenter( offset );
             }
 
-            iface.Redraw( Interface::REDRAW_GAMEAREA );
+            iface.redraw( Interface::REDRAW_GAMEAREA );
 
             display.render();
             _alphaValue += 8 * multiplier;

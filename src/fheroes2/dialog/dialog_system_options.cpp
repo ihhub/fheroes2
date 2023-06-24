@@ -420,7 +420,7 @@ namespace fheroes2
 
                 Interface::AdventureMap & basicInterface = Interface::AdventureMap::Get();
                 basicInterface.Reset();
-                basicInterface.Redraw( Interface::REDRAW_ALL );
+                basicInterface.redraw( Interface::REDRAW_ALL );
 
                 action = DialogAction::Open;
                 break;
@@ -434,8 +434,8 @@ namespace fheroes2
 
                 // We need to redraw radar first due to the nature of restorers. Only then we can redraw everything.
                 // And we do a full radar redraw as it could be hidden in "Hide Interface" mode so it was not updated.
-                basicInterface.Redraw( Interface::REDRAW_RADAR );
-                basicInterface.Redraw( Interface::REDRAW_ALL & ~( Interface::REDRAW_RADAR_CURSOR | Interface::REDRAW_RADAR ) );
+                basicInterface.redraw( Interface::REDRAW_RADAR );
+                basicInterface.redraw( Interface::REDRAW_ALL & ~( Interface::REDRAW_RADAR_CURSOR | Interface::REDRAW_RADAR ) );
 
                 action = DialogAction::Open;
                 break;

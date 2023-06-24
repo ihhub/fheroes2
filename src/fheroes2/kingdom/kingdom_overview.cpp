@@ -872,7 +872,7 @@ void Kingdom::openOverviewDialog()
         if ( listHeroes.Refresh( heroes ) ) {
             worldMapRedrawMask |= Interface::AdventureMap::Get().getRedrawMask();
             // redraw the main game window on screen, which will also erase current kingdom window
-            Interface::AdventureMap::Get().Redraw();
+            Interface::AdventureMap::Get().redraw();
             // redraw Kingdom window from scratch, because it's now invalid
             background.render();
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), display, cur_pt.x, cur_pt.y );

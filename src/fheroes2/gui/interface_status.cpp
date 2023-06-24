@@ -486,7 +486,7 @@ void Interface::StatusWindow::DrawAITurnProgress( const uint32_t progressValue )
     if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
         Game::updateAdventureMapAnimationIndex();
 
-        interface.Redraw( REDRAW_GAMEAREA );
+        interface.redraw( REDRAW_GAMEAREA );
         fheroes2::Display::instance().render();
     }
 }

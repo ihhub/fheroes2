@@ -1891,7 +1891,7 @@ namespace AI
                         // Update Adventure Map objects' animation.
                         Game::updateAdventureMapAnimationIndex();
 
-                        basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
+                        basicInterface.redraw( Interface::REDRAW_GAMEAREA );
 
                         // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
                         assert( basicInterface.getRedrawMask() == 0 );
@@ -1960,7 +1960,7 @@ namespace AI
                         Game::updateAdventureMapAnimationIndex();
                     }
 
-                    basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
+                    basicInterface.redraw( Interface::REDRAW_GAMEAREA );
 
                     // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
                     assert( basicInterface.getRedrawMask() == 0 );

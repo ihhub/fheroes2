@@ -68,7 +68,7 @@ void Interface::AdventureMap::SetFocus( Heroes * hero, const bool retainScrollBa
     hero->ShowPath( true );
     focus.Set( hero );
 
-    Redraw( REDRAW_BUTTONS );
+    redraw( REDRAW_BUTTONS );
 
     if ( !retainScrollBarPosition ) {
         iconsPanel.Select( hero );
@@ -104,7 +104,7 @@ void Interface::AdventureMap::SetFocus( Castle * castle )
 
     focus.Set( castle );
 
-    Redraw( REDRAW_BUTTONS );
+    redraw( REDRAW_BUTTONS );
 
     iconsPanel.Select( castle );
     _gameArea.SetCenter( castle->GetCenter() );

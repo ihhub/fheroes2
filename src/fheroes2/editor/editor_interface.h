@@ -89,7 +89,7 @@ namespace Interface
     public:
         static Editor & Get();
 
-        void Redraw( const uint32_t force = 0 );
+        void redraw( const uint32_t force = 0 );
 
         // Regenerates the game area and updates the panel positions depending on the UI settings
         void Reset();

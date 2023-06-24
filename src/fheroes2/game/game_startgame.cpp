@@ -320,7 +320,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
             // Check if this dialog is not opened from the other dialog and we will be exiting to the Adventure map.
             if ( renderBackgroundDialog ) {
                 // Redraw Adventure map with hidden hero path.
-                basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
+                basicInterface.redraw( Interface::REDRAW_GAMEAREA );
 
                 // Fade-in game screen only for 640x480 resolution.
                 if ( isDefaultScreenSize ) {
@@ -654,7 +654,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
     _statusWindow.Reset();
 
     // Prepare for render the whole game interface with adventure map filled with fog as it was not uncovered by 'updateMapFogDirections()'.
-    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
+    redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
     bool loadedFromSave = conf.LoadedGameVersion();
     bool skipTurns = loadedFromSave;
@@ -731,7 +731,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                         // TODO: Cover the Adventure map area with fog sprites without rendering the "Game Area" for player change.
                         Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, Color::NONE );
 
-                        Redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
+                        redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
 
                         validateFadeInAndRender();
 
@@ -780,7 +780,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     }
 #endif
 
-                    Redraw();
+                    redraw();
                     validateFadeInAndRender();
 
                     // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
@@ -884,7 +884,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         Interface::GameArea::updateMapFogDirections();
     }
 
-    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
+    redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
     validateFadeInAndRender();
 
@@ -906,7 +906,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         } );
 
         // The amount of the kingdom resources has changed, the status window needs to be updated
-        Redraw( REDRAW_STATUS );
+        redraw( REDRAW_STATUS );
         fheroes2::Display::instance().render();
 
         if ( conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
@@ -1297,7 +1297,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             }
 
             if ( needRedraw() ) {
-                Redraw();
+                redraw();
 
                 // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
                 assert( getRedrawMask() == 0 );

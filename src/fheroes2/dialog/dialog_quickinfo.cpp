@@ -100,7 +100,7 @@ namespace
             Interface::AdventureMap & iface = Interface::AdventureMap::Get();
 
             iface.getGameArea().SetCenter( updatedPosition );
-            iface.Redraw( Interface::REDRAW_RADAR_CURSOR );
+            iface.redraw( Interface::REDRAW_RADAR_CURSOR );
 
             _restorer.restore();
         }
@@ -114,7 +114,7 @@ namespace
             Interface::AdventureMap & iface = Interface::AdventureMap::Get();
 
             iface.getGameArea().SetCenterInPixels( _prevPosition );
-            iface.Redraw( Interface::REDRAW_RADAR_CURSOR );
+            iface.redraw( Interface::REDRAW_RADAR_CURSOR );
 
             _restorer.restore();
         }

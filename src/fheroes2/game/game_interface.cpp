@@ -115,7 +115,7 @@ Interface::AdventureMap & Interface::AdventureMap::Get()
     return basic;
 }
 
-void Interface::AdventureMap::Redraw( const uint32_t force /* = 0 */ )
+void Interface::AdventureMap::redraw( const uint32_t force /* = 0 */ )
 {
     if ( _lockRedraw ) {
         setRedraw( force );
@@ -215,7 +215,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
         conf.SetShowStatus( false );
         conf.SetShowControlPanel( false );
 
-        Redraw( REDRAW_GAMEAREA );
+        redraw( REDRAW_GAMEAREA );
     }
 
     if ( isFadingEnabled ) {
@@ -281,7 +281,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
             Game::updateAdventureMapAnimationIndex();
 
-            Redraw( REDRAW_GAMEAREA );
+            redraw( REDRAW_GAMEAREA );
 
             if ( isFadingEnabled ) {
                 InvertedShadow( display, gameAreaROI, spellROI, 5, 9 );
@@ -308,7 +308,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
         setRedraw( REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_GAMEAREA );
     }
 
-    Redraw( REDRAW_RADAR_CURSOR );
+    redraw( REDRAW_RADAR_CURSOR );
     display.render();
 
     return returnValue;

@@ -1063,7 +1063,7 @@ void Interface::GameArea::runSingleObjectAnimation( const std::shared_ptr<BaseOb
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_PICKUP_DELAY } ) ) && !info->isAnimationCompleted() ) {
         if ( Game::validateAnimationDelay( Game::HEROES_PICKUP_DELAY ) ) {
-            basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
+            basicInterface.redraw( Interface::REDRAW_GAMEAREA );
             display.render();
         }
     }

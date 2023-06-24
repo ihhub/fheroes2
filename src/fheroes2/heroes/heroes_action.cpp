@@ -366,7 +366,7 @@ namespace
             // Set the hero's attacked monster tile index and immediately redraw game area to show an attacking sprite for this monster
             hero.SetAttackedMonsterTileIndex( dst_index );
 
-            I.Redraw( Interface::REDRAW_GAMEAREA );
+            I.redraw( Interface::REDRAW_GAMEAREA );
 
             Army army( tile );
 
@@ -605,7 +605,7 @@ namespace
         // Update the radar map image before changing the direction of the hero.
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
         I.getRadar().SetRenderArea( hero.GetScoutRoi() );
-        I.Redraw( Interface::REDRAW_RADAR );
+        I.redraw( Interface::REDRAW_RADAR );
 
         // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
         hero.setDirection( boatDirection );
@@ -1861,7 +1861,7 @@ namespace
         // Clear the previous hero position
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
         I.getRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
-        I.Redraw( Interface::REDRAW_RADAR );
+        I.redraw( Interface::REDRAW_RADAR );
 
         I.getGameArea().SetCenter( hero.GetCenter() );
         I.getRadar().SetRenderArea( hero.GetScoutRoi() );
@@ -1901,7 +1901,7 @@ namespace
         // Clear the previous hero position
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
         I.getRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
-        I.Redraw( Interface::REDRAW_RADAR );
+        I.redraw( Interface::REDRAW_RADAR );
 
         I.getGameArea().SetCenter( hero.GetCenter() );
         I.getRadar().SetRenderArea( hero.GetScoutRoi() );
@@ -1957,7 +1957,7 @@ namespace
 
                 // Update the object on radar.
                 I.getRadar().SetRenderArea( radarRoi );
-                I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+                I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
             };
 
             auto removeObjectProtection = [&tile]() {
@@ -2117,7 +2117,7 @@ namespace
 
                 // Update the object on radar.
                 I.getRadar().SetRenderArea( radarRoi );
-                I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+                I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
                 Dialog::Message( MP2::StringObject( objectType ), _( "You beat the Ghosts and are able to restore the mine to production." ), Font::BIG, Dialog::OK );
             }
@@ -3269,7 +3269,7 @@ namespace
                     const fheroes2::Rect eyeRoi( eyePosition.x - scoutRange, eyePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 );
 
                     I.getRadar().SetRenderArea( eyeRoi );
-                    I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+                    I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
                     display.render();
 
@@ -3280,7 +3280,7 @@ namespace
                         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                             ++delay;
                             Game::updateAdventureMapAnimationIndex();
-                            I.Redraw( Interface::REDRAW_GAMEAREA );
+                            I.redraw( Interface::REDRAW_GAMEAREA );
 
                             display.render();
                         }
@@ -3561,7 +3561,7 @@ void Heroes::Action( int tileIndex )
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
         I.getGameArea().SetCenter( GetCenter() );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR | Interface::REDRAW_HEROES );
+        I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR | Interface::REDRAW_HEROES );
     }
 
     switch ( objectType ) {

@@ -179,7 +179,7 @@ void Interface::AdventureMap::EventCastSpell()
 
     // Center on the hero before opening the spell book
     _gameArea.SetCenter( hero->GetCenter() );
-    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
+    redraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
 
     const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, false, nullptr );
     if ( spell.isValid() ) {
@@ -422,7 +422,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
             fheroes2::showStandardTextMessage( "", _( "Nothing here. Where could it be?" ), Dialog::OK );
         }
 
-        Redraw( REDRAW_HEROES );
+        redraw( REDRAW_HEROES );
         fheroes2::Display::instance().render();
 
         // check if the game is over due to conditions related to the ultimate artifact
