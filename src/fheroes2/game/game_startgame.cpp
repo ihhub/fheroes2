@@ -1429,17 +1429,17 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
     }
 }
 
-void Interface::AdventureMap::mouseCursorAreaPressRight( int32_t index_maps ) const
+void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex ) const
 {
     Heroes * hero = GetFocusHeroes();
 
     if ( hero && hero->isMoveEnabled() ) {
         hero->SetMove( false );
-        Cursor::Get().SetThemes( GetCursorTileIndex( index_maps ) );
+        Cursor::Get().SetThemes( GetCursorTileIndex( tileIndex ) );
     }
     else {
         const Settings & conf = Settings::Get();
-        const Maps::Tiles & tile = world.GetTiles( index_maps );
+        const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
         DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
 

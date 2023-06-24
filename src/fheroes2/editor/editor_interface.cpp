@@ -22,6 +22,7 @@
 
 #include "editor_interface.h"
 
+#include <algorithm>
 #include <cassert>
 #include <vector>
 

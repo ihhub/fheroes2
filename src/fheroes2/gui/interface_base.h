@@ -51,6 +51,8 @@ namespace Interface
     class BaseInterface
     {
     public:
+        virtual ~BaseInterface() = default;
+
         bool needRedraw() const
         {
             return _redraw != 0;
@@ -98,7 +100,7 @@ namespace Interface
         virtual ControlPanel & getControlPanel() = 0;
 
         virtual void mouseCursorAreaClickLeft( const int32_t tileIndex ) = 0;
-        virtual void mouseCursorAreaPressRight( int32_t ) const = 0;
+        virtual void mouseCursorAreaPressRight( const int32_t tileIndex ) const = 0;
 
     protected:
         BaseInterface();
