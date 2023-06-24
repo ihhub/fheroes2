@@ -178,7 +178,7 @@ namespace Interface
             res = AdventureMap::EventScenarioInformation();
         }
         else if ( le.MouseClickLeft( _rectFile ) ) {
-            res = _interface.eventFileDialog();
+            res = Interface::Editor::eventFileDialog();
         }
         else if ( le.MouseClickLeft( _rectSystem ) ) {
             // Replace this with Editor options dialog.

@@ -34,6 +34,7 @@
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
+#include "heroes.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_base.h"
@@ -42,7 +43,9 @@
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "localevent.h"
+#include "maps_tiles.h"
 #include "math_base.h"
+#include "mp2.h"
 #include "screen.h"
 #include "settings.h"
 #include "translations.h"
@@ -51,6 +54,8 @@
 #include "ui_tool.h"
 #include "view_world.h"
 #include "world.h"
+
+class Castle;
 
 namespace Interface
 {

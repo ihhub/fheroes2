@@ -22,6 +22,7 @@
 
 #include <cstdint>
 
+#include "game_mode.h"
 #include "gamedefs.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"

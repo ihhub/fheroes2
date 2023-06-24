@@ -31,7 +31,6 @@
 #include "castle.h"
 #include "color.h"
 #include "dialog.h"
-#include "game_interface.h"
 #include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"

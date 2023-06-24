@@ -21,6 +21,7 @@
 #include "interface_base.h"
 
 #include "game.h"
+#include "ui_tool.h"
 
 namespace Interface
 {
