@@ -31,19 +31,22 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_border.h"
+#include "interface_gamearea.h"
 #include "localevent.h"
 #include "maps.h"
+#include "math_base.h"
+#include "screen.h"
 #include "settings.h"
 #include "ui_button.h"
 #include "ui_tool.h"
 #include "world.h"
 
 Interface::AdventureMap::AdventureMap()
-    : gameArea( *this )
-    , radar( *this )
+    : radar( *this )
     , iconsPanel( *this )
     , buttonsArea( *this )
     , statusWindow( *this )
@@ -95,15 +98,15 @@ void Interface::AdventureMap::Reset()
         statusWindow.SetPos( px, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
     }
 
-    const fheroes2::Point prevCenter = gameArea.getCurrentCenterInPixels();
-    const fheroes2::Rect prevRoi = gameArea.GetROI();
+    const fheroes2::Point prevCenter = _gameArea.getCurrentCenterInPixels();
+    const fheroes2::Rect prevRoi = _gameArea.GetROI();
 
-    gameArea.generate( { display.width(), display.height() }, isHideInterface );
+    _gameArea.generate( { display.width(), display.height() }, isHideInterface );
 
-    const fheroes2::Rect newRoi = gameArea.GetROI();
+    const fheroes2::Rect newRoi = _gameArea.GetROI();
 
-    gameArea.SetCenterInPixels( prevCenter + fheroes2::Point( newRoi.x + newRoi.width / 2, newRoi.y + newRoi.height / 2 )
-                                - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
+    _gameArea.SetCenterInPixels( prevCenter + fheroes2::Point( newRoi.x + newRoi.width / 2, newRoi.y + newRoi.height / 2 )
+                                 - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
 }
 
 Interface::AdventureMap & Interface::AdventureMap::Get()
@@ -125,7 +128,7 @@ void Interface::AdventureMap::Redraw( const uint32_t force /* = 0 */ )
     const bool hideInterface = conf.isHideInterfaceEnabled();
 
     if ( combinedRedraw & REDRAW_GAMEAREA ) {
-        gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
+        _gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
 
         if ( hideInterface && conf.ShowControlPanel() ) {
             controlPanel.Redraw();
@@ -189,11 +192,11 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
         buttonExit.draw();
     };
 
-    const fheroes2::Rect & gameAreaROI = gameArea.GetROI();
+    const fheroes2::Rect & gameAreaROI = _gameArea.GetROI();
     const bool isFadingEnabled = ( gameAreaROI.width > TILEWIDTH * distance ) || ( gameAreaROI.height > TILEWIDTH * distance );
 
     const fheroes2::Rect spellROI = [this, from, distance, isHideInterface, &gameAreaROI]() -> fheroes2::Rect {
-        const fheroes2::Point heroPos = gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) );
+        const fheroes2::Point heroPos = _gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) );
 
         const int32_t x = heroPos.x - TILEWIDTH * ( distance / 2 );
         const int32_t y = heroPos.y - TILEWIDTH * ( distance / 2 );
@@ -252,7 +255,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
             }
         }
         else if ( gameAreaROI & mp ) {
-            const int32_t dst = gameArea.GetValidTileIdFromPoint( mp );
+            const int32_t dst = _gameArea.GetValidTileIdFromPoint( mp );
 
             bool valid = ( dst >= 0 );
 

@@ -31,6 +31,7 @@
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "interface_icons.h"
 #include "interface_status.h"
@@ -73,7 +74,7 @@ void Interface::AdventureMap::SetFocus( Heroes * hero, const bool retainScrollBa
         iconsPanel.Select( hero );
     }
 
-    gameArea.SetCenter( hero->GetCenter() );
+    _gameArea.SetCenter( hero->GetCenter() );
     statusWindow.SetState( StatusType::STATUS_ARMY );
 
     const int heroIndex = hero->GetIndex();
@@ -106,7 +107,7 @@ void Interface::AdventureMap::SetFocus( Castle * castle )
     Redraw( REDRAW_BUTTONS );
 
     iconsPanel.Select( castle );
-    gameArea.SetCenter( castle->GetCenter() );
+    _gameArea.SetCenter( castle->GetCenter() );
     statusWindow.SetState( StatusType::STATUS_FUNDS );
 
     if ( Game::UpdateSoundsOnFocusUpdate() ) {

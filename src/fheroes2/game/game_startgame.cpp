@@ -53,6 +53,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_buttons.h"
 #include "interface_cpanel.h"
 #include "interface_gamearea.h"
@@ -873,7 +874,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
     radar.SetHide( false );
     statusWindow.Reset();
-    gameArea.SetUpdateCursor();
+    _gameArea.SetUpdateCursor();
 
     const Settings & conf = Settings::Get();
     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
@@ -1038,13 +1039,13 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 EventKeyArrowPress( Direction::BOTTOM_RIGHT );
             // map scrolling control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) )
-                gameArea.SetScroll( SCROLL_LEFT );
+                _gameArea.SetScroll( SCROLL_LEFT );
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_RIGHT ) )
-                gameArea.SetScroll( SCROLL_RIGHT );
+                _gameArea.SetScroll( SCROLL_RIGHT );
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_UP ) )
-                gameArea.SetScroll( SCROLL_TOP );
+                _gameArea.SetScroll( SCROLL_TOP );
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) )
-                gameArea.SetScroll( SCROLL_BOTTOM );
+                _gameArea.SetScroll( SCROLL_BOTTOM );
             // default action
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DEFAULT_ACTION ) )
                 res = EventDefaultAction( res );
@@ -1057,7 +1058,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             break;
         }
 
-        if ( fheroes2::cursor().isFocusActive() && !gameArea.isDragScroll() && !radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
+        if ( fheroes2::cursor().isFocusActive() && !_gameArea.isDragScroll() && !radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
             int scrollPosition = SCROLL_NONE;
 
             if ( isScrollLeft( le.GetMouseCursor() ) )
@@ -1077,7 +1078,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 }
 
                 if ( fastScrollRepeatCount >= fastScrollStartThreshold ) {
-                    gameArea.SetScroll( scrollPosition );
+                    _gameArea.SetScroll( scrollPosition );
                 }
             }
             else {
@@ -1127,7 +1128,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            if ( !gameArea.isDragScroll() )
+            if ( !_gameArea.isDragScroll() )
                 radar.QueueEventProcessing();
         }
         // cursor is over the control panel
@@ -1137,20 +1138,20 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             res = controlPanel.QueueEventProcessing();
         }
         // cursor is over the game area
-        else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
+        else if ( le.MouseCursor( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
             isCursorOverGamearea = true;
         }
         // cursor is somewhere else
-        else if ( !gameArea.NeedScroll() ) {
+        else if ( !_gameArea.NeedScroll() ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            gameArea.ResetCursorPosition();
+            _gameArea.ResetCursorPosition();
         }
 
         // gamearea
-        if ( !gameArea.NeedScroll() && !isMovingHero ) {
+        if ( !_gameArea.NeedScroll() && !isMovingHero ) {
             if ( !radar.isDragRadar() )
-                gameArea.QueueEventProcessing( isCursorOverGamearea );
+                _gameArea.QueueEventProcessing( isCursorOverGamearea );
             else if ( !le.MousePressLeft() )
                 radar.QueueEventProcessing();
         }
@@ -1172,8 +1173,8 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 if ( heroAnimationFrameCount > 0 ) {
                     const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
 
-                    gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
-                    gameArea.SetRedraw();
+                    _gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
+                    _gameArea.SetRedraw();
 
                     if ( heroAnimationOffset != fheroes2::Point() ) {
                         Game::EnvironmentSoundMixer();
@@ -1202,7 +1203,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                             // Do not generate a frame as we are going to do it later.
                             Interface::AdventureMap::RedrawLocker redrawLocker( Interface::AdventureMap::Get() );
 
-                            gameArea.SetCenter( hero->GetCenter() );
+                            _gameArea.SetCenter( hero->GetCenter() );
                             ResetFocus( GameFocus::HEROES, true );
 
                             RedrawFocus();
@@ -1222,7 +1223,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                                 const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
 
                                 heroAnimationOffset = movement;
-                                gameArea.ShiftCenter( movement );
+                                _gameArea.ShiftCenter( movement );
 
                                 Game::SetUpdateSoundsOnFocusUpdate( false );
                                 ResetFocus( GameFocus::HEROES, true );
@@ -1238,7 +1239,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                                 }
                             }
 
-                            gameArea.SetRedraw();
+                            _gameArea.SetRedraw();
                         }
 
                         isMovingHero = true;
@@ -1256,7 +1257,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
                         hero->SetMove( false );
 
-                        gameArea.SetUpdateCursor();
+                        _gameArea.SetUpdateCursor();
                     }
                 }
             }
@@ -1267,17 +1268,17 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         }
 
         // fast scroll
-        if ( ( gameArea.NeedScroll() && !isMovingHero ) || gameArea.needDragScrollRedraw() ) {
+        if ( ( _gameArea.NeedScroll() && !isMovingHero ) || _gameArea.needDragScrollRedraw() ) {
             if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
                 if ( ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
                        || isScrollBottom( le.GetMouseCursor() ) )
-                     && !gameArea.isDragScroll() ) {
-                    cursor.SetThemes( gameArea.GetScrollCursor() );
+                     && !_gameArea.isDragScroll() ) {
+                    cursor.SetThemes( _gameArea.GetScrollCursor() );
                 }
 
-                gameArea.Scroll();
+                _gameArea.Scroll();
 
-                gameArea.SetRedraw();
+                _gameArea.SetRedraw();
                 radar.SetRedraw( REDRAW_RADAR_CURSOR );
             }
         }
@@ -1292,7 +1293,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             // map objects animation
             if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                 Game::updateAdventureMapAnimationIndex();
-                gameArea.SetRedraw();
+                _gameArea.SetRedraw();
             }
 
             if ( needRedraw() ) {
@@ -1348,7 +1349,7 @@ void Interface::AdventureMap::validateFadeInAndRender()
     }
 }
 
-void Interface::AdventureMap::MouseCursorAreaClickLeft( const int32_t tileIndex )
+void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex )
 {
     Heroes * focusedHero = GetFocusHeroes();
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
@@ -1428,7 +1429,7 @@ void Interface::AdventureMap::MouseCursorAreaClickLeft( const int32_t tileIndex 
     }
 }
 
-void Interface::AdventureMap::MouseCursorAreaPressRight( int32_t index_maps ) const
+void Interface::AdventureMap::mouseCursorAreaPressRight( int32_t index_maps ) const
 {
     Heroes * hero = GetFocusHeroes();
 

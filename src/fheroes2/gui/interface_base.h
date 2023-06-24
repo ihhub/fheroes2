@@ -23,11 +23,14 @@
 #include <cstdint>
 
 #include "gamedefs.h"
+#include "interface_gamearea.h"
 #include "math_base.h"
 #include "screen.h"
 
 namespace Interface
 {
+    class ControlPanel;
+
     enum redraw_t : uint32_t
     {
         // To render the cursor over the previously generated radar map image.
@@ -87,7 +90,20 @@ namespace Interface
             return cursorPos.y >= display.height() - BORDERWIDTH;
         }
 
+        GameArea & getGameArea()
+        {
+            return _gameArea;
+        }
+
+        virtual ControlPanel & getControlPanel() = 0;
+
+        virtual void mouseCursorAreaClickLeft( const int32_t tileIndex ) = 0;
+        virtual void mouseCursorAreaPressRight( int32_t ) const = 0;
+
     protected:
+        BaseInterface();
         uint32_t _redraw{ 0 };
+
+        GameArea _gameArea;
     };
 }

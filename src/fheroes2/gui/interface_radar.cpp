@@ -36,6 +36,7 @@
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "localevent.h"
 #include "maps.h"
@@ -430,7 +431,7 @@ void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* =nul
         return;
     }
 
-    const fheroes2::Rect & viewableWorldArea = ( roiRectangle == nullptr ) ? _interface.GetGameArea().GetVisibleTileROI() : *roiRectangle;
+    const fheroes2::Rect & viewableWorldArea = ( roiRectangle == nullptr ) ? _interface.getGameArea().GetVisibleTileROI() : *roiRectangle;
 
     if ( ( viewableWorldArea.width > worldSize.width ) && ( viewableWorldArea.height > worldSize.height ) ) {
         // We hide the cursor if the whole map is displayed.
@@ -481,7 +482,7 @@ void Interface::Radar::QueueEventProcessing()
             const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {
-                GameArea & gamearea = _interface.GetGameArea();
+                GameArea & gamearea = _interface.getGameArea();
                 fheroes2::Rect visibleROI( gamearea.GetVisibleTileROI() );
                 const fheroes2::Point prev( visibleROI.x, visibleROI.y );
                 gamearea.SetCenter( { ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height } );

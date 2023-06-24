@@ -45,6 +45,7 @@
 #include "game_interface.h"
 #include "game_static.h"
 #include "heroes.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "kingdom.h"
 #include "localevent.h"
@@ -226,7 +227,7 @@ namespace
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             if ( centerOn != nullptr ) {
-                Interface::AdventureMap::Get().GetGameArea().SetCenter( *centerOn );
+                Interface::AdventureMap::Get().getGameArea().SetCenter( *centerOn );
             }
 
             if ( playSound ) {
@@ -783,7 +784,7 @@ namespace
         hero.GetPath().Reset();
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::AdventureMap::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
 
@@ -849,7 +850,7 @@ namespace
         AIWhirlpoolTroopLoseEffect( hero );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::AdventureMap::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
 
@@ -1449,7 +1450,7 @@ namespace
         const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::AdventureMap::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut( offset );
         }
 
@@ -1487,7 +1488,7 @@ namespace
         hero.GetPath().Reset();
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::AdventureMap::Get().GetGameArea().SetCenter( prevPos );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( prevPos );
             hero.FadeIn( offset );
         }
 
@@ -1845,7 +1846,7 @@ namespace AI
             hero.SetMove( true );
 
             Interface::AdventureMap & basicInterface = Interface::AdventureMap::Get();
-            Interface::GameArea & gameArea = basicInterface.GetGameArea();
+            Interface::GameArea & gameArea = basicInterface.getGameArea();
 
             const Settings & conf = Settings::Get();
 
@@ -2010,7 +2011,7 @@ namespace AI
 #endif
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::AdventureMap::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut();
         }
 
@@ -2019,7 +2020,7 @@ namespace AI
         hero.GetPath().Reset();
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::AdventureMap::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
 
@@ -2046,7 +2047,7 @@ namespace AI
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::AdventureMap::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut();
         }
 
@@ -2055,7 +2056,7 @@ namespace AI
         hero.GetPath().Reset();
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::AdventureMap::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
 

@@ -46,6 +46,7 @@
 #include "heroes_base.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "kingdom.h"
 #include "localevent.h"
@@ -89,7 +90,7 @@ namespace
         RadarUpdater( const bool performUpdate, const fheroes2::Point & updatedPosition, const fheroes2::Rect & areaToRestore )
             : _performUpdate( performUpdate )
             , _updatedPosition( updatedPosition )
-            , _prevPosition( Interface::AdventureMap::Get().GetGameArea().getCurrentCenterInPixels() )
+            , _prevPosition( Interface::AdventureMap::Get().getGameArea().getCurrentCenterInPixels() )
             , _restorer( fheroes2::Display::instance(), areaToRestore.x, areaToRestore.y, areaToRestore.width, areaToRestore.height )
         {
             if ( !_performUpdate || _updatedPosition == _prevPosition ) {
@@ -98,7 +99,7 @@ namespace
 
             Interface::AdventureMap & iface = Interface::AdventureMap::Get();
 
-            iface.GetGameArea().SetCenter( updatedPosition );
+            iface.getGameArea().SetCenter( updatedPosition );
             iface.Redraw( Interface::REDRAW_RADAR_CURSOR );
 
             _restorer.restore();
@@ -112,7 +113,7 @@ namespace
 
             Interface::AdventureMap & iface = Interface::AdventureMap::Get();
 
-            iface.GetGameArea().SetCenterInPixels( _prevPosition );
+            iface.getGameArea().SetCenterInPixels( _prevPosition );
             iface.Redraw( Interface::REDRAW_RADAR_CURSOR );
 
             _restorer.restore();
@@ -399,7 +400,7 @@ namespace
         const int32_t mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
         const int32_t my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
 
-        const Interface::GameArea & gamearea = Interface::AdventureMap::Get().GetGameArea();
+        const Interface::GameArea & gamearea = Interface::AdventureMap::Get().getGameArea();
         const fheroes2::Rect & ar = gamearea.GetROI();
 
         int32_t xpos = mx + TILEWIDTH - ( imageBox.width() / 2 );

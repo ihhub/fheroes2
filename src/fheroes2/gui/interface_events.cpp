@@ -42,6 +42,7 @@
 #include "game_over.h"
 #include "heroes.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_buttons.h"
 #include "interface_gamearea.h"
 #include "interface_icons.h"
@@ -84,7 +85,7 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
 
         DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
 
-        gameArea.SetRedraw();
+        _gameArea.SetRedraw();
         buttonsArea.SetRedraw();
     }
     // Start the hero's movement
@@ -177,7 +178,7 @@ void Interface::AdventureMap::EventCastSpell()
     }
 
     // Center on the hero before opening the spell book
-    gameArea.SetCenter( hero->GetCenter() );
+    _gameArea.SetCenter( hero->GetCenter() );
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
 
     const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, false, nullptr );
@@ -478,7 +479,7 @@ void Interface::AdventureMap::EventSwitchShowRadar() const
     if ( conf.isHideInterfaceEnabled() ) {
         if ( conf.ShowRadar() ) {
             conf.SetShowRadar( false );
-            gameArea.SetRedraw();
+            _gameArea.SetRedraw();
         }
         else {
             conf.SetShowRadar( true );
@@ -494,7 +495,7 @@ void Interface::AdventureMap::EventSwitchShowButtons() const
     if ( conf.isHideInterfaceEnabled() ) {
         if ( conf.ShowButtons() ) {
             conf.SetShowButtons( false );
-            gameArea.SetRedraw();
+            _gameArea.SetRedraw();
         }
         else {
             conf.SetShowButtons( true );
@@ -510,7 +511,7 @@ void Interface::AdventureMap::EventSwitchShowStatus() const
     if ( conf.isHideInterfaceEnabled() ) {
         if ( conf.ShowStatus() ) {
             conf.SetShowStatus( false );
-            gameArea.SetRedraw();
+            _gameArea.SetRedraw();
         }
         else {
             conf.SetShowStatus( true );
@@ -526,7 +527,7 @@ void Interface::AdventureMap::EventSwitchShowIcons() const
     if ( conf.isHideInterfaceEnabled() ) {
         if ( conf.ShowIcons() ) {
             conf.SetShowIcons( false );
-            gameArea.SetRedraw();
+            _gameArea.SetRedraw();
         }
         else {
             conf.SetShowIcons( true );
@@ -541,7 +542,7 @@ void Interface::AdventureMap::EventSwitchShowControlPanel() const
 
     if ( conf.isHideInterfaceEnabled() ) {
         conf.SetShowControlPanel( !conf.ShowControlPanel() );
-        gameArea.SetRedraw();
+        _gameArea.SetRedraw();
     }
 }
 
@@ -556,32 +557,32 @@ void Interface::AdventureMap::EventKeyArrowPress( int dir )
         // scroll map
         switch ( dir ) {
         case Direction::TOP_LEFT:
-            gameArea.SetScroll( SCROLL_TOP );
-            gameArea.SetScroll( SCROLL_LEFT );
+            _gameArea.SetScroll( SCROLL_TOP );
+            _gameArea.SetScroll( SCROLL_LEFT );
             break;
         case Direction::TOP:
-            gameArea.SetScroll( SCROLL_TOP );
+            _gameArea.SetScroll( SCROLL_TOP );
             break;
         case Direction::TOP_RIGHT:
-            gameArea.SetScroll( SCROLL_TOP );
-            gameArea.SetScroll( SCROLL_RIGHT );
+            _gameArea.SetScroll( SCROLL_TOP );
+            _gameArea.SetScroll( SCROLL_RIGHT );
             break;
         case Direction::RIGHT:
-            gameArea.SetScroll( SCROLL_RIGHT );
+            _gameArea.SetScroll( SCROLL_RIGHT );
             break;
         case Direction::BOTTOM_RIGHT:
-            gameArea.SetScroll( SCROLL_BOTTOM );
-            gameArea.SetScroll( SCROLL_RIGHT );
+            _gameArea.SetScroll( SCROLL_BOTTOM );
+            _gameArea.SetScroll( SCROLL_RIGHT );
             break;
         case Direction::BOTTOM:
-            gameArea.SetScroll( SCROLL_BOTTOM );
+            _gameArea.SetScroll( SCROLL_BOTTOM );
             break;
         case Direction::BOTTOM_LEFT:
-            gameArea.SetScroll( SCROLL_BOTTOM );
-            gameArea.SetScroll( SCROLL_LEFT );
+            _gameArea.SetScroll( SCROLL_BOTTOM );
+            _gameArea.SetScroll( SCROLL_LEFT );
             break;
         case Direction::LEFT:
-            gameArea.SetScroll( SCROLL_LEFT );
+            _gameArea.SetScroll( SCROLL_LEFT );
             break;
         default:
             break;

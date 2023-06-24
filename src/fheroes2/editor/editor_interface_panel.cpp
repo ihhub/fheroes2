@@ -32,6 +32,7 @@
 #include "game_mode.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "localevent.h"
 #include "math_base.h"
 #include "screen.h"

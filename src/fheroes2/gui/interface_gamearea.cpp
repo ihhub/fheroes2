@@ -42,6 +42,7 @@
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
+#include "interface_base.h"
 #include "interface_cpanel.h"
 #include "localevent.h"
 #include "logging.h"
@@ -308,7 +309,7 @@ namespace
     }
 }
 
-Interface::GameArea::GameArea( AdventureMap & basic )
+Interface::GameArea::GameArea( BaseInterface & basic )
     : interface( basic )
     , _minLeftOffset( 0 )
     , _maxLeftOffset( 0 )
@@ -822,7 +823,7 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
     result.reset();
 
     // Make a temporary copy
-    GameArea gamearea = AdventureMap::Get().GetGameArea();
+    GameArea gamearea = AdventureMap::Get().getGameArea();
 
     gamearea.SetAreaPosition( 0, 0, result.width(), result.height() );
 
@@ -946,7 +947,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         return;
 
     const Settings & conf = Settings::Get();
-    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
+    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( interface.getControlPanel().GetArea() ) )
         return;
 
     const fheroes2::Point tileOffset = _topLeftTileOffset + mousePosition - _windowROI.getPosition();
@@ -956,9 +957,9 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     const fheroes2::Rect tileROI( tilePos.x, tilePos.y, TILEWIDTH, TILEWIDTH );
 
     if ( le.MouseClickLeft( tileROI ) )
-        interface.MouseCursorAreaClickLeft( index );
+        interface.mouseCursorAreaClickLeft( index );
     else if ( le.MousePressRight( tileROI ) && isCursorOverGamearea )
-        interface.MouseCursorAreaPressRight( index );
+        interface.mouseCursorAreaPressRight( index );
 }
 
 fheroes2::Point Interface::GameArea::_getStartTileId() const

@@ -27,17 +27,13 @@
 #include <cstdint>
 
 #include "game_mode.h"
-#include "gamedefs.h"
 #include "interface_base.h"
 #include "interface_buttons.h"
 #include "interface_cpanel.h"
-#include "interface_gamearea.h"
 #include "interface_icons.h"
 #include "interface_radar.h"
 #include "interface_status.h"
-#include "math_base.h"
 #include "players.h"
-#include "screen.h"
 
 class Castle;
 class Heroes;
@@ -99,11 +95,6 @@ namespace Interface
 
         int32_t GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water );
 
-        GameArea & GetGameArea()
-        {
-            return gameArea;
-        }
-
         Radar & GetRadar()
         {
             return radar;
@@ -119,7 +110,7 @@ namespace Interface
             return statusWindow;
         }
 
-        ControlPanel & GetControlPanel()
+        ControlPanel & getControlPanel() override
         {
             return controlPanel;
         }
@@ -160,8 +151,8 @@ namespace Interface
 
         fheroes2::GameMode StartGame();
 
-        void MouseCursorAreaClickLeft( const int32_t tileIndex );
-        void MouseCursorAreaPressRight( int32_t ) const;
+        void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
+        void mouseCursorAreaPressRight( int32_t ) const override;
 
         static int GetCursorTileIndex( int32_t dstIndex );
 
@@ -184,7 +175,6 @@ namespace Interface
         // If display fade-in state is set reset it to false and fade-in the full display image. Otherwise render full display image without fade-in.
         void validateFadeInAndRender();
 
-        GameArea gameArea;
         Radar radar;
         IconsPanel iconsPanel;
         ButtonsArea buttonsArea;

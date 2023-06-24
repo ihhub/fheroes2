@@ -50,6 +50,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
 #include "interface_status.h"
@@ -230,7 +231,7 @@ namespace
 
                     setMonsterCountOnTile( tile, 0 );
 
-                    Interface::AdventureMap::Get().GetGameArea().runSingleObjectAnimation(
+                    Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
                         std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
                 }
                 else {
@@ -412,7 +413,7 @@ namespace
 
             setMonsterCountOnTile( tile, 0 );
 
-            Interface::AdventureMap::Get().GetGameArea().runSingleObjectAnimation(
+            Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
                 std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
         }
 
@@ -678,7 +679,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        I.GetGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+        I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
         resetObjectInfoOnTile( tile );
 
@@ -887,7 +888,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        Interface::AdventureMap::Get().GetGameArea().runSingleObjectAnimation(
+        Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
             std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
         resetObjectInfoOnTile( tile );
@@ -1510,7 +1511,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        Interface::AdventureMap::Get().GetGameArea().runSingleObjectAnimation(
+        Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
             std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
         resetObjectInfoOnTile( tile );
@@ -1687,7 +1688,7 @@ namespace
 
                 Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
-                I.GetGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+                I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
                 resetObjectInfoOnTile( tile );
 
@@ -1801,7 +1802,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        Interface::AdventureMap::Get().GetGameArea().runSingleObjectAnimation(
+        Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
             std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
         resetObjectInfoOnTile( tile );
@@ -1862,7 +1863,7 @@ namespace
         I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
         I.Redraw( Interface::REDRAW_RADAR );
 
-        I.GetGameArea().SetCenter( hero.GetCenter() );
+        I.getGameArea().SetCenter( hero.GetCenter() );
         I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
         I.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
@@ -1902,7 +1903,7 @@ namespace
         I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
         I.Redraw( Interface::REDRAW_RADAR );
 
-        I.GetGameArea().SetCenter( hero.GetCenter() );
+        I.getGameArea().SetCenter( hero.GetCenter() );
         I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
         I.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
@@ -3220,7 +3221,7 @@ namespace
                 _( "In a dazzling display of daring, you break into the local jail and free the hero imprisoned there, who, in return, pledges loyalty to your cause." ),
                 Font::BIG, Dialog::OK );
 
-            Interface::AdventureMap::Get().GetGameArea().runSingleObjectAnimation(
+            Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
                 std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
             // TODO: add hero fading in animation together with jail animation.
@@ -3263,7 +3264,7 @@ namespace
 
                     const fheroes2::Point eyePosition = Maps::GetPoint( eyeIndex );
 
-                    I.GetGameArea().SetCenter( eyePosition );
+                    I.getGameArea().SetCenter( eyePosition );
 
                     const fheroes2::Rect eyeRoi( eyePosition.x - scoutRange, eyePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 );
 
@@ -3286,7 +3287,7 @@ namespace
                     }
                 }
 
-                I.GetGameArea().SetCenter( hero.GetCenter() );
+                I.getGameArea().SetCenter( hero.GetCenter() );
                 I.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
 
                 display.render();
@@ -3448,7 +3449,7 @@ namespace
 
             AudioManager::PlaySound( M82::KILLFADE );
 
-            Interface::AdventureMap::Get().GetGameArea().runSingleObjectAnimation(
+            Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
                 std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
         }
         else {
@@ -3559,7 +3560,7 @@ void Heroes::Action( int tileIndex )
     if ( Modes( ACTION ) ) {
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
-        I.GetGameArea().SetCenter( GetCenter() );
+        I.getGameArea().SetCenter( GetCenter() );
         I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR | Interface::REDRAW_HEROES );
     }
 

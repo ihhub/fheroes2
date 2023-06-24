@@ -42,6 +42,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "interface_icons.h"
 #include "interface_list.h"
@@ -212,7 +213,7 @@ namespace
         const fheroes2::Rect fromRoi( fromPosition.x, fromPosition.y, 1, 1 );
 
         // Before casting the spell, make sure that the game area is centered on the hero
-        I.GetGameArea().SetCenter( fromPosition );
+        I.getGameArea().SetCenter( fromPosition );
         I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
 
         const int32_t dst = castle->GetIndex();
@@ -229,7 +230,7 @@ namespace
 
         I.Redraw( Interface::REDRAW_RADAR );
 
-        I.GetGameArea().SetCenter( hero.GetCenter() );
+        I.getGameArea().SetCenter( hero.GetCenter() );
 
         // Update radar image in scout area around Hero after teleport.
         I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
@@ -306,7 +307,7 @@ namespace
 
         Maps::Tiles & tileSource = world.GetTiles( boatSource );
 
-        Interface::GameArea & gameArea = Interface::AdventureMap::Get().GetGameArea();
+        Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
         gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
 
         Maps::Tiles & tileDest = world.GetTiles( boatDestination );
@@ -327,7 +328,7 @@ namespace
         const fheroes2::Rect fromRoi( fromPosition.x, fromPosition.y, 1, 1 );
 
         // Before casting the spell, make sure that the game area is centered on the hero
-        I.GetGameArea().SetCenter( hero.GetCenter() );
+        I.getGameArea().SetCenter( hero.GetCenter() );
         I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
 
         const int32_t src = hero.GetIndex();
@@ -351,7 +352,7 @@ namespace
 
         I.Redraw( Interface::REDRAW_RADAR );
 
-        I.GetGameArea().SetCenter( hero.GetCenter() );
+        I.getGameArea().SetCenter( hero.GetCenter() );
 
         // Update radar image in scout area around Hero after teleport.
         I.GetRadar().SetRenderArea( hero.GetScoutRoi() );

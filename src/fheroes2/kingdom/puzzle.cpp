@@ -42,6 +42,7 @@
 #include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
 #include "localevent.h"
@@ -196,7 +197,7 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Rect & gameArea = Interface::AdventureMap::Get().GetGameArea().GetROI();
+        const fheroes2::Rect & gameArea = Interface::AdventureMap::Get().getGameArea().GetROI();
 
         const fheroes2::StandardWindow border( gameArea.x + ( gameArea.width - sf.width() ) / 2, gameArea.y + ( gameArea.height - sf.height() ) / 2, sf.width(),
                                                sf.height(), false );
