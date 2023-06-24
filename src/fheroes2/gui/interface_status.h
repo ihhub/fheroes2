@@ -81,7 +81,7 @@ namespace Interface
         void DrawBackground() const;
         void DrawAITurns() const;
 
-        BaseInterface & interface;
+        BaseInterface & _interface;
 
         StatusType _state;
         int lastResource;

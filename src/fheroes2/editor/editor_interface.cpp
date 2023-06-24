@@ -347,7 +347,7 @@ namespace Interface
                    : fheroes2::GameMode::CANCEL;
     }
 
-    fheroes2::GameMode Editor::eventFileDialog() const
+    fheroes2::GameMode Editor::eventFileDialog()
     {
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const int cpanbkg = isEvilInterface ? ICN::CPANBKGE : ICN::CPANBKG;

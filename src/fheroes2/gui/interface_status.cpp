@@ -58,7 +58,7 @@ namespace
 
 Interface::StatusWindow::StatusWindow( BaseInterface & interface )
     : BorderWindow( { 0, 0, 144, 72 } )
-    , interface( interface )
+    , _interface( interface )
     , _state( StatusType::STATUS_UNKNOWN )
     , lastResource( Resource::UNKNOWN )
     , countLastResource( 0 )
@@ -83,7 +83,7 @@ void Interface::StatusWindow::SavePosition()
 
 void Interface::StatusWindow::SetRedraw() const
 {
-    interface.setRedraw( REDRAW_STATUS );
+    _interface.setRedraw( REDRAW_STATUS );
 }
 
 void Interface::StatusWindow::SetPos( int32_t ox, int32_t oy )
@@ -481,12 +481,12 @@ void Interface::StatusWindow::DrawAITurnProgress( const uint32_t progressValue )
 
     turn_progress = progressValue;
 
-    interface.setRedraw( REDRAW_STATUS );
+    _interface.setRedraw( REDRAW_STATUS );
 
     if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
         Game::updateAdventureMapAnimationIndex();
 
-        interface.redraw( REDRAW_GAMEAREA );
+        _interface.redraw( REDRAW_GAMEAREA );
         fheroes2::Display::instance().render();
     }
 }

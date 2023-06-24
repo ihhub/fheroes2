@@ -97,7 +97,7 @@ namespace Interface
         fheroes2::GameMode startEdit();
         static fheroes2::GameMode eventLoadMap();
         static fheroes2::GameMode eventNewMap();
-        fheroes2::GameMode eventFileDialog() const;
+        static fheroes2::GameMode eventFileDialog();
         void EventViewWorld();
 
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
