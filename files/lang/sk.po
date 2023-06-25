@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-14 20:35+0000\n"
-"PO-Revision-Date: 2023-05-16 21:04+0200\n"
+"PO-Revision-Date: 2023-06-25 14:49+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -177,7 +177,7 @@ msgid "GIFT"
 msgstr "DARUJ"
 
 msgid "guildWell|EXIT"
-msgstr "OK"
+msgstr "PREČ"
 
 msgid "DIFFICULTY"
 msgstr "OBTIAŽNOSŤ"
@@ -413,7 +413,7 @@ msgid "Settings"
 msgstr "Nastavenia"
 
 msgid "Configure"
-msgstr "Usporiadaj"
+msgstr "Konfiguruj"
 
 msgid "Hot Keys"
 msgstr "Skratky"
@@ -1905,7 +1905,7 @@ msgid "Baywatch"
 msgstr "Stráž zálivu"
 
 msgid "Fountainhead"
-msgstr "Hlava fontány"
+msgstr "Fontánohlava"
 
 msgid "Vertigo"
 msgstr "Závrat"
@@ -7622,10 +7622,10 @@ msgid "Bone Dragons"
 msgstr "Kostnatí draci"
 
 msgid "Rogue"
-msgstr "Gauner"
+msgstr "Tulák"
 
 msgid "Rogues"
-msgstr "Gauneri"
+msgstr "Tuláci"
 
 msgid "Nomad"
 msgstr "Nomád"
@@ -7676,13 +7676,13 @@ msgid "Water Elementals"
 msgstr "Vodní elementáli"
 
 msgid "Random Monsters"
-msgstr "Náhodní bojovníci"
+msgstr ""
 
 msgid "Random Monster 1"
-msgstr "Náhodný bojovník 1"
+msgstr ""
 
 msgid "Random Monsters 1"
-msgstr "Náhodní bojovníci 1"
+msgstr ""
 
 msgid "Random Monster 2"
 msgstr ""
@@ -7766,7 +7766,7 @@ msgid "Flyer"
 msgstr "Lieta"
 
 msgid "Always retaliates"
-msgstr "Vždy odvetí"
+msgstr "Vždy vracia úder"
 
 msgid "Attacks all adjacent enemies"
 msgstr "Útočí na všetkých susedných nepriateľov"
@@ -7781,7 +7781,7 @@ msgid "Undead"
 msgstr "Nemŕtvy"
 
 msgid "No enemy retaliation"
-msgstr "Žiadna nepriateľská odveta"
+msgstr "Nepriateľ nevracia úder"
 
 msgid "HP drain"
 msgstr "Čerpanie zdravia"
@@ -7961,7 +7961,7 @@ msgid ""
 msgstr ""
 
 msgid "Fizbin of Misfortune"
-msgstr "Odznak nešťastia"
+msgstr "Fizbin nešťastia"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
 msgstr "%{name} znižuje tvoju morálku o %{count}."
