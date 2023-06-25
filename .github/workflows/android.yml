@@ -74,19 +74,26 @@ jobs:
       with:
         name: android-isotools-lint-report
         path: android/isotools/build/reports/
-    - name: Create package
+    - name: Create packages
       run: |
-        7z a -bb1 -tzip -- fheroes2_android.zip LICENSE changelog.txt fheroes2.aab fheroes2.apk ./docs/README.txt ./docs/README_android.md
+        7z a -bb1 -tzip -- fheroes2_android.zip LICENSE changelog.txt fheroes2.apk ./docs/README.txt ./docs/README_android.md
+        7z a -bb1 -tzip -- fheroes2_android_aab.zip LICENSE fheroes2.aab
     - uses: actions/upload-artifact@v3
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: fheroes2_android.zip
         path: fheroes2_android.zip
         if-no-files-found: error
+    - uses: actions/upload-artifact@v3
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        name: fheroes2_android_aab.zip
+        path: fheroes2_android_aab.zip
+        if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
       with:
-        artifacts: fheroes2_android.zip
+        artifacts: fheroes2_android.zip, fheroes2_android_aab.zip
         body: ${{ github.event.head_commit.message }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Android build (latest commit)

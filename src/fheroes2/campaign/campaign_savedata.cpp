@@ -27,6 +27,8 @@
 
 #include "army.h"
 #include "campaign_data.h"
+#include "game_io.h"
+#include "save_format_version.h"
 #include "serialize.h"
 
 namespace Campaign
@@ -64,22 +66,25 @@ namespace Campaign
         }
     }
 
-    void CampaignSaveData::setCurrentScenarioBonus( const ScenarioBonusData & bonus )
-    {
-        _currentScenarioBonus = bonus;
-    }
-
-    void CampaignSaveData::setCurrentScenarioInfoId( const ScenarioInfoId & scenarioInfoId )
+    void CampaignSaveData::setCurrentScenarioInfo( const ScenarioInfoId & scenarioInfoId, const int32_t bonusId /* = -1 */ )
     {
         assert( scenarioInfoId.campaignId >= 0 && scenarioInfoId.scenarioId >= 0 );
+
         _currentScenarioInfoId = scenarioInfoId;
+        _currentScenarioBonusId = bonusId;
     }
 
     void CampaignSaveData::addCurrentMapToFinished()
     {
-        const bool isNotDuplicate = std::find( _finishedMaps.begin(), _finishedMaps.end(), _currentScenarioInfoId ) == _finishedMaps.end();
-        if ( isNotDuplicate )
-            _finishedMaps.emplace_back( _currentScenarioInfoId );
+        // Check for a duplicate
+        if ( std::find( _finishedMaps.begin(), _finishedMaps.end(), _currentScenarioInfoId ) != _finishedMaps.end() ) {
+            return;
+        }
+
+        _finishedMaps.emplace_back( _currentScenarioInfoId );
+        _bonusesForFinishedMaps.emplace_back( _currentScenarioBonusId );
+
+        assert( _finishedMaps.size() == _bonusesForFinishedMaps.size() );
     }
 
     void CampaignSaveData::addDaysPassed( const uint32_t days )
@@ -90,9 +95,11 @@ namespace Campaign
     void CampaignSaveData::reset()
     {
         _finishedMaps.clear();
+        _bonusesForFinishedMaps.clear();
         _obtainedCampaignAwards.clear();
         _carryOverTroops.clear();
         _currentScenarioInfoId = { -1, -1 };
+        _currentScenarioBonusId = -1;
         _daysPassed = 0;
         _difficulty = CampaignDifficulty::Normal;
     }
@@ -153,14 +160,42 @@ namespace Campaign
 
     StreamBase & operator<<( StreamBase & msg, const CampaignSaveData & data )
     {
-        return msg << data._currentScenarioInfoId.campaignId << data._currentScenarioInfoId.scenarioId << data._currentScenarioBonus << data._finishedMaps
-                   << data._daysPassed << data._obtainedCampaignAwards << data._carryOverTroops << data._difficulty;
+        return msg << data._currentScenarioInfoId.campaignId << data._currentScenarioInfoId.scenarioId << data._currentScenarioBonusId << data._finishedMaps
+                   << data._bonusesForFinishedMaps << data._daysPassed << data._obtainedCampaignAwards << data._carryOverTroops << data._difficulty;
     }
 
     StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data )
     {
-        return msg >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId >> data._currentScenarioBonus >> data._finishedMaps
-               >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
+        msg >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId;
+
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1005_RELEASE ) {
+            ScenarioBonusData dummy;
+
+            msg >> dummy;
+
+            // There is always a bonus in all the original HoMM2 campaign missions
+            data._currentScenarioBonusId = 0;
+        }
+        else {
+            msg >> data._currentScenarioBonusId;
+        }
+
+        msg >> data._finishedMaps;
+
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1005_RELEASE ) {
+            // There is always a bonus in all the original HoMM2 campaign missions
+            data._bonusesForFinishedMaps.resize( data._finishedMaps.size(), 0 );
+        }
+        else {
+            msg >> data._bonusesForFinishedMaps;
+
+            // Make sure that the number of elements in the vector of map bonuses matches the number of elements in the vector of finished maps
+            data._bonusesForFinishedMaps.resize( data._finishedMaps.size(), -1 );
+        }
+
+        return msg >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
     }
 
     ScenarioVictoryCondition getCurrentScenarioVictoryCondition()

@@ -214,6 +214,9 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     // image background
     fheroes2::drawMainMenuScreen();
     if ( isFirstGameRun ) {
+        // Fade in Main Menu image before showing messages. This also resets the "need fade" state to have no fade-in after these messages.
+        fheroes2::validateFadeInAndRender();
+
         fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
         if ( System::isHandheldDevice() ) {
