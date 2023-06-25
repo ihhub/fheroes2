@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-14 20:35+0000\n"
-"PO-Revision-Date: 2023-05-13 15:40+0200\n"
+"PO-Revision-Date: 2023-06-25 00:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CP1250\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? "
 "1 : 2 );\n"
-"X-Generator: Poedit 3.3\n"
+"X-Generator: Poedit 3.2.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -486,7 +486,7 @@ msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} sa vzdáva nepriateľovi a hanobne odchádza."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
-msgstr "Tvoje vojská sú porazené a %{name} sa ťa vzdáva."
+msgstr "Tvoje vojská sú porazené a %{name} ťa opúšťa."
 
 msgid "Your force suffer a bitter defeat."
 msgstr "Tvoje vojská sú porazené."
@@ -960,7 +960,7 @@ msgid "Turning Point"
 msgstr "Bod otáčania"
 
 msgid "scenarioName|Defender"
-msgstr "Obránca"
+msgstr "Obranca"
 
 msgid "Corlagon's Defense"
 msgstr "Corlagonova obrana"
@@ -2007,7 +2007,7 @@ msgid "Whittingham"
 msgstr "Whittingham"
 
 msgid "Cathcart"
-msgstr "Cathvoz"
+msgstr "Cathcart"
 
 msgid "Elk's Head"
 msgstr "Losia hlava"
@@ -2034,7 +2034,7 @@ msgid "Pig's Eye"
 msgstr "Svinské oko"
 
 msgid "Viper's Nest"
-msgstr "Hniezdo zmiji"
+msgstr "Hniezdo zmijí"
 
 msgid "Fenton"
 msgstr "Fenton"
@@ -2130,7 +2130,7 @@ msgid "Garbage Heap"
 msgstr "Smetisko"
 
 msgid "Hut"
-msgstr "Chatrč"
+msgstr "Chata"
 
 msgid "Stick Hut"
 msgstr "Drevenica"
@@ -2163,7 +2163,7 @@ msgid "Crystal Garden"
 msgstr "Krištáľová záhrada"
 
 msgid "Treehouse"
-msgstr "Stromodom"
+msgstr "Dom na strome"
 
 msgid "Cottage"
 msgstr "Chalúpka"
@@ -2360,7 +2360,7 @@ msgid "Tent"
 msgstr "Stan"
 
 msgid "Captain's Quarters"
-msgstr "Kapitánova ubytovňa"
+msgstr "Kapitánov kvartír"
 
 msgid "Mage Guild, Level 1"
 msgstr "Cech mágov, úroveň 1"
@@ -2575,7 +2575,7 @@ msgid "Max"
 msgstr "Max"
 
 msgid "Hire all creatures in the town."
-msgstr "Najmi všetkých bojovníkov v meste."
+msgstr "Najmi všetky tvory v meste."
 
 msgid "Town Population Information and Statistics"
 msgstr "Informácie o obyvateľstve a štatistika mesta"
@@ -6278,7 +6278,7 @@ msgid "Necromancy"
 msgstr ""
 
 msgid "Estates"
-msgstr ""
+msgstr "Statky"
 
 msgid "Advanced Archery"
 msgstr ""
@@ -6610,25 +6610,25 @@ msgid "View Towns and Castles."
 msgstr ""
 
 msgid "luck|Cursed"
-msgstr ""
+msgstr "Prekliate"
 
 msgid "luck|Awful"
-msgstr ""
+msgstr "Hrozné"
 
 msgid "luck|Bad"
-msgstr ""
+msgstr "Zlé"
 
 msgid "luck|Normal"
-msgstr ""
+msgstr "Normálne"
 
 msgid "luck|Good"
-msgstr ""
+msgstr "Dobré"
 
 msgid "luck|Great"
-msgstr ""
+msgstr "Skvelé"
 
 msgid "luck|Irish"
-msgstr ""
+msgstr "Írske"
 
 msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
@@ -6646,25 +6646,25 @@ msgid ""
 msgstr ""
 
 msgid "morale|Treason"
-msgstr ""
+msgstr "Zrada"
 
 msgid "morale|Awful"
-msgstr ""
+msgstr "Hrozná"
 
 msgid "morale|Poor"
-msgstr ""
+msgstr "Slabá"
 
 msgid "morale|Normal"
-msgstr ""
+msgstr "Normálna"
 
 msgid "morale|Good"
-msgstr ""
+msgstr "Dobrá"
 
 msgid "morale|Great"
-msgstr ""
+msgstr "Skvelá"
 
 msgid "morale|Blood!"
-msgstr ""
+msgstr "Krvná!"
 
 msgid "Bad morale may cause your armies to freeze in combat."
 msgstr ""
@@ -6678,22 +6678,22 @@ msgid "Good morale may give your armies extra attacks in combat."
 msgstr ""
 
 msgid "Knight"
-msgstr ""
+msgstr "Rytier"
 
 msgid "Barbarian"
-msgstr ""
+msgstr "Barbar"
 
 msgid "Sorceress"
-msgstr ""
+msgstr "Čarodejnica"
 
 msgid "Warlock"
-msgstr ""
+msgstr "Černokňažník"
 
 msgid "Wizard"
-msgstr ""
+msgstr "Čarodejník"
 
 msgid "Necromancer"
-msgstr ""
+msgstr "Nekromant"
 
 msgid "Multi"
 msgstr ""
@@ -6734,34 +6734,34 @@ msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
-msgstr ""
+msgstr "Stojaca"
 
 msgid "speed|Crawling"
-msgstr ""
+msgstr "Plaziaca"
 
 msgid "speed|Very Slow"
-msgstr ""
+msgstr "Veľmi pomalá"
 
 msgid "speed|Slow"
-msgstr ""
+msgstr "Pomalá"
 
 msgid "speed|Average"
-msgstr ""
+msgstr "Priemerná"
 
 msgid "speed|Fast"
-msgstr ""
+msgstr "Rýchla"
 
 msgid "speed|Very Fast"
-msgstr ""
+msgstr "Veľmi rýchla"
 
 msgid "speed|Ultra Fast"
-msgstr ""
+msgstr "Ultrarýchla"
 
 msgid "speed|Blazing"
-msgstr ""
+msgstr "Spaľujúca"
 
 msgid "speed|Instant"
-msgstr ""
+msgstr "Okamžitá"
 
 msgid "week|Squirrel"
 msgstr ""
@@ -7337,10 +7337,10 @@ msgid "Champions"
 msgstr "Šampióni"
 
 msgid "Paladin"
-msgstr "Paladin"
+msgstr "Paladín"
 
 msgid "Paladins"
-msgstr "Paladini"
+msgstr "Paladíni"
 
 msgid "Crusader"
 msgstr "Križiak"
@@ -7370,7 +7370,7 @@ msgid "Wolf"
 msgstr "Vlk"
 
 msgid "Wolves"
-msgstr "Vlci"
+msgstr "Vlky"
 
 msgid "Ogre"
 msgstr "Zlobor"
@@ -7460,7 +7460,7 @@ msgid "Centaur"
 msgstr "Kentaur"
 
 msgid "Centaurs"
-msgstr "Kentaury"
+msgstr "Kentauri"
 
 msgid "Gargoyle"
 msgstr "Chrlič"
@@ -7469,16 +7469,16 @@ msgid "Gargoyles"
 msgstr "Chrliče"
 
 msgid "Griffin"
-msgstr "Griffin"
+msgstr "Gryf"
 
 msgid "Griffins"
-msgstr "Griffini"
+msgstr "Gryfy"
 
 msgid "Minotaur"
 msgstr "Minotaur"
 
 msgid "Minotaurs"
-msgstr "Minotaury"
+msgstr "Minotauri"
 
 msgid "Minotaur King"
 msgstr "Minotaurí kráľ"
@@ -7496,19 +7496,19 @@ msgid "Green Dragon"
 msgstr "Zelený drak"
 
 msgid "Green Dragons"
-msgstr "Zelení draci"
+msgstr "Zelené draky"
 
 msgid "Red Dragon"
 msgstr "Červený drak"
 
 msgid "Red Dragons"
-msgstr "Červení draci"
+msgstr "Červené draky"
 
 msgid "Black Dragon"
 msgstr "Čierny drak"
 
 msgid "Black Dragons"
-msgstr "Čierni draci"
+msgstr "Čierne draky"
 
 msgid "Halfling"
 msgstr "Hobit"
@@ -7535,10 +7535,10 @@ msgid "Steel Golems"
 msgstr "Oceľoví golemovia"
 
 msgid "Roc"
-msgstr "Roc"
+msgstr "Roch"
 
 msgid "Rocs"
-msgstr "Roci"
+msgstr "Rochy"
 
 msgid "Mage"
 msgstr "Mág"
@@ -7598,10 +7598,10 @@ msgid "Vampires"
 msgstr "Upíri"
 
 msgid "Vampire Lord"
-msgstr "Upíri lord"
+msgstr "Upírí lord"
 
 msgid "Vampire Lords"
-msgstr "Upíri lordi"
+msgstr "Upírí lordi"
 
 msgid "Lich"
 msgstr "Kostej"
@@ -7622,16 +7622,16 @@ msgid "Bone Dragons"
 msgstr "Kostnatí draci"
 
 msgid "Rogue"
-msgstr ""
+msgstr "Tulák"
 
 msgid "Rogues"
-msgstr ""
+msgstr "Tuláci"
 
 msgid "Nomad"
-msgstr ""
+msgstr "Nomád"
 
 msgid "Nomads"
-msgstr ""
+msgstr "Nomádi"
 
 msgid "Ghost"
 msgstr "Duch"
@@ -7640,16 +7640,16 @@ msgid "Ghosts"
 msgstr "Duchovia"
 
 msgid "Genie"
-msgstr ""
+msgstr "Džin"
 
 msgid "Genies"
-msgstr ""
+msgstr "Džinovia"
 
 msgid "Medusa"
-msgstr ""
+msgstr "Medúza"
 
 msgid "Medusas"
-msgstr ""
+msgstr "Medúzy"
 
 msgid "Earth Elemental"
 msgstr ""
@@ -8940,25 +8940,25 @@ msgid ""
 msgstr ""
 
 msgid "Wood"
-msgstr ""
+msgstr "Drevo"
 
 msgid "Mercury"
-msgstr ""
+msgstr "Ortuť"
 
 msgid "Ore"
-msgstr ""
+msgstr "Ruda"
 
 msgid "Sulfur"
-msgstr ""
+msgstr "Síra"
 
 msgid "Crystal"
-msgstr ""
+msgstr "Kryštál"
 
 msgid "Gems"
-msgstr ""
+msgstr "Klenoty"
 
 msgid "Gold"
-msgstr ""
+msgstr "Zlato"
 
 msgid ""
 "There are seven resources in Heroes 2, used to build and improves castles, "
@@ -9066,7 +9066,7 @@ msgid "spell|Blind"
 msgstr ""
 
 msgid "Bless"
-msgstr ""
+msgstr "Požehnanie"
 
 msgid "Causes the selected creatures to inflict maximum damage."
 msgstr ""
@@ -9095,13 +9095,13 @@ msgid "Causes the selected creatures to inflict minimum damage."
 msgstr ""
 
 msgid "Curse"
-msgstr ""
+msgstr "Kliatba"
 
 msgid "Causes all enemy troops to inflict minimum damage."
 msgstr ""
 
 msgid "Mass Curse"
-msgstr ""
+msgstr "Masová kliatba"
 
 msgid "Damages all undead in the battle."
 msgstr ""
@@ -9138,7 +9138,7 @@ msgid "Causes a magic arrow to strike the selected target."
 msgstr ""
 
 msgid "Magic Arrow"
-msgstr ""
+msgstr "Čarovný šíp"
 
 msgid "Berserker"
 msgstr ""
@@ -9389,7 +9389,7 @@ msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
 
 msgid "Petrification"
-msgstr ""
+msgstr "Skamenenie"
 
 msgid ""
 "Turns the affected creature into stone.  A petrified creature receives half "
@@ -9482,22 +9482,22 @@ msgid "south-east"
 msgstr "juhovýchod"
 
 msgid "The truth is out there."
-msgstr ""
+msgstr "Pravda je tam vonku."
 
 msgid "The dark side is stronger."
-msgstr ""
+msgstr "Temná sila je silnejšia."
 
 msgid "The end of the world is near."
-msgstr ""
+msgstr "Koniec sveta sa blíži."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
-msgstr ""
+msgstr "Kosti Lorda Slayera sú zahrabané v základoch arény."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
-msgstr ""
+msgstr "Čierny drak zloží Titána aj o pol noci."
 
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
-msgstr ""
+msgstr "Povedal jej: Jada jada jada...  a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
