@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -4333,7 +4333,7 @@ msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
 
 msgid "Loading video. Please wait..."
-msgstr "Cargando vídeo. Por favor, espera..."
+msgstr ""
 
 msgid "Host"
 msgstr "Anfitrión"
