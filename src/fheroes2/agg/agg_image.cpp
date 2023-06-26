@@ -2490,6 +2490,18 @@ namespace fheroes2
                     modified = std::move( temp );
                     Fill( modified, 12, 0, 5, 1, 36 );
                 }
+                if ( _icnVsSprite[id].size() > 33 ) {
+                    // Minotaur King original mini sprite has blue armlets. We make them gold to correspond the ICN::MINOTAU2.
+                    Sprite & modified = _icnVsSprite[id][33];
+
+                    if ( modified.width() == 20 && modified.height() == 36 ) {
+                        // We update these pixels: 6x16, 7x16, 8x16, 5x17, 6x17, 7x17, 8x17, 6x18, 7x18, 14x18, 14x19.
+                        for ( const uint32_t pixelNumber : { 326, 327, 328, 345, 346, 347, 348, 366, 367, 374, 394 } ) {
+                            // The gold color gradient has -42 offset from blue color gradient.
+                            modified.image()[pixelNumber] -= 42;
+                        }
+                    }
+                }
                 if ( _icnVsSprite[id].size() > 62 ) {
                     const Point shadowOffset( -1, 2 );
                     for ( size_t i = 0; i < 62; ++i ) {
@@ -3498,6 +3510,49 @@ namespace fheroes2
             case ICN::MINI_MONSTER_SHADOW: {
                 // It doesn't matter which image is being called. We are generating both of them at the same time.
                 LoadOriginalICN( ICN::MINIMON );
+
+                // Minotaur King original Adventure map sprite has blue armlets. We make them gold to correspond the ICN::MINOTAU2.
+                if ( _icnVsSprite[ICN::MINIMON].size() > 303 ) {
+                    // The gold color gradient has -42 offset from blue color gradient.
+                    if ( _icnVsSprite[ICN::MINIMON][297].width() == 38 && _icnVsSprite[ICN::MINIMON][297].height() == 34 ) {
+                        // We update these pixels: 29x15, 30x15, 31x15, 30x16.
+                        for ( const uint32_t pixelNumber : { 599, 600, 601, 638 } ) {
+                            _icnVsSprite[ICN::MINIMON][297].image()[pixelNumber] -= 42;
+                        }
+                    }
+                    for ( uint32_t icnNumber = 298; icnNumber < 300; ++icnNumber ) {
+                        if ( _icnVsSprite[ICN::MINIMON][icnNumber].width() == 44 && _icnVsSprite[ICN::MINIMON][icnNumber].height() == 32 ) {
+                            // We update these pixels: 29x17, 30x17, 32x17, 30x18, 31x18, 38x18, 38x19, 38x20.
+                            for ( const uint32_t pixelNumber : { 777, 778, 780, 822, 823, 830, 874, 918 } ) {
+                                _icnVsSprite[ICN::MINIMON][icnNumber].image()[pixelNumber] -= 42;
+                            }
+                        }
+                    }
+                    if ( _icnVsSprite[ICN::MINIMON][300].width() == 45 && _icnVsSprite[ICN::MINIMON][300].height() == 32 ) {
+                        // We update these pixels: 30x17, 31x17, 33x17, 31x18, 32x18, 39x18, 39x19, 39x20
+                        for ( const uint32_t pixelNumber : { 795, 796, 798, 841, 842, 849, 894, 939 } ) {
+                            _icnVsSprite[ICN::MINIMON][300].image()[pixelNumber] -= 42;
+                        }
+                    }
+                    if ( _icnVsSprite[ICN::MINIMON][301].width() == 45 && _icnVsSprite[ICN::MINIMON][301].height() == 32 ) {
+                        // We update these pixels: 29x17, 30x17, 32x17, 30x18, 31x18, 39x18, 39x19, 39x20
+                        for ( const uint32_t pixelNumber : { 794, 795, 797, 840, 841, 849, 894, 939 } ) {
+                            _icnVsSprite[ICN::MINIMON][301].image()[pixelNumber] -= 42;
+                        }
+                    }
+                    if ( _icnVsSprite[ICN::MINIMON][302].width() == 45 && _icnVsSprite[ICN::MINIMON][302].height() == 32 ) {
+                        // We update these pixels: 35x16, 29x17, 30x17, 32x17, 33x17, 34x17, 30x18, 31x18, 31x19, 32x20.
+                        for ( const uint32_t pixelNumber : { 755, 794, 795, 797, 798, 799, 840, 841, 886, 932 } ) {
+                            _icnVsSprite[ICN::MINIMON][302].image()[pixelNumber] -= 42;
+                        }
+                    }
+                    if ( _icnVsSprite[ICN::MINIMON][303].width() == 44 && _icnVsSprite[ICN::MINIMON][303].height() == 32 ) {
+                        // We update these pixels: 29x17, 30x17, 30x18, 31x18, 31x19.
+                        for ( const uint32_t pixelNumber : { 777, 778, 822, 823, 867 } ) {
+                            _icnVsSprite[ICN::MINIMON][303].image()[pixelNumber] -= 42;
+                        }
+                    }
+                }
 
                 // TODO: optimize image sizes.
                 _icnVsSprite[ICN::MINI_MONSTER_IMAGE] = _icnVsSprite[ICN::MINIMON];
