@@ -9482,22 +9482,22 @@ msgid "south-east"
 msgstr "juhovýchod"
 
 msgid "The truth is out there."
-msgstr ""
+msgstr "Pravda je tam vonku."
 
 msgid "The dark side is stronger."
-msgstr ""
+msgstr "Temná sila je silnejšia."
 
 msgid "The end of the world is near."
-msgstr ""
+msgstr "Koniec sveta sa blíži."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
-msgstr ""
+msgstr "Kosti Lorda Slayera sú zahrabané v základoch arény."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
-msgstr ""
+msgstr "Čierny drak zloží Titána aj o polnoci."
 
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
-msgstr ""
+msgstr "Povedal jej: Jada jada jada...  a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
