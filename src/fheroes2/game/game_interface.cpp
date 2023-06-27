@@ -53,7 +53,7 @@ Interface::AdventureMap::AdventureMap()
     , controlPanel( *this )
     , _lockRedraw( false )
 {
-    reset();
+    AdventureMap::reset();
 }
 
 void Interface::AdventureMap::reset()

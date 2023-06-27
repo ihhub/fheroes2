@@ -61,7 +61,7 @@ namespace Interface
     Interface::Editor::Editor()
         : _editorPanel( *this )
     {
-        reset();
+        Editor::reset();
     }
 
     void Editor::reset()
@@ -100,10 +100,11 @@ namespace Interface
             // Render all except the fog.
             _gameArea.Redraw( fheroes2::Display::instance(), LEVEL_OBJECTS | LEVEL_HEROES | LEVEL_ROUTES );
 
-            // TODO:: Render horizontal and vertical map tiles scale.
+            // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
         }
 
         if ( combinedRedraw & ( REDRAW_RADAR_CURSOR | REDRAW_RADAR ) ) {
+            // Render the mini-map without fog.
             _radar.redrawForEditor( combinedRedraw & REDRAW_RADAR );
         }
 
@@ -117,6 +118,9 @@ namespace Interface
         }
 
         if ( ( combinedRedraw & REDRAW_STATUS ) && ( display.height() > display.DEFAULT_HEIGHT + BORDERWIDTH ) ) {
+            // Currently the Adventure Map status is rendered to fill the space under the Editor buttons on high resolutions.
+            // TODO: Make special status for Editor to display some map info, e.g. object properties under the cursor (castle garrison, amount of resources, etc.)
+            // TODO: Decide where to output the status for low resolutions (reduce the number of displayed buttons - put some into sub-menu).
             _statusWindow.Redraw();
         }
 
@@ -232,10 +236,8 @@ namespace Interface
                     scrollPosition |= SCROLL_BOTTOM;
 
                 if ( scrollPosition != SCROLL_NONE ) {
-                    if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) ) {
-                        if ( fastScrollRepeatCount < fastScrollStartThreshold ) {
-                            ++fastScrollRepeatCount;
-                        }
+                    if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) && ( fastScrollRepeatCount < fastScrollStartThreshold ) ) {
+                        ++fastScrollRepeatCount;
                     }
 
                     if ( fastScrollRepeatCount >= fastScrollStartThreshold ) {
@@ -293,18 +295,16 @@ namespace Interface
             }
 
             // fast scroll
-            if ( _gameArea.NeedScroll() || _gameArea.needDragScrollRedraw() ) {
-                if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
-                    if ( ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
-                           || isScrollBottom( le.GetMouseCursor() ) )
-                         && !_gameArea.isDragScroll() ) {
-                        cursor.SetThemes( _gameArea.GetScrollCursor() );
-                    }
-
-                    _gameArea.Scroll();
-
-                    _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR;
+            if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) && ( _gameArea.NeedScroll() || _gameArea.needDragScrollRedraw() ) ) {
+                if ( ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
+                       || isScrollBottom( le.GetMouseCursor() ) )
+                     && !_gameArea.isDragScroll() ) {
+                    cursor.SetThemes( _gameArea.GetScrollCursor() );
                 }
+
+                _gameArea.Scroll();
+
+                _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR;
             }
 
             // Render map only if the turn is not over.
@@ -447,6 +447,7 @@ namespace Interface
 
     void Editor::eventViewWorld()
     {
+        // TODO: Make proper borders restoration for low height resolutions, like for hide interface mode.
         ViewWorld::ViewWorldWindow( 0, ViewWorldMode::ViewAll, *this );
     }
     void Editor::mouseCursorAreaClickLeft( const int32_t tileIndex )
@@ -457,14 +458,12 @@ namespace Interface
         if ( otherHero ) {
             // TODO: Make hero edit dialog: like Battle only dialog, but only for one hero.
             Game::OpenHeroesDialog( *otherHero, true, true );
-            Cursor::Get().SetThemes( Cursor::HEROES );
         }
 
         Castle * otherCastle = world.getCastle( tile.GetCenter() );
         if ( otherCastle ) {
             // TODO: Make Castle edit dialog: like original build dialog.
             Game::OpenCastleDialog( *otherCastle );
-            Cursor::Get().SetThemes( Cursor::CASTLE );
         }
     }
     void Editor::mouseCursorAreaPressRight( const int32_t tileIndex ) const

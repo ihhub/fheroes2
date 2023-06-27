@@ -184,6 +184,7 @@ namespace Interface
         }
 
         if ( le.MousePressRight( _rectInstrumentPanel ) || le.MouseClickLeft( _rectInstrumentPanel ) ) {
+            // TODO: Implement instrument and brush select.
             fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. This panel is currently not functional.",
                                                le.MousePressRight() ? Dialog::ZERO : Dialog::OK );
         }

@@ -40,7 +40,9 @@ namespace Interface
         // Regenerates the game area and updates the panel positions depending on the UI settings
         void reset() override;
 
+        // Start Map Editor interface main function.
         fheroes2::GameMode startEdit();
+
         static fheroes2::GameMode eventLoadMap();
         static fheroes2::GameMode eventNewMap();
         static fheroes2::GameMode eventFileDialog();

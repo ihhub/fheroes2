@@ -45,7 +45,10 @@ namespace Interface
             return _rectEditorPanel;
         }
 
+        // Set Editor panel positions on screen.
         void setPos( const int32_t displayX, int32_t displayY );
+
+        // Set flag to redraw Editor buttons panel on the next interface render.
         void setRedraw() const;
 
         fheroes2::GameMode queueEventProcessing();
@@ -59,6 +62,7 @@ namespace Interface
 
         Editor & _interface;
 
+        // Index of selected Map Editor instrument.
         uint32_t _selectedInstrument{ 0 };
 
         std::array<fheroes2::Button, 6> _instrumentButtons;
