@@ -477,6 +477,13 @@ uint32_t Spell::weightForRace( const int race ) const
     case Spell::SUMMONAELEMENT:
     case Spell::SUMMONFELEMENT:
     case Spell::SUMMONWELEMENT:
+    case Spell::TOWNPORTAL:
+    case Spell::VISIONS:
+    case Spell::HAUNT:
+    case Spell::SETEGUARDIAN:
+    case Spell::SETAGUARDIAN:
+    case Spell::SETFGUARDIAN:
+    case Spell::SETWGUARDIAN:
         return 0;
 
     default:
