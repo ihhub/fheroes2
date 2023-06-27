@@ -165,6 +165,8 @@ public:
 
     uint32_t ExtraValue() const;
 
+    // Returns the weight of this spell for a specific race.
+    // See https://handbookhmm.ru/kakim-obrazom-zaklinaniya-popadayut-v-magicheskuyu-gildiyu.html for details.
     uint32_t weightForRace( const int race ) const;
 
     bool isValid() const

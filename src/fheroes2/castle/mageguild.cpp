@@ -62,7 +62,7 @@ namespace
         return Spell::COLDRING;
     }
 
-    Spell getGuaranteedRestorationSpell()
+    Spell getGuaranteedCancellationSpell()
     {
         const uint32_t rand = Rand::Get( 0, 100 );
 
@@ -111,10 +111,12 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
         auto & [freeSlots, hasAdventureSpell] = mageGuildLevels[spellLevel - 1];
         assert( freeSlots > 0 );
 
+        // There can only be one adventure spell at each level of the Mage Guild
         if ( hasAdventureSpell && spell.isAdventure() ) {
             return false;
         }
 
+        // Some spells may occur less frequently in Mage Guilds than others, depending on race
         if ( Rand::Get( 0, 10 ) > spell.weightForRace( race ) ) {
             return false;
         }
@@ -140,10 +142,12 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
         return true;
     };
 
+    // Mage Guild must always have one of the specific damage spells...
     if ( !addSpell( getGuaranteedDamageSpell() ) ) {
         assert( 0 );
     }
-    if ( !addSpell( getGuaranteedRestorationSpell() ) ) {
+    // ... as well as one of the specific "spell cancellation" spells
+    if ( !addSpell( getGuaranteedCancellationSpell() ) ) {
         assert( 0 );
     }
 
