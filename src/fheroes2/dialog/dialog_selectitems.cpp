@@ -128,17 +128,11 @@ public:
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        Monster mons( index );
+        const Monster mons( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() ), display, dstx + 5, dsty + 3 );
 
-        if ( current ) {
-            fheroes2::Text text( mons.GetName(), fheroes2::FontType::normalYellow() );
-            text.draw( dstx + 50, dsty + 10, display );
-        }
-        else {
-            fheroes2::Text text( mons.GetName(), fheroes2::FontType() );
-            text.draw( dstx + 50, dsty + 10, display );
-        }
+        const fheroes2::Text text( mons.GetName(), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        text.draw( dstx + 50, dsty + 10, display );
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
@@ -169,17 +163,12 @@ public:
     {
         const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
 
-        if ( !port.empty() )
+        if ( !port.empty() ) {
             fheroes2::Blit( port, fheroes2::Display::instance(), dstx + 5, dsty + 3 );
+        }
 
-        if ( current ) {
-            fheroes2::Text text( Heroes::GetName( index ), fheroes2::FontType::normalYellow() );
-            text.draw( dstx + 50, dsty + 5, fheroes2::Display::instance() );
-        }
-        else {
-            fheroes2::Text text( Heroes::GetName( index ), fheroes2::FontType() );
-            text.draw( dstx + 50, dsty + 5, fheroes2::Display::instance() );
-        }
+        const fheroes2::Text text( Heroes::GetName( index ), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        text.draw( dstx + 50, dsty + 5, fheroes2::Display::instance() );
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
@@ -205,14 +194,8 @@ public:
         const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
         fheroes2::Blit( artifactSprite, display, dstx + 5, dsty + 3 );
 
-        if ( current ) {
-            fheroes2::Text text( art.GetName(), fheroes2::FontType::normalYellow() );
-            text.draw( dstx + 50, dsty + 10, display );
-        }
-        else {
-            fheroes2::Text text( art.GetName(), fheroes2::FontType() );
-            text.draw( dstx + 50, dsty + 10, display );
-        }
+        const fheroes2::Text text( art.GetName(), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        text.draw( dstx + 50, dsty + 10, display );
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
@@ -237,17 +220,11 @@ public:
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        Spell spell( index );
+        const Spell spell( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() ), display, dstx + 5, dsty + 3 );
 
-        if ( current ) {
-            fheroes2::Text text( spell.GetName(), fheroes2::FontType::normalYellow() );
-            text.draw( dstx + 80, dsty + 10, display );
-        }
-        else {
-            fheroes2::Text text( spell.GetName(), fheroes2::FontType() );
-            text.draw( dstx + 80, dsty + 10, display );
-        }
+        const fheroes2::Text text( spell.GetName(), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        text.draw( dstx + 80, dsty + 10, display );
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
@@ -272,18 +249,11 @@ public:
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        Skill::Secondary skill( 1 + index / 3, 1 + ( index % 3 ) );
+        const Skill::Secondary skill( 1 + index / 3, 1 + ( index % 3 ) );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ), display, dstx + 5, dsty + 3 );
-        std::string str = skill.GetName();
 
-        if ( current ) {
-            fheroes2::Text text( str, fheroes2::FontType::normalYellow() );
-            text.draw( dstx + 50, dsty + 10, display );
-        }
-        else {
-            fheroes2::Text text( str, fheroes2::FontType() );
-            text.draw( dstx + 50, dsty + 10, display );
-        }
+        const fheroes2::Text text( skill.GetName(), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        text.draw( dstx + 50, dsty + 10, display );
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
