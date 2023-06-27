@@ -135,7 +135,7 @@ msgstr ""
 "NHIỀU\n"
 "NGƯỜI"
 
-msgid "CONFIG"
+msgid "SETTINGS"
 msgstr "ĐIỀU CHỈNH"
 
 msgid ""

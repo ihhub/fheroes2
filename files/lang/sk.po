@@ -136,7 +136,7 @@ msgstr ""
 "VIAC\n"
 "HRÁČOV"
 
-msgid "CONFIG"
+msgid "SETTINGS"
 msgstr "NASTAV"
 
 msgid ""
