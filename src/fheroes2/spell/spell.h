@@ -232,7 +232,7 @@ public:
 
     bool isGuardianType() const;
 
-    /* return index sprite spells.icn */
+    // Returns the index of the spell sprite in SPELLS.ICN
     uint32_t IndexSprite() const;
 
     static Spell Rand();
