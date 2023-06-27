@@ -9494,7 +9494,7 @@ msgid "The bones of Lord Slayer are buried in the foundation of the arena."
 msgstr "Kosti Lorda Slayera sú zahrabané v základoch arény."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
-msgstr "Čierny drak zloží Titána aj o pol noci."
+msgstr "Čierny drak zloží Titána aj o polnoci."
 
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr "Povedal jej: Jada jada jada...  a ona na to že: Blá, blá, blá..."
