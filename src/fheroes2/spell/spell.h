@@ -213,7 +213,6 @@ public:
     bool isApplyToFriends() const;
     bool isApplyToEnemies() const;
     bool isMassActions() const;
-    bool isRaceCompatible( int race ) const;
 
     bool isFire() const
     {

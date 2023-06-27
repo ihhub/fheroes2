@@ -750,33 +750,6 @@ bool Spell::isApplyToEnemies() const
     return false;
 }
 
-bool Spell::isRaceCompatible( int race ) const
-{
-    switch ( id ) {
-    case MASSCURE:
-    case MASSBLESS:
-    case HOLYSHOUT:
-    case HOLYWORD:
-    case BLESS:
-    case CURE:
-        if ( Race::NECR == race )
-            return false;
-        break;
-
-    case DEATHWAVE:
-    case DEATHRIPPLE:
-    case ANIMATEDEAD:
-        if ( Race::NECR != race )
-            return false;
-        break;
-
-    default:
-        break;
-    }
-
-    return true;
-}
-
 int32_t Spell::CalculateDimensionDoorDistance()
 {
     // original h2 variant
