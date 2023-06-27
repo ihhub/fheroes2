@@ -23,9 +23,12 @@
 
 #include "mageguild.h"
 
-#include <algorithm>
 #include <array>
-#include <vector>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <optional>
+#include <set>
 
 #include "heroes_base.h"
 #include "race.h"
