@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-14 20:35+0000\n"
-"PO-Revision-Date: 2023-06-26 20:55+0200\n"
+"PO-Revision-Date: 2023-06-27 18:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.3.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -2010,11 +2010,9 @@ msgstr "Sherman"
 msgid "Yorksford"
 msgstr ""
 
-#, fuzzy
 msgid "Blackburn"
 msgstr ""
 
-#, fuzzy
 msgid "Blacksford"
 msgstr ""
 
@@ -2805,17 +2803,13 @@ msgid "Need: "
 msgstr "Necesita: "
 
 msgid "Load Game"
-msgstr ""
-"Cargar\n"
-"Partida"
+msgstr "Cargar Partida"
 
 msgid "No save files to load."
 msgstr "No hay partidas para cargar."
 
 msgid "New Game"
-msgstr ""
-"Nueva\n"
-"Partida"
+msgstr "Nueva Partida"
 
 msgid "Start a single or multi-player game."
 msgstr "Comenzar una partida simple o multijugador."
@@ -2824,9 +2818,7 @@ msgid "Load a previously saved game."
 msgstr "Cargar una partida previamente guardada."
 
 msgid "Save Game"
-msgstr ""
-"Guardar\n"
-"Partida"
+msgstr "Guardar Partida"
 
 msgid "Save the current game."
 msgstr "Guardar la partida en curso."
