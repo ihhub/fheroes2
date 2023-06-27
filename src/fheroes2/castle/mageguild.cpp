@@ -21,62 +21,135 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "mageguild.h"
+
 #include <algorithm>
 #include <array>
 #include <vector>
 
 #include "heroes_base.h"
-#include "mageguild.h"
+#include "race.h"
 #include "rand.h"
 #include "serialize.h"
 #include "spell.h"
+#include "tools.h"
 
-Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int level );
-Spell GetGuaranteedDamageSpellForMageGuild();
-Spell GetGuaranteedNonDamageSpellForMageGuild();
-
-void MageGuild::initialize( int race, bool libraryCap )
+namespace
 {
+    Spell getGuaranteedDamageSpell()
+    {
+        const uint32_t rand = Rand::Get( 0, 100 );
+
+        if ( rand < 20 ) {
+            return Spell::ARROW;
+        }
+
+        if ( rand < 40 ) {
+            return Spell::LIGHTNINGBOLT;
+        }
+
+        if ( rand < 60 ) {
+            return Spell::FIREBALL;
+        }
+
+        if ( rand < 80 ) {
+            return Spell::COLDRAY;
+        }
+
+        return Spell::COLDRING;
+    }
+
+    Spell getGuaranteedRestorationSpell()
+    {
+        const uint32_t rand = Rand::Get( 0, 100 );
+
+        if ( rand < 25 ) {
+            return Spell::DISPEL;
+        }
+
+        if ( rand < 50 ) {
+            return Spell::MASSDISPEL;
+        }
+
+        if ( rand < 75 ) {
+            return Spell::ANTIMAGIC;
+        }
+
+        return Spell::CURE;
+    }
+}
+
+void MageGuild::initialize( const int race, const bool hasLibrary )
+{
+    assert( CountBits( race ) == 1 && ( race & Race::ALL ) );
+
     general.clear();
     library.clear();
 
-    std::array<int, 5> spellCountByLevel = { 3, 3, 2, 2, 1 };
+    struct MageGuildLevelProps
+    {
+        int freeSlots = 0;
+        bool hasAdventureSpell = false;
+    };
 
-    const Spell guaranteedDamageSpell = GetGuaranteedDamageSpellForMageGuild();
-    const int guaranteedDamageSpellLevel = guaranteedDamageSpell.Level();
-
-    const Spell guaranteedNonDamageSpell = GetGuaranteedNonDamageSpellForMageGuild();
-    const int guaranteedNonDamageSpellLevel = guaranteedNonDamageSpell.Level();
-
-    general.Append( guaranteedDamageSpell );
-    general.Append( guaranteedNonDamageSpell );
-
-    if ( libraryCap ) {
-        for ( int i = 0; i < 5; ++i )
-            ++spellCountByLevel[i];
+    std::array<MageGuildLevelProps, 5> mageGuildLevels = { { { 3, false }, { 3, false }, { 2, false }, { 2, false }, { 1, false } } };
+    if ( hasLibrary ) {
+        for ( auto & [freeSlots, dummy] : mageGuildLevels ) {
+            ++freeSlots;
+        }
     }
 
-    --spellCountByLevel[guaranteedDamageSpellLevel - 1];
-    --spellCountByLevel[guaranteedNonDamageSpellLevel - 1];
+    std::set<Spell> allSpells;
 
-    SpellStorage all( general );
+    auto addSpell = [this, race, &mageGuildLevels, &allSpells]( const Spell & spell ) {
+        const int spellLevel = spell.Level();
+        assert( spellLevel > 0 && spellLevel <= mageGuildLevels.size() );
 
-    for ( int i = 0; i < 5; ++i ) {
-        for ( int j = 0; j < spellCountByLevel[i]; ++j ) {
-            const Spell spell = GetUniqueSpellCompatibility( all, race, i + 1 );
+        auto & [freeSlots, hasAdventureSpell] = mageGuildLevels[spellLevel - 1];
+        assert( freeSlots > 0 );
 
-            if ( spell == Spell::NONE ) {
+        if ( hasAdventureSpell && spell.isAdventure() ) {
+            return false;
+        }
+
+        if ( Rand::Get( 0, 10 ) > spell.weightForRace( race ) ) {
+            return false;
+        }
+
+        const auto [dummy, inserted] = allSpells.insert( spell );
+        if ( !inserted ) {
+            return false;
+        }
+
+        general.Append( spell );
+
+        --freeSlots;
+
+        if ( spell.isAdventure() ) {
+            hasAdventureSpell = true;
+        }
+
+        return true;
+    };
+
+    if ( !addSpell( getGuaranteedDamageSpell() ) ) {
+        assert( 0 );
+    }
+    if ( !addSpell( getGuaranteedRestorationSpell() ) ) {
+        assert( 0 );
+    }
+
+    for ( int level = 1; level <= mageGuildLevels.size(); ++level ) {
+        const auto & [freeSlots, hasAdventureSpell] = mageGuildLevels[level - 1];
+
+        while ( freeSlots > 0 ) {
+            const Spell spell = Spell::Rand();
+
+            if ( spell.Level() != level ) {
                 continue;
             }
 
-            if ( libraryCap && j == spellCountByLevel[i] - 1 ) {
-                library.Append( spell );
-            }
-            else {
-                general.Append( spell );
-            }
-
-            all.Append( spell );
+            addSpell( spell );
         }
     }
 }
@@ -86,17 +159,21 @@ SpellStorage MageGuild::GetSpells( int guildLevel, bool hasLibrary, int spellLev
     SpellStorage result;
 
     if ( spellLevel == -1 ) {
-        // get all available spells
+        // Get all available spells
         for ( int level = 1; level <= guildLevel; ++level ) {
             result.Append( general.GetSpells( level ) );
-            if ( hasLibrary )
+
+            if ( hasLibrary ) {
                 result.Append( library.GetSpells( level ) );
+            }
         }
     }
     else if ( spellLevel <= guildLevel ) {
         result = general.GetSpells( spellLevel );
-        if ( hasLibrary )
+
+        if ( hasLibrary ) {
             result.Append( library.GetSpells( spellLevel ) );
+        }
     }
 
     return result;
@@ -105,71 +182,8 @@ SpellStorage MageGuild::GetSpells( int guildLevel, bool hasLibrary, int spellLev
 void MageGuild::educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const
 {
     if ( hero.HaveSpellBook() && guildLevel > 0 ) {
-        // this method will check wisdom requirement
+        // This method will test the hero for compliance with the wisdom requirements
         hero.AppendSpellsToBook( MageGuild::GetSpells( guildLevel, hasLibrary ) );
-    }
-}
-
-Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int lvl )
-{
-    const bool hasAdventureSpell = spells.hasAdventureSpell( lvl );
-    const bool lookForAdv = hasAdventureSpell ? false : Rand::Get( 0, 1 ) == 0 ? true : false;
-
-    std::vector<Spell> v;
-    v.reserve( 15 );
-
-    for ( int sp = Spell::NONE; sp < Spell::PETRIFY; ++sp ) {
-        const Spell spell( sp );
-
-        if ( spells.isPresentSpell( spell ) )
-            continue;
-
-        if ( !spell.isRaceCompatible( race ) )
-            continue;
-
-        if ( spell.Level() != lvl )
-            continue;
-
-        if ( lookForAdv != spell.isCombat() )
-            v.push_back( spell );
-    }
-
-    return !v.empty() ? Rand::Get( v ) : Spell( Spell::NONE );
-}
-
-Spell GetGuaranteedDamageSpellForMageGuild()
-{
-    switch ( Rand::Get( 0, 4 ) ) {
-    case 0:
-        return Spell::ARROW;
-    case 1:
-        return Spell::COLDRAY;
-    case 2:
-        return Spell::LIGHTNINGBOLT;
-    case 3:
-        return Spell::COLDRING;
-    case 4:
-        return Spell::FIREBALL;
-    default:
-        return Spell::RANDOM;
-    }
-}
-
-Spell GetGuaranteedNonDamageSpellForMageGuild()
-{
-    switch ( Rand::Get( 0, 4 ) ) {
-    case 0:
-        return Spell::DISPEL;
-    case 1:
-        return Spell::MASSDISPEL;
-    case 2:
-        return Spell::CURE;
-    case 3:
-        return Spell::MASSCURE;
-    case 4:
-        return Spell::ANTIMAGIC;
-    default:
-        return Spell::RANDOM;
     }
 }
 

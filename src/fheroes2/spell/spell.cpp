@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "spell.h"
+
 #include <algorithm>
 #include <cassert>
 #include <vector>
@@ -32,7 +34,6 @@
 #include "race.h"
 #include "rand.h"
 #include "serialize.h"
-#include "spell.h"
 #include "translations.h"
 
 struct spellstats_t
@@ -455,28 +456,82 @@ uint32_t Spell::ExtraValue() const
     return spells[id].extraValue;
 }
 
-Spell Spell::Rand( int lvl, bool adv )
+uint32_t Spell::weightForRace( const int race ) const
 {
-    std::vector<Spell> v;
-    v.reserve( 15 );
+    switch ( id ) {
+    case Spell::HOLYWORD:
+    case Spell::HOLYSHOUT:
+        if ( race == Race::NECR ) {
+            return 0;
+        }
+        break;
 
-    for ( int32_t sp = NONE; sp < PETRIFY; ++sp ) {
-        const Spell spell( sp );
-        if ( ( ( adv && !spell.isCombat() ) || ( !adv && spell.isCombat() ) ) && lvl == spell.Level() )
-            v.push_back( spell );
+    case Spell::DEATHRIPPLE:
+    case Spell::DEATHWAVE:
+        if ( race != Race::NECR ) {
+            return 0;
+        }
+        break;
+
+    case Spell::SUMMONEELEMENT:
+    case Spell::SUMMONAELEMENT:
+    case Spell::SUMMONFELEMENT:
+    case Spell::SUMMONWELEMENT:
+        return 0;
+
+    default:
+        break;
     }
-    return !v.empty() ? Rand::Get( v ) : Spell( Spell::NONE );
+
+    return 10;
 }
 
-Spell Spell::RandCombat( int lvl )
+Spell Spell::Rand()
 {
-    return Rand( lvl, false );
+    static_assert( Spell::SETWGUARDIAN - Spell::FIREBALL == 64, "The order of spells has been changed, check the logic below" );
+
+    return Rand::Get( Spell::FIREBALL, Spell::SETWGUARDIAN );
 }
 
-Spell Spell::RandAdventure( int lvl )
+Spell Spell::Rand( const int level, const bool isAdventure )
 {
-    Spell res = Rand( lvl, true );
-    return res.isValid() ? res : RandCombat( lvl );
+    std::vector<Spell> vec;
+    vec.reserve( 15 );
+
+    for ( int32_t spellId = NONE; spellId < PETRIFY; ++spellId ) {
+        const Spell spell( spellId );
+
+        if ( level != spell.Level() ) {
+            continue;
+        }
+
+        if ( isAdventure ) {
+            if ( !spell.isAdventure() ) {
+                continue;
+            }
+        }
+        else {
+            if ( !spell.isCombat() ) {
+                continue;
+            }
+        }
+
+        vec.push_back( spell );
+    }
+
+    return !vec.empty() ? Rand::Get( vec ) : Spell::NONE;
+}
+
+Spell Spell::RandCombat( const int level )
+{
+    return Rand( level, false );
+}
+
+Spell Spell::RandAdventure( const int level )
+{
+    const Spell spell = Rand( level, true );
+
+    return spell.isValid() ? spell : RandCombat( level );
 }
 
 bool Spell::isUndeadOnly() const

@@ -35,7 +35,7 @@ class MageGuild
 public:
     MageGuild() = default;
 
-    void initialize( int race, bool libraryCap );
+    void initialize( const int race, const bool hasLibrary );
     void educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const;
     SpellStorage GetSpells( int guildLevel, bool hasLibrary, int spellLevel = -1 ) const;
 

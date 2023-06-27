@@ -165,6 +165,8 @@ public:
 
     uint32_t ExtraValue() const;
 
+    uint32_t weightForRace( const int race ) const;
+
     bool isValid() const
     {
         return id != Spell::NONE;
@@ -231,9 +233,10 @@ public:
     /* return index sprite spells.icn */
     uint32_t IndexSprite() const;
 
-    static Spell RandCombat( int lvl );
-    static Spell RandAdventure( int lvl );
-    static Spell Rand( int lvl, bool adv );
+    static Spell Rand();
+    static Spell Rand( const int level, const bool isAdventure );
+    static Spell RandCombat( const int level );
+    static Spell RandAdventure( const int level );
 
     static int32_t CalculateDimensionDoorDistance();
 
