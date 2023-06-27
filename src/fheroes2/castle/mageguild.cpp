@@ -121,6 +121,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
             return false;
         }
 
+        // Check for possible duplicates
         const auto [dummy, inserted] = allSpells.insert( spell );
         if ( !inserted ) {
             return false;
