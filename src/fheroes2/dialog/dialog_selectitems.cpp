@@ -161,13 +161,15 @@ public:
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
+        fheroes2::Display & display = fheroes2::Display::instance();
+
 
         if ( !port.empty() ) {
-            fheroes2::Blit( port, fheroes2::Display::instance(), dstx + 5, dsty + 3 );
+            fheroes2::Blit( port, display, dstx + 5, dsty + 3 );
         }
 
         const fheroes2::Text text( Heroes::GetName( index ), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-        text.draw( dstx + 50, dsty + 5, fheroes2::Display::instance() );
+        text.draw( dstx + 50, dsty + 5, display );
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
