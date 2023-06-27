@@ -163,7 +163,6 @@ public:
         const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
         fheroes2::Display & display = fheroes2::Display::instance();
 
-
         if ( !port.empty() ) {
             fheroes2::Blit( port, display, dstx + 5, dsty + 3 );
         }
