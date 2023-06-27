@@ -34,7 +34,7 @@ namespace fheroes2
         Russian, // Buka and XXI Vek versions
         Italian, // Rare version?
         Czech, // Local release occurred in 2002 by CD Projekt
-        Spanish, // Proein version
+        Spanish, // Published by Proein. Only Succesion Wars
 
         // All languages listed below are original to fheroes2.
         Belarusian,
