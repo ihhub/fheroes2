@@ -101,7 +101,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
 
     std::set<Spell> allSpells;
 
-    auto addSpell = [this, race, &mageGuildLevels, &allSpells]( const Spell & spell ) {
+    auto addSpell = [this, race, hasLibrary, &mageGuildLevels, &allSpells]( const Spell & spell ) {
         const size_t spellLevel = fheroes2::checkedCast<size_t>( spell.Level() ).value();
         assert( spellLevel > 0 && spellLevel <= mageGuildLevels.size() );
 
@@ -121,7 +121,12 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
             return false;
         }
 
-        general.Append( spell );
+        if ( hasLibrary && freeSlots == 1 ) {
+            library.Append( spell );
+        }
+        else {
+            general.Append( spell );
+        }
 
         --freeSlots;
 
