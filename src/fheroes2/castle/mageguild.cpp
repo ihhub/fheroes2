@@ -102,7 +102,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
     std::set<Spell> allSpells;
 
     auto addSpell = [this, race, &mageGuildLevels, &allSpells]( const Spell & spell ) {
-        const int spellLevel = spell.Level();
+        const size_t spellLevel = fheroes2::checkedCast<size_t>( spell.Level() ).value();
         assert( spellLevel > 0 && spellLevel <= mageGuildLevels.size() );
 
         auto & [freeSlots, hasAdventureSpell] = mageGuildLevels[spellLevel - 1];
@@ -139,13 +139,13 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
         assert( 0 );
     }
 
-    for ( int level = 1; level <= mageGuildLevels.size(); ++level ) {
+    for ( size_t level = 1; level <= mageGuildLevels.size(); ++level ) {
         const auto & [freeSlots, hasAdventureSpell] = mageGuildLevels[level - 1];
 
         while ( freeSlots > 0 ) {
             const Spell spell = Spell::Rand();
 
-            if ( spell.Level() != level ) {
+            if ( fheroes2::checkedCast<size_t>( spell.Level() ).value() != level ) {
                 continue;
             }
 
