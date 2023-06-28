@@ -24,11 +24,14 @@
 #include <cstdint>
 
 #include "army.h"
+#include "heroes.h"
+#include "kingdom.h"
 #include "maps_tiles.h"
 #include "pairs.h"
 #include "payment.h"
 #include "profit.h"
 #include "rand.h"
+#include "route.h"
 #include "world.h"
 
 namespace AI
@@ -44,7 +47,7 @@ namespace AI
         _pathfinder.reset();
     }
 
-    void Normal::revealFog( const Maps::Tiles & tile )
+    void Normal::revealFog( const Maps::Tiles & tile, const Kingdom & kingdom )
     {
         const MP2::MapObjectType object = tile.GetObject();
         if ( !MP2::isActionObject( object ) ) {
@@ -52,6 +55,23 @@ namespace AI
         }
 
         updateMapActionObjectCache( tile.GetIndex() );
+
+        // If this is an action object and one of AI heroes is moving,
+        // we have to stop him because the new object might be more valuable than the current target.
+        const KingdomHeroes & heroes = kingdom.GetHeroes();
+        for ( Heroes * hero : heroes ) {
+            if ( hero == nullptr ) {
+                // How is it even possible?
+                assert( 0 );
+                continue;
+            }
+
+            if ( hero->isMoveEnabled() ) {
+                hero->SetMove( false );
+                hero->GetPath().Reset();
+                break;
+            }
+        }
     }
 
     double Normal::getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType )
