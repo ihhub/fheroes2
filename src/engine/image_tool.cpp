@@ -103,7 +103,9 @@ namespace
             col.r = *value;
             col.g = *( value + 1 );
             col.b = *( value + 2 );
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
             col.a = 255;
+#endif
         }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
