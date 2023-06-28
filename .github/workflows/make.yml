@@ -43,7 +43,6 @@ jobs:
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
-            FHEROES2_WITH_IMAGE: ON
           package_name: fheroes2_ubuntu_x86-64_SDL2.zip
           package_files: >-
             LICENSE
@@ -120,7 +119,6 @@ jobs:
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
-            FHEROES2_WITH_IMAGE: ON
             CC: aarch64-linux-gnu-gcc
             CXX: aarch64-linux-gnu-g++
             AR: aarch64-linux-gnu-ar
@@ -196,7 +194,6 @@ jobs:
           env:
             FHEROES2_STRICT_COMPILATION: ON
             FHEROES2_WITH_TOOLS: ON
-            FHEROES2_WITH_IMAGE: ON
           package_name: fheroes2_macos_x86-64_SDL2.zip
           package_files: >-
             LICENSE
