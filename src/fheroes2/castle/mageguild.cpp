@@ -153,7 +153,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
     }
 
     for ( size_t level = 1; level <= mageGuildLevels.size(); ++level ) {
-        const auto & [freeSlots, hasAdventureSpell] = mageGuildLevels[level - 1];
+        const auto & [freeSlots, dummy] = mageGuildLevels[level - 1];
 
         while ( freeSlots > 0 ) {
             const Spell spell = Spell::Rand();
