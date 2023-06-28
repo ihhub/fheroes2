@@ -7518,19 +7518,19 @@ msgid "Green Dragon"
 msgstr "Zelený drak"
 
 msgid "Green Dragons"
-msgstr "Zelené draky"
+msgstr "Zelení draci"
 
 msgid "Red Dragon"
 msgstr "Červený drak"
 
 msgid "Red Dragons"
-msgstr "Červené draky"
+msgstr "Červení draci"
 
 msgid "Black Dragon"
 msgstr "Čierny drak"
 
 msgid "Black Dragons"
-msgstr "Čierne draky"
+msgstr "Čierni draci"
 
 msgid "Halfling"
 msgstr "Hobit"
@@ -7641,7 +7641,7 @@ msgid "Bone Dragon"
 msgstr "Kostnatý drak"
 
 msgid "Bone Dragons"
-msgstr "Kostnaté draky"
+msgstr "Kostnatí draci"
 
 msgid "Rogue"
 msgstr "Tulák"
