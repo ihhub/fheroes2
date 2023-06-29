@@ -960,7 +960,7 @@ msgid "Turning Point"
 msgstr "Bod otáčania"
 
 msgid "scenarioName|Defender"
-msgstr "Obránca"
+msgstr "Obranca"
 
 msgid "Corlagon's Defense"
 msgstr "Corlagonova obrana"
@@ -4498,10 +4498,10 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "%{monster} growth +%{count}."
-msgstr "%{monster} +%{count} jedincov."
+msgstr "%{monster} vzrástli o %{count}."
 
 msgid " All populations are halved."
-msgstr " Všetky populácie sa znížia na polovicu."
+msgstr " Všetky populácie sú znížené na polovicu."
 
 msgid " All dwellings increase population."
 msgstr " Všetky obydlia zvyšujú počet obyvateľov."
@@ -5779,14 +5779,16 @@ msgid ""
 "to buy the maps?"
 msgstr ""
 "Kapitán na dôchodku, ktorý žije na tejto zrekonštruovanej rybárskej plošine, "
-"ti za 1 000 zlatých ponúkne na predaj mapy mora, ktoré vytvoril za svojich "
+"ti za 1000 zlatých ponúkne na predaj mapy mora, ktoré vytvoril za svojich "
 "mladších čias. Chceš si tieto mapy kúpiť?"
 
 
 msgid ""
+"The captain sighs. \"You don't have enough money, eh?  You can't expect me "
+"to give my maps away for free!\""
+msgstr ""
 "Kapitán si vzdychne. \"Nemáš dosť peňazí, čo?  Nemôžeš predsa očakávať, že "
 "budem rozdávať svoje mapy zadarmo!\""
-msgstr ""
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
