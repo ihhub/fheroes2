@@ -1486,8 +1486,6 @@ int Heroes::getNumOfTravelDays( int32_t dstIdx ) const
     const std::list<Route::Step> routePath = world.getPath( *this, dstIdx );
 
     if ( routePath.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_TRACE, "unreachable point: " << dstIdx )
-
         return 0;
     }
 

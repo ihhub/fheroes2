@@ -269,6 +269,10 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
             setDisplayFadeIn();
         }
     }
+    else {
+        // If we opened the castle dialog from other dialog, we have to restore environment sounds and terrain music theme instead of the castle's music theme
+        restoreSoundsForCurrentFocus();
+    }
 }
 
 void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderBackgroundDialog, const bool disableDismiss /* = false */ )

@@ -296,7 +296,9 @@ void StatsHeroesList::RedrawItem( const HeroRow & row, int32_t dstx, int32_t dst
     }
 
     Text text( "", Font::SMALL );
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 10 ), fheroes2::Display::instance(), dstx, dsty );
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 10 ), display, dstx, dsty );
 
     // base info
     Interface::RedrawHeroesIcon( *row.hero, dstx + 5, dsty + 4 );
@@ -314,8 +316,6 @@ void StatsHeroesList::RedrawItem( const HeroRow & row, int32_t dstx, int32_t dst
     text.Blit( dstx + 195 - text.w(), dsty + 20 );
 
     // primary skills info
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     row.primSkillsBar->setRenderingOffset( { dstx + 56, dsty - 3 } );
     row.primSkillsBar->Redraw( display );
 
@@ -570,8 +570,10 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, int32_t dstx, int32_t ds
         return;
     }
 
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     Text text( "", Font::SMALL );
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 11 ), fheroes2::Display::instance(), dstx, dsty );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 11 ), display, dstx, dsty );
 
     // base info
     Interface::RedrawCastleIcon( *row.castle, dstx + 17, dsty + 19 );
@@ -587,7 +589,7 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, int32_t dstx, int32_t ds
     }
     else if ( row.castle->GetCaptain().isValid() ) {
         const Captain & captain = row.castle->GetCaptain();
-        captain.PortraitRedraw( dstx + 82, dsty + 19, PORT_SMALL, fheroes2::Display::instance() );
+        captain.PortraitRedraw( dstx + 82, dsty + 19, PORT_SMALL, display );
         const std::string sep = "-";
         text.Set( std::to_string( captain.GetAttack() ) + sep + std::to_string( captain.GetDefense() ) + sep + std::to_string( captain.GetPower() ) + sep
                   + std::to_string( captain.GetKnowledge() ) );
@@ -596,8 +598,6 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, int32_t dstx, int32_t ds
 
     text.Set( row.castle->GetName() );
     text.Blit( dstx + 72 - text.w() / 2, dsty + 62 );
-
-    fheroes2::Display & display = fheroes2::Display::instance();
 
     // army info
     if ( row.garrisonArmyBar ) {
@@ -679,7 +679,8 @@ void RedrawFundsInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
     const Funds & funds = myKingdom.GetFunds();
     Text text( "", Font::SMALL );
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 4, 422, fheroes2::Display::instance(), pt.x + 4, pt.y + 422, 530, 56 );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 4, 422, display, pt.x + 4, pt.y + 422, 530, 56 );
 
     text.Set( std::to_string( funds.wood ) );
     text.Blit( pt.x + 56 - text.w() / 2, pt.y + 448 );
@@ -716,7 +717,7 @@ void RedrawFundsInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
     text.Blit( pt.x + 105, pt.y + 462 );
 
     const fheroes2::Sprite & lighthouse = fheroes2::AGG::GetICN( ICN::OVERVIEW, 14 );
-    fheroes2::Blit( lighthouse, 0, 0, fheroes2::Display::instance(), pt.x + 100 - lighthouse.width(), pt.y + 459, lighthouse.width(), lighthouse.height() );
+    fheroes2::Blit( lighthouse, 0, 0, display, pt.x + 100 - lighthouse.width(), pt.y + 459, lighthouse.width(), lighthouse.height() );
 }
 
 void Kingdom::openOverviewDialog()

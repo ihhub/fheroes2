@@ -580,7 +580,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     const bool isHideInterface = conf.isHideInterfaceEnabled();
     const ZoomLevel zoomLevel = conf.ViewWorldZoomLevel();
 
-    fheroes2::Rect fadeRoi( { 0, 0 }, display.screenSize() );
+    fheroes2::Rect fadeRoi( 0, 0, display.width(), display.height() );
 
     if ( !isHideInterface ) {
         // If interface is on there is no need to fade the whole screen, just only map area.

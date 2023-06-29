@@ -109,7 +109,6 @@ namespace Campaign
         ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount );
         ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount, const int32_t spellId );
 
-        friend StreamBase & operator<<( StreamBase & msg, const ScenarioBonusData & data );
         friend StreamBase & operator>>( StreamBase & msg, ScenarioBonusData & data );
 
         std::string getName() const;

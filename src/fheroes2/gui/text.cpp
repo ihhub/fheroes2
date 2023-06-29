@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -285,11 +285,6 @@ void Text::Blit( int32_t ax, int32_t ay, fheroes2::Image & dst ) const
 void Text::Blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst ) const
 {
     return message->blit( ax, ay, maxw, dst );
-}
-
-int32_t Text::getCharacterWidth( const uint8_t character, const int fontType )
-{
-    return TextAscii::charWidth( character, fontType );
 }
 
 int32_t Text::getFitWidth( const std::string & text, const int fontId, const int32_t width_ )

@@ -201,13 +201,6 @@ namespace
         fheroes2::Blit( lowerScrollbar, display, dst.x + 262, dst.y + offsetY );
     }
 
-    void DialogSpellFailed( const Spell & spell )
-    {
-        std::string str = _( "%{spell} failed!!!" );
-        StringReplace( str, "%{spell}", spell.GetName() );
-        Dialog::Message( "", str, Font::BIG, Dialog::OK );
-    }
-
     void HeroesTownGate( Heroes & hero, const Castle * castle )
     {
         assert( castle != nullptr );
@@ -301,38 +294,27 @@ namespace
     {
         assert( !hero.isShipMaster() );
 
-        const int32_t center = hero.GetIndex();
         const int32_t boatDestination = fheroes2::getPossibleBoatPosition( hero );
         assert( Maps::isValidAbsIndex( boatDestination ) );
 
-        for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
-            assert( Maps::isValidAbsIndex( boatSource ) );
+        const int32_t boatSource = fheroes2::getSummonableBoat( hero );
 
-            Maps::Tiles & tileSource = world.GetTiles( boatSource );
-            const int boatColor = tileSource.getBoatOwnerColor();
-            const int heroColor = hero.GetColor();
+        // Player should have a summonable boat before calling this function.
+        assert( boatSource != -1 );
 
-            if ( boatColor != Color::NONE && boatColor != heroColor ) {
-                continue;
-            }
+        const int heroColor = hero.GetColor();
 
-            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
+        Maps::Tiles & tileSource = world.GetTiles( boatSource );
 
-            if ( distance > 1 ) {
-                Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
-                gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
+        Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
+        gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
 
-                Maps::Tiles & tileDest = world.GetTiles( boatDestination );
-                tileDest.setBoat( Direction::RIGHT, heroColor );
-                tileSource.resetBoatOwnerColor();
+        Maps::Tiles & tileDest = world.GetTiles( boatDestination );
+        tileDest.setBoat( Direction::RIGHT, heroColor );
+        tileSource.resetBoatOwnerColor();
 
-                gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
+        gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
 
-                return true;
-            }
-        }
-
-        DialogSpellFailed( Spell::SUMMONBOAT );
         return true;
     }
 

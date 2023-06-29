@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-03 06:46+0000\n"
+"POT-Creation-Date: 2023-06-14 20:35+0000\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -6188,7 +6188,19 @@ msgstr ""
 msgid "This spell cannot be used on a boat."
 msgstr ""
 
-msgid "This spell can be casted only nearby water."
+msgid "This spell can be casted only nearby ocean."
+msgstr ""
+
+msgid ""
+"There is no boat available and no free ocean location near the hero to cast "
+"this spell."
+msgstr ""
+
+#, fuzzy
+msgid "There is no more boat available to cast this spell."
+msgstr "Seslat kouzlo."
+
+msgid "There is no free ocean location near the hero to cast this spell."
 msgstr ""
 
 msgid ""
@@ -6316,9 +6328,6 @@ msgid "Town Portal"
 msgstr ""
 
 msgid "Select town to port to."
-msgstr ""
-
-msgid "%{spell} failed!!!"
 msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."

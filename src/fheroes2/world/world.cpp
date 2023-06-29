@@ -970,14 +970,14 @@ uint32_t World::CountObeliskOnMaps()
 void World::ActionForMagellanMaps( int color )
 {
     const Kingdom & kingdom = world.GetKingdom( color );
-    const bool isAIPlayer = world.GetKingdom( color ).isControlAI();
+    const bool isAIPlayer = kingdom.isControlAI();
 
     const int alliedColors = Players::GetPlayerFriends( color );
 
     for ( Maps::Tiles & tile : vec_tiles ) {
         if ( tile.isWater() ) {
             if ( isAIPlayer && tile.isFog( color ) ) {
-                AI::Get().revealFog( kingdom, tile );
+                AI::Get().revealFog( tile, kingdom );
             }
 
             tile.ClearFog( alliedColors );
