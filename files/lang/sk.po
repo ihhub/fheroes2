@@ -6890,7 +6890,7 @@ msgid "Grass"
 msgstr ""
 
 msgid "Ocean"
-msgstr "Oceán"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Malá"
@@ -6953,7 +6953,7 @@ msgid "Skeleton"
 msgstr ""
 
 msgid "Daemon Cave"
-msgstr "Jaskyňa démonov"
+msgstr ""
 
 msgid "Treasure Chest"
 msgstr "Truhlica s pokladom"
@@ -6980,10 +6980,10 @@ msgid "Goblin Hut"
 msgstr ""
 
 msgid "Dwarf Cottage"
-msgstr "Trpasličia chalúpka"
+msgstr ""
 
 msgid "Peasant Hut"
-msgstr "Sedliacka chatrč"
+msgstr ""
 
 msgid "Stables"
 msgstr "
@@ -6995,7 +6995,7 @@ msgid "Event"
 msgstr ""
 
 msgid "Dragon City"
-msgstr "Dračie mesto"
+msgstr ""
 
 msgid "Lighthouse"
 msgid_plural "Lighthouses"
@@ -7019,7 +7019,7 @@ msgid "Obelisk"
 msgstr ""
 
 msgid "Oasis"
-msgstr "Oáza"
+msgstr ""
 
 msgid "Resource"
 msgstr "Surovina"
@@ -7028,19 +7028,19 @@ msgid "Sawmill"
 msgstr "Píla"
 
 msgid "Oracle"
-msgstr "Veštec"
+msgstr ""
 
 msgid "Shrine of the First Circle"
 msgstr "Svätyňa prvého kruhu"
 
 msgid "Shipwreck"
-msgstr "Lodný vrak"
+msgstr ""
 
 msgid "Sea Chest"
-msgstr "Morská truhlica"
+msgstr ""
 
 msgid "Desert Tent"
-msgstr "Púštny stan"
+msgstr ""
 
 msgid "Stone Liths"
 msgstr "Monolity"
@@ -7049,22 +7049,22 @@ msgid "Wagon Camp"
 msgstr "Vozový tábor"
 
 msgid "Hut of the Magi"
-msgstr "Chata mágov"
+msgstr ""
 
 msgid "Whirlpool"
-msgstr "Krútňava"
+msgstr ""
 
 msgid "Windmill"
 msgid_plural "Windmills"
-msgstr[0] "Veterný mlyn"
-msgstr[1] "Veterné mlyny"
-msgstr[2] "Veterných mlynov"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Artifact"
-msgstr "Artefakt"
+msgstr ""
 
 msgid "Mermaid"
-msgstr "Morská panna"
+msgstr ""
 
 msgid "Boat"
 msgstr "Loď"
@@ -7088,7 +7088,7 @@ msgid "Random Castle"
 msgstr ""
 
 msgid "Eye of the Magi"
-msgstr "Oko mágov"
+msgstr ""
 
 msgid "Random Monster - weak"
 msgstr ""
@@ -7121,10 +7121,10 @@ msgid "Ruins"
 msgstr ""
 
 msgid "Fort"
-msgstr "
+msgstr ""
 
 msgid "Abandoned Mine"
-msgstr"
+msgstr ""
 
 msgid "Sirens"
 msgstr ""
@@ -7133,7 +7133,7 @@ msgid "Standing Stones"
 msgstr "Stojace kamene"
 
 msgid "Idol"
-msgstr "
+msgstr ""
 
 msgid "Tree of Knowledge"
 msgstr "Strom poznania"
@@ -7238,19 +7238,19 @@ msgid "Rock"
 msgstr ""
 
 msgid "Water Lake"
-msgstr "Vodné jazero"
+msgstr ""
 
 msgid "Mandrake"
-msgstr "Mandragora"
+msgstr ""
 
 msgid "Dead Tree"
-msgstr "Odumretý strom"
+msgstr ""
 
 msgid "Stump"
 msgstr ""
 
 msgid "Crater"
-msgstr "Kráter"
+msgstr ""
 
 msgid "Cactus"
 msgstr ""
@@ -7268,7 +7268,7 @@ msgid "Shrub"
 msgstr ""
 
 msgid "Barrow Mounds"
-msgstr "Norné mohyly"
+msgstr ""
 
 msgid "Random Artifact - Treasure"
 msgstr ""
