@@ -6965,7 +6965,7 @@ msgid "Campfire"
 msgstr "Táborák"
 
 msgid "Fountain"
-msgstr "Fontána"
+msgstr ""
 
 msgid "Gazebo"
 msgstr "Altánok"
@@ -7005,9 +7005,9 @@ msgstr[2] ""
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
-msgstr[0] "Vodné koleso"
-msgstr[1] "Vodné kolesá"
-msgstr[2] "Vodných kolies"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Mines"
 msgstr ""
@@ -7067,7 +7067,7 @@ msgid "Mermaid"
 msgstr ""
 
 msgid "Boat"
-msgstr "Loď"
+msgstr ""
 
 msgid "Random Ultimate Artifact"
 msgstr ""
@@ -7196,25 +7196,25 @@ msgid "Flotsam"
 msgstr ""
 
 msgid "Derelict Ship"
-msgstr "Opustená loď"
+msgstr ""
 
 msgid "Shipwreck Survivor"
-msgstr "Trosečník"
+msgstr ""
 
 msgid "Bottle"
 msgstr ""
 
 msgid "Magic Well"
-msgstr "Čarovná studňa"
+msgstr ""
 
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
-msgstr[0] "Čarovná záhrada"
-msgstr[1] "Čarovné záhrady"
-msgstr[2] "Čarovných záhrad"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Observation Tower"
-msgstr "Rozhľadňa"
+msgstr ""
 
 msgid "Freeman's Foundry"
 msgstr "Súkromná zlievareň"
