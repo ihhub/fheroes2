@@ -6941,7 +6941,7 @@ msgid "No object"
 msgstr ""
 
 msgid "Alchemist Lab"
-msgstr "Alchymistov labák"
+msgstr "Alchymistické laboratórium"
 
 msgid "Sign"
 msgstr ""
