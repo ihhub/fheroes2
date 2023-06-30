@@ -6908,19 +6908,19 @@ msgid "maps|Custom Size"
 msgstr "Vlastná veľkosť"
 
 msgid "Ore Mine"
-msgstr"
+msgstr ""
 
 msgid "Sulfur Mine"
 msgstr ""
 
 msgid "Crystal Mine"
-msgst ""
+msgstr ""
 
 msgid "Gems Mine"
 msgstr ""
 
 msgid "Gold Mine"
-msgst ""
+msgstr ""
 
 msgid "Mine"
 msgstr ""
@@ -6986,7 +6986,7 @@ msgid "Peasant Hut"
 msgstr ""
 
 msgid "Stables"
-msgstr "
+msgstr ""
 
 msgid "Alchemist's Tower"
 msgstr "Alchymistova veža"
