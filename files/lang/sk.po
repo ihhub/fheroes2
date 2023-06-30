@@ -7160,7 +7160,7 @@ msgid "Shrine of the Third Circle"
 msgstr "Svätyňa tretieho kruhu"
 
 msgid "City of the Dead"
-msgstr "Mesto mŕtvych"
+msgstr ""
 
 msgid "Sphinx"
 msgstr ""
@@ -7169,7 +7169,7 @@ msgid "Wagon"
 msgstr ""
 
 msgid "Tar Pit"
-msgstr "Smolná jama"
+msgstr ""
 
 msgid "Artesian Spring"
 msgstr "Artézsky prameň"
