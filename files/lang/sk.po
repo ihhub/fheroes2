@@ -6869,205 +6869,205 @@ msgid "week|Unnamed"
 msgstr "Bez mena"
 
 msgid "Desert"
-msgstr ""
+msgstr "Púšť"
 
 msgid "Snow"
-msgstr ""
+msgstr "Sneh"
 
 msgid "Wasteland"
-msgstr ""
+msgstr "Pustatina"
 
 msgid "Beach"
-msgstr ""
+msgstr "Pláž"
 
 msgid "Lava"
-msgstr ""
+msgstr "Láva"
 
 msgid "Dirt"
-msgstr ""
+msgstr "Hlina"
 
 msgid "Grass"
-msgstr ""
+msgstr "Tráva"
 
 msgid "Ocean"
-msgstr ""
+msgstr "Oceán"
 
 msgid "maps|Small"
-msgstr ""
+msgstr "Malá"
 
 msgid "maps|Medium"
-msgstr ""
+msgstr "Stredná"
 
 msgid "maps|Large"
-msgstr ""
+msgstr "Veľká"
 
 msgid "maps|Extra Large"
-msgstr ""
+msgstr "Extra veľká"
 
 msgid "maps|Custom Size"
-msgstr ""
+msgstr "Vlastná veľkosť"
 
 msgid "Ore Mine"
-msgstr ""
+msgstr "Baňa na rudu"
 
 msgid "Sulfur Mine"
-msgstr ""
+msgstr "Baňa na síru"
 
 msgid "Crystal Mine"
-msgstr ""
+msgstr "Kryštálová baňa"
 
 msgid "Gems Mine"
-msgstr ""
+msgstr "Baňa na drahokamy"
 
 msgid "Gold Mine"
-msgstr ""
+msgstr "Zlatá baňa"
 
 msgid "Mine"
-msgstr ""
+msgstr "Baňa"
 
 msgid "Burma shave."
 msgstr ""
 
 msgid "Next sign 50 miles."
-msgstr ""
+msgstr "Ďalšia značka o 50 míľ."
 
 msgid "See Rock City."
 msgstr ""
 
 msgid "This space for rent."
-msgstr ""
+msgstr "Tieto priestory na prenájom."
 
 msgid "No object"
-msgstr ""
+msgstr "Nič"
 
 msgid "Alchemist Lab"
-msgstr ""
+msgstr "Alchymistov labák"
 
 msgid "Sign"
-msgstr ""
+msgstr "Značka"
 
 msgid "Buoy"
-msgstr ""
+msgstr "Bója"
 
 msgid "Skeleton"
-msgstr ""
+msgstr "Kostra"
 
 msgid "Daemon Cave"
-msgstr ""
+msgstr "Jaskyňa démonov"
 
 msgid "Treasure Chest"
-msgstr ""
+msgstr "Truhlica s pokladom"
 
 msgid "Faerie Ring"
-msgstr ""
+msgstr "Vílý kruh"
 
 msgid "Campfire"
-msgstr ""
+msgstr "Táborák"
 
 msgid "Fountain"
-msgstr ""
+msgstr "Fontána"
 
 msgid "Gazebo"
-msgstr ""
+msgstr "Altánok"
 
 msgid "Genie Lamp"
-msgstr ""
+msgstr "Džinova lampa"
 
 msgid "Archer's House"
-msgstr ""
+msgstr "Lukostrelecký dom"
 
 msgid "Goblin Hut"
-msgstr ""
+msgstr "Chata Goblinov"
 
 msgid "Dwarf Cottage"
-msgstr ""
+msgstr "Trpasličia chalúpka"
 
 msgid "Peasant Hut"
-msgstr ""
+msgstr "Sedliacka chatrč"
 
 msgid "Stables"
-msgstr ""
+msgstr "Stajne"
 
 msgid "Alchemist's Tower"
-msgstr ""
+msgstr "Alchymistova veža"
 
 msgid "Event"
 msgstr ""
 
 msgid "Dragon City"
-msgstr ""
+msgstr "Dračie mesto"
 
 msgid "Lighthouse"
 msgid_plural "Lighthouses"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Maják"
+msgstr[1] "Majáky"
+msgstr[2] "Majákov"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Vodné koleso"
+msgstr[1] "Vodné kolesá"
+msgstr[2] "Vodných kolies"
 
 msgid "Mines"
-msgstr ""
+msgstr "Bane"
 
 msgid "Monster"
-msgstr ""
+msgstr "Monštrum"
 
 msgid "Obelisk"
 msgstr ""
 
 msgid "Oasis"
-msgstr ""
+msgstr "Oáza"
 
 msgid "Resource"
-msgstr ""
+msgstr "Surovina"
 
 msgid "Sawmill"
-msgstr ""
+msgstr "Píla"
 
 msgid "Oracle"
-msgstr ""
+msgstr "Veštec"
 
 msgid "Shrine of the First Circle"
-msgstr ""
+msgstr "Svätyňa prvého kruhu"
 
 msgid "Shipwreck"
-msgstr ""
+msgstr "Lodný vrak"
 
 msgid "Sea Chest"
-msgstr ""
+msgstr "Morská truhlica"
 
 msgid "Desert Tent"
-msgstr ""
+msgstr "Púštny stan"
 
 msgid "Stone Liths"
-msgstr ""
+msgstr "Monolity"
 
 msgid "Wagon Camp"
-msgstr ""
+msgstr "Vozový tábor"
 
 msgid "Hut of the Magi"
-msgstr ""
+msgstr "Chata mágov"
 
 msgid "Whirlpool"
-msgstr ""
+msgstr "Krútňava"
 
 msgid "Windmill"
 msgid_plural "Windmills"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Veterný mlyn"
+msgstr[1] "Veterné mlyny"
+msgstr[2] "Veterných mlynov"
 
 msgid "Artifact"
-msgstr ""
+msgstr "Artefakt"
 
 msgid "Mermaid"
-msgstr ""
+msgstr "Morská panna"
 
 msgid "Boat"
-msgstr ""
+msgstr "Loď"
 
 msgid "Random Ultimate Artifact"
 msgstr ""
@@ -7088,7 +7088,7 @@ msgid "Random Castle"
 msgstr ""
 
 msgid "Eye of the Magi"
-msgstr ""
+msgstr "Oko mágov"
 
 msgid "Random Monster - weak"
 msgstr ""
@@ -7106,169 +7106,169 @@ msgid "Nothing Special"
 msgstr ""
 
 msgid "Mossy Rock"
-msgstr ""
+msgstr "Machový kameň"
 
 msgid "Watch Tower"
-msgstr ""
+msgstr "Strážna veža"
 
 msgid "Tree House"
-msgstr ""
+msgstr "Dom na strome"
 
 msgid "Tree City"
-msgstr ""
+msgstr "Stromové mesto"
 
 msgid "Ruins"
-msgstr ""
+msgstr "Ruiny"
 
 msgid "Fort"
-msgstr ""
+msgstr "Pevnosť"
 
 msgid "Abandoned Mine"
-msgstr ""
+msgstr "Opustená baňa"
 
 msgid "Sirens"
-msgstr ""
+msgstr "Sirény"
 
 msgid "Standing Stones"
-msgstr ""
+msgstr "Stojace kamene"
 
 msgid "Idol"
-msgstr ""
+msgstr "Modla"
 
 msgid "Tree of Knowledge"
-msgstr ""
+msgstr "Strom poznania"
 
 msgid "Witch Doctor's Hut"
-msgstr ""
+msgstr "Liečiteľova chatrč"
 
 msgid "Temple"
-msgstr ""
+msgstr "Chrám"
 
 msgid "Hill Fort"
-msgstr ""
+msgstr "Hradisko"
 
 msgid "Halfling Hole"
-msgstr ""
+msgstr "Hobitia diera"
 
 msgid "Mercenary Camp"
-msgstr ""
+msgstr "Žoldniersky tábor"
 
 msgid "Shrine of the Second Circle"
-msgstr ""
+msgstr "Svätyňa druhého kruhu"
 
 msgid "Shrine of the Third Circle"
-msgstr ""
+msgstr "Svätyňa tretieho kruhu"
 
 msgid "City of the Dead"
-msgstr ""
+msgstr "Mesto mŕtvych"
 
 msgid "Sphinx"
-msgstr ""
+msgstr "Sfinga"
 
 msgid "Wagon"
-msgstr ""
+msgstr "Voz"
 
 msgid "Tar Pit"
-msgstr ""
+msgstr "Smolná jama"
 
 msgid "Artesian Spring"
-msgstr ""
+msgstr "Artézsky prameň"
 
 msgid "Troll Bridge"
-msgstr ""
+msgstr "Trolí most"
 
 msgid "Watering Hole"
-msgstr ""
+msgstr "Napájadlo"
 
 msgid "Witch's Hut"
-msgstr ""
+msgstr "Ježibabin domček"
 
 msgid "Xanadu"
-msgstr ""
+msgstr "Xanadu"
 
 msgid "Lean-To"
-msgstr ""
+msgstr "Prístrešok"
 
 msgid "Magellan's Maps"
-msgstr ""
+msgstr "Magalhaesove mapy"
 
 msgid "Flotsam"
-msgstr ""
+msgstr "Fotsam"
 
 msgid "Derelict Ship"
-msgstr ""
+msgstr "Opustená loď"
 
 msgid "Shipwreck Survivor"
-msgstr ""
+msgstr "Trosečník"
 
 msgid "Bottle"
-msgstr ""
+msgstr "Fľaša"
 
 msgid "Magic Well"
-msgstr ""
+msgstr "Čarovná studňa"
 
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Čarovná záhrada"
+msgstr[1] "Čarovné záhrady"
+msgstr[2] "Čarovných záhrad"
 
 msgid "Observation Tower"
-msgstr ""
+msgstr "Rozhľadňa"
 
 msgid "Freeman's Foundry"
-msgstr ""
+msgstr "Súkromná zlievareň"
 
 msgid "Reefs"
-msgstr ""
+msgstr "Útesy"
 
 msgid "Trees"
-msgstr ""
+msgstr "Stromy"
 
 msgid "Mountains"
-msgstr ""
+msgstr "Hory"
 
 msgid "Volcano"
-msgstr ""
+msgstr "Sopka"
 
 msgid "Flowers"
-msgstr ""
+msgstr "Kvety"
 
 msgid "Rock"
-msgstr ""
+msgstr "Skala"
 
 msgid "Water Lake"
-msgstr ""
+msgstr "Vodné jazero"
 
 msgid "Mandrake"
-msgstr ""
+msgstr "Mandragora"
 
 msgid "Dead Tree"
-msgstr ""
+msgstr "Odumretý strom"
 
 msgid "Stump"
-msgstr ""
+msgstr "Peň"
 
 msgid "Crater"
-msgstr ""
+msgstr "Kráter"
 
 msgid "Cactus"
-msgstr ""
+msgstr "Kaktus"
 
 msgid "Mound"
-msgstr ""
+msgstr "Mohyla"
 
 msgid "Dune"
-msgstr ""
+msgstr "Duna"
 
 msgid "Lava Pool"
-msgstr ""
+msgstr "Bazén lávy"
 
 msgid "Shrub"
-msgstr ""
+msgstr "Krík"
 
 msgid "Barrow Mounds"
-msgstr ""
+msgstr "Norné mohyly"
 
 msgid "Random Artifact - Treasure"
 msgstr ""
@@ -7286,31 +7286,31 @@ msgid "Traveller's Tent"
 msgstr "Cestovateľský stan"
 
 msgid "Jail"
-msgstr ""
+msgstr "Žalár"
 
 msgid "Fire Summoning Altar"
-msgstr ""
+msgstr "Oltár vyvolávania ohňa"
 
 msgid "Air Summoning Altar"
-msgstr ""
+msgstr "Oltár vyvolávania vzuchu"
 
 msgid "Earth Summoning Altar"
-msgstr ""
+msgstr "Oltár vyvolávania zeme"
 
 msgid "Water Summoning Altar"
-msgstr ""
+msgstr "Oltár vyvolávania vody"
 
 msgid "Unknown Monster"
-msgstr ""
+msgstr "Neznáme monštrum"
 
 msgid "Unknown Monsters"
-msgstr ""
+msgstr "Neznáme monštrá"
 
 msgid "Peasant"
-msgstr "Roľník"
+msgstr "Sedliak"
 
 msgid "Peasants"
-msgstr "Roľníci"
+msgstr "Sedliaci"
 
 msgid "Archer"
 msgstr "Lukostrelec"
@@ -7361,10 +7361,10 @@ msgid "Champions"
 msgstr "Šampióni"
 
 msgid "Paladin"
-msgstr "Paladin"
+msgstr "Paladín"
 
 msgid "Paladins"
-msgstr "Paladini"
+msgstr "Paladíni"
 
 msgid "Crusader"
 msgstr "Križiak"
@@ -7394,7 +7394,7 @@ msgid "Wolf"
 msgstr "Vlk"
 
 msgid "Wolves"
-msgstr "Vlci"
+msgstr "Vlky"
 
 msgid "Ogre"
 msgstr "Zlobor"
@@ -8842,12 +8842,14 @@ msgid ""
 msgstr ""
 
 msgid "Arm of the Martyr"
-msgstr ""
+msgstr "Paža mučeníka"
 
 msgid ""
 "The %{name} increases your spell power by %{count} but adds the undead "
 "morale penalty."
 msgstr ""
+"%{name} zvyšuje tvoju Silu kúziel o %{count}, ale pridáva postih morálky za "
+"nemŕtvych v skupine."
 
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
@@ -8856,12 +8858,16 @@ msgid ""
 "seems to hold some sort of magical power that influences your decision "
 "making."
 msgstr ""
+"Jeden z menej inteligentných členov tvojej skupiny zdvihne zo zeme ruku. Napriek "
+"tomu, že jej chýba telo, stále sa hýbe. Tvoji vojaci považujú rozštvrtenú ruku za "
+"odpudzujúcu, ale ty sa nemôžeš prinútiť ju pustiť: zdá sa, že má akúsi magickú "
+"moc, ktorá ovplyvňuje tvoje rozhodovanie."
 
 msgid "Breastplate of Anduran"
-msgstr ""
+msgstr "Anduranove prsné brnenie"
 
 msgid "The %{name} increases your defense by %{count}."
-msgstr ""
+msgstr "%{name} zvyšuje tvoju obranu o %{count}."
 
 msgid ""
 "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and "
@@ -8869,14 +8875,20 @@ msgid ""
 "you stand up, you feel a coldness against your skin. Looking down, you find "
 "that you are suddenly wearing a gleaming, ornate breastplate."
 msgstr ""
+"Narazíš na značku. Je na nej napísané: \"Tu leží Anduranovo telo. Pokloň sa a "
+"prisahaj vernosť a budeš odmenený.\" Rozhodneš sa urobiť tak. Keď sa postavíš, "
+"pocítiš na koži chlad. Keď sa pozrieš dolu, zistíš, že zrazu máš na sebe lesklé, "
+"zdobené prsné brnenie."
 
 msgid "Broach of Shielding"
-msgstr ""
+msgstr "Brošňa ochrany"
 
 msgid ""
 "The %{name} provides %{count} percent protection from Armageddon and "
 "Elemental Storm, but decreases spell power by 2."
 msgstr ""
+"%{name} poskytuje %{count} percent ochrany pred Armagedonom a Búrkou živlov, ale "
+"znižuje Silu kúzliel o 2."
 
 msgid ""
 "A kindly Sorceress thinks that your army's defenses could use a magical "
