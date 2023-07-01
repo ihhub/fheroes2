@@ -1887,7 +1887,7 @@ namespace AI
     void Normal::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType )
     {
         if ( objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_HEROES ) {
-            // Priorities are only for castles and heroes.
+            // Priorities are only for castles and heroes at the moment.
             return;
         }
 
@@ -1905,16 +1905,16 @@ namespace AI
                 if ( hero.isFriends( castle->GetColor() ) ) {
                     removeEnemyArmies( tileIndex );
 
-                    for ( const EnemyArmy & enemyArmy : _enemyArmies ) {
-                        updatePriorityForCastle( *castle, enemyArmy );
-                    }
+                    updatePriorityForCastle( *castle );
                 }
                 else {
                     updatePriorityAttackTarget( hero.GetKingdom(), world.GetTiles( tileIndex ) );
                 }
             }
             else if ( objectType == MP2::OBJ_HEROES ) {
-                const Heroes * anotherHero = world.GetTiles( tileIndex ).GetHeroes();
+                const Maps::Tiles & tile = world.GetTiles( tileIndex );
+
+                const Heroes * anotherHero = tile.GetHeroes();
                 if ( anotherHero == nullptr ) {
                     // The hero died.
                     removeEnemyArmies( tileIndex );
@@ -1922,7 +1922,7 @@ namespace AI
                 }
 
                 if ( !hero.isFriends( anotherHero->GetColor() ) ) {
-                    updatePriorityAttackTarget( hero.GetKingdom(), world.GetTiles( tileIndex ) );
+                    updatePriorityAttackTarget( hero.GetKingdom(), tile );
                 }
             }
             else {

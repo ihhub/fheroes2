@@ -504,19 +504,23 @@ namespace AI
         return sortedCastleList;
     }
 
-    std::set<int> Normal::findCastlesInDanger( const KingdomCastles & castles )
+    std::set<int> Normal::findCastlesInDanger( const Kingdom & kingdom )
     {
         std::set<int> castlesInDanger;
 
+        // Since we are estimating danger for a castle and we need to know if an enemy hero can reach it
+        // if no our heroes exist. So we are temporary removing them from the map.
+        const TemporaryHeroEraser heroEraser( kingdom.GetHeroes() );
+
         for ( const EnemyArmy & enemyArmy : _enemyArmies ) {
-            for ( const Castle * castle : castles ) {
+            for ( const Castle * castle : kingdom.GetCastles() ) {
                 if ( castle == nullptr ) {
                     // How is it even possible? Check the logic!
                     assert( 0 );
                     continue;
                 }
 
-                if ( updatePriorityForCastle( *castle, enemyArmy ) ) {
+                if ( updateIndividualPriorityForCastle( *castle, enemyArmy ) ) {
                     castlesInDanger.insert( castle->GetIndex() );
                 }
             }
@@ -525,20 +529,35 @@ namespace AI
         return castlesInDanger;
     }
 
-    void Normal::updatePriorityForEnemyArmy( const KingdomCastles & castles, const EnemyArmy & enemyArmy )
+    void Normal::updatePriorityForEnemyArmy( const Kingdom & kingdom, const EnemyArmy & enemyArmy )
     {
-        for ( const Castle * castle : castles ) {
+        // Since we are estimating danger for a castle and we need to know if an enemy hero can reach it
+        // if no our heroes exist. So we are temporary removing them from the map.
+        const TemporaryHeroEraser heroEraser( kingdom.GetHeroes() );
+
+        for ( const Castle * castle : kingdom.GetCastles() ) {
             if ( castle == nullptr ) {
                 // How is it even possible? Check the logic!
                 assert( 0 );
                 continue;
             }
 
-            updatePriorityForCastle( *castle, enemyArmy );
+            updateIndividualPriorityForCastle( *castle, enemyArmy );
         }
     }
 
-    bool Normal::updatePriorityForCastle( const Castle & castle, const EnemyArmy & enemyArmy )
+    void Normal::updatePriorityForCastle( const Castle & castle )
+    {
+        // Since we are estimating danger for a castle and we need to know if an enemy hero can reach it
+        // if no our heroes exist. So we are temporary removing them from the map.
+        const TemporaryHeroEraser heroEraser( castle.GetKingdom().GetHeroes() );
+
+        for ( const EnemyArmy & enemyArmy : _enemyArmies ) {
+            updateIndividualPriorityForCastle( castle, enemyArmy );
+        }
+    }
+
+    bool Normal::updateIndividualPriorityForCastle( const Castle & castle, const EnemyArmy & enemyArmy )
     {
         // 30 tiles, roughly how much maxed out hero can move in a turn.
         const uint32_t threatDistanceLimit = 3000;
@@ -548,10 +567,6 @@ namespace AI
         if ( Maps::GetApproximateDistance( enemyArmy.index, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit ) {
             return false;
         }
-
-        // Since we are estimating danger for a castle and we need to know if an enemy hero can reach it
-        // in case if no our heroes exist we are temporary removing them from the map.
-        const TemporaryHeroEraser heroEraser( castle.GetKingdom().GetHeroes() );
 
         const uint32_t dist = _pathfinder.getDistance( enemyArmy.index, castleIndex, castle.GetColor(), enemyArmy.strength );
         if ( dist == 0 || dist >= threatDistanceLimit ) {
@@ -653,7 +668,7 @@ namespace AI
             if ( enemyHero != nullptr && !enemyHero->isFriends( kingdom.GetColor() ) && ( !enemyHero->Modes( Heroes::PATROL ) || enemyHero->GetPatrolDistance() != 0 ) ) {
                 const EnemyArmy enemyArmy{ tileIndex, MP2::OBJ_HEROES, enemyHero->GetArmy().GetStrength(), enemyHero->GetMaxMovePoints() };
                 updateEnemyArmy( enemyArmy );
-                updatePriorityForEnemyArmy( kingdom.GetCastles(), enemyArmy );
+                updatePriorityForEnemyArmy( kingdom, enemyArmy );
             }
 
             object = tile.GetObject( false );
@@ -664,7 +679,7 @@ namespace AI
             if ( enemyCastle != nullptr && !enemyCastle->isFriends( kingdom.GetColor() ) ) {
                 const EnemyArmy enemyArmy{ tileIndex, MP2::OBJ_CASTLE, enemyCastle->GetArmy().GetStrength(), 1500 };
                 updateEnemyArmy( enemyArmy );
-                updatePriorityForEnemyArmy( kingdom.GetCastles(), enemyArmy );
+                updatePriorityForEnemyArmy( kingdom, enemyArmy );
             }
         }
     }
@@ -848,7 +863,7 @@ namespace AI
             // Step 3. Reassign heroes roles
             setHeroRoles( heroes );
 
-            castlesInDanger = findCastlesInDanger( castles );
+            castlesInDanger = findCastlesInDanger( kingdom );
             for ( Heroes * hero : heroes ) {
                 if ( hero->GetMapsObject() == MP2::OBJ_CASTLE && _priorityTargets.find( hero->GetIndex() ) != _priorityTargets.end() ) {
                     // If a hero is in a castle and it is in danger then the hero is very weak to defend it.

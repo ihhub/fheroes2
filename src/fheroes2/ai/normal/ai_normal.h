@@ -343,12 +343,15 @@ namespace AI
 
         void updateMapActionObjectCache( const int mapIndex );
 
-        std::set<int> findCastlesInDanger( const KingdomCastles & castles );
+        std::set<int> findCastlesInDanger( const Kingdom & kingdom );
 
-        void updatePriorityForEnemyArmy( const KingdomCastles & castles, const EnemyArmy & enemyArmy );
+        void updatePriorityForEnemyArmy( const Kingdom & kingdom, const EnemyArmy & enemyArmy );
+
+        void updatePriorityForCastle( const Castle & castle );
 
         // Return true if the castle is in danger.
-        bool updatePriorityForCastle( const Castle & castle, const EnemyArmy & enemyArmy );
+        // IMPORTANT!!! Do not this method directly. Use other methods which call it internally.
+        bool updateIndividualPriorityForCastle( const Castle & castle, const EnemyArmy & enemyArmy );
 
         void removePriorityAttackTarget( const int32_t tileIndex );
 
