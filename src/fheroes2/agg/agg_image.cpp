@@ -2758,53 +2758,6 @@ namespace fheroes2
                     }
                 }
                 return true;
-            case ICN::MINIPORT:
-                // Some heroes portraits have incorrect transparent pixels.
-                LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() > 60 ) {
-                    Sprite & original = _icnVsSprite[id][60];
-                    if ( original.width() == 30 && original.height() == 22 ) {
-                        replaceTransformPixel( original, 5, 75 );
-                        replaceTransformPixel( original, 310, 48 );
-                        replaceTransformPixel( original, 358, 64 );
-                        replaceTransformPixel( original, 424, 65 );
-                    }
-                }
-                if ( _icnVsSprite[id].size() > 61 ) {
-                    Sprite & original = _icnVsSprite[id][61];
-                    if ( original.width() == 30 && original.height() == 22 ) {
-                        replaceTransformPixel( original, 51, 30 );
-                        replaceTransformPixel( original, 80, 28 );
-                        replaceTransformPixel( original, 81, 30 );
-                        replaceTransformPixel( original, 383, 24 );
-                        replaceTransformPixel( original, 445, 24 );
-                    }
-                }
-                if ( _icnVsSprite[id].size() > 65 ) {
-                    Sprite & original = _icnVsSprite[id][65];
-                    if ( original.width() == 30 && original.height() == 22 ) {
-                        replaceTransformPixel( original, 499, 60 );
-                        replaceTransformPixel( original, 601, 24 );
-                        replaceTransformPixel( original, 631, 28 );
-                    }
-                }
-                if ( _icnVsSprite[id].size() > 67 ) {
-                    Sprite & original = _icnVsSprite[id][67];
-                    if ( original.width() == 30 && original.height() == 22 ) {
-                        replaceTransformPixel( original, 42, 28 );
-                    }
-                }
-                return true;
-            case ICN::MINICAPT:
-                // Barbarian captain mini icon has bad pixel at position 22x2.
-                LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() > 1 ) {
-                    Sprite & original = _icnVsSprite[id][1];
-                    if ( original.width() == 30 && original.height() == 22 ) {
-                        replaceTransformPixel( original, 82, 244 );
-                    }
-                }
-                return true;
             case ICN::PORT0091:
                 // Barbarian captain has one bad pixel.
                 LoadOriginalICN( id );
@@ -2850,27 +2803,6 @@ namespace fheroes2
                     if ( original.width() == 101 && original.height() == 93 ) {
                         original._disableTransformLayer();
                         original.image()[2230] = 212;
-                    }
-                }
-                return true;
-            case ICN::PORT0092:
-                // Sorceress captain has two bad transparent pixels (8x20 and 8x66).
-                LoadOriginalICN( id );
-                if ( !_icnVsSprite[id].empty() ) {
-                    Sprite & original = _icnVsSprite[id][0];
-                    if ( original.width() == 101 && original.height() == 93 ) {
-                        replaceTransformPixel( original, 2028, 42 );
-                        replaceTransformPixel( original, 6674, 100 );
-                    }
-                }
-                return true;
-            case ICN::PORT0095:
-                // Necromancer captain have incorrect transparent pixel at position 8x22.
-                LoadOriginalICN( id );
-                if ( !_icnVsSprite[id].empty() ) {
-                    Sprite & original = _icnVsSprite[id][0];
-                    if ( original.width() == 101 && original.height() == 93 ) {
-                        replaceTransformPixel( original, 2230, 212 );
                     }
                 }
                 return true;
