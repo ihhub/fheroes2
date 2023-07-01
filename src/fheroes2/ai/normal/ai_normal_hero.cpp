@@ -1983,6 +1983,7 @@ namespace AI
         if ( !hero.isFreeman() ) {
             Castle * castle = hero.inCastleMutable();
             if ( castle ) {
+                // Reinforcement in a castle can lead to removing defense priority task for a castle.
                 reinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
             }
         }

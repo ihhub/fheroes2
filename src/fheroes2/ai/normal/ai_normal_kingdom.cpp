@@ -277,7 +277,7 @@ namespace AI
                 // The enemy army is so-so. Feed some monsters to the castle and continue exploring the map.
                 garrison.MergeSameMonsterTroops();
 
-                const double minStrength = defenseTask->second.threatLevel * AI::ARMY_ADVANTAGE_DESPERATE;
+                const double minStrength = defenseTask->second.threatLevel;
 
                 while ( castleStrength < minStrength ) {
                     Troop * weakestTroop = heroArmy.GetWeakestTroop();
@@ -604,11 +604,11 @@ namespace AI
 
         auto defenseTask = _priorityTargets.find( castleIndex );
         if ( defenseTask == _priorityTargets.end() ) {
-            _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, attackerThreat, enemyArmy.index };
+            _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, enemyStrength, enemyArmy.index };
         }
-        else if ( defenseTask->second.threatLevel < attackerThreat ) {
+        else if ( defenseTask->second.threatLevel < enemyStrength ) {
             defenseTask->second.secondaryTaskTileId.insert( defenseTask->first );
-            defenseTask->second.threatLevel = attackerThreat;
+            defenseTask->second.threatLevel = enemyStrength;
         }
         else {
             defenseTask->second.secondaryTaskTileId.insert( enemyArmy.index );
