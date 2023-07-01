@@ -64,6 +64,9 @@ namespace
 {
     const double fighterStrengthMultiplier = 3;
 
+    // 1500 is slightly more than a fresh hero's maximum move points hired in a castle.
+    const uint32_t movePointsFromCastle{ 1500 };
+
     struct HeroValue
     {
         Heroes * hero = nullptr;
@@ -677,7 +680,7 @@ namespace AI
         if ( object == MP2::OBJ_CASTLE ) {
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
             if ( castle != nullptr && !castle->isFriends( kingdom.GetColor() ) && ( castle->isCastle() || castle->AllowBuyBuilding( BUILD_CASTLE ) ) ) {
-                const EnemyArmy enemyArmy{ tileIndex, MP2::OBJ_CASTLE, castle->GetArmy().GetStrength(), 1500 };
+                const EnemyArmy enemyArmy{ tileIndex, MP2::OBJ_CASTLE, castle->GetArmy().GetStrength(), movePointsFromCastle };
                 updateEnemyArmy( enemyArmy );
                 updatePriorityForEnemyArmy( kingdom, enemyArmy );
             }
@@ -827,8 +830,7 @@ namespace AI
                     }
 
                     const double castleThreat = castle->GetArmy().GetStrength();
-                    // 1500 is slightly more than a fresh hero's maximum move points hired in a castle.
-                    _enemyArmies.emplace_back( idx, MP2::OBJ_CASTLE, castleThreat, 1500 );
+                    _enemyArmies.emplace_back( idx, MP2::OBJ_CASTLE, castleThreat, movePointsFromCastle );
 
                     if ( stats.highestThreat < castleThreat ) {
                         stats.highestThreat = castleThreat;
