@@ -81,9 +81,11 @@ namespace Interface
             return _mouseDraggingMovement;
         }
 
-    private:
-        friend class AdventureMap;
+        // Do not call this method directly, use Interface::AdventureMap::redraw() instead to avoid issues in the "no interface" mode.
+        // The name of this method starts from _ on purpose to do not mix with other public methods.
+        void _redraw( const bool redrawMapObjects );
 
+    private:
         enum class RadarType : char
         {
             WorldMap,
@@ -93,9 +95,6 @@ namespace Interface
         void SavePosition() override;
         void SetZoom();
 
-        // Do not call this method directly, use Interface::Basic::Redraw() instead
-        // to avoid issues in the "no interface" mode
-        void Redraw( const bool redrawMapObjects );
         void RedrawObjects( const int32_t playerColor, const ViewWorldMode flags );
         void RedrawCursor( const fheroes2::Rect * roiRectangle = nullptr );
 

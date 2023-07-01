@@ -106,7 +106,7 @@ void Interface::ButtonsArea::SetPos( int32_t ox, int32_t oy )
     systemRect = buttonSystem.area();
 }
 
-void Interface::ButtonsArea::Redraw()
+void Interface::ButtonsArea::_redraw()
 {
     const Settings & conf = Settings::Get();
 

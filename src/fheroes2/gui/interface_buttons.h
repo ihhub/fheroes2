@@ -52,12 +52,11 @@ namespace Interface
         fheroes2::GameMode QueueEventProcessing();
         void ResetButtons();
 
-    private:
-        friend AdventureMap;
+        // Do not call this method directly, use Interface::AdventureMap::redraw() instead to avoid issues in the "no interface" mode.
+        // The name of this method starts from _ on purpose to do not mix with other public methods.
+        void _redraw();
 
-        // Do not call this method directly, use Interface::Basic::Redraw() instead
-        // to avoid issues in the "no interface" mode
-        void Redraw();
+    private:
         void SetButtonStatus();
 
         AdventureMap & interface;

@@ -213,7 +213,7 @@ void Interface::Radar::SetRenderArea( const fheroes2::Rect & roi )
     }
 }
 
-void Interface::Radar::Redraw( const bool redrawMapObjects )
+void Interface::Radar::_redraw( const bool redrawMapObjects )
 {
     const Settings & conf = Settings::Get();
     if ( conf.isHideInterfaceEnabled() ) {

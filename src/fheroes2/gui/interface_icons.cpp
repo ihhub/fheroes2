@@ -362,7 +362,7 @@ void Interface::IconsPanel::SetPos( int32_t ox, int32_t oy )
     castleIcons.SetPos( rect.x + 72, rect.y );
 }
 
-void Interface::IconsPanel::Redraw()
+void Interface::IconsPanel::_redraw()
 {
     // is visible
     if ( IconsBar::IsVisible() ) {
@@ -456,7 +456,7 @@ void Interface::IconsPanel::ShowIcons( const icons_t type )
         castleIcons.SetShow( true );
 }
 
-void Interface::IconsPanel::RedrawIcons( const icons_t type )
+void Interface::IconsPanel::_redrawIcons( const icons_t type )
 {
     if ( type & ICON_HEROES )
         heroesIcons.Redraw();

@@ -67,13 +67,11 @@ namespace Interface
         void QueueEventProcessing();
         void TimerEventProcessing();
 
-    private:
-        friend class AdventureMap;
-        friend class Editor;
+        // Do not call this method directly, use Interface::AdventureMap::redraw() instead to avoid issues in the "no interface" mode.
+        // The name of this method starts from _ on purpose to do not mix with other public methods.
+        void _redraw() const;
 
-        // Do not call this method directly, use Interface::Basic::Redraw() instead
-        // to avoid issues in the "no interface" mode
-        void Redraw() const;
+    private:
         void DrawKingdomInfo( int oh = 0 ) const;
         void DrawDayInfo( int oh = 0 ) const;
         void DrawArmyInfo( int oh = 0 ) const;

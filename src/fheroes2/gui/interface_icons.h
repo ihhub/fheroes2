@@ -185,14 +185,13 @@ namespace Interface
         void HideIcons( const icons_t type );
         void ShowIcons( const icons_t type );
 
+        // Do not call this method directly, use Interface::AdventureMap::redraw() instead to avoid issues in the "no interface" mode.
+        // The name of this method starts from _ on purpose to do not mix with other public methods.
+        void _redraw();
+        // The name of this method starts from _ on purpose to do not mix with other public methods.
+        void _redrawIcons( const icons_t type );
+
     private:
-        friend AdventureMap;
-
-        // Do not call these methods directly, use Interface::Basic::Redraw() instead
-        // to avoid issues in the "no interface" mode
-        void Redraw();
-        void RedrawIcons( const icons_t type );
-
         AdventureMap & interface;
 
         fheroes2::Image sfMarker;

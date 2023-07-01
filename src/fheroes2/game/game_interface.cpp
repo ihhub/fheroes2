@@ -131,31 +131,31 @@ void Interface::AdventureMap::redraw( const uint32_t force /* = 0 */ )
         _gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
 
         if ( hideInterface && conf.ShowControlPanel() ) {
-            controlPanel.Redraw();
+            controlPanel._redraw();
         }
     }
 
     if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & ( REDRAW_RADAR_CURSOR | REDRAW_RADAR ) ) ) {
         // Redraw radar map only if `REDRAW_RADAR` is set.
-        _radar.Redraw( combinedRedraw & REDRAW_RADAR );
+        _radar._redraw( combinedRedraw & REDRAW_RADAR );
     }
 
     if ( ( hideInterface && conf.ShowIcons() ) || ( combinedRedraw & REDRAW_ICONS ) ) {
-        iconsPanel.Redraw();
+        iconsPanel._redraw();
     }
     else if ( combinedRedraw & REDRAW_HEROES ) {
-        iconsPanel.RedrawIcons( ICON_HEROES );
+        iconsPanel._redrawIcons( ICON_HEROES );
     }
     else if ( combinedRedraw & REDRAW_CASTLES ) {
-        iconsPanel.RedrawIcons( ICON_CASTLES );
+        iconsPanel._redrawIcons( ICON_CASTLES );
     }
 
     if ( ( hideInterface && conf.ShowButtons() ) || ( combinedRedraw & REDRAW_BUTTONS ) ) {
-        buttonsArea.Redraw();
+        buttonsArea._redraw();
     }
 
     if ( ( hideInterface && conf.ShowStatus() ) || ( combinedRedraw & REDRAW_STATUS ) ) {
-        _statusWindow.Redraw();
+        _statusWindow._redraw();
     }
 
     if ( combinedRedraw & REDRAW_BORDER ) {

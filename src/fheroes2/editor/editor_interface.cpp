@@ -121,7 +121,7 @@ namespace Interface
             // Currently the Adventure Map status is rendered to fill the space under the Editor buttons on high resolutions.
             // TODO: Make special status for Editor to display some map info, e.g. object properties under the cursor (castle garrison, amount of resources, etc.)
             // TODO: Decide where to output the status for low resolutions (reduce the number of displayed buttons - put some into sub-menu).
-            _statusWindow.Redraw();
+            _statusWindow._redraw();
         }
 
         _redraw = 0;

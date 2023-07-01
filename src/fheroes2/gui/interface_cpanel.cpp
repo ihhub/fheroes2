@@ -83,7 +83,7 @@ void Interface::ControlPanel::SetPos( int32_t ox, int32_t oy )
     rt_end.y = y;
 }
 
-void Interface::ControlPanel::Redraw() const
+void Interface::ControlPanel::_redraw() const
 {
     assert( _buttons );
 

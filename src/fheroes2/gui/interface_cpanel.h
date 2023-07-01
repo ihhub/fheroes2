@@ -55,13 +55,11 @@ namespace Interface
 
         const fheroes2::Rect & GetArea() const;
 
+        // Do not call this method directly, use Interface::AdventureMap::redraw() instead to avoid issues in the "no interface" mode.
+        // The name of this method starts from _ on purpose to do not mix with other public methods.
+        void _redraw() const;
+
     private:
-        friend AdventureMap;
-
-        // Do not call this method directly, use Interface::Basic::Redraw() instead
-        // to avoid issues in the "no interface" mode
-        void Redraw() const;
-
         AdventureMap & interface;
 
         // We do not want to make a copy of images but to store just references to them.

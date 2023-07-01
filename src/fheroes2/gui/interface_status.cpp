@@ -108,7 +108,7 @@ void Interface::StatusWindow::SetState( const StatusType status )
     }
 }
 
-void Interface::StatusWindow::Redraw() const
+void Interface::StatusWindow::_redraw() const
 {
     const Settings & conf = Settings::Get();
     if ( conf.isHideInterfaceEnabled() && !conf.ShowStatus() ) {
