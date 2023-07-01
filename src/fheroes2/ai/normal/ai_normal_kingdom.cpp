@@ -91,7 +91,7 @@ namespace
         explicit TemporaryHeroEraser( const std::vector<Heroes *> & heroes )
             : _heroes( heroes )
         {
-            for ( Heroes * hero : _heroes ) {
+            for ( const Heroes * hero : _heroes ) {
                 world.GetTiles( hero->GetIndex() ).SetHeroes( nullptr );
             }
         }
