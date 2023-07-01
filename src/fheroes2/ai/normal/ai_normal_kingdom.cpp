@@ -82,6 +82,12 @@ namespace
     class TemporaryHeroEraser
     {
     public:
+        TemporaryHeroEraser() = delete;
+
+        TemporaryHeroEraser( const TemporaryHeroEraser & ) = delete;
+
+        TemporaryHeroEraser( TemporaryHeroEraser && ) = delete;
+
         explicit TemporaryHeroEraser( std::vector<Heroes *> & heroes )
             : _heroes( heroes )
         {
@@ -96,6 +102,10 @@ namespace
                 world.GetTiles( hero->GetIndex() ).SetHeroes( hero );
             }
         }
+
+        TemporaryHeroEraser& operator=( const TemporaryHeroEraser & ) = delete;
+
+        TemporaryHeroEraser& operator=( TemporaryHeroEraser && ) = delete;
 
     private:
         std::vector<Heroes *> & _heroes;
