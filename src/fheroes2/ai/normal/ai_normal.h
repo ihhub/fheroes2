@@ -65,6 +65,7 @@ struct KingdomCastles;
 
 namespace AI
 {
+    // TODO: this structure is not being updated during AI heroes' actions.
     struct RegionStats
     {
         bool evaluated = false;
