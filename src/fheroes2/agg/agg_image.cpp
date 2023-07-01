@@ -207,14 +207,15 @@ namespace
                               const fheroes2::Point & offset )
     {
         output.emplace_back( origin );
-        for ( size_t i = 0; i < digits.size(); ++i ) {
-            output.emplace_back( addDigit( origin, digits[i], offset ) );
+        for ( const fheroes2::Image & digit : digits ) {
+            output.emplace_back( addDigit( origin, digit, offset ) );
             output.back().setPosition( output.back().width() - origin.width(), output.back().height() - origin.height() );
         }
     }
 
     void replaceTransformPixel( fheroes2::Image & image, const int32_t position, const uint8_t value )
     {
+        assert( !image.singleLayer() );
         if ( ( position < ( image.width() * image.height() ) ) && ( image.transform()[position] != 0 ) ) {
             image.transform()[position] = 0;
             image.image()[position] = value;
@@ -390,8 +391,8 @@ namespace
 
         const char * textSupported = getSupportedText( text, releasedFont );
 
-        fheroes2::Text releasedText( textSupported, releasedFont );
-        fheroes2::Text pressedText( textSupported, pressedFont );
+        const fheroes2::Text releasedText( textSupported, releasedFont );
+        const fheroes2::Text pressedText( textSupported, pressedFont );
 
         const fheroes2::Size releasedTextSize( releasedText.width( buttonSize.width ), releasedText.height( buttonSize.width ) );
         const fheroes2::Size pressedTextSize( pressedText.width( buttonSize.width ), pressedText.height( buttonSize.width ) );
@@ -469,7 +470,7 @@ namespace fheroes2
 {
     namespace AGG
     {
-        void LoadOriginalICN( int id )
+        void LoadOriginalICN( const int id )
         {
             const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
 
@@ -525,8 +526,8 @@ namespace fheroes2
 
             _icnVsSprite[icnId] = _icnVsSprite[originalIcnId];
             const std::vector<uint8_t> & palette = PAL::GetPalette( paletteType );
-            for ( size_t i = 0; i < _icnVsSprite[icnId].size(); ++i ) {
-                ApplyPalette( _icnVsSprite[icnId][i], palette );
+            for ( fheroes2::Sprite & sprite : _icnVsSprite[icnId] ) {
+                ApplyPalette( sprite, palette );
             }
         }
 
@@ -685,7 +686,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 86;
+                const int32_t textWidth = 86;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "CANCEL" ), isEvilInterface );
 
                 break;
@@ -741,7 +742,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 108;
+                const int32_t textWidth = 108;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "ACCEPT" ), isEvilInterface );
 
                 break;
@@ -762,7 +763,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 108;
+                const int32_t textWidth = 108;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "DECLINE" ), isEvilInterface );
 
                 break;
@@ -891,7 +892,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 85;
+                const int32_t textWidth = 85;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "EXIT" ), isEvilInterface );
 
                 break;
@@ -929,7 +930,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 110;
+                const int32_t textWidth = 110;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "DISMISS" ), isEvilInterface );
 
                 break;
@@ -946,7 +947,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 110;
+                const int32_t textWidth = 110;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "UPGRADE" ), isEvilInterface );
 
                 break;
@@ -963,7 +964,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 102;
+                const int32_t textWidth = 102;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "RESTART" ), isEvilInterface );
 
                 break;
@@ -1043,7 +1044,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 46;
+                const int32_t textWidth = 46;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "S" ), false );
 
                 break;
@@ -1057,7 +1058,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 46;
+                const int32_t textWidth = 46;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "M" ), false );
 
                 break;
@@ -1071,7 +1072,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 46;
+                const int32_t textWidth = 46;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "L" ), false );
 
                 break;
@@ -1085,7 +1086,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 46;
+                const int32_t textWidth = 46;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "X-L" ), false );
 
                 break;
@@ -1099,7 +1100,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 58;
+                const int32_t textWidth = 58;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "ALL" ), false );
 
                 break;
@@ -1457,7 +1458,7 @@ namespace fheroes2
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD: {
                 _icnVsSprite[id].resize( 2 );
 
-                int32_t textWidth = 140;
+                const int32_t textWidth = 140;
                 fheroes2::Point releasedOffset;
                 fheroes2::Point pressedOffset;
                 getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], true, textWidth, releasedOffset, pressedOffset );
@@ -1470,7 +1471,7 @@ namespace fheroes2
             case ICN::BUTTON_DIFFICULTY_ROLAND: {
                 _icnVsSprite[id].resize( 2 );
 
-                int32_t textWidth = 140;
+                const int32_t textWidth = 140;
                 fheroes2::Point releasedOffset;
                 fheroes2::Point pressedOffset;
                 getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], false, textWidth, releasedOffset, pressedOffset );
@@ -1907,7 +1908,7 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
                     // clean the button
-                    uint8_t buttonFillingColor = getButtonFillingColor( i == 0 );
+                    const uint8_t buttonFillingColor = getButtonFillingColor( i == 0 );
                     Fill( out, 25, 18, 88, 23, buttonFillingColor );
                     const int32_t offsetX = 16;
                     const int32_t offsetY = 21;
@@ -2019,8 +2020,8 @@ namespace fheroes2
                 else {
                     assert( id == ICN::FONT );
                     // The original images contain an issue: image layer has value 50 which is '2' in UTF-8. We must correct these (only 3) places
-                    for ( size_t i = 0; i < imageArray.size(); ++i ) {
-                        ReplaceColorIdByTransformId( imageArray[i], 50, 2 );
+                    for ( fheroes2::Sprite & fontImage : imageArray ) {
+                        ReplaceColorIdByTransformId( fontImage, 50, 2 );
                     }
                     modifyBaseNormalFont( _icnVsSprite[id] );
                 }
@@ -2456,8 +2457,8 @@ namespace fheroes2
                 return true;
             case ICN::LISTBOX_EVIL:
                 CopyICNWithPalette( id, ICN::LISTBOX, PAL::PaletteType::GRAY );
-                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
-                    ApplyPalette( _icnVsSprite[id][i], 2 );
+                for ( fheroes2::Sprite & sprite : _icnVsSprite[id] ) {
+                    ApplyPalette( sprite, 2 );
                 }
                 return true;
             case ICN::MONS32:
@@ -2559,7 +2560,7 @@ namespace fheroes2
                         ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
                     }
                     // Fix pressed buttons background.
-                    for ( uint32_t i : { 0, 2 } ) {
+                    for ( const uint32_t i : { 0, 2 } ) {
                         Sprite & out = _icnVsSprite[id][i + 1];
 
                         Sprite tmp( out.width(), out.height() );
@@ -2611,13 +2612,14 @@ namespace fheroes2
             case ICN::SWAP_ARROW_RIGHT_TO_LEFT: {
                 // Since the original game does not have such resources we could generate it from hero meeting sprite.
                 const Sprite & original = GetICN( ICN::SWAPWIN, 0 );
-                std::vector<Image> input( 4 );
+                std::array<Image, 4> input;
 
                 const int32_t width = 45;
                 const int32_t height = 20;
 
-                for ( Image & image : input )
+                for ( Image & image : input ) {
                     image.resize( width, height );
+                }
 
                 Copy( original, 295, 270, input[0], 0, 0, width, height );
                 Copy( original, 295, 291, input[1], 0, 0, width, height );
@@ -2650,8 +2652,6 @@ namespace fheroes2
             case ICN::EDITOR:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
-                    // This is the Editor main menu background which shouldn't have any transform layer.
-                    _icnVsSprite[id][0]._disableTransformLayer();
                     // Fix the cycling colors in original editor main menu background.
                     fheroes2::ApplyPalette( _icnVsSprite[id][0], PAL::GetPalette( PAL::PaletteType::NO_CYCLE ) );
                 }
@@ -2659,8 +2659,13 @@ namespace fheroes2
             case ICN::HEROES:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 640 && original.height() == 480 ) {
+                        // Fix incorrect pixel at position 260x305.
+                        replaceTransformPixel( original, 195460, 31 );
+                    }
                     // This is the main menu image which shouldn't have any transform layer.
-                    _icnVsSprite[id][0]._disableTransformLayer();
+                    original._disableTransformLayer();
                 }
                 return true;
             case ICN::TOWNBKG3:
@@ -2674,6 +2679,53 @@ namespace fheroes2
                         replaceTransformPixel( original, 64918, 164 );
                         replaceTransformPixel( original, 77685, 18 );
                         replaceTransformPixel( original, 84618, 19 );
+                    }
+                }
+                return true;
+            case ICN::MINIPORT:
+                // Some heroes portraits have incorrect transparent pixels.
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 60 ) {
+                    Sprite & original = _icnVsSprite[id][60];
+                    if ( original.width() == 30 && original.height() == 22 ) {
+                        replaceTransformPixel( original, 5, 75 );
+                        replaceTransformPixel( original, 310, 48 );
+                        replaceTransformPixel( original, 358, 64 );
+                        replaceTransformPixel( original, 424, 65 );
+                    }
+                }
+                if ( _icnVsSprite[id].size() > 61 ) {
+                    Sprite & original = _icnVsSprite[id][61];
+                    if ( original.width() == 30 && original.height() == 22 ) {
+                        replaceTransformPixel( original, 51, 30 );
+                        replaceTransformPixel( original, 80, 28 );
+                        replaceTransformPixel( original, 81, 30 );
+                        replaceTransformPixel( original, 383, 24 );
+                        replaceTransformPixel( original, 445, 24 );
+                    }
+                }
+                if ( _icnVsSprite[id].size() > 65 ) {
+                    Sprite & original = _icnVsSprite[id][65];
+                    if ( original.width() == 30 && original.height() == 22 ) {
+                        replaceTransformPixel( original, 499, 60 );
+                        replaceTransformPixel( original, 601, 24 );
+                        replaceTransformPixel( original, 631, 28 );
+                    }
+                }
+                if ( _icnVsSprite[id].size() > 67 ) {
+                    Sprite & original = _icnVsSprite[id][67];
+                    if ( original.width() == 30 && original.height() == 22 ) {
+                        replaceTransformPixel( original, 42, 28 );
+                    }
+                }
+                return true;
+            case ICN::MINICAPT:
+                // Barbarian captain mini icon has bad pixel at position 22x2.
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 1 ) {
+                    Sprite & original = _icnVsSprite[id][1];
+                    if ( original.width() == 30 && original.height() == 22 ) {
+                        replaceTransformPixel( original, 82, 244 );
                     }
                 }
                 return true;
@@ -2697,6 +2749,27 @@ namespace fheroes2
                         replaceTransformPixel( original, 5160, 71 );
                         replaceTransformPixel( original, 5827, 18 );
                         replaceTransformPixel( original, 7474, 167 );
+                    }
+                }
+                return true;
+            case ICN::PORT0092:
+                // Sorceress captain has two bad transparent pixels (8x20 and 8x66).
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 101 && original.height() == 93 ) {
+                        replaceTransformPixel( original, 2028, 42 );
+                        replaceTransformPixel( original, 6674, 100 );
+                    }
+                }
+                return true;
+            case ICN::PORT0095:
+                // Necromancer captain have incorrect transparent pixel at position 8x22.
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 101 && original.height() == 93 ) {
+                        replaceTransformPixel( original, 2230, 212 );
                     }
                 }
                 return true;
@@ -2978,9 +3051,12 @@ namespace fheroes2
             case ICN::GOOD_MARKET_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
+                LoadOriginalICN( ICN::ADVBTNS );
                 const int releasedIndex = ( id == ICN::GOOD_ARMY_BUTTON ) ? 0 : 4;
                 _icnVsSprite[id][0] = GetICN( ICN::ADVBTNS, releasedIndex );
                 _icnVsSprite[id][1] = GetICN( ICN::ADVBTNS, releasedIndex + 1 );
+
+                // Make all black pixels transparent.
                 AddTransparency( _icnVsSprite[id][0], 36 );
                 AddTransparency( _icnVsSprite[id][1], 36 );
                 AddTransparency( _icnVsSprite[id][1], 61 ); // remove the extra brown border
@@ -2991,20 +3067,22 @@ namespace fheroes2
             case ICN::EVIL_MARKET_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
+                LoadOriginalICN( ICN::ADVEBTNS );
                 const int releasedIndex = ( id == ICN::EVIL_ARMY_BUTTON ) ? 0 : 4;
-                _icnVsSprite[id][0] = GetICN( ICN::ADVEBTNS, releasedIndex );
+                _icnVsSprite[id][0] = GetICN( ICN::ADVBTNS, releasedIndex );
+                _icnVsSprite[id][1] = GetICN( ICN::ADVBTNS, releasedIndex + 1 );
+
+                // Make all black pixels transparent.
                 AddTransparency( _icnVsSprite[id][0], 36 );
+                AddTransparency( _icnVsSprite[id][1], 36 );
 
-                Sprite pressed = GetICN( ICN::ADVEBTNS, releasedIndex + 1 );
-                AddTransparency( pressed, 36 );
-                AddTransparency( pressed, 61 ); // remove the extra brown border
+                // Add the bottom-left dark border.
+                Fill( _icnVsSprite[id][1], 1, 4, 1, 30, 36 );
+                Fill( _icnVsSprite[id][1], 1, 34, 31, 1, 36 );
 
-                _icnVsSprite[id][1] = Sprite( pressed.width(), pressed.height(), pressed.x(), pressed.y() );
-                _icnVsSprite[id][1].reset();
-
-                // put back pixels that actually should be black
-                Fill( _icnVsSprite[id][1], 1, 4, 31, 31, 36 );
-                Blit( pressed, _icnVsSprite[id][1] );
+                // Restore back black pixels in the middle of the image.
+                Copy( _icnVsSprite[ICN::ADVEBTNS][releasedIndex], 9, 6, _icnVsSprite[id][0], 9, 6, 20, 22 );
+                Copy( _icnVsSprite[ICN::ADVEBTNS][releasedIndex + 1], 8, 7, _icnVsSprite[id][1], 8, 7, 20, 22 );
 
                 return true;
             }
@@ -3031,7 +3109,7 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() >= 19 ) {
                     // fix background for TRADE and EXIT buttons
-                    for ( uint32_t i : { 16, 18 } ) {
+                    for ( const uint32_t i : { 16, 18 } ) {
                         Sprite pressed;
                         std::swap( pressed, _icnVsSprite[id][i] );
                         AddTransparency( pressed, 25 ); // remove too dark background
@@ -3170,14 +3248,16 @@ namespace fheroes2
             }
             case ICN::ARTIFACT:
                 LoadOriginalICN( id );
-                // Fix "Arm of the Martyr" artifact rendering.
-                if ( _icnVsSprite[id].size() > 88 ) {
-                    Sprite & originalImage = _icnVsSprite[id][88];
-                    Sprite temp( originalImage.width(), originalImage.height() );
-                    temp.setPosition( originalImage.x(), originalImage.y() );
-                    temp.fill( 0 );
-                    Blit( originalImage, temp );
-                    originalImage = std::move( temp );
+                if ( _icnVsSprite[id].size() > 99 ) {
+                    // This fixes "Arm of the Martyr" (#88) and " Sphere of Negation" (#99) artifacts rendering which initially has some incorrect transparent pixels.
+                    for ( const int32_t index : { 88, 99 } ) {
+                        Sprite & originalImage = _icnVsSprite[id][index];
+                        Sprite temp( originalImage.width(), originalImage.height() );
+                        temp.setPosition( originalImage.x(), originalImage.y() );
+                        temp.fill( 0 );
+                        Blit( originalImage, temp );
+                        originalImage = std::move( temp );
+                    }
                 }
                 return true;
             case ICN::TWNSDW_5:
@@ -3590,12 +3670,13 @@ namespace fheroes2
             }
             case ICN::HISCORE: {
                 LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() > 7 ) {
+                if ( _icnVsSprite[id].size() == 9 ) {
                     // Campaign title bar needs to include rating.
-                    Sprite temp = _icnVsSprite[id][7];
+                    const int32_t imageHeight = _icnVsSprite[id][7].height();
+                    const Sprite temp = Crop( _icnVsSprite[id][7], 215, 0, 300, imageHeight );
 
-                    Copy( temp, 215, 0, _icnVsSprite[id][7], 215 - 57, 0, 300, temp.height() );
-                    Copy( _icnVsSprite[id][6], 324, 0, _icnVsSprite[id][7], 324, 0, _icnVsSprite[id][6].width() - 324, temp.height() );
+                    Copy( temp, 0, 0, _icnVsSprite[id][7], 215 - 57, 0, temp.width(), imageHeight );
+                    Copy( _icnVsSprite[id][6], 324, 0, _icnVsSprite[id][7], 324, 0, _icnVsSprite[id][6].width() - 324, imageHeight );
                 }
                 return true;
             }
@@ -3669,6 +3750,28 @@ namespace fheroes2
                 }
 
                 break;
+            }
+            case ICN::BRCREST: {
+                LoadOriginalICN( id );
+                // First sprite in this ICN has incorrect transparent pixel at position 30x5.
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 50 && original.height() == 47 ) {
+                        replaceTransformPixel( original, 280, 117 );
+                    }
+                }
+                return true;
+            }
+            case ICN::CBKGWATR: {
+                // Ship battlefield background has incorrect transparent pixel at position 125x36.
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & original = _icnVsSprite[id][0];
+                    if ( original.width() == 640 && original.height() == 443 ) {
+                        replaceTransformPixel( original, 23165, 24 );
+                    }
+                }
+                return true;
             }
             case ICN::GAME_OPTION_ICON: {
                 _icnVsSprite[id].resize( 2 );
