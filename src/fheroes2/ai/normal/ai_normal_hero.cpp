@@ -1893,6 +1893,31 @@ namespace AI
 
         const auto it = _priorityTargets.find( tileIndex );
         if ( it == _priorityTargets.end() ) {
+            if ( objectType == MP2::OBJ_CASTLE ) {
+                const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
+                if ( castle != nullptr ) {
+                    if ( hero.isFriends( castle->GetColor() ) ) {
+                        removeEnemyArmy( tileIndex );
+
+                        for ( const EnemyArmy & enemyArmy : _enemyArmies ) {
+                            updatePriorityForCastle( *castle, enemyArmy );
+                        }
+                    }
+                    else {
+                        updatePriorityAttackTarget( hero.GetKingdom(), world.GetTiles( tileIndex ) );
+                    }
+                }
+            }
+            else if ( objectType == MP2::OBJ_HEROES ) {
+                const Heroes * anotherHero = world.GetTiles( tileIndex ).GetHeroes();
+
+                // If the object is not a priority we have to update it after the battle as it can become the one.
+                // Especially, when the opposite army has grown Skeletons or Ghosts.
+                if ( anotherHero != nullptr && !hero.isFriends( anotherHero->GetColor() ) ) {
+                    updatePriorityAttackTarget( hero.GetKingdom(), world.GetTiles( tileIndex ) );
+                }
+            }
+
             return;
         }
 
@@ -1918,7 +1943,19 @@ namespace AI
         case PriorityTaskType::ATTACK: {
             removePriorityAttackTarget( tileIndex );
 
-            updatePriorityAttackTarget( hero.GetKingdom(), world.GetTiles( tileIndex ) );
+            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
+            if ( castle != nullptr ) {
+                if ( hero.isFriends( castle->GetColor() ) ) {
+                    removeEnemyArmy( tileIndex );
+
+                    for ( const EnemyArmy & enemyArmy : _enemyArmies ) {
+                        updatePriorityForCastle( *castle, enemyArmy );
+                    }
+                }
+                else {
+                    updatePriorityAttackTarget( hero.GetKingdom(), world.GetTiles( tileIndex ) );
+                }
+            }
             break;
         }
         default:

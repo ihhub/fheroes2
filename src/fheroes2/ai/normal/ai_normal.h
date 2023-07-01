@@ -362,6 +362,8 @@ namespace AI
         void updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tiles & tile );
 
         void updateEnemyArmy( const EnemyArmy & enemyArmy );
+
+        void removeEnemyArmy( const int32_t tileIndex );
     };
 }
 

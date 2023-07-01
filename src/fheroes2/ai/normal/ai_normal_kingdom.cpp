@@ -79,6 +79,29 @@ namespace
         }
     };
 
+    class TemporaryHeroEraser
+    {
+    public:
+        ~TemporaryHeroEraser()
+        {
+            for ( Heroes * hero : _heroes )
+            {
+                world.GetTiles( hero->GetIndex() ).SetHeroes( hero );
+            }
+        }
+
+        void remove( Heroes * hero )
+        {
+            assert( hero != nullptr );
+
+            _heroes.emplace_back( hero );
+            world.GetTiles( hero->GetIndex() ).SetHeroes( nullptr );
+        }
+
+    private:
+        std::vector<Heroes *> _heroes;
+    };
+
     void setHeroRoles( KingdomHeroes & heroes )
     {
         if ( heroes.empty() ) {
@@ -517,9 +540,14 @@ namespace AI
             return false;
         }
 
-        // TODO: if a hero (even a weak one) is blocking the path then the function call below will return 0.
-        // TODO: For example if a friendly hero stands just below the castle entrance then the distance will be 0.
-        // TODO: Which is not the case as an enemy hero can be very powerful to kill the hero and capture the castle.
+        // Since we are estimating danger for a castle and we need to know if an enemy hero can reach it
+        // in case if no our heroes exist we are temporary removing them from the map.
+        TemporaryHeroEraser heroEraser;
+        for ( Heroes * hero : castle.GetKingdom().GetHeroes() )
+        {
+            heroEraser.remove( hero );
+        }
+
         const uint32_t dist = _pathfinder.getDistance( enemyArmy.index, castleIndex, castle.GetColor(), enemyArmy.strength );
         if ( dist == 0 || dist >= threatDistanceLimit ) {
             return false;
@@ -611,6 +639,10 @@ namespace AI
         MP2::MapObjectType object = tile.GetObject();
         const int32_t tileIndex = tile.GetIndex();
 
+        // Remove any old entries for enemy armies.
+        // This can happen when the army has been defeated and we won't add new info about it.
+        removeEnemyArmy( tileIndex );
+
         if ( object == MP2::OBJ_HEROES ) {
             const Heroes * enemyHero = tile.GetHeroes();
             if ( enemyHero != nullptr && enemyHero->GetColor() != kingdom.GetColor() ) {
@@ -642,6 +674,18 @@ namespace AI
         }
 
         _enemyArmies.emplace_back( enemyArmy );
+    }
+
+    void Normal::removeEnemyArmy( const int32_t tileIndex )
+    {
+        for ( auto iter = _enemyArmies.begin(); iter != _enemyArmies.end(); ) {
+            if ( iter->index == tileIndex ) {
+                iter = _enemyArmies.erase( iter );
+            }
+            else {
+                ++iter;
+            }
+        }
     }
 
     void Normal::KingdomTurn( Kingdom & kingdom )
