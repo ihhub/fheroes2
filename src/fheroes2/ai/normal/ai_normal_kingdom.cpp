@@ -82,24 +82,23 @@ namespace
     class TemporaryHeroEraser
     {
     public:
+        explicit TemporaryHeroEraser( std::vector<Heroes *> & heroes )
+            : _heroes( heroes )
+        {
+            for ( Heroes * hero : _heroes ) {
+                world.GetTiles( hero->GetIndex() ).SetHeroes( nullptr );
+            }
+        }
+
         ~TemporaryHeroEraser()
         {
-            for ( Heroes * hero : _heroes )
-            {
+            for ( Heroes * hero : _heroes ) {
                 world.GetTiles( hero->GetIndex() ).SetHeroes( hero );
             }
         }
 
-        void remove( Heroes * hero )
-        {
-            assert( hero != nullptr );
-
-            _heroes.emplace_back( hero );
-            world.GetTiles( hero->GetIndex() ).SetHeroes( nullptr );
-        }
-
     private:
-        std::vector<Heroes *> _heroes;
+        std::vector<Heroes *> & _heroes;
     };
 
     void setHeroRoles( KingdomHeroes & heroes )
@@ -542,11 +541,7 @@ namespace AI
 
         // Since we are estimating danger for a castle and we need to know if an enemy hero can reach it
         // in case if no our heroes exist we are temporary removing them from the map.
-        TemporaryHeroEraser heroEraser;
-        for ( Heroes * hero : castle.GetKingdom().GetHeroes() )
-        {
-            heroEraser.remove( hero );
-        }
+        const TemporaryHeroEraser heroEraser( castle.GetKingdom().GetHeroes() );
 
         const uint32_t dist = _pathfinder.getDistance( enemyArmy.index, castleIndex, castle.GetColor(), enemyArmy.strength );
         if ( dist == 0 || dist >= threatDistanceLimit ) {
