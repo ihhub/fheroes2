@@ -29,6 +29,7 @@
 #include <cstdint>
 #include <optional>
 #include <set>
+#include <vector>
 
 #include "heroes_base.h"
 #include "race.h"
