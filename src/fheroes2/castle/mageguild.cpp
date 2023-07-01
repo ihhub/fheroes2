@@ -89,6 +89,8 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
     general.clear();
     library.clear();
 
+    std::set<Spell> spellsInUse;
+
     struct MageGuildLevelProps
     {
         int freeSlots = 0;
@@ -102,29 +104,17 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
         }
     }
 
-    std::set<Spell> allSpells;
-
-    auto addSpell = [this, race, hasLibrary, &mageGuildLevels, &allSpells]( const Spell & spell ) {
+    auto addSpell = [this, hasLibrary, &spellsInUse, &mageGuildLevels]( const Spell & spell ) {
         const size_t spellLevel = fheroes2::checkedCast<size_t>( spell.Level() ).value();
         assert( spellLevel > 0 && spellLevel <= mageGuildLevels.size() );
 
         auto & [freeSlots, hasAdventureSpell] = mageGuildLevels[spellLevel - 1];
         assert( freeSlots > 0 );
 
-        // There can only be one adventure spell at each level of the Mage Guild
-        if ( hasAdventureSpell && spell.isAdventure() ) {
-            return false;
-        }
-
-        // Some spells may occur less frequently in Mage Guilds than others, depending on race
-        if ( Rand::Get( 0, 10 ) > spell.weightForRace( race ) ) {
-            return false;
-        }
-
         // Check for possible duplicates
-        const auto [dummy, inserted] = allSpells.insert( spell );
+        const auto [dummy, inserted] = spellsInUse.insert( spell );
         if ( !inserted ) {
-            return false;
+            return;
         }
 
         if ( hasLibrary && freeSlots == 1 ) {
@@ -137,32 +127,39 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
         --freeSlots;
 
         if ( spell.isAdventure() ) {
+            assert( !hasAdventureSpell );
+
             hasAdventureSpell = true;
         }
-
-        return true;
     };
 
     // Mage Guild must always have one of the specific damage spells...
-    if ( !addSpell( getGuaranteedDamageSpell() ) ) {
-        assert( 0 );
-    }
+    addSpell( getGuaranteedDamageSpell() );
     // ... as well as one of the specific "spell cancellation" spells
-    if ( !addSpell( getGuaranteedCancellationSpell() ) ) {
-        assert( 0 );
-    }
+    addSpell( getGuaranteedCancellationSpell() );
 
     for ( size_t level = 1; level <= mageGuildLevels.size(); ++level ) {
-        const auto & [freeSlots, dummy] = mageGuildLevels[level - 1];
+        const auto & [freeSlots, hasAdventureSpell] = mageGuildLevels[level - 1];
+
+        std::vector<int> allSpellsOfLevel = Spell::getAllSpellIdsSuitableForSpellBook( fheroes2::checkedCast<int>( level ).value() );
 
         while ( freeSlots > 0 ) {
-            const Spell spell = Spell::Rand();
+            assert( !allSpellsOfLevel.empty() );
 
-            if ( fheroes2::checkedCast<size_t>( spell.Level() ).value() != level ) {
+            const uint32_t spellIdx = Rand::Get( 0, fheroes2::checkedCast<uint32_t>( allSpellsOfLevel.size() - 1 ).value() );
+            const Spell spell( allSpellsOfLevel[spellIdx] );
+
+            // Some spells may occur less frequently in Mage Guilds than others, depending on race
+            if ( Rand::Get( 0, 10 ) > spell.weightForRace( race ) ) {
                 continue;
             }
 
-            addSpell( spell );
+            // There can only be one adventure spell at each level of the Mage Guild
+            if ( !hasAdventureSpell || !spell.isAdventure() ) {
+                addSpell( spell );
+            }
+
+            allSpellsOfLevel.erase( allSpellsOfLevel.begin() + spellIdx );
         }
     }
 }

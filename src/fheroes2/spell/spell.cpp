@@ -493,13 +493,6 @@ uint32_t Spell::weightForRace( const int race ) const
     return 10;
 }
 
-Spell Spell::Rand()
-{
-    static_assert( Spell::SETWGUARDIAN - Spell::FIREBALL == 64, "The order of spells has been changed, check the logic below" );
-
-    return Rand::Get( Spell::FIREBALL, Spell::SETWGUARDIAN );
-}
-
 Spell Spell::Rand( const int level, const bool isAdventure )
 {
     std::vector<Spell> vec;
@@ -539,6 +532,27 @@ Spell Spell::RandAdventure( const int level )
     const Spell spell = Rand( level, true );
 
     return spell.isValid() ? spell : RandCombat( level );
+}
+
+std::vector<int> Spell::getAllSpellIdsSuitableForSpellBook( const int spellLevel /* = -1 */ )
+{
+    std::vector<int> result;
+    result.reserve( SPELL_COUNT );
+
+    for ( int spellId = 0; spellId < SPELL_COUNT; ++spellId ) {
+        if ( spellId == NONE || ( spellId >= RANDOM && spellId <= PETRIFY ) ) {
+            continue;
+        }
+
+        const Spell spell( spellId );
+        if ( spellLevel > 0 && spell.Level() != spellLevel ) {
+            continue;
+        }
+
+        result.push_back( spellId );
+    }
+
+    return result;
 }
 
 bool Spell::isUndeadOnly() const

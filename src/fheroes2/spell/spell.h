@@ -24,6 +24,7 @@
 #define H2SPELL_H
 
 #include <cstdint>
+#include <vector>
 
 #define DEFAULT_SPELL_DURATION 3
 
@@ -234,10 +235,13 @@ public:
     // Returns the index of the spell sprite in SPELLS.ICN
     uint32_t IndexSprite() const;
 
-    static Spell Rand();
     static Spell Rand( const int level, const bool isAdventure );
     static Spell RandCombat( const int level );
     static Spell RandAdventure( const int level );
+
+    // Returns the IDs of all spells of a given level that are suitable for the spell book (i.e. no placeholders or exclusive
+    // built-in spells for monsters are returned). If 'spellLevel' is less than 1, it returns suitable spells of all levels.
+    static std::vector<int> getAllSpellIdsSuitableForSpellBook( const int spellLevel = -1 );
 
     static int32_t CalculateDimensionDoorDistance();
 
