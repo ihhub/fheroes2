@@ -31,6 +31,8 @@
 
 namespace Interface
 {
+    const uint8_t instrumentsCount = 6;
+
     class Editor;
 
     class EditorPanel
@@ -63,10 +65,10 @@ namespace Interface
         Editor & _interface;
 
         // Index of selected Map Editor instrument.
-        uint32_t _selectedInstrument{ 0 };
+        uint8_t _selectedInstrument{ 0 };
 
-        std::array<fheroes2::Button, 6> _instrumentButtons;
-        std::array<fheroes2::Rect, 6> _instrumentButtonsRect;
+        std::array<fheroes2::Button, instrumentsCount> _instrumentButtons;
+        std::array<fheroes2::Rect, instrumentsCount> _instrumentButtonsRect;
 
         fheroes2::Button _buttonMagnify;
         fheroes2::Button _buttonUndo;

@@ -65,7 +65,7 @@ namespace Interface
     {
         int32_t offsetX = displayX;
 
-        for ( size_t i = 0; i < _instrumentButtons.size(); ++i ) {
+        for ( uint8_t i = 0; i < instrumentsCount; ++i ) {
             _instrumentButtons[i].setPosition( offsetX, displayY );
             _instrumentButtonsRect[i] = _instrumentButtons[i].area();
 
@@ -143,7 +143,7 @@ namespace Interface
         fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
         if ( le.MousePressLeft( _rectInstruments ) ) {
-            for ( uint32_t i = 0; i < _instrumentButtons.size(); ++i ) {
+            for ( uint8_t i = 0; i < instrumentsCount; ++i ) {
                 if ( le.MousePressLeft( _instrumentButtonsRect[i] ) ) {
                     if ( _instrumentButtons[i].drawOnPress() ) {
                         _selectedInstrument = i;
