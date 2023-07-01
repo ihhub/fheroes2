@@ -22,7 +22,6 @@
 
 #include "editor_interface_panel.h"
 
-#include <cstddef>
 #include <memory>
 
 #include "agg_image.h"
@@ -31,7 +30,6 @@
 #include "editor_interface.h"
 #include "icn.h"
 #include "image.h"
-#include "interface_base.h"
 #include "localevent.h"
 #include "screen.h"
 #include "translations.h"
