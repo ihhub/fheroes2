@@ -272,10 +272,9 @@ void Interface::Radar::redrawForEditor( const bool renderMapObjects )
     _cursorArea.hide();
 
     if ( renderMapObjects ) {
-        RedrawObjects( Players::FriendColors(), ViewWorldMode::ViewAll );
-        fheroes2::Display & display = fheroes2::Display::instance();
+        RedrawObjects( 0, ViewWorldMode::ViewAll );
         const fheroes2::Rect & rect = GetArea();
-        fheroes2::Copy( _map, 0, 0, display, rect.x, rect.y, _map.width(), _map.height() );
+        fheroes2::Copy( _map, 0, 0, fheroes2::Display::instance(), rect.x, rect.y, _map.width(), _map.height() );
     }
 
     _cursorArea.show();
