@@ -1891,32 +1891,51 @@ namespace AI
             return;
         }
 
-        const auto it = _priorityTargets.find( tileIndex );
-        if ( it == _priorityTargets.end() ) {
+        auto updateAttackPriorityTarget = [this, tileIndex, &hero, objectType]() {
             if ( objectType == MP2::OBJ_CASTLE ) {
                 const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
-                if ( castle != nullptr ) {
-                    if ( hero.isFriends( castle->GetColor() ) ) {
-                        removeEnemyArmy( tileIndex );
+                if ( castle == nullptr ) {
+                    // How is it possible?
+                    assert( 0 );
 
-                        for ( const EnemyArmy & enemyArmy : _enemyArmies ) {
-                            updatePriorityForCastle( *castle, enemyArmy );
-                        }
+                    removeEnemyArmy( tileIndex );
+                    return;
+                }
+
+                if ( hero.isFriends( castle->GetColor() ) ) {
+                    removeEnemyArmy( tileIndex );
+
+                    for ( const EnemyArmy & enemyArmy : _enemyArmies ) {
+                        updatePriorityForCastle( *castle, enemyArmy );
                     }
-                    else {
-                        updatePriorityAttackTarget( hero.GetKingdom(), world.GetTiles( tileIndex ) );
-                    }
+                }
+                else {
+                    updatePriorityAttackTarget( hero.GetKingdom(), world.GetTiles( tileIndex ) );
                 }
             }
             else if ( objectType == MP2::OBJ_HEROES ) {
                 const Heroes * anotherHero = world.GetTiles( tileIndex ).GetHeroes();
+                if ( anotherHero == nullptr ) {
+                    // The hero died.
+                    removeEnemyArmy( tileIndex );
+                    return;
+                }
 
-                // If the object is not a priority we have to update it after the battle as it can become the one.
-                // Especially, when the opposite army has grown Skeletons or Ghosts.
-                if ( anotherHero != nullptr && !hero.isFriends( anotherHero->GetColor() ) ) {
+                if ( !hero.isFriends( anotherHero->GetColor() ) ) {
                     updatePriorityAttackTarget( hero.GetKingdom(), world.GetTiles( tileIndex ) );
                 }
             }
+            else {
+                // Unsupported object type!
+                assert( 0 );
+            }
+        };
+
+        const auto it = _priorityTargets.find( tileIndex );
+        if ( it == _priorityTargets.end() ) {
+            // If the object is not a priority we have to update it after the battle as it can become the one.
+            // Especially, when the opposite army has grown Skeletons or Ghosts.
+            updateAttackPriorityTarget();
 
             return;
         }
@@ -1943,19 +1962,7 @@ namespace AI
         case PriorityTaskType::ATTACK: {
             removePriorityAttackTarget( tileIndex );
 
-            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
-            if ( castle != nullptr ) {
-                if ( hero.isFriends( castle->GetColor() ) ) {
-                    removeEnemyArmy( tileIndex );
-
-                    for ( const EnemyArmy & enemyArmy : _enemyArmies ) {
-                        updatePriorityForCastle( *castle, enemyArmy );
-                    }
-                }
-                else {
-                    updatePriorityAttackTarget( hero.GetKingdom(), world.GetTiles( tileIndex ) );
-                }
-            }
+            updateAttackPriorityTarget();
             break;
         }
         default:
