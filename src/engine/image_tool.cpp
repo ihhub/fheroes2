@@ -347,15 +347,18 @@ namespace fheroes2
                 ++data;
             }
             else if ( 0x80 > *data ) { // 0x01-0x7F - repeat a pixel N times
-                uint32_t pixelCount = *data;
+                const uint8_t pixelCount = *data;
                 ++data;
-                while ( pixelCount > 0 && data != dataEnd ) {
-                    imageData[posX] = *data;
-                    imageTransform[posX] = 0;
-                    ++posX;
-                    ++data;
-                    --pixelCount;
+
+                if ( data + pixelCount > dataEnd ) {
+                    // Image data is corrupted - we can not read data beyond dataEnd.
+                    break;
                 }
+
+                memcpy( imageData + posX, data, pixelCount );
+                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+                data += pixelCount;
+                posX += pixelCount;
             }
             else if ( 0x80 == *data ) { // 0x80 - end of image
                 break;
@@ -370,42 +373,35 @@ namespace fheroes2
                 const uint8_t transformValue = *data;
                 const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) << 6 ) / 256 + 2 ); // 1 is for skipping
 
-                uint32_t pixelCount = *data % 4 ? *data % 4 : *( ++data );
+                const uint32_t pixelCount = *data % 4 ? *data % 4 : *( ++data );
 
                 if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
-                    while ( pixelCount > 0 ) {
-                        imageTransform[posX] = transformType;
-                        ++posX;
-                        --pixelCount;
-                    }
+                    memset( imageTransform + posX, transformType, pixelCount );
                 }
-                else {
-                    posX += pixelCount;
-                }
+
+                posX += pixelCount;
 
                 ++data;
             }
             else if ( 0xC1 == *data ) { // 0xC1
                 ++data;
-                uint32_t pixelCount = *data;
+                const uint32_t pixelCount = *data;
                 ++data;
-                while ( pixelCount > 0 ) {
-                    imageData[posX] = *data;
-                    imageTransform[posX] = 0;
-                    ++posX;
-                    --pixelCount;
-                }
+
+                memset( imageData + posX, *data, pixelCount );
+                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+                posX += pixelCount;
+
                 ++data;
             }
             else {
-                uint32_t pixelCount = *data - 0xC0;
+                const uint32_t pixelCount = *data - 0xC0;
                 ++data;
-                while ( pixelCount > 0 ) {
-                    imageData[posX] = *data;
-                    imageTransform[posX] = 0;
-                    ++posX;
-                    --pixelCount;
-                }
+
+                memset( imageData + posX, *data, pixelCount );
+                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+                posX += pixelCount;
+
                 ++data;
             }
 
@@ -427,10 +423,9 @@ namespace fheroes2
 
         for ( size_t i = 0; i < imageCount; ++i ) {
             Image & tilImage = output[i];
-            tilImage.resize( width, height );
             tilImage._disableTransformLayer();
+            tilImage.resize( width, height );
             memcpy( tilImage.image(), data + i * imageSize, imageSize );
-            std::fill( tilImage.transform(), tilImage.transform() + imageSize, static_cast<uint8_t>( 0 ) );
         }
     }
 
