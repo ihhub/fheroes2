@@ -36,7 +36,6 @@
 #include "resource.h"
 #include "world_pathfinding.h"
 
-class Army;
 class Castle;
 class HeroBase;
 class Heroes;
@@ -253,7 +252,7 @@ namespace AI
         void KingdomTurn( Kingdom & kingdom ) override;
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) override;
 
-        void revealFog( const Maps::Tiles & tile ) override;
+        void revealFog( const Maps::Tiles & tile, const Kingdom & kingdom ) override;
 
         void HeroesPreBattle( HeroBase & hero, bool isAttacking ) override;
         void HeroesActionComplete( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType ) override;
@@ -261,7 +260,6 @@ namespace AI
         bool recruitHero( Castle & castle, bool buyArmy, bool underThreat );
         void reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget );
         void evaluateRegionSafety();
-        std::set<int> findCastlesInDanger( const KingdomCastles & castles, const std::vector<std::pair<int, const Army *>> & enemyArmies, int myColor );
         std::vector<AICastle> getSortedCastleList( const KingdomCastles & castles, const std::set<int> & castlesInDanger );
 
         double getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const;
@@ -288,6 +286,23 @@ namespace AI
         }
 
     private:
+        struct EnemyArmy
+        {
+            EnemyArmy() = default;
+
+            EnemyArmy( const int index_, const double strength_, const uint32_t movePoints_ )
+                : index( index_ )
+                , strength( strength_ )
+                , movePoints( movePoints_ )
+            {
+                // Do nothing.
+            }
+
+            int index{ -1 };
+            double strength{ 0 };
+            uint32_t movePoints{ 0 };
+        };
+
         // following data won't be saved/serialized
         double _combinedHeroStrength = 0;
         std::vector<IndexObject> _mapActionObjects;
@@ -324,6 +339,8 @@ namespace AI
         }
 
         void updateMapActionObjectCache( const int mapIndex );
+
+        std::set<int> findCastlesInDanger( const KingdomCastles & castles, const std::vector<EnemyArmy> & enemyArmies, int myColor );
     };
 }
 

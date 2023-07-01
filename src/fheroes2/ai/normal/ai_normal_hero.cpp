@@ -1704,18 +1704,79 @@ namespace AI
                 }
             }
 
-            const RegionStats & regionStats = _regions[world.GetTiles( destination ).GetRegion()];
+            const Maps::Tiles & destinationTile = world.GetTiles( destination );
 
-            if ( heroStrength < regionStats.highestThreat ) {
-                const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
+            // TODO: check nearby enemy heroes and distance to them instead of relying on region stats.
+            const RegionStats & regionStats = _regions[destinationTile.GetRegion()];
 
-                if ( castle && ( castle->GetGarrisonStrength( &hero ) <= 0 || castle->GetColor() == hero.GetColor() ) )
-                    value -= dangerousTaskPenalty / 2;
-                else
+            const bool isObjectReachableAtThisTurn = ( distance <= leftMovePoints );
+
+            // Go into "coward" mode only if the threat is real. Equal by strength heroes rarely attack each other.
+            if ( heroStrength * AI::ARMY_ADVANTAGE_SMALL < regionStats.highestThreat ) {
+                switch ( type ) {
+                case MP2::OBJ_CASTLE: {
+                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
+                    assert( castle != nullptr );
+                    if ( castle == nullptr ) {
+                        break;
+                    }
+
+                    if ( castle->GetColor() == hero.GetColor() ) {
+                        // Friendly castles are always the priority so no penalty for them.
+                        break;
+                    }
+
+                    if ( isObjectReachableAtThisTurn ) {
+                        if ( castle->GetGarrisonStrength( &hero ) > heroStrength / 2 ) {
+                            value -= dangerousTaskPenalty / 4;
+                        }
+                        else {
+                            value -= dangerousTaskPenalty / 10;
+                        }
+                    }
+                    else if ( castle->GetGarrisonStrength( &hero ) > heroStrength / 2 ) {
+                        value -= dangerousTaskPenalty / 2;
+                    }
+                    else {
+                        value -= dangerousTaskPenalty / 3;
+                    }
+
+                    break;
+                }
+                case MP2::OBJ_HEROES: {
+                    const Heroes * anotherHero = destinationTile.GetHeroes();
+                    assert( anotherHero != nullptr );
+                    if ( anotherHero == nullptr ) {
+                        break;
+                    }
+
+                    if ( anotherHero->GetColor() == hero.GetColor() ) {
+                        if ( isObjectReachableAtThisTurn ) {
+                            value -= dangerousTaskPenalty / 8;
+                        }
+                        else {
+                            value -= dangerousTaskPenalty / 4;
+                        }
+                    }
+                    else {
+                        if ( isObjectReachableAtThisTurn ) {
+                            value -= dangerousTaskPenalty / 8;
+                        }
+                        else {
+                            value -= dangerousTaskPenalty / 2;
+                        }
+                    }
+
+                    break;
+                }
+                default:
+                    // It is better to avoid all other objects if the current hero is under a big threat.
                     value -= dangerousTaskPenalty;
+                    break;
+                }
             }
 
-            if ( distance > leftMovePoints ) {
+            if ( !isObjectReachableAtThisTurn ) {
                 // Distant object which is out of reach for the current turn must have lower priority.
                 distance = leftMovePoints + ( distance - leftMovePoints ) * 2;
             }

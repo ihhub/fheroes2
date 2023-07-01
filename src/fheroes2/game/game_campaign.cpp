@@ -1235,7 +1235,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
     playPreviousScenarioVideo();
 
     if ( campaignData.isLastScenario( lastCompletedScenarioInfo ) ) {
-        Game::ShowCredits();
+        Game::ShowCredits( false );
 
         // Get data for ratings text.
         const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
@@ -1256,7 +1256,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
 
         textBody = _( "Score: %{score}\n\nRating:\n%{rating}" );
         StringReplace( textBody, "%{score}", score );
-        StringReplace( textBody, "%{rating}", fheroes2::HighScoreDataContainer::getMonsterByDay( daysPassed ).GetName() );
+        StringReplace( textBody, "%{rating}", fheroes2::HighScoreDataContainer::getMonsterByDay( score ).GetName() );
         ratingText.add( { textBody, fheroes2::FontType::normalWhite() } );
 
         // Show results from the 5th second until end (forever) and set maximum width to 140 to fit the black area.

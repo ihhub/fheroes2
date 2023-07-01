@@ -22,11 +22,14 @@
 #include <cassert>
 #include <cstdint>
 #include <cstring>
+#include <functional>
+#include <memory>
 #include <ostream>
 #include <string_view>
 #include <vector>
 
 #include <SDL_error.h>
+#include <SDL_stdinc.h>
 #include <SDL_version.h>
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -100,6 +103,9 @@ namespace
             col.r = *value;
             col.g = *( value + 1 );
             col.b = *( value + 2 );
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+            col.a = 255;
+#endif
         }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -166,17 +172,48 @@ namespace fheroes2
 
     bool Load( const std::string & path, Image & image )
     {
+        std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> surface( nullptr, SDL_FreeSurface );
+
+        {
+            std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> loadedSurface( nullptr, SDL_FreeSurface );
+
 #if defined( ENABLE_PNG )
-        SDL_Surface * surface = IMG_Load( path.c_str() );
+            loadedSurface.reset( IMG_Load( path.c_str() ) );
 #else
-        SDL_Surface * surface = SDL_LoadBMP( path.c_str() );
+            loadedSurface.reset( SDL_LoadBMP( path.c_str() ) );
 #endif
-        if ( surface == nullptr ) {
-            return false;
+            if ( !loadedSurface ) {
+                return false;
+            }
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+// SDL_PIXELFORMAT_BGRA32 and other RGBA color variants are only supported starting with SDL 2.0.5
+#if !SDL_VERSION_ATLEAST( 2, 0, 5 )
+#error Minimal supported SDL version is 2.0.5.
+#endif
+
+            // Image loading functions can theoretically return SDL_Surface in any supported color format, so we will convert it to a specific format for subsequent
+            // processing
+            const std::unique_ptr<SDL_PixelFormat, std::function<void( SDL_PixelFormat * )>> pixelFormat( SDL_AllocFormat( SDL_PIXELFORMAT_BGRA32 ), SDL_FreeFormat );
+            if ( !pixelFormat ) {
+                return false;
+            }
+
+            surface.reset( SDL_ConvertSurface( loadedSurface.get(), pixelFormat.get(), 0 ) );
+            if ( !surface ) {
+                return false;
+            }
+
+            assert( SDL_MUSTLOCK( surface.get() ) == SDL_FALSE && surface->format->BytesPerPixel == 4 );
+#else
+            // With SDL1, we just use the loaded SDL_Surface as is and hope for the best
+            surface = std::move( loadedSurface );
+#endif
         }
 
-        assert( !image.singleLayer() );
+        assert( surface && SDL_MUSTLOCK( surface.get() ) == SDL_FALSE );
 
+        // TODO: with SDL2 we can use specific color format of SDL_Surface, therefore, most of this code will not be needed
         if ( surface->format->BytesPerPixel == 1 ) {
             const SDL_Palette * palette = surface->format->palette;
             assert( palette != nullptr );
@@ -284,11 +321,8 @@ namespace fheroes2
             }
         }
         else {
-            SDL_FreeSurface( surface );
             return false;
         }
-
-        SDL_FreeSurface( surface );
 
         return true;
     }
@@ -320,13 +354,16 @@ namespace fheroes2
                 ++data;
             }
             else if ( 0x80 > *data ) { // 0x01-0x7F - repeat a pixel N times
-                assert( dataEnd - data - 2 >= 0 );
-
-                const uint32_t pixelCount = std::min( static_cast<uint32_t>( *data ), static_cast<uint32_t>( dataEnd - data - 2 ) );
+                const uint8_t pixelCount = *data;
                 ++data;
 
+                if ( data + pixelCount > dataEnd ) {
+                    // Image data is corrupted - we can not read data beyond dataEnd.
+                    break;
+                }
+
                 memcpy( imageData + posX, data, pixelCount );
-                std::fill( imageTransform + posX, imageTransform + posX + pixelCount, static_cast<uint8_t>( 0 ) );
+                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
                 data += pixelCount;
                 posX += pixelCount;
             }
@@ -354,7 +391,7 @@ namespace fheroes2
                 const uint32_t pixelCount = *data % 4 ? *data % 4 : *( ++data );
 
                 if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
-                    std::fill( imageTransform + posX, imageTransform + posX + pixelCount, transformType );
+                    memset( imageTransform + posX, transformType, pixelCount );
                 }
 
                 posX += pixelCount;
@@ -366,8 +403,8 @@ namespace fheroes2
                 const uint32_t pixelCount = *data;
                 ++data;
 
-                std::fill( imageData + posX, imageData + posX + pixelCount, *data );
-                std::fill( imageTransform + posX, imageTransform + posX + pixelCount, static_cast<uint8_t>( 0 ) );
+                memset( imageData + posX, *data, pixelCount );
+                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
                 posX += pixelCount;
 
                 ++data;
@@ -376,8 +413,8 @@ namespace fheroes2
                 const uint32_t pixelCount = *data - 0xC0;
                 ++data;
 
-                std::fill( imageData + posX, imageData + posX + pixelCount, *data );
-                std::fill( imageTransform + posX, imageTransform + posX + pixelCount, static_cast<uint8_t>( 0 ) );
+                memset( imageData + posX, *data, pixelCount );
+                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
                 posX += pixelCount;
 
                 ++data;

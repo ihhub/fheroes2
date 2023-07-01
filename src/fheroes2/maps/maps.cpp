@@ -315,7 +315,8 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
     const fheroes2::Point center = Maps::GetPoint( tileIndex );
 
     // AI is cheating!
-    const bool isAIPlayer = world.GetKingdom( playerColor ).isControlAI();
+    const Kingdom & kingdom = world.GetKingdom( playerColor );
+    const bool isAIPlayer = kingdom.isControlAI();
     if ( isAIPlayer ) {
         scoutingDistance += Difficulty::GetScoutingBonus( Game::getDifficulty() );
     }
@@ -344,7 +345,7 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
             if ( revealRadiusSquared >= dx * dx + dy * dy ) {
                 Maps::Tiles & tile = world.GetTiles( x, y );
                 if ( isAIPlayer && tile.isFog( playerColor ) ) {
-                    AI::Get().revealFog( tile );
+                    AI::Get().revealFog( tile, kingdom );
                 }
 
                 if ( tile.isFog( alliedColors ) ) {

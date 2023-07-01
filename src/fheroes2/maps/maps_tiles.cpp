@@ -1711,52 +1711,42 @@ void Maps::Tiles::RestoreAbandonedMine( Tiles & tile, const int resource )
         }
     };
 
+    auto restoreMineObjectType = [&tile]( int directionVector ) {
+        if ( Maps::isValidDirection( tile._index, directionVector ) ) {
+            Tiles & mineTile = world.GetTiles( Maps::GetDirectionIndex( tile._index, directionVector ) );
+            if ( ( mineTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
+                 && ( mineTile._uid == tile._uid || mineTile.FindAddonLevel1( tile._uid ) || mineTile.FindAddonLevel2( tile._uid ) ) ) {
+                mineTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
+            }
+        }
+    };
+
     restoreLeftSprite( tile._objectIcnType, tile._imageIndex );
     for ( TilesAddon & addon : tile.addons_level1 ) {
-        restoreLeftSprite( addon._objectIcnType, addon._imageIndex );
+        if ( addon._uid == tile._uid ) {
+            restoreLeftSprite( addon._objectIcnType, addon._imageIndex );
+        }
     }
 
     if ( Maps::isValidDirection( tile._index, Direction::RIGHT ) ) {
         Tiles & rightTile = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::RIGHT ) );
+
+        if ( rightTile._uid == tile._uid ) {
+            restoreRightSprite( rightTile._objectIcnType, rightTile._imageIndex );
+        }
+
         TilesAddon * addon = rightTile.FindAddonLevel1( tile._uid );
 
         if ( addon ) {
             restoreRightSprite( addon->_objectIcnType, addon->_imageIndex );
         }
-
-        if ( rightTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
-            rightTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
-            restoreRightSprite( rightTile._objectIcnType, rightTile._imageIndex );
-        }
     }
 
-    if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        Tiles & leftTile = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) );
-        if ( leftTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
-            leftTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
-        }
-    }
-
-    if ( Maps::isValidDirection( tile._index, Direction::TOP ) ) {
-        Tiles & upperTile = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::TOP ) );
-        if ( upperTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
-            upperTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
-        }
-
-        if ( Maps::isValidDirection( upperTile._index, Direction::LEFT ) ) {
-            Tiles & upperLeftTile = world.GetTiles( Maps::GetDirectionIndex( upperTile._index, Direction::LEFT ) );
-            if ( upperLeftTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
-                upperLeftTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
-            }
-        }
-
-        if ( Maps::isValidDirection( upperTile._index, Direction::RIGHT ) ) {
-            Tiles & upperRightTile = world.GetTiles( Maps::GetDirectionIndex( upperTile._index, Direction::RIGHT ) );
-            if ( upperRightTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE ) {
-                upperRightTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
-            }
-        }
-    }
+    restoreMineObjectType( Direction::LEFT );
+    restoreMineObjectType( Direction::RIGHT );
+    restoreMineObjectType( Direction::TOP );
+    restoreMineObjectType( Direction::TOP_LEFT );
+    restoreMineObjectType( Direction::TOP_RIGHT );
 }
 
 void Maps::Tiles::ClearFog( const int colors )

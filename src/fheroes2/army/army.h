@@ -118,11 +118,12 @@ public:
 
     void splitWeakestTroopsIfPossible();
 
+    // Combines all stacks consisting of identical monsters
+    void MergeSameMonsterTroops();
+
 protected:
     void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver );
 
-    // Combines all stacks consisting of identical monsters
-    void MergeSameMonsterTroops();
     // Combines two stacks consisting of identical monsters. Returns true if there was something to combine, otherwise returns false.
     bool MergeSameMonsterOnce();
     // Returns an optimized version of this Troops instance, i.e. all stacks of identical monsters are combined and there are no empty slots
@@ -197,7 +198,7 @@ public:
     uint32_t getTotalCount() const;
 
     double GetStrength() const override;
-    bool isStrongerThan( const Army & target, double safetyRatio = 1.0 ) const;
+    bool isStrongerThan( const Army & target, const double safetyRatio = 1.0 ) const;
     bool isMeleeDominantArmy() const;
 
     void SetColor( int cl )

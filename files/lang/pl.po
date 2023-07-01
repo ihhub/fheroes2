@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-03 06:46+0000\n"
+"POT-Creation-Date: 2023-06-14 20:35+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -491,7 +491,7 @@ msgid "A glorious victory!"
 msgstr "Wspaniałe zwycięstwo!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr "Za odwagę w walce, %{name} otrzymuje %{exp} pkt. doświadczenia"
+msgstr "Za odwagę w walce, %{name} otrzymuje %{exp} pkt. doświadczenia."
 
 msgid "The cowardly %{name} flees from battle."
 msgstr "%{name} tchórzliwie ucieka z pola bitwy."
@@ -1804,7 +1804,9 @@ msgstr ""
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
-msgstr "Królestwo otrzyma dodatkowe %{resource} na starcie scenariusza."
+msgstr ""
+"Królestwo otrzyma dodatkowe %{amount} mniej %{resource} na starcie "
+"scenariusza."
 
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
@@ -1857,7 +1859,7 @@ msgid "For this action it is necessary to build a castle first."
 msgstr "Najpierw trzeba zbudować zamek."
 
 msgid "Cannot build %{name} because castle is too far from water."
-msgstr "%{name} - nie można zbudować, zamek jest za daleko od wody"
+msgstr "%{name} - nie można zbudować, zamek jest za daleko od wody."
 
 msgid "disable build."
 msgstr "nie można zbudować."
@@ -2422,7 +2424,7 @@ msgid ""
 "The Well increases the growth rate of all dwellings by %{count} creatures "
 "per week."
 msgstr ""
-"Studnia zwiększa przyrost populacji wszystkich stworzeń o 2 jednostki "
+"Studnia zwiększa przyrost populacji wszystkich stworzeń o %{count} jednostki "
 "tygodniowo."
 
 msgid "The Statue increases your town's income by %{count} gold per day."
@@ -2695,17 +2697,16 @@ msgid "Are you sure you want to dismiss this army?"
 msgstr "Czy na pewno chcesz zwolnić ten oddział?"
 
 msgid "Upgrade"
-msgstr ""
+msgstr "Ulepsz"
 
-#, fuzzy
 msgid "Upgrade your troops."
-msgstr "Nie stać cię na ulepszenie oddziałów!"
+msgstr "Ulepsz oddział."
 
 msgid "Dismiss"
-msgstr ""
+msgstr "Zwolnij"
 
 msgid "Dismiss this army."
-msgstr ""
+msgstr "Zwolnij ten oddział."
 
 msgid "Followers"
 msgstr "Sprzymierzeńcy"
@@ -2722,7 +2723,7 @@ msgid ""
 "army for the sum of %{gold} gold.\n"
 "Do you accept?"
 msgstr ""
-"Przeciwnik jest pod wrażeniem twej dyplomatycznej przemowy i proponuje, że "
+"%{monster} jest pod wrażeniem twej dyplomatycznej przemowy i proponuje, że "
 "przyłączy się do twej armii za cenę %{gold} szt. złota. Zgadzasz się?"
 
 msgid ""
@@ -2958,7 +2959,7 @@ msgid "Change the resolution of the game."
 msgstr "Zmień rozdzielczość gry."
 
 msgid "Select Game Resolution"
-msgstr "Wybierz rozdzielczość gry:"
+msgstr "Wybierz rozdzielczość gry"
 
 msgid "Toggle between fullscreen and windowed modes."
 msgstr "Przełącz pomiędzy pełnym ekranem w widokiem w oknie."
@@ -3034,7 +3035,7 @@ msgid "n/a"
 msgstr "nd."
 
 msgid "guarded by %{count} %{monster}"
-msgstr "Strażnicy: %{monster} (%{count})"
+msgstr "strzeżona przez %{count} %{monster}"
 
 msgid "guarded by "
 msgstr "strzeżone przez "
@@ -3046,13 +3047,13 @@ msgid "(empty)"
 msgstr "(nie ma nikogo)"
 
 msgid "already learned"
-msgstr "Już to umiesz"
+msgstr "już to umiesz"
 
 msgid "already knows this skill"
-msgstr "Już znasz tę umiejętność"
+msgstr "już znasz tę umiejętność"
 
 msgid "already has max skills"
-msgstr "Posiadasz maksimum umiejętności"
+msgstr "posiadasz maksimum umiejętności"
 
 msgid "(already visited)"
 msgstr "(już odwiedzono)"
@@ -3253,7 +3254,7 @@ msgid "Map difficulty:"
 msgstr "Poziom:"
 
 msgid "N"
-msgstr ""
+msgstr "N"
 
 msgid "No maps exist at that size"
 msgstr "Brak map o tym rozmiarze"
@@ -3504,45 +3505,40 @@ msgid "Best Monster:"
 msgstr "Najlepszy potwór:"
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr ""
+msgstr "Utwórz mapę o długości %{size} i szerokości %{size}."
 
-#, fuzzy
 msgid "Cancel back to the New Map menu."
-msgstr "Wróć do głównego menu."
+msgstr "Anuluj, aby wrócić do menu Nowa Mapa."
 
 msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
+msgstr "Utwórz mapę albo od początku albo używając generatora losowych map."
 
-#, fuzzy
 msgid "New Map"
-msgstr "New Dawn"
+msgstr "Nowa Mapa"
 
-#, fuzzy
 msgid "Load Map"
-msgstr "Wczytaj grę"
+msgstr "Wczytaj Mapę"
 
 msgid "Load an existing map."
-msgstr ""
+msgstr "Wczytaj istniejącą mapę."
 
 msgid "Cancel back to the main menu."
 msgstr "Wróć do głównego menu."
 
 msgid "From Scratch"
-msgstr ""
+msgstr "Od początku"
 
 msgid "Start from scratch with a blank map."
-msgstr ""
+msgstr "Zacznij od początku pustą mapę."
 
 msgid "Create a randomly generated map."
-msgstr ""
+msgstr "Utwórz losowo wygenerowaną mapę."
 
-#, fuzzy
 msgid "Random"
-msgstr "Losowo"
+msgstr "Losowa"
 
-#, fuzzy
 msgid "Cancel back to the Map Editor main menu."
-msgstr "Wróć do głównego menu."
+msgstr "Anuluj, aby wrócić do głównego menu."
 
 msgid "No maps available!"
 msgstr "Mapy niedostępne!"
@@ -3912,24 +3908,20 @@ msgstr "wybierz oryginalną kampanię"
 msgid "hotkey|choose the expansion campaign"
 msgstr "wybierz kampanię z rozszerzenia"
 
-#, fuzzy
 msgid "hotkey|map editor main menu"
-msgstr "Kampania"
+msgstr "edytor map główne menu"
 
-#, fuzzy
 msgid "hotkey|new map menu"
-msgstr "Pokaż następnego bohatera"
+msgstr "nowa mapa"
 
-#, fuzzy
 msgid "hotkey|load map menu"
-msgstr "Gra standardowa"
+msgstr "wczytaj mapę"
 
 msgid "hotkey|new map from scratch"
-msgstr ""
+msgstr "nowa mapa od początku"
 
-#, fuzzy
 msgid "hotkey|new random map"
-msgstr "Przegląd królestwa"
+msgstr "nowa losowa mapa"
 
 msgid "hotkey|roland campaign"
 msgstr "kampania Rolanda"
@@ -4157,7 +4149,7 @@ msgid "Unsupported save format: "
 msgstr "Niewspierany format zapisanej gry: "
 
 msgid "Current game version: "
-msgstr "Aktualna wersja gry:"
+msgstr "Aktualna wersja gry: "
 
 msgid "Last supported version: "
 msgstr "Ostatnia wspierana wersja: "
@@ -4293,7 +4285,7 @@ msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr "Jedna z czterech kampani z rozszerzenia Cena Lojalności."
 
 msgid "Loading video. Please wait..."
-msgstr ""
+msgstr "Wczytuję video. Proszę czekać..."
 
 msgid "Host"
 msgstr "Gospodarz"
@@ -4409,7 +4401,7 @@ msgstr ""
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
-msgstr "Wróg zdobył miasto %{name} i odnosi zwycięstwo!"
+msgstr "Wróg zdobył miasto %{name} i odnosi zwycięstwo."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
@@ -4579,7 +4571,7 @@ msgid_plural ""
 "After regular growth, the population of %{monster} increases by %{count} "
 "percent!"
 msgstr[0] ""
-"Dzięki naturalnemu przyrostowi populacja %{monter} zwiększa się o %{count} "
+"Dzięki naturalnemu przyrostowi populacja %{monster} zwiększa się o %{count} "
 "procent!"
 msgstr[1] ""
 "Dzięki naturalnemu przyrostowi populacja %{monter} zwiększa się o %{count} "
@@ -4782,6 +4774,8 @@ msgid ""
 "Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
 "it even if he found it - all his artifact slots are full."
 msgstr ""
+"Poszukiwania Najpotężniejszego Artefaktu nie jest możliwe. Twój bohater nie "
+"utrzyma go nawet jeśli go znajdzie - wszystkie sloty na artefakty są zajęte."
 
 msgid "Digging for artifacts requires a whole day, try again tomorrow."
 msgstr "Szukanie artefaktu zajmuje cały dzień, spróbuj ponownie jutro."
@@ -4866,7 +4860,7 @@ msgstr ""
 "Tutaj można ustawić utrudnienia dla poszczególnych graczy. Tylko gracze-"
 "ludzie mogą zostać obłożeni utrudnieniami. Taki gracz zaczyna z mniejszą "
 "ilością zasobów, a także otrzymuje 15% lub 30% mniej zasobów co turę, "
-"odpowiednio dla utrudnień niewielkich i znacznych. "
+"odpowiednio dla utrudnień niewielkich i znacznych."
 
 msgid "%{color} player"
 msgstr "%{color} gracz"
@@ -5254,7 +5248,7 @@ msgstr ""
 "Spróbuj przyjść tu za tydzień."
 
 msgid "You come upon the remains of an unfortunate adventurer."
-msgstr "Dotarłeś do szczątek pechowego poszukiwacza"
+msgstr "Dotarłeś do szczątek pechowego poszukiwacza."
 
 msgid "Treasure"
 msgstr "Skarb"
@@ -5263,7 +5257,7 @@ msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Po przeszukaniu rozdartego ubrania, znajdujesz %{artifact}."
 
 msgid "Searching through the tattered clothing, you find nothing."
-msgstr "Nic nie znajdujesz w tym podartym ubraniu"
+msgstr "Nic nie znajdujesz w tym podartym ubraniu."
 
 msgid ""
 "You come across an old wagon left by a trader who didn't quite make it to "
@@ -6271,7 +6265,7 @@ msgid ""
 "%{count} gold."
 msgstr ""
 "Demon wykrzykując wyzywa Cię na pojedynek po czym atakuje. Po krótkiej, "
-"rozpaczliwej walce, zabijasz potwora i otrzymujesz %{exp) punktów "
+"rozpaczliwej walce, zabijasz potwora i otrzymujesz %{exp} punktów "
 "doświadczenia i %{count} złota."
 
 msgid ""
@@ -6547,9 +6541,8 @@ msgstr "Zaklęcie nie zostało znalezione."
 msgid "Only heroes can cast this spell."
 msgstr "Tylko bohaterowie mogą rzucać to zaklęcie."
 
-#, fuzzy
 msgid "This hero is not able to cast adventure spells."
-msgstr "Rzuć zaklęcie podróżne."
+msgstr "Twój bohater nie może rzucić żadnego czaru podróżnego."
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
@@ -6559,8 +6552,22 @@ msgstr ""
 msgid "This spell cannot be used on a boat."
 msgstr "Ten czar nie może być rzucony z łodzi."
 
-msgid "This spell can be casted only nearby water."
+#, fuzzy
+msgid "This spell can be casted only nearby ocean."
 msgstr "Ten czar może być rzucony tylko przy wodzie."
+
+msgid ""
+"There is no boat available and no free ocean location near the hero to cast "
+"this spell."
+msgstr ""
+
+#, fuzzy
+msgid "There is no more boat available to cast this spell."
+msgstr "Twój bohater nie może rzucić żadnego czaru podróżnego."
+
+#, fuzzy
+msgid "There is no free ocean location near the hero to cast this spell."
+msgstr "Aby rzucić ten czar, musisz najpierw pokonać duchy strzegące kopalni."
 
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
@@ -6589,11 +6596,15 @@ msgid ""
 "No opponent can have heroes under his command anymore. Casting this spell "
 "will not bring any advantage."
 msgstr ""
+"Żaden przeciwnik nie może mieć bohatera. Użycie tego czaru nie da żadnych "
+"rezultatów."
 
 msgid ""
 "No opponent has a hero under his command at this time. Casting this spell "
 "will not bring any advantage."
 msgstr ""
+"Żaden przeciwnik nie ma aktualnie bohatera. Użycie tego czaru nie da żadnych "
+"rezultatów."
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -6610,12 +6621,14 @@ msgstr ""
 "laboratoria nie są brane pod uwagę)."
 
 msgid "You must first defeat the ghosts guarding the mine to cast this spell."
-msgstr ""
+msgstr "Aby rzucić ten czar, musisz najpierw pokonać duchy strzegące kopalni."
 
 msgid ""
 "There are already at least as many elementals guarding the mine than the "
 "spell can generate. Casting this spell will not bring any advantage."
 msgstr ""
+"Kopalni strzeże już tyle żywiołaków, ilu mógłbyś przywołać. Rzucenie tego "
+"zaklęcia nie da żadnego rezultatu."
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name}, %{race} (poziom %{level})"
@@ -6700,9 +6713,6 @@ msgstr "Miejski Portal"
 
 msgid "Select town to port to."
 msgstr "Wybierz miasto docelowe."
-
-msgid "%{spell} failed!!!"
-msgstr "Czar %{spell} nie udał się!!!"
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Można już w pełni zidentyfikować wrogich bohaterów."
@@ -7152,7 +7162,7 @@ msgid "Garrison"
 msgstr "Garnizon"
 
 msgid "Gold Per Day:"
-msgstr "Złota na dzień."
+msgstr "Złota na dzień:"
 
 msgid "Heroes"
 msgstr "Bohaterowie"
@@ -7164,7 +7174,7 @@ msgid "Towns/Castles"
 msgstr "Miasta/Zamki"
 
 msgid "View Towns and Castles."
-msgstr "Pokaż miasta i zamki"
+msgstr "Pokaż miasta i zamki."
 
 msgid "luck|Cursed"
 msgstr "Beznadziejne"
@@ -7623,7 +7633,7 @@ msgid "Boat"
 msgstr "Łódź"
 
 msgid "Random Ultimate Artifact"
-msgstr "Losowy najpotężniejszy artefakt."
+msgstr "Losowy najpotężniejszy artefakt"
 
 msgid "Random Artifact"
 msgstr "Losowy artefakt"
@@ -8391,7 +8401,7 @@ msgid "% damage from %{spell} spell"
 msgstr "% obrażeń od czaru %{spell}"
 
 msgid "% immunity to "
-msgstr "% odporności na czar %{spell}"
+msgstr "% odporności na "
 
 msgid "Lightning"
 msgstr "błyskawic"
@@ -9583,8 +9593,8 @@ msgid ""
 "The %{name} increases your spell power by %{count} but adds the undead "
 "morale penalty."
 msgstr ""
-"%{name}  zwiększa twoją Moc czaru o %{count} ale również dodaje ujemne "
-"morale dla nieumarłych"
+"%{name} zwiększa twoją Moc o %{count} ale również dodaje ujemne morale dla "
+"nieumarłych."
 
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
@@ -9682,8 +9692,8 @@ msgid ""
 "The %{name} provides %{count} percent protection from fire, but doubles the "
 "damage taken from cold."
 msgstr ""
-"%{name} zapewnia %{count} procent ochrony od ognia, ale podwaja uszkodzenia "
-"otrzymane od zimna"
+"%{name} zapewnia %{count} procent ochrony od ognia, ale podwaja uszkodzeni "
+"otrzymane od zimna."
 
 msgid ""
 "You enter a recently burned glade and come upon a Fire Elemental sitting "
@@ -10501,3 +10511,6 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{spell} failed!!!"
+#~ msgstr "Czar %{spell} nie udał się!!!"
