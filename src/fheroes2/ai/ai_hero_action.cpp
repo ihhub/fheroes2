@@ -1845,8 +1845,8 @@ namespace AI
         if ( path.isValid() ) {
             hero.SetMove( true );
 
-            Interface::AdventureMap & basicInterface = Interface::AdventureMap::Get();
-            Interface::GameArea & gameArea = basicInterface.getGameArea();
+            Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+            Interface::GameArea & gameArea = adventureMapInterface.getGameArea();
 
             const Settings & conf = Settings::Get();
 
@@ -1891,10 +1891,10 @@ namespace AI
                         // Update Adventure Map objects' animation.
                         Game::updateAdventureMapAnimationIndex();
 
-                        basicInterface.redraw( Interface::REDRAW_GAMEAREA );
+                        adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
 
                         // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
-                        assert( basicInterface.getRedrawMask() == 0 );
+                        assert( adventureMapInterface.getRedrawMask() == 0 );
 
                         display.render();
                     }
@@ -1960,10 +1960,10 @@ namespace AI
                         Game::updateAdventureMapAnimationIndex();
                     }
 
-                    basicInterface.redraw( Interface::REDRAW_GAMEAREA );
+                    adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
 
                     // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
-                    assert( basicInterface.getRedrawMask() == 0 );
+                    assert( adventureMapInterface.getRedrawMask() == 0 );
 
                     display.render();
                 }

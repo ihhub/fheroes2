@@ -238,23 +238,23 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
     // If Castle dialog background was not rendered than we have opened it from other dialog (Kingdom Overview)
     // and there is no need update Adventure map interface at this time.
     if ( renderBackgroundDialog ) {
-        Interface::AdventureMap & basicInterface = Interface::AdventureMap::Get();
+        Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
         if ( updateFocus ) {
             if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
-                basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore], false );
+                adventureMapInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore], false );
             }
             else if ( it != myCastles.end() ) {
                 Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).GetHeroes();
                 if ( heroInCastle == nullptr ) {
-                    basicInterface.SetFocus( *it );
+                    adventureMapInterface.SetFocus( *it );
                 }
                 else {
-                    basicInterface.SetFocus( heroInCastle, false );
+                    adventureMapInterface.SetFocus( heroInCastle, false );
                 }
             }
             else {
-                basicInterface.ResetFocus( GameFocus::HEROES, false );
+                adventureMapInterface.ResetFocus( GameFocus::HEROES, false );
             }
         }
         else {
@@ -263,7 +263,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
         }
 
         // The castle garrison can change
-        basicInterface.RedrawFocus();
+        adventureMapInterface.RedrawFocus();
 
         // Fade-in game screen only for 640x480 resolution.
         if ( fheroes2::Display::instance().isDefaultSize() ) {
@@ -281,7 +281,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    Interface::AdventureMap & basicInterface = Interface::AdventureMap::Get();
+    Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
     const KingdomHeroes & myHeroes = hero.GetKingdom().GetHeroes();
     KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
@@ -320,7 +320,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
             // Check if this dialog is not opened from the other dialog and we will be exiting to the Adventure map.
             if ( renderBackgroundDialog ) {
                 // Redraw Adventure map with hidden hero path.
-                basicInterface.redraw( Interface::REDRAW_GAMEAREA );
+                adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
 
                 // Fade-in game screen only for 640x480 resolution.
                 if ( isDefaultScreenSize ) {
@@ -351,15 +351,15 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     if ( renderBackgroundDialog ) {
         if ( updateFocus ) {
             if ( it != myHeroes.end() ) {
-                basicInterface.SetFocus( *it, false );
+                adventureMapInterface.SetFocus( *it, false );
             }
             else {
-                basicInterface.ResetFocus( GameFocus::HEROES, false );
+                adventureMapInterface.ResetFocus( GameFocus::HEROES, false );
             }
         }
 
         // The hero's army can change
-        basicInterface.RedrawFocus();
+        adventureMapInterface.RedrawFocus();
 
         // Fade-in game screen only for 640x480 resolution.
         if ( needFade && renderBackgroundDialog && isDefaultScreenSize ) {

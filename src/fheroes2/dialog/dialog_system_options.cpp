@@ -418,9 +418,9 @@ namespace fheroes2
                 conf.setEvilInterface( !conf.isEvilInterfaceEnabled() );
                 saveConfiguration = true;
 
-                Interface::AdventureMap & basicInterface = Interface::AdventureMap::Get();
-                basicInterface.reset();
-                basicInterface.redraw( Interface::REDRAW_ALL );
+                Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+                adventureMapInterface.reset();
+                adventureMapInterface.redraw( Interface::REDRAW_ALL );
 
                 action = DialogAction::Open;
                 break;
@@ -429,13 +429,13 @@ namespace fheroes2
                 conf.setHideInterface( !conf.isHideInterfaceEnabled() );
                 saveConfiguration = true;
 
-                Interface::AdventureMap & basicInterface = Interface::AdventureMap::Get();
-                basicInterface.reset();
+                Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+                adventureMapInterface.reset();
 
                 // We need to redraw radar first due to the nature of restorers. Only then we can redraw everything.
                 // And we do a full radar redraw as it could be hidden in "Hide Interface" mode so it was not updated.
-                basicInterface.redraw( Interface::REDRAW_RADAR );
-                basicInterface.redraw( Interface::REDRAW_ALL & ~( Interface::REDRAW_RADAR_CURSOR | Interface::REDRAW_RADAR ) );
+                adventureMapInterface.redraw( Interface::REDRAW_RADAR );
+                adventureMapInterface.redraw( Interface::REDRAW_ALL & ~( Interface::REDRAW_RADAR_CURSOR | Interface::REDRAW_RADAR ) );
 
                 action = DialogAction::Open;
                 break;

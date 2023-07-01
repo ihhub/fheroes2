@@ -1059,11 +1059,11 @@ void Interface::GameArea::runSingleObjectAnimation( const std::shared_ptr<BaseOb
 
     LocalEvent & le = LocalEvent::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
-    Interface::AdventureMap & basicInterface = Interface::AdventureMap::Get();
+    Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_PICKUP_DELAY } ) ) && !info->isAnimationCompleted() ) {
         if ( Game::validateAnimationDelay( Game::HEROES_PICKUP_DELAY ) ) {
-            basicInterface.redraw( Interface::REDRAW_GAMEAREA );
+            adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
             display.render();
         }
     }
