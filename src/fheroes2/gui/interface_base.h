@@ -54,7 +54,7 @@ namespace Interface
     public:
         virtual ~BaseInterface() = default;
 
-        virtual void redraw( const uint32_t force = 0 ) = 0;
+        virtual void redraw( const uint32_t force ) = 0;
 
         bool needRedraw() const
         {

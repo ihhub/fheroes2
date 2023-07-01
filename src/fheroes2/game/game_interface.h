@@ -58,7 +58,7 @@ namespace Interface
     Heroes * GetFocusHeroes();
     int GetFocusType();
 
-    class AdventureMap : public BaseInterface
+    class AdventureMap final : public BaseInterface
     {
     public:
         // This class is used to lock rendering of Basic class. This is useful when we have to generate only a single frame.

@@ -30,7 +30,7 @@
 
 namespace Interface
 {
-    class Editor : public BaseInterface
+    class Editor final : public BaseInterface
     {
     public:
         static Editor & Get();
