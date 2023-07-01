@@ -1938,11 +1938,11 @@ namespace AI
             }
         }
 
-        updatePriorityTargets( hero, tileIndex, objectType );
-
         if ( isMonsterStrengthCacheable( objectType ) ) {
             _neutralMonsterStrengthCache.erase( tileIndex );
         }
+
+        updatePriorityTargets( hero, tileIndex, objectType );
 
         updateMapActionObjectCache( tileIndex );
     }

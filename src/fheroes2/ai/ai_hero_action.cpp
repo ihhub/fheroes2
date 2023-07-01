@@ -1833,9 +1833,8 @@ namespace AI
             hero.GetPath().Reset();
 
         // ignore empty tiles
-        if ( isActionObject ) {
+        if ( isActionObject )
             AI::Get().HeroesActionComplete( hero, dst_index, objectType );
-        }
     }
 
     void HeroesMove( Heroes & hero )
