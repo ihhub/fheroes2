@@ -1931,13 +1931,17 @@ namespace AI
             }
         };
 
-        const auto it = _priorityTargets.find( tileIndex );
+        auto it = _priorityTargets.find( tileIndex );
         if ( it == _priorityTargets.end() ) {
             // If the object is not a priority we have to update it after the battle as it can become the one.
             // Especially, when the opposite army has grown Skeletons or Ghosts.
             updateAttackPriorityTarget();
 
-            return;
+            // If the update did not add any priorities then nothing more to do.
+            it = _priorityTargets.find( tileIndex );
+            if ( it == _priorityTargets.end() ) {
+                return;
+            }
         }
 
         const PriorityTask & task = it->second;
