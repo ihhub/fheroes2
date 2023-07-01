@@ -113,7 +113,7 @@ namespace Interface
             GameBorderRedraw( true );
         }
 
-        if ( combinedRedraw & REDRAW_BUTTONS ) {
+        if ( combinedRedraw & REDRAW_PANEL ) {
             _editorPanel._redraw();
         }
 
@@ -149,7 +149,7 @@ namespace Interface
 
         _gameArea.SetUpdateCursor();
 
-        setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
+        setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_PANEL | REDRAW_STATUS | REDRAW_BORDER );
 
         int32_t fastScrollRepeatCount = 0;
         const int32_t fastScrollStartThreshold = 2;

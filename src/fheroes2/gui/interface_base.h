@@ -38,14 +38,13 @@ namespace Interface
         REDRAW_RADAR_CURSOR = 0x01,
         // To render radar map fully or in ROI and then the cursor over it.
         REDRAW_RADAR = 0x02,
-        REDRAW_HEROES = 0x04,
-        REDRAW_CASTLES = 0x08,
-        REDRAW_BUTTONS = 0x10,
-        REDRAW_STATUS = 0x20,
-        REDRAW_BORDER = 0x40,
-        REDRAW_GAMEAREA = 0x80,
+        REDRAW_BORDER = 0x04,
+        REDRAW_GAMEAREA = 0x08,
+        REDRAW_STATUS = 0x10,
 
-        REDRAW_ICONS = REDRAW_HEROES | REDRAW_CASTLES,
+        // IMPORTANT: values 0x20, 0x40, 0x80 (and higher) are interface specific and are declared in 'game_interface.h' and 'editor_interface.h'.
+        // Do not use them here.
+
         REDRAW_ALL = 0xFF
     };
 

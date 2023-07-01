@@ -29,7 +29,6 @@
 #include "dialog.h"
 #include "dialog_system_options.h"
 #include "editor_interface.h"
-#include "game_interface.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_base.h"
@@ -116,7 +115,7 @@ namespace Interface
 
     void EditorPanel::setRedraw() const
     {
-        _interface.setRedraw( REDRAW_BUTTONS );
+        _interface.setRedraw( REDRAW_PANEL );
     }
 
     void EditorPanel::_redraw() const
@@ -173,7 +172,8 @@ namespace Interface
             res = Editor::eventNewMap();
         }
         else if ( le.MouseClickLeft( _rectSpecs ) ) {
-            res = AdventureMap::EventScenarioInformation();
+            // TODO: Make the scenario info editor.
+            Dialog::GameInfo();
         }
         else if ( le.MouseClickLeft( _rectFile ) ) {
             res = Interface::Editor::eventFileDialog();

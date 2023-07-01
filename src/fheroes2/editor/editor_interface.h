@@ -30,6 +30,13 @@
 
 namespace Interface
 {
+    enum editorRedraw_t : uint32_t
+    {
+        // IMPORTANT: values 0x01 ... 0x10 are base for game/editor are declared in 'interface_base.h'. Do not use them here.
+
+        REDRAW_PANEL = 0x20,
+    };
+
     class Editor final : public BaseInterface
     {
     public:
