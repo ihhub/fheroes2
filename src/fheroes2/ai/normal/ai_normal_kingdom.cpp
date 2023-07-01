@@ -650,7 +650,8 @@ namespace AI
 
         if ( object == MP2::OBJ_HEROES ) {
             const Heroes * enemyHero = tile.GetHeroes();
-            if ( enemyHero != nullptr && enemyHero->GetColor() != kingdom.GetColor() ) {
+            if (
+                enemyHero != nullptr && !enemyHero->isFriends( kingdom.GetColor() ) && ( !enemyHero->Modes( Heroes::PATROL ) || enemyHero->GetPatrolDistance() != 0 ) ) {
                 const EnemyArmy enemyArmy{ tileIndex, MP2::OBJ_HEROES, enemyHero->GetArmy().GetStrength(), enemyHero->GetMaxMovePoints() };
                 updateEnemyArmy( enemyArmy );
                 updatePriorityForEnemyArmy( kingdom.GetCastles(), enemyArmy );
@@ -661,7 +662,7 @@ namespace AI
 
         if ( object == MP2::OBJ_CASTLE ) {
             const Castle * enemyCastle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
-            if ( enemyCastle != nullptr && enemyCastle->GetColor() != kingdom.GetColor() ) {
+            if ( enemyCastle != nullptr && !enemyCastle->isFriends( kingdom.GetColor() ) ) {
                 const EnemyArmy enemyArmy{ tileIndex, MP2::OBJ_CASTLE, enemyCastle->GetArmy().GetStrength(), 1500 };
                 updateEnemyArmy( enemyArmy );
                 updatePriorityForEnemyArmy( kingdom.GetCastles(), enemyArmy );
