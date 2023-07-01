@@ -1897,6 +1897,7 @@ namespace AI
         }
 
         const PriorityTask & task = it->second;
+
         switch ( task.type ) {
         case PriorityTaskType::DEFEND:
         case PriorityTaskType::REINFORCE: {

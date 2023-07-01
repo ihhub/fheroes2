@@ -207,6 +207,7 @@ namespace AI
 
     void Normal::reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )
     {
+        // It is impossible to reinforce dead heroes.
         assert( !hero.isFreeman() );
 
         const Heroes::AIHeroMeetingUpdater heroMeetingUpdater( hero );
