@@ -650,8 +650,7 @@ namespace AI
 
         if ( object == MP2::OBJ_HEROES ) {
             const Heroes * enemyHero = tile.GetHeroes();
-            if (
-                enemyHero != nullptr && !enemyHero->isFriends( kingdom.GetColor() ) && ( !enemyHero->Modes( Heroes::PATROL ) || enemyHero->GetPatrolDistance() != 0 ) ) {
+            if ( enemyHero != nullptr && !enemyHero->isFriends( kingdom.GetColor() ) && ( !enemyHero->Modes( Heroes::PATROL ) || enemyHero->GetPatrolDistance() != 0 ) ) {
                 const EnemyArmy enemyArmy{ tileIndex, MP2::OBJ_HEROES, enemyHero->GetArmy().GetStrength(), enemyHero->GetMaxMovePoints() };
                 updateEnemyArmy( enemyArmy );
                 updatePriorityForEnemyArmy( kingdom.GetCastles(), enemyArmy );
