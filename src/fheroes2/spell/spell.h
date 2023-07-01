@@ -240,7 +240,7 @@ public:
     static Spell RandAdventure( const int level );
 
     // Returns the IDs of all spells of a given level that are suitable for the spell book (i.e. no placeholders or exclusive
-    // built-in spells for monsters are returned). If 'spellLevel' is less than 1, it returns suitable spells of all levels.
+    // built-in spells for monsters are returned). If 'spellLevel' is less than 1, suitable spells of all levels are returned.
     static std::vector<int> getAllSpellIdsSuitableForSpellBook( const int spellLevel = -1 );
 
     static int32_t CalculateDimensionDoorDistance();
