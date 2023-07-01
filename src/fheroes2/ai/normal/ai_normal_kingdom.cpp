@@ -88,7 +88,7 @@ namespace
 
         TemporaryHeroEraser( TemporaryHeroEraser && ) = delete;
 
-        explicit TemporaryHeroEraser( std::vector<Heroes *> & heroes )
+        explicit TemporaryHeroEraser( const std::vector<Heroes *> & heroes )
             : _heroes( heroes )
         {
             for ( Heroes * hero : _heroes ) {
@@ -108,7 +108,7 @@ namespace
         TemporaryHeroEraser& operator=( TemporaryHeroEraser && ) = delete;
 
     private:
-        std::vector<Heroes *> & _heroes;
+        const std::vector<Heroes *> & _heroes;
     };
 
     void setHeroRoles( KingdomHeroes & heroes )
