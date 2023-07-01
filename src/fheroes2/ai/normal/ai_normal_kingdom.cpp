@@ -103,9 +103,9 @@ namespace
             }
         }
 
-        TemporaryHeroEraser& operator=( const TemporaryHeroEraser & ) = delete;
+        TemporaryHeroEraser & operator=( const TemporaryHeroEraser & ) = delete;
 
-        TemporaryHeroEraser& operator=( TemporaryHeroEraser && ) = delete;
+        TemporaryHeroEraser & operator=( TemporaryHeroEraser && ) = delete;
 
     private:
         const std::vector<Heroes *> & _heroes;
