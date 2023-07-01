@@ -350,7 +350,7 @@ namespace AI
         void updatePriorityForCastle( const Castle & castle );
 
         // Return true if the castle is in danger.
-        // IMPORTANT!!! Do not this method directly. Use other methods which call it internally.
+        // IMPORTANT!!! Do not call this method directly. Use other methods which call it internally.
         bool updateIndividualPriorityForCastle( const Castle & castle, const EnemyArmy & enemyArmy );
 
         void removePriorityAttackTarget( const int32_t tileIndex );
