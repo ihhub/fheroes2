@@ -774,7 +774,6 @@ namespace AI
 
             RegionStats & stats = _regions[regionID];
             if ( !underViewSpell && tile.isFog( myColor ) ) {
-                ++stats.fogCount;
                 continue;
             }
 
@@ -835,10 +834,6 @@ namespace AI
                         stats.highestThreat = castleThreat;
                     }
                 }
-            }
-            else if ( objectType == MP2::OBJ_MONSTER ) {
-                stats.averageMonster += Army( tile ).GetStrength();
-                ++stats.monsterCount;
             }
         }
 

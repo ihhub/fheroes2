@@ -69,12 +69,9 @@ namespace AI
     {
         bool evaluated = false;
         double highestThreat = -1;
-        double averageMonster = -1;
         int friendlyHeroes = 0;
         int friendlyCastles = 0;
         int enemyCastles = 0;
-        int monsterCount = 0;
-        int fogCount = 0;
         int safetyFactor = 0;
         int spellLevel = 2;
     };
