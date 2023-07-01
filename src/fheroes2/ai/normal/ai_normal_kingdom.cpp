@@ -646,7 +646,7 @@ namespace AI
 
         // Remove any old entries for enemy armies.
         // This can happen when the army has been defeated and we won't add new info about it.
-        removeEnemyArmy( tileIndex );
+        removeEnemyArmies( tileIndex );
 
         if ( object == MP2::OBJ_HEROES ) {
             const Heroes * enemyHero = tile.GetHeroes();
@@ -681,7 +681,7 @@ namespace AI
         _enemyArmies.emplace_back( enemyArmy );
     }
 
-    void Normal::removeEnemyArmy( const int32_t tileIndex )
+    void Normal::removeEnemyArmies( const int32_t tileIndex )
     {
         for ( auto iter = _enemyArmies.begin(); iter != _enemyArmies.end(); ) {
             if ( iter->index == tileIndex ) {

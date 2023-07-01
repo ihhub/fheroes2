@@ -307,19 +307,12 @@ namespace AI
 
         // following data won't be saved/serialized
         double _combinedHeroStrength = 0;
-
         std::vector<IndexObject> _mapActionObjects;
-
         std::map<int, PriorityTask> _priorityTargets;
-
         std::vector<EnemyArmy> _enemyArmies;
-
         std::vector<RegionStats> _regions;
-
         std::array<BudgetEntry, 7> _budget = { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
-
         AIWorldPathfinder _pathfinder;
-
         BattlePlanner _battlePlanner;
 
         // Monster strength is constant over the same turn for AI but its calculation is a heavy operation.
@@ -363,7 +356,7 @@ namespace AI
 
         void updateEnemyArmy( const EnemyArmy & enemyArmy );
 
-        void removeEnemyArmy( const int32_t tileIndex );
+        void removeEnemyArmies( const int32_t tileIndex );
     };
 }
 

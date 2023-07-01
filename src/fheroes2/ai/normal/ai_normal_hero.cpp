@@ -1898,12 +1898,12 @@ namespace AI
                     // How is it possible?
                     assert( 0 );
 
-                    removeEnemyArmy( tileIndex );
+                    removeEnemyArmies( tileIndex );
                     return;
                 }
 
                 if ( hero.isFriends( castle->GetColor() ) ) {
-                    removeEnemyArmy( tileIndex );
+                    removeEnemyArmies( tileIndex );
 
                     for ( const EnemyArmy & enemyArmy : _enemyArmies ) {
                         updatePriorityForCastle( *castle, enemyArmy );
@@ -1917,7 +1917,7 @@ namespace AI
                 const Heroes * anotherHero = world.GetTiles( tileIndex ).GetHeroes();
                 if ( anotherHero == nullptr ) {
                     // The hero died.
-                    removeEnemyArmy( tileIndex );
+                    removeEnemyArmies( tileIndex );
                     return;
                 }
 
