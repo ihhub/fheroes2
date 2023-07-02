@@ -315,8 +315,11 @@ namespace
             return true;
         }
 
-        // On-time visit free Primary Skill or Experience object.
+        // Arena allows to visit only one time for the whole map.
         case MP2::OBJ_ARENA:
+            return !hero.isObjectTypeVisited( objectType );
+
+        // On-time visit free Primary Skill or Experience object.
         case MP2::OBJ_FORT:
         case MP2::OBJ_GAZEBO:
         case MP2::OBJ_MERCENARY_CAMP:
