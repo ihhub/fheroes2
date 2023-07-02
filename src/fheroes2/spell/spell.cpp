@@ -544,9 +544,12 @@ std::vector<int> Spell::getAllSpellIdsSuitableForSpellBook( const int spellLevel
             continue;
         }
 
-        const Spell spell( spellId );
-        if ( spellLevel > 0 && spell.Level() != spellLevel ) {
-            continue;
+        if ( spellLevel > 0 ) {
+            const Spell spell( spellId );
+
+            if ( spell.Level() != spellLevel ) {
+                continue;
+            }
         }
 
         result.push_back( spellId );
