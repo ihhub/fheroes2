@@ -55,6 +55,7 @@ namespace AI
         }
 
         updateMapActionObjectCache( tile.GetIndex() );
+        updatePriorityAttackTarget( kingdom, tile );
 
         // If this is an action object and one of AI heroes is moving,
         // we have to stop him because the new object might be more valuable than the current target.

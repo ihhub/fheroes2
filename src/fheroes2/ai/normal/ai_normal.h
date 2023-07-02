@@ -65,16 +65,14 @@ struct KingdomCastles;
 
 namespace AI
 {
+    // TODO: this structure is not being updated during AI heroes' actions.
     struct RegionStats
     {
         bool evaluated = false;
         double highestThreat = -1;
-        double averageMonster = -1;
         int friendlyHeroes = 0;
         int friendlyCastles = 0;
         int enemyCastles = 0;
-        int monsterCount = 0;
-        int fogCount = 0;
         int safetyFactor = 0;
         int spellLevel = 2;
     };
@@ -255,7 +253,7 @@ namespace AI
         void revealFog( const Maps::Tiles & tile, const Kingdom & kingdom ) override;
 
         void HeroesPreBattle( HeroBase & hero, bool isAttacking ) override;
-        void HeroesActionComplete( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType ) override;
+        void HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType ) override;
 
         bool recruitHero( Castle & castle, bool buyArmy, bool underThreat );
         void reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget );
@@ -290,8 +288,9 @@ namespace AI
         {
             EnemyArmy() = default;
 
-            EnemyArmy( const int index_, const double strength_, const uint32_t movePoints_ )
+            EnemyArmy( const int index_, const MP2::MapObjectType type_, const double strength_, const uint32_t movePoints_ )
                 : index( index_ )
+                , type( type_ )
                 , strength( strength_ )
                 , movePoints( movePoints_ )
             {
@@ -299,6 +298,7 @@ namespace AI
             }
 
             int index{ -1 };
+            MP2::MapObjectType type{ MP2::OBJ_NONE };
             double strength{ 0 };
             uint32_t movePoints{ 0 };
         };
@@ -307,6 +307,7 @@ namespace AI
         double _combinedHeroStrength = 0;
         std::vector<IndexObject> _mapActionObjects;
         std::map<int, PriorityTask> _priorityTargets;
+        std::vector<EnemyArmy> _enemyArmies;
         std::vector<RegionStats> _regions;
         std::array<BudgetEntry, 7> _budget = { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
         AIWorldPathfinder _pathfinder;
@@ -340,7 +341,23 @@ namespace AI
 
         void updateMapActionObjectCache( const int mapIndex );
 
-        std::set<int> findCastlesInDanger( const KingdomCastles & castles, const std::vector<EnemyArmy> & enemyArmies, int myColor );
+        std::set<int> findCastlesInDanger( const Kingdom & kingdom );
+
+        void updatePriorityForEnemyArmy( const Kingdom & kingdom, const EnemyArmy & enemyArmy );
+
+        void updatePriorityForCastle( const Castle & castle );
+
+        // Return true if the castle is in danger.
+        // IMPORTANT!!! Do not call this method directly. Use other methods which call it internally.
+        bool updateIndividualPriorityForCastle( const Castle & castle, const EnemyArmy & enemyArmy );
+
+        void removePriorityAttackTarget( const int32_t tileIndex );
+
+        void updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tiles & tile );
+
+        void updateEnemyArmy( const EnemyArmy & enemyArmy );
+
+        void removeEnemyArmies( const int32_t tileIndex );
     };
 }
 
