@@ -347,11 +347,16 @@ namespace
                 return false;
             }
 
-            const double movementPenalty = 2.0 * pathfinder.getDistance( index );
+            const uint32_t distance = pathfinder.getDistance( index );
+            if ( distance == 0 ) {
+                return false;
+            }
+
+            const double movementPenalty = 2.0 * distance;
             return movementPenalty < GameStatic::getMovementPointBonus( objectType ) || hero.GetMorale() < Morale::BLOOD;
         }
 
-        case MP2::OBJ_MAGIC_WELL:
+        case MP2::OBJ_MAGIC_WELL: {
             if ( hero.isObjectTypeVisited( objectType ) ) {
                 return false;
             }
@@ -364,13 +369,19 @@ namespace
                 return false;
             }
 
-            if ( pathfinder.getDistance( index ) > hero.GetMovePoints() && hero.getDailyRestoredSpellPoints() + hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
+            const uint32_t distance = pathfinder.getDistance( index );
+            if ( distance == 0 ) {
+                return false;
+            }
+
+            if ( distance > hero.GetMovePoints() && hero.getDailyRestoredSpellPoints() + hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
                 // The Well is located at a distance which cannot be reached by the hero at the current turn.
                 // But if the hero will restore all spell points by the next day there is no reason to even to visit the Well.
                 return false;
             }
 
             return true;
+        }
 
         case MP2::OBJ_ARTESIAN_SPRING:
             return !hero.isVisited( tile, Visit::GLOBAL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
@@ -479,8 +490,13 @@ namespace
                 return true;
             }
 
+            const uint32_t distance = pathfinder.getDistance( index );
+            if ( distance == 0 ) {
+                return false;
+            }
+
             const int daysActive = DAYOFWEEK - world.GetDay() + 1;
-            const double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * pathfinder.getDistance( index );
+            const double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distance;
 
             return !hero.isObjectTypeVisited( objectType ) && movementBonus > 0;
         }
