@@ -124,10 +124,17 @@ namespace
 
     uint32_t getDistanceToObject( const Heroes & hero, const AIWorldPathfinder & pathfinder, const int32_t index )
     {
-        uint32_t dist = pathfinder.getDistance( index );
+        const uint32_t dist = pathfinder.getDistance( index );
 
-        const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( pathfinder.getDimensionDoorPath( hero, index ) );
-        if ( dimensionDoorDist > 0 && ( dist == 0 || dimensionDoorDist < dist / 2 ) ) {
+        const std::list<Route::Step> dimensionDoorSteps = pathfinder.getDimensionDoorPath( hero, index );
+        if ( dimensionDoorSteps.empty() ) {
+            return dist;
+        }
+
+        const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( dimensionDoorSteps );
+        assert( dimensionDoorDist > 0 );
+
+        if ( dist == 0 || dimensionDoorDist < dist / 2 ) {
             return dimensionDoorDist;
         }
 
