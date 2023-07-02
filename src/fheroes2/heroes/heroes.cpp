@@ -1065,7 +1065,7 @@ void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectT
 void Heroes::markHeroMeeting( int heroID )
 {
     if ( heroID < UNKNOWN && !hasMetWithHero( heroID ) )
-        visit_object.push_front( IndexObject( heroID, MP2::OBJ_HEROES ) );
+        visit_object.emplace_front( heroID, MP2::OBJ_HEROES );
 }
 
 void Heroes::unmarkHeroMeeting()
