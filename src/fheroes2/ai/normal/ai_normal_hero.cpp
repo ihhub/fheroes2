@@ -122,6 +122,18 @@ namespace
         return false;
     }
 
+    uint32_t getDistanceToObject( const Heroes & hero, const AIWorldPathfinder & pathfinder, const int32_t index )
+    {
+        uint32_t dist = pathfinder.getDistance( index );
+
+        const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( pathfinder.getDimensionDoorPath( hero, index ) );
+        if ( dimensionDoorDist > 0 && ( dist == 0 || dimensionDoorDist < dist / 2 ) ) {
+            return dimensionDoorDist;
+        }
+
+        return dist;
+    }
+
     bool AIShouldVisitCastle( const Heroes & hero, int castleIndex, const double heroArmyStrength )
     {
         const Castle * castle = world.getCastleEntrance( Maps::GetPoint( castleIndex ) );
@@ -347,7 +359,7 @@ namespace
                 return false;
             }
 
-            const uint32_t distance = pathfinder.getDistance( index );
+            const uint32_t distance = getDistanceToObject( hero, pathfinder, index );
             if ( distance == 0 ) {
                 return false;
             }
@@ -369,7 +381,7 @@ namespace
                 return false;
             }
 
-            const uint32_t distance = pathfinder.getDistance( index );
+            const uint32_t distance = getDistanceToObject( hero, pathfinder, index );
             if ( distance == 0 ) {
                 return false;
             }
@@ -490,7 +502,7 @@ namespace
                 return true;
             }
 
-            const uint32_t distance = pathfinder.getDistance( index );
+            const uint32_t distance = getDistanceToObject( hero, pathfinder, index );
             if ( distance == 0 ) {
                 return false;
             }
