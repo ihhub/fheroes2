@@ -28,6 +28,7 @@
 
 #include "audio.h"
 #include "core.h"
+#include "screen.h"
 #include "localevent.h"
 #include "logging.h"
 
@@ -116,11 +117,12 @@ namespace
         }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        if ( components.count( fheroes2::SystemInitializationComponent::GameController ) > 0 ) {
+        LocalEvent::Get().OpenTouchpad();
+
+        // A game controller can be initialized if it is set explicitly or when software cursor rendering mode is enabled.
+        if ( components.count( fheroes2::SystemInitializationComponent::GameController ) > 0 || fheroes2::cursor().isSoftwareEmulation() ) {
             LocalEvent::Get().OpenController();
         }
-
-        LocalEvent::Get().OpenTouchpad();
 #endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
