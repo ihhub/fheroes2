@@ -309,7 +309,7 @@ namespace
                 return false;
             }
 
-            if ( hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && !isSpellUsedByAI( spell.GetID() ) ) {
+            if ( hero.isVisited( tile, Visit::GLOBAL ) && !isSpellUsedByAI( spell.GetID() ) ) {
                 return false;
             }
             return true;
