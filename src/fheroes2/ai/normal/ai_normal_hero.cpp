@@ -1605,7 +1605,7 @@ namespace AI
         return 0;
     }
 
-    int Normal::getCourierMainTarget( const Heroes & hero, double lowestPossibleValue ) const
+    int Normal::getCourierMainTarget( const Heroes & hero, const AIWorldPathfinder & pathfinder, double lowestPossibleValue ) const
     {
         assert( hero.getAIRole() == Heroes::Role::COURIER );
         int targetIndex = -1;
@@ -1625,7 +1625,7 @@ namespace AI
                 continue;
 
             const int currentHeroIndex = otherHero->GetIndex();
-            const uint32_t dist = _pathfinder.getDistance( currentHeroIndex );
+            const uint32_t dist = getDistanceToObject( hero, pathfinder, currentHeroIndex );
             if ( dist == 0 || hero.hasMetWithHero( otherHero->GetID() ) )
                 continue;
 
@@ -1655,7 +1655,7 @@ namespace AI
                 continue;
 
             const int currentCastleIndex = castle->GetIndex();
-            const uint32_t dist = _pathfinder.getDistance( currentCastleIndex );
+            const uint32_t dist = getDistanceToObject( hero, pathfinder, currentCastleIndex );
 
             if ( dist == 0 )
                 continue;
@@ -1821,7 +1821,7 @@ namespace AI
 
         // Set baseline target if it's a special role
         if ( hero.getAIRole() == Heroes::Role::COURIER ) {
-            const int courierTarget = getCourierMainTarget( hero, lowestPossibleValue );
+            const int courierTarget = getCourierMainTarget( hero, _pathfinder, lowestPossibleValue );
             if ( courierTarget != -1 ) {
                 // Anything with positive value can override the courier's main task (i.e. castle or mine capture on the way)
                 maxPriority = 0;
