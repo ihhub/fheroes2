@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "core.h"
+
 #include <cassert>
 #include <cstdint>
 #include <stdexcept>
@@ -27,10 +29,9 @@
 #include <SDL_version.h>
 
 #include "audio.h"
-#include "core.h"
-#include "screen.h"
 #include "localevent.h"
 #include "logging.h"
+#include "screen.h"
 
 #if defined( TARGET_PS_VITA )
 #include <psp2/kernel/processmgr.h>
