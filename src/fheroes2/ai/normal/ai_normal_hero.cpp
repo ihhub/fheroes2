@@ -289,8 +289,8 @@ namespace
                 case Spell::EARTHQUAKE:
                 case Spell::HAUNT:
                 case Spell::IDENTIFYHERO:
-                case Spell::SETEGUARDIAN:
                 case Spell::SETAGUARDIAN:
+                case Spell::SETEGUARDIAN:
                 case Spell::SETFGUARDIAN:
                 case Spell::SETWGUARDIAN:
                 case Spell::TELEPORT:
