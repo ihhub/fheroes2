@@ -221,11 +221,11 @@ double Spell::getStrategicValue( double armyStrength, uint32_t currentSpellPoint
         switch ( id ) {
         case Spell::DIMENSIONDOOR:
             return 500 * amountModifier;
-        case Spell::VIEWALL:
-            return 500;
         case Spell::TOWNGATE:
         case Spell::TOWNPORTAL:
             return 250 * amountModifier;
+        case Spell::VIEWALL:
+            return 500;
         default:
             break;
         }
