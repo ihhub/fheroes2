@@ -219,10 +219,9 @@ Heroes::Heroes( int heroid, int rc )
 {
     name = _( Heroes::GetName( heroid ) );
 
-    // set default army
     army.Reset( true );
 
-    // extra hero
+    // Extra Debug Hero
     switch ( hid ) {
     case DEBUG_HERO:
         army.Clean();
@@ -244,9 +243,11 @@ Heroes::Heroes( int heroid, int rc )
         experience = 777;
         magic_point = 120;
 
-        // all spell in magic book
-        for ( int32_t spell = Spell::FIREBALL; spell < Spell::RANDOM; ++spell )
-            AppendSpellToBook( Spell( spell ), true );
+        // This hero has all the spells in his spell book
+        for ( const int spellId : Spell::getAllSpellIdsSuitableForSpellBook() ) {
+            AppendSpellToBook( Spell( spellId ), true );
+        }
+
         break;
 
     default:
