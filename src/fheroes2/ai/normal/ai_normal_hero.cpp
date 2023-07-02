@@ -283,11 +283,27 @@ namespace
                 return false;
             }
 
-            if ( hero.isObjectTypeVisited( objectType, Visit::GLOBAL )
-                 && ( spell == Spell::VIEWARTIFACTS || spell == Spell::VIEWHEROES || spell == Spell::VIEWMINES || spell == Spell::VIEWRESOURCES
-                      || spell == Spell::VIEWTOWNS || spell == Spell::IDENTIFYHERO || spell == Spell::VISIONS ) ) {
-                // AI never uses View spells except "View All".
-                return false;
+            if ( hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
+                // TODO: All these spells are not used by AI at the moment.
+                switch ( spell.GetID() ) {
+                case Spell::EARTHQUAKE:
+                case Spell::HAUNT:
+                case Spell::IDENTIFYHERO:
+                case Spell::SETEGUARDIAN:
+                case Spell::SETAGUARDIAN:
+                case Spell::SETFGUARDIAN:
+                case Spell::SETWGUARDIAN:
+                case Spell::TELEPORT:
+                case Spell::VIEWARTIFACTS:
+                case Spell::VIEWHEROES:
+                case Spell::VIEWMINES:
+                case Spell::VIEWRESOURCES:
+                case Spell::VIEWTOWNS:
+                case Spell::VISIONS:
+                    return false;
+                default:
+                    break;
+                }
             }
             return true;
         }
