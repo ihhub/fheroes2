@@ -168,6 +168,32 @@ namespace
         return monster.GetStrength() > armyStrengthThreshold;
     }
 
+    bool isSpellUsedByAI( const int spellId )
+    {
+        // TODO: All these spells are not used by AI at the moment.
+        switch ( spellId ) {
+        case Spell::EARTHQUAKE:
+        case Spell::HAUNT:
+        case Spell::IDENTIFYHERO:
+        case Spell::SETAGUARDIAN:
+        case Spell::SETEGUARDIAN:
+        case Spell::SETFGUARDIAN:
+        case Spell::SETWGUARDIAN:
+        case Spell::TELEPORT:
+        case Spell::VIEWARTIFACTS:
+        case Spell::VIEWHEROES:
+        case Spell::VIEWMINES:
+        case Spell::VIEWRESOURCES:
+        case Spell::VIEWTOWNS:
+        case Spell::VISIONS:
+            return false;
+        default:
+            break;
+        }
+
+        return true;
+    }
+
     bool HeroesValidObject( const Heroes & hero, const double heroArmyStrength, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Normal & ai,
                             const double armyStrengthThreshold )
     {
@@ -283,27 +309,8 @@ namespace
                 return false;
             }
 
-            if ( hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
-                // TODO: All these spells are not used by AI at the moment.
-                switch ( spell.GetID() ) {
-                case Spell::EARTHQUAKE:
-                case Spell::HAUNT:
-                case Spell::IDENTIFYHERO:
-                case Spell::SETAGUARDIAN:
-                case Spell::SETEGUARDIAN:
-                case Spell::SETFGUARDIAN:
-                case Spell::SETWGUARDIAN:
-                case Spell::TELEPORT:
-                case Spell::VIEWARTIFACTS:
-                case Spell::VIEWHEROES:
-                case Spell::VIEWMINES:
-                case Spell::VIEWRESOURCES:
-                case Spell::VIEWTOWNS:
-                case Spell::VISIONS:
-                    return false;
-                default:
-                    break;
-                }
+            if ( hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && !isSpellUsedByAI( spell.GetID() ) ) {
+                return false;
             }
             return true;
         }
