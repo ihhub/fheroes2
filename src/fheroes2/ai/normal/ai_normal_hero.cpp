@@ -2091,7 +2091,7 @@ namespace AI
             const size_t heroesBefore = heroes.size();
             _pathfinder.reEvaluateIfNeeded( *bestHero );
 
-            const int prevHeroPosition = bestHero->GetIndex();
+            int prevHeroPosition = bestHero->GetIndex();
 
             // check if we want to use Dimension Door spell or move regularly
             std::list<Route::Step> dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
@@ -2107,6 +2107,15 @@ namespace AI
                     moveDistance = _pathfinder.getDistance( bestTargetIndex );
 
                     dimensionPath.pop_front();
+
+                    // Hero can jump straight into the fog using the Dimension Door spell, which triggers the fog discovery mechanics for his new tile
+                    // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
+                    assert( !bestHero->isFreeman() && bestHero->GetIndex() != prevHeroPosition );
+
+                    updateMapActionObjectCache( prevHeroPosition );
+                    updateMapActionObjectCache( bestHero->GetIndex() );
+
+                    prevHeroPosition = bestHero->GetIndex();
                 }
 
                 if ( dimensionDoorDistance > 0 ) {
