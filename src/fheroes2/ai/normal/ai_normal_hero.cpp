@@ -2108,7 +2108,7 @@ namespace AI
 
                     dimensionPath.pop_front();
 
-                    // Hero can jump straight into the fog using the Dimension Door spell, which triggers the fog discovery mechanics for his new tile
+                    // Hero can jump straight into the fog using the Dimension Door spell, which triggers the mechanics of fog revealing for his new tile
                     // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
                     assert( !bestHero->isFreeman() && bestHero->GetIndex() != prevHeroPosition );
 
