@@ -1984,6 +1984,14 @@ namespace AI
         switch ( task.type ) {
         case PriorityTaskType::DEFEND:
         case PriorityTaskType::REINFORCE: {
+            if ( objectType == MP2::OBJ_HEROES ) {
+                // The castle has just been captured. No task should be updated.
+
+                // If this assertion blows up then it is not the case described above.
+                assert( ( world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_CASTLE ) && ( hero.GetIndex() != tileIndex ) );
+                return;
+            }
+
             // These tasks are only for castles at the moment!
             assert( objectType == MP2::OBJ_CASTLE );
 
@@ -2126,7 +2134,7 @@ namespace AI
             const size_t heroesBefore = heroes.size();
             _pathfinder.reEvaluateIfNeeded( *bestHero );
 
-            const int prevHeroPosition = bestHero->GetIndex();
+            int prevHeroPosition = bestHero->GetIndex();
 
             // check if we want to use Dimension Door spell or move regularly
             std::list<Route::Step> dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
@@ -2142,6 +2150,15 @@ namespace AI
                     moveDistance = _pathfinder.getDistance( bestTargetIndex );
 
                     dimensionPath.pop_front();
+
+                    // Hero can jump straight into the fog using the Dimension Door spell, which triggers the mechanics of fog revealing for his new tile
+                    // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
+                    assert( !bestHero->isFreeman() && bestHero->GetIndex() != prevHeroPosition );
+
+                    updateMapActionObjectCache( prevHeroPosition );
+                    updateMapActionObjectCache( bestHero->GetIndex() );
+
+                    prevHeroPosition = bestHero->GetIndex();
                 }
 
                 if ( dimensionDoorDistance > 0 ) {
