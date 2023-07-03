@@ -54,17 +54,6 @@ namespace GameFocus
 
 namespace Interface
 {
-    enum advMapRedraw_t : uint32_t
-    {
-        // IMPORTANT: values 0x01 ... 0x10 are base for game/editor are declared in 'interface_base.h'. Do not use them here.
-
-        REDRAW_HEROES = 0x20,
-        REDRAW_CASTLES = 0x40,
-        REDRAW_BUTTONS = 0x80,
-
-        REDRAW_ICONS = REDRAW_HEROES | REDRAW_CASTLES
-    };
-
     Castle * GetFocusCastle();
     Heroes * GetFocusHeroes();
     int GetFocusType();

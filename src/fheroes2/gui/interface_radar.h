@@ -57,7 +57,7 @@ namespace Interface
 
         void SetPos( int32_t ox, int32_t oy ) override;
 
-        // Set the render redraw flag from Interface::redraw_t enumeration:
+        // Set the render redraw flag from Interface::Redraw enumeration:
         // - 'REDRAW_RADAR' - to redraw the radar map image fully or in ROI and render the cursor over it.
         // - 'REDRAW_RADAR_CURSOR' - to render the previously generated radar map image and the cursor over it.
         void SetRedraw( const uint32_t redrawMode ) const;

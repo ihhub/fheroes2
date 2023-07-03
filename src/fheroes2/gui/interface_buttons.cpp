@@ -30,6 +30,7 @@
 #include "game_interface.h"
 #include "heroes.h"
 #include "icn.h"
+#include "interface_base.h"
 #include "kingdom.h"
 #include "localevent.h"
 #include "route.h"

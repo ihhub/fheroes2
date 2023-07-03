@@ -31,6 +31,7 @@
 #include "heroes.h"
 #include "heroes_base.h"
 #include "icn.h"
+#include "interface_base.h"
 #include "kingdom.h"
 #include "maps.h"
 #include "screen.h"

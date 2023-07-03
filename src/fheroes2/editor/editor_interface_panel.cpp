@@ -18,8 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#if defined( WITH_DEBUG )
-
 #include "editor_interface_panel.h"
 
 #include <memory>
@@ -30,6 +28,7 @@
 #include "editor_interface.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "localevent.h"
 #include "screen.h"
 #include "translations.h"
@@ -228,4 +227,3 @@ namespace Interface
         return res;
     }
 }
-#endif

@@ -20,8 +20,6 @@
 
 #pragma once
 
-#if defined( WITH_DEBUG )
-
 #include <array>
 #include <cstdint>
 
@@ -31,8 +29,6 @@
 
 namespace Interface
 {
-    const uint8_t instrumentsCount = 6;
-
     class Editor;
 
     class EditorPanel
@@ -64,6 +60,7 @@ namespace Interface
 
         // Index of selected Map Editor instrument.
         uint8_t _selectedInstrument{ 0 };
+        const static uint8_t instrumentsCount = 6;
 
         std::array<fheroes2::Button, instrumentsCount> _instrumentButtons;
         std::array<fheroes2::Rect, instrumentsCount> _instrumentButtonsRect;
@@ -87,4 +84,3 @@ namespace Interface
         fheroes2::Rect _rectEditorPanel;
     };
 }
-#endif

@@ -32,8 +32,10 @@
 
 namespace Interface
 {
-    enum redraw_t : uint32_t
+    enum Redraw : uint32_t
     {
+        // The next values are base for game/editor.
+
         // To render the cursor over the previously generated radar map image.
         REDRAW_RADAR_CURSOR = 0x01,
         // To render radar map fully or in ROI and then the cursor over it.
@@ -42,10 +44,17 @@ namespace Interface
         REDRAW_GAMEAREA = 0x08,
         REDRAW_STATUS = 0x10,
 
-        // IMPORTANT: values 0x20, 0x40, 0x80 (and higher) are interface specific and are declared in 'game_interface.h' and 'editor_interface.h'.
-        // Do not use them here.
+        // The next values are base for game (Adventure Map) interface.
+        REDRAW_HEROES = 0x20,
+        REDRAW_CASTLES = 0x40,
+        REDRAW_BUTTONS = 0x80,
 
-        REDRAW_ALL = 0xFF
+        REDRAW_ICONS = REDRAW_HEROES | REDRAW_CASTLES,
+
+        // The next value is base for Map Editor interface.
+        REDRAW_PANEL = 0x100,
+
+        REDRAW_ALL = 0x1FF
     };
 
     class BaseInterface

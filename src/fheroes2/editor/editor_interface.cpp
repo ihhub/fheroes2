@@ -18,8 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#if defined( WITH_DEBUG )
-
 #include "editor_interface.h"
 
 #include <cassert>
@@ -176,9 +174,12 @@ namespace Interface
                 if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                     res = EventExit();
                 }
+                // TODO: remove this 'if defined' when Editor is ready for release.
+#if defined( WITH_DEBUG )
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                     res = eventNewMap();
                 }
+#endif
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                     fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. Save function is not implemented yet.", Dialog::OK );
                 }
@@ -392,7 +393,12 @@ namespace Interface
             le.MousePressLeft( buttonQuit.area() ) ? buttonQuit.drawOnPress() : buttonQuit.drawOnRelease();
             le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
+            // TODO: remove this 'if defined' when Editor is ready for release.
+#if defined( WITH_DEBUG )
             if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
+#else
+            if ( le.MouseClickLeft( buttonNew.area() ) ) {
+#endif
                 if ( eventNewMap() == fheroes2::GameMode::EDITOR_NEW_MAP ) {
                     result = fheroes2::GameMode::EDITOR_NEW_MAP;
                     break;
@@ -499,4 +505,3 @@ namespace Interface
         }
     }
 }
-#endif
