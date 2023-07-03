@@ -1949,6 +1949,14 @@ namespace AI
         switch ( task.type ) {
         case PriorityTaskType::DEFEND:
         case PriorityTaskType::REINFORCE: {
+            if ( objectType == MP2::OBJ_HEROES ) {
+                // The castle was just captured. No task should be updated.
+
+                // If this assertion blows up then we miss to cover certain cases.
+                assert( world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_CASTLE );
+                return;
+            }
+
             // These tasks are only for castles at the moment!
             assert( objectType == MP2::OBJ_CASTLE );
 
