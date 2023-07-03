@@ -1912,9 +1912,62 @@ namespace AI
 
     void Normal::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType )
     {
-        const auto it = _priorityTargets.find( tileIndex );
-        if ( it == _priorityTargets.end() ) {
+        if ( objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_HEROES ) {
+            // Priorities are only for castles and heroes at the moment.
             return;
+        }
+
+        auto updateAttackPriorityTarget = [this, tileIndex, &hero, objectType]() {
+            if ( objectType == MP2::OBJ_CASTLE ) {
+                const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
+                if ( castle == nullptr ) {
+                    // How is it possible?
+                    assert( 0 );
+
+                    removeEnemyArmies( tileIndex );
+                    return;
+                }
+
+                if ( hero.isFriends( castle->GetColor() ) ) {
+                    removeEnemyArmies( tileIndex );
+
+                    updatePriorityForCastle( *castle );
+                }
+                else {
+                    updatePriorityAttackTarget( hero.GetKingdom(), world.GetTiles( tileIndex ) );
+                }
+            }
+            else if ( objectType == MP2::OBJ_HEROES ) {
+                const Maps::Tiles & tile = world.GetTiles( tileIndex );
+
+                const Heroes * anotherHero = tile.GetHeroes();
+                if ( anotherHero == nullptr ) {
+                    // The hero died.
+                    removeEnemyArmies( tileIndex );
+                    return;
+                }
+
+                if ( !hero.isFriends( anotherHero->GetColor() ) ) {
+                    updatePriorityAttackTarget( hero.GetKingdom(), tile );
+                }
+            }
+            else {
+                // Unsupported object type!
+                assert( 0 );
+            }
+        };
+
+        auto it = _priorityTargets.find( tileIndex );
+        if ( it == _priorityTargets.end() ) {
+            // If the object is not a priority we have to update it after the battle as it can become the one.
+            // Especially, when the opposite army has grown Skeletons or Ghosts.
+            updateAttackPriorityTarget();
+
+            // If the update did not add any priorities then nothing more to do.
+            it = _priorityTargets.find( tileIndex );
+            if ( it == _priorityTargets.end() ) {
+                return;
+            }
         }
 
         const PriorityTask & task = it->second;
@@ -1922,40 +1975,32 @@ namespace AI
         switch ( task.type ) {
         case PriorityTaskType::DEFEND:
         case PriorityTaskType::REINFORCE: {
-            // TODO: sort the army between the castle and hero to have maximum movement points for the next day
-            // TODO: but also have enough army to defend the castle.
-            if ( objectType == MP2::OBJ_CASTLE ) {
-                hero.SetModes( Heroes::SLEEPER );
+            if ( objectType == MP2::OBJ_HEROES ) {
+                // The castle has just been captured. No task should be updated.
+
+                // If this assertion blows up then it is not the case described above.
+                assert( ( world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_CASTLE ) && ( hero.GetIndex() != tileIndex ) );
+                return;
             }
 
+            // These tasks are only for castles at the moment!
+            assert( objectType == MP2::OBJ_CASTLE );
+
+            // How is it even possible that a hero died while simply moving into a castle?
+            assert( !hero.isFreeman() );
+
+            // TODO: sort the army between the castle and hero to have maximum movement points for the next day
+            // TODO: but also have enough army to defend the castle.
+
+            hero.SetModes( Heroes::SLEEPER );
             _priorityTargets.erase( tileIndex );
+
             break;
         }
         case PriorityTaskType::ATTACK: {
-            // check if battle was actually won or attacker still there
-            const Heroes * attackHero = world.GetTiles( tileIndex ).GetHeroes();
-            const Castle * attackCastle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
+            removePriorityAttackTarget( tileIndex );
 
-            if ( !attackHero && ( !attackCastle || attackCastle->GetColor() == hero.GetColor() ) ) {
-                for ( const int secondaryTaskId : task.secondaryTaskTileId ) {
-                    assert( secondaryTaskId != tileIndex );
-
-                    auto defense = _priorityTargets.find( secondaryTaskId );
-                    if ( defense == _priorityTargets.end() ) {
-                        continue;
-                    }
-
-                    // check if a secondary task still present
-                    std::set<int> & defenseSecondaries = defense->second.secondaryTaskTileId;
-                    defenseSecondaries.erase( tileIndex );
-                    if ( defenseSecondaries.empty() ) {
-                        // if no one else was threatening this then we no longer have to defend
-                        _priorityTargets.erase( secondaryTaskId );
-                    }
-                }
-                _priorityTargets.erase( tileIndex );
-            }
-
+            updateAttackPriorityTarget();
             break;
         }
         default:
@@ -1965,20 +2010,23 @@ namespace AI
         }
     }
 
-    void Normal::HeroesActionComplete( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType )
+    void Normal::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType )
     {
-        Castle * castle = hero.inCastleMutable();
-        if ( castle ) {
-            reinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
+        // This method is called upon action completion and the hero could no longer be available.
+        // So it is to check if the hero is still present.
+        if ( !hero.isFreeman() ) {
+            Castle * castle = hero.inCastleMutable();
+            if ( castle ) {
+                // Reinforcement in a castle can lead to removing defense priority task for a castle.
+                reinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
+            }
         }
 
         if ( isMonsterStrengthCacheable( objectType ) ) {
             _neutralMonsterStrengthCache.erase( tileIndex );
         }
 
-        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES ) {
-            updatePriorityTargets( hero, tileIndex, objectType );
-        }
+        updatePriorityTargets( hero, tileIndex, objectType );
 
         updateMapActionObjectCache( tileIndex );
     }
@@ -2077,7 +2125,7 @@ namespace AI
             const size_t heroesBefore = heroes.size();
             _pathfinder.reEvaluateIfNeeded( *bestHero );
 
-            const int prevHeroPosition = bestHero->GetIndex();
+            int prevHeroPosition = bestHero->GetIndex();
 
             // check if we want to use Dimension Door spell or move regularly
             std::list<Route::Step> dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
@@ -2093,6 +2141,15 @@ namespace AI
                     moveDistance = _pathfinder.getDistance( bestTargetIndex );
 
                     dimensionPath.pop_front();
+
+                    // Hero can jump straight into the fog using the Dimension Door spell, which triggers the mechanics of fog revealing for his new tile
+                    // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
+                    assert( !bestHero->isFreeman() && bestHero->GetIndex() != prevHeroPosition );
+
+                    updateMapActionObjectCache( prevHeroPosition );
+                    updateMapActionObjectCache( bestHero->GetIndex() );
+
+                    prevHeroPosition = bestHero->GetIndex();
                 }
 
                 if ( dimensionDoorDistance > 0 ) {

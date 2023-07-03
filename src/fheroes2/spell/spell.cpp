@@ -217,27 +217,38 @@ double Spell::getStrategicValue( double armyStrength, uint32_t currentSpellPoint
     const double amountModifier = ( casts == 1 ) ? 1 : casts - ( 0.05 * casts * casts );
 
     if ( isAdventure() ) {
-        // AI uses Dimension door and View All only spells right now
-        if ( id == Spell::DIMENSIONDOOR ) {
-            return 500.0 * amountModifier;
+        // TODO: update this logic if you add support for more Adventure Map spells.
+        switch ( id ) {
+        case Spell::DIMENSIONDOOR:
+            return 500 * amountModifier;
+        case Spell::TOWNGATE:
+        case Spell::TOWNPORTAL:
+            return 250 * amountModifier;
+        case Spell::VIEWALL:
+            return 500;
+        default:
+            break;
         }
-        if ( id == Spell::VIEWALL ) {
-            return 500.0;
-        }
-        return 0.0;
+
+        return 0;
     }
 
     if ( isDamage() ) {
         // Benchmark for Lightning for 20 power * 20 knowledge (maximum uses) is 2500.0
         return amountModifier * Damage() * spellPower;
     }
+
     // These high impact spells can turn tide of battle
     if ( isResurrect() || isMassActions() || id == Spell::BLIND || id == Spell::PARALYZE ) {
         return armyStrength * 0.1 * amountModifier;
     }
+
     if ( isSummon() ) {
-        return Monster( id ).GetMonsterStrength() * ExtraValue() * spellPower * amountModifier;
+        // Summoning spells can be effective only per single turn as a summoned stack of monster could be killed within the same turn.
+        // Also if the opponent targets the army's monsters and kill all of them the battle would be lost for this hero.
+        return Monster( id ).GetMonsterStrength() * ExtraValue() * spellPower;
     }
+
     return armyStrength * 0.04 * amountModifier;
 }
 
@@ -544,9 +555,12 @@ std::vector<int> Spell::getAllSpellIdsSuitableForSpellBook( const int spellLevel
             continue;
         }
 
-        const Spell spell( spellId );
-        if ( spellLevel > 0 && spell.Level() != spellLevel ) {
-            continue;
+        if ( spellLevel > 0 ) {
+            const Spell spell( spellId );
+
+            if ( spell.Level() != spellLevel ) {
+                continue;
+            }
         }
 
         result.push_back( spellId );
