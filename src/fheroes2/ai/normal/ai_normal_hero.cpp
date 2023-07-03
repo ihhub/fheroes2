@@ -1953,7 +1953,7 @@ namespace AI
                 // The castle has just captured. No task should be updated.
 
                 // If this assertion blows up then it is not the case described above.
-                assert( world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_CASTLE );
+                assert( ( world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_CASTLE ) && ( hero.GetIndex() != tileIndex ) );
                 return;
             }
 
