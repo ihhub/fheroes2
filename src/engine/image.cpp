@@ -365,8 +365,7 @@ namespace
                 int32_t minDistance = 3 * 255 * 255;
                 uint32_t bestPos = 0;
 
-                // 3840 = 256 * 15. This is the offset of "No cycle" transform table.
-                const uint8_t * correctorX = transformTable + 3840;
+                const uint8_t * correctorX = transformTable + 256 * 15;
 
                 for ( uint32_t i = 0; i < 256; ++i, ++correctorX ) {
                     const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *correctorX ) * 3;

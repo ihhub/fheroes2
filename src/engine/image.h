@@ -103,7 +103,7 @@ namespace fheroes2
         int32_t _height{ 0 };
         std::unique_ptr<uint8_t[]> _data; // holds 2 image layers
 
-        // Jnly for images which are not used for any other operations except displaying on screen.
+        // Only for images which are not used for any other operations except displaying on screen.
         bool _singleLayer{ false };
     };
 
