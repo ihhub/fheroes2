@@ -168,6 +168,32 @@ namespace
         return monster.GetStrength() > armyStrengthThreshold;
     }
 
+    bool isSpellUsedByAI( const int spellId )
+    {
+        // TODO: All these spells are not used by AI at the moment.
+        switch ( spellId ) {
+        case Spell::EARTHQUAKE:
+        case Spell::HAUNT:
+        case Spell::IDENTIFYHERO:
+        case Spell::SETAGUARDIAN:
+        case Spell::SETEGUARDIAN:
+        case Spell::SETFGUARDIAN:
+        case Spell::SETWGUARDIAN:
+        case Spell::TELEPORT:
+        case Spell::VIEWARTIFACTS:
+        case Spell::VIEWHEROES:
+        case Spell::VIEWMINES:
+        case Spell::VIEWRESOURCES:
+        case Spell::VIEWTOWNS:
+        case Spell::VISIONS:
+            return false;
+        default:
+            break;
+        }
+
+        return true;
+    }
+
     bool HeroesValidObject( const Heroes & hero, const double heroArmyStrength, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Normal & ai,
                             const double armyStrengthThreshold )
     {
@@ -283,17 +309,17 @@ namespace
                 return false;
             }
 
-            if ( hero.isObjectTypeVisited( objectType, Visit::GLOBAL )
-                 && ( spell == Spell::VIEWARTIFACTS || spell == Spell::VIEWHEROES || spell == Spell::VIEWMINES || spell == Spell::VIEWRESOURCES
-                      || spell == Spell::VIEWTOWNS || spell == Spell::IDENTIFYHERO || spell == Spell::VISIONS ) ) {
-                // AI never uses View spells except "View All".
+            if ( hero.isVisited( tile, Visit::GLOBAL ) && !isSpellUsedByAI( spell.GetID() ) ) {
                 return false;
             }
             return true;
         }
 
-        // On-time visit free Primary Skill or Experience object.
+        // Arena allows to visit only one time for the whole map.
         case MP2::OBJ_ARENA:
+            return !hero.isObjectTypeVisited( objectType );
+
+        // On-time visit free Primary Skill or Experience object.
         case MP2::OBJ_FORT:
         case MP2::OBJ_GAZEBO:
         case MP2::OBJ_MERCENARY_CAMP:

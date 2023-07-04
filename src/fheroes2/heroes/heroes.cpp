@@ -994,16 +994,18 @@ bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
     const int32_t index = tile.GetIndex();
     const MP2::MapObjectType objectType = tile.GetObject( false );
 
-    if ( Visit::GLOBAL == type )
+    if ( Visit::GLOBAL == type ) {
         return GetKingdom().isVisited( index, objectType );
+    }
 
     return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( index, objectType ) );
 }
 
 bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::type_t type ) const
 {
-    if ( Visit::GLOBAL == type )
+    if ( Visit::GLOBAL == type ) {
         return GetKingdom().isVisited( objectType );
+    }
 
     return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
@@ -1017,7 +1019,7 @@ void Heroes::SetVisited( int32_t index, Visit::type_t type )
         GetKingdom().SetVisited( index, objectType );
     }
     else if ( !isVisited( tile ) && MP2::OBJ_NONE != objectType ) {
-        visit_object.push_front( IndexObject( index, objectType ) );
+        visit_object.emplace_front( index, objectType );
     }
 }
 
@@ -1063,7 +1065,7 @@ void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectT
 void Heroes::markHeroMeeting( int heroID )
 {
     if ( heroID < UNKNOWN && !hasMetWithHero( heroID ) )
-        visit_object.push_front( IndexObject( heroID, MP2::OBJ_HEROES ) );
+        visit_object.emplace_front( heroID, MP2::OBJ_HEROES );
 }
 
 void Heroes::unmarkHeroMeeting()
