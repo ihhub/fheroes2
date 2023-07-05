@@ -213,15 +213,6 @@ namespace
         }
     }
 
-    void replaceTransformPixel( fheroes2::Image & image, const int32_t position, const uint8_t value )
-    {
-        assert( !image.singleLayer() );
-        if ( ( position < ( image.width() * image.height() ) ) && ( image.transform()[position] != 0 ) ) {
-            image.transform()[position] = 0;
-            image.image()[position] = value;
-        }
-    }
-
     void fillRandomPixelsFromImage( const fheroes2::Image & original, const fheroes2::Rect & originalRoi, fheroes2::Image & output, const fheroes2::Rect & outputRoi,
                                     std::mt19937 & seededGen )
     {
@@ -2682,12 +2673,12 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
-                    if ( original.width() == 640 && original.height() == 480 ) {
-                        // Fix incorrect pixel at position 260x305.
-                        replaceTransformPixel( original, 195460, 31 );
-                    }
                     // This is the main menu image which shouldn't have any transform layer.
                     original._disableTransformLayer();
+                    if ( original.width() == 640 && original.height() == 480 ) {
+                        // Fix incorrect pixel at position 260x305.
+                        original.image()[195460] = 31;
+                    }
                 }
                 return true;
             case ICN::TOWNBKG3:
@@ -2817,18 +2808,14 @@ namespace fheroes2
                         original.image()[5294] = 108;
                     }
                 }
-                if ( _icnVsSprite[id].size() >= 24 ) {
+                if ( _icnVsSprite[id].size() > 28 ) {
                     // Mage tower image has a bad pixel.
-                    Sprite & original = _icnVsSprite[id][23];
-                    if ( original.width() == 135 && original.height() == 57 ) {
-                        replaceTransformPixel( original, 4333, 23 );
-                    }
-                }
-                if ( _icnVsSprite[id].size() >= 29 ) {
-                    // Mage tower image has a bad pixel.
-                    Sprite & original = _icnVsSprite[id][28];
-                    if ( original.width() == 135 && original.height() == 57 ) {
-                        replaceTransformPixel( original, 4333, 23 );
+                    for ( const uint32_t index : { 23, 28 } ) {
+                        Sprite & original = _icnVsSprite[id][index];
+                        if ( original.width() == 135 && original.height() == 57 ) {
+                            original._disableTransformLayer();
+                            original.image()[4333] = 23;
+                        }
                     }
                 }
                 return true;
@@ -2886,9 +2873,10 @@ namespace fheroes2
                     // Red tower has bad pixels.
                     Sprite & original = _icnVsSprite[id][24];
                     if ( original.width() == 135 && original.height() == 57 ) {
-                        replaceTransformPixel( original, 2830, 165 );
-                        replaceTransformPixel( original, 3101, 165 );
-                        replaceTransformPixel( original, 3221, 69 );
+                        original._disableTransformLayer();
+                        original.image()[2830] = 165;
+                        original.image()[3101] = 165;
+                        original.image()[3221] = 69;
                     }
                 }
                 return true;
