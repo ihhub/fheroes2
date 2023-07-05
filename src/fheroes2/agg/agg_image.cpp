@@ -206,7 +206,6 @@ namespace
     void populateCursorIcons( std::vector<fheroes2::Sprite> & output, const fheroes2::Sprite & origin, const std::vector<fheroes2::Image> & digits,
                               const fheroes2::Point & offset )
     {
-        output.reserve( digits.size() + 1 );
         output.emplace_back( origin );
         for ( const fheroes2::Image & digit : digits ) {
             output.emplace_back( addDigit( origin, digit, offset ) );
@@ -2711,8 +2710,8 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 60 ) {
                     Sprite & original = _icnVsSprite[id][60];
-                    original._disableTransformLayer();
                     if ( original.width() == 30 && original.height() == 22 ) {
+                        original._disableTransformLayer();
                         original.image()[5] = 75;
                         original.image()[310] = 48;
                         original.image()[358] = 64;
@@ -2721,8 +2720,8 @@ namespace fheroes2
                 }
                 if ( _icnVsSprite[id].size() > 61 ) {
                     Sprite & original = _icnVsSprite[id][61];
-                    original._disableTransformLayer();
                     if ( original.width() == 30 && original.height() == 22 ) {
+                        original._disableTransformLayer();
                         original.image()[51] = 30;
                         original.image()[80] = 28;
                         original.image()[81] = 30;
@@ -2732,8 +2731,8 @@ namespace fheroes2
                 }
                 if ( _icnVsSprite[id].size() > 65 ) {
                     Sprite & original = _icnVsSprite[id][65];
-                    original._disableTransformLayer();
                     if ( original.width() == 30 && original.height() == 22 ) {
+                        original._disableTransformLayer();
                         original.image()[499] = 60;
                         original.image()[601] = 24;
                         original.image()[631] = 28;
@@ -2741,8 +2740,8 @@ namespace fheroes2
                 }
                 if ( _icnVsSprite[id].size() > 67 ) {
                     Sprite & original = _icnVsSprite[id][67];
-                    original._disableTransformLayer();
                     if ( original.width() == 30 && original.height() == 22 ) {
+                        original._disableTransformLayer();
                         original.image()[42] = 28;
                     }
                 }
@@ -3785,8 +3784,8 @@ namespace fheroes2
                 // First sprite in this ICN has incorrect transparent pixel at position 30x5.
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
-                    original._disableTransformLayer();
                     if ( original.width() == 50 && original.height() == 47 ) {
+                        original._disableTransformLayer();
                         original.image()[280] = 117;
                     }
                 }
