@@ -490,12 +490,12 @@ namespace fheroes2
     void Image::fill( const uint8_t value )
     {
         if ( !empty() ) {
-            const size_t totalSize = static_cast<size_t>(_width) * _height;
-            memset(image(), value, totalSize);
+            const size_t totalSize = static_cast<size_t>( _width ) * _height;
+            memset( image(), value, totalSize );
 
-            if (!_singleLayer) {
+            if ( !_singleLayer ) {
                 // Set the transform layer not to skip all data.
-                memset(transform(), static_cast<uint8_t>(0), totalSize);
+                memset( transform(), static_cast<uint8_t>( 0 ), totalSize );
             }
         }
     }
@@ -537,12 +537,12 @@ namespace fheroes2
     void Image::reset()
     {
         if ( !empty() ) {
-            const size_t totalSize = static_cast<size_t>(_width) * _height;
-            memset(image(), static_cast<uint8_t>(0), totalSize);
+            const size_t totalSize = static_cast<size_t>( _width ) * _height;
+            memset( image(), static_cast<uint8_t>( 0 ), totalSize );
 
-            if (!_singleLayer) {
+            if ( !_singleLayer ) {
                 // Set the transform layer to skip all data.
-                memset(transform(), static_cast<uint8_t>(1), totalSize);
+                memset( transform(), static_cast<uint8_t>( 1 ), totalSize );
             }
         }
     }
