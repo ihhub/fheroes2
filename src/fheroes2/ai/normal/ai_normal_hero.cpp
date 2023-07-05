@@ -122,6 +122,25 @@ namespace
         return false;
     }
 
+    uint32_t getDistanceToObject( const Heroes & hero, const AIWorldPathfinder & pathfinder, const int32_t index )
+    {
+        const uint32_t dist = pathfinder.getDistance( index );
+
+        const std::list<Route::Step> dimensionDoorSteps = pathfinder.getDimensionDoorPath( hero, index );
+        if ( dimensionDoorSteps.empty() ) {
+            return dist;
+        }
+
+        const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( dimensionDoorSteps );
+        assert( dimensionDoorDist > 0 );
+
+        if ( dist == 0 || dimensionDoorDist < dist / 2 ) {
+            return dimensionDoorDist;
+        }
+
+        return dist;
+    }
+
     bool AIShouldVisitCastle( const Heroes & hero, int castleIndex, const double heroArmyStrength )
     {
         const Castle * castle = world.getCastleEntrance( Maps::GetPoint( castleIndex ) );
@@ -373,11 +392,16 @@ namespace
                 return false;
             }
 
-            const double movementPenalty = 2.0 * pathfinder.getDistance( index );
+            const uint32_t distance = getDistanceToObject( hero, pathfinder, index );
+            if ( distance == 0 ) {
+                return false;
+            }
+
+            const double movementPenalty = 2.0 * distance;
             return movementPenalty < GameStatic::getMovementPointBonus( objectType ) || hero.GetMorale() < Morale::BLOOD;
         }
 
-        case MP2::OBJ_MAGIC_WELL:
+        case MP2::OBJ_MAGIC_WELL: {
             if ( hero.isObjectTypeVisited( objectType ) ) {
                 return false;
             }
@@ -390,13 +414,19 @@ namespace
                 return false;
             }
 
-            if ( pathfinder.getDistance( index ) > hero.GetMovePoints() && hero.getDailyRestoredSpellPoints() + hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
+            const uint32_t distance = getDistanceToObject( hero, pathfinder, index );
+            if ( distance == 0 ) {
+                return false;
+            }
+
+            if ( distance > hero.GetMovePoints() && hero.getDailyRestoredSpellPoints() + hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
                 // The Well is located at a distance which cannot be reached by the hero at the current turn.
                 // But if the hero will restore all spell points by the next day there is no reason to even to visit the Well.
                 return false;
             }
 
             return true;
+        }
 
         case MP2::OBJ_ARTESIAN_SPRING:
             return !hero.isVisited( tile, Visit::GLOBAL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
@@ -505,8 +535,13 @@ namespace
                 return true;
             }
 
+            const uint32_t distance = getDistanceToObject( hero, pathfinder, index );
+            if ( distance == 0 ) {
+                return false;
+            }
+
             const int daysActive = DAYOFWEEK - world.GetDay() + 1;
-            const double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * pathfinder.getDistance( index );
+            const double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distance;
 
             return !hero.isObjectTypeVisited( objectType ) && movementBonus > 0;
         }
@@ -1596,7 +1631,7 @@ namespace AI
         return 0;
     }
 
-    int Normal::getCourierMainTarget( const Heroes & hero, double lowestPossibleValue ) const
+    int Normal::getCourierMainTarget( const Heroes & hero, const AIWorldPathfinder & pathfinder, double lowestPossibleValue ) const
     {
         assert( hero.getAIRole() == Heroes::Role::COURIER );
         int targetIndex = -1;
@@ -1616,7 +1651,7 @@ namespace AI
                 continue;
 
             const int currentHeroIndex = otherHero->GetIndex();
-            const uint32_t dist = _pathfinder.getDistance( currentHeroIndex );
+            const uint32_t dist = getDistanceToObject( hero, pathfinder, currentHeroIndex );
             if ( dist == 0 || hero.hasMetWithHero( otherHero->GetID() ) )
                 continue;
 
@@ -1646,7 +1681,7 @@ namespace AI
                 continue;
 
             const int currentCastleIndex = castle->GetIndex();
-            const uint32_t dist = _pathfinder.getDistance( currentCastleIndex );
+            const uint32_t dist = getDistanceToObject( hero, pathfinder, currentCastleIndex );
 
             if ( dist == 0 )
                 continue;
@@ -1812,7 +1847,7 @@ namespace AI
 
         // Set baseline target if it's a special role
         if ( hero.getAIRole() == Heroes::Role::COURIER ) {
-            const int courierTarget = getCourierMainTarget( hero, lowestPossibleValue );
+            const int courierTarget = getCourierMainTarget( hero, _pathfinder, lowestPossibleValue );
             if ( courierTarget != -1 ) {
                 // Anything with positive value can override the courier's main task (i.e. castle or mine capture on the way)
                 maxPriority = 0;
