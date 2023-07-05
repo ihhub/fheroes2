@@ -368,7 +368,7 @@ namespace
                 const uint8_t * correctorX = transformTable + 256 * 15;
 
                 for ( uint32_t i = 0; i < 256; ++i, ++correctorX ) {
-                    const uint8_t * palette = gamePalette + *correctorX * 3;
+                    const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *correctorX ) * 3;
 
                     const int32_t offsetRed = static_cast<int32_t>( *palette ) - static_cast<int32_t>( r );
                     ++palette;
@@ -400,9 +400,9 @@ namespace
         const int32_t widthIn = in.width();
         const int32_t widthOut = out.width();
 
-        const uint8_t * imageInY = in.image() + inY * widthIn + inX;
-        uint8_t * imageOutY = out.image() + outY * widthOut + outX;
-        const uint8_t * imageInYEnd = imageInY + height * widthIn;
+        const uint8_t * imageInY = in.image() + static_cast<ptrdiff_t>( inY ) * widthIn + inX;
+        uint8_t * imageOutY = out.image() + static_cast<ptrdiff_t>( outY ) * widthOut + outX;
+        const uint8_t * imageInYEnd = imageInY + static_cast<ptrdiff_t>( height ) * widthIn;
 
         if ( in.singleLayer() ) {
             // All pixels in a single-layer image do not have any transform values so there is no need to check for them.
@@ -417,7 +417,7 @@ namespace
             }
         }
         else {
-            const uint8_t * transformInY = in.transform() + inY * widthIn + inX;
+            const uint8_t * transformInY = in.transform() + static_cast<ptrdiff_t>( inY ) * widthIn + inX;
 
             for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
                 const uint8_t * imageInX = imageInY;
@@ -490,12 +490,12 @@ namespace fheroes2
     void Image::fill( const uint8_t value )
     {
         if ( !empty() ) {
-            const size_t totalSize = static_cast<size_t>( _width ) * _height;
-            std::fill( image(), image() + totalSize, value );
+            const size_t totalSize = static_cast<size_t>(_width) * _height;
+            memset(image(), value, totalSize);
 
-            if ( !_singleLayer ) {
+            if (!_singleLayer) {
                 // Set the transform layer not to skip all data.
-                std::fill( transform(), transform() + totalSize, static_cast<uint8_t>( 0 ) );
+                memset(transform(), static_cast<uint8_t>(0), totalSize);
             }
         }
     }
@@ -537,12 +537,12 @@ namespace fheroes2
     void Image::reset()
     {
         if ( !empty() ) {
-            const size_t totalSize = static_cast<size_t>( _width ) * _height;
-            std::fill( image(), image() + totalSize, static_cast<uint8_t>( 0 ) );
+            const size_t totalSize = static_cast<size_t>(_width) * _height;
+            memset(image(), static_cast<uint8_t>(0), totalSize);
 
-            if ( !_singleLayer ) {
+            if (!_singleLayer) {
                 // Set the transform layer to skip all data.
-                std::fill( transform(), transform() + totalSize, static_cast<uint8_t>( 1 ) );
+                memset(transform(), static_cast<uint8_t>(1), totalSize);
             }
         }
     }
@@ -555,7 +555,7 @@ namespace fheroes2
             return;
         }
 
-        size_t size = static_cast<size_t>( image._width ) * image._height;
+        const size_t size = static_cast<size_t>( image._width ) * image._height;
 
         if ( image._width != _width || image._height != _height ) {
             _imageData.reset( new uint8_t[size] );
@@ -650,7 +650,7 @@ namespace fheroes2
     {
         _updateRoi();
 
-        if ( image.singleLayer() ) {
+        if ( _image.singleLayer() ) {
             // The restorer is used to restore the image without the transform layer so we make a single-layer copy.
             _copy._disableTransformLayer();
         }
@@ -669,7 +669,7 @@ namespace fheroes2
     {
         _updateRoi();
 
-        if ( image.singleLayer() ) {
+        if ( _image.singleLayer() ) {
             // The restorer is used to restore the image without the transform layer so we make a single-layer copy.
             _copy._disableTransformLayer();
         }
@@ -937,7 +937,7 @@ namespace fheroes2
 
             const int32_t offsetOutY = outY * widthOut + outX;
             uint8_t * imageOutY = out.image() + offsetOutY;
-            const uint8_t * imageOutYEnd = imageOutY + height * widthOut;
+            const uint8_t * imageOutYEnd = imageOutY + static_cast<ptrdiff_t>( height ) * widthOut;
 
             if ( in.singleLayer() ) {
                 for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, imageOutY += widthOut ) {
@@ -946,8 +946,8 @@ namespace fheroes2
                     const uint8_t * imageOutXEnd = imageOutX + width;
 
                     for ( ; imageOutX != imageOutXEnd; --imageInX, ++imageOutX ) {
-                        const uint8_t * inPAL = gamePalette + ( *imageInX ) * 3;
-                        const uint8_t * outPAL = gamePalette + ( *imageOutX ) * 3;
+                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( *imageInX ) * 3;
+                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
 
                         const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                         const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
@@ -972,11 +972,11 @@ namespace fheroes2
 
                         uint8_t inValue = *imageInX;
                         if ( *transformInX > 1 ) {
-                            inValue = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            inValue = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * 256 + *imageOutX );
                         }
 
-                        const uint8_t * inPAL = gamePalette + inValue * 3;
-                        const uint8_t * outPAL = gamePalette + ( *imageOutX ) * 3;
+                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( inValue ) * 3;
+                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
 
                         const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                         const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
@@ -990,8 +990,8 @@ namespace fheroes2
             const int32_t offsetInY = inY * widthIn + inX;
             const uint8_t * imageInY = in.image() + offsetInY;
 
-            uint8_t * imageOutY = out.image() + outY * widthOut + outX;
-            const uint8_t * imageInYEnd = imageInY + height * widthIn;
+            uint8_t * imageOutY = out.image() + static_cast<ptrdiff_t>( outY ) * widthOut + outX;
+            const uint8_t * imageInYEnd = imageInY + static_cast<ptrdiff_t>( height ) * widthIn;
 
             if ( in.singleLayer() ) {
                 for ( ; imageInY != imageInYEnd; imageInY += widthIn, imageOutY += widthOut ) {
@@ -1000,8 +1000,8 @@ namespace fheroes2
                     const uint8_t * imageInXEnd = imageInX + width;
 
                     for ( ; imageInX != imageInXEnd; ++imageInX, ++imageOutX ) {
-                        const uint8_t * inPAL = gamePalette + ( *imageInX ) * 3;
-                        const uint8_t * outPAL = gamePalette + ( *imageOutX ) * 3;
+                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( *imageInX ) * 3;
+                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
 
                         const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                         const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
@@ -1026,11 +1026,11 @@ namespace fheroes2
 
                         uint8_t inValue = *imageInX;
                         if ( *transformInX > 1 ) {
-                            inValue = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            inValue = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * 256 + *imageOutX );
                         }
 
-                        const uint8_t * inPAL = gamePalette + inValue * 3;
-                        const uint8_t * outPAL = gamePalette + ( *imageOutX ) * 3;
+                        const uint8_t * inPAL = gamePalette + static_cast<ptrdiff_t>( inValue ) * 3;
+                        const uint8_t * outPAL = gamePalette + static_cast<ptrdiff_t>( *imageOutX ) * 3;
 
                         const uint32_t red = static_cast<uint32_t>( *inPAL ) * alphaValue + static_cast<uint32_t>( *outPAL ) * behindValue;
                         const uint32_t green = static_cast<uint32_t>( *( inPAL + 1 ) ) * alphaValue + static_cast<uint32_t>( *( outPAL + 1 ) ) * behindValue;
@@ -1328,7 +1328,7 @@ namespace fheroes2
 
             for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
                 memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
-                std::fill( transformOutY, transformOutY + width, static_cast<uint8_t>( 0 ) );
+                memset( transformOutY, static_cast<uint8_t>( 0 ), width );
             }
         }
         else {
@@ -2126,14 +2126,14 @@ namespace fheroes2
 
         if ( image.singleLayer() ) {
             for ( ; imageY != imageYEnd; imageY += imageWidth ) {
-                std::fill( imageY, imageY + width, colorId );
+                memset( imageY, colorId, width );
             }
         }
         else {
             uint8_t * transformY = image.transform() + static_cast<ptrdiff_t>( y ) * imageWidth + x;
             for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
-                std::fill( imageY, imageY + width, colorId );
-                std::fill( transformY, transformY + width, static_cast<uint8_t>( 0 ) );
+                memset( imageY, colorId, width );
+                memset( transformY, static_cast<uint8_t>( 0 ), width );
             }
         }
     }
@@ -2151,8 +2151,8 @@ namespace fheroes2
         const uint8_t * imageYEnd = imageY + height * imageWidth;
 
         for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
-            std::fill( imageY, imageY + width, static_cast<uint8_t>( 0 ) );
-            std::fill( transformY, transformY + width, transformId );
+            memset( imageY, static_cast<uint8_t>( 0 ), width );
+            memset( transformY, transformId, width );
         }
     }
 
@@ -2301,7 +2301,7 @@ namespace fheroes2
                         }
 
                         // Set 'in' image transform data not to skip image data.
-                        std::fill( transformOutY, transformOutY + width, static_cast<uint8_t>( 0 ) );
+                        memset( transformOutY, static_cast<uint8_t>( 0 ), width );
 
                         transformOutY += widthOut;
                     }
@@ -2351,7 +2351,7 @@ namespace fheroes2
                         memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
 
                         // Set 'in' image transform data not to skip image data.
-                        std::fill( transformOutY, transformOutY + width, static_cast<uint8_t>( 0 ) );
+                        memset( transformOutY, static_cast<uint8_t>( 0 ), width );
                     }
                 }
             }
@@ -2404,7 +2404,7 @@ namespace fheroes2
                         }
 
                         // Set 'in' image transform data not to skip image data.
-                        std::fill( transformOutY, transformOutY + width, static_cast<uint8_t>( 0 ) );
+                        memset( transformOutY, static_cast<uint8_t>( 0 ), width );
                     }
                 }
             }

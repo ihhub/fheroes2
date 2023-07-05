@@ -454,7 +454,7 @@ uint32_t Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) con
 void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType )
 {
     if ( !isVisited( index, objectType ) && objectType != MP2::OBJ_NONE )
-        visit_object.push_front( IndexObject( index, objectType ) );
+        visit_object.emplace_front( index, objectType );
 }
 
 bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const

@@ -3103,8 +3103,8 @@ namespace fheroes2
 
                 LoadOriginalICN( ICN::ADVEBTNS );
                 const int releasedIndex = ( id == ICN::EVIL_ARMY_BUTTON ) ? 0 : 4;
-                _icnVsSprite[id][0] = GetICN( ICN::ADVBTNS, releasedIndex );
-                _icnVsSprite[id][1] = GetICN( ICN::ADVBTNS, releasedIndex + 1 );
+                _icnVsSprite[id][0] = GetICN( ICN::ADVEBTNS, releasedIndex );
+                _icnVsSprite[id][1] = GetICN( ICN::ADVEBTNS, releasedIndex + 1 );
 
                 // Make all black pixels transparent.
                 AddTransparency( _icnVsSprite[id][0], 36 );
