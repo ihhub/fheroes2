@@ -37,6 +37,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_border.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
@@ -85,7 +86,7 @@ namespace
     // based on given zoom level and initial center
     fheroes2::Rect computeROI( const fheroes2::Point & centerInPixel, const ZoomLevel zoomLevel )
     {
-        const fheroes2::Rect sizeInPixels = Interface::Basic::Get().GetGameArea().GetROI();
+        const fheroes2::Rect sizeInPixels = Interface::AdventureMap::Get().getGameArea().GetROI();
 
         // how many pixels from "world map" we can see in "view world" window, given current zoom
         const int32_t pixelsW = sizeInPixels.width * TILEWIDTH / tileSizePerZoomLevel[static_cast<uint8_t>( zoomLevel )];
@@ -215,7 +216,7 @@ namespace
             fheroes2::Image temporaryImg( redrawAreaWidth, redrawAreaHeight );
             temporaryImg._disableTransformLayer();
 
-            Interface::GameArea gamearea = Interface::Basic::Get().GetGameArea();
+            Interface::GameArea gamearea = Interface::AdventureMap::Get().getGameArea();
             gamearea.SetAreaPosition( 0, 0, redrawAreaWidth, redrawAreaHeight );
 
             int32_t drawingFlags = Interface::RedrawLevelType::LEVEL_ALL & ~Interface::RedrawLevelType::LEVEL_ROUTES;
@@ -254,7 +255,7 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Image & image = cache.cachedImages[static_cast<uint8_t>( ROI._zoomLevel )];
 
-        const fheroes2::Rect roiScreen = Interface::Basic::Get().GetGameArea().GetROI();
+        const fheroes2::Rect roiScreen = Interface::AdventureMap::Get().getGameArea().GetROI();
 
         const int32_t offsetPixelsX = tileSizePerZoomLevel[static_cast<uint8_t>( ROI._zoomLevel )] * ROI.GetROIinPixels().x / TILEWIDTH;
         const int32_t offsetPixelsY = tileSizePerZoomLevel[static_cast<uint8_t>( ROI._zoomLevel )] * ROI.GetROIinPixels().y / TILEWIDTH;
@@ -569,7 +570,7 @@ fheroes2::Rect ViewWorld::ZoomROIs::GetROIinTiles() const
     return result;
 }
 
-void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, Interface::Basic & interface )
+void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, Interface::BaseInterface & interface )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -597,7 +598,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     // the map generation in the World View mode heavily depends on the existing game area
     if ( isHideInterface ) {
         conf.setHideInterface( false );
-        interface.Reset();
+        interface.reset();
     }
 
     // setup cursor
@@ -606,9 +607,9 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     LocalEvent::PauseCycling();
 
     // Creates fixed radar on top-right, suitable for the View World window
-    Interface::Radar radar( interface.GetRadar(), fheroes2::Display::instance() );
+    Interface::Radar radar( interface.getRadar(), fheroes2::Display::instance() );
 
-    const Interface::GameArea gameArea = interface.GetGameArea();
+    const Interface::GameArea gameArea = interface.getGameArea();
     const fheroes2::Rect worldMapROI = gameArea.GetVisibleTileROI();
     const fheroes2::Rect visibleScreenInPixels = gameArea.GetROI();
 
@@ -736,7 +737,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     // Don't forget to reset the interface settings back if necessary
     if ( isHideInterface ) {
         conf.setHideInterface( true );
-        interface.Reset();
+        interface.reset();
     }
     else {
         radar.SetRedraw( Interface::REDRAW_RADAR_CURSOR );

@@ -871,9 +871,9 @@ void Kingdom::openOverviewDialog()
         // - hero hired -> hero icon list is updated
         // So, it's equivalent to check if hero list changed
         if ( listHeroes.Refresh( heroes ) ) {
-            worldMapRedrawMask |= Interface::Basic::Get().GetRedrawMask();
+            worldMapRedrawMask |= Interface::AdventureMap::Get().getRedrawMask();
             // redraw the main game window on screen, which will also erase current kingdom window
-            Interface::Basic::Get().Redraw();
+            Interface::AdventureMap::Get().redraw();
             // redraw Kingdom window from scratch, because it's now invalid
             background.render();
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), display, cur_pt.x, cur_pt.y );
@@ -903,6 +903,6 @@ void Kingdom::openOverviewDialog()
 
     if ( worldMapRedrawMask != 0 ) {
         // Force redraw of all UI elements that changed, that were masked by Kingdom window
-        Interface::Basic::Get().SetRedraw( worldMapRedrawMask );
+        Interface::AdventureMap::Get().setRedraw( worldMapRedrawMask );
     }
 }

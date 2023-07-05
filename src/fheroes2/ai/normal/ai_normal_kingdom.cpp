@@ -721,7 +721,7 @@ namespace AI
         }
 
         // reset indicator
-        Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
+        Interface::StatusWindow & status = Interface::AdventureMap::Get().getStatusWindow();
         status.DrawAITurnProgress( 0 );
 
         AudioManager::PlayMusicAsync( MUS::COMPUTER_TURN, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
