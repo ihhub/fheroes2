@@ -236,6 +236,8 @@ namespace fheroes2
     // Makes a button with the shadow: for that it needs to capture the background from the display at construct time
     ButtonSprite makeButtonWithShadow( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background,
                                        const Point & shadowOffset = Point( -4, 6 ) );
+    // Generates a button from a width using empty buttons. Normally the width is that of a text that will be rendered onto it.
+    void getButtonFromWidth( Sprite & released, Sprite & pressed, const int32_t width, const int emptyButtonICN );
 
     // The height of text area is only 16 pixels. If 'isTransparentBackground' is set to false the button sprite will have a default background pattern from
     // STONEBAK or STONEBAK_EVIL (for Evil interface). The pattern is the same for all buttons.

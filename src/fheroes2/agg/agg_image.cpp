@@ -148,6 +148,7 @@ namespace
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_EVIL,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
+                                                ICN::POL_CAMPAIGN_BUTTONS,
                                                 ICN::BUTTON_DIFFICULTY_ARCHIBALD,
                                                 ICN::BUTTON_DIFFICULTY_ROLAND,
                                                 ICN::BUTTON_DIFFICULTY_POL };
@@ -1455,6 +1456,77 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::POL_CAMPAIGN_BUTTONS: {
+                _icnVsSprite[id].resize( 8 );
+
+                const int baseIcnId = ICN::X_CMPBTN;
+
+                if ( useOriginalResources() ) {
+                    for ( int32_t i = 0; i < 4; ++i ) {
+                        // released button
+                        _icnVsSprite[id][2 * i] = GetICN( baseIcnId, 2 * i );
+                        // pressed button
+                        _icnVsSprite[id][2 * i + 1] = GetICN( baseIcnId, 2 * i + 1 );
+                    }
+                    // TODO: move DIFFICULTY generation to after the else statement and move the break statement to after that.
+                    break;
+                }
+                else {
+                    const std::vector<const char *> buttonTexts{ "VIEW INTRO", "RESTART", "OKAY", "CANCEL" };
+
+                    for ( int i = 0; i < static_cast<int32_t>( buttonTexts.size() ); ++i ) {
+                        const fheroes2::FontColor buttonFontColor = fheroes2::FontColor::GRAY;
+                        const char * supportedText = getSupportedText( buttonTexts[i], { fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor } );
+
+                        const fheroes2::Text releasedText( supportedText, { fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor } );
+                        const fheroes2::Text pressedText( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
+
+                        const int32_t widthTextReleased = releasedText.width();
+                        const int32_t buttonBorder = 3 + 3;
+                        const int32_t textWidthWithBorder = widthTextReleased + buttonBorder;
+
+                        // The minimum text space width for a button is 87 judging by how the original OKAY and the CANCEL buttons share the same widths even though OKAY
+                        // is a shorter word
+                        const int32_t minimumButtonTextWidthWithBorder = 87;
+                        const int32_t maximumButtonWidth = 200; // Why is such a wide button needed?
+                        const int32_t finalWidth = std::clamp( textWidthWithBorder, minimumButtonTextWidthWithBorder, maximumButtonWidth );
+
+                        const int32_t sideBackgroundBorders = 7;
+                        getButtonFromWidth( _icnVsSprite[id][2 * i], _icnVsSprite[id][2 * i + 1], finalWidth + sideBackgroundBorders, ICN::EMPTY_POL_BUTTON );
+
+                        // render the text
+                        releasedText.draw( 5, 5, finalWidth, _icnVsSprite[id][2 * i] );
+                        pressedText.draw( 4, 6, finalWidth, _icnVsSprite[id][2 * i + 1] );
+
+                    }
+                }
+                // TODO: generate the DIFFICULTY button here. Set its max width according to the space left from the widest of the set of 3 buttons containing either OKAY or RESTART
+
+                // TODO: Maximum width is determined by the space used by 3 other buttons, the space permitted on the background
+                // and the borders. This means that the text widths will have to be calculated on beforehand so that you know if any button needs to be clamped.
+                // Or you can just clamp the last one according to the space allowed from the other buttons when they have been generated - this might be simpler
+                // and good enough.
+                // TODO: Calculate and get the button width according to the other buttons and the limits of the background
+
+                // const uint32_t textWidthTotal = viewIntroText.width() + restartText.width() + okayText.width() + cancelText.width();
+
+                // std::cout << "Total text width is: " << textWidthTotal << "\n"
+                //          << "The usable background width is: " << useableBackgroundWidth << "\n";
+                // assert( textWidthTotal <= GetICN( ICN::X_CMPBKG, 0).width() );
+                // const uint32_t viewIntroWidth = 132;
+                // const uint32_t restartWidth = 100;
+                // const uint32_t okayCancelWidth = 87;
+                // const uint32_t buttonTextHeight = 17;
+                // const uint32_t buttonLeftBorder = 4;
+                // const uint32_t buttonBackgroundBorders = buttonLeftBorder + 3;
+
+                /*int32_t totalButtonTextWidths = 0;
+                const uint32_t backgroundWidth = GetICN( ICN::X_CMPBKG, 0 ).width();
+                const uint32_t useableBackgroundWidth = backgroundWidth - 29 - 29;
+                const int32_t maximumButtonWidth = useableBackgroundWidth - totalButtonTextWidths;*/
+
+                break;
+            }
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD: {
                 _icnVsSprite[id].resize( 2 );
 
@@ -2259,6 +2331,9 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_MAX_GOOD:
             case ICN::BUTTON_SMALL_MAX_EVIL:
             case ICN::BUTTON_GUILDWELL_EXIT:
+            case ICN::BUTTON_VIEWWORLD_EXIT_GOOD:
+            case ICN::BUTTON_VIEWWORLD_EXIT_EVIL:
+            case ICN::POL_CAMPAIGN_BUTTONS:
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD:
             case ICN::BUTTON_DIFFICULTY_POL:
             case ICN::BUTTON_DIFFICULTY_ROLAND:
@@ -3721,6 +3796,35 @@ namespace fheroes2
                     FillTransform( pressed, pressed.width() - 5, pressed.height() - 1, 3, 1, 1 );
                     FillTransform( pressed, pressed.width() - 4, pressed.height() - 2, 2, 1, 1 );
                     FillTransform( pressed, pressed.width() - 3, pressed.height() - 3, 1, 1, 1 );
+                }
+
+                break;
+            }
+            case ICN::EMPTY_POL_BUTTON: {
+                const int32_t originalId = ICN::X_CMPBTN;
+                LoadOriginalICN( originalId );
+
+                if ( _icnVsSprite[originalId].size() < 8 ) {
+                    break;
+                }
+                _icnVsSprite[id].resize( 2 );
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    const Sprite & original = GetICN( originalId, 4 + i );
+                    
+                    Sprite & out = _icnVsSprite[id][i];
+                    // the empty button needs to widened by 2 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result 
+                    out.resize( original.width() + 2, original.height() + 1 );
+                    out.reset();
+                    // TODO: This mimics the original appearance of the pressed state, but we have to fix it and make a proper pressed state of the button
+                    Copy( original, 0, 0, out, 1 - i, 0 + i, original.width() - 3 - i, original.height() + i );
+                    Copy( original, 4 + i, 0, out, original.width() - 3 - i, 0 + i, 2 - i, original.height() + i );
+                    Copy( original, original.width() - 3 - i, 0, out, original.width() - 1 - 2 * i, 0 + i, 3 + i, original.height() + i );
+
+                    const int32_t pixelPosition = 4 * 94 + 6;
+                    if ( pixelPosition < original.width() * original.height() ) {
+                        Fill( out, 5 - i, 3 + 2 * i, 88 - i, 18 - i, original.image()[pixelPosition] );
+                    }
                 }
 
                 break;

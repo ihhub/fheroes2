@@ -524,6 +524,14 @@ namespace fheroes2
         return { offsetX + shadow.x(), offsetY + shadow.y(), releasedWithBackground, pressedWithBackground, disabledWithBackground };
     }
 
+    void getButtonFromWidth( Sprite & released, Sprite & pressed, const int32_t width, const int emptyButtonICNId )
+    {
+        assert( width > 0 );
+
+        released = resizeButton( AGG::GetICN( emptyButtonICNId, 0 ), width );
+        pressed = resizeButton( AGG::GetICN( emptyButtonICNId, 1 ), width );
+    }
+
     void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, int32_t width, Point & releasedOffset, Point & pressedOffset,
                                 const bool isTransparentBackground /* = false */ )
     {
