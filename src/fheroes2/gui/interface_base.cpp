@@ -30,7 +30,7 @@ namespace Interface
         , _radar( *this )
         , _statusWindow( *this )
     {
-        // Do nothing;
+        // Do nothing
     }
 
     void Interface::BaseInterface::validateFadeInAndRender()
