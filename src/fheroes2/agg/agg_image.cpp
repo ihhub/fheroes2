@@ -151,7 +151,6 @@ namespace
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::BUTTON_VIEWWORLD_EXIT_GOOD,
                                                 ICN::BUTTON_VIEWWORLD_EXIT_EVIL,
-                                                ICN::POL_CAMPAIGN_BUTTONS,
                                                 ICN::BUTTON_VIEW_INTRO_POL,
                                                 ICN::BUTTON_RESTART_POL,
                                                 ICN::BUTTON_OKAY_POL,
