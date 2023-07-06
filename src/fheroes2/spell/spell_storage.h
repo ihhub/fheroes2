@@ -43,7 +43,6 @@ public:
     void Append( const BagArtifacts & );
     void Append( const Artifact & );
     bool isPresentSpell( const Spell & ) const;
-    bool hasAdventureSpell( const int lvl ) const;
     std::string String() const;
 };
 
