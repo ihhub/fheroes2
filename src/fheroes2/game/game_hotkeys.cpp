@@ -404,7 +404,7 @@ std::vector<Game::HotKeyEvent> Game::getAllHotKeyEvents()
     std::vector<Game::HotKeyEvent> events;
     events.reserve( hotKeyEventInfo.size() - 2 );
 
-    for ( size_t i = 1; i < hotKeyEventInfo.size() - 1; ++i ) {
+    for ( size_t i = 1; i < hotKeyEventInfo.size(); ++i ) {
         events.emplace_back( static_cast<Game::HotKeyEvent>( i ) );
     }
 
