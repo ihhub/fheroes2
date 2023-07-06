@@ -115,7 +115,7 @@ namespace
                 Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
                 assert( tile.GetHeroes() == nullptr );
 
-                world.GetTiles( hero->GetIndex() ).SetHeroes( hero );
+                tile.SetHeroes( hero );
             }
         }
 
