@@ -911,7 +911,7 @@ namespace fheroes2
                     break;
                 }
 
-                int32_t textWidth = 70;
+                const int32_t textWidth = 70;
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "EXIT" ), isEvilInterface );
 
                 break;
