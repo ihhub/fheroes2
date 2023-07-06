@@ -316,8 +316,11 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // button click
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-        if ( buttonDismiss.isEnabled() )
-            le.MousePressLeft( buttonDismiss.area() ) ? buttonDismiss.drawOnPress() : buttonDismiss.drawOnRelease();
+        if ( buttonDismiss.isEnabled() && ( le.MousePressLeft( buttonDismiss.area() ) || HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS_TROOP ) ) )
+            buttonDismiss.drawOnPress();
+        else {
+            buttonDismiss.drawOnRelease();
+        }
         if ( buttonPrevHero.isEnabled() )
             le.MousePressLeft( buttonPrevHero.area() ) ? buttonPrevHero.drawOnPress() : buttonPrevHero.drawOnRelease();
         if ( buttonNextHero.isEnabled() )
@@ -336,7 +339,8 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         }
 
         // dismiss
-        if ( buttonDismiss.isEnabled() && buttonDismiss.isVisible() && le.MouseClickLeft( buttonDismiss.area() )
+        if ( buttonDismiss.isEnabled() && buttonDismiss.isVisible()
+             && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS_TROOP ) )
              && Dialog::YES == Dialog::Message( GetName(), _( "Are you sure you want to dismiss this Hero?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
             // Fade-out hero dialog.
             fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
