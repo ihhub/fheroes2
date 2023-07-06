@@ -574,6 +574,24 @@ namespace fheroes2
         }
     }
 
+    int32_t getPOLButton( Sprite & released, Sprite & pressed, const int32_t width )
+    {
+        const int32_t widthTextReleased = width;
+        const int32_t buttonBorder = 3 + 3;
+        const int32_t textWidthWithBorder = widthTextReleased + buttonBorder;
+
+        // The minimum text space width for a button is 87 judging from the shared widths of the original OKAY and the CANCEL buttons even though OKAY
+        // is a shorter word
+        const int32_t minimumButtonTextWidthWithBorder = 87;
+        const int32_t maximumButtonWidth = 200; // Why is such a wide button needed?
+        const int32_t finalWidth = std::clamp( textWidthWithBorder, minimumButtonTextWidthWithBorder, maximumButtonWidth );
+
+        const int32_t sideBackgroundBorders = 7;
+        getButtonFromWidth( released, pressed, finalWidth + sideBackgroundBorders, ICN::EMPTY_POL_BUTTON );
+
+        return finalWidth;
+    }
+
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface,
                             const bool isTransparentBackground )
     {

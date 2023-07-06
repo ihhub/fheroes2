@@ -414,6 +414,23 @@ namespace
                             buttonFontColor );
     }
 
+    void createPOLButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text )
+    {
+        // get text width
+        const fheroes2::FontColor buttonFontColor = fheroes2::FontColor::GRAY;
+        const char * supportedText = getSupportedText( text, { fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor } );
+
+        const fheroes2::Text releasedText( supportedText, { fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor } );
+        const fheroes2::Text pressedText( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
+
+        // make the button
+        const int32_t finalWidth = fheroes2::getPOLButton( released, pressed, releasedText.width() );
+
+        // render the text
+        releasedText.draw( 5, 5, finalWidth, released );
+        pressedText.draw( 4, 6, finalWidth, pressed );
+    }
+
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
     {
         fheroes2::ApplyPalette( image, roi.x, roi.y, image, roi.x, roi.y, roi.width, roi.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
@@ -1475,29 +1492,7 @@ namespace fheroes2
                     const std::vector<const char *> buttonTexts{ "VIEW INTRO", "RESTART", "OKAY", "CANCEL" };
 
                     for ( int i = 0; i < static_cast<int32_t>( buttonTexts.size() ); ++i ) {
-                        const fheroes2::FontColor buttonFontColor = fheroes2::FontColor::GRAY;
-                        const char * supportedText = getSupportedText( buttonTexts[i], { fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor } );
-
-                        const fheroes2::Text releasedText( supportedText, { fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor } );
-                        const fheroes2::Text pressedText( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
-
-                        const int32_t widthTextReleased = releasedText.width();
-                        const int32_t buttonBorder = 3 + 3;
-                        const int32_t textWidthWithBorder = widthTextReleased + buttonBorder;
-
-                        // The minimum text space width for a button is 87 judging by how the original OKAY and the CANCEL buttons share the same widths even though OKAY
-                        // is a shorter word
-                        const int32_t minimumButtonTextWidthWithBorder = 87;
-                        const int32_t maximumButtonWidth = 200; // Why is such a wide button needed?
-                        const int32_t finalWidth = std::clamp( textWidthWithBorder, minimumButtonTextWidthWithBorder, maximumButtonWidth );
-
-                        const int32_t sideBackgroundBorders = 7;
-                        getButtonFromWidth( _icnVsSprite[id][2 * i], _icnVsSprite[id][2 * i + 1], finalWidth + sideBackgroundBorders, ICN::EMPTY_POL_BUTTON );
-
-                        // render the text
-                        releasedText.draw( 5, 5, finalWidth, _icnVsSprite[id][2 * i] );
-                        pressedText.draw( 4, 6, finalWidth, _icnVsSprite[id][2 * i + 1] );
-
+                        createPOLButton( _icnVsSprite[id][2 * i], _icnVsSprite[id][2 * i + 1], buttonTexts[i] );
                     }
                 }
                 // TODO: generate the DIFFICULTY button here. Set its max width according to the space left from the widest of the set of 3 buttons containing either OKAY or RESTART
