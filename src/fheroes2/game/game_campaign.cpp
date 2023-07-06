@@ -814,7 +814,7 @@ namespace
         case Campaign::DESCENDANTS_CAMPAIGN:
         case Campaign::WIZARDS_ISLE_CAMPAIGN:
         case Campaign::VOYAGE_HOME_CAMPAIGN:
-            return ICN::POL_CAMPAIGN_BUTTONS;
+            return ICN::X_CMPBTN;
         default:
             // Implementing a new campaign? Add a new case!
             assert( 0 );
