@@ -94,7 +94,7 @@ namespace
         explicit TemporaryHeroEraser( const std::vector<Heroes *> & heroes )
         {
             for ( Heroes * hero : heroes ) {
-                assert( !hero->isFreeman() );
+                assert( hero != nullptr && !hero->isFreeman() );
 
                 Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
                 if ( tile.GetHeroes() == nullptr ) {
