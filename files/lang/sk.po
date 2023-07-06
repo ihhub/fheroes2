@@ -5782,7 +5782,6 @@ msgstr ""
 "ti za 1000 zlatých ponúkne na predaj mapy mora, ktoré vytvoril za svojich "
 "mladších čias. Chceš si tieto mapy kúpiť?"
 
-
 msgid ""
 "The captain sighs. \"You don't have enough money, eh?  You can't expect me "
 "to give my maps away for free!\""
