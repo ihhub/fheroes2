@@ -2331,8 +2331,6 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_MAX_GOOD:
             case ICN::BUTTON_SMALL_MAX_EVIL:
             case ICN::BUTTON_GUILDWELL_EXIT:
-            case ICN::BUTTON_VIEWWORLD_EXIT_GOOD:
-            case ICN::BUTTON_VIEWWORLD_EXIT_EVIL:
             case ICN::POL_CAMPAIGN_BUTTONS:
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD:
             case ICN::BUTTON_DIFFICULTY_POL:
