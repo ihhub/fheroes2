@@ -1,12 +1,12 @@
 # Danish translation for fheroes2
 # Copyright (C) 2021 - 2023 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-09 14:50+0000\n"
+"POT-Creation-Date: 2023-07-06 21:34+0300\n"
 "PO-Revision-Date: 2023-05-31 12:10+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -56,6 +56,12 @@ msgstr "AFSLUT"
 
 msgid "CANCEL"
 msgstr "AFBRYD"
+
+msgid "OKAY"
+msgstr "OK"
+
+msgid "smallerButton|OKAY"
+msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "GODTAG"
@@ -184,9 +190,6 @@ msgstr "MIN"
 
 msgid "MAX"
 msgstr "MAKS"
-
-msgid "OKAY"
-msgstr "OK"
 
 msgid "Warrior"
 msgstr "Kriger"

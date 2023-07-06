@@ -1,12 +1,12 @@
 # Spanish translation for fheroes2
 # Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-03 06:46+0000\n"
+"POT-Creation-Date: 2023-07-06 21:34+0300\n"
 "PO-Revision-Date: 2022-12-03 03:38+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -45,6 +45,12 @@ msgid "QUIT"
 msgstr ""
 
 msgid "CANCEL"
+msgstr ""
+
+msgid "OKAY"
+msgstr ""
+
+msgid "smallerButton|OKAY"
 msgstr ""
 
 msgid "ACCEPT"
@@ -163,9 +169,6 @@ msgid "MIN"
 msgstr ""
 
 msgid "MAX"
-msgstr ""
-
-msgid "OKAY"
 msgstr ""
 
 #, fuzzy
@@ -4939,7 +4942,7 @@ msgstr ""
 msgid "Handicap"
 msgstr "Mandigal"
 
-#
+# 
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
@@ -4958,7 +4961,7 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr ""
 
-#
+# 
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -4967,7 +4970,7 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr ""
 
-#
+# 
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."
