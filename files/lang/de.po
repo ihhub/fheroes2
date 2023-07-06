@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-14 20:35+0000\n"
+"POT-Creation-Date: 2023-07-05 23:58+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3555,14 +3555,24 @@ msgstr "Person:"
 msgid "Best Monster:"
 msgstr "Bestes Monster:"
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
+#, fuzzy
+msgid ""
+"Are you sure you want to load a new map? (Any unsaved changes to the current "
+"map will be lost.)"
 msgstr ""
+"Sind Sie sicher, dass Sie ein neues Spiel laden wollen? (Ihr aktuelles Spiel "
+"geht dabei verloren.)"
 
 #, fuzzy
-msgid "Cancel back to the New Map menu."
-msgstr "Abbrechen und zurück zum Hauptmenü."
+msgid ""
+"Are you sure you want to create a new map? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Sind Sie sicher, dass Sie ein neues Spiel laden wollen? (Ihr aktuelles Spiel "
+"geht dabei verloren.)"
 
-msgid "Create a new map either from scratch or using the random map generator."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -3575,6 +3585,100 @@ msgstr "Spiel laden"
 
 msgid "Load an existing map."
 msgstr ""
+
+#, fuzzy
+msgid "Save Map"
+msgstr "Spiel speichern"
+
+#, fuzzy
+msgid "Save the current map."
+msgstr "Das aktuelle Spiel speichern."
+
+msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Terrain Mode"
+msgstr ""
+
+msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
+msgstr ""
+
+msgid "Object Mode"
+msgstr ""
+
+msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgstr ""
+
+msgid "Detail Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Used for special editing of monsters, heroes and towns."
+msgstr "Alle feindlichen Helden und Städte besiegen."
+
+msgid "Allows you to draw streams by clicking and dragging."
+msgstr ""
+
+msgid "Stream Mode"
+msgstr ""
+
+msgid "Allows you to draw roads by clicking and dragging."
+msgstr ""
+
+#, fuzzy
+msgid "Road Mode"
+msgstr "Weg"
+
+msgid "Erase Mode"
+msgstr ""
+
+msgid "Used to erase objects off the map."
+msgstr ""
+
+msgid "Change between zoom and normal view."
+msgstr ""
+
+msgid "Magnify"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Undo your last action.  Press again to redo the action."
+msgstr ""
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+msgid "Edit map title, description, and other general information."
+msgstr ""
+
+#, fuzzy
+msgid "Specifications"
+msgstr "Versteinerung"
+
+msgid "File Options"
+msgstr "Datei-Optionen"
+
+#, fuzzy
+msgid ""
+"Open the file options menu, where you can save or load maps, or quit out of "
+"the editor."
+msgstr ""
+"Ruft das Menü \"Dateioptionen\" auf, in dem Sie das Spiel laden, speichern, "
+"neu starten oder aufgeben können."
+
+#, fuzzy
+msgid "View the editor system options, which let you customize the editor."
+msgstr ""
+"Ruft das Menü \"Systemoptionen\" auf, in dem Sie Ihr Spiel anpassen können."
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Abbrechen und zurück zum Hauptmenü."
 
 msgid "Cancel back to the main menu."
 msgstr "Abbrechen und zurück zum Hauptmenü."
@@ -4800,9 +4904,6 @@ msgid ""
 msgstr ""
 "Ruft das Menü \"Dateioptionen\" auf, in dem Sie das Spiel laden, speichern, "
 "neu starten oder aufgeben können."
-
-msgid "File Options"
-msgstr "Datei-Optionen"
 
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
