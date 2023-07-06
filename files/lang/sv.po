@@ -3443,14 +3443,24 @@ msgstr "Personlighet:"
 msgid "Best Monster:"
 msgstr "Bästa Monster:"
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
+#, fuzzy
+msgid ""
+"Are you sure you want to load a new map? (Any unsaved changes to the current "
+"map will be lost.)"
 msgstr ""
+"Är du säker på att du vill ladda ett nytt spel? (Ditt nuvarande spel kommer "
+"att försvinna.)"
 
 #, fuzzy
-msgid "Cancel back to the New Map menu."
-msgstr "Avbryt och gå tillbaka till huvudmenyn."
+msgid ""
+"Are you sure you want to create a new map? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Är du säker på att du vill ladda ett nytt spel? (Ditt nuvarande spel kommer "
+"att försvinna.)"
 
-msgid "Create a new map either from scratch or using the random map generator."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -3463,6 +3473,100 @@ msgstr "Ladda Spel"
 
 msgid "Load an existing map."
 msgstr ""
+
+#, fuzzy
+msgid "Save Map"
+msgstr "Spara Spel"
+
+#, fuzzy
+msgid "Save the current map."
+msgstr "Spara nuvarande spel."
+
+msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Terrain Mode"
+msgstr ""
+
+msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
+msgstr ""
+
+msgid "Object Mode"
+msgstr ""
+
+msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgstr ""
+
+msgid "Detail Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Used for special editing of monsters, heroes and towns."
+msgstr "Besegra alla fiendehjältar och städer."
+
+msgid "Allows you to draw streams by clicking and dragging."
+msgstr ""
+
+msgid "Stream Mode"
+msgstr ""
+
+msgid "Allows you to draw roads by clicking and dragging."
+msgstr ""
+
+#, fuzzy
+msgid "Road Mode"
+msgstr "Väg"
+
+msgid "Erase Mode"
+msgstr ""
+
+msgid "Used to erase objects off the map."
+msgstr ""
+
+msgid "Change between zoom and normal view."
+msgstr ""
+
+msgid "Magnify"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Undo your last action.  Press again to redo the action."
+msgstr ""
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+msgid "Edit map title, description, and other general information."
+msgstr ""
+
+#, fuzzy
+msgid "Specifications"
+msgstr "Förstening"
+
+msgid "File Options"
+msgstr "Filalternativ"
+
+#, fuzzy
+msgid ""
+"Open the file options menu, where you can save or load maps, or quit out of "
+"the editor."
+msgstr ""
+"Tar fram filalternativsmenyn som låter dig ladda, spara, starta ett nytt "
+"spel eller avsluta."
+
+#, fuzzy
+msgid "View the editor system options, which let you customize the editor."
+msgstr ""
+"Tar fram systemalternativsmenyn som låter dig skräddarsy ditt spelande."
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Avbryt och gå tillbaka till huvudmenyn."
 
 msgid "Cancel back to the main menu."
 msgstr "Avbryt och gå tillbaka till huvudmenyn."
@@ -4655,9 +4759,6 @@ msgid ""
 msgstr ""
 "Tar fram filalternativsmenyn som låter dig ladda, spara, starta ett nytt "
 "spel eller avsluta."
-
-msgid "File Options"
-msgstr "Filalternativ"
 
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
@@ -6372,7 +6473,20 @@ msgstr ""
 msgid "This spell cannot be used on a boat."
 msgstr "Denna stad kan inte uppgraderas till ett slott."
 
-msgid "This spell can be casted only nearby water."
+#, fuzzy
+msgid "This spell can be casted only nearby ocean."
+msgstr "Denna stad kan inte uppgraderas till ett slott."
+
+msgid ""
+"There is no boat available and no free ocean location near the hero to cast "
+"this spell."
+msgstr ""
+
+#, fuzzy
+msgid "There is no more boat available to cast this spell."
+msgstr "Kasta en kartbesvärjelse."
+
+msgid "There is no free ocean location near the hero to cast this spell."
 msgstr ""
 
 msgid ""
@@ -6512,9 +6626,6 @@ msgstr "Stadsportal"
 
 msgid "Select town to port to."
 msgstr "Välj stad att teleportera till."
-
-msgid "%{spell} failed!!!"
-msgstr "%{spell} misslyckades!"
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Fiendehjältar är nu fullt identifierade."
@@ -10106,3 +10217,6 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{spell} failed!!!"
+#~ msgstr "%{spell} misslyckades!"

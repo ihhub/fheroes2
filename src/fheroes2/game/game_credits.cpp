@@ -25,6 +25,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -35,11 +36,11 @@
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
+#include "math_base.h"
 #include "mus.h"
 #include "pal.h"
 #include "screen.h"
 #include "settings.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_text.h"
@@ -49,8 +50,9 @@ namespace
 {
     void transformToBlack( fheroes2::Image & out )
     {
-        if ( out.empty() )
+        if ( out.empty() ) {
             return;
+        }
 
         assert( !out.singleLayer() );
 
@@ -100,7 +102,7 @@ namespace
             switch ( _animationState ) {
             case AnimationState::FADING_IN:
                 _alphaValue += ALPHA_VALUE_STEP;
-                if ( _alphaValue >= 255 ) {
+                if ( _alphaValue > 255 ) {
                     _alphaValue = 255;
                     _animationState = AnimationState::NO_ACTION;
                     _noActionCounter = 0;
@@ -119,8 +121,9 @@ namespace
                     _animationState = AnimationState::FADING_IN;
 
                     ++_pageId;
-                    if ( _pageId >= _imageCount )
+                    if ( _pageId >= _imageCount ) {
                         _pageId = 0;
+                    }
                 }
 
                 break;
@@ -151,19 +154,19 @@ namespace
         assert( background.height() < fheroes2::Display::DEFAULT_HEIGHT );
 
         fheroes2::Sprite output( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT - background.height() );
-        output.fill( 0 );
         output._disableTransformLayer();
+        output.fill( 0 );
 
-        Text caption( "fheroes2 engine (" + Settings::GetVersion() + ")", Font::YELLOW_BIG );
-        caption.Blit( output.width() / 2 - caption.w() / 2, 15, output );
+        const fheroes2::Text caption( "fheroes2 engine (" + Settings::GetVersion() + ")", fheroes2::FontType::normalYellow() );
+        caption.draw( output.width() / 2 - caption.width() / 2, 17, output );
 
         return output;
     }
 
     int32_t renderText( fheroes2::Image & output, const int32_t offsetX, const int32_t offsetY, const int32_t textWidth, const char * titleText, const char * bodyText )
     {
-        fheroes2::Text title( titleText, fheroes2::FontType::normalYellow() );
-        fheroes2::Text name( bodyText, fheroes2::FontType::normalWhite() );
+        const fheroes2::Text title( titleText, fheroes2::FontType::normalYellow() );
+        const fheroes2::Text name( bodyText, fheroes2::FontType::normalWhite() );
 
         title.draw( offsetX, offsetY, textWidth, output );
         const int32_t titleHeight = title.height( textWidth );
@@ -179,16 +182,14 @@ namespace
         output._disableTransformLayer();
 
         const int32_t columnStep = 210;
-        const int32_t textInitialOffsetY = 40;
+        const int32_t textInitialOffsetY = 42;
         const int32_t textWidth = 200;
 
         int32_t offsetY = textInitialOffsetY;
+        int32_t offsetX = 0;
 
-        TextBox title( _( "Project Coordination and Core Development" ), Font::YELLOW_BIG, textWidth );
-        TextBox name( "Ihar Hubchyk", Font::BIG, textWidth );
-        title.Blit( ( columnStep - title.w() ) / 2, offsetY, output );
-        name.Blit( ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
-        offsetY += title.h() + name.h() + 10;
+        offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Project Coordination and Core Development" ), "Ihar Hubchyk" );
+        offsetY += 10;
 
         const fheroes2::Sprite & blackDragon = fheroes2::AGG::GetICN( ICN::DRAGBLAK, 5 );
         fheroes2::Blit( blackDragon, output, ( columnStep - blackDragon.width() ) / 2, offsetY );
@@ -196,11 +197,8 @@ namespace
 
         const int32_t secondAuthorLayerY = offsetY;
 
-        title.Set( _( "Development" ), Font::YELLOW_BIG, textWidth );
-        name.Set( "Sergei Ivanov", Font::BIG, textWidth );
-        title.Blit( ( columnStep - title.w() ) / 2, offsetY, output );
-        name.Blit( ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
-        offsetY += title.h() + name.h() + 10;
+        offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Development" ), "Sergei Ivanov" );
+        offsetY += 10;
 
         const fheroes2::Sprite & minotaur = fheroes2::AGG::GetICN( ICN::MINOTAUR, 14 );
         fheroes2::Blit( minotaur, output, ( columnStep - minotaur.width() ) / 2, offsetY );
@@ -208,63 +206,59 @@ namespace
 
         offsetY += 40;
 
-        const Text websiteInto( _( "Visit us at " ), Font::BIG );
-        const Text website( "https://github.com/ihhub/fheroes2", Font::YELLOW_BIG );
-        const int32_t websiteOffsetX = ( output.width() - websiteInto.w() - website.w() ) / 2;
-        websiteInto.Blit( websiteOffsetX, offsetY, output );
-        website.Blit( websiteOffsetX + websiteInto.w(), offsetY, output );
+        const fheroes2::Text websiteInto( _( "Visit us at " ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text website( "https://github.com/ihhub/fheroes2", fheroes2::FontType::normalYellow() );
+
+        const int32_t websiteIntoWidth = websiteInto.width();
+        const int32_t websiteWidth = website.width();
+        const int32_t websiteHeight = website.height();
+        const int32_t websiteOffsetX = ( output.width() - websiteIntoWidth - websiteWidth ) / 2;
+        websiteInto.draw( websiteOffsetX, offsetY, output );
+        website.draw( websiteOffsetX + websiteIntoWidth, offsetY, output );
 
         const fheroes2::Sprite & missile = fheroes2::AGG::GetICN( ICN::ARCH_MSL, 4 );
-        fheroes2::Blit( missile, output, websiteOffsetX - 10 - missile.width(), offsetY + website.h() / 2 - missile.height() / 2 );
-        fheroes2::Blit( missile, output, websiteOffsetX + websiteInto.w() + website.w() + 10, offsetY + website.h() / 2 - missile.height() / 2, true );
+        fheroes2::Blit( missile, output, websiteOffsetX - 10 - missile.width(), offsetY + websiteHeight / 2 - missile.height() / 2 );
+        fheroes2::Blit( missile, output, websiteOffsetX + websiteIntoWidth + websiteWidth + 10, offsetY + websiteHeight / 2 - missile.height() / 2, true );
 
         offsetY = textInitialOffsetY;
+        offsetX += columnStep;
 
-        title.Set( _( "QA and Support" ), Font::YELLOW_BIG, textWidth );
-        name.Set( "Igor Tsivilko", Font::BIG, textWidth );
-        title.Blit( columnStep + ( columnStep - title.w() ) / 2, offsetY, output );
-        name.Blit( columnStep + ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
-        offsetY += title.h() + name.h() + 10;
+        offsetY += renderText( output, offsetX, offsetY, textWidth, _( "QA and Support" ), "Igor Tsivilko" );
+        offsetY += 10;
 
         const fheroes2::Sprite & cyclop = fheroes2::AGG::GetICN( ICN::CYCLOPS, 38 );
-        fheroes2::Blit( cyclop, output, columnStep + ( columnStep - cyclop.width() ) / 2, offsetY );
+        fheroes2::Blit( cyclop, output, offsetX + ( columnStep - cyclop.width() ) / 2, offsetY );
 
         offsetY = secondAuthorLayerY;
 
-        title.Set( _( "Development" ), Font::YELLOW_BIG, textWidth );
-        name.Set( "Ivan Shibanov", Font::BIG, textWidth );
-        title.Blit( columnStep + ( columnStep - title.w() ) / 2, offsetY, output );
-        name.Blit( columnStep + ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
-        offsetY += title.h() + name.h() + 10;
+        offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Development" ), "Ivan Shibanov" );
+        offsetY += 10;
 
         const fheroes2::Sprite & crusader = fheroes2::AGG::GetICN( ICN::PALADIN2, 23 );
-        fheroes2::Blit( crusader, output, columnStep + ( columnStep - crusader.width() ) / 2, offsetY );
+        fheroes2::Blit( crusader, output, offsetX + ( columnStep - crusader.width() ) / 2, offsetY );
 
         offsetY = textInitialOffsetY;
+        offsetX += columnStep;
 
-        title.Set( _( "Development" ), Font::YELLOW_BIG, textWidth );
-        name.Set( "Oleg Derevenetz", Font::BIG, textWidth );
-        title.Blit( columnStep * 2 + ( columnStep - title.w() ) / 2, offsetY, output );
-        name.Blit( columnStep * 2 + ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
-
-        offsetY += title.h() + name.h() + 10;
+        offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Development" ), "Oleg Derevenetz" );
+        offsetY += 10;
 
         const fheroes2::Sprite & mage = fheroes2::AGG::GetICN( ICN::MAGE1, 24 );
-        fheroes2::Blit( mage, output, columnStep * 2 + ( columnStep - mage.width() ) / 2, offsetY );
+        fheroes2::Blit( mage, output, offsetX + ( columnStep - mage.width() ) / 2, offsetY );
 
         offsetY = secondAuthorLayerY;
 
-        title.Set( _( "Dev and Support" ), Font::YELLOW_BIG, textWidth );
-        name.Set( "Zense", Font::BIG, textWidth );
-        title.Blit( columnStep * 2 + ( columnStep - name.w() ) / 2, offsetY, output );
-        name.Blit( columnStep * 2 + ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
-        offsetY += title.h() + name.h() + 10;
+        offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Dev and Support" ), "Zense" );
+        offsetY += 10;
 
         const fheroes2::Sprite & phoenix = fheroes2::AGG::GetICN( ICN::PHOENIX, 4 );
-        fheroes2::Blit( phoenix, output, columnStep * 2 + ( columnStep - phoenix.width() ) / 2, offsetY - 10 );
+        fheroes2::Blit( phoenix, output, offsetX + ( columnStep - phoenix.width() ) / 2, offsetY - 10 );
 
         const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
         fheroes2::Blit( goblin, output, output.width() - goblin.width() * 2, output.height() - goblin.height() - 10, true );
+
+        fheroes2::Image resizedOutput( 640, 480 );
+        fheroes2::Resize( output, 0, 0, output.width(), output.height(), resizedOutput, 0, 0, resizedOutput.width(), resizedOutput.height() );
 
         return output;
     }
@@ -274,15 +268,16 @@ namespace
         fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGLAVA, 0 );
         output._disableTransformLayer();
 
-        const int32_t textInitialOffsetX = 320;
+        const int32_t textInitialOffsetX = output.width() / 2;
         const int32_t textInitialOffsetY = 60;
         const int32_t textWidth = 300;
+        const int32_t textOffsetX = ( textInitialOffsetX - textWidth ) / 2;
 
         int32_t offsetY = textInitialOffsetY;
 
-        TextBox title( _( "Special Thanks to" ), Font::YELLOW_BIG, textWidth );
-        title.Blit( ( output.width() - title.w() ) / 2, offsetY, output );
-        offsetY += title.h() + 5;
+        const fheroes2::Text title( _( "Special Thanks to" ), fheroes2::FontType::normalYellow() );
+        title.draw( textInitialOffsetX - title.width() / 2, offsetY, output );
+        offsetY += title.height() + 5;
 
         const std::string contributors( "LeHerosInconnu\n"
                                         "undef21\n"
@@ -298,44 +293,44 @@ namespace
                                         "dimag0g\n"
                                         "tau3\n" );
 
-        TextBox name( contributors, Font::BIG, textWidth );
-        const int32_t constributorsHeight = name.h();
-        const int32_t contributorCount = static_cast<int32_t>( name.row() );
-        name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY, output );
+        fheroes2::Text name( contributors, fheroes2::FontType::normalWhite() );
+        const int32_t constributorsHeight = name.height( textWidth );
+        const int32_t contributorCount = name.rows( textWidth );
+        name.draw( textOffsetX, offsetY, textWidth, output );
 
-        std::string supporters( "Aimi Lindschouw\n"
-                                "Aleksei Mazur\n"
-                                "Andrew Szucs\n"
-                                "Benjamin Hughes\n"
-                                "Brandon Wright\n"
-                                "Connor Townsend\n"
-                                "Kiril Lipatov\n"
-                                "Kresimir Condic\n"
-                                "Kuza\n"
-                                "Matt Taylor\n"
-                                "slvclw\n"
-                                "William Hoskinson\n" );
+        const std::string supporters( "Aimi Lindschouw\n"
+                                      "Aleksei Mazur\n"
+                                      "Andrew Szucs\n"
+                                      "Benjamin Hughes\n"
+                                      "Brandon Wright\n"
+                                      "Connor Townsend\n"
+                                      "Kiril Lipatov\n"
+                                      "Kresimir Condic\n"
+                                      "Kuza\n"
+                                      "Matt Taylor\n"
+                                      "slvclw\n"
+                                      "William Hoskinson\n" );
 
-        name.Set( supporters, Font::BIG, textWidth );
-        const int32_t supportersHeight = name.h();
-        const int32_t supporterCount = static_cast<int32_t>( name.row() );
+        name.set( supporters, fheroes2::FontType::normalWhite() );
+        const int32_t supportersHeight = name.height( textWidth );
+        const int32_t supporterCount = name.rows( textWidth );
         const int32_t countDifference = ( contributorCount - supporterCount );
         const int32_t supportersOffset = ( countDifference / 2 ) * ( supportersHeight / supporterCount );
 
-        name.Blit( textInitialOffsetX + ( textInitialOffsetX - name.w() ) / 2, offsetY + supportersOffset, output );
+        name.draw( textInitialOffsetX + textOffsetX, offsetY + supportersOffset, textWidth, output );
 
         offsetY += constributorsHeight;
 
-        name.Set( _( "and many other contributors!" ), Font::BIG, textWidth );
-        name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY, output );
+        name.set( _( "and many other contributors!" ), fheroes2::FontType::normalWhite() );
+        name.draw( 10, offsetY, textWidth, output );
 
-        name.Set( _( "and many-many other supporters!" ), Font::BIG, textWidth );
-        name.Blit( textInitialOffsetX + ( textInitialOffsetX - name.w() ) / 2, offsetY, output );
+        name.set( _( "and many-many other supporters!" ), fheroes2::FontType::normalWhite() );
+        name.draw( textInitialOffsetX + textOffsetX, offsetY, textWidth, output );
 
-        offsetY += name.h();
+        offsetY += name.height();
 
         const fheroes2::Sprite & hydra = fheroes2::AGG::GetICN( ICN::HYDRA, 11 );
-        fheroes2::Blit( hydra, output, ( output.width() - hydra.width() ) / 2, offsetY );
+        fheroes2::Blit( hydra, output, textInitialOffsetX - hydra.width() / 2, offsetY );
 
         return output;
     }
@@ -345,38 +340,32 @@ namespace
         fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGSWMP, 0 );
         output._disableTransformLayer();
 
-        const int32_t textInitialOffsetX = 320;
+        const int32_t textInitialOffsetX = output.width() / 2;
         const int32_t textInitialOffsetY = 80;
         const int32_t textWidth = 300;
 
+        int32_t offsetX = ( textInitialOffsetX - textWidth ) / 2;
         int32_t offsetY = textInitialOffsetY;
 
-        TextBox title( _( "Support us at" ), Font::YELLOW_BIG, textWidth );
-        TextBox name( _( "local-donation-platform|https://www.patreon.com/fheroes2" ), Font::BIG, textWidth );
-        title.Blit( ( textInitialOffsetX - title.w() ) / 2, offsetY, output );
-        name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY + title.h(), output );
-        offsetY += title.h() + name.h() + 30;
+        offsetY += renderText( output, offsetX, offsetY, textWidth, _( "Support us at" ), _( "local-donation-platform|https://www.patreon.com/fheroes2" ) );
+        offsetY += 30;
 
         const fheroes2::Sprite & wizard = fheroes2::AGG::GetICN( ICN::CMBTCAPZ, 4 );
         fheroes2::Blit( wizard, output, ( textInitialOffsetX - wizard.width() ) / 2, offsetY );
         offsetY += wizard.height() + 20;
 
-        title.Set( _( "Connect with us at" ), Font::YELLOW_BIG, textWidth );
-        name.Set( _( "local-social-network|https://www.facebook.com/groups/fheroes2" ), Font::BIG, textWidth - 10 ); // special case to properly split the string
-        title.Blit( ( textInitialOffsetX - title.w() ) / 2, offsetY, output );
-        name.Blit( ( textInitialOffsetX - name.w() ) / 2, offsetY + title.h(), output );
-        offsetY += title.h() + name.h() + 30;
+        offsetY
+            += renderText( output, offsetX, offsetY, textWidth - 10, _( "Connect with us at" ), _( "local-social-network|https://www.facebook.com/groups/fheroes2" ) );
+        offsetY += 20;
 
         const fheroes2::Sprite & vampireLord = fheroes2::AGG::GetICN( ICN::VAMPIRE2, 22 );
         fheroes2::Blit( vampireLord, output, ( textInitialOffsetX - vampireLord.width() ) / 2, offsetY );
 
         offsetY = textInitialOffsetY;
+        offsetX += textInitialOffsetX;
 
-        title.Set( _( "Need help with the game?" ), Font::YELLOW_BIG, textWidth );
-        name.Set( "https://discord.gg/xF85vbZ", Font::BIG, textWidth );
-        title.Blit( textInitialOffsetX + ( textInitialOffsetX - title.w() ) / 2, offsetY, output );
-        name.Blit( textInitialOffsetX + ( textInitialOffsetX - name.w() ) / 2, offsetY + title.h(), output );
-        offsetY += title.h() + name.h() + 10;
+        offsetY += renderText( output, offsetX, offsetY, textWidth - 10, _( "Need help with the game?" ), "https://discord.gg/xF85vbZ" );
+        offsetY += 10;
 
         fheroes2::Sprite labyrinth = fheroes2::AGG::GetICN( ICN::TWNWUP_3, 0 );
         fheroes2::ApplyPalette( labyrinth, 2 );
@@ -384,22 +373,21 @@ namespace
 
         offsetY += labyrinth.height() + 50;
 
-        const int32_t miniMonsterXOffset = textInitialOffsetX + ( output.width() - textInitialOffsetX ) / 2;
+        const int32_t miniMonsterXOffset = textInitialOffsetX * 3 / 2;
 
-        title.Set( _( "Original project before 0.7" ), Font::YELLOW_SMALL, textWidth );
-        title.Blit( textInitialOffsetX + ( output.width() - textInitialOffsetX - title.w() ) / 2, offsetY, output );
-        offsetY += title.h();
-
-        name.Set( "Andrey Afletdinov\nhttps://sourceforge.net/\nprojects/fheroes2/", Font::SMALL, textWidth );
-        name.Blit( textInitialOffsetX + ( output.width() - textInitialOffsetX - name.w() ) / 2, offsetY, output );
+        fheroes2::Text name( _( "Original project before 0.7" ), fheroes2::FontType::smallYellow() );
+        name.draw( offsetX, offsetY, textWidth - 10, output );
+        offsetY += name.height( textWidth - 10 );
+        name.set( "Andrey Afletdinov\nhttps://sourceforge.net/\nprojects/fheroes2/", fheroes2::FontType::smallWhite() );
+        name.draw( offsetX, offsetY, textWidth - 10, output );
 
         fheroes2::Sprite creature = fheroes2::AGG::GetICN( ICN::MAGE2, 4 );
         transformToBlack( creature );
 
         const int32_t creatureOffsetY = output.height() - 95;
         fheroes2::Blit( creature, 0, 0, output, miniMonsterXOffset - creature.width() / 2, creatureOffsetY, creature.width(), creature.height() );
-        title.Set( "?", Font::YELLOW_BIG, 30 );
-        title.Blit( miniMonsterXOffset - title.w() / 2, creatureOffsetY + creature.height() / 2 - 5, output );
+        name.set( "?", fheroes2::FontType::normalYellow() );
+        name.draw( miniMonsterXOffset - name.width() / 2, creatureOffsetY + creature.height() / 2 - 5, output );
 
         return output;
     }
@@ -412,7 +400,7 @@ namespace
 
         const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
 
-        fheroes2::Text title( _( "Heroes of Might and Magic II: The Succession Wars team" ), nameFontType );
+        const fheroes2::Text title( _( "Heroes of Might and Magic II: The Succession Wars team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
         const int32_t textInitialOffsetY = 35;
@@ -475,7 +463,7 @@ namespace
 
         const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
 
-        fheroes2::Text title( _( "Heroes of Might and Magic II: The Succession Wars team" ), nameFontType );
+        const fheroes2::Text title( _( "Heroes of Might and Magic II: The Succession Wars team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
         const int32_t textInitialOffsetY = 35;
@@ -690,22 +678,28 @@ namespace
     }
 }
 
-void Game::ShowCredits()
+void Game::ShowCredits( const bool keepMainMenuBorders )
 {
-    fheroes2::fadeOutDisplay();
+    // Credits are shown in the place of Main Menu background which is correctly resized.
+    // We get the Main Menu background ROI to use it for credits ROI and leave borders unchanged.
+    const fheroes2::Sprite & mainMenuBackground = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
+    const fheroes2::Rect creditsRoi( mainMenuBackground.x(), mainMenuBackground.y(), mainMenuBackground.width(), mainMenuBackground.height() );
 
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    // Hide mouse cursor.
+    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+
+    std::unique_ptr<fheroes2::ImageRestorer> restorer;
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    if ( keepMainMenuBorders ) {
+        // Make a copy of background image to restore it during fade after the credits.
+        restorer = std::make_unique<fheroes2::ImageRestorer>( display, creditsRoi.x, creditsRoi.y, creditsRoi.width, creditsRoi.height );
+
+        fheroes2::fadeOutDisplay( creditsRoi, false );
+    }
 
     AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
-
-    fheroes2::Image blackScreen( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
-    blackScreen.fill( 0 );
-    blackScreen._disableTransformLayer();
-
-    fheroes2::Image output( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
-    output.reset();
-    output._disableTransformLayer();
 
     const uint64_t animationDelay = 50;
 
@@ -719,16 +713,26 @@ void Game::ShowCredits()
         pages.emplace_back( generatePriceOfLoyaltyCreditsSecondPage() );
         pages.emplace_back( generatePriceOfLoyaltyCreditsThirdPage() );
     }
+
     pages.emplace_back( generateSuccessionWarsCreditsFirstPage() );
     pages.emplace_back( generateSuccessionWarsCreditsSecondPage() );
 
-    const fheroes2::Sprite header = generateHeader();
+    // Resize the credits pages. 'creditsRoi' is made using Main Menu background parameters that were already properly calculated for the current resolution.
+    const int32_t resizedPageHeight = creditsRoi.width * pages.front().height() / pages.front().width();
+    for ( fheroes2::Sprite & page : pages ) {
+        fheroes2::Sprite resizedPage( creditsRoi.width, resizedPageHeight );
+        resizedPage._disableTransformLayer();
+        fheroes2::Resize( page, resizedPage, false );
+        page = std::move( resizedPage );
+    }
+
+    fheroes2::Sprite header( creditsRoi.width, creditsRoi.height - resizedPageHeight );
+    header._disableTransformLayer();
+    fheroes2::Resize( generateHeader(), header, false );
 
     AnimationSequence sequence( static_cast<int32_t>( pages.size() ) );
 
     bool fadeInHeader = true;
-
-    fheroes2::Display & display = fheroes2::Display::instance();
 
     // Immediately indicate that the delay has passed to render first frame immediately.
     Game::passCustomAnimationDelay( animationDelay );
@@ -737,32 +741,55 @@ void Game::ShowCredits()
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isCustomDelayNeeded( animationDelay ) ) ) {
-        if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
+        if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
             break;
+        }
 
         if ( Game::validateCustomAnimationDelay( animationDelay ) ) {
-            if ( fadeInHeader && sequence.state() != AnimationState::FADING_IN ) {
-                fadeInHeader = false;
-                fheroes2::Copy( header, 0, 0, output, 0, 0, header.width(), header.height() );
+            if ( sequence.state() == AnimationState::NO_ACTION ) {
+                if ( fadeInHeader ) {
+                    fadeInHeader = false;
+                }
+
+                sequence.increment();
+                continue;
             }
+
+            const uint8_t alpha = sequence.alpha();
 
             if ( fadeInHeader ) {
-                output = blackScreen;
-                fheroes2::AlphaBlit( header, 0, 0, output, 0, 0, header.width(), header.height(), sequence.alpha() );
+                fheroes2::ApplyAlpha( header, 0, 0, display, creditsRoi.x, creditsRoi.y, header.width(), header.height(), alpha );
+            }
 
-                const fheroes2::Image & page = pages[sequence.pageId()];
-                fheroes2::AlphaBlit( page, 0, 0, output, 0, header.height(), page.width(), page.height(), sequence.alpha() );
+            const fheroes2::Image & page = pages[sequence.pageId()];
+
+            if ( alpha == 255 ) {
+                // This alpha is for fully bright image so there is no need to apply alpha.
+                Copy( page, 0, 0, display, creditsRoi.x, creditsRoi.y + header.height(), page.width(), page.height() );
+            }
+            else if ( alpha == 0 ) {
+                // This alpha is for fully dark image so fill it with the black color.
+                Fill( display, creditsRoi.x, creditsRoi.y + header.height(), page.width(), page.height(), 0 );
             }
             else {
-                const fheroes2::Image & page = pages[sequence.pageId()];
-                fheroes2::Copy( blackScreen, 0, 0, output, 0, header.height(), page.width(), page.height() );
-                fheroes2::AlphaBlit( page, 0, 0, output, 0, header.height(), page.width(), page.height(), sequence.alpha() );
+                fheroes2::ApplyAlpha( page, 0, 0, display, creditsRoi.x, creditsRoi.y + header.height(), page.width(), page.height(), alpha );
             }
 
-            fheroes2::Resize( output, display );
             display.render();
 
             sequence.increment();
         }
+    }
+
+    if ( keepMainMenuBorders ) {
+        fheroes2::fadeOutDisplay( creditsRoi, false );
+
+        // Restore a copy of background image to fade it in.
+        restorer->restore();
+
+        fheroes2::fadeInDisplay( creditsRoi, false );
+    }
+    else {
+        fheroes2::fadeOutDisplay();
     }
 }

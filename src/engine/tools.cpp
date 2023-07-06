@@ -217,16 +217,18 @@ std::vector<std::string> StringSplit( const std::string & str, const std::string
     return vec;
 }
 
-std::string InsertString( const std::string & src, size_t pos, const char * c )
+std::string insertCharToString( const std::string & inputString, const size_t position, const char character )
 {
-    std::string res = src;
+    std::string outputString = inputString;
 
-    if ( pos >= src.size() )
-        res.append( c );
-    else
-        res.insert( pos, c );
+    if ( position >= inputString.size() ) {
+        outputString.append( 1, character );
+    }
+    else {
+        outputString.insert( position, 1, character );
+    }
 
-    return res;
+    return outputString;
 }
 
 int Sign( int s )

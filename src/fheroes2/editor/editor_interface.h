@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,58 +18,40 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2VIEWWORLD_H
-#define H2VIEWWORLD_H
+#pragma once
 
-#include <array>
 #include <cstdint>
 
-#include "math_base.h"
-#include "settings.h"
+#include "editor_interface_panel.h"
+#include "game_mode.h"
+#include "interface_base.h"
 
 namespace Interface
 {
-    class BaseInterface;
-}
-
-enum class ViewWorldMode : int32_t
-{
-    OnlyVisible = 0, // Only show what is currently not under fog of war
-
-    ViewArtifacts = 1,
-    ViewMines = 2,
-    ViewResources = 3,
-    ViewHeroes = 4,
-    ViewTowns = 5,
-
-    ViewAll = 6,
-};
-
-class ViewWorld
-{
-public:
-    static void ViewWorldWindow( const int32_t color, const ViewWorldMode mode, Interface::BaseInterface & interface );
-
-    struct ZoomROIs
+    class Editor final : public BaseInterface
     {
-        ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels );
+    public:
+        static Editor & Get();
 
-        bool zoomIn( const bool cycle );
-        bool zoomOut( const bool cycle );
-        bool ChangeCenter( const fheroes2::Point & centerInPixels );
+        void redraw( const uint32_t force = 0 ) override;
 
-        const fheroes2::Rect & GetROIinPixels() const;
-        fheroes2::Rect GetROIinTiles() const;
+        // Regenerates the game area and updates the panel positions depending on the UI settings
+        void reset() override;
 
-        ZoomLevel _zoomLevel{ ZoomLevel::ZoomLevel1 };
-        fheroes2::Point _center;
-        std::array<fheroes2::Rect, 4> _roiForZoomLevels;
+        // Start Map Editor interface main function.
+        fheroes2::GameMode startEdit();
+
+        static fheroes2::GameMode eventLoadMap();
+        static fheroes2::GameMode eventNewMap();
+        static fheroes2::GameMode eventFileDialog();
+        void eventViewWorld();
+
+        void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
+        void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
 
     private:
-        void _updateZoomLevels();
-        bool _updateCenter();
-        bool _changeZoom( const ZoomLevel newLevel );
-    };
-};
+        Editor();
 
-#endif
+        EditorPanel _editorPanel;
+    };
+}

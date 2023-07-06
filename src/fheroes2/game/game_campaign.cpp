@@ -1235,7 +1235,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
     playPreviousScenarioVideo();
 
     if ( campaignData.isLastScenario( lastCompletedScenarioInfo ) ) {
-        Game::ShowCredits();
+        Game::ShowCredits( false );
 
         // Get data for ratings text.
         const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();

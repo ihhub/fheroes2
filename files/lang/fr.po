@@ -3559,14 +3559,26 @@ msgstr "Personnalité :"
 msgid "Best Monster:"
 msgstr "Meilleure créature :"
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr ""
-
+# Needs line break to have insectile space but keep partie and ? together.
 #, fuzzy
-msgid "Cancel back to the New Map menu."
-msgstr "Annuler et revenir au menu principal."
+msgid ""
+"Are you sure you want to load a new map? (Any unsaved changes to the current "
+"map will be lost.)"
+msgstr ""
+"Voulez-vous vraiment charger une nouvelle\n"
+"partie ? (Votre partie en cours sera perdue.)"
 
-msgid "Create a new map either from scratch or using the random map generator."
+# Needs line break to have insectile space but keep partie and ? together.
+#, fuzzy
+msgid ""
+"Are you sure you want to create a new map? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Voulez-vous vraiment charger une nouvelle\n"
+"partie ? (Votre partie en cours sera perdue.)"
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -3579,6 +3591,101 @@ msgstr "Charger une partie"
 
 msgid "Load an existing map."
 msgstr ""
+
+#, fuzzy
+msgid "Save Map"
+msgstr "Enregistrer"
+
+#, fuzzy
+msgid "Save the current map."
+msgstr "Enregistrer le jeu en cours."
+
+msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Terrain Mode"
+msgstr ""
+
+msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
+msgstr ""
+
+msgid "Object Mode"
+msgstr ""
+
+msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgstr ""
+
+msgid "Detail Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Used for special editing of monsters, heroes and towns."
+msgstr "Vaincre tous les héros et villages ennemis."
+
+msgid "Allows you to draw streams by clicking and dragging."
+msgstr ""
+
+msgid "Stream Mode"
+msgstr ""
+
+msgid "Allows you to draw roads by clicking and dragging."
+msgstr ""
+
+#, fuzzy
+msgid "Road Mode"
+msgstr "Route"
+
+msgid "Erase Mode"
+msgstr ""
+
+msgid "Used to erase objects off the map."
+msgstr ""
+
+msgid "Change between zoom and normal view."
+msgstr ""
+
+msgid "Magnify"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Undo your last action.  Press again to redo the action."
+msgstr ""
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+msgid "Edit map title, description, and other general information."
+msgstr ""
+
+#, fuzzy
+msgid "Specifications"
+msgstr "Pétrification"
+
+msgid "File Options"
+msgstr "Options fichier"
+
+#, fuzzy
+msgid ""
+"Open the file options menu, where you can save or load maps, or quit out of "
+"the editor."
+msgstr ""
+"Affiche le menu des options fichier, qui vous permet de charger, "
+"sauvegarder, recommencer ou quitter."
+
+#, fuzzy
+msgid "View the editor system options, which let you customize the editor."
+msgstr ""
+"Affiche le menu des options du système, qui vous permet de personnaliser "
+"votre jeu."
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Annuler et revenir au menu principal."
 
 msgid "Cancel back to the main menu."
 msgstr "Annuler et revenir au menu principal."
@@ -4820,9 +4927,6 @@ msgid ""
 msgstr ""
 "Affiche le menu des options fichier, qui vous permet de charger, "
 "sauvegarder, recommencer ou quitter."
-
-msgid "File Options"
-msgstr "Options fichier"
 
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
@@ -6716,8 +6820,21 @@ msgstr ""
 msgid "This spell cannot be used on a boat."
 msgstr "Ce sort ne peut pas être jeté en mer."
 
-msgid "This spell can be casted only nearby water."
+#, fuzzy
+msgid "This spell can be casted only nearby ocean."
 msgstr "Ce sort ne peut être lancé qu'à proximité de l'eau."
+
+msgid ""
+"There is no boat available and no free ocean location near the hero to cast "
+"this spell."
+msgstr ""
+
+#, fuzzy
+msgid "There is no more boat available to cast this spell."
+msgstr "Lancer un sort d'aventure."
+
+msgid "There is no free ocean location near the hero to cast this spell."
+msgstr ""
 
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
@@ -6857,9 +6974,6 @@ msgstr "Portes du village"
 
 msgid "Select town to port to."
 msgstr "Sélectionnez la destination."
-
-msgid "%{spell} failed!!!"
-msgstr "%{spell} a échoué !"
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Les héros ennemis sont désormais parfaitement identifiables."
@@ -10680,3 +10794,6 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{spell} failed!!!"
+#~ msgstr "%{spell} a échoué !"

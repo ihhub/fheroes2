@@ -144,10 +144,7 @@ void Game::SavePlayers( const std::string & mapFileName, const Players & players
 
 fheroes2::GameMode Game::Credits()
 {
-    ShowCredits();
-
-    // After showing the credits fade-in the main menu.
-    needFadeIn = true;
+    ShowCredits( true );
 
     return fheroes2::GameMode::MAIN_MENU;
 }

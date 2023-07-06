@@ -32,6 +32,8 @@
 #include "dialog.h"
 #include "dialog_selectscenario.h"
 #include "editor.h"
+#include "editor_interface.h"
+#include "game.h"
 #include "game_hotkeys.h"
 #include "game_mainmenu_ui.h"
 #include "game_mode.h"
@@ -47,6 +49,8 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_tool.h"
+#include "world.h"
 
 namespace
 {
@@ -245,8 +249,15 @@ namespace Editor
             le.MousePressLeft( cancel.area() ) ? cancel.drawOnPress() : cancel.drawOnRelease();
 
             if ( le.MouseClickLeft( scratchMap.area() ) ) {
-                if ( selectMapSize() != Maps::ZERO ) {
-                    showWIPInfo();
+                const Maps::mapsize_t mapSize = selectMapSize();
+                if ( mapSize != Maps::ZERO ) {
+                    // TODO: Put this call to the 'world' instance to a separate '.cpp' file were will be all map editing functions.
+                    world.NewMaps( mapSize, mapSize );
+
+                    fheroes2::fadeOutDisplay();
+                    Game::setDisplayFadeIn();
+
+                    return Interface::Editor::Get().startEdit();
                 }
                 return fheroes2::GameMode::EDITOR_NEW_MAP;
             }
