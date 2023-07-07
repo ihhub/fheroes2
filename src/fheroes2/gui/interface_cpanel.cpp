@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,18 +21,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "interface_cpanel.h"
+
 #include <cassert>
 
 #include "agg_image.h"
 #include "game_interface.h"
 #include "icn.h"
 #include "image.h"
-#include "interface_cpanel.h"
 #include "localevent.h"
 #include "screen.h"
 #include "settings.h"
 
-Interface::ControlPanel::ControlPanel( Basic & basic )
+Interface::ControlPanel::ControlPanel( AdventureMap & basic )
     : interface( basic )
 {
     width = 180;
@@ -82,7 +83,7 @@ void Interface::ControlPanel::SetPos( int32_t ox, int32_t oy )
     rt_end.y = y;
 }
 
-void Interface::ControlPanel::Redraw() const
+void Interface::ControlPanel::_redraw() const
 {
     assert( _buttons );
 

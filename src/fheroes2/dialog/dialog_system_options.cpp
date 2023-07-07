@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "dialog_system_options.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
@@ -28,13 +30,13 @@
 #include "cursor.h"
 #include "dialog_audio.h"
 #include "dialog_hotkeys.h"
-#include "dialog_system_options.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "localevent.h"
 #include "math_base.h"
 #include "screen.h"
@@ -416,9 +418,9 @@ namespace fheroes2
                 conf.setEvilInterface( !conf.isEvilInterfaceEnabled() );
                 saveConfiguration = true;
 
-                Interface::Basic & basicInterface = Interface::Basic::Get();
-                basicInterface.Reset();
-                basicInterface.Redraw( Interface::REDRAW_ALL );
+                Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+                adventureMapInterface.reset();
+                adventureMapInterface.redraw( Interface::REDRAW_ALL );
 
                 action = DialogAction::Open;
                 break;
@@ -427,13 +429,13 @@ namespace fheroes2
                 conf.setHideInterface( !conf.isHideInterfaceEnabled() );
                 saveConfiguration = true;
 
-                Interface::Basic & basicInterface = Interface::Basic::Get();
-                basicInterface.Reset();
+                Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+                adventureMapInterface.reset();
 
                 // We need to redraw radar first due to the nature of restorers. Only then we can redraw everything.
                 // And we do a full radar redraw as it could be hidden in "Hide Interface" mode so it was not updated.
-                basicInterface.Redraw( Interface::REDRAW_RADAR );
-                basicInterface.Redraw( Interface::REDRAW_ALL & ~( Interface::REDRAW_RADAR_CURSOR | Interface::REDRAW_RADAR ) );
+                adventureMapInterface.redraw( Interface::REDRAW_RADAR );
+                adventureMapInterface.redraw( Interface::REDRAW_ALL & ~( Interface::REDRAW_RADAR_CURSOR | Interface::REDRAW_RADAR ) );
 
                 action = DialogAction::Open;
                 break;
