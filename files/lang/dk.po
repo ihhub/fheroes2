@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-14 20:35+0000\n"
+"POT-Creation-Date: 2023-07-05 23:58+0000\n"
 "PO-Revision-Date: 2023-05-31 12:10+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3321,14 +3321,24 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
+#, fuzzy
+msgid ""
+"Are you sure you want to load a new map? (Any unsaved changes to the current "
+"map will be lost.)"
 msgstr ""
+"Er du sikker på, om du vil indlæse et nyt spil? (Dit nuværende spil vil gå "
+"tabt.)"
 
 #, fuzzy
-msgid "Cancel back to the New Map menu."
-msgstr "Afbryd og gå tilbage til hovedmenuen."
+msgid ""
+"Are you sure you want to create a new map? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Er du sikker på, om du vil indlæse et nyt spil? (Dit nuværende spil vil gå "
+"tabt.)"
 
-msgid "Create a new map either from scratch or using the random map generator."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -3341,6 +3351,97 @@ msgstr "Indlæs spil"
 
 msgid "Load an existing map."
 msgstr ""
+
+#, fuzzy
+msgid "Save Map"
+msgstr "Gem spil"
+
+#, fuzzy
+msgid "Save the current map."
+msgstr "Gem nuværende spil."
+
+msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Terrain Mode"
+msgstr ""
+
+msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
+msgstr ""
+
+msgid "Object Mode"
+msgstr ""
+
+msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgstr ""
+
+msgid "Detail Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Used for special editing of monsters, heroes and towns."
+msgstr "Besejr alle fjendtlige helte og byer."
+
+msgid "Allows you to draw streams by clicking and dragging."
+msgstr ""
+
+msgid "Stream Mode"
+msgstr ""
+
+msgid "Allows you to draw roads by clicking and dragging."
+msgstr ""
+
+msgid "Road Mode"
+msgstr ""
+
+msgid "Erase Mode"
+msgstr ""
+
+msgid "Used to erase objects off the map."
+msgstr ""
+
+msgid "Change between zoom and normal view."
+msgstr ""
+
+msgid "Magnify"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Undo your last action.  Press again to redo the action."
+msgstr ""
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+msgid "Edit map title, description, and other general information."
+msgstr ""
+
+#, fuzzy
+msgid "Specifications"
+msgstr "Forstening"
+
+msgid "File Options"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Open the file options menu, where you can save or load maps, or quit out of "
+"the editor."
+msgstr ""
+"Frembring filindstillingsmenuen, som tillader dig at indlæse, gemme, starte "
+"et nyt spil eller afslutte."
+
+msgid "View the editor system options, which let you customize the editor."
+msgstr ""
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Afbryd og gå tilbage til hovedmenuen."
 
 msgid "Cancel back to the main menu."
 msgstr "Afbryd og gå tilbage til hovedmenuen."
@@ -4468,9 +4569,6 @@ msgid ""
 msgstr ""
 "Frembring filindstillingsmenuen, som tillader dig at indlæse, gemme, starte "
 "et nyt spil eller afslutte."
-
-msgid "File Options"
-msgstr ""
 
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""

@@ -104,6 +104,8 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_selectscenario.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_system_options.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_thievesguild.cpp" />
+    <ClCompile Include="src\fheroes2\editor\editor_interface.cpp" />
+    <ClCompile Include="src\fheroes2\editor\editor_interface_panel.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_mainmenu.cpp" />
     <ClCompile Include="src\fheroes2\game\difficulty.cpp" />
     <ClCompile Include="src\fheroes2\game\fheroes2.cpp" />
@@ -127,6 +129,7 @@
     <ClCompile Include="src\fheroes2\game\game_video.cpp" />
     <ClCompile Include="src\fheroes2\game\highscores.cpp" />
     <ClCompile Include="src\fheroes2\gui\cursor.cpp" />
+    <ClCompile Include="src\fheroes2\gui\interface_base.cpp" />
     <ClCompile Include="src\fheroes2\gui\interface_border.cpp" />
     <ClCompile Include="src\fheroes2\gui\interface_buttons.cpp" />
     <ClCompile Include="src\fheroes2\gui\interface_cpanel.cpp" />
@@ -300,6 +303,8 @@
     <ClInclude Include="src\fheroes2\dialog\dialog_selectscenario.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_system_options.h" />
     <ClInclude Include="src\fheroes2\editor\editor.h" />
+    <ClInclude Include="src\fheroes2\editor\editor_interface.h" />
+    <ClInclude Include="src\fheroes2\editor\editor_interface_panel.h" />
     <ClInclude Include="src\fheroes2\game\difficulty.h" />
     <ClInclude Include="src\fheroes2\game\game.h" />
     <ClInclude Include="src\fheroes2\game\game_credits.h" />
@@ -316,6 +321,7 @@
     <ClInclude Include="src\fheroes2\game\game_video_type.h" />
     <ClInclude Include="src\fheroes2\game\highscores.h" />
     <ClInclude Include="src\fheroes2\gui\cursor.h" />
+    <ClInclude Include="src\fheroes2\gui\interface_base.h" />
     <ClInclude Include="src\fheroes2\gui\interface_border.h" />
     <ClInclude Include="src\fheroes2\gui\interface_buttons.h" />
     <ClInclude Include="src\fheroes2\gui\interface_cpanel.h" />

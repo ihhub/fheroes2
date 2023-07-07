@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -31,7 +31,7 @@
 
 namespace Interface
 {
-    class Basic;
+    class BaseInterface;
 
     enum class StatusType : int
     {
@@ -46,7 +46,7 @@ namespace Interface
     class StatusWindow final : public BorderWindow
     {
     public:
-        explicit StatusWindow( Basic & basic );
+        explicit StatusWindow( BaseInterface & interface );
         StatusWindow( const StatusWindow & ) = delete;
 
         ~StatusWindow() override = default;
@@ -67,12 +67,11 @@ namespace Interface
         void QueueEventProcessing();
         void TimerEventProcessing();
 
-    private:
-        friend Basic;
+        // Do not call this method directly, use Interface::AdventureMap::redraw() instead to avoid issues in the "no interface" mode.
+        // The name of this method starts from _ on purpose to do not mix with other public methods.
+        void _redraw() const;
 
-        // Do not call this method directly, use Interface::Basic::Redraw() instead
-        // to avoid issues in the "no interface" mode
-        void Redraw() const;
+    private:
         void DrawKingdomInfo( int oh = 0 ) const;
         void DrawDayInfo( int oh = 0 ) const;
         void DrawArmyInfo( int oh = 0 ) const;
@@ -80,7 +79,7 @@ namespace Interface
         void DrawBackground() const;
         void DrawAITurns() const;
 
-        Basic & interface;
+        BaseInterface & _interface;
 
         StatusType _state;
         int lastResource;

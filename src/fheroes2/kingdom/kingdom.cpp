@@ -307,7 +307,7 @@ void Kingdom::AddHeroes( Heroes * hero )
 
         const Player * player = Settings::Get().GetPlayers().GetCurrent();
         if ( player && player->isColor( GetColor() ) && player->isControlHuman() )
-            Interface::Basic::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
+            Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
 
         AI::Get().HeroesAdd( *hero );
     }
@@ -347,7 +347,7 @@ void Kingdom::AddCastle( const Castle * castle )
 
         const Player * player = Settings::Get().GetPlayers().GetCurrent();
         if ( player && player->isColor( GetColor() ) )
-            Interface::Basic::Get().GetIconsPanel().ResetIcons( ICON_CASTLES );
+            Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_CASTLES );
 
         AI::Get().CastleAdd( *castle );
     }
