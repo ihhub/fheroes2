@@ -340,12 +340,12 @@ namespace fheroes2
         const uint8_t * dataEnd = data + sizeData;
 
         // The need for a transform layer can only be determined during ICN decoding.
-        bool needTransformLayer = false;
+        bool noTransformLayer = true;
 
         while ( true ) {
             if ( 0 == *data ) { // 0x00 - end of row
-                if ( static_cast<int32_t>( posX ) < width ) {
-                    needTransformLayer = true;
+                if ( noTransformLayer && ( static_cast<int32_t>( posX ) < width ) ) {
+                    noTransformLayer = false;
                 }
 
                 imageData += width;
@@ -368,27 +368,28 @@ namespace fheroes2
                 posX += pixelCount;
             }
             else if ( 0x80 == *data ) { // 0x80 - end of image
-                if ( static_cast<int32_t>( posX ) < width ) {
-                    needTransformLayer = true;
+                if ( noTransformLayer && ( static_cast<int32_t>( posX ) < width ) ) {
+                    noTransformLayer = false;
                 }
 
                 break;
             }
             else if ( 0xC0 > *data ) { // 0xBF - empty (transparent) pixels
-                needTransformLayer = true;
+                noTransformLayer = false;
 
                 posX += *data - 0x80;
                 ++data;
             }
             else if ( 0xC0 == *data ) { // 0xC0 - transform layer
-                needTransformLayer = true;
+                noTransformLayer = false;
 
                 ++data;
 
                 const uint8_t transformValue = *data;
-                const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) << 6 ) / 256 + 2 ); // 1 is for skipping
+                const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) >> 2 ) + 2 ); // 1 is for skipping
 
-                const uint32_t pixelCount = *data % 4 ? *data % 4 : *( ++data );
+                const uint32_t countValue = transformValue & 0x03;
+                const uint32_t pixelCount = ( countValue != 0 ) ? countValue : *( ++data );
 
                 if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
                     memset( imageTransform + posX, transformType, pixelCount );
@@ -425,7 +426,7 @@ namespace fheroes2
             }
         }
 
-        if ( !needTransformLayer ) {
+        if ( noTransformLayer ) {
             sprite._disableTransformLayer();
         }
 
