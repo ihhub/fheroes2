@@ -355,8 +355,15 @@ namespace fheroes2
                     break;
                 }
 
-                memcpy( imageData + posX, data, pixelCount );
-                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+                if ( pixelCount > 1 ) {
+                    memcpy( imageData + posX, data, pixelCount );
+                    memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+                }
+                else {
+                    *( imageData + posX ) = *data;
+                    *( imageTransform + posX ) = static_cast<uint8_t>( 0 );
+                }
+
                 data += pixelCount;
                 posX += pixelCount;
             }
@@ -371,12 +378,18 @@ namespace fheroes2
                 ++data;
 
                 const uint8_t transformValue = *data;
-                const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) << 6 ) / 256 + 2 ); // 1 is for skipping
+                const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) >> 2 ) + 2 ); // 1 is for skipping
 
-                const uint32_t pixelCount = *data % 4 ? *data % 4 : *( ++data );
+                const uint32_t countValue = transformValue & 0x03;
+                const uint32_t pixelCount = ( countValue != 0 ) ? countValue : *( ++data );
 
                 if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
-                    memset( imageTransform + posX, transformType, pixelCount );
+                    if ( pixelCount > 1 ) {
+                        memset( imageTransform + posX, transformType, pixelCount );
+                    }
+                    else {
+                        *( imageTransform + posX ) = transformType;
+                    }
                 }
 
                 posX += pixelCount;
@@ -390,6 +403,7 @@ namespace fheroes2
 
                 memset( imageData + posX, *data, pixelCount );
                 memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+
                 posX += pixelCount;
 
                 ++data;
@@ -400,6 +414,7 @@ namespace fheroes2
 
                 memset( imageData + posX, *data, pixelCount );
                 memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+
                 posX += pixelCount;
 
                 ++data;
