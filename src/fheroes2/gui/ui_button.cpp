@@ -574,11 +574,12 @@ namespace fheroes2
         }
     }
 
-    int32_t getPOLButton( Sprite & released, Sprite & pressed, const int32_t width )
+    const int32_t getPOLButton( Sprite & released, Sprite & pressed, const int32_t width )
     {
-        const int32_t widthTextReleased = width;
+        assert( width > 0 );
+
         const int32_t buttonBorder = 3 + 3;
-        const int32_t textWidthWithBorder = widthTextReleased + buttonBorder;
+        const int32_t textWidthWithBorder = width + buttonBorder;
 
         // The minimum text space width for a button is 87 judging from the shared widths of the original OKAY and the CANCEL buttons even though OKAY
         // is a shorter word

@@ -416,19 +416,20 @@ namespace
 
     void createPOLButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text )
     {
-        // get text width
+        // text width
         const fheroes2::FontColor buttonFontColor = fheroes2::FontColor::GRAY;
-        const char * supportedText = getSupportedText( text, { fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor } );
+        const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor };
+        const char * supportedText = getSupportedText( text, releasedButtonFont );
 
-        const fheroes2::Text releasedText( supportedText, { fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor } );
+        const fheroes2::Text releasedText( supportedText, releasedButtonFont );
         const fheroes2::Text pressedText( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
 
         // make the button
-        const int32_t finalWidth = fheroes2::getPOLButton( released, pressed, releasedText.width() );
+        const int32_t textSpaceWidth = fheroes2::getPOLButton( released, pressed, releasedText.width() );
 
         // render the text
-        releasedText.draw( 5, 5, finalWidth, released );
-        pressedText.draw( 4, 6, finalWidth, pressed );
+        releasedText.draw( 5, 5, textSpaceWidth, released );
+        pressedText.draw( 4, 6, textSpaceWidth, pressed );
     }
 
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
