@@ -47,6 +47,7 @@
 namespace fheroes2
 {
     class RandomMonsterAnimation;
+    class Image;
 }
 
 class Funds;
