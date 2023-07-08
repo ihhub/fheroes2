@@ -362,14 +362,8 @@ namespace fheroes2
                     break;
                 }
 
-                if ( pixelCount > 1 ) {
-                    memcpy( imageData + posX, data, pixelCount );
-                    memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
-                }
-                else {
-                    *( imageData + posX ) = *data;
-                    *( imageTransform + posX ) = static_cast<uint8_t>( 0 );
-                }
+                memcpy( imageData + posX, data, pixelCount );
+                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
 
                 data += pixelCount;
                 posX += pixelCount;
@@ -399,12 +393,7 @@ namespace fheroes2
                 const uint32_t pixelCount = ( countValue != 0 ) ? countValue : *( ++data );
 
                 if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
-                    if ( pixelCount > 1 ) {
-                        memset( imageTransform + posX, transformType, pixelCount );
-                    }
-                    else {
-                        *( imageTransform + posX ) = transformType;
-                    }
+                    memset( imageTransform + posX, transformType, pixelCount );
                 }
 
                 posX += pixelCount;

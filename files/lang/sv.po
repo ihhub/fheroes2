@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-05 23:58+0000\n"
+"POT-Creation-Date: 2023-07-07 01:13+0000\n"
 "PO-Revision-Date: 2022-10-25 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4180,7 +4180,8 @@ msgstr "Anslut trupper"
 msgid "hotkey|upgrade troop"
 msgstr "Uppgradera trupp"
 
-msgid "hotkey|dismiss troop"
+#, fuzzy
+msgid "hotkey|dismiss hero or troop"
 msgstr "Avskeda trupp"
 
 msgid "The save file is corrupted."
