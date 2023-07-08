@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-05 23:58+0000\n"
+"POT-Creation-Date: 2023-07-07 01:13+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4294,7 +4294,8 @@ msgstr "Stapel zusammenfügen"
 msgid "hotkey|upgrade troop"
 msgstr "Truppen aufrüsten"
 
-msgid "hotkey|dismiss troop"
+#, fuzzy
+msgid "hotkey|dismiss hero or troop"
 msgstr "Truppen entlassen"
 
 msgid "The save file is corrupted."
