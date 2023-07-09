@@ -138,7 +138,9 @@ bool Castle::_recruitCastleMax( const Troops & currentCastleArmy )
         tempGuestArmy.Insert( hero->GetArmy().getTroops() );
     }
 
-    for ( const uint32_t dwellingType : castleDwellings ) {
+    // In this loop we should go in reverse order - from strongest monsters to weakest in order to purchase most of the best monsters.
+    for ( size_t id = 0; id < CASTLEMAXMONSTER; ++id ) {
+        const uint32_t dwellingType = castleDwellings[CASTLEMAXMONSTER - id - 1];
         const uint32_t recruitableNumber = howManyRecruitMonster( *this, tempCastleArmy, tempGuestArmy, dwellingType, totalMonstersCost, currentMonsterCost );
 
         if ( recruitableNumber == 0 ) {
