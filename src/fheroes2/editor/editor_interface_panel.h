@@ -31,6 +31,54 @@ namespace Interface
 {
     class Editor;
 
+    enum Instrument : uint8_t
+    {
+        // IMPORTANT. This enumeration corresponds with the order of instruments in original assets. Do not change this order.
+        TERRAIN,
+        OBJECT,
+        DETAIL,
+        STREAM,
+        ROAD,
+        ERASE,
+
+        // The last element corresponds to the editor instruments number.
+        INSTRUMENTS_COUNT
+    };
+
+    enum Brush : uint8_t
+    {
+        // IMPORTANT. This enumeration corresponds with the order of instruments in original assets. Do not change this order.
+        WATER,
+        GRASS,
+        SNOW,
+        SWAMP,
+        LAVA,
+        DESERT,
+        DIRT,
+        WASTELAND,
+        BEACH,
+        TOWNS,
+        MONSTERS,
+        HEROES,
+        ARTIFACTS,
+        TREASURES,
+
+        // The last element corresponds to the editor instruments number.
+        BRUSHES_COUNT
+    };
+
+    enum BrushSize : uint8_t
+    {
+        // IMPORTANT. This enumeration corresponds with the order of instruments in original assets. Do not change this order.
+        SMALL,
+        MEDIUM,
+        LARGE,
+        AREA,
+
+        // The last element corresponds to the editor instruments number.
+        BRUSH_SIZE_COUNT
+    };
+
     class EditorPanel
     {
     public:
@@ -59,11 +107,17 @@ namespace Interface
         Editor & _interface;
 
         // Index of selected Map Editor instrument.
-        uint8_t _selectedInstrument{ 0 };
-        const static uint8_t instrumentsCount = 6;
+        uint8_t _selectedInstrument{ Instrument::TERRAIN };
 
-        std::array<fheroes2::Button, instrumentsCount> _instrumentButtons;
-        std::array<fheroes2::Rect, instrumentsCount> _instrumentButtonsRect;
+        std::array<fheroes2::Button, Instrument::INSTRUMENTS_COUNT> _instrumentButtons;
+        std::array<fheroes2::Rect, Instrument::INSTRUMENTS_COUNT> _instrumentButtonsRect;
+
+        uint8_t _selectedBrush{ Brush::WATER };
+        std::array<fheroes2::Rect, Brush::BRUSHES_COUNT> _brushButtonsRect;
+
+        uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
+        std::array<fheroes2::Button, BrushSize::BRUSH_SIZE_COUNT> _brushSizeButtons;
+        std::array<fheroes2::Rect, BrushSize::BRUSH_SIZE_COUNT> _brushSizeButtonsRect;
 
         fheroes2::Button _buttonMagnify;
         fheroes2::Button _buttonUndo;

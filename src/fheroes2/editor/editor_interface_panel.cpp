@@ -42,6 +42,7 @@ namespace Interface
     {
         int32_t icnIndex = 0;
 
+        // Editor Instruments go in this order in ICN: TERRAIN, OBJECT, DETAIL, STREAM, ROAD, ERASE.
         for ( fheroes2::Button & button : _instrumentButtons ) {
             button.setICNInfo( ICN::EDITBTNS, icnIndex, icnIndex + 1 );
             icnIndex += 2;
@@ -54,14 +55,22 @@ namespace Interface
         _buttonFile.setICNInfo( ICN::EDITBTNS, 20, 21 );
         _buttonSystem.setICNInfo( ICN::EDITBTNS, 22, 23 );
 
-        _instrumentButtons.front().press();
+        // Brush Size buttons go in this order in ICN: SMALL (1x), MEDIUM (2x), LARGE (4x), AREA.
+        icnIndex = 24;
+        for ( fheroes2::Button & button : _brushSizeButtons ) {
+            button.setICNInfo( ICN::EDITBTNS, icnIndex, icnIndex + 1 );
+            icnIndex += 2;
+        }
+
+        _instrumentButtons[_selectedInstrument].press();
+        _brushSizeButtons[_selectedBrushSize].press();
     }
 
     void EditorPanel::setPos( const int32_t displayX, int32_t displayY )
     {
         int32_t offsetX = displayX;
 
-        for ( uint8_t i = 0; i < instrumentsCount; ++i ) {
+        for ( uint8_t i = 0; i < Instrument::INSTRUMENTS_COUNT; ++i ) {
             _instrumentButtons[i].setPosition( offsetX, displayY );
             _instrumentButtonsRect[i] = _instrumentButtons[i].area();
 
@@ -83,8 +92,16 @@ namespace Interface
         const fheroes2::Sprite & instrumentPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, _selectedInstrument );
         _rectInstrumentPanel = { displayX, displayY, instrumentPanel.width(), instrumentPanel.height() };
 
-        // System buttons top row.
+        offsetX = displayX + 14;
+        for ( uint8_t i = 0; i < BrushSize ::BRUSH_SIZE_COUNT; ++i ) {
+            _brushSizeButtons[i].setPosition( offsetX, displayY + 128 );
+            _brushSizeButtonsRect[i] = _brushSizeButtons[i].area();
+            offsetX += 30;
+        }
+
         displayY += _rectInstrumentPanel.height;
+
+        // System buttons top row.
         _buttonMagnify.setPosition( displayX, displayY );
         _rectMagnify = _buttonMagnify.area();
 
@@ -125,6 +142,12 @@ namespace Interface
         fheroes2::Copy( instrumentPanel, 0, 0, fheroes2::Display::instance(), _rectEditorPanel.x, _rectInstruments.y + _rectInstruments.height, instrumentPanel.width(),
                         instrumentPanel.height() );
 
+        if ( _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::ERASE ) {
+            for ( const fheroes2::Button & button : _brushSizeButtons ) {
+                button.draw();
+            }
+        }
+
         _buttonMagnify.draw();
         _buttonUndo.draw();
         _buttonNew.draw();
@@ -139,7 +162,7 @@ namespace Interface
         fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
         if ( le.MousePressLeft( _rectInstruments ) ) {
-            for ( uint8_t i = 0; i < instrumentsCount; ++i ) {
+            for ( uint8_t i = 0; i < Instrument::INSTRUMENTS_COUNT; ++i ) {
                 if ( le.MousePressLeft( _instrumentButtonsRect[i] ) ) {
                     if ( _instrumentButtons[i].drawOnPress() ) {
                         _selectedInstrument = i;
@@ -149,6 +172,35 @@ namespace Interface
                 else {
                     _instrumentButtons[i].drawOnRelease();
                 }
+            }
+        }
+
+        if ( _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::ERASE ) {
+            if ( le.MousePressLeft( _rectInstrumentPanel ) ) {
+                for ( uint8_t i = 0; i < BrushSize::BRUSH_SIZE_COUNT; ++i ) {
+                    if ( le.MousePressLeft( _brushSizeButtonsRect[i] ) ) {
+                        if ( _brushSizeButtons[i].drawOnPress() ) {
+                            _selectedBrushSize = i;
+                        }
+                    }
+                    else {
+                        if ( i != _selectedBrushSize ) {
+                            _brushSizeButtons[i].drawOnRelease();
+                        }
+                    }
+                }
+            }
+            else if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::SMALL] ) ) {
+                fheroes2::showStandardTextMessage( _( "Small Brush" ), _( "Draws terrain in 1 square increments." ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::MEDIUM] ) ) {
+                fheroes2::showStandardTextMessage( _( "Medium Brush" ), _( "Draws objects in 2 by 2 square increments." ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::LARGE] ) ) {
+                fheroes2::showStandardTextMessage( _( "Large Brush" ), _( "Draws objects in 4 by 4 square increments." ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::AREA] ) ) {
+                fheroes2::showStandardTextMessage( _( "Area Fill" ), _( "Used to click and drag for clearing large areas." ), Dialog::ZERO );
             }
         }
 
@@ -179,36 +231,29 @@ namespace Interface
             // Replace this with Editor options dialog.
             fheroes2::showSystemOptionsDialog();
         }
-
-        if ( le.MousePressRight( _rectInstrumentPanel ) || le.MouseClickLeft( _rectInstrumentPanel ) ) {
-            // TODO: Implement instrument and brush select.
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. This panel is currently not functional.",
-                                               le.MousePressRight() ? Dialog::ZERO : Dialog::OK );
-        }
-
-        if ( le.MousePressRight( _instrumentButtonsRect[0] ) ) {
+        if ( le.MousePressRight( _instrumentButtonsRect[Instrument::TERRAIN] ) ) {
             fheroes2::showStandardTextMessage( _( "Terrain Mode" ), _( "Used to draw the underlying grass, dirt, water, etc. on the map." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _instrumentButtonsRect[1] ) ) {
+        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::OBJECT] ) ) {
             fheroes2::showStandardTextMessage( _( "Object Mode" ), _( "Used to place objects (mountains, trees, treasure, etc.) on the map." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _instrumentButtonsRect[2] ) ) {
+        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::DETAIL] ) ) {
             fheroes2::showStandardTextMessage( _( "Detail Mode" ), _( "Used for special editing of monsters, heroes and towns." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _instrumentButtonsRect[3] ) ) {
+        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::STREAM] ) ) {
             fheroes2::showStandardTextMessage( _( "Stream Mode" ), _( "Allows you to draw streams by clicking and dragging." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _instrumentButtonsRect[4] ) ) {
+        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::ROAD] ) ) {
             fheroes2::showStandardTextMessage( _( "Road Mode" ), _( "Allows you to draw roads by clicking and dragging." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _instrumentButtonsRect[5] ) ) {
+        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::ERASE] ) ) {
             fheroes2::showStandardTextMessage( _( "Erase Mode" ), _( "Used to erase objects off the map." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _rectMagnify ) ) {
             fheroes2::showStandardTextMessage( _( "Magnify" ), _( "Change between zoom and normal view." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _rectUndo ) ) {
-            fheroes2::showStandardTextMessage( _( "Undo" ), _( "Undo your last action.  Press again to redo the action." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Undo" ), _( "Undo your last action. Press again to redo the action." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _rectNew ) ) {
             fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map either from scratch or using the random map generator." ), Dialog::ZERO );
