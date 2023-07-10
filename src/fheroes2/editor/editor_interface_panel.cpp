@@ -93,11 +93,26 @@ namespace Interface
         _rectInstrumentPanel = { displayX, displayY, instrumentPanel.width(), instrumentPanel.height() };
 
         offsetX = displayX + 14;
-        for ( uint8_t i = 0; i < BrushSize ::BRUSH_SIZE_COUNT; ++i ) {
-            _brushSizeButtons[i].setPosition( offsetX, displayY + 128 );
+        int32_t offsetY = displayY + 128;
+        for ( uint8_t i = 0; i < BrushSize::BRUSH_SIZE_COUNT; ++i ) {
+            _brushSizeButtons[i].setPosition( offsetX, offsetY );
             _brushSizeButtonsRect[i] = _brushSizeButtons[i].area();
             offsetX += 30;
         }
+
+        offsetX = displayX + 30;
+        offsetY = displayY + 11;
+        for ( uint8_t i = 0; i < Brush::TERRAIN_COUNT; ++i ) {
+            _terrainButtonsRect[i] = { offsetX + ( i % 3 ) * 29, offsetY + ( i / 3 ) * 29, 27, 27 };
+        }
+
+        offsetX = displayX + 15;
+        ++offsetY;
+        for ( uint8_t i = 0; i < Brush::OBJECT_COUNT; ++i ) {
+            _objectButtonsRect[i] = { offsetX + ( i % 4 ) * 29, offsetY + ( i / 4 ) * 28, 27, 27 };
+        }
+        // The last object button is located not next to previous one and needs to be shifted to the right.
+        _objectButtonsRect[Brush::TREASURES].x += 29 * 2;
 
         displayY += _rectInstrumentPanel.height;
 
@@ -138,8 +153,10 @@ namespace Interface
             button.draw();
         }
 
+        fheroes2::Display & display = fheroes2::Display::instance();
+
         const fheroes2::Sprite & instrumentPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, _selectedInstrument );
-        fheroes2::Copy( instrumentPanel, 0, 0, fheroes2::Display::instance(), _rectEditorPanel.x, _rectInstruments.y + _rectInstruments.height, instrumentPanel.width(),
+        fheroes2::Copy( instrumentPanel, 0, 0, display, _rectEditorPanel.x, _rectInstruments.y + _rectInstruments.height, instrumentPanel.width(),
                         instrumentPanel.height() );
 
         if ( _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::ERASE ) {
@@ -148,12 +165,26 @@ namespace Interface
             }
         }
 
+        if ( _selectedInstrument == Instrument::TERRAIN ) {
+            const fheroes2::Sprite & selection = fheroes2::AGG::GetICN( ICN::TERRAINS, 9 );
+            fheroes2::Blit( selection, 0, 0, display, _terrainButtonsRect[_selectedTerrain].x - 2, _terrainButtonsRect[_selectedTerrain].y - 2, selection.width(),
+                            selection.height() );
+        }
+
+        if ( _selectedInstrument == Instrument::OBJECT ) {
+            const fheroes2::Sprite & selection = fheroes2::AGG::GetICN( ICN::TERRAINS, 9 );
+            fheroes2::Blit( selection, 0, 0, display, _objectButtonsRect[_selectedObject].x - 2, _objectButtonsRect[_selectedObject].y - 2, selection.width(),
+                            selection.height() );
+        }
+
         _buttonMagnify.draw();
         _buttonUndo.draw();
         _buttonNew.draw();
         _buttonSpecs.draw();
         _buttonFile.draw();
         _buttonSystem.draw();
+
+        display.render( _rectInstrumentPanel );
     }
 
     fheroes2::GameMode EditorPanel::queueEventProcessing()
@@ -201,6 +232,24 @@ namespace Interface
             }
             else if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::AREA] ) ) {
                 fheroes2::showStandardTextMessage( _( "Area Fill" ), _( "Used to click and drag for clearing large areas." ), Dialog::ZERO );
+            }
+        }
+
+        if ( ( _selectedInstrument == Instrument::TERRAIN ) && le.MousePressLeft( _rectInstrumentPanel ) ) {
+            for ( uint8_t i = 0; i < Brush::TERRAIN_COUNT; ++i ) {
+                if ( ( _selectedTerrain != i ) && le.MousePressLeft( _terrainButtonsRect[i] ) ) {
+                    _selectedTerrain = i;
+                    _redraw();
+                }
+            }
+        }
+
+        if ( ( _selectedInstrument == Instrument::OBJECT ) && le.MousePressLeft( _rectInstrumentPanel ) ) {
+            for ( uint8_t i = 0; i < Brush::OBJECT_COUNT; ++i ) {
+                if ( ( _selectedObject != i ) && le.MousePressLeft( _objectButtonsRect[i] ) ) {
+                    _selectedObject = i;
+                    _redraw();
+                }
             }
         }
 
