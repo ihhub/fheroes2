@@ -20,7 +20,7 @@
 
 #include "editor_interface_panel.h"
 
-#include <memory>
+#include <string>
 
 #include "agg_image.h"
 #include "dialog.h"
