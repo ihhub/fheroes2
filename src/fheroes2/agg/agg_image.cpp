@@ -1531,7 +1531,7 @@ namespace fheroes2
                         // pressed button
                         _icnVsSprite[id][2 * i + 1] = GetICN( baseIcnId, 2 * i + 1 );
                     }
-                    // generate the DIFFICULTY button because it is not present in original resources
+                    // generate the DIFFICULTY button because it is not present in the original resources
                     const char * text = "DIFFICULTY";
                     const fheroes2::FontColor buttonFontColor = fheroes2::FontColor::GRAY;
                     const fheroes2::FontSize buttonFontSize = fheroes2::FontSize::BUTTON_RELEASED;
