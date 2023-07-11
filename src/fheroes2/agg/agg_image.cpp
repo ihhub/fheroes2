@@ -1538,8 +1538,7 @@ namespace fheroes2
 
                     break;
                 }
-                const std::vector<const char *> buttonTexts{ "VIEW INTRO", "RESTART", "OKAY", "CANCEL", "DIFFICULTY" };
-                createCampaignButtonSet( id, buttonTexts );
+                createCampaignButtonSet( id, { gettext_noop("VIEW INTRO"), gettext_noop("RESTART"), gettext_noop("OKAY"), gettext_noop("CANCEL"), gettext_noop("DIFFICULTY") } );
 
                 break;
             }
