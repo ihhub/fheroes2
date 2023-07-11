@@ -221,14 +221,20 @@ namespace Interface
                 }
             }
 
+            const auto brushSizeText = []( const int & brushSize ) {
+                std::string text = _( "Draws objects in %{size} by %{size} square increments." );
+                StringReplace( text, "%{size}", brushSize );
+                return text;
+            };
+
             if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::SMALL] ) ) {
-                fheroes2::showStandardTextMessage( _( "Small Brush" ), _( "Draws terrain in 1 square increments." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Small Brush" ), brushSizeText( 1 ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::MEDIUM] ) ) {
-                fheroes2::showStandardTextMessage( _( "Medium Brush" ), _( "Draws objects in 2 by 2 square increments." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Medium Brush" ), brushSizeText( 2 ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::LARGE] ) ) {
-                fheroes2::showStandardTextMessage( _( "Large Brush" ), _( "Draws objects in 4 by 4 square increments." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Large Brush" ), brushSizeText( 4 ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::AREA] ) ) {
                 fheroes2::showStandardTextMessage( _( "Area Fill" ), _( "Used to click and drag for clearing large areas." ), Dialog::ZERO );
