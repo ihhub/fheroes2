@@ -1524,7 +1524,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
         else if ( le.MousePressRight( buttonDifficulty.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Select campaign difficulty. You might lower it down throughout the campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                                   fheroes2::Text( _( "Select campaign difficulty. You might lower it down throughout the campaign." ),
+                                                   fheroes2::FontType::normalWhite() ),
+                                   Dialog::ZERO );
         }
         else if ( buttonRestart.isVisible() && le.MousePressRight( buttonRestart.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Restart" ), fheroes2::FontType::normalYellow() ),
