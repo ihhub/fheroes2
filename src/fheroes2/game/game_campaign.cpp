@@ -910,7 +910,7 @@ namespace
         }
     }
 
-    int32_t setCampaignDifficulty( int32_t currentDifficulty, const bool isSelectionAllowed )
+    int32_t setCampaignDifficulty( int32_t currentDifficulty, const bool isOngoingCampaign )
     {
         const fheroes2::StandardWindow frameborder( 234, 270, true );
         const fheroes2::Rect & windowRoi = frameborder.activeArea();
@@ -962,37 +962,36 @@ namespace
         case Campaign::CampaignDifficulty::Easy:
             currentDescription = easyDescription;
             selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
-            if ( !isSelectionAllowed ) {
-                fheroes2::ApplyPalette( display, iconArea[1].x, iconArea[1].y, display, iconArea[1].x, iconArea[1].y, iconArea[1].width, iconArea[1].height,
-                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
-                fheroes2::ApplyPalette( display, iconArea[2].x, iconArea[2].y, display, iconArea[2].x, iconArea[2].y, iconArea[2].width, iconArea[2].height,
-                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
-            }
             break;
         case Campaign::CampaignDifficulty::Normal:
             currentDescription = normalDescription;
             selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
-            if ( !isSelectionAllowed ) {
-                fheroes2::ApplyPalette( display, iconArea[0].x, iconArea[0].y, display, iconArea[0].x, iconArea[0].y, iconArea[0].width, iconArea[0].height,
-                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
-                fheroes2::ApplyPalette( display, iconArea[2].x, iconArea[2].y, display, iconArea[2].x, iconArea[2].y, iconArea[2].width, iconArea[2].height,
-                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
-            }
             break;
         case Campaign::CampaignDifficulty::Hard:
             currentDescription = hardDescription;
             selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
-            if ( !isSelectionAllowed ) {
-                fheroes2::ApplyPalette( display, iconArea[0].x, iconArea[0].y, display, iconArea[0].x, iconArea[0].y, iconArea[0].width, iconArea[0].height,
-                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
-                fheroes2::ApplyPalette( display, iconArea[1].x, iconArea[1].y, display, iconArea[1].x, iconArea[1].y, iconArea[1].width, iconArea[1].height,
-                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
-            }
             break;
         default:
             // Did you add a new difficulty level for campaigns? Add the logic above!
             assert( 0 );
             break;
+        }
+
+        const std::array<bool, 3> allowedSelection{ ( !isOngoingCampaign || currentDifficulty >= Campaign::CampaignDifficulty::Easy ),
+                                                    ( !isOngoingCampaign || currentDifficulty >= Campaign::CampaignDifficulty::Normal ),
+                                                    ( !isOngoingCampaign || currentDifficulty >= Campaign::CampaignDifficulty::Hard ) };
+
+        if ( !allowedSelection[0] ) {
+            fheroes2::ApplyPalette( display, iconArea[0].x, iconArea[0].y, display, iconArea[0].x, iconArea[0].y, iconArea[0].width, iconArea[0].height,
+                                    PAL::GetPalette( PAL::PaletteType::GRAY ) );
+        }
+        if ( !allowedSelection[1] ) {
+            fheroes2::ApplyPalette( display, iconArea[1].x, iconArea[1].y, display, iconArea[1].x, iconArea[1].y, iconArea[1].width, iconArea[1].height,
+                                    PAL::GetPalette( PAL::PaletteType::GRAY ) );
+        }
+        if ( !allowedSelection[2] ) {
+            fheroes2::ApplyPalette( display, iconArea[2].x, iconArea[2].y, display, iconArea[2].x, iconArea[2].y, iconArea[2].width, iconArea[2].height,
+                                    PAL::GetPalette( PAL::PaletteType::GRAY ) );
         }
 
         const int32_t textWidth = windowRoi.width - 16;
@@ -1047,25 +1046,23 @@ namespace
 
             bool updateInfo = false;
 
-            if ( isSelectionAllowed ) {
-                if ( le.MouseClickLeft( difficultyArea[0] ) ) {
-                    currentDescription = easyDescription;
-                    selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
-                    currentDifficulty = Campaign::CampaignDifficulty::Easy;
-                    updateInfo = true;
-                }
-                else if ( le.MouseClickLeft( difficultyArea[1] ) ) {
-                    currentDescription = normalDescription;
-                    selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
-                    currentDifficulty = Campaign::CampaignDifficulty::Normal;
-                    updateInfo = true;
-                }
-                else if ( le.MouseClickLeft( difficultyArea[2] ) ) {
-                    currentDescription = hardDescription;
-                    selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
-                    currentDifficulty = Campaign::CampaignDifficulty::Hard;
-                    updateInfo = true;
-                }
+            if ( allowedSelection[0] && le.MouseClickLeft( difficultyArea[0] ) ) {
+                currentDescription = easyDescription;
+                selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
+                currentDifficulty = Campaign::CampaignDifficulty::Easy;
+                updateInfo = true;
+            }
+            else if ( allowedSelection[1] && le.MouseClickLeft( difficultyArea[1] ) ) {
+                currentDescription = normalDescription;
+                selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
+                currentDifficulty = Campaign::CampaignDifficulty::Normal;
+                updateInfo = true;
+            }
+            else if ( allowedSelection[2] && le.MouseClickLeft( difficultyArea[2] ) ) {
+                currentDescription = hardDescription;
+                selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
+                currentDifficulty = Campaign::CampaignDifficulty::Hard;
+                updateInfo = true;
             }
 
             if ( updateInfo ) {
@@ -1390,7 +1387,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     buttonViewIntro.draw();
     buttonDifficulty.draw();
 
-    const bool isDifficultySelectionAllowed = campaignSaveData.isStarting() && !allowToRestart;
+    const bool isOngoingCampaign = !campaignSaveData.isStarting() || allowToRestart;
     const bool isMapPresent = scenario.isMapFilePresent();
 
     if ( allowToRestart ) {
@@ -1527,7 +1524,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
         else if ( le.MousePressRight( buttonDifficulty.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Select campaign difficulty. It cannot be changed after." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                                   fheroes2::Text( _( "Select campaign difficulty. You might lower it down throughout the campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
         else if ( buttonRestart.isVisible() && le.MousePressRight( buttonRestart.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Restart" ), fheroes2::FontType::normalYellow() ),
@@ -1618,7 +1615,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                                    fheroes2::Text( _( "The number of days spent on this campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
         else if ( le.MouseClickLeft( buttonDifficulty.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_SELECT_DIFFICULTY ) ) {
-            campaignSaveData.setDifficulty( setCampaignDifficulty( campaignSaveData.getDifficulty(), isDifficultySelectionAllowed ) );
+            campaignSaveData.setDifficulty( setCampaignDifficulty( campaignSaveData.getDifficulty(), isOngoingCampaign ) );
             display.render();
         }
     }
