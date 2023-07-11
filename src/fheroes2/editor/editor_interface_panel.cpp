@@ -31,6 +31,7 @@
 #include "interface_base.h"
 #include "localevent.h"
 #include "screen.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -207,21 +208,20 @@ namespace Interface
         }
 
         if ( _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::ERASE ) {
-            if ( le.MousePressLeft( _rectInstrumentPanel ) ) {
-                for ( uint8_t i = 0; i < BrushSize::BRUSH_SIZE_COUNT; ++i ) {
-                    if ( le.MousePressLeft( _brushSizeButtonsRect[i] ) ) {
-                        if ( _brushSizeButtons[i].drawOnPress() ) {
-                            _selectedBrushSize = i;
-                        }
+            for ( uint8_t i = 0; i < BrushSize::BRUSH_SIZE_COUNT; ++i ) {
+                if ( le.MousePressLeft( _brushSizeButtonsRect[i] ) ) {
+                    if ( _brushSizeButtons[i].drawOnPress() ) {
+                        _selectedBrushSize = i;
                     }
-                    else {
-                        if ( i != _selectedBrushSize ) {
-                            _brushSizeButtons[i].drawOnRelease();
-                        }
+                }
+                else {
+                    if ( i != _selectedBrushSize ) {
+                        _brushSizeButtons[i].drawOnRelease();
                     }
                 }
             }
-            else if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::SMALL] ) ) {
+
+            if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::SMALL] ) ) {
                 fheroes2::showStandardTextMessage( _( "Small Brush" ), _( "Draws terrain in 1 square increments." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::MEDIUM] ) ) {
@@ -235,21 +235,104 @@ namespace Interface
             }
         }
 
-        if ( ( _selectedInstrument == Instrument::TERRAIN ) && le.MousePressLeft( _rectInstrumentPanel ) ) {
+        if ( _selectedInstrument == Instrument::TERRAIN ) {
             for ( uint8_t i = 0; i < Brush::TERRAIN_COUNT; ++i ) {
                 if ( ( _selectedTerrain != i ) && le.MousePressLeft( _terrainButtonsRect[i] ) ) {
                     _selectedTerrain = i;
                     _redraw();
                 }
             }
+
+            const auto movePenaltyText = []( const std::string & rate ) {
+                std::string text = _( "Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or eliminates the penalty.)" );
+                StringReplace( text, "%{rate}", rate );
+                return text;
+            };
+
+            if ( le.MousePressRight( _terrainButtonsRect[Brush::WATER] ) ) {
+                fheroes2::showStandardTextMessage( _( "Water" ), _( "Traversable only by boat." ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _terrainButtonsRect[Brush::GRASS] ) ) {
+                fheroes2::showStandardTextMessage( _( "Grass" ), _( "No special modifiers." ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _terrainButtonsRect[Brush::SNOW] ) ) {
+                fheroes2::showStandardTextMessage( _( "Snow" ), movePenaltyText( "1.5" ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _terrainButtonsRect[Brush::SWAMP] ) ) {
+                fheroes2::showStandardTextMessage( _( "Swamp" ), movePenaltyText( "1.75" ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _terrainButtonsRect[Brush::LAVA] ) ) {
+                fheroes2::showStandardTextMessage( _( "Lava" ), _( "No special modifiers." ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _terrainButtonsRect[Brush::DESERT] ) ) {
+                fheroes2::showStandardTextMessage( _( "Desert" ), movePenaltyText( "2" ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _terrainButtonsRect[Brush::DIRT] ) ) {
+                fheroes2::showStandardTextMessage( _( "Dirt" ), _( "No special modifiers." ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _terrainButtonsRect[Brush::WASTELAND] ) ) {
+                fheroes2::showStandardTextMessage( _( "Wasteland" ), movePenaltyText( "1.25" ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _terrainButtonsRect[Brush::BEACH] ) ) {
+                fheroes2::showStandardTextMessage( _( "Beach" ), movePenaltyText( "1.25" ), Dialog::ZERO );
+            }
         }
 
-        if ( ( _selectedInstrument == Instrument::OBJECT ) && le.MousePressLeft( _rectInstrumentPanel ) ) {
+        if ( _selectedInstrument == Instrument::OBJECT ) {
             for ( uint8_t i = 0; i < Brush::OBJECT_COUNT; ++i ) {
                 if ( ( _selectedObject != i ) && le.MousePressLeft( _objectButtonsRect[i] ) ) {
                     _selectedObject = i;
                     _redraw();
                 }
+            }
+
+            const auto terrainObjectsText = []( const std::string & terrain ) {
+                std::string text = _( "Used to select objects most appropriate for use on %{terrain}." );
+                StringReplace( text, "%{terrain}", terrain );
+                return text;
+            };
+
+            if ( le.MousePressRight( _objectButtonsRect[Brush::WATER] ) ) {
+                fheroes2::showStandardTextMessage( _( "Water Objects" ), terrainObjectsText( _( "water" ) ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _objectButtonsRect[Brush::GRASS] ) ) {
+                fheroes2::showStandardTextMessage( _( "Grass Objects" ), terrainObjectsText( _( "grass" ) ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _objectButtonsRect[Brush::SNOW] ) ) {
+                fheroes2::showStandardTextMessage( _( "Snow Objects" ), terrainObjectsText( _( "snow" ) ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _objectButtonsRect[Brush::SWAMP] ) ) {
+                fheroes2::showStandardTextMessage( _( "Swamp Objects" ), terrainObjectsText( _( "swamp" ) ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _objectButtonsRect[Brush::LAVA] ) ) {
+                fheroes2::showStandardTextMessage( _( "Lava Objects" ), terrainObjectsText( _( "lava" ) ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _objectButtonsRect[Brush::DESERT] ) ) {
+                fheroes2::showStandardTextMessage( _( "Desert Objects" ), terrainObjectsText( _( "desert" ) ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _objectButtonsRect[Brush::DIRT] ) ) {
+                fheroes2::showStandardTextMessage( _( "Dirt Objects" ), terrainObjectsText( _( "dirt" ) ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _objectButtonsRect[Brush::WASTELAND] ) ) {
+                fheroes2::showStandardTextMessage( _( "Wasteland Objects" ), terrainObjectsText( _( "wasteland" ) ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _objectButtonsRect[Brush::BEACH] ) ) {
+                fheroes2::showStandardTextMessage( _( "Beach Objects" ), terrainObjectsText( _( "beach" ) ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _objectButtonsRect[Brush::TOWNS] ) ) {
+                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Used to place a town or castle." ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _objectButtonsRect[Brush::MONSTERS] ) ) {
+                fheroes2::showStandardTextMessage( _( "Monsters" ), _( "Used to place a monster group." ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _objectButtonsRect[Brush::HEROES] ) ) {
+                fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Used to place a hero." ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _objectButtonsRect[Brush::ARTIFACTS] ) ) {
+                fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Used to place an artifact." ), Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( _objectButtonsRect[Brush::TREASURES] ) ) {
+                fheroes2::showStandardTextMessage( _( "Treasures" ), _( "Used to place a resource or treasure." ), Dialog::ZERO );
             }
         }
 
