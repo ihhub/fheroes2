@@ -1531,8 +1531,26 @@ namespace fheroes2
                         // pressed button
                         _icnVsSprite[id][2 * i + 1] = GetICN( baseIcnId, 2 * i + 1 );
                     }
-                    const int32_t availableWidth = 200 - 10 - 10;
-                    getButtonFromWidth( _icnVsSprite[id][8], _icnVsSprite[id][9], availableWidth, ICN::EMPTY_POL_BUTTON );
+                    // generate the DIFFICULTY button because it is not present in original resources
+                    const char * text = "DIFFICULTY";
+                    const fheroes2::FontColor buttonFontColor = fheroes2::FontColor::GRAY;
+                    const fheroes2::FontSize buttonFontSize = fheroes2::FontSize::BUTTON_RELEASED;
+                    const char * controlledText = getSupportedText( text, { buttonFontSize, buttonFontColor } );
+
+                    const fheroes2::Text releasedText( controlledText, { buttonFontSize, buttonFontColor } );
+                    const fheroes2::Text pressedText( controlledText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
+
+                    const int32_t outerButtonBackgroundBorders = 7;
+                    const int32_t marginsBetweenButtons = 10;
+                    const int32_t availableTextWidth = 200 - marginsBetweenButtons  * 2 - outerButtonBackgroundBorders;
+                    const int32_t textWidthPlusTextAreaMargins = releasedText.width() + 6;
+                    // the minimum button text area width is 87 from comparing the CANCEL and OKAY buttons
+                    const int32_t finalWidth = std::clamp( textWidthPlusTextAreaMargins, 87, availableTextWidth );
+
+                    getButtonFromWidth( _icnVsSprite[id][8], _icnVsSprite[id][9], finalWidth + outerButtonBackgroundBorders, ICN::EMPTY_POL_BUTTON );
+
+                    releasedText.draw( 5, 5, finalWidth, _icnVsSprite[id][8] );
+                    pressedText.draw( 4, 6, finalWidth, _icnVsSprite[id][9] );
 
                     break;
                 }
