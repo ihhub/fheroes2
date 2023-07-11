@@ -432,6 +432,51 @@ namespace
         pressedText.draw( 4, 6, textSpaceWidth, pressed );
     }
 
+    void createCampaignButtonSet( const int32_t icn, const std::vector<const char *> & texts )
+    {
+        for ( int i = 0; i < texts.size() - 1; ++i ) {
+            createPOLButton( _icnVsSprite[icn][2 * i], _icnVsSprite[icn][2 * i + 1], texts[i] );
+        }
+        // find the button width for the last remaining button I.E. DIFFICULTY button
+        // 1. Find what the available width is after other buttons have been generated
+        const int32_t widestRightsideButtonWidth = std::max( _icnVsSprite[icn][2].width(), _icnVsSprite[icn][4].width() );
+        const int32_t otherButtonsWidth = _icnVsSprite[icn][0].width() + widestRightsideButtonWidth + _icnVsSprite[icn][6].width();
+        
+        const int32_t backgroundWidth = fheroes2::AGG::GetICN( ICN::X_CMPBKG, 0 ).width();
+        const int32_t backgroundOuterBorder = 29;
+        const int32_t useableBackgroundWidth = backgroundWidth - 2 * backgroundOuterBorder;
+        const int32_t marginsBetweenNeighboringButtons = 10;
+        const int32_t availableDifficultyWidth = useableBackgroundWidth - otherButtonsWidth - 2 * marginsBetweenNeighboringButtons;
+
+        // the total width of the already generated buttons doesn't leave enough space for another button of minimum width 95px
+        assert( ( backgroundWidth - backgroundOuterBorder * 2 - marginsBetweenNeighboringButtons * 3 - 95 ) > ( otherButtonsWidth + marginsBetweenNeighboringButtons * 3 ) );
+
+        const int32_t realAvailableWidth = std::min( availableDifficultyWidth, 200 );
+
+        // 2. Find the required space for the text
+        const fheroes2::FontColor buttonFontColor = fheroes2::FontColor::GRAY;
+        const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor };
+        const char * supportedText = getSupportedText( texts[4], releasedButtonFont );
+
+        const fheroes2::Text difficultyTextReleased( supportedText, releasedButtonFont );
+        const fheroes2::Text difficultyTextPressed( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
+
+        const int32_t difficultyWidth = difficultyTextReleased.width();
+
+        // 3. Make the button width stay within the limits of the available width
+        const int32_t buttonTextAreaBorders = 3 + 3;
+        const int32_t textWidthWithBorders = difficultyWidth + buttonTextAreaBorders;
+        const int32_t controlledTextWidth = std::clamp( textWidthWithBorders, 87, realAvailableWidth );
+
+        // 4. Make the button background
+        const int32_t outerButtonBackgroundBorders = 4 + 3;
+        fheroes2::getButtonFromWidth( _icnVsSprite[icn][8], _icnVsSprite[icn][9], controlledTextWidth + outerButtonBackgroundBorders, ICN::EMPTY_POL_BUTTON );
+
+        // 5. render the text
+        difficultyTextReleased.draw( 5, 5, controlledTextWidth, _icnVsSprite[icn][8] );
+        difficultyTextPressed.draw( 4, 6, controlledTextWidth, _icnVsSprite[icn][9] );
+    }
+
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
     {
         fheroes2::ApplyPalette( image, roi.x, roi.y, image, roi.x, roi.y, roi.width, roi.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
@@ -1475,7 +1520,7 @@ namespace fheroes2
                 break;
             }
             case ICN::POL_CAMPAIGN_BUTTONS: {
-                _icnVsSprite[id].resize( 8 );
+                _icnVsSprite[id].resize( 10 );
 
                 const int baseIcnId = ICN::X_CMPBTN;
 
@@ -1486,40 +1531,13 @@ namespace fheroes2
                         // pressed button
                         _icnVsSprite[id][2 * i + 1] = GetICN( baseIcnId, 2 * i + 1 );
                     }
-                    // TODO: move DIFFICULTY generation to after the else statement and move the break statement to after that.
+                    const int32_t availableWidth = 200 - 10 - 10;
+                    getButtonFromWidth( _icnVsSprite[id][8], _icnVsSprite[id][9], availableWidth, ICN::EMPTY_POL_BUTTON );
+
                     break;
                 }
-                else {
-                    const std::vector<const char *> buttonTexts{ "VIEW INTRO", "RESTART", "OKAY", "CANCEL" };
-
-                    for ( int i = 0; i < static_cast<int32_t>( buttonTexts.size() ); ++i ) {
-                        createPOLButton( _icnVsSprite[id][2 * i], _icnVsSprite[id][2 * i + 1], buttonTexts[i] );
-                    }
-                }
-                // TODO: generate the DIFFICULTY button here. Set its max width according to the space left from the widest of the set of 3 buttons containing either OKAY or RESTART
-
-                // TODO: Maximum width is determined by the space used by 3 other buttons, the space permitted on the background
-                // and the borders. This means that the text widths will have to be calculated on beforehand so that you know if any button needs to be clamped.
-                // Or you can just clamp the last one according to the space allowed from the other buttons when they have been generated - this might be simpler
-                // and good enough.
-                // TODO: Calculate and get the button width according to the other buttons and the limits of the background
-
-                // const uint32_t textWidthTotal = viewIntroText.width() + restartText.width() + okayText.width() + cancelText.width();
-
-                // std::cout << "Total text width is: " << textWidthTotal << "\n"
-                //          << "The usable background width is: " << useableBackgroundWidth << "\n";
-                // assert( textWidthTotal <= GetICN( ICN::X_CMPBKG, 0).width() );
-                // const uint32_t viewIntroWidth = 132;
-                // const uint32_t restartWidth = 100;
-                // const uint32_t okayCancelWidth = 87;
-                // const uint32_t buttonTextHeight = 17;
-                // const uint32_t buttonLeftBorder = 4;
-                // const uint32_t buttonBackgroundBorders = buttonLeftBorder + 3;
-
-                /*int32_t totalButtonTextWidths = 0;
-                const uint32_t backgroundWidth = GetICN( ICN::X_CMPBKG, 0 ).width();
-                const uint32_t useableBackgroundWidth = backgroundWidth - 29 - 29;
-                const int32_t maximumButtonWidth = useableBackgroundWidth - totalButtonTextWidths;*/
+                const std::vector<const char *> buttonTexts{ "VIEW INTRO", "RESTART", "OKAY", "CANCEL", "DIFFICULTY" };
+                createCampaignButtonSet( id, buttonTexts );
 
                 break;
             }
@@ -1551,19 +1569,8 @@ namespace fheroes2
             }
             case ICN::BUTTON_DIFFICULTY_POL: {
                 _icnVsSprite[id].resize( 2 );
-
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::X_CMPBTN, 0 + i );
-
-                    // clean the button.
-                    const int32_t pixelPosition = 5 * 132;
-                    if ( pixelPosition < ( out.width() * out.height() ) ) {
-                        Fill( out, 4, 3 + i, 132 - i, 16, out.image()[pixelPosition] );
-                    }
-                }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 5, 5 }, { 5, 5 }, { 132, 17 }, fheroes2::FontColor::GRAY );
+                _icnVsSprite[id][0] = GetICN( ICN::POL_CAMPAIGN_BUTTONS, 8 );
+                _icnVsSprite[id][1] = GetICN( ICN::POL_CAMPAIGN_BUTTONS, 9 );
 
                 break;
             }
