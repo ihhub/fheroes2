@@ -1,7 +1,7 @@
 # Norwegian translation for fheroes2
 # Copyright (C) 2021 - 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
@@ -56,6 +56,12 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "AVBRYT"
+
+msgid "OKAY"
+msgstr "OK"
+
+msgid "smallerButton|OKAY"
+msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "GODTA"
@@ -187,9 +193,6 @@ msgstr "MIN"
 
 msgid "MAX"
 msgstr "MAKS"
-
-msgid "OKAY"
-msgstr "OK"
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -5027,7 +5030,7 @@ msgstr ""
 msgid "Handicap"
 msgstr "Handikap"
 
-#
+# 
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
@@ -5052,7 +5055,7 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr "Lett handikap"
 
-#
+# 
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."

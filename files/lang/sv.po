@@ -1,7 +1,7 @@
 # Swedish translation for fheroes2
 # Copyright (C) 2023 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
@@ -54,6 +54,12 @@ msgstr "AVSLUT."
 
 msgid "CANCEL"
 msgstr "AVBRYT"
+
+msgid "OKAY"
+msgstr "OKEJ"
+
+msgid "smallerButton|OKAY"
+msgstr "OKEJ"
 
 msgid "ACCEPT"
 msgstr "ACCEPTERA"
@@ -182,9 +188,6 @@ msgstr "MIN"
 
 msgid "MAX"
 msgstr "MAX"
-
-msgid "OKAY"
-msgstr "OKEJ"
 
 msgid "Warrior"
 msgstr "Krigare"
@@ -4876,7 +4879,7 @@ msgstr ""
 msgid "Handicap"
 msgstr "Handikapp"
 
-#
+# 
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
@@ -4898,7 +4901,7 @@ msgstr "Inga restriktioner för startresurser eller resursintäkter per dag."
 msgid "Mild Handicap"
 msgstr "Milt Handikapp"
 
-#
+# 
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -4909,7 +4912,7 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr "Gravt Handikapp"
 
-#
+# 
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."
