@@ -70,34 +70,38 @@ namespace
         return ( art.GetID() == conf.WinsFindArtifactID() );
     }
 
-    bool isTileBlocked( int tileIndex, bool fromWater )
+    bool isTileBlocksPassage( int tileIndex, bool fromWater )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const bool toWater = tile.isWater();
         const MP2::MapObjectType objectType = tile.GetObject();
 
-        if ( objectType == MP2::OBJ_HEROES || objectType == MP2::OBJ_MONSTER || objectType == MP2::OBJ_BOAT )
+        if ( objectType == MP2::OBJ_HEROES || objectType == MP2::OBJ_MONSTER || objectType == MP2::OBJ_BOAT ) {
             return true;
+        }
 
-        if ( MP2::isPickupObject( objectType ) || MP2::isActionObject( objectType, fromWater ) )
+        if ( MP2::isPickupObject( objectType ) || MP2::isActionObject( objectType, fromWater ) ) {
             return true;
+        }
 
-        if ( fromWater && !toWater && objectType == MP2::OBJ_COAST )
+        if ( fromWater && !toWater && objectType == MP2::OBJ_COAST ) {
             return true;
+        }
 
         return false;
     }
 
-    bool isTileBlockedForAIWithArmy( const int tileIndex, const int color, const double armyStrength, const bool isArtifactBagFull )
+    bool isTileBlocksPassageForAI( const int tileIndex, const int color, const bool isArtifactBagFull )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const MP2::MapObjectType objectType = tile.GetObject();
 
-        // Special cases: check if we can defeat the Hero/Monster and pass through
+        // Enemy heroes can be defeated and passed through
         if ( objectType == MP2::OBJ_HEROES ) {
             const Heroes * otherHero = tile.GetHeroes();
             assert( otherHero != nullptr );
 
+            // Friendly heroes cannot be passed through
             if ( otherHero->isFriends( color ) ) {
                 return true;
             }
@@ -107,9 +111,10 @@ namespace
                 return true;
             }
 
-            return otherHero->GetArmy().GetStrength() > armyStrength;
+            return false;
         }
 
+        // Artifacts can be picked up and passed through
         if ( MP2::isArtifactObject( objectType ) ) {
             const Artifact art = Maps::getArtifactFromTile( tile );
             if ( art.isValid() ) {
@@ -123,25 +128,24 @@ namespace
                     return true;
                 }
             }
-        }
 
-        // Monster or artifact guarded by a monster
-        if ( objectType == MP2::OBJ_MONSTER ) {
-            return Army( tile ).GetStrength() > armyStrength;
-        }
-
-        if ( objectType == MP2::OBJ_ARTIFACT && getArtifactCaptureCondition( tile ) >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES
-             && getArtifactCaptureCondition( tile ) <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
-            return Army( tile ).GetStrength() > armyStrength;
-        }
-
-        // Check if AI has the key for the barrier
-        if ( objectType == MP2::OBJ_BARRIER && world.GetKingdom( color ).IsVisitTravelersTent( getColorFromTile( tile ) ) )
             return false;
+        }
+
+        // Monsters can be defeated and passed through
+        if ( objectType == MP2::OBJ_MONSTER ) {
+            return false;
+        }
+
+        // AI may have the key for the barrier
+        if ( objectType == MP2::OBJ_BARRIER && world.GetKingdom( color ).IsVisitTravelersTent( getColorFromTile( tile ) ) ) {
+            return false;
+        }
 
         // AI can use boats to overcome water obstacles
-        if ( objectType == MP2::OBJ_BOAT )
+        if ( objectType == MP2::OBJ_BOAT ) {
             return false;
+        }
 
         // If none of the special cases apply, check if tile can be moved on
         return MP2::isNeedStayFront( objectType );
@@ -205,11 +209,42 @@ namespace
         return toTile.isPassableFrom( Direction::Reflect( direction ), fromWater, false, heroColor );
     }
 
-    bool isTileProtectedForAI( const int index, const double armyStrength, const double advantage )
+    bool isTileProtectedFromAIWithArmy( const int index, const int color, const Heroes * hero, const double armyStrength, const double advantage )
     {
         const Maps::Tiles & tile = world.GetTiles( index );
+        const MP2::MapObjectType objectType = tile.GetObject();
 
-        if ( MP2::isProtectedObject( tile.GetObject() ) ) {
+        if ( objectType == MP2::OBJ_HEROES ) {
+            const Heroes * otherHero = tile.GetHeroes();
+            assert( otherHero != nullptr );
+
+            if ( otherHero->GetColor() == color ) {
+                return false;
+            }
+
+            if ( otherHero->isFriends( color ) ) {
+                return true;
+            }
+
+            return otherHero->GetArmy().GetStrength() * advantage > armyStrength;
+        }
+
+        if ( objectType == MP2::OBJ_CASTLE ) {
+            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
+            assert( castle != nullptr );
+
+            if ( castle->GetColor() == color ) {
+                return false;
+            }
+
+            if ( castle->isFriends( color ) ) {
+                return true;
+            }
+
+            return castle->GetGarrisonStrength( hero ) * advantage > armyStrength;
+        }
+
+        if ( MP2::isProtectedObject( objectType ) ) {
             // creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
             static Army tileArmy;
 
@@ -421,7 +456,7 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
     const bool isFirstNode = currentNodeIdx == _pathStart;
     const WorldNode & currentNode = _cache[currentNodeIdx];
 
-    if ( !isFirstNode && isTileBlocked( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
+    if ( !isFirstNode && isTileBlocksPassage( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
         return;
     }
 
@@ -549,11 +584,11 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
     WorldNode & currentNode = _cache[currentNodeIdx];
 
     // Find out if current node is protected by a strong army
-    bool isProtected = isTileProtectedForAI( currentNodeIdx, _armyStrength, _advantage );
+    bool isProtected = isTileProtectedFromAIWithArmy( currentNodeIdx, _currentColor, _hero, _armyStrength, _advantage );
     if ( !isProtected ) {
         const MapsIndexes & monsters = Maps::getMonstersProtectingTile( currentNodeIdx );
         for ( auto it = monsters.begin(); it != monsters.end(); ++it ) {
-            if ( isTileProtectedForAI( *it, _armyStrength, _advantage ) ) {
+            if ( isTileProtectedFromAIWithArmy( *it, _currentColor, _hero, _armyStrength, _advantage ) ) {
                 isProtected = true;
                 break;
             }
@@ -566,7 +601,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
     }
 
     // Always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
-    if ( !isFirstNode && ( isProtected || isTileBlockedForAIWithArmy( currentNodeIdx, _currentColor, _armyStrength, _isArtifactBagFull ) ) ) {
+    if ( !isFirstNode && ( isProtected || isTileBlocksPassageForAI( currentNodeIdx, _currentColor, _isArtifactBagFull ) ) ) {
         return;
     }
 
@@ -1039,13 +1074,13 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
     }
 
     // Target tile is guarded by an overly strong army
-    if ( isTileProtectedForAI( targetIndex, _armyStrength, _advantage ) ) {
+    if ( isTileProtectedFromAIWithArmy( targetIndex, _currentColor, _hero, _armyStrength, _advantage ) ) {
         return {};
     }
 
     for ( const int32_t monsterIndex : Maps::getMonstersProtectingTile( targetIndex ) ) {
         // Target tile is guarded by an overly strong nearby monster
-        if ( isTileProtectedForAI( monsterIndex, _armyStrength, _advantage ) ) {
+        if ( isTileProtectedFromAIWithArmy( monsterIndex, _currentColor, _hero, _armyStrength, _advantage ) ) {
             return {};
         }
     }
@@ -1149,7 +1184,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, cons
     while ( currentNode != _pathStart ) {
         assert( currentNode != -1 );
 
-        if ( isTileBlocked( currentNode, fromWater ) ) {
+        if ( isTileBlocksPassage( currentNode, fromWater ) ) {
             lastValidNode = currentNode;
         }
 

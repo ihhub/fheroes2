@@ -2076,13 +2076,12 @@ namespace AI
         std::vector<HeroToMove> availableHeroes;
 
         for ( Heroes * hero : heroes ) {
+            assert( hero != nullptr );
+
             addHeroToMove( hero, availableHeroes );
         }
 
         const double originalMonsterStrengthMultiplier = _pathfinder.getCurrentArmyStrengthMultiplier();
-
-        const int monsterStrengthMultiplierCount = 2;
-        const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_ADVANTAGE_MEDIUM, ARMY_ADVANTAGE_SMALL };
 
         Interface::StatusWindow & status = Interface::AdventureMap::Get().getStatusWindow();
 
@@ -2090,38 +2089,32 @@ namespace AI
 
         while ( !availableHeroes.empty() ) {
             Heroes * bestHero = availableHeroes.front().hero;
-            double maxPriority = 0;
             int bestTargetIndex = -1;
 
-            while ( true ) {
-                for ( const HeroToMove & heroInfo : availableHeroes ) {
-                    double priority = -1;
-                    const int targetIndex = getPriorityTarget( heroInfo, priority );
-                    if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
-                        maxPriority = priority;
-                        bestTargetIndex = targetIndex;
-                        bestHero = heroInfo.hero;
+            {
+                const bool isLosingGame = bestHero->isLosingGame();
+                static const std::vector<double> usualStrengthMultipliers{ ARMY_ADVANTAGE_LARGE, ARMY_ADVANTAGE_MEDIUM, ARMY_ADVANTAGE_SMALL };
+                static const std::vector<double> emergencyStrengthMultipliers{ ARMY_ADVANTAGE_DESPERATE };
+
+                for ( const double strengthMultiplier : isLosingGame ? emergencyStrengthMultipliers : usualStrengthMultipliers ) {
+                    _pathfinder.setArmyStrengthMultiplier( strengthMultiplier );
+
+                    double maxPriority = 0;
+
+                    for ( const HeroToMove & heroInfo : availableHeroes ) {
+                        double priority = -1;
+                        const int targetIndex = getPriorityTarget( heroInfo, priority );
+
+                        if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
+                            maxPriority = priority;
+                            bestTargetIndex = targetIndex;
+                            bestHero = heroInfo.hero;
+                        }
                     }
-                }
 
-                if ( bestTargetIndex != -1 ) {
-                    break;
-                }
-
-                // If nowhere to move perhaps it's because of high monster estimation. Let's reduce it.
-                const double currentMonsterStrengthMultiplier = _pathfinder.getCurrentArmyStrengthMultiplier();
-                bool setNewMultiplier = false;
-                for ( int i = 0; i < monsterStrengthMultiplierCount; ++i ) {
-                    if ( currentMonsterStrengthMultiplier > monsterStrengthMultipliers[i] ) {
-                        _pathfinder.setArmyStrengthMultiplier( bestHero->isLosingGame() ? ARMY_ADVANTAGE_DESPERATE : monsterStrengthMultipliers[i] );
-                        _pathfinder.setSpellPointReserve( 0 );
-                        setNewMultiplier = true;
+                    if ( bestTargetIndex != -1 ) {
                         break;
                     }
-                }
-
-                if ( !setNewMultiplier ) {
-                    break;
                 }
             }
 
@@ -2149,12 +2142,12 @@ namespace AI
                         break;
                     }
                 }
+            }
 
-                if ( bestTargetIndex == -1 ) {
-                    // Nothing to do. Stop everything
-                    _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
-                    break;
-                }
+            if ( bestTargetIndex == -1 ) {
+                // Nothing to do. Stop everything
+                _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
+                break;
             }
 
             const size_t heroesBefore = heroes.size();
