@@ -35,6 +35,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_text.h"
 
 namespace Interface
 {
@@ -170,12 +171,103 @@ namespace Interface
             const fheroes2::Sprite & selection = fheroes2::AGG::GetICN( ICN::TERRAINS, 9 );
             fheroes2::Blit( selection, 0, 0, display, _terrainButtonsRect[_selectedTerrain].x - 2, _terrainButtonsRect[_selectedTerrain].y - 2, selection.width(),
                             selection.height() );
+
+            std::string text;
+            switch ( _selectedTerrain ) {
+            case Brush::WATER:
+                text = _( "Water" );
+                break;
+            case Brush::GRASS:
+                text = _( "Grass" );
+                break;
+            case Brush::SNOW:
+                text = _( "Snow" );
+                break;
+            case Brush::SWAMP:
+                text = _( "Swamp" );
+                break;
+            case Brush::LAVA:
+                text = _( "Lava" );
+                break;
+            case Brush::DESERT:
+                text = _( "Desert" );
+                break;
+            case Brush::DIRT:
+                text = _( "Dirt" );
+                break;
+            case Brush::WASTELAND:
+                text = _( "Wasteland" );
+                break;
+            case Brush::BEACH:
+                text = _( "Beach" );
+                break;
+            default:
+                // You have added a new terrain type?
+                assert( 0 );
+                break;
+            }
+
+            const fheroes2::Text terrainText( std::move( text ), fheroes2::FontType::smallWhite() );
+            terrainText.draw( _rectInstrumentPanel.x + 72 - terrainText.width( 118 ) / 2, _rectInstrumentPanel.y + 107, display );
         }
 
         if ( _selectedInstrument == Instrument::OBJECT ) {
             const fheroes2::Sprite & selection = fheroes2::AGG::GetICN( ICN::TERRAINS, 9 );
             fheroes2::Blit( selection, 0, 0, display, _objectButtonsRect[_selectedObject].x - 2, _objectButtonsRect[_selectedObject].y - 2, selection.width(),
                             selection.height() );
+
+            std::string text;
+            switch ( _selectedObject ) {
+            case Brush::WATER:
+                text = _( "Ocean Objects" );
+                break;
+            case Brush::GRASS:
+                text = _( "Grass Objects" );
+                break;
+            case Brush::SNOW:
+                text = _( "Snow Objects" );
+                break;
+            case Brush::SWAMP:
+                text = _( "Swamp Objects" );
+                break;
+            case Brush::LAVA:
+                text = _( "Lava Objects" );
+                break;
+            case Brush::DESERT:
+                text = _( "Desert Objects" );
+                break;
+            case Brush::DIRT:
+                text = _( "Dirt Objects" );
+                break;
+            case Brush::WASTELAND:
+                text = _( "Wasteland Objects" );
+                break;
+            case Brush::BEACH:
+                text = _( "Beach Objects" );
+                break;
+            case Brush::TOWNS:
+                text = _( "Towns" );
+                break;
+            case Brush::MONSTERS:
+                text = _( "Monsters" );
+                break;
+            case Brush::HEROES:
+                text = _( "Heroes" );
+                break;
+            case Brush::ARTIFACTS:
+                text = _( "Artifacts" );
+                break;
+            case Brush::TREASURES:
+                text = _( "Treasures" );
+                break;
+            default:
+                // You have added a new terrain type?
+                assert( 0 );
+                break;
+            }
+
+            const fheroes2::Text terrainText( std::move( text ), fheroes2::FontType::smallWhite() );
+            terrainText.draw( _rectInstrumentPanel.x + 72 - terrainText.width( 118 ) / 2, _rectInstrumentPanel.y + 135, display );
         }
 
         _buttonMagnify.draw();
