@@ -20,7 +20,9 @@
 
 #include "editor_interface_panel.h"
 
+#include <cassert>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "dialog.h"
@@ -261,7 +263,7 @@ namespace Interface
                 text = _( "Treasures" );
                 break;
             default:
-                // You have added a new terrain type?
+                // You have added a new object type?
                 assert( 0 );
                 break;
             }
