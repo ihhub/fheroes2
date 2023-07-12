@@ -159,7 +159,7 @@ namespace Game
         ARMY_SPLIT_STACK_BY_ONE,
         ARMY_JOIN_STACKS,
         ARMY_UPGRADE_TROOP,
-        ARMY_DISMISS_TROOP,
+        ARMY_DISMISS,
 
         // WARNING! Put all new event only above this line. No adding in between.
         NO_EVENT,

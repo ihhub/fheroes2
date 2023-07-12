@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-06 21:34+0300\n"
+"POT-Creation-Date: 2023-07-07 01:13+0000\n"
 "PO-Revision-Date: 2023-05-06 15:07+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4258,7 +4258,8 @@ msgstr "объединить отряды"
 msgid "hotkey|upgrade troop"
 msgstr "улучшить существо"
 
-msgid "hotkey|dismiss troop"
+#, fuzzy
+msgid "hotkey|dismiss hero or troop"
 msgstr "уволить существо"
 
 msgid "The save file is corrupted."
