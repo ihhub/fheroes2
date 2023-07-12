@@ -175,7 +175,7 @@ namespace Interface
             std::string text;
             switch ( _selectedTerrain ) {
             case Brush::WATER:
-                text = _( "Water" );
+                text = _( "Ocean" );
                 break;
             case Brush::GRASS:
                 text = _( "Grass" );
