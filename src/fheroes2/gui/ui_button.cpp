@@ -574,7 +574,7 @@ namespace fheroes2
         }
     }
 
-    const int32_t getCampaignButton( Sprite & released, Sprite & pressed, const int32_t width, const int icnId )
+    const int32_t getCampaignButton( Sprite & released, Sprite & pressed, const int32_t width, const int emptyButtonIcnId )
     {
         assert( width > 0 );
 
@@ -588,7 +588,7 @@ namespace fheroes2
         const int32_t finalWidth = std::clamp( textWidthWithBorder, minimumButtonTextWidthWithBorder, maximumButtonWidth );
 
         const int32_t sideBackgroundBorders = 7;
-        getButtonFromWidth( released, pressed, finalWidth + sideBackgroundBorders, icnId );
+        getButtonFromWidth( released, pressed, finalWidth + sideBackgroundBorders, emptyButtonIcnId );
 
         return finalWidth;
     }
