@@ -577,6 +577,21 @@ namespace fheroes2
     const int32_t getTailoredButton( Sprite & released, Sprite & pressed, const int32_t textWidth, const int emptyButtonIcnId )
     {
         assert( textWidth > 0 );
+        int32_t backgroundIcnId = ICN::STONEBAK;
+        switch ( emptyButtonIcnId ) {
+        case ICN::EMPTY_GOOD_BUTTON:
+            break;
+        case ICN::EMPTY_EVIL_BUTTON:
+            backgroundIcnId = ICN::STONEBAK_EVIL;
+            break;
+        case ICN::EMPTY_POL_BUTTON:
+            backgroundIcnId = ICN::STONEBAK_POL;
+            break;
+        default:
+            // Was a new type of campaign button added?
+            assert( 0 );
+            break;
+        }
 
         const int32_t buttonBorder = 3 + 3;
         const int32_t textWidthWithBorder = textWidth + buttonBorder;
@@ -595,6 +610,23 @@ namespace fheroes2
 
         released = resizeButton( AGG::GetICN( emptyButtonIcnId, 0 ), finalWidth + sideBackgroundBorders );
         pressed = resizeButton( AGG::GetICN( emptyButtonIcnId, 1 ), finalWidth + sideBackgroundBorders );
+
+        // make transparent
+        // We need to copy the background image to pressed button only where it does not overlay the image of released button.
+        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnId, 0 );
+
+        const uint8_t * releasedTransform = released.transform();
+        uint8_t * pressedTransform = pressed.transform();
+        uint8_t * pressedImage = pressed.image();
+        const uint8_t * backgroundImage
+            = background.image() + ( background.width() - pressed.width() ) / 2 + ( background.height() - pressed.height() ) * background.width() / 2;
+
+        for ( int32_t x = 0; x < pressed.width() * pressed.height(); ++x ) {
+            if ( ( *( pressedTransform + x ) == 1 ) && ( *( releasedTransform + x ) == 0 ) ) {
+                *( pressedImage + x ) = *( backgroundImage + x % pressed.width() + static_cast<ptrdiff_t>( x / pressed.width() ) * background.width() );
+                *( pressedTransform + x ) = 0;
+            }
+        }
 
         return finalWidth;
     }

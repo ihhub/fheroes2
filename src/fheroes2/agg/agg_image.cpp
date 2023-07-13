@@ -418,24 +418,8 @@ namespace
 
     void createCampaignButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const int emptyButtonIcnId )
     {
-        bool isGoodFont = false;
-        int32_t backgroundIcnId = ICN::STONEBAK;
-        switch ( emptyButtonIcnId ) {
-        case ICN::EMPTY_GOOD_BUTTON:
-            isGoodFont = true;
-            break;
-        case ICN::EMPTY_EVIL_BUTTON:
-            backgroundIcnId = ICN::STONEBAK_EVIL;
-            break;
-        case ICN::EMPTY_POL_BUTTON:
-            backgroundIcnId = ICN::STONEBAK_POL;
-            break;
-        default:
-            // Was a new type of campaign button added?
-            assert( 0 );
-            break;
-        }
         // text width
+        const bool isGoodFont = emptyButtonIcnId == ICN::EMPTY_GOOD_BUTTON;
         const fheroes2::FontColor buttonFontColor = isGoodFont ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
         const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor };
         const char * supportedText = getSupportedText( text, releasedButtonFont );
@@ -445,23 +429,6 @@ namespace
 
         // make the button
         const int32_t textSpaceWidth = fheroes2::getTailoredButton( released, pressed, releasedText.width(), emptyButtonIcnId );
-
-        // We need to copy the background image to pressed button only where it does not overlay the image of released button.
-        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnId, 0 );
-
-        // make transparent
-        const uint8_t * releasedTransform = released.transform();
-        uint8_t * pressedTransform = pressed.transform();
-        uint8_t * pressedImage = pressed.image();
-        const uint8_t * backgroundImage
-            = background.image() + ( background.width() - pressed.width() ) / 2 + ( background.height() - pressed.height() ) * background.width() / 2;
-
-        for ( int32_t x = 0; x < pressed.width() * pressed.height(); ++x ) {
-            if ( ( *( pressedTransform + x ) == 1 ) && ( *( releasedTransform + x ) == 0 ) ) {
-                *( pressedImage + x ) = *( backgroundImage + x % pressed.width() + static_cast<ptrdiff_t>( x / pressed.width() ) * background.width() );
-                *( pressedTransform + x ) = 0;
-            }
-        }
 
         // render the text
         releasedText.draw( 5, 5, textSpaceWidth, released );
@@ -473,13 +440,11 @@ namespace
         int32_t emptyButtonIcn = 0;
         fheroes2::FontColor buttonFontColor = fheroes2::FontColor::GRAY;
         int32_t backgroundIcnId = ICN::STONEBAK;
-        bool isEvilInterface = true;
         switch ( campaignSetIcnId ) {
         case ICN::GOOD_CAMPAIGN_BUTTONS:
             emptyButtonIcn = ICN::EMPTY_GOOD_BUTTON;
             buttonFontColor = fheroes2::FontColor::WHITE;
             backgroundIcnId = ICN::STONEBAK;
-            isEvilInterface = false;
             break;
         case ICN::EVIL_CAMPAIGN_BUTTONS:
             emptyButtonIcn = ICN::EMPTY_EVIL_BUTTON;
