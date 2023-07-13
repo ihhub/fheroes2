@@ -21,7 +21,6 @@
 #include "editor_interface_panel.h"
 
 #include <cassert>
-#include <utility>
 
 #include "agg_image.h"
 #include "dialog.h"
