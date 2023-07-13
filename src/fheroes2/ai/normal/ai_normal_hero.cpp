@@ -2093,6 +2093,7 @@ namespace AI
 
             {
                 const bool isLosingGame = bestHero->isLosingGame();
+
                 static const std::vector<double> usualStrengthMultipliers{ ARMY_ADVANTAGE_LARGE, ARMY_ADVANTAGE_MEDIUM, ARMY_ADVANTAGE_SMALL };
                 static const std::vector<double> emergencyStrengthMultipliers{ ARMY_ADVANTAGE_DESPERATE };
 

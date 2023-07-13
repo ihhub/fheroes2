@@ -209,7 +209,7 @@ namespace
         return toTile.isPassableFrom( Direction::Reflect( direction ), fromWater, false, heroColor );
     }
 
-    bool isTileProtectedFromAIWithArmy( const int index, const int color, const Heroes * hero, const double armyStrength, const double advantage )
+    bool isTileInaccessibleForAIWithArmy( const int index, const int color, const Heroes * hero, const double armyStrength, const double advantage )
     {
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
@@ -218,14 +218,17 @@ namespace
             const Heroes * otherHero = tile.GetHeroes();
             assert( otherHero != nullptr );
 
+            // Heroes of the same color are always accessible
             if ( otherHero->GetColor() == color ) {
                 return false;
             }
 
+            // Allied heroes are always inaccessible
             if ( otherHero->isFriends( color ) ) {
                 return true;
             }
 
+            // Too powerful enemy heroes may be inaccessible
             return otherHero->GetArmy().GetStrength() * advantage > armyStrength;
         }
 
@@ -233,14 +236,17 @@ namespace
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
             assert( castle != nullptr );
 
+            // Castles of the same color are always accessible
             if ( castle->GetColor() == color ) {
                 return false;
             }
 
+            // Allied castles are always inaccessible
             if ( castle->isFriends( color ) ) {
                 return true;
             }
 
+            // Enemy castles with too powerful garrisons may be inaccessible
             return castle->GetGarrisonStrength( hero ) * advantage > armyStrength;
         }
 
@@ -250,6 +256,7 @@ namespace
 
             tileArmy.setFromTile( tile );
 
+            // Tiles guarded by too powerful guardians may be inaccessible
             return tileArmy.GetStrength() * advantage > armyStrength;
         }
 
@@ -584,11 +591,10 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
     WorldNode & currentNode = _cache[currentNodeIdx];
 
     // Find out if current node is protected by a strong army
-    bool isProtected = isTileProtectedFromAIWithArmy( currentNodeIdx, _currentColor, _hero, _armyStrength, _advantage );
+    bool isProtected = isTileInaccessibleForAIWithArmy( currentNodeIdx, _currentColor, _hero, _armyStrength, _advantage );
     if ( !isProtected ) {
-        const MapsIndexes & monsters = Maps::getMonstersProtectingTile( currentNodeIdx );
-        for ( auto it = monsters.begin(); it != monsters.end(); ++it ) {
-            if ( isTileProtectedFromAIWithArmy( *it, _currentColor, _hero, _armyStrength, _advantage ) ) {
+        for ( const int32_t monsterIndex : Maps::getMonstersProtectingTile( currentNodeIdx ) ) {
+            if ( isTileInaccessibleForAIWithArmy( monsterIndex, _currentColor, _hero, _armyStrength, _advantage ) ) {
                 isProtected = true;
                 break;
             }
@@ -1074,13 +1080,13 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
     }
 
     // Target tile is guarded by an overly strong army
-    if ( isTileProtectedFromAIWithArmy( targetIndex, _currentColor, _hero, _armyStrength, _advantage ) ) {
+    if ( isTileInaccessibleForAIWithArmy( targetIndex, _currentColor, _hero, _armyStrength, _advantage ) ) {
         return {};
     }
 
     for ( const int32_t monsterIndex : Maps::getMonstersProtectingTile( targetIndex ) ) {
         // Target tile is guarded by an overly strong nearby monster
-        if ( isTileProtectedFromAIWithArmy( monsterIndex, _currentColor, _hero, _armyStrength, _advantage ) ) {
+        if ( isTileInaccessibleForAIWithArmy( monsterIndex, _currentColor, _hero, _armyStrength, _advantage ) ) {
             return {};
         }
     }
