@@ -251,7 +251,7 @@ namespace
         }
 
         if ( MP2::isProtectedObject( objectType ) ) {
-            // creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
+            // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
             static Army tileArmy;
 
             tileArmy.setFromTile( tile );
