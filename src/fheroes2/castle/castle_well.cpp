@@ -376,6 +376,9 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
     fheroes2::Copy( bottomBar, bottomBar.width() - ( allowedBottomBarWidth - allowedBottomBarWidth / 2 ) - 1, 0, background, maxButtinWidth + allowedBottomBarWidth / 2,
                     bottomBarOffsetY, allowedBottomBarWidth - allowedBottomBarWidth / 2, bottomBar.height() );
 
+    // The original assets Well background has a transparent line to the right of EXIT button and it is not covered by any other image. Fill it with the black color.
+    fheroes2::Fill( background, background.width() - 1, bottomBarOffsetY, 1, bottomBar.height(), static_cast<uint8_t>( 0 ) );
+
     fheroes2::Text text( _( "Town Population Information and Statistics" ), fheroes2::FontType::normalWhite() );
     text.draw( 315 - text.width() / 2, bottomBarOffsetY + 3, background );
 
