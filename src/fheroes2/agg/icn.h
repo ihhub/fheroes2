@@ -971,6 +971,7 @@ namespace ICN
         ESPANBKG_EVIL,
         RECR2BKG_EVIL,
         STONEBAK_EVIL,
+        STONEBAK_POL,
         WELLBKG_EVIL,
         CASLWIND_EVIL,
         CASLXTRA_EVIL,

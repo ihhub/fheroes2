@@ -418,28 +418,25 @@ namespace
 
     void createCampaignButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const int emptyButtonIcnId )
     {
-        bool isTransparentBackground = true;
-        bool isEvilInterface = false;
-        fheroes2::FontColor buttonFontColor = fheroes2::FontColor::GRAY;
-
+        bool isGoodFont = false;
+        int32_t backgroundIcnId = ICN::STONEBAK;
         switch ( emptyButtonIcnId ) {
         case ICN::EMPTY_GOOD_BUTTON:
-            isTransparentBackground = false;
-            buttonFontColor = fheroes2::FontColor::WHITE;
+            isGoodFont = true;
             break;
         case ICN::EMPTY_EVIL_BUTTON:
-            isTransparentBackground = false;
-            isEvilInterface = true;
+            backgroundIcnId = ICN::STONEBAK_EVIL;
             break;
         case ICN::EMPTY_POL_BUTTON:
+            backgroundIcnId = ICN::STONEBAK_POL;
             break;
         default:
             // Was a new type of campaign button added?
             assert( 0 );
             break;
         }
-
         // text width
+        const fheroes2::FontColor buttonFontColor = isGoodFont ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
         const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor };
         const char * supportedText = getSupportedText( text, releasedButtonFont );
 
@@ -449,22 +446,20 @@ namespace
         // make the button
         const int32_t textSpaceWidth = fheroes2::getTailoredButton( released, pressed, releasedText.width(), emptyButtonIcnId );
 
-        if ( !isTransparentBackground ) {
-            // We need to copy the background image to pressed button only where it does not overlay the image of released button.
-            const int32_t backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
-            const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnId, 0 );
+        // We need to copy the background image to pressed button only where it does not overlay the image of released button.
+        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnId, 0 );
 
-            const uint8_t * releasedTransform = released.transform();
-            uint8_t * pressedTransform = pressed.transform();
-            uint8_t * pressedImage = pressed.image();
-            const uint8_t * backgroundImage
-                = background.image() + ( background.width() - pressed.width() ) / 2 + ( background.height() - pressed.height() ) * background.width() / 2;
+        // make transparent
+        const uint8_t * releasedTransform = released.transform();
+        uint8_t * pressedTransform = pressed.transform();
+        uint8_t * pressedImage = pressed.image();
+        const uint8_t * backgroundImage
+            = background.image() + ( background.width() - pressed.width() ) / 2 + ( background.height() - pressed.height() ) * background.width() / 2;
 
-            for ( int32_t x = 0; x < pressed.width() * pressed.height(); ++x ) {
-                if ( ( *( pressedTransform + x ) == 1 ) && ( *( releasedTransform + x ) == 0 ) ) {
-                    *( pressedImage + x ) = *( backgroundImage + x % pressed.width() + static_cast<ptrdiff_t>( x / pressed.width() ) * background.width() );
-                    *( pressedTransform + x ) = 0;
-                }
+        for ( int32_t x = 0; x < pressed.width() * pressed.height(); ++x ) {
+            if ( ( *( pressedTransform + x ) == 1 ) && ( *( releasedTransform + x ) == 0 ) ) {
+                *( pressedImage + x ) = *( backgroundImage + x % pressed.width() + static_cast<ptrdiff_t>( x / pressed.width() ) * background.width() );
+                *( pressedTransform + x ) = 0;
             }
         }
 
@@ -477,20 +472,22 @@ namespace
     {
         int32_t emptyButtonIcn = 0;
         fheroes2::FontColor buttonFontColor = fheroes2::FontColor::GRAY;
-        bool isTransparentBackground = false;
+        int32_t backgroundIcnId = ICN::STONEBAK;
         bool isEvilInterface = true;
         switch ( campaignSetIcnId ) {
         case ICN::GOOD_CAMPAIGN_BUTTONS:
             emptyButtonIcn = ICN::EMPTY_GOOD_BUTTON;
             buttonFontColor = fheroes2::FontColor::WHITE;
+            backgroundIcnId = ICN::STONEBAK;
             isEvilInterface = false;
             break;
         case ICN::EVIL_CAMPAIGN_BUTTONS:
             emptyButtonIcn = ICN::EMPTY_EVIL_BUTTON;
+            backgroundIcnId = ICN::STONEBAK_EVIL;
             break;
         case ICN::POL_CAMPAIGN_BUTTONS:
             emptyButtonIcn = ICN::EMPTY_POL_BUTTON;
-            isTransparentBackground = false;
+            backgroundIcnId = ICN::STONEBAK_POL;
             break;
         default:
             // Was a new set of buttons added?
@@ -502,7 +499,7 @@ namespace
             createCampaignButton( _icnVsSprite[campaignSetIcnId][2 * i], _icnVsSprite[campaignSetIcnId][2 * i + 1], texts[i], emptyButtonIcn );
         }
         // generate the last button i.e. the DIFFICULTY button
-        
+
         // 1. find what the remaining permittable button width is
         const int32_t backgroundWidth = fheroes2::AGG::GetICN( ICN::CAMPBKGG, 0 ).width();
         const int32_t backgroundOuterBorders = 28 + 27;
@@ -535,22 +532,20 @@ namespace
         fheroes2::Sprite & pressed = _icnVsSprite[campaignSetIcnId][9];
         fheroes2::getButtonFromWidth( released, pressed, controlledTextWidth + buttonBackgroundBorders, emptyButtonIcn );
 
-        if ( !isTransparentBackground ) {
-            // We need to copy the background image to pressed button only where it does not overlay the image of released button.
-            const int32_t backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
-            const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnId, 0 );
+        // 5. make transparent
+        // We need to copy the background image to pressed button only where it does not overlay the image of released button.
+        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnId, 0 );
 
-            const uint8_t * releasedTransform = released.transform();
-            uint8_t * pressedTransform = pressed.transform();
-            uint8_t * pressedImage = pressed.image();
-            const uint8_t * backgroundImage
-                = background.image() + ( background.width() - pressed.width() ) / 2 + ( background.height() - pressed.height() ) * background.width() / 2;
+        const uint8_t * releasedTransform = released.transform();
+        uint8_t * pressedTransform = pressed.transform();
+        uint8_t * pressedImage = pressed.image();
+        const uint8_t * backgroundImage
+            = background.image() + ( background.width() - pressed.width() ) / 2 + ( background.height() - pressed.height() ) * background.width() / 2;
 
-            for ( int32_t x = 0; x < pressed.width() * pressed.height(); ++x ) {
-                if ( ( *( pressedTransform + x ) == 1 ) && ( *( releasedTransform + x ) == 0 ) ) {
-                    *( pressedImage + x ) = *( backgroundImage + x % pressed.width() + static_cast<ptrdiff_t>( x / pressed.width() ) * background.width() );
-                    *( pressedTransform + x ) = 0;
-                }
+        for ( int32_t x = 0; x < pressed.width() * pressed.height(); ++x ) {
+            if ( ( *( pressedTransform + x ) == 1 ) && ( *( releasedTransform + x ) == 0 ) ) {
+                *( pressedImage + x ) = *( backgroundImage + x % pressed.width() + static_cast<ptrdiff_t>( x / pressed.width() ) * background.width() );
+                *( pressedTransform + x ) = 0;
             }
         }
 
@@ -3625,6 +3620,17 @@ namespace fheroes2
                     convertToEvilInterface( _icnVsSprite[id][0], roi );
                 }
 
+                return true;
+            }
+            case ICN::STONEBAK_POL: {
+                _icnVsSprite[id].resize( 1 );
+                const fheroes2::Sprite & original = GetICN( ICN::X_CMPBKG, 0 );
+                fheroes2::Sprite & temp = _icnVsSprite[id][0];
+                if ( !original.empty() ) {
+                    temp.resize( 244, 28 );
+                    temp.reset();
+                    Copy( original, original.width() - 272, original.height() - 52, temp, 0, 0, 244, 28 );
+                }
                 return true;
             }
             case ICN::WELLBKG_EVIL: {
