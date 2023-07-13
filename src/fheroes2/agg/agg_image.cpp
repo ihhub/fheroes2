@@ -148,6 +148,8 @@ namespace
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_EVIL,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
+                                                ICN::GOOD_CAMPAIGN_BUTTONS,
+                                                ICN::EVIL_CAMPAIGN_BUTTONS,
                                                 ICN::POL_CAMPAIGN_BUTTONS,
                                                 ICN::BUTTON_DIFFICULTY_ARCHIBALD,
                                                 ICN::BUTTON_DIFFICULTY_ROLAND,
@@ -414,7 +416,7 @@ namespace
                             buttonFontColor );
     }
 
-    void createPOLButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text )
+    void createCampaignButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const int icnId )
     {
         // text width
         const fheroes2::FontColor buttonFontColor = fheroes2::FontColor::GRAY;
@@ -425,7 +427,49 @@ namespace
         const fheroes2::Text pressedText( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
 
         // make the button
-        const int32_t textSpaceWidth = fheroes2::getPOLButton( released, pressed, releasedText.width() );
+        int icn = 0;
+        bool isTransparentBackground = true;
+        bool isEvilInterface = false;
+        switch ( icnId ) {
+        case ICN::GOOD_CAMPAIGN_BUTTONS:
+            icn = ICN::EMPTY_GOOD_BUTTON;
+            isTransparentBackground = false;
+            break;
+        case ICN::EVIL_CAMPAIGN_BUTTONS:
+            icn = ICN::EMPTY_EVIL_BUTTON;
+            isTransparentBackground = false;
+            isEvilInterface = true; 
+            break;
+        case ICN::POL_CAMPAIGN_BUTTONS:
+            icn = ICN::EMPTY_POL_BUTTON;
+            break;
+        default:
+            // Was a new set of buttons added?
+            assert( 0 );
+            break;
+        }
+
+
+        const int32_t textSpaceWidth = fheroes2::getCampaignButton( released, pressed, releasedText.width(), icn );
+
+        if ( !isTransparentBackground ) {
+            // We need to copy the background image to pressed button only where it does not overlay the image of released button.
+            const int32_t backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
+            const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnId, 0 );
+
+            const uint8_t * releasedTransform = released.transform();
+            uint8_t * pressedTransform = pressed.transform();
+            uint8_t * pressedImage = pressed.image();
+            const uint8_t * backgroundImage
+                = background.image() + ( background.width() - pressed.width() ) / 2 + ( background.height() - pressed.height() ) * background.width() / 2;
+
+            for ( int32_t x = 0; x < pressed.width() * pressed.height(); ++x ) {
+                if ( ( *( pressedTransform + x ) == 1 ) && ( *( releasedTransform + x ) == 0 ) ) {
+                    *( pressedImage + x ) = *( backgroundImage + x % pressed.width() + static_cast<ptrdiff_t>( x / pressed.width() ) * background.width() );
+                    *( pressedTransform + x ) = 0;
+                }
+            }
+        }
 
         // render the text
         releasedText.draw( 5, 5, textSpaceWidth, released );
@@ -435,7 +479,7 @@ namespace
     void createCampaignButtonSet( const int32_t icn, const std::vector<const char *> & texts )
     {
         for ( int i = 0; i < texts.size() - 1; ++i ) {
-            createPOLButton( _icnVsSprite[icn][2 * i], _icnVsSprite[icn][2 * i + 1], texts[i] );
+            createCampaignButton( _icnVsSprite[icn][2 * i], _icnVsSprite[icn][2 * i + 1], texts[i], icn );
         }
         // generate the last button i.e. the DIFFICULTY button
         // 1. find what the remaining permittable button width is
@@ -472,7 +516,7 @@ namespace
 
         // 4. make the button background
         const int32_t outerButtonBackgroundBorders = 4 + 3;
-        fheroes2::getButtonFromWidth( _icnVsSprite[icn][8], _icnVsSprite[icn][9], controlledTextWidth + outerButtonBackgroundBorders, ICN::EMPTY_POL_BUTTON );
+        fheroes2::getButtonFromWidth( _icnVsSprite[icn][8], _icnVsSprite[icn][9], controlledTextWidth + outerButtonBackgroundBorders, icn );
 
         // 5. render the text on the button background
         difficultyTextReleased.draw( 5, 5, controlledTextWidth, _icnVsSprite[icn][8] );
@@ -1521,6 +1565,37 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::GOOD_CAMPAIGN_BUTTONS:
+            case ICN::EVIL_CAMPAIGN_BUTTONS: {
+                _icnVsSprite[id].resize( 10 );
+
+                if ( useOriginalResources() ) {
+                    const int originalIcnId = ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? ICN::CAMPXTRG : ICN::CAMPXTRE;
+
+                    // The evil buttons' pressed state need to be 2 pixels wider.
+                    const int offsetEvilX = ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? 0 : 2;
+
+                    for ( int32_t i = 0; i < 4; ++i ) {
+                        // The released state image.
+                        _icnVsSprite[id][2 * i] = GetICN( originalIcnId, 2 * i );
+
+                        // The pressed state image.
+                        const Sprite & original = GetICN( originalIcnId, 2 * i + 1 );
+
+                        Sprite & resized = _icnVsSprite[id][2 * i + 1];
+                        // Change pressed state image to have same width and height as released image
+                        resized.resize( _icnVsSprite[id][2 * i].width() + offsetEvilX, _icnVsSprite[id][2 * i].height() );
+                        resized.reset();
+
+                        // Restore content of the pressed state image.
+                        Copy( original, 0, 0, resized, original.x(), original.y(), original.width() + offsetEvilX, original.height() );
+                    }
+                }
+                createCampaignButtonSet( id, { gettext_noop( "VIEW INTRO" ), gettext_noop( "RESTART" ), gettext_noop( "OKAY" ), gettext_noop( "CANCEL" ),
+                                               gettext_noop( "DIFFICULTY" ) } );
+
+                break;
+            }
             case ICN::POL_CAMPAIGN_BUTTONS: {
                 _icnVsSprite[id].resize( 10 );
 
@@ -1534,11 +1609,12 @@ namespace fheroes2
                         _icnVsSprite[id][2 * i + 1] = GetICN( baseIcnId, 2 * i + 1 );
                     }
                     // generate the DIFFICULTY button because it is not present in the original resources
-                    createPOLButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ) );
+                    createCampaignButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ), id );
 
                     break;
                 }
-                createCampaignButtonSet( id, { gettext_noop("VIEW INTRO"), gettext_noop("RESTART"), gettext_noop("OKAY"), gettext_noop("CANCEL"), gettext_noop("DIFFICULTY") } );
+                createCampaignButtonSet( id, { gettext_noop( "VIEW INTRO" ), gettext_noop( "RESTART" ), gettext_noop( "OKAY" ), gettext_noop( "CANCEL" ),
+                                               gettext_noop( "DIFFICULTY" ) } );
 
                 break;
             }
@@ -2335,6 +2411,8 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_MAX_GOOD:
             case ICN::BUTTON_SMALL_MAX_EVIL:
             case ICN::BUTTON_GUILDWELL_EXIT:
+            case ICN::GOOD_CAMPAIGN_BUTTONS:
+            case ICN::EVIL_CAMPAIGN_BUTTONS:
             case ICN::POL_CAMPAIGN_BUTTONS:
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD:
             case ICN::BUTTON_DIFFICULTY_POL:
@@ -3556,34 +3634,6 @@ namespace fheroes2
 
                 const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() - 7 );
                 convertToEvilInterface( _icnVsSprite[id][0], roi );
-
-                return true;
-            }
-            case ICN::GOOD_CAMPAIGN_BUTTONS:
-            case ICN::EVIL_CAMPAIGN_BUTTONS: {
-                auto & image = _icnVsSprite[id];
-                image.resize( 8 );
-
-                const int originalIcnId = ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? ICN::CAMPXTRG : ICN::CAMPXTRE;
-
-                // The evil buttons' pressed state need to be 2 pixels wider.
-                const int offsetEvilX = ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? 0 : 2;
-
-                for ( int32_t i = 0; i < 4; ++i ) {
-                    // The released state image.
-                    image[2 * i] = GetICN( originalIcnId, 2 * i );
-
-                    // The pressed state image.
-                    const Sprite & original = GetICN( originalIcnId, 2 * i + 1 );
-
-                    Sprite & resized = image[2 * i + 1];
-                    // Change pressed state image to have same width and height as released image
-                    resized.resize( image[2 * i].width() + offsetEvilX, image[2 * i].height() );
-                    resized.reset();
-
-                    // Restore content of the pressed state image.
-                    Copy( original, 0, 0, resized, original.x(), original.y(), original.width() + offsetEvilX, original.height() );
-                }
 
                 return true;
             }
