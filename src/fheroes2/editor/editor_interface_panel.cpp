@@ -21,13 +21,13 @@
 #include "editor_interface_panel.h"
 
 #include <cassert>
-#include <string>
 #include <utility>
 
 #include "agg_image.h"
 #include "dialog.h"
 #include "dialog_system_options.h"
 #include "editor_interface.h"
+#include "ground.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_base.h"
@@ -174,42 +174,7 @@ namespace Interface
             fheroes2::Blit( selection, 0, 0, display, _terrainButtonsRect[_selectedTerrain].x - 2, _terrainButtonsRect[_selectedTerrain].y - 2, selection.width(),
                             selection.height() );
 
-            std::string text;
-            switch ( _selectedTerrain ) {
-            case Brush::WATER:
-                text = _( "Ocean" );
-                break;
-            case Brush::GRASS:
-                text = _( "Grass" );
-                break;
-            case Brush::SNOW:
-                text = _( "Snow" );
-                break;
-            case Brush::SWAMP:
-                text = _( "Swamp" );
-                break;
-            case Brush::LAVA:
-                text = _( "Lava" );
-                break;
-            case Brush::DESERT:
-                text = _( "Desert" );
-                break;
-            case Brush::DIRT:
-                text = _( "Dirt" );
-                break;
-            case Brush::WASTELAND:
-                text = _( "Wasteland" );
-                break;
-            case Brush::BEACH:
-                text = _( "Beach" );
-                break;
-            default:
-                // You have added a new terrain type?
-                assert( 0 );
-                break;
-            }
-
-            const fheroes2::Text terrainText( std::move( text ), fheroes2::FontType::smallWhite() );
+            const fheroes2::Text terrainText( Maps::Ground::String( _getGroundId( _selectedTerrain ) ), fheroes2::FontType::smallWhite() );
             terrainText.draw( _rectInstrumentPanel.x + 72 - terrainText.width( 118 ) / 2, _rectInstrumentPanel.y + 107, display );
         }
 
@@ -218,57 +183,7 @@ namespace Interface
             fheroes2::Blit( selection, 0, 0, display, _objectButtonsRect[_selectedObject].x - 2, _objectButtonsRect[_selectedObject].y - 2, selection.width(),
                             selection.height() );
 
-            std::string text;
-            switch ( _selectedObject ) {
-            case Brush::WATER:
-                text = _( "Ocean Objects" );
-                break;
-            case Brush::GRASS:
-                text = _( "Grass Objects" );
-                break;
-            case Brush::SNOW:
-                text = _( "Snow Objects" );
-                break;
-            case Brush::SWAMP:
-                text = _( "Swamp Objects" );
-                break;
-            case Brush::LAVA:
-                text = _( "Lava Objects" );
-                break;
-            case Brush::DESERT:
-                text = _( "Desert Objects" );
-                break;
-            case Brush::DIRT:
-                text = _( "Dirt Objects" );
-                break;
-            case Brush::WASTELAND:
-                text = _( "Wasteland Objects" );
-                break;
-            case Brush::BEACH:
-                text = _( "Beach Objects" );
-                break;
-            case Brush::TOWNS:
-                text = _( "Towns" );
-                break;
-            case Brush::MONSTERS:
-                text = _( "Monsters" );
-                break;
-            case Brush::HEROES:
-                text = _( "Heroes" );
-                break;
-            case Brush::ARTIFACTS:
-                text = _( "Artifacts" );
-                break;
-            case Brush::TREASURES:
-                text = _( "Treasures" );
-                break;
-            default:
-                // You have added a new object type?
-                assert( 0 );
-                break;
-            }
-
-            const fheroes2::Text terrainText( std::move( text ), fheroes2::FontType::smallWhite() );
+            const fheroes2::Text terrainText( _getObjectTypeName( _selectedObject ), fheroes2::FontType::smallWhite() );
             terrainText.draw( _rectInstrumentPanel.x + 72 - terrainText.width( 118 ) / 2, _rectInstrumentPanel.y + 135, display );
         }
 
@@ -280,6 +195,74 @@ namespace Interface
         _buttonSystem.draw();
 
         display.render( _rectInstrumentPanel );
+    }
+
+    int EditorPanel::_getGroundId( uint8_t brushId )
+    {
+        switch ( brushId ) {
+        case Brush::WATER:
+            return Maps::Ground::WATER;
+        case Brush::GRASS:
+            return Maps::Ground::GRASS;
+        case Brush::SNOW:
+            return Maps::Ground::SNOW;
+        case Brush::SWAMP:
+            return Maps::Ground::SWAMP;
+        case Brush::LAVA:
+            return Maps::Ground::LAVA;
+        case Brush::DESERT:
+            return Maps::Ground::DESERT;
+        case Brush::DIRT:
+            return Maps::Ground::DIRT;
+        case Brush::WASTELAND:
+            return Maps::Ground::WASTELAND;
+        case Brush::BEACH:
+            return Maps::Ground::BEACH;
+        default:
+            break;
+        }
+
+        return Maps::Ground::UNKNOWN;
+    }
+
+    std::string EditorPanel::_getObjectTypeName( uint8_t brushId )
+    {
+        switch ( brushId ) {
+        case Brush::WATER:
+            return _( "Ocean Objects" );
+        case Brush::GRASS:
+            return _( "Grass Objects" );
+        case Brush::SNOW:
+            return _( "Snow Objects" );
+        case Brush::SWAMP:
+            return _( "Swamp Objects" );
+        case Brush::LAVA:
+            return _( "Lava Objects" );
+        case Brush::DESERT:
+            return _( "Desert Objects" );
+        case Brush::DIRT:
+            return _( "Dirt Objects" );
+        case Brush::WASTELAND:
+            return _( "Wasteland Objects" );
+        case Brush::BEACH:
+            return _( "Beach Objects" );
+        case Brush::TOWNS:
+            return _( "Towns" );
+        case Brush::MONSTERS:
+            return _( "Monsters" );
+        case Brush::HEROES:
+            return _( "Heroes" );
+        case Brush::ARTIFACTS:
+            return _( "Artifacts" );
+        case Brush::TREASURES:
+            return _( "Treasures" );
+        default:
+            // Have you added a new object type?
+            assert( 0 );
+            break;
+        }
+
+        return {};
     }
 
     fheroes2::GameMode EditorPanel::queueEventProcessing()
@@ -350,31 +333,31 @@ namespace Interface
             };
 
             if ( le.MousePressRight( _terrainButtonsRect[Brush::WATER] ) ) {
-                fheroes2::showStandardTextMessage( _( "Water" ), _( "Traversable only by boat." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::WATER ), _( "Traversable only by boat." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _terrainButtonsRect[Brush::GRASS] ) ) {
-                fheroes2::showStandardTextMessage( _( "Grass" ), _( "No special modifiers." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::GRASS ), _( "No special modifiers." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _terrainButtonsRect[Brush::SNOW] ) ) {
-                fheroes2::showStandardTextMessage( _( "Snow" ), movePenaltyText( "1.5" ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::SNOW ), movePenaltyText( "1.5" ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _terrainButtonsRect[Brush::SWAMP] ) ) {
-                fheroes2::showStandardTextMessage( _( "Swamp" ), movePenaltyText( "1.75" ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::SWAMP ), movePenaltyText( "1.75" ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _terrainButtonsRect[Brush::LAVA] ) ) {
-                fheroes2::showStandardTextMessage( _( "Lava" ), _( "No special modifiers." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::LAVA ), _( "No special modifiers." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _terrainButtonsRect[Brush::DESERT] ) ) {
-                fheroes2::showStandardTextMessage( _( "Desert" ), movePenaltyText( "2" ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::DESERT ), movePenaltyText( "2" ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _terrainButtonsRect[Brush::DIRT] ) ) {
-                fheroes2::showStandardTextMessage( _( "Dirt" ), _( "No special modifiers." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::DIRT ), _( "No special modifiers." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _terrainButtonsRect[Brush::WASTELAND] ) ) {
-                fheroes2::showStandardTextMessage( _( "Wasteland" ), movePenaltyText( "1.25" ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::WASTELAND ), movePenaltyText( "1.25" ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _terrainButtonsRect[Brush::BEACH] ) ) {
-                fheroes2::showStandardTextMessage( _( "Beach" ), movePenaltyText( "1.25" ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::BEACH ), movePenaltyText( "1.25" ), Dialog::ZERO );
             }
         }
 
@@ -386,53 +369,28 @@ namespace Interface
                 }
             }
 
-            const auto terrainObjectsText = []( const std::string & terrain ) {
-                std::string text = _( "Used to select objects most appropriate for use on %{terrain}." );
-                StringReplace( text, "%{terrain}", terrain );
-                return text;
-            };
+            for ( uint8_t objectId = Brush::WATER; objectId < Brush::TERRAIN_COUNT; ++objectId ) {
+                if ( le.MousePressRight( _objectButtonsRect[objectId] ) ) {
+                    std::string text = _( "Used to select objects most appropriate for use on %{terrain}." );
+                    StringReplaceWithLowercase( text, "%{terrain}", Maps::Ground::String( _getGroundId( objectId ) ) );
+                    fheroes2::showStandardTextMessage( _getObjectTypeName( objectId ), text, Dialog::ZERO );
+                }
+            }
 
-            if ( le.MousePressRight( _objectButtonsRect[Brush::WATER] ) ) {
-                fheroes2::showStandardTextMessage( _( "Water Objects" ), terrainObjectsText( _( "water" ) ), Dialog::ZERO );
-            }
-            else if ( le.MousePressRight( _objectButtonsRect[Brush::GRASS] ) ) {
-                fheroes2::showStandardTextMessage( _( "Grass Objects" ), terrainObjectsText( _( "grass" ) ), Dialog::ZERO );
-            }
-            else if ( le.MousePressRight( _objectButtonsRect[Brush::SNOW] ) ) {
-                fheroes2::showStandardTextMessage( _( "Snow Objects" ), terrainObjectsText( _( "snow" ) ), Dialog::ZERO );
-            }
-            else if ( le.MousePressRight( _objectButtonsRect[Brush::SWAMP] ) ) {
-                fheroes2::showStandardTextMessage( _( "Swamp Objects" ), terrainObjectsText( _( "swamp" ) ), Dialog::ZERO );
-            }
-            else if ( le.MousePressRight( _objectButtonsRect[Brush::LAVA] ) ) {
-                fheroes2::showStandardTextMessage( _( "Lava Objects" ), terrainObjectsText( _( "lava" ) ), Dialog::ZERO );
-            }
-            else if ( le.MousePressRight( _objectButtonsRect[Brush::DESERT] ) ) {
-                fheroes2::showStandardTextMessage( _( "Desert Objects" ), terrainObjectsText( _( "desert" ) ), Dialog::ZERO );
-            }
-            else if ( le.MousePressRight( _objectButtonsRect[Brush::DIRT] ) ) {
-                fheroes2::showStandardTextMessage( _( "Dirt Objects" ), terrainObjectsText( _( "dirt" ) ), Dialog::ZERO );
-            }
-            else if ( le.MousePressRight( _objectButtonsRect[Brush::WASTELAND] ) ) {
-                fheroes2::showStandardTextMessage( _( "Wasteland Objects" ), terrainObjectsText( _( "wasteland" ) ), Dialog::ZERO );
-            }
-            else if ( le.MousePressRight( _objectButtonsRect[Brush::BEACH] ) ) {
-                fheroes2::showStandardTextMessage( _( "Beach Objects" ), terrainObjectsText( _( "beach" ) ), Dialog::ZERO );
-            }
-            else if ( le.MousePressRight( _objectButtonsRect[Brush::TOWNS] ) ) {
-                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Used to place a town or castle." ), Dialog::ZERO );
+            if ( le.MousePressRight( _objectButtonsRect[Brush::TOWNS] ) ) {
+                fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TOWNS ), _( "Used to place a town or castle." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _objectButtonsRect[Brush::MONSTERS] ) ) {
-                fheroes2::showStandardTextMessage( _( "Monsters" ), _( "Used to place a monster group." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::MONSTERS ), _( "Used to place a monster group." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _objectButtonsRect[Brush::HEROES] ) ) {
-                fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Used to place a hero." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::HEROES ), _( "Used to place a hero." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _objectButtonsRect[Brush::ARTIFACTS] ) ) {
-                fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Used to place an artifact." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::ARTIFACTS ), _( "Used to place an artifact." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _objectButtonsRect[Brush::TREASURES] ) ) {
-                fheroes2::showStandardTextMessage( _( "Treasures" ), _( "Used to place a resource or treasure." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place a resource or treasure." ), Dialog::ZERO );
             }
         }
 
