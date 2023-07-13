@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-07 01:13+0000\n"
-"PO-Revision-Date: 2023-07-08 20:10+0300\n"
+"PO-Revision-Date: 2023-07-13 19:58+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -3540,20 +3540,20 @@ msgid "Save the current map."
 msgstr "Сохранить текущую карту."
 
 msgid "Quit out of the map editor."
-msgstr "Выйти из редактора карты."
+msgstr "Выйти из редактора карт."
 
 msgid "Terrain Mode"
 msgstr "Почва"
 
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
-msgstr "Используется для отрисовки почвы (травы, грязи, воды и т.п.) на карте."
+msgstr "Используется для создания рельефа карты (травы, грязи, воды и т.п.)."
 
 msgid "Object Mode"
 msgstr "Объекты"
 
 msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
 msgstr ""
-"Используется для размещения объектов (горы, деревья, сокровища и т.п.) на "
+"Используется для размещения объектов (гор, деревьев, сокровищ и т.п.) на "
 "карте."
 
 msgid "Detail Mode"
@@ -3565,10 +3565,10 @@ msgstr ""
 "городов."
 
 msgid "Allows you to draw streams by clicking and dragging."
-msgstr "Позволяет разместить потоки воды, щёлкнув и перетащив курсор."
+msgstr "Позволяет прокладывать русла рек."
 
 msgid "Stream Mode"
-msgstr "Потоки."
+msgstr "Реки"
 
 msgid "Allows you to draw roads by clicking and dragging."
 msgstr "Позволяет проложить дороги, щёлкнув и перетащив курсор."
@@ -3599,7 +3599,7 @@ msgstr ""
 "Создать новую карту либо с нуля, либо с помощью генератора случайных карт."
 
 msgid "Edit map title, description, and other general information."
-msgstr "Изменить название карты, описание и другие параметры."
+msgstr "Изменить название карты, описание и прочие параметры."
 
 msgid "Specifications"
 msgstr "Характеристики"
@@ -3611,15 +3611,14 @@ msgid ""
 "Open the file options menu, where you can save or load maps, or quit out of "
 "the editor."
 msgstr ""
-"Открывает меню, где Вы можете загрузить, сохранить, создать новую карту или "
-"выйти из редактора."
+"Открывает меню, где Вы можете создать новую карту, загрузить или сохранить "
+"уже готовую, а также выйти из редактора."
 
 msgid "View the editor system options, which let you customize the editor."
 msgstr "Открывает окно системных настроек редактора карт."
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr ""
-"Создать карту размером%{size} клеток в ширину и %{size} клеток в высоту."
+msgstr "Создать карту размером %{size}x%{size} клеток"
 
 msgid "Cancel back to the New Map menu."
 msgstr "Вернуться в меню создания новой карты."
@@ -3631,7 +3630,7 @@ msgid "From Scratch"
 msgstr "С нуля"
 
 msgid "Start from scratch with a blank map."
-msgstr "Начать карту с нуля."
+msgstr "Создать карту с нуля."
 
 msgid "Create a randomly generated map."
 msgstr "Создать случайную карту."
@@ -4020,7 +4019,7 @@ msgid "hotkey|new map menu"
 msgstr "меню новой карты"
 
 msgid "hotkey|load map menu"
-msgstr "меню загрузки карта"
+msgstr "меню загрузки карты"
 
 msgid "hotkey|new map from scratch"
 msgstr "новая карта с нуля"
@@ -6626,7 +6625,7 @@ msgid "Only heroes can cast this spell."
 msgstr "Только герои могут колдовать данное заклинание."
 
 msgid "This hero is not able to cast adventure spells."
-msgstr "Этот героя не может использовать приключенческие заклинания."
+msgstr "Ваш герой не может использовать заклинания на карте."
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
