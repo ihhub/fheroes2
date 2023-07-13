@@ -117,19 +117,22 @@ namespace
         // Artifacts can be picked up and passed through
         if ( MP2::isArtifactObject( objectType ) ) {
             const Artifact art = Maps::getArtifactFromTile( tile );
+
+            // This tile does indeed contain an artifact
             if ( art.isValid() ) {
+                // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
                 if ( isFindArtifactVictoryConditionForHuman( art ) ) {
-                    // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player.
                     return true;
                 }
 
-                if ( isArtifactBagFull && MP2::isPickupObject( objectType ) ) {
-                    // A hero cannot pickup this object on his way since his artifact bag is full.
-                    return true;
+                // If this is an artifact that can be picked up, then the hero should have a place for it in his artifact bag
+                if ( MP2::isPickupObject( objectType ) ) {
+                    return isArtifactBagFull;
                 }
             }
 
-            return false;
+            // Otherwise, it's a stationary object that can offer an artifact as a reward, check if tile can be moved on
+            return MP2::isNeedStayFront( objectType );
         }
 
         // Monsters can be defeated and passed through
