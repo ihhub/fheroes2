@@ -259,6 +259,14 @@ namespace
                 return true;
             }
 
+            const Castle * castle = otherHero->inCastle();
+            if ( castle ) {
+                assert( castle->GetColor() == otherHero->GetColor() );
+
+                // Enemy heroes in castles with too powerful garrisons may be inaccessible
+                return castle->GetGarrisonStrength( hero ) * advantage > armyStrength;
+            }
+
             // Too powerful enemy heroes may be inaccessible
             return otherHero->GetArmy().GetStrength() * advantage > armyStrength;
         }
