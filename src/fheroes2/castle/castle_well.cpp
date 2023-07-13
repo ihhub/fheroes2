@@ -303,7 +303,7 @@ void Castle::OpenWell()
 void Castle::_wellRedrawAvailableMonsters( const uint32_t dwellingType, const bool restoreBackground, fheroes2::Image & background ) const
 {
     if ( !( building & dwellingType ) ) {
-        // This building is not build.
+        // This building has not been built.
         return;
     }
 
@@ -337,7 +337,7 @@ void Castle::_wellRedrawAvailableMonsters( const uint32_t dwellingType, const bo
         offset.y += 300;
         break;
     default:
-        // You have added a new dwelling?
+        // Have you added a new dwelling?
         assert( 0 );
         break;
     }
@@ -382,7 +382,7 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
     const fheroes2::FontType statsFontType = fheroes2::FontType::smallWhite();
 
     for ( const uint32_t dwellingType : castleDwellings ) {
-        // As default the 'icnIndex' and 'offset' values are set for DWELLING_MONSTER1.
+        // By default the 'icnIndex' and 'offset' values are set for DWELLING_MONSTER1.
         uint32_t icnIndex = 19;
         fheroes2::Point offset{ 0, 1 };
 
@@ -412,7 +412,7 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
             icnIndex = DWELLING_UPGRADE7 & building ? 30 : ( DWELLING_UPGRADE6 & building ? 29 : 24 );
             break;
         default:
-            // You have added a new dwelling?
+            // Have you added a new dwelling?
             assert( 0 );
             break;
         }
@@ -554,7 +554,7 @@ void Castle::_wellRedrawMonsterAnimation( const fheroes2::Point & cur_pt, std::a
             outPos.y += 300;
             break;
         default:
-            // You have added a new dwelling?
+            // Have you added a new dwelling?
             assert( 0 );
             break;
         }
