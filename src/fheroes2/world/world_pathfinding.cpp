@@ -70,7 +70,7 @@ namespace
         return ( art.GetID() == conf.WinsFindArtifactID() );
     }
 
-    bool isTileBlocksPassage( int tileIndex, bool fromWater )
+    bool isPassageThroughTileBlocked( int tileIndex, bool fromWater )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const bool toWater = tile.isWater();
@@ -91,7 +91,7 @@ namespace
         return false;
     }
 
-    bool isTileBlocksPassageForAI( const int tileIndex, const int color, const Heroes * hero )
+    bool isPassageThroughTileBlockedForAI( const int tileIndex, const int color, const Heroes * hero )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const MP2::MapObjectType objectType = tile.GetObject();
@@ -494,7 +494,7 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
     const bool isFirstNode = currentNodeIdx == _pathStart;
     const WorldNode & currentNode = _cache[currentNodeIdx];
 
-    if ( !isFirstNode && isTileBlocksPassage( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
+    if ( !isFirstNode && isPassageThroughTileBlocked( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
         return;
     }
 
@@ -637,7 +637,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
     }
 
     // Always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
-    if ( !isFirstNode && ( isProtected || isTileBlocksPassageForAI( currentNodeIdx, _currentColor, _hero ) ) ) {
+    if ( !isFirstNode && ( isProtected || isPassageThroughTileBlockedForAI( currentNodeIdx, _currentColor, _hero ) ) ) {
         return;
     }
 
@@ -1220,7 +1220,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, cons
     while ( currentNode != _pathStart ) {
         assert( currentNode != -1 );
 
-        if ( isTileBlocksPassage( currentNode, fromWater ) ) {
+        if ( isPassageThroughTileBlocked( currentNode, fromWater ) ) {
             lastValidNode = currentNode;
         }
 
