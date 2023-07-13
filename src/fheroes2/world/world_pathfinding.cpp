@@ -169,8 +169,8 @@ namespace
         }
 
         // AI may have the key for the barrier
-        if ( objectType == MP2::OBJ_BARRIER && world.GetKingdom( color ).IsVisitTravelersTent( getColorFromTile( tile ) ) ) {
-            return false;
+        if ( objectType == MP2::OBJ_BARRIER ) {
+            return !world.GetKingdom( color ).IsVisitTravelersTent( getColorFromTile( tile ) );
         }
 
         // AI can use boats to overcome water obstacles
