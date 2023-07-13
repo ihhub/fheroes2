@@ -177,5 +177,4 @@ private:
     double _armyStrength{ -1 };
     double _advantage{ 1.0 };
     double _spellPointsReserved{ 0.5 };
-    bool _isArtifactBagFull{ false };
 };

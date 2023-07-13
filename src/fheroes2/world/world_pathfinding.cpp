@@ -91,7 +91,7 @@ namespace
         return false;
     }
 
-    bool isTileBlocksPassageForAI( const int tileIndex, const int color, const bool isArtifactBagFull )
+    bool isTileBlocksPassageForAI( const int tileIndex, const int color, const Heroes * hero )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const MP2::MapObjectType objectType = tile.GetObject();
@@ -125,9 +125,37 @@ namespace
                     return true;
                 }
 
-                // If this is an artifact that can be picked up, then the hero should have a place for it in his artifact bag
+                // This is an object that can be picked up (and removed from the map)
                 if ( MP2::isPickupObject( objectType ) ) {
-                    return isArtifactBagFull;
+                    // This is not an artifact itself, but some pickupable object that contains an artifact, e.g. Treasure Chest, we can pick it up and go through
+                    if ( objectType != MP2::OBJ_ARTIFACT ) {
+                        return false;
+                    }
+
+                    // If AI pathfinder is in planning mode (without reference to a specific hero), all artifacts are considered available for pickup
+                    if ( hero == nullptr ) {
+                        return false;
+                    }
+
+                    // Hero should have a place for this artifact in his artifact bag
+                    if ( hero->IsFullBagArtifacts() ) {
+                        return true;
+                    }
+
+                    // Check the conditions for picking up the artifact (except for the artifact guard)
+                    const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
+
+                    if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD || condition == Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES
+                         || condition == Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
+                        return !hero->GetKingdom().AllowPayment( getArtifactResourceRequirement( tile ) );
+                    }
+
+                    if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
+                        return !hero->HasSecondarySkill( getArtifactSecondarySkillRequirement( tile ).Skill() );
+                    }
+
+                    // If there are no conditions, then we can just pick this artifact up and go through
+                    return false;
                 }
             }
 
@@ -513,17 +541,16 @@ void AIWorldPathfinder::reset()
         _remainingMovePoints = 0;
         _maxMovePoints = 0;
 
-        _armyStrength = -1;
         _hero = nullptr;
-        _isArtifactBagFull = false;
+        _armyStrength = -1;
     }
 }
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _hero, _armyStrength, _isArtifactBagFull );
+    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _hero, _armyStrength );
     const auto newSettings = std::make_tuple( hero.GetIndex(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetColor(),
-                                              hero.GetMovePoints(), hero.GetMaxMovePoints(), &hero, hero.GetArmy().GetStrength(), hero.GetBagArtifacts().isFull() );
+                                              hero.GetMovePoints(), hero.GetMaxMovePoints(), &hero, hero.GetArmy().GetStrength() );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
@@ -534,8 +561,8 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill )
 {
-    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _hero, _armyStrength, _isArtifactBagFull );
-    const auto newSettings = std::make_tuple( start, skill, color, 0U, 0U, nullptr, armyStrength, false );
+    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _hero, _armyStrength );
+    const auto newSettings = std::make_tuple( start, skill, color, 0U, 0U, nullptr, armyStrength );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
@@ -610,7 +637,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
     }
 
     // Always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
-    if ( !isFirstNode && ( isProtected || isTileBlocksPassageForAI( currentNodeIdx, _currentColor, _isArtifactBagFull ) ) ) {
+    if ( !isFirstNode && ( isProtected || isTileBlocksPassageForAI( currentNodeIdx, _currentColor, _hero ) ) ) {
         return;
     }
 
