@@ -244,7 +244,7 @@ namespace fheroes2
     void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, int32_t width, Point & releasedOffset, Point & pressedOffset,
                                 const bool isTransparentBackground = false );
 
-    const int32_t getCampaignButton( Sprite & released, Sprite & pressed, const int32_t width, const int icnId );
+    const int32_t getTailoredButton( Sprite & released, Sprite & pressed, const int32_t width, const int icnId );
 
     // Generate released and pressed button sprites with the text on it over a transparent or a default (STONEBAK/STONEBAK_EVIL) background.
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface,

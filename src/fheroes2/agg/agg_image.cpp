@@ -416,13 +416,13 @@ namespace
                             buttonFontColor );
     }
 
-    void createCampaignButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const int emptyButtonICNid )
+    void createCampaignButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const int emptyButtonIcnId )
     {
         bool isTransparentBackground = true;
         bool isEvilInterface = false;
         fheroes2::FontColor buttonFontColor = fheroes2::FontColor::GRAY;
 
-        switch ( emptyButtonICNid ) {
+        switch ( emptyButtonIcnId ) {
         case ICN::EMPTY_GOOD_BUTTON:
             isTransparentBackground = false;
             buttonFontColor = fheroes2::FontColor::WHITE;
@@ -434,7 +434,7 @@ namespace
         case ICN::EMPTY_POL_BUTTON:
             break;
         default:
-            // Was a new set of buttons added?
+            // Was a new type of campaign button added?
             assert( 0 );
             break;
         }
@@ -447,7 +447,7 @@ namespace
         const fheroes2::Text pressedText( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
 
         // make the button
-        const int32_t textSpaceWidth = fheroes2::getCampaignButton( released, pressed, releasedText.width(), emptyButtonICNid );
+        const int32_t textSpaceWidth = fheroes2::getTailoredButton( released, pressed, releasedText.width(), emptyButtonIcnId );
 
         if ( !isTransparentBackground ) {
             // We need to copy the background image to pressed button only where it does not overlay the image of released button.
@@ -473,13 +473,13 @@ namespace
         pressedText.draw( 4, 6, textSpaceWidth, pressed );
     }
 
-    void createCampaignButtonSet( const int32_t icn, const std::vector<const char *> & texts )
+    void createCampaignButtonSet( const int32_t campaignSetIcnId, const std::vector<const char *> & texts )
     {
         int32_t emptyButtonIcn = 0;
         fheroes2::FontColor buttonFontColor = fheroes2::FontColor::GRAY;
         bool isTransparentBackground = false;
         bool isEvilInterface = true;
-        switch ( icn ) {
+        switch ( campaignSetIcnId ) {
         case ICN::GOOD_CAMPAIGN_BUTTONS:
             emptyButtonIcn = ICN::EMPTY_GOOD_BUTTON;
             buttonFontColor = fheroes2::FontColor::WHITE;
@@ -490,7 +490,7 @@ namespace
             break;
         case ICN::POL_CAMPAIGN_BUTTONS:
             emptyButtonIcn = ICN::EMPTY_POL_BUTTON;
-            isTransparentBackground = true;
+            isTransparentBackground = false;
             break;
         default:
             // Was a new set of buttons added?
@@ -499,44 +499,41 @@ namespace
         }
 
         for ( int i = 0; i < texts.size() - 1; ++i ) {
-            createCampaignButton( _icnVsSprite[icn][2 * i], _icnVsSprite[icn][2 * i + 1], texts[i], emptyButtonIcn );
+            createCampaignButton( _icnVsSprite[campaignSetIcnId][2 * i], _icnVsSprite[campaignSetIcnId][2 * i + 1], texts[i], emptyButtonIcn );
         }
         // generate the last button i.e. the DIFFICULTY button
-        // 1. find the required space for the text
-        const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor };
-        const char * supportedText = getSupportedText( texts[4], releasedButtonFont );
-
-        const fheroes2::Text difficultyTextReleased( supportedText, releasedButtonFont );
-        const fheroes2::Text difficultyTextPressed( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
-
-        const int32_t difficultyWidth = difficultyTextReleased.width();
-
-        // 2. find what the remaining permittable button width is
+        
+        // 1. find what the remaining permittable button width is
         const int32_t backgroundWidth = fheroes2::AGG::GetICN( ICN::CAMPBKGG, 0 ).width();
         const int32_t backgroundOuterBorders = 28 + 27;
         const int32_t useableBackgroundWidth = backgroundWidth - backgroundOuterBorders;
         // the OKAY and RESTART buttons never appear together so we only need the width of the widest one of them
-        const int32_t widestRightsideButtonWidth = std::max( _icnVsSprite[icn][2].width(), _icnVsSprite[icn][4].width() );
-        const int32_t nonDifficultyButtonsWidth = _icnVsSprite[icn][0].width() + widestRightsideButtonWidth + _icnVsSprite[icn][6].width();
+        const int32_t widestRightsideButtonWidth = std::max( _icnVsSprite[campaignSetIcnId][2].width(), _icnVsSprite[campaignSetIcnId][4].width() );
+        const int32_t nonDifficultyButtonsWidth = _icnVsSprite[campaignSetIcnId][0].width() + widestRightsideButtonWidth + _icnVsSprite[campaignSetIcnId][6].width();
         const int32_t marginsBetweenNeighboringButtons = 10;
 
         // the total width of the already generated buttons does not leave enough space for another button of minimum width 95px
         assert( ( useableBackgroundWidth - marginsBetweenNeighboringButtons * 3 - 95 ) > ( nonDifficultyButtonsWidth + marginsBetweenNeighboringButtons * 3 ) );
 
-        const int32_t availableDifficultyWidth = useableBackgroundWidth - nonDifficultyButtonsWidth - 2 * marginsBetweenNeighboringButtons;
+        const int32_t availableDifficultyWidth = useableBackgroundWidth - nonDifficultyButtonsWidth - marginsBetweenNeighboringButtons * 2;
+        const int32_t allowedDifficultyWidth = std::min( availableDifficultyWidth, 200 );
 
-        const int32_t permittableDifficultyWidth = std::min( availableDifficultyWidth, 200 );
+        // 2. find the required width for the text
+        const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor };
+        const char * supportedText = getSupportedText( texts[4], releasedButtonFont );
+        const fheroes2::Text textReleased( supportedText, releasedButtonFont );
+        const int32_t difficultyWidth = textReleased.width();
 
         // 3. make the button width stay within the limits of the available width
         const int32_t buttonTextAreaBorders = 3 + 3;
         const int32_t textWidthWithBorders = difficultyWidth + buttonTextAreaBorders;
-        const int32_t controlledTextWidth = std::clamp( textWidthWithBorders, 87, permittableDifficultyWidth );
+        const int32_t controlledTextWidth = std::clamp( textWidthWithBorders, 87, allowedDifficultyWidth );
 
         // 4. make the button background
-        const int32_t outerButtonBackgroundBorders = 4 + 3;
-        fheroes2::Sprite & released = _icnVsSprite[icn][8];
-        fheroes2::Sprite & pressed = _icnVsSprite[icn][9];
-        fheroes2::getButtonFromWidth( released, pressed, controlledTextWidth + outerButtonBackgroundBorders, emptyButtonIcn );
+        const int32_t buttonBackgroundBorders = 4 + 3;
+        fheroes2::Sprite & released = _icnVsSprite[campaignSetIcnId][8];
+        fheroes2::Sprite & pressed = _icnVsSprite[campaignSetIcnId][9];
+        fheroes2::getButtonFromWidth( released, pressed, controlledTextWidth + buttonBackgroundBorders, emptyButtonIcn );
 
         if ( !isTransparentBackground ) {
             // We need to copy the background image to pressed button only where it does not overlay the image of released button.
@@ -558,8 +555,9 @@ namespace
         }
 
         // 5. render the text on the button background
-        difficultyTextReleased.draw( 5, 5, controlledTextWidth, released );
-        difficultyTextPressed.draw( 4, 6, controlledTextWidth, pressed );
+        const fheroes2::Text textPressed( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
+        textReleased.draw( 5, 5, controlledTextWidth, released );
+        textPressed.draw( 4, 6, controlledTextWidth, pressed );
     }
 
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
@@ -1609,10 +1607,11 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 10 );
 
                 if ( useOriginalResources() ) {
-                    const int originalIcnId = ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? ICN::CAMPXTRG : ICN::CAMPXTRE;
+                    const bool isEvilInterface = id == ICN::EVIL_CAMPAIGN_BUTTONS;
+                    const int originalIcnId = isEvilInterface ? ICN::CAMPXTRE : ICN::CAMPXTRG;
 
                     // The evil buttons' pressed state need to be 2 pixels wider.
-                    const int offsetEvilX = ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? 0 : 2;
+                    const int offsetEvilX = isEvilInterface ? 2 : 0;
 
                     for ( int32_t i = 0; i < 4; ++i ) {
                         // The released state image.
@@ -1630,7 +1629,7 @@ namespace fheroes2
                         Copy( original, 0, 0, resized, original.x(), original.y(), original.width() + offsetEvilX, original.height() );
                     }
                     createCampaignButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
-                                          ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? ICN::EMPTY_GOOD_BUTTON : ICN::EMPTY_EVIL_BUTTON );
+                                          isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON );
                     break;
                 }
                 createCampaignButtonSet( id, { gettext_noop( "VIEW INTRO" ), gettext_noop( "RESTART" ), gettext_noop( "OKAY" ), gettext_noop( "CANCEL" ),

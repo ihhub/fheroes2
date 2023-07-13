@@ -574,21 +574,27 @@ namespace fheroes2
         }
     }
 
-    const int32_t getCampaignButton( Sprite & released, Sprite & pressed, const int32_t width, const int emptyButtonIcnId )
+    const int32_t getTailoredButton( Sprite & released, Sprite & pressed, const int32_t textWidth, const int emptyButtonIcnId )
     {
-        assert( width > 0 );
+        assert( textWidth > 0 );
 
         const int32_t buttonBorder = 3 + 3;
-        const int32_t textWidthWithBorder = width + buttonBorder;
+        const int32_t textWidthWithBorder = textWidth + buttonBorder;
 
-        // The minimum text space width for a button is 87 judging from the shared widths of the original OKAY and the CANCEL buttons even though OKAY
-        // is a shorter word
+        // The minimum text space width for a button is 87 judging from the shared widths of the
+        // original OKAY and the CANCEL buttons even though OKAY is a shorter word
+        // TODO: Make the minimum width be adjusted for the various empty ICNs.
+        // NOTE: Buttons can use the same ICN but have different minimum widths, i.e. good buttons
         const int32_t minimumButtonTextWidthWithBorder = 87;
         const int32_t maximumButtonWidth = 200; // Why is such a wide button needed?
         const int32_t finalWidth = std::clamp( textWidthWithBorder, minimumButtonTextWidthWithBorder, maximumButtonWidth );
 
+        // NOTE: Buttons have different side background borders
         const int32_t sideBackgroundBorders = 7;
-        getButtonFromWidth( released, pressed, finalWidth + sideBackgroundBorders, emptyButtonIcnId );
+        assert( finalWidth + sideBackgroundBorders > 0 );
+
+        released = resizeButton( AGG::GetICN( emptyButtonIcnId, 0 ), finalWidth + sideBackgroundBorders );
+        pressed = resizeButton( AGG::GetICN( emptyButtonIcnId, 1 ), finalWidth + sideBackgroundBorders );
 
         return finalWidth;
     }
