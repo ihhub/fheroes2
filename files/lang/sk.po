@@ -3503,6 +3503,7 @@ msgstr "Nahraj hru"
 
 msgid "Load an existing map."
 msgstr ""
+
 #, fuzzy
 msgid "Save Map"
 msgstr "Ulož hru"
