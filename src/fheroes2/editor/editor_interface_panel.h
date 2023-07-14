@@ -22,7 +22,6 @@
 
 #include <array>
 #include <cstdint>
-#include <string>
 
 #include "game_mode.h"
 #include "math_base.h"
@@ -112,9 +111,9 @@ namespace Interface
     private:
         Editor & _interface;
 
-        static int _getGroundId( uint8_t brushId );
+        static const char * _getTerrainTypeName( const uint8_t brushId );
 
-        static std::string _getObjectTypeName( uint8_t brushId );
+        static const char * _getObjectTypeName( const uint8_t brushId );
 
         // Index of selected Map Editor instrument.
         uint8_t _selectedInstrument{ Instrument::TERRAIN };

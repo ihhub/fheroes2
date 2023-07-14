@@ -21,6 +21,7 @@
 #include "editor_interface_panel.h"
 
 #include <cassert>
+#include <string>
 
 #include "agg_image.h"
 #include "dialog.h"
@@ -73,7 +74,7 @@ namespace Interface
     {
         int32_t offsetX = displayX;
 
-        for ( uint8_t i = 0; i < Instrument::INSTRUMENTS_COUNT; ++i ) {
+        for ( uint8_t i = 0; i < static_cast<uint8_t>( _instrumentButtonsRect.size() ); ++i ) {
             _instrumentButtons[i].setPosition( offsetX, displayY );
             _instrumentButtonsRect[i] = _instrumentButtons[i].area();
 
@@ -97,7 +98,7 @@ namespace Interface
 
         offsetX = displayX + 14;
         int32_t offsetY = displayY + 128;
-        for ( uint8_t i = 0; i < BrushSize::BRUSH_SIZE_COUNT; ++i ) {
+        for ( uint8_t i = 0; i < static_cast<uint8_t>( _brushSizeButtonsRect.size() ); ++i ) {
             _brushSizeButtons[i].setPosition( offsetX, offsetY );
             _brushSizeButtonsRect[i] = _brushSizeButtons[i].area();
             offsetX += 30;
@@ -105,13 +106,13 @@ namespace Interface
 
         offsetX = displayX + 30;
         offsetY = displayY + 11;
-        for ( uint8_t i = 0; i < Brush::TERRAIN_COUNT; ++i ) {
+        for ( uint8_t i = 0; i < static_cast<uint8_t>( _terrainButtonsRect.size() ); ++i ) {
             _terrainButtonsRect[i] = { offsetX + ( i % 3 ) * 29, offsetY + ( i / 3 ) * 29, 27, 27 };
         }
 
         offsetX = displayX + 15;
         ++offsetY;
-        for ( uint8_t i = 0; i < Brush::OBJECT_COUNT; ++i ) {
+        for ( uint8_t i = 0; i < static_cast<uint8_t>( _objectButtonsRect.size() ); ++i ) {
             _objectButtonsRect[i] = { offsetX + ( i % 4 ) * 29, offsetY + ( i / 4 ) * 28, 27, 27 };
         }
         // The last object button is located not next to previous one and needs to be shifted to the right.
@@ -173,11 +174,11 @@ namespace Interface
             fheroes2::Blit( selection, 0, 0, display, _terrainButtonsRect[_selectedTerrain].x - 2, _terrainButtonsRect[_selectedTerrain].y - 2, selection.width(),
                             selection.height() );
 
-            const fheroes2::Text terrainText( Maps::Ground::String( _getGroundId( _selectedTerrain ) ), fheroes2::FontType::smallWhite() );
+            const fheroes2::Text terrainText( _getTerrainTypeName( _selectedTerrain ), fheroes2::FontType::smallWhite() );
             terrainText.draw( _rectInstrumentPanel.x + 72 - terrainText.width( 118 ) / 2, _rectInstrumentPanel.y + 107, display );
         }
 
-        if ( _selectedInstrument == Instrument::OBJECT ) {
+        else if ( _selectedInstrument == Instrument::OBJECT ) {
             const fheroes2::Sprite & selection = fheroes2::AGG::GetICN( ICN::TERRAINS, 9 );
             fheroes2::Blit( selection, 0, 0, display, _objectButtonsRect[_selectedObject].x - 2, _objectButtonsRect[_selectedObject].y - 2, selection.width(),
                             selection.height() );
@@ -196,35 +197,47 @@ namespace Interface
         display.render( _rectInstrumentPanel );
     }
 
-    int EditorPanel::_getGroundId( uint8_t brushId )
+    const char * EditorPanel::_getTerrainTypeName( const uint8_t brushId )
     {
+        int groundId = Maps::Ground::UNKNOWN;
         switch ( brushId ) {
         case Brush::WATER:
-            return Maps::Ground::WATER;
+            groundId = Maps::Ground::WATER;
+            break;
         case Brush::GRASS:
-            return Maps::Ground::GRASS;
+            groundId = Maps::Ground::GRASS;
+            break;
         case Brush::SNOW:
-            return Maps::Ground::SNOW;
+            groundId = Maps::Ground::SNOW;
+            break;
         case Brush::SWAMP:
-            return Maps::Ground::SWAMP;
+            groundId = Maps::Ground::SWAMP;
+            break;
         case Brush::LAVA:
-            return Maps::Ground::LAVA;
+            groundId = Maps::Ground::LAVA;
+            break;
         case Brush::DESERT:
-            return Maps::Ground::DESERT;
+            groundId = Maps::Ground::DESERT;
+            break;
         case Brush::DIRT:
-            return Maps::Ground::DIRT;
+            groundId = Maps::Ground::DIRT;
+            break;
         case Brush::WASTELAND:
-            return Maps::Ground::WASTELAND;
+            groundId = Maps::Ground::WASTELAND;
+            break;
         case Brush::BEACH:
-            return Maps::Ground::BEACH;
+            groundId = Maps::Ground::BEACH;
+            break;
         default:
+            // Have you added a new terrain type?
+            assert( 0 );
             break;
         }
 
-        return Maps::Ground::UNKNOWN;
+        return Maps::Ground::String( groundId );
     }
 
-    std::string EditorPanel::_getObjectTypeName( uint8_t brushId )
+    const char * EditorPanel::_getObjectTypeName( const uint8_t brushId )
     {
         switch ( brushId ) {
         case Brush::WATER:
@@ -270,7 +283,7 @@ namespace Interface
         fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
         if ( le.MousePressLeft( _rectInstruments ) ) {
-            for ( uint8_t i = 0; i < Instrument::INSTRUMENTS_COUNT; ++i ) {
+            for ( uint8_t i = 0; i < static_cast<uint8_t>( _instrumentButtonsRect.size() ); ++i ) {
                 if ( le.MousePressLeft( _instrumentButtonsRect[i] ) ) {
                     if ( _instrumentButtons[i].drawOnPress() ) {
                         _selectedInstrument = i;
@@ -284,16 +297,14 @@ namespace Interface
         }
 
         if ( _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::ERASE ) {
-            for ( uint8_t i = 0; i < BrushSize::BRUSH_SIZE_COUNT; ++i ) {
+            for ( uint8_t i = 0; i < static_cast<uint8_t>( _brushSizeButtonsRect.size() ); ++i ) {
                 if ( le.MousePressLeft( _brushSizeButtonsRect[i] ) ) {
                     if ( _brushSizeButtons[i].drawOnPress() ) {
                         _selectedBrushSize = i;
                     }
                 }
-                else {
-                    if ( i != _selectedBrushSize ) {
-                        _brushSizeButtons[i].drawOnRelease();
-                    }
+                else if ( i != _selectedBrushSize ) {
+                    _brushSizeButtons[i].drawOnRelease();
                 }
             }
 
@@ -318,7 +329,7 @@ namespace Interface
         }
 
         if ( _selectedInstrument == Instrument::TERRAIN ) {
-            for ( uint8_t i = 0; i < Brush::TERRAIN_COUNT; ++i ) {
+            for ( uint8_t i = 0; i < static_cast<uint8_t>( _terrainButtonsRect.size() ); ++i ) {
                 if ( ( _selectedTerrain != i ) && le.MousePressLeft( _terrainButtonsRect[i] ) ) {
                     _selectedTerrain = i;
                     _redraw();
@@ -332,46 +343,46 @@ namespace Interface
             };
 
             if ( le.MousePressRight( _terrainButtonsRect[Brush::WATER] ) ) {
-                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::WATER ), _( "Traversable only by boat." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::WATER ), _( "Traversable only by boat." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _terrainButtonsRect[Brush::GRASS] ) ) {
-                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::GRASS ), _( "No special modifiers." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::GRASS ), _( "No special modifiers." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _terrainButtonsRect[Brush::SNOW] ) ) {
-                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::SNOW ), movePenaltyText( "1.5" ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::SNOW ), movePenaltyText( "1.5" ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _terrainButtonsRect[Brush::SWAMP] ) ) {
-                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::SWAMP ), movePenaltyText( "1.75" ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::SWAMP ), movePenaltyText( "1.75" ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _terrainButtonsRect[Brush::LAVA] ) ) {
-                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::LAVA ), _( "No special modifiers." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::LAVA ), _( "No special modifiers." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _terrainButtonsRect[Brush::DESERT] ) ) {
-                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::DESERT ), movePenaltyText( "2" ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::DESERT ), movePenaltyText( "2" ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _terrainButtonsRect[Brush::DIRT] ) ) {
-                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::DIRT ), _( "No special modifiers." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::DIRT ), _( "No special modifiers." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _terrainButtonsRect[Brush::WASTELAND] ) ) {
-                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::WASTELAND ), movePenaltyText( "1.25" ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::WASTELAND ), movePenaltyText( "1.25" ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _terrainButtonsRect[Brush::BEACH] ) ) {
-                fheroes2::showStandardTextMessage( Maps::Ground::String( Maps::Ground::BEACH ), movePenaltyText( "1.25" ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::BEACH ), movePenaltyText( "1.25" ), Dialog::ZERO );
             }
         }
 
         if ( _selectedInstrument == Instrument::OBJECT ) {
-            for ( uint8_t i = 0; i < Brush::OBJECT_COUNT; ++i ) {
+            for ( uint8_t i = 0; i < static_cast<uint8_t>( _objectButtonsRect.size() ); ++i ) {
                 if ( ( _selectedObject != i ) && le.MousePressLeft( _objectButtonsRect[i] ) ) {
                     _selectedObject = i;
                     _redraw();
                 }
             }
 
-            for ( uint8_t objectId = Brush::WATER; objectId < Brush::TERRAIN_COUNT; ++objectId ) {
+            for ( uint8_t objectId = Brush::WATER; objectId < Brush::TOWNS; ++objectId ) {
                 if ( le.MousePressRight( _objectButtonsRect[objectId] ) ) {
                     std::string text = _( "Used to select objects most appropriate for use on %{terrain}." );
-                    StringReplaceWithLowercase( text, "%{terrain}", Maps::Ground::String( _getGroundId( objectId ) ) );
+                    StringReplaceWithLowercase( text, "%{terrain}", _getTerrainTypeName( objectId ) );
                     fheroes2::showStandardTextMessage( _getObjectTypeName( objectId ), text, Dialog::ZERO );
                 }
             }
