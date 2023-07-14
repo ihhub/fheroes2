@@ -524,8 +524,9 @@ namespace fheroes2
         return { offsetX + shadow.x(), offsetY + shadow.y(), releasedWithBackground, pressedWithBackground, disabledWithBackground };
     }
 
-    Rect getButtonNumbers( const int32_t emptyButtonIcnID, int32_t backgroundIcnID )
+    int32_t getButtonBackground( const int32_t emptyButtonIcnID )
     {
+        int32_t backgroundIcnID = 0;
         switch ( emptyButtonIcnID ) {
         case ICN::EMPTY_GOOD_BUTTON:
             backgroundIcnID = ICN::STONEBAK;
@@ -543,9 +544,9 @@ namespace fheroes2
         }
 
         // minimum buttonWidth
-        // stone background
 
         // offsets for drawing?
+        return backgroundIcnID;
     }
     void makeTransparentBackground( fheroes2::Sprite released, fheroes2::Sprite pressed, const int32_t backgroundIcnID )
     {
@@ -571,8 +572,7 @@ namespace fheroes2
         released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), width );
         pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), width );
 
-        int32_t backgroundIcnID;
-        getButtonNumbers( emptyButtonIcnID, backgroundIcnID );
+        const int32_t backgroundIcnID = getButtonBackground( emptyButtonIcnID );
 
         makeTransparentBackground( released, pressed, backgroundIcnID );
     }
@@ -610,9 +610,6 @@ namespace fheroes2
     {
         assert( textWidth > 0 );
 
-        int32_t backgroundIcnID;
-        getButtonNumbers( emptyButtonIcnID, backgroundIcnID );
-
         const int32_t buttonBorder = 3 + 3;
         const int32_t textWidthWithBorder = textWidth + buttonBorder;
 
@@ -631,6 +628,7 @@ namespace fheroes2
         released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), finalWidth + sideBackgroundBorders );
         pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), finalWidth + sideBackgroundBorders );
 
+        const int32_t backgroundIcnID = getButtonBackground( emptyButtonIcnID );
         makeTransparentBackground( released, pressed, backgroundIcnID );
 
         return finalWidth;
