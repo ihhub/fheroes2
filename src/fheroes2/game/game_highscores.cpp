@@ -77,19 +77,84 @@ namespace
     const int32_t scenarioNameOffset = 244;
     const int32_t dayCountOffset = 403;
     const int32_t ratingOffset = 484;
+    const int32_t monsterOffsetX = 554;
+    const int32_t monsterOffsetY = 91;
 
-    const fheroes2::Rect backgroundCopyRoi( 512, 51, 76, 406 );
+    // Calculate the mini monster sprites ROI.
+    fheroes2::Rect getAnimationRoi( const fheroes2::Point & position, const bool isCampaign )
+    {
+        fheroes2::Rect roi;
+        std::vector<uint32_t> animationIndex;
+
+        if ( isCampaign ) {
+            const std::vector<fheroes2::HighscoreData> & highScoreData = highScoreDataContainer.getHighScoresCampaign();
+
+            animationIndex.reserve( highScoreData.size() );
+
+            for ( const fheroes2::HighscoreData & data : highScoreData ) {
+                animationIndex.push_back( fheroes2::HighScoreDataContainer::getMonsterByDay( data.rating ).GetSpriteIndex() * 9 );
+            }
+        }
+
+        else {
+            const std::vector<fheroes2::HighscoreData> & highScoreData = highScoreDataContainer.getHighScoresStandard();
+
+            animationIndex.reserve( highScoreData.size() );
+
+            for ( const fheroes2::HighscoreData & data : highScoreData ) {
+                animationIndex.push_back( fheroes2::HighScoreDataContainer::getMonsterByRating( data.rating ).GetSpriteIndex() * 9 );
+            }
+        }
+
+        // Animation frames: 0 - static part, 1-6 - animation, 7 and 8 - attacking sprite. We analyze and render here only 0-6 frames.
+        for ( uint32_t i = 0; i < 7; ++i ) {
+            const fheroes2::Sprite & topMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, animationIndex.front() + i );
+            const fheroes2::Sprite & bottomMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, animationIndex.back() + i );
+
+            // We search for the most top sprite offset of the top monster sprite, the most bottom offset of the bottom monster.
+            int32_t offset = topMonsterSprite.y();
+            if ( offset < roi.y ) {
+                roi.y = offset;
+            }
+
+            // The offset of the sprite right border from the render point.
+            offset = bottomMonsterSprite.y() + bottomMonsterSprite.height();
+            if ( offset > roi.height ) {
+                roi.height = offset;
+            }
+
+            for ( const uint32_t index : animationIndex ) {
+                const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, index + i );
+
+                offset = monsterSprite.x();
+                if ( offset < roi.x ) {
+                    roi.x = offset;
+                }
+
+                offset += monsterSprite.width();
+                if ( offset > roi.width ) {
+                    roi.width = offset;
+                }
+            }
+        }
+
+        // We have 10 high score records and should take into account 9 intervals between each record.
+        roi.height += highScoreEntryStepY * 9 - roi.y;
+        roi.width -= roi.x;
+
+        // We take into account the High Scores windows position and first monster sprite offset.
+        roi.x += position.x + monsterOffsetX;
+        roi.y += position.y + monsterOffsetY;
+
+        return roi;
+    }
 
     void redrawMonstersAnimation( const fheroes2::Point & position, uint32_t & monsterAnimationFrameId, const std::vector<fheroes2::HighscoreData> & highScores,
-                                  const std::function<Monster( size_t )> & getMonster, const fheroes2::Image & backgroundCopy )
+                                  const std::function<Monster( size_t )> & getMonster )
     {
         ++monsterAnimationFrameId;
 
         fheroes2::Display & display = fheroes2::Display::instance();
-
-        // Restore background with static monster animation part.
-        fheroes2::Copy( backgroundCopy, 0, 0, display, position.x + backgroundCopyRoi.x, position.y + backgroundCopyRoi.y, backgroundCopy.width(),
-                        backgroundCopy.height() );
 
         const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
         int32_t offsetY = position.y;
@@ -100,21 +165,22 @@ namespace
                 = monsterAnimationSequence[( position.x + offsetY + data.dayCount + monsterAnimationFrameId ) % monsterAnimationSequence.size()];
             const uint32_t secondaryMonsterAnimationIndex = getMonster( data.rating ).GetSpriteIndex() * 9 + 1 + monsterAnimationId;
             const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, secondaryMonsterAnimationIndex );
-            fheroes2::Blit( secondaryMonsterSprite, display, secondaryMonsterSprite.x() + position.x + 554, secondaryMonsterSprite.y() + offsetY + 91 );
+            fheroes2::Blit( secondaryMonsterSprite, display, secondaryMonsterSprite.x() + position.x + monsterOffsetX,
+                            secondaryMonsterSprite.y() + offsetY + monsterOffsetY );
 
             offsetY += highScoreEntryStepY;
         }
     }
 
-    void redrawHighScoreAnimation( const fheroes2::Point & position, uint32_t & monsterAnimationFrameId, const fheroes2::Image & backgroundCopy, const bool isCampaign )
+    void redrawHighScoreAnimation( const fheroes2::Point & position, uint32_t & monsterAnimationFrameId, const bool isCampaign )
     {
         if ( isCampaign ) {
-            redrawMonstersAnimation( position, monsterAnimationFrameId, highScoreDataContainer.getHighScoresCampaign(), fheroes2::HighScoreDataContainer::getMonsterByDay,
-                                     backgroundCopy );
+            redrawMonstersAnimation( position, monsterAnimationFrameId, highScoreDataContainer.getHighScoresCampaign(),
+                                     fheroes2::HighScoreDataContainer::getMonsterByDay );
         }
         else {
             redrawMonstersAnimation( position, monsterAnimationFrameId, highScoreDataContainer.getHighScoresStandard(),
-                                     fheroes2::HighScoreDataContainer::getMonsterByRating, backgroundCopy );
+                                     fheroes2::HighScoreDataContainer::getMonsterByRating );
         }
     }
 
@@ -279,14 +345,13 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         redrawHighScoreScreen( top, selectedEntryIndex, highScoreDataContainer.getHighScoresStandard(), 6, fheroes2::HighScoreDataContainer::getMonsterByRating );
     }
 
+    const fheroes2::Rect animationRoi = getAnimationRoi( top, isCampaign );
+
     // Make a copy of static monsters animation part with background to restore it during animations.
-    fheroes2::Image backgroundCopy( backgroundCopyRoi.width, backgroundCopyRoi.height );
-    backgroundCopy._disableTransformLayer();
-    const fheroes2::Rect animationRoi( top.x + backgroundCopyRoi.x, top.y + backgroundCopyRoi.y, backgroundCopyRoi.width, backgroundCopyRoi.height );
-    fheroes2::Copy( display, animationRoi.x, animationRoi.y, backgroundCopy, 0, 0, animationRoi.width, animationRoi.height );
+    fheroes2::ImageRestorer backgroundCopy( display, animationRoi.x, animationRoi.y, animationRoi.width, animationRoi.height );
 
     // Render first animation frame.
-    redrawHighScoreAnimation( top, monsterAnimationFrameId, backgroundCopy, isCampaign );
+    redrawHighScoreAnimation( top, monsterAnimationFrameId, isCampaign );
 
     // button that goes to standard: releasedIndex == 2, pressedIndex == 3
     // button that goes to campaign: releasedIndex == 0, pressedIndex == 1
@@ -345,7 +410,10 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         }
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            redrawHighScoreAnimation( top, monsterAnimationFrameId, backgroundCopy, isCampaign );
+            // Restore background with static monster animation part.
+            backgroundCopy.restore();
+
+            redrawHighScoreAnimation( top, monsterAnimationFrameId, isCampaign );
 
             buttonOtherHighScore.draw();
             buttonExit.draw();
