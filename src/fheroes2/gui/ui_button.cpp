@@ -606,8 +606,9 @@ namespace fheroes2
         }
     }
 
-    const int32_t getTailoredButton( Sprite & released, Sprite & pressed, const int32_t textWidth, const int emptyButtonIcnID )
+    void getTextAdaptedButton( Sprite & released, Sprite & pressed, const fheroes2::Text releasedText, const fheroes2::Text pressedText, const int emptyButtonIcnID )
     {
+        const int32_t textWidth = releasedText.width();
         assert( textWidth > 0 );
 
         const int32_t buttonBorder = 3 + 3;
@@ -631,7 +632,8 @@ namespace fheroes2
         const int32_t backgroundIcnID = getButtonBackground( emptyButtonIcnID );
         makeTransparentBackground( released, pressed, backgroundIcnID );
 
-        return finalWidth;
+        releasedText.draw( 5, 5, finalWidth, released );
+        pressedText.draw( 4, 6, finalWidth, pressed );
     }
 
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface,

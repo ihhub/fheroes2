@@ -413,9 +413,9 @@ namespace
                             buttonFontColor );
     }
 
-    void createCampaignButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const int emptyButtonIcnId )
+    void createTextAdaptedButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const int emptyButtonIcnId )
     {
-        // text width
+        // make the text with font
         const bool isGoodFont = emptyButtonIcnId == ICN::EMPTY_GOOD_BUTTON;
         const fheroes2::FontColor buttonFontColor = isGoodFont ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
         const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor };
@@ -424,12 +424,8 @@ namespace
         const fheroes2::Text releasedText( supportedText, releasedButtonFont );
         const fheroes2::Text pressedText( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
 
-        // make the button
-        const int32_t textSpaceWidth = fheroes2::getTailoredButton( released, pressed, releasedText.width(), emptyButtonIcnId );
-
-        // render the text
-        releasedText.draw( 5, 5, textSpaceWidth, released );
-        pressedText.draw( 4, 6, textSpaceWidth, pressed );
+        // generate the button with text on
+        fheroes2::getTextAdaptedButton( released, pressed, releasedText, pressedText, emptyButtonIcnId );
     }
 
     void createCampaignButtonSet( const int32_t campaignSetIcnId, const std::vector<const char *> & texts )
@@ -452,7 +448,7 @@ namespace
         }
 
         for ( int i = 0; i < texts.size() - 1; ++i ) {
-            createCampaignButton( _icnVsSprite[campaignSetIcnId][2 * i], _icnVsSprite[campaignSetIcnId][2 * i + 1], texts[i], emptyButtonIcn );
+            createTextAdaptedButton( _icnVsSprite[campaignSetIcnId][2 * i], _icnVsSprite[campaignSetIcnId][2 * i + 1], texts[i], emptyButtonIcn );
         }
         // generate the last button i.e. the DIFFICULTY button
 
@@ -1564,7 +1560,7 @@ namespace fheroes2
                         // Restore content of the pressed state image.
                         Copy( original, 0, 0, resized, original.x(), original.y(), original.width() + offsetEvilX, original.height() );
                     }
-                    createCampaignButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
+                    createTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
                                           isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON );
                     break;
                 }
@@ -1586,7 +1582,7 @@ namespace fheroes2
                         _icnVsSprite[id][2 * i + 1] = GetICN( baseIcnId, 2 * i + 1 );
                     }
                     // generate the DIFFICULTY button because it is not present in the original resources
-                    createCampaignButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ), ICN::EMPTY_POL_BUTTON );
+                    createTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ), ICN::EMPTY_POL_BUTTON );
 
                     break;
                 }
@@ -3805,16 +3801,16 @@ namespace fheroes2
                 break;
             }
             case ICN::EMPTY_POL_BUTTON: {
-                const int32_t originalId = ICN::X_CMPBTN;
-                LoadOriginalICN( originalId );
+                const int32_t originalID = ICN::X_CMPBTN;
+                LoadOriginalICN( originalID );
 
-                if ( _icnVsSprite[originalId].size() < 8 ) {
+                if ( _icnVsSprite[originalID].size() < 8 ) {
                     break;
                 }
                 _icnVsSprite[id].resize( 2 );
 
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    const Sprite & original = GetICN( originalId, 4 + i );
+                    const Sprite & original = GetICN( originalID, 4 + i );
                     
                     Sprite & out = _icnVsSprite[id][i];
                     // the empty button needs to widened by 2 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result 
