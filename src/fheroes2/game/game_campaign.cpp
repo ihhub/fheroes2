@@ -1534,9 +1534,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                                    fheroes2::Text( _( "Restart the current scenario." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
         else if ( ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_OKAY ) ) ) || restartButtonClicked ) {
-            if ( restartButtonClicked && fheroes2::showStandardTextMessage( _( "Restart" ), _( "Are you sure you want to restart this scenario?" ), Dialog::YES | Dialog::NO ) == Dialog::NO ) {
-                    continue;
-                }
+            if ( restartButtonClicked && fheroes2::showStandardTextMessage( _( "Restart" ), _( "Are you sure you want to restart this scenario?" ),
+                                                                            Dialog::YES | Dialog::NO ) == Dialog::NO ) {
+                continue;
             }
 
             if ( !campaignSaveData.isStarting() && currentDifficulty != campaignSaveData.getDifficulty()
