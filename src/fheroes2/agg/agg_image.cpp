@@ -150,10 +150,7 @@ namespace
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::GOOD_CAMPAIGN_BUTTONS,
                                                 ICN::EVIL_CAMPAIGN_BUTTONS,
-                                                ICN::POL_CAMPAIGN_BUTTONS,
-                                                ICN::BUTTON_DIFFICULTY_ARCHIBALD,
-                                                ICN::BUTTON_DIFFICULTY_ROLAND,
-                                                ICN::BUTTON_DIFFICULTY_POL };
+                                                ICN::POL_CAMPAIGN_BUTTONS };
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -438,21 +435,15 @@ namespace
     void createCampaignButtonSet( const int32_t campaignSetIcnId, const std::vector<const char *> & texts )
     {
         int32_t emptyButtonIcn = 0;
-        fheroes2::FontColor buttonFontColor = fheroes2::FontColor::GRAY;
-        int32_t backgroundIcnId = ICN::STONEBAK;
         switch ( campaignSetIcnId ) {
         case ICN::GOOD_CAMPAIGN_BUTTONS:
             emptyButtonIcn = ICN::EMPTY_GOOD_BUTTON;
-            buttonFontColor = fheroes2::FontColor::WHITE;
-            backgroundIcnId = ICN::STONEBAK;
             break;
         case ICN::EVIL_CAMPAIGN_BUTTONS:
             emptyButtonIcn = ICN::EMPTY_EVIL_BUTTON;
-            backgroundIcnId = ICN::STONEBAK_EVIL;
             break;
         case ICN::POL_CAMPAIGN_BUTTONS:
             emptyButtonIcn = ICN::EMPTY_POL_BUTTON;
-            backgroundIcnId = ICN::STONEBAK_POL;
             break;
         default:
             // Was a new set of buttons added?
@@ -481,9 +472,12 @@ namespace
         const int32_t allowedDifficultyWidth = std::min( availableDifficultyWidth, 200 );
 
         // 2. find the required width for the text
+        const bool isGoodFont = campaignSetIcnId == ICN::GOOD_CAMPAIGN_BUTTONS;
+        const fheroes2::FontColor buttonFontColor = isGoodFont ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
         const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor };
         const char * supportedText = getSupportedText( texts[4], releasedButtonFont );
         const fheroes2::Text textReleased( supportedText, releasedButtonFont );
+        const fheroes2::Text textPressed( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
         const int32_t difficultyWidth = textReleased.width();
 
         // 3. make the button width stay within the limits of the available width
@@ -497,25 +491,7 @@ namespace
         fheroes2::Sprite & pressed = _icnVsSprite[campaignSetIcnId][9];
         fheroes2::getButtonFromWidth( released, pressed, controlledTextWidth + buttonBackgroundBorders, emptyButtonIcn );
 
-        // 5. make transparent
-        // We need to copy the background image to pressed button only where it does not overlay the image of released button.
-        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnId, 0 );
-
-        const uint8_t * releasedTransform = released.transform();
-        uint8_t * pressedTransform = pressed.transform();
-        uint8_t * pressedImage = pressed.image();
-        const uint8_t * backgroundImage
-            = background.image() + ( background.width() - pressed.width() ) / 2 + ( background.height() - pressed.height() ) * background.width() / 2;
-
-        for ( int32_t x = 0; x < pressed.width() * pressed.height(); ++x ) {
-            if ( ( *( pressedTransform + x ) == 1 ) && ( *( releasedTransform + x ) == 0 ) ) {
-                *( pressedImage + x ) = *( backgroundImage + x % pressed.width() + static_cast<ptrdiff_t>( x / pressed.width() ) * background.width() );
-                *( pressedTransform + x ) = 0;
-            }
-        }
-
         // 5. render the text on the button background
-        const fheroes2::Text textPressed( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
         textReleased.draw( 5, 5, controlledTextWidth, released );
         textPressed.draw( 4, 6, controlledTextWidth, pressed );
     }
@@ -1619,27 +1595,6 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BUTTON_DIFFICULTY_ARCHIBALD: {
-                _icnVsSprite[id].resize( 2 );
-                _icnVsSprite[id][0] = GetICN( ICN::EVIL_CAMPAIGN_BUTTONS, 8 );
-                _icnVsSprite[id][1] = GetICN( ICN::EVIL_CAMPAIGN_BUTTONS, 9 );
-
-                break;
-            }
-            case ICN::BUTTON_DIFFICULTY_ROLAND: {
-                _icnVsSprite[id].resize( 2 );
-                _icnVsSprite[id][0] = GetICN( ICN::GOOD_CAMPAIGN_BUTTONS, 8 );
-                _icnVsSprite[id][1] = GetICN( ICN::GOOD_CAMPAIGN_BUTTONS, 9 );
-
-                break;
-            }
-            case ICN::BUTTON_DIFFICULTY_POL: {
-                _icnVsSprite[id].resize( 2 );
-                _icnVsSprite[id][0] = GetICN( ICN::POL_CAMPAIGN_BUTTONS, 8 );
-                _icnVsSprite[id][1] = GetICN( ICN::POL_CAMPAIGN_BUTTONS, 9 );
-
-                break;
-            }
             case ICN::BUTTON_SMALL_MIN_GOOD: {
                 _icnVsSprite[id].resize( 2 );
 
@@ -2403,9 +2358,6 @@ namespace fheroes2
             case ICN::GOOD_CAMPAIGN_BUTTONS:
             case ICN::EVIL_CAMPAIGN_BUTTONS:
             case ICN::POL_CAMPAIGN_BUTTONS:
-            case ICN::BUTTON_DIFFICULTY_ARCHIBALD:
-            case ICN::BUTTON_DIFFICULTY_POL:
-            case ICN::BUTTON_DIFFICULTY_ROLAND:
                 generateLanguageSpecificImages( id );
                 return true;
             case ICN::PHOENIX:

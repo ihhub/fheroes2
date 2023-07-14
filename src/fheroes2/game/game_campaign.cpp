@@ -868,31 +868,6 @@ namespace
         }
     }
 
-    fheroes2::ButtonSprite getDifficultyButton( const int campaignId, const fheroes2::Point & offset )
-    {
-        int icnId = ICN::UNKNOWN;
-
-        switch ( campaignId ) {
-        case Campaign::ROLAND_CAMPAIGN:
-            icnId = ICN::BUTTON_DIFFICULTY_ROLAND;
-            break;
-        case Campaign::ARCHIBALD_CAMPAIGN:
-            icnId = ICN::BUTTON_DIFFICULTY_ARCHIBALD;
-            break;
-        case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
-        case Campaign::DESCENDANTS_CAMPAIGN:
-        case Campaign::WIZARDS_ISLE_CAMPAIGN:
-        case Campaign::VOYAGE_HOME_CAMPAIGN:
-            icnId = ICN::BUTTON_DIFFICULTY_POL;
-            break;
-        default:
-            // Implementing a new campaign? Add a new case!
-            assert( 0 );
-            break;
-        }
-        return fheroes2::ButtonSprite( offset.x, offset.y, fheroes2::AGG::GetICN( icnId, 0 ), fheroes2::AGG::GetICN( icnId, 1 ) );
-    }
-
     std::string getCampaignDifficultyText( const int32_t difficulty )
     {
         switch ( difficulty ) {
@@ -1338,9 +1313,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     fheroes2::Button buttonRestart( top.x + 367 - 6, top.y + 431, buttonIconID, 2, 3 );
     fheroes2::Button buttonOk( top.x + 367, top.y + 431, buttonIconID, 4, 5 );
     fheroes2::Button buttonCancel( top.x + 511, top.y + 431, buttonIconID, 6, 7 );
-
-    // Difficulty button is not present in the original assets so we need to generate it.
-    fheroes2::ButtonSprite buttonDifficulty = getDifficultyButton( chosenCampaignID, top + fheroes2::Point( 195, 431 ) );
+    fheroes2::Button buttonDifficulty( top.x + 195, top.y + 431, buttonIconID, 8, 9 );
 
     // create scenario bonus choice buttons
     fheroes2::ButtonGroup buttonChoices;
