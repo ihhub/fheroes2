@@ -258,9 +258,6 @@ namespace
 
     bool isTileInaccessibleForAIWithArmy( const int tileIndex, const double armyStrength, const double advantage )
     {
-        const Maps::Tiles & tile = world.GetTiles( tileIndex );
-        const MP2::MapObjectType objectType = tile.GetObject();
-
         // Tiles with monsters are considered accessible regardless of the monsters' power, high-level AI logic
         // will decide what to do with them
         if ( world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_MONSTER ) {
