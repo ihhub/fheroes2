@@ -42,7 +42,7 @@
       <description>
         <p>Changes in v1.0.6 (15 July 2023):</p>
         <ul>
-          <li>allow to lower difficulty down of campaign during gameplay</li>
+          <li>allow to lower the campaign difficulty during playthrough</li>
           <li>update Russian translation</li>
           <li>reduce CPU usage while rendering High Score dialog</li>
           <li>add some missing horizontal buttons to translations</li>
@@ -56,7 +56,7 @@
           <li>correct spell value estimation for AI heroes</li>
           <li>fix a case when a dead AI hero was trying to reinforce army in a castle</li>
           <li>update priorities for AI heroes based on battle outcome and fog uncover events</li>
-          <li>rework the spell generation in castle's Mage Guilds</li>
+          <li>rework the spell generation in castles' Mage Guilds</li>
           <li>update Spanish translation</li>
           <li>speed up Armageddon spell rendering</li>
           <li>fix invalid pixels in multiple images from the original resources</li>
