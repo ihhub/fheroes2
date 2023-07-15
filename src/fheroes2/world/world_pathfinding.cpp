@@ -92,7 +92,7 @@ namespace
     }
 
     bool isTileAvailableForWalkThroughForAIWithArmy( const int tileIndex, const int color, const bool isArtifactsBagFull, const double armyStrength,
-                                                     const double advantage )
+                                                     const double minimalAdvantage )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const MP2::MapObjectType objectType = tile.GetObject();
@@ -117,7 +117,7 @@ namespace
                 return false;
             }
 
-            return otherHero->GetArmy().GetStrength() * advantage <= armyStrength;
+            return otherHero->GetArmy().GetStrength() * minimalAdvantage <= armyStrength;
         }
 
         // Artifacts can be picked up and passed through
@@ -166,7 +166,7 @@ namespace
 
                     tileArmy.setFromTile( world.GetTiles( tileIndex ) );
 
-                    return tileArmy.GetStrength() * advantage <= armyStrength;
+                    return tileArmy.GetStrength() * minimalAdvantage <= armyStrength;
                 }
             }
 
@@ -181,7 +181,7 @@ namespace
 
             tileArmy.setFromTile( world.GetTiles( tileIndex ) );
 
-            return tileArmy.GetStrength() * advantage <= armyStrength;
+            return tileArmy.GetStrength() * minimalAdvantage <= armyStrength;
         }
 
         // AI may have the key for the barrier
@@ -256,7 +256,7 @@ namespace
         return toTile.isPassableFrom( Direction::Reflect( direction ), fromWater, false, heroColor );
     }
 
-    bool isTileAccessibleForAIWithArmy( const int tileIndex, const double armyStrength, const double advantage )
+    bool isTileAccessibleForAIWithArmy( const int tileIndex, const double armyStrength, const double minimalAdvantage )
     {
         // Tiles with monsters are considered accessible regardless of the monsters' power, high-level AI logic
         // will decide what to do with them
@@ -271,7 +271,7 @@ namespace
             tileArmy.setFromTile( world.GetTiles( monsterIndex ) );
 
             // Tiles guarded by too powerful wandering monsters may be inaccessible
-            if ( tileArmy.GetStrength() * advantage > armyStrength ) {
+            if ( tileArmy.GetStrength() * minimalAdvantage > armyStrength ) {
                 return false;
             }
         }
@@ -640,7 +640,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
     const bool isFirstNode = currentNodeIdx == _pathStart;
     WorldNode & currentNode = _cache[currentNodeIdx];
 
-    const bool isAccessible = isTileAccessibleForAIWithArmy( currentNodeIdx, _armyStrength, _advantage );
+    const bool isAccessible = isTileAccessibleForAIWithArmy( currentNodeIdx, _armyStrength, _minimalArmyStrengthAdvantage );
 
     // If we can't move here, reset
     if ( !isAccessible ) {
@@ -648,7 +648,9 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
     }
 
     // Always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
-    if ( !isFirstNode && ( !isAccessible || !isTileAvailableForWalkThroughForAIWithArmy( currentNodeIdx, _color, _isArtifactsBagFull, _armyStrength, _advantage ) ) ) {
+    if ( !isFirstNode
+         && ( !isAccessible
+              || !isTileAvailableForWalkThroughForAIWithArmy( currentNodeIdx, _color, _isArtifactsBagFull, _armyStrength, _minimalArmyStrengthAdvantage ) ) ) {
         return;
     }
 
@@ -1122,7 +1124,7 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
         }
     }
 
-    if ( !isTileAccessibleForAIWithArmy( targetIndex, _armyStrength, _advantage ) ) {
+    if ( !isTileAccessibleForAIWithArmy( targetIndex, _armyStrength, _minimalArmyStrengthAdvantage ) ) {
         return {};
     }
 
@@ -1258,10 +1260,13 @@ uint32_t AIWorldPathfinder::getDistance( int start, int targetIndex, int color, 
     return _cache[targetIndex]._cost;
 }
 
-void AIWorldPathfinder::setArmyStrengthMultiplier( const double multiplier )
+void AIWorldPathfinder::setMinimalArmyStrengthAdvantage( const double advantage )
 {
-    if ( multiplier > 0 && std::fabs( _advantage - multiplier ) > 0.001 ) {
-        _advantage = multiplier;
-        reset();
+    if ( advantage <= 0 || std::fabs( _minimalArmyStrengthAdvantage - advantage ) <= 0.001 ) {
+        return;
     }
+
+    _minimalArmyStrengthAdvantage = advantage;
+
+    reset();
 }

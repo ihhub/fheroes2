@@ -126,7 +126,7 @@ class AIWorldPathfinder : public WorldPathfinder
 {
 public:
     explicit AIWorldPathfinder( double advantage )
-        : _advantage( advantage )
+        : _minimalArmyStrengthAdvantage( advantage )
     {}
 
     AIWorldPathfinder( const AIWorldPathfinder & ) = delete;
@@ -157,12 +157,16 @@ public:
     // Faster, but does not re-evaluate the map (expose base class method)
     using Pathfinder::getDistance;
 
-    double getCurrentArmyStrengthMultiplier() const
+    // Returns the coefficient of the minimum required advantage in army strength in order to be able to "pass through"
+    // protected tiles from the AI pathfinder's point of view
+    double getMinimalArmyStrengthAdvantage() const
     {
-        return _advantage;
+        return _minimalArmyStrengthAdvantage;
     }
 
-    void setArmyStrengthMultiplier( const double multiplier );
+    // Sets the coefficient of the minimum required advantage in army strength in order to be able to "pass through"
+    // protected tiles from the AI pathfinder's point of view
+    void setMinimalArmyStrengthAdvantage( const double advantage );
 
 private:
     void processWorldMap() override;
@@ -194,5 +198,7 @@ private:
     int32_t _townGateCastleIndex{ -1 };
     std::vector<int32_t> _townPortalCastleIndexes;
 
-    double _advantage{ 1.0 };
+    // Coefficient of the minimum required advantage in army strength in order to be able to "pass through" protected
+    // tiles from the AI pathfinder's point of view
+    double _minimalArmyStrengthAdvantage{ 1.0 };
 };
