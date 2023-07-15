@@ -608,7 +608,7 @@ namespace
         }
 
         case MP2::OBJ_CASTLE:
-            return AIShouldVisitCastle( hero, index, heroArmyStrength ) || ai.isPriorityTask( index );
+            return AIShouldVisitCastle( hero, index, heroArmyStrength );
 
         case MP2::OBJ_JAIL:
             return kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
