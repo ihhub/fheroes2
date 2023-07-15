@@ -487,6 +487,12 @@ namespace
         // 5. render the text on the button background
         textReleased.draw( 5, 5, controlledTextWidth, released );
         textPressed.draw( 4, 6, controlledTextWidth, pressed );
+
+        // 6. Set offsets to the buttons like the original offsets 8,0 and 7,1
+        for ( int i = 0; i < texts.size(); ++i ) {
+            _icnVsSprite[campaignSetIcnId][2 * i].setPosition( 8, 0 );
+            _icnVsSprite[campaignSetIcnId][2 * i + 1].setPosition( 7, 1 );
+        }
     }
 
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
@@ -1559,6 +1565,9 @@ namespace fheroes2
                     }
                     createTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
                                           isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON );
+                    // the original assets have offsets 8,0 (released) and 7,1 (pressed) for these buttons 
+                    _icnVsSprite[id][8].setPosition( 8, 0 );
+                    _icnVsSprite[id][9].setPosition( 7, 1 );
                     break;
                 }
                 createCampaignButtonSet( id, { gettext_noop( "VIEW INTRO" ), gettext_noop( "RESTART" ), gettext_noop( "OKAY" ), gettext_noop( "CANCEL" ),
@@ -1578,7 +1587,7 @@ namespace fheroes2
                         // pressed button
                         _icnVsSprite[id][2 * i + 1] = GetICN( baseIcnId, 2 * i + 1 );
                     }
-                    // generate the DIFFICULTY button because it is not present in the original resources
+                    // generate the DIFFICULTY button as it is not present in the original resources
                     createTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ), ICN::EMPTY_POL_BUTTON );
 
                     break;
@@ -3798,7 +3807,7 @@ namespace fheroes2
                 break;
             }
             case ICN::EMPTY_POL_BUTTON: {
-                const int32_t originalID = ICN::X_CMPBTN;
+                const int originalID = ICN::X_CMPBTN;
                 LoadOriginalICN( originalID );
 
                 if ( _icnVsSprite[originalID].size() < 8 ) {
