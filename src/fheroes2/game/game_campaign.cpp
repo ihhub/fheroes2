@@ -1540,7 +1540,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 continue;
             }
 
-            if ( !campaignSaveData.isStarting() && currentDifficulty != campaignSaveData.getDifficulty()
+            if ( ( !campaignSaveData.isStarting() || allowToRestart ) && currentDifficulty != campaignSaveData.getDifficulty()
                  && fheroes2::showStandardTextMessage( _( "Difficulty" ),
                                                        _( "You selected lower difficulty for the campaign. You will not be able to revert it after this point. "
                                                           "The high score will be calculated based on the newly selected difficulty. Do you want to proceed?" ),
@@ -1629,7 +1629,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                                    fheroes2::Text( _( "The number of days spent on this campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
         else if ( le.MouseClickLeft( buttonDifficulty.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_SELECT_DIFFICULTY ) ) {
-            if ( campaignSaveData.isStarting() ) {
+            if ( campaignSaveData.isStarting() && !allowToRestart ) {
                 currentDifficulty = setCampaignDifficulty( currentDifficulty, Campaign::CampaignDifficulty::Hard );
             }
             else {
