@@ -95,7 +95,6 @@ namespace
                 animationIndex.push_back( fheroes2::HighScoreDataContainer::getMonsterByDay( data.rating ).GetSpriteIndex() * 9 );
             }
         }
-
         else {
             const std::vector<fheroes2::HighscoreData> & highScoreData = highScoreDataContainer.getHighScoresStandard();
 
