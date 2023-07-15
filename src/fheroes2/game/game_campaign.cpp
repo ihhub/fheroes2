@@ -1309,9 +1309,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     const int buttonIconID = getCampaignButtonId( chosenCampaignID );
 
     const int32_t backgroundMargin = 30;
-    const int32_t cancelButtonPlacement = top.x + backgroundImageWidth - backgroundMargin - fheroes2::AGG::GetICN( buttonIconID, 6 ).width();
     const int32_t viewIntroPlacement = top.x + backgroundMargin;
     const int32_t endOfViewIntroPlacement = viewIntroPlacement + fheroes2::AGG::GetICN( buttonIconID, 0 ).width();
+    const int32_t cancelButtonPlacement = top.x + backgroundImageWidth - backgroundMargin - fheroes2::AGG::GetICN( buttonIconID, 6 ).width();
     const int32_t spaceBetweenViewIntroAndCancel = cancelButtonPlacement - endOfViewIntroPlacement;
     const int32_t difficultyButtonWidth = fheroes2::AGG::GetICN( buttonIconID, 8 ).width();
     const uint32_t okayRestartICN = allowToRestart ? 2 : 4;
