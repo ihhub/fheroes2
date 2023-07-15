@@ -538,7 +538,7 @@ namespace fheroes2
             backgroundIcnID = ICN::STONEBAK_POL;
             break;
         default:
-            // Was a new type of button added?
+            // Was a new empty button template added?
             assert( 0 );
             break;
         }

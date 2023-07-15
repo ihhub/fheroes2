@@ -465,7 +465,7 @@ namespace
         const int32_t allowedDifficultyWidth = std::min( availableDifficultyWidth, 200 );
 
         // 2. find the required width for the text
-        const bool isGoodFont = campaignSetIcnId == ICN::GOOD_CAMPAIGN_BUTTONS;
+        const bool isGoodFont = emptyButtonIcn == ICN::EMPTY_GOOD_BUTTON;
         const fheroes2::FontColor buttonFontColor = isGoodFont ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
         const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor };
         const char * supportedText = getSupportedText( texts[4], releasedButtonFont );
