@@ -92,17 +92,30 @@ namespace
         TemporaryHeroEraser( TemporaryHeroEraser && ) = delete;
 
         explicit TemporaryHeroEraser( const std::vector<Heroes *> & heroes )
-            : _heroes( heroes )
         {
-            for ( const Heroes * hero : _heroes ) {
-                world.GetTiles( hero->GetIndex() ).SetHeroes( nullptr );
+            for ( Heroes * hero : heroes ) {
+                assert( hero != nullptr && !hero->isFreeman() );
+
+                Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
+                if ( tile.GetHeroes() == nullptr ) {
+                    // This could happen when a hero is moving.
+                    continue;
+                }
+
+                assert( tile.GetHeroes() == hero );
+                _heroes.emplace_back( hero );
+
+                tile.SetHeroes( nullptr );
             }
         }
 
         ~TemporaryHeroEraser()
         {
             for ( Heroes * hero : _heroes ) {
-                world.GetTiles( hero->GetIndex() ).SetHeroes( hero );
+                Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
+                assert( tile.GetHeroes() == nullptr );
+
+                tile.SetHeroes( hero );
             }
         }
 
@@ -111,7 +124,7 @@ namespace
         TemporaryHeroEraser & operator=( TemporaryHeroEraser && ) = delete;
 
     private:
-        const std::vector<Heroes *> & _heroes;
+        std::vector<Heroes *> _heroes;
     };
 
     void setHeroRoles( KingdomHeroes & heroes )

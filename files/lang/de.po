@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-05 23:58+0000\n"
+"POT-Creation-Date: 2023-07-15 12:25+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -53,6 +53,12 @@ msgstr "BEEND."
 
 msgid "CANCEL"
 msgstr "ABBR."
+
+msgid "OKAY"
+msgstr "OKAY"
+
+msgid "smallerButton|OKAY"
+msgstr ""
 
 msgid "ACCEPT"
 msgstr "AKZEPT."
@@ -186,9 +192,6 @@ msgstr "MIN"
 
 msgid "MAX"
 msgstr "MAX"
-
-msgid "OKAY"
-msgstr "OKAY"
 
 msgid "Warrior"
 msgstr "Krieger"
@@ -3776,7 +3779,10 @@ msgstr "Intro ansehen"
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Sehen Sie sich die Intro-Videos zum aktuellen Stand des Feldzuges an."
 
-msgid "Select campaign difficulty. It cannot be changed after."
+#, fuzzy
+msgid ""
+"Select the campaign difficulty. This can be lowered at any point during the "
+"campaign."
 msgstr ""
 "Wählt den Schwierigkeitsgrad des Feldzuges. Er kann danach nicht mehr "
 "geändert werden."
@@ -3786,6 +3792,18 @@ msgstr "Neustart"
 
 msgid "Restart the current scenario."
 msgstr "Neustart des aktuellen Szenarios."
+
+#, fuzzy
+msgid "Difficulty"
+msgstr ""
+"Karten-\n"
+"grad"
+
+msgid ""
+"You have changed to a lower difficulty for the campaign. You will not be "
+"able to revert this after this point. The high score will be calculated "
+"based solely on the new difficulty. Do you want to proceed?"
+msgstr ""
 
 msgid "Are you sure you want to restart this scenario?"
 msgstr "Sind Sie sicher, dass Sie dieses Szenario neu starten wollen?"
@@ -4294,7 +4312,8 @@ msgstr "Stapel zusammenfügen"
 msgid "hotkey|upgrade troop"
 msgstr "Truppen aufrüsten"
 
-msgid "hotkey|dismiss troop"
+#, fuzzy
+msgid "hotkey|dismiss hero or troop"
 msgstr "Truppen entlassen"
 
 msgid "The save file is corrupted."
