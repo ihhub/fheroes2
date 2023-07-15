@@ -120,65 +120,68 @@ namespace
             return otherHero->GetArmy().GetStrength() * minimalAdvantage <= armyStrength;
         }
 
-        // Artifacts can be picked up and passed through
-        if ( MP2::isArtifactObject( objectType ) ) {
-            const Artifact art = Maps::getArtifactFromTile( tile );
-
-            // This tile does indeed contain an artifact
-            if ( art.isValid() ) {
-                // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
-                if ( isFindArtifactVictoryConditionForHuman( art ) ) {
-                    return false;
-                }
-
-                // This is an object that can be picked up (and removed from the map)
-                if ( MP2::isPickupObject( objectType ) ) {
-                    // This is not an artifact itself, but some pickupable object that contains an artifact, e.g. Treasure Chest, we can pick it up and go through
-                    if ( objectType != MP2::OBJ_ARTIFACT ) {
-                        return true;
-                    }
-
-                    // Hero should have a place for this artifact in his artifact bag
-                    if ( isArtifactsBagFull ) {
-                        return false;
-                    }
-
-                    // Check the conditions for picking up the artifact (except for the artifact guard): if there are any, then this artifact is considered as not
-                    // available for pickup
-                    const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
-
-                    switch ( condition ) {
-                    case Maps::ArtifactCaptureCondition::PAY_2000_GOLD:
-                    case Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES:
-                    case Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES:
-
-                    case Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL:
-                    case Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL:
-                        return false;
-
-                    default:
-                        break;
-                    }
-
-                    // Artifact may be guarded, check the power of guardians.
-                    // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations.
-                    static Army tileArmy;
-
-                    tileArmy.setFromTile( world.GetTiles( tileIndex ) );
-
-                    return tileArmy.GetStrength() * minimalAdvantage <= armyStrength;
-                }
+        // Pickupable objects (including artifacts) can be picked up and passed through
+        if ( MP2::isPickupObject( objectType ) ) {
+            // Genie Lamp is special: there may not be enough money to hire all the genies and remove this object from the map, high-level
+            // AI logic will decide what to do with it
+            if ( objectType == MP2::OBJ_GENIE_LAMP ) {
+                return false;
             }
 
-            // Otherwise, it's a stationary object that can offer an artifact as a reward, check if tile can be moved on
-            return !MP2::isNeedStayFront( objectType );
+            // If this object doesn't contain an artifact, then just pick it up and go through
+            if ( !MP2::isArtifactObject( objectType ) ) {
+                return true;
+            }
+
+            const Artifact art = Maps::getArtifactFromTile( tile );
+            if ( !art.isValid() ) {
+                return true;
+            }
+
+            // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
+            if ( isFindArtifactVictoryConditionForHuman( art ) ) {
+                return false;
+            }
+
+            // This object contains an artifact, but it is not an artifact itself, pick it up and go through
+            if ( objectType != MP2::OBJ_ARTIFACT ) {
+                return true;
+            }
+
+            // Hero should have a place for this artifact in his artifact bag
+            if ( isArtifactsBagFull ) {
+                return false;
+            }
+
+            // Check the conditions for picking up the artifact (except for the artifact guard): if there are any, then we can't pick it up
+            // "automatically", high-level AI logic will decide what to do with it
+            const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
+
+            switch ( condition ) {
+            case Maps::ArtifactCaptureCondition::PAY_2000_GOLD:
+            case Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES:
+            case Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES:
+
+            case Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL:
+            case Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL:
+                return false;
+
+            default:
+                break;
+            }
+
+            // Artifact may be guarded, check the power of guardians.
+            // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations.
+            static Army tileArmy;
+            tileArmy.setFromTile( world.GetTiles( tileIndex ) );
+
+            return tileArmy.GetStrength() * minimalAdvantage <= armyStrength;
         }
 
         // Monsters can be defeated and passed through
         if ( objectType == MP2::OBJ_MONSTER ) {
             // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
             static Army tileArmy;
-
             tileArmy.setFromTile( world.GetTiles( tileIndex ) );
 
             return tileArmy.GetStrength() * minimalAdvantage <= armyStrength;
@@ -267,10 +270,9 @@ namespace
         for ( const int32_t monsterIndex : Maps::getMonstersProtectingTile( tileIndex ) ) {
             // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
             static Army tileArmy;
-
             tileArmy.setFromTile( world.GetTiles( monsterIndex ) );
 
-            // Tiles guarded by too powerful wandering monsters may be inaccessible
+            // Tiles guarded by too powerful wandering monsters are considered inaccessible
             if ( tileArmy.GetStrength() * minimalAdvantage > armyStrength ) {
                 return false;
             }
