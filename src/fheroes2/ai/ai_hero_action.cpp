@@ -221,6 +221,42 @@ namespace
         return true;
     }
 
+    void AITownPortal( Heroes & hero, const int32_t targetIndex )
+    {
+        assert( !hero.Modes( Heroes::PATROL ) && !hero.isShipMaster() && Maps::isValidAbsIndex( targetIndex ) );
+#ifndef NDEBUG
+        const Castle * targetCastle = world.getCastleEntrance( Maps::GetPoint( targetIndex ) );
+        assert( targetCastle && targetCastle->GetHero() == nullptr );
+#endif
+
+        const Spell spellToUse = [&hero, targetIndex]() {
+            const Castle * nearestCastle = fheroes2::getNearestCastleTownGate( hero );
+            if ( nearestCastle && nearestCastle->GetIndex() == targetIndex ) {
+                return Spell::TOWNGATE;
+            }
+
+            return Spell::TOWNPORTAL;
+        }();
+
+        assert( hero.CanCastSpell( spellToUse ) );
+
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
+            hero.FadeOut();
+        }
+
+        hero.Move2Dest( targetIndex );
+        hero.SpellCasted( spellToUse );
+        hero.GetPath().Reset();
+
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
+            hero.FadeIn();
+        }
+
+        AI::Get().HeroesActionComplete( hero, targetIndex, hero.GetMapsObject() );
+    }
+
     void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, const fheroes2::Point * centerOn = nullptr, const bool playSound = false )
     {
         const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
@@ -1976,7 +2012,7 @@ namespace AI
             const int32_t targetIndex = step.GetIndex();
 
             if ( step.GetFrom() != targetIndex && world.GetTiles( targetIndex ).GetObject() == MP2::OBJ_CASTLE ) {
-                HeroesCastTownPortal( hero, targetIndex );
+                AITownPortal( hero, targetIndex );
             }
             else if ( MP2::isActionObject( hero.GetMapsObject(), hero.isShipMaster() ) ) {
                 // use the action object hero is standing on (Stone Liths)
@@ -2025,42 +2061,6 @@ namespace AI
         }
 
         hero.ActionNewPosition( false );
-    }
-
-    void HeroesCastTownPortal( Heroes & hero, const int32_t targetIndex )
-    {
-        assert( !hero.Modes( Heroes::PATROL ) && !hero.isShipMaster() && Maps::isValidAbsIndex( targetIndex ) );
-#ifndef NDEBUG
-        const Castle * targetCastle = world.getCastleEntrance( Maps::GetPoint( targetIndex ) );
-        assert( targetCastle && targetCastle->GetHero() == nullptr );
-#endif
-
-        const Spell spellToUse = [&hero, targetIndex]() {
-            const Castle * nearestCastle = fheroes2::getNearestCastleTownGate( hero );
-            if ( nearestCastle && nearestCastle->GetIndex() == targetIndex ) {
-                return Spell::TOWNGATE;
-            }
-
-            return Spell::TOWNPORTAL;
-        }();
-
-        assert( hero.CanCastSpell( spellToUse ) );
-
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
-            hero.FadeOut();
-        }
-
-        hero.Move2Dest( targetIndex );
-        hero.SpellCasted( spellToUse );
-        hero.GetPath().Reset();
-
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
-            hero.FadeIn();
-        }
-
-        AI::Get().HeroesActionComplete( hero, targetIndex, hero.GetMapsObject() );
     }
 
     bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell )
