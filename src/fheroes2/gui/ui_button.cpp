@@ -548,8 +548,9 @@ namespace fheroes2
         // offsets for drawing?
         return backgroundIcnID;
     }
-    void makeTransparentBackground( fheroes2::Sprite released, fheroes2::Sprite pressed, const int backgroundIcnID )
+    void makeTransparentBackground( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const int backgroundIcnID )
     {
+        // We need to copy the background image to pressed button only where it does not overlay the image of released button.
         const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnID, 0 );
 
         const uint8_t * releasedTransform = released.transform();
@@ -601,7 +602,7 @@ namespace fheroes2
 
         if ( !isTransparentBackground ) {
             // We need to copy the background image to pressed button only where it does not overlay the image of released button.
-            const int32_t backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
+            const int backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
             makeTransparentBackground( released, pressed, backgroundIcnId );
         }
     }

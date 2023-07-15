@@ -237,9 +237,6 @@ namespace fheroes2
     ButtonSprite makeButtonWithShadow( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background,
                                        const Point & shadowOffset = Point( -4, 6 ) );
 
-    // make transparent borders around buttons using stone background patterns from original ICNs. Necessary for the pressed state for buttons
-    //void makeTransparentBackground( fheroes2::Sprite released, fheroes2::Sprite pressed, const int backgroundIcnID );
-
     // Generates a button from a width using empty buttons. Normally the width is that of a text that will be rendered onto it.
     void getButtonFromWidth( Sprite & released, Sprite & pressed, const int32_t width, const int emptyButtonICN );
 
