@@ -93,11 +93,15 @@ protected:
     // Subtracts movement points taking the transition between turns into account
     uint32_t subtractMovePoints( const uint32_t movePoints, const uint32_t subtractedMovePoints ) const;
 
-    uint8_t _pathfindingSkill = Skill::Level::EXPERT;
-    int _currentColor = Color::NONE;
+    std::vector<int> _mapOffset;
+
+    // Hero properties should be cached here because they can change even if the hero's position does not change,
+    // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
+    // pathfinder's cache
+    int _color = Color::NONE;
     uint32_t _remainingMovePoints = 0;
     uint32_t _maxMovePoints = 0;
-    std::vector<int> _mapOffset;
+    uint8_t _pathfindingSkill = Skill::Level::EXPERT;
 };
 
 class PlayerWorldPathfinder : public WorldPathfinder
@@ -173,8 +177,18 @@ private:
     // about the hero's remaining movement points.
     uint32_t getMovementPenalty( int src, int dst, int direction ) const override;
 
-    const Heroes * _hero = nullptr;
+    // Hero properties should be cached here because they can change even if the hero's position does not change,
+    // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
+    // pathfinder's cache
     double _armyStrength{ -1 };
+    uint32_t _spellPoints{ 0 };
+    bool _isArtifactsBagFull{ false };
+    bool _hasMeleeDominantArmy{ false };
+    bool _hasBallisticsSkill{ false };
+
+    int32_t _townGateCastleIndex{ -1 };
+    std::vector<int32_t> _townPortalCastleIndexes;
+
     double _advantage{ 1.0 };
     double _spellPointsReserved{ 0.5 };
 };

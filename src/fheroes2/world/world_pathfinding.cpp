@@ -91,7 +91,7 @@ namespace
         return false;
     }
 
-    bool isPassageThroughTileBlockedForAI( const int tileIndex, const int color, const Heroes * hero )
+    bool isPassageThroughTileBlockedForAI( const int tileIndex, const int color, const bool isArtifactsBagFull )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const MP2::MapObjectType objectType = tile.GetObject();
@@ -132,26 +132,26 @@ namespace
                         return false;
                     }
 
-                    // If AI pathfinder is in planning mode (without reference to a specific hero), all artifacts are considered available for pickup
-                    if ( hero == nullptr ) {
-                        return false;
-                    }
-
                     // Hero should have a place for this artifact in his artifact bag
-                    if ( hero->IsFullBagArtifacts() ) {
+                    if ( isArtifactsBagFull ) {
                         return true;
                     }
 
-                    // Check the conditions for picking up the artifact (except for the artifact guard)
+                    // Check the conditions for picking up the artifact (except for the artifact guard): if there are any, then this artifact is considered as not
+                    // available for pickup
                     const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
 
-                    if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD || condition == Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES
-                         || condition == Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
-                        return !hero->GetKingdom().AllowPayment( getArtifactResourceRequirement( tile ) );
-                    }
+                    switch ( condition ) {
+                    case Maps::ArtifactCaptureCondition::PAY_2000_GOLD:
+                    case Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES:
+                    case Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES:
 
-                    if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
-                        return !hero->HasSecondarySkill( getArtifactSecondarySkillRequirement( tile ).Skill() );
+                    case Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL:
+                    case Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL:
+                        return true;
+
+                    default:
+                        break;
                     }
 
                     // If there are no conditions, then we can just pick this artifact up and go through
@@ -240,7 +240,8 @@ namespace
         return toTile.isPassableFrom( Direction::Reflect( direction ), fromWater, false, heroColor );
     }
 
-    bool isTileInaccessibleForAIWithArmy( const int index, const int color, const Heroes * hero, const double armyStrength, const double advantage )
+    bool isTileInaccessibleForAIWithArmy( const int index, const int color, const double armyStrength, const double advantage, const bool heroHasMeleeDominantArmy,
+                                          const bool heroHasBallisticsSkill )
     {
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
@@ -264,7 +265,7 @@ namespace
                 assert( castle->GetColor() == otherHero->GetColor() );
 
                 // Enemy heroes in castles with too powerful garrisons may be inaccessible
-                return castle->GetGarrisonStrength( hero ) * advantage > armyStrength;
+                return castle->GetGarrisonStrength( heroHasMeleeDominantArmy, heroHasBallisticsSkill ) * advantage > armyStrength;
             }
 
             // Too powerful enemy heroes may be inaccessible
@@ -286,7 +287,7 @@ namespace
             }
 
             // Enemy castles with too powerful garrisons may be inaccessible
-            return castle->GetGarrisonStrength( hero ) * advantage > armyStrength;
+            return castle->GetGarrisonStrength( heroHasMeleeDominantArmy, heroHasBallisticsSkill ) * advantage > armyStrength;
         }
 
         if ( MP2::isProtectedObject( objectType ) ) {
@@ -406,7 +407,7 @@ void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int
     const WorldNode & currentNode = _cache[currentNodeIdx];
 
     for ( size_t i = 0; i < directions.size(); ++i ) {
-        if ( !Maps::isValidDirection( currentNodeIdx, directions[i] ) || !isValidPath( currentNodeIdx, directions[i], _currentColor ) ) {
+        if ( !Maps::isValidDirection( currentNodeIdx, directions[i] ) || !isValidPath( currentNodeIdx, directions[i], _color ) ) {
             continue;
         }
 
@@ -440,18 +441,18 @@ void PlayerWorldPathfinder::reset()
     if ( _pathStart != -1 ) {
         _pathStart = -1;
 
-        _pathfindingSkill = Skill::Level::EXPERT;
-        _currentColor = Color::NONE;
+        _color = Color::NONE;
         _remainingMovePoints = 0;
         _maxMovePoints = 0;
+        _pathfindingSkill = Skill::Level::EXPERT;
     }
 }
 
 void PlayerWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints );
-    const auto newSettings = std::make_tuple( hero.GetIndex(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetColor(),
-                                              hero.GetMovePoints(), hero.GetMaxMovePoints() );
+    auto currentSettings = std::tie( _pathStart, _color, _remainingMovePoints, _maxMovePoints, _pathfindingSkill );
+    const auto newSettings = std::make_tuple( hero.GetIndex(), hero.GetColor(), hero.GetMovePoints(), hero.GetMaxMovePoints(),
+                                              static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ) );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
@@ -513,7 +514,7 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
         for ( int monsterIndex : monsters ) {
             const int direction = Maps::GetDirection( currentNodeIdx, monsterIndex );
 
-            if ( direction == Direction::UNKNOWN || direction == Direction::CENTER || !isValidPath( currentNodeIdx, direction, _currentColor ) ) {
+            if ( direction == Direction::UNKNOWN || direction == Direction::CENTER || !isValidPath( currentNodeIdx, direction, _color ) ) {
                 continue;
             }
 
@@ -544,21 +545,61 @@ void AIWorldPathfinder::reset()
     if ( _pathStart != -1 ) {
         _pathStart = -1;
 
-        _pathfindingSkill = Skill::Level::EXPERT;
-        _currentColor = Color::NONE;
+        _color = Color::NONE;
         _remainingMovePoints = 0;
         _maxMovePoints = 0;
+        _pathfindingSkill = Skill::Level::EXPERT;
 
-        _hero = nullptr;
         _armyStrength = -1;
+        _spellPoints = 0;
+        _isArtifactsBagFull = false;
+        _hasMeleeDominantArmy = false;
+        _hasBallisticsSkill = false;
+
+        _townGateCastleIndex = -1;
+        _townPortalCastleIndexes.clear();
     }
 }
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _hero, _armyStrength );
-    const auto newSettings = std::make_tuple( hero.GetIndex(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetColor(),
-                                              hero.GetMovePoints(), hero.GetMaxMovePoints(), &hero, hero.GetArmy().GetStrength() );
+    const int32_t townGateCastleIndex = [&hero]() {
+        if ( hero.Modes( Heroes::PATROL ) || hero.isShipMaster() || !hero.CanCastSpell( Spell::TOWNGATE ) ) {
+            return -1;
+        }
+
+        const Castle * castle = fheroes2::getNearestCastleTownGate( hero );
+        if ( castle == nullptr || castle->GetHero() ) {
+            return -1;
+        }
+
+        return castle->GetIndex();
+    }();
+
+    const std::vector<int32_t> townPortalCastleIndexes = [&hero]() {
+        std::vector<int32_t> result;
+
+        if ( hero.Modes( Heroes::PATROL ) || hero.isShipMaster() || !hero.CanCastSpell( Spell::TOWNPORTAL ) ) {
+            return result;
+        }
+
+        for ( const Castle * castle : hero.GetKingdom().GetCastles() ) {
+            assert( castle != nullptr );
+
+            if ( castle->GetHero() == nullptr ) {
+                result.push_back( castle->GetIndex() );
+            }
+        }
+
+        return result;
+    }();
+
+    auto currentSettings = std::tie( _pathStart, _color, _remainingMovePoints, _maxMovePoints, _pathfindingSkill, _armyStrength, _spellPoints, _isArtifactsBagFull,
+                                     _hasMeleeDominantArmy, _hasBallisticsSkill, _townGateCastleIndex, _townPortalCastleIndexes );
+    const auto newSettings = std::make_tuple( hero.GetIndex(), hero.GetColor(), hero.GetMovePoints(), hero.GetMaxMovePoints(),
+                                              static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetArmy().GetStrength(),
+                                              hero.GetSpellPoints(), hero.IsFullBagArtifacts(), hero.GetArmy().isMeleeDominantArmy(),
+                                              hero.HasSecondarySkill( Skill::Secondary::BALLISTICS ), townGateCastleIndex, townPortalCastleIndexes );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
@@ -569,8 +610,9 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill )
 {
-    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _hero, _armyStrength );
-    const auto newSettings = std::make_tuple( start, skill, color, 0U, 0U, nullptr, armyStrength );
+    auto currentSettings = std::tie( _pathStart, _color, _remainingMovePoints, _maxMovePoints, _pathfindingSkill, _armyStrength, _spellPoints, _isArtifactsBagFull,
+                                     _hasMeleeDominantArmy, _hasBallisticsSkill, _townGateCastleIndex, _townPortalCastleIndexes );
+    const auto newSettings = std::make_tuple( start, color, 0U, 0U, skill, armyStrength, 0U, false, false, false, -1, std::vector<int32_t>{} );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
@@ -590,30 +632,27 @@ void AIWorldPathfinder::processWorldMap()
     std::vector<int> nodesToExplore;
     nodesToExplore.push_back( _pathStart );
 
-    if ( _hero && !_hero->Modes( Heroes::PATROL ) && !_hero->isShipMaster() ) {
+    auto processTownPortal = [this, &nodesToExplore]( const Spell & spell, const int32_t castleIndex ) {
+        const uint32_t movePointCost = spell.movePoints();
+        const uint32_t movePointsAfter = ( _remainingMovePoints < movePointCost ) ? 0 : _remainingMovePoints - movePointCost;
+
+        _cache[castleIndex] = WorldNode( _pathStart, movePointCost, MP2::OBJ_CASTLE, movePointsAfter );
+        nodesToExplore.push_back( castleIndex );
+    };
+
+    if ( _townGateCastleIndex != -1 ) {
         static const Spell townGate( Spell::TOWNGATE );
-        static const Spell townPortal( Spell::TOWNPORTAL );
-        const uint32_t currentSpellPoints = _hero->GetSpellPoints();
 
-        auto tryPortalToTown = [this, &nodesToExplore]( const Spell & spell, const Castle * castle ) {
-            if ( !castle || castle->GetHero() )
-                return;
-
-            const int castleIndex = castle->GetIndex();
-            const uint32_t movePointCost = spell.movePoints();
-            const uint32_t movePointsAfter = ( _remainingMovePoints < movePointCost ) ? 0 : _remainingMovePoints - movePointCost;
-
-            _cache[castleIndex] = WorldNode( _pathStart, movePointCost, MP2::OBJ_CASTLE, movePointsAfter );
-            nodesToExplore.push_back( castleIndex );
-        };
-
-        if ( _hero->CanCastSpell( townGate ) && currentSpellPoints > townGate.spellPoints() + currentSpellPoints * _spellPointsReserved ) {
-            const Castle * castle = fheroes2::getNearestCastleTownGate( *_hero );
-            tryPortalToTown( townGate, castle );
+        if ( _spellPoints > townGate.spellPoints() + _spellPoints * _spellPointsReserved ) {
+            processTownPortal( townGate, _townGateCastleIndex );
         }
-        if ( _hero->CanCastSpell( townPortal ) && currentSpellPoints > townPortal.spellPoints() + currentSpellPoints * _spellPointsReserved ) {
-            for ( const Castle * castle : _hero->GetKingdom().GetCastles() ) {
-                tryPortalToTown( townPortal, castle );
+    }
+    if ( !_townPortalCastleIndexes.empty() ) {
+        static const Spell townPortal( Spell::TOWNPORTAL );
+
+        if ( _spellPoints > townPortal.spellPoints() + _spellPoints * _spellPointsReserved ) {
+            for ( const int32_t idx : _townPortalCastleIndexes ) {
+                processTownPortal( townPortal, idx );
             }
         }
     }
@@ -628,11 +667,11 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
     const bool isFirstNode = currentNodeIdx == _pathStart;
     WorldNode & currentNode = _cache[currentNodeIdx];
 
-    // Find out if current node is protected by a strong army
-    bool isProtected = isTileInaccessibleForAIWithArmy( currentNodeIdx, _currentColor, _hero, _armyStrength, _advantage );
+    // Find out if current node is protected by a strong army (or a strong nearby monster)
+    bool isProtected = isTileInaccessibleForAIWithArmy( currentNodeIdx, _color, _armyStrength, _advantage, _hasMeleeDominantArmy, _hasBallisticsSkill );
     if ( !isProtected ) {
         for ( const int32_t monsterIndex : Maps::getMonstersProtectingTile( currentNodeIdx ) ) {
-            if ( isTileInaccessibleForAIWithArmy( monsterIndex, _currentColor, _hero, _armyStrength, _advantage ) ) {
+            if ( isTileInaccessibleForAIWithArmy( monsterIndex, _color, _armyStrength, _advantage, _hasMeleeDominantArmy, _hasBallisticsSkill ) ) {
                 isProtected = true;
                 break;
             }
@@ -645,7 +684,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
     }
 
     // Always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
-    if ( !isFirstNode && ( isProtected || isPassageThroughTileBlockedForAI( currentNodeIdx, _currentColor, _hero ) ) ) {
+    if ( !isFirstNode && ( isProtected || isPassageThroughTileBlockedForAI( currentNodeIdx, _color, _isArtifactsBagFull ) ) ) {
         return;
     }
 
@@ -741,13 +780,13 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero, bool & isTerrit
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
 
         if ( bestIndex == -1 && start != currentNodeIdx ) {
-            int32_t maxTilesToReveal = Maps::getFogTileCountToBeRevealed( currentNodeIdx, scoutingDistance, _currentColor );
+            int32_t maxTilesToReveal = Maps::getFogTileCountToBeRevealed( currentNodeIdx, scoutingDistance, _color );
             if ( maxTilesToReveal > 0 ) {
                 // Found a tile where we can reveal fog. Check for other tiles in the queue to find the one with the highest value.
                 bestIndex = currentNodeIdx;
                 for ( size_t i = lastProcessedNode + 1; i < nodesToExplore.size(); ++i ) {
                     const int nodeIdx = nodesToExplore[i];
-                    const int32_t tilesToReveal = Maps::getFogTileCountToBeRevealed( nodeIdx, scoutingDistance, _currentColor );
+                    const int32_t tilesToReveal = Maps::getFogTileCountToBeRevealed( nodeIdx, scoutingDistance, _color );
 
                     if ( std::make_tuple( maxTilesToReveal, _cache[nodeIdx]._cost ) < std::make_tuple( tilesToReveal, _cache[bestIndex]._cost ) ) {
                         maxTilesToReveal = tilesToReveal;
@@ -780,7 +819,7 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero, bool & isTerrit
             }
 
             for ( const int32_t tileIndex : Maps::getAroundIndexes( newIndex ) ) {
-                if ( world.GetTiles( tileIndex ).isFog( _currentColor ) ) {
+                if ( world.GetTiles( tileIndex ).isFog( _color ) ) {
                     // We found a tile which has a neighboring tile covered in fog.
                     // Since the current tile is accessible for the hero, the tile covered by fog most likely is accessible too.
                     isTerritoryExpansion = true;
@@ -810,7 +849,7 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero, bool & isTerrit
                 }
 
                 for ( const int32_t tileIndex : Maps::getAroundIndexes( teleportIndex ) ) {
-                    if ( world.GetTiles( tileIndex ).isFog( _currentColor ) ) {
+                    if ( world.GetTiles( tileIndex ).isFog( _color ) ) {
                         // We found a tile which has a neighboring tile covered in fog.
                         // Since the current tile is accessible for the hero, the tile covered by fog most likely is accessible too.
                         isTerritoryExpansion = true;
@@ -1023,7 +1062,7 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
 
 std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int targetIndex, const bool checkAdjacent /* = false */ ) const
 {
-    assert( _pathStart != -1 && _currentColor != Color::NONE && targetIndex != -1 );
+    assert( _pathStart != -1 && _color != Color::NONE && targetIndex != -1 );
 
     std::vector<IndexObject> result;
 
@@ -1032,7 +1071,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
         return result;
     }
 
-    const Kingdom & kingdom = world.GetKingdom( _currentColor );
+    const Kingdom & kingdom = world.GetKingdom( _color );
     const Directions & directions = Direction::All();
 
     std::set<int> uniqueIndices;
@@ -1101,8 +1140,9 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
 
     // Reserve spell points only if target isn't a well that will replenish lost SP
     if ( objectType != MP2::OBJ_MAGIC_WELL && objectType != MP2::OBJ_ARTESIAN_SPRING ) {
-        if ( currentSpellPoints < hero.GetMaxSpellPoints() * _spellPointsReserved )
+        if ( currentSpellPoints < hero.GetMaxSpellPoints() * _spellPointsReserved ) {
             return {};
+        }
 
         currentSpellPoints -= static_cast<uint32_t>( hero.GetMaxSpellPoints() * _spellPointsReserved );
     }
@@ -1113,18 +1153,19 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
     // Have to explicitly call GetObject( false ) since hero might be standing on it
     if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
         targetIndex = Maps::GetDirectionIndex( targetIndex, Direction::BOTTOM );
-        if ( !Maps::isValidAbsIndex( targetIndex ) )
+        if ( !Maps::isValidAbsIndex( targetIndex ) ) {
             return {};
+        }
     }
 
     // Target tile is guarded by an overly strong army
-    if ( isTileInaccessibleForAIWithArmy( targetIndex, _currentColor, _hero, _armyStrength, _advantage ) ) {
+    if ( isTileInaccessibleForAIWithArmy( targetIndex, _color, _armyStrength, _advantage, _hasMeleeDominantArmy, _hasBallisticsSkill ) ) {
         return {};
     }
 
+    // Target tile is guarded by an overly strong nearby monster
     for ( const int32_t monsterIndex : Maps::getMonstersProtectingTile( targetIndex ) ) {
-        // Target tile is guarded by an overly strong nearby monster
-        if ( isTileInaccessibleForAIWithArmy( monsterIndex, _currentColor, _hero, _armyStrength, _advantage ) ) {
+        if ( isTileInaccessibleForAIWithArmy( monsterIndex, _color, _armyStrength, _advantage, _hasMeleeDominantArmy, _hasBallisticsSkill ) ) {
             return {};
         }
     }
@@ -1163,7 +1204,7 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
                     continue;
 
                 // If we are near the destination and we cannot reach the cell, skip it.
-                if ( anotherNodeIdx == targetIndex && !isValidPath( anotherNodeIdx, directions[i], _currentColor ) ) {
+                if ( anotherNodeIdx == targetIndex && !isValidPath( anotherNodeIdx, directions[i], _color ) ) {
                     continue;
                 }
 

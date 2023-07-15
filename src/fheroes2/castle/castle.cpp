@@ -2435,7 +2435,7 @@ Army & Castle::GetActualArmy()
     return hero ? hero->GetArmy() : army;
 }
 
-double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
+double Castle::GetGarrisonStrength( const bool isAttackingHeroHasMeleeDominantArmy, const bool isAttackingHeroHasBallisticsSkill ) const
 {
     double totalStrength = 0;
 
@@ -2471,16 +2471,12 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
             totalStrength += towerStr / 2;
         }
 
-        // As a rule, armies without heroes do not attack castles, but AI pathfinder in certain cases can use this method without
-        // reference to a specific attacking hero. Do not overestimate the castle garrison strength in this case.
-        if ( attackingHero ) {
-            if ( !attackingHero->GetArmy().isMeleeDominantArmy() || attackingHero->HasSecondarySkill( Skill::Secondary::BALLISTICS ) ) {
-                totalStrength *= isBuild( BUILD_MOAT ) ? 1.2 : 1.15;
-            }
-            else {
-                // Heavy penalty if the attacking hero does not have a ballistic skill, and his army is based on melee infantry
-                totalStrength *= isBuild( BUILD_MOAT ) ? 1.45 : 1.25;
-            }
+        if ( isAttackingHeroHasMeleeDominantArmy && !isAttackingHeroHasBallisticsSkill ) {
+            // Heavy penalty if the attacking hero does not have a ballistic skill, and his army is based on melee infantry
+            totalStrength *= isBuild( BUILD_MOAT ) ? 1.45 : 1.25;
+        }
+        else {
+            totalStrength *= isBuild( BUILD_MOAT ) ? 1.2 : 1.15;
         }
     }
 
