@@ -2086,154 +2086,152 @@ namespace AI
         uint32_t currentProgressValue = startProgressValue;
 
         while ( !availableHeroes.empty() ) {
+            class StrengthMultiplierRestorer
             {
-                class StrengthMultiplierRestorer
+            public:
+                StrengthMultiplierRestorer( AIWorldPathfinder & pathfinder )
+                    : _pathfinder( pathfinder )
+                    , _originalStrengthMultiplier( _pathfinder.getMinimalArmyStrengthAdvantage() )
+                {}
+
+                StrengthMultiplierRestorer( const StrengthMultiplierRestorer & ) = delete;
+
+                ~StrengthMultiplierRestorer()
                 {
-                public:
-                    StrengthMultiplierRestorer( AIWorldPathfinder & pathfinder )
-                        : _pathfinder( pathfinder )
-                        , _originalStrengthMultiplier( _pathfinder.getMinimalArmyStrengthAdvantage() )
-                    {}
-
-                    StrengthMultiplierRestorer( const StrengthMultiplierRestorer & ) = delete;
-
-                    ~StrengthMultiplierRestorer()
-                    {
-                        _pathfinder.setMinimalArmyStrengthAdvantage( _originalStrengthMultiplier );
-                    }
-
-                    StrengthMultiplierRestorer & operator=( const StrengthMultiplierRestorer & ) = delete;
-
-                private:
-                    AIWorldPathfinder & _pathfinder;
-                    const double _originalStrengthMultiplier;
-                };
-
-                const StrengthMultiplierRestorer strengthMultiplierRestorer( _pathfinder );
-
-                Heroes * bestHero = availableHeroes.front().hero;
-                int bestTargetIndex = -1;
-
-                {
-                    const bool isLosingGame = bestHero->isLosingGame();
-
-                    static const std::vector<double> usualStrengthMultipliers{ ARMY_ADVANTAGE_LARGE, ARMY_ADVANTAGE_MEDIUM, ARMY_ADVANTAGE_SMALL };
-                    static const std::vector<double> emergencyStrengthMultipliers{ ARMY_ADVANTAGE_DESPERATE };
-
-                    for ( const double strengthMultiplier : isLosingGame ? emergencyStrengthMultipliers : usualStrengthMultipliers ) {
-                        _pathfinder.setMinimalArmyStrengthAdvantage( strengthMultiplier );
-
-                        double maxPriority = 0;
-
-                        for ( const HeroToMove & heroInfo : availableHeroes ) {
-                            double priority = -1;
-                            const int targetIndex = getPriorityTarget( heroInfo, priority );
-
-                            if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
-                                maxPriority = priority;
-                                bestTargetIndex = targetIndex;
-                                bestHero = heroInfo.hero;
-                            }
-                        }
-
-                        if ( bestTargetIndex != -1 ) {
-                            break;
-                        }
-                    }
+                    _pathfinder.setMinimalArmyStrengthAdvantage( _originalStrengthMultiplier );
                 }
 
-                if ( bestTargetIndex == -1 ) {
-                    // Possibly heroes have nothing to do because one of them is blocking the way. Move a random hero randomly and see what happens.
-                    Rand::Shuffle( availableHeroes );
+                StrengthMultiplierRestorer & operator=( const StrengthMultiplierRestorer & ) = delete;
 
-                    for ( HeroToMove & heroInfo : availableHeroes ) {
-                        // Skip heroes who are in castles or on patrol.
-                        if ( heroInfo.patrolCenter >= 0 && heroInfo.hero->inCastle() != nullptr ) {
-                            continue;
-                        }
+            private:
+                AIWorldPathfinder & _pathfinder;
+                const double _originalStrengthMultiplier;
+            };
 
-                        if ( !AIWorldPathfinder::isHeroPossiblyBlockingWay( *heroInfo.hero ) ) {
-                            continue;
-                        }
+            const StrengthMultiplierRestorer strengthMultiplierRestorer( _pathfinder );
 
-                        const int targetIndex = _pathfinder.getNearestTileToMove( *heroInfo.hero );
-                        if ( targetIndex != -1 ) {
+            Heroes * bestHero = availableHeroes.front().hero;
+            int bestTargetIndex = -1;
+
+            {
+                const bool isLosingGame = bestHero->isLosingGame();
+
+                static const std::vector<double> usualStrengthMultipliers{ ARMY_ADVANTAGE_LARGE, ARMY_ADVANTAGE_MEDIUM, ARMY_ADVANTAGE_SMALL };
+                static const std::vector<double> emergencyStrengthMultipliers{ ARMY_ADVANTAGE_DESPERATE };
+
+                for ( const double strengthMultiplier : isLosingGame ? emergencyStrengthMultipliers : usualStrengthMultipliers ) {
+                    _pathfinder.setMinimalArmyStrengthAdvantage( strengthMultiplier );
+
+                    double maxPriority = 0;
+
+                    for ( const HeroToMove & heroInfo : availableHeroes ) {
+                        double priority = -1;
+                        const int targetIndex = getPriorityTarget( heroInfo, priority );
+
+                        if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
+                            maxPriority = priority;
                             bestTargetIndex = targetIndex;
                             bestHero = heroInfo.hero;
-
-                            DEBUG_LOG( DBG_AI, DBG_INFO, bestHero->GetName() << " may be blocking the way. Moving to " << bestTargetIndex )
-
-                            break;
                         }
                     }
-                }
 
-                if ( bestTargetIndex == -1 ) {
-                    // Nothing to do. Stop everything
-                    break;
-                }
-
-                const size_t heroesBefore = heroes.size();
-                _pathfinder.reEvaluateIfNeeded( *bestHero );
-
-                int prevHeroPosition = bestHero->GetIndex();
-
-                // check if we want to use Dimension Door spell or move regularly
-                std::list<Route::Step> dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
-                uint32_t dimensionDoorDistance = AIWorldPathfinder::calculatePathPenalty( dimensionPath );
-                uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
-                if ( dimensionDoorDistance && ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) ) {
-                    while ( ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) && !dimensionPath.empty() && bestHero->MayStillMove( false, false )
-                            && bestHero->CanCastSpell( Spell::DIMENSIONDOOR ) ) {
-                        HeroesCastDimensionDoor( *bestHero, dimensionPath.front().GetIndex() );
-                        dimensionDoorDistance -= dimensionPath.front().GetPenalty();
-
-                        _pathfinder.reEvaluateIfNeeded( *bestHero );
-                        moveDistance = _pathfinder.getDistance( bestTargetIndex );
-
-                        dimensionPath.pop_front();
-
-                        // Hero can jump straight into the fog using the Dimension Door spell, which triggers the mechanics of fog revealing for his new tile
-                        // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
-                        assert( !bestHero->isFreeman() && bestHero->GetIndex() != prevHeroPosition );
-
-                        updateMapActionObjectCache( prevHeroPosition );
-                        updateMapActionObjectCache( bestHero->GetIndex() );
-
-                        prevHeroPosition = bestHero->GetIndex();
-                    }
-
-                    if ( dimensionDoorDistance > 0 ) {
-                        // The rest of the path the hero should do by foot.
-                        bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
-
-                        HeroesMove( *bestHero );
+                    if ( bestTargetIndex != -1 ) {
+                        break;
                     }
                 }
-                else {
+            }
+
+            if ( bestTargetIndex == -1 ) {
+                // Possibly heroes have nothing to do because one of them is blocking the way. Move a random hero randomly and see what happens.
+                Rand::Shuffle( availableHeroes );
+
+                for ( HeroToMove & heroInfo : availableHeroes ) {
+                    // Skip heroes who are in castles or on patrol.
+                    if ( heroInfo.patrolCenter >= 0 && heroInfo.hero->inCastle() != nullptr ) {
+                        continue;
+                    }
+
+                    if ( !AIWorldPathfinder::isHeroPossiblyBlockingWay( *heroInfo.hero ) ) {
+                        continue;
+                    }
+
+                    const int targetIndex = _pathfinder.getNearestTileToMove( *heroInfo.hero );
+                    if ( targetIndex != -1 ) {
+                        bestTargetIndex = targetIndex;
+                        bestHero = heroInfo.hero;
+
+                        DEBUG_LOG( DBG_AI, DBG_INFO, bestHero->GetName() << " may be blocking the way. Moving to " << bestTargetIndex )
+
+                        break;
+                    }
+                }
+            }
+
+            if ( bestTargetIndex == -1 ) {
+                // Nothing to do. Stop everything
+                break;
+            }
+
+            const size_t heroesBefore = heroes.size();
+            _pathfinder.reEvaluateIfNeeded( *bestHero );
+
+            int prevHeroPosition = bestHero->GetIndex();
+
+            // check if we want to use Dimension Door spell or move regularly
+            std::list<Route::Step> dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
+            uint32_t dimensionDoorDistance = AIWorldPathfinder::calculatePathPenalty( dimensionPath );
+            uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
+            if ( dimensionDoorDistance && ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) ) {
+                while ( ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) && !dimensionPath.empty() && bestHero->MayStillMove( false, false )
+                        && bestHero->CanCastSpell( Spell::DIMENSIONDOOR ) ) {
+                    HeroesCastDimensionDoor( *bestHero, dimensionPath.front().GetIndex() );
+                    dimensionDoorDistance -= dimensionPath.front().GetPenalty();
+
+                    _pathfinder.reEvaluateIfNeeded( *bestHero );
+                    moveDistance = _pathfinder.getDistance( bestTargetIndex );
+
+                    dimensionPath.pop_front();
+
+                    // Hero can jump straight into the fog using the Dimension Door spell, which triggers the mechanics of fog revealing for his new tile
+                    // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
+                    assert( !bestHero->isFreeman() && bestHero->GetIndex() != prevHeroPosition );
+
+                    updateMapActionObjectCache( prevHeroPosition );
+                    updateMapActionObjectCache( bestHero->GetIndex() );
+
+                    prevHeroPosition = bestHero->GetIndex();
+                }
+
+                if ( dimensionDoorDistance > 0 ) {
+                    // The rest of the path the hero should do by foot.
                     bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
 
                     HeroesMove( *bestHero );
                 }
-
-                if ( bestHero->isFreeman() || bestHero->GetIndex() != prevHeroPosition ) {
-                    // The hero died or moved to another position. We have to update the action object cache.
-                    updateMapActionObjectCache( prevHeroPosition );
-
-                    if ( !bestHero->isFreeman() ) {
-                        // Hero moved to another position and is still alive.
-                        updateMapActionObjectCache( bestHero->GetIndex() );
-                    }
-                }
-
-                if ( heroes.size() > heroesBefore ) {
-                    addHeroToMove( heroes.back(), availableHeroes );
-                }
-
-                availableHeroes.erase( std::remove_if( availableHeroes.begin(), availableHeroes.end(),
-                                                       []( const HeroToMove & item ) { return !item.hero->MayStillMove( false, false ); } ),
-                                       availableHeroes.end() );
             }
+            else {
+                bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
+
+                HeroesMove( *bestHero );
+            }
+
+            if ( bestHero->isFreeman() || bestHero->GetIndex() != prevHeroPosition ) {
+                // The hero died or moved to another position. We have to update the action object cache.
+                updateMapActionObjectCache( prevHeroPosition );
+
+                if ( !bestHero->isFreeman() ) {
+                    // Hero moved to another position and is still alive.
+                    updateMapActionObjectCache( bestHero->GetIndex() );
+                }
+            }
+
+            if ( heroes.size() > heroesBefore ) {
+                addHeroToMove( heroes.back(), availableHeroes );
+            }
+
+            availableHeroes.erase( std::remove_if( availableHeroes.begin(), availableHeroes.end(),
+                                                   []( const HeroToMove & item ) { return !item.hero->MayStillMove( false, false ); } ),
+                                   availableHeroes.end() );
 
             // The size of heroes can be increased if a new hero is released from Jail.
             const size_t maxHeroCount = std::max( heroes.size(), availableHeroes.size() );
