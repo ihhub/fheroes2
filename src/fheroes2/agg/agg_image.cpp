@@ -421,16 +421,13 @@ namespace
         const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor };
         const char * supportedText = getSupportedText( text, releasedButtonFont );
 
-        const fheroes2::Text releasedText( supportedText, releasedButtonFont );
-        const fheroes2::Text pressedText( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
-
         // generate the button with text on
-        fheroes2::getTextAdaptedButton( released, pressed, releasedText, pressedText, emptyButtonIcnId );
+        fheroes2::getTextAdaptedButton( released, pressed, supportedText, emptyButtonIcnId );
     }
 
-    void createCampaignButtonSet( const int32_t campaignSetIcnId, const std::vector<const char *> & texts )
+    void createCampaignButtonSet( const int campaignSetIcnId, const std::vector<const char *> & texts )
     {
-        int32_t emptyButtonIcn = 0;
+        int emptyButtonIcn = 0;
         switch ( campaignSetIcnId ) {
         case ICN::GOOD_CAMPAIGN_BUTTONS:
             emptyButtonIcn = ICN::EMPTY_GOOD_BUTTON;

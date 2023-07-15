@@ -524,9 +524,9 @@ namespace fheroes2
         return { offsetX + shadow.x(), offsetY + shadow.y(), releasedWithBackground, pressedWithBackground, disabledWithBackground };
     }
 
-    int32_t getButtonBackground( const int32_t emptyButtonIcnID )
+    int getButtonBackground( const int emptyButtonIcnID )
     {
-        int32_t backgroundIcnID = 0;
+        int backgroundIcnID = 0;
         switch ( emptyButtonIcnID ) {
         case ICN::EMPTY_GOOD_BUTTON:
             backgroundIcnID = ICN::STONEBAK;
@@ -548,7 +548,7 @@ namespace fheroes2
         // offsets for drawing?
         return backgroundIcnID;
     }
-    void makeTransparentBackground( fheroes2::Sprite released, fheroes2::Sprite pressed, const int32_t backgroundIcnID )
+    void makeTransparentBackground( fheroes2::Sprite released, fheroes2::Sprite pressed, const int backgroundIcnID )
     {
         const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnID, 0 );
 
@@ -572,7 +572,7 @@ namespace fheroes2
         released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), width );
         pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), width );
 
-        const int32_t backgroundIcnID = getButtonBackground( emptyButtonIcnID );
+        const int backgroundIcnID = getButtonBackground( emptyButtonIcnID );
 
         makeTransparentBackground( released, pressed, backgroundIcnID );
     }
@@ -606,15 +606,20 @@ namespace fheroes2
         }
     }
 
-    void getTextAdaptedButton( Sprite & released, Sprite & pressed, const fheroes2::Text releasedText, const fheroes2::Text pressedText, const int emptyButtonIcnID )
+    void getTextAdaptedButton( Sprite & released, Sprite & pressed, const char * text, const int emptyButtonIcnID )
     {
+        const bool isGoodFont = emptyButtonIcnID == ICN::EMPTY_GOOD_BUTTON;
+        const fheroes2::FontColor buttonFontColor = isGoodFont ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
+        const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor };
+        const fheroes2::Text releasedText( text, releasedButtonFont );
+        const fheroes2::Text pressedText( text, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
         const int32_t textWidth = releasedText.width();
         assert( textWidth > 0 );
 
         const int32_t buttonBorder = 3 + 3;
         const int32_t textWidthWithBorder = textWidth + buttonBorder;
 
-        // The minimum text space width for a button is 87 judging from the shared widths of the
+        // The minimum text space width for a campaign button is 87 judging from the shared widths of the
         // original OKAY and the CANCEL buttons even though OKAY is a shorter word
         // TODO: Make the minimum width be adjusted for the various empty ICNs.
         // NOTE: Buttons can use the same ICN but have different minimum widths, i.e. good buttons
@@ -629,7 +634,7 @@ namespace fheroes2
         released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), finalWidth + sideBackgroundBorders );
         pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), finalWidth + sideBackgroundBorders );
 
-        const int32_t backgroundIcnID = getButtonBackground( emptyButtonIcnID );
+        const int backgroundIcnID = getButtonBackground( emptyButtonIcnID );
         makeTransparentBackground( released, pressed, backgroundIcnID );
 
         releasedText.draw( 5, 5, finalWidth, released );
