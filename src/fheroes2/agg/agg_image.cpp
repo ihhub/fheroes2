@@ -1589,7 +1589,9 @@ namespace fheroes2
                     }
                     // generate the DIFFICULTY button as it is not present in the original resources
                     createTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ), ICN::EMPTY_POL_BUTTON );
-
+                    // the original assets have offsets 8,0 (released) and 7,1 (pressed) for these buttons
+                    _icnVsSprite[id][8].setPosition( 8, 0 );
+                    _icnVsSprite[id][9].setPosition( 7, 1 );
                     break;
                 }
                 createCampaignButtonSet( id, { gettext_noop( "VIEW INTRO" ), gettext_noop( "RESTART" ), gettext_noop( "OKAY" ), gettext_noop( "CANCEL" ),
