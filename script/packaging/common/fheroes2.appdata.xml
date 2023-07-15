@@ -37,6 +37,41 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2023-07-15" version="v1.0.6">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.6</url>
+      <description>
+        <p>Changes in v1.0.6 (15 July 2023):</p>
+        <ul>
+          <li>allow to lower the campaign difficulty during playthrough</li>
+          <li>update Russian translation</li>
+          <li>reduce CPU usage while rendering High Score dialog</li>
+          <li>add some missing horizontal buttons to translations</li>
+          <li>fix missing redraw in Battle Only dialog after cancelling hero selection</li>
+          <li>fix last hotkey not showing up in the hotkey dialog</li>
+          <li>add Dismiss hotkey to hero screen</li>
+          <li>create basic Map Editor GUI</li>
+          <li>update Polish translation</li>
+          <li>add checks for object reachability when calculating their value for AI heroes</li>
+          <li>fix AI logic for visiting Shrines and Arena</li>
+          <li>correct spell value estimation for AI heroes</li>
+          <li>fix a case when a dead AI hero was trying to reinforce army in a castle</li>
+          <li>update priorities for AI heroes based on battle outcome and fog uncover events</li>
+          <li>rework the spell generation in castles' Mage Guilds</li>
+          <li>update Spanish translation</li>
+          <li>speed up Armageddon spell rendering</li>
+          <li>fix invalid pixels in multiple images from the original resources</li>
+          <li>speed up resource loading</li>
+          <li>update Slovak translation</li>
+          <li>do Main Menu fade-in before showing first game run</li>
+          <li>fix the fade effect on the "View World" screen</li>
+          <li>properly restore environment sounds and terrain music after opening a castle dialog from the Kingdom Overview screen</li>
+          <li>fix cases when false symbols appear after the blinking cursor in text input dialog</li>
+          <li>rework game credits to keep aspect ratio</li>
+          <li>add extra windows and greying out conditions for Summon Boat spell</li>
+          <li>fix several button text placements and button press rendering</li>
+        </ul>
+      </description>
+    </release>
     <release date="2023-06-14" version="v1.0.5">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.5</url>
       <description>
