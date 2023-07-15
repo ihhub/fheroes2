@@ -2230,14 +2230,9 @@ namespace AI
                     addHeroToMove( heroes.back(), availableHeroes );
                 }
 
-                for ( size_t i = 0; i < availableHeroes.size(); ) {
-                    if ( !availableHeroes[i].hero->MayStillMove( false, false ) ) {
-                        availableHeroes.erase( availableHeroes.begin() + i );
-                        continue;
-                    }
-
-                    ++i;
-                }
+                availableHeroes.erase( std::remove_if( availableHeroes.begin(), availableHeroes.end(),
+                                                       []( const HeroToMove & item ) { return !item.hero->MayStillMove( false, false ); } ),
+                                       availableHeroes.end() );
             }
 
             // The size of heroes can be increased if a new hero is released from Jail.
