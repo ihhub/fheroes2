@@ -204,7 +204,7 @@ namespace
 
     void HeroesTownGate( Heroes & hero, const Castle * castle )
     {
-        assert( castle != nullptr );
+        assert( castle && castle->GetHero() == nullptr );
 
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
 

@@ -2029,22 +2029,22 @@ namespace AI
 
     void HeroesCastTownPortal( Heroes & hero, const int32_t targetIndex )
     {
-        if ( !Maps::isValidAbsIndex( targetIndex ) || hero.isShipMaster() ) {
-            return;
-        }
+        assert( !hero.Modes( Heroes::PATROL ) && !hero.isShipMaster() && Maps::isValidAbsIndex( targetIndex ) );
+#ifndef NDEBUG
+        const Castle * targetCastle = world.getCastleEntrance( Maps::GetPoint( targetIndex ) );
+        assert( targetCastle && targetCastle->GetHero() == nullptr );
+#endif
 
-        Spell spellToUse( Spell::TOWNPORTAL );
+        const Spell spellToUse = [&hero, targetIndex]() {
+            const Castle * nearestCastle = fheroes2::getNearestCastleTownGate( hero );
+            if ( nearestCastle && nearestCastle->GetIndex() == targetIndex ) {
+                return Spell::TOWNGATE;
+            }
 
-        // check if we can cast Town Gate instead
-        const Spell townGate( Spell::TOWNGATE );
-        const Castle * nearestCastle = fheroes2::getNearestCastleTownGate( hero );
-        if ( nearestCastle && nearestCastle->GetIndex() == targetIndex && hero.HaveSpell( townGate ) ) {
-            spellToUse = townGate;
-        }
+            return Spell::TOWNPORTAL;
+        }();
 
-        if ( !hero.CanCastSpell( spellToUse ) ) {
-            return;
-        }
+        assert( hero.CanCastSpell( spellToUse ) );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
