@@ -1309,8 +1309,3 @@ void AIWorldPathfinder::setArmyStrengthMultiplier( const double multiplier )
         reset();
     }
 }
-
-void AIWorldPathfinder::setSpellPointReserve( const double reserve )
-{
-    _spellPointsReserved = reserve;
-}

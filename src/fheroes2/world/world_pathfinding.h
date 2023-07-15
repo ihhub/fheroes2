@@ -163,7 +163,6 @@ public:
     }
 
     void setArmyStrengthMultiplier( const double multiplier );
-    void setSpellPointReserve( const double reserve );
 
 private:
     void processWorldMap() override;
@@ -186,6 +185,10 @@ private:
     bool _hasMeleeDominantArmy{ false };
     bool _hasBallisticsSkill{ false };
 
+    // Spell points reservation factor for spells associated with the movement of the hero on the adventure map
+    // (such as Dimension Door, Town Gate or Town Portal)
+    static constexpr double _spellPointsReserved{ 0.5 };
+
     // The potential destinations of the Town Gate and Town Portal spells should be cached here because they can
     // change even if the hero's position does not change (e.g. when a new hero was hired in the nearby castle),
     // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
@@ -194,5 +197,4 @@ private:
     std::vector<int32_t> _townPortalCastleIndexes;
 
     double _advantage{ 1.0 };
-    double _spellPointsReserved{ 0.5 };
 };
