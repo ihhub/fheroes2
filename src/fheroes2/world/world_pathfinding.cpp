@@ -608,6 +608,7 @@ void AIWorldPathfinder::processWorldMap()
     nodesToExplore.push_back( _pathStart );
 
     auto processTownPortal = [this, &nodesToExplore]( const Spell & spell, const int32_t castleIndex ) {
+        assert( castleIndex >= 0 && static_cast<size_t>( castleIndex ) < _cache.size() );
         assert( castleIndex != _pathStart && _cache[castleIndex]._from == -1 );
 
         const uint32_t movePointCost = spell.movePoints();
