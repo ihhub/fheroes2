@@ -1525,7 +1525,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
         else if ( le.MousePressRight( buttonDifficulty.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Select campaign difficulty. You might lower it down throughout the campaign." ),
+                                   fheroes2::Text( _( "Select the campaign difficulty. This can be lowered at any point during the campaign." ),
                                                    fheroes2::FontType::normalWhite() ),
                                    Dialog::ZERO );
         }
@@ -1534,17 +1534,17 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                                    fheroes2::Text( _( "Restart the current scenario." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
         else if ( ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_OKAY ) ) ) || restartButtonClicked ) {
-            if ( restartButtonClicked
-                 && fheroes2::showStandardTextMessage( _( "Restart" ), _( "Are you sure you want to restart this scenario?" ), Dialog::YES | Dialog::NO )
+            if ( ( !campaignSaveData.isStarting() || allowToRestart ) && currentDifficulty != campaignSaveData.getDifficulty()
+                 && fheroes2::showStandardTextMessage( _( "Difficulty" ),
+                                                       _( "You have changed to a lower difficulty for the campaign. You will not be able to revert it after this point. "
+                                                          "The high score will be calculated based solely on the new difficulty. Do you want to proceed?" ),
+                                                       Dialog::YES | Dialog::NO )
                         == Dialog::NO ) {
                 continue;
             }
 
-            if ( ( !campaignSaveData.isStarting() || allowToRestart ) && currentDifficulty != campaignSaveData.getDifficulty()
-                 && fheroes2::showStandardTextMessage( _( "Difficulty" ),
-                                                       _( "You selected lower difficulty for the campaign. You will not be able to revert it after this point. "
-                                                          "The high score will be calculated based on the newly selected difficulty. Do you want to proceed?" ),
-                                                       Dialog::YES | Dialog::NO )
+            if ( restartButtonClicked
+                 && fheroes2::showStandardTextMessage( _( "Restart" ), _( "Are you sure you want to restart this scenario?" ), Dialog::YES | Dialog::NO )
                         == Dialog::NO ) {
                 continue;
             }
