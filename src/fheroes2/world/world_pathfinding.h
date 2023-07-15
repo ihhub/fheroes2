@@ -186,6 +186,10 @@ private:
     bool _hasMeleeDominantArmy{ false };
     bool _hasBallisticsSkill{ false };
 
+    // The potential destinations of the Town Gate and Town Portal spells should be cached here because they can
+    // change even if the hero's position does not change (e.g. when a new hero was hired in the nearby castle),
+    // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
+    // pathfinder's cache
     int32_t _townGateCastleIndex{ -1 };
     std::vector<int32_t> _townPortalCastleIndexes;
 
