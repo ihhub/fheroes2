@@ -151,10 +151,9 @@ namespace
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::GOOD_CAMPAIGN_BUTTONS,
                                                 ICN::EVIL_CAMPAIGN_BUTTONS,
-                                                ICN::POL_CAMPAIGN_BUTTONS };
+                                                ICN::POL_CAMPAIGN_BUTTONS,
                                                 ICN::BUTTON_VIEWWORLD_EXIT_GOOD,
-                                                ICN::BUTTON_VIEWWORLD_EXIT_EVIL,
-                                                };
+                                                ICN::BUTTON_VIEWWORLD_EXIT_EVIL };
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -1556,7 +1555,7 @@ namespace fheroes2
 
                 break;
             }
-case ICN::GOOD_CAMPAIGN_BUTTONS:
+            case ICN::GOOD_CAMPAIGN_BUTTONS:
             case ICN::EVIL_CAMPAIGN_BUTTONS: {
                 _icnVsSprite[id].resize( 10 );
 
