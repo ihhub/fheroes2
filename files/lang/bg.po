@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-12 01:51+0000\n"
+"POT-Creation-Date: 2023-07-15 12:25+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3741,7 +3741,10 @@ msgstr "Виж въведение"
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Виж въвеждащи видеоклипове за текущото състояние на кампанията."
 
-msgid "Select campaign difficulty. It cannot be changed after."
+#, fuzzy
+msgid ""
+"Select the campaign difficulty. This can be lowered at any point during the "
+"campaign."
 msgstr "Избери трудност на кампанията. Не може да се промени след това."
 
 msgid "Restart"
@@ -3749,6 +3752,18 @@ msgstr "Рестарт"
 
 msgid "Restart the current scenario."
 msgstr "Рестартирай текущия сценарий."
+
+#, fuzzy
+msgid "Difficulty"
+msgstr ""
+"Трудност\n"
+"на Карта"
+
+msgid ""
+"You have changed to a lower difficulty for the campaign. You will not be "
+"able to revert this after this point. The high score will be calculated "
+"based solely on the new difficulty. Do you want to proceed?"
+msgstr ""
 
 msgid "Are you sure you want to restart this scenario?"
 msgstr "Сигурен ли си, че искаш да рестартираш този сценарий?"
