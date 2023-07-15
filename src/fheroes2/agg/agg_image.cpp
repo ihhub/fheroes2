@@ -425,7 +425,7 @@ namespace
         fheroes2::getTextAdaptedButton( released, pressed, supportedText, emptyButtonIcnId );
     }
 
-    void createCampaignButtonSet( const int campaignSetIcnId, const std::vector<const char *> & texts )
+    void createCampaignButtonSet( const int campaignSetIcnId, const std::array<const char *, 5> & texts )
     {
         int emptyButtonIcn = 0;
         switch ( campaignSetIcnId ) {
@@ -474,7 +474,7 @@ namespace
         const int32_t difficultyWidth = textReleased.width();
 
         // 3. make the button width stay within the limits of the available width
-        const int32_t buttonTextAreaBorders = 3 + 3;
+        const int32_t buttonTextAreaBorders = 4 + 4;
         const int32_t textWidthWithBorders = difficultyWidth + buttonTextAreaBorders;
         const int32_t controlledTextWidth = std::clamp( textWidthWithBorders, 87, allowedDifficultyWidth );
 
