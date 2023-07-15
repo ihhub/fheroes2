@@ -200,7 +200,7 @@ void Game::UpdateGameSpeed()
     delays[BATTLE_CATAPULT_CLOUD_DELAY].setDelay( static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
     delays[BATTLE_BRIDGE_DELAY].setDelay( static_cast<uint64_t>( 90 * adjustedBattleSpeed ) );
     delays[BATTLE_IDLE_DELAY].setDelay( static_cast<uint64_t>( 150 * adjustedIdleAnimationSpeed ) );
-    delays[BATTLE_OPPONENTS_DELAY].setDelay( static_cast<uint64_t>( 350 * adjustedBattleSpeed ) );
+    delays[BATTLE_OPPONENTS_DELAY].setDelay( static_cast<uint64_t>( 60 * adjustedIdleAnimationSpeed ) );
     delays[BATTLE_FLAGS_DELAY].setDelay( static_cast<uint64_t>( 250 * adjustedIdleAnimationSpeed ) );
 }
 
