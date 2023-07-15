@@ -182,8 +182,6 @@ private:
     double _armyStrength{ -1 };
     uint32_t _spellPoints{ 0 };
     bool _isArtifactsBagFull{ false };
-    bool _hasMeleeDominantArmy{ false };
-    bool _hasBallisticsSkill{ false };
 
     // Spell points reservation factor for spells associated with the movement of the hero on the adventure map
     // (such as Dimension Door, Town Gate or Town Portal)

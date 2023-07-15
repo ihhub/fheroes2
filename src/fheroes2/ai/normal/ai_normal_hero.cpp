@@ -164,11 +164,8 @@ namespace
             return false;
         }
 
-        const bool heroHasMeleeDominantArmy = hero.GetArmy().isMeleeDominantArmy();
-        const bool heroHasBallisticsSkill = hero.HasSecondarySkill( Skill::Secondary::BALLISTICS );
-
         const double advantage = hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_MEDIUM;
-        const double castleStrength = castle->GetGarrisonStrength( heroHasMeleeDominantArmy, heroHasBallisticsSkill ) * advantage;
+        const double castleStrength = castle->GetGarrisonStrength( hero ) * advantage;
 
         return heroArmyStrength > castleStrength;
     }
@@ -1790,18 +1787,15 @@ namespace AI
                         break;
                     }
 
-                    const bool heroHasMeleeDominantArmy = hero.GetArmy().isMeleeDominantArmy();
-                    const bool heroHasBallisticsSkill = hero.HasSecondarySkill( Skill::Secondary::BALLISTICS );
-
                     if ( isObjectReachableAtThisTurn ) {
-                        if ( castle->GetGarrisonStrength( heroHasMeleeDominantArmy, heroHasBallisticsSkill ) > heroStrength / 2 ) {
+                        if ( castle->GetGarrisonStrength( hero ) > heroStrength / 2 ) {
                             value -= dangerousTaskPenalty / 4;
                         }
                         else {
                             value -= dangerousTaskPenalty / 10;
                         }
                     }
-                    else if ( castle->GetGarrisonStrength( heroHasMeleeDominantArmy, heroHasBallisticsSkill ) > heroStrength / 2 ) {
+                    else if ( castle->GetGarrisonStrength( hero ) > heroStrength / 2 ) {
                         value -= dangerousTaskPenalty / 2;
                     }
                     else {

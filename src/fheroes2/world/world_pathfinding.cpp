@@ -91,7 +91,8 @@ namespace
         return false;
     }
 
-    bool isPassageThroughTileBlockedForAI( const int tileIndex, const int color, const bool isArtifactsBagFull )
+    bool isPassageThroughTileBlockedForAIWithArmy( const int tileIndex, const int color, const bool isArtifactsBagFull, const double armyStrength,
+                                                   const double advantage )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const MP2::MapObjectType objectType = tile.GetObject();
@@ -106,12 +107,17 @@ namespace
                 return true;
             }
 
+            // Heroes in castles cannot be passed through
+            if ( otherHero->inCastle() ) {
+                return true;
+            }
+
             // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
             if ( otherHero == world.GetHeroesCondWins() ) {
                 return true;
             }
 
-            return false;
+            return otherHero->GetArmy().GetStrength() * advantage > armyStrength;
         }
 
         // Artifacts can be picked up and passed through
@@ -154,8 +160,13 @@ namespace
                         break;
                     }
 
-                    // If there are no conditions, then we can just pick this artifact up and go through
-                    return false;
+                    // Artifact may be guarded, check the power of guardians.
+                    // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations.
+                    static Army tileArmy;
+
+                    tileArmy.setFromTile( world.GetTiles( tileIndex ) );
+
+                    return tileArmy.GetStrength() * advantage > armyStrength;
                 }
             }
 
@@ -165,7 +176,12 @@ namespace
 
         // Monsters can be defeated and passed through
         if ( objectType == MP2::OBJ_MONSTER ) {
-            return false;
+            // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
+            static Army tileArmy;
+
+            tileArmy.setFromTile( world.GetTiles( tileIndex ) );
+
+            return tileArmy.GetStrength() * advantage > armyStrength;
         }
 
         // AI may have the key for the barrier
@@ -240,64 +256,27 @@ namespace
         return toTile.isPassableFrom( Direction::Reflect( direction ), fromWater, false, heroColor );
     }
 
-    bool isTileInaccessibleForAIWithArmy( const int index, const int color, const double armyStrength, const double advantage, const bool heroHasMeleeDominantArmy,
-                                          const bool heroHasBallisticsSkill )
+    bool isTileInaccessibleForAIWithArmy( const int tileIndex, const double armyStrength, const double advantage )
     {
-        const Maps::Tiles & tile = world.GetTiles( index );
+        const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const MP2::MapObjectType objectType = tile.GetObject();
 
-        if ( objectType == MP2::OBJ_HEROES ) {
-            const Heroes * otherHero = tile.GetHeroes();
-            assert( otherHero != nullptr );
-
-            // Heroes of the same color are always accessible
-            if ( otherHero->GetColor() == color ) {
-                return false;
-            }
-
-            // Allied heroes are always inaccessible
-            if ( otherHero->isFriends( color ) ) {
-                return true;
-            }
-
-            const Castle * castle = otherHero->inCastle();
-            if ( castle ) {
-                assert( castle->GetColor() == otherHero->GetColor() );
-
-                // Enemy heroes in castles with too powerful garrisons may be inaccessible
-                return castle->GetGarrisonStrength( heroHasMeleeDominantArmy, heroHasBallisticsSkill ) * advantage > armyStrength;
-            }
-
-            // Too powerful enemy heroes may be inaccessible
-            return otherHero->GetArmy().GetStrength() * advantage > armyStrength;
+        // Tiles with monsters are considered accessible regardless of the monsters' power, high-level AI logic
+        // will decide what to do with them
+        if ( world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_MONSTER ) {
+            return false;
         }
 
-        if ( objectType == MP2::OBJ_CASTLE ) {
-            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
-            assert( castle != nullptr );
-
-            // Castles of the same color are always accessible
-            if ( castle->GetColor() == color ) {
-                return false;
-            }
-
-            // Allied castles are always inaccessible
-            if ( castle->isFriends( color ) ) {
-                return true;
-            }
-
-            // Enemy castles with too powerful garrisons may be inaccessible
-            return castle->GetGarrisonStrength( heroHasMeleeDominantArmy, heroHasBallisticsSkill ) * advantage > armyStrength;
-        }
-
-        if ( MP2::isProtectedObject( objectType ) ) {
+        for ( const int32_t monsterIndex : Maps::getMonstersProtectingTile( tileIndex ) ) {
             // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
             static Army tileArmy;
 
-            tileArmy.setFromTile( tile );
+            tileArmy.setFromTile( world.GetTiles( monsterIndex ) );
 
-            // Tiles guarded by too powerful guardians may be inaccessible
-            return tileArmy.GetStrength() * advantage > armyStrength;
+            // Tiles guarded by too powerful wandering monsters may be inaccessible
+            if ( tileArmy.GetStrength() * advantage > armyStrength ) {
+                return true;
+            }
         }
 
         return false;
@@ -553,8 +532,6 @@ void AIWorldPathfinder::reset()
         _armyStrength = -1;
         _spellPoints = 0;
         _isArtifactsBagFull = false;
-        _hasMeleeDominantArmy = false;
-        _hasBallisticsSkill = false;
 
         _townGateCastleIndex = -1;
         _townPortalCastleIndexes.clear();
@@ -595,11 +572,10 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
     }();
 
     auto currentSettings = std::tie( _pathStart, _color, _remainingMovePoints, _maxMovePoints, _pathfindingSkill, _armyStrength, _spellPoints, _isArtifactsBagFull,
-                                     _hasMeleeDominantArmy, _hasBallisticsSkill, _townGateCastleIndex, _townPortalCastleIndexes );
+                                     _townGateCastleIndex, _townPortalCastleIndexes );
     const auto newSettings = std::make_tuple( hero.GetIndex(), hero.GetColor(), hero.GetMovePoints(), hero.GetMaxMovePoints(),
                                               static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetArmy().GetStrength(),
-                                              hero.GetSpellPoints(), hero.IsFullBagArtifacts(), hero.GetArmy().isMeleeDominantArmy(),
-                                              hero.HasSecondarySkill( Skill::Secondary::BALLISTICS ), townGateCastleIndex, townPortalCastleIndexes );
+                                              hero.GetSpellPoints(), hero.IsFullBagArtifacts(), townGateCastleIndex, townPortalCastleIndexes );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
@@ -611,8 +587,8 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill )
 {
     auto currentSettings = std::tie( _pathStart, _color, _remainingMovePoints, _maxMovePoints, _pathfindingSkill, _armyStrength, _spellPoints, _isArtifactsBagFull,
-                                     _hasMeleeDominantArmy, _hasBallisticsSkill, _townGateCastleIndex, _townPortalCastleIndexes );
-    const auto newSettings = std::make_tuple( start, color, 0U, 0U, skill, armyStrength, 0U, false, false, false, -1, std::vector<int32_t>{} );
+                                     _townGateCastleIndex, _townPortalCastleIndexes );
+    const auto newSettings = std::make_tuple( start, color, 0U, 0U, skill, armyStrength, 0U, false, -1, std::vector<int32_t>{} );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
@@ -667,24 +643,15 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
     const bool isFirstNode = currentNodeIdx == _pathStart;
     WorldNode & currentNode = _cache[currentNodeIdx];
 
-    // Find out if current node is protected by a strong army (or a strong nearby monster)
-    bool isProtected = isTileInaccessibleForAIWithArmy( currentNodeIdx, _color, _armyStrength, _advantage, _hasMeleeDominantArmy, _hasBallisticsSkill );
-    if ( !isProtected ) {
-        for ( const int32_t monsterIndex : Maps::getMonstersProtectingTile( currentNodeIdx ) ) {
-            if ( isTileInaccessibleForAIWithArmy( monsterIndex, _color, _armyStrength, _advantage, _hasMeleeDominantArmy, _hasBallisticsSkill ) ) {
-                isProtected = true;
-                break;
-            }
-        }
-    }
+    const bool isInaccessible = isTileInaccessibleForAIWithArmy( currentNodeIdx, _armyStrength, _advantage );
 
     // If we can't move here, reset
-    if ( isProtected ) {
+    if ( isInaccessible ) {
         currentNode.resetNode();
     }
 
     // Always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
-    if ( !isFirstNode && ( isProtected || isPassageThroughTileBlockedForAI( currentNodeIdx, _color, _isArtifactsBagFull ) ) ) {
+    if ( !isFirstNode && ( isInaccessible || isPassageThroughTileBlockedForAIWithArmy( currentNodeIdx, _color, _isArtifactsBagFull, _armyStrength, _advantage ) ) ) {
         return;
     }
 
@@ -1158,16 +1125,8 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
         }
     }
 
-    // Target tile is guarded by an overly strong army
-    if ( isTileInaccessibleForAIWithArmy( targetIndex, _color, _armyStrength, _advantage, _hasMeleeDominantArmy, _hasBallisticsSkill ) ) {
+    if ( isTileInaccessibleForAIWithArmy( targetIndex, _armyStrength, _advantage ) ) {
         return {};
-    }
-
-    // Target tile is guarded by an overly strong nearby monster
-    for ( const int32_t monsterIndex : Maps::getMonstersProtectingTile( targetIndex ) ) {
-        if ( isTileInaccessibleForAIWithArmy( monsterIndex, _color, _armyStrength, _advantage, _hasMeleeDominantArmy, _hasBallisticsSkill ) ) {
-            return {};
-        }
     }
 
     const fheroes2::Point targetPoint = Maps::GetPoint( targetIndex );
