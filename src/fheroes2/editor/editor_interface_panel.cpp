@@ -74,7 +74,7 @@ namespace Interface
     {
         int32_t offsetX = displayX;
 
-        for ( uint8_t i = 0; i < static_cast<uint8_t>( _instrumentButtonsRect.size() ); ++i ) {
+        for ( size_t i = 0; i < _instrumentButtonsRect.size(); ++i ) {
             _instrumentButtons[i].setPosition( offsetX, displayY );
             _instrumentButtonsRect[i] = _instrumentButtons[i].area();
 
@@ -98,7 +98,7 @@ namespace Interface
 
         offsetX = displayX + 14;
         int32_t offsetY = displayY + 128;
-        for ( uint8_t i = 0; i < static_cast<uint8_t>( _brushSizeButtonsRect.size() ); ++i ) {
+        for ( size_t i = 0; i < _brushSizeButtonsRect.size(); ++i ) {
             _brushSizeButtons[i].setPosition( offsetX, offsetY );
             _brushSizeButtonsRect[i] = _brushSizeButtons[i].area();
             offsetX += 30;
@@ -106,14 +106,14 @@ namespace Interface
 
         offsetX = displayX + 30;
         offsetY = displayY + 11;
-        for ( uint8_t i = 0; i < static_cast<uint8_t>( _terrainButtonsRect.size() ); ++i ) {
-            _terrainButtonsRect[i] = { offsetX + ( i % 3 ) * 29, offsetY + ( i / 3 ) * 29, 27, 27 };
+        for ( size_t i = 0; i < _terrainButtonsRect.size(); ++i ) {
+            _terrainButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 3 ) * 29, offsetY + static_cast<int32_t>( i / 3 ) * 29, 27, 27 };
         }
 
         offsetX = displayX + 15;
         ++offsetY;
-        for ( uint8_t i = 0; i < static_cast<uint8_t>( _objectButtonsRect.size() ); ++i ) {
-            _objectButtonsRect[i] = { offsetX + ( i % 4 ) * 29, offsetY + ( i / 4 ) * 28, 27, 27 };
+        for ( size_t i = 0; i < _objectButtonsRect.size(); ++i ) {
+            _objectButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 4 ) * 29, offsetY + static_cast<int32_t>( i / 4 ) * 28, 27, 27 };
         }
         // The last object button is located not next to previous one and needs to be shifted to the right.
         _objectButtonsRect[Brush::TREASURES].x += 29 * 2;
@@ -175,7 +175,7 @@ namespace Interface
                             selection.height() );
 
             const fheroes2::Text terrainText( _getTerrainTypeName( _selectedTerrain ), fheroes2::FontType::smallWhite() );
-            terrainText.draw( _rectInstrumentPanel.x + 72 - terrainText.width( 118 ) / 2, _rectInstrumentPanel.y + 107, display );
+            terrainText.draw( _rectInstrumentPanel.x + 72 - terrainText.width() / 2, _rectInstrumentPanel.y + 107, display );
         }
 
         else if ( _selectedInstrument == Instrument::OBJECT ) {
@@ -184,7 +184,7 @@ namespace Interface
                             selection.height() );
 
             const fheroes2::Text terrainText( _getObjectTypeName( _selectedObject ), fheroes2::FontType::smallWhite() );
-            terrainText.draw( _rectInstrumentPanel.x + 72 - terrainText.width( 118 ) / 2, _rectInstrumentPanel.y + 135, display );
+            terrainText.draw( _rectInstrumentPanel.x + 72 - terrainText.width() / 2, _rectInstrumentPanel.y + 135, display );
         }
 
         _buttonMagnify.draw();
@@ -274,7 +274,7 @@ namespace Interface
             break;
         }
 
-        return {};
+        return "Unknown object type";
     }
 
     fheroes2::GameMode EditorPanel::queueEventProcessing()
@@ -283,10 +283,10 @@ namespace Interface
         fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
         if ( le.MousePressLeft( _rectInstruments ) ) {
-            for ( uint8_t i = 0; i < static_cast<uint8_t>( _instrumentButtonsRect.size() ); ++i ) {
+            for ( size_t i = 0; i < _instrumentButtonsRect.size(); ++i ) {
                 if ( le.MousePressLeft( _instrumentButtonsRect[i] ) ) {
                     if ( _instrumentButtons[i].drawOnPress() ) {
-                        _selectedInstrument = i;
+                        _selectedInstrument = static_cast<uint8_t>( i );
                         setRedraw();
                     }
                 }
@@ -297,10 +297,10 @@ namespace Interface
         }
 
         if ( _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::ERASE ) {
-            for ( uint8_t i = 0; i < static_cast<uint8_t>( _brushSizeButtonsRect.size() ); ++i ) {
+            for ( size_t i = 0; i < _brushSizeButtonsRect.size(); ++i ) {
                 if ( le.MousePressLeft( _brushSizeButtonsRect[i] ) ) {
                     if ( _brushSizeButtons[i].drawOnPress() ) {
-                        _selectedBrushSize = i;
+                        _selectedBrushSize = static_cast<uint8_t>( i );
                     }
                 }
                 else if ( i != _selectedBrushSize ) {
@@ -329,10 +329,13 @@ namespace Interface
         }
 
         if ( _selectedInstrument == Instrument::TERRAIN ) {
-            for ( uint8_t i = 0; i < static_cast<uint8_t>( _terrainButtonsRect.size() ); ++i ) {
+            for ( size_t i = 0; i < _terrainButtonsRect.size(); ++i ) {
                 if ( ( _selectedTerrain != i ) && le.MousePressLeft( _terrainButtonsRect[i] ) ) {
-                    _selectedTerrain = i;
-                    _redraw();
+                    _selectedTerrain = static_cast<uint8_t>( i );
+                    setRedraw();
+
+                    // There is no need to continue the loop as only one button can be pressed at one moment.
+                    break;
                 }
             }
 
@@ -372,10 +375,13 @@ namespace Interface
         }
 
         if ( _selectedInstrument == Instrument::OBJECT ) {
-            for ( uint8_t i = 0; i < static_cast<uint8_t>( _objectButtonsRect.size() ); ++i ) {
+            for ( size_t i = 0; i < _objectButtonsRect.size(); ++i ) {
                 if ( ( _selectedObject != i ) && le.MousePressLeft( _objectButtonsRect[i] ) ) {
-                    _selectedObject = i;
-                    _redraw();
+                    _selectedObject = static_cast<uint8_t>( i );
+                    setRedraw();
+
+                    // There is no need to continue the loop as only one button can be pressed at one moment.
+                    break;
                 }
             }
 
@@ -384,6 +390,9 @@ namespace Interface
                     std::string text = _( "Used to select objects most appropriate for use on %{terrain}." );
                     StringReplaceWithLowercase( text, "%{terrain}", _getTerrainTypeName( objectId ) );
                     fheroes2::showStandardTextMessage( _getObjectTypeName( objectId ), text, Dialog::ZERO );
+
+                    // There is no need to continue the loop as only one button can be pressed at one moment.
+                    break;
                 }
             }
 
