@@ -70,29 +70,29 @@ namespace
         return ( art.GetID() == conf.WinsFindArtifactID() );
     }
 
-    bool isPassageThroughTileBlocked( int tileIndex, bool fromWater )
+    bool isTileAvailableForWalkThrough( int tileIndex, bool fromWater )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const bool toWater = tile.isWater();
         const MP2::MapObjectType objectType = tile.GetObject();
 
         if ( objectType == MP2::OBJ_HEROES || objectType == MP2::OBJ_MONSTER || objectType == MP2::OBJ_BOAT ) {
-            return true;
+            return false;
         }
 
         if ( MP2::isPickupObject( objectType ) || MP2::isActionObject( objectType, fromWater ) ) {
-            return true;
+            return false;
         }
 
         if ( fromWater && !toWater && objectType == MP2::OBJ_COAST ) {
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 
-    bool isPassageThroughTileBlockedForAIWithArmy( const int tileIndex, const int color, const bool isArtifactsBagFull, const double armyStrength,
-                                                   const double advantage )
+    bool isTileAvailableForWalkThroughForAIWithArmy( const int tileIndex, const int color, const bool isArtifactsBagFull, const double armyStrength,
+                                                     const double advantage )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const MP2::MapObjectType objectType = tile.GetObject();
@@ -104,20 +104,20 @@ namespace
 
             // Friendly heroes cannot be passed through
             if ( otherHero->isFriends( color ) ) {
-                return true;
+                return false;
             }
 
             // Heroes in castles cannot be passed through
             if ( otherHero->inCastle() ) {
-                return true;
+                return false;
             }
 
             // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
             if ( otherHero == world.GetHeroesCondWins() ) {
-                return true;
+                return false;
             }
 
-            return otherHero->GetArmy().GetStrength() * advantage > armyStrength;
+            return otherHero->GetArmy().GetStrength() * advantage <= armyStrength;
         }
 
         // Artifacts can be picked up and passed through
@@ -128,19 +128,19 @@ namespace
             if ( art.isValid() ) {
                 // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
                 if ( isFindArtifactVictoryConditionForHuman( art ) ) {
-                    return true;
+                    return false;
                 }
 
                 // This is an object that can be picked up (and removed from the map)
                 if ( MP2::isPickupObject( objectType ) ) {
                     // This is not an artifact itself, but some pickupable object that contains an artifact, e.g. Treasure Chest, we can pick it up and go through
                     if ( objectType != MP2::OBJ_ARTIFACT ) {
-                        return false;
+                        return true;
                     }
 
                     // Hero should have a place for this artifact in his artifact bag
                     if ( isArtifactsBagFull ) {
-                        return true;
+                        return false;
                     }
 
                     // Check the conditions for picking up the artifact (except for the artifact guard): if there are any, then this artifact is considered as not
@@ -154,7 +154,7 @@ namespace
 
                     case Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL:
                     case Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL:
-                        return true;
+                        return false;
 
                     default:
                         break;
@@ -166,12 +166,12 @@ namespace
 
                     tileArmy.setFromTile( world.GetTiles( tileIndex ) );
 
-                    return tileArmy.GetStrength() * advantage > armyStrength;
+                    return tileArmy.GetStrength() * advantage <= armyStrength;
                 }
             }
 
             // Otherwise, it's a stationary object that can offer an artifact as a reward, check if tile can be moved on
-            return MP2::isNeedStayFront( objectType );
+            return !MP2::isNeedStayFront( objectType );
         }
 
         // Monsters can be defeated and passed through
@@ -181,21 +181,21 @@ namespace
 
             tileArmy.setFromTile( world.GetTiles( tileIndex ) );
 
-            return tileArmy.GetStrength() * advantage > armyStrength;
+            return tileArmy.GetStrength() * advantage <= armyStrength;
         }
 
         // AI may have the key for the barrier
         if ( objectType == MP2::OBJ_BARRIER ) {
-            return !world.GetKingdom( color ).IsVisitTravelersTent( getColorFromTile( tile ) );
+            return world.GetKingdom( color ).IsVisitTravelersTent( getColorFromTile( tile ) );
         }
 
         // AI can use boats to overcome water obstacles
         if ( objectType == MP2::OBJ_BOAT ) {
-            return false;
+            return true;
         }
 
         // If none of the special cases apply, check if tile can be moved on
-        return MP2::isNeedStayFront( objectType );
+        return !MP2::isNeedStayFront( objectType );
     }
 
     bool isValidPath( const int index, const int direction, const int heroColor )
@@ -256,12 +256,12 @@ namespace
         return toTile.isPassableFrom( Direction::Reflect( direction ), fromWater, false, heroColor );
     }
 
-    bool isTileInaccessibleForAIWithArmy( const int tileIndex, const double armyStrength, const double advantage )
+    bool isTileAccessibleForAIWithArmy( const int tileIndex, const double armyStrength, const double advantage )
     {
         // Tiles with monsters are considered accessible regardless of the monsters' power, high-level AI logic
         // will decide what to do with them
         if ( world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_MONSTER ) {
-            return false;
+            return true;
         }
 
         for ( const int32_t monsterIndex : Maps::getMonstersProtectingTile( tileIndex ) ) {
@@ -272,11 +272,11 @@ namespace
 
             // Tiles guarded by too powerful wandering monsters may be inaccessible
             if ( tileArmy.GetStrength() * advantage > armyStrength ) {
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 }
 
@@ -479,7 +479,7 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
     const bool isFirstNode = currentNodeIdx == _pathStart;
     const WorldNode & currentNode = _cache[currentNodeIdx];
 
-    if ( !isFirstNode && isPassageThroughTileBlocked( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
+    if ( !isFirstNode && !isTileAvailableForWalkThrough( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
         return;
     }
 
@@ -640,15 +640,15 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
     const bool isFirstNode = currentNodeIdx == _pathStart;
     WorldNode & currentNode = _cache[currentNodeIdx];
 
-    const bool isInaccessible = isTileInaccessibleForAIWithArmy( currentNodeIdx, _armyStrength, _advantage );
+    const bool isAccessible = isTileAccessibleForAIWithArmy( currentNodeIdx, _armyStrength, _advantage );
 
     // If we can't move here, reset
-    if ( isInaccessible ) {
+    if ( !isAccessible ) {
         currentNode.resetNode();
     }
 
     // Always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
-    if ( !isFirstNode && ( isInaccessible || isPassageThroughTileBlockedForAIWithArmy( currentNodeIdx, _color, _isArtifactsBagFull, _armyStrength, _advantage ) ) ) {
+    if ( !isFirstNode && ( !isAccessible || !isTileAvailableForWalkThroughForAIWithArmy( currentNodeIdx, _color, _isArtifactsBagFull, _armyStrength, _advantage ) ) ) {
         return;
     }
 
@@ -1122,7 +1122,7 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
         }
     }
 
-    if ( isTileInaccessibleForAIWithArmy( targetIndex, _armyStrength, _advantage ) ) {
+    if ( !isTileAccessibleForAIWithArmy( targetIndex, _armyStrength, _advantage ) ) {
         return {};
     }
 
@@ -1225,7 +1225,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, cons
     while ( currentNode != _pathStart ) {
         assert( currentNode != -1 );
 
-        if ( isPassageThroughTileBlocked( currentNode, fromWater ) ) {
+        if ( !isTileAvailableForWalkThrough( currentNode, fromWater ) ) {
             lastValidNode = currentNode;
         }
 
