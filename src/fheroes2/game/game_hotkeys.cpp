@@ -327,8 +327,8 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_JOIN_STACKS )] = { HotKeyCategory::ARMY, gettext_noop( "hotkey|join stacks" ), fheroes2::Key::KEY_ALT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_UPGRADE_TROOP )]
             = { HotKeyCategory::ARMY, gettext_noop( "hotkey|upgrade troop" ), fheroes2::Key::KEY_U };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_DISMISS_TROOP )]
-            = { HotKeyCategory::ARMY, gettext_noop( "hotkey|dismiss troop" ), fheroes2::Key::KEY_D };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_DISMISS )]
+            = { HotKeyCategory::ARMY, gettext_noop( "hotkey|dismiss hero or troop" ), fheroes2::Key::KEY_D };
     }
 
     std::string getHotKeyFileContent()
@@ -402,9 +402,9 @@ const char * Game::getHotKeyEventNameByEventId( const HotKeyEvent eventID )
 std::vector<Game::HotKeyEvent> Game::getAllHotKeyEvents()
 {
     std::vector<Game::HotKeyEvent> events;
-    events.reserve( hotKeyEventInfo.size() - 2 );
+    events.reserve( hotKeyEventInfo.size() - 1 );
 
-    for ( size_t i = 1; i < hotKeyEventInfo.size() - 1; ++i ) {
+    for ( size_t i = 1; i < hotKeyEventInfo.size(); ++i ) {
         events.emplace_back( static_cast<Game::HotKeyEvent>( i ) );
     }
 

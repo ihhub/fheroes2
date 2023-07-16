@@ -5762,7 +5762,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             fheroes2::ApplyPalette( spriteWhitening, 9 );
-            fheroes2::Blit( spriteWhitening, _mainSurface, area.x, area.y );
+            fheroes2::Copy( spriteWhitening, 0, 0, _mainSurface, area.x, area.y, area.width, area.height );
             RedrawPartialFinish();
 
             alpha += 10;
@@ -5796,7 +5796,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
                 shifted.height -= offset;
                 shifted.y = 0;
             }
-            fheroes2::Blit( spriteReddish, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
+            fheroes2::Copy( spriteReddish, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
 
             RedrawPartialFinish();
         }

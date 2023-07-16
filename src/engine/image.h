@@ -34,8 +34,8 @@ namespace fheroes2
     class Image
     {
     public:
-        Image();
-        Image( int32_t width_, int32_t height_ );
+        Image() = default;
+        Image( const int32_t width_, const int32_t height_ );
         Image( const Image & image_ );
         Image( Image && image_ ) noexcept;
 
@@ -44,7 +44,7 @@ namespace fheroes2
         Image & operator=( const Image & image_ );
         Image & operator=( Image && image_ ) noexcept;
 
-        virtual void resize( int32_t width_, int32_t height_ );
+        virtual void resize( const int32_t width_, const int32_t height_ );
 
         // It's safe to cast to uint32_t as width and height are always >= 0
         int32_t width() const
@@ -58,6 +58,7 @@ namespace fheroes2
         }
 
         virtual uint8_t * image();
+
         virtual const uint8_t * image() const;
 
         uint8_t * transform()
@@ -78,7 +79,8 @@ namespace fheroes2
         void reset(); // makes image fully transparent (transform layer is set to 1)
         void clear(); // makes the image empty
 
-        void fill( uint8_t value ); // fill 'image' layer with given value, setting 'transform' layer set to 0
+        // Fill 'image' layer with given value, setting 'transform' layer to 0.
+        void fill( const uint8_t value );
 
         // This is an optional indicator for image processing functions.
         // The whole image still consists of 2 layers but transform layer might be ignored in computations.
@@ -97,20 +99,21 @@ namespace fheroes2
     private:
         void copy( const Image & image );
 
-        int32_t _width;
-        int32_t _height;
+        int32_t _width{ 0 };
+        int32_t _height{ 0 };
         std::unique_ptr<uint8_t[]> _data; // holds 2 image layers
 
-        bool _singleLayer; // only for images which are not used for any other operations except displaying on screen. Non-copyable member.
+        // Only for images which are not used for any other operations except displaying on screen.
+        bool _singleLayer{ false };
     };
 
     class Sprite : public Image
     {
     public:
-        Sprite();
-        Sprite( int32_t width_, int32_t height_, int32_t x_ = 0, int32_t y_ = 0 );
-        Sprite( const Image & image, int32_t x_ = 0, int32_t y_ = 0 );
-        Sprite( const Sprite & sprite );
+        Sprite() = default;
+        Sprite( const int32_t width_, const int32_t height_, const int32_t x_ = 0, const int32_t y_ = 0 );
+        Sprite( const Image & image, const int32_t x_ = 0, const int32_t y_ = 0 );
+        Sprite( const Sprite & sprite ) = default;
         Sprite( Sprite && sprite ) noexcept;
 
         ~Sprite() override = default;
@@ -128,11 +131,11 @@ namespace fheroes2
             return _y;
         }
 
-        virtual void setPosition( int32_t x_, int32_t y_ );
+        virtual void setPosition( const int32_t x_, const int32_t y_ );
 
     private:
-        int32_t _x;
-        int32_t _y;
+        int32_t _x{ 0 };
+        int32_t _y{ 0 };
     };
 
     // This class is used in situations when we draw a window within another window
@@ -140,12 +143,12 @@ namespace fheroes2
     {
     public:
         explicit ImageRestorer( Image & image );
-        ImageRestorer( Image & image, int32_t x_, int32_t y_, int32_t width, int32_t height );
+        ImageRestorer( Image & image, const int32_t x_, const int32_t y_, const int32_t width, const int32_t height );
         ~ImageRestorer(); // restore method will be call upon object's destruction
 
         ImageRestorer( const ImageRestorer & ) = delete;
 
-        void update( int32_t x_, int32_t y_, int32_t width, int32_t height );
+        void update( const int32_t x_, const int32_t y_, const int32_t width, const int32_t height );
 
         int32_t x() const
         {
@@ -173,20 +176,23 @@ namespace fheroes2
         }
 
         void restore();
-        void reset();
+        void reset()
+        {
+            _isRestored = true;
+        }
 
     private:
         Image & _image;
         Image _copy;
 
-        int32_t _x;
-        int32_t _y;
-        int32_t _width;
-        int32_t _height;
+        int32_t _x{ 0 };
+        int32_t _y{ 0 };
+        int32_t _width{ 0 };
+        int32_t _height{ 0 };
 
         void _updateRoi();
 
-        bool _isRestored;
+        bool _isRestored{ false };
     };
 
     // Apply shadow that gradually reduces strength using 'in' image shape. Shadow is applied to the 'out' image.
@@ -196,32 +202,32 @@ namespace fheroes2
     Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId );
 
     // Replace a particular pixel value by transparency value (transform layer value will be 1)
-    void AddTransparency( Image & image, uint8_t valueToReplace );
+    void AddTransparency( Image & image, const uint8_t valueToReplace );
 
     // make sure that output image's transform layer doesn't have skipping values (transform == 1)
-    void AlphaBlit( const Image & in, Image & out, uint8_t alphaValue, bool flip = false );
-    void AlphaBlit( const Image & in, Image & out, int32_t outX, int32_t outY, uint8_t alphaValue, bool flip = false );
-    void AlphaBlit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t alphaValue,
-                    bool flip = false );
+    void AlphaBlit( const Image & in, Image & out, const uint8_t alphaValue, const bool flip = false );
+    void AlphaBlit( const Image & in, Image & out, int32_t outX, int32_t outY, const uint8_t alphaValue, const bool flip = false );
+    void AlphaBlit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const uint8_t alphaValue,
+                    const bool flip = false );
 
     // apply palette only for image layer, it doesn't affect transform part
     void ApplyPalette( Image & image, const std::vector<uint8_t> & palette );
     void ApplyPalette( const Image & in, Image & out, const std::vector<uint8_t> & palette );
-    void ApplyPalette( Image & image, uint8_t paletteId );
-    void ApplyPalette( const Image & in, Image & out, uint8_t paletteId );
+    void ApplyPalette( Image & image, const uint8_t paletteId );
+    void ApplyPalette( const Image & in, Image & out, const uint8_t paletteId );
     void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t paletteId );
     void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height,
                        const std::vector<uint8_t> & palette );
 
-    void ApplyAlpha( const Image & in, Image & out, uint8_t alpha );
-    void ApplyAlpha( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t alpha );
+    void ApplyAlpha( const Image & in, Image & out, const uint8_t alpha );
+    void ApplyAlpha( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const uint8_t alpha );
 
-    void ApplyTransform( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t transformId );
+    void ApplyTransform( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, const uint8_t transformId );
 
     // draw one image onto another
-    void Blit( const Image & in, Image & out, bool flip = false );
-    void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, bool flip = false );
-    void Blit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, bool flip = false );
+    void Blit( const Image & in, Image & out, const bool flip = false );
+    void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, const bool flip = false );
+    void Blit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const bool flip = false );
 
     // inPos must contain non-negative values
     void Blit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, bool flip = false );
@@ -232,7 +238,7 @@ namespace fheroes2
     // Copies transform the layer from in to out. Both images must be of the same size.
     void CopyTransformLayer( const Image & in, Image & out );
 
-    Sprite CreateContour( const Image & image, uint8_t value );
+    Sprite CreateContour( const Image & image, const uint8_t value );
 
     // Make a transition to "in" image from left to right or vertically - from top to bottom using dithering (https://en.wikipedia.org/wiki/Dither).
     // The direction of transition can be reversed.
@@ -242,12 +248,12 @@ namespace fheroes2
     Sprite Crop( const Image & image, int32_t x, int32_t y, int32_t width, int32_t height );
 
     // skipFactor is responsible for non-solid line. You can interpret it as skip every N pixel
-    void DrawBorder( Image & image, uint8_t value, uint32_t skipFactor = 0 );
+    void DrawBorder( Image & image, const uint8_t value, const uint32_t skipFactor = 0 );
 
     // roi is an optional parameter when you need to draw in a small than image area
-    void DrawLine( Image & image, const Point & start, const Point & end, uint8_t value, const Rect & roi = Rect() );
+    void DrawLine( Image & image, const Point & start, const Point & end, const uint8_t value, const Rect & roi = Rect() );
 
-    void DrawRect( Image & image, const Rect & roi, uint8_t value );
+    void DrawRect( Image & image, const Rect & roi, const uint8_t value );
 
     void DivideImageBySquares( const Point & spriteOffset, const Image & original, const int32_t squareSize, std::vector<Point> & outputSquareId,
                                std::vector<std::pair<Point, Rect>> & outputImageInfo );
@@ -256,22 +262,23 @@ namespace fheroes2
     Image ExtractCommonPattern( const std::vector<const Image *> & input );
 
     // Please use GetColorId function if you want to use an RGB value
-    void Fill( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t colorId );
+    void Fill( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, const uint8_t colorId );
 
-    void FillTransform( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t transformId );
+    void FillTransform( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, const uint8_t transformId );
 
     Image FilterOnePixelNoise( const Image & input );
 
     bool FitToRoi( const Image & in, Point & inPos, const Image & out, Point & outPos, Size & outputSize, const Rect & outputRoi );
 
-    Image Flip( const Image & in, bool horizontally, bool vertically );
-    void Flip( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, bool horizontally, bool vertically );
+    Image Flip( const Image & in, const bool horizontally, const bool vertically );
+    void Flip( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const bool horizontally,
+               const bool vertically );
 
     // Return ROI with pixels which are not skipped and not used for shadow creation. 1 is to skip, 2 - 5 types of shadows
     Rect GetActiveROI( const Image & image, const uint8_t minTransformValue = 6 );
 
     // Returns a closest color ID from the original game's palette
-    uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue );
+    uint8_t GetColorId( const uint8_t red, const uint8_t green, const uint8_t blue );
 
     std::vector<uint8_t> getTransformTable( const Image & in, const Image & out, int32_t x, int32_t y, int32_t width, int32_t height );
 
@@ -280,10 +287,10 @@ namespace fheroes2
     void MaskTransformLayer( const Image & mask, int32_t maskX, int32_t maskY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height );
 
     // This function does NOT check transform layer. If you intent to replace few colors at the same image please use ApplyPalette to be more efficient.
-    void ReplaceColorId( Image & image, uint8_t oldColorId, uint8_t newColorId );
+    void ReplaceColorId( Image & image, const uint8_t oldColorId, const uint8_t newColorId );
 
     // Use this function only when you need to convert pixel value into transform layer
-    void ReplaceColorIdByTransformId( Image & image, uint8_t colorId, uint8_t transformId );
+    void ReplaceColorIdByTransformId( Image & image, const uint8_t colorId, const uint8_t transformId );
 
     // Please remember that subpixel accuracy resizing is extremely slow!
     void Resize( const Image & in, Image & out, const bool isSubpixelAccuracy = false );
@@ -292,14 +299,14 @@ namespace fheroes2
                  const int32_t outY, const int32_t widthRoiOut, const int32_t heightRoiOut, const bool isSubpixelAccuracy = false );
 
     // Please use value from the main palette only
-    void SetPixel( Image & image, int32_t x, int32_t y, uint8_t value );
+    void SetPixel( Image & image, const int32_t x, const int32_t y, const uint8_t value );
 
-    void SetPixel( Image & image, const std::vector<Point> & points, uint8_t value );
+    void SetPixel( Image & image, const std::vector<Point> & points, const uint8_t value );
 
     // Please set value not bigger than 13!
-    void SetTransformPixel( Image & image, int32_t x, int32_t y, uint8_t value );
+    void SetTransformPixel( Image & image, const int32_t x, const int32_t y, const uint8_t value );
 
-    Image Stretch( const Image & in, int32_t inX, int32_t inY, int32_t widthIn, int32_t heightIn, int32_t widthOut, int32_t heightOut );
+    Image Stretch( const Image & in, int32_t inX, int32_t inY, int32_t widthIn, int32_t heightIn, const int32_t widthOut, const int32_t heightOut );
 
     void Transpose( const Image & in, Image & out );
 

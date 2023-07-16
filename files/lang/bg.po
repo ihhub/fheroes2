@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-14 20:35+0000\n"
+"POT-Creation-Date: 2023-07-15 12:25+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -53,6 +53,12 @@ msgstr "ИЗХОД"
 
 msgid "CANCEL"
 msgstr "ОТКАЗ"
+
+msgid "OKAY"
+msgstr "ДОБРЕ"
+
+msgid "smallerButton|OKAY"
+msgstr ""
 
 msgid "ACCEPT"
 msgstr "ПРИЕМАМ"
@@ -184,9 +190,6 @@ msgstr "МИН"
 
 msgid "MAX"
 msgstr "МАКС"
-
-msgid "OKAY"
-msgstr "ДОБРЕ"
 
 msgid "Warrior"
 msgstr "Войн"
@@ -3504,13 +3507,25 @@ msgstr "Личност:"
 msgid "Best Monster:"
 msgstr "Най-добро чудовище:"
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr "Създай карта с ширина %{size} квадрата и височина %{size} квадрата."
+#, fuzzy
+msgid ""
+"Are you sure you want to load a new map? (Any unsaved changes to the current "
+"map will be lost.)"
+msgstr ""
+"Сигурен ли си, че искаш да заредиш нова игра? (Текущата ти игра ще бъде "
+"загубена.)"
 
-msgid "Cancel back to the New Map menu."
-msgstr "Отказ обратно към Меню за нова карта."
+#, fuzzy
+msgid ""
+"Are you sure you want to create a new map? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Сигурен ли си, че искаш да заредиш нова игра? (Текущата ти игра ще бъде "
+"загубена.)"
 
-msgid "Create a new map either from scratch or using the random map generator."
+#, fuzzy
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 "Създай нова карта или от начало, или като използваш генератора на произволни "
 "карти."
@@ -3523,6 +3538,102 @@ msgstr "Зареди Карта"
 
 msgid "Load an existing map."
 msgstr "Зареди съществуваща карта."
+
+#, fuzzy
+msgid "Save Map"
+msgstr "Запази играта"
+
+#, fuzzy
+msgid "Save the current map."
+msgstr "Запази текущата игра."
+
+msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Terrain Mode"
+msgstr ""
+
+msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
+msgstr ""
+
+msgid "Object Mode"
+msgstr ""
+
+msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgstr ""
+
+msgid "Detail Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Used for special editing of monsters, heroes and towns."
+msgstr "Победи всички вражески герои и градове."
+
+msgid "Allows you to draw streams by clicking and dragging."
+msgstr ""
+
+msgid "Stream Mode"
+msgstr ""
+
+msgid "Allows you to draw roads by clicking and dragging."
+msgstr ""
+
+#, fuzzy
+msgid "Road Mode"
+msgstr "Път"
+
+msgid "Erase Mode"
+msgstr ""
+
+msgid "Used to erase objects off the map."
+msgstr ""
+
+msgid "Change between zoom and normal view."
+msgstr ""
+
+msgid "Magnify"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Undo your last action.  Press again to redo the action."
+msgstr ""
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+"Създай нова карта или от начало, или като използваш генератора на произволни "
+"карти."
+
+msgid "Edit map title, description, and other general information."
+msgstr ""
+
+#, fuzzy
+msgid "Specifications"
+msgstr "Вкаменяване"
+
+msgid "File Options"
+msgstr "Опции за файлове"
+
+#, fuzzy
+msgid ""
+"Open the file options menu, where you can save or load maps, or quit out of "
+"the editor."
+msgstr ""
+"Покажи менюто с опции за файлове, което ти позволява да зареждаш, запазваш, "
+"стартираш нова игра или да напуснеш играта."
+
+#, fuzzy
+msgid "View the editor system options, which let you customize the editor."
+msgstr ""
+"Покажи менюто със системни опции, което ти позволява да персонализираш "
+"играта си."
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr "Създай карта с ширина %{size} квадрата и височина %{size} квадрата."
+
+msgid "Cancel back to the New Map menu."
+msgstr "Отказ обратно към Меню за нова карта."
 
 msgid "Cancel back to the main menu."
 msgstr "Отказ обратно към главното меню."
@@ -3630,7 +3741,10 @@ msgstr "Виж въведение"
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Виж въвеждащи видеоклипове за текущото състояние на кампанията."
 
-msgid "Select campaign difficulty. It cannot be changed after."
+#, fuzzy
+msgid ""
+"Select the campaign difficulty. This can be lowered at any point during the "
+"campaign."
 msgstr "Избери трудност на кампанията. Не може да се промени след това."
 
 msgid "Restart"
@@ -3638,6 +3752,18 @@ msgstr "Рестарт"
 
 msgid "Restart the current scenario."
 msgstr "Рестартирай текущия сценарий."
+
+#, fuzzy
+msgid "Difficulty"
+msgstr ""
+"Трудност\n"
+"на Карта"
+
+msgid ""
+"You have changed to a lower difficulty for the campaign. You will not be "
+"able to revert this after this point. The high score will be calculated "
+"based solely on the new difficulty. Do you want to proceed?"
+msgstr ""
 
 msgid "Are you sure you want to restart this scenario?"
 msgstr "Сигурен ли си, че искаш да рестартираш този сценарий?"
@@ -4140,7 +4266,8 @@ msgstr "съедини стековете"
 msgid "hotkey|upgrade troop"
 msgstr "надгради войските"
 
-msgid "hotkey|dismiss troop"
+#, fuzzy
+msgid "hotkey|dismiss hero or troop"
 msgstr "разпусни войските"
 
 msgid "The save file is corrupted."
@@ -4731,9 +4858,6 @@ msgid ""
 msgstr ""
 "Покажи менюто с опции за файлове, което ти позволява да зареждаш, запазваш, "
 "стартираш нова игра или да напуснеш играта."
-
-msgid "File Options"
-msgstr "Опции за файлове"
 
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""

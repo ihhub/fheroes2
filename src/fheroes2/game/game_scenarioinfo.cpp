@@ -266,7 +266,7 @@ namespace
         LocalEvent & le = LocalEvent::Get();
         while ( true ) {
             if ( !le.HandleEvents( true, true ) ) {
-                if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+                if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                     fheroes2::fadeOutDisplay();
 
                     return fheroes2::GameMode::QUIT_GAME;

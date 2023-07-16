@@ -307,7 +307,7 @@ void Kingdom::AddHeroes( Heroes * hero )
 
         const Player * player = Settings::Get().GetPlayers().GetCurrent();
         if ( player && player->isColor( GetColor() ) && player->isControlHuman() )
-            Interface::Basic::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
+            Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
 
         AI::Get().HeroesAdd( *hero );
     }
@@ -347,7 +347,7 @@ void Kingdom::AddCastle( const Castle * castle )
 
         const Player * player = Settings::Get().GetPlayers().GetCurrent();
         if ( player && player->isColor( GetColor() ) )
-            Interface::Basic::Get().GetIconsPanel().ResetIcons( ICON_CASTLES );
+            Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_CASTLES );
 
         AI::Get().CastleAdd( *castle );
     }
@@ -454,7 +454,7 @@ uint32_t Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) con
 void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType )
 {
     if ( !isVisited( index, objectType ) && objectType != MP2::OBJ_NONE )
-        visit_object.push_front( IndexObject( index, objectType ) );
+        visit_object.emplace_front( index, objectType );
 }
 
 bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const
