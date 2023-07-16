@@ -1311,24 +1311,25 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     const int32_t backgroundMargin = 30;
     const int32_t viewIntroPlacement = top.x + backgroundMargin;
     const int32_t endOfViewIntroPlacement = viewIntroPlacement + fheroes2::AGG::GetICN( buttonIconID, 0 ).width();
-    const int32_t cancelButtonPlacement = top.x + backgroundImageWidth - backgroundMargin - fheroes2::AGG::GetICN( buttonIconID, 6 ).width();
-    const int32_t spaceBetweenViewIntroAndCancel = cancelButtonPlacement - endOfViewIntroPlacement;
+    const int32_t cancelPlacement = top.x + backgroundImageWidth - backgroundMargin - fheroes2::AGG::GetICN( buttonIconID, 6 ).width();
+    const int32_t spaceBetweenViewIntroAndCancel = cancelPlacement - endOfViewIntroPlacement;
     const int32_t difficultyButtonWidth = fheroes2::AGG::GetICN( buttonIconID, 8 ).width();
-    const uint32_t okayRestartICN = allowToRestart ? 2 : 4;
+    const uint32_t okayRestartIndex = allowToRestart ? 2 : 4;
     const int32_t middleButtonsMargin
-        = ( spaceBetweenViewIntroAndCancel - difficultyButtonWidth - ( fheroes2::AGG::GetICN( buttonIconID, okayRestartICN ).width() ) ) / 3;
+        = ( spaceBetweenViewIntroAndCancel - difficultyButtonWidth - ( fheroes2::AGG::GetICN( buttonIconID, okayRestartIndex ).width() ) ) / 3;
     const int32_t difficultyPlacement = endOfViewIntroPlacement + middleButtonsMargin;
     const int32_t okRestartPlacement = difficultyPlacement + difficultyButtonWidth + middleButtonsMargin;
 
-    // the original game's campaign buttons all have x and y offsets in their headers of {8,0} (released) and {7,1} (pressed)
-    // and we have to compensate for this
-    const int32_t originalXOffset = 8;
-
-    fheroes2::Button buttonViewIntro( viewIntroPlacement - originalXOffset, top.y + 431, buttonIconID, 0, 1 );
-    fheroes2::Button buttonRestart( okRestartPlacement - originalXOffset, top.y + 431, buttonIconID, 2, 3 );
-    fheroes2::Button buttonOk( okRestartPlacement - originalXOffset, top.y + 431, buttonIconID, 4, 5 );
-    fheroes2::Button buttonCancel( cancelButtonPlacement - originalXOffset, top.y + 431, buttonIconID, 6, 7 );
-    fheroes2::Button buttonDifficulty( difficultyPlacement - originalXOffset, top.y + 431, buttonIconID, 8, 9 );
+    fheroes2::Button buttonViewIntro( viewIntroPlacement, top.y + 431, buttonIconID, 0, 1 );
+    fheroes2::Button buttonRestart( okRestartPlacement, top.y + 431, buttonIconID, 2, 3 );
+    fheroes2::Button buttonOk( okRestartPlacement, top.y + 431, buttonIconID, 4, 5 );
+    fheroes2::Button buttonCancel( cancelPlacement, top.y + 431, buttonIconID, 6, 7 );
+    fheroes2::Button buttonDifficulty( difficultyPlacement, top.y + 431, buttonIconID, 8, 9 );
+    
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 0 ), display, { viewIntroPlacement, top.y + 431 }, { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, okayRestartIndex ), display, { okRestartPlacement, top.y + 431 }, { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 6 ), display, { cancelPlacement, top.y + 431 }, { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 8 ), display, { difficultyPlacement, top.y + 431 }, { -5, 5 } );
 
     // create scenario bonus choice buttons
     fheroes2::ButtonGroup buttonChoices;
