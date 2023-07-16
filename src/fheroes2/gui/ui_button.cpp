@@ -621,7 +621,7 @@ namespace fheroes2
             makeTransparentBackground( released, pressed, backgroundIcnId );
         }
     }
-    
+
     void getTextAdaptedButton( Sprite & released, Sprite & pressed, const char * text, const int emptyButtonIcnID )
     {
         fheroes2::FontColor buttonFont = fheroes2::FontColor::WHITE;
@@ -635,7 +635,7 @@ namespace fheroes2
         getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaBorder, minimumTextAreaWidth, backgroundBorders, backgroundIcnID, releasedOffset, pressedOffset );
 
         const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFont };
-        
+
         const char * translatedText = _( text );
         const char * supportedText = fheroes2::isFontAvailable( translatedText, releasedButtonFont ) ? translatedText : text;
 
@@ -661,7 +661,7 @@ namespace fheroes2
         const fheroes2::Size releasedTextSize( releasedText.width( textAreaWidth ), releasedText.height( textAreaWidth ) );
         const fheroes2::Size pressedTextSize( pressedText.width( textAreaWidth ), pressedText.height( textAreaWidth ) );
 
-        releasedText.draw( releasedOffset.x, releasedOffset.y + ( releasedText.height() - releasedTextSize.height ) / 2 , textAreaWidth, released );
+        releasedText.draw( releasedOffset.x, releasedOffset.y + ( releasedText.height() - releasedTextSize.height ) / 2, textAreaWidth, released );
         pressedText.draw( pressedOffset.x, pressedOffset.y + ( pressedText.height() - pressedTextSize.height ) / 2, textAreaWidth, pressed );
     }
 

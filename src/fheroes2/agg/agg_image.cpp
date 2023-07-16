@@ -1526,7 +1526,7 @@ namespace fheroes2
                         fheroes2::makeTransparentBackground( released, pressed, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
                     }
                     createTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
-                                          isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON );
+                                             isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON );
                     break;
                 }
                 createCampaignButtonSet( id, { gettext_noop( "VIEW INTRO" ), gettext_noop( "RESTART" ), gettext_noop( "OKAY" ), gettext_noop( "CANCEL" ),
@@ -3794,9 +3794,9 @@ namespace fheroes2
 
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     const Sprite & original = GetICN( originalID, 4 + i );
-                    
+
                     Sprite & out = _icnVsSprite[id][i];
-                    // the empty button needs to widened by 2 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result 
+                    // the empty button needs to widened by 2 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result
                     out.resize( original.width() + 2, original.height() + 1 );
                     out.reset();
 

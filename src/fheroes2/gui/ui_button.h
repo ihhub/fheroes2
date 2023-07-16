@@ -229,7 +229,7 @@ namespace fheroes2
         void subscribeAll();
         void unsubscribeAll();
     };
-    
+
     // make transparent edges around buttons making the pressed state appear without parts of the released state
     void makeTransparentBackground( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const int backgroundIcnID );
 

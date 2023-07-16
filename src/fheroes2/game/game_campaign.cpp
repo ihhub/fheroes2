@@ -1327,7 +1327,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     fheroes2::Button buttonOk( okRestartPlacement, top.y + 431, buttonIconID, 4, 5 );
     fheroes2::Button buttonCancel( cancelPlacement, top.y + 431, buttonIconID, 6, 7 );
     fheroes2::Button buttonDifficulty( difficultyPlacement, top.y + 431, buttonIconID, 8, 9 );
-    
+
     fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 0 ), display, { viewIntroPlacement, top.y + 431 }, { -5, 5 } );
     fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, okayRestartIndex ), display, { okRestartPlacement, top.y + 431 }, { -5, 5 } );
     fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 6 ), display, { cancelPlacement, top.y + 431 }, { -5, 5 } );
