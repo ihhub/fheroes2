@@ -231,7 +231,7 @@ void DrawFlags( const std::vector<ValueColors> & v, const fheroes2::Point & pos,
     }
 }
 
-void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step )
+void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step, const int frameIcnID )
 {
     if ( !v.empty() ) {
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -240,7 +240,7 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & 
             const Heroes * hero = world.GetHeroes( v[ii].first );
             if ( hero ) {
                 int32_t px = pos.x + ii * step;
-                const fheroes2::Sprite & window = fheroes2::AGG::GetICN( ICN::LOCATORS, 22 );
+                const fheroes2::Sprite & window = fheroes2::AGG::GetICN( frameIcnID, 22 );
                 fheroes2::Blit( window, display, px - window.width() / 2, pos.y - 4 );
 
                 const fheroes2::Sprite & icon = hero->GetPortrait( PORT_SMALL );
@@ -490,7 +490,8 @@ void Dialog::ThievesGuild( bool oracle )
     dst_pt.x = cur_pt.x + startx + 1;
     dst_pt.y -= 2;
     GetBestHeroArmyInfo( v, colors );
-    DrawHeroIcons( v, dst_pt, stepx );
+    const int frameIcnID = isEvilInterface && !oracle ? ICN::LOCATORE : ICN::LOCATORS; 
+    DrawHeroIcons( v, dst_pt, stepx, frameIcnID );
 
     text.Set( _( "Best Hero Stats:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
