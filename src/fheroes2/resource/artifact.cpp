@@ -1196,7 +1196,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
     }
     else {
         if ( can_change ) {
-            const Artifact newArtifact = Dialog::SelectArtifact();
+            const Artifact newArtifact = Dialog::selectArtifact();
 
             if ( isMagicBook( newArtifact ) ) {
                 const_cast<Heroes *>( _hero )->SpellBookActivate();

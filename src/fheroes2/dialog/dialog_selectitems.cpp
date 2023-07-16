@@ -55,31 +55,42 @@ public:
     explicit SelectEnum( const fheroes2::Rect & rt )
         : Interface::ListBox<int>( rt.getPosition() )
         , area( rt )
-        , ok( false )
     {
         SelectEnum::RedrawBackground( rt.getPosition() );
 
-        SetScrollButtonUp( ICN::LISTBOX, 3, 4, { rt.x + rt.width - 25, rt.y + 25 } );
-        SetScrollButtonDn( ICN::LISTBOX, 5, 6, { rt.x + rt.width - 25, rt.y + rt.height - 55 } );
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        const int listIcnId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
+
+        SetScrollButtonUp( listIcnId, 3, 4, { rt.x + rt.width - 25, rt.y + 25 } );
+        SetScrollButtonDn( listIcnId, 5, 6, { rt.x + rt.width - 25, rt.y + rt.height - 55 } );
 
         setScrollBarArea( { rt.x + rt.width - 21, rt.y + 48, 14, rt.height - 107 } );
-        setScrollBarImage( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ) );
+        setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 10 ) );
         SetAreaMaxItems( 5 );
         SetAreaItems( { rt.x + 10, rt.y + 30, rt.width - 30, rt.height - 70 } );
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        const int listIcnId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
+
         Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), { dst.x, dst.y + 25, rtAreaItems.width + 5, rtAreaItems.height + 11 } );
 
         // scroll
         fheroes2::Display & display = fheroes2::Display::instance();
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 7 ), display, dst.x + area.width - 25, dst.y + 45 );
 
-        for ( int32_t i = 1; i < 9; ++i )
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 8 ), display, dst.x + area.width - 25, dst.y + 44 + ( i * 19 ) );
+        const fheroes2::Sprite & topSprite = fheroes2::AGG::GetICN( listIcnId, 7 );
+        fheroes2::Copy( topSprite, 0, 0, display, dst.x + area.width - 25, dst.y + 45, topSprite.width(), topSprite.height() );
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 9 ), display, dst.x + area.width - 25, dst.y + area.height - 74 );
+        const fheroes2::Sprite & middleSprite = fheroes2::AGG::GetICN( listIcnId, 8 );
+        const int32_t count = ( area.height - 119 ) / middleSprite.height() + 1;
+        for ( int32_t i = 1; i < count; ++i ) {
+            fheroes2::Copy( middleSprite, 0, 0, display, dst.x + area.width - 25, dst.y + 44 + ( i * 19 ), middleSprite.width(), middleSprite.height() );
+        }
+
+        const fheroes2::Sprite & bottomSprite = fheroes2::AGG::GetICN( listIcnId, 9 );
+        fheroes2::Copy( bottomSprite, 0, 0, display, dst.x + area.width - 25, dst.y + area.height - 74, bottomSprite.width(), bottomSprite.height() );
     }
 
     void ActionListDoubleClick( int & /*index*/ ) override
@@ -102,18 +113,18 @@ public:
         // Do nothing.
     }
 
-    void ActionListSingleClick( int & ) override
+    void ActionListSingleClick( int & /* unused */ ) override
     {
         // Do nothing.
     }
 
-    void ActionListPressRight( int & ) override
+    void ActionListPressRight( int & /* unused */ ) override
     {
         // Do nothing.
     }
 
     fheroes2::Rect area;
-    bool ok;
+    bool ok{ false };
 };
 
 class SelectEnumMonster : public SelectEnum
@@ -136,7 +147,7 @@ public:
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
-        fheroes2::Text text( _( "Select Monster:" ), fheroes2::FontType::normalYellow() );
+        const fheroes2::Text text( _( "Select Monster:" ), fheroes2::FontType::normalYellow() );
         text.draw( dst.x + ( area.width - text.width() ) / 2, dst.y, fheroes2::Display::instance() );
 
         SelectEnum::RedrawBackground( dst );
@@ -144,7 +155,7 @@ public:
 
     void ActionListPressRight( int & index ) override
     {
-        Troop troop( Monster( index ), 1 );
+        const Troop troop( Monster( index ), 1 );
         Dialog::ArmyInfo( troop, Dialog::ZERO );
     }
 };
@@ -173,7 +184,7 @@ public:
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
-        fheroes2::Text text( _( "Select Hero:" ), fheroes2::FontType::normalYellow() );
+        const fheroes2::Text text( _( "Select Hero:" ), fheroes2::FontType::normalYellow() );
         text.draw( dst.x + ( area.width - text.width() ) / 2, dst.y, fheroes2::Display::instance() );
 
         SelectEnum::RedrawBackground( dst );
@@ -200,7 +211,7 @@ public:
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
-        fheroes2::Text text( _( "Select Artifact:" ), fheroes2::FontType::normalYellow() );
+        const fheroes2::Text text( _( "Select Artifact:" ), fheroes2::FontType::normalYellow() );
         text.draw( dst.x + ( area.width - text.width() ) / 2, dst.y, fheroes2::Display::instance() );
 
         SelectEnum::RedrawBackground( dst );
@@ -229,7 +240,7 @@ public:
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
-        fheroes2::Text text( _( "Select Spell:" ), fheroes2::FontType::normalYellow() );
+        const fheroes2::Text text( _( "Select Spell:" ), fheroes2::FontType::normalYellow() );
         text.draw( dst.x + ( area.width - text.width() ) / 2, dst.y, fheroes2::Display::instance() );
 
         SelectEnum::RedrawBackground( dst );
@@ -242,7 +253,7 @@ public:
     explicit SelectEnumSecSkill( const fheroes2::Rect & rt )
         : SelectEnum( rt )
     {
-        SetAreaMaxItems( 5 );
+        SetAreaMaxItems( ( rt.height - 25 - 11 ) / 50 );
     }
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
@@ -258,14 +269,14 @@ public:
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
-        fheroes2::Text text( _( "Select Skill:" ), fheroes2::FontType::normalYellow() );
+        const fheroes2::Text text( _( "Select Skill:" ), fheroes2::FontType::normalYellow() );
         text.draw( dst.x + ( area.width - text.width() ) / 2, dst.y, fheroes2::Display::instance() );
 
         SelectEnum::RedrawBackground( dst );
     }
 };
 
-Skill::Secondary Dialog::SelectSecondarySkill()
+Skill::Secondary Dialog::selectSecondarySkill()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -273,12 +284,13 @@ Skill::Secondary Dialog::SelectSecondarySkill()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    std::vector<int> skills( MAXSECONDARYSKILL * 3, 0 );
+    std::vector<int> skills( static_cast<int>( MAXSECONDARYSKILL * 3 ), 0 );
 
-    for ( int i = 0; i < MAXSECONDARYSKILL * 3; ++i )
+    for ( int i = 0; i < MAXSECONDARYSKILL * 3; ++i ) {
         skills[i] = i;
+    }
 
-    Dialog::FrameBorder frameborder( { 310, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    const Dialog::FrameBorder frameborder( { 350, display.height() - 200 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const fheroes2::Rect & area = frameborder.GetArea();
 
     SelectEnumSecSkill listbox( area );
@@ -315,7 +327,7 @@ Skill::Secondary Dialog::SelectSecondarySkill()
     return skill;
 }
 
-Spell Dialog::SelectSpell( int cur )
+Spell Dialog::selectSpell( const int spellId /* = Spell::NONE */ )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -325,14 +337,15 @@ Spell Dialog::SelectSpell( int cur )
 
     std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook();
 
-    Dialog::FrameBorder frameborder( { 340, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    const Dialog::FrameBorder frameborder( { 340, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const fheroes2::Rect & area = frameborder.GetArea();
 
     SelectEnumSpell listbox( area );
 
     listbox.SetListContent( spells );
-    if ( cur != Spell::NONE )
-        listbox.SetCurrent( cur );
+    if ( spellId != Spell::NONE ) {
+        listbox.SetCurrent( spellId );
+    }
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups( area, Dialog::OK | Dialog::CANCEL );
@@ -356,7 +369,7 @@ Spell Dialog::SelectSpell( int cur )
     return result == Dialog::OK || listbox.ok ? Spell( listbox.GetCurrent() ) : Spell( Spell::NONE );
 }
 
-Artifact Dialog::SelectArtifact()
+Artifact Dialog::selectArtifact()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -375,7 +388,7 @@ Artifact Dialog::SelectArtifact()
         }
     }
 
-    Dialog::FrameBorder frameborder( { 370, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    const Dialog::FrameBorder frameborder( { 370, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const fheroes2::Rect & area = frameborder.GetArea();
 
     SelectEnumArtifact listbox( area );
@@ -406,7 +419,7 @@ Artifact Dialog::SelectArtifact()
     return ( result == Dialog::OK || listbox.ok ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
 }
 
-Monster Dialog::SelectMonster( int id )
+Monster Dialog::selectMonster( const int monsterId /* = Monster::UNKNOWN */ )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -416,17 +429,20 @@ Monster Dialog::SelectMonster( int id )
 
     std::vector<int> monsters( static_cast<int>( Monster::WATER_ELEMENT ), Monster::UNKNOWN );
 
-    for ( size_t i = 0; i < monsters.size(); ++i )
-        monsters[i] = static_cast<int>( i + 1 ); // skip Monster::UNKNOWN, safe to do this as the monsters of spells can't be more than 2 billion
+    for ( size_t i = 0; i < monsters.size(); ++i ) {
+        // Skip Monster::UNKNOWN, safe to do casting as the monsters can't be more than 2 billion
+        monsters[i] = static_cast<int>( i + 1 );
+    }
 
-    Dialog::FrameBorder frameborder( { 260, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    const Dialog::FrameBorder frameborder( { 260, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const fheroes2::Rect & area = frameborder.GetArea();
 
     SelectEnumMonster listbox( area );
 
     listbox.SetListContent( monsters );
-    if ( id != Monster::UNKNOWN )
-        listbox.SetCurrent( id );
+    if ( monsterId != Monster::UNKNOWN ) {
+        listbox.SetCurrent( monsterId );
+    }
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups( area, Dialog::OK | Dialog::CANCEL );
@@ -450,7 +466,7 @@ Monster Dialog::SelectMonster( int id )
     return result == Dialog::OK || listbox.ok ? Monster( listbox.GetCurrent() ) : Monster( Monster::UNKNOWN );
 }
 
-int Dialog::SelectHeroes( int cur )
+int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -460,17 +476,20 @@ int Dialog::SelectHeroes( int cur )
 
     std::vector<int> heroes( static_cast<int>( Settings::Get().isCurrentMapPriceOfLoyalty() ? Heroes::DEBUG_HERO : Heroes::SOLMYR ), Heroes::UNKNOWN );
 
-    for ( size_t i = 0; i < heroes.size(); ++i )
-        heroes[i] = static_cast<int>( i ); // safe to do this as the heroes of spells can't be more than 2 billion
+    for ( size_t i = 0; i < heroes.size(); ++i ) {
+        // Safe to do casting as the heroes can't be more than 2 billion.
+        heroes[i] = static_cast<int>( i );
+    }
 
-    Dialog::FrameBorder frameborder( { 240, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    const Dialog::FrameBorder frameborder( { 240, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const fheroes2::Rect & area = frameborder.GetArea();
 
     SelectEnumHeroes listbox( area );
 
     listbox.SetListContent( heroes );
-    if ( cur != Heroes::UNKNOWN )
-        listbox.SetCurrent( cur );
+    if ( heroId != Heroes::UNKNOWN ) {
+        listbox.SetCurrent( heroId );
+    }
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups( area, Dialog::OK | Dialog::CANCEL );

@@ -201,7 +201,7 @@ bool Battle::Only::ChangeSettings()
             exit = true;
 
         if ( allow1 && le.MouseClickLeft( rtPortrait1 ) ) {
-            int hid = Dialog::SelectHeroes( hero1 ? hero1->GetID() : Heroes::UNKNOWN );
+            int hid = Dialog::selectHeroes( hero1 ? hero1->GetID() : Heroes::UNKNOWN );
             if ( hero2 && hid == hero2->GetID() ) {
                 Dialog::Message( _( "Error" ), _( "Please select another hero." ), Font::BIG, Dialog::OK );
             }
@@ -215,7 +215,7 @@ bool Battle::Only::ChangeSettings()
             redraw = true;
         }
         else if ( allow2 && le.MouseClickLeft( rtPortrait2 ) ) {
-            int hid = Dialog::SelectHeroes( hero2 ? hero2->GetID() : Heroes::UNKNOWN );
+            int hid = Dialog::selectHeroes( hero2 ? hero2->GetID() : Heroes::UNKNOWN );
             if ( hero1 && hid == hero1->GetID() ) {
                 Dialog::Message( _( "Error" ), _( "Please select another hero." ), Font::BIG, Dialog::OK );
             }
