@@ -30,12 +30,10 @@
 #include <cstdlib>
 #include <iostream>
 #include <limits>
-#include <optional>
 #include <set>
 #include <type_traits>
 #include <utility>
 
-#include "army.h"
 #include "army_troop.h"
 #include "artifact.h"
 #include "castle.h"
@@ -65,7 +63,6 @@
 #include "resource.h"
 #include "save_format_version.h"
 #include "serialize.h"
-#include "tools.h"
 #include "trees.h"
 #include "world.h"
 

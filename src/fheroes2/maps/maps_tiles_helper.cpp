@@ -30,8 +30,10 @@
 #include <ostream>
 #include <type_traits>
 
+#include "army.h"
 #include "army_troop.h"
 #include "artifact.h"
+#include "castle.h"
 #include "color.h"
 #include "direction.h"
 #include "logging.h"
