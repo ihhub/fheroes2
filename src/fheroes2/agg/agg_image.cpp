@@ -1529,6 +1529,11 @@ namespace fheroes2
                         // Restore content of the pressed state image.
                         Copy( original, 0, 0, resized, original.x(), original.y(), original.width() + offsetEvilX, original.height() );
                     }
+                    for ( int32_t i = 0; i < 4; ++i ) {
+                        // released button
+                        _icnVsSprite[id][2 * i].setPosition( 1, 0 );
+                        _icnVsSprite[id][2 * i + 1].setPosition( 0, 1 );
+                    }
                     createTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
                                           isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON );
                     break;
@@ -1545,10 +1550,26 @@ namespace fheroes2
 
                 if ( useOriginalResources() ) {
                     for ( int32_t i = 0; i < 4; ++i ) {
-                        // released button
-                        _icnVsSprite[id][2 * i] = GetICN( baseIcnId, 2 * i );
-                        // pressed button
-                        _icnVsSprite[id][2 * i + 1] = GetICN( baseIcnId, 2 * i + 1 );
+                        // released
+                        const Sprite & originalReleased = GetICN( baseIcnId, 2 * i );
+
+                        Sprite & released = _icnVsSprite[id][2 * i];
+                        released.resize( originalReleased.width() + 1, originalReleased.height() );
+                        released.reset();
+
+                        Copy( originalReleased, 0, 0, released, 1, 0, originalReleased.width(), originalReleased.height() );
+                        
+                        // pressed
+                        const Sprite & originalPressed = GetICN( baseIcnId, 2 * i + 1 );
+
+                        Sprite & pressed = _icnVsSprite[id][2 * i + 1];
+                        pressed.resize( originalPressed.width() + 1, originalPressed.height() + 1 );
+                        pressed.reset();
+
+                        Copy( originalPressed, 0, 0, pressed, 0, 1, originalPressed.width(), originalPressed.height() );
+                        _icnVsSprite[id][2 * i + 1].setPosition( 0, 0 );
+
+                        fheroes2::makeTransparentBackground( released, pressed, ICN::STONEBAK_POL );
                     }
                     // generate the DIFFICULTY button as it is not present in the original resources
                     createTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ), ICN::EMPTY_POL_BUTTON );
