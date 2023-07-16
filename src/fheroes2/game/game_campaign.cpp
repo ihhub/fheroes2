@@ -1308,6 +1308,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     const int buttonIconID = getCampaignButtonId( chosenCampaignID );
 
+    // find the placements for the buttons by taking into account their widths. The space between VIEW INTRO and CANCEL is divided by 3
+    // for the 3 interbutton spaces. The OKAY and RESTART buttons never appear together
     const int32_t backgroundMargin = 30;
     const int32_t viewIntroPlacement = top.x + backgroundMargin;
     const int32_t endOfViewIntroPlacement = viewIntroPlacement + fheroes2::AGG::GetICN( buttonIconID, 0 ).width();
