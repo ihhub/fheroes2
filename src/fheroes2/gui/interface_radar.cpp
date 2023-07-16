@@ -31,11 +31,11 @@
 #include "castle.h"
 #include "color.h"
 #include "dialog.h"
-#include "game_interface.h"
 #include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "localevent.h"
 #include "maps.h"
@@ -142,10 +142,10 @@ namespace
     }
 }
 
-Interface::Radar::Radar( Basic & basic )
+Interface::Radar::Radar( BaseInterface & interface )
     : BorderWindow( { 0, 0, RADARWIDTH, RADARWIDTH } )
     , _radarType( RadarType::WorldMap )
-    , _interface( basic )
+    , _interface( interface )
 {
     // Radar image can not be transparent so we disable the transform layer to speed up rendering.
     _map._disableTransformLayer();
@@ -200,7 +200,7 @@ void Interface::Radar::SetRedraw( const uint32_t redrawMode ) const
     // Only radar redraws are allowed here.
     assert( ( redrawMode & ~( REDRAW_RADAR_CURSOR | REDRAW_RADAR ) ) == 0 );
 
-    _interface.SetRedraw( redrawMode );
+    _interface.setRedraw( redrawMode );
 }
 
 void Interface::Radar::SetRenderArea( const fheroes2::Rect & roi )
@@ -213,7 +213,7 @@ void Interface::Radar::SetRenderArea( const fheroes2::Rect & roi )
     }
 }
 
-void Interface::Radar::Redraw( const bool redrawMapObjects )
+void Interface::Radar::_redraw( const bool redrawMapObjects )
 {
     const Settings & conf = Settings::Get();
     if ( conf.isHideInterfaceEnabled() ) {
@@ -265,6 +265,20 @@ void Interface::Radar::RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, cons
     const fheroes2::Rect roiInTiles = roi.GetROIinTiles();
     _cursorArea.show();
     RedrawCursor( &roiInTiles );
+}
+
+void Interface::Radar::redrawForEditor( const bool renderMapObjects )
+{
+    _cursorArea.hide();
+
+    if ( renderMapObjects ) {
+        RedrawObjects( 0, ViewWorldMode::ViewAll );
+        const fheroes2::Rect & rect = GetArea();
+        fheroes2::Copy( _map, 0, 0, fheroes2::Display::instance(), rect.x, rect.y, _map.width(), _map.height() );
+    }
+
+    _cursorArea.show();
+    RedrawCursor();
 }
 
 void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorldMode flags )
@@ -415,7 +429,7 @@ void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* =nul
         return;
     }
 
-    const fheroes2::Rect & viewableWorldArea = ( roiRectangle == nullptr ) ? _interface.GetGameArea().GetVisibleTileROI() : *roiRectangle;
+    const fheroes2::Rect & viewableWorldArea = ( roiRectangle == nullptr ) ? _interface.getGameArea().GetVisibleTileROI() : *roiRectangle;
 
     if ( ( viewableWorldArea.width > worldSize.width ) && ( viewableWorldArea.height > worldSize.height ) ) {
         // We hide the cursor if the whole map is displayed.
@@ -457,7 +471,7 @@ void Interface::Radar::QueueEventProcessing()
     // Move border window
     if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
         _cursorArea.hide();
-        _interface.SetRedraw( REDRAW_RADAR_CURSOR );
+        _interface.setRedraw( REDRAW_RADAR_CURSOR );
     }
     else if ( le.MouseCursor( rect ) ) {
         // move cursor
@@ -466,13 +480,13 @@ void Interface::Radar::QueueEventProcessing()
             const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {
-                GameArea & gamearea = _interface.GetGameArea();
+                GameArea & gamearea = _interface.getGameArea();
                 fheroes2::Rect visibleROI( gamearea.GetVisibleTileROI() );
                 const fheroes2::Point prev( visibleROI.x, visibleROI.y );
                 gamearea.SetCenter( { ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height } );
                 visibleROI = gamearea.GetVisibleTileROI();
                 if ( prev.x != visibleROI.x || prev.y != visibleROI.y ) {
-                    _interface.SetRedraw( REDRAW_RADAR_CURSOR );
+                    _interface.setRedraw( REDRAW_RADAR_CURSOR );
                     gamearea.SetRedraw();
                 }
             }

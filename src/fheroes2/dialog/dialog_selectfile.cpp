@@ -462,7 +462,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             lastSelectedSaveFileName = "";
         }
 
-        is_limit = isEditing ? RedrawExtraInfo( rt.getPosition(), header, InsertString( filename, charInsertPos, isCursorVisible ? "_" : "\x7F" ), enter_field )
+        is_limit = isEditing ? RedrawExtraInfo( rt.getPosition(), header, insertCharToString( filename, charInsertPos, isCursorVisible ? '_' : '\x7F' ), enter_field )
                              : RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
 
         buttonOk.draw();

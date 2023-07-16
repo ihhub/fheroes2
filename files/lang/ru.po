@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-03 06:46+0000\n"
-"PO-Revision-Date: 2023-05-06 15:07+0300\n"
+"POT-Creation-Date: 2023-07-15 12:25+0000\n"
+"PO-Revision-Date: 2023-07-15 14:32+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.3\n"
+"X-Generator: Poedit 3.3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -59,6 +59,12 @@ msgstr "ВЫЙТИ"
 
 msgid "CANCEL"
 msgstr "ОТМЕНА"
+
+msgid "OKAY"
+msgstr "ОК"
+
+msgid "smallerButton|OKAY"
+msgstr "ОК"
 
 msgid "ACCEPT"
 msgstr "ПРИНЯТЬ"
@@ -189,9 +195,6 @@ msgstr "МИН"
 
 msgid "MAX"
 msgstr "МАКС"
-
-msgid "OKAY"
-msgstr "ОК"
 
 msgid "Warrior"
 msgstr "Воин"
@@ -2685,17 +2688,16 @@ msgid "Are you sure you want to dismiss this army?"
 msgstr "Вы уверены, что хотите распустить этот отряд?"
 
 msgid "Upgrade"
-msgstr ""
+msgstr "Улучшить"
 
-#, fuzzy
 msgid "Upgrade your troops."
-msgstr "Вы не можете позволить себе улучшения для Вашей армии!"
+msgstr "Улучшить ваших существ."
 
 msgid "Dismiss"
-msgstr ""
+msgstr "Уволить"
 
 msgid "Dismiss this army."
-msgstr ""
+msgstr "Уволить этот отряд."
 
 msgid "Followers"
 msgstr "Последователи"
@@ -3506,46 +3508,141 @@ msgstr "Характер:"
 msgid "Best Monster:"
 msgstr "Лучший отряд:"
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgid ""
+"Are you sure you want to load a new map? (Any unsaved changes to the current "
+"map will be lost.)"
+msgstr ""
+"Вы действительно хотите загрузить новую карту? (Любые несохранённые "
+"изменения данной карты будут потеряны.)"
+
+msgid ""
+"Are you sure you want to create a new map? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Вы действительно хотите создать новую карту? (Любые несохранённые изменения "
+"данной карты будут потеряны.)"
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+"Создать новую карту либо с нуля, либо с помощью генератора случайных карт."
+
+msgid "New Map"
+msgstr "Новая карта"
+
+msgid "Load Map"
+msgstr "Загрузить карту"
+
+msgid "Load an existing map."
+msgstr "Загрузить существующую карту."
+
+msgid "Save Map"
+msgstr "Сохранить карту"
+
+msgid "Save the current map."
+msgstr "Сохранить текущую карту."
+
+msgid "Quit out of the map editor."
+msgstr "Выйти из редактора карт."
+
+msgid "Terrain Mode"
+msgstr "Почва"
+
+msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
+msgstr "Используется для создания рельефа карты (травы, грязи, воды и т.п.)."
+
+msgid "Object Mode"
+msgstr "Объекты"
+
+msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgstr ""
+"Используется для размещения объектов (гор, деревьев, сокровищ и т.п.) на "
+"карте."
+
+msgid "Detail Mode"
 msgstr ""
 
-#, fuzzy
-msgid "Cancel back to the New Map menu."
-msgstr "Вернуться в главное меню."
+msgid "Used for special editing of monsters, heroes and towns."
+msgstr ""
+"Используется для определения специальных параметров монстров, героев и "
+"городов."
+
+msgid "Allows you to draw streams by clicking and dragging."
+msgstr "Позволяет прокладывать русла рек."
+
+msgid "Stream Mode"
+msgstr "Реки"
+
+msgid "Allows you to draw roads by clicking and dragging."
+msgstr "Позволяет прокладывать дороги."
+
+msgid "Road Mode"
+msgstr "Дороги"
+
+msgid "Erase Mode"
+msgstr "Ластик"
+
+msgid "Used to erase objects off the map."
+msgstr "Используется для удаления объектов с карты."
+
+msgid "Change between zoom and normal view."
+msgstr "Сменить обычный режим на масштабированный."
+
+msgid "Magnify"
+msgstr "Лупа"
+
+msgid "Undo"
+msgstr "Отменить"
+
+msgid "Undo your last action.  Press again to redo the action."
+msgstr "Отменить предыдущее действие. Повторное нажатие повторяет действие."
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr ""
+"Создать новую карту либо с нуля, либо с помощью генератора случайных карт."
 
-#, fuzzy
-msgid "New Map"
-msgstr "Нью-Давн"
+msgid "Edit map title, description, and other general information."
+msgstr "Изменить название карты, описание и прочие параметры."
 
-#, fuzzy
-msgid "Load Map"
-msgstr "Загрузка игры"
+msgid "Specifications"
+msgstr "Характеристики"
 
-msgid "Load an existing map."
+msgid "File Options"
+msgstr "Настройки файла карты"
+
+msgid ""
+"Open the file options menu, where you can save or load maps, or quit out of "
+"the editor."
 msgstr ""
+"Открывает меню, где Вы можете создать новую карту, загрузить или сохранить "
+"уже готовую, а также выйти из редактора."
+
+msgid "View the editor system options, which let you customize the editor."
+msgstr "Открывает окно системных настроек редактора карт."
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr "Создать карту размером %{size}x%{size} клеток."
+
+msgid "Cancel back to the New Map menu."
+msgstr "Вернуться в меню создания новой карты."
 
 msgid "Cancel back to the main menu."
 msgstr "Вернуться в главное меню."
 
 msgid "From Scratch"
-msgstr ""
+msgstr "С нуля"
 
 msgid "Start from scratch with a blank map."
-msgstr ""
+msgstr "Создать карту с нуля."
 
 msgid "Create a randomly generated map."
-msgstr ""
+msgstr "Создать случайную карту."
 
-#, fuzzy
 msgid "Random"
-msgstr "Случайно"
+msgstr "Случайная карта"
 
-#, fuzzy
 msgid "Cancel back to the Map Editor main menu."
-msgstr "Вернуться в главное меню."
+msgstr "Вернуться в главное меню редактора карт."
 
 msgid "No maps available!"
 msgstr "Нет доступных карт!"
@@ -3635,7 +3732,10 @@ msgstr "Посмотреть вступление"
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Просмотреть вступительное видео к текущему сценарию кампании."
 
-msgid "Select campaign difficulty. It cannot be changed after."
+#, fuzzy
+msgid ""
+"Select the campaign difficulty. This can be lowered at any point during the "
+"campaign."
 msgstr "Выбор сложности кампании. Этот выбор невозможно будет изменить."
 
 msgid "Restart"
@@ -3643,6 +3743,18 @@ msgstr "Начать сначала"
 
 msgid "Restart the current scenario."
 msgstr "Начать сначала текущий сценарий."
+
+#, fuzzy
+msgid "Difficulty"
+msgstr ""
+"Сложность\n"
+"карты"
+
+msgid ""
+"You have changed to a lower difficulty for the campaign. You will not be "
+"able to revert this after this point. The high score will be calculated "
+"based solely on the new difficulty. Do you want to proceed?"
+msgstr ""
 
 msgid "Are you sure you want to restart this scenario?"
 msgstr "Вы действительно хотите начать этот сценарий сначала?"
@@ -3666,7 +3778,7 @@ msgid "Development"
 msgstr "Разработчик"
 
 msgid "Visit us at "
-msgstr "Посетите нас"
+msgstr "Посетите нас "
 
 msgid "QA and Support"
 msgstr "Контроль качества и поддержка"
@@ -3678,7 +3790,7 @@ msgid "Special Thanks to"
 msgstr "Особая благодарность"
 
 msgid "and many other contributors!"
-msgstr "и многим другим участникам"
+msgstr "и многим другим участникам!"
 
 msgid "and many-many other supporters!"
 msgstr "и многим другим, кто поддерживает нас!"
@@ -3918,25 +4030,20 @@ msgstr "выбрать кампанию: войны за престол"
 msgid "hotkey|choose the expansion campaign"
 msgstr "выбрать кампании дополнения цена верности"
 
-#, fuzzy
 msgid "hotkey|map editor main menu"
-msgstr "кампания"
+msgstr "меню редактора карт"
 
-#, fuzzy
 msgid "hotkey|new map menu"
-msgstr "новая игра"
+msgstr "меню новой карты"
 
-#, fuzzy
 msgid "hotkey|load map menu"
-msgstr "загрузить игру"
+msgstr "меню загрузки карты"
 
-#, fuzzy
 msgid "hotkey|new map from scratch"
-msgstr "отступление из битвы"
+msgstr "новая карта с нуля"
 
-#, fuzzy
 msgid "hotkey|new random map"
-msgstr "новая игра"
+msgstr "новая случайная карта"
 
 msgid "hotkey|roland campaign"
 msgstr "кампания за роланда"
@@ -4154,8 +4261,8 @@ msgstr "объединить отряды"
 msgid "hotkey|upgrade troop"
 msgstr "улучшить существо"
 
-msgid "hotkey|dismiss troop"
-msgstr "уволить существо"
+msgid "hotkey|dismiss hero or troop"
+msgstr "уволить героя или существо"
 
 msgid "The save file is corrupted."
 msgstr "Файл сохранения повреждён."
@@ -4290,7 +4397,7 @@ msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr "Одна из четырёх новых кампаний из набора дополнений \"Цена верности\"."
 
 msgid "Loading video. Please wait..."
-msgstr ""
+msgstr "Загрузка видео. Пожалуйста, подождите..."
 
 msgid "Host"
 msgstr "Хост"
@@ -4483,7 +4590,7 @@ msgid "Find the ultimate artifact."
 msgstr "Найти великий артефакт."
 
 msgid "Find the '%{name}' artifact."
-msgstr "Найти артефакт '${name}'."
+msgstr "Найти артефакт '%{name}'."
 
 msgid "Accumulate %{count} gold."
 msgstr "Накопить %{count} золота."
@@ -4739,9 +4846,6 @@ msgid ""
 msgstr ""
 "Открывает меню, где Вы можете загрузить, сохранить, начать новую игру или "
 "выйти из нее."
-
-msgid "File Options"
-msgstr "Настройки файла карты"
 
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr "Открывает окно системных настроек, позволяющих настроить игру."
@@ -6538,9 +6642,8 @@ msgstr "Заклинание не найдено."
 msgid "Only heroes can cast this spell."
 msgstr "Только герои могут колдовать данное заклинание."
 
-#, fuzzy
 msgid "This hero is not able to cast adventure spells."
-msgstr "произнести заклинание приключения"
+msgstr "Ваш герой не может использовать заклинания на карте."
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
@@ -6550,8 +6653,23 @@ msgstr ""
 msgid "This spell cannot be used on a boat."
 msgstr "Это заклинание не действует в море."
 
-msgid "This spell can be casted only nearby water."
+msgid "This spell can be casted only nearby ocean."
 msgstr "Это заклинание действует только у воды."
+
+msgid ""
+"There is no boat available and no free ocean location near the hero to cast "
+"this spell."
+msgstr ""
+"Нет свободных кораблей и рядом с героем нет свободного места в океане для "
+"использования этого заклинания."
+
+msgid "There is no more boat available to cast this spell."
+msgstr "Отсутствуют свободные корабли для применения этого заклинания."
+
+msgid "There is no free ocean location near the hero to cast this spell."
+msgstr ""
+"Рядом с героем нет свободного места в океане для использования этого "
+"заклинания."
 
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
@@ -6578,11 +6696,15 @@ msgid ""
 "No opponent can have heroes under his command anymore. Casting this spell "
 "will not bring any advantage."
 msgstr ""
+"Нет ни одного противника у которого бы могли быть герои. Использование этого "
+"заклинания не принесёт Вам пользы."
 
 msgid ""
 "No opponent has a hero under his command at this time. Casting this spell "
 "will not bring any advantage."
 msgstr ""
+"В настоящее время ни у одного противника нет героев. Использование этого "
+"заклинания не принесёт Вам пользы."
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -6598,11 +6720,15 @@ msgstr "Вы должны стать поближе к руднику, для и
 
 msgid "You must first defeat the ghosts guarding the mine to cast this spell."
 msgstr ""
+"Для использования заклинания Вам необходимо сначала победить призраков, "
+"охраняющих шахту."
 
 msgid ""
 "There are already at least as many elementals guarding the mine than the "
 "spell can generate. Casting this spell will not bring any advantage."
 msgstr ""
+"Эту шахту уже охраняет не меньшее число элементалей, чем Вы можете призвать. "
+"Это заклинание не принесёт Вам пользы."
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race} %{name} (уровень %{level})"
@@ -6687,9 +6813,6 @@ msgstr "Портал города"
 
 msgid "Select town to port to."
 msgstr "Выберите, куда перенестись."
-
-msgid "%{spell} failed!!!"
-msgstr "Неудачный вызов %{spell}!"
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Все вражеские Герои опознаны."
@@ -7135,7 +7258,7 @@ msgid "Heroes"
 msgstr "Герои"
 
 msgid "View Heroes."
-msgstr "Просмотреть всех Ваших героев"
+msgstr "Просмотреть всех Ваших героев."
 
 msgid "Towns/Castles"
 msgstr "Города"
@@ -10103,7 +10226,7 @@ msgid ""
 "improved version of Death Ripple."
 msgstr ""
 "Наносит значительный урон всем живым существам на поле боя, кроме нежити. "
-"Это заклинание является более мощной версией заклинания 'Дыхание смерти'"
+"Это заклинание является более мощной версией заклинания 'Дыхание смерти'."
 
 msgid "Dragon Slayer"
 msgstr "Убийца драконов"
@@ -10344,7 +10467,7 @@ msgstr ""
 "%{count} %{monster}."
 
 msgid "This spell restores %{hp} HP."
-msgstr "Это заклинание восстанавливает %{hp} здоровья"
+msgstr "Это заклинание восстанавливает %{hp} здоровья."
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
 msgstr "Это заклинание вызывает %{count} %{monster} для охраны шахты."
@@ -10425,3 +10548,6 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{spell} failed!!!"
+#~ msgstr "Неудачный вызов %{spell}!"

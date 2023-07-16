@@ -36,7 +36,7 @@ namespace
 
     static_assert( ( DEFAULT_BATTLE_SPEED >= 0 ) && ( DEFAULT_BATTLE_SPEED < 10 ) );
 
-    const double battleSpeedAdjustment = 1.0 / static_cast<double>( 10 - DEFAULT_BATTLE_SPEED );
+    constexpr double battleSpeedAdjustment = 1.0 / static_cast<double>( 10 - DEFAULT_BATTLE_SPEED );
 
     int humanHeroMultiplier = 1;
     int aiHeroMultiplier = 1;
@@ -186,7 +186,10 @@ void Game::UpdateGameSpeed()
     SetupHeroMovement( conf.AIMoveSpeed(), delays[CURRENT_AI_DELAY], aiHeroMultiplier );
 
     const int32_t battleSpeed = conf.BattleSpeed();
-    const double adjustedBattleSpeed = ( battleSpeed < 10 ) ? ( ( 10 - battleSpeed ) * battleSpeedAdjustment ) : ( battleSpeedAdjustment / 2 );
+    // For the battle speed = 10 avoid the zero delay and set animation speed to the 1/3 of battleSpeedAdjustment step.
+    const double adjustedBattleSpeed = ( battleSpeed < 10 ) ? ( ( 10 - battleSpeed ) * battleSpeedAdjustment ) : ( battleSpeedAdjustment / 3 );
+    // Reduce the Idle animation adjustment interval to: 1.2 for speed 1 ... 0.8 for speed 10.
+    const double adjustedIdleAnimationSpeed = ( 28 - battleSpeed ) / 22.5;
 
     delays[BATTLE_FRAME_DELAY].setDelay( static_cast<uint64_t>( 120 * adjustedBattleSpeed ) );
     delays[BATTLE_MISSILE_DELAY].setDelay( static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
@@ -196,9 +199,9 @@ void Game::UpdateGameSpeed()
     delays[BATTLE_CATAPULT_BOULDER_DELAY].setDelay( static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
     delays[BATTLE_CATAPULT_CLOUD_DELAY].setDelay( static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
     delays[BATTLE_BRIDGE_DELAY].setDelay( static_cast<uint64_t>( 90 * adjustedBattleSpeed ) );
-    delays[BATTLE_IDLE_DELAY].setDelay( static_cast<uint64_t>( 150 * adjustedBattleSpeed ) );
+    delays[BATTLE_IDLE_DELAY].setDelay( static_cast<uint64_t>( 150 * adjustedIdleAnimationSpeed ) );
     delays[BATTLE_OPPONENTS_DELAY].setDelay( static_cast<uint64_t>( 350 * adjustedBattleSpeed ) );
-    delays[BATTLE_FLAGS_DELAY].setDelay( static_cast<uint64_t>( 250 * adjustedBattleSpeed ) );
+    delays[BATTLE_FLAGS_DELAY].setDelay( static_cast<uint64_t>( 250 * adjustedIdleAnimationSpeed ) );
 }
 
 int Game::HumanHeroAnimSkip()
@@ -213,7 +216,8 @@ int Game::AIHeroAnimSkip()
 
 uint32_t Game::ApplyBattleSpeed( uint32_t delay )
 {
-    return static_cast<uint32_t>( battleSpeedAdjustment * ( 10 - Settings::Get().BattleSpeed() ) * delay );
+    const uint32_t battleSpeed = static_cast<uint32_t>( battleSpeedAdjustment * ( 10 - Settings::Get().BattleSpeed() ) * delay );
+    return battleSpeed == 0 ? 1 : battleSpeed;
 }
 
 bool Game::hasEveryDelayPassed( const std::vector<Game::DelayType> & delayTypes )

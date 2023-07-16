@@ -810,7 +810,7 @@ namespace Maps
                 count += Rand::Get( 1, 3 );
             }
 
-            static_assert( LAST_SUPPORTED_FORMAT_VERSION <= FORMAT_VERSION_1005_RELEASE, "Remove the check below." );
+            static_assert( LAST_SUPPORTED_FORMAT_VERSION <= FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the check below." );
             if ( count == 0 ) {
                 // The fix for the case when the Troll Bridge or City of Dead with NONE tile color, has 0 creatures (fixed in PR #7246).
                 count += Rand::Get( 1, 3 );
@@ -827,7 +827,7 @@ namespace Maps
                 ++count;
             }
 
-            static_assert( LAST_SUPPORTED_FORMAT_VERSION <= FORMAT_VERSION_1005_RELEASE, "Remove the check below." );
+            static_assert( LAST_SUPPORTED_FORMAT_VERSION <= FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the check below." );
             if ( count == 0 ) {
                 // The fix for the case when the Dragon City with NONE tile color, has 0 creatures (fixed in PR #7246).
                 ++count;

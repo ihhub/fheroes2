@@ -378,7 +378,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
                 buttonOk.draw();
             }
 
-            text.set( InsertString( res, charInsertPos, isCursorVisible ? "_" : "\x7F" ), fheroes2::FontType::normalWhite() );
+            text.set( insertCharToString( res, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
             text.fitToOneRow( inputArea.width() - textOffset );
 
             fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
