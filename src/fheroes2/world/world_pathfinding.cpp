@@ -540,7 +540,7 @@ void AIWorldPathfinder::reset()
 void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
     const int32_t townGateCastleIndex = [&hero]() {
-        if ( hero.Modes( Heroes::PATROL ) || hero.isShipMaster() || !hero.CanCastSpell( Spell::TOWNGATE ) ) {
+        if ( hero.Modes( Heroes::PATROL ) || !hero.CanCastSpell( Spell::TOWNGATE ) ) {
             return -1;
         }
 
@@ -555,7 +555,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
     const std::vector<int32_t> townPortalCastleIndexes = [&hero]() {
         std::vector<int32_t> result;
 
-        if ( hero.Modes( Heroes::PATROL ) || hero.isShipMaster() || !hero.CanCastSpell( Spell::TOWNPORTAL ) ) {
+        if ( hero.Modes( Heroes::PATROL ) || !hero.CanCastSpell( Spell::TOWNPORTAL ) ) {
             return result;
         }
 

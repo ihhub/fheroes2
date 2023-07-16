@@ -223,7 +223,7 @@ namespace
 
     void AITownPortal( Heroes & hero, const int32_t targetIndex )
     {
-        assert( !hero.Modes( Heroes::PATROL ) && !hero.isShipMaster() && Maps::isValidAbsIndex( targetIndex ) );
+        assert( !hero.Modes( Heroes::PATROL ) && Maps::isValidAbsIndex( targetIndex ) );
 #ifndef NDEBUG
         const Castle * targetCastle = world.getCastleEntrance( Maps::GetPoint( targetIndex ) );
         assert( targetCastle && targetCastle->GetHero() == nullptr );
