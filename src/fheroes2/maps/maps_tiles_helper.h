@@ -139,4 +139,14 @@ namespace Maps
     void setMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count );
 
     std::pair<int, int> getColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
+
+    // Checks whether the object to be captured is guarded by its own forces
+    // (castle has a hero or garrison, dwelling has creatures, etc)
+    bool isCaptureObjectProtected( const Tiles & tile );
+
+    // Restores an abandoned mine whose main tile is 'tile', turning it into an ordinary mine that brings
+    // resources of type 'resource'. This method updates all sprites and sets object types for non-action
+    // tiles. The object type for the action tile (i.e. the main tile) remains unchanged and should be
+    // updated separately.
+    void restoreAbandonedMine( Tiles & tile, const int resource );
 }

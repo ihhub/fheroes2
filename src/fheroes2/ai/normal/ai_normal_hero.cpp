@@ -255,7 +255,7 @@ namespace
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL:
             if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
-                if ( tile.isCaptureObjectProtected() ) {
+                if ( isCaptureObjectProtected( tile ) ) {
                     return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_SMALL );
                 }
 
@@ -1305,7 +1305,6 @@ namespace AI
 
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
-        const bool anotherFriendlyHeroPresent = _regions[tile.GetRegion()].friendlyHeroes > 1;
 
         switch ( objectType ) {
         case MP2::OBJ_CASTLE: {
@@ -1399,6 +1398,7 @@ namespace AI
             }
 
             // TODO: we should add logic to compare monsters and hero army strengths.
+            const bool anotherFriendlyHeroPresent = _regions[tile.GetRegion()].friendlyHeroes > 1;
             return ( anotherFriendlyHeroPresent ? 4000.0 : 1000.0 ) + monsters.getTotalHP() / 100.0;
         }
         case MP2::OBJ_ABANDONED_MINE: {
@@ -1423,6 +1423,7 @@ namespace AI
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_WATER_WHEEL:
         case MP2::OBJ_WINDMILL: {
+            const bool anotherFriendlyHeroPresent = _regions[tile.GetRegion()].friendlyHeroes > 1;
             if ( anotherFriendlyHeroPresent ) {
                 return 100.0;
             }
@@ -1646,7 +1647,7 @@ namespace AI
             if ( !otherHero || hero.GetID() == otherHero->GetID() )
                 continue;
 
-            Heroes::Role role = otherHero->getAIRole();
+            const Heroes::Role role = otherHero->getAIRole();
             if ( role == Heroes::Role::COURIER || role == Heroes::Role::SCOUT )
                 continue;
 
@@ -1744,13 +1745,11 @@ namespace AI
         // pre-cache the pathfinder
         _pathfinder.reEvaluateIfNeeded( hero );
 
-        const uint32_t leftMovePoints = hero.GetMovePoints();
-
         ObjectValidator objectValidator( hero, _pathfinder, *this );
         ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
-        auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero, leftMovePoints]( const int destination, uint32_t & distance, double & value,
-                                                                                                            const MP2::MapObjectType type, const bool isDimensionDoor ) {
+        auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero]( const int destination, uint32_t & distance, double & value,
+                                                                                            const MP2::MapObjectType type, const bool isDimensionDoor ) {
             if ( !isDimensionDoor ) {
                 // Dimension door path does not include any objects on the way.
                 std::vector<IndexObject> list = _pathfinder.getObjectsOnTheWay( destination );
@@ -1770,7 +1769,7 @@ namespace AI
             // TODO: check nearby enemy heroes and distance to them instead of relying on region stats.
             const RegionStats & regionStats = _regions[destinationTile.GetRegion()];
 
-            const bool isObjectReachableAtThisTurn = ( distance <= leftMovePoints );
+            const bool isObjectReachableAtThisTurn = ( distance <= hero.GetMovePoints() );
 
             // Go into "coward" mode only if the threat is real. Equal by strength heroes rarely attack each other.
             if ( heroStrength * AI::ARMY_ADVANTAGE_SMALL < regionStats.highestThreat ) {
@@ -1839,7 +1838,7 @@ namespace AI
 
             if ( !isObjectReachableAtThisTurn ) {
                 // Distant object which is out of reach for the current turn must have lower priority.
-                distance = leftMovePoints + ( distance - leftMovePoints ) * 2;
+                distance = hero.GetMovePoints() + ( distance - hero.GetMovePoints() ) * 2;
             }
 
             value = ScaleWithDistance( value, distance, type );
@@ -2114,7 +2113,7 @@ namespace AI
                 for ( int i = 0; i < monsterStrengthMultiplierCount; ++i ) {
                     if ( currentMonsterStrengthMultiplier > monsterStrengthMultipliers[i] ) {
                         _pathfinder.setArmyStrengthMultiplier( bestHero->isLosingGame() ? ARMY_ADVANTAGE_DESPERATE : monsterStrengthMultipliers[i] );
-                        _pathfinder.setSpellPointReserve( 0 );
+                        _pathfinder.setSpellPointReserveRatio( 0 );
                         setNewMultiplier = true;
                         break;
                     }
@@ -2224,7 +2223,7 @@ namespace AI
             }
 
             _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
-            _pathfinder.setSpellPointReserve( 0.5 );
+            _pathfinder.setSpellPointReserveRatio( 0.5 );
 
             // The size of heroes can be increased if a new hero is released from Jail.
             const size_t maxHeroCount = std::max( heroes.size(), availableHeroes.size() );
@@ -2242,7 +2241,7 @@ namespace AI
         const bool allHeroesMoved = availableHeroes.empty();
 
         _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
-        _pathfinder.setSpellPointReserve( 0.5 );
+        _pathfinder.setSpellPointReserveRatio( 0.5 );
 
         status.DrawAITurnProgress( endProgressValue );
 
