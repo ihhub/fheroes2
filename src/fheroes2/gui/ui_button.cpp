@@ -646,20 +646,23 @@ namespace fheroes2
 
         const int32_t borderedTextWidth = textWidth + textAreaBorder;
 
-        const int32_t maximumButtonWidth = 200; // Why is such a wide button needed?
-        const int32_t finalWidth = std::clamp( borderedTextWidth, minimumTextAreaWidth, maximumButtonWidth );
+        const int32_t maximumTextAreaWidth = 200; // Why is such a wide button needed?
+        const int32_t textAreaWidth = std::clamp( borderedTextWidth, minimumTextAreaWidth, maximumTextAreaWidth );
 
-        assert( finalWidth + backgroundBorders > 0 );
+        assert( textAreaWidth + backgroundBorders > 0 );
 
-        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), finalWidth + backgroundBorders );
-        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), finalWidth + backgroundBorders );
+        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), textAreaWidth + backgroundBorders );
+        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), textAreaWidth + backgroundBorders );
 
         if ( backgroundIcnID != ICN::UNKNOWN ) {
             makeTransparentBackground( released, pressed, backgroundIcnID );
         }
 
-        releasedText.draw( releasedOffset.x, releasedOffset.y, finalWidth, released );
-        pressedText.draw( pressedOffset.x, pressedOffset.y, finalWidth, pressed );
+        const fheroes2::Size releasedTextSize( releasedText.width( textAreaWidth ), releasedText.height( textAreaWidth ) );
+        const fheroes2::Size pressedTextSize( pressedText.width( textAreaWidth ), pressedText.height( textAreaWidth ) );
+
+        releasedText.draw( releasedOffset.x, releasedOffset.y + ( releasedText.height() - releasedTextSize.height ) / 2 , textAreaWidth, released );
+        pressedText.draw( pressedOffset.x, pressedOffset.y + ( pressedText.height() - pressedTextSize.height ) / 2, textAreaWidth, pressed );
     }
 
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface,
