@@ -623,8 +623,8 @@ namespace fheroes2
         const int32_t textWidth = releasedText.width();
         assert( textWidth > 0 );
 
-        const int32_t buttonBorder = emptyButtonIcnID == ICN::EMPTY_GUILDWELL_BUTTON ? 0 + 0 : 3 + 3;
-        const int32_t textWidthWithBorder = textWidth + buttonBorder;
+        const int32_t buttonTextBorder = emptyButtonIcnID == ICN::EMPTY_GUILDWELL_BUTTON ? 1 + 1 : 4 + 4;
+        const int32_t borderedTextWidth = textWidth + buttonTextBorder;
 
         // The minimum text space width for a campaign button is 87 judging from the shared widths of the
         // original OKAY and the CANCEL buttons even though OKAY is a shorter word
@@ -632,14 +632,14 @@ namespace fheroes2
         // NOTE: Buttons can use the same ICN but have different minimum widths, i.e. good buttons
         const int32_t minimumButtonTextWidthWithBorder = emptyButtonIcnID == ICN::EMPTY_GUILDWELL_BUTTON ? 60 : 87;
         const int32_t maximumButtonWidth = 200; // Why is such a wide button needed?
-        const int32_t finalWidth = std::clamp( textWidthWithBorder, minimumButtonTextWidthWithBorder, maximumButtonWidth );
+        const int32_t finalWidth = std::clamp( borderedTextWidth, minimumButtonTextWidthWithBorder, maximumButtonWidth );
 
-        // NOTE: Buttons have different side background borders
-        const int32_t sideBackgroundBorders = emptyButtonIcnID == ICN::EMPTY_GUILDWELL_BUTTON ? 2 : 7;
-        assert( finalWidth + sideBackgroundBorders > 0 );
+        // NOTE: Buttons have different background borders
+        const int32_t backgroundBorders = emptyButtonIcnID == ICN::EMPTY_GUILDWELL_BUTTON ? 4 : 7;
+        assert( finalWidth + backgroundBorders > 0 );
 
-        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), finalWidth + sideBackgroundBorders );
-        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), finalWidth + sideBackgroundBorders );
+        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), finalWidth + backgroundBorders );
+        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), finalWidth + backgroundBorders );
 
         const int backgroundIcnID = getButtonBackground( emptyButtonIcnID );
         if ( backgroundIcnID != ICN::UNKNOWN ) {
