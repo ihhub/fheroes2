@@ -310,7 +310,7 @@ void Dialog::ThievesGuild( bool oracle )
     Dialog::FrameBorder frameborder( { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } );
     const fheroes2::Point cur_pt( frameborder.GetArea().x, frameborder.GetArea().y );
 
-    const bool isEvilInterfaceTown = Settings::Get().isEvilInterfaceEnabled() && !oracle;
+    const bool isEvilInterfaceTown = !oracle && Settings::Get().isEvilInterfaceEnabled();
 
     const int backgroundIcnID = isEvilInterfaceTown ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
     fheroes2::Blit( fheroes2::AGG::GetICN( backgroundIcnID, 0 ), display, cur_pt.x, cur_pt.y );
