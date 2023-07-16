@@ -31,6 +31,7 @@
 #include "localevent.h"
 #include "pal.h"
 #include "settings.h"
+#include "translations.h"
 #include "ui_text.h"
 
 namespace
@@ -612,8 +613,12 @@ namespace fheroes2
         const bool isGoodFont = emptyButtonIcnID == ICN::EMPTY_GOOD_BUTTON;
         const fheroes2::FontColor buttonFontColor = isGoodFont ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
         const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor };
-        const fheroes2::Text releasedText( text, releasedButtonFont );
-        const fheroes2::Text pressedText( text, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
+        
+        const char * translatedText = _( text );
+        const char * supportedText = fheroes2::isFontAvailable( translatedText, releasedButtonFont ) ? translatedText : text;
+
+        const fheroes2::Text releasedText( supportedText, releasedButtonFont );
+        const fheroes2::Text pressedText( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
         const int32_t textWidth = releasedText.width();
         assert( textWidth > 0 );
 
