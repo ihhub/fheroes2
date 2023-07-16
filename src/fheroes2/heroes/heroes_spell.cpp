@@ -380,7 +380,7 @@ namespace
             return false;
         }
 
-        if ( castle->GetHero() && castle->GetHero() != &hero ) {
+        if ( castle->GetHero() ) {
             // The nearest town occupation must be checked before casting this spell. Something is wrong with the logic!
             assert( 0 );
             return false;
