@@ -418,14 +418,8 @@ namespace
 
     void createTextAdaptedButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const int emptyButtonIcnId )
     {
-        // control if the font is available
-        const bool isGoodFont = emptyButtonIcnId == ICN::EMPTY_GOOD_BUTTON;
-        const fheroes2::FontColor buttonFontColor = isGoodFont ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
-        const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor };
-        const char * supportedText = getSupportedText( text, releasedButtonFont );
-
         // generate the button with text on
-        fheroes2::getTextAdaptedButton( released, pressed, supportedText, emptyButtonIcnId );
+        fheroes2::getTextAdaptedButton( released, pressed, text, emptyButtonIcnId );
     }
 
     void createCampaignButtonSet( const int campaignSetIcnId, const std::array<const char *, 5> & texts )
@@ -447,51 +441,11 @@ namespace
             break;
         }
 
-        for ( int i = 0; i < texts.size() - 1; ++i ) {
+        for ( int i = 0; i < texts.size(); ++i ) {
             createTextAdaptedButton( _icnVsSprite[campaignSetIcnId][2 * i], _icnVsSprite[campaignSetIcnId][2 * i + 1], texts[i], emptyButtonIcn );
         }
-        // generate the last button i.e. the DIFFICULTY button
 
-        // 1. find what the remaining permittable button width is
-        const int32_t backgroundWidth = fheroes2::AGG::GetICN( ICN::CAMPBKGG, 0 ).width();
-        const int32_t backgroundOuterBorders = 28 + 27;
-        const int32_t useableBackgroundWidth = backgroundWidth - backgroundOuterBorders;
-        // the OKAY and RESTART buttons never appear together so we only need the width of the widest one of them
-        const int32_t widestRightsideButtonWidth = std::max( _icnVsSprite[campaignSetIcnId][2].width(), _icnVsSprite[campaignSetIcnId][4].width() );
-        const int32_t nonDifficultyButtonsWidth = _icnVsSprite[campaignSetIcnId][0].width() + widestRightsideButtonWidth + _icnVsSprite[campaignSetIcnId][6].width();
-        const int32_t marginsBetweenNeighboringButtons = 10;
-
-        // the total width of the already generated buttons does not leave enough space for another button of minimum width 95px
-        assert( ( useableBackgroundWidth - marginsBetweenNeighboringButtons * 3 - 95 ) > ( nonDifficultyButtonsWidth + marginsBetweenNeighboringButtons * 3 ) );
-
-        const int32_t availableDifficultyWidth = useableBackgroundWidth - nonDifficultyButtonsWidth - marginsBetweenNeighboringButtons * 2;
-        const int32_t allowedDifficultyWidth = std::min( availableDifficultyWidth, 200 );
-
-        // 2. find the required width for the text
-        const bool isGoodFont = emptyButtonIcn == ICN::EMPTY_GOOD_BUTTON;
-        const fheroes2::FontColor buttonFontColor = isGoodFont ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
-        const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor };
-        const char * supportedText = getSupportedText( texts[4], releasedButtonFont );
-        const fheroes2::Text textReleased( supportedText, releasedButtonFont );
-        const fheroes2::Text textPressed( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFontColor } );
-        const int32_t difficultyWidth = textReleased.width();
-
-        // 3. make the button width stay within the limits of the available width
-        const int32_t buttonTextAreaBorders = 4 + 4;
-        const int32_t textWidthWithBorders = difficultyWidth + buttonTextAreaBorders;
-        const int32_t controlledTextWidth = std::clamp( textWidthWithBorders, 87, allowedDifficultyWidth );
-
-        // 4. make the button background
-        const int32_t buttonBackgroundBorders = 4 + 3;
-        fheroes2::Sprite & released = _icnVsSprite[campaignSetIcnId][8];
-        fheroes2::Sprite & pressed = _icnVsSprite[campaignSetIcnId][9];
-        fheroes2::getButtonFromWidth( released, pressed, controlledTextWidth + buttonBackgroundBorders, emptyButtonIcn );
-
-        // 5. render the text on the button background
-        textReleased.draw( 5, 5, controlledTextWidth, released );
-        textPressed.draw( 4, 6, controlledTextWidth, pressed );
-
-        // 6. Set offsets to the buttons like the original offsets 8,0 and 7,1
+        // set offsets to the buttons like the original asset's offsets 8,0 and 7,1
         for ( int i = 0; i < texts.size(); ++i ) {
             _icnVsSprite[campaignSetIcnId][2 * i].setPosition( 8, 0 );
             _icnVsSprite[campaignSetIcnId][2 * i + 1].setPosition( 7, 1 );
