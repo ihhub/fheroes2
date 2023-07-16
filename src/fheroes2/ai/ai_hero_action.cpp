@@ -231,7 +231,9 @@ namespace
 
         const Spell spellToUse = [&hero, targetIndex]() {
             const Castle * nearestCastle = fheroes2::getNearestCastleTownGate( hero );
-            if ( nearestCastle && nearestCastle->GetIndex() == targetIndex && hero.CanCastSpell( Spell::TOWNGATE ) ) {
+            assert( nearestCastle != nullptr );
+
+            if ( nearestCastle->GetIndex() == targetIndex && hero.CanCastSpell( Spell::TOWNGATE ) ) {
                 return Spell::TOWNGATE;
             }
 
