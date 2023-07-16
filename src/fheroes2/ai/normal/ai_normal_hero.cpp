@@ -2086,29 +2086,33 @@ namespace AI
         uint32_t currentProgressValue = startProgressValue;
 
         while ( !availableHeroes.empty() ) {
-            class StrengthMultiplierRestorer
+            class AIWorldPathfinderStateRestorer
             {
             public:
-                StrengthMultiplierRestorer( AIWorldPathfinder & pathfinder )
+                AIWorldPathfinderStateRestorer( AIWorldPathfinder & pathfinder )
                     : _pathfinder( pathfinder )
-                    , _originalStrengthMultiplier( _pathfinder.getMinimalArmyStrengthAdvantage() )
+                    , _originalMinimalArmyStrengthAdvantage( _pathfinder.getMinimalArmyStrengthAdvantage() )
+                    , _originalSpellPointsReserveRatio( _pathfinder.getSpellPointsReserveRatio() )
                 {}
 
-                StrengthMultiplierRestorer( const StrengthMultiplierRestorer & ) = delete;
+                AIWorldPathfinderStateRestorer( const AIWorldPathfinderStateRestorer & ) = delete;
 
-                ~StrengthMultiplierRestorer()
+                ~AIWorldPathfinderStateRestorer()
                 {
-                    _pathfinder.setMinimalArmyStrengthAdvantage( _originalStrengthMultiplier );
+                    _pathfinder.setMinimalArmyStrengthAdvantage( _originalMinimalArmyStrengthAdvantage );
+                    _pathfinder.setSpellPointsReserveRatio( _originalSpellPointsReserveRatio );
                 }
 
-                StrengthMultiplierRestorer & operator=( const StrengthMultiplierRestorer & ) = delete;
+                AIWorldPathfinderStateRestorer & operator=( const AIWorldPathfinderStateRestorer & ) = delete;
 
             private:
                 AIWorldPathfinder & _pathfinder;
-                const double _originalStrengthMultiplier;
+
+                const double _originalMinimalArmyStrengthAdvantage;
+                const double _originalSpellPointsReserveRatio;
             };
 
-            const StrengthMultiplierRestorer strengthMultiplierRestorer( _pathfinder );
+            const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
 
             Heroes * bestHero = availableHeroes.front().hero;
             int bestTargetIndex = -1;
@@ -2116,11 +2120,14 @@ namespace AI
             {
                 const bool isLosingGame = bestHero->isLosingGame();
 
-                static const std::vector<double> usualStrengthMultipliers{ ARMY_ADVANTAGE_LARGE, ARMY_ADVANTAGE_MEDIUM, ARMY_ADVANTAGE_SMALL };
-                static const std::vector<double> emergencyStrengthMultipliers{ ARMY_ADVANTAGE_DESPERATE };
+                static const std::vector<std::pair<double, double>> usualStrengthMultipliers{ { ARMY_ADVANTAGE_LARGE, 0.5 },
+                                                                                              { ARMY_ADVANTAGE_MEDIUM, 0.25 },
+                                                                                              { ARMY_ADVANTAGE_SMALL, 0.0 } };
+                static const std::vector<std::pair<double, double>> emergencyStrengthMultipliers{ { ARMY_ADVANTAGE_DESPERATE, 0.0 } };
 
-                for ( const double strengthMultiplier : isLosingGame ? emergencyStrengthMultipliers : usualStrengthMultipliers ) {
-                    _pathfinder.setMinimalArmyStrengthAdvantage( strengthMultiplier );
+                for ( const auto & [minStrengthAdvantage, spReserveRatio] : isLosingGame ? emergencyStrengthMultipliers : usualStrengthMultipliers ) {
+                    _pathfinder.setMinimalArmyStrengthAdvantage( minStrengthAdvantage );
+                    _pathfinder.setSpellPointsReserveRatio( spReserveRatio );
 
                     double maxPriority = 0;
 

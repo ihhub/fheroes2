@@ -621,14 +621,14 @@ void AIWorldPathfinder::processWorldMap()
     if ( _townGateCastleIndex != -1 ) {
         static const Spell townGate( Spell::TOWNGATE );
 
-        if ( _spellPoints > townGate.spellPoints() + _spellPoints * _spellPointsReserved ) {
+        if ( _spellPoints > townGate.spellPoints() + _spellPoints * _spellPointsReserveRatio ) {
             processTownPortal( townGate, _townGateCastleIndex );
         }
     }
     if ( !_townPortalCastleIndexes.empty() ) {
         static const Spell townPortal( Spell::TOWNPORTAL );
 
-        if ( _spellPoints > townPortal.spellPoints() + _spellPoints * _spellPointsReserved ) {
+        if ( _spellPoints > townPortal.spellPoints() + _spellPoints * _spellPointsReserveRatio ) {
             for ( const int32_t idx : _townPortalCastleIndexes ) {
                 if ( idx == _townGateCastleIndex ) {
                     continue;
@@ -1105,8 +1105,9 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
     }
 
     const Spell dimensionDoor( Spell::DIMENSIONDOOR );
-    if ( !hero.HaveSpell( dimensionDoor ) || !Maps::isValidAbsIndex( targetIndex ) )
+    if ( !hero.HaveSpell( dimensionDoor ) || !Maps::isValidAbsIndex( targetIndex ) ) {
         return {};
+    }
 
     uint32_t currentSpellPoints = hero.GetSpellPoints();
 
@@ -1115,11 +1116,11 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
 
     // Reserve spell points only if target isn't a well that will replenish lost SP
     if ( objectType != MP2::OBJ_MAGIC_WELL && objectType != MP2::OBJ_ARTESIAN_SPRING ) {
-        if ( currentSpellPoints < hero.GetMaxSpellPoints() * _spellPointsReserved ) {
+        if ( currentSpellPoints < hero.GetMaxSpellPoints() * _spellPointsReserveRatio ) {
             return {};
         }
 
-        currentSpellPoints -= static_cast<uint32_t>( hero.GetMaxSpellPoints() * _spellPointsReserved );
+        currentSpellPoints -= static_cast<uint32_t>( hero.GetMaxSpellPoints() * _spellPointsReserveRatio );
     }
 
     const uint32_t movementCost = std::max( 1U, dimensionDoor.movePoints() );
@@ -1276,6 +1277,17 @@ void AIWorldPathfinder::setMinimalArmyStrengthAdvantage( const double advantage 
     }
 
     _minimalArmyStrengthAdvantage = advantage;
+
+    reset();
+}
+
+void AIWorldPathfinder::setSpellPointsReserveRatio( const double ratio )
+{
+    if ( ratio <= 0 || std::fabs( _spellPointsReserveRatio - ratio ) <= 0.001 ) {
+        return;
+    }
+
+    _spellPointsReserveRatio = ratio;
 
     reset();
 }

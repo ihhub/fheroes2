@@ -168,6 +168,17 @@ public:
     // protected tiles from the AI pathfinder's point of view
     void setMinimalArmyStrengthAdvantage( const double advantage );
 
+    // Returns the spell points reservation factor for spells associated with the movement of the hero on the adventure
+    // map (such as Dimension Door, Town Gate or Town Portal)
+    double getSpellPointsReserveRatio() const
+    {
+        return _spellPointsReserveRatio;
+    }
+
+    // Sets the spell points reservation factor for spells associated with the movement of the hero on the adventure map
+    // (such as Dimension Door, Town Gate or Town Portal)
+    void setSpellPointsReserveRatio( const double ratio );
+
 private:
     void processWorldMap() override;
 
@@ -187,10 +198,6 @@ private:
     uint32_t _spellPoints{ 0 };
     bool _isArtifactsBagFull{ false };
 
-    // Spell points reservation factor for spells associated with the movement of the hero on the adventure map
-    // (such as Dimension Door, Town Gate or Town Portal)
-    static constexpr double _spellPointsReserved{ 0.5 };
-
     // The potential destinations of the Town Gate and Town Portal spells should be cached here because they can
     // change even if the hero's position does not change (e.g. when a new hero was hired in the nearby castle),
     // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
@@ -201,4 +208,8 @@ private:
     // Coefficient of the minimum required advantage in army strength in order to be able to "pass through" protected
     // tiles from the AI pathfinder's point of view
     double _minimalArmyStrengthAdvantage{ 1.0 };
+
+    // Spell points reservation factor for spells associated with the movement of the hero on the adventure map
+    // (such as Dimension Door, Town Gate or Town Portal)
+    double _spellPointsReserveRatio{ 0.5 };
 };
