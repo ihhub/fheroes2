@@ -416,24 +416,24 @@ namespace
                             buttonFontColor );
     }
 
-    void createTextAdaptedButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const int emptyButtonIcnId )
+    void createTextAdaptedButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const int emptyButtonIcnID )
     {
         // generate the button with text on
-        fheroes2::getTextAdaptedButton( released, pressed, text, emptyButtonIcnId );
+        fheroes2::getTextAdaptedButton( released, pressed, text, emptyButtonIcnID );
     }
 
     void createCampaignButtonSet( const int campaignSetIcnId, const std::array<const char *, 5> & texts )
     {
-        int emptyButtonIcn = 0;
+        int emptyButtonIcnID = 0;
         switch ( campaignSetIcnId ) {
         case ICN::GOOD_CAMPAIGN_BUTTONS:
-            emptyButtonIcn = ICN::EMPTY_GOOD_BUTTON;
+            emptyButtonIcnID = ICN::EMPTY_GOOD_BUTTON;
             break;
         case ICN::EVIL_CAMPAIGN_BUTTONS:
-            emptyButtonIcn = ICN::EMPTY_EVIL_BUTTON;
+            emptyButtonIcnID = ICN::EMPTY_EVIL_BUTTON;
             break;
         case ICN::POL_CAMPAIGN_BUTTONS:
-            emptyButtonIcn = ICN::EMPTY_POL_BUTTON;
+            emptyButtonIcnID = ICN::EMPTY_POL_BUTTON;
             break;
         default:
             // Was a new set of buttons added?
@@ -442,7 +442,7 @@ namespace
         }
 
         for ( int i = 0; i < texts.size(); ++i ) {
-            createTextAdaptedButton( _icnVsSprite[campaignSetIcnId][2 * i], _icnVsSprite[campaignSetIcnId][2 * i + 1], texts[i], emptyButtonIcn );
+            createTextAdaptedButton( _icnVsSprite[campaignSetIcnId][2 * i], _icnVsSprite[campaignSetIcnId][2 * i + 1], texts[i], emptyButtonIcnID );
         }
 
         // set offsets to the buttons like the original asset's offsets 8,0 and 7,1
