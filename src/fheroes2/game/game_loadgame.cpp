@@ -157,6 +157,10 @@ fheroes2::GameMode Game::LoadGame()
     buttons[2].setICNInfo( ICN::BUTTON_MULTIPLAYER_GAME, 0, 1 );
     buttons[3].setICNInfo( ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
+    if ( !isSuccessionWarsCampaignPresent() ) {
+        buttons[1].disable();
+    }
+
     for ( size_t i = 0; i < buttonCount - 1; ++i ) {
         buttons[i].setPosition( buttonPos.x, buttonPos.y + buttonYStep * static_cast<int32_t>( i ) );
         buttons[i].draw();
@@ -183,7 +187,7 @@ fheroes2::GameMode Game::LoadGame()
                 return fheroes2::GameMode::LOAD_STANDARD;
             }
         }
-        else if ( le.MouseClickLeft( buttons[1].area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_CAMPAIGN ) ) {
+        else if ( buttons[1].isEnabled() && ( le.MouseClickLeft( buttons[1].area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_CAMPAIGN ) ) ) {
             if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_CAMPAIGN ), false ) ) {
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             }
