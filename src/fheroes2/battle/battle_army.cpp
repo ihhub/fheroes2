@@ -272,8 +272,23 @@ bool Battle::Force::HasMonster( const Monster & mons ) const
 bool Battle::Force::onlyHasMonster( const Monster & monster ) const
 {
     const int monsterID = monster.GetID();
-    const auto predicate = [&monsterID]( const Troop * troop ) { return ( ( troop->isEmpty() ) || ( troop->isValid() && troop->isMonster( monsterID ) ) ); };
+    const auto predicate = [&monsterID]( const Troop * troop ) { return ( troop->isEmpty() || ( troop->isValid() && troop->isMonster( monsterID ) ) ); };
     return std::all_of( begin(), end(), predicate );
+}
+
+bool Battle::Force::onlyHasUneadAndMonsters( const std::set<Monster> & monsters ) const
+{
+    bool hasUndead = false;
+    std::set<Monster> nonUndead;
+    for ( const Unit * unit : *this ) {
+        if ( unit->isUndead() ) {
+            hasUndead = true;
+        }
+        else if ( unit->isValid() ) {
+            nonUndead.insert( unit->GetMonster() );
+        }
+    }
+    return nonUndead == monsters && hasUndead;
 }
 
 bool Battle::Force::hasArchers() const
@@ -286,6 +301,12 @@ bool Battle::Force::hasDragons() const
 {
     const auto predicate = []( const Unit * unit ) { return unit->isDragons() && unit->GetCount() != 0; };
     return std::any_of( begin(), end(), predicate );
+}
+
+bool Battle::Force::allUnitsUndead() const
+{
+    const auto predicate = []( const Unit * unit ) { return ( unit->isEmpty() || ( unit->isValid() && unit->isUndead() ) ); };
+    return std::all_of( begin(), end(), predicate );
 }
 
 uint32_t Battle::Force::GetDeadCounts() const

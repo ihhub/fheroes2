@@ -447,7 +447,13 @@ bool Spell::canCastCombatSpell( std::string * res ) const
     if ( *this == Spell::BLESS || *this == Spell::MASSBLESS ) {
         if ( playerForce.onlyHasMonster( Monster::PEASANT ) ) {
             if ( res != nullptr ) {
-                *res = _( "The spell will affect no one" );
+                *res = _( "Damage from peasant is constant, so there is no benefit to cast this spell." );
+            }
+            return false;
+        }
+        if ( playerForce.allUnitsUndead() ) {
+            if ( res != nullptr ) {
+                *res = _( "Undead creatures cannot be affected by this spell." );
             }
             return false;
         }
@@ -455,7 +461,39 @@ bool Spell::canCastCombatSpell( std::string * res ) const
     else if ( *this == Spell::CURSE || *this == Spell::MASSCURSE ) {
         if ( opposingForce.onlyHasMonster( Monster::PEASANT ) ) {
             if ( res != nullptr ) {
-                *res = _( "The spell will affect no one on the opposing side" );
+                *res = _( "Damage from peasant is constant, so there is no benefit to cast this spell." );
+            }
+            return false;
+        }
+        if ( opposingForce.allUnitsUndead() ) {
+            if ( res != nullptr ) {
+                *res = _( "Undead creatures cannot be affected by this spell." );
+            }
+            return false;
+        }
+        if ( opposingForce.onlyHasMonster( Monster::CRUSADER ) ) {
+            if ( res != nullptr ) {
+                *res = _( "Crusader cannot be affected by this spell." );
+            }
+            return false;
+        }
+        if ( opposingForce.onlyHasUneadAndMonsters( { Monster::CRUSADER } ) ) {
+            if ( res != nullptr ) {
+                *res = _( "Crusader and undead creatures cannot be affected by this spell." );
+            }
+            return false;
+        }
+        if ( opposingForce.onlyHasUneadAndMonsters( { Monster::PEASANT } ) ) {
+            if ( res != nullptr ) {
+                *res = _( "Undead creatures cannot be affected by this spell and damage from peasant is constant, so there is no benefit to cast this spell." );
+            }
+            return false;
+        }
+
+        if ( opposingForce.onlyHasUneadAndMonsters( { Monster::PEASANT, Monster::CRUSADER } ) ) {
+            if ( res != nullptr ) {
+                *res = _(
+                    "Crusader and undead creatures cannot be affected by this spell and damage from peasant is constant, so there is no benefit to cast this spell." );
             }
             return false;
         }
@@ -463,7 +501,7 @@ bool Spell::canCastCombatSpell( std::string * res ) const
     else if ( *this == Spell::SHIELD || *this == Spell::MASSSHIELD ) {
         if ( !opposingForce.hasArchers() ) {
             if ( res != nullptr ) {
-                *res = _( "The spell will affect no one. Opposing side does not have archers" );
+                *res = _( "Opposing hero's army does not include any ranged creatures, so there is no benefit to cast this spell." );
             }
             return false;
         }
@@ -471,7 +509,7 @@ bool Spell::canCastCombatSpell( std::string * res ) const
     else if ( *this == Spell::DRAGONSLAYER ) {
         if ( !opposingForce.hasDragons() ) {
             if ( res != nullptr ) {
-                *res = _( "The spell will affect no one. Opposing side does not have dragons" );
+                *res = _( "Opposing hero's army does not include any dragons, so there is no benefit to cast this spell." );
             }
             return false;
         }

@@ -152,6 +152,11 @@ public:
         return id != m.id;
     }
 
+    bool operator<( const Monster & m ) const
+    {
+        return id < m.id;
+    }
+
     int GetID() const
     {
         return id;
