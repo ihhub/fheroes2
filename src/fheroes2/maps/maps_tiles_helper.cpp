@@ -1676,7 +1676,8 @@ namespace Maps
             if ( Maps::isValidDirection( tile.GetIndex(), directionVector ) ) {
                 Tiles & mineTile = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), directionVector ) );
                 if ( ( mineTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
-                     && ( mineTile.GetObjectUID() == tile.GetObjectUID() || mineTile.FindAddonLevel1( tile.GetObjectUID() ) || mineTile.FindAddonLevel2( tile.GetObjectUID() ) ) ) {
+                     && ( mineTile.GetObjectUID() == tile.GetObjectUID() || mineTile.FindAddonLevel1( tile.GetObjectUID() )
+                          || mineTile.FindAddonLevel2( tile.GetObjectUID() ) ) ) {
                     mineTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
                 }
             }
