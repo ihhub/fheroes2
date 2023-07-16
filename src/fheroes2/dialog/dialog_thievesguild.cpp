@@ -311,7 +311,7 @@ void Dialog::ThievesGuild( bool oracle )
     const fheroes2::Point cur_pt( frameborder.GetArea().x, frameborder.GetArea().y );
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-    const int backgroundIcnID = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
+    const int backgroundIcnID = isEvilInterface && !oracle ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
 
     fheroes2::Blit( fheroes2::AGG::GetICN( backgroundIcnID, 0 ), display, cur_pt.x, cur_pt.y );
 
