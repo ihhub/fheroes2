@@ -545,9 +545,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
         }
 
         const Castle * castle = fheroes2::getNearestCastleTownGate( hero );
-        if ( castle == nullptr || castle->GetHero() ) {
-            return -1;
-        }
+        assert( castle != nullptr && castle->GetHero() == nullptr );
 
         return castle->GetIndex();
     }();
