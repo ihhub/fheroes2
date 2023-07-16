@@ -7230,7 +7230,7 @@ msgid "Mine"
 msgstr "Baňa"
 
 msgid "Burma shave."
-msgstr "Barmské holenie."
+msgstr ""
 
 msgid "Next sign 50 miles."
 msgstr "Ďalšia značka o 50 míľ."
