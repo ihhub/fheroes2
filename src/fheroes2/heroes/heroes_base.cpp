@@ -398,6 +398,15 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             return false;
         }
 
+        if ( !hero->MayCastAdventureSpells() ) {
+            // This should never happen
+            assert( 0 );
+            if ( res ) {
+                *res = _( "This hero is not able to cast adventure spells." );
+            }
+            return false;
+        }
+
         if ( !haveMovePoints( spell ) ) {
             if ( res ) {
                 *res = _( "Your hero is too tired to cast this spell today. Try again tomorrow." );
@@ -413,10 +422,31 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( spell == Spell::SUMMONBOAT ) {
-            const int32_t boatDestination = fheroes2::getPossibleBoatPosition( *hero );
-            if ( !Maps::isValidAbsIndex( boatDestination ) ) {
+            if ( !fheroes2::isHeroNearWater( *hero ) ) {
                 if ( res != nullptr ) {
-                    *res = _( "This spell can be casted only nearby water." );
+                    *res = _( "This spell can be casted only nearby ocean." );
+                }
+                return false;
+            }
+
+            const int32_t boatSource = fheroes2::getSummonableBoat( *hero );
+            const int32_t boatDestination = fheroes2::getPossibleBoatPosition( *hero );
+            const bool validBoatDestination = Maps::isValidAbsIndex( boatDestination );
+            if ( boatSource == -1 && !validBoatDestination ) {
+                if ( res != nullptr ) {
+                    *res = _( "There is no boat available and no free ocean location near the hero to cast this spell." );
+                }
+                return false;
+            }
+            if ( boatSource == -1 ) {
+                if ( res != nullptr ) {
+                    *res = _( "There is no more boat available to cast this spell." );
+                }
+                return false;
+            }
+            if ( !validBoatDestination ) {
+                if ( res != nullptr ) {
+                    *res = _( "There is no free ocean location near the hero to cast this spell." );
                 }
                 return false;
             }
@@ -466,7 +496,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 
             const bool opponentsHaveHeroes = kingdom.opponentsHaveHeroes();
             const bool opponentsCanRecruitHeroes = kingdom.opponentsCanRecruitMoreHeroes();
-            // This text is show in two cases. First when there are no opponents
+            // This text is shown in two cases. First when there are no opponents
             // left in the game. Second when opponent doesn't have heroes left
             // and cannot recruit more. This will happen when all opponent
             // heroes are defeated and the opponent has a town that cannot be

@@ -24,11 +24,15 @@
 #include <cstdint>
 
 #include "army.h"
+#include "heroes.h"
+#include "kingdom.h"
 #include "maps_tiles.h"
 #include "pairs.h"
 #include "payment.h"
 #include "profit.h"
 #include "rand.h"
+#include "route.h"
+#include "world.h"
 
 namespace AI
 {
@@ -43,15 +47,31 @@ namespace AI
         _pathfinder.reset();
     }
 
-    void Normal::revealFog( const Maps::Tiles & tile )
+    void Normal::revealFog( const Maps::Tiles & tile, const Kingdom & kingdom )
     {
         const MP2::MapObjectType object = tile.GetObject();
-        if ( object != MP2::OBJ_NONE ) {
-            const IndexObject indexObject{ tile.GetIndex(), static_cast<int>( object ) };
+        if ( !MP2::isActionObject( object ) ) {
+            return;
+        }
 
-            // _mapObjects must in a sorted ascending order as we use std::binary_search later in the code.
-            // std::upper_bound is used in order to find the correct spot for insertion in a sorted array.
-            _mapObjects.emplace( std::upper_bound( _mapObjects.begin(), _mapObjects.end(), indexObject ), indexObject );
+        updateMapActionObjectCache( tile.GetIndex() );
+        updatePriorityAttackTarget( kingdom, tile );
+
+        // If this is an action object and one of AI heroes is moving,
+        // we have to stop him because the new object might be more valuable than the current target.
+        const KingdomHeroes & heroes = kingdom.GetHeroes();
+        for ( Heroes * hero : heroes ) {
+            if ( hero == nullptr ) {
+                // How is it even possible?
+                assert( 0 );
+                continue;
+            }
+
+            if ( hero->isMoveEnabled() ) {
+                hero->SetMove( false );
+                hero->GetPath().Reset();
+                break;
+            }
         }
     }
 
@@ -142,5 +162,25 @@ namespace AI
         }
 
         return prio;
+    }
+
+    void Normal::updateMapActionObjectCache( const int mapIndex )
+    {
+        const Maps::Tiles & tile = world.GetTiles( mapIndex );
+        const MP2::MapObjectType objectType = tile.GetObject();
+        auto iter = std::lower_bound( _mapActionObjects.begin(), _mapActionObjects.end(), IndexObject{ mapIndex, objectType },
+                                      []( const IndexObject & left, const IndexObject & right ) { return left.first < right.first; } );
+
+        if ( iter != _mapActionObjects.end() && iter->first == mapIndex ) {
+            if ( MP2::isActionObject( objectType ) ) {
+                iter->second = objectType;
+            }
+            else {
+                _mapActionObjects.erase( iter );
+            }
+        }
+        else if ( MP2::isActionObject( objectType ) ) {
+            _mapActionObjects.emplace( iter, IndexObject{ mapIndex, objectType } );
+        }
     }
 }

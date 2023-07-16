@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-30 00:59+0000\n"
+"POT-Creation-Date: 2023-07-15 12:25+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -47,6 +47,12 @@ msgid "QUIT"
 msgstr ""
 
 msgid "CANCEL"
+msgstr ""
+
+msgid "OKAY"
+msgstr ""
+
+msgid "smallerButton|OKAY"
 msgstr ""
 
 msgid "ACCEPT"
@@ -165,9 +171,6 @@ msgid "MIN"
 msgstr "MİN"
 
 msgid "MAX"
-msgstr ""
-
-msgid "OKAY"
 msgstr ""
 
 msgid "Warrior"
@@ -3250,13 +3253,18 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgid ""
+"Are you sure you want to load a new map? (Any unsaved changes to the current "
+"map will be lost.)"
 msgstr ""
 
-msgid "Cancel back to the New Map menu."
+msgid ""
+"Are you sure you want to create a new map? (Any unsaved changes to the "
+"current map will be lost.)"
 msgstr ""
 
-msgid "Create a new map either from scratch or using the random map generator."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 msgid "New Map"
@@ -3266,6 +3274,89 @@ msgid "Load Map"
 msgstr ""
 
 msgid "Load an existing map."
+msgstr ""
+
+msgid "Save Map"
+msgstr ""
+
+msgid "Save the current map."
+msgstr ""
+
+msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Terrain Mode"
+msgstr ""
+
+msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
+msgstr ""
+
+msgid "Object Mode"
+msgstr ""
+
+msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgstr ""
+
+msgid "Detail Mode"
+msgstr ""
+
+msgid "Used for special editing of monsters, heroes and towns."
+msgstr ""
+
+msgid "Allows you to draw streams by clicking and dragging."
+msgstr ""
+
+msgid "Stream Mode"
+msgstr ""
+
+msgid "Allows you to draw roads by clicking and dragging."
+msgstr ""
+
+msgid "Road Mode"
+msgstr ""
+
+msgid "Erase Mode"
+msgstr ""
+
+msgid "Used to erase objects off the map."
+msgstr ""
+
+msgid "Change between zoom and normal view."
+msgstr ""
+
+msgid "Magnify"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Undo your last action.  Press again to redo the action."
+msgstr ""
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+msgid "Edit map title, description, and other general information."
+msgstr ""
+
+msgid "Specifications"
+msgstr ""
+
+msgid "File Options"
+msgstr ""
+
+msgid ""
+"Open the file options menu, where you can save or load maps, or quit out of "
+"the editor."
+msgstr ""
+
+msgid "View the editor system options, which let you customize the editor."
+msgstr ""
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+msgid "Cancel back to the New Map menu."
 msgstr ""
 
 msgid "Cancel back to the main menu."
@@ -3358,13 +3449,24 @@ msgstr ""
 msgid "View Intro videos for the current state of the campaign."
 msgstr ""
 
-msgid "Select campaign difficulty. It cannot be changed after."
+msgid ""
+"Select the campaign difficulty. This can be lowered at any point during the "
+"campaign."
 msgstr ""
 
 msgid "Restart"
 msgstr ""
 
 msgid "Restart the current scenario."
+msgstr ""
+
+msgid "Difficulty"
+msgstr ""
+
+msgid ""
+"You have changed to a lower difficulty for the campaign. You will not be "
+"able to revert this after this point. The high score will be calculated "
+"based solely on the new difficulty. Do you want to proceed?"
 msgstr ""
 
 msgid "Are you sure you want to restart this scenario?"
@@ -3870,7 +3972,7 @@ msgstr ""
 msgid "hotkey|upgrade troop"
 msgstr ""
 
-msgid "hotkey|dismiss troop"
+msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
 #, fuzzy
@@ -4386,9 +4488,6 @@ msgstr ""
 msgid ""
 "Bring up the file options menu, allowing you to load, save, start a new game "
 "or quit."
-msgstr ""
-
-msgid "File Options"
 msgstr ""
 
 msgid "Bring up the system options menu, allowing you to customize your game."
@@ -5788,13 +5887,27 @@ msgstr ""
 msgid "Only heroes can cast this spell."
 msgstr ""
 
+msgid "This hero is not able to cast adventure spells."
+msgstr ""
+
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
 msgid "This spell cannot be used on a boat."
 msgstr ""
 
-msgid "This spell can be casted only nearby water."
+msgid "This spell can be casted only nearby ocean."
+msgstr ""
+
+msgid ""
+"There is no boat available and no free ocean location near the hero to cast "
+"this spell."
+msgstr ""
+
+msgid "There is no more boat available to cast this spell."
+msgstr ""
+
+msgid "There is no free ocean location near the hero to cast this spell."
 msgstr ""
 
 msgid ""
@@ -5917,9 +6030,6 @@ msgid "Town Portal"
 msgstr ""
 
 msgid "Select town to port to."
-msgstr ""
-
-msgid "%{spell} failed!!!"
 msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."

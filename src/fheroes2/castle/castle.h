@@ -205,8 +205,9 @@ public:
     // Returns the correct dwelling type available in the castle. BUILD_NOTHING is returned if this is not a dwelling.
     uint32_t GetActualDwelling( const uint32_t buildId ) const;
 
-    bool RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force = false );
+    // Returns true in case of successful recruitment.
     bool RecruitMonster( const Troop & troop, bool showDialog = true );
+
     void recruitBestAvailable( Funds budget );
     uint32_t getRecruitLimit( const Monster & monster, const Funds & budget ) const;
 
@@ -306,6 +307,8 @@ private:
     void WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<fheroes2::RandomMonsterAnimation> & monsterAnimInfo ) const;
     void JoinRNDArmy();
     void PostLoad();
+
+    bool RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force = false );
 
     friend StreamBase & operator<<( StreamBase &, const Castle & );
     friend StreamBase & operator>>( StreamBase &, Castle & );

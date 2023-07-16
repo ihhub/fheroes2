@@ -33,6 +33,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_delays.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -268,7 +269,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
     fheroes2::Text text( "_", fheroes2::FontType::normalWhite() );
     fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
-    text.draw( dst_pt.x + ( inputArea.width() - text.width() ) / 2, dst_pt.y + 1, display );
+    text.draw( text_rt.x + ( text_rt.width - text.width() ) / 2, text_rt.y + 3, display );
 
     const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
@@ -307,9 +308,13 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
     LocalEvent & le = LocalEvent::Get();
 
+    bool isCursorVisible = true;
+
+    Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
+
     const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
-    while ( le.HandleEvents() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
         bool redraw = false;
 
         buttonOk.isEnabled() && le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -339,6 +344,12 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
                 redraw = true;
             }
         }
+        else if ( le.MouseClickLeft( text_rt ) ) {
+            charInsertPos = fheroes2::getTextInputCursorPosition( res, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x,
+                                                                  text_rt.x + ( text_rt.width - text.width() ) / 2 );
+
+            redraw = true;
+        }
 
         if ( le.MousePressRight( buttonCancel.area() ) ) {
             Dialog::Message( _( "Cancel" ), _( "Exit this menu without doing anything." ), Font::BIG );
@@ -348,6 +359,12 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
         }
         else if ( le.MousePressRight( buttonVirtualKB.area() ) ) {
             Dialog::Message( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Font::BIG );
+        }
+
+        // Text input cursor blink.
+        if ( Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
+            isCursorVisible = !isCursorVisible;
+            redraw = true;
         }
 
         if ( redraw ) {
@@ -361,7 +378,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
                 buttonOk.draw();
             }
 
-            text.set( InsertString( res, charInsertPos, "_" ), fheroes2::FontType::normalWhite() );
+            text.set( insertCharToString( res, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
             text.fitToOneRow( inputArea.width() - textOffset );
 
             fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );

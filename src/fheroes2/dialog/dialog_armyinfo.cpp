@@ -570,6 +570,9 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_UPGRADE_TROOP ) ) ) {
+            // If this assertion blows up then you are executing this code for a monster which has no upgrades.
+            assert( troop.isAllowUpgrade() );
+
             if ( UPGRADE_DISABLE & flags ) {
                 const fheroes2::Text description( _( "You can't afford to upgrade your troops!" ), fheroes2::FontType::normalWhite() );
                 fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::OK, troop.GetTotalUpgradeCost() );
@@ -585,7 +588,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
             }
         }
 
-        if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS_TROOP ) )
+        if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
              && Dialog::YES
                     == Dialog::Message( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ), Font::BIG,
                                         Dialog::YES | Dialog::NO ) ) {

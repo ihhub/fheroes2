@@ -261,7 +261,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     std::unique_ptr<SMKVideoSequence> video = getVideo( "CHOOSE.SMK" );
     if ( !video ) {
         showMissingVideoFilesWindow();
-        campaignSaveData.setCurrentScenarioInfoId( { Campaign::ROLAND_CAMPAIGN, 0 } );
+        campaignSaveData.setCurrentScenarioInfo( { Campaign::ROLAND_CAMPAIGN, 0 } );
         return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
     }
 
@@ -291,11 +291,11 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isCustomDelayNeeded( customDelay ) ) ) {
         if ( le.MouseClickLeft( campaignRoi[0] ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_ROLAND ) ) {
-            campaignSaveData.setCurrentScenarioInfoId( { Campaign::ROLAND_CAMPAIGN, 0 } );
+            campaignSaveData.setCurrentScenarioInfo( { Campaign::ROLAND_CAMPAIGN, 0 } );
             break;
         }
         if ( le.MouseClickLeft( campaignRoi[1] ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_ARCHIBALD ) ) {
-            campaignSaveData.setCurrentScenarioInfoId( { Campaign::ARCHIBALD_CAMPAIGN, 0 } );
+            campaignSaveData.setCurrentScenarioInfo( { Campaign::ARCHIBALD_CAMPAIGN, 0 } );
             break;
         }
 
@@ -343,7 +343,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     // TODO: Properly choose the campaign instead of this hackish way
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     campaignSaveData.reset();
-    campaignSaveData.setCurrentScenarioInfoId( { Campaign::PRICE_OF_LOYALTY_CAMPAIGN, 0 } );
+    campaignSaveData.setCurrentScenarioInfo( { Campaign::PRICE_OF_LOYALTY_CAMPAIGN, 0 } );
 
     std::array<std::unique_ptr<SMKVideoSequence>, 4> videos{ getVideo( "IVYPOL.SMK" ), getVideo( "IVYVOY.SMK" ), getVideo( "IVYWIZ.SMK" ), getVideo( "IVYDES.SMK" ) };
 
@@ -401,22 +401,22 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( highlightCampaignId < videos.size() ? Game::isCustomDelayNeeded( customDelay ) : true ) ) {
         if ( le.MouseClickLeft( activeCampaignArea[0] ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_PRICE_OF_LOYALTY ) ) {
-            campaignSaveData.setCurrentScenarioInfoId( { Campaign::PRICE_OF_LOYALTY_CAMPAIGN, 0 } );
+            campaignSaveData.setCurrentScenarioInfo( { Campaign::PRICE_OF_LOYALTY_CAMPAIGN, 0 } );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
         if ( le.MouseClickLeft( activeCampaignArea[1] ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_VOYAGE_HOME ) ) {
-            campaignSaveData.setCurrentScenarioInfoId( { Campaign::VOYAGE_HOME_CAMPAIGN, 0 } );
+            campaignSaveData.setCurrentScenarioInfo( { Campaign::VOYAGE_HOME_CAMPAIGN, 0 } );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
         if ( le.MouseClickLeft( activeCampaignArea[2] ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_WIZARDS_ISLE ) ) {
-            campaignSaveData.setCurrentScenarioInfoId( { Campaign::WIZARDS_ISLE_CAMPAIGN, 0 } );
+            campaignSaveData.setCurrentScenarioInfo( { Campaign::WIZARDS_ISLE_CAMPAIGN, 0 } );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
         if ( le.MouseClickLeft( activeCampaignArea[3] ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_DESCENDANTS ) ) {
-            campaignSaveData.setCurrentScenarioInfoId( { Campaign::DESCENDANTS_CAMPAIGN, 0 } );
+            campaignSaveData.setCurrentScenarioInfo( { Campaign::DESCENDANTS_CAMPAIGN, 0 } );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }

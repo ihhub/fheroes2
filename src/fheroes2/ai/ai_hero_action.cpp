@@ -45,6 +45,7 @@
 #include "game_interface.h"
 #include "game_static.h"
 #include "heroes.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "kingdom.h"
 #include "localevent.h"
@@ -226,7 +227,7 @@ namespace
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             if ( centerOn != nullptr ) {
-                Interface::Basic::Get().GetGameArea().SetCenter( *centerOn );
+                Interface::AdventureMap::Get().getGameArea().SetCenter( *centerOn );
             }
 
             if ( playSound ) {
@@ -783,7 +784,7 @@ namespace
         hero.GetPath().Reset();
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
 
@@ -849,7 +850,7 @@ namespace
         AIWhirlpoolTroopLoseEffect( hero );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
 
@@ -1449,7 +1450,7 @@ namespace
         const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut( offset );
         }
 
@@ -1487,7 +1488,7 @@ namespace
         hero.GetPath().Reset();
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( prevPos );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( prevPos );
             hero.FadeIn( offset );
         }
 
@@ -1574,7 +1575,6 @@ namespace AI
 
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         const MP2::MapObjectType objectType = tile.GetObject( dst_index != hero.GetIndex() );
-        bool isAction = true;
 
         const bool isActionObject = MP2::isActionObject( objectType, hero.isShipMaster() );
         if ( isActionObject )
@@ -1585,6 +1585,7 @@ namespace AI
             AIToBoat( hero, dst_index );
             break;
         case MP2::OBJ_COAST:
+            // Coast is not an action object by definition but we need to do hero's animation.
             AIToCoast( hero, dst_index );
             break;
 
@@ -1824,8 +1825,8 @@ namespace AI
             AIToSirens( hero, objectType, dst_index );
             break;
         default:
-            assert( !isActionObject ); // AI should know what to do with this type of action object! Please add logic for it.
-            isAction = false;
+            // AI should know what to do with this type of action object! Please add logic for it.
+            assert( !isActionObject );
             break;
         }
 
@@ -1833,7 +1834,7 @@ namespace AI
             hero.GetPath().Reset();
 
         // ignore empty tiles
-        if ( isAction )
+        if ( isActionObject )
             AI::Get().HeroesActionComplete( hero, dst_index, objectType );
     }
 
@@ -1844,8 +1845,8 @@ namespace AI
         if ( path.isValid() ) {
             hero.SetMove( true );
 
-            Interface::Basic & basicInterface = Interface::Basic::Get();
-            Interface::GameArea & gameArea = basicInterface.GetGameArea();
+            Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+            Interface::GameArea & gameArea = adventureMapInterface.getGameArea();
 
             const Settings & conf = Settings::Get();
 
@@ -1890,10 +1891,10 @@ namespace AI
                         // Update Adventure Map objects' animation.
                         Game::updateAdventureMapAnimationIndex();
 
-                        basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
+                        adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
 
                         // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
-                        assert( basicInterface.GetRedrawMask() == 0 );
+                        assert( adventureMapInterface.getRedrawMask() == 0 );
 
                         display.render();
                     }
@@ -1959,10 +1960,10 @@ namespace AI
                         Game::updateAdventureMapAnimationIndex();
                     }
 
-                    basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
+                    adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
 
                     // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
-                    assert( basicInterface.GetRedrawMask() == 0 );
+                    assert( adventureMapInterface.getRedrawMask() == 0 );
 
                     display.render();
                 }
@@ -2010,7 +2011,7 @@ namespace AI
 #endif
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut();
         }
 
@@ -2019,7 +2020,7 @@ namespace AI
         hero.GetPath().Reset();
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
 
@@ -2046,7 +2047,7 @@ namespace AI
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut();
         }
 
@@ -2055,7 +2056,7 @@ namespace AI
         hero.GetPath().Reset();
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
 

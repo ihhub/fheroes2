@@ -42,6 +42,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "interface_icons.h"
 #include "interface_list.h"
@@ -201,26 +202,19 @@ namespace
         fheroes2::Blit( lowerScrollbar, display, dst.x + 262, dst.y + offsetY );
     }
 
-    void DialogSpellFailed( const Spell & spell )
-    {
-        std::string str = _( "%{spell} failed!!!" );
-        StringReplace( str, "%{spell}", spell.GetName() );
-        Dialog::Message( "", str, Font::BIG, Dialog::OK );
-    }
-
     void HeroesTownGate( Heroes & hero, const Castle * castle )
     {
         assert( castle != nullptr );
 
-        Interface::Basic & I = Interface::Basic::Get();
+        Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
         const fheroes2::Point fromPosition = hero.GetCenter();
         // Position of Hero on radar before casting the spell to clear it after casting.
         const fheroes2::Rect fromRoi( fromPosition.x, fromPosition.y, 1, 1 );
 
         // Before casting the spell, make sure that the game area is centered on the hero
-        I.GetGameArea().SetCenter( fromPosition );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
+        I.getGameArea().SetCenter( fromPosition );
+        I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
 
         const int32_t dst = castle->GetIndex();
         assert( Maps::isValidAbsIndex( dst ) );
@@ -232,15 +226,15 @@ namespace
         hero.Move2Dest( dst );
 
         // Clear previous hero position on radar.
-        I.GetRadar().SetRenderArea( fromRoi );
+        I.getRadar().SetRenderArea( fromRoi );
 
-        I.Redraw( Interface::REDRAW_RADAR );
+        I.redraw( Interface::REDRAW_RADAR );
 
-        I.GetGameArea().SetCenter( hero.GetCenter() );
+        I.getGameArea().SetCenter( hero.GetCenter() );
 
         // Update radar image in scout area around Hero after teleport.
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
-        I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        I.getRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn();
@@ -253,37 +247,37 @@ namespace
 
     bool ActionSpellViewMines()
     {
-        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewMines, Interface::Basic::Get() );
+        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewMines, Interface::AdventureMap::Get() );
         return true;
     }
 
     bool ActionSpellViewResources()
     {
-        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewResources, Interface::Basic::Get() );
+        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewResources, Interface::AdventureMap::Get() );
         return true;
     }
 
     bool ActionSpellViewArtifacts()
     {
-        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewArtifacts, Interface::Basic::Get() );
+        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewArtifacts, Interface::AdventureMap::Get() );
         return true;
     }
 
     bool ActionSpellViewTowns()
     {
-        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewTowns, Interface::Basic::Get() );
+        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewTowns, Interface::AdventureMap::Get() );
         return true;
     }
 
     bool ActionSpellViewHeroes()
     {
-        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewHeroes, Interface::Basic::Get() );
+        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewHeroes, Interface::AdventureMap::Get() );
         return true;
     }
 
     bool ActionSpellViewAll()
     {
-        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewAll, Interface::Basic::Get() );
+        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewAll, Interface::AdventureMap::Get() );
         return true;
     }
 
@@ -301,52 +295,41 @@ namespace
     {
         assert( !hero.isShipMaster() );
 
-        const int32_t center = hero.GetIndex();
         const int32_t boatDestination = fheroes2::getPossibleBoatPosition( hero );
         assert( Maps::isValidAbsIndex( boatDestination ) );
 
-        for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
-            assert( Maps::isValidAbsIndex( boatSource ) );
+        const int32_t boatSource = fheroes2::getSummonableBoat( hero );
 
-            Maps::Tiles & tileSource = world.GetTiles( boatSource );
-            const int boatColor = tileSource.getBoatOwnerColor();
-            const int heroColor = hero.GetColor();
+        // Player should have a summonable boat before calling this function.
+        assert( boatSource != -1 );
 
-            if ( boatColor != Color::NONE && boatColor != heroColor ) {
-                continue;
-            }
+        const int heroColor = hero.GetColor();
 
-            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
+        Maps::Tiles & tileSource = world.GetTiles( boatSource );
 
-            if ( distance > 1 ) {
-                Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
-                gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
+        Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
+        gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
 
-                Maps::Tiles & tileDest = world.GetTiles( boatDestination );
-                tileDest.setBoat( Direction::RIGHT, heroColor );
-                tileSource.resetBoatOwnerColor();
+        Maps::Tiles & tileDest = world.GetTiles( boatDestination );
+        tileDest.setBoat( Direction::RIGHT, heroColor );
+        tileSource.resetBoatOwnerColor();
 
-                gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
+        gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
 
-                return true;
-            }
-        }
-
-        DialogSpellFailed( Spell::SUMMONBOAT );
         return true;
     }
 
     bool ActionSpellDimensionDoor( Heroes & hero )
     {
-        Interface::Basic & I = Interface::Basic::Get();
+        Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
         const fheroes2::Point fromPosition = hero.GetCenter();
         // Position of Hero on radar before casting the spell to clear it after casting.
         const fheroes2::Rect fromRoi( fromPosition.x, fromPosition.y, 1, 1 );
 
         // Before casting the spell, make sure that the game area is centered on the hero
-        I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
+        I.getGameArea().SetCenter( hero.GetCenter() );
+        I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
 
         const int32_t src = hero.GetIndex();
         assert( Maps::isValidAbsIndex( src ) );
@@ -365,15 +348,15 @@ namespace
         hero.Move2Dest( dst );
 
         // Clear previous hero position on radar.
-        I.GetRadar().SetRenderArea( fromRoi );
+        I.getRadar().SetRenderArea( fromRoi );
 
-        I.Redraw( Interface::REDRAW_RADAR );
+        I.redraw( Interface::REDRAW_RADAR );
 
-        I.GetGameArea().SetCenter( hero.GetCenter() );
+        I.getGameArea().SetCenter( hero.GetCenter() );
 
         // Update radar image in scout area around Hero after teleport.
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
-        I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        I.getRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn();
@@ -585,11 +568,11 @@ namespace
             tile.removeOwnershipFlag( MP2::OBJ_MINES );
 
             // Update the color of haunted mine on radar.
-            Interface::Basic & I = Interface::Basic::Get();
+            Interface::AdventureMap & I = Interface::AdventureMap::Get();
             const fheroes2::Point heroPosition = hero.GetCenter();
-            I.GetRadar().SetRenderArea( { heroPosition.x - 1, heroPosition.y - 1, 3, 2 } );
+            I.getRadar().SetRenderArea( { heroPosition.x - 1, heroPosition.y - 1, 3, 2 } );
 
-            I.SetRedraw( Interface::REDRAW_RADAR );
+            I.setRedraw( Interface::REDRAW_RADAR );
         }
 
         world.GetCapturedObject( tile.GetIndex() ).GetTroop().Set( Monster( spell ), count );

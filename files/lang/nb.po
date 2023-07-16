@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-30 00:59+0000\n"
+"POT-Creation-Date: 2023-07-15 12:25+0000\n"
 "PO-Revision-Date: 2023-04-10 00:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -56,6 +56,12 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "AVBRYT"
+
+msgid "OKAY"
+msgstr "OK"
+
+msgid "smallerButton|OKAY"
+msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "GODTA"
@@ -187,9 +193,6 @@ msgstr "MIN"
 
 msgid "MAX"
 msgstr "MAKS"
-
-msgid "OKAY"
-msgstr "OK"
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -3566,14 +3569,24 @@ msgstr "Rolle:"
 msgid "Best Monster:"
 msgstr "Beste skapning:"
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
+#, fuzzy
+msgid ""
+"Are you sure you want to load a new map? (Any unsaved changes to the current "
+"map will be lost.)"
 msgstr ""
+"Er du sikker på at du ønsker å laste inn et tidligere parti?\n"
+"(Alt som er ulagret i dette partiet vil gå tapt.)"
 
 #, fuzzy
-msgid "Cancel back to the New Map menu."
-msgstr "Avbryt og dra tilbake til hovedmenyen."
+msgid ""
+"Are you sure you want to create a new map? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Er du sikker på at du ønsker å laste inn et tidligere parti?\n"
+"(Alt som er ulagret i dette partiet vil gå tapt.)"
 
-msgid "Create a new map either from scratch or using the random map generator."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -3586,6 +3599,99 @@ msgstr "Last inn et parti"
 
 msgid "Load an existing map."
 msgstr ""
+
+#, fuzzy
+msgid "Save Map"
+msgstr "Lagre spill"
+
+#, fuzzy
+msgid "Save the current map."
+msgstr "Lagre det nåværende spillet."
+
+msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Terrain Mode"
+msgstr ""
+
+msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
+msgstr ""
+
+msgid "Object Mode"
+msgstr ""
+
+msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgstr ""
+
+msgid "Detail Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Used for special editing of monsters, heroes and towns."
+msgstr "Beseire alle fiendtlige helter og byer."
+
+msgid "Allows you to draw streams by clicking and dragging."
+msgstr ""
+
+msgid "Stream Mode"
+msgstr ""
+
+msgid "Allows you to draw roads by clicking and dragging."
+msgstr ""
+
+#, fuzzy
+msgid "Road Mode"
+msgstr "Vei"
+
+msgid "Erase Mode"
+msgstr ""
+
+msgid "Used to erase objects off the map."
+msgstr ""
+
+msgid "Change between zoom and normal view."
+msgstr ""
+
+msgid "Magnify"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Undo your last action.  Press again to redo the action."
+msgstr ""
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+msgid "Edit map title, description, and other general information."
+msgstr ""
+
+#, fuzzy
+msgid "Specifications"
+msgstr "Forsteining"
+
+msgid "File Options"
+msgstr "Filvalg"
+
+#, fuzzy
+msgid ""
+"Open the file options menu, where you can save or load maps, or quit out of "
+"the editor."
+msgstr ""
+"Åpne menyen for filvalg, som lar deg laste inn et parti, lagre et parti, "
+"begynne på et nytt parti eller avslutte."
+
+#, fuzzy
+msgid "View the editor system options, which let you customize the editor."
+msgstr "Hent fram menyen for systeminnstillinger og skreddersy spillet."
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Avbryt og dra tilbake til hovedmenyen."
 
 msgid "Cancel back to the main menu."
 msgstr "Avbryt og dra tilbake til hovedmenyen."
@@ -3686,7 +3792,10 @@ msgstr "Vis introfilm"
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Vis filmen for det nåværende punktet av felttoget."
 
-msgid "Select campaign difficulty. It cannot be changed after."
+#, fuzzy
+msgid ""
+"Select the campaign difficulty. This can be lowered at any point during the "
+"campaign."
 msgstr ""
 "Velg vanskelighetsgrad for felttoget. Dette vil ikke kunne endres senere."
 
@@ -3695,6 +3804,18 @@ msgstr "Start på nytt"
 
 msgid "Restart the current scenario."
 msgstr "Start det nåværende kartet på nytt."
+
+#, fuzzy
+msgid "Difficulty"
+msgstr ""
+"Kartets\n"
+"utfordring"
+
+msgid ""
+"You have changed to a lower difficulty for the campaign. You will not be "
+"able to revert this after this point. The high score will be calculated "
+"based solely on the new difficulty. Do you want to proceed?"
+msgstr ""
 
 msgid "Are you sure you want to restart this scenario?"
 msgstr "Er du sikker på at du vil begynne dette kartet på nytt?"
@@ -4206,7 +4327,8 @@ msgstr "Foren tropper"
 msgid "hotkey|upgrade troop"
 msgstr "Oppgrader tropp"
 
-msgid "hotkey|dismiss troop"
+#, fuzzy
+msgid "hotkey|dismiss hero or troop"
 msgstr "Bortvis tropp"
 
 msgid "The save file is corrupted."
@@ -4804,9 +4926,6 @@ msgid ""
 msgstr ""
 "Åpne menyen for filvalg, som lar deg laste inn et parti, lagre et parti, "
 "begynne på et nytt parti eller avslutte."
-
-msgid "File Options"
-msgstr "Filvalg"
 
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr "Hent fram menyen for systeminnstillinger og skreddersy spillet."
@@ -6662,6 +6781,10 @@ msgstr "Trolldommen ble ikke funnet."
 msgid "Only heroes can cast this spell."
 msgstr "Kun helter kan bruke denne trolldommen."
 
+#, fuzzy
+msgid "This hero is not able to cast adventure spells."
+msgstr "Bruk kartmagi"
+
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 "Din helt er for sliten til å bruke denne trolldommen i dag. Prøv igjen i "
@@ -6670,8 +6793,21 @@ msgstr ""
 msgid "This spell cannot be used on a boat."
 msgstr "Denne trolldommen kan ikke bli brukt på et skip."
 
-msgid "This spell can be casted only nearby water."
+#, fuzzy
+msgid "This spell can be casted only nearby ocean."
 msgstr "Denne trolldommen kan kun bli brukt i nærheten av vann."
+
+msgid ""
+"There is no boat available and no free ocean location near the hero to cast "
+"this spell."
+msgstr ""
+
+#, fuzzy
+msgid "There is no more boat available to cast this spell."
+msgstr "Bruk kartmagi"
+
+msgid "There is no free ocean location near the hero to cast this spell."
+msgstr ""
 
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
@@ -6809,9 +6945,6 @@ msgstr "Byportal"
 
 msgid "Select town to port to."
 msgstr "Velg by å reise til."
-
-msgid "%{spell} failed!!!"
-msgstr "%{spell} mislyktes!"
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr "De fiendtlige heltene er nå helt kartlagte."
@@ -10652,3 +10785,6 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{spell} failed!!!"
+#~ msgstr "%{spell} mislyktes!"

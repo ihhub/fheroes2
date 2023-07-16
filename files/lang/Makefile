@@ -19,7 +19,8 @@
 ###########################################################################
 
 ICONV  = iconv
-MSGFMT = sed -e '1,20 s/UTF-8/$(1)/' $< | $(ICONV) -f utf-8 -t $(1) | msgfmt - -o $@
+# TODO: consider converting game fonts and texts to UTF-8 in the engine instead
+MSGFMT = sed -e '1,20 s/UTF-8/$(1)/' $< | $(ICONV) -f utf-8 -t $(1) | if msgfmt --help | grep -q no-convert >/dev/null 2>/dev/null; then msgfmt - -o $@ --no-convert; else msgfmt - -o $@; fi
 
 .PHONY: all clean merge
 

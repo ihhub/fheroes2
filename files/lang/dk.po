@@ -6,12 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-13 05:15+0000\n"
-<<<<<<< Updated upstream
-"PO-Revision-Date: 2023-06-09 16:32+0200\n"
-=======
-"PO-Revision-Date: 2023-05-31 10:03+0200\n"
->>>>>>> Stashed changes
+"POT-Creation-Date: 2023-07-15 12:25+0000\n"
+"PO-Revision-Date: 2023-05-31 12:10+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -60,6 +56,12 @@ msgstr "AFSLUT"
 
 msgid "CANCEL"
 msgstr "AFBRYD"
+
+msgid "OKAY"
+msgstr "OK"
+
+msgid "smallerButton|OKAY"
+msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "GODTAG"
@@ -153,11 +155,8 @@ msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
-<<<<<<< Updated upstream
-"UDVIDELSES\n"
-=======
+
 "UDVIDELSE\n"
->>>>>>> Stashed changes
 "FELTTOG"
 
 msgid "HOT SEAT"
@@ -192,9 +191,6 @@ msgstr "MIN"
 
 msgid "MAX"
 msgstr "MAKS"
-
-msgid "OKAY"
-msgstr "OK"
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -2275,7 +2271,7 @@ msgid ""
 msgstr ""
 "Tyvelauget skaffer informationer om hvordan andre spillere klarer sig i "
 "forhold til dig. Desuden udspejdes fjendtlige byer og borge også. Jo flere "
-"Tyvelaug du har, jo flere information får du (maks 5)."
+"Tyvelaug du har, jo flere informationer får du."
 
 msgid "The Tavern increases morale for troops defending the castle."
 msgstr "Kroen øger de forsvarende styrkers moral med 2 point."
@@ -2310,7 +2306,7 @@ msgid ""
 msgstr ""
 "På markedspladsen kan man bytte én resursetype til en anden. Du opnår mere "
 "og mere fordelagtige byttehandlinger, jo flere markedspladser du har i dit "
-"rige (maks 5)."
+"rige."
 
 msgid ""
 "The Moat slows attacking units. Any unit entering the moat must end its turn "
@@ -2325,7 +2321,7 @@ msgid ""
 "day."
 msgstr ""
 "Borgen forstærker byens forsvar mod angreb. Borgen øger desuden dit riges "
-"indkomst med %{count} om dagen."
+"indkomst med %{count} guldstykker om dagen."
 
 msgid ""
 "The Tent provides workers to build a castle, provided the materials and the "
@@ -2338,16 +2334,16 @@ msgid ""
 "The Captain's Quarters provides a captain to assist in the castle's defense "
 "when no hero is present."
 msgstr ""
-"Kaptajnens kvarter frembringer en kaptajn til at assisterer de forsvarende "
+"Kaptajnens kvarter frembringer en kaptajn til at assistere de forsvarende "
 "styrker, når der ikke er en helt tilstede."
 
 msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
 msgstr ""
-"Helte kan købe en magibog og lære besværgelser, når de besøger magilauget. "
-"Desuden fornyes heltes maksimale antal mana automatisk, hvis de ender deres "
-"tur stående i byen."
+"Helte kan købe en magibog og lære besværgelser, når de besøger "
+"magikerlauget. Desuden fornyes heltes maksimale antal magipoint automatisk, "
+"hvis de ender deres tur stående i byen."
 
 msgid "Recruit %{name}"
 msgstr "Rekruttér %{name}"
@@ -2360,8 +2356,8 @@ msgid ""
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
 "Din helt er nødt til at købe en magibog, før denne må træde ind i "
-"magilauget. Men helten har desværre ikke plads til at bære en magibog. Prøv "
-"at afgive én af dine artefakter til en anden helt."
+"magikerlauget. Men helten har desværre ikke plads til at bære en magibog. "
+"Prøv at afgive én af dine artefakter til en anden helt."
 
 msgid "Exit"
 msgstr "Gå"
@@ -2588,10 +2584,6 @@ msgid ""
 msgstr ""
 "En gruppe %{monster} med drømme om magt og ære ønsker at forene sig med din "
 "hær.\n"
-<<<<<<< Updated upstream
-"\n"
-=======
->>>>>>> Stashed changes
 "Godtager du disse betingleser?"
 
 msgid ""
@@ -3370,8 +3362,136 @@ msgstr "Personlighed:"
 msgid "Best Monster:"
 msgstr "Bedste væsen:"
 
-msgid "difficulty|Easy"
-msgstr "Let"
+#, fuzzy
+msgid ""
+"Are you sure you want to load a new map? (Any unsaved changes to the current "
+"map will be lost.)"
+msgstr ""
+"Er du sikker på, om du vil indlæse et nyt spil? (Dit nuværende spil vil gå "
+"tabt.)"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to create a new map? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Er du sikker på, om du vil indlæse et nyt spil? (Dit nuværende spil vil gå "
+"tabt.)"
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Nyt spil"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Indlæs spil"
+
+msgid "Load an existing map."
+msgstr ""
+
+#, fuzzy
+msgid "Save Map"
+msgstr "Gem spil"
+
+#, fuzzy
+msgid "Save the current map."
+msgstr "Gem nuværende spil."
+
+msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Terrain Mode"
+msgstr ""
+
+msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
+msgstr ""
+
+msgid "Object Mode"
+msgstr ""
+
+msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgstr ""
+
+msgid "Detail Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Used for special editing of monsters, heroes and towns."
+msgstr "Besejr alle fjendtlige helte og byer."
+
+msgid "Allows you to draw streams by clicking and dragging."
+msgstr ""
+
+msgid "Stream Mode"
+msgstr ""
+
+msgid "Allows you to draw roads by clicking and dragging."
+msgstr ""
+
+msgid "Road Mode"
+msgstr ""
+
+msgid "Erase Mode"
+msgstr ""
+
+msgid "Used to erase objects off the map."
+msgstr ""
+
+msgid "Change between zoom and normal view."
+msgstr ""
+
+msgid "Magnify"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Undo your last action.  Press again to redo the action."
+msgstr ""
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+msgid "Edit map title, description, and other general information."
+msgstr ""
+
+#, fuzzy
+msgid "Specifications"
+msgstr "Forstening"
+
+msgid "File Options"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Open the file options menu, where you can save or load maps, or quit out of "
+"the editor."
+msgstr ""
+"Frembring filindstillingsmenuen, som tillader dig at indlæse, gemme, starte "
+"et nyt spil eller afslutte."
+
+msgid "View the editor system options, which let you customize the editor."
+msgstr ""
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Afbryd og gå tilbage til hovedmenuen."
+
+msgid "Cancel back to the main menu."
+msgstr "Afbryd og gå tilbage til hovedmenuen."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
 
 msgid "difficulty|Normal"
 msgstr "Normal"
@@ -3381,15 +3501,10 @@ msgstr "Svær"
 
 msgid "difficulty|Expert"
 msgstr "Ekspert"
-<<<<<<< Updated upstream
-=======
 
 msgid "difficulty|Impossible"
 msgstr "Umulig"
->>>>>>> Stashed changes
 
-msgid "difficulty|Impossible"
-msgstr "Umulig"
 msgid "difficulty|Easy"
 msgstr "Let"
 
@@ -3464,13 +3579,25 @@ msgstr "Vis intro"
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Vis intro videoer for felttogets nuværende stadie."
 
-msgid "Select campaign difficulty. It cannot be changed after."
+msgid ""
+"Select the campaign difficulty. This can be lowered at any point during the "
+"campaign."
 msgstr ""
 
 msgid "Restart"
 msgstr ""
 
 msgid "Restart the current scenario."
+msgstr ""
+
+#, fuzzy
+msgid "Difficulty"
+msgstr "Kort-niveau:"
+
+msgid ""
+"You have changed to a lower difficulty for the campaign. You will not be "
+"able to revert this after this point. The high score will be calculated "
+"based solely on the new difficulty. Do you want to proceed?"
 msgstr ""
 
 msgid "Are you sure you want to restart this scenario?"
@@ -3976,7 +4103,7 @@ msgstr ""
 msgid "hotkey|upgrade troop"
 msgstr ""
 
-msgid "hotkey|dismiss troop"
+msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
 msgid "The save file is corrupted."
@@ -4510,9 +4637,6 @@ msgid ""
 msgstr ""
 "Frembring filindstillingsmenuen, som tillader dig at indlæse, gemme, starte "
 "et nyt spil eller afslutte."
-
-msgid "File Options"
-msgstr ""
 
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
@@ -5429,22 +5553,14 @@ msgid ""
 "wood per day."
 msgstr ""
 "Denne savmølle er nu under din kontrol. Den forsyner dit rige med %{count} "
-<<<<<<< Updated upstream
-"mængder træ om dagen."
-=======
 "mængde træ om dagen."
->>>>>>> Stashed changes
 
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
 msgstr ""
 "Denne malmmine er nu under din kontrol. Den forsyner dit rige med %{count} "
-<<<<<<< Updated upstream
-"mængder malm om dagen."
-=======
 "mængde malm om dagen."
->>>>>>> Stashed changes
 
 msgid ""
 "You gain control of a sulfur mine. It will provide you with %{count} unit of "
@@ -5997,13 +6113,27 @@ msgstr ""
 msgid "Only heroes can cast this spell."
 msgstr ""
 
+msgid "This hero is not able to cast adventure spells."
+msgstr ""
+
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
 msgid "This spell cannot be used on a boat."
 msgstr ""
 
-msgid "This spell can be casted only nearby water."
+msgid "This spell can be casted only nearby ocean."
+msgstr ""
+
+msgid ""
+"There is no boat available and no free ocean location near the hero to cast "
+"this spell."
+msgstr ""
+
+msgid "There is no more boat available to cast this spell."
+msgstr ""
+
+msgid "There is no free ocean location near the hero to cast this spell."
 msgstr ""
 
 msgid ""
@@ -6125,9 +6255,6 @@ msgid "Town Portal"
 msgstr ""
 
 msgid "Select town to port to."
-msgstr ""
-
-msgid "%{spell} failed!!!"
 msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
