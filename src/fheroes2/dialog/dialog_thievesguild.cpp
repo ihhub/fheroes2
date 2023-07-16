@@ -490,7 +490,7 @@ void Dialog::ThievesGuild( bool oracle )
     dst_pt.x = cur_pt.x + startx + 1;
     dst_pt.y -= 2;
     GetBestHeroArmyInfo( v, colors );
-    const int frameIcnID = isEvilInterface && !oracle ? ICN::LOCATORE : ICN::LOCATORS; 
+    const int frameIcnID = isEvilInterface && !oracle ? ICN::LOCATORE : ICN::LOCATORS;
     DrawHeroIcons( v, dst_pt, stepx, frameIcnID );
 
     text.Set( _( "Best Hero Stats:" ) );
