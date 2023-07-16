@@ -1469,18 +1469,7 @@ namespace fheroes2
                     _icnVsSprite[id][1] = GetICN( ICN::WELLXTRA, 1 );
                     break;
                 }
-
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-
-                    out = GetICN( ICN::WELLXTRA, 0 + i );
-
-                    // clean the button.
-                    Fill( out, 6 - 2 * i, 2 + i, 52, 14, getButtonFillingColor( i == 0 ) );
-                }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "guildWell|EXIT" ), { 6, 3 }, { 5, 4 }, { 52, 14 },
-                                    fheroes2::FontColor::WHITE );
+                createTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "guildWell|EXIT" ), ICN::EMPTY_GUILDWELL_BUTTON );
 
                 break;
             }
@@ -3819,6 +3808,31 @@ namespace fheroes2
                     if ( pixelPosition < original.width() * original.height() ) {
                         Fill( out, 5 - i, 3 + 2 * i, 88 - i, 18 - i, original.image()[pixelPosition] );
                     }
+                }
+
+                break;
+            }
+            case ICN::EMPTY_GUILDWELL_BUTTON: {
+                const int originalID = ICN::WELLXTRA;
+                LoadOriginalICN( originalID );
+
+                if ( _icnVsSprite[originalID].size() < 3 ) {
+                    break;
+                }
+                _icnVsSprite[id].resize( 2 );
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    const Sprite & original = GetICN( originalID, 0 + i );
+
+                    Sprite & out = _icnVsSprite[id][i];
+                    // the empty button needs to shortened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result
+                    out.resize( original.width() - 1, original.height() );
+                    out.reset();
+
+                    Copy( original, 0, 0, out, 1, 0, original.width() - 4, original.height() );
+                    Copy( original, original.width() - 3, 0, out, original.width() - 4, 0, 3, original.height() );
+
+                    Fill( out, 7 - i * 2, 2 + i, 50 + i, 14, getButtonFillingColor( i == 0 ) );
                 }
 
                 break;

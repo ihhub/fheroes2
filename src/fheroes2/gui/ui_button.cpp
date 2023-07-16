@@ -524,10 +524,9 @@ namespace fheroes2
 
         return { offsetX + shadow.x(), offsetY + shadow.y(), releasedWithBackground, pressedWithBackground, disabledWithBackground };
     }
-
     int getButtonBackground( const int emptyButtonIcnID )
     {
-        int backgroundIcnID = 0;
+        int backgroundIcnID = ICN::UNKNOWN;
         switch ( emptyButtonIcnID ) {
         case ICN::EMPTY_GOOD_BUTTON:
             backgroundIcnID = ICN::STONEBAK;
@@ -537,6 +536,8 @@ namespace fheroes2
             break;
         case ICN::EMPTY_POL_BUTTON:
             backgroundIcnID = ICN::STONEBAK_POL;
+            break;
+        case ICN::EMPTY_GUILDWELL_BUTTON:
             break;
         default:
             // Was a new empty button template added?
@@ -610,7 +611,7 @@ namespace fheroes2
 
     void getTextAdaptedButton( Sprite & released, Sprite & pressed, const char * text, const int emptyButtonIcnID )
     {
-        const bool isGoodFont = emptyButtonIcnID == ICN::EMPTY_GOOD_BUTTON;
+        const bool isGoodFont = emptyButtonIcnID == ICN::EMPTY_GOOD_BUTTON || emptyButtonIcnID == ICN::EMPTY_GUILDWELL_BUTTON;
         const fheroes2::FontColor buttonFontColor = isGoodFont ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
         const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFontColor };
         
@@ -622,29 +623,31 @@ namespace fheroes2
         const int32_t textWidth = releasedText.width();
         assert( textWidth > 0 );
 
-        const int32_t buttonBorder = 3 + 3;
+        const int32_t buttonBorder = emptyButtonIcnID == ICN::EMPTY_GUILDWELL_BUTTON ? 0 + 0 : 3 + 3;
         const int32_t textWidthWithBorder = textWidth + buttonBorder;
 
         // The minimum text space width for a campaign button is 87 judging from the shared widths of the
         // original OKAY and the CANCEL buttons even though OKAY is a shorter word
         // TODO: Make the minimum width be adjusted for the various empty ICNs.
         // NOTE: Buttons can use the same ICN but have different minimum widths, i.e. good buttons
-        const int32_t minimumButtonTextWidthWithBorder = 87;
+        const int32_t minimumButtonTextWidthWithBorder = emptyButtonIcnID == ICN::EMPTY_GUILDWELL_BUTTON ? 60 : 87;
         const int32_t maximumButtonWidth = 200; // Why is such a wide button needed?
         const int32_t finalWidth = std::clamp( textWidthWithBorder, minimumButtonTextWidthWithBorder, maximumButtonWidth );
 
         // NOTE: Buttons have different side background borders
-        const int32_t sideBackgroundBorders = 7;
+        const int32_t sideBackgroundBorders = emptyButtonIcnID == ICN::EMPTY_GUILDWELL_BUTTON ? 2 : 7;
         assert( finalWidth + sideBackgroundBorders > 0 );
 
         released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), finalWidth + sideBackgroundBorders );
         pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), finalWidth + sideBackgroundBorders );
 
         const int backgroundIcnID = getButtonBackground( emptyButtonIcnID );
-        makeTransparentBackground( released, pressed, backgroundIcnID );
+        if ( backgroundIcnID != ICN::UNKNOWN ) {
+            makeTransparentBackground( released, pressed, backgroundIcnID );
+        }
 
-        releasedText.draw( 5, 5, finalWidth, released );
-        pressedText.draw( 4, 6, finalWidth, pressed );
+        releasedText.draw( emptyButtonIcnID == ICN::EMPTY_GUILDWELL_BUTTON ? 3 : 5, emptyButtonIcnID == ICN::EMPTY_GUILDWELL_BUTTON ? 2 : 5, finalWidth, released );
+        pressedText.draw( emptyButtonIcnID == ICN::EMPTY_GUILDWELL_BUTTON ? 2 : 4, emptyButtonIcnID == ICN::EMPTY_GUILDWELL_BUTTON ? 3 : 6, finalWidth, pressed );
     }
 
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface,
