@@ -130,7 +130,7 @@ void randomizeGameAreaPoint() {
     VERBOSE_LOG("Height from: " << heightFrom << " to: " << heightTo)
     VERBOSE_LOG("Next point x: " << x << " y: " << y)
 
-    Interface::Basic::Get().GetGameArea().SetCenter({x, y});
+    Interface::AdventureMap::Get().getGameArea().SetCenter({x, y});
 }
 
 uint32_t lwpLastMapUpdate = 0;
@@ -181,9 +181,11 @@ void resizeDisplay() {
 
     fheroes2::ResolutionInfo nextResolution = display.getScaledScreenSize(scale);
 
-    if (nextResolution.screenWidth != display.width() || nextResolution.screenHeight != display.height()) {
+    if (nextResolution.screenWidth != display.width() ||
+        nextResolution.screenHeight != display.height()) {
         display.setResolution(nextResolution);
-        Interface::Basic::Get().GetGameArea().generate({display.width(), display.height()}, true);
+        Interface::AdventureMap::Get().getGameArea().generate({display.width(), display.height()},
+                                                              true);
     }
 }
 
@@ -234,12 +236,13 @@ void handleSDLEvents(SDL_Event &event, LocalEvent &le, fheroes2::Display &displa
 }
 
 void renderWallpaper() {
-    Interface::Basic &interface = Interface::Basic::Get();
+    Interface::GameArea &gameArea = Interface::AdventureMap::Get().getGameArea();
+
     fheroes2::Display &display = fheroes2::Display::instance();
     LocalEvent &le = LocalEvent::Get();
     SDL_Event event;
 
-    interface.GetGameArea().generate({display.width(), display.height()}, true);
+    gameArea.generate({display.width(), display.height()}, true);
 
     while (true) {
         handleSDLEvents(event, le, display);
@@ -247,11 +250,16 @@ void renderWallpaper() {
         if (Game::validateAnimationDelay(Game::MAPS_DELAY)) {
             Game::updateAdventureMapAnimationIndex();
 
-            interface.GetGameArea().Redraw(
+            gameArea.Redraw(
                     display,
                     Interface::RedrawLevelType::LEVEL_OBJECTS |
                     Interface::RedrawLevelType::LEVEL_HEROES);
             display.render();
+        } else {
+            VERBOSE_LOG("Delay: " << Game::getAnimationDelayValue(Game::MAPS_DELAY))
+            SDL_Delay(
+                    Game::getAnimationDelayValue(Game::MAPS_DELAY)
+            );
         }
     }
 }
@@ -259,7 +267,7 @@ void renderWallpaper() {
 void configure() {
     Settings &conf = Settings::Get();
     conf.SetGameType(Game::TYPE_STANDARD);
-    conf.SetCurrentColor(-1);
+    conf.SetCurrentColor(Color::NONE);
     conf.setVSync(true);
     conf.setSystemInfo(false);
     conf.setHideInterface(true);
