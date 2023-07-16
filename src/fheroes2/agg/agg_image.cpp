@@ -441,7 +441,7 @@ namespace
             break;
         }
 
-        for ( int i = 0; i < texts.size(); ++i ) {
+        for ( int32_t i = 0; i < static_cast<int32_t>( texts.size() ); ++i ) {
             createTextAdaptedButton( _icnVsSprite[campaignSetIcnId][2 * i], _icnVsSprite[campaignSetIcnId][2 * i + 1], texts[i], emptyButtonIcnID );
         }
     }
@@ -1503,7 +1503,7 @@ namespace fheroes2
                     // The evil buttons' released state are 2 pixels wider.
                     const int offsetEvilX = isEvilInterface ? 2 : 0;
 
-                    for ( int32_t i = 0; i < 4; ++i ) {
+                    for ( size_t i = 0; i < 4; ++i ) {
                         // released
                         const Sprite & originalReleased = GetICN( originalIcnId, 2 * i );
 
@@ -1540,7 +1540,7 @@ namespace fheroes2
                 const int baseIcnId = ICN::X_CMPBTN;
 
                 if ( useOriginalResources() ) {
-                    for ( int32_t i = 0; i < 4; ++i ) {
+                    for ( size_t i = 0; i < 4; ++i ) {
                         // released
                         const Sprite & originalReleased = GetICN( baseIcnId, 2 * i );
 
@@ -1549,7 +1549,7 @@ namespace fheroes2
                         released.reset();
 
                         Copy( originalReleased, 0, 0, released, 1, 0, originalReleased.width(), originalReleased.height() );
-                        
+
                         // pressed
                         const Sprite & originalPressed = GetICN( baseIcnId, 2 * i + 1 );
 
