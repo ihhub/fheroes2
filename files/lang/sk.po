@@ -7185,7 +7185,7 @@ msgid "Beach"
 msgstr "Pláž"
 
 msgid "Lava"
-msgstr "Láva"
+msgstr ""
 
 msgid "Dirt"
 msgstr "Hlina"
@@ -7194,7 +7194,7 @@ msgid "Grass"
 msgstr "Tráva"
 
 msgid "Ocean"
-msgstr "Oceán"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Malá"
@@ -7263,13 +7263,13 @@ msgid "Treasure Chest"
 msgstr "Truhlica s pokladom"
 
 msgid "Faerie Ring"
-msgstr "Vílý kruh"
+msgstr ""
 
 msgid "Campfire"
 msgstr "Táborák"
 
 msgid "Fountain"
-msgstr "Fontána"
+msgstr ""
 
 msgid "Gazebo"
 msgstr "Altánok"
@@ -7281,13 +7281,13 @@ msgid "Archer's House"
 msgstr "Lukostrelecký dom"
 
 msgid "Goblin Hut"
-msgstr "Chata Goblinov"
+msgstr ""
 
 msgid "Dwarf Cottage"
-msgstr "Trpasličia chalúpka"
+msgstr ""
 
 msgid "Peasant Hut"
-msgstr "Sedliacka chatrč"
+msgstr ""
 
 msgid "Stables"
 msgstr "Stajne"
@@ -7303,15 +7303,15 @@ msgstr "Dračie mesto"
 
 msgid "Lighthouse"
 msgid_plural "Lighthouses"
-msgstr[0] "Maják"
-msgstr[1] "Majáky"
-msgstr[2] "Majákov"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
-msgstr[0] "Vodné koleso"
-msgstr[1] "Vodné kolesá"
-msgstr[2] "Vodných kolies"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Mines"
 msgstr "Bane"
@@ -7360,9 +7360,9 @@ msgstr "Vodný vír"
 
 msgid "Windmill"
 msgid_plural "Windmills"
-msgstr[0] "Veterný mlyn"
-msgstr[1] "Veterné mlyny"
-msgstr[2] "Veterných mlynov"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Artifact"
 msgstr "Artefakt"
