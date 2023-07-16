@@ -1511,28 +1511,30 @@ namespace fheroes2
                     const bool isEvilInterface = id == ICN::EVIL_CAMPAIGN_BUTTONS;
                     const int originalIcnId = isEvilInterface ? ICN::CAMPXTRE : ICN::CAMPXTRG;
 
-                    // The evil buttons' pressed state need to be 2 pixels wider.
+                    // The evil buttons' released state are 2 pixels wider.
                     const int offsetEvilX = isEvilInterface ? 2 : 0;
 
                     for ( int32_t i = 0; i < 4; ++i ) {
-                        // The released state image.
-                        _icnVsSprite[id][2 * i] = GetICN( originalIcnId, 2 * i );
+                        // released
+                        const Sprite & originalReleased = GetICN( originalIcnId, 2 * i );
 
-                        // The pressed state image.
-                        const Sprite & original = GetICN( originalIcnId, 2 * i + 1 );
+                        Sprite & released = _icnVsSprite[id][2 * i];
+                        released.resize( originalReleased.width() + 1, originalReleased.height() - 10 );
+                        released.reset();
 
-                        Sprite & resized = _icnVsSprite[id][2 * i + 1];
-                        // Change pressed state image to have same width and height as released image
-                        resized.resize( _icnVsSprite[id][2 * i].width() + offsetEvilX, _icnVsSprite[id][2 * i].height() );
-                        resized.reset();
+                        Copy( originalReleased, 7 - offsetEvilX, 0, released, 1, 0, originalReleased.width(), originalReleased.height() - 10 );
 
-                        // Restore content of the pressed state image.
-                        Copy( original, 0, 0, resized, original.x(), original.y(), original.width() + offsetEvilX, original.height() );
-                    }
-                    for ( int32_t i = 0; i < 4; ++i ) {
-                        // released button
-                        _icnVsSprite[id][2 * i].setPosition( 1, 0 );
-                        _icnVsSprite[id][2 * i + 1].setPosition( 0, 1 );
+                        // pressed
+                        const Sprite & originalPressed = GetICN( originalIcnId, 2 * i + 1 );
+
+                        Sprite & pressed = _icnVsSprite[id][2 * i + 1];
+                        pressed.resize( originalPressed.width() + 1, originalPressed.height() + 1 );
+                        pressed.reset();
+
+                        Copy( originalPressed, 0, 1, pressed, 0, 1, originalPressed.width() - 1, originalPressed.height() );
+                        _icnVsSprite[id][2 * i + 1].setPosition( 0, 0 );
+
+                        fheroes2::makeTransparentBackground( released, pressed, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
                     }
                     createTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
                                           isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON );
