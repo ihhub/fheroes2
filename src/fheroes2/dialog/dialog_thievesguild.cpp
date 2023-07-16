@@ -310,9 +310,9 @@ void Dialog::ThievesGuild( bool oracle )
     Dialog::FrameBorder frameborder( { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } );
     const fheroes2::Point cur_pt( frameborder.GetArea().x, frameborder.GetArea().y );
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-    const int backgroundIcnID = isEvilInterface && !oracle ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
+    const bool isEvilInterfaceTown = Settings::Get().isEvilInterfaceEnabled() && !oracle;
 
+    const int backgroundIcnID = isEvilInterfaceTown ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
     fheroes2::Blit( fheroes2::AGG::GetICN( backgroundIcnID, 0 ), display, cur_pt.x, cur_pt.y );
 
     fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
@@ -490,7 +490,7 @@ void Dialog::ThievesGuild( bool oracle )
     dst_pt.x = cur_pt.x + startx + 1;
     dst_pt.y -= 2;
     GetBestHeroArmyInfo( v, colors );
-    const int frameIcnID = isEvilInterface && !oracle ? ICN::LOCATORE : ICN::LOCATORS;
+    const int frameIcnID = isEvilInterfaceTown ? ICN::LOCATORE : ICN::LOCATORS;
     DrawHeroIcons( v, dst_pt, stepx, frameIcnID );
 
     text.Set( _( "Best Hero Stats:" ) );
