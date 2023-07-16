@@ -3799,7 +3799,7 @@ namespace fheroes2
                     // the empty button needs to widened by 2 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result 
                     out.resize( original.width() + 2, original.height() + 1 );
                     out.reset();
-                    // TODO: This mimics the original appearance of the pressed state, but we have to fix it and make a proper pressed state of the button
+
                     Copy( original, 0, 0, out, 1 - i, 0 + i, original.width() - 3 - i, original.height() + i );
                     Copy( original, 4 + i, 0, out, original.width() - 3 - i, 0 + i, 2 - i, original.height() + i );
                     Copy( original, original.width() - 3 - i, 0, out, original.width() - 1 - 2 * i, 0 + i, 3 + i, original.height() + i );
