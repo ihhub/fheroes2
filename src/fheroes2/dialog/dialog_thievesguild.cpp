@@ -356,8 +356,7 @@ void Dialog::ThievesGuild( bool oracle )
     }
 
     // bar
-    const int32_t exitButtonWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
-    
+    const int32_t exitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
     const int32_t bottomBarOffsetY = 461;
 
     dst_pt.x = cur_pt.x;
@@ -365,11 +364,9 @@ void Dialog::ThievesGuild( bool oracle )
 
     const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
     const int32_t barHeight = bottomBar.height();
-    const int32_t bottomBarWidth = bottomBar.width();
-    const int32_t allowedBottomBarWidth = 640 - exitButtonWidth;
-    fheroes2::Blit( bottomBar, 0, 0, display, dst_pt.x, dst_pt.y, 640 /2, barHeight );
-    fheroes2::Blit( bottomBar, bottomBar.width() - (640 / 2 - exitButtonWidth), 0, display, dst_pt.x + 640/2, dst_pt.y,
-                    640/2 - exitButtonWidth, barHeight );
+    fheroes2::Blit( bottomBar, 0, 0, display, dst_pt.x, dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2, barHeight );
+    fheroes2::Blit( bottomBar, bottomBar.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + exitWidth, 0, display, dst_pt.x + fheroes2::Display::DEFAULT_WIDTH / 2,
+                    dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2 - exitWidth, barHeight );
 
     // text bar
     text.Set( oracle ? _( "Oracle: Player Rankings" ) : _( "Thieves' Guild: Player Rankings" ), Font::BIG );
@@ -378,7 +375,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Blit( dst_pt.x, dst_pt.y );
 
     // button exit
-    dst_pt.x = cur_pt.x + 640 - exitButtonWidth;
+    dst_pt.x = cur_pt.x + 640 - exitWidth;
     dst_pt.y = cur_pt.y + 461;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
 
