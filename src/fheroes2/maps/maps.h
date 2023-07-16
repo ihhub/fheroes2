@@ -32,6 +32,8 @@
 
 #define TILEWIDTH 32
 
+class Heroes;
+
 using MapsIndexes = std::vector<int32_t>;
 
 namespace Maps
@@ -65,6 +67,8 @@ namespace Maps
 
     Indexes getAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile = 1 );
 
+    MapsIndexes getVisibleMonstersAroundHero( const Heroes & hero );
+
     Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType );
     Indexes ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const MP2::MapObjectType objectType );
     Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType, const bool ignoreHeroes );
@@ -73,8 +77,10 @@ namespace Maps
     bool isValidForDimensionDoor( int32_t targetIndex, bool isWater );
     // Checks if the tile is guarded by a monster
     bool isTileUnderProtection( const int32_t tileIndex );
-    // Returns a list of indexes of tiles with monsters guarding the specified tile
-    Indexes getMonstersProtectingTile( const int32_t tileIndex );
+    // Returns a list of indexes of tiles with monsters guarding the specified tile. If the 'checkObjectOnTile' parameter
+    // is set to true, then an additional check is performed to see if it is possible to interact with an object on this
+    // tile without triggering a monster attack.
+    Indexes getMonstersProtectingTile( const int32_t tileIndex, const bool checkObjectOnTile = true );
 
     Indexes GetObjectPositions( const MP2::MapObjectType objectType, bool ignoreHeroes );
     Indexes GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes );

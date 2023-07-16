@@ -23,6 +23,7 @@
 #ifndef H2KINGDOM_H
 #define H2KINGDOM_H
 
+#include <algorithm>
 #include <cstdint>
 #include <functional>
 #include <list>
@@ -89,6 +90,20 @@ public:
     bool AllowPayment( const Funds & ) const;
     bool AllowRecruitHero( bool check_payment ) const;
 
+    // Return true if this kingdom can recruit heroes, false otherwise. For
+    // example this function will return false when kingdom has one town that
+    // cannot be upgraded to a castle.
+    bool canRecruitHeroes() const
+    {
+        return std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return ( castle->isCastle() || castle->Modes( Castle::ALLOWCASTLE ) ); } );
+    }
+
+    // Return true if this kingdom has any heroes, false otherwise.
+    bool hasHeroes() const
+    {
+        return !heroes.empty();
+    }
+
     void SetLastBattleWinHero( const Heroes & hero );
     Heroes * GetLastBattleWinHero() const;
 
@@ -106,7 +121,7 @@ public:
     {
         return resource;
     }
-    Funds GetIncome( int = INCOME_ALL ) const;
+    Funds GetIncome( int type = INCOME_ALL ) const;
 
     double GetArmiesStrength() const;
 
@@ -173,6 +188,9 @@ public:
     bool isVisited( int32_t, const MP2::MapObjectType objectType ) const;
 
     bool isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const;
+
+    bool opponentsCanRecruitMoreHeroes() const;
+    bool opponentsHaveHeroes() const;
 
     bool HeroesMayStillMove() const;
 

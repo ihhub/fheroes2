@@ -452,7 +452,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     // button exit
     dst_pt.x = cur_pt.x + 553;
     dst_pt.y = cur_pt.y + 428;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_SMALLER_EXIT, 0, 1 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_SMALLER_EXIT_GOOD, 0, 1 );
 
     if ( GetKingdom().GetCastles().size() < 2 ) {
         buttonPrevCastle.disable();
@@ -619,13 +619,17 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             Dialog::Message( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Font::BIG );
         else if ( hero1 && le.MousePressRight( rectHero1 ) ) {
             LocalEvent::GetClean();
-            hero1->OpenDialog( true, false, false, false );
-            display.render();
+            hero1->OpenDialog( true, true, false, false, false );
+
+            // Use half fade if game resolution is not 640x480.
+            fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
         }
         else if ( hero2 && le.MousePressRight( rectHero2 ) ) {
             LocalEvent::GetClean();
-            hero2->OpenDialog( true, false, false, false );
-            display.render();
+            hero2->OpenDialog( true, true, false, false, false );
+
+            // Use half fade if game resolution is not 640x480.
+            fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
         }
         else if ( le.MousePressRight( buttonNextCastle.area() ) ) {
             Dialog::Message( _( "Show next town" ), _( "Click to show next town." ), Font::BIG );

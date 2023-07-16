@@ -219,10 +219,9 @@ Heroes::Heroes( int heroid, int rc )
 {
     name = _( Heroes::GetName( heroid ) );
 
-    // set default army
     army.Reset( true );
 
-    // extra hero
+    // Extra Debug Hero
     switch ( hid ) {
     case DEBUG_HERO:
         army.Clean();
@@ -244,9 +243,11 @@ Heroes::Heroes( int heroid, int rc )
         experience = 777;
         magic_point = 120;
 
-        // all spell in magic book
-        for ( int32_t spell = Spell::FIREBALL; spell < Spell::RANDOM; ++spell )
-            AppendSpellToBook( Spell( spell ), true );
+        // This hero has all the spells in his spell book
+        for ( const int spellId : Spell::getAllSpellIdsSuitableForSpellBook() ) {
+            AppendSpellToBook( Spell( spellId ), true );
+        }
+
         break;
 
     default:
@@ -454,10 +455,10 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
         PickupArtifact( art );
     };
 
-    // 3 artifacts
-    addInitialArtifact( Artifact( dataStream.get() ) );
-    addInitialArtifact( Artifact( dataStream.get() ) );
-    addInitialArtifact( Artifact( dataStream.get() ) );
+    // 3 artifacts. Artifact IDs are by value 1 bigger than in the original game.
+    addInitialArtifact( Artifact( dataStream.get() + 1 ) );
+    addInitialArtifact( Artifact( dataStream.get() + 1 ) );
+    addInitialArtifact( Artifact( dataStream.get() + 1 ) );
 
     // Skip unused byte.
     dataStream.skip( 1 );
@@ -993,16 +994,18 @@ bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
     const int32_t index = tile.GetIndex();
     const MP2::MapObjectType objectType = tile.GetObject( false );
 
-    if ( Visit::GLOBAL == type )
+    if ( Visit::GLOBAL == type ) {
         return GetKingdom().isVisited( index, objectType );
+    }
 
     return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( index, objectType ) );
 }
 
 bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::type_t type ) const
 {
-    if ( Visit::GLOBAL == type )
+    if ( Visit::GLOBAL == type ) {
         return GetKingdom().isVisited( objectType );
+    }
 
     return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
@@ -1016,7 +1019,7 @@ void Heroes::SetVisited( int32_t index, Visit::type_t type )
         GetKingdom().SetVisited( index, objectType );
     }
     else if ( !isVisited( tile ) && MP2::OBJ_NONE != objectType ) {
-        visit_object.push_front( IndexObject( index, objectType ) );
+        visit_object.emplace_front( index, objectType );
     }
 }
 
@@ -1062,7 +1065,7 @@ void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectT
 void Heroes::markHeroMeeting( int heroID )
 {
     if ( heroID < UNKNOWN && !hasMetWithHero( heroID ) )
-        visit_object.push_front( IndexObject( heroID, MP2::OBJ_HEROES ) );
+        visit_object.emplace_front( heroID, MP2::OBJ_HEROES );
 }
 
 void Heroes::unmarkHeroMeeting()
@@ -1154,7 +1157,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
         // If there were artifacts assembled we check them for scout area bonus.
         for ( const ArtifactSetData & assembledArtifact : assembledArtifacts ) {
-            if ( scout( static_cast<int32_t>( assembledArtifact._assembledArtifactID ) ) ) {
+            if ( scout( assembledArtifact._assembledArtifactID ) ) {
                 return true;
             }
         }
@@ -1486,8 +1489,6 @@ int Heroes::getNumOfTravelDays( int32_t dstIdx ) const
     const std::list<Route::Step> routePath = world.getPath( *this, dstIdx );
 
     if ( routePath.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_TRACE, "unreachable point: " << dstIdx )
-
         return 0;
     }
 
@@ -1619,7 +1620,7 @@ bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) con
 
 bool Heroes::MayCastAdventureSpells() const
 {
-    return !isFreeman();
+    return isValid() && GetColor() != Color::NONE;
 }
 
 bool Heroes::isValid() const
@@ -1629,42 +1630,44 @@ bool Heroes::isValid() const
 
 bool Heroes::isFreeman() const
 {
-    return isValid() && Color::NONE == GetColor() && !Modes( JAIL );
+    return isValid() && GetColor() == Color::NONE && !Modes( JAIL );
 }
 
 void Heroes::SetFreeman( int reason )
 {
-    if ( !isFreeman() ) {
-        // if not surrendering, reset army
-        if ( ( reason & Battle::RESULT_SURRENDER ) == 0 ) {
-            army.Reset( true );
-        }
+    if ( isFreeman() ) {
+        return;
+    }
 
-        const int heroColor = GetColor();
-        Kingdom & kingdom = GetKingdom();
+    // if not surrendering, reset army
+    if ( ( reason & Battle::RESULT_SURRENDER ) == 0 ) {
+        army.Reset( true );
+    }
+
+    const int heroColor = GetColor();
+    Kingdom & kingdom = GetKingdom();
+
+    if ( heroColor != Color::NONE ) {
+        kingdom.RemoveHeroes( this );
+    }
+    SetColor( Color::NONE );
+
+    world.GetTiles( GetIndex() ).SetHeroes( nullptr );
+    SetIndex( -1 );
+
+    modes = 0;
+
+    path.Reset();
+
+    SetMove( false );
+
+    SetModes( ACTION );
+
+    if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
+        SetModes( SAVEMP );
 
         if ( heroColor != Color::NONE ) {
-            kingdom.RemoveHeroes( this );
-        }
-        SetColor( Color::NONE );
-
-        world.GetTiles( GetIndex() ).SetHeroes( nullptr );
-        SetIndex( -1 );
-
-        modes = 0;
-
-        path.Reset();
-
-        SetMove( false );
-
-        SetModes( ACTION );
-
-        if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
-            SetModes( SAVEMP );
-
-            if ( heroColor != Color::NONE ) {
-                kingdom.appendSurrenderedHero( *this );
-            }
+            kingdom.appendSurrenderedHero( *this );
         }
     }
 }
@@ -1698,7 +1701,7 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
 {
     if ( allowMonsterAttack ) {
         // scan for monsters around
-        const MapsIndexes targets = Maps::getMonstersProtectingTile( GetIndex() );
+        const MapsIndexes targets = Maps::getMonstersProtectingTile( GetIndex(), false );
 
         if ( !targets.empty() ) {
             SetMove( false );
@@ -1708,11 +1711,11 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
             MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinationIndex() );
 
             if ( it != targets.end() ) {
-                Action( *it, true );
+                Action( *it );
             }
             // otherwise fight the monsters on the first adjacent tile
             else {
-                Action( targets.front(), true );
+                Action( targets.front() );
             }
         }
     }
@@ -1721,7 +1724,7 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
         const MapEvent * event = world.GetMapEvent( GetCenter() );
 
         if ( event && event->isAllow( GetColor() ) ) {
-            Action( GetIndex(), false );
+            Action( GetIndex() );
             SetMove( false );
         }
     }

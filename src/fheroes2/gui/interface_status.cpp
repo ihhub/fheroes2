@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "interface_status.h"
+
 #include <cassert>
 #include <string>
 
@@ -36,7 +38,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
-#include "interface_status.h"
+#include "interface_base.h"
 #include "kingdom.h"
 #include "localevent.h"
 #include "math_base.h"
@@ -54,9 +56,9 @@ namespace
     const uint32_t resourceWindowExpireTime = 2500;
 }
 
-Interface::StatusWindow::StatusWindow( Basic & basic )
+Interface::StatusWindow::StatusWindow( BaseInterface & interface )
     : BorderWindow( { 0, 0, 144, 72 } )
-    , interface( basic )
+    , _interface( interface )
     , _state( StatusType::STATUS_UNKNOWN )
     , lastResource( Resource::UNKNOWN )
     , countLastResource( 0 )
@@ -81,7 +83,7 @@ void Interface::StatusWindow::SavePosition()
 
 void Interface::StatusWindow::SetRedraw() const
 {
-    interface.SetRedraw( REDRAW_STATUS );
+    _interface.setRedraw( REDRAW_STATUS );
 }
 
 void Interface::StatusWindow::SetPos( int32_t ox, int32_t oy )
@@ -106,7 +108,7 @@ void Interface::StatusWindow::SetState( const StatusType status )
     }
 }
 
-void Interface::StatusWindow::Redraw() const
+void Interface::StatusWindow::_redraw() const
 {
     const Settings & conf = Settings::Get();
     if ( conf.isHideInterfaceEnabled() && !conf.ShowStatus() ) {
@@ -479,12 +481,12 @@ void Interface::StatusWindow::DrawAITurnProgress( const uint32_t progressValue )
 
     turn_progress = progressValue;
 
-    interface.SetRedraw( REDRAW_STATUS );
+    _interface.setRedraw( REDRAW_STATUS );
 
     if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
         Game::updateAdventureMapAnimationIndex();
 
-        interface.Redraw( REDRAW_GAMEAREA );
+        _interface.redraw( REDRAW_GAMEAREA );
         fheroes2::Display::instance().render();
     }
 }

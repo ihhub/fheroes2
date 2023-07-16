@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cmath>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
@@ -36,6 +38,7 @@
 #include "dialog_game_settings.h"
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
+#include "editor.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
@@ -56,6 +59,7 @@
 #include "ui_dialog.h"
 #include "ui_language.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -169,15 +173,29 @@ void Game::mainGameLoop( bool isFirstGameRun )
             break;
         case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO_FROM_LOAD_FILE:
             result = Game::CompleteCampaignScenario( true );
-            if ( result == fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO ) {
+            while ( result == fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO ) {
                 result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIGN, false );
             }
             break;
+#if defined( WITH_DEBUG )
+        case fheroes2::GameMode::EDITOR_MAIN_MENU:
+            result = Editor::menuMain();
+            break;
+        case fheroes2::GameMode::EDITOR_NEW_MAP:
+            result = Editor::menuNewMap();
+            break;
+        case fheroes2::GameMode::EDITOR_LOAD_MAP:
+            result = Editor::menuLoadMap();
+            break;
+#endif
 
         default:
             break;
         }
     }
+
+    // We are quitting the game, so fade-out the screen.
+    fheroes2::fadeOutDisplay();
 }
 
 fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
@@ -199,6 +217,9 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     // image background
     fheroes2::drawMainMenuScreen();
     if ( isFirstGameRun ) {
+        // Fade in Main Menu image before showing messages. This also resets the "need fade" state to have no fade-in after these messages.
+        fheroes2::validateFadeInAndRender();
+
         fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
         if ( System::isHandheldDevice() ) {
@@ -250,12 +271,17 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     buttonCredits.draw();
     buttonQuit.draw();
 
-    display.render();
+    fheroes2::validateFadeInAndRender();
 
     const double scaleX = static_cast<double>( display.width() ) / fheroes2::Display::DEFAULT_WIDTH;
     const double scaleY = static_cast<double>( display.height() ) / fheroes2::Display::DEFAULT_HEIGHT;
-    const fheroes2::Rect settingsArea( static_cast<int32_t>( 63 * scaleX ), static_cast<int32_t>( 202 * scaleY ), static_cast<int32_t>( 90 * scaleX ),
-                                       static_cast<int32_t>( 160 * scaleY ) );
+
+    const double scale = std::min( scaleX, scaleY );
+    const int32_t offsetX = static_cast<int32_t>( std::lround( display.width() - fheroes2::Display::DEFAULT_WIDTH * scale ) ) / 2;
+    const int32_t offsetY = static_cast<int32_t>( std::lround( display.height() - fheroes2::Display::DEFAULT_HEIGHT * scale ) ) / 2;
+
+    const fheroes2::Rect settingsArea( static_cast<int32_t>( 63 * scale ) + offsetX, static_cast<int32_t>( 202 * scale ) + offsetY, static_cast<int32_t>( 90 * scale ),
+                                       static_cast<int32_t>( 160 * scale ) );
 
     uint32_t lantern_frame = 0;
 
@@ -273,10 +299,9 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     fheroes2::Sprite highlightDoor = fheroes2::AGG::GetICN( ICN::SHNGANIM, 18 );
     fheroes2::ApplyPalette( highlightDoor, 8 );
 
-    // mainmenu loop
     while ( true ) {
         if ( !le.HandleEvents( true, true ) ) {
-            if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+            if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 break;
             }
             else {
@@ -333,7 +358,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         }
 
         if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonQuit.area() ) ) {
-            if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+            if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 return fheroes2::GameMode::QUIT_GAME;
             }
         }
@@ -342,6 +367,12 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
             return fheroes2::GameMode::MAIN_MENU;
         }
+#if defined( WITH_DEBUG )
+        // Editor is still in development.
+        else if ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) ) {
+            return fheroes2::GameMode::EDITOR_MAIN_MENU;
+        }
+#endif
 
         // right info
         if ( le.MousePressRight( buttonQuit.area() ) )
@@ -362,8 +393,9 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             ++lantern_frame;
             fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
             if ( le.MouseCursor( settingsArea ) ) {
-                const int32_t offsetY = static_cast<int32_t>( 55 * scaleY );
-                fheroes2::Blit( highlightDoor, 0, offsetY, display, highlightDoor.x(), highlightDoor.y() + offsetY, highlightDoor.width(), highlightDoor.height() );
+                const int32_t doorOffsetY = static_cast<int32_t>( 55 * scale ) + offsetY;
+                fheroes2::Blit( highlightDoor, 0, doorOffsetY, display, highlightDoor.x(), highlightDoor.y() + doorOffsetY, highlightDoor.width(),
+                                highlightDoor.height() );
             }
 
             display.render();

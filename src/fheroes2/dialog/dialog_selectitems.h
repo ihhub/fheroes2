@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -34,7 +34,7 @@ namespace Dialog
 {
     Monster SelectMonster( int id = Monster::UNKNOWN );
     int SelectHeroes( int cur = Heroes::UNKNOWN );
-    Artifact SelectArtifact( int id = Artifact::UNKNOWN );
+    Artifact SelectArtifact();
     Spell SelectSpell( int id = Spell::NONE );
     Skill::Secondary SelectSecondarySkill();
 }

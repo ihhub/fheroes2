@@ -240,8 +240,10 @@ namespace AI
     void Normal::CastleTurn( Castle & castle, const bool defensiveStrategy )
     {
         if ( defensiveStrategy ) {
-            // Avoid building monster dwellings when defensive as they will likely fall into enemy's hands
+            // Avoid building monster dwellings when defensive as they might fall into enemy's hands, unless we have a lot of resources.
             const Kingdom & kingdom = castle.GetKingdom();
+
+            // TODO: check if we can upgrade monsters. It is much cheaper (except Giants into Titans) to upgrade monsters than buy new ones.
 
             Troops possibleReinforcement = castle.getAvailableArmy( kingdom.GetFunds() );
             double possibleReinforcementStrength = possibleReinforcement.GetStrength();

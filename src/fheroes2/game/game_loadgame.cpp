@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "game.h"
+
 #include <cstddef>
 #include <cstdint>
 #include <memory>
@@ -28,30 +30,31 @@
 #include <string>
 #include <vector>
 
-#include "agg_image.h"
 #include "audio.h"
 #include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dir.h"
-#include "game.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
 #include "game_mainmenu_ui.h"
 #include "game_mode.h"
 #include "icn.h"
-#include "image.h"
 #include "localevent.h"
 #include "logging.h"
+#include "math_base.h"
 #include "mus.h"
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_tool.h"
 
 namespace
 {
+    const int32_t buttonYStep = 66;
+
     void outputLoadGameInTextSupportMode()
     {
         START_TEXT_SUPPORT_MODE
@@ -85,24 +88,13 @@ fheroes2::GameMode Game::LoadMulti()
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // image background
-    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
     fheroes2::drawMainMenuScreen();
 
-    const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
-    const int32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
-    const int32_t panelXPos = back.width() - ( panel.width() + panelOffset );
-    fheroes2::Blit( panel, display, panelXPos, panelOffset );
+    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
-    const int32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
-    const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
-    const int32_t buttonWidth = buttonSample.width();
-    const int32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
-    const int32_t buttonYPos = 46;
-    const int32_t buttonYStep = 66;
-
-    fheroes2::Button buttonHotSeat( buttonXPos, buttonYPos, ICN::BUTTON_HOT_SEAT, 0, 1 );
-    fheroes2::Button buttonNetwork( buttonXPos, buttonYPos + buttonYStep * 1, ICN::BTNMP, 2, 3 );
-    fheroes2::Button buttonCancelGame( buttonXPos, buttonYPos + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
+    fheroes2::Button buttonHotSeat( buttonPos.x, buttonPos.y, ICN::BUTTON_HOT_SEAT, 0, 1 );
+    fheroes2::Button buttonNetwork( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNMP, 2, 3 );
+    fheroes2::Button buttonCancelGame( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
     buttonHotSeat.draw();
     buttonCancelGame.draw();
@@ -150,22 +142,12 @@ fheroes2::GameMode Game::LoadGame()
 
     AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
     fheroes2::drawMainMenuScreen();
 
-    const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
-    const int32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
-    const int32_t panelXPos = back.width() - ( panel.width() + panelOffset );
-    fheroes2::Blit( panel, display, panelXPos, panelOffset );
-
-    const int32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
-    const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
-    const int32_t buttonWidth = buttonSample.width();
+    const fheroes2::Point buttonPos = fheroes2::drawButtonPanel();
 
     std::vector<fheroes2::Button> buttons( 4 );
     const size_t buttonCount = buttons.size();
@@ -175,20 +157,16 @@ fheroes2::GameMode Game::LoadGame()
     buttons[2].setICNInfo( ICN::BUTTON_MULTIPLAYER_GAME, 0, 1 );
     buttons[3].setICNInfo( ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
-    const int32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
-    const int32_t buttonYPos = 46;
-    const int32_t buttonYStep = 66;
-
     for ( size_t i = 0; i < buttonCount - 1; ++i ) {
-        buttons[i].setPosition( buttonXPos, buttonYPos + buttonYStep * static_cast<int32_t>( i ) );
+        buttons[i].setPosition( buttonPos.x, buttonPos.y + buttonYStep * static_cast<int32_t>( i ) );
         buttons[i].draw();
     }
 
     // following the cancel button in newgame
-    buttons.back().setPosition( buttonXPos, buttonYPos + buttonYStep * 5 );
+    buttons.back().setPosition( buttonPos.x, buttonPos.y + buttonYStep * 5 );
     buttons.back().draw();
 
-    display.render();
+    fheroes2::validateFadeInAndRender();
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -255,7 +233,7 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
     // image background
     fheroes2::drawMainMenuScreen();
 
-    fheroes2::Display::instance().render();
+    fheroes2::validateFadeInAndRender();
 
     const std::string file = Dialog::SelectFileLoad();
     if ( file.empty() ) {
@@ -266,6 +244,11 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
     if ( returnValue == fheroes2::GameMode::CANCEL ) {
         return fheroes2::GameMode::LOAD_GAME;
     }
+
+    // We are loading a game so fade-out main menu screen.
+    fheroes2::fadeOutDisplay();
+
+    setDisplayFadeIn();
 
     return returnValue;
 }

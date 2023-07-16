@@ -58,6 +58,9 @@ public:
     uint32_t GetDamageMax() const;
 
     payment_t GetTotalCost() const;
+
+    // Returns the cost of an upgrade if a monster has an upgrade. Otherwise returns no resources.
+    // IMPORTANT!!! Make sure that you call this method after checking by isAllowUpgrade() method.
     payment_t GetTotalUpgradeCost() const;
 
     bool isEmpty() const;

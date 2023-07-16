@@ -211,11 +211,14 @@ namespace
             updateNormalFontLetterShadow( font[156 - 32] );
 
             // Lowercase t with caron
-            font[157 - 32].resize( font[116 - 32].width(), font[116 - 32].height() + 3 );
+            font[157 - 32].resize( font[116 - 32].width(), font[116 - 32].height() + 1 );
             font[157 - 32].reset();
-            fheroes2::Copy( font[116 - 32], 0, 0, font[157 - 32], 0, 3, font[116 - 32].width(), font[116 - 32].height() );
-            fheroes2::Copy( font[138 - 32], 4, 0, font[157 - 32], 1, 0, 3, 2 );
-            font[157 - 32].setPosition( font[116 - 32].x(), font[116 - 32].y() - 3 );
+            fheroes2::Copy( font[116 - 32], 0, 0, font[157 - 32], 0, 1, font[116 - 32].width(), font[116 - 32].height() );
+            fheroes2::Copy( font[65], 1, 1, font[157 - 32], 5, 1, 1, 1 );
+            fheroes2::Copy( font[65], 1, 1, font[157 - 32], 6, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[157 - 32], 4, 1, 1, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[157 - 32], 5, 0, 1, 1 );
+            font[157 - 32].setPosition( font[116 - 32].x(), font[116 - 32].y() - 1 );
             updateNormalFontLetterShadow( font[157 - 32] );
 
             // Lowercase z with caron
@@ -301,6 +304,26 @@ namespace
             // Shadows are already made for the ogonek.
             fheroes2::Copy( font[165 - 32], 10, 11, font[185 - 32], 5, 7, 5, 5 );
 
+            // Uppercase L with caron (NOT an uppercase Y with diaeresis)
+            font[188 - 32].resize( font[76 - 32].width(), font[76 - 32].height() );
+            font[188 - 32].reset();
+            fheroes2::Copy( font[76 - 32], 0, 0, font[188 - 32], 0, 0, font[76 - 32].width(), font[76 - 32].height() );
+            fheroes2::Copy( font[65], 1, 1, font[188 - 32], 9, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 1, font[188 - 32], 9, 1, 1, 1 );
+            fheroes2::Copy( font[65], 1, 1, font[188 - 32], 10, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[188 - 32], 8, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[188 - 32], 8, 1, 1, 1 );
+            font[188 - 32].setPosition( font[76 - 32].x(), font[76 - 32].y() );
+            updateNormalFontLetterShadow( font[188 - 32] );
+
+            // Lowercase l with caron (NOT an uppercase L with caron)
+            font[190 - 32].resize( font[108 - 32].width() + 2, font[108 - 32].height() );
+            font[190 - 32].reset();
+            fheroes2::Copy( font[108 - 32], 0, 0, font[190 - 32], 0, 0, font[108 - 32].width(), font[108 - 32].height() );
+            fheroes2::Copy( font[188 - 32], 8, 0, font[190 - 32], 4, 0, 3, 2 );
+            font[190 - 32].setPosition( font[108 - 32].x(), font[108 - 32].y() );
+            updateNormalFontLetterShadow( font[190 - 32] );
+
             // Lowercase z with dot above
             font[191 - 32].resize( font[122 - 32].width(), font[122 - 32].height() + 3 );
             font[191 - 32].reset();
@@ -309,6 +332,14 @@ namespace
             font[191 - 32].setPosition( font[122 - 32].x(), font[122 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[191 - 32] );
 
+            // Uppercase R with acute
+            font[192 - 32].resize( font[82 - 32].width(), font[82 - 32].height() + 3 );
+            font[192 - 32].reset();
+            fheroes2::Copy( font[82 - 32], 0, 0, font[192 - 32], 0, 3, font[82 - 32].width(), font[82 - 32].height() );
+            fheroes2::Copy( font[140 - 32], 4, 0, font[192 - 32], 7, 0, 3, 2 );
+            font[192 - 32].setPosition( font[82 - 32].x(), font[82 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[192 - 32] );
+
             // Uppercase A with acute
             font[193 - 32].resize( font[65 - 32].width(), font[65 - 32].height() + 3 );
             font[193 - 32].reset();
@@ -316,6 +347,35 @@ namespace
             fheroes2::Copy( font[140 - 32], 4, 0, font[193 - 32], 7, 0, 3, 2 );
             font[193 - 32].setPosition( font[65 - 32].x(), font[65 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[193 - 32] );
+
+            // Uppercase A with circumflex
+            font[194 - 32].resize( font[65 - 32].width(), font[65 - 32].height() + 3 );
+            font[194 - 32].reset();
+            fheroes2::Copy( font[65 - 32], 0, 0, font[194 - 32], 0, 3, font[65 - 32].width(), font[65 - 32].height() );
+            fheroes2::Copy( font[97 - 32], 7, 1, font[194 - 32], 7, 1, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 7, 1, font[194 - 32], 8, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 7, 1, font[194 - 32], 9, 1, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 1, 0, font[194 - 32], 7, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 1, 0, font[194 - 32], 9, 0, 1, 1 );
+            font[194 - 32].setPosition( font[65 - 32].x(), font[65 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[194 - 32] );
+
+            // Uppercase A with diaeresis
+            font[196 - 32].resize( font[65 - 32].width(), font[65 - 32].height() + 3 );
+            font[196 - 32].reset();
+            fheroes2::Copy( font[65 - 32], 0, 0, font[196 - 32], 0, 3, font[65 - 32].width(), font[65 - 32].height() );
+            fheroes2::Copy( font[175 - 32], 5, 0, font[196 - 32], 5, 0, 2, 2 );
+            fheroes2::Copy( font[175 - 32], 5, 0, font[196 - 32], 10, 0, 2, 2 );
+            font[196 - 32].setPosition( font[65 - 32].x(), font[65 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[196 - 32] );
+
+            // Uppercase L with acute
+            font[197 - 32].resize( font[76 - 32].width(), font[76 - 32].height() + 3 );
+            font[197 - 32].reset();
+            fheroes2::Copy( font[76 - 32], 0, 0, font[197 - 32], 0, 3, font[76 - 32].width(), font[76 - 32].height() );
+            fheroes2::Copy( font[140 - 32], 4, 0, font[197 - 32], 8, 0, 3, 2 );
+            font[197 - 32].setPosition( font[76 - 32].x(), font[76 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[197 - 32] );
 
             // Uppercase C with acute
             font[198 - 32].resize( font[67 - 32].width(), font[67 - 32].height() + 3 );
@@ -398,6 +458,20 @@ namespace
             font[211 - 32].setPosition( font[79 - 32].x(), font[79 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[211 - 32] );
 
+            // Uppercase O with circumflex
+            font[212 - 32].resize( font[79 - 32].width(), font[79 - 32].height() + 3 );
+            font[212 - 32].reset();
+            fheroes2::Copy( font[79 - 32], 0, 0, font[212 - 32], 0, 3, font[79 - 32].width(), font[79 - 32].height() );
+            fheroes2::Copy( font[65], 1, 1, font[212 - 32], 6, 1, 1, 1 );
+            fheroes2::Copy( font[65], 1, 1, font[212 - 32], 7, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 1, font[212 - 32], 8, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 1, font[212 - 32], 9, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 1, font[212 - 32], 10, 1, 1, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[212 - 32], 6, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[212 - 32], 10, 0, 1, 1 );
+            font[212 - 32].setPosition( font[79 - 32].x(), font[79 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[212 - 32] );
+
             // Uppercase O with double acute
             font[213 - 32].resize( font[79 - 32].width(), font[79 - 32].height() + 3 );
             font[213 - 32].reset();
@@ -469,6 +543,14 @@ namespace
             font[221 - 32].setPosition( font[89 - 32].x(), font[89 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[221 - 32] );
 
+            // Lowercase r with acute
+            font[224 - 32].resize( font[114 - 32].width(), font[114 - 32].height() + 3 );
+            font[224 - 32].reset();
+            fheroes2::Copy( font[114 - 32], 0, 0, font[224 - 32], 0, 3, font[114 - 32].width(), font[114 - 32].height() );
+            fheroes2::Copy( font[140 - 32], 4, 0, font[224 - 32], 4, 0, 3, 2 );
+            font[224 - 32].setPosition( font[114 - 32].x(), font[114 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[224 - 32] );
+
             // Lowercase a with acute
             font[225 - 32].resize( font[97 - 32].width(), font[97 - 32].height() + 3 );
             font[225 - 32].reset();
@@ -476,6 +558,31 @@ namespace
             fheroes2::Copy( font[140 - 32], 4, 0, font[225 - 32], 3, 0, 3, 2 );
             font[225 - 32].setPosition( font[97 - 32].x(), font[97 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[225 - 32] );
+
+            // Lowercase a with circumflex
+            font[226 - 32].resize( font[97 - 32].width(), font[97 - 32].height() + 3 );
+            font[226 - 32].reset();
+            fheroes2::Copy( font[97 - 32], 0, 0, font[226 - 32], 0, 3, font[97 - 32].width(), font[97 - 32].height() );
+            fheroes2::Copy( font[194 - 32], 7, 0, font[226 - 32], 3, 0, 3, 2 );
+            font[226 - 32].setPosition( font[97 - 32].x(), font[97 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[226 - 32] );
+
+            // Lowercase a with diaeresis
+            font[228 - 32].resize( font[97 - 32].width(), font[97 - 32].height() + 3 );
+            font[228 - 32].reset();
+            fheroes2::Copy( font[97 - 32], 0, 0, font[228 - 32], 0, 3, font[97 - 32].width(), font[97 - 32].height() );
+            fheroes2::Copy( font[175 - 32], 5, 0, font[228 - 32], 2, 0, 2, 2 );
+            fheroes2::Copy( font[175 - 32], 5, 0, font[228 - 32], 6, 0, 2, 2 );
+            font[228 - 32].setPosition( font[97 - 32].x(), font[97 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[228 - 32] );
+
+            // Lowercase l with acute
+            font[229 - 32].resize( font[108 - 32].width(), font[108 - 32].height() + 3 );
+            font[229 - 32].reset();
+            fheroes2::Copy( font[108 - 32], 0, 0, font[229 - 32], 0, 3, font[108 - 32].width(), font[108 - 32].height() );
+            fheroes2::Copy( font[140 - 32], 4, 0, font[229 - 32], 2, 0, 3, 2 );
+            font[229 - 32].setPosition( font[108 - 32].x(), font[108 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[229 - 32] );
 
             // Lowercase c with acute
             font[230 - 32].resize( font[99 - 32].width(), font[99 - 32].height() + 3 );
@@ -560,6 +667,19 @@ namespace
             fheroes2::Copy( font[140 - 32], 4, 0, font[243 - 32], 4, 0, 3, 2 );
             font[243 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 3 );
             updateNormalFontLetterShadow( font[243 - 32] );
+
+            // Lowercase o with circumflex
+            font[244 - 32].resize( font[111 - 32].width(), font[111 - 32].height() + 3 );
+            font[244 - 32].reset();
+            fheroes2::Copy( font[111 - 32], 0, 0, font[244 - 32], 0, 3, font[111 - 32].width(), font[111 - 32].height() );
+            fheroes2::Copy( font[65], 1, 1, font[244 - 32], 3, 1, 1, 1 );
+            fheroes2::Copy( font[65], 1, 1, font[244 - 32], 4, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 1, font[244 - 32], 5, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 1, font[244 - 32], 6, 1, 1, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[244 - 32], 3, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[244 - 32], 6, 0, 1, 1 );
+            font[244 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 3 );
+            updateNormalFontLetterShadow( font[244 - 32] );
 
             // Lowercase o with double acute
             font[245 - 32].resize( font[111 - 32].width(), font[111 - 32].height() + 3 );
@@ -694,11 +814,12 @@ namespace
             updateSmallFontLetterShadow( font[156 - 32] );
 
             // Lowercase t with caron
-            font[157 - 32].resize( font[116 - 32].width(), font[116 - 32].height() + 3 );
+            font[157 - 32].resize( font[116 - 32].width(), font[116 - 32].height() + 1 );
             font[157 - 32].reset();
-            fheroes2::Copy( font[116 - 32], 0, 0, font[157 - 32], 0, 3, font[116 - 32].width(), font[116 - 32].height() );
-            fheroes2::Copy( font[116 - 32], 2, 5, font[157 - 32], 1, 0, 3, 2 );
-            font[157 - 32].setPosition( font[116 - 32].x(), font[116 - 32].y() - 3 );
+            fheroes2::Copy( font[116 - 32], 0, 0, font[157 - 32], 0, 1, font[116 - 32].width(), font[116 - 32].height() );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[157 - 32], 4, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[157 - 32], 4, 1, 1, 1 );
+            font[157 - 32].setPosition( font[116 - 32].x(), font[116 - 32].y() - 1 );
             updateSmallFontLetterShadow( font[157 - 32] );
 
             // Lowercase z with caron
@@ -758,6 +879,25 @@ namespace
             font[185 - 32].setPosition( font[97 - 32].x(), font[97 - 32].y() );
             updateSmallFontLetterShadow( font[185 - 32] );
 
+            // Uppercase L with caron (NOT an uppercase Y with diaeresis)
+            font[188 - 32].resize( font[76 - 32].width(), font[76 - 32].height() );
+            font[188 - 32].reset();
+            fheroes2::Copy( font[76 - 32], 0, 0, font[188 - 32], 0, 0, font[76 - 32].width(), font[76 - 32].height() );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[188 - 32], 6, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[188 - 32], 7, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[188 - 32], 6, 1, 1, 1 );
+            font[188 - 32].setPosition( font[76 - 32].x(), font[76 - 32].y() );
+            updateSmallFontLetterShadow( font[188 - 32] );
+
+            // Lowercase l with caron (NOT an uppercase L with caron)
+            font[190 - 32].resize( font[108 - 32].width() + 1, font[108 - 32].height() );
+            font[190 - 32].reset();
+            fheroes2::Copy( font[108 - 32], 0, 0, font[190 - 32], 0, 0, font[108 - 32].width(), font[108 - 32].height() );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[190 - 32], 4, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[190 - 32], 4, 1, 1, 1 );
+            font[190 - 32].setPosition( font[108 - 32].x(), font[108 - 32].y() );
+            updateSmallFontLetterShadow( font[190 - 32] );
+
             // Lowercase z with dot above
             font[191 - 32].resize( font[122 - 32].width(), font[122 - 32].height() + 2 );
             font[191 - 32].reset();
@@ -766,6 +906,14 @@ namespace
             font[191 - 32].setPosition( font[122 - 32].x(), font[122 - 32].y() - 2 );
             updateSmallFontLetterShadow( font[191 - 32] );
 
+            // Uppercase R with acute
+            font[192 - 32].resize( font[82 - 32].width(), font[82 - 32].height() + 3 );
+            font[192 - 32].reset();
+            fheroes2::Copy( font[82 - 32], 0, 0, font[192 - 32], 0, 3, font[82 - 32].width(), font[82 - 32].height() );
+            fheroes2::Copy( font[122 - 32], 2, 2, font[192 - 32], 5, 0, 2, 2 );
+            font[192 - 32].setPosition( font[82 - 32].x(), font[82 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[192 - 32] );
+
             // Uppercase A with acute
             font[193 - 32].resize( font[65 - 32].width(), font[65 - 32].height() + 3 );
             font[193 - 32].reset();
@@ -773,6 +921,33 @@ namespace
             fheroes2::Copy( font[122 - 32], 2, 2, font[193 - 32], 5, 0, 2, 2 );
             font[193 - 32].setPosition( font[65 - 32].x(), font[65 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[193 - 32] );
+
+            // Uppercase A with circumflex
+            font[194 - 32].resize( font[33].width(), font[33].height() + 3 );
+            font[194 - 32].reset();
+            fheroes2::Copy( font[33], 0, 0, font[194 - 32], 0, 3, font[33].width(), font[33].height() );
+            fheroes2::Copy( font[33], 4, 0, font[194 - 32], 4, 1, 1, 1 );
+            fheroes2::Copy( font[33], 4, 0, font[194 - 32], 5, 0, 1, 1 );
+            fheroes2::Copy( font[33], 4, 0, font[194 - 32], 6, 1, 1, 1 );
+            font[194 - 32].setPosition( font[33].x(), font[33].y() - 3 );
+            updateSmallFontLetterShadow( font[194 - 32] );
+
+            // Uppercase A with diaeresis
+            font[196 - 32].resize( font[65 - 32].width(), font[65 - 32].height() + 2 );
+            font[196 - 32].reset();
+            fheroes2::Copy( font[65 - 32], 0, 0, font[196 - 32], 0, 2, font[65 - 32].width(), font[65 - 32].height() );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[196 - 32], 3, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[196 - 32], 6, 0, 1, 1 );
+            font[196 - 32].setPosition( font[65 - 32].x(), font[65 - 32].y() - 2 );
+            updateSmallFontLetterShadow( font[196 - 32] );
+
+            // Uppercase L with acute
+            font[197 - 32].resize( font[76 - 32].width(), font[76 - 32].height() + 3 );
+            font[197 - 32].reset();
+            fheroes2::Copy( font[76 - 32], 0, 0, font[197 - 32], 0, 3, font[76 - 32].width(), font[76 - 32].height() );
+            fheroes2::Copy( font[122 - 32], 2, 2, font[197 - 32], 5, 0, 2, 2 );
+            font[197 - 32].setPosition( font[76 - 32].x(), font[76 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[197 - 32] );
 
             // Uppercase C with acute
             font[198 - 32].resize( font[67 - 32].width(), font[67 - 32].height() + 3 );
@@ -854,6 +1029,18 @@ namespace
             font[211 - 32].setPosition( font[79 - 32].x(), font[79 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[211 - 32] );
 
+            // Uppercase O with double circumflex
+            font[212 - 32].resize( font[79 - 32].width(), font[79 - 32].height() + 3 );
+            font[212 - 32].reset();
+            fheroes2::Copy( font[79 - 32], 0, 0, font[212 - 32], 0, 3, font[79 - 32].width(), font[79 - 32].height() );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[212 - 32], 2, 1, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[212 - 32], 3, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[212 - 32], 4, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[212 - 32], 5, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[212 - 32], 6, 1, 1, 1 );
+            font[212 - 32].setPosition( font[79 - 32].x(), font[79 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[212 - 32] );
+
             // Uppercase O with double acute
             font[213 - 32].resize( font[79 - 32].width(), font[79 - 32].height() + 3 );
             font[213 - 32].reset();
@@ -923,6 +1110,14 @@ namespace
             font[221 - 32].setPosition( font[89 - 32].x(), font[89 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[221 - 32] );
 
+            // Lowercase r with acute
+            font[224 - 32].resize( font[114 - 32].width(), font[114 - 32].height() + 3 );
+            font[224 - 32].reset();
+            fheroes2::Copy( font[114 - 32], 0, 0, font[224 - 32], 0, 3, font[114 - 32].width(), font[114 - 32].height() );
+            fheroes2::Copy( font[122 - 32], 2, 2, font[224 - 32], 3, 0, 2, 2 );
+            font[224 - 32].setPosition( font[114 - 32].x(), font[114 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[224 - 32] );
+
             // Lowercase a with acute
             font[225 - 32].resize( font[97 - 32].width(), font[97 - 32].height() + 3 );
             font[225 - 32].reset();
@@ -930,6 +1125,34 @@ namespace
             fheroes2::Copy( font[122 - 32], 2, 2, font[225 - 32], 3, 0, 2, 2 );
             font[225 - 32].setPosition( font[97 - 32].x(), font[97 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[225 - 32] );
+
+            // Lowercase a with circumflex
+            font[226 - 32].resize( font[97 - 32].width(), font[97 - 32].height() + 3 );
+            font[226 - 32].reset();
+            fheroes2::Copy( font[97 - 32], 0, 0, font[226 - 32], 0, 3, font[97 - 32].width(), font[97 - 32].height() );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[226 - 32], 2, 1, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[226 - 32], 3, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[226 - 32], 4, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[226 - 32], 5, 1, 1, 1 );
+            font[226 - 32].setPosition( font[97 - 32].x(), font[97 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[226 - 32] );
+
+            // Lowercase a with diaeresis
+            font[228 - 32].resize( font[97 - 32].width(), font[97 - 32].height() + 2 );
+            font[228 - 32].reset();
+            fheroes2::Copy( font[97 - 32], 0, 0, font[228 - 32], 0, 2, font[97 - 32].width(), font[97 - 32].height() );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[228 - 32], 2, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[228 - 32], 5, 0, 1, 1 );
+            font[228 - 32].setPosition( font[97 - 32].x(), font[97 - 32].y() - 2 );
+            updateSmallFontLetterShadow( font[228 - 32] );
+
+            // Lowercase l with acute
+            font[229 - 32].resize( font[108 - 32].width(), font[108 - 32].height() + 3 );
+            font[229 - 32].reset();
+            fheroes2::Copy( font[108 - 32], 0, 0, font[229 - 32], 0, 3, font[108 - 32].width(), font[108 - 32].height() );
+            fheroes2::Copy( font[122 - 32], 2, 2, font[229 - 32], 2, 0, 2, 2 );
+            font[229 - 32].setPosition( font[108 - 32].x(), font[108 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[229 - 32] );
 
             // Lowercase c with acute
             font[230 - 32].resize( font[99 - 32].width(), font[99 - 32].height() + 3 );
@@ -1010,6 +1233,16 @@ namespace
             fheroes2::Copy( font[122 - 32], 2, 2, font[243 - 32], 3, 0, 2, 2 );
             font[243 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 3 );
             updateSmallFontLetterShadow( font[243 - 32] );
+
+            // Lowercase o with circumflex
+            font[244 - 32].resize( font[111 - 32].width() + 1, font[111 - 32].height() + 3 );
+            font[244 - 32].reset();
+            fheroes2::Copy( font[111 - 32], 0, 0, font[244 - 32], 0, 3, font[111 - 32].width(), font[111 - 32].height() );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[244 - 32], 2, 1, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[244 - 32], 3, 0, 1, 1 );
+            fheroes2::Copy( font[97 - 32], 2, 0, font[244 - 32], 4, 1, 1, 1 );
+            font[244 - 32].setPosition( font[111 - 32].x(), font[111 - 32].y() - 3 );
+            updateSmallFontLetterShadow( font[244 - 32] );
 
             // Lowercase o with double acute
             font[245 - 32].resize( font[111 - 32].width() + 1, font[111 - 32].height() + 3 );
@@ -4662,6 +4895,32 @@ namespace
         fheroes2::DrawLine( released[94], { offset + 7, offset + 1 }, { offset + 13, offset + 7 }, 12 );
         fheroes2::DrawLine( released[94], { offset + 12, offset + 1 }, { offset + 6, offset + 7 }, 12 );
         fheroes2::DrawLine( released[94], { offset + 13, offset + 1 }, { offset + 7, offset + 7 }, 12 );
+
+        // Replaced with Change Language symbol for virtual keyboard
+        // TODO: put the Change Language symbol to a special font to not replace any other ASCII character.
+        released[95].resize( 14 + offset * 2, 13 + offset * 2 );
+        released[95].reset();
+        released[95].setPosition( buttonFontOffset.x, buttonFontOffset.y - 2 );
+        fheroes2::DrawLine( released[95], { offset + 4, offset + 0 }, { offset + 9, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 1, offset + 2 }, { offset + 2, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 1, offset + 3 }, { offset + 3, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 10, offset + 1 }, { offset + 12, offset + 3 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 11, offset + 1 }, { offset + 12, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 0, offset + 4 }, { offset + 13, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 0, offset + 8 }, { offset + 13, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 1, offset + 9 }, { offset + 3, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 1, offset + 10 }, { offset + 2, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 4, offset + 12 }, { offset + 9, offset + 12 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 10, offset + 11 }, { offset + 12, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 11, offset + 11 }, { offset + 12, offset + 10 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 4, offset + 3 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 9, offset + 3 }, { offset + 9, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 5, offset + 1 }, { offset + 5, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 8, offset + 1 }, { offset + 8, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 5, offset + 10 }, { offset + 5, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 8, offset + 10 }, { offset + 8, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 0, offset + 5 }, { offset + 0, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[95], { offset + 13, offset + 5 }, { offset + 13, offset + 7 }, buttonGoodReleasedColor );
     }
 
     void generateCP1250GoodButtonFont( std::vector<fheroes2::Sprite> & released )
@@ -4674,137 +4933,270 @@ namespace
         const int32_t offset = 2;
 
         // Offset letters with diacritics above them.
-        released[108].setPosition( buttonFontOffset.x, -3 );
-        released[166].setPosition( buttonFontOffset.x, -3 );
+        for ( const int & charCode : { 138, 140, 141, 142, 143, 175, 192, 193, 194, 195, 196, 197, 198, 200, 201, 203,
+                                       204, 205, 206, 207, 209, 210, 211, 212, 213, 214, 216, 218, 219, 220, 221 } ) {
+            released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
+        }
+        released[217 - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 4 );
 
-        // S with caron. Only copied from S.
-        released[106] = released[51];
+        // S with caron.
+        released[138 - 32].resize( released[83 - 32].width(), released[83 - 32].height() + 3 );
+        released[138 - 32].reset();
+        fheroes2::Copy( released[83 - 32], 0, 0, released[138 - 32], 0, 3, released[83 - 32].width(), released[83 - 32].height() );
+        fheroes2::SetPixel( released[138 - 32], offset + 3, offset + 0, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[138 - 32], { offset + 4, offset + 1 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
 
         // S with acute accent.
-        released[108].resize( released[51].width(), released[51].height() + 4 );
-        released[108].reset();
-        fheroes2::Copy( released[51], 0, 0, released[108], 0, 3, released[51].width(), released[51].height() );
-        fheroes2::DrawLine( released[108], { offset + 4, offset + 1 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
+        released[140 - 32].resize( released[83 - 32].width(), released[83 - 32].height() + 3 );
+        released[140 - 32].reset();
+        fheroes2::Copy( released[83 - 32], 0, 0, released[140 - 32], 0, 3, released[83 - 32].width(), released[83 - 32].height() );
+        fheroes2::DrawLine( released[140 - 32], { offset + 4, offset + 1 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
 
-        // T with caron. Only copied from T.
-        released[109] = released[52];
+        // T with caron.
+        released[141 - 32].resize( released[84 - 32].width(), released[84 - 32].height() + 3 );
+        released[141 - 32].reset();
+        fheroes2::Copy( released[84 - 32], 0, 0, released[141 - 32], 0, 3, released[84 - 32].width(), released[84 - 32].height() );
+        fheroes2::SetPixel( released[141 - 32], offset + 4, offset + 0, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[141 - 32], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
 
-        // Z with caron. Only copied from Z.
-        released[110] = released[58];
+        // Z with caron.
+        released[142 - 32].resize( released[90 - 32].width(), released[90 - 32].height() + 3 );
+        released[142 - 32].reset();
+        fheroes2::Copy( released[90 - 32], 0, 0, released[142 - 32], 0, 3, released[90 - 32].width(), released[90 - 32].height() );
+        fheroes2::SetPixel( released[142 - 32], offset + 3, offset + 0, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[142 - 32], { offset + 4, offset + 1 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
 
-        // Z with acute. Only copied from Z.
-        released[111] = released[58];
+        // Z with acute.
+        released[143 - 32].resize( released[90 - 32].width(), released[90 - 32].height() + 3 );
+        released[143 - 32].reset();
+        fheroes2::Copy( released[90 - 32], 0, 0, released[143 - 32], 0, 3, released[90 - 32].width(), released[90 - 32].height() );
+        fheroes2::DrawLine( released[143 - 32], { offset + 4, offset + 1 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
 
-        // L with stroke. Only copied from L.
-        released[131] = released[44];
+        // L with stroke.
+        released[163 - 32] = released[76 - 32];
+        fheroes2::DrawLine( released[131], { offset + 1, offset + 6 }, { offset + 5, offset + 2 }, buttonGoodReleasedColor );
 
-        // A with ogonek. Only copied from A.
-        released[133] = released[33];
+        // A with ogonek.
+        released[165 - 32].resize( released[65 - 32].width(), released[65 - 32].height() + 3 );
+        released[165 - 32].reset();
+        fheroes2::Copy( released[65 - 32], 0, 0, released[165 - 32], 0, 0, released[65 - 32].width(), released[65 - 32].height() );
+        fheroes2::DrawLine( released[165 - 32], { offset + 9, offset + 11 }, { offset + 10, offset + 10 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[165 - 32], { offset + 10, offset + 12 }, { offset + 11, offset + 12 }, buttonGoodReleasedColor );
 
-        // S with cedilla. Only copied from S.
-        released[138] = released[51];
+        // S with cedilla.
+        released[170 - 32].resize( released[83 - 32].width(), released[83 - 32].height() + 3 );
+        released[170 - 32].reset();
+        fheroes2::Copy( released[83 - 32], 0, 0, released[170 - 32], 0, 0, released[83 - 32].width(), released[83 - 32].height() );
+        fheroes2::DrawLine( released[170 - 32], { offset + 4, offset + 10 }, { offset + 5, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[170 - 32], { offset + 3, offset + 12 }, { offset + 4, offset + 12 }, buttonGoodReleasedColor );
 
-        // Z with dot above. Only copied from Z.
-        released[143] = released[58];
+        // Z with dot above.
+        released[175 - 32].resize( released[90 - 32].width(), released[90 - 32].height() + 3 );
+        released[175 - 32].reset();
+        fheroes2::Copy( released[90 - 32], 0, 0, released[175 - 32], 0, 3, released[90 - 32].width(), released[90 - 32].height() );
+        fheroes2::DrawLine( released[175 - 32], { offset + 4, offset + 1 }, { offset + 5, offset + 1 }, buttonGoodReleasedColor );
 
-        // Y with diaerisis. Only copied from Y.
-        released[156] = released[57];
+        // L with caron.
+        released[188 - 32] = released[76 - 32];
+        fheroes2::DrawLine( released[188 - 32], { offset + 6, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[188 - 32], { offset + 6, offset + 2 }, { offset + 7, offset + 1 }, buttonGoodReleasedColor );
 
-        // L with caron. Only copied from L.
-        released[158] = released[44];
+        // R with acute.
+        released[192 - 32].resize( released[82 - 32].width(), released[82 - 32].height() + 3 );
+        released[192 - 32].reset();
+        fheroes2::Copy( released[82 - 32], 0, 0, released[192 - 32], 0, 3, released[82 - 32].width(), released[82 - 32].height() );
+        fheroes2::DrawLine( released[192 - 32], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
 
-        // R with acute. Only copied from R.
-        released[160] = released[50];
+        // A with acute.
+        released[193 - 32].resize( released[65 - 32].width(), released[65 - 32].height() + 3 );
+        released[193 - 32].reset();
+        fheroes2::Copy( released[65 - 32], 0, 0, released[193 - 32], 0, 3, released[65 - 32].width(), released[65 - 32].height() );
+        fheroes2::DrawLine( released[193 - 32], { offset + 6, offset + 1 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
 
-        // A with acute. Only copied from A.
-        released[161] = released[33];
+        // A with circumflex.
+        released[194 - 32].resize( released[65 - 32].width(), released[65 - 32].height() + 3 );
+        released[194 - 32].reset();
+        fheroes2::Copy( released[65 - 32], 0, 0, released[194 - 32], 0, 3, released[65 - 32].width(), released[65 - 32].height() );
+        fheroes2::SetPixel( released[194 - 32], offset + 5, offset + 1, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[194 - 32], { offset + 6, offset + 0 }, { offset + 7, offset + 1 }, buttonGoodReleasedColor );
 
-        // A with circumflex. Only copied from A.
-        released[162] = released[33];
+        // A with breve.
+        released[195 - 32].resize( released[65 - 32].width(), released[65 - 32].height() + 3 );
+        released[195 - 32].reset();
+        fheroes2::Copy( released[65 - 32], 0, 0, released[195 - 32], 0, 3, released[65 - 32].width(), released[65 - 32].height() );
+        fheroes2::DrawLine( released[195 - 32], { offset + 5, offset + 0 }, { offset + 6, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[195 - 32], { offset + 7, offset + 1 }, { offset + 8, offset + 0 }, buttonGoodReleasedColor );
 
-        // A with breve. Only copied from A.
-        released[163] = released[33];
+        // A with diaeresis.
+        released[196 - 32].resize( released[65 - 32].width(), released[65 - 32].height() + 3 );
+        released[196 - 32].reset();
+        fheroes2::Copy( released[65 - 32], 0, 0, released[196 - 32], 0, 3, released[65 - 32].width(), released[65 - 32].height() );
+        fheroes2::DrawLine( released[196 - 32], { offset + 4, offset + 1 }, { offset + 5, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[196 - 32], { offset + 8, offset + 1 }, { offset + 9, offset + 1 }, buttonGoodReleasedColor );
 
-        // A with diaerisis. Only copied from A.
-        released[164] = released[33];
-
-        // L with acute. Only copied from L.
-        released[165] = released[44];
+        // L with acute.
+        released[197 - 32].resize( released[76 - 32].width(), released[76 - 32].height() + 3 );
+        released[197 - 32].reset();
+        fheroes2::Copy( released[76 - 32], 0, 0, released[197 - 32], 0, 3, released[76 - 32].width(), released[76 - 32].height() );
+        fheroes2::DrawLine( released[197 - 32], { offset + 3, offset + 1 }, { offset + 4, offset + 0 }, buttonGoodReleasedColor );
 
         // C with acute accent.
-        released[166].resize( released[35].width(), released[35].height() + 4 );
-        released[166].reset();
-        fheroes2::Copy( released[35], 0, 0, released[166], 0, 3, released[35].width(), released[35].height() );
-        fheroes2::DrawLine( released[166], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
+        released[198 - 32].resize( released[67 - 32].width(), released[67 - 32].height() + 3 );
+        released[198 - 32].reset();
+        fheroes2::Copy( released[67 - 32], 0, 0, released[198 - 32], 0, 3, released[67 - 32].width(), released[67 - 32].height() );
+        fheroes2::DrawLine( released[198 - 32], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
 
-        // C with cedilla. Only copied from C.
-        released[167] = released[35];
+        // C with cedilla.
+        released[199 - 32].resize( released[67 - 32].width(), released[67 - 32].height() + 3 );
+        released[199 - 32].reset();
+        fheroes2::Copy( released[67 - 32], 0, 0, released[199 - 32], 0, 0, released[67 - 32].width(), released[67 - 32].height() );
+        fheroes2::DrawLine( released[199 - 32], { offset + 5, offset + 10 }, { offset + 6, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[199 - 32], { offset + 4, offset + 12 }, { offset + 5, offset + 12 }, buttonGoodReleasedColor );
 
-        // C with caron. Only copied from C.
-        released[168] = released[35];
+        // C with caron.
+        released[200 - 32].resize( released[67 - 32].width(), released[67 - 32].height() + 3 );
+        released[200 - 32].reset();
+        fheroes2::Copy( released[67 - 32], 0, 0, released[200 - 32], 0, 3, released[67 - 32].width(), released[67 - 32].height() );
+        fheroes2::SetPixel( released[200 - 32], offset + 4, offset + 0, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[200 - 32], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
 
-        // E with acute. Only copied from E.
-        released[169] = released[37];
+        // E with acute.
+        released[201 - 32].resize( released[69 - 32].width(), released[69 - 32].height() + 3 );
+        released[201 - 32].reset();
+        fheroes2::Copy( released[69 - 32], 0, 0, released[201 - 32], 0, 3, released[69 - 32].width(), released[69 - 32].height() );
+        fheroes2::DrawLine( released[201 - 32], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
 
-        // E with ogonek. Only copied from E.
-        released[170] = released[37];
+        // E with ogonek.
+        released[202 - 32].resize( released[69 - 32].width(), released[69 - 32].height() + 3 );
+        released[202 - 32].reset();
+        fheroes2::Copy( released[69 - 32], 0, 0, released[202 - 32], 0, 0, released[69 - 32].width(), released[69 - 32].height() );
+        fheroes2::DrawLine( released[202 - 32], { offset + 6, offset + 11 }, { offset + 7, offset + 10 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[202 - 32], { offset + 7, offset + 12 }, { offset + 8, offset + 12 }, buttonGoodReleasedColor );
 
-        // E with diaerisis. Only copied from E.
-        released[171] = released[37];
+        // E with diaeresis.
+        released[203 - 32].resize( released[69 - 32].width(), released[69 - 32].height() + 3 );
+        released[203 - 32].reset();
+        fheroes2::Copy( released[69 - 32], 0, 0, released[203 - 32], 0, 3, released[69 - 32].width(), released[69 - 32].height() );
+        fheroes2::DrawLine( released[203 - 32], { offset + 2, offset + 1 }, { offset + 3, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[203 - 32], { offset + 6, offset + 1 }, { offset + 7, offset + 1 }, buttonGoodReleasedColor );
 
-        // E with caron. Only copied from E.
-        released[172] = released[37];
+        // E with caron.
+        released[204 - 32].resize( released[69 - 32].width(), released[69 - 32].height() + 3 );
+        released[204 - 32].reset();
+        fheroes2::Copy( released[69 - 32], 0, 0, released[204 - 32], 0, 3, released[69 - 32].width(), released[69 - 32].height() );
+        fheroes2::SetPixel( released[204 - 32], offset + 4, offset + 0, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[204 - 32], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
 
-        // I with acute. Only copied from I.
-        released[173] = released[41];
+        // I with acute.
+        released[205 - 32].resize( released[73 - 32].width(), released[73 - 32].height() + 3 );
+        released[205 - 32].reset();
+        fheroes2::Copy( released[73 - 32], 0, 0, released[205 - 32], 0, 3, released[73 - 32].width(), released[73 - 32].height() );
+        fheroes2::DrawLine( released[205 - 32], { offset + 2, offset + 1 }, { offset + 3, offset + 0 }, buttonGoodReleasedColor );
 
-        // I with circumflex. Only copied from I.
-        released[174] = released[41];
+        // I with circumflex.
+        released[206 - 32].resize( released[73 - 32].width(), released[73 - 32].height() + 3 );
+        released[206 - 32].reset();
+        fheroes2::Copy( released[73 - 32], 0, 0, released[206 - 32], 0, 3, released[73 - 32].width(), released[73 - 32].height() );
+        fheroes2::SetPixel( released[206 - 32], offset + 1, offset + 1, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[206 - 32], { offset + 2, offset + 0 }, { offset + 3, offset + 1 }, buttonGoodReleasedColor );
 
-        // D with caron. Only copied from D.
-        released[175] = released[36];
+        // D with caron.
+        released[207 - 32].resize( released[68 - 32].width(), released[68 - 32].height() + 3 );
+        released[207 - 32].reset();
+        fheroes2::Copy( released[68 - 32], 0, 0, released[207 - 32], 0, 3, released[68 - 32].width(), released[68 - 32].height() );
+        fheroes2::SetPixel( released[207 - 32], offset + 4, offset + 0, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[207 - 32], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
 
-        // D with stroke. Only copied from D.
-        released[176] = released[36];
+        // D with stroke.
+        released[208 - 32] = released[68 - 32];
+        fheroes2::DrawLine( released[208 - 32], { offset + 1, offset + 4 }, { offset + 5, offset + 4 }, buttonGoodReleasedColor );
 
-        // N with acute. Only copied from N.
-        released[177] = released[46];
+        // N with acute.
+        released[209 - 32].resize( released[78 - 32].width(), released[78 - 32].height() + 3 );
+        released[209 - 32].reset();
+        fheroes2::Copy( released[78 - 32], 0, 0, released[209 - 32], 0, 3, released[78 - 32].width(), released[78 - 32].height() );
+        fheroes2::DrawLine( released[209 - 32], { offset + 7, offset + 1 }, { offset + 8, offset + 0 }, buttonGoodReleasedColor );
 
-        // N with caron. Only copied from N.
-        released[178] = released[46];
+        // N with caron.
+        released[210 - 32].resize( released[78 - 32].width(), released[78 - 32].height() + 3 );
+        released[210 - 32].reset();
+        fheroes2::Copy( released[78 - 32], 0, 0, released[210 - 32], 0, 3, released[78 - 32].width(), released[78 - 32].height() );
+        fheroes2::SetPixel( released[210 - 32], offset + 6, offset + 0, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[210 - 32], { offset + 7, offset + 1 }, { offset + 8, offset + 0 }, buttonGoodReleasedColor );
 
-        // O with acute. Only copied from O.
-        released[179] = released[47];
+        // O with acute.
+        released[211 - 32].resize( released[79 - 32].width(), released[79 - 32].height() + 3 );
+        released[211 - 32].reset();
+        fheroes2::Copy( released[79 - 32], 0, 0, released[211 - 32], 0, 3, released[79 - 32].width(), released[79 - 32].height() );
+        fheroes2::DrawLine( released[211 - 32], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
 
-        // O with circumflex. Only copied from O.
-        released[180] = released[47];
+        // O with circumflex.
+        released[212 - 32].resize( released[79 - 32].width(), released[79 - 32].height() + 3 );
+        released[212 - 32].reset();
+        fheroes2::Copy( released[79 - 32], 0, 0, released[212 - 32], 0, 3, released[79 - 32].width(), released[79 - 32].height() );
+        fheroes2::SetPixel( released[212 - 32], offset + 4, offset + 1, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[212 - 32], { offset + 5, offset + 0 }, { offset + 6, offset + 1 }, buttonGoodReleasedColor );
 
-        // O with double acute. Only copied from O.
-        released[181] = released[47];
+        // O with double acute.
+        released[213 - 32].resize( released[79 - 32].width(), released[79 - 32].height() + 3 );
+        released[213 - 32].reset();
+        fheroes2::Copy( released[79 - 32], 0, 0, released[213 - 32], 0, 3, released[79 - 32].width(), released[79 - 32].height() );
+        fheroes2::DrawLine( released[213 - 32], { offset + 3, offset + 1 }, { offset + 4, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[213 - 32], { offset + 6, offset + 1 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
 
-        // O with diaerisis. Only copied from O.
-        released[182] = released[47];
+        // O with diaeresis.
+        released[214 - 32].resize( released[79 - 32].width(), released[79 - 32].height() + 3 );
+        released[214 - 32].reset();
+        fheroes2::Copy( released[79 - 32], 0, 0, released[214 - 32], 0, 3, released[79 - 32].width(), released[79 - 32].height() );
+        fheroes2::DrawLine( released[214 - 32], { offset + 2, offset + 1 }, { offset + 3, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[214 - 32], { offset + 6, offset + 1 }, { offset + 7, offset + 1 }, buttonGoodReleasedColor );
 
-        // R with caron. Only copied from R.
-        released[184] = released[50];
+        // R with caron.
+        released[216 - 32].resize( released[82 - 32].width(), released[82 - 32].height() + 3 );
+        released[216 - 32].reset();
+        fheroes2::Copy( released[82 - 32], 0, 0, released[216 - 32], 0, 3, released[82 - 32].width(), released[82 - 32].height() );
+        fheroes2::SetPixel( released[216 - 32], offset + 5, offset + 0, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[216 - 32], { offset + 6, offset + 1 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
 
-        // U with ring above. Only copied from U.
-        released[185] = released[53];
+        // U with ring above.
+        released[217 - 32].resize( released[85 - 32].width(), released[85 - 32].height() + 4 );
+        released[217 - 32].reset();
+        fheroes2::Copy( released[85 - 32], 0, 0, released[217 - 32], 0, 4, released[85 - 32].width(), released[85 - 32].height() );
+        fheroes2::DrawLine( released[217 - 32], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[217 - 32], { offset + 6, offset + 2 }, { offset + 7, offset + 1 }, buttonGoodReleasedColor );
 
-        // U with acute. Only copied from U.
-        released[186] = released[53];
+        // U with acute.
+        released[218 - 32].resize( released[85 - 32].width(), released[85 - 32].height() + 3 );
+        released[218 - 32].reset();
+        fheroes2::Copy( released[85 - 32], 0, 0, released[218 - 32], 0, 3, released[85 - 32].width(), released[85 - 32].height() );
+        fheroes2::DrawLine( released[218 - 32], { offset + 6, offset + 1 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
 
-        // U with double acute. Only copied from U.
-        released[187] = released[53];
+        // U with double acute.
+        released[219 - 32].resize( released[85 - 32].width(), released[85 - 32].height() + 3 );
+        released[219 - 32].reset();
+        fheroes2::Copy( released[85 - 32], 0, 0, released[219 - 32], 0, 3, released[85 - 32].width(), released[85 - 32].height() );
+        fheroes2::DrawLine( released[219 - 32], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[219 - 32], { offset + 8, offset + 1 }, { offset + 9, offset + 0 }, buttonGoodReleasedColor );
 
-        // U with diaerisis. Only copied from U.
-        released[188] = released[53];
+        // U with diaeresis.
+        released[220 - 32].resize( released[85 - 32].width(), released[85 - 32].height() + 3 );
+        released[220 - 32].reset();
+        fheroes2::Copy( released[85 - 32], 0, 0, released[220 - 32], 0, 3, released[85 - 32].width(), released[85 - 32].height() );
+        fheroes2::DrawLine( released[220 - 32], { offset + 4, offset + 1 }, { offset + 5, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[220 - 32], { offset + 8, offset + 1 }, { offset + 9, offset + 1 }, buttonGoodReleasedColor );
 
-        // Y with acute. Only copied from Y.
-        released[189] = released[57];
+        // Y with acute.
+        released[221 - 32].resize( released[89 - 32].width(), released[89 - 32].height() + 3 );
+        released[221 - 32].reset();
+        fheroes2::Copy( released[89 - 32], 0, 0, released[221 - 32], 0, 3, released[89 - 32].width(), released[89 - 32].height() );
+        fheroes2::DrawLine( released[221 - 32], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
 
         // T with cedilla. Only copied from T.
-        released[190] = released[52];
+        released[222 - 32].resize( released[84 - 32].width(), released[84 - 32].height() + 3 );
+        released[222 - 32].reset();
+        fheroes2::Copy( released[84 - 32], 0, 0, released[222 - 32], 0, 0, released[84 - 32].width(), released[84 - 32].height() );
+        fheroes2::DrawLine( released[222 - 32], { offset + 5, offset + 10 }, { offset + 6, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[222 - 32], { offset + 4, offset + 12 }, { offset + 5, offset + 12 }, buttonGoodReleasedColor );
     }
 
     void generateCP1251GoodButtonFont( std::vector<fheroes2::Sprite> & released )
@@ -5424,6 +5816,11 @@ namespace fheroes2
         fheroes2::Copy( icnVsSprite[43], 6, 6, icnVsSprite[75], 4, 8, 4, 1 );
         icnVsSprite[75].setPosition( icnVsSprite[75].x(), icnVsSprite[75].y() );
         updateNormalFontLetterShadow( icnVsSprite[75] );
+
+        // System call 'DELETE' (0x7F) is never used as a text character in phrases.
+        // To make the blinking text cursor we have to make a transparent character with the width of the cursor '_'.
+        icnVsSprite[127 - 32].resize( icnVsSprite[95 - 32].width(), 1 );
+        icnVsSprite[127 - 32].reset();
     }
 
     void modifyBaseSmallFont( std::vector<fheroes2::Sprite> & icnVsSprite )

@@ -21,16 +21,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "dialog_selectitems.h"
+
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
-#include <string>
 #include <vector>
 
 #include "agg_image.h"
 #include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "dialog_selectitems.h"
 #include "gamedefs.h"
 #include "heroes_base.h"
 #include "icn.h"
@@ -124,17 +125,13 @@ public:
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
-        Monster mons( index );
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
+        fheroes2::Display & display = fheroes2::Display::instance();
 
-        if ( current ) {
-            fheroes2::Text text( mons.GetName(), fheroes2::FontType::normalYellow() );
-            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
-        }
-        else {
-            fheroes2::Text text( mons.GetName(), fheroes2::FontType() );
-            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
-        }
+        const Monster mons( index );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() ), display, dstx + 5, dsty + 3 );
+
+        const fheroes2::Text text( mons.GetName(), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        text.draw( dstx + 50, dsty + 10, display );
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
@@ -164,18 +161,14 @@ public:
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
+        fheroes2::Display & display = fheroes2::Display::instance();
 
-        if ( !port.empty() )
-            fheroes2::Blit( port, fheroes2::Display::instance(), dstx + 5, dsty + 3 );
+        if ( !port.empty() ) {
+            fheroes2::Blit( port, display, dstx + 5, dsty + 3 );
+        }
 
-        if ( current ) {
-            fheroes2::Text text( Heroes::GetName( index ), fheroes2::FontType::normalYellow() );
-            text.draw( dstx + 50, dsty + 5, fheroes2::Display::instance() );
-        }
-        else {
-            fheroes2::Text text( Heroes::GetName( index ), fheroes2::FontType() );
-            text.draw( dstx + 50, dsty + 5, fheroes2::Display::instance() );
-        }
+        const fheroes2::Text text( Heroes::GetName( index ), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        text.draw( dstx + 50, dsty + 5, display );
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
@@ -201,14 +194,8 @@ public:
         const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
         fheroes2::Blit( artifactSprite, display, dstx + 5, dsty + 3 );
 
-        if ( current ) {
-            fheroes2::Text text( art.GetName(), fheroes2::FontType::normalYellow() );
-            text.draw( dstx + 50, dsty + 10, display );
-        }
-        else {
-            fheroes2::Text text( art.GetName(), fheroes2::FontType() );
-            text.draw( dstx + 50, dsty + 10, display );
-        }
+        const fheroes2::Text text( art.GetName(), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        text.draw( dstx + 50, dsty + 10, display );
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
@@ -231,17 +218,13 @@ public:
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
-        Spell spell( index );
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
+        fheroes2::Display & display = fheroes2::Display::instance();
 
-        if ( current ) {
-            fheroes2::Text text( spell.GetName(), fheroes2::FontType::normalYellow() );
-            text.draw( dstx + 80, dsty + 10, fheroes2::Display::instance() );
-        }
-        else {
-            fheroes2::Text text( spell.GetName(), fheroes2::FontType() );
-            text.draw( dstx + 80, dsty + 10, fheroes2::Display::instance() );
-        }
+        const Spell spell( index );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() ), display, dstx + 5, dsty + 3 );
+
+        const fheroes2::Text text( spell.GetName(), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        text.draw( dstx + 80, dsty + 10, display );
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
@@ -264,18 +247,13 @@ public:
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
-        Skill::Secondary skill( 1 + index / 3, 1 + ( index % 3 ) );
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
-        std::string str = skill.GetName();
+        fheroes2::Display & display = fheroes2::Display::instance();
 
-        if ( current ) {
-            fheroes2::Text text( str, fheroes2::FontType::normalYellow() );
-            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
-        }
-        else {
-            fheroes2::Text text( str, fheroes2::FontType() );
-            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
-        }
+        const Skill::Secondary skill( 1 + index / 3, 1 + ( index % 3 ) );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ), display, dstx + 5, dsty + 3 );
+
+        const fheroes2::Text text( skill.GetName(), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        text.draw( dstx + 50, dsty + 10, display );
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
@@ -345,10 +323,7 @@ Spell Dialog::SelectSpell( int cur )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    std::vector<int> spells( static_cast<int>( Spell::RANDOM - 1 ), Spell::NONE );
-
-    for ( size_t i = 0; i < spells.size(); ++i )
-        spells[i] = static_cast<int>( i + 1 ); // safe to do this as the number of spells can't be more than 2 billion
+    std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook();
 
     Dialog::FrameBorder frameborder( { 340, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const fheroes2::Rect & area = frameborder.GetArea();
@@ -381,7 +356,7 @@ Spell Dialog::SelectSpell( int cur )
     return result == Dialog::OK || listbox.ok ? Spell( listbox.GetCurrent() ) : Spell( Spell::NONE );
 }
 
-Artifact Dialog::SelectArtifact( int cur )
+Artifact Dialog::SelectArtifact()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -389,10 +364,16 @@ Artifact Dialog::SelectArtifact( int cur )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    std::vector<int> artifacts( static_cast<int>( Settings::Get().isCurrentMapPriceOfLoyalty() ? Artifact::UNKNOWN : Artifact::SPELL_SCROLL ), Artifact::UNKNOWN );
+    std::vector<int> artifacts;
+    artifacts.reserve( Artifact::ARTIFACT_COUNT - 1 );
 
-    for ( size_t i = 0; i < artifacts.size(); ++i )
-        artifacts[i] = static_cast<int>( i ); // safe to do this as the number of artifacts can't be more than 2 billion
+    const bool isPriceofLoyaltyArtifactAllowed = Settings::Get().isCurrentMapPriceOfLoyalty();
+
+    for ( int artifactId = Artifact::UNKNOWN + 1; artifactId < Artifact::ARTIFACT_COUNT; ++artifactId ) {
+        if ( Artifact( artifactId ).isValid() && ( isPriceofLoyaltyArtifactAllowed || !fheroes2::isPriceOfLoyaltyArtifact( artifactId ) ) ) {
+            artifacts.emplace_back( artifactId );
+        }
+    }
 
     Dialog::FrameBorder frameborder( { 370, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const fheroes2::Rect & area = frameborder.GetArea();
@@ -400,8 +381,8 @@ Artifact Dialog::SelectArtifact( int cur )
     SelectEnumArtifact listbox( area );
 
     listbox.SetListContent( artifacts );
-    if ( cur != Artifact::UNKNOWN )
-        listbox.SetCurrent( cur );
+    // Force to select the first artifact in the list.
+    listbox.SetCurrent( static_cast<size_t>( 0 ) );
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups( area, Dialog::OK | Dialog::CANCEL );
@@ -422,7 +403,7 @@ Artifact Dialog::SelectArtifact( int cur )
         display.render();
     }
 
-    return result == Dialog::OK || listbox.ok ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
+    return ( result == Dialog::OK || listbox.ok ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
 }
 
 Monster Dialog::SelectMonster( int id )

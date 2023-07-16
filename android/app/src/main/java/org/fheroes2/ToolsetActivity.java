@@ -1,4 +1,4 @@
-/***************************************************************************
+ƒ/***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2023                                                    *
  *                                                                         *
@@ -37,7 +37,6 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -91,8 +90,12 @@ public final class ToolsetActivity extends AppCompatActivity {
             liveStatus.setValue(status.setIsHoMM2AssetsPresent(HoMM2AssetManagement.isHoMM2AssetsPresent(externalFilesDir)));
         }
 
-        public void extractAssets(final File externalFilesDir, final File cacheDir, final Uri zipFileUri, final ContentResolver contentResolver) {
+        private void extractAssets(final File externalFilesDir, final File cacheDir, final Uri zipFileUri, final ContentResolver contentResolver) {
             final Status status = Objects.requireNonNull(liveStatus.getValue());
+
+            if (status.isBackgroundTaskExecuting) {
+                return;
+            }
 
             liveStatus.setValue(status.setIsBackgroundTaskExecuting(true));
 
@@ -130,7 +133,7 @@ public final class ToolsetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_toolset);
 
         viewModel = new ViewModelProvider(this).get(ToolsetActivityViewModel.class);
-        viewModel.getLiveStatus().observe(this, this::updateUI);
+        viewModel.liveStatus.observe(this, this::updateUI);
     }
 
     @Override

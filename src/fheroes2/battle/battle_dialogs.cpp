@@ -70,6 +70,7 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_option_item.h"
+#include "ui_tool.h"
 
 namespace
 {
@@ -384,6 +385,7 @@ namespace
             if ( redrawScreen ) {
                 fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
                 RedrawBattleSettings( optionAreas );
+                buttonOkay.draw();
                 display.render();
 
                 saveConfiguration = true;
@@ -655,7 +657,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
         const bool isWinnerHuman = winner && winner->isControlHuman();
 
-        btnOk.reset( new fheroes2::Button( pos_rt.x + 120, pos_rt.y + 410, isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 ) );
+        btnOk
+            = std::make_unique<fheroes2::Button>( pos_rt.x + 120, pos_rt.y + 410, isEvilInterface ? ICN::BUTTON_SMALLER_OKAY_EVIL : ICN::BUTTON_SMALLER_OKAY_GOOD, 0, 1 );
 
         for ( const Artifact & art : artifacts ) {
             if ( isWinnerHuman || art.isUltimate() ) { // always show the message for ultimate artifacts
@@ -910,7 +913,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
 
     int result = 0;
 
-    display.render();
+    display.render( pos_rt );
 
     std::string statusMessage = _( "Hero's Options" );
 
@@ -975,9 +978,10 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
         if ( le.MouseClickLeft( portraitArea ) && actionHero != nullptr ) {
             LocalEvent::GetClean();
             // IMPORTANT!!! This is extremely dangerous but we have no choice with current code. Make sure that this trick doesn't allow user to modify the hero.
-            const_cast<Heroes *>( actionHero )->OpenDialog( true, false, true, true );
-            // Render to restore the screen after closing the hero dialog
-            display.render();
+            const_cast<Heroes *>( actionHero )->OpenDialog( true, true, true, true, false );
+
+            // Fade-in to restore the screen after closing the hero dialog.
+            fheroes2::fadeInDisplay( _interface->GetInterfaceRoi(), !display.isDefaultSize() );
         }
 
         if ( le.MousePressRight( btnCast.area() ) && _currentColor == hero.GetColor() ) {
@@ -1069,7 +1073,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
     auto drawGoldMsg = [cost, &kingdom, &btnAccept]() {
         std::string str = _( "Not enough gold (%{gold})" );
 
-        StringReplace( str, "%{gold}", cost - kingdom.GetFunds().Get( Resource::GOLD ) );
+        StringReplace( str, "%{gold}", cost - kingdom.GetFunds().gold );
 
         const Text text( str, Font::SMALL );
         const fheroes2::Rect rect = btnAccept.area();

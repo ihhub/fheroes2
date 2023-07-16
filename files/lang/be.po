@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-01 11:22+0000\n"
+"POT-Creation-Date: 2023-07-15 12:25+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -55,6 +55,12 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "НАЗАД"
+
+msgid "OKAY"
+msgstr "ДОБРА"
+
+msgid "smallerButton|OKAY"
+msgstr ""
 
 msgid "ACCEPT"
 msgstr "ПРЫНЯЦЬ"
@@ -180,9 +186,6 @@ msgstr "МІН"
 
 msgid "MAX"
 msgstr "МАКС"
-
-msgid "OKAY"
-msgstr "ДОБРА"
 
 msgid "Warrior"
 msgstr "Ваяр"
@@ -2525,6 +2528,18 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr ""
 
+msgid "Upgrade"
+msgstr ""
+
+msgid "Upgrade your troops."
+msgstr ""
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
+
 msgid "Followers"
 msgstr ""
 
@@ -3293,6 +3308,143 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
+msgid ""
+"Are you sure you want to load a new map? (Any unsaved changes to the current "
+"map will be lost.)"
+msgstr ""
+
+msgid ""
+"Are you sure you want to create a new map? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Новая гульня"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Загрузіць гульню"
+
+msgid "Load an existing map."
+msgstr ""
+
+#, fuzzy
+msgid "Save Map"
+msgstr "Вялікія мапы"
+
+#, fuzzy
+msgid "Save the current map."
+msgstr "Назва абранай мапы."
+
+msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Terrain Mode"
+msgstr ""
+
+msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
+msgstr ""
+
+msgid "Object Mode"
+msgstr ""
+
+msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgstr ""
+
+msgid "Detail Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Used for special editing of monsters, heroes and towns."
+msgstr "Знішчыць усіх варожых герояў і захапіць усе варожыя гарады."
+
+msgid "Allows you to draw streams by clicking and dragging."
+msgstr ""
+
+msgid "Stream Mode"
+msgstr ""
+
+msgid "Allows you to draw roads by clicking and dragging."
+msgstr ""
+
+msgid "Road Mode"
+msgstr ""
+
+msgid "Erase Mode"
+msgstr ""
+
+msgid "Used to erase objects off the map."
+msgstr ""
+
+msgid "Change between zoom and normal view."
+msgstr ""
+
+msgid "Magnify"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Undo your last action.  Press again to redo the action."
+msgstr ""
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+msgid "Edit map title, description, and other general information."
+msgstr ""
+
+msgid "Specifications"
+msgstr ""
+
+msgid "File Options"
+msgstr ""
+
+msgid ""
+"Open the file options menu, where you can save or load maps, or quit out of "
+"the editor."
+msgstr ""
+
+msgid "View the editor system options, which let you customize the editor."
+msgstr ""
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Вярнуцца ў галоўнае меню."
+
+msgid "Cancel back to the main menu."
+msgstr "Вярнуцца ў галоўнае меню."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr ""
+"Выпад-\n"
+"ковы"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Вярнуцца ў галоўнае меню."
+
+msgid "No maps available!"
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Лёгка"
 
@@ -3362,13 +3514,25 @@ msgstr "Паглядзець уступ"
 msgid "View Intro videos for the current state of the campaign."
 msgstr ""
 
-msgid "Select campaign difficulty. It cannot be changed after."
+msgid ""
+"Select the campaign difficulty. This can be lowered at any point during the "
+"campaign."
 msgstr ""
 
 msgid "Restart"
 msgstr ""
 
 msgid "Restart the current scenario."
+msgstr ""
+
+#, fuzzy
+msgid "Difficulty"
+msgstr "Складанасць"
+
+msgid ""
+"You have changed to a lower difficulty for the campaign. You will not be "
+"able to revert this after this point. The high score will be calculated "
+"based solely on the new difficulty. Do you want to proceed?"
 msgstr ""
 
 msgid "Are you sure you want to restart this scenario?"
@@ -3646,6 +3810,25 @@ msgstr ""
 msgid "hotkey|choose the expansion campaign"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "Кампанія"
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "Звычайная гульня"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "Звычайная гульня"
+
+msgid "hotkey|new map from scratch"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "Зводка аб каралеўстве"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -3870,7 +4053,7 @@ msgstr ""
 msgid "hotkey|upgrade troop"
 msgstr ""
 
-msgid "hotkey|dismiss troop"
+msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
 msgid "The save file is corrupted."
@@ -3908,9 +4091,6 @@ msgid ""
 msgstr ""
 "Гуляй за адным кампутарам з адной-пяццю іншымі асобамі, перадаючы кіраванне "
 "па чарзе."
-
-msgid "Cancel back to the main menu."
-msgstr "Вярнуцца ў галоўнае меню."
 
 msgid "A single player game playing out a single map."
 msgstr "Гульня для адной асобы на адной мапе."
@@ -4002,6 +4182,9 @@ msgid "Expansion Campaign"
 msgstr "Дадатковыя сцэнары"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr ""
+
+msgid "Loading video. Please wait..."
 msgstr ""
 
 msgid "Host"
@@ -4237,9 +4420,6 @@ msgstr "Пстрыкні, каб ухваліць налады і пачаць �
 msgid "Click to return to the main menu."
 msgstr "Пстрыкні, каб вярнуцца ў галоўнае меню."
 
-msgid "No maps available!"
-msgstr ""
-
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr ""
 
@@ -4400,9 +4580,6 @@ msgid ""
 "or quit."
 msgstr ""
 
-msgid "File Options"
-msgstr ""
-
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 
@@ -4548,9 +4725,6 @@ msgid "Keyboard|123"
 msgstr ""
 
 msgid "Keyboard|SPACE"
-msgstr ""
-
-msgid "Keyboard|LANG"
 msgstr ""
 
 msgid "Keyboard|ABC"
@@ -5815,13 +5989,27 @@ msgstr ""
 msgid "Only heroes can cast this spell."
 msgstr ""
 
+msgid "This hero is not able to cast adventure spells."
+msgstr ""
+
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
 msgid "This spell cannot be used on a boat."
 msgstr ""
 
-msgid "This spell can be casted only nearby water."
+msgid "This spell can be casted only nearby ocean."
+msgstr ""
+
+msgid ""
+"There is no boat available and no free ocean location near the hero to cast "
+"this spell."
+msgstr ""
+
+msgid "There is no more boat available to cast this spell."
+msgstr ""
+
+msgid "There is no free ocean location near the hero to cast this spell."
 msgstr ""
 
 msgid ""
@@ -5835,6 +6023,37 @@ msgid ""
 "The nearest town is %{town}.\n"
 " \n"
 "This town is occupied by your hero %{hero}."
+msgstr ""
+
+msgid "This spell is already in use."
+msgstr ""
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
 msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
@@ -5915,18 +6134,10 @@ msgstr ""
 msgid "Select town to port to."
 msgstr ""
 
-msgid "%{spell} failed!!!"
-msgstr ""
-
-msgid "This spell is already in use."
-msgstr ""
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr ""
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
+msgid "Identify Hero"
 msgstr ""
 
 msgid "The creatures are willing to join us!"
@@ -5950,11 +6161,6 @@ msgid "These weak creatures will surely flee before us."
 msgstr ""
 
 msgid "I fear these creatures are in the mood for a fight."
-msgstr ""
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
 msgstr ""
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
@@ -7593,6 +7799,9 @@ msgstr ""
 msgid "This item can't be traded."
 msgstr ""
 
+msgid "Invalid Artifact"
+msgstr ""
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
@@ -8691,9 +8900,6 @@ msgid ""
 "lost by mortals."
 msgstr ""
 
-msgid "Invalid Artifact"
-msgstr ""
-
 msgid "Wood"
 msgstr ""
 
@@ -9076,9 +9282,6 @@ msgid "View All"
 msgstr ""
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
-msgstr ""
-
-msgid "Identify Hero"
 msgstr ""
 
 msgid "Summon Boat"

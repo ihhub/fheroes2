@@ -65,6 +65,15 @@ namespace Game
         MAIN_MENU_NEW_ORIGINAL_CAMPAIGN,
         MAIN_MENU_NEW_EXPANSION_CAMPAIGN,
 
+#if defined( WITH_DEBUG )
+        // Editor is still in development.
+        EDITOR_MAIN_MENU,
+        EDITOR_NEW_MAP_MENU,
+        EDITOR_LOAD_MAP_MENU,
+        EDITOR_FROM_SCRATCH_MAP_MENU,
+        EDITOR_RANDOM_MAP_MENU,
+#endif
+
         CAMPAIGN_ROLAND,
         CAMPAIGN_ARCHIBALD,
         CAMPAIGN_PRICE_OF_LOYALTY,
@@ -150,7 +159,7 @@ namespace Game
         ARMY_SPLIT_STACK_BY_ONE,
         ARMY_JOIN_STACKS,
         ARMY_UPGRADE_TROOP,
-        ARMY_DISMISS_TROOP,
+        ARMY_DISMISS,
 
         // WARNING! Put all new event only above this line. No adding in between.
         NO_EVENT,

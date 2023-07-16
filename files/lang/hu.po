@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-01 11:22+0000\n"
+"POT-Creation-Date: 2023-07-15 12:25+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -47,6 +47,12 @@ msgid "QUIT"
 msgstr ""
 
 msgid "CANCEL"
+msgstr ""
+
+msgid "OKAY"
+msgstr ""
+
+msgid "smallerButton|OKAY"
 msgstr ""
 
 msgid "ACCEPT"
@@ -165,9 +171,6 @@ msgid "MIN"
 msgstr ""
 
 msgid "MAX"
-msgstr ""
-
-msgid "OKAY"
 msgstr ""
 
 msgid "Warrior"
@@ -2694,6 +2697,18 @@ msgstr ""
 msgid "Are you sure you want to dismiss this army?"
 msgstr "Biztos vagy benne hogy feloszlatod ezt a sereget?"
 
+msgid "Upgrade"
+msgstr ""
+
+msgid "Upgrade your troops."
+msgstr ""
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Dismiss this army."
+msgstr ""
+
 #, fuzzy
 msgid "Followers"
 msgstr "Virágok"
@@ -3535,6 +3550,149 @@ msgstr "Személyiség:"
 msgid "Best Monster:"
 msgstr "Legjobb szörny:"
 
+#, fuzzy
+msgid ""
+"Are you sure you want to load a new map? (Any unsaved changes to the current "
+"map will be lost.)"
+msgstr ""
+"Biztos hogy benne hogy új játékot töltesz be? (A jelenlegi játékod el fog "
+"veszni)"
+
+#, fuzzy
+msgid ""
+"Are you sure you want to create a new map? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Biztos hogy benne hogy új játékot töltesz be? (A jelenlegi játékod el fog "
+"veszni)"
+
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
+msgstr ""
+
+#, fuzzy
+msgid "New Map"
+msgstr "Dawn"
+
+#, fuzzy
+msgid "Load Map"
+msgstr "Játék betöltése"
+
+msgid "Load an existing map."
+msgstr ""
+
+#, fuzzy
+msgid "Save Map"
+msgstr "Új játék"
+
+#, fuzzy
+msgid "Save the current map."
+msgstr "Kattints a főmenübe való visszatéréshez."
+
+msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Terrain Mode"
+msgstr ""
+
+msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
+msgstr ""
+
+msgid "Object Mode"
+msgstr ""
+
+msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgstr ""
+
+msgid "Detail Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Used for special editing of monsters, heroes and towns."
+msgstr "Az ellenfelek összes hősének és városának elpusztítása."
+
+msgid "Allows you to draw streams by clicking and dragging."
+msgstr ""
+
+msgid "Stream Mode"
+msgstr ""
+
+msgid "Allows you to draw roads by clicking and dragging."
+msgstr ""
+
+#, fuzzy
+msgid "Road Mode"
+msgstr "Út Mód"
+
+msgid "Erase Mode"
+msgstr ""
+
+msgid "Used to erase objects off the map."
+msgstr ""
+
+msgid "Change between zoom and normal view."
+msgstr ""
+
+msgid "Magnify"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Undo your last action.  Press again to redo the action."
+msgstr ""
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+msgid "Edit map title, description, and other general information."
+msgstr ""
+
+#, fuzzy
+msgid "Specifications"
+msgstr "Erődítmények"
+
+msgid "File Options"
+msgstr "Fájlbeállítások"
+
+msgid ""
+"Open the file options menu, where you can save or load maps, or quit out of "
+"the editor."
+msgstr ""
+
+msgid "View the editor system options, which let you customize the editor."
+msgstr ""
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Vissza a főmenübe."
+
+msgid "Cancel back to the main menu."
+msgstr "Vissza a főmenübe."
+
+msgid "From Scratch"
+msgstr ""
+
+msgid "Start from scratch with a blank map."
+msgstr ""
+
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Véletlenszerű város"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Vissza a főmenübe."
+
+msgid "No maps available!"
+msgstr "Nincs használható térkép!"
+
 msgid "difficulty|Easy"
 msgstr "Könnyű"
 
@@ -3607,7 +3765,9 @@ msgstr "Hős mutatása"
 msgid "View Intro videos for the current state of the campaign."
 msgstr ""
 
-msgid "Select campaign difficulty. It cannot be changed after."
+msgid ""
+"Select the campaign difficulty. This can be lowered at any point during the "
+"campaign."
 msgstr ""
 
 msgid "Restart"
@@ -3616,6 +3776,18 @@ msgstr ""
 #, fuzzy
 msgid "Restart the current scenario."
 msgstr "Készítők listájának megjelenítése."
+
+#, fuzzy
+msgid "Difficulty"
+msgstr ""
+"Térkép\n"
+"Nehézség"
+
+msgid ""
+"You have changed to a lower difficulty for the campaign. You will not be "
+"able to revert this after this point. The high score will be calculated "
+"based solely on the new difficulty. Do you want to proceed?"
+msgstr ""
 
 #, fuzzy
 msgid "Are you sure you want to restart this scenario?"
@@ -3907,6 +4079,25 @@ msgstr ""
 msgid "hotkey|choose the expansion campaign"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|map editor main menu"
+msgstr "Hadjárat"
+
+#, fuzzy
+msgid "hotkey|new map menu"
+msgstr "Következő hősök"
+
+#, fuzzy
+msgid "hotkey|load map menu"
+msgstr "Szimpla játék"
+
+msgid "hotkey|new map from scratch"
+msgstr ""
+
+#, fuzzy
+msgid "hotkey|new random map"
+msgstr "Királyság összesítése"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4138,7 +4329,7 @@ msgstr ""
 msgid "hotkey|upgrade troop"
 msgstr ""
 
-msgid "hotkey|dismiss troop"
+msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
 #, fuzzy
@@ -4175,9 +4366,6 @@ msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-
-msgid "Cancel back to the main menu."
-msgstr "Vissza a főmenübe."
 
 msgid "A single player game playing out a single map."
 msgstr "Egyjátékos mód egy pályán."
@@ -4272,6 +4460,9 @@ msgid "Expansion Campaign"
 msgstr ""
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
+msgstr ""
+
+msgid "Loading video. Please wait..."
 msgstr ""
 
 msgid "Host"
@@ -4528,9 +4719,6 @@ msgstr "Kattints a beállítások elfogadásához és új játék indításához
 msgid "Click to return to the main menu."
 msgstr "Kattints a főmenübe való visszatéréshez."
 
-msgid "No maps available!"
-msgstr "Nincs használható térkép!"
-
 #, fuzzy
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Az Asztrológusok kihírdették a %{name} havát."
@@ -4702,9 +4890,6 @@ msgid ""
 "or quit."
 msgstr ""
 
-msgid "File Options"
-msgstr "Fájlbeállítások"
-
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
 
@@ -4855,9 +5040,6 @@ msgid "Keyboard|123"
 msgstr ""
 
 msgid "Keyboard|SPACE"
-msgstr ""
-
-msgid "Keyboard|LANG"
 msgstr ""
 
 msgid "Keyboard|ABC"
@@ -6319,6 +6501,10 @@ msgstr "Ez a varázslat nem fog senkire se hatni!"
 msgid "Only heroes can cast this spell."
 msgstr ""
 
+#, fuzzy
+msgid "This hero is not able to cast adventure spells."
+msgstr "Kalandozó varázslat elsütése."
+
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 "A hősöd túl fáradt ehhez a varázslathoz a mai nap. Próbáld újra holnap."
@@ -6327,7 +6513,20 @@ msgstr ""
 msgid "This spell cannot be used on a boat."
 msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
 
-msgid "This spell can be casted only nearby water."
+#, fuzzy
+msgid "This spell can be casted only nearby ocean."
+msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
+
+msgid ""
+"There is no boat available and no free ocean location near the hero to cast "
+"this spell."
+msgstr ""
+
+#, fuzzy
+msgid "There is no more boat available to cast this spell."
+msgstr "Kalandozó varázslat elsütése."
+
+msgid "There is no free ocean location near the hero to cast this spell."
 msgstr ""
 
 msgid ""
@@ -6341,6 +6540,39 @@ msgid ""
 "The nearest town is %{town}.\n"
 " \n"
 "This town is occupied by your hero %{hero}."
+msgstr ""
+
+msgid "This spell is already in use."
+msgstr ""
+
+msgid ""
+"No opponent can have heroes under his command anymore. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"No opponent has a hero under his command at this time. Casting this spell "
+"will not bring any advantage."
+msgstr ""
+
+msgid ""
+"You must be within %{count} spaces of a monster for the Visions spell to "
+"work."
+msgstr ""
+
+msgid ""
+"You must be standing on the entrance to a mine (sawmills and alchemists "
+"don't count) to cast this spell."
+msgstr ""
+"A bánya bejáratánál kell állnod (a fűrészmalmot és az alkimista labort "
+"leszámítva), hogy használd ezt a varázslatot."
+
+msgid "You must first defeat the ghosts guarding the mine to cast this spell."
+msgstr ""
+
+msgid ""
+"There are already at least as many elementals guarding the mine than the "
+"spell can generate. Casting this spell will not bring any advantage."
 msgstr ""
 
 #, fuzzy
@@ -6431,19 +6663,11 @@ msgstr "Városba lépés"
 msgid "Select town to port to."
 msgstr ""
 
-msgid "%{spell} failed!!!"
-msgstr ""
-
-msgid "This spell is already in use."
-msgstr ""
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Az ellenséges hősök teljes mértékben azonosíthatóak."
 
-msgid ""
-"You must be within %{count} spaces of a monster for the Visions spell to "
-"work."
-msgstr ""
+msgid "Identify Hero"
+msgstr "Hősazonosítás"
 
 msgid "The creatures are willing to join us!"
 msgstr "A lények csatlakozni akarnak hozzád!"
@@ -6466,13 +6690,6 @@ msgstr "Ezek a gyenge lények valószínű elmenekül előled."
 
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Félő, hogy ezek a lények készek harcolni."
-
-msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
-msgstr ""
-"A bánya bejáratánál kell állnod (a fűrészmalmot és az alkimista labort "
-"leszámítva), hogy használd ezt a varázslatot."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr ""
@@ -8345,6 +8562,10 @@ msgstr "A sereg utolsó egységét nem lehet áthelyezni."
 msgid "This item can't be traded."
 msgstr ""
 
+#, fuzzy
+msgid "Invalid Artifact"
+msgstr "Varázstárgy"
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
@@ -9456,10 +9677,6 @@ msgid ""
 "lost by mortals."
 msgstr ""
 
-#, fuzzy
-msgid "Invalid Artifact"
-msgstr "Varázstárgy"
-
 msgid "Wood"
 msgstr "Fa"
 
@@ -9858,9 +10075,6 @@ msgstr "Minden mutatása"
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr "Részletes információkat ad az ellenséges hősökről."
 
-msgid "Identify Hero"
-msgstr "Hősazonosítás"
-
 msgid "Summon Boat"
 msgstr "Hajó idézése"
 
@@ -10065,11 +10279,3 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Attention"
-#~ msgstr "animáció"
-
-#, fuzzy
-#~ msgid "Location: "
-#~ msgstr "Ásatás"

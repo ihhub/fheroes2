@@ -37,6 +37,7 @@
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
+#include "campaign_savedata.h"
 #include "dialog.h"
 #include "game.h"
 #include "heroes.h"
@@ -217,7 +218,9 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
     }
 
     const bool isHumanBattle = army1.isControlHuman() || army2.isControlHuman();
-    bool showBattle = !Settings::Get().BattleAutoResolve() && isHumanBattle;
+
+    const Settings & conf = Settings::Get();
+    bool showBattle = !conf.BattleAutoResolve() && isHumanBattle;
 
 #ifdef WITH_DEBUG
     if ( IS_DEBUG( DBG_BATTLE, DBG_TRACE ) )
@@ -294,6 +297,14 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
 
                 if ( winnerHero->isControlHuman() ) {
                     std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
+                }
+            }
+
+            if ( loserHero->isControlAI() ) {
+                const Heroes * loserAdventureHero = dynamic_cast<const Heroes *>( loserHero );
+
+                if ( loserAdventureHero != nullptr && conf.isCampaignGameType() ) {
+                    Campaign::CampaignSaveData::Get().setEnemyDefeatedAward( loserAdventureHero->GetID() );
                 }
             }
         }

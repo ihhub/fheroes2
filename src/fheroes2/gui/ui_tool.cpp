@@ -25,7 +25,6 @@
 #include <cassert>
 #include <chrono>
 #include <cmath>
-#include <cstddef>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
@@ -33,6 +32,8 @@
 #include <string>
 #include <utility>
 
+#include "agg_image.h"
+#include "cursor.h"
 #include "game_delays.h"
 #include "image_palette.h"
 #include "localevent.h"
@@ -44,6 +45,15 @@
 
 namespace
 {
+    // The parameters of display fade effect. Full dark and full bright alpha values.
+    const uint8_t fullDarkAlpha = 0;
+    const uint8_t fullBrightAlpha = 255;
+    // Fade-in and fade-out effects are made in separate functions. Here we set the duration of a single function.
+    const uint32_t screenFadeTimeMs = 100;
+    // For 100 ms duration 6 frames will result in 60 FPS.
+    const uint32_t screenFadeFrameCount = 6;
+    const uint8_t screenFadeStep = ( fullBrightAlpha - fullDarkAlpha ) / screenFadeFrameCount;
+
     // Renderer of current time and FPS on screen
     class SystemInfoRenderer
     {
@@ -114,6 +124,61 @@ namespace
     };
 
     SystemInfoRenderer systemInfoRenderer;
+
+    void fadeDisplay( const uint8_t startAlpha, const uint8_t endAlpha, const fheroes2::Rect & roi, const uint32_t fadeTimeMs, const uint32_t frameCount )
+    {
+        if ( frameCount < 2 || roi.height <= 0 || roi.width <= 0 ) {
+            return;
+        }
+
+        Cursor::Get().SetThemes( Cursor::POINTER );
+
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        fheroes2::Rect fadeRoi( roi ^ fheroes2::Rect( 0, 0, display.width(), display.height() ) );
+
+        fheroes2::Image temp{ fadeRoi.width, fadeRoi.height };
+        Copy( display, fadeRoi.x, fadeRoi.y, temp, 0, 0, fadeRoi.width, fadeRoi.height );
+
+        double alpha = startAlpha;
+        const uint32_t delay = fadeTimeMs / frameCount;
+        const double alphaStep = ( alpha - endAlpha ) / static_cast<double>( frameCount - 1 );
+
+        uint32_t frameNumber = 0;
+
+        LocalEvent & le = LocalEvent::Get();
+
+        Game::passCustomAnimationDelay( delay );
+        while ( le.HandleEvents( Game::isCustomDelayNeeded( delay ) ) ) {
+            if ( Game::validateCustomAnimationDelay( delay ) ) {
+                if ( frameNumber == frameCount ) {
+                    break;
+                }
+
+                assert( alpha >= 0 && alpha <= 255 );
+
+                const uint8_t fadeAlpha = static_cast<uint8_t>( std::round( alpha ) );
+
+                if ( fadeAlpha == 255 ) {
+                    // This alpha is for fully bright image so there is no need to apply alpha.
+                    Copy( temp, 0, 0, display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height );
+                }
+                else if ( fadeAlpha == 0 ) {
+                    // This alpha is for fully dark image so fill it with the black color.
+                    // Color index '0' in all game palettes (including videos) corresponds to the black color.
+                    Fill( display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height, 0 );
+                }
+                else {
+                    ApplyAlpha( temp, 0, 0, display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height, fadeAlpha );
+                }
+
+                display.render( fadeRoi );
+
+                alpha -= alphaStep;
+                ++frameNumber;
+            }
+        }
+    }
 }
 
 namespace fheroes2
@@ -506,34 +571,48 @@ namespace fheroes2
         return out;
     }
 
-    void FadeDisplay( const Image & top, const Point & pos, const uint8_t endAlpha, const int32_t fadeTimeMs )
+    void fadeOutDisplay()
     {
-        Display & display = Display::instance();
+        const Display & display = Display::instance();
 
-        Image shadow = top;
-        uint8_t alpha = 255;
-        const uint8_t step = 10;
-        const uint8_t min = step + 5;
-        const int32_t stepDelay = ( fadeTimeMs * step ) / ( alpha - min );
+        fadeOutDisplay( { 0, 0, display.width(), display.height() }, false );
+    }
 
-        const fheroes2::Rect roi{ pos.x, pos.y, shadow.width(), shadow.height() };
+    void fadeOutDisplay( const Rect & roi, const bool halfFade )
+    {
+        static_assert( screenFadeFrameCount != 0 );
 
-        LocalEvent & le = LocalEvent::Get();
+        // As we are doing fade-out we already have the full bright picture so we skip it and calculate the startAlpha.
+        const uint8_t startAlpha = fullBrightAlpha - screenFadeStep;
 
-        Game::passCustomAnimationDelay( stepDelay );
-        while ( le.HandleEvents( Game::isCustomDelayNeeded( stepDelay ) ) ) {
-            if ( Game::validateCustomAnimationDelay( stepDelay ) ) {
-                if ( alpha < ( min + endAlpha ) ) {
-                    break;
-                }
+        if ( halfFade ) {
+            fadeDisplay( startAlpha, ( fullBrightAlpha - fullDarkAlpha ) / 2, roi, screenFadeTimeMs / 2, screenFadeFrameCount / 2 );
+        }
+        else {
+            fadeDisplay( startAlpha, fullDarkAlpha, roi, screenFadeTimeMs, screenFadeFrameCount );
+        }
+    }
 
-                ApplyAlpha( top, shadow, alpha );
-                Copy( shadow, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
+    void fadeInDisplay()
+    {
+        const Display & display = Display::instance();
 
-                display.render( roi );
+        fadeInDisplay( { 0, 0, display.width(), display.height() }, false );
+    }
 
-                alpha -= step;
-            }
+    void fadeInDisplay( const Rect & roi, const bool halfFade )
+    {
+        static_assert( screenFadeFrameCount != 0 );
+
+        // As we are doing fade-in we already have the full dark picture from the previous fade-out so we skip it and calculate the startAlpha.
+        const uint8_t startAlpha = fullDarkAlpha + screenFadeStep;
+
+        if ( halfFade ) {
+            // We add an extra frame to have a smoother fade effect taking into account that the last frame is fully bright to render the image.
+            fadeDisplay( ( fullBrightAlpha - startAlpha ) / 2, fullBrightAlpha, roi, screenFadeTimeMs * 3 / 4, screenFadeFrameCount / 2 + 1 );
+        }
+        else {
+            fadeDisplay( startAlpha, fullBrightAlpha, roi, screenFadeTimeMs, screenFadeFrameCount );
         }
     }
 
@@ -565,15 +644,31 @@ namespace fheroes2
         }
     }
 
-    void FadeDisplay( int32_t fadeTimeMs /* = 500 */ )
+    size_t getTextInputCursorPosition( const std::string & text, const FontType & fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
+                                       const int32_t textStartXOffset )
     {
-        Display & display = Display::instance();
-        Image temp;
-        Copy( display, temp );
+        if ( text.empty() || pointerCursorXOffset <= textStartXOffset ) {
+            // The text is empty or mouse cursor position is to the left of input field.
+            return 0;
+        }
 
-        FadeDisplay( temp, { 0, 0 }, 5, fadeTimeMs );
+        const int32_t maxOffset = pointerCursorXOffset - textStartXOffset;
+        const size_t textSize = text.size();
+        int32_t positionOffset = 0;
+        for ( size_t i = 0; i < textSize; ++i ) {
+            positionOffset += AGG::getChar( static_cast<uint8_t>( text[i] ), fontType ).width();
 
-        Copy( temp, display ); // restore the original image
+            if ( positionOffset > maxOffset ) {
+                return i;
+            }
+
+            // If the mouse cursor is to the right of the current text cursor position we take its width into account
+            if ( i == currentTextCursorPosition ) {
+                positionOffset += AGG::getChar( '_', fontType ).width();
+            }
+        }
+
+        return textSize;
     }
 
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount )

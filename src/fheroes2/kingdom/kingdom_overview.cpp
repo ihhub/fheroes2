@@ -60,12 +60,15 @@
 #include "ui_button.h"
 #include "ui_kingdom.h"
 #include "ui_scrollbar.h"
+#include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
 
 namespace
 {
     const int32_t scrollbarOffset = 626;
+
+    bool needFadeIn{ false };
 
     std::string CapturedExtInfoString( int res, int color, const Funds & funds )
     {
@@ -240,8 +243,11 @@ void StatsHeroesList::ActionListDoubleClick( HeroRow & row, const fheroes2::Poin
 
 void StatsHeroesList::ActionListSingleClick( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy )
 {
-    if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) )
+    if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) ) {
         Game::OpenHeroesDialog( *row.hero, false, false );
+
+        needFadeIn = true;
+    }
 }
 
 void StatsHeroesList::ActionListPressRight( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy )
@@ -290,7 +296,9 @@ void StatsHeroesList::RedrawItem( const HeroRow & row, int32_t dstx, int32_t dst
     }
 
     Text text( "", Font::SMALL );
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 10 ), fheroes2::Display::instance(), dstx, dsty );
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 10 ), display, dstx, dsty );
 
     // base info
     Interface::RedrawHeroesIcon( *row.hero, dstx + 5, dsty + 4 );
@@ -308,8 +316,6 @@ void StatsHeroesList::RedrawItem( const HeroRow & row, int32_t dstx, int32_t dst
     text.Blit( dstx + 195 - text.w(), dsty + 20 );
 
     // primary skills info
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     row.primSkillsBar->setRenderingOffset( { dstx + 56, dsty - 3 } );
     row.primSkillsBar->Redraw( display );
 
@@ -481,17 +487,26 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const fheroes2::Poi
     if ( row.castle ) {
         // click castle icon
         if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
-            Game::OpenCastleDialog( *row.castle, false );
-            row.Init( row.castle );
+            Game::OpenCastleDialog( *row.castle, false, false );
         }
+
         // click hero icon
         else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
             Heroes * hero = row.castle->GetHero();
-            if ( hero ) {
-                Game::OpenHeroesDialog( *hero, false, false );
-                row.Init( row.castle );
+
+            if ( !hero ) {
+                return;
             }
+
+            Game::OpenHeroesDialog( *hero, false, false );
         }
+        else {
+            return;
+        }
+
+        row.Init( row.castle );
+
+        needFadeIn = true;
     }
 }
 
@@ -555,8 +570,10 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, int32_t dstx, int32_t ds
         return;
     }
 
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     Text text( "", Font::SMALL );
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 11 ), fheroes2::Display::instance(), dstx, dsty );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 11 ), display, dstx, dsty );
 
     // base info
     Interface::RedrawCastleIcon( *row.castle, dstx + 17, dsty + 19 );
@@ -572,7 +589,7 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, int32_t dstx, int32_t ds
     }
     else if ( row.castle->GetCaptain().isValid() ) {
         const Captain & captain = row.castle->GetCaptain();
-        captain.PortraitRedraw( dstx + 82, dsty + 19, PORT_SMALL, fheroes2::Display::instance() );
+        captain.PortraitRedraw( dstx + 82, dsty + 19, PORT_SMALL, display );
         const std::string sep = "-";
         text.Set( std::to_string( captain.GetAttack() ) + sep + std::to_string( captain.GetDefense() ) + sep + std::to_string( captain.GetPower() ) + sep
                   + std::to_string( captain.GetKnowledge() ) );
@@ -581,8 +598,6 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, int32_t dstx, int32_t ds
 
     text.Set( row.castle->GetName() );
     text.Blit( dstx + 72 - text.w() / 2, dsty + 62 );
-
-    fheroes2::Display & display = fheroes2::Display::instance();
 
     // army info
     if ( row.garrisonArmyBar ) {
@@ -664,7 +679,8 @@ void RedrawFundsInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
     const Funds & funds = myKingdom.GetFunds();
     Text text( "", Font::SMALL );
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 4, 422, fheroes2::Display::instance(), pt.x + 4, pt.y + 422, 530, 56 );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 4, 422, display, pt.x + 4, pt.y + 422, 530, 56 );
 
     text.Set( std::to_string( funds.wood ) );
     text.Blit( pt.x + 56 - text.w() / 2, pt.y + 448 );
@@ -701,7 +717,7 @@ void RedrawFundsInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
     text.Blit( pt.x + 105, pt.y + 462 );
 
     const fheroes2::Sprite & lighthouse = fheroes2::AGG::GetICN( ICN::OVERVIEW, 14 );
-    fheroes2::Blit( lighthouse, 0, 0, fheroes2::Display::instance(), pt.x + 100 - lighthouse.width(), pt.y + 459, lighthouse.width(), lighthouse.height() );
+    fheroes2::Blit( lighthouse, 0, 0, display, pt.x + 100 - lighthouse.width(), pt.y + 459, lighthouse.width(), lighthouse.height() );
 }
 
 void Kingdom::openOverviewDialog()
@@ -712,6 +728,12 @@ void Kingdom::openOverviewDialog()
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT, false );
+
+    // Fade-out game screen only for 640x480 resolution.
+    const bool isDefaultScreenSize = display.isDefaultSize();
+    if ( isDefaultScreenSize ) {
+        fheroes2::fadeOutDisplay();
+    }
 
     const fheroes2::Point cur_pt( background.activeArea().x, background.activeArea().y );
     fheroes2::Point dst_pt( cur_pt );
@@ -771,7 +793,13 @@ void Kingdom::openOverviewDialog()
     buttonCastle.draw();
     buttonExit.draw();
 
-    display.render();
+    // Fade-in Kingdom overview dialog.
+    if ( !isDefaultScreenSize ) {
+        // We need to expand the ROI for the next render to properly render window borders and shadow.
+        display.updateNextRenderRoi( background.totalArea() );
+    }
+
+    fheroes2::fadeInDisplay( background.activeArea(), !isDefaultScreenSize );
 
     LocalEvent & le = LocalEvent::Get();
     bool redraw = true;
@@ -799,6 +827,12 @@ void Kingdom::openOverviewDialog()
 
         // Exit this dialog.
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+            // Fade-out Kingdom overview dialog.
+            fheroes2::fadeOutDisplay( background.activeArea(), !isDefaultScreenSize );
+            if ( isDefaultScreenSize ) {
+                Game::setDisplayFadeIn();
+            }
+
             break;
         }
 
@@ -837,9 +871,9 @@ void Kingdom::openOverviewDialog()
         // - hero hired -> hero icon list is updated
         // So, it's equivalent to check if hero list changed
         if ( listHeroes.Refresh( heroes ) ) {
-            worldMapRedrawMask |= Interface::Basic::Get().GetRedrawMask();
+            worldMapRedrawMask |= Interface::AdventureMap::Get().getRedrawMask();
             // redraw the main game window on screen, which will also erase current kingdom window
-            Interface::Basic::Get().Redraw();
+            Interface::AdventureMap::Get().redraw();
             // redraw Kingdom window from scratch, because it's now invalid
             background.render();
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), display, cur_pt.x, cur_pt.y );
@@ -851,7 +885,15 @@ void Kingdom::openOverviewDialog()
         listStats->Redraw();
         RedrawIncomeInfo( cur_pt, *this );
         RedrawFundsInfo( cur_pt, *this );
-        display.render();
+
+        if ( needFadeIn ) {
+            needFadeIn = false;
+
+            fheroes2::fadeInDisplay( background.activeArea(), false );
+        }
+        else {
+            display.render();
+        }
 
         redraw = false;
     }
@@ -861,6 +903,6 @@ void Kingdom::openOverviewDialog()
 
     if ( worldMapRedrawMask != 0 ) {
         // Force redraw of all UI elements that changed, that were masked by Kingdom window
-        Interface::Basic::Get().SetRedraw( worldMapRedrawMask );
+        Interface::AdventureMap::Get().setRedraw( worldMapRedrawMask );
     }
 }

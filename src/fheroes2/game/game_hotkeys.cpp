@@ -174,6 +174,19 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_EXPANSION_CAMPAIGN )]
             = { HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|choose the expansion campaign" ), fheroes2::Key::KEY_E };
 
+#if defined( WITH_DEBUG )
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_MAIN_MENU )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|map editor main menu" ), fheroes2::Key::KEY_E };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new map menu" ), fheroes2::Key::KEY_N };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_LOAD_MAP_MENU )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|load map menu" ), fheroes2::Key::KEY_L };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new map from scratch" ), fheroes2::Key::KEY_S };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new random map" ), fheroes2::Key::KEY_R };
+#endif
+
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ROLAND )]
             = { HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|roland campaign" ), fheroes2::Key::KEY_1 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ARCHIBALD )]
@@ -314,8 +327,8 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_JOIN_STACKS )] = { HotKeyCategory::ARMY, gettext_noop( "hotkey|join stacks" ), fheroes2::Key::KEY_ALT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_UPGRADE_TROOP )]
             = { HotKeyCategory::ARMY, gettext_noop( "hotkey|upgrade troop" ), fheroes2::Key::KEY_U };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_DISMISS_TROOP )]
-            = { HotKeyCategory::ARMY, gettext_noop( "hotkey|dismiss troop" ), fheroes2::Key::KEY_D };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_DISMISS )]
+            = { HotKeyCategory::ARMY, gettext_noop( "hotkey|dismiss hero or troop" ), fheroes2::Key::KEY_D };
     }
 
     std::string getHotKeyFileContent()
@@ -389,9 +402,9 @@ const char * Game::getHotKeyEventNameByEventId( const HotKeyEvent eventID )
 std::vector<Game::HotKeyEvent> Game::getAllHotKeyEvents()
 {
     std::vector<Game::HotKeyEvent> events;
-    events.reserve( hotKeyEventInfo.size() - 2 );
+    events.reserve( hotKeyEventInfo.size() - 1 );
 
-    for ( size_t i = 1; i < hotKeyEventInfo.size() - 1; ++i ) {
+    for ( size_t i = 1; i < hotKeyEventInfo.size(); ++i ) {
         events.emplace_back( static_cast<Game::HotKeyEvent>( i ) );
     }
 

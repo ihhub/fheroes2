@@ -442,18 +442,33 @@ void Troops::Clean()
     std::for_each( begin(), end(), []( Troop * troop ) { troop->Reset(); } );
 }
 
-void Troops::UpgradeTroops( const Castle & castle )
+void Troops::UpgradeTroops( const Castle & castle ) const
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() ) {
-            payment_t payment = ( *it )->GetTotalUpgradeCost();
-            Kingdom & kingdom = castle.GetKingdom();
-
-            if ( castle.GetRace() == ( *it )->GetRace() && castle.isBuild( ( *it )->GetUpgrade().GetDwelling() ) && kingdom.AllowPayment( payment ) ) {
-                kingdom.OddFundsResource( payment );
-                ( *it )->Upgrade();
-            }
+    for ( Troop * troop : *this ) {
+        assert( troop != nullptr );
+        if ( !troop->isValid() ) {
+            continue;
         }
+
+        if ( !troop->isAllowUpgrade() ) {
+            continue;
+        }
+
+        Kingdom & kingdom = castle.GetKingdom();
+        if ( castle.GetRace() != troop->GetRace() ) {
+            continue;
+        }
+
+        if ( !castle.isBuild( troop->GetUpgrade().GetDwelling() ) ) {
+            continue;
+        }
+
+        const payment_t payment = troop->GetTotalUpgradeCost();
+        if ( kingdom.AllowPayment( payment ) ) {
+            kingdom.OddFundsResource( payment );
+            troop->Upgrade();
+        }
+    }
 }
 
 Troop * Troops::GetFirstValid()
@@ -670,7 +685,7 @@ void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotFor
     }
 
     if ( !keepAtLeastOneSlotForGiver || giverArmy.isValid() ) {
-        // Either the giver army does no need extra army or it already has some.
+        // Either the giver army does not need an extra army or it already has some.
         return;
     }
 
@@ -683,7 +698,10 @@ void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotFor
 
     // First check if the weakest troop is actually worth to keep.
     const double weakestStrength = weakest->GetStrength();
-    const double totalArmyStrength = GetStrength();
+    const double totalArmyStrength = Troops::GetStrength();
+
+    assert( totalArmyStrength >= weakestStrength );
+
     // The weakest army should not be more than 5% from the overall army strength.
     const double strengthLimit = totalArmyStrength / 20;
 
@@ -717,22 +735,7 @@ void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotFor
     }
 
     // Make sure that this hero can survive an attack by splitting a single stack of monsters into multiple.
-    Troop * firstValidStack = giverArmy.GetFirstValid();
-    assert( firstValidStack != nullptr );
-
-    if ( firstValidStack->GetCount() > 1 ) {
-        const uint32_t stackCount = std::min( static_cast<uint32_t>( giverArmy.size() ), firstValidStack->GetCount() );
-
-        Troop temp( *firstValidStack );
-        firstValidStack->Reset();
-
-        giverArmy.addNewTroopsToFreeSlots( temp, stackCount );
-    }
-
-    // Make it less predictable to guess where troops would be. It makes human players to suffer by constantly adjusting the position of their troops.
-    if ( giverArmy.GetOccupiedSlotCount() < giverArmy.size() ) {
-        Rand::Shuffle( giverArmy );
-    }
+    splitWeakestTroopsIfPossible();
 }
 
 void Troops::SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots )
@@ -847,6 +850,31 @@ bool Troops::mergeWeakestTroopsIfNeeded()
     return true;
 }
 
+void Troops::splitWeakestTroopsIfPossible()
+{
+    if ( GetOccupiedSlotCount() == size() ) {
+        // Nothing to do as all slots are being occupied.
+        return;
+    }
+
+    Troop * weakestStack = GetWeakestTroop();
+    assert( weakestStack != nullptr );
+
+    if ( weakestStack->GetCount() > 1 ) {
+        const uint32_t stackCount = std::min( static_cast<uint32_t>( size() + 1 - GetOccupiedSlotCount() ), weakestStack->GetCount() );
+
+        Troop temp( *weakestStack );
+        weakestStack->Reset();
+
+        addNewTroopsToFreeSlots( temp, stackCount );
+    }
+
+    // Make it less predictable to guess where troops would be. It makes human players to suffer by constantly adjusting the position of their troops.
+    if ( GetOccupiedSlotCount() < size() ) {
+        Rand::Shuffle( *this );
+    }
+}
+
 void Troops::AssignToFirstFreeSlot( const Troop & troopToAssign, const uint32_t count ) const
 {
     for ( Troop * troop : *this ) {
@@ -915,11 +943,17 @@ const Troops & Army::getTroops() const
 
 void Army::setFromTile( const Maps::Tiles & tile )
 {
-    Reset();
+    assert( commander == nullptr );
+
+    Troops::Clean();
 
     const bool isCaptureObject = MP2::isCaptureObject( tile.GetObject( false ) );
-    if ( isCaptureObject )
+    if ( isCaptureObject ) {
         color = getColorFromTile( tile );
+    }
+    else {
+        color = Color::NONE;
+    }
 
     switch ( tile.GetObject( false ) ) {
     case MP2::OBJ_PYRAMID:
@@ -941,20 +975,20 @@ void Army::setFromTile( const Maps::Tiles & tile )
     case MP2::OBJ_SHIPWRECK: {
         uint32_t count = 0;
 
-        switch ( tile.QuantityVariant() ) {
-        case 0:
+        switch ( getShipwreckCaptureCondition( tile ) ) {
+        case Maps::ShipwreckCaptureCondition::EMPTY:
             // Shipwreck guardians were defeated.
             return;
-        case 1:
+        case Maps::ShipwreckCaptureCondition::FIGHT_10_GHOSTS_AND_GET_1000_GOLD:
             count = 10;
             break;
-        case 2:
+        case Maps::ShipwreckCaptureCondition::FIGHT_15_GHOSTS_AND_GET_2000_GOLD:
             count = 15;
             break;
-        case 3:
+        case Maps::ShipwreckCaptureCondition::FIGHT_25_GHOSTS_AND_GET_5000_GOLD:
             count = 25;
             break;
-        case 4:
+        case Maps::ShipwreckCaptureCondition::FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT:
             count = 50;
             break;
         default:
@@ -972,29 +1006,29 @@ void Army::setFromTile( const Maps::Tiles & tile )
         break;
 
     case MP2::OBJ_ARTIFACT:
-        switch ( tile.QuantityVariant() ) {
-        case 6:
+        switch ( getArtifactCaptureCondition( tile ) ) {
+        case Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES:
             ArrangeForBattle( Monster::ROGUE, 50, tile.GetIndex(), false );
             break;
-        case 7:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_GENIE:
             ArrangeForBattle( Monster::GENIE, 1, tile.GetIndex(), false );
             break;
-        case 8:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_PALADIN:
             ArrangeForBattle( Monster::PALADIN, 1, tile.GetIndex(), false );
             break;
-        case 9:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_CYCLOPS:
             ArrangeForBattle( Monster::CYCLOPS, 1, tile.GetIndex(), false );
             break;
-        case 10:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_PHOENIX:
             ArrangeForBattle( Monster::PHOENIX, 1, tile.GetIndex(), false );
             break;
-        case 11:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_GREEN_DRAGON:
             ArrangeForBattle( Monster::GREEN_DRAGON, 1, tile.GetIndex(), false );
             break;
-        case 12:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_TITAN:
             ArrangeForBattle( Monster::TITAN, 1, tile.GetIndex(), false );
             break;
-        case 13:
+        case Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON:
             ArrangeForBattle( Monster::BONE_DRAGON, 1, tile.GetIndex(), false );
             break;
         default:
@@ -1044,8 +1078,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
 
     default:
         if ( isCaptureObject ) {
-            CapturedObject & capturedObject = world.GetCapturedObject( tile.GetIndex() );
-            const Troop & troop = capturedObject.GetTroop();
+            const Troop & troop = world.GetCapturedObject( tile.GetIndex() ).GetTroop();
 
             if ( troop.isValid() ) {
                 ArrangeForBattle( troop.GetMonster(), troop.GetCount(), tile.GetIndex(), false );
@@ -1175,12 +1208,16 @@ double Army::GetStrength() const
     const int armyMorale = GetMorale();
     const int armyLuck = GetLuck();
 
+    bool troopsExist = false;
+
     for ( const Troop * troop : *this ) {
         assert( troop != nullptr );
 
         if ( troop->isEmpty() ) {
             continue;
         }
+
+        troopsExist = true;
 
         double strength = troop->GetStrengthWithBonus( bonusAttack, bonusDefense );
 
@@ -1197,7 +1234,7 @@ double Army::GetStrength() const
         result += strength;
     }
 
-    if ( commander ) {
+    if ( commander != nullptr && troopsExist ) {
         result += commander->GetMagicStrategicValue( result );
     }
 
@@ -1423,17 +1460,18 @@ uint32_t Army::ActionToSirens() const
     return experience;
 }
 
-bool Army::isStrongerThan( const Army & target, double safetyRatio ) const
+bool Army::isStrongerThan( const Army & target, double safetyRatio /* = 1.0 */ ) const
 {
-    if ( !target.isValid() )
+    if ( !target.isValid() ) {
         return true;
+    }
 
-    const double str1 = GetStrength();
-    const double str2 = target.GetStrength() * safetyRatio;
+    const double armyStrength = Army::GetStrength();
+    const double targetStrength = target.GetStrength() * safetyRatio;
 
-    DEBUG_LOG( DBG_GAME, DBG_TRACE, "Comparing troops: " << str1 << " versus " << str2 )
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, "Comparing troops: " << armyStrength << " versus " << targetStrength )
 
-    return str1 > str2;
+    return armyStrength > targetStrength;
 }
 
 bool Army::isMeleeDominantArmy() const

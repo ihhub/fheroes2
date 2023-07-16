@@ -43,6 +43,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "kingdom.h"
 #include "localevent.h"
@@ -492,7 +493,7 @@ bool Heroes::isInVisibleMapArea() const
 {
     // TODO: this is not entirely correct. Consider a hero being outside the visible are but his shadow is still inside. The visible tile ROI should be extended by
     // TODO: at least 1 tile in each direction.
-    return Interface::Basic::Get().GetGameArea().GetVisibleTileROI() & GetCenter();
+    return Interface::AdventureMap::Get().getGameArea().GetVisibleTileROI() & GetCenter();
 }
 
 bool Heroes::isInDeepOcean() const
@@ -621,70 +622,70 @@ std::vector<fheroes2::ObjectRenderingInfo> Heroes::getHeroShadowSpritesPerTile()
     return objectInfo;
 }
 
-void Heroes::MoveStep( Heroes & hero, int32_t indexTo, bool newpos )
-{
-    Route::Path & path = hero.GetPath();
-    hero.ApplyPenaltyMovement( path.GetFrontPenalty() );
-    if ( newpos ) {
-        hero.Move2Dest( indexTo );
-
-        if ( hero.isControlHuman() ) {
-            // Update the radar map image in the area that is visible to the hero after his movement.
-            hero.ScoutRadar();
-        }
-
-        hero.ActionNewPosition( true );
-        path.PopFront();
-
-        // possible that hero loses the battle
-        if ( !hero.isFreeman() ) {
-            const bool isDestination = indexTo == hero.GetPath().GetDestinationIndex( true );
-            hero.Action( indexTo, isDestination );
-
-            if ( isDestination ) {
-                hero.GetPath().Reset();
-                hero.SetMove( false );
-            }
-        }
-    }
-    else {
-        hero.GetPath().Reset();
-        hero.Action( indexTo, true );
-        hero.SetMove( false );
-    }
-}
-
 bool Heroes::MoveStep( const bool jumpToNextTile )
 {
     const int32_t heroIndex = GetIndex();
     const int32_t indexTo = Maps::GetDirectionIndex( heroIndex, path.GetFrontDirection() );
     const int32_t indexDest = path.GetDestinationIndex( true );
 
+    auto makeStep = [this, indexTo, indexDest]( const bool performMovement ) {
+        ApplyPenaltyMovement( path.GetFrontPenalty() );
+
+        if ( !performMovement ) {
+            GetPath().Reset();
+            Action( indexTo );
+            SetMove( false );
+
+            return;
+        }
+
+        Move2Dest( indexTo );
+
+        if ( isControlHuman() ) {
+            // Update the radar map image in the area that is visible to the hero after his movement.
+            ScoutRadar();
+        }
+
+        ActionNewPosition( true );
+        path.PopFront();
+
+        // It is possible that the hero in the new position will be attacked and lose the battle before he can perform the action
+        if ( !isFreeman() ) {
+            Action( indexTo );
+
+            if ( indexTo == indexDest ) {
+                GetPath().Reset();
+                SetMove( false );
+            }
+        }
+    };
+
     if ( jumpToNextTile ) {
         if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) ) {
-            MoveStep( *this, indexTo, false );
+            makeStep( false );
         }
         else {
             // Unveil fog before moving the hero.
             Scout( indexTo );
 
-            MoveStep( *this, indexTo, true );
+            makeStep( true );
         }
 
         return true;
     }
 
-    const fheroes2::Point & mp = GetCenter();
     const int currentHeroFrameIndex = ( sprite_index % heroFrameCountPerTile );
     if ( currentHeroFrameIndex == 0 ) {
         if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) ) {
-            MoveStep( *this, indexTo, false );
+            makeStep( false );
 
             return true;
         }
 
         // play sound
         if ( GetKingdom().isControlHuman() ) {
+            const fheroes2::Point & mp = GetCenter();
+
             playHeroWalkingSound( world.GetTiles( mp.x, mp.y ).GetGround() );
         }
     }
@@ -694,7 +695,8 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
     }
     else if ( currentHeroFrameIndex == 8 ) {
         sprite_index -= 8;
-        MoveStep( *this, indexTo, true );
+
+        makeStep( true );
 
         // if we continue to move into the same direction we must skip first frame as it's for stand position only
         if ( isMoveEnabled() && GetDirection() == path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.GetTiles( path.front().GetIndex() ) ) ) {
@@ -906,8 +908,8 @@ void Heroes::FadeOut( const fheroes2::Point & offset ) const
     if ( !isInVisibleMapArea() )
         return;
 
-    Interface::Basic & iface = Interface::Basic::Get();
-    Interface::GameArea & gamearea = iface.GetGameArea();
+    Interface::AdventureMap & iface = Interface::AdventureMap::Get();
+    Interface::GameArea & gamearea = iface.getGameArea();
 
     int multiplier = std::max( offset.x < 0 ? -offset.x : offset.x, offset.y < 0 ? -offset.y : offset.y );
     if ( multiplier < 1 )
@@ -926,7 +928,7 @@ void Heroes::FadeOut( const fheroes2::Point & offset ) const
                 gamearea.ShiftCenter( offset );
             }
 
-            iface.Redraw( Interface::REDRAW_GAMEAREA );
+            iface.redraw( Interface::REDRAW_GAMEAREA );
 
             display.render();
             _alphaValue -= 8 * multiplier;
@@ -941,8 +943,8 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
     if ( !isInVisibleMapArea() )
         return;
 
-    Interface::Basic & iface = Interface::Basic::Get();
-    Interface::GameArea & gamearea = iface.GetGameArea();
+    Interface::AdventureMap & iface = Interface::AdventureMap::Get();
+    Interface::GameArea & gamearea = iface.getGameArea();
 
     int multiplier = std::max( offset.x < 0 ? -offset.x : offset.x, offset.y < 0 ? -offset.y : offset.y );
     if ( multiplier < 1 )
@@ -961,7 +963,7 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
                 gamearea.ShiftCenter( offset );
             }
 
-            iface.Redraw( Interface::REDRAW_GAMEAREA );
+            iface.redraw( Interface::REDRAW_GAMEAREA );
 
             display.render();
             _alphaValue += 8 * multiplier;

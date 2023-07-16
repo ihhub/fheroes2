@@ -112,7 +112,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation 'androidx.datastore:datastore:1.0.0'
     implementation "androidx.datastore:datastore-preferences:1.0.0"
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'com.google.android.material:material:1.9.0'
 }
 
 task copyH2D(type: Copy) {
