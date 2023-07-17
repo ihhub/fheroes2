@@ -3816,7 +3816,7 @@ namespace fheroes2
                     const Sprite & original = GetICN( originalID, 4 + i );
                     Sprite & out = _icnVsSprite[id][i];
 
-                    // the empty button needs to widened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result
+                    // the empty button needs to be widened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result
                     Copy( original, original.width() - 5, 0, out, out.width() - 5 - 2 * i, 0 + i, 5, original.height() );
 
                     const int32_t pixelPosition = 4 * 94 + 6;
