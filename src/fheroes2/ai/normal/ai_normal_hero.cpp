@@ -2120,12 +2120,12 @@ namespace AI
             {
                 const bool isLosingGame = bestHero->isLosingGame();
 
-                static const std::vector<std::pair<double, double>> usualStrengthMultipliers{ { ARMY_ADVANTAGE_LARGE, 0.5 },
-                                                                                              { ARMY_ADVANTAGE_MEDIUM, 0.25 },
-                                                                                              { ARMY_ADVANTAGE_SMALL, 0.0 } };
-                static const std::vector<std::pair<double, double>> emergencyStrengthMultipliers{ { ARMY_ADVANTAGE_DESPERATE, 0.0 } };
+                static const std::vector<std::pair<double, double>> commonPathfinderConfigurations{ { ARMY_ADVANTAGE_LARGE, 0.5 },
+                                                                                                    { ARMY_ADVANTAGE_MEDIUM, 0.25 },
+                                                                                                    { ARMY_ADVANTAGE_SMALL, 0.0 } };
+                static const std::vector<std::pair<double, double>> emergencyPathfinderConfigurations{ { ARMY_ADVANTAGE_DESPERATE, 0.0 } };
 
-                for ( const auto & [minStrengthAdvantage, spReserveRatio] : isLosingGame ? emergencyStrengthMultipliers : usualStrengthMultipliers ) {
+                for ( const auto & [minStrengthAdvantage, spReserveRatio] : isLosingGame ? emergencyPathfinderConfigurations : commonPathfinderConfigurations ) {
                     _pathfinder.setMinimalArmyStrengthAdvantage( minStrengthAdvantage );
                     _pathfinder.setSpellPointsReserveRatio( spReserveRatio );
 
