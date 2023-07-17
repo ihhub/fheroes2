@@ -226,8 +226,8 @@ namespace
         assert( !hero.Modes( Heroes::PATROL ) && Maps::isValidAbsIndex( targetIndex ) );
 #ifndef NDEBUG
         const Castle * targetCastle = world.getCastleEntrance( Maps::GetPoint( targetIndex ) );
-        assert( targetCastle && targetCastle->GetHero() == nullptr );
 #endif
+        assert( targetCastle && targetCastle->GetHero() == nullptr );
 
         const Spell spellToUse = [&hero, targetIndex]() {
             const Castle * nearestCastle = fheroes2::getNearestCastleTownGate( hero );
