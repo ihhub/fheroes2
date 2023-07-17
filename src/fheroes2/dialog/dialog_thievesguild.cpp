@@ -365,7 +365,7 @@ void Dialog::ThievesGuild( bool oracle )
     const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
     const int32_t barHeight = bottomBar.height();
     fheroes2::Blit( bottomBar, 0, 0, display, dst_pt.x, dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2, barHeight );
-    fheroes2::Blit( bottomBar, bottomBar.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + exitWidth, 0, display, dst_pt.x + fheroes2::Display::DEFAULT_WIDTH / 2,
+    fheroes2::Blit( bottomBar, bottomBar.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + exitWidth - 2, 0, display, dst_pt.x + fheroes2::Display::DEFAULT_WIDTH / 2,
                     dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2 - exitWidth, barHeight );
 
     // text bar
