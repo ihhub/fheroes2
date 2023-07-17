@@ -108,7 +108,26 @@ void loadMap() {
     world.LoadMapMP2(conf.MapsFile(), true);
 }
 
+bool shouldUpdateMapRegion() {
+    uint32_t updateInterval = Settings::Get().GetLWPMapUpdateInterval();
+    uint32_t currentTime = std::time(nullptr);
+    bool isExpired = lwpLastMapUpdate < currentTime - updateInterval;
+
+    VERBOSE_LOG(
+            "ShouldUpdateMapRegion"
+                    << " interval:" << updateInterval
+                    << " current: " << currentTime
+                    << " last update: " << lwpLastMapUpdate
+    )
+
+    return isExpired;
+}
+
 void randomizeGameAreaPoint() {
+    if (!shouldUpdateMapRegion()) {
+        return;
+    }
+
     lwpLastMapUpdate = std::time(nullptr);
 
     fheroes2::Display &display = fheroes2::Display::instance();
@@ -141,22 +160,6 @@ void randomizeGameAreaPoint() {
 
     Interface::AdventureMap::Get().getGameArea().SetCenter({x, y});
 }
-
-bool shouldUpdateMapRegion() {
-    uint32_t updateInterval = Settings::Get().GetLWPMapUpdateInterval();
-    uint32_t currentTime = std::time(nullptr);
-    bool isExpired = lwpLastMapUpdate < currentTime - updateInterval;
-
-    VERBOSE_LOG(
-            "ShouldUpdateMapRegion"
-                    << " interval:" << updateInterval
-                    << " current: " << currentTime
-                    << " last update: " << lwpLastMapUpdate
-    )
-
-    return isExpired;
-}
-
 
 void updateBrightness() {
     int brightness = Settings::Get().GetLWPBrightness();
@@ -196,23 +199,15 @@ void updateConfigs() {
     updateBrightness();
 }
 
-void updateVisibleMapRegion() {
-    updateConfigs();
-
-    if (shouldUpdateMapRegion()) {
-        randomizeGameAreaPoint();
-    }
-}
-
 void forceUpdates() {
-    if (forceMapUpdate) {
-        randomizeGameAreaPoint();
-        forceMapUpdate = false;
-    }
-
     if (forceConfigUpdate) {
         updateConfigs();
         forceConfigUpdate = false;
+    }
+
+    if (forceMapUpdate) {
+        randomizeGameAreaPoint();
+        forceMapUpdate = false;
     }
 }
 
@@ -291,7 +286,6 @@ void configure() {
 fheroes2::GameMode Game::Wallpaper() {
     configure();
     loadMap();
-    updateVisibleMapRegion();
     renderWallpaper();
 
     return fheroes2::GameMode::END_TURN;
