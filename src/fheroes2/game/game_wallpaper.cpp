@@ -85,6 +85,12 @@
 #include "week.h"
 #include "world.h"
 #include "SDL_timer.h"
+#include "SDL_system.h"
+#include "SDL_thread.h"
+#include <jni.h>
+
+uint32_t lwpLastMapUpdate = 0;
+bool forceMapUpdate = true;
 
 void loadMap() {
     Settings &conf = Settings::Get();
@@ -102,6 +108,9 @@ void loadMap() {
 }
 
 void randomizeGameAreaPoint() {
+    forceMapUpdate = false;
+    lwpLastMapUpdate = std::time(nullptr);
+
     fheroes2::Display &display = fheroes2::Display::instance();
     int32_t displayWidth = display.width();
     int32_t displayHeight = display.height();
@@ -133,12 +142,9 @@ void randomizeGameAreaPoint() {
     Interface::AdventureMap::Get().getGameArea().SetCenter({x, y});
 }
 
-uint32_t lwpLastMapUpdate = 0;
-
 bool shouldUpdateMapRegion() {
     uint32_t updateInterval = Settings::Get().GetLWPMapUpdateInterval();
     uint32_t currentTime = std::time(nullptr);
-    bool isFirstRun = lwpLastMapUpdate == 0;
     bool isExpired = lwpLastMapUpdate < currentTime - updateInterval;
 
     VERBOSE_LOG(
@@ -148,12 +154,7 @@ bool shouldUpdateMapRegion() {
                     << " last update: " << lwpLastMapUpdate
     )
 
-    if (isFirstRun || isExpired) {
-        lwpLastMapUpdate = currentTime;
-        return true;
-    }
-
-    return false;
+    return isExpired;
 }
 
 
@@ -203,6 +204,20 @@ void updateVisibleMapRegion() {
     }
 }
 
+extern "C" JNIEXPORT void JNICALL
+Java_org_libsdl_app_SDLActivity_nativeUpdateVisibleMapRegion([[maybe_unused]] JNIEnv *env,
+                                                             [[maybe_unused]] jclass cls) {
+    VERBOSE_LOG("nativeUpdateVisibleMapRegion")
+    forceMapUpdate = true;
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_org_libsdl_app_SDLActivity_nativeUpdateConfigs([[maybe_unused]] JNIEnv *env,
+                                                    [[maybe_unused]] jclass cls) {
+    VERBOSE_LOG("nativeUpdateConfigs")
+//    updateConfigs();
+}
+
 void handleSDLEvents(SDL_Event &event, LocalEvent &le, fheroes2::Display &display) {
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
@@ -217,20 +232,6 @@ void handleSDLEvents(SDL_Event &event, LocalEvent &le, fheroes2::Display &displa
                 display.render();
                 break;
             }
-            case SDL_KEYDOWN:
-                switch (event.key.keysym.sym) {
-                    case SDLK_SPACE: {
-                        VERBOSE_LOG("Space pressed")
-                        updateVisibleMapRegion();
-                        break;
-                    }
-
-                    case SDLK_F1: {
-                        VERBOSE_LOG("F1 pressed")
-                        updateConfigs();
-                        break;
-                    }
-                }
         }
     }
 }
@@ -245,6 +246,10 @@ void renderWallpaper() {
     gameArea.generate({display.width(), display.height()}, true);
 
     while (true) {
+        if (forceMapUpdate) {
+            randomizeGameAreaPoint();
+        }
+
         handleSDLEvents(event, le, display);
 
         if (Game::validateAnimationDelay(Game::MAPS_DELAY)) {
@@ -256,7 +261,6 @@ void renderWallpaper() {
                     Interface::RedrawLevelType::LEVEL_HEROES);
             display.render();
         } else {
-            VERBOSE_LOG("Delay: " << Game::getAnimationDelayValue(Game::MAPS_DELAY))
             SDL_Delay(
                     Game::getAnimationDelayValue(Game::MAPS_DELAY)
             );

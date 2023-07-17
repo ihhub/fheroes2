@@ -466,8 +466,6 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
         @Override
         public void onTouchEvent(MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                // Fake event to trigger map region change
-//                onNativeKeyDown(KeyEvent.KEYCODE_SPACE);
                 nativeUpdateVisibleMapRegion();
             }
         }
@@ -479,7 +477,7 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
                 SDLActivity.nativeResume();
 //                nativeUpdateConfigs();
             } else {
-//                nativeUpdateVisibleMapRegion();
+                nativeUpdateVisibleMapRegion();
                 SDLActivity.nativePause();
             }
         }
