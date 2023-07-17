@@ -616,7 +616,6 @@ namespace fheroes2
         pressed = resizeButton( originalPressed, width );
 
         if ( !isTransparentBackground ) {
-            // We need to copy the background image to pressed button only where it does not overlay the image of released button.
             const int backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
             makeTransparentBackground( released, pressed, backgroundIcnId );
         }
