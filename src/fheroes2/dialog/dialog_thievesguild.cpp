@@ -355,7 +355,7 @@ void Dialog::ThievesGuild( bool oracle )
         text.Blit( dst_pt.x, dst_pt.y );
     }
 
-    // bar
+    // status bar
     const int32_t exitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
     const int32_t bottomBarOffsetY = 461;
 
