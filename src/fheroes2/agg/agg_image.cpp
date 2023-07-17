@@ -1508,20 +1508,19 @@ namespace fheroes2
                         const Sprite & originalReleased = GetICN( originalIcnId, 2 * i );
 
                         Sprite & released = _icnVsSprite[id][2 * i];
-                        released.resize( originalReleased.width() + 1, originalReleased.height() - 10 );
+                        released.resize( originalReleased.width() - 6 + offsetEvilX, originalReleased.height() - 8 );
                         released.reset();
 
-                        Copy( originalReleased, 7 - offsetEvilX, 0, released, 1, 0, originalReleased.width(), originalReleased.height() - 10 );
+                        Copy( originalReleased, 6 - offsetEvilX, 0, released, 0, 0, originalReleased.width() - 1, originalReleased.height() - 8 );
 
                         // pressed
                         const Sprite & originalPressed = GetICN( originalIcnId, 2 * i + 1 );
 
                         Sprite & pressed = _icnVsSprite[id][2 * i + 1];
-                        pressed.resize( originalPressed.width() + 1, originalPressed.height() + 1 );
+                        pressed.resize( originalPressed.width() + 1, originalPressed.height() );
                         pressed.reset();
 
                         Copy( originalPressed, 0, 1, pressed, 0, 1, originalPressed.width() - 1, originalPressed.height() );
-                        _icnVsSprite[id][2 * i + 1].setPosition( 0, 0 );
 
                         fheroes2::makeTransparentBackground( released, pressed, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
                     }
