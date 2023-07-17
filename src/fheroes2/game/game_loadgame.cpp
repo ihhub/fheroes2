@@ -156,7 +156,7 @@ fheroes2::GameMode Game::LoadGame()
     fheroes2::Button buttonMultiplayerGame( 0, 0, ICN::BUTTON_MULTIPLAYER_GAME, 0, 1 );
     fheroes2::Button buttonCancel( 0, 0, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
-    std::array<fheroes2::ButtonBase*, 4> buttons{ &buttonStandardGame, &buttonCampaignGame, &buttonMultiplayerGame, &buttonCancel };
+    std::array<fheroes2::ButtonBase *, 4> buttons{ &buttonStandardGame, &buttonCampaignGame, &buttonMultiplayerGame, &buttonCancel };
 
     if ( !isSuccessionWarsCampaignPresent() ) {
         buttonCampaignGame.disable();
@@ -177,8 +177,8 @@ fheroes2::GameMode Game::LoadGame()
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        for ( size_t i = 0; i < buttons.size(); ++i ) {
-            le.MousePressLeft( buttons[i]->area() ) ? buttons[i]->drawOnPress() : buttons[i]->drawOnRelease();
+        for ( fheroes2::ButtonBase* button : buttons ) {
+            le.MousePressLeft( button->area() ) ? button->drawOnPress() : button->drawOnRelease();
         }
 
         if ( le.MouseClickLeft( buttonStandardGame.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_STANDARD ) ) {
