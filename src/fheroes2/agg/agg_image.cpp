@@ -3791,23 +3791,43 @@ namespace fheroes2
                 if ( _icnVsSprite[originalID].size() < 8 ) {
                     break;
                 }
+                // move dark border to new released state from original pressed state button
                 _icnVsSprite[id].resize( 2 );
+
+                const Sprite & originalReleased = GetICN( originalID, 4 );
+                const Sprite & originalPressed = GetICN( originalID, 5 );
+                Sprite & releasedWithDarkBorder = _icnVsSprite[id][0];
+                releasedWithDarkBorder.resize( originalReleased.width() + 2, originalReleased.height() + 1 );
+                releasedWithDarkBorder.reset();
+                
+                Copy( originalReleased, 0, 0, releasedWithDarkBorder, 1, 0, originalReleased.width(), originalReleased.height() );
+                Copy( originalReleased, 0, 2, releasedWithDarkBorder, 1, 21, 1, 1 );
+                Copy( originalReleased, 0, 2, releasedWithDarkBorder, 2, 22, 1, 1 );
+                // copy darker left edge to released state from pressed state
+                Copy( originalPressed, 0, 2, releasedWithDarkBorder, 0, 3, 1, 19 );
+                
+                // copy darker bottom edge left to released state from pressed state
+                Copy( originalPressed, 0, originalPressed.height() - 1, releasedWithDarkBorder, 0, originalPressed.height(), originalPressed.width(), 1 );
+                
+                // copy single dark corner pixel
+                Copy( originalPressed, 0, 2, releasedWithDarkBorder, 1, 22, 1, 1 );
+
+                // make pressed state without darker border
+                Sprite & pressedWithoutDarkBorder = _icnVsSprite[id][1];
+                pressedWithoutDarkBorder.resize( originalPressed.width() + 2, originalPressed.height() + 1 );
+                pressedWithoutDarkBorder.reset();
+                Copy( originalPressed, 1, 0, pressedWithoutDarkBorder, 0, 1, originalPressed.width() - 1, originalPressed.height() );
 
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     const Sprite & original = GetICN( originalID, 4 + i );
-
                     Sprite & out = _icnVsSprite[id][i];
-                    // the empty button needs to widened by 2 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result
-                    out.resize( original.width() + 2, original.height() + 1 );
-                    out.reset();
 
-                    Copy( original, 0, 0, out, 1 - i, 0 + i, original.width() - 3 - i, original.height() + i );
-                    Copy( original, 4 + i, 0, out, original.width() - 3 - i, 0 + i, 2 - i, original.height() + i );
-                    Copy( original, original.width() - 3 - i, 0, out, original.width() - 1 - 2 * i, 0 + i, 3 + i, original.height() + i );
+                    // the empty button needs to widened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result
+                    Copy( original, original.width() - 5, 0, out, out.width() - 5 - 2 * i, 0 + i, 5, original.height() );
 
                     const int32_t pixelPosition = 4 * 94 + 6;
                     if ( pixelPosition < original.width() * original.height() ) {
-                        Fill( out, 5 - i, 3 + 2 * i, 88 - i, 18 - i, original.image()[pixelPosition] );
+                        Fill( out, 5 - 2 * i, 3 + 2 * i, 88 - i, 18 - i, original.image()[pixelPosition] );
                     }
                 }
 
