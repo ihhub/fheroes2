@@ -178,7 +178,7 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
     const int32_t barHeight = bottomBar.height();
     // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
     fheroes2::Blit( bottomBar, 1, 0, display, dst_pt.x, dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2, barHeight );
-    fheroes2::Blit( bottomBar, bottomBar.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + exitWidth - 2, 0, display, dst_pt.x + fheroes2::Display::DEFAULT_WIDTH / 2,
+    fheroes2::Blit( bottomBar, bottomBar.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + exitWidth - 1, 0, display, dst_pt.x + fheroes2::Display::DEFAULT_WIDTH / 2,
                     dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2 - exitWidth + 1, barHeight );
 
     // text bar
