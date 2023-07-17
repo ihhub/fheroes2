@@ -30,8 +30,10 @@
 #include <ostream>
 #include <type_traits>
 
+#include "army.h"
 #include "army_troop.h"
 #include "artifact.h"
+#include "castle.h"
 #include "color.h"
 #include "direction.h"
 #include "logging.h"
@@ -1572,5 +1574,153 @@ namespace Maps
         }
 
         return res;
+    }
+
+    bool isCaptureObjectProtected( const Tiles & tile )
+    {
+        const MP2::MapObjectType objectType = tile.GetObject( false );
+
+        if ( !MP2::isCaptureObject( objectType ) ) {
+            return false;
+        }
+
+        if ( MP2::OBJ_CASTLE == objectType ) {
+            Castle * castle = world.getCastleEntrance( tile.GetCenter() );
+            assert( castle != nullptr );
+
+            if ( castle ) {
+                return castle->GetArmy().isValid();
+            }
+
+            return false;
+        }
+
+        return getTroopFromTile( tile ).isValid();
+    }
+
+    void restoreAbandonedMine( Tiles & tile, const int resource )
+    {
+        assert( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE );
+        assert( tile.GetObjectUID() != 0 );
+
+        const payment_t info = ProfitConditions::FromMine( resource );
+        std::optional<uint32_t> resourceCount;
+
+        switch ( resource ) {
+        case Resource::ORE:
+            resourceCount = fheroes2::checkedCast<uint32_t>( info.ore );
+            break;
+        case Resource::SULFUR:
+            resourceCount = fheroes2::checkedCast<uint32_t>( info.sulfur );
+            break;
+        case Resource::CRYSTAL:
+            resourceCount = fheroes2::checkedCast<uint32_t>( info.crystal );
+            break;
+        case Resource::GEMS:
+            resourceCount = fheroes2::checkedCast<uint32_t>( info.gems );
+            break;
+        case Resource::GOLD:
+            resourceCount = fheroes2::checkedCast<uint32_t>( info.gold );
+            break;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        assert( resourceCount.has_value() && resourceCount > 0U );
+
+        setResourceOnTile( tile, resource, resourceCount.value() );
+
+        auto restoreLeftSprite = [resource]( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex ) {
+            if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 6 ) {
+                objectIcnType = MP2::OBJ_ICN_TYPE_MTNGRAS;
+                imageIndex = 82;
+            }
+            else if ( MP2::OBJ_ICN_TYPE_OBJNDIRT == objectIcnType && imageIndex == 8 ) {
+                objectIcnType = MP2::OBJ_ICN_TYPE_MTNDIRT;
+                imageIndex = 112;
+            }
+            else if ( MP2::OBJ_ICN_TYPE_EXTRAOVR == objectIcnType && imageIndex == 5 ) {
+                switch ( resource ) {
+                case Resource::ORE:
+                    imageIndex = 0;
+                    break;
+                case Resource::SULFUR:
+                    imageIndex = 1;
+                    break;
+                case Resource::CRYSTAL:
+                    imageIndex = 2;
+                    break;
+                case Resource::GEMS:
+                    imageIndex = 3;
+                    break;
+                case Resource::GOLD:
+                    imageIndex = 4;
+                    break;
+                default:
+                    break;
+                }
+            }
+        };
+
+        auto restoreRightSprite = []( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex ) {
+            if ( MP2::OBJ_ICN_TYPE_OBJNDIRT == objectIcnType && imageIndex == 9 ) {
+                objectIcnType = MP2::OBJ_ICN_TYPE_MTNDIRT;
+                imageIndex = 113;
+            }
+            else if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 7 ) {
+                objectIcnType = MP2::OBJ_ICN_TYPE_MTNGRAS;
+                imageIndex = 83;
+            }
+        };
+
+        auto restoreMineObjectType = [&tile]( int directionVector ) {
+            if ( Maps::isValidDirection( tile.GetIndex(), directionVector ) ) {
+                Tiles & mineTile = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), directionVector ) );
+                if ( ( mineTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
+                     && ( mineTile.GetObjectUID() == tile.GetObjectUID() || mineTile.FindAddonLevel1( tile.GetObjectUID() )
+                          || mineTile.FindAddonLevel2( tile.GetObjectUID() ) ) ) {
+                    mineTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
+                }
+            }
+        };
+
+        MP2::ObjectIcnType objectIcnTypeTemp{ tile.getObjectIcnType() };
+        uint8_t imageIndexTemp{ tile.GetObjectSpriteIndex() };
+
+        restoreLeftSprite( objectIcnTypeTemp, imageIndexTemp );
+        tile.setObjectIcnType( objectIcnTypeTemp );
+        tile.setObjectSpriteIndex( imageIndexTemp );
+
+        for ( TilesAddon & addon : tile.getLevel1Addons() ) {
+            if ( addon._uid == tile.GetObjectUID() ) {
+                restoreLeftSprite( addon._objectIcnType, addon._imageIndex );
+            }
+        }
+
+        if ( Maps::isValidDirection( tile.GetIndex(), Direction::RIGHT ) ) {
+            Tiles & rightTile = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::RIGHT ) );
+
+            if ( rightTile.GetObjectUID() == tile.GetObjectUID() ) {
+                objectIcnTypeTemp = rightTile.getObjectIcnType();
+                imageIndexTemp = rightTile.GetObjectSpriteIndex();
+                restoreRightSprite( objectIcnTypeTemp, imageIndexTemp );
+
+                rightTile.setObjectIcnType( objectIcnTypeTemp );
+                rightTile.setObjectSpriteIndex( imageIndexTemp );
+            }
+
+            TilesAddon * addon = rightTile.FindAddonLevel1( tile.GetObjectUID() );
+
+            if ( addon ) {
+                restoreRightSprite( addon->_objectIcnType, addon->_imageIndex );
+            }
+        }
+
+        restoreMineObjectType( Direction::LEFT );
+        restoreMineObjectType( Direction::RIGHT );
+        restoreMineObjectType( Direction::TOP );
+        restoreMineObjectType( Direction::TOP_LEFT );
+        restoreMineObjectType( Direction::TOP_RIGHT );
     }
 }
