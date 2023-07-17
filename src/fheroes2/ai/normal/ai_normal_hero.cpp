@@ -1613,6 +1613,10 @@ namespace AI
     {
         assert( objectType == world.GetTiles( index ).GetObject() );
 
+#ifdef NDEBUG
+        (void)objectType;
+#endif
+
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
         case Heroes::Role::SCOUT:
