@@ -376,7 +376,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Blit( dst_pt.x, dst_pt.y );
 
     // button exit
-    dst_pt.x = cur_pt.x + 640 - exitWidth;
+    dst_pt.x = cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - exitWidth;
     dst_pt.y = cur_pt.y + 461;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
 
