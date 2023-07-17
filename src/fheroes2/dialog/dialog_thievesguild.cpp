@@ -364,9 +364,10 @@ void Dialog::ThievesGuild( bool oracle )
 
     const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
     const int32_t barHeight = bottomBar.height();
-    fheroes2::Blit( bottomBar, 0, 0, display, dst_pt.x, dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2, barHeight );
+    // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
+    fheroes2::Blit( bottomBar, 1, 0, display, dst_pt.x, dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2, barHeight );
     fheroes2::Blit( bottomBar, bottomBar.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + exitWidth - 2, 0, display, dst_pt.x + fheroes2::Display::DEFAULT_WIDTH / 2,
-                    dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2 - exitWidth, barHeight );
+                    dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2 - exitWidth + 1, barHeight );
 
     // text bar
     text.Set( oracle ? _( "Oracle: Player Rankings" ) : _( "Thieves' Guild: Player Rankings" ), Font::BIG );
