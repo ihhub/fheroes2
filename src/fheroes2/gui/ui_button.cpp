@@ -114,11 +114,11 @@ namespace
         case ICN::EMPTY_GUILDWELL_BUTTON:
             font = fheroes2::FontColor::WHITE;
             textMargin = 2 + 2;
-            minimumTextAreaWidth = 52;
-            backgroundBorders = 6 + 3;
+            minimumTextAreaWidth = 53;
+            backgroundBorders = 5 + 3;
             backgroundIcnID = ICN::UNKNOWN;
-            releasedOffset = { 6, 2 };
-            pressedOffset = { 5, 3 };
+            releasedOffset = { 5, 2 };
+            pressedOffset = { 4, 3 };
             break;
         default:
             // Was a new empty button template added?
