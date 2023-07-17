@@ -2113,7 +2113,7 @@ namespace AI
                 for ( int i = 0; i < monsterStrengthMultiplierCount; ++i ) {
                     if ( currentMonsterStrengthMultiplier > monsterStrengthMultipliers[i] ) {
                         _pathfinder.setArmyStrengthMultiplier( bestHero->isLosingGame() ? ARMY_ADVANTAGE_DESPERATE : monsterStrengthMultipliers[i] );
-                        _pathfinder.setSpellPointReserveRatio( 0 );
+                        _pathfinder.setSpellPointReserve( 0 );
                         setNewMultiplier = true;
                         break;
                     }
@@ -2223,7 +2223,7 @@ namespace AI
             }
 
             _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
-            _pathfinder.setSpellPointReserveRatio( 0.5 );
+            _pathfinder.setSpellPointReserve( 0.5 );
 
             // The size of heroes can be increased if a new hero is released from Jail.
             const size_t maxHeroCount = std::max( heroes.size(), availableHeroes.size() );
@@ -2241,7 +2241,7 @@ namespace AI
         const bool allHeroesMoved = availableHeroes.empty();
 
         _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
-        _pathfinder.setSpellPointReserveRatio( 0.5 );
+        _pathfinder.setSpellPointReserve( 0.5 );
 
         status.DrawAITurnProgress( endProgressValue );
 

@@ -159,7 +159,7 @@ public:
     }
 
     void setArmyStrengthMultiplier( const double multiplier );
-    void setSpellPointReserveRatio( const double reserve );
+    void setSpellPointReserve( const double reserve );
 
 private:
     void processWorldMap() override;
@@ -176,6 +176,6 @@ private:
     const Heroes * _hero = nullptr;
     double _armyStrength{ -1 };
     double _advantage{ 1.0 };
-    double _spellPointsReservedRatio{ 0.5 };
+    double _spellPointsReserved{ 0.5 };
     bool _isArtifactBagFull{ false };
 };

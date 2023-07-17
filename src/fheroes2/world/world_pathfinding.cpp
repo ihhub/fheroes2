@@ -527,11 +527,11 @@ void AIWorldPathfinder::processWorldMap()
             nodesToExplore.push_back( castleIndex );
         };
 
-        if ( _hero->CanCastSpell( townGate ) && currentSpellPoints > townGate.spellPoints() + currentSpellPoints * _spellPointsReservedRatio ) {
+        if ( _hero->CanCastSpell( townGate ) && currentSpellPoints > townGate.spellPoints() + currentSpellPoints * _spellPointsReserved ) {
             const Castle * castle = fheroes2::getNearestCastleTownGate( *_hero );
             tryPortalToTown( townGate, castle );
         }
-        if ( _hero->CanCastSpell( townPortal ) && currentSpellPoints > townPortal.spellPoints() + currentSpellPoints * _spellPointsReservedRatio ) {
+        if ( _hero->CanCastSpell( townPortal ) && currentSpellPoints > townPortal.spellPoints() + currentSpellPoints * _spellPointsReserved ) {
             for ( const Castle * castle : _hero->GetKingdom().GetCastles() ) {
                 tryPortalToTown( townPortal, castle );
             }
@@ -1022,10 +1022,10 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
 
     // Reserve spell points only if target isn't a well that will replenish lost SP
     if ( objectType != MP2::OBJ_MAGIC_WELL && objectType != MP2::OBJ_ARTESIAN_SPRING ) {
-        if ( currentSpellPoints < hero.GetMaxSpellPoints() * _spellPointsReservedRatio )
+        if ( currentSpellPoints < hero.GetMaxSpellPoints() * _spellPointsReserved )
             return {};
 
-        currentSpellPoints -= static_cast<uint32_t>( hero.GetMaxSpellPoints() * _spellPointsReservedRatio );
+        currentSpellPoints -= static_cast<uint32_t>( hero.GetMaxSpellPoints() * _spellPointsReserved );
     }
 
     const uint32_t movementCost = std::max( 1U, dimensionDoor.movePoints() );
@@ -1190,7 +1190,7 @@ void AIWorldPathfinder::setArmyStrengthMultiplier( const double multiplier )
     }
 }
 
-void AIWorldPathfinder::setSpellPointReserveRatio( const double reserve )
+void AIWorldPathfinder::setSpellPointReserve( const double reserve )
 {
-    _spellPointsReservedRatio = reserve;
+    _spellPointsReserved = reserve;
 }
