@@ -52,7 +52,6 @@
 namespace
 {
     const int32_t bottomBarOffsetY = 461;
-    const int32_t exitButtonOffsetX = 578;
 
     class RowSpells
     {
@@ -168,14 +167,19 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
 
     fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
 
-    // The original ICN::WELLXTRA image does not have a yellow outer frame.
-    const int32_t allowedBottomBarWidth = exitButtonOffsetX;
-    const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
+    // bar
+    const int32_t exitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
 
+    dst_pt.x = cur_pt.x;
+    dst_pt.y = cur_pt.y + bottomBarOffsetY;
+
+    // The original ICN::WELLXTRA image does not have a yellow outer frame.
+    const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
+    const int32_t barHeight = bottomBar.height();
     // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
-    fheroes2::Blit( bottomBar, 1, 0, display, cur_pt.x, cur_pt.y + bottomBarOffsetY, allowedBottomBarWidth / 2, bottomBar.height() );
-    fheroes2::Blit( bottomBar, bottomBar.width() - ( allowedBottomBarWidth - allowedBottomBarWidth / 2 ) - 1, 0, display, cur_pt.x + allowedBottomBarWidth / 2,
-                    cur_pt.y + bottomBarOffsetY, allowedBottomBarWidth - allowedBottomBarWidth / 2, bottomBar.height() );
+    fheroes2::Blit( bottomBar, 1, 0, display, dst_pt.x, dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2, barHeight );
+    fheroes2::Blit( bottomBar, bottomBar.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + exitWidth - 2, 0, display, dst_pt.x + fheroes2::Display::DEFAULT_WIDTH / 2,
+                    dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2 - exitWidth + 1, barHeight );
 
     // text bar
     Text text;
@@ -235,7 +239,7 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
     spells4.Redraw( display );
     spells5.Redraw( display );
 
-    fheroes2::Button buttonExit( cur_pt.x + exitButtonOffsetX, cur_pt.y + bottomBarOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
+    fheroes2::Button buttonExit( fheroes2::Display::DEFAULT_WIDTH - exitWidth, cur_pt.y + bottomBarOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
     buttonExit.draw();
 
     display.render();
