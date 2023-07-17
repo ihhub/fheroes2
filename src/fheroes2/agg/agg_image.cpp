@@ -1502,7 +1502,7 @@ namespace fheroes2
 
                     // The evil buttons' released state are 2 pixels wider.
                     const int offsetEvilX = isEvilInterface ? 2 : 0;
-
+                    // remove embedded shadows so that we can generate shadows with our own code later
                     for ( int32_t i = 0; i < 4; ++i ) {
                         // released
                         const Sprite & originalReleased = GetICN( originalIcnId, 2 * i );
@@ -1525,6 +1525,7 @@ namespace fheroes2
 
                         fheroes2::makeTransparentBackground( released, pressed, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
                     }
+                    // generate the DIFFICULTY button as it is not present in the original resources
                     createTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
                                              isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON );
                     break;
