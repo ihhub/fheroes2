@@ -310,7 +310,7 @@ namespace Interface
 
             const auto brushSizeText = []( const int brushSize, const bool isFillBrush ) {
                 std::string text
-                    = isFillBrush ? _( "Draws objects in %{size} by %{size} square increments." ) : _( "Erases objects in %{size} by %{size} square increments." );
+                    = isFillBrush ? _( "Draws objects in\n%{size} by %{size} square increments." ) : _( "Erases objects in\n%{size} by %{size} square increments." );
 
                 StringReplace( text, "%{size}", brushSize );
                 return text;
