@@ -91,6 +91,7 @@
 
 uint32_t lwpLastMapUpdate = 0;
 bool forceMapUpdate = true;
+bool forceConfigUpdate = true;
 
 void loadMap() {
     Settings &conf = Settings::Get();
@@ -108,7 +109,6 @@ void loadMap() {
 }
 
 void randomizeGameAreaPoint() {
-    forceMapUpdate = false;
     lwpLastMapUpdate = std::time(nullptr);
 
     fheroes2::Display &display = fheroes2::Display::instance();
@@ -204,6 +204,18 @@ void updateVisibleMapRegion() {
     }
 }
 
+void forceUpdates() {
+    if (forceMapUpdate) {
+        randomizeGameAreaPoint();
+        forceMapUpdate = false;
+    }
+
+    if (forceConfigUpdate) {
+        updateConfigs();
+        forceConfigUpdate = false;
+    }
+}
+
 extern "C" JNIEXPORT void JNICALL
 Java_org_libsdl_app_SDLActivity_nativeUpdateVisibleMapRegion([[maybe_unused]] JNIEnv *env,
                                                              [[maybe_unused]] jclass cls) {
@@ -215,7 +227,7 @@ extern "C" JNIEXPORT void JNICALL
 Java_org_libsdl_app_SDLActivity_nativeUpdateConfigs([[maybe_unused]] JNIEnv *env,
                                                     [[maybe_unused]] jclass cls) {
     VERBOSE_LOG("nativeUpdateConfigs")
-//    updateConfigs();
+    forceConfigUpdate = true;
 }
 
 void handleSDLEvents(SDL_Event &event, LocalEvent &le, fheroes2::Display &display) {
@@ -246,9 +258,7 @@ void renderWallpaper() {
     gameArea.generate({display.width(), display.height()}, true);
 
     while (true) {
-        if (forceMapUpdate) {
-            randomizeGameAreaPoint();
-        }
+        forceUpdates();
 
         handleSDLEvents(event, le, display);
 
