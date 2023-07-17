@@ -394,7 +394,7 @@ namespace Interface
 
             for ( uint8_t objectId = Brush::WATER; objectId < Brush::TOWNS; ++objectId ) {
                 if ( le.MousePressRight( _objectButtonsRect[objectId] ) ) {
-                    std::string text = _( "Used to select objects most appropriate for use on %{terrain}." );
+                    std::string text = _( "Used to place objects most appropriate for use on %{terrain}." );
                     StringReplaceWithLowercase( text, "%{terrain}", _getTerrainTypeName( objectId ) );
                     fheroes2::showStandardTextMessage( _getObjectTypeName( objectId ), text, Dialog::ZERO );
 
