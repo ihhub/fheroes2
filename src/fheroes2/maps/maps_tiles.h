@@ -306,10 +306,6 @@ namespace Maps
 
         void ClearFog( const int colors );
 
-        // Checks whether the object to be captured is guarded by its own forces
-        // (castle has a hero or garrison, dwelling has creatures, etc)
-        bool isCaptureObjectProtected() const;
-
         void SetObjectPassable( bool pass );
 
         const std::array<uint32_t, 3> & metadata() const
@@ -348,12 +344,6 @@ namespace Maps
         bool containsAnyObjectIcnType( const std::vector<MP2::ObjectIcnType> & objectIcnTypes ) const;
 
         bool containsSprite( const MP2::ObjectIcnType objectIcnType, const uint32_t imageIdx ) const;
-
-        // Restores an abandoned mine whose main tile is 'tile', turning it into an ordinary mine that brings
-        // resources of type 'resource'. This method updates all sprites and sets object types for non-action
-        // tiles. The object type for the action tile (i.e. the main tile) remains unchanged and should be
-        // updated separately.
-        static void RestoreAbandonedMine( Tiles & tile, const int resource );
 
         // Some tiles have incorrect object type. This is due to original Editor issues.
         static void fixTileObjectType( Tiles & tile );

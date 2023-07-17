@@ -1454,7 +1454,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
                     const Funds rc{ static_cast<int32_t>( tile.metadata()[0] ), 1 };
                     const int resource = ( rc.GetValidItemsCount() > 0 ) ? rc.getFirstValidResource().first : Resource::GOLD;
 
-                    Maps::Tiles::RestoreAbandonedMine( tile, resource );
+                    Maps::restoreAbandonedMine( tile, resource );
 
                     Heroes * hero = tile.GetHeroes();
                     if ( hero ) {
