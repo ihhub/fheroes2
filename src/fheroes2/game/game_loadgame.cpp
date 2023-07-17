@@ -177,7 +177,7 @@ fheroes2::GameMode Game::LoadGame()
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
-        for ( fheroes2::ButtonBase* button : buttons ) {
+        for ( fheroes2::ButtonBase * button : buttons ) {
             le.MousePressLeft( button->area() ) ? button->drawOnPress() : button->drawOnRelease();
         }
 
