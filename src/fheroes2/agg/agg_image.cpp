@@ -3799,16 +3799,16 @@ namespace fheroes2
                 Sprite & releasedWithDarkBorder = _icnVsSprite[id][0];
                 releasedWithDarkBorder.resize( originalReleased.width() + 2, originalReleased.height() + 1 );
                 releasedWithDarkBorder.reset();
-                
+
                 Copy( originalReleased, 0, 0, releasedWithDarkBorder, 1, 0, originalReleased.width(), originalReleased.height() );
                 Copy( originalReleased, 0, 2, releasedWithDarkBorder, 1, 21, 1, 1 );
                 Copy( originalReleased, 0, 2, releasedWithDarkBorder, 2, 22, 1, 1 );
                 // copy darker left edge to released state from pressed state
                 Copy( originalPressed, 0, 2, releasedWithDarkBorder, 0, 3, 1, 19 );
-                
+
                 // copy darker bottom edge left to released state from pressed state
                 Copy( originalPressed, 0, originalPressed.height() - 1, releasedWithDarkBorder, 0, originalPressed.height(), originalPressed.width(), 1 );
-                
+
                 // copy single dark corner pixel
                 Copy( originalPressed, 0, 2, releasedWithDarkBorder, 1, 22, 1, 1 );
 
