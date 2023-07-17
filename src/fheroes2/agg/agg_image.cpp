@@ -3791,9 +3791,9 @@ namespace fheroes2
                 if ( _icnVsSprite[originalID].size() < 8 ) {
                     break;
                 }
-                // move dark border to new released state from original pressed state button
-                _icnVsSprite[id].resize( 2 );
 
+                _icnVsSprite[id].resize( 2 );
+                // move dark border to new released state from original pressed state button
                 const Sprite & originalReleased = GetICN( originalID, 4 );
                 const Sprite & originalPressed = GetICN( originalID, 5 );
                 Sprite & releasedWithDarkBorder = _icnVsSprite[id][0];
@@ -3803,13 +3803,8 @@ namespace fheroes2
                 Copy( originalReleased, 0, 0, releasedWithDarkBorder, 1, 0, originalReleased.width(), originalReleased.height() );
                 Copy( originalReleased, 0, 2, releasedWithDarkBorder, 1, 21, 1, 1 );
                 Copy( originalReleased, 0, 2, releasedWithDarkBorder, 2, 22, 1, 1 );
-                // copy darker left edge to released state from pressed state
                 Copy( originalPressed, 0, 2, releasedWithDarkBorder, 0, 3, 1, 19 );
-
-                // copy darker bottom edge left to released state from pressed state
                 Copy( originalPressed, 0, originalPressed.height() - 1, releasedWithDarkBorder, 0, originalPressed.height(), originalPressed.width(), 1 );
-
-                // copy single dark corner pixel
                 Copy( originalPressed, 0, 2, releasedWithDarkBorder, 1, 22, 1, 1 );
 
                 // make pressed state without darker border
