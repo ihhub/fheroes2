@@ -3829,7 +3829,7 @@ namespace fheroes2
                     out.resize( original.width() - 1, original.height() );
                     out.reset();
 
-                    Copy( original, 0, 0, out, 1, 0, original.width() - 4, original.height() );
+                    Copy( original, 0, 0, out, 0, 0, original.width() - 4, original.height() );
                     Copy( original, original.width() - 3, 0, out, original.width() - 4, 0, 3, original.height() );
 
                     Fill( out, 7 - i * 2, 2 + i, 50 + i, 14, getButtonFillingColor( i == 0 ) );
