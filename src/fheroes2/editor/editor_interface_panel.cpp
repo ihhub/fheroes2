@@ -308,23 +308,30 @@ namespace Interface
                 }
             }
 
-            const auto brushSizeText = []( const int & brushSize ) {
-                std::string text = _( "Draws objects in %{size} by %{size} square increments." );
+            const auto brushSizeText = []( const int brushSize, const bool isFillBrush ) {
+                std::string text
+                    = isFillBrush ? _( "Draws objects in %{size} by %{size} square increments." ) : _( "Erases objects in %{size} by %{size} square increments." );
+
                 StringReplace( text, "%{size}", brushSize );
                 return text;
             };
 
             if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::SMALL] ) ) {
-                fheroes2::showStandardTextMessage( _( "Small Brush" ), brushSizeText( 1 ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Small Brush" ), brushSizeText( 1, _selectedInstrument == Instrument::TERRAIN ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::MEDIUM] ) ) {
-                fheroes2::showStandardTextMessage( _( "Medium Brush" ), brushSizeText( 2 ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Medium Brush" ), brushSizeText( 2, _selectedInstrument == Instrument::TERRAIN ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::LARGE] ) ) {
-                fheroes2::showStandardTextMessage( _( "Large Brush" ), brushSizeText( 4 ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Large Brush" ), brushSizeText( 4, _selectedInstrument == Instrument::TERRAIN ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _brushSizeButtonsRect[BrushSize::AREA] ) ) {
-                fheroes2::showStandardTextMessage( _( "Area Fill" ), _( "Used to click and drag for clearing large areas." ), Dialog::ZERO );
+                if ( _selectedInstrument == Instrument::TERRAIN ) {
+                    fheroes2::showStandardTextMessage( _( "Area Fill" ), _( "Used to click and drag for filling in large areas." ), Dialog::ZERO );
+                }
+                else {
+                    fheroes2::showStandardTextMessage( _( "Clear Area" ), _( "Used to click and drag for clearing large areas." ), Dialog::ZERO );
+                }
             }
         }
 
@@ -397,10 +404,10 @@ namespace Interface
             }
 
             if ( le.MousePressRight( _objectButtonsRect[Brush::TOWNS] ) ) {
-                fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TOWNS ), _( "Used to place a town or castle." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TOWNS ), _( "Used to place\na town or castle." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _objectButtonsRect[Brush::MONSTERS] ) ) {
-                fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::MONSTERS ), _( "Used to place a monster group." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::MONSTERS ), _( "Used to place\na monster group." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _objectButtonsRect[Brush::HEROES] ) ) {
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::HEROES ), _( "Used to place a hero." ), Dialog::ZERO );
@@ -409,7 +416,7 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::ARTIFACTS ), _( "Used to place an artifact." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( _objectButtonsRect[Brush::TREASURES] ) ) {
-                fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place a resource or treasure." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
             }
         }
 
