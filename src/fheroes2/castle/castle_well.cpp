@@ -202,7 +202,7 @@ void Castle::OpenWell()
     fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
 
     // button exit
-    dst_pt.x = cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - fheroes2::AGG::GetICN(ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
+    dst_pt.x = cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
     dst_pt.y = cur_pt.y + bottomBarOffsetY;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
 
