@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-15 12:25+0000\n"
+"POT-Creation-Date: 2023-07-18 14:41+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3592,6 +3592,120 @@ msgstr "Kattints a főmenübe való visszatéréshez."
 msgid "Quit out of the map editor."
 msgstr ""
 
+msgid "Ocean Objects"
+msgstr ""
+
+msgid "Grass Objects"
+msgstr ""
+
+msgid "Snow Objects"
+msgstr ""
+
+msgid "Swamp Objects"
+msgstr ""
+
+msgid "Lava Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Desert Objects"
+msgstr "Sivatagi sátor"
+
+msgid "Dirt Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Wasteland Objects"
+msgstr "Pusztulat"
+
+msgid "Beach Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Towns"
+msgstr "Város"
+
+msgid "Heroes"
+msgstr "Hősök"
+
+#, fuzzy
+msgid "Artifacts"
+msgstr "Varázstárgy"
+
+#, fuzzy
+msgid "Treasures"
+msgstr "Kincsek"
+
+msgid ""
+"Draws terrain in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+msgid ""
+"Erases objects in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+#, fuzzy
+msgid "Small Brush"
+msgstr "Kicsi térképek"
+
+#, fuzzy
+msgid "Medium Brush"
+msgstr "Közepes térképek"
+
+#, fuzzy
+msgid "Large Brush"
+msgstr "Nagy térképek"
+
+msgid "Area Fill"
+msgstr ""
+
+msgid "Used to click and drag for filling in large areas."
+msgstr ""
+
+msgid "Clear Area"
+msgstr ""
+
+msgid "Used to click and drag for clearing large areas."
+msgstr ""
+
+msgid ""
+"Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
+"eliminates the penalty.)"
+msgstr ""
+
+msgid "Traversable only by boat."
+msgstr ""
+
+msgid "No special modifiers."
+msgstr ""
+
+msgid "Used to place objects most appropriate for use on %{terrain}."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a town or castle."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a monster group."
+msgstr ""
+
+msgid "Used to place a hero."
+msgstr ""
+
+#, fuzzy
+msgid "Used to place an artifact."
+msgstr "A Szent Varázstárgy kiásása."
+
+msgid ""
+"Used to place\n"
+"a resource or treasure."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr ""
 
@@ -3639,7 +3753,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-msgid "Undo your last action.  Press again to redo the action."
+msgid "Undo your last action. Press again to redo the action."
 msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
@@ -7180,10 +7294,6 @@ msgid "Skills"
 msgstr "Fűrészmalom"
 
 #, fuzzy
-msgid "Artifacts"
-msgstr "Varázstárgy"
-
-#, fuzzy
 msgid "Town/Castle"
 msgstr "Kastély"
 
@@ -7193,9 +7303,6 @@ msgstr "Helyőrség"
 #, fuzzy
 msgid "Gold Per Day:"
 msgstr "Arany a kincstárban:"
-
-msgid "Heroes"
-msgstr "Hősök"
 
 #, fuzzy
 msgid "View Heroes."

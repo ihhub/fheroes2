@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-15 12:25+0000\n"
+"POT-Creation-Date: 2023-07-18 14:41+0000\n"
 "PO-Revision-Date: 2023-05-13 22:08+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3673,6 +3673,117 @@ msgstr "Збережіть поточну гру."
 msgid "Quit out of the map editor."
 msgstr ""
 
+msgid "Ocean Objects"
+msgstr ""
+
+msgid "Grass Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Snow Objects"
+msgstr "Порожнє місце"
+
+msgid "Swamp Objects"
+msgstr ""
+
+msgid "Lava Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Desert Objects"
+msgstr "Пустельний намет"
+
+msgid "Dirt Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Wasteland Objects"
+msgstr "Пустка"
+
+msgid "Beach Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Towns"
+msgstr "Місто"
+
+msgid "Heroes"
+msgstr ""
+
+msgid "Artifacts"
+msgstr ""
+
+#, fuzzy
+msgid "Treasures"
+msgstr "Скарб"
+
+msgid ""
+"Draws terrain in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+msgid ""
+"Erases objects in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+#, fuzzy
+msgid "Small Brush"
+msgstr "Маленькі Мапи"
+
+msgid "Medium Brush"
+msgstr ""
+
+msgid "Large Brush"
+msgstr ""
+
+msgid "Area Fill"
+msgstr ""
+
+msgid "Used to click and drag for filling in large areas."
+msgstr ""
+
+msgid "Clear Area"
+msgstr ""
+
+msgid "Used to click and drag for clearing large areas."
+msgstr ""
+
+msgid ""
+"Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
+"eliminates the penalty.)"
+msgstr ""
+
+msgid "Traversable only by boat."
+msgstr ""
+
+msgid "No special modifiers."
+msgstr ""
+
+msgid "Used to place objects most appropriate for use on %{terrain}."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a town or castle."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a monster group."
+msgstr ""
+
+msgid "Used to place a hero."
+msgstr ""
+
+msgid "Used to place an artifact."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a resource or treasure."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr ""
 
@@ -3718,7 +3829,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-msgid "Undo your last action.  Press again to redo the action."
+msgid "Undo your last action. Press again to redo the action."
 msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
@@ -6959,9 +7070,6 @@ msgstr ""
 msgid "Skills"
 msgstr ""
 
-msgid "Artifacts"
-msgstr ""
-
 msgid "Town/Castle"
 msgstr ""
 
@@ -6969,9 +7077,6 @@ msgid "Garrison"
 msgstr ""
 
 msgid "Gold Per Day:"
-msgstr ""
-
-msgid "Heroes"
 msgstr ""
 
 msgid "View Heroes."
