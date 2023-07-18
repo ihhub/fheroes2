@@ -21,7 +21,6 @@
 #pragma once
 
 #include <cstdint>
-#include <string>
 
 namespace fheroes2
 {
