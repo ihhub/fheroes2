@@ -3806,19 +3806,19 @@ namespace fheroes2
                 Copy( originalPressed, 0, originalPressed.height() - 1, releasedWithDarkBorder, 0, originalPressed.height(), originalPressed.width(), 1 );
                 Copy( originalPressed, 0, 2, releasedWithDarkBorder, 1, 22, 1, 1 );
 
-                // make pressed state without darker border
-                Sprite & pressedWithoutDarkBorder = _icnVsSprite[id][1];
-                pressedWithoutDarkBorder.resize( originalPressed.width() + 2, originalPressed.height() + 1 );
-                pressedWithoutDarkBorder.reset();
-                Copy( originalPressed, 1, 0, pressedWithoutDarkBorder, 0, 1, originalPressed.width() - 1, originalPressed.height() );
+                // pressed state
+                Sprite & pressed = _icnVsSprite[id][1];
+                pressed.resize( originalPressed.width() + 2, originalPressed.height() + 1 );
+                pressed.reset();
+                Copy( originalPressed, 0, 0, pressed, 0, 1, originalPressed.width(), originalPressed.height() );
 
-                // the empty button needs to be widened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result
+                // the empty buttons need to be widened by 1 px so that they can be evenly divided by 3 in resizeButton() in ui_tools.cpp
                 Copy( originalReleased, originalReleased.width() - 5, 0, releasedWithDarkBorder, releasedWithDarkBorder.width() - 5, 0, 5, originalReleased.height() );
-                Copy( originalPressed, originalPressed.width() - 5, 0, pressedWithoutDarkBorder, pressedWithoutDarkBorder.width() - 7, 1, 5, originalPressed.height() );
+                Copy( originalPressed, originalPressed.width() - 5, 0, pressed, pressed.width() - 6, 1, 5, originalPressed.height() );
 
                 const int32_t pixelPosition = 4 * 94 + 6;
                 Fill( releasedWithDarkBorder, 5, 3, 88, 18, originalReleased.image()[pixelPosition] );
-                Fill( pressedWithoutDarkBorder, 3, 5, 87, 17, originalPressed.image()[pixelPosition] );
+                Fill( pressed, 4, 5, 87, 17, originalPressed.image()[pixelPosition] );
 
                 break;
             }
