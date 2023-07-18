@@ -58,12 +58,61 @@ namespace Interface
     private:
         Editor & _interface;
 
-        // Index of selected Map Editor instrument.
-        uint8_t _selectedInstrument{ 0 };
-        const static uint8_t instrumentsCount = 6;
+        static const char * _getTerrainTypeName( const uint8_t brushId );
+        static const char * _getObjectTypeName( const uint8_t brushId );
 
-        std::array<fheroes2::Button, instrumentsCount> _instrumentButtons;
-        std::array<fheroes2::Rect, instrumentsCount> _instrumentButtonsRect;
+        enum Instrument : uint8_t
+        {
+            // IMPORTANT. This enumeration corresponds with the order of instruments in original assets. Do not change this order.
+            TERRAIN = 0U,
+            OBJECT = 1U,
+            DETAIL = 2U,
+            STREAM = 3U,
+            ROAD = 4U,
+            ERASE = 5U,
+
+            // The last element corresponds to the editor instruments count.
+            INSTRUMENTS_COUNT = 6U
+        };
+
+        enum Brush : uint8_t
+        {
+            // IMPORTANT. This enumeration corresponds with the order of instruments in original assets. Do not change this order.
+            WATER = 0U,
+            GRASS = 1U,
+            SNOW = 2U,
+            SWAMP = 3U,
+            LAVA = 4U,
+            DESERT = 5U,
+            DIRT = 6U,
+            WASTELAND = 7U,
+            BEACH = 8U,
+
+            // This element corresponds to the editor terrain types count.
+            TERRAIN_COUNT = 9U,
+
+            // For objects this enumeration continues.
+            TOWNS = 9U,
+            MONSTERS = 10U,
+            HEROES = 11U,
+            ARTIFACTS = 12U,
+            TREASURES = 13U,
+
+            // The last element corresponds to the editor object types count.
+            OBJECT_COUNT = 14U
+        };
+
+        enum BrushSize : uint8_t
+        {
+            // IMPORTANT. This enumeration corresponds with the order of brush size in original assets. Do not change this order.
+            SMALL = 0U,
+            MEDIUM = 1U,
+            LARGE = 2U,
+            AREA = 3U,
+
+            // The last element corresponds to the editor brush size count.
+            BRUSH_SIZE_COUNT = 4U
+        };
 
         fheroes2::Button _buttonMagnify;
         fheroes2::Button _buttonUndo;
@@ -82,5 +131,18 @@ namespace Interface
         fheroes2::Rect _rectInstruments;
         fheroes2::Rect _rectInstrumentPanel;
         fheroes2::Rect _rectEditorPanel;
+
+        std::array<fheroes2::Button, Instrument::INSTRUMENTS_COUNT> _instrumentButtons;
+        std::array<fheroes2::Button, BrushSize::BRUSH_SIZE_COUNT> _brushSizeButtons;
+
+        std::array<fheroes2::Rect, Instrument::INSTRUMENTS_COUNT> _instrumentButtonsRect;
+        std::array<fheroes2::Rect, Brush::TERRAIN_COUNT> _terrainButtonsRect;
+        std::array<fheroes2::Rect, Brush::OBJECT_COUNT> _objectButtonsRect;
+        std::array<fheroes2::Rect, BrushSize::BRUSH_SIZE_COUNT> _brushSizeButtonsRect;
+
+        uint8_t _selectedInstrument{ Instrument::TERRAIN };
+        uint8_t _selectedTerrain{ Brush::WATER };
+        uint8_t _selectedObject{ Brush::WATER };
+        uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
     };
 }
