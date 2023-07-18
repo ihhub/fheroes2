@@ -1539,14 +1539,19 @@ namespace fheroes2
                         const Sprite & originalReleased = GetICN( baseIcnId, 2 * i );
 
                         Sprite & released = _icnVsSprite[id][2 * i];
-                        released.resize( originalReleased.width() + 1, originalReleased.height() );
+                        released.resize( originalReleased.width() + 1, originalReleased.height() + 1 );
                         released.reset();
 
                         Copy( originalReleased, 0, 0, released, 1, 0, originalReleased.width(), originalReleased.height() );
-
-                        // pressed
                         const Sprite & originalPressed = GetICN( baseIcnId, 2 * i + 1 );
+                        // the released state is missing the darker borders of the pressed state
+                        Copy( originalPressed, 0, 0, released, 0, 1, 1, originalPressed.height() );
+                        Copy( originalPressed, 1, originalPressed.height() - 1, released, 1, originalPressed.height(), originalPressed.width(), 1 );
+                        Copy( originalPressed, 0, 2, released, 1, originalPressed.height() - 1, 1, 1 );
+                        Copy( originalReleased, 0, 2, released, 1, originalPressed.height() - 2, 1, 1 );
+                        Copy( originalReleased, 0, 2, released, 2, originalPressed.height() - 1, 1, 1 );
 
+                        // pressed state
                         Sprite & pressed = _icnVsSprite[id][2 * i + 1];
                         pressed.resize( originalPressed.width() + 1, originalPressed.height() + 1 );
                         pressed.reset();
