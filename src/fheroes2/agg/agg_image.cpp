@@ -1511,7 +1511,7 @@ namespace fheroes2
                         const Sprite & originalPressed = GetICN( originalIcnId, 2 * i + 1 );
 
                         Sprite & pressed = _icnVsSprite[id][2 * i + 1];
-                        pressed.resize( originalPressed.width() + 1, originalPressed.height() );
+                        pressed.resize( originalPressed.width(), originalPressed.height() );
                         pressed.reset();
 
                         Copy( originalPressed, 0, 1, pressed, 0, 1, originalPressed.width() - 1, originalPressed.height() );
@@ -3754,22 +3754,28 @@ namespace fheroes2
                 Sprite & pressed = _icnVsSprite[id][1];
 
                 released = _icnVsSprite[originalId][11];
-                pressed = _icnVsSprite[originalId][12];
 
-                if ( pressed.width() > 2 && pressed.height() > 2 ) {
+                const Sprite & originalPressed = GetICN( originalId, 12 );
+
+                if ( originalPressed.width() > 2 && originalPressed.height() > 2 ) {
+                    pressed.resize( originalPressed.width(), originalPressed.height() );
+                    // copy the original pressed button but add the missing darker leftside border from the released state
+                    Copy( released, 0, 0, pressed, 0, 0, 1, released.height() );
+                    Copy( originalPressed, 0, 0, pressed, 1, 0, originalPressed.width() - 1, originalPressed.height() );
+
                     // Make the background transparent.
-                    FillTransform( pressed, 0, 0, pressed.width(), 1, 1 );
-                    FillTransform( pressed, pressed.width() - 2, 1, 2, pressed.height() - 1, 1 );
+                    FillTransform( pressed, 1, 0, pressed.width() - 1, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 1, 1, 1, pressed.height() - 1, 1 );
 
-                    FillTransform( pressed, 0, 1, 2, 1, 1 );
-                    FillTransform( pressed, 0, 2, 1, 1, 1 );
+                    FillTransform( pressed, 1, 1, 2, 1, 1 );
+                    FillTransform( pressed, 1, 2, 1, 1, 1 );
 
-                    FillTransform( pressed, pressed.width() - 4, 1, 2, 1, 1 );
-                    FillTransform( pressed, pressed.width() - 3, 2, 1, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 3, 1, 2, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 2, 2, 1, 1, 1 );
 
-                    FillTransform( pressed, pressed.width() - 5, pressed.height() - 1, 3, 1, 1 );
-                    FillTransform( pressed, pressed.width() - 4, pressed.height() - 2, 2, 1, 1 );
-                    FillTransform( pressed, pressed.width() - 3, pressed.height() - 3, 1, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 4, pressed.height() - 1, 3, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 3, pressed.height() - 2, 2, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 2, pressed.height() - 3, 1, 1, 1 );
                 }
 
                 break;
