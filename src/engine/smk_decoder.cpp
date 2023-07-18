@@ -21,9 +21,11 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
+#include <cstdio>
 #include <cstring>
 #include <memory>
 
+#include "exception.h"
 #include "image.h"
 #include "serialize.h"
 #include "smacker.h"
@@ -32,6 +34,30 @@
 namespace
 {
     const size_t audioHeaderSize = 44;
+
+    void verifyVideoFile( const std::string & filePath )
+    {
+        if ( filePath.empty() ) {
+            // Why are you trying to even play a file from an empty path?
+            assert( 0 );
+            return;
+        }
+
+        // Verify that the file is valid. We use C-code on purpose since libsmacker library does the same.
+        std::FILE * file = std::fopen( filePath.c_str(), "rb" );
+        if ( file == nullptr ) {
+            return;
+        }
+
+        std::fseek( file, 0, SEEK_END );
+        const size_t fileSize = std::ftell( file );
+        std::fclose( file );
+
+        // According to https://wiki.multimedia.cx/index.php/Smacker the minimum size of a file must be 56 bytes.
+        if ( fileSize < 56 ) {
+            throw fheroes2::InvalidDataResources( "Video file " + filePath + " is being corrupted. Make sure that you own an official version of the game." );
+        }
+    }
 }
 
 SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
@@ -43,6 +69,8 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     , _currentFrameId( 0 )
     , _videoFile( nullptr )
 {
+    verifyVideoFile( filePath );
+
     _videoFile = smk_open_file( filePath.c_str(), SMK_MODE_MEMORY );
     if ( _videoFile == nullptr )
         return;
