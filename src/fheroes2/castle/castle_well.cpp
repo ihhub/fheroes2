@@ -322,8 +322,8 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
     const int32_t exitWidth = buttonExit.width();
     const int32_t buttonMaxWidth = buttonMax.width();
     // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
-    fheroes2::Blit( bottomBar, 1, 0, display, cur_pt.x + buttonMaxWidth, cur_pt.y + bottomBarOffsetY, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonMaxWidth, barHeight );
-    fheroes2::Blit( bottomBar, bottomBar.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + exitWidth - 1, 0, display, cur_pt.x + fheroes2::Display::DEFAULT_WIDTH / 2,
+    fheroes2::Copy( bottomBar, 1, 0, display, cur_pt.x + buttonMaxWidth, cur_pt.y + bottomBarOffsetY, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonMaxWidth, barHeight );
+    fheroes2::Copy( bottomBar, bottomBar.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + exitWidth - 1, 0, display, cur_pt.x + fheroes2::Display::DEFAULT_WIDTH / 2,
                     cur_pt.y + bottomBarOffsetY, fheroes2::Display::DEFAULT_WIDTH / 2 - exitWidth + 1, barHeight );
 
     fheroes2::Text text( _( "Town Population Information and Statistics" ), fheroes2::FontType() );

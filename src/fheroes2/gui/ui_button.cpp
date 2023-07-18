@@ -107,7 +107,7 @@ namespace
             textMargin = 4 + 4;
             minimumTextAreaWidth = 87;
             backgroundBorders = 4 + 3;
-            backgroundIcnID = ICN::STONEBAK_POL;
+            backgroundIcnID = ICN::STONEBAK_SMALL_POL;
             releasedOffset = { 5, 5 };
             pressedOffset = { 4, 6 };
             break;
@@ -528,7 +528,8 @@ namespace fheroes2
     {
         // We need to copy the background image to pressed button only where it does not overlay the image of released button.
         const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnID, 0 );
-
+        // you are trying to apply transform on an image that is single-layered
+        assert( !pressed.singleLayer() && !released.singleLayer() );
         const uint8_t * releasedTransform = released.transform();
         uint8_t * pressedTransform = pressed.transform();
         uint8_t * pressedImage = pressed.image();

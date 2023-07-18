@@ -416,12 +416,6 @@ namespace
                             buttonFontColor );
     }
 
-    void createTextAdaptedButton( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const char * text, const int emptyButtonIcnID )
-    {
-        // generate the button with text on
-        fheroes2::getTextAdaptedButton( released, pressed, text, emptyButtonIcnID );
-    }
-
     void createCampaignButtonSet( const int campaignSetIcnId, const std::array<const char *, 5> & texts )
     {
         int emptyButtonIcnID = 0;
@@ -441,8 +435,8 @@ namespace
             break;
         }
 
-        for ( int32_t i = 0; i < static_cast<int32_t>( texts.size() ); ++i ) {
-            createTextAdaptedButton( _icnVsSprite[campaignSetIcnId][2 * i], _icnVsSprite[campaignSetIcnId][2 * i + 1], texts[i], emptyButtonIcnID );
+        for ( size_t i = 0; i < texts.size(); ++i ) {
+            fheroes2::getTextAdaptedButton( _icnVsSprite[campaignSetIcnId][2 * i], _icnVsSprite[campaignSetIcnId][2 * i + 1], texts[i], emptyButtonIcnID );
         }
     }
 
@@ -1469,7 +1463,7 @@ namespace fheroes2
                     _icnVsSprite[id][1] = GetICN( ICN::WELLXTRA, 1 );
                     break;
                 }
-                createTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "guildWell|EXIT" ), ICN::EMPTY_GUILDWELL_BUTTON );
+                fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "guildWell|EXIT" ), ICN::EMPTY_GUILDWELL_BUTTON );
 
                 break;
             }
@@ -1503,7 +1497,7 @@ namespace fheroes2
                     // The evil buttons' released state are 2 pixels wider.
                     const int offsetEvilX = isEvilInterface ? 2 : 0;
                     // remove embedded shadows so that we can generate shadows with our own code later
-                    for ( int32_t i = 0; i < 4; ++i ) {
+                    for ( uint32_t i = 0; i < 4; ++i ) {
                         // released
                         const Sprite & originalReleased = GetICN( originalIcnId, 2 * i );
 
@@ -1525,7 +1519,7 @@ namespace fheroes2
                         fheroes2::makeTransparentBackground( released, pressed, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
                     }
                     // generate the DIFFICULTY button as it is not present in the original resources
-                    createTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
+                    fheroes2::getTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
                                              isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON );
                     break;
                 }
@@ -1540,7 +1534,7 @@ namespace fheroes2
                 const int baseIcnId = ICN::X_CMPBTN;
 
                 if ( useOriginalResources() ) {
-                    for ( int32_t i = 0; i < 4; ++i ) {
+                    for ( uint32_t i = 0; i < 4; ++i ) {
                         // released
                         const Sprite & originalReleased = GetICN( baseIcnId, 2 * i );
 
@@ -1560,10 +1554,10 @@ namespace fheroes2
                         Copy( originalPressed, 0, 0, pressed, 0, 1, originalPressed.width(), originalPressed.height() );
                         _icnVsSprite[id][2 * i + 1].setPosition( 0, 0 );
 
-                        fheroes2::makeTransparentBackground( released, pressed, ICN::STONEBAK_POL );
+                        fheroes2::makeTransparentBackground( released, pressed, ICN::STONEBAK_SMALL_POL );
                     }
                     // generate the DIFFICULTY button as it is not present in the original resources
-                    createTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ), ICN::EMPTY_POL_BUTTON );
+                    fheroes2::getTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ), ICN::EMPTY_POL_BUTTON );
                     break;
                 }
                 createCampaignButtonSet( id, { gettext_noop( "VIEW INTRO" ), gettext_noop( "RESTART" ), gettext_noop( "OKAY" ), gettext_noop( "CANCEL" ),
@@ -3518,14 +3512,11 @@ namespace fheroes2
 
                 return true;
             }
-            case ICN::STONEBAK_POL: {
+            case ICN::STONEBAK_SMALL_POL: {
                 _icnVsSprite[id].resize( 1 );
                 const fheroes2::Sprite & original = GetICN( ICN::X_CMPBKG, 0 );
-                fheroes2::Sprite & temp = _icnVsSprite[id][0];
                 if ( !original.empty() ) {
-                    temp.resize( 244, 28 );
-                    temp.reset();
-                    Copy( original, original.width() - 272, original.height() - 52, temp, 0, 0, 244, 28 );
+                    _icnVsSprite[id][0] = Crop( original, original.width() - 272, original.height() - 52, 244, 28 );
                 }
                 return true;
             }
@@ -3795,6 +3786,9 @@ namespace fheroes2
                 // move dark border to new released state from original pressed state button
                 const Sprite & originalReleased = GetICN( originalID, 4 );
                 const Sprite & originalPressed = GetICN( originalID, 5 );
+                if ( originalReleased.width() != 94 && originalPressed.width() != 94 ) {
+                    break;
+                }
                 Sprite & releasedWithDarkBorder = _icnVsSprite[id][0];
                 releasedWithDarkBorder.resize( originalReleased.width() + 2, originalReleased.height() + 1 );
                 releasedWithDarkBorder.reset();
@@ -3812,18 +3806,13 @@ namespace fheroes2
                 pressedWithoutDarkBorder.reset();
                 Copy( originalPressed, 1, 0, pressedWithoutDarkBorder, 0, 1, originalPressed.width() - 1, originalPressed.height() );
 
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    const Sprite & original = GetICN( originalID, 4 + i );
-                    Sprite & out = _icnVsSprite[id][i];
+                // the empty button needs to be widened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result
+                Copy( originalReleased, originalReleased.width() - 5, 0, releasedWithDarkBorder, releasedWithDarkBorder.width() - 5, 0, 5, originalReleased.height() );
+                Copy( originalPressed, originalPressed.width() - 5, 0, pressedWithoutDarkBorder, pressedWithoutDarkBorder.width() - 7, 1, 5, originalPressed.height() );
 
-                    // the empty button needs to be widened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result
-                    Copy( original, original.width() - 5, 0, out, out.width() - 5 - 2 * i, 0 + i, 5, original.height() );
-
-                    const int32_t pixelPosition = 4 * 94 + 6;
-                    if ( pixelPosition < original.width() * original.height() ) {
-                        Fill( out, 5 - 2 * i, 3 + 2 * i, 88 - i, 18 - i, original.image()[pixelPosition] );
-                    }
-                }
+                const int32_t pixelPosition = 4 * 94 + 6;
+                Fill( releasedWithDarkBorder, 5, 3, 88, 18, originalReleased.image()[pixelPosition] );
+                Fill( pressedWithoutDarkBorder, 3, 5, 87, 17, originalPressed.image()[pixelPosition] );
 
                 break;
             }
@@ -3842,7 +3831,6 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     // the empty button needs to shortened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result
                     out.resize( original.width() - 1, original.height() );
-                    out.reset();
 
                     Copy( original, 0, 0, out, 0, 0, original.width() - 4, original.height() );
                     Copy( original, original.width() - 3, 0, out, original.width() - 4, 0, 3, original.height() );
