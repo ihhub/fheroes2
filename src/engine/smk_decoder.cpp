@@ -25,6 +25,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
+#include <functional>
 #include <memory>
 
 #include "exception.h"
@@ -45,14 +46,13 @@ namespace
         }
 
         // Verify that the file is valid. We use C-code on purpose since libsmacker library does the same.
-        std::FILE * file = std::fopen( filePath.c_str(), "rb" );
+        std::unique_ptr<std::FILE, std::function<int( std::FILE * )>> file( std::fopen( filePath.c_str(), "rb" ), std::fclose );
         if ( file == nullptr ) {
             return;
         }
 
-        std::fseek( file, 0, SEEK_END );
-        const size_t fileSize = std::ftell( file );
-        std::fclose( file );
+        std::fseek( file.get(), 0, SEEK_END );
+        const size_t fileSize = std::ftell( file.get() );
 
         // According to https://wiki.multimedia.cx/index.php/Smacker the minimum size of a file must be 56 bytes.
         if ( fileSize < 56 ) {
