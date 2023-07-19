@@ -181,7 +181,7 @@ void Game::Init()
     le.setGlobalMouseMotionEventHook( Cursor::updateCursorPosition );
     le.setGlobalKeyDownEventHook( Game::globalKeyDownEvent );
 
-    le.setWindowMovedEventHook( []( int x, int y ) {
+    LocalEvent::setWindowMovedEventHook( []( int x, int y ) {
         Settings & conf = Settings::Get();
         conf.SetWindowPosition( { x, y } );
         conf.Save( Settings::configFileName );

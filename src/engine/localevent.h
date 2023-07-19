@@ -195,9 +195,9 @@ public:
         _globalKeyDownEventHook = std::move( hook );
     }
 
-    void setWindowMovedEventHook( std::function<void( const int, const int )> hook )
+    static void setWindowMovedEventHook( std::function<void( const int, const int )> hook )
     {
-        _onWindowMoved = std::move( hook );
+        LocalEvent::_onWindowMoved = std::move( hook );
     }
 
     static void setEventProcessingStates();
@@ -380,7 +380,7 @@ private:
     std::function<fheroes2::Rect( const int32_t, const int32_t )> _globalMouseMotionEventHook;
     std::function<void( const fheroes2::Key, const int32_t )> _globalKeyDownEventHook;
 
-    std::function<void( const int, const int )> _onWindowMoved;
+    inline static std::function<void( const int, const int )> _onWindowMoved;
 
     fheroes2::Rect _mouseCursorRenderArea;
 
