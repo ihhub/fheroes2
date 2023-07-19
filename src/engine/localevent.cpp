@@ -1438,12 +1438,12 @@ bool LocalEvent::HandleActiveEvent( const SDL_ActiveEvent & event )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 fheroes2::Point LocalEvent::getCenterPosition()
 {
-    return fheroes2::Point( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED );
+    return { SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED };
 }
 #else
 fheroes2::Point LocalEvent::getCenterPosition()
 {
-    return fheroes2::Point( -1, -1 );
+    return { -1, -1 };
 }
 #endif
 
