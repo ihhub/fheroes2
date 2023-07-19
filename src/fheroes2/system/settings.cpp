@@ -261,7 +261,7 @@ bool Settings::Read( const std::string & filePath )
         setFullScreen( config.StrParams( "fullscreen" ) == "on" );
     }
 
-    #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     // window position
     if ( config.Exists( "window position" ) ) {
         int default_x = SDL_WINDOWPOS_CENTERED;
@@ -269,7 +269,7 @@ bool Settings::Read( const std::string & filePath )
 
         _windowPosition = config.PointParams( "window position", { default_x, default_y } );
     }
-    #endif
+#endif
 
     if ( config.Exists( "controller pointer speed" ) ) {
         _controllerPointerSpeed = std::clamp( config.IntParams( "controller pointer speed" ), 0, 100 );
