@@ -184,7 +184,7 @@ void Game::Init()
     le.setGlobalKeyDownEventHook( Game::globalKeyDownEvent );
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    LocalEvent::setWindowMovedEventHook( []( int x, int y ) {
+    LocalEvent::setWindowMovedEventHook( []( const int x, const int y ) {
         Settings & conf = Settings::Get();
         conf.SetWindowPosition( { x, y } );
         conf.Save( Settings::configFileName );
