@@ -338,6 +338,7 @@ int main( int argc, char ** argv )
         ERROR_LOG( "An unknown exception occurred during application runtime." )
         return EXIT_FAILURE;
     }
-
+    const Settings & conf = Settings::Get();
+    conf.SaveIfNecessary();
     return EXIT_SUCCESS;
 }

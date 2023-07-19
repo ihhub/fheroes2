@@ -347,6 +347,14 @@ bool Settings::Save( const std::string_view fileName ) const
     return true;
 }
 
+void Settings::SaveIfNecessary() const
+{
+    if ( config_modified ){
+        Save( Settings::configFileName );
+    }
+
+}
+
 std::string Settings::String() const
 {
     std::ostringstream os;

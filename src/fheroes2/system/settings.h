@@ -66,6 +66,7 @@ class Settings
 {
 public:
     static constexpr const char * configFileName = "fheroes2.cfg";
+    bool config_modified = false;
 
     Settings( const Settings & ) = delete;
 
@@ -77,6 +78,7 @@ public:
 
     bool Read( const std::string & filePath );
     bool Save( const std::string_view fileName ) const;
+    void SaveIfNecessary() const;
 
     std::string String() const;
     void SetCurrentFileInfo( const Maps::FileInfo & );

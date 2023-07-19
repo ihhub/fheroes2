@@ -187,7 +187,7 @@ void Game::Init()
     LocalEvent::setWindowMovedEventHook( []( const int x, const int y ) {
         Settings & conf = Settings::Get();
         conf.SetWindowPosition( { x, y } );
-        conf.Save( Settings::configFileName );
+        conf.config_modified = true;
     } );
 #endif
 
