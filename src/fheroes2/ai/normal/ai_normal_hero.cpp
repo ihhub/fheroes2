@@ -165,7 +165,7 @@ namespace
         }
 
         const double advantage = hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_MEDIUM;
-        const double castleStrength = castle->GetGarrisonStrength( &hero ) * advantage;
+        const double castleStrength = castle->GetGarrisonStrength( hero ) * advantage;
 
         return heroArmyStrength > castleStrength;
     }
@@ -605,7 +605,7 @@ namespace
         }
 
         case MP2::OBJ_CASTLE:
-            return AIShouldVisitCastle( hero, index, heroArmyStrength ) || ai.isPriorityTask( index );
+            return AIShouldVisitCastle( hero, index, heroArmyStrength );
 
         case MP2::OBJ_JAIL:
             return kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
@@ -1791,14 +1791,14 @@ namespace AI
                     }
 
                     if ( isObjectReachableAtThisTurn ) {
-                        if ( castle->GetGarrisonStrength( &hero ) > heroStrength / 2 ) {
+                        if ( castle->GetGarrisonStrength( hero ) > heroStrength / 2 ) {
                             value -= dangerousTaskPenalty / 4;
                         }
                         else {
                             value -= dangerousTaskPenalty / 10;
                         }
                     }
-                    else if ( castle->GetGarrisonStrength( &hero ) > heroStrength / 2 ) {
+                    else if ( castle->GetGarrisonStrength( hero ) > heroStrength / 2 ) {
                         value -= dangerousTaskPenalty / 2;
                     }
                     else {
@@ -2079,52 +2079,75 @@ namespace AI
         std::vector<HeroToMove> availableHeroes;
 
         for ( Heroes * hero : heroes ) {
+            assert( hero != nullptr );
+
             addHeroToMove( hero, availableHeroes );
         }
-
-        const double originalMonsterStrengthMultiplier = _pathfinder.getCurrentArmyStrengthMultiplier();
-
-        const int monsterStrengthMultiplierCount = 2;
-        const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_ADVANTAGE_MEDIUM, ARMY_ADVANTAGE_SMALL };
 
         Interface::StatusWindow & status = Interface::AdventureMap::Get().getStatusWindow();
 
         uint32_t currentProgressValue = startProgressValue;
 
         while ( !availableHeroes.empty() ) {
+            class AIWorldPathfinderStateRestorer
+            {
+            public:
+                AIWorldPathfinderStateRestorer( AIWorldPathfinder & pathfinder )
+                    : _pathfinder( pathfinder )
+                    , _originalMinimalArmyStrengthAdvantage( _pathfinder.getMinimalArmyStrengthAdvantage() )
+                    , _originalSpellPointsReserveRatio( _pathfinder.getSpellPointsReserveRatio() )
+                {}
+
+                AIWorldPathfinderStateRestorer( const AIWorldPathfinderStateRestorer & ) = delete;
+
+                ~AIWorldPathfinderStateRestorer()
+                {
+                    _pathfinder.setMinimalArmyStrengthAdvantage( _originalMinimalArmyStrengthAdvantage );
+                    _pathfinder.setSpellPointsReserveRatio( _originalSpellPointsReserveRatio );
+                }
+
+                AIWorldPathfinderStateRestorer & operator=( const AIWorldPathfinderStateRestorer & ) = delete;
+
+            private:
+                AIWorldPathfinder & _pathfinder;
+
+                const double _originalMinimalArmyStrengthAdvantage;
+                const double _originalSpellPointsReserveRatio;
+            };
+
+            const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
+
             Heroes * bestHero = availableHeroes.front().hero;
-            double maxPriority = 0;
             int bestTargetIndex = -1;
 
-            while ( true ) {
-                for ( const HeroToMove & heroInfo : availableHeroes ) {
-                    double priority = -1;
-                    const int targetIndex = getPriorityTarget( heroInfo, priority );
-                    if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
-                        maxPriority = priority;
-                        bestTargetIndex = targetIndex;
-                        bestHero = heroInfo.hero;
+            {
+                const bool isLosingGame = bestHero->isLosingGame();
+
+                static const std::vector<std::pair<double, double>> commonPathfinderConfigurations{ { ARMY_ADVANTAGE_LARGE, 0.5 },
+                                                                                                    { ARMY_ADVANTAGE_MEDIUM, 0.25 },
+                                                                                                    { ARMY_ADVANTAGE_SMALL, 0.0 } };
+                static const std::vector<std::pair<double, double>> emergencyPathfinderConfigurations{ { ARMY_ADVANTAGE_DESPERATE, 0.0 } };
+
+                for ( const auto & [minStrengthAdvantage, spReserveRatio] : isLosingGame ? emergencyPathfinderConfigurations : commonPathfinderConfigurations ) {
+                    _pathfinder.setMinimalArmyStrengthAdvantage( minStrengthAdvantage );
+                    _pathfinder.setSpellPointsReserveRatio( spReserveRatio );
+
+                    double maxPriority = 0;
+
+                    for ( const HeroToMove & heroInfo : availableHeroes ) {
+                        double priority = -1;
+                        const int targetIndex = getPriorityTarget( heroInfo, priority );
+
+                        if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
+                            maxPriority = priority;
+                            bestTargetIndex = targetIndex;
+                            bestHero = heroInfo.hero;
+                        }
                     }
-                }
 
-                if ( bestTargetIndex != -1 ) {
-                    break;
-                }
-
-                // If nowhere to move perhaps it's because of high monster estimation. Let's reduce it.
-                const double currentMonsterStrengthMultiplier = _pathfinder.getCurrentArmyStrengthMultiplier();
-                bool setNewMultiplier = false;
-                for ( int i = 0; i < monsterStrengthMultiplierCount; ++i ) {
-                    if ( currentMonsterStrengthMultiplier > monsterStrengthMultipliers[i] ) {
-                        _pathfinder.setArmyStrengthMultiplier( bestHero->isLosingGame() ? ARMY_ADVANTAGE_DESPERATE : monsterStrengthMultipliers[i] );
-                        _pathfinder.setSpellPointReserve( 0 );
-                        setNewMultiplier = true;
+                    if ( bestTargetIndex != -1 ) {
                         break;
                     }
-                }
-
-                if ( !setNewMultiplier ) {
-                    break;
                 }
             }
 
@@ -2152,12 +2175,11 @@ namespace AI
                         break;
                     }
                 }
+            }
 
-                if ( bestTargetIndex == -1 ) {
-                    // Nothing to do. Stop everything
-                    _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
-                    break;
-                }
+            if ( bestTargetIndex == -1 ) {
+                // Nothing to do. Stop everything
+                break;
             }
 
             const size_t heroesBefore = heroes.size();
@@ -2217,17 +2239,9 @@ namespace AI
                 addHeroToMove( heroes.back(), availableHeroes );
             }
 
-            for ( size_t i = 0; i < availableHeroes.size(); ) {
-                if ( !availableHeroes[i].hero->MayStillMove( false, false ) ) {
-                    availableHeroes.erase( availableHeroes.begin() + i );
-                    continue;
-                }
-
-                ++i;
-            }
-
-            _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
-            _pathfinder.setSpellPointReserve( 0.5 );
+            availableHeroes.erase( std::remove_if( availableHeroes.begin(), availableHeroes.end(),
+                                                   []( const HeroToMove & item ) { return !item.hero->MayStillMove( false, false ); } ),
+                                   availableHeroes.end() );
 
             // The size of heroes can be increased if a new hero is released from Jail.
             const size_t maxHeroCount = std::max( heroes.size(), availableHeroes.size() );
@@ -2242,13 +2256,8 @@ namespace AI
             }
         }
 
-        const bool allHeroesMoved = availableHeroes.empty();
-
-        _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
-        _pathfinder.setSpellPointReserve( 0.5 );
-
         status.DrawAITurnProgress( endProgressValue );
 
-        return allHeroesMoved;
+        return availableHeroes.empty();
     }
 }
