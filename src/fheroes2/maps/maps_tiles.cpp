@@ -30,12 +30,10 @@
 #include <cstdlib>
 #include <iostream>
 #include <limits>
-#include <optional>
 #include <set>
 #include <type_traits>
 #include <utility>
 
-#include "army.h"
 #include "army_troop.h"
 #include "artifact.h"
 #include "castle.h"
@@ -65,7 +63,6 @@
 #include "resource.h"
 #include "save_format_version.h"
 #include "serialize.h"
-#include "tools.h"
 #include "trees.h"
 #include "world.h"
 
@@ -1471,28 +1468,6 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
     }
 }
 
-bool Maps::Tiles::isCaptureObjectProtected() const
-{
-    const MP2::MapObjectType objectType = GetObject( false );
-
-    if ( !MP2::isCaptureObject( objectType ) ) {
-        return false;
-    }
-
-    if ( MP2::OBJ_CASTLE == objectType ) {
-        Castle * castle = world.getCastleEntrance( GetCenter() );
-        assert( castle != nullptr );
-
-        if ( castle ) {
-            return castle->GetArmy().isValid();
-        }
-
-        return false;
-    }
-
-    return getTroopFromTile( *this ).isValid();
-}
-
 void Maps::Tiles::Remove( uint32_t uniqID )
 {
     addons_level1.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v.isUniq( uniqID ); } );
@@ -1631,120 +1606,6 @@ void Maps::Tiles::RemoveJailSprite()
     }
 
     Remove( _uid );
-}
-
-void Maps::Tiles::RestoreAbandonedMine( Tiles & tile, const int resource )
-{
-    assert( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE );
-    assert( tile._uid != 0 );
-
-    const payment_t info = ProfitConditions::FromMine( resource );
-    std::optional<uint32_t> resourceCount;
-
-    switch ( resource ) {
-    case Resource::ORE:
-        resourceCount = fheroes2::checkedCast<uint32_t>( info.ore );
-        break;
-    case Resource::SULFUR:
-        resourceCount = fheroes2::checkedCast<uint32_t>( info.sulfur );
-        break;
-    case Resource::CRYSTAL:
-        resourceCount = fheroes2::checkedCast<uint32_t>( info.crystal );
-        break;
-    case Resource::GEMS:
-        resourceCount = fheroes2::checkedCast<uint32_t>( info.gems );
-        break;
-    case Resource::GOLD:
-        resourceCount = fheroes2::checkedCast<uint32_t>( info.gold );
-        break;
-    default:
-        assert( 0 );
-        break;
-    }
-
-    assert( resourceCount.has_value() && resourceCount > 0U );
-
-    setResourceOnTile( tile, resource, resourceCount.value() );
-
-    auto restoreLeftSprite = [resource]( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex ) {
-        if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 6 ) {
-            objectIcnType = MP2::OBJ_ICN_TYPE_MTNGRAS;
-            imageIndex = 82;
-        }
-        else if ( MP2::OBJ_ICN_TYPE_OBJNDIRT == objectIcnType && imageIndex == 8 ) {
-            objectIcnType = MP2::OBJ_ICN_TYPE_MTNDIRT;
-            imageIndex = 112;
-        }
-        else if ( MP2::OBJ_ICN_TYPE_EXTRAOVR == objectIcnType && imageIndex == 5 ) {
-            switch ( resource ) {
-            case Resource::ORE:
-                imageIndex = 0;
-                break;
-            case Resource::SULFUR:
-                imageIndex = 1;
-                break;
-            case Resource::CRYSTAL:
-                imageIndex = 2;
-                break;
-            case Resource::GEMS:
-                imageIndex = 3;
-                break;
-            case Resource::GOLD:
-                imageIndex = 4;
-                break;
-            default:
-                break;
-            }
-        }
-    };
-
-    auto restoreRightSprite = []( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex ) {
-        if ( MP2::OBJ_ICN_TYPE_OBJNDIRT == objectIcnType && imageIndex == 9 ) {
-            objectIcnType = MP2::OBJ_ICN_TYPE_MTNDIRT;
-            imageIndex = 113;
-        }
-        else if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 7 ) {
-            objectIcnType = MP2::OBJ_ICN_TYPE_MTNGRAS;
-            imageIndex = 83;
-        }
-    };
-
-    auto restoreMineObjectType = [&tile]( int directionVector ) {
-        if ( Maps::isValidDirection( tile._index, directionVector ) ) {
-            Tiles & mineTile = world.GetTiles( Maps::GetDirectionIndex( tile._index, directionVector ) );
-            if ( ( mineTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
-                 && ( mineTile._uid == tile._uid || mineTile.FindAddonLevel1( tile._uid ) || mineTile.FindAddonLevel2( tile._uid ) ) ) {
-                mineTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
-            }
-        }
-    };
-
-    restoreLeftSprite( tile._objectIcnType, tile._imageIndex );
-    for ( TilesAddon & addon : tile.addons_level1 ) {
-        if ( addon._uid == tile._uid ) {
-            restoreLeftSprite( addon._objectIcnType, addon._imageIndex );
-        }
-    }
-
-    if ( Maps::isValidDirection( tile._index, Direction::RIGHT ) ) {
-        Tiles & rightTile = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::RIGHT ) );
-
-        if ( rightTile._uid == tile._uid ) {
-            restoreRightSprite( rightTile._objectIcnType, rightTile._imageIndex );
-        }
-
-        TilesAddon * addon = rightTile.FindAddonLevel1( tile._uid );
-
-        if ( addon ) {
-            restoreRightSprite( addon->_objectIcnType, addon->_imageIndex );
-        }
-    }
-
-    restoreMineObjectType( Direction::LEFT );
-    restoreMineObjectType( Direction::RIGHT );
-    restoreMineObjectType( Direction::TOP );
-    restoreMineObjectType( Direction::TOP_LEFT );
-    restoreMineObjectType( Direction::TOP_RIGHT );
 }
 
 void Maps::Tiles::ClearFog( const int colors )

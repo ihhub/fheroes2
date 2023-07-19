@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-15 12:25+0000\n"
+"POT-Creation-Date: 2023-07-19 05:56+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3550,6 +3550,120 @@ msgstr "Запази текущата игра."
 msgid "Quit out of the map editor."
 msgstr ""
 
+msgid "Ocean Objects"
+msgstr ""
+
+msgid "Grass Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Snow Objects"
+msgstr "Няма обект"
+
+msgid "Swamp Objects"
+msgstr ""
+
+msgid "Lava Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Desert Objects"
+msgstr "Пустинна палатка"
+
+msgid "Dirt Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Wasteland Objects"
+msgstr "Пустош"
+
+msgid "Beach Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Towns"
+msgstr "Град"
+
+msgid "Heroes"
+msgstr "Герой"
+
+msgid "Artifacts"
+msgstr "Артефакти"
+
+#, fuzzy
+msgid "Treasures"
+msgstr "Съкровище"
+
+msgid ""
+"Draws terrain in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+msgid ""
+"Erases objects in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+#, fuzzy
+msgid "Small Brush"
+msgstr "Малки карти"
+
+#, fuzzy
+msgid "Medium Brush"
+msgstr "Средни карти"
+
+#, fuzzy
+msgid "Large Brush"
+msgstr "Големи карти"
+
+msgid "Area Fill"
+msgstr ""
+
+msgid "Used to click and drag for filling in large areas."
+msgstr ""
+
+msgid "Clear Area"
+msgstr ""
+
+msgid "Used to click and drag for clearing large areas."
+msgstr ""
+
+msgid ""
+"Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
+"eliminates the penalty.)"
+msgstr ""
+
+msgid "Traversable only by boat."
+msgstr ""
+
+msgid "No special modifiers."
+msgstr ""
+
+msgid "Used to place objects most appropriate for use on %{terrain}."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a town or castle."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a monster group."
+msgstr ""
+
+msgid "Used to place a hero."
+msgstr ""
+
+#, fuzzy
+msgid "Used to place an artifact."
+msgstr "Намери най-добрият артефакт."
+
+msgid ""
+"Used to place\n"
+"a resource or treasure."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr ""
 
@@ -3597,7 +3711,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-msgid "Undo your last action.  Press again to redo the action."
+msgid "Undo your last action. Press again to redo the action."
 msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
@@ -6689,8 +6803,10 @@ msgstr ""
 "Първо трябва да победиш призраците, които пазят мината, за да направиш това "
 "заклинание."
 
+#, fuzzy
 msgid ""
-"You do not currently own any town or castle, so you can't cast the spell."
+"You do not currently own any town or castle that is not occupied by a hero, "
+"so you can't cast the spell."
 msgstr ""
 "В момента не притежаваш никакъв град или замък, така че не можеш да направиш "
 "заклинанието."
@@ -7275,9 +7391,6 @@ msgstr "Герой/Статистика"
 msgid "Skills"
 msgstr "Умения"
 
-msgid "Artifacts"
-msgstr "Артефакти"
-
 msgid "Town/Castle"
 msgstr "Град/Замък"
 
@@ -7286,9 +7399,6 @@ msgstr "Гарнизон"
 
 msgid "Gold Per Day:"
 msgstr "Злато на ден:"
-
-msgid "Heroes"
-msgstr "Герой"
 
 msgid "View Heroes."
 msgstr "Виж геройте"
