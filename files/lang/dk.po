@@ -6336,7 +6336,6 @@ msgstr ""
 
 msgid "Identify Hero"
 msgstr "Identificer helt"
-"
 
 msgid "The creatures are willing to join us!"
 msgstr ""
