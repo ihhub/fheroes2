@@ -257,10 +257,8 @@ bool Settings::Read( const std::string & filePath )
     }
 
     // window position
-    if ( config.Exists( "window position" ) ) {
-        fheroes2::Point center_position = LocalEvent::getCenterPosition();
-        _windowPosition = config.PointParams( "window position", center_position );
-    }
+    fheroes2::Point center_position = LocalEvent::getCenterPosition();
+    _windowPosition = config.PointParams( "window position", center_position );
 
     if ( config.Exists( "controller pointer speed" ) ) {
         _controllerPointerSpeed = std::clamp( config.IntParams( "controller pointer speed" ), 0, 100 );
