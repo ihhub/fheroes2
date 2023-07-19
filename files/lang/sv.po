@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-19 05:56+0000\n"
-"PO-Revision-Date: 2022-10-25 08:57+0200\n"
+"PO-Revision-Date: 2023-07-19 17:11+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CP1254\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.3.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -83,7 +83,7 @@ msgid "EXIT"
 msgstr "LÄMNA"
 
 msgid "DISMISS"
-msgstr "SPARKA"
+msgstr "AVSKEDA"
 
 msgid "UPGRADE"
 msgstr "UPPG."
@@ -140,7 +140,7 @@ msgid ""
 msgstr "MULTIPLAYSPEL"
 
 msgid "CONFIG"
-msgstr "ANPASSA"
+msgstr "KONFIGURERA"
 
 msgid ""
 "ORIGINAL\n"
@@ -1551,177 +1551,134 @@ msgstr "Thundax"
 msgid "campaignBonus|Traveler's Boots"
 msgstr ""
 
-#, fuzzy
 msgid "campaignBonus|White Pearl"
-msgstr "Vit pärla"
+msgstr "Vit Pärla"
 
-#, fuzzy
 msgid "campaignBonus|Basic Archery"
-msgstr "Svart pärla"
+msgstr "Basalt Skytte"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Archery"
-msgstr "Avancerat bågskytte"
+msgstr "Avancerat Skytte"
 
-#, fuzzy
 msgid "campaignBonus|Expert Archery"
-msgstr "Thundax"
+msgstr "Expert Skytte"
 
-#, fuzzy
 msgid "campaignBonus|Basic Ballistics"
-msgstr "Svart pärla"
+msgstr "Basal Ballistik"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Ballistics"
-msgstr "Nomader"
+msgstr "Avancerad Ballistik"
 
-#, fuzzy
 msgid "campaignBonus|Expert Ballistics"
-msgstr "Thundax"
+msgstr "Expert Ballistik"
 
-#, fuzzy
 msgid "campaignBonus|Basic Diplomacy"
-msgstr "Bröstharnesk"
+msgstr "Basal Diplomati"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Diplomacy"
-msgstr "Ge liv åt död"
+msgstr "Avancerad Diplomati"
 
-#, fuzzy
 msgid "campaignBonus|Expert Diplomacy"
-msgstr "Bröstharnesk"
+msgstr "Expert Diplomati"
 
-#, fuzzy
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Svart pärla"
+msgstr "Basal Falkblick"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr "Ge liv åt död"
+msgstr "Avancerad Falkblick"
 
-#, fuzzy
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr "Thundax"
+msgstr "Expert Falkblick"
 
-#, fuzzy
 msgid "campaignBonus|Basic Estates"
-msgstr "Bröstharnesk"
+msgstr "Basala Ägor"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Estates"
-msgstr "Bröstharnesk"
+msgstr "Avancerade Ägor"
 
-#, fuzzy
 msgid "campaignBonus|Expert Estates"
-msgstr "Bröstharnesk"
+msgstr "Expert Ägor"
 
-#, fuzzy
 msgid "campaignBonus|Basic Leadership"
-msgstr "Svart pärla"
+msgstr "Basalt Ledarskap"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Leadership"
-msgstr "Ge liv åt död"
+msgstr "Avancerat Ledarskap"
 
-#, fuzzy
 msgid "campaignBonus|Expert Leadership"
-msgstr "Professionellt ledarskap"
+msgstr "Expert Ledarskap"
 
-#, fuzzy
 msgid "campaignBonus|Basic Logistics"
-msgstr "Nomader"
+msgstr "Basal Logistik"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Logistics"
-msgstr "Avancerad logistik"
+msgstr "Avancerad Logistik"
 
-#, fuzzy
 msgid "campaignBonus|Expert Logistics"
-msgstr "Professionell logistik"
+msgstr "Expert Logistik"
 
-#, fuzzy
 msgid "campaignBonus|Basic Luck"
-msgstr "Svart pärla"
+msgstr "Basal Tur"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Luck"
-msgstr "Ge liv åt död"
+msgstr "Avancerad Tur"
 
-#, fuzzy
 msgid "campaignBonus|Expert Luck"
-msgstr "Thundax"
+msgstr "Expert Tur"
 
-#, fuzzy
 msgid "campaignBonus|Basic Mysticism"
-msgstr "Svart pärla"
+msgstr "Basal Mystik"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Mysticism"
-msgstr "Nomader"
+msgstr "Avancerad Mystik"
 
-#, fuzzy
 msgid "campaignBonus|Expert Mysticism"
-msgstr "Thundax"
+msgstr "Expert Mystik"
 
-#, fuzzy
 msgid "campaignBonus|Basic Navigation"
-msgstr "Grundläggande navigering"
+msgstr "Basal Navigering"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Navigation"
-msgstr "Avancerad navigering"
+msgstr "Avancerad Navigering"
 
-#, fuzzy
 msgid "campaignBonus|Expert Navigation"
-msgstr "Professionell navigering"
+msgstr "Expert Navigering"
 
-#, fuzzy
 msgid "campaignBonus|Basic Necromancy"
-msgstr "Svart pärla"
+msgstr "Basal Svartkonst"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Necromancy"
-msgstr "Ge liv åt död"
+msgstr "Avancerad Svartkonst"
 
-#, fuzzy
 msgid "campaignBonus|Expert Necromancy"
-msgstr "Visa hjältar"
+msgstr "Expert Svartkonst"
 
-#, fuzzy
 msgid "campaignBonus|Basic Pathfinding"
-msgstr "Svart pärla"
+msgstr "Basal Vägvisning"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr "Avancerad vägledning"
+msgstr "Avancerad Vägvisning"
 
-#, fuzzy
 msgid "campaignBonus|Expert Pathfinding"
-msgstr "Professionell vägledning"
+msgstr "Expert Vägvisning"
 
-#, fuzzy
 msgid "campaignBonus|Basic Scouting"
-msgstr "Vit pärla"
+msgstr "Basal Spaning"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Scouting"
-msgstr "Nomader"
+msgstr "Avancerad Spaning"
 
-#, fuzzy
 msgid "campaignBonus|Expert Scouting"
-msgstr "Vit pärla"
+msgstr "Expert Spaning"
 
-#, fuzzy
 msgid "campaignBonus|Basic Wisdom"
-msgstr "Svart pärla"
+msgstr "Basal Visdom"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Wisdom"
-msgstr "Ge liv åt död"
+msgstr "Avancerad Visdom"
 
-#, fuzzy
 msgid "campaignBonus|Expert Wisdom"
-msgstr "Spikad sköld"
+msgstr "Expert Visdom"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -2627,17 +2584,16 @@ msgid "Are you sure you want to dismiss this army?"
 msgstr "Är du säker på att du vill avskeda denna armé?"
 
 msgid "Upgrade"
-msgstr ""
+msgstr "Uppgradera"
 
-#, fuzzy
 msgid "Upgrade your troops."
-msgstr "Du har inte råd att upgradera dina trupper!"
+msgstr "Uppgradera dina trupper."
 
 msgid "Dismiss"
-msgstr ""
+msgstr "Avskeda"
 
 msgid "Dismiss this army."
-msgstr ""
+msgstr "Avskeda armén."
 
 msgid "Followers"
 msgstr "Anhängare"
@@ -3341,7 +3297,7 @@ msgid "Battles"
 msgstr "Strider"
 
 msgid "autoBattle|Manual"
-msgstr ""
+msgstr "Manuell"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Ändra hastigheten för dina hjältars rörelser på kartan."
@@ -3443,81 +3399,73 @@ msgstr "Personlighet:"
 msgid "Best Monster:"
 msgstr "Bästa Monster:"
 
-#, fuzzy
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
 msgstr ""
-"Är du säker på att du vill ladda ett nytt spel? (Ditt nuvarande spel kommer "
+"Är du säker på att du vill ladda en ny karta? (Din nuvarande karta kommer "
 "att försvinna.)"
 
-#, fuzzy
 msgid ""
 "Are you sure you want to create a new map? (Any unsaved changes to the "
 "current map will be lost.)"
 msgstr ""
-"Är du säker på att du vill ladda ett nytt spel? (Ditt nuvarande spel kommer "
-"att försvinna.)"
+"Är du säker på att du skapa en ny karta? (Din nuvarande karta kommer att "
+"försvinna.)"
 
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
+"Skapa ny karta, antingen en blank karta eller genom att använda "
+"kartgeneratorn."
 
-#, fuzzy
 msgid "New Map"
-msgstr "New Dawn"
+msgstr "Ny Karta"
 
-#, fuzzy
 msgid "Load Map"
-msgstr "Ladda Spel"
+msgstr "Ladda Karta"
 
 msgid "Load an existing map."
-msgstr ""
+msgstr "Ladda en karta."
 
-#, fuzzy
 msgid "Save Map"
-msgstr "Spara Spel"
+msgstr "Spara Karta"
 
-#, fuzzy
 msgid "Save the current map."
-msgstr "Spara nuvarande spel."
+msgstr "Spara nuvarande karta"
 
 msgid "Quit out of the map editor."
-msgstr ""
+msgstr "Lämna kartredigeraren."
 
 msgid "Ocean Objects"
-msgstr ""
+msgstr "Havsföremål"
 
 msgid "Grass Objects"
-msgstr ""
+msgstr "Gräsföremål"
 
-#, fuzzy
 msgid "Snow Objects"
-msgstr "Inget Objekt"
+msgstr "Snöföremål"
 
 msgid "Swamp Objects"
-msgstr ""
+msgstr "Träskföremål"
 
 msgid "Lava Objects"
-msgstr ""
+msgstr "Lavaföremål"
 
-#, fuzzy
 msgid "Desert Objects"
-msgstr "Ökentält"
+msgstr "Ökenföremål"
 
 msgid "Dirt Objects"
-msgstr ""
+msgstr "Jordföremål"
 
-#, fuzzy
 msgid "Wasteland Objects"
-msgstr "Ödemark"
+msgstr "Ödemarksföremål"
 
 msgid "Beach Objects"
-msgstr ""
+msgstr "Strandföremål"
 
-#, fuzzy
 msgid "Towns"
-msgstr "Stad"
+msgstr "Städer"
 
 msgid "Heroes"
 msgstr "Hjältar"
@@ -3525,43 +3473,43 @@ msgstr "Hjältar"
 msgid "Artifacts"
 msgstr "Artefakter"
 
-#, fuzzy
 msgid "Treasures"
-msgstr "Skatt"
+msgstr "Skatter"
 
 msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
 msgstr ""
+"Ritar terräng i\n"
+"rutstorlek om %{size} gånger %{size}."
 
 msgid ""
 "Erases objects in\n"
 "%{size} by %{size} square increments."
 msgstr ""
+"Raderar terräng i\n"
+"rutstorlek om %{size} gånger %{size}."
 
-#, fuzzy
 msgid "Small Brush"
-msgstr "Små Kartor"
+msgstr "Liten Pensel"
 
-#, fuzzy
 msgid "Medium Brush"
-msgstr "Medelstora Kartor"
+msgstr "Medelstora Pensel"
 
-#, fuzzy
 msgid "Large Brush"
-msgstr "Stora Kartor"
+msgstr "Stor Pensel"
 
 msgid "Area Fill"
-msgstr ""
+msgstr "Fyll område"
 
 msgid "Used to click and drag for filling in large areas."
-msgstr ""
+msgstr "Används för att klicka och dra för att fylla stora områden."
 
 msgid "Clear Area"
-msgstr ""
+msgstr "Rensa område"
 
 msgid "Used to click and drag for clearing large areas."
-msgstr ""
+msgstr "Används för att klicka och dra för rensa stora områden."
 
 msgid ""
 "Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
@@ -3569,7 +3517,7 @@ msgid ""
 msgstr ""
 
 msgid "Traversable only by boat."
-msgstr ""
+msgstr "Endast farbar med skepp."
 
 msgid "No special modifiers."
 msgstr ""
@@ -3580,103 +3528,97 @@ msgstr ""
 msgid ""
 "Used to place\n"
 "a town or castle."
-msgstr ""
+msgstr "Använda för att placera en stad eller slott."
 
 msgid ""
 "Used to place\n"
 "a monster group."
-msgstr ""
+msgstr "Använda för att placera en grupp monster."
 
 msgid "Used to place a hero."
-msgstr ""
+msgstr "Använda för att placera en hjälte."
 
-#, fuzzy
 msgid "Used to place an artifact."
-msgstr "Hitta den Främsta Artefakten."
+msgstr "Används för att placera en artefakt."
 
 msgid ""
 "Used to place\n"
 "a resource or treasure."
-msgstr ""
+msgstr "Använda för att placera en resurs eller skatt."
 
 msgid "Terrain Mode"
-msgstr ""
+msgstr "Terrängläge"
 
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
-msgstr ""
+msgstr "Används för att rita terrängen så som gräs, jord, hav osv på kartan."
 
 msgid "Object Mode"
-msgstr ""
+msgstr "Föremålsläge"
 
 msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
-msgstr ""
+msgstr "Används för att placera föremål (berg, träd, skatter, osv) på kartan."
 
 msgid "Detail Mode"
-msgstr ""
+msgstr "Detaljläge"
 
-#, fuzzy
 msgid "Used for special editing of monsters, heroes and towns."
-msgstr "Besegra alla fiendehjältar och städer."
+msgstr "Används för att redigera varelser, hjältar och städer."
 
 msgid "Allows you to draw streams by clicking and dragging."
-msgstr ""
+msgstr "Används för att dra älvar genom att klicka och dra."
 
 msgid "Stream Mode"
-msgstr ""
+msgstr "Älvläge"
 
 msgid "Allows you to draw roads by clicking and dragging."
-msgstr ""
+msgstr "Används för att dra vägar genom att klicka och dra."
 
-#, fuzzy
 msgid "Road Mode"
-msgstr "Väg"
+msgstr "Vägläge"
 
 msgid "Erase Mode"
-msgstr ""
+msgstr "Raderarläge"
 
 msgid "Used to erase objects off the map."
-msgstr ""
+msgstr "Använda för att radera föremål från kartan."
 
 msgid "Change between zoom and normal view."
-msgstr ""
+msgstr "Ändra mellan inzoomad vy eller normal vy."
 
 msgid "Magnify"
-msgstr ""
+msgstr "Förstora"
 
 msgid "Undo"
-msgstr ""
+msgstr "Ångra"
 
 msgid "Undo your last action. Press again to redo the action."
-msgstr ""
+msgstr "Ångra sin senaste händelse. Klicka igen för att ångra dig igen."
 
 msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
+msgstr "Skapa en ny blank karta eller en slumpad karta med kartgeneratorn."
 
 msgid "Edit map title, description, and other general information."
-msgstr ""
+msgstr "Redigera karttiteln, beskrivning och annan information."
 
-#, fuzzy
 msgid "Specifications"
-msgstr "Förstening"
+msgstr "Specifikationer"
 
 msgid "File Options"
 msgstr "Filalternativ"
 
-#, fuzzy
 msgid ""
 "Open the file options menu, where you can save or load maps, or quit out of "
 "the editor."
 msgstr ""
-"Tar fram filalternativsmenyn som låter dig ladda, spara, starta ett nytt "
-"spel eller avsluta."
+"Tar fram filalternativsmenyn som låter dig spara eller ladda kartor eller "
+"lämna kartredigeraren."
 
-#, fuzzy
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
-"Tar fram systemalternativsmenyn som låter dig skräddarsy ditt spelande."
+"Tar fram systemalternativsmenyn som låter dig skräddarsy kartredigeraren."
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr ""
+msgstr "Skapa en karta som är %{size} rutor bred och %{size} rutor hög."
 
 #, fuzzy
 msgid "Cancel back to the New Map menu."
@@ -3686,21 +3628,19 @@ msgid "Cancel back to the main menu."
 msgstr "Avbryt och gå tillbaka till huvudmenyn."
 
 msgid "From Scratch"
-msgstr ""
+msgstr "Blank karta"
 
 msgid "Start from scratch with a blank map."
-msgstr ""
+msgstr "Starta med en blank karta."
 
 msgid "Create a randomly generated map."
-msgstr ""
+msgstr "Skapa en slumpmässigt genererad karta."
 
-#, fuzzy
 msgid "Random"
 msgstr "Slumpad"
 
-#, fuzzy
 msgid "Cancel back to the Map Editor main menu."
-msgstr "Avbryt och gå tillbaka till huvudmenyn."
+msgstr "Avbryt och gå tillbaka till kartredigerarens huvudmeny."
 
 msgid "No maps available!"
 msgstr "Inga kartor tillgängliga!"
@@ -3746,25 +3686,31 @@ msgid ""
 "with normal difficulty."
 msgstr ""
 
-#, fuzzy
 msgid ""
 "Congratulations!\n"
 "\n"
 "Days: %{days}\n"
-msgstr "Gratulerar!"
+msgstr ""
+"Gratulerar!\n"
+"\n"
+"Dagar: %{days}\n"
 
 msgid ""
 "\n"
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
+"\n"
+"Svårtighetsgrad: %{difficulty}\n"
+"\n"
 
+#, fuzzy
 msgid ""
 "Score: %{score}\n"
 "\n"
 "Rating:\n"
 "%{rating}"
-msgstr ""
+msgstr "Poängställning: %{score}\n"
 
 msgid "Start the selected scenario."
 msgstr "Börja valt scenerio"
@@ -3775,11 +3721,12 @@ msgstr "Visa Intro"
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Visa introvideor för nuvarande kampanjkarta."
 
-#, fuzzy
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
 "campaign."
-msgstr "Välj kampanjsvårighet. Kan inte ändras senare."
+msgstr ""
+"Välj kampanjsvårighet. Kan sänkas till en lägre svårighetsgrad senare i "
+"kampanjen."
 
 msgid "Restart"
 msgstr "Omstart"
@@ -3845,7 +3792,7 @@ msgid "local-donation-platform|https://www.patreon.com/fheroes2"
 msgstr ""
 
 msgid "Connect with us at"
-msgstr ""
+msgstr "Kontakta oss på"
 
 msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
 msgstr ""
@@ -3869,7 +3816,7 @@ msgid "Executive Producer"
 msgstr ""
 
 msgid "Producer"
-msgstr ""
+msgstr "Producent"
 
 msgid "Additional Design"
 msgstr ""
@@ -3878,14 +3825,13 @@ msgid "Additional Programming"
 msgstr ""
 
 msgid "Musical Production"
-msgstr ""
+msgstr "Musikproduktion"
 
 msgid "Music and Sound Design"
 msgstr ""
 
-#, fuzzy
 msgid "Vocalists"
-msgstr "Ballistik"
+msgstr "Vocalister"
 
 msgid "Art Director"
 msgstr ""
@@ -3928,9 +3874,8 @@ msgstr ""
 msgid "Art Lead"
 msgstr ""
 
-#, fuzzy
 msgid "Playtesters"
-msgstr "2 Spelare"
+msgstr "Testspelare"
 
 msgid "Designer"
 msgstr ""
@@ -3943,11 +3888,10 @@ msgid "QA Managers"
 msgstr "Vandringsmän"
 
 msgid "Sound Design"
-msgstr ""
+msgstr "Ljuddesign"
 
-#, fuzzy
 msgid "Town Themes"
-msgstr "Stadsport"
+msgstr "Stadsteman"
 
 msgid "Alto Sax"
 msgstr ""
@@ -3971,7 +3915,7 @@ msgid "German Consultant"
 msgstr ""
 
 msgid "Map Designers"
-msgstr ""
+msgstr "Kartkreatörer"
 
 msgid "Package Design"
 msgstr ""
@@ -4079,21 +4023,17 @@ msgstr "Välj expansionskampanj"
 msgid "hotkey|map editor main menu"
 msgstr "Kampanjspel"
 
-#, fuzzy
 msgid "hotkey|new map menu"
-msgstr "Nytt spel"
+msgstr "Nytt karta"
 
-#, fuzzy
 msgid "hotkey|load map menu"
-msgstr "Ladda spel"
+msgstr "Ladda karta"
 
-#, fuzzy
 msgid "hotkey|new map from scratch"
-msgstr "Kartvy: Sydost"
+msgstr "Ny blank karta"
 
-#, fuzzy
 msgid "hotkey|new random map"
-msgstr "Nytt spel"
+msgstr "Ny slumpad karta"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"
@@ -4248,9 +4188,8 @@ msgstr ""
 msgid "hotkey|finish the battle in auto mode"
 msgstr "Låt datorn fortsätta striden"
 
-#, fuzzy
 msgid "hotkey|battle options"
-msgstr "Slottalternativ"
+msgstr "Stridsalternativ"
 
 msgid "hotkey|skip turn in battle"
 msgstr "Hoppa över runda i strid"
@@ -4312,9 +4251,8 @@ msgstr "Anslut trupper"
 msgid "hotkey|upgrade troop"
 msgstr "Uppgradera trupp"
 
-#, fuzzy
 msgid "hotkey|dismiss hero or troop"
-msgstr "Avskeda trupp"
+msgstr "Avskeda hjälte eller varelse"
 
 msgid "The save file is corrupted."
 msgstr "Sparfilen är korrupt."
@@ -4383,17 +4321,18 @@ msgstr "fheroes2 Resurrection Team presenterar"
 msgid "Greetings!"
 msgstr "Inställningar"
 
-#, fuzzy
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
-msgstr "Avsluta fheroes2 och återgå till operativsystemet."
+msgstr "Välkommen till Heroes of Might and Magic II genom fheroes2 spelmotor!"
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
 "starting the game please choose game resolution."
 msgstr ""
+"Välkommen till Heroes of Might and Magic II genom fhereos2 spelmotor. Välj "
+"spelupplösning innan du börjar spelet."
 
 msgid "Please Remember"
-msgstr ""
+msgstr "Kom ihåg"
 
 msgid "You can always change game resolution by clicking on the "
 msgstr "Du kan alltid ändra spelupplösning genom att klicka på "
@@ -4409,9 +4348,8 @@ msgstr ""
 " på vänstersida om huvudmenyn eller genom att klicka på Anpassaknappen.\n"
 "Lycka till!"
 
-#, fuzzy
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
-msgstr "Avsluta fheroes2 och återgå till operativsystemet."
+msgstr "Avsluta Heroes of Might and Magic II och återgå till operativsystemet."
 
 msgid "Credits"
 msgstr "Tack till"
@@ -4451,7 +4389,7 @@ msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
 
 msgid "Loading video. Please wait..."
-msgstr ""
+msgstr "Laddar film. Vänta..."
 
 msgid "Host"
 msgstr "Värd"
@@ -4610,11 +4548,10 @@ msgstr "Besegra alla fiendehjältar och inta alla fiendestäder och slott."
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr "Få slut på tid. (Misslyckas att vinna vid en bestämd punkt.)"
 
-#, fuzzy
 msgid "You must defeat the enemy %{enemies}."
 msgid_plural "You must defeat the enemy alliance of %{enemies}."
-msgstr[0] "Besegra hjälten '%{name}'."
-msgstr[1] "Besegra hjälten '%{name}'."
+msgstr[0] "Du måste besegra fienden %{enemies}."
+msgstr[1] "Du måste besegra fienderna %{enemies}."
 
 msgid ""
 "The alliance consisting of %{allies} and you must defeat the enemy "
@@ -4746,7 +4683,7 @@ msgid " All dwellings increase population."
 msgstr " Alla bostäder höjer folkmängden."
 
 msgid "New Week!"
-msgstr ""
+msgstr "Ny Vecka!"
 
 msgid "Beware!"
 msgstr ""
@@ -4800,9 +4737,8 @@ msgstr "Herr Gallanth"
 msgid "Thundax"
 msgstr "Thundax"
 
-#, fuzzy
 msgid "Lord Haart"
-msgstr "Lord Halton"
+msgstr "Lord Haart"
 
 msgid "Ariel"
 msgstr "Ariel"
@@ -5302,6 +5238,8 @@ msgstr " ger dig maximalt med tur"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr ""
+"Hjälten kan inte plocka upp denna artefakten. Hjälten har redan full "
+"packning!"
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr ""
@@ -5335,6 +5273,8 @@ msgid ""
 "The %{monster}, awed by the power of your forces, begin to scatter.\n"
 "Do you wish to pursue and engage them?"
 msgstr ""
+"Varelserna rädda för din armés styrka börjar skingras.\n"
+"Vill du förfölja och strida mot dem?"
 
 msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
 msgstr ""
@@ -5685,7 +5625,6 @@ msgstr ""
 "gravarna och hittar ingenting! En sådan föraktlig handling reducerar din "
 "armés moral."
 
-#, fuzzy
 msgid "Upon defeating the Zombies you search the graves and find something!"
 msgstr ""
 "Medan du besegrar Zombierna söker du igenom gravarna och hittar någonting!"
@@ -6460,7 +6399,6 @@ msgstr ""
 "När sirenerna sjunger sin spökliga sång lyckas din din lilla beslutsamma "
 "armé överkomma uppmaningen att dyka med huvudet först i havet."
 
-#, fuzzy
 msgid ""
 "An eerie wailing song emanates from the sirens perched upon the rocks. Many "
 "of your crew fall under its spell, and dive into the water where they drown. "
@@ -6588,11 +6526,10 @@ msgid "The spell was not found."
 msgstr "Den besvärjelsen kommer inte att påverka någon!"
 
 msgid "Only heroes can cast this spell."
-msgstr ""
+msgstr "Endast hjältar kan kasta denna besvärjelsen."
 
-#, fuzzy
 msgid "This hero is not able to cast adventure spells."
-msgstr "Kasta en kartbesvärjelse."
+msgstr "Hjälten kan inte kasta kartbesvärjelser."
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
@@ -6612,9 +6549,8 @@ msgid ""
 "this spell."
 msgstr ""
 
-#, fuzzy
 msgid "There is no more boat available to cast this spell."
-msgstr "Kasta en kartbesvärjelse."
+msgstr "Det finns inget tillgängligt skepp för att kasta denna besvärjelsen."
 
 msgid "There is no free ocean location near the hero to cast this spell."
 msgstr ""
@@ -6670,6 +6606,9 @@ msgid ""
 "There are already at least as many elementals guarding the mine than the "
 "spell can generate. Casting this spell will not bring any advantage."
 msgstr ""
+"Det finns redan minst så många Andar som vaktar gruvan som besvärjelsen kan "
+"frambringa. Att kasta denne besvärjelsen kommer inte ge någon ytterligare "
+"fördel."
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race}n %{name} (Nivå %{level})"
@@ -6858,13 +6797,13 @@ msgid "Estates"
 msgstr "Ägor"
 
 msgid "Advanced Archery"
-msgstr "Avancerat Bågskytte"
+msgstr "Avancerat Skytte"
 
 msgid "Advanced Pathfinding"
 msgstr "Avancerad Vägvisning"
 
 msgid "Basic Archery"
-msgstr "Basalt Bågskytte"
+msgstr "Basalt Skytte"
 
 msgid "Basic Pathfinding"
 msgstr "Basal Vägvisning"
@@ -6882,7 +6821,7 @@ msgid "Basic Scouting"
 msgstr "Basal Spaning"
 
 msgid "Expert Archery"
-msgstr "Expert Bågskytte"
+msgstr "Expert Skytte"
 
 msgid "Expert Logistics"
 msgstr "Expert Logistik"
@@ -9223,7 +9162,7 @@ msgstr ""
 "upp hatten, borstar den rent från smuts och sätter den på ditt huvud."
 
 msgid "Power Ring"
-msgstr ""
+msgstr "Kraftring"
 
 msgid "The %{name} returns %{count} extra spell points per day to your hero."
 msgstr ""
@@ -10008,7 +9947,7 @@ msgid "Disrupting Ray"
 msgstr ""
 
 msgid "Reduces the defense rating of an enemy unit by three."
-msgstr ""
+msgstr "Sänker varelsens försvarsförmåga med tre enheter."
 
 msgid "Damages all living (non-undead) units in the battle."
 msgstr "Skadar alla levande (icke-odöda) varelser på slagfältet."
@@ -10053,7 +9992,7 @@ msgid ""
 "if it takes any damage."
 msgstr ""
 "Skapar en illusorisk enhet som duplicerar en av dina existerande enheter. "
-"Denna illusoriska enhet tar lika mycket skada som originalet, men försvinner "
+"Denna illusoriska enhet ger lika mycket skada som originalet, men försvinner "
 "om de tar skada."
 
 msgid "Halves damage received from ranged attacks for a single unit."
@@ -10151,6 +10090,8 @@ msgid ""
 "location.  A friendly boat is one which you just built or were the most "
 "recent player to occupy."
 msgstr ""
+"Framkallar närmsta lediga skepp till en närliggande strand. Bara skepp som "
+"du nyligen byggt eller var den senaste att kontrollera kan framkallas."
 
 msgid "Allows the caster to magically transport to a nearby location."
 msgstr "Låter kastaren magiskt transportera sig till en närliggande plats."
@@ -10264,7 +10205,7 @@ msgstr ""
 "%{count} %{monster}."
 
 msgid "This spell restores %{hp} HP."
-msgstr ""
+msgstr "Denna besvärjelse återställer %{hp} hälsopoäng."
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
 msgstr "Denna besvärjelse framkallar %{count} %{monster} för att vakta gruvan."
@@ -10279,6 +10220,8 @@ msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
 msgstr ""
+"Denna besvärjelse kontrollerar upp till\n"
+"%{hp} hälsopoäng."
 
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Den Främsta Artefakten är %{name}."
