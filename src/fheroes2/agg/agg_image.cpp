@@ -1463,7 +1463,7 @@ namespace fheroes2
                     _icnVsSprite[id][1] = GetICN( ICN::WELLXTRA, 1 );
                     break;
                 }
-                fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "guildWell|EXIT" ), ICN::EMPTY_GUILDWELL_BUTTON );
+                fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), ICN::EMPTY_GUILDWELL_BUTTON );
 
                 break;
             }
