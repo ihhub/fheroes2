@@ -48,6 +48,10 @@ namespace fheroes2
     std::string getSpellDescription( const Spell & spell, const HeroBase * hero );
 
     int32_t getPossibleBoatPosition( const Heroes & hero );
+
+    int32_t getSummonableBoat( const Heroes & hero );
+
+    bool isHeroNearWater( const Heroes & hero );
 }
 
 #endif

@@ -87,7 +87,7 @@ fheroes2::GameMode Dialog::FileOptions()
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) ) {
-            if ( Interface::Basic::Get().EventNewGame() == fheroes2::GameMode::NEW_GAME ) {
+            if ( Interface::AdventureMap::Get().EventNewGame() == fheroes2::GameMode::NEW_GAME ) {
                 result = fheroes2::GameMode::NEW_GAME;
                 break;
             }
@@ -98,7 +98,7 @@ fheroes2::GameMode Dialog::FileOptions()
                                        fheroes2::Text( _( "No save files to load." ), fheroes2::FontType::normalWhite() ), Dialog::OK );
             }
             else {
-                result = Interface::Basic::Get().EventLoadGame();
+                result = Interface::AdventureMap::Get().EventLoadGame();
                 break;
             }
         }
@@ -106,10 +106,10 @@ fheroes2::GameMode Dialog::FileOptions()
             // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
             back.restore();
 
-            return Interface::Basic::Get().EventSaveGame();
+            return Interface::AdventureMap::Get().EventSaveGame();
         }
         else if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
-            if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+            if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 result = fheroes2::GameMode::QUIT_GAME;
                 break;
             }

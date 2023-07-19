@@ -219,10 +219,9 @@ Heroes::Heroes( int heroid, int rc )
 {
     name = _( Heroes::GetName( heroid ) );
 
-    // set default army
     army.Reset( true );
 
-    // extra hero
+    // Extra Debug Hero
     switch ( hid ) {
     case DEBUG_HERO:
         army.Clean();
@@ -244,9 +243,11 @@ Heroes::Heroes( int heroid, int rc )
         experience = 777;
         magic_point = 120;
 
-        // all spell in magic book
-        for ( int32_t spell = Spell::FIREBALL; spell < Spell::RANDOM; ++spell )
-            AppendSpellToBook( Spell( spell ), true );
+        // This hero has all the spells in his spell book
+        for ( const int spellId : Spell::getAllSpellIdsSuitableForSpellBook() ) {
+            AppendSpellToBook( Spell( spellId ), true );
+        }
+
         break;
 
     default:
@@ -993,16 +994,18 @@ bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
     const int32_t index = tile.GetIndex();
     const MP2::MapObjectType objectType = tile.GetObject( false );
 
-    if ( Visit::GLOBAL == type )
+    if ( Visit::GLOBAL == type ) {
         return GetKingdom().isVisited( index, objectType );
+    }
 
     return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( index, objectType ) );
 }
 
 bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::type_t type ) const
 {
-    if ( Visit::GLOBAL == type )
+    if ( Visit::GLOBAL == type ) {
         return GetKingdom().isVisited( objectType );
+    }
 
     return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
@@ -1016,7 +1019,7 @@ void Heroes::SetVisited( int32_t index, Visit::type_t type )
         GetKingdom().SetVisited( index, objectType );
     }
     else if ( !isVisited( tile ) && MP2::OBJ_NONE != objectType ) {
-        visit_object.push_front( IndexObject( index, objectType ) );
+        visit_object.emplace_front( index, objectType );
     }
 }
 
@@ -1062,7 +1065,7 @@ void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectT
 void Heroes::markHeroMeeting( int heroID )
 {
     if ( heroID < UNKNOWN && !hasMetWithHero( heroID ) )
-        visit_object.push_front( IndexObject( heroID, MP2::OBJ_HEROES ) );
+        visit_object.emplace_front( heroID, MP2::OBJ_HEROES );
 }
 
 void Heroes::unmarkHeroMeeting()
@@ -1486,8 +1489,6 @@ int Heroes::getNumOfTravelDays( int32_t dstIdx ) const
     const std::list<Route::Step> routePath = world.getPath( *this, dstIdx );
 
     if ( routePath.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_TRACE, "unreachable point: " << dstIdx )
-
         return 0;
     }
 

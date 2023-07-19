@@ -214,6 +214,9 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     // image background
     fheroes2::drawMainMenuScreen();
     if ( isFirstGameRun ) {
+        // Fade in Main Menu image before showing messages. This also resets the "need fade" state to have no fade-in after these messages.
+        fheroes2::validateFadeInAndRender();
+
         fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
         if ( System::isHandheldDevice() ) {
@@ -295,7 +298,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
     while ( true ) {
         if ( !le.HandleEvents( true, true ) ) {
-            if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+            if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 break;
             }
             else {
@@ -352,7 +355,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         }
 
         if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonQuit.area() ) ) {
-            if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+            if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 return fheroes2::GameMode::QUIT_GAME;
             }
         }

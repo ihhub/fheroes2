@@ -698,7 +698,10 @@ void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotFor
 
     // First check if the weakest troop is actually worth to keep.
     const double weakestStrength = weakest->GetStrength();
-    const double totalArmyStrength = GetStrength();
+    const double totalArmyStrength = Troops::GetStrength();
+
+    assert( totalArmyStrength >= weakestStrength );
+
     // The weakest army should not be more than 5% from the overall army strength.
     const double strengthLimit = totalArmyStrength / 20;
 
@@ -1457,17 +1460,18 @@ uint32_t Army::ActionToSirens() const
     return experience;
 }
 
-bool Army::isStrongerThan( const Army & target, double safetyRatio ) const
+bool Army::isStrongerThan( const Army & target, double safetyRatio /* = 1.0 */ ) const
 {
-    if ( !target.isValid() )
+    if ( !target.isValid() ) {
         return true;
+    }
 
-    const double str1 = GetStrength();
-    const double str2 = target.GetStrength() * safetyRatio;
+    const double armyStrength = Army::GetStrength();
+    const double targetStrength = target.GetStrength() * safetyRatio;
 
-    DEBUG_LOG( DBG_GAME, DBG_TRACE, "Comparing troops: " << str1 << " versus " << str2 )
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, "Comparing troops: " << armyStrength << " versus " << targetStrength )
 
-    return str1 > str2;
+    return armyStrength > targetStrength;
 }
 
 bool Army::isMeleeDominantArmy() const
