@@ -482,14 +482,14 @@ namespace
 
         uint8_t * imageTransform = buttonSprite.transform();
         const uint8_t transparencyValue = 1;
-        std::fill( imageTransform, imageTransform + 3, transparencyValue );
-        std::fill( imageTransform + imageWidth - 2, imageTransform + imageWidth + 2, transparencyValue );
-        std::fill( imageTransform + 2 * imageWidth - 1, imageTransform + 2 * imageWidth + 1, transparencyValue );
+        std::fill( imageTransform, imageTransform + 4, transparencyValue );
+        std::fill( imageTransform + imageWidth - 2, imageTransform + imageWidth + 3, transparencyValue );
+        std::fill( imageTransform + 2 * imageWidth - 1, imageTransform + 2 * imageWidth + 2, transparencyValue );
         *( imageTransform + 3 * imageWidth ) = transparencyValue;
         *( imageTransform + ( imageHeight - 3 ) * imageWidth - 1 ) = transparencyValue;
-        std::fill( imageTransform + ( imageHeight - 2 ) * imageWidth - 2, imageTransform + ( imageHeight - 2 ) * imageWidth - 1, transparencyValue );
-        std::fill( imageTransform + ( imageHeight - 1 ) * imageWidth - 3, imageTransform + ( imageHeight - 1 ) * imageWidth - 1, transparencyValue );
-        std::fill( imageTransform + imageHeight * imageWidth - 4, imageTransform + imageHeight * imageWidth - 1, transparencyValue );
+        std::fill( imageTransform + ( imageHeight - 2 ) * imageWidth - 2, imageTransform + ( imageHeight - 2 ) * imageWidth, transparencyValue );
+        std::fill( imageTransform + ( imageHeight - 1 ) * imageWidth - 3, imageTransform + ( imageHeight - 1 ) * imageWidth, transparencyValue );
+        std::fill( imageTransform + imageHeight * imageWidth - 4, imageTransform + imageHeight * imageWidth, transparencyValue );
     }
 }
 
