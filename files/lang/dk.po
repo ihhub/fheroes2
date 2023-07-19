@@ -2433,15 +2433,14 @@ msgid "Grouped Formation"
 msgstr ""
 
 msgid "Recruit %{name} the %{race}"
-msgstr "Rekruttér %{race}en %{name}"
+msgstr ""
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
-"Indstil garnisonen til at stå opstille sig i 'spredt' formation under kamp"
 
 msgid "Set garrison combat formation to 'Grouped'"
 msgstr ""
-"Indstil garnisonen til at stå opstille sig i 'gruppe'-formation under kamp"
+""
 
 msgid "Exit Castle Options"
 msgstr "Forlad borg-vindue"
@@ -6624,52 +6623,52 @@ msgid "Purple"
 msgstr "Lilla"
 
 msgid "barrier|Aqua"
-msgstr "Lyseblå"
+msgstr ""
 
 msgid "barrier|Blue"
-msgstr "Blå"
+msgstr ""
 
 msgid "barrier|Brown"
-msgstr "Brun"
+msgstr ""
 
 msgid "barrier|Gold"
-msgstr "Guld"
+msgstr ""
 
 msgid "barrier|Green"
-msgstr "Grøn"
+msgstr ""
 
 msgid "barrier|Orange"
-msgstr "Orange"
+msgstr ""
 
 msgid "barrier|Purple"
-msgstr "Lilla"
+msgstr ""
 
 msgid "barrier|Red"
-msgstr "Rød"
+msgstr ""
 
 msgid "tent|Aqua"
-msgstr "Lyseblåt"
+msgstr ""
 
 msgid "tent|Blue"
-msgstr "Blåt"
+msgstr ""
 
 msgid "tent|Brown"
-msgstr "Brunt"
+msgstr ""
 
 msgid "tent|Gold"
-msgstr "Guld"
+msgstr ""
 
 msgid "tent|Green"
-msgstr "Grønt"
+msgstr ""
 
 msgid "tent|Orange"
-msgstr "Orange"
+msgstr ""
 
 msgid "tent|Purple"
-msgstr "Lilla"
+msgstr ""
 
 msgid "tent|Red"
-msgstr "Rødt"
+msgstr ""
 
 msgid "Experience"
 msgstr "Erfaringspoint"
