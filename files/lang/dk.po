@@ -4542,6 +4542,7 @@ msgid "Click to accept these settings and start a new game."
 msgstr "Klik for at acceptere disse indstillinger og start et nyt spil."
 
 msgid "Click to return to the main menu."
+msgstr ""
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr ""
