@@ -26,6 +26,7 @@
 #include <fstream>
 #include <memory>
 #include <utility>
+
 #include <SDL2/SDL_video.h>
 
 #if defined( MACOS_APP_BUNDLE )
@@ -959,7 +960,7 @@ void Settings::SetMusicVolume( int v )
     music_volume = std::clamp( v, 0, 10 );
 }
 
-void Settings::SetWindowPosition( const fheroes2::Point& position )
+void Settings::SetWindowPosition( const fheroes2::Point & position )
 {
     _windowPosition = position;
 }

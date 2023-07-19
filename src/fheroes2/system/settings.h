@@ -212,7 +212,7 @@ public:
         return _resolutionInfo;
     }
 
-    const fheroes2::Point& getWindowPosition() const
+    const fheroes2::Point & getWindowPosition() const
     {
         return _windowPosition;
     }
@@ -257,7 +257,7 @@ public:
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
 
-    void SetWindowPosition( const fheroes2::Point& position );
+    void SetWindowPosition( const fheroes2::Point & position );
 
     void SetMusicType( int v )
     {
