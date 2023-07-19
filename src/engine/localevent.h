@@ -308,6 +308,8 @@ public:
         }
     }
 
+    static fheroes2::Point getCenterPosition();
+
 private:
     LocalEvent();
 

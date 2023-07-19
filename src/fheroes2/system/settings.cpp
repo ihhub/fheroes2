@@ -27,12 +27,6 @@
 #include <memory>
 #include <utility>
 
-#include <SDL_version.h>
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#include <SDL2/SDL_video.h>
-#endif
-
 #if defined( MACOS_APP_BUNDLE )
 #include <CoreFoundation/CoreFoundation.h>
 #endif
@@ -41,6 +35,7 @@
 #include "difficulty.h"
 #include "game.h"
 #include "gamedefs.h"
+#include "localevent.h"
 #include "logging.h"
 #include "screen.h"
 #include "serialize.h"
@@ -261,15 +256,11 @@ bool Settings::Read( const std::string & filePath )
         setFullScreen( config.StrParams( "fullscreen" ) == "on" );
     }
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     // window position
     if ( config.Exists( "window position" ) ) {
-        int default_x = SDL_WINDOWPOS_CENTERED;
-        int default_y = SDL_WINDOWPOS_CENTERED;
-
-        _windowPosition = config.PointParams( "window position", { default_x, default_y } );
+        fheroes2::Point center_position = LocalEvent::getCenterPosition();
+        _windowPosition = config.PointParams( "window position", center_position );
     }
-#endif
 
     if ( config.Exists( "controller pointer speed" ) ) {
         _controllerPointerSpeed = std::clamp( config.IntParams( "controller pointer speed" ), 0, 100 );
@@ -964,11 +955,6 @@ void Settings::SetSoundVolume( int v )
 void Settings::SetMusicVolume( int v )
 {
     music_volume = std::clamp( v, 0, 10 );
-}
-
-void Settings::SetWindowPosition( const fheroes2::Point & position )
-{
-    _windowPosition = position;
 }
 
 void Settings::SetPreferablyCountPlayers( int c )

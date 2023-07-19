@@ -257,7 +257,10 @@ public:
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
 
-    inline void SetWindowPosition( const fheroes2::Point & position );
+    inline void SetWindowPosition( const fheroes2::Point & position )
+    {
+        _windowPosition = position;
+    }
 
     void SetMusicType( int v )
     {

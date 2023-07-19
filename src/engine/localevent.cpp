@@ -1435,6 +1435,18 @@ bool LocalEvent::HandleActiveEvent( const SDL_ActiveEvent & event )
 }
 #endif
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+fheroes2::Point LocalEvent::getCenterPosition()
+{
+    return fheroes2::Point(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+}
+#else
+fheroes2::Point LocalEvent::getCenterPosition()
+{
+    return fheroes2::Point(-1, -1);
+}
+#endif
+
 bool LocalEvent::MousePressLeft() const
 {
     return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_LEFT == mouse_button;
