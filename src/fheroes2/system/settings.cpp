@@ -44,7 +44,6 @@
 #include "translations.h"
 #include "ui_language.h"
 #include "version.h"
-
 #include <SDL2/SDL_video.h>
 
 #define STRINGIFY( DEF ) #DEF
@@ -375,7 +374,7 @@ std::string Settings::String() const
     os << "videomode = " << display.width() << "x" << display.height() << ":" << display.screenSize().width << "x" << display.screenSize().height << std::endl;
 
     os << std::endl << "# starting window position (x,y); used to maintain it between sessions" << std::endl;
-    os << "windowposition = [ " << windowPosition.x << ", " << windowPosition.y << " ]" << std::endl;
+    os << "windowposition = [ " << _windowPosition.x << ", " << _windowPosition.y << " ]" << std::endl;
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;

@@ -163,7 +163,7 @@ namespace
                 display.setResolution( bestResolution );
             }
             else {
-                fheroes2::engine().setPosition( conf.WindowPosition() );
+                fheroes2::engine().setPosition( conf.getWindowPosition() );
                 display.setResolution( conf.currentResolutionInfo() );
             }
 
