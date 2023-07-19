@@ -1515,7 +1515,7 @@ namespace fheroes2
                         pressed.reset();
 
                         Copy( originalPressed, 0, 1, pressed, 0, 1, originalPressed.width() - 1, originalPressed.height() );
-
+                        setButtonCornersTransparent( released );
                         fheroes2::makeTransparentBackground( released, pressed, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
                     }
                     // generate the DIFFICULTY button as it is not present in the original resources
@@ -1546,10 +1546,13 @@ namespace fheroes2
                         const Sprite & originalPressed = GetICN( baseIcnId, 2 * i + 1 );
                         // the released state is missing the darker borders of the pressed state
                         Copy( originalPressed, 0, 0, released, 0, 1, 1, originalPressed.height() );
+                        Copy( originalPressed, 0, 2, released, 0, originalPressed.height() - 1, 1, 2 );
                         Copy( originalPressed, 1, originalPressed.height() - 1, released, 1, originalPressed.height(), originalPressed.width(), 1 );
-                        Copy( originalPressed, 0, 2, released, 1, originalPressed.height() - 1, 1, 1 );
+                        Copy( originalPressed, 0, 2, released, 1, originalPressed.height(), 1, 1 );
                         Copy( originalReleased, 0, 2, released, 1, originalPressed.height() - 2, 1, 1 );
                         Copy( originalReleased, 0, 2, released, 2, originalPressed.height() - 1, 1, 1 );
+                        Copy( originalReleased, 0, 2, released, 1, originalPressed.height() - 1, 1, 1 );
+                        Copy( originalReleased, 1, 2, released, 2, originalPressed.height() - 2, 1, 1 );
 
                         // pressed state
                         Sprite & pressed = _icnVsSprite[id][2 * i + 1];
@@ -1557,6 +1560,10 @@ namespace fheroes2
                         pressed.reset();
 
                         Copy( originalPressed, 0, 0, pressed, 0, 1, originalPressed.width(), originalPressed.height() );
+                        // pressed state has incomplete lower left corner
+                        Copy( originalPressed, 0, 2, pressed, 0, originalPressed.height() - 1, 1, 2 );
+                        Copy( originalPressed, 0, 2, pressed, 1, originalPressed.height(), 1, 1 );
+                        Copy( originalPressed, 1, 2, pressed, 1, originalPressed.height() - 1, 1, 1 );
                         _icnVsSprite[id][2 * i + 1].setPosition( 0, 0 );
 
                         fheroes2::makeTransparentBackground( released, pressed, ICN::STONEBAK_SMALL_POL );
