@@ -208,29 +208,45 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
         fheroes2::Blit( sprite0, display, dst_pt.x + sprite0.x(), dst_pt.y + sprite0.y() );
     }
 
+    if ( Race::WZRD == castle.GetRace() ) {
+        // Wizard castle has river animation in background.
+        int riverIcnId = ICN::TWNZEXT0;
+        const uint32_t riverExtraIndex = 1 + animationIndex % 5;
+
+        fheroes2::drawCastleDialogBuilding( riverIcnId, 0, castle, dst_pt, max );
+        fheroes2::drawCastleDialogBuilding( riverIcnId, riverExtraIndex, castle, dst_pt, max );
+    }
+
     // Bay animation
-    if ( Race::WZRD == castle.GetRace() || ( !castle.isBuild( BUILD_SHIPYARD ) && castle.HaveNearlySea() ) ) {
+    if ( !castle.isBuild( BUILD_SHIPYARD ) && castle.HaveNearlySea() ) {
         int bayIcnId = 0;
+        int bayAnimationIcnId = 0;
         const uint32_t bayExtraIndex = 1 + animationIndex % 5;
 
         switch ( castle.GetRace() ) {
         case Race::KNGT:
             bayIcnId = ICN::TWNKEXT0;
+            bayAnimationIcnId = ICN::TWNKEXT0;
             break;
         case Race::BARB:
             bayIcnId = ICN::TWNBEXT0;
+            bayAnimationIcnId = ICN::TWNBEXT0;
             break;
         case Race::SORC:
             bayIcnId = ICN::TWNSEXT0;
+            bayAnimationIcnId = ICN::TWNSEXT0;
             break;
         case Race::NECR:
             bayIcnId = ICN::TWNNEXT0;
+            bayAnimationIcnId = ICN::TWNNEXT0;
             break;
         case Race::WRLK:
             bayIcnId = ICN::TWNWEXT0;
+            bayAnimationIcnId = ICN::TWNWEXT0;
             break;
         case Race::WZRD:
-            bayIcnId = ICN::TWNZEXT0;
+            bayIcnId = ICN::WIZARD_CASTLE_BAY;
+            bayAnimationIcnId = ICN::TWNZDOCK;
             break;
         default:
             // Did you add a new race? Add the logic for it!
@@ -239,7 +255,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
         }
 
         fheroes2::drawCastleDialogBuilding( bayIcnId, 0, castle, dst_pt, max );
-        fheroes2::drawCastleDialogBuilding( bayIcnId, bayExtraIndex, castle, dst_pt, max );
+        fheroes2::drawCastleDialogBuilding( bayAnimationIcnId, bayExtraIndex, castle, dst_pt, max );
     }
 
     // redraw all builds

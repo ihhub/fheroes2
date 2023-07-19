@@ -3802,6 +3802,16 @@ namespace fheroes2
                 h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
                 break;
             }
+            case ICN::WIZARD_CASTLE_BAY: {
+                _icnVsSprite[id].resize( 1 );
+                _icnVsSprite[id][0] = GetICN( ICN::TWNZDOCK, 0 );
+
+                Sprite temp;
+                h2d::readImage( "wizard_castle_bay.image", temp );
+                Blit( temp, _icnVsSprite[id][0] );
+                Save( _icnVsSprite[id][0], "result.bmp", 96 );
+                break;
+            }
             default:
                 break;
             }
