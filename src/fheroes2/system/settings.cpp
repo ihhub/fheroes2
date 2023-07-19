@@ -374,7 +374,7 @@ std::string Settings::String() const
     os << "videomode = " << display.width() << "x" << display.height() << ":" << display.screenSize().width << "x" << display.screenSize().height << std::endl;
 
     os << std::endl << "# starting window position (x,y); used to maintain it between sessions" << std::endl;
-    os << "windowposition = [ " << _windowPosition.x << ", " << _windowPosition.y << " ]" << std::endl;
+    os << "window position = [ " << _windowPosition.x << ", " << _windowPosition.y << " ]" << std::endl;
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;
