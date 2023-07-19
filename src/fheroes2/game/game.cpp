@@ -23,7 +23,6 @@
 
 #include "game.h"
 
-#include <SDL_version.h>
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -182,13 +181,11 @@ void Game::Init()
     le.setGlobalMouseMotionEventHook( Cursor::updateCursorPosition );
     le.setGlobalKeyDownEventHook( Game::globalKeyDownEvent );
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     le.setWindowMovedEventHook( []( int x, int y ) {
         Settings & conf = Settings::Get();
         conf.SetWindowPosition( { x, y } );
         conf.Save( Settings::configFileName );
     } );
-#endif
 
     Game::AnimateDelaysInitialize();
 

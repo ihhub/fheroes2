@@ -21,7 +21,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <SDL_version.h>
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
@@ -46,9 +45,7 @@
 #include "ui_language.h"
 #include "version.h"
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #include <SDL2/SDL_video.h>
-#endif
 
 #define STRINGIFY( DEF ) #DEF
 #define EXPANDDEF( DEF ) STRINGIFY( DEF )
@@ -260,7 +257,6 @@ bool Settings::Read( const std::string & filePath )
         setFullScreen( config.StrParams( "fullscreen" ) == "on" );
     }
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     // window position
     if ( config.Exists( "window position" ) ) {
         int default_x = SDL_WINDOWPOS_CENTERED;
@@ -268,7 +264,6 @@ bool Settings::Read( const std::string & filePath )
 
         _windowPosition = config.PointParams( "window position", { default_x, default_y } );
     }
-#endif
 
     if ( config.Exists( "controller pointer speed" ) ) {
         _controllerPointerSpeed = std::clamp( config.IntParams( "controller pointer speed" ), 0, 100 );
@@ -379,10 +374,8 @@ std::string Settings::String() const
     os << std::endl << "# video mode: in-game width x in-game height : on-screen width x on-screen height" << std::endl;
     os << "videomode = " << display.width() << "x" << display.height() << ":" << display.screenSize().width << "x" << display.screenSize().height << std::endl;
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     os << std::endl << "# starting window position (x,y); used to maintain it between sessions" << std::endl;
     os << "windowposition = [ " << windowPosition.x << ", " << windowPosition.y << " ]" << std::endl;
-#endif
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;
@@ -967,12 +960,10 @@ void Settings::SetMusicVolume( int v )
     music_volume = std::clamp( v, 0, 10 );
 }
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 void Settings::SetWindowPosition( const fheroes2::Point& position )
 {
     _windowPosition = position;
 }
-#endif
 
 void Settings::SetPreferablyCountPlayers( int c )
 {

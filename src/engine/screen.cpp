@@ -877,13 +877,12 @@ namespace
             return ( flags & SDL_WINDOW_FULLSCREEN ) != 0 || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) != 0;
         }
 
-        std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
         void setPosition( fheroes2::Point position ) override
         {
             _prevWindowPos = position;
         }
 
-        std::vector<fheroes2::Size> getAvailableResolutions() const override
+        std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
         {
             static const std::vector<fheroes2::ResolutionInfo> filteredResolutions = []() {
                 std::set<fheroes2::ResolutionInfo> resolutionSet;

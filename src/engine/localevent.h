@@ -195,12 +195,10 @@ public:
         _globalKeyDownEventHook = std::move( hook );
     }
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void setWindowMovedEventHook( std::function<void( const int, const int )> hook )
     {
         _onWindowMoved = std::move( hook );
     }
-#endif
 
     static void setEventProcessingStates();
 
@@ -381,9 +379,8 @@ private:
 
     std::function<fheroes2::Rect( const int32_t, const int32_t )> _globalMouseMotionEventHook;
     std::function<void( const fheroes2::Key, const int32_t )> _globalKeyDownEventHook;
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+
     std::function<void( const int, const int )> _onWindowMoved;
-#endif
 
     fheroes2::Rect _mouseCursorRenderArea;
 

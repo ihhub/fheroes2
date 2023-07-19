@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include <SDL_version.h>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -100,12 +99,11 @@ namespace fheroes2
         }
 
         virtual std::vector<ResolutionInfo> getAvailableResolutions() const
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+
         virtual void setPosition( fheroes2::Point /*unused*/ )
         {
             // Do nothing.
         }
-#endif
 
         virtual std::vector<Size> getAvailableResolutions() const
         {
