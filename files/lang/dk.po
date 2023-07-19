@@ -4438,9 +4438,6 @@ msgid ""
 "All is lost."
 msgstr ""
 
-msgid "Defeat!"
-msgstr ""
-
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
