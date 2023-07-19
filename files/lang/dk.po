@@ -3613,21 +3613,8 @@ msgstr "Ekspert"
 
 msgid "difficulty|Impossible"
 msgstr "Umulig"
-
 msgid "difficulty|Easy"
 msgstr "Let"
-
-msgid "difficulty|Normal"
-msgstr "Normal"
-
-msgid "difficulty|Hard"
-msgstr "Svær"
-
-msgid "difficulty|Expert"
-msgstr "Ekspert"
-
-msgid "difficulty|Impossible"
-msgstr "Umulig"
 
 msgid "and more..."
 msgstr "og mere..."
@@ -3637,12 +3624,6 @@ msgstr "Let"
 
 msgid "Hard"
 msgstr "Svær"
-
-msgid "Easy"
-msgstr ""
-
-msgid "Hard"
-msgstr ""
 msgid "Campaign Difficulty"
 msgstr ""
 
@@ -4251,9 +4232,6 @@ msgid ""
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
 
-msgid "Cancel back to the main menu."
-msgstr "Afbryd og gå tilbage til hovedmenuen."
-
 msgid "A single player game playing out a single map."
 msgstr ""
 
@@ -4471,12 +4449,6 @@ msgstr ""
 
 msgid "Defeat!"
 msgstr "Nederlag!"
-
-msgid ""
-"Base score: %{score}\n"
-"Difficulty: %{difficulty}\n"
-"\n"
-msgstr ""
 
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
@@ -6203,11 +6175,6 @@ msgstr ""
 msgid ""
 "That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
 msgstr "Du har ingen Magibog, så du kan ikke kaste magi."
-
-msgid ""
-"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
-msgstr ""
-"Den besværgelse koster %{mana} mana. Du har ingen, så du kan ikke kaste den."
 
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
@@ -9554,9 +9521,6 @@ msgstr "Vis alt"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr ""
-
-msgid "Identify Hero"
-msgstr "Identificer helt"
 
 msgid "Summon Boat"
 msgstr "Hidkald båd"
