@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "artifact_info.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -25,7 +27,6 @@
 #include <sstream>
 
 #include "artifact.h"
-#include "artifact_info.h"
 #include "spell.h"
 #include "tools.h"
 #include "translations.h"
@@ -40,6 +41,7 @@ namespace
         assert( artifactData.empty() );
 
         artifactData = {
+            { gettext_noop( "Invalid Artifact" ), gettext_noop( "Invalid Artifact" ), nullptr, {}, {} },
             // Ultimate artifacts do not have discovery event description as they are not supposed to be found on map.
             { gettext_noop( "Ultimate Book of Knowledge" ), gettext_noop( "The %{name} increases your knowledge by %{count}." ), nullptr, {}, {} },
             { gettext_noop( "Ultimate Sword of Dominion" ), gettext_noop( "The %{name} increases your attack skill by %{count}." ), nullptr, {}, {} },
@@ -74,23 +76,23 @@ namespace
               {},
               {} },
             { gettext_noop( "Medal of Valor" ),
-              gettext_noop( "The %{name} increases your morale." ),
+              gettext_noop( "The %{name} increases your morale by %{count}." ),
               gettext_noop( "Freeing a virtuous maiden from the clutches of an evil overlord, you are granted a Medal of Valor by the King's herald." ),
               {},
               {} },
             { gettext_noop( "Medal of Courage" ),
-              gettext_noop( "The %{name} increases your morale." ),
+              gettext_noop( "The %{name} increases your morale by %{count}." ),
               gettext_noop(
                   "After saving a young boy from a vicious pack of Wolves, you return him to his father's manor. The grateful nobleman awards you with a Medal of Courage." ),
               {},
               {} },
             { gettext_noop( "Medal of Honor" ),
-              gettext_noop( "The %{name} increases your morale." ),
+              gettext_noop( "The %{name} increases your morale by %{count}." ),
               gettext_noop( "After freeing a princess of a neighboring kingdom from the evil clutches of despicable slavers, she awards you with a Medal of Honor." ),
               {},
               {} },
             { gettext_noop( "Medal of Distinction" ),
-              gettext_noop( "The %{name} increases your morale." ),
+              gettext_noop( "The %{name} increases your morale by %{count}." ),
               gettext_noop(
                   "Ridding the countryside of the hideous Minotaur who made a sport of eating noblemen's Knights, you are honored with the Medal of Distinction." ),
               {},
@@ -124,7 +126,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Ballista of Quickness" ),
-              gettext_noop( "The %{name} lets your catapult fire twice per combat round." ),
+              gettext_noop( "The %{name} gives your catapult one extra shot per combat round." ),
               gettext_noop( "Walking through the ruins of an ancient walled city, you find the instrument of the city's destruction, an elaborately crafted ballista." ),
               {},
               {} },
@@ -206,24 +208,24 @@ namespace
               {},
               {} },
             { gettext_noop( "Lucky Rabbit's Foot" ),
-              gettext_noop( "The %{name} increases your luck in combat." ),
+              gettext_noop( "The %{name} increases your luck in combat by %{count}." ),
               gettext_noop(
                   "A traveling merchant offers you a rabbit's foot, made of gleaming silver fur, for safe passage. The merchant explains the charm will increase your luck in combat." ),
               {},
               {} },
             { gettext_noop( "Golden Horseshoe" ),
-              gettext_noop( "The %{name} increases your luck in combat." ),
+              gettext_noop( "The %{name} increases your luck in combat by %{count}." ),
               gettext_noop(
                   "An ensnared Unicorn whinnies in fright. Murmuring soothing words, you set her free. Snorting and stamping her front hoof once, she gallops off. Looking down you see a golden horseshoe." ),
               {},
               {} },
             { gettext_noop( "Gambler's Lucky Coin" ),
-              gettext_noop( "The %{name} increases your luck in combat." ),
+              gettext_noop( "The %{name} increases your luck in combat by %{count}." ),
               gettext_noop( "You have captured a mischievous imp who has been terrorizing the region. In exchange for his release, he rewards you with a magical coin." ),
               {},
               {} },
             { gettext_noop( "Four-Leaf Clover" ),
-              gettext_noop( "The %{name} increases your luck in combat." ),
+              gettext_noop( "The %{name} increases your luck in combat by %{count}." ),
               gettext_noop( "In the middle of a patch of dead and dry vegetation, to your surprise you find a healthy green four-leaf clover." ),
               {},
               {} },
@@ -567,13 +569,13 @@ namespace
                   "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, you discover it to be the enchanted shovel of the Gravediggers, long thought lost by mortals." ),
               {},
               {} },
-
-            { gettext_noop( "Invalid Artifact" ), gettext_noop( "Invalid Artifact" ), nullptr, {}, {} },
         };
 
-        assert( artifactData.size() == ( Artifact::UNKNOWN + 1 ) );
+        assert( artifactData.size() == ( Artifact::ARTIFACT_COUNT ) );
 
         // Artifact bonus and curse 'value' is signed integer. However, it should not be negative.
+
+        artifactData[Artifact::UNKNOWN].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
 
         artifactData[Artifact::ULTIMATE_BOOK].bonuses.emplace_back( fheroes2::ArtifactBonusType::KNOWLEDGE_SKILL, 12 );
 
@@ -800,8 +802,6 @@ namespace
         artifactData[Artifact::SWORD_ANDURAN].bonuses.emplace_back( fheroes2::ArtifactBonusType::ATTACK_SKILL, 5 );
 
         artifactData[Artifact::SPADE_NECROMANCY].bonuses.emplace_back( fheroes2::ArtifactBonusType::NECROMANCY_SKILL, 10 );
-
-        artifactData[Artifact::UNKNOWN].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
 
         for ( const fheroes2::ArtifactData & artifact : artifactData ) {
             if ( artifact.bonuses.empty() && artifact.curses.empty() ) {

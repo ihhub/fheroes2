@@ -28,6 +28,7 @@
 #include <memory>
 #include <set>
 #include <string>
+#include <vector>
 
 #include <SDL_events.h>
 #include <SDL_main.h> // IWYU pragma: keep
@@ -46,17 +47,20 @@
 #endif
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_manager.h"
 #include "bin_info.h"
 #include "core.h"
 #include "cursor.h"
 #include "dir.h"
 #include "embedded_image.h"
+#include "exception.h"
 #include "game.h"
 #include "game_logo.h"
 #include "game_video.h"
 #include "game_video_type.h"
 #include "h2d.h"
+#include "icn.h"
 #include "image.h"
 #include "image_palette.h"
 #include "localevent.h"
@@ -121,6 +125,22 @@ namespace
             System::MakeDirectory( dataFilesSave );
     }
 
+    void displayMissingResourceWindow()
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
+
+        display.fill( 0 );
+        fheroes2::Resize( image, display );
+
+        display.render();
+
+        LocalEvent & le = LocalEvent::Get();
+        while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() ) {
+            // Do nothing.
+        }
+    }
+
     class DisplayInitializer
     {
     public:
@@ -129,13 +149,24 @@ namespace
             const Settings & conf = Settings::Get();
 
             fheroes2::Display & display = fheroes2::Display::instance();
+            if ( conf.isFirstGameRun() && System::isHandheldDevice() ) {
+                // We do not show resolution dialog for first run on handheld devices. In this case it is wise to set 'widest' resolution by default.
+                const std::vector<fheroes2::ResolutionInfo> resolutions = fheroes2::engine().getAvailableResolutions();
+                fheroes2::ResolutionInfo bestResolution{ conf.currentResolutionInfo() };
 
-            display.setResolution( conf.currentResolutionInfo() );
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-            fheroes2::engine().setPosition( conf.WindowPosition() );
-#endif
+                for ( const fheroes2::ResolutionInfo & info : resolutions ) {
+                    if ( info.gameWidth > bestResolution.gameWidth && info.gameHeight == bestResolution.gameHeight ) {
+                        bestResolution = info;
+                    }
+                }
 
-            display.resize( conf.VideoMode().width, conf.VideoMode().height );
+                display.setResolution( bestResolution );
+            }
+            else {
+                fheroes2::engine().setPosition( conf.WindowPosition() );
+                display.setResolution( conf.currentResolutionInfo() );
+            }
+
             display.fill( 0 ); // start from a black screen
 
             fheroes2::engine().setTitle( GetCaption() );
@@ -174,20 +205,12 @@ namespace
                 _aggInitializer.reset( new AGG::AGGInitializer );
 
                 _h2dInitializer.reset( new fheroes2::h2d::H2DInitializer );
+
+                // Verify that the font is present and it is not corrupted.
+                fheroes2::AGG::GetICN( ICN::FONT, 0 );
             }
             catch ( ... ) {
-                fheroes2::Display & display = fheroes2::Display::instance();
-                const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
-
-                display.fill( 0 );
-                fheroes2::Resize( image, display );
-
-                display.render();
-
-                LocalEvent & le = LocalEvent::Get();
-                while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() ) {
-                    // Do nothing.
-                }
+                displayMissingResourceWindow();
 
                 throw;
             }
@@ -296,13 +319,23 @@ int main( int argc, char ** argv )
             Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
         }
 
-        // init cursor
-        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+        try {
+            const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        Game::mainGameLoop( conf.isFirstGameRun() );
+            Game::mainGameLoop( conf.isFirstGameRun() );
+        }
+        catch ( const fheroes2::InvalidDataResources & ex ) {
+            ERROR_LOG( ex.what() )
+            displayMissingResourceWindow();
+            return EXIT_FAILURE;
+        }
     }
     catch ( const std::exception & ex ) {
         ERROR_LOG( "Exception '" << ex.what() << "' occurred during application runtime." )
+        return EXIT_FAILURE;
+    }
+    catch ( ... ) {
+        ERROR_LOG( "An unknown exception occurred during application runtime." )
         return EXIT_FAILURE;
     }
 

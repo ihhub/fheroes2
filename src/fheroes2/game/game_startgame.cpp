@@ -27,7 +27,6 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <list>
 #include <ostream>
 #include <string>
 #include <type_traits>
@@ -54,6 +53,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_buttons.h"
 #include "interface_cpanel.h"
 #include "interface_gamearea.h"
@@ -66,6 +66,7 @@
 #include "m82.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
@@ -89,6 +90,44 @@ namespace
     {
         return ( player1->isControlHuman() && !player2->isControlHuman() )
                || ( ( player1->isControlHuman() == player2->isControlHuman() ) && ( player1->GetColor() < player2->GetColor() ) );
+    }
+
+    // Get colors value of players to use in fog directions update.
+    // For human allied AI returns colors of this alliance, for hostile AI - colors of all human players and their allies.
+    int32_t hotSeatAIFogColors( const Player * player )
+    {
+        assert( player != nullptr );
+
+        // This function should be called when AI makes a move.
+        assert( world.GetKingdom( player->GetColor() ).GetControl() == CONTROL_AI );
+
+        const int32_t humanColors = Players::HumanColors();
+        // Check if the current AI player is a friend of any of human players to fully show his move and revealed map,
+        // otherwise his revealed map will not be shown - instead of it we will show the revealed map by all human players.
+        const bool isFriendlyAI = Players::isFriends( player->GetColor(), humanColors );
+
+#if defined( WITH_DEBUG )
+        if ( isFriendlyAI || player->isAIAutoControlMode() ) {
+#else
+        if ( isFriendlyAI ) {
+#endif
+            // Fully update fog directions for allied AI players in Hot Seat mode as the previous move could be done by opposing player.
+            return player->GetFriends();
+        }
+
+        // If AI is hostile for all human players then fully update fog directions for all human players to see enemy AI hero move on tiles with
+        // discovered fog.
+
+        int32_t friendColors = 0;
+
+        for ( const int32_t color : Colors( humanColors ) ) {
+            const Player * humanPlayer = Players::Get( color );
+            if ( humanPlayer ) {
+                friendColors |= humanPlayer->GetFriends();
+            }
+        }
+
+        return friendColors;
     }
 }
 
@@ -114,13 +153,13 @@ fheroes2::GameMode Game::StartGame()
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();
 
-    return Interface::Basic::Get().StartGame();
+    return Interface::AdventureMap::Get().StartGame();
 }
 
-void Game::DialogPlayers( int color, std::string str )
+void Game::DialogPlayers( int color, std::string title, std::string message )
 {
     const Player * player = Players::Get( color );
-    StringReplace( str, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
+    StringReplace( message, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
 
     const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
     fheroes2::Sprite sign = border;
@@ -151,10 +190,11 @@ void Game::DialogPlayers( int color, std::string str )
     }
 
     const fheroes2::CustomImageDialogElement imageUI( std::move( sign ) );
-    fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( std::move( str ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
+    fheroes2::showMessage( fheroes2::Text( std::move( title ), fheroes2::FontType::normalYellow() ),
+                           fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
 }
 
-void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
+void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, const bool renderBackgroundDialog /* = true */ )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -169,109 +209,136 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
 
     const size_t heroCountBefore = myKingdom.GetHeroes().size();
 
-    if ( it != myCastles.end() ) {
-        Castle::CastleDialogReturnValue result = Castle::CastleDialogReturnValue::DoNothing;
+    assert( it != myCastles.end() );
 
-        while ( result != Castle::CastleDialogReturnValue::Close ) {
-            assert( it != myCastles.end() );
+    Castle::CastleDialogReturnValue result = ( *it )->OpenDialog( false, true, renderBackgroundDialog );
 
-            const bool openConstructionWindow
-                = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
-
-            result = ( *it )->OpenDialog( openConstructionWindow );
-
-            if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
-                if ( it == myCastles.begin() )
-                    it = myCastles.end();
-                --it;
+    while ( result != Castle::CastleDialogReturnValue::Close ) {
+        if ( result == Castle::CastleDialogReturnValue::PreviousCastle || result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) {
+            if ( it == myCastles.begin() ) {
+                it = myCastles.end();
             }
-            else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextCostructionWindow ) {
-                ++it;
-                if ( it == myCastles.end() )
-                    it = myCastles.begin();
+            --it;
+        }
+        else if ( result == Castle::CastleDialogReturnValue::NextCastle || result == Castle::CastleDialogReturnValue::NextCostructionWindow ) {
+            ++it;
+            if ( it == myCastles.end() ) {
+                it = myCastles.begin();
             }
         }
-    }
-    else {
-        assert( 0 );
+
+        assert( it != myCastles.end() );
+
+        const bool openConstructionWindow
+            = ( result == Castle::CastleDialogReturnValue::PreviousCostructionWindow ) || ( result == Castle::CastleDialogReturnValue::NextCostructionWindow );
+
+        result = ( *it )->OpenDialog( openConstructionWindow, false, renderBackgroundDialog );
     }
 
-    Interface::Basic & basicInterface = Interface::Basic::Get();
+    // If Castle dialog background was not rendered than we have opened it from other dialog (Kingdom Overview)
+    // and there is no need update Adventure map interface at this time.
+    if ( renderBackgroundDialog ) {
+        Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
-    if ( updateFocus ) {
-        if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
-            basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
-        }
-        else if ( it != myCastles.end() ) {
-            Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).GetHeroes();
-            if ( heroInCastle == nullptr ) {
-                basicInterface.SetFocus( *it );
+        if ( updateFocus ) {
+            if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
+                adventureMapInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore], false );
+            }
+            else if ( it != myCastles.end() ) {
+                Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).GetHeroes();
+                if ( heroInCastle == nullptr ) {
+                    adventureMapInterface.SetFocus( *it );
+                }
+                else {
+                    adventureMapInterface.SetFocus( heroInCastle, false );
+                }
             }
             else {
-                basicInterface.SetFocus( heroInCastle );
+                adventureMapInterface.ResetFocus( GameFocus::HEROES, false );
             }
         }
         else {
-            basicInterface.ResetFocus( GameFocus::HEROES );
+            // If we don't update focus, we still have to restore environment sounds and terrain music theme
+            restoreSoundsForCurrentFocus();
+        }
+
+        // The castle garrison can change
+        adventureMapInterface.RedrawFocus();
+
+        // Fade-in game screen only for 640x480 resolution.
+        if ( fheroes2::Display::instance().isDefaultSize() ) {
+            setDisplayFadeIn();
         }
     }
     else {
-        // If we don't update focus, we still have to restore environment sounds and terrain music theme
+        // If we opened the castle dialog from other dialog, we have to restore environment sounds and terrain music theme instead of the castle's music theme
         restoreSoundsForCurrentFocus();
     }
-
-    // The castle garrison can change
-    basicInterface.RedrawFocus();
 }
 
-void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss /* = false */ )
+void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderBackgroundDialog, const bool disableDismiss /* = false */ )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    bool needFade = Settings::isFadeEffectEnabled() && fheroes2::Display::instance().isDefaultSize();
-
-    Interface::Basic & basicInterface = Interface::Basic::Get();
+    Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
     const KingdomHeroes & myHeroes = hero.GetKingdom().GetHeroes();
     KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
 
+    const bool isDefaultScreenSize = fheroes2::Display::instance().isDefaultSize();
+    bool needFade = true;
     int result = Dialog::ZERO;
 
     while ( it != myHeroes.end() && result != Dialog::CANCEL ) {
-        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, windowIsGameWorld );
-        if ( needFade )
+        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, renderBackgroundDialog );
+
+        if ( needFade ) {
             needFade = false;
+        }
 
         switch ( result ) {
         case Dialog::PREV:
-            if ( it == myHeroes.begin() )
+            if ( it == myHeroes.begin() ) {
                 it = myHeroes.end();
+            }
             --it;
             break;
 
         case Dialog::NEXT:
             ++it;
-            if ( it == myHeroes.end() )
+            if ( it == myHeroes.end() ) {
                 it = myHeroes.begin();
+            }
             break;
 
         case Dialog::DISMISS:
             AudioManager::PlaySound( M82::KILLFADE );
 
             ( *it )->GetPath().Hide();
-            basicInterface.SetRedraw( Interface::REDRAW_GAMEAREA );
 
-            if ( windowIsGameWorld ) {
+            // Check if this dialog is not opened from the other dialog and we will be exiting to the Adventure map.
+            if ( renderBackgroundDialog ) {
+                // Redraw Adventure map with hidden hero path.
+                adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
+
+                // Fade-in game screen only for 640x480 resolution.
+                if ( isDefaultScreenSize ) {
+                    fheroes2::fadeInDisplay();
+                }
+
                 ( *it )->FadeOut();
+                updateFocus = true;
             }
 
             ( *it )->SetFreeman( 0 );
             it = myHeroes.end();
 
-            updateFocus = true;
-
             result = Dialog::CANCEL;
+            break;
+
+        case Dialog::CANCEL:
+            needFade = true;
             break;
 
         default:
@@ -279,17 +346,26 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
         }
     }
 
-    if ( updateFocus ) {
-        if ( it != myHeroes.end() ) {
-            basicInterface.SetFocus( *it );
+    // If Hero dialog background was not rendered than we have opened it from other dialog (Kingdom Overview or Castle dialog)
+    // and there is no need update Adventure map interface at this time.
+    if ( renderBackgroundDialog ) {
+        if ( updateFocus ) {
+            if ( it != myHeroes.end() ) {
+                adventureMapInterface.SetFocus( *it, false );
+            }
+            else {
+                adventureMapInterface.ResetFocus( GameFocus::HEROES, false );
+            }
         }
-        else {
-            basicInterface.ResetFocus( GameFocus::HEROES );
+
+        // The hero's army can change
+        adventureMapInterface.RedrawFocus();
+
+        // Fade-in game screen only for 640x480 resolution.
+        if ( needFade && renderBackgroundDialog && isDefaultScreenSize ) {
+            setDisplayFadeIn();
         }
     }
-
-    // The hero's army can change
-    basicInterface.RedrawFocus();
 }
 
 void ShowNewWeekDialog()
@@ -328,23 +404,7 @@ void ShowNewWeekDialog()
     else
         message += _( " All dwellings increase population." );
 
-    fheroes2::showStandardTextMessage( "", message, Dialog::OK );
-}
-
-void ShowEventDayDialog()
-{
-    const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    const EventsDate events = world.GetEventsDate( myKingdom.GetColor() );
-
-    for ( const EventDate & event : events ) {
-        if ( event.resource.GetValidItemsCount() ) {
-            fheroes2::showResourceMessage( fheroes2::Text( event.title, fheroes2::FontType::normalYellow() ),
-                                           fheroes2::Text( event.message, fheroes2::FontType::normalWhite() ), Dialog::OK, event.resource );
-        }
-        else if ( !event.message.empty() ) {
-            fheroes2::showStandardTextMessage( event.title, event.message, Dialog::OK );
-        }
-    }
+    fheroes2::showStandardTextMessage( _( "New Week!" ), message, Dialog::OK );
 }
 
 void ShowWarningLostTownsDialog()
@@ -353,32 +413,37 @@ void ShowWarningLostTownsDialog()
     const uint32_t lostTownDays = myKingdom.GetLostTownDays();
 
     if ( lostTownDays == 1 ) {
-        Game::DialogPlayers( myKingdom.GetColor(), _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
+        Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ),
+                             _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
     }
     else if ( lostTownDays > 0 && lostTownDays <= Game::GetLostTownDays() ) {
         std::string str = _( "%{color} player, you only have %{day} days left to capture a town, or you will be banished from this land." );
         StringReplace( str, "%{day}", lostTownDays );
-        Game::DialogPlayers( myKingdom.GetColor(), str );
+        Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ), str );
     }
 }
 
-int Interface::Basic::GetCursorFocusCastle( const Castle & from_castle, const Maps::Tiles & tile )
+int Interface::AdventureMap::GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile )
 {
     switch ( tile.GetObject() ) {
     case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
-        const Castle * to_castle = world.getCastle( tile.GetCenter() );
+        const Castle * otherCastle = world.getCastle( tile.GetCenter() );
 
-        if ( nullptr != to_castle )
-            return to_castle->GetColor() == from_castle.GetColor() ? Cursor::CASTLE : Cursor::POINTER;
+        if ( otherCastle ) {
+            return otherCastle->GetColor() == castle.GetColor() ? Cursor::CASTLE : Cursor::POINTER;
+        }
+
         break;
     }
 
     case MP2::OBJ_HEROES: {
-        const Heroes * heroes = tile.GetHeroes();
+        const Heroes * hero = tile.GetHeroes();
 
-        if ( nullptr != heroes )
-            return heroes->GetColor() == from_castle.GetColor() ? Cursor::HEROES : Cursor::POINTER;
+        if ( hero ) {
+            return hero->GetColor() == castle.GetColor() ? Cursor::HEROES : Cursor::POINTER;
+        }
+
         break;
     }
 
@@ -389,168 +454,179 @@ int Interface::Basic::GetCursorFocusCastle( const Castle & from_castle, const Ma
     return Cursor::POINTER;
 }
 
-int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const Maps::Tiles & tile )
+int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile )
 {
-    const bool water = tile.isWater();
+    const bool isWater = tile.isWater();
 
     switch ( tile.GetObject() ) {
-    case MP2::OBJ_MONSTER:
-        return water ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( tile.GetIndex() ) ) : Cursor::POINTER;
-
-    case MP2::OBJ_BOAT:
-        return Cursor::POINTER;
-
     case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
 
         if ( castle ) {
-            if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE && water && tile.isPassableFrom( Direction::CENTER, true, false, from_hero.GetColor() ) ) {
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+            if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE && isWater && tile.isPassableFrom( Direction::CENTER, true, false, hero.GetColor() ) ) {
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
 
-            return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
+            return hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
         }
+
         break;
     }
 
     case MP2::OBJ_HEROES: {
-        const Heroes * to_hero = tile.GetHeroes();
+        const Heroes * otherHero = tile.GetHeroes();
 
-        if ( to_hero ) {
-            if ( !to_hero->isShipMaster() )
-                return from_hero.GetColor() == to_hero->GetColor() ? Cursor::HEROES : Cursor::POINTER;
-            else if ( to_hero->GetCenter() == from_hero.GetCenter() )
+        if ( otherHero ) {
+            if ( !otherHero->isShipMaster() ) {
+                return hero.GetColor() == otherHero->GetColor() ? Cursor::HEROES : Cursor::POINTER;
+            }
+
+            if ( otherHero->GetCenter() == hero.GetCenter() ) {
                 return Cursor::HEROES;
-            else if ( from_hero.GetColor() == to_hero->GetColor() )
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
-            else if ( from_hero.isFriends( to_hero->GetColor() ) )
+            }
+
+            if ( hero.GetColor() == otherHero->GetColor() ) {
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, hero.getNumOfTravelDays( tile.GetIndex() ) );
+            }
+
+            if ( hero.isFriends( otherHero->GetColor() ) ) {
                 return Cursor::POINTER;
-            else
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+            }
+
+            return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, hero.getNumOfTravelDays( tile.GetIndex() ) );
         }
+
         break;
     }
 
+    case MP2::OBJ_MONSTER:
+        // TODO: Can monsters be placed on water?
+        return isWater ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, hero.getNumOfTravelDays( tile.GetIndex() ) ) : Cursor::POINTER;
+
     case MP2::OBJ_COAST:
-        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
     default:
-        if ( water ) {
+        if ( isWater ) {
             if ( MP2::isWaterActionObject( tile.GetObject() ) ) {
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT_ACTION, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT_ACTION, hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
-            if ( tile.isPassableFrom( Direction::CENTER, true, false, from_hero.GetColor() ) ) {
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+
+            if ( tile.isPassableFrom( Direction::CENTER, true, false, hero.GetColor() ) ) {
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
         }
+
         break;
     }
 
     return Cursor::POINTER;
 }
 
-int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps::Tiles & tile )
+int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile )
 {
-    if ( from_hero.Modes( Heroes::ENABLEMOVE ) )
+    if ( hero.Modes( Heroes::ENABLEMOVE ) ) {
         return Cursor::Get().Themes();
-    else if ( from_hero.isShipMaster() )
-        return GetCursorFocusShipmaster( from_hero, tile );
+    }
+
+    if ( hero.isShipMaster() ) {
+        return GetCursorFocusShipmaster( hero, tile );
+    }
 
     switch ( tile.GetObject() ) {
-    case MP2::OBJ_MONSTER:
-        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
-
     case MP2::OBJ_NON_ACTION_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
 
-        if ( nullptr != castle ) {
+        if ( castle ) {
             if ( tile.GetObject() == MP2::OBJ_NON_ACTION_CASTLE ) {
                 if ( tile.GetPassable() == 0 ) {
-                    return ( from_hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
+                    return ( hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
                 }
-                else {
-                    const bool protection = Maps::isTileUnderProtection( tile.GetIndex() );
 
-                    return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ),
-                                                   from_hero.getNumOfTravelDays( tile.GetIndex() ) );
-                }
+                return Cursor::DistanceThemes( Maps::isTileUnderProtection( tile.GetIndex() ) ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE,
+                                               hero.getNumOfTravelDays( tile.GetIndex() ) );
             }
-            else if ( from_hero.GetIndex() == castle->GetIndex() ) {
-                return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
+
+            if ( hero.GetIndex() == castle->GetIndex() ) {
+                return hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
             }
-            else if ( from_hero.GetColor() == castle->GetColor() ) {
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.getNumOfTravelDays( castle->GetIndex() ) );
+
+            if ( hero.GetColor() == castle->GetColor() ) {
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, hero.getNumOfTravelDays( castle->GetIndex() ) );
             }
-            else if ( from_hero.isFriends( castle->GetColor() ) ) {
+
+            if ( hero.isFriends( castle->GetColor() ) ) {
                 return Cursor::POINTER;
             }
-            else if ( castle->GetActualArmy().isValid() ) {
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( castle->GetIndex() ) );
+
+            if ( castle->GetActualArmy().isValid() ) {
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, hero.getNumOfTravelDays( castle->GetIndex() ) );
             }
-            else {
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.getNumOfTravelDays( castle->GetIndex() ) );
-            }
+
+            return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, hero.getNumOfTravelDays( castle->GetIndex() ) );
         }
+
         break;
     }
 
     case MP2::OBJ_HEROES: {
-        const Heroes * to_hero = tile.GetHeroes();
+        const Heroes * otherHero = tile.GetHeroes();
 
-        if ( nullptr != to_hero ) {
-            if ( to_hero->GetCenter() == from_hero.GetCenter() ) {
+        if ( otherHero ) {
+            if ( otherHero->GetCenter() == hero.GetCenter() ) {
                 return Cursor::HEROES;
             }
-            else if ( from_hero.GetColor() == to_hero->GetColor() ) {
-                int newcur = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
-                return newcur != Cursor::POINTER ? newcur : Cursor::HEROES;
+
+            if ( hero.GetColor() == otherHero->GetColor() ) {
+                const int cursor = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, hero.getNumOfTravelDays( tile.GetIndex() ) );
+
+                return cursor != Cursor::POINTER ? cursor : Cursor::HEROES;
             }
-            else if ( from_hero.isFriends( to_hero->GetColor() ) ) {
+
+            if ( hero.isFriends( otherHero->GetColor() ) ) {
                 return Cursor::POINTER;
             }
-            else
-                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+
+            return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, hero.getNumOfTravelDays( tile.GetIndex() ) );
         }
         break;
     }
 
     case MP2::OBJ_BOAT:
-        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
-    case MP2::OBJ_BARRIER:
-        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, hero.getNumOfTravelDays( tile.GetIndex() ) );
+
     default:
         if ( MP2::isActionObject( tile.GetObject() ) ) {
-            bool protection = false;
-            if ( !MP2::isPickupObject( tile.GetObject() ) && !MP2::isAbandonedMine( tile.GetObject() ) ) {
-                protection = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.isCaptureObjectProtected() ) );
-            }
-            else {
-                protection = Maps::isTileUnderProtection( tile.GetIndex() );
-            }
+            const bool isProtected
+                = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !hero.isFriends( getColorFromTile( tile ) ) && isCaptureObjectProtected( tile ) ) );
 
-            return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION ), from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+            return Cursor::DistanceThemes( isProtected ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION, hero.getNumOfTravelDays( tile.GetIndex() ) );
         }
-        else if ( tile.isPassableFrom( Direction::CENTER, from_hero.isShipMaster(), false, from_hero.GetColor() ) ) {
-            bool protection = Maps::isTileUnderProtection( tile.GetIndex() );
 
-            return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ), from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+        if ( tile.isPassableFrom( Direction::CENTER, hero.isShipMaster(), false, hero.GetColor() ) ) {
+            return Cursor::DistanceThemes( Maps::isTileUnderProtection( tile.GetIndex() ) ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE,
+                                           hero.getNumOfTravelDays( tile.GetIndex() ) );
         }
+
         break;
     }
 
     return Cursor::POINTER;
 }
 
-int Interface::Basic::GetCursorTileIndex( int32_t dst_index )
+int Interface::AdventureMap::GetCursorTileIndex( int32_t dstIndex )
 {
-    if ( dst_index < 0 || dst_index >= world.w() * world.h() )
+    if ( !Maps::isValidAbsIndex( dstIndex ) ) {
         return Cursor::POINTER;
+    }
 
-    const Maps::Tiles & tile = world.GetTiles( dst_index );
-    if ( tile.isFog( Settings::Get().CurrentColor() ) )
+    const Maps::Tiles & tile = world.GetTiles( dstIndex );
+
+    if ( tile.isFog( Settings::Get().CurrentColor() ) ) {
         return Cursor::POINTER;
+    }
 
     switch ( GetFocusType() ) {
     case GameFocus::HEROES:
@@ -566,35 +642,47 @@ int Interface::Basic::GetCursorTileIndex( int32_t dst_index )
     return Cursor::POINTER;
 }
 
-fheroes2::GameMode Interface::Basic::StartGame()
+fheroes2::GameMode Interface::AdventureMap::StartGame()
 {
     Settings & conf = Settings::Get();
-    fheroes2::Display & display = fheroes2::Display::instance();
 
-    Reset();
+    reset();
 
-    radar.Build();
-    radar.SetHide( true );
-
-    // Hide the world map at the first drawing
-    const int currentColor = conf.CurrentColor();
-    conf.SetCurrentColor( -1 );
-
+    _radar.Build();
+    _radar.SetHide( true );
     iconsPanel.HideIcons( ICON_ANY );
-    statusWindow.Reset();
+    _statusWindow.Reset();
 
-    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
-
-    conf.SetCurrentColor( currentColor );
+    // Prepare for render the whole game interface with adventure map filled with fog as it was not uncovered by 'updateMapFogDirections()'.
+    redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
     bool loadedFromSave = conf.LoadedGameVersion();
     bool skipTurns = loadedFromSave;
+
+    // Set need of fade-in of game screen.
+    Game::setDisplayFadeIn();
 
     GameOver::Result & gameResult = GameOver::Result::Get();
     fheroes2::GameMode res = fheroes2::GameMode::END_TURN;
 
     std::vector<Player *> sortedPlayers = conf.GetPlayers().getVector();
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
+
+    if ( !loadedFromSave || world.CountDay() == 1 ) {
+        // Clear fog around heroes, castles and mines for all players when starting a new map or if the save was done at the first day.
+        for ( const Player * player : sortedPlayers ) {
+            world.ClearFog( player->GetColor() );
+        }
+    }
+
+    const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
+    if ( !isHotSeatGame ) {
+        // It is not a Hot Seat (multiplayer) game so we set current color to the only human player.
+        conf.SetCurrentColor( Players::HumanColors() );
+
+        // Fully update fog directions if there will be only one human player.
+        Interface::GameArea::updateMapFogDirections();
+    }
 
     while ( res == fheroes2::GameMode::END_TURN ) {
         if ( !loadedFromSave ) {
@@ -613,7 +701,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
         for ( const Player * player : sortedPlayers ) {
             assert( player != nullptr );
 
-            Kingdom & kingdom = world.GetKingdom( player->GetColor() );
+            const int playerColor = player->GetColor();
+
+            Kingdom & kingdom = world.GetKingdom( playerColor );
 
             if ( skipTurns && !player->isColor( conf.CurrentColor() ) ) {
                 continue;
@@ -623,37 +713,37 @@ fheroes2::GameMode Interface::Basic::StartGame()
             skipTurns = false;
 
             if ( kingdom.isPlay() ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() )
+                DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( playerColor ) << ", resource: " << kingdom.GetFunds().String() )
 
-                radar.SetHide( true );
-                radar.SetRedraw( REDRAW_RADAR_CURSOR );
+                _radar.SetHide( true );
+                _radar.SetRedraw( REDRAW_RADAR_CURSOR );
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
                     // Reset environment sounds and music theme at the beginning of the human turn
                     AudioManager::ResetAudio();
 
-                    if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
-                        // we need to hide the world map in hot seat mode
-                        conf.SetCurrentColor( -1 );
-
+                    if ( isHotSeatGame ) {
                         iconsPanel.HideIcons( ICON_ANY );
-                        statusWindow.Reset();
+                        _statusWindow.Reset();
 
-                        Redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
-                        display.render();
+                        // Fully update fog directions in Hot Seat mode to cover the map with fog on player change.
+                        // TODO: Cover the Adventure map area with fog sprites without rendering the "Game Area" for player change.
+                        Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, Color::NONE );
+
+                        redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
+
+                        validateFadeInAndRender();
 
                         // reset the music after closing the dialog
                         const AudioManager::MusicRestorer musicRestorer;
 
                         AudioManager::PlayMusic( MUS::NEW_MONTH, Music::PlaybackMode::PLAY_ONCE );
 
-                        Game::DialogPlayers( player->GetColor(), _( "%{color} player's turn." ) );
+                        Game::DialogPlayers( playerColor, "", _( "%{color} player's turn." ) );
                     }
 
-                    conf.SetCurrentColor( player->GetColor() );
-
-                    world.ClearFog( player->GetColor() );
+                    conf.SetCurrentColor( playerColor );
 
                     kingdom.ActionBeforeTurn();
 
@@ -671,36 +761,59 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     AudioManager::ResetAudio();
 
                     break;
-
-                // CONTROL_AI turn
-                default:
+                case CONTROL_AI:
                     // TODO: remove this temporary assertion
                     assert( res == fheroes2::GameMode::END_TURN );
 
                     Cursor::Get().SetThemes( Cursor::WAIT );
 
-                    conf.SetCurrentColor( player->GetColor() );
+                    conf.SetCurrentColor( playerColor );
 
-                    statusWindow.Reset();
-                    statusWindow.SetState( StatusType::STATUS_AITURN );
+                    _statusWindow.Reset();
+                    _statusWindow.SetState( StatusType::STATUS_AITURN );
 
 #if defined( WITH_DEBUG )
                     if ( player->isAIAutoControlMode() ) {
                         // If player gave control to AI we show the radar image and update it fully at the start of player's turn.
-                        radar.SetHide( false );
-                        radar.SetRedraw( REDRAW_RADAR );
+                        _radar.SetHide( false );
+                        _radar.SetRedraw( REDRAW_RADAR );
                     }
 #endif
 
-                    Redraw();
-                    display.render();
+                    redraw();
+                    validateFadeInAndRender();
 
-                    world.ClearFog( player->GetColor() );
+                    // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
+                    if ( isHotSeatGame ) {
+                        Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, hotSeatAIFogColors( player ) );
+                    }
+
+                    if ( !loadedFromSave ) {
+                        kingdom.ActionNewDayResourceUpdate( nullptr );
+                    }
 
                     kingdom.ActionBeforeTurn();
 
+#if defined( WITH_DEBUG )
+                    if ( !loadedFromSave && player->isAIAutoControlMode() && conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
+                        // This is a human player which gave control to AI so we need to do autosave here.
+                        Game::AutoSave();
+                    }
+#endif
+
                     AI::Get().KingdomTurn( kingdom );
 
+#if defined( WITH_DEBUG )
+                    if ( !loadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
+                        // This is a human player which gave control to AI so we need to do autosave here.
+                        Game::AutoSave();
+                    }
+#endif
+
+                    break;
+                default:
+                    // So far no other player type is supported so this should not happen.
+                    assert( 0 );
                     break;
                 }
 
@@ -733,51 +846,68 @@ fheroes2::GameMode Interface::Basic::StartGame()
             res = fheroes2::GameMode::MAIN_MENU;
         }
 
-        // don't carry the current color from the last player to the next turn
-        conf.SetCurrentColor( -1 );
+        // Don't carry the current player color to the next turn.
+        conf.SetCurrentColor( Color::NONE );
     }
 
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
     assert( res != fheroes2::GameMode::END_TURN );
 
-    if ( Settings::isFadeEffectEnabled() )
-        fheroes2::FadeDisplay();
+    Game::setDisplayFadeIn();
+
+    // Do not use fade-out effect when exiting to Highscores screen as in this case name input dialog will be rendered next.
+    if ( res != fheroes2::GameMode::HIGHSCORES_STANDARD ) {
+        fheroes2::fadeOutDisplay();
+    }
 
     return res;
 }
 
-fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
+fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 {
-    fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
-
-    const Settings & conf = Settings::Get();
-
-    Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
-    const KingdomCastles & myCastles = myKingdom.GetCastles();
-
     if ( isload ) {
         updateFocus();
     }
     else {
-        ResetFocus( GameFocus::FIRSTHERO );
+        ResetFocus( GameFocus::FIRSTHERO, false );
     }
 
-    radar.SetHide( false );
-    statusWindow.Reset();
-    gameArea.SetUpdateCursor();
+    _radar.SetHide( false );
+    _statusWindow.Reset();
+    _gameArea.SetUpdateCursor();
 
-    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
+    const Settings & conf = Settings::Get();
+    if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
+        // TODO: Cache fog directions for all Human players in array to not perform full update at every turn start.
 
-    fheroes2::Display & display = fheroes2::Display::instance();
+        // Fully update fog directions at the start of player's move in Hot Seat mode as the previous move could be done by opposing player.
+        Interface::GameArea::updateMapFogDirections();
+    }
 
-    display.render();
+    redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
+
+    validateFadeInAndRender();
+
+    Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
 
     if ( !isload ) {
         if ( 1 < world.CountWeek() && world.BeginWeek() ) {
             ShowNewWeekDialog();
         }
 
-        ShowEventDayDialog();
+        myKingdom.ActionNewDayResourceUpdate( []( const EventDate & event, const Funds & funds ) {
+            if ( funds.GetValidItemsCount() ) {
+                fheroes2::showResourceMessage( fheroes2::Text( event.title, fheroes2::FontType::normalYellow() ),
+                                               fheroes2::Text( event.message, fheroes2::FontType::normalWhite() ), Dialog::OK, funds );
+            }
+            else if ( !event.message.empty() ) {
+                fheroes2::showStandardTextMessage( event.title, event.message, Dialog::OK );
+            }
+        } );
+
+        // The amount of the kingdom resources has changed, the status window needs to be updated
+        redraw( REDRAW_STATUS );
+        fheroes2::Display::instance().render();
 
         if ( conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
             Game::AutoSave();
@@ -787,8 +917,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     GameOver::Result & gameResult = GameOver::Result::Get();
 
     // check if the game is over at the beginning of each human-controlled player's turn
-    res = gameResult.LocalCheckGameOver();
+    fheroes2::GameMode res = gameResult.LocalCheckGameOver();
 
+    const KingdomCastles & myCastles = myKingdom.GetCastles();
     if ( res == fheroes2::GameMode::CANCEL && myCastles.empty() ) {
         ShowWarningLostTownsDialog();
     }
@@ -821,7 +952,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
 
         // pending timer events
-        statusWindow.TimerEventProcessing();
+        _statusWindow.TimerEventProcessing();
 
         // hotkeys
         if ( le.KeyPress() ) {
@@ -832,10 +963,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
 #if defined( WITH_DEBUG )
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI ) ) {
-                if ( fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
-                                            fheroes2::Text( _( "Do you want to transfer control from you to the AI? The effect will take place only on the next turn." ),
-                                                            fheroes2::FontType::normalWhite() ),
-                                            Dialog::YES | Dialog::NO )
+                if ( fheroes2::showStandardTextMessage( _( "Warning" ),
+                                                        _( "Do you want to transfer control from you to the AI? The effect will take place only on the next turn." ),
+                                                        Dialog::YES | Dialog::NO )
                      == Dialog::YES ) {
                     Players::Get( myKingdom.GetColor() )->setAIAutoControlMode( true );
                     return fheroes2::GameMode::END_TURN;
@@ -909,13 +1039,13 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 EventKeyArrowPress( Direction::BOTTOM_RIGHT );
             // map scrolling control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) )
-                gameArea.SetScroll( SCROLL_LEFT );
+                _gameArea.SetScroll( SCROLL_LEFT );
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_RIGHT ) )
-                gameArea.SetScroll( SCROLL_RIGHT );
+                _gameArea.SetScroll( SCROLL_RIGHT );
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_UP ) )
-                gameArea.SetScroll( SCROLL_TOP );
+                _gameArea.SetScroll( SCROLL_TOP );
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) )
-                gameArea.SetScroll( SCROLL_BOTTOM );
+                _gameArea.SetScroll( SCROLL_BOTTOM );
             // default action
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DEFAULT_ACTION ) )
                 res = EventDefaultAction( res );
@@ -928,7 +1058,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             break;
         }
 
-        if ( fheroes2::cursor().isFocusActive() && !gameArea.isDragScroll() && !radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
+        if ( fheroes2::cursor().isFocusActive() && !_gameArea.isDragScroll() && !_radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
             int scrollPosition = SCROLL_NONE;
 
             if ( isScrollLeft( le.GetMouseCursor() ) )
@@ -948,7 +1078,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 }
 
                 if ( fastScrollRepeatCount >= fastScrollStartThreshold ) {
-                    gameArea.SetScroll( scrollPosition );
+                    _gameArea.SetScroll( scrollPosition );
                 }
             }
             else {
@@ -971,16 +1101,15 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             }
 
             // if the hero is currently moving, pressing any mouse button should stop him
-            const fheroes2::Rect displayArea{ 0, 0, display.width(), display.height() };
-            if ( le.MouseClickLeft( displayArea ) || le.MousePressRight( displayArea ) ) {
+            if ( le.MouseClickLeft() || le.MousePressRight() ) {
                 stopHero = true;
             }
         }
         // cursor is over the status window
-        else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( statusWindow.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( _statusWindow.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            statusWindow.QueueEventProcessing();
+            _statusWindow.QueueEventProcessing();
         }
         // cursor is over the buttons area
         else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.MouseCursor( buttonsArea.GetRect() ) ) {
@@ -996,11 +1125,11 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             iconsPanel.QueueEventProcessing();
         }
         // cursor is over the radar
-        else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( _radar.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            if ( !gameArea.isDragScroll() )
-                radar.QueueEventProcessing();
+            if ( !_gameArea.isDragScroll() )
+                _radar.QueueEventProcessing();
         }
         // cursor is over the control panel
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
@@ -1009,22 +1138,22 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             res = controlPanel.QueueEventProcessing();
         }
         // cursor is over the game area
-        else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
+        else if ( le.MouseCursor( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
             isCursorOverGamearea = true;
         }
         // cursor is somewhere else
-        else if ( !gameArea.NeedScroll() ) {
+        else if ( !_gameArea.NeedScroll() ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            gameArea.ResetCursorPosition();
+            _gameArea.ResetCursorPosition();
         }
 
         // gamearea
-        if ( !gameArea.NeedScroll() && !isMovingHero ) {
-            if ( !radar.isDragRadar() )
-                gameArea.QueueEventProcessing( isCursorOverGamearea );
+        if ( !_gameArea.NeedScroll() && !isMovingHero ) {
+            if ( !_radar.isDragRadar() )
+                _gameArea.QueueEventProcessing( isCursorOverGamearea );
             else if ( !le.MousePressLeft() )
-                radar.QueueEventProcessing();
+                _radar.QueueEventProcessing();
         }
 
         if ( prevIsCursorOverButtons && !isCursorOverButtons ) {
@@ -1044,8 +1173,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 if ( heroAnimationFrameCount > 0 ) {
                     const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
 
-                    gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
-                    gameArea.SetRedraw();
+                    _gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
+                    _gameArea.SetRedraw();
 
                     if ( heroAnimationOffset != fheroes2::Point() ) {
                         Game::EnvironmentSoundMixer();
@@ -1072,10 +1201,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                     if ( hero->isMoveEnabled() ) {
                         if ( hero->Move( 10 == conf.HeroesMoveSpeed() ) ) {
                             // Do not generate a frame as we are going to do it later.
-                            Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
+                            Interface::AdventureMap::RedrawLocker redrawLocker( Interface::AdventureMap::Get() );
 
-                            gameArea.SetCenter( hero->GetCenter() );
-                            ResetFocus( GameFocus::HEROES );
+                            _gameArea.SetCenter( hero->GetCenter() );
+                            ResetFocus( GameFocus::HEROES, true );
 
                             RedrawFocus();
 
@@ -1089,15 +1218,15 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                             const fheroes2::Point movement( hero->MovementDirection() );
                             if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
                                 // Do not generate a frame as we are going to do it later.
-                                Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
+                                Interface::AdventureMap::RedrawLocker redrawLocker( Interface::AdventureMap::Get() );
 
                                 const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
 
                                 heroAnimationOffset = movement;
-                                gameArea.ShiftCenter( movement );
+                                _gameArea.ShiftCenter( movement );
 
                                 Game::SetUpdateSoundsOnFocusUpdate( false );
-                                ResetFocus( GameFocus::HEROES );
+                                ResetFocus( GameFocus::HEROES, true );
                                 Game::SetUpdateSoundsOnFocusUpdate( true );
                                 heroAnimationFrameCount = 32 - heroMovementSkipValue;
                                 heroAnimationSpriteId = hero->GetSpriteIndex();
@@ -1110,7 +1239,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                                 }
                             }
 
-                            gameArea.SetRedraw();
+                            _gameArea.SetRedraw();
                         }
 
                         isMovingHero = true;
@@ -1128,7 +1257,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
                         hero->SetMove( false );
 
-                        gameArea.SetUpdateCursor();
+                        _gameArea.SetUpdateCursor();
                     }
                 }
             }
@@ -1139,39 +1268,42 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
 
         // fast scroll
-        if ( ( gameArea.NeedScroll() && !isMovingHero ) || gameArea.needDragScrollRedraw() ) {
+        if ( ( _gameArea.NeedScroll() && !isMovingHero ) || _gameArea.needDragScrollRedraw() ) {
             if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
                 if ( ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
                        || isScrollBottom( le.GetMouseCursor() ) )
-                     && !gameArea.isDragScroll() ) {
-                    cursor.SetThemes( gameArea.GetScrollCursor() );
+                     && !_gameArea.isDragScroll() ) {
+                    cursor.SetThemes( _gameArea.GetScrollCursor() );
                 }
 
-                gameArea.Scroll();
+                _gameArea.Scroll();
 
-                gameArea.SetRedraw();
-                radar.SetRedraw( REDRAW_RADAR_CURSOR );
+                _gameArea.SetRedraw();
+                _radar.SetRedraw( REDRAW_RADAR_CURSOR );
             }
         }
 
-        // map objects animation
-        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            Game::updateAdventureMapAnimationIndex();
-            gameArea.SetRedraw();
-        }
-
-        // check that the kingdom is not vanquished yet (has at least one hero or castle)
+        // Check that the kingdom is not vanquished yet (has at least one hero or castle).
         if ( res == fheroes2::GameMode::CANCEL && !myKingdom.isPlay() ) {
             res = fheroes2::GameMode::END_TURN;
         }
 
-        if ( NeedRedraw() ) {
-            Redraw();
+        // Render map only if the turn is not over.
+        if ( res == fheroes2::GameMode::CANCEL ) {
+            // map objects animation
+            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                Game::updateAdventureMapAnimationIndex();
+                _gameArea.SetRedraw();
+            }
 
-            // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
-            assert( GetRedrawMask() == 0 );
+            if ( needRedraw() ) {
+                redraw();
 
-            display.render();
+                // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
+                assert( getRedrawMask() == 0 );
+
+                validateFadeInAndRender();
+            }
         }
     }
 
@@ -1179,7 +1311,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         if ( GetFocusHeroes() ) {
             GetFocusHeroes()->ShowPath( false );
 
-            SetRedraw( REDRAW_GAMEAREA );
+            setRedraw( REDRAW_GAMEAREA );
         }
 
         if ( myKingdom.isPlay() ) {
@@ -1188,11 +1320,11 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 const uint32_t lostTownDays = myKingdom.GetLostTownDays();
 
                 if ( lostTownDays > Game::GetLostTownDays() ) {
-                    Game::DialogPlayers( conf.CurrentColor(),
+                    Game::DialogPlayers( conf.CurrentColor(), _( "Beware!" ),
                                          _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
                 }
                 else if ( lostTownDays == 1 ) {
-                    Game::DialogPlayers( conf.CurrentColor(), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
+                    Game::DialogPlayers( conf.CurrentColor(), _( "Defeat!" ), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
                 }
             }
 
@@ -1205,48 +1337,52 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     return res;
 }
 
-void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
+void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex )
 {
-    Heroes * from_hero = GetFocusHeroes();
-    const Maps::Tiles & tile = world.GetTiles( index_maps );
+    Heroes * focusedHero = GetFocusHeroes();
+    const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
     switch ( Cursor::WithoutDistanceThemes( Cursor::Get().Themes() ) ) {
     case Cursor::HEROES: {
-        Heroes * to_hero = tile.GetHeroes();
-        // focus change/open hero
-        if ( nullptr != to_hero ) {
-            if ( !from_hero || from_hero != to_hero ) {
-                SetFocus( to_hero );
-                CalculateHeroPath( to_hero, -1 );
-                RedrawFocus();
-            }
-            else {
-                Game::OpenHeroesDialog( *to_hero, true, true );
-                Cursor::Get().SetThemes( Cursor::HEROES );
-            }
+        Heroes * otherHero = tile.GetHeroes();
+        if ( otherHero == nullptr ) {
+            break;
         }
+
+        if ( focusedHero == nullptr || focusedHero != otherHero ) {
+            SetFocus( otherHero, false );
+            RedrawFocus();
+        }
+        else {
+            Game::OpenHeroesDialog( *otherHero, true, true );
+            Cursor::Get().SetThemes( Cursor::HEROES );
+        }
+
         break;
     }
 
     case Cursor::CASTLE: {
-        // correct index for castle
         const MP2::MapObjectType objectType = tile.GetObject();
-        if ( MP2::OBJ_NON_ACTION_CASTLE != objectType && MP2::OBJ_CASTLE != objectType )
+        if ( MP2::OBJ_NON_ACTION_CASTLE != objectType && MP2::OBJ_CASTLE != objectType ) {
             break;
+        }
 
-        Castle * to_castle = world.getCastle( tile.GetCenter() );
-        if ( to_castle == nullptr )
+        Castle * otherCastle = world.getCastle( tile.GetCenter() );
+        if ( otherCastle == nullptr ) {
             break;
+        }
 
-        const Castle * from_castle = GetFocusCastle();
-        if ( !from_castle || from_castle != to_castle ) {
-            SetFocus( to_castle );
+        const Castle * focusedCastle = GetFocusCastle();
+
+        if ( focusedCastle == nullptr || focusedCastle != otherCastle ) {
+            SetFocus( otherCastle );
             RedrawFocus();
         }
         else {
-            Game::OpenCastleDialog( *to_castle );
+            Game::OpenCastleDialog( *otherCastle );
             Cursor::Get().SetThemes( Cursor::CASTLE );
         }
+
         break;
     }
     case Cursor::CURSOR_HERO_FIGHT:
@@ -1255,59 +1391,72 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
     case Cursor::CURSOR_HERO_ANCHOR:
     case Cursor::CURSOR_HERO_MEET:
     case Cursor::CURSOR_HERO_ACTION:
-    case Cursor::CURSOR_HERO_BOAT_ACTION:
-        if ( from_hero == nullptr )
+    case Cursor::CURSOR_HERO_BOAT_ACTION: {
+        if ( focusedHero == nullptr ) {
             break;
+        }
 
-        if ( from_hero->isMoveEnabled() )
-            from_hero->SetMove( false );
-        else
-            ShowPathOrStartMoveHero( from_hero, index_maps );
+        if ( focusedHero->isMoveEnabled() ) {
+            focusedHero->SetMove( false );
+        }
+        else {
+            ShowPathOrStartMoveHero( focusedHero, tileIndex );
+        }
+
         break;
+    }
 
     default:
-        if ( from_hero )
-            from_hero->SetMove( false );
+        if ( focusedHero == nullptr ) {
+            break;
+        }
+
+        focusedHero->SetMove( false );
+
         break;
     }
 }
 
-void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
+void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex ) const
 {
     Heroes * hero = GetFocusHeroes();
 
-    // stop hero
     if ( hero && hero->isMoveEnabled() ) {
         hero->SetMove( false );
-        Cursor::Get().SetThemes( GetCursorTileIndex( index_maps ) );
+        Cursor::Get().SetThemes( GetCursorTileIndex( tileIndex ) );
     }
     else {
         const Settings & conf = Settings::Get();
-        const Maps::Tiles & tile = world.GetTiles( index_maps );
+        const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
         DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
 
-        if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) )
+        if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) ) {
             Dialog::QuickInfo( tile );
-        else
+        }
+        else {
             switch ( tile.GetObject() ) {
             case MP2::OBJ_NON_ACTION_CASTLE:
             case MP2::OBJ_CASTLE: {
                 const Castle * castle = world.getCastle( tile.GetCenter() );
+
                 if ( castle ) {
                     Dialog::QuickInfo( *castle );
                 }
                 else {
                     Dialog::QuickInfo( tile );
                 }
+
                 break;
             }
 
             case MP2::OBJ_HEROES: {
                 const Heroes * heroes = tile.GetHeroes();
+
                 if ( heroes ) {
                     Dialog::QuickInfo( *heroes );
                 }
+
                 break;
             }
 
@@ -1315,5 +1464,6 @@ void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
                 Dialog::QuickInfo( tile );
                 break;
             }
+        }
     }
 }

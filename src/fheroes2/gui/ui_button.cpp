@@ -31,6 +31,7 @@
 #include "localevent.h"
 #include "pal.h"
 #include "settings.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -523,7 +524,8 @@ namespace fheroes2
         return { offsetX + shadow.x(), offsetY + shadow.y(), releasedWithBackground, pressedWithBackground, disabledWithBackground };
     }
 
-    void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, int32_t width, Point & releasedOffset, Point & pressedOffset )
+    void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, int32_t width, Point & releasedOffset, Point & pressedOffset,
+                                const bool isTransparentBackground /* = false */ )
     {
         assert( width > 0 );
 
@@ -541,21 +543,44 @@ namespace fheroes2
         const Sprite & originalReleased = AGG::GetICN( icnId, 0 );
         const Sprite & originalPressed = AGG::GetICN( icnId, 1 );
 
-        const int32_t backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
-        const Sprite & background = AGG::GetICN( backgroundIcnId, 0 );
+        released = resizeButton( originalReleased, width );
+        pressed = resizeButton( originalPressed, width );
 
-        Image temp = resizeButton( originalReleased, width );
-        released.resize( temp.width(), temp.height() );
-        assert( background.width() >= temp.width() && background.height() >= temp.height() );
-        Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, released, 0, 0, temp.width(), temp.height() );
-        Blit( temp, released );
-        released.setPosition( originalReleased.x(), originalReleased.y() );
+        if ( !isTransparentBackground ) {
+            // We need to copy the background image to pressed button only where it does not overlay the image of released button.
+            const int32_t backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
+            const Sprite & background = AGG::GetICN( backgroundIcnId, 0 );
 
-        temp = resizeButton( originalPressed, width );
-        pressed.resize( temp.width(), temp.height() );
-        assert( background.width() >= temp.width() && background.height() >= temp.height() );
-        Copy( background, ( background.width() - temp.width() ) / 2, ( background.height() - temp.height() ) / 2, pressed, 0, 0, temp.width(), temp.height() );
-        Blit( temp, pressed );
-        pressed.setPosition( originalPressed.x(), originalPressed.y() );
+            const uint8_t * releasedTransform = released.transform();
+            uint8_t * pressedTransform = pressed.transform();
+            uint8_t * pressedImage = pressed.image();
+            const uint8_t * backgroundImage
+                = background.image() + ( background.width() - pressed.width() ) / 2 + ( background.height() - pressed.height() ) * background.width() / 2;
+
+            for ( int32_t x = 0; x < pressed.width() * pressed.height(); ++x ) {
+                if ( ( *( pressedTransform + x ) == 1 ) && ( *( releasedTransform + x ) == 0 ) ) {
+                    *( pressedImage + x ) = *( backgroundImage + x % pressed.width() + static_cast<ptrdiff_t>( x / pressed.width() ) * background.width() );
+                    *( pressedTransform + x ) = 0;
+                }
+            }
+        }
+    }
+
+    void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface,
+                            const bool isTransparentBackground )
+    {
+        fheroes2::Point releasedOffset;
+        fheroes2::Point pressedOffset;
+        fheroes2::getCustomNormalButton( released, pressed, isEvilInterface, buttonWidth, releasedOffset, pressedOffset, isTransparentBackground );
+
+        const fheroes2::FontColor fontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
+
+        const fheroes2::Text releasedText( text, { fheroes2::FontSize::BUTTON_RELEASED, fontColor } );
+        const fheroes2::Text pressedText( text, { fheroes2::FontSize::BUTTON_PRESSED, fontColor } );
+
+        const fheroes2::Point textOffset{ ( buttonWidth - releasedText.width() ) / 2, ( 16 - fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) ) / 2 };
+
+        releasedText.draw( releasedOffset.x + textOffset.x, releasedOffset.y + textOffset.y, released );
+        pressedText.draw( pressedOffset.x + textOffset.x, pressedOffset.y + textOffset.y, pressed );
     }
 }

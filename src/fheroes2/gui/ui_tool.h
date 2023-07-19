@@ -20,8 +20,10 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <string>
 #include <vector>
 
 #include "image.h"
@@ -31,6 +33,8 @@
 
 namespace fheroes2
 {
+    struct FontType;
+
     class MovableSprite : public Sprite
     {
     public:
@@ -109,21 +113,38 @@ namespace fheroes2
         const bool isOriginalEvilInterface;
     };
 
+    // Fade display image colors to grayscale part of default game palette.
+    void colorFade( const std::vector<uint8_t> & palette, const fheroes2::Rect & frameRoi, const uint32_t durationMs, const double fps );
+
     void CreateDeathWaveEffect( Image & out, const Image & in, const int32_t x, const std::vector<int32_t> & deathWaveCurve );
 
     Image CreateHolyShoutEffect( const Image & in, const int32_t blurRadius, const uint8_t darkredStrength );
 
-    Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX = 0.05, double waveFrequency = 20.0 );
+    Image CreateRippleEffect( const Image & in, const int32_t frameId, const double scaleX = 0.05, const double waveFrequency = 20.0 );
 
-    void FadeDisplay( const Image & top, const Point & pos, uint8_t endAlpha, int delayMs );
+    // Fade-out the whole screen.
+    void fadeOutDisplay();
 
-    void FadeDisplayWithPalette( const Image & top, const Point & pos, uint8_t paletteId, int delayMs, int frameCount );
+    // Fade-out the display image in ROI. The 'halfFade' parameter sets to do only half of fade-out: till half-darkened image.
+    void fadeOutDisplay( const Rect & roi, const bool halfFade );
 
-    void FadeDisplay( int delayMs = 500 );
+    // Fade-in the prepared image in display instance on the whole screen. The last frame is fully bright so it is a copy of original image.
+    void fadeInDisplay();
 
-    void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, uint8_t paletteId, int delayMs, int frameCount );
+    // Fade-in the prepared display image in ROI. The 'halfFade' parameter sets to do only half of fade-in: from the half-darkened image.
+    // The last frame is fully bright so it is a copy of original image.
+    void fadeInDisplay( const Rect & roi, const bool halfFade );
 
-    void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int paletteCount );
+    void FadeDisplayWithPalette( const Image & top, const Point & pos, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount );
+
+    // Returns the character position number in the 'text' string.
+    size_t getTextInputCursorPosition( const std::string & text, const FontType & fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
+                                       const int32_t textStartXOffset );
+
+    void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs,
+                                  const int32_t frameCount );
+
+    void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t paletteCount );
 
     // Display pre-render function to show screen system info
     void PreRenderSystemInfo();

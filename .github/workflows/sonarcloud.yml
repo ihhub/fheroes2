@@ -6,9 +6,6 @@ on:
       SONAR_TOKEN:
         required: true
 
-env:
-  SONAR_SCANNER_VERSION: 4.8.0.2856
-
 jobs:
   sonarcloud:
     name: SonarCloud Analyzer
@@ -22,15 +19,16 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
+    - uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 17
     - name: Install dependencies
       run: |
+        bash script/android/install_packages.sh
         sudo apt-get -y update
-        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
-    - name: Initialize SonarCloud
-      run: |
-        mkdir -p ~/.sonarcloud
-        wget -P ~/.sonarcloud https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-"$SONAR_SCANNER_VERSION"-linux.zip
-        unzip ~/.sonarcloud/sonar-scanner-cli-"$SONAR_SCANNER_VERSION"-linux.zip -d ~/.sonarcloud
+        sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev
+    - uses: SonarSource/sonarcloud-github-c-cpp@v1
     - name: Prepare SonarCloud cfamily cache
       uses: actions/cache@v3
       with:
@@ -41,15 +39,21 @@ jobs:
     - name: Generate version information
       run: |
         sed -i~ "s/%{version}/$(cat version.txt)/" sonar-project.properties
+    - name: Generate Java bytecode
+      run: |
+        cd android
+        ./gradlew compileDebugJavaWithJavac
     - name: Prepare compile_commands.json
       run: |
         cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DUSE_SDL_VERSION=SDL2 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     - name: Analyze
       run: |
-        ~/.sonarcloud/sonar-scanner-"$SONAR_SCANNER_VERSION"-linux/bin/sonar-scanner -Dsonar.cfamily.compile-commands=build/compile_commands.json \
-                                                                                     -Dsonar.cfamily.analysisCache.mode=fs \
-                                                                                     -Dsonar.cfamily.analysisCache.path="$HOME"/.sonar-cfamily-cache \
-                                                                                     -Dsonar.host.url=https://sonarcloud.io
+        sonar-scanner -Dsonar.cfamily.compile-commands=build/compile_commands.json \
+                      -Dsonar.cfamily.analysisCache.mode=fs \
+                      -Dsonar.cfamily.analysisCache.path="$HOME"/.sonar-cfamily-cache \
+                      -Dsonar.java.binaries="android/*/build/**/classes" \
+                      -Dsonar.java.libraries="$ANDROID_HOME/**/*.jar,$HOME/.gradle/**/*.jar" \
+                      -Dsonar.host.url=https://sonarcloud.io
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

@@ -1,0 +1,12 @@
+apply plugin: 'com.android.library'
+
+android {
+    namespace 'com.github.stephenc.javaisotools'
+
+    compileSdkVersion 33
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 33
+    }
+}

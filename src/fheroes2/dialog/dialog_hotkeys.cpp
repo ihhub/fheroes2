@@ -143,7 +143,7 @@ namespace
 
             const fheroes2::FontType fontType = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
-            fheroes2::Text name( Game::getHotKeyEventNameByEventId( hotKeyEvent ), fontType );
+            fheroes2::Text name( _( Game::getHotKeyEventNameByEventId( hotKeyEvent ) ), fontType );
             name.fitToOneRow( editBoxLength - hotKeyLength );
             name.draw( offsetX + 5, offsetY, display );
 
@@ -175,7 +175,7 @@ namespace
 
         void ActionListPressRight( Game::HotKeyEvent & hotKeyEvent ) override
         {
-            fheroes2::showMessage( fheroes2::Text{ Game::getHotKeyEventNameByEventId( hotKeyEvent ), fheroes2::FontType::normalWhite() },
+            fheroes2::showMessage( fheroes2::Text{ _( Game::getHotKeyEventNameByEventId( hotKeyEvent ) ), fheroes2::FontType::normalWhite() },
                                    fheroes2::Text{ Game::getHotKeyNameByEventId( hotKeyEvent ), fheroes2::FontType::normalYellow() }, Dialog::ZERO );
         }
 
@@ -195,7 +195,7 @@ namespace
             Game::setHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_FULLSCREEN, fheroes2::Key::NONE );
             Game::setHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_TEXT_SUPPORT_MODE, fheroes2::Key::NONE );
 
-            const int returnValue = fheroes2::showMessage( fheroes2::Text{ Game::getHotKeyEventNameByEventId( hotKeyEvent ), fheroes2::FontType::normalWhite() },
+            const int returnValue = fheroes2::showMessage( fheroes2::Text{ _( Game::getHotKeyEventNameByEventId( hotKeyEvent ) ), fheroes2::FontType::normalWhite() },
                                                            fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::OK | Dialog::CANCEL, { &hotKeyUI } );
 
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY, okayEventKey );

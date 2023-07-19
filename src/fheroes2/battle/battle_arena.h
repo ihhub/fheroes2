@@ -135,7 +135,7 @@ namespace Battle
 
         bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, bool allowToCancel ) const;
         int DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const;
-        void DialogBattleNecromancy( const uint32_t raiseCount, const uint32_t raisedMonsterType ) const;
+        static void DialogBattleNecromancy( const uint32_t raiseCount );
 
         void FadeArena( bool clearMessageLog ) const;
 
@@ -197,7 +197,7 @@ namespace Battle
         const Rand::DeterministicRandomGenerator & GetRandomGenerator() const;
 
         static Board * GetBoard();
-        static Tower * GetTower( int );
+        static Tower * GetTower( const TowerType type );
         static Bridge * GetBridge();
         static const Castle * GetCastle();
         static Interface * GetInterface();
@@ -270,7 +270,8 @@ namespace Battle
         std::unique_ptr<Force> _army2;
         std::shared_ptr<Units> _orderOfUnits;
 
-        int current_color;
+        // The color of the army, whose turn it is to perform an action
+        int _currentColor;
         // The color of the army of the last unit that performed a full-fledged action (skipping a turn due to
         // bad morale is not considered as such)
         int _lastActiveUnitArmyColor;

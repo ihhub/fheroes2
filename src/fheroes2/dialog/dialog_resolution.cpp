@@ -53,11 +53,15 @@ namespace
 
     std::pair<std::string, std::string> getResolutionStrings( const fheroes2::ResolutionInfo & resolution )
     {
-        if ( resolution.scale > 1 ) {
-            return std::make_pair( std::to_string( resolution.width ), std::to_string( resolution.height ) + " (x" + std::to_string( resolution.scale ) + ")" );
+        if ( resolution.screenWidth != resolution.gameWidth && resolution.screenHeight != resolution.gameHeight ) {
+            const int32_t integer = resolution.screenWidth / resolution.gameWidth;
+            const int32_t fraction = resolution.screenWidth * 10 / resolution.gameWidth - 10 * integer;
+
+            return std::make_pair( std::to_string( resolution.gameWidth ),
+                                   std::to_string( resolution.gameHeight ) + " (x" + std::to_string( integer ) + "." + std::to_string( fraction ) + ')' );
         }
 
-        return std::make_pair( std::to_string( resolution.width ), std::to_string( resolution.height ) );
+        return std::make_pair( std::to_string( resolution.gameWidth ), std::to_string( resolution.gameHeight ) );
     }
 
     class ResolutionList : public Interface::ListBox<fheroes2::ResolutionInfo>
@@ -135,7 +139,7 @@ namespace
         fheroes2::Text text( _( "Select Game Resolution:" ), fheroes2::FontType::normalYellow() );
         text.draw( dst.x + ( 377 - text.width() ) / 2, dst.y + 32, output );
 
-        if ( resolution.width > 0 && resolution.height > 0 ) {
+        if ( resolution.gameWidth > 0 && resolution.gameHeight > 0 ) {
             const fheroes2::FontType fontType = fheroes2::FontType::normalYellow();
 
             const auto [leftText, rightText] = getResolutionStrings( resolution );
@@ -194,7 +198,7 @@ namespace Dialog
 
         resList.SetListContent( resolutions );
 
-        const fheroes2::ResolutionInfo currentResolution{ display.width(), display.height(), display.scale() };
+        const fheroes2::ResolutionInfo currentResolution{ display.width(), display.height(), display.screenSize().width, display.screenSize().height };
 
         fheroes2::ResolutionInfo selectedResolution;
         for ( size_t i = 0; i < resolutions.size(); ++i ) {
@@ -257,7 +261,8 @@ namespace Dialog
             display.render();
         }
 
-        if ( selectedResolution.width > 0 && selectedResolution.height > 0 && selectedResolution.scale > 0 && selectedResolution != currentResolution ) {
+        if ( selectedResolution.gameWidth > 0 && selectedResolution.gameHeight > 0 && selectedResolution.screenWidth >= selectedResolution.gameWidth
+             && selectedResolution.screenHeight >= selectedResolution.gameHeight && selectedResolution != currentResolution ) {
             display.setResolution( selectedResolution );
 
 #if !defined( MACOS_APP_BUNDLE )

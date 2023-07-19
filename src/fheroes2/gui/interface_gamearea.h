@@ -37,9 +37,9 @@
 
 namespace Interface
 {
-    class Basic;
+    class BaseInterface;
 
-    enum ScollingType
+    enum ScrollingType
     {
         SCROLL_NONE = 0x00,
         SCROLL_LEFT = 0x01,
@@ -150,7 +150,7 @@ namespace Interface
     class GameArea
     {
     public:
-        explicit GameArea( Basic & basic );
+        explicit GameArea( BaseInterface & interface );
         GameArea( const GameArea & ) = default;
         GameArea( GameArea && ) = delete;
 
@@ -217,6 +217,9 @@ namespace Interface
             updateCursor = true;
         }
 
+        // Update fog directions data for entire map tiles by checking fog data for current player and its allies.
+        static void updateMapFogDirections();
+
         void QueueEventProcessing( bool isCursorOverGamearea );
 
         static fheroes2::Image GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset );
@@ -259,7 +262,7 @@ namespace Interface
         }
 
     private:
-        Basic & interface;
+        BaseInterface & _interface;
 
         fheroes2::Rect _windowROI; // visible to draw area of World Map in pixels
         fheroes2::Point _topLeftTileOffset; // offset of tiles to be drawn (from here we can find any tile ID)

@@ -118,7 +118,7 @@ Battle::Force::Force( Army & parent, bool opposite, const Rand::DeterministicRan
             continue;
         }
 
-        int32_t idx = army.isSpreadFormat() ? static_cast<int32_t>( i ) * 22 : 22 + static_cast<int32_t>( i ) * 11;
+        int32_t idx = army.isSpreadFormation() ? static_cast<int32_t>( i ) * 22 : 22 + static_cast<int32_t>( i ) * 11;
 
         if ( opposite ) {
             idx += ( troop->isWide() ? 9 : 10 );
@@ -265,42 +265,39 @@ Troops Battle::Force::GetKilledTroops() const
     return result;
 }
 
-bool Battle::Force::animateIdleUnits()
+bool Battle::Force::animateIdleUnits() const
 {
     bool redrawNeeded = false;
 
-    for ( Force::iterator it = begin(); it != end(); ++it ) {
-        Unit & unit = **it;
-
-        // check if alive and not paralyzed
-        if ( unit.isValid() && !unit.Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
-            if ( unit.isIdling() ) {
-                if ( unit.isFinishAnimFrame() ) {
-                    redrawNeeded = unit.SwitchAnimation( Monster_Info::STATIC ) || redrawNeeded;
+    for ( Unit * unit : *this ) {
+        // Check if unit is alive.
+        if ( unit->isValid() ) {
+            if ( unit->isIdling() ) {
+                // Go to 'STATIC' animation state if idle animation is over or if unit is blinded or paralyzed.
+                if ( unit->isFinishAnimFrame() || unit->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
+                    redrawNeeded = unit->SwitchAnimation( Monster_Info::STATIC ) || redrawNeeded;
                 }
                 else {
-                    unit.IncreaseAnimFrame();
+                    unit->IncreaseAnimFrame();
                     redrawNeeded = true;
                 }
             }
-            // checkIdleDelay() sets and checks unit's internal timer if we're ready to switch to next one
-            else if ( unit.GetAnimationState() == Monster_Info::STATIC && unit.checkIdleDelay() ) {
-                redrawNeeded = unit.SwitchAnimation( Monster_Info::IDLE ) || redrawNeeded;
+            // checkIdleDelay() sets and checks unit's internal timer if we're ready to switch to next one.
+            // Do not start idle animations for paralyzed or blinded units.
+            else if ( unit->GetAnimationState() == Monster_Info::STATIC && !unit->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) && unit->checkIdleDelay() ) {
+                redrawNeeded = unit->SwitchAnimation( Monster_Info::IDLE ) || redrawNeeded;
             }
         }
     }
     return redrawNeeded;
 }
 
-void Battle::Force::resetIdleAnimation()
+void Battle::Force::resetIdleAnimation() const
 {
-    for ( Force::iterator it = begin(); it != end(); ++it ) {
-        Unit & unit = **it;
-
-        // check if alive and not paralyzed
-        if ( unit.isValid() && !unit.Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
-            if ( unit.GetAnimationState() == Monster_Info::STATIC )
-                unit.checkIdleDelay();
+    for ( Unit * unit : *this ) {
+        // Check if unit is alive, not paralyzed or blinded and is in 'STATIC' animation state.
+        if ( unit->isValid() && unit->GetAnimationState() == Monster_Info::STATIC && !unit->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
+            unit->checkIdleDelay();
         }
     }
 }

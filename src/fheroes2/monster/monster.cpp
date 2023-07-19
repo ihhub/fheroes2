@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -118,6 +118,7 @@ Monster::Monster( const Spell & sp )
     case Spell::HAUNT:
         id = GHOST;
         break;
+
     default:
         break;
     }
@@ -820,9 +821,11 @@ int Monster::ICNMonh() const
 payment_t Monster::GetUpgradeCost() const
 {
     const Monster upgr = GetUpgrade();
-    const payment_t pay = ( id != upgr.id ) ? ( upgr.GetCost() - GetCost() ) * 2 : GetCost();
+    if ( id == upgr.id ) {
+        return {};
+    }
 
-    return pay;
+    return ( upgr.GetCost() - GetCost() ) * 2;
 }
 
 uint32_t Monster::GetCountFromHitPoints( const Monster & mons, uint32_t hp )

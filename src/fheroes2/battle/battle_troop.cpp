@@ -711,7 +711,7 @@ void Battle::Unit::PostKilledAction()
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() )
 }
 
-uint32_t Battle::Unit::Resurrect( uint32_t points, bool allow_overflow, bool skip_dead )
+uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allow_overflow, const bool skip_dead )
 {
     uint32_t resurrect = Monster::GetCountFromHitPoints( *this, hp + points ) - GetCount();
 
@@ -746,17 +746,16 @@ uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t &
     }
 
     uint32_t resurrected = 0;
+
     if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
-        resurrected = killed * enemy.Monster::GetHitPoints();
-        enemy.Resurrect( resurrected, true, false );
+        resurrected = enemy.Resurrect( killed * enemy.Monster::GetHitPoints(), true, false );
     }
     else if ( enemy.isAbilityPresent( fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
-        resurrected = killed * Monster::GetHitPoints();
-        enemy.Resurrect( resurrected, false, false );
+        resurrected = enemy.Resurrect( killed * Monster::GetHitPoints(), false, false );
     }
 
     if ( resurrected > 0 ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrected );
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << ", resurrected: " << resurrected )
     }
 
     if ( ptrResurrected != nullptr ) {
@@ -776,12 +775,15 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
         return false;
     }
 
-    if ( hero && spell.isApplyToFriends() && GetColor() != hero->GetColor() )
+    if ( hero && spell.isApplyToFriends() && GetColor() != hero->GetColor() ) {
         return false;
-    if ( hero && spell.isApplyToEnemies() && GetColor() == hero->GetColor() && !forceApplyToAlly )
+    }
+    if ( hero && spell.isApplyToEnemies() && GetColor() == hero->GetColor() && !forceApplyToAlly ) {
         return false;
-    if ( isMagicResist( spell, ( hero ? hero->GetPower() : 0 ), hero ) )
+    }
+    if ( GetMagicResist( spell, ( hero ? hero->GetPower() : 0 ), hero ) >= 100 ) {
         return false;
+    }
 
     const HeroBase * myhero = GetCommander();
     if ( !myhero )
@@ -904,10 +906,12 @@ bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, Targe
 
     const uint32_t spoint = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
 
-    if ( spell.isDamage() )
+    if ( spell.isDamage() ) {
         SpellApplyDamage( spell, spoint, hero, target );
-    else if ( spell.isRestore() )
+    }
+    else if ( spell.isRestore() || spell.isResurrect() ) {
         SpellRestoreAction( spell, spoint, hero );
+    }
     else {
         SpellModesAction( spell, spoint, hero );
     }
@@ -1010,15 +1014,7 @@ void Battle::Unit::PostAttackAction()
         }
     }
 
-    // clean berserker spell
-    removeAffection( SP_BERSERKER );
-
-    // clean hypnotize spell
-    removeAffection( SP_HYPNOTIZE );
-
-    // clean luck capability
-    ResetModes( LUCK_GOOD );
-    ResetModes( LUCK_BAD );
+    ResetModes( LUCK_GOOD | LUCK_BAD );
 }
 
 void Battle::Unit::SetBlindAnswer( bool value )
@@ -1248,13 +1244,12 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
         break;
 
     case Spell::BERSERKER:
-        addAffection( SP_BERSERKER, duration );
+        replaceAffection( SP_HYPNOTIZE, SP_BERSERKER, duration );
         break;
 
-    case Spell::HYPNOTIZE: {
-        addAffection( SP_HYPNOTIZE, duration );
+    case Spell::HYPNOTIZE:
+        replaceAffection( SP_BERSERKER, SP_HYPNOTIZE, duration );
         break;
-    }
 
     case Spell::PETRIFY:
         addAffection( SP_STONE, duration );
@@ -1270,12 +1265,15 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
         break;
 
     default:
+        assert( 0 );
         break;
     }
 }
 
-void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, TargetInfo & target )
+void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * hero, TargetInfo & target )
 {
+    assert( spell.isDamage() );
+
     const uint32_t dmg = CalculateSpellDamage( spell, spellPoints, hero, target.damage, false /* ignore defending hero */ );
 
     // apply damage
@@ -1287,6 +1285,8 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, uint32_t spellPoints, 
 
 uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, uint32_t targetDamage, bool ignoreDefendingHero ) const
 {
+    assert( spell.isDamage() );
+
     // TODO: use fheroes2::getSpellDamage function to remove code duplication.
     uint32_t dmg = spell.Damage() * spellPoints;
 
@@ -1460,7 +1460,7 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
     return dmg;
 }
 
-void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, const HeroBase * hero )
+void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spellPoints, const HeroBase * hero )
 {
     switch ( spell.GetID() ) {
     case Spell::CURE:
@@ -1469,7 +1469,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
         removeAffection( IS_BAD_MAGIC );
 
         // restore
-        hp += ( spell.Restore() * spoint );
+        hp += fheroes2::getHPRestorePoints( spell, spellPoints, hero );
         if ( hp > ArmyTroop::GetHitPoints() ) {
             hp = ArmyTroop::GetHitPoints();
         }
@@ -1485,7 +1485,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
             graveyard->RemoveTroop( *this );
         }
 
-        const uint32_t restore = fheroes2::getResurrectPoints( spell, spoint, hero );
+        const uint32_t restore = fheroes2::getResurrectPoints( spell, spellPoints, hero );
         const uint32_t resurrect = Resurrect( restore, false, ( spell == Spell::RESURRECT ) );
 
         // Put the unit back on the board
@@ -1501,6 +1501,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, uint32_t spoint, con
     }
 
     default:
+        assert( 0 );
         break;
     }
 }

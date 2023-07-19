@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <vector>
@@ -134,14 +135,14 @@ namespace AI
 {
     bool Build( Castle & castle, const std::vector<BuildOrder> & buildOrderList, int multiplier = 1 )
     {
-        for ( std::vector<BuildOrder>::const_iterator it = buildOrderList.begin(); it != buildOrderList.end(); ++it ) {
-            const int priority = it->priority * multiplier;
+        for ( const BuildOrder & order : buildOrderList ) {
+            const int priority = order.priority * multiplier;
             if ( priority == 1 ) {
-                if ( BuildIfAvailable( castle, it->building ) )
+                if ( BuildIfAvailable( castle, order.building ) )
                     return true;
             }
             else {
-                if ( BuildIfEnoughResources( castle, it->building, GetResourceMultiplier( priority, priority + 1 ) ) )
+                if ( BuildIfEnoughResources( castle, order.building, GetResourceMultiplier( priority, priority + 1 ) ) )
                     return true;
             }
         }
@@ -192,17 +193,63 @@ namespace AI
         return Build( castle, supportingDefensiveStructure, 10 );
     }
 
+    void Normal::updateKingdomBudget( const Kingdom & kingdom )
+    {
+        // clean up first
+        for ( BudgetEntry & budgetEntry : _budget ) {
+            budgetEntry.reset();
+        }
+
+        const Funds & kindgomFunds = kingdom.GetFunds();
+        Funds requirements;
+        for ( const Castle * castle : kingdom.GetCastles() ) {
+            if ( !castle ) {
+                continue;
+            }
+
+            const int race = castle->GetRace();
+            const std::vector<BuildOrder> & buildOrder = GetBuildOrder( race );
+            for ( const BuildOrder & order : buildOrder ) {
+                const int status = castle->CheckBuyBuilding( order.building );
+                if ( status == LACK_RESOURCES ) {
+                    Funds missing = PaymentConditions::BuyBuilding( race, order.building ) - kindgomFunds;
+
+                    requirements = requirements.max( missing );
+                }
+            }
+
+            if ( castle->isBuild( DWELLING_MONSTER6 ) ) {
+                Funds bestUnitCost = Monster( race, DWELLING_MONSTER6 ).GetUpgrade().GetCost();
+                for ( BudgetEntry & budgetEntry : _budget ) {
+                    if ( bestUnitCost.Get( budgetEntry.resource ) > 0 ) {
+                        budgetEntry.recurringCost = true;
+                    }
+                }
+            }
+        }
+
+        for ( BudgetEntry & budgetEntry : _budget ) {
+            budgetEntry.missing = requirements.Get( budgetEntry.resource );
+
+            if ( budgetEntry.missing ) {
+                budgetEntry.priority = true;
+            }
+        }
+    }
+
     void Normal::CastleTurn( Castle & castle, const bool defensiveStrategy )
     {
         if ( defensiveStrategy ) {
-            // TODO: add logic to build monster dwellings as they might add more monsters for defence.
+            // Avoid building monster dwellings when defensive as they might fall into enemy's hands, unless we have a lot of resources.
             const Kingdom & kingdom = castle.GetKingdom();
+
+            // TODO: check if we can upgrade monsters. It is much cheaper (except Giants into Titans) to upgrade monsters than buy new ones.
 
             Troops possibleReinforcement = castle.getAvailableArmy( kingdom.GetFunds() );
             double possibleReinforcementStrength = possibleReinforcement.GetStrength();
 
             // A very rough estimation of strength. We measure the strength of possible army to hire with the strength of purchasing a turret.
-            const Battle::Tower tower( castle, Battle::TWR_RIGHT, Rand::DeterministicRandomGenerator( 0 ), 0 );
+            const Battle::Tower tower( castle, Battle::TowerType::TWR_RIGHT, Rand::DeterministicRandomGenerator( 0 ), 0 );
             const Troop towerMonster( Monster::ARCHER, tower.GetCount() );
             const double towerStrength = towerMonster.GetStrength();
             if ( possibleReinforcementStrength > towerStrength ) {

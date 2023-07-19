@@ -87,7 +87,7 @@ namespace AI
         virtual void KingdomTurn( Kingdom & kingdom ) = 0;
         virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions ) = 0;
 
-        virtual void revealFog( const Maps::Tiles & tile ) = 0;
+        virtual void revealFog( const Maps::Tiles & tile, const Kingdom & kingdom ) = 0;
 
         virtual void HeroesAdd( const Heroes & hero );
         virtual void HeroesRemove( const Heroes & hero );
@@ -133,7 +133,6 @@ namespace AI
     void HeroesAction( Heroes & hero, const int32_t dst_index );
     void HeroesMove( Heroes & hero );
     void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex );
-    void HeroesCastTownPortal( Heroes & hero, const int32_t targetIndex );
     bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell );
 
     // functionality in ai_common.cpp
@@ -141,6 +140,7 @@ namespace AI
     bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator );
     uint32_t GetResourceMultiplier( uint32_t min, uint32_t max );
     void OptimizeTroopsOrder( Army & hero );
+    bool CanPurchaseHero( const Kingdom & kingdom );
 
     StreamBase & operator<<( StreamBase &, const AI::Base & );
     StreamBase & operator>>( StreamBase &, AI::Base & );

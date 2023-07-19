@@ -65,8 +65,12 @@ namespace
     {
         const fheroes2::Display & display = fheroes2::Display::instance();
         std::string resolutionName;
-        if ( display.scale() > 1 ) {
-            resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() ) + " (x" + std::to_string( display.scale() ) + ')';
+        if ( display.screenSize().width != display.width() || display.screenSize().height != display.height() ) {
+            const int32_t integer = display.screenSize().width / display.width();
+            const int32_t fraction = display.screenSize().width * 10 / display.width() - 10 * integer;
+
+            resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() ) + " (x" + std::to_string( integer ) + '.'
+                             + std::to_string( fraction ) + ')';
         }
         else {
             resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() );

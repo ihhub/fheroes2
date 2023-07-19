@@ -196,6 +196,9 @@ using MapsFileInfoList = std::vector<Maps::FileInfo>;
 namespace Maps
 {
     MapsFileInfoList PrepareMapsFileInfoList( const bool multi );
+
+    // Creates the list of fheroes2 Resurrection map files.
+    MapsFileInfoList prepareResurrectionMapsFileInfoList();
 }
 
 #endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -231,7 +231,7 @@ void DrawFlags( const std::vector<ValueColors> & v, const fheroes2::Point & pos,
     }
 }
 
-void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step )
+void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step, const int frameIcnID )
 {
     if ( !v.empty() ) {
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -240,7 +240,7 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & 
             const Heroes * hero = world.GetHeroes( v[ii].first );
             if ( hero ) {
                 int32_t px = pos.x + ii * step;
-                const fheroes2::Sprite & window = fheroes2::AGG::GetICN( ICN::LOCATORS, 22 );
+                const fheroes2::Sprite & window = fheroes2::AGG::GetICN( frameIcnID, 22 );
                 fheroes2::Blit( window, display, px - window.width() / 2, pos.y - 4 );
 
                 const fheroes2::Sprite & icon = hero->GetPortrait( PORT_SMALL );
@@ -310,7 +310,10 @@ void Dialog::ThievesGuild( bool oracle )
     Dialog::FrameBorder frameborder( { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } );
     const fheroes2::Point cur_pt( frameborder.GetArea().x, frameborder.GetArea().y );
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
+    const bool isEvilInterfaceTown = !oracle && Settings::Get().isEvilInterfaceEnabled();
+
+    const int backgroundIcnID = isEvilInterfaceTown ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
+    fheroes2::Blit( fheroes2::AGG::GetICN( backgroundIcnID, 0 ), display, cur_pt.x, cur_pt.y );
 
     fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
 
@@ -369,7 +372,7 @@ void Dialog::ThievesGuild( bool oracle )
     // button exit
     dst_pt.x = cur_pt.x + 578;
     dst_pt.y = cur_pt.y + 461;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::WELLXTRA, 0, 1 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
 
     text.Set( _( "Number of Towns:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
@@ -487,7 +490,8 @@ void Dialog::ThievesGuild( bool oracle )
     dst_pt.x = cur_pt.x + startx + 1;
     dst_pt.y -= 2;
     GetBestHeroArmyInfo( v, colors );
-    DrawHeroIcons( v, dst_pt, stepx );
+    const int frameIcnID = isEvilInterfaceTown ? ICN::LOCATORE : ICN::LOCATORS;
+    DrawHeroIcons( v, dst_pt, stepx, frameIcnID );
 
     text.Set( _( "Best Hero Stats:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -49,6 +49,11 @@ public:
     void SetBackground( const fheroes2::Size & sz, const uint8_t fillColor );
     void SetArmy( Army * );
 
+    void setTroopWindowOffsetY( const int32_t offsetY )
+    {
+        _troopWindowOffsetY = offsetY;
+    }
+
     bool isValid() const;
 
     void ResetSelected();
@@ -81,6 +86,7 @@ private:
     bool read_only;
     bool can_change;
     std::string msg;
+    int32_t _troopWindowOffsetY;
 };
 
 #endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "campaign_savedata.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -25,7 +27,8 @@
 
 #include "army.h"
 #include "campaign_data.h"
-#include "campaign_savedata.h"
+#include "game_io.h"
+#include "save_format_version.h"
 #include "serialize.h"
 
 namespace Campaign
@@ -46,22 +49,42 @@ namespace Campaign
         _obtainedCampaignAwards.erase( std::remove( _obtainedCampaignAwards.begin(), _obtainedCampaignAwards.end(), awardID ), _obtainedCampaignAwards.end() );
     }
 
-    void CampaignSaveData::setCurrentScenarioBonus( const ScenarioBonusData & bonus )
+    void CampaignSaveData::setEnemyDefeatedAward( const int heroId )
     {
-        _currentScenarioBonus = bonus;
+        const ScenarioInfoId & currentScenarioInfo = getCurrentScenarioInfoId();
+        const std::vector<CampaignAwardData> obtainableAwards = CampaignAwardData::getCampaignAwardData( currentScenarioInfo );
+
+        for ( const auto & obtainableAward : obtainableAwards ) {
+            const int32_t awardType = obtainableAward._type;
+
+            if ( awardType == CampaignAwardData::AwardType::TYPE_DEFEAT_ENEMY_HERO ) {
+                if ( obtainableAward._subType == heroId ) {
+                    addCampaignAward( obtainableAward._id );
+                }
+                break;
+            }
+        }
     }
 
-    void CampaignSaveData::setCurrentScenarioInfoId( const ScenarioInfoId & scenarioInfoId )
+    void CampaignSaveData::setCurrentScenarioInfo( const ScenarioInfoId & scenarioInfoId, const int32_t bonusId /* = -1 */ )
     {
         assert( scenarioInfoId.campaignId >= 0 && scenarioInfoId.scenarioId >= 0 );
+
         _currentScenarioInfoId = scenarioInfoId;
+        _currentScenarioBonusId = bonusId;
     }
 
     void CampaignSaveData::addCurrentMapToFinished()
     {
-        const bool isNotDuplicate = std::find( _finishedMaps.begin(), _finishedMaps.end(), _currentScenarioInfoId ) == _finishedMaps.end();
-        if ( isNotDuplicate )
-            _finishedMaps.emplace_back( _currentScenarioInfoId );
+        // Check for a duplicate
+        if ( std::find( _finishedMaps.begin(), _finishedMaps.end(), _currentScenarioInfoId ) != _finishedMaps.end() ) {
+            return;
+        }
+
+        _finishedMaps.emplace_back( _currentScenarioInfoId );
+        _bonusesForFinishedMaps.emplace_back( _currentScenarioBonusId );
+
+        assert( _finishedMaps.size() == _bonusesForFinishedMaps.size() );
     }
 
     void CampaignSaveData::addDaysPassed( const uint32_t days )
@@ -72,9 +95,11 @@ namespace Campaign
     void CampaignSaveData::reset()
     {
         _finishedMaps.clear();
+        _bonusesForFinishedMaps.clear();
         _obtainedCampaignAwards.clear();
         _carryOverTroops.clear();
         _currentScenarioInfoId = { -1, -1 };
+        _currentScenarioBonusId = -1;
         _daysPassed = 0;
         _difficulty = CampaignDifficulty::Normal;
     }
@@ -92,6 +117,23 @@ namespace Campaign
     {
         assert( !_finishedMaps.empty() );
         return _finishedMaps.back();
+    }
+
+    uint32_t CampaignSaveData::getCampaignDifficultyPercent() const
+    {
+        switch ( _difficulty ) {
+        case CampaignDifficulty::Easy:
+            return 125;
+        case CampaignDifficulty::Normal:
+            // Original campaign difficulty.
+            return 100;
+        case CampaignDifficulty::Hard:
+            return 75;
+        default:
+            // Did you add a new campaign difficulty? Add the logic above!
+            assert( 0 );
+            return 100;
+        }
     }
 
     std::vector<Campaign::CampaignAwardData> CampaignSaveData::getObtainedCampaignAwards() const
@@ -118,14 +160,42 @@ namespace Campaign
 
     StreamBase & operator<<( StreamBase & msg, const CampaignSaveData & data )
     {
-        return msg << data._currentScenarioInfoId.campaignId << data._currentScenarioInfoId.scenarioId << data._currentScenarioBonus << data._finishedMaps
-                   << data._daysPassed << data._obtainedCampaignAwards << data._carryOverTroops << data._difficulty;
+        return msg << data._currentScenarioInfoId.campaignId << data._currentScenarioInfoId.scenarioId << data._currentScenarioBonusId << data._finishedMaps
+                   << data._bonusesForFinishedMaps << data._daysPassed << data._obtainedCampaignAwards << data._carryOverTroops << data._difficulty;
     }
 
     StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data )
     {
-        return msg >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId >> data._currentScenarioBonus >> data._finishedMaps
-               >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
+        msg >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId;
+
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1005_RELEASE ) {
+            ScenarioBonusData dummy;
+
+            msg >> dummy;
+
+            // There is always a bonus in all the original HoMM2 campaign missions
+            data._currentScenarioBonusId = 0;
+        }
+        else {
+            msg >> data._currentScenarioBonusId;
+        }
+
+        msg >> data._finishedMaps;
+
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1005_RELEASE ) {
+            // There is always a bonus in all the original HoMM2 campaign missions
+            data._bonusesForFinishedMaps.resize( data._finishedMaps.size(), 0 );
+        }
+        else {
+            msg >> data._bonusesForFinishedMaps;
+
+            // Make sure that the number of elements in the vector of map bonuses matches the number of elements in the vector of finished maps
+            data._bonusesForFinishedMaps.resize( data._finishedMaps.size(), -1 );
+        }
+
+        return msg >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
     }
 
     ScenarioVictoryCondition getCurrentScenarioVictoryCondition()

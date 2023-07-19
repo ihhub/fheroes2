@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -152,15 +152,19 @@ public:
 
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
-        buttonGift.setICNInfo( isEvilInterface ? ICN::BTNGIFT_EVIL : ICN::BTNGIFT_GOOD, 0, 1 );
-        buttonTrade.setICNInfo( isEvilInterface ? ICN::BUTTON_SMALL_TRADE_EVIL : ICN::BUTTON_SMALL_TRADE_GOOD, 0, 1 );
+        const int tradeButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_TRADE_EVIL : ICN::BUTTON_SMALL_TRADE_GOOD;
+        const int giftButtonIcnID = isEvilInterface ? ICN::BTNGIFT_EVIL : ICN::BTNGIFT_GOOD;
+
+        buttonGift.setICNInfo( giftButtonIcnID, 0, 1 );
+        buttonTrade.setICNInfo( tradeButtonIcnID, 0, 1 );
         buttonLeft.setICNInfo( tradpostIcnId, 3, 4 );
         buttonRight.setICNInfo( tradpostIcnId, 5, 6 );
 
-        const fheroes2::Sprite & spriteExit = fheroes2::AGG::GetICN( tradpostIcnId, 17 );
+        const fheroes2::Sprite & spriteGift = fheroes2::AGG::GetICN( giftButtonIcnID, 0 );
+        const fheroes2::Sprite & spriteTrade = fheroes2::AGG::GetICN( tradeButtonIcnID, 0 );
 
-        buttonGift.setPosition( pos_rt.x - 68 + ( pos_rt.width - spriteExit.width() ) / 2, pos_rt.y + pos_rt.height - spriteExit.height() );
-        buttonTrade.setPosition( pos_rt.x + ( pos_rt.width - spriteExit.width() ) / 2, pos_rt.y + 150 );
+        buttonGift.setPosition( pos_rt.x - 68 + ( pos_rt.width - spriteGift.width() ) / 2, pos_rt.y + pos_rt.height - spriteGift.height() );
+        buttonTrade.setPosition( pos_rt.x + ( pos_rt.width - spriteTrade.width() ) / 2, pos_rt.y + 150 );
         buttonLeft.setPosition( pos_rt.x + 11, pos_rt.y + 129 );
         buttonRight.setPosition( pos_rt.x + 220, pos_rt.y + 129 );
         _scrollbar.setImage( fheroes2::AGG::GetICN( tradpostIcnId, 2 ) );
@@ -222,7 +226,7 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
                                         ? _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." )
                                         : _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" );
 
-        const TextBox displayMesssage( message, Font::BIG, dst_rt );
+        const TextBox displayMessage( message, Font::BIG, dst_rt );
 
         if ( !_singlePlayer ) {
             buttonGift.enable();
@@ -333,7 +337,9 @@ void TradeWindowGUI::RedrawInfoBuySell( uint32_t count_sell, uint32_t count_buy,
 void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const int tradpost = Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST;
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    const int tradpost = isEvilInterface ? ICN::TRADPOSE : ICN::TRADPOST;
     const std::string & header = fromTradingPost ? _( "Trading Post" ) : _( "Marketplace" );
 
     // setup cursor
@@ -418,11 +424,12 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     fheroes2::Scrollbar & scrollbar = gui._scrollbar;
 
     // button exit
-    const fheroes2::Sprite & spriteExit = fheroes2::AGG::GetICN( tradpost, 17 );
+    const int exitButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_EXIT_BUTTON : ICN::UNIFORM_GOOD_EXIT_BUTTON;
+    const fheroes2::Sprite & spriteExit = fheroes2::AGG::GetICN( exitButtonIcnID, 0 );
 
     dst_pt.x = pos_rt.x + 68 + ( pos_rt.width - spriteExit.width() ) / 2;
     dst_pt.y = pos_rt.y + pos_rt.height - spriteExit.height();
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, tradpost, 17, 18 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, exitButtonIcnID, 0, 1 );
 
     buttonGift.draw();
     buttonExit.draw();

@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "castle.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -34,7 +36,6 @@
 #include "audio_manager.h"
 #include "battle_board.h"
 #include "battle_tower.h"
-#include "castle.h"
 #include "castle_building_info.h"
 #include "dialog.h"
 #include "difficulty.h"
@@ -116,7 +117,7 @@ Castle::Castle( int32_t cx, int32_t cy, int rc )
 
 void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
 {
-    assert( data.size() == MP2::SIZEOFMP2CASTLE );
+    assert( data.size() == MP2::MP2_CASTLE_STRUCTURE_SIZE );
 
     // Structure containing information about town or castle.
     //
@@ -644,10 +645,17 @@ double Castle::getVisitValue( const Heroes & hero ) const
 
     for ( size_t i = 0; i < futureArmy.Size(); ++i ) {
         Troop * troop = futureArmy.GetTroop( i );
-        if ( troop != nullptr && troop->isValid() ) {
-            const payment_t payment = troop->GetTotalUpgradeCost();
+        if ( troop != nullptr && troop->isValid() && troop->isAllowUpgrade() ) {
+            if ( GetRace() != troop->GetRace() ) {
+                continue;
+            }
 
-            if ( GetRace() == troop->GetRace() && isBuild( troop->GetUpgrade().GetDwelling() ) && potentialFunds >= payment ) {
+            if ( !isBuild( troop->GetUpgrade().GetDwelling() ) ) {
+                continue;
+            }
+
+            const payment_t payment = troop->GetTotalUpgradeCost();
+            if ( potentialFunds >= payment ) {
                 potentialFunds -= payment;
                 troop->Upgrade();
             }
@@ -1068,36 +1076,45 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
 
 bool Castle::RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force )
 {
-    Monster monster( race, GetActualDwelling( dw ) );
-    Troop troop( monster, std::min( count, getRecruitLimit( monster, GetKingdom().GetFunds() ) ) );
+    const Monster monster( race, GetActualDwelling( dw ) );
+    assert( count <= getRecruitLimit( monster, GetKingdom().GetFunds() ) );
 
-    if ( !RecruitMonster( troop, false ) ) {
-        if ( force ) {
-            Troop * weak = GetArmy().GetWeakestTroop();
-            if ( weak && weak->GetStrength() < troop.GetStrength() ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO,
-                           name << ": " << troop.GetCount() << " " << troop.GetMultiName() << " replace " << weak->GetCount() << " " << weak->GetMultiName() )
-                weak->Set( troop );
-                return true;
-            }
-        }
+    const Troop troop( monster, std::min( count, getRecruitLimit( monster, GetKingdom().GetFunds() ) ) );
 
-        return false;
+    if ( RecruitMonster( troop, false ) ) {
+        return true;
     }
-    return true;
+
+    // TODO: before removing an existing stack of monsters try to upgrade them and also merge some stacks.
+
+    if ( force ) {
+        Troop * weak = GetArmy().GetWeakestTroop();
+        if ( weak && weak->GetStrength() < troop.GetStrength() ) {
+            DEBUG_LOG( DBG_GAME, DBG_INFO,
+                       name << ": " << troop.GetCount() << " " << troop.GetMultiName() << " replace " << weak->GetCount() << " " << weak->GetMultiName() )
+            weak->Set( troop );
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void Castle::recruitBestAvailable( Funds budget )
 {
     for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
-        if ( isBuild( dw ) ) {
-            const Monster monster( race, GetActualDwelling( dw ) );
-            const uint32_t willRecruit = getRecruitLimit( monster, budget );
+        if ( !isBuild( dw ) ) {
+            continue;
+        }
 
-            if ( RecruitMonsterFromDwelling( dw, willRecruit, true ) ) {
-                // success, reduce the budget
-                budget -= ( monster.GetCost() * willRecruit );
-            }
+        const Monster monster( race, GetActualDwelling( dw ) );
+        const uint32_t willRecruit = getRecruitLimit( monster, budget );
+        if ( willRecruit == 0 ) {
+            continue;
+        }
+
+        if ( RecruitMonsterFromDwelling( dw, willRecruit, true ) ) {
+            budget -= ( monster.GetCost() * willRecruit );
         }
     }
 }
@@ -2418,7 +2435,7 @@ Army & Castle::GetActualArmy()
     return hero ? hero->GetArmy() : army;
 }
 
-double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
+double Castle::GetGarrisonStrength( const Heroes & attackingHero ) const
 {
     double totalStrength = 0;
 
@@ -2442,9 +2459,9 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
     }
 
     // Add castle bonuses if there are any troops defending the castle
-    if ( isCastle() && totalStrength > 1 ) {
-        const Battle::Tower tower( *this, Battle::TWR_CENTER, Rand::DeterministicRandomGenerator( 0 ), 0 );
-        const double towerStr = tower.GetStrengthWithBonus( tower.GetBonus(), 0 );
+    if ( isCastle() && totalStrength > 0.1 ) {
+        const Battle::Tower tower( *this, Battle::TowerType::TWR_CENTER, Rand::DeterministicRandomGenerator( 0 ), 0 );
+        const double towerStr = tower.GetStrengthWithBonus( tower.GetAttackBonus(), 0 );
 
         totalStrength += towerStr;
         if ( isBuild( BUILD_LEFTTURRET ) ) {
@@ -2454,12 +2471,12 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
             totalStrength += towerStr / 2;
         }
 
-        if ( attackingHero && ( !attackingHero->GetArmy().isMeleeDominantArmy() || attackingHero->HasSecondarySkill( Skill::Secondary::BALLISTICS ) ) ) {
-            totalStrength *= isBuild( BUILD_MOAT ) ? 1.2 : 1.15;
-        }
-        else {
+        if ( !attackingHero.HasSecondarySkill( Skill::Secondary::BALLISTICS ) && attackingHero.GetArmy().isMeleeDominantArmy() ) {
             // Heavy penalty if the attacking hero does not have a ballistic skill, and his army is based on melee infantry
             totalStrength *= isBuild( BUILD_MOAT ) ? 1.45 : 1.25;
+        }
+        else {
+            totalStrength *= isBuild( BUILD_MOAT ) ? 1.2 : 1.15;
         }
     }
 

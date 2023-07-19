@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,7 +23,9 @@
 #ifndef H2KINGDOM_H
 #define H2KINGDOM_H
 
+#include <algorithm>
 #include <cstdint>
+#include <functional>
 #include <list>
 #include <set>
 
@@ -40,6 +42,8 @@
 #include "resource.h"
 
 class StreamBase;
+
+struct EventDate;
 
 namespace Maps
 {
@@ -86,6 +90,20 @@ public:
     bool AllowPayment( const Funds & ) const;
     bool AllowRecruitHero( bool check_payment ) const;
 
+    // Return true if this kingdom can recruit heroes, false otherwise. For
+    // example this function will return false when kingdom has one town that
+    // cannot be upgraded to a castle.
+    bool canRecruitHeroes() const
+    {
+        return std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return ( castle->isCastle() || castle->Modes( Castle::ALLOWCASTLE ) ); } );
+    }
+
+    // Return true if this kingdom has any heroes, false otherwise.
+    bool hasHeroes() const
+    {
+        return !heroes.empty();
+    }
+
     void SetLastBattleWinHero( const Heroes & hero );
     Heroes * GetLastBattleWinHero() const;
 
@@ -103,7 +121,7 @@ public:
     {
         return resource;
     }
-    Funds GetIncome( int = INCOME_ALL ) const;
+    Funds GetIncome( int type = INCOME_ALL ) const;
 
     double GetArmiesStrength() const;
 
@@ -161,6 +179,7 @@ public:
     void ActionNewDay();
     void ActionNewWeek();
     void ActionNewMonth();
+    void ActionNewDayResourceUpdate( const std::function<void( const EventDate & event, const Funds & funds )> & displayEventDialog );
 
     void SetVisited( int32_t index, const MP2::MapObjectType objectType );
     uint32_t CountVisitedObjects( const MP2::MapObjectType objectType ) const;
@@ -169,6 +188,9 @@ public:
     bool isVisited( int32_t, const MP2::MapObjectType objectType ) const;
 
     bool isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const;
+
+    bool opponentsCanRecruitMoreHeroes() const;
+    bool opponentsHaveHeroes() const;
 
     bool HeroesMayStillMove() const;
 

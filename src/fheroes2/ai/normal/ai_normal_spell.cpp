@@ -108,7 +108,7 @@ namespace AI
                 checkSelectBestSpell( spell, spellDamageValue( spell, arena, currentUnit, friendly, enemies, retreating ) );
             }
             else if ( spell.isEffectDispel() ) {
-                checkSelectBestSpell( spell, spellDispellValue( spell, friendly, enemies ) );
+                checkSelectBestSpell( spell, spellDispelValue( spell, friendly, enemies ) );
             }
             else if ( spell.isSummon() ) {
                 checkSelectBestSpell( spell, spellSummonValue( spell, arena, _commander->GetColor() ) );
@@ -306,12 +306,12 @@ namespace AI
         return ratio;
     }
 
-    double BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const
+    double BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispel ) const
     {
         const int spellID = spell.GetID();
 
-        // Make sure this spell can be applied to the current unit (skip check for dispell estimation)
-        if ( !forDispell
+        // Make sure this spell can be applied to the current unit (skip check for dispel estimation)
+        if ( !forDispel
              && ( ( target.Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) && spellID != Spell::ANTIMAGIC ) || target.isUnderSpellEffect( spell )
                   || !target.AllowApplySpell( spell, _commander ) ) ) {
             return 0.0;
@@ -445,7 +445,7 @@ namespace AI
         return bestOutcome;
     }
 
-    SpellcastOutcome BattlePlanner::spellDispellValue( const Spell & spell, const Battle::Units & friendly, const Units & enemies ) const
+    SpellcastOutcome BattlePlanner::spellDispelValue( const Spell & spell, const Battle::Units & friendly, const Units & enemies ) const
     {
         SpellcastOutcome bestOutcome;
 

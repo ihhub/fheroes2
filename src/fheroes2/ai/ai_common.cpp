@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,6 +32,7 @@
 #include "payment.h"
 #include "rand.h"
 #include "resource.h"
+#include "settings.h"
 
 namespace AI
 {
@@ -135,5 +136,20 @@ namespace AI
                 break;
             }
         }
+    }
+
+    bool CanPurchaseHero( const Kingdom & kingdom )
+    {
+        if ( kingdom.GetCountCastle() == 0 ) {
+            return false;
+        }
+
+        if ( kingdom.GetColor() == Settings::Get().CurrentColor() ) {
+            // This is the AI's current turn.
+            return kingdom.AllowPayment( PaymentConditions::RecruitHero() );
+        }
+
+        // This is not the current turn for the AI so we need to roughly calculate the possible future income on the next day.
+        return kingdom.AllowPayment( PaymentConditions::RecruitHero() - kingdom.GetIncome() );
     }
 }

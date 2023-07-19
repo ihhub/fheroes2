@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "maps.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -31,9 +33,9 @@
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
+#include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
-#include "maps.h"
 #include "maps_tiles.h"
 #include "players.h"
 #include "race.h"
@@ -64,42 +66,6 @@ namespace
             }
         }
         return result;
-    }
-
-    bool isTileUnderMonsterProtection( const int32_t tileIndex, const int32_t monsterTileIndex )
-    {
-        const Maps::Tiles & tile = world.GetTiles( tileIndex );
-        const Maps::Tiles & monsterTile = world.GetTiles( monsterTileIndex );
-
-        // A pickupable object can be accessed without triggering a monster attack
-        if ( MP2::isPickupObject( tile.GetObject() ) || monsterTile.GetObject() != MP2::OBJ_MONSTER || tile.isWater() != monsterTile.isWater() ) {
-            return false;
-        }
-
-        const int directionToMonster = Maps::GetDirection( tileIndex, monsterTileIndex );
-        const int directionFromMonster = Direction::Reflect( directionToMonster );
-
-        // The tile is directly accessible to the monster
-        if ( ( tile.GetPassable() & directionToMonster ) && ( monsterTile.GetPassable() & directionFromMonster ) ) {
-            return true;
-        }
-
-        // The tile is not directly accessible to the monster, but he can still attack in the diagonal direction if, when the hero moves away from the tile
-        // in question in the vertical direction and the monster moves away from his tile in the horizontal direction, they would have to meet
-        if ( directionFromMonster == Direction::TOP_LEFT && ( tile.GetPassable() & Direction::BOTTOM ) && ( monsterTile.GetPassable() & Direction::LEFT ) ) {
-            return true;
-        }
-        if ( directionFromMonster == Direction::TOP_RIGHT && ( tile.GetPassable() & Direction::BOTTOM ) && ( monsterTile.GetPassable() & Direction::RIGHT ) ) {
-            return true;
-        }
-        if ( directionFromMonster == Direction::BOTTOM_RIGHT && ( tile.GetPassable() & Direction::TOP ) && ( monsterTile.GetPassable() & Direction::RIGHT ) ) {
-            return true;
-        }
-        if ( directionFromMonster == Direction::BOTTOM_LEFT && ( tile.GetPassable() & Direction::TOP ) && ( monsterTile.GetPassable() & Direction::LEFT ) ) {
-            return true;
-        }
-
-        return false;
     }
 }
 
@@ -328,6 +294,17 @@ Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t max
     return results;
 }
 
+MapsIndexes Maps::getVisibleMonstersAroundHero( const Heroes & hero )
+{
+    const uint32_t dist = hero.GetVisionsDistance();
+    MapsIndexes monsters = Maps::ScanAroundObjectWithDistance( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
+
+    const int32_t heroColor = hero.GetColor();
+    monsters.erase( std::remove_if( monsters.begin(), monsters.end(), [heroColor]( const int32_t index ) { return world.GetTiles( index ).isFog( heroColor ); } ),
+                    monsters.end() );
+    return monsters;
+}
+
 void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int playerColor )
 {
     if ( scoutingDistance <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
@@ -338,12 +315,14 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
     const fheroes2::Point center = Maps::GetPoint( tileIndex );
 
     // AI is cheating!
-    const bool isAIPlayer = world.GetKingdom( playerColor ).isControlAI();
+    const Kingdom & kingdom = world.GetKingdom( playerColor );
+    const bool isAIPlayer = kingdom.isControlAI();
     if ( isAIPlayer ) {
         scoutingDistance += Difficulty::GetScoutingBonus( Game::getDifficulty() );
     }
 
     const int alliedColors = Players::GetPlayerFriends( playerColor );
+    const bool isHumanOrHumanFriend = !isAIPlayer || Players::isFriends( playerColor, Players::HumanColors() );
 
     const int revealRadiusSquared = scoutingDistance * scoutingDistance + 4; // constant factor for "backwards compatibility"
 
@@ -355,6 +334,9 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
     const int32_t maxX = std::min( center.x + scoutingDistance, world.w() - 1 );
     assert( minX < maxX );
 
+    fheroes2::Point fogRevealMinPos( world.h(), world.w() );
+    fheroes2::Point fogRevealMaxPos( 0, 0 );
+
     for ( int32_t y = minY; y <= maxY; ++y ) {
         const int32_t dy = y - center.y;
 
@@ -363,12 +345,31 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
             if ( revealRadiusSquared >= dx * dx + dy * dy ) {
                 Maps::Tiles & tile = world.GetTiles( x, y );
                 if ( isAIPlayer && tile.isFog( playerColor ) ) {
-                    AI::Get().revealFog( tile );
+                    AI::Get().revealFog( tile, kingdom );
                 }
 
-                tile.ClearFog( alliedColors );
+                if ( tile.isFog( alliedColors ) ) {
+                    // Clear fog only if it is not already cleared.
+                    tile.ClearFog( alliedColors );
+
+                    if ( isHumanOrHumanFriend ) {
+                        // Update fog reveal area points only for human player and his allies.
+                        fogRevealMinPos.x = std::min( fogRevealMinPos.x, x );
+                        fogRevealMinPos.y = std::min( fogRevealMinPos.y, y );
+                        fogRevealMaxPos.x = std::max( fogRevealMaxPos.x, x );
+                        fogRevealMaxPos.y = std::max( fogRevealMaxPos.y, y );
+                    }
+                }
             }
         }
+    }
+
+    // Update fog directions only for human player and his allies and only if fog has to be cleared.
+    if ( isHumanOrHumanFriend && ( fogRevealMaxPos.x >= fogRevealMinPos.x ) && ( fogRevealMaxPos.y >= fogRevealMinPos.y ) ) {
+        // Fog directions should be updated 1 tile outside of the cleared fog.
+        fogRevealMinPos -= { 1, 1 };
+        fogRevealMaxPos += { 1, 1 };
+        Maps::Tiles::updateFogDirectionsInArea( fogRevealMinPos, fogRevealMaxPos, alliedColors );
     }
 }
 
@@ -464,48 +465,105 @@ bool Maps::isTileUnderProtection( const int32_t tileIndex )
     return world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_MONSTER ? true : !getMonstersProtectingTile( tileIndex ).empty();
 }
 
-Maps::Indexes Maps::getMonstersProtectingTile( const int32_t tileIndex )
+Maps::Indexes Maps::getMonstersProtectingTile( const int32_t tileIndex, const bool checkObjectOnTile /* = true */ )
 {
+    if ( !isValidAbsIndex( tileIndex ) ) {
+        return {};
+    }
+
     Indexes result;
-    if ( !isValidAbsIndex( tileIndex ) )
+
+    const Maps::Tiles & tile = world.GetTiles( tileIndex );
+
+    // If a tile contains an object that you can interact with without visiting this tile, then this interaction doesn't trigger a monster attack...
+    if ( checkObjectOnTile && MP2::isNeedStayFront( tile.GetObject() ) ) {
+        // ... unless the tile itself contains a monster
+        if ( tile.GetObject() == MP2::OBJ_MONSTER ) {
+            result.push_back( tileIndex );
+        }
+
         return result;
+    }
 
     result.reserve( 9 );
+
     const int width = world.w();
     const int x = tileIndex % width;
     const int y = tileIndex / width;
 
-    auto validateAndInsert = [&result, tileIndex]( const int monsterTileIndex ) {
-        if ( isTileUnderMonsterProtection( tileIndex, monsterTileIndex ) ) {
+    auto isProtectedBy = [tileIndex, &tile]( const int32_t monsterTileIndex ) {
+        const Maps::Tiles & monsterTile = world.GetTiles( monsterTileIndex );
+
+        if ( monsterTile.GetObject() != MP2::OBJ_MONSTER || tile.isWater() != monsterTile.isWater() ) {
+            return false;
+        }
+
+        const int directionToMonster = Maps::GetDirection( tileIndex, monsterTileIndex );
+        const int directionFromMonster = Direction::Reflect( directionToMonster );
+
+        // The tile is directly accessible to the monster
+        if ( ( tile.GetPassable() & directionToMonster ) && ( monsterTile.GetPassable() & directionFromMonster ) ) {
+            return true;
+        }
+
+        // The tile is not directly accessible to the monster, but he can still attack in the diagonal direction if, when the hero moves away from the tile
+        // in question in the vertical direction and the monster moves away from his tile in the horizontal direction, they would have to meet
+        if ( directionFromMonster == Direction::TOP_LEFT && ( tile.GetPassable() & Direction::BOTTOM ) && ( monsterTile.GetPassable() & Direction::LEFT ) ) {
+            return true;
+        }
+        if ( directionFromMonster == Direction::TOP_RIGHT && ( tile.GetPassable() & Direction::BOTTOM ) && ( monsterTile.GetPassable() & Direction::RIGHT ) ) {
+            return true;
+        }
+        if ( directionFromMonster == Direction::BOTTOM_RIGHT && ( tile.GetPassable() & Direction::TOP ) && ( monsterTile.GetPassable() & Direction::RIGHT ) ) {
+            return true;
+        }
+        if ( directionFromMonster == Direction::BOTTOM_LEFT && ( tile.GetPassable() & Direction::TOP ) && ( monsterTile.GetPassable() & Direction::LEFT ) ) {
+            return true;
+        }
+
+        return false;
+    };
+
+    auto validateAndAdd = [&result, &isProtectedBy]( const int monsterTileIndex ) {
+        if ( isProtectedBy( monsterTileIndex ) ) {
             result.push_back( monsterTileIndex );
         }
     };
 
     if ( y > 0 ) {
-        if ( x > 0 )
-            validateAndInsert( tileIndex - width - 1 );
+        if ( x > 0 ) {
+            validateAndAdd( tileIndex - width - 1 );
+        }
 
-        validateAndInsert( tileIndex - width );
+        validateAndAdd( tileIndex - width );
 
-        if ( x < width - 1 )
-            validateAndInsert( tileIndex - width + 1 );
+        if ( x < width - 1 ) {
+            validateAndAdd( tileIndex - width + 1 );
+        }
     }
 
-    if ( x > 0 )
-        validateAndInsert( tileIndex - 1 );
-    if ( MP2::OBJ_MONSTER == world.GetTiles( tileIndex ).GetObject() )
+    if ( x > 0 ) {
+        validateAndAdd( tileIndex - 1 );
+    }
+
+    if ( tile.GetObject() == MP2::OBJ_MONSTER ) {
         result.push_back( tileIndex );
-    if ( x < width - 1 )
-        validateAndInsert( tileIndex + 1 );
+    }
+
+    if ( x < width - 1 ) {
+        validateAndAdd( tileIndex + 1 );
+    }
 
     if ( y < world.h() - 1 ) {
-        if ( x > 0 )
-            validateAndInsert( tileIndex + width - 1 );
+        if ( x > 0 ) {
+            validateAndAdd( tileIndex + width - 1 );
+        }
 
-        validateAndInsert( tileIndex + width );
+        validateAndAdd( tileIndex + width );
 
-        if ( x < width - 1 )
-            validateAndInsert( tileIndex + width + 1 );
+        if ( x < width - 1 ) {
+            validateAndAdd( tileIndex + width + 1 );
+        }
     }
 
     return result;
@@ -558,7 +616,7 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
 {
     /*
     Castle/Town object image consists of 42 tile sprites:
-    10 base tiles (OBJNTWBA) with 16 shadow tiles on left side (OBJNTWSH) overlayed by 16 town tiles (OBJNTOWN)
+    10 base tiles (OBJNTWBA) with 16 shadow tiles on left side (OBJNTWSH) overlaid by 16 town tiles (OBJNTOWN)
 
     Shadows (OBJNTWSH)  Castle (OBJNTOWN)
                               0

@@ -377,7 +377,7 @@ namespace
         if ( !descriptions.empty() ) {
             const int32_t descriptionWidth = 210;
             const int32_t maximumRowCount = 3;
-            const int32_t rowHeight = fheroes2::Text( std::string(), fheroes2::FontType::smallWhite() ).height();
+            const int32_t rowHeight = fheroes2::getFontHeight( fheroes2::FontSize::SMALL );
 
             bool asSolidText = true;
             if ( descriptions.size() <= static_cast<size_t>( maximumRowCount ) ) {
@@ -450,7 +450,7 @@ namespace
     }
 }
 
-int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
+int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const int32_t windowOffsetY )
 {
     // Unit cannot be dismissed or upgraded during combat
     assert( !troop.isBattle() || !( flags & BUTTONS ) || !( flags & ( UPGRADE | DISMISS ) ) );
@@ -472,6 +472,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     if ( isEvilInterface ) {
         dialogOffset.y += 3;
     }
+    dialogOffset.y += windowOffsetY;
 
     const fheroes2::Point shadowShift( spriteDialogShadow.x() - sprite_dialog.x(), spriteDialogShadow.y() - sprite_dialog.y() );
     const fheroes2::Point shadowOffset( dialogOffset.x + shadowShift.x, dialogOffset.y + shadowShift.y );
@@ -561,12 +562,17 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
         if ( buttonUpgrade.isEnabled() ) {
             le.MousePressLeft( buttonUpgrade.area() ) ? buttonUpgrade.drawOnPress() : buttonUpgrade.drawOnRelease();
         }
+
         if ( buttonDismiss.isEnabled() ) {
             le.MousePressLeft( buttonDismiss.area() ) ? buttonDismiss.drawOnPress() : buttonDismiss.drawOnRelease();
         }
+
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_UPGRADE_TROOP ) ) ) {
+            // If this assertion blows up then you are executing this code for a monster which has no upgrades.
+            assert( troop.isAllowUpgrade() );
+
             if ( UPGRADE_DISABLE & flags ) {
                 const fheroes2::Text description( _( "You can't afford to upgrade your troops!" ), fheroes2::FontType::normalWhite() );
                 fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::OK, troop.GetTotalUpgradeCost() );
@@ -581,16 +587,28 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 }
             }
         }
-        if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS_TROOP ) )
+
+        if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
              && Dialog::YES
                     == Dialog::Message( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ), Font::BIG,
                                         Dialog::YES | Dialog::NO ) ) {
             result = Dialog::DISMISS;
             break;
         }
+
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             result = Dialog::CANCEL;
             break;
+        }
+
+        if ( le.MousePressRight( buttonExit.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
+        }
+        else if ( buttonUpgrade.isEnabled() && le.MousePressRight( buttonUpgrade.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Upgrade" ), _( "Upgrade your troops." ), 0 );
+        }
+        else if ( buttonDismiss.isEnabled() && le.MousePressRight( buttonDismiss.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Dismiss" ), _( "Dismiss this army." ), 0 );
         }
 
         for ( const auto & spellInfo : spellAreas ) {

@@ -25,6 +25,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <string>
 #include <utility>
@@ -51,6 +52,7 @@
 #include "game_video.h"
 #include "game_video_type.h"
 #include "heroes.h"
+#include "highscores.h"
 #include "icn.h"
 #include "image.h"
 #include "kingdom.h"
@@ -68,6 +70,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "text.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_campaign.h"
@@ -387,7 +390,7 @@ namespace
             scenarioId = betrayalScenarioId + 1;
         }
 
-        Text campaignMapId( std::to_string( scenarioId ), Font::BIG );
+        const Text campaignMapId( std::to_string( scenarioId ), Font::BIG );
         campaignMapId.Blit( top.x + 172 - campaignMapId.w() / 2, top.y + 97 - campaignMapId.h() / 2 );
 
         TextBox mapDescription( scenario.getDescription(), Font::BIG, 356 );
@@ -751,7 +754,7 @@ namespace
         }
     }
 
-    void playPreviosScenarioVideo()
+    void playPreviousScenarioVideo()
     {
         const Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
         if ( saveData.isStarting() ) {
@@ -890,13 +893,30 @@ namespace
         return fheroes2::ButtonSprite( offset.x, offset.y, fheroes2::AGG::GetICN( icnId, 0 ), fheroes2::AGG::GetICN( icnId, 1 ) );
     }
 
-    int32_t setCampaignDifficulty( int32_t currentDifficulty, const bool isSelectionAllowed )
+    std::string getCampaignDifficultyText( const int32_t difficulty )
+    {
+        switch ( difficulty ) {
+        case Campaign::CampaignDifficulty::Easy:
+            return { _( "Easy" ) };
+        case Campaign::CampaignDifficulty::Normal:
+            // Original campaign difficulty.
+            return { _( "Normal" ) };
+        case Campaign::CampaignDifficulty::Hard:
+            return { _( "Hard" ) };
+        default:
+            // Did you add a new campaign difficulty? Add the logic above!
+            assert( 0 );
+            return {};
+        }
+    }
+
+    int32_t setCampaignDifficulty( int32_t currentDifficulty, const int32_t maximumAllowedDifficulty )
     {
         const fheroes2::StandardWindow frameborder( 234, 270, true );
         const fheroes2::Rect & windowRoi = frameborder.activeArea();
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-        const int buttonIcnId = isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN;
+        const int buttonIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
         const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcnId, 0 );
 
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -942,37 +962,36 @@ namespace
         case Campaign::CampaignDifficulty::Easy:
             currentDescription = easyDescription;
             selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
-            if ( !isSelectionAllowed ) {
-                fheroes2::ApplyPalette( display, iconArea[1].x, iconArea[1].y, display, iconArea[1].x, iconArea[1].y, iconArea[1].width, iconArea[1].height,
-                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
-                fheroes2::ApplyPalette( display, iconArea[2].x, iconArea[2].y, display, iconArea[2].x, iconArea[2].y, iconArea[2].width, iconArea[2].height,
-                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
-            }
             break;
         case Campaign::CampaignDifficulty::Normal:
             currentDescription = normalDescription;
             selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
-            if ( !isSelectionAllowed ) {
-                fheroes2::ApplyPalette( display, iconArea[0].x, iconArea[0].y, display, iconArea[0].x, iconArea[0].y, iconArea[0].width, iconArea[0].height,
-                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
-                fheroes2::ApplyPalette( display, iconArea[2].x, iconArea[2].y, display, iconArea[2].x, iconArea[2].y, iconArea[2].width, iconArea[2].height,
-                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
-            }
             break;
         case Campaign::CampaignDifficulty::Hard:
             currentDescription = hardDescription;
             selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
-            if ( !isSelectionAllowed ) {
-                fheroes2::ApplyPalette( display, iconArea[0].x, iconArea[0].y, display, iconArea[0].x, iconArea[0].y, iconArea[0].width, iconArea[0].height,
-                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
-                fheroes2::ApplyPalette( display, iconArea[1].x, iconArea[1].y, display, iconArea[1].x, iconArea[1].y, iconArea[1].width, iconArea[1].height,
-                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
-            }
             break;
         default:
             // Did you add a new difficulty level for campaigns? Add the logic above!
             assert( 0 );
             break;
+        }
+
+        const std::array<bool, 3> allowedSelection{ ( maximumAllowedDifficulty >= Campaign::CampaignDifficulty::Easy ),
+                                                    ( maximumAllowedDifficulty >= Campaign::CampaignDifficulty::Normal ),
+                                                    ( maximumAllowedDifficulty >= Campaign::CampaignDifficulty::Hard ) };
+
+        if ( !allowedSelection[0] ) {
+            fheroes2::ApplyPalette( display, iconArea[0].x, iconArea[0].y, display, iconArea[0].x, iconArea[0].y, iconArea[0].width, iconArea[0].height,
+                                    PAL::GetPalette( PAL::PaletteType::GRAY ) );
+        }
+        if ( !allowedSelection[1] ) {
+            fheroes2::ApplyPalette( display, iconArea[1].x, iconArea[1].y, display, iconArea[1].x, iconArea[1].y, iconArea[1].width, iconArea[1].height,
+                                    PAL::GetPalette( PAL::PaletteType::GRAY ) );
+        }
+        if ( !allowedSelection[2] ) {
+            fheroes2::ApplyPalette( display, iconArea[2].x, iconArea[2].y, display, iconArea[2].x, iconArea[2].y, iconArea[2].width, iconArea[2].height,
+                                    PAL::GetPalette( PAL::PaletteType::GRAY ) );
         }
 
         const int32_t textWidth = windowRoi.width - 16;
@@ -982,9 +1001,9 @@ namespace
         fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, textWidth, description.height( textWidth ) );
         description.draw( textOffset.x, textOffset.y, textWidth, display );
 
-        fheroes2::Text easyName( _( "Easy" ), fheroes2::FontType::normalWhite() );
-        fheroes2::Text normalName( _( "Normal" ), fheroes2::FontType::normalWhite() );
-        fheroes2::Text hardName( _( "Hard" ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text easyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Easy ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text normalName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Normal ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text hardName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Hard ), fheroes2::FontType::normalWhite() );
 
         easyName.draw( difficultyArea[0].x + ( difficultyArea[0].width - easyName.width() ) / 2, difficultyArea[0].y + difficultyArea[0].height + 5, display );
         normalName.draw( difficultyArea[1].x + ( difficultyArea[1].width - normalName.width() ) / 2, difficultyArea[1].y + difficultyArea[1].height + 5, display );
@@ -1001,51 +1020,49 @@ namespace
             }
 
             if ( le.MousePressRight( buttonOk.area() ) ) {
-                fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
+                const fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
+                const fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
             else if ( le.MousePressRight( difficultyArea[0] ) ) {
-                fheroes2::Text header( _( "Easy" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( easyDescription, fheroes2::FontType::normalWhite() );
+                const fheroes2::Text header( getCampaignDifficultyText( Campaign::CampaignDifficulty::Easy ), fheroes2::FontType::normalYellow() );
+                const fheroes2::Text body( easyDescription, fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
             else if ( le.MousePressRight( difficultyArea[1] ) ) {
-                fheroes2::Text header( _( "Normal" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( normalDescription, fheroes2::FontType::normalWhite() );
+                const fheroes2::Text header( getCampaignDifficultyText( Campaign::CampaignDifficulty::Normal ), fheroes2::FontType::normalYellow() );
+                const fheroes2::Text body( normalDescription, fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
             else if ( le.MousePressRight( difficultyArea[2] ) ) {
-                fheroes2::Text header( _( "Hard" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( hardDescription, fheroes2::FontType::normalWhite() );
+                const fheroes2::Text header( getCampaignDifficultyText( Campaign::CampaignDifficulty::Hard ), fheroes2::FontType::normalYellow() );
+                const fheroes2::Text body( hardDescription, fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
 
             bool updateInfo = false;
 
-            if ( isSelectionAllowed ) {
-                if ( le.MouseClickLeft( difficultyArea[0] ) ) {
-                    currentDescription = easyDescription;
-                    selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
-                    currentDifficulty = Campaign::CampaignDifficulty::Easy;
-                    updateInfo = true;
-                }
-                else if ( le.MouseClickLeft( difficultyArea[1] ) ) {
-                    currentDescription = normalDescription;
-                    selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
-                    currentDifficulty = Campaign::CampaignDifficulty::Normal;
-                    updateInfo = true;
-                }
-                else if ( le.MouseClickLeft( difficultyArea[2] ) ) {
-                    currentDescription = hardDescription;
-                    selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
-                    currentDifficulty = Campaign::CampaignDifficulty::Hard;
-                    updateInfo = true;
-                }
+            if ( allowedSelection[0] && le.MouseClickLeft( difficultyArea[0] ) ) {
+                currentDescription = easyDescription;
+                selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
+                currentDifficulty = Campaign::CampaignDifficulty::Easy;
+                updateInfo = true;
+            }
+            else if ( allowedSelection[1] && le.MouseClickLeft( difficultyArea[1] ) ) {
+                currentDescription = normalDescription;
+                selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
+                currentDifficulty = Campaign::CampaignDifficulty::Normal;
+                updateInfo = true;
+            }
+            else if ( allowedSelection[2] && le.MouseClickLeft( difficultyArea[2] ) ) {
+                currentDescription = hardDescription;
+                selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
+                currentDifficulty = Campaign::CampaignDifficulty::Hard;
+                updateInfo = true;
             }
 
             if ( updateInfo ) {
@@ -1157,8 +1174,13 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
     const std::vector<Campaign::CampaignAwardData> obtainableAwards = Campaign::CampaignAwardData::getCampaignAwardData( lastCompletedScenarioInfo );
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
-    for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
-        const uint32_t awardType = obtainableAwards[i]._type;
+    for ( const auto & obtainableAward : obtainableAwards ) {
+        const int32_t awardType = obtainableAward._type;
+
+        if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_DEFEAT_ENEMY_HERO ) {
+            // This award must be granted only after defeating a hero in a battle.
+            continue;
+        }
 
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
             const Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
@@ -1169,7 +1191,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
                 saveData.setCarryOverTroops( lastBattleWinHero->GetArmy() );
         }
 
-        saveData.addCampaignAward( obtainableAwards[i]._id );
+        saveData.addCampaignAward( obtainableAward._id );
 
         // after adding an artifact award, check whether the artifacts can be assembled into something else
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT ) {
@@ -1207,22 +1229,47 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         }
     }
 
-    playPreviosScenarioVideo();
+    playPreviousScenarioVideo();
 
     if ( campaignData.isLastScenario( lastCompletedScenarioInfo ) ) {
-        Game::ShowCredits();
+        Game::ShowCredits( false );
+
+        // Get data for ratings text.
+        const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+        const int32_t daysPassed = static_cast<int32_t>( campaignSaveData.getDaysPassed() );
+        // Rating is calculated based on difficulty of campaign.
+        const int32_t score = daysPassed * static_cast<int32_t>( campaignSaveData.getCampaignDifficultyPercent() ) / 100;
+
+        // Make ratings text as a subtitle for WIN.SMK.
+        fheroes2::MultiFontText ratingText;
+
+        std::string textBody = _( "Congratulations!\n\nDays: %{days}\n" );
+        StringReplace( textBody, "%{days}", daysPassed );
+        ratingText.add( { textBody, fheroes2::FontType::normalWhite() } );
+
+        textBody = _( "\nDifficulty: %{difficulty}\n\n" );
+        StringReplace( textBody, "%{difficulty}", getCampaignDifficultyText( campaignSaveData.getDifficulty() ) );
+        ratingText.add( { textBody, fheroes2::FontType::smallWhite() } );
+
+        textBody = _( "Score: %{score}\n\nRating:\n%{rating}" );
+        StringReplace( textBody, "%{score}", score );
+        StringReplace( textBody, "%{rating}", fheroes2::HighScoreDataContainer::getMonsterByDay( score ).GetName() );
+        ratingText.add( { textBody, fheroes2::FontType::normalWhite() } );
+
+        // Show results from the 5th second until end (forever) and set maximum width to 140 to fit the black area.
+        // Set subtitles top-center position (475,110) to render results over the black rectangle of burned picture in WIN.SMK video.
+        Video::Subtitle ratingSubtitle( ratingText, 5000, UINT32_MAX, { 475, 110 }, 140 );
 
         AudioManager::ResetAudio();
-        Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
-        // TODO : Implement function that displays the last frame of win.smk with score
-        // and a dialog for name entry. fheroes2::PlayMusic is run here in order to start
-        // playing before displaying the high score.
+        Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { std::move( ratingSubtitle ) }, true );
+
+        // fheroes2::PlayMusic is run here in order to start playing before displaying the high score.
         AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
         return fheroes2::GameMode::HIGHSCORES_CAMPAIGN;
     }
 
     const Campaign::ScenarioInfoId firstNextMap = Campaign::CampaignData::getScenariosAfter( lastCompletedScenarioInfo ).front();
-    saveData.setCurrentScenarioInfoId( firstNextMap );
+    saveData.setCurrentScenarioInfo( firstNextMap );
     return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
 
@@ -1245,7 +1292,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
     const Campaign::ScenarioData & scenario = scenarios[currentScenarioInfoId.scenarioId];
 
-    fheroes2::GameInterfaceTypeRestorer gameInterfaceRestorer( chosenCampaignID != Campaign::ROLAND_CAMPAIGN );
+    const fheroes2::GameInterfaceTypeRestorer gameInterfaceRestorer( chosenCampaignID != Campaign::ROLAND_CAMPAIGN );
 
     if ( !allowToRestart ) {
         playCurrentScenarioVideo();
@@ -1296,7 +1343,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     fheroes2::ButtonGroup buttonChoices;
     fheroes2::OptionButtonGroup optionButtonGroup;
 
-    Campaign::ScenarioBonusData scenarioBonus;
+    std::optional<int32_t> scenarioBonusId;
     const std::vector<Campaign::ScenarioBonusData> & bonusChoices = scenario.getBonuses();
 
     const fheroes2::Point optionButtonOffset( 590, 199 );
@@ -1307,22 +1354,39 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     fheroes2::Copy( backgroundImage, optionButtonOffset.x + pressedButton.x(), optionButtonOffset.y + pressedButton.y(), releaseButton, 0, 0, releaseButton.width(),
                     releaseButton.height() );
 
-    const uint32_t bonusChoiceCount = static_cast<uint32_t>( scenario.getBonuses().size() );
-    for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
-        buttonChoices.createButton( optionButtonOffset.x + top.x, optionButtonOffset.y + optionButtonStep * i + top.y, releaseButton, pressedButton, i );
-        optionButtonGroup.addButton( &buttonChoices.button( i ) );
+    const uint32_t bonusChoiceCount = static_cast<uint32_t>( bonusChoices.size() );
+
+    {
+        const int32_t saveDataBonusId = campaignSaveData.getCurrentScenarioBonusId();
+
+        for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
+            buttonChoices.createButton( optionButtonOffset.x + top.x, optionButtonOffset.y + optionButtonStep * i + top.y, releaseButton, pressedButton, i );
+            optionButtonGroup.addButton( &buttonChoices.button( i ) );
+
+            if ( allowToRestart && saveDataBonusId >= 0 && static_cast<uint32_t>( saveDataBonusId ) == i ) {
+                scenarioBonusId = saveDataBonusId;
+                buttonChoices.button( i ).press();
+            }
+        }
     }
 
-    // in case there's no bonus for the map
     if ( bonusChoiceCount > 0 ) {
-        scenarioBonus = bonusChoices[0];
-        buttonChoices.button( 0 ).press();
+        if ( allowToRestart ) {
+            // If the campaign scenario is already in progress, then one of the bonuses should be selected
+            assert( scenarioBonusId.has_value() );
+        }
+        else {
+            // If this is the beginning of a new campaign scenario, then just select the first bonus
+            scenarioBonusId = 0;
+            buttonChoices.button( 0 ).press();
+        }
     }
+
+    optionButtonGroup.draw();
 
     buttonViewIntro.draw();
     buttonDifficulty.draw();
 
-    const bool isDifficultySelectionAllowed = campaignSaveData.isStarting() && !allowToRestart;
     const bool isMapPresent = scenario.isMapFilePresent();
 
     if ( allowToRestart ) {
@@ -1351,10 +1415,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     buttonCancel.draw();
 
-    for ( uint32_t i = 0; i < bonusChoiceCount; ++i )
-        buttonChoices.button( i ).draw();
-
-    Text textDaysSpent( std::to_string( campaignSaveData.getDaysPassed() ), Font::BIG );
+    const Text textDaysSpent( std::to_string( campaignSaveData.getDaysPassed() ), Font::BIG );
     textDaysSpent.Blit( top.x + 582 - textDaysSpent.w() / 2, top.y + 31 );
 
     DrawCampaignScenarioDescription( scenario, top );
@@ -1385,7 +1446,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     LocalEvent & le = LocalEvent::Get();
 
-    display.render();
+    // Fade-in campaign scenario info.
+    if ( validateDisplayFadeIn() ) {
+        fheroes2::fadeInDisplay( { top.x, top.y, backgroundImage.width(), backgroundImage.height() }, false );
+    }
 
     std::vector<fheroes2::Rect> choiceArea( bonusChoiceCount );
     for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
@@ -1399,6 +1463,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     const std::array<Game::HotKeyEvent, 3> hotKeyBonusChoice{ Game::HotKeyEvent::CAMPAIGN_SELECT_FIRST_BONUS, Game::HotKeyEvent::CAMPAIGN_SELECT_SECOND_BONUS,
                                                               Game::HotKeyEvent::CAMPAIGN_SELECT_THIRD_BONUS };
 
+    int32_t currentDifficulty = campaignSaveData.getDifficulty();
+
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -1408,9 +1474,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
         for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
             if ( le.MousePressLeft( choiceArea[i] ) || ( i < hotKeyBonusChoice.size() && HotKeyPressEvent( hotKeyBonusChoice[i] ) ) ) {
+                scenarioBonusId = fheroes2::checkedCast<int32_t>( i );
                 buttonChoices.button( i ).press();
                 optionButtonGroup.draw();
-                scenarioBonus = bonusChoices[i];
                 display.render();
 
                 break;
@@ -1419,7 +1485,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
         for ( uint32_t i = 0; i < selectableScenariosCount; ++i ) {
             if ( currentScenarioInfoId != selectableScenarios[i] && le.MouseClickLeft( selectableScenarioButtons.button( i ).area() ) ) {
-                campaignSaveData.setCurrentScenarioInfoId( selectableScenarios[i] );
+                campaignSaveData.setCurrentScenarioInfo( selectableScenarios[i] );
                 return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             }
         }
@@ -1429,6 +1495,14 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 // Make sure to reset a state of the game if a user does not want to load it.
                 GameOver::Result::Get().Reset();
             }
+
+            fheroes2::fadeOutDisplay( { top.x, top.y, backgroundImage.width(), backgroundImage.height() }, false );
+
+            if ( prevMode == fheroes2::GameMode::LOAD_CAMPAIGN || prevMode == fheroes2::GameMode::MAIN_MENU ) {
+                // We are going back to main menu.
+                setDisplayFadeIn();
+            }
+
             return prevMode;
         }
 
@@ -1451,15 +1525,27 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
         else if ( le.MousePressRight( buttonDifficulty.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Select campaign difficulty. It cannot be changed after." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                                   fheroes2::Text( _( "Select the campaign difficulty. This can be lowered at any point during the campaign." ),
+                                                   fheroes2::FontType::normalWhite() ),
+                                   Dialog::ZERO );
         }
         else if ( buttonRestart.isVisible() && le.MousePressRight( buttonRestart.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Restart" ), fheroes2::FontType::normalYellow() ),
                                    fheroes2::Text( _( "Restart the current scenario." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
         else if ( ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_OKAY ) ) ) || restartButtonClicked ) {
+            if ( ( !campaignSaveData.isStarting() || allowToRestart ) && currentDifficulty != campaignSaveData.getDifficulty()
+                 && fheroes2::showStandardTextMessage( _( "Difficulty" ),
+                                                       _( "You have changed to a lower difficulty for the campaign. You will not be able to revert this after this "
+                                                          "point. The high score will be calculated based solely on the new difficulty. Do you want to proceed?" ),
+                                                       Dialog::YES | Dialog::NO )
+                        == Dialog::NO ) {
+                continue;
+            }
+
             if ( restartButtonClicked
-                 && Dialog::Message( _( "Restart" ), _( "Are you sure you want to restart this scenario?" ), Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::NO ) {
+                 && fheroes2::showStandardTextMessage( _( "Restart" ), _( "Are you sure you want to restart this scenario?" ), Dialog::YES | Dialog::NO )
+                        == Dialog::NO ) {
                 continue;
             }
 
@@ -1467,6 +1553,20 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             Campaign::CampaignData::updateScenarioGameplayConditions( currentScenarioInfoId, mapInfo );
 
             conf.SetCurrentFileInfo( mapInfo );
+
+            assert( !scenarioBonusId || ( scenarioBonusId >= 0 && static_cast<size_t>( *scenarioBonusId ) < bonusChoices.size() ) );
+
+            const Campaign::ScenarioBonusData scenarioBonus = [scenarioBonusId, &bonusChoices = std::as_const( bonusChoices )]() -> Campaign::ScenarioBonusData {
+                if ( !scenarioBonusId ) {
+                    return {};
+                }
+
+                if ( scenarioBonusId < 0 || static_cast<size_t>( *scenarioBonusId ) >= bonusChoices.size() ) {
+                    return {};
+                }
+
+                return bonusChoices[*scenarioBonusId];
+            }();
 
             // starting faction scenario bonus has to be called before players.SetStartGame()
             if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE || scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY ) {
@@ -1481,8 +1581,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             Players & players = conf.GetPlayers();
             players.SetStartGame();
-            if ( Settings::isFadeEffectEnabled() )
-                fheroes2::FadeDisplay();
 
             conf.SetGameType( Game::TYPE_CAMPAIGN );
 
@@ -1496,6 +1594,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 continue;
             }
 
+            // Fade-out screen before loading a scenario.
+            fheroes2::fadeOutDisplay();
+
             // meanwhile, the others should be called after players.SetStartGame()
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE ) {
                 SetScenarioBonus( currentScenarioInfoId, scenarioBonus );
@@ -1503,28 +1604,38 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             applyObtainedCampaignAwards( currentScenarioInfoId, campaignSaveData.getObtainedCampaignAwards() );
 
-            campaignSaveData.setCurrentScenarioBonus( scenarioBonus );
-            campaignSaveData.setCurrentScenarioInfoId( currentScenarioInfoId );
+            campaignSaveData.setCurrentScenarioInfo( currentScenarioInfoId, scenarioBonusId.value_or( -1 ) );
+            campaignSaveData.setDifficulty( currentDifficulty );
 
             return fheroes2::GameMode::START_GAME;
         }
         else if ( le.MouseClickLeft( buttonViewIntro.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_VIEW_INTRO ) ) {
             AudioManager::ResetAudio();
             fheroes2::ImageRestorer restorer( display, top.x, top.y, backgroundImage.width(), backgroundImage.height() );
-            playPreviosScenarioVideo();
+
+            fheroes2::fadeOutDisplay( restorer.rect(), false );
+
+            playPreviousScenarioVideo();
             playCurrentScenarioVideo();
 
-            restorer.restore();
-            display.render();
-
             playCampaignMusic( chosenCampaignID );
+
+            restorer.restore();
+
+            fheroes2::fadeInDisplay( restorer.rect(), false );
         }
         else if ( le.MousePressRight( areaDaysSpent ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Days spent" ), fheroes2::FontType::normalYellow() ),
                                    fheroes2::Text( _( "The number of days spent on this campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
         else if ( le.MouseClickLeft( buttonDifficulty.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_SELECT_DIFFICULTY ) ) {
-            campaignSaveData.setDifficulty( setCampaignDifficulty( campaignSaveData.getDifficulty(), isDifficultySelectionAllowed ) );
+            if ( campaignSaveData.isStarting() && !allowToRestart ) {
+                currentDifficulty = setCampaignDifficulty( currentDifficulty, Campaign::CampaignDifficulty::Hard );
+            }
+            else {
+                currentDifficulty = setCampaignDifficulty( currentDifficulty, campaignSaveData.getDifficulty() );
+            }
+
             display.render();
         }
     }

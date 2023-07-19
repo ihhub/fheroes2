@@ -165,7 +165,7 @@ const char * Heroes::GetName( int heroid )
             // necromant
             gettext_noop( "Zom" ), gettext_noop( "Darlana" ), gettext_noop( "Zam" ), gettext_noop( "Ranloo" ), gettext_noop( "Charity" ), gettext_noop( "Rialdo" ),
             gettext_noop( "Roxana" ), gettext_noop( "Sandro" ), gettext_noop( "Celia" ),
-            // campains
+            // campaigns
             gettext_noop( "Roland" ), gettext_noop( "Lord Corlagon" ), gettext_noop( "Sister Eliza" ), gettext_noop( "Archibald" ), gettext_noop( "Lord Halton" ),
             gettext_noop( "Brother Brax" ),
             // loyalty version
@@ -187,7 +187,7 @@ Heroes::Heroes()
     , path( *this )
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
-    , patrol_square( 0 )
+    , _patrolDistance( 0 )
     , _alphaValue( 255 )
     , _attackedMonsterTileIndex( -1 )
     , _aiRole( Role::HUNTER )
@@ -212,17 +212,16 @@ Heroes::Heroes( int heroid, int rc )
     , path( *this )
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
-    , patrol_square( 0 )
+    , _patrolDistance( 0 )
     , _alphaValue( 255 )
     , _attackedMonsterTileIndex( -1 )
     , _aiRole( Role::HUNTER )
 {
     name = _( Heroes::GetName( heroid ) );
 
-    // set default army
     army.Reset( true );
 
-    // extra hero
+    // Extra Debug Hero
     switch ( hid ) {
     case DEBUG_HERO:
         army.Clean();
@@ -244,9 +243,11 @@ Heroes::Heroes( int heroid, int rc )
         experience = 777;
         magic_point = 120;
 
-        // all spell in magic book
-        for ( int32_t spell = Spell::FIREBALL; spell < Spell::RANDOM; ++spell )
-            AppendSpellToBook( Spell( spell ), true );
+        // This hero has all the spells in his spell book
+        for ( const int spellId : Spell::getAllSpellIdsSuitableForSpellBook() ) {
+            AppendSpellToBook( Spell( spellId ), true );
+        }
+
         break;
 
     default:
@@ -258,49 +259,183 @@ Heroes::Heroes( int heroid, int rc )
     move_point = GetMaxMovePoints();
 }
 
-void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
+void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const std::vector<uint8_t> & data )
 {
+    assert( data.size() == MP2::MP2_HEROES_STRUCTURE_SIZE );
+
+    // Structure containing information about a hero.
+    //
+    // - uint8_t (1 byte)
+    //     Unknown / unused. TODO: find out what this byte is for.
+    //
+    // - uint8_t (1 byte)
+    //     Does the hero have custom army set by map creator?
+    //
+    // - uint8_t (1 byte)
+    //    Custom monster type in army slot 1.
+    //
+    // - uint8_t (1 byte)
+    //    Custom monster type in army slot 2.
+    //
+    // - uint8_t (1 byte)
+    //    Custom monster type in army slot 3.
+    //
+    // - uint8_t (1 byte)
+    //    Custom monster type in army slot 4.
+    //
+    // - uint8_t (1 byte)
+    //    Custom monster type in army slot 5.
+    //
+    // - uint16_t (2 bytes)
+    //    The number of custom monsters in army slot 1.
+    //
+    // - uint16_t (2 bytes)
+    //    The number of custom monsters in army slot 2.
+    //
+    // - uint16_t (2 bytes)
+    //    The number of custom monsters in army slot 3.
+    //
+    // - uint16_t (2 bytes)
+    //    The number of custom monsters in army slot 4.
+    //
+    // - uint16_t (2 bytes)
+    //    The number of custom monsters in army slot 5.
+    //
+    // - uint8_t (1 byte)
+    //     Does the hero have a custom portrait?
+    //
+    // - uint8_t (1 byte)
+    //     Custom portrait ID.
+    //
+    // - uint8_t (1 byte)
+    //     Custom first artifact ID.
+    //
+    // - uint8_t (1 byte)
+    //     Custom second artifact ID.
+    //
+    // - uint8_t (1 byte)
+    //     Custom third artifact ID.
+    //
+    // - uint8_t (1 byte)
+    //     Unknown / unused. TODO: find out what this byte is for.
+    //
+    // - uint32_t (4 bytes)
+    //    Experience.
+    //
+    // - uint8_t (1 byte)
+    //     Does the hero have custom secondary skills?
+    //
+    // - uint8_t (1 byte)
+    //     Custom secondary skill type at slot 1.
+    //
+    // - uint8_t (1 byte)
+    //     Custom secondary skill type at slot 2.
+    //
+    // - uint8_t (1 byte)
+    //     Custom secondary skill type at slot 3.
+    //
+    // - uint8_t (1 byte)
+    //     Custom secondary skill type at slot 4.
+    //
+    // - uint8_t (1 byte)
+    //     Custom secondary skill type at slot 5.
+    //
+    // - uint8_t (1 byte)
+    //     Custom secondary skill type at slot 6.
+    //
+    // - uint8_t (1 byte)
+    //     Custom secondary skill type at slot 7.
+    //
+    // - uint8_t (1 byte)
+    //     Custom secondary skill type at slot 8.
+    //
+    // - uint8_t (1 byte)
+    //     Custom secondary skill level at slot 1.
+    //
+    // - uint8_t (1 byte)
+    //     Custom secondary skill level at slot 2.
+    //
+    // - uint8_t (1 byte)
+    //     Custom secondary skill level at slot 3.
+    //
+    // - uint8_t (1 byte)
+    //     Custom secondary skill level at slot 4.
+    //
+    // - uint8_t (1 byte)
+    //     Custom secondary skill level at slot 5.
+    //
+    // - uint8_t (1 byte)
+    //     Custom secondary skill level at slot 6.
+    //
+    // - uint8_t (1 byte)
+    //     Custom secondary skill level at slot 7.
+    //
+    // - uint8_t (1 byte)
+    //     Custom secondary skill level at slot 8.
+    //
+    // - uint8_t (1 byte)
+    //     Unknown / unused. TODO: find out what this byte is for.
+    //
+    // - uint8_t (1 byte)
+    //     Does the hero have a custom name?
+    //
+    // - string of 13 bytes
+    //    Null terminated string of custom hero name.
+    //
+    // - uint8_t (1 byte)
+    //     Is AI hero on patrol?
+    //
+    // - uint8_t (1 byte)
+    //     AI hero patrol distance.
+    //
+    // - unused 15 bytes
+    //    Always zeros.
+
     modes = 0;
 
-    SetIndex( map_index );
-    SetColor( cl );
+    SetIndex( mapIndex );
+    SetColor( colorType );
 
-    // Unknown
-    st.skip( 1 );
+    StreamBuf dataStream( data );
 
-    // Custom troops
-    if ( st.get() ) {
+    // Skip first unused byte.
+    dataStream.skip( 1 );
+
+    const bool doesHeroHaveCustomArmy = ( dataStream.get() != 0 );
+    if ( doesHeroHaveCustomArmy ) {
         Troop troops[5];
 
-        // Monster id
-        for ( Troop & troop : troops )
-            troop.SetMonster( st.get() + 1 );
+        // Set monster types.
+        for ( Troop & troop : troops ) {
+            // Monster IDs in the MP2 format start from 0, while in the engine they start from 1 due to presence of UNKNOWN monster type.
+            troop.SetMonster( dataStream.get() + 1 );
+        }
 
-        // Count
-        for ( Troop & troop : troops )
-            troop.SetCount( st.getLE16() );
+        // Set monster count.
+        for ( Troop & troop : troops ) {
+            troop.SetCount( dataStream.getLE16() );
+        }
 
         army.Assign( troops, std::end( troops ) );
     }
-    else
-        st.skip( 15 );
+    else {
+        dataStream.skip( 15 );
+    }
 
-    // Custom portrait
-    bool custom_portrait = ( st.get() != 0 );
-
-    if ( custom_portrait ) {
+    const bool doesHeroHaveCustomPortrait = ( dataStream.get() != 0 );
+    if ( doesHeroHaveCustomPortrait ) {
         SetModes( NOTDEFAULTS );
 
         // Portrait sprite index
-        portrait = st.get();
+        portrait = dataStream.get();
 
         if ( UNKNOWN <= portrait ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "custom portrait incorrect: " << portrait )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 file format: incorrect custom portrait ID: " << portrait )
             portrait = hid;
         }
 
         // Hero's race may not match the custom portrait
-        _race = rc;
+        _race = raceType;
 
         // Since we changed the hero's race, we have to update the initial spell as well. Let's remove the
         // existing spell and the spell book itself for now, the new one will be added later if necessary.
@@ -308,7 +443,7 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
         bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
     }
     else {
-        st.skip( 1 );
+        dataStream.skip( 1 );
     }
 
     auto addInitialArtifact = [this]( const Artifact & art ) {
@@ -320,61 +455,69 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
         PickupArtifact( art );
     };
 
-    // 3 artifacts
-    addInitialArtifact( Artifact( st.get() ) );
-    addInitialArtifact( Artifact( st.get() ) );
-    addInitialArtifact( Artifact( st.get() ) );
+    // 3 artifacts. Artifact IDs are by value 1 bigger than in the original game.
+    addInitialArtifact( Artifact( dataStream.get() + 1 ) );
+    addInitialArtifact( Artifact( dataStream.get() + 1 ) );
+    addInitialArtifact( Artifact( dataStream.get() + 1 ) );
 
-    // Unknown
-    st.skip( 1 );
+    // Skip unused byte.
+    dataStream.skip( 1 );
 
-    // Experience
-    experience = st.getLE32();
+    // Get hero's experience.
+    experience = dataStream.getLE32();
 
-    // Custom secondary skills
-    const bool custom_secskill = ( st.get() != 0 );
-
-    if ( custom_secskill ) {
+    const bool doesHeroHaveCustomSecondarySkills = ( dataStream.get() != 0 );
+    if ( doesHeroHaveCustomSecondarySkills ) {
         SetModes( NOTDEFAULTS );
         SetModes( CUSTOMSKILLS );
         std::vector<Skill::Secondary> secs( 8 );
 
-        for ( std::vector<Skill::Secondary>::iterator it = secs.begin(); it != secs.end(); ++it )
-            ( *it ).SetSkill( st.get() + 1 );
+        for ( Skill::Secondary & skill : secs ) {
+            // Secondary Skill IDs in the MP2 format start from 0, while in the engine they start from 1 due to presence of UNKNOWN skill type.
+            skill.SetSkill( dataStream.get() + 1 );
+        }
 
-        for ( std::vector<Skill::Secondary>::iterator it = secs.begin(); it != secs.end(); ++it )
-            ( *it ).SetLevel( st.get() );
+        for ( Skill::Secondary & skill : secs ) {
+            skill.SetLevel( dataStream.get() );
+        }
 
         secondary_skills = Skill::SecSkills();
 
-        for ( std::vector<Skill::Secondary>::const_iterator it = secs.begin(); it != secs.end(); ++it )
-            if ( ( *it ).isValid() )
-                secondary_skills.AddSkill( *it );
+        for ( const Skill::Secondary & skill : secs ) {
+            if ( skill.isValid() ) {
+                // The original map editor does not check presence of similar skills even those which have different levels.
+                // We need to check whether the existing skill has a lower level before updating it.
+                const auto * existingSkill = secondary_skills.FindSkill( skill.Skill() );
+                if ( existingSkill == nullptr || ( existingSkill->Level() < skill.Level() ) ) {
+                    secondary_skills.AddSkill( skill );
+                }
+            }
+        }
     }
     else {
-        st.skip( 16 );
+        dataStream.skip( 16 );
     }
 
-    // Unknown
-    st.skip( 1 );
+    // Skip unused byte.
+    dataStream.skip( 1 );
 
-    // Custom name
-    if ( st.get() ) {
+    const bool doesHeroHaveCustomName = ( dataStream.get() != 0 );
+    if ( doesHeroHaveCustomName ) {
         SetModes( NOTDEFAULTS );
-        name = st.toString( 13 );
+        name = dataStream.toString( 13 );
     }
     else {
-        st.skip( 13 );
+        dataStream.skip( 13 );
     }
 
-    // Patrol
-    if ( st.get() ) {
+    const bool doesAIHeroSetOnPatrol = ( dataStream.get() != 0 );
+    if ( doesAIHeroSetOnPatrol ) {
         SetModes( PATROL );
-        patrol_center = GetCenter();
+        _patrolCenter = GetCenter();
     }
 
-    // Patrol square
-    patrol_square = st.get();
+    // Patrol distance
+    _patrolDistance = dataStream.get();
 
     PostLoad();
 }
@@ -468,13 +611,13 @@ double Heroes::getRecruitValue() const
     return army.GetStrength() + ( ( bag_artifacts.getArtifactValue() * 10.0 + getStatsValue() ) * SKILL_VALUE );
 }
 
-double Heroes::getMeetingValue( const Heroes & recievingHero ) const
+double Heroes::getMeetingValue( const Heroes & receivingHero ) const
 {
     // TODO: add logic to check artifacts with curses and those which are invaluable for a hero.
 
     // Magic Book is not transferable.
     const uint32_t artCount = bag_artifacts.CountArtifacts() - bag_artifacts.Count( Artifact::MAGIC_BOOK );
-    const uint32_t canFit = HEROESMAXARTIFACT - recievingHero.bag_artifacts.CountArtifacts();
+    const uint32_t canFit = HEROESMAXARTIFACT - receivingHero.bag_artifacts.CountArtifacts();
 
     double artifactValue = bag_artifacts.getArtifactValue() * 5.0;
     if ( artCount > canFit ) {
@@ -482,7 +625,7 @@ double Heroes::getMeetingValue( const Heroes & recievingHero ) const
     }
 
     // TODO: leaving only one monster in an army is very risky. Add logic to find out which part of the army would be useful to get.
-    return recievingHero.army.getReinforcementValue( army ) + artifactValue * SKILL_VALUE;
+    return receivingHero.army.getReinforcementValue( army ) + artifactValue * SKILL_VALUE;
 }
 
 int Heroes::GetAttack() const
@@ -773,6 +916,18 @@ void Heroes::ActionAfterBattle()
     SetModes( ACTION );
 }
 
+uint32_t Heroes::getDailyRestoredSpellPoints() const
+{
+    uint32_t points = GameStatic::GetHeroesRestoreSpellPointsPerDay();
+
+    // Spell points from artifacts.
+    points += static_cast<uint32_t>( GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POINTS_DAILY_GENERATION ) );
+
+    points += GetSecondaryValues( Skill::Secondary::MYSTICISM );
+
+    return points;
+}
+
 void Heroes::ReplenishSpellPoints()
 {
     const uint32_t maxp = GetMaxSpellPoints();
@@ -787,19 +942,13 @@ void Heroes::ReplenishSpellPoints()
 
     // in castle?
     if ( castle && castle->GetLevelMageGuild() ) {
-        curr = maxp;
+        SetSpellPoints( maxp );
     }
+    else {
+        curr += getDailyRestoredSpellPoints();
 
-    // everyday
-    curr += GameStatic::GetHeroesRestoreSpellPointsPerDay();
-
-    // Spell points from artifacts.
-    curr += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POINTS_DAILY_GENERATION );
-
-    // secondary skill
-    curr += GetSecondaryValues( Skill::Secondary::MYSTICISM );
-
-    SetSpellPoints( std::min( curr, maxp ) );
+        SetSpellPoints( std::min( curr, maxp ) );
+    }
 }
 
 void Heroes::calculatePath( int32_t dstIdx )
@@ -845,16 +994,18 @@ bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
     const int32_t index = tile.GetIndex();
     const MP2::MapObjectType objectType = tile.GetObject( false );
 
-    if ( Visit::GLOBAL == type )
+    if ( Visit::GLOBAL == type ) {
         return GetKingdom().isVisited( index, objectType );
+    }
 
     return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( index, objectType ) );
 }
 
 bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::type_t type ) const
 {
-    if ( Visit::GLOBAL == type )
+    if ( Visit::GLOBAL == type ) {
         return GetKingdom().isVisited( objectType );
+    }
 
     return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
@@ -868,7 +1019,7 @@ void Heroes::SetVisited( int32_t index, Visit::type_t type )
         GetKingdom().SetVisited( index, objectType );
     }
     else if ( !isVisited( tile ) && MP2::OBJ_NONE != objectType ) {
-        visit_object.push_front( IndexObject( index, objectType ) );
+        visit_object.emplace_front( index, objectType );
     }
 }
 
@@ -914,7 +1065,7 @@ void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectT
 void Heroes::markHeroMeeting( int heroID )
 {
     if ( heroID < UNKNOWN && !hasMetWithHero( heroID ) )
-        visit_object.push_front( IndexObject( heroID, MP2::OBJ_HEROES ) );
+        visit_object.emplace_front( heroID, MP2::OBJ_HEROES );
 }
 
 void Heroes::unmarkHeroMeeting()
@@ -1006,7 +1157,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
         // If there were artifacts assembled we check them for scout area bonus.
         for ( const ArtifactSetData & assembledArtifact : assembledArtifacts ) {
-            if ( scout( static_cast<int32_t>( assembledArtifact._assembledArtifactID ) ) ) {
+            if ( scout( assembledArtifact._assembledArtifactID ) ) {
                 return true;
             }
         }
@@ -1338,8 +1489,6 @@ int Heroes::getNumOfTravelDays( int32_t dstIdx ) const
     const std::list<Route::Step> routePath = world.getPath( *this, dstIdx );
 
     if ( routePath.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_TRACE, "unreachable point: " << dstIdx )
-
         return 0;
     }
 
@@ -1394,7 +1543,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
     Skill::Secondary sec1;
     Skill::Secondary sec2;
 
-    secondary_skills.FindSkillsForLevelUp( _race, seeds.seedSecondaySkill1, seeds.seedSecondaySkill2, sec1, sec2 );
+    secondary_skills.FindSkillsForLevelUp( _race, seeds.seedSecondarySkill1, seeds.seedSecondarySkill2, sec1, sec2 );
 
     if ( sec1.isValid() && sec2.isValid() ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) << " or " << Skill::Secondary::String( sec2.Skill() ) )
@@ -1410,7 +1559,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
 
     if ( autoselect ) {
         if ( sec1.isValid() && sec2.isValid() ) {
-            selected = Rand::GetWithSeed( 0, 1, seeds.seedSecondaySkillRandomChoose ) ? sec1 : sec2;
+            selected = Rand::GetWithSeed( 0, 1, seeds.seedSecondarySkillRandomChoose ) ? sec1 : sec2;
         }
         else {
             selected = sec1.isValid() ? sec1 : sec2;
@@ -1471,7 +1620,7 @@ bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) con
 
 bool Heroes::MayCastAdventureSpells() const
 {
-    return !isFreeman();
+    return isValid() && GetColor() != Color::NONE;
 }
 
 bool Heroes::isValid() const
@@ -1481,42 +1630,44 @@ bool Heroes::isValid() const
 
 bool Heroes::isFreeman() const
 {
-    return isValid() && Color::NONE == GetColor() && !Modes( JAIL );
+    return isValid() && GetColor() == Color::NONE && !Modes( JAIL );
 }
 
 void Heroes::SetFreeman( int reason )
 {
-    if ( !isFreeman() ) {
-        // if not surrendering, reset army
-        if ( ( reason & Battle::RESULT_SURRENDER ) == 0 ) {
-            army.Reset( true );
-        }
+    if ( isFreeman() ) {
+        return;
+    }
 
-        const int heroColor = GetColor();
-        Kingdom & kingdom = GetKingdom();
+    // if not surrendering, reset army
+    if ( ( reason & Battle::RESULT_SURRENDER ) == 0 ) {
+        army.Reset( true );
+    }
+
+    const int heroColor = GetColor();
+    Kingdom & kingdom = GetKingdom();
+
+    if ( heroColor != Color::NONE ) {
+        kingdom.RemoveHeroes( this );
+    }
+    SetColor( Color::NONE );
+
+    world.GetTiles( GetIndex() ).SetHeroes( nullptr );
+    SetIndex( -1 );
+
+    modes = 0;
+
+    path.Reset();
+
+    SetMove( false );
+
+    SetModes( ACTION );
+
+    if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
+        SetModes( SAVEMP );
 
         if ( heroColor != Color::NONE ) {
-            kingdom.RemoveHeroes( this );
-        }
-        SetColor( Color::NONE );
-
-        world.GetTiles( GetIndex() ).SetHeroes( nullptr );
-        SetIndex( -1 );
-
-        modes = 0;
-
-        path.Reset();
-
-        SetMove( false );
-
-        SetModes( ACTION );
-
-        if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
-            SetModes( SAVEMP );
-
-            if ( heroColor != Color::NONE ) {
-                kingdom.appendSurrenderedHero( *this );
-            }
+            kingdom.appendSurrenderedHero( *this );
         }
     }
 }
@@ -1538,7 +1689,7 @@ MP2::MapObjectType Heroes::GetMapsObject() const
 
 void Heroes::SetMapsObject( const MP2::MapObjectType objectType )
 {
-    save_maps_object = objectType != MP2::OBJ_HEROES ? objectType : MP2::OBJ_NONE;
+    save_maps_object = ( ( objectType != MP2::OBJ_HEROES ) ? objectType : MP2::OBJ_NONE );
 }
 
 void Heroes::ActionPreBattle()
@@ -1550,7 +1701,7 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
 {
     if ( allowMonsterAttack ) {
         // scan for monsters around
-        const MapsIndexes targets = Maps::getMonstersProtectingTile( GetIndex() );
+        const MapsIndexes targets = Maps::getMonstersProtectingTile( GetIndex(), false );
 
         if ( !targets.empty() ) {
             SetMove( false );
@@ -1560,11 +1711,11 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
             MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinationIndex() );
 
             if ( it != targets.end() ) {
-                Action( *it, true );
+                Action( *it );
             }
             // otherwise fight the monsters on the first adjacent tile
             else {
-                Action( targets.front(), true );
+                Action( targets.front() );
             }
         }
     }
@@ -1573,7 +1724,7 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
         const MapEvent * event = world.GetMapEvent( GetCenter() );
 
         if ( event && event->isAllow( GetColor() ) ) {
-            Action( GetIndex(), false );
+            Action( GetIndex() );
             SetMove( false );
         }
     }
@@ -1698,7 +1849,7 @@ std::string Heroes::String() const
        << "flags           : " << ( Modes( SHIPMASTER ) ? "SHIPMASTER," : "" ) << ( Modes( PATROL ) ? "PATROL" : "" ) << std::endl;
 
     if ( Modes( PATROL ) ) {
-        os << "patrol square   : " << patrol_square << std::endl;
+        os << "patrol zone     : center: (" << _patrolCenter.x << ", " << _patrolCenter.y << "), distance " << _patrolDistance << std::endl;
     }
 
     if ( !visit_object.empty() ) {
@@ -1952,13 +2103,13 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
 
     HeroSeedsForLevelUp seeds;
     seeds.seedPrimarySkill = hash;
-    seeds.seedSecondaySkill1 = hash + 1;
-    seeds.seedSecondaySkill2 = hash + 2;
-    seeds.seedSecondaySkillRandomChoose = hash + 3;
+    seeds.seedSecondarySkill1 = hash + 1;
+    seeds.seedSecondarySkill2 = hash + 2;
+    seeds.seedSecondarySkillRandomChoose = hash + 3;
     return seeds;
 }
 
-double Heroes::getAIMininumJoiningArmyStrength() const
+double Heroes::getAIMinimumJoiningArmyStrength() const
 {
     // Ideally we need to assert here that the hero is under AI control.
     // But in cases when we regain a temporary control from the AI then the hero becomes non-AI.
@@ -2029,10 +2180,10 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
         << hero.direction << hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
-    const int16_t patrolX = static_cast<int16_t>( hero.patrol_center.x );
-    const int16_t patrolY = static_cast<int16_t>( hero.patrol_center.y );
+    const int16_t patrolX = static_cast<int16_t>( hero._patrolCenter.x );
+    const int16_t patrolY = static_cast<int16_t>( hero._patrolCenter.y );
 
-    msg << patrolX << patrolY << hero.patrol_square << hero.visit_object << hero._lastGroundRegion;
+    msg << patrolX << patrolY << hero._patrolDistance << hero.visit_object << hero._lastGroundRegion;
 
     return msg;
 }
@@ -2054,9 +2205,9 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     int16_t patrolY = 0;
 
     msg >> patrolX >> patrolY;
-    hero.patrol_center = fheroes2::Point( patrolX, patrolY );
+    hero._patrolCenter = fheroes2::Point( patrolX, patrolY );
 
-    msg >> hero.patrol_square >> hero.visit_object >> hero._lastGroundRegion;
+    msg >> hero._patrolDistance >> hero.visit_object >> hero._lastGroundRegion;
 
     hero.army.SetCommander( &hero );
     return msg;

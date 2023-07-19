@@ -35,11 +35,6 @@ namespace fheroes2
     class AGGFile
     {
     public:
-        AGGFile()
-        {
-            // Avoid C4592 warning in Visual Studio.
-        }
-
         bool isGood() const
         {
             return !_stream.fail() && !_files.empty();

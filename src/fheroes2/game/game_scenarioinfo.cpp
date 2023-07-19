@@ -98,7 +98,8 @@ namespace
         fheroes2::Blit( panel, display, rt.x, rt.y );
 
         // Redraw select button as the original image has a wrong position of it
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, 64 ), display, rt.x + 309, rt.y + 45 );
+        const int32_t buttonSelectWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT, 0 ).width();
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT, 0 ), display, rt.x + 389 - buttonSelectWidth, rt.y + 45 );
 
         fheroes2::FontType normalWhiteFont = fheroes2::FontType::normalWhite();
 
@@ -182,7 +183,9 @@ namespace
         coordDifficulty.emplace_back( rectPanel.x + 251, rectPanel.y + 91, ngextraWidth, ngextraHeight );
         coordDifficulty.emplace_back( rectPanel.x + 328, rectPanel.y + 91, ngextraWidth, ngextraHeight );
 
-        fheroes2::Button buttonSelectMaps( rectPanel.x + 309, rectPanel.y + 45, ICN::NGEXTRA, 64, 65 );
+        const int32_t buttonSelectWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT, 0 ).width();
+
+        fheroes2::Button buttonSelectMaps( rectPanel.x + 389 - buttonSelectWidth, rectPanel.y + 45, ICN::BUTTON_MAP_SELECT, 0, 1 );
         fheroes2::Button buttonOk( rectPanel.x + 31, rectPanel.y + 380, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
         fheroes2::Button buttonCancel( rectPanel.x + 287, rectPanel.y + 380, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
@@ -263,10 +266,9 @@ namespace
         LocalEvent & le = LocalEvent::Get();
         while ( true ) {
             if ( !le.HandleEvents( true, true ) ) {
-                if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
-                    if ( Settings::isFadeEffectEnabled() ) {
-                        fheroes2::FadeDisplay();
-                    }
+                if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+                    fheroes2::fadeOutDisplay();
+
                     return fheroes2::GameMode::QUIT_GAME;
                 }
 
@@ -309,6 +311,9 @@ namespace
             else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) )
                 result = fheroes2::GameMode::START_GAME;
+
+                // Fade-out screen before starting a scenario.
+                fheroes2::fadeOutDisplay();
                 break;
             }
             else if ( le.MouseClickLeft( rectPanel ) ) {
@@ -388,9 +393,6 @@ namespace
         Settings & conf = Settings::Get();
 
         conf.GetPlayers().SetStartGame();
-        if ( Settings::isFadeEffectEnabled() ) {
-            fheroes2::FadeDisplay();
-        }
 
         // Load maps
         std::string lower = StringLower( conf.MapsFile() );

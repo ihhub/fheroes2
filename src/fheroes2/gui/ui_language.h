@@ -28,12 +28,13 @@ namespace fheroes2
     enum class SupportedLanguage : int
     {
         English = 0, // default language for all versions of the game.
-        French, // GoG version
-        Polish, // GoG version
-        German, // GoG version
+        French, // GOG version
+        Polish, // GOG version
+        German, // GOG version
         Russian, // Buka and XXI Vek versions
         Italian, // Rare version?
         Czech, // Local release occurred in 2002 by CD Projekt
+        Spanish, // Published by Proein. Only Succession Wars
 
         // All languages listed below are original to fheroes2.
         Belarusian,
@@ -45,10 +46,10 @@ namespace fheroes2
         Portuguese,
         Romanian,
         Slovak,
-        Spanish,
         Swedish,
         Turkish,
-        Ukrainian
+        Ukrainian,
+        Vietnamese
     };
 
     class LanguageSwitcher

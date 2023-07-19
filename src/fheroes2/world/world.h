@@ -29,6 +29,7 @@
 #include <list>
 #include <map>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include "army_troop.h"
@@ -48,7 +49,6 @@
 
 class MapObjectSimple;
 class StreamBase;
-class StreamBuf;
 
 struct MapEvent;
 struct Week;
@@ -118,23 +118,20 @@ struct CapturedObjects : std::map<int32_t, CapturedObject>
 
 struct EventDate
 {
-    EventDate()
-        : first( 0 )
-        , subsequent( 0 )
-        , colors( 0 )
-        , computer( false )
-    {}
+    void LoadFromMP2( const std::vector<uint8_t> & data );
 
-    void LoadFromMP2( StreamBuf );
+    bool isAllow( const int color, const uint32_t date ) const;
 
-    bool isAllow( int color, uint32_t date ) const;
-    bool isDeprecated( uint32_t date ) const;
+    bool isDeprecated( const uint32_t date ) const
+    {
+        return date > firstOccurrenceDay && repeatPeriodInDays == 0;
+    }
 
     Funds resource;
-    uint32_t first;
-    uint32_t subsequent;
-    int colors;
-    bool computer;
+    uint32_t firstOccurrenceDay{ 0 };
+    uint32_t repeatPeriodInDays{ 0 };
+    int colors{ 0 };
+    bool isApplicableForAIPlayers{ false };
     std::string message;
 
     std::string title;
@@ -355,14 +352,18 @@ public:
 
     bool isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const;
 
+    void setOldTileQuantityData( const int32_t tileIndex, const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata );
+
 private:
     World() = default;
 
     void Defaults();
     void Reset();
     void MonthOfMonstersAction( const Monster & );
-    void ProcessNewMap();
+    bool ProcessNewMap( const std::string & filename, const bool checkPoLObjects );
     void PostLoad( const bool setTilePassabilities );
+
+    bool updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType objectType, const bool checkPoLObjects );
 
     bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
 
@@ -400,6 +401,8 @@ private:
 
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
+
+    std::vector<std::tuple<uint8_t, uint8_t, uint32_t>> _oldTileQuantityData;
 };
 
 StreamBase & operator<<( StreamBase &, const CapturedObject & );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -89,6 +89,6 @@ namespace fheroes2
 
     // The original scrollbar slider has fixed size. This is a not user-friendly solution as on big screens it might look extremely tiny.
     // In the most modern applications the slider size depends on the number of elements. The lesser the number the bigger the slider.
-    Image generateScrollbarSlider( const Image & originalSlider, const bool horizonalSlider, const int32_t sliderAreaLength, const int32_t elementCountPerView,
+    Image generateScrollbarSlider( const Image & originalSlider, const bool horizontalSlider, const int32_t sliderAreaLength, const int32_t elementCountPerView,
                                    const int32_t totalElementCount, const Rect & startSliderArea, const Rect & middleSliderArea );
 }

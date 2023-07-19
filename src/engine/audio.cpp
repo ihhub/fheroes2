@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "audio.h"
+
 #include <algorithm>
 #include <atomic>
 #include <cassert>
@@ -42,7 +44,6 @@
 #include <SDL_stdinc.h>
 #include <SDL_version.h>
 
-#include "audio.h"
 #include "core.h"
 #include "dir.h"
 #include "logging.h"
@@ -54,11 +55,12 @@ namespace
 {
     struct AudioSpec
     {
-#if defined( _WIN32 )
-        // Value 22050 causes audio distortion on Windows
-        int frequency = 44100;
-#else
+#if defined( TARGET_PS_VITA )
+        // Notice: The PS Vita sound resampler is CPU intensive if the value is not 22050.
         int frequency = 22050;
+#else
+        // Notice: Value 22050 causes music distortion on Windows.
+        int frequency = 44100;
 #endif
         uint16_t format = AUDIO_S16;
         // Stereo audio support
@@ -620,10 +622,12 @@ namespace
         }
 
         if ( volumePercentage >= 100 ) {
-            return MIX_MAX_VOLUME;
+            // Reserve an extra 0.5 dB for possible sound overloads in SDL_mixer, multiplying max volume by 50/53.
+            return MIX_MAX_VOLUME * 50 / 53;
         }
 
-        return static_cast<int>( ( std::exp( std::log( 10 + 1 ) * volumePercentage / 100 ) - 1 ) / 10 * MIX_MAX_VOLUME );
+        // MIX_MAX_VOLUME is divided by 10.6, not 10 to reserve an extra 0.5 dB for possible sound overloads in SDL_mixer.
+        return static_cast<int>( ( std::exp( std::log( 10 + 1 ) * volumePercentage / 100 ) - 1 ) / 10.6 * MIX_MAX_VOLUME );
     }
 }
 

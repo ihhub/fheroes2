@@ -81,7 +81,7 @@ namespace AI
     {
         // Composite priority criteria:
         // Primary - Enemy is within move range and can be attacked this turn
-        // Secondary - Postion quality (to attack from, or protect friendly unit)
+        // Secondary - Position quality (to attack from, or protect friendly unit)
         // Tertiary - Enemy unit threat
         return ( newOutcome.canAttackImmediately && !previous.canAttackImmediately )
                || ( newOutcome.canAttackImmediately == previous.canAttackImmediately
@@ -238,10 +238,13 @@ namespace AI
 
     bool BattlePlanner::checkRetreatCondition( const Heroes & hero ) const
     {
+        if ( !_considerRetreat || hero.isControlHuman() || hero.isLosingGame() || !isHeroWorthSaving( hero ) || !CanPurchaseHero( hero.GetKingdom() ) ) {
+            return false;
+        }
+
         // Retreat if remaining army strength is a fraction of enemy's
         // Consider taking speed/turn order into account in the future
-        const double ratio = Difficulty::GetAIRetreatRatio( Game::getDifficulty() );
-        return !hero.isLosingGame() && _considerRetreat && _myArmyStrength * ratio < _enemyArmyStrength && !hero.isControlHuman() && isHeroWorthSaving( hero );
+        return _myArmyStrength * Difficulty::GetAIRetreatRatio( Game::getDifficulty() ) < _enemyArmyStrength;
     }
 
     bool BattlePlanner::isUnitFaster( const Unit & currentUnit, const Unit & target ) const
@@ -509,11 +512,11 @@ namespace AI
             const bool attackerIgnoresCover
                 = arena.GetForce1().GetCommander()->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY );
 
-            auto getTowerStrength = [&currentUnit]( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetScoreQuality( currentUnit ) : 0; };
+            auto getTowerStrength = []( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetStrength() : 0; };
 
-            double towerStr = getTowerStrength( Arena::GetTower( TWR_CENTER ) );
-            towerStr += getTowerStrength( Arena::GetTower( TWR_LEFT ) );
-            towerStr += getTowerStrength( Arena::GetTower( TWR_RIGHT ) );
+            double towerStr = getTowerStrength( Arena::GetTower( TowerType::TWR_CENTER ) );
+            towerStr += getTowerStrength( Arena::GetTower( TowerType::TWR_LEFT ) );
+            towerStr += getTowerStrength( Arena::GetTower( TowerType::TWR_RIGHT ) );
 
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Castle strength: " << towerStr )
 
