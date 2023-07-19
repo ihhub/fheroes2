@@ -2405,35 +2405,32 @@ msgid "Recruit Hero"
 msgstr "Rekruttér helt"
 
 msgid "%{name} is a level %{value} %{race} "
-msgstr "%{name} er en level %{value} %{race} "
+msgstr " "
 
 msgid "with %{count} artifacts."
-msgstr "med %{count} artefakter."
+msgstr ""
 
 msgid "with 1 artifact."
-msgstr "med 1 artefakt."
+msgstr ""
 
 msgid "without artifacts."
-msgstr "uden artefakter."
+msgstr ""
 
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
 msgstr ""
-"'spredt' kampformation spreder dine tropper fra top til bund på slagmarken, "
-"med mindst én tom plads mellem hver enhed."
 
 msgid ""
 "'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
-"'gruppe'-formation samler dine tropper i midten af din side på slagmarken."
 
 msgid "Spread Formation"
-msgstr "Spredt formation"
+msgstr ""
 
 msgid "Grouped Formation"
-msgstr "Gruppeformation"
+msgstr ""
 
 msgid "Recruit %{name} the %{race}"
 msgstr "Rekruttér %{race}en %{name}"
@@ -3178,10 +3175,6 @@ msgid ""
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
 msgstr ""
-"Det nuværende kort-niveau for det valgte kort. Korets sværhedsgrad er "
-"udelukkende bedømt af dets designer. Vanskeligere kort inkluderer flere og "
-"stærkere fjender, færre resurser eller andre særlige vilkår, som gør det "
-"sværere for menneskelige spillere."
 
 msgid "Selected Description"
 msgstr ""
@@ -3587,6 +3580,23 @@ msgstr ""
 msgid "Start from scratch with a blank map."
 msgstr ""
 
+msgid "Create a randomly generated map."
+msgstr ""
+
+#, fuzzy
+msgid "Random"
+msgstr "Tilfældigt monster"
+
+#, fuzzy
+msgid "Cancel back to the Map Editor main menu."
+msgstr "Afbryd og gå tilbage til hovedmenuen."
+
+msgid "No maps available!"
+msgstr ""
+
+msgid "difficulty|Easy"
+msgstr "Let"
+
 msgid "difficulty|Normal"
 msgstr "Normal"
 
@@ -3598,8 +3608,6 @@ msgstr "Ekspert"
 
 msgid "difficulty|Impossible"
 msgstr "Umulig"
-msgid "difficulty|Easy"
-msgstr "Let"
 
 msgid "and more..."
 msgstr "og mere..."
@@ -4535,10 +4543,6 @@ msgid "Click to accept these settings and start a new game."
 msgstr "Klik for at acceptere disse indstillinger og start et nyt spil."
 
 msgid "Click to return to the main menu."
-msgstr "Klik her for at vende tilbage til hovedmenuen."
-
-msgid "No maps available!"
-msgstr "Ingen kort tilgængelige!"
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr ""
@@ -5134,18 +5138,12 @@ msgid ""
 "\"Milord, I have been working very hard to provide you with this gold, come "
 "back next week for more.\""
 msgstr ""
-"Mølleren annoncerer:\n"
-"\"Deres excellence, jeg har arbejdet hårdt for at skaffe Dem disse "
-"guldstykker. Få mere ved at komme igen i næste uge.\""
 
 msgid ""
 "The keeper of the mill announces:\n"
 "\"Milord, I am sorry, there is no gold currently available. Please try again "
 "next week.\""
 msgstr ""
-"Mølleren annoncerer:\n"
-"\"Deres excellence, jeg beklager, der er intet guld at hente i øjeblikket. "
-"Prøv at vende tilbage i næste uge.\""
 
 msgid ""
 "You've found an abandoned lean-to.\n"
@@ -9045,9 +9043,6 @@ msgid ""
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
 "lost by mortals."
 msgstr ""
-
-
-
 
 msgid "Wood"
 msgstr "Træ"
