@@ -214,9 +214,9 @@ public:
     }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    fheroes2::Point WindowPosition() const
+    const fheroes2::Point& getWindowPosition() const
     {
-        return windowPosition;
+        return _windowPosition;
     }
 #endif
 
@@ -261,7 +261,7 @@ public:
     void SetMusicVolume( int v );
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    void SetWindowPosition( fheroes2::Point position );
+    void SetWindowPosition( const fheroes2::Point& position );
 #endif
 
     void SetMusicType( int v )
@@ -456,7 +456,7 @@ private:
     fheroes2::Size video_mode;
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    fheroes2::Point windowPosition{ 0, 0 };
+    fheroes2::Point _windowPosition{ 0, 0 };
 #endif
 
     fheroes2::ResolutionInfo _resolutionInfo;

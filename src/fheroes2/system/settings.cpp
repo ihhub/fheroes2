@@ -262,11 +262,11 @@ bool Settings::Read( const std::string & filePath )
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     // window position
-    if ( config.Exists( "windowposition" ) ) {
+    if ( config.Exists( "window position" ) ) {
         int default_x = SDL_WINDOWPOS_CENTERED;
         int default_y = SDL_WINDOWPOS_CENTERED;
 
-        windowPosition = config.PointParams( "windowposition", { default_x, default_y } );
+        _windowPosition = config.PointParams( "window position", { default_x, default_y } );
     }
 #endif
 
@@ -968,9 +968,9 @@ void Settings::SetMusicVolume( int v )
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-void Settings::SetWindowPosition( fheroes2::Point position )
+void Settings::SetWindowPosition( const fheroes2::Point& position )
 {
-    windowPosition = position;
+    _windowPosition = position;
 }
 #endif
 
