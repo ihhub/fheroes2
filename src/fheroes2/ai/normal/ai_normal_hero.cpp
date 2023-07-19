@@ -2092,7 +2092,7 @@ namespace AI
             class AIWorldPathfinderStateRestorer
             {
             public:
-                AIWorldPathfinderStateRestorer( AIWorldPathfinder & pathfinder )
+                explicit AIWorldPathfinderStateRestorer( AIWorldPathfinder & pathfinder )
                     : _pathfinder( pathfinder )
                     , _originalMinimalArmyStrengthAdvantage( _pathfinder.getMinimalArmyStrengthAdvantage() )
                     , _originalSpellPointsReserveRatio( _pathfinder.getSpellPointsReserveRatio() )
