@@ -3746,7 +3746,8 @@ namespace fheroes2
             }
             case ICN::EMPTY_GOOD_BUTTON:
             case ICN::EMPTY_EVIL_BUTTON: {
-                const int32_t originalId = ( id == ICN::EMPTY_GOOD_BUTTON ) ? ICN::SYSTEM : ICN::SYSTEME;
+                const bool isGoodInterface = id == ICN::EMPTY_GOOD_BUTTON;
+                const int32_t originalId = isGoodInterface ? ICN::SYSTEM : ICN::SYSTEME;
                 LoadOriginalICN( originalId );
 
                 if ( _icnVsSprite[originalId].size() < 13 ) {
@@ -3759,6 +3760,9 @@ namespace fheroes2
                 Sprite & pressed = _icnVsSprite[id][1];
 
                 released = _icnVsSprite[originalId][11];
+
+                // fix single bright pixel in the left part of the text area of the released state buttons
+                Fill( released, 8, 7, 1, 1, getButtonFillingColor( true, isGoodInterface ) );
 
                 const Sprite & originalPressed = GetICN( originalId, 12 );
 
