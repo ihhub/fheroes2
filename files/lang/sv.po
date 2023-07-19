@@ -3426,13 +3426,13 @@ msgid "Load Map"
 msgstr "Ladda Karta"
 
 msgid "Load an existing map."
-msgstr "Ladda en karta."
+msgstr "Laddar en karta."
 
 msgid "Save Map"
 msgstr "Spara Karta"
 
 msgid "Save the current map."
-msgstr "Spara nuvarande karta"
+msgstr "Spara nuvarande karta."
 
 msgid "Quit out of the map editor."
 msgstr "Lämna kartredigeraren."
