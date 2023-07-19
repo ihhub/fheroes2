@@ -26,6 +26,7 @@
 #include <fstream>
 #include <memory>
 #include <utility>
+#include <SDL2/SDL_video.h>
 
 #if defined( MACOS_APP_BUNDLE )
 #include <CoreFoundation/CoreFoundation.h>
@@ -44,7 +45,6 @@
 #include "translations.h"
 #include "ui_language.h"
 #include "version.h"
-#include <SDL2/SDL_video.h>
 
 #define STRINGIFY( DEF ) #DEF
 #define EXPANDDEF( DEF ) STRINGIFY( DEF )
