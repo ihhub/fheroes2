@@ -452,6 +452,11 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
             auto checkWinLossConditions = []( const int color ) -> uint32_t {
                 const Kingdom & kingdom = world.GetKingdom( color );
 
+                // Check the win/loss conditions for active players only
+                if ( !kingdom.isPlay() ) {
+                    return GameOver::COND_NONE;
+                }
+
 #if defined( WITH_DEBUG )
                 const Player * player = Players::Get( color );
                 assert( player != nullptr );
@@ -461,8 +466,8 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 const bool isAIAutoControlMode = false;
 #endif
 
-                // Check the win/loss conditions for active human-controlled players only
-                if ( !kingdom.isPlay() || ( !kingdom.isControlHuman() && !isAIAutoControlMode ) ) {
+                // Check the win/loss conditions for human-controlled players only
+                if ( !kingdom.isControlHuman() && !isAIAutoControlMode ) {
                     return GameOver::COND_NONE;
                 }
 
