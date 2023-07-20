@@ -36,6 +36,7 @@
 #include "dialog.h"
 #include "localevent.h"
 #include "logging.h"
+#include "players.h"
 #include "settings.h"
 #include "system.h"
 #include "tinyconfig.h"
