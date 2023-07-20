@@ -3549,12 +3549,6 @@ msgstr ""
 msgid "Towns"
 msgstr "Mesto"
 
-msgid "Heroes"
-msgstr ""
-
-msgid "Artifacts"
-msgstr ""
-
 #, fuzzy
 msgid "Treasures"
 msgstr "Poklad"
