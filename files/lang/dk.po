@@ -4431,14 +4431,14 @@ msgid ""
 "All is lost."
 msgstr ""
 
-msgid "Defeat!"
-msgstr "Nederlag!"
-
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
+
+msgid "Defeat!"
+msgstr "Nederlag!"
 
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
