@@ -2227,7 +2227,7 @@ msgid "Orchard"
 msgstr "Ovocný sad"
 
 msgid "Habitat"
-msgstr "Hobitín"
+msgstr "Habitát"
 
 msgid "Pen"
 msgstr "Ohrada"
@@ -2328,7 +2328,7 @@ msgid ""
 msgstr "Knižnica zvyšuje počet kúziel v cechu o jedno za každú úroveň cechu."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr "Ovocný sad zvyšuje produkciu hobitov o %{count} za týždeň."
+msgstr "Ovocný sad zvyšuje produkciu polčíkov o %{count} za týždeň."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
 msgstr "Búrka pridáva +2 k sile kúziel brániaceho kúzelníka."
@@ -7452,7 +7452,7 @@ msgid "Hill Fort"
 msgstr "Hradisko"
 
 msgid "Halfling Hole"
-msgstr "Hobitia diera"
+msgstr "Polčíčia diera"
 
 msgid "Mercenary Camp"
 msgstr "Žoldniersky tábor"
@@ -7839,10 +7839,10 @@ msgid "Black Dragons"
 msgstr "Čierni draci"
 
 msgid "Halfling"
-msgstr "Hobit"
+msgstr "Polčík"
 
 msgid "Halflings"
-msgstr "Hobiti"
+msgstr "Polčíci"
 
 msgid "Boar"
 msgstr "Kanec"
