@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "castle.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -34,7 +36,6 @@
 #include "audio_manager.h"
 #include "battle_board.h"
 #include "battle_tower.h"
-#include "castle.h"
 #include "castle_building_info.h"
 #include "dialog.h"
 #include "difficulty.h"
@@ -2434,7 +2435,7 @@ Army & Castle::GetActualArmy()
     return hero ? hero->GetArmy() : army;
 }
 
-double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
+double Castle::GetGarrisonStrength( const Heroes & attackingHero ) const
 {
     double totalStrength = 0;
 
@@ -2470,12 +2471,12 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
             totalStrength += towerStr / 2;
         }
 
-        if ( attackingHero && ( !attackingHero->GetArmy().isMeleeDominantArmy() || attackingHero->HasSecondarySkill( Skill::Secondary::BALLISTICS ) ) ) {
-            totalStrength *= isBuild( BUILD_MOAT ) ? 1.2 : 1.15;
-        }
-        else {
+        if ( !attackingHero.HasSecondarySkill( Skill::Secondary::BALLISTICS ) && attackingHero.GetArmy().isMeleeDominantArmy() ) {
             // Heavy penalty if the attacking hero does not have a ballistic skill, and his army is based on melee infantry
             totalStrength *= isBuild( BUILD_MOAT ) ? 1.45 : 1.25;
+        }
+        else {
+            totalStrength *= isBuild( BUILD_MOAT ) ? 1.2 : 1.15;
         }
     }
 

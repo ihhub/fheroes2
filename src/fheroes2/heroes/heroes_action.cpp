@@ -2046,7 +2046,7 @@ namespace
                 }
             };
 
-            if ( tile.isCaptureObjectProtected() ) {
+            if ( isCaptureObjectProtected( tile ) ) {
                 Army army( tile );
 
                 Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
@@ -2104,7 +2104,7 @@ namespace
             if ( result.AttackerWins() ) {
                 hero.IncreaseExperience( result.GetExperienceAttacker() );
 
-                Maps::Tiles::RestoreAbandonedMine( tile, Resource::GOLD );
+                Maps::restoreAbandonedMine( tile, Resource::GOLD );
                 hero.SetMapsObject( MP2::OBJ_MINES );
                 setColorOnTile( tile, hero.GetColor() );
 

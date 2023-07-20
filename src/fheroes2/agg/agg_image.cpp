@@ -38,6 +38,7 @@
 #include "agg.h"
 #include "agg_file.h"
 #include "battle_cell.h"
+#include "exception.h"
 #include "h2d.h"
 #include "icn.h"
 #include "image.h"
