@@ -34,6 +34,7 @@
 #include <type_traits>
 #include <utility>
 
+#include "battle_arena.h"
 #include "dialog.h"
 #include "localevent.h"
 #include "logging.h"
@@ -493,7 +494,9 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
         std::unique_lock<std::mutex> recursionGuardLock( recursionGuardMutex, std::defer_lock );
         if ( recursionGuardLock.try_lock() ) {
             Player * player = Settings::Get().GetPlayers().GetCurrent();
-            if ( player && ( player->isControlHuman() || player->isAIAutoControlMode() ) ) {
+
+            // Do not allow to transfer control to/from AI during battle
+            if ( player && ( player->isControlHuman() || player->isAIAutoControlMode() ) && Battle::GetArena() == nullptr ) {
                 if ( player->isAIAutoControlMode() ) {
                     if ( fheroes2::showStandardTextMessage( _( "Warning" ),
                                                             _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
