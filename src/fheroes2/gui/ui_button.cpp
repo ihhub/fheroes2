@@ -524,7 +524,7 @@ namespace fheroes2
         }
     }
 
-    void makeTransparentBackground( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const int backgroundIcnID )
+    void makeTransparentBackground( const Sprite & released, Sprite & pressed, const int backgroundIcnID )
     {
         // We need to copy the background image to pressed button only where it does not overlay the image of released button.
         const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnID, 0 );

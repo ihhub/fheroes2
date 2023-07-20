@@ -1322,16 +1322,18 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     const int32_t difficultyPlacement = endOfViewIntroPlacement + middleButtonsMargin;
     const int32_t okRestartPlacement = difficultyPlacement + difficultyButtonWidth + middleButtonsMargin;
 
-    fheroes2::Button buttonViewIntro( viewIntroPlacement, top.y + 431, buttonIconID, 0, 1 );
-    fheroes2::Button buttonRestart( okRestartPlacement, top.y + 431, buttonIconID, 2, 3 );
-    fheroes2::Button buttonOk( okRestartPlacement, top.y + 431, buttonIconID, 4, 5 );
-    fheroes2::Button buttonCancel( cancelPlacement, top.y + 431, buttonIconID, 6, 7 );
-    fheroes2::Button buttonDifficulty( difficultyPlacement, top.y + 431, buttonIconID, 8, 9 );
+    const int32_t buttonOffsetY = top.y + 431;
 
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 0 ), display, { viewIntroPlacement, top.y + 431 }, { -5, 5 } );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, okayRestartIndex ), display, { okRestartPlacement, top.y + 431 }, { -5, 5 } );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 6 ), display, { cancelPlacement, top.y + 431 }, { -5, 5 } );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 8 ), display, { difficultyPlacement, top.y + 431 }, { -5, 5 } );
+    fheroes2::Button buttonViewIntro( viewIntroPlacement, buttonOffsetY, buttonIconID, 0, 1 );
+    fheroes2::Button buttonRestart( okRestartPlacement, buttonOffsetY, buttonIconID, 2, 3 );
+    fheroes2::Button buttonOk( okRestartPlacement, buttonOffsetY, buttonIconID, 4, 5 );
+    fheroes2::Button buttonCancel( cancelPlacement, buttonOffsetY, buttonIconID, 6, 7 );
+    fheroes2::Button buttonDifficulty( difficultyPlacement, buttonOffsetY, buttonIconID, 8, 9 );
+
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 0 ), display, { viewIntroPlacement, buttonOffsetY }, { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, okayRestartIndex ), display, { okRestartPlacement, buttonOffsetY }, { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 6 ), display, { cancelPlacement, buttonOffsetY }, { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 8 ), display, { difficultyPlacement, buttonOffsetY }, { -5, 5 } );
 
     // create scenario bonus choice buttons
     fheroes2::ButtonGroup buttonChoices;

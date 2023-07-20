@@ -231,7 +231,7 @@ namespace fheroes2
     };
 
     // Make transparent edges around buttons making the pressed state appear without parts of the released state
-    void makeTransparentBackground( fheroes2::Sprite & released, fheroes2::Sprite & pressed, const int backgroundIcnID );
+    void makeTransparentBackground( const Sprite & released, Sprite & pressed, const int backgroundIcnID );
 
     // Makes a button with the background (usually from display): it can be used when original button sprites do not contain pieces of background in the pressed state
     ButtonSprite makeButtonWithBackground( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background );

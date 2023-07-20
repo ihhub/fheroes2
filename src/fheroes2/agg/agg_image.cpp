@@ -436,7 +436,8 @@ namespace
         }
 
         for ( size_t i = 0; i < texts.size(); ++i ) {
-            fheroes2::getTextAdaptedButton( _icnVsSprite[campaignSetIcnId][2 * i], _icnVsSprite[campaignSetIcnId][2 * i + 1], texts[i], emptyButtonIcnID );
+            const size_t icnIndex = 2 * i;
+            fheroes2::getTextAdaptedButton( _icnVsSprite[campaignSetIcnId][2 * i], _icnVsSprite[campaignSetIcnId][icnIndex + 1], texts[i], emptyButtonIcnID );
         }
     }
 
@@ -1497,20 +1498,20 @@ namespace fheroes2
                     // The evil buttons' released state are 2 pixels wider.
                     const int offsetEvilX = isEvilInterface ? 2 : 0;
                     // remove embedded shadows so that we can generate shadows with our own code later
-                    for ( uint32_t i = 0; i < 4; ++i ) {
+                    for ( uint32_t i = 0; i < 8; i += 2 ) {
                         // released
-                        const Sprite & originalReleased = GetICN( originalIcnId, 2 * i );
+                        const Sprite & originalReleased = GetICN( originalIcnId, i );
 
-                        Sprite & released = _icnVsSprite[id][2 * i];
+                        Sprite & released = _icnVsSprite[id][i];
                         released.resize( originalReleased.width() - 6 + offsetEvilX, originalReleased.height() - 8 );
                         released.reset();
 
                         Copy( originalReleased, 6 - offsetEvilX, 0, released, 0, 0, originalReleased.width() - 1, originalReleased.height() - 8 );
 
                         // pressed
-                        const Sprite & originalPressed = GetICN( originalIcnId, 2 * i + 1 );
+                        const Sprite & originalPressed = GetICN( originalIcnId, i + 1 );
 
-                        Sprite & pressed = _icnVsSprite[id][2 * i + 1];
+                        Sprite & pressed = _icnVsSprite[id][i + 1];
                         pressed.resize( originalPressed.width(), originalPressed.height() );
                         pressed.reset();
 
@@ -1534,16 +1535,16 @@ namespace fheroes2
                 const int baseIcnId = ICN::X_CMPBTN;
 
                 if ( useOriginalResources() ) {
-                    for ( uint32_t i = 0; i < 4; ++i ) {
+                    for ( uint32_t i = 0; i < 8; i += 2 ) {
                         // released
-                        const Sprite & originalReleased = GetICN( baseIcnId, 2 * i );
+                        const Sprite & originalReleased = GetICN( baseIcnId, i );
 
-                        Sprite & released = _icnVsSprite[id][2 * i];
+                        Sprite & released = _icnVsSprite[id][i];
                         released.resize( originalReleased.width() + 1, originalReleased.height() + 1 );
                         released.reset();
 
                         Copy( originalReleased, 0, 0, released, 1, 0, originalReleased.width(), originalReleased.height() );
-                        const Sprite & originalPressed = GetICN( baseIcnId, 2 * i + 1 );
+                        const Sprite & originalPressed = GetICN( baseIcnId, i + 1 );
                         // the released state is missing the darker borders of the pressed state
                         Copy( originalPressed, 0, 0, released, 0, 1, 1, originalPressed.height() );
                         Copy( originalPressed, 0, 2, released, 0, originalPressed.height() - 1, 1, 2 );
@@ -1555,7 +1556,7 @@ namespace fheroes2
                         Copy( originalReleased, 1, 2, released, 2, originalPressed.height() - 2, 1, 1 );
 
                         // pressed state
-                        Sprite & pressed = _icnVsSprite[id][2 * i + 1];
+                        Sprite & pressed = _icnVsSprite[id][i + 1];
                         pressed.resize( originalPressed.width() + 1, originalPressed.height() + 1 );
                         pressed.reset();
 
@@ -1564,7 +1565,7 @@ namespace fheroes2
                         Copy( originalPressed, 0, 2, pressed, 0, originalPressed.height() - 1, 1, 2 );
                         Copy( originalPressed, 0, 2, pressed, 1, originalPressed.height(), 1, 1 );
                         Copy( originalPressed, 1, 2, pressed, 1, originalPressed.height() - 1, 1, 1 );
-                        _icnVsSprite[id][2 * i + 1].setPosition( 0, 0 );
+                        _icnVsSprite[id][i + 1].setPosition( 0, 0 );
 
                         fheroes2::makeTransparentBackground( released, pressed, ICN::STONEBAK_SMALL_POL );
                     }
@@ -3808,7 +3809,7 @@ namespace fheroes2
                 // move dark border to new released state from original pressed state button
                 const Sprite & originalReleased = GetICN( originalID, 4 );
                 const Sprite & originalPressed = GetICN( originalID, 5 );
-                if ( originalReleased.width() != 94 && originalPressed.width() != 94 ) {
+                if ( originalReleased.width() != 94 && originalPressed.width() != 94 && originalReleased.height() < 5 && originalPressed.height() < 5 ) {
                     break;
                 }
                 Sprite & releasedWithDarkBorder = _icnVsSprite[id][0];
