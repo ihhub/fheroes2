@@ -349,7 +349,7 @@ bool Settings::Save( const std::string_view fileName ) const
 
 void Settings::SaveIfNecessary() const
 {
-    if ( config_modified ){
+    if ( config_modified ) {
         Save( Settings::configFileName );
     }
 
