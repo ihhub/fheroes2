@@ -714,14 +714,8 @@ namespace AI
 
     void Normal::removeEnemyArmies( const int32_t tileIndex )
     {
-        for ( auto iter = _enemyArmies.begin(); iter != _enemyArmies.end(); ) {
-            if ( iter->index == tileIndex ) {
-                iter = _enemyArmies.erase( iter );
-            }
-            else {
-                ++iter;
-            }
-        }
+        _enemyArmies.erase( std::remove_if( _enemyArmies.begin(), _enemyArmies.end(), [tileIndex]( const EnemyArmy & item ) { return item.index == tileIndex; } ),
+                            _enemyArmies.end() );
     }
 
     void Normal::KingdomTurn( Kingdom & kingdom )
