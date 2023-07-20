@@ -33,6 +33,7 @@
 #include <type_traits>
 #include <utility>
 
+#include "dialog.h"
 #include "localevent.h"
 #include "logging.h"
 #include "settings.h"
@@ -40,6 +41,7 @@
 #include "tinyconfig.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 #include "ui_language.h"
 
 namespace
@@ -482,4 +484,26 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
         conf.setTextSupportMode( !conf.isTextSupportModeEnabled() );
         conf.Save( Settings::configFileName );
     }
+#if defined( WITH_DEBUG )
+    else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )].key ) {
+        Player * player = Settings::Get().GetPlayers().GetCurrent();
+        if ( player && ( player->isControlHuman() || player->isAIAutoControlMode() ) ) {
+            if ( player->isAIAutoControlMode() ) {
+                if ( fheroes2::showStandardTextMessage( _( "Warning" ), _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
+                                                        Dialog::YES | Dialog::NO )
+                     == Dialog::YES ) {
+                    player->setAIAutoControlMode( false );
+                }
+            }
+            else {
+                if ( fheroes2::showStandardTextMessage( _( "Warning" ),
+                                                        _( "Do you want to transfer control from you to the AI? The effect will take place only on the next turn." ),
+                                                        Dialog::YES | Dialog::NO )
+                     == Dialog::YES ) {
+                    player->setAIAutoControlMode( true );
+                }
+            }
+        }
+    }
+#endif
 }

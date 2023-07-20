@@ -1904,20 +1904,6 @@ namespace AI
 
             LocalEvent & le = LocalEvent::Get();
             while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
-#if defined( WITH_DEBUG )
-                Player * player = Players::Get( hero.GetColor() );
-                assert( player != nullptr );
-
-                if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI ) && player->isAIAutoControlMode() ) {
-                    if ( fheroes2::showStandardTextMessage( _( "Warning" ),
-                                                            _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
-                                                            Dialog::YES | Dialog::NO )
-                         == Dialog::YES ) {
-                        player->setAIAutoControlMode( false );
-                    }
-                }
-#endif
-
                 if ( hero.isFreeman() || !hero.isMoveEnabled() ) {
                     break;
                 }
@@ -2037,21 +2023,6 @@ namespace AI
             assert( 0 );
             return;
         }
-
-#if defined( WITH_DEBUG )
-        Player * player = Players::Get( hero.GetColor() );
-        assert( player != nullptr );
-
-        if ( player->isAIAutoControlMode() ) {
-            LocalEvent::Get().HandleEvents( false );
-            if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )
-                 && fheroes2::showStandardTextMessage( _( "Warning" ), _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
-                                                       Dialog::YES | Dialog::NO )
-                        == Dialog::YES ) {
-                player->setAIAutoControlMode( false );
-            }
-        }
-#endif
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
