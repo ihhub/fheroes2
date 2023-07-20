@@ -200,7 +200,7 @@ void Player::setAIAutoControlMode( const bool enable )
     if ( enable ) {
         _isAIAutoControlMode = enable;
     }
-    // Otherwise, the change is first planned and then committed, in which case this mode should be enabled
+    // Otherwise, the change is first planned and then committed, in which case this mode should be actually enabled
     else {
         assert( _isAIAutoControlMode );
     }
@@ -212,7 +212,7 @@ void Player::commitAIAutoControlMode()
 {
     assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
 
-    // If this method has been called, then this mode should be enabled
+    // If this method has been called, then this mode should be actually enabled
     assert( _isAIAutoControlMode );
 
     _isAIAutoControlMode = _isAIAutoControlModePlanned;
