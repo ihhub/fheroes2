@@ -155,7 +155,6 @@ msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
-
 "UDVIDELSE\n"
 "FELTTOG"
 
@@ -2405,7 +2404,7 @@ msgid "Recruit Hero"
 msgstr "Rekruttér helt"
 
 msgid "%{name} is a level %{value} %{race} "
-msgstr " "
+msgstr ""
 
 msgid "with %{count} artifacts."
 msgstr ""
@@ -2440,7 +2439,6 @@ msgstr ""
 
 msgid "Set garrison combat formation to 'Grouped'"
 msgstr ""
-""
 
 msgid "Exit Castle Options"
 msgstr "Forlad borg-vindue"
@@ -2449,7 +2447,7 @@ msgid "Castle Options"
 msgstr "Borg-vindue"
 
 msgid "Not enough resources to recruit creatures."
-msgstr "Der er nok resurser til at rekruttére væsener for."
+msgstr "Der er ikke nok resurser til at rekruttére væsener for."
 
 msgid "You are unable to recruit at this time, your ranks are full."
 msgstr ""
@@ -2571,6 +2569,7 @@ msgstr ""
 
 msgid "Dismiss this army."
 msgstr ""
+
 msgid "Followers"
 msgstr "Følgere"
 
@@ -3969,6 +3968,7 @@ msgstr ""
 #, fuzzy
 msgid "hotkey|new random map"
 msgstr "verdenskort op til venstre"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4316,6 +4316,7 @@ msgstr ""
 
 msgid "Loading video. Please wait..."
 msgstr ""
+
 msgid "Host"
 msgstr ""
 
@@ -4513,7 +4514,7 @@ msgid "Class:"
 msgstr "Klasse:"
 
 msgid "Rating %{rating}%"
-msgstr "bedømmelse %{rating}%"
+msgstr "Bedømmelse %{rating}%"
 
 msgid "Click here to select which scenario to play."
 msgstr "Klik her for at vælge, hvilket kort du vil spille på."
@@ -5268,7 +5269,8 @@ msgstr ""
 msgid ""
 "An ancient and immortal witch living in a hut with bird's legs for stilts "
 "teaches you %{skill} for her own inscrutable purposes."
-msgstr ""
+msgstr "I hytten lever en udødelig og ældgammel heks med krøkker af fugleben. Af "
+"sine egne uransagelige årsager, lærer hun dig at blive %{skill}."
 
 msgid "As you drink the sweet water, you gain luck for your next battle."
 msgstr ""
@@ -6186,6 +6188,7 @@ msgid ""
 "There are already at least as many elementals guarding the mine than the "
 "spell can generate. Casting this spell will not bring any advantage."
 msgstr ""
+
 msgid "%{name} the %{race} (Level %{level})"
 msgstr ""
 
@@ -7091,7 +7094,7 @@ msgid "Mines"
 msgstr ""
 
 msgid "Monster"
-msgstr ""
+msgstr "Monster"
 
 msgid "Obelisk"
 msgstr ""
@@ -7943,6 +7946,7 @@ msgstr ""
 
 msgid "Invalid Artifact"
 msgstr ""
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
