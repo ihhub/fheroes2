@@ -928,7 +928,7 @@ msgid "Dwarven Alliance"
 msgstr "Dvärgallians"
 
 msgid "Sorceress Guild"
-msgstr "Häxacirkel"
+msgstr "Häxcirkel"
 
 msgid "Necromancer Guild"
 msgstr ""
