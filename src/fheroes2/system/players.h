@@ -184,13 +184,19 @@ public:
 
     void setHandicapStatus( const HandicapStatus status );
 
-    // This mode sets control from a human player to AI so the game will be continued by AI.
+#if defined( WITH_DEBUG )
+    // Sets whether a given human player is controlled by AI. See the implementation for details.
     void setAIAutoControlMode( const bool enable );
+
+    // Turns the planned value of whether a given human player is controlled by AI into the actual value.
+    // Should be called only if this mode is enabled.
+    void commitAIAutoControlMode();
 
     bool isAIAutoControlMode() const
     {
         return _isAIAutoControlMode;
     }
+#endif
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const Player & );
@@ -206,8 +212,14 @@ protected:
     std::shared_ptr<AI::Base> _ai;
     HandicapStatus _handicapStatus;
 
-    // This member should not be saved anywhere.
+#if defined( WITH_DEBUG )
+    // These members should not be saved anywhere
+
+    // Actual value of whether a given human player is controlled by AI
     bool _isAIAutoControlMode;
+    // Planned value of whether a given human player is controlled by AI (will become actual upon committing it)
+    bool _isAIAutoControlModePlanned;
+#endif
 };
 
 StreamBase & operator<<( StreamBase &, const Player & );

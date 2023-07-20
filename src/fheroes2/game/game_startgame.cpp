@@ -967,7 +967,11 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                                                         _( "Do you want to transfer control from you to the AI? The effect will take place only on the next turn." ),
                                                         Dialog::YES | Dialog::NO )
                      == Dialog::YES ) {
-                    Players::Get( myKingdom.GetColor() )->setAIAutoControlMode( true );
+                    Player * player = Players::Get( myKingdom.GetColor() );
+                    assert( player != nullptr );
+
+                    player->setAIAutoControlMode( true );
+
                     return fheroes2::GameMode::END_TURN;
                 }
             }

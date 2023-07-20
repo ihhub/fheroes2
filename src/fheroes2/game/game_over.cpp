@@ -385,7 +385,16 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 
         const Kingdom & myKingdom = world.GetKingdom( humanColors );
 
-        if ( myKingdom.isControlHuman() || Players::Get( humanColors )->isAIAutoControlMode() ) {
+#if defined( WITH_DEBUG )
+        const Player * humanPlayer = Players::Get( humanColors );
+        assert( humanPlayer != nullptr );
+
+        const bool isAIAutoControlMode = humanPlayer->isAIAutoControlMode();
+#else
+        const bool isAIAutoControlMode = false;
+#endif
+
+        if ( myKingdom.isControlHuman() || isAIAutoControlMode ) {
             result = world.CheckKingdomWins( myKingdom );
             if ( result != GameOver::COND_NONE ) {
                 DialogWins( result );
@@ -443,8 +452,17 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
             auto checkWinLossConditions = []( const int color ) -> uint32_t {
                 const Kingdom & kingdom = world.GetKingdom( color );
 
+#if defined( WITH_DEBUG )
+                const Player * player = Players::Get( color );
+                assert( player != nullptr );
+
+                const bool isAIAutoControlMode = player->isAIAutoControlMode();
+#else
+                const bool isAIAutoControlMode = false;
+#endif
+
                 // Check the win/loss conditions for active human-controlled players only
-                if ( !kingdom.isPlay() || ( !kingdom.isControlHuman() && !Players::Get( color )->isAIAutoControlMode() ) ) {
+                if ( !kingdom.isPlay() || ( !kingdom.isControlHuman() && !isAIAutoControlMode ) ) {
                     return GameOver::COND_NONE;
                 }
 

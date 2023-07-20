@@ -720,6 +720,35 @@ namespace AI
 
     void Normal::KingdomTurn( Kingdom & kingdom )
     {
+#if defined( WITH_DEBUG )
+        class AIAutoControlModeCommitter
+        {
+        public:
+            explicit AIAutoControlModeCommitter( const Kingdom & kingdom )
+                : _kingdomColor( kingdom.GetColor() )
+            {}
+
+            AIAutoControlModeCommitter( const AIAutoControlModeCommitter & ) = delete;
+
+            ~AIAutoControlModeCommitter()
+            {
+                Player * player = Players::Get( _kingdomColor );
+                assert( player != nullptr );
+
+                if ( player->isAIAutoControlMode() ) {
+                    player->commitAIAutoControlMode();
+                }
+            }
+
+            AIAutoControlModeCommitter & operator=( const AIAutoControlModeCommitter & ) = delete;
+
+        private:
+            const int _kingdomColor;
+        };
+
+        const AIAutoControlModeCommitter aiAutoControlModeCommitter( kingdom );
+#endif
+
         const int myColor = kingdom.GetColor();
 
         if ( kingdom.isLoss() || myColor == Color::NONE ) {
