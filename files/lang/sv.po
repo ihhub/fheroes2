@@ -4634,7 +4634,7 @@ msgid ""
 "settings, give extra resources to the computer."
 msgstr ""
 "Låter dig ändra svårighetsgraden för spelet. Vid högre svårighetsgrad så "
-"startar du men färre resurser och vid ännu svårare så får datorn mer "
+"startar du med färre resurser och vid ännu svårare så får datorn mer "
 "resurser."
 
 msgid "Difficulty Rating"
