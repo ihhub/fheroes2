@@ -29,6 +29,7 @@
 #include <cstring>
 #include <fstream>
 #include <map>
+#include <mutex>
 #include <set>
 #include <type_traits>
 #include <utility>
@@ -487,21 +488,27 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
     }
 #if defined( WITH_DEBUG )
     else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )].key ) {
-        Player * player = Settings::Get().GetPlayers().GetCurrent();
-        if ( player && ( player->isControlHuman() || player->isAIAutoControlMode() ) ) {
-            if ( player->isAIAutoControlMode() ) {
-                if ( fheroes2::showStandardTextMessage( _( "Warning" ), _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
-                                                        Dialog::YES | Dialog::NO )
-                     == Dialog::YES ) {
-                    player->setAIAutoControlMode( false );
+        static std::mutex recursionGuardMutex;
+
+        std::unique_lock<std::mutex> recursionGuardLock( recursionGuardMutex, std::defer_lock );
+        if ( recursionGuardLock.try_lock() ) {
+            Player * player = Settings::Get().GetPlayers().GetCurrent();
+            if ( player && ( player->isControlHuman() || player->isAIAutoControlMode() ) ) {
+                if ( player->isAIAutoControlMode() ) {
+                    if ( fheroes2::showStandardTextMessage( _( "Warning" ),
+                                                            _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
+                                                            Dialog::YES | Dialog::NO )
+                         == Dialog::YES ) {
+                        player->setAIAutoControlMode( false );
+                    }
                 }
-            }
-            else {
-                if ( fheroes2::showStandardTextMessage( _( "Warning" ),
-                                                        _( "Do you want to transfer control from you to the AI? The effect will take place only on the next turn." ),
-                                                        Dialog::YES | Dialog::NO )
-                     == Dialog::YES ) {
-                    player->setAIAutoControlMode( true );
+                else {
+                    if ( fheroes2::showStandardTextMessage( _( "Warning" ),
+                                                            _( "Do you want to transfer control from you to the AI? The effect will take place only on the next turn." ),
+                                                            Dialog::YES | Dialog::NO )
+                         == Dialog::YES ) {
+                        player->setAIAutoControlMode( true );
+                    }
                 }
             }
         }
