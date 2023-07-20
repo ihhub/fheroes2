@@ -352,7 +352,6 @@ void Settings::SaveIfNecessary() const
     if ( config_modified ) {
         Save( Settings::configFileName );
     }
-
 }
 
 std::string Settings::String() const
