@@ -2926,7 +2926,7 @@ msgid "Uncharted Territory"
 msgstr "Ukendt område"
 
 msgid "Defenders:"
-msgstr "Forsvarer:"
+msgstr "Forsvarere:"
 
 msgid "Unknown"
 msgstr "Ukendt"
@@ -2986,10 +2986,10 @@ msgid "Open Virtual Keyboard"
 msgstr ""
 
 msgid "How many troops to move?"
-msgstr "Angiv antal per trop, eller"
+msgstr "Angiv antal per trop"
 
 msgid "Fast separation into slots:"
-msgstr "Hurtigfordeling:"
+msgstr "Hurtigfordel:"
 
 msgid "Map: "
 msgstr "Kort:"
@@ -3615,6 +3615,7 @@ msgstr "Let"
 
 msgid "Hard"
 msgstr "Svær"
+
 msgid "Campaign Difficulty"
 msgstr ""
 
@@ -4431,14 +4432,14 @@ msgid ""
 "All is lost."
 msgstr ""
 
+msgid "Defeat!"
+msgstr "Nederlag!"
+
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
-
-msgid "Defeat!"
-msgstr "Nederlag!"
 
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
