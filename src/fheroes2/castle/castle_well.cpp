@@ -273,9 +273,13 @@ void Castle::OpenWell()
 
                         _wellRedrawAvailableMonsters( castleDwellings[dwellingId], true, background );
                     }
+
+                    break;
                 }
                 else if ( le.MousePressRight( rectMonster[dwellingId] ) ) {
                     Dialog::DwellingInfo( castleMonster[dwellingId], dwelling[dwellingId] );
+
+                    break;
                 }
             }
         }
@@ -283,7 +287,7 @@ void Castle::OpenWell()
         if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
             fheroes2::Copy( background, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
 
-            _wellRedrawMonsterAnimation( roi.getPosition(), monsterAnimInfo );
+            _wellRedrawMonsterAnimation( roi, monsterAnimInfo );
 
             buttonMax.draw();
             buttonExit.draw();
@@ -533,12 +537,12 @@ void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
     }
 }
 
-void Castle::_wellRedrawMonsterAnimation( const fheroes2::Point & cur_pt, std::array<fheroes2::RandomMonsterAnimation, CASTLEMAXMONSTER> & monsterAnimInfo ) const
+void Castle::_wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array<fheroes2::RandomMonsterAnimation, CASTLEMAXMONSTER> & monsterAnimInfo ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
     for ( size_t monsterId = 0; monsterId < CASTLEMAXMONSTER; ++monsterId ) {
-        fheroes2::Point outPos( cur_pt.x, cur_pt.y + 1 );
+        fheroes2::Point outPos( roi.x, roi.y + 1 );
 
         switch ( monsterId ) {
         case 0:
@@ -584,8 +588,7 @@ void Castle::_wellRedrawMonsterAnimation( const fheroes2::Point & cur_pt, std::a
         fheroes2::Point inPos( 0, 0 );
         fheroes2::Size inSize( smonster.width(), smonster.height() );
 
-        if ( fheroes2::FitToRoi( smonster, inPos, display, outPos, inSize,
-                                 { cur_pt.x, cur_pt.y, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } ) ) {
+        if ( fheroes2::FitToRoi( smonster, inPos, display, outPos, inSize, roi ) ) {
             fheroes2::Blit( smonster, inPos, display, outPos, inSize, flipMonsterSprite );
         }
 

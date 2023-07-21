@@ -309,7 +309,7 @@ private:
 
     void _wellRedrawAvailableMonsters( const uint32_t dwellingType, const bool restoreBackground, fheroes2::Image & background ) const;
     void _wellRedrawBackground( fheroes2::Image & background ) const;
-    void _wellRedrawMonsterAnimation( const fheroes2::Point & cur_pt, std::array<fheroes2::RandomMonsterAnimation, CASTLEMAXMONSTER> & monsterAnimInfo ) const;
+    void _wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array<fheroes2::RandomMonsterAnimation, CASTLEMAXMONSTER> & monsterAnimInfo ) const;
 
     // Recruit maximum monsters from the castle. Returns 'true' if the recruit was made.
     bool _recruitCastleMax( const Troops & currentCastleArmy );
