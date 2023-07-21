@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 05:56+0000\n"
+"POT-Creation-Date: 2023-07-21 16:11+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -161,11 +161,11 @@ msgstr ""
 msgid "GIFT"
 msgstr "AJÁNDÉK"
 
-msgid "guildWell|EXIT"
-msgstr ""
-
 msgid "DIFFICULTY"
 msgstr "NEHÉZSÉG"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr ""

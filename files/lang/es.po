@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 05:56+0000\n"
+"POT-Creation-Date: 2023-07-21 16:11+0000\n"
 "PO-Revision-Date: 2023-06-27 18:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -165,11 +165,11 @@ msgstr "6 JUGADORES"
 msgid "GIFT"
 msgstr "REGALO"
 
-msgid "guildWell|EXIT"
-msgstr "SALIR"
-
 msgid "DIFFICULTY"
 msgstr "DIFICULTAD"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
@@ -10580,6 +10580,9 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "guildWell|EXIT"
+#~ msgstr "SALIR"
 
 #~ msgid "%{spell} failed!!!"
 #~ msgstr "¡%{spell} fallido!"
