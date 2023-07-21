@@ -6381,7 +6381,7 @@ msgid ""
 msgstr ""
 "Stallmästaren talar till dig, \"Det är en fin häst du har. Tyvärr är jag "
 "rädd att jag inte kan erbjuda någon bättre, men ditt kavalleris hästar har "
-"sett bättre dagar. Vi har många tränade krishästar som skulle vara "
+"sett bättre dagar. Vi har många tränade krigshästar som skulle vara "
 "behjälpliga dina ryttare. Jag insisterar att du tar dem.\""
 
 msgid ""
