@@ -202,7 +202,7 @@ void Castle::OpenWell()
     fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
 
     // button exit
-    dst_pt.x = cur_pt.x + 578;
+    dst_pt.x = cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
     dst_pt.y = cur_pt.y + bottomBarOffsetY;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
 
@@ -217,8 +217,6 @@ void Castle::OpenWell()
     const fheroes2::Rect rectMonster5( cur_pt.x + 334, cur_pt.y + 168, 288, 124 );
     const fheroes2::Rect rectMonster6( cur_pt.x + 334, cur_pt.y + 318, 288, 124 );
 
-    buttonExit.draw();
-
     std::vector<fheroes2::RandomMonsterAnimation> monsterAnimInfo;
     monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER1 ) ) );
     monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ) );
@@ -228,7 +226,7 @@ void Castle::OpenWell()
     monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ) );
 
     WellRedrawInfoArea( cur_pt, monsterAnimInfo );
-
+    buttonExit.draw();
     buttonMax.draw();
 
     std::vector<uint32_t> allDwellings;
@@ -286,7 +284,7 @@ void Castle::OpenWell()
 
             for ( size_t i = 0; i < monsterAnimInfo.size(); ++i )
                 monsterAnimInfo[i].increment();
-
+            buttonExit.draw();
             buttonMax.draw();
             display.render();
         }
@@ -314,17 +312,19 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
 
     const fheroes2::FontType statsFontType = fheroes2::FontType::smallWhite();
 
-    const fheroes2::Sprite & button = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 );
-    const fheroes2::Rect src_rt( 0, bottomBarOffsetY, button.width(), 19 );
+    const fheroes2::Sprite & buttonMax = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 );
+    const fheroes2::Sprite & buttonExit = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 );
 
+    // status bar
     // The original ICN::WELLBKG image has incorrect bottom message bar with no yellow outline. Also the original graphics did not have MAX button.
-    const int32_t allowedBottomBarWidth = 578 - button.width();
     const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
-
-    fheroes2::Blit( bottomBar, 0, 0, display, cur_pt.x + button.width(), cur_pt.y + bottomBarOffsetY, allowedBottomBarWidth / 2, bottomBar.height() );
-    fheroes2::Blit( bottomBar, bottomBar.width() - ( allowedBottomBarWidth - allowedBottomBarWidth / 2 ) - 1, 0, display,
-                    cur_pt.x + button.width() + allowedBottomBarWidth / 2, cur_pt.y + bottomBarOffsetY, allowedBottomBarWidth - allowedBottomBarWidth / 2,
-                    bottomBar.height() );
+    const int32_t barHeight = bottomBar.height();
+    const int32_t exitWidth = buttonExit.width();
+    const int32_t buttonMaxWidth = buttonMax.width();
+    // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
+    fheroes2::Copy( bottomBar, 1, 0, display, cur_pt.x + buttonMaxWidth, cur_pt.y + bottomBarOffsetY, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonMaxWidth, barHeight );
+    fheroes2::Copy( bottomBar, bottomBar.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + exitWidth - 1, 0, display, cur_pt.x + fheroes2::Display::DEFAULT_WIDTH / 2,
+                    cur_pt.y + bottomBarOffsetY, fheroes2::Display::DEFAULT_WIDTH / 2 - exitWidth + 1, barHeight );
 
     fheroes2::Text text( _( "Town Population Information and Statistics" ), fheroes2::FontType() );
     fheroes2::Point dst_pt( cur_pt.x + 315 - text.width() / 2, cur_pt.y + 464 );
