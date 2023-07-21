@@ -276,7 +276,8 @@ void Castle::OpenWell()
 
                     break;
                 }
-                else if ( le.MousePressRight( rectMonster[dwellingId] ) ) {
+
+                if ( le.MousePressRight( rectMonster[dwellingId] ) ) {
                     Dialog::DwellingInfo( castleMonster[dwellingId], dwelling[dwellingId] );
 
                     break;
