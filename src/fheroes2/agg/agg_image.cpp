@@ -437,7 +437,7 @@ namespace
 
         for ( size_t i = 0; i < texts.size(); ++i ) {
             const size_t icnIndex = 2 * i;
-            fheroes2::getTextAdaptedButton( _icnVsSprite[campaignSetIcnId][2 * i], _icnVsSprite[campaignSetIcnId][icnIndex + 1], texts[i], emptyButtonIcnID );
+            fheroes2::getTextAdaptedButton( _icnVsSprite[campaignSetIcnId][icnIndex], _icnVsSprite[campaignSetIcnId][icnIndex + 1], texts[i], emptyButtonIcnID );
         }
     }
 
