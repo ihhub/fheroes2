@@ -489,6 +489,8 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
     }
 #if defined( WITH_DEBUG )
     else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )].key ) {
+        // It would be possible to use a static flag and a self-written "locking" class here to avoid the recursive calls of these dialogs,
+        // but it would look a bit verbose, so we just use std::mutex to simplify our life, since this is not a "hot" code section
         static std::mutex recursionGuardMutex;
 
         std::unique_lock<std::mutex> recursionGuardLock( recursionGuardMutex, std::defer_lock );
