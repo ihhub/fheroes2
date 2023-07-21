@@ -535,10 +535,11 @@ namespace fheroes2
         uint8_t * pressedImage = pressed.image();
         const uint8_t * backgroundImage
             = background.image() + ( background.width() - pressed.width() ) / 2 + ( background.height() - pressed.height() ) * background.width() / 2;
+        const int32_t pressedArea = pressed.width() * pressed.height();
 
-        for ( int32_t x = 0; x < pressed.width() * pressed.height(); ++x ) {
+        for ( int32_t x = 0; x < pressedArea; ++x ) {
             if ( ( *( pressedTransform + x ) == 1 ) && ( *( releasedTransform + x ) == 0 ) ) {
-                *( pressedImage + x ) = *( backgroundImage + x % pressed.width() + static_cast<ptrdiff_t>( x / pressed.width() ) * background.width() );
+                *( pressedImage + x ) = *( backgroundImage + ( x % pressed.width() ) + static_cast<ptrdiff_t>( x / pressed.width() ) * background.width() );
                 *( pressedTransform + x ) = 0;
             }
         }

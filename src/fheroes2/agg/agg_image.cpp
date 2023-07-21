@@ -3754,7 +3754,7 @@ namespace fheroes2
             }
             case ICN::EMPTY_GOOD_BUTTON:
             case ICN::EMPTY_EVIL_BUTTON: {
-                const bool isGoodInterface = id == ICN::EMPTY_GOOD_BUTTON;
+                const bool isGoodInterface = ( id == ICN::EMPTY_GOOD_BUTTON );
                 const int32_t originalId = isGoodInterface ? ICN::SYSTEM : ICN::SYSTEME;
                 LoadOriginalICN( originalId );
 
