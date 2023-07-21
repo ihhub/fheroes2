@@ -214,11 +214,13 @@ void Castle::OpenWell()
 
     const fheroes2::Rect roi = restorer.rect();
 
+    const int32_t buttonOffsetY = roi.y + bottomBarOffsetY;
+
     // MAX button.
-    fheroes2::Button buttonMax( roi.x, roi.y + bottomBarOffsetY, ICN::BUYMAX, 0, 1 );
+    fheroes2::Button buttonMax( roi.x, buttonOffsetY, ICN::BUYMAX, 0, 1 );
 
     // EXIT button.
-    fheroes2::Button buttonExit( roi.x + 578, roi.y + bottomBarOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
+    fheroes2::Button buttonExit( roi.x + roi.width - fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width(), buttonOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
 
     const std::array<fheroes2::Rect, CASTLEMAXMONSTER> rectMonster
         = { fheroes2::Rect( roi.x + 20, roi.y + 18, 288, 124 ),   fheroes2::Rect( roi.x + 20, roi.y + 168, 288, 124 ),
@@ -362,19 +364,21 @@ void Castle::_wellRedrawAvailableMonsters( const uint32_t dwellingType, const bo
 void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
 {
     const fheroes2::Sprite & wellBackground = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::WELLBKG_EVIL : ICN::WELLBKG, 0 );
+    const int32_t backgroundWidth = wellBackground.width();
 
-    fheroes2::Copy( wellBackground, 0, 0, background, 0, 0, wellBackground.width(), bottomBarOffsetY );
+    fheroes2::Copy( wellBackground, 0, 0, background, 0, 0, backgroundWidth, bottomBarOffsetY );
 
     // TODO: Make Well bottom bar and buttons for Evil interface.
 
     // The original ICN::WELLBKG image has incorrect bottom message bar with no yellow outline. Also the original graphics did not have MAX button.
-    const int32_t maxButtinWidth = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 ).width();
-    const int32_t allowedBottomBarWidth = 578 - maxButtinWidth;
     const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
-
-    fheroes2::Copy( bottomBar, 0, 0, background, maxButtinWidth, bottomBarOffsetY, allowedBottomBarWidth / 2, bottomBar.height() );
-    fheroes2::Copy( bottomBar, bottomBar.width() - ( allowedBottomBarWidth - allowedBottomBarWidth / 2 ) - 1, 0, background, maxButtinWidth + allowedBottomBarWidth / 2,
-                    bottomBarOffsetY, allowedBottomBarWidth - allowedBottomBarWidth / 2, bottomBar.height() );
+    const int32_t barHeight = bottomBar.height();
+    const int32_t exitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
+    const int32_t buttonMaxWidth = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 ).width();
+    // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
+    fheroes2::Copy( bottomBar, 1, 0, background, buttonMaxWidth, bottomBarOffsetY, backgroundWidth / 2 - buttonMaxWidth, barHeight );
+    fheroes2::Copy( bottomBar, bottomBar.width() - backgroundWidth / 2 + exitWidth - 1, 0, background, backgroundWidth / 2, bottomBarOffsetY,
+                    backgroundWidth / 2 - exitWidth + 1, barHeight );
 
     // The original assets Well background has a transparent line to the right of EXIT button and it is not covered by any other image. Fill it with the black color.
     fheroes2::Fill( background, background.width() - 1, bottomBarOffsetY, 1, bottomBar.height(), static_cast<uint8_t>( 0 ) );

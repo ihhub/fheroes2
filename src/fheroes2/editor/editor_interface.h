@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,10 +20,38 @@
 
 #pragma once
 
-#define MAJOR_VERSION 1
-#define MINOR_VERSION 0
-#define INTERMEDIATE_VERSION 6
+#include <cstdint>
 
-#ifndef BUILD_VERSION
-#define BUILD_VERSION 0
-#endif
+#include "editor_interface_panel.h"
+#include "game_mode.h"
+#include "interface_base.h"
+
+namespace Interface
+{
+    class Editor final : public BaseInterface
+    {
+    public:
+        static Editor & Get();
+
+        void redraw( const uint32_t force = 0 ) override;
+
+        // Regenerates the game area and updates the panel positions depending on the UI settings
+        void reset() override;
+
+        // Start Map Editor interface main function.
+        fheroes2::GameMode startEdit();
+
+        static fheroes2::GameMode eventLoadMap();
+        static fheroes2::GameMode eventNewMap();
+        static fheroes2::GameMode eventFileDialog();
+        void eventViewWorld();
+
+        void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
+        void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
+
+    private:
+        Editor();
+
+        EditorPanel _editorPanel;
+    };
+}

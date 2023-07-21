@@ -30,6 +30,7 @@
 #include "game_interface.h"
 #include "heroes.h"
 #include "icn.h"
+#include "interface_base.h"
 #include "kingdom.h"
 #include "localevent.h"
 #include "route.h"
@@ -38,7 +39,7 @@
 #include "ui_dialog.h"
 #include "world.h"
 
-Interface::ButtonsArea::ButtonsArea( Basic & basic )
+Interface::ButtonsArea::ButtonsArea( AdventureMap & basic )
     : BorderWindow( { 0, 0, 144, 72 } )
     , interface( basic )
 {}
@@ -53,7 +54,7 @@ void Interface::ButtonsArea::SavePosition()
 
 void Interface::ButtonsArea::SetRedraw() const
 {
-    interface.SetRedraw( REDRAW_BUTTONS );
+    interface.setRedraw( REDRAW_BUTTONS );
 }
 
 void Interface::ButtonsArea::SetPos( int32_t ox, int32_t oy )
@@ -105,7 +106,7 @@ void Interface::ButtonsArea::SetPos( int32_t ox, int32_t oy )
     systemRect = buttonSystem.area();
 }
 
-void Interface::ButtonsArea::Redraw()
+void Interface::ButtonsArea::_redraw()
 {
     const Settings & conf = Settings::Get();
 

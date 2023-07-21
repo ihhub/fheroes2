@@ -45,6 +45,7 @@
 #include "game_interface.h"
 #include "game_static.h"
 #include "heroes.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "kingdom.h"
 #include "localevent.h"
@@ -220,13 +221,51 @@ namespace
         return true;
     }
 
+    void AITownPortal( Heroes & hero, const int32_t targetIndex )
+    {
+        assert( !hero.Modes( Heroes::PATROL ) && Maps::isValidAbsIndex( targetIndex ) );
+#ifndef NDEBUG
+        const Castle * targetCastle = world.getCastleEntrance( Maps::GetPoint( targetIndex ) );
+#endif
+        assert( targetCastle && targetCastle->GetHero() == nullptr );
+
+        const Spell spellToUse = [&hero, targetIndex]() {
+            const Castle * nearestCastle = fheroes2::getNearestCastleTownGate( hero );
+            assert( nearestCastle != nullptr );
+
+            if ( nearestCastle->GetIndex() == targetIndex && hero.CanCastSpell( Spell::TOWNGATE ) ) {
+                return Spell::TOWNGATE;
+            }
+
+            return Spell::TOWNPORTAL;
+        }();
+
+        assert( hero.CanCastSpell( spellToUse ) );
+
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
+            hero.FadeOut();
+        }
+
+        hero.Move2Dest( targetIndex );
+        hero.SpellCasted( spellToUse );
+        hero.GetPath().Reset();
+
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
+            hero.FadeIn();
+        }
+
+        AI::Get().HeroesActionComplete( hero, targetIndex, hero.GetMapsObject() );
+    }
+
     void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, const fheroes2::Point * centerOn = nullptr, const bool playSound = false )
     {
         const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             if ( centerOn != nullptr ) {
-                Interface::Basic::Get().GetGameArea().SetCenter( *centerOn );
+                Interface::AdventureMap::Get().getGameArea().SetCenter( *centerOn );
             }
 
             if ( playSound ) {
@@ -623,7 +662,7 @@ namespace
                 setColorOnTile( tile, hero.GetColor() );
             };
 
-            if ( tile.isCaptureObjectProtected() ) {
+            if ( isCaptureObjectProtected( tile ) ) {
                 Army army( tile );
 
                 Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
@@ -783,7 +822,7 @@ namespace
         hero.GetPath().Reset();
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
 
@@ -849,7 +888,7 @@ namespace
         AIWhirlpoolTroopLoseEffect( hero );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
 
@@ -1341,7 +1380,7 @@ namespace
         if ( result.AttackerWins() ) {
             hero.IncreaseExperience( result.GetExperienceAttacker() );
 
-            Maps::Tiles::RestoreAbandonedMine( tile, Resource::GOLD );
+            Maps::restoreAbandonedMine( tile, Resource::GOLD );
             hero.SetMapsObject( MP2::OBJ_MINES );
             setColorOnTile( tile, hero.GetColor() );
         }
@@ -1449,7 +1488,7 @@ namespace
         const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut( offset );
         }
 
@@ -1487,7 +1526,7 @@ namespace
         hero.GetPath().Reset();
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( prevPos );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( prevPos );
             hero.FadeIn( offset );
         }
 
@@ -1844,8 +1883,8 @@ namespace AI
         if ( path.isValid() ) {
             hero.SetMove( true );
 
-            Interface::Basic & basicInterface = Interface::Basic::Get();
-            Interface::GameArea & gameArea = basicInterface.GetGameArea();
+            Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+            Interface::GameArea & gameArea = adventureMapInterface.getGameArea();
 
             const Settings & conf = Settings::Get();
 
@@ -1890,10 +1929,10 @@ namespace AI
                         // Update Adventure Map objects' animation.
                         Game::updateAdventureMapAnimationIndex();
 
-                        basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
+                        adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
 
                         // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
-                        assert( basicInterface.GetRedrawMask() == 0 );
+                        assert( adventureMapInterface.getRedrawMask() == 0 );
 
                         display.render();
                     }
@@ -1959,10 +1998,10 @@ namespace AI
                         Game::updateAdventureMapAnimationIndex();
                     }
 
-                    basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
+                    adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
 
                     // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
-                    assert( basicInterface.GetRedrawMask() == 0 );
+                    assert( adventureMapInterface.getRedrawMask() == 0 );
 
                     display.render();
                 }
@@ -1975,7 +2014,7 @@ namespace AI
             const int32_t targetIndex = step.GetIndex();
 
             if ( step.GetFrom() != targetIndex && world.GetTiles( targetIndex ).GetObject() == MP2::OBJ_CASTLE ) {
-                HeroesCastTownPortal( hero, targetIndex );
+                AITownPortal( hero, targetIndex );
             }
             else if ( MP2::isActionObject( hero.GetMapsObject(), hero.isShipMaster() ) ) {
                 // use the action object hero is standing on (Stone Liths)
@@ -2010,7 +2049,7 @@ namespace AI
 #endif
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut();
         }
 
@@ -2019,47 +2058,11 @@ namespace AI
         hero.GetPath().Reset();
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
 
         hero.ActionNewPosition( false );
-    }
-
-    void HeroesCastTownPortal( Heroes & hero, const int32_t targetIndex )
-    {
-        if ( !Maps::isValidAbsIndex( targetIndex ) || hero.isShipMaster() ) {
-            return;
-        }
-
-        Spell spellToUse( Spell::TOWNPORTAL );
-
-        // check if we can cast Town Gate instead
-        const Spell townGate( Spell::TOWNGATE );
-        const Castle * nearestCastle = fheroes2::getNearestCastleTownGate( hero );
-        if ( nearestCastle && nearestCastle->GetIndex() == targetIndex && hero.HaveSpell( townGate ) ) {
-            spellToUse = townGate;
-        }
-
-        if ( !hero.CanCastSpell( spellToUse ) ) {
-            return;
-        }
-
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
-            hero.FadeOut();
-        }
-
-        hero.Move2Dest( targetIndex );
-        hero.SpellCasted( spellToUse );
-        hero.GetPath().Reset();
-
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
-            hero.FadeIn();
-        }
-
-        AI::Get().HeroesActionComplete( hero, targetIndex, hero.GetMapsObject() );
     }
 
     bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell )

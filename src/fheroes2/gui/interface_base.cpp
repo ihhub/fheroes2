@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,12 +18,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#include "interface_base.h"
 
-#define MAJOR_VERSION 1
-#define MINOR_VERSION 0
-#define INTERMEDIATE_VERSION 6
+#include "game.h"
+#include "ui_tool.h"
 
-#ifndef BUILD_VERSION
-#define BUILD_VERSION 0
-#endif
+namespace Interface
+{
+    BaseInterface::BaseInterface()
+        : _gameArea( *this )
+        , _radar( *this )
+        , _statusWindow( *this )
+    {
+        // Do nothing
+    }
+
+    void Interface::BaseInterface::validateFadeInAndRender()
+    {
+        if ( Game::validateDisplayFadeIn() ) {
+            fheroes2::fadeInDisplay();
+
+            setRedraw( REDRAW_GAMEAREA );
+        }
+        else {
+            fheroes2::Display::instance().render();
+        }
+    }
+
+}

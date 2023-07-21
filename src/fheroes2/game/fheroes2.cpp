@@ -54,6 +54,7 @@
 #include "cursor.h"
 #include "dir.h"
 #include "embedded_image.h"
+#include "exception.h"
 #include "game.h"
 #include "game_logo.h"
 #include "game_video.h"

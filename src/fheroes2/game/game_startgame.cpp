@@ -53,6 +53,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_buttons.h"
 #include "interface_cpanel.h"
 #include "interface_gamearea.h"
@@ -152,7 +153,7 @@ fheroes2::GameMode Game::StartGame()
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();
 
-    return Interface::Basic::Get().StartGame();
+    return Interface::AdventureMap::Get().StartGame();
 }
 
 void Game::DialogPlayers( int color, std::string title, std::string message )
@@ -237,23 +238,23 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
     // If Castle dialog background was not rendered than we have opened it from other dialog (Kingdom Overview)
     // and there is no need update Adventure map interface at this time.
     if ( renderBackgroundDialog ) {
-        Interface::Basic & basicInterface = Interface::Basic::Get();
+        Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
         if ( updateFocus ) {
             if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
-                basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore], false );
+                adventureMapInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore], false );
             }
             else if ( it != myCastles.end() ) {
                 Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).GetHeroes();
                 if ( heroInCastle == nullptr ) {
-                    basicInterface.SetFocus( *it );
+                    adventureMapInterface.SetFocus( *it );
                 }
                 else {
-                    basicInterface.SetFocus( heroInCastle, false );
+                    adventureMapInterface.SetFocus( heroInCastle, false );
                 }
             }
             else {
-                basicInterface.ResetFocus( GameFocus::HEROES, false );
+                adventureMapInterface.ResetFocus( GameFocus::HEROES, false );
             }
         }
         else {
@@ -262,7 +263,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
         }
 
         // The castle garrison can change
-        basicInterface.RedrawFocus();
+        adventureMapInterface.RedrawFocus();
 
         // Fade-in game screen only for 640x480 resolution.
         if ( fheroes2::Display::instance().isDefaultSize() ) {
@@ -280,7 +281,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    Interface::Basic & basicInterface = Interface::Basic::Get();
+    Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
     const KingdomHeroes & myHeroes = hero.GetKingdom().GetHeroes();
     KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
@@ -319,7 +320,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
             // Check if this dialog is not opened from the other dialog and we will be exiting to the Adventure map.
             if ( renderBackgroundDialog ) {
                 // Redraw Adventure map with hidden hero path.
-                basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
+                adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
 
                 // Fade-in game screen only for 640x480 resolution.
                 if ( isDefaultScreenSize ) {
@@ -350,15 +351,15 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     if ( renderBackgroundDialog ) {
         if ( updateFocus ) {
             if ( it != myHeroes.end() ) {
-                basicInterface.SetFocus( *it, false );
+                adventureMapInterface.SetFocus( *it, false );
             }
             else {
-                basicInterface.ResetFocus( GameFocus::HEROES, false );
+                adventureMapInterface.ResetFocus( GameFocus::HEROES, false );
             }
         }
 
         // The hero's army can change
-        basicInterface.RedrawFocus();
+        adventureMapInterface.RedrawFocus();
 
         // Fade-in game screen only for 640x480 resolution.
         if ( needFade && renderBackgroundDialog && isDefaultScreenSize ) {
@@ -422,7 +423,7 @@ void ShowWarningLostTownsDialog()
     }
 }
 
-int Interface::Basic::GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile )
+int Interface::AdventureMap::GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile )
 {
     switch ( tile.GetObject() ) {
     case MP2::OBJ_NON_ACTION_CASTLE:
@@ -453,7 +454,7 @@ int Interface::Basic::GetCursorFocusCastle( const Castle & castle, const Maps::T
     return Cursor::POINTER;
 }
 
-int Interface::Basic::GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile )
+int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile )
 {
     const bool isWater = tile.isWater();
 
@@ -523,7 +524,7 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & hero, const Maps:
     return Cursor::POINTER;
 }
 
-int Interface::Basic::GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile )
+int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile )
 {
     if ( hero.Modes( Heroes::ENABLEMOVE ) ) {
         return Cursor::Get().Themes();
@@ -599,7 +600,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & hero, const Maps::Til
     default:
         if ( MP2::isActionObject( tile.GetObject() ) ) {
             const bool isProtected
-                = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !hero.isFriends( getColorFromTile( tile ) ) && tile.isCaptureObjectProtected() ) );
+                = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !hero.isFriends( getColorFromTile( tile ) ) && isCaptureObjectProtected( tile ) ) );
 
             return Cursor::DistanceThemes( isProtected ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION, hero.getNumOfTravelDays( tile.GetIndex() ) );
         }
@@ -615,7 +616,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & hero, const Maps::Til
     return Cursor::POINTER;
 }
 
-int Interface::Basic::GetCursorTileIndex( int32_t dstIndex )
+int Interface::AdventureMap::GetCursorTileIndex( int32_t dstIndex )
 {
     if ( !Maps::isValidAbsIndex( dstIndex ) ) {
         return Cursor::POINTER;
@@ -641,19 +642,19 @@ int Interface::Basic::GetCursorTileIndex( int32_t dstIndex )
     return Cursor::POINTER;
 }
 
-fheroes2::GameMode Interface::Basic::StartGame()
+fheroes2::GameMode Interface::AdventureMap::StartGame()
 {
     Settings & conf = Settings::Get();
 
-    Reset();
+    reset();
 
-    radar.Build();
-    radar.SetHide( true );
+    _radar.Build();
+    _radar.SetHide( true );
     iconsPanel.HideIcons( ICON_ANY );
-    statusWindow.Reset();
+    _statusWindow.Reset();
 
     // Prepare for render the whole game interface with adventure map filled with fog as it was not uncovered by 'updateMapFogDirections()'.
-    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
+    redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
     bool loadedFromSave = conf.LoadedGameVersion();
     bool skipTurns = loadedFromSave;
@@ -714,8 +715,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
             if ( kingdom.isPlay() ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( playerColor ) << ", resource: " << kingdom.GetFunds().String() )
 
-                radar.SetHide( true );
-                radar.SetRedraw( REDRAW_RADAR_CURSOR );
+                _radar.SetHide( true );
+                _radar.SetRedraw( REDRAW_RADAR_CURSOR );
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
@@ -724,13 +725,13 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     if ( isHotSeatGame ) {
                         iconsPanel.HideIcons( ICON_ANY );
-                        statusWindow.Reset();
+                        _statusWindow.Reset();
 
                         // Fully update fog directions in Hot Seat mode to cover the map with fog on player change.
                         // TODO: Cover the Adventure map area with fog sprites without rendering the "Game Area" for player change.
                         Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, Color::NONE );
 
-                        Redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
+                        redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
 
                         validateFadeInAndRender();
 
@@ -768,18 +769,18 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     conf.SetCurrentColor( playerColor );
 
-                    statusWindow.Reset();
-                    statusWindow.SetState( StatusType::STATUS_AITURN );
+                    _statusWindow.Reset();
+                    _statusWindow.SetState( StatusType::STATUS_AITURN );
 
 #if defined( WITH_DEBUG )
                     if ( player->isAIAutoControlMode() ) {
                         // If player gave control to AI we show the radar image and update it fully at the start of player's turn.
-                        radar.SetHide( false );
-                        radar.SetRedraw( REDRAW_RADAR );
+                        _radar.SetHide( false );
+                        _radar.SetRedraw( REDRAW_RADAR );
                     }
 #endif
 
-                    Redraw();
+                    redraw();
                     validateFadeInAndRender();
 
                     // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
@@ -862,7 +863,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     return res;
 }
 
-fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
+fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 {
     if ( isload ) {
         updateFocus();
@@ -871,9 +872,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
         ResetFocus( GameFocus::FIRSTHERO, false );
     }
 
-    radar.SetHide( false );
-    statusWindow.Reset();
-    gameArea.SetUpdateCursor();
+    _radar.SetHide( false );
+    _statusWindow.Reset();
+    _gameArea.SetUpdateCursor();
 
     const Settings & conf = Settings::Get();
     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
@@ -883,7 +884,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
         Interface::GameArea::updateMapFogDirections();
     }
 
-    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
+    redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
     validateFadeInAndRender();
 
@@ -905,7 +906,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
         } );
 
         // The amount of the kingdom resources has changed, the status window needs to be updated
-        Redraw( REDRAW_STATUS );
+        redraw( REDRAW_STATUS );
         fheroes2::Display::instance().render();
 
         if ( conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
@@ -951,7 +952,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
         }
 
         // pending timer events
-        statusWindow.TimerEventProcessing();
+        _statusWindow.TimerEventProcessing();
 
         // hotkeys
         if ( le.KeyPress() ) {
@@ -1038,13 +1039,13 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                 EventKeyArrowPress( Direction::BOTTOM_RIGHT );
             // map scrolling control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) )
-                gameArea.SetScroll( SCROLL_LEFT );
+                _gameArea.SetScroll( SCROLL_LEFT );
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_RIGHT ) )
-                gameArea.SetScroll( SCROLL_RIGHT );
+                _gameArea.SetScroll( SCROLL_RIGHT );
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_UP ) )
-                gameArea.SetScroll( SCROLL_TOP );
+                _gameArea.SetScroll( SCROLL_TOP );
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) )
-                gameArea.SetScroll( SCROLL_BOTTOM );
+                _gameArea.SetScroll( SCROLL_BOTTOM );
             // default action
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DEFAULT_ACTION ) )
                 res = EventDefaultAction( res );
@@ -1057,7 +1058,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
             break;
         }
 
-        if ( fheroes2::cursor().isFocusActive() && !gameArea.isDragScroll() && !radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
+        if ( fheroes2::cursor().isFocusActive() && !_gameArea.isDragScroll() && !_radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
             int scrollPosition = SCROLL_NONE;
 
             if ( isScrollLeft( le.GetMouseCursor() ) )
@@ -1077,7 +1078,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                 }
 
                 if ( fastScrollRepeatCount >= fastScrollStartThreshold ) {
-                    gameArea.SetScroll( scrollPosition );
+                    _gameArea.SetScroll( scrollPosition );
                 }
             }
             else {
@@ -1105,10 +1106,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
             }
         }
         // cursor is over the status window
-        else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( statusWindow.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( _statusWindow.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            statusWindow.QueueEventProcessing();
+            _statusWindow.QueueEventProcessing();
         }
         // cursor is over the buttons area
         else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.MouseCursor( buttonsArea.GetRect() ) ) {
@@ -1124,11 +1125,11 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
             iconsPanel.QueueEventProcessing();
         }
         // cursor is over the radar
-        else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
+        else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( _radar.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            if ( !gameArea.isDragScroll() )
-                radar.QueueEventProcessing();
+            if ( !_gameArea.isDragScroll() )
+                _radar.QueueEventProcessing();
         }
         // cursor is over the control panel
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
@@ -1137,22 +1138,22 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
             res = controlPanel.QueueEventProcessing();
         }
         // cursor is over the game area
-        else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
+        else if ( le.MouseCursor( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
             isCursorOverGamearea = true;
         }
         // cursor is somewhere else
-        else if ( !gameArea.NeedScroll() ) {
+        else if ( !_gameArea.NeedScroll() ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            gameArea.ResetCursorPosition();
+            _gameArea.ResetCursorPosition();
         }
 
         // gamearea
-        if ( !gameArea.NeedScroll() && !isMovingHero ) {
-            if ( !radar.isDragRadar() )
-                gameArea.QueueEventProcessing( isCursorOverGamearea );
+        if ( !_gameArea.NeedScroll() && !isMovingHero ) {
+            if ( !_radar.isDragRadar() )
+                _gameArea.QueueEventProcessing( isCursorOverGamearea );
             else if ( !le.MousePressLeft() )
-                radar.QueueEventProcessing();
+                _radar.QueueEventProcessing();
         }
 
         if ( prevIsCursorOverButtons && !isCursorOverButtons ) {
@@ -1172,8 +1173,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                 if ( heroAnimationFrameCount > 0 ) {
                     const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
 
-                    gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
-                    gameArea.SetRedraw();
+                    _gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
+                    _gameArea.SetRedraw();
 
                     if ( heroAnimationOffset != fheroes2::Point() ) {
                         Game::EnvironmentSoundMixer();
@@ -1200,9 +1201,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                     if ( hero->isMoveEnabled() ) {
                         if ( hero->Move( 10 == conf.HeroesMoveSpeed() ) ) {
                             // Do not generate a frame as we are going to do it later.
-                            Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
+                            Interface::AdventureMap::RedrawLocker redrawLocker( Interface::AdventureMap::Get() );
 
-                            gameArea.SetCenter( hero->GetCenter() );
+                            _gameArea.SetCenter( hero->GetCenter() );
                             ResetFocus( GameFocus::HEROES, true );
 
                             RedrawFocus();
@@ -1217,12 +1218,12 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                             const fheroes2::Point movement( hero->MovementDirection() );
                             if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
                                 // Do not generate a frame as we are going to do it later.
-                                Interface::Basic::RedrawLocker redrawLocker( Interface::Basic::Get() );
+                                Interface::AdventureMap::RedrawLocker redrawLocker( Interface::AdventureMap::Get() );
 
                                 const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
 
                                 heroAnimationOffset = movement;
-                                gameArea.ShiftCenter( movement );
+                                _gameArea.ShiftCenter( movement );
 
                                 Game::SetUpdateSoundsOnFocusUpdate( false );
                                 ResetFocus( GameFocus::HEROES, true );
@@ -1238,7 +1239,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
                                 }
                             }
 
-                            gameArea.SetRedraw();
+                            _gameArea.SetRedraw();
                         }
 
                         isMovingHero = true;
@@ -1256,7 +1257,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
 
                         hero->SetMove( false );
 
-                        gameArea.SetUpdateCursor();
+                        _gameArea.SetUpdateCursor();
                     }
                 }
             }
@@ -1267,18 +1268,18 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
         }
 
         // fast scroll
-        if ( ( gameArea.NeedScroll() && !isMovingHero ) || gameArea.needDragScrollRedraw() ) {
+        if ( ( _gameArea.NeedScroll() && !isMovingHero ) || _gameArea.needDragScrollRedraw() ) {
             if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
                 if ( ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
                        || isScrollBottom( le.GetMouseCursor() ) )
-                     && !gameArea.isDragScroll() ) {
-                    cursor.SetThemes( gameArea.GetScrollCursor() );
+                     && !_gameArea.isDragScroll() ) {
+                    cursor.SetThemes( _gameArea.GetScrollCursor() );
                 }
 
-                gameArea.Scroll();
+                _gameArea.Scroll();
 
-                gameArea.SetRedraw();
-                radar.SetRedraw( REDRAW_RADAR_CURSOR );
+                _gameArea.SetRedraw();
+                _radar.SetRedraw( REDRAW_RADAR_CURSOR );
             }
         }
 
@@ -1292,14 +1293,14 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
             // map objects animation
             if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                 Game::updateAdventureMapAnimationIndex();
-                gameArea.SetRedraw();
+                _gameArea.SetRedraw();
             }
 
-            if ( NeedRedraw() ) {
-                Redraw();
+            if ( needRedraw() ) {
+                redraw();
 
                 // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
-                assert( GetRedrawMask() == 0 );
+                assert( getRedrawMask() == 0 );
 
                 validateFadeInAndRender();
             }
@@ -1310,7 +1311,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
         if ( GetFocusHeroes() ) {
             GetFocusHeroes()->ShowPath( false );
 
-            SetRedraw( REDRAW_GAMEAREA );
+            setRedraw( REDRAW_GAMEAREA );
         }
 
         if ( myKingdom.isPlay() ) {
@@ -1336,19 +1337,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( const bool isload )
     return res;
 }
 
-void Interface::Basic::validateFadeInAndRender()
-{
-    if ( Game::validateDisplayFadeIn() ) {
-        fheroes2::fadeInDisplay();
-
-        SetRedraw( REDRAW_GAMEAREA );
-    }
-    else {
-        fheroes2::Display::instance().render();
-    }
-}
-
-void Interface::Basic::MouseCursorAreaClickLeft( const int32_t tileIndex )
+void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex )
 {
     Heroes * focusedHero = GetFocusHeroes();
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
@@ -1428,17 +1417,17 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t tileIndex )
     }
 }
 
-void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
+void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex ) const
 {
     Heroes * hero = GetFocusHeroes();
 
     if ( hero && hero->isMoveEnabled() ) {
         hero->SetMove( false );
-        Cursor::Get().SetThemes( GetCursorTileIndex( index_maps ) );
+        Cursor::Get().SetThemes( GetCursorTileIndex( tileIndex ) );
     }
     else {
         const Settings & conf = Settings::Get();
-        const Maps::Tiles & tile = world.GetTiles( index_maps );
+        const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
         DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
 

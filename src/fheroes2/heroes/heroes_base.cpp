@@ -457,7 +457,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             bool hasCastles = std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return castle && castle->GetHero() == nullptr; } );
             if ( !hasCastles ) {
                 if ( res != nullptr ) {
-                    *res = _( "You do not currently own any town or castle, so you can't cast the spell." );
+                    *res = _( "You do not currently own any town or castle that is not occupied by a hero, so you can't cast the spell." );
                 }
                 return false;
             }
