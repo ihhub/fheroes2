@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-19 05:56+0000\n"
-"PO-Revision-Date: 2023-07-21 16:33+0200\n"
+"PO-Revision-Date: 2023-07-21 16:49+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -3519,39 +3519,37 @@ msgid "Quit out of the map editor."
 msgstr ""
 
 msgid "Ocean Objects"
-msgstr ""
+msgstr "Objekty oceánu"
 
 msgid "Grass Objects"
-msgstr ""
+msgstr "Objekty trávy"
 
 msgid "Snow Objects"
-msgstr ""
+msgstr "Objekty snehu"
 
 msgid "Swamp Objects"
-msgstr ""
+msgstr "Objekty močiara"
 
 msgid "Lava Objects"
-msgstr ""
+msgstr "Objekty lávy"
 
 msgid "Desert Objects"
-msgstr ""
+msgstr "Objekty púšte"
 
 msgid "Dirt Objects"
-msgstr ""
+msgstr "Objekty hliny"
 
 msgid "Wasteland Objects"
-msgstr ""
+msgstr "Objekty pustatiny"
 
 msgid "Beach Objects"
-msgstr ""
+msgstr "Objekty pláže"
 
-#, fuzzy
 msgid "Towns"
-msgstr "Mesto"
+msgstr "Mestá"
 
-#, fuzzy
 msgid "Treasures"
-msgstr "Poklad"
+msgstr "Poklady"
 
 msgid ""
 "Draws terrain in\n"
@@ -3563,17 +3561,14 @@ msgid ""
 "%{size} by %{size} square increments."
 msgstr ""
 
-#, fuzzy
 msgid "Small Brush"
-msgstr "Malé mapy"
+msgstr "Malý štetec"
 
-#, fuzzy
 msgid "Medium Brush"
-msgstr "Stredné mapy"
+msgstr "Stredný štetec"
 
-#, fuzzy
 msgid "Large Brush"
-msgstr "Veľké mapy"
+msgstr "Veľký štetec"
 
 msgid "Area Fill"
 msgstr ""
@@ -3703,7 +3698,7 @@ msgid "Cancel back to the main menu."
 msgstr ""
 
 msgid "From Scratch"
-msgstr ""
+msgstr "Od nuly"
 
 msgid "Start from scratch with a blank map."
 msgstr ""
@@ -3715,10 +3710,10 @@ msgid "Random"
 msgstr ""
 
 msgid "Cancel back to the Map Editor main menu."
-msgstr ""
+msgstr "Zrušenie a návrat do hlavnej ponuky Editora máp."
 
 msgid "No maps available!"
-msgstr ""
+msgstr "Žiadne dostupné mapy!"
 
 msgid "difficulty|Easy"
 msgstr "Ľahká"
@@ -9242,6 +9237,8 @@ msgid ""
 "This %{name} gives your hero the ability to cast the %{spell} spell if your "
 "hero has a Magic Book."
 msgstr ""
+"Tento %{name} dáva tvojmu hrdinovi schopnosť zoslať kúzlo %{spell}, ak má "
+"tvoj hrdina Magickú knihu."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -9401,7 +9398,7 @@ msgid ""
 msgstr ""
 
 msgid "Masthead"
-msgstr ""
+msgstr "Hrot sťažňa"
 
 msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
 msgstr ""
