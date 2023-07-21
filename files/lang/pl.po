@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 05:56+0000\n"
+"POT-Creation-Date: 2023-07-21 16:11+0000\n"
 "PO-Revision-Date: 2023-07-01 14:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -184,11 +184,11 @@ msgstr "6 GRACZY"
 msgid "GIFT"
 msgstr "WYŚLIJ"
 
-msgid "guildWell|EXIT"
-msgstr "WYJŚCIE"
-
 msgid "DIFFICULTY"
 msgstr "TRUDNOŚĆ"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
@@ -10740,6 +10740,9 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "guildWell|EXIT"
+#~ msgstr "WYJŚCIE"
 
 #~ msgid "%{spell} failed!!!"
 #~ msgstr "Czar %{spell} nie udał się!!!"
