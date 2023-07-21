@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-20 11:13+0000\n"
+"POT-Creation-Date: 2023-07-21 16:11+0000\n"
 "PO-Revision-Date: 2023-07-21 11:58+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -179,11 +179,11 @@ msgstr "6 SPELARE"
 msgid "GIFT"
 msgstr "GÅVA"
 
-msgid "guildWell|EXIT"
-msgstr "LÄMNA"
-
 msgid "DIFFICULTY"
 msgstr "SVÅRIGHETSGRAD"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
@@ -10329,6 +10329,9 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "guildWell|EXIT"
+#~ msgstr "LÄMNA"
 
 #~ msgid "%{spell} failed!!!"
 #~ msgstr "%{spell} misslyckades!"

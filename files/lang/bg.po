@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 05:56+0000\n"
+"POT-Creation-Date: 2023-07-21 16:11+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -179,11 +179,11 @@ msgstr "6 ИГРАЧА"
 msgid "GIFT"
 msgstr "ДАРИ"
 
-msgid "guildWell|EXIT"
-msgstr "ИЗХОД"
-
 msgid "DIFFICULTY"
 msgstr "ТРУДНОСТ"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "МИН"
@@ -10708,6 +10708,9 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "guildWell|EXIT"
+#~ msgstr "ИЗХОД"
 
 #~ msgid "%{spell} failed!!!"
 #~ msgstr "%{spell} е неуспешна!!!"
