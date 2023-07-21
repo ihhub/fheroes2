@@ -29,7 +29,6 @@
 #include <cstring>
 #include <fstream>
 #include <map>
-#include <mutex>
 #include <set>
 #include <type_traits>
 #include <utility>
@@ -489,12 +488,33 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
     }
 #if defined( WITH_DEBUG )
     else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )].key ) {
-        // It would be possible to use a static flag and a self-written "locking" class here to avoid the recursive calls of these dialogs,
-        // but it would look a bit verbose, so we just use std::mutex to simplify our life, since this is not a "hot" code section
-        static std::mutex recursionGuardMutex;
+        static bool recursiveCall = false;
 
-        std::unique_lock<std::mutex> recursionGuardLock( recursionGuardMutex, std::defer_lock );
-        if ( recursionGuardLock.try_lock() ) {
+        if ( !recursiveCall ) {
+            class RecursionGuard
+            {
+            public:
+                explicit RecursionGuard( bool & rc )
+                    : _recursiveCall( rc )
+                {
+                    _recursiveCall = true;
+                }
+
+                RecursionGuard( const RecursionGuard & ) = delete;
+
+                ~RecursionGuard()
+                {
+                    _recursiveCall = false;
+                }
+
+                RecursionGuard & operator=( const RecursionGuard & ) = delete;
+
+            private:
+                bool & _recursiveCall;
+            };
+
+            const RecursionGuard recursionGuard( recursiveCall );
+
             Player * player = Settings::Get().GetPlayers().GetCurrent();
 
             // Do not allow to transfer control to/from AI during battle
