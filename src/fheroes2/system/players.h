@@ -185,17 +185,17 @@ public:
     void setHandicapStatus( const HandicapStatus status );
 
 #if defined( WITH_DEBUG )
+    bool isAIAutoControlMode() const
+    {
+        return _isAIAutoControlMode;
+    }
+
     // Sets whether a given human player is controlled by AI. See the implementation for details.
     void setAIAutoControlMode( const bool enable );
 
     // Turns the planned value of whether a given human player is controlled by AI into the actual value.
     // Should be called only if this mode is actually enabled.
     void commitAIAutoControlMode();
-
-    bool isAIAutoControlMode() const
-    {
-        return _isAIAutoControlMode;
-    }
 #endif
 
 protected:
