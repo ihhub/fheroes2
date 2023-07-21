@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 05:56+0000\n"
+"POT-Creation-Date: 2023-07-21 12:17+0000\n"
 "PO-Revision-Date: 2023-06-28 10:32+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3549,6 +3549,12 @@ msgstr ""
 msgid "Towns"
 msgstr "Mesto"
 
+msgid "Heroes"
+msgstr "Hrdinovia"
+
+msgid "Artifacts"
+msgstr "Artefakty"
+
 #, fuzzy
 msgid "Treasures"
 msgstr "Poklad"
@@ -7009,9 +7015,6 @@ msgstr "Hrdina/Štatistika"
 msgid "Skills"
 msgstr "Zručnosti"
 
-msgid "Artifacts"
-msgstr "Artefakty"
-
 msgid "Town/Castle"
 msgstr "Mesto/Hrad"
 
@@ -7020,9 +7023,6 @@ msgstr "Posádka"
 
 msgid "Gold Per Day:"
 msgstr "Zlato za deň:"
-
-msgid "Heroes"
-msgstr "Hrdinovia"
 
 msgid "View Heroes."
 msgstr "Ukáž hrdinov."
