@@ -33,6 +33,7 @@
 #include <memory>
 #include <mutex>
 #include <ostream>
+#include <set>
 #include <type_traits>
 #include <utility>
 #include <variant>
@@ -139,12 +140,13 @@ namespace
 
             const std::scoped_lock<std::mutex> lock( _channelsToCleanupMutex );
 
-            _channelsToCleanup.push_back( channelId );
+            // Some channels could not be cleaned yet, we use 'set' to avoid duplicate of one channel in cleanup list.
+            _channelsToCleanup.insert( channelId );
         }
 
         void clearFinishedSamples()
         {
-            std::vector<int> channelsToCleanup;
+            std::set<int> channelsToCleanup;
 
             {
                 const std::scoped_lock<std::mutex> lock( _channelsToCleanupMutex );
@@ -170,7 +172,7 @@ namespace
     private:
         std::map<int, std::pair<Mix_Chunk *, Mix_Chunk *>> _channelSamples;
 
-        std::vector<int> _channelsToCleanup;
+        std::set<int> _channelsToCleanup;
         // This mutex protects operations with _channelsToCleanup
         std::mutex _channelsToCleanupMutex;
     };
