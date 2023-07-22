@@ -4216,11 +4216,20 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
 
     Unit * target = !targets.empty() ? targets.front().defender : nullptr;
 
+    const bool isMassSpell = spell.isApplyWithoutFocusObject();
+
     // set spell cast animation
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmy1Color() ? _opponent1.get() : _opponent2.get();
         if ( opponent ) {
-            opponent->SetAnimation( spell.isApplyWithoutFocusObject() ? OP_CAST_MASS : ( dst > 32 ? OP_CAST_DOWN : OP_CAST_UP ) );
+            if ( isMassSpell ) {
+                opponent->SetAnimation( OP_CAST_MASS );
+            }
+            else {
+                // If target unit is below the 3rd row (cell index is higher than 32) caster should cast spell down.
+                opponent->SetAnimation( ( dst > 32 ) ? OP_CAST_DOWN : OP_CAST_UP );
+            }
+
             AnimateOpponents( opponent );
         }
     }
@@ -4370,7 +4379,12 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmy1Color() ? _opponent1.get() : _opponent2.get();
         if ( opponent ) {
-            opponent->SetAnimation( ( target != nullptr ) ? OP_CAST_UP_RETURN : OP_CAST_MASS_RETURN );
+            if ( isMassSpell ) {
+                opponent->SetAnimation( OP_CAST_MASS_RETURN );
+            }
+            else {
+                opponent->SetAnimation( ( dst > 32 ) ? OP_CAST_DOWN_RETURN : OP_CAST_UP_RETURN );
+            }
             AnimateOpponents( opponent );
         }
     }
