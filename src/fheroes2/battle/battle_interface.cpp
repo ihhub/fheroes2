@@ -4372,6 +4372,9 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
         if ( opponent ) {
             opponent->SetAnimation( ( target != nullptr ) ? OP_CAST_UP_RETURN : OP_CAST_MASS_RETURN );
             AnimateOpponents( opponent );
+
+            // Return to the static animation of hero.
+            opponent->SetAnimation( OP_STATIC );
         }
     }
 }
