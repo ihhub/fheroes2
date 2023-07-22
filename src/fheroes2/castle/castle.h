@@ -24,6 +24,7 @@
 #define H2CASTLE_H
 
 #include <algorithm>
+#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <map>
@@ -46,6 +47,7 @@
 namespace fheroes2
 {
     class RandomMonsterAnimation;
+    class Image;
 }
 
 class Funds;
@@ -211,8 +213,6 @@ public:
     void recruitBestAvailable( Funds budget );
     uint32_t getRecruitLimit( const Monster & monster, const Funds & budget ) const;
 
-    void recruitCastleMax( const Troops & currentCastleArmy, const std::vector<uint32_t> & allCastleDwellings );
-
     int getBuildingValue() const;
 
     // Used only for AI.
@@ -304,10 +304,15 @@ private:
     void OpenTavern() const;
     void OpenWell();
     void OpenMageGuild( const Heroes * hero ) const;
-    void WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<fheroes2::RandomMonsterAnimation> & monsterAnimInfo ) const;
     void JoinRNDArmy();
     void PostLoad();
 
+    void _wellRedrawAvailableMonsters( const uint32_t dwellingType, const bool restoreBackground, fheroes2::Image & background ) const;
+    void _wellRedrawBackground( fheroes2::Image & background ) const;
+    void _wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array<fheroes2::RandomMonsterAnimation, CASTLEMAXMONSTER> & monsterAnimInfo ) const;
+
+    // Recruit maximum monsters from the castle. Returns 'true' if the recruit was made.
+    bool _recruitCastleMax( const Troops & currentCastleArmy );
     bool RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force = false );
 
     friend StreamBase & operator<<( StreamBase &, const Castle & );
