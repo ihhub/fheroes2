@@ -921,7 +921,7 @@ void Mixer::fadeOutChannel( const int channelId, const int timeMs )
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
-    if ( isInitialized ) {
+    if ( isInitialized && Mix_Playing( channelId ) > 0 ) {
         Mix_FadeOutChannel( channelId, timeMs );
     }
 }

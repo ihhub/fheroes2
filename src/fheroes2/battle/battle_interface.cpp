@@ -364,7 +364,7 @@ namespace
 
         if ( ( moveSounds[0] != -1 ) && Mixer ::isPlaying( moveSounds[0] ) ) {
             // The walk sound is playing in the first channel.
-            if ( ( moveSounds[1] != -1 ) && Mixer ::isPlaying( moveSounds[1] ) ) {
+            if ( ( moveSounds[1] != -1 ) ) {
                 // The walk sound is also playing in the second channel. Fade it out and stop.
                 Mixer::fadeOutChannel( moveSounds[1], soundFadeTimeMs );
             }
@@ -3870,7 +3870,6 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
-    Indexes::const_iterator dst = path.begin();
     Bridge * bridge = Arena::GetBridge();
 
     // Get the time to animate movement for one cell.
@@ -3906,7 +3905,11 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     const bool canFly = unit.isAbilityPresent( fheroes2::MonsterAbilityType::FLYING );
     // If it is a wide creature (cache this boolean to use in the loop).
     const bool isWide = unit.isWide();
+
+    Indexes::const_iterator dst = path.begin();
     const Indexes::const_iterator pathEnd = path.end();
+    const Indexes::const_iterator finalStep = pathEnd - 1;
+    const size_t pathSize = path.size();
 
     const bool isOneStepPath = [&unit, &path]() {
         if ( path.size() == 1 ) {
@@ -4004,11 +4007,12 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         // Check if a wide unit changes its horizontal direction.
         if ( isWide && unit.GetTailIndex() == *dst ) {
             // We must not reflect the flyers at the and of the path (just before the landing).
-            if ( !canFly || ( dst != ( pathEnd - 1 ) ) ) {
+            if ( !canFly || ( dst != finalStep ) ) {
                 unit.SetReflection( !unit.isReflect() );
             }
             // After changing the direction go to the next step in the path.
             ++dst;
+
             continue;
         }
 
@@ -4025,7 +4029,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
             unit.SwitchAnimation( Monster_Info::STAND_STILL );
             bridge->ActionDown();
             _movingUnit = &unit;
-            if ( dst == ( pathEnd - 1 ) ) {
+            if ( dst == finalStep ) {
                 // There is only one cell left to move after standing.
                 unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
             }
@@ -4041,7 +4045,6 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         }
 
         // Render the unit movement with the movement sound.
-        // TODO: adjust sounds calls and synchronize them with frames.
         if ( canFly ) {
             // Play sounds entirely for the slowed flying creatures.
             AudioManager::PlaySound( unit.M82Move() );
@@ -4049,6 +4052,13 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         else {
             // Limit the simultaneous walk sounds.
             playMoveSound( walkSounds, unit.M82Move(), soundFadeTimeMs, isHighBatleSpeed );
+
+            if ( ( dst == finalStep && pathSize > 1 ) || ( isWide && dst == ( finalStep - 1 ) && pathSize > 3 ) ) {
+                // If there is more then 3 steps in path backwards for wide creature (turn, do more than 1 step, turn back)
+                // and it is the last step before the turn back or if there is more then 1 step in path and it is the last step
+                // then stop sound in the first channel with fade to avoid "echo" effect at the end of path.
+                Mixer::fadeOutChannel( walkSounds[0], soundFadeTimeMs );
+            }
         }
 
         AnimateUnitWithDelay( unit );
@@ -4070,7 +4080,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
                 unit.SwitchAnimation( Monster_Info::STAND_STILL );
                 bridge->ActionUp();
                 _movingUnit = &unit;
-                if ( dst == ( pathEnd - 1 ) ) {
+                if ( dst == finalStep ) {
                     // There is only one cell left to move after standing.
                     unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
                 }
@@ -4079,7 +4089,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
                     unit.SwitchAnimation( Monster_Info::MOVE_START );
                 }
             }
-            else if ( dst == ( pathEnd - 1 ) ) {
+            else if ( dst == finalStep ) {
                 // There is only one cell left to move.
                 unit.SwitchAnimation( Monster_Info::MOVE_END );
             }
@@ -4087,11 +4097,6 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
                 unit.SwitchAnimation( Monster_Info::MOVING );
             }
         }
-    }
-
-    if ( ( walkSounds[1] != -1 ) && Mixer::isPlaying( walkSounds[0] ) && Mixer::isPlaying( walkSounds[1] ) ) {
-        // Both sound channels are playing walk sound. Stop sound in the first channel with fade.
-        Mixer::fadeOutChannel( walkSounds[0], soundFadeTimeMs );
     }
 
     // Slowed flying creature has to land.
