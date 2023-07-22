@@ -4220,7 +4220,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmy1Color() ? _opponent1.get() : _opponent2.get();
         if ( opponent ) {
-            opponent->SetAnimation( spell.isApplyWithoutFocusObject() ? OP_CAST_MASS : OP_CAST_UP );
+            opponent->SetAnimation( spell.isApplyWithoutFocusObject() ? OP_CAST_MASS : ( dst > 32 ? OP_CAST_DOWN : OP_CAST_UP ) );
             AnimateOpponents( opponent );
         }
     }
