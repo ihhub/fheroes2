@@ -40,7 +40,10 @@ namespace Difficulty
 
     int GetScoutingBonus( int difficulty );
     double GetGoldIncomeBonus( int difficulty );
-    double GetUnitGrowthBonusForAI( int difficulty );
+
+    // Returns an extra growth bonus modifier for AI based on difficulty level.
+    double GetUnitGrowthBonusForAI( const int difficulty );
+
     int GetHeroMovementBonus( int difficulty );
     double GetAIRetreatRatio( int difficulty );
 }

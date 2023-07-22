@@ -222,7 +222,10 @@ public:
     void ChangeColor( int );
 
     void ActionNewDay();
+
     void ActionNewWeek();
+    void ActionNewWeekAIBonuses();
+
     void ActionNewMonth() const;
 
     void ActionPreBattle();
@@ -435,6 +438,11 @@ public:
     void NewWeek()
     {
         std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewWeek(); } );
+    }
+
+    void NewWeekAI()
+    {
+        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewWeekAIBonuses(); } );
     }
 
     void NewMonth()

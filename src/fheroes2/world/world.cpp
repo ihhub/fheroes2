@@ -544,6 +544,13 @@ void World::NewDay()
     vec_eventsday.remove_if( [this]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
 }
 
+void World::NewDayAI()
+{
+    if ( BeginWeek() ) {
+        vec_castles.NewWeekAI();
+    }
+}
+
 void World::NewWeek()
 {
     // update objects
