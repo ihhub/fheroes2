@@ -6004,7 +6004,7 @@ msgid ""
 msgstr ""
 "När du närmar dig den bubblande lerpölen börjar varelser stiga upp och "
 "ställa sig runt den. I samklang säger de: \"Moder Jord vill erbjuda dig "
-"några av hennes trupper. Vill du rekrytera Jordandar?\""
+"några av hennes trupper. Vill du rekrytera Jordväsen?\""
 
 msgid "You enter the structure of white stone pillars, and find nothing."
 msgstr "Du kliver in i byggnaden av vita pelare, men du hittar ingenting."
@@ -8248,10 +8248,10 @@ msgid "Medusas"
 msgstr "Medusor"
 
 msgid "Earth Elemental"
-msgstr "Jordande"
+msgstr "Jordväsen"
 
 msgid "Earth Elementals"
-msgstr "Jordandar"
+msgstr "Jordväsen"
 
 msgid "Air Elemental"
 msgstr "Luftväsen"
