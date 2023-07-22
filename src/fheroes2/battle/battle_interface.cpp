@@ -3312,17 +3312,22 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, const bool skipLastFr
     }
 }
 
-void Battle::Interface::AnimateOpponents( OpponentSprite * target )
+void Battle::Interface::AnimateOpponents( OpponentSprite * hero )
 {
-    if ( target == nullptr || target->isFinishFrame() ) // nothing to animate
+    if ( hero == nullptr ) {
         return;
+    }
+
+    // Render the first animation frame. We do it here not to skip small animations with duration for 1 frame.
+    // For such (one frame) animations we are already ad the end of animation and `isFinishFrame()` always will return true.
+    Redraw();
 
     LocalEvent & le = LocalEvent::Get();
 
     // We need to wait this delay before rendering the first frame of hero animation.
     Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
 
-    // 'BATTLE_OPPONENTS_DELAY' is more than 2 times the value of 'BATTLE_IDLE_DELAY', so we need to handle the idle animation separately in this loop.
+    // 'BATTLE_OPPONENTS_DELAY' is different than 'BATTLE_IDLE_DELAY', so we handle the idle animation separately in this loop.
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_OPPONENTS_DELAY, Game::BATTLE_IDLE_DELAY } ) ) ) {
         // Animate the idling units.
         if ( IdleTroopsAnimation() ) {
@@ -3330,15 +3335,15 @@ void Battle::Interface::AnimateOpponents( OpponentSprite * target )
         }
 
         if ( Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
-            // Render before switching to the next frame.
-            Redraw();
-
-            if ( target->isFinishFrame() ) {
+            if ( hero->isFinishFrame() ) {
                 // We have reached the end of animation.
                 break;
             }
 
-            target->IncreaseAnimFrame();
+            hero->IncreaseAnimFrame();
+
+            // Render the next frame and then wait a delay before checking if it is the last frame in the animation.
+            Redraw();
         }
     }
 }
