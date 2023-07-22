@@ -820,7 +820,7 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
     }
 
     fheroes2::Image result( 448, 448 );
-    result.reset();
+    result._disableTransformLayer();
 
     // Make a temporary copy
     GameArea gamearea = AdventureMap::Get().getGameArea();
