@@ -3884,7 +3884,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     // Set the delay between movement animation frames. This delay will be used for all types of movement animations.
     unit.SwitchAnimation( Monster_Info::MOVING );
 
-    uint64_t movementAnimationDelay = frameDelay / unit.animation.animationLength();
+    const uint64_t movementAnimationDelay = frameDelay / unit.animation.animationLength();
 
     // If movement animation frame rate is more then 100 Hz (delay is less than 10 ms)
     // we consider this as High Battle Speed and do not play any simultaneous sound while unit is moving.
@@ -4044,21 +4044,14 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
             _movingPos.x -= CELLW;
         }
 
-        // Render the unit movement with the movement sound.
-        if ( canFly ) {
-            // Play sounds entirely for the slowed flying creatures.
-            AudioManager::PlaySound( unit.M82Move() );
-        }
-        else {
-            // Limit the simultaneous walk sounds.
-            playMoveSound( walkSounds, unit.M82Move(), soundFadeTimeMs, isHighBatleSpeed );
+        // Limit the simultaneous walk sounds.
+        playMoveSound( walkSounds, unit.M82Move(), soundFadeTimeMs, isHighBatleSpeed );
 
-            if ( ( dst == finalStep && pathSize > 1 ) || ( isWide && dst == ( finalStep - 1 ) && pathSize > 3 ) ) {
-                // If there is more then 3 steps in path backwards for wide creature (turn, do more than 1 step, turn back)
-                // and it is the last step before the turn back or if there is more then 1 step in path and it is the last step
-                // then stop sound in the first channel with fade to avoid "echo" effect at the end of path.
-                Mixer::fadeOutChannel( walkSounds[0], soundFadeTimeMs );
-            }
+        if ( ( dst == finalStep && pathSize > 1 ) || ( isWide && dst == ( finalStep - 1 ) && pathSize > 3 ) ) {
+            // If there is more then 3 steps in path backwards for wide creature (turn, do more than 1 step, turn back)
+            // and it is the last step before the turn back or if there is more then 1 step in path and it is the last step
+            // then stop sound in the first channel with fade to avoid "echo" effect at the end of path.
+            Mixer::fadeOutChannel( walkSounds[0], soundFadeTimeMs );
         }
 
         AnimateUnitWithDelay( unit );
@@ -4162,7 +4155,8 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     // Set the delay between movement animation frames. This delay will be used for all types of movement animations.
     unit.SwitchAnimation( Monster_Info::MOVING );
-    Game::setCustomUnitMovementDelay( frameDelay / unit.animation.animationLength() );
+    const uint64_t movementAnimationDelay = frameDelay / unit.animation.animationLength();
+    Game::setCustomUnitMovementDelay( movementAnimationDelay );
 
     const std::vector<fheroes2::Point> points = GetEuclideanLine( destPos, targetPos, step );
     std::vector<fheroes2::Point>::const_iterator currentPoint = points.begin();
@@ -4195,11 +4189,21 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         ++currentPoint;
     }
 
+    // If movement animation frame rate is more then 100 Hz (delay is less than 10 ms)
+    // we consider this as High Battle Speed and do not play any simultaneous sound while unit is moving.
+    const bool isHighBatleSpeed = movementAnimationDelay < 10;
+
+    // We allow to play maximum 2 simultaneous walk sounds. '-1' means that the channel is not set.
+    std::array<int, 2> flySounds{ -1, -1 };
+    // Set sound fade out time: 400 ms for battle speed 1 - 200 ms for battle speed 10.
+    const int soundFadeTimeMs = 3600 / ( Settings::Get().BattleSpeed() + 8 );
+
     unit.SwitchAnimation( Monster_Info::MOVING );
     while ( currentPoint != points.end() ) {
         _movingPos = *currentPoint;
 
-        AudioManager::PlaySound( unit.M82Move() );
+        // Limit the simultaneous fly sounds.
+        playMoveSound( flySounds, unit.M82Move(), soundFadeTimeMs, isHighBatleSpeed );
 
         unit.animation.restartAnimation();
         AnimateUnitWithDelay( unit );
