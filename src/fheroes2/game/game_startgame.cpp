@@ -951,6 +951,18 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             continue;
         }
 
+#if defined( WITH_DEBUG )
+        {
+            const Player * player = Players::Get( myKingdom.GetColor() );
+            assert( player != nullptr );
+
+            // Control has just been transferred to AI, end the turn immediately
+            if ( player->isAIAutoControlMode() ) {
+                return fheroes2::GameMode::END_TURN;
+            }
+        }
+#endif
+
         // pending timer events
         _statusWindow.TimerEventProcessing();
 
@@ -960,19 +972,6 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             if ( isMovingHero ) {
                 stopHero = true;
             }
-
-#if defined( WITH_DEBUG )
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI ) ) {
-                if ( fheroes2::showStandardTextMessage( _( "Warning" ),
-                                                        _( "Do you want to transfer control from you to the AI? The effect will take place only on the next turn." ),
-                                                        Dialog::YES | Dialog::NO )
-                     == Dialog::YES ) {
-                    Players::Get( myKingdom.GetColor() )->setAIAutoControlMode( true );
-                    return fheroes2::GameMode::END_TURN;
-                }
-            }
-#endif
-
             // adventure map control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
                 res = EventExit();
