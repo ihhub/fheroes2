@@ -204,7 +204,7 @@ namespace
 
     void HeroesTownGate( Heroes & hero, const Castle * castle )
     {
-        assert( castle != nullptr );
+        assert( castle && castle->GetHero() == nullptr );
 
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
@@ -380,7 +380,7 @@ namespace
             return false;
         }
 
-        if ( castle->GetHero() && castle->GetHero() != &hero ) {
+        if ( castle->GetHero() ) {
             // The nearest town occupation must be checked before casting this spell. Something is wrong with the logic!
             assert( 0 );
             return false;

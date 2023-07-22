@@ -419,7 +419,7 @@ namespace
         const int32_t playerColor = Settings::Get().CurrentColor();
         const MP2::MapObjectType objectType = tile.GetObject( false );
 
-        if ( tile.isCaptureObjectProtected() || objectType == MP2::OBJ_ABANDONED_MINE ) {
+        if ( objectType == MP2::OBJ_ABANDONED_MINE || isCaptureObjectProtected( tile ) ) {
             return showGuardiansInfo( tile, playerColor == getColorFromTile( tile ) );
         }
 

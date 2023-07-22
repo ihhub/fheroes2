@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-07 01:13+0000\n"
+"POT-Creation-Date: 2023-07-22 03:24+0000\n"
 "PO-Revision-Date: 2023-05-07 22:12+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -53,6 +53,12 @@ msgstr "RỜI KHỎI"
 
 msgid "CANCEL"
 msgstr "TỪ BỎ"
+
+msgid "OKAY"
+msgstr "ĐƯỢC"
+
+msgid "smallerButton|OKAY"
+msgstr ""
 
 msgid "ACCEPT"
 msgstr "ĐỒNG Ý"
@@ -173,20 +179,17 @@ msgstr "6 NGƯỜI CHƠI"
 msgid "GIFT"
 msgstr "QUÀ"
 
-msgid "guildWell|EXIT"
-msgstr "THOÁT"
-
 msgid "DIFFICULTY"
 msgstr "ĐỘ KHÓ"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
 
 msgid "MAX"
 msgstr "MAX"
-
-msgid "OKAY"
-msgstr "ĐƯỢC"
 
 msgid "Warrior"
 msgstr "Chiến binh"
@@ -199,14 +202,6 @@ msgstr "Thám hiểm"
 
 msgid "None"
 msgstr "Không"
-
-msgid "Warning"
-msgstr "Cảnh báo"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr "Bạn có muốn AI kiểm soát không? Hiệu quả sẽ bắt đầu ở lượt tiếp theo."
 
 msgid ""
 "A few\n"
@@ -2570,10 +2565,13 @@ msgstr "Max"
 msgid "Hire all creatures in the town."
 msgstr "Thuê tất cả các sinh vật trong thị trấn."
 
+msgid "Available"
+msgstr "Có sẵn"
+
 msgid "Town Population Information and Statistics"
 msgstr ""
 
-msgid "Damg"
+msgid "Damage"
 msgstr "Thiệt hại"
 
 msgid "HP"
@@ -2584,9 +2582,6 @@ msgstr "Sinh trưởng"
 
 msgid "week"
 msgstr "tuần"
-
-msgid "Available"
-msgstr "Có sẵn"
 
 msgid "View World"
 msgstr "Xem toàn bộ thế giới."
@@ -2639,9 +2634,6 @@ msgstr ""
 
 msgid "Shots Left"
 msgstr ""
-
-msgid "Damage"
-msgstr "Thiệt hại"
 
 msgid "Hit Points"
 msgstr ""
@@ -3498,6 +3490,119 @@ msgstr "Lưu trò chơi hiện tại."
 msgid "Quit out of the map editor."
 msgstr ""
 
+msgid "Ocean Objects"
+msgstr ""
+
+msgid "Grass Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Snow Objects"
+msgstr "Không có gì"
+
+msgid "Swamp Objects"
+msgstr ""
+
+msgid "Lava Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Desert Objects"
+msgstr "Sa mạc"
+
+msgid "Dirt Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Wasteland Objects"
+msgstr "Đất hoang"
+
+msgid "Beach Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Towns"
+msgstr "Thị trấn"
+
+msgid "Heroes"
+msgstr "Tướng"
+
+msgid "Artifacts"
+msgstr "Bảo vật"
+
+#, fuzzy
+msgid "Treasures"
+msgstr "Kho báu"
+
+msgid ""
+"Draws terrain in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+msgid ""
+"Erases objects in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+#, fuzzy
+msgid "Small Brush"
+msgstr "Bản đồ Nhỏ"
+
+#, fuzzy
+msgid "Medium Brush"
+msgstr "Bản đồ Thường"
+
+#, fuzzy
+msgid "Large Brush"
+msgstr "Bản đồ Rộng"
+
+msgid "Area Fill"
+msgstr ""
+
+msgid "Used to click and drag for filling in large areas."
+msgstr ""
+
+msgid "Clear Area"
+msgstr ""
+
+msgid "Used to click and drag for clearing large areas."
+msgstr ""
+
+msgid ""
+"Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
+"eliminates the penalty.)"
+msgstr ""
+
+msgid "Traversable only by boat."
+msgstr ""
+
+msgid "No special modifiers."
+msgstr ""
+
+msgid "Used to place objects most appropriate for use on %{terrain}."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a town or castle."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a monster group."
+msgstr ""
+
+msgid "Used to place a hero."
+msgstr ""
+
+msgid "Used to place an artifact."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a resource or treasure."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr ""
 
@@ -3545,7 +3650,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-msgid "Undo your last action.  Press again to redo the action."
+msgid "Undo your last action. Press again to redo the action."
 msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
@@ -3596,6 +3701,9 @@ msgstr ""
 
 msgid "No maps available!"
 msgstr "Không có bản đồ nào!"
+
+msgid "Warning"
+msgstr "Cảnh báo"
 
 msgid "difficulty|Easy"
 msgstr "Dễ"
@@ -3673,7 +3781,10 @@ msgstr "Xem Giới thiệu"
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Xem video Giới thiệu để biết trạng thái hiện tại của chiến dịch."
 
-msgid "Select campaign difficulty. It cannot be changed after."
+#, fuzzy
+msgid ""
+"Select the campaign difficulty. This can be lowered at any point during the "
+"campaign."
 msgstr "Chọn độ khó của chiến dịch. Nó không thể thay đổi sau đó."
 
 msgid "Restart"
@@ -3681,6 +3792,18 @@ msgstr "Chơi lại"
 
 msgid "Restart the current scenario."
 msgstr "Chơi lại kịch bản hiện tại."
+
+#, fuzzy
+msgid "Difficulty"
+msgstr ""
+"Độ khó\n"
+"Bản đồ"
+
+msgid ""
+"You have changed to a lower difficulty for the campaign. You will not be "
+"able to revert this after this point. The high score will be calculated "
+"based solely on the new difficulty. Do you want to proceed?"
+msgstr ""
 
 msgid "Are you sure you want to restart this scenario?"
 msgstr "Ngươi có chắc muốn chơi lại kịch bản?"
@@ -4186,6 +4309,18 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr "Bạn có muốn AI kiểm soát không? Hiệu quả sẽ bắt đầu ở lượt tiếp theo."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+"Ngươi có muốn chuyển quyền kiểm soát sang cho AI không? Hiệu ứng sẽ chỉ diễn "
+"ra ở lượt tiếp theo."
+
 msgid "The save file is corrupted."
 msgstr "File lưu bị hỏng."
 
@@ -4601,13 +4736,6 @@ msgstr ""
 
 msgid "%{color} player's turn."
 msgstr ""
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
-"Ngươi có muốn chuyển quyền kiểm soát sang cho AI không? Hiệu ứng sẽ chỉ diễn "
-"ra ở lượt tiếp theo."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -6138,7 +6266,8 @@ msgid "There is no free ocean location near the hero to cast this spell."
 msgstr ""
 
 msgid ""
-"You do not currently own any town or castle, so you can't cast the spell."
+"You do not currently own any town or castle that is not occupied by a hero, "
+"so you can't cast the spell."
 msgstr ""
 
 msgid "This hero is already in a town, so you can't cast the spell."
@@ -6655,9 +6784,6 @@ msgstr ""
 msgid "Skills"
 msgstr "Kĩ năng"
 
-msgid "Artifacts"
-msgstr "Bảo vật"
-
 msgid "Town/Castle"
 msgstr "Thị trấn/Lâu đài"
 
@@ -6666,9 +6792,6 @@ msgstr ""
 
 msgid "Gold Per Day:"
 msgstr "Vàng Mỗi Ngày:"
-
-msgid "Heroes"
-msgstr "Tướng"
 
 msgid "View Heroes."
 msgstr ""
@@ -9579,3 +9702,9 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Damg"
+#~ msgstr "Thiệt hại"
+
+#~ msgid "guildWell|EXIT"
+#~ msgstr "THOÁT"

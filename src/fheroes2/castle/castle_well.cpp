@@ -21,10 +21,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
+#include <array>
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -37,6 +37,7 @@
 #include "dialog.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
@@ -59,11 +60,15 @@ namespace
 {
     const int32_t bottomBarOffsetY = 461;
 
+    const std::array<uint32_t, CASTLEMAXMONSTER> castleDwellings
+        = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6 };
+
     uint32_t howManyRecruitMonster( const Castle & castle, Troops & tempCastleArmy, Troops & tempHeroArmy, const uint32_t dw, const Funds & add, Funds & res )
     {
         const Monster monsters( castle.GetRace(), castle.GetActualDwelling( dw ) );
-        if ( !tempCastleArmy.CanJoinTroop( monsters ) && !tempHeroArmy.CanJoinTroop( monsters ) )
+        if ( !tempCastleArmy.CanJoinTroop( monsters ) && !tempHeroArmy.CanJoinTroop( monsters ) ) {
             return 0;
+        }
 
         uint32_t count = castle.getMonstersInDwelling( dw );
         payment_t payment;
@@ -74,16 +79,19 @@ namespace
             payment = monsters.GetCost() * count;
             res = payment;
             payment += add;
-            if ( kingdom.AllowPayment( payment ) )
+            if ( kingdom.AllowPayment( payment ) ) {
                 break;
+            }
             --count;
         }
 
         if ( count > 0 ) {
-            if ( tempCastleArmy.CanJoinTroop( monsters ) )
+            if ( tempCastleArmy.CanJoinTroop( monsters ) ) {
                 tempCastleArmy.JoinTroop( monsters, count, false );
-            else if ( tempHeroArmy.CanJoinTroop( monsters ) )
+            }
+            else if ( tempHeroArmy.CanJoinTroop( monsters ) ) {
                 tempHeroArmy.JoinTroop( monsters, count, false );
+            }
         }
 
         return count;
@@ -114,7 +122,7 @@ namespace
     }
 }
 
-void Castle::recruitCastleMax( const Troops & currentCastleArmy, const std::vector<uint32_t> & allCastleDwellings )
+bool Castle::_recruitCastleMax( const Troops & currentCastleArmy )
 {
     std::vector<Troop> totalRecruitmentResult;
     Funds currentMonsterCost;
@@ -130,7 +138,9 @@ void Castle::recruitCastleMax( const Troops & currentCastleArmy, const std::vect
         tempGuestArmy.Insert( hero->GetArmy().getTroops() );
     }
 
-    for ( const uint32_t dwellingType : allCastleDwellings ) {
+    // In this loop we should go in reverse order - from strongest monsters to weakest in order to purchase most of the best monsters.
+    for ( size_t id = 0; id < CASTLEMAXMONSTER; ++id ) {
+        const uint32_t dwellingType = castleDwellings[CASTLEMAXMONSTER - id - 1];
         const uint32_t recruitableNumber = howManyRecruitMonster( *this, tempCastleArmy, tempGuestArmy, dwellingType, totalMonstersCost, currentMonsterCost );
 
         if ( recruitableNumber == 0 ) {
@@ -153,9 +163,9 @@ void Castle::recruitCastleMax( const Troops & currentCastleArmy, const std::vect
         bool isCreaturePresent = false;
         bool canAffordOneCreature = false;
 
-        for ( uint32_t currentDwelling = DWELLING_MONSTER1; currentDwelling <= DWELLING_MONSTER6; currentDwelling <<= 1 ) {
-            if ( getMonstersInDwelling( currentDwelling ) > 0 ) {
-                const Monster monsters( race, currentDwelling );
+        for ( const uint32_t dwellingType : castleDwellings ) {
+            if ( getMonstersInDwelling( dwellingType ) > 0 ) {
+                const Monster monsters( race, dwellingType );
                 const payment_t payment = monsters.GetCost();
 
                 if ( GetKingdom().AllowPayment( payment ) ) {
@@ -184,7 +194,11 @@ void Castle::recruitCastleMax( const Troops & currentCastleArmy, const std::vect
         for ( const Troop & troop : totalRecruitmentResult ) {
             RecruitMonster( troop, false );
         }
+
+        return true;
     }
+
+    return false;
 }
 
 void Castle::OpenWell()
@@ -198,50 +212,40 @@ void Castle::OpenWell()
                                             ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2, fheroes2::Display::DEFAULT_WIDTH,
                                             fheroes2::Display::DEFAULT_HEIGHT );
 
-    const fheroes2::Point cur_pt( restorer.x(), restorer.y() );
-    fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
+    const fheroes2::Rect roi = restorer.rect();
 
-    // button exit
-    dst_pt.x = cur_pt.x + 578;
-    dst_pt.y = cur_pt.y + bottomBarOffsetY;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
+    const int32_t buttonOffsetY = roi.y + bottomBarOffsetY;
 
-    dst_pt.x = cur_pt.x;
-    dst_pt.y = cur_pt.y + bottomBarOffsetY;
-    fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, ICN::BUYMAX, 0, 1 );
+    // MAX button.
+    fheroes2::Button buttonMax( roi.x, buttonOffsetY, ICN::BUYMAX, 0, 1 );
 
-    const fheroes2::Rect rectMonster1( cur_pt.x + 20, cur_pt.y + 18, 288, 124 );
-    const fheroes2::Rect rectMonster2( cur_pt.x + 20, cur_pt.y + 168, 288, 124 );
-    const fheroes2::Rect rectMonster3( cur_pt.x + 20, cur_pt.y + 318, 288, 124 );
-    const fheroes2::Rect rectMonster4( cur_pt.x + 334, cur_pt.y + 18, 288, 124 );
-    const fheroes2::Rect rectMonster5( cur_pt.x + 334, cur_pt.y + 168, 288, 124 );
-    const fheroes2::Rect rectMonster6( cur_pt.x + 334, cur_pt.y + 318, 288, 124 );
+    // EXIT button.
+    fheroes2::Button buttonExit( roi.x + roi.width - fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width(), buttonOffsetY, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
 
-    std::vector<fheroes2::RandomMonsterAnimation> monsterAnimInfo;
-    monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER1 ) ) );
-    monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ) );
-    monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ) );
-    monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER4 ) ) );
-    monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ) );
-    monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ) );
+    const std::array<fheroes2::Rect, CASTLEMAXMONSTER> rectMonster
+        = { fheroes2::Rect( roi.x + 20, roi.y + 18, 288, 124 ),   fheroes2::Rect( roi.x + 20, roi.y + 168, 288, 124 ),
+            fheroes2::Rect( roi.x + 20, roi.y + 318, 288, 124 ),  fheroes2::Rect( roi.x + 334, roi.y + 18, 288, 124 ),
+            fheroes2::Rect( roi.x + 334, roi.y + 168, 288, 124 ), fheroes2::Rect( roi.x + 334, roi.y + 318, 288, 124 ) };
 
-    WellRedrawInfoArea( cur_pt, monsterAnimInfo );
+    const std::array<Monster, CASTLEMAXMONSTER> castleMonster
+        = { Monster( race, GetActualDwelling( castleDwellings[0] ) ), Monster( race, GetActualDwelling( castleDwellings[1] ) ),
+            Monster( race, GetActualDwelling( castleDwellings[2] ) ), Monster( race, GetActualDwelling( castleDwellings[3] ) ),
+            Monster( race, GetActualDwelling( castleDwellings[4] ) ), Monster( race, GetActualDwelling( castleDwellings[5] ) ) };
 
-    buttonExit.draw();
-    buttonMax.draw();
+    std::array<fheroes2::RandomMonsterAnimation, CASTLEMAXMONSTER> monsterAnimInfo
+        = { fheroes2::RandomMonsterAnimation( castleMonster[0] ), fheroes2::RandomMonsterAnimation( castleMonster[1] ),
+            fheroes2::RandomMonsterAnimation( castleMonster[2] ), fheroes2::RandomMonsterAnimation( castleMonster[3] ),
+            fheroes2::RandomMonsterAnimation( castleMonster[4] ), fheroes2::RandomMonsterAnimation( castleMonster[5] ) };
 
-    std::vector<uint32_t> allDwellings;
-    allDwellings.reserve( 6 );
-    allDwellings.push_back( DWELLING_MONSTER6 );
-    allDwellings.push_back( DWELLING_MONSTER5 );
-    allDwellings.push_back( DWELLING_MONSTER4 );
-    allDwellings.push_back( DWELLING_MONSTER3 );
-    allDwellings.push_back( DWELLING_MONSTER2 );
-    allDwellings.push_back( DWELLING_MONSTER1 );
-
-    display.render();
+    fheroes2::Image background;
+    background._disableTransformLayer();
+    background.resize( roi.width, roi.height );
+    _wellRedrawBackground( background );
 
     LocalEvent & le = LocalEvent::Get();
+
+    Game::passAnimationDelay( Game::CASTLE_UNIT_DELAY );
+
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::CASTLE_UNIT_DELAY } ) ) ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
@@ -253,42 +257,44 @@ void Castle::OpenWell()
         }
         if ( le.MouseClickLeft( buttonMax.area() ) || HotKeyPressEvent( Game::HotKeyEvent::TOWN_WELL_BUY_ALL ) ) {
             const Troops & currentArmy = GetArmy();
-            recruitCastleMax( currentArmy, allDwellings );
+            if ( _recruitCastleMax( currentArmy ) ) {
+                // Update available monster count on background.
+
+                for ( const uint32_t dwellingType : castleDwellings ) {
+                    _wellRedrawAvailableMonsters( dwellingType, true, background );
+                }
+            }
         }
-        else if ( ( building & DWELLING_MONSTER1 ) && ( le.MouseClickLeft( rectMonster1 ) || pressedHotkeyBuildingID == DWELLING_MONSTER1 ) )
-            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER1 ) }, dwelling[0], true, 2 ) );
-        else if ( ( building & DWELLING_MONSTER2 ) && ( le.MouseClickLeft( rectMonster2 ) || pressedHotkeyBuildingID == DWELLING_MONSTER2 ) )
-            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER2 ) }, dwelling[1], true, 2 ) );
-        else if ( ( building & DWELLING_MONSTER3 ) && ( le.MouseClickLeft( rectMonster3 ) || pressedHotkeyBuildingID == DWELLING_MONSTER3 ) )
-            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER3 ) }, dwelling[2], true, 2 ) );
-        else if ( ( building & DWELLING_MONSTER4 ) && ( le.MouseClickLeft( rectMonster4 ) || pressedHotkeyBuildingID == DWELLING_MONSTER4 ) )
-            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER4 ) }, dwelling[3], true, 2 ) );
-        else if ( ( building & DWELLING_MONSTER5 ) && ( le.MouseClickLeft( rectMonster5 ) || pressedHotkeyBuildingID == DWELLING_MONSTER5 ) )
-            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER5 ) }, dwelling[4], true, 2 ) );
-        else if ( ( building & DWELLING_MONSTER6 ) && ( le.MouseClickLeft( rectMonster6 ) || pressedHotkeyBuildingID == DWELLING_MONSTER6 ) )
-            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER6 ) }, dwelling[5], true, 2 ) );
-        else if ( ( building & DWELLING_MONSTER1 ) && le.MousePressRight( rectMonster1 ) )
-            Dialog::DwellingInfo( { race, GetActualDwelling( DWELLING_MONSTER1 ) }, dwelling[0] );
-        else if ( ( building & DWELLING_MONSTER2 ) && le.MousePressRight( rectMonster2 ) )
-            Dialog::DwellingInfo( { race, GetActualDwelling( DWELLING_MONSTER2 ) }, dwelling[1] );
-        else if ( ( building & DWELLING_MONSTER3 ) && le.MousePressRight( rectMonster3 ) )
-            Dialog::DwellingInfo( { race, GetActualDwelling( DWELLING_MONSTER3 ) }, dwelling[2] );
-        else if ( ( building & DWELLING_MONSTER4 ) && le.MousePressRight( rectMonster4 ) )
-            Dialog::DwellingInfo( { race, GetActualDwelling( DWELLING_MONSTER4 ) }, dwelling[3] );
-        else if ( ( building & DWELLING_MONSTER5 ) && le.MousePressRight( rectMonster5 ) )
-            Dialog::DwellingInfo( { race, GetActualDwelling( DWELLING_MONSTER5 ) }, dwelling[4] );
-        else if ( ( building & DWELLING_MONSTER6 ) && le.MousePressRight( rectMonster6 ) )
-            Dialog::DwellingInfo( { race, GetActualDwelling( DWELLING_MONSTER6 ) }, dwelling[5] );
+
+        for ( size_t dwellingId = 0; dwellingId < CASTLEMAXMONSTER; ++dwellingId ) {
+            if ( building & castleDwellings[dwellingId] ) {
+                if ( le.MouseClickLeft( rectMonster[dwellingId] ) || pressedHotkeyBuildingID == castleDwellings[dwellingId] ) {
+                    if ( RecruitMonster( Dialog::RecruitMonster( castleMonster[dwellingId], dwelling[dwellingId], true, 2 ) ) ) {
+                        // Update available monster count on background.
+
+                        _wellRedrawAvailableMonsters( castleDwellings[dwellingId], true, background );
+                    }
+
+                    break;
+                }
+
+                if ( le.MousePressRight( rectMonster[dwellingId] ) ) {
+                    Dialog::DwellingInfo( castleMonster[dwellingId], dwelling[dwellingId] );
+
+                    break;
+                }
+            }
+        }
 
         if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
-            WellRedrawInfoArea( cur_pt, monsterAnimInfo );
+            fheroes2::Copy( background, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
 
-            for ( size_t i = 0; i < monsterAnimInfo.size(); ++i )
-                monsterAnimInfo[i].increment();
+            _wellRedrawMonsterAnimation( roi, monsterAnimInfo );
 
             buttonExit.draw();
             buttonMax.draw();
-            display.render();
+            buttonExit.draw();
+            display.render( roi );
         }
 
         if ( le.MousePressRight( buttonExit.area() ) ) {
@@ -303,248 +309,292 @@ void Castle::OpenWell()
     }
 }
 
-void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<fheroes2::RandomMonsterAnimation> & monsterAnimInfo ) const
+void Castle::_wellRedrawAvailableMonsters( const uint32_t dwellingType, const bool restoreBackground, fheroes2::Image & background ) const
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    if ( !( building & dwellingType ) ) {
+        // This building has not been built.
+        return;
+    }
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::WELLBKG_EVIL : ICN::WELLBKG, 0 ), display, cur_pt.x, cur_pt.y );
+    uint32_t population = 0;
+    fheroes2::Point offset{ 20, 121 };
 
-    fheroes2::Point pt;
+    switch ( dwellingType ) {
+    case DWELLING_MONSTER1:
+        population = dwelling[0];
+        break;
+    case DWELLING_MONSTER2:
+        population = dwelling[1];
+        offset.y += 150;
+        break;
+    case DWELLING_MONSTER3:
+        population = dwelling[2];
+        offset.y += 300;
+        break;
+    case DWELLING_MONSTER4:
+        offset.x += 314;
+        population = dwelling[3];
+        break;
+    case DWELLING_MONSTER5:
+        population = dwelling[4];
+        offset.x += 314;
+        offset.y += 150;
+        break;
+    case DWELLING_MONSTER6:
+        population = dwelling[5];
+        offset.x += 314;
+        offset.y += 300;
+        break;
+    default:
+        // Have you added a new dwelling?
+        assert( 0 );
+        break;
+    }
+
+    if ( restoreBackground ) {
+        // Restore background under "Available: <number>" text.
+        const fheroes2::Sprite & wellBackground = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::WELLBKG_EVIL : ICN::WELLBKG, 0 );
+
+        fheroes2::Copy( wellBackground, offset.x, offset.y, background, offset.x, offset.y, 137, fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) );
+    }
+
+    std::string textString = _( "Available" );
+    textString += ": ";
+
+    fheroes2::Text text( textString, fheroes2::FontType::smallWhite() );
+    text.draw( offset.x + 24, offset.y + 2, background );
+
+    text.set( std::to_string( population ), fheroes2::FontType::normalYellow() );
+    text.draw( offset.x + 109 - text.width() / 2, offset.y, background );
+}
+
+void Castle::_wellRedrawBackground( fheroes2::Image & background ) const
+{
+    const fheroes2::Sprite & wellBackground = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::WELLBKG_EVIL : ICN::WELLBKG, 0 );
+    const int32_t backgroundWidth = wellBackground.width();
+
+    fheroes2::Copy( wellBackground, 0, 0, background, 0, 0, backgroundWidth, bottomBarOffsetY );
+
+    // TODO: Make Well bottom bar and buttons for Evil interface.
+
+    // The original ICN::WELLBKG image has incorrect bottom message bar with no yellow outline. Also the original graphics did not have MAX button.
+    const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
+    const int32_t barHeight = bottomBar.height();
+    const int32_t exitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
+    const int32_t buttonMaxWidth = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 ).width();
+    // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
+    fheroes2::Copy( bottomBar, 1, 0, background, buttonMaxWidth, bottomBarOffsetY, backgroundWidth / 2 - buttonMaxWidth, barHeight );
+    fheroes2::Copy( bottomBar, bottomBar.width() - backgroundWidth / 2 + exitWidth - 1, 0, background, backgroundWidth / 2, bottomBarOffsetY,
+                    backgroundWidth / 2 - exitWidth + 1, barHeight );
+
+    // The original assets Well background has a transparent line to the right of EXIT button and it is not covered by any other image. Fill it with the black color.
+    fheroes2::Fill( background, background.width() - 1, bottomBarOffsetY, 1, bottomBar.height(), static_cast<uint8_t>( 0 ) );
+
+    fheroes2::Text text( _( "Town Population Information and Statistics" ), fheroes2::FontType::normalWhite() );
+    text.draw( 315 - text.width() / 2, bottomBarOffsetY + 3, background );
 
     const fheroes2::FontType statsFontType = fheroes2::FontType::smallWhite();
 
-    const fheroes2::Sprite & button = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 );
-    const fheroes2::Rect src_rt( 0, bottomBarOffsetY, button.width(), 19 );
+    for ( const uint32_t dwellingType : castleDwellings ) {
+        // By default the 'icnIndex' and 'offset' values are set for DWELLING_MONSTER1.
+        uint32_t icnIndex = 19;
+        fheroes2::Point offset{ 0, 1 };
 
-    // The original ICN::WELLBKG image has incorrect bottom message bar with no yellow outline. Also the original graphics did not have MAX button.
-    const int32_t allowedBottomBarWidth = 578 - button.width();
-    const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
-
-    fheroes2::Blit( bottomBar, 0, 0, display, cur_pt.x + button.width(), cur_pt.y + bottomBarOffsetY, allowedBottomBarWidth / 2, bottomBar.height() );
-    fheroes2::Blit( bottomBar, bottomBar.width() - ( allowedBottomBarWidth - allowedBottomBarWidth / 2 ) - 1, 0, display,
-                    cur_pt.x + button.width() + allowedBottomBarWidth / 2, cur_pt.y + bottomBarOffsetY, allowedBottomBarWidth - allowedBottomBarWidth / 2,
-                    bottomBar.height() );
-
-    fheroes2::Text text( _( "Town Population Information and Statistics" ), fheroes2::FontType() );
-    fheroes2::Point dst_pt( cur_pt.x + 315 - text.width() / 2, cur_pt.y + 464 );
-    text.draw( dst_pt.x, dst_pt.y, display );
-
-    uint32_t dw = DWELLING_MONSTER1;
-    size_t monsterId = 0u;
-
-    while ( dw <= DWELLING_MONSTER6 ) {
-        bool present = false;
-        uint32_t dw_orig = DWELLING_MONSTER1;
-        uint32_t icnindex = 0;
-        uint32_t available = 0;
-
-        switch ( dw ) {
+        switch ( dwellingType ) {
         case DWELLING_MONSTER1:
-            pt.x = cur_pt.x;
-            pt.y = cur_pt.y + 1;
-            present = ( DWELLING_MONSTER1 & building ) != 0;
-            icnindex = 19;
-            available = dwelling[0];
             break;
         case DWELLING_MONSTER2:
-            pt.x = cur_pt.x;
-            pt.y = cur_pt.y + 151;
-            present = ( DWELLING_MONSTER2 & building ) != 0;
-            dw_orig = GetActualDwelling( DWELLING_MONSTER2 );
-            icnindex = DWELLING_UPGRADE2 & building ? 25 : 20;
-            available = dwelling[1];
+            offset.y = 151;
+            icnIndex = DWELLING_UPGRADE2 & building ? 25 : 20;
             break;
         case DWELLING_MONSTER3:
-            pt.x = cur_pt.x;
-            pt.y = cur_pt.y + 301;
-            present = ( DWELLING_MONSTER3 & building ) != 0;
-            dw_orig = GetActualDwelling( DWELLING_MONSTER3 );
-            icnindex = DWELLING_UPGRADE3 & building ? 26 : 21;
-            available = dwelling[2];
+            offset.y = 301;
+            icnIndex = DWELLING_UPGRADE3 & building ? 26 : 21;
             break;
         case DWELLING_MONSTER4:
-            pt.x = cur_pt.x + 314;
-            pt.y = cur_pt.y + 1;
-            present = ( DWELLING_MONSTER4 & building ) != 0;
-            dw_orig = GetActualDwelling( DWELLING_MONSTER4 );
-            icnindex = DWELLING_UPGRADE4 & building ? 27 : 22;
-            available = dwelling[3];
+            offset.x = 314;
+            icnIndex = DWELLING_UPGRADE4 & building ? 27 : 22;
             break;
         case DWELLING_MONSTER5:
-            pt.x = cur_pt.x + 314;
-            pt.y = cur_pt.y + 151;
-            present = ( DWELLING_MONSTER5 & building ) != 0;
-            dw_orig = GetActualDwelling( DWELLING_MONSTER5 );
-            icnindex = DWELLING_UPGRADE5 & building ? 28 : 23;
-            available = dwelling[4];
+            offset.x = 314;
+            offset.y = 151;
+            icnIndex = DWELLING_UPGRADE5 & building ? 28 : 23;
             break;
         case DWELLING_MONSTER6:
-            pt.x = cur_pt.x + 314;
-            pt.y = cur_pt.y + 301;
-            present = ( DWELLING_MONSTER6 & building ) != 0;
-            dw_orig = GetActualDwelling( DWELLING_MONSTER6 );
-            icnindex = DWELLING_UPGRADE7 & building ? 30 : ( DWELLING_UPGRADE6 & building ? 29 : 24 );
-            available = dwelling[5];
+            offset.x = 314;
+            offset.y = 301;
+            icnIndex = DWELLING_UPGRADE7 & building ? 30 : ( DWELLING_UPGRADE6 & building ? 29 : 24 );
             break;
         default:
+            // Have you added a new dwelling?
+            assert( 0 );
             break;
         }
 
-        const Monster monster( race, dw_orig );
+        const uint32_t actualDwellindType = GetActualDwelling( dwellingType );
+        const Monster monster( race, actualDwellindType );
 
-        // sprite
-        dst_pt.x = pt.x + 21;
-        dst_pt.y = pt.y + 35;
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::Get4Building( race ), icnindex ), display, dst_pt.x, dst_pt.y );
+        // Dwelling building image.
+        fheroes2::Point renderPoint( offset.x + 21, offset.y + 35 );
+        const fheroes2::Sprite & dwellingImage = fheroes2::AGG::GetICN( ICN::Get4Building( race ), icnIndex );
+        fheroes2::Copy( dwellingImage, 0, 0, background, renderPoint.x, renderPoint.y, dwellingImage.width(), dwellingImage.height() );
 
-        // monster dwelling name
-        text.set( GetStringBuilding( dw_orig, race ), statsFontType );
-        dst_pt.x = pt.x + 86 - text.width() / 2;
-        dst_pt.y = pt.y + 104;
-        text.draw( dst_pt.x, dst_pt.y, display );
+        // Dwelling name.
+        text.set( GetStringBuilding( actualDwellindType, race ), statsFontType );
+        renderPoint.x = offset.x + 86 - text.width() / 2;
+        renderPoint.y = offset.y + 104;
+        text.draw( renderPoint.x, renderPoint.y, background );
 
-        // creature name
+        // Creature name.
         text.set( monster.GetMultiName(), statsFontType );
-        dst_pt.x = pt.x + 122 - text.width() / 2;
-        dst_pt.y = pt.y + 19;
-        text.draw( dst_pt.x, dst_pt.y, display );
+        renderPoint.x = offset.x + 122 - text.width() / 2;
+        renderPoint.y = offset.y + 19;
+        text.draw( renderPoint.x, renderPoint.y, background );
 
         // attack
-        std::string str;
-        str = _( "Attack" );
-        str += ": ";
-        str += std::to_string( monster.GetAttack() );
+        std::string textString;
+        textString = _( "Attack" );
+        textString += ": ";
+        textString += std::to_string( monster.GetAttack() );
 
-        text.set( str, statsFontType );
+        text.set( textString, statsFontType );
 
-        const int32_t statsOffsetX = 269;
-        const int32_t statsInitialOffsetY = 22;
-        int32_t statsOffsetY = statsInitialOffsetY;
+        // Set initial X and Y offset.
+        renderPoint.x = offset.x + 269;
+        renderPoint.y = offset.y + 22;
 
-        dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
-        dst_pt.y = pt.y + statsOffsetY;
-        text.draw( dst_pt.x, dst_pt.y, display );
-        statsOffsetY += text.height( text.width() );
+        text.draw( renderPoint.x - text.width() / 2, renderPoint.y, background );
+        renderPoint.y += text.height( text.width() );
 
         // defense
-        str = _( "Defense" );
-        str += ": ";
-        str += std::to_string( monster.GetDefense() );
+        textString = _( "Defense" );
+        textString += ": ";
+        textString += std::to_string( monster.GetDefense() );
 
-        text.set( str, statsFontType );
-        dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
-        dst_pt.y = pt.y + statsOffsetY;
-        text.draw( dst_pt.x, dst_pt.y, display );
-        statsOffsetY += text.height( text.width() );
+        text.set( textString, statsFontType );
+        text.draw( renderPoint.x - text.width() / 2, renderPoint.y, background );
+        renderPoint.y += text.height( text.width() );
 
         // damage
-        str = _( "Damg" );
-        str += ": ";
+        textString = _( "Damage" );
+        textString += ": ";
 
         const uint32_t monsterMinDamage = monster.GetDamageMin();
         const uint32_t monsterMaxDamage = monster.GetDamageMax();
 
-        str += std::to_string( monsterMinDamage );
+        textString += std::to_string( monsterMinDamage );
 
         if ( monsterMinDamage != monsterMaxDamage ) {
-            str += '-';
-            str += std::to_string( monsterMaxDamage );
+            textString += '-';
+            textString += std::to_string( monsterMaxDamage );
         }
 
-        text.set( str, statsFontType );
-        dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
-        dst_pt.y = pt.y + statsOffsetY;
-        text.draw( dst_pt.x, dst_pt.y, display );
-        statsOffsetY += text.height( text.width() );
+        text.set( textString, statsFontType );
+        text.draw( renderPoint.x - text.width() / 2, renderPoint.y, background );
+        renderPoint.y += text.height( text.width() );
 
         // hp
-        str = _( "HP" );
-        str += ": ";
-        str += std::to_string( monster.GetHitPoints() );
+        textString = _( "HP" );
+        textString += ": ";
+        textString += std::to_string( monster.GetHitPoints() );
 
-        text.set( str, statsFontType );
-        dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
-        dst_pt.y = pt.y + statsOffsetY;
-        text.draw( dst_pt.x, dst_pt.y, display );
-        statsOffsetY += 2 * ( text.height( text.width() ) ); // skip a line
+        text.set( textString, statsFontType );
+        text.draw( renderPoint.x - text.width() / 2, renderPoint.y, background );
+        renderPoint.y += 2 * ( text.height( text.width() ) ); // skip a line
 
         // speed
-        str = _( "Speed" );
-        str += ':';
+        textString = _( "Speed" );
+        textString += ':';
 
-        text.set( str, statsFontType );
-        dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
-        dst_pt.y = pt.y + statsOffsetY;
-        text.draw( dst_pt.x, dst_pt.y, display );
-        statsOffsetY += text.height( text.width() );
+        text.set( textString, statsFontType );
+        text.draw( renderPoint.x - text.width() / 2, renderPoint.y, background );
+        renderPoint.y += text.height( text.width() );
 
-        text.set( Speed::String( monster.GetSpeed() ), statsFontType );
-        dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
-        dst_pt.y = pt.y + statsOffsetY;
-        text.draw( dst_pt.x, dst_pt.y, display );
-        statsOffsetY += 2 * ( text.height( text.width() ) ); // skip a line
+        text.set( Speed::String( static_cast<int>( monster.GetSpeed() ) ), statsFontType );
+        text.draw( renderPoint.x - text.width() / 2, renderPoint.y, background );
+        renderPoint.y += 2 * ( text.height( text.width() ) ); // skip a line
 
-        // growth and number available
-        if ( present ) {
+        // If dwelling is built show growth and available population.
+        if ( building & dwellingType ) {
             uint32_t monsterGrown = monster.GetGrown();
             monsterGrown += building & BUILD_WELL ? GetGrownWell() : 0;
 
-            if ( DWELLING_MONSTER1 & dw ) {
+            if ( DWELLING_MONSTER1 & dwellingType ) {
                 monsterGrown += building & BUILD_WEL2 ? GetGrownWel2() : 0;
             }
 
             text.set( _( "Growth" ), statsFontType );
-            dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
-            dst_pt.y = pt.y + statsOffsetY;
-            text.draw( dst_pt.x, dst_pt.y, display );
-            statsOffsetY += text.height( text.width() );
+            text.draw( renderPoint.x - text.width() / 2, renderPoint.y, background );
+            renderPoint.y += text.height( text.width() );
 
-            str = "+ ";
-            str += std::to_string( monsterGrown );
-            str += " / ";
-            str += _( "week" );
+            textString = "+ ";
+            textString += std::to_string( monsterGrown );
+            textString += " / ";
+            textString += _( "week" );
 
-            text.set( str, statsFontType );
-            dst_pt.x = pt.x + statsOffsetX - text.width() / 2;
-            dst_pt.y = pt.y + statsOffsetY;
-            text.draw( dst_pt.x, dst_pt.y, display );
+            text.set( textString, statsFontType );
+            text.draw( renderPoint.x - text.width() / 2, renderPoint.y, background );
 
-            str = _( "Available" );
-            str += ':';
+            _wellRedrawAvailableMonsters( dwellingType, false, background );
+        }
+    }
+}
 
-            text.set( str, statsFontType );
-            dst_pt.x = pt.x + 44;
-            dst_pt.y = pt.y + 122;
-            text.draw( dst_pt.x, dst_pt.y, display );
+void Castle::_wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array<fheroes2::RandomMonsterAnimation, CASTLEMAXMONSTER> & monsterAnimInfo ) const
+{
+    fheroes2::Display & display = fheroes2::Display::instance();
 
-            text.set( std::to_string( available ), fheroes2::FontType::normalYellow() );
-            dst_pt.x = pt.x + 129 - text.width() / 2;
-            dst_pt.y = pt.y + 120;
-            text.draw( dst_pt.x, dst_pt.y, display );
+    for ( size_t monsterId = 0; monsterId < CASTLEMAXMONSTER; ++monsterId ) {
+        fheroes2::Point outPos( roi.x, roi.y + 1 );
+
+        switch ( monsterId ) {
+        case 0:
+            break;
+        case 1:
+            outPos.y += 150;
+            break;
+        case 2:
+            outPos.y += 300;
+            break;
+        case 3:
+            outPos.x += 314;
+            break;
+        case 4:
+            outPos.x += 314;
+            outPos.y += 150;
+            break;
+        case 5:
+            outPos.x += 314;
+            outPos.y += 300;
+            break;
+        default:
+            // Have you added a new dwelling?
+            assert( 0 );
+            break;
         }
 
+        const Monster monster( race, GetActualDwelling( castleDwellings[monsterId] ) );
+
         // monster
-        const bool flipMonsterSprite = ( dw >= DWELLING_MONSTER4 );
+        const bool flipMonsterSprite = ( monsterId > 2 );
 
         const fheroes2::Sprite & smonster = fheroes2::AGG::GetICN( monsterAnimInfo[monsterId].icnFile(), monsterAnimInfo[monsterId].frameId() );
-        if ( flipMonsterSprite )
-            dst_pt.x = pt.x + 193 - ( smonster.x() + smonster.width() ) + ( monster.isWide() ? CELLW / 2 : 0 ) + monsterAnimInfo[monsterId].offset();
-        else
-            dst_pt.x = pt.x + 193 + smonster.x() - ( monster.isWide() ? CELLW / 2 : 0 ) - monsterAnimInfo[monsterId].offset();
+        if ( flipMonsterSprite ) {
+            outPos.x += 193 - ( smonster.x() + smonster.width() ) + ( monster.isWide() ? CELLW / 2 : 0 ) + monsterAnimInfo[monsterId].offset();
+        }
+        else {
+            outPos.x += 193 + smonster.x() - ( monster.isWide() ? CELLW / 2 : 0 ) - monsterAnimInfo[monsterId].offset();
+        }
 
-        dst_pt.y = pt.y + 124 + smonster.y();
+        outPos.y += 124 + smonster.y();
 
         fheroes2::Point inPos( 0, 0 );
-        fheroes2::Point outPos( dst_pt.x, dst_pt.y );
         fheroes2::Size inSize( smonster.width(), smonster.height() );
 
-        if ( fheroes2::FitToRoi( smonster, inPos, display, outPos, inSize,
-                                 { cur_pt.x, cur_pt.y, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } ) ) {
+        if ( fheroes2::FitToRoi( smonster, inPos, display, outPos, inSize, roi ) ) {
             fheroes2::Blit( smonster, inPos, display, outPos, inSize, flipMonsterSprite );
         }
 
-        dw <<= 1;
-        ++monsterId;
+        monsterAnimInfo[monsterId].increment();
     }
 }

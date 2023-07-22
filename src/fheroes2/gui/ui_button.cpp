@@ -31,6 +31,7 @@
 #include "localevent.h"
 #include "pal.h"
 #include "settings.h"
+#include "translations.h"
 #include "ui_text.h"
 
 namespace
@@ -75,6 +76,55 @@ namespace
         }
 
         return output;
+    }
+
+    void getButtonSpecificValues( const int emptyButtonIcnID, fheroes2::FontColor & font, int32_t & textMargin, int32_t & minimumTextAreaWidth,
+                                  int32_t & backgroundBorders, int & backgroundIcnID, fheroes2::Point & releasedOffset, fheroes2::Point & pressedOffset )
+    {
+        switch ( emptyButtonIcnID ) {
+        case ICN::EMPTY_GOOD_BUTTON:
+            font = fheroes2::FontColor::WHITE;
+            textMargin = 4 + 4;
+            // The minimum text area width for campaign buttons is 87 judging from the shared widths of the
+            // original OKAY and the CANCEL buttons even though OKAY is a shorter word
+            minimumTextAreaWidth = 87;
+            backgroundBorders = 4 + 3;
+            backgroundIcnID = ICN::STONEBAK;
+            releasedOffset = { 5, 5 };
+            pressedOffset = { 4, 6 };
+            break;
+        case ICN::EMPTY_EVIL_BUTTON:
+            font = fheroes2::FontColor::GRAY;
+            textMargin = 4 + 4;
+            minimumTextAreaWidth = 87;
+            backgroundBorders = 4 + 3;
+            backgroundIcnID = ICN::STONEBAK_EVIL;
+            releasedOffset = { 5, 5 };
+            pressedOffset = { 4, 6 };
+            break;
+        case ICN::EMPTY_POL_BUTTON:
+            font = fheroes2::FontColor::GRAY;
+            textMargin = 4 + 4;
+            minimumTextAreaWidth = 87;
+            backgroundBorders = 4 + 3;
+            backgroundIcnID = ICN::STONEBAK_SMALL_POL;
+            releasedOffset = { 5, 5 };
+            pressedOffset = { 4, 6 };
+            break;
+        case ICN::EMPTY_GUILDWELL_BUTTON:
+            font = fheroes2::FontColor::WHITE;
+            textMargin = 2 + 2;
+            minimumTextAreaWidth = 53;
+            backgroundBorders = 5 + 3;
+            backgroundIcnID = ICN::UNKNOWN;
+            releasedOffset = { 5, 2 };
+            pressedOffset = { 4, 3 };
+            break;
+        default:
+            // Was a new empty button template added?
+            assert( 0 );
+            break;
+        }
     }
 }
 
@@ -474,6 +524,27 @@ namespace fheroes2
         }
     }
 
+    void makeTransparentBackground( const Sprite & released, Sprite & pressed, const int backgroundIcnID )
+    {
+        // We need to copy the background image to pressed button only where it does not overlay the image of released button.
+        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( backgroundIcnID, 0 );
+        // you are trying to apply transform on an image that is single-layered
+        assert( !pressed.singleLayer() && !released.singleLayer() );
+        const uint8_t * releasedTransform = released.transform();
+        uint8_t * pressedTransform = pressed.transform();
+        uint8_t * pressedImage = pressed.image();
+        const uint8_t * backgroundImage
+            = background.image() + ( background.width() - pressed.width() ) / 2 + ( background.height() - pressed.height() ) * background.width() / 2;
+        const int32_t pressedArea = pressed.width() * pressed.height();
+
+        for ( int32_t x = 0; x < pressedArea; ++x ) {
+            if ( ( *( pressedTransform + x ) == 1 ) && ( *( releasedTransform + x ) == 0 ) ) {
+                *( pressedImage + x ) = *( backgroundImage + ( x % pressed.width() ) + static_cast<ptrdiff_t>( x / pressed.width() ) * background.width() );
+                *( pressedTransform + x ) = 0;
+            }
+        }
+    }
+
     ButtonSprite makeButtonWithBackground( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background )
     {
         const Sprite croppedBackground = Crop( background, offsetX, offsetY, released.width(), released.height() );
@@ -547,23 +618,52 @@ namespace fheroes2
         pressed = resizeButton( originalPressed, width );
 
         if ( !isTransparentBackground ) {
-            // We need to copy the background image to pressed button only where it does not overlay the image of released button.
-            const int32_t backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
-            const Sprite & background = AGG::GetICN( backgroundIcnId, 0 );
-
-            const uint8_t * releasedTransform = released.transform();
-            uint8_t * pressedTransform = pressed.transform();
-            uint8_t * pressedImage = pressed.image();
-            const uint8_t * backgroundImage
-                = background.image() + ( background.width() - pressed.width() ) / 2 + ( background.height() - pressed.height() ) * background.width() / 2;
-
-            for ( int32_t x = 0; x < pressed.width() * pressed.height(); ++x ) {
-                if ( ( *( pressedTransform + x ) == 1 ) && ( *( releasedTransform + x ) == 0 ) ) {
-                    *( pressedImage + x ) = *( backgroundImage + x % pressed.width() + static_cast<ptrdiff_t>( x / pressed.width() ) * background.width() );
-                    *( pressedTransform + x ) = 0;
-                }
-            }
+            const int backgroundIcnId = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
+            makeTransparentBackground( released, pressed, backgroundIcnId );
         }
+    }
+
+    void getTextAdaptedButton( Sprite & released, Sprite & pressed, const char * text, const int emptyButtonIcnID )
+    {
+        fheroes2::FontColor buttonFont = fheroes2::FontColor::WHITE;
+        int32_t textAreaBorder = 0;
+        int32_t minimumTextAreaWidth = 0;
+        int32_t backgroundBorders = 0;
+        int backgroundIcnID = ICN::UNKNOWN;
+        fheroes2::Point releasedOffset = {};
+        fheroes2::Point pressedOffset = {};
+
+        getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaBorder, minimumTextAreaWidth, backgroundBorders, backgroundIcnID, releasedOffset, pressedOffset );
+
+        const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFont };
+
+        const char * translatedText = _( text );
+        const char * supportedText = fheroes2::isFontAvailable( translatedText, releasedButtonFont ) ? translatedText : text;
+
+        const fheroes2::Text releasedText( supportedText, releasedButtonFont );
+        const fheroes2::Text pressedText( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFont } );
+        const int32_t textWidth = releasedText.width();
+        assert( textWidth > 0 );
+
+        const int32_t borderedTextWidth = textWidth + textAreaBorder;
+
+        const int32_t maximumTextAreaWidth = 200; // Why is such a wide button needed?
+        const int32_t textAreaWidth = std::clamp( borderedTextWidth, minimumTextAreaWidth, maximumTextAreaWidth );
+
+        assert( textAreaWidth + backgroundBorders > 0 );
+
+        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), textAreaWidth + backgroundBorders );
+        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), textAreaWidth + backgroundBorders );
+
+        if ( backgroundIcnID != ICN::UNKNOWN ) {
+            makeTransparentBackground( released, pressed, backgroundIcnID );
+        }
+
+        const fheroes2::Size releasedTextSize( releasedText.width( textAreaWidth ), releasedText.height( textAreaWidth ) );
+        const fheroes2::Size pressedTextSize( pressedText.width( textAreaWidth ), pressedText.height( textAreaWidth ) );
+
+        releasedText.draw( releasedOffset.x, releasedOffset.y + ( releasedText.height() - releasedTextSize.height ) / 2, textAreaWidth, released );
+        pressedText.draw( pressedOffset.x, pressedOffset.y + ( pressedText.height() - pressedTextSize.height ) / 2, textAreaWidth, pressed );
     }
 
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface,

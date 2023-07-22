@@ -133,7 +133,6 @@ namespace AI
     void HeroesAction( Heroes & hero, const int32_t dst_index );
     void HeroesMove( Heroes & hero );
     void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex );
-    void HeroesCastTownPortal( Heroes & hero, const int32_t targetIndex );
     bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell );
 
     // functionality in ai_common.cpp

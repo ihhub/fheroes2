@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-07 01:13+0000\n"
+"POT-Creation-Date: 2023-07-22 03:24+0000\n"
 "PO-Revision-Date: 2023-07-01 14:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -58,6 +58,12 @@ msgstr "WYJŚCIE"
 
 msgid "CANCEL"
 msgstr "ANULUJ"
+
+msgid "OKAY"
+msgstr "OK"
+
+msgid "smallerButton|OKAY"
+msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "ZGÓDŹ SIĘ"
@@ -178,20 +184,17 @@ msgstr "6 GRACZY"
 msgid "GIFT"
 msgstr "WYŚLIJ"
 
-msgid "guildWell|EXIT"
-msgstr "WYJŚCIE"
-
 msgid "DIFFICULTY"
 msgstr "TRUDNOŚĆ"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
 
 msgid "MAX"
 msgstr "MAKS"
-
-msgid "OKAY"
-msgstr "OK"
 
 msgid "Warrior"
 msgstr "Wojownik"
@@ -204,16 +207,6 @@ msgstr "Badacz"
 
 msgid "None"
 msgstr "Brak"
-
-msgid "Warning"
-msgstr "Uwaga"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
-"Czy chcesz odzyskać kontrolę z rąk AI? Efekt zadziała tylko w następnej "
-"turze."
 
 msgid ""
 "A few\n"
@@ -2605,11 +2598,14 @@ msgstr "Maks"
 msgid "Hire all creatures in the town."
 msgstr "Zwerbuj wszystkie jednostki w tym mieście."
 
+msgid "Available"
+msgstr "Dostępne"
+
 msgid "Town Population Information and Statistics"
 msgstr "Statystyki populacji miasta"
 
-msgid "Damg"
-msgstr "Obraż"
+msgid "Damage"
+msgstr "Obrażenia"
 
 msgid "HP"
 msgstr "PŻ"
@@ -2619,9 +2615,6 @@ msgstr "Przyrost"
 
 msgid "week"
 msgstr "tydzień"
-
-msgid "Available"
-msgstr "Dostępne"
 
 msgid "View World"
 msgstr "Pokaż świat"
@@ -2673,9 +2666,6 @@ msgstr "Strzały"
 
 msgid "Shots Left"
 msgstr "Pozostałe strzały"
-
-msgid "Damage"
-msgstr "Obrażenia"
 
 msgid "Hit Points"
 msgstr "Punkty życia"
@@ -3543,6 +3533,120 @@ msgstr "Zapisz bieżącą grę."
 msgid "Quit out of the map editor."
 msgstr ""
 
+msgid "Ocean Objects"
+msgstr ""
+
+msgid "Grass Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Snow Objects"
+msgstr "Brak obiektu"
+
+msgid "Swamp Objects"
+msgstr ""
+
+msgid "Lava Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Desert Objects"
+msgstr "Namiot na pustyni"
+
+msgid "Dirt Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Wasteland Objects"
+msgstr "Wyschnięty"
+
+msgid "Beach Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Towns"
+msgstr "Miasto"
+
+msgid "Heroes"
+msgstr "Bohaterowie"
+
+msgid "Artifacts"
+msgstr "Artefakty"
+
+#, fuzzy
+msgid "Treasures"
+msgstr "Skarb"
+
+msgid ""
+"Draws terrain in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+msgid ""
+"Erases objects in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+#, fuzzy
+msgid "Small Brush"
+msgstr "Małe mapy"
+
+#, fuzzy
+msgid "Medium Brush"
+msgstr "Średnie mapy"
+
+#, fuzzy
+msgid "Large Brush"
+msgstr "Duże mapy"
+
+msgid "Area Fill"
+msgstr ""
+
+msgid "Used to click and drag for filling in large areas."
+msgstr ""
+
+msgid "Clear Area"
+msgstr ""
+
+msgid "Used to click and drag for clearing large areas."
+msgstr ""
+
+msgid ""
+"Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
+"eliminates the penalty.)"
+msgstr ""
+
+msgid "Traversable only by boat."
+msgstr ""
+
+msgid "No special modifiers."
+msgstr ""
+
+msgid "Used to place objects most appropriate for use on %{terrain}."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a town or castle."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a monster group."
+msgstr ""
+
+msgid "Used to place a hero."
+msgstr ""
+
+#, fuzzy
+msgid "Used to place an artifact."
+msgstr "Znajdź najpotężniejszy artefakt."
+
+msgid ""
+"Used to place\n"
+"a resource or treasure."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr ""
 
@@ -3590,7 +3694,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-msgid "Undo your last action.  Press again to redo the action."
+msgid "Undo your last action. Press again to redo the action."
 msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
@@ -3645,6 +3749,9 @@ msgstr "Anuluj, aby wrócić do głównego menu."
 
 msgid "No maps available!"
 msgstr "Mapy niedostępne!"
+
+msgid "Warning"
+msgstr "Uwaga"
 
 msgid "difficulty|Easy"
 msgstr "Łatwy"
@@ -3731,7 +3838,10 @@ msgstr "Zobacz Wprowadzenie"
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Zobacz filmy wprowadzające dla obecnego stanu kampanii."
 
-msgid "Select campaign difficulty. It cannot be changed after."
+#, fuzzy
+msgid ""
+"Select the campaign difficulty. This can be lowered at any point during the "
+"campaign."
 msgstr ""
 "Wybierz stopień trudności. Tego ustawienia nie będziesz mógł później zmienić."
 
@@ -3740,6 +3850,18 @@ msgstr "Rozpocznij od nowa"
 
 msgid "Restart the current scenario."
 msgstr "Rozpocznij od nowa obecny scenariusz."
+
+#, fuzzy
+msgid "Difficulty"
+msgstr ""
+"Trudność\n"
+"mapy"
+
+msgid ""
+"You have changed to a lower difficulty for the campaign. You will not be "
+"able to revert this after this point. The high score will be calculated "
+"based solely on the new difficulty. Do you want to proceed?"
+msgstr ""
 
 msgid "Are you sure you want to restart this scenario?"
 msgstr "Czy na pewno chcesz rozpocząć od nowa obecny scenariusz?"
@@ -4246,6 +4368,19 @@ msgstr "ulepsz stworzenie"
 msgid "hotkey|dismiss hero or troop"
 msgstr "zwolnij stworzenie"
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+"Czy chcesz odzyskać kontrolę z rąk AI? Efekt zadziała tylko w następnej "
+"turze."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+"Czy chcesz przekazać AI kontrolę? Efekt zadziała tylko w następnej turze."
+
 msgid "The save file is corrupted."
 msgstr "Plik z zapisaną grą jest uszkodzony."
 
@@ -4716,12 +4851,6 @@ msgstr ""
 
 msgid "%{color} player's turn."
 msgstr "%{color} gracz - nowa tura."
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
-"Czy chcesz przekazać AI kontrolę? Efekt zadziała tylko w następnej turze."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -6670,8 +6799,10 @@ msgid "There is no free ocean location near the hero to cast this spell."
 msgstr ""
 "Nie możesz rzucić czaru, ponieważ nie ma miejsca koło bohatera przy brzegu."
 
+#, fuzzy
 msgid ""
-"You do not currently own any town or castle, so you can't cast the spell."
+"You do not currently own any town or castle that is not occupied by a hero, "
+"so you can't cast the spell."
 msgstr ""
 "Nie posiadasz w tym momencie żadnego miasta lub zamku, z tego powodu nie "
 "możesz rzucić zaklęcia."
@@ -7253,9 +7384,6 @@ msgstr "Bohater/Statystyki"
 msgid "Skills"
 msgstr "Umiejętności"
 
-msgid "Artifacts"
-msgstr "Artefakty"
-
 msgid "Town/Castle"
 msgstr "Miasto/Zamek"
 
@@ -7264,9 +7392,6 @@ msgstr "Garnizon"
 
 msgid "Gold Per Day:"
 msgstr "Złota na dzień:"
-
-msgid "Heroes"
-msgstr "Bohaterowie"
 
 msgid "View Heroes."
 msgstr "Pokaż bohaterów."
@@ -10612,6 +10737,12 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Damg"
+#~ msgstr "Obraż"
+
+#~ msgid "guildWell|EXIT"
+#~ msgstr "WYJŚCIE"
 
 #~ msgid "%{spell} failed!!!"
 #~ msgstr "Czar %{spell} nie udał się!!!"

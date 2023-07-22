@@ -2046,7 +2046,7 @@ namespace
                 }
             };
 
-            if ( tile.isCaptureObjectProtected() ) {
+            if ( isCaptureObjectProtected( tile ) ) {
                 Army army( tile );
 
                 Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
@@ -2104,7 +2104,7 @@ namespace
             if ( result.AttackerWins() ) {
                 hero.IncreaseExperience( result.GetExperienceAttacker() );
 
-                Maps::Tiles::RestoreAbandonedMine( tile, Resource::GOLD );
+                Maps::restoreAbandonedMine( tile, Resource::GOLD );
                 hero.SetMapsObject( MP2::OBJ_MINES );
                 setColorOnTile( tile, hero.GetColor() );
 
@@ -3525,12 +3525,20 @@ void Heroes::Action( int tileIndex )
     };
 
     std::unique_ptr<FocusUpdater> focusUpdater;
-    const bool isAIControlledForHumanPlayer = Players::Get( GetKingdom().GetColor() )->isAIAutoControlMode();
 
-    if ( !GetKingdom().isControlAI() || isAIControlledForHumanPlayer ) {
+#if defined( WITH_DEBUG )
+    const Player * player = Players::Get( GetKingdom().GetColor() );
+    assert( player != nullptr );
+
+    const bool isAIAutoControlMode = player->isAIAutoControlMode();
+#else
+    const bool isAIAutoControlMode = false;
+#endif
+
+    if ( !GetKingdom().isControlAI() || isAIAutoControlMode ) {
         focusUpdater = std::make_unique<FocusUpdater>();
 
-        if ( isAIControlledForHumanPlayer ) {
+        if ( isAIAutoControlMode ) {
             Interface::AdventureMap::Get().SetFocus( this, false );
         }
     }
