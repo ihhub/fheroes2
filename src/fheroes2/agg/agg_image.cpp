@@ -484,25 +484,6 @@ namespace
         std::fill( imageTransform + ( imageHeight - 1 ) * imageWidth - 3, imageTransform + ( imageHeight - 1 ) * imageWidth, transparencyValue );
         std::fill( imageTransform + imageHeight * imageWidth - 4, imageTransform + imageHeight * imageWidth, transparencyValue );
     }
-
-    // Checks if all values in transform layer are 0 (zero). For single-layer images returns true.
-    bool isTransformLayerNotUsed( const fheroes2::Sprite & image )
-    {
-        if ( image.singleLayer() ) {
-            return true;
-        }
-
-        const uint8_t * transformLayer = image.transform();
-        const size_t size = static_cast<size_t>( image.width() ) * image.height();
-
-        for ( size_t transformIndex = 0; transformIndex < size; ++transformIndex ) {
-            if ( transformLayer[transformIndex] != 0 ) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 }
 
 namespace fheroes2
@@ -2768,11 +2749,12 @@ namespace fheroes2
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 640 && original.height() == 256 ) {
                         original._disableTransformLayer();
-                        original.image()[51945] = 17;
-                        original.image()[61828] = 25;
-                        original.image()[64918] = 164;
-                        original.image()[77685] = 18;
-                        original.image()[84618] = 19;
+                        uint8_t * imageData = original.image();
+                        imageData[51945] = 17;
+                        imageData[61828] = 25;
+                        imageData[64918] = 164;
+                        imageData[77685] = 18;
+                        imageData[84618] = 19;
                     }
                 }
                 return true;
@@ -2783,30 +2765,33 @@ namespace fheroes2
                     Sprite & original = _icnVsSprite[id][60];
                     if ( original.width() == 30 && original.height() == 22 ) {
                         original._disableTransformLayer();
-                        original.image()[5] = 75;
-                        original.image()[310] = 48;
-                        original.image()[358] = 64;
-                        original.image()[424] = 65;
+                        uint8_t * imageData = original.image();
+                        imageData[5] = 75;
+                        imageData[310] = 48;
+                        imageData[358] = 64;
+                        imageData[424] = 65;
                     }
                 }
                 if ( _icnVsSprite[id].size() > 61 ) {
                     Sprite & original = _icnVsSprite[id][61];
                     if ( original.width() == 30 && original.height() == 22 ) {
                         original._disableTransformLayer();
-                        original.image()[51] = 30;
-                        original.image()[80] = 28;
-                        original.image()[81] = 30;
-                        original.image()[383] = 24;
-                        original.image()[445] = 24;
+                        uint8_t * imageData = original.image();
+                        imageData[51] = 30;
+                        imageData[80] = 28;
+                        imageData[81] = 30;
+                        imageData[383] = 24;
+                        imageData[445] = 24;
                     }
                 }
                 if ( _icnVsSprite[id].size() > 65 ) {
                     Sprite & original = _icnVsSprite[id][65];
                     if ( original.width() == 30 && original.height() == 22 ) {
                         original._disableTransformLayer();
-                        original.image()[499] = 60;
-                        original.image()[601] = 24;
-                        original.image()[631] = 28;
+                        uint8_t * imageData = original.image();
+                        imageData[499] = 60;
+                        imageData[601] = 24;
+                        imageData[631] = 28;
                     }
                 }
                 if ( _icnVsSprite[id].size() > 67 ) {
@@ -2846,10 +2831,11 @@ namespace fheroes2
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 101 && original.height() == 93 ) {
                         original._disableTransformLayer();
-                        original.image()[2314] = 70;
-                        original.image()[5160] = 71;
-                        original.image()[5827] = 18;
-                        original.image()[7474] = 167;
+                        uint8_t * imageData = original.image();
+                        imageData[2314] = 70;
+                        imageData[5160] = 71;
+                        imageData[5827] = 18;
+                        imageData[7474] = 167;
                     }
                 }
                 return true;
@@ -2860,8 +2846,9 @@ namespace fheroes2
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 101 && original.height() == 93 ) {
                         original._disableTransformLayer();
-                        original.image()[2028] = 42;
-                        original.image()[6674] = 100;
+                        uint8_t * imageData = original.image();
+                        imageData[2028] = 42;
+                        imageData[6674] = 100;
                     }
                 }
                 return true;
@@ -2883,9 +2870,10 @@ namespace fheroes2
                     Sprite & original = _icnVsSprite[id][7];
                     if ( original.width() == 135 && original.height() == 57 ) {
                         original._disableTransformLayer();
-                        original.image()[3687] = 50;
-                        original.image()[5159] = 108;
-                        original.image()[5294] = 108;
+                        uint8_t * imageData = original.image();
+                        imageData[3687] = 50;
+                        imageData[5159] = 108;
+                        imageData[5294] = 108;
                     }
                 }
                 if ( _icnVsSprite[id].size() > 28 ) {
@@ -2917,10 +2905,11 @@ namespace fheroes2
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 84 && original.height() == 81 ) {
                         original._disableTransformLayer();
-                        original.image()[1692] = 26;
-                        original.image()[2363] = 32;
-                        original.image()[2606] = 21;
-                        original.image()[2608] = 21;
+                        uint8_t * imageData = original.image();
+                        imageData[1692] = 26;
+                        imageData[2363] = 32;
+                        imageData[2606] = 21;
+                        imageData[2608] = 21;
                     }
                 }
                 return true;
@@ -2931,22 +2920,23 @@ namespace fheroes2
                     Sprite & original = _icnVsSprite[id][13];
                     if ( original.width() == 135 && original.height() == 57 ) {
                         original._disableTransformLayer();
-                        original.image()[2047] = 160;
-                        original.image()[2052] = 159;
-                        original.image()[2055] = 160;
-                        original.image()[2060] = 67;
-                        original.image()[2063] = 159;
-                        original.image()[2067] = 67;
-                        original.image()[2184] = 67;
-                        original.image()[2192] = 158;
-                        original.image()[3508] = 67;
-                        original.image()[3641] = 67;
-                        original.image()[3773] = 69;
-                        original.image()[3910] = 67;
-                        original.image()[4039] = 69;
-                        original.image()[4041] = 67;
-                        original.image()[4172] = 67;
-                        original.image()[4578] = 69;
+                        uint8_t * imageData = original.image();
+                        imageData[2047] = 160;
+                        imageData[2052] = 159;
+                        imageData[2055] = 160;
+                        imageData[2060] = 67;
+                        imageData[2063] = 159;
+                        imageData[2067] = 67;
+                        imageData[2184] = 67;
+                        imageData[2192] = 158;
+                        imageData[3508] = 67;
+                        imageData[3641] = 67;
+                        imageData[3773] = 69;
+                        imageData[3910] = 67;
+                        imageData[4039] = 69;
+                        imageData[4041] = 67;
+                        imageData[4172] = 67;
+                        imageData[4578] = 69;
                     }
                 }
                 if ( _icnVsSprite[id].size() >= 25 ) {
@@ -2954,9 +2944,10 @@ namespace fheroes2
                     Sprite & original = _icnVsSprite[id][24];
                     if ( original.width() == 135 && original.height() == 57 ) {
                         original._disableTransformLayer();
-                        original.image()[2830] = 165;
-                        original.image()[3101] = 165;
-                        original.image()[3221] = 69;
+                        uint8_t * imageData = original.image();
+                        imageData[2830] = 165;
+                        imageData[3101] = 165;
+                        imageData[3221] = 69;
                     }
                 }
                 return true;
@@ -3952,12 +3943,6 @@ namespace fheroes2
 
                 h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
                 h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
-
-                for ( fheroes2::Sprite & sprite : _icnVsSprite[id] ) {
-                    if ( isTransformLayerNotUsed( sprite ) ) {
-                        sprite._disableTransformLayer();
-                    }
-                }
 
                 break;
             }
