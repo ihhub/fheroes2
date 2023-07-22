@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-21 16:11+0000\n"
+"POT-Creation-Date: 2023-07-22 03:24+0000\n"
 "PO-Revision-Date: 2023-05-31 12:10+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -202,16 +202,6 @@ msgstr "Udforsker"
 
 msgid "None"
 msgstr "Ingen"
-
-msgid "Warning"
-msgstr "Advarsel"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
-"Vil du genoptage kontrollen fra AI'en? Dette vil kun have effekt på næste "
-"tur."
 
 msgid ""
 "A few\n"
@@ -2466,10 +2456,13 @@ msgstr "Maks"
 msgid "Hire all creatures in the town."
 msgstr "Hyr alle byens tilgængelige væsener."
 
+msgid "Available"
+msgstr "Tilgængelig"
+
 msgid "Town Population Information and Statistics"
 msgstr "Informationer og tal om byens indbyggere"
 
-msgid "Damg"
+msgid "Damage"
 msgstr "Skade"
 
 msgid "HP"
@@ -2480,9 +2473,6 @@ msgstr "Vækst"
 
 msgid "week"
 msgstr "uge"
-
-msgid "Available"
-msgstr "Tilgængelig"
 
 msgid "View World"
 msgstr "Vis verden"
@@ -2535,9 +2525,6 @@ msgstr "Skud"
 
 msgid "Shots Left"
 msgstr "Resterende skud"
-
-msgid "Damage"
-msgstr "Skade"
 
 msgid "Hit Points"
 msgstr "Liv"
@@ -3592,6 +3579,9 @@ msgstr "Afbryd og gå tilbage til hovedmenuen."
 msgid "No maps available!"
 msgstr ""
 
+msgid "Warning"
+msgstr "Advarsel"
+
 msgid "difficulty|Easy"
 msgstr "Let"
 
@@ -4189,6 +4179,18 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+"Vil du genoptage kontrollen fra AI'en? Dette vil kun have effekt på næste "
+"tur."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr "Det gemte spil er korrupt."
 
@@ -4590,11 +4592,6 @@ msgid ""
 msgstr ""
 
 msgid "%{color} player's turn."
-msgstr ""
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
 msgstr ""
 
 msgid ""
@@ -9643,6 +9640,9 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Damg"
+#~ msgstr "Skade"
 
 #~ msgid "guildWell|EXIT"
 #~ msgstr "UD"

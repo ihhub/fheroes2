@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-21 16:11+0000\n"
+"POT-Creation-Date: 2023-07-22 03:24+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -201,16 +201,6 @@ msgstr "Voyageur"
 
 msgid "None"
 msgstr "Aucune"
-
-msgid "Warning"
-msgstr "Attention"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
-"Voulez-vous reprendre à l'IA le contrôle du jeu ? L'effet aura lieu "
-"uniquement au prochain tour."
 
 msgid ""
 "A few\n"
@@ -2635,10 +2625,13 @@ msgstr "Max"
 msgid "Hire all creatures in the town."
 msgstr "Recruter toutes les créatures disponibles dans le village."
 
+msgid "Available"
+msgstr "Disponible"
+
 msgid "Town Population Information and Statistics"
 msgstr "Informations et statistiques sur la population du village"
 
-msgid "Damg"
+msgid "Damage"
 msgstr "Dégâts"
 
 msgid "HP"
@@ -2649,9 +2642,6 @@ msgstr "Croissance"
 
 msgid "week"
 msgstr "semaine"
-
-msgid "Available"
-msgstr "Disponible"
 
 msgid "View World"
 msgstr "Tout voir"
@@ -2704,9 +2694,6 @@ msgstr "Tirs"
 
 msgid "Shots Left"
 msgstr "Tirs restants"
-
-msgid "Damage"
-msgstr "Dégâts"
 
 msgid "Hit Points"
 msgstr "Points de vie"
@@ -3824,6 +3811,9 @@ msgstr "Annuler et revenir au menu principal."
 msgid "No maps available!"
 msgstr "Aucune carte disponible !"
 
+msgid "Warning"
+msgstr "Attention"
+
 msgid "difficulty|Easy"
 msgstr "Facile"
 
@@ -4454,6 +4444,20 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+"Voulez-vous reprendre à l'IA le contrôle du jeu ? L'effet aura lieu "
+"uniquement au prochain tour."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+"Voulez-vous laisser l'IA prendre les commandes ? L'effet aura lieu "
+"uniquement au prochain tour."
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "L'image miroir est créée."
@@ -4932,13 +4936,6 @@ msgstr ""
 
 msgid "%{color} player's turn."
 msgstr "tour du joueur %{color}."
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
-"Voulez-vous laisser l'IA prendre les commandes ? L'effet aura lieu "
-"uniquement au prochain tour."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -10919,6 +10916,9 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Damg"
+#~ msgstr "Dégâts"
 
 #~ msgid "%{spell} failed!!!"
 #~ msgstr "%{spell} a échoué !"

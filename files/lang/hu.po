@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-21 16:11+0000\n"
+"POT-Creation-Date: 2023-07-22 03:24+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -184,16 +184,6 @@ msgstr "Felfedező"
 
 msgid "None"
 msgstr "Nincs"
-
-msgid "Warning"
-msgstr "Figyelmeztetés"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
-"Szeretnéd visszavenni az irányítást az AI-tól? Ez csak a következő körben "
-"lesz érvényes."
 
 msgid ""
 "A few\n"
@@ -2607,11 +2597,14 @@ msgstr "Maximus"
 msgid "Hire all creatures in the town."
 msgstr "Összes hős és város elvesztése"
 
+msgid "Available"
+msgstr "Rendelkezésre áll"
+
 msgid "Town Population Information and Statistics"
 msgstr "A város lakosságának adatai és statisztikái"
 
-msgid "Damg"
-msgstr ""
+msgid "Damage"
+msgstr "Sebzés"
 
 msgid "HP"
 msgstr "ÉP"
@@ -2621,9 +2614,6 @@ msgstr "Szaporulat"
 
 msgid "week"
 msgstr "hét"
-
-msgid "Available"
-msgstr "Rendelkezésre áll"
 
 #, fuzzy
 msgid "View World"
@@ -2674,9 +2664,6 @@ msgstr "Lövések"
 
 msgid "Shots Left"
 msgstr "Maradék lövések"
-
-msgid "Damage"
-msgstr "Sebzés"
 
 msgid "Hit Points"
 msgstr "Életerő-pontok"
@@ -3807,6 +3794,9 @@ msgstr "Vissza a főmenübe."
 msgid "No maps available!"
 msgstr "Nincs használható térkép!"
 
+msgid "Warning"
+msgstr "Figyelmeztetés"
+
 msgid "difficulty|Easy"
 msgstr "Könnyű"
 
@@ -4446,6 +4436,18 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+"Szeretnéd visszavenni az irányítást az AI-tól? Ez csak a következő körben "
+"lesz érvényes."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "A Tükörkép varázslat nem sikerült."
@@ -4885,11 +4887,6 @@ msgstr ""
 #, fuzzy
 msgid "%{color} player's turn."
 msgstr "%{color} játékos köre"
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "

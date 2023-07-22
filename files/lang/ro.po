@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-21 16:11+0000\n"
+"POT-Creation-Date: 2023-07-22 03:24+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -184,16 +184,6 @@ msgstr "Explorator"
 
 msgid "None"
 msgstr "Nimic"
-
-msgid "Warning"
-msgstr "Atenție"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
-"Dorești să recâștigi controlul de la AI? Efectul va avea loc doar în "
-"următoarea rundă."
 
 msgid ""
 "A few\n"
@@ -2455,10 +2445,13 @@ msgstr ""
 msgid "Hire all creatures in the town."
 msgstr ""
 
+msgid "Available"
+msgstr ""
+
 msgid "Town Population Information and Statistics"
 msgstr ""
 
-msgid "Damg"
+msgid "Damage"
 msgstr ""
 
 msgid "HP"
@@ -2468,9 +2461,6 @@ msgid "Growth"
 msgstr ""
 
 msgid "week"
-msgstr ""
-
-msgid "Available"
 msgstr ""
 
 msgid "View World"
@@ -2519,9 +2509,6 @@ msgid "Shots"
 msgstr ""
 
 msgid "Shots Left"
-msgstr ""
-
-msgid "Damage"
 msgstr ""
 
 msgid "Hit Points"
@@ -3539,6 +3526,9 @@ msgstr ""
 msgid "No maps available!"
 msgstr ""
 
+msgid "Warning"
+msgstr "Atenție"
+
 msgid "difficulty|Easy"
 msgstr ""
 
@@ -4134,6 +4124,18 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+"Dorești să recâștigi controlul de la AI? Efectul va avea loc doar în "
+"următoarea rundă."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "Se creează o imagine în oglindă."
@@ -4536,11 +4538,6 @@ msgid ""
 msgstr ""
 
 msgid "%{color} player's turn."
-msgstr ""
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
 msgstr ""
 
 msgid ""
