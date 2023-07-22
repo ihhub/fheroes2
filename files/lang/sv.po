@@ -183,7 +183,7 @@ msgid "DIFFICULTY"
 msgstr "SVÅRIGHETSGRAD"
 
 msgid "VIEW INTRO"
-msgstr "Visa Intro"
+msgstr "VISA INTRO"
 
 msgid "MIN"
 msgstr "MIN"
