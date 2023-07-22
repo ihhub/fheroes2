@@ -542,7 +542,7 @@ namespace
         if ( destroy ) {
             setMonsterCountOnTile( tile, 0 );
 
-            tile.RemoveObjectSprite();
+            removeObjectSprite( tile );
             tile.setAsEmpty();
         }
     }
@@ -555,7 +555,7 @@ namespace
             hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
         }
 
-        tile.RemoveObjectSprite();
+        removeObjectSprite( tile );
         resetObjectInfoOnTile( tile );
         hero.GetPath().Reset();
 
@@ -634,7 +634,7 @@ namespace
             kingdom.AddFundsResource( Funds( Resource::GOLD, gold ) );
         }
 
-        tile.RemoveObjectSprite();
+        removeObjectSprite( tile );
         resetObjectInfoOnTile( tile );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
@@ -756,7 +756,7 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
         hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
-        tile.RemoveObjectSprite();
+        removeObjectSprite( tile );
         resetObjectInfoOnTile( tile );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
@@ -1308,7 +1308,7 @@ namespace
 
         // Remove genie lamp sprite if no genies are available to hire.
         if ( MP2::OBJ_GENIE_LAMP == objectType && ( availableTroopCount == recruitTroopCount ) ) {
-            tile.RemoveObjectSprite();
+            removeObjectSprite( tile );
             tile.setAsEmpty();
         }
 
@@ -1393,7 +1393,7 @@ namespace
         const Kingdom & kingdom = hero.GetKingdom();
 
         if ( kingdom.IsVisitTravelersTent( getColorFromTile( tile ) ) ) {
-            tile.RemoveObjectSprite();
+            removeObjectSprite( tile );
             tile.setAsEmpty();
         }
 
@@ -1419,7 +1419,7 @@ namespace
         else
             hero.PickupArtifact( getArtifactFromTile( tile ) );
 
-        tile.RemoveObjectSprite();
+        removeObjectSprite( tile );
         resetObjectInfoOnTile( tile );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
@@ -1466,7 +1466,7 @@ namespace
             }
 
             if ( result && hero.PickupArtifact( art ) ) {
-                tile.RemoveObjectSprite();
+                removeObjectSprite( tile );
                 resetObjectInfoOnTile( tile );
             }
         }
@@ -1540,7 +1540,7 @@ namespace
         if ( kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes() ) {
             Maps::Tiles & tile = world.GetTiles( tileIndex );
 
-            tile.RemoveObjectSprite();
+            removeObjectSprite( tile );
             tile.setAsEmpty();
 
             Heroes * prisoner = world.FromJailHeroes( tileIndex );
