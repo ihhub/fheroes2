@@ -6814,7 +6814,7 @@ msgid "Pathfinding"
 msgstr "Vägvisning"
 
 msgid "Archery"
-msgstr "Bågskytte"
+msgstr "Skytte"
 
 msgid "Logistics"
 msgstr "Logistik"
