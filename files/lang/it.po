@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-21 16:11+0000\n"
+"POT-Creation-Date: 2023-07-22 03:24+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -182,14 +182,6 @@ msgstr "Esplorare"
 
 msgid "None"
 msgstr "Nessun/a"
-
-msgid "Warning"
-msgstr ""
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
 
 msgid ""
 "A few\n"
@@ -2479,10 +2471,13 @@ msgstr "Max"
 msgid "Hire all creatures in the town."
 msgstr "Perdi tutti i tuoi eroi e le città."
 
+msgid "Available"
+msgstr "Disponibile"
+
 msgid "Town Population Information and Statistics"
 msgstr "Populazione e Dati della Città"
 
-msgid "Damg"
+msgid "Damage"
 msgstr "Danni"
 
 msgid "HP"
@@ -2493,9 +2488,6 @@ msgstr "Crescita"
 
 msgid "week"
 msgstr "sett."
-
-msgid "Available"
-msgstr "Disponibile"
 
 msgid "View World"
 msgstr "Mostra Mondo"
@@ -2547,9 +2539,6 @@ msgstr "Colpi"
 
 msgid "Shots Left"
 msgstr "Colpi Residui"
-
-msgid "Damage"
-msgstr "Danni"
 
 msgid "Hit Points"
 msgstr "Pt. Ferita"
@@ -3654,6 +3643,9 @@ msgstr ""
 msgid "No maps available!"
 msgstr ""
 
+msgid "Warning"
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Facile"
 
@@ -4281,6 +4273,16 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "Non esistono punti di salvataggio da caricare."
@@ -4702,11 +4704,6 @@ msgstr ""
 
 msgid "%{color} player's turn."
 msgstr "Turno di giocatore %{color}"
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -9841,6 +9838,9 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Damg"
+#~ msgstr "Danni"
 
 #~ msgid "%{spell} failed!!!"
 #~ msgstr "%{spell} fallita!!!"

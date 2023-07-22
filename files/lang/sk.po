@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-21 16:11+0000\n"
+"POT-Creation-Date: 2023-07-22 03:24+0000\n"
 "PO-Revision-Date: 2023-06-28 10:32+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -206,14 +206,6 @@ msgstr "Prieskumník"
 
 msgid "None"
 msgstr "Žiadny"
-
-msgid "Warning"
-msgstr "Pozor"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr "Chceš prevziať kontrolu nad hráčom? Efekt sa prejaví v ďalšom kole."
 
 msgid ""
 "A few\n"
@@ -2581,11 +2573,14 @@ msgstr "Max"
 msgid "Hire all creatures in the town."
 msgstr "Najmi všetkých bojovníkov v meste."
 
+msgid "Available"
+msgstr "Dostupné"
+
 msgid "Town Population Information and Statistics"
 msgstr "Informácie o obyvateľstve a štatistika mesta"
 
-msgid "Damg"
-msgstr "Pošk"
+msgid "Damage"
+msgstr "Poškodenie"
 
 msgid "HP"
 msgstr "Zdravie"
@@ -2595,9 +2590,6 @@ msgstr "Nárast"
 
 msgid "week"
 msgstr "týždeň"
-
-msgid "Available"
-msgstr "Dostupné"
 
 msgid "View World"
 msgstr "Ukáž svet"
@@ -2649,9 +2641,6 @@ msgstr "Strely"
 
 msgid "Shots Left"
 msgstr "Ostáva striel"
-
-msgid "Damage"
-msgstr "Poškodenie"
 
 msgid "Hit Points"
 msgstr "Zdravie max"
@@ -3727,6 +3716,9 @@ msgstr ""
 msgid "No maps available!"
 msgstr ""
 
+msgid "Warning"
+msgstr "Pozor"
+
 msgid "difficulty|Easy"
 msgstr "Ľahká"
 
@@ -4342,6 +4334,16 @@ msgstr "povýš jednotku"
 msgid "hotkey|dismiss hero or troop"
 msgstr "prepusti jednotku alebo hrdinu"
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr "Chceš prevziať kontrolu nad hráčom? Efekt sa prejaví v ďalšom kole."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr "Uložený súbor je poškodený."
 
@@ -4800,11 +4802,6 @@ msgstr ""
 
 msgid "%{color} player's turn."
 msgstr "%{color} hráč je na ťahu."
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -10044,6 +10041,9 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Damg"
+#~ msgstr "Pošk"
 
 #~ msgid "guildWell|EXIT"
 #~ msgstr "ODÍĎ"
