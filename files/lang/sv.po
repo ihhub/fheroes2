@@ -8899,7 +8899,7 @@ msgstr ""
 "klockan faktiskt är förtrollad."
 
 msgid "Skullcap"
-msgstr "Stålhätta"
+msgstr "Hätta"
 
 msgid "The %{name} halves the casting cost of all mind influencing spells."
 msgstr "%{name} halverar besvärjelsekostnaden för alla Sinnesbesvärjelser."
