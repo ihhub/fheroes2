@@ -9430,7 +9430,7 @@ msgid ""
 msgstr ""
 
 msgid "Sword Breaker"
-msgstr "Lamač mečov"
+msgstr "Lámač mečov"
 
 msgid "The %{name} increases your defense by %{count} and attack by 1."
 msgstr ""
@@ -9641,7 +9641,7 @@ msgid "Holy Shout"
 msgstr "Svätý výkrik"
 
 msgid "Anti-Magic"
-msgstr "Anti-Mágia"
+msgstr "Protimágia"
 
 msgid "Prevents harmful magic against the selected creatures."
 msgstr ""
@@ -9689,7 +9689,7 @@ msgid ""
 msgstr ""
 
 msgid "Meteor Shower"
-msgstr "Meteorický roj"
+msgstr "Pád kameňov"
 
 msgid "Paralyze"
 msgstr "Paralýza"
