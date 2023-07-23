@@ -344,6 +344,8 @@ namespace fheroes2
 
         while ( true ) {
             if ( 0 == *data ) { // 0x00 - end of row
+                noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= width );
+
                 imageData += width;
                 imageTransform += width;
                 posX = 0;
