@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-23 15:04+0000\n"
-"PO-Revision-Date: 2023-07-23 19:01+0200\n"
+"PO-Revision-Date: 2023-07-23 19:03+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -6588,28 +6588,28 @@ msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Určite chceš tohto hrdinu prepustiť?"
 
 msgid "View Experience Info"
-msgstr "Zobraz info o skúsenostiach"
+msgstr ""
 
 msgid "View Spell Points Info"
-msgstr "Zobraz info o bodoch kúziel"
+msgstr ""
 
 msgid "Set army combat formation to 'Spread'"
-msgstr "Nastaviť bojovú formáciu na 'Široká'"
+msgstr ""
 
 msgid "Set army combat formation to 'Grouped'"
-msgstr "Nastaviť bojovú formáciu na 'Zoskupená'"
+msgstr ""
 
 msgid "Exit Hero Screen"
 msgstr "Zavrieť obrazovku hrdinu"
 
 msgid "You cannot dismiss a hero in a castle"
-msgstr "Nemôžeš prepustiť hrdinu v hrade"
+msgstr ""
 
 msgid "Dismissal of %{name} the %{race} is prohibited by scenario"
 msgstr "%{race} %{name} nesmie byť podľa scenára prepustený"
 
 msgid "Dismiss %{name} the %{race}"
-msgstr "Prepustiť: %{race} %{name}"
+msgstr ""
 
 msgid "Show previous hero"
 msgstr "Ukáž predošlého hrdinu"
