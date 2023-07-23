@@ -4232,7 +4232,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
             else {
                 // The cast down is applied below the 2rd battlefield row (count is started from 0)
                 // and for the (rowNumber - 2) columns starting from the side of the hero.
-                isCastDown = isLeftOpponent ? ( dst % 11 < dst / 11 - 2 ) : ( 10 - dst % 11 < dst / 11 - 2 );
+                isCastDown = isLeftOpponent ? ( ( dst % 11 ) < dst / 11 - 2 ) : ( ( 10 - ( dst % 11 ) ) < dst / 11 - 2 );
 
                 opponent->SetAnimation( isCastDown ? OP_CAST_DOWN : OP_CAST_UP );
             }
