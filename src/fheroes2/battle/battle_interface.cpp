@@ -4217,19 +4217,21 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
     Unit * target = !targets.empty() ? targets.front().defender : nullptr;
 
     const bool isMassSpell = spell.isApplyWithoutFocusObject();
+    bool isCastDown = false;
+    OpponentSprite * opponent = nullptr;
 
     // set spell cast animation
     if ( caster ) {
         const bool isLeftOpponent = caster->GetColor() == arena.GetArmy1Color();
-        OpponentSprite * opponent = isLeftOpponent ? _opponent1.get() : _opponent2.get();
-        if ( opponent ) {
+        opponent = isLeftOpponent ? _opponent1.get() : _opponent2.get();
+        if ( opponent != nullptr) {
             if ( isMassSpell ) {
                 opponent->SetAnimation( OP_CAST_MASS );
             }
             else {
                 // The cast down is applied below the 2rd battlefield row (count is started from 0)
                 // and for the (rowNumber - 2) columns starting from the side of the hero.
-                bool isCastDown = isLeftOpponent ? ( dst % 11 < dst / 11 - 2 ) : ( 10 - dst % 11 < dst / 11 - 2 );
+                isCastDown = isLeftOpponent ? ( dst % 11 < dst / 11 - 2 ) : ( 10 - dst % 11 < dst / 11 - 2 );
 
                 opponent->SetAnimation( isCastDown ? OP_CAST_DOWN : OP_CAST_UP );
             }
@@ -4380,22 +4382,14 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
             }
     }
 
-    if ( caster ) {
-        const bool isLeftOpponent = caster->GetColor() == arena.GetArmy1Color();
-        OpponentSprite * opponent = isLeftOpponent ? _opponent1.get() : _opponent2.get();
-        if ( opponent ) {
-            if ( isMassSpell ) {
-                opponent->SetAnimation( OP_CAST_MASS_RETURN );
-            }
-            else {
-                // The cast down is applied below the 2rd battlefield row (count is started from 0)
-                // and for the (rowNumber - 2) columns starting from the side of the hero.
-                bool isCastDown = isLeftOpponent ? ( dst % 11 < dst / 11 - 2 ) : ( 10 - dst % 11 < dst / 11 - 2 );
-
-                opponent->SetAnimation( isCastDown ? OP_CAST_DOWN_RETURN : OP_CAST_UP_RETURN );
-            }
-            AnimateOpponents( opponent );
+    if ( opponent != nullptr ) {
+        if ( isMassSpell ) {
+            opponent->SetAnimation( OP_CAST_MASS_RETURN );
         }
+        else {
+            opponent->SetAnimation( isCastDown ? OP_CAST_DOWN_RETURN : OP_CAST_UP_RETURN );
+        }
+        AnimateOpponents( opponent );
     }
 }
 
