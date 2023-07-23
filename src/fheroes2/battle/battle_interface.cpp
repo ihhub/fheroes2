@@ -3868,7 +3868,6 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     Indexes::const_iterator dst = path.begin();
     const Indexes::const_iterator pathEnd = path.end();
     const Indexes::const_iterator finalStep = pathEnd - 1;
-    const size_t pathSize = path.size();
 
     const bool isOneStepPath = [&unit, &path]() {
         if ( path.size() == 1 ) {
