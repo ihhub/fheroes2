@@ -910,8 +910,8 @@ namespace AudioManager
     {
         const std::vector<uint8_t> & v = GetWAV( m82 );
 
-        // Sound duration is: (wavSize - headerSize) / sampleRateKHz / channels / byesPerSample.
-        return static_cast<uint32_t>( ( v.size() - 44 ) / 22.050 );
+        // Sound duration is: (wavSize - headerSize) / sampleRateKHz / channelCount / byesPerSample.
+        return static_cast<uint32_t>( ( static_cast<double>( v.size() ) - 44. ) / 22.050 );
     }
 
     bool isExternalMusicFileAvailable( const int trackId )
