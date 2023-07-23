@@ -508,7 +508,7 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
 {
     if ( isArchers() ) {
         if ( !isHandFighting() ) {
-            // check skill archery +%10, +%25, +%50
+            // Hero's Archery skill may increase damage
             if ( GetCommander() ) {
                 dmg += ( dmg * GetCommander()->GetSecondaryValues( Skill::Secondary::ARCHERY ) / 100 );
             }
@@ -516,13 +516,13 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
             const Arena * arena = GetArena();
             assert( arena != nullptr );
 
-            // check castle defense
+            // Penalty for damage to castle defenders behind the castle walls
             if ( arena->IsShootingPenalty( *this, enemy ) ) {
                 dmg /= 2;
             }
 
-            // check spell shield
-            if ( enemy.Modes( SP_SHIELD ) ) {
+            // The Shield spell does not affect the damage of the castle towers
+            if ( !Modes( CAP_TOWER ) && enemy.Modes( SP_SHIELD ) ) {
                 dmg /= Spell( Spell::SHIELD ).ExtraValue();
             }
         }
@@ -531,44 +531,50 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
         }
     }
 
-    // after blind
-    if ( blindanswer )
+    // The retaliatory damage of a blinded unit is halved
+    if ( blindanswer ) {
         dmg /= 2;
+    }
 
-    // stone cap.
-    if ( enemy.Modes( SP_STONE ) )
+    // The retaliatory damage of a petrified unit is halved
+    if ( enemy.Modes( SP_STONE ) ) {
         dmg /= 2;
+    }
 
-    // check monster capability
     switch ( GetID() ) {
     case Monster::CRUSADER:
-        // double damage for undead
-        if ( enemy.isUndead() )
+        if ( enemy.isUndead() ) {
             dmg *= 2;
+        }
         break;
     case Monster::FIRE_ELEMENT:
-        if ( enemy.GetID() == Monster::WATER_ELEMENT )
+        if ( enemy.GetID() == Monster::WATER_ELEMENT ) {
             dmg *= 2;
+        }
         break;
     case Monster::WATER_ELEMENT:
-        if ( enemy.GetID() == Monster::FIRE_ELEMENT )
+        if ( enemy.GetID() == Monster::FIRE_ELEMENT ) {
             dmg *= 2;
+        }
         break;
     case Monster::AIR_ELEMENT:
-        if ( enemy.GetID() == Monster::EARTH_ELEMENT )
+        if ( enemy.GetID() == Monster::EARTH_ELEMENT ) {
             dmg *= 2;
+        }
         break;
     case Monster::EARTH_ELEMENT:
-        if ( enemy.GetID() == Monster::AIR_ELEMENT )
+        if ( enemy.GetID() == Monster::AIR_ELEMENT ) {
             dmg *= 2;
+        }
         break;
     default:
         break;
     }
 
     int r = GetAttack() - enemy.GetDefense();
-    if ( enemy.isDragons() && Modes( SP_DRAGONSLAYER ) )
+    if ( enemy.isDragons() && Modes( SP_DRAGONSLAYER ) ) {
         r += Spell( Spell::DRAGONSLAYER ).ExtraValue();
+    }
 
     // Attack bonus is 20% to 300%
     dmg *= 1 + ( 0 < r ? 0.1 * std::min( r, 20 ) : 0.05 * std::max( r, -16 ) );
@@ -1006,10 +1012,12 @@ void Battle::Unit::SetResponse()
 
 void Battle::Unit::PostAttackAction()
 {
-    // decrease shots
     if ( isArchers() && !isHandFighting() ) {
         const HeroBase * hero = GetCommander();
+
         if ( !hero || !hero->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::ENDLESS_AMMUNITION ) ) {
+            assert( !Modes( CAP_TOWER ) && shots > 0 );
+
             --shots;
         }
     }
