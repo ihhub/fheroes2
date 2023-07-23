@@ -906,14 +906,14 @@ namespace AudioManager
         g_asyncSoundManager.pushSound( m82, Settings::Get().SoundVolume() );
     }
 
-    uint32_t getSoundDurationMs( const int m82 )
+    double getSoundDurationMs( const int m82 )
     {
         const std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         const std::vector<uint8_t> & v = GetWAV( m82 );
 
         // Sound duration is: (wavSize - headerSize) / sampleRateKHz / channelCount / byesPerSample.
-        return static_cast<uint32_t>( ( static_cast<double>( v.size() ) - 44. ) / 22.050 );
+        return ( static_cast<double>( v.size() ) - 44. ) / 22.050;
     }
 
     bool isExternalMusicFileAvailable( const int trackId )
