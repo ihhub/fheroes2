@@ -3838,7 +3838,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     // Get the time to animate movement for one cell.
     uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
-    if ( unit.Modes( SP_HASTE ) ) {
+    if ( unit.Modes( SP_HASTE ) && frameDelay > 1 ) {
         frameDelay = frameDelay * 65 / 100; // by 35% faster
     }
     else if ( unit.Modes( SP_SLOW ) ) {
@@ -3963,9 +3963,6 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     const int walkSoundId = unit.M82Move();
     const uint32_t cellCountForOneSound = AudioManager::getSoundDurationMs( walkSoundId ) / frameDelay;
     int soundStatus = -1;
-
-    COUT( "movement time = " << frameDelay << " ms, each frame delay = " << movementAnimationDelay
-                             << " ms sound time = " << AudioManager::getSoundDurationMs( walkSoundId ) << " ms, cell count = " << cellCountForOneSound )
 
     while ( dst != pathEnd ) {
         // Check if a wide unit changes its horizontal direction.
@@ -4169,7 +4166,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     while ( currentPoint != points.end() ) {
         _movingPos = *currentPoint;
 
-        // Limit the simultaneous walk sounds.
+        // Limit the simultaneous fly sounds.
         if ( playSoundBySound ) {
             if ( soundStatus < 0 || !Mixer::isPlaying( soundStatus ) ) {
                 soundStatus = AudioManager::PlaySound( flySoundId );
