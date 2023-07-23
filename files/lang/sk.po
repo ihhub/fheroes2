@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-22 03:24+0000\n"
+"POT-Creation-Date: 2023-07-23 15:04+0000\n"
 "PO-Revision-Date: 2023-06-28 10:32+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3536,6 +3536,14 @@ msgstr "Objekty pláže"
 
 msgid "Towns"
 msgstr "Mestá"
+
+#, fuzzy
+msgid "Heroes"
+msgstr "Ukáž hrdinov"
+
+#, fuzzy
+msgid "Artifacts"
+msgstr "Artefakty:"
 
 msgid "Treasures"
 msgstr "Poklady"
