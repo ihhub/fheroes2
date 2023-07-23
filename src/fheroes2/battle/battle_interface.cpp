@@ -3311,17 +3311,22 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, const bool skipLastFr
     }
 }
 
-void Battle::Interface::AnimateOpponents( OpponentSprite * target )
+void Battle::Interface::AnimateOpponents( OpponentSprite * hero )
 {
-    if ( target == nullptr || target->isFinishFrame() ) // nothing to animate
+    if ( hero == nullptr ) {
         return;
+    }
+
+    // Render the first animation frame. We do it here not to skip small animations with duration for 1 frame.
+    // For such (one frame) animations we are already ad the end of animation and `isFinishFrame()` always will return true.
+    Redraw();
 
     LocalEvent & le = LocalEvent::Get();
 
     // We need to wait this delay before rendering the first frame of hero animation.
     Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
 
-    // 'BATTLE_OPPONENTS_DELAY' is more than 2 times the value of 'BATTLE_IDLE_DELAY', so we need to handle the idle animation separately in this loop.
+    // 'BATTLE_OPPONENTS_DELAY' is different than 'BATTLE_IDLE_DELAY', so we handle the idle animation separately in this loop.
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_OPPONENTS_DELAY, Game::BATTLE_IDLE_DELAY } ) ) ) {
         // Animate the idling units.
         if ( IdleTroopsAnimation() ) {
@@ -3329,15 +3334,15 @@ void Battle::Interface::AnimateOpponents( OpponentSprite * target )
         }
 
         if ( Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
-            // Render before switching to the next frame.
-            Redraw();
-
-            if ( target->isFinishFrame() ) {
+            if ( hero->isFinishFrame() ) {
                 // We have reached the end of animation.
                 break;
             }
 
-            target->IncreaseAnimFrame();
+            hero->IncreaseAnimFrame();
+
+            // Render the next frame and then wait a delay before checking if it is the last frame in the animation.
+            Redraw();
         }
     }
 }
@@ -5420,6 +5425,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     fheroes2::Image battleFieldCopy;
     battleFieldCopy._disableTransformLayer();
     battleFieldCopy.resize( area.width, area.height );
+
     fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     // The death wave horizontal length in pixels.
@@ -5443,7 +5449,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     int32_t position = waveStep;
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // Prepare the blank image for the Death Wave spell effect with the transform layer equal to "0"
+    // Prepare the blank image for the Death Wave spell effect.
     fheroes2::Image spellEffect;
     spellEffect._disableTransformLayer();
     spellEffect.resize( waveLength, area.height );
@@ -5552,6 +5558,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
     fheroes2::Image battleFieldCopy;
     battleFieldCopy._disableTransformLayer();
     battleFieldCopy.resize( area.width, area.height );
+
     fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;
@@ -5689,6 +5696,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
     fheroes2::Image spriteWhitening;
     spriteWhitening._disableTransformLayer();
     spriteWhitening.resize( area.width, area.height );
+
     fheroes2::Copy( _mainSurface, area.x, area.y, spriteWhitening, 0, 0, area.width, area.height );
     fheroes2::Image spriteReddish = spriteWhitening;
 
@@ -5760,6 +5768,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     fheroes2::Image sprite;
     sprite._disableTransformLayer();
     sprite.resize( area.width, area.height );
+
     fheroes2::Copy( _mainSurface, area.x, area.y, sprite, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;

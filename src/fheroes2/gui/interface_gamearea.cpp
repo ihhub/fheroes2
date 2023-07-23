@@ -48,6 +48,7 @@
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "maps_tiles_render.h"
 #include "pal.h"
 #include "players.h"
@@ -1074,7 +1075,7 @@ Interface::ObjectFadingOutInfo::~ObjectFadingOutInfo()
     Maps::Tiles & tile = world.GetTiles( tileId );
 
     if ( tile.GetObject() == type ) {
-        tile.RemoveObjectSprite();
+        removeObjectSprite( tile );
         tile.setAsEmpty();
     }
 }

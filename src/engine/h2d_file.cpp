@@ -196,6 +196,7 @@ namespace fheroes2
         const size_t size = static_cast<size_t>( width * height );
         image.resize( width, height );
         memcpy( image.image(), data.data() + 4 + 4 + 4 + 4, size );
+        // TODO: Store in h2d images the 'isSingleLayer' state to disable and skip transform layer for such images.
         memcpy( image.transform(), data.data() + 4 + 4 + 4 + 4 + size, size );
 
         image.setPosition( x, y );
