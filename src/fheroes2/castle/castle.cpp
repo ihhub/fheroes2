@@ -890,6 +890,7 @@ void Castle::ActionNewWeekAIBonuses()
 {
     if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
         // No growth bonus can be applied.
+        return;
     }
 
     if ( !isControlAI() ) {
