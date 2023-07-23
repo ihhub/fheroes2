@@ -43,7 +43,7 @@ namespace MultiThreading
     {
         if ( _worker ) {
             {
-                std::scoped_lock<std::mutex> lock( _mutex );
+                const std::scoped_lock<std::mutex> lock( _mutex );
 
                 _exitFlag = true;
                 _runFlag = true;
@@ -68,7 +68,7 @@ namespace MultiThreading
         assert( manager != nullptr );
 
         {
-            std::scoped_lock<std::mutex> lock( manager->_mutex );
+            const std::scoped_lock<std::mutex> lock( manager->_mutex );
 
             manager->_runFlag = false;
         }
@@ -87,7 +87,7 @@ namespace MultiThreading
             }
 
             {
-                std::scoped_lock<std::mutex> lock( manager->_mutex );
+                const std::scoped_lock<std::mutex> lock( manager->_mutex );
 
                 const bool moreTasks = manager->prepareTask();
                 if ( !moreTasks ) {
