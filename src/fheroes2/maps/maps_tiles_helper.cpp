@@ -187,6 +187,46 @@ namespace
 
         tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( mons.GetID() - 1 ) ); // ICN::MONS32 starts from PEASANT
     }
+
+    void removeJailSprite( Maps::Tiles & tile )
+    {
+        assert( tile.GetObject() == MP2::OBJ_JAIL );
+
+        // remove left sprite
+        if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
+            const int32_t left = Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT );
+            world.GetTiles( left ).Remove( tile.GetObjectUID() );
+
+            // remove left left sprite
+            if ( Maps::isValidDirection( left, Direction::LEFT ) )
+                world.GetTiles( Maps::GetDirectionIndex( left, Direction::LEFT ) ).Remove( tile.GetObjectUID() );
+        }
+
+        // remove top sprite
+        if ( Maps::isValidDirection( tile.GetIndex(), Direction::TOP ) ) {
+            const int32_t top = Maps::GetDirectionIndex( tile.GetIndex(), Direction::TOP );
+            Maps::Tiles & topTile = world.GetTiles( top );
+            topTile.Remove( tile.GetObjectUID() );
+
+            if ( topTile.GetObject() == MP2::OBJ_JAIL ) {
+                topTile.setAsEmpty();
+                topTile.FixObject();
+            }
+
+            // remove top left sprite
+            if ( Maps::isValidDirection( top, Direction::LEFT ) ) {
+                Maps::Tiles & leftTile = world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) );
+                leftTile.Remove( tile.GetObjectUID() );
+
+                if ( leftTile.GetObject() == MP2::OBJ_JAIL ) {
+                    leftTile.setAsEmpty();
+                    leftTile.FixObject();
+                }
+            }
+        }
+
+        tile.Remove( tile.GetObjectUID() );
+    }
 }
 
 namespace Maps
@@ -1722,5 +1762,45 @@ namespace Maps
         restoreMineObjectType( Direction::TOP );
         restoreMineObjectType( Direction::TOP_LEFT );
         restoreMineObjectType( Direction::TOP_RIGHT );
+    }
+
+    void removeObjectSprite( Tiles & tile )
+    {
+        switch ( tile.GetObject() ) {
+        case MP2::OBJ_MONSTER:
+            tile.Remove( tile.GetObjectUID() );
+            break;
+        case MP2::OBJ_JAIL:
+            removeJailSprite( tile );
+            tile.resetPassability();
+            break;
+        case MP2::OBJ_ARTIFACT: {
+            const uint32_t uidArtifact = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNARTI );
+            tile.Remove( uidArtifact );
+
+            if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) )
+                world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ).Remove( uidArtifact );
+            break;
+        }
+        case MP2::OBJ_TREASURE_CHEST:
+        case MP2::OBJ_RESOURCE: {
+            const uint32_t uidResource = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNRSRC );
+            tile.Remove( uidResource );
+
+            if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) )
+                world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ).Remove( uidResource );
+            break;
+        }
+        case MP2::OBJ_BARRIER:
+            tile.resetPassability();
+            [[fallthrough]];
+        default:
+            // remove shadow sprite from left cell
+            if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) )
+                world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ).Remove( tile.GetObjectUID() );
+
+            tile.Remove( tile.GetObjectUID() );
+            break;
+        }
     }
 }

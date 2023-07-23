@@ -370,12 +370,28 @@ public:
     int GetLevelSkill( int ) const override;
     uint32_t GetSecondaryValues( int skill ) const override;
     void LearnSkill( const Skill::Secondary & );
-    Skill::SecSkills & GetSecondarySkills();
+
+    Skill::SecSkills & GetSecondarySkills()
+    {
+        return secondary_skills;
+    }
 
     bool PickupArtifact( const Artifact & );
-    bool HasUltimateArtifact() const;
-    uint32_t GetCountArtifacts() const;
-    bool IsFullBagArtifacts() const;
+
+    bool HasUltimateArtifact() const
+    {
+        return bag_artifacts.ContainUltimateArtifact();
+    }
+
+    uint32_t GetCountArtifacts() const
+    {
+        return bag_artifacts.CountArtifacts();
+    }
+
+    bool IsFullBagArtifacts() const
+    {
+        return bag_artifacts.isFull();
+    }
 
     int GetMobilityIndexSprite() const;
 

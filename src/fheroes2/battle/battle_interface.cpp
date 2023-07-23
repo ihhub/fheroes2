@@ -3056,6 +3056,7 @@ void Battle::Interface::FadeArena( const bool clearMessageLog )
 
     const fheroes2::Rect srt = border.GetArea();
     fheroes2::Image top( srt.width, srt.height );
+    top._disableTransformLayer();
 
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.width, srt.height );
     fheroes2::FadeDisplayWithPalette( top, srt.getPosition(), 5, 300, 5 );
@@ -4390,6 +4391,9 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
             opponent->SetAnimation( isCastDown ? OP_CAST_DOWN_RETURN : OP_CAST_UP_RETURN );
         }
         AnimateOpponents( opponent );
+
+        // Return to the static animation of hero.
+        opponent->SetAnimation( OP_STATIC );
     }
 }
 
@@ -5441,6 +5445,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     }
 
     fheroes2::Image battleFieldCopy( area.width, area.height );
+    battleFieldCopy._disableTransformLayer();
     fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     // The death wave horizontal length in pixels.
@@ -5466,7 +5471,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
 
     // Prepare the blank image for the Death Wave spell effect with the transform layer equal to "0"
     fheroes2::Image spellEffect( waveLength, area.height );
-    std::fill( spellEffect.transform(), spellEffect.transform() + static_cast<size_t>( waveLength * area.height ), static_cast<uint8_t>( 0 ) );
+    spellEffect._disableTransformLayer();
 
     AudioManager::PlaySound( M82::MNRDEATH );
 
@@ -5570,6 +5575,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
     }
 
     fheroes2::Image battleFieldCopy( area.width, area.height );
+    battleFieldCopy._disableTransformLayer();
     fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;
@@ -5706,6 +5712,8 @@ void Battle::Interface::RedrawActionArmageddonSpell()
 
     fheroes2::Image spriteWhitening( area.width, area.height );
     fheroes2::Image spriteReddish( area.width, area.height );
+    spriteWhitening._disableTransformLayer();
+    spriteReddish._disableTransformLayer();
     fheroes2::Copy( _mainSurface, area.x, area.y, spriteWhitening, 0, 0, area.width, area.height );
     fheroes2::Copy( _mainSurface, area.x, area.y, spriteReddish, 0, 0, area.width, area.height );
 
@@ -5775,6 +5783,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     cursor.SetThemes( Cursor::WAR_POINTER );
 
     fheroes2::Image sprite( area.width, area.height );
+    sprite._disableTransformLayer();
     fheroes2::Copy( _mainSurface, area.x, area.y, sprite, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;
