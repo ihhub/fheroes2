@@ -352,8 +352,6 @@ namespace fheroes2
                 ++data;
             }
             else if ( 0x80 > *data ) { // 0x01-0x7F - repeat a pixel N times
-                noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= width );
-
                 const uint8_t pixelCount = *data;
                 ++data;
 
