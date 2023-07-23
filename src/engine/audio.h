@@ -57,9 +57,6 @@ namespace Mixer
 
     void setVolume( const int channelId, const int volumePercentage );
 
-    // Stop playing sound in a channel after fading it out for a specified time in milliseconds.
-    void fadeOutChannel( const int channelId, const int timeMs );
-
     void Pause( const int channelId = -1 );
     void Resume( const int channelId = -1 );
     void Stop( const int channelId = -1 );

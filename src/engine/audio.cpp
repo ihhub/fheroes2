@@ -65,10 +65,12 @@ namespace
         uint16_t format = AUDIO_S16;
         // Stereo audio support
         int channels = 2;
-
-        // Value greater than 1024 causes audio distortion on Android.
-        // Also value greater than 1024 causes clicks in sound during fade.
+#if defined( ANDROID )
+        // Value greater than 1024 causes audio distortion on Android
         int chunkSize = 1024;
+#else
+        int chunkSize = 2048;
+#endif
     };
 
     std::atomic<bool> isInitialized{ false };
@@ -912,15 +914,6 @@ void Mixer::setVolume( const int channelId, const int volumePercentage )
 
     if ( channel < savedMixerVolumes.size() ) {
         savedMixerVolumes[channel] = volume;
-    }
-}
-
-void Mixer::fadeOutChannel( const int channelId, const int timeMs )
-{
-    const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
-
-    if ( isInitialized && Mix_Playing( channelId ) > 0 ) {
-        Mix_FadeOutChannel( channelId, timeMs );
     }
 }
 

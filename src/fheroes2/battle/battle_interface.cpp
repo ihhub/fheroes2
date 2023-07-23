@@ -348,42 +348,6 @@ namespace
 
         return result;
     }
-
-    // The first move audio channel plays sound until it ends, if both sounds are playing then sound in the second channel is interrupted at every step (function call).
-    // If 'oneSimultaneousSound' is set to true the second channel will not be used and there will be no simultaneous sounds from one creature's move.
-    void playMoveSound( std::array<int, 2> & moveSounds, const int walkSoundId, const int soundFadeTimeMs, const bool oneSimultaneousSound )
-    {
-        if ( oneSimultaneousSound ) {
-            // Do not star sounds in the second channel and start sound in the first channel only if previous sound is finished.
-            if ( ( moveSounds[0] == -1 ) || !Mixer ::isPlaying( moveSounds[0] ) ) {
-                moveSounds[0] = AudioManager::PlaySound( walkSoundId );
-            }
-
-            return;
-        }
-
-        if ( ( moveSounds[0] != -1 ) && Mixer ::isPlaying( moveSounds[0] ) ) {
-            // The walk sound is playing in the first channel.
-            if ( ( moveSounds[1] != -1 ) ) {
-                // The walk sound is also playing in the second channel. Fade it out and stop.
-                Mixer::fadeOutChannel( moveSounds[1], soundFadeTimeMs );
-            }
-
-            // Start a new walk sound in the second channel.
-            moveSounds[1] = AudioManager::PlaySound( walkSoundId );
-        }
-        else {
-            if ( ( moveSounds[1] != -1 ) || Mixer::isPlaying( moveSounds[1] ) ) {
-                // The walk sound playing is playing only in the second channel. Make it the first channel and start walk sound in the second one.
-                moveSounds[0] = moveSounds[1];
-                moveSounds[1] = AudioManager::PlaySound( walkSoundId );
-            }
-            else {
-                // There is no walk sound playing in both channels. Start walk sound in the first channel.
-                moveSounds[0] = AudioManager::PlaySound( walkSoundId );
-            }
-        }
-    }
 }
 
 namespace Battle
@@ -3885,11 +3849,6 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     unit.SwitchAnimation( Monster_Info::MOVING );
 
     const uint64_t movementAnimationDelay = frameDelay / unit.animation.animationLength();
-
-    // If movement animation frame rate is more then 100 Hz (delay is less than 10 ms)
-    // we consider this as High Battle Speed and do not play any simultaneous sound while unit is moving.
-    const bool isHighBatleSpeed = movementAnimationDelay < 10;
-
     Game::setCustomUnitMovementDelay( movementAnimationDelay );
 
     std::string msg = _( "Moved %{monster}: from [%{src}] to [%{dst}]." );
@@ -3998,10 +3957,16 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         }
     }
 
-    // We allow to play maximum 2 simultaneous walk sounds. '-1' means that the channel is not set.
-    std::array<int, 2> walkSounds{ -1, -1 };
-    // Set sound fade out time: 400 ms for battle speed 1 - 200 ms for battle speed 10.
-    const int soundFadeTimeMs = 3600 / ( Settings::Get().BattleSpeed() + 8 );
+    // If the frame rate is more than 50 fps (20 ms frame delay) we play sound by sound
+    // without checking the sound duration calculations as some monitors may use 50 Hz refresh rate
+    // with V-sync turned on (or a low CPU system may not allow so high FPS).
+    const bool playSoundBySound = movementAnimationDelay < 20;
+    const int walkSoundId = unit.M82Move();
+    const uint32_t cellCountForOneSound = AudioManager::getSoundDurationMs( walkSoundId ) / frameDelay;
+    int soundStatus = -1;
+
+    COUT( "movement time = " << frameDelay << " ms, each frame delay = " << movementAnimationDelay
+                             << " ms sound time = " << AudioManager::getSoundDurationMs( walkSoundId ) << " ms, cell count = " << cellCountForOneSound )
 
     while ( dst != pathEnd ) {
         // Check if a wide unit changes its horizontal direction.
@@ -4045,13 +4010,17 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         }
 
         // Limit the simultaneous walk sounds.
-        playMoveSound( walkSounds, unit.M82Move(), soundFadeTimeMs, isHighBatleSpeed );
-
-        if ( ( dst == finalStep && pathSize > 1 ) || ( isWide && dst == ( finalStep - 1 ) && pathSize > 3 ) ) {
-            // If there is more then 3 steps in path backwards for wide creature (turn, do more than 1 step, turn back)
-            // and it is the last step before the turn back or if there is more then 1 step in path and it is the last step
-            // then stop sound in the first channel with fade to avoid "echo" effect at the end of path.
-            Mixer::fadeOutChannel( walkSounds[0], soundFadeTimeMs );
+        if ( playSoundBySound ) {
+            if ( soundStatus < 0 || !Mixer::isPlaying( soundStatus ) ) {
+                soundStatus = AudioManager::PlaySound( walkSoundId );
+            }
+        }
+        else {
+            if ( soundStatus < 1 ) {
+                AudioManager::PlaySound( walkSoundId );
+                soundStatus = cellCountForOneSound;
+            }
+            --soundStatus;
         }
 
         AnimateUnitWithDelay( unit );
@@ -4189,21 +4158,31 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         ++currentPoint;
     }
 
-    // If movement animation frame rate is more then 100 Hz (delay is less than 10 ms)
-    // we consider this as High Battle Speed and do not play any simultaneous sound while unit is moving.
-    const bool isHighBatleSpeed = movementAnimationDelay < 10;
-
-    // We allow to play maximum 2 simultaneous walk sounds. '-1' means that the channel is not set.
-    std::array<int, 2> flySounds{ -1, -1 };
-    // Set sound fade out time: 400 ms for battle speed 1 - 200 ms for battle speed 10.
-    const int soundFadeTimeMs = 3600 / ( Settings::Get().BattleSpeed() + 8 );
+    // If the frame rate is more than 50 fps (20 ms frame delay) we play sound by sound
+    // without checking the sound duration calculations as some monitors may use 50 Hz refresh rate
+    // with V-sync turned on (or a low CPU system may not allow so high FPS).
+    const bool playSoundBySound = movementAnimationDelay < 20;
+    const int flySoundId = unit.M82Move();
+    const uint32_t cellCountForOneSound = AudioManager::getSoundDurationMs( flySoundId ) / frameDelay;
+    int soundStatus = -1;
 
     unit.SwitchAnimation( Monster_Info::MOVING );
     while ( currentPoint != points.end() ) {
         _movingPos = *currentPoint;
 
-        // Limit the simultaneous fly sounds.
-        playMoveSound( flySounds, unit.M82Move(), soundFadeTimeMs, isHighBatleSpeed );
+        // Limit the simultaneous walk sounds.
+        if ( playSoundBySound ) {
+            if ( soundStatus < 0 || !Mixer::isPlaying( soundStatus ) ) {
+                soundStatus = AudioManager::PlaySound( flySoundId );
+            }
+        }
+        else {
+            if ( soundStatus < 1 ) {
+                AudioManager::PlaySound( flySoundId );
+                soundStatus = cellCountForOneSound;
+            }
+            --soundStatus;
+        }
 
         unit.animation.restartAnimation();
         AnimateUnitWithDelay( unit );

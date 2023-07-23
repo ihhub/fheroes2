@@ -93,6 +93,9 @@ namespace AudioManager
     int PlaySound( const int m82 );
     void PlaySoundAsync( const int m82 );
 
+    // Returns specified sound duration in milliseconds (rounded down to integer).
+    uint32_t getSoundDurationMs( const int m82 );
+
     // Returns true if an external music file is available for the music track with the specified ID, otherwise returns false.
     bool isExternalMusicFileAvailable( const int trackId );
 
