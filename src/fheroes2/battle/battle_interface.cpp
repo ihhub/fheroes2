@@ -4292,7 +4292,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
             RedrawActionResurrectSpell( *target, spell );
         else
             switch ( spell.GetID() ) {
-                // simple spell animation
+            // simple spell animation
             case Spell::BLESS:
                 RedrawTroopWithFrameAnimation( *target, ICN::BLESS, M82::FromSpell( spell.GetID() ), NONE );
                 break;
@@ -4339,7 +4339,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
                 RedrawTroopWithFrameAnimation( *target, ICN::BERZERK, M82::FromSpell( spell.GetID() ), NONE );
                 break;
 
-                // uniq spell animation
+            // uniq spell animation
             case Spell::LIGHTNINGBOLT:
                 RedrawActionLightningBoltSpell( *target );
                 break;
@@ -6269,7 +6269,7 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
 void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & actions )
 {
     switch ( result ) {
-        // cast
+    // cast
     case 1: {
         const HeroBase * hero = _currentUnit->GetCurrentOrArmyCommander();
 
@@ -6324,7 +6324,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
         break;
     }
 
-        // retreat
+    // retreat
     case 2: {
         if ( arena.CanRetreatOpponent( _currentUnit->GetCurrentOrArmyColor() ) ) {
             if ( Dialog::YES == Dialog::Message( "", _( "Are you sure you want to retreat?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
@@ -6339,7 +6339,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
         break;
     }
 
-        // surrender
+    // surrender
     case 3: {
         if ( arena.CanSurrenderOpponent( _currentUnit->GetCurrentOrArmyColor() ) ) {
             const HeroBase * enemy = arena.getEnemyCommander( arena.GetCurrentColor() );

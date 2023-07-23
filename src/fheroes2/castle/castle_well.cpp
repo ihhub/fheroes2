@@ -291,7 +291,6 @@ void Castle::OpenWell()
 
             _wellRedrawMonsterAnimation( roi, monsterAnimInfo );
 
-            buttonExit.draw();
             buttonMax.draw();
             buttonExit.draw();
             display.render( roi );

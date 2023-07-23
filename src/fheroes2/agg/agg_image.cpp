@@ -484,25 +484,6 @@ namespace
         std::fill( imageTransform + ( imageHeight - 1 ) * imageWidth - 3, imageTransform + ( imageHeight - 1 ) * imageWidth, transparencyValue );
         std::fill( imageTransform + imageHeight * imageWidth - 4, imageTransform + imageHeight * imageWidth, transparencyValue );
     }
-
-    // Checks if all values in transform layer are 0 (zero). For single-layer images returns true.
-    bool isTransformLayerNotUsed( const fheroes2::Sprite & image )
-    {
-        if ( image.singleLayer() ) {
-            return true;
-        }
-
-        const uint8_t * transformLayer = image.transform();
-        const size_t size = static_cast<size_t>( image.width() ) * image.height();
-
-        for ( size_t transformIndex = 0; transformIndex < size; ++transformIndex ) {
-            if ( transformLayer[transformIndex] != 0 ) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 }
 
 namespace fheroes2
@@ -2536,9 +2517,6 @@ namespace fheroes2
             case ICN::HSICONS:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 7 ) {
-                    // The first sprite has no transparency.
-                    _icnVsSprite[id][0]._disableTransformLayer();
-
                     Sprite & out = _icnVsSprite[id][7];
                     if ( out.width() == 34 && out.height() == 19 ) {
                         Sprite temp;
@@ -2825,7 +2803,7 @@ namespace fheroes2
                 }
                 return true;
             case ICN::MINICAPT:
-                // Barbarian captain mini icon has  bad pixel at position 22x2.
+                // Barbarian captain mini icon has bad pixel at position 22x2.
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 1 ) {
                     Sprite & original = _icnVsSprite[id][1];
@@ -3367,7 +3345,6 @@ namespace fheroes2
             case ICN::ARTIFACT:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 99 ) {
-                    // Convert 88 and 99 images to single-layer.
                     // This fixes "Arm of the Martyr" (#88) and " Sphere of Negation" (#99) artifacts rendering which initially has some incorrect transparent pixels.
                     for ( const int32_t index : { 88, 99 } ) {
                         Sprite & originalImage = _icnVsSprite[id][index];
