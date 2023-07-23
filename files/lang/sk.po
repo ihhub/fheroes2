@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? "
 "1 : 2 );\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -1604,10 +1604,10 @@ msgid "campaignBonus|Major Scroll"
 msgstr "Hlavný zvitok"
 
 msgid "campaignBonus|Medal of Honor"
-msgstr "Medaila za česť"
+msgstr "Medaila cti"
 
 msgid "campaignBonus|Medal of Valor"
-msgstr "Medaila za odvahu"
+msgstr "Medaila za statočnosť"
 
 msgid "campaignBonus|Minor Scroll"
 msgstr "Menší zvitok"
@@ -3508,45 +3508,37 @@ msgid "Quit out of the map editor."
 msgstr ""
 
 msgid "Ocean Objects"
-msgstr ""
+msgstr "Objekty oceánu"
 
 msgid "Grass Objects"
-msgstr ""
+msgstr "Objekty trávy"
 
 msgid "Snow Objects"
-msgstr ""
+msgstr "Objekty snehu"
 
 msgid "Swamp Objects"
-msgstr ""
+msgstr "Objekty močiara"
 
 msgid "Lava Objects"
-msgstr ""
+msgstr "Objekty lávy"
 
 msgid "Desert Objects"
-msgstr ""
+msgstr "Objekty púšte"
 
 msgid "Dirt Objects"
-msgstr ""
+msgstr "Objekty hliny"
 
 msgid "Wasteland Objects"
-msgstr ""
+msgstr "Objekty pustatiny"
 
 msgid "Beach Objects"
-msgstr ""
+msgstr "Objekty pláže"
 
-#, fuzzy
 msgid "Towns"
-msgstr "Mesto"
+msgstr "Mestá"
 
-msgid "Heroes"
-msgstr "Hrdinovia"
-
-msgid "Artifacts"
-msgstr "Artefakty"
-
-#, fuzzy
 msgid "Treasures"
-msgstr "Poklad"
+msgstr "Poklady"
 
 msgid ""
 "Draws terrain in\n"
@@ -3558,17 +3550,14 @@ msgid ""
 "%{size} by %{size} square increments."
 msgstr ""
 
-#, fuzzy
 msgid "Small Brush"
-msgstr "Malé mapy"
+msgstr "Malý štetec"
 
-#, fuzzy
 msgid "Medium Brush"
-msgstr "Stredné mapy"
+msgstr "Stredný štetec"
 
-#, fuzzy
 msgid "Large Brush"
-msgstr "Veľké mapy"
+msgstr "Veľký štetec"
 
 msgid "Area Fill"
 msgstr ""
@@ -3646,12 +3635,11 @@ msgstr ""
 msgid "Allows you to draw roads by clicking and dragging."
 msgstr ""
 
-#, fuzzy
 msgid "Road Mode"
-msgstr "Cesta"
+msgstr "Cestný režim"
 
 msgid "Erase Mode"
-msgstr ""
+msgstr "Režim mazania"
 
 msgid "Used to erase objects off the map."
 msgstr ""
@@ -3699,7 +3687,7 @@ msgid "Cancel back to the main menu."
 msgstr ""
 
 msgid "From Scratch"
-msgstr ""
+msgstr "Od nuly"
 
 msgid "Start from scratch with a blank map."
 msgstr ""
@@ -3711,10 +3699,10 @@ msgid "Random"
 msgstr ""
 
 msgid "Cancel back to the Map Editor main menu."
-msgstr ""
+msgstr "Zrušenie a návrat do hlavnej ponuky Editora máp."
 
 msgid "No maps available!"
-msgstr ""
+msgstr "Žiadne dostupné mapy!"
 
 msgid "Warning"
 msgstr "Pozor"
@@ -5642,7 +5630,7 @@ msgstr ""
 msgid ""
 "A drink at the well is supposed to restore your spell points, but you are "
 "already at maximum."
-msgstr "Pitie zo studne ti má obnoviť body kúzliel, ale ty už máš maximum.\""
+msgstr "Pitie zo studne ti má obnoviť body kúzliel, ale ty už máš maximum."
 
 msgid "A second drink at the well in one day will not help you."
 msgstr "Druhé pitie v studni v jeden deň ti nepomôže."
@@ -6115,7 +6103,7 @@ msgid ""
 msgstr ""
 
 msgid " and "
-msgstr ""
+msgstr " a "
 
 msgid ""
 "All of the %{monsters} you have in your army have been trained by the battle "
@@ -6640,7 +6628,7 @@ msgid "skill|Advanced"
 msgstr "Pokročilý"
 
 msgid "skill|Expert"
-msgstr ""
+msgstr "Expert"
 
 msgid "Pathfinding"
 msgstr "Hľad. ciest"
@@ -7288,7 +7276,7 @@ msgid "Beach"
 msgstr "Pláž"
 
 msgid "Lava"
-msgstr ""
+msgstr "Láva"
 
 msgid "Dirt"
 msgstr "Hlina"
@@ -7297,7 +7285,7 @@ msgid "Grass"
 msgstr "Tráva"
 
 msgid "Ocean"
-msgstr ""
+msgstr "Oceán"
 
 msgid "maps|Small"
 msgstr "Malá"
@@ -7333,7 +7321,7 @@ msgid "Mine"
 msgstr "Baňa"
 
 msgid "Burma shave."
-msgstr ""
+msgstr "Barmské holenie."
 
 msgid "Next sign 50 miles."
 msgstr "Ďalšia značka o 50 míľ."
@@ -7345,7 +7333,7 @@ msgid "This space for rent."
 msgstr "Tieto priestory na prenájom."
 
 msgid "No object"
-msgstr ""
+msgstr "Nič"
 
 msgid "Alchemist Lab"
 msgstr "Alchymistické laboratórium"
@@ -7366,13 +7354,13 @@ msgid "Treasure Chest"
 msgstr "Truhlica s pokladom"
 
 msgid "Faerie Ring"
-msgstr ""
+msgstr "Vílý kruh"
 
 msgid "Campfire"
 msgstr "Táborák"
 
 msgid "Fountain"
-msgstr ""
+msgstr "Fontána"
 
 msgid "Gazebo"
 msgstr "Altánok"
@@ -7384,13 +7372,13 @@ msgid "Archer's House"
 msgstr "Lukostrelecký dom"
 
 msgid "Goblin Hut"
-msgstr ""
+msgstr "Chata Goblinov"
 
 msgid "Dwarf Cottage"
-msgstr ""
+msgstr "Trpasličia chalúpka"
 
 msgid "Peasant Hut"
-msgstr ""
+msgstr "Sedliacka chatrč"
 
 msgid "Stables"
 msgstr "Stajne"
@@ -7510,10 +7498,10 @@ msgid "Random Monster - very strong"
 msgstr ""
 
 msgid "Nothing Special"
-msgstr ""
+msgstr "Nič zvláštne"
 
 msgid "Mossy Rock"
-msgstr ""
+msgstr "Machový kameň"
 
 msgid "Watch Tower"
 msgstr "Strážna veža"
@@ -7567,16 +7555,16 @@ msgid "Shrine of the Third Circle"
 msgstr "Svätyňa tretieho kruhu"
 
 msgid "City of the Dead"
-msgstr ""
+msgstr "Mesto mŕtvych"
 
 msgid "Sphinx"
-msgstr ""
+msgstr "Sfinga"
 
 msgid "Wagon"
-msgstr ""
+msgstr "Voz"
 
 msgid "Tar Pit"
-msgstr ""
+msgstr "Smolná jama"
 
 msgid "Artesian Spring"
 msgstr "Artézsky prameň"
@@ -7591,7 +7579,7 @@ msgid "Witch's Hut"
 msgstr "Ježibabin domček"
 
 msgid "Xanadu"
-msgstr ""
+msgstr "Xanadu"
 
 msgid "Lean-To"
 msgstr "Prístrešok"
@@ -7600,19 +7588,19 @@ msgid "Magellan's Maps"
 msgstr "Magalhaesove mapy"
 
 msgid "Flotsam"
-msgstr ""
+msgstr "Vyhodený náklad"
 
 msgid "Derelict Ship"
-msgstr ""
+msgstr "Opustená loď"
 
 msgid "Shipwreck Survivor"
-msgstr ""
+msgstr "Trosečník"
 
 msgid "Bottle"
-msgstr ""
+msgstr "Fľaša"
 
 msgid "Magic Well"
-msgstr ""
+msgstr "Čarovná studňa"
 
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
@@ -7621,73 +7609,73 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "Observation Tower"
-msgstr ""
+msgstr "Rozhľadňa"
 
 msgid "Freeman's Foundry"
 msgstr "Súkromná zlievareň"
 
 msgid "Reefs"
-msgstr ""
+msgstr "Útesy"
 
 msgid "Trees"
-msgstr ""
+msgstr "Stromy"
 
 msgid "Mountains"
-msgstr ""
+msgstr "Hory"
 
 msgid "Volcano"
-msgstr ""
+msgstr "Sopka"
 
 msgid "Flowers"
-msgstr ""
+msgstr "Kvety"
 
 msgid "Rock"
-msgstr ""
+msgstr "Skala"
 
 msgid "Water Lake"
-msgstr ""
+msgstr "Jazero s vodou"
 
 msgid "Mandrake"
-msgstr ""
+msgstr "Mandragora"
 
 msgid "Dead Tree"
-msgstr ""
+msgstr "Odumretý strom"
 
 msgid "Stump"
-msgstr ""
+msgstr "Peň"
 
 msgid "Crater"
-msgstr ""
+msgstr "Kráter"
 
 msgid "Cactus"
-msgstr ""
+msgstr "Kaktus"
 
 msgid "Mound"
-msgstr ""
+msgstr "Mohyla"
 
 msgid "Dune"
-msgstr ""
+msgstr "Duna"
 
 msgid "Lava Pool"
-msgstr ""
+msgstr "Lávové jazierko"
 
 msgid "Shrub"
-msgstr ""
+msgstr "Krík"
 
 msgid "Barrow Mounds"
-msgstr ""
+msgstr "Norné mohyly"
 
 msgid "Random Artifact - Treasure"
-msgstr ""
+msgstr "Náhodný artefakt - Poklad"
 
 msgid "Random Artifact - Minor"
-msgstr ""
+msgstr "Náhodný artefakt - Menší"
 
 msgid "Random Artifact - Major"
-msgstr ""
+msgstr "Náhodný artefakt - Väčší"
 
 msgid "Barrier"
-msgstr ""
+msgstr "Bariéra"
 
 msgid "Traveller's Tent"
 msgstr "Cestovateľský stan"
@@ -7708,10 +7696,10 @@ msgid "Water Summoning Altar"
 msgstr "Oltár vyvolávania vody"
 
 msgid "Unknown Monster"
-msgstr ""
+msgstr "Neznámy bojovník"
 
 msgid "Unknown Monsters"
-msgstr ""
+msgstr "Neznámi bojovníci"
 
 msgid "Peasant"
 msgstr "Roľník"
@@ -8272,7 +8260,7 @@ msgid "This item can't be traded."
 msgstr "Tento predmet sa nedá zameniť."
 
 msgid "Invalid Artifact"
-msgstr ""
+msgstr "Neplatný artefakt"
 
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} zvyšuje tvoje vedomosti o %{count}."
@@ -8366,7 +8354,7 @@ msgstr ""
 "Opatrne sa priblížiš k mŕtvole a pridáš brošňu do svojho inventára."
 
 msgid "Medal of Valor"
-msgstr "Medaila za odvahu"
+msgstr "Medaila za statočnosť"
 
 msgid "The %{name} increases your morale by %{count}."
 msgstr "%{name} zvyšuje tvoju morálku o %{count}."
@@ -8377,7 +8365,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Courage"
-msgstr "Medaila za guráž"
+msgstr "Medaila za odvahu"
 
 msgid ""
 "After saving a young boy from a vicious pack of Wolves, you return him to "
@@ -8385,7 +8373,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Honor"
-msgstr "Medaila za česť"
+msgstr "Medaila cti"
 
 msgid ""
 "After freeing a princess of a neighboring kingdom from the evil clutches of "
@@ -8393,7 +8381,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Distinction"
-msgstr "Medaila vyznamenania"
+msgstr "Medaila za zásluhy"
 
 msgid ""
 "Ridding the countryside of the hideous Minotaur who made a sport of eating "
@@ -8847,7 +8835,7 @@ msgid ""
 msgstr ""
 
 msgid "Ankh"
-msgstr "Ankh"
+msgstr "Anch"
 
 msgid ""
 "The %{name} doubles the effectiveness of all your resurrect and animate "
@@ -9101,7 +9089,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Pouch of Sulfur"
-msgstr ""
+msgstr "Bezodný mešec síry"
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
 msgstr ""
@@ -9113,7 +9101,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Vial of Mercury"
-msgstr ""
+msgstr "Nekonečná fľaštička s ortuťou"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
 msgstr ""
@@ -9125,7 +9113,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Pouch of Gems"
-msgstr ""
+msgstr "Bezodný mešec drahokamov"
 
 msgid "The %{name} provides %{count} unit of gems per day."
 msgstr ""
@@ -9138,7 +9126,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Cord of Wood"
-msgstr ""
+msgstr "Nekonečná fúra dreva"
 
 msgid "The %{name} provides %{count} unit of wood per day."
 msgstr ""
@@ -9151,7 +9139,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Cart of Ore"
-msgstr ""
+msgstr "Nekonečný vozík s rudou"
 
 msgid "The %{name} provides %{count} unit of ore per day."
 msgstr ""
@@ -9163,7 +9151,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Pouch of Crystal"
-msgstr ""
+msgstr "Mešec nekonečného kryštálu"
 
 msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr ""
@@ -9176,7 +9164,7 @@ msgid ""
 msgstr ""
 
 msgid "Spiked Helm"
-msgstr ""
+msgstr "Ostnatá prilba"
 
 msgid ""
 "Your army is ambushed by a small tribe of wild (and none too bright) Orcs. "
@@ -9186,7 +9174,7 @@ msgid ""
 msgstr ""
 
 msgid "Spiked Shield"
-msgstr ""
+msgstr "Ostnatý štít"
 
 msgid ""
 "You come upon a bridge spanning a dry gully. Before you can cross, a Troll "
@@ -9196,7 +9184,7 @@ msgid ""
 msgstr ""
 
 msgid "White Pearl"
-msgstr ""
+msgstr "Biela perla"
 
 msgid ""
 "A walk across a dry saltwater lake bed yields an unlikely prize:  A white "
@@ -9204,7 +9192,7 @@ msgid ""
 msgstr ""
 
 msgid "Black Pearl"
-msgstr ""
+msgstr "Čierna perla"
 
 msgid ""
 "Rumors of a Griffin of unusual size preying upon the countryside lead you to "
@@ -9213,7 +9201,7 @@ msgid ""
 msgstr ""
 
 msgid "Magic Book"
-msgstr ""
+msgstr "Kniha kúziel"
 
 msgid "The %{name} enables you to cast spells."
 msgstr ""
@@ -9222,7 +9210,7 @@ msgid "Dummy 1"
 msgstr ""
 
 msgid "The reserved artifact."
-msgstr ""
+msgstr "Vyhradený artefakt."
 
 msgid "Dummy 2"
 msgstr ""
@@ -9234,12 +9222,14 @@ msgid "Dummy 4"
 msgstr ""
 
 msgid "Spell Scroll"
-msgstr ""
+msgstr "Zvitok s kúzlom"
 
 msgid ""
 "This %{name} gives your hero the ability to cast the %{spell} spell if your "
 "hero has a Magic Book."
 msgstr ""
+"Tento %{name} dáva tvojmu hrdinovi schopnosť zoslať kúzlo %{spell}, ak má "
+"tvoj hrdina Magickú knihu."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -9304,7 +9294,7 @@ msgid ""
 msgstr ""
 
 msgid "Battle Garb of Anduran"
-msgstr ""
+msgstr "Anduranov bojový odev"
 
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts.  It provides "
@@ -9318,7 +9308,7 @@ msgid ""
 msgstr ""
 
 msgid "Crystal Ball"
-msgstr ""
+msgstr "Krištáľová guľa"
 
 msgid ""
 "The %{name} lets you get more specific information about monsters, enemy "
@@ -9334,7 +9324,7 @@ msgid ""
 msgstr ""
 
 msgid "Heart of Fire"
-msgstr ""
+msgstr "Ohnivé srdce"
 
 msgid ""
 "The %{name} provides %{count} percent protection from fire, but doubles the "
@@ -9349,7 +9339,7 @@ msgid ""
 msgstr ""
 
 msgid "Heart of Ice"
-msgstr ""
+msgstr "Ľadové srdce"
 
 msgid ""
 "The %{name} provides %{count} percent protection from cold, but doubles the "
@@ -9365,7 +9355,7 @@ msgid ""
 msgstr ""
 
 msgid "Helmet of Anduran"
-msgstr ""
+msgstr "Anduranova prilba"
 
 msgid ""
 "You spy a gleaming object poking up out of the ground. You send a member of "
@@ -9375,7 +9365,7 @@ msgid ""
 msgstr ""
 
 msgid "Holy Hammer"
-msgstr ""
+msgstr "Sväté kladivo"
 
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
@@ -9385,7 +9375,7 @@ msgid ""
 msgstr ""
 
 msgid "Legendary Scepter"
-msgstr ""
+msgstr "Legendárne žezlo"
 
 msgid "The %{name} adds %{count} points to all attributes."
 msgstr ""
@@ -9399,7 +9389,7 @@ msgid ""
 msgstr ""
 
 msgid "Masthead"
-msgstr ""
+msgstr "Hrot sťažňa"
 
 msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
 msgstr ""
@@ -9412,7 +9402,7 @@ msgid ""
 msgstr ""
 
 msgid "Sphere of Negation"
-msgstr ""
+msgstr "Guľa negácie"
 
 msgid "The %{name} disables all spell casting, for both sides, in combat."
 msgstr ""
@@ -9424,7 +9414,7 @@ msgid ""
 msgstr ""
 
 msgid "Staff of Wizardry"
-msgstr ""
+msgstr "Čarodejnícka palica"
 
 msgid "The %{name} boosts your spell power by %{count}."
 msgstr ""
@@ -9437,7 +9427,7 @@ msgid ""
 msgstr ""
 
 msgid "Sword Breaker"
-msgstr ""
+msgstr "Lámač mečov"
 
 msgid "The %{name} increases your defense by %{count} and attack by 1."
 msgstr ""
@@ -9456,10 +9446,10 @@ msgid ""
 msgstr ""
 
 msgid "Sword of Anduran"
-msgstr ""
+msgstr "Anduranov meč"
 
 msgid "Spade of Necromancy"
-msgstr ""
+msgstr "Rýľ nekromancie"
 
 msgid "The %{name} gives you increased necromancy skill."
 msgstr ""
@@ -9471,25 +9461,25 @@ msgid ""
 msgstr ""
 
 msgid "Wood"
-msgstr ""
+msgstr "Drevo"
 
 msgid "Mercury"
-msgstr ""
+msgstr "Ortuť"
 
 msgid "Ore"
-msgstr ""
+msgstr "Ruda"
 
 msgid "Sulfur"
-msgstr ""
+msgstr "Síra"
 
 msgid "Crystal"
-msgstr ""
+msgstr "Kryštál"
 
 msgid "Gems"
-msgstr ""
+msgstr "Drahokamy"
 
 msgid "Gold"
-msgstr ""
+msgstr "Zlato"
 
 msgid ""
 "There are seven resources in Heroes 2, used to build and improves castles, "
@@ -9505,10 +9495,10 @@ msgid ""
 msgstr ""
 
 msgid "Fireball"
-msgstr ""
+msgstr "Ohnivá guľa"
 
 msgid "Fireblast"
-msgstr ""
+msgstr "Výbuch ohňa"
 
 msgid ""
 "An improved version of fireball, fireblast affects two hexes around the "
@@ -9519,10 +9509,10 @@ msgid "Causes a bolt of electrical energy to strike the selected creature."
 msgstr ""
 
 msgid "Lightning Bolt"
-msgstr ""
+msgstr "Blesk"
 
 msgid "Chain Lightning"
-msgstr ""
+msgstr "Reťazový blesk"
 
 msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
@@ -9532,14 +9522,14 @@ msgid ""
 msgstr ""
 
 msgid "Teleport"
-msgstr ""
+msgstr "Teleport"
 
 msgid ""
 "Teleports the creature you select to any open position on the battlefield."
 msgstr ""
 
 msgid "Cure"
-msgstr ""
+msgstr "Liečenie"
 
 msgid ""
 "Removes all negative spells cast upon one of your units, and restores up to "
@@ -9547,7 +9537,7 @@ msgid ""
 msgstr ""
 
 msgid "Mass Cure"
-msgstr ""
+msgstr "Hromadné liečenie"
 
 msgid ""
 "Removes all negative spells cast upon your forces, and restores up to "
@@ -9555,19 +9545,19 @@ msgid ""
 msgstr ""
 
 msgid "Resurrect"
-msgstr ""
+msgstr "Vzkriesenie"
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
 msgstr ""
 
 msgid "Resurrect True"
-msgstr ""
+msgstr "Vzkriesenie pravé"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
 msgstr ""
 
 msgid "Haste"
-msgstr ""
+msgstr "Zhon"
 
 msgid "Increases the speed of any creature by %{count}."
 msgstr ""
@@ -9576,16 +9566,16 @@ msgid "Increases the speed of all of your creatures by %{count}."
 msgstr ""
 
 msgid "Mass Haste"
-msgstr ""
+msgstr "Hromadný zhon"
 
 msgid "Slows target to half movement rate."
 msgstr ""
 
 msgid "spell|Slow"
-msgstr ""
+msgstr "Spomalenie"
 
 msgid "Mass Slow"
-msgstr ""
+msgstr "Hromadné spomalenie"
 
 msgid "Slows all enemies to half movement rate."
 msgstr ""
@@ -9594,10 +9584,10 @@ msgid "Clouds the affected creatures' eyes, preventing them from moving."
 msgstr ""
 
 msgid "spell|Blind"
-msgstr ""
+msgstr "Slepota"
 
 msgid "Bless"
-msgstr ""
+msgstr "Požehnanie"
 
 msgid "Causes the selected creatures to inflict maximum damage."
 msgstr ""
@@ -9606,13 +9596,13 @@ msgid "Causes all of your units to inflict maximum damage."
 msgstr ""
 
 msgid "Mass Bless"
-msgstr ""
+msgstr "Hromadné požehnanie"
 
 msgid "Magically increases the defense skill of the selected creatures."
 msgstr ""
 
 msgid "Stoneskin"
-msgstr ""
+msgstr "Kamenná koža"
 
 msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
@@ -9620,47 +9610,47 @@ msgid ""
 msgstr ""
 
 msgid "Steelskin"
-msgstr ""
+msgstr "Oceľová koža"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr ""
 
 msgid "Curse"
-msgstr ""
+msgstr "Kliatba"
 
 msgid "Causes all enemy troops to inflict minimum damage."
 msgstr ""
 
 msgid "Mass Curse"
-msgstr ""
+msgstr "Hromadná kliatba"
 
 msgid "Damages all undead in the battle."
 msgstr ""
 
 msgid "Holy Word"
-msgstr ""
+msgstr "Sväté slovo"
 
 msgid ""
 "Damages all undead in the battle.  This is an improved version of Holy Word."
 msgstr ""
 
 msgid "Holy Shout"
-msgstr ""
+msgstr "Svätý výkrik"
 
 msgid "Anti-Magic"
-msgstr ""
+msgstr "Protimágia"
 
 msgid "Prevents harmful magic against the selected creatures."
 msgstr ""
 
 msgid "Dispel Magic"
-msgstr ""
+msgstr "Rozptýliť mágiu"
 
 msgid "Removes all magic spells from a single target."
 msgstr ""
 
 msgid "Mass Dispel"
-msgstr ""
+msgstr "Hromadné rozptýlenie"
 
 msgid "Removes all magic spells from all creatures."
 msgstr ""
@@ -9669,23 +9659,23 @@ msgid "Causes a magic arrow to strike the selected target."
 msgstr ""
 
 msgid "Magic Arrow"
-msgstr ""
+msgstr "Čarovný šíp"
 
 msgid "Berserker"
-msgstr ""
+msgstr "Amok"
 
 msgid "Causes a creature to attack its nearest neighbor."
 msgstr ""
 
 msgid "Armageddon"
-msgstr ""
+msgstr "Armagedon"
 
 msgid ""
 "Holy terror strikes the battlefield, causing severe damage to all creatures."
 msgstr ""
 
 msgid "Elemental Storm"
-msgstr ""
+msgstr "Búrka živlov"
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
 msgstr ""
@@ -9696,16 +9686,16 @@ msgid ""
 msgstr ""
 
 msgid "Meteor Shower"
-msgstr ""
+msgstr "Pád kameňov"
 
 msgid "Paralyze"
-msgstr ""
+msgstr "Paralýza"
 
 msgid "The targeted creatures are paralyzed, unable to move or retaliate."
 msgstr ""
 
 msgid "Hypnotize"
-msgstr ""
+msgstr "Hypnóza"
 
 msgid ""
 "Brings a single enemy unit under your control if its hits are less than "
@@ -9713,13 +9703,13 @@ msgid ""
 msgstr ""
 
 msgid "Cold Ray"
-msgstr ""
+msgstr "Lúč chladu"
 
 msgid "Drains body heat from a single enemy unit."
 msgstr ""
 
 msgid "Cold Ring"
-msgstr ""
+msgstr "Prstenec chladu"
 
 msgid ""
 "Drains body heat from all units surrounding the center point, but not "
@@ -9727,7 +9717,7 @@ msgid ""
 msgstr ""
 
 msgid "Disrupting Ray"
-msgstr ""
+msgstr "Narušujúci lúč"
 
 msgid "Reduces the defense rating of an enemy unit by three."
 msgstr ""
@@ -9736,10 +9726,10 @@ msgid "Damages all living (non-undead) units in the battle."
 msgstr ""
 
 msgid "Death Ripple"
-msgstr ""
+msgstr "Poryv smrti"
 
 msgid "Death Wave"
-msgstr ""
+msgstr "Vlna smrti"
 
 msgid ""
 "Damages all living (non-undead) units in the battle.  This spell is an "
@@ -9747,25 +9737,25 @@ msgid ""
 msgstr ""
 
 msgid "Dragon Slayer"
-msgstr ""
+msgstr "Drakobijec"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
 msgstr ""
 
 msgid "Blood Lust"
-msgstr ""
+msgstr "Krvilačnosť"
 
 msgid "Increases a unit's attack skill."
 msgstr ""
 
 msgid "Animate Dead"
-msgstr ""
+msgstr "Animácia mŕtvych"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
 msgstr ""
 
 msgid "Mirror Image"
-msgstr ""
+msgstr "Zrkadlový obraz"
 
 msgid ""
 "Creates an illusionary unit that duplicates one of your existing units.  "
@@ -9777,85 +9767,85 @@ msgid "Halves damage received from ranged attacks for a single unit."
 msgstr ""
 
 msgid "Shield"
-msgstr ""
+msgstr "Štít"
 
 msgid "Halves damage received from ranged attacks for all of your units."
 msgstr ""
 
 msgid "Mass Shield"
-msgstr ""
+msgstr "Hromadný štít"
 
 msgid "Summon Earth Elemental"
-msgstr ""
+msgstr "Vyvolaj Zemského elementála"
 
 msgid "Summons Earth Elementals to fight for your army."
 msgstr ""
 
 msgid "Summon Air Elemental"
-msgstr ""
+msgstr "Vyvolaj Vzdušného elementála"
 
 msgid "Summons Air Elementals to fight for your army."
 msgstr ""
 
 msgid "Summon Fire Elemental"
-msgstr ""
+msgstr "Vyvolaj Ohnivého elementála"
 
 msgid "Summons Fire Elementals to fight for your army."
 msgstr ""
 
 msgid "Summon Water Elemental"
-msgstr ""
+msgstr "Vyvolaj Vodného elementála"
 
 msgid "Summons Water Elementals to fight for your army."
 msgstr ""
 
 msgid "Damages castle walls."
-msgstr ""
+msgstr "Poškodí hradné múry."
 
 msgid "Earthquake"
-msgstr ""
+msgstr "Zemetrasenie"
 
 msgid "Causes all mines across the land to become visible."
 msgstr ""
 
 msgid "View Mines"
-msgstr ""
+msgstr "Ukáž bane"
 
 msgid "Causes all resources across the land to become visible."
 msgstr ""
 
 msgid "View Resources"
-msgstr ""
+msgstr "Ukáž suroviny"
 
 msgid "Causes all artifacts across the land to become visible."
 msgstr ""
 
 msgid "View Artifacts"
-msgstr ""
+msgstr "Ukáž artefakty"
 
 msgid "Causes all towns and castles across the land to become visible."
 msgstr ""
 
 msgid "View Towns"
-msgstr ""
+msgstr "Ukáž mestá"
 
 msgid "Causes all Heroes across the land to become visible."
 msgstr ""
 
 msgid "View Heroes"
-msgstr ""
+msgstr "Ukáž hrdinov"
 
 msgid "Causes the entire land to become visible."
 msgstr ""
 
 msgid "View All"
-msgstr ""
+msgstr "Ukáž všetko"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr ""
 
 msgid "Summon Boat"
-msgstr ""
+msgstr "Vyvolaj loď"
 
 msgid ""
 "Summons the nearest unoccupied, friendly boat to an adjacent shore "
@@ -9867,13 +9857,13 @@ msgid "Allows the caster to magically transport to a nearby location."
 msgstr ""
 
 msgid "Dimension Door"
-msgstr ""
+msgstr "Dimenzionálne dvere"
 
 msgid "Returns the caster to any town or castle currently owned."
 msgstr ""
 
 msgid "Town Gate"
-msgstr ""
+msgstr "Mestská brána"
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -9881,14 +9871,14 @@ msgid ""
 msgstr ""
 
 msgid "Visions"
-msgstr ""
+msgstr "Vízie"
 
 msgid ""
 "Visions predicts the likely outcome of an encounter with a neutral army camp."
 msgstr ""
 
 msgid "Haunt"
-msgstr ""
+msgstr "Zakliať baňu"
 
 msgid ""
 "Haunts a mine you control with Ghosts.  This mine stops producing "
@@ -9896,31 +9886,31 @@ msgid ""
 msgstr ""
 
 msgid "Set Earth Guardian"
-msgstr ""
+msgstr "Nasadiť zemskú stráž"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
 msgstr ""
 
 msgid "Set Air Guardian"
-msgstr ""
+msgstr "Nasadiť vzdušnú stráž"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
 msgstr ""
 
 msgid "Set Fire Guardian"
-msgstr ""
+msgstr "Nasadiť ohnivú stráž"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
 msgstr ""
 
 msgid "Set Water Guardian"
-msgstr ""
+msgstr "Nasadiť vodnú stráž"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
 
 msgid "Petrification"
-msgstr ""
+msgstr "Skamenenie"
 
 msgid ""
 "Turns the affected creature into stone.  A petrified creature receives half "
@@ -9928,13 +9918,13 @@ msgid ""
 msgstr ""
 
 msgid "You have no Magic Book, so you cannot cast a spell."
-msgstr ""
+msgstr "Nemáš knihu kúziel, takže nemôžeš zosielať kúzla."
 
 msgid "No spell to cast."
-msgstr ""
+msgstr "Žiadne kúzla na zoslanie."
 
 msgid "Your hero has %{point} spell points remaining."
-msgstr ""
+msgstr "Tvojmu hrdinovi zostáva %{point} bodov kúziel."
 
 msgid "View Adventure Spells"
 msgstr ""
@@ -9943,13 +9933,13 @@ msgid "View Combat Spells"
 msgstr ""
 
 msgid "View previous page"
-msgstr ""
+msgstr "Zobraziť predchádzajúcu stranu"
 
 msgid "View next page"
-msgstr ""
+msgstr "Zobraziť ďalšiu stranu"
 
 msgid "Close Spellbook"
-msgstr ""
+msgstr "Zavrieť knihu kúziel"
 
 msgid "View %{spell}"
 msgstr ""
@@ -9969,7 +9959,7 @@ msgid "This spell summons %{count} %{monster} to guard the mine."
 msgstr ""
 
 msgid "The nearest town is %{town}."
-msgstr ""
+msgstr "Najbližšie mesto je %{town}."
 
 msgid "This town is occupied by your hero %{hero}."
 msgstr ""
@@ -9980,10 +9970,10 @@ msgid ""
 msgstr ""
 
 msgid "The ultimate artifact is really the %{name}."
-msgstr ""
+msgstr "Ultimátny artefakt je v skutočnosti %{name}."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr ""
+msgstr "Ultimátny artefakt sa nachádza v regióne %{name}."
 
 msgid "north-west"
 msgstr "severozápad"
