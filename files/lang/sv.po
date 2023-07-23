@@ -3263,7 +3263,7 @@ msgstr "Snabbstrid"
 
 msgid "Auto, No Spells"
 msgstr ""
-"Snabbstrid \n"
+"Snabbstrid, \n"
 "Inga Besvärjelser"
 
 msgid "Battles"
@@ -9243,7 +9243,7 @@ msgstr ""
 "Du finner ett träd som påminner starkt om den store Häxmästaren Carnauth med "
 "en ring runt en av dess små grenar. Trasor av gamla kläder och ruttnade "
 "läder får dig att inse att trädet faktiskt är Carnauth som är förvandlad. "
-"Eftersom du inte kan hjälpa honom så tar du ringen efter som du tycker att "
+"Eftersom du inte kan hjälpa honom så tar du ringen, då du tycker att "
 "du har bättre nytta av den."
 
 msgid "Ammo Cart"
