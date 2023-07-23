@@ -908,6 +908,8 @@ namespace AudioManager
 
     uint32_t getSoundDurationMs( const int m82 )
     {
+        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
+
         const std::vector<uint8_t> & v = GetWAV( m82 );
 
         // Sound duration is: (wavSize - headerSize) / sampleRateKHz / channelCount / byesPerSample.
