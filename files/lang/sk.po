@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-23 15:04+0000\n"
-"PO-Revision-Date: 2023-07-23 18:32+0200\n"
+"PO-Revision-Date: 2023-07-23 18:45+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -9443,6 +9443,10 @@ msgid ""
 "hands. You realize that it must be the helmet of the legendary Anduran, the "
 "only man who was known to wear solid gold armor."
 msgstr ""
+"Zo zeme vyčnieva lesklý predmet. Pošleš jedného člena svojej skupiny, aby to "
+"preskúmal. Vráti sa so zlatou prilbou v rukách. Uvedomuješ si, že to musí "
+"byť prilba legendárneho Andurana, jediného človeka, o ktorom sa vedelo, že "
+"nosí zbroj z čistého zlata."
 
 msgid "Holy Hammer"
 msgstr "Sväté kladivo"
@@ -9485,7 +9489,7 @@ msgid "Sphere of Negation"
 msgstr "Guľa negácie"
 
 msgid "The %{name} disables all spell casting, for both sides, in combat."
-msgstr ""
+msgstr "%{name} znemožňuje obom stranám v boji zosielanie všetkých kúziel."
 
 msgid ""
 "You stop to help a Peasant catch a runaway mare. To show his gratitude, he "
@@ -9497,7 +9501,7 @@ msgid "Staff of Wizardry"
 msgstr "Čarodejnícka palica"
 
 msgid "The %{name} boosts your spell power by %{count}."
-msgstr ""
+msgstr "%{name} zvýši tvoju Silu kúziel o %{count}."
 
 msgid ""
 "While out scaring up game, your troops find a mysterious staff levitating "
@@ -9510,7 +9514,7 @@ msgid "Sword Breaker"
 msgstr "Lámač mečov"
 
 msgid "The %{name} increases your defense by %{count} and attack by 1."
-msgstr ""
+msgstr "%{name} zvyšuje tvoju obranu o %{count} a útok o 1."
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
@@ -9524,6 +9528,10 @@ msgid ""
 "sword, you give thanks that half-witted Trolls tend to grab the wrong end of "
 "sharp objects."
 msgstr ""
+"Zastaví ťa Trol a povie: \"Zaplať mi 5000 zlatých, inak ťa Anduranov meč "
+"zabije na mieste.\" Odmietneš. Trol chytí meč zavesený na opasku, skríkne od "
+"bolesti a utečie. Zdvihneš bájny meč a poďakuješ sa, že polointeligentní "
+"trollovia majú tendenciu uchopiť ostré predmety za nesprávny koniec."
 
 msgid "Sword of Anduran"
 msgstr "Anduranov meč"
@@ -9620,6 +9628,8 @@ msgid ""
 "Removes all negative spells cast upon one of your units, and restores up to "
 "%{count} HP per level of spell power."
 msgstr ""
+"Odstráni všetky negatívne kúzla zoslané na jednu z vašich jednotiek a obnoví "
+"až %{count} HP za úroveň Sily kúziel."
 
 msgid "Mass Cure"
 msgstr "Hromadné liečenie"
@@ -9654,7 +9664,7 @@ msgid "Mass Haste"
 msgstr "Hromadný zhon"
 
 msgid "Slows target to half movement rate."
-msgstr ""
+msgstr "Spomalí cieľ na polovicu rýchlosti pohybu."
 
 msgid "spell|Slow"
 msgstr "Spomalenie"
@@ -9663,7 +9673,7 @@ msgid "Mass Slow"
 msgstr "Hromadné spomalenie"
 
 msgid "Slows all enemies to half movement rate."
-msgstr ""
+msgstr "Spomaľuje všetkých nepriateľov na polovicu rýchlosti pohybu."
 
 msgid "Clouds the affected creatures' eyes, preventing them from moving."
 msgstr ""
@@ -9678,7 +9688,7 @@ msgid "Causes the selected creatures to inflict maximum damage."
 msgstr ""
 
 msgid "Causes all of your units to inflict maximum damage."
-msgstr ""
+msgstr "Zapríčiní, že všetky tvoje jednotky spôsobia maximálne poškodenie."
 
 msgid "Mass Bless"
 msgstr "Hromadné požehnanie"
@@ -9704,7 +9714,7 @@ msgid "Curse"
 msgstr "Kliatba"
 
 msgid "Causes all enemy troops to inflict minimum damage."
-msgstr ""
+msgstr "Zapríčiní, že všetci nepriatelia spôsobia minimálne poškodenie."
 
 msgid "Mass Curse"
 msgstr "Hromadná kliatba"
@@ -9777,7 +9787,7 @@ msgid "Paralyze"
 msgstr "Paralýza"
 
 msgid "The targeted creatures are paralyzed, unable to move or retaliate."
-msgstr ""
+msgstr "Cieľové bytosti sú paralyzované, neschopné pohybu alebo odvety."
 
 msgid "Hypnotize"
 msgstr "Hypnóza"
@@ -9786,12 +9796,14 @@ msgid ""
 "Brings a single enemy unit under your control if its hits are less than "
 "%{count} times the caster's spell power."
 msgstr ""
+"Privedie jednu nepriateľskú jednotku pod tvoju kontrolu, ak je jej HP menej "
+"ako %{count} násobok Sily kúziel zosielateľa."
 
 msgid "Cold Ray"
 msgstr "Lúč chladu"
 
 msgid "Drains body heat from a single enemy unit."
-msgstr ""
+msgstr "Odčerpá telesné teplo z jednej nepriateľskej jednotky."
 
 msgid "Cold Ring"
 msgstr "Prstenec chladu"
@@ -9800,15 +9812,17 @@ msgid ""
 "Drains body heat from all units surrounding the center point, but not "
 "including the center point."
 msgstr ""
+"Odčerpá telesné teplo zo všetkých jednotiek v okolí stredového bodu, ale nie "
+"z tohto bodu."
 
 msgid "Disrupting Ray"
 msgstr "Narušujúci lúč"
 
 msgid "Reduces the defense rating of an enemy unit by three."
-msgstr ""
+msgstr "Zníži obranyschopnosť nepriateľskej jednotky o tri."
 
 msgid "Damages all living (non-undead) units in the battle."
-msgstr ""
+msgstr "Poškodí všetky živé (nie nemŕtve) jednotky v bitke."
 
 msgid "Death Ripple"
 msgstr "Poryv smrti"
@@ -9820,24 +9834,26 @@ msgid ""
 "Damages all living (non-undead) units in the battle.  This spell is an "
 "improved version of Death Ripple."
 msgstr ""
+"Poškodí všetky živé (nie nemŕtve) jednotky v bitke.  Toto kúzlo je "
+"vylepšenou verziou Poryvu smrti."
 
 msgid "Dragon Slayer"
 msgstr "Drakobijec"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
-msgstr ""
+msgstr "Výrazne zvyšuje útočné schopnosti jednotky proti drakom."
 
 msgid "Blood Lust"
 msgstr "Krvilačnosť"
 
 msgid "Increases a unit's attack skill."
-msgstr ""
+msgstr "Zvyšuje útočné schopnosti jednotky."
 
 msgid "Animate Dead"
 msgstr "Animácia mŕtvych"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
-msgstr ""
+msgstr "Trvalo oživí bytosti z poškodenej alebo zabitej nemŕtvej jednotky."
 
 msgid "Mirror Image"
 msgstr "Zrkadlový obraz"
@@ -9847,15 +9863,20 @@ msgid ""
 "This illusionary unit does the same damages as the original, but will vanish "
 "if it takes any damage."
 msgstr ""
+"Vytvorí iluzórnu jednotku, ktorá duplikuje jednu z tvojich existujúcich "
+"jednotiek.  Táto iluzórna jednotka spôsobuje rovnaké poškodenie ako pôvodná "
+"jednotka, ale ak dostane akékoľvek poškodenie, zmizne."
 
 msgid "Halves damage received from ranged attacks for a single unit."
-msgstr ""
+msgstr "Znižuje poškodenie z útokov na diaľku o polovicu pre jednu jednotku."
 
 msgid "Shield"
 msgstr "Štít"
 
 msgid "Halves damage received from ranged attacks for all of your units."
 msgstr ""
+"O polovicu znižuje poškodenie spôsobené útokom na diaľku pre všetky tvoje "
+"jednotky."
 
 msgid "Mass Shield"
 msgstr "Hromadný štít"
@@ -9864,25 +9885,25 @@ msgid "Summon Earth Elemental"
 msgstr "Vyvolaj Zemského elementála"
 
 msgid "Summons Earth Elementals to fight for your army."
-msgstr ""
+msgstr "Vyvolá Zemských elementálov, aby bojovali za tvoju armádu."
 
 msgid "Summon Air Elemental"
 msgstr "Vyvolaj Vzdušného elementála"
 
 msgid "Summons Air Elementals to fight for your army."
-msgstr ""
+msgstr "Vyvolá Vzdušných elementálov, aby bojovali za tvoju armádu."
 
 msgid "Summon Fire Elemental"
 msgstr "Vyvolaj Ohnivého elementála"
 
 msgid "Summons Fire Elementals to fight for your army."
-msgstr ""
+msgstr "Vyvolá Ohnivých elementálov, aby bojovali za tvoju armádu."
 
 msgid "Summon Water Elemental"
 msgstr "Vyvolaj Vodného elementála"
 
 msgid "Summons Water Elementals to fight for your army."
-msgstr ""
+msgstr "Vyvolá Vodných elementálov, aby bojovali za tvoju armádu."
 
 msgid "Damages castle walls."
 msgstr "Poškodí hradné múry."
@@ -9891,43 +9912,45 @@ msgid "Earthquake"
 msgstr "Zemetrasenie"
 
 msgid "Causes all mines across the land to become visible."
-msgstr ""
+msgstr "Spôsobí, že sa všetky bane v krajine zviditeľnia."
 
 msgid "View Mines"
 msgstr "Ukáž bane"
 
 msgid "Causes all resources across the land to become visible."
-msgstr ""
+msgstr "Spôsobí, že sa všetky suroviny v celej krajine zviditeľnia."
 
 msgid "View Resources"
 msgstr "Ukáž suroviny"
 
 msgid "Causes all artifacts across the land to become visible."
-msgstr ""
+msgstr "Spôsobí, že všetky artefakty v krajine budú viditeľné."
 
 msgid "View Artifacts"
 msgstr "Ukáž artefakty"
 
 msgid "Causes all towns and castles across the land to become visible."
-msgstr ""
+msgstr "Spôsobí, že sa zviditeľnia všetky mestá a hrady v celej krajine."
 
 msgid "View Towns"
 msgstr "Ukáž mestá"
 
 msgid "Causes all Heroes across the land to become visible."
-msgstr ""
+msgstr "Spôsobí, že sa všetci hrdinovia v celej krajine zviditeľnia."
 
 msgid "View Heroes"
 msgstr "Ukáž hrdinov"
 
 msgid "Causes the entire land to become visible."
-msgstr ""
+msgstr "Spôsobí zviditeľnenie celej krajiny."
 
 msgid "View All"
 msgstr "Ukáž všetko"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr ""
+"Umožňuje zosielateľovi zobraziť podrobné informácie o nepriateľských "
+"hrdinoch."
 
 msgid "Summon Boat"
 msgstr "Vyvolaj loď"
@@ -9937,15 +9960,19 @@ msgid ""
 "location.  A friendly boat is one which you just built or were the most "
 "recent player to occupy."
 msgstr ""
+"Privolá najbližšiu neobsadenú priateľskú loď na priľahlé miesto na pobreží.  "
+"Priateľská loď je loď, ktorú si práve postavil alebo si ju obsadil ako "
+"posledný hráč."
 
 msgid "Allows the caster to magically transport to a nearby location."
-msgstr ""
+msgstr "Umožňuje zaklínačovi magicky sa preniesť na blízke miesto."
 
 msgid "Dimension Door"
 msgstr "Dimenzionálne dvere"
 
 msgid "Returns the caster to any town or castle currently owned."
 msgstr ""
+"Vráti zosielateľa do ktoréhokoľvek mesta alebo hradu, ktorý práve vlastníš."
 
 msgid "Town Gate"
 msgstr "Mestská brána"
@@ -9953,7 +9980,7 @@ msgstr "Mestská brána"
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
 "by you."
-msgstr ""
+msgstr "Vráti hrdinu do vybraného mesta alebo hradu, ak ho ovládaš."
 
 msgid "Visions"
 msgstr "Vízie"
@@ -9961,6 +9988,8 @@ msgstr "Vízie"
 msgid ""
 "Visions predicts the likely outcome of an encounter with a neutral army camp."
 msgstr ""
+"Vízie predpovedajú pravdepodobný výsledok stretnutia s táborom neutrálnej "
+"armády."
 
 msgid "Haunt"
 msgstr "Zakliať baňu"
@@ -9969,30 +9998,36 @@ msgid ""
 "Haunts a mine you control with Ghosts.  This mine stops producing "
 "resources.  (If I can't keep it, nobody will!)"
 msgstr ""
+"Zakľaje banu, ktorú ovládaš pomocou Duchov.  Táto baňa prestane produkovať "
+"suroviny.  (Ak ju nebudem môcť mať ja, nebude ju mať nikto!)"
 
 msgid "Set Earth Guardian"
 msgstr "Nasadiť zemskú stráž"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
 msgstr ""
+"Nasadí Zemských elementálov, aby strážili baňu pred nepriateľskými armádami."
 
 msgid "Set Air Guardian"
 msgstr "Nasadiť vzdušnú stráž"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
 msgstr ""
+"Nasadí Vzdušných elementálov, aby strážili baňu pred nepriateľskými armádami."
 
 msgid "Set Fire Guardian"
 msgstr "Nasadiť ohnivú stráž"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
 msgstr ""
+"Nasadí Ohnivých elementálov, aby strážili baňu pred nepriateľskými armádami."
 
 msgid "Set Water Guardian"
 msgstr "Nasadiť vodnú stráž"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
+"Nasadí Vodných elementálov, aby strážili baňu pred nepriateľskými armádami."
 
 msgid "Petrification"
 msgstr "Skamenenie"
