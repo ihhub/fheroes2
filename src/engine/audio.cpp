@@ -141,7 +141,7 @@ namespace
 
             const std::scoped_lock<std::mutex> lock( _channelsToCleanupMutex );
 
-            _channelsToCleanup.emplace_back( channelId );
+            _channelsToCleanup.push_back( channelId );
         }
 
         void clearFinishedSamples()
