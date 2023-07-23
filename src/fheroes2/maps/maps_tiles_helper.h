@@ -149,4 +149,6 @@ namespace Maps
     // tiles. The object type for the action tile (i.e. the main tile) remains unchanged and should be
     // updated separately.
     void restoreAbandonedMine( Tiles & tile, const int resource );
+
+    void removeObjectSprite( Tiles & tile );
 }
