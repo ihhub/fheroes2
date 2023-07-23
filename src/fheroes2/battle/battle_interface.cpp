@@ -4224,7 +4224,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
     if ( caster ) {
         const bool isLeftOpponent = caster->GetColor() == arena.GetArmy1Color();
         opponent = isLeftOpponent ? _opponent1.get() : _opponent2.get();
-        if ( opponent != nullptr) {
+        if ( opponent != nullptr ) {
             if ( isMassSpell ) {
                 opponent->SetAnimation( OP_CAST_MASS );
             }
