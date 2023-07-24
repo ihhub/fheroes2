@@ -536,7 +536,7 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
         dmg /= 2;
     }
 
-    // The retaliatory damage of a petrified unit is halved
+    // A petrified unit takes only half of the damage
     if ( enemy.Modes( SP_STONE ) ) {
         dmg /= 2;
     }
