@@ -130,7 +130,7 @@ Battle::Unit::Unit( const Troop & t, const Position & pos, const bool ref, const
     , reflect( ref )
     , mirror( nullptr )
     , idleTimer( animation.getIdleDelay() )
-    , blindanswer( false )
+    , _blindRetaliation( false )
     , customAlphaMask( 255 )
     , _randomGenerator( randomGenerator )
 {
@@ -478,18 +478,22 @@ uint32_t Battle::Unit::GetMoveRange() const
 uint32_t Battle::Unit::CalculateRetaliationDamage( uint32_t damageTaken ) const
 {
     // Check if there will be retaliation in the first place
-    if ( damageTaken > hp || Modes( CAP_MIRRORIMAGE ) || !AllowResponse() )
+    if ( damageTaken > hp || Modes( CAP_MIRRORIMAGE ) || !AllowResponse() ) {
         return 0;
+    }
 
     const uint32_t unitsLeft = ( hp - damageTaken ) / Monster::GetHitPoints();
 
     uint32_t damagePerUnit = 0;
-    if ( Modes( SP_CURSE ) )
+    if ( Modes( SP_CURSE ) ) {
         damagePerUnit = Monster::GetDamageMin();
-    else if ( Modes( SP_BLESS ) )
+    }
+    else if ( Modes( SP_BLESS ) ) {
         damagePerUnit = Monster::GetDamageMax();
-    else
+    }
+    else {
         damagePerUnit = ( Monster::GetDamageMin() + Monster::GetDamageMax() ) / 2;
+    }
 
     return unitsLeft * damagePerUnit;
 }
@@ -532,7 +536,7 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
     }
 
     // The retaliatory damage of a blinded unit is halved
-    if ( blindanswer ) {
+    if ( _blindRetaliation ) {
         dmg /= 2;
     }
 
@@ -1001,8 +1005,26 @@ std::string Battle::Unit::String( bool more ) const
 
 bool Battle::Unit::AllowResponse() const
 {
-    return ( !Modes( SP_BLIND ) || blindanswer ) && !Modes( IS_PARALYZE_MAGIC ) && !Modes( SP_HYPNOTIZE )
-           && ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) || !Modes( TR_RESPONDED ) );
+    // Hypnotized units never respond to an attack
+    if ( Modes( SP_HYPNOTIZE ) ) {
+        return false;
+    }
+
+    // Blindness can be cast by an attacking unit. In this case, there should be no response to the attack.
+    if ( Modes( SP_BLIND ) && !_blindRetaliation ) {
+        return false;
+    }
+
+    // Units with this ability retaliate even when under the influence of paralyzing spells
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+        return true;
+    }
+
+    if ( Modes( IS_PARALYZE_MAGIC ) ) {
+        return false;
+    }
+
+    return ( !Modes( TR_RESPONDED ) );
 }
 
 void Battle::Unit::SetResponse()
@@ -1025,9 +1047,9 @@ void Battle::Unit::PostAttackAction()
     ResetModes( LUCK_GOOD | LUCK_BAD );
 }
 
-void Battle::Unit::SetBlindAnswer( bool value )
+void Battle::Unit::SetBlindRetaliation( bool value )
 {
-    blindanswer = value;
+    _blindRetaliation = value;
 }
 
 uint32_t Battle::Unit::GetAttack() const
@@ -1232,7 +1254,8 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
 
     case Spell::BLIND:
         addAffection( SP_BLIND, duration );
-        blindanswer = false;
+        // Blindness can be cast by an attacking unit. In this case, there should be no response to the attack.
+        _blindRetaliation = false;
         break;
 
     case Spell::DRAGONSLAYER:

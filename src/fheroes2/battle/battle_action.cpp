@@ -365,7 +365,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
         const bool doubleAttack = attacker->isDoubleAttack();
 
         if ( attacker->isArchers() || handfighting ) {
-            defender->SetBlindAnswer( defender->Modes( SP_BLIND ) );
+            defender->SetBlindRetaliation( defender->Modes( SP_BLIND ) );
 
             BattleProcess( *attacker, *defender, dst, dir );
 
@@ -375,13 +375,13 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
                     defender->SetResponse();
                 }
 
-                defender->SetBlindAnswer( false );
-
                 if ( doubleAttack && attacker->isValid() && !attacker->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "double attack" )
                     BattleProcess( *attacker, *defender, dst, dir );
                 }
             }
+
+            defender->SetBlindRetaliation( false );
 
             // Berserk and Hypnotize spells should only be removed after an attack initiated by this unit, but not after its retaliatory attack
             attacker->removeAffection( SP_BERSERKER | SP_HYPNOTIZE );
