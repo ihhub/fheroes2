@@ -57,11 +57,11 @@ namespace Game
         BATTLE_COLOR_CYCLE_DELAY,
         BATTLE_SELECTED_UNIT_DELAY,
         CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY,
-
+        
         CURRENT_HERO_DELAY,
         CURRENT_AI_DELAY,
         CUSTOM_DELAY,
-
+        CASTLE_EXIT_SCROLL_MAP_DELAY,
         // IMPORTANT!!! All new entries must be put before this entry!
         LAST_DELAY
     };

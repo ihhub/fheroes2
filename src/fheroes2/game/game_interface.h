@@ -32,6 +32,7 @@
 #include "interface_cpanel.h"
 #include "interface_icons.h"
 #include "players.h"
+#include "game_delays.h"
 
 class Castle;
 class Heroes;
@@ -157,12 +158,15 @@ namespace Interface
         void MoveHeroFromArrowKeys( Heroes & hero, const int direction );
 
         fheroes2::GameMode HumanTurn( const bool isload );
+        int GetScrollPosition();
 
         IconsPanel iconsPanel;
         ButtonsArea buttonsArea;
         ControlPanel controlPanel;
 
         bool _lockRedraw;
+        Game::DelayType scrollDelayType;
+        int lastScrollPosition;
     };
 }
 

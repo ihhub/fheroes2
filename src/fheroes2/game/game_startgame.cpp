@@ -83,6 +83,7 @@
 #include "ui_tool.h"
 #include "week.h"
 #include "world.h"
+#include "interface_gamearea.h"
 
 namespace
 {
@@ -129,6 +130,21 @@ namespace
 
         return friendColors;
     }
+}
+
+int Interface::AdventureMap::GetScrollPosition()
+{
+    int scrollPosition = SCROLL_NONE;
+    LocalEvent & le = LocalEvent::Get();
+    if ( isScrollLeft( le.GetMouseCursor() ) )
+        scrollPosition |= SCROLL_LEFT;
+    else if ( isScrollRight( le.GetMouseCursor() ) )
+        scrollPosition |= SCROLL_RIGHT;
+    if ( isScrollTop( le.GetMouseCursor() ) )
+        scrollPosition |= SCROLL_TOP;
+    else if ( isScrollBottom( le.GetMouseCursor() ) )
+        scrollPosition |= SCROLL_BOTTOM;
+    return scrollPosition;
 }
 
 fheroes2::GameMode Game::StartBattleOnly()
@@ -1059,19 +1075,13 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         }
 
         if ( fheroes2::cursor().isFocusActive() && !_gameArea.isDragScroll() && !_radar.isDragRadar() && ( conf.ScrollSpeed() != SCROLL_SPEED_NONE ) ) {
-            int scrollPosition = SCROLL_NONE;
-
-            if ( isScrollLeft( le.GetMouseCursor() ) )
-                scrollPosition |= SCROLL_LEFT;
-            else if ( isScrollRight( le.GetMouseCursor() ) )
-                scrollPosition |= SCROLL_RIGHT;
-            if ( isScrollTop( le.GetMouseCursor() ) )
-                scrollPosition |= SCROLL_TOP;
-            else if ( isScrollBottom( le.GetMouseCursor() ) )
-                scrollPosition |= SCROLL_BOTTOM;
+            int scrollPosition = GetScrollPosition();
 
             if ( scrollPosition != SCROLL_NONE ) {
-                if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) ) {
+                if (lastScrollPosition != scrollPosition) {
+                    scrollDelayType = Game::SCROLL_START_DELAY;
+                }
+                if ( Game::validateAnimationDelay( scrollDelayType ) ) {
                     if ( fastScrollRepeatCount < fastScrollStartThreshold ) {
                         ++fastScrollRepeatCount;
                     }
@@ -1079,11 +1089,13 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
                 if ( fastScrollRepeatCount >= fastScrollStartThreshold ) {
                     _gameArea.SetScroll( scrollPosition );
+                    scrollDelayType = Game::SCROLL_START_DELAY;
                 }
             }
             else {
                 fastScrollRepeatCount = 0;
             }
+            lastScrollPosition = scrollPosition;
         }
         else {
             fastScrollRepeatCount = 0;
@@ -1381,6 +1393,8 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
         else {
             Game::OpenCastleDialog( *otherCastle );
             Cursor::Get().SetThemes( Cursor::CASTLE );
+            scrollDelayType = Game::CASTLE_EXIT_SCROLL_MAP_DELAY;
+            lastScrollPosition = GetScrollPosition();
         }
 
         break;
