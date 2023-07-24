@@ -83,7 +83,6 @@
 #include "ui_tool.h"
 #include "week.h"
 #include "world.h"
-#include "interface_gamearea.h"
 
 namespace
 {

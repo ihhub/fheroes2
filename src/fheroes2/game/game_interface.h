@@ -158,7 +158,7 @@ namespace Interface
         void MoveHeroFromArrowKeys( Heroes & hero, const int direction );
 
         fheroes2::GameMode HumanTurn( const bool isload );
-        int GetScrollPosition();
+        static int GetScrollPosition();
 
         IconsPanel iconsPanel;
         ButtonsArea buttonsArea;
