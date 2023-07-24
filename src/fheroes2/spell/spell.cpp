@@ -106,7 +106,7 @@ spellstats_t spells[] = {
     { gettext_noop( "Shield" ), 3, 0, 0, 15, 2,
       gettext_noop( "Halves damage received from ranged attacks for a single unit. Does not affect damage received from Turrets or Ballistae." ) },
     { gettext_noop( "Mass Shield" ), 7, 0, 0, 65, 0,
-      gettext_noop( "Halves damage received from ranged attacks for all of your units. Does not affect damage received from Turrets or Ballista." ) },
+      gettext_noop( "Halves damage received from ranged attacks for all of your units. Does not affect damage received from Turrets or Ballistae." ) },
     { gettext_noop( "Summon Earth Elemental" ), 30, 0, 0, 56, 3, gettext_noop( "Summons Earth Elementals to fight for your army." ) },
     { gettext_noop( "Summon Air Elemental" ), 30, 0, 0, 57, 3, gettext_noop( "Summons Air Elementals to fight for your army." ) },
     { gettext_noop( "Summon Fire Elemental" ), 30, 0, 0, 58, 3, gettext_noop( "Summons Fire Elementals to fight for your army." ) },
