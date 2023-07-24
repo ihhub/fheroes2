@@ -1545,7 +1545,7 @@ msgstr ""
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
 msgstr ""
-"Jotnene gir fra seg et grynt av annerkjennelse, \"Archibald sine allierte "
+"Ogrene gir fra seg et grynt av annerkjennelse, \"Archibald sine allierte "
 "kan få slippe forbi.\"."
 
 msgid ""
@@ -1654,7 +1654,7 @@ msgid "campaignBonus|Spiked Shield"
 msgstr "Piggskjoldet"
 
 msgid "campaignBonus|Stealth Shield"
-msgstr "Tyveskjoldet"
+msgstr "Snikeskjoldet"
 
 msgid "campaignBonus|Tax Lien"
 msgstr "Skattepant"
@@ -2123,7 +2123,7 @@ msgid "Sheltemburg"
 msgstr ""
 
 msgid "Cannot recruit - you already have a Hero in this town."
-msgstr "Det kan ikke verves en helt. Det befinner seg en i byen."
+msgstr "Det kan ikke verves en helt. Det befinner seg alt én i byen."
 
 msgid "Cannot recruit - you have too many Heroes."
 msgstr "Kan ikke verves - du har for mange helter."
@@ -2515,7 +2515,7 @@ msgid ""
 "points."
 msgstr ""
 "Hos Magikerlauget kan heltene dine lære seg trolldommer og få fylt opp "
-"manaene sine."
+"magipoengene sine."
 
 msgid "Recruit %{name}"
 msgstr "Verv %{name}"
@@ -2731,17 +2731,17 @@ msgid "Are you sure you want to dismiss this army?"
 msgstr "Er du sikker på at du vil bortvise denne troppen?"
 
 msgid "Upgrade"
-msgstr ""
+msgstr "Oppgrader"
 
 #, fuzzy
 msgid "Upgrade your troops."
 msgstr "Du har ikke råd til å oppgradere troppene dine!"
 
 msgid "Dismiss"
-msgstr ""
+msgstr "Bortvis"
 
 msgid "Dismiss this army."
-msgstr ""
+msgstr "Bortvis denne troppen."
 
 msgid "Followers"
 msgstr "Følgere"
@@ -3147,7 +3147,7 @@ msgid "Knowledge:"
 msgstr "Kunnskap:"
 
 msgid "Spell Points:"
-msgstr "Mana:"
+msgstr "Magipoeng:"
 
 msgid "Move Points:"
 msgstr "Skritt:"
