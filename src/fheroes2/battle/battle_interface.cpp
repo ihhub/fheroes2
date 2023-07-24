@@ -3845,7 +3845,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     // Get the time to animate movement for one cell.
     uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
-    if ( unit.Modes( SP_HASTE ) ) {
+
+    if ( unit.Modes( SP_HASTE ) && frameDelay > 1 ) {
         frameDelay = frameDelay * 65 / 100; // by 35% faster
     }
     else if ( unit.Modes( SP_SLOW ) ) {
@@ -3870,6 +3871,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     // If it is a wide creature (cache this boolean to use in the loop).
     const bool isWide = unit.isWide();
     const Indexes::const_iterator pathEnd = path.end();
+    const Indexes::const_iterator finalStep = pathEnd - 1;
 
     const bool isOneStepPath = [&unit, &path]() {
         if ( path.size() == 1 ) {
@@ -3958,11 +3960,17 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         }
     }
 
+    // For Battle speed 9 and 10 we play one sound at time without any simultaneous playbacks
+    // as on these speed the unit will end its movement until the sound is finished.
+    const bool playSoundBySound = Settings::Get().BattleSpeed() > 8;
+    int soundStatus = -1;
+    const int walkSoundId = unit.M82Move();
+
     while ( dst != pathEnd ) {
         // Check if a wide unit changes its horizontal direction.
         if ( isWide && unit.GetTailIndex() == *dst ) {
             // We must not reflect the flyers at the and of the path (just before the landing).
-            if ( !canFly || ( dst != ( pathEnd - 1 ) ) ) {
+            if ( !canFly || ( dst != finalStep ) ) {
                 unit.SetReflection( !unit.isReflect() );
             }
             // After changing the direction go to the next step in the path.
@@ -3983,7 +3991,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
             unit.SwitchAnimation( Monster_Info::STAND_STILL );
             bridge->ActionDown();
             _movingUnit = &unit;
-            if ( dst == ( pathEnd - 1 ) ) {
+            if ( dst == finalStep ) {
                 // There is only one cell left to move after standing.
                 unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
             }
@@ -3998,9 +4006,17 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
             _movingPos.x -= CELLW;
         }
 
-        // Render the unit movement with the movement sound.
         // TODO: adjust sounds calls and synchronize them with frames. Take into account that some sounds (like for Cavalry) consists of a sequence of steps.
-        AudioManager::PlaySound( unit.M82Move() );
+        if ( playSoundBySound ) {
+            // Do not play simultaneous walk sounds.
+            if ( soundStatus < 0 || !Mixer::isPlaying( soundStatus ) ) {
+                soundStatus = AudioManager::PlaySound( walkSoundId );
+            }
+        }
+        else {
+            AudioManager::PlaySound( walkSoundId );
+        }
+
         AnimateUnitWithDelay( unit );
         unit.SetPosition( *dst );
 
@@ -4020,7 +4036,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
                 unit.SwitchAnimation( Monster_Info::STAND_STILL );
                 bridge->ActionUp();
                 _movingUnit = &unit;
-                if ( dst == ( pathEnd - 1 ) ) {
+                if ( dst == finalStep ) {
                     // There is only one cell left to move after standing.
                     unit.SwitchAnimation( Monster_Info::MOVE_QUICK );
                 }
@@ -4029,7 +4045,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
                     unit.SwitchAnimation( Monster_Info::MOVE_START );
                 }
             }
-            else if ( dst == ( pathEnd - 1 ) ) {
+            else if ( dst == finalStep ) {
                 // There is only one cell left to move.
                 unit.SwitchAnimation( Monster_Info::MOVE_END );
             }
@@ -4093,7 +4109,8 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     const uint32_t step = unit.animation.getFlightSpeed();
     uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
-    if ( unit.Modes( SP_HASTE ) ) {
+
+    if ( unit.Modes( SP_HASTE ) && frameDelay > 1 ) {
         frameDelay = frameDelay * 8 / 10; // 20% faster
     }
     else if ( unit.Modes( SP_SLOW ) ) {
@@ -4135,11 +4152,26 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         ++currentPoint;
     }
 
+    // For Battle speed 9 and 10 we play one sound at time without any simultaneous playbacks
+    // as on these speed the unit will end its movement until the sound is finished.
+    const bool playSoundBySound = Settings::Get().BattleSpeed() > 8;
+    int soundStatus = -1;
+    const int flySoundId = unit.M82Move();
+
     unit.SwitchAnimation( Monster_Info::MOVING );
     while ( currentPoint != points.end() ) {
         _movingPos = *currentPoint;
 
-        AudioManager::PlaySound( unit.M82Move() );
+        if ( playSoundBySound ) {
+            // Do not play simultaneous fly sounds.
+            if ( soundStatus < 0 || !Mixer::isPlaying( soundStatus ) ) {
+                soundStatus = AudioManager::PlaySound( flySoundId );
+            }
+        }
+        else {
+            AudioManager::PlaySound( flySoundId );
+        }
+
         unit.animation.restartAnimation();
         AnimateUnitWithDelay( unit );
 
