@@ -1077,7 +1077,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             int scrollPosition = GetScrollPosition();
 
             if ( scrollPosition != SCROLL_NONE ) {
-                if (lastScrollPosition != scrollPosition) {
+                if ( lastScrollPosition != scrollPosition ) {
                     scrollDelayType = Game::SCROLL_START_DELAY;
                 }
                 if ( Game::validateAnimationDelay( scrollDelayType ) ) {
