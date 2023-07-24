@@ -1528,7 +1528,7 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t attac
     switch ( spell.GetID() ) {
     case Spell::CURE:
     case Spell::MASSCURE:
-        if ( !isHaveDamage() && !( modes & IS_MAGIC ) )
+        if ( !isHaveDamage() && !( modes & IS_BAD_MAGIC ) )
             return 100;
         break;
 

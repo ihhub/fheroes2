@@ -260,9 +260,15 @@ void Kingdom::ActionNewDayResourceUpdate( const std::function<void( const EventD
         }
     }
 
+    const bool isAIPlayer = ( GetControl() == CONTROL_AI );
+
     // Resources from events
     const EventsDate events = world.GetEventsDate( GetColor() );
     for ( const EventDate & event : events ) {
+        if ( isAIPlayer && !event.isApplicableForAIPlayers ) {
+            continue;
+        }
+
         const Funds fundsUpdate = Resource::CalculateEventResourceUpdate( GetFunds(), event.resource );
         AddFundsResource( fundsUpdate );
         if ( displayEventDialog )
