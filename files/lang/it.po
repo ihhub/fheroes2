@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-22 03:24+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -9546,19 +9546,25 @@ msgstr ""
 "unità. Questa illusione è capace di fare gli stessi di quello di cui sono la "
 "copia, però sparisce se subisce qualsiasi danno."
 
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr ""
-"Riduce a metà i danni subiti da colpi a distanza per una singola unità."
-
 msgid "Shield"
 msgstr "Scudo"
 
-msgid "Halves damage received from ranged attacks for all of your units."
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
-"Riduce a metà i danni subiti da colpi a distanza per tutte le tue unità."
+"Riduce a metà i danni subiti da colpi a distanza per una singola unità."
 
 msgid "Mass Shield"
 msgstr "Max Scudo"
+
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr ""
+"Riduce a metà i danni subiti da colpi a distanza per tutte le tue unità."
 
 msgid "Summon Earth Elemental"
 msgstr "Richiama Creature di Terra"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-22 03:24+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -10422,18 +10422,24 @@ msgstr ""
 "Тази илюзорна единица нанася същите щети като оригинала, но ще изчезне, ако "
 "понесе някакви щети."
 
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr "Намалява наполовина щетите, получени от далечни атаки за една единица."
-
 msgid "Shield"
 msgstr "Щит"
 
-msgid "Halves damage received from ranged attacks for all of your units."
-msgstr ""
-"Намалява наполовина щетите, получени от далечни атаки за всички твой единици."
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr "Намалява наполовина щетите, получени от далечни атаки за една единица."
 
 msgid "Mass Shield"
 msgstr "Всеобщ щит"
+
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr ""
+"Намалява наполовина щетите, получени от далечни атаки за всички твой единици."
 
 msgid "Summon Earth Elemental"
 msgstr "Призови земен елементал"

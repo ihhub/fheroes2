@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-22 03:24+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2023-04-10 00:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -10598,19 +10598,25 @@ msgstr ""
 "tropper. Denne falske troppen skader like mye som en ekte, men skulle den ta "
 "noe som helst skade så forsvinner den."
 
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr "Halverer skade som mottas fra skuddangrep for en enkelt kriger."
-
 msgid "Shield"
 msgstr "Skjold"
 
-msgid "Halves damage received from ranged attacks for all of your units."
-msgstr "Halverer skade som mottas fra skuddangrep på alle dine styrker."
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr "Halverer skade som mottas fra skuddangrep for en enkelt kriger."
 
 msgid "Mass Shield"
 msgstr ""
 "For-\n"
 "skansning"
+
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr "Halverer skade som mottas fra skuddangrep på alle dine styrker."
 
 msgid "Summon Earth Elemental"
 msgstr "Tilkall jordånd"

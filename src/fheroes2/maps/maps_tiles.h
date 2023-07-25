@@ -159,6 +159,11 @@ namespace Maps
             return tilePassable;
         }
 
+        void resetPassability()
+        {
+            tilePassable = DIRECTION_ALL;
+        }
+
         int GetGround() const;
 
         bool isWater() const
@@ -291,7 +296,7 @@ namespace Maps
 
         void AddonsSort();
         void Remove( uint32_t uniqID );
-        void RemoveObjectSprite();
+
         void updateObjectImageIndex( const uint32_t objectUid, const MP2::ObjectIcnType objectIcnType, const int imageIndexOffset );
         void replaceObject( const uint32_t objectUid, const MP2::ObjectIcnType originalObjectIcnType, const MP2::ObjectIcnType newObjectIcnType,
                             const uint8_t originalImageIndex, const uint8_t newImageIndex );
@@ -367,7 +372,6 @@ namespace Maps
 
         // Set or remove a flag which belongs to UID of the object.
         void updateFlag( const int color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer );
-        void RemoveJailSprite();
 
         bool isTallObject() const;
 

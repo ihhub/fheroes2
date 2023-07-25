@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-22 03:24+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2023-07-01 14:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -10441,21 +10441,27 @@ msgstr ""
 "Tworzy iluzję jednej z twoich istniejących jednostek. Walczy tak samo jak "
 "oryginalna jednostka, ale znika po otrzymaniu jakichkolwiek obrażeń."
 
-msgid "Halves damage received from ranged attacks for a single unit."
+msgid "Shield"
+msgstr "Tarcza"
+
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 "Zmniejsza o połowę obrażenia, jakie otrzymuje jedna z twoich jednostek z "
 "powodu ataków dystansowych."
 
-msgid "Shield"
-msgstr "Tarcza"
+msgid "Mass Shield"
+msgstr "Grupowa Tarcza"
 
-msgid "Halves damage received from ranged attacks for all of your units."
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 "Zmniejsza o połowę obrażenia, jakie otrzymują wszystkie twoje jednostki z "
 "powodu ataków dystansowych."
-
-msgid "Mass Shield"
-msgstr "Grupowa Tarcza"
 
 msgid "Summon Earth Elemental"
 msgstr "Przywołanie Żywiołaka Ziemi"
