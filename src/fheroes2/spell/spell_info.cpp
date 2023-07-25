@@ -364,27 +364,12 @@ namespace fheroes2
     {
         const int32_t center = hero.GetIndex();
         const int heroColor = hero.GetColor();
-        const int heroid = hero.GetID();        
-
-        for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
-            assert( Maps::isValidAbsIndex( boatSource ) );
-
-            const int boatHeroID = world.GetTiles( boatSource ).getBoatOwnerHeroID();
-            if ( boatHeroID != heroid ) {
-                continue;
-            }
-
-            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, center );
-            if ( distance > 1 ) {
-                return boatSource;
-            }
-        }
 
         for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
             assert( Maps::isValidAbsIndex( boatSource ) );
 
             const int boatColor = world.GetTiles( boatSource ).getBoatOwnerColor();
-            if ( boatColor != heroColor ) {
+            if ( boatColor != Color::NONE && boatColor != heroColor ) {
                 continue;
             }
 

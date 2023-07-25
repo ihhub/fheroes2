@@ -507,7 +507,6 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
     _terrainImageIndex = mp2.terrainImageIndex;
     _terrainFlags = mp2.terrainFlags;
     _boatOwnerColor = Color::NONE;
-    _boatOwnerHeroID = -1;
 
     SetIndex( index );
     SetObject( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
@@ -593,7 +592,7 @@ void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
     world.resetPathfinder();
 }
 
-void Maps::Tiles::setBoat( const int direction, const int color, const int boatHeroID )
+void Maps::Tiles::setBoat( const int direction, const int color )
 {
     if ( _objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _imageIndex != 255 ) {
         AddonsPushLevel1( TilesAddon( OBJECT_LAYER, _uid, _objectIcnType, _imageIndex, false, false ) );
@@ -640,13 +639,7 @@ void Maps::Tiles::setBoat( const int direction, const int color, const int boatH
 
     assert( color >= std::numeric_limits<BoatOwnerColorType>::min() && color <= std::numeric_limits<BoatOwnerColorType>::max() );
 
-    using BoatOwnerHeroIDType = decltype( _boatOwnerHeroID );
-    static_assert( std::is_same_v<BoatOwnerHeroIDType, int8_t>, "Type of _boatOwnerHeroID has been changed, check the logic below" );
-
-    assert( color >= std::numeric_limits<BoatOwnerHeroIDType>::min() && color <= std::numeric_limits<BoatOwnerHeroIDType>::max() );
-
     _boatOwnerColor = static_cast<BoatOwnerColorType>( color );
-    _boatOwnerHeroID = static_cast<BoatOwnerHeroIDType>( boatHeroID );
 }
 
 int Maps::Tiles::getBoatDirection() const
