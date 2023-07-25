@@ -3889,6 +3889,8 @@ msgid ""
 msgstr ""
 "Poeng: %{score}\n"
 "\n"
+"Grad:\n"
+"%{rating}"
 
 msgid "Start the selected scenario."
 msgstr "Begynn det kartet du har valgt."
