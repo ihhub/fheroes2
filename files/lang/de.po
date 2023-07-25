@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-22 03:24+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -10632,17 +10632,23 @@ msgstr ""
 "dupliziert.  Diese illusionäre Einheit verursacht den gleichen Schaden wie "
 "das Original, verschwindet aber, wenn sie Schaden nimmt."
 
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr "Halbiert den Schaden von Fernkampfangriffen für eine einzelne Einheit."
-
 msgid "Shield"
 msgstr "Schild"
 
-msgid "Halves damage received from ranged attacks for all of your units."
-msgstr "Halbiert den Schaden von Fernkampfangriffen für alle deine Einheiten."
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr "Halbiert den Schaden von Fernkampfangriffen für eine einzelne Einheit."
 
 msgid "Mass Shield"
 msgstr "Massenschild"
+
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr "Halbiert den Schaden von Fernkampfangriffen für alle deine Einheiten."
 
 msgid "Summon Earth Elemental"
 msgstr "Erdwesen herbeirufen"
