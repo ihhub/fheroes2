@@ -179,7 +179,7 @@ double Monster::GetMonsterStrength( int attack, int defense ) const
     if ( defense == -1 )
         defense = GetDefense();
 
-    const double attackDefense = 1.0 + attack * 0.1 + defense * 0.05;
+    const double attackDefense = 1.0 + 0.1 * ( attack + defense );
     return attackDefense * fheroes2::getMonsterData( id ).battleStats.monsterBaseStrength;
 }
 
