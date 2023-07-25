@@ -3554,79 +3554,71 @@ msgstr "Rolle:"
 msgid "Best Monster:"
 msgstr "Beste skapning:"
 
-#, fuzzy
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
 msgstr ""
-"Er du sikker på at du ønsker å laste inn et tidligere parti?\n"
-"(Alt som er ulagret i dette partiet vil gå tapt.)"
+"Er du sikker på at du ønsker å laste inn et nytt kart?\n"
+"(Alt som er ulagret i dette kartet vil gå tapt.)"
 
 #, fuzzy
 msgid ""
 "Are you sure you want to create a new map? (Any unsaved changes to the "
 "current map will be lost.)"
 msgstr ""
-"Er du sikker på at du ønsker å laste inn et tidligere parti?\n"
-"(Alt som er ulagret i dette partiet vil gå tapt.)"
+"Er du sikker på at du ønsker å lage et nytt kart?"
+"(Alt som er ulagret i dette kartet vil gå tapt.)"
 
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
+"Lag et nytt kart, enten ett helt fra bunn av eller et tilfeldig generert ett."
 
-#, fuzzy
 msgid "New Map"
-msgstr "Morgengry"
+msgstr "Nytt kart"
 
-#, fuzzy
 msgid "Load Map"
-msgstr "Last inn et parti"
+msgstr "Last inn kart"
 
 msgid "Load an existing map."
-msgstr ""
+msgstr "Last inn et eksisterende kart."
 
-#, fuzzy
 msgid "Save Map"
-msgstr "Lagre spill"
+msgstr "Lagre kart"
 
-#, fuzzy
 msgid "Save the current map."
-msgstr "Lagre det nåværende spillet."
+msgstr "Lagre det nåværende kartet."
 
 msgid "Quit out of the map editor."
-msgstr ""
+msgstr "Forlat kartlageren"
 
 msgid "Ocean Objects"
-msgstr ""
+msgstr "Sjøobjekter"
 
 msgid "Grass Objects"
-msgstr ""
+msgstr "Gressobjekter"
 
-#, fuzzy
 msgid "Snow Objects"
-msgstr "Ingen objekt"
+msgstr "Snøobjekter"
 
 msgid "Swamp Objects"
-msgstr ""
+msgstr "Myrobjekter"
 
 msgid "Lava Objects"
-msgstr ""
+msgstr "Lavaobjekter"
 
-#, fuzzy
 msgid "Desert Objects"
-msgstr "Ørkentelt"
+msgstr "Ørkenobjekter"
 
 msgid "Dirt Objects"
 msgstr ""
 
-#, fuzzy
 msgid "Wasteland Objects"
-msgstr "Ødemark"
+msgstr "Ødemarkobjekter"
 
 msgid "Beach Objects"
-msgstr ""
+msgstr "Strandobjekter"
 
-#, fuzzy
 msgid "Towns"
 msgstr "By"
 
@@ -3636,181 +3628,188 @@ msgstr "Helter"
 msgid "Artifacts"
 msgstr "Skatter"
 
-#, fuzzy
 msgid "Treasures"
-msgstr "Skatt"
+msgstr "Verdifulle gjenstander"
 
 msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
 msgstr ""
+"Tegner terreng i et kvadrat på størrelser av\n"
+"%{size} ganger %{size}."
 
 msgid ""
 "Erases objects in\n"
 "%{size} by %{size} square increments."
-msgstr ""
+msgstr "Fjerner objekt i et kvadrat på størrelser av\n"
+"%{size} ganger %{size}."
 
-#, fuzzy
 msgid "Small Brush"
-msgstr "Små kart"
+msgstr "Liten pensel"
 
-#, fuzzy
 msgid "Medium Brush"
-msgstr "Middels kart"
+msgstr "Middels pensel"
 
-#, fuzzy
 msgid "Large Brush"
-msgstr "Store kart"
+msgstr "Stor pensel"
 
 msgid "Area Fill"
-msgstr ""
+msgstr "Områdefylling"
 
 msgid "Used to click and drag for filling in large areas."
-msgstr ""
+msgstr "Brukes til å fylle områder ved å klikke og dra over dem."
 
 msgid "Clear Area"
-msgstr ""
+msgstr "Klarer område"
 
 msgid "Used to click and drag for clearing large areas."
-msgstr ""
+msgstr "Brukes til å klarere områder ved å klikke og dra over dem."
 
 msgid ""
 "Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
 "eliminates the penalty.)"
 msgstr ""
+"Koster %{rate} ganger mer enn vanlig forflytning for alle helter.\n"
+"(Kartlesing minsker eller fjerner denne reduksjonen."
 
 msgid "Traversable only by boat."
 msgstr ""
+"Kan kun overfares med skip."
 
 msgid "No special modifiers."
 msgstr ""
+"Ingen spesielle påvirkninger."
 
 msgid "Used to place objects most appropriate for use on %{terrain}."
 msgstr ""
+"Brukes for å plassere objekter som passer best på terreng av typen %{terrain}."
 
 msgid ""
 "Used to place\n"
 "a town or castle."
 msgstr ""
+"Brukes for å plassere\n"
+"en by eller borg."
 
 msgid ""
 "Used to place\n"
 "a monster group."
 msgstr ""
+"Brukes for å plassere\n"
+"en gruppe monstre."
 
 msgid "Used to place a hero."
 msgstr ""
+"Brukes for å plassere en helt."
 
-#, fuzzy
 msgid "Used to place an artifact."
-msgstr "Finn den sjeldneste skatten."
+msgstr "Brukes for å plassere en gjenstand."
 
 msgid ""
 "Used to place\n"
 "a resource or treasure."
 msgstr ""
+"Brukes for å plassere en råvare eller en verdifull gjenstand.
 
 msgid "Terrain Mode"
-msgstr ""
+msgstr "Terrengmodus"
 
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
-msgstr ""
+msgstr "Brukes til å tegne det underliggende gresset, gjørmen, vannet osv. på kartet."
 
 msgid "Object Mode"
-msgstr ""
+msgstr "Objektmodus"
 
 msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
-msgstr ""
+msgstr "Brukes for å plassere objekter (fjell, trær, verdifulle gjenstander osv.) på kartet."
 
 msgid "Detail Mode"
 msgstr ""
+"Detaljemodus"
 
-#, fuzzy
 msgid "Used for special editing of monsters, heroes and towns."
-msgstr "Beseire alle fiendtlige helter og byer."
+msgstr "Brukes for spesielle tilpasninger av monster, helter eller byer."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr ""
+"Lar deg tegne bekker ved å klikke og dra."
 
 msgid "Stream Mode"
-msgstr ""
+msgstr "Bekkemodus"
 
 msgid "Allows you to draw roads by clicking and dragging."
-msgstr ""
+msgstr "Lar deg tegne veier ved å klikke og dra."
 
-#, fuzzy
 msgid "Road Mode"
-msgstr "Vei"
+msgstr "Veimodus"
 
 msgid "Erase Mode"
-msgstr ""
+msgstr "Viskemodus"
 
 msgid "Used to erase objects off the map."
-msgstr ""
+msgstr "Brukes til å fjerne objekter fra kartet."
 
 msgid "Change between zoom and normal view."
-msgstr ""
+msgstr "Bytte mellom forstørret og normal visning."
 
 msgid "Magnify"
-msgstr ""
+msgstr "Forstørr"
 
 msgid "Undo"
-msgstr ""
+msgstr "Angre"
 
 msgid "Undo your last action. Press again to redo the action."
-msgstr ""
+msgstr "Amgre den siste endringen din. Trykk igjen for å gjøre endringen om igjen."
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr ""
+"Lag et nytt kart helt fra bunn av eller ved å bruke den tilfeldige kartlageren."
 
 msgid "Edit map title, description, and other general information."
 msgstr ""
+"Rediger kartets navn, beskrivelse eller annen informasjon."
 
-#, fuzzy
 msgid "Specifications"
-msgstr "Forsteining"
+msgstr "Spesifikasjoner"
 
 msgid "File Options"
 msgstr "Filvalg"
 
-#, fuzzy
 msgid ""
 "Open the file options menu, where you can save or load maps, or quit out of "
 "the editor."
 msgstr ""
-"Åpne menyen for filvalg, som lar deg laste inn et parti, lagre et parti, "
-"begynne på et nytt parti eller avslutte."
+"Åpne menyen for filvalg, hvor du kan lagre eller laste inn kart, eller avslutte "
+"kartlageren."
 
-#, fuzzy
 msgid "View the editor system options, which let you customize the editor."
-msgstr "Hent fram menyen for systeminnstillinger og skreddersy spillet."
+msgstr "Vis systeminnstillingene for kartlageren. Her kan du skreddersy kartlageren."
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr ""
+msgstr "Lag et kart som har en høyde på %{size} kvadrater og bredde på %{size} kvadrater."
 
-#, fuzzy
 msgid "Cancel back to the New Map menu."
-msgstr "Avbryt og dra tilbake til hovedmenyen."
+msgstr "Avbryt og dra tilbake menyen for nytt kart."
 
 msgid "Cancel back to the main menu."
 msgstr "Avbryt og dra tilbake til hovedmenyen."
 
 msgid "From Scratch"
-msgstr ""
+msgstr "Fra bunn av"
 
 msgid "Start from scratch with a blank map."
 msgstr ""
+"Begynn på et kart helt fra bunn av."
 
 msgid "Create a randomly generated map."
 msgstr ""
+"Lag et tilfeldig generert kart."
 
-#, fuzzy
 msgid "Random"
 msgstr "Tilfeldig"
 
-#, fuzzy
 msgid "Cancel back to the Map Editor main menu."
-msgstr "Avbryt og dra tilbake til hovedmenyen."
+msgstr "Avbryt og dra tilbake til kartlagerens hovedmeny."
 
 msgid "No maps available!"
 msgstr "Ingen kart er tilgjengelige!"
@@ -3865,18 +3864,22 @@ msgstr ""
 "Velg denne vanskelighetsgraden hvis du ønsker en utfordring. KI'en vil være "
 "sterkere enn ved middels vanskelighetsgrad."
 
-#, fuzzy
 msgid ""
 "Congratulations!\n"
 "\n"
 "Days: %{days}\n"
-msgstr "Gratulerer!"
+msgstr "Gratulerer!\n"
+"\n"
+"Dager: %{days}\n"
 
 msgid ""
 "\n"
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
+"\n"
+"Vanskelighetsgrad: %{difficulty}\n"
+"\n"
 
 msgid ""
 "Score: %{score}\n"
@@ -3884,6 +3887,8 @@ msgid ""
 "Rating:\n"
 "%{rating}"
 msgstr ""
+"Poeng: %{score}\n"
+"\n"
 
 msgid "Start the selected scenario."
 msgstr "Begynn det kartet du har valgt."
@@ -3894,12 +3899,11 @@ msgstr "Vis introfilm"
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Vis filmen for det nåværende punktet av felttoget."
 
-#, fuzzy
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
 "campaign."
 msgstr ""
-"Velg vanskelighetsgrad for felttoget. Dette vil ikke kunne endres senere."
+"Velg vanskelighetsgrad for felttoget. Dette kan nedjusteres når som helst senere i felttoget."
 
 msgid "Restart"
 msgstr "Start på nytt"
@@ -3907,17 +3911,18 @@ msgstr "Start på nytt"
 msgid "Restart the current scenario."
 msgstr "Start det nåværende kartet på nytt."
 
-#, fuzzy
 msgid "Difficulty"
 msgstr ""
-"Kartets\n"
-"utfordring"
+"Vanskelighetsgrad"
 
 msgid ""
 "You have changed to a lower difficulty for the campaign. You will not be "
 "able to revert this after this point. The high score will be calculated "
 "based solely on the new difficulty. Do you want to proceed?"
 msgstr ""
+"Du har endret til en lavere vanskelighetsgrad på felttoget. Du vil ikke kunne "
+"omgjøre dette. Din endelige poengsum vil bli beregnet kun ut ifra "
+"den nye vanskelighetsgraden. Ønsker du å gå videre med valget?"
 
 msgid "Are you sure you want to restart this scenario?"
 msgstr "Er du sikker på at du vil begynne dette kartet på nytt?"
@@ -4193,25 +4198,20 @@ msgstr "Velg Krigen om tronen"
 msgid "hotkey|choose the expansion campaign"
 msgstr "Velg Prisen for Lojalitet"
 
-#, fuzzy
 msgid "hotkey|map editor main menu"
-msgstr "Felttog"
+msgstr "Kartlagerens hovedmeny"
 
-#, fuzzy
 msgid "hotkey|new map menu"
-msgstr "Nytt parti"
+msgstr "Menyen for nytt kart"
 
-#, fuzzy
 msgid "hotkey|load map menu"
-msgstr "Last inn parti"
+msgstr "Menyen for kartlasting"
 
-#, fuzzy
 msgid "hotkey|new map from scratch"
-msgstr "Trekk tilbake fra kamp"
+msgstr "Nytt kart fra bunn av"
 
-#, fuzzy
 msgid "hotkey|new random map"
-msgstr "Nytt parti"
+msgstr "Nytt tilfeldig kart"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands felttog"
@@ -4429,9 +4429,8 @@ msgstr "Foren tropper"
 msgid "hotkey|upgrade troop"
 msgstr "Oppgrader tropp"
 
-#, fuzzy
 msgid "hotkey|dismiss hero or troop"
-msgstr "Bortvis tropp"
+msgstr "Bortvis helt"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
@@ -4688,7 +4687,7 @@ msgstr ""
 "Oppdraget ditt er fullført."
 
 msgid "Ultimate Artifact"
-msgstr "Den sjeldneste skatten"
+msgstr "Den sjeldneste gjenstanden"
 
 msgid ""
 "The enemy is beaten.\n"
@@ -4735,15 +4734,17 @@ msgstr ""
 "Du klarte ikke å fullføre oppdraget innen tiden.\n"
 "Alt er tapt."
 
-#, fuzzy
 msgid "Defeat!"
-msgstr " fanget"
+msgstr "Nederlag!"
 
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
+"Grunnpoeng: %{score}\n"
+"Vanskelighetsgrad: %{difficulty}\n"
+"\n"
 
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
@@ -4811,7 +4812,7 @@ msgid "%{color} player has been vanquished!"
 msgstr "%{color} spiller har blitt utslettet!"
 
 msgid "Major Event!"
-msgstr ""
+msgstr "Viktig hendelse!"
 
 msgid "Scenario:"
 msgstr "Kart:"
@@ -4896,10 +4897,10 @@ msgid " All dwellings increase population."
 msgstr " Alle bostedenes befolkninger opplever vanlig vekst."
 
 msgid "New Week!"
-msgstr ""
+msgstr "Ny uke!"
 
 msgid "Beware!"
-msgstr ""
+msgstr "Viktig melding!"
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
@@ -4932,21 +4933,19 @@ msgstr ""
 "%{color} spiller, dine helter forlater deg og du er bannlyst fra landet."
 
 msgid "Lord Kilburn"
-msgstr "Baron Kilburn"
+msgstr "Fyrst Kilburn"
 
 msgid "Tsabu"
 msgstr "Sabu"
 
-#, fuzzy
 msgid "Sir Galant"
-msgstr "Sir Galant"
+msgstr "Herr Galant"
 
 msgid "Thundax"
 msgstr "Tordøks"
 
-#, fuzzy
 msgid "Lord Haart"
-msgstr "Baron Halton"
+msgstr "Fyrst Halton"
 
 msgid "Ariel"
 msgstr "Ariel"
@@ -4960,21 +4959,20 @@ msgstr "Sandro"
 msgid "Crodo"
 msgstr "Krod"
 
-#, fuzzy
 msgid "Barock"
-msgstr "Bjarg"
+msgstr "Barokk"
 
 msgid "Antoine"
 msgstr ""
 
 msgid "Astra"
-msgstr "Astri"
+msgstr "Astra"
 
 msgid "Agar"
 msgstr "Hagar"
 
 msgid "Vatawna"
-msgstr "Vatafna"
+msgstr "Vatavna"
 
 msgid "Vesper"
 msgstr "Vesper"
@@ -4983,7 +4981,7 @@ msgid "Ambrose"
 msgstr "Ambrose"
 
 msgid "Troyan"
-msgstr "Trojann"
+msgstr "Troyann"
 
 msgid "Jojosh"
 msgstr "Jojosva"
@@ -4992,7 +4990,7 @@ msgid "Wrathmont"
 msgstr "Vredeberg"
 
 msgid "Maximus"
-msgstr "Maximus"
+msgstr "Maksimus"
 
 msgid "Next Hero"
 msgstr "Neste helt"
@@ -5299,13 +5297,13 @@ msgid "Gwenneth"
 msgstr "Lycke"
 
 msgid "Sir Gallant"
-msgstr "Sir Galant"
+msgstr "Herr Gallant"
 
 msgid "Tyro"
 msgstr "Tyros"
 
 msgid "Dimitry"
-msgstr "Dimitri"
+msgstr "Dimitry"
 
 msgid "Ruby"
 msgstr "Rubin"
@@ -5317,7 +5315,7 @@ msgid "Fineous"
 msgstr "Finneas"
 
 msgid "Jezebel"
-msgstr "Isabell"
+msgstr "Izabell"
 
 msgid "Atlas"
 msgstr "Atlas"
@@ -5329,7 +5327,7 @@ msgid "Jaclyn"
 msgstr "Bina"
 
 msgid "Gem"
-msgstr "Edel"
+msgstr "Edelsten"
 
 msgid "Natasha"
 msgstr "Natalie"
@@ -5341,10 +5339,10 @@ msgid "Luna"
 msgstr "Luna"
 
 msgid "Arie"
-msgstr "Aris"
+msgstr "Arie"
 
 msgid "Barok"
-msgstr "Bjarg"
+msgstr "Barok"
 
 msgid "Kastore"
 msgstr "Kastor"
@@ -5383,16 +5381,16 @@ msgid "Darlana"
 msgstr "Darlana"
 
 msgid "Ranloo"
-msgstr "Rannlau"
+msgstr "Rannlov"
 
 msgid "Rialdo"
 msgstr "Rialto"
 
 msgid "Zam"
-msgstr "Zamm"
+msgstr "Zam"
 
 msgid "Zom"
-msgstr "Zomm"
+msgstr "Zom"
 
 msgid "Celia"
 msgstr "Celia"
@@ -5401,10 +5399,10 @@ msgid "Roxana"
 msgstr "Roksana"
 
 msgid "Lord Corlagon"
-msgstr "Baron Korlagon"
+msgstr "Fyrst Korlagon"
 
 msgid "Lord Halton"
-msgstr "Baron Halton"
+msgstr "Fyrst Halton"
 
 msgid "Sister Eliza"
 msgstr "Søster Eliza"
@@ -5419,7 +5417,7 @@ msgid "Joseph"
 msgstr "Josef"
 
 msgid "Mog"
-msgstr "Maug"
+msgstr "Mog"
 
 msgid "Solmyr"
 msgstr "Solmyr"
@@ -5560,7 +5558,7 @@ msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Du kommer over levningene til en uheldig eventyrer."
 
 msgid "Treasure"
-msgstr "Skatt"
+msgstr "Verdifull gjenstand"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Etter å ha lett gjennom de fillete plaggene, finner du: %{artifact}."
