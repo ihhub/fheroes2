@@ -219,13 +219,23 @@ namespace Maps
         {
             _boatOwnerColor = Color::NONE;
         }
+        
+        void resetBoatOwnerHeroID()
+        {
+            _boatOwnerHeroID = -1;
+        }       
 
         int getBoatOwnerColor() const
         {
             return _boatOwnerColor;
         }
+        
+        int getBoatOwnerHeroID() const
+        {
+            return _boatOwnerHeroID;
+        }       
 
-        void setBoat( const int direction, const int color );
+        void setBoat( const int direction, const int color, const int boatHeroID );
         int getBoatDirection() const;
 
         void resetObjectSprite()
@@ -427,8 +437,11 @@ namespace Maps
 
         bool tileIsRoad = false;
 
-        // Heroes can only summon neutral empty boats or empty boats belonging to their kingdom.
+        // Heroes can only summon empty boats belonging to their kingdom
+        // first of all, a search is made for a boat belonging to this particular hero
         uint8_t _boatOwnerColor = Color::NONE;
+        
+        int8_t _boatOwnerHeroID = -1;   
 
         // This field does not persist in savegame.
         uint32_t _region = REGION_NODE_BLOCKED;

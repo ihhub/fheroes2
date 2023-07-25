@@ -1499,6 +1499,7 @@ namespace
         AI::Get().HeroesClearTask( hero );
 
         world.GetTiles( dst_index ).resetBoatOwnerColor();
+        world.GetTiles( dst_index ).resetBoatOwnerHeroID();
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
@@ -1517,7 +1518,7 @@ namespace
 
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
-        from.setBoat( Maps::GetDirection( fromIndex, dst_index ), hero.GetColor() );
+        from.setBoat( Maps::GetDirection( fromIndex, dst_index ), hero.GetColor(), hero.GetID() );
         hero.SetShipMaster( false );
         hero.GetPath().Reset();
 
