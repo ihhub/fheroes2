@@ -117,7 +117,7 @@ void Game::AnimateDelaysInitialize()
     delays[BATTLE_CATAPULT_CLOUD_DELAY].setDelay( 40 );
     delays[BATTLE_BRIDGE_DELAY].setDelay( 90 );
     delays[BATTLE_IDLE_DELAY].setDelay( 150 );
-    delays[BATTLE_OPPONENTS_DELAY].setDelay( 350 );
+    delays[BATTLE_OPPONENTS_DELAY].setDelay( 75 );
     delays[BATTLE_FLAGS_DELAY].setDelay( 250 );
     delays[BATTLE_POPUP_DELAY].setDelay( 800 );
     delays[BATTLE_COLOR_CYCLE_DELAY].setDelay( 220 );
@@ -200,7 +200,7 @@ void Game::UpdateGameSpeed()
     delays[BATTLE_CATAPULT_CLOUD_DELAY].setDelay( static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
     delays[BATTLE_BRIDGE_DELAY].setDelay( static_cast<uint64_t>( 90 * adjustedBattleSpeed ) );
     delays[BATTLE_IDLE_DELAY].setDelay( static_cast<uint64_t>( 150 * adjustedIdleAnimationSpeed ) );
-    delays[BATTLE_OPPONENTS_DELAY].setDelay( static_cast<uint64_t>( 350 * adjustedBattleSpeed ) );
+    delays[BATTLE_OPPONENTS_DELAY].setDelay( static_cast<uint64_t>( 75 * adjustedIdleAnimationSpeed ) );
     delays[BATTLE_FLAGS_DELAY].setDelay( static_cast<uint64_t>( 250 * adjustedIdleAnimationSpeed ) );
 }
 

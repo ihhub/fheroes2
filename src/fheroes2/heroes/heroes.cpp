@@ -1101,21 +1101,6 @@ void Heroes::ResetAction()
     ResetModes( ACTION );
 }
 
-uint32_t Heroes::GetCountArtifacts() const
-{
-    return bag_artifacts.CountArtifacts();
-}
-
-bool Heroes::HasUltimateArtifact() const
-{
-    return bag_artifacts.ContainUltimateArtifact();
-}
-
-bool Heroes::IsFullBagArtifacts() const
-{
-    return bag_artifacts.isFull();
-}
-
 bool Heroes::PickupArtifact( const Artifact & art )
 {
     if ( !art.isValid() ) {
@@ -1392,11 +1377,6 @@ void Heroes::SetShipMaster( bool f )
     f ? SetModes( SHIPMASTER ) : ResetModes( SHIPMASTER );
 }
 
-Skill::SecSkills & Heroes::GetSecondarySkills()
-{
-    return secondary_skills;
-}
-
 bool Heroes::HasSecondarySkill( int skill ) const
 {
     return Skill::Level::NONE != secondary_skills.GetLevel( skill );
@@ -1592,7 +1572,6 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
     }
 }
 
-/* apply penalty */
 void Heroes::ApplyPenaltyMovement( uint32_t penalty )
 {
     if ( move_point >= penalty )
