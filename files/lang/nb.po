@@ -3709,7 +3709,7 @@ msgid ""
 "Used to place\n"
 "a resource or treasure."
 msgstr ""
-"Brukes for å plassere en råvare eller en verdifull gjenstand.
+"Brukes for å plassere en råvare eller en verdifull gjenstand."
 
 msgid "Terrain Mode"
 msgstr "Terrengmodus"
