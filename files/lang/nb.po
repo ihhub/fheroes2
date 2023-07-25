@@ -1323,7 +1323,7 @@ msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
 "forefather of all descendants."
 msgstr ""
-"Erobre og foren alle de fiendtlige stammene. Ikke mist helten kalt Jarkonas, "
+"Erobre og foren alle de fiendtlige stammene. Ikke mist helten ved navn Jarkonas, "
 "alle etterkommeres forfeder."
 
 msgid ""
@@ -1886,7 +1886,7 @@ msgid "Blackridge"
 msgstr "Svartfjellryggen"
 
 msgid "Hillstone"
-msgstr "Haugstein"
+msgstr "Vollsten"
 
 msgid "Pinehurst"
 msgstr "Furuskogen"
@@ -4402,7 +4402,7 @@ msgid "hotkey|marketplace"
 msgstr "Markedsplass"
 
 msgid "hotkey|mage guild"
-msgstr "Magikerlaug"
+msgstr "Magikerforbund"
 
 msgid "hotkey|shipyard"
 msgstr "Skipsverft"
@@ -4526,7 +4526,7 @@ msgstr ""
 "Vennligst velg skjermoppløsning før du begynner."
 
 msgid "Please Remember"
-msgstr "Husk"
+msgstr "Merk"
 
 # Needs extra whitespace to avoid yellow word splitting
 msgid "You can always change game resolution by clicking on the "
@@ -4902,7 +4902,7 @@ msgid "New Week!"
 msgstr "Ny uke!"
 
 msgid "Beware!"
-msgstr "Viktig melding!"
+msgstr "Viktig beskjed!"
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
@@ -4947,7 +4947,7 @@ msgid "Thundax"
 msgstr "Tordøks"
 
 msgid "Lord Haart"
-msgstr "Fyrst Halton"
+msgstr "Fyrst Hjart"
 
 msgid "Ariel"
 msgstr "Ariel"
@@ -5362,10 +5362,10 @@ msgid "Halon"
 msgstr "Halon"
 
 msgid "Myra"
-msgstr "Mirha"
+msgstr "Myrha"
 
 msgid "Myrini"
-msgstr "Mjirini"
+msgstr "Myrini"
 
 msgid "Wilfrey"
 msgstr "Vilfrid"
@@ -5594,7 +5594,7 @@ msgid "You search through the flotsam, but find nothing."
 msgstr "Du går gjennom vrakgodset, men finner ingenting."
 
 msgid "Shrine of the 1st Circle"
-msgstr "Tempel av den første sirkelen"
+msgstr "Tempel av første sirkel"
 
 msgid ""
 "You come across a small shrine attended by a group of novice acolytes.\n"
@@ -5607,7 +5607,7 @@ msgstr ""
 "'%{spell}'."
 
 msgid "Shrine of the 2nd Circle"
-msgstr "Tempel av den andre sirkelen"
+msgstr "Tempel av andre sirkel"
 
 msgid ""
 "You come across an ornate shrine attended by a group of rotund friars.\n"
@@ -5618,7 +5618,7 @@ msgstr ""
 "I bytte mot din beskyttelse går de med på å lære deg trolldommen: '%{spell}'."
 
 msgid "Shrine of the 3rd Circle"
-msgstr "Tempel av den tredje sirkelen"
+msgstr "Tempel av tredje sirkel"
 
 msgid ""
 "You come across a lavish shrine attended by a group of high priests.\n"
@@ -6009,7 +6009,7 @@ msgstr ""
 "foten sin og snur seg vekk fra deg."
 
 msgid "You've found the artifact: "
-msgstr "Du fant skatten: "
+msgstr "Du fant den verdifulle gjenstanden: "
 
 msgid ""
 "You've found the humble dwelling of a withered hermit. The hermit tells you "
@@ -6062,7 +6062,7 @@ msgid ""
 "Discretion is the better part of valor, and you decide to avoid this fight "
 "for today."
 msgstr ""
-"Du velger varsomhet over dumdristighet og unngår denne kampen for i dag."
+"Du velger varsomhet framfor dumdristighet og unngår denne kampen for i dag."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -6870,11 +6870,10 @@ msgstr ""
 msgid "Spell book is not present."
 msgstr "Ingen tryllebok er til å finne."
 
-#, fuzzy
 msgid ""
 "That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
 msgstr ""
-"Denne trolldommen koster %{mana} mana. Du har kun %{point} mana, så du kan "
+"Denne trolldommen koster %{mana} mana. Du har null magipoeng, så du kan "
 "ikke bruke denne trolldommen."
 
 msgid ""
@@ -7973,7 +7972,7 @@ msgstr[0] "Vindmølle"
 msgstr[1] "Vindmøller"
 
 msgid "Artifact"
-msgstr "Skatt"
+msgstr "Gjenstand"
 
 msgid "Mermaid"
 msgstr "Havfrue"
@@ -7985,7 +7984,7 @@ msgid "Random Ultimate Artifact"
 msgstr "Tilfeldig sjeldneste skatt"
 
 msgid "Random Artifact"
-msgstr "Tilfeldig skatt"
+msgstr "Tilfeldig gjenstand"
 
 msgid "Random Resource"
 msgstr "Tilfeldig råvare"
@@ -8240,16 +8239,16 @@ msgid "Rangers"
 msgstr "Jegere"
 
 msgid "Pikeman"
-msgstr "Pikenér"
+msgstr "Spydmann"
 
 msgid "Pikemen"
-msgstr "Pikenérer"
+msgstr "Spydmenn"
 
 msgid "Veteran Pikeman"
-msgstr "Veteranpikenér"
+msgstr "Spydveteran"
 
 msgid "Veteran Pikemen"
-msgstr "Veteranpikenérer"
+msgstr "Spydveteraner"
 
 msgid "Swordsman"
 msgstr "Sverdmann"
@@ -8258,10 +8257,10 @@ msgid "Swordsmen"
 msgstr "Sverdmenn"
 
 msgid "Master Swordsman"
-msgstr "Mestersverdmann"
+msgstr "Sverdmester"
 
 msgid "Master Swordsmen"
-msgstr "Mestersverdmenn"
+msgstr "Sverdmestre"
 
 msgid "Cavalries"
 msgstr "Ryttere"
@@ -8313,16 +8312,16 @@ msgid "Wolves"
 msgstr "Varger"
 
 msgid "Ogre"
-msgstr "Jotun"
+msgstr "Ogre"
 
 msgid "Ogres"
-msgstr "Jotner"
+msgstr "Ogrer"
 
 msgid "Ogre Lord"
-msgstr "Jotunhersker"
+msgstr "Ogrehersker"
 
 msgid "Ogre Lords"
-msgstr "Jotunherskere"
+msgstr "Ogreherskere"
 
 msgid "Troll"
 msgstr "Troll"
@@ -8783,7 +8782,7 @@ msgid "This item can't be traded."
 msgstr "Denne tingen kan ikke byttes."
 
 msgid "Invalid Artifact"
-msgstr "Ugyldig skatt"
+msgstr "Ugyldig gjenstand"
 
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} øker kunnskapen din med %{count}."
@@ -10271,7 +10270,7 @@ msgid "Fireball"
 msgstr "Ildkule"
 
 msgid "Fireblast"
-msgstr "Ildsmell"
+msgstr "Ildblest"
 
 msgid ""
 "An improved version of fireball, fireblast affects two hexes around the "
@@ -10311,7 +10310,7 @@ msgid ""
 msgstr "Teleporterer den utvalgte krigeren til en ledig rute på slagmarken."
 
 msgid "Cure"
-msgstr "Kurer"
+msgstr "Kur"
 
 msgid ""
 "Removes all negative spells cast upon one of your units, and restores up to "
@@ -10321,7 +10320,7 @@ msgstr ""
 "%{count} liv for hvert nivå av brukerens kraft."
 
 msgid "Mass Cure"
-msgstr "Helbredning"
+msgstr "Helbredelse"
 
 msgid ""
 "Removes all negative spells cast upon your forces, and restores up to "
@@ -10342,7 +10341,7 @@ msgstr ""
 
 msgid "Resurrect True"
 msgstr ""
-"Ekte gjen-\n"
+"Sann gjen-\n"
 "opplivning"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
@@ -10358,7 +10357,7 @@ msgid "Increases the speed of all of your creatures by %{count}."
 msgstr "Øker hurtigheten til alle skapningene dine med %{count}."
 
 msgid "Mass Haste"
-msgstr "Hastverk"
+msgstr "Full hast"
 
 msgid "Slows target to half movement rate."
 msgstr "Halverer skrittene og minsker hurtigheten til målet."
@@ -10369,7 +10368,8 @@ msgstr ""
 "else"
 
 msgid "Mass Slow"
-msgstr "Sneglehær"
+msgstr "Full for-\n"
+"sinkelse"
 
 msgid "Slows all enemies to half movement rate."
 msgstr "Reduserer alle fiender ned til halvparten av skrittene deres."
