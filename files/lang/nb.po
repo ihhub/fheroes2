@@ -46,7 +46,8 @@ msgstr ""
 
 msgid "INFO"
 msgstr ""
-"INFO"
+"INFOR-\n"
+"MASJON"
 
 msgid "QUIT"
 msgstr ""
@@ -1020,6 +1021,7 @@ msgstr ""
 "fiendens byer og borger for å vinne, og pass på å ikke miste alle "
 "dvergebyene til samme tid, ellers vinner fienden."
 
+# rett fram?
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
