@@ -2733,9 +2733,8 @@ msgstr "Er du sikker på at du vil bortvise denne troppen?"
 msgid "Upgrade"
 msgstr "Oppgrader"
 
-#, fuzzy
 msgid "Upgrade your troops."
-msgstr "Du har ikke råd til å oppgradere troppene dine!"
+msgstr "Oppgrader troppene dine."
 
 msgid "Dismiss"
 msgstr "Bortvis"
@@ -3034,7 +3033,7 @@ msgid "You have learned %{skill}."
 msgstr "Du har lært %{skill}."
 
 msgid "You may learn either:"
-msgstr "Du kan enten velge mellom:"
+msgstr "Du kan velge mellom å lære:"
 
 msgid "or"
 msgstr "eller"
@@ -3561,7 +3560,6 @@ msgstr ""
 "Er du sikker på at du ønsker å laste inn et nytt kart?\n"
 "(Alt som er ulagret i dette kartet vil gå tapt.)"
 
-#, fuzzy
 msgid ""
 "Are you sure you want to create a new map? (Any unsaved changes to the "
 "current map will be lost.)"
@@ -3611,7 +3609,7 @@ msgid "Desert Objects"
 msgstr "Ørkenting"
 
 msgid "Dirt Objects"
-msgstr ""
+msgstr "Grusting"
 
 msgid "Wasteland Objects"
 msgstr "Ødemarksting"
@@ -3626,7 +3624,7 @@ msgid "Heroes"
 msgstr "Helter"
 
 msgid "Artifacts"
-msgstr "Skatter"
+msgstr "Gjenstander"
 
 msgid "Treasures"
 msgstr "Verdifulle gjenstander"
@@ -4779,7 +4777,7 @@ msgid "Capture the town '%{name}'."
 msgstr "Overta byen kalt %{name}."
 
 msgid "Defeat the hero '%{name}'."
-msgstr "Slå ut helten kalt %{name}."
+msgstr "Slå ut helten ved navn %{name}."
 
 msgid "Find the ultimate artifact."
 msgstr "Finn den sjeldneste skatten."
@@ -5959,7 +5957,7 @@ msgid ""
 "you all that I know to aid you in your travels.\""
 msgstr ""
 "En gammel ridder dukker opp på trappa til lysthuset, \"Min herre, jeg skal "
-"lære deg alt jeg kan for å kunne hjelpe deg på din ferd.\""
+"lære deg alt jeg kan for å hjelpe deg på din ferd.\""
 
 msgid ""
 "You've pulled a shipwreck survivor from certain death in an unforgiving "
