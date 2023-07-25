@@ -304,6 +304,7 @@ namespace
         assert( boatSource != -1 );
 
         const int heroColor = hero.GetColor();
+        const int boatHeroID = hero.GetID();
 
         Maps::Tiles & tileSource = world.GetTiles( boatSource );
 
@@ -311,8 +312,9 @@ namespace
         gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
 
         Maps::Tiles & tileDest = world.GetTiles( boatDestination );
-        tileDest.setBoat( Direction::RIGHT, heroColor );
+        tileDest.setBoat( Direction::RIGHT, heroColor, boatHeroID );
         tileSource.resetBoatOwnerColor();
+        tileSource.resetBoatOwnerHeroID();
 
         gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
 
