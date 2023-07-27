@@ -89,7 +89,7 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
         buttonsArea.SetRedraw();
     }
     // Start the hero's movement
-    else if ( path.isValid() && hero->MayStillMove( false, true ) ) {
+    else if ( path.isValidForMovement() && hero->MayStillMove( false, true ) ) {
         SetFocus( hero, true );
         RedrawFocus();
 
@@ -157,7 +157,7 @@ void Interface::AdventureMap::EventContinueMovement() const
 {
     Heroes * hero = GetFocusHeroes();
 
-    if ( hero && hero->GetPath().isValid() && hero->MayStillMove( false, true ) ) {
+    if ( hero && hero->GetPath().isValidForMovement() && hero->MayStillMove( false, true ) ) {
         hero->SetMove( true );
     }
 }

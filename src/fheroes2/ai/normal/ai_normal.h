@@ -252,8 +252,10 @@ namespace AI
 
         void revealFog( const Maps::Tiles & tile, const Kingdom & kingdom ) override;
 
+        void HeroesBeginMovement( Heroes & hero ) override;
         void HeroesPreBattle( HeroBase & hero, bool isAttacking ) override;
         void HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType ) override;
+        void HeroesActionNewPosition( Heroes & hero ) override;
 
         bool recruitHero( Castle & castle, bool buyArmy, bool underThreat );
         void reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget );

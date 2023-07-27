@@ -360,26 +360,28 @@ namespace fheroes2
         return -1;
     }
 
-    int32_t getSummonableBoat( const Heroes & hero )
+    int32_t getSummonableBoat( const int32_t index, const int color )
     {
-        const int32_t center = hero.GetIndex();
-        const int heroColor = hero.GetColor();
-
-        for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
+        for ( const int32_t boatSource : Maps::GetObjectPositions( index, MP2::OBJ_BOAT, false ) ) {
             assert( Maps::isValidAbsIndex( boatSource ) );
 
             const int boatColor = world.GetTiles( boatSource ).getBoatOwnerColor();
-            if ( boatColor != Color::NONE && boatColor != heroColor ) {
+            if ( boatColor != Color::NONE && boatColor != color ) {
                 continue;
             }
 
-            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, center );
+            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, index );
             if ( distance > 1 ) {
                 return boatSource;
             }
         }
 
         return -1;
+    }
+
+    int32_t getSummonableBoat( const Heroes & hero )
+    {
+        return getSummonableBoat( hero.GetIndex(), hero.GetColor() );
     }
 
     bool isHeroNearWater( const Heroes & hero )

@@ -2048,6 +2048,37 @@ namespace AI
         }
     }
 
+    void Normal::HeroesBeginMovement( Heroes & hero )
+    {
+        const Route::Path & path = hero.GetPath();
+        if ( !path.isValidForMovement() ) {
+            return;
+        }
+
+        const int32_t heroIdx = hero.GetIndex();
+
+        const int frontDirection = path.GetFrontDirection();
+        assert( Maps::isValidDirection( heroIdx, frontDirection ) );
+
+        const int32_t nextTileIdx = Maps::GetDirectionIndex( heroIdx, frontDirection );
+
+        const Maps::Tiles & currTile = world.GetTiles( heroIdx );
+        const Maps::Tiles & nextTile = world.GetTiles( nextTileIdx );
+
+        if ( currTile.isWater() || ( !nextTile.isWater() || nextTile.GetObject() != MP2::OBJ_NONE ) ) {
+            return;
+        }
+
+        // If the hero goes to the water tile, then this should be his last movement
+        assert( path.size() == 1 );
+
+        const int32_t boatIdx = nextTile.GetIndex();
+        const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, boatIdx );
+
+        updateMapActionObjectCache( formerBoatIdx );
+        updateMapActionObjectCache( boatIdx );
+    }
+
     void Normal::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType )
     {
         // This method is called upon action completion and the hero could no longer be available.
@@ -2067,6 +2098,47 @@ namespace AI
         updatePriorityTargets( hero, tileIndex, objectType );
 
         updateMapActionObjectCache( tileIndex );
+    }
+
+    void Normal::HeroesActionNewPosition( Heroes & hero )
+    {
+        if ( hero.isFreeman() ) {
+            return;
+        }
+
+        const Route::Path & path = hero.GetPath();
+        if ( !path.isValidForMovement() ) {
+            return;
+        }
+
+        const int32_t heroIdx = hero.GetIndex();
+        assert( heroIdx == path.GetFrontIndex() );
+
+        const int nextStepDirection = path.GetNextStepDirection();
+        if ( !Maps::isValidDirection( heroIdx, nextStepDirection ) ) {
+            return;
+        }
+
+        const int32_t nextTileIdx = Maps::GetDirectionIndex( heroIdx, nextStepDirection );
+
+        const Maps::Tiles & currTile = world.GetTiles( heroIdx );
+        const Maps::Tiles & nextTile = world.GetTiles( nextTileIdx );
+
+        if ( currTile.isWater() || ( !nextTile.isWater() || nextTile.GetObject() != MP2::OBJ_NONE ) ) {
+            return;
+        }
+
+        // If the hero goes to the water tile, then this should be his last movement
+        // (not counting the current step, which is not yet completed at the moment)
+        assert( path.size() == 2 );
+
+        const int32_t boatIdx = nextTile.GetIndex();
+        const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, boatIdx );
+
+        updateMapActionObjectCache( formerBoatIdx );
+        updateMapActionObjectCache( boatIdx );
+
+        assert( hero.isMoveEnabled() );
     }
 
     bool Normal::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue )

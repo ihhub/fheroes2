@@ -507,7 +507,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     if ( hero->isControlAI() ) {
                         const Route::Path & path = hero->GetPath();
                         // Check if the next AI hero path point will not be seen on map to skip it.
-                        if ( path.isValid() && ( world.GetTiles( path.front().GetIndex() ).getFogDirection() == DIRECTION_ALL ) ) {
+                        if ( path.isValidForMovement() && ( world.GetTiles( path.GetFrontIndex() ).getFogDirection() == DIRECTION_ALL ) ) {
                             continue;
                         }
                     }

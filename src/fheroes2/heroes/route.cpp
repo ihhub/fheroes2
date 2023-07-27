@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "route.h"
+
 #include <cassert>
 #include <memory>
 
@@ -28,21 +30,34 @@
 #include "maps.h"
 #include "maps_tiles.h"
 #include "mp2.h"
-#include "route.h"
 #include "serialize.h"
 #include "world.h"
 
-Route::Path::Path( const Heroes & h )
-    : hero( &h )
-    , dst( -1 )
-    , hide( true )
+Route::Path::Path( const Heroes & hero )
+    : _hero( &hero )
+    , _dst( -1 )
+    , _hide( true )
 {}
+
+int Route::Path::GetFrontIndex() const
+{
+    return empty() ? _dst : front().GetIndex();
+}
+
+int Route::Path::GetFrontFrom() const
+{
+    assert( _hero != nullptr );
+
+    return empty() ? _hero->GetIndex() : front().GetFrom();
+}
 
 int Route::Path::GetFrontDirection() const
 {
     if ( empty() ) {
-        if ( Maps::isValidAbsIndex( dst ) ) {
-            return Maps::GetDirection( hero->GetIndex(), dst );
+        if ( Maps::isValidAbsIndex( _dst ) ) {
+            assert( _hero != nullptr );
+
+            return Maps::GetDirection( _hero->GetIndex(), _dst );
         }
 
         return Direction::UNKNOWN;
@@ -56,42 +71,63 @@ uint32_t Route::Path::GetFrontPenalty() const
     return empty() ? 0 : front().GetPenalty();
 }
 
+int Route::Path::GetNextStepDirection() const
+{
+    if ( size() < 2 ) {
+        return Direction::UNKNOWN;
+    }
+
+    auto iter = cbegin();
+
+    return ( ++iter )->GetDirection();
+}
+
 void Route::Path::PopFront()
 {
-    if ( !empty() )
-        pop_front();
+    if ( empty() ) {
+        return;
+    }
+
+    pop_front();
 }
 
 int32_t Route::Path::GetDestinationIndex( const bool returnLastStep /* = false */ ) const
 {
     if ( returnLastStep ) {
-        return empty() ? dst : back().GetIndex();
+        return empty() ? _dst : back().GetIndex();
     }
 
-    return dst;
+    return _dst;
 }
 
 void Route::Path::setPath( const std::list<Route::Step> & path, int32_t destIndex )
 {
     assign( path.begin(), path.end() );
 
-    dst = destIndex;
+    _dst = destIndex;
 }
 
 void Route::Path::Reset()
 {
-    dst = -1;
+    _dst = -1;
 
-    if ( !empty() ) {
-        hide = true;
-
-        clear();
+    if ( empty() ) {
+        return;
     }
+
+    _hide = true;
+
+    clear();
 }
 
-bool Route::Path::isValid() const
+bool Route::Path::isValidForMovement() const
 {
-    return !empty() && front().GetDirection() != Direction::UNKNOWN;
+    return !empty() && front().GetDirection() != Direction::UNKNOWN && Maps::isValidAbsIndex( front().GetIndex() );
+}
+
+bool Route::Path::isValidForTeleportation() const
+{
+    return !empty() && front().GetDirection() == Direction::UNKNOWN && Maps::isValidAbsIndex( front().GetIndex() );
 }
 
 int Route::Path::GetIndexSprite( int from, int to, int mod )
@@ -364,20 +400,21 @@ int Route::Path::GetIndexSprite( int from, int to, int mod )
 
 bool Route::Path::hasAllowedSteps() const
 {
-    if ( !isValid() ) {
+    if ( !isValidForMovement() ) {
         return false;
     }
 
-    assert( hero != nullptr );
-    assert( !empty() );
+    assert( _hero != nullptr );
 
-    return hero->GetMovePoints() >= front().GetPenalty();
+    return _hero->GetMovePoints() >= front().GetPenalty();
 }
 
 int Route::Path::GetAllowedSteps() const
 {
+    assert( _hero != nullptr );
+
     int green = 0;
-    uint32_t movePoints = hero->GetMovePoints();
+    uint32_t movePoints = _hero->GetMovePoints();
 
     for ( const_iterator it = begin(); it != end() && movePoints > 0; ++it ) {
         uint32_t penalty = it->GetPenalty();
@@ -396,12 +433,14 @@ int Route::Path::GetAllowedSteps() const
 
 std::string Route::Path::String() const
 {
+    assert( _hero != nullptr );
+
     std::string output( "from: " );
-    output += std::to_string( hero->GetIndex() );
+    output += std::to_string( _hero->GetIndex() );
     output += ", to: ";
-    output += std::to_string( dst );
+    output += std::to_string( _dst );
     output += ", obj: ";
-    output += MP2::StringObject( Maps::isValidAbsIndex( dst ) ? world.GetTiles( dst ).GetObject() : MP2::OBJ_NONE );
+    output += MP2::StringObject( Maps::isValidAbsIndex( _dst ) ? world.GetTiles( _dst ).GetObject() : MP2::OBJ_NONE );
     output += ", dump: ";
 
     for ( const Step & step : *this ) {
@@ -423,7 +462,7 @@ StreamBase & Route::operator<<( StreamBase & msg, const Step & step )
 
 StreamBase & Route::operator<<( StreamBase & msg, const Path & path )
 {
-    return msg << path.dst << path.hide << static_cast<const std::list<Step> &>( path );
+    return msg << path._dst << path._hide << static_cast<const std::list<Step> &>( path );
 }
 
 StreamBase & Route::operator>>( StreamBase & msg, Step & step )
@@ -436,5 +475,5 @@ StreamBase & Route::operator>>( StreamBase & msg, Step & step )
 StreamBase & Route::operator>>( StreamBase & msg, Path & path )
 {
     std::list<Step> & base = path;
-    return msg >> path.dst >> path.hide >> base;
+    return msg >> path._dst >> path._hide >> base;
 }

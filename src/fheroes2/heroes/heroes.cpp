@@ -958,7 +958,7 @@ void Heroes::calculatePath( int32_t dstIdx )
         dstIdx = path.GetDestinationIndex();
     }
 
-    if ( !path.isValid() ) {
+    if ( !path.isValidForMovement() ) {
         path.Reset();
     }
 
@@ -968,7 +968,7 @@ void Heroes::calculatePath( int32_t dstIdx )
 
     path.setPath( world.getPath( *this, dstIdx ), dstIdx );
 
-    if ( !path.isValid() ) {
+    if ( !path.isValidForMovement() ) {
         path.Reset();
     }
 }
@@ -1322,7 +1322,7 @@ bool Heroes::BuySpellBook( const Castle * castle )
 
 bool Heroes::isMoveEnabled() const
 {
-    return Modes( ENABLEMOVE ) && path.isValid() && path.hasAllowedSteps();
+    return Modes( ENABLEMOVE ) && path.isValidForMovement() && path.hasAllowedSteps();
 }
 
 bool Heroes::CanMove() const
@@ -1336,12 +1336,20 @@ void Heroes::SetMove( bool f )
     if ( f ) {
         ResetModes( SLEEPER );
 
+        if ( isControlAI() ) {
+            AI::Get().HeroesBeginMovement( *this );
+        }
+
         SetModes( ENABLEMOVE );
     }
     else {
         ResetModes( ENABLEMOVE );
 
-        // reset sprite position
+        if ( isControlAI() ) {
+            AI::Get().HeroesFinishMovement( *this );
+        }
+
+        // Reset the hero sprite
         switch ( direction ) {
         case Direction::TOP:
             sprite_index = 0;
@@ -1590,7 +1598,7 @@ bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) con
         return false;
     }
 
-    if ( path.isValid() && !ignorePath ) {
+    if ( path.isValidForMovement() && !ignorePath ) {
         return path.hasAllowedSteps();
     }
 
