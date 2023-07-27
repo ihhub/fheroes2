@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-15 12:25+0000\n"
+"POT-Creation-Date: 2023-07-22 03:24+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -161,11 +161,11 @@ msgstr ""
 msgid "GIFT"
 msgstr "AJÁNDÉK"
 
-msgid "guildWell|EXIT"
-msgstr ""
-
 msgid "DIFFICULTY"
 msgstr "NEHÉZSÉG"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr ""
@@ -184,16 +184,6 @@ msgstr "Felfedező"
 
 msgid "None"
 msgstr "Nincs"
-
-msgid "Warning"
-msgstr "Figyelmeztetés"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
-"Szeretnéd visszavenni az irányítást az AI-tól? Ez csak a következő körben "
-"lesz érvényes."
 
 msgid ""
 "A few\n"
@@ -2607,11 +2597,14 @@ msgstr "Maximus"
 msgid "Hire all creatures in the town."
 msgstr "Összes hős és város elvesztése"
 
+msgid "Available"
+msgstr "Rendelkezésre áll"
+
 msgid "Town Population Information and Statistics"
 msgstr "A város lakosságának adatai és statisztikái"
 
-msgid "Damg"
-msgstr ""
+msgid "Damage"
+msgstr "Sebzés"
 
 msgid "HP"
 msgstr "ÉP"
@@ -2621,9 +2614,6 @@ msgstr "Szaporulat"
 
 msgid "week"
 msgstr "hét"
-
-msgid "Available"
-msgstr "Rendelkezésre áll"
 
 #, fuzzy
 msgid "View World"
@@ -2674,9 +2664,6 @@ msgstr "Lövések"
 
 msgid "Shots Left"
 msgstr "Maradék lövések"
-
-msgid "Damage"
-msgstr "Sebzés"
 
 msgid "Hit Points"
 msgstr "Életerő-pontok"
@@ -3592,6 +3579,120 @@ msgstr "Kattints a főmenübe való visszatéréshez."
 msgid "Quit out of the map editor."
 msgstr ""
 
+msgid "Ocean Objects"
+msgstr ""
+
+msgid "Grass Objects"
+msgstr ""
+
+msgid "Snow Objects"
+msgstr ""
+
+msgid "Swamp Objects"
+msgstr ""
+
+msgid "Lava Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Desert Objects"
+msgstr "Sivatagi sátor"
+
+msgid "Dirt Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Wasteland Objects"
+msgstr "Pusztulat"
+
+msgid "Beach Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Towns"
+msgstr "Város"
+
+msgid "Heroes"
+msgstr "Hősök"
+
+#, fuzzy
+msgid "Artifacts"
+msgstr "Varázstárgy"
+
+#, fuzzy
+msgid "Treasures"
+msgstr "Kincsek"
+
+msgid ""
+"Draws terrain in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+msgid ""
+"Erases objects in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+#, fuzzy
+msgid "Small Brush"
+msgstr "Kicsi térképek"
+
+#, fuzzy
+msgid "Medium Brush"
+msgstr "Közepes térképek"
+
+#, fuzzy
+msgid "Large Brush"
+msgstr "Nagy térképek"
+
+msgid "Area Fill"
+msgstr ""
+
+msgid "Used to click and drag for filling in large areas."
+msgstr ""
+
+msgid "Clear Area"
+msgstr ""
+
+msgid "Used to click and drag for clearing large areas."
+msgstr ""
+
+msgid ""
+"Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
+"eliminates the penalty.)"
+msgstr ""
+
+msgid "Traversable only by boat."
+msgstr ""
+
+msgid "No special modifiers."
+msgstr ""
+
+msgid "Used to place objects most appropriate for use on %{terrain}."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a town or castle."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a monster group."
+msgstr ""
+
+msgid "Used to place a hero."
+msgstr ""
+
+#, fuzzy
+msgid "Used to place an artifact."
+msgstr "A Szent Varázstárgy kiásása."
+
+msgid ""
+"Used to place\n"
+"a resource or treasure."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr ""
 
@@ -3639,7 +3740,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-msgid "Undo your last action.  Press again to redo the action."
+msgid "Undo your last action. Press again to redo the action."
 msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
@@ -3692,6 +3793,9 @@ msgstr "Vissza a főmenübe."
 
 msgid "No maps available!"
 msgstr "Nincs használható térkép!"
+
+msgid "Warning"
+msgstr "Figyelmeztetés"
 
 msgid "difficulty|Easy"
 msgstr "Könnyű"
@@ -4332,6 +4436,18 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+"Szeretnéd visszavenni az irányítást az AI-tól? Ez csak a következő körben "
+"lesz érvényes."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "A Tükörkép varázslat nem sikerült."
@@ -4771,11 +4887,6 @@ msgstr ""
 #, fuzzy
 msgid "%{color} player's turn."
 msgstr "%{color} játékos köre"
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -6530,7 +6641,8 @@ msgid "There is no free ocean location near the hero to cast this spell."
 msgstr ""
 
 msgid ""
-"You do not currently own any town or castle, so you can't cast the spell."
+"You do not currently own any town or castle that is not occupied by a hero, "
+"so you can't cast the spell."
 msgstr ""
 
 msgid "This hero is already in a town, so you can't cast the spell."
@@ -7180,10 +7292,6 @@ msgid "Skills"
 msgstr "Fűrészmalom"
 
 #, fuzzy
-msgid "Artifacts"
-msgstr "Varázstárgy"
-
-#, fuzzy
 msgid "Town/Castle"
 msgstr "Kastély"
 
@@ -7193,9 +7301,6 @@ msgstr "Helyőrség"
 #, fuzzy
 msgid "Gold Per Day:"
 msgstr "Arany a kincstárban:"
-
-msgid "Heroes"
-msgstr "Hősök"
 
 #, fuzzy
 msgid "View Heroes."

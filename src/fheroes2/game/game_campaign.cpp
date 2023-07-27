@@ -814,7 +814,7 @@ namespace
         case Campaign::DESCENDANTS_CAMPAIGN:
         case Campaign::WIZARDS_ISLE_CAMPAIGN:
         case Campaign::VOYAGE_HOME_CAMPAIGN:
-            return ICN::X_CMPBTN;
+            return ICN::POL_CAMPAIGN_BUTTONS;
         default:
             // Implementing a new campaign? Add a new case!
             assert( 0 );
@@ -866,31 +866,6 @@ namespace
             assert( 0 );
             break;
         }
-    }
-
-    fheroes2::ButtonSprite getDifficultyButton( const int campaignId, const fheroes2::Point & offset )
-    {
-        int icnId = ICN::UNKNOWN;
-
-        switch ( campaignId ) {
-        case Campaign::ROLAND_CAMPAIGN:
-            icnId = ICN::BUTTON_DIFFICULTY_ROLAND;
-            break;
-        case Campaign::ARCHIBALD_CAMPAIGN:
-            icnId = ICN::BUTTON_DIFFICULTY_ARCHIBALD;
-            break;
-        case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
-        case Campaign::DESCENDANTS_CAMPAIGN:
-        case Campaign::WIZARDS_ISLE_CAMPAIGN:
-        case Campaign::VOYAGE_HOME_CAMPAIGN:
-            icnId = ICN::BUTTON_DIFFICULTY_POL;
-            break;
-        default:
-            // Implementing a new campaign? Add a new case!
-            assert( 0 );
-            break;
-        }
-        return fheroes2::ButtonSprite( offset.x, offset.y, fheroes2::AGG::GetICN( icnId, 0 ), fheroes2::AGG::GetICN( icnId, 1 ) );
     }
 
     std::string getCampaignDifficultyText( const int32_t difficulty )
@@ -1325,19 +1300,40 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     }
 
     const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( backgroundIconID, 0 );
-    const fheroes2::Point top( ( display.width() - backgroundImage.width() ) / 2, ( display.height() - backgroundImage.height() ) / 2 );
+    const int32_t backgroundImageWidth = backgroundImage.width();
+    const fheroes2::Point top( ( display.width() - backgroundImageWidth ) / 2, ( display.height() - backgroundImage.height() ) / 2 );
 
     fheroes2::Blit( backgroundImage, display, top.x, top.y );
     drawCampaignNameHeader( chosenCampaignID, display, top );
 
     const int buttonIconID = getCampaignButtonId( chosenCampaignID );
-    fheroes2::Button buttonViewIntro( top.x + 22, top.y + 431, buttonIconID, 0, 1 );
-    fheroes2::Button buttonRestart( top.x + 367 - 6, top.y + 431, buttonIconID, 2, 3 );
-    fheroes2::Button buttonOk( top.x + 367, top.y + 431, buttonIconID, 4, 5 );
-    fheroes2::Button buttonCancel( top.x + 511, top.y + 431, buttonIconID, 6, 7 );
 
-    // Difficulty button is not present in the original assets so we need to generate it.
-    fheroes2::ButtonSprite buttonDifficulty = getDifficultyButton( chosenCampaignID, top + fheroes2::Point( 195, 431 ) );
+    // find the placements for the buttons by taking into account their widths. The space between VIEW INTRO and CANCEL is divided by 3
+    // for the 3 interbutton spaces. The OKAY and RESTART buttons never appear together
+    const int32_t backgroundMargin = 30;
+    const int32_t viewIntroPlacement = top.x + backgroundMargin;
+    const int32_t endOfViewIntroPlacement = viewIntroPlacement + fheroes2::AGG::GetICN( buttonIconID, 0 ).width();
+    const int32_t cancelPlacement = top.x + backgroundImageWidth - backgroundMargin - fheroes2::AGG::GetICN( buttonIconID, 6 ).width();
+    const int32_t spaceBetweenViewIntroAndCancel = cancelPlacement - endOfViewIntroPlacement;
+    const int32_t difficultyButtonWidth = fheroes2::AGG::GetICN( buttonIconID, 8 ).width();
+    const uint32_t okayRestartIndex = allowToRestart ? 2 : 4;
+    const int32_t middleButtonsMargin
+        = ( spaceBetweenViewIntroAndCancel - difficultyButtonWidth - ( fheroes2::AGG::GetICN( buttonIconID, okayRestartIndex ).width() ) ) / 3;
+    const int32_t difficultyPlacement = endOfViewIntroPlacement + middleButtonsMargin;
+    const int32_t okRestartPlacement = difficultyPlacement + difficultyButtonWidth + middleButtonsMargin;
+
+    const int32_t buttonOffsetY = top.y + 431;
+
+    fheroes2::Button buttonViewIntro( viewIntroPlacement, buttonOffsetY, buttonIconID, 0, 1 );
+    fheroes2::Button buttonRestart( okRestartPlacement, buttonOffsetY, buttonIconID, 2, 3 );
+    fheroes2::Button buttonOk( okRestartPlacement, buttonOffsetY, buttonIconID, 4, 5 );
+    fheroes2::Button buttonCancel( cancelPlacement, buttonOffsetY, buttonIconID, 6, 7 );
+    fheroes2::Button buttonDifficulty( difficultyPlacement, buttonOffsetY, buttonIconID, 8, 9 );
+
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 0 ), display, { viewIntroPlacement, buttonOffsetY }, { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, okayRestartIndex ), display, { okRestartPlacement, buttonOffsetY }, { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 6 ), display, { cancelPlacement, buttonOffsetY }, { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonIconID, 8 ), display, { difficultyPlacement, buttonOffsetY }, { -5, 5 } );
 
     // create scenario bonus choice buttons
     fheroes2::ButtonGroup buttonChoices;

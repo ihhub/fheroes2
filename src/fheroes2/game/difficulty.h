@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -40,7 +40,10 @@ namespace Difficulty
 
     int GetScoutingBonus( int difficulty );
     double GetGoldIncomeBonus( int difficulty );
-    double GetUnitGrowthBonusForAI( int difficulty );
+
+    // Returns an extra growth bonus modifier for AI based on difficulty level.
+    double GetUnitGrowthBonusForAI( const int difficulty );
+
     int GetHeroMovementBonus( int difficulty );
     double GetAIRetreatRatio( int difficulty );
 }

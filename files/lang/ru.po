@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-15 12:25+0000\n"
+"POT-Creation-Date: 2023-07-22 03:24+0000\n"
 "PO-Revision-Date: 2023-07-15 14:32+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -184,11 +184,11 @@ msgstr "6 ИГРОКОВ"
 msgid "GIFT"
 msgstr "ОТДАТЬ"
 
-msgid "guildWell|EXIT"
-msgstr ""
-
 msgid "DIFFICULTY"
 msgstr "СЛОЖНОСТЬ"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "МИН"
@@ -207,16 +207,6 @@ msgstr "Разведчик"
 
 msgid "None"
 msgstr "Отсутствуют"
-
-msgid "Warning"
-msgstr "Внимание"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
-"Хотите ли Вы передать управление ИИ? Передача вступит в силу со следующего "
-"хода."
 
 msgid ""
 "A few\n"
@@ -2597,10 +2587,13 @@ msgstr "Максимум"
 msgid "Hire all creatures in the town."
 msgstr "Нанять всех существ в городе."
 
+msgid "Available"
+msgstr "Доступно"
+
 msgid "Town Population Information and Statistics"
 msgstr "Информация о населении города"
 
-msgid "Damg"
+msgid "Damage"
 msgstr "Урон"
 
 msgid "HP"
@@ -2611,9 +2604,6 @@ msgstr "Прирост"
 
 msgid "week"
 msgstr "неделя"
-
-msgid "Available"
-msgstr "Доступно"
 
 msgid "View World"
 msgstr "Обзор мира"
@@ -2665,9 +2655,6 @@ msgstr "Выстрелов"
 
 msgid "Shots Left"
 msgstr "Выстрелов"
-
-msgid "Damage"
-msgstr "Урон"
 
 msgid "Hit Points"
 msgstr "Здоровье"
@@ -3545,6 +3532,123 @@ msgstr "Сохранить текущую карту."
 msgid "Quit out of the map editor."
 msgstr "Выйти из редактора карт."
 
+msgid "Ocean Objects"
+msgstr ""
+
+msgid "Grass Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Snow Objects"
+msgstr "Нет объекта"
+
+msgid "Swamp Objects"
+msgstr ""
+
+msgid "Lava Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Desert Objects"
+msgstr "Шатёр"
+
+msgid "Dirt Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Wasteland Objects"
+msgstr "Пустошь"
+
+msgid "Beach Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Towns"
+msgstr "Город"
+
+msgid "Heroes"
+msgstr "Герои"
+
+msgid "Artifacts"
+msgstr "Артефакты"
+
+#, fuzzy
+msgid "Treasures"
+msgstr "Сокровище"
+
+msgid ""
+"Draws terrain in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+msgid ""
+"Erases objects in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+#, fuzzy
+msgid "Small Brush"
+msgstr "Маленькие карты"
+
+#, fuzzy
+msgid "Medium Brush"
+msgstr "Средние карты"
+
+#, fuzzy
+msgid "Large Brush"
+msgstr "Большие карты"
+
+msgid "Area Fill"
+msgstr ""
+
+msgid "Used to click and drag for filling in large areas."
+msgstr ""
+
+msgid "Clear Area"
+msgstr ""
+
+msgid "Used to click and drag for clearing large areas."
+msgstr ""
+
+msgid ""
+"Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
+"eliminates the penalty.)"
+msgstr ""
+
+msgid "Traversable only by boat."
+msgstr ""
+
+msgid "No special modifiers."
+msgstr ""
+
+#, fuzzy
+msgid "Used to place objects most appropriate for use on %{terrain}."
+msgstr ""
+"Используется для размещения объектов (гор, деревьев, сокровищ и т.п.) на "
+"карте."
+
+msgid ""
+"Used to place\n"
+"a town or castle."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a monster group."
+msgstr ""
+
+msgid "Used to place a hero."
+msgstr ""
+
+#, fuzzy
+msgid "Used to place an artifact."
+msgstr "Найти великий артефакт."
+
+msgid ""
+"Used to place\n"
+"a resource or treasure."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr "Почва"
 
@@ -3594,7 +3698,8 @@ msgstr "Лупа"
 msgid "Undo"
 msgstr "Отменить"
 
-msgid "Undo your last action.  Press again to redo the action."
+#, fuzzy
+msgid "Undo your last action. Press again to redo the action."
 msgstr "Отменить предыдущее действие. Повторное нажатие повторяет действие."
 
 msgid "Create a new map either from scratch or using the random map generator."
@@ -3646,6 +3751,9 @@ msgstr "Вернуться в главное меню редактора кар�
 
 msgid "No maps available!"
 msgstr "Нет доступных карт!"
+
+msgid "Warning"
+msgstr "Внимание"
 
 msgid "difficulty|Easy"
 msgstr "Простая"
@@ -4264,6 +4372,20 @@ msgstr "улучшить существо"
 msgid "hotkey|dismiss hero or troop"
 msgstr "уволить героя или существо"
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+"Хотите ли Вы передать управление ИИ? Передача вступит в силу со следующего "
+"хода."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+"Хотите ли Вы передать управление ИИ? Передача вступит в силу со следующего "
+"хода."
+
 msgid "The save file is corrupted."
 msgstr "Файл сохранения повреждён."
 
@@ -4725,13 +4847,6 @@ msgstr ""
 
 msgid "%{color} player's turn."
 msgstr "Ход игрока: %{color}"
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
-"Хотите ли Вы передать управление ИИ? Передача вступит в силу со следующего "
-"хода."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -6671,8 +6786,10 @@ msgstr ""
 "Рядом с героем нет свободного места в океане для использования этого "
 "заклинания."
 
+#, fuzzy
 msgid ""
-"You do not currently own any town or castle, so you can't cast the spell."
+"You do not currently own any town or castle that is not occupied by a hero, "
+"so you can't cast the spell."
 msgstr ""
 "Вы не владеете ни одним городом или замком. Потому это заклинание не "
 "сработает."
@@ -7242,9 +7359,6 @@ msgstr "Герой/Характеристика"
 msgid "Skills"
 msgstr "Навыки"
 
-msgid "Artifacts"
-msgstr "Артефакты"
-
 msgid "Town/Castle"
 msgstr "Город/Замок"
 
@@ -7253,9 +7367,6 @@ msgstr "Гарнизон"
 
 msgid "Gold Per Day:"
 msgstr "Доход золота в день:"
-
-msgid "Heroes"
-msgstr "Герои"
 
 msgid "View Heroes."
 msgstr "Просмотреть всех Ваших героев."
@@ -10548,6 +10659,9 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Damg"
+#~ msgstr "Урон"
 
 #~ msgid "%{spell} failed!!!"
 #~ msgstr "Неудачный вызов %{spell}!"

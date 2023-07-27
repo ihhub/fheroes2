@@ -600,7 +600,7 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
     default:
         if ( MP2::isActionObject( tile.GetObject() ) ) {
             const bool isProtected
-                = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !hero.isFriends( getColorFromTile( tile ) ) && tile.isCaptureObjectProtected() ) );
+                = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !hero.isFriends( getColorFromTile( tile ) ) && isCaptureObjectProtected( tile ) ) );
 
             return Cursor::DistanceThemes( isProtected ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION, hero.getNumOfTravelDays( tile.GetIndex() ) );
         }
@@ -698,6 +698,8 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
         res = fheroes2::GameMode::END_TURN;
 
+        bool isFirstAIPlayer = true;
+
         for ( const Player * player : sortedPlayers ) {
             assert( player != nullptr );
 
@@ -706,6 +708,12 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
             Kingdom & kingdom = world.GetKingdom( playerColor );
 
             if ( skipTurns && !player->isColor( conf.CurrentColor() ) ) {
+                if ( kingdom.isPlay() && kingdom.GetControl() == CONTROL_AI ) {
+                    // Only the first AI player can trigger AI bonuses.
+                    // Since this player is the one the bonuses have been applied.
+                    isFirstAIPlayer = false;
+                }
+
                 continue;
             }
 
@@ -764,6 +772,13 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                 case CONTROL_AI:
                     // TODO: remove this temporary assertion
                     assert( res == fheroes2::GameMode::END_TURN );
+
+                    if ( isFirstAIPlayer ) {
+                        isFirstAIPlayer = false;
+                        // All bonuses for AI must be applied on the first AI player turn, not the first player in general.
+                        // This prevents human players to abuse AI bonuses.
+                        world.NewDayAI();
+                    }
 
                     Cursor::Get().SetThemes( Cursor::WAIT );
 
@@ -951,6 +966,18 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             continue;
         }
 
+#if defined( WITH_DEBUG )
+        {
+            const Player * player = Players::Get( myKingdom.GetColor() );
+            assert( player != nullptr );
+
+            // Control has just been transferred to AI, end the turn immediately
+            if ( player->isAIAutoControlMode() ) {
+                return fheroes2::GameMode::END_TURN;
+            }
+        }
+#endif
+
         // pending timer events
         _statusWindow.TimerEventProcessing();
 
@@ -960,19 +987,6 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             if ( isMovingHero ) {
                 stopHero = true;
             }
-
-#if defined( WITH_DEBUG )
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI ) ) {
-                if ( fheroes2::showStandardTextMessage( _( "Warning" ),
-                                                        _( "Do you want to transfer control from you to the AI? The effect will take place only on the next turn." ),
-                                                        Dialog::YES | Dialog::NO )
-                     == Dialog::YES ) {
-                    Players::Get( myKingdom.GetColor() )->setAIAutoControlMode( true );
-                    return fheroes2::GameMode::END_TURN;
-                }
-            }
-#endif
-
             // adventure map control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
                 res = EventExit();

@@ -93,11 +93,15 @@ protected:
     // Subtracts movement points taking the transition between turns into account
     uint32_t subtractMovePoints( const uint32_t movePoints, const uint32_t subtractedMovePoints ) const;
 
-    uint8_t _pathfindingSkill = Skill::Level::EXPERT;
-    int _currentColor = Color::NONE;
+    std::vector<int> _mapOffset;
+
+    // Hero properties should be cached here because they can change even if the hero's position does not change,
+    // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
+    // pathfinder's cache
+    int _color = Color::NONE;
     uint32_t _remainingMovePoints = 0;
     uint32_t _maxMovePoints = 0;
-    std::vector<int> _mapOffset;
+    uint8_t _pathfindingSkill = Skill::Level::EXPERT;
 };
 
 class PlayerWorldPathfinder : public WorldPathfinder
@@ -122,7 +126,7 @@ class AIWorldPathfinder : public WorldPathfinder
 {
 public:
     explicit AIWorldPathfinder( double advantage )
-        : _advantage( advantage )
+        : _minimalArmyStrengthAdvantage( advantage )
     {}
 
     AIWorldPathfinder( const AIWorldPathfinder & ) = delete;
@@ -153,13 +157,27 @@ public:
     // Faster, but does not re-evaluate the map (expose base class method)
     using Pathfinder::getDistance;
 
-    double getCurrentArmyStrengthMultiplier() const
+    // Returns the coefficient of the minimum required advantage in army strength in order to be able to "pass through"
+    // protected tiles from the AI pathfinder's point of view
+    double getMinimalArmyStrengthAdvantage() const
     {
-        return _advantage;
+        return _minimalArmyStrengthAdvantage;
     }
 
-    void setArmyStrengthMultiplier( const double multiplier );
-    void setSpellPointReserve( const double reserve );
+    // Sets the coefficient of the minimum required advantage in army strength in order to be able to "pass through"
+    // protected tiles from the AI pathfinder's point of view
+    void setMinimalArmyStrengthAdvantage( const double advantage );
+
+    // Returns the spell points reservation factor for spells associated with the movement of the hero on the adventure
+    // map (such as Dimension Door, Town Gate or Town Portal)
+    double getSpellPointsReserveRatio() const
+    {
+        return _spellPointsReserveRatio;
+    }
+
+    // Sets the spell points reservation factor for spells associated with the movement of the hero on the adventure map
+    // (such as Dimension Door, Town Gate or Town Portal)
+    void setSpellPointsReserveRatio( const double ratio );
 
 private:
     void processWorldMap() override;
@@ -173,9 +191,25 @@ private:
     // about the hero's remaining movement points.
     uint32_t getMovementPenalty( int src, int dst, int direction ) const override;
 
-    const Heroes * _hero = nullptr;
+    // Hero properties should be cached here because they can change even if the hero's position does not change,
+    // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
+    // pathfinder's cache
     double _armyStrength{ -1 };
-    double _advantage{ 1.0 };
-    double _spellPointsReserved{ 0.5 };
-    bool _isArtifactBagFull{ false };
+    uint32_t _spellPoints{ 0 };
+    bool _isArtifactsBagFull{ false };
+
+    // The potential destinations of the Town Gate and Town Portal spells should be cached here because they can
+    // change even if the hero's position does not change (e.g. when a new hero was hired in the nearby castle),
+    // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
+    // pathfinder's cache
+    int32_t _townGateCastleIndex{ -1 };
+    std::vector<int32_t> _townPortalCastleIndexes;
+
+    // Coefficient of the minimum required advantage in army strength in order to be able to "pass through" protected
+    // tiles from the AI pathfinder's point of view
+    double _minimalArmyStrengthAdvantage{ 1.0 };
+
+    // Spell points reservation factor for spells associated with the movement of the hero on the adventure map
+    // (such as Dimension Door, Town Gate or Town Portal)
+    double _spellPointsReserveRatio{ 0.5 };
 };
