@@ -44,6 +44,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_text.h"
+#include "ui_window.h"
 
 class SelectEnum : public Interface::ListBox<int>
 {
@@ -56,7 +57,9 @@ public:
         : Interface::ListBox<int>( rt.getPosition() )
         , area( rt )
     {
-        SelectEnum::RedrawBackground( rt.getPosition() );
+        SetAreaItems( { rt.x + 10, rt.y + 30, rt.width - 30, rt.height - 70 } );
+
+        // SelectEnum::RedrawBackground( rt.getPosition() );
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const int listIcnId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
@@ -67,18 +70,41 @@ public:
         setScrollBarArea( { rt.x + rt.width - 21, rt.y + 48, 14, rt.height - 107 } );
         setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 10 ) );
         SetAreaMaxItems( 5 );
-        SetAreaItems( { rt.x + 10, rt.y + 30, rt.width - 30, rt.height - 70 } );
     }
 
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
+        // if ( rtAreaItems.height < 1 ) {
+        //    return;
+        //}
+
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const int listIcnId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
 
-        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), { dst.x, dst.y + 25, rtAreaItems.width + 5, rtAreaItems.height + 11 } );
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        /*const fheroes2::Sprite & upperPart = fheroes2::AGG::GetICN( listIcnId, 0 );
+        const fheroes2::Sprite & middlePart = fheroes2::AGG::GetICN( listIcnId, 1 );
+        const fheroes2::Sprite & lowerPart = fheroes2::AGG::GetICN( listIcnId, 2 );
+
+        int32_t offsetY = 25;
+        fheroes2::Copy( upperPart, 0, 0, display, dst.x, dst.y + offsetY, upperPart.width(), upperPart.height() );
+
+        offsetY += upperPart.height();
+
+        int32_t totalHeight = rtAreaItems.height + 11;
+        int32_t middlePartCount = ( totalHeight - upperPart.height() - lowerPart.height() + middlePart.height() - 1 ) / middlePart.height();
+
+        for ( int32_t i = 0; i < middlePartCount; ++i ) {
+            fheroes2::Copy( middlePart, 0, 0, display, dst.x, dst.y + offsetY, middlePart.width(), middlePart.height() );
+            offsetY += middlePart.height();
+        }
+
+        fheroes2::Copy( lowerPart, 0, 0, display, dst.x, dst.y + totalHeight - lowerPart.height() + 25, lowerPart.width(), lowerPart.height() );
+        */
+        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::TEXTBACK, 1 ), { dst.x, dst.y + 25, rtAreaItems.width + 5, rtAreaItems.height + 11 } );
 
         // scroll
-        fheroes2::Display & display = fheroes2::Display::instance();
 
         const fheroes2::Sprite & topSprite = fheroes2::AGG::GetICN( listIcnId, 7 );
         fheroes2::Copy( topSprite, 0, 0, display, dst.x + area.width - 25, dst.y + 45, topSprite.width(), topSprite.height() );
@@ -130,7 +156,11 @@ public:
 class SelectEnumMonster : public SelectEnum
 {
 public:
-    using SelectEnum::SelectEnum;
+    explicit SelectEnumMonster( const fheroes2::Rect & rt )
+        : SelectEnum( rt )
+    {
+        SetAreaMaxItems( ( rt.height - 41 - 50 + 43 ) / 43 );
+    }
 
     using SelectEnum::ActionListPressRight;
 
@@ -166,7 +196,7 @@ public:
     explicit SelectEnumHeroes( const fheroes2::Rect & rt )
         : SelectEnum( rt )
     {
-        SetAreaMaxItems( 6 );
+        SetAreaMaxItems( ( rt.height - 41 - 50 + 35 ) / 35 );
     }
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
@@ -194,7 +224,11 @@ public:
 class SelectEnumArtifact : public SelectEnum
 {
 public:
-    using SelectEnum::SelectEnum;
+    explicit SelectEnumArtifact( const fheroes2::Rect & rt )
+        : SelectEnum( rt )
+    {
+        SetAreaMaxItems( ( rt.height - 41 - 50 + 42 ) / 42 );
+    }
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
@@ -224,7 +258,7 @@ public:
     explicit SelectEnumSpell( const fheroes2::Rect & rt )
         : SelectEnum( rt )
     {
-        SetAreaMaxItems( 4 );
+        SetAreaMaxItems( ( rt.height - 41 - 50 + 52 ) / 52 );
     }
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
@@ -253,7 +287,7 @@ public:
     explicit SelectEnumSecSkill( const fheroes2::Rect & rt )
         : SelectEnum( rt )
     {
-        SetAreaMaxItems( ( rt.height - 25 - 11 ) / 50 );
+        SetAreaMaxItems( ( rt.height - 41 - 50 + 42 ) / 42 );
     }
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
@@ -290,8 +324,10 @@ Skill::Secondary Dialog::selectSecondarySkill()
         skills[i] = i;
     }
 
-    const Dialog::FrameBorder frameborder( { 350, display.height() - 200 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
-    const fheroes2::Rect & area = frameborder.GetArea();
+    // const Dialog::FrameBorder frameborder( { 350, display.height() - 200 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    const std::unique_ptr<fheroes2::StandardWindow> frameborder = std::make_unique<fheroes2::StandardWindow>( 350, display.height() - 200, true );
+
+    const fheroes2::Rect & area = frameborder->activeArea();
 
     SelectEnumSecSkill listbox( area );
 
@@ -337,8 +373,10 @@ Spell Dialog::selectSpell( const int spellId /* = Spell::NONE */ )
 
     std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook();
 
-    const Dialog::FrameBorder frameborder( { 340, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
-    const fheroes2::Rect & area = frameborder.GetArea();
+    // const Dialog::FrameBorder frameborder( { 340, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    const std::unique_ptr<fheroes2::StandardWindow> frameborder = std::make_unique<fheroes2::StandardWindow>( 340, display.height() - 200, true );
+
+    const fheroes2::Rect & area = frameborder->activeArea();
 
     SelectEnumSpell listbox( area );
 
@@ -388,8 +426,10 @@ Artifact Dialog::selectArtifact()
         }
     }
 
-    const Dialog::FrameBorder frameborder( { 370, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
-    const fheroes2::Rect & area = frameborder.GetArea();
+    // const Dialog::FrameBorder frameborder( { 370, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    const std::unique_ptr<fheroes2::StandardWindow> frameborder = std::make_unique<fheroes2::StandardWindow>( 370, display.height() - 200, true );
+
+    const fheroes2::Rect & area = frameborder->activeArea();
 
     SelectEnumArtifact listbox( area );
 
@@ -434,8 +474,10 @@ Monster Dialog::selectMonster( const int monsterId /* = Monster::UNKNOWN */ )
         monsters[i] = static_cast<int>( i + 1 );
     }
 
-    const Dialog::FrameBorder frameborder( { 260, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
-    const fheroes2::Rect & area = frameborder.GetArea();
+    // const Dialog::FrameBorder frameborder( { 260, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    const std::unique_ptr<fheroes2::StandardWindow> frameborder = std::make_unique<fheroes2::StandardWindow>( 280, display.height() - 200, true );
+
+    const fheroes2::Rect & area = frameborder->activeArea();
 
     SelectEnumMonster listbox( area );
 
@@ -481,8 +523,10 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
         heroes[i] = static_cast<int>( i );
     }
 
-    const Dialog::FrameBorder frameborder( { 240, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
-    const fheroes2::Rect & area = frameborder.GetArea();
+    // const Dialog::FrameBorder frameborder( { 240, 280 }, fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    const std::unique_ptr<fheroes2::StandardWindow> frameborder = std::make_unique<fheroes2::StandardWindow>( 240, display.height() - 200, true );
+
+    const fheroes2::Rect & area = frameborder->activeArea();
 
     SelectEnumHeroes listbox( area );
 
