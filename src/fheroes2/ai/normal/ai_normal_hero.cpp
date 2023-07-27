@@ -2065,7 +2065,7 @@ namespace AI
         const Maps::Tiles & currTile = world.GetTiles( heroIdx );
         const Maps::Tiles & nextTile = world.GetTiles( nextTileIdx );
 
-        if ( currTile.isWater() || ( !nextTile.isWater() || nextTile.GetObject() != MP2::OBJ_NONE ) ) {
+        if ( currTile.isWater() || !nextTile.isWater() || nextTile.GetObject() != MP2::OBJ_NONE ) {
             return;
         }
 
@@ -2124,7 +2124,7 @@ namespace AI
         const Maps::Tiles & currTile = world.GetTiles( heroIdx );
         const Maps::Tiles & nextTile = world.GetTiles( nextTileIdx );
 
-        if ( currTile.isWater() || ( !nextTile.isWater() || nextTile.GetObject() != MP2::OBJ_NONE ) ) {
+        if ( currTile.isWater() || !nextTile.isWater() || nextTile.GetObject() != MP2::OBJ_NONE ) {
             return;
         }
 
