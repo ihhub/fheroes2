@@ -123,7 +123,12 @@ namespace Route
         void Reset();
         void PopFront();
 
+        // Returns true if this path is valid for normal movement on the map (the current step is performed to the tile
+        // adjacent to the hero), otherwise returns false
         bool isValidForMovement() const;
+
+        // Returns true if this path is valid to move through teleportation (the current step is performed NOT to the tile
+        // adjacent to the hero, but to some distant valid tile), otherwise returns false
         bool isValidForTeleportation() const;
 
         bool isShow() const
