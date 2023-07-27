@@ -220,7 +220,7 @@ namespace
     void AITownPortal( Heroes & hero, const int32_t targetIndex )
     {
         assert( !hero.Modes( Heroes::PATROL ) && Maps::isValidAbsIndex( targetIndex ) );
-#ifndef NDEBUG
+#if !defined( NDEBUG ) || defined( WITH_DEBUG )
         const Castle * targetCastle = world.getCastleEntrance( Maps::GetPoint( targetIndex ) );
 #endif
         assert( targetCastle && targetCastle->GetHero() == nullptr );
@@ -253,6 +253,8 @@ namespace
         }
 
         AI::Get().HeroesActionComplete( hero, targetIndex, hero.GetMapsObject() );
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " used the " << spellToUse.GetName() << " to reach the " << targetCastle->GetName() )
     }
 
     void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, const fheroes2::Point * centerOn = nullptr, const bool playSound = false )
@@ -2037,6 +2039,8 @@ namespace AI
         }
 
         hero.ActionNewPosition( false );
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " moved to " << targetIndex )
     }
 
     int32_t HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIndex )
@@ -2078,7 +2082,9 @@ namespace AI
             gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestinationIndex, MP2::OBJ_BOAT ) );
         }
 
-        return tileSource.GetIndex();
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " summoned the boat from " << boatSource << " to " << boatDestinationIndex )
+
+        return boatSource;
     }
 
     bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell )
