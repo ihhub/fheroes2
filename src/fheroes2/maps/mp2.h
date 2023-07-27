@@ -470,16 +470,21 @@ namespace MP2
 
     bool isHiddenForPuzzle( const int terrainType, const ObjectIcnType objectIcnType, uint8_t index );
 
-    // The method check whether the object is an action object depending on its location. For example, castle can't be located on water.
-    bool isActionObject( const MapObjectType objectType, const bool locatesOnWater );
+    // The method check whether the object is an action object depending on whether it is accessed from water or from land.
+    // For example, castle can't be accessed from water.
+    //
+    // TODO: make a separate function to determine whether the object is an action object depending on its location and not
+    // TODO: on where it is accessed from.
+    bool isActionObject( const MapObjectType objectType, const bool accessedFromWater );
 
-    // The method checks if the object is an action independent form its location.
+    // The method checks if the object is an action object regardless of where it is accessed from.
     bool isActionObject( const MapObjectType objectType );
+
+    // The method checks if the object is an action object if it is accessed from the water.
+    bool isWaterActionObject( const MapObjectType objectType );
 
     // Returns proper object type if the object is an action object. Otherwise it returns the object type itself.
     MapObjectType getBaseActionObjectType( const MapObjectType objectType );
-
-    bool isWaterActionObject( const MapObjectType objectType );
 
     bool isValuableResourceObject( const MapObjectType objectType );
     bool isCaptureObject( const MapObjectType objectType );
