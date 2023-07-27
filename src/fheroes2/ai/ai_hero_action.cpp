@@ -24,7 +24,6 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
-#include <memory>
 #include <ostream>
 #include <string>
 #include <vector>
