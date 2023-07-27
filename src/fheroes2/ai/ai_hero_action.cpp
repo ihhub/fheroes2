@@ -2052,16 +2052,27 @@ namespace AI
 
         const int heroColor = hero.GetColor();
 
+        Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
+
         Maps::Tiles & tileSource = world.GetTiles( boatSource );
+
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
+        }
+        else {
+            removeObjectSprite( tileSource );
+            tileSource.setAsEmpty();
+        }
+
         Maps::Tiles & tileDest = world.GetTiles( boatDestinationIndex );
-
-        assert( tileSource.GetObject() == MP2::OBJ_BOAT && tileDest.GetObject() == MP2::OBJ_NONE );
-
-        removeObjectSprite( tileSource );
-        tileSource.setAsEmpty();
+        assert( tileDest.GetObject() == MP2::OBJ_NONE );
 
         tileDest.setBoat( Direction::RIGHT, heroColor );
         tileSource.resetBoatOwnerColor();
+
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestinationIndex, MP2::OBJ_BOAT ) );
+        }
 
         return tileSource.GetIndex();
     }
