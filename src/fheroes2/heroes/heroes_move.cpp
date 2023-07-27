@@ -650,7 +650,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
         path.PopFront();
 
         // It is possible that the hero in the new position will be attacked and lose the battle before he can perform the action
-        if ( !isFreeman() ) {
+        if ( isActive() ) {
             Action( indexTo );
 
             if ( indexTo == indexDest ) {
@@ -983,7 +983,7 @@ bool Heroes::Move( const bool jumpToNextTile /* = false */ )
             direction = path.GetFrontDirection();
             MoveStep( jumpToNextTile );
 
-            // TODO: why don't we check !isFreeman() like it is done for a normal movement?
+            // TODO: why don't we check isActive() like it is done for a normal movement?
             return true;
         }
 
@@ -998,7 +998,7 @@ bool Heroes::Move( const bool jumpToNextTile /* = false */ )
             SetValidDirectionSprite();
 
             if ( MoveStep( jumpToNextTile ) ) {
-                return !isFreeman();
+                return isActive();
             }
         }
     }

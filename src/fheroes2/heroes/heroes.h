@@ -277,7 +277,14 @@ public:
     static const char * GetName( int heroid );
 
     bool isValid() const override;
+    // Returns true if the hero is active on the adventure map (i.e. has a valid ID, is not imprisoned, and is hired by
+    // some kingdom), otherwise returns false
+    bool isActive() const;
+
+    // Returns true if the hero is available for hire (i.e. has a valid ID, is not imprisoned, and is not hired by any
+    // kingdom), otherwise returns false
     bool isFreeman() const;
+    // Makes the hero available for hire because of a 'reason'. See the implementation for details.
     void SetFreeman( int reason );
 
     bool isLosingGame() const;

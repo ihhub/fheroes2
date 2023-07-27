@@ -2025,7 +2025,7 @@ namespace AI
             assert( objectType == MP2::OBJ_CASTLE );
 
             // How is it even possible that a hero died while simply moving into a castle?
-            assert( !hero.isFreeman() );
+            assert( hero.isActive() );
 
             // TODO: sort the army between the castle and hero to have maximum movement points for the next day
             // TODO: but also have enough army to defend the castle.
@@ -2050,6 +2050,8 @@ namespace AI
 
     void Normal::HeroesBeginMovement( Heroes & hero )
     {
+        assert( hero.isActive() );
+
         const Route::Path & path = hero.GetPath();
         if ( !path.isValidForMovement() ) {
             return;
@@ -2083,7 +2085,7 @@ namespace AI
     {
         // This method is called upon action completion and the hero could no longer be available.
         // So it is to check if the hero is still present.
-        if ( !hero.isFreeman() ) {
+        if ( hero.isActive() ) {
             Castle * castle = hero.inCastleMutable();
             if ( castle ) {
                 // Reinforcement in a castle can lead to removing defense priority task for a castle.
@@ -2102,7 +2104,7 @@ namespace AI
 
     void Normal::HeroesActionNewPosition( Heroes & hero )
     {
-        if ( hero.isFreeman() ) {
+        if ( !hero.isActive() ) {
             return;
         }
 
@@ -2274,7 +2276,7 @@ namespace AI
 
                     // Hero can jump straight into the fog using the Dimension Door spell, which triggers the mechanics of fog revealing for his new tile
                     // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
-                    assert( !bestHero->isFreeman() && bestHero->GetIndex() != prevHeroPosition );
+                    assert( bestHero->isActive() && bestHero->GetIndex() != prevHeroPosition );
 
                     updateMapActionObjectCache( prevHeroPosition );
                     updateMapActionObjectCache( bestHero->GetIndex() );
@@ -2295,11 +2297,11 @@ namespace AI
                 HeroesMove( *bestHero );
             }
 
-            if ( bestHero->isFreeman() || bestHero->GetIndex() != prevHeroPosition ) {
+            if ( !bestHero->isActive() || bestHero->GetIndex() != prevHeroPosition ) {
                 // The hero died or moved to another position. We have to update the action object cache.
                 updateMapActionObjectCache( prevHeroPosition );
 
-                if ( !bestHero->isFreeman() ) {
+                if ( bestHero->isActive() ) {
                     // Hero moved to another position and is still alive.
                     updateMapActionObjectCache( bestHero->GetIndex() );
                 }

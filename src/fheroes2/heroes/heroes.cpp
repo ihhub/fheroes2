@@ -1590,7 +1590,7 @@ void Heroes::ApplyPenaltyMovement( uint32_t penalty )
 
 bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const
 {
-    if ( isFreeman() ) {
+    if ( !isActive() ) {
         return false;
     }
 
@@ -1613,6 +1613,11 @@ bool Heroes::MayCastAdventureSpells() const
 bool Heroes::isValid() const
 {
     return hid != UNKNOWN;
+}
+
+bool Heroes::isActive() const
+{
+    return isValid() && ( GetColor() & Color::ALL ) && !Modes( JAIL );
 }
 
 bool Heroes::isFreeman() const
@@ -1707,7 +1712,7 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
         }
     }
 
-    if ( !isFreeman() && GetMapsObject() == MP2::OBJ_EVENT ) {
+    if ( isActive() && GetMapsObject() == MP2::OBJ_EVENT ) {
         const MapEvent * event = world.GetMapEvent( GetCenter() );
 
         if ( event && event->isAllow( GetColor() ) ) {

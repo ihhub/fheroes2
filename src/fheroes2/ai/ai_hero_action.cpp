@@ -1917,7 +1917,7 @@ namespace AI
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
-            if ( hero.isFreeman() || !hero.isMoveEnabled() ) {
+            if ( !hero.isActive() || !hero.isMoveEnabled() ) {
                 break;
             }
 
