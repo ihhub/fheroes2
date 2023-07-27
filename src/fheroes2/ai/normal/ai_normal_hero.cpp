@@ -2137,8 +2137,6 @@ namespace AI
 
         updateMapActionObjectCache( formerBoatIdx );
         updateMapActionObjectCache( boatIdx );
-
-        assert( hero.isMoveEnabled() );
     }
 
     bool Normal::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue )

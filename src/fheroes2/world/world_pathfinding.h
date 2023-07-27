@@ -52,7 +52,7 @@ struct WorldNode : public PathfindingNode<MP2::MapObjectType>
     WorldNode( const WorldNode & ) = delete;
     WorldNode( WorldNode && ) = default;
 
-    ~WorldNode() = default;
+    ~WorldNode() override = default;
 
     WorldNode & operator=( const WorldNode & ) = delete;
     WorldNode & operator=( WorldNode && ) = default;
@@ -72,7 +72,7 @@ public:
     WorldPathfinder() = default;
     WorldPathfinder( const WorldPathfinder & ) = delete;
 
-    ~WorldPathfinder() = default;
+    ~WorldPathfinder() override = default;
 
     WorldPathfinder & operator=( const WorldPathfinder & ) = delete;
 
@@ -119,7 +119,7 @@ public:
     PlayerWorldPathfinder() = default;
     PlayerWorldPathfinder( const PlayerWorldPathfinder & ) = delete;
 
-    ~PlayerWorldPathfinder() = default;
+    ~PlayerWorldPathfinder() override = default;
 
     PlayerWorldPathfinder & operator=( const PlayerWorldPathfinder & ) = delete;
 
@@ -142,7 +142,7 @@ public:
 
     AIWorldPathfinder( const AIWorldPathfinder & ) = delete;
 
-    ~AIWorldPathfinder() = default;
+    ~AIWorldPathfinder() override = default;
 
     AIWorldPathfinder & operator=( const AIWorldPathfinder & ) = delete;
 
