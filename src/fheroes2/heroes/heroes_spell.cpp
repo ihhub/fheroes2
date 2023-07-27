@@ -301,7 +301,7 @@ namespace
         const int32_t boatSource = fheroes2::getSummonableBoat( hero );
 
         // Player should have a summonable boat before calling this function.
-        assert( boatSource != -1 );
+        assert( Maps::isValidAbsIndex( boatSource ) );
 
         const int heroColor = hero.GetColor();
 

@@ -2049,7 +2049,7 @@ namespace AI
         const int32_t boatSource = fheroes2::getSummonableBoat( hero );
 
         // Player should have a summonable boat before calling this function.
-        assert( boatSource != -1 );
+        assert( Maps::isValidAbsIndex( boatSource ) );
 
         hero.SpellCasted( summonBoat );
 
@@ -2060,6 +2060,7 @@ namespace AI
         Maps::Tiles & tileSource = world.GetTiles( boatSource );
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            gameArea.SetCenter( hero.GetCenter() );
             gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
         }
         else {
