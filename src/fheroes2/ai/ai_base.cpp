@@ -88,12 +88,12 @@ namespace AI
         // Do nothing.
     }
 
-    void Base::HeroesBeginMovement( Heroes & )
+    void Base::HeroesBeginMovement( Heroes & /* hero */ )
     {
         // Do nothing.
     }
 
-    void Base::HeroesFinishMovement( Heroes & )
+    void Base::HeroesFinishMovement( Heroes & /* hero */ )
     {
         // Do nothing.
     }
