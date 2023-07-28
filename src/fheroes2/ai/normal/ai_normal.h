@@ -252,9 +252,11 @@ namespace AI
 
         void revealFog( const Maps::Tiles & tile, const Kingdom & kingdom ) override;
 
+        // Implements the logic of transparent casting of the Summon Boat spell at the beginning of the hero's movement
         void HeroesBeginMovement( Heroes & hero ) override;
         void HeroesPreBattle( HeroBase & hero, bool isAttacking ) override;
         void HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType ) override;
+        // Implements the logic of transparent casting of the Summon Boat spell during the hero's movement
         void HeroesActionNewPosition( Heroes & hero ) override;
 
         bool recruitHero( Castle & castle, bool buyArmy, bool underThreat );

@@ -88,6 +88,8 @@ namespace
             return false;
         }
 
+        // In general, direct movement from a shore tile to a water tile is not possible, but AI can use this movement for transparent Summon Boat
+        // spellcasting. In this case, it may be necessary to cut the resulting path on a water tile.
         if ( !fromWater && toWater && objectType == MP2::OBJ_NONE ) {
             return false;
         }
