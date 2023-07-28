@@ -1869,9 +1869,10 @@ namespace AI
         if ( MP2::isNeedStayFront( objectType ) )
             hero.GetPath().Reset();
 
-        // ignore empty tiles
-        if ( isActionObject )
+        // Ignore empty tiles
+        if ( isActionObject ) {
             AI::Get().HeroesActionComplete( hero, dst_index, objectType );
+        }
     }
 
     void HeroesMove( Heroes & hero )
@@ -1887,6 +1888,8 @@ namespace AI
 
             AITownPortal( hero, targetIndex );
 
+            // This is the end of a this hero's movement, even if the hero's full path doesn't end in this town or castle.
+            // The further path of this hero will be re-planned by AI.
             return;
         }
 
@@ -2089,8 +2092,9 @@ namespace AI
 
     bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell )
     {
-        if ( !hero.CanCastSpell( spell ) )
+        if ( !hero.CanCastSpell( spell ) ) {
             return false;
+        }
 
         hero.SpellCasted( spell );
 
