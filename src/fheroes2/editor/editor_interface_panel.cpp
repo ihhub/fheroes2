@@ -71,6 +71,25 @@ namespace Interface
         _brushSizeButtons[_selectedBrushSize].press();
     }
 
+    uint8_t EditorPanel::getBrushSize() const
+    {
+        switch ( _selectedBrushSize ) {
+        case BrushSize::SMALL:
+            return 1;
+        case BrushSize::MEDIUM:
+            return 2;
+        case BrushSize::LARGE:
+            return 4;
+        case BrushSize::AREA:
+            return 0;
+        default:
+            // Have you added a new Brush size? Update the logic above!
+            assert( 0 );
+        }
+
+        return 0;
+    }
+
     void EditorPanel::setPos( const int32_t displayX, int32_t displayY )
     {
         int32_t offsetX = displayX;
@@ -202,31 +221,22 @@ namespace Interface
         switch ( brushId ) {
         case Brush::WATER:
             return Maps::Ground::WATER;
-            break;
         case Brush::GRASS:
             return Maps::Ground::GRASS;
-            break;
         case Brush::SNOW:
             return Maps::Ground::SNOW;
-            break;
         case Brush::SWAMP:
             return Maps::Ground::SWAMP;
-            break;
         case Brush::LAVA:
             return Maps::Ground::LAVA;
-            break;
         case Brush::DESERT:
             return Maps::Ground::DESERT;
-            break;
         case Brush::DIRT:
             return Maps::Ground::DIRT;
-            break;
         case Brush::WASTELAND:
             return Maps::Ground::WASTELAND;
-            break;
         case Brush::BEACH:
             return Maps::Ground::BEACH;
-            break;
         default:
             // Have you added a new terrain type? Add the logic above!
             assert( 0 );

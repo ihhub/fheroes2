@@ -44,6 +44,8 @@ namespace Interface
             return _rectEditorPanel;
         }
 
+        uint8_t getBrushSize() const;
+
         int selectedGroundType() const
         {
             return _getGroundId( _selectedTerrain );

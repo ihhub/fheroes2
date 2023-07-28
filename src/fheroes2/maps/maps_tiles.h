@@ -333,9 +333,10 @@ namespace Maps
             return _terrainImageIndex;
         }
 
-        void setTerrainImageIndex( const uint16_t terrainImageIndex )
+        void setTerrainImage( const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip )
         {
             _terrainImageIndex = terrainImageIndex;
+            _terrainFlags = static_cast<uint8_t>( verticalFlip ) + 2 * static_cast<uint8_t>( horizontalFlip );
         }
 
         Heroes * GetHeroes() const;

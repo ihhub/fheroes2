@@ -100,6 +100,8 @@ namespace Interface
             _gameArea.Redraw( fheroes2::Display::instance(), LEVEL_OBJECTS | LEVEL_HEROES | LEVEL_ROUTES );
 
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
+
+            // TODO: Render square cursor around tiles according to Brush Size.
         }
 
         if ( combinedRedraw & ( REDRAW_RADAR_CURSOR | REDRAW_RADAR ) ) {
@@ -309,7 +311,6 @@ namespace Interface
                 _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR;
             }
 
-            // Render map only if the turn is not over.
             if ( res == fheroes2::GameMode::CANCEL ) {
                 // map objects animation
                 if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
@@ -473,7 +474,32 @@ namespace Interface
             Game::OpenCastleDialog( *otherCastle );
         }
         else if ( _editorPanel.isTerrainEdit() ) {
-            tile.setTerrainImageIndex( Maps::Ground::getRandomTerrainImageIndex( _editorPanel.selectedGroundType() ) );
+            const uint8_t brushSize = _editorPanel.getBrushSize();
+            if ( brushSize > 0 ) {
+                const int groundId = _editorPanel.selectedGroundType();
+                Maps::Tiles * brushTile = &tile;
+
+                for ( uint8_t tileOffsetY = 0; tileOffsetY < brushSize; ++tileOffsetY ) {
+                    for ( uint8_t tileOffsetX = 0; tileOffsetX < brushSize; ++tileOffsetX ) {
+                        Maps::Tiles * currentTile = brushTile + tileOffsetX;
+
+                        currentTile->setTerrainImage( Maps::Ground::getRandomTerrainImageIndex( groundId ), false, false );
+
+                        if ( !Maps::isValidDirection( currentTile->GetIndex(), Direction::RIGHT ) ) {
+                            break;
+                        }
+                    }
+
+                    if ( !Maps::isValidDirection( brushTile->GetIndex(), Direction::BOTTOM ) ) {
+                        break;
+                    }
+
+                    brushTile = &world.GetTiles( Maps::GetDirectionIndex( brushTile->GetIndex(), Direction::BOTTOM ) );
+                }
+            }
+            else {
+                // TODO: Add ability to select area (without dragging a map).
+            }
             _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
         }
     }
