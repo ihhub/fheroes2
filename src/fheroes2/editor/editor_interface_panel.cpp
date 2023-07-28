@@ -197,44 +197,42 @@ namespace Interface
         display.render( _rectInstrumentPanel );
     }
 
-    const char * EditorPanel::_getTerrainTypeName( const uint8_t brushId )
+    const int EditorPanel::_getGroundId( const uint8_t brushId )
     {
-        int groundId = Maps::Ground::UNKNOWN;
         switch ( brushId ) {
         case Brush::WATER:
-            groundId = Maps::Ground::WATER;
+            return Maps::Ground::WATER;
             break;
         case Brush::GRASS:
-            groundId = Maps::Ground::GRASS;
+            return Maps::Ground::GRASS;
             break;
         case Brush::SNOW:
-            groundId = Maps::Ground::SNOW;
+            return Maps::Ground::SNOW;
             break;
         case Brush::SWAMP:
-            groundId = Maps::Ground::SWAMP;
+            return Maps::Ground::SWAMP;
             break;
         case Brush::LAVA:
-            groundId = Maps::Ground::LAVA;
+            return Maps::Ground::LAVA;
             break;
         case Brush::DESERT:
-            groundId = Maps::Ground::DESERT;
+            return Maps::Ground::DESERT;
             break;
         case Brush::DIRT:
-            groundId = Maps::Ground::DIRT;
+            return Maps::Ground::DIRT;
             break;
         case Brush::WASTELAND:
-            groundId = Maps::Ground::WASTELAND;
+            return Maps::Ground::WASTELAND;
             break;
         case Brush::BEACH:
-            groundId = Maps::Ground::BEACH;
+            return Maps::Ground::BEACH;
             break;
         default:
-            // Have you added a new terrain type?
+            // Have you added a new terrain type? Add the logic above!
             assert( 0 );
             break;
         }
-
-        return Maps::Ground::String( groundId );
+        return Maps::Ground::UNKNOWN;
     }
 
     const char * EditorPanel::_getObjectTypeName( const uint8_t brushId )
@@ -269,7 +267,7 @@ namespace Interface
         case Brush::TREASURES:
             return _( "Treasures" );
         default:
-            // Have you added a new object type?
+            // Have you added a new object type? Add the logic above!
             assert( 0 );
             break;
         }

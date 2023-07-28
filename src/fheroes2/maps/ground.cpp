@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,13 +23,16 @@
 
 #include "ground.h"
 
+#include <cassert>
+
 #include "maps_tiles.h"
+#include "rand.h"
 #include "skill.h"
 #include "translations.h"
 
-const char * Maps::Ground::String( int ground )
+const char * Maps::Ground::String( int groundId )
 {
-    switch ( ground ) {
+    switch ( groundId ) {
     case DESERT:
         return _( "Desert" );
     case SNOW:
@@ -126,4 +129,33 @@ uint32_t Maps::Ground::GetPenalty( const Maps::Tiles & tile, uint32_t level )
     }
 
     return result;
+}
+
+uint16_t Maps::Ground::getRandomTerrainImageIndex( const int groundId )
+{
+    const uint16_t indexOffset = static_cast<uint16_t>( Rand::Get( 7 ) );
+    switch ( groundId ) {
+    case DESERT:
+        return indexOffset + 300u;
+    case SNOW:
+        return indexOffset + 130u;
+    case SWAMP:
+        return indexOffset + 184u;
+    case WASTELAND:
+        return indexOffset + 399u;
+    case BEACH:
+        return indexOffset + 415u;
+    case LAVA:
+        return indexOffset + 246u;
+    case DIRT:
+        return indexOffset + 337u;
+    case GRASS:
+        return indexOffset + 68u;
+    case WATER:
+        return indexOffset + 16u;
+    default:
+
+        assert( 0 );
+        return 0;
+    }
 }

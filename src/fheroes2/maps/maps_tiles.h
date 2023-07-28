@@ -333,6 +333,11 @@ namespace Maps
             return _terrainImageIndex;
         }
 
+        void setTerrainImageIndex( const uint16_t terrainImageIndex )
+        {
+            _terrainImageIndex = terrainImageIndex;
+        }
+
         Heroes * GetHeroes() const;
         void SetHeroes( Heroes * hero );
 

@@ -31,6 +31,7 @@
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
+#include "ground.h"
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
@@ -458,18 +459,22 @@ namespace Interface
     }
     void Editor::mouseCursorAreaClickLeft( const int32_t tileIndex )
     {
-        const Maps::Tiles & tile = world.GetTiles( tileIndex );
+        Maps::Tiles & tile = world.GetTiles( tileIndex );
 
         Heroes * otherHero = tile.GetHeroes();
+        Castle * otherCastle = world.getCastle( tile.GetCenter() );
+
         if ( otherHero ) {
             // TODO: Make hero edit dialog: like Battle only dialog, but only for one hero.
             Game::OpenHeroesDialog( *otherHero, true, true );
         }
-
-        Castle * otherCastle = world.getCastle( tile.GetCenter() );
-        if ( otherCastle ) {
+        else if ( otherCastle ) {
             // TODO: Make Castle edit dialog: like original build dialog.
             Game::OpenCastleDialog( *otherCastle );
+        }
+        else if ( _editorPanel.isTerrainEdit() ) {
+            tile.setTerrainImageIndex( Maps::Ground::getRandomTerrainImageIndex( _editorPanel.selectedGroundType() ) );
+            _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
         }
     }
     void Editor::mouseCursorAreaPressRight( const int32_t tileIndex ) const

@@ -24,6 +24,7 @@
 #include <cstdint>
 
 #include "game_mode.h"
+#include "ground.h"
 #include "math_base.h"
 #include "ui_button.h"
 
@@ -43,6 +44,16 @@ namespace Interface
             return _rectEditorPanel;
         }
 
+        int selectedGroundType() const
+        {
+            return _getGroundId( _selectedTerrain );
+        }
+
+        bool isTerrainEdit() const
+        {
+            return _selectedInstrument == Instrument::TERRAIN;
+        }
+
         // Set Editor panel positions on screen.
         void setPos( const int32_t displayX, int32_t displayY );
 
@@ -58,7 +69,11 @@ namespace Interface
     private:
         Editor & _interface;
 
-        static const char * _getTerrainTypeName( const uint8_t brushId );
+        static const int _getGroundId( const uint8_t brushId );
+        static const char * _getTerrainTypeName( const uint8_t brushId )
+        {
+            return Maps::Ground::String( _getGroundId( brushId ) );
+        }
         static const char * _getObjectTypeName( const uint8_t brushId );
 
         enum Instrument : uint8_t
