@@ -915,9 +915,9 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         _mouseDraggingInitiated = true;
         _lastMouseDragPosition = mousePosition;
     }
-    else if ( ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
-                || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement )
-              && isCursorOverGamearea ) {
+    else if ( isCursorOverGamearea
+              && ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
+                   || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) ) {
         _mouseDraggingMovement = true;
     }
 
@@ -934,7 +934,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         return;
     }
 
-    int32_t index = GetValidTileIdFromPoint( mousePosition );
+    const int32_t index = GetValidTileIdFromPoint( mousePosition );
 
     // change cursor if need
     if ( ( updateCursor || index != _prevIndexPos ) && isCursorOverGamearea ) {
@@ -944,12 +944,14 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     }
 
     // out of range
-    if ( index < 0 )
+    if ( !isCursorOverGamearea || !Maps::isValidAbsIndex( index ) ) {
         return;
+    }
 
     const Settings & conf = Settings::Get();
-    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( Interface::AdventureMap::Get().getControlPanel().GetArea() ) )
+    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( Interface::AdventureMap::Get().getControlPanel().GetArea() ) ) {
         return;
+    }
 
     const fheroes2::Point tileOffset = _topLeftTileOffset + mousePosition - _windowROI.getPosition();
     const fheroes2::Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
@@ -957,10 +959,12 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 
     const fheroes2::Rect tileROI( tilePos.x, tilePos.y, TILEWIDTH, TILEWIDTH );
 
-    if ( le.MouseClickLeft( tileROI ) )
+    if ( le.MouseClickLeft( tileROI ) ) {
         _interface.mouseCursorAreaClickLeft( index );
-    else if ( le.MousePressRight( tileROI ) && isCursorOverGamearea )
+    }
+    else if ( le.MousePressRight( tileROI ) && isCursorOverGamearea ) {
         _interface.mouseCursorAreaPressRight( index );
+    }
 }
 
 fheroes2::Point Interface::GameArea::_getStartTileId() const
