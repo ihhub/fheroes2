@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-22 03:24+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -10615,21 +10615,27 @@ msgstr ""
 "illusion inflige les mêmes dégâts que l'original, mais disparaît si elle "
 "subit des dégâts."
 
-msgid "Halves damage received from ranged attacks for a single unit."
+msgid "Shield"
+msgstr "Bouclier"
+
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 "Réduit de moitié les dégâts reçus par les attaques à distance pour l'unité "
 "choisie."
 
-msgid "Shield"
-msgstr "Bouclier"
+msgid "Mass Shield"
+msgstr "Grand bouclier"
 
-msgid "Halves damage received from ranged attacks for all of your units."
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 "Réduit de moitié les dégâts reçus par les attaques à distance pour toutes "
 "vos créatures."
-
-msgid "Mass Shield"
-msgstr "Grand bouclier"
 
 msgid "Summon Earth Elemental"
 msgstr "Invoquer élémentaire de la terre"

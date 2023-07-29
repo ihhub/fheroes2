@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-22 03:24+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2023-07-15 14:32+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -10368,21 +10368,27 @@ msgstr ""
 "Создаёт дубликат одного из Ваших отрядов. Эта иллюзия может нанести такой же "
 "урон как и оригинал, но будет развеяна от малейшего повреждения."
 
-msgid "Halves damage received from ranged attacks for a single unit."
+msgid "Shield"
+msgstr "Щит"
+
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 "Принимает на себя половину урона от всех стрелковых атак врага, направленных "
 "на выбранный отряд."
 
-msgid "Shield"
-msgstr "Щит"
+msgid "Mass Shield"
+msgstr "Общий щит"
 
-msgid "Halves damage received from ranged attacks for all of your units."
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 "Принимает на себя половину урона стрелковых атак врага, направленных на всех "
 "Ваших существ."
-
-msgid "Mass Shield"
-msgstr "Общий щит"
 
 msgid "Summon Earth Elemental"
 msgstr "Земной элементаль"

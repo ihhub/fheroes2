@@ -698,6 +698,8 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
         res = fheroes2::GameMode::END_TURN;
 
+        bool isFirstAIPlayer = true;
+
         for ( const Player * player : sortedPlayers ) {
             assert( player != nullptr );
 
@@ -706,6 +708,12 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
             Kingdom & kingdom = world.GetKingdom( playerColor );
 
             if ( skipTurns && !player->isColor( conf.CurrentColor() ) ) {
+                if ( kingdom.isPlay() && kingdom.GetControl() == CONTROL_AI ) {
+                    // Only the first AI player can trigger AI bonuses.
+                    // Since this player is the one the bonuses have been applied.
+                    isFirstAIPlayer = false;
+                }
+
                 continue;
             }
 
@@ -764,6 +772,13 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                 case CONTROL_AI:
                     // TODO: remove this temporary assertion
                     assert( res == fheroes2::GameMode::END_TURN );
+
+                    if ( isFirstAIPlayer ) {
+                        isFirstAIPlayer = false;
+                        // All bonuses for AI must be applied on the first AI player turn, not the first player in general.
+                        // This prevents human players to abuse AI bonuses.
+                        world.NewDayAI();
+                    }
 
                     Cursor::Get().SetThemes( Cursor::WAIT );
 
