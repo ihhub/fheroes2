@@ -44,7 +44,7 @@ namespace Interface
             return _rectEditorPanel;
         }
 
-        uint8_t getBrushSize() const;
+        int32_t getBrushSize() const;
 
         int selectedGroundType() const
         {
@@ -54,6 +54,11 @@ namespace Interface
         bool isTerrainEdit() const
         {
             return _selectedInstrument == Instrument::TERRAIN;
+        }
+
+        bool useMouseDragMovment() const
+        {
+            return ( _selectedInstrument != Instrument::TERRAIN ) || ( _selectedBrushSize != BrushSize::AREA );
         }
 
         // Set Editor panel positions on screen.

@@ -101,7 +101,6 @@ namespace Interface
 
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
 
-            // TODO: Render square cursor around tiles according to Brush Size.
             if ( _editorPanel.isTerrainEdit() ) {
                 LocalEvent & le = LocalEvent::Get();
                 const fheroes2::Point & mousePosition = le.GetMouseCursor();
@@ -116,6 +115,9 @@ namespace Interface
                         const int32_t cursorSizeY = std::min( brushSize, world.h() - index / worldWidth ) - 1;
                         const int32_t endIndex = index + cursorSizeX + worldWidth * cursorSizeY;
                         _gameArea.renderTileCursor( display, index, endIndex );
+                    }
+                    else if ( brushSize == -1 ) {
+                        _gameArea.renderTileCursor( display, _selectedTile, index );
                     }
                 }
             }
@@ -315,6 +317,10 @@ namespace Interface
                 }
             }
 
+            if ( le.MouseReleaseLeft() ) {
+                _selectedTile = -1;
+            }
+
             // fast scroll
             if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) && ( _gameArea.NeedScroll() || _gameArea.needDragScrollRedraw() ) ) {
                 if ( ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
@@ -475,6 +481,7 @@ namespace Interface
         // TODO: Make proper borders restoration for low height resolutions, like for hide interface mode.
         ViewWorld::ViewWorldWindow( 0, ViewWorldMode::ViewAll, *this );
     }
+
     void Editor::mouseCursorAreaClickLeft( const int32_t tileIndex )
     {
         Maps::Tiles & tile = world.GetTiles( tileIndex );
@@ -491,13 +498,13 @@ namespace Interface
             Game::OpenCastleDialog( *otherCastle );
         }
         else if ( _editorPanel.isTerrainEdit() ) {
-            const uint8_t brushSize = _editorPanel.getBrushSize();
+            const int32_t brushSize = _editorPanel.getBrushSize();
             if ( brushSize > 0 ) {
                 const int groundId = _editorPanel.selectedGroundType();
                 Maps::Tiles * brushTile = &tile;
 
-                for ( uint8_t tileOffsetY = 0; tileOffsetY < brushSize; ++tileOffsetY ) {
-                    for ( uint8_t tileOffsetX = 0; tileOffsetX < brushSize; ++tileOffsetX ) {
+                for ( int32_t tileOffsetY = 0; tileOffsetY < brushSize; ++tileOffsetY ) {
+                    for ( int32_t tileOffsetX = 0; tileOffsetX < brushSize; ++tileOffsetX ) {
                         Maps::Tiles * currentTile = brushTile + tileOffsetX;
 
                         currentTile->setTerrainImage( Maps::Ground::getRandomTerrainImageIndex( groundId ), false, false );
@@ -514,12 +521,19 @@ namespace Interface
                     brushTile += world.w();
                 }
             }
-            else {
+            else if ( brushSize == -1 ) {
                 // TODO: Add ability to select area (without dragging a map).
+                _selectedTile = -1;
             }
             _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
         }
     }
+
+    void Editor::mouseCursorAreaPressLeft( const int32_t tileIndex )
+    {
+        _selectedTile = tileIndex;
+    }
+
     void Editor::mouseCursorAreaPressRight( const int32_t tileIndex ) const
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );

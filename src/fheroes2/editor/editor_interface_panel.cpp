@@ -71,7 +71,7 @@ namespace Interface
         _brushSizeButtons[_selectedBrushSize].press();
     }
 
-    uint8_t EditorPanel::getBrushSize() const
+    int32_t EditorPanel::getBrushSize() const
     {
         switch ( _selectedBrushSize ) {
         case BrushSize::SMALL:
@@ -81,7 +81,7 @@ namespace Interface
         case BrushSize::LARGE:
             return 4;
         case BrushSize::AREA:
-            return 0;
+            return -1;
         default:
             // Have you added a new Brush size? Update the logic above!
             assert( 0 );

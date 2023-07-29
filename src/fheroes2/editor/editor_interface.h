@@ -46,12 +46,20 @@ namespace Interface
         static fheroes2::GameMode eventFileDialog();
         void eventViewWorld();
 
+        bool useMouseDragMovment() override
+        {
+            return _editorPanel.useMouseDragMovment();
+        }
+
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
+        void mouseCursorAreaPressLeft( const int32_t tileIndex ) override;
         void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
 
     private:
         Editor();
 
         EditorPanel _editorPanel;
+
+        int32_t _selectedTile{ -1 };
     };
 }

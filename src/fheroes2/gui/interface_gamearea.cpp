@@ -938,7 +938,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         _mouseDraggingInitiated = true;
         _lastMouseDragPosition = mousePosition;
     }
-    else if ( isCursorOverGamearea
+    else if ( isCursorOverGamearea && _interface.useMouseDragMovment()
               && ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
                    || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) ) {
         _mouseDraggingMovement = true;
@@ -985,7 +985,10 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     if ( le.MouseClickLeft( tileROI ) ) {
         _interface.mouseCursorAreaClickLeft( index );
     }
-    else if ( le.MousePressRight( tileROI ) && isCursorOverGamearea ) {
+    else if ( le.MousePressLeft( tileROI ) ) {
+        _interface.mouseCursorAreaPressLeft( index );
+    }
+    else if ( le.MousePressRight( tileROI ) ) {
         _interface.mouseCursorAreaPressRight( index );
     }
 }
