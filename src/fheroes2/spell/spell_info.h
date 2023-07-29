@@ -49,7 +49,6 @@ namespace fheroes2
 
     int32_t getPossibleBoatPosition( const Heroes & hero );
 
-    int32_t getSummonableBoat( const int32_t index, const int color );
     int32_t getSummonableBoat( const Heroes & hero );
 
     bool isHeroNearWater( const Heroes & hero );

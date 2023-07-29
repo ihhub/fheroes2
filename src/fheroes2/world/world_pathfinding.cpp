@@ -277,13 +277,8 @@ namespace
             return false;
         }
 
-        // ... this tile should be reachable from the shore (as if this shore tile were a water tile)...
-        if ( !toTile.isPassableFrom( Direction::Reflect( direction ), true, false, heroColor ) ) {
-            return false;
-        }
-
-        // ... and there should be a boat available for summoning
-        return ( fheroes2::getSummonableBoat( from, heroColor ) != -1 );
+        // ... and this tile should be reachable from the shore (as if this shore tile were a water tile)
+        return toTile.isPassableFrom( Direction::Reflect( direction ), true, false, heroColor );
     }
 
     bool isTileAccessibleForAIWithArmy( const int tileIndex, const double armyStrength, const double minimalAdvantage )
@@ -578,7 +573,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
             return false;
         }
 
-        return true;
+        return ( fheroes2::getSummonableBoat( hero ) != -1 );
     }();
 
     const int32_t townGateCastleIndex = [this, &hero]() {
