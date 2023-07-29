@@ -91,17 +91,34 @@ namespace Interface
 
     void Editor::redraw( const uint32_t force /* = 0 */ )
     {
-        const fheroes2::Display & display = fheroes2::Display::instance();
+        fheroes2::Display & display = fheroes2::Display::instance();
 
         const uint32_t combinedRedraw = _redraw | force;
 
         if ( combinedRedraw & REDRAW_GAMEAREA ) {
             // Render all except the fog.
-            _gameArea.Redraw( fheroes2::Display::instance(), LEVEL_OBJECTS | LEVEL_HEROES | LEVEL_ROUTES );
+            _gameArea.Redraw( display, LEVEL_OBJECTS | LEVEL_HEROES | LEVEL_ROUTES );
 
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
 
             // TODO: Render square cursor around tiles according to Brush Size.
+            if ( _editorPanel.isTerrainEdit() ) {
+                LocalEvent & le = LocalEvent::Get();
+                const fheroes2::Point & mousePosition = le.GetMouseCursor();
+                const int32_t index = _gameArea.GetValidTileIdFromPoint( mousePosition );
+
+                if ( index > -1 ) {
+                    const int32_t brushSize = _editorPanel.getBrushSize();
+
+                    if ( brushSize > 0 ) {
+                        const int32_t worldWidth = world.w();
+                        const int32_t cursorSizeX = std::min( brushSize, worldWidth - index % worldWidth ) - 1;
+                        const int32_t cursorSizeY = std::min( brushSize, world.h() - index / worldWidth ) - 1;
+                        const int32_t endIndex = index + cursorSizeX + worldWidth * cursorSizeY;
+                        _gameArea.renderTileCursor( display, index, endIndex );
+                    }
+                }
+            }
         }
 
         if ( combinedRedraw & ( REDRAW_RADAR_CURSOR | REDRAW_RADAR ) ) {
@@ -494,7 +511,7 @@ namespace Interface
                         break;
                     }
 
-                    brushTile = &world.GetTiles( Maps::GetDirectionIndex( brushTile->GetIndex(), Direction::BOTTOM ) );
+                    brushTile += world.w();
                 }
             }
             else {
