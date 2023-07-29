@@ -444,9 +444,33 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
     listbox.SetAreaMaxItems( 9 ); // This has impact on displaying selected scenario info
     listbox.SetAreaItems( { rt.x + 55, rt.y + 55, 270, 175 } );
 
-    fheroes2::ButtonBase * currentPressedButton = &buttonSelectAll;
-    buttonSelectAll.press();
-    listbox.SelectMapSize( all, Maps::ZERO );
+    fheroes2::ButtonBase * currentPressedButton = nullptr;
+
+    Settings & settings = Settings::Get();
+    const Maps::mapsize_t currentFilter = settings.getCurrentMapFilter();
+    switch ( currentFilter ) {
+    case Maps::SMALL:
+        currentPressedButton = &buttonSelectSmall;
+        listbox.SelectMapSize( small, Maps::SMALL );
+        break;
+    case Maps::MEDIUM:
+        currentPressedButton = &buttonSelectMedium;
+        listbox.SelectMapSize( medium, Maps::MEDIUM );
+        break;
+    case Maps::LARGE:
+        currentPressedButton = &buttonSelectLarge;
+        listbox.SelectMapSize( large, Maps::LARGE );
+        break;
+    case Maps::XLARGE:
+        currentPressedButton = &buttonSelectXLarge;
+        listbox.SelectMapSize( xlarge, Maps::XLARGE );
+        break;
+    default:
+        currentPressedButton = &buttonSelectAll;
+        listbox.SelectMapSize( all, Maps::ZERO );
+        break;
+    }
+    currentPressedButton->press();
     listbox.SetCurrent( GetInitialMapId( all ) );
 
     fheroes2::OptionButtonGroup buttonGroup;
@@ -502,6 +526,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
                 currentPressedButton->drawOnPress();
             }
             else {
+                settings.setCurrentMapFilter( Maps::SMALL );
                 listbox.SelectMapSize( small, Maps::SMALL );
                 currentPressedButton = SwitchPressedMapSizeButtons( buttonSelectSmall );
             }
@@ -515,6 +540,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
                 currentPressedButton->drawOnPress();
             }
             else {
+                settings.setCurrentMapFilter( Maps::MEDIUM );
                 listbox.SelectMapSize( medium, Maps::MEDIUM );
                 currentPressedButton = SwitchPressedMapSizeButtons( buttonSelectMedium );
             }
@@ -528,6 +554,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
                 currentPressedButton->drawOnPress();
             }
             else {
+                settings.setCurrentMapFilter( Maps::LARGE );
                 listbox.SelectMapSize( large, Maps::LARGE );
                 currentPressedButton = SwitchPressedMapSizeButtons( buttonSelectLarge );
             }
@@ -541,6 +568,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
                 currentPressedButton->drawOnPress();
             }
             else {
+                settings.setCurrentMapFilter( Maps::XLARGE );
                 listbox.SelectMapSize( xlarge, Maps::XLARGE );
                 currentPressedButton = SwitchPressedMapSizeButtons( buttonSelectXLarge );
             }
@@ -548,6 +576,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
             needRedraw = true;
         }
         else if ( le.MouseClickLeft( buttonSelectAll.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_ALL ) ) {
+            settings.setCurrentMapFilter( Maps::ZERO );
             listbox.SelectMapSize( all, Maps::ZERO );
             currentPressedButton = SwitchPressedMapSizeButtons( buttonSelectAll );
 

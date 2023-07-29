@@ -31,6 +31,7 @@
 
 #include "bitmodes.h"
 #include "dir.h"
+#include "maps.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
 #include "players.h"
@@ -420,6 +421,16 @@ public:
         _viewWorldZoomLevel = zoomLevel;
     }
 
+    void setCurrentMapFilter( const Maps::mapsize_t size )
+    {
+        _currentMapFilter = size;
+    }
+
+    Maps::mapsize_t getCurrentMapFilter() const
+    {
+        return _currentMapFilter;
+    }
+
     void SetProgramPath( const char * );
 
     static std::string GetVersion();
@@ -460,6 +471,7 @@ private:
     int ai_speed;
     int scroll_speed;
     int battle_speed;
+    Maps::mapsize_t _currentMapFilter = Maps::ZERO;
 
     int game_type;
     int preferably_count_players;
