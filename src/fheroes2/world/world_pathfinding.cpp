@@ -562,9 +562,9 @@ void AIWorldPathfinder::reset()
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    static const Spell summonBoat( Spell::SUMMONBOAT );
-
     const bool isSummonBoatSpellAvailable = [this, &hero]() {
+        static const Spell summonBoat( Spell::SUMMONBOAT );
+
         if ( !hero.HaveSpell( summonBoat ) ) {
             return false;
         }
