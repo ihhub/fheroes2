@@ -2108,7 +2108,7 @@ namespace AI
             return;
         }
 
-        const Route::Path & path = hero.GetPath();
+        Route::Path & path = hero.GetPath();
         if ( !path.isValidForMovement() ) {
             return;
         }
@@ -2133,6 +2133,16 @@ namespace AI
         // If the hero goes to the water tile, then this should be his last movement
         // (not counting the current step, which is not yet completed at the moment)
         assert( path.size() == 2 );
+
+        // It may happen that although the hero at the beginning of his path had enough spell points to
+        // summon a boat, but while moving through the guarded tiles, these spell points were spent. In
+        // this case, just stop.
+        if ( !hero.CanCastSpell( Spell::SUMMONBOAT ) ) {
+            path.Reset();
+            hero.SetMove( false );
+
+            return;
+        }
 
         const int32_t boatIdx = nextTile.GetIndex();
         const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, boatIdx );

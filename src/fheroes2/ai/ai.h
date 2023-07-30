@@ -141,7 +141,8 @@ namespace AI
 
     // Makes it so that the 'hero' casts the Summon Boat spell, summoning the boat at the 'boatDestinationIndex'.
     // Returns the index of the tile on which the boat was located before the summoning. It's the caller's
-    // responsibility to make sure that 'hero' may cast this spell and there is a summonable boat on the map.
+    // responsibility to make sure that 'hero' may cast this spell and there is a summonable boat on the map
+    // before calling this function.
     int32_t HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIndex );
 
     bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell );

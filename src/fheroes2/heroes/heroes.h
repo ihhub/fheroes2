@@ -477,7 +477,7 @@ public:
     void Move2Dest( const int32_t destination );
     bool isMoveEnabled() const;
     bool CanMove() const;
-    void SetMove( bool );
+    void SetMove( const bool enable );
     bool isAction() const;
     void ResetAction();
     void Action( int tileIndex );

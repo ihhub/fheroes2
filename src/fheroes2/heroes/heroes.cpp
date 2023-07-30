@@ -1331,9 +1331,13 @@ bool Heroes::CanMove() const
     return move_point >= ( tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, GetLevelSkill( Skill::Secondary::PATHFINDING ) ) );
 }
 
-void Heroes::SetMove( bool f )
+void Heroes::SetMove( const bool enable )
 {
-    if ( f ) {
+    if ( enable ) {
+        if ( Modes( ENABLEMOVE ) ) {
+            return;
+        }
+
         ResetModes( SLEEPER );
 
         if ( isControlAI() ) {
@@ -1343,6 +1347,10 @@ void Heroes::SetMove( bool f )
         SetModes( ENABLEMOVE );
     }
     else {
+        if ( !Modes( ENABLEMOVE ) ) {
+            return;
+        }
+
         ResetModes( ENABLEMOVE );
 
         if ( isControlAI() ) {
