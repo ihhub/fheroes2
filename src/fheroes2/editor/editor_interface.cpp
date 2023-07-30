@@ -103,22 +103,18 @@ namespace Interface
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
 
             if ( _editorPanel.isTerrainEdit() ) {
-                LocalEvent & le = LocalEvent::Get();
-                const fheroes2::Point & mousePosition = le.GetMouseCursor();
-                const int32_t index = _gameArea.GetValidTileIdFromPoint( mousePosition );
-
-                if ( index > -1 ) {
+                if ( _tileUnderCursor > -1 ) {
                     const int32_t brushSize = _editorPanel.getBrushSize();
 
                     if ( brushSize > 0 ) {
                         const int32_t worldWidth = world.w();
-                        const int32_t cursorSizeX = std::min( brushSize, worldWidth - index % worldWidth ) - 1;
-                        const int32_t cursorSizeY = std::min( brushSize, world.h() - index / worldWidth ) - 1;
-                        const int32_t endIndex = index + cursorSizeX + worldWidth * cursorSizeY;
-                        _gameArea.renderTileCursor( display, index, endIndex );
+                        const int32_t cursorSizeX = std::min( brushSize, worldWidth - _tileUnderCursor % worldWidth ) - 1;
+                        const int32_t cursorSizeY = std::min( brushSize, world.h() - _tileUnderCursor / worldWidth ) - 1;
+                        const int32_t endIndex = _tileUnderCursor + cursorSizeX + worldWidth * cursorSizeY;
+                        _gameArea.renderTileCursor( display, _tileUnderCursor, endIndex );
                     }
-                    else if ( brushSize == -1 ) {
-                        _gameArea.renderTileCursor( display, _selectedTile, index );
+                    else if ( _editorPanel.isAreaSelect() ) {
+                        _gameArea.renderTileCursor( display, _selectedTile, _tileUnderCursor );
                     }
                 }
             }
@@ -290,6 +286,21 @@ namespace Interface
             // cursor is over the game area
             else if ( le.MouseCursor( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
                 isCursorOverGamearea = true;
+
+                // Get tile index under the cursor.
+                const int32_t tileIndex = _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
+                if ( _tileUnderCursor != tileIndex ) {
+                    _tileUnderCursor = tileIndex;
+
+                    // Force redraw if cursor position was changed as area rectangle is also changed.
+                    if ( _editorPanel.isTerrainEdit() && !( _editorPanel.isAreaSelect() && _selectedTile == -1 ) ) {
+                        _redraw |= REDRAW_GAMEAREA;
+                    }
+
+                    if ( _selectedTile == -1 && _editorPanel.isAreaSelect() && le.MousePressLeft() ) {
+                        _selectedTile = _tileUnderCursor;
+                    }
+                }
             }
             // cursor is over the buttons area
             else if ( le.MouseCursor( _editorPanel.getRect() ) ) {
@@ -320,11 +331,11 @@ namespace Interface
 
             // Fill the selected area in terrain edit mode.
             if ( _selectedTile > -1 && le.MouseReleaseLeft() && _editorPanel.isTerrainEdit() ) {
-                const int groundId = _editorPanel.selectedGroundType();
-                const fheroes2::Point & mousePosition = le.GetMouseCursor();
-                const int32_t endIndex = _gameArea.GetValidTileIdFromPoint( mousePosition );
+                if ( isCursorOverGamearea && _editorPanel.isAreaSelect() ) {
+                    const int groundId = _editorPanel.selectedGroundType();
 
-                Maps::setTerrainImageOnTiles( _selectedTile, endIndex, groundId );
+                    Maps::setTerrainImageOnTiles( _selectedTile, _tileUnderCursor, groundId );
+                }
 
                 // Reset the area start tile.
                 _selectedTile = -1;
@@ -333,7 +344,7 @@ namespace Interface
             }
 
             // fast scroll
-            if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) && ( _gameArea.NeedScroll() || _gameArea.needDragScrollRedraw() ) ) {
+            if ( ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) && _gameArea.NeedScroll() ) || _gameArea.needDragScrollRedraw() ) {
                 if ( ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
                        || isScrollBottom( le.GetMouseCursor() ) )
                      && !_gameArea.isDragScroll() ) {
@@ -510,25 +521,21 @@ namespace Interface
         }
         else if ( _editorPanel.isTerrainEdit() ) {
             const int32_t brushSize = _editorPanel.getBrushSize();
+            const int groundId = _editorPanel.selectedGroundType();
+
             if ( brushSize > 0 ) {
-                const int groundId = _editorPanel.selectedGroundType();
                 const int32_t worldWidth = world.w();
                 const int32_t cursorSizeX = std::min( brushSize, worldWidth - tileIndex % worldWidth ) - 1;
                 const int32_t cursorSizeY = std::min( brushSize, world.h() - tileIndex / worldWidth ) - 1;
                 const int32_t endIndex = tileIndex + cursorSizeX + worldWidth * cursorSizeY;
                 Maps::setTerrainImageOnTiles( tileIndex, endIndex, groundId );
             }
-            else if ( brushSize == -1 ) {
-                // TODO: Add ability to select area (without dragging a map).
+            else if ( _editorPanel.isAreaSelect() ) {
+                Maps::setTerrainImageOnTiles( tileIndex, tileIndex, groundId );
                 _selectedTile = -1;
             }
             _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
         }
-    }
-
-    void Editor::mouseCursorAreaPressLeft( const int32_t tileIndex )
-    {
-        _selectedTile = tileIndex;
     }
 
     void Editor::mouseCursorAreaPressRight( const int32_t tileIndex ) const

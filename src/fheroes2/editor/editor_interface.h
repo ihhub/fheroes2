@@ -52,7 +52,6 @@ namespace Interface
         }
 
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
-        void mouseCursorAreaPressLeft( const int32_t tileIndex ) override;
         void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
 
     private:
@@ -61,5 +60,6 @@ namespace Interface
         EditorPanel _editorPanel;
 
         int32_t _selectedTile{ -1 };
+        int32_t _tileUnderCursor{ -1 };
     };
 }

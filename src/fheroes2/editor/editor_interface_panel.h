@@ -56,6 +56,11 @@ namespace Interface
             return _selectedInstrument == Instrument::TERRAIN;
         }
 
+        bool isAreaSelect() const
+        {
+            return _selectedBrushSize == BrushSize::AREA;
+        }
+
         bool useMouseDragMovment() const
         {
             return ( _selectedInstrument != Instrument::TERRAIN ) || ( _selectedBrushSize != BrushSize::AREA );

@@ -126,7 +126,6 @@ namespace Interface
         }
 
         virtual void mouseCursorAreaClickLeft( const int32_t tileIndex ) = 0;
-        virtual void mouseCursorAreaPressLeft( const int32_t tileIndex ) = 0;
         virtual void mouseCursorAreaPressRight( const int32_t tileIndex ) const = 0;
 
         // Regenerates the game area and updates the panel positions depending on the UI settings
