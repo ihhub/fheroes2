@@ -279,7 +279,7 @@ namespace Interface
                 if ( Cursor::POINTER != cursor.Themes() ) {
                     cursor.SetThemes( Cursor::POINTER );
                 }
-                if ( !_gameArea.isDragScroll() ) {
+                if ( !_gameArea.isDragScroll() && !( _editorPanel.isAreaSelect() && _selectedTile != -1 ) ) {
                     _radar.QueueEventProcessing();
                 }
             }
