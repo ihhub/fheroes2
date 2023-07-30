@@ -133,6 +133,10 @@ uint32_t Maps::Ground::GetPenalty( const Maps::Tiles & tile, uint32_t level )
 
 uint16_t Maps::Ground::getRandomTerrainImageIndex( const int groundId )
 {
+    if ( groundId == WATER ) {
+        return static_cast<uint16_t>( Rand::Get( 3 ) ) + 16u;
+    }
+
     const uint16_t indexOffset = static_cast<uint16_t>( Rand::Get( 7 ) );
     switch ( groundId ) {
     case DESERT:
@@ -151,10 +155,37 @@ uint16_t Maps::Ground::getRandomTerrainImageIndex( const int groundId )
         return indexOffset + 337u;
     case GRASS:
         return indexOffset + 68u;
-    case WATER:
-        return indexOffset + 16u;
     default:
+        // Have you added a new ground? Add the logic above!
+        assert( 0 );
+        return 0;
+    }
+}
 
+uint16_t Maps::Ground::getRandomTerrainSpecialImageIndex( const int groundId )
+{
+    switch ( groundId ) {
+    case DESERT:
+        return static_cast<uint16_t>( Rand::Get( 12 ) ) + 308u;
+    case SNOW:
+        return static_cast<uint16_t>( Rand::Get( 7 ) ) + 138u;
+    case SWAMP:
+        return static_cast<uint16_t>( Rand::Get( 15 ) ) + 192u;
+    case WASTELAND:
+        return static_cast<uint16_t>( Rand::Get( 7 ) ) + 407u;
+    case BEACH:
+        return static_cast<uint16_t>( Rand::Get( 8 ) ) + 423u;
+    case LAVA:
+        return static_cast<uint16_t>( Rand::Get( 7 ) ) + 254u;
+    case DIRT:
+        return static_cast<uint16_t>( Rand::Get( 15 ) ) + 345u;
+    case GRASS:
+        return static_cast<uint16_t>( Rand::Get( 15 ) ) + 76u;
+    case WATER:
+        // There are no extra water terrain tiles. We return normal tiles instead.
+        return getRandomTerrainImageIndex( groundId );
+    default:
+        // Have you added a new ground? Add the logic above!
         assert( 0 );
         return 0;
     }

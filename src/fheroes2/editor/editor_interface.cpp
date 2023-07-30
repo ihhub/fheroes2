@@ -42,6 +42,7 @@
 #include "interface_status.h"
 #include "localevent.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "screen.h"
@@ -317,8 +318,18 @@ namespace Interface
                 }
             }
 
-            if ( le.MouseReleaseLeft() ) {
+            // Fill the selected area in terrain edit mode.
+            if ( _selectedTile > -1 && le.MouseReleaseLeft() && _editorPanel.isTerrainEdit() ) {
+                const int groundId = _editorPanel.selectedGroundType();
+                const fheroes2::Point & mousePosition = le.GetMouseCursor();
+                const int32_t endIndex = _gameArea.GetValidTileIdFromPoint( mousePosition );
+
+                Maps::setTerrainImageOnTiles( _selectedTile, endIndex, groundId );
+
+                // Reset the area start tile.
                 _selectedTile = -1;
+
+                _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
             }
 
             // fast scroll
@@ -501,25 +512,11 @@ namespace Interface
             const int32_t brushSize = _editorPanel.getBrushSize();
             if ( brushSize > 0 ) {
                 const int groundId = _editorPanel.selectedGroundType();
-                Maps::Tiles * brushTile = &tile;
-
-                for ( int32_t tileOffsetY = 0; tileOffsetY < brushSize; ++tileOffsetY ) {
-                    for ( int32_t tileOffsetX = 0; tileOffsetX < brushSize; ++tileOffsetX ) {
-                        Maps::Tiles * currentTile = brushTile + tileOffsetX;
-
-                        currentTile->setTerrainImage( Maps::Ground::getRandomTerrainImageIndex( groundId ), false, false );
-
-                        if ( !Maps::isValidDirection( currentTile->GetIndex(), Direction::RIGHT ) ) {
-                            break;
-                        }
-                    }
-
-                    if ( !Maps::isValidDirection( brushTile->GetIndex(), Direction::BOTTOM ) ) {
-                        break;
-                    }
-
-                    brushTile += world.w();
-                }
+                const int32_t worldWidth = world.w();
+                const int32_t cursorSizeX = std::min( brushSize, worldWidth - tileIndex % worldWidth ) - 1;
+                const int32_t cursorSizeY = std::min( brushSize, world.h() - tileIndex / worldWidth ) - 1;
+                const int32_t endIndex = tileIndex + cursorSizeX + worldWidth * cursorSizeY;
+                Maps::setTerrainImageOnTiles( tileIndex, endIndex, groundId );
             }
             else if ( brushSize == -1 ) {
                 // TODO: Add ability to select area (without dragging a map).

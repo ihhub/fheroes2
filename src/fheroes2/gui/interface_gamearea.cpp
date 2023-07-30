@@ -781,10 +781,10 @@ void Interface::GameArea::renderTileCursor( fheroes2::Image & dst, const int32_t
 
     const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
     const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
-    const int32_t endX = std::max( startTileOffset.x, endTileOffset.x );
-    const int32_t endY = std::max( startTileOffset.y, endTileOffset.y );
+    const int32_t sizeX = TILEWIDTH + std::abs( startTileOffset.x - endTileOffset.x );
+    const int32_t sizeY = TILEWIDTH + std::abs( startTileOffset.y - endTileOffset.y );
 
-    const fheroes2::Rect imageRoi{ startX, startY, TILEWIDTH + endX - startX, TILEWIDTH + endY - startY };
+    const fheroes2::Rect imageRoi{ startX, startY, sizeX, sizeY };
     const fheroes2::Rect overlappedRoi = _windowROI ^ imageRoi;
 
     fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, std::min( 2, overlappedRoi.height ), 181 );

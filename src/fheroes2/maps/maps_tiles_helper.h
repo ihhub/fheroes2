@@ -75,7 +75,7 @@ namespace Maps
         FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT = 4
     };
 
-    void setTerrainImageOnTiles( Tiles & tile, const int32_t spellId );
+    void setTerrainImageOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId );
 
     // Only for MP2::OBJ_MINES.
     int32_t getMineSpellIdFromTile( const Tiles & tile );
