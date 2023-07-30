@@ -279,7 +279,7 @@ namespace Interface
                 if ( Cursor::POINTER != cursor.Themes() ) {
                     cursor.SetThemes( Cursor::POINTER );
                 }
-                if ( !_gameArea.isDragScroll() && !( _editorPanel.isAreaSelect() && _selectedTile != -1 ) ) {
+                if ( !_gameArea.isDragScroll() && ( !_editorPanel.isAreaSelect() || _selectedTile == -1 ) ) {
                     _radar.QueueEventProcessing();
                 }
             }
@@ -293,13 +293,13 @@ namespace Interface
                     _tileUnderCursor = tileIndex;
 
                     // Force redraw if cursor position was changed as area rectangle is also changed.
-                    if ( _editorPanel.isTerrainEdit() && !( _editorPanel.isAreaSelect() && _selectedTile == -1 ) ) {
+                    if ( _editorPanel.isTerrainEdit() && ( !_editorPanel.isAreaSelect() || _selectedTile != -1 ) ) {
                         _redraw |= REDRAW_GAMEAREA;
                     }
+                }
 
-                    if ( _selectedTile == -1 && _editorPanel.isAreaSelect() && le.MousePressLeft() ) {
-                        _selectedTile = _tileUnderCursor;
-                    }
+                if ( _selectedTile == -1 && _editorPanel.isAreaSelect() && le.MousePressLeft() ) {
+                    _selectedTile = tileIndex;
                 }
             }
             // cursor is over the buttons area
@@ -506,7 +506,7 @@ namespace Interface
 
     void Editor::mouseCursorAreaClickLeft( const int32_t tileIndex )
     {
-        Maps::Tiles & tile = world.GetTiles( tileIndex );
+        const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
         Heroes * otherHero = tile.GetHeroes();
         Castle * otherCastle = world.getCastle( tile.GetCenter() );
@@ -528,10 +528,13 @@ namespace Interface
                 const int32_t cursorSizeX = std::min( brushSize, worldWidth - tileIndex % worldWidth ) - 1;
                 const int32_t cursorSizeY = std::min( brushSize, world.h() - tileIndex / worldWidth ) - 1;
                 const int32_t endIndex = tileIndex + cursorSizeX + worldWidth * cursorSizeY;
+
                 Maps::setTerrainImageOnTiles( tileIndex, endIndex, groundId );
             }
             else if ( _editorPanel.isAreaSelect() ) {
+                // This is a case when area was not selected but a single tile was clicked.
                 Maps::setTerrainImageOnTiles( tileIndex, tileIndex, groundId );
+
                 _selectedTile = -1;
             }
             _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
