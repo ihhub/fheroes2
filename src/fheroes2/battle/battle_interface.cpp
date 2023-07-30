@@ -3112,6 +3112,12 @@ void Battle::Interface::EventAutoSwitch( const Unit & unit, Actions & actions )
         return;
     }
 
+    if ( fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Are you sure you want to enable auto combat?" ), fheroes2::FontType::normalWhite() ),
+                                Dialog::YES | Dialog::NO )
+         != Dialog::YES ) {
+        return;
+    }
+
     actions.emplace_back( CommandType::MSG_BATTLE_AUTO_SWITCH, unit.GetCurrentOrArmyColor() );
 
     humanturn_redraw = true;
