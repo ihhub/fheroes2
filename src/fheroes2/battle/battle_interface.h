@@ -393,7 +393,7 @@ namespace Battle
         void ProcessingHeroDialogResult( const int result, Actions & actions );
 
         void _openBattleSettingsDialog();
-        void EventAutoSwitch( const Unit & unit, Actions & actions );
+        void EventAutoSwitch( const Unit & unit, Actions & actions, const bool hotKeyPressed );
         void EventAutoFinish( Actions & actions );
         void EventShowOptions();
         void ButtonAutoAction( const Unit & unit, Actions & actions );
