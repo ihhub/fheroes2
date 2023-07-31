@@ -91,7 +91,10 @@ namespace Route
 
         // Returns the target index of the current step (the first in the queue). If the queue is empty, then returns the
         // destination index of the path.
-        int32_t GetFrontIndex() const;
+        int32_t GetFrontIndex() const
+        {
+            return empty() ? _dst : front().GetIndex();
+        }
 
         // Returns the source index of the current step (the first in the queue). If the queue is empty, then returns the
         // hero's index.

@@ -39,12 +39,7 @@ Route::Path::Path( const Heroes & hero )
     , _hide( true )
 {}
 
-int Route::Path::GetFrontIndex() const
-{
-    return empty() ? _dst : front().GetIndex();
-}
-
-int Route::Path::GetFrontFrom() const
+int32_t Route::Path::GetFrontFrom() const
 {
     assert( _hero != nullptr );
 
