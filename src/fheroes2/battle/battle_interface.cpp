@@ -2758,7 +2758,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         }
         // Switch the auto battle mode on/off
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH ) ) {
-            EventAutoSwitch( unit, actions, true );
+            EventAutoSwitch( unit, actions );
         }
         // Finish the battle in auto mode
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_FINISH ) ) {
@@ -3106,16 +3106,9 @@ void Battle::Interface::EventShowOptions()
     humanturn_redraw = true;
 }
 
-void Battle::Interface::EventAutoSwitch( const Unit & unit, Actions & actions, const bool hotKeyPressed )
+void Battle::Interface::EventAutoSwitch( const Unit & unit, Actions & actions )
 {
     if ( !arena.CanToggleAutoBattle() ) {
-        return;
-    }
-
-    if ( !hotKeyPressed
-         && fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Are you sure you want to enable auto combat?" ), fheroes2::FontType::normalWhite() ),
-                                   Dialog::YES | Dialog::NO )
-                != Dialog::YES ) {
         return;
     }
 
@@ -3147,7 +3140,13 @@ void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
     le.MousePressLeft( btn_auto.area() ) ? btn_auto.drawOnPress() : btn_auto.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_auto.area() ) ) {
-        EventAutoSwitch( unit, actions, false );
+        if ( fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Are you sure you want to enable auto combat?" ), fheroes2::FontType::normalWhite() ),
+                                    Dialog::YES | Dialog::NO )
+             != Dialog::YES ) {
+            return;
+        }
+
+        EventAutoSwitch( unit, actions );
     }
 }
 
