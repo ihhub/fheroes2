@@ -257,7 +257,7 @@ msgstr ""
 "(dav)"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "%{monster}\n"
