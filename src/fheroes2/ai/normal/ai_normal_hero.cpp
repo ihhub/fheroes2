@@ -2074,11 +2074,10 @@ namespace AI
         // If the hero goes to the water tile, then this should be his last movement
         assert( path.size() == 1 );
 
-        const int32_t boatIdx = nextTile.GetIndex();
-        const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, boatIdx );
+        const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, nextTileIdx );
 
         updateMapActionObjectCache( formerBoatIdx );
-        updateMapActionObjectCache( boatIdx );
+        updateMapActionObjectCache( nextTileIdx );
     }
 
     void Normal::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType )
@@ -2144,11 +2143,10 @@ namespace AI
             return;
         }
 
-        const int32_t boatIdx = nextTile.GetIndex();
-        const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, boatIdx );
+        const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, nextTileIdx );
 
         updateMapActionObjectCache( formerBoatIdx );
-        updateMapActionObjectCache( boatIdx );
+        updateMapActionObjectCache( nextTileIdx );
     }
 
     bool Normal::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue )
