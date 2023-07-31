@@ -234,7 +234,7 @@ namespace Maps
 {
     void setTerrainImageOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId )
     {
-        if ( startTileId < 0 || startTileId < 0 ) {
+        if ( startTileId < 0 || endTileId < 0 ) {
             return;
         }
 
