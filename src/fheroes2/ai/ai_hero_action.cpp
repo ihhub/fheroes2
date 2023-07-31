@@ -97,7 +97,7 @@ namespace
     }
 
     // Never cache the value of this function as it depends on hero's path and location.
-    bool AIHeroesShowAnimation( const Heroes & hero, const uint32_t colors )
+    bool AIIsShowAnimationForHero( const Heroes & hero, const uint32_t colors )
     {
         if ( Settings::Get().AIMoveSpeed() == 0 ) {
             return false;
@@ -124,6 +124,20 @@ namespace
         }
 
         return false;
+    }
+
+    bool AIIsShowAnimationForTile( const Maps::Tiles & tile, const uint32_t colors )
+    {
+        if ( Settings::Get().AIMoveSpeed() == 0 ) {
+            return false;
+        }
+
+        if ( colors == 0 ) {
+            return false;
+        }
+
+        // Show animation on this tile if it is visible (or barely visible) to the human player.
+        return ( tile.getFogDirection() != DIRECTION_ALL );
     }
 
     int AISelectSkillFromArena( const Heroes & hero )
@@ -238,7 +252,7 @@ namespace
 
         assert( hero.CanCastSpell( spellToUse ) );
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut();
         }
@@ -247,7 +261,7 @@ namespace
         hero.SpellCasted( spellToUse );
         hero.GetPath().Reset();
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
@@ -261,7 +275,7 @@ namespace
     {
         const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             if ( centerOn != nullptr ) {
                 Interface::AdventureMap::Get().getGameArea().SetCenter( *centerOn );
             }
@@ -810,7 +824,7 @@ namespace
 
         assert( world.GetTiles( indexTo ).GetObject() != MP2::OBJ_HEROES );
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             // AI-controlled hero cannot activate Stone Liths from the same tile, but should move to this tile from some
             // other tile first, so there is no need to re-center the game area on the hero before his disappearance
             hero.FadeOut();
@@ -819,7 +833,7 @@ namespace
         hero.Move2Dest( indexTo );
         hero.GetPath().Reset();
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
@@ -874,7 +888,7 @@ namespace
             return;
         }
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             // AI-controlled hero cannot activate Whirlpool from the same tile, but should move to this tile from some
             // other tile first, so there is no need to re-center the game area on the hero before his disappearance
             hero.FadeOut();
@@ -885,7 +899,7 @@ namespace
 
         AIWhirlpoolTroopLoseEffect( hero );
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
@@ -1485,7 +1499,7 @@ namespace
 
         const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut( offset );
         }
@@ -1523,7 +1537,7 @@ namespace
         hero.SetShipMaster( false );
         hero.GetPath().Reset();
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( prevPos );
             hero.FadeIn( offset );
         }
@@ -1924,7 +1938,7 @@ namespace AI
                 break;
             }
 
-            if ( hideAIMovements || !AIHeroesShowAnimation( hero, colors ) ) {
+            if ( hideAIMovements || !AIIsShowAnimationForHero( hero, colors ) ) {
                 hero.Move( true );
                 recenterNeeded = true;
 
@@ -1973,7 +1987,7 @@ namespace AI
                     }
 
                     if ( hero.Move( noMovementAnimation ) ) {
-                        if ( AIHeroesShowAnimation( hero, colors ) ) {
+                        if ( AIIsShowAnimationForHero( hero, colors ) ) {
                             gameArea.SetCenter( hero.GetCenter() );
                         }
                     }
@@ -2027,7 +2041,7 @@ namespace AI
             return;
         }
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut();
         }
@@ -2036,7 +2050,7 @@ namespace AI
         hero.SpellCasted( dimensionDoor );
         hero.GetPath().Reset();
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
@@ -2066,8 +2080,8 @@ namespace AI
 
         Maps::Tiles & tileSource = world.GetTiles( boatSource );
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            gameArea.SetCenter( hero.GetCenter() );
+        if ( AIIsShowAnimationForTile( tileSource, AIGetAllianceColors() ) ) {
+            gameArea.SetCenter( Maps::GetPoint( boatSource ) );
             gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
         }
         else {
@@ -2081,7 +2095,8 @@ namespace AI
         tileDest.setBoat( Direction::RIGHT, heroColor );
         tileSource.resetBoatOwnerColor();
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForTile( tileDest, AIGetAllianceColors() ) ) {
+            gameArea.SetCenter( Maps::GetPoint( boatDestinationIndex ) );
             gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestinationIndex, MP2::OBJ_BOAT ) );
         }
 
