@@ -254,7 +254,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Mračna\n"
