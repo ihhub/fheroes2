@@ -293,21 +293,6 @@ namespace Interface
             // cursor is over the game area
             else if ( le.MouseCursor( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
                 isCursorOverGamearea = true;
-
-                // Get tile index under the cursor.
-                const int32_t tileIndex = _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
-                if ( _tileUnderCursor != tileIndex ) {
-                    _tileUnderCursor = tileIndex;
-
-                    // Force redraw if cursor position was changed as area rectangle is also changed.
-                    if ( _editorPanel.isTerrainEdit() && ( !_editorPanel.isAreaSelect() || _selectedTile != -1 ) ) {
-                        _redraw |= REDRAW_GAMEAREA;
-                    }
-                }
-
-                if ( _selectedTile == -1 && _editorPanel.isAreaSelect() && le.MousePressLeft() ) {
-                    _selectedTile = tileIndex;
-                }
             }
             // cursor is over the buttons area
             else if ( le.MouseCursor( _editorPanel.getRect() ) ) {
@@ -334,6 +319,28 @@ namespace Interface
                 else if ( !le.MousePressLeft() ) {
                     _radar.QueueEventProcessing();
                 }
+            }
+
+            if ( isCursorOverGamearea ) {
+                // Get tile index under the cursor.
+                const int32_t tileIndex = _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
+                if ( _tileUnderCursor != tileIndex ) {
+                    _tileUnderCursor = tileIndex;
+
+                    // Force redraw if cursor position was changed as area rectangle is also changed.
+                    if ( _editorPanel.isTerrainEdit() && ( !_editorPanel.isAreaSelect() || _selectedTile != -1 ) ) {
+                        _redraw |= REDRAW_GAMEAREA;
+                    }
+                }
+
+                if ( _selectedTile == -1 && _editorPanel.isAreaSelect() && le.MousePressLeft() ) {
+                    _selectedTile = tileIndex;
+                    _redraw |= REDRAW_GAMEAREA;
+                }
+            }
+            else if ( _tileUnderCursor != -1 ) {
+                _tileUnderCursor = -1;
+                _redraw |= REDRAW_GAMEAREA;
             }
 
             // Fill the selected area in terrain edit mode.
