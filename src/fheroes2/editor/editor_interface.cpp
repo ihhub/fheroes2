@@ -56,6 +56,17 @@
 
 class Castle;
 
+namespace
+{
+    int32_t brushAreaEndIndex( const int32_t brushSize, const int32_t startIndex )
+    {
+        const int32_t worldWidth = world.w();
+        const int32_t cursorSizeX = std::min( brushSize, worldWidth - startIndex % worldWidth ) - 1;
+        const int32_t cursorSizeY = std::min( brushSize, world.h() - startIndex / worldWidth ) - 1;
+        return startIndex + cursorSizeX + worldWidth * cursorSizeY;
+    }
+}
+
 namespace Interface
 {
     Interface::Editor::Editor()
@@ -107,11 +118,7 @@ namespace Interface
                     const int32_t brushSize = _editorPanel.getBrushSize();
 
                     if ( brushSize > 0 ) {
-                        const int32_t worldWidth = world.w();
-                        const int32_t cursorSizeX = std::min( brushSize, worldWidth - _tileUnderCursor % worldWidth ) - 1;
-                        const int32_t cursorSizeY = std::min( brushSize, world.h() - _tileUnderCursor / worldWidth ) - 1;
-                        const int32_t endIndex = _tileUnderCursor + cursorSizeX + worldWidth * cursorSizeY;
-                        _gameArea.renderTileCursor( display, _tileUnderCursor, endIndex );
+                        _gameArea.renderTileCursor( display, _tileUnderCursor, brushAreaEndIndex( brushSize, _tileUnderCursor ) );
                     }
                     else if ( _editorPanel.isAreaSelect() ) {
                         _gameArea.renderTileCursor( display, _selectedTile, _tileUnderCursor );
@@ -524,12 +531,7 @@ namespace Interface
             const int groundId = _editorPanel.selectedGroundType();
 
             if ( brushSize > 0 ) {
-                const int32_t worldWidth = world.w();
-                const int32_t cursorSizeX = std::min( brushSize, worldWidth - tileIndex % worldWidth ) - 1;
-                const int32_t cursorSizeY = std::min( brushSize, world.h() - tileIndex / worldWidth ) - 1;
-                const int32_t endIndex = tileIndex + cursorSizeX + worldWidth * cursorSizeY;
-
-                Maps::setTerrainImageOnTiles( tileIndex, endIndex, groundId );
+                Maps::setTerrainImageOnTiles( tileIndex, brushAreaEndIndex( brushSize, tileIndex ), groundId );
             }
             else if ( _editorPanel.isAreaSelect() ) {
                 // This is a case when area was not selected but a single tile was clicked.
