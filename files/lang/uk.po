@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-14 20:35+0000\n"
-"PO-Revision-Date: 2023-08-02 00:10+0300\n"
+"PO-Revision-Date: 2023-08-02 00:18+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -2455,7 +2455,6 @@ msgstr ""
 msgid "Thieves' Guild"
 msgstr "Гільдія злодіїв"
 
-#, fuzzy
 msgid "Tavern"
 msgstr "Таверна"
 
