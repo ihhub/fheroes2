@@ -102,7 +102,7 @@ public:
 
         fheroes2::Copy( lowerPart, 0, 0, display, dst.x, dst.y + totalHeight - lowerPart.height() + 25, lowerPart.width(), lowerPart.height() );
         */
-        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::TEXTBACK, 1 ), { dst.x, dst.y + 25, rtAreaItems.width + 5, rtAreaItems.height + 11 } );
+        // Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::TEXTBACK, 1 ), { dst.x, dst.y + 25, rtAreaItems.width + 5, rtAreaItems.height + 11 } );
 
         // scroll
 
@@ -328,6 +328,8 @@ Skill::Secondary Dialog::selectSecondarySkill()
     const std::unique_ptr<fheroes2::StandardWindow> frameborder = std::make_unique<fheroes2::StandardWindow>( 350, display.height() - 200, true );
 
     const fheroes2::Rect & area = frameborder->activeArea();
+
+    frameborder->applyTextBackgroundShading( { area.x, area.y + 25, area.width - 30, area.height - 70 } );
 
     SelectEnumSecSkill listbox( area );
 

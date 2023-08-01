@@ -268,6 +268,38 @@ namespace fheroes2
         ApplyTransform( _output, _windowArea.x + _windowArea.width - borderSize - 1, _windowArea.y + _windowArea.height, 1, borderSize - 1, 5 );
     }
 
+    void StandardWindow::applyTextBackgroundShading( const Rect roi )
+    {
+        fheroes2::Rect shadingRoi = roi ^ _activeArea;
+
+        // The text background is darker than original background. The shadow strength 2 is too much so we do two shading transforms: 3 and 5.
+        ApplyTransform( _output, shadingRoi.x + 1, shadingRoi.y + 1, shadingRoi.width - 2, shadingRoi.height - 2, 3 );
+        ApplyTransform( _output, shadingRoi.x + 1, shadingRoi.y + 1, shadingRoi.width - 2, shadingRoi.height - 2, 5 );
+
+        // Make text background borders: it consists of rectangles with different transform shading.
+        auto applyRectTransform = [&shadingRoi]( Image & output, const int32_t offset, const int32_t size, const uint8_t transformId ) {
+            // Top horizontal line.
+            ApplyTransform( output, shadingRoi.x + offset, shadingRoi.y + offset, shadingRoi.width - 2 * offset, size, transformId );
+            // Left vertical line without pixels that are parts of horizontal lines.
+            ApplyTransform( output, shadingRoi.x + offset, shadingRoi.y + offset + size, size, shadingRoi.height - 2 * ( offset + size ), transformId );
+            // Bottom horizontal line.
+            ApplyTransform( output, shadingRoi.x + offset, shadingRoi.y + shadingRoi.height - 1 - offset - size + 1, shadingRoi.width - 2 * offset, size, transformId );
+            // Right vertical line without pixels that are parts of horizontal lines.
+            ApplyTransform( output, shadingRoi.x + shadingRoi.width - 1 - offset - size + 1, shadingRoi.y + offset + size, size,
+                            shadingRoi.height - 2 * ( offset + size ), transformId );
+        };
+
+        // Outer rectangle is slightly bright.
+        applyRectTransform( _output, 0, 1, 9 );
+        // Next inner rectangle is the same as original image, we skip its transform.
+        // Next shaded rectangles have these shadow strengths: 3, 2, 2, 2, 3, 4, 5.
+        applyRectTransform( _output, 2, 1, 3 );
+        applyRectTransform( _output, 3, 3, 2 );
+        applyRectTransform( _output, 6, 1, 3 );
+        applyRectTransform( _output, 7, 1, 4 );
+        applyRectTransform( _output, 8, 1, 5 );
+    }
+
     void StandardWindow::_renderBackground( const bool isEvilInterface )
     {
         const Sprite & backgroundSprite = AGG::GetICN( ( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK ), 0 );
