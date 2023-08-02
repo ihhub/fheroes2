@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-28 06:16+0000\n"
+"POT-Creation-Date: 2023-08-02 13:14+0000\n"
 "PO-Revision-Date: 2023-04-10 00:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -725,6 +725,10 @@ msgstr "Viser en logg over alle krigernes trekk."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Er du sikker på at du vil fullføre kampen med automatiske trekk?"
+
+#, fuzzy
+msgid "Are you sure you want to enable auto combat?"
+msgstr "Er du sikker på at du vil flykte fra kampen?"
 
 msgid "%{name} skip their turn."
 msgstr "Troppen med %{name} hoppet over turen sin."
