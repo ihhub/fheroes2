@@ -3726,10 +3726,10 @@ msgstr ""
 "verwendet."
 
 msgid "Allows you to draw streams by clicking and dragging."
-msgstr "Ermöglicht das Zeichnen von Streams durch Klicken und Ziehen."
+msgstr "Ermöglicht das Zeichnen von Wasserläufen durch Klicken und Ziehen."
 
 msgid "Stream Mode"
-msgstr "Stream-Modus"
+msgstr "Wasserlauf-Modus"
 
 msgid "Allows you to draw roads by clicking and dragging."
 msgstr "Ermöglicht das Zeichnen von Straßen durch Klicken und Ziehen."
