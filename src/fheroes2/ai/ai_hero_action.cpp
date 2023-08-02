@@ -286,7 +286,7 @@ namespace
             hero.FadeOut();
         }
 
-        hero.SetFreeman( reason );
+        hero.Dismiss( reason );
     }
 
     void AIMeeting( Heroes & left, Heroes & right )

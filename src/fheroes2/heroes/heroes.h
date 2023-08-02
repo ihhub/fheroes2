@@ -283,9 +283,9 @@ public:
 
     // Returns true if the hero is available for hire (i.e. has a valid ID, is not imprisoned, and is not hired by any
     // kingdom), otherwise returns false
-    bool isFreeman() const;
-    // Makes the hero available for hire because of a 'reason'. See the implementation for details.
-    void SetFreeman( int reason );
+    bool isAvailableForHire() const;
+    // Dismisses the hero (makes him available for hire) because of a 'reason'. See the implementation for details.
+    void Dismiss( int reason );
 
     bool isLosingGame() const;
     const Castle * inCastle() const override;
@@ -698,7 +698,7 @@ struct AllHeroes : public VecHeroes
     }
 
     Heroes * GetHero( const Castle & castle ) const;
-    Heroes * GetFreeman( const int race, const int heroIDToIgnore ) const;
+    Heroes * GetHeroForHire( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( int32_t ) const;
 };
 
