@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-25 08:44+0000\n"
+"POT-Creation-Date: 2023-08-02 13:14+0000\n"
 "PO-Revision-Date: 2023-05-07 22:12+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -253,7 +253,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Quy mô\n"
@@ -711,6 +711,10 @@ msgstr "Hiển thị kết quả hành động của từng quái vật."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Ngươi có chắc chắn muốn kết thúc trận chiến ở chế độ tự động không?"
+
+#, fuzzy
+msgid "Are you sure you want to enable auto combat?"
+msgstr "Ngươi có chắc chắn muốn rút lui?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} bỏ lượt."

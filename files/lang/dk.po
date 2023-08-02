@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-25 08:44+0000\n"
+"POT-Creation-Date: 2023-08-02 13:14+0000\n"
 "PO-Revision-Date: 2023-05-31 12:10+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -253,7 +253,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Pokkers mange\n"
@@ -712,6 +712,10 @@ msgstr "Viser resultater for individuelle monstres handlinger."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Er du sikker på du vil færdiggøre denne kamp automatisk?"
+
+#, fuzzy
+msgid "Are you sure you want to enable auto combat?"
+msgstr "Er du sikker på, at du vil flygte?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} skipper deres tur."

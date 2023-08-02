@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-25 08:44+0000\n"
+"POT-Creation-Date: 2023-08-02 13:14+0000\n"
 "PO-Revision-Date: 2023-07-15 14:32+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -258,7 +258,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Тьма\n"
@@ -720,6 +720,10 @@ msgstr "Здесь отображаются результаты действи�
 
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Вы уверены, что хотите закончить битву в авторежиме?"
+
+#, fuzzy
+msgid "Are you sure you want to enable auto combat?"
+msgstr "Вы действительно хотите отступить?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name}: пропуск хода."
