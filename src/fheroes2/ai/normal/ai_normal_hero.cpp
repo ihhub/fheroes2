@@ -863,13 +863,43 @@ namespace AI
 
             const bool priority = isPriorityTask( index );
             const bool critical = isCriticalTask( index );
-            if ( hero.GetColor() == castle->GetColor() ) {
-                double value = castle->getVisitValue( hero );
-                if ( critical )
-                    return 10000 + value;
 
-                if ( !priority && value < 500 )
+            auto calcCastleValue = [&hero, castle, critical]( const bool ourCastle ) {
+                double value = castle->getBuildingValue() * 150.0 + 3000;
+
+                if ( critical || hero.isLosingGame() ) {
+                    value += 15000;
+                }
+
+                // This is our own castle in need of protection.
+                if ( ourCastle ) {
+                    value *= 1.25;
+                }
+                // This castle is defenseless. This modifier shouldn't be too high to avoid players baiting AI in.
+                else if ( !castle->GetActualArmy().isValid() ) {
+                    value *= 1.25;
+                }
+
+                if ( isCastleLossConditionForHuman( castle ) ) {
+                    value += 20000;
+                }
+
+                return value;
+            };
+
+            if ( hero.GetColor() == castle->GetColor() ) {
+                // If our castle is in danger, then we should evaluate it not in terms of its usefulness for receiving
+                // reinforcements, but in terms of its overall value - so that it can compete with enemy castles in terms
+                // of its evaluation
+                if ( critical ) {
+                    return calcCastleValue( true );
+                }
+
+                double value = castle->getVisitValue( hero );
+
+                if ( !priority && value < 500 ) {
                     return valueToIgnore;
+                }
 
                 return value;
             }
@@ -887,23 +917,13 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            double value = castle->getBuildingValue() * 150.0 + 3000;
-            if ( critical || hero.isLosingGame() )
-                value += 15000;
-            // If the castle is defenseless
-            if ( !castle->GetActualArmy().isValid() )
-                value *= 1.25;
-
-            if ( isCastleLossConditionForHuman( castle ) )
-                value += 20000;
-
-            return value;
+            return calcCastleValue( false );
         }
         case MP2::OBJ_HEROES: {
             const Heroes * otherHero = tile.GetHeroes();
-            assert( otherHero );
             if ( !otherHero ) {
                 // How is it even possible?
+                assert( 0 );
                 return valueToIgnore;
             }
 
@@ -1311,18 +1331,49 @@ namespace AI
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
             if ( !castle ) {
                 // How is it even possible?
+                assert( 0 );
                 return valueToIgnore;
             }
 
             const bool priority = isPriorityTask( index );
             const bool critical = isCriticalTask( index );
-            if ( hero.GetColor() == castle->GetColor() ) {
-                double value = castle->getVisitValue( hero );
-                if ( critical )
-                    return 15000 + value;
 
-                if ( !priority && value < 500 )
+            auto calcCastleValue = [&hero, castle, critical]( const bool ourCastle ) {
+                double value = castle->getBuildingValue() * 500.0 + 15000;
+
+                if ( critical || hero.isLosingGame() ) {
+                    value += 15000;
+                }
+
+                // This is our own castle in need of protection.
+                if ( ourCastle ) {
+                    value *= 1.5;
+                }
+                // This castle is defenseless. This modifier shouldn't be too high to avoid players baiting AI in.
+                else if ( !castle->GetActualArmy().isValid() ) {
+                    value *= 1.5;
+                }
+
+                if ( isCastleLossConditionForHuman( castle ) ) {
+                    value += 20000;
+                }
+
+                return value;
+            };
+
+            if ( hero.GetColor() == castle->GetColor() ) {
+                // If our castle is in danger, then we should evaluate it not in terms of its usefulness for receiving
+                // reinforcements, but in terms of its overall value - so that it can compete with enemy castles in terms
+                // of its evaluation
+                if ( critical ) {
+                    return calcCastleValue( true );
+                }
+
+                double value = castle->getVisitValue( hero );
+
+                if ( !priority && value < 500 ) {
                     return valueToIgnore;
+                }
 
                 return value / 2;
             }
@@ -1340,23 +1391,13 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            double value = castle->getBuildingValue() * 500.0 + 15000;
-            if ( critical || hero.isLosingGame() )
-                value += 15000;
-            // If the castle is defenseless
-            // This modifier shouldn't be too high to avoid players baiting AI in
-            if ( !castle->GetActualArmy().isValid() )
-                value *= 1.5;
-
-            if ( isCastleLossConditionForHuman( castle ) )
-                value += 20000;
-
-            return value;
+            return calcCastleValue( false );
         }
         case MP2::OBJ_HEROES: {
             const Heroes * otherHero = tile.GetHeroes();
-            assert( otherHero );
             if ( !otherHero ) {
+                // How is it even possible?
+                assert( 0 );
                 return valueToIgnore;
             }
 
@@ -1526,8 +1567,9 @@ namespace AI
         switch ( objectType ) {
         case MP2::OBJ_HEROES: {
             const Heroes * otherHero = tile.GetHeroes();
-            assert( otherHero );
             if ( !otherHero ) {
+                // How is it even possible?
+                assert( 0 );
                 return valueToIgnore;
             }
 
