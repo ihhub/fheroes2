@@ -864,7 +864,7 @@ namespace AI
             const bool priority = isPriorityTask( index );
             const bool critical = isCriticalTask( index );
 
-            auto calcCastleValue = [&hero, castle, critical]( const bool ourCastle ) {
+            auto calculateCastleValue = [&hero, castle, critical]( const bool ourCastle ) {
                 double value = castle->getBuildingValue() * 150.0 + 3000;
 
                 if ( critical || hero.isLosingGame() ) {
@@ -892,7 +892,7 @@ namespace AI
                 // reinforcements, but in terms of its overall value - so that it can compete with enemy castles in terms
                 // of its evaluation
                 if ( critical ) {
-                    return calcCastleValue( true );
+                    return calculateCastleValue( true );
                 }
 
                 double value = castle->getVisitValue( hero );
@@ -917,7 +917,7 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            return calcCastleValue( false );
+            return calculateCastleValue( false );
         }
         case MP2::OBJ_HEROES: {
             const Heroes * otherHero = tile.GetHeroes();
@@ -1338,7 +1338,7 @@ namespace AI
             const bool priority = isPriorityTask( index );
             const bool critical = isCriticalTask( index );
 
-            auto calcCastleValue = [&hero, castle, critical]( const bool ourCastle ) {
+            auto calculateCastleValue = [&hero, castle, critical]( const bool ourCastle ) {
                 double value = castle->getBuildingValue() * 500.0 + 15000;
 
                 if ( critical || hero.isLosingGame() ) {
@@ -1366,7 +1366,7 @@ namespace AI
                 // reinforcements, but in terms of its overall value - so that it can compete with enemy castles in terms
                 // of its evaluation
                 if ( critical ) {
-                    return calcCastleValue( true );
+                    return calculateCastleValue( true );
                 }
 
                 double value = castle->getVisitValue( hero );
@@ -1391,7 +1391,7 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            return calcCastleValue( false );
+            return calculateCastleValue( false );
         }
         case MP2::OBJ_HEROES: {
             const Heroes * otherHero = tile.GetHeroes();
