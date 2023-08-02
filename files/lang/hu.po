@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 05:56+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -161,11 +161,11 @@ msgstr ""
 msgid "GIFT"
 msgstr "AJÁNDÉK"
 
-msgid "guildWell|EXIT"
-msgstr ""
-
 msgid "DIFFICULTY"
 msgstr "NEHÉZSÉG"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr ""
@@ -184,16 +184,6 @@ msgstr "Felfedező"
 
 msgid "None"
 msgstr "Nincs"
-
-msgid "Warning"
-msgstr "Figyelmeztetés"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
-"Szeretnéd visszavenni az irányítást az AI-tól? Ez csak a következő körben "
-"lesz érvényes."
 
 msgid ""
 "A few\n"
@@ -245,7 +235,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Ezrednyi\n"
@@ -2607,11 +2597,14 @@ msgstr "Maximus"
 msgid "Hire all creatures in the town."
 msgstr "Összes hős és város elvesztése"
 
+msgid "Available"
+msgstr "Rendelkezésre áll"
+
 msgid "Town Population Information and Statistics"
 msgstr "A város lakosságának adatai és statisztikái"
 
-msgid "Damg"
-msgstr ""
+msgid "Damage"
+msgstr "Sebzés"
 
 msgid "HP"
 msgstr "ÉP"
@@ -2621,9 +2614,6 @@ msgstr "Szaporulat"
 
 msgid "week"
 msgstr "hét"
-
-msgid "Available"
-msgstr "Rendelkezésre áll"
 
 #, fuzzy
 msgid "View World"
@@ -2674,9 +2664,6 @@ msgstr "Lövések"
 
 msgid "Shots Left"
 msgstr "Maradék lövések"
-
-msgid "Damage"
-msgstr "Sebzés"
 
 msgid "Hit Points"
 msgstr "Életerő-pontok"
@@ -3807,6 +3794,9 @@ msgstr "Vissza a főmenübe."
 msgid "No maps available!"
 msgstr "Nincs használható térkép!"
 
+msgid "Warning"
+msgstr "Figyelmeztetés"
+
 msgid "difficulty|Easy"
 msgstr "Könnyű"
 
@@ -4446,6 +4436,18 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+"Szeretnéd visszavenni az irányítást az AI-tól? Ez csak a következő körben "
+"lesz érvényes."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "A Tükörkép varázslat nem sikerült."
@@ -4885,11 +4887,6 @@ msgstr ""
 #, fuzzy
 msgid "%{color} player's turn."
 msgstr "%{color} játékos köre"
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -10102,17 +10099,23 @@ msgstr ""
 "ugyanakkora erővel támad, mint az eredeti, de bármilyen sebzés következtében "
 "eltűnik."
 
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr "Felére csökkenti a távolsági sebzéseket egy kiválasztott egységnek."
-
 msgid "Shield"
 msgstr "Pajzs"
 
-msgid "Halves damage received from ranged attacks for all of your units."
-msgstr "Felére csökkenti a távolsági sebzéseket minden egységnek."
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr "Felére csökkenti a távolsági sebzéseket egy kiválasztott egységnek."
 
 msgid "Mass Shield"
 msgstr "Teljes Pajzs"
+
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr "Felére csökkenti a távolsági sebzéseket minden egységnek."
 
 msgid "Summon Earth Elemental"
 msgstr "Földelementál idézése"

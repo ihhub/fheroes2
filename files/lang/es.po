@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 05:56+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2023-06-27 18:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -165,11 +165,11 @@ msgstr "6 JUGADORES"
 msgid "GIFT"
 msgstr "REGALO"
 
-msgid "guildWell|EXIT"
-msgstr "SALIR"
-
 msgid "DIFFICULTY"
 msgstr "DIFICULTAD"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
@@ -188,16 +188,6 @@ msgstr "Explorador"
 
 msgid "None"
 msgstr "Ninguno"
-
-msgid "Warning"
-msgstr "Advertencia"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
-"¿Quieres recuperar el control de la IA? El efecto sólo tendrá efecto en\n"
-"el siguiente turno."
 
 msgid ""
 "A few\n"
@@ -249,7 +239,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Demasiados\n"
@@ -2604,11 +2594,14 @@ msgstr "Maximus"
 msgid "Hire all creatures in the town."
 msgstr "Perder todos tus héroes y ciudades."
 
+msgid "Available"
+msgstr "Disponible"
+
 msgid "Town Population Information and Statistics"
 msgstr "Población y estadísticas de la ciudad"
 
-msgid "Damg"
-msgstr ""
+msgid "Damage"
+msgstr "Daño"
 
 msgid "HP"
 msgstr "Daño (puntos)"
@@ -2618,9 +2611,6 @@ msgstr "Crecimiento"
 
 msgid "week"
 msgstr "semana"
-
-msgid "Available"
-msgstr "Disponible"
 
 #, fuzzy
 msgid "View World"
@@ -2675,9 +2665,6 @@ msgstr "Disparos"
 
 msgid "Shots Left"
 msgstr "Disparos restantes"
-
-msgid "Damage"
-msgstr "Daño"
 
 msgid "Hit Points"
 msgstr "Pts. de Daño"
@@ -3788,6 +3775,9 @@ msgstr "Cancelar y volver al menú principal."
 msgid "No maps available!"
 msgstr "¡Ningún mapa disponible!"
 
+msgid "Warning"
+msgstr "Advertencia"
+
 msgid "difficulty|Easy"
 msgstr "Fácil"
 
@@ -4424,6 +4414,18 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+"¿Quieres recuperar el control de la IA? El efecto sólo tendrá efecto en\n"
+"el siguiente turno."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "Reflejo creado."
@@ -4895,11 +4897,6 @@ msgstr ""
 #, fuzzy
 msgid "%{color} player's turn."
 msgstr "Turno del jugador %{color}"
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -10280,20 +10277,26 @@ msgstr ""
 "causará los mismos daños que la original, pero se esfumará si recibe algún "
 "daño."
 
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr ""
-"Reduce a la midad los daños recibidos en ataques a distancia por una unidad."
-
 msgid "Shield"
 msgstr "Escudo"
 
-msgid "Halves damage received from ranged attacks for all of your units."
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
-"Reduce a la midad los daños recibidos en ataques a distancia por todas tus "
-"unidades."
+"Reduce a la midad los daños recibidos en ataques a distancia por una unidad."
 
 msgid "Mass Shield"
 msgstr "Escudo en Masa"
+
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr ""
+"Reduce a la midad los daños recibidos en ataques a distancia por todas tus "
+"unidades."
 
 msgid "Summon Earth Elemental"
 msgstr "LLamar al Elemental de la Tierra"
@@ -10580,6 +10583,9 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "guildWell|EXIT"
+#~ msgstr "SALIR"
 
 #~ msgid "%{spell} failed!!!"
 #~ msgstr "¡%{spell} fallido!"

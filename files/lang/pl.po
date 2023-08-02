@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 05:56+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2023-07-01 14:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -184,11 +184,11 @@ msgstr "6 GRACZY"
 msgid "GIFT"
 msgstr "WYŚLIJ"
 
-msgid "guildWell|EXIT"
-msgstr "WYJŚCIE"
-
 msgid "DIFFICULTY"
 msgstr "TRUDNOŚĆ"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
@@ -207,16 +207,6 @@ msgstr "Badacz"
 
 msgid "None"
 msgstr "Brak"
-
-msgid "Warning"
-msgstr "Uwaga"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
-"Czy chcesz odzyskać kontrolę z rąk AI? Efekt zadziała tylko w następnej "
-"turze."
 
 msgid ""
 "A few\n"
@@ -268,7 +258,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Setki\n"
@@ -2608,11 +2598,14 @@ msgstr "Maks"
 msgid "Hire all creatures in the town."
 msgstr "Zwerbuj wszystkie jednostki w tym mieście."
 
+msgid "Available"
+msgstr "Dostępne"
+
 msgid "Town Population Information and Statistics"
 msgstr "Statystyki populacji miasta"
 
-msgid "Damg"
-msgstr "Obraż"
+msgid "Damage"
+msgstr "Obrażenia"
 
 msgid "HP"
 msgstr "PŻ"
@@ -2622,9 +2615,6 @@ msgstr "Przyrost"
 
 msgid "week"
 msgstr "tydzień"
-
-msgid "Available"
-msgstr "Dostępne"
 
 msgid "View World"
 msgstr "Pokaż świat"
@@ -2676,9 +2666,6 @@ msgstr "Strzały"
 
 msgid "Shots Left"
 msgstr "Pozostałe strzały"
-
-msgid "Damage"
-msgstr "Obrażenia"
 
 msgid "Hit Points"
 msgstr "Punkty życia"
@@ -3763,6 +3750,9 @@ msgstr "Anuluj, aby wrócić do głównego menu."
 msgid "No maps available!"
 msgstr "Mapy niedostępne!"
 
+msgid "Warning"
+msgstr "Uwaga"
+
 msgid "difficulty|Easy"
 msgstr "Łatwy"
 
@@ -4378,6 +4368,19 @@ msgstr "ulepsz stworzenie"
 msgid "hotkey|dismiss hero or troop"
 msgstr "zwolnij stworzenie"
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+"Czy chcesz odzyskać kontrolę z rąk AI? Efekt zadziała tylko w następnej "
+"turze."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+"Czy chcesz przekazać AI kontrolę? Efekt zadziała tylko w następnej turze."
+
 msgid "The save file is corrupted."
 msgstr "Plik z zapisaną grą jest uszkodzony."
 
@@ -4848,12 +4851,6 @@ msgstr ""
 
 msgid "%{color} player's turn."
 msgstr "%{color} gracz - nowa tura."
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
-"Czy chcesz przekazać AI kontrolę? Efekt zadziała tylko w następnej turze."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -10444,21 +10441,27 @@ msgstr ""
 "Tworzy iluzję jednej z twoich istniejących jednostek. Walczy tak samo jak "
 "oryginalna jednostka, ale znika po otrzymaniu jakichkolwiek obrażeń."
 
-msgid "Halves damage received from ranged attacks for a single unit."
+msgid "Shield"
+msgstr "Tarcza"
+
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 "Zmniejsza o połowę obrażenia, jakie otrzymuje jedna z twoich jednostek z "
 "powodu ataków dystansowych."
 
-msgid "Shield"
-msgstr "Tarcza"
+msgid "Mass Shield"
+msgstr "Grupowa Tarcza"
 
-msgid "Halves damage received from ranged attacks for all of your units."
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 "Zmniejsza o połowę obrażenia, jakie otrzymują wszystkie twoje jednostki z "
 "powodu ataków dystansowych."
-
-msgid "Mass Shield"
-msgstr "Grupowa Tarcza"
 
 msgid "Summon Earth Elemental"
 msgstr "Przywołanie Żywiołaka Ziemi"
@@ -10740,6 +10743,12 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Damg"
+#~ msgstr "Obraż"
+
+#~ msgid "guildWell|EXIT"
+#~ msgstr "WYJŚCIE"
 
 #~ msgid "%{spell} failed!!!"
 #~ msgstr "Czar %{spell} nie udał się!!!"

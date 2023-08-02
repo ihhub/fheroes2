@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 05:56+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2023-05-07 22:12+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -179,11 +179,11 @@ msgstr "6 NGƯỜI CHƠI"
 msgid "GIFT"
 msgstr "QUÀ"
 
-msgid "guildWell|EXIT"
-msgstr "THOÁT"
-
 msgid "DIFFICULTY"
 msgstr "ĐỘ KHÓ"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
@@ -202,14 +202,6 @@ msgstr "Thám hiểm"
 
 msgid "None"
 msgstr "Không"
-
-msgid "Warning"
-msgstr "Cảnh báo"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr "Bạn có muốn AI kiểm soát không? Hiệu quả sẽ bắt đầu ở lượt tiếp theo."
 
 msgid ""
 "A few\n"
@@ -261,7 +253,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Quy mô\n"
@@ -2573,10 +2565,13 @@ msgstr "Max"
 msgid "Hire all creatures in the town."
 msgstr "Thuê tất cả các sinh vật trong thị trấn."
 
+msgid "Available"
+msgstr "Có sẵn"
+
 msgid "Town Population Information and Statistics"
 msgstr ""
 
-msgid "Damg"
+msgid "Damage"
 msgstr "Thiệt hại"
 
 msgid "HP"
@@ -2587,9 +2582,6 @@ msgstr "Sinh trưởng"
 
 msgid "week"
 msgstr "tuần"
-
-msgid "Available"
-msgstr "Có sẵn"
 
 msgid "View World"
 msgstr "Xem toàn bộ thế giới."
@@ -2642,9 +2634,6 @@ msgstr ""
 
 msgid "Shots Left"
 msgstr ""
-
-msgid "Damage"
-msgstr "Thiệt hại"
 
 msgid "Hit Points"
 msgstr ""
@@ -3713,6 +3702,9 @@ msgstr ""
 msgid "No maps available!"
 msgstr "Không có bản đồ nào!"
 
+msgid "Warning"
+msgstr "Cảnh báo"
+
 msgid "difficulty|Easy"
 msgstr "Dễ"
 
@@ -4317,6 +4309,18 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr "Bạn có muốn AI kiểm soát không? Hiệu quả sẽ bắt đầu ở lượt tiếp theo."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+"Ngươi có muốn chuyển quyền kiểm soát sang cho AI không? Hiệu ứng sẽ chỉ diễn "
+"ra ở lượt tiếp theo."
+
 msgid "The save file is corrupted."
 msgstr "File lưu bị hỏng."
 
@@ -4732,13 +4736,6 @@ msgstr ""
 
 msgid "%{color} player's turn."
 msgstr ""
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
-"Ngươi có muốn chuyển quyền kiểm soát sang cho AI không? Hiệu ứng sẽ chỉ diễn "
-"ra ở lượt tiếp theo."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -9435,16 +9432,20 @@ msgid ""
 "if it takes any damage."
 msgstr ""
 
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr ""
-
 msgid "Shield"
 msgstr "Khiên"
 
-msgid "Halves damage received from ranged attacks for all of your units."
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 
 msgid "Mass Shield"
+msgstr ""
+
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 
 msgid "Summon Earth Elemental"
@@ -9705,3 +9706,9 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Damg"
+#~ msgstr "Thiệt hại"
+
+#~ msgid "guildWell|EXIT"
+#~ msgstr "THOÁT"

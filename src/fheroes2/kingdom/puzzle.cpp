@@ -165,7 +165,7 @@ namespace
         fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarArea.x, radarArea.y );
 
         fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
-                                     ( isEvilInterface ? ICN::BUTTON_SMALLER_EXIT_GOOD : ICN::BUTTON_SMALLER_EXIT_EVIL ), 0, 1 );
+                                     ( isEvilInterface ? ICN::BUTTON_SMALLER_EXIT_EVIL : ICN::BUTTON_SMALLER_EXIT_GOOD ), 0, 1 );
         buttonExit.draw();
 
         drawPuzzle( pzl, sf, BORDERWIDTH, BORDERWIDTH );

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 05:56+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -159,10 +159,10 @@ msgstr ""
 msgid "GIFT"
 msgstr ""
 
-msgid "guildWell|EXIT"
+msgid "DIFFICULTY"
 msgstr ""
 
-msgid "DIFFICULTY"
+msgid "VIEW INTRO"
 msgstr ""
 
 msgid "MIN"
@@ -182,14 +182,6 @@ msgstr "Explorador"
 
 msgid "None"
 msgstr "Nenhum"
-
-msgid "Warning"
-msgstr "Atenção"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
 
 msgid ""
 "A few\n"
@@ -241,7 +233,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Um inferno de\n"
@@ -2526,11 +2518,14 @@ msgstr "máximo"
 msgid "Hire all creatures in the town."
 msgstr "Perder todos os seus heróis e das cidades."
 
+msgid "Available"
+msgstr "Disponível"
+
 msgid "Town Population Information and Statistics"
 msgstr "Informações da População da Cidade e Estatísticas"
 
-msgid "Damg"
-msgstr ""
+msgid "Damage"
+msgstr "Dano"
 
 msgid "HP"
 msgstr "HP"
@@ -2540,9 +2535,6 @@ msgstr "Produção"
 
 msgid "week"
 msgstr "semana"
-
-msgid "Available"
-msgstr "Disponível"
 
 #, fuzzy
 msgid "View World"
@@ -2597,9 +2589,6 @@ msgstr "Tiros"
 
 msgid "Shots Left"
 msgstr "Tiros restantes"
-
-msgid "Damage"
-msgstr "Dano"
 
 msgid "Hit Points"
 msgstr "HP"
@@ -3731,6 +3720,9 @@ msgstr "Cancelar e voltar para o menu principal."
 msgid "No maps available!"
 msgstr "Não há mapas disponíveis!"
 
+msgid "Warning"
+msgstr "Atenção"
+
 msgid "difficulty|Easy"
 msgstr ""
 
@@ -4365,6 +4357,16 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "A imagem no espelho está criada."
@@ -4819,11 +4821,6 @@ msgstr ""
 #, fuzzy
 msgid "%{color} player's turn."
 msgstr "Turno do jogador %{color}"
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -9734,16 +9731,20 @@ msgid ""
 "if it takes any damage."
 msgstr ""
 
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr ""
-
 msgid "Shield"
 msgstr ""
 
-msgid "Halves damage received from ranged attacks for all of your units."
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 
 msgid "Mass Shield"
+msgstr ""
+
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 
 msgid "Summon Earth Elemental"

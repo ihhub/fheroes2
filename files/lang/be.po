@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 05:56+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -175,11 +175,11 @@ msgstr "6 ГУЛЬЦОЎ"
 msgid "GIFT"
 msgstr "АДДАЦЬ"
 
-msgid "guildWell|EXIT"
-msgstr ""
-
 msgid "DIFFICULTY"
 msgstr "ЦЯЖКАСЦЬ"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "МІН"
@@ -197,14 +197,6 @@ msgid "Explorer"
 msgstr "Даследчык"
 
 msgid "None"
-msgstr ""
-
-msgid "Warning"
-msgstr "Увага"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
 msgstr ""
 
 msgid ""
@@ -257,7 +249,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Безліч\n"
@@ -2442,11 +2434,14 @@ msgstr ""
 msgid "Hire all creatures in the town."
 msgstr ""
 
+msgid "Available"
+msgstr "Даступна"
+
 msgid "Town Population Information and Statistics"
 msgstr ""
 
-msgid "Damg"
-msgstr ""
+msgid "Damage"
+msgstr "Урон"
 
 msgid "HP"
 msgstr ""
@@ -2456,9 +2451,6 @@ msgstr ""
 
 msgid "week"
 msgstr "тыдзень"
-
-msgid "Available"
-msgstr "Даступна"
 
 msgid "View World"
 msgstr ""
@@ -2507,9 +2499,6 @@ msgstr "Стрэлы"
 
 msgid "Shots Left"
 msgstr "Астатак стрэлаў"
-
-msgid "Damage"
-msgstr "Урон"
 
 msgid "Hit Points"
 msgstr "Здароўе"
@@ -3554,6 +3543,9 @@ msgstr "Вярнуцца ў галоўнае меню."
 msgid "No maps available!"
 msgstr ""
 
+msgid "Warning"
+msgstr "Увага"
+
 msgid "difficulty|Easy"
 msgstr "Лёгка"
 
@@ -4165,6 +4157,16 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr ""
 
@@ -4574,11 +4576,6 @@ msgid ""
 msgstr ""
 
 msgid "%{color} player's turn."
-msgstr ""
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
 msgstr ""
 
 msgid ""
@@ -9307,16 +9304,20 @@ msgid ""
 "if it takes any damage."
 msgstr ""
 
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr ""
-
 msgid "Shield"
 msgstr ""
 
-msgid "Halves damage received from ranged attacks for all of your units."
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 
 msgid "Mass Shield"
+msgstr ""
+
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 
 msgid "Summon Earth Elemental"

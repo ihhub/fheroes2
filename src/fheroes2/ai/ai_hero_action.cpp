@@ -37,11 +37,9 @@
 #include "battle.h"
 #include "castle.h"
 #include "color.h"
-#include "dialog.h"
 #include "direction.h"
 #include "game.h"
 #include "game_delays.h"
-#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_static.h"
 #include "heroes.h"
@@ -70,8 +68,6 @@
 #include "skill.h"
 #include "spell.h"
 #include "spell_info.h"
-#include "translations.h"
-#include "ui_dialog.h"
 #include "visit.h"
 #include "world.h"
 
@@ -546,7 +542,7 @@ namespace
         if ( destroy ) {
             setMonsterCountOnTile( tile, 0 );
 
-            tile.RemoveObjectSprite();
+            removeObjectSprite( tile );
             tile.setAsEmpty();
         }
     }
@@ -559,7 +555,7 @@ namespace
             hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
         }
 
-        tile.RemoveObjectSprite();
+        removeObjectSprite( tile );
         resetObjectInfoOnTile( tile );
         hero.GetPath().Reset();
 
@@ -638,7 +634,7 @@ namespace
             kingdom.AddFundsResource( Funds( Resource::GOLD, gold ) );
         }
 
-        tile.RemoveObjectSprite();
+        removeObjectSprite( tile );
         resetObjectInfoOnTile( tile );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
@@ -760,7 +756,7 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
         hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
-        tile.RemoveObjectSprite();
+        removeObjectSprite( tile );
         resetObjectInfoOnTile( tile );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
@@ -1312,7 +1308,7 @@ namespace
 
         // Remove genie lamp sprite if no genies are available to hire.
         if ( MP2::OBJ_GENIE_LAMP == objectType && ( availableTroopCount == recruitTroopCount ) ) {
-            tile.RemoveObjectSprite();
+            removeObjectSprite( tile );
             tile.setAsEmpty();
         }
 
@@ -1397,7 +1393,7 @@ namespace
         const Kingdom & kingdom = hero.GetKingdom();
 
         if ( kingdom.IsVisitTravelersTent( getColorFromTile( tile ) ) ) {
-            tile.RemoveObjectSprite();
+            removeObjectSprite( tile );
             tile.setAsEmpty();
         }
 
@@ -1423,7 +1419,7 @@ namespace
         else
             hero.PickupArtifact( getArtifactFromTile( tile ) );
 
-        tile.RemoveObjectSprite();
+        removeObjectSprite( tile );
         resetObjectInfoOnTile( tile );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
@@ -1470,7 +1466,7 @@ namespace
             }
 
             if ( result && hero.PickupArtifact( art ) ) {
-                tile.RemoveObjectSprite();
+                removeObjectSprite( tile );
                 resetObjectInfoOnTile( tile );
             }
         }
@@ -1544,7 +1540,7 @@ namespace
         if ( kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes() ) {
             Maps::Tiles & tile = world.GetTiles( tileIndex );
 
-            tile.RemoveObjectSprite();
+            removeObjectSprite( tile );
             tile.setAsEmpty();
 
             Heroes * prisoner = world.FromJailHeroes( tileIndex );
@@ -1904,18 +1900,6 @@ namespace AI
 
             LocalEvent & le = LocalEvent::Get();
             while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
-#if defined( WITH_DEBUG )
-                if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI ) && Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
-                    if ( fheroes2::showStandardTextMessage( _( "Warning" ),
-                                                            _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
-                                                            Dialog::YES | Dialog::NO )
-                         == Dialog::YES ) {
-                        Players::Get( hero.GetColor() )->setAIAutoControlMode( false );
-                        continue;
-                    }
-                }
-#endif
-
                 if ( hero.isFreeman() || !hero.isMoveEnabled() ) {
                     break;
                 }
@@ -2035,18 +2019,6 @@ namespace AI
             assert( 0 );
             return;
         }
-
-#if defined( WITH_DEBUG )
-        if ( Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
-            LocalEvent::Get().HandleEvents( false );
-            if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )
-                 && fheroes2::showStandardTextMessage( _( "Warning" ), _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
-                                                       Dialog::YES | Dialog::NO )
-                        == Dialog::YES ) {
-                Players::Get( hero.GetColor() )->setAIAutoControlMode( false );
-            }
-        }
-#endif
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );

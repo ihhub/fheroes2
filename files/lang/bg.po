@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 05:56+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -179,11 +179,11 @@ msgstr "6 ИГРАЧА"
 msgid "GIFT"
 msgstr "ДАРИ"
 
-msgid "guildWell|EXIT"
-msgstr "ИЗХОД"
-
 msgid "DIFFICULTY"
 msgstr "ТРУДНОСТ"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "МИН"
@@ -202,14 +202,6 @@ msgstr "Изследовател"
 
 msgid "None"
 msgstr "Без"
-
-msgid "Warning"
-msgstr "Внимание"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr "Искаш ли да си върнеш контрола от ИИ? Ще има ефектът на следващия ход."
 
 msgid ""
 "A few\n"
@@ -261,7 +253,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Стотици\n"
@@ -2598,11 +2590,14 @@ msgstr "Максимално"
 msgid "Hire all creatures in the town."
 msgstr "Наеми всички същества в града."
 
+msgid "Available"
+msgstr "Налични"
+
 msgid "Town Population Information and Statistics"
 msgstr "Информация и статистика за населението на града"
 
-msgid "Damg"
-msgstr "Щета"
+msgid "Damage"
+msgstr "Щети"
 
 msgid "HP"
 msgstr "Живот"
@@ -2612,9 +2607,6 @@ msgstr "Растеж"
 
 msgid "week"
 msgstr "седмица"
-
-msgid "Available"
-msgstr "Налични"
 
 msgid "View World"
 msgstr "Виж Света"
@@ -2667,9 +2659,6 @@ msgstr "Изстрели"
 
 msgid "Shots Left"
 msgstr "Ост. изстрели"
-
-msgid "Damage"
-msgstr "Щети"
 
 msgid "Hit Points"
 msgstr "Живот"
@@ -3770,6 +3759,9 @@ msgstr "Отказ обратно към главното меню на Създ
 msgid "No maps available!"
 msgstr "Няма налични карти!"
 
+msgid "Warning"
+msgstr "Внимание"
+
 msgid "difficulty|Easy"
 msgstr "Лесна"
 
@@ -4384,6 +4376,16 @@ msgstr "надгради войските"
 msgid "hotkey|dismiss hero or troop"
 msgstr "разпусни войските"
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr "Искаш ли да си върнеш контрола от ИИ? Ще има ефектът на следващия ход."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr "Искаш ли да си върнеш контрола от ИИ? Ще има ефектът на следващия ход."
+
 msgid "The save file is corrupted."
 msgstr "Запазеният файл е повреден."
 
@@ -4854,11 +4856,6 @@ msgstr ""
 
 msgid "%{color} player's turn."
 msgstr "Ход на %{color} играч."
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr "Искаш ли да си върнеш контрола от ИИ? Ще има ефектът на следващия ход."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -10425,18 +10422,24 @@ msgstr ""
 "Тази илюзорна единица нанася същите щети като оригинала, но ще изчезне, ако "
 "понесе някакви щети."
 
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr "Намалява наполовина щетите, получени от далечни атаки за една единица."
-
 msgid "Shield"
 msgstr "Щит"
 
-msgid "Halves damage received from ranged attacks for all of your units."
-msgstr ""
-"Намалява наполовина щетите, получени от далечни атаки за всички твой единици."
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr "Намалява наполовина щетите, получени от далечни атаки за една единица."
 
 msgid "Mass Shield"
 msgstr "Всеобщ щит"
+
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr ""
+"Намалява наполовина щетите, получени от далечни атаки за всички твой единици."
 
 msgid "Summon Earth Elemental"
 msgstr "Призови земен елементал"
@@ -10708,6 +10711,12 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Damg"
+#~ msgstr "Щета"
+
+#~ msgid "guildWell|EXIT"
+#~ msgstr "ИЗХОД"
 
 #~ msgid "%{spell} failed!!!"
 #~ msgstr "%{spell} е неуспешна!!!"

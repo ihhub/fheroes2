@@ -714,18 +714,41 @@ namespace AI
 
     void Normal::removeEnemyArmies( const int32_t tileIndex )
     {
-        for ( auto iter = _enemyArmies.begin(); iter != _enemyArmies.end(); ) {
-            if ( iter->index == tileIndex ) {
-                iter = _enemyArmies.erase( iter );
-            }
-            else {
-                ++iter;
-            }
-        }
+        _enemyArmies.erase( std::remove_if( _enemyArmies.begin(), _enemyArmies.end(), [tileIndex]( const EnemyArmy & item ) { return item.index == tileIndex; } ),
+                            _enemyArmies.end() );
     }
 
     void Normal::KingdomTurn( Kingdom & kingdom )
     {
+#if defined( WITH_DEBUG )
+        class AIAutoControlModeCommitter
+        {
+        public:
+            explicit AIAutoControlModeCommitter( const Kingdom & kingdom )
+                : _kingdomColor( kingdom.GetColor() )
+            {}
+
+            AIAutoControlModeCommitter( const AIAutoControlModeCommitter & ) = delete;
+
+            ~AIAutoControlModeCommitter()
+            {
+                Player * player = Players::Get( _kingdomColor );
+                assert( player != nullptr );
+
+                if ( player->isAIAutoControlMode() ) {
+                    player->commitAIAutoControlMode();
+                }
+            }
+
+            AIAutoControlModeCommitter & operator=( const AIAutoControlModeCommitter & ) = delete;
+
+        private:
+            const int _kingdomColor;
+        };
+
+        const AIAutoControlModeCommitter aiAutoControlModeCommitter( kingdom );
+#endif
+
         const int myColor = kingdom.GetColor();
 
         if ( kingdom.isLoss() || myColor == Color::NONE ) {

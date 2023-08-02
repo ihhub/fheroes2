@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 05:56+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -181,11 +181,11 @@ msgstr "6 SPIELER"
 msgid "GIFT"
 msgstr "SPEND."
 
-msgid "guildWell|EXIT"
-msgstr "ENDE"
-
 msgid "DIFFICULTY"
 msgstr "SCHWIERIG."
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
@@ -204,16 +204,6 @@ msgstr "Forscher"
 
 msgid "None"
 msgstr "Niemand"
-
-msgid "Warning"
-msgstr "Achtung"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
-"Möchten Sie die Kontrolle über die KI zurückgewinnen? Der Effekt tritt erst "
-"in der nächsten Runde ein."
 
 msgid ""
 "A few\n"
@@ -265,7 +255,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Ein Schwarm\n"
@@ -2640,10 +2630,13 @@ msgstr "Max"
 msgid "Hire all creatures in the town."
 msgstr "Alle Kreaturen in der Stadt rekrutieren."
 
+msgid "Available"
+msgstr "Verfügbar"
+
 msgid "Town Population Information and Statistics"
 msgstr "Informationen und Statistiken zur Bevölkerung der Stadt"
 
-msgid "Damg"
+msgid "Damage"
 msgstr "Schaden"
 
 msgid "HP"
@@ -2654,9 +2647,6 @@ msgstr "Wachstum"
 
 msgid "week"
 msgstr "Woche"
-
-msgid "Available"
-msgstr "Verfügbar"
 
 msgid "View World"
 msgstr "Alles anzeigen"
@@ -2709,9 +2699,6 @@ msgstr "Schüsse"
 
 msgid "Shots Left"
 msgstr "Schüsse übrig"
-
-msgid "Damage"
-msgstr "Schaden"
 
 msgid "Hit Points"
 msgstr "Trefferpunkte"
@@ -3820,6 +3807,9 @@ msgstr "Abbrechen und zurück zum Hauptmenü."
 msgid "No maps available!"
 msgstr "Keine Karten vorhanden!"
 
+msgid "Warning"
+msgstr "Achtung"
+
 msgid "difficulty|Easy"
 msgstr "Leicht"
 
@@ -4430,6 +4420,20 @@ msgstr "Truppen aufrüsten"
 msgid "hotkey|dismiss hero or troop"
 msgstr "Truppen entlassen"
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+"Möchten Sie die Kontrolle über die KI zurückgewinnen? Der Effekt tritt erst "
+"in der nächsten Runde ein."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+"Möchten Sie die Kontrolle von Euch auf die KI übertragen? Der Effekt tritt "
+"erst in der nächsten Runde ein."
+
 msgid "The save file is corrupted."
 msgstr "Die Speicherdatei ist beschädigt."
 
@@ -4912,13 +4916,6 @@ msgstr ""
 
 msgid "%{color} player's turn."
 msgstr "Spieler %{color} ist dran."
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
-"Möchten Sie die Kontrolle von Euch auf die KI übertragen? Der Effekt tritt "
-"erst in der nächsten Runde ein."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -10635,17 +10632,23 @@ msgstr ""
 "dupliziert.  Diese illusionäre Einheit verursacht den gleichen Schaden wie "
 "das Original, verschwindet aber, wenn sie Schaden nimmt."
 
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr "Halbiert den Schaden von Fernkampfangriffen für eine einzelne Einheit."
-
 msgid "Shield"
 msgstr "Schild"
 
-msgid "Halves damage received from ranged attacks for all of your units."
-msgstr "Halbiert den Schaden von Fernkampfangriffen für alle deine Einheiten."
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr "Halbiert den Schaden von Fernkampfangriffen für eine einzelne Einheit."
 
 msgid "Mass Shield"
 msgstr "Massenschild"
+
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr "Halbiert den Schaden von Fernkampfangriffen für alle deine Einheiten."
 
 msgid "Summon Earth Elemental"
 msgstr "Erdwesen herbeirufen"
@@ -10926,6 +10929,12 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Damg"
+#~ msgstr "Schaden"
+
+#~ msgid "guildWell|EXIT"
+#~ msgstr "ENDE"
 
 #~ msgid "%{spell} failed!!!"
 #~ msgstr "%{spell} fehlgeschlagen!!!"

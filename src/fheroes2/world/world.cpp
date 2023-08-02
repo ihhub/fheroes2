@@ -544,6 +544,13 @@ void World::NewDay()
     vec_eventsday.remove_if( [this]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
 }
 
+void World::NewDayAI()
+{
+    if ( BeginWeek() ) {
+        vec_castles.NewWeekAI();
+    }
+}
+
 void World::NewWeek()
 {
     // update objects
@@ -1014,12 +1021,23 @@ const Heroes * World::GetHeroesCondLoss() const
 
 bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 {
+#ifndef NDEBUG
+#if defined( WITH_DEBUG )
+    const Player * kingdomPlayer = Players::Get( kingdom.GetColor() );
+    assert( kingdomPlayer != nullptr );
+
+    const bool isKingdomInAIAutoControlMode = kingdomPlayer->isAIAutoControlMode();
+#else
+    const bool isKingdomInAIAutoControlMode = false;
+#endif // WITH_DEBUG
+#endif // !NDEBUG
+
     const Settings & conf = Settings::Get();
 
     switch ( wins ) {
     case GameOver::WINS_ALL:
         // This method should be called with this condition only for a human-controlled kingdom
-        assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
+        assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
         return kingdom.GetColor() == vec_kingdoms.GetNotLossColors();
 
@@ -1030,7 +1048,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 
     case GameOver::WINS_HERO: {
         // This method should be called with this condition only for a human-controlled kingdom
-        assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
+        assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
         if ( heroes_cond_wins == Heroes::UNKNOWN ) {
             return false;
@@ -1045,7 +1063,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 
     case GameOver::WINS_ARTIFACT: {
         // This method should be called with this condition only for a human-controlled kingdom
-        assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
+        assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
         const KingdomHeroes & heroes = kingdom.GetHeroes();
         if ( conf.WinsFindUltimateArtifact() ) {
@@ -1059,7 +1077,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 
     case GameOver::WINS_SIDE:
         // This method should be called with this condition only for a human-controlled kingdom
-        assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
+        assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
         return !( Game::GetActualKingdomColors() & ~Players::GetPlayerFriends( kingdom.GetColor() ) );
 
@@ -1076,8 +1094,19 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 
 bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
 {
+#ifndef NDEBUG
+#if defined( WITH_DEBUG )
+    const Player * kingdomPlayer = Players::Get( kingdom.GetColor() );
+    assert( kingdomPlayer != nullptr );
+
+    const bool isKingdomInAIAutoControlMode = kingdomPlayer->isAIAutoControlMode();
+#else
+    const bool isKingdomInAIAutoControlMode = false;
+#endif // WITH_DEBUG
+#endif // !NDEBUG
+
     // This method should only be called for a human-controlled kingdom
-    assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
+    assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
     const Settings & conf = Settings::Get();
 
@@ -1103,8 +1132,17 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
             return true;
         }
 
+#if defined( WITH_DEBUG )
+        const Player * heroPlayer = Players::Get( hero->GetColor() );
+        assert( heroPlayer != nullptr );
+
+        const bool isHeroInAIAutoControlMode = heroPlayer->isAIAutoControlMode();
+#else
+        const bool isHeroInAIAutoControlMode = false;
+#endif
+
         // .. or be hired by an AI-controlled kingdom
-        if ( GetKingdom( hero->GetColor() ).isControlAI() && !Players::Get( hero->GetColor() )->isAIAutoControlMode() ) {
+        if ( GetKingdom( hero->GetColor() ).isControlAI() && !isHeroInAIAutoControlMode ) {
             // Exception for campaign: hero is not considered lost if he is hired by a friendly AI-controlled kingdom
             if ( conf.isCampaignGameType() && Players::isFriends( kingdom.GetColor(), hero->GetColor() ) ) {
                 return false;
@@ -1128,8 +1166,19 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
 
 uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 {
+#ifndef NDEBUG
+#if defined( WITH_DEBUG )
+    const Player * kingdomPlayer = Players::Get( kingdom.GetColor() );
+    assert( kingdomPlayer != nullptr );
+
+    const bool isKingdomInAIAutoControlMode = kingdomPlayer->isAIAutoControlMode();
+#else
+    const bool isKingdomInAIAutoControlMode = false;
+#endif // WITH_DEBUG
+#endif // !NDEBUG
+
     // This method should only be called for a human-controlled kingdom
-    assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
+    assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
     const Settings & conf = Settings::Get();
 
@@ -1159,8 +1208,19 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 
 uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
 {
+#ifndef NDEBUG
+#if defined( WITH_DEBUG )
+    const Player * kingdomPlayer = Players::Get( kingdom.GetColor() );
+    assert( kingdomPlayer != nullptr );
+
+    const bool isKingdomInAIAutoControlMode = kingdomPlayer->isAIAutoControlMode();
+#else
+    const bool isKingdomInAIAutoControlMode = false;
+#endif // WITH_DEBUG
+#endif // !NDEBUG
+
     // This method should only be called for a human-controlled kingdom
-    assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
+    assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
     const Settings & conf = Settings::Get();
 

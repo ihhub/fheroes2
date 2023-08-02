@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 05:56+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -161,11 +161,11 @@ msgstr ""
 msgid "GIFT"
 msgstr "HEDİYE"
 
-msgid "guildWell|EXIT"
-msgstr ""
-
 msgid "DIFFICULTY"
 msgstr "ZORLUK"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "MİN"
@@ -184,16 +184,6 @@ msgstr "Kaşif"
 
 msgid "None"
 msgstr "Hiç"
-
-msgid "Warning"
-msgstr "Uyarı"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
-"Bilgisayardan kontrolü yeniden kazanmak istiyor musunuz? Etki bir sonraki "
-"tur'da gerçekleşecek."
 
 msgid ""
 "A few\n"
@@ -245,7 +235,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Aşırı fazla\n"
@@ -2401,10 +2391,13 @@ msgstr ""
 msgid "Hire all creatures in the town."
 msgstr ""
 
+msgid "Available"
+msgstr ""
+
 msgid "Town Population Information and Statistics"
 msgstr ""
 
-msgid "Damg"
+msgid "Damage"
 msgstr ""
 
 msgid "HP"
@@ -2414,9 +2407,6 @@ msgid "Growth"
 msgstr ""
 
 msgid "week"
-msgstr ""
-
-msgid "Available"
 msgstr ""
 
 msgid "View World"
@@ -2465,9 +2455,6 @@ msgid "Shots"
 msgstr ""
 
 msgid "Shots Left"
-msgstr ""
-
-msgid "Damage"
 msgstr ""
 
 msgid "Hit Points"
@@ -3485,6 +3472,9 @@ msgstr ""
 msgid "No maps available!"
 msgstr ""
 
+msgid "Warning"
+msgstr "Uyarı"
+
 msgid "difficulty|Easy"
 msgstr ""
 
@@ -4080,6 +4070,18 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+"Bilgisayardan kontrolü yeniden kazanmak istiyor musunuz? Etki bir sonraki "
+"tur'da gerçekleşecek."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "Ayna görüntüsü oluşturuldu."
@@ -4480,11 +4482,6 @@ msgid ""
 msgstr ""
 
 msgid "%{color} player's turn."
-msgstr ""
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
 msgstr ""
 
 msgid ""
@@ -9182,16 +9179,20 @@ msgid ""
 "if it takes any damage."
 msgstr ""
 
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr ""
-
 msgid "Shield"
 msgstr ""
 
-msgid "Halves damage received from ranged attacks for all of your units."
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 
 msgid "Mass Shield"
+msgstr ""
+
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 
 msgid "Summon Earth Elemental"

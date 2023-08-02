@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 05:56+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2023-07-15 14:32+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -184,11 +184,11 @@ msgstr "6 ИГРОКОВ"
 msgid "GIFT"
 msgstr "ОТДАТЬ"
 
-msgid "guildWell|EXIT"
-msgstr ""
-
 msgid "DIFFICULTY"
 msgstr "СЛОЖНОСТЬ"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "МИН"
@@ -207,16 +207,6 @@ msgstr "Разведчик"
 
 msgid "None"
 msgstr "Отсутствуют"
-
-msgid "Warning"
-msgstr "Внимание"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
-"Хотите ли Вы передать управление ИИ? Передача вступит в силу со следующего "
-"хода."
 
 msgid ""
 "A few\n"
@@ -268,7 +258,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Тьма\n"
@@ -2597,10 +2587,13 @@ msgstr "Максимум"
 msgid "Hire all creatures in the town."
 msgstr "Нанять всех существ в городе."
 
+msgid "Available"
+msgstr "Доступно"
+
 msgid "Town Population Information and Statistics"
 msgstr "Информация о населении города"
 
-msgid "Damg"
+msgid "Damage"
 msgstr "Урон"
 
 msgid "HP"
@@ -2611,9 +2604,6 @@ msgstr "Прирост"
 
 msgid "week"
 msgstr "неделя"
-
-msgid "Available"
-msgstr "Доступно"
 
 msgid "View World"
 msgstr "Обзор мира"
@@ -2665,9 +2655,6 @@ msgstr "Выстрелов"
 
 msgid "Shots Left"
 msgstr "Выстрелов"
-
-msgid "Damage"
-msgstr "Урон"
 
 msgid "Hit Points"
 msgstr "Здоровье"
@@ -3765,6 +3752,9 @@ msgstr "Вернуться в главное меню редактора кар�
 msgid "No maps available!"
 msgstr "Нет доступных карт!"
 
+msgid "Warning"
+msgstr "Внимание"
+
 msgid "difficulty|Easy"
 msgstr "Простая"
 
@@ -4382,6 +4372,20 @@ msgstr "улучшить существо"
 msgid "hotkey|dismiss hero or troop"
 msgstr "уволить героя или существо"
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+"Хотите ли Вы передать управление ИИ? Передача вступит в силу со следующего "
+"хода."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+"Хотите ли Вы передать управление ИИ? Передача вступит в силу со следующего "
+"хода."
+
 msgid "The save file is corrupted."
 msgstr "Файл сохранения повреждён."
 
@@ -4843,13 +4847,6 @@ msgstr ""
 
 msgid "%{color} player's turn."
 msgstr "Ход игрока: %{color}"
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
-"Хотите ли Вы передать управление ИИ? Передача вступит в силу со следующего "
-"хода."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -10371,21 +10368,27 @@ msgstr ""
 "Создаёт дубликат одного из Ваших отрядов. Эта иллюзия может нанести такой же "
 "урон как и оригинал, но будет развеяна от малейшего повреждения."
 
-msgid "Halves damage received from ranged attacks for a single unit."
+msgid "Shield"
+msgstr "Щит"
+
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 "Принимает на себя половину урона от всех стрелковых атак врага, направленных "
 "на выбранный отряд."
 
-msgid "Shield"
-msgstr "Щит"
+msgid "Mass Shield"
+msgstr "Общий щит"
 
-msgid "Halves damage received from ranged attacks for all of your units."
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 "Принимает на себя половину урона стрелковых атак врага, направленных на всех "
 "Ваших существ."
-
-msgid "Mass Shield"
-msgstr "Общий щит"
 
 msgid "Summon Earth Elemental"
 msgstr "Земной элементаль"
@@ -10662,6 +10665,9 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Damg"
+#~ msgstr "Урон"
 
 #~ msgid "%{spell} failed!!!"
 #~ msgstr "Неудачный вызов %{spell}!"

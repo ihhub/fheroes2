@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-19 05:56+0000\n"
+"POT-Creation-Date: 2023-07-25 08:44+0000\n"
 "PO-Revision-Date: 2023-05-31 12:10+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -179,11 +179,11 @@ msgstr "6 SPILLERE"
 msgid "GIFT"
 msgstr "FORÆR"
 
-msgid "guildWell|EXIT"
-msgstr "UD"
-
 msgid "DIFFICULTY"
 msgstr "NIVEAU"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
@@ -202,16 +202,6 @@ msgstr "Udforsker"
 
 msgid "None"
 msgstr "Ingen"
-
-msgid "Warning"
-msgstr "Advarsel"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
-"Vil du genoptage kontrollen fra AI'en? Dette vil kun have effekt på næste "
-"tur."
 
 msgid ""
 "A few\n"
@@ -263,7 +253,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Pokkers mange\n"
@@ -2466,10 +2456,13 @@ msgstr "Maks"
 msgid "Hire all creatures in the town."
 msgstr "Hyr alle byens tilgængelige væsener."
 
+msgid "Available"
+msgstr "Tilgængelig"
+
 msgid "Town Population Information and Statistics"
 msgstr "Informationer og tal om byens indbyggere"
 
-msgid "Damg"
+msgid "Damage"
 msgstr "Skade"
 
 msgid "HP"
@@ -2535,9 +2528,6 @@ msgstr "Skud"
 
 msgid "Shots Left"
 msgstr "Resterende skud"
-
-msgid "Damage"
-msgstr "Skade"
 
 msgid "Hit Points"
 msgstr "Liv"
@@ -3592,6 +3582,9 @@ msgstr "Afbryd og gå tilbage til hovedmenuen."
 msgid "No maps available!"
 msgstr ""
 
+msgid "Warning"
+msgstr "Advarsel"
+
 msgid "difficulty|Easy"
 msgstr "Let"
 
@@ -4189,6 +4182,18 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+"Vil du genoptage kontrollen fra AI'en? Dette vil kun have effekt på næste "
+"tur."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr "Det gemte spil er korrupt."
 
@@ -4590,11 +4595,6 @@ msgid ""
 msgstr ""
 
 msgid "%{color} player's turn."
-msgstr ""
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
 msgstr ""
 
 msgid ""
@@ -5270,8 +5270,9 @@ msgstr ""
 msgid ""
 "An ancient and immortal witch living in a hut with bird's legs for stilts "
 "teaches you %{skill} for her own inscrutable purposes."
-msgstr "I en hytte med stolper af enorme fugleben lever en udødelig og ældgammel heks. "
-"Af sine egne uransagelige årsager lærer hun dig %{skill}."
+msgstr ""
+"I en hytte med stolper af enorme fugleben lever en udødelig og ældgammel "
+"heks. Af sine egne uransagelige årsager lærer hun dig %{skill}."
 
 msgid "As you drink the sweet water, you gain luck for your next battle."
 msgstr ""
@@ -9370,19 +9371,23 @@ msgid ""
 "if it takes any damage."
 msgstr ""
 
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr ""
-
 msgid "Shield"
 msgstr "Skærmning"
 
-msgid "Halves damage received from ranged attacks for all of your units."
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 
 msgid "Mass Shield"
 msgstr ""
 "Masse\n"
 "skærmning"
+
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr ""
 
 msgid "Summon Earth Elemental"
 msgstr "Hidkald jord-elemental"
@@ -9642,3 +9647,9 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Damg"
+#~ msgstr "Skade"
+
+#~ msgid "guildWell|EXIT"
+#~ msgstr "UD"
