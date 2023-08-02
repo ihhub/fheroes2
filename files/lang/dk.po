@@ -2422,7 +2422,7 @@ msgid ""
 "'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
-'gruppe'-formation samler dine tropper i midten af din side på slagmarken."
+"'gruppe'-formation samler dine tropper i midten af din side på slagmarken."
 
 msgid "Spread Formation"
 msgstr "Spredt formation"
@@ -2539,6 +2539,7 @@ msgstr "Skud"
 
 msgid "Shots Left"
 msgstr "Resterende skud"
+
 msgid "Hit Points"
 msgstr "Liv"
 
@@ -4474,6 +4475,7 @@ msgid ""
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
+
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
 
@@ -5685,6 +5687,7 @@ msgid ""
 msgstr ""
 "Denne guldmine er nu under din kontrol. Den forsyner dit rige med %{count} "
 "guldstykker om dagen."
+
 msgid ""
 "The lighthouse is now under your control, and all of your ships will now "
 "move further each day."
