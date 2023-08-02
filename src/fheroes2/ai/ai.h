@@ -117,6 +117,8 @@ namespace AI
 
         virtual ~Base() = default;
 
+        virtual void tradingPostVisitEvent( Kingdom & kingdom ) = 0;
+
     protected:
         int _personality = NONE;
 
