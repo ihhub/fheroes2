@@ -1962,12 +1962,12 @@ namespace AI
                     // How is it possible?
                     assert( 0 );
 
-                    removeEnemyArmies( tileIndex );
+                    _enemyArmies.erase( tileIndex );
                     return;
                 }
 
                 if ( hero.isFriends( castle->GetColor() ) ) {
-                    removeEnemyArmies( tileIndex );
+                    _enemyArmies.erase( tileIndex );
 
                     updatePriorityForCastle( *castle );
                 }
@@ -1981,7 +1981,7 @@ namespace AI
                 const Heroes * anotherHero = tile.GetHeroes();
                 if ( anotherHero == nullptr ) {
                     // The hero died.
-                    removeEnemyArmies( tileIndex );
+                    _enemyArmies.erase( tileIndex );
                     return;
                 }
 

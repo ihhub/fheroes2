@@ -206,18 +206,12 @@ namespace
         }
     }
 
-    std::pair<std::optional<AI::EnemyArmy>, std::optional<AI::EnemyArmy>> getEnemyArmiesOnTile( const int kingdomColor, const Maps::Tiles & tile )
+    std::optional<AI::EnemyArmy> getEnemyArmyOnTile( const int kingdomColor, const Maps::Tiles & tile )
     {
-        std::pair<std::optional<AI::EnemyArmy>, std::optional<AI::EnemyArmy>> result;
-
-        MP2::MapObjectType object = tile.GetObject();
+        const MP2::MapObjectType object = tile.GetObject();
         const int32_t tileIndex = tile.GetIndex();
 
-        result.first = [kingdomColor, &tile, &object, tileIndex]() -> std::optional<AI::EnemyArmy> {
-            if ( object != MP2::OBJ_HEROES ) {
-                return {};
-            }
-
+        if ( object == MP2::OBJ_HEROES ) {
             const Heroes * hero = tile.GetHeroes();
             if ( hero == nullptr ) {
                 return {};
@@ -236,17 +230,10 @@ namespace
             // Rough estimate - if the hero is in the castle, then we sum up the power of the castle garrison with the power of the hero's army
             const double threat = castle ? castle->GetArmy().GetStrength() + hero->GetArmy().GetStrength() : hero->GetArmy().GetStrength();
 
-            // The hero can be in the castle, which can also pose a threat
-            object = tile.GetObject( false );
+            return AI::EnemyArmy( tileIndex, hero, threat, hero->GetMaxMovePoints() );
+        }
 
-            return AI::EnemyArmy( tileIndex, MP2::OBJ_HEROES, hero, threat, hero->GetMaxMovePoints() );
-        }();
-
-        ( result.first ? result.second : result.first ) = [kingdomColor, object, tileIndex]() -> std::optional<AI::EnemyArmy> {
-            if ( object != MP2::OBJ_CASTLE ) {
-                return {};
-            }
-
+        if ( object == MP2::OBJ_CASTLE ) {
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
             if ( castle == nullptr ) {
                 return {};
@@ -262,14 +249,12 @@ namespace
                 return {};
             }
 
-            const Heroes * hero = castle->GetHero();
-            // Rough estimate - if there is a hero in the castle, then we sum up the power of the castle garrison with the power of the hero's army
-            const double threat = hero ? hero->GetArmy().GetStrength() + castle->GetArmy().GetStrength() : castle->GetArmy().GetStrength();
+            const double threat = castle->GetArmy().GetStrength();
 
-            return AI::EnemyArmy( tileIndex, MP2::OBJ_CASTLE, hero, threat, movePointsFromCastle );
-        }();
+            return AI::EnemyArmy( tileIndex, nullptr, threat, movePointsFromCastle );
+        }
 
-        return result;
+        return {};
     }
 }
 
@@ -594,7 +579,7 @@ namespace AI
         // if no our heroes exist. So we are temporary removing them from the map.
         const TemporaryHeroEraser heroEraser( kingdom.GetHeroes() );
 
-        for ( const EnemyArmy & enemyArmy : _enemyArmies ) {
+        for ( const auto & [dummy, enemyArmy] : _enemyArmies ) {
             for ( const Castle * castle : kingdom.GetCastles() ) {
                 if ( castle == nullptr ) {
                     // How is it even possible? Check the logic!
@@ -634,7 +619,7 @@ namespace AI
         // if no our heroes exist. So we are temporary removing them from the map.
         const TemporaryHeroEraser heroEraser( castle.GetKingdom().GetHeroes() );
 
-        for ( const EnemyArmy & enemyArmy : _enemyArmies ) {
+        for ( const auto & [dummy, enemyArmy] : _enemyArmies ) {
             updateIndividualPriorityForCastle( castle, enemyArmy );
         }
     }
@@ -644,7 +629,7 @@ namespace AI
         // 30 tiles, roughly how much maxed out hero can move in a turn.
         const uint32_t threatDistanceLimit = 3000;
 
-        const int castleIndex = castle.GetIndex();
+        const int32_t castleIndex = castle.GetIndex();
         // skip precise distance check if army is too far to be a threat
         if ( Maps::GetApproximateDistance( enemyArmy.index, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit ) {
             return false;
@@ -711,7 +696,7 @@ namespace AI
             return;
         }
 
-        for ( const int secondaryTaskId : attackTask.secondaryTaskTileId ) {
+        for ( const int32_t secondaryTaskId : attackTask.secondaryTaskTileId ) {
             // If this assertion blows then you are attacking and defending the same tile!
             assert( secondaryTaskId != tileIndex );
 
@@ -740,33 +725,14 @@ namespace AI
     {
         const int32_t tileIndex = tile.GetIndex();
 
-        // Remove any old entries for enemy armies.
-        // This can happen when the army has been defeated and we won't add new info about it.
-        removeEnemyArmies( tileIndex );
+        _enemyArmies.erase( tileIndex );
 
-        std::apply(
-            [this, &kingdom]( const auto... enemyArmy ) {
-                ( ( enemyArmy ? ( updateEnemyArmy( *enemyArmy ), updatePriorityForEnemyArmy( kingdom, *enemyArmy ) ) : []() {}() ), ... );
-            },
-            getEnemyArmiesOnTile( kingdom.GetColor(), tile ) );
-    }
+        const auto enemyArmy = getEnemyArmyOnTile( kingdom.GetColor(), tile );
+        if ( enemyArmy ) {
+            _enemyArmies[enemyArmy->index] = *enemyArmy;
 
-    void Normal::updateEnemyArmy( const EnemyArmy & enemyArmy )
-    {
-        for ( EnemyArmy & army : _enemyArmies ) {
-            if ( enemyArmy.index == army.index && enemyArmy.type == army.type ) {
-                army = enemyArmy;
-                return;
-            }
+            updatePriorityForEnemyArmy( kingdom, *enemyArmy );
         }
-
-        _enemyArmies.emplace_back( enemyArmy );
-    }
-
-    void Normal::removeEnemyArmies( const int32_t tileIndex )
-    {
-        _enemyArmies.erase( std::remove_if( _enemyArmies.begin(), _enemyArmies.end(), [tileIndex]( const EnemyArmy & item ) { return item.index == tileIndex; } ),
-                            _enemyArmies.end() );
     }
 
     void Normal::KingdomTurn( Kingdom & kingdom )
@@ -885,6 +851,7 @@ namespace AI
                     }
                 }
 
+                // This hero can be in a castle
                 objectType = tile.GetObject( false );
             }
 
@@ -900,14 +867,14 @@ namespace AI
                 }
             }
 
-            std::apply(
-                [this, &stats]( const auto... enemyArmy ) {
-                    ( ( enemyArmy ? ( _enemyArmies.push_back( *enemyArmy ),
-                                      stats.highestThreat = ( stats.highestThreat < enemyArmy->strength ) ? enemyArmy->strength : stats.highestThreat )
-                                  : 0 ),
-                      ... );
-                },
-                getEnemyArmiesOnTile( myColor, tile ) );
+            const auto enemyArmy = getEnemyArmyOnTile( myColor, tile );
+            if ( enemyArmy ) {
+                _enemyArmies[enemyArmy->index] = *enemyArmy;
+
+                if ( stats.highestThreat < enemyArmy->strength ) {
+                    stats.highestThreat = enemyArmy->strength;
+                }
+            }
         }
 
         evaluateRegionSafety();

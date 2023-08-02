@@ -123,16 +123,14 @@ namespace AI
     {
         EnemyArmy() = default;
 
-        EnemyArmy( const int index_, const MP2::MapObjectType type_, const Heroes * hero_, const double strength_, const uint32_t movePoints_ )
+        EnemyArmy( const int index_, const Heroes * hero_, const double strength_, const uint32_t movePoints_ )
             : index( index_ )
-            , type( type_ )
             , hero( hero_ )
             , strength( strength_ )
             , movePoints( movePoints_ )
         {}
 
-        int index{ -1 };
-        MP2::MapObjectType type{ MP2::OBJ_NONE };
+        int32_t index{ -1 };
         const Heroes * hero = nullptr;
         double strength{ 0 };
         uint32_t movePoints{ 0 };
@@ -156,7 +154,7 @@ namespace AI
 
         PriorityTaskType type{ PriorityTaskType::ATTACK };
         double threatLevel{ 0.0 };
-        std::set<int> secondaryTaskTileId;
+        std::set<int32_t> secondaryTaskTileId;
     };
 
     struct BattleTargetPair
@@ -288,12 +286,12 @@ namespace AI
 
         double getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType );
 
-        bool isPriorityTask( const int index ) const
+        bool isPriorityTask( const int32_t index ) const
         {
             return _priorityTargets.find( index ) != _priorityTargets.end();
         }
 
-        bool isCriticalTask( const int index ) const
+        bool isCriticalTask( const int32_t index ) const
         {
             const auto iter = _priorityTargets.find( index );
             if ( iter == _priorityTargets.end() ) {
@@ -307,8 +305,8 @@ namespace AI
         // following data won't be saved/serialized
         double _combinedHeroStrength = 0;
         std::vector<IndexObject> _mapActionObjects;
-        std::map<int, PriorityTask> _priorityTargets;
-        std::vector<EnemyArmy> _enemyArmies;
+        std::map<int32_t, PriorityTask> _priorityTargets;
+        std::map<int32_t, EnemyArmy> _enemyArmies;
         std::vector<RegionStats> _regions;
         std::array<BudgetEntry, 7> _budget = { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
         AIWorldPathfinder _pathfinder;
@@ -355,10 +353,6 @@ namespace AI
         void removePriorityAttackTarget( const int32_t tileIndex );
 
         void updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tiles & tile );
-
-        void updateEnemyArmy( const EnemyArmy & enemyArmy );
-
-        void removeEnemyArmies( const int32_t tileIndex );
     };
 }
 
