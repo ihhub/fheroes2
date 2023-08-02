@@ -219,7 +219,9 @@ namespace
             }
 
             const Heroes * hero = tile.GetHeroes();
-            assert( hero != nullptr );
+            if ( hero == nullptr ) {
+                return {};
+            }
 
             if ( hero->isFriends( kingdomColor ) ) {
                 return {};
@@ -246,7 +248,9 @@ namespace
             }
 
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
-            assert( castle != nullptr );
+            if ( castle == nullptr ) {
+                return {};
+            }
 
             // Neutral castles don't pose a threat because they can't hire heroes
             if ( castle->GetColor() == Color::NONE || castle->isFriends( kingdomColor ) ) {
