@@ -123,7 +123,7 @@ namespace AI
     {
         EnemyArmy() = default;
 
-        EnemyArmy( const int index_, const Heroes * hero_, const double strength_, const uint32_t movePoints_ )
+        EnemyArmy( const int32_t index_, const Heroes * hero_, const double strength_, const uint32_t movePoints_ )
             : index( index_ )
             , hero( hero_ )
             , strength( strength_ )
