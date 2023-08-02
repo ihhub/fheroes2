@@ -40,7 +40,7 @@ namespace
     // gold   --> common
     // gold   --> rare
     //
-    // However, common --> common and rare   --> rare should have the same conversion ratio as these are within category.
+    // However, common --> common and rare --> rare should have the same conversion ratio as these are within category.
     // So are left with 7 combinations.
     const size_t maxMarketplaces{ 9 };
 
