@@ -1599,6 +1599,11 @@ namespace
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " visited Sirens and got " << experience << " experience." )
     }
+
+    void AIToTradingPost( Heroes & hero )
+    {
+        AI::Get().tradingPostVisitEvent( hero.GetKingdom() );
+    }
 }
 
 namespace AI
@@ -1848,9 +1853,12 @@ namespace AI
             AIToAlchemistTower( hero );
             break;
 
+        case MP2::OBJ_TRADING_POST:
+            AIToTradingPost( hero );
+            break;
+
         // AI has no advantage or knowledge to use these objects
         case MP2::OBJ_ORACLE:
-        case MP2::OBJ_TRADING_POST:
         case MP2::OBJ_EYE_OF_MAGI:
         case MP2::OBJ_SPHINX:
             break;

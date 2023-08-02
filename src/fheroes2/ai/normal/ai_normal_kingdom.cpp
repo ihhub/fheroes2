@@ -1019,4 +1019,9 @@ namespace AI
         // target found, buy hero
         return recruitmentCastle && recruitHero( *recruitmentCastle, !slowEarlyGame, false );
     }
+
+    void Normal::tradingPostVisitEvent( Kingdom & /*kingdom*/ )
+    {
+        // Do nothing.
+    }
 }
