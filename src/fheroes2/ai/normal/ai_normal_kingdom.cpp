@@ -240,7 +240,7 @@ namespace
             return AI::EnemyArmy( tileIndex, MP2::OBJ_HEROES, hero, threat, hero->GetMaxMovePoints() );
         }();
 
-        ( result.first ? result.second : result.first ) = [kingdomColor, &tile, object, tileIndex]() -> std::optional<AI::EnemyArmy> {
+        ( result.first ? result.second : result.first ) = [kingdomColor, object, tileIndex]() -> std::optional<AI::EnemyArmy> {
             if ( object != MP2::OBJ_CASTLE ) {
                 return {};
             }
