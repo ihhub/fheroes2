@@ -424,7 +424,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         if ( spell == Spell::SUMMONBOAT ) {
             if ( !fheroes2::isHeroNearWater( *hero ) ) {
                 if ( res != nullptr ) {
-                    *res = _( "This spell can be casted only nearby ocean." );
+                    *res = _( "This spell can only be cast near a body of water." );
                 }
                 return false;
             }
@@ -504,7 +504,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             // town opponent is not defeated yet.
             if ( !opponentsHaveHeroes && !opponentsCanRecruitHeroes ) {
                 if ( res != nullptr ) {
-                    *res = _( "No opponent can have heroes under his command anymore. Casting this spell will not bring any advantage." );
+                    *res = _( "No opponent neither has nor can have any hero under their command anymore. Casting this spell will have no effect." );
                 }
                 return false;
             }
@@ -512,7 +512,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             // the moment and can recruit more.
             if ( !opponentsHaveHeroes && opponentsCanRecruitHeroes ) {
                 if ( res != nullptr ) {
-                    *res = _( "No opponent has a hero under his command at this time. Casting this spell will not bring any advantage." );
+                    *res = _( "No opponent has a hero under his command at this time. Casting this spell will have no effect." );
                 }
                 return false;
             }
