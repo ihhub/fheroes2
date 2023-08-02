@@ -888,9 +888,10 @@ namespace AI
             };
 
             if ( hero.GetColor() == castle->GetColor() ) {
-                // If our castle is in danger, then we should evaluate it not in terms of its usefulness for receiving
-                // reinforcements, but in terms of its overall value - so that it can compete with enemy castles in terms
-                // of its evaluation
+                // If our castle is in danger, then we should evaluate it not from the point of view of momentary benefits
+                // for the hero (for example, the presence of reinforcements), but from the point of view of the castle,
+                // which then will have to be taken back from the enemy, that is, according to approximately the same logic
+                // as enemy castles
                 if ( critical ) {
                     return calculateCastleValue( true );
                 }
@@ -1362,9 +1363,10 @@ namespace AI
             };
 
             if ( hero.GetColor() == castle->GetColor() ) {
-                // If our castle is in danger, then we should evaluate it not in terms of its usefulness for receiving
-                // reinforcements, but in terms of its overall value - so that it can compete with enemy castles in terms
-                // of its evaluation
+                // If our castle is in danger, then we should evaluate it not from the point of view of momentary benefits
+                // for the hero (for example, the presence of reinforcements), but from the point of view of the castle,
+                // which then will have to be taken back from the enemy, that is, according to approximately the same logic
+                // as enemy castles
                 if ( critical ) {
                     return calculateCastleValue( true );
                 }
@@ -1822,8 +1824,8 @@ namespace AI
                 switch ( type ) {
                 case MP2::OBJ_CASTLE: {
                     const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
-                    assert( castle != nullptr );
                     if ( castle == nullptr ) {
+                        assert( 0 );
                         break;
                     }
 
@@ -1851,8 +1853,8 @@ namespace AI
                 }
                 case MP2::OBJ_HEROES: {
                     const Heroes * anotherHero = destinationTile.GetHeroes();
-                    assert( anotherHero != nullptr );
                     if ( anotherHero == nullptr ) {
+                        assert( 0 );
                         break;
                     }
 
