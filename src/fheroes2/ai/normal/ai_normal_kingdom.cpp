@@ -205,6 +205,68 @@ namespace
             }
         }
     }
+
+    std::pair<std::optional<AI::EnemyArmy>, std::optional<AI::EnemyArmy>> getEnemyArmiesOnTile( const int kingdomColor, const Maps::Tiles & tile )
+    {
+        std::pair<std::optional<AI::EnemyArmy>, std::optional<AI::EnemyArmy>> result;
+
+        MP2::MapObjectType object = tile.GetObject();
+        const int32_t tileIndex = tile.GetIndex();
+
+        result.first = [kingdomColor, &tile, &object, tileIndex]() -> std::optional<AI::EnemyArmy> {
+            if ( object != MP2::OBJ_HEROES ) {
+                return {};
+            }
+
+            const Heroes * hero = tile.GetHeroes();
+            assert( hero != nullptr );
+
+            if ( hero->isFriends( kingdomColor ) ) {
+                return {};
+            }
+
+            // If the hero is standing in one place, then he does not pose a threat (as well as the castle in which he may be located)
+            if ( ( hero->Modes( Heroes::PATROL ) && hero->GetPatrolDistance() == 0 ) ) {
+                return {};
+            }
+
+            const Castle * castle = hero->inCastle();
+            // Rough estimate - if the hero is in the castle, then we sum up the power of the castle garrison with the power of the hero's army
+            const double threat = castle ? castle->GetArmy().GetStrength() + hero->GetArmy().GetStrength() : hero->GetArmy().GetStrength();
+
+            // The hero can be in the castle, which can also pose a threat
+            object = tile.GetObject( false );
+
+            return AI::EnemyArmy( tileIndex, MP2::OBJ_HEROES, hero, threat, hero->GetMaxMovePoints() );
+        }();
+
+        ( result.first ? result.second : result.first ) = [kingdomColor, &tile, object, tileIndex]() -> std::optional<AI::EnemyArmy> {
+            if ( object != MP2::OBJ_CASTLE ) {
+                return {};
+            }
+
+            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
+            assert( castle != nullptr );
+
+            // Neutral castles don't pose a threat because they can't hire heroes
+            if ( castle->GetColor() == Color::NONE || castle->isFriends( kingdomColor ) ) {
+                return {};
+            }
+
+            // If it's just a town where there's no way to build a castle, then there's no way to hire heroes who might pose a threat
+            if ( ( !castle->isCastle() && !castle->AllowBuyBuilding( BUILD_CASTLE ) ) ) {
+                return {};
+            }
+
+            const Heroes * hero = castle->GetHero();
+            // Rough estimate - if there is a hero in the castle, then we sum up the power of the castle garrison with the power of the hero's army
+            const double threat = hero ? hero->GetArmy().GetStrength() + castle->GetArmy().GetStrength() : castle->GetArmy().GetStrength();
+
+            return AI::EnemyArmy( tileIndex, MP2::OBJ_CASTLE, hero, threat, movePointsFromCastle );
+        }();
+
+        return result;
+    }
 }
 
 namespace AI
@@ -604,7 +666,7 @@ namespace AI
             --daysToReach;
         }
 
-        const double defenders = castle.GetArmy().GetStrength();
+        const double defenders = castle.GetGarrisonStrength( enemyArmy.hero );
         const double attackerThreat = enemyStrength - defenders;
         if ( attackerThreat < 0.1 ) {
             return false;
@@ -672,32 +734,17 @@ namespace AI
 
     void Normal::updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tiles & tile )
     {
-        MP2::MapObjectType object = tile.GetObject();
         const int32_t tileIndex = tile.GetIndex();
 
         // Remove any old entries for enemy armies.
         // This can happen when the army has been defeated and we won't add new info about it.
         removeEnemyArmies( tileIndex );
 
-        if ( object == MP2::OBJ_HEROES ) {
-            const Heroes * hero = tile.GetHeroes();
-            if ( hero != nullptr && !hero->isFriends( kingdom.GetColor() ) && ( !hero->Modes( Heroes::PATROL ) || hero->GetPatrolDistance() != 0 ) ) {
-                const EnemyArmy enemyArmy{ tileIndex, MP2::OBJ_HEROES, hero->GetArmy().GetStrength(), hero->GetMaxMovePoints() };
-                updateEnemyArmy( enemyArmy );
-                updatePriorityForEnemyArmy( kingdom, enemyArmy );
-            }
-
-            object = tile.GetObject( false );
-        }
-
-        if ( object == MP2::OBJ_CASTLE ) {
-            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
-            if ( castle != nullptr && !castle->isFriends( kingdom.GetColor() ) && ( castle->isCastle() || castle->AllowBuyBuilding( BUILD_CASTLE ) ) ) {
-                const EnemyArmy enemyArmy{ tileIndex, MP2::OBJ_CASTLE, castle->GetArmy().GetStrength(), movePointsFromCastle };
-                updateEnemyArmy( enemyArmy );
-                updatePriorityForEnemyArmy( kingdom, enemyArmy );
-            }
-        }
+        std::apply(
+            [this, &kingdom]( const auto... enemyArmy ) {
+                ( ( enemyArmy ? ( updateEnemyArmy( *enemyArmy ), updatePriorityForEnemyArmy( kingdom, *enemyArmy ) ) : []() {}() ), ... );
+            },
+            getEnemyArmiesOnTile( kingdom.GetColor(), tile ) );
     }
 
     void Normal::updateEnemyArmy( const EnemyArmy & enemyArmy )
@@ -806,8 +853,7 @@ namespace AI
 
             const uint32_t regionID = tile.GetRegion();
             if ( regionID >= _regions.size() ) {
-                // shouldn't be possible, assert
-                assert( regionID < _regions.size() );
+                assert( 0 );
                 continue;
             }
 
@@ -824,55 +870,40 @@ namespace AI
 
             if ( objectType == MP2::OBJ_HEROES ) {
                 const Heroes * hero = tile.GetHeroes();
-                if ( !hero )
-                    continue;
+                assert( hero != nullptr );
 
                 if ( hero->GetColor() == myColor && !hero->Modes( Heroes::PATROL ) ) {
                     ++stats.friendlyHeroes;
 
                     const int wisdomLevel = hero->GetLevelSkill( Skill::Secondary::WISDOM );
-                    if ( wisdomLevel + 2 > stats.spellLevel )
+                    if ( wisdomLevel + 2 > stats.spellLevel ) {
                         stats.spellLevel = wisdomLevel + 2;
-                }
-                else if ( !Players::isFriends( myColor, hero->GetColor() ) && ( !hero->Modes( Heroes::PATROL ) || hero->GetPatrolDistance() != 0 ) ) {
-                    const double heroThreat = hero->GetArmy().GetStrength();
-
-                    _enemyArmies.emplace_back( idx, MP2::OBJ_HEROES, heroThreat, hero->GetMaxMovePoints() );
-                    if ( stats.highestThreat < heroThreat ) {
-                        stats.highestThreat = heroThreat;
                     }
                 }
 
-                // TODO: we should combine strength of both hero's and castle's armies to calculate the final strength.
-                // check object underneath the hero as well (maybe a castle)
                 objectType = tile.GetObject( false );
             }
 
             if ( objectType == MP2::OBJ_CASTLE ) {
-                const int tileColor = getColorFromTile( tile );
-                if ( myColor == tileColor || Players::isFriends( myColor, tileColor ) ) {
+                const Castle * castle = world.getCastleEntrance( Maps::GetPoint( idx ) );
+                assert( castle != nullptr );
+
+                if ( castle->isFriends( myColor ) ) {
                     ++stats.friendlyCastles;
                 }
-                else if ( tileColor != Color::NONE ) {
+                else if ( castle->GetColor() != Color::NONE ) {
                     ++stats.enemyCastles;
-
-                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( idx ) );
-                    if ( !castle )
-                        continue;
-
-                    if ( !castle->isCastle() && !castle->AllowBuyBuilding( BUILD_CASTLE ) ) {
-                        // If it is just a town with no possibility to build a castle then there is no way to hire heroes which can be a threat.
-                        continue;
-                    }
-
-                    const double castleThreat = castle->GetArmy().GetStrength();
-                    _enemyArmies.emplace_back( idx, MP2::OBJ_CASTLE, castleThreat, movePointsFromCastle );
-
-                    if ( stats.highestThreat < castleThreat ) {
-                        stats.highestThreat = castleThreat;
-                    }
                 }
             }
+
+            std::apply(
+                [this, &stats]( const auto... enemyArmy ) {
+                    ( ( enemyArmy ? ( _enemyArmies.push_back( *enemyArmy ),
+                                      stats.highestThreat = ( stats.highestThreat < enemyArmy->strength ) ? enemyArmy->strength : stats.highestThreat )
+                                  : 0 ),
+                      ... );
+                },
+                getEnemyArmiesOnTile( myColor, tile ) );
         }
 
         evaluateRegionSafety();

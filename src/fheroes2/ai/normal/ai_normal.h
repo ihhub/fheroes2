@@ -119,13 +119,29 @@ namespace AI
         uint32_t patrolDistance = 0;
     };
 
+    struct EnemyArmy
+    {
+        EnemyArmy() = default;
+
+        EnemyArmy( const int index_, const MP2::MapObjectType type_, const Heroes * hero_, const double strength_, const uint32_t movePoints_ )
+            : index( index_ )
+            , type( type_ )
+            , hero( hero_ )
+            , strength( strength_ )
+            , movePoints( movePoints_ )
+        {}
+
+        int index{ -1 };
+        MP2::MapObjectType type{ MP2::OBJ_NONE };
+        const Heroes * hero = nullptr;
+        double strength{ 0 };
+        uint32_t movePoints{ 0 };
+    };
+
     struct PriorityTask
     {
-        PriorityTaskType type = PriorityTaskType::ATTACK;
-        double threatLevel = 0.0;
-        std::set<int> secondaryTaskTileId;
-
         PriorityTask() = default;
+
         PriorityTask( PriorityTaskType t, double threat )
             : type( t )
             , threatLevel( threat )
@@ -137,6 +153,10 @@ namespace AI
         {
             secondaryTaskTileId.insert( secondaryTask );
         }
+
+        PriorityTaskType type{ PriorityTaskType::ATTACK };
+        double threatLevel{ 0.0 };
+        std::set<int> secondaryTaskTileId;
     };
 
     struct BattleTargetPair
@@ -284,25 +304,6 @@ namespace AI
         }
 
     private:
-        struct EnemyArmy
-        {
-            EnemyArmy() = default;
-
-            EnemyArmy( const int index_, const MP2::MapObjectType type_, const double strength_, const uint32_t movePoints_ )
-                : index( index_ )
-                , type( type_ )
-                , strength( strength_ )
-                , movePoints( movePoints_ )
-            {
-                // Do nothing.
-            }
-
-            int index{ -1 };
-            MP2::MapObjectType type{ MP2::OBJ_NONE };
-            double strength{ 0 };
-            uint32_t movePoints{ 0 };
-        };
-
         // following data won't be saved/serialized
         double _combinedHeroStrength = 0;
         std::vector<IndexObject> _mapActionObjects;
