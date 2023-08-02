@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <string>
@@ -48,7 +49,6 @@
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
-#include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "mus.h"
 #include "pairs.h"
