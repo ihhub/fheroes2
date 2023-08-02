@@ -434,19 +434,19 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             const bool validBoatDestination = Maps::isValidAbsIndex( boatDestination );
             if ( boatSource == -1 && !validBoatDestination ) {
                 if ( res != nullptr ) {
-                    *res = _( "There is no boat available and no free ocean location near the hero to cast this spell." );
+                    *res = _( "There are no boats available and no body of water adjacent to the hero where this spell will work." );
                 }
                 return false;
             }
             if ( boatSource == -1 ) {
                 if ( res != nullptr ) {
-                    *res = _( "There is no more boat available to cast this spell." );
+                    *res = _( "There are no boats available for this spell." );
                 }
                 return false;
             }
             if ( !validBoatDestination ) {
                 if ( res != nullptr ) {
-                    *res = _( "There is no free ocean location near the hero to cast this spell." );
+                    *res = _( "There is no body of water adjacent to the hero where this spell will work." );
                 }
                 return false;
             }
