@@ -2479,9 +2479,6 @@ msgstr "Vækst"
 msgid "week"
 msgstr "uge"
 
-msgid "Available"
-msgstr "Tilgængelig"
-
 msgid "View World"
 msgstr "Vis verden"
 
