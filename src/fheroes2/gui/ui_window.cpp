@@ -273,8 +273,8 @@ namespace fheroes2
         fheroes2::Rect shadingRoi = roi ^ _activeArea;
 
         // The text background is darker than original background. The shadow strength 2 is too much so we do two shading transforms: 3 and 5.
-        ApplyTransform( _output, shadingRoi.x + 1, shadingRoi.y + 1, shadingRoi.width - 2, shadingRoi.height - 2, 3 );
-        ApplyTransform( _output, shadingRoi.x + 1, shadingRoi.y + 1, shadingRoi.width - 2, shadingRoi.height - 2, 5 );
+        ApplyTransform( _output, shadingRoi.x + 2, shadingRoi.y + 2, shadingRoi.width - 4, shadingRoi.height - 4, 3 );
+        ApplyTransform( _output, shadingRoi.x + 2, shadingRoi.y + 2, shadingRoi.width - 4, shadingRoi.height - 4, 5 );
 
         // Make text background borders: it consists of rectangles with different transform shading.
         auto applyRectTransform = [&shadingRoi]( Image & output, const int32_t offset, const int32_t size, const uint8_t transformId ) {
@@ -291,8 +291,8 @@ namespace fheroes2
 
         // Outer rectangle is slightly bright.
         applyRectTransform( _output, 0, 1, 9 );
-        // Next inner rectangle is the same as original image, we skip its transform.
-        // Next shaded rectangles have these shadow strengths: 3, 2, 2, 2, 3, 4, 5.
+        // Next shaded rectangles have these shadow strengths: 4, 3, 2, 2, 2, 3, 4, 5.
+        applyRectTransform( _output, 1, 1, 4 );
         applyRectTransform( _output, 2, 1, 3 );
         applyRectTransform( _output, 3, 3, 2 );
         applyRectTransform( _output, 6, 1, 3 );
