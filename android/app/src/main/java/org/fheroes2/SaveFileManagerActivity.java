@@ -21,14 +21,19 @@
 package org.fheroes2;
 
 import java.io.File;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,10 +42,14 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ToggleButton;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
+import org.apache.commons.io.IOUtils;
 
 public final class SaveFileManagerActivity extends AppCompatActivity
 {
@@ -86,6 +95,39 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                     Log.e( "fheroes2", "Failed to get a list of save files.", ex );
 
                     liveStatus.postValue( new Status( false, new ArrayList<>() ) );
+                }
+            } ).start();
+        }
+
+        private void retrieveSaveFiles( final File saveFileDir, final List<String> saveFileNames, final Uri zipFileUri, final ContentResolver contentResolver )
+        {
+            final Status status = Objects.requireNonNull( liveStatus.getValue() );
+
+            if ( status.isBackgroundTaskExecuting ) {
+                return;
+            }
+
+            liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
+
+            new Thread( () -> {
+                try {
+                    try ( final ZipOutputStream zStream = new ZipOutputStream( contentResolver.openOutputStream( zipFileUri ) ) ) {
+                        for ( final String saveFileName : saveFileNames ) {
+                            zStream.putNextEntry( new ZipEntry( saveFileName ) );
+
+                            final File saveFile = new File( saveFileDir, saveFileName );
+
+                            try ( final InputStream in = Files.newInputStream( saveFile.toPath() ) ) {
+                                IOUtils.copy( in, zStream );
+                            }
+                        }
+                    }
+                }
+                catch ( final Exception ex ) {
+                    Log.e( "fheroes2", "Failed to retrieve save files.", ex );
+                }
+                finally {
+                    liveStatus.postValue( status.setIsBackgroundTaskExecuting( false ) );
                 }
             } ).start();
         }
@@ -168,6 +210,24 @@ public final class SaveFileManagerActivity extends AppCompatActivity
 
     private ArrayAdapter<String> saveFileListViewAdapter = null;
 
+    private final ActivityResultLauncher<String> zipFileLocationChooserLauncher
+        = registerForActivityResult( new ActivityResultContracts.CreateDocument( "application/zip" ), result -> {
+              // No location was selected
+              if ( result == null ) {
+                  return;
+              }
+
+              final List<String> saveFileNames = new ArrayList<>();
+
+              for ( int i = 0; i < saveFileListView.getCount(); ++i ) {
+                  if ( saveFileListView.isItemChecked( i ) ) {
+                      saveFileNames.add( saveFileListViewAdapter.getItem( i ) );
+                  }
+              }
+
+              viewModel.retrieveSaveFiles( saveFileDir, saveFileNames, result, getContentResolver() );
+          } );
+
     @Override
     protected void onCreate( final Bundle savedInstanceState )
     {
@@ -240,6 +300,16 @@ public final class SaveFileManagerActivity extends AppCompatActivity
     }
 
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
+    public void retrieveButtonClicked( final View view )
+    {
+        if ( saveFileListView.getCheckedItemCount() == 0 ) {
+            return;
+        }
+
+        zipFileLocationChooserLauncher.launch( getString( R.string.activity_save_file_manager_zip_archive_name ) );
+    }
+
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void deleteButtonClicked( final View view )
     {
         final int selectedSaveFilesCount = saveFileListView.getCheckedItemCount();
@@ -293,6 +363,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
     {
         final ImageButton selectAllButton = findViewById( R.id.activity_save_file_manager_select_all_btn );
         final ImageButton unselectAllButton = findViewById( R.id.activity_save_file_manager_unselect_all_btn );
+        final ImageButton retrieveButton = findViewById( R.id.activity_save_file_manager_retrieve_btn );
         final ImageButton deleteButton = findViewById( R.id.activity_save_file_manager_delete_btn );
 
         filterStandardToggleButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
@@ -301,6 +372,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         saveFileListView.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         selectAllButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         unselectAllButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+        retrieveButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         deleteButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
 
         saveFileListViewAdapter.clear();

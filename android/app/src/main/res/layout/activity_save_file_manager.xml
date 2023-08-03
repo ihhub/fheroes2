@@ -96,6 +96,20 @@
             android:layout_weight="1" />
 
         <ImageButton
+            android:id="@+id/activity_save_file_manager_retrieve_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/btn_retrieve"
+            android:contentDescription="@string/activity_save_file_manager_retrieve_btn_content_description"
+            android:onClick="retrieveButtonClicked" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageButton
             android:id="@+id/activity_save_file_manager_delete_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
