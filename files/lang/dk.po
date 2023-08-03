@@ -6384,7 +6384,7 @@ msgid ""
 msgstr ""
 
 msgid "Current Modifiers:"
-msgstr ""
+msgstr "Nuværende modifikationer"
 
 msgid "skill|Basic"
 msgstr "Begynder"
@@ -6696,52 +6696,52 @@ msgid "Purple"
 msgstr "Lilla"
 
 msgid "barrier|Aqua"
-msgstr ""
+msgstr "Lyseblå"
 
 msgid "barrier|Blue"
-msgstr ""
+msgstr "Blå"
 
 msgid "barrier|Brown"
-msgstr ""
+msgstr "Brun"
 
 msgid "barrier|Gold"
-msgstr ""
+msgstr "Guld"
 
 msgid "barrier|Green"
-msgstr ""
+msgstr "Grøn"
 
 msgid "barrier|Orange"
-msgstr ""
+msgstr "Orange"
 
 msgid "barrier|Purple"
-msgstr ""
+msgstr "Lilla"
 
 msgid "barrier|Red"
-msgstr ""
+msgstr "Rød"
 
 msgid "tent|Aqua"
-msgstr ""
+msgstr "Lyseblåt"
 
 msgid "tent|Blue"
-msgstr ""
+msgstr "Blåt"
 
 msgid "tent|Brown"
-msgstr ""
+msgstr "Brunt"
 
 msgid "tent|Gold"
-msgstr ""
+msgstr "Guld"
 
 msgid "tent|Green"
-msgstr ""
+msgstr "Grønt"
 
 msgid "tent|Orange"
-msgstr ""
+msgstr "Orange"
 
 msgid "tent|Purple"
-msgstr ""
+msgstr "Lilla"
 
 msgid "tent|Red"
-msgstr ""
+msgstr "Rødt"
 
 msgid "Experience"
 msgstr "Erfaringspoint"
@@ -7096,28 +7096,28 @@ msgid "Alchemist Lab"
 msgstr "Alkymist laboratorium"
 
 msgid "Sign"
-msgstr ""
+msgstr "Skilt"
 
 msgid "Buoy"
 msgstr ""
 
 msgid "Skeleton"
-msgstr ""
+msgstr "Skelet"
 
 msgid "Daemon Cave"
-msgstr ""
+msgstr "Daimon Grotte"
 
 msgid "Treasure Chest"
-msgstr ""
+msgstr "Skattekiste"
 
 msgid "Faerie Ring"
-msgstr ""
+msgstr "Fe-ring"
 
 msgid "Campfire"
-msgstr ""
+msgstr "Lejrbål"
 
 msgid "Fountain"
-msgstr ""
+msgstr "Springvand"
 
 msgid "Gazebo"
 msgstr ""
@@ -7126,59 +7126,59 @@ msgid "Genie Lamp"
 msgstr ""
 
 msgid "Archer's House"
-msgstr ""
+msgstr "Bueskyttes hus"
 
 msgid "Goblin Hut"
-msgstr ""
+msgstr "Vættehytte"
 
 msgid "Dwarf Cottage"
-msgstr ""
+msgstr "Dværge-kottage"
 
 msgid "Peasant Hut"
-msgstr ""
+msgstr "Bondehytte"
 
 msgid "Stables"
 msgstr ""
 
 msgid "Alchemist's Tower"
-msgstr ""
+msgstr "Alkymists tårn"
 
 msgid "Event"
-msgstr ""
+msgstr "Begivenhed"
 
 msgid "Dragon City"
-msgstr ""
+msgstr "Drageby"
 
 msgid "Lighthouse"
 msgid_plural "Lighthouses"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Fyrtårn"
+msgstr[1] "Fyrtårne"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Vandmølle"
+msgstr[1] "Vandmøller"
 
 msgid "Mines"
-msgstr ""
+msgstr "Miner"
 
 msgid "Monster"
-msgstr "Monster"
+msgstr "Væsen"
 
 msgid "Obelisk"
-msgstr ""
+msgstr "Obelisk"
 
 msgid "Oasis"
-msgstr ""
+msgstr "Oase"
 
 msgid "Resource"
-msgstr ""
+msgstr "Resurse"
 
 msgid "Sawmill"
 msgstr "Savmølle"
 
 msgid "Oracle"
-msgstr ""
+msgstr "Orakel"
 
 msgid "Shrine of the First Circle"
 msgstr "Helligdom for 1. cirkel"
@@ -7258,49 +7258,49 @@ msgid "Mossy Rock"
 msgstr "Mosset sten"
 
 msgid "Watch Tower"
-msgstr ""
+msgstr "Udkigstårn"
 
 msgid "Tree House"
-msgstr ""
+msgstr "Træhus"
 
 msgid "Tree City"
-msgstr ""
+msgstr "Træby"
 
 msgid "Ruins"
-msgstr ""
+msgstr "Ruiner"
 
 msgid "Fort"
-msgstr ""
+msgstr "Fort"
 
 msgid "Abandoned Mine"
 msgstr "Forladt mine"
 
 msgid "Sirens"
-msgstr ""
+msgstr "Sirener"
 
 msgid "Standing Stones"
 msgstr ""
 
 msgid "Idol"
-msgstr ""
+msgstr "Idol"
 
 msgid "Tree of Knowledge"
-msgstr ""
+msgstr "Visdomstræ"
 
 msgid "Witch Doctor's Hut"
-msgstr ""
+msgstr "Heksedoktorens hytte"
 
 msgid "Temple"
-msgstr ""
+msgstr "Tempel"
 
 msgid "Hill Fort"
 msgstr ""
 
 msgid "Halfling Hole"
-msgstr ""
+msgstr "Halvlang-hul"
 
 msgid "Mercenary Camp"
-msgstr ""
+msgstr "Lejesoldaterlejr"
 
 msgid "Shrine of the Second Circle"
 msgstr "Helligdom for 2. cirkel"
@@ -7309,28 +7309,28 @@ msgid "Shrine of the Third Circle"
 msgstr "Helligdom for 3. cirkel"
 
 msgid "City of the Dead"
-msgstr ""
+msgstr "De dødes by"
 
 msgid "Sphinx"
-msgstr ""
+msgstr "Sfinks"
 
 msgid "Wagon"
-msgstr ""
+msgstr "Vogn"
 
 msgid "Tar Pit"
-msgstr ""
+msgstr "Tjæresø"
 
 msgid "Artesian Spring"
 msgstr ""
 
 msgid "Troll Bridge"
-msgstr ""
+msgstr "Troldebro"
 
 msgid "Watering Hole"
-msgstr ""
+msgstr "Vandhul"
 
 msgid "Witch's Hut"
-msgstr ""
+msgstr "Heksens hytte"
 
 msgid "Xanadu"
 msgstr ""
@@ -7351,18 +7351,18 @@ msgid "Shipwreck Survivor"
 msgstr ""
 
 msgid "Bottle"
-msgstr ""
+msgstr "Flaske"
 
 msgid "Magic Well"
-msgstr ""
+msgstr "Magisk brønd"
 
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Magisk have"
+msgstr[1] "Magiske haver"
 
 msgid "Observation Tower"
-msgstr ""
+msgstr "Observationstårn"
 
 msgid "Freeman's Foundry"
 msgstr ""
@@ -7371,19 +7371,19 @@ msgid "Reefs"
 msgstr ""
 
 msgid "Trees"
-msgstr ""
+msgstr "Træer"
 
 msgid "Mountains"
-msgstr ""
+msgstr "Bjerge"
 
 msgid "Volcano"
-msgstr ""
+msgstr "Vulkan"
 
 msgid "Flowers"
-msgstr ""
+msgstr "Blomster"
 
 msgid "Rock"
-msgstr ""
+msgstr "Sten"
 
 msgid "Water Lake"
 msgstr ""
@@ -7392,16 +7392,16 @@ msgid "Mandrake"
 msgstr ""
 
 msgid "Dead Tree"
-msgstr ""
+msgstr "Dødt træ"
 
 msgid "Stump"
 msgstr ""
 
 msgid "Crater"
-msgstr ""
+msgstr "Krater"
 
 msgid "Cactus"
-msgstr ""
+msgstr "Kaktus"
 
 msgid "Mound"
 msgstr ""
@@ -7419,34 +7419,34 @@ msgid "Barrow Mounds"
 msgstr ""
 
 msgid "Random Artifact - Treasure"
-msgstr ""
+msgstr "Tilfældigt artefakt - Skat"
 
 msgid "Random Artifact - Minor"
-msgstr ""
+msgstr "Tilfældigt artefakt - Minor"
 
 msgid "Random Artifact - Major"
-msgstr ""
+msgstr "Tilfældigt artefakt - Major"
 
 msgid "Barrier"
-msgstr ""
+msgstr "Barriere"
 
 msgid "Traveller's Tent"
-msgstr ""
+msgstr "Rejsendes telt"
 
 msgid "Jail"
-msgstr ""
+msgstr "Fængsel"
 
 msgid "Fire Summoning Altar"
-msgstr ""
+msgstr "Ild-elementalers alter"
 
 msgid "Air Summoning Altar"
-msgstr ""
+msgstr "Luft-elementalers alter"
 
 msgid "Earth Summoning Altar"
-msgstr ""
+msgstr "Jord-elementalers alter"
 
 msgid "Water Summoning Altar"
-msgstr ""
+msgstr "Vand-elementalers alter"
 
 msgid "Unknown Monster"
 msgstr "Ukendt monster"
@@ -9118,25 +9118,25 @@ msgid ""
 msgstr ""
 
 msgid "Wood"
-msgstr "Træ"
+msgstr "træ"
 
 msgid "Mercury"
-msgstr "Kviksølv"
+msgstr "kviksølv"
 
 msgid "Ore"
-msgstr "Malm"
+msgstr "malm"
 
 msgid "Sulfur"
-msgstr "Svovl"
+msgstr "svovl"
 
 msgid "Crystal"
-msgstr "Krystal"
+msgstr "krystal"
 
 msgid "Gems"
-msgstr "Juveler"
+msgstr "juveler"
 
 msgid "Gold"
-msgstr "Guld"
+msgstr "guld"
 
 msgid ""
 "There are seven resources in Heroes 2, used to build and improves castles, "
