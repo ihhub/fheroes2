@@ -178,25 +178,50 @@ public:
         _scrollbar.moveToIndex( _topId );
     }
 
-    int32_t processButtonEvents()
+    int32_t selectItemsEventProcessing( const char * caption )
     {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        // setup cursor
+        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+        const fheroes2::Rect roi = background->activeArea();
+
+        const fheroes2::Text text( caption, fheroes2::FontType::normalYellow() );
+        text.draw( roi.x + ( roi.width - text.width() ) / 2, roi.y + 10, display );
+
+        updateSrollBarImage();
+        Redraw();
+        display.render( background->totalArea() );
+
         LocalEvent & le = LocalEvent::Get();
 
-        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        while ( !ok && le.HandleEvents() ) {
+            le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+            le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
-            return Dialog::OK;
-        }
-        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-            return Dialog::CANCEL;
-        }
+            if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+                return Dialog::OK;
+            }
+            if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+                return Dialog::CANCEL;
+            }
 
-        if ( le.MousePressRight( buttonOk.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Accept the choice made." ), 0 );
-        }
-        else if ( le.MousePressRight( buttonCancel.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), 0 );
+            if ( le.MousePressRight( buttonOk.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Accept the choice made." ), 0 );
+            }
+            else if ( le.MousePressRight( buttonCancel.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), 0 );
+            }
+
+            QueueEventProcessing();
+
+            if ( !IsNeedRedraw() ) {
+                continue;
+            }
+
+            Redraw();
+            display.render( roi );
         }
 
         return Dialog::ZERO;
@@ -358,104 +383,44 @@ public:
 
 Skill::Secondary Dialog::selectSecondarySkill()
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    LocalEvent & le = LocalEvent::Get();
-
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
     std::vector<int> skills( static_cast<int>( MAXSECONDARYSKILL * 3 ), 0 );
 
     for ( int i = 0; i < MAXSECONDARYSKILL * 3; ++i ) {
         skills[i] = i;
     }
 
-    SelectEnumSecSkill listbox( { 350, display.height() - 200 } );
-    const fheroes2::Rect roi = listbox.background->activeArea();
-
-    const fheroes2::Text text( _( "Select Skill:" ), fheroes2::FontType::normalYellow() );
-    text.draw( roi.x + ( roi.width - text.width() ) / 2, roi.y + 10, display );
+    SelectEnumSecSkill listbox( { 350, fheroes2::Display::instance().height() - 200 } );
 
     listbox.SetListContent( skills );
-    listbox.updateSrollBarImage();
-    listbox.Redraw();
 
-    display.render( listbox.background->totalArea() );
-
-    int32_t result = Dialog::ZERO;
-
-    while ( result == Dialog::ZERO && !listbox.ok && le.HandleEvents() ) {
-        result = listbox.processButtonEvents();
-        listbox.QueueEventProcessing();
-
-        if ( !listbox.IsNeedRedraw() ) {
-            continue;
-        }
-
-        listbox.Redraw();
-        display.render( roi );
-    }
-
-    Skill::Secondary skill;
+    const int32_t result = listbox.selectItemsEventProcessing( _( "Select Skill:" ) );
 
     if ( result == Dialog::OK || listbox.ok ) {
-        skill.SetSkill( 1 + ( listbox.GetCurrent() / 3 ) );
-        skill.SetLevel( 1 + ( listbox.GetCurrent() % 3 ) );
+        const int skillIndex = listbox.GetCurrent();
+        return { 1 + skillIndex / 3, 1 + ( skillIndex % 3 ) };
     }
 
-    return skill;
+    return {};
 }
 
 Spell Dialog::selectSpell( const int spellId /* = Spell::NONE */ )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    LocalEvent & le = LocalEvent::Get();
-
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
     std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook();
 
-    SelectEnumSpell listbox( { 340, display.height() - 200 } );
-
-    const fheroes2::Rect roi = listbox.background->activeArea();
-
-    const fheroes2::Text text( _( "Select Spell:" ), fheroes2::FontType::normalYellow() );
-    text.draw( roi.x + ( roi.width - text.width() ) / 2, roi.y + 10, display );
+    SelectEnumSpell listbox( { 340, fheroes2::Display::instance().height() - 200 } );
 
     listbox.SetListContent( spells );
     if ( spellId != Spell::NONE ) {
         listbox.SetCurrent( spellId );
     }
-    listbox.updateSrollBarImage();
-    listbox.Redraw();
 
-    display.render( listbox.background->totalArea() );
-
-    int32_t result = Dialog::ZERO;
-    while ( result == Dialog::ZERO && !listbox.ok && le.HandleEvents() ) {
-        result = listbox.processButtonEvents();
-        listbox.QueueEventProcessing();
-
-        if ( !listbox.IsNeedRedraw() ) {
-            continue;
-        }
-
-        listbox.Redraw();
-        display.render( roi );
-    }
+    const int32_t result = listbox.selectItemsEventProcessing( _( "Select Spell:" ) );
 
     return result == Dialog::OK || listbox.ok ? Spell( listbox.GetCurrent() ) : Spell( Spell::NONE );
 }
 
 Artifact Dialog::selectArtifact()
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    LocalEvent & le = LocalEvent::Get();
-
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
     std::vector<int> artifacts;
     artifacts.reserve( Artifact::ARTIFACT_COUNT - 1 );
 
@@ -467,45 +432,19 @@ Artifact Dialog::selectArtifact()
         }
     }
 
-    SelectEnumArtifact listbox( { 370, display.height() - 200 } );
-
-    const fheroes2::Rect roi = listbox.background->activeArea();
-
-    const fheroes2::Text text( _( "Select Artifact:" ), fheroes2::FontType::normalYellow() );
-    text.draw( roi.x + ( roi.width - text.width() ) / 2, roi.y + 10, display );
+    SelectEnumArtifact listbox( { 370, fheroes2::Display::instance().height() - 200 } );
 
     listbox.SetListContent( artifacts );
     // Force to select the first artifact in the list.
     listbox.SetCurrent( static_cast<size_t>( 0 ) );
-    listbox.updateSrollBarImage();
-    listbox.Redraw();
 
-    display.render( listbox.background->totalArea() );
-
-    int32_t result = Dialog::ZERO;
-    while ( result == Dialog::ZERO && !listbox.ok && le.HandleEvents() ) {
-        result = listbox.processButtonEvents();
-        listbox.QueueEventProcessing();
-
-        if ( !listbox.IsNeedRedraw() ) {
-            continue;
-        }
-
-        listbox.Redraw();
-        display.render( roi );
-    }
+    const int32_t result = listbox.selectItemsEventProcessing( _( "Select Artifact:" ) );
 
     return ( result == Dialog::OK || listbox.ok ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
 }
 
 Monster Dialog::selectMonster( const int monsterId /* = Monster::UNKNOWN */ )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    LocalEvent & le = LocalEvent::Get();
-
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
     std::vector<int> monsters( static_cast<int>( Monster::WATER_ELEMENT ), Monster::UNKNOWN );
 
     for ( size_t i = 0; i < monsters.size(); ++i ) {
@@ -513,46 +452,20 @@ Monster Dialog::selectMonster( const int monsterId /* = Monster::UNKNOWN */ )
         monsters[i] = static_cast<int>( i + 1 );
     }
 
-    SelectEnumMonster listbox( { 280, display.height() - 200 } );
-
-    const fheroes2::Rect roi = listbox.background->activeArea();
-
-    const fheroes2::Text text( _( "Select Monster:" ), fheroes2::FontType::normalYellow() );
-    text.draw( roi.x + ( roi.width - text.width() ) / 2, roi.y + 10, display );
+    SelectEnumMonster listbox( { 280, fheroes2::Display::instance().height() - 200 } );
 
     listbox.SetListContent( monsters );
     if ( monsterId != Monster::UNKNOWN ) {
         listbox.SetCurrent( monsterId );
     }
-    listbox.updateSrollBarImage();
-    listbox.Redraw();
 
-    display.render( listbox.background->totalArea() );
-
-    int32_t result = Dialog::ZERO;
-    while ( result == Dialog::ZERO && !listbox.ok && le.HandleEvents() ) {
-        result = listbox.processButtonEvents();
-        listbox.QueueEventProcessing();
-
-        if ( !listbox.IsNeedRedraw() ) {
-            continue;
-        }
-
-        listbox.Redraw();
-        display.render( roi );
-    }
+    const int32_t result = listbox.selectItemsEventProcessing( _( "Select Monster:" ) );
 
     return result == Dialog::OK || listbox.ok ? Monster( listbox.GetCurrent() ) : Monster( Monster::UNKNOWN );
 }
 
 int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    LocalEvent & le = LocalEvent::Get();
-
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
     std::vector<int> heroes( static_cast<int>( Settings::Get().isCurrentMapPriceOfLoyalty() ? Heroes::DEBUG_HERO : Heroes::SOLMYR ), Heroes::UNKNOWN );
 
     for ( size_t i = 0; i < heroes.size(); ++i ) {
@@ -560,34 +473,14 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
         heroes[i] = static_cast<int>( i );
     }
 
-    SelectEnumHeroes listbox( { 240, display.height() - 200 } );
-
-    const fheroes2::Rect roi = listbox.background->activeArea();
-
-    const fheroes2::Text text( _( "Select Hero:" ), fheroes2::FontType::normalYellow() );
-    text.draw( roi.x + ( roi.width - text.width() ) / 2, roi.y + 10, display );
+    SelectEnumHeroes listbox( { 240, fheroes2::Display::instance().height() - 200 } );
 
     listbox.SetListContent( heroes );
     if ( heroId != Heroes::UNKNOWN ) {
         listbox.SetCurrent( heroId );
     }
-    listbox.updateSrollBarImage();
-    listbox.Redraw();
 
-    display.render( listbox.background->totalArea() );
-
-    int32_t result = Dialog::ZERO;
-    while ( result == Dialog::ZERO && !listbox.ok && le.HandleEvents() ) {
-        result = listbox.processButtonEvents();
-        listbox.QueueEventProcessing();
-
-        if ( !listbox.IsNeedRedraw() ) {
-            continue;
-        }
-
-        listbox.Redraw();
-        display.render( roi );
-    }
+    const int32_t result = listbox.selectItemsEventProcessing( _( "Select Hero:" ) );
 
     return result == Dialog::OK || listbox.ok ? listbox.GetCurrent() : Heroes::UNKNOWN;
 }
