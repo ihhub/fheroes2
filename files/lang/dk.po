@@ -179,12 +179,6 @@ msgstr "6 SPILLERE"
 msgid "GIFT"
 msgstr "FORÆR"
 
-msgid "Damg"
-msgstr "Skade"
-
-msgid "guildWell|EXIT"
-msgstr "UD"
-
 msgid "DIFFICULTY"
 msgstr "NIVEAU"
 
