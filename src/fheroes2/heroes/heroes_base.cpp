@@ -457,7 +457,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             bool hasCastles = std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return castle && castle->GetHero() == nullptr; } );
             if ( !hasCastles ) {
                 if ( res != nullptr ) {
-                    *res = _( "You do not currently own any town or castle that is not occupied by a hero, so you can't cast the spell." );
+                    *res = _( "You do not own any town or castle that is not currently occupied by a hero. You cannot cast this spell." );
                 }
                 return false;
             }
@@ -556,7 +556,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                 if ( newCount <= currentCount ) {
                     if ( res != nullptr ) {
                         *res = _(
-                            "There are already at least as many elementals guarding the mine than the spell can generate. Casting this spell will not bring any advantage." );
+                            "There are already at least as many elementals guarding the mine as this hero could generate. Casting this spell will have no effect." );
                     }
                     return false;
                 }
