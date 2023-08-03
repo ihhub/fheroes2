@@ -2597,7 +2597,7 @@ msgid ""
 "tongue, and make you an offer:\n"
 " \n"
 msgstr ""
-Disse væsener lader sig overtale af din diplomatiske\n"
+"Disse væsener lader sig overtale af din diplomatiske\n"
 "tunge. De giver dig et tilbud:\n"
 "\n"
 
