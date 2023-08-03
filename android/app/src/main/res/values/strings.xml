@@ -25,7 +25,7 @@
     <string name="activity_save_file_manager_unselect_all_btn_content_description">Unselect all save files</string>
     <string name="activity_save_file_manager_retrieve_btn_content_description">Retrieve selected save files</string>
     <string name="activity_save_file_manager_delete_btn_content_description">Delete selected save files</string>
-    <string name="activity_save_file_manager_zip_archive_name" translatable="false">save.zip</string>
+    <string name="activity_save_file_manager_zip_archive_name" translatable="false">fheroes2_save_files.zip</string>
     <plurals name="activity_save_file_manager_delete_confirmation_title">
         <item quantity="one">Delete save file</item>
         <item quantity="other">Delete save files</item>
