@@ -22,6 +22,7 @@
     <string name="activity_save_file_manager_save_file_list_empty_lbl_text">Нет доступных файлов сохранений</string>
     <string name="activity_save_file_manager_select_all_btn_content_description">Выбрать все файлы сохранений</string>
     <string name="activity_save_file_manager_unselect_all_btn_content_description">Отменить выбор файлов сохранений</string>
+    <string name="activity_save_file_manager_retrieve_btn_content_description">Получить выбранные файлы сохранений</string>
     <string name="activity_save_file_manager_delete_btn_content_description">Удалить выбранные файлы сохранений</string>
     <plurals name="activity_save_file_manager_delete_confirmation_title" tools:ignore="MissingQuantity">
         <item quantity="other">Удалить файлы сохранений</item>
