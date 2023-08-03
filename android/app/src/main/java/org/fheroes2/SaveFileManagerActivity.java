@@ -306,7 +306,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             return;
         }
 
-        zipFileLocationChooserLauncher.launch( getString( R.string.activity_save_file_manager_zip_archive_name ) );
+        zipFileLocationChooserLauncher.launch( getString( R.string.activity_save_file_manager_suggested_zip_file_name ) );
     }
 
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
