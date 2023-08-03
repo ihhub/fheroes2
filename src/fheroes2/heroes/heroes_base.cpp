@@ -555,8 +555,8 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                 const uint32_t currentCount = troop.GetCount();
                 if ( newCount <= currentCount ) {
                     if ( res != nullptr ) {
-                        *res = _(
-                            "There are already at least as many elementals guarding the mine as this hero could generate. Casting this spell will have no effect." );
+                        *res
+                            = _( "There are already at least as many elementals guarding the mine as this hero could generate. Casting this spell will have no effect." );
                     }
                     return false;
                 }
