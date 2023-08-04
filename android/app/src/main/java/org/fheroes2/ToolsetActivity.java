@@ -46,7 +46,13 @@ public final class ToolsetActivity extends AppCompatActivity
 {
     public static final class ToolsetActivityViewModel extends ViewModel
     {
-        private enum BackgroundTaskResult { RESULT_NONE, RESULT_SUCCESS, RESULT_NO_ASSETS, RESULT_ERROR }
+        private enum BackgroundTaskResult
+        {
+            RESULT_NONE,
+            RESULT_SUCCESS,
+            RESULT_NO_ASSETS,
+            RESULT_ERROR
+        }
 
         private static final class Status
         {
