@@ -46,19 +46,16 @@ public final class ToolsetActivity extends AppCompatActivity
 {
     public static final class ToolsetActivityViewModel extends ViewModel
     {
-        private static final int RESULT_NONE = 0;
-        private static final int RESULT_SUCCESS = 1;
-        private static final int RESULT_NO_ASSETS = 2;
-        private static final int RESULT_ERROR = 3;
+        private enum BackgroundTaskResult { RESULT_NONE, RESULT_SUCCESS, RESULT_NO_ASSETS, RESULT_ERROR }
 
         private static final class Status
         {
             private boolean isHoMM2AssetsPresent;
             private boolean isBackgroundTaskExecuting;
-            private final int backgroundTaskResult;
+            private final BackgroundTaskResult backgroundTaskResult;
             private final String backgroundTaskError;
 
-            private Status( final boolean isHoMM2AssetsPresent, final boolean isBackgroundTaskExecuting, final int backgroundTaskResult,
+            private Status( final boolean isHoMM2AssetsPresent, final boolean isBackgroundTaskExecuting, final BackgroundTaskResult backgroundTaskResult,
                             final String backgroundTaskError )
             {
                 this.isHoMM2AssetsPresent = isHoMM2AssetsPresent;
@@ -83,7 +80,7 @@ public final class ToolsetActivity extends AppCompatActivity
             }
         }
 
-        private final MutableLiveData<Status> liveStatus = new MutableLiveData<>( new Status( false, false, RESULT_NONE, "" ) );
+        private final MutableLiveData<Status> liveStatus = new MutableLiveData<>( new Status( false, false, BackgroundTaskResult.RESULT_NONE, "" ) );
 
         private void validateAssets( final File externalFilesDir )
         {
@@ -105,16 +102,19 @@ public final class ToolsetActivity extends AppCompatActivity
             new Thread( () -> {
                 try ( final InputStream in = contentResolver.openInputStream( zipFileUri ) ) {
                     if ( HoMM2AssetManagement.extractHoMM2AssetsFromZip( externalFilesDir, cacheDir, in ) ) {
-                        liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, RESULT_SUCCESS, "" ) );
+                        liveStatus.postValue(
+                            new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, BackgroundTaskResult.RESULT_SUCCESS, "" ) );
                     }
                     else {
-                        liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, RESULT_NO_ASSETS, "" ) );
+                        liveStatus.postValue(
+                            new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, BackgroundTaskResult.RESULT_NO_ASSETS, "" ) );
                     }
                 }
                 catch ( final Exception ex ) {
                     Log.e( "fheroes2", "Failed to extract the ZIP file.", ex );
 
-                    liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, RESULT_ERROR, String.format( "%s", ex ) ) );
+                    liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, BackgroundTaskResult.RESULT_ERROR,
+                                                      String.format( "%s", ex ) ) );
                 }
             } ).start();
         }
@@ -213,13 +213,13 @@ public final class ToolsetActivity extends AppCompatActivity
         String statusText;
 
         switch ( modelStatus.backgroundTaskResult ) {
-        case ToolsetActivityViewModel.RESULT_NONE:
+        case RESULT_NONE:
             statusText = "";
             break;
-        case ToolsetActivityViewModel.RESULT_SUCCESS:
+        case RESULT_SUCCESS:
             statusText = getString( R.string.activity_toolset_last_task_status_lbl_text_completed_successfully );
             break;
-        case ToolsetActivityViewModel.RESULT_NO_ASSETS:
+        case RESULT_NO_ASSETS:
             statusText = getString( R.string.activity_toolset_last_task_status_lbl_text_no_assets_found );
             break;
         default:
