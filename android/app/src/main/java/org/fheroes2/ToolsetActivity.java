@@ -103,8 +103,8 @@ public final class ToolsetActivity extends AppCompatActivity
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
             new Thread( () -> {
-                try ( final InputStream iStream = contentResolver.openInputStream( zipFileUri ) ) {
-                    if ( HoMM2AssetManagement.extractHoMM2AssetsFromZip( externalFilesDir, cacheDir, iStream ) ) {
+                try ( final InputStream in = contentResolver.openInputStream( zipFileUri ) ) {
+                    if ( HoMM2AssetManagement.extractHoMM2AssetsFromZip( externalFilesDir, cacheDir, in ) ) {
                         liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, RESULT_SUCCESS, "" ) );
                     }
                     else {

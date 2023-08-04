@@ -80,8 +80,8 @@
                 android:id="@+id/activity_save_file_manager_select_all_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="24dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/btn_select_all"
                 android:contentDescription="@string/activity_save_file_manager_select_all_btn_content_description"
                 android:onClick="selectAllButtonClicked" />
@@ -90,6 +90,8 @@
                 android:id="@+id/activity_save_file_manager_unselect_all_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/btn_unselect_all"
                 android:contentDescription="@string/activity_save_file_manager_unselect_all_btn_content_description"
                 android:onClick="unselectAllButtonClicked" />
@@ -100,13 +102,24 @@
                 android:layout_weight="1" />
 
             <ImageButton
-                android:id="@+id/activity_save_file_manager_retrieve_btn"
+                android:id="@+id/activity_save_file_manager_import_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:background="@drawable/btn_retrieve"
-                android:contentDescription="@string/activity_save_file_manager_retrieve_btn_content_description"
-                android:onClick="retrieveButtonClicked" />
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/btn_import"
+                android:contentDescription="@string/activity_save_file_manager_import_btn_content_description"
+                android:onClick="importButtonClicked" />
+
+            <ImageButton
+                android:id="@+id/activity_save_file_manager_export_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/btn_export"
+                android:contentDescription="@string/activity_save_file_manager_export_btn_content_description"
+                android:onClick="exportButtonClicked" />
 
             <Space
                 android:layout_width="0dp"
@@ -117,7 +130,8 @@
                 android:id="@+id/activity_save_file_manager_delete_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="12dp"
                 android:background="@drawable/btn_delete"
                 android:contentDescription="@string/activity_save_file_manager_delete_btn_content_description"
                 android:onClick="deleteButtonClicked" />

@@ -22,12 +22,15 @@ package org.fheroes2;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import android.app.AlertDialog;
@@ -100,7 +103,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             } ).start();
         }
 
-        private void retrieveSaveFiles( final File saveFileDir, final List<String> saveFileNames, final Uri zipFileUri, final ContentResolver contentResolver )
+        private void importSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final Uri zipFileUri, final ContentResolver contentResolver )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
@@ -112,20 +115,79 @@ public final class SaveFileManagerActivity extends AppCompatActivity
 
             new Thread( () -> {
                 try {
-                    try ( final ZipOutputStream zStream = new ZipOutputStream( contentResolver.openOutputStream( zipFileUri ) ) ) {
-                        for ( final String saveFileName : saveFileNames ) {
-                            zStream.putNextEntry( new ZipEntry( saveFileName ) );
+                    final Function<String, Boolean> checkExtension = ( String name ) ->
+                    {
+                        for ( final String extension : allowedSaveFileExtensions ) {
+                            if ( name.endsWith( extension ) ) {
+                                return true;
+                            }
+                        }
 
-                            final File saveFile = new File( saveFileDir, saveFileName );
+                        return false;
+                    };
 
-                            try ( final InputStream in = Files.newInputStream( saveFile.toPath() ) ) {
-                                IOUtils.copy( in, zStream );
+                    try ( final InputStream in = contentResolver.openInputStream( zipFileUri ) ) {
+                        final ZipInputStream zin = new ZipInputStream( in );
+                        for ( ZipEntry zEntry = zin.getNextEntry(); zEntry != null; zEntry = zin.getNextEntry() ) {
+                            if ( zEntry.isDirectory() ) {
+                                continue;
+                            }
+
+                            final String zEntryFileName = new File( zEntry.getName() ).getName();
+                            if ( !checkExtension.apply( zEntryFileName ) ) {
+                                continue;
+                            }
+
+                            final File outFile = new File( saveFileDir, zEntryFileName );
+
+                            try ( final OutputStream out = Files.newOutputStream( outFile.toPath() ) ) {
+                                IOUtils.copy( zin, out );
                             }
                         }
                     }
                 }
                 catch ( final Exception ex ) {
-                    Log.e( "fheroes2", "Failed to retrieve save files.", ex );
+                    Log.e( "fheroes2", "Failed to import save files.", ex );
+                }
+                finally {
+                    try {
+                        liveStatus.postValue( new Status( false, getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                    }
+                    catch ( final Exception ex ) {
+                        Log.e( "fheroes2", "Failed to get a list of save files.", ex );
+
+                        liveStatus.postValue( new Status( false, new ArrayList<>() ) );
+                    }
+                }
+            } ).start();
+        }
+
+        private void exportSaveFiles( final File saveFileDir, final List<String> saveFileNames, final Uri zipFileUri, final ContentResolver contentResolver )
+        {
+            final Status status = Objects.requireNonNull( liveStatus.getValue() );
+
+            if ( status.isBackgroundTaskExecuting ) {
+                return;
+            }
+
+            liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
+
+            new Thread( () -> {
+                try {
+                    try ( final ZipOutputStream zout = new ZipOutputStream( contentResolver.openOutputStream( zipFileUri ) ) ) {
+                        for ( final String saveFileName : saveFileNames ) {
+                            zout.putNextEntry( new ZipEntry( saveFileName ) );
+
+                            final File saveFile = new File( saveFileDir, saveFileName );
+
+                            try ( final InputStream in = Files.newInputStream( saveFile.toPath() ) ) {
+                                IOUtils.copy( in, zout );
+                            }
+                        }
+                    }
+                }
+                catch ( final Exception ex ) {
+                    Log.e( "fheroes2", "Failed to export save files.", ex );
                 }
                 finally {
                     liveStatus.postValue( status.setIsBackgroundTaskExecuting( false ) );
@@ -211,6 +273,19 @@ public final class SaveFileManagerActivity extends AppCompatActivity
 
     private ArrayAdapter<String> saveFileListViewAdapter = null;
 
+    private final ActivityResultLauncher<String> zipFileChooserLauncher = registerForActivityResult( new ActivityResultContracts.GetContent(), result -> {
+        // No ZIP file was selected
+        if ( result == null ) {
+            return;
+        }
+
+        for ( int i = 0; i < saveFileListView.getCount(); ++i ) {
+            saveFileListView.setItemChecked( i, false );
+        }
+
+        viewModel.importSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), result, getContentResolver() );
+    } );
+
     private final ActivityResultLauncher<String> zipFileLocationChooserLauncher
         = registerForActivityResult( new ActivityResultContracts.CreateDocument( "application/zip" ), result -> {
               // No location was selected
@@ -226,7 +301,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                   }
               }
 
-              viewModel.retrieveSaveFiles( saveFileDir, saveFileNames, result, getContentResolver() );
+              viewModel.exportSaveFiles( saveFileDir, saveFileNames, result, getContentResolver() );
           } );
 
     @Override
@@ -301,7 +376,13 @@ public final class SaveFileManagerActivity extends AppCompatActivity
     }
 
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
-    public void retrieveButtonClicked( final View view )
+    public void importButtonClicked( final View view )
+    {
+        zipFileChooserLauncher.launch( "application/zip" );
+    }
+
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
+    public void exportButtonClicked( final View view )
     {
         if ( saveFileListView.getCheckedItemCount() == 0 ) {
             return;
@@ -364,7 +445,8 @@ public final class SaveFileManagerActivity extends AppCompatActivity
     {
         final ImageButton selectAllButton = findViewById( R.id.activity_save_file_manager_select_all_btn );
         final ImageButton unselectAllButton = findViewById( R.id.activity_save_file_manager_unselect_all_btn );
-        final ImageButton retrieveButton = findViewById( R.id.activity_save_file_manager_retrieve_btn );
+        final ImageButton importButton = findViewById( R.id.activity_save_file_manager_import_btn );
+        final ImageButton exportButton = findViewById( R.id.activity_save_file_manager_export_btn );
         final ImageButton deleteButton = findViewById( R.id.activity_save_file_manager_delete_btn );
 
         final ProgressBar backgroundTaskProgressBar = findViewById( R.id.activity_save_file_manager_background_task_pb );
@@ -375,7 +457,8 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         saveFileListView.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         selectAllButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         unselectAllButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
-        retrieveButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+        importButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+        exportButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         deleteButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
 
         backgroundTaskProgressBar.setVisibility( modelStatus.isBackgroundTaskExecuting ? View.VISIBLE : View.GONE );

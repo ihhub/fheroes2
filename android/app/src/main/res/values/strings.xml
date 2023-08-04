@@ -23,7 +23,8 @@
     <string name="activity_save_file_manager_save_file_list_empty_lbl_text">No save files available</string>
     <string name="activity_save_file_manager_select_all_btn_content_description">Select all save files</string>
     <string name="activity_save_file_manager_unselect_all_btn_content_description">Unselect all save files</string>
-    <string name="activity_save_file_manager_retrieve_btn_content_description">Retrieve selected save files</string>
+    <string name="activity_save_file_manager_import_btn_content_description">Import save files</string>
+    <string name="activity_save_file_manager_export_btn_content_description">Export selected save files</string>
     <string name="activity_save_file_manager_delete_btn_content_description">Delete selected save files</string>
     <plurals name="activity_save_file_manager_delete_confirmation_title">
         <item quantity="one">Delete save file</item>

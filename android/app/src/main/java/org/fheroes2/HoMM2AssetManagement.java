@@ -51,7 +51,7 @@ final class HoMM2AssetManagement
     }
 
     // Returns true if at least one asset was found and extracted, otherwise returns false
-    static boolean extractHoMM2AssetsFromZip( final File externalFilesDir, final File cacheDir, final InputStream iStream ) throws IOException
+    static boolean extractHoMM2AssetsFromZip( final File externalFilesDir, final File cacheDir, final InputStream zipStream ) throws IOException
     {
         // It is allowed to extract only files located in these subdirectories
         final Set<String> allowedSubdirNames = new HashSet<>();
@@ -69,8 +69,8 @@ final class HoMM2AssetManagement
 
         boolean result = false;
 
-        final ZipInputStream zStream = new ZipInputStream( iStream );
-        for ( ZipEntry zEntry = zStream.getNextEntry(); zEntry != null; zEntry = zStream.getNextEntry() ) {
+        final ZipInputStream zin = new ZipInputStream( zipStream );
+        for ( ZipEntry zEntry = zin.getNextEntry(); zEntry != null; zEntry = zin.getNextEntry() ) {
             // No need to extract empty directories
             if ( zEntry.isDirectory() ) {
                 continue;
@@ -84,7 +84,7 @@ final class HoMM2AssetManagement
 
                 try {
                     try ( final OutputStream iso = Files.newOutputStream( isoFile.toPath() ) ) {
-                        gogToISO( zStream, iso );
+                        gogToISO( zin, iso );
                     }
 
                     final boolean res = extractAnimationsFromISO( externalFilesDir, isoFile );
@@ -116,7 +116,7 @@ final class HoMM2AssetManagement
             }
 
             try ( final OutputStream out = Files.newOutputStream( outFile.toPath() ) ) {
-                IOUtils.copy( zStream, out );
+                IOUtils.copy( zin, out );
             }
 
             result = true;
