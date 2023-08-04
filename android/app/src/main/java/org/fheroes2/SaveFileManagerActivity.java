@@ -126,8 +126,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                         return false;
                     };
 
-                    try ( final InputStream in = contentResolver.openInputStream( zipFileUri ) ) {
-                        final ZipInputStream zin = new ZipInputStream( in );
+                    try ( final InputStream in = contentResolver.openInputStream( zipFileUri ); final ZipInputStream zin = new ZipInputStream( in ) ) {
                         for ( ZipEntry zEntry = zin.getNextEntry(); zEntry != null; zEntry = zin.getNextEntry() ) {
                             if ( zEntry.isDirectory() ) {
                                 continue;
@@ -174,7 +173,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
 
             new Thread( () -> {
                 try {
-                    try ( final ZipOutputStream zout = new ZipOutputStream( contentResolver.openOutputStream( zipFileUri ) ) ) {
+                    try ( final OutputStream out = contentResolver.openOutputStream( zipFileUri ); final ZipOutputStream zout = new ZipOutputStream( out ) ) {
                         for ( final String saveFileName : saveFileNames ) {
                             zout.putNextEntry( new ZipEntry( saveFileName ) );
 

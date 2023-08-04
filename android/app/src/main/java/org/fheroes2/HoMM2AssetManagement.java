@@ -69,57 +69,58 @@ final class HoMM2AssetManagement
 
         boolean result = false;
 
-        final ZipInputStream zin = new ZipInputStream( zipStream );
-        for ( ZipEntry zEntry = zin.getNextEntry(); zEntry != null; zEntry = zin.getNextEntry() ) {
-            // No need to extract empty directories
-            if ( zEntry.isDirectory() ) {
-                continue;
-            }
+        try ( final ZipInputStream zin = new ZipInputStream( zipStream ) ) {
+            for ( ZipEntry zEntry = zin.getNextEntry(); zEntry != null; zEntry = zin.getNextEntry() ) {
+                // No need to extract empty directories
+                if ( zEntry.isDirectory() ) {
+                    continue;
+                }
 
-            final File zEntryFile = new File( zEntry.getName() );
+                final File zEntryFile = new File( zEntry.getName() );
 
-            // CD image from GOG
-            if ( zEntryFile.getName().toLowerCase( Locale.ROOT ).equals( "homm2.gog" ) ) {
-                final File isoFile = new File( cacheDir, "homm2.iso" );
+                // CD image from GOG
+                if ( zEntryFile.getName().toLowerCase( Locale.ROOT ).equals( "homm2.gog" ) ) {
+                    final File isoFile = new File( cacheDir, "homm2.iso" );
 
-                try {
-                    try ( final OutputStream iso = Files.newOutputStream( isoFile.toPath() ) ) {
-                        gogToISO( zin, iso );
+                    try {
+                        try ( final OutputStream iso = Files.newOutputStream( isoFile.toPath() ) ) {
+                            gogToISO( zin, iso );
+                        }
+
+                        final boolean res = extractAnimationsFromISO( externalFilesDir, isoFile );
+
+                        result = result || res;
+                    }
+                    finally {
+                        Files.deleteIfExists( isoFile.toPath() );
                     }
 
-                    final boolean res = extractAnimationsFromISO( externalFilesDir, isoFile );
-
-                    result = result || res;
-                }
-                finally {
-                    Files.deleteIfExists( isoFile.toPath() );
+                    continue;
                 }
 
-                continue;
-            }
+                final String assetSubpath = getHoMM2AssetSubpath( zEntryFile, allowedSubdirNames );
+                // No need to extract the file if its path does not contain any of the allowed subdirectories
+                if ( assetSubpath.isEmpty() ) {
+                    continue;
+                }
 
-            final String assetSubpath = getHoMM2AssetSubpath( zEntryFile, allowedSubdirNames );
-            // No need to extract the file if its path does not contain any of the allowed subdirectories
-            if ( assetSubpath.isEmpty() ) {
-                continue;
-            }
+                final File outFile = new File( externalFilesDir, assetSubpath );
+                // Check the path for various trickery, such as 'data/../../../bin/file'
+                if ( !isValidHoMM2AssetPath( outFile, allowedSubdirs ) ) {
+                    continue;
+                }
 
-            final File outFile = new File( externalFilesDir, assetSubpath );
-            // Check the path for various trickery, such as 'data/../../../bin/file'
-            if ( !isValidHoMM2AssetPath( outFile, allowedSubdirs ) ) {
-                continue;
-            }
+                final File outFileDir = outFile.getParentFile();
+                if ( outFileDir != null ) {
+                    Files.createDirectories( outFileDir.toPath() );
+                }
 
-            final File outFileDir = outFile.getParentFile();
-            if ( outFileDir != null ) {
-                Files.createDirectories( outFileDir.toPath() );
-            }
+                try ( final OutputStream out = Files.newOutputStream( outFile.toPath() ) ) {
+                    IOUtils.copy( zin, out );
+                }
 
-            try ( final OutputStream out = Files.newOutputStream( outFile.toPath() ) ) {
-                IOUtils.copy( zin, out );
+                result = true;
             }
-
-            result = true;
         }
 
         return result;
