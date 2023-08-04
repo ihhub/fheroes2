@@ -137,9 +137,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                                 continue;
                             }
 
-                            final File outFile = new File( saveFileDir, zEntryFileName );
-
-                            try ( final OutputStream out = Files.newOutputStream( outFile.toPath() ) ) {
+                            try ( final OutputStream out = Files.newOutputStream( ( new File( saveFileDir, zEntryFileName ) ).toPath() ) ) {
                                 IOUtils.copy( zin, out );
                             }
                         }
@@ -177,9 +175,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                         for ( final String saveFileName : saveFileNames ) {
                             zout.putNextEntry( new ZipEntry( saveFileName ) );
 
-                            final File saveFile = new File( saveFileDir, saveFileName );
-
-                            try ( final InputStream in = Files.newInputStream( saveFile.toPath() ) ) {
+                            try ( final InputStream in = Files.newInputStream( ( new File( saveFileDir, saveFileName ) ).toPath() ) ) {
                                 IOUtils.copy( in, zout );
                             }
                         }
