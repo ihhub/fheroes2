@@ -25,6 +25,9 @@
     <string name="activity_save_file_manager_import_btn_content_description">Импортировать файлы сохранений</string>
     <string name="activity_save_file_manager_export_btn_content_description">Экспортировать выбранные файлы сохранений</string>
     <string name="activity_save_file_manager_delete_btn_content_description">Удалить выбранные файлы сохранений</string>
+    <string name="activity_save_file_manager_no_files_selected_for_export_title">Файлы для экспорта не выбраны</string>
+    <string name="activity_save_file_manager_no_files_selected_for_export_message">Пожалуйста, выберите файлы сохранений для экспорта.</string>
+    <string name="activity_save_file_manager_no_files_selected_for_export_positive_btn_text">OK</string>
     <plurals name="activity_save_file_manager_delete_confirmation_title" tools:ignore="MissingQuantity">
         <item quantity="other">Удалить файлы сохранений</item>
     </plurals>

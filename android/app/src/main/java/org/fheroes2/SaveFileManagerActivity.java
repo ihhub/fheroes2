@@ -383,6 +383,13 @@ public final class SaveFileManagerActivity extends AppCompatActivity
     public void exportButtonClicked( final View view )
     {
         if ( saveFileListView.getCheckedItemCount() == 0 ) {
+            ( new AlertDialog.Builder( this ) )
+                .setTitle( R.string.activity_save_file_manager_no_files_selected_for_export_title )
+                .setMessage( R.string.activity_save_file_manager_no_files_selected_for_export_message )
+                .setPositiveButton( R.string.activity_save_file_manager_no_files_selected_for_export_positive_btn_text, ( dialog, which ) -> {} )
+                .create()
+                .show();
+
             return;
         }
 
