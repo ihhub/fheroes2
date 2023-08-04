@@ -117,34 +117,32 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
             new Thread( () -> {
-                try {
-                    final Function<String, Boolean> checkExtension = ( String name ) ->
-                    {
-                        final String lowercaseName = name.toLowerCase( Locale.ROOT );
+                final Function<String, Boolean> checkExtension = ( String name ) ->
+                {
+                    final String lowercaseName = name.toLowerCase( Locale.ROOT );
 
-                        for ( final String extension : allowedSaveFileExtensions ) {
-                            if ( lowercaseName.endsWith( extension ) ) {
-                                return true;
-                            }
+                    for ( final String extension : allowedSaveFileExtensions ) {
+                        if ( lowercaseName.endsWith( extension ) ) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                };
+
+                try ( final InputStream in = contentResolver.openInputStream( zipFileUri ); final ZipInputStream zin = new ZipInputStream( in ) ) {
+                    for ( ZipEntry zEntry = zin.getNextEntry(); zEntry != null; zEntry = zin.getNextEntry() ) {
+                        if ( zEntry.isDirectory() ) {
+                            continue;
                         }
 
-                        return false;
-                    };
+                        final String zEntryFileName = new File( zEntry.getName() ).getName();
+                        if ( !checkExtension.apply( zEntryFileName ) ) {
+                            continue;
+                        }
 
-                    try ( final InputStream in = contentResolver.openInputStream( zipFileUri ); final ZipInputStream zin = new ZipInputStream( in ) ) {
-                        for ( ZipEntry zEntry = zin.getNextEntry(); zEntry != null; zEntry = zin.getNextEntry() ) {
-                            if ( zEntry.isDirectory() ) {
-                                continue;
-                            }
-
-                            final String zEntryFileName = new File( zEntry.getName() ).getName();
-                            if ( !checkExtension.apply( zEntryFileName ) ) {
-                                continue;
-                            }
-
-                            try ( final OutputStream out = Files.newOutputStream( ( new File( saveFileDir, zEntryFileName ) ).toPath() ) ) {
-                                IOUtils.copy( zin, out );
-                            }
+                        try ( final OutputStream out = Files.newOutputStream( ( new File( saveFileDir, zEntryFileName ) ).toPath() ) ) {
+                            IOUtils.copy( zin, out );
                         }
                     }
                 }
@@ -175,14 +173,12 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
             new Thread( () -> {
-                try {
-                    try ( final OutputStream out = contentResolver.openOutputStream( zipFileUri ); final ZipOutputStream zout = new ZipOutputStream( out ) ) {
-                        for ( final String saveFileName : saveFileNames ) {
-                            zout.putNextEntry( new ZipEntry( saveFileName ) );
+                try ( final OutputStream out = contentResolver.openOutputStream( zipFileUri ); final ZipOutputStream zout = new ZipOutputStream( out ) ) {
+                    for ( final String saveFileName : saveFileNames ) {
+                        zout.putNextEntry( new ZipEntry( saveFileName ) );
 
-                            try ( final InputStream in = Files.newInputStream( ( new File( saveFileDir, saveFileName ) ).toPath() ) ) {
-                                IOUtils.copy( in, zout );
-                            }
+                        try ( final InputStream in = Files.newInputStream( ( new File( saveFileDir, saveFileName ) ).toPath() ) ) {
+                            IOUtils.copy( in, zout );
                         }
                     }
                 }
