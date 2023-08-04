@@ -40,6 +40,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.ToggleButton;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -366,6 +367,8 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         final ImageButton retrieveButton = findViewById( R.id.activity_save_file_manager_retrieve_btn );
         final ImageButton deleteButton = findViewById( R.id.activity_save_file_manager_delete_btn );
 
+        final ProgressBar backgroundTaskProgressBar = findViewById( R.id.activity_save_file_manager_background_task_pb );
+
         filterStandardToggleButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         filterCampaignToggleButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         filterMultiplayerToggleButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
@@ -374,6 +377,8 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         unselectAllButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         retrieveButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         deleteButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+
+        backgroundTaskProgressBar.setVisibility( modelStatus.isBackgroundTaskExecuting ? View.VISIBLE : View.GONE );
 
         saveFileListViewAdapter.clear();
         saveFileListViewAdapter.addAll( modelStatus.saveFileNames );
