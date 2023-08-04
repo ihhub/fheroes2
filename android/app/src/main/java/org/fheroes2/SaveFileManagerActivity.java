@@ -24,10 +24,12 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.function.Function;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -84,10 +86,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         private void updateSaveFileList( final File saveFileDir, final List<String> allowedSaveFileExtensions )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
-
-            if ( status.isBackgroundTaskExecuting ) {
-                return;
-            }
+            assert !status.isBackgroundTaskExecuting;
 
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
@@ -106,10 +105,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         private void importSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final Uri zipFileUri, final ContentResolver contentResolver )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
-
-            if ( status.isBackgroundTaskExecuting ) {
-                return;
-            }
+            assert !status.isBackgroundTaskExecuting;
 
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
@@ -162,10 +158,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         private void exportSaveFiles( final File saveFileDir, final List<String> saveFileNames, final Uri zipFileUri, final ContentResolver contentResolver )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
-
-            if ( status.isBackgroundTaskExecuting ) {
-                return;
-            }
+            assert !status.isBackgroundTaskExecuting;
 
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
@@ -193,10 +186,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         private void deleteSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final List<String> saveFileNames )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
-
-            if ( status.isBackgroundTaskExecuting ) {
-                return;
-            }
+            assert !status.isBackgroundTaskExecuting;
 
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
@@ -263,10 +253,9 @@ public final class SaveFileManagerActivity extends AppCompatActivity
     private ToggleButton filterMultiplayerToggleButton = null;
 
     private ListView saveFileListView = null;
+    private ArrayAdapter<String> saveFileListViewAdapter = null;
 
     private SaveFileManagerActivityViewModel viewModel = null;
-
-    private ArrayAdapter<String> saveFileListViewAdapter = null;
 
     private final ActivityResultLauncher<String> zipFileChooserLauncher = registerForActivityResult( new ActivityResultContracts.GetContent(), result -> {
         // No ZIP file was selected
@@ -278,7 +267,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             saveFileListView.setItemChecked( i, false );
         }
 
-        viewModel.importSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), result, getContentResolver() );
+        enqueueAsyncTask( () -> viewModel.importSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), result, getContentResolver() ) );
     } );
 
     private final ActivityResultLauncher<String> zipFileLocationChooserLauncher
@@ -296,8 +285,10 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                   }
               }
 
-              viewModel.exportSaveFiles( saveFileDir, saveFileNames, result, getContentResolver() );
+              enqueueAsyncTask( () -> viewModel.exportSaveFiles( saveFileDir, saveFileNames, result, getContentResolver() ) );
           } );
+
+    private final Queue<Runnable> asyncTaskQueue = new ArrayDeque<>();
 
     @Override
     protected void onCreate( final Bundle savedInstanceState )
@@ -313,14 +304,14 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         filterMultiplayerToggleButton = findViewById( R.id.activity_save_file_manager_filter_multiplayer_btn );
 
         saveFileListView = findViewById( R.id.activity_save_file_manager_save_file_list );
-
-        viewModel = new ViewModelProvider( this ).get( SaveFileManagerActivityViewModel.class );
-        viewModel.liveStatus.observe( this, this::updateUI );
-
         saveFileListViewAdapter = new ArrayAdapter<>( this, android.R.layout.simple_list_item_multiple_choice, new ArrayList<>() );
 
         saveFileListView.setAdapter( saveFileListViewAdapter );
         saveFileListView.setEmptyView( findViewById( R.id.activity_save_file_manager_save_file_list_empty_lbl ) );
+
+        viewModel = new ViewModelProvider( this ).get( SaveFileManagerActivityViewModel.class );
+        viewModel.liveStatus.observe( this, this::runNextAsyncTask );
+        viewModel.liveStatus.observe( this, this::updateUI );
     }
 
     @Override
@@ -328,7 +319,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
     {
         super.onResume();
 
-        viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() );
+        enqueueAsyncTask( () -> viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() ) );
     }
 
     public void filterButtonClicked( final View view )
@@ -351,7 +342,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             saveFileListView.setItemChecked( i, false );
         }
 
-        viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() );
+        enqueueAsyncTask( () -> viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() ) );
     }
 
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
@@ -412,7 +403,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                                         }
                                     }
 
-                                    viewModel.deleteSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), saveFileNames );
+                                    enqueueAsyncTask( () -> viewModel.deleteSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), saveFileNames ) );
                                 } )
             .setNegativeButton( R.string.activity_save_file_manager_delete_confirmation_negative_btn_text, ( dialog, which ) -> {} )
             .create()
@@ -434,6 +425,31 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         }
 
         return allowedSaveFileExtensions;
+    }
+
+    private void enqueueAsyncTask( final Runnable task )
+    {
+        final SaveFileManagerActivityViewModel.Status modelStatus = Objects.requireNonNull( viewModel.liveStatus.getValue() );
+
+        if ( modelStatus.isBackgroundTaskExecuting ) {
+            asyncTaskQueue.add( task );
+        }
+        else {
+            task.run();
+        }
+    }
+
+    private void runNextAsyncTask( final SaveFileManagerActivityViewModel.Status modelStatus )
+    {
+        if ( modelStatus.isBackgroundTaskExecuting ) {
+            return;
+        }
+
+        final Runnable task = asyncTaskQueue.poll();
+
+        if ( task != null ) {
+            task.run();
+        }
     }
 
     private void updateUI( final SaveFileManagerActivityViewModel.Status modelStatus )
