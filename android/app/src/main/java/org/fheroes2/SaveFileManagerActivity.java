@@ -83,6 +83,9 @@ public final class SaveFileManagerActivity extends AppCompatActivity
 
         private final MutableLiveData<Status> liveStatus = new MutableLiveData<>( new Status( false, new ArrayList<>() ) );
 
+        /**
+         * This method should never be called directly. Call it only using the enqueueAsyncTask() method.
+         */
         private void updateSaveFileList( final File saveFileDir, final List<String> allowedSaveFileExtensions )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
@@ -102,6 +105,9 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             } ).start();
         }
 
+        /**
+         * This method should never be called directly. Call it only using the enqueueAsyncTask() method.
+         */
         private void importSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final Uri zipFileUri, final ContentResolver contentResolver )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
@@ -155,6 +161,9 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             } ).start();
         }
 
+        /**
+         * This method should never be called directly. Call it only using the enqueueAsyncTask() method.
+         */
         private void exportSaveFiles( final File saveFileDir, final List<String> saveFileNames, final Uri zipFileUri, final ContentResolver contentResolver )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
@@ -183,6 +192,9 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             } ).start();
         }
 
+        /**
+         * This method should never be called directly. Call it only using the enqueueAsyncTask() method.
+         */
         private void deleteSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final List<String> saveFileNames )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
