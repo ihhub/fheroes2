@@ -28,6 +28,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.function.Function;
@@ -119,8 +120,10 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                 try {
                     final Function<String, Boolean> checkExtension = ( String name ) ->
                     {
+                        final String lowercaseName = name.toLowerCase( Locale.ROOT );
+
                         for ( final String extension : allowedSaveFileExtensions ) {
-                            if ( name.endsWith( extension ) ) {
+                            if ( lowercaseName.endsWith( extension ) ) {
                                 return true;
                             }
                         }
@@ -235,8 +238,10 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                     return false;
                 }
 
+                final String lowercaseName = name.toLowerCase( Locale.ROOT );
+
                 for ( final String extension : allowedSaveFileExtensions ) {
-                    if ( name.endsWith( extension ) ) {
+                    if ( lowercaseName.endsWith( extension ) ) {
                         return true;
                     }
                 }
