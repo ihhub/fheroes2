@@ -950,6 +950,7 @@ namespace fheroes2
                     _icnVsSprite[id][1] = GetICN( ICN::TREASURY, 2 );
                     break;
                 }
+
                 // Needs to be generated from original assets because it needs the black background from the pressed state.
                 // TODO: Make a way to generate buttons with black background since it is needed for MAX and EXIT in the Well and Guilds.
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
@@ -959,6 +960,7 @@ namespace fheroes2
                     // clean the button.
                     Fill( out, 6 - i, 4 + i, 70, 17, getButtonFillingColor( i == 0 ) );
                 }
+
                 const int32_t textWidth = 70;
                 Point releasedOffset = { 7, 5 };
                 Point pressedOffset = { 6, 6 };
@@ -979,6 +981,7 @@ namespace fheroes2
                     _icnVsSprite[id][1] = GetICN( originalButtonICN, 5 );
                     break;
                 }
+
                 // Needs to be generated from original assets because the background has a much darker shadow than normal.
                 // TODO: Make the button generated as normal after removing the embedded shadow on the background.
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
@@ -988,6 +991,7 @@ namespace fheroes2
                     // clean the button.
                     Fill( out, 6 - i, 4 + i, 71 - i, 17, getButtonFillingColor( i == 0, !isEvilInterface ) );
                 }
+
                 const int32_t textWidth = 71;
                 Point releasedOffset = { 6, 5 };
                 Point pressedOffset = { 5, 6 };
