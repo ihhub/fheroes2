@@ -125,6 +125,7 @@ namespace
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 return true;
             }
+
             if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
                 fheroes2::Blit( sf, display, dstx, dsty );
 
@@ -152,6 +153,7 @@ namespace
                 assert( alpha >= 0 );
             }
         }
+
         return false;
     }
 
@@ -185,7 +187,7 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
 
-        while ( le.HandleEvents() && !earlyExit ) {
+        while ( !earlyExit && le.HandleEvents() ) {
             le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
                 break;
