@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-25 08:44+0000\n"
+"POT-Creation-Date: 2023-08-02 13:14+0000\n"
 "PO-Revision-Date: 2023-05-31 12:10+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -183,7 +183,7 @@ msgid "DIFFICULTY"
 msgstr "NIVEAU"
 
 msgid "VIEW INTRO"
-msgstr ""
+msgstr "VIS INTRO"
 
 msgid "MIN"
 msgstr "MIN"
@@ -712,6 +712,10 @@ msgstr "Viser resultater for individuelle monstres handlinger."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Er du sikker på du vil færdiggøre denne kamp automatisk?"
+
+#, fuzzy
+msgid "Are you sure you want to enable auto combat?"
+msgstr "Er du sikker på, at du vil flygte?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} skipper deres tur."
@@ -2394,41 +2398,46 @@ msgid "Recruit Hero"
 msgstr "Rekruttér helt"
 
 msgid "%{name} is a level %{value} %{race} "
-msgstr ""
+msgstr "%{name} er en level %{value} %{race}"
 
 msgid "with %{count} artifacts."
-msgstr ""
+msgstr "med %{count} artefakter."
 
 msgid "with 1 artifact."
-msgstr ""
+msgstr "med 1 artefakt."
 
 msgid "without artifacts."
-msgstr ""
+msgstr "uden artefakter."
 
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
 msgstr ""
+"'spredt' kampformation spreder dine tropper fra top til bund på slagmarken, "
+"med mindst én tom plads mellem hver enhed."
 
 msgid ""
 "'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
+"'gruppe'-formation samler dine tropper i midten af din side på slagmarken."
 
 msgid "Spread Formation"
-msgstr ""
+msgstr "Spredt formation"
 
 msgid "Grouped Formation"
-msgstr ""
+msgstr "Gruppeformation"
 
 msgid "Recruit %{name} the %{race}"
-msgstr ""
+msgstr "Rektruttér %{race}en %{name}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
+"Indstil garnisonen til at stå opstille sig i 'spredt' formation under kamp"
 
 msgid "Set garrison combat formation to 'Grouped'"
 msgstr ""
+"Indstil garnisonen til at stå opstille sig i 'gruppe'-formation under kamp"
 
 msgid "Exit Castle Options"
 msgstr "Forlad borg-vindue"
@@ -2564,24 +2573,39 @@ msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
 msgstr ""
+"En gruppe %{monster} med drømme om magt og ære ønsker at forene sig med din "
+"hær.\n"
+"Godtager du disse betingleser?"
 
 msgid ""
 "The %{monster} is swayed by your diplomatic tongue, and offers to join your "
 "army for the sum of %{gold} gold.\n"
 "Do you accept?"
 msgstr ""
+"Et enkelt medlem af %{monster}-hæren lader sig overtale af din diplomatiske "
+"tunge og vil gerne forene sig med din hær, for en sum af %{gold} "
+"guldstykker.\n"
+"Godtager du disse betingelser?"
 
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
 " \n"
 msgstr ""
+"Disse væsener lader sig overtale af din diplomatiske\n"
+"tunge. De giver dig et tilbud:\n"
+"\n"
 
 msgid ""
 "%{offer} of the %{total} %{monster} will join your army, and the rest will "
 "leave you alone, for the sum of %{gold} gold.\n"
 "Do you accept?"
 msgstr ""
+"Ud af %{total} %{monster} er %{offer} af dem villige til at forene sig med "
+"din hær, mens de resterende vil lade dig være i fred, til en sum af %{gold} "
+"guldstykker.\n"
+"\n"
+"Godtager du disse betingelser?"
 
 msgid ""
 "All %{offer} of the %{monster} will join your army for the sum of %{gold} "
@@ -3160,6 +3184,10 @@ msgid ""
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
 msgstr ""
+"Det nuværende kort-niveau for det valgte kort. Korets sværhedsgrad er "
+"udelukkende bedømt af dets designer. Vanskeligere kort inkluderer flere og "
+"stærkere fjender, færre resurser eller andre særlige vilkår, som gør det "
+"sværere for menneskelige spillere."
 
 msgid "Selected Description"
 msgstr ""
@@ -4546,7 +4574,7 @@ msgid "Click to accept these settings and start a new game."
 msgstr "Klik for at acceptere disse indstillinger og start et nyt spil."
 
 msgid "Click to return to the main menu."
-msgstr ""
+msgstr "Klik her for at vende tilbage til hovedmenuen."
 
 msgid "Astrologers proclaim the Month of the %{name}."
 msgstr ""
@@ -4686,7 +4714,7 @@ msgid "Cast an adventure spell."
 msgstr ""
 
 msgid "End Turn"
-msgstr ""
+msgstr "End tur"
 
 msgid "End your turn and left the computer take its turn."
 msgstr ""
@@ -4710,6 +4738,7 @@ msgstr ""
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
+"En eller flere helte kan stadig ride. Er du sikker på at du vil ende din tur?"
 
 msgid "Are you sure you want to quit?"
 msgstr "Er du sikker på om du vil afslutte?"
@@ -4762,7 +4791,7 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 
 msgid "World Map"
-msgstr ""
+msgstr "Verdenskort"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Måned: %{month} Uge: %{week}"
@@ -5090,6 +5119,8 @@ msgstr "Du kan ikke opsamle denne artefakt, da du allerede har fuld last!"
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr ""
+"For at kaste besværgelser, må du først købe en magibog. Den koster %{gold} "
+"guldstykker."
 
 msgid "Unfortunately, you seem to be a little short of cash at the moment."
 msgstr ""
@@ -5101,10 +5132,10 @@ msgid "%{count} / day"
 msgstr "%{count} / dag"
 
 msgid "one"
-msgstr ""
+msgstr "én"
 
 msgid "two"
-msgstr ""
+msgstr "to"
 
 msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
 msgstr ""
@@ -5116,6 +5147,9 @@ msgid ""
 "The %{monster}, awed by the power of your forces, begin to scatter.\n"
 "Do you wish to pursue and engage them?"
 msgstr ""
+"Disse %{monster} beundres ved synet af din mægtige hær og begynder at sprede "
+"sig.\n"
+"Ønsker du at forfølge og gå på dem?"
 
 msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
 msgstr ""
@@ -5125,24 +5159,36 @@ msgid ""
 "\"Milord, I have been working very hard to provide you with these resources, "
 "come back next week for more.\""
 msgstr ""
+"Mølleren annoncerer:\n"
+"\"Deres excellence, jeg har arbejdet hårdt for at skaffe Dem disse resurser. "
+"Få mere ved at komme igen i næste uge.\""
 
 msgid ""
 "The keeper of the mill announces:\n"
 "\"Milord, I am sorry, there are no resources currently available. Please try "
 "again next week.\""
 msgstr ""
+"Mølleren annoncerer:\n"
+"\"Deres excellence, jeg har arbejdet hårdt for at skaffe Dem disse "
+"guldstykker. Få mere ved at komme igen i næste uge.\""
 
 msgid ""
 "The keeper of the mill announces:\n"
 "\"Milord, I have been working very hard to provide you with this gold, come "
 "back next week for more.\""
 msgstr ""
+"Mølleren annoncerer:\n"
+"\"Deres excellence, jeg har arbejdet hårdt for at skaffe Dem disse "
+"guldstykker. Få mere ved at komme igen i næste uge.\""
 
 msgid ""
 "The keeper of the mill announces:\n"
 "\"Milord, I am sorry, there is no gold currently available. Please try again "
 "next week.\""
 msgstr ""
+"Mølleren annoncerer:\n"
+"\"Deres excellence, jeg beklager, der er intet guld at hente i øjeblikket. "
+"Prøv at vende tilbage i næste uge.\""
 
 msgid ""
 "You've found an abandoned lean-to.\n"
@@ -5158,12 +5204,18 @@ msgid ""
 "In exchange for his freedom, he guides you to a small pot filled with "
 "precious things."
 msgstr ""
+"Du fanger en tåbelig alf i at sove mellem en samling magiske svampe.\n"
+"I bytte for sin frihed, viser han dig vejen til en lille potte fyldt med "
+"værdigenstande."
 
 msgid ""
 "You've found a magic garden, the kind of place that leprechauns and faeries "
 "like to cavort in, but there is no one here today.\n"
 "Perhaps you should try again next week."
 msgstr ""
+"Du finder en magisk have, den slags haver som feer og alfer kan lide at "
+"boltre sig i. Men der er ingen her at finde i dag.\n"
+"Måske du skulle prøve igen i næste uge."
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr ""
@@ -5258,11 +5310,17 @@ msgid ""
 "\"You already know everything you deserve to learn!\" the witch screeches. "
 "\"NOW GET OUT OF MY HOUSE!\""
 msgstr ""
+"Idet du nærmer dig, vender hun sig om og retter sit glasøje mod dig.\n"
+"\"Du ved allerede alt hvad du fortjener at lære!\" hviner heksen. \"OG "
+"FORSVIND SÅ FRA MIT HJEM!\""
 
 msgid ""
 "As you approach, she turns and speaks.\n"
 "\"You already know that which I would teach you. I can help you no further.\""
 msgstr ""
+"Idet du nærmer dig, vender hun sig om og siger:\n"
+"\"Du evner allerede det, som jeg ville have lært dig at kunne. Jeg kan ikke "
+"hjælpe dig.\""
 
 msgid ""
 "An ancient and immortal witch living in a hut with bird's legs for stilts "
@@ -5558,6 +5616,9 @@ msgid ""
 "the gold or distribute the gold to the peasants for experience. Do you wish "
 "to keep the gold?"
 msgstr ""
+"Efter at have undersøgt området, falder du over en hemmelig skattekiste. Du "
+"har to valg: Enten beholder du guldet for dig selv, eller også fordeler du "
+"guldet mellem dine undersåtter for nogle erfaringspoint. Hvad gør du?"
 
 msgid ""
 "After scouring the area, you fall upon a hidden chest, containing the "
@@ -5578,36 +5639,49 @@ msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
+"Dette alkymist laboratorium er nu under din kontrol. Den forsyner dit rige "
+"med %{count} mængde kviksølv om dagen."
 
 msgid ""
 "You gain control of a sawmill. It will provide you with %{count} units of "
 "wood per day."
 msgstr ""
+"Denne savmølle er nu under din kontrol. Den forsyner dit rige med %{count} "
+"mængde træ om dagen."
 
 msgid ""
 "You gain control of an ore mine. It will provide you with %{count} units of "
 "ore per day."
 msgstr ""
-
+"Denne malmmine er nu under din kontrol. Den forsyner dit rige med %{count} "
+"mængde malm om dagen."
 msgid ""
 "You gain control of a sulfur mine. It will provide you with %{count} unit of "
 "sulfur per day."
 msgstr ""
+"Denne svovlmine er nu under din kontrol. Den forsyner dit rige med %{count} "
+"mængde svovl om dagen."
 
 msgid ""
 "You gain control of a crystal mine. It will provide you with %{count} unit "
 "of crystal per day."
 msgstr ""
+"Denne krystalmine er nu under din kontrol. Den forsyner dit rige med "
+"%{count} mængde krystaler om dagen."
 
 msgid ""
 "You gain control of a gem mine. It will provide you with %{count} unit of "
 "gems per day."
 msgstr ""
+"Denne juvelmine er nu under din kontrol. Den forsyner dit rige med %{count} "
+"mængde juveler om dagen."
 
 msgid ""
 "You gain control of a gold mine. It will provide you with %{count} gold per "
 "day."
 msgstr ""
+"Denne guldmine er nu under din kontrol. Den forsyner dit rige med %{count} "
+"guldstykker om dagen."
 
 msgid ""
 "The lighthouse is now under your control, and all of your ships will now "
@@ -6314,7 +6388,7 @@ msgid ""
 msgstr ""
 
 msgid "Current Modifiers:"
-msgstr ""
+msgstr "Nuværende modifikationer"
 
 msgid "skill|Basic"
 msgstr "Begynder"
@@ -6626,52 +6700,52 @@ msgid "Purple"
 msgstr "Lilla"
 
 msgid "barrier|Aqua"
-msgstr ""
+msgstr "Lyseblå"
 
 msgid "barrier|Blue"
-msgstr ""
+msgstr "Blå"
 
 msgid "barrier|Brown"
-msgstr ""
+msgstr "Brun"
 
 msgid "barrier|Gold"
-msgstr ""
+msgstr "Guld"
 
 msgid "barrier|Green"
-msgstr ""
+msgstr "Grøn"
 
 msgid "barrier|Orange"
-msgstr ""
+msgstr "Orange"
 
 msgid "barrier|Purple"
-msgstr ""
+msgstr "Lilla"
 
 msgid "barrier|Red"
-msgstr ""
+msgstr "Rød"
 
 msgid "tent|Aqua"
-msgstr ""
+msgstr "Lyseblåt"
 
 msgid "tent|Blue"
-msgstr ""
+msgstr "Blåt"
 
 msgid "tent|Brown"
-msgstr ""
+msgstr "Brunt"
 
 msgid "tent|Gold"
-msgstr ""
+msgstr "Guld"
 
 msgid "tent|Green"
-msgstr ""
+msgstr "Grønt"
 
 msgid "tent|Orange"
-msgstr ""
+msgstr "Orange"
 
 msgid "tent|Purple"
-msgstr ""
+msgstr "Lilla"
 
 msgid "tent|Red"
-msgstr ""
+msgstr "Rødt"
 
 msgid "Experience"
 msgstr "Erfaringspoint"
@@ -7026,28 +7100,28 @@ msgid "Alchemist Lab"
 msgstr "Alkymist laboratorium"
 
 msgid "Sign"
-msgstr ""
+msgstr "Skilt"
 
 msgid "Buoy"
 msgstr ""
 
 msgid "Skeleton"
-msgstr ""
+msgstr "Skelet"
 
 msgid "Daemon Cave"
-msgstr ""
+msgstr "Daimon Grotte"
 
 msgid "Treasure Chest"
-msgstr ""
+msgstr "Skattekiste"
 
 msgid "Faerie Ring"
-msgstr ""
+msgstr "Fe-ring"
 
 msgid "Campfire"
-msgstr ""
+msgstr "Lejrbål"
 
 msgid "Fountain"
-msgstr ""
+msgstr "Springvand"
 
 msgid "Gazebo"
 msgstr ""
@@ -7056,59 +7130,59 @@ msgid "Genie Lamp"
 msgstr ""
 
 msgid "Archer's House"
-msgstr ""
+msgstr "Bueskyttes hus"
 
 msgid "Goblin Hut"
-msgstr ""
+msgstr "Vættehytte"
 
 msgid "Dwarf Cottage"
-msgstr ""
+msgstr "Dværge-kottage"
 
 msgid "Peasant Hut"
-msgstr ""
+msgstr "Bondehytte"
 
 msgid "Stables"
 msgstr ""
 
 msgid "Alchemist's Tower"
-msgstr ""
+msgstr "Alkymists tårn"
 
 msgid "Event"
-msgstr ""
+msgstr "Begivenhed"
 
 msgid "Dragon City"
-msgstr ""
+msgstr "Drageby"
 
 msgid "Lighthouse"
 msgid_plural "Lighthouses"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Fyrtårn"
+msgstr[1] "Fyrtårne"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Vandmølle"
+msgstr[1] "Vandmøller"
 
 msgid "Mines"
-msgstr ""
+msgstr "Miner"
 
 msgid "Monster"
-msgstr "Monster"
+msgstr "Væsen"
 
 msgid "Obelisk"
-msgstr ""
+msgstr "Obelisk"
 
 msgid "Oasis"
-msgstr ""
+msgstr "Oase"
 
 msgid "Resource"
-msgstr ""
+msgstr "Resurse"
 
 msgid "Sawmill"
 msgstr "Savmølle"
 
 msgid "Oracle"
-msgstr ""
+msgstr "Orakel"
 
 msgid "Shrine of the First Circle"
 msgstr "Helligdom for 1. cirkel"
@@ -7188,49 +7262,49 @@ msgid "Mossy Rock"
 msgstr "Mosset sten"
 
 msgid "Watch Tower"
-msgstr ""
+msgstr "Udkigstårn"
 
 msgid "Tree House"
-msgstr ""
+msgstr "Træhus"
 
 msgid "Tree City"
-msgstr ""
+msgstr "Træby"
 
 msgid "Ruins"
-msgstr ""
+msgstr "Ruiner"
 
 msgid "Fort"
-msgstr ""
+msgstr "Fort"
 
 msgid "Abandoned Mine"
 msgstr "Forladt mine"
 
 msgid "Sirens"
-msgstr ""
+msgstr "Sirener"
 
 msgid "Standing Stones"
 msgstr ""
 
 msgid "Idol"
-msgstr ""
+msgstr "Idol"
 
 msgid "Tree of Knowledge"
-msgstr ""
+msgstr "Visdomstræ"
 
 msgid "Witch Doctor's Hut"
-msgstr ""
+msgstr "Heksedoktorens hytte"
 
 msgid "Temple"
-msgstr ""
+msgstr "Tempel"
 
 msgid "Hill Fort"
 msgstr ""
 
 msgid "Halfling Hole"
-msgstr ""
+msgstr "Halvlang-hul"
 
 msgid "Mercenary Camp"
-msgstr ""
+msgstr "Lejesoldaterlejr"
 
 msgid "Shrine of the Second Circle"
 msgstr "Helligdom for 2. cirkel"
@@ -7239,28 +7313,28 @@ msgid "Shrine of the Third Circle"
 msgstr "Helligdom for 3. cirkel"
 
 msgid "City of the Dead"
-msgstr ""
+msgstr "De dødes by"
 
 msgid "Sphinx"
-msgstr ""
+msgstr "Sfinks"
 
 msgid "Wagon"
-msgstr ""
+msgstr "Vogn"
 
 msgid "Tar Pit"
-msgstr ""
+msgstr "Tjæresø"
 
 msgid "Artesian Spring"
 msgstr ""
 
 msgid "Troll Bridge"
-msgstr ""
+msgstr "Troldebro"
 
 msgid "Watering Hole"
-msgstr ""
+msgstr "Vandhul"
 
 msgid "Witch's Hut"
-msgstr ""
+msgstr "Heksens hytte"
 
 msgid "Xanadu"
 msgstr ""
@@ -7281,18 +7355,18 @@ msgid "Shipwreck Survivor"
 msgstr ""
 
 msgid "Bottle"
-msgstr ""
+msgstr "Flaske"
 
 msgid "Magic Well"
-msgstr ""
+msgstr "Magisk brønd"
 
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Magisk have"
+msgstr[1] "Magiske haver"
 
 msgid "Observation Tower"
-msgstr ""
+msgstr "Observationstårn"
 
 msgid "Freeman's Foundry"
 msgstr ""
@@ -7301,19 +7375,19 @@ msgid "Reefs"
 msgstr ""
 
 msgid "Trees"
-msgstr ""
+msgstr "Træer"
 
 msgid "Mountains"
-msgstr ""
+msgstr "Bjerge"
 
 msgid "Volcano"
-msgstr ""
+msgstr "Vulkan"
 
 msgid "Flowers"
-msgstr ""
+msgstr "Blomster"
 
 msgid "Rock"
-msgstr ""
+msgstr "Sten"
 
 msgid "Water Lake"
 msgstr ""
@@ -7322,16 +7396,16 @@ msgid "Mandrake"
 msgstr ""
 
 msgid "Dead Tree"
-msgstr ""
+msgstr "Dødt træ"
 
 msgid "Stump"
 msgstr ""
 
 msgid "Crater"
-msgstr ""
+msgstr "Krater"
 
 msgid "Cactus"
-msgstr ""
+msgstr "Kaktus"
 
 msgid "Mound"
 msgstr ""
@@ -7349,34 +7423,34 @@ msgid "Barrow Mounds"
 msgstr ""
 
 msgid "Random Artifact - Treasure"
-msgstr ""
+msgstr "Tilfældigt artefakt - Skat"
 
 msgid "Random Artifact - Minor"
-msgstr ""
+msgstr "Tilfældigt artefakt - Minor"
 
 msgid "Random Artifact - Major"
-msgstr ""
+msgstr "Tilfældigt artefakt - Major"
 
 msgid "Barrier"
-msgstr ""
+msgstr "Barriere"
 
 msgid "Traveller's Tent"
-msgstr ""
+msgstr "Rejsendes telt"
 
 msgid "Jail"
-msgstr ""
+msgstr "Fængsel"
 
 msgid "Fire Summoning Altar"
-msgstr ""
+msgstr "Ild-elementalers alter"
 
 msgid "Air Summoning Altar"
-msgstr ""
+msgstr "Luft-elementalers alter"
 
 msgid "Earth Summoning Altar"
-msgstr ""
+msgstr "Jord-elementalers alter"
 
 msgid "Water Summoning Altar"
-msgstr ""
+msgstr "Vand-elementalers alter"
 
 msgid "Unknown Monster"
 msgstr "Ukendt monster"
@@ -9048,25 +9122,25 @@ msgid ""
 msgstr ""
 
 msgid "Wood"
-msgstr "Træ"
+msgstr "træ"
 
 msgid "Mercury"
-msgstr "Kviksølv"
+msgstr "kviksølv"
 
 msgid "Ore"
-msgstr "Malm"
+msgstr "malm"
 
 msgid "Sulfur"
-msgstr "Svovl"
+msgstr "svovl"
 
 msgid "Crystal"
-msgstr "Krystal"
+msgstr "krystal"
 
 msgid "Gems"
-msgstr "Juveler"
+msgstr "juveler"
 
 msgid "Gold"
-msgstr "Guld"
+msgstr "guld"
 
 msgid ""
 "There are seven resources in Heroes 2, used to build and improves castles, "
@@ -9644,9 +9718,3 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Damg"
-#~ msgstr "Skade"
-
-#~ msgid "guildWell|EXIT"
-#~ msgstr "UD"

@@ -94,7 +94,7 @@ namespace
         explicit TemporaryHeroEraser( const std::vector<Heroes *> & heroes )
         {
             for ( Heroes * hero : heroes ) {
-                assert( hero != nullptr && !hero->isFreeman() );
+                assert( hero != nullptr && hero->isActive() );
 
                 Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
                 if ( tile.GetHeroes() == nullptr ) {
@@ -307,7 +307,7 @@ namespace AI
     void Normal::reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )
     {
         // It is impossible to reinforce dead heroes.
-        assert( !hero.isFreeman() );
+        assert( hero.isActive() );
 
         const Heroes::AIHeroMeetingUpdater heroMeetingUpdater( hero );
 
