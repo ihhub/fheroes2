@@ -165,7 +165,8 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         /**
          * This method should never be called directly. Call it only using the enqueueAsyncTask() method.
          */
-        private void exportSaveFiles( final File saveFileDir, final List<String> saveFileNames, final Uri zipFileUri, final ContentResolver contentResolver )
+        private void exportSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final List<String> saveFileNames, final Uri zipFileUri,
+                                      final ContentResolver contentResolver )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
             assert !status.isBackgroundTaskExecuting;
@@ -186,7 +187,14 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                     Log.e( "fheroes2", "Failed to export save files.", ex );
                 }
                 finally {
-                    liveStatus.postValue( status.setIsBackgroundTaskExecuting( false ) );
+                    try {
+                        liveStatus.postValue( new Status( false, getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                    }
+                    catch ( final Exception ex ) {
+                        Log.e( "fheroes2", "Failed to get a list of save files.", ex );
+
+                        liveStatus.postValue( new Status( false, new ArrayList<>() ) );
+                    }
                 }
             } ).start();
         }
@@ -298,7 +306,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                   }
               }
 
-              enqueueAsyncTask( () -> viewModel.exportSaveFiles( saveFileDir, saveFileNames, result, getContentResolver() ) );
+              enqueueAsyncTask( () -> viewModel.exportSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), saveFileNames, result, getContentResolver() ) );
           } );
 
     private final Queue<Runnable> asyncTaskQueue = new ArrayDeque<>();
