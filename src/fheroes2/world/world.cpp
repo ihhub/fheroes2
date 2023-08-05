@@ -438,9 +438,9 @@ bool World::isValidCastleEntrance( const fheroes2::Point & tilePosition ) const
     return Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) && ( GetTiles( tilePosition.x, tilePosition.y ).GetObject( false ) == MP2::OBJ_CASTLE );
 }
 
-Heroes * World::GetFreemanHeroes( const int race, const int heroIDToIgnore /* = Heroes::UNKNOWN */ ) const
+Heroes * World::GetHeroForHire( const int race, const int heroIDToIgnore /* = Heroes::UNKNOWN */ ) const
 {
-    return vec_heroes.GetFreeman( race, heroIDToIgnore );
+    return vec_heroes.GetHeroForHire( race, heroIDToIgnore );
 }
 
 Heroes * World::FromJailHeroes( int32_t index )
@@ -1057,8 +1057,8 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         const Heroes * hero = GetHeroesCondWins();
         assert( hero != nullptr );
 
-        // The hero in question should be either a freeman or be hired by a human-controlled kingdom
-        return ( hero->isFreeman() || GetKingdom( hero->GetColor() ).isControlHuman() );
+        // The hero in question should either be available for hire or be hired by a human-controlled kingdom
+        return ( hero->isAvailableForHire() || GetKingdom( hero->GetColor() ).isControlHuman() );
     }
 
     case GameOver::WINS_ARTIFACT: {
@@ -1127,8 +1127,8 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
         const Heroes * hero = GetHeroesCondLoss();
         assert( hero != nullptr );
 
-        // The hero in question should be either a freeman...
-        if ( hero->isFreeman() ) {
+        // The hero in question should either be available for hire...
+        if ( hero->isAvailableForHire() ) {
             return true;
         }
 

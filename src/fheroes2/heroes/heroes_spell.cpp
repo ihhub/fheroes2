@@ -301,16 +301,18 @@ namespace
         const int32_t boatSource = fheroes2::getSummonableBoat( hero );
 
         // Player should have a summonable boat before calling this function.
-        assert( boatSource != -1 );
+        assert( Maps::isValidAbsIndex( boatSource ) );
 
         const int heroColor = hero.GetColor();
 
+        Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
+
         Maps::Tiles & tileSource = world.GetTiles( boatSource );
 
-        Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
         gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
 
         Maps::Tiles & tileDest = world.GetTiles( boatDestination );
+
         tileDest.setBoat( Direction::RIGHT, heroColor );
         tileSource.resetBoatOwnerColor();
 

@@ -731,7 +731,7 @@ namespace
                         assert( heroes[j] != nullptr );
 
                         if ( heroes[j]->GetID() == awards[i]._subType ) {
-                            heroes[j]->SetFreeman( Battle::RESULT_LOSS );
+                            heroes[j]->Dismiss( Battle::RESULT_LOSS );
                             break;
                         }
                     }
