@@ -205,7 +205,7 @@ namespace
         AudioManager::PlaySound( M82::KILLFADE );
 
         hero.FadeOut();
-        hero.SetFreeman( reason );
+        hero.Dismiss( reason );
 
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
         if ( !hero.GetKingdom().isLoss() ) {

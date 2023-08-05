@@ -650,7 +650,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
         path.PopFront();
 
         // It is possible that the hero in the new position will be attacked and lose the battle before he can perform the action
-        if ( !isFreeman() ) {
+        if ( isActive() ) {
             Action( indexTo );
 
             if ( indexTo == indexDest ) {
@@ -699,7 +699,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
         makeStep( true );
 
         // if we continue to move into the same direction we must skip first frame as it's for stand position only
-        if ( isMoveEnabled() && GetDirection() == path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.GetTiles( path.front().GetIndex() ) ) ) {
+        if ( isMoveEnabled() && GetDirection() == path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.GetTiles( path.GetFrontIndex() ) ) ) {
             if ( GetKingdom().isControlHuman() ) {
                 playHeroWalkingSound( world.GetTiles( heroIndex ).GetGround() );
             }
@@ -975,17 +975,15 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
 
 bool Heroes::Move( const bool jumpToNextTile /* = false */ )
 {
-    if ( Modes( ACTION ) )
-        ResetModes( ACTION );
+    ResetModes( ACTION );
 
-    // move hero
-    if ( path.isValid() && ( isMoveEnabled() || ( GetSpriteIndex() < 45 && ( GetSpriteIndex() % heroFrameCountPerTile ) > 0 ) || GetSpriteIndex() >= 45 ) ) {
+    if ( path.isValidForMovement() && ( isMoveEnabled() || ( GetSpriteIndex() < 45 && ( GetSpriteIndex() % heroFrameCountPerTile ) > 0 ) || GetSpriteIndex() >= 45 ) ) {
         // Jump to the next position.
         if ( jumpToNextTile ) {
             direction = path.GetFrontDirection();
             MoveStep( jumpToNextTile );
 
-            // TODO: why don't we check !isFreeman() like it is done for a normal movement?
+            // TODO: why don't we check isActive() like it is done for a normal movement?
             return true;
         }
 
@@ -1000,7 +998,7 @@ bool Heroes::Move( const bool jumpToNextTile /* = false */ )
             SetValidDirectionSprite();
 
             if ( MoveStep( jumpToNextTile ) ) {
-                return !isFreeman();
+                return isActive();
             }
         }
     }

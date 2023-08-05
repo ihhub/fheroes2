@@ -193,7 +193,6 @@ int32_t Maps::GetDirectionIndex( int32_t from, int vector )
     return -1;
 }
 
-// check bound
 bool Maps::isValidDirection( int32_t from, int vector )
 {
     const int32_t width = world.w();

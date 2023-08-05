@@ -260,7 +260,7 @@ public:
     }
 
     Heroes * FromJailHeroes( int32_t );
-    Heroes * GetFreemanHeroes( const int race, const int heroIDToIgnore = Heroes::UNKNOWN ) const;
+    Heroes * GetHeroForHire( const int race, const int heroIDToIgnore = Heroes::UNKNOWN ) const;
 
     const Heroes * GetHeroesCondWins() const;
     const Heroes * GetHeroesCondLoss() const;
