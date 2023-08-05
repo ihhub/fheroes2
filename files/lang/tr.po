@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-02 13:14+0000\n"
+"POT-Creation-Date: 2023-08-05 03:57+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -338,13 +338,17 @@ msgstr ""
 msgid "You have already cast a spell this round."
 msgstr "Bu turda zaten bir büyü yaptın."
 
-msgid "That spell will affect no one!"
+#, fuzzy
+msgid "That spell will have no effect!"
 msgstr "Bu büyü hiç kimseyi etkilemeyecek!"
 
 msgid "You may only summon one type of elemental per combat."
 msgstr "Savaş başına yalnızca bir tür elemental çağırabilirsiniz."
 
-msgid "There is no open space adjacent to your hero to summon an Elemental to."
+#, fuzzy
+msgid ""
+"There is no open space adjacent to your hero where you can summon an "
+"Elemental to."
 msgstr "Kahramanınızın yanında bir Elemental çağırmak için açık bir alan yok."
 
 msgid ""
@@ -2627,7 +2631,7 @@ msgstr ""
 msgid "Change the graphics settings of the game."
 msgstr ""
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 
 msgid ""
@@ -3144,6 +3148,9 @@ msgid "Battles"
 msgstr ""
 
 msgid "autoBattle|Manual"
+msgstr ""
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -5975,16 +5982,18 @@ msgid ""
 "oracle taught me his skill. I have the answer you seek.\""
 msgstr ""
 
-msgid "Spell book is not present."
+#, fuzzy
+msgid "No spell book is present."
+msgstr "Yapılacak büyü yok."
+
+msgid ""
+"This spell costs %{mana} spell points. You have no spell points, so you "
+"cannot cast it."
 msgstr ""
 
 msgid ""
-"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
-msgstr ""
-
-msgid ""
-"That spell costs %{mana} mana. You only have %{point} mana, so you can't "
-"cast the spell."
+"This spell costs %{mana} spell points. You only have %{point} spell points, "
+"so you cannot cast it."
 msgstr ""
 
 msgid "The spell was not found."
@@ -5999,29 +6008,30 @@ msgstr ""
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
-msgid "This spell cannot be used on a boat."
+msgid "This spell cannot be cast on a boat."
 msgstr ""
 
-msgid "This spell can be casted only nearby ocean."
-msgstr ""
-
-msgid ""
-"There is no boat available and no free ocean location near the hero to cast "
-"this spell."
-msgstr ""
-
-msgid "There is no more boat available to cast this spell."
-msgstr ""
-
-msgid "There is no free ocean location near the hero to cast this spell."
+msgid "This spell can only be cast near an ocean."
 msgstr ""
 
 msgid ""
-"You do not currently own any town or castle that is not occupied by a hero, "
-"so you can't cast the spell."
+"There are no boats available and no ocean adjacent to the hero where this "
+"spell will work."
 msgstr ""
 
-msgid "This hero is already in a town, so you can't cast the spell."
+msgid "There are no boats available for this spell."
+msgstr ""
+
+#, fuzzy
+msgid "There is no ocean adjacent to the hero where this spell will work."
+msgstr "Kahramanınızın yanında bir Elemental çağırmak için açık bir alan yok."
+
+msgid ""
+"You do not own any town or castle that is not currently occupied by a hero. "
+"You cannot cast this spell."
+msgstr ""
+
+msgid "This hero is already in a town, so you cannot cast this spell."
 msgstr ""
 
 msgid ""
@@ -6030,17 +6040,17 @@ msgid ""
 "This town is occupied by your hero %{hero}."
 msgstr ""
 
-msgid "This spell is already in use."
+msgid "This spell is already in effect."
 msgstr ""
 
 msgid ""
-"No opponent can have heroes under his command anymore. Casting this spell "
-"will not bring any advantage."
+"No opponent neither has nor can have any hero under their command anymore. "
+"Casting this spell will have no effect."
 msgstr ""
 
 msgid ""
-"No opponent has a hero under his command at this time. Casting this spell "
-"will not bring any advantage."
+"No opponent has a hero under their command at this time. Casting this spell "
+"will have no effect."
 msgstr ""
 
 msgid ""
@@ -6049,16 +6059,16 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
+"You must be standing on the entrance to a mine (sawmills and alchemist labs "
+"do not count) to cast this spell."
 msgstr ""
 
 msgid "You must first defeat the ghosts guarding the mine to cast this spell."
 msgstr ""
 
 msgid ""
-"There are already at least as many elementals guarding the mine than the "
-"spell can generate. Casting this spell will not bring any advantage."
+"There are already at least as many elementals guarding the mine as this hero "
+"can generate. Casting this spell will have no effect."
 msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
