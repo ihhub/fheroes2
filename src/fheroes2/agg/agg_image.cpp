@@ -939,7 +939,7 @@ namespace fheroes2
                 // The heroes meeting screen has an embedded shadow so the button needs to be fixed at the same size as the original one.
                 // TODO: Remove the embedded shadow and button in the heroes meeting screen and use getTextAdaptedButton() instead.
                 const int32_t textWidth = 70;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "heroesMeeting|EXIT" ), isEvilInterface );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "smallerButton|EXIT" ), isEvilInterface );
 
                 break;
             }
@@ -965,7 +965,7 @@ namespace fheroes2
                 const int32_t textWidth = 70;
                 Point releasedOffset = { 7, 5 };
                 Point pressedOffset = { 6, 6 };
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "town|EXIT" ), releasedOffset, pressedOffset,
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), releasedOffset, pressedOffset,
                                     { textWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) }, fheroes2::FontColor::WHITE );
 
                 break;
@@ -996,7 +996,7 @@ namespace fheroes2
                 const int32_t textWidth = 71;
                 Point releasedOffset = { 6, 5 };
                 Point pressedOffset = { 5, 6 };
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "puzzleDDoor|EXIT" ), releasedOffset, pressedOffset,
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), releasedOffset, pressedOffset,
                                     { textWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) },
                                     isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE );
 
