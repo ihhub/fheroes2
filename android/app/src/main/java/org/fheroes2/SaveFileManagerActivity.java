@@ -47,6 +47,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -62,14 +63,27 @@ public final class SaveFileManagerActivity extends AppCompatActivity
 {
     public static final class SaveFileManagerActivityViewModel extends ViewModel
     {
+        private enum BackgroundTaskResult
+        {
+            RESULT_NONE,
+            RESULT_SUCCESS,
+            RESULT_NO_SAVE_FILES,
+            RESULT_ERROR
+        }
+
         private static final class Status
         {
             private boolean isBackgroundTaskExecuting;
+            private final BackgroundTaskResult backgroundTaskResult;
+            private final String backgroundTaskError;
             private final List<String> saveFileNames;
 
-            private Status( final boolean isBackgroundTaskExecuting, final List<String> saveFileNames )
+            private Status( final boolean isBackgroundTaskExecuting, final BackgroundTaskResult backgroundTaskResult, final String backgroundTaskError,
+                            final List<String> saveFileNames )
             {
                 this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;
+                this.backgroundTaskResult = backgroundTaskResult;
+                this.backgroundTaskError = backgroundTaskError;
                 this.saveFileNames = saveFileNames;
             }
 
@@ -82,7 +96,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             }
         }
 
-        private final MutableLiveData<Status> liveStatus = new MutableLiveData<>( new Status( false, new ArrayList<>() ) );
+        private final MutableLiveData<Status> liveStatus = new MutableLiveData<>( new Status( false, BackgroundTaskResult.RESULT_NONE, "", new ArrayList<>() ) );
 
         /**
          * This method should never be called directly. Call it only using the enqueueAsyncTask() method.
@@ -96,12 +110,13 @@ public final class SaveFileManagerActivity extends AppCompatActivity
 
             new Thread( () -> {
                 try {
-                    liveStatus.postValue( new Status( false, getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                    // Reading the list of save files should not by itself change the visible status of the last background task, unless an error occurred while reading
+                    liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_NONE, "", getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
                 }
                 catch ( final Exception ex ) {
                     Log.e( "fheroes2", "Failed to get a list of save files.", ex );
 
-                    liveStatus.postValue( new Status( false, new ArrayList<>() ) );
+                    liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", ex ), new ArrayList<>() ) );
                 }
             } ).start();
         }
@@ -117,6 +132,8 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
             new Thread( () -> {
+                Exception caughtException = null;
+
                 final Function<String, Boolean> checkExtension = ( String name ) ->
                 {
                     final String lowercaseName = name.toLowerCase( Locale.ROOT );
@@ -130,7 +147,11 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                     return false;
                 };
 
+                boolean atLeastOneSaveFileImported = false;
+
                 try ( final InputStream in = contentResolver.openInputStream( zipFileUri ); final ZipInputStream zin = new ZipInputStream( in ) ) {
+                    Files.createDirectories( saveFileDir.toPath() );
+
                     for ( ZipEntry zEntry = zin.getNextEntry(); zEntry != null; zEntry = zin.getNextEntry() ) {
                         if ( zEntry.isDirectory() ) {
                             continue;
@@ -144,19 +165,31 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                         try ( final OutputStream out = Files.newOutputStream( ( new File( saveFileDir, zEntryFileName ) ).toPath() ) ) {
                             IOUtils.copy( zin, out );
                         }
+
+                        atLeastOneSaveFileImported = true;
                     }
                 }
                 catch ( final Exception ex ) {
                     Log.e( "fheroes2", "Failed to import save files.", ex );
+
+                    caughtException = ex;
                 }
                 finally {
                     try {
-                        liveStatus.postValue( new Status( false, getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                        if ( caughtException != null ) {
+                            liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", caughtException ),
+                                                              getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                        }
+                        else {
+                            liveStatus.postValue(
+                                new Status( false, atLeastOneSaveFileImported ? BackgroundTaskResult.RESULT_SUCCESS : BackgroundTaskResult.RESULT_NO_SAVE_FILES, "",
+                                            getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                        }
                     }
                     catch ( final Exception ex ) {
                         Log.e( "fheroes2", "Failed to get a list of save files.", ex );
 
-                        liveStatus.postValue( new Status( false, new ArrayList<>() ) );
+                        liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", ex ), new ArrayList<>() ) );
                     }
                 }
             } ).start();
@@ -174,6 +207,8 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
             new Thread( () -> {
+                Exception caughtException = null;
+
                 try ( final OutputStream out = contentResolver.openOutputStream( zipFileUri ); final ZipOutputStream zout = new ZipOutputStream( out ) ) {
                     for ( final String saveFileName : saveFileNames ) {
                         zout.putNextEntry( new ZipEntry( saveFileName ) );
@@ -185,15 +220,24 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                 }
                 catch ( final Exception ex ) {
                     Log.e( "fheroes2", "Failed to export save files.", ex );
+
+                    caughtException = ex;
                 }
                 finally {
                     try {
-                        liveStatus.postValue( new Status( false, getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                        if ( caughtException != null ) {
+                            liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", caughtException ),
+                                                              getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                        }
+                        else {
+                            liveStatus.postValue(
+                                new Status( false, BackgroundTaskResult.RESULT_SUCCESS, "", getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                        }
                     }
                     catch ( final Exception ex ) {
                         Log.e( "fheroes2", "Failed to get a list of save files.", ex );
 
-                        liveStatus.postValue( new Status( false, new ArrayList<>() ) );
+                        liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", ex ), new ArrayList<>() ) );
                     }
                 }
             } ).start();
@@ -210,6 +254,8 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
             new Thread( () -> {
+                Exception caughtException = null;
+
                 try {
                     for ( final String saveFileName : saveFileNames ) {
                         final File saveFile = new File( saveFileDir, saveFileName );
@@ -219,15 +265,24 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                 }
                 catch ( final Exception ex ) {
                     Log.e( "fheroes2", "Failed to delete save files.", ex );
+
+                    caughtException = ex;
                 }
                 finally {
                     try {
-                        liveStatus.postValue( new Status( false, getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                        if ( caughtException != null ) {
+                            liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", caughtException ),
+                                                              getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                        }
+                        else {
+                            liveStatus.postValue(
+                                new Status( false, BackgroundTaskResult.RESULT_SUCCESS, "", getSaveFileList( saveFileDir, allowedSaveFileExtensions ) ) );
+                        }
                     }
                     catch ( final Exception ex ) {
                         Log.e( "fheroes2", "Failed to get a list of save files.", ex );
 
-                        liveStatus.postValue( new Status( false, new ArrayList<>() ) );
+                        liveStatus.postValue( new Status( false, BackgroundTaskResult.RESULT_ERROR, String.format( "%s", ex ), new ArrayList<>() ) );
                     }
                 }
             } ).start();
@@ -488,6 +543,8 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         final ImageButton exportButton = findViewById( R.id.activity_save_file_manager_export_btn );
         final ImageButton deleteButton = findViewById( R.id.activity_save_file_manager_delete_btn );
 
+        final TextView lastTaskStatusTextView = findViewById( R.id.activity_save_file_manager_last_task_status_lbl );
+
         final ProgressBar backgroundTaskProgressBar = findViewById( R.id.activity_save_file_manager_background_task_pb );
 
         filterStandardToggleButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
@@ -500,6 +557,25 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         exportButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         deleteButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
 
+        switch ( modelStatus.backgroundTaskResult ) {
+        case RESULT_NONE:
+            break;
+        case RESULT_SUCCESS:
+            lastTaskStatusTextView.setText( "" );
+            break;
+        case RESULT_NO_SAVE_FILES:
+            lastTaskStatusTextView.setText( getString( R.string.activity_save_file_manager_last_task_status_lbl_text_no_save_files_found ) );
+            break;
+        case RESULT_ERROR:
+            lastTaskStatusTextView.setText(
+                String.format( getString( R.string.activity_save_file_manager_last_task_status_lbl_text_failed ), modelStatus.backgroundTaskError ) );
+            break;
+        default:
+            assert false;
+            break;
+        }
+
+        lastTaskStatusTextView.setVisibility( lastTaskStatusTextView.getText().length() > 0 ? View.VISIBLE : View.GONE );
         backgroundTaskProgressBar.setVisibility( modelStatus.isBackgroundTaskExecuting ? View.VISIBLE : View.GONE );
 
         saveFileListViewAdapter.clear();

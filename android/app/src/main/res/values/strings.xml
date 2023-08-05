@@ -26,6 +26,8 @@
     <string name="activity_save_file_manager_import_btn_content_description">Import save files</string>
     <string name="activity_save_file_manager_export_btn_content_description">Export selected save files</string>
     <string name="activity_save_file_manager_delete_btn_content_description">Delete selected save files</string>
+    <string name="activity_save_file_manager_last_task_status_lbl_text_no_save_files_found">Operation completed successfully, but no save files were found.</string>
+    <string name="activity_save_file_manager_last_task_status_lbl_text_failed">An error occurred during the operation: %s</string>
     <string name="activity_save_file_manager_no_files_selected_for_export_title">No files selected for export</string>
     <string name="activity_save_file_manager_no_files_selected_for_export_message">Please select the save files to export.</string>
     <string name="activity_save_file_manager_no_files_selected_for_export_positive_btn_text">OK</string>

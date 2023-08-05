@@ -212,27 +212,25 @@ public final class ToolsetActivity extends AppCompatActivity
         downloadHoMM2DemoButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         saveFileManagerButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
 
-        gameStatusTextView.setVisibility( modelStatus.isHoMM2AssetsPresent ? View.GONE : View.VISIBLE );
-        backgroundTaskProgressBar.setVisibility( !modelStatus.isBackgroundTaskExecuting ? View.GONE : View.VISIBLE );
-        lastTaskStatusTextView.setVisibility( modelStatus.isBackgroundTaskExecuting ? View.GONE : View.VISIBLE );
-
-        String statusText;
-
         switch ( modelStatus.backgroundTaskResult ) {
         case RESULT_NONE:
-            statusText = "";
             break;
         case RESULT_SUCCESS:
-            statusText = getString( R.string.activity_toolset_last_task_status_lbl_text_completed_successfully );
+            lastTaskStatusTextView.setText( getString( R.string.activity_toolset_last_task_status_lbl_text_completed_successfully ) );
             break;
         case RESULT_NO_ASSETS:
-            statusText = getString( R.string.activity_toolset_last_task_status_lbl_text_no_assets_found );
+            lastTaskStatusTextView.setText( getString( R.string.activity_toolset_last_task_status_lbl_text_no_assets_found ) );
+            break;
+        case RESULT_ERROR:
+            lastTaskStatusTextView.setText( String.format( getString( R.string.activity_toolset_last_task_status_lbl_text_failed ), modelStatus.backgroundTaskError ) );
             break;
         default:
-            statusText = String.format( getString( R.string.activity_toolset_last_task_status_lbl_text_failed ), modelStatus.backgroundTaskError );
+            assert false;
             break;
         }
 
-        lastTaskStatusTextView.setText( statusText );
+        gameStatusTextView.setVisibility( modelStatus.isHoMM2AssetsPresent ? View.GONE : View.VISIBLE );
+        backgroundTaskProgressBar.setVisibility( !modelStatus.isBackgroundTaskExecuting ? View.GONE : View.VISIBLE );
+        lastTaskStatusTextView.setVisibility( modelStatus.isBackgroundTaskExecuting ? View.GONE : View.VISIBLE );
     }
 }

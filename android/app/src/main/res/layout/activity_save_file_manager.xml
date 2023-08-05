@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="4dp">
 
             <ToggleButton
                 android:id="@+id/activity_save_file_manager_filter_standard_btn"
@@ -52,6 +52,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:layout_weight="1">
 
             <ListView
@@ -70,10 +72,23 @@
                 android:visibility="gone" />
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/activity_save_file_manager_last_task_status_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:freezesText="true"
+            android:gravity="center"
+            android:maxWidth="512dp"
+            android:padding="8dp"
+            android:text=""
+            android:visibility="gone" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:layout_marginBottom="8dp">
 
             <ImageButton
