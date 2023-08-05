@@ -104,6 +104,9 @@ namespace
                                                 ICN::BUTTON_SMALL_EXIT_EVIL,
                                                 ICN::BUTTON_SMALLER_EXIT_GOOD,
                                                 ICN::BUTTON_SMALLER_EXIT_EVIL,
+                                                ICN::BUTTON_EXIT_TOWN,
+                                                ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD,
+                                                ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL,
                                                 ICN::BUTTON_SMALL_DISMISS_GOOD,
                                                 ICN::BUTTON_SMALL_DISMISS_EVIL,
                                                 ICN::BUTTON_SMALL_UPGRADE_GOOD,
@@ -922,15 +925,75 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 const bool isEvilInterface = ( id == ICN::BUTTON_SMALLER_EXIT_EVIL );
+                const int buttonIcnId = isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON;
 
                 if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA, 4 );
                     _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA, 5 );
+                    setButtonCornersTransparent( _icnVsSprite[id][0] );                    
+                    makeTransparentBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], buttonIcnId );
                     break;
                 }
 
+                // The heroes meeting screen has an embedded shadow so the button needs to be fixed at the same size as the original one.
+                // TODO: Remove the embedded shadow and button in the heroes meeting screen and use getTextAdaptedButton() instead.
                 const int32_t textWidth = 70;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "EXIT" ), isEvilInterface );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "heroesMeeting|EXIT" ), isEvilInterface );
+
+                break;
+            }
+            case ICN::BUTTON_EXIT_TOWN: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::TREASURY, 1 );
+                    _icnVsSprite[id][1] = GetICN( ICN::TREASURY, 2 );
+                    break;
+                }
+                // Needs to be generated from original assets because it needs the black background from the pressed state.
+                // TODO: Make a way to generate buttons with black background since it is needed for MAX and EXIT in the Well and Guilds.
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TREASURY, 1 + i );
+
+                    // clean the button.
+                    Fill( out, 6 - i, 4 + i, 70, 17, getButtonFillingColor( i == 0 ) );
+                }
+                const int32_t textWidth = 70;
+                Point releasedOffset = { 7, 5 };
+                Point pressedOffset = { 6, 6 };
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "town|EXIT" ), releasedOffset, pressedOffset,
+                                    { textWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD:
+            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL );
+                const int originalButtonICN = isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA;
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( originalButtonICN, 4 );
+                    _icnVsSprite[id][1] = GetICN( originalButtonICN, 5 );
+                    break;
+                }
+                // Needs to be generated from original assets because the background has a much darker shadow than normal.
+                // TODO: Make the button generated as normal after removing the embedded shadow on the background.
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( originalButtonICN, 4 + i );
+
+                    // clean the button.
+                    Fill( out, 6 - i, 4 + i, 71 - i, 17, getButtonFillingColor( i == 0, !isEvilInterface ) );
+                }
+                const int32_t textWidth = 71;
+                Point releasedOffset = { 6, 5 };
+                Point pressedOffset = { 5, 6 };
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "puzzleDDoor|EXIT" ), releasedOffset, pressedOffset,
+                                    { textWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) },
+                                    isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -2285,6 +2348,9 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_EXIT_EVIL:
             case ICN::BUTTON_SMALLER_EXIT_GOOD:
             case ICN::BUTTON_SMALLER_EXIT_EVIL:
+            case ICN::BUTTON_EXIT_TOWN:
+            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL:
+            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD:
             case ICN::BUTTON_SMALL_DISMISS_GOOD:
             case ICN::BUTTON_SMALL_DISMISS_EVIL:
             case ICN::BUTTON_SMALL_UPGRADE_GOOD:
