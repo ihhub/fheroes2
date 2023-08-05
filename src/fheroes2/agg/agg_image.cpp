@@ -72,7 +72,8 @@ namespace
     // Some resources are language dependent. These are mostly buttons with a text of them.
     // Once a user changes a language we have to update resources. To do this we need to clear the existing images.
 
-    const std::set<int> languageDependentIcnId{ ICN::BUTTON_NEW_GAME_GOOD,
+    const std::set<int> languageDependentIcnId{ ICN::BUYMAX,
+                                                ICN::BUTTON_NEW_GAME_GOOD,
                                                 ICN::BUTTON_NEW_GAME_EVIL,
                                                 ICN::BUTTON_SAVE_GAME_GOOD,
                                                 ICN::BUTTON_SAVE_GAME_EVIL,
@@ -1515,6 +1516,13 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUYMAX: {
+                _icnVsSprite[id].resize( 2 );
+
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), ICN::EMPTY_GUILDWELL_BUTTON );
+
+                break;
+            }
             case ICN::BUTTON_GUILDWELL_EXIT: {
                 _icnVsSprite[id].resize( 2 );
 
@@ -2308,18 +2316,6 @@ namespace fheroes2
                 }
                 return true;
             case ICN::BUYMAX:
-                _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < 2; ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::WELLXTRA, i );
-
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 2, 52, 14 );
-
-                    // add 'max'
-                    Blit( GetICN( ICN::RECRUIT, 4 + i ), 12, 6, out, 7, 3, 50, 12 );
-                }
-                return true;
             case ICN::BUTTON_NEW_GAME_GOOD:
             case ICN::BUTTON_NEW_GAME_EVIL:
             case ICN::BUTTON_SAVE_GAME_GOOD:
