@@ -79,7 +79,7 @@ msgid "NO"
 msgstr "NEIN"
 
 msgid "EXIT"
-msgstr "BEEND."
+msgstr "ENDE"
 
 msgid "DISMISS"
 msgstr "ABLEHNEN"
