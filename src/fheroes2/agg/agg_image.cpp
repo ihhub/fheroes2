@@ -931,7 +931,7 @@ namespace fheroes2
                 if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA, 4 );
                     _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA, 5 );
-                    setButtonCornersTransparent( _icnVsSprite[id][0] );                    
+                    setButtonCornersTransparent( _icnVsSprite[id][0] );
                     makeTransparentBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], buttonIcnId );
                     break;
                 }
