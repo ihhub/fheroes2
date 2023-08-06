@@ -5121,8 +5121,6 @@ msgstr ""
 msgid "Slovak"
 msgstr ""
 
-# Vietnamese? Citizens of Vietnam?))
-# What exactly does this string means?)
 msgid "Vietnamese"
 msgstr ""
 
