@@ -3151,7 +3151,6 @@ namespace fheroes2
                 LoadOriginalICN( ICN::ADVBTNS );
 
                 const int releasedIndex = ( id == ICN::GOOD_ARMY_BUTTON ) ? 0 : 4;
-
                 Copy( GetICN( ICN::ADVBTNS, releasedIndex ), _icnVsSprite[id][0] );
                 Copy( GetICN( ICN::ADVBTNS, releasedIndex + 1 ), _icnVsSprite[id][1] );
 
@@ -3169,7 +3168,6 @@ namespace fheroes2
                 LoadOriginalICN( ICN::ADVEBTNS );
 
                 const int releasedIndex = ( id == ICN::EVIL_ARMY_BUTTON ) ? 0 : 4;
-
                 Copy( GetICN( ICN::ADVEBTNS, releasedIndex ), _icnVsSprite[id][0] );
                 Copy( GetICN( ICN::ADVEBTNS, releasedIndex + 1 ), _icnVsSprite[id][1] );
 
