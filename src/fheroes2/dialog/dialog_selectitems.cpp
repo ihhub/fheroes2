@@ -168,6 +168,11 @@ public:
         // Do nothing.
     }
 
+    void ActionListPressRight( int & /* unused */ ) override
+    {
+        // Do nothing.
+    }
+
     void updateSrollBarImage()
     {
         setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
@@ -241,6 +246,8 @@ public:
         SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
     }
 
+    using SelectEnum::ActionListPressRight;
+
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -268,6 +275,8 @@ public:
         constexpr int offset = 35;
         SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
     }
+
+    using SelectEnum::ActionListPressRight;
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
@@ -299,6 +308,8 @@ public:
         SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
     }
 
+    using SelectEnum::ActionListPressRight;
+
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -329,6 +340,8 @@ public:
         SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
     }
 
+    using SelectEnum::ActionListPressRight;
+
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -356,6 +369,8 @@ public:
         constexpr int offset = 42;
         SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
     }
+
+    using SelectEnum::ActionListPressRight;
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
