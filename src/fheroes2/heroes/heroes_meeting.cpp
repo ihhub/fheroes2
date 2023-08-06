@@ -399,7 +399,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     // button exit
     dst_pt.x = cur_pt.x + 280;
     dst_pt.y = cur_pt.y + 428;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::SWAPBTN, 0, 1 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_SMALLER_EXIT_GOOD, 0, 1 );
 
     moveArmyToHero2.draw();
     moveArmyToHero1.draw();

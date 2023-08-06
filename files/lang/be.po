@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-14 20:35+0000\n"
+"POT-Creation-Date: 2023-08-05 03:57+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -55,6 +55,12 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr "НАЗАД"
+
+msgid "OKAY"
+msgstr "ДОБРА"
+
+msgid "smallerButton|OKAY"
+msgstr ""
 
 msgid "ACCEPT"
 msgstr "ПРЫНЯЦЬ"
@@ -169,20 +175,17 @@ msgstr "6 ГУЛЬЦОЎ"
 msgid "GIFT"
 msgstr "АДДАЦЬ"
 
-msgid "guildWell|EXIT"
-msgstr ""
-
 msgid "DIFFICULTY"
 msgstr "ЦЯЖКАСЦЬ"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr "МІН"
 
 msgid "MAX"
 msgstr "МАКС"
-
-msgid "OKAY"
-msgstr "ДОБРА"
 
 msgid "Warrior"
 msgstr "Ваяр"
@@ -194,14 +197,6 @@ msgid "Explorer"
 msgstr "Даследчык"
 
 msgid "None"
-msgstr ""
-
-msgid "Warning"
-msgstr "Увага"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
 msgstr ""
 
 msgid ""
@@ -254,7 +249,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Безліч\n"
@@ -356,13 +351,15 @@ msgstr ""
 msgid "You have already cast a spell this round."
 msgstr ""
 
-msgid "That spell will affect no one!"
+msgid "That spell will have no effect!"
 msgstr ""
 
 msgid "You may only summon one type of elemental per combat."
 msgstr ""
 
-msgid "There is no open space adjacent to your hero to summon an Elemental to."
+msgid ""
+"There is no open space adjacent to your hero where you can summon an "
+"Elemental to."
 msgstr ""
 
 msgid ""
@@ -694,6 +691,10 @@ msgstr ""
 
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr ""
+
+#, fuzzy
+msgid "Are you sure you want to enable auto combat?"
+msgstr "Вы ўпэўненыя, што хочаце выйсці?"
 
 msgid "%{name} skip their turn."
 msgstr ""
@@ -2439,11 +2440,14 @@ msgstr ""
 msgid "Hire all creatures in the town."
 msgstr ""
 
+msgid "Available"
+msgstr "Даступна"
+
 msgid "Town Population Information and Statistics"
 msgstr ""
 
-msgid "Damg"
-msgstr ""
+msgid "Damage"
+msgstr "Урон"
 
 msgid "HP"
 msgstr ""
@@ -2453,9 +2457,6 @@ msgstr ""
 
 msgid "week"
 msgstr "тыдзень"
-
-msgid "Available"
-msgstr "Даступна"
 
 msgid "View World"
 msgstr ""
@@ -2504,9 +2505,6 @@ msgstr "Стрэлы"
 
 msgid "Shots Left"
 msgstr "Астатак стрэлаў"
-
-msgid "Damage"
-msgstr "Урон"
 
 msgid "Hit Points"
 msgstr "Здароўе"
@@ -2674,7 +2672,8 @@ msgstr "Мова"
 msgid "Change the graphics settings of the game."
 msgstr "Наладзіць графіку."
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+#, fuzzy
+msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Укл/выкл каляровы курсор. Гэта ўплывае толькі на візуал."
 
 msgid ""
@@ -3207,6 +3206,9 @@ msgstr ""
 msgid "autoBattle|Manual"
 msgstr ""
 
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr "Укл/выкл каляровы курсор. Гэта ўплывае толькі на візуал."
+
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
@@ -3305,14 +3307,18 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgid ""
+"Are you sure you want to load a new map? (Any unsaved changes to the current "
+"map will be lost.)"
 msgstr ""
 
-#, fuzzy
-msgid "Cancel back to the New Map menu."
-msgstr "Вярнуцца ў галоўнае меню."
+msgid ""
+"Are you sure you want to create a new map? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
 
-msgid "Create a new map either from scratch or using the random map generator."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -3325,6 +3331,202 @@ msgstr "Загрузіць гульню"
 
 msgid "Load an existing map."
 msgstr ""
+
+#, fuzzy
+msgid "Save Map"
+msgstr "Вялікія мапы"
+
+#, fuzzy
+msgid "Save the current map."
+msgstr "Назва абранай мапы."
+
+msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Ocean Objects"
+msgstr ""
+
+msgid "Grass Objects"
+msgstr ""
+
+msgid "Snow Objects"
+msgstr ""
+
+msgid "Swamp Objects"
+msgstr ""
+
+msgid "Lava Objects"
+msgstr ""
+
+msgid "Desert Objects"
+msgstr ""
+
+msgid "Dirt Objects"
+msgstr ""
+
+msgid "Wasteland Objects"
+msgstr ""
+
+msgid "Beach Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Towns"
+msgstr "Горад"
+
+msgid "Heroes"
+msgstr ""
+
+msgid "Artifacts"
+msgstr ""
+
+msgid "Treasures"
+msgstr ""
+
+msgid ""
+"Draws terrain in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+msgid ""
+"Erases objects in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+#, fuzzy
+msgid "Small Brush"
+msgstr "Малыя мапы"
+
+#, fuzzy
+msgid "Medium Brush"
+msgstr "Сярэднія мапы"
+
+#, fuzzy
+msgid "Large Brush"
+msgstr "Вялікія мапы"
+
+msgid "Area Fill"
+msgstr ""
+
+msgid "Used to click and drag for filling in large areas."
+msgstr ""
+
+msgid "Clear Area"
+msgstr ""
+
+msgid "Used to click and drag for clearing large areas."
+msgstr ""
+
+msgid ""
+"Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
+"eliminates the penalty.)"
+msgstr ""
+
+msgid "Traversable only by boat."
+msgstr ""
+
+msgid "No special modifiers."
+msgstr ""
+
+msgid "Used to place objects most appropriate for use on %{terrain}."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a town or castle."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a monster group."
+msgstr ""
+
+msgid "Used to place a hero."
+msgstr ""
+
+msgid "Used to place an artifact."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a resource or treasure."
+msgstr ""
+
+msgid "Terrain Mode"
+msgstr ""
+
+msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
+msgstr ""
+
+msgid "Object Mode"
+msgstr ""
+
+msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgstr ""
+
+msgid "Detail Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Used for special editing of monsters, heroes and towns."
+msgstr "Знішчыць усіх варожых герояў і захапіць усе варожыя гарады."
+
+msgid "Allows you to draw streams by clicking and dragging."
+msgstr ""
+
+msgid "Stream Mode"
+msgstr ""
+
+msgid "Allows you to draw roads by clicking and dragging."
+msgstr ""
+
+msgid "Road Mode"
+msgstr ""
+
+msgid "Erase Mode"
+msgstr ""
+
+msgid "Used to erase objects off the map."
+msgstr ""
+
+msgid "Change between zoom and normal view."
+msgstr ""
+
+msgid "Magnify"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Undo your last action. Press again to redo the action."
+msgstr ""
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+msgid "Edit map title, description, and other general information."
+msgstr ""
+
+msgid "Specifications"
+msgstr ""
+
+msgid "File Options"
+msgstr ""
+
+msgid ""
+"Open the file options menu, where you can save or load maps, or quit out of "
+"the editor."
+msgstr ""
+
+msgid "View the editor system options, which let you customize the editor."
+msgstr ""
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Вярнуцца ў галоўнае меню."
 
 msgid "Cancel back to the main menu."
 msgstr "Вярнуцца ў галоўнае меню."
@@ -3350,6 +3552,9 @@ msgstr "Вярнуцца ў галоўнае меню."
 
 msgid "No maps available!"
 msgstr ""
+
+msgid "Warning"
+msgstr "Увага"
 
 msgid "difficulty|Easy"
 msgstr "Лёгка"
@@ -3420,13 +3625,25 @@ msgstr "Паглядзець уступ"
 msgid "View Intro videos for the current state of the campaign."
 msgstr ""
 
-msgid "Select campaign difficulty. It cannot be changed after."
+msgid ""
+"Select the campaign difficulty. This can be lowered at any point during the "
+"campaign."
 msgstr ""
 
 msgid "Restart"
 msgstr ""
 
 msgid "Restart the current scenario."
+msgstr ""
+
+#, fuzzy
+msgid "Difficulty"
+msgstr "Складанасць"
+
+msgid ""
+"You have changed to a lower difficulty for the campaign. You will not be "
+"able to revert this after this point. The high score will be calculated "
+"based solely on the new difficulty. Do you want to proceed?"
 msgstr ""
 
 msgid "Are you sure you want to restart this scenario?"
@@ -3947,7 +4164,17 @@ msgstr ""
 msgid "hotkey|upgrade troop"
 msgstr ""
 
-msgid "hotkey|dismiss troop"
+msgid "hotkey|dismiss hero or troop"
+msgstr ""
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
 msgstr ""
 
 msgid "The save file is corrupted."
@@ -4362,11 +4589,6 @@ msgid "%{color} player's turn."
 msgstr ""
 
 msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
-
-msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
@@ -4472,9 +4694,6 @@ msgstr ""
 msgid ""
 "Bring up the file options menu, allowing you to load, save, start a new game "
 "or quit."
-msgstr ""
-
-msgid "File Options"
 msgstr ""
 
 msgid "Bring up the system options menu, allowing you to customize your game."
@@ -5868,16 +6087,18 @@ msgid ""
 "oracle taught me his skill. I have the answer you seek.\""
 msgstr ""
 
-msgid "Spell book is not present."
+#, fuzzy
+msgid "No spell book is present."
+msgstr "Няма загавораў."
+
+msgid ""
+"This spell costs %{mana} spell points. You have no spell points, so you "
+"cannot cast it."
 msgstr ""
 
 msgid ""
-"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
-msgstr ""
-
-msgid ""
-"That spell costs %{mana} mana. You only have %{point} mana, so you can't "
-"cast the spell."
+"This spell costs %{mana} spell points. You only have %{point} spell points, "
+"so you cannot cast it."
 msgstr ""
 
 msgid "The spell was not found."
@@ -5892,28 +6113,29 @@ msgstr ""
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
-msgid "This spell cannot be used on a boat."
+msgid "This spell cannot be cast on a boat."
 msgstr ""
 
-msgid "This spell can be casted only nearby ocean."
-msgstr ""
-
-msgid ""
-"There is no boat available and no free ocean location near the hero to cast "
-"this spell."
-msgstr ""
-
-msgid "There is no more boat available to cast this spell."
-msgstr ""
-
-msgid "There is no free ocean location near the hero to cast this spell."
+msgid "This spell can only be cast near an ocean."
 msgstr ""
 
 msgid ""
-"You do not currently own any town or castle, so you can't cast the spell."
+"There are no boats available and no ocean adjacent to the hero where this "
+"spell will work."
 msgstr ""
 
-msgid "This hero is already in a town, so you can't cast the spell."
+msgid "There are no boats available for this spell."
+msgstr ""
+
+msgid "There is no ocean adjacent to the hero where this spell will work."
+msgstr ""
+
+msgid ""
+"You do not own any town or castle that is not currently occupied by a hero. "
+"You cannot cast this spell."
+msgstr ""
+
+msgid "This hero is already in a town, so you cannot cast this spell."
 msgstr ""
 
 msgid ""
@@ -5922,17 +6144,17 @@ msgid ""
 "This town is occupied by your hero %{hero}."
 msgstr ""
 
-msgid "This spell is already in use."
+msgid "This spell is already in effect."
 msgstr ""
 
 msgid ""
-"No opponent can have heroes under his command anymore. Casting this spell "
-"will not bring any advantage."
+"No opponent neither has nor can have any hero under their command anymore. "
+"Casting this spell will have no effect."
 msgstr ""
 
 msgid ""
-"No opponent has a hero under his command at this time. Casting this spell "
-"will not bring any advantage."
+"No opponent has a hero under their command at this time. Casting this spell "
+"will have no effect."
 msgstr ""
 
 msgid ""
@@ -5941,16 +6163,16 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
+"You must be standing on the entrance to a mine (sawmills and alchemist labs "
+"do not count) to cast this spell."
 msgstr ""
 
 msgid "You must first defeat the ghosts guarding the mine to cast this spell."
 msgstr ""
 
 msgid ""
-"There are already at least as many elementals guarding the mine than the "
-"spell can generate. Casting this spell will not bring any advantage."
+"There are already at least as many elementals guarding the mine as this hero "
+"can generate. Casting this spell will have no effect."
 msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
@@ -6431,9 +6653,6 @@ msgstr ""
 msgid "Skills"
 msgstr ""
 
-msgid "Artifacts"
-msgstr ""
-
 msgid "Town/Castle"
 msgstr ""
 
@@ -6441,9 +6660,6 @@ msgid "Garrison"
 msgstr ""
 
 msgid "Gold Per Day:"
-msgstr ""
-
-msgid "Heroes"
 msgstr ""
 
 msgid "View Heroes."
@@ -9100,16 +9316,20 @@ msgid ""
 "if it takes any damage."
 msgstr ""
 
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr ""
-
 msgid "Shield"
 msgstr ""
 
-msgid "Halves damage received from ranged attacks for all of your units."
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 
 msgid "Mass Shield"
+msgstr ""
+
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 
 msgid "Summon Earth Elemental"

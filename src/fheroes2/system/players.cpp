@@ -117,7 +117,10 @@ Player::Player( int col )
     , id( World::GetUniq() )
     , _ai( std::make_shared<AI::Normal>() )
     , _handicapStatus( HandicapStatus::NONE )
+#if defined( WITH_DEBUG )
     , _isAIAutoControlMode( false )
+    , _isAIAutoControlModePlanned( false )
+#endif
 {
     // Do nothing.
 }
@@ -138,10 +141,12 @@ std::string Player::GetName() const
 
 int Player::GetControl() const
 {
+#if defined( WITH_DEBUG )
     if ( _isAIAutoControlMode ) {
         assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
         return CONTROL_AI;
     }
+#endif
 
     return control;
 }
@@ -186,11 +191,33 @@ void Player::setHandicapStatus( const HandicapStatus status )
     _handicapStatus = status;
 }
 
+#if defined( WITH_DEBUG )
 void Player::setAIAutoControlMode( const bool enable )
 {
     assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
-    _isAIAutoControlMode = enable;
+
+    // If this mode should be enabled, then it happens immediately
+    if ( enable ) {
+        _isAIAutoControlMode = enable;
+    }
+    // Otherwise, the change is first planned and then committed, in which case this mode should be actually enabled
+    else {
+        assert( _isAIAutoControlMode );
+    }
+
+    _isAIAutoControlModePlanned = enable;
 }
+
+void Player::commitAIAutoControlMode()
+{
+    assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
+
+    // If this method has been called, then this mode should be actually enabled
+    assert( _isAIAutoControlMode );
+
+    _isAIAutoControlMode = _isAIAutoControlModePlanned;
+}
+#endif
 
 StreamBase & operator<<( StreamBase & msg, const Focus & focus )
 {

@@ -130,7 +130,7 @@ Battle::Unit::Unit( const Troop & t, const Position & pos, const bool ref, const
     , reflect( ref )
     , mirror( nullptr )
     , idleTimer( animation.getIdleDelay() )
-    , blindanswer( false )
+    , _blindRetaliation( false )
     , customAlphaMask( 255 )
     , _randomGenerator( randomGenerator )
 {
@@ -478,18 +478,22 @@ uint32_t Battle::Unit::GetMoveRange() const
 uint32_t Battle::Unit::CalculateRetaliationDamage( uint32_t damageTaken ) const
 {
     // Check if there will be retaliation in the first place
-    if ( damageTaken > hp || Modes( CAP_MIRRORIMAGE ) || !AllowResponse() )
+    if ( damageTaken > hp || Modes( CAP_MIRRORIMAGE ) || !AllowResponse() ) {
         return 0;
+    }
 
     const uint32_t unitsLeft = ( hp - damageTaken ) / Monster::GetHitPoints();
 
     uint32_t damagePerUnit = 0;
-    if ( Modes( SP_CURSE ) )
+    if ( Modes( SP_CURSE ) ) {
         damagePerUnit = Monster::GetDamageMin();
-    else if ( Modes( SP_BLESS ) )
+    }
+    else if ( Modes( SP_BLESS ) ) {
         damagePerUnit = Monster::GetDamageMax();
-    else
+    }
+    else {
         damagePerUnit = ( Monster::GetDamageMin() + Monster::GetDamageMax() ) / 2;
+    }
 
     return unitsLeft * damagePerUnit;
 }
@@ -508,7 +512,7 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
 {
     if ( isArchers() ) {
         if ( !isHandFighting() ) {
-            // check skill archery +%10, +%25, +%50
+            // Hero's Archery skill may increase damage
             if ( GetCommander() ) {
                 dmg += ( dmg * GetCommander()->GetSecondaryValues( Skill::Secondary::ARCHERY ) / 100 );
             }
@@ -516,13 +520,13 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
             const Arena * arena = GetArena();
             assert( arena != nullptr );
 
-            // check castle defense
+            // Penalty for damage to castle defenders behind the castle walls
             if ( arena->IsShootingPenalty( *this, enemy ) ) {
                 dmg /= 2;
             }
 
-            // check spell shield
-            if ( enemy.Modes( SP_SHIELD ) ) {
+            // The Shield spell does not affect the damage of the castle towers
+            if ( !Modes( CAP_TOWER ) && enemy.Modes( SP_SHIELD ) ) {
                 dmg /= Spell( Spell::SHIELD ).ExtraValue();
             }
         }
@@ -531,44 +535,50 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
         }
     }
 
-    // after blind
-    if ( blindanswer )
+    // The retaliatory damage of a blinded unit is halved
+    if ( _blindRetaliation ) {
         dmg /= 2;
+    }
 
-    // stone cap.
-    if ( enemy.Modes( SP_STONE ) )
+    // A petrified unit takes only half of the damage
+    if ( enemy.Modes( SP_STONE ) ) {
         dmg /= 2;
+    }
 
-    // check monster capability
     switch ( GetID() ) {
     case Monster::CRUSADER:
-        // double damage for undead
-        if ( enemy.isUndead() )
+        if ( enemy.isUndead() ) {
             dmg *= 2;
+        }
         break;
     case Monster::FIRE_ELEMENT:
-        if ( enemy.GetID() == Monster::WATER_ELEMENT )
+        if ( enemy.GetID() == Monster::WATER_ELEMENT ) {
             dmg *= 2;
+        }
         break;
     case Monster::WATER_ELEMENT:
-        if ( enemy.GetID() == Monster::FIRE_ELEMENT )
+        if ( enemy.GetID() == Monster::FIRE_ELEMENT ) {
             dmg *= 2;
+        }
         break;
     case Monster::AIR_ELEMENT:
-        if ( enemy.GetID() == Monster::EARTH_ELEMENT )
+        if ( enemy.GetID() == Monster::EARTH_ELEMENT ) {
             dmg *= 2;
+        }
         break;
     case Monster::EARTH_ELEMENT:
-        if ( enemy.GetID() == Monster::AIR_ELEMENT )
+        if ( enemy.GetID() == Monster::AIR_ELEMENT ) {
             dmg *= 2;
+        }
         break;
     default:
         break;
     }
 
     int r = GetAttack() - enemy.GetDefense();
-    if ( enemy.isDragons() && Modes( SP_DRAGONSLAYER ) )
+    if ( enemy.isDragons() && Modes( SP_DRAGONSLAYER ) ) {
         r += Spell( Spell::DRAGONSLAYER ).ExtraValue();
+    }
 
     // Attack bonus is 20% to 300%
     dmg *= 1 + ( 0 < r ? 0.1 * std::min( r, 20 ) : 0.05 * std::max( r, -16 ) );
@@ -995,8 +1005,26 @@ std::string Battle::Unit::String( bool more ) const
 
 bool Battle::Unit::AllowResponse() const
 {
-    return ( !Modes( SP_BLIND ) || blindanswer ) && !Modes( IS_PARALYZE_MAGIC ) && !Modes( SP_HYPNOTIZE )
-           && ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) || !Modes( TR_RESPONDED ) );
+    // Hypnotized units never respond to an attack
+    if ( Modes( SP_HYPNOTIZE ) ) {
+        return false;
+    }
+
+    // Blindness can be cast by an attacking unit. In this case, there should be no response to the attack.
+    if ( Modes( SP_BLIND ) && !_blindRetaliation ) {
+        return false;
+    }
+
+    // Units with this ability retaliate even when under the influence of paralyzing spells
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+        return true;
+    }
+
+    if ( Modes( IS_PARALYZE_MAGIC ) ) {
+        return false;
+    }
+
+    return ( !Modes( TR_RESPONDED ) );
 }
 
 void Battle::Unit::SetResponse()
@@ -1006,10 +1034,12 @@ void Battle::Unit::SetResponse()
 
 void Battle::Unit::PostAttackAction()
 {
-    // decrease shots
     if ( isArchers() && !isHandFighting() ) {
         const HeroBase * hero = GetCommander();
+
         if ( !hero || !hero->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::ENDLESS_AMMUNITION ) ) {
+            assert( !Modes( CAP_TOWER ) && shots > 0 );
+
             --shots;
         }
     }
@@ -1017,9 +1047,9 @@ void Battle::Unit::PostAttackAction()
     ResetModes( LUCK_GOOD | LUCK_BAD );
 }
 
-void Battle::Unit::SetBlindAnswer( bool value )
+void Battle::Unit::SetBlindRetaliation( bool value )
 {
-    blindanswer = value;
+    _blindRetaliation = value;
 }
 
 uint32_t Battle::Unit::GetAttack() const
@@ -1224,7 +1254,8 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
 
     case Spell::BLIND:
         addAffection( SP_BLIND, duration );
-        blindanswer = false;
+        // Blindness can be cast by an attacking unit. In this case, there should be no response to the attack.
+        _blindRetaliation = false;
         break;
 
     case Spell::DRAGONSLAYER:
@@ -1528,7 +1559,7 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t attac
     switch ( spell.GetID() ) {
     case Spell::CURE:
     case Spell::MASSCURE:
-        if ( !isHaveDamage() && !( modes & IS_MAGIC ) )
+        if ( !isHaveDamage() && !( modes & IS_BAD_MAGIC ) )
             return 100;
         break;
 

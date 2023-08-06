@@ -43,6 +43,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "kingdom.h"
 #include "localevent.h"
@@ -492,7 +493,7 @@ bool Heroes::isInVisibleMapArea() const
 {
     // TODO: this is not entirely correct. Consider a hero being outside the visible are but his shadow is still inside. The visible tile ROI should be extended by
     // TODO: at least 1 tile in each direction.
-    return Interface::Basic::Get().GetGameArea().GetVisibleTileROI() & GetCenter();
+    return Interface::AdventureMap::Get().getGameArea().GetVisibleTileROI() & GetCenter();
 }
 
 bool Heroes::isInDeepOcean() const
@@ -649,7 +650,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
         path.PopFront();
 
         // It is possible that the hero in the new position will be attacked and lose the battle before he can perform the action
-        if ( !isFreeman() ) {
+        if ( isActive() ) {
             Action( indexTo );
 
             if ( indexTo == indexDest ) {
@@ -698,7 +699,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
         makeStep( true );
 
         // if we continue to move into the same direction we must skip first frame as it's for stand position only
-        if ( isMoveEnabled() && GetDirection() == path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.GetTiles( path.front().GetIndex() ) ) ) {
+        if ( isMoveEnabled() && GetDirection() == path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.GetTiles( path.GetFrontIndex() ) ) ) {
             if ( GetKingdom().isControlHuman() ) {
                 playHeroWalkingSound( world.GetTiles( heroIndex ).GetGround() );
             }
@@ -907,8 +908,8 @@ void Heroes::FadeOut( const fheroes2::Point & offset ) const
     if ( !isInVisibleMapArea() )
         return;
 
-    Interface::Basic & iface = Interface::Basic::Get();
-    Interface::GameArea & gamearea = iface.GetGameArea();
+    Interface::AdventureMap & iface = Interface::AdventureMap::Get();
+    Interface::GameArea & gamearea = iface.getGameArea();
 
     int multiplier = std::max( offset.x < 0 ? -offset.x : offset.x, offset.y < 0 ? -offset.y : offset.y );
     if ( multiplier < 1 )
@@ -927,7 +928,7 @@ void Heroes::FadeOut( const fheroes2::Point & offset ) const
                 gamearea.ShiftCenter( offset );
             }
 
-            iface.Redraw( Interface::REDRAW_GAMEAREA );
+            iface.redraw( Interface::REDRAW_GAMEAREA );
 
             display.render();
             _alphaValue -= 8 * multiplier;
@@ -942,8 +943,8 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
     if ( !isInVisibleMapArea() )
         return;
 
-    Interface::Basic & iface = Interface::Basic::Get();
-    Interface::GameArea & gamearea = iface.GetGameArea();
+    Interface::AdventureMap & iface = Interface::AdventureMap::Get();
+    Interface::GameArea & gamearea = iface.getGameArea();
 
     int multiplier = std::max( offset.x < 0 ? -offset.x : offset.x, offset.y < 0 ? -offset.y : offset.y );
     if ( multiplier < 1 )
@@ -962,7 +963,7 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
                 gamearea.ShiftCenter( offset );
             }
 
-            iface.Redraw( Interface::REDRAW_GAMEAREA );
+            iface.redraw( Interface::REDRAW_GAMEAREA );
 
             display.render();
             _alphaValue += 8 * multiplier;
@@ -974,17 +975,15 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
 
 bool Heroes::Move( const bool jumpToNextTile /* = false */ )
 {
-    if ( Modes( ACTION ) )
-        ResetModes( ACTION );
+    ResetModes( ACTION );
 
-    // move hero
-    if ( path.isValid() && ( isMoveEnabled() || ( GetSpriteIndex() < 45 && ( GetSpriteIndex() % heroFrameCountPerTile ) > 0 ) || GetSpriteIndex() >= 45 ) ) {
+    if ( path.isValidForMovement() && ( isMoveEnabled() || ( GetSpriteIndex() < 45 && ( GetSpriteIndex() % heroFrameCountPerTile ) > 0 ) || GetSpriteIndex() >= 45 ) ) {
         // Jump to the next position.
         if ( jumpToNextTile ) {
             direction = path.GetFrontDirection();
             MoveStep( jumpToNextTile );
 
-            // TODO: why don't we check !isFreeman() like it is done for a normal movement?
+            // TODO: why don't we check isActive() like it is done for a normal movement?
             return true;
         }
 
@@ -999,7 +998,7 @@ bool Heroes::Move( const bool jumpToNextTile /* = false */ )
             SetValidDirectionSprite();
 
             if ( MoveStep( jumpToNextTile ) ) {
-                return !isFreeman();
+                return isActive();
             }
         }
     }

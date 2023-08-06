@@ -87,10 +87,12 @@ namespace AI
         virtual void KingdomTurn( Kingdom & kingdom ) = 0;
         virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions ) = 0;
 
-        virtual void revealFog( const Maps::Tiles & tile ) = 0;
+        virtual void revealFog( const Maps::Tiles & tile, const Kingdom & kingdom ) = 0;
 
         virtual void HeroesAdd( const Heroes & hero );
         virtual void HeroesRemove( const Heroes & hero );
+        virtual void HeroesBeginMovement( Heroes & hero );
+        virtual void HeroesFinishMovement( Heroes & hero );
         virtual void HeroesPreBattle( HeroBase & hero, bool isAttacking );
         virtual void HeroesAfterBattle( HeroBase & hero, bool wasAttacking );
         virtual void HeroesPostLoad( Heroes & hero );
@@ -129,14 +131,24 @@ namespace AI
 
     Base & Get( AI_TYPE type = AI_TYPE::NORMAL );
 
-    // functionality in ai_hero_action.cpp
+    // Definitions are in the ai_hero_action.cpp
+
     void HeroesAction( Heroes & hero, const int32_t dst_index );
     void HeroesMove( Heroes & hero );
+
+    // Makes it so that the 'hero' casts the Dimension Door spell to the 'targetIndex'
     void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex );
-    void HeroesCastTownPortal( Heroes & hero, const int32_t targetIndex );
+
+    // Makes it so that the 'hero' casts the Summon Boat spell, summoning the boat at the 'boatDestinationIndex'.
+    // Returns the index of the tile on which the boat was located before the summoning. It's the caller's
+    // responsibility to make sure that 'hero' may cast this spell and there is a summonable boat on the map
+    // before calling this function.
+    int32_t HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIndex );
+
     bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell );
 
-    // functionality in ai_common.cpp
+    // Definitions are in the ai_common.cpp
+
     bool BuildIfAvailable( Castle & castle, int building );
     bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator );
     uint32_t GetResourceMultiplier( uint32_t min, uint32_t max );

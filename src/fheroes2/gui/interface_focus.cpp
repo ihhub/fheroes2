@@ -31,6 +31,7 @@
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "interface_icons.h"
 #include "interface_status.h"
@@ -41,7 +42,7 @@
 #include "settings.h"
 #include "world.h"
 
-void Interface::Basic::SetFocus( Heroes * hero, const bool retainScrollBarPosition )
+void Interface::AdventureMap::SetFocus( Heroes * hero, const bool retainScrollBarPosition )
 {
     assert( hero != nullptr );
 
@@ -50,7 +51,15 @@ void Interface::Basic::SetFocus( Heroes * hero, const bool retainScrollBarPositi
         return;
     }
 
-    assert( player->GetColor() == hero->GetColor() && ( player->isControlHuman() || ( player->isControlAI() && player->isAIAutoControlMode() ) ) );
+#ifndef NDEBUG
+#if defined( WITH_DEBUG )
+    const bool isAIAutoControlMode = player->isAIAutoControlMode();
+#else
+    const bool isAIAutoControlMode = false;
+#endif // WITH_DEBUG
+#endif // !NDEBUG
+
+    assert( player->GetColor() == hero->GetColor() && ( player->isControlHuman() || ( player->isControlAI() && isAIAutoControlMode ) ) );
 
     Focus & focus = player->GetFocus();
 
@@ -67,14 +76,14 @@ void Interface::Basic::SetFocus( Heroes * hero, const bool retainScrollBarPositi
     hero->ShowPath( true );
     focus.Set( hero );
 
-    Redraw( REDRAW_BUTTONS );
+    redraw( REDRAW_BUTTONS );
 
     if ( !retainScrollBarPosition ) {
         iconsPanel.Select( hero );
     }
 
-    gameArea.SetCenter( hero->GetCenter() );
-    statusWindow.SetState( StatusType::STATUS_ARMY );
+    _gameArea.SetCenter( hero->GetCenter() );
+    _statusWindow.SetState( StatusType::STATUS_ARMY );
 
     const int heroIndex = hero->GetIndex();
     if ( Game::UpdateSoundsOnFocusUpdate() && heroIndex >= 0 ) {
@@ -83,7 +92,7 @@ void Interface::Basic::SetFocus( Heroes * hero, const bool retainScrollBarPositi
     }
 }
 
-void Interface::Basic::SetFocus( Castle * castle )
+void Interface::AdventureMap::SetFocus( Castle * castle )
 {
     assert( castle != nullptr );
 
@@ -92,7 +101,15 @@ void Interface::Basic::SetFocus( Castle * castle )
         return;
     }
 
-    assert( player->GetColor() == castle->GetColor() && ( player->isControlHuman() || ( player->isControlAI() && player->isAIAutoControlMode() ) ) );
+#ifndef NDEBUG
+#if defined( WITH_DEBUG )
+    const bool isAIAutoControlMode = player->isAIAutoControlMode();
+#else
+    const bool isAIAutoControlMode = false;
+#endif // WITH_DEBUG
+#endif // !NDEBUG
+
+    assert( player->GetColor() == castle->GetColor() && ( player->isControlHuman() || ( player->isControlAI() && isAIAutoControlMode ) ) );
 
     Focus & focus = player->GetFocus();
 
@@ -103,11 +120,11 @@ void Interface::Basic::SetFocus( Castle * castle )
 
     focus.Set( castle );
 
-    Redraw( REDRAW_BUTTONS );
+    redraw( REDRAW_BUTTONS );
 
     iconsPanel.Select( castle );
-    gameArea.SetCenter( castle->GetCenter() );
-    statusWindow.SetState( StatusType::STATUS_FUNDS );
+    _gameArea.SetCenter( castle->GetCenter() );
+    _statusWindow.SetState( StatusType::STATUS_FUNDS );
 
     if ( Game::UpdateSoundsOnFocusUpdate() ) {
         Game::EnvironmentSoundMixer();
@@ -115,7 +132,7 @@ void Interface::Basic::SetFocus( Castle * castle )
     }
 }
 
-void Interface::Basic::updateFocus()
+void Interface::AdventureMap::updateFocus()
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
@@ -141,7 +158,7 @@ void Interface::Basic::updateFocus()
     }
 }
 
-void Interface::Basic::ResetFocus( const int priority, const bool retainScrollBarPosition )
+void Interface::AdventureMap::ResetFocus( const int priority, const bool retainScrollBarPosition )
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
     if ( player == nullptr ) {
@@ -236,7 +253,7 @@ Heroes * Interface::GetFocusHeroes()
     return player ? player->GetFocus().GetHeroes() : nullptr;
 }
 
-void Interface::Basic::RedrawFocus()
+void Interface::AdventureMap::RedrawFocus()
 {
     int type = GetFocusType();
 
@@ -258,12 +275,12 @@ void Interface::Basic::RedrawFocus()
         iconsPanel.SetRedraw();
     }
 
-    SetRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
+    setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
 
     if ( type == FOCUS_HEROES )
         iconsPanel.SetRedraw( ICON_HEROES );
     else if ( type == FOCUS_CASTLE )
         iconsPanel.SetRedraw( ICON_CASTLES );
 
-    statusWindow.SetRedraw();
+    _statusWindow.SetRedraw();
 }
