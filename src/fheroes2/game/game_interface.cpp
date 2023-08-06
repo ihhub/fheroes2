@@ -31,30 +31,32 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_border.h"
+#include "interface_gamearea.h"
+#include "interface_radar.h"
+#include "interface_status.h"
 #include "localevent.h"
 #include "maps.h"
+#include "math_base.h"
+#include "screen.h"
 #include "settings.h"
 #include "ui_button.h"
 #include "ui_tool.h"
 #include "world.h"
 
-Interface::Basic::Basic()
-    : gameArea( *this )
-    , radar( *this )
-    , iconsPanel( *this )
+Interface::AdventureMap::AdventureMap()
+    : iconsPanel( *this )
     , buttonsArea( *this )
-    , statusWindow( *this )
     , controlPanel( *this )
-    , redraw( 0 )
     , _lockRedraw( false )
 {
-    Reset();
+    AdventureMap::reset();
 }
 
-void Interface::Basic::Reset()
+void Interface::AdventureMap::reset()
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -74,96 +76,96 @@ void Interface::Basic::Reset()
         auto isPosValid = []( const fheroes2::Point & pos ) { return pos.x >= 0 && pos.y >= 0; };
 
         if ( isPosValid( radrPos ) && isPosValid( bttnPos ) && isPosValid( iconPos ) && isPosValid( statPos ) ) {
-            radar.SetPos( radrPos.x, radrPos.y );
+            _radar.SetPos( radrPos.x, radrPos.y );
             iconsPanel.SetPos( iconPos.x, iconPos.y );
             buttonsArea.SetPos( bttnPos.x, bttnPos.y );
-            statusWindow.SetPos( statPos.x, statPos.y );
+            _statusWindow.SetPos( statPos.x, statPos.y );
         }
         else {
-            radar.SetPos( 0, 0 );
+            _radar.SetPos( 0, 0 );
             // It's OK to use display.width() for the X coordinate here, panel will be docked to the right edge
-            iconsPanel.SetPos( display.width(), radar.GetRect().y + radar.GetRect().height );
+            iconsPanel.SetPos( display.width(), _radar.GetRect().y + _radar.GetRect().height );
             buttonsArea.SetPos( display.width(), iconsPanel.GetRect().y + iconsPanel.GetRect().height );
-            statusWindow.SetPos( display.width(), buttonsArea.GetRect().y + buttonsArea.GetRect().height );
+            _statusWindow.SetPos( display.width(), buttonsArea.GetRect().y + buttonsArea.GetRect().height );
         }
     }
     else {
         const int32_t px = display.width() - BORDERWIDTH - RADARWIDTH;
 
-        radar.SetPos( px, BORDERWIDTH );
-        iconsPanel.SetPos( px, radar.GetArea().y + radar.GetArea().height + BORDERWIDTH );
+        _radar.SetPos( px, BORDERWIDTH );
+        iconsPanel.SetPos( px, _radar.GetArea().y + _radar.GetArea().height + BORDERWIDTH );
         buttonsArea.SetPos( px, iconsPanel.GetArea().y + iconsPanel.GetArea().height + BORDERWIDTH );
-        statusWindow.SetPos( px, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
+        _statusWindow.SetPos( px, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
     }
 
-    const fheroes2::Point prevCenter = gameArea.getCurrentCenterInPixels();
-    const fheroes2::Rect prevRoi = gameArea.GetROI();
+    const fheroes2::Point prevCenter = _gameArea.getCurrentCenterInPixels();
+    const fheroes2::Rect prevRoi = _gameArea.GetROI();
 
-    gameArea.generate( { display.width(), display.height() }, isHideInterface );
+    _gameArea.generate( { display.width(), display.height() }, isHideInterface );
 
-    const fheroes2::Rect newRoi = gameArea.GetROI();
+    const fheroes2::Rect newRoi = _gameArea.GetROI();
 
-    gameArea.SetCenterInPixels( prevCenter + fheroes2::Point( newRoi.x + newRoi.width / 2, newRoi.y + newRoi.height / 2 )
-                                - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
+    _gameArea.SetCenterInPixels( prevCenter + fheroes2::Point( newRoi.x + newRoi.width / 2, newRoi.y + newRoi.height / 2 )
+                                 - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
 }
 
-Interface::Basic & Interface::Basic::Get()
+Interface::AdventureMap & Interface::AdventureMap::Get()
 {
-    static Basic basic;
+    static AdventureMap basic;
     return basic;
 }
 
-void Interface::Basic::Redraw( const uint32_t force /* = 0 */ )
+void Interface::AdventureMap::redraw( const uint32_t force /* = 0 */ )
 {
     if ( _lockRedraw ) {
-        SetRedraw( force );
+        setRedraw( force );
         return;
     }
 
     const Settings & conf = Settings::Get();
 
-    const uint32_t combinedRedraw = redraw | force;
+    const uint32_t combinedRedraw = _redraw | force;
     const bool hideInterface = conf.isHideInterfaceEnabled();
 
     if ( combinedRedraw & REDRAW_GAMEAREA ) {
-        gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
+        _gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
 
         if ( hideInterface && conf.ShowControlPanel() ) {
-            controlPanel.Redraw();
+            controlPanel._redraw();
         }
     }
 
     if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & ( REDRAW_RADAR_CURSOR | REDRAW_RADAR ) ) ) {
         // Redraw radar map only if `REDRAW_RADAR` is set.
-        radar.Redraw( combinedRedraw & REDRAW_RADAR );
+        _radar._redraw( combinedRedraw & REDRAW_RADAR );
     }
 
     if ( ( hideInterface && conf.ShowIcons() ) || ( combinedRedraw & REDRAW_ICONS ) ) {
-        iconsPanel.Redraw();
+        iconsPanel._redraw();
     }
     else if ( combinedRedraw & REDRAW_HEROES ) {
-        iconsPanel.RedrawIcons( ICON_HEROES );
+        iconsPanel._redrawIcons( ICON_HEROES );
     }
     else if ( combinedRedraw & REDRAW_CASTLES ) {
-        iconsPanel.RedrawIcons( ICON_CASTLES );
+        iconsPanel._redrawIcons( ICON_CASTLES );
     }
 
     if ( ( hideInterface && conf.ShowButtons() ) || ( combinedRedraw & REDRAW_BUTTONS ) ) {
-        buttonsArea.Redraw();
+        buttonsArea._redraw();
     }
 
     if ( ( hideInterface && conf.ShowStatus() ) || ( combinedRedraw & REDRAW_STATUS ) ) {
-        statusWindow.Redraw();
+        _statusWindow._redraw();
     }
 
     if ( combinedRedraw & REDRAW_BORDER ) {
         GameBorderRedraw( false );
     }
 
-    redraw = 0;
+    _redraw = 0;
 }
 
-int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water )
+int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -175,8 +177,8 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     const bool isStatusVisible = conf.ShowStatus();
     const bool isControlPanelVisible = conf.ShowControlPanel();
 
-    const fheroes2::Rect & radarRect = radar.GetRect();
-    const fheroes2::Rect & radarArea = radar.GetArea();
+    const fheroes2::Rect & radarRect = _radar.GetRect();
+    const fheroes2::Rect & radarArea = _radar.GetArea();
 
     fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
 
@@ -190,11 +192,11 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
         buttonExit.draw();
     };
 
-    const fheroes2::Rect & gameAreaROI = gameArea.GetROI();
+    const fheroes2::Rect & gameAreaROI = _gameArea.GetROI();
     const bool isFadingEnabled = ( gameAreaROI.width > TILEWIDTH * distance ) || ( gameAreaROI.height > TILEWIDTH * distance );
 
     const fheroes2::Rect spellROI = [this, from, distance, isHideInterface, &gameAreaROI]() -> fheroes2::Rect {
-        const fheroes2::Point heroPos = gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) );
+        const fheroes2::Point heroPos = _gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) );
 
         const int32_t x = heroPos.x - TILEWIDTH * ( distance / 2 );
         const int32_t y = heroPos.y - TILEWIDTH * ( distance / 2 );
@@ -213,7 +215,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
         conf.SetShowStatus( false );
         conf.SetShowControlPanel( false );
 
-        Redraw( REDRAW_GAMEAREA );
+        redraw( REDRAW_GAMEAREA );
     }
 
     if ( isFadingEnabled ) {
@@ -253,7 +255,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
             }
         }
         else if ( gameAreaROI & mp ) {
-            const int32_t dst = gameArea.GetValidTileIdFromPoint( mp );
+            const int32_t dst = _gameArea.GetValidTileIdFromPoint( mp );
 
             bool valid = ( dst >= 0 );
 
@@ -279,7 +281,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
             Game::updateAdventureMapAnimationIndex();
 
-            Redraw( REDRAW_GAMEAREA );
+            redraw( REDRAW_GAMEAREA );
 
             if ( isFadingEnabled ) {
                 InvertedShadow( display, gameAreaROI, spellROI, 5, 9 );
@@ -294,7 +296,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     }
 
     if ( isFadingEnabled ) {
-        SetRedraw( REDRAW_GAMEAREA );
+        setRedraw( REDRAW_GAMEAREA );
     }
 
     if ( isHideInterface ) {
@@ -303,10 +305,10 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
         conf.SetShowStatus( isStatusVisible );
         conf.SetShowControlPanel( isControlPanelVisible );
 
-        SetRedraw( REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_GAMEAREA );
+        setRedraw( REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_GAMEAREA );
     }
 
-    Redraw( REDRAW_RADAR_CURSOR );
+    redraw( REDRAW_RADAR_CURSOR );
     display.render();
 
     return returnValue;

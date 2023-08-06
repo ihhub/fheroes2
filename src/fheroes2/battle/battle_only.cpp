@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_only.h"
+
 #include <cstdint>
 #include <string>
 
@@ -28,7 +30,6 @@
 #include "army_bar.h"
 #include "army_troop.h"
 #include "battle.h"
-#include "battle_only.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -210,8 +211,9 @@ bool Battle::Only::ChangeSettings()
                 if ( hero1 )
                     hero1->GetSecondarySkills().FillMax( Skill::Secondary() );
                 UpdateHero1( cur_pt );
-                redraw = true;
             }
+
+            redraw = true;
         }
         else if ( allow2 && le.MouseClickLeft( rtPortrait2 ) ) {
             int hid = Dialog::SelectHeroes( hero2 ? hero2->GetID() : Heroes::UNKNOWN );
@@ -226,8 +228,9 @@ bool Battle::Only::ChangeSettings()
                 if ( player2.isControlLocal() && nullptr == cinfo2 ) {
                     cinfo2.reset( new ControlInfo( { cur_pt.x + 500, cur_pt.y + 425 }, player2.GetControl() ) );
                 }
-                redraw = true;
             }
+
+            redraw = true;
         }
 
         if ( hero1 && allow1 ) {
@@ -621,4 +624,6 @@ void Battle::Only::StartBattle()
 
         Battle::Loader( hero1->GetArmy(), ( hero2 ? hero2->GetArmy() : monsters ), hero1->GetIndex() + 1 );
     }
+
+    conf.SetCurrentColor( Color::NONE );
 }

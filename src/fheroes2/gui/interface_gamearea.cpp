@@ -42,11 +42,13 @@
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
+#include "interface_base.h"
 #include "interface_cpanel.h"
 #include "localevent.h"
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "maps_tiles_render.h"
 #include "pal.h"
 #include "players.h"
@@ -308,8 +310,8 @@ namespace
     }
 }
 
-Interface::GameArea::GameArea( Basic & basic )
-    : interface( basic )
+Interface::GameArea::GameArea( BaseInterface & interface )
+    : _interface( interface )
     , _minLeftOffset( 0 )
     , _maxLeftOffset( 0 )
     , _minTopOffset( 0 )
@@ -505,7 +507,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     if ( hero->isControlAI() ) {
                         const Route::Path & path = hero->GetPath();
                         // Check if the next AI hero path point will not be seen on map to skip it.
-                        if ( path.isValid() && ( world.GetTiles( path.front().GetIndex() ).getFogDirection() == DIRECTION_ALL ) ) {
+                        if ( path.isValidForMovement() && ( world.GetTiles( path.GetFrontIndex() ).getFogDirection() == DIRECTION_ALL ) ) {
                             continue;
                         }
                     }
@@ -738,7 +740,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
         }
     }
-    else
+    else {
 #endif
         // redraw fog
         if ( renderFog ) {
@@ -761,6 +763,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
             }
         }
+#ifdef WITH_DEBUG
+    }
+#endif
 
     updateObjectAnimationInfo();
 }
@@ -805,7 +810,7 @@ void Interface::GameArea::Scroll()
 
 void Interface::GameArea::SetRedraw() const
 {
-    interface.SetRedraw( REDRAW_GAMEAREA );
+    _interface.setRedraw( REDRAW_GAMEAREA );
 }
 
 fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset )
@@ -816,10 +821,10 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
     }
 
     fheroes2::Image result( 448, 448 );
-    result.reset();
+    result._disableTransformLayer();
 
     // Make a temporary copy
-    GameArea gamearea = Basic::Get().GetGameArea();
+    GameArea gamearea = AdventureMap::Get().getGameArea();
 
     gamearea.SetAreaPosition( 0, 0, result.width(), result.height() );
 
@@ -933,7 +938,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 
     // change cursor if need
     if ( ( updateCursor || index != _prevIndexPos ) && isCursorOverGamearea ) {
-        Cursor::Get().SetThemes( Interface::Basic::GetCursorTileIndex( index ) );
+        Cursor::Get().SetThemes( Interface::AdventureMap::GetCursorTileIndex( index ) );
         _prevIndexPos = index;
         updateCursor = false;
     }
@@ -943,7 +948,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         return;
 
     const Settings & conf = Settings::Get();
-    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
+    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( Interface::AdventureMap::Get().getControlPanel().GetArea() ) )
         return;
 
     const fheroes2::Point tileOffset = _topLeftTileOffset + mousePosition - _windowROI.getPosition();
@@ -953,9 +958,9 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     const fheroes2::Rect tileROI( tilePos.x, tilePos.y, TILEWIDTH, TILEWIDTH );
 
     if ( le.MouseClickLeft( tileROI ) )
-        interface.MouseCursorAreaClickLeft( index );
+        _interface.mouseCursorAreaClickLeft( index );
     else if ( le.MousePressRight( tileROI ) && isCursorOverGamearea )
-        interface.MouseCursorAreaPressRight( index );
+        _interface.mouseCursorAreaPressRight( index );
 }
 
 fheroes2::Point Interface::GameArea::_getStartTileId() const
@@ -1055,11 +1060,11 @@ void Interface::GameArea::runSingleObjectAnimation( const std::shared_ptr<BaseOb
 
     LocalEvent & le = LocalEvent::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
-    Interface::Basic & basicInterface = Interface::Basic::Get();
+    Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_PICKUP_DELAY } ) ) && !info->isAnimationCompleted() ) {
         if ( Game::validateAnimationDelay( Game::HEROES_PICKUP_DELAY ) ) {
-            basicInterface.Redraw( Interface::REDRAW_GAMEAREA );
+            adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
             display.render();
         }
     }
@@ -1070,7 +1075,7 @@ Interface::ObjectFadingOutInfo::~ObjectFadingOutInfo()
     Maps::Tiles & tile = world.GetTiles( tileId );
 
     if ( tile.GetObject() == type ) {
-        tile.RemoveObjectSprite();
+        removeObjectSprite( tile );
         tile.setAsEmpty();
     }
 }

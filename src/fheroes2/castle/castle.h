@@ -24,6 +24,7 @@
 #define H2CASTLE_H
 
 #include <algorithm>
+#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <map>
@@ -46,6 +47,7 @@
 namespace fheroes2
 {
     class RandomMonsterAnimation;
+    class Image;
 }
 
 class Funds;
@@ -200,7 +202,7 @@ public:
     // castle - including an estimate of the strength of the combined army consisting of the garrison and
     // the hero's troops (if present), castle-specific bonuses from moat, towers and so on, relative to
     // the attacking hero's abilities. See the implementation for details.
-    double GetGarrisonStrength( const Heroes * attackingHero ) const;
+    double GetGarrisonStrength( const Heroes & attackingHero ) const;
 
     // Returns the correct dwelling type available in the castle. BUILD_NOTHING is returned if this is not a dwelling.
     uint32_t GetActualDwelling( const uint32_t buildId ) const;
@@ -211,8 +213,6 @@ public:
     void recruitBestAvailable( Funds budget );
     uint32_t getRecruitLimit( const Monster & monster, const Funds & budget ) const;
 
-    void recruitCastleMax( const Troops & currentCastleArmy, const std::vector<uint32_t> & allCastleDwellings );
-
     int getBuildingValue() const;
 
     // Used only for AI.
@@ -222,7 +222,10 @@ public:
     void ChangeColor( int );
 
     void ActionNewDay();
+
     void ActionNewWeek();
+    void ActionNewWeekAIBonuses();
+
     void ActionNewMonth() const;
 
     void ActionPreBattle();
@@ -304,10 +307,15 @@ private:
     void OpenTavern() const;
     void OpenWell();
     void OpenMageGuild( const Heroes * hero ) const;
-    void WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<fheroes2::RandomMonsterAnimation> & monsterAnimInfo ) const;
     void JoinRNDArmy();
     void PostLoad();
 
+    void _wellRedrawAvailableMonsters( const uint32_t dwellingType, const bool restoreBackground, fheroes2::Image & background ) const;
+    void _wellRedrawBackground( fheroes2::Image & background ) const;
+    void _wellRedrawMonsterAnimation( const fheroes2::Rect & roi, std::array<fheroes2::RandomMonsterAnimation, CASTLEMAXMONSTER> & monsterAnimInfo ) const;
+
+    // Recruit maximum monsters from the castle. Returns 'true' if the recruit was made.
+    bool _recruitCastleMax( const Troops & currentCastleArmy );
     bool RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force = false );
 
     friend StreamBase & operator<<( StreamBase &, const Castle & );
@@ -430,6 +438,11 @@ public:
     void NewWeek()
     {
         std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewWeek(); } );
+    }
+
+    void NewWeekAI()
+    {
+        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewWeekAIBonuses(); } );
     }
 
     void NewMonth()

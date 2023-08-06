@@ -50,6 +50,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
 #include "interface_status.h"
@@ -204,17 +205,17 @@ namespace
         AudioManager::PlaySound( M82::KILLFADE );
 
         hero.FadeOut();
-        hero.SetFreeman( reason );
+        hero.Dismiss( reason );
 
-        Interface::Basic & I = Interface::Basic::Get();
+        Interface::AdventureMap & I = Interface::AdventureMap::Get();
         if ( !hero.GetKingdom().isLoss() ) {
             // If the enemy is not vanquished we update only position of defeated hero on radar to remove hero mark.
             const fheroes2::Point heroPosition = hero.GetCenter();
-            I.GetRadar().SetRenderArea( { heroPosition.x, heroPosition.y, 1, 1 } );
+            I.getRadar().SetRenderArea( { heroPosition.x, heroPosition.y, 1, 1 } );
         }
         // If the enemy is vanquished we do not set radar ROI and fully redraw the radar map image as there might be color reset of enemy's objects.
 
-        I.SetRedraw( Interface::REDRAW_RADAR );
+        I.setRedraw( Interface::REDRAW_RADAR );
     }
 
     void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )
@@ -230,7 +231,7 @@ namespace
 
                     setMonsterCountOnTile( tile, 0 );
 
-                    Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+                    Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
                         std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
                 }
                 else {
@@ -242,7 +243,7 @@ namespace
 
                 hero.GetArmy().JoinTroop( troop.GetMonster(), recruit, false );
 
-                Interface::Basic::Get().SetRedraw( Interface::REDRAW_STATUS );
+                Interface::AdventureMap::Get().setRedraw( Interface::REDRAW_STATUS );
             }
         }
     }
@@ -281,7 +282,7 @@ namespace
                 weakestTroop->SetCount( newCount );
             }
 
-            Interface::Basic::Get().SetRedraw( Interface::REDRAW_STATUS );
+            Interface::AdventureMap::Get().setRedraw( Interface::REDRAW_STATUS );
         }
     }
 
@@ -290,7 +291,7 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
         Troop troop = getTroopFromTile( tile );
 
-        Interface::Basic & I = Interface::Basic::Get();
+        Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
         bool destroy = false;
 
@@ -323,7 +324,7 @@ namespace
             if ( Dialog::YES == Dialog::ArmyJoinFree( troop ) ) {
                 hero.GetArmy().JoinTroop( troop );
 
-                I.SetRedraw( Interface::REDRAW_STATUS );
+                I.setRedraw( Interface::REDRAW_STATUS );
                 destroy = true;
             }
             else {
@@ -342,7 +343,7 @@ namespace
                 hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount, false );
                 hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
 
-                I.SetRedraw( Interface::REDRAW_STATUS );
+                I.setRedraw( Interface::REDRAW_STATUS );
                 destroy = true;
             }
             else {
@@ -365,7 +366,7 @@ namespace
             // Set the hero's attacked monster tile index and immediately redraw game area to show an attacking sprite for this monster
             hero.SetAttackedMonsterTileIndex( dst_index );
 
-            I.Redraw( Interface::REDRAW_GAMEAREA );
+            I.redraw( Interface::REDRAW_GAMEAREA );
 
             Army army( tile );
 
@@ -412,7 +413,7 @@ namespace
 
             setMonsterCountOnTile( tile, 0 );
 
-            Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+            Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
                 std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
         }
 
@@ -459,17 +460,17 @@ namespace
 
             castle->Scout();
 
-            Interface::Basic & I = Interface::Basic::Get();
+            Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
             // If the enemy is not vanquished we update only the area around the castle on radar.
             if ( !enemyKingdom.isLoss() ) {
                 const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ) );
                 const fheroes2::Point castlePosition = Maps::GetPoint( dstIndex );
 
-                I.GetRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
+                I.getRadar().SetRenderArea( { castlePosition.x - scoutRange, castlePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 } );
             }
             // Otherwise we fully redraw the radar map image as there might be color reset of enemy's objects.
-            I.SetRedraw( Interface::REDRAW_CASTLES | Interface::REDRAW_RADAR );
+            I.setRedraw( Interface::REDRAW_CASTLES | Interface::REDRAW_RADAR );
         };
 
         Army & army = castle->GetActualArmy();
@@ -602,9 +603,9 @@ namespace
         hero.Move2Dest( dst_index );
 
         // Update the radar map image before changing the direction of the hero.
-        Interface::Basic & I = Interface::Basic::Get();
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
-        I.Redraw( Interface::REDRAW_RADAR );
+        Interface::AdventureMap & I = Interface::AdventureMap::Get();
+        I.getRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.redraw( Interface::REDRAW_RADAR );
 
         // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
         hero.setDirection( boatDirection );
@@ -637,9 +638,9 @@ namespace
         hero.FadeIn( offset );
 
         // Clear hero position marker from the boat and scout the area on radar after disembarking.
-        Interface::Basic & I = Interface::Basic::Get();
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
-        I.SetRedraw( Interface::REDRAW_RADAR );
+        Interface::AdventureMap & I = Interface::AdventureMap::Get();
+        I.getRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.setRedraw( Interface::REDRAW_RADAR );
 
         hero.GetPath().Reset();
         hero.ActionNewPosition( true );
@@ -651,7 +652,7 @@ namespace
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
-        Interface::Basic & I = Interface::Basic::Get();
+        Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
         if ( objectType == MP2::OBJ_BOTTLE ) {
             const MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
@@ -669,8 +670,8 @@ namespace
             else {
                 const auto resource = funds.getFirstValidResource();
 
-                I.GetStatusWindow().SetResource( resource.first, resource.second );
-                I.SetRedraw( Interface::REDRAW_STATUS );
+                I.getStatusWindow().SetResource( resource.first, resource.second );
+                I.setRedraw( Interface::REDRAW_STATUS );
             }
 
             hero.GetKingdom().AddFundsResource( funds );
@@ -678,15 +679,15 @@ namespace
 
         Game::PlayPickupSound();
 
-        I.GetGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+        I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
         resetObjectInfoOnTile( tile );
 
         if ( objectType == MP2::OBJ_RESOURCE ) {
             // Update the position of picked up resource on radar to remove its mark.
             const fheroes2::Point resourcePosition = Maps::GetPoint( dst_index );
-            I.GetRadar().SetRenderArea( { resourcePosition.x, resourcePosition.y, 1, 1 } );
-            I.SetRedraw( Interface::REDRAW_RADAR );
+            I.getRadar().SetRenderArea( { resourcePosition.x, resourcePosition.y, 1, 1 } );
+            I.setRedraw( Interface::REDRAW_RADAR );
         }
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
@@ -887,7 +888,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+        Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
             std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
         resetObjectInfoOnTile( tile );
@@ -1510,7 +1511,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+        Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
             std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
         resetObjectInfoOnTile( tile );
@@ -1685,17 +1686,17 @@ namespace
             if ( result && hero.PickupArtifact( art ) ) {
                 Game::PlayPickupSound();
 
-                Interface::Basic & I = Interface::Basic::Get();
+                Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
-                I.GetGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+                I.getGameArea().runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
                 resetObjectInfoOnTile( tile );
 
                 const fheroes2::Point artifactPosition = Maps::GetPoint( dst_index );
 
                 // Update the position of picked up artifact on radar to remove its mark.
-                I.GetRadar().SetRenderArea( { artifactPosition.x, artifactPosition.y, 1, 1 } );
-                I.SetRedraw( Interface::REDRAW_RADAR );
+                I.getRadar().SetRenderArea( { artifactPosition.x, artifactPosition.y, 1, 1 } );
+                I.setRedraw( Interface::REDRAW_RADAR );
             }
         }
 
@@ -1801,7 +1802,7 @@ namespace
 
         Game::PlayPickupSound();
 
-        Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+        Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
             std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
         resetObjectInfoOnTile( tile );
@@ -1858,13 +1859,13 @@ namespace
         hero.Move2Dest( index_to );
 
         // Clear the previous hero position
-        Interface::Basic & I = Interface::Basic::Get();
-        I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
-        I.Redraw( Interface::REDRAW_RADAR );
+        Interface::AdventureMap & I = Interface::AdventureMap::Get();
+        I.getRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
+        I.redraw( Interface::REDRAW_RADAR );
 
-        I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
-        I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        I.getGameArea().SetCenter( hero.GetCenter() );
+        I.getRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.GetPath().Hide();
@@ -1898,13 +1899,13 @@ namespace
         hero.Move2Dest( index_to );
 
         // Clear the previous hero position
-        Interface::Basic & I = Interface::Basic::Get();
-        I.GetRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
-        I.Redraw( Interface::REDRAW_RADAR );
+        Interface::AdventureMap & I = Interface::AdventureMap::Get();
+        I.getRadar().SetRenderArea( { fromPoint.x, fromPoint.y, 1, 1 } );
+        I.redraw( Interface::REDRAW_RADAR );
 
-        I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.GetRadar().SetRenderArea( hero.GetScoutRoi() );
-        I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        I.getGameArea().SetCenter( hero.GetCenter() );
+        I.getRadar().SetRenderArea( hero.GetScoutRoi() );
+        I.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.GetPath().Hide();
@@ -1952,11 +1953,11 @@ namespace
                     break;
                 }
 
-                Interface::Basic & I = Interface::Basic::Get();
+                Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
                 // Update the object on radar.
-                I.GetRadar().SetRenderArea( radarRoi );
-                I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+                I.getRadar().SetRenderArea( radarRoi );
+                I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
             };
 
             auto removeObjectProtection = [&tile]() {
@@ -2045,7 +2046,7 @@ namespace
                 }
             };
 
-            if ( tile.isCaptureObjectProtected() ) {
+            if ( isCaptureObjectProtected( tile ) ) {
                 Army army( tile );
 
                 Battle::Result result = Battle::Loader( hero.GetArmy(), army, dstIndex );
@@ -2103,7 +2104,7 @@ namespace
             if ( result.AttackerWins() ) {
                 hero.IncreaseExperience( result.GetExperienceAttacker() );
 
-                Maps::Tiles::RestoreAbandonedMine( tile, Resource::GOLD );
+                Maps::restoreAbandonedMine( tile, Resource::GOLD );
                 hero.SetMapsObject( MP2::OBJ_MINES );
                 setColorOnTile( tile, hero.GetColor() );
 
@@ -2112,11 +2113,11 @@ namespace
                 const fheroes2::Point tilePoint = Maps::GetPoint( dstIndex );
                 const fheroes2::Rect radarRoi( tilePoint.x - 1, tilePoint.y - 1, 3, 2 );
 
-                Interface::Basic & I = Interface::Basic::Get();
+                Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
                 // Update the object on radar.
-                I.GetRadar().SetRenderArea( radarRoi );
-                I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+                I.getRadar().SetRenderArea( radarRoi );
+                I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
                 Dialog::Message( MP2::StringObject( objectType ), _( "You beat the Ghosts and are able to restore the mine to production." ), Font::BIG, Dialog::OK );
             }
@@ -2163,7 +2164,7 @@ namespace
                     setMonsterCountOnTile( tile, 0 );
                     hero.GetArmy().JoinTroop( troop );
 
-                    Interface::Basic::Get().SetRedraw( Interface::REDRAW_STATUS );
+                    Interface::AdventureMap::Get().setRedraw( Interface::REDRAW_STATUS );
                 }
             }
         }
@@ -2420,11 +2421,11 @@ namespace
         const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ) );
         Maps::ClearFog( dst_index, scoutRange, hero.GetColor() );
 
-        Interface::Basic & I = Interface::Basic::Get();
+        Interface::AdventureMap & I = Interface::AdventureMap::Get();
         const fheroes2::Point towerPosition = Maps::GetPoint( dst_index );
         const fheroes2::Rect towerRoi( towerPosition.x - scoutRange, towerPosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 );
-        I.GetRadar().SetRenderArea( towerRoi );
-        I.SetRedraw( Interface::REDRAW_RADAR );
+        I.getRadar().SetRenderArea( towerRoi );
+        I.setRedraw( Interface::REDRAW_RADAR );
     }
 
     void ActionToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -2666,8 +2667,8 @@ namespace
 
                     // Fully update fog directions and redraw radar and game area.
                     Interface::GameArea::updateMapFogDirections();
-                    Interface::Basic & I = Interface::Basic::Get();
-                    I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+                    Interface::AdventureMap & I = Interface::AdventureMap::Get();
+                    I.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
                 }
             }
             else {
@@ -3220,7 +3221,7 @@ namespace
                 _( "In a dazzling display of daring, you break into the local jail and free the hero imprisoned there, who, in return, pledges loyalty to your cause." ),
                 Font::BIG, Dialog::OK );
 
-            Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+            Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
                 std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
             // TODO: add hero fading in animation together with jail animation.
@@ -3252,7 +3253,7 @@ namespace
 
             const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
             if ( !eyeMagiIndexes.empty() ) {
-                Interface::Basic & I = Interface::Basic::Get();
+                Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
                 fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -3263,12 +3264,12 @@ namespace
 
                     const fheroes2::Point eyePosition = Maps::GetPoint( eyeIndex );
 
-                    I.GetGameArea().SetCenter( eyePosition );
+                    I.getGameArea().SetCenter( eyePosition );
 
                     const fheroes2::Rect eyeRoi( eyePosition.x - scoutRange, eyePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 );
 
-                    I.GetRadar().SetRenderArea( eyeRoi );
-                    I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+                    I.getRadar().SetRenderArea( eyeRoi );
+                    I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
                     display.render();
 
@@ -3279,15 +3280,15 @@ namespace
                         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                             ++delay;
                             Game::updateAdventureMapAnimationIndex();
-                            I.Redraw( Interface::REDRAW_GAMEAREA );
+                            I.redraw( Interface::REDRAW_GAMEAREA );
 
                             display.render();
                         }
                     }
                 }
 
-                I.GetGameArea().SetCenter( hero.GetCenter() );
-                I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
+                I.getGameArea().SetCenter( hero.GetCenter() );
+                I.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR );
 
                 display.render();
             }
@@ -3448,7 +3449,7 @@ namespace
 
             AudioManager::PlaySound( M82::KILLFADE );
 
-            Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+            Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
                 std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
         }
         else {
@@ -3481,7 +3482,7 @@ namespace
 
 void Heroes::ScoutRadar() const
 {
-    Interface::Basic & I = Interface::Basic::Get();
+    Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
 #if defined( WITH_DEBUG )
     if ( GetColor() != Color::NONE ) {
@@ -3493,14 +3494,14 @@ void Heroes::ScoutRadar() const
         if ( !player->isAIAutoControlMode() ) {
 #endif
 
-            I.GetRadar().SetRenderArea( GetScoutRoi() );
+            I.getRadar().SetRenderArea( GetScoutRoi() );
 
 #if defined( WITH_DEBUG )
         }
     }
 #endif
 
-    I.SetRedraw( Interface::REDRAW_RADAR );
+    I.setRedraw( Interface::REDRAW_RADAR );
 }
 
 void Heroes::Action( int tileIndex )
@@ -3514,7 +3515,7 @@ void Heroes::Action( int tileIndex )
 
         ~FocusUpdater()
         {
-            Interface::Basic & I = Interface::Basic::Get();
+            Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
             I.ResetFocus( GameFocus::HEROES, true );
             I.RedrawFocus();
@@ -3524,13 +3525,21 @@ void Heroes::Action( int tileIndex )
     };
 
     std::unique_ptr<FocusUpdater> focusUpdater;
-    const bool isAIControlledForHumanPlayer = Players::Get( GetKingdom().GetColor() )->isAIAutoControlMode();
 
-    if ( !GetKingdom().isControlAI() || isAIControlledForHumanPlayer ) {
+#if defined( WITH_DEBUG )
+    const Player * player = Players::Get( GetKingdom().GetColor() );
+    assert( player != nullptr );
+
+    const bool isAIAutoControlMode = player->isAIAutoControlMode();
+#else
+    const bool isAIAutoControlMode = false;
+#endif
+
+    if ( !GetKingdom().isControlAI() || isAIAutoControlMode ) {
         focusUpdater = std::make_unique<FocusUpdater>();
 
-        if ( isAIControlledForHumanPlayer ) {
-            Interface::Basic::Get().SetFocus( this, false );
+        if ( isAIAutoControlMode ) {
+            Interface::AdventureMap::Get().SetFocus( this, false );
         }
     }
 
@@ -3557,10 +3566,10 @@ void Heroes::Action( int tileIndex )
 
     // Most likely there will be some action, immediately center the map on the hero to avoid subsequent minor screen movements
     if ( Modes( ACTION ) ) {
-        Interface::Basic & I = Interface::Basic::Get();
+        Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
-        I.GetGameArea().SetCenter( GetCenter() );
-        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR | Interface::REDRAW_HEROES );
+        I.getGameArea().SetCenter( GetCenter() );
+        I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR_CURSOR | Interface::REDRAW_HEROES );
     }
 
     switch ( objectType ) {

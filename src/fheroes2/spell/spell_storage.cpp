@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -59,16 +59,6 @@ void SpellStorage::Append( const SpellStorage & st )
 bool SpellStorage::isPresentSpell( const Spell & spell ) const
 {
     return end() != std::find( begin(), end(), spell );
-}
-
-bool SpellStorage::hasAdventureSpell( const int lvl ) const
-{
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it ).Level() == lvl && ( *it ).isAdventure() )
-            return true;
-    }
-
-    return false;
 }
 
 std::string SpellStorage::String() const

@@ -159,6 +159,11 @@ namespace Maps
             return tilePassable;
         }
 
+        void resetPassability()
+        {
+            tilePassable = DIRECTION_ALL;
+        }
+
         int GetGround() const;
 
         bool isWater() const
@@ -291,7 +296,7 @@ namespace Maps
 
         void AddonsSort();
         void Remove( uint32_t uniqID );
-        void RemoveObjectSprite();
+
         void updateObjectImageIndex( const uint32_t objectUid, const MP2::ObjectIcnType objectIcnType, const int imageIndexOffset );
         void replaceObject( const uint32_t objectUid, const MP2::ObjectIcnType originalObjectIcnType, const MP2::ObjectIcnType newObjectIcnType,
                             const uint8_t originalImageIndex, const uint8_t newImageIndex );
@@ -305,10 +310,6 @@ namespace Maps
         }
 
         void ClearFog( const int colors );
-
-        // Checks whether the object to be captured is guarded by its own forces
-        // (castle has a hero or garrison, dwelling has creatures, etc)
-        bool isCaptureObjectProtected() const;
 
         void SetObjectPassable( bool pass );
 
@@ -349,12 +350,6 @@ namespace Maps
 
         bool containsSprite( const MP2::ObjectIcnType objectIcnType, const uint32_t imageIdx ) const;
 
-        // Restores an abandoned mine whose main tile is 'tile', turning it into an ordinary mine that brings
-        // resources of type 'resource'. This method updates all sprites and sets object types for non-action
-        // tiles. The object type for the action tile (i.e. the main tile) remains unchanged and should be
-        // updated separately.
-        static void RestoreAbandonedMine( Tiles & tile, const int resource );
-
         // Some tiles have incorrect object type. This is due to original Editor issues.
         static void fixTileObjectType( Tiles & tile );
 
@@ -377,7 +372,6 @@ namespace Maps
 
         // Set or remove a flag which belongs to UID of the object.
         void updateFlag( const int color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer );
-        void RemoveJailSprite();
 
         bool isTallObject() const;
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-14 20:35+0000\n"
+"POT-Creation-Date: 2023-08-05 03:57+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -47,6 +47,12 @@ msgid "QUIT"
 msgstr ""
 
 msgid "CANCEL"
+msgstr ""
+
+msgid "OKAY"
+msgstr ""
+
+msgid "smallerButton|OKAY"
 msgstr ""
 
 msgid "ACCEPT"
@@ -155,19 +161,16 @@ msgstr ""
 msgid "GIFT"
 msgstr "AJÁNDÉK"
 
-msgid "guildWell|EXIT"
-msgstr ""
-
 msgid "DIFFICULTY"
 msgstr "NEHÉZSÉG"
+
+msgid "VIEW INTRO"
+msgstr ""
 
 msgid "MIN"
 msgstr ""
 
 msgid "MAX"
-msgstr ""
-
-msgid "OKAY"
 msgstr ""
 
 msgid "Warrior"
@@ -181,16 +184,6 @@ msgstr "Felfedező"
 
 msgid "None"
 msgstr "Nincs"
-
-msgid "Warning"
-msgstr "Figyelmeztetés"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
-"Szeretnéd visszavenni az irányítást az AI-tól? Ez csak a következő körben "
-"lesz érvényes."
 
 msgid ""
 "A few\n"
@@ -242,7 +235,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Ezrednyi\n"
@@ -345,13 +338,17 @@ msgstr "A Tagadás Gömbje varázstárgy hatására a csatában nem lehet varáz
 msgid "You have already cast a spell this round."
 msgstr "Te már használtál varázslatot ebben a körben."
 
-msgid "That spell will affect no one!"
+#, fuzzy
+msgid "That spell will have no effect!"
 msgstr "Ez a varázslat nem fog senkire se hatni!"
 
 msgid "You may only summon one type of elemental per combat."
 msgstr "Csak egy típusú elementált idézhetsz meg egy csatában."
 
-msgid "There is no open space adjacent to your hero to summon an Elemental to."
+#, fuzzy
+msgid ""
+"There is no open space adjacent to your hero where you can summon an "
+"Elemental to."
 msgstr "Nincs szabad helye a hősödnek, egy újabb Elementál idézésére."
 
 msgid ""
@@ -698,6 +695,10 @@ msgstr ""
 #, fuzzy
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Biztos vagy benne hogy feloszlatod ezt a sereget?"
+
+#, fuzzy
+msgid "Are you sure you want to enable auto combat?"
+msgstr "Biztos, hogy vissza akarsz vonulni?"
 
 #, fuzzy
 msgid "%{name} skip their turn."
@@ -2604,11 +2605,14 @@ msgstr "Maximus"
 msgid "Hire all creatures in the town."
 msgstr "Összes hős és város elvesztése"
 
+msgid "Available"
+msgstr "Rendelkezésre áll"
+
 msgid "Town Population Information and Statistics"
 msgstr "A város lakosságának adatai és statisztikái"
 
-msgid "Damg"
-msgstr ""
+msgid "Damage"
+msgstr "Sebzés"
 
 msgid "HP"
 msgstr "ÉP"
@@ -2618,9 +2622,6 @@ msgstr "Szaporulat"
 
 msgid "week"
 msgstr "hét"
-
-msgid "Available"
-msgstr "Rendelkezésre áll"
 
 #, fuzzy
 msgid "View World"
@@ -2671,9 +2672,6 @@ msgstr "Lövések"
 
 msgid "Shots Left"
 msgstr "Maradék lövések"
-
-msgid "Damage"
-msgstr "Sebzés"
 
 msgid "Hit Points"
 msgstr "Életerő-pontok"
@@ -2869,7 +2867,7 @@ msgstr "Kiválasztott Leírás"
 msgid "Change the graphics settings of the game."
 msgstr ""
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 
 msgid ""
@@ -3445,6 +3443,9 @@ msgstr "Üveg"
 msgid "autoBattle|Manual"
 msgstr ""
 
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr ""
+
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
@@ -3547,14 +3548,24 @@ msgstr "Személyiség:"
 msgid "Best Monster:"
 msgstr "Legjobb szörny:"
 
-msgid "Create a map that is %{size} squares wide and %{size} squares high."
+#, fuzzy
+msgid ""
+"Are you sure you want to load a new map? (Any unsaved changes to the current "
+"map will be lost.)"
 msgstr ""
+"Biztos hogy benne hogy új játékot töltesz be? (A jelenlegi játékod el fog "
+"veszni)"
 
 #, fuzzy
-msgid "Cancel back to the New Map menu."
-msgstr "Vissza a főmenübe."
+msgid ""
+"Are you sure you want to create a new map? (Any unsaved changes to the "
+"current map will be lost.)"
+msgstr ""
+"Biztos hogy benne hogy új játékot töltesz be? (A jelenlegi játékod el fog "
+"veszni)"
 
-msgid "Create a new map either from scratch or using the random map generator."
+msgid ""
+"Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
 #, fuzzy
@@ -3567,6 +3578,209 @@ msgstr "Játék betöltése"
 
 msgid "Load an existing map."
 msgstr ""
+
+#, fuzzy
+msgid "Save Map"
+msgstr "Új játék"
+
+#, fuzzy
+msgid "Save the current map."
+msgstr "Kattints a főmenübe való visszatéréshez."
+
+msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Ocean Objects"
+msgstr ""
+
+msgid "Grass Objects"
+msgstr ""
+
+msgid "Snow Objects"
+msgstr ""
+
+msgid "Swamp Objects"
+msgstr ""
+
+msgid "Lava Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Desert Objects"
+msgstr "Sivatagi sátor"
+
+msgid "Dirt Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Wasteland Objects"
+msgstr "Pusztulat"
+
+msgid "Beach Objects"
+msgstr ""
+
+#, fuzzy
+msgid "Towns"
+msgstr "Város"
+
+msgid "Heroes"
+msgstr "Hősök"
+
+#, fuzzy
+msgid "Artifacts"
+msgstr "Varázstárgy"
+
+#, fuzzy
+msgid "Treasures"
+msgstr "Kincsek"
+
+msgid ""
+"Draws terrain in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+msgid ""
+"Erases objects in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+#, fuzzy
+msgid "Small Brush"
+msgstr "Kicsi térképek"
+
+#, fuzzy
+msgid "Medium Brush"
+msgstr "Közepes térképek"
+
+#, fuzzy
+msgid "Large Brush"
+msgstr "Nagy térképek"
+
+msgid "Area Fill"
+msgstr ""
+
+msgid "Used to click and drag for filling in large areas."
+msgstr ""
+
+msgid "Clear Area"
+msgstr ""
+
+msgid "Used to click and drag for clearing large areas."
+msgstr ""
+
+msgid ""
+"Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
+"eliminates the penalty.)"
+msgstr ""
+
+msgid "Traversable only by boat."
+msgstr ""
+
+msgid "No special modifiers."
+msgstr ""
+
+msgid "Used to place objects most appropriate for use on %{terrain}."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a town or castle."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a monster group."
+msgstr ""
+
+msgid "Used to place a hero."
+msgstr ""
+
+#, fuzzy
+msgid "Used to place an artifact."
+msgstr "A Szent Varázstárgy kiásása."
+
+msgid ""
+"Used to place\n"
+"a resource or treasure."
+msgstr ""
+
+msgid "Terrain Mode"
+msgstr ""
+
+msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
+msgstr ""
+
+msgid "Object Mode"
+msgstr ""
+
+msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgstr ""
+
+msgid "Detail Mode"
+msgstr ""
+
+#, fuzzy
+msgid "Used for special editing of monsters, heroes and towns."
+msgstr "Az ellenfelek összes hősének és városának elpusztítása."
+
+msgid "Allows you to draw streams by clicking and dragging."
+msgstr ""
+
+msgid "Stream Mode"
+msgstr ""
+
+msgid "Allows you to draw roads by clicking and dragging."
+msgstr ""
+
+#, fuzzy
+msgid "Road Mode"
+msgstr "Út Mód"
+
+msgid "Erase Mode"
+msgstr ""
+
+msgid "Used to erase objects off the map."
+msgstr ""
+
+msgid "Change between zoom and normal view."
+msgstr ""
+
+msgid "Magnify"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Undo your last action. Press again to redo the action."
+msgstr ""
+
+msgid "Create a new map either from scratch or using the random map generator."
+msgstr ""
+
+msgid "Edit map title, description, and other general information."
+msgstr ""
+
+#, fuzzy
+msgid "Specifications"
+msgstr "Erődítmények"
+
+msgid "File Options"
+msgstr "Fájlbeállítások"
+
+msgid ""
+"Open the file options menu, where you can save or load maps, or quit out of "
+"the editor."
+msgstr ""
+
+msgid "View the editor system options, which let you customize the editor."
+msgstr ""
+
+msgid "Create a map that is %{size} squares wide and %{size} squares high."
+msgstr ""
+
+#, fuzzy
+msgid "Cancel back to the New Map menu."
+msgstr "Vissza a főmenübe."
 
 msgid "Cancel back to the main menu."
 msgstr "Vissza a főmenübe."
@@ -3590,6 +3804,9 @@ msgstr "Vissza a főmenübe."
 
 msgid "No maps available!"
 msgstr "Nincs használható térkép!"
+
+msgid "Warning"
+msgstr "Figyelmeztetés"
 
 msgid "difficulty|Easy"
 msgstr "Könnyű"
@@ -3663,7 +3880,9 @@ msgstr "Hős mutatása"
 msgid "View Intro videos for the current state of the campaign."
 msgstr ""
 
-msgid "Select campaign difficulty. It cannot be changed after."
+msgid ""
+"Select the campaign difficulty. This can be lowered at any point during the "
+"campaign."
 msgstr ""
 
 msgid "Restart"
@@ -3672,6 +3891,18 @@ msgstr ""
 #, fuzzy
 msgid "Restart the current scenario."
 msgstr "Készítők listájának megjelenítése."
+
+#, fuzzy
+msgid "Difficulty"
+msgstr ""
+"Térkép\n"
+"Nehézség"
+
+msgid ""
+"You have changed to a lower difficulty for the campaign. You will not be "
+"able to revert this after this point. The high score will be calculated "
+"based solely on the new difficulty. Do you want to proceed?"
+msgstr ""
 
 #, fuzzy
 msgid "Are you sure you want to restart this scenario?"
@@ -4213,7 +4444,19 @@ msgstr ""
 msgid "hotkey|upgrade troop"
 msgstr ""
 
-msgid "hotkey|dismiss troop"
+msgid "hotkey|dismiss hero or troop"
+msgstr ""
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+"Szeretnéd visszavenni az irányítást az AI-tól? Ez csak a következő körben "
+"lesz érvényes."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
 msgstr ""
 
 #, fuzzy
@@ -4657,11 +4900,6 @@ msgid "%{color} player's turn."
 msgstr "%{color} játékos köre"
 
 msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
-
-msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
@@ -4773,9 +5011,6 @@ msgid ""
 "Bring up the file options menu, allowing you to load, save, start a new game "
 "or quit."
 msgstr ""
-
-msgid "File Options"
-msgstr "Fájlbeállítások"
 
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
@@ -6369,16 +6604,18 @@ msgid ""
 "oracle taught me his skill. I have the answer you seek.\""
 msgstr ""
 
-msgid "Spell book is not present."
+#, fuzzy
+msgid "No spell book is present."
+msgstr "Nincsenek varázslatai."
+
+msgid ""
+"This spell costs %{mana} spell points. You have no spell points, so you "
+"cannot cast it."
 msgstr ""
 
 msgid ""
-"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
-msgstr ""
-
-msgid ""
-"That spell costs %{mana} mana. You only have %{point} mana, so you can't "
-"cast the spell."
+"This spell costs %{mana} spell points. You only have %{point} spell points, "
+"so you cannot cast it."
 msgstr ""
 
 #, fuzzy
@@ -6397,31 +6634,34 @@ msgstr ""
 "A hősöd túl fáradt ehhez a varázslathoz a mai nap. Próbáld újra holnap."
 
 #, fuzzy
-msgid "This spell cannot be used on a boat."
+msgid "This spell cannot be cast on a boat."
 msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
 
 #, fuzzy
-msgid "This spell can be casted only nearby ocean."
+msgid "This spell can only be cast near an ocean."
 msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
 
 msgid ""
-"There is no boat available and no free ocean location near the hero to cast "
-"this spell."
+"There are no boats available and no ocean adjacent to the hero where this "
+"spell will work."
 msgstr ""
 
 #, fuzzy
-msgid "There is no more boat available to cast this spell."
+msgid "There are no boats available for this spell."
 msgstr "Kalandozó varázslat elsütése."
 
-msgid "There is no free ocean location near the hero to cast this spell."
-msgstr ""
+#, fuzzy
+msgid "There is no ocean adjacent to the hero where this spell will work."
+msgstr "Nincs szabad helye a hősödnek, egy újabb Elementál idézésére."
 
 msgid ""
-"You do not currently own any town or castle, so you can't cast the spell."
+"You do not own any town or castle that is not currently occupied by a hero. "
+"You cannot cast this spell."
 msgstr ""
 
-msgid "This hero is already in a town, so you can't cast the spell."
-msgstr ""
+#, fuzzy
+msgid "This hero is already in a town, so you cannot cast this spell."
+msgstr "Kalandozó varázslat elsütése."
 
 msgid ""
 "The nearest town is %{town}.\n"
@@ -6429,17 +6669,17 @@ msgid ""
 "This town is occupied by your hero %{hero}."
 msgstr ""
 
-msgid "This spell is already in use."
+msgid "This spell is already in effect."
 msgstr ""
 
 msgid ""
-"No opponent can have heroes under his command anymore. Casting this spell "
-"will not bring any advantage."
+"No opponent neither has nor can have any hero under their command anymore. "
+"Casting this spell will have no effect."
 msgstr ""
 
 msgid ""
-"No opponent has a hero under his command at this time. Casting this spell "
-"will not bring any advantage."
+"No opponent has a hero under their command at this time. Casting this spell "
+"will have no effect."
 msgstr ""
 
 msgid ""
@@ -6447,9 +6687,10 @@ msgid ""
 "work."
 msgstr ""
 
+#, fuzzy
 msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
+"You must be standing on the entrance to a mine (sawmills and alchemist labs "
+"do not count) to cast this spell."
 msgstr ""
 "A bánya bejáratánál kell állnod (a fűrészmalmot és az alkimista labort "
 "leszámítva), hogy használd ezt a varázslatot."
@@ -6458,8 +6699,8 @@ msgid "You must first defeat the ghosts guarding the mine to cast this spell."
 msgstr ""
 
 msgid ""
-"There are already at least as many elementals guarding the mine than the "
-"spell can generate. Casting this spell will not bring any advantage."
+"There are already at least as many elementals guarding the mine as this hero "
+"can generate. Casting this spell will have no effect."
 msgstr ""
 
 #, fuzzy
@@ -7067,10 +7308,6 @@ msgid "Skills"
 msgstr "Fűrészmalom"
 
 #, fuzzy
-msgid "Artifacts"
-msgstr "Varázstárgy"
-
-#, fuzzy
 msgid "Town/Castle"
 msgstr "Kastély"
 
@@ -7080,9 +7317,6 @@ msgstr "Helyőrség"
 #, fuzzy
 msgid "Gold Per Day:"
 msgstr "Arany a kincstárban:"
-
-msgid "Heroes"
-msgstr "Hősök"
 
 #, fuzzy
 msgid "View Heroes."
@@ -9881,17 +10115,23 @@ msgstr ""
 "ugyanakkora erővel támad, mint az eredeti, de bármilyen sebzés következtében "
 "eltűnik."
 
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr "Felére csökkenti a távolsági sebzéseket egy kiválasztott egységnek."
-
 msgid "Shield"
 msgstr "Pajzs"
 
-msgid "Halves damage received from ranged attacks for all of your units."
-msgstr "Felére csökkenti a távolsági sebzéseket minden egységnek."
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr "Felére csökkenti a távolsági sebzéseket egy kiválasztott egységnek."
 
 msgid "Mass Shield"
 msgstr "Teljes Pajzs"
+
+#, fuzzy
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
+msgstr "Felére csökkenti a távolsági sebzéseket minden egységnek."
 
 msgid "Summon Earth Elemental"
 msgstr "Földelementál idézése"

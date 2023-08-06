@@ -103,6 +103,9 @@ namespace
             col.r = *value;
             col.g = *( value + 1 );
             col.b = *( value + 2 );
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+            col.a = 255;
+#endif
         }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -336,79 +339,94 @@ namespace fheroes2
 
         const uint8_t * dataEnd = data + sizeData;
 
+        // The need for a transform layer can only be determined during ICN decoding.
+        bool noTransformLayer = true;
+
         while ( true ) {
             if ( 0 == *data ) { // 0x00 - end of row
+                noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= width );
+
                 imageData += width;
                 imageTransform += width;
                 posX = 0;
                 ++data;
             }
             else if ( 0x80 > *data ) { // 0x01-0x7F - repeat a pixel N times
-                uint32_t pixelCount = *data;
+                const uint8_t pixelCount = *data;
                 ++data;
-                while ( pixelCount > 0 && data != dataEnd ) {
-                    imageData[posX] = *data;
-                    imageTransform[posX] = 0;
-                    ++posX;
-                    ++data;
-                    --pixelCount;
+
+                if ( data + pixelCount > dataEnd ) {
+                    // Image data is corrupted - we can not read data beyond dataEnd.
+                    break;
                 }
+
+                memcpy( imageData + posX, data, pixelCount );
+                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+
+                data += pixelCount;
+                posX += pixelCount;
             }
             else if ( 0x80 == *data ) { // 0x80 - end of image
+                noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= width );
+
                 break;
             }
             else if ( 0xC0 > *data ) { // 0xBF - empty (transparent) pixels
+                noTransformLayer = false;
+
                 posX += *data - 0x80;
                 ++data;
             }
             else if ( 0xC0 == *data ) { // 0xC0 - transform layer
+                noTransformLayer = false;
+
                 ++data;
 
                 const uint8_t transformValue = *data;
-                const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) << 6 ) / 256 + 2 ); // 1 is for skipping
+                const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) >> 2 ) + 2 ); // 1 is for skipping
 
-                uint32_t pixelCount = *data % 4 ? *data % 4 : *( ++data );
+                const uint32_t countValue = transformValue & 0x03;
+                const uint32_t pixelCount = ( countValue != 0 ) ? countValue : *( ++data );
 
                 if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
-                    while ( pixelCount > 0 ) {
-                        imageTransform[posX] = transformType;
-                        ++posX;
-                        --pixelCount;
-                    }
+                    memset( imageTransform + posX, transformType, pixelCount );
                 }
-                else {
-                    posX += pixelCount;
-                }
+
+                posX += pixelCount;
 
                 ++data;
             }
             else if ( 0xC1 == *data ) { // 0xC1
                 ++data;
-                uint32_t pixelCount = *data;
+                const uint32_t pixelCount = *data;
                 ++data;
-                while ( pixelCount > 0 ) {
-                    imageData[posX] = *data;
-                    imageTransform[posX] = 0;
-                    ++posX;
-                    --pixelCount;
-                }
+
+                memset( imageData + posX, *data, pixelCount );
+                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+
+                posX += pixelCount;
+
                 ++data;
             }
             else {
-                uint32_t pixelCount = *data - 0xC0;
+                const uint32_t pixelCount = *data - 0xC0;
                 ++data;
-                while ( pixelCount > 0 ) {
-                    imageData[posX] = *data;
-                    imageTransform[posX] = 0;
-                    ++posX;
-                    --pixelCount;
-                }
+
+                memset( imageData + posX, *data, pixelCount );
+                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+
+                posX += pixelCount;
+
                 ++data;
             }
 
             if ( data >= dataEnd ) {
                 break;
             }
+        }
+
+        if ( noTransformLayer ) {
+            sprite._disableTransformLayer();
         }
 
         return sprite;
@@ -424,10 +442,9 @@ namespace fheroes2
 
         for ( size_t i = 0; i < imageCount; ++i ) {
             Image & tilImage = output[i];
-            tilImage.resize( width, height );
             tilImage._disableTransformLayer();
+            tilImage.resize( width, height );
             memcpy( tilImage.image(), data + i * imageSize, imageSize );
-            std::fill( tilImage.transform(), tilImage.transform() + imageSize, static_cast<uint8_t>( 0 ) );
         }
     }
 

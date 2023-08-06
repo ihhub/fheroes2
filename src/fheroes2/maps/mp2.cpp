@@ -571,9 +571,9 @@ bool MP2::isBattleLife( const MapObjectType objectType )
     return false;
 }
 
-bool MP2::isActionObject( const MapObjectType objectType, const bool locatesOnWater )
+bool MP2::isActionObject( const MapObjectType objectType, const bool accessedFromWater )
 {
-    if ( locatesOnWater ) {
+    if ( accessedFromWater ) {
         return isWaterActionObject( objectType );
     }
 
@@ -584,10 +584,10 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
 {
     switch ( objectType ) {
     case OBJ_ARTIFACT:
-    case OBJ_BARRIER: // Can barriers be set on water?
+    case OBJ_BARRIER:
     case OBJ_BOTTLE:
     case OBJ_BUOY:
-    case OBJ_COAST: // This is actually a land object.
+    case OBJ_COAST:
     case OBJ_DERELICT_SHIP:
     case OBJ_FLOTSAM:
     case OBJ_MAGELLANS_MAPS:

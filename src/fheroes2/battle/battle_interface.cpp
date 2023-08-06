@@ -3056,6 +3056,7 @@ void Battle::Interface::FadeArena( const bool clearMessageLog )
 
     const fheroes2::Rect srt = border.GetArea();
     fheroes2::Image top( srt.width, srt.height );
+    top._disableTransformLayer();
 
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.width, srt.height );
     fheroes2::FadeDisplayWithPalette( top, srt.getPosition(), 5, 300, 5 );
@@ -3139,6 +3140,12 @@ void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
     le.MousePressLeft( btn_auto.area() ) ? btn_auto.drawOnPress() : btn_auto.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_auto.area() ) ) {
+        if ( fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Are you sure you want to enable auto combat?" ), fheroes2::FontType::normalWhite() ),
+                                    Dialog::YES | Dialog::NO )
+             != Dialog::YES ) {
+            return;
+        }
+
         EventAutoSwitch( unit, actions );
     }
 }
@@ -3312,17 +3319,22 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, const bool skipLastFr
     }
 }
 
-void Battle::Interface::AnimateOpponents( OpponentSprite * target )
+void Battle::Interface::AnimateOpponents( OpponentSprite * hero )
 {
-    if ( target == nullptr || target->isFinishFrame() ) // nothing to animate
+    if ( hero == nullptr ) {
         return;
+    }
+
+    // Render the first animation frame. We do it here not to skip small animations with duration for 1 frame.
+    // For such (one frame) animations we are already ad the end of animation and `isFinishFrame()` always will return true.
+    Redraw();
 
     LocalEvent & le = LocalEvent::Get();
 
     // We need to wait this delay before rendering the first frame of hero animation.
     Game::AnimateResetDelay( Game::DelayType::BATTLE_OPPONENTS_DELAY );
 
-    // 'BATTLE_OPPONENTS_DELAY' is more than 2 times the value of 'BATTLE_IDLE_DELAY', so we need to handle the idle animation separately in this loop.
+    // 'BATTLE_OPPONENTS_DELAY' is different than 'BATTLE_IDLE_DELAY', so we handle the idle animation separately in this loop.
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::BATTLE_OPPONENTS_DELAY, Game::BATTLE_IDLE_DELAY } ) ) ) {
         // Animate the idling units.
         if ( IdleTroopsAnimation() ) {
@@ -3330,15 +3342,15 @@ void Battle::Interface::AnimateOpponents( OpponentSprite * target )
         }
 
         if ( Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
-            // Render before switching to the next frame.
-            Redraw();
-
-            if ( target->isFinishFrame() ) {
+            if ( hero->isFinishFrame() ) {
                 // We have reached the end of animation.
                 break;
             }
 
-            target->IncreaseAnimFrame();
+            hero->IncreaseAnimFrame();
+
+            // Render the next frame and then wait a delay before checking if it is the last frame in the animation.
+            Redraw();
         }
     }
 }
@@ -4211,11 +4223,26 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
 
     Unit * target = !targets.empty() ? targets.front().defender : nullptr;
 
+    const bool isMassSpell = spell.isApplyWithoutFocusObject();
+    bool isCastDown = false;
+    OpponentSprite * opponent = nullptr;
+
     // set spell cast animation
     if ( caster ) {
-        OpponentSprite * opponent = caster->GetColor() == arena.GetArmy1Color() ? _opponent1.get() : _opponent2.get();
-        if ( opponent ) {
-            opponent->SetAnimation( spell.isApplyWithoutFocusObject() ? OP_CAST_MASS : OP_CAST_UP );
+        const bool isLeftOpponent = caster->GetColor() == arena.GetArmy1Color();
+        opponent = isLeftOpponent ? _opponent1.get() : _opponent2.get();
+        if ( opponent != nullptr ) {
+            if ( isMassSpell ) {
+                opponent->SetAnimation( OP_CAST_MASS );
+            }
+            else {
+                // The cast down is applied below the 2rd battlefield row (count is started from 0)
+                // and for the (rowNumber - 2) columns starting from the side of the hero.
+                isCastDown = isLeftOpponent ? ( ( dst % 11 ) < dst / 11 - 2 ) : ( ( 10 - ( dst % 11 ) ) < dst / 11 - 2 );
+
+                opponent->SetAnimation( isCastDown ? OP_CAST_DOWN : OP_CAST_UP );
+            }
+
             AnimateOpponents( opponent );
         }
     }
@@ -4362,12 +4389,17 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
             }
     }
 
-    if ( caster ) {
-        OpponentSprite * opponent = caster->GetColor() == arena.GetArmy1Color() ? _opponent1.get() : _opponent2.get();
-        if ( opponent ) {
-            opponent->SetAnimation( ( target != nullptr ) ? OP_CAST_UP_RETURN : OP_CAST_MASS_RETURN );
-            AnimateOpponents( opponent );
+    if ( opponent != nullptr ) {
+        if ( isMassSpell ) {
+            opponent->SetAnimation( OP_CAST_MASS_RETURN );
         }
+        else {
+            opponent->SetAnimation( isCastDown ? OP_CAST_DOWN_RETURN : OP_CAST_UP_RETURN );
+        }
+        AnimateOpponents( opponent );
+
+        // Return to the static animation of hero.
+        opponent->SetAnimation( OP_STATIC );
     }
 }
 
@@ -5419,6 +5451,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     }
 
     fheroes2::Image battleFieldCopy( area.width, area.height );
+    battleFieldCopy._disableTransformLayer();
     fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     // The death wave horizontal length in pixels.
@@ -5444,7 +5477,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
 
     // Prepare the blank image for the Death Wave spell effect with the transform layer equal to "0"
     fheroes2::Image spellEffect( waveLength, area.height );
-    std::fill( spellEffect.transform(), spellEffect.transform() + static_cast<size_t>( waveLength * area.height ), static_cast<uint8_t>( 0 ) );
+    spellEffect._disableTransformLayer();
 
     AudioManager::PlaySound( M82::MNRDEATH );
 
@@ -5548,6 +5581,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
     }
 
     fheroes2::Image battleFieldCopy( area.width, area.height );
+    battleFieldCopy._disableTransformLayer();
     fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;
@@ -5684,6 +5718,8 @@ void Battle::Interface::RedrawActionArmageddonSpell()
 
     fheroes2::Image spriteWhitening( area.width, area.height );
     fheroes2::Image spriteReddish( area.width, area.height );
+    spriteWhitening._disableTransformLayer();
+    spriteReddish._disableTransformLayer();
     fheroes2::Copy( _mainSurface, area.x, area.y, spriteWhitening, 0, 0, area.width, area.height );
     fheroes2::Copy( _mainSurface, area.x, area.y, spriteReddish, 0, 0, area.width, area.height );
 
@@ -5700,7 +5736,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             fheroes2::ApplyPalette( spriteWhitening, 9 );
-            fheroes2::Blit( spriteWhitening, _mainSurface, area.x, area.y );
+            fheroes2::Copy( spriteWhitening, 0, 0, _mainSurface, area.x, area.y, area.width, area.height );
             RedrawPartialFinish();
 
             alpha += 10;
@@ -5734,7 +5770,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
                 shifted.height -= offset;
                 shifted.y = 0;
             }
-            fheroes2::Blit( spriteReddish, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
+            fheroes2::Copy( spriteReddish, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
 
             RedrawPartialFinish();
         }
@@ -5753,6 +5789,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     cursor.SetThemes( Cursor::WAR_POINTER );
 
     fheroes2::Image sprite( area.width, area.height );
+    sprite._disableTransformLayer();
     fheroes2::Copy( _mainSurface, area.x, area.y, sprite, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;

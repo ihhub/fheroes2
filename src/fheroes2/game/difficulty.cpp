@@ -80,14 +80,14 @@ double Difficulty::GetGoldIncomeBonus( int difficulty )
     return 1.0;
 }
 
-double Difficulty::GetUnitGrowthBonusForAI( int difficulty )
+double Difficulty::GetUnitGrowthBonusForAI( const int difficulty )
 {
     // In the original game AI has a cheeky monster growth bonus depending on difficulty:
-    // Easy - 1.0 (no bonus)
-    // Normal - 1.0 (no bonus)
-    // Hard - 1.20 (or 20% extra)
-    // Expert - 1.32 (or 32% extra)
-    // Impossible - 1.44 (or 44% extra)
+    // Easy - 0.0 (no bonus)
+    // Normal - 0.0 (no bonus)
+    // Hard - 0.20 (or 20% extra)
+    // Expert - 0.32 (or 32% extra)
+    // Impossible - 0.44 (or 44% extra)
     // This bonus was introduced to compensate weak AI in the game.
     //
     // However, with introduction of proper AI in this engine AI has become much stronger and some maps are impossible to beat.
@@ -99,19 +99,19 @@ double Difficulty::GetUnitGrowthBonusForAI( int difficulty )
     switch ( difficulty ) {
     case Difficulty::EASY:
     case Difficulty::NORMAL:
-        return 1.0;
+        return 0;
     case Difficulty::HARD:
-        return 1.14;
+        return 0.14;
     case Difficulty::EXPERT:
-        return 1.254;
+        return 0.254;
     case Difficulty::IMPOSSIBLE:
-        return 1.368;
+        return 0.368;
     default:
         // Did you add a new difficulty level? Add the logic above!
         assert( 0 );
         break;
     }
-    return 1.0;
+    return 0;
 }
 
 int Difficulty::GetHeroMovementBonus( int difficulty )

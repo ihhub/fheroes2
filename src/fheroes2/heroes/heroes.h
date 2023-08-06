@@ -277,8 +277,15 @@ public:
     static const char * GetName( int heroid );
 
     bool isValid() const override;
-    bool isFreeman() const;
-    void SetFreeman( int reason );
+    // Returns true if the hero is active on the adventure map (i.e. has a valid ID, is not imprisoned, and is hired by
+    // some kingdom), otherwise returns false
+    bool isActive() const;
+
+    // Returns true if the hero is available for hire (i.e. has a valid ID, is not imprisoned, and is not hired by any
+    // kingdom), otherwise returns false
+    bool isAvailableForHire() const;
+    // Dismisses the hero (makes him available for hire) because of a 'reason'. See the implementation for details.
+    void Dismiss( int reason );
 
     bool isLosingGame() const;
     const Castle * inCastle() const override;
@@ -370,12 +377,28 @@ public:
     int GetLevelSkill( int ) const override;
     uint32_t GetSecondaryValues( int skill ) const override;
     void LearnSkill( const Skill::Secondary & );
-    Skill::SecSkills & GetSecondarySkills();
+
+    Skill::SecSkills & GetSecondarySkills()
+    {
+        return secondary_skills;
+    }
 
     bool PickupArtifact( const Artifact & );
-    bool HasUltimateArtifact() const;
-    uint32_t GetCountArtifacts() const;
-    bool IsFullBagArtifacts() const;
+
+    bool HasUltimateArtifact() const
+    {
+        return bag_artifacts.ContainUltimateArtifact();
+    }
+
+    uint32_t GetCountArtifacts() const
+    {
+        return bag_artifacts.CountArtifacts();
+    }
+
+    bool IsFullBagArtifacts() const
+    {
+        return bag_artifacts.isFull();
+    }
 
     int GetMobilityIndexSprite() const;
 
@@ -454,7 +477,7 @@ public:
     void Move2Dest( const int32_t destination );
     bool isMoveEnabled() const;
     bool CanMove() const;
-    void SetMove( bool );
+    void SetMove( const bool enable );
     bool isAction() const;
     void ResetAction();
     void Action( int tileIndex );
@@ -675,7 +698,7 @@ struct AllHeroes : public VecHeroes
     }
 
     Heroes * GetHero( const Castle & castle ) const;
-    Heroes * GetFreeman( const int race, const int heroIDToIgnore ) const;
+    Heroes * GetHeroForHire( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( int32_t ) const;
 };
 

@@ -52,6 +52,8 @@ struct WorldNode : public PathfindingNode<MP2::MapObjectType>
     WorldNode( const WorldNode & ) = delete;
     WorldNode( WorldNode && ) = default;
 
+    ~WorldNode() override = default;
+
     WorldNode & operator=( const WorldNode & ) = delete;
     WorldNode & operator=( WorldNode && ) = default;
 
@@ -70,6 +72,8 @@ public:
     WorldPathfinder() = default;
     WorldPathfinder( const WorldPathfinder & ) = delete;
 
+    ~WorldPathfinder() override = default;
+
     WorldPathfinder & operator=( const WorldPathfinder & ) = delete;
 
     // This method resizes the cache and re-calculates map offsets if values are out of sync with World class
@@ -81,30 +85,41 @@ protected:
     virtual void processWorldMap();
     void checkAdjacentNodes( std::vector<int> & nodesToExplore, int currentNodeIdx );
 
+    // Checks whether moving from the source tile in the specified direction is allowed. The default implementation
+    // can be overridden by a derived class.
+    virtual bool isMovementAllowed( const int from, const int direction ) const;
+
     // This method defines pathfinding rules. This has to be implemented by the derived class.
     virtual void processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx ) = 0;
 
-    // Calculates the movement penalty when moving from the src tile to the adjacent dst tile in the specified direction.
-    // If the "last move" logic should be taken into account (when performing pathfinding for a real hero on the map),
-    // then the src tile should be already accessible for this hero and it should also have a valid information about
-    // the hero's remaining movement points. The default implementation can be overridden by a derived class.
-    virtual uint32_t getMovementPenalty( int src, int dst, int direction ) const;
+    // Calculates the movement penalty when moving from the source tile to the adjacent destination tile in the
+    // specified direction. If the "last move" logic should be taken into account (when performing pathfinding
+    // for a real hero on the map), then the source tile should be already accessible for this hero and it should
+    // also have a valid information about the hero's remaining movement points. The default implementation can be
+    // overridden by a derived class.
+    virtual uint32_t getMovementPenalty( const int from, const int to, const int direction ) const;
 
     // Subtracts movement points taking the transition between turns into account
     uint32_t subtractMovePoints( const uint32_t movePoints, const uint32_t subtractedMovePoints ) const;
 
-    uint8_t _pathfindingSkill = Skill::Level::EXPERT;
-    int _currentColor = Color::NONE;
+    std::vector<int> _mapOffset;
+
+    // Hero properties should be cached here because they can change even if the hero's position does not change,
+    // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
+    // pathfinder's cache
+    int _color = Color::NONE;
     uint32_t _remainingMovePoints = 0;
     uint32_t _maxMovePoints = 0;
-    std::vector<int> _mapOffset;
+    uint8_t _pathfindingSkill = Skill::Level::EXPERT;
 };
 
-class PlayerWorldPathfinder : public WorldPathfinder
+class PlayerWorldPathfinder final : public WorldPathfinder
 {
 public:
     PlayerWorldPathfinder() = default;
     PlayerWorldPathfinder( const PlayerWorldPathfinder & ) = delete;
+
+    ~PlayerWorldPathfinder() override = default;
 
     PlayerWorldPathfinder & operator=( const PlayerWorldPathfinder & ) = delete;
 
@@ -118,14 +133,16 @@ private:
     void processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx ) override;
 };
 
-class AIWorldPathfinder : public WorldPathfinder
+class AIWorldPathfinder final : public WorldPathfinder
 {
 public:
     explicit AIWorldPathfinder( double advantage )
-        : _advantage( advantage )
+        : _minimalArmyStrengthAdvantage( advantage )
     {}
 
     AIWorldPathfinder( const AIWorldPathfinder & ) = delete;
+
+    ~AIWorldPathfinder() override = default;
 
     AIWorldPathfinder & operator=( const AIWorldPathfinder & ) = delete;
 
@@ -153,29 +170,62 @@ public:
     // Faster, but does not re-evaluate the map (expose base class method)
     using Pathfinder::getDistance;
 
-    double getCurrentArmyStrengthMultiplier() const
+    // Returns the coefficient of the minimum required advantage in army strength in order to be able to "pass through"
+    // protected tiles from the AI pathfinder's point of view
+    double getMinimalArmyStrengthAdvantage() const
     {
-        return _advantage;
+        return _minimalArmyStrengthAdvantage;
     }
 
-    void setArmyStrengthMultiplier( const double multiplier );
-    void setSpellPointReserve( const double reserve );
+    // Sets the coefficient of the minimum required advantage in army strength in order to be able to "pass through"
+    // protected tiles from the AI pathfinder's point of view
+    void setMinimalArmyStrengthAdvantage( const double advantage );
+
+    // Returns the spell points reservation factor for spells associated with the movement of the hero on the adventure
+    // map (such as Dimension Door, Town Gate or Town Portal)
+    double getSpellPointsReserveRatio() const
+    {
+        return _spellPointsReserveRatio;
+    }
+
+    // Sets the spell points reservation factor for spells associated with the movement of the hero on the adventure map
+    // (such as Dimension Door, Town Gate or Town Portal)
+    void setSpellPointsReserveRatio( const double ratio );
 
 private:
     void processWorldMap() override;
 
+    // Adds special logic for AI-controlled heroes to use Summon Boat spell to overcome water obstacles (if available)
+    bool isMovementAllowed( const int from, const int direction ) const override;
+
     // Follows custom passability rules (for the AI)
     void processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx ) override;
 
-    // Adds special logic for AI-controlled heroes to encourage them to overcome water obstacles using boats.
-    // If this logic should be taken into account (when performing pathfinding for a real hero on the map),
-    // then the src tile should be already accessible for this hero and it should also have a valid information
-    // about the hero's remaining movement points.
-    uint32_t getMovementPenalty( int src, int dst, int direction ) const override;
+    // Adds special logic for AI-controlled heroes to encourage them to overcome water obstacles using boats. If this
+    // logic should be taken into account (when performing pathfinding for a real hero on the map), then the source
+    // tile should be already accessible for this hero and it should also have a valid information about the hero's
+    // remaining movement points.
+    uint32_t getMovementPenalty( const int from, const int to, const int direction ) const override;
 
-    const Heroes * _hero = nullptr;
+    // Hero properties should be cached here because they can change even if the hero's position does not change,
+    // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
+    // pathfinder's cache
     double _armyStrength{ -1 };
-    double _advantage{ 1.0 };
-    double _spellPointsReserved{ 0.5 };
-    bool _isArtifactBagFull{ false };
+    bool _isArtifactsBagFull{ false };
+    bool _isSummonBoatSpellAvailable{ false };
+
+    // The potential destinations of the Town Gate and Town Portal spells should be cached here because they can
+    // change even if the hero's position does not change (e.g. when a new hero was hired in the nearby castle),
+    // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
+    // pathfinder's cache
+    int32_t _townGateCastleIndex{ -1 };
+    std::vector<int32_t> _townPortalCastleIndexes;
+
+    // Coefficient of the minimum required advantage in army strength in order to be able to "pass through" protected
+    // tiles from the AI pathfinder's point of view
+    double _minimalArmyStrengthAdvantage{ 1.0 };
+
+    // Spell points reservation factor for spells associated with the movement of the hero on the adventure map
+    // (such as Dimension Door, Town Gate or Town Portal)
+    double _spellPointsReserveRatio{ 0.5 };
 };

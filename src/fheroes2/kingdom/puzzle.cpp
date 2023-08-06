@@ -42,6 +42,7 @@
 #include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
 #include "localevent.h"
@@ -153,7 +154,7 @@ namespace
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
+        const Interface::Radar & radar = Interface::AdventureMap::Get().getRadar();
         const fheroes2::Rect & radarArea = radar.GetArea();
 
         fheroes2::ImageRestorer back( display, BORDERWIDTH, BORDERWIDTH, sf.width(), sf.height() );
@@ -163,7 +164,8 @@ namespace
 
         fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarArea.x, radarArea.y );
 
-        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
+        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
+                                     ( isEvilInterface ? ICN::BUTTON_SMALLER_EXIT_EVIL : ICN::BUTTON_SMALLER_EXIT_GOOD ), 0, 1 );
         buttonExit.draw();
 
         drawPuzzle( pzl, sf, BORDERWIDTH, BORDERWIDTH );
@@ -196,7 +198,7 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Rect & gameArea = Interface::Basic::Get().GetGameArea().GetROI();
+        const fheroes2::Rect & gameArea = Interface::AdventureMap::Get().getGameArea().GetROI();
 
         const fheroes2::StandardWindow border( gameArea.x + ( gameArea.width - sf.width() ) / 2, gameArea.y + ( gameArea.height - sf.height() ) / 2, sf.width(),
                                                sf.height(), false );
@@ -218,11 +220,12 @@ namespace
 
         fheroes2::Blit( background, display, blitArea.x, blitArea.y );
 
-        const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
+        const Interface::Radar & radar = Interface::AdventureMap::Get().getRadar();
         const fheroes2::Rect & radarRect = radar.GetRect();
         const fheroes2::Rect & radarArea = radar.GetArea();
 
-        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
+        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
+                                     ( isEvilInterface ? ICN::BUTTON_SMALLER_EXIT_EVIL : ICN::BUTTON_SMALLER_EXIT_GOOD ), 0, 1 );
 
         std::function<fheroes2::Rect()> drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
             if ( isHideInterface ) {

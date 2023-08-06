@@ -24,6 +24,7 @@
 #define H2SPELL_H
 
 #include <cstdint>
+#include <vector>
 
 #define DEFAULT_SPELL_DURATION 3
 
@@ -165,6 +166,10 @@ public:
 
     uint32_t ExtraValue() const;
 
+    // Returns the weight of this spell for a specific race.
+    // See https://handbookhmm.ru/kakim-obrazom-zaklinaniya-popadayut-v-magicheskuyu-gildiyu.html for details.
+    uint32_t weightForRace( const int race ) const;
+
     bool isValid() const
     {
         return id != Spell::NONE;
@@ -209,7 +214,6 @@ public:
     bool isApplyToFriends() const;
     bool isApplyToEnemies() const;
     bool isMassActions() const;
-    bool isRaceCompatible( int race ) const;
 
     bool isFire() const
     {
@@ -228,12 +232,16 @@ public:
 
     bool isGuardianType() const;
 
-    /* return index sprite spells.icn */
+    // Returns the index of the spell sprite in SPELLS.ICN
     uint32_t IndexSprite() const;
 
-    static Spell RandCombat( int lvl );
-    static Spell RandAdventure( int lvl );
-    static Spell Rand( int lvl, bool adv );
+    static Spell Rand( const int level, const bool isAdventure );
+    static Spell RandCombat( const int level );
+    static Spell RandAdventure( const int level );
+
+    // Returns the IDs of all spells of a given level that are suitable for the spell book (i.e. no placeholders or exclusive
+    // built-in spells for monsters are returned). If 'spellLevel' is less than 1, suitable spells of all levels are returned.
+    static std::vector<int> getAllSpellIdsSuitableForSpellBook( const int spellLevel = -1 );
 
     static int32_t CalculateDimensionDoorDistance();
 
