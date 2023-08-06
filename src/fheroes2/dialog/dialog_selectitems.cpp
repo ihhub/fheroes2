@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
+#include <memory>
 #include <vector>
 
 #include "agg_image.h"
@@ -45,6 +46,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
@@ -166,11 +168,6 @@ public:
         // Do nothing.
     }
 
-    void ActionListPressRight( int & /* unused */ ) override
-    {
-        // Do nothing.
-    }
-
     void updateSrollBarImage()
     {
         setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
@@ -243,8 +240,6 @@ public:
         constexpr int offset = 43;
         SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
     }
-
-    using SelectEnum::ActionListPressRight;
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
