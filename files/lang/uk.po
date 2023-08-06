@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-14 20:35+0000\n"
-"PO-Revision-Date: 2023-08-02 00:18+0300\n"
+"PO-Revision-Date: 2023-08-06 22:49+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -3612,7 +3612,7 @@ msgstr ""
 msgid "Campaign Difficulty"
 msgstr ""
 "Складність\n"
-"Мапи"
+"Кампанії"
 
 msgid ""
 "Choose this difficulty if you want to prefer game story over challenge. AI "
@@ -4899,11 +4899,10 @@ msgstr ""
 msgid "Slovak"
 msgstr ""
 
-# Vietnamese? Citizens of Vietnam?)) 
+# Vietnamese? Citizens of Vietnam?))
 # What exactly does this string means?)
-#, fuzzy
 msgid "Vietnamese"
-msgstr "Дивитися %{name}"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""
