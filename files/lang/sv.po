@@ -722,7 +722,7 @@ msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Är du säker på att du vill fortsätta slaget i automatiskt läge?"
 
 msgid "Are you sure you want to enable auto combat?"
-msgstr "Är du säker på att du aktivera automatisk strid?"
+msgstr "Är du säker på att du vill aktivera automatisk strid?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} hoppar över rundan."
