@@ -117,7 +117,7 @@ public final class ToolsetActivity extends AppCompatActivity
                     }
                 }
                 catch ( final Exception ex ) {
-                    Log.e( "fheroes2", "Failed to extract the ZIP file.", ex );
+                    Log.e( "fheroes2", "Failed to extract the assets.", ex );
 
                     liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, BackgroundTaskResult.RESULT_ERROR,
                                                       String.format( "%s", ex ) ) );
@@ -178,7 +178,7 @@ public final class ToolsetActivity extends AppCompatActivity
             startActivity( new Intent( Intent.ACTION_VIEW, Uri.parse( getString( R.string.activity_toolset_homm2_demo_url ) ) ) );
         }
         catch ( final Exception ex ) {
-            Log.e( "fheroes2", "Failed to download HoMM2 demo archive.", ex );
+            Log.e( "fheroes2", "Failed to download the HoMM2 demo archive.", ex );
 
             ( new AlertDialog.Builder( this ) )
                 .setTitle( R.string.activity_toolset_download_homm2_demo_error_title )
