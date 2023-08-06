@@ -157,7 +157,8 @@ namespace
                                                 ICN::EVIL_CAMPAIGN_BUTTONS,
                                                 ICN::POL_CAMPAIGN_BUTTONS,
                                                 ICN::BUTTON_VIEWWORLD_EXIT_GOOD,
-                                                ICN::BUTTON_VIEWWORLD_EXIT_EVIL };
+                                                ICN::BUTTON_VIEWWORLD_EXIT_EVIL,
+                                                ICN::BUTTON_VERTICAL_DISMISS };
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -1796,6 +1797,22 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_VERTICAL_DISMISS: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( ICN::HSBTNS, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::HSBTNS, 1 );
+                    break;
+                }
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::EMPTY_VERTICAL_GOOD_BUTTON, i );
+                }
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], "D\nI\nS\nM\nI\nS\nS", { 5, 4 }, { 4, 5 }, { 18, 111 }, fheroes2::FontColor::WHITE );
+                break;
+            }
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 // Did you add a new image for one language without generating a default
@@ -2396,6 +2413,7 @@ namespace fheroes2
             case ICN::POL_CAMPAIGN_BUTTONS:
             case ICN::BUTTON_VIEWWORLD_EXIT_GOOD:
             case ICN::BUTTON_VIEWWORLD_EXIT_EVIL:
+            case ICN::BUTTON_VERTICAL_DISMISS:
                 generateLanguageSpecificImages( id );
                 return true;
             case ICN::PHOENIX:
@@ -3961,6 +3979,57 @@ namespace fheroes2
                     // Clean the buttons.
                     Fill( released, 28, 15, 42, 27, getButtonFillingColor( true, isGoodInterface ) );
                     Fill( pressed, 27, 16, 42, 27, getButtonFillingColor( false, isGoodInterface ) );
+                }
+
+                break;
+            }
+            case ICN::EMPTY_VERTICAL_GOOD_BUTTON: {
+                const int32_t originalId = ICN::HSBTNS;
+                LoadOriginalICN( originalId );
+
+                if ( _icnVsSprite[originalId].size() < 9 ) {
+                    break;
+                }
+
+                _icnVsSprite[id].resize( 2 );
+                const Sprite & originalReleased = GetICN( originalId, 2 );
+                const Sprite & originalPressed = GetICN( originalId, 3 );
+
+                Sprite & released = _icnVsSprite[id][0];
+                Sprite & pressed = _icnVsSprite[id][1];
+
+                Copy( originalReleased, released );
+                Copy( originalPressed, pressed );
+
+                if ( released.width() > 2 && released.height() > 2 && pressed.width() > 2 && pressed.height() > 2 ) {
+                    // Clean the button states.
+                    Fill( released, 5, 4, 18, 111, getButtonFillingColor( true ) );
+                    Fill( pressed, 4, 5, 18, 111, getButtonFillingColor( false ) );
+
+                    // Make the background transparent.
+                    FillTransform( pressed, 0, 0, pressed.width(), 1, 1 );
+                    FillTransform( pressed, 0, 1, 3, 1, 1 );
+                    FillTransform( pressed, 0, 2, 2, 1, 1 );
+                    FillTransform( pressed, 0, 3, 1, 1, 1 );
+
+                    FillTransform( pressed, pressed.width() - 3, 1, 2, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 2, 2, 1, 1, 1 );
+
+                    FillTransform( pressed, pressed.width() - 1, 1, 1, pressed.height() - 1, 1 );
+                    FillTransform( pressed, pressed.width() - 2, pressed.height() - 2, 1, 2, 1 );
+                    FillTransform( pressed, pressed.width() - 3, pressed.height() - 1, 1, 1, 1 );
+
+                    FillTransform( released, 0, 0, 4, 1, 1 );
+                    FillTransform( released, 0, 1, 3, 1, 1 );
+                    FillTransform( released, 0, 2, 2, 1, 1 );
+                    FillTransform( released, 0, 3, 1, 1, 1 );
+
+                    FillTransform( released, released.width() - 2, 0, 2, 1, 1 );
+                    FillTransform( released, released.width() - 1, 1, 1, 1, 1 );
+
+                    FillTransform( released, released.width() - 1, released.height() - 3, 1, 3, 1 );
+                    FillTransform( released, released.width() - 2, released.height() - 2, 1, 2, 1 );
+                    FillTransform( released, released.width() - 3, released.height() - 1, 1, 1, 1 );
                 }
 
                 break;
