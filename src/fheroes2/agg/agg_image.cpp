@@ -103,8 +103,7 @@ namespace
                                                 ICN::BUTTON_SMALL_NO_EVIL,
                                                 ICN::BUTTON_SMALL_EXIT_GOOD,
                                                 ICN::BUTTON_SMALL_EXIT_EVIL,
-                                                ICN::BUTTON_SMALLER_EXIT_GOOD,
-                                                ICN::BUTTON_SMALLER_EXIT_EVIL,
+                                                ICN::BUTTON_EXIT_HEROES_MEETING,
                                                 ICN::BUTTON_EXIT_TOWN,
                                                 ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD,
                                                 ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL,
@@ -921,25 +920,21 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BUTTON_SMALLER_EXIT_GOOD:
-            case ICN::BUTTON_SMALLER_EXIT_EVIL: {
+            case ICN::BUTTON_EXIT_HEROES_MEETING: {
                 _icnVsSprite[id].resize( 2 );
 
-                const bool isEvilInterface = ( id == ICN::BUTTON_SMALLER_EXIT_EVIL );
-                const int buttonIcnId = isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON;
-
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA, 4 );
-                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA, 5 );
-                    setButtonCornersTransparent( _icnVsSprite[id][0] );
-                    makeTransparentBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], buttonIcnId );
+                    _icnVsSprite[id][0] = GetICN( ICN::SWAPBTN, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::SWAPBTN, 1 );
+                    // fix some wrong pixels in the original pressed state
+                    setButtonCornersTransparent( _icnVsSprite[id][1] );
                     break;
                 }
 
                 // The heroes meeting screen has an embedded shadow so the button needs to be fixed at the same size as the original one.
                 // TODO: Remove the embedded shadow and button in the heroes meeting screen and use getTextAdaptedButton() instead.
                 const int32_t textWidth = 70;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "smallerButton|EXIT" ), isEvilInterface );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "smallerButton|EXIT" ), false );
 
                 break;
             }
@@ -2346,8 +2341,7 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_NO_EVIL:
             case ICN::BUTTON_SMALL_EXIT_GOOD:
             case ICN::BUTTON_SMALL_EXIT_EVIL:
-            case ICN::BUTTON_SMALLER_EXIT_GOOD:
-            case ICN::BUTTON_SMALLER_EXIT_EVIL:
+            case ICN::BUTTON_EXIT_HEROES_MEETING:
             case ICN::BUTTON_EXIT_TOWN:
             case ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL:
             case ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD:
