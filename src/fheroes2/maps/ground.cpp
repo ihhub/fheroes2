@@ -140,21 +140,21 @@ uint16_t Maps::Ground::getRandomTerrainImageIndex( const int groundId )
     const uint16_t indexOffset = static_cast<uint16_t>( Rand::Get( 7 ) );
     switch ( groundId ) {
     case DESERT:
-        return indexOffset + 300u;
+        return indexOffset + 300U;
     case SNOW:
-        return indexOffset + 130u;
+        return indexOffset + 130U;
     case SWAMP:
-        return indexOffset + 184u;
+        return indexOffset + 184U;
     case WASTELAND:
-        return indexOffset + 399u;
+        return indexOffset + 399U;
     case BEACH:
-        return indexOffset + 415u;
+        return indexOffset + 415U;
     case LAVA:
-        return indexOffset + 246u;
+        return indexOffset + 246U;
     case DIRT:
-        return indexOffset + 337u;
+        return indexOffset + 337U;
     case GRASS:
-        return indexOffset + 68u;
+        return indexOffset + 68U;
     default:
         // Have you added a new ground? Add the logic above!
         assert( 0 );
@@ -166,21 +166,21 @@ uint16_t Maps::Ground::getRandomTerrainSpecialImageIndex( const int groundId )
 {
     switch ( groundId ) {
     case DESERT:
-        return static_cast<uint16_t>( Rand::Get( 12 ) ) + 308u;
+        return static_cast<uint16_t>( Rand::Get( 12 ) ) + 308U;
     case SNOW:
-        return static_cast<uint16_t>( Rand::Get( 7 ) ) + 138u;
+        return static_cast<uint16_t>( Rand::Get( 7 ) ) + 138U;
     case SWAMP:
-        return static_cast<uint16_t>( Rand::Get( 15 ) ) + 192u;
+        return static_cast<uint16_t>( Rand::Get( 15 ) ) + 192U;
     case WASTELAND:
-        return static_cast<uint16_t>( Rand::Get( 7 ) ) + 407u;
+        return static_cast<uint16_t>( Rand::Get( 7 ) ) + 407U;
     case BEACH:
-        return static_cast<uint16_t>( Rand::Get( 8 ) ) + 423u;
+        return static_cast<uint16_t>( Rand::Get( 8 ) ) + 423U;
     case LAVA:
-        return static_cast<uint16_t>( Rand::Get( 7 ) ) + 254u;
+        return static_cast<uint16_t>( Rand::Get( 7 ) ) + 254U;
     case DIRT:
-        return static_cast<uint16_t>( Rand::Get( 15 ) ) + 345u;
+        return static_cast<uint16_t>( Rand::Get( 15 ) ) + 345U;
     case GRASS:
-        return static_cast<uint16_t>( Rand::Get( 15 ) ) + 76u;
+        return static_cast<uint16_t>( Rand::Get( 15 ) ) + 76U;
     case WATER:
         // There are no extra water terrain tiles. We return normal tiles instead.
         return getRandomTerrainImageIndex( groundId );

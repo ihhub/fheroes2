@@ -81,7 +81,7 @@ namespace Interface
     private:
         Editor & _interface;
 
-        static const int _getGroundId( const uint8_t brushId );
+        static int _getGroundId( const uint8_t brushId );
         static const char * _getTerrainTypeName( const uint8_t brushId )
         {
             return Maps::Ground::String( _getGroundId( brushId ) );

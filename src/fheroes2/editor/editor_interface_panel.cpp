@@ -216,7 +216,7 @@ namespace Interface
         display.render( _rectInstrumentPanel );
     }
 
-    const int EditorPanel::_getGroundId( const uint8_t brushId )
+    int EditorPanel::_getGroundId( const uint8_t brushId )
     {
         switch ( brushId ) {
         case Brush::WATER:

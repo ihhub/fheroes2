@@ -40,6 +40,7 @@
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
 #include "payment.h"
