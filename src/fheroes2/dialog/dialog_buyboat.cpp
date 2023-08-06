@@ -71,16 +71,16 @@ int Dialog::BuyBoat( bool enable )
     rbs.Redraw();
 
     // buttons
-    const int buttonOKAYICN = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
+    const int buttonOkayICN = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( buttonOKAYICN, 0 ).height();
-    fheroes2::Button buttonOkay( dst_pt.x, dst_pt.y, buttonOKAYICN, 0, 1 );
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( buttonOkayICN, 0 ).height();
+    fheroes2::Button buttonOkay( dst_pt.x, dst_pt.y, buttonOkayICN, 0, 1 );
 
-    const int buttonCANCELICN = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
+    const int buttonCancelICN = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
 
-    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( buttonCANCELICN, 0 ).width();
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( buttonCANCELICN, 0 ).height();
-    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, buttonCANCELICN, 0, 1 );
+    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( buttonCancelICN, 0 ).width();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( buttonCancelICN, 0 ).height();
+    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, buttonCancelICN, 0, 1 );
 
     if ( !enable ) {
         buttonOkay.press();
