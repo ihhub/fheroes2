@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-25 08:44+0000\n"
+"POT-Creation-Date: 2023-08-05 03:57+0000\n"
 "PO-Revision-Date: 2023-07-15 14:32+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -258,7 +258,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Тьма\n"
@@ -361,13 +361,17 @@ msgstr ""
 msgid "You have already cast a spell this round."
 msgstr "Вы уже использовали магию на этом ходу."
 
-msgid "That spell will affect no one!"
+#, fuzzy
+msgid "That spell will have no effect!"
 msgstr "Это заклинание ни на кого не подействует!"
 
 msgid "You may only summon one type of elemental per combat."
 msgstr "В сражении Вы можете призвать элементалей только одного типа."
 
-msgid "There is no open space adjacent to your hero to summon an Elemental to."
+#, fuzzy
+msgid ""
+"There is no open space adjacent to your hero where you can summon an "
+"Elemental to."
 msgstr "Для вызова элементалей у Вас нет свободного пространства возле героя."
 
 msgid ""
@@ -720,6 +724,10 @@ msgstr "Здесь отображаются результаты действи�
 
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Вы уверены, что хотите закончить битву в авторежиме?"
+
+#, fuzzy
+msgid "Are you sure you want to enable auto combat?"
+msgstr "Вы действительно хотите отступить?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name}: пропуск хода."
@@ -2836,7 +2844,8 @@ msgstr "Выберите язык игры:"
 msgid "Change the graphics settings of the game."
 msgstr "Настроить параметры графики."
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+#, fuzzy
+msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Включить или выключить цветной курсор. Это эстетический выбор."
 
 msgid ""
@@ -3393,6 +3402,9 @@ msgstr "Битвы"
 
 msgid "autoBattle|Manual"
 msgstr "Вручную"
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr "Включить или выключить цветной курсор. Это эстетический выбор."
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -6735,18 +6747,22 @@ msgstr ""
 "тайной магии. Сам великий оракул обучал меня древним хитростям. У меня есть "
 "ответ, который Вы ищете.\""
 
-msgid "Spell book is not present."
+#, fuzzy
+msgid "No spell book is present."
 msgstr "Книги заклинаний нет."
 
+#, fuzzy
 msgid ""
-"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
+"This spell costs %{mana} spell points. You have no spell points, so you "
+"cannot cast it."
 msgstr ""
 "Заклинание требует %{mana} очков магии. У Вас нет очков магии, поэтому Вы не "
 "можете произнести заклинание."
 
+#, fuzzy
 msgid ""
-"That spell costs %{mana} mana. You only have %{point} mana, so you can't "
-"cast the spell."
+"This spell costs %{mana} spell points. You only have %{point} spell points, "
+"so you cannot cast it."
 msgstr ""
 "Заклинание требует %{mana} очков магии. У Вас только %{point}, поэтому Вы не "
 "можете произнести заклинание."
@@ -6765,36 +6781,42 @@ msgstr ""
 "Ваш герой очень устал, и не сможет применять магию сегодня. Попробуйте ещё "
 "раз завтра."
 
-msgid "This spell cannot be used on a boat."
+#, fuzzy
+msgid "This spell cannot be cast on a boat."
 msgstr "Это заклинание не действует в море."
 
-msgid "This spell can be casted only nearby ocean."
+#, fuzzy
+msgid "This spell can only be cast near an ocean."
 msgstr "Это заклинание действует только у воды."
 
+#, fuzzy
 msgid ""
-"There is no boat available and no free ocean location near the hero to cast "
-"this spell."
+"There are no boats available and no ocean adjacent to the hero where this "
+"spell will work."
 msgstr ""
 "Нет свободных кораблей и рядом с героем нет свободного места в океане для "
 "использования этого заклинания."
 
-msgid "There is no more boat available to cast this spell."
+#, fuzzy
+msgid "There are no boats available for this spell."
 msgstr "Отсутствуют свободные корабли для применения этого заклинания."
 
-msgid "There is no free ocean location near the hero to cast this spell."
+#, fuzzy
+msgid "There is no ocean adjacent to the hero where this spell will work."
 msgstr ""
 "Рядом с героем нет свободного места в океане для использования этого "
 "заклинания."
 
 #, fuzzy
 msgid ""
-"You do not currently own any town or castle that is not occupied by a hero, "
-"so you can't cast the spell."
+"You do not own any town or castle that is not currently occupied by a hero. "
+"You cannot cast this spell."
 msgstr ""
 "Вы не владеете ни одним городом или замком. Потому это заклинание не "
 "сработает."
 
-msgid "This hero is already in a town, so you can't cast the spell."
+#, fuzzy
+msgid "This hero is already in a town, so you cannot cast this spell."
 msgstr "Этот герой уже в замке, поэтому Вам не произнести данное заклинание."
 
 msgid ""
@@ -6806,19 +6828,22 @@ msgstr ""
 "\n"
 "В этом городе уже есть Ваш герой: %{hero}."
 
-msgid "This spell is already in use."
+#, fuzzy
+msgid "This spell is already in effect."
 msgstr "Это заклинание уже используется."
 
+#, fuzzy
 msgid ""
-"No opponent can have heroes under his command anymore. Casting this spell "
-"will not bring any advantage."
+"No opponent neither has nor can have any hero under their command anymore. "
+"Casting this spell will have no effect."
 msgstr ""
 "Нет ни одного противника у которого бы могли быть герои. Использование этого "
 "заклинания не принесёт Вам пользы."
 
+#, fuzzy
 msgid ""
-"No opponent has a hero under his command at this time. Casting this spell "
-"will not bring any advantage."
+"No opponent has a hero under their command at this time. Casting this spell "
+"will have no effect."
 msgstr ""
 "В настоящее время ни у одного противника нет героев. Использование этого "
 "заклинания не принесёт Вам пользы."
@@ -6830,9 +6855,10 @@ msgstr ""
 "Вы должны находиться не более %{count} ходов от армии монстров для магии "
 "Видение."
 
+#, fuzzy
 msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
+"You must be standing on the entrance to a mine (sawmills and alchemist labs "
+"do not count) to cast this spell."
 msgstr "Вы должны стать поближе к руднику, для использования этой магии."
 
 msgid "You must first defeat the ghosts guarding the mine to cast this spell."
@@ -6840,9 +6866,10 @@ msgstr ""
 "Для использования заклинания Вам необходимо сначала победить призраков, "
 "охраняющих шахту."
 
+#, fuzzy
 msgid ""
-"There are already at least as many elementals guarding the mine than the "
-"spell can generate. Casting this spell will not bring any advantage."
+"There are already at least as many elementals guarding the mine as this hero "
+"can generate. Casting this spell will have no effect."
 msgstr ""
 "Эту шахту уже охраняет не меньшее число элементалей, чем Вы можете призвать. "
 "Это заклинание не принесёт Вам пользы."
