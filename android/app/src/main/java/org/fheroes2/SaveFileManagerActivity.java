@@ -99,7 +99,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         private final MutableLiveData<Status> liveStatus = new MutableLiveData<>( new Status( false, BackgroundTaskResult.RESULT_NONE, "", new ArrayList<>() ) );
 
         /**
-         * This method should never be called directly. Call it only using the enqueueAsyncTask() method.
+         * This method should never be called directly. Call it only using the enqueueBackgroundTask() method.
          */
         private void updateSaveFileList( final File saveFileDir, final List<String> allowedSaveFileExtensions )
         {
@@ -122,7 +122,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         }
 
         /**
-         * This method should never be called directly. Call it only using the enqueueAsyncTask() method.
+         * This method should never be called directly. Call it only using the enqueueBackgroundTask() method.
          */
         private void importSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final Uri zipFileUri, final ContentResolver contentResolver )
         {
@@ -196,7 +196,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         }
 
         /**
-         * This method should never be called directly. Call it only using the enqueueAsyncTask() method.
+         * This method should never be called directly. Call it only using the enqueueBackgroundTask() method.
          */
         private void exportSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final List<String> saveFileNames, final Uri zipFileUri,
                                       final ContentResolver contentResolver )
@@ -244,7 +244,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         }
 
         /**
-         * This method should never be called directly. Call it only using the enqueueAsyncTask() method.
+         * This method should never be called directly. Call it only using the enqueueBackgroundTask() method.
          */
         private void deleteSaveFiles( final File saveFileDir, final List<String> allowedSaveFileExtensions, final List<String> saveFileNames )
         {
@@ -343,7 +343,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             saveFileListView.setItemChecked( i, false );
         }
 
-        enqueueAsyncTask( () -> viewModel.importSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), result, getContentResolver() ) );
+        enqueueBackgroundTask( () -> viewModel.importSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), result, getContentResolver() ) );
     } );
 
     private final ActivityResultLauncher<String> zipFileLocationChooserLauncher
@@ -361,10 +361,10 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                   }
               }
 
-              enqueueAsyncTask( () -> viewModel.exportSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), saveFileNames, result, getContentResolver() ) );
+              enqueueBackgroundTask( () -> viewModel.exportSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), saveFileNames, result, getContentResolver() ) );
           } );
 
-    private final Queue<Runnable> asyncTaskQueue = new ArrayDeque<>();
+    private final Queue<Runnable> backgroundTaskQueue = new ArrayDeque<>();
 
     @Override
     protected void onCreate( final Bundle savedInstanceState )
@@ -386,7 +386,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         saveFileListView.setEmptyView( findViewById( R.id.activity_save_file_manager_save_file_list_empty_lbl ) );
 
         viewModel = new ViewModelProvider( this ).get( SaveFileManagerActivityViewModel.class );
-        viewModel.liveStatus.observe( this, this::runNextAsyncTask );
+        viewModel.liveStatus.observe( this, this::runNextBackgroundTask );
         viewModel.liveStatus.observe( this, this::updateUI );
     }
 
@@ -395,7 +395,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
     {
         super.onResume();
 
-        enqueueAsyncTask( () -> viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() ) );
+        enqueueBackgroundTask( () -> viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() ) );
     }
 
     public void filterButtonClicked( final View view )
@@ -418,7 +418,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             saveFileListView.setItemChecked( i, false );
         }
 
-        enqueueAsyncTask( () -> viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() ) );
+        enqueueBackgroundTask( () -> viewModel.updateSaveFileList( saveFileDir, getAllowedSaveFileExtensions() ) );
     }
 
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
@@ -486,7 +486,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                                         }
                                     }
 
-                                    enqueueAsyncTask( () -> viewModel.deleteSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), saveFileNames ) );
+                                    enqueueBackgroundTask( () -> viewModel.deleteSaveFiles( saveFileDir, getAllowedSaveFileExtensions(), saveFileNames ) );
                                 } )
             .setNegativeButton( R.string.activity_save_file_manager_delete_confirmation_negative_btn_text, ( dialog, which ) -> {} )
             .create()
@@ -510,25 +510,25 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         return allowedSaveFileExtensions;
     }
 
-    private void enqueueAsyncTask( final Runnable task )
+    private void enqueueBackgroundTask( final Runnable task )
     {
         final SaveFileManagerActivityViewModel.Status modelStatus = Objects.requireNonNull( viewModel.liveStatus.getValue() );
 
         if ( modelStatus.isBackgroundTaskExecuting ) {
-            asyncTaskQueue.add( task );
+            backgroundTaskQueue.add( task );
         }
         else {
             task.run();
         }
     }
 
-    private void runNextAsyncTask( final SaveFileManagerActivityViewModel.Status modelStatus )
+    private void runNextBackgroundTask( final SaveFileManagerActivityViewModel.Status modelStatus )
     {
         if ( modelStatus.isBackgroundTaskExecuting ) {
             return;
         }
 
-        final Runnable task = asyncTaskQueue.poll();
+        final Runnable task = backgroundTaskQueue.poll();
 
         if ( task != null ) {
             task.run();
