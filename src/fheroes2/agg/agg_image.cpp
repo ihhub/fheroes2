@@ -3154,13 +3154,11 @@ namespace fheroes2
 
                 const Sprite & originalReleased = GetICN( ICN::ADVBTNS, releasedIndex );
                 _icnVsSprite[id][0].resize( originalReleased.width(), originalReleased.height() );
-                _icnVsSprite[id][0].reset();
 
                 Copy( originalReleased, 0, 0, _icnVsSprite[id][0], 0, 0, originalReleased.width(), originalReleased.height() );
 
                 const Sprite & originalPressed = GetICN( ICN::ADVBTNS, releasedIndex + 1 );
                 _icnVsSprite[id][1].resize( originalPressed.width(), originalPressed.height() );
-                _icnVsSprite[id][1].reset();
 
                 Copy( originalPressed, 0, 0, _icnVsSprite[id][1], 0, 0, originalPressed.width(), originalPressed.height() );
 
