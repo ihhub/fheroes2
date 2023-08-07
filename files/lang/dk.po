@@ -6839,7 +6839,7 @@ msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
 "only do half damage."
 msgstr ""
-"Nogle gange bliver dine tropper ramt af uheld i kamp, ​​hvilket får deres "
+"Nogle gange bliver dine tropper ramt af uheld i kamp, hvilket får deres "
 "angreb til kun at gøre halv skade mod fjenden."
 
 msgid ""
