@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-05 03:57+0000\n"
-"PO-Revision-Date: 2023-08-07 16:22+0200\n"
+"PO-Revision-Date: 2023-08-07 20:21+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -2432,7 +2432,7 @@ msgid "Grouped Formation"
 msgstr "Gruppeformation"
 
 msgid "Recruit %{name} the %{race}"
-msgstr "Rektruttér %{race}en %{name}"
+msgstr "Rekruttér %{race}en %{name}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
@@ -2490,7 +2490,7 @@ msgid "View World"
 msgstr "Vis verden"
 
 msgid "View the entire world."
-msgstr "Vis hele verdenen"
+msgstr "Vis hele verdenen."
 
 msgid "Puzzle"
 msgstr "Puslespil"
@@ -2502,7 +2502,7 @@ msgid "Scenario Information"
 msgstr "Kortbeskrivelse"
 
 msgid "View information on the scenario you are currently playing."
-msgstr "Vis information om det scenarier, du er i gang med at spille."
+msgstr "Vis information om det scenarie, du er i gang med at spille."
 
 msgid "Dig for the Ultimate Artifact."
 msgstr "Grav efter det Ultimative Artefakt."
@@ -2527,10 +2527,10 @@ msgstr ""
 "selv hvilken."
 
 msgid "Attack Skill"
-msgstr "Angrebsevne"
+msgstr "Angreb"
 
 msgid "Defense Skill"
-msgstr "Forsvarsevne"
+msgstr "Forsvar"
 
 msgid "Shots"
 msgstr "Skud"
@@ -3185,7 +3185,7 @@ msgid "Selected Name"
 msgstr "Valgte navn"
 
 msgid "The name of the currently selected map."
-msgstr ""
+msgstr "Navnet på det valgte kort."
 
 msgid "Selected Map Difficulty"
 msgstr "Valgte kort-niveau"
@@ -3202,93 +3202,95 @@ msgstr ""
 "sværere for menneskelige spillere."
 
 msgid "Selected Description"
-msgstr ""
+msgstr "Valgte beskrivelse"
 
 msgid "The description of the currently selected map."
-msgstr ""
+msgstr "Beskrivelsen til det valgte kort."
 
 msgid "Accept the choice made."
-msgstr ""
+msgstr "Accepter de trufne valg."
 
 msgid "Jump"
-msgstr ""
+msgstr "Hop"
 
 msgid "Hero Speed"
-msgstr ""
+msgstr "Heltes hastighed"
 
 msgid "Don't Show"
-msgstr ""
+msgstr "Vis ikke"
 
 msgid "Enemy Speed"
-msgstr ""
+msgstr "Fjenders hastighed"
 
 msgid "Slow"
-msgstr "Forsløvning"
+msgstr "Langsom"
 
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 msgid "Fast"
-msgstr ""
+msgstr "Hurtig"
 
 msgid "Very Fast"
-msgstr ""
+msgstr "Meget hurtig"
 
 msgid "Scroll Speed"
-msgstr ""
+msgstr "Rullehastighed"
 
 msgid "Evil"
-msgstr ""
+msgstr "Ond"
 
 msgid "Good"
-msgstr ""
+msgstr "God"
 
 msgid "Interface Type"
-msgstr ""
+msgstr "Interface type"
 
 msgid "Hide"
-msgstr ""
+msgstr "Skjul"
 
 msgid "Show"
-msgstr ""
+msgstr "Vis"
 
 msgid "Interface"
-msgstr ""
+msgstr "Interface"
 
 msgid "Auto Resolve"
-msgstr ""
+msgstr "Fuldt auto"
 
 msgid "Auto, No Spells"
-msgstr ""
+msgstr "Auto, ingen magi"
 
 msgid "Battles"
-msgstr ""
+msgstr "Kamp"
 
 msgid "autoBattle|Manual"
-msgstr ""
+msgstr "Manuelt"
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr ""
+msgstr "Vælg farvet musemarkør til eller fra. Dette er kun et æstetisk valg."
 
 msgid "Change the speed at which your heroes move on the main screen."
-msgstr ""
+msgstr "Vælg hvor hurtigt dine helte skal flytte sig på hovedskærmen."
 
 msgid ""
 "Sets the speed that A.I. heroes move at.  You can also elect not to view A."
 "I. movement at all."
 msgstr ""
+"Bestemmer hvor hurtigt AI-helte flytter sig.  Du kan også vælge slet ikke at "
+"se på, når de flytter sig."
 
 msgid "Sets the speed at which you scroll the window."
-msgstr ""
+msgstr "Bestemmer vinduets rullehastighed."
 
 msgid "Toggle the type of interface you want to use."
-msgstr ""
+msgstr "Vælg hvilken interface type du ønsker at bruge."
 
 msgid "Toggle interface visibility."
-msgstr ""
+msgstr "Vælg interfacets synlighed til eller fra."
 
 msgid "Toggle instant battle mode."
-msgstr ""
+msgstr "Vælg øjeblikkelig kamptilstand."
 
 msgid "Att."
 msgstr "Angr."
@@ -6417,7 +6419,7 @@ msgid ""
 "normal circumstances, a hero is limited to 10 spell points per level of "
 "knowledge."
 msgstr ""
-"Din kundskab bestemmer hvor mange mana din helt må have. Under normale "
+"Din kundskab bestemmer hvor meget mana din helt må have. Under normale "
 "omstændigheder er en helt begrænset til at have 10 mana per level i kundskab."
 
 msgid "Current Modifiers:"
