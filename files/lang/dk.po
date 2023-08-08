@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-05 03:57+0000\n"
-"PO-Revision-Date: 2023-08-07 20:21+0200\n"
+"PO-Revision-Date: 2023-08-08 13:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -718,7 +718,7 @@ msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Er du sikker på du vil færdiggøre denne kamp automatisk?"
 
 msgid "Are you sure you want to enable auto combat?"
-msgstr "Er du sikker på, at du vil flygte?"
+msgstr "Er du sikker på du vil aktivere autokamp?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} skipper deres tur."
@@ -2401,7 +2401,7 @@ msgid "Recruit Hero"
 msgstr "Rekruttér helt"
 
 msgid "%{name} is a level %{value} %{race} "
-msgstr "%{name} er en level %{value} %{race}"
+msgstr "%{name} er en level %{value} %{race} "
 
 msgid "with %{count} artifacts."
 msgstr "med %{count} artefakter."
@@ -2558,16 +2558,16 @@ msgid "Are you sure you want to dismiss this army?"
 msgstr "Er du sikker på du vil bortvise denne hær?"
 
 msgid "Upgrade"
-msgstr "Opgrader"
+msgstr "Opgradér"
 
 msgid "Upgrade your troops."
-msgstr "Opgrader dine tropper."
+msgstr "Opgradér dine tropper."
 
 msgid "Dismiss"
 msgstr "Bortvis"
 
 msgid "Dismiss this army."
-msgstr "Bortvis din hær."
+msgstr "Bortvis denne hær."
 
 msgid "Followers"
 msgstr "Følgere"
@@ -3244,7 +3244,7 @@ msgid "Good"
 msgstr "God"
 
 msgid "Interface Type"
-msgstr "Interface type"
+msgstr "Interface-type"
 
 msgid "Hide"
 msgstr "Skjul"
@@ -3284,7 +3284,7 @@ msgid "Sets the speed at which you scroll the window."
 msgstr "Bestemmer vinduets rullehastighed."
 
 msgid "Toggle the type of interface you want to use."
-msgstr "Vælg hvilken interface type du ønsker at bruge."
+msgstr "Vælg hvilken interface-type du ønsker at bruge."
 
 msgid "Toggle interface visibility."
 msgstr "Vælg interfacets synlighed til eller fra."
@@ -8049,7 +8049,7 @@ msgid "View Spells"
 msgstr "Vis besværgelser"
 
 msgid "View %{name} Info"
-msgstr "Vis %{name} Info"
+msgstr "Vis %{name} info"
 
 msgid "Move %{name}"
 msgstr "Flyt %{name}"
