@@ -853,6 +853,31 @@ namespace AI
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
 
+        const auto calculateCastleValue = [this, &hero]( const Castle * castle ) {
+            assert( castle != nullptr );
+
+            double value = castle->getBuildingValue() * 150.0 + 3000;
+
+            if ( isCriticalTask( castle->GetIndex() ) || hero.isLosingGame() ) {
+                value += 15000;
+            }
+
+            // This is our own castle in need of protection.
+            if ( hero.GetColor() == castle->GetColor() ) {
+                value *= 1.25;
+            }
+            // This castle is defenseless. This modifier shouldn't be too high to avoid players baiting AI in.
+            else if ( !castle->GetActualArmy().isValid() ) {
+                value *= 1.25;
+            }
+
+            if ( isCastleLossConditionForHuman( castle ) ) {
+                value += 20000;
+            }
+
+            return value;
+        };
+
         switch ( objectType ) {
         case MP2::OBJ_CASTLE: {
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
@@ -862,44 +887,18 @@ namespace AI
                 return valueToIgnore;
             }
 
-            const bool priority = isPriorityTask( index );
-            const bool critical = isCriticalTask( index );
-
-            const auto calculateCastleValue = [&hero, castle, critical]( const bool ourCastle ) {
-                double value = castle->getBuildingValue() * 150.0 + 3000;
-
-                if ( critical || hero.isLosingGame() ) {
-                    value += 15000;
-                }
-
-                // This is our own castle in need of protection.
-                if ( ourCastle ) {
-                    value *= 1.25;
-                }
-                // This castle is defenseless. This modifier shouldn't be too high to avoid players baiting AI in.
-                else if ( !castle->GetActualArmy().isValid() ) {
-                    value *= 1.25;
-                }
-
-                if ( isCastleLossConditionForHuman( castle ) ) {
-                    value += 20000;
-                }
-
-                return value;
-            };
-
             if ( hero.GetColor() == castle->GetColor() ) {
                 // If our castle is in danger, then we should evaluate it not from the point of view of momentary benefits
                 // for the hero (for example, the presence of reinforcements), but from the point of view of the castle,
                 // which then will have to be taken back from the enemy, that is, according to approximately the same logic
                 // as enemy castles
-                if ( critical ) {
-                    return calculateCastleValue( true );
+                if ( isCriticalTask( index ) ) {
+                    return calculateCastleValue( castle );
                 }
 
                 double value = castle->getVisitValue( hero );
 
-                if ( !priority && value < 500 ) {
+                if ( !isPriorityTask( index ) && value < 500 ) {
                     return valueToIgnore;
                 }
 
@@ -919,7 +918,7 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            return calculateCastleValue( false );
+            return calculateCastleValue( castle );
         }
         case MP2::OBJ_HEROES: {
             const Heroes * otherHero = tile.GetHeroes();
@@ -956,8 +955,29 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            // focus on enemy hero if there's priority set (i.e. hero is threatening our castle)
-            return isCriticalTask( index ) ? 12000.0 : 5000.0;
+            double value = 5000;
+
+            // If this hero threatens our castles, then we should evaluate him no worse than the best of our castles that he threatens,
+            // (as if it had to be taken back from the enemy). If a threatening hero can be attacked in an open field, it is better to
+            // do it now than to attack him later in our castle occupied by him.
+            if ( isCriticalTask( index ) ) {
+                const auto iter = _priorityTargets.find( index );
+                assert( iter != _priorityTargets.end() );
+
+                const PriorityTask & attackTask = iter->second;
+                assert( attackTask.type == PriorityTaskType::ATTACK );
+
+                for ( const int32_t secondaryTaskTileIdx : attackTask.secondaryTaskTileId ) {
+                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( secondaryTaskTileIdx ) );
+                    if ( castle == nullptr ) {
+                        continue;
+                    }
+
+                    value = std::max( value, calculateCastleValue( castle ) * 1.25 );
+                }
+            }
+
+            return value;
         }
         case MP2::OBJ_MONSTER: {
             const Army monsters( tile );
@@ -1328,6 +1348,31 @@ namespace AI
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
 
+        const auto calculateCastleValue = [this, &hero]( const Castle * castle ) {
+            assert( castle != nullptr );
+
+            double value = castle->getBuildingValue() * 500.0 + 15000;
+
+            if ( isCriticalTask( castle->GetIndex() ) || hero.isLosingGame() ) {
+                value += 15000;
+            }
+
+            // This is our own castle in need of protection.
+            if ( hero.GetColor() == castle->GetColor() ) {
+                value *= 1.5;
+            }
+            // This castle is defenseless. This modifier shouldn't be too high to avoid players baiting AI in.
+            else if ( !castle->GetActualArmy().isValid() ) {
+                value *= 1.5;
+            }
+
+            if ( isCastleLossConditionForHuman( castle ) ) {
+                value += 20000;
+            }
+
+            return value;
+        };
+
         switch ( objectType ) {
         case MP2::OBJ_CASTLE: {
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
@@ -1337,44 +1382,18 @@ namespace AI
                 return valueToIgnore;
             }
 
-            const bool priority = isPriorityTask( index );
-            const bool critical = isCriticalTask( index );
-
-            const auto calculateCastleValue = [&hero, castle, critical]( const bool ourCastle ) {
-                double value = castle->getBuildingValue() * 500.0 + 15000;
-
-                if ( critical || hero.isLosingGame() ) {
-                    value += 15000;
-                }
-
-                // This is our own castle in need of protection.
-                if ( ourCastle ) {
-                    value *= 1.5;
-                }
-                // This castle is defenseless. This modifier shouldn't be too high to avoid players baiting AI in.
-                else if ( !castle->GetActualArmy().isValid() ) {
-                    value *= 1.5;
-                }
-
-                if ( isCastleLossConditionForHuman( castle ) ) {
-                    value += 20000;
-                }
-
-                return value;
-            };
-
             if ( hero.GetColor() == castle->GetColor() ) {
                 // If our castle is in danger, then we should evaluate it not from the point of view of momentary benefits
                 // for the hero (for example, the presence of reinforcements), but from the point of view of the castle,
                 // which then will have to be taken back from the enemy, that is, according to approximately the same logic
                 // as enemy castles
-                if ( critical ) {
-                    return calculateCastleValue( true );
+                if ( isCriticalTask( index ) ) {
+                    return calculateCastleValue( castle );
                 }
 
                 double value = castle->getVisitValue( hero );
 
-                if ( !priority && value < 500 ) {
+                if ( !isPriorityTask( index ) && value < 500 ) {
                     return valueToIgnore;
                 }
 
@@ -1394,7 +1413,7 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            return calculateCastleValue( false );
+            return calculateCastleValue( castle );
         }
         case MP2::OBJ_HEROES: {
             const Heroes * otherHero = tile.GetHeroes();
@@ -1431,7 +1450,29 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            return isCriticalTask( index ) ? 20000.0 : 12000.0;
+            double value = 12000;
+
+            // If this hero threatens our castles, then we should evaluate him no worse than the best of our castles that he threatens,
+            // (as if it had to be taken back from the enemy). If a threatening hero can be attacked in an open field, it is better to
+            // do it now than to attack him later in our castle occupied by him.
+            if ( isCriticalTask( index ) ) {
+                const auto iter = _priorityTargets.find( index );
+                assert( iter != _priorityTargets.end() );
+
+                const PriorityTask & attackTask = iter->second;
+                assert( attackTask.type == PriorityTaskType::ATTACK );
+
+                for ( const int32_t secondaryTaskTileIdx : attackTask.secondaryTaskTileId ) {
+                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( secondaryTaskTileIdx ) );
+                    if ( castle == nullptr ) {
+                        continue;
+                    }
+
+                    value = std::max( value, calculateCastleValue( castle ) * 1.5 );
+                }
+            }
+
+            return value;
         }
         case MP2::OBJ_MONSTER: {
             const Army monsters( tile );
@@ -1593,8 +1634,12 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            // focus on enemy hero if there's priority set (i.e. hero is threatening our castle)
-            return isCriticalTask( index ) ? 10000.0 : tenTiles;
+            // This hero threatens our castles, use the general evaluation in this case
+            if ( isCriticalTask( index ) ) {
+                break;
+            }
+
+            return tenTiles;
         }
         case MP2::OBJ_MONSTER: {
             const Army monsters( tile );

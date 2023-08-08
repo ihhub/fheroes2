@@ -657,9 +657,6 @@ namespace AI
 
         const double defenders = castle.GetGarrisonStrength( enemyArmy.hero );
         const double attackerThreat = enemyStrength - defenders;
-        if ( attackerThreat < 0.1 ) {
-            return false;
-        }
 
         auto attackTask = _priorityTargets.find( enemyArmy.index );
         if ( attackTask == _priorityTargets.end() ) {
@@ -681,7 +678,7 @@ namespace AI
             defenseTask->second.secondaryTaskTileId.insert( enemyArmy.index );
         }
 
-        return true;
+        return ( attackerThreat >= 0.1 );
     }
 
     void Normal::removePriorityAttackTarget( const int32_t tileIndex )
@@ -900,7 +897,7 @@ namespace AI
 
             castlesInDanger = findCastlesInDanger( kingdom );
             for ( Heroes * hero : heroes ) {
-                if ( hero->GetMapsObject() == MP2::OBJ_CASTLE && _priorityTargets.find( hero->GetIndex() ) != _priorityTargets.end() ) {
+                if ( castlesInDanger.find( hero->GetIndex() ) != castlesInDanger.end() ) {
                     // If a hero is in a castle and it is in danger then the hero is very weak to defend it.
                     // Therefore let's make him stay in the castle.
                     // TODO: allow the hero to still do some actions but always return to the castle at the end of the turn.
