@@ -1999,8 +1999,8 @@ namespace AI
             return;
         }
 
-        const auto updateAttackPriorityTarget = [this, tileIndex, &hero, objectType]() {
-            const auto updateCastleTarget = [this, tileIndex, &hero]() {
+        const auto updateObject = [this, &hero, tileIndex, objectType]() {
+            const auto updateCastle = [this, &hero, tileIndex]() {
                 const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
                 if ( castle == nullptr ) {
                     // How is it possible?
@@ -2021,7 +2021,7 @@ namespace AI
             };
 
             if ( objectType == MP2::OBJ_CASTLE ) {
-                updateCastleTarget();
+                updateCastle();
             }
             else if ( objectType == MP2::OBJ_HEROES ) {
                 const Maps::Tiles & tile = world.GetTiles( tileIndex );
@@ -2030,7 +2030,7 @@ namespace AI
                 if ( anotherHero == nullptr ) {
                     // Another hero lost the battle, but he could defend a castle
                     if ( tile.GetObject() == MP2::OBJ_CASTLE ) {
-                        updateCastleTarget();
+                        updateCastle();
                     }
                     else {
                         _enemyArmies.erase( tileIndex );
@@ -2053,7 +2053,7 @@ namespace AI
         if ( it == _priorityTargets.end() ) {
             // If the object is not a priority we have to update it after the battle as it can become the one.
             // Especially, when the opposite army has grown Skeletons or Ghosts.
-            updateAttackPriorityTarget();
+            updateObject();
 
             // If the update did not add any priorities then nothing more to do.
             it = _priorityTargets.find( tileIndex );
@@ -2092,7 +2092,7 @@ namespace AI
         case PriorityTaskType::ATTACK: {
             removePriorityAttackTarget( tileIndex );
 
-            updateAttackPriorityTarget();
+            updateObject();
             break;
         }
         default:
