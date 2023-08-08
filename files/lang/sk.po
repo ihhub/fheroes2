@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-05 03:57+0000\n"
+"POT-Creation-Date: 2023-08-08 16:49+0000\n"
 "PO-Revision-Date: 2023-06-28 10:32+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -84,6 +84,10 @@ msgstr "NIE"
 
 msgid "EXIT"
 msgstr "PREČ"
+
+#, fuzzy
+msgid "smallerButton|EXIT"
+msgstr "OK"
 
 msgid "DISMISS"
 msgstr "PREPUSŤ"
@@ -183,6 +187,9 @@ msgstr "6 HRÁČOV"
 msgid "GIFT"
 msgstr "DARUJ"
 
+msgid "MAX"
+msgstr "MAX"
+
 msgid "DIFFICULTY"
 msgstr "OBTIAŽNOSŤ"
 
@@ -191,9 +198,6 @@ msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
-
-msgid "MAX"
-msgstr "MAX"
 
 msgid "Warrior"
 msgstr "Bojovník"
@@ -9967,8 +9971,8 @@ msgid ""
 "Halves damage received from ranged attacks for a single unit. Does not "
 "affect damage received from Turrets or Ballistae."
 msgstr ""
-"Znižuje poškodenie z útokov na diaľku o polovicu pre jednu jednotku."
-"Nechráni pred vežami a balistami"
+"Znižuje poškodenie z útokov na diaľku o polovicu pre jednu jednotku.Nechráni "
+"pred vežami a balistami"
 
 msgid "Mass Shield"
 msgstr "Hromadný štít"
@@ -9976,7 +9980,8 @@ msgstr "Hromadný štít"
 msgid ""
 "Halves damage received from ranged attacks for all of your units. Does not "
 "affect damage received from Turrets or Ballistae."
-msgstr "O polovicu znižuje poškodenie spôsobené útokom na diaľku pre všetky tvoje "
+msgstr ""
+"O polovicu znižuje poškodenie spôsobené útokom na diaľku pre všetky tvoje "
 "jednotky. Nechráni pred vežami a balistami"
 
 msgid "Summon Earth Elemental"
