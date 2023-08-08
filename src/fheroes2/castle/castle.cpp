@@ -2515,11 +2515,6 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
     return totalStrength;
 }
 
-double Castle::GetGarrisonStrength( const Heroes & attackingHero ) const
-{
-    return GetGarrisonStrength( &attackingHero );
-}
-
 bool Castle::AllowBuyBoat() const
 {
     // check payment and present other boat

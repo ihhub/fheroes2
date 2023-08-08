@@ -203,7 +203,10 @@ public:
     // (if present), castle-specific bonuses from moat, towers and so on, relative to the attacking hero's abilities
     // (if the 'attackingHero' is not 'nullptr'). See the implementation for details.
     double GetGarrisonStrength( const Heroes * attackingHero ) const;
-    double GetGarrisonStrength( const Heroes & attackingHero ) const;
+    double GetGarrisonStrength( const Heroes & attackingHero ) const
+    {
+        return GetGarrisonStrength( &attackingHero );
+    }
 
     // Returns the correct dwelling type available in the castle. BUILD_NOTHING is returned if this is not a dwelling.
     uint32_t GetActualDwelling( const uint32_t buildId ) const;
