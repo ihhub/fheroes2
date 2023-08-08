@@ -72,7 +72,8 @@ namespace
     // Some resources are language dependent. These are mostly buttons with a text of them.
     // Once a user changes a language we have to update resources. To do this we need to clear the existing images.
 
-    const std::set<int> languageDependentIcnId{ ICN::BUTTON_NEW_GAME_GOOD,
+    const std::set<int> languageDependentIcnId{ ICN::BUYMAX,
+                                                ICN::BUTTON_NEW_GAME_GOOD,
                                                 ICN::BUTTON_NEW_GAME_EVIL,
                                                 ICN::BUTTON_SAVE_GAME_GOOD,
                                                 ICN::BUTTON_SAVE_GAME_EVIL,
@@ -102,8 +103,10 @@ namespace
                                                 ICN::BUTTON_SMALL_NO_EVIL,
                                                 ICN::BUTTON_SMALL_EXIT_GOOD,
                                                 ICN::BUTTON_SMALL_EXIT_EVIL,
-                                                ICN::BUTTON_SMALLER_EXIT_GOOD,
-                                                ICN::BUTTON_SMALLER_EXIT_EVIL,
+                                                ICN::BUTTON_EXIT_HEROES_MEETING,
+                                                ICN::BUTTON_EXIT_TOWN,
+                                                ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD,
+                                                ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL,
                                                 ICN::BUTTON_SMALL_DISMISS_GOOD,
                                                 ICN::BUTTON_SMALL_DISMISS_EVIL,
                                                 ICN::BUTTON_SMALL_UPGRADE_GOOD,
@@ -917,20 +920,78 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BUTTON_SMALLER_EXIT_GOOD:
-            case ICN::BUTTON_SMALLER_EXIT_EVIL: {
+            case ICN::BUTTON_EXIT_HEROES_MEETING: {
                 _icnVsSprite[id].resize( 2 );
 
-                const bool isEvilInterface = ( id == ICN::BUTTON_SMALLER_EXIT_EVIL );
-
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA, 4 );
-                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA, 5 );
+                    _icnVsSprite[id][0] = GetICN( ICN::SWAPBTN, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::SWAPBTN, 1 );
+                    // fix some wrong pixels in the original pressed state
+                    setButtonCornersTransparent( _icnVsSprite[id][1] );
                     break;
                 }
 
+                // The heroes meeting screen has an embedded shadow so the button needs to be fixed at the same size as the original one.
+                // TODO: Remove the embedded shadow and button in the heroes meeting screen and use getTextAdaptedButton() instead.
                 const int32_t textWidth = 70;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "EXIT" ), isEvilInterface );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "smallerButton|EXIT" ), false );
+
+                break;
+            }
+            case ICN::BUTTON_EXIT_TOWN: {
+                std::vector<fheroes2::Sprite> & buttonStates = _icnVsSprite[id];
+                buttonStates.resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    buttonStates[0] = GetICN( ICN::TREASURY, 1 );
+                    buttonStates[1] = GetICN( ICN::TREASURY, 2 );
+                    break;
+                }
+
+                // Needs to be generated from original assets because it needs the black background from the pressed state.
+                // TODO: Make a way to generate buttons with black background since it is needed for MAX and EXIT in the Well and Guilds.
+                for ( int32_t i = 0; i < static_cast<int32_t>( buttonStates.size() ); ++i ) {
+                    Sprite & out = buttonStates[i];
+                    out = GetICN( ICN::TREASURY, 1 + i );
+
+                    // clean the button.
+                    Fill( out, 6 - i, 4 + i, 70, 17, getButtonFillingColor( i == 0 ) );
+                }
+
+                const int32_t textWidth = 70;
+                renderTextOnButton( buttonStates[0], buttonStates[1], gettext_noop( "smallerButton|EXIT" ), { 7, 5 }, { 6, 6 },
+                                    { textWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD:
+            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL: {
+                std::vector<fheroes2::Sprite> & buttonStates = _icnVsSprite[id];
+                buttonStates.resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL );
+                const int originalButtonICN = isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA;
+
+                if ( useOriginalResources() ) {
+                    buttonStates[0] = GetICN( originalButtonICN, 4 );
+                    buttonStates[1] = GetICN( originalButtonICN, 5 );
+                    break;
+                }
+
+                // Needs to be generated from original assets because the background has a much darker shadow than normal.
+                // TODO: Make the button generated as normal after removing the embedded shadow on the background.
+                for ( int32_t i = 0; i < static_cast<int32_t>( buttonStates.size() ); ++i ) {
+                    Sprite & out = buttonStates[i];
+                    out = GetICN( originalButtonICN, 4 + i );
+
+                    // clean the button.
+                    Fill( out, 6 - i, 4 + i, 71 - i, 17, getButtonFillingColor( i == 0, !isEvilInterface ) );
+                }
+
+                const int32_t textWidth = 71;
+                renderTextOnButton( buttonStates[0], buttonStates[1], gettext_noop( "smallerButton|EXIT" ), { 6, 5 }, { 5, 6 },
+                                    { textWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) },
+                                    isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -1445,6 +1506,13 @@ namespace fheroes2
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ), { 5, 5 }, { 4, 6 }, { 88, 16 }, buttonFontColor );
+
+                break;
+            }
+            case ICN::BUYMAX: {
+                _icnVsSprite[id].resize( 2 );
+
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), ICN::EMPTY_GUILDWELL_BUTTON );
 
                 break;
             }
@@ -2241,18 +2309,6 @@ namespace fheroes2
                 }
                 return true;
             case ICN::BUYMAX:
-                _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < 2; ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::WELLXTRA, i );
-
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 2, 52, 14 );
-
-                    // add 'max'
-                    Blit( GetICN( ICN::RECRUIT, 4 + i ), 12, 6, out, 7, 3, 50, 12 );
-                }
-                return true;
             case ICN::BUTTON_NEW_GAME_GOOD:
             case ICN::BUTTON_NEW_GAME_EVIL:
             case ICN::BUTTON_SAVE_GAME_GOOD:
@@ -2283,8 +2339,10 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_NO_EVIL:
             case ICN::BUTTON_SMALL_EXIT_GOOD:
             case ICN::BUTTON_SMALL_EXIT_EVIL:
-            case ICN::BUTTON_SMALLER_EXIT_GOOD:
-            case ICN::BUTTON_SMALLER_EXIT_EVIL:
+            case ICN::BUTTON_EXIT_HEROES_MEETING:
+            case ICN::BUTTON_EXIT_TOWN:
+            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL:
+            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD:
             case ICN::BUTTON_SMALL_DISMISS_GOOD:
             case ICN::BUTTON_SMALL_DISMISS_EVIL:
             case ICN::BUTTON_SMALL_UPGRADE_GOOD:
