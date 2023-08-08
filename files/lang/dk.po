@@ -84,6 +84,10 @@ msgstr "NEJ"
 msgid "EXIT"
 msgstr "UD"
 
+#, fuzzy
+msgid "smallerButton|EXIT"
+msgstr "OK"
+
 msgid "DISMISS"
 msgstr "BORTVIS"
 
@@ -179,6 +183,9 @@ msgstr "6 SPILLERE"
 msgid "GIFT"
 msgstr "FORÆR"
 
+msgid "MAX"
+msgstr "MAKS"
+
 msgid "DIFFICULTY"
 msgstr "NIVEAU"
 
@@ -187,9 +194,6 @@ msgstr "VIS INTRO"
 
 msgid "MIN"
 msgstr "MIN"
-
-msgid "MAX"
-msgstr "MAKS"
 
 msgid "Warrior"
 msgstr "Kriger"

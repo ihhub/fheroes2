@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-05 03:57+0000\n"
+"POT-Creation-Date: 2023-08-08 16:49+0000\n"
 "PO-Revision-Date: 2023-08-05 00:20+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -81,6 +81,10 @@ msgstr "NEI"
 
 msgid "EXIT"
 msgstr "UT"
+
+#, fuzzy
+msgid "smallerButton|EXIT"
+msgstr "OK"
 
 msgid "DISMISS"
 msgstr "BORTVIS"
@@ -180,6 +184,9 @@ msgstr "6 SPILLERE"
 msgid "GIFT"
 msgstr "SEND"
 
+msgid "MAX"
+msgstr "MAKS"
+
 msgid "DIFFICULTY"
 msgstr "FELTTOGSNIVÅ"
 
@@ -188,9 +195,6 @@ msgstr "VIS VIDEO"
 
 msgid "MIN"
 msgstr "MIN"
-
-msgid "MAX"
-msgstr "MAKS"
 
 msgid "Warrior"
 msgstr "Kriger"

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-05 03:57+0000\n"
-"PO-Revision-Date: 2023-07-25 11:58+0200\n"
+"POT-Creation-Date: 2023-08-08 16:49+0000\n"
+"PO-Revision-Date: 2023-08-05 14:31+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -81,6 +81,10 @@ msgstr "NEJ"
 
 msgid "EXIT"
 msgstr "LÄMNA"
+
+#, fuzzy
+msgid "smallerButton|EXIT"
+msgstr "OKEJ"
 
 msgid "DISMISS"
 msgstr "AVSKEDA"
@@ -179,6 +183,9 @@ msgstr "6 SPELARE"
 msgid "GIFT"
 msgstr "GÅVA"
 
+msgid "MAX"
+msgstr "MAX"
+
 msgid "DIFFICULTY"
 msgstr "SVÅRIGHETSGRAD"
 
@@ -187,9 +194,6 @@ msgstr "VISA INTRO"
 
 msgid "MIN"
 msgstr "MIN"
-
-msgid "MAX"
-msgstr "MAX"
 
 msgid "Warrior"
 msgstr "Krigare"
@@ -356,19 +360,17 @@ msgstr ""
 msgid "You have already cast a spell this round."
 msgstr "Du har redan kastat en besvärjelse denna runda."
 
-#, fuzzy
 msgid "That spell will have no effect!"
-msgstr "Den besvärjelsen kommer inte att påverka någon!"
+msgstr "Besvärjelsen har ingen effekt!"
 
 msgid "You may only summon one type of elemental per combat."
 msgstr "Du kan endast inkalla en elementtyp per strid."
 
-#, fuzzy
 msgid ""
 "There is no open space adjacent to your hero where you can summon an "
 "Elemental to."
 msgstr ""
-"Det finns ingen fri plats intill din hjälte för att inkalla en elementande."
+"Det finns ingen fri plats intill din hjälte för att inkalla ett elementväsen."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
@@ -723,9 +725,8 @@ msgstr "Visa resultaten av en varelses handlingar."
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Är du säker på att du vill fortsätta slaget i automatiskt läge?"
 
-#, fuzzy
 msgid "Are you sure you want to enable auto combat?"
-msgstr "Är du säker på att du vill retirera?"
+msgstr "Är du säker på att du vill aktivera automatisk strid?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} hoppar över rundan."
@@ -6561,11 +6562,9 @@ msgstr ""
 "\"I mina resor har jag lärt mig mycket om mystisk magi. Ett stor orakel "
 "lärde mig denna färdighet. Jag har svaret du söker.\""
 
-#, fuzzy
 msgid "No spell book is present."
 msgstr "Det finns ingen Magibok."
 
-#, fuzzy
 msgid ""
 "This spell costs %{mana} spell points. You have no spell points, so you "
 "cannot cast it."
@@ -6573,7 +6572,6 @@ msgstr ""
 "Den besvärjelsen kostar %{mana} besvärjelsepoäng. Hjälten har slut på "
 "besvärjelsepoäng så denna kan inte kasta besvärjelsen."
 
-#, fuzzy
 msgid ""
 "This spell costs %{mana} spell points. You only have %{point} spell points, "
 "so you cannot cast it."
@@ -6595,15 +6593,12 @@ msgstr ""
 "Din hjälte är för trött för att kasta en besvärjelse idag. Försök igen "
 "imorgon."
 
-#, fuzzy
 msgid "This spell cannot be cast on a boat."
 msgstr "Denna besvärjelse kan inte kastas från skepp."
 
-#, fuzzy
 msgid "This spell can only be cast near an ocean."
 msgstr "Denna besvärjelse kan bara kastas nära hav."
 
-#, fuzzy
 msgid ""
 "There are no boats available and no ocean adjacent to the hero where this "
 "spell will work."
@@ -6611,17 +6606,14 @@ msgstr ""
 "Det finns inget skepp tillgängligt och inget ledig strand i närheten för att "
 "hjälten skall kunna kasta denna besvärjelse."
 
-#, fuzzy
 msgid "There are no boats available for this spell."
 msgstr "Det finns inget tillgängligt skepp för att kasta denna besvärjelsen."
 
-#, fuzzy
 msgid "There is no ocean adjacent to the hero where this spell will work."
 msgstr ""
 "Det finns ingen ledig strand i närheten för att hjälten skall kunna kasta "
 "denna besvärjelse."
 
-#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
 "You cannot cast this spell."
@@ -6629,7 +6621,6 @@ msgstr ""
 "Du äger för närvarande inte någon stad eller slott som inte är upptaget, så "
 "hjälten kan inte kasta besvärjelsen."
 
-#, fuzzy
 msgid "This hero is already in a town, so you cannot cast this spell."
 msgstr "Hjälten är redan i en stad, så hjälten kan inte kasta besvärjelsen."
 
@@ -6642,11 +6633,9 @@ msgstr ""
 "\n"
 "Denna stad besöks av din hjälte %{hero}."
 
-#, fuzzy
 msgid "This spell is already in effect."
 msgstr "Denna besvärjelse används redan."
 
-#, fuzzy
 msgid ""
 "No opponent neither has nor can have any hero under their command anymore. "
 "Casting this spell will have no effect."
@@ -6654,7 +6643,6 @@ msgstr ""
 "Ingen motståndare kan ha hjältar under dennes befäl längre. Att kasta denna "
 "besvärjelsen bringar ingen fördel."
 
-#, fuzzy
 msgid ""
 "No opponent has a hero under their command at this time. Casting this spell "
 "will have no effect."
@@ -6669,7 +6657,6 @@ msgstr ""
 "Hjälten måste befinna sig inom %{count} rutor från ett monster för att "
 "Synerbesvärjelsen ska ge effekt."
 
-#, fuzzy
 msgid ""
 "You must be standing on the entrance to a mine (sawmills and alchemist labs "
 "do not count) to cast this spell."
@@ -6682,14 +6669,13 @@ msgstr ""
 "Då måste först besegra Spökena som vaktar gruvan för att hjälten ska kasta "
 "besvärjelsen."
 
-#, fuzzy
 msgid ""
 "There are already at least as many elementals guarding the mine as this hero "
 "can generate. Casting this spell will have no effect."
 msgstr ""
-"Det finns redan minst så många Andar som vaktar gruvan som besvärjelsen kan "
-"frambringa. Att kasta denne besvärjelsen kommer inte ge någon ytterligare "
-"fördel."
+"Det finns redan minst så många Elementväsen som vaktar gruvan som "
+"besvärjelsen kan frambringa. Att kasta denne besvärjelsen kommer inte ge "
+"någon ytterligare fördel."
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race}n %{name} (Nivå %{level})"
@@ -9633,6 +9619,10 @@ msgid ""
 "hands. You realize that it must be the helmet of the legendary Anduran, the "
 "only man who was known to wear solid gold armor."
 msgstr ""
+"Du ser något glimmande föremål sticka upp ur marken. Du skickar iväg en "
+"undersåte att kolla vad det är. Han kommer tillbaka med en gyllene hjälm i "
+"sina händer. Du inser att hjälmen måste vara från den legendariske Anduran, "
+"den enda mannen som var känd för att bära rustning i det renaste guld."
 
 msgid "Holy Hammer"
 msgstr "Helig Hammare"
@@ -9643,6 +9633,10 @@ msgid ""
 "you pick it up, it begins to hum, and then everything becomes a blur. The "
 "Zombies lie dead, the hammer dripping with blood. You strap it to your belt."
 msgstr ""
+"Du stöter på en strid där en Paladin är dödligt sårad från en grupp med "
+"Zombier. Han ber dig att ta hans stridshammare och avsluta det han påbörjat. "
+"När du tar hammaren så börjar den surra och sen blir allting en oklar dimma. "
+"Zombierna ligger döda och hammaren är blodstänkt. Du tar hammaren."
 
 msgid "Legendary Scepter"
 msgstr "Legendarisk Spira"
@@ -10111,20 +10105,22 @@ msgstr ""
 msgid "Shield"
 msgstr "Sköld"
 
-#, fuzzy
 msgid ""
 "Halves damage received from ranged attacks for a single unit. Does not "
 "affect damage received from Turrets or Ballistae."
-msgstr "Halverar skada från projektilsattacker för en varelse."
+msgstr ""
+"Halverar skada från projektilsattacker för en varelse. Projektiler från torn "
+"och ballistor räknas ej."
 
 msgid "Mass Shield"
 msgstr "Massköld"
 
-#, fuzzy
 msgid ""
 "Halves damage received from ranged attacks for all of your units. Does not "
 "affect damage received from Turrets or Ballistae."
-msgstr "Halverar skadan till alla dina trupper från projektilattacker."
+msgstr ""
+"Halverar skadan till alla dina trupper från projektilattacker. Projektiler "
+"från torn och ballistor räknas ej."
 
 msgid "Summon Earth Elemental"
 msgstr "Framkalla Jordväsen"
