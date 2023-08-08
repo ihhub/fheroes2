@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-05 03:57+0000\n"
+"POT-Creation-Date: 2023-08-08 16:49+0000\n"
 "PO-Revision-Date: 2023-07-15 14:32+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -86,6 +86,10 @@ msgstr "НЕТ"
 
 msgid "EXIT"
 msgstr "ВЫЙТИ"
+
+#, fuzzy
+msgid "smallerButton|EXIT"
+msgstr "ОК"
 
 msgid "DISMISS"
 msgstr "УВОЛИТЬ"
@@ -184,6 +188,9 @@ msgstr "6 ИГРОКОВ"
 msgid "GIFT"
 msgstr "ОТДАТЬ"
 
+msgid "MAX"
+msgstr "МАКС"
+
 msgid "DIFFICULTY"
 msgstr "СЛОЖНОСТЬ"
 
@@ -192,9 +199,6 @@ msgstr ""
 
 msgid "MIN"
 msgstr "МИН"
-
-msgid "MAX"
-msgstr "МАКС"
 
 msgid "Warrior"
 msgstr "Воин"
