@@ -2000,7 +2000,7 @@ namespace AI
         }
 
         auto updateAttackPriorityTarget = [this, tileIndex, &hero, objectType]() {
-            if ( objectType == MP2::OBJ_CASTLE ) {
+            const auto updateCastleTarget = [this, tileIndex, &hero]() {
                 const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
                 if ( castle == nullptr ) {
                     // How is it possible?
@@ -2018,14 +2018,24 @@ namespace AI
                 else {
                     updatePriorityAttackTarget( hero.GetKingdom(), world.GetTiles( tileIndex ) );
                 }
+            };
+
+            if ( objectType == MP2::OBJ_CASTLE ) {
+                updateCastleTarget();
             }
             else if ( objectType == MP2::OBJ_HEROES ) {
                 const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
                 const Heroes * anotherHero = tile.GetHeroes();
                 if ( anotherHero == nullptr ) {
-                    // The hero died.
-                    _enemyArmies.erase( tileIndex );
+                    // Another hero lost the battle, but he could defend a castle
+                    if ( tile.GetObject() == MP2::OBJ_CASTLE ) {
+                        updateCastleTarget();
+                    }
+                    else {
+                        _enemyArmies.erase( tileIndex );
+                    }
+
                     return;
                 }
 
