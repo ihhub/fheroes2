@@ -30,6 +30,9 @@
     <string name="activity_save_file_manager_no_files_selected_for_export_title">Файлы для экспорта не выбраны</string>
     <string name="activity_save_file_manager_no_files_selected_for_export_message">Пожалуйста, выберите файлы сохранений для экспорта.</string>
     <string name="activity_save_file_manager_no_files_selected_for_export_positive_btn_text">OK</string>
+    <string name="activity_save_file_manager_no_files_selected_for_deletion_title">Файлы для удаления не выбраны</string>
+    <string name="activity_save_file_manager_no_files_selected_for_deletion_message">Пожалуйста, выберите файлы сохранений для удаления.</string>
+    <string name="activity_save_file_manager_no_files_selected_for_deletion_positive_btn_text">OK</string>
     <plurals name="activity_save_file_manager_delete_confirmation_title" tools:ignore="MissingQuantity">
         <item quantity="other">Удалить файлы сохранений</item>
     </plurals>

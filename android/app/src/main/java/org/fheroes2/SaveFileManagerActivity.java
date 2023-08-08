@@ -466,6 +466,13 @@ public final class SaveFileManagerActivity extends AppCompatActivity
         final int selectedSaveFilesCount = saveFileListView.getCheckedItemCount();
 
         if ( selectedSaveFilesCount == 0 ) {
+            ( new AlertDialog.Builder( this ) )
+                .setTitle( R.string.activity_save_file_manager_no_files_selected_for_deletion_title )
+                .setMessage( R.string.activity_save_file_manager_no_files_selected_for_deletion_message )
+                .setPositiveButton( R.string.activity_save_file_manager_no_files_selected_for_deletion_positive_btn_text, ( dialog, which ) -> {} )
+                .create()
+                .show();
+
             return;
         }
 
