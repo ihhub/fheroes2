@@ -6503,7 +6503,7 @@ msgid ""
 msgstr ""
 
 msgid "No spell book is present."
-msgstr "Kniha kúziel nie je k dispozícii.
+msgstr "Kniha kúziel nie je k dispozícii."
 
 msgid ""
 "This spell costs %{mana} spell points. You have no spell points, so you "
