@@ -23,6 +23,8 @@
 #include <array>
 #include <cassert>
 
+#include "resource.h"
+
 namespace
 {
     // Resources for trade are divided into 3 categories:
