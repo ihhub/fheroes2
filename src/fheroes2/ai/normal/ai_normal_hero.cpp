@@ -1999,7 +1999,7 @@ namespace AI
             return;
         }
 
-        const auto updateObject = [this, &hero, tileIndex, objectType]() {
+        const auto updateTile = [this, &hero, tileIndex, objectType]() {
             const auto updateCastle = [this, &hero, tileIndex]() {
                 const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
                 if ( castle == nullptr ) {
@@ -2053,7 +2053,7 @@ namespace AI
         if ( it == _priorityTargets.end() ) {
             // If the object is not a priority we have to update it after the battle as it can become the one.
             // Especially, when the opposite army has grown Skeletons or Ghosts.
-            updateObject();
+            updateTile();
 
             // If the update did not add any priorities then nothing more to do.
             it = _priorityTargets.find( tileIndex );
@@ -2092,7 +2092,7 @@ namespace AI
         case PriorityTaskType::ATTACK: {
             removePriorityAttackTarget( tileIndex );
 
-            updateObject();
+            updateTile();
             break;
         }
         default:
