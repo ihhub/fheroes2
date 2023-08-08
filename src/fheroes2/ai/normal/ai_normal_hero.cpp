@@ -40,6 +40,7 @@
 #include "artifact.h"
 #include "castle.h"
 #include "color.h"
+#include "direction.h"
 #include "game_interface.h"
 #include "game_over.h"
 #include "game_static.h"
@@ -2067,11 +2068,12 @@ namespace AI
         switch ( task.type ) {
         case PriorityTaskType::DEFEND:
         case PriorityTaskType::REINFORCE: {
-            if ( objectType == MP2::OBJ_HEROES ) {
+            if ( hero.GetIndex() != tileIndex ) {
                 // The castle has just been captured. No task should be updated.
 
                 // If this assertion blows up then it is not the case described above.
-                assert( ( world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_CASTLE ) && ( hero.GetIndex() != tileIndex ) );
+                assert( ( world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_CASTLE ) && Maps::isValidDirection( tileIndex, Direction::BOTTOM )
+                        && hero.GetIndex() == Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ) );
                 return;
             }
 
