@@ -142,7 +142,7 @@ std::string Battle::Tower::GetInfo( const Castle & castle )
 
     // This method can be called both during combat and outside of it. In the
     // former case, we have to check if the tower was destroyed during the siege.
-    auto isTowerValid = []( const TowerType towerType ) {
+    const auto isTowerValid = []( const TowerType towerType ) {
         // If the siege is in progress, we need to check the current state of the tower
         if ( GetArena() ) {
             const Tower * tower = Arena::GetTower( towerType );

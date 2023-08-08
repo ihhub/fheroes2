@@ -371,8 +371,8 @@ bool Troops::JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirs
         return false;
     }
 
-    auto findEmptySlot = []( const Troop * troop ) { return !troop->isValid(); };
-    auto findMonster = [&mons]( const Troop * troop ) { return troop->isValid() && troop->isMonster( mons.GetID() ); };
+    const auto findEmptySlot = []( const Troop * troop ) { return !troop->isValid(); };
+    const auto findMonster = [&mons]( const Troop * troop ) { return troop->isValid() && troop->isMonster( mons.GetID() ); };
 
     iterator it = emptySlotFirst ? std::find_if( begin(), end(), findEmptySlot ) : std::find_if( begin(), end(), findMonster );
     if ( it == end() ) {
@@ -765,7 +765,7 @@ void Troops::addNewTroopsToFreeSlots( const Troop & troop, uint32_t maxSlots )
     uint32_t remainingCount = troop.GetCount() % maxSlots;
     uint32_t remainingSlots = maxSlots;
 
-    auto TryCreateTroopChunk = [&remainingSlots, &remainingCount, chunk, &troop]( Troop & newTroop ) {
+    const auto TryCreateTroopChunk = [&remainingSlots, &remainingCount, chunk, &troop]( Troop & newTroop ) {
         if ( remainingSlots <= 0 )
             return;
 
@@ -1385,7 +1385,7 @@ void Army::MoveTroops( Army & from, const int monsterIdToKeep )
         }
     }
 
-    auto moveTroops = [this, &from, monsterIdToKeep, fromHero]( const bool ignoreMonstersToKeep ) {
+    const auto moveTroops = [this, &from, monsterIdToKeep, fromHero]( const bool ignoreMonstersToKeep ) {
         uint32_t stacksLeft = from.GetOccupiedSlotCount();
 
         for ( Troop * troop : from ) {

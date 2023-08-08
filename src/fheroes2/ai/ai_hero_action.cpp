@@ -345,7 +345,7 @@ namespace
             return;
         }
 
-        auto captureCastle = [&hero, dstIndex, castle]() {
+        const auto captureCastle = [&hero, dstIndex, castle]() {
             castle->GetKingdom().RemoveCastle( castle );
             hero.GetKingdom().AddCastle( castle );
             world.CaptureObject( dstIndex, hero.GetColor() );
@@ -661,14 +661,14 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dstIndex );
 
         if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
-            auto removeObjectProtection = [&tile]() {
+            const auto removeObjectProtection = [&tile]() {
                 // Clear any metadata related to spells
                 if ( tile.GetObject( false ) == MP2::OBJ_MINES ) {
                     removeMineSpellFromTile( tile );
                 }
             };
 
-            auto captureObject = [&hero, &tile, &removeObjectProtection]() {
+            const auto captureObject = [&hero, &tile, &removeObjectProtection]() {
                 removeObjectProtection();
 
                 setColorOnTile( tile, hero.GetColor() );

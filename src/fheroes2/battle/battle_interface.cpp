@@ -2498,7 +2498,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
     const Cell * cell = Board::GetCell( index_pos );
 
     if ( cell && _currentUnit ) {
-        auto formatViewInfoMsg = []( const Unit * unit ) {
+        const auto formatViewInfoMsg = []( const Unit * unit ) {
             assert( unit != nullptr );
 
             std::string msg = _( "View %{monster} info" );
@@ -3195,7 +3195,7 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
     const int32_t index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
 
-    auto fixupDestinationCell = []( const Unit & unit, const int32_t dst ) {
+    const auto fixupDestinationCell = []( const Unit & unit, const int32_t dst ) {
         // Only wide units may need this fixup
         if ( !unit.isWide() ) {
             return dst;
@@ -3610,7 +3610,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const Unit & d
         status.SetMessage( "", false );
 
         if ( resurrects != 0 ) {
-            auto updateStatusBar = []( Battle::Status & statusBar, std::string & localMsg, const uint32_t localRes, const char * localUnit ) {
+            const auto updateStatusBar = []( Battle::Status & statusBar, std::string & localMsg, const uint32_t localRes, const char * localUnit ) {
                 StringReplace( localMsg, "%{count}", localRes );
                 StringReplaceWithLowercase( localMsg, "%{unit}", localUnit );
 
@@ -3655,7 +3655,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                                && attacker->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT );
 
     // Play sound only if it is not already playing.
-    auto playSoundIfNotPlaying = [&unitSounds]( const int unitSound ) {
+    const auto playSoundIfNotPlaying = [&unitSounds]( const int unitSound ) {
         const auto [dummy, isUnique] = unitSounds.insert( unitSound );
         if ( isUnique ) {
             AudioManager::PlaySound( unitSound );
@@ -5965,7 +5965,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
         std::set<int> unitSounds;
 
-        auto playSoundIfNotPlaying = [&unitSounds]( const int unitSound ) {
+        const auto playSoundIfNotPlaying = [&unitSounds]( const int unitSound ) {
             const auto [dummy, isUnique] = unitSounds.insert( unitSound );
             if ( isUnique ) {
                 AudioManager::PlaySound( unitSound );
@@ -6302,7 +6302,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
                     Dialog::Message( "", msg, Font::BIG, Dialog::OK );
                 }
                 else {
-                    std::function<void( const std::string & )> statusCallback = [this]( const std::string & statusStr ) {
+                    const std::function<void( const std::string & )> statusCallback = [this]( const std::string & statusStr ) {
                         status.SetMessage( statusStr );
                         status.Redraw( fheroes2::Display::instance() );
                     };

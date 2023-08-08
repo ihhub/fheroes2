@@ -864,7 +864,7 @@ namespace AI
             const bool priority = isPriorityTask( index );
             const bool critical = isCriticalTask( index );
 
-            auto calculateCastleValue = [&hero, castle, critical]( const bool ourCastle ) {
+            const auto calculateCastleValue = [&hero, castle, critical]( const bool ourCastle ) {
                 double value = castle->getBuildingValue() * 150.0 + 3000;
 
                 if ( critical || hero.isLosingGame() ) {
@@ -1339,7 +1339,7 @@ namespace AI
             const bool priority = isPriorityTask( index );
             const bool critical = isCriticalTask( index );
 
-            auto calculateCastleValue = [&hero, castle, critical]( const bool ourCastle ) {
+            const auto calculateCastleValue = [&hero, castle, critical]( const bool ourCastle ) {
                 double value = castle->getBuildingValue() * 500.0 + 15000;
 
                 if ( critical || hero.isLosingGame() ) {
@@ -1796,8 +1796,8 @@ namespace AI
         ObjectValidator objectValidator( hero, _pathfinder, *this );
         ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
-        auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero]( const int destination, uint32_t & distance, double & value,
-                                                                                            const MP2::MapObjectType type, const bool isDimensionDoor ) {
+        const auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero]( const int destination, uint32_t & distance, double & value,
+                                                                                                  const MP2::MapObjectType type, const bool isDimensionDoor ) {
             if ( !isDimensionDoor ) {
                 // Dimension door path does not include any objects on the way.
                 std::vector<IndexObject> list = _pathfinder.getObjectsOnTheWay( destination );
@@ -1999,7 +1999,7 @@ namespace AI
             return;
         }
 
-        auto updateAttackPriorityTarget = [this, tileIndex, &hero, objectType]() {
+        const auto updateAttackPriorityTarget = [this, tileIndex, &hero, objectType]() {
             const auto updateCastleTarget = [this, tileIndex, &hero]() {
                 const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
                 if ( castle == nullptr ) {

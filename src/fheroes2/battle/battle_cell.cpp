@@ -91,7 +91,7 @@ Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t
     Position result;
 
     if ( unit.isWide() ) {
-        auto checkCells = [&unit]( Cell * headCell, Cell * tailCell ) {
+        const auto checkCells = [&unit]( Cell * headCell, Cell * tailCell ) {
             Position res;
 
             if ( headCell == nullptr || ( !unit.GetPosition().contains( headCell->GetIndex() ) && !headCell->isPassable( true ) ) ) {
@@ -145,7 +145,7 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
     assert( arena != nullptr );
 
     if ( unit.isWide() ) {
-        auto checkCells = [&unit, arena]( Cell * headCell, Cell * tailCell ) -> Position {
+        const auto checkCells = [&unit, arena]( Cell * headCell, Cell * tailCell ) -> Position {
             if ( headCell == nullptr || tailCell == nullptr ) {
                 return {};
             }
@@ -162,7 +162,7 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
             return {};
         };
 
-        auto tryHead = [&unit, dst, &checkCells]() -> Position {
+        const auto tryHead = [&unit, dst, &checkCells]() -> Position {
             const int tailDirection = unit.isReflect() ? RIGHT : LEFT;
 
             if ( Board::isValidDirection( dst, tailDirection ) ) {
@@ -175,7 +175,7 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
             return {};
         };
 
-        auto tryTail = [&unit, dst, &checkCells]() -> Position {
+        const auto tryTail = [&unit, dst, &checkCells]() -> Position {
             const int headDirection = unit.isReflect() ? LEFT : RIGHT;
 
             if ( Board::isValidDirection( dst, headDirection ) ) {

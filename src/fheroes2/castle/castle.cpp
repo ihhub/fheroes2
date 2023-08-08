@@ -676,7 +676,7 @@ bool Castle::isExactBuildingBuilt( const uint32_t buildingToCheck ) const
         return false;
     }
 
-    auto checkBuilding = [this]( const uint32_t expectedLevels, const uint32_t allPossibleLevels ) {
+    const auto checkBuilding = [this]( const uint32_t expectedLevels, const uint32_t allPossibleLevels ) {
         // All expected levels should be built
         assert( ( building & expectedLevels ) == expectedLevels );
 

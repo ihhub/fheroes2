@@ -73,7 +73,7 @@ void Interface::AdventureMap::reset()
         fheroes2::Point iconPos = conf.PosIcons();
         fheroes2::Point statPos = conf.PosStatus();
 
-        auto isPosValid = []( const fheroes2::Point & pos ) { return pos.x >= 0 && pos.y >= 0; };
+        const auto isPosValid = []( const fheroes2::Point & pos ) { return pos.x >= 0 && pos.y >= 0; };
 
         if ( isPosValid( radrPos ) && isPosValid( bttnPos ) && isPosValid( iconPos ) && isPosValid( statPos ) ) {
             _radar.SetPos( radrPos.x, radrPos.y );
@@ -182,7 +182,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
 
     fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
 
-    auto drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
+    const auto drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
         if ( isHideInterface ) {
             Dialog::FrameBorder::RenderRegular( radarRect );
         }

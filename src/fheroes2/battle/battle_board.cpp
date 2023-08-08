@@ -1058,7 +1058,7 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     const int y = leftmostIndex / ARENAW;
     const int mod = y % 2;
 
-    auto validateAndInsert = [&result, &currentColor]( const int index ) {
+    const auto validateAndInsert = [&result, &currentColor]( const int index ) {
         const Unit * vUnit = GetCell( index )->GetUnit();
         if ( vUnit && currentColor != vUnit->GetArmyColor() )
             result.push_back( index );
