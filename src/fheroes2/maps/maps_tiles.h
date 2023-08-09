@@ -333,7 +333,7 @@ namespace Maps
             return _terrainImageIndex;
         }
 
-        void setTerrainImage( const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip )
+        void setTerrain( const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip )
         {
             _terrainImageIndex = terrainImageIndex;
             _terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );

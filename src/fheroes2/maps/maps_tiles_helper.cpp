@@ -256,7 +256,7 @@ namespace Maps
 
                 // In original editor these tiles are never flipped.
                 // TODO: Decide and make the logic if some tiles can be flipped horizontally and/or vertically.
-                tile.setTerrainImage( terainImageIndex, false, false );
+                tile.setTerrain( terainImageIndex, false, false );
             }
         }
     }
