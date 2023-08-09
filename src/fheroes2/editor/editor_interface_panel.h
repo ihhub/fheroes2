@@ -56,12 +56,7 @@ namespace Interface
             return _selectedInstrument == Instrument::TERRAIN;
         }
 
-        bool isAreaSelect() const
-        {
-            return _selectedBrushSize == BrushSize::AREA;
-        }
-
-        bool useMouseDragMovment() const
+        bool useMouseDragMovement() const
         {
             return ( _selectedInstrument != Instrument::TERRAIN ) || ( _selectedBrushSize != BrushSize::AREA );
         }
@@ -82,10 +77,12 @@ namespace Interface
         Editor & _interface;
 
         static int _getGroundId( const uint8_t brushId );
+
         static const char * _getTerrainTypeName( const uint8_t brushId )
         {
             return Maps::Ground::String( _getGroundId( brushId ) );
         }
+
         static const char * _getObjectTypeName( const uint8_t brushId );
 
         enum Instrument : uint8_t

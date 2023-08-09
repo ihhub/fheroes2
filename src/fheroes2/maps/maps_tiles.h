@@ -336,7 +336,7 @@ namespace Maps
         void setTerrainImage( const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip )
         {
             _terrainImageIndex = terrainImageIndex;
-            _terrainFlags = static_cast<uint8_t>( verticalFlip ) + 2 * static_cast<uint8_t>( horizontalFlip );
+            _terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
         }
 
         Heroes * GetHeroes() const;

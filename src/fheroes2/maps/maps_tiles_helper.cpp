@@ -233,9 +233,10 @@ namespace
 
 namespace Maps
 {
-    void setTerrainImageOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId )
+    void setTerrainOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId )
     {
-        if ( startTileId < 0 || endTileId < 0 ) {
+        const int32_t maxTileId = world.w() * world.h() - 1;
+        if ( startTileId < 0 || endTileId < 0 || startTileId > maxTileId || endTileId > maxTileId ) {
             return;
         }
 

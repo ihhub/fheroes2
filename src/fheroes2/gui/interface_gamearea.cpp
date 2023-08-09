@@ -770,7 +770,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     updateObjectAnimationInfo();
 }
 
-void Interface::GameArea::renderTileCursor( fheroes2::Image & dst, const int32_t startTile, const int32_t endTile ) const
+void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int32_t startTile, const int32_t endTile ) const
 {
     if ( startTile < 0 || endTile < 0 ) {
         return;
@@ -938,7 +938,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         _mouseDraggingInitiated = true;
         _lastMouseDragPosition = mousePosition;
     }
-    else if ( isCursorOverGamearea && _interface.useMouseDragMovment()
+    else if ( isCursorOverGamearea && _interface.useMouseDragMovement()
               && ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
                    || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) ) {
         _mouseDraggingMovement = true;

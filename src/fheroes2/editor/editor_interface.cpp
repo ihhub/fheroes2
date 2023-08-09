@@ -58,7 +58,7 @@ class Castle;
 
 namespace
 {
-    int32_t brushAreaEndIndex( const int32_t brushSize, const int32_t startIndex )
+    int32_t getBrushAreaEndIndex( const int32_t brushSize, const int32_t startIndex )
     {
         const int32_t worldWidth = world.w();
         const int32_t cursorSizeX = std::min( brushSize, worldWidth - startIndex % worldWidth ) - 1;
@@ -113,16 +113,15 @@ namespace Interface
 
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
 
-            if ( _editorPanel.isTerrainEdit() ) {
-                if ( _tileUnderCursor > -1 ) {
-                    const int32_t brushSize = _editorPanel.getBrushSize();
+            if ( _editorPanel.isTerrainEdit() && ( _tileUnderCursor > -1 ) ) {
+                const int32_t brushSize = _editorPanel.getBrushSize();
 
-                    if ( brushSize > 0 ) {
-                        _gameArea.renderTileCursor( display, _tileUnderCursor, brushAreaEndIndex( brushSize, _tileUnderCursor ) );
-                    }
-                    else if ( _editorPanel.isAreaSelect() ) {
-                        _gameArea.renderTileCursor( display, _selectedTile, _tileUnderCursor );
-                    }
+                if ( brushSize > 0 ) {
+                    _gameArea.renderTileAreaSelect( display, _tileUnderCursor, getBrushAreaEndIndex( brushSize, _tileUnderCursor ) );
+                }
+                else if ( brushSize == 0 ) {
+                    // Render area selection from the tile where the left mouse button was pressed till the tile under the cursor.
+                    _gameArea.renderTileAreaSelect( display, _selectedTile, _tileUnderCursor );
                 }
             }
         }
@@ -286,7 +285,9 @@ namespace Interface
                 if ( Cursor::POINTER != cursor.Themes() ) {
                     cursor.SetThemes( Cursor::POINTER );
                 }
-                if ( !_gameArea.isDragScroll() && ( !_editorPanel.isAreaSelect() || _selectedTile == -1 ) ) {
+
+                // TODO: Add checks for object placing/moving, and other Editor functions that uses mouse dragging.
+                if ( !_gameArea.isDragScroll() && ( _editorPanel.getBrushSize() > 0 || _selectedTile == -1 ) ) {
                     _radar.QueueEventProcessing();
                 }
             }
@@ -324,16 +325,18 @@ namespace Interface
             if ( isCursorOverGamearea ) {
                 // Get tile index under the cursor.
                 const int32_t tileIndex = _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
+                const int32_t brushSize = _editorPanel.getBrushSize();
+
                 if ( _tileUnderCursor != tileIndex ) {
                     _tileUnderCursor = tileIndex;
 
                     // Force redraw if cursor position was changed as area rectangle is also changed.
-                    if ( _editorPanel.isTerrainEdit() && ( !_editorPanel.isAreaSelect() || _selectedTile != -1 ) ) {
+                    if ( _editorPanel.isTerrainEdit() && ( brushSize > 0 || _selectedTile != -1 ) ) {
                         _redraw |= REDRAW_GAMEAREA;
                     }
                 }
 
-                if ( _selectedTile == -1 && _editorPanel.isAreaSelect() && le.MousePressLeft() ) {
+                if ( _selectedTile == -1 && tileIndex != -1 && brushSize == 0 && le.MousePressLeft() ) {
                     _selectedTile = tileIndex;
                     _redraw |= REDRAW_GAMEAREA;
                 }
@@ -345,10 +348,10 @@ namespace Interface
 
             // Fill the selected area in terrain edit mode.
             if ( _selectedTile > -1 && le.MouseReleaseLeft() && _editorPanel.isTerrainEdit() ) {
-                if ( isCursorOverGamearea && _editorPanel.isAreaSelect() ) {
+                if ( isCursorOverGamearea && _editorPanel.getBrushSize() == 0 ) {
                     const int groundId = _editorPanel.selectedGroundType();
 
-                    Maps::setTerrainImageOnTiles( _selectedTile, _tileUnderCursor, groundId );
+                    Maps::setTerrainOnTiles( _selectedTile, _tileUnderCursor, groundId );
                 }
 
                 // Reset the area start tile.
@@ -538,11 +541,11 @@ namespace Interface
             const int groundId = _editorPanel.selectedGroundType();
 
             if ( brushSize > 0 ) {
-                Maps::setTerrainImageOnTiles( tileIndex, brushAreaEndIndex( brushSize, tileIndex ), groundId );
+                Maps::setTerrainOnTiles( tileIndex, getBrushAreaEndIndex( brushSize, tileIndex ), groundId );
             }
-            else if ( _editorPanel.isAreaSelect() ) {
+            else if ( brushSize == 0 ) {
                 // This is a case when area was not selected but a single tile was clicked.
-                Maps::setTerrainImageOnTiles( tileIndex, tileIndex, groundId );
+                Maps::setTerrainOnTiles( tileIndex, tileIndex, groundId );
 
                 _selectedTile = -1;
             }

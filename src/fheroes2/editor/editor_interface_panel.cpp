@@ -81,10 +81,11 @@ namespace Interface
         case BrushSize::LARGE:
             return 4;
         case BrushSize::AREA:
-            return -1;
+            return 0;
         default:
             // Have you added a new Brush size? Update the logic above!
             assert( 0 );
+            break;
         }
 
         return 0;
