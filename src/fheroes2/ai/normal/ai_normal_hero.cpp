@@ -853,26 +853,52 @@ namespace AI
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
 
-        const auto calculateCastleValue = [this, &hero]( const Castle * castle ) {
+        const std::function<double( const Castle * )> calculateCastleValue = [this, &hero, &calculateCastleValue]( const Castle * castle ) {
             assert( castle != nullptr );
 
             double value = castle->getBuildingValue() * 150.0 + 3000;
 
-            if ( isCriticalTask( castle->GetIndex() ) || hero.isLosingGame() ) {
+            if ( hero.isLosingGame() ) {
                 value += 15000;
+            }
+
+            if ( isCastleLossConditionForHuman( castle ) ) {
+                value += 20000;
             }
 
             // This is our own castle in need of protection.
             if ( hero.GetColor() == castle->GetColor() ) {
                 value *= 1.25;
             }
-            // This castle is defenseless. This modifier shouldn't be too high to avoid players baiting AI in.
-            else if ( !castle->GetActualArmy().isValid() ) {
-                value *= 1.25;
-            }
+            else {
+                const int32_t castleIndex = castle->GetIndex();
 
-            if ( isCastleLossConditionForHuman( castle ) ) {
-                value += 20000;
+                // If this castle threatens our castles, then we should evaluate it no worse than the best of our castles that it threatens
+                // (as if our best castle had to be taken back from the enemy). If a threatening castle can be attacked right now, it is
+                // better to do it than wait until the hero hired in it captures one of our castles.
+                if ( isCriticalTask( castleIndex ) ) {
+                    const auto iter = _priorityTargets.find( castleIndex );
+                    assert( iter != _priorityTargets.end() );
+
+                    const PriorityTask & attackTask = iter->second;
+                    assert( attackTask.type == PriorityTaskType::ATTACK );
+
+                    for ( const int32_t secondaryTaskTileIdx : attackTask.secondaryTaskTileId ) {
+                        const Castle * castleUnderThreat = world.getCastleEntrance( Maps::GetPoint( secondaryTaskTileIdx ) );
+                        if ( castleUnderThreat == nullptr ) {
+                            continue;
+                        }
+
+                        assert( hero.GetColor() == castleUnderThreat->GetColor() );
+
+                        value = std::max( value, calculateCastleValue( castleUnderThreat ) * 1.25 );
+                    }
+                }
+
+                // This castle is defenseless. This modifier shouldn't be too high to avoid players baiting AI in.
+                if ( !castle->GetActualArmy().isValid() ) {
+                    value *= 1.25;
+                }
             }
 
             return value;
@@ -957,7 +983,7 @@ namespace AI
 
             double value = 5000;
 
-            // If this hero threatens our castles, then we should evaluate him no worse than the best of our castles that he threatens,
+            // If this hero threatens our castles, then we should evaluate him no worse than the best of our castles that he threatens
             // (as if it had to be taken back from the enemy). If a threatening hero can be attacked in an open field, it is better to
             // do it now than to attack him later in our castle occupied by him.
             if ( isCriticalTask( index ) ) {
@@ -972,6 +998,8 @@ namespace AI
                     if ( castle == nullptr ) {
                         continue;
                     }
+
+                    assert( hero.GetColor() == castle->GetColor() );
 
                     value = std::max( value, calculateCastleValue( castle ) * 1.25 );
                 }
@@ -1348,26 +1376,52 @@ namespace AI
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
 
-        const auto calculateCastleValue = [this, &hero]( const Castle * castle ) {
+        const std::function<double( const Castle * )> calculateCastleValue = [this, &hero, &calculateCastleValue]( const Castle * castle ) {
             assert( castle != nullptr );
 
             double value = castle->getBuildingValue() * 500.0 + 15000;
 
-            if ( isCriticalTask( castle->GetIndex() ) || hero.isLosingGame() ) {
+            if ( hero.isLosingGame() ) {
                 value += 15000;
+            }
+
+            if ( isCastleLossConditionForHuman( castle ) ) {
+                value += 20000;
             }
 
             // This is our own castle in need of protection.
             if ( hero.GetColor() == castle->GetColor() ) {
                 value *= 1.5;
             }
-            // This castle is defenseless. This modifier shouldn't be too high to avoid players baiting AI in.
-            else if ( !castle->GetActualArmy().isValid() ) {
-                value *= 1.5;
-            }
+            else {
+                const int32_t castleIndex = castle->GetIndex();
 
-            if ( isCastleLossConditionForHuman( castle ) ) {
-                value += 20000;
+                // If this castle threatens our castles, then we should evaluate it no worse than the best of our castles that it threatens
+                // (as if our best castle had to be taken back from the enemy). If a threatening castle can be attacked right now, it is
+                // better to do it than wait until the hero hired in it captures one of our castles.
+                if ( isCriticalTask( castleIndex ) ) {
+                    const auto iter = _priorityTargets.find( castleIndex );
+                    assert( iter != _priorityTargets.end() );
+
+                    const PriorityTask & attackTask = iter->second;
+                    assert( attackTask.type == PriorityTaskType::ATTACK );
+
+                    for ( const int32_t secondaryTaskTileIdx : attackTask.secondaryTaskTileId ) {
+                        const Castle * castleUnderThreat = world.getCastleEntrance( Maps::GetPoint( secondaryTaskTileIdx ) );
+                        if ( castleUnderThreat == nullptr ) {
+                            continue;
+                        }
+
+                        assert( hero.GetColor() == castleUnderThreat->GetColor() );
+
+                        value = std::max( value, calculateCastleValue( castleUnderThreat ) * 1.5 );
+                    }
+                }
+
+                // This castle is defenseless. This modifier shouldn't be too high to avoid players baiting AI in.
+                if ( !castle->GetActualArmy().isValid() ) {
+                    value *= 1.5;
+                }
             }
 
             return value;
@@ -1452,7 +1506,7 @@ namespace AI
 
             double value = 12000;
 
-            // If this hero threatens our castles, then we should evaluate him no worse than the best of our castles that he threatens,
+            // If this hero threatens our castles, then we should evaluate him no worse than the best of our castles that he threatens
             // (as if it had to be taken back from the enemy). If a threatening hero can be attacked in an open field, it is better to
             // do it now than to attack him later in our castle occupied by him.
             if ( isCriticalTask( index ) ) {
@@ -1467,6 +1521,8 @@ namespace AI
                     if ( castle == nullptr ) {
                         continue;
                     }
+
+                    assert( hero.GetColor() == castle->GetColor() );
 
                     value = std::max( value, calculateCastleValue( castle ) * 1.5 );
                 }
