@@ -867,9 +867,12 @@ namespace AI
                 value += 20000;
             }
 
-            // This is our own castle in need of protection.
+            // This modifier shouldn't be too high to avoid players baiting AI in
+            const double defenselessCastleModifier = 1.25;
+
+            // This is our own castle in need of protection, evaluate it no worse than a similar defenseless enemy castle
             if ( hero.GetColor() == castle->GetColor() ) {
-                value *= 1.25;
+                value *= defenselessCastleModifier;
             }
             else {
                 const int32_t castleIndex = castle->GetIndex();
@@ -892,13 +895,14 @@ namespace AI
 
                         assert( hero.GetColor() == castleUnderThreat->GetColor() );
 
+                        // Apply a bonus so that the AI prefers to eliminate the threat if possible instead of guarding its castle
                         value = std::max( value, calculateCastleValue( castleUnderThreat ) * 1.25 );
                     }
                 }
 
-                // This castle is defenseless. This modifier shouldn't be too high to avoid players baiting AI in.
+                // This castle is defenseless
                 if ( !castle->GetActualArmy().isValid() ) {
-                    value *= 1.25;
+                    value *= defenselessCastleModifier;
                 }
             }
 
@@ -1002,6 +1006,7 @@ namespace AI
 
                     assert( hero.GetColor() == castle->GetColor() );
 
+                    // Apply a bonus so that the AI prefers to eliminate the threat if possible instead of guarding its castle
                     value = std::max( value, calculateCastleValue( castle ) * 1.25 );
                 }
             }
@@ -1390,9 +1395,12 @@ namespace AI
                 value += 20000;
             }
 
-            // This is our own castle in need of protection.
+            // This modifier shouldn't be too high to avoid players baiting AI in
+            const double defenselessCastleModifier = 1.5;
+
+            // This is our own castle in need of protection, evaluate it no worse than a similar defenseless enemy castle
             if ( hero.GetColor() == castle->GetColor() ) {
-                value *= 1.5;
+                value *= defenselessCastleModifier;
             }
             else {
                 const int32_t castleIndex = castle->GetIndex();
@@ -1415,13 +1423,14 @@ namespace AI
 
                         assert( hero.GetColor() == castleUnderThreat->GetColor() );
 
+                        // Apply a bonus so that the AI prefers to eliminate the threat if possible instead of guarding its castle
                         value = std::max( value, calculateCastleValue( castleUnderThreat ) * 1.5 );
                     }
                 }
 
-                // This castle is defenseless. This modifier shouldn't be too high to avoid players baiting AI in.
+                // This castle is defenseless
                 if ( !castle->GetActualArmy().isValid() ) {
-                    value *= 1.5;
+                    value *= defenselessCastleModifier;
                 }
             }
 
@@ -1525,6 +1534,7 @@ namespace AI
 
                     assert( hero.GetColor() == castle->GetColor() );
 
+                    // Apply a bonus so that the AI prefers to eliminate the threat if possible instead of guarding its castle
                     value = std::max( value, calculateCastleValue( castle ) * 1.5 );
                 }
             }
