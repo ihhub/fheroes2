@@ -180,7 +180,8 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
     const fheroes2::Rect & radarRect = _radar.GetRect();
     const fheroes2::Rect & radarArea = _radar.GetArea();
 
-    fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
+    fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
+                                 ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD ), 0, 1 );
 
     const auto drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
         if ( isHideInterface ) {
