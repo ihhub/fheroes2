@@ -194,6 +194,7 @@ msgstr "VIS INTRO"
 
 msgid "MIN"
 msgstr "MIN"
+
 msgid "Warrior"
 msgstr "Kriger"
 
