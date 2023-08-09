@@ -62,11 +62,6 @@
 
 namespace
 {
-    const double fighterStrengthMultiplier = 3;
-
-    // 1500 is slightly more than a fresh hero's maximum move points hired in a castle.
-    const uint32_t movePointsFromCastle{ 1500 };
-
     struct HeroValue
     {
         Heroes * hero = nullptr;
@@ -197,7 +192,7 @@ namespace
                 continue;
             }
 
-            if ( object.strength > medianStrength * fighterStrengthMultiplier ) {
+            if ( object.strength > medianStrength * 3 ) {
                 object.hero->setAIRole( Heroes::Role::FIGHTER );
             }
             else {
@@ -251,7 +246,8 @@ namespace
 
             const double threat = castle->GetArmy().GetStrength();
 
-            return AI::EnemyArmy( tileIndex, nullptr, threat, movePointsFromCastle );
+            // 1500 is slightly more than a fresh hero's maximum move points hired in a castle.
+            return AI::EnemyArmy( tileIndex, nullptr, threat, 1500 );
         }
 
         return {};
