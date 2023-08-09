@@ -29,7 +29,7 @@ jobs:
           release_name: Ubuntu x86-64 (Linux) build with SDL1 (latest commit)
           release_tag: fheroes2-linux-sdl1_dev
         - name: Linux x86-64 SDL1 Debug
-          os: ubuntu-22.04
+          os: ubuntu-latest
           dependencies: libsdl1.2-dev libsdl-mixer1.2-dev gettext
           env:
             FHEROES2_STRICT_COMPILATION: ON
@@ -71,7 +71,7 @@ jobs:
           release_name: Ubuntu x86-64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-sdl2_dev
         - name: Linux x86-64 SDL2 Debug
-          os: ubuntu-22.04
+          os: ubuntu-latest
           dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
           env:
             FHEROES2_STRICT_COMPILATION: ON
@@ -103,7 +103,7 @@ jobs:
           release_name: Ubuntu ARM64 (Linux) build with SDL1 (latest commit)
           release_tag: fheroes2-linux-arm-sdl1_dev
         - name: Linux ARM64 SDL1 Debug
-          os: ubuntu-22.04
+          os: ubuntu-latest
           dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl1.2-dev:arm64 libsdl-mixer1.2-dev:arm64 gettext
           env:
             FHEROES2_STRICT_COMPILATION: ON
@@ -151,7 +151,7 @@ jobs:
           release_name: Ubuntu ARM64 (Linux) build with SDL2 (latest commit)
           release_tag: fheroes2-linux-arm-sdl2_dev
         - name: Linux ARM64 SDL2 Debug
-          os: ubuntu-22.04
+          os: ubuntu-latest
           dependencies: gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libsdl2-dev:arm64 libsdl2-mixer-dev:arm64 libsdl2-image-dev:arm64 libpng-dev:arm64 gettext
           env:
             FHEROES2_STRICT_COMPILATION: ON
@@ -183,7 +183,7 @@ jobs:
           release_name: macOS x86-64 build with SDL1 (latest commit)
           release_tag: fheroes2-osx-sdl1_dev
         - name: macOS SDL1 App Bundle
-          os: macos-11
+          os: macos-latest
           dependencies: sdl sdl_mixer dylibbundler
           env:
             FHEROES2_STRICT_COMPILATION: ON
@@ -224,7 +224,7 @@ jobs:
           release_name: macOS x86-64 build with SDL2 (latest commit)
           release_tag: fheroes2-osx-sdl2_dev
         - name: macOS SDL2 App Bundle
-          os: macos-11
+          os: macos-latest
           dependencies: sdl2 sdl2_mixer dylibbundler
           env:
             FHEROES2_STRICT_COMPILATION: ON
