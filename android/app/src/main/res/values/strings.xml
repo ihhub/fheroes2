@@ -23,7 +23,17 @@
     <string name="activity_save_file_manager_save_file_list_empty_lbl_text">No save files available</string>
     <string name="activity_save_file_manager_select_all_btn_content_description">Select all save files</string>
     <string name="activity_save_file_manager_unselect_all_btn_content_description">Unselect all save files</string>
+    <string name="activity_save_file_manager_import_btn_content_description">Import save files</string>
+    <string name="activity_save_file_manager_export_btn_content_description">Export selected save files</string>
     <string name="activity_save_file_manager_delete_btn_content_description">Delete selected save files</string>
+    <string name="activity_save_file_manager_last_task_status_lbl_text_no_save_files_found">Operation completed successfully, but no save files were found.</string>
+    <string name="activity_save_file_manager_last_task_status_lbl_text_failed">An error occurred during the operation: %s</string>
+    <string name="activity_save_file_manager_no_files_selected_for_export_title">No files selected for export</string>
+    <string name="activity_save_file_manager_no_files_selected_for_export_message">Please select the save files to export.</string>
+    <string name="activity_save_file_manager_no_files_selected_for_export_positive_btn_text">OK</string>
+    <string name="activity_save_file_manager_no_files_selected_for_deletion_title">No files selected for deletion</string>
+    <string name="activity_save_file_manager_no_files_selected_for_deletion_message">Please select the save files to delete.</string>
+    <string name="activity_save_file_manager_no_files_selected_for_deletion_positive_btn_text">OK</string>
     <plurals name="activity_save_file_manager_delete_confirmation_title">
         <item quantity="one">Delete save file</item>
         <item quantity="other">Delete save files</item>
@@ -34,4 +44,5 @@
     </plurals>
     <string name="activity_save_file_manager_delete_confirmation_positive_btn_text">Yes</string>
     <string name="activity_save_file_manager_delete_confirmation_negative_btn_text">No</string>
+    <string name="activity_save_file_manager_suggested_zip_file_name" translatable="false">fheroes2_save_files.zip</string>
 </resources>
