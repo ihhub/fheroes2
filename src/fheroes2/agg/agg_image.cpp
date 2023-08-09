@@ -940,18 +940,19 @@ namespace fheroes2
                 break;
             }
             case ICN::BUTTON_EXIT_TOWN: {
-                _icnVsSprite[id].resize( 2 );
+                std::vector<fheroes2::Sprite> & buttonStates = _icnVsSprite[id];
+                buttonStates.resize( 2 );
 
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( ICN::TREASURY, 1 );
-                    _icnVsSprite[id][1] = GetICN( ICN::TREASURY, 2 );
+                    buttonStates[0] = GetICN( ICN::TREASURY, 1 );
+                    buttonStates[1] = GetICN( ICN::TREASURY, 2 );
                     break;
                 }
 
                 // Needs to be generated from original assets because it needs the black background from the pressed state.
                 // TODO: Make a way to generate buttons with black background since it is needed for MAX and EXIT in the Well and Guilds.
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
+                for ( int32_t i = 0; i < static_cast<int32_t>( buttonStates.size() ); ++i ) {
+                    Sprite & out = buttonStates[i];
                     out = GetICN( ICN::TREASURY, 1 + i );
 
                     // clean the button.
@@ -959,30 +960,29 @@ namespace fheroes2
                 }
 
                 const int32_t textWidth = 70;
-                Point releasedOffset = { 7, 5 };
-                Point pressedOffset = { 6, 6 };
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), releasedOffset, pressedOffset,
+                renderTextOnButton( buttonStates[0], buttonStates[1], gettext_noop( "smallerButton|EXIT" ), { 7, 5 }, { 6, 6 },
                                     { textWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) }, fheroes2::FontColor::WHITE );
 
                 break;
             }
             case ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD:
             case ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL: {
-                _icnVsSprite[id].resize( 2 );
+                std::vector<fheroes2::Sprite> & buttonStates = _icnVsSprite[id];
+                buttonStates.resize( 2 );
 
                 const bool isEvilInterface = ( id == ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL );
                 const int originalButtonICN = isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA;
 
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( originalButtonICN, 4 );
-                    _icnVsSprite[id][1] = GetICN( originalButtonICN, 5 );
+                    buttonStates[0] = GetICN( originalButtonICN, 4 );
+                    buttonStates[1] = GetICN( originalButtonICN, 5 );
                     break;
                 }
 
                 // Needs to be generated from original assets because the background has a much darker shadow than normal.
                 // TODO: Make the button generated as normal after removing the embedded shadow on the background.
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
+                for ( int32_t i = 0; i < static_cast<int32_t>( buttonStates.size() ); ++i ) {
+                    Sprite & out = buttonStates[i];
                     out = GetICN( originalButtonICN, 4 + i );
 
                     // clean the button.
@@ -990,9 +990,7 @@ namespace fheroes2
                 }
 
                 const int32_t textWidth = 71;
-                Point releasedOffset = { 6, 5 };
-                Point pressedOffset = { 5, 6 };
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "smallerButton|EXIT" ), releasedOffset, pressedOffset,
+                renderTextOnButton( buttonStates[0], buttonStates[1], gettext_noop( "smallerButton|EXIT" ), { 6, 5 }, { 5, 6 },
                                     { textWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) },
                                     isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE );
 
@@ -3227,9 +3225,10 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 LoadOriginalICN( ICN::ADVBTNS );
+
                 const int releasedIndex = ( id == ICN::GOOD_ARMY_BUTTON ) ? 0 : 4;
-                _icnVsSprite[id][0] = GetICN( ICN::ADVBTNS, releasedIndex );
-                _icnVsSprite[id][1] = GetICN( ICN::ADVBTNS, releasedIndex + 1 );
+                Copy( GetICN( ICN::ADVBTNS, releasedIndex ), _icnVsSprite[id][0] );
+                Copy( GetICN( ICN::ADVBTNS, releasedIndex + 1 ), _icnVsSprite[id][1] );
 
                 // Make all black pixels transparent.
                 AddTransparency( _icnVsSprite[id][0], 36 );
@@ -3243,9 +3242,10 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 LoadOriginalICN( ICN::ADVEBTNS );
+
                 const int releasedIndex = ( id == ICN::EVIL_ARMY_BUTTON ) ? 0 : 4;
-                _icnVsSprite[id][0] = GetICN( ICN::ADVEBTNS, releasedIndex );
-                _icnVsSprite[id][1] = GetICN( ICN::ADVEBTNS, releasedIndex + 1 );
+                Copy( GetICN( ICN::ADVEBTNS, releasedIndex ), _icnVsSprite[id][0] );
+                Copy( GetICN( ICN::ADVEBTNS, releasedIndex + 1 ), _icnVsSprite[id][1] );
 
                 // Make all black pixels transparent.
                 AddTransparency( _icnVsSprite[id][0], 36 );
