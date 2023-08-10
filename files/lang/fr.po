@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-25 08:44+0000\n"
+"POT-Creation-Date: 2023-08-08 16:49+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -81,6 +81,9 @@ msgstr "NON"
 
 msgid "EXIT"
 msgstr "FIN"
+
+msgid "smallerButton|EXIT"
+msgstr ""
 
 msgid "DISMISS"
 msgstr "RENVOYER"
@@ -178,6 +181,9 @@ msgstr "6 JOUEURS"
 msgid "GIFT"
 msgstr "DONNER"
 
+msgid "MAX"
+msgstr "MAX"
+
 msgid "DIFFICULTY"
 msgstr "DIFFICULTÉ"
 
@@ -186,9 +192,6 @@ msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
-
-msgid "MAX"
-msgstr "MAX"
 
 msgid "Warrior"
 msgstr "Guerrier"
@@ -355,13 +358,17 @@ msgstr ""
 msgid "You have already cast a spell this round."
 msgstr "Vous avez déjà jeté un sort pendant ce tour."
 
-msgid "That spell will affect no one!"
+#, fuzzy
+msgid "That spell will have no effect!"
 msgstr "Ce sort n'affectera personne !"
 
 msgid "You may only summon one type of elemental per combat."
 msgstr "Vous ne pouvez invoquer qu'un seul type d'élémentaire par combat."
 
-msgid "There is no open space adjacent to your hero to summon an Elemental to."
+#, fuzzy
+msgid ""
+"There is no open space adjacent to your hero where you can summon an "
+"Elemental to."
 msgstr ""
 "Il n'y a pas d'espace libre adjacent à votre héros pour y invoquer un "
 "élémentaire."
@@ -718,6 +725,10 @@ msgstr ""
 
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Voulez-vous vraiment finir la bataille en mode combat auto ?"
+
+#, fuzzy
+msgid "Are you sure you want to enable auto combat?"
+msgstr "Voulez-vous vraiment sonner la retraite ?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} passent leur tour."
@@ -2881,7 +2892,8 @@ msgstr "Choix de la langue"
 msgid "Change the graphics settings of the game."
 msgstr "Changer les paramètres d'affichage."
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+#, fuzzy
+msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 "Basculer le curseur en couleur. Il ne s'agit que d'un choix esthétique."
 
@@ -3444,6 +3456,10 @@ msgstr "Batailles"
 
 msgid "autoBattle|Manual"
 msgstr "Manuelles"
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr ""
+"Basculer le curseur en couleur. Il ne s'agit que d'un choix esthétique."
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -6911,19 +6927,22 @@ msgstr ""
 "arcane. Un grand oracle m'a appris son talent. J'ai la réponse que vous "
 "cherchez.\""
 
-msgid "Spell book is not present."
+#, fuzzy
+msgid "No spell book is present."
 msgstr "Le grimoire n'est pas présent."
 
 #, fuzzy
 msgid ""
-"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
+"This spell costs %{mana} spell points. You have no spell points, so you "
+"cannot cast it."
 msgstr ""
 "Ce sort coûte %{mana} mana. Vous n'avez que %{point} mana, vous ne pouvez "
 "donc pas lancer le sort."
 
+#, fuzzy
 msgid ""
-"That spell costs %{mana} mana. You only have %{point} mana, so you can't "
-"cast the spell."
+"This spell costs %{mana} spell points. You only have %{point} spell points, "
+"so you cannot cast it."
 msgstr ""
 "Ce sort coûte %{mana} mana. Vous n'avez que %{point} mana, vous ne pouvez "
 "donc pas lancer le sort."
@@ -6943,34 +6962,39 @@ msgstr ""
 "Votre héros est trop fatigué pour lancer ce sort aujourd'hui. Essayez à "
 "nouveau demain."
 
-msgid "This spell cannot be used on a boat."
+#, fuzzy
+msgid "This spell cannot be cast on a boat."
 msgstr "Ce sort ne peut pas être jeté en mer."
 
 #, fuzzy
-msgid "This spell can be casted only nearby ocean."
+msgid "This spell can only be cast near an ocean."
 msgstr "Ce sort ne peut être lancé qu'à proximité de l'eau."
 
 msgid ""
-"There is no boat available and no free ocean location near the hero to cast "
-"this spell."
+"There are no boats available and no ocean adjacent to the hero where this "
+"spell will work."
 msgstr ""
 
 #, fuzzy
-msgid "There is no more boat available to cast this spell."
+msgid "There are no boats available for this spell."
 msgstr "Lancer un sort d'aventure."
 
-msgid "There is no free ocean location near the hero to cast this spell."
+#, fuzzy
+msgid "There is no ocean adjacent to the hero where this spell will work."
 msgstr ""
+"Il n'y a pas d'espace libre adjacent à votre héros pour y invoquer un "
+"élémentaire."
 
 #, fuzzy
 msgid ""
-"You do not currently own any town or castle that is not occupied by a hero, "
-"so you can't cast the spell."
+"You do not own any town or castle that is not currently occupied by a hero. "
+"You cannot cast this spell."
 msgstr ""
 "Vous ne possédez actuellement aucun village ou château, vous ne pouvez donc "
 "pas lancer le sort."
 
-msgid "This hero is already in a town, so you can't cast the spell."
+#, fuzzy
+msgid "This hero is already in a town, so you cannot cast this spell."
 msgstr "Ce héros est déjà dans un village, vous ne pouvez pas lancer le sort."
 
 msgid ""
@@ -6982,17 +7006,18 @@ msgstr ""
 "\n"
 "Ce village est occupé par votre héros %{hero}."
 
-msgid "This spell is already in use."
+#, fuzzy
+msgid "This spell is already in effect."
 msgstr "Ce sort est déjà utilisé."
 
 msgid ""
-"No opponent can have heroes under his command anymore. Casting this spell "
-"will not bring any advantage."
+"No opponent neither has nor can have any hero under their command anymore. "
+"Casting this spell will have no effect."
 msgstr ""
 
 msgid ""
-"No opponent has a hero under his command at this time. Casting this spell "
-"will not bring any advantage."
+"No opponent has a hero under their command at this time. Casting this spell "
+"will have no effect."
 msgstr ""
 
 msgid ""
@@ -7002,9 +7027,10 @@ msgstr ""
 "Vous devez être à maximum %{count} de distance d'un monstre pour que le sort "
 "visions fonctionne."
 
+#, fuzzy
 msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
+"You must be standing on the entrance to a mine (sawmills and alchemist labs "
+"do not count) to cast this spell."
 msgstr ""
 "Vous devez être à l'entrée d'une mine (les scieries et les alchimistes ne "
 "comptent pas) pour lancer ce sort."
@@ -7013,8 +7039,8 @@ msgid "You must first defeat the ghosts guarding the mine to cast this spell."
 msgstr ""
 
 msgid ""
-"There are already at least as many elementals guarding the mine than the "
-"spell can generate. Casting this spell will not bring any advantage."
+"There are already at least as many elementals guarding the mine as this hero "
+"can generate. Casting this spell will have no effect."
 msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
