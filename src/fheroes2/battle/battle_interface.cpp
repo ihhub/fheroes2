@@ -3961,7 +3961,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     }
 
     // For Battle speed 9 and 10 we play one sound at time without any simultaneous playbacks
-    // as on these speed the unit will end its movement until the sound is finished.
+    // as on these speeds the unit will end its movement before the sound is finished.
     const bool playSoundBySound = Settings::Get().BattleSpeed() > 8;
     int soundStatus = -1;
     const int walkSoundId = unit.M82Move();
@@ -4008,7 +4008,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
         // TODO: adjust sounds calls and synchronize them with frames. Take into account that some sounds (like for Cavalry) consists of a sequence of steps.
         if ( playSoundBySound ) {
-            // Do not play simultaneous walk sounds.
+            // Start unit move sound only if it is not already playing.
             if ( soundStatus < 0 || !Mixer::isPlaying( soundStatus ) ) {
                 soundStatus = AudioManager::PlaySound( walkSoundId );
             }
@@ -4153,7 +4153,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     }
 
     // For Battle speed 9 and 10 we play one sound at time without any simultaneous playbacks
-    // as on these speed the unit will end its movement until the sound is finished.
+    // as on these speeds the unit will end its movement before the sound is finished.
     const bool playSoundBySound = Settings::Get().BattleSpeed() > 8;
     int soundStatus = -1;
     const int flySoundId = unit.M82Move();
@@ -4163,7 +4163,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         _movingPos = *currentPoint;
 
         if ( playSoundBySound ) {
-            // Do not play simultaneous fly sounds.
+            // Start unit move sound only if it is not already playing.
             if ( soundStatus < 0 || !Mixer::isPlaying( soundStatus ) ) {
                 soundStatus = AudioManager::PlaySound( flySoundId );
             }
