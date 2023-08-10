@@ -140,13 +140,13 @@ namespace AI
     {
         PriorityTask() = default;
 
-        PriorityTask( PriorityTaskType t, double threat )
-            : type( t )
+        PriorityTask( PriorityTaskType taskType, double threat )
+            : type( taskType )
             , threatLevel( threat )
         {}
 
-        PriorityTask( PriorityTaskType t, double threat, int secondaryTask )
-            : type( t )
+        PriorityTask( PriorityTaskType taskType, double threat, int secondaryTask )
+            : type( taskType )
             , threatLevel( threat )
         {
             secondaryTaskTileId.insert( secondaryTask );
