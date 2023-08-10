@@ -331,7 +331,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
                 updateFocus = true;
             }
 
-            ( *it )->SetFreeman( 0 );
+            ( *it )->Dismiss( 0 );
             it = myHeroes.end();
 
             result = Dialog::CANCEL;

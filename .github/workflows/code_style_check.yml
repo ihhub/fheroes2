@@ -6,7 +6,7 @@ on:
 jobs:
   style:
     name: Code style check
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     defaults:
       run:

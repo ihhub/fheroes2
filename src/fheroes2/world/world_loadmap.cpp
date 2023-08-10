@@ -515,7 +515,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                         break;
                     }
 
-                    Heroes * hero = GetFreemanHeroes( raceType );
+                    Heroes * hero = GetHeroForHire( raceType );
 
                     if ( hero ) {
                         hero->LoadFromMP2( objectTileId, Color::NONE, hero->GetRace(), pblock );
@@ -546,8 +546,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                         if ( pblock[17] && pblock[18] < Heroes::BAX )
                             hero = vec_heroes.Get( pblock[18] );
 
-                        if ( !hero || !hero->isFreeman() )
-                            hero = GetFreemanHeroes( colorRace.second );
+                        if ( !hero || !hero->isAvailableForHire() )
+                            hero = GetHeroForHire( colorRace.second );
 
                         if ( hero )
                             hero->LoadFromMP2( objectTileId, colorRace.first, colorRace.second, pblock );

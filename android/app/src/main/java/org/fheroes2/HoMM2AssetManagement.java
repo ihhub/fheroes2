@@ -50,8 +50,10 @@ final class HoMM2AssetManagement
         return ( new File( externalFilesDir, "data" + File.separator + "heroes2.agg" ) ).exists();
     }
 
-    // Returns true if at least one asset was found and extracted, otherwise returns false
-    static boolean extractHoMM2AssetsFromZip( final File externalFilesDir, final File cacheDir, final InputStream iStream ) throws IOException
+    /**
+     * @return true if at least one asset was found and extracted, otherwise returns false
+     */
+    static boolean extractHoMM2AssetsFromZip( final File externalFilesDir, final File cacheDir, final InputStream zipStream ) throws IOException
     {
         // It is allowed to extract only files located in these subdirectories
         final Set<String> allowedSubdirNames = new HashSet<>();
@@ -69,63 +71,66 @@ final class HoMM2AssetManagement
 
         boolean result = false;
 
-        final ZipInputStream zStream = new ZipInputStream( iStream );
-        for ( ZipEntry zEntry = zStream.getNextEntry(); zEntry != null; zEntry = zStream.getNextEntry() ) {
-            // No need to extract empty directories
-            if ( zEntry.isDirectory() ) {
-                continue;
-            }
+        try ( final ZipInputStream zin = new ZipInputStream( zipStream ) ) {
+            for ( ZipEntry zEntry = zin.getNextEntry(); zEntry != null; zEntry = zin.getNextEntry() ) {
+                // No need to extract empty directories
+                if ( zEntry.isDirectory() ) {
+                    continue;
+                }
 
-            final File zEntryFile = new File( zEntry.getName() );
+                final File zEntryFile = new File( zEntry.getName() );
 
-            // CD image from GOG
-            if ( zEntryFile.getName().toLowerCase( Locale.ROOT ).equals( "homm2.gog" ) ) {
-                final File isoFile = new File( cacheDir, "homm2.iso" );
+                // CD image from GOG
+                if ( zEntryFile.getName().toLowerCase( Locale.ROOT ).equals( "homm2.gog" ) ) {
+                    final File isoFile = new File( cacheDir, "homm2.iso" );
 
-                try {
-                    try ( final OutputStream iso = Files.newOutputStream( isoFile.toPath() ) ) {
-                        gogToISO( zStream, iso );
+                    try {
+                        try ( final OutputStream iso = Files.newOutputStream( isoFile.toPath() ) ) {
+                            gogToISO( zin, iso );
+                        }
+
+                        final boolean res = extractAnimationsFromISO( externalFilesDir, isoFile );
+
+                        result = result || res;
+                    }
+                    finally {
+                        Files.deleteIfExists( isoFile.toPath() );
                     }
 
-                    final boolean res = extractAnimationsFromISO( externalFilesDir, isoFile );
-
-                    result = result || res;
-                }
-                finally {
-                    Files.deleteIfExists( isoFile.toPath() );
+                    continue;
                 }
 
-                continue;
-            }
+                final String assetSubpath = getHoMM2AssetSubpath( zEntryFile, allowedSubdirNames );
+                // No need to extract the file if its path does not contain any of the allowed subdirectories
+                if ( assetSubpath.isEmpty() ) {
+                    continue;
+                }
 
-            final String assetSubpath = getHoMM2AssetSubpath( zEntryFile, allowedSubdirNames );
-            // No need to extract the file if its path does not contain any of the allowed subdirectories
-            if ( assetSubpath.isEmpty() ) {
-                continue;
-            }
+                final File outFile = new File( externalFilesDir, assetSubpath );
+                // Check the path for various trickery, such as 'data/../../../bin/file'
+                if ( !isValidHoMM2AssetPath( outFile, allowedSubdirs ) ) {
+                    continue;
+                }
 
-            final File outFile = new File( externalFilesDir, assetSubpath );
-            // Check the path for various trickery, such as 'data/../../../bin/file'
-            if ( !isValidHoMM2AssetPath( outFile, allowedSubdirs ) ) {
-                continue;
-            }
+                final File outFileDir = outFile.getParentFile();
+                if ( outFileDir != null ) {
+                    Files.createDirectories( outFileDir.toPath() );
+                }
 
-            final File outFileDir = outFile.getParentFile();
-            if ( outFileDir != null ) {
-                Files.createDirectories( outFileDir.toPath() );
-            }
+                try ( final OutputStream out = Files.newOutputStream( outFile.toPath() ) ) {
+                    IOUtils.copy( zin, out );
+                }
 
-            try ( final OutputStream out = Files.newOutputStream( outFile.toPath() ) ) {
-                IOUtils.copy( zStream, out );
+                result = true;
             }
-
-            result = true;
         }
 
         return result;
     }
 
-    // Returns true if at least one animation was found and extracted, otherwise returns false
+    /**
+     * @return true if at least one animation was found and extracted, otherwise returns false
+     */
     private static boolean extractAnimationsFromISO( final File externalFilesDir, final File isoFile ) throws IOException
     {
         // It is allowed to extract only files located in these subdirectories
@@ -176,9 +181,12 @@ final class HoMM2AssetManagement
         return result;
     }
 
-    // Tries to truncate the given path to the shortest path starting from one of the allowed subdirectories,
-    // for example 'foo/bar/data/zoo/file' -> 'data/zoo/file'. Returns an empty string if the given path does
-    // not contain any of the allowed subdirectories.
+    /**
+     * Tries to truncate the given path to the shortest path starting from one of the allowed subdirectories,
+     * for example 'foo/bar/data/zoo/file' -> 'data/zoo/file'.
+     *
+     * @return the resulting path, or an empty string if the given path does not contain any of the allowed subdirectories
+     */
     private static String getHoMM2AssetSubpath( final File path, final Set<String> allowedSubdirNames )
     {
         StringBuilder assetSubpath = new StringBuilder();
@@ -211,7 +219,9 @@ final class HoMM2AssetManagement
         return false;
     }
 
-    // Converts HOMM2.GOG file to ISO format
+    /**
+     * Converts HOMM2.GOG file to ISO format
+     */
     private static void gogToISO( final InputStream gogStream, final OutputStream isoStream ) throws IOException
     {
         final int chunkSize = 2352;

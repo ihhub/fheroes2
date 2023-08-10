@@ -89,7 +89,7 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
         buttonsArea.SetRedraw();
     }
     // Start the hero's movement
-    else if ( path.isValid() && hero->MayStillMove( false, true ) ) {
+    else if ( path.isValidForMovement() && hero->MayStillMove( false, true ) ) {
         SetFocus( hero, true );
         RedrawFocus();
 
@@ -157,7 +157,7 @@ void Interface::AdventureMap::EventContinueMovement() const
 {
     Heroes * hero = GetFocusHeroes();
 
-    if ( hero && hero->GetPath().isValid() && hero->MayStillMove( false, true ) ) {
+    if ( hero && hero->GetPath().isValidForMovement() && hero->MayStillMove( false, true ) ) {
         hero->SetMove( true );
     }
 }
@@ -249,7 +249,7 @@ void Interface::AdventureMap::EventSystemDialog() const
 
 fheroes2::GameMode Interface::BaseInterface::EventExit()
 {
-    if ( Dialog::YES & fheroes2::showStandardTextMessage( "", _( "Are you sure you want to quit?" ), Dialog::YES | Dialog::NO ) )
+    if ( Dialog::YES & fheroes2::showStandardTextMessage( _( "Quit" ), _( "Are you sure you want to quit?" ), Dialog::YES | Dialog::NO ) )
         return fheroes2::GameMode::QUIT_GAME;
 
     return fheroes2::GameMode::CANCEL;
