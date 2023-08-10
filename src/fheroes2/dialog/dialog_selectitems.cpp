@@ -173,10 +173,12 @@ public:
         // Do nothing.
     }
 
-    void updateSrollBarImage()
+    void updateScrollBarImage()
     {
-        setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
-                                                              { 0, 0, _scrollbar.width(), 8 }, { 0, 7, _scrollbar.width(), 8 } ) );
+        const int32_t scrollBarWidth = _scrollbar.width();
+
+        setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(), { 0, 0, scrollBarWidth, 8 },
+                                                              { 0, 7, scrollBarWidth, 8 } ) );
         _scrollbar.moveToIndex( _topId );
     }
 
@@ -192,7 +194,8 @@ public:
         const fheroes2::Text text( caption, fheroes2::FontType::normalYellow() );
         text.draw( roi.x + ( roi.width - text.width() ) / 2, roi.y + 10, display );
 
-        updateSrollBarImage();
+        updateScrollBarImage();
+
         Redraw();
         display.render( background->totalArea() );
 
@@ -210,10 +213,10 @@ public:
             }
 
             if ( le.MousePressRight( buttonOk.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Accept the choice made." ), 0 );
+                fheroes2::showStandardTextMessage( _( "Okay" ), _( "Accept the choice made." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( buttonCancel.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), 0 );
+                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
 
             QueueEventProcessing();

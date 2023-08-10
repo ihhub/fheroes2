@@ -37,7 +37,7 @@ namespace fheroes2
 
         ~Scrollbar() override
         {
-            // We need to reset the ImageRestorer for the scroll bar to avoid its restoration by destructor and possible race with th dialog window restorer.
+            // We need to reset the ImageRestorer for the scroll bar to avoid its restoration by destructor and possible race with the dialog window restorer.
             _resetRestorer();
         }
 
