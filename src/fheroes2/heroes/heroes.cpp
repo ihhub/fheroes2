@@ -829,7 +829,7 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
 bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
 {
     if ( GetColor() != Color::NONE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "hero is not a freeman" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "hero has already been hired by some kingdom" )
 
         return false;
     }
@@ -958,7 +958,7 @@ void Heroes::calculatePath( int32_t dstIdx )
         dstIdx = path.GetDestinationIndex();
     }
 
-    if ( !path.isValid() ) {
+    if ( !path.isValidForMovement() ) {
         path.Reset();
     }
 
@@ -968,7 +968,7 @@ void Heroes::calculatePath( int32_t dstIdx )
 
     path.setPath( world.getPath( *this, dstIdx ), dstIdx );
 
-    if ( !path.isValid() ) {
+    if ( !path.isValidForMovement() ) {
         path.Reset();
     }
 }
@@ -1322,7 +1322,7 @@ bool Heroes::BuySpellBook( const Castle * castle )
 
 bool Heroes::isMoveEnabled() const
 {
-    return Modes( ENABLEMOVE ) && path.isValid() && path.hasAllowedSteps();
+    return Modes( ENABLEMOVE ) && path.isValidForMovement() && path.hasAllowedSteps();
 }
 
 bool Heroes::CanMove() const
@@ -1331,17 +1331,33 @@ bool Heroes::CanMove() const
     return move_point >= ( tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, GetLevelSkill( Skill::Secondary::PATHFINDING ) ) );
 }
 
-void Heroes::SetMove( bool f )
+void Heroes::SetMove( const bool enable )
 {
-    if ( f ) {
+    if ( enable ) {
+        if ( Modes( ENABLEMOVE ) ) {
+            return;
+        }
+
         ResetModes( SLEEPER );
+
+        if ( isControlAI() ) {
+            AI::Get().HeroesBeginMovement( *this );
+        }
 
         SetModes( ENABLEMOVE );
     }
     else {
+        if ( !Modes( ENABLEMOVE ) ) {
+            return;
+        }
+
         ResetModes( ENABLEMOVE );
 
-        // reset sprite position
+        if ( isControlAI() ) {
+            AI::Get().HeroesFinishMovement( *this );
+        }
+
+        // Reset the hero sprite
         switch ( direction ) {
         case Direction::TOP:
             sprite_index = 0;
@@ -1582,7 +1598,7 @@ void Heroes::ApplyPenaltyMovement( uint32_t penalty )
 
 bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const
 {
-    if ( isFreeman() ) {
+    if ( !isActive() ) {
         return false;
     }
 
@@ -1590,7 +1606,7 @@ bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) con
         return false;
     }
 
-    if ( path.isValid() && !ignorePath ) {
+    if ( path.isValidForMovement() && !ignorePath ) {
         return path.hasAllowedSteps();
     }
 
@@ -1607,14 +1623,19 @@ bool Heroes::isValid() const
     return hid != UNKNOWN;
 }
 
-bool Heroes::isFreeman() const
+bool Heroes::isActive() const
+{
+    return isValid() && ( GetColor() & Color::ALL ) && !Modes( JAIL );
+}
+
+bool Heroes::isAvailableForHire() const
 {
     return isValid() && GetColor() == Color::NONE && !Modes( JAIL );
 }
 
-void Heroes::SetFreeman( int reason )
+void Heroes::Dismiss( int reason )
 {
-    if ( isFreeman() ) {
+    if ( isAvailableForHire() ) {
         return;
     }
 
@@ -1699,7 +1720,7 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
         }
     }
 
-    if ( !isFreeman() && GetMapsObject() == MP2::OBJ_EVENT ) {
+    if ( isActive() && GetMapsObject() == MP2::OBJ_EVENT ) {
         const MapEvent * event = world.GetMapEvent( GetCenter() );
 
         if ( event && event->isAllow( GetColor() ) ) {
@@ -1956,7 +1977,7 @@ Heroes * AllHeroes::GetHero( const Castle & castle ) const
     return end() != it ? *it : nullptr;
 }
 
-Heroes * AllHeroes::GetFreeman( const int race, const int heroIDToIgnore ) const
+Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) const
 {
     int min = Heroes::UNKNOWN;
     int max = Heroes::UNKNOWN;
@@ -1998,48 +2019,48 @@ Heroes * AllHeroes::GetFreeman( const int race, const int heroIDToIgnore ) const
         break;
     }
 
-    std::vector<int> freeman_heroes;
-    freeman_heroes.reserve( maxHeroCount );
+    std::vector<int> heroesForHire;
+    heroesForHire.reserve( maxHeroCount );
 
     // First try to find a free hero of the specified race (skipping custom heroes)
     for ( int i = min; i <= max; ++i ) {
-        if ( i != heroIDToIgnore && at( i )->isFreeman() && !at( i )->Modes( Heroes::NOTDEFAULTS ) ) {
-            freeman_heroes.push_back( i );
+        if ( i != heroIDToIgnore && at( i )->isAvailableForHire() && !at( i )->Modes( Heroes::NOTDEFAULTS ) ) {
+            heroesForHire.push_back( i );
         }
     }
 
     // If no heroes are found, then try to find a free hero of any race
-    if ( race != Race::NONE && freeman_heroes.empty() ) {
+    if ( race != Race::NONE && heroesForHire.empty() ) {
         min = Heroes::LORDKILBURN;
         max = Heroes::CELIA;
 
         for ( int i = min; i <= max; ++i ) {
-            if ( i != heroIDToIgnore && at( i )->isFreeman() ) {
-                freeman_heroes.push_back( i );
+            if ( i != heroIDToIgnore && at( i )->isAvailableForHire() ) {
+                heroesForHire.push_back( i );
             }
         }
     }
 
     // All the heroes are busy
-    if ( freeman_heroes.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "freeman not found, all the heroes are busy." )
+    if ( heroesForHire.empty() ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "no hero found for hire, all the heroes are busy." )
         return nullptr;
     }
 
-    // Try to avoid freeman heroes who are already available for recruitment in any kingdom
-    std::vector<int> freemanHeroesNotRecruits = freeman_heroes;
+    // Try to avoid heroes who are already available for recruitment in any kingdom
+    std::vector<int> heroesForHireNotRecruits = heroesForHire;
 
-    freemanHeroesNotRecruits.erase( std::remove_if( freemanHeroesNotRecruits.begin(), freemanHeroesNotRecruits.end(),
+    heroesForHireNotRecruits.erase( std::remove_if( heroesForHireNotRecruits.begin(), heroesForHireNotRecruits.end(),
                                                     [this]( const int heroID ) { return at( heroID )->Modes( Heroes::RECRUIT ); } ),
-                                    freemanHeroesNotRecruits.end() );
+                                    heroesForHireNotRecruits.end() );
 
-    if ( !freemanHeroesNotRecruits.empty() ) {
-        return at( Rand::Get( freemanHeroesNotRecruits ) );
+    if ( !heroesForHireNotRecruits.empty() ) {
+        return at( Rand::Get( heroesForHireNotRecruits ) );
     }
 
-    // There are no freeman heroes who are not yet available for recruitment, allow
-    // heroes to be available for recruitment in several kingdoms at the same time
-    return at( Rand::Get( freeman_heroes ) );
+    // There are no heroes who are not yet available for recruitment, allow heroes
+    // to be available for recruitment in several kingdoms at the same time
+    return at( Rand::Get( heroesForHire ) );
 }
 
 void AllHeroes::Scout( int colors ) const

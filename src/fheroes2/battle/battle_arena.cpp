@@ -892,7 +892,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
 
         if ( spell == Spell::EARTHQUAKE && !castle ) {
             if ( msg ) {
-                *msg = _( "That spell will affect no one!" );
+                *msg = _( "That spell will have no effect!" );
             }
             return true;
         }
@@ -910,7 +910,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
 
             if ( 0 > GetFreePositionNearHero( _currentColor ) ) {
                 if ( msg ) {
-                    *msg = _( "There is no open space adjacent to your hero to summon an Elemental to." );
+                    *msg = _( "There is no open space adjacent to your hero where you can summon an Elemental to." );
                 }
                 return true;
             }
@@ -934,7 +934,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
             }
 
             if ( msg ) {
-                *msg = _( "That spell will affect no one!" );
+                *msg = _( "That spell will have no effect!" );
             }
             return true;
         }
