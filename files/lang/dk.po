@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-05 03:57+0000\n"
-"PO-Revision-Date: 2023-08-08 17:05+0200\n"
+"PO-Revision-Date: 2023-08-09 14:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -3677,12 +3677,18 @@ msgid ""
 "\n"
 "Days: %{days}\n"
 msgstr ""
+"Tillykke!\n"
+"\n"
+"Dage: %{days}\n"
 
 msgid ""
 "\n"
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
+"\n"
+"Niveau: %{difficulty}\n"
+"\n"
 
 msgid ""
 "Score: %{score}\n"
@@ -3690,9 +3696,13 @@ msgid ""
 "Rating:\n"
 "%{rating}"
 msgstr ""
+"Score: %{score}\n"
+"\n"
+"Bedømmelse:\n"
+"%{rating}"
 
 msgid "Start the selected scenario."
-msgstr ""
+msgstr "Start det valgte scenarie."
 
 msgid "View Intro"
 msgstr "Vis intro"
@@ -3706,10 +3716,10 @@ msgid ""
 msgstr ""
 
 msgid "Restart"
-msgstr ""
+msgstr "Genstart"
 
 msgid "Restart the current scenario."
-msgstr ""
+msgstr "Genstart det igangværende scenarie."
 
 #, fuzzy
 msgid "Difficulty"
@@ -3722,7 +3732,7 @@ msgid ""
 msgstr ""
 
 msgid "Are you sure you want to restart this scenario?"
-msgstr ""
+msgstr "Er du sikker på du vil genstarte dette scenarie?"
 
 msgid "Campaign Scenario loading failure"
 msgstr "Indlæsningsfejl af felttogs-scenarie"
@@ -3731,181 +3741,181 @@ msgid "Please make sure that campaign files are correct and present."
 msgstr ""
 
 msgid "Days spent"
-msgstr ""
+msgstr "Dage brugt"
 
 msgid "The number of days spent on this campaign."
 msgstr ""
 
 msgid "Project Coordination and Core Development"
-msgstr ""
+msgstr "Projektkoordination og kerneudvikling"
 
 msgid "Development"
-msgstr ""
+msgstr "Udvikling"
 
 msgid "Visit us at "
-msgstr ""
+msgstr "Besøg os på "
 
 msgid "QA and Support"
-msgstr ""
+msgstr "QA og support"
 
 msgid "Dev and Support"
-msgstr ""
+msgstr "Udv. og support"
 
 msgid "Special Thanks to"
-msgstr ""
+msgstr "Specielt tak til"
 
 msgid "and many other contributors!"
-msgstr ""
+msgstr "og mange andre bidragere!"
 
 msgid "and many-many other supporters!"
-msgstr ""
+msgstr "og mange-mange andre tilhængere!"
 
 msgid "Support us at"
-msgstr ""
+msgstr "Støt os på"
 
 msgid "local-donation-platform|https://www.patreon.com/fheroes2"
-msgstr ""
+msgstr "local-donation-platform|https://www.patreon.com/fheroes2"
 
 msgid "Connect with us at"
-msgstr ""
+msgstr "Kontakt os på"
 
 msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
-msgstr ""
+msgstr "local-social-network|https://www.facebook.com/groups/fheroes2"
 
 msgid "Need help with the game?"
-msgstr ""
+msgstr "Brug for hjælp til spillet?"
 
 msgid "Original project before 0.7"
-msgstr ""
+msgstr "Originale projekt før 0.7"
 
 msgid "Heroes of Might and Magic II: The Succession Wars team"
-msgstr ""
+msgstr "Teamet bag Heroes of Might and Magic II: The Succession Wars"
 
 msgid "Designed and Directed"
-msgstr ""
+msgstr "Designet og instrueret"
 
 msgid "Programming and Design"
-msgstr ""
+msgstr "Programmering og design"
 
 msgid "Executive Producer"
-msgstr ""
+msgstr "Executive Producer"
 
 msgid "Producer"
-msgstr ""
+msgstr "Producer"
 
 msgid "Additional Design"
-msgstr ""
+msgstr "Ekstra design"
 
 msgid "Additional Programming"
-msgstr ""
+msgstr "Ekstra programmering"
 
 msgid "Musical Production"
-msgstr ""
+msgstr "Musikproduktion"
 
 msgid "Music and Sound Design"
-msgstr ""
+msgstr "Musik- og lyddesign"
 
 msgid "Vocalists"
-msgstr ""
+msgstr "Vokalister"
 
 msgid "Art Director"
-msgstr ""
+msgstr "Art Director"
 
 msgid "Assistant Art Director"
-msgstr ""
+msgstr "Assisterende Art Director"
 
 msgid "Artists"
-msgstr ""
+msgstr "Kunstnere"
 
 msgid "QA Manager"
-msgstr ""
+msgstr "QA Manager"
 
 msgid "QA"
-msgstr ""
+msgstr "QA"
 
 msgid "Writing"
-msgstr ""
+msgstr "Skribent"
 
 msgid "Manual and Helpfile"
-msgstr ""
+msgstr "Manual og hjælpefil"
 
 msgid "Scenarios"
-msgstr ""
+msgstr "Scenarier"
 
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
-msgstr ""
+msgstr "Teamet bag Heroes of Might and Magic II: The Price of Loyalty"
 
 msgid "Design Lead"
-msgstr ""
+msgstr "Design-leder"
 
 msgid "Designers"
-msgstr ""
+msgstr "Designere"
 
 msgid "Programming Lead"
-msgstr ""
+msgstr "Programmeringsleder"
 
 msgid "Art Lead"
-msgstr ""
+msgstr "Kunstleder"
 
 msgid "Playtesters"
-msgstr ""
+msgstr "Spiltestere"
 
 msgid "Designer"
-msgstr ""
+msgstr "Designer"
 
 msgid "Producers"
-msgstr ""
+msgstr "Producere"
 
 msgid "QA Managers"
-msgstr ""
+msgstr "QA Managere"
 
 msgid "Sound Design"
-msgstr ""
+msgstr "Lyddesign"
 
 msgid "Town Themes"
-msgstr ""
+msgstr "Byernes musiktemaer"
 
 msgid "Alto Sax"
-msgstr ""
+msgstr "Altsax"
 
 msgid "Harpsichord and Piano"
-msgstr ""
+msgstr "Cembalo og klaver"
 
 msgid "Basso Vocal"
-msgstr ""
+msgstr "Bass vokal"
 
 msgid "Soprano Vocal"
-msgstr ""
+msgstr "Sopran vokal"
 
 msgid "Recorded at %{recordingStudio}"
-msgstr ""
+msgstr "Indspillet hos %{recordingStudio}"
 
 msgid "credits|Manual"
-msgstr ""
+msgstr "Manual"
 
 msgid "German Consultant"
-msgstr ""
+msgstr "Tysk rådgiver"
 
 msgid "Map Designers"
-msgstr ""
+msgstr "Kortdesignere"
 
 msgid "Package Design"
-msgstr ""
+msgstr "Pakkedesign"
 
 msgid "Your Name"
-msgstr ""
+msgstr "Dit navn"
 
 msgid "Unknown Hero"
-msgstr ""
+msgstr "Ukendt helt"
 
 msgid "Standard"
-msgstr ""
+msgstr "Standard"
 
 msgid "View High Scores for Standard Maps."
 msgstr "Vis højeste score for enkelt spiller kort."
 
 msgid "Campaign"
-msgstr ""
+msgstr "Felttog"
 
 msgid "View High Scores for Campaigns."
 msgstr "Vis højeste score for enkelt spiller kort."
@@ -4247,10 +4257,10 @@ msgid "Unsupported save format: "
 msgstr "Ikke-understøttet gem-format: "
 
 msgid "Current game version: "
-msgstr ""
+msgstr "Nuværende spilversion: "
 
 msgid "Last supported version: "
-msgstr ""
+msgstr "Sidste understøttede version: "
 
 msgid "This file contains a save with an invalid game type."
 msgstr "Denne fil indeholder et gemt spil af en invalid spiltype."
@@ -4266,7 +4276,7 @@ msgid "This saved game is localized to '"
 msgstr "Dette gemte spil er lokaliseret til '"
 
 msgid "' language, but the current language of the game is '"
-msgstr ""
+msgstr "' sprog, men spillets nuværende sprog er '"
 
 msgid "Hot Seat"
 msgstr "Lokalt spil"
@@ -4277,13 +4287,13 @@ msgid ""
 msgstr ""
 
 msgid "A single player game playing out a single map."
-msgstr ""
+msgstr "Et enkeltspillerspil, der gennemspilles på ét enkelt kort."
 
 msgid "Standard Game"
 msgstr "Enkelt spil"
 
 msgid "A single player game playing through a series of maps."
-msgstr ""
+msgstr "Et enkeltspillerspil, der gennemspilles på en serie af kort."
 
 msgid "Campaign Game"
 msgstr "Felttog spil"
@@ -4292,142 +4302,164 @@ msgid ""
 "A multi-player game, with several human players completing against each "
 "other on a single map."
 msgstr ""
+"Et flerspillerspil, hvor flere menneskelige spillere konkurrerer mod "
+"hinanden på ét enkelt kort."
 
 msgid "Multi-Player Game"
 msgstr "Flerspiller spil"
 
 msgid "fheroes2 Resurrection Team presents"
-msgstr ""
+msgstr "Teamet bag fheroes2 Resurrection præsenterer"
 
 msgid "Greetings!"
-msgstr ""
+msgstr "Vær hilset!"
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
+"Velkommen til Heroes of Might and Magic II, drevet af fheroes2-motoren!"
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
 "starting the game please choose game resolution."
 msgstr ""
+"Velkommen til Heroes of Might and Magic II, drevet af fheroes2-motoren! "
+"Inden du starter spillet, skal du vælge spilopløsning."
 
 msgid "Please Remember"
-msgstr ""
+msgstr "Husk venligst"
 
 msgid "You can always change game resolution by clicking on the "
-msgstr ""
+msgstr "Du kan altid ændre spilopløsningen, ved at klikke på "
 
 msgid "door"
-msgstr ""
+msgstr "døren"
 
 msgid ""
 " on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
+"i venstre side af hovedmenuen eller ved at klikke på konfigurationsknappen.\n"
+"\n"
+"Nyd spillet!"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Afslut Heroes of Might and Magic II og vend tilbage til operativsystemet."
 
 msgid "Credits"
-msgstr ""
+msgstr "Kreditter"
 
 msgid "View the credits screen."
-msgstr ""
+msgstr "Se kreditskærmen."
 
 msgid "High Scores"
-msgstr ""
+msgstr "Ranglister"
 
 msgid "View the high scores screen."
 msgstr "Vis skærmen for højeste score."
 
 msgid "Change language, resolution and settings of the game."
-msgstr ""
+msgstr "Skift spillets sprog, opløsning og indstillinger."
 
 msgid "Game Settings"
-msgstr ""
+msgstr "Spilindstillinger"
 
 msgid ""
 "Required video files for campaign selection window are missing. Please make "
 "sure that all necessary files are present in the system."
 msgstr ""
+"Nødvendige videofiler til felttogsvalgsvinduet mangler. Sørg for, at alle "
+"nødvendige filer er til stede i systemet."
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
 msgstr ""
+"Enten Rolands eller Archibalds felttog fra den originale Heroes of Might and "
+"Magic II."
 
 msgid "Original Campaign"
-msgstr ""
+msgstr "Originalt felttog"
 
 msgid "Expansion Campaign"
-msgstr ""
+msgstr "Udvidelse-felttog"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-msgstr ""
+msgstr "En af de fire nye felttog fra Prisen for loyalitet-udvidelsessættet."
 
 msgid "Loading video. Please wait..."
-msgstr ""
+msgstr "Indlæser video. Vent venligst..."
 
 msgid "Host"
-msgstr ""
+msgstr "Vært"
 
 msgid ""
 "The host sets up the game options. There can only be one host per network "
 "game."
 msgstr ""
+"Værten opsætter spilmulighederne. Der kan kun være én vært pr. netværksspil."
 
 msgid "Guest"
-msgstr ""
+msgstr "Gæst"
 
 msgid ""
 "The guest waits for the host to set up the game, then is automatically added "
 "in. There can be multiple guests for TCP/IP games."
 msgstr ""
+"Gæsten venter på, at værten sætter spillet op, og tilføjes derefter "
+"automatisk. Der kan være flere gæster til TCP/IP-spil."
 
 msgid "Battle Only"
-msgstr ""
+msgstr "Kun kamp"
 
 msgid "Setup and play a battle without loading any map."
 msgstr "Opsæt og spil en kamp uden at indlæse et kort."
 
 msgid "2 Players"
-msgstr ""
+msgstr "2 spillere"
 
 msgid ""
 "Play with 2 human players, and optionally, up to 4 additional computer "
 "players."
 msgstr ""
+"Spil med 2 menneskelige spillere og eventuelt op til 4 ekstra "
+"computerspillere."
 
 msgid "3 Players"
-msgstr ""
+msgstr "3 spillere"
 
 msgid ""
 "Play with 3 human players, and optionally, up to 3 additional computer "
 "players."
 msgstr ""
+"Spil med 3 menneskelige spillere og eventuelt op til 3 ekstra "
+"computerspillere."
 
 msgid "4 Players"
-msgstr ""
+msgstr "4 spillere"
 
 msgid ""
 "Play with 4 human players, and optionally, up to 2 additional computer "
 "players."
 msgstr ""
+"Spil med 4 menneskelige spillere og eventuelt op til 2 ekstra "
+"computerspillere."
 
 msgid "5 Players"
-msgstr ""
+msgstr "5 spillere"
 
 msgid ""
 "Play with 5 human players, and optionally, up to 1 additional computer "
 "player."
 msgstr ""
+"Spil med 5 menneskelige spillere og eventuelt 1 ekstra computerspillere."
 
 msgid "6 Players"
-msgstr ""
+msgstr "6 spillere"
 
 msgid "Play with 6 human players."
-msgstr ""
+msgstr "Spil med 2 menneskelige spillere."
 
 msgid "Dragon city has fallen!  You are now the Master of the Dragons."
 msgstr ""
@@ -4448,7 +4480,7 @@ msgid ""
 msgstr ""
 
 msgid "Ultimate Artifact"
-msgstr ""
+msgstr "Den Ultimative Artefakt"
 
 msgid ""
 "The enemy is beaten.\n"
@@ -4548,10 +4580,10 @@ msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
 msgstr ""
 
 msgid "%{color} player has been vanquished!"
-msgstr ""
+msgstr "%{color} spiller er blevet besejret!"
 
 msgid "Major Event!"
-msgstr ""
+msgstr "Stor begivenhed!"
 
 msgid "Scenario:"
 msgstr "Kort:"
@@ -4582,6 +4614,9 @@ msgid ""
 "difficulty levels start you of with fewer resources, and at the higher "
 "settings, give extra resources to the computer."
 msgstr ""
+"Dette lader dig ændre startsværhedsgraden, som du vil spille med. Højere "
+"niveauer starter dig med færre ressourcer, og ved de højere indstillinger "
+"giver du ekstra resurser til computeren."
 
 msgid "Difficulty Rating"
 msgstr "Niveau-bedømmelse"
@@ -4590,6 +4625,8 @@ msgid ""
 "The difficulty rating reflects a combination of various settings for your "
 "game. This number will be applied to your final score."
 msgstr ""
+"Sværhedsgraden afspejler en kombination af forskellige indstillinger for dit "
+"spil. Dette tal vil blive anvendt på din endelige score."
 
 msgid "Click to accept these settings and start a new game."
 msgstr "Klik for at acceptere disse indstillinger og start et nyt spil."
@@ -4598,13 +4635,13 @@ msgid "Click to return to the main menu."
 msgstr "Klik her for at vende tilbage til hovedmenuen."
 
 msgid "Astrologers proclaim the Month of the %{name}."
-msgstr ""
+msgstr "Astrologer kundgør, at det er måneden for %{name}."
 
 msgid "Astrologers proclaim the Week of the %{name}."
-msgstr ""
+msgstr "Astrologer kundgør, at det er ugen for %{name}."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
-msgstr ""
+msgstr "Efter regelmæssig tilvækst er befolkningen på %{monster} fordoblet!"
 
 msgid ""
 "After regular growth, the population of %{monster} increases by %{count} "
@@ -4613,45 +4650,57 @@ msgid_plural ""
 "After regular growth, the population of %{monster} increases by %{count} "
 "percent!"
 msgstr[0] ""
+"Efter regelmæssig tilvækst stiger befolkningen af %{monster} med %{count} "
+"procent!"
 msgstr[1] ""
+"Efter regelmæssig vækst stiger befolkningen af %{monster} med %{count} "
+"procent!"
 
 msgid "%{monster} growth +%{count}."
-msgstr ""
+msgstr "%{monster} tilvækst +%{count}."
 
 msgid " All populations are halved."
-msgstr ""
+msgstr "Hele befolkningen er halveret."
 
 msgid " All dwellings increase population."
-msgstr ""
+msgstr "Alle bosteder får øget deres befolkning."
 
 msgid "New Week!"
-msgstr ""
+msgstr "Ny uge!"
 
 msgid "Beware!"
-msgstr ""
+msgstr "Pas på!"
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
 "banished from this land."
 msgstr ""
+"%{color} spiller! Dette er din sidste dag til at erobre en by, ellers bliver "
+"du forvist fra dette land!"
 
 msgid ""
 "%{color} player, you only have %{day} days left to capture a town, or you "
 "will be banished from this land."
 msgstr ""
+"%{color} spiller! Du har kun %{day} dage til at erobre en by, ellers bliver "
+"du forvist fra dette land!"
 
 msgid "%{color} player's turn."
-msgstr ""
+msgstr "%{color} spillers tur."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
+"%{color} spiller! Du har mistet din sidste by. Hvis du ikke erobrer en anden "
+"by i løbet af én uge, vil du blive forvist fra dette land!"
 
 msgid ""
 "%{color} player, your heroes abandon you, and you are banished from this "
 "land."
 msgstr ""
+"%{color} spiller! Dine helte forlader dig og du bliver forvist fra dette "
+"land!"
 
 msgid "Lord Kilburn"
 msgstr ""
@@ -4714,37 +4763,37 @@ msgid "Maximus"
 msgstr ""
 
 msgid "Next Hero"
-msgstr ""
+msgstr "Næste helt"
 
 msgid "Select the next Hero."
-msgstr ""
+msgstr "Vælg næste helt."
 
 msgid "Continue Movement"
-msgstr ""
+msgstr "Fortsæt rejse."
 
 msgid "Continue the Hero's movement along the current path."
-msgstr ""
+msgstr "Fortsæt heltens rejse langs den nuværende sti."
 
 msgid "Kingdom Summary"
-msgstr ""
+msgstr "Oversigt over kongedømmet"
 
 msgid "View a Summary of your Kingdom."
 msgstr "Vis en oversigt over dit kongerige."
 
 msgid "Cast an adventure spell."
-msgstr ""
+msgstr "Kast en eventyrbesværgelse"
 
 msgid "End Turn"
 msgstr "End tur"
 
 msgid "End your turn and left the computer take its turn."
-msgstr ""
+msgstr "End din tur og lad computeren tage sin."
 
 msgid "Adventure Options"
-msgstr ""
+msgstr "Eventyrindstillinger"
 
 msgid "Bring up the adventure options menu."
-msgstr ""
+msgstr "Frembring menuen for eventyrindstillingerne."
 
 msgid ""
 "Bring up the file options menu, allowing you to load, save, start a new game "
@@ -4755,6 +4804,7 @@ msgstr ""
 
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
+"Frembring menuen for systemindstillingerne, så du kan tilpasse dit spil."
 
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
@@ -4785,31 +4835,37 @@ msgstr ""
 "tabt.)"
 
 msgid "Try looking on land!!!"
-msgstr ""
+msgstr "Prøv at søge på land!!!"
 
 msgid ""
 "Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
 "it even if he found it - all his artifact slots are full."
 msgstr ""
+"At søge efter Det Ultimative Artefakt er frugtesløst. Din helt kunne ikke "
+"bære den, selvom han fandt den - alle hans artefaktpladser er fulde."
 
 msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr ""
+msgstr "At grave efter artefakter kræver en hel dag. Prøv igen i morgen."
 
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
+"Efter at have brugt mange timer på at grave her, har du afsløret "
+"%{artefakten}."
 
 msgid "Congratulations!"
-msgstr ""
+msgstr "TILLYKKE!!!"
 
 msgid "Nothing here. Where could it be?"
-msgstr ""
+msgstr "Intet her. Hvor kan den være?"
 
 msgid "Try searching on clear ground."
-msgstr ""
+msgstr "Prøv at søge på et bart område."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
+"Et miniaturebillede af den kendte verden. Venstre klik for at flytte "
+"visningsområde."
 
 msgid "World Map"
 msgstr "Verdenskort"
@@ -4828,63 +4884,82 @@ msgstr ""
 "mængde %{resource}."
 
 msgid "Status Window"
-msgstr ""
+msgstr "Statusvindue"
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
 "shows the date."
 msgstr ""
+"Dette vindue giver information om status på din helt eller dit rige og viser "
+"datoen."
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
 "shows the date. Left click here to cycle through these windows."
 msgstr ""
+"Dette vindue giver information om status på din helt eller dit rige og viser "
+"datoen. Venstre klik her for at bladre gennem disse vinduer."
 
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
 "played by a computer player or only by a human player."
 msgstr ""
+"Dette lader dig ændre spillerens startpositioner og farver. En bestemt farve "
+"starter altid på et bestemt sted. Nogle positioner kan kun spilles af en "
+"computerspiller eller kun af en menneskelig spiller."
 
 msgid ""
 "This lets you change the class of a player. Classes are not always "
 "changeable. Depending on the scenario, a player may receive additional towns "
 "and/or heroes not of their primary alignment."
 msgstr ""
+"Dette lader dig ændre en spillers klasse. Klasser er ikke altid "
+"udskiftelige. Afhængigt af scenariet kan en spiller modtage yderligere byer "
+"og/eller helte, der ikke er i deres primære linje."
 
 msgid "Handicap"
-msgstr ""
+msgstr "Handicap"
 
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
 "30% fewer resources per turn for mild and severe handicaps, respectively."
 msgstr ""
+"Dette lader dig ændre handicappet for en bestemt spiller. Kun mennesker må "
+"være handicappede. Handicappede spillere starter med færre resurser og "
+"tjener 15 eller 30 % færre resurser pr. omgang for henholdsvis milde og "
+"svære handicap."
 
 msgid "%{color} player"
-msgstr ""
+msgstr "%{color} spiller"
 
 msgid "No Handicap"
-msgstr ""
+msgstr "Intet handicap"
 
 msgid "No special restrictions on start resources and earning them per turn."
 msgstr ""
+"Ingen særlige begrænsninger for startresurser og indkomst af disse pr. tur."
 
 msgid "Mild Handicap"
-msgstr ""
+msgstr "Mildt handicap"
 
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
 msgstr ""
+"Mildt handicappede spillere starter med færre resurser og tjener 15 % færre "
+"resurser pr. tur."
 
 msgid "Severe Handicap"
-msgstr ""
+msgstr "Svært handicap"
 
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."
 msgstr ""
+"Svært handicappede spillere starter med færre resurser og tjener 30 % færre "
+"resurser pr. tur."
 
 msgid "View %{skill} Info"
 msgstr "Vis info om %{skill}"
@@ -5130,10 +5205,10 @@ msgid "Martine"
 msgstr ""
 
 msgid " gives you maximum morale"
-msgstr ""
+msgstr " giver dig maksimal moral"
 
 msgid " gives you maximum luck"
-msgstr ""
+msgstr " giver dig maksimalt held"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Du kan ikke opsamle denne artefakt, da du allerede har fuld last!"
@@ -5144,10 +5219,10 @@ msgstr ""
 "guldstykker."
 
 msgid "Unfortunately, you seem to be a little short of cash at the moment."
-msgstr ""
+msgstr "Desværre ser det ud til, at du mangler kontanter i øjeblikket."
 
 msgid "Do you wish to buy one?"
-msgstr ""
+msgstr "Ønsker du at købe én?"
 
 msgid "%{count} / day"
 msgstr "%{count} / dag"
@@ -5160,9 +5235,10 @@ msgstr "to"
 
 msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
 msgstr ""
+"En hvirvelstrøm opsluger dit skib. Noget af din hær er faldet over bord."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
-msgstr ""
+msgstr "Fornærmet over din afvisning af deres tilbud, angriber væsenerne!"
 
 msgid ""
 "The %{monster}, awed by the power of your forces, begin to scatter.\n"
@@ -8923,7 +8999,7 @@ msgid ""
 msgstr ""
 
 msgid "Magic Book"
-msgstr ""
+msgstr "Magibog"
 
 msgid "The %{name} enables you to cast spells."
 msgstr ""
