@@ -4612,7 +4612,7 @@ msgstr "Mist helten '%{name}'."
 
 msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
 msgstr ""
-"Du taber, hvis du ikke vinder inden udgangen af ​ måned %{month}, uge ​​"
+"Du taber, hvis du ikke vinder inden udgangen af  måned %{month}, uge"
 "%{week}, dag %{day}."			  
 
 msgid "%{color} player has been vanquished!"
