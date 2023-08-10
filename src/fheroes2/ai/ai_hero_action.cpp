@@ -1616,7 +1616,7 @@ namespace
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " visited Sirens and got " << experience << " experience." )
     }
 
-    void AIToTradingPost( Heroes & hero )
+    void AIToTradingPost( const Heroes & hero )
     {
         AI::Get().tradingPostVisitEvent( hero.GetKingdom() );
     }
