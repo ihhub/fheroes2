@@ -183,7 +183,7 @@ public:
         _scrollbar.moveToIndex( _topId );
     }
 
-    void renderItem( const fheroes2::Sprite & itemSprite, const std::string itemText, const fheroes2::Point & destination, const fheroes2::Point & offset,
+    void renderItem( const fheroes2::Sprite & itemSprite, const std::string & itemText, const fheroes2::Point & destination, const fheroes2::Point & offset,
                      const bool current ) const
     {
         fheroes2::Display & display = fheroes2::Display::instance();
