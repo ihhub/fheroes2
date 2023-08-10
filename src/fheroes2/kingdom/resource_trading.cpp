@@ -22,6 +22,7 @@
 
 #include <array>
 #include <cassert>
+#include <cstddef>
 
 #include "resource.h"
 
