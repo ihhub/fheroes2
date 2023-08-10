@@ -2025,7 +2025,7 @@ namespace AI
             assert( objectType == MP2::OBJ_CASTLE );
 
             // How is it even possible that a hero died while simply moving into a castle?
-            assert( !hero.isFreeman() );
+            assert( hero.isActive() );
 
             // TODO: sort the army between the castle and hero to have maximum movement points for the next day
             // TODO: but also have enough army to defend the castle.
@@ -2048,11 +2048,43 @@ namespace AI
         }
     }
 
+    void Normal::HeroesBeginMovement( Heroes & hero )
+    {
+        assert( hero.isActive() );
+
+        const Route::Path & path = hero.GetPath();
+        if ( !path.isValidForMovement() ) {
+            return;
+        }
+
+        const int32_t heroIdx = hero.GetIndex();
+
+        const int frontDirection = path.GetFrontDirection();
+        assert( Maps::isValidDirection( heroIdx, frontDirection ) );
+
+        const int32_t nextTileIdx = Maps::GetDirectionIndex( heroIdx, frontDirection );
+
+        const Maps::Tiles & currTile = world.GetTiles( heroIdx );
+        const Maps::Tiles & nextTile = world.GetTiles( nextTileIdx );
+
+        if ( currTile.isWater() || !nextTile.isWater() || nextTile.GetObject() != MP2::OBJ_NONE ) {
+            return;
+        }
+
+        // If the hero goes to the water tile, then this should be his last movement
+        assert( path.size() == 1 );
+
+        const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, nextTileIdx );
+
+        updateMapActionObjectCache( formerBoatIdx );
+        updateMapActionObjectCache( nextTileIdx );
+    }
+
     void Normal::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType )
     {
         // This method is called upon action completion and the hero could no longer be available.
         // So it is to check if the hero is still present.
-        if ( !hero.isFreeman() ) {
+        if ( hero.isActive() ) {
             Castle * castle = hero.inCastleMutable();
             if ( castle ) {
                 // Reinforcement in a castle can lead to removing defense priority task for a castle.
@@ -2067,6 +2099,54 @@ namespace AI
         updatePriorityTargets( hero, tileIndex, objectType );
 
         updateMapActionObjectCache( tileIndex );
+    }
+
+    void Normal::HeroesActionNewPosition( Heroes & hero )
+    {
+        if ( !hero.isActive() ) {
+            return;
+        }
+
+        Route::Path & path = hero.GetPath();
+        if ( !path.isValidForMovement() ) {
+            return;
+        }
+
+        const int32_t heroIdx = hero.GetIndex();
+        assert( heroIdx == path.GetFrontIndex() );
+
+        const int nextStepDirection = path.GetNextStepDirection();
+        if ( !Maps::isValidDirection( heroIdx, nextStepDirection ) ) {
+            return;
+        }
+
+        const int32_t nextTileIdx = Maps::GetDirectionIndex( heroIdx, nextStepDirection );
+
+        const Maps::Tiles & currTile = world.GetTiles( heroIdx );
+        const Maps::Tiles & nextTile = world.GetTiles( nextTileIdx );
+
+        if ( currTile.isWater() || !nextTile.isWater() || nextTile.GetObject() != MP2::OBJ_NONE ) {
+            return;
+        }
+
+        // If the hero goes to the water tile, then this should be his last movement
+        // (not counting the current step, which is not yet completed at the moment)
+        assert( path.size() == 2 );
+
+        // It may happen that although the hero at the beginning of his path had enough spell points to
+        // summon a boat, but while moving through the guarded tiles, these spell points were spent. In
+        // this case, just stop.
+        if ( !hero.CanCastSpell( Spell::SUMMONBOAT ) ) {
+            path.Reset();
+            hero.SetMove( false );
+
+            return;
+        }
+
+        const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, nextTileIdx );
+
+        updateMapActionObjectCache( formerBoatIdx );
+        updateMapActionObjectCache( nextTileIdx );
     }
 
     bool Normal::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue )
@@ -2092,7 +2172,7 @@ namespace AI
             class AIWorldPathfinderStateRestorer
             {
             public:
-                AIWorldPathfinderStateRestorer( AIWorldPathfinder & pathfinder )
+                explicit AIWorldPathfinderStateRestorer( AIWorldPathfinder & pathfinder )
                     : _pathfinder( pathfinder )
                     , _originalMinimalArmyStrengthAdvantage( _pathfinder.getMinimalArmyStrengthAdvantage() )
                     , _originalSpellPointsReserveRatio( _pathfinder.getSpellPointsReserveRatio() )
@@ -2204,7 +2284,7 @@ namespace AI
 
                     // Hero can jump straight into the fog using the Dimension Door spell, which triggers the mechanics of fog revealing for his new tile
                     // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
-                    assert( !bestHero->isFreeman() && bestHero->GetIndex() != prevHeroPosition );
+                    assert( bestHero->isActive() && bestHero->GetIndex() != prevHeroPosition );
 
                     updateMapActionObjectCache( prevHeroPosition );
                     updateMapActionObjectCache( bestHero->GetIndex() );
@@ -2225,11 +2305,11 @@ namespace AI
                 HeroesMove( *bestHero );
             }
 
-            if ( bestHero->isFreeman() || bestHero->GetIndex() != prevHeroPosition ) {
+            if ( !bestHero->isActive() || bestHero->GetIndex() != prevHeroPosition ) {
                 // The hero died or moved to another position. We have to update the action object cache.
                 updateMapActionObjectCache( prevHeroPosition );
 
-                if ( !bestHero->isFreeman() ) {
+                if ( bestHero->isActive() ) {
                     // Hero moved to another position and is still alive.
                     updateMapActionObjectCache( bestHero->GetIndex() );
                 }

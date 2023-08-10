@@ -358,10 +358,19 @@ void Dialog::ThievesGuild( bool oracle )
         text.Blit( dst_pt.x, dst_pt.y );
     }
 
-    // bar
+    // status bar
+    const int32_t exitWidth = fheroes2::AGG::GetICN( ICN::BUTTON_GUILDWELL_EXIT, 0 ).width();
+    const int32_t bottomBarOffsetY = 461;
+
     dst_pt.x = cur_pt.x;
-    dst_pt.y = cur_pt.y + 461;
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLXTRA, 2 ), display, dst_pt.x, dst_pt.y );
+    dst_pt.y = cur_pt.y + bottomBarOffsetY;
+
+    const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
+    const int32_t barHeight = bottomBar.height();
+    // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
+    fheroes2::Copy( bottomBar, 1, 0, display, dst_pt.x, dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2, barHeight );
+    fheroes2::Copy( bottomBar, bottomBar.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + exitWidth - 1, 0, display, dst_pt.x + fheroes2::Display::DEFAULT_WIDTH / 2,
+                    dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2 - exitWidth + 1, barHeight );
 
     // text bar
     text.Set( oracle ? _( "Oracle: Player Rankings" ) : _( "Thieves' Guild: Player Rankings" ), Font::BIG );
@@ -370,7 +379,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Blit( dst_pt.x, dst_pt.y );
 
     // button exit
-    dst_pt.x = cur_pt.x + 578;
+    dst_pt.x = cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - exitWidth;
     dst_pt.y = cur_pt.y + 461;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
 

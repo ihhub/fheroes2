@@ -452,7 +452,7 @@ namespace
     public:
         void restartCurrentMusicTrack()
         {
-            std::scoped_lock<std::mutex> lock( _mutex );
+            const std::scoped_lock<std::mutex> lock( _mutex );
 
             _trackChangeCounter = musicTrackManager.getCurrentTrackChangeCounter();
 

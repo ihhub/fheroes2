@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_only.h"
+
 #include <cstdint>
 #include <string>
 
@@ -28,7 +30,6 @@
 #include "army_bar.h"
 #include "army_troop.h"
 #include "battle.h"
-#include "battle_only.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -623,4 +624,6 @@ void Battle::Only::StartBattle()
 
         Battle::Loader( hero1->GetArmy(), ( hero2 ? hero2->GetArmy() : monsters ), hero1->GetIndex() + 1 );
     }
+
+    conf.SetCurrentColor( Color::NONE );
 }

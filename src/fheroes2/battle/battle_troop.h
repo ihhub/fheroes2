@@ -182,7 +182,10 @@ namespace Battle
         bool isUnderSpellEffect( const Spell & spell ) const;
         std::vector<Spell> getCurrentSpellEffects() const;
         void PostAttackAction();
-        void SetBlindAnswer( bool value );
+
+        // Sets whether a unit performs a retaliatory attack while being blinded (i.e. with reduced efficiency)
+        void SetBlindRetaliation( bool value );
+
         uint32_t CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, uint32_t targetDamage, bool ignoreDefendingHero ) const;
 
         bool SwitchAnimation( int rule, bool reverse = false );
@@ -296,7 +299,9 @@ namespace Battle
         Unit * mirror;
         RandomizedDelay idleTimer;
 
-        bool blindanswer;
+        // Whether a unit performs a retaliatory attack while being blinded (i.e. with reduced efficiency)
+        bool _blindRetaliation;
+
         uint8_t customAlphaMask;
 
         const Rand::DeterministicRandomGenerator & _randomGenerator;

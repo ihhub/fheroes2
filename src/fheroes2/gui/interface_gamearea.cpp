@@ -48,6 +48,7 @@
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "maps_tiles_render.h"
 #include "pal.h"
 #include "players.h"
@@ -506,7 +507,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     if ( hero->isControlAI() ) {
                         const Route::Path & path = hero->GetPath();
                         // Check if the next AI hero path point will not be seen on map to skip it.
-                        if ( path.isValid() && ( world.GetTiles( path.front().GetIndex() ).getFogDirection() == DIRECTION_ALL ) ) {
+                        if ( path.isValidForMovement() && ( world.GetTiles( path.GetFrontIndex() ).getFogDirection() == DIRECTION_ALL ) ) {
                             continue;
                         }
                     }
@@ -820,7 +821,7 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
     }
 
     fheroes2::Image result( 448, 448 );
-    result.reset();
+    result._disableTransformLayer();
 
     // Make a temporary copy
     GameArea gamearea = AdventureMap::Get().getGameArea();
@@ -1074,7 +1075,7 @@ Interface::ObjectFadingOutInfo::~ObjectFadingOutInfo()
     Maps::Tiles & tile = world.GetTiles( tileId );
 
     if ( tile.GetObject() == type ) {
-        tile.RemoveObjectSprite();
+        removeObjectSprite( tile );
         tile.setAsEmpty();
     }
 }

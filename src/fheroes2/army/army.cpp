@@ -131,7 +131,7 @@ std::string Army::TroopSizeString( const Troop & troop )
         str = _( "A swarm of\n%{monster}" );
         break;
     case ARMY_ZOUNDS:
-        str = _( "Zounds of\n%{monster}" );
+        str = _( "Zounds...\n%{monster}" );
         break;
     case ARMY_LEGION:
         str = _( "A legion of\n%{monster}" );

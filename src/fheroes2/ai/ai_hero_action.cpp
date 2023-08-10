@@ -37,11 +37,9 @@
 #include "battle.h"
 #include "castle.h"
 #include "color.h"
-#include "dialog.h"
 #include "direction.h"
 #include "game.h"
 #include "game_delays.h"
-#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_static.h"
 #include "heroes.h"
@@ -70,8 +68,6 @@
 #include "skill.h"
 #include "spell.h"
 #include "spell_info.h"
-#include "translations.h"
-#include "ui_dialog.h"
 #include "visit.h"
 #include "world.h"
 
@@ -101,7 +97,7 @@ namespace
     }
 
     // Never cache the value of this function as it depends on hero's path and location.
-    bool AIHeroesShowAnimation( const Heroes & hero, const uint32_t colors )
+    bool AIIsShowAnimationForHero( const Heroes & hero, const uint32_t colors )
     {
         if ( Settings::Get().AIMoveSpeed() == 0 ) {
             return false;
@@ -123,11 +119,25 @@ namespace
 
         const Route::Path & path = hero.GetPath();
         // Show AI hero animation if any of the tiles next to the first tile in the path is visible for human player.
-        if ( path.isValid() && ( world.GetTiles( path.front().GetIndex() ).getFogDirection() != DIRECTION_ALL ) ) {
+        if ( path.isValidForMovement() && ( world.GetTiles( path.GetFrontIndex() ).getFogDirection() != DIRECTION_ALL ) ) {
             return true;
         }
 
         return false;
+    }
+
+    bool AIIsShowAnimationForTile( const Maps::Tiles & tile, const uint32_t colors )
+    {
+        if ( Settings::Get().AIMoveSpeed() == 0 ) {
+            return false;
+        }
+
+        if ( colors == 0 ) {
+            return false;
+        }
+
+        // Show animation on this tile if it is visible (or barely visible) to the human player.
+        return ( tile.getFogDirection() != DIRECTION_ALL );
     }
 
     int AISelectSkillFromArena( const Heroes & hero )
@@ -224,7 +234,7 @@ namespace
     void AITownPortal( Heroes & hero, const int32_t targetIndex )
     {
         assert( !hero.Modes( Heroes::PATROL ) && Maps::isValidAbsIndex( targetIndex ) );
-#ifndef NDEBUG
+#if !defined( NDEBUG ) || defined( WITH_DEBUG )
         const Castle * targetCastle = world.getCastleEntrance( Maps::GetPoint( targetIndex ) );
 #endif
         assert( targetCastle && targetCastle->GetHero() == nullptr );
@@ -242,7 +252,7 @@ namespace
 
         assert( hero.CanCastSpell( spellToUse ) );
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut();
         }
@@ -251,19 +261,21 @@ namespace
         hero.SpellCasted( spellToUse );
         hero.GetPath().Reset();
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
 
         AI::Get().HeroesActionComplete( hero, targetIndex, hero.GetMapsObject() );
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " used the " << spellToUse.GetName() << " to reach the " << targetCastle->GetName() )
     }
 
     void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, const fheroes2::Point * centerOn = nullptr, const bool playSound = false )
     {
         const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             if ( centerOn != nullptr ) {
                 Interface::AdventureMap::Get().getGameArea().SetCenter( *centerOn );
             }
@@ -274,7 +286,7 @@ namespace
             hero.FadeOut();
         }
 
-        hero.SetFreeman( reason );
+        hero.Dismiss( reason );
     }
 
     void AIMeeting( Heroes & left, Heroes & right )
@@ -546,7 +558,7 @@ namespace
         if ( destroy ) {
             setMonsterCountOnTile( tile, 0 );
 
-            tile.RemoveObjectSprite();
+            removeObjectSprite( tile );
             tile.setAsEmpty();
         }
     }
@@ -559,7 +571,7 @@ namespace
             hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
         }
 
-        tile.RemoveObjectSprite();
+        removeObjectSprite( tile );
         resetObjectInfoOnTile( tile );
         hero.GetPath().Reset();
 
@@ -638,7 +650,7 @@ namespace
             kingdom.AddFundsResource( Funds( Resource::GOLD, gold ) );
         }
 
-        tile.RemoveObjectSprite();
+        removeObjectSprite( tile );
         resetObjectInfoOnTile( tile );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
@@ -760,7 +772,7 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
         hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
-        tile.RemoveObjectSprite();
+        removeObjectSprite( tile );
         resetObjectInfoOnTile( tile );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
@@ -812,7 +824,7 @@ namespace
 
         assert( world.GetTiles( indexTo ).GetObject() != MP2::OBJ_HEROES );
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             // AI-controlled hero cannot activate Stone Liths from the same tile, but should move to this tile from some
             // other tile first, so there is no need to re-center the game area on the hero before his disappearance
             hero.FadeOut();
@@ -821,7 +833,7 @@ namespace
         hero.Move2Dest( indexTo );
         hero.GetPath().Reset();
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
@@ -876,7 +888,7 @@ namespace
             return;
         }
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             // AI-controlled hero cannot activate Whirlpool from the same tile, but should move to this tile from some
             // other tile first, so there is no need to re-center the game area on the hero before his disappearance
             hero.FadeOut();
@@ -887,7 +899,7 @@ namespace
 
         AIWhirlpoolTroopLoseEffect( hero );
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
@@ -1312,7 +1324,7 @@ namespace
 
         // Remove genie lamp sprite if no genies are available to hire.
         if ( MP2::OBJ_GENIE_LAMP == objectType && ( availableTroopCount == recruitTroopCount ) ) {
-            tile.RemoveObjectSprite();
+            removeObjectSprite( tile );
             tile.setAsEmpty();
         }
 
@@ -1397,7 +1409,7 @@ namespace
         const Kingdom & kingdom = hero.GetKingdom();
 
         if ( kingdom.IsVisitTravelersTent( getColorFromTile( tile ) ) ) {
-            tile.RemoveObjectSprite();
+            removeObjectSprite( tile );
             tile.setAsEmpty();
         }
 
@@ -1423,7 +1435,7 @@ namespace
         else
             hero.PickupArtifact( getArtifactFromTile( tile ) );
 
-        tile.RemoveObjectSprite();
+        removeObjectSprite( tile );
         resetObjectInfoOnTile( tile );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
@@ -1470,7 +1482,7 @@ namespace
             }
 
             if ( result && hero.PickupArtifact( art ) ) {
-                tile.RemoveObjectSprite();
+                removeObjectSprite( tile );
                 resetObjectInfoOnTile( tile );
             }
         }
@@ -1487,7 +1499,7 @@ namespace
 
         const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut( offset );
         }
@@ -1525,7 +1537,7 @@ namespace
         hero.SetShipMaster( false );
         hero.GetPath().Reset();
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( prevPos );
             hero.FadeIn( offset );
         }
@@ -1544,7 +1556,7 @@ namespace
         if ( kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes() ) {
             Maps::Tiles & tile = world.GetTiles( tileIndex );
 
-            tile.RemoveObjectSprite();
+            removeObjectSprite( tile );
             tile.setAsEmpty();
 
             Heroes * prisoner = world.FromJailHeroes( tileIndex );
@@ -1871,132 +1883,69 @@ namespace AI
         if ( MP2::isNeedStayFront( objectType ) )
             hero.GetPath().Reset();
 
-        // ignore empty tiles
-        if ( isActionObject )
+        // Ignore empty tiles
+        if ( isActionObject ) {
             AI::Get().HeroesActionComplete( hero, dst_index, objectType );
+        }
     }
 
     void HeroesMove( Heroes & hero )
     {
         const Route::Path & path = hero.GetPath();
 
-        if ( path.isValid() ) {
-            hero.SetMove( true );
+        if ( path.isValidForTeleportation() ) {
+            const int32_t targetIndex = path.GetFrontIndex();
 
-            Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
-            Interface::GameArea & gameArea = adventureMapInterface.getGameArea();
+            // At the moment, this kind of movement using paths generated by AI pathfinder is only possible
+            // to the towns/castles with the use of Town Gate or Town Portal spells
+            assert( path.GetFrontFrom() != targetIndex && world.GetTiles( targetIndex ).GetObject() == MP2::OBJ_CASTLE );
 
-            const Settings & conf = Settings::Get();
+            AITownPortal( hero, targetIndex );
 
-            const uint32_t colors = AIGetAllianceColors();
-            bool recenterNeeded = true;
+            // This is the end of a this hero's movement, even if the hero's full path doesn't end in this town or castle.
+            // The further path of this hero will be re-planned by AI.
+            return;
+        }
 
-            int heroAnimationFrameCount = 0;
-            fheroes2::Point heroAnimationOffset;
-            int heroAnimationSpriteId = 0;
+        if ( !path.isValidForMovement() ) {
+            return;
+        }
 
-            const bool hideAIMovements = ( conf.AIMoveSpeed() == 0 );
-            const bool noMovementAnimation = ( conf.AIMoveSpeed() == 10 );
+        hero.SetMove( true );
 
-            const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_AI_DELAY, Game::MAPS_DELAY };
+        Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+        Interface::GameArea & gameArea = adventureMapInterface.getGameArea();
 
-            fheroes2::Display & display = fheroes2::Display::instance();
+        const Settings & conf = Settings::Get();
 
-            LocalEvent & le = LocalEvent::Get();
-            while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
-#if defined( WITH_DEBUG )
-                if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI ) && Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
-                    if ( fheroes2::showStandardTextMessage( _( "Warning" ),
-                                                            _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
-                                                            Dialog::YES | Dialog::NO )
-                         == Dialog::YES ) {
-                        Players::Get( hero.GetColor() )->setAIAutoControlMode( false );
-                        continue;
-                    }
-                }
-#endif
+        const uint32_t colors = AIGetAllianceColors();
+        bool recenterNeeded = true;
 
-                if ( hero.isFreeman() || !hero.isMoveEnabled() ) {
-                    break;
-                }
+        int heroAnimationFrameCount = 0;
+        fheroes2::Point heroAnimationOffset;
+        int heroAnimationSpriteId = 0;
 
-                if ( hideAIMovements || !AIHeroesShowAnimation( hero, colors ) ) {
-                    hero.Move( true );
-                    recenterNeeded = true;
+        const bool hideAIMovements = ( conf.AIMoveSpeed() == 0 );
+        const bool noMovementAnimation = ( conf.AIMoveSpeed() == 10 );
 
-                    // Render a frame only if there is a need to show one.
-                    if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-                        // Update Adventure Map objects' animation.
-                        Game::updateAdventureMapAnimationIndex();
+        const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_AI_DELAY, Game::MAPS_DELAY };
 
-                        adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
+        fheroes2::Display & display = fheroes2::Display::instance();
 
-                        // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
-                        assert( adventureMapInterface.getRedrawMask() == 0 );
+        LocalEvent & le = LocalEvent::Get();
+        while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
+            if ( !hero.isActive() || !hero.isMoveEnabled() ) {
+                break;
+            }
 
-                        display.render();
-                    }
-                }
-                else if ( Game::validateAnimationDelay( Game::CURRENT_AI_DELAY ) ) {
-                    // re-center in case hero appears from the fog
-                    if ( recenterNeeded ) {
-                        gameArea.SetCenter( hero.GetCenter() );
-                        recenterNeeded = false;
-                    }
+            if ( hideAIMovements || !AIIsShowAnimationForHero( hero, colors ) ) {
+                hero.Move( true );
+                recenterNeeded = true;
 
-                    bool resetHeroSprite = false;
-                    if ( heroAnimationFrameCount > 0 ) {
-                        const int32_t heroMovementSkipValue = Game::AIHeroAnimSkip();
-
-                        gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
-                        gameArea.SetRedraw();
-                        heroAnimationFrameCount -= heroMovementSkipValue;
-                        if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
-                            hero.SetSpriteIndex( heroAnimationSpriteId );
-
-                            if ( heroAnimationFrameCount == 0 )
-                                resetHeroSprite = true;
-                            else
-                                ++heroAnimationSpriteId;
-                        }
-                        const int offsetStep = ( ( 4 - ( heroAnimationFrameCount & 0x3 ) ) & 0x3 ); // % 4
-                        hero.SetOffset( { heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep } );
-                    }
-
-                    if ( heroAnimationFrameCount == 0 ) {
-                        if ( resetHeroSprite ) {
-                            hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
-                        }
-
-                        if ( hero.Move( noMovementAnimation ) ) {
-                            if ( AIHeroesShowAnimation( hero, colors ) ) {
-                                gameArea.SetCenter( hero.GetCenter() );
-                            }
-                        }
-                        else {
-                            const fheroes2::Point movement( hero.MovementDirection() );
-                            if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
-                                const int32_t heroMovementSkipValue = Game::AIHeroAnimSkip();
-
-                                heroAnimationOffset = movement;
-                                gameArea.ShiftCenter( movement );
-                                heroAnimationFrameCount = 32 - heroMovementSkipValue;
-                                heroAnimationSpriteId = hero.GetSpriteIndex();
-                                if ( heroMovementSkipValue < 4 ) {
-                                    hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
-                                    hero.SetOffset( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
-                                }
-                                else {
-                                    ++heroAnimationSpriteId;
-                                }
-                            }
-                        }
-                    }
-
-                    if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-                        // Update Adventure Map objects' animation.
-                        Game::updateAdventureMapAnimationIndex();
-                    }
+                // Render a frame only if there is a need to show one.
+                if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                    // Update Adventure Map objects' animation.
+                    Game::updateAdventureMapAnimationIndex();
 
                     adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
 
@@ -2006,21 +1955,77 @@ namespace AI
                     display.render();
                 }
             }
+            else if ( Game::validateAnimationDelay( Game::CURRENT_AI_DELAY ) ) {
+                // re-center in case hero appears from the fog
+                if ( recenterNeeded ) {
+                    gameArea.SetCenter( hero.GetCenter() );
+                    recenterNeeded = false;
+                }
 
-            hero.SetMove( false );
-        }
-        else if ( !path.empty() && path.GetFrontDirection() == Direction::UNKNOWN ) {
-            const Route::Step & step = path.front();
-            const int32_t targetIndex = step.GetIndex();
+                bool resetHeroSprite = false;
+                if ( heroAnimationFrameCount > 0 ) {
+                    const int32_t heroMovementSkipValue = Game::AIHeroAnimSkip();
 
-            if ( step.GetFrom() != targetIndex && world.GetTiles( targetIndex ).GetObject() == MP2::OBJ_CASTLE ) {
-                AITownPortal( hero, targetIndex );
-            }
-            else if ( MP2::isActionObject( hero.GetMapsObject(), hero.isShipMaster() ) ) {
-                // use the action object hero is standing on (Stone Liths)
-                hero.Action( hero.GetIndex() );
+                    gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
+                    gameArea.SetRedraw();
+                    heroAnimationFrameCount -= heroMovementSkipValue;
+                    if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
+                        hero.SetSpriteIndex( heroAnimationSpriteId );
+
+                        if ( heroAnimationFrameCount == 0 )
+                            resetHeroSprite = true;
+                        else
+                            ++heroAnimationSpriteId;
+                    }
+                    const int offsetStep = ( ( 4 - ( heroAnimationFrameCount & 0x3 ) ) & 0x3 ); // % 4
+                    hero.SetOffset( { heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep } );
+                }
+
+                if ( heroAnimationFrameCount == 0 ) {
+                    if ( resetHeroSprite ) {
+                        hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
+                    }
+
+                    if ( hero.Move( noMovementAnimation ) ) {
+                        if ( AIIsShowAnimationForHero( hero, colors ) ) {
+                            gameArea.SetCenter( hero.GetCenter() );
+                        }
+                    }
+                    else {
+                        const fheroes2::Point movement( hero.MovementDirection() );
+                        if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
+                            const int32_t heroMovementSkipValue = Game::AIHeroAnimSkip();
+
+                            heroAnimationOffset = movement;
+                            gameArea.ShiftCenter( movement );
+                            heroAnimationFrameCount = 32 - heroMovementSkipValue;
+                            heroAnimationSpriteId = hero.GetSpriteIndex();
+                            if ( heroMovementSkipValue < 4 ) {
+                                hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
+                                hero.SetOffset( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
+                            }
+                            else {
+                                ++heroAnimationSpriteId;
+                            }
+                        }
+                    }
+                }
+
+                if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+                    // Update Adventure Map objects' animation.
+                    Game::updateAdventureMapAnimationIndex();
+                }
+
+                adventureMapInterface.redraw( Interface::REDRAW_GAMEAREA );
+
+                // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
+                assert( adventureMapInterface.getRedrawMask() == 0 );
+
+                display.render();
             }
         }
+
+        hero.SetMove( false );
     }
 
     void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )
@@ -2036,19 +2041,7 @@ namespace AI
             return;
         }
 
-#if defined( WITH_DEBUG )
-        if ( Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
-            LocalEvent::Get().HandleEvents( false );
-            if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )
-                 && fheroes2::showStandardTextMessage( _( "Warning" ), _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
-                                                       Dialog::YES | Dialog::NO )
-                        == Dialog::YES ) {
-                Players::Get( hero.GetColor() )->setAIAutoControlMode( false );
-            }
-        }
-#endif
-
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut();
         }
@@ -2057,18 +2050,66 @@ namespace AI
         hero.SpellCasted( dimensionDoor );
         hero.GetPath().Reset();
 
-        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+        if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
 
         hero.ActionNewPosition( false );
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " moved to " << targetIndex )
+    }
+
+    int32_t HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIndex )
+    {
+        assert( !hero.isShipMaster() && Maps::isValidAbsIndex( boatDestinationIndex ) );
+
+        const Spell summonBoat( Spell::SUMMONBOAT );
+        assert( hero.CanCastSpell( summonBoat ) );
+
+        const int32_t boatSource = fheroes2::getSummonableBoat( hero );
+
+        // Player should have a summonable boat before calling this function.
+        assert( Maps::isValidAbsIndex( boatSource ) );
+
+        hero.SpellCasted( summonBoat );
+
+        const int heroColor = hero.GetColor();
+
+        Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
+
+        Maps::Tiles & tileSource = world.GetTiles( boatSource );
+
+        if ( AIIsShowAnimationForTile( tileSource, AIGetAllianceColors() ) ) {
+            gameArea.SetCenter( Maps::GetPoint( boatSource ) );
+            gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
+        }
+        else {
+            removeObjectSprite( tileSource );
+            tileSource.setAsEmpty();
+        }
+
+        Maps::Tiles & tileDest = world.GetTiles( boatDestinationIndex );
+        assert( tileDest.GetObject() == MP2::OBJ_NONE );
+
+        tileDest.setBoat( Direction::RIGHT, heroColor );
+        tileSource.resetBoatOwnerColor();
+
+        if ( AIIsShowAnimationForTile( tileDest, AIGetAllianceColors() ) ) {
+            gameArea.SetCenter( Maps::GetPoint( boatDestinationIndex ) );
+            gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestinationIndex, MP2::OBJ_BOAT ) );
+        }
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " summoned the boat from " << boatSource << " to " << boatDestinationIndex )
+
+        return boatSource;
     }
 
     bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell )
     {
-        if ( !hero.CanCastSpell( spell ) )
+        if ( !hero.CanCastSpell( spell ) ) {
             return false;
+        }
 
         hero.SpellCasted( spell );
 
