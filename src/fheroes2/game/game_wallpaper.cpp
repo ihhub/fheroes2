@@ -93,14 +93,14 @@ uint32_t lwpLastMapUpdate = 0;
 bool forceMapUpdate = true;
 bool forceConfigUpdate = true;
 
-void loadMap() {
+void initWallpaper() {
     Settings &conf = Settings::Get();
 
     const MapsFileInfoList lists = Maps::PrepareMapsFileInfoList(
             Settings::Get().IsGameType(Game::TYPE_MULTI));
     conf.SetCurrentFileInfo(lists.front());
 
-    VERBOSE_LOG("loadMap file: " << lists.front().file.c_str() << " name: "
+    VERBOSE_LOG("initWallpaper file: " << lists.front().file.c_str() << " name: "
                                  << lists.front().name.c_str())
 
     conf.GetPlayers().SetStartGame();
@@ -193,7 +193,7 @@ void resizeDisplay() {
     }
 }
 
-void updateConfigs() {
+void rereadAndApplyConfigs() {
     readConfigFile();
     resizeDisplay();
     updateBrightness();
@@ -201,7 +201,7 @@ void updateConfigs() {
 
 void forceUpdates() {
     if (forceConfigUpdate) {
-        updateConfigs();
+        rereadAndApplyConfigs();
         forceConfigUpdate = false;
     }
 
@@ -273,7 +273,7 @@ void renderWallpaper() {
     }
 }
 
-void configure() {
+void overrideConfiguration() {
     Settings &conf = Settings::Get();
     conf.SetGameType(Game::TYPE_STANDARD);
     conf.SetCurrentColor(Color::NONE);
@@ -284,9 +284,9 @@ void configure() {
 }
 
 fheroes2::GameMode Game::Wallpaper() {
-    updateConfigs();
-    configure();
-    loadMap();
+    rereadAndApplyConfigs();
+    overrideConfiguration();
+    initWallpaper();
     renderWallpaper();
 
     return fheroes2::GameMode::END_TURN;
