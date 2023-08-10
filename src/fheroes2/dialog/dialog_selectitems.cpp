@@ -27,6 +27,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "agg_image.h"
@@ -182,6 +183,20 @@ public:
         _scrollbar.moveToIndex( _topId );
     }
 
+    void renderItem( const fheroes2::Sprite & itemSprite, const std::string itemText, const fheroes2::Point & destination, const fheroes2::Point & offset,
+                     const bool current ) const
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        if ( !itemSprite.empty() ) {
+            fheroes2::Blit( itemSprite, display, destination.x + ( offset.x - itemSprite.width() ) / 2, destination.y + ( offset.y - itemSprite.height() ) / 2 );
+        }
+
+        fheroes2::Text text( itemText, current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
+        text.fitToOneRow( background->activeArea().width - offset.x - 55 );
+        text.draw( destination.x + offset.x + 5, destination.y + ( offset.y - text.height() ) / 2 + 2, display );
+    }
+
     int32_t selectItemsEventProcessing( const char * caption )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -253,18 +268,10 @@ public:
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        constexpr int32_t offsetX = 45;
-        constexpr int32_t offsetY = 43;
         const Monster mons( index );
         const fheroes2::Sprite monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
 
-        fheroes2::Blit( monsterSprite, display, dstx + ( offsetX - monsterSprite.width() ) / 2, dsty + ( offsetY - monsterSprite.height() ) / 2 );
-
-        fheroes2::Text text( mons.GetName(), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-        text.fitToOneRow( background->activeArea().width - 100 );
-        text.draw( dstx + offsetX + 5, dsty + ( offsetY - text.height() ) / 2 + 2, display );
+        renderItem( monsterSprite, mons.GetName(), { dstx, dsty }, { 45, 43 }, current );
     }
 
     void ActionListPressRight( int & index ) override
@@ -287,18 +294,9 @@ public:
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        constexpr int32_t offsetY = 35;
         const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
 
-        if ( !port.empty() ) {
-            fheroes2::Copy( port, 0, 0, display, dstx + 5, dsty + ( offsetY - port.height() ) / 2, port.width(), port.height() );
-        }
-
-        fheroes2::Text text( Heroes::GetName( index ), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-        text.fitToOneRow( background->activeArea().width - 100 );
-        text.draw( dstx + 50, dsty + ( offsetY - text.height() ) / 2 + 2, display );
+        renderItem( port, Heroes::GetName( index ), { dstx, dsty }, { 45, 35 }, current );
     }
 
     void ActionListPressRight( int & index ) override
@@ -321,17 +319,10 @@ public:
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        constexpr int32_t offsetY = 42;
         const Artifact art( index );
         const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
 
-        fheroes2::Copy( artifactSprite, 0, 0, display, dstx + 5, dsty + ( offsetY - artifactSprite.height() ) / 2, artifactSprite.width(), artifactSprite.height() );
-
-        fheroes2::Text text( art.GetName(), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-        text.fitToOneRow( background->activeArea().width - 100 );
-        text.draw( dstx + 50, dsty + ( offsetY - text.height() ) / 2 + 2, display );
+        renderItem( artifactSprite, art.GetName(), { dstx, dsty }, { 45, 42 }, current );
     }
 
     void ActionListPressRight( int & index ) override
@@ -354,18 +345,10 @@ public:
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        constexpr int32_t offsetX = 75;
-        constexpr int32_t offsetY = 55;
         const Spell spell( index );
         const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
 
-        fheroes2::Blit( spellSprite, display, dstx + ( offsetX - spellSprite.width() ) / 2, dsty + ( offsetY - spellSprite.height() ) / 2 );
-
-        fheroes2::Text text( spell.GetName(), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-        text.fitToOneRow( background->activeArea().width - 130 );
-        text.draw( dstx + offsetX + 5, dsty + ( offsetY - text.height() ) / 2 + 2, display );
+        renderItem( spellSprite, spell.GetName(), { dstx, dsty }, { 75, 55 }, current );
     }
 
     void ActionListPressRight( int & index ) override
@@ -388,17 +371,10 @@ public:
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        constexpr int32_t offsetY = 42;
         const Skill::Secondary skill( 1 + index / 3, 1 + ( index % 3 ) );
         const fheroes2::Sprite & skillSprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
 
-        fheroes2::Copy( skillSprite, 0, 0, display, dstx + 5, dsty + ( offsetY - skillSprite.height() ) / 2, skillSprite.width(), skillSprite.height() );
-
-        fheroes2::Text text( skill.GetName(), current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-        text.fitToOneRow( background->activeArea().width - 100 );
-        text.draw( dstx + 50, dsty + ( offsetY - text.height() ) / 2 + 2, display );
+        renderItem( skillSprite, skill.GetName(), { dstx, dsty }, { 45, 42 }, current );
     }
 
     void ActionListPressRight( int & index ) override
