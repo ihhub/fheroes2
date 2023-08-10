@@ -3809,7 +3809,6 @@ namespace fheroes2
                 Sprite temp;
                 h2d::readImage( "wizard_castle_bay.image", temp );
                 Blit( temp, _icnVsSprite[id][0] );
-                Save( _icnVsSprite[id][0], "result.bmp", 96 );
                 break;
             }
             default:
