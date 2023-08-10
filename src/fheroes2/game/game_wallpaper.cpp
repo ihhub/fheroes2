@@ -284,6 +284,7 @@ void configure() {
 }
 
 fheroes2::GameMode Game::Wallpaper() {
+    updateConfigs();
     configure();
     loadMap();
     renderWallpaper();

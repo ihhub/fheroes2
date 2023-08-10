@@ -45,6 +45,10 @@ class MainActivity() : ComponentActivity() {
         val config =
             getExternalFilesDir(null)?.resolve("fheroes2.cfg")
 
+        if (config?.exists() == false) {
+            config.createNewFile();
+        }
+
         val settingsViewModel = SettingsViewModel(
             WallpaperPreferencesRepository(config),
             setWallpaper = ::setWallpaper,
