@@ -733,9 +733,6 @@ void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotFor
 
         weakest->SetCount( weakest->GetCount() - acceptableCount );
     }
-
-    // Make sure that this hero can survive an attack by splitting a single stack of monsters into multiple.
-    splitWeakestTroopsIfPossible();
 }
 
 void Troops::SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots )
@@ -850,29 +847,41 @@ bool Troops::mergeWeakestTroopsIfNeeded()
     return true;
 }
 
-void Troops::splitWeakestTroopsIfPossible()
+void Troops::splitStackOfWeakestUnitsIntoFreeSlots()
 {
-    if ( GetOccupiedSlotCount() == size() ) {
+    const uint32_t occupiedSlotCount = GetOccupiedSlotCount();
+
+    if ( occupiedSlotCount == size() ) {
         // Nothing to do as all slots are being occupied.
         return;
     }
 
-    Troop * weakestStack = GetWeakestTroop();
-    assert( weakestStack != nullptr );
+    // Look for a stack consisting of the weakest units
+    Troop * stackOfWeakestUnits = nullptr;
 
-    if ( weakestStack->GetCount() > 1 ) {
-        const uint32_t stackCount = std::min( static_cast<uint32_t>( size() + 1 - GetOccupiedSlotCount() ), weakestStack->GetCount() );
+    for ( Troop * troop : *this ) {
+        assert( troop != nullptr );
 
-        Troop temp( *weakestStack );
-        weakestStack->Reset();
+        if ( !troop->isValid() ) {
+            continue;
+        }
 
-        addNewTroopsToFreeSlots( temp, stackCount );
+        if ( stackOfWeakestUnits == nullptr || stackOfWeakestUnits->GetMonsterStrength() > troop->GetMonsterStrength() ) {
+            stackOfWeakestUnits = troop;
+        }
     }
 
-    // Make it less predictable to guess where troops would be. It makes human players to suffer by constantly adjusting the position of their troops.
-    if ( GetOccupiedSlotCount() < size() ) {
-        Rand::Shuffle( *this );
+    assert( stackOfWeakestUnits != nullptr );
+    assert( stackOfWeakestUnits->GetCount() > 0 );
+
+    const uint32_t count = std::min( static_cast<uint32_t>( size() ) - occupiedSlotCount, stackOfWeakestUnits->GetCount() - 1 );
+    if ( count == 0 ) {
+        return;
     }
+
+    stackOfWeakestUnits->SetCount( stackOfWeakestUnits->GetCount() - count );
+
+    addNewTroopsToFreeSlots( { stackOfWeakestUnits->GetMonster(), count }, count );
 }
 
 void Troops::AssignToFirstFreeSlot( const Troop & troopToAssign, const uint32_t count ) const

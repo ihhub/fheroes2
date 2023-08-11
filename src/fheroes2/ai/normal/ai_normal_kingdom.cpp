@@ -328,60 +328,63 @@ namespace AI
         heroArmy.JoinStrongestFromArmy( garrison );
 
         const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
-        // check if we should leave some troops in the garrison
+
+        // Check if we should leave some troops in the garrison
         // TODO: amount of troops left could depend on region's safetyFactor
         if ( castle.isCastle() && _regions[regionID].safetyFactor <= 100 && !garrison.isValid() ) {
-            const Heroes::Role heroRole = hero.getAIRole();
-            const bool isFigtherHero = ( heroRole == Heroes::Role::FIGHTER || heroRole == Heroes::Role::CHAMPION );
+            auto [troopForTransferToGarrison, transferHalf] = [&hero, &heroArmy]() -> std::pair<Troop *, bool> {
+                const Heroes::Role heroRole = hero.getAIRole();
+                const bool isFighterRole = ( heroRole == Heroes::Role::FIGHTER || heroRole == Heroes::Role::CHAMPION );
 
-            bool onlyHalf = false;
-            Troop * unitToSwap = heroArmy.GetSlowestTroop();
-            if ( unitToSwap ) {
                 // We need to compare a strength of troops excluding hero's stats.
                 const double troopsStrength = Troops( heroArmy.getTroops() ).GetStrength();
+                const double significanceRatio = isFighterRole ? 20.0 : 10.0;
 
-                const double significanceRatio = isFigtherHero ? 20.0 : 10.0;
-                if ( unitToSwap->GetStrength() > troopsStrength / significanceRatio ) {
-                    Troop * weakest = heroArmy.GetWeakestTroop();
+                {
+                    Troop * candidateTroop = heroArmy.GetSlowestTroop();
+                    assert( candidateTroop != nullptr );
 
-                    assert( weakest != nullptr );
-                    if ( weakest ) {
-                        unitToSwap = weakest;
-                        if ( weakest->GetStrength() > troopsStrength / significanceRatio ) {
-                            if ( isFigtherHero ) {
-                                // if it's an important hero and all troops are significant - keep the army
-                                unitToSwap = nullptr;
-                            }
-                            else {
-                                onlyHalf = true;
-                            }
-                        }
+                    if ( candidateTroop->GetStrength() <= troopsStrength / significanceRatio ) {
+                        return { candidateTroop, false };
                     }
                 }
-            }
 
-            if ( unitToSwap ) {
-                const uint32_t count = unitToSwap->GetCount();
-                const uint32_t toMove = onlyHalf ? count / 2 : count;
-                if ( garrison.JoinTroop( unitToSwap->GetMonster(), toMove, true ) ) {
-                    if ( !onlyHalf ) {
-                        unitToSwap->Reset();
+                // if this is an important hero, then all his troops are significant
+                if ( isFighterRole ) {
+                    return {};
+                }
+
+                {
+                    Troop * candidateTroop = heroArmy.GetWeakestTroop();
+                    assert( candidateTroop != nullptr );
+
+                    if ( candidateTroop->GetStrength() <= troopsStrength / significanceRatio ) {
+                        return { candidateTroop, true };
+                    }
+                }
+
+                return {};
+            }();
+
+            if ( troopForTransferToGarrison ) {
+                assert( heroArmy.GetOccupiedSlotCount() > 1 );
+
+                const uint32_t initialCount = troopForTransferToGarrison->GetCount();
+                const uint32_t countToTransfer = transferHalf ? initialCount / 2 : initialCount;
+
+                if ( garrison.JoinTroop( troopForTransferToGarrison->GetMonster(), countToTransfer, true ) ) {
+                    if ( countToTransfer == initialCount ) {
+                        troopForTransferToGarrison->Reset();
                     }
                     else {
-                        unitToSwap->SetCount( count - toMove );
+                        troopForTransferToGarrison->SetCount( initialCount - countToTransfer );
                     }
                 }
             }
         }
 
         OptimizeTroopsOrder( heroArmy );
-
-        if ( garrison.GetOccupiedSlotCount() == 1 ) {
-            garrison.splitWeakestTroopsIfPossible();
-        }
-        else {
-            OptimizeTroopsOrder( garrison );
-        }
+        OptimizeTroopsOrder( garrison );
     }
 
     void Normal::evaluateRegionSafety()

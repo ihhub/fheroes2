@@ -307,9 +307,15 @@ namespace
         Heroes & giver = rightToLeft ? right : left;
         Heroes & taker = rightToLeft ? left : right;
 
+        Army & takerArmy = taker.GetArmy();
+        Army & giverArmy = giver.GetArmy();
+
         // TODO: do not transfer the whole army from one hero to another. Add logic to leave a fast unit for Scout and Courier. Also 3-5 monsters are better than
         // having 1 Peasant in one stack which leads to an instant death if the hero is attacked by an opponent.
-        taker.GetArmy().JoinStrongestFromArmy( giver.GetArmy() );
+        takerArmy.JoinStrongestFromArmy( giverArmy );
+
+        AI::OptimizeTroopsOrder( takerArmy );
+        AI::OptimizeTroopsOrder( giverArmy );
 
         taker.GetBagArtifacts().exchangeArtifacts( giver.GetBagArtifacts(), taker, giver );
     }

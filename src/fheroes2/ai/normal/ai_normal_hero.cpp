@@ -2254,8 +2254,12 @@ namespace AI
         // So it is to check if the hero is still present.
         if ( hero.isActive() ) {
             Castle * castle = hero.inCastleMutable();
+
             if ( castle ) {
                 reinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
+            }
+            else {
+                OptimizeTroopsOrder( hero.GetArmy() );
             }
         }
 
