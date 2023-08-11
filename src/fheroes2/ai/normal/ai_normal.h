@@ -140,20 +140,17 @@ namespace AI
     {
         PriorityTask() = default;
 
-        PriorityTask( PriorityTaskType taskType, double threat )
+        PriorityTask( PriorityTaskType taskType )
             : type( taskType )
-            , threatLevel( threat )
         {}
 
-        PriorityTask( PriorityTaskType taskType, double threat, int secondaryTask )
+        PriorityTask( PriorityTaskType taskType, int secondaryTask )
             : type( taskType )
-            , threatLevel( threat )
         {
             secondaryTaskTileId.insert( secondaryTask );
         }
 
         PriorityTaskType type{ PriorityTaskType::ATTACK };
-        double threatLevel{ 0.0 };
         std::set<int32_t> secondaryTaskTileId;
     };
 

@@ -580,7 +580,7 @@ namespace AI
 
         auto attackTask = _priorityTargets.find( enemyArmy.index );
         if ( attackTask == _priorityTargets.end() ) {
-            _priorityTargets[enemyArmy.index] = { PriorityTaskType::ATTACK, enemyArmy.strength, castleIndex };
+            _priorityTargets[enemyArmy.index] = { PriorityTaskType::ATTACK, castleIndex };
         }
         else {
             attackTask->second.secondaryTaskTileId.insert( castleIndex );
@@ -588,11 +588,7 @@ namespace AI
 
         auto defenseTask = _priorityTargets.find( castleIndex );
         if ( defenseTask == _priorityTargets.end() ) {
-            _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, enemyStrength, enemyArmy.index };
-        }
-        else if ( defenseTask->second.threatLevel < enemyStrength ) {
-            defenseTask->second.secondaryTaskTileId.insert( defenseTask->first );
-            defenseTask->second.threatLevel = enemyStrength;
+            _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, enemyArmy.index };
         }
         else {
             defenseTask->second.secondaryTaskTileId.insert( enemyArmy.index );
@@ -851,7 +847,7 @@ namespace AI
                 // So for the next day a hero will have a maximum amount of spell points as well as new troops.
                 for ( const Castle * castle : castles ) {
                     if ( castle->GetHero() == nullptr ) {
-                        const auto [dummy, inserted] = _priorityTargets.try_emplace( castle->GetIndex(), PriorityTaskType::REINFORCE, 0 );
+                        const auto [dummy, inserted] = _priorityTargets.try_emplace( castle->GetIndex(), PriorityTaskType::REINFORCE );
                         if ( inserted ) {
                             moreTaskForHeroes = true;
                         }
