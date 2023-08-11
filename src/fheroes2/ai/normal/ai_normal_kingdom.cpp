@@ -856,9 +856,13 @@ namespace AI
                 // Heroes have nothing to do. In this case it is wise to move heroes to castles especially if it is the last day of a week.
                 // So for the next day a hero will have a maximum amount of spell points as well as new troops.
                 for ( const Castle * castle : castles ) {
+                    assert( castle != nullptr );
+
                     if ( castle->GetHero() == nullptr ) {
                         const auto [dummy, inserted] = _priorityTargets.try_emplace( castle->GetIndex(), PriorityTaskType::REINFORCE );
                         if ( inserted ) {
+                            DEBUG_LOG( DBG_AI, DBG_INFO, castle->GetName() << " is designated as a priority target to reinforce nearby heroes" )
+
                             moreTaskForHeroes = true;
                         }
                     }
