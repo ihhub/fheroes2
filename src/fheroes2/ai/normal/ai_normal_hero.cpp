@@ -896,7 +896,7 @@ namespace AI
                         assert( hero.GetColor() == castleUnderThreat->GetColor() );
 
                         // Apply a bonus so that the AI prefers to eliminate the threat if possible instead of guarding its castle
-                        value = std::max( value, calculateCastleValue( castleUnderThreat ) * 1.25 );
+                        value = std::max( value, calculateCastleValue( castleUnderThreat ) * 2 );
                     }
                 }
 
@@ -1007,7 +1007,7 @@ namespace AI
                     assert( hero.GetColor() == castle->GetColor() );
 
                     // Apply a bonus so that the AI prefers to eliminate the threat if possible instead of guarding its castle
-                    value = std::max( value, calculateCastleValue( castle ) * 1.25 );
+                    value = std::max( value, calculateCastleValue( castle ) * 2 );
                 }
             }
 
@@ -1424,7 +1424,7 @@ namespace AI
                         assert( hero.GetColor() == castleUnderThreat->GetColor() );
 
                         // Apply a bonus so that the AI prefers to eliminate the threat if possible instead of guarding its castle
-                        value = std::max( value, calculateCastleValue( castleUnderThreat ) * 1.5 );
+                        value = std::max( value, calculateCastleValue( castleUnderThreat ) * 2 );
                     }
                 }
 
@@ -1535,7 +1535,7 @@ namespace AI
                     assert( hero.GetColor() == castle->GetColor() );
 
                     // Apply a bonus so that the AI prefers to eliminate the threat if possible instead of guarding its castle
-                    value = std::max( value, calculateCastleValue( castle ) * 1.5 );
+                    value = std::max( value, calculateCastleValue( castle ) * 2 );
                 }
             }
 
