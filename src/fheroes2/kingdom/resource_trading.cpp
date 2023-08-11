@@ -72,7 +72,7 @@ namespace fheroes2
         --marketplaceCount;
 
         if ( resourceFrom == resourceTo ) {
-            // What are trying to archive?
+            // What are we trying to achieve?
             return 0;
         }
 
