@@ -575,9 +575,6 @@ namespace AI
             --daysToReach;
         }
 
-        const double defenders = castle.GetGarrisonStrength( enemyArmy.hero );
-        const double attackerThreat = enemyStrength - defenders;
-
         auto attackTask = _priorityTargets.find( enemyArmy.index );
         if ( attackTask == _priorityTargets.end() ) {
             _priorityTargets[enemyArmy.index] = { PriorityTaskType::ATTACK, castleIndex };
@@ -594,7 +591,20 @@ namespace AI
             defenseTask->second.secondaryTaskTileId.insert( enemyArmy.index );
         }
 
-        return ( attackerThreat >= 0.1 );
+        // If the castle guard (including the garrison and the guest hero) is weaker than the enemy, then the
+        // castle is considered to be in danger
+        if ( castle.GetGarrisonStrength( enemyArmy.hero ) < enemyStrength ) {
+            return true;
+        }
+
+        // If the guest hero himself is not able to defeat a threatening enemy in an open field, then the castle
+        // is considered to be in danger, and the guest hero should probably stay in it
+        const Heroes * hero = castle.GetHero();
+        if ( hero && hero->GetArmy().GetStrength() <= enemyStrength * ARMY_ADVANTAGE_SMALL ) {
+            return true;
+        }
+
+        return false;
     }
 
     void Normal::removePriorityAttackTarget( const int32_t tileIndex )
@@ -814,8 +824,8 @@ namespace AI
             castlesInDanger = findCastlesInDanger( kingdom );
             for ( Heroes * hero : heroes ) {
                 if ( castlesInDanger.find( hero->GetIndex() ) != castlesInDanger.end() ) {
-                    // If a hero is in a castle and it is in danger then the hero is very weak to defend it.
-                    // Therefore let's make him stay in the castle.
+                    // If a hero is in a castle and this castle is in danger then the hero is most likely not able to defeat
+                    // a threatening enemy in an open field. Therefore let's make him stay in the castle.
                     // TODO: allow the hero to still do some actions but always return to the castle at the end of the turn.
 
                     HeroesActionComplete( *hero, hero->GetIndex(), hero->GetMapsObject() );
