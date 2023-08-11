@@ -6024,7 +6024,7 @@ msgid ""
 msgstr ""
 
 msgid " and "
-msgstr "og"
+msgstr " og "
 
 msgid ""
 "All of the %{monsters} you have in your army have been trained by the battle "
