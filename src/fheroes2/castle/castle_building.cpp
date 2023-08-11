@@ -210,7 +210,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
 
     if ( Race::WZRD == castle.GetRace() ) {
         // Wizard castle has river animation in background.
-        int riverIcnId = ICN::TWNZEXT0;
+        const int32_t riverIcnId = ICN::TWNZEXT0;
         const uint32_t riverExtraIndex = 1 + animationIndex % 5;
 
         fheroes2::drawCastleDialogBuilding( riverIcnId, 0, castle, dst_pt, max );
@@ -219,8 +219,8 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
 
     // Bay animation
     if ( !castle.isBuild( BUILD_SHIPYARD ) && castle.HaveNearlySea() ) {
-        int bayIcnId = 0;
-        int bayAnimationIcnId = 0;
+        int32_t bayIcnId = 0;
+        int32_t bayAnimationIcnId = 0;
         const uint32_t bayExtraIndex = 1 + animationIndex % 5;
 
         switch ( castle.GetRace() ) {
