@@ -26,13 +26,14 @@
 
 #include <cstdint>
 
+#include "game_delays.h"
 #include "game_mode.h"
 #include "interface_base.h"
 #include "interface_buttons.h"
 #include "interface_cpanel.h"
 #include "interface_icons.h"
 #include "players.h"
-#include "game_delays.h"
+
 
 class Castle;
 class Heroes;
