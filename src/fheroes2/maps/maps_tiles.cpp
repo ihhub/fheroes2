@@ -1187,7 +1187,7 @@ bool Maps::Tiles::isShadow() const
 
 Maps::TilesAddon * Maps::Tiles::getAddonWithFlag( const uint32_t uid )
 {
-    auto isFlag = [uid]( const TilesAddon & addon ) { return addon._uid == uid && addon._objectIcnType == MP2::OBJ_ICN_TYPE_FLAG32; };
+    const auto isFlag = [uid]( const TilesAddon & addon ) { return addon._uid == uid && addon._objectIcnType == MP2::OBJ_ICN_TYPE_FLAG32; };
 
     auto iter = std::find_if( addons_level1.begin(), addons_level1.end(), isFlag );
     if ( iter != addons_level1.end() ) {
@@ -1321,7 +1321,7 @@ void Maps::Tiles::updateFlag( const int color, const uint8_t objectSpriteIndex, 
 {
     // Flag deletion or installation must be done in relation to object UID as flag is attached to the object.
     if ( color == Color::NONE ) {
-        auto isFlag = [uid]( const TilesAddon & addon ) { return addon._uid == uid && addon._objectIcnType == MP2::OBJ_ICN_TYPE_FLAG32; };
+        const auto isFlag = [uid]( const TilesAddon & addon ) { return addon._uid == uid && addon._objectIcnType == MP2::OBJ_ICN_TYPE_FLAG32; };
         addons_level1.remove_if( isFlag );
         addons_level2.remove_if( isFlag );
         return;

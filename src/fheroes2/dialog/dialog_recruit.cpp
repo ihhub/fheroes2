@@ -403,7 +403,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
     const fheroes2::Rect monsterArea( dialogOffset.x + 24, dialogOffset.y + 19, 75, 95 );
 
-    auto buttonReleaseRestore = [&display, &background, &dialogOffset]( fheroes2::ButtonBase & button ) {
+    const auto buttonReleaseRestore = [&display, &background, &dialogOffset]( fheroes2::ButtonBase & button ) {
         if ( button.isReleased() ) {
             return;
         }

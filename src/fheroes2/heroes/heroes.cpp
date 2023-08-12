@@ -446,7 +446,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
         dataStream.skip( 1 );
     }
 
-    auto addInitialArtifact = [this]( const Artifact & art ) {
+    const auto addInitialArtifact = [this]( const Artifact & art ) {
         // Perhaps the hero already has a spell book because of his race
         if ( art == Artifact::MAGIC_BOOK && HaveSpellBook() ) {
             return;
@@ -1125,7 +1125,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
         std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
 
         // The function to check the artifact for scout area bonus and returns true if it has and the area around hero was scouted.
-        auto scout = [this]( const int32_t artifactID ) {
+        const auto scout = [this]( const int32_t artifactID ) {
             const std::vector<fheroes2::ArtifactBonus> bonuses = fheroes2::getArtifactData( artifactID ).bonuses;
             if ( std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) != bonuses.end() ) {
                 Scout( this->GetIndex() );

@@ -1070,7 +1070,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
     btnAccept.draw();
     btnDecline.draw();
 
-    auto drawGoldMsg = [cost, &kingdom, &btnAccept]() {
+    const auto drawGoldMsg = [cost, &kingdom, &btnAccept]() {
         std::string str = _( "Not enough gold (%{gold})" );
 
         StringReplace( str, "%{gold}", cost - kingdom.GetFunds().gold );

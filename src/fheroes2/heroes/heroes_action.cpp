@@ -452,7 +452,7 @@ namespace
             return;
         }
 
-        auto captureCastle = [&hero, dstIndex, castle]() {
+        const auto captureCastle = [&hero, dstIndex, castle]() {
             Kingdom & enemyKingdom = castle->GetKingdom();
             enemyKingdom.RemoveCastle( castle );
             hero.GetKingdom().AddCastle( castle );
@@ -1926,7 +1926,7 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dstIndex );
 
         if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
-            auto updateRadar = [objectType, dstIndex]() {
+            const auto updateRadar = [objectType, dstIndex]() {
                 // TODO: make a function that will automatically get the object size in tiles and return a ROI for radar update.
                 // Set the radar update ROI according to captured object size and position.
                 fheroes2::Rect radarRoi( Maps::GetPoint( dstIndex ), { 1, 1 } );
@@ -1960,14 +1960,14 @@ namespace
                 I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
             };
 
-            auto removeObjectProtection = [&tile]() {
+            const auto removeObjectProtection = [&tile]() {
                 // Clear any metadata related to spells
                 if ( tile.GetObject( false ) == MP2::OBJ_MINES ) {
                     removeMineSpellFromTile( tile );
                 }
             };
 
-            auto captureObject = [&hero, objectType, &tile, &updateRadar, &removeObjectProtection]() {
+            const auto captureObject = [&hero, objectType, &tile, &updateRadar, &removeObjectProtection]() {
                 removeObjectProtection();
 
                 setColorOnTile( tile, hero.GetColor() );

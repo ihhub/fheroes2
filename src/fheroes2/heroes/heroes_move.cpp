@@ -628,7 +628,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
     const int32_t indexTo = Maps::GetDirectionIndex( heroIndex, path.GetFrontDirection() );
     const int32_t indexDest = path.GetDestinationIndex( true );
 
-    auto makeStep = [this, indexTo, indexDest]( const bool performMovement ) {
+    const auto makeStep = [this, indexTo, indexDest]( const bool performMovement ) {
         ApplyPenaltyMovement( path.GetFrontPenalty() );
 
         if ( !performMovement ) {

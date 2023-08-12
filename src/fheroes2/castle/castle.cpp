@@ -676,7 +676,7 @@ bool Castle::isExactBuildingBuilt( const uint32_t buildingToCheck ) const
         return false;
     }
 
-    auto checkBuilding = [this]( const uint32_t expectedLevels, const uint32_t allPossibleLevels ) {
+    const auto checkBuilding = [this]( const uint32_t expectedLevels, const uint32_t allPossibleLevels ) {
         // All expected levels should be built
         assert( ( building & expectedLevels ) == expectedLevels );
 
@@ -2467,7 +2467,7 @@ Army & Castle::GetActualArmy()
     return hero ? hero->GetArmy() : army;
 }
 
-double Castle::GetGarrisonStrength( const Heroes & attackingHero ) const
+double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
 {
     double totalStrength = 0;
 
@@ -2503,7 +2503,7 @@ double Castle::GetGarrisonStrength( const Heroes & attackingHero ) const
             totalStrength += towerStr / 2;
         }
 
-        if ( !attackingHero.HasSecondarySkill( Skill::Secondary::BALLISTICS ) && attackingHero.GetArmy().isMeleeDominantArmy() ) {
+        if ( attackingHero && !attackingHero->HasSecondarySkill( Skill::Secondary::BALLISTICS ) && attackingHero->GetArmy().isMeleeDominantArmy() ) {
             // Heavy penalty if the attacking hero does not have a ballistic skill, and his army is based on melee infantry
             totalStrength *= isBuild( BUILD_MOAT ) ? 1.45 : 1.25;
         }

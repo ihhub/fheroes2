@@ -119,24 +119,39 @@ namespace AI
         uint32_t patrolDistance = 0;
     };
 
-    struct PriorityTask
+    struct EnemyArmy
     {
-        PriorityTaskType type = PriorityTaskType::ATTACK;
-        double threatLevel = 0.0;
-        std::set<int> secondaryTaskTileId;
+        EnemyArmy() = default;
 
-        PriorityTask() = default;
-        PriorityTask( PriorityTaskType t, double threat )
-            : type( t )
-            , threatLevel( threat )
+        EnemyArmy( const int32_t index_, const Heroes * hero_, const double strength_, const uint32_t movePoints_ )
+            : index( index_ )
+            , hero( hero_ )
+            , strength( strength_ )
+            , movePoints( movePoints_ )
         {}
 
-        PriorityTask( PriorityTaskType t, double threat, int secondaryTask )
-            : type( t )
-            , threatLevel( threat )
+        int32_t index{ -1 };
+        const Heroes * hero = nullptr;
+        double strength{ 0 };
+        uint32_t movePoints{ 0 };
+    };
+
+    struct PriorityTask
+    {
+        PriorityTask() = default;
+
+        PriorityTask( PriorityTaskType taskType )
+            : type( taskType )
+        {}
+
+        PriorityTask( PriorityTaskType taskType, int secondaryTask )
+            : type( taskType )
         {
             secondaryTaskTileId.insert( secondaryTask );
         }
+
+        PriorityTaskType type{ PriorityTaskType::ATTACK };
+        std::set<int32_t> secondaryTaskTileId;
     };
 
     struct BattleTargetPair
@@ -272,12 +287,12 @@ namespace AI
 
         double getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType );
 
-        bool isPriorityTask( const int index ) const
+        bool isPriorityTask( const int32_t index ) const
         {
             return _priorityTargets.find( index ) != _priorityTargets.end();
         }
 
-        bool isCriticalTask( const int index ) const
+        bool isCriticalTask( const int32_t index ) const
         {
             const auto iter = _priorityTargets.find( index );
             if ( iter == _priorityTargets.end() ) {
@@ -290,30 +305,11 @@ namespace AI
         void tradingPostVisitEvent( Kingdom & kingdom ) override;
 
     private:
-        struct EnemyArmy
-        {
-            EnemyArmy() = default;
-
-            EnemyArmy( const int index_, const MP2::MapObjectType type_, const double strength_, const uint32_t movePoints_ )
-                : index( index_ )
-                , type( type_ )
-                , strength( strength_ )
-                , movePoints( movePoints_ )
-            {
-                // Do nothing.
-            }
-
-            int index{ -1 };
-            MP2::MapObjectType type{ MP2::OBJ_NONE };
-            double strength{ 0 };
-            uint32_t movePoints{ 0 };
-        };
-
         // following data won't be saved/serialized
         double _combinedHeroStrength = 0;
         std::vector<IndexObject> _mapActionObjects;
-        std::map<int, PriorityTask> _priorityTargets;
-        std::vector<EnemyArmy> _enemyArmies;
+        std::map<int32_t, PriorityTask> _priorityTargets;
+        std::map<int32_t, EnemyArmy> _enemyArmies;
         std::vector<RegionStats> _regions;
         std::array<BudgetEntry, 7> _budget = { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
         AIWorldPathfinder _pathfinder;
@@ -360,10 +356,6 @@ namespace AI
         void removePriorityAttackTarget( const int32_t tileIndex );
 
         void updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tiles & tile );
-
-        void updateEnemyArmy( const EnemyArmy & enemyArmy );
-
-        void removeEnemyArmies( const int32_t tileIndex );
     };
 }
 
