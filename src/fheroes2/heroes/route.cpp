@@ -40,13 +40,6 @@ Route::Path::Path( const Heroes & hero )
     , _hide( true )
 {}
 
-int32_t Route::Path::GetFrontFrom() const
-{
-    assert( _hero != nullptr );
-
-    return empty() ? _hero->GetIndex() : front().GetFrom();
-}
-
 bool Route::Path::isValidForMovement() const
 {
     return !empty() && front().GetDirection() != Direction::UNKNOWN && Maps::isValidAbsIndex( front().GetIndex() );
