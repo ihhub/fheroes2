@@ -793,6 +793,7 @@ namespace
         case MP2::OBJ_GENIE_LAMP:
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_SEA_CHEST:
+        case MP2::OBJ_TREASURE_CHEST:
             return 0.95;
         case MP2::OBJ_BUOY:
         case MP2::OBJ_TEMPLE:
@@ -1049,7 +1050,8 @@ namespace AI
             // Since mines constantly bring resources, they are valuable objects
             return resourceAmount * getResourcePriorityModifier( resourceType, true );
         }
-        case MP2::OBJ_ARTIFACT: {
+        case MP2::OBJ_ARTIFACT:
+        case MP2::OBJ_SHIPWRECK_SURVIVOR: {
             const Artifact art = getArtifactFromTile( tile );
             assert( art.isValid() );
 
@@ -1062,23 +1064,19 @@ namespace AI
             return 1000.0 * art.getArtifactValue();
         }
         case MP2::OBJ_SEA_CHEST:
-        case MP2::OBJ_SHIPWRECK_SURVIVOR:
         case MP2::OBJ_TREASURE_CHEST: {
             if ( getArtifactFromTile( tile ).isValid() ) {
                 const Artifact art = getArtifactFromTile( tile );
 
-                // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
+                // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this object untouched for the human player.
                 if ( isFindArtifactVictoryConditionForHuman( art ) ) {
                     assert( 0 );
                     return -dangerousTaskPenalty;
                 }
-
-                return 1000.0 * art.getArtifactValue();
             }
 
-            const Funds funds = getFundsFromTile( tile );
-            assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
-
+            // This is an average gold amount you can get from a treasure chest or sea chest.
+            const Funds funds{ Resource::GOLD, 1500 };
             return funds.gold * getResourcePriorityModifier( Resource::GOLD, false );
         }
         case MP2::OBJ_DAEMON_CAVE: {
@@ -1730,8 +1728,21 @@ namespace AI
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_GENIE_LAMP:
-        case MP2::OBJ_RESOURCE:
-        case MP2::OBJ_SEA_CHEST: {
+        case MP2::OBJ_RESOURCE: {
+            return twoTiles;
+        }
+        case MP2::OBJ_SEA_CHEST:
+        case MP2::OBJ_TREASURE_CHEST: {
+            if ( getArtifactFromTile( tile ).isValid() ) {
+                const Artifact art = getArtifactFromTile( tile );
+
+                // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this object untouched for the human player.
+                if ( isFindArtifactVictoryConditionForHuman( art ) ) {
+                    assert( 0 );
+                    return -dangerousTaskPenalty;
+                }
+            }
+
             return twoTiles;
         }
         case MP2::OBJ_ARENA:
