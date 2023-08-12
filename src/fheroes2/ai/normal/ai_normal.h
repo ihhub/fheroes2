@@ -140,7 +140,7 @@ namespace AI
     {
         PriorityTask() = default;
 
-        PriorityTask( PriorityTaskType taskType )
+        explicit PriorityTask( PriorityTaskType taskType )
             : type( taskType )
         {}
 
