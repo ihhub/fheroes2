@@ -4299,7 +4299,7 @@ namespace
         released[27].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
         released[31].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
         released[33].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
-        released[54].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
+        //released[54].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
         released[57].setPosition( buttonFontOffset.x - 1, buttonFontOffset.y );
 
         // !
