@@ -34,7 +34,6 @@
 #include "interface_icons.h"
 #include "players.h"
 
-
 class Castle;
 class Heroes;
 
