@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Queue;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -134,7 +134,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
             new Thread( () -> {
                 Exception caughtException = null;
 
-                final Function<String, Boolean> checkExtension = ( String name ) ->
+                final Predicate<String> checkExtension = ( String name ) ->
                 {
                     final String lowercaseName = name.toLowerCase( Locale.ROOT );
 
@@ -158,7 +158,7 @@ public final class SaveFileManagerActivity extends AppCompatActivity
                         }
 
                         final String zEntryFileName = new File( zEntry.getName() ).getName();
-                        if ( !checkExtension.apply( zEntryFileName ) ) {
+                        if ( !checkExtension.test( zEntryFileName ) ) {
                             continue;
                         }
 

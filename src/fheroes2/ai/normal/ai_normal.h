@@ -287,6 +287,8 @@ namespace AI
             return iter->second.type == PriorityTaskType::ATTACK || iter->second.type == PriorityTaskType::DEFEND;
         }
 
+        void tradingPostVisitEvent( Kingdom & kingdom ) override;
+
     private:
         struct EnemyArmy
         {
