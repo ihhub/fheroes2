@@ -34,9 +34,9 @@ namespace Dialog
 {
     Monster selectMonster( const int monsterId = Monster::UNKNOWN );
     int selectHeroes( const int heroId = Heroes::UNKNOWN );
-    Artifact selectArtifact();
+    Artifact selectArtifact( const int artifactId = Artifact::UNKNOWN );
     Spell selectSpell( const int spellId = Spell::NONE );
-    Skill::Secondary selectSecondarySkill();
+    Skill::Secondary selectSecondarySkill( const int skillId = Skill::Secondary::UNKNOWN );
 }
 
 #endif

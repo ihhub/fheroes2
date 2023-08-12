@@ -27,6 +27,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <numeric>
 #include <string>
 #include <vector>
 
@@ -59,6 +60,8 @@ public:
     using Interface::ListBox<int>::ActionListSingleClick;
     using Interface::ListBox<int>::ActionListPressRight;
 
+    SelectEnum() = delete;
+
     explicit SelectEnum( const fheroes2::Size & dialogSize )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -81,13 +84,13 @@ public:
         int32_t scrollbarOffsetX = area.x + area.width - 25;
 
         // Top part of scrollbar background.
-        constexpr int32_t topPartHeight = 19;
-        constexpr int32_t scrollBarWidth = 16;
+        const int32_t topPartHeight = 19;
+        const int32_t scrollBarWidth = 16;
         fheroes2::Copy( scrollBar, 536, 176, display, scrollbarOffsetX, listRoi.y, scrollBarWidth, topPartHeight );
 
         // Middle part of scrollbar background.
         int32_t offsetY = topPartHeight;
-        constexpr int32_t middlePartHeight = 88;
+        const int32_t middlePartHeight = 88;
         const int32_t middlePartCount = ( listRoi.height - 2 * topPartHeight + middlePartHeight - 1 ) / middlePartHeight;
 
         for ( int32_t i = 0; i < middlePartCount; ++i ) {
@@ -119,7 +122,7 @@ public:
         }
 
         // Dialog buttons.
-        constexpr int32_t buttonFromBorderOffsetX = 20;
+        const int32_t buttonFromBorderOffsetX = 20;
         const int32_t buttonY = listRoi.y + listRoi.height + 7;
 
         const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
@@ -139,9 +142,7 @@ public:
 
     void RedrawBackground( const fheroes2::Point & /* unused */ ) override
     {
-        if ( listBackground != nullptr ) {
-            listBackground->restore();
-        }
+        listBackground->restore();
     }
 
     void ActionListDoubleClick( int & /* unused */ ) override
@@ -260,7 +261,7 @@ public:
     explicit SelectEnumMonster( const fheroes2::Size & rt )
         : SelectEnum( rt )
     {
-        constexpr int offset = 43;
+        const int offset = 43;
         SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
     }
 
@@ -286,7 +287,7 @@ public:
     explicit SelectEnumHeroes( const fheroes2::Size & rt )
         : SelectEnum( rt )
     {
-        constexpr int offset = 35;
+        const int offset = 35;
         SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
     }
 
@@ -311,7 +312,7 @@ public:
     explicit SelectEnumArtifact( const fheroes2::Size & rt )
         : SelectEnum( rt )
     {
-        constexpr int offset = 42;
+        const int offset = 42;
         SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
     }
 
@@ -337,7 +338,7 @@ public:
     explicit SelectEnumSpell( const fheroes2::Size & rt )
         : SelectEnum( rt )
     {
-        constexpr int offset = 55;
+        const int offset = 55;
         SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
     }
 
@@ -363,7 +364,7 @@ public:
     explicit SelectEnumSecSkill( const fheroes2::Size & rt )
         : SelectEnum( rt )
     {
-        constexpr int offset = 42;
+        const int offset = 42;
         SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
     }
 
@@ -383,17 +384,18 @@ public:
     }
 };
 
-Skill::Secondary Dialog::selectSecondarySkill()
+Skill::Secondary Dialog::selectSecondarySkill( const int skillId /* = Skill::Secondary::UNKNOWN */ )
 {
-    std::vector<int> skills( static_cast<int>( MAXSECONDARYSKILL * 3 ), 0 );
+    std::vector<int> skills( static_cast<size_t>( MAXSECONDARYSKILL * 3 ), 0 );
 
-    for ( int i = 0; i < MAXSECONDARYSKILL * 3; ++i ) {
-        skills[i] = i;
-    }
+    std::iota( skills.begin(), skills.end(), 0 );
 
     SelectEnumSecSkill listbox( { 350, fheroes2::Display::instance().height() - 200 } );
 
     listbox.SetListContent( skills );
+    if ( skillId != Skill::Secondary::UNKNOWN ) {
+        listbox.SetCurrent( skillId );
+    }
 
     const int32_t result = listbox.selectItemsEventProcessing( _( "Select Skill:" ) );
 
@@ -421,24 +423,25 @@ Spell Dialog::selectSpell( const int spellId /* = Spell::NONE */ )
     return result == Dialog::OK || listbox.ok ? Spell( listbox.GetCurrent() ) : Spell( Spell::NONE );
 }
 
-Artifact Dialog::selectArtifact()
+Artifact Dialog::selectArtifact( const int artifactId /* = Artifact::UNKNOWN */ )
 {
     std::vector<int> artifacts;
     artifacts.reserve( Artifact::ARTIFACT_COUNT - 1 );
 
     const bool isPriceofLoyaltyArtifactAllowed = Settings::Get().isCurrentMapPriceOfLoyalty();
 
-    for ( int artifactId = Artifact::UNKNOWN + 1; artifactId < Artifact::ARTIFACT_COUNT; ++artifactId ) {
-        if ( Artifact( artifactId ).isValid() && ( isPriceofLoyaltyArtifactAllowed || !fheroes2::isPriceOfLoyaltyArtifact( artifactId ) ) ) {
-            artifacts.emplace_back( artifactId );
+    for ( int id = Artifact::UNKNOWN + 1; id < Artifact::ARTIFACT_COUNT; ++id ) {
+        if ( Artifact( id ).isValid() && ( isPriceofLoyaltyArtifactAllowed || !fheroes2::isPriceOfLoyaltyArtifact( id ) ) ) {
+            artifacts.emplace_back( id );
         }
     }
 
     SelectEnumArtifact listbox( { 370, fheroes2::Display::instance().height() - 200 } );
 
     listbox.SetListContent( artifacts );
-    // Force to select the first artifact in the list.
-    listbox.SetCurrent( static_cast<size_t>( 0 ) );
+    if ( artifactId != Artifact::UNKNOWN ) {
+        listbox.SetCurrent( artifactId );
+    }
 
     const int32_t result = listbox.selectItemsEventProcessing( _( "Select Artifact:" ) );
 
@@ -449,10 +452,8 @@ Monster Dialog::selectMonster( const int monsterId /* = Monster::UNKNOWN */ )
 {
     std::vector<int> monsters( static_cast<int>( Monster::WATER_ELEMENT ), Monster::UNKNOWN );
 
-    for ( size_t i = 0; i < monsters.size(); ++i ) {
-        // Skip Monster::UNKNOWN, safe to do casting as the monsters can't be more than 2 billion
-        monsters[i] = static_cast<int>( i + 1 );
-    }
+    // Skip Monster::UNKNOWN and start from the next one.
+    std::iota( monsters.begin(), monsters.end(), Monster::UNKNOWN + 1 );
 
     SelectEnumMonster listbox( { 280, fheroes2::Display::instance().height() - 200 } );
 
@@ -470,10 +471,7 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 {
     std::vector<int> heroes( static_cast<int>( Settings::Get().isCurrentMapPriceOfLoyalty() ? Heroes::DEBUG_HERO : Heroes::SOLMYR ), Heroes::UNKNOWN );
 
-    for ( size_t i = 0; i < heroes.size(); ++i ) {
-        // Safe to do casting as the heroes can't be more than 2 billion.
-        heroes[i] = static_cast<int>( i );
-    }
+    std::iota( heroes.begin(), heroes.end(), 0 );
 
     SelectEnumHeroes listbox( { 240, fheroes2::Display::instance().height() - 200 } );
 

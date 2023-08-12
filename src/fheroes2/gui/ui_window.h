@@ -55,7 +55,7 @@ namespace fheroes2
 
         void render();
 
-        void applyTextBackgroundShading( const Rect roi );
+        void applyTextBackgroundShading( const Rect & roi );
 
     private:
         Image & _output;

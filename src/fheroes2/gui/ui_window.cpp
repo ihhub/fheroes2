@@ -268,9 +268,9 @@ namespace fheroes2
         ApplyTransform( _output, _windowArea.x + _windowArea.width - borderSize - 1, _windowArea.y + _windowArea.height, 1, borderSize - 1, 5 );
     }
 
-    void StandardWindow::applyTextBackgroundShading( const Rect roi )
+    void StandardWindow::applyTextBackgroundShading( const Rect & roi )
     {
-        fheroes2::Rect shadingRoi = roi ^ _activeArea;
+        const fheroes2::Rect shadingRoi = roi ^ _activeArea;
 
         // The text background is darker than original background. The shadow strength 2 is too much so we do two shading transforms: 3 and 5.
         ApplyTransform( _output, shadingRoi.x + 2, shadingRoi.y + 2, shadingRoi.width - 4, shadingRoi.height - 4, 3 );
