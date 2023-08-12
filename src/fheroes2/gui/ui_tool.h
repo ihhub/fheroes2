@@ -62,6 +62,12 @@ namespace fheroes2
 
         void setPosition( int32_t x_, int32_t y_ ) override;
 
+    protected:
+        void _resetRestorer()
+        {
+            _restorer.reset();
+        }
+
     private:
         ImageRestorer _restorer;
         bool _isHidden;
