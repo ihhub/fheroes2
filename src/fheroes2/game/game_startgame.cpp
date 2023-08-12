@@ -315,7 +315,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
         case Dialog::DISMISS:
             AudioManager::PlaySound( M82::KILLFADE );
 
-            ( *it )->GetPath().Hide();
+            ( *it )->ShowPath( false );
 
             // Check if this dialog is not opened from the other dialog and we will be exiting to the Adventure map.
             if ( renderBackgroundDialog ) {

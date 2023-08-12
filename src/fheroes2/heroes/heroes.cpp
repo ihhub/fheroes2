@@ -966,7 +966,7 @@ void Heroes::calculatePath( int32_t dstIdx )
         return;
     }
 
-    path.setPath( world.getPath( *this, dstIdx ), dstIdx );
+    path.setPath( world.getPath( *this, dstIdx ) );
 
     if ( !path.isValidForMovement() ) {
         path.Reset();
@@ -1657,6 +1657,7 @@ void Heroes::Dismiss( int reason )
 
     modes = 0;
 
+    path.Hide();
     path.Reset();
 
     SetMove( false );
@@ -1705,7 +1706,7 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
 
         if ( !targets.empty() ) {
             SetMove( false );
-            GetPath().Hide();
+            ShowPath( false );
 
             // first fight the monsters on the destination tile (if any)
             MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinationIndex() );
@@ -1735,17 +1736,17 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
     ResetModes( VISIONS );
 }
 
-// Move hero to a new position. This function applies no action and no penalty
 void Heroes::Move2Dest( const int32_t dstIndex )
 {
     const int32_t currentIndex = GetIndex();
 
-    if ( dstIndex != currentIndex ) {
-        world.GetTiles( currentIndex ).SetHeroes( nullptr );
-        SetIndex( dstIndex );
-        Scout( dstIndex );
-        world.GetTiles( dstIndex ).SetHeroes( this );
+    if ( dstIndex == currentIndex ) {
+        return;
     }
+
+    world.GetTiles( currentIndex ).SetHeroes( nullptr );
+    SetIndex( dstIndex );
+    world.GetTiles( dstIndex ).SetHeroes( this );
 }
 
 const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )

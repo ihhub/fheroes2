@@ -208,9 +208,7 @@ namespace
 
         if ( object == MP2::OBJ_HEROES ) {
             const Heroes * hero = tile.GetHeroes();
-            if ( hero == nullptr ) {
-                return {};
-            }
+            assert( hero != nullptr );
 
             if ( hero->isFriends( kingdomColor ) ) {
                 return {};
@@ -230,9 +228,7 @@ namespace
 
         if ( object == MP2::OBJ_CASTLE ) {
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
-            if ( castle == nullptr ) {
-                return {};
-            }
+            assert( castle != nullptr );
 
             // Neutral castles don't pose a threat because they can't hire heroes
             if ( castle->GetColor() == Color::NONE || castle->isFriends( kingdomColor ) ) {

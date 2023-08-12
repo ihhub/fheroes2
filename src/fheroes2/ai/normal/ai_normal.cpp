@@ -68,8 +68,7 @@ namespace AI
             }
 
             if ( hero->isMoveEnabled() ) {
-                hero->GetPath().Reset();
-                hero->SetMove( false );
+                hero->GetPath().Truncate();
                 break;
             }
         }

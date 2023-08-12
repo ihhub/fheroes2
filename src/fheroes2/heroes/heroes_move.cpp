@@ -626,13 +626,13 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
 {
     const int32_t heroIndex = GetIndex();
     const int32_t indexTo = Maps::GetDirectionIndex( heroIndex, path.GetFrontDirection() );
-    const int32_t indexDest = path.GetDestinationIndex( true );
 
-    const auto makeStep = [this, indexTo, indexDest]( const bool performMovement ) {
+    const auto makeStep = [this, indexTo]( const bool performMovement ) {
         ApplyPenaltyMovement( path.GetFrontPenalty() );
 
         if ( !performMovement ) {
-            GetPath().Reset();
+            path.Reset();
+
             Action( indexTo );
             SetMove( false );
 
@@ -653,12 +653,15 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
         if ( isActive() ) {
             Action( indexTo );
 
-            if ( indexTo == indexDest ) {
-                GetPath().Reset();
+            if ( indexTo == path.GetDestinationIndex() ) {
+                path.Reset();
+
                 SetMove( false );
             }
         }
     };
+
+    const int32_t indexDest = path.GetDestinationIndex();
 
     if ( jumpToNextTile ) {
         if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) ) {

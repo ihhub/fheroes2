@@ -2465,13 +2465,13 @@ namespace AI
 
                 if ( dimensionDoorDistance > 0 ) {
                     // The rest of the path the hero should do by foot.
-                    bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
+                    bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
 
                     HeroesMove( *bestHero );
                 }
             }
             else {
-                bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
+                bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
 
                 HeroesMove( *bestHero );
             }
