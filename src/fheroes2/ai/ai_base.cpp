@@ -58,6 +58,11 @@ namespace AI
         // Do nothing.
     }
 
+    bool Base::isValidHeroObject( const Heroes &, const double, const int32_t, const double, const bool )
+    {
+        return false;
+    }
+
     void Base::CastlePreBattle( Castle & )
     {
         // Do nothing.

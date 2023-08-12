@@ -1133,7 +1133,7 @@ namespace
         uint32_t gold = funds.gold;
         bool complete = false;
 
-        if ( gold ) {
+        if ( gold && AI::Get().isValidHeroObject( hero, hero.GetArmy().GetStrength(), dst_index, 0, true ) ) {
             Army army( tile );
 
             Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
@@ -1173,7 +1173,7 @@ namespace
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const Spell & spell = getSpellFromTile( tile );
 
-        if ( spell.isValid() ) {
+        if ( AI::Get().isValidHeroObject( hero, hero.GetArmy().GetStrength(), dst_index, 0, true ) ) {
             // battle
             Army army( tile );
 
@@ -1196,7 +1196,7 @@ namespace
                 AIBattleLose( hero, res, true );
             }
         }
-        else {
+        else if ( !spell.isValid() ) {
             hero.SetVisited( dst_index, Visit::LOCAL );
             hero.SetVisited( dst_index, Visit::GLOBAL );
         }
@@ -1243,7 +1243,7 @@ namespace
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
-        if ( doesTileContainValuableItems( tile ) ) {
+        if ( doesTileContainValuableItems( tile ) && AI::Get().isValidHeroObject( hero, hero.GetArmy().GetStrength(), dst_index, 0, true ) ) {
             Army army( tile );
 
             Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
