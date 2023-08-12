@@ -864,10 +864,7 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
 
     // After recruiting a hero we reveal map in hero scout area.
     Scout( GetIndex() );
-    if ( isControlHuman() ) {
-        // And the radar image map for human player.
-        ScoutRadar();
-    }
+    ScoutRadar();
 
     return true;
 }
@@ -1116,6 +1113,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
                                                 : fheroes2::showStandardTextMessage( art.GetName(),
                                                                                      _( "You cannot pick up this artifact, you already have a full load!" ), Dialog::OK );
         }
+
         return false;
     }
 
@@ -1123,28 +1121,29 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
     if ( isControlHuman() ) {
         std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
+    }
 
-        // The function to check the artifact for scout area bonus and returns true if it has and the area around hero was scouted.
-        const auto scout = [this]( const int32_t artifactID ) {
-            const std::vector<fheroes2::ArtifactBonus> bonuses = fheroes2::getArtifactData( artifactID ).bonuses;
-            if ( std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) != bonuses.end() ) {
-                Scout( this->GetIndex() );
-                ScoutRadar();
-                return true;
-            }
+    const auto scout = [this]( const int32_t artifactID ) {
+        const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifactID ).bonuses;
+        if ( std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) == bonuses.end() ) {
             return false;
-        };
-
-        // If the scout area bonus is increased with the new artifact we update the radar.
-        if ( scout( art.GetID() ) ) {
-            return true;
         }
 
-        // If there were artifacts assembled we check them for scout area bonus.
-        for ( const ArtifactSetData & assembledArtifact : assembledArtifacts ) {
-            if ( scout( assembledArtifact._assembledArtifactID ) ) {
-                return true;
-            }
+        Scout( this->GetIndex() );
+        ScoutRadar();
+
+        return true;
+    };
+
+    // Check the picked up artifact for a bonus to the scouting area.
+    if ( scout( art.GetID() ) ) {
+        return true;
+    }
+
+    // If there were artifacts assembled, check them for a bonus to the scouting area.
+    for ( const ArtifactSetData & assembledArtifact : assembledArtifacts ) {
+        if ( scout( assembledArtifact._assembledArtifactID ) ) {
+            return true;
         }
     }
 

@@ -208,7 +208,10 @@ namespace
 
         if ( object == MP2::OBJ_HEROES ) {
             const Heroes * hero = tile.GetHeroes();
-            assert( hero != nullptr );
+            // TODO: this function can be called when the game world is not fully initialized yet
+            if ( hero == nullptr ) {
+                return {};
+            }
 
             if ( hero->isFriends( kingdomColor ) ) {
                 return {};
@@ -228,7 +231,10 @@ namespace
 
         if ( object == MP2::OBJ_CASTLE ) {
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
-            assert( castle != nullptr );
+            // TODO: this function can be called when the game world is not fully initialized yet
+            if ( castle == nullptr ) {
+                return {};
+            }
 
             // Neutral castles don't pose a threat because they can't hire heroes
             if ( castle->GetColor() == Color::NONE || castle->isFriends( kingdomColor ) ) {
