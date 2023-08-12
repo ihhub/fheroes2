@@ -1720,15 +1720,6 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
         }
     }
 
-    if ( isActive() && GetMapsObject() == MP2::OBJ_EVENT ) {
-        const MapEvent * event = world.GetMapEvent( GetCenter() );
-
-        if ( event && event->isAllow( GetColor() ) ) {
-            Action( GetIndex() );
-            SetMove( false );
-        }
-    }
-
     if ( isControlAI() )
         AI::Get().HeroesActionNewPosition( *this );
 
