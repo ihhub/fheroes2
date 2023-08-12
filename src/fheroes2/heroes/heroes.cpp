@@ -54,7 +54,6 @@
 #include "luck.h"
 #include "m82.h"
 #include "maps.h"
-#include "maps_objects.h"
 #include "maps_tiles.h"
 #include "monster.h"
 #include "morale.h"
