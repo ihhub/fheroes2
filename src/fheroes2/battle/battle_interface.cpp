@@ -3966,8 +3966,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         }
     }
 
-    // For Battle speed 9 and 10 we play one sound at time without any simultaneous playbacks
-    // as on these speeds the unit will end its movement before the sound is finished.
+    // For Battle speed 9 and 10 we play one sound at a time without any simultaneous playbacks
+    // because on these speeds the unit will end its movement before the sound is finished.
     const bool playSoundBySound = Settings::Get().BattleSpeed() > 8;
     int soundStatus = -1;
     const int walkSoundId = unit.M82Move();
@@ -4158,8 +4158,8 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         ++currentPoint;
     }
 
-    // For Battle speed 9 and 10 we play one sound at time without any simultaneous playbacks
-    // as on these speeds the unit will end its movement before the sound is finished.
+    // For Battle speeds 9 and 10 we play one sound at a time without any simultaneous playbacks
+    // because on these speeds the unit will end its movement before the sound is finished.
     const bool playSoundBySound = Settings::Get().BattleSpeed() > 8;
     int soundStatus = -1;
     const int flySoundId = unit.M82Move();
