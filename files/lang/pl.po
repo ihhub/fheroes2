@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-08 16:49+0000\n"
+"POT-Creation-Date: 2023-08-12 09:48+0000\n"
 "PO-Revision-Date: 2023-07-01 14:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3196,20 +3196,23 @@ msgstr "Czy na pewno chcesz usunąć plik:"
 msgid "Warning!"
 msgstr "Uwaga!"
 
+msgid "Accept the choice made."
+msgstr "Zastosuj wprowadzone zmiany."
+
+msgid "Select Skill:"
+msgstr "Wybierz umiejętność:"
+
+msgid "Select Spell:"
+msgstr "Wybierz zaklęcie:"
+
+msgid "Select Artifact:"
+msgstr "Wybierz artefakt:"
+
 msgid "Select Monster:"
 msgstr "Wybierz potwora:"
 
 msgid "Select Hero:"
 msgstr "Wybierz bohatera:"
-
-msgid "Select Artifact:"
-msgstr "Wybierz artefakt:"
-
-msgid "Select Spell:"
-msgstr "Wybierz zaklęcie:"
-
-msgid "Select Skill:"
-msgstr "Wybierz umiejętność:"
 
 msgid "Map Type:\n"
 msgstr "Typ Mapy:\n"
@@ -3346,9 +3349,6 @@ msgstr "Wybrany opis"
 
 msgid "The description of the currently selected map."
 msgstr "Opis aktualnie wybranej mapy."
-
-msgid "Accept the choice made."
-msgstr "Zastosuj wprowadzone zmiany."
 
 msgid "Jump"
 msgstr "Skok"

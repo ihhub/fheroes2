@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-08 16:49+0000\n"
+"POT-Creation-Date: 2023-08-12 09:48+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3223,6 +3223,21 @@ msgstr "Biztos benne hogy törli a fájlt:"
 msgid "Warning!"
 msgstr "Figyelem!"
 
+msgid "Accept the choice made."
+msgstr "A választás elfogadása."
+
+#, fuzzy
+msgid "Select Skill:"
+msgstr "Védőerő"
+
+#, fuzzy
+msgid "Select Spell:"
+msgstr "Varázslat célpontjának választása."
+
+#, fuzzy
+msgid "Select Artifact:"
+msgstr "Varázstárgy"
+
 #, fuzzy
 msgid "Select Monster:"
 msgstr "Legjobb szörny:"
@@ -3230,18 +3245,6 @@ msgstr "Legjobb szörny:"
 #, fuzzy
 msgid "Select Hero:"
 msgstr "Legjobb hős:"
-
-#, fuzzy
-msgid "Select Artifact:"
-msgstr "Varázstárgy"
-
-#, fuzzy
-msgid "Select Spell:"
-msgstr "Varázslat célpontjának választása."
-
-#, fuzzy
-msgid "Select Skill:"
-msgstr "Védőerő"
 
 #, fuzzy
 msgid "Map Type:\n"
@@ -3378,9 +3381,6 @@ msgstr "Kiválasztott Leírás"
 
 msgid "The description of the currently selected map."
 msgstr "A kiválasztott térkép leírása."
-
-msgid "Accept the choice made."
-msgstr "A választás elfogadása."
 
 msgid "Jump"
 msgstr ""
