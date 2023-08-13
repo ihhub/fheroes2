@@ -148,7 +148,7 @@ namespace Route
             clear();
         }
 
-        // Truncates the path after the current step (the first in the queue). Is the queue is empty, then does nothing.
+        // Truncates the path after the current step (the first in the queue). If the queue is empty, then does nothing.
         void Truncate()
         {
             if ( empty() ) {
