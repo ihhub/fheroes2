@@ -76,11 +76,12 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
         return;
     }
 
+    assert( !hero->Modes( Heroes::ENABLEMOVE ) );
+
     const Route::Path & path = hero->GetPath();
 
     // Calculate and show the hero's path
     if ( path.GetDestinationIndex() != destinationIdx ) {
-        hero->SetMove( false );
         hero->calculatePath( destinationIdx );
 
         DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
@@ -194,16 +195,19 @@ void Interface::AdventureMap::EventCastSpell()
 
 fheroes2::GameMode Interface::AdventureMap::EventEndTurn() const
 {
-    const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
+#ifndef NDEBUG
+    Heroes * focusedHero = GetFocusHeroes();
+#endif
+    assert( focusedHero == nullptr || !focusedHero->Modes( Heroes::ENABLEMOVE ) );
 
-    if ( GetFocusHeroes() )
-        GetFocusHeroes()->SetMove( false );
+    const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
     if ( !myKingdom.HeroesMayStillMove()
          || Dialog::YES
                 == fheroes2::showStandardTextMessage( _( "End Turn" ), _( "One or more heroes may still move, are you sure you want to end your turn?" ),
-                                                      Dialog::YES | Dialog::NO ) )
+                                                      Dialog::YES | Dialog::NO ) ) {
         return fheroes2::GameMode::END_TURN;
+    }
 
     return fheroes2::GameMode::CANCEL;
 }
