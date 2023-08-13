@@ -399,9 +399,10 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
                 resourceFrom = Resource::getResourceTypeFromIconIndex( ii );
                 max_sell = fundsFrom.Get( resourceFrom );
 
-                if ( GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) ) {
-                    max_buy = Resource::GOLD == resourceTo ? max_sell * GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost )
-                                                           : max_sell / GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost );
+                const uint32_t tradeCost = GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost );
+
+                if ( tradeCost ) {
+                    max_buy = Resource::GOLD == resourceTo ? max_sell * tradeCost : max_sell / tradeCost;
                 }
 
                 count_sell = 0;
@@ -433,9 +434,10 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
             if ( le.MouseClickLeft( rect_to ) ) {
                 resourceTo = Resource::getResourceTypeFromIconIndex( ii );
 
-                if ( GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) ) {
-                    max_buy = Resource::GOLD == resourceTo ? max_sell * GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost )
-                                                           : max_sell / GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost );
+                const uint32_t tradeCost = GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost );
+
+                if ( tradeCost ) {
+                    max_buy = Resource::GOLD == resourceTo ? max_sell * tradeCost : max_sell / tradeCost;
                 }
 
                 count_sell = 0;

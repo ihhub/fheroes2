@@ -65,16 +65,17 @@ namespace fheroes2
             return 0;
         }
 
+        if ( resourceFrom == resourceTo || resourceFrom == Resource::UNKNOWN || resourceTo == Resource::UNKNOWN ) {
+            // The resource is not selected (Resource::UNKNOWN) or resources are the same.
+            // What are we trying to achieve?
+            return 0;
+        }
+
         if ( marketplaceCount > 9 ) {
             marketplaceCount = 9;
         }
 
         --marketplaceCount;
-
-        if ( resourceFrom == resourceTo ) {
-            // What are we trying to achieve?
-            return 0;
-        }
 
         switch ( resourceFrom ) {
         case Resource::GOLD: {
