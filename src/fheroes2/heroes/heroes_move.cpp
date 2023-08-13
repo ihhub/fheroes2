@@ -630,15 +630,14 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
     const auto makeStep = [this, nextStepIndex]( const bool performMovement ) {
         ApplyPenaltyMovement( path.GetFrontPenalty() );
 
-        // If we are accessing an object located on a tile that we cannot step on, then this should be the last step of the path
         if ( !performMovement ) {
+            // If we are accessing an object located on a tile that we cannot step on, then this should be the last step of the path
             assert( nextStepIndex == path.GetDestinationIndex() );
 
             path.PopFront();
             assert( path.empty() );
 
             Action( nextStepIndex );
-            SetMove( false );
 
             return;
         }
@@ -651,17 +650,12 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
         }
 
         ActionNewPosition( true );
+
         path.PopFront();
 
         // It is possible that the hero in the new position will be attacked and lose the battle before he can perform the action
         if ( isActive() ) {
             Action( nextStepIndex );
-
-            if ( nextStepIndex == path.GetDestinationIndex() ) {
-                assert( path.empty() );
-
-                SetMove( false );
-            }
         }
     };
 
@@ -687,7 +681,6 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
             return true;
         }
 
-        // play sound
         if ( GetKingdom().isControlHuman() ) {
             const fheroes2::Point & mp = GetCenter();
 
