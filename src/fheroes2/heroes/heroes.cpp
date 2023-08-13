@@ -54,7 +54,6 @@
 #include "luck.h"
 #include "m82.h"
 #include "maps.h"
-#include "maps_objects.h"
 #include "maps_tiles.h"
 #include "monster.h"
 #include "morale.h"
@@ -1724,15 +1723,6 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
             else {
                 Action( targets.front() );
             }
-        }
-    }
-
-    if ( isActive() && GetMapsObject() == MP2::OBJ_EVENT ) {
-        const MapEvent * event = world.GetMapEvent( GetCenter() );
-
-        if ( event && event->isAllow( GetColor() ) ) {
-            Action( GetIndex() );
-            SetMove( false );
         }
     }
 

@@ -218,7 +218,7 @@ namespace
             }
 
             // If the hero is standing in one place, then he does not pose a threat (as well as the castle in which he may be located)
-            if ( ( hero->Modes( Heroes::PATROL ) && hero->GetPatrolDistance() == 0 ) ) {
+            if ( hero->Modes( Heroes::PATROL ) && hero->GetPatrolDistance() == 0 ) {
                 return {};
             }
 
@@ -242,7 +242,7 @@ namespace
             }
 
             // If it's just a town where there's no way to build a castle, then there's no way to hire heroes who might pose a threat
-            if ( ( !castle->isCastle() && !castle->AllowBuyBuilding( BUILD_CASTLE ) ) ) {
+            if ( !castle->isCastle() && !castle->AllowBuyBuilding( BUILD_CASTLE ) ) {
                 return {};
             }
 
