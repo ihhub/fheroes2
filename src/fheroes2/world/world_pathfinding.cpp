@@ -184,15 +184,6 @@ namespace
             return tileArmy.GetStrength() * minimalAdvantage <= armyStrength;
         }
 
-        // Monsters can be defeated and passed through
-        if ( objectType == MP2::OBJ_MONSTER ) {
-            // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
-            static Army tileArmy;
-            tileArmy.setFromTile( world.GetTiles( tileIndex ) );
-
-            return tileArmy.GetStrength() * minimalAdvantage <= armyStrength;
-        }
-
         // AI may have the key for the barrier
         if ( objectType == MP2::OBJ_BARRIER ) {
             return world.GetKingdom( color ).IsVisitTravelersTent( getColorFromTile( tile ) );
@@ -203,8 +194,21 @@ namespace
             return true;
         }
 
-        // If none of the special cases apply, check if tile can be moved on
-        return !MP2::isNeedStayFront( objectType );
+        // If we can't step on this tile, then we can't pass it through
+        if ( MP2::isNeedStayFront( objectType ) ) {
+            return false;
+        }
+
+        // Tiles with monsters can be passed through if we manage to defeat the monsters
+        if ( MP2::isProtectedObject( objectType ) ) {
+            // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
+            static Army tileArmy;
+            tileArmy.setFromTile( world.GetTiles( tileIndex ) );
+
+            return tileArmy.GetStrength() * minimalAdvantage <= armyStrength;
+        }
+
+        return true;
     }
 
     bool isMovementAllowedForColor( const int from, const int direction, const int heroColor, const bool isSummonBoatSpellAvailable )
