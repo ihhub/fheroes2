@@ -864,7 +864,10 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
 
     // After recruiting a hero we reveal map in hero scout area.
     Scout( GetIndex() );
-    ScoutRadar();
+    if ( isControlHuman() ) {
+        // And the radar image map for human player.
+        ScoutRadar();
+    }
 
     return true;
 }
@@ -1129,8 +1132,10 @@ bool Heroes::PickupArtifact( const Artifact & art )
             return false;
         }
 
-        Scout( this->GetIndex() );
-        ScoutRadar();
+        Scout( GetIndex() );
+        if ( isControlHuman ) {
+            ScoutRadar();
+        }
 
         return true;
     };
@@ -1582,7 +1587,9 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
         // Scout the area around the hero if his Scouting skill was leveled and he belongs to any kingdom.
         if ( ( selected.Skill() == Skill::Secondary::SCOUTING ) && ( GetColor() != Color::NONE ) ) {
             Scout( GetIndex() );
-            ScoutRadar();
+            if ( isControlHuman ) {
+                ScoutRadar();
+            }
         }
     }
 }
