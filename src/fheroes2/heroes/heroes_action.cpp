@@ -3564,8 +3564,8 @@ void Heroes::Action( int tileIndex )
         SetModes( ACTION );
     }
 
-    // Most likely there will be some action, immediately center the map on the hero to avoid subsequent minor screen movements
-    if ( Modes( ACTION ) ) {
+    // Most likely there will be some action or event, immediately center the map on the hero to avoid subsequent minor screen movements
+    if ( Modes( ACTION ) || objectType == MP2::OBJ_EVENT ) {
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
         I.getGameArea().SetCenter( GetCenter() );
