@@ -1066,12 +1066,10 @@ namespace AI
         case MP2::OBJ_SEA_CHEST:
         case MP2::OBJ_TREASURE_CHEST: {
             const Artifact art = getArtifactFromTile( tile );
-            if ( art.isValid() ) {
+            if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
                 // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this object untouched for the human player.
-                if ( isFindArtifactVictoryConditionForHuman( art ) ) {
-                    assert( 0 );
-                    return -dangerousTaskPenalty;
-                }
+                assert( 0 );
+                return -dangerousTaskPenalty;
             }
 
             // This is an average gold amount you can get from a treasure chest or sea chest.
@@ -1733,12 +1731,10 @@ namespace AI
         case MP2::OBJ_SEA_CHEST:
         case MP2::OBJ_TREASURE_CHEST: {
             const Artifact art = getArtifactFromTile( tile );
-            if ( art.isValid() ) {
+            if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
                 // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this object untouched for the human player.
-                if ( isFindArtifactVictoryConditionForHuman( art ) ) {
-                    assert( 0 );
-                    return -dangerousTaskPenalty;
-                }
+                assert( 0 );
+                return -dangerousTaskPenalty;
             }
 
             return twoTiles;
