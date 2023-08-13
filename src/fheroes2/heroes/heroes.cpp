@@ -1132,7 +1132,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
         }
 
         Scout( GetIndex() );
-        if ( isControlHuman ) {
+        if ( isControlHuman() ) {
             ScoutRadar();
         }
 
@@ -1586,7 +1586,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
         // Scout the area around the hero if his Scouting skill was leveled and he belongs to any kingdom.
         if ( ( selected.Skill() == Skill::Secondary::SCOUTING ) && ( GetColor() != Color::NONE ) ) {
             Scout( GetIndex() );
-            if ( isControlHuman ) {
+            if ( isControlHuman() ) {
                 ScoutRadar();
             }
         }
