@@ -194,12 +194,12 @@ namespace
             return true;
         }
 
-        // If we can't step on this tile, then we can't pass it through
+        // If we can't step on this tile, then it cannot be passed through
         if ( MP2::isNeedStayFront( objectType ) ) {
             return false;
         }
 
-        // Tiles with monsters can be passed through if we manage to defeat the monsters
+        // If we can step on this tile, but it is protected by monsters, then it can be passed through if we manage to defeat the monsters
         if ( MP2::isProtectedObject( objectType ) ) {
             // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
             static Army tileArmy;
@@ -208,6 +208,7 @@ namespace
             return tileArmy.GetStrength() * minimalAdvantage <= armyStrength;
         }
 
+        // We can step on this tile and it is not protected by monsters, just go ahead
         return true;
     }
 
