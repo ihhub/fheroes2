@@ -3063,20 +3063,23 @@ msgstr "Er du sikker på at du vil slette denne fil:"
 msgid "Warning!"
 msgstr "Advarsel!"
 
+msgid "Accept the choice made."
+msgstr "Acceptér de trufne valg."
+
+msgid "Select Skill:"
+msgstr "Vælg evne:"
+
+msgid "Select Spell:"
+msgstr "Vælg magi:"
+
+msgid "Select Artifact:"
+msgstr "Vælg artefakt:"
+
 msgid "Select Monster:"
 msgstr "Vælg væsen:"
 
 msgid "Select Hero:"
 msgstr "Vælg helt:"
-
-msgid "Select Artifact:"
-msgstr "Vælg artefakt:"
-
-msgid "Select Spell:"
-msgstr "Vælg magi:"
-
-msgid "Select Skill:"
-msgstr "Vælg evne:"
 
 msgid "Map Type:\n"
 msgstr "Korttype:\n"
@@ -3218,9 +3221,6 @@ msgstr "Valgte beskrivelse"
 
 msgid "The description of the currently selected map."
 msgstr "Beskrivelsen til det valgte kort."
-
-msgid "Accept the choice made."
-msgstr "Acceptér de trufne valg."
 
 msgid "Jump"
 msgstr "Hop"

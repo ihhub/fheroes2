@@ -26,7 +26,6 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <functional>
 #include <iterator>
 #include <ostream>
 #include <random>
@@ -144,7 +143,7 @@ namespace
     {
         Battle::Unit * result = nullptr;
 
-        std::function<bool( const Battle::Unit * )> unitFilter = []( const Battle::Unit * unit ) { return unit->GetSpeed() > Speed::STANDING; };
+        const auto unitFilter = []( const Battle::Unit * unit ) { return unit->GetSpeed() > Speed::STANDING; };
 
         Battle::Units::iterator it1 = std::find_if( units1.begin(), units1.end(), unitFilter );
         Battle::Units::iterator it2 = std::find_if( units2.begin(), units2.end(), unitFilter );
@@ -556,7 +555,7 @@ void Battle::Arena::Turns()
                 // Castle towers act either during the turn of the first unit from the defending army, or at the end of
                 // the turn if none of the units from the defending army are able to act (for example, all are blinded)
                 if ( !towersActed && ( troop == nullptr || troop->GetColor() == _army2->GetColor() ) ) {
-                    auto towerAction = [this, &orderHistory, troop]( const size_t idx ) {
+                    const auto towerAction = [this, &orderHistory, troop]( const size_t idx ) {
                         assert( idx < std::size( _towers ) );
 
                         if ( _towers[idx] == nullptr || !_towers[idx]->isValid() ) {

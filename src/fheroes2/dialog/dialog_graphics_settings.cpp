@@ -146,7 +146,7 @@ namespace
         const fheroes2::Rect windowVSyncRoi( vSyncRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowSystemInfoRoi( systemInfoRoi + windowRoi.getPosition() );
 
-        auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi]() {
+        const auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi]() {
             drawResolution( windowResolutionRoi );
             drawMode( windowModeRoi );
             drawVSync( windowVSyncRoi );

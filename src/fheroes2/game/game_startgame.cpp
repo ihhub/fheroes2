@@ -73,7 +73,6 @@
 #include "mus.h"
 #include "players.h"
 #include "resource.h"
-#include "route.h"
 #include "screen.h"
 #include "settings.h"
 #include "tools.h"
@@ -315,7 +314,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
         case Dialog::DISMISS:
             AudioManager::PlaySound( M82::KILLFADE );
 
-            ( *it )->GetPath().Hide();
+            ( *it )->ShowPath( false );
 
             // Check if this dialog is not opened from the other dialog and we will be exiting to the Adventure map.
             if ( renderBackgroundDialog ) {
@@ -1354,6 +1353,8 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex )
 {
     Heroes * focusedHero = GetFocusHeroes();
+    assert( focusedHero == nullptr || !focusedHero->Modes( Heroes::ENABLEMOVE ) );
+
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
     switch ( Cursor::WithoutDistanceThemes( Cursor::Get().Themes() ) ) {
@@ -1410,74 +1411,60 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
             break;
         }
 
-        if ( focusedHero->isMoveEnabled() ) {
-            focusedHero->SetMove( false );
-        }
-        else {
-            ShowPathOrStartMoveHero( focusedHero, tileIndex );
-        }
+        ShowPathOrStartMoveHero( focusedHero, tileIndex );
 
         break;
     }
 
     default:
-        if ( focusedHero == nullptr ) {
-            break;
-        }
-
-        focusedHero->SetMove( false );
-
         break;
     }
 }
 
 void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex ) const
 {
-    Heroes * hero = GetFocusHeroes();
+#ifndef NDEBUG
+    const Heroes * focusedHero = GetFocusHeroes();
+#endif
+    assert( focusedHero == nullptr || !focusedHero->Modes( Heroes::ENABLEMOVE ) );
 
-    if ( hero && hero->isMoveEnabled() ) {
-        hero->SetMove( false );
-        Cursor::Get().SetThemes( GetCursorTileIndex( tileIndex ) );
+    const Settings & conf = Settings::Get();
+    const Maps::Tiles & tile = world.GetTiles( tileIndex );
+
+    DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
+
+    if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) ) {
+        Dialog::QuickInfo( tile );
     }
     else {
-        const Settings & conf = Settings::Get();
-        const Maps::Tiles & tile = world.GetTiles( tileIndex );
+        switch ( tile.GetObject() ) {
+        case MP2::OBJ_NON_ACTION_CASTLE:
+        case MP2::OBJ_CASTLE: {
+            const Castle * castle = world.getCastle( tile.GetCenter() );
 
-        DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
-
-        if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) ) {
-            Dialog::QuickInfo( tile );
-        }
-        else {
-            switch ( tile.GetObject() ) {
-            case MP2::OBJ_NON_ACTION_CASTLE:
-            case MP2::OBJ_CASTLE: {
-                const Castle * castle = world.getCastle( tile.GetCenter() );
-
-                if ( castle ) {
-                    Dialog::QuickInfo( *castle );
-                }
-                else {
-                    Dialog::QuickInfo( tile );
-                }
-
-                break;
+            if ( castle ) {
+                Dialog::QuickInfo( *castle );
             }
-
-            case MP2::OBJ_HEROES: {
-                const Heroes * heroes = tile.GetHeroes();
-
-                if ( heroes ) {
-                    Dialog::QuickInfo( *heroes );
-                }
-
-                break;
-            }
-
-            default:
+            else {
                 Dialog::QuickInfo( tile );
-                break;
             }
+
+            break;
+        }
+
+        case MP2::OBJ_HEROES: {
+            const Heroes * heroes = tile.GetHeroes();
+
+            if ( heroes ) {
+                Dialog::QuickInfo( *heroes );
+            }
+
+            break;
+        }
+
+        default:
+            Dialog::QuickInfo( tile );
+            break;
         }
     }
 }

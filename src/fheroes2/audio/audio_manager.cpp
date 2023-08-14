@@ -116,7 +116,7 @@ namespace
             return iter->second;
         }
 
-        auto tryMusicFileType = [musicTrackId]( MusicFileType & musicFileType ) -> std::string {
+        const auto tryMusicFileType = [musicTrackId]( MusicFileType & musicFileType ) -> std::string {
             std::string fullPath;
 
             std::string fileName = MUS::getFileName( musicTrackId, musicFileType.type, musicFileType.extension[0].c_str() );

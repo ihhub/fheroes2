@@ -85,7 +85,7 @@ namespace
 
 void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst /* = -1 */, int dir /* = -1 */ )
 {
-    auto calculateDst = []( const Unit & attackingUnit, const Unit & defendingUnit ) {
+    const auto calculateDst = []( const Unit & attackingUnit, const Unit & defendingUnit ) {
         // The defender's head cell is near the attacker's head cell
         if ( Board::isNearIndexes( attackingUnit.GetHeadIndex(), defendingUnit.GetHeadIndex() ) ) {
             return defendingUnit.GetHeadIndex();
@@ -106,7 +106,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
         return defendingUnit.GetHeadIndex();
     };
 
-    auto calculateDir = []( const Unit & attackingUnit, const int32_t attackDst ) -> int {
+    const auto calculateDir = []( const Unit & attackingUnit, const int32_t attackDst ) -> int {
         // The target cell of the attack is near the attacker's head cell
         if ( Board::isNearIndexes( attackingUnit.GetHeadIndex(), attackDst ) ) {
             return Board::GetDirection( attackingUnit.GetHeadIndex(), attackDst );
@@ -132,7 +132,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
 
     // This is a direct attack, update the direction for both the attacker and the defender
     if ( dir ) {
-        auto directionIsValidForAttack = []( const Unit & attackingUnit, const int32_t attackDst, const int attackDir ) {
+        const auto directionIsValidForAttack = []( const Unit & attackingUnit, const int32_t attackDst, const int attackDir ) {
             assert( attackingUnit.isWide() );
 
             const int32_t attackSrc = Board::GetIndexDirection( attackDst, Board::GetReflectDirection( attackDir ) );

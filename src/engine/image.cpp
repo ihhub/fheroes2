@@ -781,7 +781,7 @@ namespace fheroes2
 
         uint8_t * imageOut = out.image() + outStartOffset;
 
-        auto isTransparent = [inWidth, inHeight, transformIn]( const int32_t offsetX, const int32_t offsetY ) {
+        const auto isTransparent = [inWidth, inHeight, transformIn]( const int32_t offsetX, const int32_t offsetY ) {
             return ( ( offsetX < 0 ) || ( offsetY < 0 ) || ( offsetX >= inWidth ) || ( offsetY >= inHeight ) )
                    || ( transformIn && ( *( transformIn + offsetX + static_cast<ptrdiff_t>( offsetY ) * inWidth ) == 1 ) );
         };

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-08 16:49+0000\n"
+"POT-Creation-Date: 2023-08-12 09:48+0000\n"
 "PO-Revision-Date: 2023-06-28 10:32+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3171,20 +3171,23 @@ msgstr "Určite chceš vymazať súbor:"
 msgid "Warning!"
 msgstr "Pozor!"
 
+msgid "Accept the choice made."
+msgstr "Prijať uskutočnený výber."
+
+msgid "Select Skill:"
+msgstr "Zvoľ zručnosť:"
+
+msgid "Select Spell:"
+msgstr "Zvoľ kúzlo:"
+
+msgid "Select Artifact:"
+msgstr "Zvoľ artefakt:"
+
 msgid "Select Monster:"
 msgstr "Zvoľ bojovníka:"
 
 msgid "Select Hero:"
 msgstr "Zvoľ hrdinu:"
-
-msgid "Select Artifact:"
-msgstr "Zvoľ artefakt:"
-
-msgid "Select Spell:"
-msgstr "Zvoľ kúzlo:"
-
-msgid "Select Skill:"
-msgstr "Zvoľ zručnosť:"
 
 msgid "Map Type:\n"
 msgstr "Typ mapy:\n"
@@ -3323,9 +3326,6 @@ msgstr "Zvolený opis"
 
 msgid "The description of the currently selected map."
 msgstr "Opis aktuálne zvolenej mapy."
-
-msgid "Accept the choice made."
-msgstr "Prijať uskutočnený výber."
 
 msgid "Jump"
 msgstr "Skok"

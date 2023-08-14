@@ -266,7 +266,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
     const bool isDefaultScreenSize = display.isDefaultSize();
 
     if ( isAfterGameCompletion ) {
-        auto inputPlayerName = []( std::string & playerName ) {
+        const auto inputPlayerName = []( std::string & playerName ) {
             Dialog::InputString( _( "Your Name" ), playerName, std::string(), 15 );
             if ( playerName.empty() ) {
                 playerName = _( "Unknown Hero" );

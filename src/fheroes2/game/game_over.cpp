@@ -246,7 +246,7 @@ std::string GameOver::GetActualDescription( uint32_t cond )
         const int currentColor = currentPlayer->GetColor();
         const int friendColors = currentPlayer->GetFriends();
 
-        auto makeListOfPlayers = []( const int colors ) {
+        const auto makeListOfPlayers = []( const int colors ) {
             std::pair<std::string, size_t> result{ {}, 0 };
 
             for ( const int col : Colors( colors ) ) {
@@ -449,7 +449,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
         }
         // Check the regular win/loss conditions
         else {
-            auto checkWinLossConditions = []( const int color ) -> uint32_t {
+            const auto checkWinLossConditions = []( const int color ) -> uint32_t {
                 const Kingdom & kingdom = world.GetKingdom( color );
 
                 // Check the win/loss conditions for active players only
