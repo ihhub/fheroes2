@@ -965,7 +965,7 @@ void Heroes::calculatePath( int32_t dstIdx )
         return;
     }
 
-    path.setPath( world.getPath( *this, dstIdx ), dstIdx );
+    path.setPath( world.getPath( *this, dstIdx ) );
 
     if ( !path.isValidForMovement() ) {
         path.Reset();
@@ -1115,6 +1115,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
                                                 : fheroes2::showStandardTextMessage( art.GetName(),
                                                                                      _( "You cannot pick up this artifact, you already have a full load!" ), Dialog::OK );
         }
+
         return false;
     }
 
@@ -1122,28 +1123,31 @@ bool Heroes::PickupArtifact( const Artifact & art )
 
     if ( isControlHuman() ) {
         std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
+    }
 
-        // The function to check the artifact for scout area bonus and returns true if it has and the area around hero was scouted.
-        const auto scout = [this]( const int32_t artifactID ) {
-            const std::vector<fheroes2::ArtifactBonus> bonuses = fheroes2::getArtifactData( artifactID ).bonuses;
-            if ( std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) != bonuses.end() ) {
-                Scout( this->GetIndex() );
-                ScoutRadar();
-                return true;
-            }
+    const auto scout = [this]( const int32_t artifactID ) {
+        const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifactID ).bonuses;
+        if ( std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) == bonuses.end() ) {
             return false;
-        };
-
-        // If the scout area bonus is increased with the new artifact we update the radar.
-        if ( scout( art.GetID() ) ) {
-            return true;
         }
 
-        // If there were artifacts assembled we check them for scout area bonus.
-        for ( const ArtifactSetData & assembledArtifact : assembledArtifacts ) {
-            if ( scout( assembledArtifact._assembledArtifactID ) ) {
-                return true;
-            }
+        Scout( GetIndex() );
+        if ( isControlHuman() ) {
+            ScoutRadar();
+        }
+
+        return true;
+    };
+
+    // Check the picked up artifact for a bonus to the scouting area.
+    if ( scout( art.GetID() ) ) {
+        return true;
+    }
+
+    // If there were artifacts assembled, check them for a bonus to the scouting area.
+    for ( const ArtifactSetData & assembledArtifact : assembledArtifacts ) {
+        if ( scout( assembledArtifact._assembledArtifactID ) ) {
+            return true;
         }
     }
 
@@ -1582,7 +1586,9 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
         // Scout the area around the hero if his Scouting skill was leveled and he belongs to any kingdom.
         if ( ( selected.Skill() == Skill::Secondary::SCOUTING ) && ( GetColor() != Color::NONE ) ) {
             Scout( GetIndex() );
-            ScoutRadar();
+            if ( isControlHuman() ) {
+                ScoutRadar();
+            }
         }
     }
 }
@@ -1656,6 +1662,7 @@ void Heroes::Dismiss( int reason )
 
     modes = 0;
 
+    path.Hide();
     path.Reset();
 
     SetMove( false );
@@ -1704,7 +1711,7 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
 
         if ( !targets.empty() ) {
             SetMove( false );
-            GetPath().Hide();
+            ShowPath( false );
 
             // first fight the monsters on the destination tile (if any)
             MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinationIndex() );
@@ -1725,17 +1732,17 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
     ResetModes( VISIONS );
 }
 
-// Move hero to a new position. This function applies no action and no penalty
 void Heroes::Move2Dest( const int32_t dstIndex )
 {
     const int32_t currentIndex = GetIndex();
 
-    if ( dstIndex != currentIndex ) {
-        world.GetTiles( currentIndex ).SetHeroes( nullptr );
-        SetIndex( dstIndex );
-        Scout( dstIndex );
-        world.GetTiles( dstIndex ).SetHeroes( this );
+    if ( dstIndex == currentIndex ) {
+        return;
     }
+
+    world.GetTiles( currentIndex ).SetHeroes( nullptr );
+    SetIndex( dstIndex );
+    world.GetTiles( dstIndex ).SetHeroes( this );
 }
 
 const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
