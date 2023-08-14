@@ -1424,7 +1424,7 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
 void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex ) const
 {
 #ifndef NDEBUG
-    Heroes * focusedHero = GetFocusHeroes();
+    const Heroes * focusedHero = GetFocusHeroes();
 #endif
     assert( focusedHero == nullptr || !focusedHero->Modes( Heroes::ENABLEMOVE ) );
 
