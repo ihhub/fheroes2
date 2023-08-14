@@ -196,7 +196,7 @@ void Interface::AdventureMap::EventCastSpell()
 fheroes2::GameMode Interface::AdventureMap::EventEndTurn() const
 {
 #ifndef NDEBUG
-    Heroes * focusedHero = GetFocusHeroes();
+    const Heroes * focusedHero = GetFocusHeroes();
 #endif
     assert( focusedHero == nullptr || !focusedHero->Modes( Heroes::ENABLEMOVE ) );
 
