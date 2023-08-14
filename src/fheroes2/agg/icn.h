@@ -1074,6 +1074,7 @@ namespace ICN
         BUTTON_VIEWWORLD_EXIT_EVIL,
 
         GAME_OPTION_ICON,
+        SCREEN_SCROLL_ICON,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
