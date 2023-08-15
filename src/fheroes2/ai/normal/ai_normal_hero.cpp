@@ -2325,7 +2325,7 @@ namespace AI
         updateMapActionObjectCache( nextTileIdx );
     }
 
-    bool Normal::isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero )
+    bool Normal::isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero /* = false */ )
     {
         return HeroesValidObject( hero, hero.GetArmy().GetStrength(), index, _pathfinder, *this, 0, underHero );
     }
