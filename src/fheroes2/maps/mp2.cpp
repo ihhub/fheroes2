@@ -729,21 +729,13 @@ bool MP2::isArtifactObject( const MapObjectType objectType )
     return false;
 }
 
-bool MP2::isProtectedObject( const MapObjectType objectType )
+bool MP2::isBattleMandatoryifObjectIsProtected( const MapObjectType objectType )
 {
     // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
-    case OBJ_ABANDONED_MINE:
+    // If the artifact is guarded by rogues, it is impossible to refuse a fight.
     case OBJ_ARTIFACT:
-    case OBJ_CITY_OF_DEAD:
-    case OBJ_DAEMON_CAVE:
-    case OBJ_DERELICT_SHIP:
-    case OBJ_DRAGON_CITY:
-    case OBJ_GRAVEYARD:
     case OBJ_MONSTER:
-    case OBJ_PYRAMID:
-    case OBJ_SHIPWRECK:
-    case OBJ_TROLL_BRIDGE:
         return true;
     default:
         break;

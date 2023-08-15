@@ -103,6 +103,14 @@ namespace
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const MP2::MapObjectType objectType = tile.GetObject();
 
+        const auto evaluateTileArmyStrength = [armyStrength, minimalAdvantage, &tile]() {
+            // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
+            static Army tileArmy;
+            tileArmy.setFromTile( tile );
+
+            return tileArmy.GetStrength() * minimalAdvantage <= armyStrength;
+        };
+
         // Enemy heroes can be defeated and passed through
         if ( objectType == MP2::OBJ_HEROES ) {
             const Heroes * otherHero = tile.GetHeroes();
@@ -177,20 +185,12 @@ namespace
             }
 
             // Artifact may be guarded, check the power of guardians.
-            // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations.
-            static Army tileArmy;
-            tileArmy.setFromTile( world.GetTiles( tileIndex ) );
-
-            return tileArmy.GetStrength() * minimalAdvantage <= armyStrength;
+            return evaluateTileArmyStrength();
         }
 
         // Monsters can be defeated and passed through
         if ( objectType == MP2::OBJ_MONSTER ) {
-            // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
-            static Army tileArmy;
-            tileArmy.setFromTile( world.GetTiles( tileIndex ) );
-
-            return tileArmy.GetStrength() * minimalAdvantage <= armyStrength;
+            return evaluateTileArmyStrength();
         }
 
         // AI may have the key for the barrier
@@ -203,8 +203,19 @@ namespace
             return true;
         }
 
-        // If none of the special cases apply, check if tile can be moved on
-        return !MP2::isNeedStayFront( objectType );
+        // If we can't step on this tile, then it cannot be passed through
+        if ( MP2::isNeedStayFront( objectType ) ) {
+            return false;
+        }
+
+        // If we can step on this tile, but it is protected by monsters and it is impossible to refuse a fight, then it
+        // can be passed through if we manage to defeat the monsters
+        if ( MP2::isBattleMandatoryifObjectIsProtected( objectType ) ) {
+            return evaluateTileArmyStrength();
+        }
+
+        // We can step on this tile and it is either not protected by monsters, or we can refuse a fight, just go ahead
+        return true;
     }
 
     bool isMovementAllowedForColor( const int from, const int direction, const int heroColor, const bool isSummonBoatSpellAvailable )

@@ -490,7 +490,8 @@ namespace MP2
     bool isCaptureObject( const MapObjectType objectType );
     bool isPickupObject( const MapObjectType objectType );
     bool isArtifactObject( const MapObjectType objectType );
-    bool isProtectedObject( const MapObjectType objectType );
+    // Returns true if it is impossible to refuse a fight when visiting a protected object of this type.
+    bool isBattleMandatoryifObjectIsProtected( const MapObjectType objectType );
     // Returns true if this object can be safely visited by AI for fog discovery purposes.
     bool isSafeForFogDiscoveryObject( const MapObjectType objectType );
 
