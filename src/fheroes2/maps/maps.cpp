@@ -193,6 +193,35 @@ int32_t Maps::GetDirectionIndex( int32_t from, int vector )
     return -1;
 }
 
+fheroes2::Point Maps::getDirectionPoint( const fheroes2::Point & from, int vector )
+{
+    switch ( vector ) {
+    case Direction::TOP:
+        return { from.x, from.y - 1 };
+    case Direction::TOP_RIGHT:
+        return { from.x + 1, from.y - 1 };
+    case Direction::RIGHT:
+        return { from.x + 1, from.y };
+    case Direction::BOTTOM_RIGHT:
+        return { from.x + 1, from.y + 1 };
+    case Direction::BOTTOM:
+        return { from.x, from.y + 1 };
+    case Direction::BOTTOM_LEFT:
+        return { from.x - 1, from.y + 1 };
+    case Direction::LEFT:
+        return { from.x - 1, from.y };
+    case Direction::TOP_LEFT:
+        return { from.x - 1, from.y - 1 };
+    case Direction::CENTER:
+        return from;
+    default:
+        break;
+    }
+
+    // This is equal to index = -1.
+    return { -1, 0 };
+}
+
 // check bound
 bool Maps::isValidDirection( int32_t from, int vector )
 {

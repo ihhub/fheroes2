@@ -54,6 +54,7 @@ namespace Maps
 
     int GetDirection( int from, int to );
     int32_t GetDirectionIndex( int32_t from, int vector );
+    fheroes2::Point getDirectionPoint( const fheroes2::Point & from, int vector );
     bool isValidDirection( int32_t from, int vector );
 
     bool isValidAbsIndex( const int32_t index );

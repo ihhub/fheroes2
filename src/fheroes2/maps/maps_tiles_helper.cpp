@@ -240,8 +240,8 @@ namespace Maps
             return;
         }
 
-        const fheroes2::Point startTileOffset = Maps::GetPoint( startTileId );
-        const fheroes2::Point endTileOffset = Maps::GetPoint( endTileId );
+        const fheroes2::Point startTileOffset = GetPoint( startTileId );
+        const fheroes2::Point endTileOffset = GetPoint( endTileId );
 
         const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
         const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
@@ -250,15 +250,41 @@ namespace Maps
 
         for ( int32_t y = startY; y <= endY; ++y ) {
             for ( int32_t x = startX; x <= endX; ++x ) {
-                Maps::Tiles & tile = world.GetTiles( x, y );
+                Tiles & tile = world.GetTiles( x, y );
                 const uint16_t terainImageIndex
-                    = ( Rand::Get( 6 ) == 0 ) ? Maps::Ground::getRandomTerrainSpecialImageIndex( groundId ) : Maps::Ground::getRandomTerrainImageIndex( groundId );
+                    = ( Rand::Get( 6 ) == 0 ) ? Ground::getRandomTerrainSpecialImageIndex( groundId ) : Ground::getRandomTerrainImageIndex( groundId );
 
                 // In original editor these tiles are never flipped.
                 // TODO: Decide and make the logic if some tiles can be flipped horizontally and/or vertically.
                 tile.setTerrain( terainImageIndex, false, false );
             }
         }
+    }
+
+    int getGroundDirecton( const int32_t centerTileIndex, const int groundId )
+    {
+        if ( centerTileIndex < 0 || centerTileIndex >= world.w() * world.h() ) {
+            // Center tile is out of the map borders.
+            return Direction::UNKNOWN;
+        }
+
+        const fheroes2::Point centerTile = GetPoint( centerTileIndex );
+        const fheroes2::Point lastWorldTile = { world.w() - 1, world.h() - 1 };
+
+        int around = ( world.GetTiles( centerTileIndex ).GetGround() == groundId ) ? Direction::CENTER : 0;
+
+        for ( const int & direction : Direction::All() ) {
+            // We do not let 'tilePosition' to get out of the world borders, meaning that beyond the borders is the same tile type as the nearby one on the map.
+            fheroes2::Point tilePosition = getDirectionPoint( centerTile, direction );
+            tilePosition.x = std::min( lastWorldTile.x, std::max( 0, tilePosition.x ) );
+            tilePosition.y = std::min( lastWorldTile.y, std::max( 0, tilePosition.y ) );
+
+            if ( world.GetTiles( tilePosition.x, tilePosition.y ).GetGround() == groundId ) {
+                around |= direction;
+            }
+        }
+
+        return around;
     }
 
     int32_t getMineSpellIdFromTile( const Tiles & tile )
