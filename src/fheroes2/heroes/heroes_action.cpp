@@ -585,7 +585,6 @@ namespace
 
     void ActionToBoat( Heroes & hero, int32_t dst_index )
     {
-        // If the hero is already on a ship do nothing
         if ( hero.isShipMaster() )
             return;
 
@@ -597,10 +596,13 @@ namespace
         const int boatDirection = world.GetTiles( dst_index ).getBoatDirection();
 
         AudioManager::PlaySound( M82::KILLFADE );
-        hero.GetPath().Hide();
+        hero.ShowPath( false );
         hero.FadeOut( offset );
-        hero.ResetMovePoints();
+
+        hero.Scout( dst_index );
         hero.Move2Dest( dst_index );
+        hero.ResetMovePoints();
+        hero.GetPath().Reset();
 
         // Update the radar map image before changing the direction of the hero.
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
@@ -612,7 +614,8 @@ namespace
         hero.SetMapsObject( MP2::OBJ_NONE );
         world.GetTiles( dst_index ).resetObjectSprite();
         hero.SetShipMaster( true );
-        hero.GetPath().Reset();
+
+        hero.ShowPath( true );
 
         // Boat is no longer empty so we reset color to default
         world.GetTiles( dst_index ).resetBoatOwnerColor();
@@ -627,22 +630,29 @@ namespace
 
         const int fromIndex = hero.GetIndex();
         Maps::Tiles & from = world.GetTiles( fromIndex );
+
+        // Calculate the offset before making the action.
         const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
 
-        hero.ResetMovePoints();
+        hero.ShowPath( false );
+
+        hero.Scout( dst_index );
         hero.Move2Dest( dst_index );
+        hero.ResetMovePoints();
+        hero.GetPath().Reset();
+
         from.setBoat( Maps::GetDirection( fromIndex, dst_index ), hero.GetColor() );
         hero.SetShipMaster( false );
+
         AudioManager::PlaySound( M82::KILLFADE );
-        hero.GetPath().Hide();
         hero.FadeIn( offset );
+        hero.ShowPath( true );
 
         // Clear hero position marker from the boat and scout the area on radar after disembarking.
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
         I.getRadar().SetRenderArea( hero.GetScoutRoi() );
         I.setRedraw( Interface::REDRAW_RADAR );
 
-        hero.GetPath().Reset();
         hero.ActionNewPosition( true );
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
@@ -1840,23 +1850,23 @@ namespace
     void ActionToTeleports( Heroes & hero, int32_t index_from )
     {
         const int32_t index_to = world.NextTeleport( index_from );
-
         if ( index_from == index_to ) {
             AudioManager::PlaySound( M82::RSBRYFZL );
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "action unsuccessfully..." )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, hero.GetName() << " has nowhere to go through stone liths." )
             return;
         }
 
         assert( world.GetTiles( index_to ).GetObject() != MP2::OBJ_HEROES );
 
         AudioManager::PlaySound( M82::KILLFADE );
-        hero.GetPath().Hide();
+        hero.ShowPath( false );
         hero.FadeOut();
 
         const fheroes2::Point fromPoint = Maps::GetPoint( index_from );
 
-        // No action and no penalty
+        hero.Scout( index_to );
         hero.Move2Dest( index_to );
+        hero.GetPath().Reset();
 
         // Clear the previous hero position
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
@@ -1864,16 +1874,14 @@ namespace
         I.redraw( Interface::REDRAW_RADAR );
 
         I.getGameArea().SetCenter( hero.GetCenter() );
+
         I.getRadar().SetRenderArea( hero.GetScoutRoi() );
         I.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
-        hero.GetPath().Hide();
         hero.FadeIn();
+        hero.ShowPath( true );
 
-        hero.GetPath().Reset();
-        // Path::Reset() puts the hero's path into the hidden mode, we have to make it visible again
-        hero.GetPath().Show();
         hero.ActionNewPosition( false );
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
@@ -1882,21 +1890,23 @@ namespace
     void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     {
         const int32_t index_to = world.NextWhirlpool( index_from );
-
         if ( index_from == index_to ) {
             AudioManager::PlaySound( M82::RSBRYFZL );
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "action unsuccessfully..." )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, hero.GetName() << " has nowhere to go through the whirlpool." )
             return;
         }
 
         AudioManager::PlaySound( M82::KILLFADE );
-        hero.GetPath().Hide();
+        hero.ShowPath( false );
         hero.FadeOut();
 
         const fheroes2::Point fromPoint = Maps::GetPoint( index_from );
 
-        // No action and no penalty
+        hero.Scout( index_to );
         hero.Move2Dest( index_to );
+        hero.GetPath().Reset();
+
+        WhirlpoolTroopLoseEffect( hero );
 
         // Clear the previous hero position
         Interface::AdventureMap & I = Interface::AdventureMap::Get();
@@ -1904,18 +1914,14 @@ namespace
         I.redraw( Interface::REDRAW_RADAR );
 
         I.getGameArea().SetCenter( hero.GetCenter() );
+
         I.getRadar().SetRenderArea( hero.GetScoutRoi() );
         I.setRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
-        hero.GetPath().Hide();
         hero.FadeIn();
+        hero.ShowPath( true );
 
-        WhirlpoolTroopLoseEffect( hero );
-
-        hero.GetPath().Reset();
-        // Path::Reset() puts the hero's path into the hidden mode, we have to make it visible again
-        hero.GetPath().Show();
         hero.ActionNewPosition( false );
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )

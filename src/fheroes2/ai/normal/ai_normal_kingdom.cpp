@@ -208,6 +208,7 @@ namespace
 
         if ( object == MP2::OBJ_HEROES ) {
             const Heroes * hero = tile.GetHeroes();
+            // TODO: this function can be called when the game world is not fully initialized yet
             if ( hero == nullptr ) {
                 return {};
             }
@@ -230,6 +231,7 @@ namespace
 
         if ( object == MP2::OBJ_CASTLE ) {
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
+            // TODO: this function can be called when the game world is not fully initialized yet
             if ( castle == nullptr ) {
                 return {};
             }

@@ -257,6 +257,7 @@ namespace
             hero.FadeOut();
         }
 
+        hero.Scout( targetIndex );
         hero.Move2Dest( targetIndex );
         hero.SpellCasted( spellToUse );
         hero.GetPath().Reset();
@@ -836,6 +837,7 @@ namespace
             hero.FadeOut();
         }
 
+        hero.Scout( indexTo );
         hero.Move2Dest( indexTo );
         hero.GetPath().Reset();
 
@@ -900,6 +902,7 @@ namespace
             hero.FadeOut();
         }
 
+        hero.Scout( indexTo );
         hero.Move2Dest( indexTo );
         hero.GetPath().Reset();
 
@@ -1505,21 +1508,26 @@ namespace
 
         const fheroes2::Point offset( Maps::GetPoint( dst_index ) - hero.GetCenter() );
 
+        // Get the direction of the boat so that the direction of the hero can be set to it after boarding
+        const int boatDirection = world.GetTiles( dst_index ).getBoatDirection();
+
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeOut( offset );
         }
 
-        hero.setDirection( world.GetTiles( dst_index ).getBoatDirection() );
-        hero.ResetMovePoints();
+        hero.Scout( dst_index );
         hero.Move2Dest( dst_index );
+        hero.ResetMovePoints();
+        hero.GetPath().Reset();
+
+        // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
+        hero.setDirection( boatDirection );
         hero.SetMapsObject( MP2::OBJ_NONE );
         world.GetTiles( dst_index ).resetObjectSprite();
         hero.SetShipMaster( true );
-        hero.GetPath().Reset();
 
-        AI::Get().HeroesClearTask( hero );
-
+        // Boat is no longer empty so we reset color to default
         world.GetTiles( dst_index ).resetBoatOwnerColor();
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
@@ -1537,11 +1545,13 @@ namespace
         const fheroes2::Point prevPos = hero.GetCenter();
         const fheroes2::Point offset( Maps::GetPoint( dst_index ) - prevPos );
 
-        hero.ResetMovePoints();
+        hero.Scout( dst_index );
         hero.Move2Dest( dst_index );
+        hero.ResetMovePoints();
+        hero.GetPath().Reset();
+
         from.setBoat( Maps::GetDirection( fromIndex, dst_index ), hero.GetColor() );
         hero.SetShipMaster( false );
-        hero.GetPath().Reset();
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( prevPos );
@@ -1549,8 +1559,6 @@ namespace
         }
 
         hero.ActionNewPosition( true );
-
-        AI::Get().HeroesClearTask( hero );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
     }
@@ -2060,6 +2068,7 @@ namespace AI
             hero.FadeOut();
         }
 
+        hero.Scout( targetIndex );
         hero.Move2Dest( targetIndex );
         hero.SpellCasted( dimensionDoor );
         hero.GetPath().Reset();
