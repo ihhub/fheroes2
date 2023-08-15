@@ -118,11 +118,6 @@ namespace AI
         // Do nothing.
     }
 
-    void Base::HeroesClearTask( const Heroes & )
-    {
-        // Do nothing.
-    }
-
     std::string Base::HeroesString( const Heroes & )
     {
         return std::string();

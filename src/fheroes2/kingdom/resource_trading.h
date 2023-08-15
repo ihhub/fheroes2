@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,22 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2EDITOR_DIALOGS_H
-#define H2EDITOR_DIALOGS_H
+#pragma once
 
-#include "artifact.h"
-#include "heroes.h"
-#include "monster.h"
-#include "skill.h"
-#include "spell.h"
+#include <cstdint>
 
-namespace Dialog
+namespace fheroes2
 {
-    Monster selectMonster( const int monsterId = Monster::UNKNOWN );
-    int selectHeroes( const int heroId = Heroes::UNKNOWN );
-    Artifact selectArtifact( const int artifactId = Artifact::UNKNOWN );
-    Spell selectSpell( const int spellId = Spell::NONE );
-    Skill::Secondary selectSecondarySkill( const int skillId = Skill::Secondary::UNKNOWN );
+    uint32_t getTradeCost( uint32_t marketplaceCount, const int resourceFrom, const int resourceTo );
 }
-
-#endif

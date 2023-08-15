@@ -98,7 +98,6 @@ namespace AI
         virtual void HeroesPostLoad( Heroes & hero );
         virtual void HeroesActionComplete( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType );
         virtual void HeroesActionNewPosition( Heroes & hero );
-        virtual void HeroesClearTask( const Heroes & hero );
         virtual void HeroesLevelUp( Heroes & hero );
         virtual std::string HeroesString( const Heroes & hero );
 
@@ -119,6 +118,8 @@ namespace AI
         virtual void battleBegins() = 0;
 
         virtual ~Base() = default;
+
+        virtual void tradingPostVisitEvent( Kingdom & kingdom ) = 0;
 
     protected:
         int _personality = NONE;

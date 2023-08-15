@@ -63,9 +63,9 @@ void Interface::AdventureMap::SetFocus( Heroes * hero, const bool retainScrollBa
 
     Focus & focus = player->GetFocus();
 
-    if ( focus.GetHeroes() && focus.GetHeroes() != hero ) {
-        focus.GetHeroes()->SetMove( false );
-        focus.GetHeroes()->ShowPath( false );
+    Heroes * focusedHero = focus.GetHeroes();
+    if ( focusedHero && focusedHero != hero ) {
+        focusedHero->ShowPath( false );
     }
 
     // Heroes::calculatePath() uses PlayerWorldPathfinder and should not be used for an AI-controlled hero
@@ -113,9 +113,9 @@ void Interface::AdventureMap::SetFocus( Castle * castle )
 
     Focus & focus = player->GetFocus();
 
-    if ( focus.GetHeroes() ) {
-        focus.GetHeroes()->SetMove( false );
-        focus.GetHeroes()->ShowPath( false );
+    Heroes * focusedHero = focus.GetHeroes();
+    if ( focusedHero ) {
+        focusedHero->ShowPath( false );
     }
 
     focus.Set( castle );

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-08 16:49+0000\n"
+"POT-Creation-Date: 2023-08-12 09:48+0000\n"
 "PO-Revision-Date: 2023-08-05 14:31+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3058,20 +3058,23 @@ msgstr "Är du säker på att du vill radera filen:"
 msgid "Warning!"
 msgstr "Varning!"
 
+msgid "Accept the choice made."
+msgstr "Acceptera alla ändringar."
+
+msgid "Select Skill:"
+msgstr "Välj Förmåga:"
+
+msgid "Select Spell:"
+msgstr "Välj Besvärjelse"
+
+msgid "Select Artifact:"
+msgstr "Välj Artefakt:"
+
 msgid "Select Monster:"
 msgstr "Välj Monster:"
 
 msgid "Select Hero:"
 msgstr "Välj Hjälte:"
-
-msgid "Select Artifact:"
-msgstr "Välj Artefakt:"
-
-msgid "Select Spell:"
-msgstr "Välj Besvärjelse"
-
-msgid "Select Skill:"
-msgstr "Välj Förmåga:"
 
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
@@ -3211,9 +3214,6 @@ msgstr "Vald beskrivning"
 
 msgid "The description of the currently selected map."
 msgstr "Den valda kartans beskrivning."
-
-msgid "Accept the choice made."
-msgstr "Acceptera alla ändringar."
 
 msgid "Jump"
 msgstr "Hoppa"

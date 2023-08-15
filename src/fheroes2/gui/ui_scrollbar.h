@@ -32,8 +32,14 @@ namespace fheroes2
     {
     public:
         Scrollbar();
+        Scrollbar( const Scrollbar & ) = delete;
+        Scrollbar & operator=( const Scrollbar & ) = delete;
 
-        ~Scrollbar() override = default;
+        ~Scrollbar() override
+        {
+            // We need to reset the ImageRestorer for the scroll bar to avoid its restoration by destructor and possible race with the dialog window restorer.
+            _resetRestorer();
+        }
 
         // The original resources do not support proper scrollbar slider scaling. Use generateScrollbarSlider() function to generate needed image.
         void setImage( const Image & image );

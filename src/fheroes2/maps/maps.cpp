@@ -490,7 +490,7 @@ Maps::Indexes Maps::getMonstersProtectingTile( const int32_t tileIndex, const bo
     const int x = tileIndex % width;
     const int y = tileIndex / width;
 
-    auto isProtectedBy = [tileIndex, &tile]( const int32_t monsterTileIndex ) {
+    const auto isProtectedBy = [tileIndex, &tile]( const int32_t monsterTileIndex ) {
         const Maps::Tiles & monsterTile = world.GetTiles( monsterTileIndex );
 
         if ( monsterTile.GetObject() != MP2::OBJ_MONSTER || tile.isWater() != monsterTile.isWater() ) {
@@ -523,7 +523,7 @@ Maps::Indexes Maps::getMonstersProtectingTile( const int32_t tileIndex, const bo
         return false;
     };
 
-    auto validateAndAdd = [&result, &isProtectedBy]( const int monsterTileIndex ) {
+    const auto validateAndAdd = [&result, &isProtectedBy]( const int monsterTileIndex ) {
         if ( isProtectedBy( monsterTileIndex ) ) {
             result.push_back( monsterTileIndex );
         }

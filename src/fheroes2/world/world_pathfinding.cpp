@@ -678,7 +678,7 @@ void AIWorldPathfinder::processWorldMap()
     std::vector<int> nodesToExplore;
     nodesToExplore.push_back( _pathStart );
 
-    auto processTownPortal = [this, &nodesToExplore]( const Spell & spell, const int32_t castleIndex ) {
+    const auto processTownPortal = [this, &nodesToExplore]( const Spell & spell, const int32_t castleIndex ) {
         assert( castleIndex >= 0 && static_cast<size_t>( castleIndex ) < _cache.size() );
         assert( castleIndex != _pathStart && _cache[castleIndex]._from == -1 );
 
@@ -955,7 +955,7 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
     const int32_t heroIndex = hero.GetIndex();
     const int heroColor = hero.GetColor();
 
-    auto isReachableDirection = [heroIndex, heroColor]( const int direction ) {
+    const auto isReachableDirection = [heroIndex, heroColor]( const int direction ) {
         if ( !Maps::isValidDirection( heroIndex, direction ) ) {
             return false;
         }
@@ -1122,7 +1122,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
     const Directions & directions = Direction::All();
 
     std::set<int> uniqueIndices;
-    auto validateAndAdd = [&kingdom, &result, &uniqueIndices]( int index, const MP2::MapObjectType objectType ) {
+    const auto validateAndAdd = [&kingdom, &result, &uniqueIndices]( int index, const MP2::MapObjectType objectType ) {
         // std::set insert returns a pair, second value is true if it was unique
         if ( uniqueIndices.insert( index ).second && kingdom.isValidKingdomObject( world.GetTiles( index ), objectType ) ) {
             result.emplace_back( index, objectType );

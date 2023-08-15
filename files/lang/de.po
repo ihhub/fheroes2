@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-08 16:49+0000\n"
+"POT-Creation-Date: 2023-08-12 09:48+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3238,20 +3238,23 @@ msgstr "Sind Sie sicher, dass Sie die Datei löschen möchten:"
 msgid "Warning!"
 msgstr "Achtung!"
 
+msgid "Accept the choice made."
+msgstr "Akzeptieren Sie die getroffene Wahl."
+
+msgid "Select Skill:"
+msgstr "Fähigkeit auswählen:"
+
+msgid "Select Spell:"
+msgstr "Zauberspruch auswählen:"
+
+msgid "Select Artifact:"
+msgstr "Artefakt auswählen:"
+
 msgid "Select Monster:"
 msgstr "Monster auswählen:"
 
 msgid "Select Hero:"
 msgstr "Held auswählen:"
-
-msgid "Select Artifact:"
-msgstr "Artefakt auswählen:"
-
-msgid "Select Spell:"
-msgstr "Zauberspruch auswählen:"
-
-msgid "Select Skill:"
-msgstr "Fähigkeit auswählen:"
 
 msgid "Map Type:\n"
 msgstr "Kartentyp:\n"
@@ -3394,9 +3397,6 @@ msgstr "Ausgewählte Beschreibung"
 
 msgid "The description of the currently selected map."
 msgstr "Die Beschreibung der aktuell ausgewählten Karte."
-
-msgid "Accept the choice made."
-msgstr "Akzeptieren Sie die getroffene Wahl."
 
 msgid "Jump"
 msgstr "Sprung"

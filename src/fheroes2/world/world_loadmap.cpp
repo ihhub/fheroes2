@@ -679,7 +679,7 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
     const MapsTiles::iterator ultArtTileIter
         = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isSameMainObject( MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ); } );
 
-    auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
+    const auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
         const int32_t x = idx % width;
         if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset ) {
             return false;

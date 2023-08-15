@@ -512,7 +512,7 @@ namespace AI
             const bool attackerIgnoresCover
                 = arena.GetForce1().GetCommander()->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY );
 
-            auto getTowerStrength = []( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetStrength() : 0; };
+            const auto getTowerStrength = []( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetStrength() : 0; };
 
             double towerStr = getTowerStrength( Arena::GetTower( TowerType::TWR_CENTER ) );
             towerStr += getTowerStrength( Arena::GetTower( TowerType::TWR_LEFT ) );
@@ -774,14 +774,18 @@ namespace AI
 
         const double defenceDistanceModifier = _myArmyStrength / STRENGTH_DISTANCE_FACTOR;
 
+        const auto isDefensivePosition = [this, &currentUnit]( const int32_t index ) {
+            return ( !_defendingCastle && Board::DistanceFromOriginX( index, currentUnit.isReflect() ) <= ARENAW / 2 )
+                   || ( _defendingCastle && Board::isCastleIndex( index ) );
+        };
+
         // 1. Check if there's a target within our half of the battlefield
         MeleeAttackOutcome attackOption;
         for ( const Unit * enemy : enemies ) {
             const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy, *_randomGenerator );
 
             // Allow to move only within our half of the battlefield. If in castle make sure to stay inside.
-            if ( ( !_defendingCastle && Board::DistanceFromOriginX( outcome.fromIndex, currentUnit.isReflect() ) > ARENAW / 2 )
-                 || ( _defendingCastle && !Board::isCastleIndex( outcome.fromIndex ) ) )
+            if ( !isDefensivePosition( outcome.fromIndex ) )
                 continue;
 
             if ( IsOutcomeImproved( outcome, attackOption ) ) {
@@ -844,6 +848,11 @@ namespace AI
         }
         else if ( target.cell != -1 ) {
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " protecting friendly archer, moving to " << target.cell )
+        }
+        else if ( !isDefensivePosition( currentUnit.GetHeadIndex() ) ) {
+            // When there's nothing to do on our half; we're likely dealing with enemy's archers
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " on the enemy half of the battlefield; switch to offense" )
+            target = meleeUnitOffense( arena, currentUnit );
         }
 
         return target;

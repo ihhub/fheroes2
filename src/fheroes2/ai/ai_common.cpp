@@ -68,11 +68,17 @@ namespace AI
 
     void OptimizeTroopsOrder( Army & army )
     {
-        // Optimize troops placement before the battle
+        if ( !army.isValid() ) {
+            return;
+        }
+
+        // Optimize troops placement in case of a battle
+        army.MergeSameMonsterTroops();
+
+        // Validate and pick the troops
         std::vector<Troop> archers;
         std::vector<Troop> others;
 
-        // Validate and pick the troops
         for ( size_t slot = 0; slot < Army::maximumTroopCount; ++slot ) {
             const Troop * troop = army.GetTroop( slot );
             if ( troop && troop->isValid() ) {
@@ -136,6 +142,9 @@ namespace AI
                 break;
             }
         }
+
+        // Complicate the task of a potential attacker
+        army.splitStackOfWeakestUnitsIntoFreeSlots();
     }
 
     bool CanPurchaseHero( const Kingdom & kingdom )
