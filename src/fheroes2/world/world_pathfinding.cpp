@@ -43,6 +43,7 @@
 #include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "pairs.h"
+#include "players.h"
 #include "rand.h"
 #include "route.h"
 #include "settings.h"
