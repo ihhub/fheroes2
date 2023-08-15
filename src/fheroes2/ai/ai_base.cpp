@@ -58,7 +58,7 @@ namespace AI
         // Do nothing.
     }
 
-    bool Base::isValidHeroObject( const Heroes &, const double, const int32_t, const double, const bool )
+    bool Base::isValidHeroObject( const Heroes & /*hero*/, const int32_t /*index*/, const bool /*underHero*/ )
     {
         return false;
     }

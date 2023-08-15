@@ -213,6 +213,445 @@ namespace
         return true;
     }
 
+    bool HeroesValidObject( const Heroes & hero, const double heroArmyStrength, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Normal & ai,
+                            const double armyStrengthThreshold, const bool underHero = false )
+    {
+        const Maps::Tiles & tile = world.GetTiles( index );
+        const MP2::MapObjectType objectType = tile.GetObject( !underHero );
+
+        // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
+        if ( MP2::isArtifactObject( objectType ) ) {
+            const Artifact art = getArtifactFromTile( tile );
+
+            if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
+                return false;
+            }
+        }
+
+        const Army & army = hero.GetArmy();
+        const Kingdom & kingdom = hero.GetKingdom();
+
+        // If you add a new object to a group of objects sort them alphabetically.
+        switch ( objectType ) {
+        case MP2::OBJ_BOTTLE:
+        case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_FLOTSAM:
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_SEA_CHEST:
+        case MP2::OBJ_SHIPWRECK_SURVIVOR:
+        case MP2::OBJ_TREASURE_CHEST:
+            return true;
+
+        case MP2::OBJ_BUOY:
+        case MP2::OBJ_TEMPLE:
+            return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD && !army.AllTroopsAreUndead();
+
+        case MP2::OBJ_MAGELLANS_MAPS:
+            // TODO: avoid hardcoded resource values for objects.
+            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
+
+        case MP2::OBJ_ALCHEMIST_LAB:
+        case MP2::OBJ_LIGHTHOUSE:
+        case MP2::OBJ_MINES:
+        case MP2::OBJ_SAWMILL:
+            if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
+                if ( isCaptureObjectProtected( tile ) ) {
+                    return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_SMALL );
+                }
+
+                return true;
+            }
+            break;
+
+        case MP2::OBJ_ABANDONED_MINE:
+            return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
+
+        case MP2::OBJ_LEAN_TO:
+        case MP2::OBJ_MAGIC_GARDEN:
+        case MP2::OBJ_SKELETON:
+        case MP2::OBJ_WAGON:
+        case MP2::OBJ_WATER_WHEEL:
+        case MP2::OBJ_WINDMILL:
+            return doesTileContainValuableItems( tile );
+
+        case MP2::OBJ_ARTIFACT: {
+            if ( hero.IsFullBagArtifacts() )
+                return false;
+
+            const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
+
+            if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD || condition == Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES
+                 || condition == Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
+                return kingdom.AllowPayment( getArtifactResourceRequirement( tile ) );
+            }
+
+            if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
+                return hero.HasSecondarySkill( getArtifactSecondarySkillRequirement( tile ).Skill() );
+            }
+
+            // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
+            if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
+                return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
+            }
+
+            // No conditions to capture an artifact exist.
+            return true;
+        }
+
+        case MP2::OBJ_OBSERVATION_TOWER:
+            return Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() )
+                   > 0;
+
+        case MP2::OBJ_OBELISK:
+            // TODO: add the logic to dig an Ultimate artifact when a digging tile is visible.
+            // But for now AI should not waste time visiting Obelisks.
+            return false;
+
+        case MP2::OBJ_BARRIER:
+            return kingdom.IsVisitTravelersTent( getColorFromTile( tile ) );
+
+        case MP2::OBJ_TRAVELLER_TENT:
+            return !kingdom.IsVisitTravelersTent( getColorFromTile( tile ) );
+
+        case MP2::OBJ_SHRINE_FIRST_CIRCLE:
+        case MP2::OBJ_SHRINE_SECOND_CIRCLE:
+        case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
+            const Spell & spell = getSpellFromTile( tile );
+            if ( !spell.isValid() ) {
+                // The spell cannot be invalid!
+                assert( 0 );
+                return false;
+            }
+
+            if ( !hero.HaveSpellBook() || hero.HaveSpell( spell, true )
+                 || ( 3 == spell.Level() && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
+                return false;
+            }
+
+            if ( hero.isVisited( tile, Visit::GLOBAL ) && !isSpellUsedByAI( spell.GetID() ) ) {
+                return false;
+            }
+            return true;
+        }
+
+        // Arena allows to visit only one time for the whole map.
+        case MP2::OBJ_ARENA:
+            return !hero.isObjectTypeVisited( objectType );
+
+        // On-time visit free Primary Skill or Experience object.
+        case MP2::OBJ_FORT:
+        case MP2::OBJ_GAZEBO:
+        case MP2::OBJ_MERCENARY_CAMP:
+        case MP2::OBJ_STANDING_STONES:
+        case MP2::OBJ_WITCH_DOCTORS_HUT:
+            return !hero.isVisited( tile );
+
+        // One time visit Secondary Skill object.
+        case MP2::OBJ_WITCHS_HUT: {
+            const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( tile );
+            const int skillType = skill.Skill();
+
+            if ( !skill.isValid() || hero.HasMaxSecondarySkill() || hero.HasSecondarySkill( skillType ) ) {
+                return false;
+            }
+
+            if ( army.AllTroopsAreUndead() && skillType == Skill::Secondary::LEADERSHIP ) {
+                // For undead army it's pointless to have Leadership skill.
+                return false;
+            }
+
+            if ( !hero.HaveSpellBook() && skillType == Skill::Secondary::MYSTICISM ) {
+                // It's useless to have Mysticism with no magic book in hands.
+                return false;
+            }
+
+            return true;
+        }
+
+        case MP2::OBJ_TREE_OF_KNOWLEDGE:
+            if ( !hero.isVisited( tile ) ) {
+                const Funds & rc = getTreeOfKnowledgeRequirement( tile );
+                // If the payment is required do not waste all resources from the kingdom. Use them wisely.
+                if ( rc.GetValidItemsCount() == 0 || kingdom.AllowPayment( rc * 5 ) ) {
+                    return true;
+                }
+            }
+            break;
+
+        // Objects increasing Luck.
+        case MP2::OBJ_FAERIE_RING:
+        case MP2::OBJ_FOUNTAIN:
+        case MP2::OBJ_IDOL:
+        case MP2::OBJ_MERMAID:
+            return !hero.isObjectTypeVisited( objectType ) && hero.GetLuck() < Luck::IRISH;
+
+        // Objects increasing Movement points and Morale.
+        case MP2::OBJ_OASIS:
+        case MP2::OBJ_WATERING_HOLE: {
+            if ( hero.isObjectTypeVisited( objectType ) ) {
+                return false;
+            }
+
+            const uint32_t distance = getDistanceToObject( hero, pathfinder, index );
+            if ( distance == 0 ) {
+                return false;
+            }
+
+            const double movementPenalty = 2.0 * distance;
+            return movementPenalty < GameStatic::getMovementPointBonus( objectType ) || hero.GetMorale() < Morale::BLOOD;
+        }
+
+        case MP2::OBJ_MAGIC_WELL: {
+            if ( hero.isObjectTypeVisited( objectType ) ) {
+                return false;
+            }
+
+            if ( !hero.HaveSpellBook() ) {
+                return false;
+            }
+
+            if ( hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
+                return false;
+            }
+
+            const uint32_t distance = getDistanceToObject( hero, pathfinder, index );
+            if ( distance == 0 ) {
+                return false;
+            }
+
+            if ( distance > hero.GetMovePoints() && hero.getDailyRestoredSpellPoints() + hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
+                // The Well is located at a distance which cannot be reached by the hero at the current turn.
+                // But if the hero will restore all spell points by the next day there is no reason to even to visit the Well.
+                return false;
+            }
+
+            return true;
+        }
+
+        case MP2::OBJ_ARTESIAN_SPRING:
+            return !hero.isVisited( tile, Visit::GLOBAL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
+
+        case MP2::OBJ_XANADU:
+            return !hero.isVisited( tile ) && GameStatic::isHeroWorthyToVisitXanadu( hero );
+
+        // Dwellings with free army.
+        case MP2::OBJ_ARCHER_HOUSE:
+        case MP2::OBJ_CAVE:
+        case MP2::OBJ_DWARF_COTTAGE:
+        case MP2::OBJ_EXCAVATION:
+        case MP2::OBJ_GOBLIN_HUT:
+        case MP2::OBJ_HALFLING_HOLE:
+        case MP2::OBJ_PEASANT_HUT:
+        case MP2::OBJ_TREE_HOUSE:
+        case MP2::OBJ_WATCH_TOWER: {
+            const Troop & troop = getTroopFromTile( tile );
+            if ( !troop.isValid() ) {
+                return false;
+            }
+
+            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
+            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
+                return false;
+            }
+
+            return isArmyValuableToObtain( troop, armyStrengthThreshold, armyHasMonster );
+        }
+
+        // Dwellings where AI can recruit an army.
+        case MP2::OBJ_AIR_ALTAR:
+        case MP2::OBJ_BARROW_MOUNDS:
+        case MP2::OBJ_DESERT_TENT:
+        case MP2::OBJ_EARTH_ALTAR:
+        case MP2::OBJ_FIRE_ALTAR:
+        case MP2::OBJ_GENIE_LAMP:
+        case MP2::OBJ_RUINS:
+        case MP2::OBJ_TREE_CITY:
+        case MP2::OBJ_WAGON_CAMP:
+        case MP2::OBJ_WATER_ALTAR: {
+            const Troop & troop = getTroopFromTile( tile );
+            if ( !troop.isValid() ) {
+                return false;
+            }
+
+            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
+            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
+                return false;
+            }
+
+            const payment_t singleMonsterCost = troop.GetCost();
+
+            uint32_t recruitTroopCount = kingdom.GetFunds().getLowestQuotient( singleMonsterCost );
+            if ( recruitTroopCount <= 0 ) {
+                // We do not have resources to hire even a single creature.
+                return false;
+            }
+
+            const uint32_t availableTroopCount = troop.GetCount();
+            if ( recruitTroopCount > availableTroopCount ) {
+                recruitTroopCount = availableTroopCount;
+            }
+
+            const Troop troopToHire{ troop.GetID(), recruitTroopCount };
+
+            return isArmyValuableToObtain( troopToHire, armyStrengthThreshold, armyHasMonster );
+        }
+
+        // Dwellings where AI might fight monsters first before recruiting them.
+        case MP2::OBJ_CITY_OF_DEAD:
+        case MP2::OBJ_DRAGON_CITY:
+        case MP2::OBJ_TROLL_BRIDGE: {
+            if ( Color::NONE == getColorFromTile( tile ) ) {
+                return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
+            }
+
+            const Troop & troop = getTroopFromTile( tile );
+            if ( !troop.isValid() ) {
+                return false;
+            }
+
+            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
+            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
+                return false;
+            }
+
+            const payment_t & paymentCosts = troop.GetTotalCost();
+            // TODO: even if AI does not have enough money it might still buy few monsters.
+            if ( !kingdom.AllowPayment( paymentCosts ) ) {
+                return false;
+            }
+
+            return isArmyValuableToObtain( troop, armyStrengthThreshold, armyHasMonster );
+        }
+
+        // Free army upgrade objects.
+        case MP2::OBJ_FREEMANS_FOUNDRY:
+            return army.HasMonster( Monster::PIKEMAN ) || army.HasMonster( Monster::SWORDSMAN ) || army.HasMonster( Monster::IRON_GOLEM );
+        case MP2::OBJ_HILL_FORT:
+            return army.HasMonster( Monster::DWARF ) || army.HasMonster( Monster::ORC ) || army.HasMonster( Monster::OGRE );
+
+        // Free army upgrade and extra movement points for the rest of the week.
+        case MP2::OBJ_STABLES: {
+            if ( army.HasMonster( Monster::CAVALRY ) ) {
+                return true;
+            }
+
+            const uint32_t distance = getDistanceToObject( hero, pathfinder, index );
+            if ( distance == 0 ) {
+                return false;
+            }
+
+            const int daysActive = DAYOFWEEK - world.GetDay() + 1;
+            const double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distance;
+
+            return !hero.isObjectTypeVisited( objectType ) && movementBonus > 0;
+        }
+
+        // Objects that give goods but curse with bad morale when visiting them for subsequent times.
+        case MP2::OBJ_DERELICT_SHIP:
+        case MP2::OBJ_GRAVEYARD:
+        case MP2::OBJ_SHIPWRECK:
+            if ( !hero.isVisited( tile, Visit::GLOBAL ) && doesTileContainValuableItems( tile ) ) {
+                Army enemy( tile );
+                return enemy.isValid() && isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, 2 );
+            }
+            break;
+
+        case MP2::OBJ_PYRAMID:
+            if ( !hero.isVisited( tile, Visit::GLOBAL ) && doesTileContainValuableItems( tile ) ) {
+                Army enemy( tile );
+                return enemy.isValid() && Skill::Level::EXPERT == hero.GetLevelSkill( Skill::Secondary::WISDOM )
+                       && isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
+            }
+            break;
+
+        case MP2::OBJ_DAEMON_CAVE:
+            if ( doesTileContainValuableItems( tile ) ) {
+                // AI always chooses to fight the demon's servants and doesn't roll the dice
+                return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
+            }
+            break;
+
+        case MP2::OBJ_MONSTER:
+            return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, ( hero.isLosingGame() ? 1.0 : AI::ARMY_ADVANTAGE_MEDIUM ) );
+
+        case MP2::OBJ_HEROES: {
+            const Heroes * otherHero = tile.GetHeroes();
+            assert( otherHero != nullptr );
+
+            const bool otherHeroInCastle = ( otherHero->inCastle() != nullptr );
+
+            if ( hero.GetColor() == otherHero->GetColor() && !hero.hasMetWithHero( otherHero->GetID() ) ) {
+                return !otherHeroInCastle;
+            }
+
+            if ( hero.isFriends( otherHero->GetColor() ) ) {
+                return false;
+            }
+
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
+            if ( otherHero == world.GetHeroesCondWins() ) {
+                return false;
+            }
+
+            if ( otherHeroInCastle ) {
+                return AIShouldVisitCastle( hero, index, heroArmyStrength );
+            }
+
+            if ( army.isStrongerThan( otherHero->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL ) ) {
+                return true;
+            }
+
+            break;
+        }
+
+        case MP2::OBJ_CASTLE:
+            return AIShouldVisitCastle( hero, index, heroArmyStrength );
+
+        case MP2::OBJ_JAIL:
+            return kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
+        case MP2::OBJ_HUT_OF_MAGI:
+            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && !Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true ).empty();
+
+        case MP2::OBJ_ALCHEMIST_TOWER: {
+            const BagArtifacts & bag = hero.GetBagArtifacts();
+            const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.containsCurses(); } ) );
+            if ( cursed == 0 ) {
+                return false;
+            }
+
+            const payment_t payment = PaymentConditions::ForAlchemist();
+            return kingdom.AllowPayment( payment );
+        }
+
+        // AI should never consider a boat as a destination point. It uses them only to make a path.
+        case MP2::OBJ_BOAT:
+        // Eye of Magi is not an action object at all.
+        case MP2::OBJ_EYE_OF_MAGI:
+        // No use of these object for AI.
+        case MP2::OBJ_ORACLE:
+        // AI has no brains to do anything from sign messages.
+        case MP2::OBJ_SIGN:
+        // AI has no brains to handle Sirens object.
+        case MP2::OBJ_SIRENS:
+        // TODO: AI doesn't know how it use Sphinx object properly.
+        case MP2::OBJ_SPHINX:
+        // AI should never consider a stone lith as a destination point. It uses them only to make a path.
+        case MP2::OBJ_STONE_LITHS:
+        // TODO: AI doesn't know how it use Trading Post object properly.
+        case MP2::OBJ_TRADING_POST:
+        // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
+        case MP2::OBJ_WHIRLPOOL:
+            return false;
+
+        default:
+            // Did you add a new action object but forget to add AI interaction for it?
+            assert( 0 );
+            break;
+        }
+
+        return false;
+    }
+
     void addHeroToMove( Heroes * hero, std::vector<AI::HeroToMove> & availableHeroes )
     {
         if ( hero->Modes( Heroes::PATROL ) ) {
@@ -238,8 +677,9 @@ namespace
     class ObjectValidator
     {
     public:
-        explicit ObjectValidator( const Heroes & hero, AI::Normal & ai )
+        explicit ObjectValidator( const Heroes & hero, const AIWorldPathfinder & pathfinder, AI::Normal & ai )
             : _hero( hero )
+            , _pathfinder( pathfinder )
             , _ai( ai )
             , _heroArmyStrength( hero.GetArmy().GetStrength() )
             , _armyStrengthThreshold( hero.getAIMinimumJoiningArmyStrength() )
@@ -254,13 +694,14 @@ namespace
                 return iter->second;
             }
 
-            const bool valid = _ai.isValidHeroObject( _hero, _heroArmyStrength, index, _armyStrengthThreshold );
+            const bool valid = HeroesValidObject( _hero, _heroArmyStrength, index, _pathfinder, _ai, _armyStrengthThreshold );
             _validObjects[index] = valid;
             return valid;
         }
 
     private:
         const Heroes & _hero;
+        const AIWorldPathfinder & _pathfinder;
         AI::Normal & _ai;
 
         // Hero's strength value is valid till any action is done.
@@ -402,445 +843,6 @@ namespace
 
 namespace AI
 {
-
-    bool Normal::isValidHeroObject( const Heroes & hero, const double heroArmyStrength, const int32_t index, const double joiningArmyThreshold, const bool underHero )
-    {
-        const Maps::Tiles & tile = world.GetTiles( index );
-        const MP2::MapObjectType objectType = tile.GetObject( !underHero );
-
-        // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
-        if ( MP2::isArtifactObject( objectType ) ) {
-            const Artifact art = getArtifactFromTile( tile );
-
-            if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
-                return false;
-            }
-        }
-
-        const Army & army = hero.GetArmy();
-        const Kingdom & kingdom = hero.GetKingdom();
-
-        // If you add a new object to a group of objects sort them alphabetically.
-        switch ( objectType ) {
-        case MP2::OBJ_BOTTLE:
-        case MP2::OBJ_CAMPFIRE:
-        case MP2::OBJ_FLOTSAM:
-        case MP2::OBJ_RESOURCE:
-        case MP2::OBJ_SEA_CHEST:
-        case MP2::OBJ_SHIPWRECK_SURVIVOR:
-        case MP2::OBJ_TREASURE_CHEST:
-            return true;
-
-        case MP2::OBJ_BUOY:
-        case MP2::OBJ_TEMPLE:
-            return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD && !army.AllTroopsAreUndead();
-
-        case MP2::OBJ_MAGELLANS_MAPS:
-            // TODO: avoid hardcoded resource values for objects.
-            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
-
-        case MP2::OBJ_ALCHEMIST_LAB:
-        case MP2::OBJ_LIGHTHOUSE:
-        case MP2::OBJ_MINES:
-        case MP2::OBJ_SAWMILL:
-            if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
-                if ( isCaptureObjectProtected( tile ) ) {
-                    return isHeroStrongerThan( tile, objectType, *this, heroArmyStrength, AI::ARMY_ADVANTAGE_SMALL );
-                }
-
-                return true;
-            }
-            break;
-
-        case MP2::OBJ_ABANDONED_MINE:
-            return isHeroStrongerThan( tile, objectType, *this, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
-
-        case MP2::OBJ_LEAN_TO:
-        case MP2::OBJ_MAGIC_GARDEN:
-        case MP2::OBJ_SKELETON:
-        case MP2::OBJ_WAGON:
-        case MP2::OBJ_WATER_WHEEL:
-        case MP2::OBJ_WINDMILL:
-            return doesTileContainValuableItems( tile );
-
-        case MP2::OBJ_ARTIFACT: {
-            if ( hero.IsFullBagArtifacts() )
-                return false;
-
-            const Maps::ArtifactCaptureCondition condition = getArtifactCaptureCondition( tile );
-
-            if ( condition == Maps::ArtifactCaptureCondition::PAY_2000_GOLD || condition == Maps::ArtifactCaptureCondition::PAY_2500_GOLD_AND_3_RESOURCES
-                 || condition == Maps::ArtifactCaptureCondition::PAY_3000_GOLD_AND_5_RESOURCES ) {
-                return kingdom.AllowPayment( getArtifactResourceRequirement( tile ) );
-            }
-
-            if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
-                return hero.HasSecondarySkill( getArtifactSecondarySkillRequirement( tile ).Skill() );
-            }
-
-            // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
-            if ( condition >= Maps::ArtifactCaptureCondition::FIGHT_50_ROGUES && condition <= Maps::ArtifactCaptureCondition::FIGHT_1_BONE_DRAGON ) {
-                return isHeroStrongerThan( tile, objectType, *this, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
-            }
-
-            // No conditions to capture an artifact exist.
-            return true;
-        }
-
-        case MP2::OBJ_OBSERVATION_TOWER:
-            return Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() )
-                   > 0;
-
-        case MP2::OBJ_OBELISK:
-            // TODO: add the logic to dig an Ultimate artifact when a digging tile is visible.
-            // But for now AI should not waste time visiting Obelisks.
-            return false;
-
-        case MP2::OBJ_BARRIER:
-            return kingdom.IsVisitTravelersTent( getColorFromTile( tile ) );
-
-        case MP2::OBJ_TRAVELLER_TENT:
-            return !kingdom.IsVisitTravelersTent( getColorFromTile( tile ) );
-
-        case MP2::OBJ_SHRINE_FIRST_CIRCLE:
-        case MP2::OBJ_SHRINE_SECOND_CIRCLE:
-        case MP2::OBJ_SHRINE_THIRD_CIRCLE: {
-            const Spell & spell = getSpellFromTile( tile );
-            if ( !spell.isValid() ) {
-                // The spell cannot be invalid!
-                assert( 0 );
-                return false;
-            }
-
-            if ( !hero.HaveSpellBook() || hero.HaveSpell( spell, true )
-                 || ( 3 == spell.Level() && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
-                return false;
-            }
-
-            if ( hero.isVisited( tile, Visit::GLOBAL ) && !isSpellUsedByAI( spell.GetID() ) ) {
-                return false;
-            }
-            return true;
-        }
-
-        // Arena allows to visit only one time for the whole map.
-        case MP2::OBJ_ARENA:
-            return !hero.isObjectTypeVisited( objectType );
-
-        // On-time visit free Primary Skill or Experience object.
-        case MP2::OBJ_FORT:
-        case MP2::OBJ_GAZEBO:
-        case MP2::OBJ_MERCENARY_CAMP:
-        case MP2::OBJ_STANDING_STONES:
-        case MP2::OBJ_WITCH_DOCTORS_HUT:
-            return !hero.isVisited( tile );
-
-        // One time visit Secondary Skill object.
-        case MP2::OBJ_WITCHS_HUT: {
-            const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( tile );
-            const int skillType = skill.Skill();
-
-            if ( !skill.isValid() || hero.HasMaxSecondarySkill() || hero.HasSecondarySkill( skillType ) ) {
-                return false;
-            }
-
-            if ( army.AllTroopsAreUndead() && skillType == Skill::Secondary::LEADERSHIP ) {
-                // For undead army it's pointless to have Leadership skill.
-                return false;
-            }
-
-            if ( !hero.HaveSpellBook() && skillType == Skill::Secondary::MYSTICISM ) {
-                // It's useless to have Mysticism with no magic book in hands.
-                return false;
-            }
-
-            return true;
-        }
-
-        case MP2::OBJ_TREE_OF_KNOWLEDGE:
-            if ( !hero.isVisited( tile ) ) {
-                const Funds & rc = getTreeOfKnowledgeRequirement( tile );
-                // If the payment is required do not waste all resources from the kingdom. Use them wisely.
-                if ( rc.GetValidItemsCount() == 0 || kingdom.AllowPayment( rc * 5 ) ) {
-                    return true;
-                }
-            }
-            break;
-
-        // Objects increasing Luck.
-        case MP2::OBJ_FAERIE_RING:
-        case MP2::OBJ_FOUNTAIN:
-        case MP2::OBJ_IDOL:
-        case MP2::OBJ_MERMAID:
-            return !hero.isObjectTypeVisited( objectType ) && hero.GetLuck() < Luck::IRISH;
-
-        // Objects increasing Movement points and Morale.
-        case MP2::OBJ_OASIS:
-        case MP2::OBJ_WATERING_HOLE: {
-            if ( hero.isObjectTypeVisited( objectType ) ) {
-                return false;
-            }
-
-            const uint32_t distance = getDistanceToObject( hero, _pathfinder, index );
-            if ( distance == 0 ) {
-                return false;
-            }
-
-            const double movementPenalty = 2.0 * distance;
-            return movementPenalty < GameStatic::getMovementPointBonus( objectType ) || hero.GetMorale() < Morale::BLOOD;
-        }
-
-        case MP2::OBJ_MAGIC_WELL: {
-            if ( hero.isObjectTypeVisited( objectType ) ) {
-                return false;
-            }
-
-            if ( !hero.HaveSpellBook() ) {
-                return false;
-            }
-
-            if ( hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
-                return false;
-            }
-
-            const uint32_t distance = getDistanceToObject( hero, _pathfinder, index );
-            if ( distance == 0 ) {
-                return false;
-            }
-
-            if ( distance > hero.GetMovePoints() && hero.getDailyRestoredSpellPoints() + hero.GetSpellPoints() >= hero.GetMaxSpellPoints() ) {
-                // The Well is located at a distance which cannot be reached by the hero at the current turn.
-                // But if the hero will restore all spell points by the next day there is no reason to even to visit the Well.
-                return false;
-            }
-
-            return true;
-        }
-
-        case MP2::OBJ_ARTESIAN_SPRING:
-            return !hero.isVisited( tile, Visit::GLOBAL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
-
-        case MP2::OBJ_XANADU:
-            return !hero.isVisited( tile ) && GameStatic::isHeroWorthyToVisitXanadu( hero );
-
-        // Dwellings with free army.
-        case MP2::OBJ_ARCHER_HOUSE:
-        case MP2::OBJ_CAVE:
-        case MP2::OBJ_DWARF_COTTAGE:
-        case MP2::OBJ_EXCAVATION:
-        case MP2::OBJ_GOBLIN_HUT:
-        case MP2::OBJ_HALFLING_HOLE:
-        case MP2::OBJ_PEASANT_HUT:
-        case MP2::OBJ_TREE_HOUSE:
-        case MP2::OBJ_WATCH_TOWER: {
-            const Troop & troop = getTroopFromTile( tile );
-            if ( !troop.isValid() ) {
-                return false;
-            }
-
-            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
-            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
-                return false;
-            }
-
-            return isArmyValuableToObtain( troop, joiningArmyThreshold, armyHasMonster );
-        }
-
-        // Dwellings where AI can recruit an army.
-        case MP2::OBJ_AIR_ALTAR:
-        case MP2::OBJ_BARROW_MOUNDS:
-        case MP2::OBJ_DESERT_TENT:
-        case MP2::OBJ_EARTH_ALTAR:
-        case MP2::OBJ_FIRE_ALTAR:
-        case MP2::OBJ_GENIE_LAMP:
-        case MP2::OBJ_RUINS:
-        case MP2::OBJ_TREE_CITY:
-        case MP2::OBJ_WAGON_CAMP:
-        case MP2::OBJ_WATER_ALTAR: {
-            const Troop & troop = getTroopFromTile( tile );
-            if ( !troop.isValid() ) {
-                return false;
-            }
-
-            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
-            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
-                return false;
-            }
-
-            const payment_t singleMonsterCost = troop.GetCost();
-
-            uint32_t recruitTroopCount = kingdom.GetFunds().getLowestQuotient( singleMonsterCost );
-            if ( recruitTroopCount <= 0 ) {
-                // We do not have resources to hire even a single creature.
-                return false;
-            }
-
-            const uint32_t availableTroopCount = troop.GetCount();
-            if ( recruitTroopCount > availableTroopCount ) {
-                recruitTroopCount = availableTroopCount;
-            }
-
-            const Troop troopToHire{ troop.GetID(), recruitTroopCount };
-
-            return isArmyValuableToObtain( troopToHire, joiningArmyThreshold, armyHasMonster );
-        }
-
-        // Dwellings where AI might fight monsters first before recruiting them.
-        case MP2::OBJ_CITY_OF_DEAD:
-        case MP2::OBJ_DRAGON_CITY:
-        case MP2::OBJ_TROLL_BRIDGE: {
-            if ( Color::NONE == getColorFromTile( tile ) ) {
-                return isHeroStrongerThan( tile, objectType, *this, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
-            }
-
-            const Troop & troop = getTroopFromTile( tile );
-            if ( !troop.isValid() ) {
-                return false;
-            }
-
-            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
-            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
-                return false;
-            }
-
-            const payment_t & paymentCosts = troop.GetTotalCost();
-            // TODO: even if AI does not have enough money it might still buy few monsters.
-            if ( !kingdom.AllowPayment( paymentCosts ) ) {
-                return false;
-            }
-
-            return isArmyValuableToObtain( troop, joiningArmyThreshold, armyHasMonster );
-        }
-
-        // Free army upgrade objects.
-        case MP2::OBJ_FREEMANS_FOUNDRY:
-            return army.HasMonster( Monster::PIKEMAN ) || army.HasMonster( Monster::SWORDSMAN ) || army.HasMonster( Monster::IRON_GOLEM );
-        case MP2::OBJ_HILL_FORT:
-            return army.HasMonster( Monster::DWARF ) || army.HasMonster( Monster::ORC ) || army.HasMonster( Monster::OGRE );
-
-        // Free army upgrade and extra movement points for the rest of the week.
-        case MP2::OBJ_STABLES: {
-            if ( army.HasMonster( Monster::CAVALRY ) ) {
-                return true;
-            }
-
-            const uint32_t distance = getDistanceToObject( hero, _pathfinder, index );
-            if ( distance == 0 ) {
-                return false;
-            }
-
-            const int daysActive = DAYOFWEEK - world.GetDay() + 1;
-            const double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distance;
-
-            return !hero.isObjectTypeVisited( objectType ) && movementBonus > 0;
-        }
-
-        // Objects that give goods but curse with bad morale when visiting them for subsequent times.
-        case MP2::OBJ_DERELICT_SHIP:
-        case MP2::OBJ_GRAVEYARD:
-        case MP2::OBJ_SHIPWRECK:
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) && doesTileContainValuableItems( tile ) ) {
-                Army enemy( tile );
-                return enemy.isValid() && isHeroStrongerThan( tile, objectType, *this, heroArmyStrength, 2 );
-            }
-            break;
-
-        case MP2::OBJ_PYRAMID:
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) && doesTileContainValuableItems( tile ) ) {
-                Army enemy( tile );
-                return enemy.isValid() && Skill::Level::EXPERT == hero.GetLevelSkill( Skill::Secondary::WISDOM )
-                       && isHeroStrongerThan( tile, objectType, *this, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
-            }
-            break;
-
-        case MP2::OBJ_DAEMON_CAVE:
-            if ( doesTileContainValuableItems( tile ) ) {
-                // AI always chooses to fight the demon's servants and doesn't roll the dice
-                return isHeroStrongerThan( tile, objectType, *this, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
-            }
-            break;
-
-        case MP2::OBJ_MONSTER:
-            return isHeroStrongerThan( tile, objectType, *this, heroArmyStrength, ( hero.isLosingGame() ? 1.0 : AI::ARMY_ADVANTAGE_MEDIUM ) );
-
-        case MP2::OBJ_HEROES: {
-            const Heroes * otherHero = tile.GetHeroes();
-            assert( otherHero != nullptr );
-
-            const bool otherHeroInCastle = ( otherHero->inCastle() != nullptr );
-
-            if ( hero.GetColor() == otherHero->GetColor() && !hero.hasMetWithHero( otherHero->GetID() ) ) {
-                return !otherHeroInCastle;
-            }
-
-            if ( hero.isFriends( otherHero->GetColor() ) ) {
-                return false;
-            }
-
-            // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
-            if ( otherHero == world.GetHeroesCondWins() ) {
-                return false;
-            }
-
-            if ( otherHeroInCastle ) {
-                return AIShouldVisitCastle( hero, index, heroArmyStrength );
-            }
-
-            if ( army.isStrongerThan( otherHero->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL ) ) {
-                return true;
-            }
-
-            break;
-        }
-
-        case MP2::OBJ_CASTLE:
-            return AIShouldVisitCastle( hero, index, heroArmyStrength );
-
-        case MP2::OBJ_JAIL:
-            return kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
-        case MP2::OBJ_HUT_OF_MAGI:
-            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && !Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true ).empty();
-
-        case MP2::OBJ_ALCHEMIST_TOWER: {
-            const BagArtifacts & bag = hero.GetBagArtifacts();
-            const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.containsCurses(); } ) );
-            if ( cursed == 0 ) {
-                return false;
-            }
-
-            const payment_t payment = PaymentConditions::ForAlchemist();
-            return kingdom.AllowPayment( payment );
-        }
-
-        // AI should never consider a boat as a destination point. It uses them only to make a path.
-        case MP2::OBJ_BOAT:
-        // Eye of Magi is not an action object at all.
-        case MP2::OBJ_EYE_OF_MAGI:
-        // No use of these object for AI.
-        case MP2::OBJ_ORACLE:
-        // AI has no brains to do anything from sign messages.
-        case MP2::OBJ_SIGN:
-        // AI has no brains to handle Sirens object.
-        case MP2::OBJ_SIRENS:
-        // TODO: AI doesn't know how it use Sphinx object properly.
-        case MP2::OBJ_SPHINX:
-        // AI should never consider a stone lith as a destination point. It uses them only to make a path.
-        case MP2::OBJ_STONE_LITHS:
-        // TODO: AI doesn't know how it use Trading Post object properly.
-        case MP2::OBJ_TRADING_POST:
-        // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
-        case MP2::OBJ_WHIRLPOOL:
-            return false;
-
-        default:
-            // Did you add a new action object but forget to add AI interaction for it?
-            assert( 0 );
-            break;
-        }
-
-        return false;
-    }
-
     // TODO: In the future we need to come up with dynamic object value estimation based not only on a hero's role but on an outcome from movement at certain position.
 
     double Normal::getGeneralObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
@@ -1747,7 +1749,7 @@ namespace AI
         // pre-cache the pathfinder
         _pathfinder.reEvaluateIfNeeded( hero );
 
-        ObjectValidator objectValidator( hero, *this );
+        ObjectValidator objectValidator( hero, _pathfinder, *this );
         ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
         auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero]( const int destination, uint32_t & distance, double & value,
@@ -2145,6 +2147,11 @@ namespace AI
 
         updateMapActionObjectCache( formerBoatIdx );
         updateMapActionObjectCache( nextTileIdx );
+    }
+
+    bool Normal::isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero )
+    {
+        return HeroesValidObject( hero, hero.GetArmy().GetStrength(), index, _pathfinder, *this, 0, underHero );
     }
 
     bool Normal::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue )
