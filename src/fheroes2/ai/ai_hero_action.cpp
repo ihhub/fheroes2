@@ -1135,6 +1135,11 @@ namespace
 
     void AIToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
+        if ( !AI::Get().isValidHeroObject( hero, dst_index, true ) ) {
+            // We're just passing through here, don't mess with this object
+            return;
+        }
+
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const Funds funds = getFundsFromTile( tile );
         assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
@@ -1142,7 +1147,7 @@ namespace
         uint32_t gold = funds.gold;
         bool complete = false;
 
-        if ( gold && AI::Get().isValidHeroObject( hero, dst_index, true ) ) {
+        if ( gold ) {
             Army army( tile );
 
             Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
@@ -1166,10 +1171,11 @@ namespace
             }
         }
 
-        if ( complete )
+        if ( complete ) {
             resetObjectInfoOnTile( tile );
+        }
         else if ( 0 == gold && !hero.isObjectTypeVisited( objectType ) ) {
-            // modify morale
+            // Modify morale
             hero.SetVisited( dst_index );
             hero.SetVisited( dst_index, Visit::GLOBAL );
         }
@@ -1179,10 +1185,15 @@ namespace
 
     void AIToPyramid( Heroes & hero, int32_t dst_index )
     {
+        if ( !AI::Get().isValidHeroObject( hero, dst_index, true ) ) {
+            // We're just passing through here, don't mess with this object
+            return;
+        }
+
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const Spell & spell = getSpellFromTile( tile );
 
-        if ( AI::Get().isValidHeroObject( hero, dst_index, true ) ) {
+        if ( spell.isValid() ) {
             // battle
             Army army( tile );
 
@@ -1205,7 +1216,7 @@ namespace
                 AIBattleLose( hero, res, true );
             }
         }
-        else if ( !spell.isValid() ) {
+        else {
             hero.SetVisited( dst_index, Visit::LOCAL );
             hero.SetVisited( dst_index, Visit::GLOBAL );
         }
@@ -1250,9 +1261,14 @@ namespace
 
     void AIToDaemonCave( Heroes & hero, int32_t dst_index )
     {
+        if ( !AI::Get().isValidHeroObject( hero, dst_index, true ) ) {
+            // We're just passing through here, don't mess with this object
+            return;
+        }
+
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
-        if ( doesTileContainValuableItems( tile ) && AI::Get().isValidHeroObject( hero, dst_index, true ) ) {
+        if ( doesTileContainValuableItems( tile ) ) {
             Army army( tile );
 
             Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
@@ -1342,6 +1358,11 @@ namespace
 
     void AIToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType objectType, const int32_t tileIndex )
     {
+        if ( !AI::Get().isValidHeroObject( hero, tileIndex, true ) ) {
+            // We're just passing through here, don't mess with this object
+            return;
+        }
+
         Maps::Tiles & tile = world.GetTiles( tileIndex );
         bool recruitmentAllowed = true;
 
@@ -1392,6 +1413,11 @@ namespace
 
     void AIToAbandonedMine( Heroes & hero, const int32_t dstIndex )
     {
+        if ( !AI::Get().isValidHeroObject( hero, dstIndex, true ) ) {
+            // We're just passing through here, don't mess with this object
+            return;
+        }
+
         Maps::Tiles & tile = world.GetTiles( dstIndex );
 
         Army army( tile );
