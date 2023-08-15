@@ -2327,7 +2327,7 @@ namespace AI
 
     bool Normal::isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero /* = false */ )
     {
-        return HeroesValidObject( hero, hero.GetArmy().GetStrength(), index, _pathfinder, *this, 0, underHero );
+        return HeroesValidObject( hero, hero.GetArmy().GetStrength(), index, _pathfinder, *this, hero.getAIMinimumJoiningArmyStrength(), underHero );
     }
 
     bool Normal::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue )
