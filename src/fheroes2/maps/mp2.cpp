@@ -764,17 +764,18 @@ bool MP2::isSafeForFogDiscoveryObject( const MapObjectType objectType )
 
 bool MP2::isNeedStayFront( const MapObjectType objectType )
 {
+    // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
-    case OBJ_MONSTER:
-    case OBJ_HEROES:
-    case OBJ_BOAT:
     case OBJ_BARRIER:
-    case OBJ_JAIL:
+    case OBJ_BOAT:
     case OBJ_BUOY:
-    case OBJ_SKELETON:
+    case OBJ_HEROES:
+    case OBJ_JAIL:
     case OBJ_MERMAID:
-    case OBJ_SIRENS:
+    case OBJ_MONSTER:
     case OBJ_SHIPWRECK:
+    case OBJ_SIRENS:
+    case OBJ_SKELETON:
         return true;
     default:
         break;
