@@ -37,6 +37,55 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2023-08-15" version="v1.0.7">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.7</url>
+      <description>
+        <p>Changes in v1.0.7 (15 August 2023):</p>
+        <ul>
+          <li>properly update uncovered fog with all hero actions</li>
+          <li>fix an issue when AI hero "jumps back" during the fog discovery</li>
+          <li>AI heroes should not know what exactly a Treasure or Sea Chest contains</li>
+          <li>do not play simultaneous walk/fly sounds for battle speed 9 and 10</li>
+          <li>do not handle an event on the map twice</li>
+          <li>fix AI estimation of the castle garrison strength for priority tasks</li>
+          <li>rework "select from list" dialogs and also make all elements within dialogs right clickable</li>
+          <li>battle AI should switch to offense mode instead of passing turns</li>
+          <li>update Russian translation</li>
+          <li>add the ability to export and import save files in Android Toolset application</li>
+          <li>make many in-game buttons translatable</li>
+          <li>fix Army info button in level up dialog</li>
+          <li>update Ukrainian translation</li>
+          <li>update German translation</li>
+          <li>add Summon Boat spell support for AI</li>
+          <li>rephrase various game dialogs</li>
+          <li>add a dialog to confirm auto combat</li>
+          <li>add "Quit" title to quit dialog</li>
+          <li>fix Zounds grammar</li>
+          <li>update Norwegian Translation</li>
+          <li>the Shield spell should not affect the damage of the castle towers</li>
+          <li>apply AI growth bonus only on first AI player turn</li>
+          <li>show "cast down" animation for heroes on the battlefield</li>
+          <li>apply Cure &amp; Mass Cure spells only if the target unit is either damaged or has negative magical effects</li>
+          <li>fix hero last frame delay after the spell casting animation</li>
+          <li>speed up several spell animations during battle</li>
+          <li>fix missing first animation frame of heroes on the battlefield</li>
+          <li>change heroes animation speed on the battlefield</li>
+          <li>fix puzzle screen exit button theme</li>
+          <li>reduce CPU usage while rendering castle's Well dialog</li>
+          <li>fix campaign buttons' rendering issues</li>
+          <li>make campaign buttons translatable</li>
+          <li>update Slovak translation</li>
+          <li>update Danish translation</li>
+          <li>update Swedish translation</li>
+          <li>disable Campaign button if no campaign resources are present</li>
+          <li>improve AI pathfinding logic regarding protected and guarded tiles</li>
+          <li>avoid engine execution with corrupted video files</li>
+          <li>add ability to select instrument brush and brush size in Editor UI</li>
+          <li>make thieves guild adapt background to chosen interface</li>
+          <li>fix a possible crash in Android toolset application</li>
+        </ul>
+      </description>
+    </release>
     <release date="2023-07-15" version="v1.0.6">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.6</url>
       <description>
