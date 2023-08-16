@@ -671,6 +671,9 @@ namespace
     void AIToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, const int32_t dstIndex )
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " object: " << MP2::StringObject( objectType ) )
+#ifndef WITH_DEBUG
+        (void)objectType;
+#endif
 
         Maps::Tiles & tile = world.GetTiles( dstIndex );
 
@@ -719,10 +722,6 @@ namespace
                 captureObject();
             }
         }
-
-#ifndef WITH_DEBUG
-        (void)objectType;
-#endif
     }
 
     void AIToObjectResource( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
