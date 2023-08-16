@@ -1039,7 +1039,7 @@ namespace AI
             }
             else {
                 if ( getColorFromTile( tile ) == hero.GetColor() ) {
-                    return -valueToIgnore; // don't even attempt to go here
+                    return valueToIgnore; // don't even attempt to go here
                 }
 
                 std::tie( resourceType, resourceAmount ) = getDailyIncomeObjectResources( tile ).getFirstValidResource();
@@ -1132,7 +1132,7 @@ namespace AI
 
             // This object could have already been visited
             if ( value < 1 ) {
-                return -valueToIgnore;
+                return valueToIgnore;
             }
 
             return value;
