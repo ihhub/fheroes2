@@ -835,7 +835,7 @@ namespace
 
         const int32_t indexTo = world.NextTeleport( startIndex );
         if ( startIndex == indexTo ) {
-            DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has nowhere to go through stone liths." )
+            DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has nowhere to go through stone liths" )
             return;
         }
 
@@ -902,7 +902,7 @@ namespace
 
         const int32_t indexTo = world.NextWhirlpool( startIndex );
         if ( startIndex == indexTo ) {
-            DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has nowhere to go through the whirlpool." )
+            DEBUG_LOG( DBG_AI, DBG_WARN, "AI hero " << hero.GetName() << " has nowhere to go through the whirlpool" )
             return;
         }
 
@@ -1676,7 +1676,7 @@ namespace
 
         const uint32_t experience = hero.GetArmy().ActionToSirens();
 
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " got " << experience << " experience." )
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " got " << experience << " experience" )
 
         hero.IncreaseExperience( experience );
 
