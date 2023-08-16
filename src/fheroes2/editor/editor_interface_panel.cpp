@@ -71,6 +71,26 @@ namespace Interface
         _brushSizeButtons[_selectedBrushSize].press();
     }
 
+    int32_t EditorPanel::getBrushSize() const
+    {
+        switch ( _selectedBrushSize ) {
+        case BrushSize::SMALL:
+            return 1;
+        case BrushSize::MEDIUM:
+            return 2;
+        case BrushSize::LARGE:
+            return 4;
+        case BrushSize::AREA:
+            return 0;
+        default:
+            // Have you added a new Brush size? Update the logic above!
+            assert( 0 );
+            break;
+        }
+
+        return 0;
+    }
+
     void EditorPanel::setPos( const int32_t displayX, int32_t displayY )
     {
         int32_t offsetX = displayX;
@@ -197,44 +217,33 @@ namespace Interface
         display.render( _rectInstrumentPanel );
     }
 
-    const char * EditorPanel::_getTerrainTypeName( const uint8_t brushId )
+    int EditorPanel::_getGroundId( const uint8_t brushId )
     {
-        int groundId = Maps::Ground::UNKNOWN;
         switch ( brushId ) {
         case Brush::WATER:
-            groundId = Maps::Ground::WATER;
-            break;
+            return Maps::Ground::WATER;
         case Brush::GRASS:
-            groundId = Maps::Ground::GRASS;
-            break;
+            return Maps::Ground::GRASS;
         case Brush::SNOW:
-            groundId = Maps::Ground::SNOW;
-            break;
+            return Maps::Ground::SNOW;
         case Brush::SWAMP:
-            groundId = Maps::Ground::SWAMP;
-            break;
+            return Maps::Ground::SWAMP;
         case Brush::LAVA:
-            groundId = Maps::Ground::LAVA;
-            break;
+            return Maps::Ground::LAVA;
         case Brush::DESERT:
-            groundId = Maps::Ground::DESERT;
-            break;
+            return Maps::Ground::DESERT;
         case Brush::DIRT:
-            groundId = Maps::Ground::DIRT;
-            break;
+            return Maps::Ground::DIRT;
         case Brush::WASTELAND:
-            groundId = Maps::Ground::WASTELAND;
-            break;
+            return Maps::Ground::WASTELAND;
         case Brush::BEACH:
-            groundId = Maps::Ground::BEACH;
-            break;
+            return Maps::Ground::BEACH;
         default:
-            // Have you added a new terrain type?
+            // Have you added a new terrain type? Add the logic above!
             assert( 0 );
             break;
         }
-
-        return Maps::Ground::String( groundId );
+        return Maps::Ground::UNKNOWN;
     }
 
     const char * EditorPanel::_getObjectTypeName( const uint8_t brushId )
@@ -269,7 +278,7 @@ namespace Interface
         case Brush::TREASURES:
             return _( "Treasures" );
         default:
-            // Have you added a new object type?
+            // Have you added a new object type? Add the logic above!
             assert( 0 );
             break;
         }
