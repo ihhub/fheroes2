@@ -1868,8 +1868,9 @@ namespace
 
         const int32_t index_to = world.NextTeleport( index_from );
         if ( index_from == index_to ) {
-            AudioManager::PlaySound( M82::RSBRYFZL );
             DEBUG_LOG( DBG_GAME, DBG_WARN, hero.GetName() << " has nowhere to go through stone liths" )
+
+            AudioManager::PlaySound( M82::RSBRYFZL );
             return;
         }
 
@@ -1908,8 +1909,9 @@ namespace
 
         const int32_t index_to = world.NextWhirlpool( index_from );
         if ( index_from == index_to ) {
-            AudioManager::PlaySound( M82::RSBRYFZL );
             DEBUG_LOG( DBG_GAME, DBG_WARN, hero.GetName() << " has nowhere to go through the whirlpool" )
+
+            AudioManager::PlaySound( M82::RSBRYFZL );
             return;
         }
 
