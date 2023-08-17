@@ -7773,10 +7773,10 @@ msgid "Sirens"
 msgstr "Sirener"
 
 msgid "Standing Stones"
-msgstr "Bautasten"
+msgstr ""
 
 msgid "Idol"
-msgstr "Stenidol"
+msgstr "Idol"
 
 msgid "Tree of Knowledge"
 msgstr "Visdomstræ"
@@ -7788,7 +7788,7 @@ msgid "Temple"
 msgstr "Tempel"
 
 msgid "Hill Fort"
-msgstr "Bakkefort"
+msgstr ""
 
 msgid "Halfling Hole"
 msgstr "Halvlang-hul"
@@ -7815,7 +7815,7 @@ msgid "Tar Pit"
 msgstr "Tjæresø"
 
 msgid "Artesian Spring"
-msgstr "Artesisk springvand"
+msgstr ""
 
 msgid "Troll Bridge"
 msgstr "Troldebro"
@@ -7827,22 +7827,22 @@ msgid "Witch's Hut"
 msgstr "Heksens hytte"
 
 msgid "Xanadu"
-msgstr "Abrahams skød"
+msgstr ""
 
 msgid "Lean-To"
-msgstr "Shelter"
+msgstr ""
 
 msgid "Magellan's Maps"
-msgstr "Magellans kort"
+msgstr ""
 
 msgid "Flotsam"
-msgstr "Vraggods"
+msgstr ""
 
 msgid "Derelict Ship"
-msgstr "Forladt skib"
+msgstr ""
 
 msgid "Shipwreck Survivor"
-msgstr "Skibbruden"
+msgstr ""
 
 msgid "Bottle"
 msgstr "Flaske"
@@ -7859,10 +7859,10 @@ msgid "Observation Tower"
 msgstr "Observationstårn"
 
 msgid "Freeman's Foundry"
-msgstr "Friborgeres støberi"
+msgstr ""
 
 msgid "Reefs"
-msgstr "Rev"
+msgstr ""
 
 msgid "Trees"
 msgstr "Træer"
