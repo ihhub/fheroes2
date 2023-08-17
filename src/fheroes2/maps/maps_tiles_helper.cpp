@@ -229,10 +229,109 @@ namespace
 
         tile.Remove( tile.GetObjectUID() );
     }
+
+    bool setTerrainBoundaries( const int groundDirection, const int32_t tileId, const uint16_t terrainImageOffset )
+    {
+        auto hasDirections = [&groundDirection]( const int directions ) { return ( directions & groundDirection ) == directions; };
+        auto noDirections = [&groundDirection]( const int directions ) { return ( directions & groundDirection ) == 0; };
+
+        if ( groundDirection == ( Direction::TOP_RIGHT | Direction::TOP | DIRECTION_BOTTOM_ROW | DIRECTION_CENTER_ROW ) ) {
+            // Top-left corner is non 'groundId'.
+            world.GetTiles( tileId ).setTerrain( terrainImageOffset + 12U + static_cast<uint16_t>( Rand::Get( 3 ) ), true, false );
+            return true;
+        }
+        if ( groundDirection == ( Direction::TOP_LEFT | Direction::TOP | DIRECTION_BOTTOM_ROW | DIRECTION_CENTER_ROW ) ) {
+            // Top-right corner is non 'groundId'.
+            world.GetTiles( tileId ).setTerrain( terrainImageOffset + 12U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, false );
+            return true;
+        }
+        if ( groundDirection == ( Direction::BOTTOM_LEFT | Direction::BOTTOM | DIRECTION_TOP_ROW | DIRECTION_CENTER_ROW ) ) {
+            // Bottom-right corner is non 'groundId'.
+            world.GetTiles( tileId ).setTerrain( terrainImageOffset + 12U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, true );
+            return true;
+        }
+        if ( groundDirection == ( Direction::BOTTOM_RIGHT | Direction::BOTTOM | DIRECTION_TOP_ROW | DIRECTION_CENTER_ROW ) ) {
+            // Bottom-left corner is non 'groundId'.
+            world.GetTiles( tileId ).setTerrain( terrainImageOffset + 12U + static_cast<uint16_t>( Rand::Get( 3 ) ), true, true );
+            return true;
+        }
+
+        if ( hasDirections( DIRECTION_LEFT_COL | Direction::TOP | Direction::BOTTOM ) && noDirections( Direction::RIGHT ) ) {
+            // Right is non 'groundId'.
+            world.GetTiles( tileId ).setTerrain( terrainImageOffset + 8U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, false );
+            return true;
+        }
+        if ( hasDirections( DIRECTION_RIGHT_COL | Direction::TOP | Direction::BOTTOM ) && noDirections( Direction::LEFT ) ) {
+            // LEft is non 'groundId'.
+            world.GetTiles( tileId ).setTerrain( terrainImageOffset + 8U + static_cast<uint16_t>( Rand::Get( 3 ) ), true, false );
+            return true;
+        }
+
+        if ( hasDirections( DIRECTION_BOTTOM_ROW | Direction::LEFT | Direction::RIGHT ) && noDirections( Direction::TOP ) ) {
+            // Top is non 'groundId'.
+            world.GetTiles( tileId ).setTerrain( terrainImageOffset + static_cast<uint16_t>( Rand::Get( 3 ) ), false, false );
+            return true;
+        }
+        if ( hasDirections( DIRECTION_TOP_ROW | Direction::LEFT | Direction::RIGHT ) && noDirections( Direction::BOTTOM ) ) {
+            // Bottom is non 'groundId'.
+            world.GetTiles( tileId ).setTerrain( terrainImageOffset + static_cast<uint16_t>( Rand::Get( 3 ) ), false, true );
+            return true;
+        }
+
+        if ( hasDirections( Direction::RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM ) && noDirections( Direction::TOP | Direction::LEFT ) ) {
+            // Top, top-left and left tiles are non 'groundId'.
+            world.GetTiles( tileId ).setTerrain( terrainImageOffset + 4U + static_cast<uint16_t>( Rand::Get( 3 ) ), true, false );
+            return true;
+        }
+        if ( hasDirections( Direction::LEFT | Direction::BOTTOM_LEFT | Direction::BOTTOM ) && noDirections( Direction::TOP | Direction::RIGHT ) ) {
+            // Top, top-right and right tiles are non 'groundId'.
+            world.GetTiles( tileId ).setTerrain( terrainImageOffset + 4U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, false );
+            return true;
+        }
+        if ( hasDirections( Direction::TOP | Direction::TOP_LEFT | Direction::LEFT ) && noDirections( Direction::RIGHT | Direction::BOTTOM ) ) {
+            // Right, bottom-right and bottom tiles are non 'groundId'.
+            world.GetTiles( tileId ).setTerrain( terrainImageOffset + 4U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, true );
+            return true;
+        }
+        if ( hasDirections( Direction::TOP | Direction::TOP_RIGHT | Direction::RIGHT ) && noDirections( Direction::LEFT | Direction::BOTTOM ) ) {
+            // Left, bottom-left and bottom tiles are non 'groundId'.
+            world.GetTiles( tileId ).setTerrain( terrainImageOffset + 4U + static_cast<uint16_t>( Rand::Get( 3 ) ), true, true );
+            return true;
+        }
+        return false;
+    }
 }
 
 namespace Maps
 {
+    bool setTerrainBoundariesOnTile( const int32_t tileId, const int ground )
+    {
+        // Check the near tile for the need of interconnection.
+        const int tileGroundDirection = getGroundDirecton( tileId, ground ) | Direction::CENTER;
+
+        if ( tileGroundDirection == DIRECTION_ALL ) {
+            // Current tile does not have other ground nearby.
+            return false;
+        }
+
+        switch ( ground ) {
+        case Ground::WATER:
+            return setTerrainBoundaries( tileGroundDirection, tileId, 0U );
+        case Ground::GRASS: {
+            const int beachDirections = getGroundDirecton( tileId, Ground::WATER ) | getGroundDirecton( tileId, Ground::BEACH );
+            return setTerrainBoundaries( tileGroundDirection | beachDirections, tileId, 30U )
+                   || setTerrainBoundaries( tileGroundDirection & ~beachDirections, tileId, 46U );
+        }
+        case Ground::SNOW: {
+            const int beachDirections = getGroundDirecton( tileId, Ground::WATER ) | getGroundDirecton( tileId, Ground::BEACH );
+            return setTerrainBoundaries( tileGroundDirection | beachDirections, tileId, 92U )
+                   || setTerrainBoundaries( tileGroundDirection & ~beachDirections, tileId, 108U );
+        }
+        default:
+            return false;
+        }
+    }
+
     void setTerrainOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId )
     {
         const int32_t maxTileId = world.w() * world.h() - 1;

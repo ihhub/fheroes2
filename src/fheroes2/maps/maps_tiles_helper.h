@@ -75,6 +75,8 @@ namespace Maps
         FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT = 4
     };
 
+    // Returns true if terrain connection was set.
+    bool setTerrainBoundariesOnTile( const int32_t tileId, const int ground );
     void setTerrainOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId );
 
     int getGroundDirecton( const int32_t centerTileIndex, const int groundId );

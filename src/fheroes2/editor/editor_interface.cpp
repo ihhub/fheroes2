@@ -545,7 +545,9 @@ namespace Interface
             }
             else if ( brushSize == 0 ) {
                 // This is a case when area was not selected but a single tile was clicked.
-                Maps::setTerrainOnTiles( tileIndex, tileIndex, groundId );
+                if ( !Maps::setTerrainBoundariesOnTile( tileIndex, groundId ) ) {
+                    Maps::setTerrainOnTiles( tileIndex, tileIndex, groundId );
+                }
 
                 _selectedTile = -1;
             }
