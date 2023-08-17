@@ -7858,16 +7858,16 @@ msgid "Rock"
 msgstr "Sten"
 
 msgid "Water Lake"
-msgstr "Indsø"
+msgstr ""
 
 msgid "Mandrake"
-msgstr "Alrune"
+msgstr ""
 
 msgid "Dead Tree"
 msgstr "Dødt træ"
 
 msgid "Stump"
-msgstr "Stub"
+msgstr ""
 
 msgid "Crater"
 msgstr "Krater"
@@ -7876,19 +7876,19 @@ msgid "Cactus"
 msgstr "Kaktus"
 
 msgid "Mound"
-msgstr "Høj"
+msgstr ""
 
 msgid "Dune"
-msgstr "Klit"
+msgstr ""
 
 msgid "Lava Pool"
-msgstr "Lavasø"
+msgstr ""
 
 msgid "Shrub"
-msgstr "Buskads"
+msgstr ""
 
 msgid "Barrow Mounds"
-msgstr "Gravhøj"
+msgstr ""
 
 msgid "Random Artifact - Treasure"
 msgstr "Tilfældigt artefakt - Skat"
@@ -8018,28 +8018,28 @@ msgid "Wolves"
 msgstr "Ulve"
 
 msgid "Ogre"
-msgstr "Jætte"
-
-msgid "Ogres"
-msgstr "Jætter"
-
-msgid "Ogre Lord"
-msgstr "Jætteherre"
-
-msgid "Ogre Lords"
-msgstr "Jætteherrer"
-
-msgid "Troll"
 msgstr "Trold"
 
-msgid "Trolls"
+msgid "Ogres"
 msgstr "Trolde"
 
+msgid "Ogre Lord"
+msgstr "Troldherre"
+
+msgid "Ogre Lords"
+msgstr "Troldherrer"
+
+msgid "Troll"
+msgstr "Jætte"
+
+msgid "Trolls"
+msgstr "Jætter"
+
 msgid "War Troll"
-msgstr "Krigstrold"
+msgstr "Krigsjætte"
 
 msgid "War Trolls"
-msgstr "Krigstrolde"
+msgstr "Krigsjætter"
 
 msgid "Cyclopes"
 msgstr "Kykloper"
