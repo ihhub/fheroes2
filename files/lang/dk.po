@@ -7515,28 +7515,28 @@ msgid "week|Unnamed"
 msgstr ""
 
 msgid "Desert"
-msgstr "Ørken"
+msgstr ""
 
 msgid "Snow"
-msgstr "Sne"
+msgstr ""
 
 msgid "Wasteland"
-msgstr "Ødemark"
+msgstr ""
 
 msgid "Beach"
-msgstr "Strand"
+msgstr ""
 
 msgid "Lava"
-msgstr "Lava"
+msgstr ""
 
 msgid "Dirt"
-msgstr "Jord"
+msgstr ""
 
 msgid "Grass"
-msgstr "Græs"
+msgstr ""
 
 msgid "Ocean"
-msgstr "Hav"
+msgstr ""
 
 msgid "maps|Small"
 msgstr "Lille"
@@ -7593,7 +7593,7 @@ msgid "Sign"
 msgstr "Skilt"
 
 msgid "Buoy"
-msgstr "Bøje"
+msgstr ""
 
 msgid "Skeleton"
 msgstr "Skelet"
@@ -7614,10 +7614,10 @@ msgid "Fountain"
 msgstr "Springvand"
 
 msgid "Gazebo"
-msgstr "Lysthus"
+msgstr ""
 
 msgid "Genie Lamp"
-msgstr "Magisk lampe"
+msgstr ""
 
 msgid "Archer's House"
 msgstr "Bueskyttes hus"
@@ -7632,10 +7632,10 @@ msgid "Peasant Hut"
 msgstr "Bondehytte"
 
 msgid "Stables"
-msgstr "Stalde"
+msgstr ""
 
 msgid "Alchemist's Tower"
-msgstr "Alkymistens tårn"
+msgstr "Alkymists tårn"
 
 msgid "Event"
 msgstr "Begivenhed"
