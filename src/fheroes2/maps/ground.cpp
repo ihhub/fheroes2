@@ -134,7 +134,7 @@ uint32_t Maps::Ground::GetPenalty( const Maps::Tiles & tile, uint32_t level )
 uint16_t Maps::Ground::getRandomTerrainImageIndex( const int groundId )
 {
     if ( groundId == WATER ) {
-        return static_cast<uint16_t>( Rand::Get( 3 ) ) + 16u;
+        return static_cast<uint16_t>( Rand::Get( 3 ) ) + 16U;
     }
 
     const uint16_t indexOffset = static_cast<uint16_t>( Rand::Get( 7 ) );
