@@ -36,9 +36,11 @@
 #include "castle.h"
 #include "color.h"
 #include "direction.h"
+#include "ground.h"
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
 #include "payment.h"
@@ -231,6 +233,34 @@ namespace
 
 namespace Maps
 {
+    void setTerrainOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId )
+    {
+        const int32_t maxTileId = world.w() * world.h() - 1;
+        if ( startTileId < 0 || endTileId < 0 || startTileId > maxTileId || endTileId > maxTileId ) {
+            return;
+        }
+
+        const fheroes2::Point startTileOffset = Maps::GetPoint( startTileId );
+        const fheroes2::Point endTileOffset = Maps::GetPoint( endTileId );
+
+        const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
+        const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
+        const int32_t endX = std::max( startTileOffset.x, endTileOffset.x );
+        const int32_t endY = std::max( startTileOffset.y, endTileOffset.y );
+
+        for ( int32_t y = startY; y <= endY; ++y ) {
+            for ( int32_t x = startX; x <= endX; ++x ) {
+                Maps::Tiles & tile = world.GetTiles( x, y );
+                const uint16_t terainImageIndex
+                    = ( Rand::Get( 6 ) == 0 ) ? Maps::Ground::getRandomTerrainSpecialImageIndex( groundId ) : Maps::Ground::getRandomTerrainImageIndex( groundId );
+
+                // In original editor these tiles are never flipped.
+                // TODO: Decide and make the logic if some tiles can be flipped horizontally and/or vertically.
+                tile.setTerrain( terainImageIndex, false, false );
+            }
+        }
+    }
+
     int32_t getMineSpellIdFromTile( const Tiles & tile )
     {
         if ( tile.GetObject( false ) != MP2::OBJ_MINES ) {

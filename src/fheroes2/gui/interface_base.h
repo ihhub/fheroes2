@@ -120,6 +120,11 @@ namespace Interface
 
         static fheroes2::GameMode EventExit();
 
+        virtual bool useMouseDragMovement()
+        {
+            return true;
+        }
+
         virtual void mouseCursorAreaClickLeft( const int32_t tileIndex ) = 0;
         virtual void mouseCursorAreaPressRight( const int32_t tileIndex ) const = 0;
 
