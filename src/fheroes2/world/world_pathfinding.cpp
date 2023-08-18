@@ -43,6 +43,7 @@
 #include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "pairs.h"
+#include "players.h"
 #include "rand.h"
 #include "route.h"
 #include "settings.h"
@@ -100,8 +101,24 @@ namespace
     bool isTileAvailableForWalkThroughForAIWithArmy( const int tileIndex, const int color, const bool isArtifactsBagFull, const double armyStrength,
                                                      const double minimalAdvantage )
     {
+        assert( color & Color::ALL );
+
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const MP2::MapObjectType objectType = tile.GetObject();
+
+        const auto isTileAccessible = [color, armyStrength, minimalAdvantage, &tile]() {
+            // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
+            static Army tileArmy;
+            tileArmy.setFromTile( tile );
+
+            const int tileArmyColor = tileArmy.GetColor();
+            // Tile can be guarded by our own or a friendly army (for example, our ally used a Set Elemental Guardian spell on his mine)
+            if ( color == tileArmyColor || Players::isFriends( color, tileArmyColor ) ) {
+                return true;
+            }
+
+            return tileArmy.GetStrength() * minimalAdvantage <= armyStrength;
+        };
 
         // Enemy heroes can be defeated and passed through
         if ( objectType == MP2::OBJ_HEROES ) {
@@ -177,20 +194,12 @@ namespace
             }
 
             // Artifact may be guarded, check the power of guardians.
-            // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations.
-            static Army tileArmy;
-            tileArmy.setFromTile( world.GetTiles( tileIndex ) );
-
-            return tileArmy.GetStrength() * minimalAdvantage <= armyStrength;
+            return isTileAccessible();
         }
 
         // Monsters can be defeated and passed through
         if ( objectType == MP2::OBJ_MONSTER ) {
-            // Creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
-            static Army tileArmy;
-            tileArmy.setFromTile( world.GetTiles( tileIndex ) );
-
-            return tileArmy.GetStrength() * minimalAdvantage <= armyStrength;
+            return isTileAccessible();
         }
 
         // AI may have the key for the barrier
@@ -203,8 +212,24 @@ namespace
             return true;
         }
 
-        // If none of the special cases apply, check if tile can be moved on
-        return !MP2::isNeedStayFront( objectType );
+        // If we can't step on this tile, then it cannot be passed through
+        if ( MP2::isNeedStayFront( objectType ) ) {
+            return false;
+        }
+
+        // Although we can step on a castle's tile, there's nowhere to go through it anyway
+        if ( objectType == MP2::OBJ_CASTLE ) {
+            return false;
+        }
+
+        // If we can step on this tile, but it is protected by monsters and it is impossible to refuse a fight, then it
+        // can be passed through if we manage to defeat the monsters
+        if ( MP2::isBattleMandatoryifObjectIsProtected( objectType ) ) {
+            return isTileAccessible();
+        }
+
+        // We can step on this tile and it is either not protected by monsters, or we can refuse a fight, just go ahead
+        return true;
     }
 
     bool isMovementAllowedForColor( const int from, const int direction, const int heroColor, const bool isSummonBoatSpellAvailable )

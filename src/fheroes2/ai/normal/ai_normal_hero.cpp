@@ -216,10 +216,10 @@ namespace
     }
 
     bool HeroesValidObject( const Heroes & hero, const double heroArmyStrength, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Normal & ai,
-                            const double armyStrengthThreshold )
+                            const double armyStrengthThreshold, const bool underHero )
     {
         const Maps::Tiles & tile = world.GetTiles( index );
-        const MP2::MapObjectType objectType = tile.GetObject();
+        const MP2::MapObjectType objectType = tile.GetObject( !underHero );
 
         // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
         if ( MP2::isArtifactObject( objectType ) ) {
@@ -696,7 +696,7 @@ namespace
                 return iter->second;
             }
 
-            const bool valid = HeroesValidObject( _hero, _heroArmyStrength, index, _pathfinder, _ai, _armyStrengthThreshold );
+            const bool valid = HeroesValidObject( _hero, _heroArmyStrength, index, _pathfinder, _ai, _armyStrengthThreshold, false );
             _validObjects[index] = valid;
             return valid;
         }
@@ -1039,7 +1039,7 @@ namespace AI
             }
             else {
                 if ( getColorFromTile( tile ) == hero.GetColor() ) {
-                    return -valueToIgnore; // don't even attempt to go here
+                    return valueToIgnore; // don't even attempt to go here
                 }
 
                 std::tie( resourceType, resourceAmount ) = getDailyIncomeObjectResources( tile ).getFirstValidResource();
@@ -1132,7 +1132,7 @@ namespace AI
 
             // This object could have already been visited
             if ( value < 1 ) {
-                return -valueToIgnore;
+                return valueToIgnore;
             }
 
             return value;
@@ -2323,6 +2323,11 @@ namespace AI
 
         updateMapActionObjectCache( formerBoatIdx );
         updateMapActionObjectCache( nextTileIdx );
+    }
+
+    bool Normal::isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero )
+    {
+        return HeroesValidObject( hero, hero.GetArmy().GetStrength(), index, _pathfinder, *this, hero.getAIMinimumJoiningArmyStrength(), underHero );
     }
 
     bool Normal::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue )
