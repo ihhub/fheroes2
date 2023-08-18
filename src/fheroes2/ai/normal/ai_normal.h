@@ -279,7 +279,7 @@ namespace AI
         void evaluateRegionSafety();
         std::vector<AICastle> getSortedCastleList( const KingdomCastles & castles, const std::set<int> & castlesInDanger );
 
-        bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero = false ) override;
+        bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero ) override;
         double getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority );
         void resetPathfinder() override;

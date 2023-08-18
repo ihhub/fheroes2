@@ -216,7 +216,7 @@ namespace
     }
 
     bool HeroesValidObject( const Heroes & hero, const double heroArmyStrength, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Normal & ai,
-                            const double armyStrengthThreshold, const bool underHero = false )
+                            const double armyStrengthThreshold, const bool underHero )
     {
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject( !underHero );
@@ -696,7 +696,7 @@ namespace
                 return iter->second;
             }
 
-            const bool valid = HeroesValidObject( _hero, _heroArmyStrength, index, _pathfinder, _ai, _armyStrengthThreshold );
+            const bool valid = HeroesValidObject( _hero, _heroArmyStrength, index, _pathfinder, _ai, _armyStrengthThreshold, false );
             _validObjects[index] = valid;
             return valid;
         }
@@ -2325,7 +2325,7 @@ namespace AI
         updateMapActionObjectCache( nextTileIdx );
     }
 
-    bool Normal::isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero /* = false */ )
+    bool Normal::isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero )
     {
         return HeroesValidObject( hero, hero.GetArmy().GetStrength(), index, _pathfinder, *this, hero.getAIMinimumJoiningArmyStrength(), underHero );
     }

@@ -111,7 +111,7 @@ namespace AI
 
         virtual void Reset();
         virtual void resetPathfinder() = 0;
-        virtual bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero = false ) = 0;
+        virtual bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero ) = 0;
 
         // Should be called at the beginning of the battle even if no AI-controlled players are
         // involved in the battle - because of the possibility of using instant or auto battle
