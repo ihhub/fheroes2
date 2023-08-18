@@ -949,7 +949,7 @@ msgid "Kraeger defeated"
 msgstr "Kraeger besegrad"
 
 msgid "Wayward Son"
-msgstr "Egensinne Sonen"
+msgstr "Egensinnige Sonen"
 
 msgid "Uncle Ivan"
 msgstr "Farbror Ivan"
