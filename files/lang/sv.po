@@ -6473,7 +6473,7 @@ msgid ""
 "You have your crew stop up their ears with wax before the sirens' eerie song "
 "has any chance of luring them to a watery grave."
 msgstr ""
-"Du låter sin besättning fylla sina öron med vax innan sirenernas sällsamma "
+"Du låter din besättning fylla sina öron med vax innan sirenernas sällsamma "
 "sång får någon chans att locka ner de i djupet."
 
 msgid ""
