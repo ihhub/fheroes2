@@ -46,12 +46,14 @@ namespace Maps
             ALL = DESERT | SNOW | SWAMP | WASTELAND | BEACH | LAVA | DIRT | GRASS
         };
 
+        constexpr uint16_t getTerrainIageOffset( const int groundId );
+
         const uint32_t roadPenalty = 75;
         const uint32_t defaultGroundPenalty = 100;
         const uint32_t slowestMovePenalty = 200;
 
         const char * String( int groundId );
-        uint32_t GetPenalty( const Maps::Tiles & tile, uint32_t pathfinding );
+        uint32_t GetPenalty( const Maps::Tiles & tile, uint32_t pathfindingLevel );
 
         // Returns the terrain index (used in TIL file) for normal terrain layout.
         uint16_t getRandomTerrainImageIndex( const int groundId );
