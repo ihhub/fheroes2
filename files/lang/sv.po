@@ -949,7 +949,7 @@ msgid "Kraeger defeated"
 msgstr "Kraeger besegrad"
 
 msgid "Wayward Son"
-msgstr ""
+msgstr "Egensinne Sonen"
 
 msgid "Uncle Ivan"
 msgstr "Farbror Ivan"
@@ -1079,9 +1079,8 @@ msgstr "Uppror"
 msgid "Apocalypse"
 msgstr "Apokalypsen"
 
-#, fuzzy
 msgid "Greater Glory"
-msgstr "Stor druid"
+msgstr "Större Ära"
 
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region.  "
@@ -1159,9 +1158,8 @@ msgstr "Norrsken"
 msgid "Betrayal's End"
 msgstr "Förräderiet"
 
-#, fuzzy
 msgid "Corruption's Heart"
-msgstr "Kaptenens bostad"
+msgstr "Korruptionens Hjärta"
 
 #, fuzzy
 msgid "The Giant's Pass"
