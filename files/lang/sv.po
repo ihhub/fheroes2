@@ -2828,7 +2828,7 @@ msgstr "Växla mellan fullskärmsläge och fönsterläge."
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
 "monitors."
-msgstr "V-Sync kan aktiveras för att lösa flimmer problem på vissa skärmar."
+msgstr "V-Sync kan aktiveras för att lösa flimmerproblem på vissa skärmar."
 
 msgid "Show extra information such as FPS and current time."
 msgstr "Visa extra information som FPS och nuvarande tid."
