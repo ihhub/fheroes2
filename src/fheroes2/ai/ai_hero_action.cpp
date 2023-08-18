@@ -1146,7 +1146,9 @@ namespace
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( objectType ) )
 
-        if ( !AI::Get().isValidHeroObject( hero, dst_index, true ) ) {
+        assert( hero.GetIndex() == dst_index );
+
+        if ( !AI::Get().isValidHeroObject( hero, dst_index, ( hero.GetIndex() == dst_index ) ) ) {
             // We're just passing through here, don't mess with this object
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " passes through without interacting with the object" )
             return;
@@ -1197,7 +1199,9 @@ namespace
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
 
-        if ( !AI::Get().isValidHeroObject( hero, dst_index, true ) ) {
+        assert( hero.GetIndex() == dst_index );
+
+        if ( !AI::Get().isValidHeroObject( hero, dst_index, ( hero.GetIndex() == dst_index ) ) ) {
             // We're just passing through here, don't mess with this object
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " passes through without interacting with the object" )
             return;
@@ -1274,7 +1278,9 @@ namespace
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
 
-        if ( !AI::Get().isValidHeroObject( hero, dst_index, true ) ) {
+        assert( hero.GetIndex() == dst_index );
+
+        if ( !AI::Get().isValidHeroObject( hero, dst_index, ( hero.GetIndex() == dst_index ) ) ) {
             // We're just passing through here, don't mess with this object
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " passes through without interacting with the object" )
             return;
@@ -1372,7 +1378,9 @@ namespace
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( objectType ) )
 
-        if ( !AI::Get().isValidHeroObject( hero, tileIndex, true ) ) {
+        assert( hero.GetIndex() == tileIndex );
+
+        if ( !AI::Get().isValidHeroObject( hero, tileIndex, ( hero.GetIndex() == tileIndex ) ) ) {
             // We're just passing through here, don't mess with this object
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " passes through without interacting with the object" )
             return;
@@ -1428,7 +1436,9 @@ namespace
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
 
-        if ( !AI::Get().isValidHeroObject( hero, dstIndex, true ) ) {
+        assert( hero.GetIndex() == dstIndex );
+
+        if ( !AI::Get().isValidHeroObject( hero, dstIndex, ( hero.GetIndex() == dstIndex ) ) ) {
             // We're just passing through here, don't mess with this object
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " passes through without interacting with the object" )
             return;
