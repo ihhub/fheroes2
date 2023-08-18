@@ -328,7 +328,7 @@ namespace
             }
         }
 
-        if ( hasBits( groundDirection, DIRECTION_RIGHT_COL | Direction::TOP | Direction::BOTTOM ) && hasNoBits( groundDirection, Direction::LEFT ) ) {
+        if ( hasBits( groundDirection, DIRECTION_RIGHT_COL | Direction::TOP | Direction::BOTTOM ) ) {
             // Left is non 'groundId'.
 
             if ( hasBits( beachDirection, Direction::LEFT ) ) {
@@ -564,6 +564,8 @@ namespace
                 return true;
             }
         }
+
+        // This terrain cannot be properly connected with the nearby terrains.
         return false;
     }
 }
@@ -574,7 +576,7 @@ namespace Maps
     {
         if ( ground == Ground::BEACH ) {
             // Beach tile images does not have connections with the other terrains.
-            return false;
+            return true;
         }
 
         // Check the near tile for the need of interconnection.
@@ -582,7 +584,12 @@ namespace Maps
 
         if ( tileGroundDirection == DIRECTION_ALL ) {
             // Current tile does not have other ground nearby.
-            return false;
+            Tiles & tile = world.GetTiles( tileId );
+            if ( Ground::isTerrainTransitionImage( tile.getTerrainImageIndex() ) ) {
+                // We change image with the transition to original terrain image.
+                tile.setTerrain( Ground::getRandomTerrainImageIndex( ground ), false, false );
+            }
+            return true;
         }
 
         switch ( ground ) {
@@ -603,7 +610,7 @@ namespace Maps
         }
         case Ground::DIRT: {
             // Dirt has transition only with water and beach.
-            const int nonBeachDirection = DIRECTION_ALL - getGroundDirecton( tileId, Ground::WATER ) | getGroundDirecton( tileId, Ground::BEACH );
+            const int nonBeachDirection = DIRECTION_ALL - ( getGroundDirecton( tileId, Ground::WATER ) | getGroundDirecton( tileId, Ground::BEACH ) );
 
             return setTerrainBoundaries( nonBeachDirection, 0, tileId, Ground::getTerrainIageOffset( ground ) );
         }
@@ -624,20 +631,37 @@ namespace Maps
         const fheroes2::Point startTileOffset = GetPoint( startTileId );
         const fheroes2::Point endTileOffset = GetPoint( endTileId );
 
-        const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
-        const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
-        const int32_t endX = std::max( startTileOffset.x, endTileOffset.x );
-        const int32_t endY = std::max( startTileOffset.y, endTileOffset.y );
+        int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
+        int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
+        int32_t endX = std::max( startTileOffset.x, endTileOffset.x );
+        int32_t endY = std::max( startTileOffset.y, endTileOffset.y );
 
         for ( int32_t y = startY; y <= endY; ++y ) {
             for ( int32_t x = startX; x <= endX; ++x ) {
-                Tiles & tile = world.GetTiles( x, y );
-                const uint16_t terainImageIndex
-                    = ( Rand::Get( 6 ) == 0 ) ? Ground::getRandomTerrainSpecialImageIndex( groundId ) : Ground::getRandomTerrainImageIndex( groundId );
-
                 // In original editor these tiles are never flipped.
-                // TODO: Decide and make the logic if some tiles can be flipped horizontally and/or vertically.
-                tile.setTerrain( terainImageIndex, false, false );
+                world.GetTiles( x, y ).setTerrain( Ground::getRandomTerrainImageIndex( groundId ), false, false );
+            }
+        }
+
+        // Set ground transitions on the boundaries.
+        // Expand working map area by 1.
+        startX = std::max( 0, startX - 1 );
+        startY = std::max( 0, startY - 1 );
+        endX = std::min( world.w() - 1, endX + 1 );
+        endY = std::min( world.h() - 1, endY + 1 );
+
+        for ( int32_t y = startY; y <= endY; ++y ) {
+            for ( int32_t x = startX; x <= endX; ++x ) {
+                const int groundOnTile = world.GetTiles( x, y ).GetGround();
+                if ( setTerrainBoundariesOnTile( x + y * world.w(), groundOnTile ) ) {
+                    continue;
+                }
+
+                if ( groundId == groundOnTile ) {
+                    continue;
+                }
+
+                setTerrainOnTiles( x + y * world.w(), x + y * world.w(), groundId );
             }
         }
     }

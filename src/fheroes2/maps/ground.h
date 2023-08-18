@@ -47,6 +47,8 @@ namespace Maps
         };
 
         constexpr uint16_t getTerrainIageOffset( const int groundId );
+        int getGroundByImageIndex( const uint16_t terrainImageIndex );
+        bool isTerrainTransitionImage( const uint16_t terrainImageIndex );
 
         const uint32_t roadPenalty = 75;
         const uint32_t defaultGroundPenalty = 100;
@@ -55,10 +57,8 @@ namespace Maps
         const char * String( int groundId );
         uint32_t GetPenalty( const Maps::Tiles & tile, uint32_t pathfindingLevel );
 
-        // Returns the terrain index (used in TIL file) for normal terrain layout.
+        // Returns the terrain index (used in TIL file) for main (without transition) terrain layout.
         uint16_t getRandomTerrainImageIndex( const int groundId );
-        // Returns the terrain index (used in TIL file) for extra terrain layout (stone, flowers, crack, etc.).
-        uint16_t getRandomTerrainSpecialImageIndex( const int groundId );
     }
 }
 
