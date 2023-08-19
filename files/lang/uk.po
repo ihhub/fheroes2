@@ -2007,9 +2007,11 @@ msgstr ""
 msgid "Dragadune"
 msgstr ""
 
+#, fuzzy
 msgid "Kalindra"
 msgstr "Каліндра"
 
+#, fuzzy
 msgid "Xabran"
 msgstr "Ксабран"
 
@@ -2034,6 +2036,7 @@ msgstr ""
 msgid "Big Oak"
 msgstr ""
 
+#, fuzzy
 msgid "Chandler"
 msgstr "Чандлер"
 
@@ -2043,9 +2046,11 @@ msgstr ""
 msgid "Hampshire"
 msgstr ""
 
+#, fuzzy
 msgid "Antioch"
 msgstr "Антіох"
 
+#, fuzzy
 msgid "Avalon"
 msgstr "Авалон"
 
@@ -2151,9 +2156,11 @@ msgstr ""
 msgid "There is no room in the garrison for this army."
 msgstr ""
 
+#, fuzzy
 msgid "Fortifications"
 msgstr "Укріплення"
 
+#, fuzzy
 msgid "Farm"
 msgstr "Ферма"
 
@@ -2177,11 +2184,13 @@ msgstr "Ковальня"
 msgid "Upg. Blacksmith"
 msgstr "Майстерня"
 
+#, fuzzy
 msgid "Armory"
-msgstr "Арсенал"
+msgstr "Збройниця"
 
+#, fuzzy
 msgid "Upg. Armory"
-msgstr "Арсенал Ветеранів"
+msgstr "Арсенал"
 
 msgid "Jousting Arena"
 msgstr ""
@@ -2195,9 +2204,11 @@ msgstr ""
 msgid "Upg. Cathedral"
 msgstr ""
 
+#, fuzzy
 msgid "Coliseum"
 msgstr "Колізей"
 
+#, fuzzy
 msgid "Garbage Heap"
 msgstr "Смітник"
 
@@ -2252,108 +2263,141 @@ msgstr ""
 msgid "Fenced Meadow"
 msgstr ""
 
+#, fuzzy
 msgid "sorceress|Red Tower"
 msgstr "Червона вежа"
 
+#, fuzzy
 msgid "Dungeon"
 msgstr "Підземелля"
 
+#, fuzzy
 msgid "Waterfall"
 msgstr "Водоспад"
 
+#, fuzzy
 msgid "Cave"
 msgstr "Печера"
 
+#, fuzzy
 msgid "Crypt"
-msgstr "Крипта"
+msgstr "Склеп"
 
+#, fuzzy
 msgid "Nest"
 msgstr "Гніздо"
 
+#, fuzzy
 msgid "Maze"
 msgstr "Лабіринт"
 
+#, fuzzy
 msgid "Upg. Maze"
-msgstr "Королівський Лабіринт"
+msgstr "Великий лабіринт"
 
+#, fuzzy
 msgid "Swamp"
 msgstr "Болото"
 
+#, fuzzy
 msgid "Green Tower"
 msgstr "Зелена вежа"
 
+#, fuzzy
 msgid "warlock|Red Tower"
-msgstr "Червона Вежа"
+msgstr "Червона вежа"
 
+#, fuzzy
 msgid "Black Tower"
-msgstr "Чорна Вежа"
+msgstr "Чорна вежа"
 
+#, fuzzy
 msgid "Library"
 msgstr "Бібліотека"
 
+#, fuzzy
 msgid "Orchard"
-msgstr "Фруктовий Сад"
+msgstr "Фруктовий сад"
 
+#, fuzzy
 msgid "Habitat"
-msgstr "Помешкання"
+msgstr "Хата"
 
+#, fuzzy
 msgid "Pen"
 msgstr "Хлів"
 
+#, fuzzy
 msgid "Foundry"
 msgstr "Ливарня"
 
+#, fuzzy
 msgid "Upg. Foundry"
-msgstr "Ливарний Завод"
+msgstr "Фабрика"
 
+#, fuzzy
 msgid "Cliff Nest"
-msgstr "Скельне Гніздо"
+msgstr "Скельне гніздо"
 
+#, fuzzy
 msgid "Ivory Tower"
-msgstr "Вежа Магів"
+msgstr "Вежа слонової кістки"
 
 msgid "Upg. Ivory Tower"
 msgstr ""
 
+#, fuzzy
 msgid "Cloud Castle"
-msgstr "Хмарна Фортеця"
+msgstr "Хмарний замок"
 
 msgid "Upg. Cloud Castle"
 msgstr ""
 
+#, fuzzy
 msgid "Storm"
 msgstr "Шторм"
 
+#, fuzzy
 msgid "Skull Pile"
 msgstr "Купа черепів"
 
+#, fuzzy
 msgid "Excavation"
 msgstr "Розкопки"
 
+#, fuzzy
 msgid "Graveyard"
-msgstr "Цвинтар"
-
-msgid "Upg. Graveyard"
 msgstr "Кладовище"
 
+#, fuzzy
+msgid "Upg. Graveyard"
+msgstr "Цвинтар"
+
+#, fuzzy
 msgid "Upg. Pyramid"
-msgstr "Проклята Піраміда"
+msgstr "Велика піраміда"
 
+#, fuzzy
 msgid "Mansion"
-msgstr "Садиба"
+msgstr "Особняк"
 
+#, fuzzy
 msgid "Upg. Mansion"
 msgstr "Маєток"
 
+#, fuzzy
 msgid "Mausoleum"
 msgstr "Мавзолей"
 
+#, fuzzy
 msgid "Upg. Mausoleum"
-msgstr "Проклятий Мавзолей"
+msgstr "Некрополь"
 
+#, fuzzy
 msgid "Laboratory"
 msgstr "Лабораторія"
 
+#, fuzzy
 msgid "Shrine"
 msgstr "Святиня"
 
@@ -2380,17 +2424,20 @@ msgid ""
 "The Crystal Garden increases production of Sprites by %{count} per week."
 msgstr ""
 
+#, fuzzy
 msgid "The Dungeon increases the income of the town by %{count} gold per day."
-msgstr "Підземелля підвищує прибуток міста на %{count} золота на день."
+msgstr "Підземелля підвищує прибуток міста на %{count} в день."
 
+#, fuzzy
 msgid "The Waterfall increases production of Centaurs by %{count} per week."
-msgstr "Водоспад підвищує приріст Кентаврів на %{count} на тиждень."
+msgstr "Водоспад підвищує приріст Кентаврів на %{count} за тиждень."
 
+#, fuzzy
 msgid ""
 "The Library increases the number of spells in the Guild by one for each "
 "level of the guild."
 msgstr ""
-"Бібліотека підвищує кількість заклять в Гільдії на одне за кожний рівень "
+"Бібліотека підвищує кількість чарів в Гільдії на один за кожний рівень "
 "гільдії."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
@@ -2402,12 +2449,14 @@ msgstr ""
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
 
+#, fuzzy
 msgid "Thieves' Guild"
-msgstr "Гільдія Злодіїв"
+msgstr "Гільдія злодіїв"
 
 msgid "Tavern"
 msgstr "Таверна"
 
+#, fuzzy
 msgid "Shipyard"
 msgstr "Верф"
 
@@ -2952,8 +3001,9 @@ msgstr ""
 msgid "V-Sync"
 msgstr ""
 
+#, fuzzy
 msgid "on"
-msgstr "Ввімк."
+msgstr "Відсутні"
 
 msgid "FPS"
 msgstr ""
@@ -3189,19 +3239,22 @@ msgstr ""
 msgid "Warning!"
 msgstr ""
 
-msgid "Select Monster:"
+msgid "Accept the choice made."
 msgstr ""
 
-msgid "Select Hero:"
-msgstr ""
-
-msgid "Select Artifact:"
+msgid "Select Skill:"
 msgstr ""
 
 msgid "Select Spell:"
 msgstr ""
 
-msgid "Select Skill:"
+msgid "Select Artifact:"
+msgstr ""
+
+msgid "Select Monster:"
+msgstr ""
+
+msgid "Select Hero:"
 msgstr ""
 
 msgid "Map Type:\n"
@@ -3331,9 +3384,6 @@ msgid "Selected Description"
 msgstr ""
 
 msgid "The description of the currently selected map."
-msgstr ""
-
-msgid "Accept the choice made."
 msgstr ""
 
 msgid "Jump"
@@ -3517,11 +3567,13 @@ msgstr "Завантажити Гру"
 msgid "Load an existing map."
 msgstr ""
 
+#, fuzzy
 msgid "Save Map"
-msgstr "Зберегти Мапу"
+msgstr "Зберегти Гру"
 
+#, fuzzy
 msgid "Save the current map."
-msgstr "Зберегти поточну гру."
+msgstr "Збережіть поточну гру."
 
 msgid "Quit out of the map editor."
 msgstr ""
@@ -3532,8 +3584,9 @@ msgstr ""
 msgid "Grass Objects"
 msgstr ""
 
+#, fuzzy
 msgid "Snow Objects"
-msgstr "Об'єкти Снігових Пустель"
+msgstr "Порожнє місце"
 
 msgid "Swamp Objects"
 msgstr ""
@@ -3541,20 +3594,23 @@ msgstr ""
 msgid "Lava Objects"
 msgstr ""
 
+#, fuzzy
 msgid "Desert Objects"
-msgstr "Об'єкти Пустелі"
+msgstr "Пустельний намет"
 
 msgid "Dirt Objects"
 msgstr ""
 
+#, fuzzy
 msgid "Wasteland Objects"
-msgstr "Об'єкти Пустки"
+msgstr "Пустка"
 
 msgid "Beach Objects"
 msgstr ""
 
+#, fuzzy
 msgid "Towns"
-msgstr "Міста"
+msgstr "Місто"
 
 msgid "Heroes"
 msgstr ""
@@ -3562,8 +3618,9 @@ msgstr ""
 msgid "Artifacts"
 msgstr ""
 
+#, fuzzy
 msgid "Treasures"
-msgstr "Скарби"
+msgstr "Скарб"
 
 msgid ""
 "Draws terrain in\n"
@@ -3575,8 +3632,9 @@ msgid ""
 "%{size} by %{size} square increments."
 msgstr ""
 
+#, fuzzy
 msgid "Small Brush"
-msgstr "Маленька Кисть"
+msgstr "Маленькі Мапи"
 
 msgid "Medium Brush"
 msgstr ""
@@ -3812,6 +3870,7 @@ msgstr ""
 msgid "Restart the current scenario."
 msgstr ""
 
+#, fuzzy
 msgid "Difficulty"
 msgstr ""
 "Складність\n"
