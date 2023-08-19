@@ -10405,7 +10405,7 @@ msgstr ""
 "%{hp} hälsopoäng."
 
 msgid "The ultimate artifact is really the %{name}."
-msgstr "Den Främsta Artefakten är %{name}."
+msgstr "Den Främsta Artefakten är den %{name}."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
 msgstr ""
