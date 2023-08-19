@@ -812,9 +812,10 @@ uint32_t AIWorldPathfinder::getMovementPenalty( const int from, const int to, co
         // when moving to this tile - once when accessing the object to remove it, and again when moving to
         // this tile.
         //
-        // According to a rough estimate (without taking into account the "last move" logic), the movement
-        // points spent can be considered the same in both cases, therefore, we apply an additional penalty
-        // when moving from the tile containing this object to the next tile.
+        // According to a rough estimate, the movement points spent can be considered the same in both cases,
+        // therefore, we apply an additional penalty when moving from the tile containing this object to the
+        // next tile. In general, it is impossible to perform an accurate estimation, since the stats and
+        // skills of a moving hero may change after interacting with the object.
         //
         // The real path will not reach this step, so this logic will be used to estimate distances more
         // accurately when choosing whether to move through objects or past them.
