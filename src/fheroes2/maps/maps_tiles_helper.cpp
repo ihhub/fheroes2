@@ -566,15 +566,16 @@ namespace
         }
 
         // This terrain cannot be properly connected with the nearby terrains.
+        const fheroes2::Point tilePnt( Maps::GetPoint( tileId ) );
+        COUT( "No proper ground transition found for " << Maps::Ground::String( Maps::Ground::getGroundByImageIndex( imageOffset ) ) << " at " << tilePnt.x << ','
+                                                       << tilePnt.y )
         return false;
     }
-}
 
-namespace Maps
-{
+    // Returns true if terrain transition was set or it is not needed.
     bool setTerrainBoundariesOnTile( const int32_t tileId, const int ground )
     {
-        if ( ground == Ground::BEACH ) {
+        if ( ground == Maps::Ground::BEACH ) {
             // Beach tile images does not have connections with the other terrains.
             return true;
         }
@@ -584,35 +585,35 @@ namespace Maps
 
         if ( tileGroundDirection == DIRECTION_ALL ) {
             // Current tile does not have other ground nearby.
-            Tiles & tile = world.GetTiles( tileId );
-            if ( Ground::isTerrainTransitionImage( tile.getTerrainImageIndex() ) ) {
-                // We change image with the transition to original terrain image.
-                tile.setTerrain( Ground::getRandomTerrainImageIndex( ground ), false, false );
+            Maps::Tiles & tile = world.GetTiles( tileId );
+            if ( Maps::Ground::isTerrainTransitionImage( tile.getTerrainImageIndex() ) ) {
+                // We change image with the transition to original terrain image without transition.
+                tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( ground ), false, false );
             }
             return true;
         }
 
         switch ( ground ) {
-        case Ground::WATER:
+        case Maps::Ground::WATER:
             // Water connects with all other terrains with the transition to the Beach ground.
             // TODO: Set waves on the water for 3 tiles from the ground with the wave direction to the center of the ground.
-            return setTerrainBoundaries( tileGroundDirection, 0, tileId, Ground::getTerrainIageOffset( ground ) );
-        case Ground::GRASS:
-        case Ground::SNOW:
-        case Ground::SWAMP:
-        case Ground::LAVA:
-        case Ground::DESERT:
-        case Ground::WASTELAND: {
+            return setTerrainBoundaries( tileGroundDirection, 0, tileId, Maps::Ground::getTerrainIageOffset( ground ) );
+        case Maps::Ground::GRASS:
+        case Maps::Ground::SNOW:
+        case Maps::Ground::SWAMP:
+        case Maps::Ground::LAVA:
+        case Maps::Ground::DESERT:
+        case Maps::Ground::WASTELAND: {
             // The transition to the Beach terrain is rendered when the next tile ground is Water or Beach.
-            const int beachDirection = getGroundDirecton( tileId, Ground::WATER ) | getGroundDirecton( tileId, Ground::BEACH );
+            const int beachDirection = getGroundDirecton( tileId, Maps::Ground::WATER ) | getGroundDirecton( tileId, Maps::Ground::BEACH );
 
-            return setTerrainBoundaries( tileGroundDirection, beachDirection, tileId, Ground::getTerrainIageOffset( ground ) );
+            return setTerrainBoundaries( tileGroundDirection, beachDirection, tileId, Maps::Ground::getTerrainIageOffset( ground ) );
         }
-        case Ground::DIRT: {
+        case Maps::Ground::DIRT: {
             // Dirt has transition only with water and beach.
-            const int nonBeachDirection = DIRECTION_ALL - ( getGroundDirecton( tileId, Ground::WATER ) | getGroundDirecton( tileId, Ground::BEACH ) );
+            const int nonBeachDirection = DIRECTION_ALL - ( getGroundDirecton( tileId, Maps::Ground::WATER ) | getGroundDirecton( tileId, Maps::Ground::BEACH ) );
 
-            return setTerrainBoundaries( nonBeachDirection, 0, tileId, Ground::getTerrainIageOffset( ground ) );
+            return setTerrainBoundaries( nonBeachDirection, 0, tileId, Maps::Ground::getTerrainIageOffset( ground ) );
         }
         default:
             // Have you added a new ground? Add the logic above!
@@ -621,10 +622,15 @@ namespace Maps
         }
     }
 
+}
+
+namespace Maps
+{
     void setTerrainOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId )
     {
-        const int32_t maxTileId = world.w() * world.h() - 1;
-        if ( startTileId < 0 || endTileId < 0 || startTileId > maxTileId || endTileId > maxTileId ) {
+        const int32_t mapWidth = world.w();
+        const int32_t maxTileId = mapWidth * world.h() - 1;
+        if ( startTileId < 0 || startTileId > maxTileId || endTileId < 0 || endTileId > maxTileId ) {
             return;
         }
 
@@ -636,10 +642,13 @@ namespace Maps
         int32_t endX = std::max( startTileOffset.x, endTileOffset.x );
         int32_t endY = std::max( startTileOffset.y, endTileOffset.y );
 
+        // TODO: add the terrain variable to a tile (e.g. uint16_t _groundType) to faster get it and not to set multiple time the terrain image
+        //       and to have an ability to revert it by imageId.
         for ( int32_t y = startY; y <= endY; ++y ) {
+            const int32_t tileOffset = y * mapWidth;
             for ( int32_t x = startX; x <= endX; ++x ) {
                 // In original editor these tiles are never flipped.
-                world.GetTiles( x, y ).setTerrain( Ground::getRandomTerrainImageIndex( groundId ), false, false );
+                world.GetTiles( x + tileOffset ).setTerrain( Ground::getRandomTerrainImageIndex( groundId ), false, false );
             }
         }
 
@@ -647,21 +656,39 @@ namespace Maps
         // Expand working map area by 1.
         startX = std::max( 0, startX - 1 );
         startY = std::max( 0, startY - 1 );
-        endX = std::min( world.w() - 1, endX + 1 );
+        endX = std::min( mapWidth - 1, endX + 1 );
         endY = std::min( world.h() - 1, endY + 1 );
 
         for ( int32_t y = startY; y <= endY; ++y ) {
+            const int32_t tileOffset = y * mapWidth;
             for ( int32_t x = startX; x <= endX; ++x ) {
-                const int groundOnTile = world.GetTiles( x, y ).GetGround();
-                if ( setTerrainBoundariesOnTile( x + y * world.w(), groundOnTile ) ) {
+                const int32_t tileId = x + tileOffset;
+                const int groundOnTile = world.GetTiles( tileId ).GetGround();
+
+                if ( setTerrainBoundariesOnTile( tileId, groundOnTile ) ) {
+                    // The terrain transition was correctly set or it was not needed.
                     continue;
                 }
+
+                /**/
 
                 if ( groundId == groundOnTile ) {
+                    // TODO: Revert the ground change or calculate a proper ground for this tile (what criteria to use?).
+                    COUT( "Ground " << Maps::Ground::String( groundOnTile ) << " at " << x << ',' << y << " should be replaced by some other one." )
+                    for ( const int newGround :
+                          { Ground::WATER, Ground::GRASS, Ground::SNOW, Ground::SWAMP, Ground::LAVA, Ground::DESERT, Ground::DIRT, Ground::WASTELAND, Ground::BEACH } ) {
+                        world.GetTiles( x + tileOffset ).setTerrain( Ground::getRandomTerrainImageIndex( newGround ), false, false );
+                        if ( setTerrainBoundariesOnTile( tileId, newGround ) ) {
+                            COUT( "Ground " << Maps::Ground::String( newGround ) << " was set." )
+                            break;
+                        }
+                    }
                     continue;
                 }
 
-                setTerrainOnTiles( x + y * world.w(), x + y * world.w(), groundId );
+                COUT( "Ground " << Maps::Ground::String( groundOnTile ) << " at " << x << ',' << y << " replaced by " << Maps::Ground::String( groundId ) )
+
+                setTerrainOnTiles( tileId, tileId, groundId );
             }
         }
     }
