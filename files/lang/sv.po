@@ -9226,7 +9226,7 @@ msgid ""
 "The %{name} eliminates the %{count} percent penalty for your troops shooting "
 "past obstacles (e.g. castle walls)."
 msgstr ""
-"%{name} tar bort handikappet med %{count} för dina varelsers projektiler när "
+"%{name} tar bort handikappet med %{count} procent för dina varelsers projektiler när "
 "de passerar hinder, exempelvis slottsmurar."
 
 msgid ""
