@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-05 03:57+0000\n"
-"PO-Revision-Date: 2023-08-05 00:20+0200\n"
+"POT-Creation-Date: 2023-08-12 09:48+0000\n"
+"PO-Revision-Date: 2023-08-11 23:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -80,6 +80,9 @@ msgid "NO"
 msgstr "NEI"
 
 msgid "EXIT"
+msgstr "UT"
+
+msgid "smallerButton|EXIT"
 msgstr "UT"
 
 msgid "DISMISS"
@@ -180,6 +183,9 @@ msgstr "6 SPILLERE"
 msgid "GIFT"
 msgstr "SEND"
 
+msgid "MAX"
+msgstr "MAKS"
+
 msgid "DIFFICULTY"
 msgstr "FELTTOGSNIVÅ"
 
@@ -188,9 +194,6 @@ msgstr "VIS VIDEO"
 
 msgid "MIN"
 msgstr "MIN"
-
-msgid "MAX"
-msgstr "MAKS"
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -357,18 +360,16 @@ msgstr ""
 msgid "You have already cast a spell this round."
 msgstr "Du har allerede brukt trolldom denne runden."
 
-#, fuzzy
 msgid "That spell will have no effect!"
-msgstr "Denne trolldommen vil ikke ha virkning på noen som helst!"
+msgstr "Denne trolldommen vil ikke ha noen virkning!"
 
 msgid "You may only summon one type of elemental per combat."
 msgstr "Du kan kun mane fram én type elementærånd per kamp."
 
-#, fuzzy
 msgid ""
 "There is no open space adjacent to your hero where you can summon an "
 "Elemental to."
-msgstr "Det er ikke plass nær helten din til å mane fram en elementærånd."
+msgstr "Det er ikke plass nær helten din til å framkalle en elementærånd."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
@@ -587,22 +588,22 @@ msgid ""
 "round is reset when every creature has had a turn."
 msgstr ""
 "Bruk en trolldom. Du kan kun bruke én per kamprunde. Runden er over når hver "
-"skapning har gjort sin tur."
+"kriger har gjort sin tur."
 
 msgid ""
 "Retreat your hero, abandoning your creatures. Your hero will be available "
 "for you to recruit again, however, the hero will have only a novice hero's "
 "forces."
 msgstr ""
-"Trekk tilbake din helt og forlat dine skapninger. Din helt vil være "
-"tilgjengelig til å verves på nytt, men kun med startstyrker."
+"Flykt med helten din og forlat dine krigere. Helten vil bli tilgjengelig for "
+"verving med en gang, men kun med startstyrker."
 
 msgid ""
 "Surrendering costs gold. However if you pay the ransom, the hero and all of "
 "his or her surviving creatures will be available to recruit again."
 msgstr ""
-"Det koster gull å overgi seg. Dersom du betaler løsepengene vil helten din "
-"samt alle de overlevende skapningene som medfølger kunne verves igjen."
+"Det koster gull å overgi seg. Dersom du betaler løsepengene vil helten din, "
+"samt alle de gjenværende krigerne, kunne verves igjen."
 
 msgid "Open Hero Screen to view full information about the hero."
 msgstr "Åpne heltevinduet for å se all informasjon om en helt."
@@ -698,8 +699,8 @@ msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
 "get to go again until the next round."
 msgstr ""
-"Hopper over den nåværende skapningen. Den nåværende skapningen avslutter "
-"turen sin og får ikke en ny tur før neste runde."
+"Hopper over den nåværende krigeren. Turen dens avsluttes og neste tur vil "
+"ikke komme før neste runde."
 
 msgid "View Captain's options"
 msgstr "Vis innstillinger for kapteinen"
@@ -741,8 +742,8 @@ msgstr[1] "Troppen med %{attacker} gjorde %{damage} skadepoeng."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
-msgstr[0] "1 skapning døde."
-msgstr[1] "%{count} skapninger dør."
+msgstr[0] "1 kriger døde."
+msgstr[1] "%{count} krigere dør."
 
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
@@ -772,22 +773,22 @@ msgid "%{name} casts %{spell}."
 msgstr "%{name} brukte %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr "%{spell} gjorde %{damage} skadepoeng på én vandød skapning."
+msgstr "%{spell} gjorde %{damage} skadepoeng på én vandød kriger."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
 msgstr "%{spell} gjorde %{damage} skadepoeng på alle vandøde."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr "%{spell} gjorde %{damage} skadepoeng, %{count} skapninger dør."
+msgstr "%{spell} gjorde %{damage} skadepoeng, %{count} krigere dør."
 
 msgid "The %{spell} does %{damage} damage."
 msgstr "%{spell} gjorde %{damage} skadepoeng."
 
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr "%{spell} gjorde %{damage} skadepoeng på én levende skapning."
+msgstr "%{spell} gjorde %{damage} skadepoeng på én levende kriger."
 
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr "%{spell} gjorde %{damage} skadepoeng på alle levende skapninger."
+msgstr "%{spell} gjorde %{damage} skadepoeng på alle levende krigere."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr ""
@@ -944,7 +945,7 @@ msgid "Necromancer Guild"
 msgstr "Sortekunstnerlaug"
 
 msgid "Ogre Alliance"
-msgstr "Ogrealliansen"
+msgstr "Jettealliansen"
 
 msgid "Dwarfbane"
 msgstr "Dvergebane"
@@ -1135,7 +1136,7 @@ msgstr ""
 "Kong Archibald forlanger at du beseirer hans tre fiender i dette området. De "
 "er ikke allierte med hverandre og vil derfor bruke mesteparten av kreftene "
 "sine på å krige seg imellom. Du vinner når du har underlagt deg alle de "
-"fiendtlige borgene og det er ingen flere helter igjen å slå."
+"fiendtlige borgene og det ikke er flere helter igjen å slå."
 
 msgid ""
 "You must unify the barbarian tribes of the north by conquering them. As in "
@@ -1145,8 +1146,8 @@ msgid ""
 msgstr ""
 "Du må forene de barbariske stammene i nord ved å beseire dem. Som i det "
 "forrige oppdraget er fiendene ikke alliert mot deg, men de har mer råvarer "
-"tilgjengelig. Du vil vinne når du eier alle de fiendtlige borgene og det er "
-"ingen flere helter igjen å slå."
+"tilgjengelig. Du vil vinne når du eier alle de fiendtlige borgene og det "
+"ikke er flere helter igjen å slå."
 
 msgid ""
 "Do-gooder wizards have taken the Necromancers' castle. You must retake it to "
@@ -1521,8 +1522,8 @@ msgstr ""
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
 msgstr ""
-"Jotnene gjenkjenner deg som Dvergebanen og tumler seg tungt bort til deg for "
-"å slå seg sammen med deg."
+"Jettene gjenkjenner deg som Dvergebanen og tumler seg tungt bort til deg for "
+"å slå seg til din armé."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
@@ -1552,8 +1553,8 @@ msgstr ""
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
 msgstr ""
-"Ogrene gir fra seg et grynt av annerkjennelse, \"Archibald sine allierte kan "
-"få slippe forbi.\"."
+"Jettene gir fra seg et grynt av annerkjennelse, \"Archibald sine allierte "
+"skal få slippe forbi.\"."
 
 msgid ""
 "The dragons see you and call out.  \"Our alliance with Archibald compels us "
@@ -1569,7 +1570,7 @@ msgid ""
 "says, \"Let us not impede your progress, ally!  Move on, and may victory be "
 "yours.\""
 msgstr ""
-"Alvene står i givakt mens du kommer nærmere. Lederen deres roper på deg og "
+"Alvene står i givakt idet du kommer nærmere. Lederen deres roper på deg og "
 "sier: \"La oss ikke komme i veien for deg, vår allierte! Dra nå videre, og "
 "måtte seieren bli din.\"."
 
@@ -2760,8 +2761,8 @@ msgid ""
 "tongue, and make you an offer:\n"
 " \n"
 msgstr ""
-"Skapningene lar seg overtale takket være dine formidable meglingsevner, og "
-"de gir deg følgende tilbud:\n"
+"Krigerne lar seg overtale takket være dine formidable meglingsevner, og de "
+"gir deg følgende tilbud:\n"
 " \n"
 
 msgid ""
@@ -2888,9 +2889,8 @@ msgstr "Velg spillspråk"
 msgid "Change the graphics settings of the game."
 msgstr "Endre bildeinnstillingene til spillet."
 
-#, fuzzy
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
-msgstr "Skru farget markør av eller på. Dette er kun smak og behag."
+msgstr "Skru farget markør av eller på. Dette er kun et estetisk valg."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3230,20 +3230,23 @@ msgstr "Er du sikker på at du vil slette filen:"
 msgid "Warning!"
 msgstr "Advarsel!"
 
+msgid "Accept the choice made."
+msgstr "Bekreft valget og gå videre."
+
+msgid "Select Skill:"
+msgstr "Velg ferdighet:"
+
+msgid "Select Spell:"
+msgstr "Velg trolldom:"
+
+msgid "Select Artifact:"
+msgstr "Velg en skatt:"
+
 msgid "Select Monster:"
 msgstr "Velg monster:"
 
 msgid "Select Hero:"
 msgstr "Velg helt:"
-
-msgid "Select Artifact:"
-msgstr "Velg en skatt:"
-
-msgid "Select Spell:"
-msgstr "Velg trolldom:"
-
-msgid "Select Skill:"
-msgstr "Velg ferdighet:"
 
 msgid "Map Type:\n"
 msgstr "Kart-type:\n"
@@ -3385,9 +3388,6 @@ msgstr "Kartbeskrivelse"
 
 msgid "The description of the currently selected map."
 msgstr "Beskrivelse av det utvalgte kartet."
-
-msgid "Accept the choice made."
-msgstr "Bekreft valget og gå videre."
 
 msgid "Jump"
 msgstr "Sprang"
@@ -3549,7 +3549,7 @@ msgid "Personality:"
 msgstr "Rolle:"
 
 msgid "Best Monster:"
-msgstr "Beste skapning:"
+msgstr "Beste krigerslag:"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3892,10 +3892,10 @@ msgid "Start the selected scenario."
 msgstr "Begynn det kartet du har valgt."
 
 msgid "View Intro"
-msgstr "Vis introfilm"
+msgstr "Vis video"
 
 msgid "View Intro videos for the current state of the campaign."
-msgstr "Vis filmen for det nåværende punktet av felttoget."
+msgstr "Vis filmen for det inneværende punktet av felttoget."
 
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
@@ -6463,7 +6463,7 @@ msgid ""
 "An unusual alliance of Ogres, Orcs, and Dwarves offer to train (upgrade) any "
 "such troops brought to them. Unfortunately, you have none with you."
 msgstr ""
-"En usedvanlig allianse av orker, ogrer og dverger tilbyr å trene opp "
+"En usedvanlig allianse av orker, jetter og dverger tilbyr å trene opp "
 "(oppgradere) det du har av samme krigere som dem. Dessverre har du ingen "
 "slike i hæren din."
 
@@ -6862,25 +6862,22 @@ msgstr ""
 "\"På vandringene mine har jeg lært mye om mørkets kunster. Jeg har gått i "
 "læren hos et dyktig orakel. Du skal få svaret du søker.\""
 
-#, fuzzy
 msgid "No spell book is present."
-msgstr "Ingen tryllebok er til å finne."
+msgstr "Det fins ingen tryllebok."
 
-#, fuzzy
 msgid ""
 "This spell costs %{mana} spell points. You have no spell points, so you "
 "cannot cast it."
 msgstr ""
-"Denne trolldommen koster %{mana} mana. Du har null magipoeng, så du kan ikke "
-"bruke denne trolldommen."
+"Denne trolldommen koster %{mana} magipoeng. Du har null magipoeng, så du kan "
+"ikke bruke denne trolldommen."
 
-#, fuzzy
 msgid ""
 "This spell costs %{mana} spell points. You only have %{point} spell points, "
 "so you cannot cast it."
 msgstr ""
-"Denne trolldommen koster %{mana} mana. Du har kun %{point} mana, så du kan "
-"ikke bruke denne trolldommen."
+"Denne trolldommen koster %{mana} magipoeng. Du har kun %{point} magipoeng, "
+"så du kan ikke bruke denne trolldommen."
 
 msgid "The spell was not found."
 msgstr "Trolldommen ble ikke funnet."
@@ -6896,44 +6893,38 @@ msgstr ""
 "Din helt er for sliten til å bruke denne trolldommen i dag. Prøv igjen i "
 "morgen."
 
-#, fuzzy
 msgid "This spell cannot be cast on a boat."
-msgstr "Denne trolldommen kan ikke bli brukt på et skip."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
 
-#, fuzzy
 msgid "This spell can only be cast near an ocean."
-msgstr "Denne trolldommen kan kun bli brukt i nærheten av vann."
+msgstr "Denne trolldommen kan kun bli brukt i nærheten av sjø."
 
-#, fuzzy
 msgid ""
 "There are no boats available and no ocean adjacent to the hero where this "
 "spell will work."
 msgstr ""
-"Det er ingen skip eller vann i nærheten av helten, og dermed vil ikke denne "
-"trolldommen virke."
+"Det er ingen skip tilgjengelige eller sjø i nærheten av helten hvor denne "
+"trolldommen vil virke."
 
-#, fuzzy
 msgid "There are no boats available for this spell."
 msgstr "Ingen skip er tilgjengelige for denne trolldommen."
 
-#, fuzzy
 msgid "There is no ocean adjacent to the hero where this spell will work."
 msgstr ""
-"Denne trolldommen vil ikke virke fordi det ikke er et ledig vannområde i "
-"umiddelbar nærhet av helten."
+"Det er ingen sjø i umiddelbar nærhet av helten hvor denne trolldommen kan "
+"brukes."
 
-#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
 "You cannot cast this spell."
 msgstr ""
-"Du eier for øyeblikket ingen byer eller borger som ikke har en helt på "
-"besøk, og dermed kan ikke denne trolldommen brukes."
+"Du eier ingen byer eller borger som ikke har besøk av andre helter for "
+"øyeblikket. Du kan ikke bruke denne trolldommen."
 
-#, fuzzy
 msgid "This hero is already in a town, so you cannot cast this spell."
 msgstr ""
-"Helten befinner seg allerede i en by, og kan ikke denne trolldommen brukes."
+"Denne helten befinner seg allerede i en by, og dermed kan ikke denne "
+"trolldommen brukes."
 
 msgid ""
 "The nearest town is %{town}.\n"
@@ -6944,25 +6935,22 @@ msgstr ""
 "\n"
 "Denne byen er blokkert av helten din %{hero}."
 
-#, fuzzy
 msgid "This spell is already in effect."
 msgstr "Denne trolldommen er allerede i virkning."
 
-#, fuzzy
 msgid ""
 "No opponent neither has nor can have any hero under their command anymore. "
 "Casting this spell will have no effect."
 msgstr ""
-"Ingen av motstanderne dine kan ha helter under sin kommando lenger, dermed "
-"vil ikke denne trolldommen gjøre noe."
+"Ingen av motstanderne dine har eller vil kunne ha helter under sitt befal "
+"lenger, og dermed vil ikke denne trolldommen ha noen virkning."
 
-#, fuzzy
 msgid ""
 "No opponent has a hero under their command at this time. Casting this spell "
 "will have no effect."
 msgstr ""
-"Ingen av motstanderne dine har en helt under sin kommando for øyeblikket, "
-"dermed vil ikke denne trolldommen gjøre noe."
+"Ingen av motstanderne dine har helter under sitt befal for øyeblikket, og "
+"dermed vil ikke denne trolldommen ha noen virkning."
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -6971,12 +6959,11 @@ msgstr ""
 "Du må være innenfor %{count} ruter av et monster for at trolldommen 'Syner' "
 "skal virke."
 
-#, fuzzy
 msgid ""
 "You must be standing on the entrance to a mine (sawmills and alchemist labs "
 "do not count) to cast this spell."
 msgstr ""
-"Du må stå ved inngangen til ei gruve (sagbruk og alkymistlaber funker ikke) "
+"Du må stå ved inngangen til en gruve (sagbruk og alkymistlaber telles ikke) "
 "for å bruke denne trolldommen."
 
 msgid "You must first defeat the ghosts guarding the mine to cast this spell."
@@ -6984,13 +6971,12 @@ msgstr ""
 "Du må først fordrive spøkelsene som vokter over gruven for å bruke denne "
 "trolldommen."
 
-#, fuzzy
 msgid ""
 "There are already at least as many elementals guarding the mine as this hero "
 "can generate. Casting this spell will have no effect."
 msgstr ""
-"Det antallet elementærånder du kan tilkalle er enten like mange eller færre "
-"enn det som allerede er her. Å bruke denne trolldommen vil være uten nytte."
+"Det befinner seg alt minst like mange elementærånder som denne helten kan "
+"tilkalle her. Å bruke denne trolldommen vil være uten nytte."
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race}en %{name} (level %{level})"
@@ -7017,7 +7003,7 @@ msgid "You cannot dismiss a hero in a castle"
 msgstr "Du kan ikke bortvise en helt i en borg"
 
 msgid "Dismissal of %{name} the %{race} is prohibited by scenario"
-msgstr "Bortvisningen av %{race}en %{name} er forhindret på dette kartet"
+msgstr "Bortvisning av %{race}en %{name} er forbudt på dette kartet"
 
 msgid "Dismiss %{name} the %{race}"
 msgstr "Bortvis %{race}en %{name}"
@@ -7082,15 +7068,15 @@ msgid "Identify Hero"
 msgstr "Kartlegg helt"
 
 msgid "The creatures are willing to join us!"
-msgstr "Skapningene er villige til å bli med oss!"
+msgstr "Krigerne er villige til å slå seg til oss!"
 
 msgid "All the creatures will join us..."
-msgstr "Alle skapningene vil bli med oss..."
+msgstr "Alle krigerne kommer til å ville slå seg til oss..."
 
 msgid "The creature will join us..."
 msgid_plural "%{count} of the creatures will join us..."
-msgstr[0] "Skapningen vil bli med oss..."
-msgstr[1] "%{count} skapninger vil bli med oss..."
+msgstr[0] "Krigeren vil bli med oss..."
+msgstr[1] "%{count} krigere vil bli med oss..."
 
 msgid ""
 "\n"
@@ -7100,10 +7086,10 @@ msgstr ""
 "imot en pris på %{gold} gullstykker."
 
 msgid "These weak creatures will surely flee before us."
-msgstr "Disse svake skapningene vil uten tvil flykte fra oss."
+msgstr "Disse svake krigerne vil uten tvil flykte fra oss."
 
 msgid "I fear these creatures are in the mood for a fight."
-msgstr "Jeg er redd for at disse skapningene er ute etter en kamp."
+msgstr "Jeg er redd for at disse krigerne er ute etter en kamp."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr "Angrepsevnen til helten din legges til angrepsevnen til krigerne dine."
@@ -7416,8 +7402,8 @@ msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
 "brought back from the dead as Skeletons."
 msgstr ""
-"%{skill} gjør at %{count} prosent av skapningene som faller i kamp blir "
-"brakt tilbake fra de døde i form av skjeletter."
+"%{skill} gjør at %{count} prosent av krigerne som faller i kamp blir brakt "
+"tilbake fra de døde i form av skjeletter."
 
 msgid ""
 "Your hero produces %{count} gold pieces per day as tax revenue from estates."
@@ -8331,16 +8317,16 @@ msgid "Wolves"
 msgstr "Varger"
 
 msgid "Ogre"
-msgstr "Ogre"
+msgstr "Jette"
 
 msgid "Ogres"
-msgstr "Ogrer"
+msgstr "Jetter"
 
 msgid "Ogre Lord"
-msgstr "Ogrehersker"
+msgstr "Herskerjette"
 
 msgid "Ogre Lords"
-msgstr "Ogreherskere"
+msgstr "Herskerjetter"
 
 msgid "Troll"
 msgstr "Troll"
@@ -8881,8 +8867,8 @@ msgid ""
 "dazzling jeweled ring."
 msgstr ""
 "Et skrik av smerte fører deg til en kentaur fanget i en felle. Etter å ha "
-"hjulpet skapningen ut, gir han deg en liten taske. Blant innholdet i den "
-"finner du en fantastisk ring med en edelsten på seg."
+"hjulpet det stakkars vesenet ut, gir han deg en liten taske. Blant innholdet "
+"i den finner du en fantastisk ring med en edelsten på seg."
 
 msgid "Witch's Broach of Magic"
 msgstr "Heksens magiske brystnål"
@@ -9247,9 +9233,9 @@ msgid ""
 "An old sea captain is being tortured by Ogres. You save him, and in return "
 "he rewards you with a wondrous instrument to measure the distance of a star."
 msgstr ""
-"En gammel sjøulk driver og blir torturert av noen ogrer. Du befrir han, og "
-"til gjengjeld belønner han deg med en vidunderlig verktøy for å måle "
-"avstandene til stjernene."
+"Du kommer over en gammel sjøulk som blir torturert av noen jetter. Du befrir "
+"ham, og til gjengjeld belønner han deg med et underlig verktøy som kan måle "
+"avstanden til stjerner."
 
 msgid "Evil Eye"
 msgstr "Ondskapens øye"
@@ -9286,7 +9272,7 @@ msgid "Gold Watch"
 msgstr "Gulluret"
 
 msgid "The %{name} doubles the effectiveness of your hypnotize spells."
-msgstr "%{name} dobler virkningen til hypnosemagien din."
+msgstr "%{name} dobler virkningen av trollbinding."
 
 msgid ""
 "In reward for helping his cart out of a ditch, a traveling potion salesman "
@@ -9395,10 +9381,10 @@ msgid ""
 "them and teach them to make fire with sticks. Believing you to be a god, the "
 "apes give you their rock."
 msgstr ""
-"Dine vandringer ender deg opp i møte med en stamme av apelignende skapninger "
-"som bruker en magisk lavastein som aldri kjøler ned til å få fyr når de "
-"trenger det. Du syns synd på dem og lærer dem å lage ild med pinner. De tror "
-"derfor at du er en gud, og apene gir deg steinen sin."
+"Dine vandringer ender deg opp i et møte med en stamme apelignende "
+"skapninger. De bruker en magisk lavastein som aldri kjøler seg ned til å få "
+"ild når de trenger det. Du syns synd på dem og lærer dem å lage ild med "
+"pinner. De tror derfor at du er en gud og gir deg steinen sin."
 
 msgid "Lightning Rod"
 msgstr "Lynstav"
@@ -9504,7 +9490,7 @@ msgid "Pendant of Free Will"
 msgstr "Halskjedet av fri vilje"
 
 msgid "The %{name} makes all your troops immune to hypnotize spells."
-msgstr "%{name} gjør alle krigerne dine immune mot hypnosemagi."
+msgstr "%{name} gjør alle krigerne dine immune mot trollbinding."
 
 msgid ""
 "Responding to cries for help, you find river Sprites making a sport of "
@@ -10277,14 +10263,14 @@ msgstr ""
 "Gull er den vanligste råvaren og trengs i bunn og grunn til alt.\n"
 "Ved og malm blir brukt til de fleste bygninger.\n"
 "Edelstener, kvikksølv, svovel og krystall er sjeldne, magiske råvarer som "
-"trengs for de sterkeste skapningene og mest avanserte bygningene."
+"trengs for de sterkeste krigerne og mest avanserte bygningene."
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
 "creatures."
 msgstr ""
 "Får en stor ildkule til å slå ned på det utvalgte området og skader alle "
-"nærstående skapninger."
+"nærstående krigere."
 
 msgid "Fireball"
 msgstr "Ildkule"
@@ -10318,7 +10304,7 @@ msgstr ""
 "deretter på den nærmeste krigeren med kun halvparten av styrken, og så på "
 "den som er nærmest den igjen med nok en gang halvparten, og så videre helt "
 "til lynet blir så svakt at det gjør skade. Advarsel: Denne trolldommen kan "
-"treffe dine egne skapninger!"
+"treffe dine egne krigere!"
 
 msgid "Teleport"
 msgstr ""
@@ -10356,8 +10342,8 @@ msgstr ""
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
 msgstr ""
-"Gjenoppliver skapninger fra en skadet eller død tropp, men kun fram til "
-"kampens slutt."
+"Gjenoppliver krigere fra en skadet eller død tropp, men kun fram til kampens "
+"slutt."
 
 msgid "Resurrect True"
 msgstr ""
@@ -10365,16 +10351,16 @@ msgstr ""
 "opplivning"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
-msgstr "Gjenoppliver skapninger fra en skadet eller død tropp permanent."
+msgstr "Gjenoppliver krigere fra en skadet eller død tropp permanent."
 
 msgid "Haste"
 msgstr "Hast"
 
 msgid "Increases the speed of any creature by %{count}."
-msgstr "Øker hurtigheten til én skapning med %{count}."
+msgstr "Øker hurtigheten til én kriger med %{count}."
 
 msgid "Increases the speed of all of your creatures by %{count}."
-msgstr "Øker hurtigheten til alle skapningene dine med %{count}."
+msgstr "Øker hurtigheten til alle krigerne dine med %{count}."
 
 msgid "Mass Haste"
 msgstr "Full hast"
@@ -10407,32 +10393,32 @@ msgid "Bless"
 msgstr "Velsignelse"
 
 msgid "Causes the selected creatures to inflict maximum damage."
-msgstr "Får den utvalgte skapningen til å gjøre maksimal skade."
+msgstr "Får den utvalgte krigeren til å gjøre maksimal skade."
 
 msgid "Causes all of your units to inflict maximum damage."
-msgstr "Får alle skapningene dine til å gjøre maksimal skade."
+msgstr "Får alle krigerne dine til å gjøre maksimal skade."
 
 msgid "Mass Bless"
 msgstr "Forhelligelse"
 
 msgid "Magically increases the defense skill of the selected creatures."
-msgstr "Øker på magisk vis forsvarsevnen til den utvalgte skapningen."
+msgstr "Øker på magisk vis forsvarsevnen til den utvalgte krigeren."
 
 msgid "Stoneskin"
-msgstr "Steinhud"
+msgstr "Stenhud"
 
 msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
 "version of Stoneskin."
 msgstr ""
-"Øker forsvarsevnen til de utvalgte skapningene. Dette er en forbedret utgave "
-"av steinhud."
+"Øker forsvarsevnen til de utvalgte krigerne. Dette er en forbedret utgave av "
+"stenhud."
 
 msgid "Steelskin"
 msgstr "Stålhud"
 
 msgid "Causes the selected creatures to inflict minimum damage."
-msgstr "Får den utvalgte skapningen til å gjøre minst mulig skade."
+msgstr "Får den utvalgte krigeren til å gjøre minst mulig skade."
 
 msgid "Curse"
 msgstr "Forbannelse"
@@ -10494,8 +10480,8 @@ msgstr "Berserk"
 # nabo?
 msgid "Causes a creature to attack its nearest neighbor."
 msgstr ""
-"Får en skapning til å angripe dens nærmeste tropp, uavhengig om den er "
-"vennlig eller fiendtlig."
+"Får en kriger til å angripe dens nærmeste tropp, uavhengig om den er vennlig "
+"eller fiendtlig."
 
 msgid "Armageddon"
 msgstr "Dommedag"
@@ -10504,13 +10490,13 @@ msgid ""
 "Holy terror strikes the battlefield, causing severe damage to all creatures."
 msgstr ""
 "Hellig forferdelse slår ned på slagmarken og gjør alvorlig skade på alle "
-"skapninger."
+"krigere."
 
 msgid "Elemental Storm"
 msgstr "Elementær storm"
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
-msgstr "Magiske elementer høljer ned på slagmarken og treffer alle skapninger."
+msgstr "Magiske elementer høljer ned på slagmarken og skader alle krigere."
 
 msgid ""
 "A rain of rocks strikes an area of the battlefield, damaging all nearby "
@@ -10527,11 +10513,11 @@ msgstr "Lammelse"
 
 msgid "The targeted creatures are paralyzed, unable to move or retaliate."
 msgstr ""
-"De utvalgte skapningene blir lamme og får ikke til å flytte på seg eller slå "
+"De utvalgte krigerne lammes og får ikke til å flytte på seg eller å slå "
 "tilbake."
 
 msgid "Hypnotize"
-msgstr "Hypnose"
+msgstr "Trollbinding"
 
 msgid ""
 "Brings a single enemy unit under your control if its hits are less than "
@@ -10600,7 +10586,7 @@ msgstr ""
 "besjelning"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
-msgstr "Gjenreiser skapninger fra en skadet eller død vandød tropp permanent."
+msgstr "Gjenreiser krigere fra en skadet eller død vandød tropp permanent."
 
 msgid "Mirror Image"
 msgstr "Speilbilde"
@@ -10789,14 +10775,14 @@ msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Tilkaller en vannånd for å vokte over ei gruve mot fiendtlige styrker."
 
 msgid "Petrification"
-msgstr "Forsteining"
+msgstr "Forstening"
 
 msgid ""
 "Turns the affected creature into stone.  A petrified creature receives half "
 "damage from a direct attack."
 msgstr ""
-"Forvandler den påvirkede skapningen til stein. En forsteinet skapning tar "
-"halv skade fra direkte angrep."
+"Forvandler den påvirkede krigeren til sten. En forstenet kriger tar halv "
+"skade fra fysiske angrep."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
 msgstr "Du har ingen tryllebok og kan derfor ikke bruke magi."

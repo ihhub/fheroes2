@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-05 03:57+0000\n"
+"POT-Creation-Date: 2023-08-12 09:48+0000\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -81,6 +81,9 @@ msgstr "NE"
 
 msgid "EXIT"
 msgstr "PRYČ"
+
+msgid "smallerButton|EXIT"
+msgstr ""
 
 msgid "DISMISS"
 msgstr "PROPUSŤ"
@@ -180,6 +183,9 @@ msgstr ""
 msgid "GIFT"
 msgstr "DARUJ"
 
+msgid "MAX"
+msgstr "MAX"
+
 msgid "DIFFICULTY"
 msgstr "OBTÍŽNOST"
 
@@ -188,9 +194,6 @@ msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
-
-msgid "MAX"
-msgstr "MAX"
 
 msgid "Warrior"
 msgstr "Válečník"
@@ -3161,6 +3164,20 @@ msgstr "Jsi si jist, že chceš smazat soubor:"
 msgid "Warning!"
 msgstr "Výstraha!"
 
+msgid "Accept the choice made."
+msgstr ""
+
+msgid "Select Skill:"
+msgstr ""
+
+#, fuzzy
+msgid "Select Spell:"
+msgstr "Seslat kouzlo"
+
+#, fuzzy
+msgid "Select Artifact:"
+msgstr "Artefakt"
+
 #, fuzzy
 msgid "Select Monster:"
 msgstr "Vybrat %{name}"
@@ -3168,17 +3185,6 @@ msgstr "Vybrat %{name}"
 #, fuzzy
 msgid "Select Hero:"
 msgstr "Nejlepší hrdina:"
-
-#, fuzzy
-msgid "Select Artifact:"
-msgstr "Artefakt"
-
-#, fuzzy
-msgid "Select Spell:"
-msgstr "Seslat kouzlo"
-
-msgid "Select Skill:"
-msgstr ""
 
 #, fuzzy
 msgid "Map Type:\n"
@@ -3312,9 +3318,6 @@ msgid "Selected Description"
 msgstr ""
 
 msgid "The description of the currently selected map."
-msgstr ""
-
-msgid "Accept the choice made."
 msgstr ""
 
 msgid "Jump"

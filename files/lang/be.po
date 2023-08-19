@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-05 03:57+0000\n"
+"POT-Creation-Date: 2023-08-12 09:48+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -82,6 +82,9 @@ msgstr "НЕ"
 
 msgid "EXIT"
 msgstr "ВЫЙСЦІ"
+
+msgid "smallerButton|EXIT"
+msgstr ""
 
 msgid "DISMISS"
 msgstr ""
@@ -175,6 +178,9 @@ msgstr "6 ГУЛЬЦОЎ"
 msgid "GIFT"
 msgstr "АДДАЦЬ"
 
+msgid "MAX"
+msgstr "МАКС"
+
 msgid "DIFFICULTY"
 msgstr "ЦЯЖКАСЦЬ"
 
@@ -183,9 +189,6 @@ msgstr ""
 
 msgid "MIN"
 msgstr "МІН"
-
-msgid "MAX"
-msgstr "МАКС"
 
 msgid "Warrior"
 msgstr "Ваяр"
@@ -2991,19 +2994,22 @@ msgstr ""
 msgid "Warning!"
 msgstr ""
 
-msgid "Select Monster:"
-msgstr ""
+msgid "Accept the choice made."
+msgstr "Ухваліць выбар."
 
-msgid "Select Hero:"
-msgstr ""
-
-msgid "Select Artifact:"
+msgid "Select Skill:"
 msgstr ""
 
 msgid "Select Spell:"
 msgstr ""
 
-msgid "Select Skill:"
+msgid "Select Artifact:"
+msgstr ""
+
+msgid "Select Monster:"
+msgstr ""
+
+msgid "Select Hero:"
 msgstr ""
 
 msgid "Map Type:\n"
@@ -3143,9 +3149,6 @@ msgstr "Апісанне"
 
 msgid "The description of the currently selected map."
 msgstr "Апісанне абранай мапы."
-
-msgid "Accept the choice made."
-msgstr "Ухваліць выбар."
 
 msgid "Jump"
 msgstr ""

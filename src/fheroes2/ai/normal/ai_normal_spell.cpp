@@ -83,7 +83,7 @@ namespace AI
             spellValueThreshold *= 2;
         }
 
-        auto checkSelectBestSpell = [this, &retreating, &spellValueThreshold, &bestSpell]( const Spell & spell, const SpellcastOutcome & outcome ) {
+        const auto checkSelectBestSpell = [this, &retreating, &spellValueThreshold, &bestSpell]( const Spell & spell, const SpellcastOutcome & outcome ) {
             // Diminish spell effectiveness based on spell point cost
             // 1. Divide cost by 3 to make level 1 spells a baseline (1:1)
             // 2. Use square root to make sure relationship isn't linear for high-level spells
@@ -142,7 +142,7 @@ namespace AI
         const int spellPower = _commander->GetPower();
         const uint32_t totalDamage = spell.Damage() * spellPower;
 
-        auto damageHeuristic = [this, &totalDamage, &spell, &spellPower, &retreating]( const Unit * unit ) {
+        const auto damageHeuristic = [this, &totalDamage, &spell, &spellPower, &retreating]( const Unit * unit ) {
             const uint32_t damage = totalDamage * ( 100 - unit->GetMagicResist( spell, spellPower, _commander ) ) / 100;
             // If we're retreating we don't care about partial damage, only actual units killed
             if ( retreating )
@@ -182,7 +182,7 @@ namespace AI
         }
         else {
             // Area of effect spells like Fireball
-            auto areaOfEffectCheck = [&damageHeuristic, &bestOutcome, &currentUnit, &retreating]( const TargetsInfo & targets, const int32_t index, int myColor ) {
+            const auto areaOfEffectCheck = [&damageHeuristic, &bestOutcome, &currentUnit, &retreating]( const TargetsInfo & targets, const int32_t index, int myColor ) {
                 double spellHeuristic = 0;
                 for ( const TargetInfo & target : targets ) {
                     if ( target.defender->GetCurrentColor() == myColor ) {
@@ -506,7 +506,7 @@ namespace AI
             hpRestored = hpRestored * ( 100 + value ) / 100;
         }
 
-        auto updateBestOutcome = [this, &spell, &bestOutcome, hpRestored]( const Unit * unit ) {
+        const auto updateBestOutcome = [this, &spell, &bestOutcome, hpRestored]( const Unit * unit ) {
             uint32_t missingHP = unit->GetMissingHitPoints();
             missingHP = ( missingHP < hpRestored ) ? missingHP : hpRestored;
 

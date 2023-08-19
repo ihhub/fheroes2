@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-05 03:57+0000\n"
+"POT-Creation-Date: 2023-08-12 09:48+0000\n"
 "PO-Revision-Date: 2023-06-27 18:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -77,6 +77,9 @@ msgstr "NO"
 
 msgid "EXIT"
 msgstr "SALIR"
+
+msgid "smallerButton|EXIT"
+msgstr ""
 
 msgid "DISMISS"
 msgstr "DESPEDIR"
@@ -165,6 +168,9 @@ msgstr "6 JUGADORES"
 msgid "GIFT"
 msgstr "REGALO"
 
+msgid "MAX"
+msgstr "MAX"
+
 msgid "DIFFICULTY"
 msgstr "DIFICULTAD"
 
@@ -173,9 +179,6 @@ msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
-
-msgid "MAX"
-msgstr "MAX"
 
 msgid "Warrior"
 msgstr "Guerrero"
@@ -3196,6 +3199,21 @@ msgstr "Estas seguro de que quieres eliminar el archivo:"
 msgid "Warning!"
 msgstr "¡Advertencia!"
 
+msgid "Accept the choice made."
+msgstr "Aceptar la elección realizada."
+
+#, fuzzy
+msgid "Select Skill:"
+msgstr "Defensa"
+
+#, fuzzy
+msgid "Select Spell:"
+msgstr "Seleccionar objetivo del hechizo"
+
+#, fuzzy
+msgid "Select Artifact:"
+msgstr "Artefactos"
+
 #, fuzzy
 msgid "Select Monster:"
 msgstr "Mejor monstruo:"
@@ -3203,18 +3221,6 @@ msgstr "Mejor monstruo:"
 #, fuzzy
 msgid "Select Hero:"
 msgstr "Mejor héroe:"
-
-#, fuzzy
-msgid "Select Artifact:"
-msgstr "Artefactos"
-
-#, fuzzy
-msgid "Select Spell:"
-msgstr "Seleccionar objetivo del hechizo"
-
-#, fuzzy
-msgid "Select Skill:"
-msgstr "Defensa"
 
 #, fuzzy
 msgid "Map Type:\n"
@@ -3356,9 +3362,6 @@ msgstr "Descripción seleccionada"
 
 msgid "The description of the currently selected map."
 msgstr "La descripción del mapa actualmente elegido."
-
-msgid "Accept the choice made."
-msgstr "Aceptar la elección realizada."
 
 msgid "Jump"
 msgstr ""

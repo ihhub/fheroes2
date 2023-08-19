@@ -158,7 +158,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
 {
     DEBUG_LOG( DBG_GAME, DBG_INFO, filePath )
 
-    auto showGenericErrorMessage = []() { fheroes2::showStandardTextMessage( _( "Error" ), _( "The save file is corrupted." ), Dialog::OK ); };
+    const auto showGenericErrorMessage = []() { fheroes2::showStandardTextMessage( _( "Error" ), _( "The save file is corrupted." ), Dialog::OK ); };
 
     StreamFile fs;
     fs.setbigendian( true );

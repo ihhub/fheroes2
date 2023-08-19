@@ -6,8 +6,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
+ 
 "POT-Creation-Date: 2023-06-14 20:35+0000\n"
 "PO-Revision-Date: 2023-08-19 23:16+0300\n"
+
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -72,6 +74,9 @@ msgid "NO"
 msgstr ""
 
 msgid "EXIT"
+msgstr ""
+
+msgid "smallerButton|EXIT"
 msgstr ""
 
 msgid "DISMISS"
@@ -159,6 +164,9 @@ msgstr ""
 msgid "GIFT"
 msgstr ""
 
+msgid "MAX"
+msgstr "МАКС"
+
 msgid "DIFFICULTY"
 msgstr ""
 
@@ -167,9 +175,6 @@ msgstr ""
 
 msgid "MIN"
 msgstr ""
-
-msgid "MAX"
-msgstr "МАКС"
 
 msgid "Warrior"
 msgstr "Воїн"
@@ -3011,9 +3016,8 @@ msgstr ""
 msgid "System Info"
 msgstr "Системні Параметри"
 
-#, fuzzy
 msgid "Change the resolution of the game."
-msgstr "Змінити мову гри."
+msgstr "Змінити розділову здатність гри."
 
 msgid "Select Game Resolution"
 msgstr ""
@@ -3240,16 +3244,23 @@ msgstr ""
 msgid "Warning!"
 msgstr ""
 
-msgid "Select Monster."
+msgid "Accept the choice made."
+msgstr ""
+
+msgid "Select Skill:"
+msgstr ""
+
+msgid "Select Spell:"
+>>>>>>> master
 msgstr ""
 
 msgid "Select Artifact:"
 msgstr ""
 
-msgid "Select Spell:"
+msgid "Select Monster:"
 msgstr ""
 
-msgid "Select Skill:"
+msgid "Select Hero:"
 msgstr ""
 
 msgid "Map Type:\n"
@@ -3379,9 +3390,6 @@ msgid "Selected Description"
 msgstr ""
 
 msgid "The description of the currently selected map."
-msgstr ""
-
-msgid "Accept the choice made.
 msgstr ""
 
 msgid "Jump"
@@ -6625,20 +6633,17 @@ msgstr "Експертне Лідерство"
 msgid "Expert Wisdom"
 msgstr "Експертна Мудрість"
 
-#, fuzzy
 msgid "Advanced Luck"
-msgstr "Просунута Вдача"
+msgstr "Просунута Удача"
 
 msgid "Advanced Mysticism"
 msgstr "Просунутий Містицизм"
 
-#, fuzzy
 msgid "Basic Luck"
-msgstr "Базова Вдача"
+msgstr "Базова Удача"
 
-#, fuzzy
 msgid "Expert Luck"
-msgstr "Експертна Вдача"
+msgstr "Експертна Удача"
 
 msgid "Expert Mysticism"
 msgstr "Експертний Містицизм"
@@ -6673,13 +6678,11 @@ msgstr "Експертний Орлиний Зір"
 msgid "Expert Necromancy"
 msgstr "Експертна Некромантія"
 
-#, fuzzy
 msgid "Advanced Estates"
-msgstr "Просунута Шляхетність"
+msgstr "Просунуті Маєтки"
 
-#, fuzzy
 msgid "Expert Estates"
-msgstr "Експертна Шляхетність"
+msgstr "Експертні Маєтки"
 
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."

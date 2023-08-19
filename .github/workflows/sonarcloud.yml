@@ -28,7 +28,7 @@ jobs:
         bash script/android/install_packages.sh
         sudo apt-get -y update
         sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev
-    - uses: SonarSource/sonarcloud-github-c-cpp@v1
+    - uses: SonarSource/sonarcloud-github-c-cpp@v2
     - name: Prepare SonarCloud cfamily cache
       uses: actions/cache@v3
       with:

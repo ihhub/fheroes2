@@ -84,35 +84,54 @@ namespace Route
 
         Path & operator=( const Path & ) = delete;
 
-        // Returns the destination index of the path, or, if the returnLastStep is true, returns the index of the last
-        // step of the path. Usually it's the same thing if PlayerWorldPathfinder was used to calculate the path, but
-        // this may not be the case if AIWorldPathfinder was used - due to the peculiarities of laying the path through
-        // heroes, neutral armies, teleports or water.
-        int32_t GetDestinationIndex( const bool returnLastStep = false ) const;
-
-        // Returns the target index of the current step (the first in the queue). If the queue is empty, then returns the
-        // destination index of the path.
-        int32_t GetFrontIndex() const
+        // Returns the index of the last step of the path. If the path is empty, then returns -1.
+        int32_t GetDestinationIndex() const
         {
-            return empty() ? _dst : front().GetIndex();
+            return empty() ? -1 : back().GetIndex();
         }
 
-        // Returns the source index of the current step (the first in the queue). If the queue is empty, then returns the
-        // hero's index.
-        int32_t GetFrontFrom() const;
+        // Returns the target index of the current step (the first in the queue). If the queue is empty, then returns -1.
+        int32_t GetFrontIndex() const
+        {
+            return empty() ? -1 : front().GetIndex();
+        }
 
-        // Returns the direction of the current step (the first in the queue). If the queue is empty, then returns the
-        // direction from the hero to the destination of the path.
-        int GetFrontDirection() const;
+        // Returns the source index of the current step (the first in the queue). If the queue is empty, then returns -1.
+        int32_t GetFrontFrom() const
+        {
+            return empty() ? -1 : front().GetFrom();
+        }
+
+        // Returns the direction of the current step (the first in the queue). If the queue is empty, then returns
+        // 'Direction::UNKNOWN'.
+        int GetFrontDirection() const
+        {
+            return empty() ? Direction::UNKNOWN : front().GetDirection();
+        }
 
         // Returns the penalty of the current step (the first in the queue). If the queue is empty, then returns 0.
-        uint32_t GetFrontPenalty() const;
+        uint32_t GetFrontPenalty() const
+        {
+            return empty() ? 0 : front().GetPenalty();
+        }
 
         // Returns the direction of the next step (the second in the queue). If the size of the queue is less than 2 elements,
         // then returns 'Direction::UNKNOWN'.
-        int GetNextStepDirection() const;
+        int GetNextStepDirection() const
+        {
+            if ( size() < 2 ) {
+                return Direction::UNKNOWN;
+            }
 
-        void setPath( const std::list<Step> & path, int32_t destIndex );
+            auto iter = cbegin();
+
+            return ( ++iter )->GetDirection();
+        }
+
+        void setPath( const std::list<Step> & path )
+        {
+            assign( path.begin(), path.end() );
+        }
 
         void Show()
         {
@@ -124,8 +143,31 @@ namespace Route
             _hide = true;
         }
 
-        void Reset();
-        void PopFront();
+        void Reset()
+        {
+            clear();
+        }
+
+        // Truncates the path after the current step (the first in the queue). If the queue is empty, then does nothing.
+        void Truncate()
+        {
+            if ( empty() ) {
+                return;
+            }
+
+            auto iter = cbegin();
+
+            erase( ++iter, cend() );
+        }
+
+        void PopFront()
+        {
+            if ( empty() ) {
+                return;
+            }
+
+            pop_front();
+        }
 
         // Returns true if this path is valid for normal movement on the map (the current step is performed to the tile
         // adjacent to the hero), otherwise returns false
@@ -141,18 +183,17 @@ namespace Route
         }
 
         bool hasAllowedSteps() const;
+        int GetAllowedSteps() const;
 
         std::string String() const;
 
-        int GetAllowedSteps() const;
-        static int GetIndexSprite( int from, int to, int mod );
+        static int GetIndexSprite( const int from, const int to, const int cost );
 
     private:
         friend StreamBase & operator<<( StreamBase &, const Path & );
         friend StreamBase & operator>>( StreamBase &, Path & );
 
         const Heroes * _hero;
-        int32_t _dst;
         bool _hide;
     };
 

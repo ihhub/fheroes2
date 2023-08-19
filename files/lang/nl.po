@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-05 03:57+0000\n"
+"POT-Creation-Date: 2023-08-12 09:48+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -74,6 +74,9 @@ msgid "NO"
 msgstr ""
 
 msgid "EXIT"
+msgstr ""
+
+msgid "smallerButton|EXIT"
 msgstr ""
 
 msgid "DISMISS"
@@ -161,6 +164,9 @@ msgstr ""
 msgid "GIFT"
 msgstr "DONEREN"
 
+msgid "MAX"
+msgstr ""
+
 msgid "DIFFICULTY"
 msgstr "NIVEAU"
 
@@ -169,9 +175,6 @@ msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
-
-msgid "MAX"
-msgstr ""
 
 msgid "Warrior"
 msgstr "Strijder"
@@ -3112,19 +3115,22 @@ msgstr ""
 msgid "Warning!"
 msgstr ""
 
-msgid "Select Monster:"
+msgid "Accept the choice made."
 msgstr ""
 
-msgid "Select Hero:"
-msgstr ""
-
-msgid "Select Artifact:"
+msgid "Select Skill:"
 msgstr ""
 
 msgid "Select Spell:"
 msgstr ""
 
-msgid "Select Skill:"
+msgid "Select Artifact:"
+msgstr ""
+
+msgid "Select Monster:"
+msgstr ""
+
+msgid "Select Hero:"
 msgstr ""
 
 msgid "Map Type:\n"
@@ -3254,9 +3260,6 @@ msgid "Selected Description"
 msgstr ""
 
 msgid "The description of the currently selected map."
-msgstr ""
-
-msgid "Accept the choice made."
 msgstr ""
 
 msgid "Jump"

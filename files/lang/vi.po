@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-05 03:57+0000\n"
+"POT-Creation-Date: 2023-08-12 09:48+0000\n"
 "PO-Revision-Date: 2023-05-07 22:12+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -80,6 +80,9 @@ msgstr "KHÔNG"
 
 msgid "EXIT"
 msgstr "THOÁT"
+
+msgid "smallerButton|EXIT"
+msgstr ""
 
 msgid "DISMISS"
 msgstr "GIẢI TÁN"
@@ -179,6 +182,9 @@ msgstr "6 NGƯỜI CHƠI"
 msgid "GIFT"
 msgstr "QUÀ"
 
+msgid "MAX"
+msgstr "MAX"
+
 msgid "DIFFICULTY"
 msgstr "ĐỘ KHÓ"
 
@@ -187,9 +193,6 @@ msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
-
-msgid "MAX"
-msgstr "MAX"
 
 msgid "Warrior"
 msgstr "Chiến binh"
@@ -3147,20 +3150,23 @@ msgstr "Ngươi có chắc muốn xóa file:"
 msgid "Warning!"
 msgstr "Cảnh báo!"
 
+msgid "Accept the choice made."
+msgstr "Chấp nhận sự lựa chọn được thực hiện."
+
+msgid "Select Skill:"
+msgstr "Chọn Kỹ năng:"
+
+msgid "Select Spell:"
+msgstr "Chọn Phép:"
+
+msgid "Select Artifact:"
+msgstr "Chọn Bảo vật:"
+
 msgid "Select Monster:"
 msgstr "Chọn Quái vật:"
 
 msgid "Select Hero:"
 msgstr "Chọn Tướng:"
-
-msgid "Select Artifact:"
-msgstr "Chọn Bảo vật:"
-
-msgid "Select Spell:"
-msgstr "Chọn Phép:"
-
-msgid "Select Skill:"
-msgstr "Chọn Kỹ năng:"
 
 msgid "Map Type:\n"
 msgstr "Kiểu Bản đồ:\n"
@@ -3302,9 +3308,6 @@ msgstr "Chọn Mô tả"
 
 msgid "The description of the currently selected map."
 msgstr "Mô tả của bản đồ hiện được chọn."
-
-msgid "Accept the choice made."
-msgstr "Chấp nhận sự lựa chọn được thực hiện."
 
 msgid "Jump"
 msgstr "Nhảy"

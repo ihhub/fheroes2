@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-05 03:57+0000\n"
+"POT-Creation-Date: 2023-08-12 09:48+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -72,6 +72,9 @@ msgid "NO"
 msgstr ""
 
 msgid "EXIT"
+msgstr ""
+
+msgid "smallerButton|EXIT"
 msgstr ""
 
 msgid "DISMISS"
@@ -159,6 +162,9 @@ msgstr ""
 msgid "GIFT"
 msgstr ""
 
+msgid "MAX"
+msgstr "MAX"
+
 msgid "DIFFICULTY"
 msgstr ""
 
@@ -167,9 +173,6 @@ msgstr ""
 
 msgid "MIN"
 msgstr ""
-
-msgid "MAX"
-msgstr "MAX"
 
 msgid "Warrior"
 msgstr "Lottare"
@@ -3073,20 +3076,23 @@ msgstr "Sei sicuro di voler cancellare il file:"
 msgid "Warning!"
 msgstr "Attenzione!"
 
+msgid "Accept the choice made."
+msgstr "Accetta la scelta."
+
+msgid "Select Skill:"
+msgstr "Scegli dote:"
+
+msgid "Select Spell:"
+msgstr "Scegli magia:"
+
+msgid "Select Artifact:"
+msgstr "Scegli artefatto:"
+
 msgid "Select Monster:"
 msgstr "Scegli mostro:"
 
 msgid "Select Hero:"
 msgstr "Scegli eroe:"
-
-msgid "Select Artifact:"
-msgstr "Scegli artefatto:"
-
-msgid "Select Spell:"
-msgstr "Scegli magia:"
-
-msgid "Select Skill:"
-msgstr "Scegli dote:"
 
 #, fuzzy
 msgid "Map Type:\n"
@@ -3230,9 +3236,6 @@ msgstr "Descrizione scelta"
 
 msgid "The description of the currently selected map."
 msgstr "La descrizione della mappa scelta attualmente."
-
-msgid "Accept the choice made."
-msgstr "Accetta la scelta."
 
 msgid "Jump"
 msgstr "Salta"

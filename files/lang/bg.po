@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-05 03:57+0000\n"
+"POT-Creation-Date: 2023-08-12 09:48+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -80,6 +80,9 @@ msgstr "НЕ"
 
 msgid "EXIT"
 msgstr "ИЗХОД"
+
+msgid "smallerButton|EXIT"
+msgstr ""
 
 msgid "DISMISS"
 msgstr "МАХНИ"
@@ -179,6 +182,9 @@ msgstr "6 ИГРАЧА"
 msgid "GIFT"
 msgstr "ДАРИ"
 
+msgid "MAX"
+msgstr "МАКС"
+
 msgid "DIFFICULTY"
 msgstr "ТРУДНОСТ"
 
@@ -187,9 +193,6 @@ msgstr ""
 
 msgid "MIN"
 msgstr "МИН"
-
-msgid "MAX"
-msgstr "МАКС"
 
 msgid "Warrior"
 msgstr "Войн"
@@ -3189,20 +3192,23 @@ msgstr "Сигурен ли си, че искаш да изтриеш файла
 msgid "Warning!"
 msgstr "Внимание!"
 
+msgid "Accept the choice made."
+msgstr "Приемете направения избор."
+
+msgid "Select Skill:"
+msgstr "Избери умение:"
+
+msgid "Select Spell:"
+msgstr "Избери заклинание:"
+
+msgid "Select Artifact:"
+msgstr "Избери артефакт:"
+
 msgid "Select Monster:"
 msgstr "Избери чудовище:"
 
 msgid "Select Hero:"
 msgstr "Избери герой:"
-
-msgid "Select Artifact:"
-msgstr "Избери артефакт:"
-
-msgid "Select Spell:"
-msgstr "Избери заклинание:"
-
-msgid "Select Skill:"
-msgstr "Избери умение:"
 
 msgid "Map Type:\n"
 msgstr "Тип на карта:\n"
@@ -3344,9 +3350,6 @@ msgstr "Избрано описание"
 
 msgid "The description of the currently selected map."
 msgstr "Описание на избраната в момента карта."
-
-msgid "Accept the choice made."
-msgstr "Приемете направения избор."
 
 msgid "Jump"
 msgstr "Скок"

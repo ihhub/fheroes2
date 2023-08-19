@@ -897,7 +897,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
         }
     }
 
-    auto isPureCursedArtifact = []( const Artifact & artifact ) {
+    const auto isPureCursedArtifact = []( const Artifact & artifact ) {
         const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact.GetID() );
         return !data.curses.empty() && data.bonuses.empty();
     };
@@ -906,7 +906,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
     transferArtifactsByCondition( combined, giftBag, isPureCursedArtifact );
 
     if ( !taker.HasSecondarySkill( Skill::Secondary::NECROMANCY ) && giver.HasSecondarySkill( Skill::Secondary::NECROMANCY ) ) {
-        auto isNecromancyArtifact = []( const Artifact & artifact ) {
+        const auto isNecromancyArtifact = []( const Artifact & artifact ) {
             const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact.GetID() );
             if ( data.bonuses.empty() ) {
                 return false;
@@ -927,7 +927,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
 
     // Scrolls are effective if they contain spells which are not present in the book.
     if ( taker.HaveSpellBook() ) {
-        auto isScrollSpellDuplicated = [&taker]( const Artifact & artifact ) {
+        const auto isScrollSpellDuplicated = [&taker]( const Artifact & artifact ) {
             const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact.GetID() );
             if ( data.bonuses.empty() ) {
                 return false;
@@ -950,7 +950,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
     }
 
     // A unique artifact is an artifact with no curses and all its bonuses are unique.
-    auto isUniqueArtifact = []( const Artifact & artifact ) {
+    const auto isUniqueArtifact = []( const Artifact & artifact ) {
         const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact.GetID() );
         if ( !data.curses.empty() ) {
             return false;
@@ -1167,7 +1167,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
             }
             else if ( _allowOpeningMagicBook ) {
                 if ( _statusBar != nullptr ) {
-                    std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) { _statusBar->ShowMessage( status ); };
+                    const std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) { _statusBar->ShowMessage( status ); };
                     _hero->OpenSpellBook( SpellBook::Filter::ALL, false, false, &statusCallback );
                 }
                 else {
@@ -1196,7 +1196,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
     }
     else {
         if ( can_change ) {
-            const Artifact newArtifact = Dialog::SelectArtifact();
+            const Artifact newArtifact = Dialog::selectArtifact();
 
             if ( isMagicBook( newArtifact ) ) {
                 const_cast<Heroes *>( _hero )->SpellBookActivate();

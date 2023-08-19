@@ -38,6 +38,7 @@
 #include "math_base.h"
 #include "players.h"
 #include "resource.h"
+#include "resource_trading.h"
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
@@ -48,89 +49,6 @@
 #include "ui_scrollbar.h"
 #include "ui_tool.h"
 #include "world.h"
-
-namespace
-{
-    enum
-    {
-        // change uncostly to costly
-        COSTLY_UNCOSTLY1 = 5,
-        COSTLY_UNCOSTLY2 = 4,
-        COSTLY_UNCOSTLY3 = 3,
-        COSTLY_UNCOSTLY4 = 2,
-        COSTLY_UNCOSTLY5 = 2,
-        COSTLY_UNCOSTLY6 = 2,
-        COSTLY_UNCOSTLY7 = 2,
-        COSTLY_UNCOSTLY8 = 2,
-        COSTLY_UNCOSTLY9 = 1,
-
-        // change costly to uncostly
-        UNCOSTLY_COSTLY1 = 20,
-        UNCOSTLY_COSTLY2 = 14,
-        UNCOSTLY_COSTLY3 = 10,
-        UNCOSTLY_COSTLY4 = 8,
-        UNCOSTLY_COSTLY5 = 7,
-        UNCOSTLY_COSTLY6 = 6,
-        UNCOSTLY_COSTLY7 = 5,
-        UNCOSTLY_COSTLY8 = 5,
-        UNCOSTLY_COSTLY9 = 4,
-
-        // change interchangeable
-        COSTLY_COSTLY1 = 10,
-        COSTLY_COSTLY2 = 7,
-        COSTLY_COSTLY3 = 5,
-        COSTLY_COSTLY4 = 4,
-        COSTLY_COSTLY5 = 4,
-        COSTLY_COSTLY6 = 3,
-        COSTLY_COSTLY7 = 3,
-        COSTLY_COSTLY8 = 3,
-        COSTLY_COSTLY9 = 2,
-
-        // sale uncostly
-        SALE_UNCOSTLY1 = 25,
-        SALE_UNCOSTLY2 = 37,
-        SALE_UNCOSTLY3 = 50,
-        SALE_UNCOSTLY4 = 62,
-        SALE_UNCOSTLY5 = 74,
-        SALE_UNCOSTLY6 = 87,
-        SALE_UNCOSTLY7 = 100,
-        SALE_UNCOSTLY8 = 112,
-        SALE_UNCOSTLY9 = 124,
-
-        // sale costly
-        SALE_COSTLY1 = 50,
-        SALE_COSTLY2 = 74,
-        SALE_COSTLY3 = 100,
-        SALE_COSTLY4 = 124,
-        SALE_COSTLY5 = 149,
-        SALE_COSTLY6 = 175,
-        SALE_COSTLY7 = 200,
-        SALE_COSTLY8 = 224,
-        SALE_COSTLY9 = 249,
-
-        // buy uncostly
-        BUY_UNCOSTLY1 = 2500,
-        BUY_UNCOSTLY2 = 1667,
-        BUY_UNCOSTLY3 = 1250,
-        BUY_UNCOSTLY4 = 1000,
-        BUY_UNCOSTLY5 = 834,
-        BUY_UNCOSTLY6 = 715,
-        BUY_UNCOSTLY7 = 625,
-        BUY_UNCOSTLY8 = 556,
-        BUY_UNCOSTLY9 = 500,
-
-        // buy costly
-        BUY_COSTLY1 = 5000,
-        BUY_COSTLY2 = 3334,
-        BUY_COSTLY3 = 2500,
-        BUY_COSTLY4 = 2000,
-        BUY_COSTLY5 = 1667,
-        BUY_COSTLY6 = 1429,
-        BUY_COSTLY7 = 1250,
-        BUY_COSTLY8 = 1112,
-        BUY_COSTLY9 = 1000
-    };
-}
 
 void RedrawFromResource( const fheroes2::Point &, const Funds & );
 void RedrawToResource( const fheroes2::Point & pt, bool showcost, const Kingdom & kingdom, bool tradingPost, int from_resource = 0 );
@@ -481,9 +399,10 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
                 resourceFrom = Resource::getResourceTypeFromIconIndex( ii );
                 max_sell = fundsFrom.Get( resourceFrom );
 
-                if ( GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) ) {
-                    max_buy = Resource::GOLD == resourceTo ? max_sell * GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost )
-                                                           : max_sell / GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost );
+                const uint32_t tradeCost = GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost );
+
+                if ( tradeCost ) {
+                    max_buy = Resource::GOLD == resourceTo ? max_sell * tradeCost : max_sell / tradeCost;
                 }
 
                 count_sell = 0;
@@ -515,9 +434,10 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
             if ( le.MouseClickLeft( rect_to ) ) {
                 resourceTo = Resource::getResourceTypeFromIconIndex( ii );
 
-                if ( GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) ) {
-                    max_buy = Resource::GOLD == resourceTo ? max_sell * GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost )
-                                                           : max_sell / GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost );
+                const uint32_t tradeCost = GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost );
+
+                if ( tradeCost ) {
+                    max_buy = Resource::GOLD == resourceTo ? max_sell * tradeCost : max_sell / tradeCost;
                 }
 
                 count_sell = 0;
@@ -706,235 +626,5 @@ std::string GetStringTradeCosts( const Kingdom & kingdom, int rs_from, int rs_to
 
 uint32_t GetTradeCosts( const Kingdom & kingdom, int rs_from, int rs_to, bool tradingPost )
 {
-    const uint32_t markets = tradingPost ? 3 : kingdom.GetCountMarketplace();
-
-    if ( rs_from == rs_to )
-        return 0;
-
-    switch ( rs_from ) {
-    // uncostly
-    case Resource::WOOD:
-    case Resource::ORE:
-
-        switch ( rs_to ) {
-        // sale uncostly
-        case Resource::GOLD:
-            if ( 1 == markets )
-                return SALE_UNCOSTLY1;
-            else if ( 2 == markets )
-                return SALE_UNCOSTLY2;
-            else if ( 3 == markets )
-                return SALE_UNCOSTLY3;
-            else if ( 4 == markets )
-                return SALE_UNCOSTLY4;
-            else if ( 5 == markets )
-                return SALE_UNCOSTLY5;
-            else if ( 6 == markets )
-                return SALE_UNCOSTLY6;
-            else if ( 7 == markets )
-                return SALE_UNCOSTLY7;
-            else if ( 8 == markets )
-                return SALE_UNCOSTLY8;
-            else if ( 8 < markets )
-                return SALE_UNCOSTLY9;
-            break;
-
-        // change uncostly to costly
-        case Resource::MERCURY:
-        case Resource::SULFUR:
-        case Resource::CRYSTAL:
-        case Resource::GEMS:
-            if ( 1 == markets )
-                return UNCOSTLY_COSTLY1;
-            else if ( 2 == markets )
-                return UNCOSTLY_COSTLY2;
-            else if ( 3 == markets )
-                return UNCOSTLY_COSTLY3;
-            else if ( 4 == markets )
-                return UNCOSTLY_COSTLY4;
-            else if ( 5 == markets )
-                return UNCOSTLY_COSTLY5;
-            else if ( 6 == markets )
-                return UNCOSTLY_COSTLY6;
-            else if ( 7 == markets )
-                return UNCOSTLY_COSTLY7;
-            else if ( 8 == markets )
-                return UNCOSTLY_COSTLY8;
-            else if ( 8 < markets )
-                return UNCOSTLY_COSTLY9;
-            break;
-
-        // change uncostly to uncostly
-        case Resource::WOOD:
-        case Resource::ORE:
-            if ( 1 == markets )
-                return COSTLY_COSTLY1;
-            else if ( 2 == markets )
-                return COSTLY_COSTLY2;
-            else if ( 3 == markets )
-                return COSTLY_COSTLY3;
-            else if ( 4 == markets )
-                return COSTLY_COSTLY4;
-            else if ( 5 == markets )
-                return COSTLY_COSTLY5;
-            else if ( 6 == markets )
-                return COSTLY_COSTLY6;
-            else if ( 7 == markets )
-                return COSTLY_COSTLY7;
-            else if ( 8 == markets )
-                return COSTLY_COSTLY8;
-            else if ( 8 < markets )
-                return COSTLY_COSTLY9;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    // costly
-    case Resource::MERCURY:
-    case Resource::SULFUR:
-    case Resource::CRYSTAL:
-    case Resource::GEMS:
-
-        switch ( rs_to ) {
-        // sale costly
-        case Resource::GOLD:
-            if ( 1 == markets )
-                return SALE_COSTLY1;
-            else if ( 2 == markets )
-                return SALE_COSTLY2;
-            else if ( 3 == markets )
-                return SALE_COSTLY3;
-            else if ( 4 == markets )
-                return SALE_COSTLY4;
-            else if ( 5 == markets )
-                return SALE_COSTLY5;
-            else if ( 6 == markets )
-                return SALE_COSTLY6;
-            else if ( 7 == markets )
-                return SALE_COSTLY7;
-            else if ( 8 == markets )
-                return SALE_COSTLY8;
-            else if ( 8 < markets )
-                return SALE_COSTLY9;
-            break;
-
-        // change costly to costly
-        case Resource::MERCURY:
-        case Resource::SULFUR:
-        case Resource::CRYSTAL:
-        case Resource::GEMS:
-            if ( 1 == markets )
-                return COSTLY_COSTLY1;
-            else if ( 2 == markets )
-                return COSTLY_COSTLY2;
-            else if ( 3 == markets )
-                return COSTLY_COSTLY3;
-            else if ( 4 == markets )
-                return COSTLY_COSTLY4;
-            else if ( 5 == markets )
-                return COSTLY_COSTLY5;
-            else if ( 6 == markets )
-                return COSTLY_COSTLY6;
-            else if ( 7 == markets )
-                return COSTLY_COSTLY7;
-            else if ( 8 == markets )
-                return COSTLY_COSTLY8;
-            else if ( 8 < markets )
-                return COSTLY_COSTLY9;
-            break;
-
-        // change costly to uncostly
-        case Resource::WOOD:
-        case Resource::ORE:
-            if ( 1 == markets )
-                return COSTLY_UNCOSTLY1;
-            else if ( 2 == markets )
-                return COSTLY_UNCOSTLY2;
-            else if ( 3 == markets )
-                return COSTLY_UNCOSTLY3;
-            else if ( 4 == markets )
-                return COSTLY_UNCOSTLY4;
-            else if ( 5 == markets )
-                return COSTLY_UNCOSTLY5;
-            else if ( 6 == markets )
-                return COSTLY_UNCOSTLY6;
-            else if ( 7 == markets )
-                return COSTLY_UNCOSTLY7;
-            else if ( 8 == markets )
-                return COSTLY_UNCOSTLY8;
-            else if ( 8 < markets )
-                return COSTLY_UNCOSTLY9;
-            break;
-
-        default:
-            break;
-        }
-        break;
-
-    // gold
-    case Resource::GOLD:
-
-        switch ( rs_to ) {
-        default:
-            break;
-
-        // buy costly
-        case Resource::MERCURY:
-        case Resource::SULFUR:
-        case Resource::CRYSTAL:
-        case Resource::GEMS:
-            if ( 1 == markets )
-                return BUY_COSTLY1;
-            else if ( 2 == markets )
-                return BUY_COSTLY2;
-            else if ( 3 == markets )
-                return BUY_COSTLY3;
-            else if ( 4 == markets )
-                return BUY_COSTLY4;
-            else if ( 5 == markets )
-                return BUY_COSTLY5;
-            else if ( 6 == markets )
-                return BUY_COSTLY6;
-            else if ( 7 == markets )
-                return BUY_COSTLY7;
-            else if ( 8 == markets )
-                return BUY_COSTLY8;
-            else if ( 8 < markets )
-                return BUY_COSTLY9;
-            break;
-
-        // buy uncostly
-        case Resource::WOOD:
-        case Resource::ORE:
-            if ( 1 == markets )
-                return BUY_UNCOSTLY1;
-            else if ( 2 == markets )
-                return BUY_UNCOSTLY2;
-            else if ( 3 == markets )
-                return BUY_UNCOSTLY3;
-            else if ( 4 == markets )
-                return BUY_UNCOSTLY4;
-            else if ( 5 == markets )
-                return BUY_UNCOSTLY5;
-            else if ( 6 == markets )
-                return BUY_UNCOSTLY6;
-            else if ( 7 == markets )
-                return BUY_UNCOSTLY7;
-            else if ( 8 == markets )
-                return BUY_UNCOSTLY8;
-            else if ( 8 < markets )
-                return BUY_UNCOSTLY9;
-            break;
-        }
-        break;
-
-    // not select
-    default:
-        break;
-    }
-
-    return 0;
+    return fheroes2::getTradeCost( ( tradingPost ? 3 : kingdom.GetCountMarketplace() ), rs_from, rs_to );
 }
