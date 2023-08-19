@@ -46,6 +46,8 @@ namespace Difficulty
 
     int GetHeroMovementBonus( int difficulty );
     double GetAIRetreatRatio( int difficulty );
+
+    uint32_t GetDimensionDoorLimit( int difficulty );
 }
 
 #endif

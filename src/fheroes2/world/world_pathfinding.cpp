@@ -30,6 +30,9 @@
 #include <type_traits>
 #include <utility>
 
+#include <difficulty.h>
+#include <game.h>
+
 #include "army.h"
 #include "artifact.h"
 #include "castle.h"
@@ -1197,7 +1200,8 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
     }
 
     const uint32_t movementCost = std::max( 1U, dimensionDoor.movePoints() );
-    const uint32_t maxCasts = std::min( currentSpellPoints / std::max( 1U, dimensionDoor.spellPoints( &hero ) ), hero.GetMovePoints() / movementCost );
+    const uint32_t spellcastsPossible = std::min( currentSpellPoints / std::max( 1U, dimensionDoor.spellPoints( &hero ) ), hero.GetMovePoints() / movementCost );
+    const uint32_t maxCasts = std::min( spellcastsPossible, Difficulty::GetDimensionDoorLimit( Game::getDifficulty() ) );
 
     // Have to explicitly call GetObject( false ) since hero might be standing on it
     if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
