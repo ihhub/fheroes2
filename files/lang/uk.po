@@ -3011,8 +3011,9 @@ msgstr ""
 msgid "System Info"
 msgstr "Системні Параметри"
 
+#, fuzzy
 msgid "Change the resolution of the game."
-msgstr "Змінити розділову здатність гри."
+msgstr "Змінити мову гри."
 
 msgid "Select Game Resolution"
 msgstr ""
@@ -6627,17 +6628,20 @@ msgstr "Експертне Лідерство"
 msgid "Expert Wisdom"
 msgstr "Експертна Мудрість"
 
+#, fuzzy
 msgid "Advanced Luck"
-msgstr "Просунута Удача"
+msgstr "Просунута Вдача"
 
 msgid "Advanced Mysticism"
 msgstr "Просунутий Містицизм"
 
+#, fuzzy
 msgid "Basic Luck"
-msgstr "Базова Удача"
+msgstr "Базова Вдача"
 
+#, fuzzy
 msgid "Expert Luck"
-msgstr "Експертна Удача"
+msgstr "Експертна Вдача"
 
 msgid "Expert Mysticism"
 msgstr "Експертний Містицизм"
@@ -6672,11 +6676,13 @@ msgstr "Експертний Орлиний Зір"
 msgid "Expert Necromancy"
 msgstr "Експертна Некромантія"
 
+#, fuzzy
 msgid "Advanced Estates"
-msgstr "Просунуті Маєтки"
+msgstr "Просунута Шляхетність"
 
+#, fuzzy
 msgid "Expert Estates"
-msgstr "Експертні Маєтки"
+msgstr "Експертна Шляхетність"
 
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
