@@ -8666,7 +8666,7 @@ msgid ""
 "A glint of golden light catches your eye. Upon further investigation, you "
 "find a golden helm hidden under a bush."
 msgstr ""
-"Någonting glimmat till i ett tätt buskage. Vid närmare inspektion hittar du "
+"Någonting glimmar till i ett tätt buskage. Vid närmare inspektion hittar du "
 "en gyllene hjälm glömd under busken."
 
 msgid "Giant Flail of Dominion"
