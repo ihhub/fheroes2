@@ -206,10 +206,10 @@ private:
     // Follows custom passability rules (for the AI)
     void processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx ) override;
 
-    // Adds special logic for AI-controlled heroes to correctly calculate movement penalties when such a hero overcomes
-    // water obstacles using boats. If this logic should be taken into account (when performing pathfinding for a real
-    // hero on the map), then the source tile should be already accessible for this hero and it should also have a valid
-    // information about the hero's remaining movement points.
+    // Adds special logic for AI-controlled heroes to correctly calculate movement penalties when such a hero passes
+    // through objects on the map or overcomes water obstacles using boats. If this logic should be taken into account
+    // (when performing pathfinding for a real hero on the map), then the source tile should be already accessible for
+    // this hero and it should also have a valid information about the hero's remaining movement points.
     uint32_t getMovementPenalty( const int from, const int to, const int direction ) const override;
 
     // Hero properties should be cached here because they can change even if the hero's position does not change,

@@ -787,7 +787,39 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
 
 uint32_t AIWorldPathfinder::getMovementPenalty( const int from, const int to, const int direction ) const
 {
-    const uint32_t defaultPenalty = WorldPathfinder::getMovementPenalty( from, to, direction );
+    const uint32_t defaultPenalty = [this, from, to, direction]() {
+        const uint32_t regularPenalty = WorldPathfinder::getMovementPenalty( from, to, direction );
+
+        if ( from == _pathStart ) {
+            return regularPenalty;
+        }
+
+        const MP2::MapObjectType objectType = world.GetTiles( from ).GetObject();
+        if ( !MP2::isNeedStayFront( objectType ) || objectType == MP2::OBJ_BOAT ) {
+            return regularPenalty;
+        }
+
+        const WorldNode & node = _cache[from];
+
+        // No dead ends allowed
+        assert( node._from != -1 );
+
+        const int prevStepDirection = Maps::GetDirection( node._from, from );
+        assert( prevStepDirection != Direction::UNKNOWN && prevStepDirection != Direction::CENTER );
+
+        // If we are moving from a tile that we technically cannot stand on, then it means that there was
+        // an object on this tile that we previously removed. Thus, we have spent additional movement points
+        // when moving to this tile - once when accessing the object to remove it, and again when moving to
+        // this tile.
+        //
+        // According to a rough estimate (without taking into account the "last move" logic), the movement
+        // points spent can be considered the same in both cases, therefore, we apply an additional penalty
+        // when moving from the tile containing this object to the next tile.
+        //
+        // The real path will not reach this step, so this logic will be used to estimate distances more
+        // accurately when choosing whether to move through objects or past them.
+        return regularPenalty + WorldPathfinder::getMovementPenalty( node._from, from, prevStepDirection );
+    }();
 
     // If we perform pathfinding for a real AI-controlled hero on the map, we should correctly calculate
     // movement penalties when this hero overcomes water obstacles using boats.
@@ -810,6 +842,8 @@ uint32_t AIWorldPathfinder::getMovementPenalty( const int from, const int to, co
             // If the hero is not able to make this movement this turn, then he will have to spend
             // all the movement points next turn.
             if ( defaultPenalty > node._remainingMovePoints ) {
+                assert( _maxMovePoints >= defaultPenalty );
+
                 return _maxMovePoints;
             }
 
