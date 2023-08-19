@@ -720,6 +720,7 @@ namespace AI
 
         for ( Heroes * hero : heroes ) {
             hero->ResetModes( Heroes::SLEEPER );
+            hero->setDimensionDoorUsage( 0 );
 
             const double strength = hero->GetArmy().GetStrength();
             _combinedHeroStrength += strength;

@@ -576,6 +576,16 @@ public:
         return _aiRole;
     }
 
+    void setDimensionDoorUsage( const uint32_t newUsage )
+    {
+        _dimensionDoorsUsed = newUsage;
+    }
+
+    uint32_t getDimensionDoorUses() const
+    {
+        return _dimensionDoorsUsed;
+    }
+
     uint8_t getAlphaValue() const
     {
         return static_cast<uint8_t>( _alphaValue );
@@ -643,6 +653,9 @@ private:
 
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;
+
+    // Tracking how many spells this hero used this turn
+    uint32_t _dimensionDoorsUsed = 0;
 
     mutable int _alphaValue;
 

@@ -2135,6 +2135,7 @@ namespace AI
         hero.Scout( targetIndex );
         hero.Move2Dest( targetIndex );
         hero.SpellCasted( dimensionDoor );
+        hero.setDimensionDoorUsage( hero.getDimensionDoorUses() + 1 );
         hero.GetPath().Reset();
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
