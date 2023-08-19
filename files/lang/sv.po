@@ -2724,7 +2724,7 @@ msgid "Change the graphics settings of the game."
 msgstr "Ändra spelets grafikinställningar"
 
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
-msgstr "Välj färglagd eller svartvit muspekare."
+msgstr "Välj färglagd eller svartvit muspekare. Detta är bara ett estetiskt val."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
