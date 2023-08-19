@@ -727,16 +727,12 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
     const bool isFirstNode = ( currentNodeIdx == _pathStart );
     WorldNode & currentNode = _cache[currentNodeIdx];
 
-    const bool isAccessible = isTileAccessibleForAIWithArmy( currentNodeIdx, _armyStrength, _minimalArmyStrengthAdvantage );
-
-    // If we can't move here, then reset the node
-    if ( !isAccessible ) {
-        currentNode.resetNode();
-    }
-
     // Always allow movement from the starting point to cover the edge case where we got here before this tile became blocked
     if ( !isFirstNode ) {
-        if ( !isAccessible ) {
+        if ( !isTileAccessibleForAIWithArmy( currentNodeIdx, _armyStrength, _minimalArmyStrengthAdvantage ) ) {
+            // If we can't move here, then reset the node
+            currentNode.resetNode();
+
             return;
         }
 
