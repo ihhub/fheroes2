@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-14 20:35+0000\n"
-"PO-Revision-Date: 2023-08-19 23:07+0300\n"
+"PO-Revision-Date: 2023-08-19 23:16+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -4543,7 +4543,7 @@ msgid ""
 msgstr ""
 
 msgid "Ultimate Artifact"
-msgstr "Унікальний Артефакт"
+msgstr ""
 
 msgid ""
 "The enemy is beaten.\n"
@@ -6230,8 +6230,9 @@ msgid ""
 "oracle taught me his skill. I have the answer you seek.\""
 msgstr ""
 
+#, fuzzy
 msgid "No spell book is present."
-msgstr "Відсутня книга чарів."
+msgstr "Немає чарів для застосування."
 
 msgid ""
 "This spell costs %{mana} spell points. You have no spell points, so you "
@@ -6269,17 +6270,18 @@ msgstr ""
 msgid "There are no boats available for this spell."
 msgstr ""
 
+#, fuzzy
 msgid "There is no ocean adjacent to the hero where this spell will work."
-msgstr "Поблизу героя немає океану, де б це закляття могло спрацювати."
+msgstr "Недостатньо місця поряд з вашим героєм для виклику Елементаля."
 
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
 "You cannot cast this spell."
 msgstr ""
 
+#, fuzzy
 msgid "This hero is already in a town, so you cannot cast this spell."
-msgstr ""
-"Герой вже знаходиться у місті, то ж ви не може вичаклувати це закляття."
+msgstr "У вас немає Магічної Книги, то ж ви не можете вичаклувати закляття."
 
 msgid ""
 "The nearest town is %{town}.\n"
@@ -7106,8 +7108,9 @@ msgstr "Велика"
 msgid "maps|Extra Large"
 msgstr "надвелика"
 
+#, fuzzy
 msgid "maps|Custom Size"
-msgstr "Користувацький Розмір"
+msgstr "Вказати розмір"
 
 msgid "Ore Mine"
 msgstr "Рудна Копальня"
@@ -7491,16 +7494,16 @@ msgid "Jail"
 msgstr "В'язниця"
 
 msgid "Fire Summoning Altar"
-msgstr "Вівтар Виклику Вогню"
+msgstr "Вівтар виклику вогню"
 
 msgid "Air Summoning Altar"
-msgstr "Вівтар Виклику Повітря"
+msgstr "Вівтар виклику повітря"
 
 msgid "Earth Summoning Altar"
-msgstr "Вівтар Виклику Землі"
+msgstr "Вівтар виклику землі"
 
 msgid "Water Summoning Altar"
-msgstr "Вівтар Виклику Води"
+msgstr "Вівтар виклику води"
 
 msgid "Unknown Monster"
 msgstr "Невідомий монстр"
@@ -9280,291 +9283,263 @@ msgid "spell|Slow"
 msgstr ""
 
 msgid "Mass Slow"
-msgstr "Масове Уповільнення"
+msgstr ""
 
 msgid "Slows all enemies to half movement rate."
-msgstr "Вдвічі сповільнює всіх ворогів."
+msgstr ""
 
 msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Затуманює очі уражених істот, не дозволяючи їм рухатися. "
+msgstr ""
 
 msgid "spell|Blind"
-msgstr "Осліплення"
+msgstr ""
 
 msgid "Bless"
-msgstr "Благословення"
+msgstr ""
 
 msgid "Causes the selected creatures to inflict maximum damage."
-msgstr "Дозволяє обраному дружньому підрозділу завдавати максимальної шкоди. "
+msgstr ""
 
 msgid "Causes all of your units to inflict maximum damage."
-msgstr "Дозволяє всім дружнім підрозділам завдавати максимальної шкоди. "
+msgstr ""
 
 msgid "Mass Bless"
-msgstr "Масове Благословення"
+msgstr ""
 
 msgid "Magically increases the defense skill of the selected creatures."
-msgstr "Магічно збільшує навичку захисту обраного дружнього підрозділу."
+msgstr ""
 
 msgid "Stoneskin"
-msgstr "Кам'яна Шкіра"
+msgstr ""
 
 msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
 "version of Stoneskin."
 msgstr ""
-"Збільшує навичку захисту обраного дружнього підрозділу. Це закляття - "
-"покращена версія Кам'яної Шкіри."
 
 msgid "Steelskin"
-msgstr "Сталева Шкіра"
+msgstr ""
 
 msgid "Causes the selected creatures to inflict minimum damage."
-msgstr "Змушує обраний ворожий підрозділ завдавати мінімальної шкоди."
+msgstr ""
 
 msgid "Curse"
-msgstr "Прокляття"
+msgstr ""
 
 msgid "Causes all enemy troops to inflict minimum damage."
-msgstr "Змушує всі ворожі війська завдавати мінімальної шкоди."
+msgstr ""
 
 msgid "Mass Curse"
-msgstr "Масове Прокляття"
+msgstr ""
 
 msgid "Damages all undead in the battle."
-msgstr "Завдає шкоди всім невмерлим на полі бою."
+msgstr ""
 
 msgid "Holy Word"
-msgstr "Святе Слово"
+msgstr ""
 
 msgid ""
 "Damages all undead in the battle.  This is an improved version of Holy Word."
 msgstr ""
-"Завдає шкоди всім невмерлим на полі бою. Це закляття - покращена версія "
-"Святого Слова."
 
 msgid "Holy Shout"
-msgstr "Святий Крик"
+msgstr ""
 
 msgid "Anti-Magic"
-msgstr "Анти-Магія"
+msgstr ""
 
 msgid "Prevents harmful magic against the selected creatures."
-msgstr "Запобігає застосуванню магії проти обраного дружнього підрозділу."
+msgstr ""
 
 msgid "Dispel Magic"
-msgstr "Розсіювання Магії"
+msgstr ""
 
 msgid "Removes all magic spells from a single target."
-msgstr "Знімає всі закляття з обраного підрозділу."
+msgstr ""
 
 msgid "Mass Dispel"
-msgstr "Масове Розсіювання"
+msgstr ""
 
 msgid "Removes all magic spells from all creatures."
-msgstr "Знімає всі закляття з усіх істот."
+msgstr ""
 
 msgid "Causes a magic arrow to strike the selected target."
-msgstr "Запускає магічну стрілу в обраний ворожий підрозділ. "
+msgstr ""
 
 msgid "Magic Arrow"
-msgstr "Магічна Стріла"
+msgstr ""
 
 msgid "Berserker"
-msgstr "Берсерк"
+msgstr ""
 
 msgid "Causes a creature to attack its nearest neighbor."
 msgstr ""
-"Змушує істоту атакувати найближчий підрозділ, незалежно від його належності. "
 
 msgid "Armageddon"
-msgstr "Армагеддон "
+msgstr ""
 
 msgid ""
 "Holy terror strikes the battlefield, causing severe damage to all creatures."
 msgstr ""
-"Страхітливої сили катаклізм вражає поле бою, завдаючи значної шкоди всім "
-"істотам."
 
 msgid "Elemental Storm"
-msgstr "Елементальний Шторм"
+msgstr ""
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
 msgstr ""
-"Магічна стихія проливається дощем на поле бою, завдаючи шкоди всім істотам."
 
 msgid ""
 "A rain of rocks strikes an area of the battlefield, damaging all nearby "
 "creatures."
 msgstr ""
-"Потоки каміння вдаряють по невеликій частині поля бою, завдаючи шкоди всім "
-"ураженим істотам. "
 
 msgid "Meteor Shower"
-msgstr "Метеорний Дощ"
+msgstr ""
 
 msgid "Paralyze"
-msgstr "Параліч"
+msgstr ""
 
 msgid "The targeted creatures are paralyzed, unable to move or retaliate."
 msgstr ""
-"Паралізує вражених істот, не дозволяючи їм рухатись, або атакувати у "
-"відповідь."
 
 msgid "Hypnotize"
-msgstr "Гіпноз"
+msgstr ""
 
 msgid ""
 "Brings a single enemy unit under your control if its hits are less than "
 "%{count} times the caster's spell power."
 msgstr ""
-"Переводить обраний ворожий підрозділ під ваш контроль, якщо сумарна "
-"кількість очок здоров'я не перевищує Силу Магії заклинача більше, ніж у "
-"%{count} разів."
 
 msgid "Cold Ray"
-msgstr "Крижаний Промінь"
+msgstr ""
 
 msgid "Drains body heat from a single enemy unit."
-msgstr "Всотує тепло тіла з обраного ворожого підрозділу. "
+msgstr ""
 
 msgid "Cold Ring"
-msgstr "Крижане Коло"
+msgstr ""
 
 msgid ""
 "Drains body heat from all units surrounding the center point, but not "
 "including the center point."
 msgstr ""
-"Всотує тепло тіла з усіх підрозділів довкола обраної клітинки, не завдаючи "
-"шкоди тим, хто розташований на ній."
 
 msgid "Disrupting Ray"
-msgstr "Розриваючий Промінь"
+msgstr ""
 
 msgid "Reduces the defense rating of an enemy unit by three."
-msgstr "Зменшує захист ворожого підрозділу на 3 одиниці."
+msgstr ""
 
 msgid "Damages all living (non-undead) units in the battle."
-msgstr "Пошкоджує всіх живих (не-невмерлих) воїнів на полі бою."
+msgstr ""
 
 msgid "Death Ripple"
-msgstr "Смертельне Тремтіння"
+msgstr ""
 
 msgid "Death Wave"
-msgstr "Смертельна Хвиля"
+msgstr ""
 
 msgid ""
 "Damages all living (non-undead) units in the battle.  This spell is an "
 "improved version of Death Ripple."
 msgstr ""
-"Пошкоджує всіх живих (не-невмерлих) воїнів на полі бою. Це закляття - "
-"покращена версія Смертельного Тремтіння."
 
 msgid "Dragon Slayer"
-msgstr "Драконоборець"
+msgstr ""
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
-msgstr "Значно збільшує вміння атаки підрозділу проти Драконів."
+msgstr ""
 
 msgid "Blood Lust"
-msgstr "Кровожерливість"
+msgstr ""
 
 msgid "Increases a unit's attack skill."
-msgstr "Збільшує вміння атаки підрозділу. "
+msgstr ""
 
 msgid "Animate Dead"
-msgstr "Оживлення Мерців"
+msgstr ""
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
 msgstr ""
-"Назавжди воскрешає істот з числа пошкоджених або полеглих підрозділів "
-"невмерлих. "
 
 msgid "Mirror Image"
-msgstr "Клон"
+msgstr ""
 
 msgid ""
 "Creates an illusionary unit that duplicates one of your existing units.  "
 "This illusionary unit does the same damages as the original, but will vanish "
 "if it takes any damage."
 msgstr ""
-"Створює ілюзорний підрозділ, що копіює обраний вами підрозділ. Ці ілюзорні "
-"воїни завдаватимуть такої ж шкоди, як і справжні, однак вони щезнуть, щойно "
-"зазнають будь-яких ушкоджень. "
 
 msgid "Shield"
-msgstr "Щит"
+msgstr ""
 
 msgid ""
 "Halves damage received from ranged attacks for a single unit. Does not "
 "affect damage received from Turrets or Ballistae."
 msgstr ""
-"Вдвічі зменшує шкоду, отримувану зачарованим підрозділом. Не впливає на "
-"шкоду, що завдають Вежі або Балліста. "
 
 msgid "Mass Shield"
-msgstr "Масовий Щит"
+msgstr ""
 
 msgid ""
 "Halves damage received from ranged attacks for all of your units. Does not "
 "affect damage received from Turrets or Ballistae."
 msgstr ""
-"Вдвічі зменшує шкоду, отримувану всіма дружніми підрозділами від атак з "
-"відстані. Не впливає на шкоду, що завдають Вежі або Балліста. "
 
 msgid "Summon Earth Elemental"
-msgstr "Виклик Земляних Елементалів"
+msgstr ""
 
 msgid "Summons Earth Elementals to fight for your army."
-msgstr "Викликає Земних Елементалів, щоб вони бились за ваше військо."
+msgstr ""
 
 msgid "Summon Air Elemental"
-msgstr "Виклик Повітряних Елементалів"
+msgstr ""
 
 msgid "Summons Air Elementals to fight for your army."
-msgstr "Викликає Повітряних Елементалів, щоб вони бились за ваше військо."
+msgstr ""
 
 msgid "Summon Fire Elemental"
-msgstr "Виклик Вогняних Елементалів"
+msgstr ""
 
 msgid "Summons Fire Elementals to fight for your army."
-msgstr "Викликає Вогняних Елементалів, щоб вони бились за ваше військо."
+msgstr ""
 
 msgid "Summon Water Elemental"
-msgstr "Виклик Водних Елементалів"
+msgstr ""
 
 msgid "Summons Water Elementals to fight for your army."
-msgstr "Викликає Водних Елементалів, щоб вони бились за ваше військо."
+msgstr ""
 
 msgid "Damages castle walls."
-msgstr "Пошкоджує стіни замку."
+msgstr ""
 
 msgid "Earthquake"
 msgstr "Землетрус"
 
 msgid "Causes all mines across the land to become visible."
-msgstr "Робить всі копальні на території видимими."
+msgstr ""
 
 msgid "View Mines"
-msgstr "Огляд Копалень"
+msgstr ""
 
 msgid "Causes all resources across the land to become visible."
-msgstr "Робить всі ресурси на території видимими."
+msgstr ""
 
 msgid "View Resources"
-msgstr "Огляд Ресурсів"
+msgstr ""
 
 msgid "Causes all artifacts across the land to become visible."
-msgstr "Робить всі артефакти на території видимими."
+msgstr ""
 
 msgid "View Artifacts"
-msgstr "Огляд Артефактів"
+msgstr ""
 
 msgid "Causes all towns and castles across the land to become visible."
-msgstr "Робить всі міста та замки на території видимими."
+msgstr ""
 
 msgid "View Towns"
-msgstr "Огляд Міст"
+msgstr ""
 
 msgid "Causes all Heroes across the land to become visible."
 msgstr "Показує всіх героїв на карті."
@@ -9582,16 +9557,13 @@ msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr "Дозволяє заклиначу побачити повну інформацію про ворожих Героїв."
 
 msgid "Summon Boat"
-msgstr "Виклик Човна"
+msgstr ""
 
 msgid ""
 "Summons the nearest unoccupied, friendly boat to an adjacent shore "
 "location.  A friendly boat is one which you just built or were the most "
 "recent player to occupy."
 msgstr ""
-"Викликає найближчий вільний, дружній човен до суміжної з узбережжям клітинки "
-"на водоймі. Човен вважається дружнім, якщо його збудували ви, або якщо ви "
-"були останнім гравцем, що ним скористався."
 
 msgid "Allows the caster to magically transport to a nearby location."
 msgstr "Магічно переносить заклинача на невелику відстань."
@@ -9618,43 +9590,36 @@ msgid ""
 msgstr "Видіння передбачає ймовірний результат битви з нейтральною армією."
 
 msgid "Haunt"
-msgstr "Одержима Копальня"
+msgstr ""
 
 msgid ""
 "Haunts a mine you control with Ghosts.  This mine stops producing "
 "resources.  (If I can't keep it, nobody will!)"
 msgstr ""
-"Населяє підконтрольну вам копальню Привидами. Копальня припиняє видобуток "
-"ресурсів. (Гірко з'їсти, і шкода покинути.)"
 
 msgid "Set Earth Guardian"
-msgstr "Виклик Земляного Охоронця"
+msgstr ""
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
 msgstr ""
-"Розміщує Земних Елементалів, щоб вони охороняли копальню від ворожих армій."
 
 msgid "Set Air Guardian"
-msgstr "Виклик Повітряного Охоронця"
+msgstr ""
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
 msgstr ""
-"Розміщує Повітряних Елементалів, щоб вони охороняли копальню від ворожих "
-"армій."
 
 msgid "Set Fire Guardian"
-msgstr "Виклик Вогняного Охоронця"
+msgstr ""
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
 msgstr ""
-"Розміщує Вогняних Елементалів, щоб вони охороняли копальню від ворожих армій."
 
 msgid "Set Water Guardian"
-msgstr "Виклик Водного Охоронця"
+msgstr ""
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
-"Розміщує Водних Елементалів, щоб вони охороняли копальню від ворожих армій."
 
 msgid "Petrification"
 msgstr "Скам'яніння"
@@ -9673,7 +9638,7 @@ msgid "No spell to cast."
 msgstr "Немає чарів для застосування."
 
 msgid "Your hero has %{point} spell points remaining."
-msgstr "У вашого героя залишилось %{point} очок мани."
+msgstr ""
 
 msgid "View Adventure Spells"
 msgstr "Показати Небойові Закляття"
@@ -9691,7 +9656,7 @@ msgid "Close Spellbook"
 msgstr "Закрити Книгу Заклять"
 
 msgid "View %{spell}"
-msgstr "Показати %{spell}"
+msgstr ""
 
 msgid "This spell does %{damage} points of damage."
 msgstr "Це закляття завдає %{damage} очок шкоди."
@@ -9704,7 +9669,7 @@ msgstr ""
 "%{count} %{monster}."
 
 msgid "This spell restores %{hp} HP."
-msgstr "Це закляття відновлює %{hp} ОЗ."
+msgstr ""
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
 msgstr "Це закляття викликає %{count} %{monster} для охорони шахти."
@@ -9719,15 +9684,12 @@ msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
 msgstr ""
-"Це закляття дозволяє \n"
-"контролювати істот із \n"
-"%{hp} сумарними ОЗ."
 
 msgid "The ultimate artifact is really the %{name}."
-msgstr "Унікальний артефакт це, насправді, %{name}."
+msgstr ""
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr "Унікальний артефакт можна знайти там, де %{name}."
+msgstr ""
 
 msgid "north-west"
 msgstr "північний захід"
