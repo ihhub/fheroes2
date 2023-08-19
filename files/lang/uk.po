@@ -3240,22 +3240,16 @@ msgstr ""
 msgid "Warning!"
 msgstr ""
 
-msgid "Accept the choice made."
-msgstr ""
-
-msgid "Select Skill:"
-msgstr ""
-
-msgid "Select Spell:"
+msgid "Select Monster."
 msgstr ""
 
 msgid "Select Artifact:"
 msgstr ""
 
-msgid "Select Monster:"
+msgid "Select Spell:"
 msgstr ""
 
-msgid "Select Hero:"
+msgid "Select Skill:"
 msgstr ""
 
 msgid "Map Type:\n"
@@ -3385,6 +3379,9 @@ msgid "Selected Description"
 msgstr ""
 
 msgid "The description of the currently selected map."
+msgstr ""
+
+msgid "Accept the choice made.
 msgstr ""
 
 msgid "Jump"
