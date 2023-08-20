@@ -79,7 +79,7 @@ namespace
     }
 
     void getButtonSpecificValues( const int emptyButtonIcnID, fheroes2::FontColor & font, int32_t & textMargin, int32_t & minimumTextAreaWidth,
-                                  int32_t & backgroundBorders, int & backgroundIcnID, fheroes2::Point & releasedOffset, fheroes2::Point & pressedOffset )
+                                  int32_t & backgroundBorders, fheroes2::Point & releasedOffset, fheroes2::Point & pressedOffset )
     {
         switch ( emptyButtonIcnID ) {
         case ICN::EMPTY_GOOD_BUTTON:
@@ -89,7 +89,6 @@ namespace
             // original OKAY and the CANCEL buttons even though OKAY is a shorter word
             minimumTextAreaWidth = 87;
             backgroundBorders = 4 + 3;
-            backgroundIcnID = ICN::STONEBAK;
             releasedOffset = { 5, 5 };
             pressedOffset = { 4, 6 };
             break;
@@ -98,7 +97,6 @@ namespace
             textMargin = 4 + 4;
             minimumTextAreaWidth = 87;
             backgroundBorders = 4 + 3;
-            backgroundIcnID = ICN::STONEBAK_EVIL;
             releasedOffset = { 5, 5 };
             pressedOffset = { 4, 6 };
             break;
@@ -107,7 +105,6 @@ namespace
             textMargin = 4 + 4;
             minimumTextAreaWidth = 87;
             backgroundBorders = 4 + 3;
-            backgroundIcnID = ICN::STONEBAK_SMALL_POL;
             releasedOffset = { 5, 5 };
             pressedOffset = { 4, 6 };
             break;
@@ -116,7 +113,6 @@ namespace
             textMargin = 2 + 2;
             minimumTextAreaWidth = 53;
             backgroundBorders = 5 + 3;
-            backgroundIcnID = ICN::UNKNOWN;
             releasedOffset = { 5, 2 };
             pressedOffset = { 4, 3 };
             break;
@@ -623,17 +619,17 @@ namespace fheroes2
         }
     }
 
-    void getTextAdaptedButton( Sprite & released, Sprite & pressed, const char * text, const int emptyButtonIcnID )
+    void getTextAdaptedButton( Sprite & released, Sprite & pressed, const char * text, const int emptyButtonIcnID, const int buttonBackgroundIcnID )
     {
         fheroes2::FontColor buttonFont = fheroes2::FontColor::WHITE;
         int32_t textAreaBorder = 0;
         int32_t minimumTextAreaWidth = 0;
         int32_t backgroundBorders = 0;
-        int backgroundIcnID = ICN::UNKNOWN;
         fheroes2::Point releasedOffset = {};
         fheroes2::Point pressedOffset = {};
 
-        getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaBorder, minimumTextAreaWidth, backgroundBorders, backgroundIcnID, releasedOffset, pressedOffset );
+        getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaBorder, minimumTextAreaWidth, backgroundBorders, releasedOffset,
+ pressedOffset );
 
         const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFont };
 
@@ -655,8 +651,8 @@ namespace fheroes2
         released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), textAreaWidth + backgroundBorders );
         pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), textAreaWidth + backgroundBorders );
 
-        if ( backgroundIcnID != ICN::UNKNOWN ) {
-            makeTransparentBackground( released, pressed, backgroundIcnID );
+        if ( buttonBackgroundIcnID != ICN::UNKNOWN ) {
+            makeTransparentBackground( released, pressed, buttonBackgroundIcnID );
         }
 
         const fheroes2::Size releasedTextSize( releasedText.width( textAreaWidth ), releasedText.height( textAreaWidth ) );
