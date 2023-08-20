@@ -728,8 +728,12 @@ namespace
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( objectType ) )
 
-        // TODO: remove this temporary assertion
+        // TODO: remove this temporary assertion and 'defined( NDEBUG )' condition below
         assert( !MP2::isCaptureObject( objectType ) );
+
+#if defined( NDEBUG ) && !defined( WITH_DEBUG )
+        (void)objectType;
+#endif
 
         Maps::Tiles & tile = world.GetTiles( dst_index );
         hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
