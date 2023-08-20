@@ -3251,7 +3251,6 @@ msgid "Select Skill:"
 msgstr ""
 
 msgid "Select Spell:"
->>>>>>> master
 msgstr ""
 
 msgid "Select Artifact:"
