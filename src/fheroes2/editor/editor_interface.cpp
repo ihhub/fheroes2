@@ -20,6 +20,7 @@
 
 #include "editor_interface.h"
 
+#include <algorithm>
 #include <cassert>
 #include <vector>
 
@@ -41,6 +42,7 @@
 #include "interface_status.h"
 #include "localevent.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "screen.h"
@@ -53,6 +55,17 @@
 #include "world.h"
 
 class Castle;
+
+namespace
+{
+    int32_t getBrushAreaEndIndex( const int32_t brushSize, const int32_t startIndex )
+    {
+        const int32_t worldWidth = world.w();
+        const int32_t cursorSizeX = std::min( brushSize, worldWidth - startIndex % worldWidth ) - 1;
+        const int32_t cursorSizeY = std::min( brushSize, world.h() - startIndex / worldWidth ) - 1;
+        return startIndex + cursorSizeX + worldWidth * cursorSizeY;
+    }
+}
 
 namespace Interface
 {
@@ -90,15 +103,27 @@ namespace Interface
 
     void Editor::redraw( const uint32_t force /* = 0 */ )
     {
-        const fheroes2::Display & display = fheroes2::Display::instance();
+        fheroes2::Display & display = fheroes2::Display::instance();
 
         const uint32_t combinedRedraw = _redraw | force;
 
         if ( combinedRedraw & REDRAW_GAMEAREA ) {
             // Render all except the fog.
-            _gameArea.Redraw( fheroes2::Display::instance(), LEVEL_OBJECTS | LEVEL_HEROES | LEVEL_ROUTES );
+            _gameArea.Redraw( display, LEVEL_OBJECTS | LEVEL_HEROES | LEVEL_ROUTES );
 
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
+
+            if ( _editorPanel.isTerrainEdit() && ( _tileUnderCursor > -1 ) ) {
+                const int32_t brushSize = _editorPanel.getBrushSize();
+
+                if ( brushSize > 0 ) {
+                    _gameArea.renderTileAreaSelect( display, _tileUnderCursor, getBrushAreaEndIndex( brushSize, _tileUnderCursor ) );
+                }
+                else if ( brushSize == 0 ) {
+                    // Render area selection from the tile where the left mouse button was pressed till the tile under the cursor.
+                    _gameArea.renderTileAreaSelect( display, _selectedTile, _tileUnderCursor );
+                }
+            }
         }
 
         if ( combinedRedraw & ( REDRAW_RADAR_CURSOR | REDRAW_RADAR ) ) {
@@ -260,7 +285,9 @@ namespace Interface
                 if ( Cursor::POINTER != cursor.Themes() ) {
                     cursor.SetThemes( Cursor::POINTER );
                 }
-                if ( !_gameArea.isDragScroll() ) {
+
+                // TODO: Add checks for object placing/moving, and other Editor functions that uses mouse dragging.
+                if ( !_gameArea.isDragScroll() && ( _editorPanel.getBrushSize() > 0 || _selectedTile == -1 ) ) {
                     _radar.QueueEventProcessing();
                 }
             }
@@ -295,8 +322,46 @@ namespace Interface
                 }
             }
 
+            if ( isCursorOverGamearea ) {
+                // Get tile index under the cursor.
+                const int32_t tileIndex = _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
+                const int32_t brushSize = _editorPanel.getBrushSize();
+
+                if ( _tileUnderCursor != tileIndex ) {
+                    _tileUnderCursor = tileIndex;
+
+                    // Force redraw if cursor position was changed as area rectangle is also changed.
+                    if ( _editorPanel.isTerrainEdit() && ( brushSize > 0 || _selectedTile != -1 ) ) {
+                        _redraw |= REDRAW_GAMEAREA;
+                    }
+                }
+
+                if ( _selectedTile == -1 && tileIndex != -1 && brushSize == 0 && le.MousePressLeft() ) {
+                    _selectedTile = tileIndex;
+                    _redraw |= REDRAW_GAMEAREA;
+                }
+            }
+            else if ( _tileUnderCursor != -1 ) {
+                _tileUnderCursor = -1;
+                _redraw |= REDRAW_GAMEAREA;
+            }
+
+            // Fill the selected area in terrain edit mode.
+            if ( _selectedTile > -1 && le.MouseReleaseLeft() && _editorPanel.isTerrainEdit() ) {
+                if ( isCursorOverGamearea && _editorPanel.getBrushSize() == 0 ) {
+                    const int groundId = _editorPanel.selectedGroundType();
+
+                    Maps::setTerrainOnTiles( _selectedTile, _tileUnderCursor, groundId );
+                }
+
+                // Reset the area start tile.
+                _selectedTile = -1;
+
+                _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
+            }
+
             // fast scroll
-            if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) && ( _gameArea.NeedScroll() || _gameArea.needDragScrollRedraw() ) ) {
+            if ( ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) && _gameArea.NeedScroll() ) || _gameArea.needDragScrollRedraw() ) {
                 if ( ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
                        || isScrollBottom( le.GetMouseCursor() ) )
                      && !_gameArea.isDragScroll() ) {
@@ -308,7 +373,6 @@ namespace Interface
                 _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR;
             }
 
-            // Render map only if the turn is not over.
             if ( res == fheroes2::GameMode::CANCEL ) {
                 // map objects animation
                 if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
@@ -456,22 +520,39 @@ namespace Interface
         // TODO: Make proper borders restoration for low height resolutions, like for hide interface mode.
         ViewWorld::ViewWorldWindow( 0, ViewWorldMode::ViewAll, *this );
     }
+
     void Editor::mouseCursorAreaClickLeft( const int32_t tileIndex )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
         Heroes * otherHero = tile.GetHeroes();
+        Castle * otherCastle = world.getCastle( tile.GetCenter() );
+
         if ( otherHero ) {
             // TODO: Make hero edit dialog: like Battle only dialog, but only for one hero.
             Game::OpenHeroesDialog( *otherHero, true, true );
         }
-
-        Castle * otherCastle = world.getCastle( tile.GetCenter() );
-        if ( otherCastle ) {
+        else if ( otherCastle ) {
             // TODO: Make Castle edit dialog: like original build dialog.
             Game::OpenCastleDialog( *otherCastle );
         }
+        else if ( _editorPanel.isTerrainEdit() ) {
+            const int32_t brushSize = _editorPanel.getBrushSize();
+            const int groundId = _editorPanel.selectedGroundType();
+
+            if ( brushSize > 0 ) {
+                Maps::setTerrainOnTiles( tileIndex, getBrushAreaEndIndex( brushSize, tileIndex ), groundId );
+            }
+            else if ( brushSize == 0 ) {
+                // This is a case when area was not selected but a single tile was clicked.
+                Maps::setTerrainOnTiles( tileIndex, tileIndex, groundId );
+
+                _selectedTile = -1;
+            }
+            _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
+        }
     }
+
     void Editor::mouseCursorAreaPressRight( const int32_t tileIndex ) const
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );

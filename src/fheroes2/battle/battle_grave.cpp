@@ -63,7 +63,7 @@ void Battle::Graveyard::RemoveTroop( const Unit & unit )
 {
     assert( Board::isValidIndex( unit.GetHeadIndex() ) && ( !unit.isWide() || Board::isValidIndex( unit.GetTailIndex() ) ) );
 
-    auto removeUIDFromIndex = [this]( const int32_t idx, const uint32_t uid ) {
+    const auto removeUIDFromIndex = [this]( const int32_t idx, const uint32_t uid ) {
         const auto idxIter = find( idx );
         if ( idxIter == end() ) {
             return;

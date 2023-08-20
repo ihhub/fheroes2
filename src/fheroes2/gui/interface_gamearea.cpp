@@ -770,6 +770,29 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     updateObjectAnimationInfo();
 }
 
+void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int32_t startTile, const int32_t endTile ) const
+{
+    if ( startTile < 0 || endTile < 0 ) {
+        return;
+    }
+
+    const fheroes2::Point startTileOffset = GetRelativeTilePosition( Maps::GetPoint( startTile ) );
+    const fheroes2::Point endTileOffset = GetRelativeTilePosition( Maps::GetPoint( endTile ) );
+
+    const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
+    const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
+    const int32_t sizeX = TILEWIDTH + std::abs( startTileOffset.x - endTileOffset.x );
+    const int32_t sizeY = TILEWIDTH + std::abs( startTileOffset.y - endTileOffset.y );
+
+    const fheroes2::Rect imageRoi{ startX, startY, sizeX, sizeY };
+    const fheroes2::Rect overlappedRoi = _windowROI ^ imageRoi;
+
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, std::min( 2, overlappedRoi.height ), 181 );
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + 2, std::min( 2, overlappedRoi.width ), overlappedRoi.height - 4, 181 );
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + overlappedRoi.height - 2, overlappedRoi.width, 2, 181 );
+    fheroes2::Fill( dst, overlappedRoi.x + overlappedRoi.width - 2, overlappedRoi.y + 2, 2, overlappedRoi.height - 4, 181 );
+}
+
 void Interface::GameArea::updateMapFogDirections()
 {
     const int32_t friendColors = Players::FriendColors();
@@ -915,9 +938,9 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         _mouseDraggingInitiated = true;
         _lastMouseDragPosition = mousePosition;
     }
-    else if ( ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
-                || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement )
-              && isCursorOverGamearea ) {
+    else if ( isCursorOverGamearea && _interface.useMouseDragMovement()
+              && ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
+                   || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) ) {
         _mouseDraggingMovement = true;
     }
 
@@ -934,7 +957,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         return;
     }
 
-    int32_t index = GetValidTileIdFromPoint( mousePosition );
+    const int32_t index = GetValidTileIdFromPoint( mousePosition );
 
     // change cursor if need
     if ( ( updateCursor || index != _prevIndexPos ) && isCursorOverGamearea ) {
@@ -944,12 +967,14 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     }
 
     // out of range
-    if ( index < 0 )
+    if ( !isCursorOverGamearea || !Maps::isValidAbsIndex( index ) ) {
         return;
+    }
 
     const Settings & conf = Settings::Get();
-    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( Interface::AdventureMap::Get().getControlPanel().GetArea() ) )
+    if ( conf.isHideInterfaceEnabled() && conf.ShowControlPanel() && le.MouseCursor( Interface::AdventureMap::Get().getControlPanel().GetArea() ) ) {
         return;
+    }
 
     const fheroes2::Point tileOffset = _topLeftTileOffset + mousePosition - _windowROI.getPosition();
     const fheroes2::Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
@@ -957,10 +982,12 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 
     const fheroes2::Rect tileROI( tilePos.x, tilePos.y, TILEWIDTH, TILEWIDTH );
 
-    if ( le.MouseClickLeft( tileROI ) )
+    if ( le.MouseClickLeft( tileROI ) ) {
         _interface.mouseCursorAreaClickLeft( index );
-    else if ( le.MousePressRight( tileROI ) && isCursorOverGamearea )
+    }
+    else if ( le.MousePressRight( tileROI ) ) {
         _interface.mouseCursorAreaPressRight( index );
+    }
 }
 
 fheroes2::Point Interface::GameArea::_getStartTileId() const

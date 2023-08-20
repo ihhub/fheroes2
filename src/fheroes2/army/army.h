@@ -116,7 +116,8 @@ public:
     // If the army has no slot find 2 or more slots of the same monster which is the weakest and merge them releasing one slot in troops.
     bool mergeWeakestTroopsIfNeeded();
 
-    void splitWeakestTroopsIfPossible();
+    // Splits the stack consisting of the weakest units into free slots (if any), 1 monster per free slot
+    void splitStackOfWeakestUnitsIntoFreeSlots();
 
     // Combines all stacks consisting of identical monsters
     void MergeSameMonsterTroops();

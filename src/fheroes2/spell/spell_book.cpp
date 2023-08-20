@@ -438,7 +438,7 @@ void SpellBook::Edit( const HeroBase & hero )
                 }
             }
             else {
-                const Spell spell = Dialog::SelectSpell();
+                const Spell spell = Dialog::selectSpell();
                 Append( spell );
                 displayedSpells = SetFilter( Filter::ALL, &hero );
                 redraw = true;

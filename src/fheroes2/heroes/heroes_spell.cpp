@@ -220,14 +220,15 @@ namespace
         assert( Maps::isValidAbsIndex( dst ) );
 
         AudioManager::PlaySound( M82::KILLFADE );
-        hero.GetPath().Hide();
+        hero.ShowPath( false );
         hero.FadeOut();
 
+        hero.Scout( dst );
         hero.Move2Dest( dst );
+        hero.GetPath().Reset();
 
         // Clear previous hero position on radar.
         I.getRadar().SetRenderArea( fromRoi );
-
         I.redraw( Interface::REDRAW_RADAR );
 
         I.getGameArea().SetCenter( hero.GetCenter() );
@@ -238,9 +239,7 @@ namespace
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn();
-        hero.GetPath().Reset();
-        // Path::Reset() puts the hero's path into the hidden mode, we have to make it visible again
-        hero.GetPath().Show();
+        hero.ShowPath( true );
 
         castle->MageGuildEducateHero( hero );
     }
@@ -342,16 +341,16 @@ namespace
         }
 
         AudioManager::PlaySound( M82::KILLFADE );
-        hero.GetPath().Hide();
+        hero.ShowPath( false );
         hero.FadeOut();
 
-        hero.SpellCasted( Spell::DIMENSIONDOOR );
-
+        hero.Scout( dst );
         hero.Move2Dest( dst );
+        hero.SpellCasted( Spell::DIMENSIONDOOR );
+        hero.GetPath().Reset();
 
         // Clear previous hero position on radar.
         I.getRadar().SetRenderArea( fromRoi );
-
         I.redraw( Interface::REDRAW_RADAR );
 
         I.getGameArea().SetCenter( hero.GetCenter() );
@@ -362,9 +361,8 @@ namespace
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn();
-        hero.GetPath().Reset();
-        // Path::Reset() puts the hero's path into the hidden mode, we have to make it visible again
-        hero.GetPath().Show();
+        hero.ShowPath( true );
+
         hero.ActionNewPosition( false );
 
         // SpellCasted() has already been called, we should not call it once again

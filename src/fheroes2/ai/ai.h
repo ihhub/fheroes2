@@ -98,7 +98,6 @@ namespace AI
         virtual void HeroesPostLoad( Heroes & hero );
         virtual void HeroesActionComplete( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType );
         virtual void HeroesActionNewPosition( Heroes & hero );
-        virtual void HeroesClearTask( const Heroes & hero );
         virtual void HeroesLevelUp( Heroes & hero );
         virtual std::string HeroesString( const Heroes & hero );
 
@@ -112,6 +111,7 @@ namespace AI
 
         virtual void Reset();
         virtual void resetPathfinder() = 0;
+        virtual bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero ) = 0;
 
         // Should be called at the beginning of the battle even if no AI-controlled players are
         // involved in the battle - because of the possibility of using instant or auto battle

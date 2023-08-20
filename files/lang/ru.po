@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-08 16:49+0000\n"
+"POT-Creation-Date: 2023-08-12 09:48+0000\n"
 "PO-Revision-Date: 2023-08-10 16:59+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3187,20 +3187,23 @@ msgstr "Вы действительно хотите удалить файл:"
 msgid "Warning!"
 msgstr "Внимание!"
 
+msgid "Accept the choice made."
+msgstr "Принять изменения."
+
+msgid "Select Skill:"
+msgstr "Выберите навык:"
+
+msgid "Select Spell:"
+msgstr "Выберите заклинание:"
+
+msgid "Select Artifact:"
+msgstr "Выберите артефакт:"
+
 msgid "Select Monster:"
 msgstr "Выберите существо:"
 
 msgid "Select Hero:"
 msgstr "Выберите героя:"
-
-msgid "Select Artifact:"
-msgstr "Выберите артефакт:"
-
-msgid "Select Spell:"
-msgstr "Выберите заклинание:"
-
-msgid "Select Skill:"
-msgstr "Выберите навык:"
 
 msgid "Map Type:\n"
 msgstr "Тип карты:\n"
@@ -3341,9 +3344,6 @@ msgstr "Описание"
 
 msgid "The description of the currently selected map."
 msgstr "Расширенное описание выбранной карты."
-
-msgid "Accept the choice made."
-msgstr "Принять изменения."
 
 msgid "Jump"
 msgstr "Прыжком"
