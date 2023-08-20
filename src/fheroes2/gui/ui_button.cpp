@@ -628,8 +628,7 @@ namespace fheroes2
         fheroes2::Point releasedOffset = {};
         fheroes2::Point pressedOffset = {};
 
-        getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaBorder, minimumTextAreaWidth, backgroundBorders, releasedOffset,
- pressedOffset );
+        getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaBorder, minimumTextAreaWidth, backgroundBorders, releasedOffset, pressedOffset );
 
         const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFont };
 
