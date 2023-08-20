@@ -724,7 +724,7 @@ namespace
         }
     }
 
-    void AIToObjectResource( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+    void AIToObjectResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( objectType ) )
 
