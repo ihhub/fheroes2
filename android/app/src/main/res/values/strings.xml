@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <string name="app_name">fheroes2 live wallpaper</string>
-    <string name="app_label">fheroes2</string>
-    <string name="activity_toolset_label">fheroes2 Toolset</string>
+    <string name="app_name">Heroes 2 live wallpaper</string>
+    <string name="app_label">Heroes 2</string>
+    <string name="activity_toolset_label">Heroes 2 Settings</string>
     <string name="activity_toolset_game_logo_img_content_description">fheroes2 logo</string>
     <string name="activity_toolset_game_status_lbl_text"><b>You cannot run the game at the moment, because some data files of the original game are missing.</b>\n\nPlease put the contents of the directory with the original Heroes of Might and Magic II game (or just <b>ANIM</b>, <b>DATA</b>, <b>MAPS</b> and <b>MUSIC</b> folders) into a ZIP archive, copy it to this device, press the \"<b>Extract HoMM2 assets</b>\" button and select this ZIP archive.\n\nIf you do not have a copy of the original game, you can download a ZIP archive of the demo version. Once the download is complete please press the \"<b>Extract HoMM2 assets</b>\" button and select the newly downloaded demo archive.</string>
     <string name="activity_toolset_start_game_btn_text">Start game</string>
