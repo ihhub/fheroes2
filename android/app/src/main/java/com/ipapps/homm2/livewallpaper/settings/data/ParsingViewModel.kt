@@ -46,6 +46,17 @@ class ParsingViewModel(
                 .resolve("SyncStateContract.Constants.Assets.ATLAS_FOLDER")
     }
 
+    fun copyResurrectionH2d() {
+        val input = application.applicationContext.assets.open("files/data/resurrection.h2d")
+        val output =
+            application.applicationContext.getExternalFilesDir("files/data")
+                ?.resolve("resurrection.h2d");
+
+        if (output != null && !output.exists() && output.createNewFile()) {
+            input.copyTo(output.outputStream())
+        }
+    }
+
     fun copyDefaultMap() {
         val userMapsFolder = application
             .applicationContext

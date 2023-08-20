@@ -61,6 +61,8 @@ class MainActivity() : ComponentActivity() {
                 if (mapsViewModel.mapsList.first().isEmpty()) {
                     parsingViewModel.copyDefaultMap()
                 }
+
+                parsingViewModel.copyResurrectionH2d()
             }
 
             NavigationHost(
