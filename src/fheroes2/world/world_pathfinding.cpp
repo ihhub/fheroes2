@@ -822,6 +822,8 @@ uint32_t AIWorldPathfinder::getMovementPenalty( const int from, const int to, co
         return regularPenalty + WorldPathfinder::getMovementPenalty( node._from, from, prevStepDirection );
     }();
 
+    assert( _maxMovePoints == 0 || defaultPenalty <= _maxMovePoints );
+
     // If we perform pathfinding for a real AI-controlled hero on the map, we should correctly calculate
     // movement penalties when this hero overcomes water obstacles using boats.
     if ( _maxMovePoints > 0 ) {
@@ -843,8 +845,6 @@ uint32_t AIWorldPathfinder::getMovementPenalty( const int from, const int to, co
             // If the hero is not able to make this movement this turn, then he will have to spend
             // all the movement points next turn.
             if ( defaultPenalty > node._remainingMovePoints ) {
-                assert( _maxMovePoints >= defaultPenalty );
-
                 return _maxMovePoints;
             }
 
