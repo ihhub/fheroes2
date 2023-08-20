@@ -126,6 +126,9 @@ public:
     void reset() override;
 
     void reEvaluateIfNeeded( const Heroes & hero );
+
+    // Builds and returns a path to the tile with the index 'targetIndex'. If the destination tile is not reachable,
+    // then an empty path is returned.
     std::list<Route::Step> buildPath( const int targetIndex ) const;
 
 private:
@@ -150,6 +153,7 @@ public:
 
     void reEvaluateIfNeeded( const Heroes & hero );
     void reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill );
+
     int getFogDiscoveryTile( const Heroes & hero, bool & isTerritoryExpansion );
 
     // Used for cases when heroes are stuck because one hero might be blocking the way and we have to move him.
@@ -161,13 +165,14 @@ public:
 
     std::list<Route::Step> getDimensionDoorPath( const Heroes & hero, int targetIndex ) const;
 
+    // Builds and returns a path to the tile with the index 'targetIndex'. If there is a need to pass through any objects
+    // on the way to this tile, then a path to the nearest such object is returned. If the destination tile is not reachable
+    // in principle, then an empty path is returned.
+    std::list<Route::Step> buildPath( const int targetIndex ) const;
+
     // Used for non-hero armies, like castles or monsters
     uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
-
-    // Override builds path to the nearest valid object
-    std::list<Route::Step> buildPath( const int targetIndex, const bool isPlanningMode = false ) const;
-
-    // Faster, but does not re-evaluate the map (expose base class method)
+    // Faster, but does not re-evaluate the map (exposed method of the base class)
     using Pathfinder::getDistance;
 
     // Returns the coefficient of the minimum required advantage in army strength in order to be able to "pass through"
@@ -201,10 +206,10 @@ private:
     // Follows custom passability rules (for the AI)
     void processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx ) override;
 
-    // Adds special logic for AI-controlled heroes to encourage them to overcome water obstacles using boats. If this
-    // logic should be taken into account (when performing pathfinding for a real hero on the map), then the source
-    // tile should be already accessible for this hero and it should also have a valid information about the hero's
-    // remaining movement points.
+    // Adds special logic for AI-controlled heroes to correctly calculate movement penalties when such a hero passes
+    // through objects on the map or overcomes water obstacles using boats. If this logic should be taken into account
+    // (when performing pathfinding for a real hero on the map), then the source tile should be already accessible for
+    // this hero and it should also have a valid information about the hero's remaining movement points.
     uint32_t getMovementPenalty( const int from, const int to, const int direction ) const override;
 
     // Hero properties should be cached here because they can change even if the hero's position does not change,

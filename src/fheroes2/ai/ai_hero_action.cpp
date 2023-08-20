@@ -1146,9 +1146,12 @@ namespace
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( objectType ) )
 
-        assert( hero.GetIndex() == dst_index );
+        assert( hero.GetIndex() == dst_index || MP2::isNeedStayFront( objectType ) );
 
         if ( !AI::Get().isValidHeroObject( hero, dst_index, ( hero.GetIndex() == dst_index ) ) ) {
+            // If we can't step on this tile, then we shouldn't be here at all
+            assert( !MP2::isNeedStayFront( objectType ) );
+
             // We're just passing through here, don't mess with this object
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " passes through without interacting with the object" )
             return;

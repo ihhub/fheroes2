@@ -71,7 +71,7 @@ namespace
         return ( art.GetID() == conf.WinsFindArtifactID() );
     }
 
-    bool isTileAvailableForWalkThrough( int tileIndex, bool fromWater )
+    bool isTileAvailableForWalkThrough( const int tileIndex, const bool fromWater )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const bool toWater = tile.isWater();
@@ -98,12 +98,13 @@ namespace
         return true;
     }
 
-    bool isTileAvailableForWalkThroughForAIWithArmy( const int tileIndex, const int color, const bool isArtifactsBagFull, const double armyStrength,
+    bool isTileAvailableForWalkThroughForAIWithArmy( const int tileIndex, const bool fromWater, const int color, const bool isArtifactsBagFull, const double armyStrength,
                                                      const double minimalAdvantage )
     {
         assert( color & Color::ALL );
 
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
+        const bool toWater = tile.isWater();
         const MP2::MapObjectType objectType = tile.GetObject();
 
         const auto isTileAccessible = [color, armyStrength, minimalAdvantage, &tile]() {
@@ -122,6 +123,13 @@ namespace
 
         // Enemy heroes can be defeated and passed through
         if ( objectType == MP2::OBJ_HEROES ) {
+            // Heroes on the water can be attacked from the nearby shore, but they cannot be passed through
+            if ( fromWater != toWater ) {
+                assert( !fromWater && toWater );
+
+                return false;
+            }
+
             const Heroes * otherHero = tile.GetHeroes();
             assert( otherHero != nullptr );
 
@@ -217,9 +225,10 @@ namespace
             return false;
         }
 
-        // Although we can step on a castle's tile, there's nowhere to go through it anyway
+        // The castle tile can be passed through if we got there using Town Gate or Town Portal spells, which means that
+        // this should be our castle
         if ( objectType == MP2::OBJ_CASTLE ) {
-            return false;
+            return color == Maps::getColorFromTile( tile );
         }
 
         // If we can step on this tile, but it is protected by monsters and it is impossible to refuse a fight, then it
@@ -232,7 +241,7 @@ namespace
         return true;
     }
 
-    bool isMovementAllowedForColor( const int from, const int direction, const int heroColor, const bool isSummonBoatSpellAvailable )
+    bool isMovementAllowedForColor( const int from, const int direction, const int color, const bool isSummonBoatSpellAvailable )
     {
         const Maps::Tiles & fromTile = world.GetTiles( from );
         const bool fromWater = fromTile.isWater();
@@ -288,7 +297,7 @@ namespace
 
         const Maps::Tiles & toTile = world.GetTiles( Maps::GetDirectionIndex( from, direction ) );
 
-        if ( toTile.isPassableFrom( Direction::Reflect( direction ), fromWater, false, heroColor ) ) {
+        if ( toTile.isPassableFrom( Direction::Reflect( direction ), fromWater, false, color ) ) {
             return true;
         }
 
@@ -303,7 +312,7 @@ namespace
         }
 
         // ... and this tile should be reachable from the shore (as if this shore tile were a water tile)
-        return toTile.isPassableFrom( Direction::Reflect( direction ), true, false, heroColor );
+        return toTile.isPassableFrom( Direction::Reflect( direction ), true, false, color );
     }
 
     bool isTileAccessibleForAIWithArmy( const int tileIndex, const double armyStrength, const double minimalAdvantage )
@@ -528,16 +537,17 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( const int targetIndex )
 
 void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx )
 {
-    const bool isFirstNode = currentNodeIdx == _pathStart;
+    const bool isFirstNode = ( currentNodeIdx == _pathStart );
     const WorldNode & currentNode = _cache[currentNodeIdx];
+    const bool fromWater = world.GetTiles( _pathStart ).isWater();
 
-    if ( !isFirstNode && !isTileAvailableForWalkThrough( currentNodeIdx, world.GetTiles( _pathStart ).isWater() ) ) {
+    if ( !isFirstNode && !isTileAvailableForWalkThrough( currentNodeIdx, fromWater ) ) {
         return;
     }
 
     const MapsIndexes & monsters = Maps::getMonstersProtectingTile( currentNodeIdx );
 
-    // If the current tile is protected, then the hero can only move to one of the neighboring monsters
+    // If the current tile is protected by monsters, and this tile is not the starting tile, then the hero can only move towards one of the neighboring monsters
     if ( !isFirstNode && !monsters.empty() ) {
         for ( int monsterIndex : monsters ) {
             const int direction = Maps::GetDirection( currentNodeIdx, monsterIndex );
@@ -683,10 +693,10 @@ void AIWorldPathfinder::processWorldMap()
         assert( castleIndex >= 0 && static_cast<size_t>( castleIndex ) < _cache.size() );
         assert( castleIndex != _pathStart && _cache[castleIndex]._from == -1 );
 
-        const uint32_t movePointCost = spell.movePoints();
-        const uint32_t movePointsAfter = ( _remainingMovePoints < movePointCost ) ? 0 : _remainingMovePoints - movePointCost;
+        const uint32_t cost = spell.movePoints();
+        const uint32_t remaining = ( _remainingMovePoints < cost ) ? 0 : _remainingMovePoints - cost;
 
-        _cache[castleIndex] = WorldNode( _pathStart, movePointCost, MP2::OBJ_CASTLE, movePointsAfter );
+        _cache[castleIndex] = WorldNode( _pathStart, cost, MP2::OBJ_CASTLE, remaining );
         nodesToExplore.push_back( castleIndex );
     };
 
@@ -714,21 +724,26 @@ bool AIWorldPathfinder::isMovementAllowed( const int from, const int direction )
 
 void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx )
 {
-    const bool isFirstNode = currentNodeIdx == _pathStart;
+    const bool isFirstNode = ( currentNodeIdx == _pathStart );
     WorldNode & currentNode = _cache[currentNodeIdx];
 
-    const bool isAccessible = isTileAccessibleForAIWithArmy( currentNodeIdx, _armyStrength, _minimalArmyStrengthAdvantage );
+    // Always allow movement from the starting point to cover the edge case where we got here before this tile became blocked
+    if ( !isFirstNode ) {
+        if ( !isTileAccessibleForAIWithArmy( currentNodeIdx, _armyStrength, _minimalArmyStrengthAdvantage ) ) {
+            // If we can't move here, then reset the node
+            currentNode.resetNode();
 
-    // If we can't move here, reset
-    if ( !isAccessible ) {
-        currentNode.resetNode();
-    }
+            return;
+        }
 
-    // Always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
-    if ( !isFirstNode
-         && ( !isAccessible
-              || !isTileAvailableForWalkThroughForAIWithArmy( currentNodeIdx, _color, _isArtifactsBagFull, _armyStrength, _minimalArmyStrengthAdvantage ) ) ) {
-        return;
+        // No dead ends allowed
+        assert( currentNode._from != -1 );
+
+        const bool fromWater = world.GetTiles( currentNode._from ).isWater();
+
+        if ( !isTileAvailableForWalkThroughForAIWithArmy( currentNodeIdx, fromWater, _color, _isArtifactsBagFull, _armyStrength, _minimalArmyStrengthAdvantage ) ) {
+            return;
+        }
     }
 
     MapsIndexes teleports;
@@ -742,12 +757,13 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
         }
     }
 
-    // Do not check adjacent if we're going through the teleport in the middle of the path
+    // Check adjacent nodes only if we are either not on the teleport tile, or we got here from another endpoint of this teleport.
+    // Do not check them if we came to the tile with a teleport from a neighboring tile (and are going to use it for teleportation).
     if ( teleports.empty() || std::find( teleports.begin(), teleports.end(), currentNode._from ) != teleports.end() ) {
         checkAdjacentNodes( nodesToExplore, currentNodeIdx );
     }
 
-    // Special case: move through teleports
+    // Special case: movement via teleport
     for ( const int teleportIdx : teleports ) {
         if ( teleportIdx == _pathStart ) {
             continue;
@@ -755,7 +771,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
 
         WorldNode & teleportNode = _cache[teleportIdx];
 
-        // Check if move is actually faster through teleport
+        // Check if the movement is really faster via teleport
         if ( teleportNode._from == -1 || teleportNode._cost > currentNode._cost ) {
             const Maps::Tiles & teleportTile = world.GetTiles( teleportIdx );
 
@@ -771,10 +787,43 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, c
 
 uint32_t AIWorldPathfinder::getMovementPenalty( const int from, const int to, const int direction ) const
 {
-    const uint32_t defaultPenalty = WorldPathfinder::getMovementPenalty( from, to, direction );
+    const uint32_t defaultPenalty = [this, from, to, direction]() {
+        const uint32_t regularPenalty = WorldPathfinder::getMovementPenalty( from, to, direction );
 
-    // If we perform pathfinding for a real AI-controlled hero on the map, we should encourage him
-    // to overcome water obstacles using boats.
+        if ( from == _pathStart ) {
+            return regularPenalty;
+        }
+
+        const MP2::MapObjectType objectType = world.GetTiles( from ).GetObject();
+        if ( !MP2::isNeedStayFront( objectType ) || objectType == MP2::OBJ_BOAT ) {
+            return regularPenalty;
+        }
+
+        const WorldNode & node = _cache[from];
+
+        // No dead ends allowed
+        assert( node._from != -1 );
+
+        const int prevStepDirection = Maps::GetDirection( node._from, from );
+        assert( prevStepDirection != Direction::UNKNOWN && prevStepDirection != Direction::CENTER );
+
+        // If we are moving from a tile that we technically cannot stand on, then it means that there was
+        // an object on this tile that we previously removed. Thus, we have spent additional movement points
+        // when moving to this tile - once when accessing the object to remove it, and again when moving to
+        // this tile.
+        //
+        // According to a rough estimate, the movement points spent can be considered the same in both cases,
+        // therefore, we apply an additional penalty when moving from the tile containing this object to the
+        // next tile. In general, it is impossible to perform an accurate estimation, since the stats and
+        // skills of a moving hero may change after interacting with the object.
+        //
+        // The real path will not reach this step, so this logic will be used to estimate distances more
+        // accurately when choosing whether to move through objects or past them.
+        return regularPenalty + WorldPathfinder::getMovementPenalty( node._from, from, prevStepDirection );
+    }();
+
+    // If we perform pathfinding for a real AI-controlled hero on the map, we should correctly calculate
+    // movement penalties when this hero overcomes water obstacles using boats.
     if ( _maxMovePoints > 0 ) {
         const WorldNode & node = _cache[from];
 
@@ -794,6 +843,8 @@ uint32_t AIWorldPathfinder::getMovementPenalty( const int from, const int to, co
             // If the hero is not able to make this movement this turn, then he will have to spend
             // all the movement points next turn.
             if ( defaultPenalty > node._remainingMovePoints ) {
+                assert( _maxMovePoints >= defaultPenalty );
+
                 return _maxMovePoints;
             }
 
@@ -1287,7 +1338,7 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
     return {};
 }
 
-std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, const bool isPlanningMode /* = false */ ) const
+std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex ) const
 {
     assert( _pathStart != -1 && targetIndex != -1 );
 
@@ -1328,8 +1379,8 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, cons
         currentNode = node._from;
     }
 
-    // Cut the path to the last valid tile/obstacle if not in planning mode.
-    if ( !isPlanningMode && lastValidNode != targetIndex ) {
+    // Cut the path to the last valid tile/obstacle
+    if ( lastValidNode != targetIndex ) {
         path.erase( std::find_if( path.begin(), path.end(), [lastValidNode]( const Route::Step & step ) { return step.GetFrom() == lastValidNode; } ), path.end() );
     }
 
