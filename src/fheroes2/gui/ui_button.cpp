@@ -645,7 +645,7 @@ namespace fheroes2
 
         const fheroes2::Text releasedText( supportedText, releasedButtonFont );
         const fheroes2::Text pressedText( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFont } );
-        const int32_t textWidth = releasedText.width();
+        const int32_t textWidth = releasedText.width( releasedText.width() );
         assert( textWidth > 0 );
 
         const int32_t borderedTextWidth = textWidth + textAreaBorder;
