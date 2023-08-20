@@ -116,6 +116,14 @@ namespace
             releasedOffset = { 5, 2 };
             pressedOffset = { 4, 3 };
             break;
+        case ICN::EMPTY_VERTICAL_GOOD_BUTTON:
+            font = fheroes2::FontColor::WHITE;
+            textMargin = 2 + 2;
+            minimumTextAreaWidth = 19;
+            backgroundBorders = 5 + 4;
+            releasedOffset = { 5, 52 };
+            pressedOffset = { 4, 53 };
+            break;
         default:
             // Was a new empty button template added?
             assert( 0 );
@@ -647,8 +655,15 @@ namespace fheroes2
 
         assert( textAreaWidth + backgroundBorders > 0 );
 
-        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), textAreaWidth + backgroundBorders );
-        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), textAreaWidth + backgroundBorders );
+        // TODO: Make resizeButton() scale in vertical direction too, like for vertical and larger buttons.
+        if ( emptyButtonIcnID != ICN::EMPTY_VERTICAL_GOOD_BUTTON ) {
+            released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), textAreaWidth + backgroundBorders );
+            pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), textAreaWidth + backgroundBorders );
+        }
+        else {
+            released = AGG::GetICN( emptyButtonIcnID, 0 );
+            pressed = AGG::GetICN( emptyButtonIcnID, 1 );
+        }
 
         if ( buttonBackgroundIcnID != ICN::UNKNOWN ) {
             makeTransparentBackground( released, pressed, buttonBackgroundIcnID );

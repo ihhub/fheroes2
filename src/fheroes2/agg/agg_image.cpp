@@ -1811,12 +1811,8 @@ namespace fheroes2
                     break;
                 }
 
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::EMPTY_VERTICAL_GOOD_BUTTON, i );
-                }
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), { 5, 4 }, { 4, 5 }, { 18, 111 },
-                                    fheroes2::FontColor::WHITE );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON, ICN::UNKNOWN );
+
                 break;
             }
             default:
