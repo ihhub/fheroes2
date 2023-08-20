@@ -724,12 +724,16 @@ namespace
         }
     }
 
-    void AIToObjectResource( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+    void AIToObjectResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( objectType ) )
 
-        // TODO: remove this temporary assertion
+        // TODO: remove this temporary assertion and 'defined( NDEBUG )' condition below
         assert( !MP2::isCaptureObject( objectType ) );
+
+#if defined( NDEBUG ) && !defined( WITH_DEBUG )
+        (void)objectType;
+#endif
 
         Maps::Tiles & tile = world.GetTiles( dst_index );
         hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
