@@ -2218,7 +2218,7 @@ namespace Maps
 
         setResourceOnTile( tile, resource, resourceCount.value() );
 
-        auto restoreLeftSprite = [resource]( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex ) {
+        const auto restoreLeftSprite = [resource]( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex ) {
             if ( MP2::OBJ_ICN_TYPE_OBJNGRAS == objectIcnType && imageIndex == 6 ) {
                 objectIcnType = MP2::OBJ_ICN_TYPE_MTNGRAS;
                 imageIndex = 82;
@@ -2250,7 +2250,7 @@ namespace Maps
             }
         };
 
-        auto restoreRightSprite = []( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex ) {
+        const auto restoreRightSprite = []( MP2::ObjectIcnType & objectIcnType, uint8_t & imageIndex ) {
             if ( MP2::OBJ_ICN_TYPE_OBJNDIRT == objectIcnType && imageIndex == 9 ) {
                 objectIcnType = MP2::OBJ_ICN_TYPE_MTNDIRT;
                 imageIndex = 113;
@@ -2261,7 +2261,7 @@ namespace Maps
             }
         };
 
-        auto restoreMineObjectType = [&tile]( int directionVector ) {
+        const auto restoreMineObjectType = [&tile]( int directionVector ) {
             if ( Maps::isValidDirection( tile.GetIndex(), directionVector ) ) {
                 Tiles & mineTile = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), directionVector ) );
                 if ( ( mineTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )

@@ -215,7 +215,7 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
 void Interface::ButtonsArea::SetButtonStatus()
 {
     Heroes * currentHero = GetFocusHeroes();
-    if ( currentHero == nullptr || !currentHero->GetPath().isValid() || !currentHero->MayStillMove( false, true ) )
+    if ( currentHero == nullptr || !currentHero->GetPath().isValidForMovement() || !currentHero->MayStillMove( false, true ) )
         buttonMovement.disable();
     else
         buttonMovement.enable();

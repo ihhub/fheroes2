@@ -625,21 +625,24 @@ std::vector<fheroes2::ObjectRenderingInfo> Heroes::getHeroShadowSpritesPerTile()
 bool Heroes::MoveStep( const bool jumpToNextTile )
 {
     const int32_t heroIndex = GetIndex();
-    const int32_t indexTo = Maps::GetDirectionIndex( heroIndex, path.GetFrontDirection() );
-    const int32_t indexDest = path.GetDestinationIndex( true );
+    const int32_t nextStepIndex = Maps::GetDirectionIndex( heroIndex, path.GetFrontDirection() );
 
-    auto makeStep = [this, indexTo, indexDest]( const bool performMovement ) {
+    const auto makeStep = [this, nextStepIndex]( const bool performMovement ) {
         ApplyPenaltyMovement( path.GetFrontPenalty() );
 
         if ( !performMovement ) {
-            GetPath().Reset();
-            Action( indexTo );
-            SetMove( false );
+            // If we are accessing an object located on a tile that we cannot step on, then this should be the last step of the path
+            assert( nextStepIndex == path.GetDestinationIndex() );
+
+            path.PopFront();
+            assert( path.empty() );
+
+            Action( nextStepIndex );
 
             return;
         }
 
-        Move2Dest( indexTo );
+        Move2Dest( nextStepIndex );
 
         if ( isControlHuman() ) {
             // Update the radar map image in the area that is visible to the hero after his movement.
@@ -647,26 +650,22 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
         }
 
         ActionNewPosition( true );
+
         path.PopFront();
 
         // It is possible that the hero in the new position will be attacked and lose the battle before he can perform the action
-        if ( !isFreeman() ) {
-            Action( indexTo );
-
-            if ( indexTo == indexDest ) {
-                GetPath().Reset();
-                SetMove( false );
-            }
+        if ( isActive() ) {
+            Action( nextStepIndex );
         }
     };
 
     if ( jumpToNextTile ) {
-        if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) ) {
+        if ( isNeedStayFrontObject( *this, world.GetTiles( nextStepIndex ) ) ) {
             makeStep( false );
         }
         else {
             // Unveil fog before moving the hero.
-            Scout( indexTo );
+            Scout( nextStepIndex );
 
             makeStep( true );
         }
@@ -676,13 +675,12 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
 
     const int currentHeroFrameIndex = ( sprite_index % heroFrameCountPerTile );
     if ( currentHeroFrameIndex == 0 ) {
-        if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) ) {
+        if ( isNeedStayFrontObject( *this, world.GetTiles( nextStepIndex ) ) ) {
             makeStep( false );
 
             return true;
         }
 
-        // play sound
         if ( GetKingdom().isControlHuman() ) {
             const fheroes2::Point & mp = GetCenter();
 
@@ -691,7 +689,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
     }
     else if ( currentHeroFrameIndex == 1 ) {
         // This is a start of hero's movement. We should clear fog around him.
-        Scout( indexTo );
+        Scout( nextStepIndex );
     }
     else if ( currentHeroFrameIndex == 8 ) {
         sprite_index -= 8;
@@ -699,7 +697,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
         makeStep( true );
 
         // if we continue to move into the same direction we must skip first frame as it's for stand position only
-        if ( isMoveEnabled() && GetDirection() == path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.GetTiles( path.front().GetIndex() ) ) ) {
+        if ( isMoveEnabled() && GetDirection() == path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.GetTiles( path.GetFrontIndex() ) ) ) {
             if ( GetKingdom().isControlHuman() ) {
                 playHeroWalkingSound( world.GetTiles( heroIndex ).GetGround() );
             }
@@ -975,17 +973,15 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
 
 bool Heroes::Move( const bool jumpToNextTile /* = false */ )
 {
-    if ( Modes( ACTION ) )
-        ResetModes( ACTION );
+    ResetModes( ACTION );
 
-    // move hero
-    if ( path.isValid() && ( isMoveEnabled() || ( GetSpriteIndex() < 45 && ( GetSpriteIndex() % heroFrameCountPerTile ) > 0 ) || GetSpriteIndex() >= 45 ) ) {
+    if ( path.isValidForMovement() && ( isMoveEnabled() || ( GetSpriteIndex() < 45 && ( GetSpriteIndex() % heroFrameCountPerTile ) > 0 ) || GetSpriteIndex() >= 45 ) ) {
         // Jump to the next position.
         if ( jumpToNextTile ) {
             direction = path.GetFrontDirection();
             MoveStep( jumpToNextTile );
 
-            // TODO: why don't we check !isFreeman() like it is done for a normal movement?
+            // TODO: why don't we check isActive() like it is done for a normal movement?
             return true;
         }
 
@@ -1000,7 +996,7 @@ bool Heroes::Move( const bool jumpToNextTile /* = false */ )
             SetValidDirectionSprite();
 
             if ( MoveStep( jumpToNextTile ) ) {
-                return !isFreeman();
+                return isActive();
             }
         }
     }

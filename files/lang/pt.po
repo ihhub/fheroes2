@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-22 03:24+0000\n"
+"POT-Creation-Date: 2023-08-21 13:07+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -72,6 +72,9 @@ msgid "NO"
 msgstr ""
 
 msgid "EXIT"
+msgstr ""
+
+msgid "smallerButton|EXIT"
 msgstr ""
 
 msgid "DISMISS"
@@ -159,6 +162,9 @@ msgstr ""
 msgid "GIFT"
 msgstr ""
 
+msgid "MAX"
+msgstr "MÁX"
+
 msgid "DIFFICULTY"
 msgstr ""
 
@@ -167,9 +173,6 @@ msgstr ""
 
 msgid "MIN"
 msgstr ""
-
-msgid "MAX"
-msgstr "MÁX"
 
 msgid "Warrior"
 msgstr "Guerreiro"
@@ -233,7 +236,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Um inferno de\n"
@@ -344,13 +347,17 @@ msgstr ""
 msgid "You have already cast a spell this round."
 msgstr "Você já lançou um feitiço nesse round."
 
-msgid "That spell will affect no one!"
+#, fuzzy
+msgid "That spell will have no effect!"
 msgstr "Esta magia não afetará ninguem!"
 
 msgid "You may only summon one type of elemental per combat."
 msgstr "Você só pode convocar um tipo de Elemento por combate."
 
-msgid "There is no open space adjacent to your hero to summon an Elemental to."
+#, fuzzy
+msgid ""
+"There is no open space adjacent to your hero where you can summon an "
+"Elemental to."
 msgstr "Não há espaço adjacente aberto para o seu herói lançar um Elemento."
 
 msgid ""
@@ -699,6 +706,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Tem certeza de que quer a retirada?"
+
+#, fuzzy
+msgid "Are you sure you want to enable auto combat?"
 msgstr "Tem certeza de que quer a retirada?"
 
 #, fuzzy
@@ -2779,7 +2790,7 @@ msgstr "Selecione o idioma do jogo"
 msgid "Change the graphics settings of the game."
 msgstr "Mudar a resolução do jogo."
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 
 msgid ""
@@ -3130,6 +3141,21 @@ msgstr "Você tem certeza que quer deletar este arquivo:"
 msgid "Warning!"
 msgstr "Aviso!"
 
+msgid "Accept the choice made."
+msgstr "Aceitar a escolha feita."
+
+#, fuzzy
+msgid "Select Skill:"
+msgstr "Habilidade de Defesa"
+
+#, fuzzy
+msgid "Select Spell:"
+msgstr "Magia"
+
+#, fuzzy
+msgid "Select Artifact:"
+msgstr "Artefato"
+
 #, fuzzy
 msgid "Select Monster:"
 msgstr "Melhor Criatura:"
@@ -3137,18 +3163,6 @@ msgstr "Melhor Criatura:"
 #, fuzzy
 msgid "Select Hero:"
 msgstr "Melhor Herói:"
-
-#, fuzzy
-msgid "Select Artifact:"
-msgstr "Artefato"
-
-#, fuzzy
-msgid "Select Spell:"
-msgstr "Magia"
-
-#, fuzzy
-msgid "Select Skill:"
-msgstr "Habilidade de Defesa"
 
 #, fuzzy
 msgid "Map Type:\n"
@@ -3293,9 +3307,6 @@ msgstr ""
 msgid "The description of the currently selected map."
 msgstr ""
 
-msgid "Accept the choice made."
-msgstr "Aceitar a escolha feita."
-
 msgid "Jump"
 msgstr ""
 
@@ -3356,6 +3367,9 @@ msgid "Battles"
 msgstr ""
 
 msgid "autoBattle|Manual"
+msgstr ""
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -4613,6 +4627,9 @@ msgstr ""
 "Você tem acumulou o total %{count} de ouro.\n"
 "Todos os inimigos curvar-se diante de sua riqueza e poder."
 
+msgid "Victory!"
+msgstr ""
+
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
@@ -4797,6 +4814,9 @@ msgstr " Todas as população foi reduzidas a metade."
 
 msgid " All dwellings increase population."
 msgstr " Todas as populações aumentaram nas habitações."
+
+msgid "New Month!"
+msgstr ""
 
 msgid "New Week!"
 msgstr ""
@@ -6461,16 +6481,17 @@ msgid ""
 "oracle taught me his skill. I have the answer you seek.\""
 msgstr ""
 
-msgid "Spell book is not present."
+msgid "No spell book is present."
 msgstr ""
 
 msgid ""
-"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
+"This spell costs %{mana} spell points. You have no spell points, so you "
+"cannot cast it."
 msgstr ""
 
 msgid ""
-"That spell costs %{mana} mana. You only have %{point} mana, so you can't "
-"cast the spell."
+"This spell costs %{mana} spell points. You only have %{point} spell points, "
+"so you cannot cast it."
 msgstr ""
 
 #, fuzzy
@@ -6488,32 +6509,34 @@ msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
 #, fuzzy
-msgid "This spell cannot be used on a boat."
+msgid "This spell cannot be cast on a boat."
 msgstr "Esta cidade não pode ser transformada em castelo."
 
 #, fuzzy
-msgid "This spell can be casted only nearby ocean."
+msgid "This spell can only be cast near an ocean."
 msgstr "Esta cidade não pode ser transformada em castelo."
 
 msgid ""
-"There is no boat available and no free ocean location near the hero to cast "
-"this spell."
+"There are no boats available and no ocean adjacent to the hero where this "
+"spell will work."
 msgstr ""
 
 #, fuzzy
-msgid "There is no more boat available to cast this spell."
+msgid "There are no boats available for this spell."
 msgstr "Lançar uma magia."
 
-msgid "There is no free ocean location near the hero to cast this spell."
-msgstr ""
+#, fuzzy
+msgid "There is no ocean adjacent to the hero where this spell will work."
+msgstr "Não há espaço adjacente aberto para o seu herói lançar um Elemento."
 
 msgid ""
-"You do not currently own any town or castle that is not occupied by a hero, "
-"so you can't cast the spell."
+"You do not own any town or castle that is not currently occupied by a hero. "
+"You cannot cast this spell."
 msgstr ""
 
-msgid "This hero is already in a town, so you can't cast the spell."
-msgstr ""
+#, fuzzy
+msgid "This hero is already in a town, so you cannot cast this spell."
+msgstr "Lançar uma magia."
 
 msgid ""
 "The nearest town is %{town}.\n"
@@ -6521,17 +6544,17 @@ msgid ""
 "This town is occupied by your hero %{hero}."
 msgstr ""
 
-msgid "This spell is already in use."
+msgid "This spell is already in effect."
 msgstr ""
 
 msgid ""
-"No opponent can have heroes under his command anymore. Casting this spell "
-"will not bring any advantage."
+"No opponent neither has nor can have any hero under their command anymore. "
+"Casting this spell will have no effect."
 msgstr ""
 
 msgid ""
-"No opponent has a hero under his command at this time. Casting this spell "
-"will not bring any advantage."
+"No opponent has a hero under their command at this time. Casting this spell "
+"will have no effect."
 msgstr ""
 
 msgid ""
@@ -6540,16 +6563,16 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
+"You must be standing on the entrance to a mine (sawmills and alchemist labs "
+"do not count) to cast this spell."
 msgstr ""
 
 msgid "You must first defeat the ghosts guarding the mine to cast this spell."
 msgstr ""
 
 msgid ""
-"There are already at least as many elementals guarding the mine than the "
-"spell can generate. Casting this spell will not bring any advantage."
+"There are already at least as many elementals guarding the mine as this hero "
+"can generate. Casting this spell will have no effect."
 msgstr ""
 
 #, fuzzy
@@ -9731,16 +9754,20 @@ msgid ""
 "if it takes any damage."
 msgstr ""
 
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr ""
-
 msgid "Shield"
 msgstr ""
 
-msgid "Halves damage received from ranged attacks for all of your units."
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 
 msgid "Mass Shield"
+msgstr ""
+
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 
 msgid "Summon Earth Elemental"

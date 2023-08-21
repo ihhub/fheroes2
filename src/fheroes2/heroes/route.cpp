@@ -21,86 +21,42 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "route.h"
+
 #include <cassert>
 #include <memory>
 
+#include "game_io.h"
 #include "heroes.h"
 #include "maps.h"
 #include "maps_tiles.h"
 #include "mp2.h"
-#include "route.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "world.h"
 
-Route::Path::Path( const Heroes & h )
-    : hero( &h )
-    , dst( -1 )
-    , hide( true )
+Route::Path::Path( const Heroes & hero )
+    : _hero( &hero )
+    , _hide( true )
 {}
 
-int Route::Path::GetFrontDirection() const
+bool Route::Path::isValidForMovement() const
 {
-    if ( empty() ) {
-        if ( Maps::isValidAbsIndex( dst ) ) {
-            return Maps::GetDirection( hero->GetIndex(), dst );
-        }
-
-        return Direction::UNKNOWN;
-    }
-
-    return front().GetDirection();
+    return !empty() && front().GetDirection() != Direction::UNKNOWN && Maps::isValidAbsIndex( front().GetIndex() );
 }
 
-uint32_t Route::Path::GetFrontPenalty() const
+bool Route::Path::isValidForTeleportation() const
 {
-    return empty() ? 0 : front().GetPenalty();
+    return !empty() && front().GetDirection() == Direction::UNKNOWN && Maps::isValidAbsIndex( front().GetIndex() );
 }
 
-void Route::Path::PopFront()
-{
-    if ( !empty() )
-        pop_front();
-}
-
-int32_t Route::Path::GetDestinationIndex( const bool returnLastStep /* = false */ ) const
-{
-    if ( returnLastStep ) {
-        return empty() ? dst : back().GetIndex();
-    }
-
-    return dst;
-}
-
-void Route::Path::setPath( const std::list<Route::Step> & path, int32_t destIndex )
-{
-    assign( path.begin(), path.end() );
-
-    dst = destIndex;
-}
-
-void Route::Path::Reset()
-{
-    dst = -1;
-
-    if ( !empty() ) {
-        hide = true;
-
-        clear();
-    }
-}
-
-bool Route::Path::isValid() const
-{
-    return !empty() && front().GetDirection() != Direction::UNKNOWN;
-}
-
-int Route::Path::GetIndexSprite( int from, int to, int mod )
+int Route::Path::GetIndexSprite( const int from, const int to, const int cost )
 {
     // ICN::ROUTE
     // start index 1, 25, 49, 73, 97, 121 (path arrow size)
     int index = 1;
 
-    switch ( mod ) {
+    switch ( cost ) {
     case 200:
         index = 121;
         break;
@@ -364,20 +320,21 @@ int Route::Path::GetIndexSprite( int from, int to, int mod )
 
 bool Route::Path::hasAllowedSteps() const
 {
-    if ( !isValid() ) {
+    if ( !isValidForMovement() ) {
         return false;
     }
 
-    assert( hero != nullptr );
-    assert( !empty() );
+    assert( _hero != nullptr );
 
-    return hero->GetMovePoints() >= front().GetPenalty();
+    return _hero->GetMovePoints() >= front().GetPenalty();
 }
 
 int Route::Path::GetAllowedSteps() const
 {
+    assert( _hero != nullptr );
+
     int green = 0;
-    uint32_t movePoints = hero->GetMovePoints();
+    uint32_t movePoints = _hero->GetMovePoints();
 
     for ( const_iterator it = begin(); it != end() && movePoints > 0; ++it ) {
         uint32_t penalty = it->GetPenalty();
@@ -396,12 +353,16 @@ int Route::Path::GetAllowedSteps() const
 
 std::string Route::Path::String() const
 {
+    assert( _hero != nullptr );
+
+    const int32_t dstIndex = GetDestinationIndex();
+
     std::string output( "from: " );
-    output += std::to_string( hero->GetIndex() );
+    output += std::to_string( _hero->GetIndex() );
     output += ", to: ";
-    output += std::to_string( dst );
+    output += std::to_string( dstIndex );
     output += ", obj: ";
-    output += MP2::StringObject( Maps::isValidAbsIndex( dst ) ? world.GetTiles( dst ).GetObject() : MP2::OBJ_NONE );
+    output += MP2::StringObject( Maps::isValidAbsIndex( dstIndex ) ? world.GetTiles( dstIndex ).GetObject() : MP2::OBJ_NONE );
     output += ", dump: ";
 
     for ( const Step & step : *this ) {
@@ -423,7 +384,7 @@ StreamBase & Route::operator<<( StreamBase & msg, const Step & step )
 
 StreamBase & Route::operator<<( StreamBase & msg, const Path & path )
 {
-    return msg << path.dst << path.hide << static_cast<const std::list<Step> &>( path );
+    return msg << path._hide << static_cast<const std::list<Step> &>( path );
 }
 
 StreamBase & Route::operator>>( StreamBase & msg, Step & step )
@@ -436,5 +397,13 @@ StreamBase & Route::operator>>( StreamBase & msg, Step & step )
 StreamBase & Route::operator>>( StreamBase & msg, Path & path )
 {
     std::list<Step> & base = path;
-    return msg >> path.dst >> path.hide >> base;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1007_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1007_RELEASE ) {
+        int32_t dummy;
+
+        msg >> dummy;
+    }
+
+    return msg >> path._hide >> base;
 }

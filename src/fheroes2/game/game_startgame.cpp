@@ -73,7 +73,6 @@
 #include "mus.h"
 #include "players.h"
 #include "resource.h"
-#include "route.h"
 #include "screen.h"
 #include "settings.h"
 #include "tools.h"
@@ -315,7 +314,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
         case Dialog::DISMISS:
             AudioManager::PlaySound( M82::KILLFADE );
 
-            ( *it )->GetPath().Hide();
+            ( *it )->ShowPath( false );
 
             // Check if this dialog is not opened from the other dialog and we will be exiting to the Adventure map.
             if ( renderBackgroundDialog ) {
@@ -331,7 +330,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
                 updateFocus = true;
             }
 
-            ( *it )->SetFreeman( 0 );
+            ( *it )->Dismiss( 0 );
             it = myHeroes.end();
 
             result = Dialog::CANCEL;
@@ -373,21 +372,23 @@ void ShowNewWeekDialog()
     // restore the original music on exit
     const AudioManager::MusicRestorer musicRestorer;
 
-    AudioManager::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
+    const bool isNewMonth = world.BeginMonth();
+
+    AudioManager::PlayMusic( isNewMonth ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
 
     const Week & week = world.GetWeekType();
 
     // head
-    std::string message = world.BeginMonth() ? _( "Astrologers proclaim the Month of the %{name}." ) : _( "Astrologers proclaim the Week of the %{name}." );
+    std::string message = isNewMonth ? _( "Astrologers proclaim the Month of the %{name}." ) : _( "Astrologers proclaim the Week of the %{name}." );
     StringReplace( message, "%{name}", week.GetName() );
     message += "\n \n";
 
     if ( week.GetType() == WeekName::MONSTERS ) {
         const Monster monster( week.GetMonster() );
-        const uint32_t count = world.BeginMonth() ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
+        const uint32_t count = isNewMonth ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
 
         if ( monster.isValid() && count ) {
-            if ( world.BeginMonth() )
+            if ( isNewMonth )
                 message += 100 == Castle::GetGrownMonthOf() ? _( "After regular growth, the population of %{monster} is doubled!" )
                                                             : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
                                                                   "After regular growth, the population of %{monster} increases by %{count} percent!", count );
@@ -404,7 +405,7 @@ void ShowNewWeekDialog()
     else
         message += _( " All dwellings increase population." );
 
-    fheroes2::showStandardTextMessage( _( "New Week!" ), message, Dialog::OK );
+    fheroes2::showStandardTextMessage( isNewMonth ? _( "New Month!" ) : _( "New Week!" ), message, Dialog::OK );
 }
 
 void ShowWarningLostTownsDialog()
@@ -1354,6 +1355,8 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex )
 {
     Heroes * focusedHero = GetFocusHeroes();
+    assert( focusedHero == nullptr || !focusedHero->Modes( Heroes::ENABLEMOVE ) );
+
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
     switch ( Cursor::WithoutDistanceThemes( Cursor::Get().Themes() ) ) {
@@ -1410,74 +1413,60 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
             break;
         }
 
-        if ( focusedHero->isMoveEnabled() ) {
-            focusedHero->SetMove( false );
-        }
-        else {
-            ShowPathOrStartMoveHero( focusedHero, tileIndex );
-        }
+        ShowPathOrStartMoveHero( focusedHero, tileIndex );
 
         break;
     }
 
     default:
-        if ( focusedHero == nullptr ) {
-            break;
-        }
-
-        focusedHero->SetMove( false );
-
         break;
     }
 }
 
 void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex ) const
 {
-    Heroes * hero = GetFocusHeroes();
+#ifndef NDEBUG
+    const Heroes * focusedHero = GetFocusHeroes();
+#endif
+    assert( focusedHero == nullptr || !focusedHero->Modes( Heroes::ENABLEMOVE ) );
 
-    if ( hero && hero->isMoveEnabled() ) {
-        hero->SetMove( false );
-        Cursor::Get().SetThemes( GetCursorTileIndex( tileIndex ) );
+    const Settings & conf = Settings::Get();
+    const Maps::Tiles & tile = world.GetTiles( tileIndex );
+
+    DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
+
+    if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) ) {
+        Dialog::QuickInfo( tile );
     }
     else {
-        const Settings & conf = Settings::Get();
-        const Maps::Tiles & tile = world.GetTiles( tileIndex );
+        switch ( tile.GetObject() ) {
+        case MP2::OBJ_NON_ACTION_CASTLE:
+        case MP2::OBJ_CASTLE: {
+            const Castle * castle = world.getCastle( tile.GetCenter() );
 
-        DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
-
-        if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) ) {
-            Dialog::QuickInfo( tile );
-        }
-        else {
-            switch ( tile.GetObject() ) {
-            case MP2::OBJ_NON_ACTION_CASTLE:
-            case MP2::OBJ_CASTLE: {
-                const Castle * castle = world.getCastle( tile.GetCenter() );
-
-                if ( castle ) {
-                    Dialog::QuickInfo( *castle );
-                }
-                else {
-                    Dialog::QuickInfo( tile );
-                }
-
-                break;
+            if ( castle ) {
+                Dialog::QuickInfo( *castle );
             }
-
-            case MP2::OBJ_HEROES: {
-                const Heroes * heroes = tile.GetHeroes();
-
-                if ( heroes ) {
-                    Dialog::QuickInfo( *heroes );
-                }
-
-                break;
-            }
-
-            default:
+            else {
                 Dialog::QuickInfo( tile );
-                break;
             }
+
+            break;
+        }
+
+        case MP2::OBJ_HEROES: {
+            const Heroes * heroes = tile.GetHeroes();
+
+            if ( heroes ) {
+                Dialog::QuickInfo( *heroes );
+            }
+
+            break;
+        }
+
+        default:
+            Dialog::QuickInfo( tile );
+            break;
         }
     }
 }

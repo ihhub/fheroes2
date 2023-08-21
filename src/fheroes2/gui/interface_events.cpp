@@ -76,11 +76,12 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
         return;
     }
 
+    assert( !hero->Modes( Heroes::ENABLEMOVE ) );
+
     const Route::Path & path = hero->GetPath();
 
     // Calculate and show the hero's path
     if ( path.GetDestinationIndex() != destinationIdx ) {
-        hero->SetMove( false );
         hero->calculatePath( destinationIdx );
 
         DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
@@ -89,7 +90,7 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
         buttonsArea.SetRedraw();
     }
     // Start the hero's movement
-    else if ( path.isValid() && hero->MayStillMove( false, true ) ) {
+    else if ( path.isValidForMovement() && hero->MayStillMove( false, true ) ) {
         SetFocus( hero, true );
         RedrawFocus();
 
@@ -157,7 +158,7 @@ void Interface::AdventureMap::EventContinueMovement() const
 {
     Heroes * hero = GetFocusHeroes();
 
-    if ( hero && hero->GetPath().isValid() && hero->MayStillMove( false, true ) ) {
+    if ( hero && hero->GetPath().isValidForMovement() && hero->MayStillMove( false, true ) ) {
         hero->SetMove( true );
     }
 }
@@ -194,16 +195,19 @@ void Interface::AdventureMap::EventCastSpell()
 
 fheroes2::GameMode Interface::AdventureMap::EventEndTurn() const
 {
-    const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
+#ifndef NDEBUG
+    const Heroes * focusedHero = GetFocusHeroes();
+#endif
+    assert( focusedHero == nullptr || !focusedHero->Modes( Heroes::ENABLEMOVE ) );
 
-    if ( GetFocusHeroes() )
-        GetFocusHeroes()->SetMove( false );
+    const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
     if ( !myKingdom.HeroesMayStillMove()
          || Dialog::YES
                 == fheroes2::showStandardTextMessage( _( "End Turn" ), _( "One or more heroes may still move, are you sure you want to end your turn?" ),
-                                                      Dialog::YES | Dialog::NO ) )
+                                                      Dialog::YES | Dialog::NO ) ) {
         return fheroes2::GameMode::END_TURN;
+    }
 
     return fheroes2::GameMode::CANCEL;
 }
@@ -249,7 +253,7 @@ void Interface::AdventureMap::EventSystemDialog() const
 
 fheroes2::GameMode Interface::BaseInterface::EventExit()
 {
-    if ( Dialog::YES & fheroes2::showStandardTextMessage( "", _( "Are you sure you want to quit?" ), Dialog::YES | Dialog::NO ) )
+    if ( Dialog::YES & fheroes2::showStandardTextMessage( _( "Quit" ), _( "Are you sure you want to quit?" ), Dialog::YES | Dialog::NO ) )
         return fheroes2::GameMode::QUIT_GAME;
 
     return fheroes2::GameMode::CANCEL;

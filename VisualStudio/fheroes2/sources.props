@@ -181,6 +181,7 @@
     <ClCompile Include="src\fheroes2\kingdom\profit.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\puzzle.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\race.cpp" />
+    <ClCompile Include="src\fheroes2\kingdom\resource_trading.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\speed.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\view_world.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\week.cpp" />
@@ -371,6 +372,7 @@
     <ClInclude Include="src\fheroes2\kingdom\profit.h" />
     <ClInclude Include="src\fheroes2\kingdom\puzzle.h" />
     <ClInclude Include="src\fheroes2\kingdom\race.h" />
+    <ClInclude Include="src\fheroes2\kingdom\resource_trading.h" />
     <ClInclude Include="src\fheroes2\kingdom\speed.h" />
     <ClInclude Include="src\fheroes2\kingdom\view_world.h" />
     <ClInclude Include="src\fheroes2\kingdom\week.h" />

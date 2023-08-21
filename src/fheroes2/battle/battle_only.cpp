@@ -202,7 +202,7 @@ bool Battle::Only::ChangeSettings()
             exit = true;
 
         if ( allow1 && le.MouseClickLeft( rtPortrait1 ) ) {
-            int hid = Dialog::SelectHeroes( hero1 ? hero1->GetID() : Heroes::UNKNOWN );
+            int hid = Dialog::selectHeroes( hero1 ? hero1->GetID() : Heroes::UNKNOWN );
             if ( hero2 && hid == hero2->GetID() ) {
                 Dialog::Message( _( "Error" ), _( "Please select another hero." ), Font::BIG, Dialog::OK );
             }
@@ -216,7 +216,7 @@ bool Battle::Only::ChangeSettings()
             redraw = true;
         }
         else if ( allow2 && le.MouseClickLeft( rtPortrait2 ) ) {
-            int hid = Dialog::SelectHeroes( hero2 ? hero2->GetID() : Heroes::UNKNOWN );
+            int hid = Dialog::selectHeroes( hero2 ? hero2->GetID() : Heroes::UNKNOWN );
             if ( hero1 && hid == hero1->GetID() ) {
                 Dialog::Message( _( "Error" ), _( "Please select another hero." ), Font::BIG, Dialog::OK );
             }
@@ -350,10 +350,14 @@ bool Battle::Only::ChangeSettings()
                 MoraleIndicator::QueueEventProcessing( *moraleIndicator1 );
             else if ( le.MouseCursor( luckIndicator1->GetArea() ) )
                 LuckIndicator::QueueEventProcessing( *luckIndicator1 );
-            else if ( le.MouseCursor( primskill_bar1->GetArea() ) && primskill_bar1->QueueEventProcessing() )
+            else if ( le.MouseCursor( primskill_bar1->GetArea() ) ) {
+                primskill_bar1->QueueEventProcessing();
                 redraw = true;
-            else if ( le.MouseCursor( secskill_bar1->GetArea() ) && secskill_bar1->QueueEventProcessing() )
+            }
+            else if ( le.MouseCursor( secskill_bar1->GetArea() ) ) {
+                secskill_bar1->QueueEventProcessing();
                 redraw = true;
+            }
         }
 
         if ( hero2 && allow2 ) {
@@ -361,10 +365,14 @@ bool Battle::Only::ChangeSettings()
                 MoraleIndicator::QueueEventProcessing( *moraleIndicator2 );
             else if ( le.MouseCursor( luckIndicator2->GetArea() ) )
                 LuckIndicator::QueueEventProcessing( *luckIndicator2 );
-            else if ( le.MouseCursor( primskill_bar2->GetArea() ) && primskill_bar2->QueueEventProcessing() )
+            else if ( le.MouseCursor( primskill_bar2->GetArea() ) ) {
+                primskill_bar2->QueueEventProcessing();
                 redraw = true;
-            else if ( le.MouseCursor( secskill_bar2->GetArea() ) && secskill_bar2->QueueEventProcessing() )
+            }
+            else if ( le.MouseCursor( secskill_bar2->GetArea() ) ) {
+                secskill_bar2->QueueEventProcessing();
                 redraw = true;
+            }
         }
 
         if ( cinfo2 && allow1 ) {

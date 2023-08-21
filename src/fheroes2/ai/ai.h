@@ -91,12 +91,13 @@ namespace AI
 
         virtual void HeroesAdd( const Heroes & hero );
         virtual void HeroesRemove( const Heroes & hero );
+        virtual void HeroesBeginMovement( Heroes & hero );
+        virtual void HeroesFinishMovement( Heroes & hero );
         virtual void HeroesPreBattle( HeroBase & hero, bool isAttacking );
         virtual void HeroesAfterBattle( HeroBase & hero, bool wasAttacking );
         virtual void HeroesPostLoad( Heroes & hero );
         virtual void HeroesActionComplete( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType );
         virtual void HeroesActionNewPosition( Heroes & hero );
-        virtual void HeroesClearTask( const Heroes & hero );
         virtual void HeroesLevelUp( Heroes & hero );
         virtual std::string HeroesString( const Heroes & hero );
 
@@ -110,12 +111,15 @@ namespace AI
 
         virtual void Reset();
         virtual void resetPathfinder() = 0;
+        virtual bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero ) = 0;
 
         // Should be called at the beginning of the battle even if no AI-controlled players are
         // involved in the battle - because of the possibility of using instant or auto battle
         virtual void battleBegins() = 0;
 
         virtual ~Base() = default;
+
+        virtual void tradingPostVisitEvent( Kingdom & kingdom ) = 0;
 
     protected:
         int _personality = NONE;
@@ -129,13 +133,24 @@ namespace AI
 
     Base & Get( AI_TYPE type = AI_TYPE::NORMAL );
 
-    // functionality in ai_hero_action.cpp
+    // Definitions are in the ai_hero_action.cpp
+
     void HeroesAction( Heroes & hero, const int32_t dst_index );
     void HeroesMove( Heroes & hero );
+
+    // Makes it so that the 'hero' casts the Dimension Door spell to the 'targetIndex'
     void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex );
+
+    // Makes it so that the 'hero' casts the Summon Boat spell, summoning the boat at the 'boatDestinationIndex'.
+    // Returns the index of the tile on which the boat was located before the summoning. It's the caller's
+    // responsibility to make sure that 'hero' may cast this spell and there is a summonable boat on the map
+    // before calling this function.
+    int32_t HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIndex );
+
     bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell );
 
-    // functionality in ai_common.cpp
+    // Definitions are in the ai_common.cpp
+
     bool BuildIfAvailable( Castle & castle, int building );
     bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator );
     uint32_t GetResourceMultiplier( uint32_t min, uint32_t max );
