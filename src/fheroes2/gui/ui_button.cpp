@@ -659,9 +659,9 @@ namespace fheroes2
         assert( textAreaWidth + backgroundBorders > 0 );
 
         // TODO: Make resizeButton() scale in vertical direction too, like for vertical and larger buttons.
-       // if ( emptyButtonIcnID != ICN::EMPTY_VERTICAL_GOOD_BUTTON ) {
-            released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), textAreaWidth + backgroundBorders );
-            pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), textAreaWidth + backgroundBorders );
+        // if ( emptyButtonIcnID != ICN::EMPTY_VERTICAL_GOOD_BUTTON ) {
+        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), textAreaWidth + backgroundBorders );
+        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), textAreaWidth + backgroundBorders );
         //}
         /*else {
             released = AGG::GetICN( emptyButtonIcnID, 0 );
