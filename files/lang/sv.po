@@ -4569,6 +4569,9 @@ msgstr ""
 "Du har byggt upp en förmögenhet på över %{count} i din skattkammare.\n"
 "Alla fiender bugar inför din rikedom och makt."
 
+msgid "Victory!"
+msgstr "Seger!"
+
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
