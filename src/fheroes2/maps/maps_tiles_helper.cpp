@@ -308,8 +308,11 @@ namespace
             return true;
         }
 
-        if ( hasBits( groundDirection, DIRECTION_LEFT_COL | Direction::TOP | Direction::BOTTOM ) ) {
+        if ( hasBits( groundDirection, Direction::LEFT | Direction::TOP | Direction::BOTTOM ) ) {
             // Right is non 'groundId'.
+            // NOTICE: Initially the whole 'DIRECTION_LEFT_COL' should have bits, but we expand this case a little as there are no tile images
+            // for cases without Direction::TOP_LEFT or Direction::BOTTOM_LEFT. The absence of this "corner" transition is barely noticeable.
+            // TODO:: Design tile images for these cases.
 
             if ( hasBits( beachDirection, Direction::RIGHT ) ) {
                 // To the right there is a beach/water.
@@ -335,8 +338,11 @@ namespace
             }
         }
 
-        if ( hasBits( groundDirection, DIRECTION_RIGHT_COL | Direction::TOP | Direction::BOTTOM ) ) {
+        if ( hasBits( groundDirection, Direction::RIGHT | Direction::TOP | Direction::BOTTOM ) ) {
             // Left is non 'groundId'.
+            // NOTICE: Initially the whole 'DIRECTION_RIGHT_COL' should have bits, but we expand this case a little as there are no tile images
+            // for cases without Direction::TOP_RIGHT or Direction::BOTTOM_RIGHT. The absence of this "corner" transition is barely noticeable.
+            // TODO:: Design tile images for these cases.
 
             if ( hasBits( beachDirection, Direction::LEFT ) ) {
                 // To the left there is a beach/water.
@@ -362,8 +368,11 @@ namespace
             }
         }
 
-        if ( hasBits( groundDirection, DIRECTION_BOTTOM_ROW | Direction::LEFT | Direction::RIGHT ) ) {
+        if ( hasBits( groundDirection, Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) {
             // Top is non 'groundId'.
+            // NOTICE: Initially the whole 'DIRECTION_BOTTOM_ROW' should have bits, but we expand this case a little as there are no tile images
+            // for cases without Direction::BOTTOM_LEFT or Direction::BOTTOM_RIGHT. The absence of this "corner" transition is barely noticeable.
+            // TODO:: Design tile images for these cases.
 
             if ( hasBits( beachDirection, Direction::TOP ) ) {
                 // To the top there is a beach/water.
@@ -389,8 +398,11 @@ namespace
             }
         }
 
-        if ( hasBits( groundDirection, DIRECTION_TOP_ROW | Direction::LEFT | Direction::RIGHT ) ) {
+        if ( hasBits( groundDirection, Direction::TOP | Direction::LEFT | Direction::RIGHT ) ) {
             // Bottom is non 'groundId'.
+            // NOTICE: Initially the whole 'DIRECTION_TOP_ROW' should have bits, but we expand this case a little as there are no tile images
+            // for cases without Direction::TOP_LEFT or Direction::TOP_RIGHT. The absence of this "corner" transition is barely noticeable.
+            // TODO:: Design tile images for these cases.
 
             if ( hasBits( beachDirection, Direction::BOTTOM ) ) {
                 // To the bottom there is a beach/water.
@@ -557,10 +569,18 @@ namespace
             }
         }
 
+        if ( groundDirection == ( Direction::TOP_LEFT | Direction::TOP | Direction::BOTTOM | Direction::BOTTOM_RIGHT | DIRECTION_CENTER_ROW )
+             || groundDirection == ( Direction::TOP_RIGHT | Direction::TOP | Direction::BOTTOM | Direction::BOTTOM_LEFT | DIRECTION_CENTER_ROW ) ) {
+            // For these cases there is no extra tile image, but for now we can leave a tile without transition as it is not noticeable.
+            // TODO: Design tile images for these cases.
+
+            return true;
+        }
+
         // This terrain cannot be properly connected with the nearby terrains.
         DEBUG_LOG( DBG_DEVEL, DBG_WARN,
                    "No proper ground transition found for " << Maps::Ground::String( Maps::Ground::getGroundByImageIndex( imageOffset ) ) << " at " << tileId % world.w()
-                                                            << ',' << tileId / world.w() << " (" << tileId << ")." )
+                                                            << ',' << tileId / world.w() << " (" << tileId << ").\nDirections: " << Direction::String( groundDirection ) )
         return false;
     }
 
@@ -624,24 +644,43 @@ namespace
             // Try to change the ground type to one of the others.
             // TODO: Change this algorithm to a more proper one. E.g. remember the previous ground and try to UNDO it here.
             std::vector<int> newGrounds;
-            const int groundId = world.GetTiles( tileId ).GetGround();
+            const int groundOnTile = world.GetTiles( tileId ).GetGround();
 
-            if ( groundId != newGroundId ) {
+            if ( groundOnTile != newGroundId ) {
                 newGrounds.push_back( newGroundId );
             }
 
             DEBUG_LOG( DBG_DEVEL, DBG_WARN,
-                       "Ground " << Maps::Ground::String( groundId ) << " at " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId
-                                 << ") in inner boundaries should be replaced by some other one." )
+                       "Ground " << Maps::Ground::String( groundOnTile ) << " at " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId
+                                 << ") should be replaced by some other one." )
 
-            for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
+            bool isWater = ( groundOnTile == Maps::Ground::WATER );
+            const Directions & around = Direction::All();
+            for ( const int direction : around ) {
                 if ( Maps::isValidDirection( tileId, direction ) ) {
                     const int32_t ground = world.GetTiles( Maps::GetDirectionIndex( tileId, direction ) ).GetGround();
-                    if ( ground != groundId && std::find( newGrounds.begin(), newGrounds.end(), ground ) == newGrounds.end() ) {
+                    if ( ground != groundOnTile && std::find( newGrounds.begin(), newGrounds.end(), ground ) == newGrounds.end() ) {
                         newGrounds.push_back( ground );
                     }
+
+                    isWater = isWater || ( ground == Maps::Ground::WATER );
                 }
             }
+
+            if ( isWater ) {
+                // As the last chance we can try to place Beach to make a path on the water.
+                if ( std::find( newGrounds.begin(), newGrounds.end(), Maps::Ground::BEACH ) == newGrounds.end() ) {
+                    newGrounds.push_back( Maps::Ground::BEACH );
+                }
+            }
+            else {
+                // As the last chance we can try to connect terrains by placing Dirt.
+                if ( std::find( newGrounds.begin(), newGrounds.end(), Maps::Ground::DIRT ) == newGrounds.end() ) {
+                    newGrounds.push_back( Maps::Ground::DIRT );
+                }
+            }
+
+            bool needRevert = true;
 
             for ( const int newGround : newGrounds ) {
                 DEBUG_LOG( DBG_DEVEL, DBG_WARN,
@@ -653,16 +692,23 @@ namespace
                                "Ground " << Maps::Ground::String( newGround ) << " was set to " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId
                                          << ")." )
 
-                    // As we are always moving from left to right and from top to bottom, bu we update bottom boundaries prior to left and right.
-                    // So update left, top and bottom tiles.
-                    for ( const int direction : Direction::All() ) {
+                    for ( const int direction : around ) {
                         if ( Maps::isValidDirection( tileId, direction ) ) {
                             updateTerrainTransitionOnTile( Maps::GetDirectionIndex( tileId, direction ) );
                         }
                     }
 
+                    needRevert = false;
+
                     break;
                 }
+            }
+
+            if ( needRevert && !newGrounds.empty() ) {
+                world.GetTiles( tileId ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( groundOnTile ), false, false );
+                DEBUG_LOG( DBG_DEVEL, DBG_WARN,
+                           "Reverting ground to " << Maps::Ground::String( groundOnTile ) << " at " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId
+                                                  << ")." )
             }
         }
     }
@@ -718,33 +764,6 @@ namespace
         if ( endX < mapWidth - 1 && endY < mapHeight - 1 ) {
             const int32_t tileId = endX + 1 + mapWidth * ( endY + 1 );
             updateTerrainTransitionOnArea( groundId, tileId, tileId, 1 );
-        }
-
-        // Then we update the next circle outside the filled area, excluding the corners. This is needed for some rare cases.
-        // TODO: Add an algorithm that will analyze what tiles should be updated or even changed in the "outer" boundaries.
-        if ( startY > 1 ) {
-            const int32_t tileOffset = mapWidth * ( startY - 2 );
-            const int32_t tileStartX = ( startX > 0 ) ? ( startX - 1 ) : 0;
-            const int32_t tileEndX = ( endX < mapWidth - 1 ) ? ( endX + 1 ) : mapWidth;
-            updateTerrainTransitionOnArea( groundId, tileStartX + tileOffset, tileEndX + tileOffset, 1 );
-        }
-        if ( endY < mapHeight - 2 ) {
-            const int32_t tileOffset = mapWidth * ( endY + 2 );
-            const int32_t tileStartX = ( startX > 0 ) ? ( startX - 1 ) : 0;
-            const int32_t tileEndX = ( endX < mapWidth - 1 ) ? ( endX + 1 ) : mapWidth;
-            updateTerrainTransitionOnArea( groundId, tileStartX + tileOffset, tileEndX + tileOffset, 1 );
-        }
-        if ( startX > 1 ) {
-            const int32_t tileOffset = startX - 2;
-            const int32_t tileStartY = ( startY > 0 ) ? ( startY - 1 ) : 0;
-            const int32_t tileEndY = ( endY < mapHeight - 1 ) ? ( endY + 1 ) : mapHeight;
-            updateTerrainTransitionOnArea( groundId, tileOffset + mapWidth * tileStartY, tileOffset + mapWidth * tileEndY, mapWidth );
-        }
-        if ( endX < mapWidth - 2 ) {
-            const int32_t tileOffset = endX + 2;
-            const int32_t tileStartY = ( startY > 0 ) ? ( startY - 1 ) : 0;
-            const int32_t tileEndY = ( endY < mapHeight - 1 ) ? ( endY + 1 ) : mapHeight;
-            updateTerrainTransitionOnArea( groundId, tileOffset + mapWidth * tileStartY, tileOffset + mapWidth * tileEndY, mapWidth );
         }
     }
 }
