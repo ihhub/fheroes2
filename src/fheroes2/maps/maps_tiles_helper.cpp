@@ -30,6 +30,7 @@
 #include <ostream>
 #include <type_traits>
 #include <vector>
+#include <initializer_list>
 
 #include "army.h"
 #include "army_troop.h"
@@ -664,7 +665,7 @@ namespace
                 }
             }
         }
-    };
+    }
 
     void updateTerrainTransitionOnAreaBoundaries( const int groundId, const int32_t startX, const int32_t endX, const int32_t startY, const int32_t endY )
     {
