@@ -3398,22 +3398,18 @@ msgid ""
 msgstr ""
 "Opret et nyt kort, enten fra bunden eller ved hjælp af kortgeneratoren."
 
-	
 msgid "New Map"
 msgstr "Nyt kort"
 
-		
 msgid "Load Map"
 msgstr "Indlæs kort"
 
 msgid "Load an existing map."
 msgstr "indlæs et eksisterende kort."
 
-		
 msgid "Save Map"
 msgstr "Gem kort"
 
-		
 msgid "Save the current map."
 msgstr "Gem nuværende kort."
 
@@ -3585,7 +3581,6 @@ msgstr "Specifikationer"
 msgid "File Options"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "Open the file options menu, where you can save or load maps, or quit out of "
 "the editor."
@@ -6631,6 +6626,7 @@ msgid ""
 msgstr ""
 "Denne besværgelse koster %{mana} mana. Du har ingen mana, så du kan ikke "
 "kaste den."
+
 msgid ""
 "This spell costs %{mana} spell points. You only have %{point} spell points, "
 "so you cannot cast it."
@@ -8488,6 +8484,9 @@ msgstr "Lyn"
 
 msgid "% damage from "
 msgstr "% skade af "
+
+msgid "The three Anduran artifacts magically combine into one."
+msgstr ""
 
 msgid "View Spells"
 msgstr "Vis besværgelser"
