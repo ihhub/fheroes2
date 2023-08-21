@@ -3379,7 +3379,6 @@ msgstr "Personlighed:"
 msgid "Best Monster:"
 msgstr "Bedste væsen:"
 
-#, fuzzy
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3387,7 +3386,6 @@ msgstr ""
 "Er du sikker på, om du vil indlæse et nyt spil? (Dit nuværende spil vil gå "
 "tabt.)"
 
-#, fuzzy
 msgid ""
 "Are you sure you want to create a new map? (Any unsaved changes to the "
 "current map will be lost.)"
@@ -3400,24 +3398,24 @@ msgid ""
 msgstr ""
 "Opret et nyt kort, enten fra bunden eller ved hjælp af kortgeneratoren."
 
-#, fuzzy
+	
 msgid "New Map"
-msgstr "Nyt spil"
+msgstr "Nyt kort"
 
-#, fuzzy
+		
 msgid "Load Map"
-msgstr "Indlæs spil"
+msgstr "Indlæs kort"
 
 msgid "Load an existing map."
 msgstr "indlæs et eksisterende kort."
 
-#, fuzzy
+		
 msgid "Save Map"
-msgstr "Gem spil"
+msgstr "Gem kort"
 
-#, fuzzy
+		
 msgid "Save the current map."
-msgstr "Gem nuværende spil."
+msgstr "Gem nuværende kort."
 
 msgid "Quit out of the map editor."
 msgstr "Forlad korteditoren."
@@ -3449,9 +3447,8 @@ msgstr "Ødemark-objekter"
 msgid "Beach Objects"
 msgstr "Strand-objekter"
 
-#, fuzzy
 msgid "Towns"
-msgstr "Vis byer"
+msgstr "Byer"
 
 msgid "Heroes"
 msgstr "Helte"
@@ -3543,9 +3540,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr ""
 
-#, fuzzy
 msgid "Used for special editing of monsters, heroes and towns."
-msgstr "Besejr alle fjendtlige helte og byer."
+msgstr "Bruges til specialredigering af væsener, helte og byer."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr ""
@@ -3583,9 +3579,8 @@ msgstr ""
 msgid "Edit map title, description, and other general information."
 msgstr ""
 
-#, fuzzy
 msgid "Specifications"
-msgstr "Forstening"
+msgstr "Specifikationer"
 
 msgid "File Options"
 msgstr ""
@@ -3595,8 +3590,8 @@ msgid ""
 "Open the file options menu, where you can save or load maps, or quit out of "
 "the editor."
 msgstr ""
-"Frembring filindstillingsmenuen, som tillader dig at indlæse, gemme, starte "
-"et nyt spil eller afslutte."
+"Frembring filindstillingsmenuen, som tillader dig at gemme/indlæse kort "
+"eller afslutte Korteditoren."
 
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
@@ -3604,9 +3599,8 @@ msgstr ""
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
 
-#, fuzzy
 msgid "Cancel back to the New Map menu."
-msgstr "Afbryd og gå tilbage til hovedmenuen."
+msgstr "Afbryd og gå tilbage til hovedmenuen for Nyt-kort."
 
 msgid "Cancel back to the main menu."
 msgstr "Afbryd og gå tilbage til hovedmenuen."
@@ -3620,13 +3614,11 @@ msgstr ""
 msgid "Create a randomly generated map."
 msgstr ""
 
-#, fuzzy
 msgid "Random"
-msgstr "Tilfældigt monster"
+msgstr "Tilfældigt"
 
-#, fuzzy
 msgid "Cancel back to the Map Editor main menu."
-msgstr "Afbryd og gå tilbage til hovedmenuen."
+msgstr "Afbryd og gå tilbage til Korteditorens hovedmenu."
 
 msgid "No maps available!"
 msgstr ""
@@ -5443,7 +5435,7 @@ msgid ""
 "Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
 "\n"
-"Desværre har du ingen magibog, at nedskrive besværgelsen i."   
+"Desværre har du ingen magibog, at nedskrive besværgelsen i."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -6673,15 +6665,12 @@ msgstr ""
 "Der er hverken et hav ved siden af helten eller nogen tilgængelige skibe at "
 "hidkalde."
 
-		
 msgid "There are no boats available for this spell."
 msgstr "Der er ingen tilgængelige skibe at hidkalde."
 
-		
 msgid "There is no ocean adjacent to the hero where this spell will work."
 msgstr ""
 "Der er intet hav ved siden af helten, hvor denne besværgelse vil virke."
-	  
 
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
@@ -6690,7 +6679,6 @@ msgstr ""
 "Du ejer ikke nogen by eller en borg, der ikke i øjeblikket er besat af en "
 "helt. Du kan ikke kaste denne besværgelse."
 
-		
 msgid "This hero is already in a town, so you cannot cast this spell."
 msgstr "Denne helt er allerede i en by, så du kan ikke kaste besværgelsen."
 
@@ -8382,100 +8370,100 @@ msgid "Random Monsters 4"
 msgstr "Tilfældige monstre 4"
 
 msgid "Double shot"
-msgstr ""
+msgstr "Dobbeltskud"
 
 msgid "2-hex monster"
-msgstr ""
+msgstr "2-feltsvæsen"
 
 msgid "Double strike"
-msgstr ""
+msgstr "Dobbeltslag"
 
 msgid "Double damage to Undead"
-msgstr ""
+msgstr "Dobbelt skade til udøde"
 
 msgid "% magic resistance"
-msgstr ""
+msgstr "% magiresistens"
 
 msgid "Immune to Mind spells"
-msgstr ""
+msgstr "Immun overfor sindsbesværgelser"
 
 msgid "Immune to Elemental spells"
-msgstr ""
+msgstr "Immun overfor elementalbesværgelser"
 
 msgid "Immune to Fire spells"
-msgstr ""
+msgstr "Immun overfor ildbesværgelser"
 
 msgid "Immune to Cold spells"
-msgstr ""
+msgstr "Immun overfor koldbesværgelser"
 
 msgid "Immune to "
-msgstr ""
+msgstr "Immun overfor "
 
 msgid "% immunity to %{spell} spell"
-msgstr ""
+msgstr "% immunitet overfor %{spell} besværgelse"
 
 msgid "% damage from Elemental spells"
-msgstr ""
+msgstr "% skade af elementalbesværgelser"
 
 msgid "% chance to Dispel beneficial spells"
-msgstr ""
+msgstr "% chance, for at fordrive gavnlige besværgelser"
 
 msgid "% chance to Paralyze"
-msgstr ""
+msgstr "% chance, for at lamme"
 
 msgid "% chance to Petrify"
-msgstr ""
+msgstr "% chance, for at forstene"
 
 msgid "% chance to Blind"
-msgstr ""
+msgstr "% chance, for at blinde"
 
 msgid "% chance to Curse"
-msgstr ""
+msgstr "% chance, for at forbande"
 
 msgid "% chance to cast %{spell} spell"
-msgstr ""
+msgstr "% chance, for at kaste en %{spell} besværgelse"
 
 msgid "HP regeneration"
-msgstr ""
+msgstr "Selvhelbredende"
 
 msgid "Two hexes attack"
-msgstr ""
+msgstr "2-feltsangreb"
 
 msgid "Flyer"
-msgstr ""
+msgstr "Kan flyve"
 
 msgid "Always retaliates"
-msgstr ""
+msgstr "Slår altid igen"
 
 msgid "Attacks all adjacent enemies"
-msgstr ""
+msgstr "Angriber alle fjender omkring sig"
 
 msgid "No melee penalty"
-msgstr ""
+msgstr "Ingen nærkampsstraf"
 
 msgid "Dragon"
-msgstr ""
+msgstr "Drage"
 
 msgid "Undead"
-msgstr ""
+msgstr "Udød"
 
 msgid "No enemy retaliation"
-msgstr ""
+msgstr "Fjender kan ikke slå igen"
 
 msgid "HP drain"
-msgstr ""
+msgstr "Stjæler liv"
 
 msgid "Cloud attack"
-msgstr ""
+msgstr "Skyangreb"
 
 msgid "Decreases enemy's morale by "
-msgstr ""
+msgstr "Sænker fjendens moral med "
 
 msgid "% chance to halve enemy"
-msgstr ""
+msgstr "% chance for at halvere fjenden"
 
 msgid "Soul Eater"
-msgstr ""
+msgstr "Sjælefortærer"
 
 msgid "Elemental"
 msgstr "Elementalt"
@@ -8484,25 +8472,22 @@ msgid "No Morale"
 msgstr "Ingen moral"
 
 msgid "200% damage from Fire spells"
-msgstr ""
+msgstr "200% skade af ildbesværgelser"
 
 msgid "200% damage from Cold spells"
-msgstr ""
+msgstr "200% skade af koldbesværgelser"
 
 msgid "% damage from %{spell} spell"
-msgstr ""
+msgstr "% skade af %{spell} besværgelsen"
 
 msgid "% immunity to "
-msgstr ""
+msgstr "% immunitet overfor "
 
 msgid "Lightning"
-msgstr ""
+msgstr "Lyn"
 
 msgid "% damage from "
-msgstr ""
-
-msgid "The three Anduran artifacts magically combine into one."
-msgstr ""
+msgstr "% skade af "
 
 msgid "View Spells"
 msgstr "Vis besværgelser"
@@ -10165,10 +10150,10 @@ msgid ""
 msgstr ""
 
 msgid "The ultimate artifact is really the %{name}."
-msgstr ""
+msgstr "Den ultimative artefakt er i virkeligheden %{name}."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr ""
+msgstr "Den ultimative artefakt kan findes i verdens %{name}-regioner."
 
 msgid "north-west"
 msgstr "nordvest"
@@ -10207,13 +10192,15 @@ msgid "The end of the world is near."
 msgstr "Verdens ende er nær."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
-msgstr ""
+msgstr "Lord Slayers knogler er begravet i fundamentet af arenaen."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr "En sortdrage kan til enhver tid klare en titan."
 
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr ""
+"Til hende sagde han: \"snakke, snakke, snakke...\", og til det svarede hun: "
+"\"Bla, bla, bla...\""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
