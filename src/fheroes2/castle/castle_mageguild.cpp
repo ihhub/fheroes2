@@ -190,7 +190,7 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
         textAlternative = _( "The spells the hero can learn have been added to their book." );
     }
     fheroes2::Text statusText( textAlternative, fheroes2::FontType::normalWhite() );
-    statusText.draw( cur_pt.x + 280 - statusText.width() / 2, cur_pt.y + 465, display );
+    statusText.draw( cur_pt.x + 280 - statusText.width() / 2, cur_pt.y + 464, display );
 
     const int level = GetLevelMageGuild();
     // sprite
