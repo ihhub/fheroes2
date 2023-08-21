@@ -1220,11 +1220,10 @@ msgstr "Korruptionens Hjärta"
 msgid "The Giant's Pass"
 msgstr "Kungligt avfall"
 
-#, fuzzy
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
 "to operate in this region."
-msgstr "Kuva "
+msgstr "Kuva de bångstyriga lokala herrarna för att ge Imperiet åtkomst till anläggningar för att styra regionen."
 
 msgid ""
 "Eliminate all opposition in this area. Then the first piece of the artifact "
