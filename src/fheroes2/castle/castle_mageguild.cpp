@@ -182,7 +182,6 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
                     dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2 - exitWidth + 1, barHeight );
 
     // text bar
-    fheroes2::Text statusText;
     const char * textAlternative;
     if ( hero == nullptr || !hero->HaveSpellBook() ) {
         textAlternative = _( "The above spells are available here." );
@@ -190,7 +189,7 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
     else {
         textAlternative = _( "The spells the hero can learn have been added to their book." );
     }
-    statusText.set( textAlternative, fheroes2::FontType::normalWhite() );
+    fheroes2::Text statusText( textAlternative, fheroes2::FontType::normalWhite() );
     statusText.draw( cur_pt.x + 280 - statusText.width() / 2, cur_pt.y + 465, display );
 
     const int level = GetLevelMageGuild();
