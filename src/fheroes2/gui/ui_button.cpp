@@ -121,8 +121,8 @@ namespace
             textMargin = 2 + 2;
             minimumTextAreaWidth = 19;
             backgroundBorders = 5 + 4;
-            releasedOffset = { 5, 52 };
-            pressedOffset = { 4, 53 };
+            releasedOffset = { 4, 52 };
+            pressedOffset = { 3, 53 };
             break;
         default:
             // Was a new empty button template added?
