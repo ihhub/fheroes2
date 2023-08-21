@@ -7388,8 +7388,6 @@ msgstr "Barbar"
 
 msgid "doubleLined|Sorceress"
 msgstr "Heks"
-		  
-		
 
 msgid "doubleLined|Warlock"
 msgstr ""
@@ -8228,7 +8226,7 @@ msgid "Magi"
 msgstr "Troldmænd"
 
 msgid "Archmage"
-msgstr "Ærketroldmænd"
+msgstr "Ærketroldmand"
 
 msgid "Archmagi"
 msgstr "Ærketroldmænd"
