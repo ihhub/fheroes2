@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-12 09:48+0000\n"
+"POT-Creation-Date: 2023-08-21 13:07+0000\n"
 "PO-Revision-Date: 2023-08-10 16:59+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -4627,6 +4627,10 @@ msgstr ""
 "В вашей сокровищнице накопилось более %{count} золота.\n"
 "Ваши враги преклоняются перед Вашим богатством и могуществом."
 
+#, fuzzy
+msgid "Victory!"
+msgstr "Эктор"
+
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
@@ -4826,6 +4830,9 @@ msgstr " Всё население уменьшилось вдвое."
 
 msgid " All dwellings increase population."
 msgstr " Население всех жилищ возросло."
+
+msgid "New Month!"
+msgstr ""
 
 msgid "New Week!"
 msgstr "Новая неделя!"

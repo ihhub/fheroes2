@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-12 09:48+0000\n"
+"POT-Creation-Date: 2023-08-21 13:07+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -4527,6 +4527,9 @@ msgid ""
 "All enemies bow before your wealth and power."
 msgstr ""
 
+msgid "Victory!"
+msgstr ""
+
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
@@ -4698,6 +4701,9 @@ msgstr "Tutte le populazioni dimezzate."
 
 msgid " All dwellings increase population."
 msgstr "Cresce il numero di truppe disponibili di ogni dimora."
+
+msgid "New Month!"
+msgstr ""
 
 msgid "New Week!"
 msgstr ""
