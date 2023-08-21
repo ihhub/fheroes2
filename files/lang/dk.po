@@ -6674,7 +6674,7 @@ msgid ""
 msgstr ""
 
 msgid "This hero is already in a town, so you cannot cast this spell."
-msgstr ""
+msgstr "Denne helt er allerede i en by, så du kan ikke kaste besværgelsen."
 
 msgid ""
 "The nearest town is %{town}.\n"
@@ -6738,7 +6738,7 @@ msgid "You cannot dismiss a hero in a castle"
 msgstr "Du kan ikke bortvise en helt, som befinder sig i en borg."
 
 msgid "Dismissal of %{name} the %{race} is prohibited by scenario"
-msgstr "Afvisning af %{race}en %{name} er ifølge scenariet forbudt"
+msgstr ""
 
 msgid "Dismiss %{name} the %{race}"
 msgstr "Bortvis %{race}en %{name}"
@@ -7550,16 +7550,16 @@ msgid "Mine"
 msgstr "Mine"
 
 msgid "Burma shave."
-msgstr "Barbercreme."
+msgstr ""
 
 msgid "Next sign 50 miles."
-msgstr "80 km til næste skilt."
+msgstr ""
 
 msgid "See Rock City."
-msgstr "Se Stenby."
+msgstr ""
 
 msgid "This space for rent."
-msgstr "Denne plads er til leje."
+msgstr ""
 
 msgid "No object"
 msgstr "Intet objekt"
