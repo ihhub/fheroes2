@@ -112,7 +112,7 @@ namespace
         AudioManager::PlayMusic( MUS::VICTORY, Music::PlaybackMode::PLAY_ONCE );
 
         if ( !body.empty() )
-            fheroes2::showStandardTextMessage( "", body, Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Victory!" ), body, Dialog::OK );
     }
 
     void DialogLoss( uint32_t cond )
