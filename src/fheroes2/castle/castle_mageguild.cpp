@@ -187,7 +187,7 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
         text.Set( _( "The above spells are available here." ), Font::BIG );
     }
     else {
-        text.Set( _( "The above spells have been added to your book." ), Font::BIG );
+        text.Set( _( "The spells the hero can learn have been added to their book." ), Font::BIG );
     }
     text.Blit( cur_pt.x + 280 - text.w() / 2, cur_pt.y + 463 );
 
