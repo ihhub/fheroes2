@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-05 03:57+0000\n"
+"POT-Creation-Date: 2023-08-21 13:07+0000\n"
 "PO-Revision-Date: 2023-08-18 11:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -4512,6 +4512,9 @@ msgstr ""
 "Du har opbygget over %{count} guld i dit skatkammer.\n"
 "Alle fjender bøjer sig for din rigdom og magt!"
 
+msgid "Victory!"
+msgstr ""
+
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
@@ -4700,6 +4703,9 @@ msgstr "Hele befolkningen er halveret."
 
 msgid " All dwellings increase population."
 msgstr "Alle bosteder får øget deres befolkning."
+
+msgid "New Month!"
+msgstr ""
 
 msgid "New Week!"
 msgstr "Ny uge!"

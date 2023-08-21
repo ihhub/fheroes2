@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-21 01:58+0000\n"
+"POT-Creation-Date: 2023-08-21 13:07+0000\n"
 "PO-Revision-Date: 2023-08-19 18:44+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4512,6 +4512,10 @@ msgstr ""
 "Du har byggt upp en förmögenhet på över %{count} i din skattkammare.\n"
 "Alla fiender bugar inför din rikedom och makt."
 
+#, fuzzy
+msgid "Victory!"
+msgstr "Ector"
+
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
@@ -4698,6 +4702,9 @@ msgstr " All populationer är halverade."
 
 msgid " All dwellings increase population."
 msgstr " Alla bostäder höjer folkmängden."
+
+msgid "New Month!"
+msgstr ""
 
 msgid "New Week!"
 msgstr "Ny Vecka!"

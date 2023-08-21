@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-12 09:48+0000\n"
+"POT-Creation-Date: 2023-08-21 13:07+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4659,6 +4659,10 @@ msgstr ""
 "Натрупал си над %{count} злато в съкровищницата си.\n"
 "Всички врагове се прекланят пред твоето богатство и сила."
 
+#, fuzzy
+msgid "Victory!"
+msgstr "Ектор"
+
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
@@ -4849,6 +4853,9 @@ msgstr " Всички популации са наполовина."
 
 msgid " All dwellings increase population."
 msgstr " Всички жилища увеличават населението."
+
+msgid "New Month!"
+msgstr ""
 
 msgid "New Week!"
 msgstr "Нова Седмица!"

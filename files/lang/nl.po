@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-12 09:48+0000\n"
+"POT-Creation-Date: 2023-08-21 13:07+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -4483,6 +4483,9 @@ msgid ""
 "All enemies bow before your wealth and power."
 msgstr ""
 
+msgid "Victory!"
+msgstr ""
+
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
@@ -4646,6 +4649,9 @@ msgid " All populations are halved."
 msgstr ""
 
 msgid " All dwellings increase population."
+msgstr ""
+
+msgid "New Month!"
 msgstr ""
 
 msgid "New Week!"
