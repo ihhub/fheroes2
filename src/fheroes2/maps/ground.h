@@ -46,7 +46,7 @@ namespace Maps
             ALL = DESERT | SNOW | SWAMP | WASTELAND | BEACH | LAVA | DIRT | GRASS
         };
 
-        constexpr uint16_t getTerrainIageOffset( const int groundId );
+        uint16_t getTerrainIageOffset( const int groundId );
         int getGroundByImageIndex( const uint16_t terrainImageIndex );
         bool isTerrainTransitionImage( const uint16_t terrainImageIndex );
 

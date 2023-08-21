@@ -30,7 +30,7 @@
 #include "skill.h"
 #include "translations.h"
 
-constexpr uint16_t Maps::Ground::getTerrainIageOffset( const int groundId )
+uint16_t Maps::Ground::getTerrainIageOffset( const int groundId )
 {
     switch ( groundId ) {
     case WATER:

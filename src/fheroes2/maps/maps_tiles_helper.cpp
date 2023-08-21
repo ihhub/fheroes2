@@ -24,13 +24,13 @@
 #include <array>
 #include <cassert>
 #include <cstdint>
+#include <initializer_list>
 #include <limits>
 #include <list>
 #include <optional>
 #include <ostream>
 #include <type_traits>
 #include <vector>
-#include <initializer_list>
 
 #include "army.h"
 #include "army_troop.h"
