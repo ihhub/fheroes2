@@ -557,8 +557,9 @@ namespace
         }
 
         // This terrain cannot be properly connected with the nearby terrains.
-        COUT( "No proper ground transition found for " << Maps::Ground::String( Maps::Ground::getGroundByImageIndex( imageOffset ) ) << " at " << tileId % world.w()
-                                                       << ',' << tileId / world.w() << " (" << tileId << ")." )
+        DEBUG_LOG( DBG_DEVEL, DBG_WARN,
+                   "No proper ground transition found for " << Maps::Ground::String( Maps::Ground::getGroundByImageIndex( imageOffset ) ) << " at " << tileId % world.w()
+                                                            << ',' << tileId / world.w() << " (" << tileId << ")." )
         return false;
     }
 
@@ -611,6 +612,140 @@ namespace
         }
     }
 
+    void updateTerrainTransitionOnArea( const int newGroundId, const int32_t tileStart, const int32_t tileEnd, const int32_t tileStep )
+    {
+        for ( int32_t tileId = tileStart; tileId <= tileEnd; tileId += tileStep ) {
+            if ( updateTerrainTransitionOnTile( tileId ) ) {
+                // The terrain transition was correctly set or it was not needed.
+                continue;
+            }
+
+            // Try to change the ground type to one of the others.
+            // TODO: Change this algorithm to a more proper one. E.g. remember the previous ground and try to UNDO it here.
+            std::vector<int> newGrounds;
+            const int groundId = world.GetTiles( tileId ).GetGround();
+
+            if ( groundId != newGroundId ) {
+                newGrounds.push_back( newGroundId );
+            }
+
+            DEBUG_LOG( DBG_DEVEL, DBG_WARN,
+                       "Ground " << Maps::Ground::String( groundId ) << " at " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId
+                                 << ") in inner boundaries should be replaced by some other one." )
+
+            for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
+                if ( Maps::isValidDirection( tileId, direction ) ) {
+                    const int32_t ground = world.GetTiles( Maps::GetDirectionIndex( tileId, direction ) ).GetGround();
+                    if ( ground != groundId && std::find( newGrounds.begin(), newGrounds.end(), ground ) == newGrounds.end() ) {
+                        newGrounds.push_back( ground );
+                    }
+                }
+            }
+
+            for ( const int newGround : newGrounds ) {
+                DEBUG_LOG( DBG_DEVEL, DBG_WARN,
+                           "Trying ground " << Maps::Ground::String( newGround ) << " at " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId << ")." )
+
+                world.GetTiles( tileId ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( newGround ), false, false );
+                if ( updateTerrainTransitionOnTile( tileId ) ) {
+                    DEBUG_LOG( DBG_DEVEL, DBG_WARN,
+                               "Ground " << Maps::Ground::String( newGround ) << " was set to " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId
+                                         << ")." )
+
+                    // As we are always moving from left to right and from top to bottom, bu we update bottom boundaries prior to left and right.
+                    // So update left, top and bottom tiles.
+                    for ( const int direction : Direction::All() ) {
+                        if ( Maps::isValidDirection( tileId, direction ) ) {
+                            updateTerrainTransitionOnTile( Maps::GetDirectionIndex( tileId, direction ) );
+                        }
+                    }
+
+                    break;
+                }
+            }
+        }
+    };
+
+    void updateTerrainTransitionOnAreaBoundaries( const int groundId, const int32_t startX, const int32_t endX, const int32_t startY, const int32_t endY )
+    {
+        const int32_t mapWidth = world.w();
+        const int32_t mapHeight = world.h();
+
+        // First we update the boundaries inside the filled area.
+        updateTerrainTransitionOnArea( groundId, startX + mapWidth * startY, endX + mapWidth * startY, 1 );
+        if ( startY != endY ) {
+            updateTerrainTransitionOnArea( groundId, startX + mapWidth * endY, endX + mapWidth * endY, 1 );
+            if ( endY - startY > 1 ) {
+                updateTerrainTransitionOnArea( groundId, startX + mapWidth * ( startY + 1 ), startX + mapWidth * ( endY - 1 ), mapWidth );
+                if ( startX != endX ) {
+                    updateTerrainTransitionOnArea( groundId, endX + mapWidth * ( startY + 1 ), endX + mapWidth * ( endY - 1 ), mapWidth );
+                }
+            }
+        }
+
+        // Then we update the boundaries outside the filled area, excluding the corners.
+        if ( startY > 0 ) {
+            const int32_t tileOffset = mapWidth * ( startY - 1 );
+            updateTerrainTransitionOnArea( groundId, startX + tileOffset, endX + tileOffset, 1 );
+        }
+        if ( endY < mapHeight - 1 ) {
+            const int32_t tileOffset = mapWidth * ( endY + 1 );
+            updateTerrainTransitionOnArea( groundId, startX + tileOffset, endX + tileOffset, 1 );
+        }
+        if ( startX > 0 ) {
+            const int32_t tileOffset = startX - 1;
+            updateTerrainTransitionOnArea( groundId, tileOffset + mapWidth * startY, tileOffset + mapWidth * endY, mapWidth );
+        }
+        if ( endX < mapWidth - 1 ) {
+            const int32_t tileOffset = endX + 1;
+            updateTerrainTransitionOnArea( groundId, tileOffset + mapWidth * startY, tileOffset + mapWidth * endY, mapWidth );
+        }
+
+        // Update the corners outside of filled area.
+        if ( startX > 0 && startY > 0 ) {
+            const int32_t tileId = startX - 1 + mapWidth * ( startY - 1 );
+            updateTerrainTransitionOnArea( groundId, tileId, tileId, 1 );
+        }
+        if ( startY > 0 && endX < mapWidth - 1 ) {
+            const int32_t tileId = endX + 1 + mapWidth * ( startY - 1 );
+            updateTerrainTransitionOnArea( groundId, tileId, tileId, 1 );
+        }
+        if ( startX > 0 && endY < mapHeight - 1 ) {
+            const int32_t tileId = startX - 1 + mapWidth * ( endY + 1 );
+            updateTerrainTransitionOnArea( groundId, tileId, tileId, 1 );
+        }
+        if ( endX < mapWidth - 1 && endY < mapHeight - 1 ) {
+            const int32_t tileId = endX + 1 + mapWidth * ( endY + 1 );
+            updateTerrainTransitionOnArea( groundId, tileId, tileId, 1 );
+        }
+
+        // Then we update the next circle outside the filled area, excluding the corners. This is needed for some rare cases.
+        // TODO: Add an algorithm that will analyze what tiles should be updated or even changed in the "outer" boundaries.
+        if ( startY > 1 ) {
+            const int32_t tileOffset = mapWidth * ( startY - 2 );
+            const int32_t tileStartX = ( startX > 0 ) ? ( startX - 1 ) : 0;
+            const int32_t tileEndX = ( endX < mapWidth - 1 ) ? ( endX + 1 ) : mapWidth;
+            updateTerrainTransitionOnArea( groundId, tileStartX + tileOffset, tileEndX + tileOffset, 1 );
+        }
+        if ( endY < mapHeight - 2 ) {
+            const int32_t tileOffset = mapWidth * ( endY + 2 );
+            const int32_t tileStartX = ( startX > 0 ) ? ( startX - 1 ) : 0;
+            const int32_t tileEndX = ( endX < mapWidth - 1 ) ? ( endX + 1 ) : mapWidth;
+            updateTerrainTransitionOnArea( groundId, tileStartX + tileOffset, tileEndX + tileOffset, 1 );
+        }
+        if ( startX > 1 ) {
+            const int32_t tileOffset = startX - 2;
+            const int32_t tileStartY = ( startY > 0 ) ? ( startY - 1 ) : 0;
+            const int32_t tileEndY = ( endY < mapHeight - 1 ) ? ( endY + 1 ) : mapHeight;
+            updateTerrainTransitionOnArea( groundId, tileOffset + mapWidth * tileStartY, tileOffset + mapWidth * tileEndY, mapWidth );
+        }
+        if ( endX < mapWidth - 2 ) {
+            const int32_t tileOffset = endX + 2;
+            const int32_t tileStartY = ( startY > 0 ) ? ( startY - 1 ) : 0;
+            const int32_t tileEndY = ( endY < mapHeight - 1 ) ? ( endY + 1 ) : mapHeight;
+            updateTerrainTransitionOnArea( groundId, tileOffset + mapWidth * tileStartY, tileOffset + mapWidth * tileEndY, mapWidth );
+        }
+    }
 }
 
 namespace Maps
@@ -631,8 +766,6 @@ namespace Maps
         const int32_t endX = std::max( startTileOffset.x, endTileOffset.x );
         const int32_t endY = std::max( startTileOffset.y, endTileOffset.y );
 
-        // TODO: add the terrain variable to a tile (e.g. uint16_t _groundType) to faster get it and not to set multiple time the terrain image
-        //       and to have an ability to revert it by imageId.
         for ( int32_t y = startY; y <= endY; ++y ) {
             const int32_t tileOffset = y * mapWidth;
             for ( int32_t x = startX; x <= endX; ++x ) {
@@ -642,151 +775,7 @@ namespace Maps
         }
 
         // Set ground transitions on the boundaries of filled terrain area.
-        auto updateInnerBoundaries = [groundId]( const int32_t tileStart, const int32_t tileEnd, const int32_t tileStep ) {
-            for ( int32_t tileId = tileStart; tileId <= tileEnd; tileId += tileStep ) {
-                if ( updateTerrainTransitionOnTile( tileId ) ) {
-                    // The terrain transition was correctly set or it was not needed.
-                    continue;
-                }
-
-                // TODO: Remember the previous ground and try to UNDO it here.
-                COUT( "Ground " << Ground::String( groundId ) << " at " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId
-                                << ") in inner boundaries should be replaced by some other one." )
-
-                // Try to change the ground type to one of the others.
-                // TODO: Change this algorithm to a more proper one.
-                std::vector<int> newGrounds;
-
-                for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
-                    if ( isValidDirection( tileId, direction ) ) {
-                        const int32_t ground = world.GetTiles( GetDirectionIndex( tileId, direction ) ).GetGround();
-                        if ( ground != groundId && std::find( newGrounds.begin(), newGrounds.end(), ground ) == newGrounds.end() ) {
-                            newGrounds.push_back( ground );
-                        }
-                    }
-                }
-
-                for ( const int newGround : newGrounds ) {
-                    COUT( "Trying ground " << Ground::String( newGround ) << " at " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId << ")." )
-
-                    // setTerrainOnTiles( tileId, tileId, newGround );
-                    world.GetTiles( tileId ).setTerrain( Ground::getRandomTerrainImageIndex( newGround ), false, false );
-                    if ( updateTerrainTransitionOnTile( tileId ) ) {
-                        COUT( "Ground " << Ground::String( newGround ) << " was set to " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId << ")." )
-
-                        // As we are always moving from left to right and from top to bottom, bu we update bottom boundaries prior to left and right.
-                        // So update left, top and bottom tiles.
-                        for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::BOTTOM } ) {
-                            if ( isValidDirection( tileId, direction ) ) {
-                                int32_t nearestTileId = GetDirectionIndex( tileId, direction );
-                                updateTerrainTransitionOnTile( nearestTileId );
-                            }
-                        }
-
-                        break;
-                    }
-                }
-            }
-        };
-
-        auto updateOuterBoundaries = [groundId]( const int32_t tileStart, const int32_t tileEnd, const int32_t tileStep ) {
-            for ( int32_t tileId = tileStart; tileId <= tileEnd; tileId += tileStep ) {
-                if ( updateTerrainTransitionOnTile( tileId ) ) {
-                    // The terrain transition was correctly set or it was not needed.
-                    continue;
-                }
-
-                COUT( "Ground at " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId << ") in outer boundaries replaced by "
-                                   << Maps::Ground::String( groundId ) )
-
-                // setTerrainOnTiles( tileId, tileId, groundId );
-                world.GetTiles( tileId ).setTerrain( Ground::getRandomTerrainImageIndex( groundId ), false, false );
-                if ( updateTerrainTransitionOnTile( tileId ) ) {
-                    for ( const int direction : Direction::All() ) {
-                        if ( isValidDirection( tileId, direction ) ) {
-                            updateTerrainTransitionOnTile( GetDirectionIndex( tileId, direction ) );
-                        }
-                    }
-                }
-            }
-        };
-
-        // First we update the boundaries inside the filled area.
-        updateInnerBoundaries( startX + mapWidth * startY, endX + mapWidth * startY, 1 );
-        if ( startY != endY ) {
-            updateInnerBoundaries( startX + mapWidth * endY, endX + mapWidth * endY, 1 );
-            if ( endY - startY > 1 ) {
-                updateInnerBoundaries( startX + mapWidth * ( startY + 1 ), startX + mapWidth * ( endY - 1 ), mapWidth );
-                if ( startX != endX ) {
-                    updateInnerBoundaries( endX + mapWidth * ( startY + 1 ), endX + mapWidth * ( endY - 1 ), mapWidth );
-                }
-            }
-        }
-
-        // Then we update the boundaries outside the filled area, excluding th corners.
-        if ( startY > 0 ) {
-            updateOuterBoundaries( startX + mapWidth * ( startY - 1 ), endX + mapWidth * ( startY - 1 ), 1 );
-        }
-        if ( endY < world.h() - 1 ) {
-            updateOuterBoundaries( startX + mapWidth * ( endY + 1 ), endX + mapWidth * ( endY + 1 ), 1 );
-        }
-        if ( startX > 0 ) {
-            updateOuterBoundaries( startX - 1 + mapWidth * startY, startX - 1 + mapWidth * endY, mapWidth );
-        }
-        if ( endX < mapWidth - 1 ) {
-            updateOuterBoundaries( endX + 1 + mapWidth * startY, endX + 1 + mapWidth * endY, mapWidth );
-        }
-
-        // Update the corners outside of filled area.
-        if ( startX > 0 && startY > 0 ) {
-            updateOuterBoundaries( startX - 1 + mapWidth * ( startY - 1 ), startX - 1 + mapWidth * ( startY - 1 ), 1 );
-        }
-        if ( startY > 0 && endX < mapWidth - 1 ) {
-            updateOuterBoundaries( endX + 1 + mapWidth * ( startY - 1 ), endX + 1 + mapWidth * ( startY - 1 ), 1 );
-        }
-        if ( startX > 0 && endY < world.h() - 1 ) {
-            updateOuterBoundaries( startX - 1 + mapWidth * ( endY + 1 ), startX - 1 + mapWidth * ( endY + 1 ), 1 );
-        }
-        if ( endX < mapWidth - 1 && endY < world.h() - 1 ) {
-            updateOuterBoundaries( endX + 1 + mapWidth * ( endY + 1 ), endX + 1 + mapWidth * ( endY + 1 ), 1 );
-        }
-
-        // Expand working map area by 1.
-        /*startX = std::max( 0, startX - 1 );
-        startY = std::max( 0, startY - 1 );
-        endX = std::min( mapWidth - 1, endX + 1 );
-        endY = std::min( world.h() - 1, endY + 1 );
-
-        for ( int32_t y = startY; y <= endY; ++y ) {
-            const int32_t tileOffset = y * mapWidth;
-            for ( int32_t x = startX; x <= endX; ++x ) {
-                const int32_t tileId = x + tileOffset;
-                const int groundOnTile = world.GetTiles( tileId ).GetGround();
-
-                if ( setTerrainBoundariesOnTile( tileId, groundOnTile ) ) {
-                    // The terrain transition was correctly set or it was not needed.
-                    continue;
-                }
-
-                if ( groundId == groundOnTile ) {
-                    // TODO: Revert the ground change or calculate a proper ground for this tile (what criteria to use?).
-                    COUT( "Ground " << Maps::Ground::String( groundOnTile ) << " at " << x << ',' << y << " should be replaced by some other one." )
-                    for ( const int newGround :
-                          { Ground::WATER, Ground::GRASS, Ground::SNOW, Ground::SWAMP, Ground::LAVA, Ground::DESERT, Ground::DIRT, Ground::WASTELAND, Ground::BEACH } ) {
-                        world.GetTiles( tileId ).setTerrain( Ground::getRandomTerrainImageIndex( newGround ), false, false );
-                        if ( setTerrainBoundariesOnTile( tileId, newGround ) ) {
-                            COUT( "Ground " << Maps::Ground::String( newGround ) << " was set." )
-                            break;
-                        }
-                    }
-                    continue;
-                }
-
-                COUT( "Ground " << Maps::Ground::String( groundOnTile ) << " at " << x << ',' << y << " replaced by " << Maps::Ground::String( groundId ) )
-
-                setTerrainOnTiles( tileId, tileId, groundId );
-            }
-        }*/
+        updateTerrainTransitionOnAreaBoundaries( groundId, startX, endX, startY, endY );
     }
 
     int32_t getMineSpellIdFromTile( const Tiles & tile )
