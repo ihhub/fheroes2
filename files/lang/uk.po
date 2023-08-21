@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-12 09:48+0000\n"
-"PO-Revision-Date: 2023-08-06 22:49+0300\n"
+"POT-Creation-Date: 2023-06-14 20:35+0000\n"
+"PO-Revision-Date: 2023-08-19 23:16+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -1889,13 +1889,11 @@ msgstr "Подорож Додому"
 msgid "Wizard's Isle"
 msgstr "Острів Чаклуна"
 
-#, fuzzy
 msgid "Descendants"
-msgstr "Селяни"
+msgstr "Нащадки"
 
-#, fuzzy
 msgid "The %{building} produces %{monster}."
-msgstr "У %{building} можна придбати %{monster}."
+msgstr "%{building} - житло, в якому доступні для найму %{monster}."
 
 #, fuzzy
 msgid "Requires:"
@@ -2003,7 +2001,6 @@ msgstr ""
 msgid "Sandcaster"
 msgstr ""
 
-#, fuzzy
 msgid "Alamar"
 msgstr "Аламар"
 
@@ -3249,25 +3246,25 @@ msgid "Accept the choice made."
 msgstr ""
 
 msgid "Select Skill:"
-msgstr ""
+msgstr "Оберіть Навички"
 
 msgid "Select Spell:"
-msgstr ""
+msgstr "Оберіть Закляття"
 
 msgid "Select Artifact:"
-msgstr ""
+msgstr "Оберіть Артефакти"
 
 msgid "Select Monster:"
-msgstr ""
+msgstr "Оберіть Монстра"
 
 msgid "Select Hero:"
-msgstr ""
+msgstr "Оберіть Героя"
 
 msgid "Map Type:\n"
 msgstr "Тип мапи:\n"
 
 msgid "The Succession Wars"
-msgstr ""
+msgstr "Війни за Спадщину"
 
 msgid "Lose all your heroes and towns."
 msgstr ""
