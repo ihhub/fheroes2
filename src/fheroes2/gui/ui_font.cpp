@@ -5582,6 +5582,7 @@ namespace
         released[192 - 32].setPosition( buttonFontOffset.x - 1, -3 );
         released[193 - 32].setPosition( buttonFontOffset.x - 1, -3 );
         released[197 - 32].setPosition( buttonFontOffset.x - 1, -2 );
+        released[198 - 32].setPosition( buttonFontOffset.x - 2, buttonFontOffset.y );
         released[200 - 32].setPosition( buttonFontOffset.x, -3 );
         released[201 - 32].setPosition( buttonFontOffset.x, -3 );
 
