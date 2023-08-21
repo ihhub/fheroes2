@@ -85,10 +85,10 @@ namespace
         case ICN::EMPTY_GOOD_BUTTON:
             font = fheroes2::FontColor::WHITE;
             textMargin = 4 + 4;
-            // The minimum text area width for campaign buttons is 87 judging from the shared widths of the
+            // The minimum text area width for campaign buttons is 86 judging from the shared widths of the
             // original OKAY and the CANCEL buttons even though OKAY is a shorter word
-            minimumTextAreaWidth = 87;
-            backgroundBorders = 4 + 3;
+            minimumTextAreaWidth = 86;
+            backgroundBorders = 6 + 4;
             releasedOffset = { 5, 5 };
             pressedOffset = { 4, 6 };
             break;
@@ -96,7 +96,7 @@ namespace
             font = fheroes2::FontColor::GRAY;
             textMargin = 4 + 4;
             minimumTextAreaWidth = 87;
-            backgroundBorders = 4 + 3;
+            backgroundBorders = 6 + 3;
             releasedOffset = { 5, 5 };
             pressedOffset = { 4, 6 };
             break;
@@ -118,9 +118,9 @@ namespace
             break;
         case ICN::EMPTY_VERTICAL_GOOD_BUTTON:
             font = fheroes2::FontColor::WHITE;
-            textMargin = 2 + 2;
+            textMargin = 0 + 0;
             minimumTextAreaWidth = 19;
-            backgroundBorders = 5 + 4;
+            backgroundBorders = 4 + 4;
             // TODO: The center of the button will change according to the height of it when we can resize it.
             // The height offsets will need to be adjusted when this is possible, now they point to the
             // center of the empty button.
@@ -659,14 +659,14 @@ namespace fheroes2
         assert( textAreaWidth + backgroundBorders > 0 );
 
         // TODO: Make resizeButton() scale in vertical direction too, like for vertical and larger buttons.
-        if ( emptyButtonIcnID != ICN::EMPTY_VERTICAL_GOOD_BUTTON ) {
+       // if ( emptyButtonIcnID != ICN::EMPTY_VERTICAL_GOOD_BUTTON ) {
             released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), textAreaWidth + backgroundBorders );
             pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), textAreaWidth + backgroundBorders );
-        }
-        else {
+        //}
+        /*else {
             released = AGG::GetICN( emptyButtonIcnID, 0 );
             pressed = AGG::GetICN( emptyButtonIcnID, 1 );
-        }
+        }*/
 
         if ( buttonBackgroundIcnID != ICN::UNKNOWN ) {
             makeTransparentBackground( released, pressed, buttonBackgroundIcnID );
