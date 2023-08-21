@@ -1015,7 +1015,7 @@ msgid ""
 msgstr ""
 "Din uppgift är att försvara Dvärgarna mot Archibalds styrkor. Inta alla "
 "fiendestäder och slott för att vinna, och försäkra dig om att inte förlora "
-"kontrollen över samtliga dvärgstäder för i så fall har fienden vunnit.,"
+"kontrollen över samtliga dvärgstäder för i så fall har fienden vunnit."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
@@ -4755,6 +4755,9 @@ msgstr " All populationer är halverade."
 
 msgid " All dwellings increase population."
 msgstr " Alla bostäder höjer folkmängden."
+
+msgid "New Month!"
+msgstr "Ny Månad!"
 
 msgid "New Week!"
 msgstr "Ny Vecka!"
