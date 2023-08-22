@@ -2522,7 +2522,7 @@ msgstr ""
 msgid "The above spells are available here."
 msgstr ""
 
-msgid "The above spells have been added to your book."
+msgid "The spells the hero can learn have been added to their book."
 msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
@@ -4508,6 +4508,10 @@ msgid ""
 "All enemies bow before your wealth and power."
 msgstr ""
 
+#, fuzzy
+msgid "Victory!"
+msgstr "Ектор"
+
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
@@ -4673,6 +4677,9 @@ msgid " All populations are halved."
 msgstr ""
 
 msgid " All dwellings increase population."
+msgstr ""
+
+msgid "New Month!"
 msgstr ""
 
 msgid "New Week!"
