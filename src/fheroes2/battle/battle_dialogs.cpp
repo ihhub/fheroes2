@@ -834,8 +834,8 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
 
     // first 15 pixels in the dialog is left shadow, skip
-    pos_rt.x += 15;
-    pos_rt.width -= 15;
+    pos_rt.x += dialogShadow.x;
+    pos_rt.width -= dialogShadow.x;
 
     const fheroes2::Rect portraitArea( pos_rt.x + 7, pos_rt.y + 35, 113, 108 );
     const Heroes * actionHero = ( _currentColor == hero.GetColor() ) ? dynamic_cast<const Heroes *>( &hero ) : nullptr;
@@ -844,8 +844,6 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     int col = ( Color::NONE == hero.GetColor() ? 1 : Color::GetIndex( hero.GetColor() ) + 1 );
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::VIEWGEN, col ), display, pos_rt.x + 133, pos_rt.y + 36 );
 
-    fheroes2::Point tp( pos_rt.x, pos_rt.y );
-
     std::string str;
     Text text;
     text.Set( Font::SMALL );
@@ -853,43 +851,47 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     StringReplace( str, "%{name}", hero.GetName() );
     StringReplace( str, "%{race}", Race::String( hero.GetRace() ) );
     text.Set( str );
-    tp.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2;
-    tp.y = pos_rt.y + 11;
+    fheroes2::Point tp{ pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 11 };
     text.Blit( tp.x, tp.y );
+
+    const fheroes2::Point statsTextOffset{ pos_rt.x + 148 - dialogShadow.x, pos_rt.y + 40 };
+    const int32_t maxStatsTextWidth{ 111 };
+    const int32_t statsTextRowHeight{ 11 };
+
     str = _( "Attack" ) + std::string( ": " ) + std::to_string( hero.GetAttack() );
     text.Set( str );
-    tp.x = pos_rt.x + 190 - text.w() / 2;
-    tp.y = pos_rt.y + 40;
+    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.w() ) / 2;
+    tp.y = statsTextOffset.y;
     text.Blit( tp.x, tp.y );
     str = _( "Defense" ) + std::string( ": " ) + std::to_string( hero.GetDefense() );
     text.Set( str );
-    tp.x = pos_rt.x + 190 - text.w() / 2;
-    tp.y = pos_rt.y + 51;
+    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.w() ) / 2;
+    tp.y = statsTextOffset.y + statsTextRowHeight;
     text.Blit( tp.x, tp.y );
     str = _( "Spell Power" ) + std::string( ": " ) + std::to_string( hero.GetPower() );
     text.Set( str );
-    tp.x = pos_rt.x + 190 - text.w() / 2;
-    tp.y = pos_rt.y + 62;
+    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.w() ) / 2;
+    tp.y = statsTextOffset.y + statsTextRowHeight * 2;
     text.Blit( tp.x, tp.y );
     str = _( "Knowledge" ) + std::string( ": " ) + std::to_string( hero.GetKnowledge() );
     text.Set( str );
-    tp.x = pos_rt.x + 190 - text.w() / 2;
-    tp.y = pos_rt.y + 73;
+    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.w() ) / 2;
+    tp.y = statsTextOffset.y + statsTextRowHeight * 3;
     text.Blit( tp.x, tp.y );
     str = _( "Morale" ) + std::string( ": " ) + Morale::String( hero.GetMorale() );
     text.Set( str );
-    tp.x = pos_rt.x + 190 - text.w() / 2;
-    tp.y = pos_rt.y + 84;
+    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.w() ) / 2;
+    tp.y = statsTextOffset.y + statsTextRowHeight * 4;
     text.Blit( tp.x, tp.y );
     str = _( "Luck" ) + std::string( ": " ) + Luck::String( hero.GetLuck() );
     text.Set( str );
-    tp.x = pos_rt.x + 190 - text.w() / 2;
-    tp.y = pos_rt.y + 95;
+    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.w() ) / 2;
+    tp.y = statsTextOffset.y + statsTextRowHeight * 5;
     text.Blit( tp.x, tp.y );
     str = _( "Spell Points" ) + std::string( ": " ) + std::to_string( hero.GetSpellPoints() ) + "/" + std::to_string( hero.GetMaxSpellPoints() );
     text.Set( str );
-    tp.x = pos_rt.x + 190 - text.w() / 2;
-    tp.y = pos_rt.y + 117;
+    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.w() ) / 2;
+    tp.y = statsTextOffset.y + statsTextRowHeight * 7;
     text.Blit( tp.x, tp.y );
 
     fheroes2::Button btnCast( pos_rt.x + 15, pos_rt.y + 148, ICN::VIEWGEN, 9, 10 );
