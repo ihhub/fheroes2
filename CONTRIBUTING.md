@@ -1,42 +1,14 @@
-## How to contribute to fheroes2
+## Contribution and Development
 
-#### **Did you find a bug?**
+This repository is a place for everyone. If you want to contribute, please read more [**here**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.#q-how-can-i-contribute-to-the-project).
 
-* Please open issues for bugs or security vulnerabilities.
+To build the project from source, please follow [**this guide**](docs/DEVELOPMENT.md).
 
-* **Ensure the bug was not already reported** by searching on GitHub under [issues](https://github.com/ihhub/fheroes2/issues).
+[![Build Status](https://github.com/ihhub/fheroes2/actions/workflows/push.yml/badge.svg)](https://github.com/ihhub/fheroes2/actions)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=bugs)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=code_smells)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)
 
-* If you're unable to find an open issue addressing the problem,
-  [open a new one](https://github.com/ihhub/fheroes2/issues/new/choose). Be sure to include a **title and clear description**,
-  and as much relevant information as possible, including the **list of steps to reproduce the bug** and **a save file**
-  (if available).
+To assist with the graphical asset efforts of the project, please look at our [**graphical artist guide**](docs/GRAPHICAL_ASSETS.md).
 
-#### **Did you write a patch that fixes a bug?**
-
-* Ensure your patch follows project's [code style](https://github.com/ihhub/fheroes2/wiki/Code-style).
-
-* Open a new GitHub pull request with the patch.
-
-* Ensure the PR description clearly describes the problem and solution. Include the relevant issue number if applicable.
-
-* One bug per pull request. 
-
-#### **Do you intend to add a new feature or change an existing one?**
-
-* Suggest your change in an issue first and then start writing code.
-
-* Ensure your code follows project's [code style](https://github.com/ihhub/fheroes2/wiki/Code-style).
-
-* One feature per pull request. 
-
-#### **Do you have questions about the source code?**
-
-* Ask any question in the issues section as well. 
-
-#### **Do you want to contribute to the project?**
-
-fheroes2 is a volunteer effort. We encourage you to pitch in and join the team!
-
-Thanks! :heart: :heart: :heart:
-
-fheroes2 Resurrection Team
+If you would like to help translating the project, please read the [**translation guide**](docs/TRANSLATION.md).
