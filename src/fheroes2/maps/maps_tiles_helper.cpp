@@ -585,13 +585,17 @@ namespace
             }
         }
 
-        if ( ( groundDirection == ( Direction::TOP_LEFT | Direction::TOP | Direction::BOTTOM | Direction::BOTTOM_RIGHT | DIRECTION_CENTER_ROW )
-               || groundDirection == ( Direction::TOP_RIGHT | Direction::TOP | Direction::BOTTOM | Direction::BOTTOM_LEFT | DIRECTION_CENTER_ROW ) )
-             && tile.GetGround() != Maps::Ground::WATER ) {
-            // For these cases there is no extra tile image, but for now we can leave a tile with ground without transition as it is barely noticeable.
-            // TODO: Design tile images for these cases.
+        if ( groundDirection == ( Direction::TOP_LEFT | Direction::TOP | Direction::BOTTOM | Direction::BOTTOM_RIGHT | DIRECTION_CENTER_ROW )
+             || groundDirection == ( Direction::TOP_RIGHT | Direction::TOP | Direction::BOTTOM | Direction::BOTTOM_LEFT | DIRECTION_CENTER_ROW ) ) {
+            const int ground = tile.GetGround();
+            if ( ground != Maps::Ground::WATER ) {
+                // Two opposite corners needs ground transition.
+                // For these cases there is no extra tile image, but for now we can leave a tile with ground without transition as it is barely noticeable.
+                // TODO: Design tile images for these cases.
 
-            return true;
+                tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( ground ), false, false );
+                return true;
+            }
         }
 
         // This terrain cannot be properly connected with the nearby terrains. There are no such ground images.
