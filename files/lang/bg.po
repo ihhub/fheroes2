@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-21 13:07+0000\n"
+"POT-Creation-Date: 2023-08-22 00:24+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2527,7 +2527,8 @@ msgstr "Виж герой"
 msgid "The above spells are available here."
 msgstr "Гореизложените магии са налични тук."
 
-msgid "The above spells have been added to your book."
+#, fuzzy
+msgid "The spells the hero can learn have been added to their book."
 msgstr "Гореизложените заклинания са добавени към твоята книга."
 
 msgid "A generous tip for the barkeep yields the following rumor:"

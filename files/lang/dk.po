@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-21 13:07+0000\n"
+"POT-Creation-Date: 2023-08-22 00:24+0000\n"
 "PO-Revision-Date: 2023-08-18 11:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -2395,7 +2395,8 @@ msgstr "Vis helt"
 msgid "The above spells are available here."
 msgstr "Med nok visdom kan alle disse besværgelser læres af dine helte."
 
-msgid "The above spells have been added to your book."
+#, fuzzy
+msgid "The spells the hero can learn have been added to their book."
 msgstr "Besværgelser som ses her, er blevet tilføjet din magibog."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
