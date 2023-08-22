@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-12 09:48+0000\n"
+"POT-Creation-Date: 2023-08-22 00:24+0000\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -2502,7 +2502,8 @@ msgstr "Zobrazit hrdinu"
 msgid "The above spells are available here."
 msgstr "Nacházejí se zde výše uvedená kouzla."
 
-msgid "The above spells have been added to your book."
+#, fuzzy
+msgid "The spells the hero can learn have been added to their book."
 msgstr "Výše uvedená kouzla byly přidány to tvé knihy."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
@@ -4618,6 +4619,9 @@ msgstr ""
 "Nashromáždil si %{count} zlaťáků v pokladnici.\n"
 "Všichni nepřátelé se klanějí Tvému bohatství a síle."
 
+msgid "Victory!"
+msgstr ""
+
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
@@ -4806,6 +4810,9 @@ msgstr "Celá populace je na polovině."
 
 msgid " All dwellings increase population."
 msgstr "Všechna obydlí přináší novou populaci."
+
+msgid "New Month!"
+msgstr ""
 
 msgid "New Week!"
 msgstr "Začal nový týden!"

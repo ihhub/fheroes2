@@ -2391,7 +2391,8 @@ msgstr "Vis helt"
 msgid "The above spells are available here."
 msgstr "Med nok visdom kan alle disse besværgelser læres af dine helte."
 
-msgid "The above spells have been added to your book."
+#, fuzzy
+msgid "The spells the hero can learn have been added to their book."
 msgstr "Besværgelser som ses her, er blevet tilføjet din magibog."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
@@ -4491,6 +4492,9 @@ msgstr ""
 "Du har opbygget over %{count} guld i dit skatkammer.\n"
 "Alle fjender bøjer sig for din rigdom og magt!"
 
+msgid "Victory!"
+msgstr ""
+
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
@@ -4679,6 +4683,9 @@ msgstr "Hele befolkningen er halveret."
 
 msgid " All dwellings increase population."
 msgstr "Alle bosteder får øget deres befolkning."
+
+msgid "New Month!"
+msgstr ""
 
 msgid "New Week!"
 msgstr "Ny uge!"

@@ -5582,6 +5582,7 @@ namespace
         released[192 - 32].setPosition( buttonFontOffset.x - 1, -3 );
         released[193 - 32].setPosition( buttonFontOffset.x - 1, -3 );
         released[197 - 32].setPosition( buttonFontOffset.x - 1, -2 );
+        released[198 - 32].setPosition( buttonFontOffset.x - 2, buttonFontOffset.y );
         released[200 - 32].setPosition( buttonFontOffset.x, -3 );
         released[201 - 32].setPosition( buttonFontOffset.x, -3 );
 
@@ -5602,7 +5603,7 @@ namespace
         fheroes2::SetPixel( released[197 - 32], offset + 6, offset + 3, buttonGoodReleasedColor );
 
         // A attached to E.
-        released[198 - 32].resize( 18 + offset * 2, 12 + offset * 2 );
+        released[198 - 32].resize( 15 + offset * 2, 10 + offset * 2 );
         released[198 - 32].reset();
         fheroes2::DrawLine( released[198 - 32], { offset + 0, offset + 9 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[198 - 32], { offset + 8, offset + 9 }, { offset + 12, offset + 9 }, buttonGoodReleasedColor );
