@@ -5579,6 +5579,7 @@ namespace
         const int32_t offset = 2;
 
         // Change spacing relative to other characters.
+        released[65 - 32].setPosition( buttonFontOffset.x - 2, buttonFontOffset.y );
         released[192 - 32].setPosition( buttonFontOffset.x - 1, -3 );
         released[193 - 32].setPosition( buttonFontOffset.x - 1, -3 );
         released[196 - 32].setPosition( buttonFontOffset.x - 2, -2 );
