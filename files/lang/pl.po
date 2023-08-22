@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-12 09:48+0000\n"
+"POT-Creation-Date: 2023-08-22 00:24+0000\n"
 "PO-Revision-Date: 2023-07-01 14:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -2534,7 +2534,8 @@ msgstr "Pokaż bohatera"
 msgid "The above spells are available here."
 msgstr "Tu są dostępne powyższe zaklęcia."
 
-msgid "The above spells have been added to your book."
+#, fuzzy
+msgid "The spells the hero can learn have been added to their book."
 msgstr "Powyższe zaklęcia zostały dodane do twojej księgi."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
@@ -4655,6 +4656,10 @@ msgstr ""
 "W twoim skarbcu udało ci się zebrać ponad %{count} szt. złota.\n"
 "Wszyscy przeciwnicy korzą się przed twym bogactwem i potęgą."
 
+#, fuzzy
+msgid "Victory!"
+msgstr "Ector"
+
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
@@ -4846,6 +4851,9 @@ msgstr " Ginie połowa populacji królestwa."
 
 msgid " All dwellings increase population."
 msgstr " Populacja całego królestwa zwiększa się."
+
+msgid "New Month!"
+msgstr ""
 
 msgid "New Week!"
 msgstr "Nowy tydzień!"
