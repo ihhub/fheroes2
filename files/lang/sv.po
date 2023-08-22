@@ -5985,7 +5985,7 @@ msgid ""
 "of crystal per day."
 msgstr ""
 "Du tar kontroll över en kristallgruva. Den kommer att förse dig med %{count} "
-"enheter av kristall per dag."
+"enhet av kristaller per dag."
 
 msgid ""
 "You gain control of a gem mine. It will provide you with %{count} unit of "
