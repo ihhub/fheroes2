@@ -232,6 +232,7 @@ namespace
         tile.Remove( tile.GetObjectUID() );
     }
 
+    // Returns the direction vector bits from 'centerTileIndex' where the ground is 'groundId'.
     int getGroundDirecton( const int32_t centerTileIndex, const int groundId )
     {
         if ( centerTileIndex < 0 || centerTileIndex >= world.w() * world.h() ) {
@@ -242,7 +243,7 @@ namespace
         const fheroes2::Point centerTile = Maps::GetPoint( centerTileIndex );
         const fheroes2::Point lastWorldTile = { world.w() - 1, world.h() - 1 };
 
-        int around = ( world.GetTiles( centerTileIndex ).GetGround() == groundId ) ? Direction::CENTER : 0;
+        int groundDirection = ( world.GetTiles( centerTileIndex ).GetGround() == groundId ) ? Direction::CENTER : 0;
 
         for ( const int & direction : Direction::All() ) {
             // We do not let 'tilePosition' to get out of the world borders, meaning that beyond the borders is the same tile type as the nearby one on the map.
@@ -251,11 +252,11 @@ namespace
             tilePosition.y = std::min( lastWorldTile.y, std::max( 0, tilePosition.y ) );
 
             if ( world.GetTiles( tilePosition.x, tilePosition.y ).GetGround() == groundId ) {
-                around |= direction;
+                groundDirection |= direction;
             }
         }
 
-        return around;
+        return groundDirection;
     }
 
     inline bool hasBits( const int value, const int bits )
@@ -268,7 +269,7 @@ namespace
         return ( value & bits ) == 0;
     }
 
-    // Returns true if terrain transition on boundaries was properly set or it is not needed.
+    // Returns true if terrain transition on tile was properly set or it is not needed.
     bool setTerrainBoundaries( const int groundDirection, const int beachDirection, const int32_t tileId, const uint16_t imageOffset )
     {
         if ( groundDirection == DIRECTION_ALL ) {
@@ -276,7 +277,7 @@ namespace
             return true;
         }
         if ( groundDirection == ( Direction::TOP_RIGHT | Direction::TOP | DIRECTION_BOTTOM_ROW | DIRECTION_CENTER_ROW ) ) {
-            // Top-left corner is non 'groundId'.
+            // All directions without the top-left corner.
             uint16_t imageIndex = imageOffset + 12U;
             imageIndex += hasNoBits( beachDirection, Direction::TOP_LEFT ) ? 0U : 16U;
             imageIndex += static_cast<uint16_t>( Rand::Get( 3 ) );
@@ -284,7 +285,7 @@ namespace
             return true;
         }
         if ( groundDirection == ( Direction::TOP_LEFT | Direction::TOP | DIRECTION_BOTTOM_ROW | DIRECTION_CENTER_ROW ) ) {
-            // Top-right corner is non 'groundId'.
+            // All directions without the top-right corner.
             uint16_t imageIndex = imageOffset + 12U;
             imageIndex += hasNoBits( beachDirection, Direction::TOP_RIGHT ) ? 0U : 16U;
             imageIndex += static_cast<uint16_t>( Rand::Get( 3 ) );
@@ -292,7 +293,7 @@ namespace
             return true;
         }
         if ( groundDirection == ( Direction::BOTTOM_LEFT | Direction::BOTTOM | DIRECTION_TOP_ROW | DIRECTION_CENTER_ROW ) ) {
-            // Bottom-right corner is non 'groundId'.
+            // All directions without the bottom-right corner.
             uint16_t imageIndex = imageOffset + 12U;
             imageIndex += hasNoBits( beachDirection, Direction::BOTTOM_RIGHT ) ? 0U : 16U;
             imageIndex += static_cast<uint16_t>( Rand::Get( 3 ) );
@@ -300,7 +301,7 @@ namespace
             return true;
         }
         if ( groundDirection == ( Direction::BOTTOM_RIGHT | Direction::BOTTOM | DIRECTION_TOP_ROW | DIRECTION_CENTER_ROW ) ) {
-            // Bottom-left corner is non 'groundId'.
+            // All directions without the bottom-left corner.
             uint16_t imageIndex = imageOffset + 12U;
             imageIndex += hasNoBits( beachDirection, Direction::BOTTOM_LEFT ) ? 0U : 16U;
             imageIndex += static_cast<uint16_t>( Rand::Get( 3 ) );
@@ -309,19 +310,20 @@ namespace
         }
 
         if ( hasBits( groundDirection, Direction::LEFT | Direction::TOP | Direction::BOTTOM ) ) {
-            // Right is non 'groundId'.
-            // NOTICE: Initially the whole 'DIRECTION_LEFT_COL' should have bits, but we expand this case a little as there are no tile images
-            // for cases without Direction::TOP_LEFT or Direction::BOTTOM_LEFT. The absence of this "corner" transition is barely noticeable.
-            // TODO:: Design tile images for these cases.
+            // There is no ground direction to the right.
+            // NOTICE: Initially the whole 'DIRECTION_LEFT_COL' should have direction bits.
+            // We do not check TOP_LEFT and BOTTOM_LEFT as there are no tile images for that cases.
+            // The absence of this "corner" transition is barely noticeable.
+            // TODO: Design tile images for these cases.
 
             if ( hasBits( beachDirection, Direction::RIGHT ) ) {
-                // To the right there is a beach/water.
+                // To the right there is a beach (or beach transition to the water).
                 world.GetTiles( tileId ).setTerrain( imageOffset + 8U + 16U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, false );
                 return true;
             }
 
             if ( hasNoBits( groundDirection, Direction::RIGHT ) ) {
-                // There is no beach and no current ground.
+                // There is no beach and no current ground to the right.
                 if ( hasBits( beachDirection, Direction::TOP_RIGHT ) ) {
                     // Top-right is beach transition and right is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 35U, false, false );
@@ -339,19 +341,20 @@ namespace
         }
 
         if ( hasBits( groundDirection, Direction::RIGHT | Direction::TOP | Direction::BOTTOM ) ) {
-            // Left is non 'groundId'.
-            // NOTICE: Initially the whole 'DIRECTION_RIGHT_COL' should have bits, but we expand this case a little as there are no tile images
-            // for cases without Direction::TOP_RIGHT or Direction::BOTTOM_RIGHT. The absence of this "corner" transition is barely noticeable.
-            // TODO:: Design tile images for these cases.
+            // There is no ground direction to the left.
+            // NOTICE: Initially the whole 'DIRECTION_RIGHT_COL' should have direction bits.
+            // We do not check TOP_RIGHT and BOTTOM_RIGHT as there are no tile images for that cases.
+            // The absence of this "corner" transition is barely noticeable.
+            // TODO: Design tile images for these cases.
 
             if ( hasBits( beachDirection, Direction::LEFT ) ) {
-                // To the left there is a beach/water.
+                // To the left there is a beach (or beach transition to the water).
                 world.GetTiles( tileId ).setTerrain( imageOffset + 8U + 16U + static_cast<uint16_t>( Rand::Get( 3 ) ), true, false );
                 return true;
             }
 
             if ( hasNoBits( groundDirection, Direction::LEFT ) ) {
-                // There is no beach and no current ground.
+                // There is no beach and no current ground to the left.
                 if ( hasBits( beachDirection, Direction::TOP_LEFT ) ) {
                     // Top-left is beach transition and left is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 35U, true, false );
@@ -369,19 +372,20 @@ namespace
         }
 
         if ( hasBits( groundDirection, Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) {
-            // Top is non 'groundId'.
-            // NOTICE: Initially the whole 'DIRECTION_BOTTOM_ROW' should have bits, but we expand this case a little as there are no tile images
-            // for cases without Direction::BOTTOM_LEFT or Direction::BOTTOM_RIGHT. The absence of this "corner" transition is barely noticeable.
-            // TODO:: Design tile images for these cases.
+            // There is no ground direction to the top.
+            // NOTICE: Initially the whole 'DIRECTION_BOTTOM_ROW' should have direction bits.
+            // We do not check BOTTOM_LEFT and BOTTOM_RIGHT as there are no tile images for that cases.
+            // The absence of this "corner" transition is barely noticeable.
+            // TODO: Design tile images for these cases.
 
             if ( hasBits( beachDirection, Direction::TOP ) ) {
-                // To the top there is a beach/water.
+                // To the top there is a beach (or beach transition to the water).
                 world.GetTiles( tileId ).setTerrain( imageOffset + 16U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, false );
                 return true;
             }
 
             if ( hasNoBits( groundDirection, Direction::TOP ) ) {
-                // There is no beach and no current ground.
+                // There is no beach and no current ground to the top.
                 if ( hasBits( beachDirection, Direction::TOP_RIGHT ) ) {
                     // Top-right is beach transition and top is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 34U, false, false );
@@ -399,19 +403,20 @@ namespace
         }
 
         if ( hasBits( groundDirection, Direction::TOP | Direction::LEFT | Direction::RIGHT ) ) {
-            // Bottom is non 'groundId'.
-            // NOTICE: Initially the whole 'DIRECTION_TOP_ROW' should have bits, but we expand this case a little as there are no tile images
-            // for cases without Direction::TOP_LEFT or Direction::TOP_RIGHT. The absence of this "corner" transition is barely noticeable.
-            // TODO:: Design tile images for these cases.
+            // There is no ground direction to the bottom.
+            // NOTICE: Initially the whole 'DIRECTION_TOP_ROW' should have direction bits.
+            // We do not check TOP_LEFT and TOP_RIGHT as there are no tile images for that cases.
+            // The absence of this "corner" transition is barely noticeable.
+            // TODO: Design tile images for these cases.
 
             if ( hasBits( beachDirection, Direction::BOTTOM ) ) {
-                // To the bottom there is a beach/water.
+                // To the bottom there is a beach (or beach transition to the water).
                 world.GetTiles( tileId ).setTerrain( imageOffset + 16U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, true );
                 return true;
             }
 
             if ( hasNoBits( groundDirection, Direction::BOTTOM ) ) {
-                // There is no beach and no current ground.
+                // There is no beach and no current ground to the bottom.
                 if ( hasBits( beachDirection, Direction::BOTTOM_RIGHT ) ) {
                     // Bottom-right is beach transition and bottom is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 34U, false, true );
@@ -429,7 +434,7 @@ namespace
         }
 
         if ( hasBits( groundDirection, Direction::RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM ) ) {
-            // Top, top-left and left tiles are non 'groundId'.
+            // There is no ground direction to the top, top-left and left tiles.
 
             if ( hasBits( beachDirection, Direction::TOP | Direction::LEFT ) ) {
                 // To the top and left there is a beach/water.
@@ -438,13 +443,14 @@ namespace
             }
 
             if ( hasNoBits( groundDirection, Direction::TOP | Direction::LEFT ) ) {
-                // There is no beach and no current ground.
+                // There is no beach and no current ground to the top and left.
+
                 if ( hasBits( beachDirection, Direction::TOP ) ) {
                     // Top is beach transition and left is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 36U, true, false );
                 }
                 else if ( hasBits( beachDirection, Direction::TOP_RIGHT ) ) {
-                    // Top-right is beach transition and ( bottom-left -> top ) is dirt transition.
+                    // Top-right is beach transition and left is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 33U, true, false );
                 }
                 else if ( hasBits( beachDirection, Direction::LEFT ) ) {
@@ -452,11 +458,11 @@ namespace
                     world.GetTiles( tileId ).setTerrain( imageOffset + 37U, true, false );
                 }
                 else if ( hasBits( beachDirection, Direction::BOTTOM_LEFT ) ) {
-                    // Bottom-left is beach transition and ( left -> top-right ) is dirt transition.
+                    // Bottom-left is beach transition and left is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 32U, true, false );
                 }
                 else {
-                    // Transition to the dirt.
+                    // Transition to the dirt to the top and left.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 4U + static_cast<uint16_t>( Rand::Get( 3 ) ), true, false );
                 }
                 return true;
@@ -464,7 +470,7 @@ namespace
         }
 
         if ( hasBits( groundDirection, Direction::LEFT | Direction::BOTTOM_LEFT | Direction::BOTTOM ) ) {
-            // Top, top-right and right tiles are non 'groundId'.
+            // There is no ground direction to the top, top-right and right tiles.
 
             if ( hasBits( beachDirection, Direction::TOP | Direction::RIGHT ) ) {
                 // To the top and right there is a beach/water.
@@ -473,25 +479,26 @@ namespace
             }
 
             if ( hasNoBits( groundDirection, Direction::TOP | Direction::RIGHT ) ) {
-                // There is no beach and no current ground.
+                // There is no beach and no current ground to the top and right.
+
                 if ( hasBits( beachDirection, Direction::TOP ) ) {
-                    // Top is beach transition and ( right -> bottom-right ) is dirt transition.
+                    // Top is beach transition and right is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 36U, false, false );
                 }
                 else if ( hasBits( beachDirection, Direction::TOP_LEFT ) ) {
-                    // Top-left is beach transition and ( top -> bottom-right ) is dirt transition.
+                    // Top-left is beach transition and right is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 33U, false, false );
                 }
                 else if ( hasBits( beachDirection, Direction::RIGHT ) ) {
-                    // Right is beach transition and ( top-left -> top ) is dirt transition.
+                    // Right is beach transition and top is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 37U, false, false );
                 }
                 else if ( hasBits( beachDirection, Direction::BOTTOM_RIGHT ) ) {
-                    // Bottom-right is beach transition and ( top-left -> right ) is dirt transition.
+                    // Bottom-right is beach transition and top is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 32U, false, false );
                 }
                 else {
-                    // Transition to the dirt.
+                    // Transition to the dirt to the top and right.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 4U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, false );
                 }
                 return true;
@@ -499,7 +506,7 @@ namespace
         }
 
         if ( hasBits( groundDirection, Direction::TOP | Direction::TOP_LEFT | Direction::LEFT ) ) {
-            // Right, bottom-right and bottom tiles are non 'groundId'.
+            // There is no ground direction to the right, bottom-right and bottom tiles.
 
             if ( hasBits( beachDirection, Direction::RIGHT | Direction::BOTTOM ) ) {
                 // To the bottom and right there is a beach/water.
@@ -508,25 +515,26 @@ namespace
             }
 
             if ( hasNoBits( groundDirection, Direction::RIGHT | Direction::BOTTOM ) ) {
-                // There is no beach and no current ground.
+                // There is no beach and no current ground to the bottom and right.
+
                 if ( hasBits( beachDirection, Direction::BOTTOM ) ) {
-                    // Bottom is beach transition and ( top-right -> bottom ) is dirt transition.
+                    // Bottom is beach transition and right is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 36U, false, true );
                 }
                 else if ( hasBits( beachDirection, Direction::BOTTOM_LEFT ) ) {
-                    // Bottom-left is beach transition and ( top-right -> bottom ) is dirt transition.
+                    // Bottom-left is beach transition and right is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 33U, false, true );
                 }
                 else if ( hasBits( beachDirection, Direction::RIGHT ) ) {
-                    // Right is beach transition and ( bottom -> bottom-left ) is dirt transition.
+                    // Right is beach transition and bottom is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 37U, false, true );
                 }
                 else if ( hasBits( beachDirection, Direction::TOP_RIGHT ) ) {
-                    // Top-right is beach transition and ( bottom -> bottom-left ) is dirt transition.
+                    // Top-right is beach transition and bottom is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 32U, false, true );
                 }
                 else {
-                    // Transition to the dirt.
+                    // Transition to the dirt to the bottom and right.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 4U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, true );
                 }
                 return true;
@@ -534,7 +542,7 @@ namespace
         }
 
         if ( hasBits( groundDirection, Direction::TOP | Direction::TOP_RIGHT | Direction::RIGHT ) ) {
-            // Left, bottom-left and bottom tiles are non 'groundId'.
+            // There is no ground direction to the left, bottom-left and bottom tiles.
 
             if ( hasBits( beachDirection, Direction::LEFT | Direction::BOTTOM ) ) {
                 // To the bottom and left there is a beach/water.
@@ -543,26 +551,27 @@ namespace
             }
 
             if ( hasNoBits( groundDirection, Direction::LEFT | Direction::BOTTOM ) ) {
-                // There is no beach and no current ground.
+                // There is no beach and no current ground to the bottom and left.
+
                 if ( hasBits( beachDirection, Direction::BOTTOM ) ) {
-                    // Bottom is beach transition and ( top-left -> left ) is dirt transition.
+                    // Bottom is beach transition and left is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 36U, true, true );
                 }
                 else if ( hasBits( beachDirection, Direction::BOTTOM_RIGHT ) ) {
-                    // Bottom-right is beach transition and ( bottom-left -> top ) is dirt transition.
+                    // Bottom-right is beach transition and left is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 33U, true, true );
                 }
                 else if ( hasBits( beachDirection, Direction::LEFT ) ) {
-                    // Left is beach transition and ( bottom -> bottom-right ) is dirt transition.
+                    // Left is beach transition and bottom is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 37U, true, true );
                 }
                 else if ( hasBits( beachDirection, Direction::TOP_LEFT ) ) {
-                    // Top-left is beach transition and ( left -> bottom-right ) is dirt transition.
+                    // Top-left is beach transition and bottom is dirt transition.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 32U, true, true );
                 }
 
                 else {
-                    // Transition to the dirt.
+                    // Transition to the dirt to the bottom and left.
                     world.GetTiles( tileId ).setTerrain( imageOffset + 4U + static_cast<uint16_t>( Rand::Get( 3 ) ), true, true );
                 }
                 return true;
@@ -571,13 +580,13 @@ namespace
 
         if ( groundDirection == ( Direction::TOP_LEFT | Direction::TOP | Direction::BOTTOM | Direction::BOTTOM_RIGHT | DIRECTION_CENTER_ROW )
              || groundDirection == ( Direction::TOP_RIGHT | Direction::TOP | Direction::BOTTOM | Direction::BOTTOM_LEFT | DIRECTION_CENTER_ROW ) ) {
-            // For these cases there is no extra tile image, but for now we can leave a tile without transition as it is not noticeable.
+            // For these cases there is no extra tile image, but for now we can leave a tile with ground without transition as it is barely noticeable.
             // TODO: Design tile images for these cases.
 
             return true;
         }
 
-        // This terrain cannot be properly connected with the nearby terrains.
+        // This terrain cannot be properly connected with the nearby terrains. There are no such ground images.
         DEBUG_LOG( DBG_DEVEL, DBG_WARN,
                    "No proper ground transition found for " << Maps::Ground::String( Maps::Ground::getGroundByImageIndex( imageOffset ) ) << " at " << tileId % world.w()
                                                             << ',' << tileId / world.w() << " (" << tileId << ").\nDirections: " << Direction::String( groundDirection ) )
@@ -590,17 +599,18 @@ namespace
         const int ground = world.GetTiles( tileId ).GetGround();
 
         if ( ground == Maps::Ground::BEACH ) {
-            // Beach tile images does not have connections with the other terrains.
+            // Beach tile images does not have transition with the other terrains.
             return true;
         }
 
-        // Check the near tile for the need of interconnection. Dirt has transition only with water and beach
+        // Check the tiles around for the need of ground transition.
+        // Dirt has transition only with water and beach and these "Beach transitions" have offsets like "Dirt transitions" for all other terrains.
         const int tileGroundDirection = ( ground == Maps::Ground::DIRT )
                                             ? ( DIRECTION_ALL - ( getGroundDirecton( tileId, Maps::Ground::WATER ) | getGroundDirecton( tileId, Maps::Ground::BEACH ) ) )
                                             : ( getGroundDirecton( tileId, ground ) | Direction::CENTER );
 
         if ( tileGroundDirection == DIRECTION_ALL ) {
-            // Current tile does not have other ground nearby.
+            // Current tile does not need a transition because there is no other terrain nearby.
             Maps::Tiles & tile = world.GetTiles( tileId );
             if ( Maps::Ground::isTerrainTransitionImage( tile.getTerrainImageIndex() ) ) {
                 // We change image with the transition to original terrain image without transition.
@@ -612,7 +622,8 @@ namespace
         switch ( ground ) {
         case Maps::Ground::WATER:
         case Maps::Ground::DIRT:
-            // Water and Dirt connects with all other terrains with the transition to the Beach ground.
+            // Water has only "Beach transition" to all other terrains.
+            // Dirt has only "Beach transition" only with Water and/or Beach.
             // TODO: Set waves on the water for 3 tiles from the ground with the wave direction to the center of the ground.
             return setTerrainBoundaries( tileGroundDirection, 0, tileId, Maps::Ground::getTerrainIageOffset( ground ) );
         case Maps::Ground::GRASS:
@@ -621,7 +632,7 @@ namespace
         case Maps::Ground::LAVA:
         case Maps::Ground::DESERT:
         case Maps::Ground::WASTELAND: {
-            // The transition to the Beach terrain is rendered when the next tile ground is Water or Beach.
+            // The transition to the Beach terrain is rendered when the near tile ground is Water or Beach.
             const int beachDirection = getGroundDirecton( tileId, Maps::Ground::WATER ) | getGroundDirecton( tileId, Maps::Ground::BEACH );
 
             return setTerrainBoundaries( tileGroundDirection, beachDirection, tileId, Maps::Ground::getTerrainIageOffset( ground ) );
@@ -637,25 +648,29 @@ namespace
     {
         for ( int32_t tileId = tileStart; tileId <= tileEnd; tileId += tileStep ) {
             if ( updateTerrainTransitionOnTile( tileId ) ) {
-                // The terrain transition was correctly set or it was not needed.
+                // The terrain transition was correctly set or transition was not needed.
                 continue;
             }
 
             // Try to change the ground type to one of the others.
             // TODO: Change this algorithm to a more proper one. E.g. remember the previous ground and try to UNDO it here.
-            std::vector<int> newGrounds;
             const int groundOnTile = world.GetTiles( tileId ).GetGround();
-
-            if ( groundOnTile != newGroundId ) {
-                newGrounds.push_back( newGroundId );
-            }
 
             DEBUG_LOG( DBG_DEVEL, DBG_WARN,
                        "Ground " << Maps::Ground::String( groundOnTile ) << " at " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId
                                  << ") should be replaced by some other one." )
 
+            std::vector<int> newGrounds;
+
+            if ( groundOnTile != newGroundId ) {
+                // Outside of filled area we can try to place the ground of this area.
+                newGrounds.push_back( newGroundId );
+            }
+
             bool isWater = ( groundOnTile == Maps::Ground::WATER );
             const Directions & around = Direction::All();
+
+            // Get ground types from all tiles around to try them.
             for ( const int direction : around ) {
                 if ( Maps::isValidDirection( tileId, direction ) ) {
                     const int32_t ground = world.GetTiles( Maps::GetDirectionIndex( tileId, direction ) ).GetGround();
@@ -668,13 +683,13 @@ namespace
             }
 
             if ( isWater ) {
-                // As the last chance we can try to place Beach to make a path on the water.
+                // As a last chance, we can try to place Beach to make a path on the water because Beach doesn't need to transition to the water.
                 if ( std::find( newGrounds.begin(), newGrounds.end(), Maps::Ground::BEACH ) == newGrounds.end() ) {
                     newGrounds.push_back( Maps::Ground::BEACH );
                 }
             }
             else {
-                // As the last chance we can try to connect terrains by placing Dirt.
+                // As a last chance, we can try to connect terrains by placing Dirt, because Dirt doesn't need to transition to other non-water terrains.
                 if ( std::find( newGrounds.begin(), newGrounds.end(), Maps::Ground::DIRT ) == newGrounds.end() ) {
                     newGrounds.push_back( Maps::Ground::DIRT );
                 }
@@ -687,23 +702,29 @@ namespace
                            "Trying ground " << Maps::Ground::String( newGround ) << " at " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId << ")." )
 
                 world.GetTiles( tileId ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( newGround ), false, false );
-                if ( updateTerrainTransitionOnTile( tileId ) ) {
-                    DEBUG_LOG( DBG_DEVEL, DBG_WARN,
-                               "Ground " << Maps::Ground::String( newGround ) << " was set to " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId
-                                         << ")." )
 
-                    for ( const int direction : around ) {
-                        if ( Maps::isValidDirection( tileId, direction ) ) {
-                            updateTerrainTransitionOnTile( Maps::GetDirectionIndex( tileId, direction ) );
-                        }
-                    }
-
-                    needRevert = false;
-
-                    break;
+                if ( !updateTerrainTransitionOnTile( tileId ) ) {
+                    // The ground image has not been set properly. We move on to the next type of the ground.
+                    continue;
                 }
+
+                DEBUG_LOG( DBG_DEVEL, DBG_WARN,
+                           "Ground " << Maps::Ground::String( newGround ) << " was properly set to " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId
+                                     << ")." )
+
+                // The ground on the tile has been changed, so we need to update the transitions on all the tiles around.
+                for ( const int direction : around ) {
+                    if ( Maps::isValidDirection( tileId, direction ) ) {
+                        updateTerrainTransitionOnTile( Maps::GetDirectionIndex( tileId, direction ) );
+                    }
+                }
+
+                needRevert = false;
+
+                break;
             }
 
+            // If all ground replacements fail we revert the ground change to the initial ground type.
             if ( needRevert && !newGrounds.empty() ) {
                 world.GetTiles( tileId ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( groundOnTile ), false, false );
                 DEBUG_LOG( DBG_DEVEL, DBG_WARN,

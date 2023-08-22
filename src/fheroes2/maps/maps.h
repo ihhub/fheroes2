@@ -54,6 +54,7 @@ namespace Maps
 
     int GetDirection( int from, int to );
     int32_t GetDirectionIndex( int32_t from, int vector );
+    // Returns the nearest point on the map to the current tile, located in the given direction vector.
     fheroes2::Point getDirectionPoint( const fheroes2::Point & from, int vector );
     bool isValidDirection( int32_t from, int vector );
 

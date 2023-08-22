@@ -60,7 +60,6 @@ uint16_t Maps::Ground::getTerrainIageOffset( const int groundId )
 
 int Maps::Ground::getGroundByImageIndex( const uint16_t terrainImageIndex )
 {
-    // list grounds from GROUND32.TIL
     if ( 30U > terrainImageIndex ) {
         return Maps::Ground::WATER;
     }
