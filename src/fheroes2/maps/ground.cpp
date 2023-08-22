@@ -30,7 +30,7 @@
 #include "skill.h"
 #include "translations.h"
 
-uint16_t Maps::Ground::getTerrainIageOffset( const int groundId )
+uint16_t Maps::Ground::getTerrainStartImageIndex( const int groundId )
 {
     switch ( groundId ) {
     case WATER:
@@ -99,14 +99,14 @@ bool Maps::Ground::isTerrainTransitionImage( const uint16_t terrainImageIndex )
     switch ( groundId ) {
     case WATER:
     case DIRT:
-        return terrainImageIndex < 16U + getTerrainIageOffset( groundId );
+        return terrainImageIndex < 16U + getTerrainStartImageIndex( groundId );
     case GRASS:
     case SNOW:
     case SWAMP:
     case LAVA:
     case DESERT:
     case WASTELAND:
-        return terrainImageIndex < 38U + getTerrainIageOffset( groundId );
+        return terrainImageIndex < 38U + getTerrainStartImageIndex( groundId );
     case BEACH:
         return false;
     default:
@@ -220,7 +220,7 @@ uint32_t Maps::Ground::GetPenalty( const Maps::Tiles & tile, uint32_t level )
 uint16_t Maps::Ground::getRandomTerrainImageIndex( const int groundId )
 {
     if ( groundId == WATER ) {
-        return static_cast<uint16_t>( Rand::Get( 3 ) ) + 16U + getTerrainIageOffset( groundId );
+        return static_cast<uint16_t>( Rand::Get( 3 ) ) + 16U + getTerrainStartImageIndex( groundId );
     }
 
     // Terrain image main contain an extra image (rock, flowers, crack, etc.).
@@ -229,17 +229,17 @@ uint16_t Maps::Ground::getRandomTerrainImageIndex( const int groundId )
         switch ( groundId ) {
         case GRASS:
         case SWAMP:
-            return static_cast<uint16_t>( Rand::Get( 15 ) ) + 46U + getTerrainIageOffset( groundId );
+            return static_cast<uint16_t>( Rand::Get( 15 ) ) + 46U + getTerrainStartImageIndex( groundId );
         case SNOW:
         case WASTELAND:
         case LAVA:
-            return static_cast<uint16_t>( Rand::Get( 7 ) ) + 46U + getTerrainIageOffset( groundId );
+            return static_cast<uint16_t>( Rand::Get( 7 ) ) + 46U + getTerrainStartImageIndex( groundId );
         case DESERT:
-            return static_cast<uint16_t>( Rand::Get( 12 ) ) + 46U + getTerrainIageOffset( groundId );
+            return static_cast<uint16_t>( Rand::Get( 12 ) ) + 46U + getTerrainStartImageIndex( groundId );
         case DIRT:
-            return static_cast<uint16_t>( Rand::Get( 15 ) ) + 24U + getTerrainIageOffset( groundId );
+            return static_cast<uint16_t>( Rand::Get( 15 ) ) + 24U + getTerrainStartImageIndex( groundId );
         case BEACH:
-            return static_cast<uint16_t>( Rand::Get( 8 ) ) + 8U + getTerrainIageOffset( groundId );
+            return static_cast<uint16_t>( Rand::Get( 8 ) ) + 8U + getTerrainStartImageIndex( groundId );
         default:
             // Have you added a new ground? Add the logic above!
             assert( 0 );
@@ -255,11 +255,11 @@ uint16_t Maps::Ground::getRandomTerrainImageIndex( const int groundId )
     case LAVA:
     case DESERT:
     case WASTELAND:
-        return indexOffset + 38U + getTerrainIageOffset( groundId );
+        return indexOffset + 38U + getTerrainStartImageIndex( groundId );
     case DIRT:
-        return indexOffset + 16U + getTerrainIageOffset( groundId );
+        return indexOffset + 16U + getTerrainStartImageIndex( groundId );
     case BEACH:
-        return indexOffset + getTerrainIageOffset( groundId );
+        return indexOffset + getTerrainStartImageIndex( groundId );
     default:
         // Have you added a new ground? Add the logic above!
         assert( 0 );

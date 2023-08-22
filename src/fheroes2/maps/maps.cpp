@@ -167,9 +167,9 @@ int Maps::GetDirection( int from, int to )
     return Direction::UNKNOWN;
 }
 
-int32_t Maps::GetDirectionIndex( int32_t from, int vector )
+int32_t Maps::GetDirectionIndex( const int32_t from, const int direction )
 {
-    switch ( vector ) {
+    switch ( direction ) {
     case Direction::TOP:
         return from - world.w();
     case Direction::TOP_RIGHT:
@@ -193,9 +193,9 @@ int32_t Maps::GetDirectionIndex( int32_t from, int vector )
     return -1;
 }
 
-fheroes2::Point Maps::getDirectionPoint( const fheroes2::Point & from, int vector )
+fheroes2::Point Maps::getDirectionPoint( const fheroes2::Point & from, const int direction )
 {
-    switch ( vector ) {
+    switch ( direction ) {
     case Direction::TOP:
         return { from.x, from.y - 1 };
     case Direction::TOP_RIGHT:
@@ -215,6 +215,8 @@ fheroes2::Point Maps::getDirectionPoint( const fheroes2::Point & from, int vecto
     case Direction::CENTER:
         return from;
     default:
+        // This is not a valid direction.
+        assert( 0 );
         break;
     }
 

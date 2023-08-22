@@ -47,7 +47,7 @@ namespace Maps
         };
 
         // Returns index of first ground image in GROUND32.TIL
-        uint16_t getTerrainIageOffset( const int groundId );
+        uint16_t getTerrainStartImageIndex( const int groundId );
         // Returns ground index by ground image index in GROUND32.TIL
         int getGroundByImageIndex( const uint16_t terrainImageIndex );
         // Returns true if ground image index corresponds to image with transition to other ground.
