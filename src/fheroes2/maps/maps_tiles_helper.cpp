@@ -671,18 +671,16 @@ namespace
             }
 
             bool isWater = ( groundOnTile == Maps::Ground::WATER );
-            const Directions & around = Direction::All();
+            const Maps::Indexes around = Maps::getAroundIndexes( tileId );
 
             // Get ground types from all tiles around to try them.
-            for ( const int direction : around ) {
-                if ( Maps::isValidDirection( tileId, direction ) ) {
-                    const int32_t ground = world.GetTiles( Maps::GetDirectionIndex( tileId, direction ) ).GetGround();
-                    if ( ground != groundOnTile && std::find( newGrounds.begin(), newGrounds.end(), ground ) == newGrounds.end() ) {
-                        newGrounds.push_back( ground );
-                    }
-
-                    isWater = isWater || ( ground == Maps::Ground::WATER );
+            for ( const int32_t index : around ) {
+                const int32_t ground = world.GetTiles( index ).GetGround();
+                if ( ground != groundOnTile && std::find( newGrounds.begin(), newGrounds.end(), ground ) == newGrounds.end() ) {
+                    newGrounds.push_back( ground );
                 }
+
+                isWater = isWater || ( ground == Maps::Ground::WATER );
             }
 
             if ( isWater ) {
@@ -716,10 +714,8 @@ namespace
                                      << ")." )
 
                 // The ground on the tile has been changed, so we need to update the transitions on all the tiles around.
-                for ( const int direction : around ) {
-                    if ( Maps::isValidDirection( tileId, direction ) ) {
-                        updateTerrainTransitionOnTile( Maps::GetDirectionIndex( tileId, direction ) );
-                    }
+                for ( const int32_t index : around ) {
+                    updateTerrainTransitionOnTile( index );
                 }
 
                 needRevert = false;
