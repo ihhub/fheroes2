@@ -24,17 +24,17 @@ RestartIfNeededByRun=no
 [Files]
 Source: "{#BuildDir}\{#AppName}.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BuildDir}\*.dll"; DestDir: "{app}"
+Source: "..\..\.vcredist\vcredist.exe"; DestDir: "{tmp}"
+Source: "..\..\LICENSE"; DestDir: "{app}"
+Source: "..\..\changelog.txt"; DestDir: "{app}"
 Source: "..\..\docs\README.txt"; DestDir: "{app}"
+Source: "..\..\files\data\*.h2d"; DestDir: "{app}\files\data"
+Source: "..\..\files\lang\*.mo"; DestDir: "{app}\files\lang"
+Source: "..\..\files\soundfonts\*.*"; DestDir: "{app}\files\soundfonts"
 Source: "..\demo\*.bat"; DestDir: "{app}"
 Source: "..\demo\*.ps1"; DestDir: "{app}"
 Source: "..\homm2\*.bat"; DestDir: "{app}"
 Source: "..\homm2\*.ps1"; DestDir: "{app}"
-Source: "..\..\changelog.txt"; DestDir: "{app}"
-Source: "..\..\LICENSE"; DestDir: "{app}"
-Source: "..\..\files\lang\*.mo"; DestDir: "{app}\files\lang"
-Source: "..\..\files\data\*.h2d"; DestDir: "{app}\files\data"
-Source: "..\..\files\soundfonts\*.*"; DestDir: "{app}\files\soundfonts"
-Source: "..\..\.vcredist\vcredist.exe"; DestDir: "{tmp}"
 
 [Tasks]
 Name: desktopicon; Description: "{cm:DesktopIconTaskDescription}"
