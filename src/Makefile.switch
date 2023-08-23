@@ -28,13 +28,5 @@ CCFLAGS_FH2 := -DTARGET_NINTENDO_SWITCH
 
 LIBS := $(LIBS) -lvorbisidec -lmodplug -lmpg123 -lopusfile -lopus -logg
 
-ifdef FHEROES2_WITH_IMAGE
-LIBS := $(LIBS) -ljpeg -lwebp
-endif
-
 # Prevent sdl2-config --cflags from running once again in the main Makefile
 SDL_FLAGS :=
-
-ifdef FHEROES2_WITH_IMAGE
-SDL_FLAGS := $(SDL_FLAGS) $(shell libpng-config --cflags)
-endif
