@@ -37,7 +37,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 #
 option(USE_SYSTEM_LIBSMACKER "Use system libsmacker instead of the bundled version" OFF)
 option(ENABLE_STRICT_COMPILATION "Enable strict compilation mode (turns warnings into errors)" OFF)
-option(ENABLE_IMAGE "Enable SDL2 Image support (requires libpng)" ON)
+option(ENABLE_IMAGE "Enable SDL_image support (requires libpng)" ON)
 option(ENABLE_TOOLS "Enable additional tools" OFF)
 
 # Available only on macOS
@@ -50,7 +50,7 @@ set(USE_SDL_VERSION SDL2 CACHE STRING "Version of the SDL library used")
 set(FHEROES2_DATA ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME} CACHE STRING "Path to the fheroes2 data directory (relative to CMAKE_INSTALL_PREFIX)")
 
 # For ComboBox in CMake GUI
-set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS SDL SDL2)
+set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS SDL2)
 
 #
 # Library & feature detection
