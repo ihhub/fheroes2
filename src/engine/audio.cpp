@@ -42,7 +42,6 @@
 #include <SDL_mixer.h>
 #include <SDL_rwops.h>
 #include <SDL_stdinc.h>
-#include <SDL_version.h>
 
 #include "core.h"
 #include "dir.h"

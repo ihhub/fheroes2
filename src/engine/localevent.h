@@ -34,7 +34,6 @@
 #include <SDL_events.h>
 #include <SDL_gamecontroller.h>
 #include <SDL_touch.h>
-#include <SDL_version.h>
 
 #include "math_base.h"
 #include "timing.h"

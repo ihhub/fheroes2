@@ -33,7 +33,6 @@
 #include <SDL_events.h>
 #include <SDL_main.h> // IWYU pragma: keep
 #include <SDL_mouse.h>
-#include <SDL_version.h>
 
 #if defined( _WIN32 )
 #include <cassert>

@@ -24,7 +24,6 @@
 
 #include <SDL.h>
 #include <SDL_error.h>
-#include <SDL_version.h>
 
 #include "audio.h"
 #include "core.h"

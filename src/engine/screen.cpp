@@ -37,7 +37,6 @@
 #include <SDL_render.h>
 #include <SDL_stdinc.h>
 #include <SDL_surface.h>
-#include <SDL_version.h>
 #include <SDL_video.h>
 
 #if defined( TARGET_PS_VITA )
