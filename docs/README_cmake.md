@@ -5,13 +5,13 @@ Building with CMake
 [**fheroes2**](README.md) can be built with CMake buildsystem. First, you need to install dependencies.
 For Linux and macOS follow to instructions as described above.
 
-Next, you can build project with following commands:
+Next, you can configure the project with following commands:
 
 ```shell
-cmake -B build -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON
+cmake -B build
 ```
 
-After configuration let's build project:
+After configuration let's build the project:
 
 ```shell
 cmake --build build
@@ -45,14 +45,14 @@ After following command Visual Studio automagically will find all required depen
 .\vcpkg\vcpkg integrate install
 ```
 
-Now you ready to compile project. cd to fheroes2 directory and run `cmake` command (note for `-DCMAKE_TOOLCHAIN_FILE` and
+Now you are ready to configure the project. cd to fheroes2 directory and run `cmake` command (note for `-DCMAKE_TOOLCHAIN_FILE` and
 `-DVCPKG_TARGET_TRIPLET` options):
 
 ```shell
-cmake -B build -DCMAKE_TOOLCHAIN_FILE="C:\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON -DENABLE_MIXER=ON
+cmake -B build -DCMAKE_TOOLCHAIN_FILE="C:\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
 ```
 
-After configuration let's build project:
+After configuration let's build the project:
 
 ```shell
 cmake --build build --config Release
