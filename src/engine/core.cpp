@@ -78,11 +78,7 @@ namespace
         case fheroes2::SystemInitializationComponent::Video:
             return SDL_INIT_VIDEO;
         case fheroes2::SystemInitializationComponent::GameController:
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
             return SDL_INIT_GAMECONTROLLER;
-#else
-            return 0;
-#endif
         default:
             // Did you add a new component?
             assert( 0 );
@@ -115,19 +111,11 @@ namespace
             Audio::Init();
         }
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
         if ( components.count( fheroes2::SystemInitializationComponent::GameController ) > 0 ) {
             LocalEvent::Get().OpenController();
         }
 
         LocalEvent::Get().OpenTouchpad();
-#endif
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#else
-        SDL_EnableKeyRepeat( SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL );
-#endif
-
         LocalEvent::setEventProcessingStates();
 
         return true;
@@ -135,11 +123,9 @@ namespace
 
     void freeCoreInternally()
     {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
         if ( fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::GameController ) ) {
             LocalEvent::Get().CloseController();
         }
-#endif
 
         if ( fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::Audio ) ) {
             Audio::Quit();

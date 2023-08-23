@@ -36,14 +36,7 @@
 #include <SDL_version.h>
 
 #if defined( _WIN32 )
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #include <cassert>
-#else
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#endif
-
 #endif
 
 #include "agg.h"
@@ -235,22 +228,10 @@ namespace
     };
 }
 
-// SDL1: this app is not linked against the SDLmain.lib, implement our own WinMain
-#if defined( _WIN32 ) && !SDL_VERSION_ATLEAST( 2, 0, 0 )
-#undef main
-
-int main( int argc, char ** argv );
-
-int WINAPI WinMain( HINSTANCE /* hInstance */, HINSTANCE /* hPrevInstance */, LPSTR /* pCmdLine */, int /* nCmdShow */ )
-{
-    return main( __argc, __argv );
-}
-#endif
-
 int main( int argc, char ** argv )
 {
 // SDL2main.lib converts argv to UTF-8, but this application expects ANSI, use the original argv
-#if defined( _WIN32 ) && SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if defined( _WIN32 )
     assert( argc == __argc );
 
     argv = __argv;

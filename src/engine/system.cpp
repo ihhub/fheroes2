@@ -59,7 +59,7 @@
 
 #include <SDL_version.h>
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 ) && defined( ANDROID )
+#if defined( ANDROID )
 #include <SDL_error.h>
 #include <SDL_system.h>
 #endif
