@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "core.h"
+
 #include <cassert>
 #include <cstdint>
 #include <stdexcept>
@@ -26,7 +28,6 @@
 #include <SDL_error.h>
 
 #include "audio.h"
-#include "core.h"
 #include "localevent.h"
 #include "logging.h"
 
