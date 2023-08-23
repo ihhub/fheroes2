@@ -2391,9 +2391,8 @@ msgstr "Vis helt"
 msgid "The above spells are available here."
 msgstr "Med nok visdom kan alle disse besværgelser læres af dine helte."
 
-#, fuzzy
 msgid "The spells the hero can learn have been added to their book."
-msgstr "De besværgelser som den besøgende helt kan lære, er blevet tilføjet din magibog."
+msgstr "De besværgelser, som den besøgende helt kan lære, er blevet tilføjet din magibog."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "En generøs mængde drikkepenge får krokarlen til at dele dette rygte:"
