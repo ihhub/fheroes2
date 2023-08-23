@@ -30,6 +30,9 @@
 #include <type_traits>
 #include <utility>
 
+#include <difficulty.h>
+#include <game.h>
+
 #include "army.h"
 #include "artifact.h"
 #include "castle.h"
@@ -1224,7 +1227,9 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
 
 std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & hero, int targetIndex ) const
 {
-    if ( hero.GetIndex() == targetIndex ) {
+    uint32_t difficultyLimit = Difficulty::GetDimensionDoorLimit( Game::getDifficulty() );
+    const uint32_t spellsUsedThisTurn = hero.getDimensionDoorUses();
+    if ( hero.GetIndex() == targetIndex || spellsUsedThisTurn >= difficultyLimit ) {
         return {};
     }
 
@@ -1247,8 +1252,10 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
         currentSpellPoints -= static_cast<uint32_t>( hero.GetMaxSpellPoints() * _spellPointsReserveRatio );
     }
 
+    difficultyLimit -= spellsUsedThisTurn;
     const uint32_t movementCost = std::max( 1U, dimensionDoor.movePoints() );
-    const uint32_t maxCasts = std::min( currentSpellPoints / std::max( 1U, dimensionDoor.spellPoints( &hero ) ), hero.GetMovePoints() / movementCost );
+    const uint32_t spellcastsPossible = std::min( currentSpellPoints / std::max( 1U, dimensionDoor.spellPoints( &hero ) ), hero.GetMovePoints() / movementCost );
+    const uint32_t maxCasts = std::min( spellcastsPossible, difficultyLimit );
 
     // Have to explicitly call GetObject( false ) since hero might be standing on it
     if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
