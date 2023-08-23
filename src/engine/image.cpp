@@ -362,7 +362,7 @@ namespace
                 r = ( id % 64 );
                 g = ( id >> 6 ) % 64;
                 b = ( id >> 12 );
-                int32_t minDistance = 3 * 255 * 255;
+                int32_t minDistance = INT32_MAX;
                 uint32_t bestPos = 0;
 
                 const uint8_t * correctorX = transformTable + 256 * 15;
@@ -370,13 +370,15 @@ namespace
                 for ( uint32_t i = 0; i < 256; ++i, ++correctorX ) {
                     const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *correctorX ) * 3;
 
+                    // Use "Redmean" color distance calculation (https://www.compuphase.com/cmetric.htm).
+                    const int32_t meanRed = ( static_cast<int32_t>( *palette ) + static_cast<int32_t>( r ) ) / 2;
                     const int32_t offsetRed = static_cast<int32_t>( *palette ) - static_cast<int32_t>( r );
                     ++palette;
                     const int32_t offsetGreen = static_cast<int32_t>( *palette ) - static_cast<int32_t>( g );
                     ++palette;
                     const int32_t offsetBlue = static_cast<int32_t>( *palette ) - static_cast<int32_t>( b );
                     ++palette;
-                    const int32_t distance = offsetRed * offsetRed + offsetGreen * offsetGreen + offsetBlue * offsetBlue;
+                    const int32_t distance = ( 512 + meanRed ) * offsetRed * offsetRed + 1024 * offsetGreen * offsetGreen + ( 767 - meanRed ) * offsetBlue * offsetBlue;
                     if ( minDistance > distance ) {
                         minDistance = distance;
                         bestPos = *correctorX;
