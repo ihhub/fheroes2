@@ -7572,16 +7572,16 @@ msgid "Mine"
 msgstr "Mine"
 
 msgid "Burma shave."
-msgstr "Barbercreme."
+msgstr ""
 
 msgid "Next sign 50 miles."
-msgstr "80 km til næste skilt."
+msgstr ""
 
 msgid "See Rock City."
-msgstr "Se Stenby."
+msgstr ""
 
 msgid "This space for rent."
-msgstr "Denne plads er til leje."
+msgstr ""
 
 msgid "No object"
 msgstr "Intet objekt"
