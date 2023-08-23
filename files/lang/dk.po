@@ -2392,7 +2392,7 @@ msgid "The above spells are available here."
 msgstr "Med nok visdom kan alle disse besværgelser læres af dine helte."
 
 msgid "The spells the hero can learn have been added to their book."
-msgstr "De besværgelser, den besøgende helt kan lære, er føjet til magibogen."
+msgstr "De besværgelser, den besøgende helt kan lære, er nu i magibogen."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "En generøs mængde drikkepenge får krokarlen til at dele dette rygte:"
