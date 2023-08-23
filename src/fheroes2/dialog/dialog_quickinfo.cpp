@@ -851,7 +851,7 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
 
     if ( showFullInfo ) {
         // attack
-        text.set( _( "Attack:" ), smallWhite );
+        text.set( _( "Attack" ) + std::string( ":" ), smallWhite );
         dst_pt.x = cur_rt.x + 10;
         dst_pt.y += heroPortraitFrame.height();
         text.draw( dst_pt.x, dst_pt.y, display );
@@ -861,7 +861,7 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
         text.draw( dst_pt.x, dst_pt.y, display );
 
         // defense
-        text.set( _( "Defense:" ), smallWhite );
+        text.set( _( "Defense" ) + std::string( ":" ), smallWhite );
         dst_pt.x = cur_rt.x + 10;
         dst_pt.y += statRow;
         text.draw( dst_pt.x, dst_pt.y, display );
@@ -871,7 +871,7 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
         text.draw( dst_pt.x, dst_pt.y, display );
 
         // power
-        text.set( _( "Spell Power:" ), smallWhite );
+        text.set( _( "Spell Power" ) + std::string( ":" ), smallWhite );
         dst_pt.x = cur_rt.x + 10;
         dst_pt.y += statRow;
         text.draw( dst_pt.x, dst_pt.y, display );
@@ -881,7 +881,7 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
         text.draw( dst_pt.x, dst_pt.y, display );
 
         // knowledge
-        text.set( _( "Knowledge:" ), smallWhite );
+        text.set( _( "Knowledge" ) + std::string( ":" ), smallWhite );
         dst_pt.x = cur_rt.x + 10;
         dst_pt.y += statRow;
         text.draw( dst_pt.x, dst_pt.y, display );
@@ -891,7 +891,7 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
         text.draw( dst_pt.x, dst_pt.y, display );
 
         // spell point
-        text.set( _( "Spell Points:" ), smallWhite );
+        text.set( _( "Spell Points" ) + std::string( ":" ), smallWhite );
         dst_pt.x = cur_rt.x + 10;
         dst_pt.y += statRow;
         text.draw( dst_pt.x, dst_pt.y, display );
