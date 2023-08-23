@@ -30,6 +30,8 @@ set(CMAKE_CXX_STANDARD 17)
 include(CMakeDependentOption)
 include(GNUInstallDirs)
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 #
 # Compile-time options
 #
