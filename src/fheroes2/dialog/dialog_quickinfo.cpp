@@ -174,7 +174,7 @@ namespace
         const Troop & troop = getTroopFromTile( tile );
 
         if ( troop.isValid() ) {
-            str.append( "\n \n" );
+            str.append( "\n\n" );
 
             if ( isOwned ) {
                 str.append( _( "guarded by %{count} %{monster}" ) );
@@ -221,7 +221,7 @@ namespace
         std::string str = MP2::StringObject( tile.GetObject( false ) );
 
         if ( isOwned ) {
-            str += "\n \n";
+            str += "\n\n";
 
             const Troop & troop = getTroopFromTile( tile );
 
@@ -246,7 +246,7 @@ namespace
         if ( isVisited ) {
             const Spell & spell = getSpellFromTile( tile );
 
-            str.append( "\n(" );
+            str.append( "\n\n(" );
             str.append( spell.GetName() );
             str += ')';
 
@@ -269,23 +269,24 @@ namespace
         if ( isVisited ) {
             const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( tile );
 
-            str.append( "\n(" );
+            str.append( "\n\n(" );
             str.append( Skill::Secondary::String( skill.Skill() ) );
             str += ')';
 
             const Heroes * hero = Interface::GetFocusHeroes();
 
             if ( hero ) {
+                str.append( "\n(" );
+
                 if ( hero->HasSecondarySkill( skill.Skill() ) ) {
-                    str.append( "\n(" );
                     str.append( _( "already knows this skill" ) );
-                    str += ')';
+                    
                 }
                 else if ( hero->HasMaxSecondarySkill() ) {
-                    str.append( "\n(" );
                     str.append( _( "already has max skills" ) );
-                    str += ')';
                 }
+
+                str += ')';
             }
         }
 
@@ -297,7 +298,7 @@ namespace
         std::string str = MP2::StringObject( tile.GetObject( false ) );
         const Heroes * hero = Interface::GetFocusHeroes();
         if ( hero ) {
-            str.append( "\n \n" );
+            str.append( "\n\n" );
             str.append( hero->isVisited( tile ) ? _( "(already visited)" ) : _( "(not visited)" ) );
         }
 
@@ -309,7 +310,7 @@ namespace
         std::string str = MP2::StringObject( objectType );
         const Heroes * hero = Interface::GetFocusHeroes();
         if ( hero ) {
-            str.append( "\n \n" );
+            str.append( "\n\n" );
             str.append( hero->isObjectTypeVisited( objectType ) ? _( "(already visited)" ) : _( "(not visited)" ) );
         }
 
@@ -320,7 +321,7 @@ namespace
     {
         std::string str = MP2::StringObject( objectType );
 
-        str.append( "\n \n" );
+        str.append( "\n\n" );
         str.append( isVisited ? _( "(already visited)" ) : _( "(not visited)" ) );
 
         return str;
@@ -341,7 +342,7 @@ namespace
         StringReplace( str, "%{color}", fheroes2::getTentColorName( tentColor ) );
 
         if ( kingdom.IsVisitTravelersTent( tentColor ) ) {
-            str.append( "\n \n" );
+            str.append( "\n\n" );
             str.append( _( "(already visited)" ) );
         }
 
@@ -364,7 +365,7 @@ namespace
             str = Maps::Ground::String( tile.GetGround() );
         }
 
-        str.append( "\n \n" );
+        str.append( "\n\n" );
 
         // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
         if ( tile.GoodForUltimateArtifact() || world.GetUltimateArtifact().getPosition() == tile.GetIndex() ) {
