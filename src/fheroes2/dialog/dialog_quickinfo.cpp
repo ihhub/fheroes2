@@ -280,7 +280,6 @@ namespace
 
                 if ( hero->HasSecondarySkill( skill.Skill() ) ) {
                     str.append( _( "already knows this skill" ) );
-                    
                 }
                 else if ( hero->HasMaxSecondarySkill() ) {
                     str.append( _( "already has max skills" ) );
