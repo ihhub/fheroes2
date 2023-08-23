@@ -117,7 +117,7 @@ Follow the [**instructions below**](#macos-resources) to gather resources necess
   method (using [**MacPorts**](#macports) or [**Homebrew**](#homebrew-mac)), or
   [**build the project from source**](DEVELOPMENT.md#macos-and-linux).
 
-* After downloading the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl_2.sh` from
+* After downloading the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl2.sh` from
   the `script/macos` subdirectory. This will install the SDL libraries required to run the game.
 
 Follow the [**instructions below**](#macos-resources) to gather resources necessary for fheroes2 to function as expected.
@@ -278,7 +278,7 @@ makepkg -si
 * After downloading the ZIP archive, extract it to a suitable directory of your choice. Then you will need to install the SDL libraries
   required to run the game. The installation procedure depends on the Linux distribution you are using:
 
-  * **Debian-based**: run the script `install_sdl_2.sh` from the `script/linux` subdirectory.
+  * **Debian-based**: run the script `install_sdl2.sh` from the `script/linux` subdirectory.
 
   * **Pacman-based (e.g. Arch Linux)**: run the following command: `sudo pacman -S sdl2 sdl2_mixer`.
 
@@ -329,20 +329,15 @@ makepkg -si
 
 You can download the precompiled binaries of the latest commit (snapshot) for
 **Windows** (
-[**x64 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x64-SDL2),
-[**x64 SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x64-SDL1),
-[**x86 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x86-SDL2) and
-[**x86 SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x86-SDL1)
+[**x64 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x64-SDL2) and
+[**x86 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x86-SDL2)
 ),
 **macOS x86-64** (
-[**SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-osx-sdl2_dev) and
-[**SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-osx-sdl1_dev)
+[**SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-osx-sdl2_dev)
 ),
 **Ubuntu** (
-[**x86-64 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl2_dev),
-[**x86-64 SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl1_dev),
-[**ARM64 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-arm-sdl2_dev) and
-[**ARM64 SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-arm-sdl1_dev)
+[**x86-64 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl2_dev) and
+[**ARM64 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-arm-sdl2_dev)
 ),
 [**Android**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-android),
 [**PlayStation Vita**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-psv-sdl2_dev) and

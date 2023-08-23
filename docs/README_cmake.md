@@ -8,10 +8,6 @@ For Linux and macOS follow to instructions as described above.
 Next, you can build project with following commands:
 
 ```shell
-# SDL1
-cmake -B build -DUSE_SDL_VERSION=SDL -DENABLE_IMAGE=ON
-# OR
-# SDL2
 cmake -B build -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON
 ```
 
@@ -53,7 +49,6 @@ Now you ready to compile project. cd to fheroes2 directory and run `cmake` comma
 `-DVCPKG_TARGET_TRIPLET` options):
 
 ```shell
-# SDL2
 cmake -B build -DCMAKE_TOOLCHAIN_FILE="C:\vcpkg\scripts\buildsystems\vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON -DENABLE_MIXER=ON
 ```
 
