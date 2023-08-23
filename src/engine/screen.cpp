@@ -136,7 +136,6 @@ namespace
             }
         }
 
-        // Scaling is available only on SDL 2.
         std::set<fheroes2::ResolutionInfo> scaledResolutions;
 
         {
@@ -544,7 +543,6 @@ namespace
         RenderCursor()
             : _cursor( nullptr )
         {
-            // SDL 2 handles mouse properly without any emulation.
             _emulation = false;
 
             const int returnCode = SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
