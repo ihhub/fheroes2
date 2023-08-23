@@ -371,7 +371,7 @@ namespace
                 for ( uint32_t i = 0; i < 256; ++i, ++correctorX ) {
                     const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *correctorX ) * 3;
 
-                    const int32_t sumRed = ( static_cast<int32_t>( *palette ) + r );
+                    const int32_t sumRed = static_cast<int32_t>( *palette ) + r;
                     const int32_t offsetRed = static_cast<int32_t>( *palette ) - r;
                     ++palette;
                     const int32_t offsetGreen = static_cast<int32_t>( *palette ) - g;
