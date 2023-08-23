@@ -133,11 +133,7 @@ endif
 
 # SDL_FLAGS can already be defined in a platform-specific Makefile
 ifeq ($(origin SDL_FLAGS),undefined)
-ifdef FHEROES2_WITH_SDL1
-SDL_FLAGS := $(shell sdl-config --cflags)
-else
 SDL_FLAGS := $(shell sdl2-config --cflags)
-endif
 
 ifdef FHEROES2_WITH_IMAGE
 SDL_FLAGS := $(SDL_FLAGS) $(shell libpng-config --cflags)
@@ -146,22 +142,12 @@ endif
 
 # SDL_LIBS can already be defined in a platform-specific Makefile
 ifeq ($(origin SDL_LIBS),undefined)
-ifdef FHEROES2_WITH_SDL1
-SDL_LIBS := $(shell sdl-config --libs)
-# Insert -lSDL_mixer before -lSDL, but after any previous -L/path/to/lib entries
-SDL_LIBS := $(subst $(firstword $(filter -l%,$(SDL_LIBS))),-lSDL_mixer $(firstword $(filter -l%,$(SDL_LIBS))),$(SDL_LIBS))
-
-ifdef FHEROES2_WITH_IMAGE
-SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs)
-endif
-else
 SDL_LIBS := $(shell sdl2-config --libs)
 # Insert -lSDL2_mixer before -lSDL2, but after any previous -L/path/to/lib entries
 SDL_LIBS := $(subst $(firstword $(filter -l%,$(SDL_LIBS))),-lSDL2_mixer $(firstword $(filter -l%,$(SDL_LIBS))),$(SDL_LIBS))
 
 ifdef FHEROES2_WITH_IMAGE
 SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs)
-endif
 endif
 endif
 
