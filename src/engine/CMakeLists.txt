@@ -51,10 +51,10 @@ target_link_libraries(
 	engine
 	smacker
 	${USE_SDL_VERSION}::${USE_SDL_VERSION}
-	${USE_SDL_VERSION}::Mixer
-	$<$<BOOL:${ENABLE_IMAGE}>:${USE_SDL_VERSION}::Image>
+	${USE_SDL_VERSION}_mixer::${USE_SDL_VERSION}_mixer
+	$<$<BOOL:${ENABLE_IMAGE}>:${USE_SDL_VERSION}_image::${USE_SDL_VERSION}_image>
 	$<$<BOOL:${ENABLE_IMAGE}>:PNG::PNG>
-	Threads::Threads # To match the build settings of the main app
+	Threads::Threads
 	ZLIB::ZLIB
 	)
 

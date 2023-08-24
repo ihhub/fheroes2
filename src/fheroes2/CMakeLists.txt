@@ -117,8 +117,6 @@ target_include_directories(
 target_link_libraries(
 	fheroes2
 	${MINGW_LIBRARIES}  # Be sure define it first. Beware WinMain@16 error!!
-	${SDL_MIXER_LIBRARIES}
 	engine
-	Threads::Threads
-	ZLIB::ZLIB
+	${USE_SDL_VERSION}::${USE_SDL_VERSION}main
 	)
