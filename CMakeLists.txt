@@ -36,7 +36,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 # Compile-time options
 #
 option(ENABLE_STRICT_COMPILATION "Enable strict compilation mode (turns warnings into errors)" OFF)
-option(ENABLE_IMAGE "Enable SDL_image support (requires libpng)" ON)
+option(ENABLE_IMAGE "Enable SDL_image support (requires libpng)" OFF)
 option(ENABLE_TOOLS "Enable additional tools" OFF)
 
 # Available only on macOS
