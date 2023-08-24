@@ -658,15 +658,9 @@ namespace fheroes2
 
         assert( textAreaWidth + backgroundBorders > 0 );
 
-        // TODO: Make resizeButton() scale in vertical direction too, like for vertical and larger buttons.
-        // if ( emptyButtonIcnID != ICN::EMPTY_VERTICAL_GOOD_BUTTON ) {
+        // TODO: Make resizeButton() scale in vertical direction too, for vertical and larger buttons.
         released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), textAreaWidth + backgroundBorders );
         pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), textAreaWidth + backgroundBorders );
-        //}
-        /*else {
-            released = AGG::GetICN( emptyButtonIcnID, 0 );
-            pressed = AGG::GetICN( emptyButtonIcnID, 1 );
-        }*/
 
         if ( buttonBackgroundIcnID != ICN::UNKNOWN ) {
             makeTransparentBackground( released, pressed, buttonBackgroundIcnID );
@@ -675,7 +669,8 @@ namespace fheroes2
         const fheroes2::Size releasedTextSize( releasedText.width( textAreaWidth ), releasedText.height( textAreaWidth ) );
         const fheroes2::Size pressedTextSize( pressedText.width( textAreaWidth ), pressedText.height( textAreaWidth ) );
 
-        // The button font letters are all shifted 1 pixel to the left due to shadows so we have to add one when drawing to properly center align
+        // The button font letters are all shifted 1 pixel to the left due to shadows, so we have to add 1 to the x position when drawing
+        // to properly center-align
         releasedText.draw( releasedOffset.x + 1, releasedOffset.y + ( releasedText.height() - releasedTextSize.height ) / 2, textAreaWidth, released );
         pressedText.draw( pressedOffset.x + 1, pressedOffset.y + ( pressedText.height() - pressedTextSize.height ) / 2, textAreaWidth, pressed );
     }
