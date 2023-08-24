@@ -28,7 +28,6 @@
 
 #include "icn.h"
 #include "image.h"
-#include "math_base.h"
 
 namespace
 {
@@ -5650,6 +5649,21 @@ namespace
 
 namespace fheroes2
 {
+    ButtonFontRestorer::ButtonFontRestorer( std::vector<fheroes2::Sprite> & font, const fheroes2::Point & newOffsets )
+        : _font( font )
+        , _originalOffsets( font )
+    {
+        // The first 15 characters are special characters and are not used on buttons
+        for ( int charCode = 16; charCode < font.size(); ++charCode ) {
+            font[charCode].setPosition( newOffsets.x, newOffsets.y );
+        }
+    }
+
+    ButtonFontRestorer::~ButtonFontRestorer()
+    {
+        _font = _originalOffsets;
+    }
+
     void generateAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite )
     {
         switch ( language ) {
