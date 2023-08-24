@@ -63,14 +63,14 @@ find_package(Threads)
 # TODO: imported targets, but older versions do not. To solve this problem, we have to use FindSDL2*.cmake modules from the cmake/ subdirectory and
 # TODO: define aliases for imported targets provided by these modules.
 
-# TODO: remove this alias and modules from the cmake/ subdirectory as soon as the distributions start using a newer version of SDL_mixer
+# TODO: remove this alias and modules from the cmake/ subdirectory as soon as the distributions start shipping a newer version of SDL_mixer
 add_library(${USE_SDL_VERSION}_mixer::${USE_SDL_VERSION}_mixer ALIAS ${USE_SDL_VERSION}::Mixer)
 
 if(ENABLE_IMAGE)
 	find_package(${USE_SDL_VERSION}_image REQUIRED)
 	find_package(PNG REQUIRED)
 
-	# TODO: remove this alias and modules from the cmake/ subdirectory as soon as the distributions start using a newer version of SDL_image
+	# TODO: remove this alias and modules from the cmake/ subdirectory as soon as the distributions start shipping a newer version of SDL_image
 	add_library(${USE_SDL_VERSION}_image::${USE_SDL_VERSION}_image ALIAS ${USE_SDL_VERSION}::Image)
 endif(ENABLE_IMAGE)
 
