@@ -279,39 +279,39 @@ namespace
         title.draw( textInitialOffsetX - title.width() / 2, offsetY, output );
         offsetY += title.height() + 5;
 
-        const std::string contributors( "LeHerosInconnu\n"
-                                        "undef21\n"
-                                        "shprotru\n"
-                                        "Arkadiy Illarionov\n"
-                                        "a1exsh\n"
-                                        "vincent-grosbois\n"
-                                        "eos428\n"
-                                        "felix642\n"
-                                        "Arthusppp\n"
-                                        "Vasilenko Alexey\n"
-                                        "Andrii Kurdiumov\n"
-                                        "dimag0g\n"
-                                        "tau3\n" );
+        std::string contributors( "LeHerosInconnu\n"
+                                  "undef21\n"
+                                  "shprotru\n"
+                                  "Arkadiy Illarionov\n"
+                                  "a1exsh\n"
+                                  "vincent-grosbois\n"
+                                  "eos428\n"
+                                  "felix642\n"
+                                  "Arthusppp\n"
+                                  "Vasilenko Alexey\n"
+                                  "Andrii Kurdiumov\n"
+                                  "dimag0g\n"
+                                  "tau3\n" );
 
-        fheroes2::Text name( contributors, fheroes2::FontType::normalWhite() );
+        fheroes2::Text name( std::move( contributors ), fheroes2::FontType::normalWhite() );
         const int32_t constributorsHeight = name.height( textWidth );
         const int32_t contributorCount = name.rows( textWidth );
         name.draw( textOffsetX, offsetY, textWidth, output );
 
-        const std::string supporters( "Aimi Lindschouw\n"
-                                      "Aleksei Mazur\n"
-                                      "Andrew Szucs\n"
-                                      "Benjamin Hughes\n"
-                                      "Brandon Wright\n"
-                                      "Connor Townsend\n"
-                                      "Kiril Lipatov\n"
-                                      "Kresimir Condic\n"
-                                      "Kuza\n"
-                                      "Matt Taylor\n"
-                                      "slvclw\n"
-                                      "William Hoskinson\n" );
+        std::string supporters( "Aimi Lindschouw\n"
+                                "Aleksei Mazur\n"
+                                "Andrew Szucs\n"
+                                "Benjamin Hughes\n"
+                                "Brandon Wright\n"
+                                "Connor Townsend\n"
+                                "Kiril Lipatov\n"
+                                "Kresimir Condic\n"
+                                "Kuza\n"
+                                "Matt Taylor\n"
+                                "slvclw\n"
+                                "William Hoskinson\n" );
 
-        name.set( supporters, fheroes2::FontType::normalWhite() );
+        name.set( std::move( supporters ), fheroes2::FontType::normalWhite() );
         const int32_t supportersHeight = name.height( textWidth );
         const int32_t supporterCount = name.rows( textWidth );
         const int32_t countDifference = ( contributorCount - supporterCount );

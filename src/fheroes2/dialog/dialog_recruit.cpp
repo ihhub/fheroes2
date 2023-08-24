@@ -109,7 +109,7 @@ void RedrawCurrentInfo( const fheroes2::Point & pos, const uint32_t result, cons
     const std::string sgold = std::to_string( paymentCosts.gold ) + " " + "(" + std::to_string( funds.gold - paymentCosts.gold ) + ")";
     const int rsext = paymentMonster.GetValidItems() & ~Resource::GOLD;
 
-    text.set( sgold, fheroes2::FontType::smallWhite() );
+    text.set( std::move( sgold ), fheroes2::FontType::smallWhite() );
 
     // Restore the background of the text before rendering it.
     fheroes2::Copy( background, 0, 214, display, pos.x, pos.y + 214, background.width(), text.height() );
@@ -129,7 +129,7 @@ void RedrawCurrentInfo( const fheroes2::Point & pos, const uint32_t result, cons
     fheroes2::Copy( background, 0, 166, display, pos.x, pos.y + 166, background.width(), text.height() );
 
     if ( !label.empty() ) {
-        text.set( label, fheroes2::FontType::smallWhite() );
+        text.set( std::move( label ), fheroes2::FontType::smallWhite() );
         text.draw( pos.x + 151 - text.width() / 2, pos.y + 166, display );
     }
 }
@@ -211,7 +211,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, con
 
     str = _( "Available: %{count}" );
     StringReplace( str, "%{count}", available );
-    text.set( str, fheroes2::FontType::smallWhite() );
+    text.set( std::move( str ), fheroes2::FontType::smallWhite() );
     text.draw( pos.x + 64 - text.width() / 2, pos.y + 121, display );
 
     if ( showTotalSum ) {

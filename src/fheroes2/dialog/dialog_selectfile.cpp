@@ -139,38 +139,40 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int
 {
     char shortDate[20];
     char shortHours[20];
-    char shortTime[20];
+    char shortMinutes[20];
 
     const tm tmi = System::GetTM( info.timestamp );
 
     std::fill( shortDate, std::end( shortDate ), static_cast<char>( 0 ) );
     std::fill( shortHours, std::end( shortHours ), static_cast<char>( 0 ) );
-    std::fill( shortTime, std::end( shortTime ), static_cast<char>( 0 ) );
+    std::fill( shortMinutes, std::end( shortMinutes ), static_cast<char>( 0 ) );
     std::strftime( shortDate, ARRAY_COUNT( shortDate ) - 1, "%b %d,", &tmi );
     std::strftime( shortHours, ARRAY_COUNT( shortHours ) - 1, "%H", &tmi );
-    std::strftime( shortTime, ARRAY_COUNT( shortTime ) - 1, ":%M", &tmi );
+    std::strftime( shortMinutes, ARRAY_COUNT( shortMinutes ) - 1, ":%M", &tmi );
     std::string savname( System::GetBasename( info.file ) );
 
     if ( !savname.empty() ) {
-        Text text;
-
         const std::string saveExtension = Game::GetSaveFileExtension();
         const size_t dotPos = savname.size() - saveExtension.size();
 
         if ( StringLower( savname.substr( dotPos ) ) == saveExtension )
             savname.erase( dotPos );
 
-        text.Set( savname, ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 5, dsty, 150 );
+        const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
+        fheroes2::Display & display = fheroes2::Display::instance();
 
-        text.Set( shortDate, ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 225 - text.w(), dsty );
+        fheroes2::Text text{ std::move( savname ), font };
+        text.fitToOneRow( 150 );
+        text.draw( dstx + 5, dsty + 2, display );
 
-        text.Set( shortHours, ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 245 - text.w(), dsty );
+        text.set( shortDate, font );
+        text.draw( dstx + 225 - text.width(), dsty + 2, display );
 
-        text.Set( shortTime, ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 245, dsty );
+        text.set( shortHours, font );
+        text.draw( dstx + 245 - text.width(), dsty + 2, display );
+
+        text.set( shortMinutes, font );
+        text.draw( dstx + 245, dsty + 2, display );
     }
 }
 
