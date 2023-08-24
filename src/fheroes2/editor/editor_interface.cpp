@@ -22,6 +22,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <ostream>
+#include <string>
 #include <vector>
 
 #include "agg_image.h"
