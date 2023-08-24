@@ -32,12 +32,8 @@
 #include <utility>
 
 #include <SDL_events.h>
-#include <SDL_version.h>
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #include <SDL_gamecontroller.h>
 #include <SDL_touch.h>
-#endif
 
 #include "math_base.h"
 #include "timing.h"
@@ -313,7 +309,6 @@ private:
     static void StopSounds();
     static void ResumeSounds();
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
     void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
     void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
@@ -324,10 +319,6 @@ private:
     static void HandleRenderDeviceResetEvent();
 
     void ProcessControllerAxisMotion();
-#else
-    // Returns true if frame rendering is required.
-    static bool HandleActiveEvent( const SDL_ActiveEvent & event );
-#endif
 
     enum flag_t
     {
@@ -383,7 +374,6 @@ private:
     double _emulatedPointerPosX = 0;
     double _emulatedPointerPosY = 0;
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     // bigger value corresponds to faster pointer movement speed with bigger stick axis values
     const double CONTROLLER_AXIS_SPEEDUP = 1.03;
     const double CONTROLLER_TRIGGER_CURSOR_SPEEDUP = 2.0;
@@ -400,7 +390,6 @@ private:
     std::pair<std::optional<SDL_FingerID>, std::optional<SDL_FingerID>> _fingerIds;
     // Is the two-finger gesture currently being processed
     bool _isTwoFingerGestureInProgress = false;
-#endif
 };
 
 #endif

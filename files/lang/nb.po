@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-12 09:48+0000\n"
+"POT-Creation-Date: 2023-08-22 00:24+0000\n"
 "PO-Revision-Date: 2023-08-11 23:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2578,7 +2578,8 @@ msgstr "Vis helt"
 msgid "The above spells are available here."
 msgstr "Trolldommene ovenfor er tilgjengelige her."
 
-msgid "The above spells have been added to your book."
+#, fuzzy
+msgid "The spells the hero can learn have been added to their book."
 msgstr "Med nok visdom kan du lære deg trolldommene over."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
@@ -4717,6 +4718,10 @@ msgstr ""
 "Du har spart opp over %{count} gullstykker i statskassa di.\n"
 "Alle motstanderne bøyer seg foran din rikdom og makt."
 
+#, fuzzy
+msgid "Victory!"
+msgstr "Hektor"
+
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
@@ -4909,6 +4914,9 @@ msgstr " Alle befolkninger halveres."
 
 msgid " All dwellings increase population."
 msgstr " Alle bostedenes befolkninger opplever vanlig vekst."
+
+msgid "New Month!"
+msgstr ""
 
 msgid "New Week!"
 msgstr "Ny uke!"

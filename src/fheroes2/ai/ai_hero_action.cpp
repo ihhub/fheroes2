@@ -724,12 +724,16 @@ namespace
         }
     }
 
-    void AIToObjectResource( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
+    void AIToObjectResource( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( objectType ) )
 
-        // TODO: remove this temporary assertion
+        // TODO: remove this temporary assertion and 'defined( NDEBUG )' condition below
         assert( !MP2::isCaptureObject( objectType ) );
+
+#if defined( NDEBUG ) && !defined( WITH_DEBUG )
+        (void)objectType;
+#endif
 
         Maps::Tiles & tile = world.GetTiles( dst_index );
         hero.GetKingdom().AddFundsResource( getFundsFromTile( tile ) );
@@ -1146,9 +1150,12 @@ namespace
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( objectType ) )
 
-        assert( hero.GetIndex() == dst_index );
+        assert( hero.GetIndex() == dst_index || MP2::isNeedStayFront( objectType ) );
 
         if ( !AI::Get().isValidHeroObject( hero, dst_index, ( hero.GetIndex() == dst_index ) ) ) {
+            // If we can't step on this tile, then we shouldn't be here at all
+            assert( !MP2::isNeedStayFront( objectType ) );
+
             // We're just passing through here, don't mess with this object
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " passes through without interacting with the object" )
             return;
@@ -2135,6 +2142,7 @@ namespace AI
         hero.Scout( targetIndex );
         hero.Move2Dest( targetIndex );
         hero.SpellCasted( dimensionDoor );
+        hero.setDimensionDoorUsage( hero.getDimensionDoorUses() + 1 );
         hero.GetPath().Reset();
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {

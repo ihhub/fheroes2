@@ -103,11 +103,12 @@ namespace
         }
     }
 
-    void revealPuzzle( const Puzzle & pzl, const fheroes2::Image & sf, int32_t dstx, int32_t dsty, const std::function<fheroes2::Rect()> * drawControlPanel = nullptr )
+    bool revealPuzzle( const Puzzle & pzl, const fheroes2::Image & sf, int32_t dstx, int32_t dsty, fheroes2::Button & buttonExit,
+                       const std::function<fheroes2::Rect()> * drawControlPanel = nullptr )
     {
         // In developer mode, the entire puzzle should already be revealed
         if ( IS_DEVEL() ) {
-            return;
+            return false;
         }
 
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -119,6 +120,12 @@ namespace
         int alpha = 250;
 
         while ( alpha >= 0 && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
+            le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            // If exit button was pressed before reveal animation is finished, return true to indicate early exit.
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+                return true;
+            }
+
             if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
                 fheroes2::Blit( sf, display, dstx, dsty );
 
@@ -146,6 +153,8 @@ namespace
                 assert( alpha >= 0 );
             }
         }
+
+        return false;
     }
 
     void ShowStandardDialog( const Puzzle & pzl, const fheroes2::Image & sf )
@@ -174,11 +183,11 @@ namespace
 
         fheroes2::fadeInDisplay( back.rect(), false );
 
-        revealPuzzle( pzl, sf, BORDERWIDTH, BORDERWIDTH );
+        const bool earlyExit = revealPuzzle( pzl, sf, BORDERWIDTH, BORDERWIDTH, buttonExit );
 
         LocalEvent & le = LocalEvent::Get();
 
-        while ( le.HandleEvents() ) {
+        while ( !earlyExit && le.HandleEvents() ) {
             le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
                 break;
@@ -245,11 +254,11 @@ namespace
         display.updateNextRenderRoi( border.totalArea() );
         fheroes2::fadeInDisplay( border.activeArea(), true );
 
-        revealPuzzle( pzl, sf, blitArea.x, blitArea.y, isHideInterface ? &drawControlPanel : nullptr );
+        const bool earlyExit = revealPuzzle( pzl, sf, blitArea.x, blitArea.y, buttonExit, isHideInterface ? &drawControlPanel : nullptr );
 
         LocalEvent & le = LocalEvent::Get();
 
-        while ( le.HandleEvents() ) {
+        while ( le.HandleEvents() && !earlyExit ) {
             le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
                 break;

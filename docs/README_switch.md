@@ -3,9 +3,9 @@
 It's a homebrew app, so you need to be running custom firmware for it to work.
 
 ## BUILDING
-You will need to install the [devkitPro](https://devkitpro.org/) toolchain. Make sure to include the following packages:
+You will need to install the [devkitPro](https://devkitpro.org/) toolchain. Make sure to include the following package:
 ```
-libnx switch-sdl2_image switch-sdl2_mixer
+libnx switch-sdl2_mixer
 ```
 
 After installation run `make -f Makefile.switch -j 2` command to build the package.

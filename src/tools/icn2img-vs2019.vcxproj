@@ -1,28 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug-SDL1|Win32">
-      <Configuration>Debug-SDL1</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug-SDL2|Win32">
       <Configuration>Debug-SDL2</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Debug-SDL2|x64">
       <Configuration>Debug-SDL2</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release-SDL1|Win32">
-      <Configuration>Release-SDL1</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug-SDL1|x64">
-      <Configuration>Debug-SDL1</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release-SDL1|x64">
-      <Configuration>Release-SDL1</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release-SDL2|Win32">
@@ -53,17 +37,9 @@
     <Import Project="..\..\VisualStudio\tools\icn2img\common.props" />
     <Import Project="..\..\VisualStudio\tools\icn2img\sources.props" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)'=='Debug-SDL1'" Label="PropertySheets">
-    <Import Project="..\..\VisualStudio\Debug.props" />
-    <Import Project="..\..\VisualStudio\SDL1.props" />
-  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)'=='Debug-SDL2'" Label="PropertySheets">
     <Import Project="..\..\VisualStudio\Debug.props" />
     <Import Project="..\..\VisualStudio\SDL2.props" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)'=='Release-SDL1'" Label="PropertySheets">
-    <Import Project="..\..\VisualStudio\Release.props" />
-    <Import Project="..\..\VisualStudio\SDL1.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)'=='Release-SDL2'" Label="PropertySheets">
     <Import Project="..\..\VisualStudio\Release.props" />

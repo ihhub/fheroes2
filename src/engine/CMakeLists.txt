@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2022                                                    #
+#   Copyright (C) 2022 - 2023                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -54,8 +54,7 @@ target_include_directories(
 target_link_libraries(
 	engine
 	smacker
-	# In the case of SDL1, SDL_LIBRARY contains both SDLmain and SDL libraries
-	$<$<BOOL:${SDL2MAIN_FOUND}>:${SDL2MAIN_LIBRARY}>
+	${${USE_SDL_VERSION}MAIN_LIBRARY}
 	${${USE_SDL_VERSION}_LIBRARY}
 	${${USE_SDL_VERSION}_MIXER_LIBRARIES}
 	$<$<BOOL:${ENABLE_IMAGE}>:${${USE_SDL_VERSION}_IMAGE_LIBRARIES}>

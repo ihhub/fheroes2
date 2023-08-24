@@ -5578,11 +5578,22 @@ namespace
         const int32_t offset = 2;
 
         // Change spacing relative to other characters.
+        released[65 - 32].setPosition( buttonFontOffset.x - 2, buttonFontOffset.y );
         released[192 - 32].setPosition( buttonFontOffset.x - 1, -3 );
         released[193 - 32].setPosition( buttonFontOffset.x - 1, -3 );
-        released[197 - 32].setPosition( buttonFontOffset.x - 1, -2 );
+        released[196 - 32].setPosition( buttonFontOffset.x - 2, -2 );
+        released[197 - 32].setPosition( buttonFontOffset.x - 2, -2 );
+        released[198 - 32].setPosition( buttonFontOffset.x - 2, buttonFontOffset.y );
         released[200 - 32].setPosition( buttonFontOffset.x, -3 );
         released[201 - 32].setPosition( buttonFontOffset.x, -3 );
+        released[214 - 32].setPosition( buttonFontOffset.x, -2 );
+
+        // A with diaeresis
+        released[196 - 32].resize( released[65 - 32].width(), released[65 - 32].height() + 2 );
+        released[196 - 32].reset();
+        fheroes2::Copy( released[65 - 32], 0, 0, released[196 - 32], 0, 2, released[65 - 32].width(), released[65 - 32].height() );
+        fheroes2::SetPixel( released[196 - 32], offset + 5, offset + 0, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[196 - 32], offset + 7, offset + 0, buttonGoodReleasedColor );
 
         // A with circle on top
         released[197 - 32].resize( 13 + offset * 2, 12 + offset * 2 );
@@ -5601,7 +5612,7 @@ namespace
         fheroes2::SetPixel( released[197 - 32], offset + 6, offset + 3, buttonGoodReleasedColor );
 
         // A attached to E.
-        released[198 - 32].resize( 18 + offset * 2, 12 + offset * 2 );
+        released[198 - 32].resize( 15 + offset * 2, 10 + offset * 2 );
         released[198 - 32].reset();
         fheroes2::DrawLine( released[198 - 32], { offset + 0, offset + 9 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[198 - 32], { offset + 8, offset + 9 }, { offset + 12, offset + 9 }, buttonGoodReleasedColor );
@@ -5644,6 +5655,13 @@ namespace
         released[201 - 32].reset();
         fheroes2::Copy( released[69 - 32], 0, 0, released[201 - 32], 0, 3, released[69 - 32].width(), released[69 - 32].height() );
         fheroes2::DrawLine( released[201 - 32], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
+
+        // O with diaeresis.
+        released[214 - 32].resize( released[79 - 32].width(), released[79 - 32].height() + 2 );
+        released[214 - 32].reset();
+        fheroes2::Copy( released[79 - 32], 0, 0, released[214 - 32], 0, 2, released[79 - 32].width(), released[79 - 32].height() );
+        fheroes2::SetPixel( released[214 - 32], offset + 3, offset + 0, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[214 - 32], offset + 6, offset + 0, buttonGoodReleasedColor );
     }
 }
 
