@@ -25,6 +25,7 @@
 
 #include <cstdint>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "army_bar.h"

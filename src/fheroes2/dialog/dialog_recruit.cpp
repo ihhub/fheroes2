@@ -28,6 +28,7 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"

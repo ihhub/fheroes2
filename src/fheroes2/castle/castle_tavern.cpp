@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "castle.h"
 #include "dialog.h"
