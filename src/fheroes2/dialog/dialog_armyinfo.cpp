@@ -369,7 +369,7 @@ namespace
     {
         // name
         Text text( troop.GetName(), Font::YELLOW_BIG );
-        fheroes2::Point pos( offset.x + 140 - text.w() / 2, offset.y + 40 );
+        fheroes2::Point pos( offset.x + 29 + ( 227 - text.w() ) / 2, offset.y + 37 );
         text.Blit( pos.x, pos.y );
 
         // Description.
