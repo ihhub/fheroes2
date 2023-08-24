@@ -592,8 +592,8 @@ namespace fheroes2
         disabledWithBackground.setPosition( 0, 0 );
         Blit( disabled, disabledWithBackground, disabled.x() - shadow.x(), disabled.y() - shadow.y() );
 
-        return
-            { offsetX + shadow.x(), offsetY + shadow.y(), std::move( releasedWithBackground ), std::move( pressedWithBackground ), std::move( disabledWithBackground ) };
+        return { offsetX + shadow.x(), offsetY + shadow.y(), std::move( releasedWithBackground ), std::move( pressedWithBackground ),
+                 std::move( disabledWithBackground ) };
     }
 
     void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, int32_t width, Point & releasedOffset, Point & pressedOffset,
