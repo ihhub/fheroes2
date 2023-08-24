@@ -34,7 +34,6 @@ else(USE_SYSTEM_LIBSMACKER)
 		smacker
 		PUBLIC
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/libsmacker>
-		$<INSTALL_INTERFACE:include>
 		)
 
 	target_link_libraries(
