@@ -57,5 +57,3 @@ target_link_libraries(
 	Threads::Threads
 	ZLIB::ZLIB
 	)
-
-export(TARGETS engine FILE EngineConfig.cmake)

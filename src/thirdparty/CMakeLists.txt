@@ -35,5 +35,3 @@ target_link_libraries(
 	smacker
 	Threads::Threads # To match the build settings of the main app
 	)
-
-export(TARGETS smacker FILE SmackerConfig.cmake)
