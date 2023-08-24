@@ -61,7 +61,7 @@ find_package(Threads)
 
 # TODO: Modern versions of SDL2* packages provide the CMake config files that define the SDL2::SDL2, SDL2_mixer::SDL2_mixer and SDL2_image::SDL2_image
 # TODO: imported targets, but older versions do not. To solve this problem, we have to use FindSDL2*.cmake modules from the cmake/ subdirectory and
-# TODO: create aliases for imported targets provided by these modules.
+# TODO: define aliases for imported targets provided by these modules.
 
 # TODO: remove this alias and modules from the cmake/ subdirectory as soon as the distributions start using a newer version of SDL_mixer
 add_library(${USE_SDL_VERSION}_mixer::${USE_SDL_VERSION}_mixer ALIAS ${USE_SDL_VERSION}::Mixer)
