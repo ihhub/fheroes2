@@ -5673,7 +5673,7 @@ namespace fheroes2
     {
         // The first 15 characters are special characters and are not used on buttons.
         // We only need to change the x offsets.
-        for ( int charCode = 16; charCode < font.size(); ++charCode ) {
+        for ( size_t charCode = 16; charCode < font.size(); ++charCode ) {
             font[charCode].setPosition( newOffset, font[charCode].y() );
         }
     }
