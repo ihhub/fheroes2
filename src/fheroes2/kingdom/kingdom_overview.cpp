@@ -71,11 +71,11 @@ namespace
 
     bool needFadeIn{ false };
 
-    std::string CapturedExtInfoString( int res, int color, const Funds & funds )
+    std::string CapturedExtInfoString( const int resource, const int color, const Funds & funds )
     {
-        std::string output = std::to_string( world.CountCapturedMines( res, color ) );
+        std::string output = std::to_string( world.CountCapturedMines( resource, color ) );
 
-        const int32_t vals = funds.Get( res );
+        const int32_t vals = funds.Get( resource );
 
         if ( vals != 0 ) {
             output += " (";
@@ -130,7 +130,7 @@ struct HeroRow
         secSkillsBar->setInBetweenItemsOffset( { -1, 8 } );
         secSkillsBar->SetContent( hero->GetSecondarySkills().ToVector() );
 
-        primSkillsBar = std::make_unique<PrimarySkillsBar>( ptr, true );
+        primSkillsBar = std::make_unique<PrimarySkillsBar>( hero, true );
         primSkillsBar->setTableSize( { 4, 1 } );
         primSkillsBar->setInBetweenItemsOffset( { 2, 0 } );
         primSkillsBar->SetTextOff( 20, -13 );
@@ -145,7 +145,7 @@ public:
     bool Refresh( KingdomHeroes & heroes );
 
     void RedrawItem( const HeroRow & row, int32_t dstx, int32_t dsty, bool current ) override;
-    void RedrawBackground( const fheroes2::Point & ) override;
+    void RedrawBackground( const fheroes2::Point & dst ) override;
 
     void ActionCurrentUp() override
     {
@@ -157,17 +157,17 @@ public:
         // Do nothing.
     }
 
-    void ActionListSingleClick( HeroRow & ) override
+    void ActionListSingleClick( HeroRow & /* unused */ ) override
     {
         // Do nothing.
     }
 
-    void ActionListDoubleClick( HeroRow & ) override
+    void ActionListDoubleClick( HeroRow & /* unused */ ) override
     {
         // Do nothing.
     }
 
-    void ActionListPressRight( HeroRow & ) override
+    void ActionListPressRight( HeroRow & /* unused */ ) override
     {
         // Do nothing.
     }
@@ -189,17 +189,19 @@ StatsHeroesList::StatsHeroesList( const fheroes2::Rect & windowArea, const fhero
     , _windowArea( windowArea )
 {
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
+    const int32_t backHeight = back.height();
 
     SetTopLeft( offset );
-    setScrollBarArea( { offset.x + scrollbarOffset + 2, offset.y + 18, back.width(), back.height() - 2 } );
+    const int32_t offsetX = offset.x + scrollbarOffset;
+    setScrollBarArea( { offsetX + 2, offset.y + 18, back.width(), backHeight - 2 } );
 
     const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::SCROLL, 4 );
-    const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, back.height() - 2, 4, static_cast<int32_t>( heroes.size() ),
+    const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, backHeight - 2, 4, static_cast<int32_t>( heroes.size() ),
                                                                                { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
 
     setScrollBarImage( scrollbarSlider );
-    SetScrollButtonUp( ICN::SCROLL, 0, 1, { offset.x + scrollbarOffset, offset.y } );
-    SetScrollButtonDn( ICN::SCROLL, 2, 3, { offset.x + scrollbarOffset, offset.y + 20 + back.height() } );
+    SetScrollButtonUp( ICN::SCROLL, 0, 1, { offsetX, offset.y } );
+    SetScrollButtonDn( ICN::SCROLL, 2, 3, { offsetX, offset.y + 20 + backHeight } );
     SetAreaMaxItems( 4 );
     SetAreaItems( { offset.x + 30, offset.y + 17, 594, 344 } );
     SetContent( heroes );
@@ -209,8 +211,9 @@ void StatsHeroesList::SetContent( const KingdomHeroes & heroes )
 {
     content.clear();
     content.reserve( heroes.size() );
-    for ( Heroes * hero : heroes )
+    for ( Heroes * hero : heroes ) {
         content.emplace_back( hero );
+    }
     SetListContent( content );
 }
 
@@ -218,7 +221,9 @@ void StatsHeroesList::SetContent( const KingdomHeroes & heroes )
 // Returns true if we updated something
 bool StatsHeroesList::Refresh( KingdomHeroes & heroes )
 {
-    if ( heroes.size() != content.size() ) {
+    const size_t contentSize = content.size();
+
+    if ( heroes.size() != contentSize ) {
         const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
         const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::SCROLL, 4 );
         const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, back.height() - 2, 4, static_cast<int32_t>( heroes.size() ),
@@ -229,7 +234,7 @@ bool StatsHeroesList::Refresh( KingdomHeroes & heroes )
 
         return true;
     }
-    for ( size_t i = 0; i < content.size(); ++i ) {
+    for ( size_t i = 0; i < contentSize; ++i ) {
         if ( heroes[i] != content[i].hero ) {
             SetContent( heroes );
             return true;
@@ -345,16 +350,16 @@ void StatsHeroesList::RedrawBackground( const fheroes2::Point & dst )
     const fheroes2::Sprite & header = fheroes2::AGG::GetICN( ICN::OVERVIEW, 6 );
     fheroes2::Copy( header, 0, 0, display, dst.x + 30, dst.y, header.width(), header.height() );
 
-    const int32_t offxetY = dst.y + 3;
+    int32_t offsetY = dst.y + 3;
 
     fheroes2::Text text( _( "Hero/Stats" ), fheroes2::FontType::smallWhite() );
-    text.draw( dst.x + 130 - text.width() / 2, offxetY, display );
+    text.draw( dst.x + 130 - text.width() / 2, offsetY, display );
 
     text.set( _( "Skills" ), fheroes2::FontType::smallWhite() );
-    text.draw( dst.x + 300 - text.width() / 2, offxetY, display );
+    text.draw( dst.x + 300 - text.width() / 2, offsetY, display );
 
     text.set( _( "Artifacts" ), fheroes2::FontType::smallWhite() );
-    text.draw( dst.x + 500 - text.width() / 2, offxetY, display );
+    text.draw( dst.x + 500 - text.width() / 2, offsetY, display );
 
     // Scrollbar background.
     const fheroes2::Sprite & scrollbar = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
@@ -364,8 +369,13 @@ void StatsHeroesList::RedrawBackground( const fheroes2::Point & dst )
     const fheroes2::Sprite & itemsBack = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
     const int32_t itemsBackWidth = itemsBack.width();
     const int32_t itemsBackHeight = itemsBack.height();
-    for ( int ii = 0; ii < VisibleItemCount(); ++ii ) {
-        fheroes2::Copy( itemsBack, 0, 0, display, dst.x + 30, dst.y + 17 + ii * ( itemsBackHeight + 4 ), itemsBackWidth, itemsBackHeight );
+    const int32_t offsetX = dst.x + 30;
+    offsetY = dst.y + 17;
+    const int32_t stepY = itemsBackHeight + 4;
+    const int visibleItems = VisibleItemCount();
+
+    for ( int ii = 0; ii < visibleItems; ++ii, offsetY += stepY ) {
+        fheroes2::Copy( itemsBack, 0, 0, display, offsetX, offsetY, itemsBackWidth, itemsBackHeight );
     }
 }
 
@@ -392,29 +402,32 @@ struct CstlRow
     {
         castle = ptr;
 
-        const uint8_t fill = fheroes2::GetColorId( 40, 12, 0 );
-
         garrisonArmyBar = std::make_unique<ArmyBar>( &castle->GetArmy(), true, false );
-        garrisonArmyBar->SetBackground( { 41, 41 }, fill );
+        garrisonArmyBar->SetBackground( { 41, 41 }, fheroes2::GetColorId( 40, 12, 0 ) );
         garrisonArmyBar->setTableSize( { 5, 1 } );
         garrisonArmyBar->setInBetweenItemsOffset( { -1, 0 } );
         garrisonArmyBar->setTroopWindowOffsetY( -60 );
 
+        updateHeroArmyBar();
+
+        dwellingsBar = std::make_unique<DwellingsBar>( *castle, fheroes2::Size{ 39, 52 } );
+        dwellingsBar->setTableSize( { 6, 1 } );
+        dwellingsBar->setInBetweenItemsOffset( { 2, 0 } );
+    }
+
+    void updateHeroArmyBar()
+    {
         Heroes * hero = world.GetHero( *castle );
 
         if ( hero ) {
             heroArmyBar = std::make_unique<ArmyBar>( &hero->GetArmy(), true, false );
-            heroArmyBar->SetBackground( { 41, 41 }, fill );
+            heroArmyBar->SetBackground( { 41, 41 }, fheroes2::GetColorId( 40, 12, 0 ) );
             heroArmyBar->setTableSize( { 5, 1 } );
             heroArmyBar->setInBetweenItemsOffset( { -1, 0 } );
         }
         else {
             heroArmyBar.reset();
         }
-
-        dwellingsBar = std::make_unique<DwellingsBar>( *castle, fheroes2::Size{ 39, 52 } );
-        dwellingsBar->setTableSize( { 6, 1 } );
-        dwellingsBar->setInBetweenItemsOffset( { 2, 0 } );
     }
 };
 
@@ -424,7 +437,7 @@ public:
     StatsCastlesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const KingdomCastles & castles );
 
     void RedrawItem( const CstlRow & row, int32_t dstx, int32_t dsty, bool current ) override;
-    void RedrawBackground( const fheroes2::Point & ) override;
+    void RedrawBackground( const fheroes2::Point & dst ) override;
 
     void ActionCurrentUp() override
     {
@@ -436,17 +449,17 @@ public:
         // Do nothing.
     }
 
-    void ActionListDoubleClick( CstlRow & ) override
+    void ActionListDoubleClick( CstlRow & /* unused */ ) override
     {
         // Do nothing.
     }
 
-    void ActionListSingleClick( CstlRow & ) override
+    void ActionListSingleClick( CstlRow & /* unused */ ) override
     {
         // Do nothing.
     }
 
-    void ActionListPressRight( CstlRow & ) override
+    void ActionListPressRight( CstlRow & /* unused */ ) override
     {
         // Do nothing.
     }
@@ -454,7 +467,14 @@ public:
     void ActionListSingleClick( CstlRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy ) override;
     void ActionListDoubleClick( CstlRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy ) override;
     void ActionListPressRight( CstlRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy ) override;
-    bool ActionListCursor( CstlRow &, const fheroes2::Point & ) override;
+    bool ActionListCursor( CstlRow & row, const fheroes2::Point & cursor ) override;
+
+    void updateHeroArmyBars()
+    {
+        for ( CstlRow & row : content ) {
+            row.updateHeroArmyBar();
+        }
+    }
 
 private:
     std::vector<CstlRow> content;
@@ -466,24 +486,27 @@ StatsCastlesList::StatsCastlesList( const fheroes2::Rect & windowArea, const fhe
     , _windowArea( windowArea )
 {
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
+    const int32_t backHeight = back.height();
 
     SetTopLeft( offset );
-    setScrollBarArea( { offset.x + scrollbarOffset + 2, offset.y + 18, back.width(), back.height() - 2 } );
+    const int32_t offsetX = offset.x + scrollbarOffset;
+    setScrollBarArea( { offsetX + 2, offset.y + 18, back.width(), backHeight - 2 } );
 
     const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::SCROLL, 4 );
     const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, back.height() - 2, 4, static_cast<int32_t>( castles.size() ),
                                                                                { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
 
     setScrollBarImage( scrollbarSlider );
-    SetScrollButtonUp( ICN::SCROLL, 0, 1, { offset.x + scrollbarOffset, offset.y } );
-    SetScrollButtonDn( ICN::SCROLL, 2, 3, { offset.x + scrollbarOffset, offset.y + 20 + back.height() } );
+    SetScrollButtonUp( ICN::SCROLL, 0, 1, { offsetX, offset.y } );
+    SetScrollButtonDn( ICN::SCROLL, 2, 3, { offsetX, offset.y + 20 + backHeight } );
     SetAreaMaxItems( 4 );
     SetAreaItems( { offset.x + 30, offset.y + 17, 594, 344 } );
 
     content.reserve( castles.size() );
 
-    for ( Castle * castle : castles )
+    for ( Castle * castle : castles ) {
         content.emplace_back( castle );
+    }
 
     SetListContent( content );
 }
@@ -499,8 +522,6 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const fheroes2::Poi
         // click castle icon
         if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
             Game::OpenCastleDialog( *row.castle, false, false );
-
-            row.Init( row.castle );
         }
 
         // click hero icon
@@ -635,7 +656,7 @@ void StatsCastlesList::RedrawBackground( const fheroes2::Point & dst )
     const fheroes2::Sprite & header = fheroes2::AGG::GetICN( ICN::OVERVIEW, 7 );
     fheroes2::Copy( header, 0, 0, display, dst.x + 30, dst.y, header.width(), header.height() );
 
-    const int32_t offsetY = dst.y + 3;
+    int32_t offsetY = dst.y + 3;
 
     fheroes2::Text text( _( "Town/Castle" ), fheroes2::FontType::smallWhite() );
     text.draw( dst.x + 105 - text.width() / 2, offsetY, display );
@@ -651,16 +672,25 @@ void StatsCastlesList::RedrawBackground( const fheroes2::Point & dst )
     fheroes2::Copy( scrollbar, 0, 0, display, dst.x + scrollbarOffset + 1, dst.y + 17, scrollbar.width(), scrollbar.height() );
 
     // items background
-    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
+    const fheroes2::Sprite & itemsBack = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
     const fheroes2::Sprite & overback = fheroes2::AGG::GetICN( ICN::OVERBACK, 0 );
-    for ( int i = 0; i < VisibleItemCount(); ++i ) {
-        fheroes2::Copy( back, 0, 0, display, dst.x + 30, dst.y + 17 + i * ( back.height() + 4 ), back.width(), back.height() );
+    const int32_t itemsBackWidth = itemsBack.width();
+    const int32_t itemsBackHeight = itemsBack.height();
+    const int32_t offsetX = dst.x + 30;
+    offsetY = dst.y + 17;
+    const int32_t stepY = itemsBackHeight + 4;
+    const int32_t overbackOffsetX = dst.x + 29;
+    int32_t overbackOffsetY = dst.y + 13;
+    const int visibleItems = VisibleItemCount();
+
+    for ( int i = 0; i < visibleItems; ++i, offsetY += stepY, overbackOffsetY += stepY ) {
+        fheroes2::Copy( itemsBack, 0, 0, display, offsetX, offsetY, itemsBackWidth, itemsBackHeight );
         // fix bar
-        fheroes2::Copy( overback, 29, 13, display, dst.x + 29, dst.y + 13 + i * ( back.height() + 4 ), 595, 4 );
+        fheroes2::Copy( overback, 29, 13, display, overbackOffsetX, overbackOffsetY, 595, 4 );
     }
 
     // Copy one vertical line in case of previous army selection
-    fheroes2::Copy( overback, 29, 12, display, dst.x + 29, dst.y + 12, 1, 357 );
+    fheroes2::Copy( overback, 29, 12, display, overbackOffsetX, dst.y + 12, 1, 357 );
 }
 
 void RedrawIncomeInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
@@ -773,10 +803,10 @@ void Kingdom::openOverviewDialog()
     dst_pt.y += 42;
     fheroes2::Copy( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 540, 444, display, dst_pt.x, dst_pt.y, 99, 5 );
 
-    dst_pt.y = cur_pt.y + 405;
+    dst_pt.y += 3;
     fheroes2::Button buttonCastle( dst_pt.x, dst_pt.y, ICN::BUTTON_KINGDOM_TOWNS, 0, 1 );
 
-    dst_pt.y = cur_pt.y + 453;
+    dst_pt.y += 48;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_KINGDOM_EXIT, 0, 1 );
 
     const fheroes2::Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
@@ -884,11 +914,14 @@ void Kingdom::openOverviewDialog()
             continue;
         }
 
-        // Check if graphics in main world map window should change, this can happen if
-        // hero is hired or dismissed: hero icon list is updated.
-        // So, it's equivalent to check if hero list changed
+        // Check if graphics in main world map window should change,
+        // this can happen if hero was hired or dismissed: hero icon list is updated.
+        // So, it's equivalent to check if hero list changed.
         if ( listHeroes.Refresh( heroes ) ) {
             worldMapRedrawMask |= Interface::AdventureMap::Get().getRedrawMask();
+
+            // Update army bars in Castles.
+            listCastles.updateHeroArmyBars();
         }
 
         listStats->Redraw();
