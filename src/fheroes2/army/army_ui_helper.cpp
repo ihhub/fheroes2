@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "army_ui_helper.h"
+
 #include <cassert>
 #include <cstddef>
 #include <string>
@@ -26,7 +28,6 @@
 #include "agg_image.h"
 #include "army.h"
 #include "army_troop.h"
-#include "army_ui_helper.h"
 #include "game.h"
 #include "icn.h"
 #include "image.h"
