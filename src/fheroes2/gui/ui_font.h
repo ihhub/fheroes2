@@ -28,8 +28,6 @@
 
 namespace fheroes2
 {
-    class Sprite;
-
     // this class is used for a situations when we need to remove letter specific offsets, like when we display single letters in a row,
     // and then restore these offsets within the scope of the code
     class ButtonFontRestorer
