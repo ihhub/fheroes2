@@ -8597,7 +8597,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Valor"
-msgstr "Gloværdighedsmedaljen"
+msgstr "Hædersmedaljen"
 
 msgid "The %{name} increases your morale by %{count}."
 msgstr "%{name} øger din moral med %{count}."
@@ -10036,7 +10036,7 @@ msgid ""
 msgstr ""
 "Skaber en illusionær trop, der dublerer en af dine eksisterende tropper. "
 "Denne illusionære trop giver det samme i skade som originalen, men den "
-"forsvinder, hvis den tager skade!"
+"forsvinder, hvis den tager skade."
 
 msgid "Shield"
 msgstr "Skærmning"
