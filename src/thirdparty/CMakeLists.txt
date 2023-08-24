@@ -18,12 +18,7 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-set(
-	LIBSMACKER_SOURCES
-	libsmacker/smacker.c
-	)
-
-add_library(smacker STATIC ${LIBSMACKER_SOURCES})
+add_library(smacker STATIC libsmacker/smacker.c)
 
 target_include_directories(
 	smacker
