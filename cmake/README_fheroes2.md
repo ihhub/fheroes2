@@ -1,5 +1,5 @@
-# SDL2 CMake modules
+# CMake modules to find SDL
 
-Files under cmake/ directory taken from
-[sdl2-cmake-modules](https://gitlab.com/aminosbh/sdl2-cmake-modules/)
-repository and licensed under BSD 3-Clause License.
+Files under cmake/ directory are taken from
+[cmake-modern-findsdl2](https://github.com/opeik/cmake-modern-findsdl2/)
+repository and licensed under ISC License.
