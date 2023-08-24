@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-21 13:07+0000\n"
+"POT-Creation-Date: 2023-08-22 00:24+0000\n"
 "PO-Revision-Date: 2023-06-27 18:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -2523,7 +2523,8 @@ msgstr "Ver Heroe"
 msgid "The above spells are available here."
 msgstr "Los hechizos anteriores han sido añadidos a tu Libro de Hechizos."
 
-msgid "The above spells have been added to your book."
+#, fuzzy
+msgid "The spells the hero can learn have been added to their book."
 msgstr "Los hechizos anteriores han sido añadidos a tu Libro de Hechizos."
 
 msgid "A generous tip for the barkeep yields the following rumor:"

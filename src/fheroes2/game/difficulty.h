@@ -23,6 +23,7 @@
 #ifndef H2DIFFICULTY_H
 #define H2DIFFICULTY_H
 
+#include <cstdint>
 #include <string>
 
 namespace Difficulty
@@ -46,6 +47,8 @@ namespace Difficulty
 
     int GetHeroMovementBonus( int difficulty );
     double GetAIRetreatRatio( int difficulty );
+
+    uint32_t GetDimensionDoorLimit( int difficulty );
 }
 
 #endif

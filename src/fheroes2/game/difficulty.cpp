@@ -21,9 +21,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "difficulty.h"
+
 #include <cassert>
 
-#include "difficulty.h"
 #include "translations.h"
 
 std::string Difficulty::String( int difficulty )
@@ -140,4 +141,19 @@ double Difficulty::GetAIRetreatRatio( int difficulty )
         break;
     }
     return 100.0 / 6.0;
+}
+
+uint32_t Difficulty::GetDimensionDoorLimit( int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        return 1;
+    case Difficulty::NORMAL:
+        return 2;
+    case Difficulty::HARD:
+        return 3;
+    default:
+        break;
+    }
+    return UINT32_MAX;
 }

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-21 13:07+0000\n"
-"PO-Revision-Date: 2023-08-18 11:01+0200\n"
+"POT-Creation-Date: 2023-08-05 03:57+0000\n"
+"PO-Revision-Date: 2023-08-22 10:50+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -84,9 +84,8 @@ msgstr "NEJ"
 msgid "EXIT"
 msgstr "UD"
 
-#, fuzzy
 msgid "smallerButton|EXIT"
-msgstr "OK"
+msgstr "UD"
 
 msgid "DISMISS"
 msgstr "BORTVIS"
@@ -360,20 +359,17 @@ msgstr ""
 msgid "You have already cast a spell this round."
 msgstr "Du har allerede kastet magi én gang i denne runde."
 
-#, fuzzy
 msgid "That spell will have no effect!"
-msgstr "Dén magi vil ikke påvirke nogen!"
+msgstr "Dén besværgelse vil ikke påvirke nogen!"
 
 msgid "You may only summon one type of elemental per combat."
-msgstr "Du må kun hidkalde én slags Elemental per kamp."
+msgstr "Du må kun hidkalde én slags elemental per kamp."
 
-#, fuzzy
 msgid ""
 "There is no open space adjacent to your hero where you can summon an "
 "Elemental to."
 msgstr ""
-"Der er ingen åben plads ved siden af din helt til at hidkalde en Elemental "
-"på."
+"Der er ingen åben plads ved siden af din helt til at hidkalde elementaler på."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
@@ -2395,7 +2391,8 @@ msgstr "Vis helt"
 msgid "The above spells are available here."
 msgstr "Med nok visdom kan alle disse besværgelser læres af dine helte."
 
-msgid "The above spells have been added to your book."
+#, fuzzy
+msgid "The spells the hero can learn have been added to their book."
 msgstr "Besværgelser som ses her, er blevet tilføjet din magibog."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
@@ -3382,45 +3379,39 @@ msgstr "Personlighed:"
 msgid "Best Monster:"
 msgstr "Bedste væsen:"
 
-#, fuzzy
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
 msgstr ""
-"Er du sikker på, om du vil indlæse et nyt spil? (Dit nuværende spil vil gå "
-"tabt.)"
+"Er du sikker på, at du vil indlæse et nyt kort? (Alle ikke-gemte ændringer "
+"på det nuværende kort, vil gå tabt.)"
 
-#, fuzzy
 msgid ""
 "Are you sure you want to create a new map? (Any unsaved changes to the "
 "current map will be lost.)"
 msgstr ""
-"Er du sikker på, om du vil indlæse et nyt spil? (Dit nuværende spil vil gå "
-"tabt.)"
+"Er du sikker på, at du vil oprette et nyt kort? (Alle ikke-gemte ændringer "
+"af det nuværende kort, vil gå tabt.)"
 
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
 "Opret et nyt kort, enten fra bunden eller ved hjælp af kortgeneratoren."
 
-#, fuzzy
 msgid "New Map"
-msgstr "Nyt spil"
+msgstr "Nyt kort"
 
-#, fuzzy
 msgid "Load Map"
-msgstr "Indlæs spil"
+msgstr "Indlæs kort"
 
 msgid "Load an existing map."
 msgstr "indlæs et eksisterende kort."
 
-#, fuzzy
 msgid "Save Map"
-msgstr "Gem spil"
+msgstr "Gem kort"
 
-#, fuzzy
 msgid "Save the current map."
-msgstr "Gem nuværende spil."
+msgstr "Gem nuværende kort."
 
 msgid "Quit out of the map editor."
 msgstr "Forlad korteditoren."
@@ -3452,9 +3443,8 @@ msgstr "Ødemark-objekter"
 msgid "Beach Objects"
 msgstr "Strand-objekter"
 
-#, fuzzy
 msgid "Towns"
-msgstr "Vis byer"
+msgstr "Byer"
 
 msgid "Heroes"
 msgstr "Helte"
@@ -3546,9 +3536,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr ""
 
-#, fuzzy
 msgid "Used for special editing of monsters, heroes and towns."
-msgstr "Besejr alle fjendtlige helte og byer."
+msgstr "Bruges til specialredigering af væsener, helte og byer."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr ""
@@ -3586,20 +3575,18 @@ msgstr ""
 msgid "Edit map title, description, and other general information."
 msgstr ""
 
-#, fuzzy
 msgid "Specifications"
-msgstr "Forstening"
+msgstr "Specifikationer"
 
 msgid "File Options"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "Open the file options menu, where you can save or load maps, or quit out of "
 "the editor."
 msgstr ""
-"Frembring filindstillingsmenuen, som tillader dig at indlæse, gemme, starte "
-"et nyt spil eller afslutte."
+"Frembring filindstillingsmenuen, som tillader dig at gemme/indlæse kort "
+"eller afslutte Korteditoren."
 
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
@@ -3607,9 +3594,8 @@ msgstr ""
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
 
-#, fuzzy
 msgid "Cancel back to the New Map menu."
-msgstr "Afbryd og gå tilbage til hovedmenuen."
+msgstr "Afbryd og gå tilbage til hovedmenuen for Nyt-kort."
 
 msgid "Cancel back to the main menu."
 msgstr "Afbryd og gå tilbage til hovedmenuen."
@@ -3623,13 +3609,11 @@ msgstr ""
 msgid "Create a randomly generated map."
 msgstr ""
 
-#, fuzzy
 msgid "Random"
-msgstr "Tilfældigt monster"
+msgstr "Tilfældigt"
 
-#, fuzzy
 msgid "Cancel back to the Map Editor main menu."
-msgstr "Afbryd og gå tilbage til hovedmenuen."
+msgstr "Afbryd og gå tilbage til Korteditorens hovedmenu."
 
 msgid "No maps available!"
 msgstr ""
@@ -3727,7 +3711,6 @@ msgstr "Genstart"
 msgid "Restart the current scenario."
 msgstr "Genstart det igangværende scenarie."
 
-#, fuzzy
 msgid "Difficulty"
 msgstr "Kort-niveau:"
 
@@ -4010,20 +3993,17 @@ msgstr "Vælg udvidelsens felttog"
 msgid "hotkey|map editor main menu"
 msgstr "Korteditorens hovedmenu"
 
-#, fuzzy
 msgid "hotkey|new map menu"
-msgstr "verdenskort op til venstre"
+msgstr "Nyt-kort menu"
 
-#, fuzzy
 msgid "hotkey|load map menu"
-msgstr "verdenskort op til venstre"
+msgstr "Indlæs-kort menu"
 
 msgid "hotkey|new map from scratch"
 msgstr "Nyt blankt kort"
 
-#, fuzzy
 msgid "hotkey|new random map"
-msgstr "verdenskort op til venstre"
+msgstr "Generer nyt kort"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands felttog"
@@ -4674,10 +4654,10 @@ msgid "Click to return to the main menu."
 msgstr "Klik her for at vende tilbage til hovedmenuen."
 
 msgid "Astrologers proclaim the Month of the %{name}."
-msgstr "Astrologer kundgør, at det er måneden for %{name}."
+msgstr "Astrologer kundgør, at månedens væsen er %{name}."
 
 msgid "Astrologers proclaim the Week of the %{name}."
-msgstr "Astrologer kundgør, at det er ugen for %{name}."
+msgstr "Astrologer kundgør, at ugens væsen er %{name}."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
 msgstr "Efter regelmæssig tilvækst er befolkningen på %{monster} fordoblet!"
@@ -4696,7 +4676,7 @@ msgstr[1] ""
 "procent!"
 
 msgid "%{monster} growth +%{count}."
-msgstr "%{monster} tilvækst +%{count}."
+msgstr "Tilvækst på %{monster} +%{count}."
 
 msgid " All populations are halved."
 msgstr "Hele befolkningen er halveret."
@@ -4892,8 +4872,8 @@ msgstr "At grave efter artefakter kræver en hel dag. Prøv igen i morgen."
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
-"Efter at have brugt mange timer på at grave her, har du afsløret "
-"%{artefakten}."
+"Efter at have brugt mange timer på at grave her, finder du endelig "
+"%{artifact}."
 
 msgid "Congratulations!"
 msgstr "TILLYKKE!!!"
@@ -5334,9 +5314,11 @@ msgid ""
 "You've found an abandoned lean-to.\n"
 "Poking about, you discover some resources hidden nearby."
 msgstr ""
+"Du har fundet et forladt shelter.\n"
+"Idet du roder rundt, opdager du nogle resurser gemt i nærheden."
 
 msgid "The lean-to is long abandoned. There is nothing of value here."
-msgstr ""
+msgstr "Shelteret er for længst forladt. Der er intet af værdi her."
 
 msgid ""
 "You catch a leprechaun foolishly sleeping amidst a cluster of magic "
@@ -5358,83 +5340,103 @@ msgstr ""
 "Måske du skulle prøve igen i næste uge."
 
 msgid "You come upon the remains of an unfortunate adventurer."
-msgstr ""
+msgstr "Du støder på resterne af en uheldig eventyrer."
 
 msgid "Treasure"
 msgstr "Skat"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
-msgstr ""
+msgstr "Du gennemsøger det lasede tøj og finder %{artifact}."
 
 msgid "Searching through the tattered clothing, you find nothing."
-msgstr ""
+msgstr "Du gennemsøger det lasede tøj, men finder intet af værdi."
 
 msgid ""
 "You come across an old wagon left by a trader who didn't quite make it to "
 "safe terrain."
 msgstr ""
+"Du støder på en gammel vogn efterladt af en handelsmand, der ikke helt nåede "
+"til sikkert terræn."
 
 msgid "Unfortunately, others have found it first, and the wagon is empty."
-msgstr ""
+msgstr "Desværre har andre fundet den først, og vognen er tom."
 
 msgid "Searching inside, you find the %{artifact}."
-msgstr ""
+msgstr "Indenfor kigger du søgende rundt. Du finder %{artifact}."
 
 msgid "Inside, you find some of the wagon's cargo still intact."
-msgstr ""
+msgstr "Indeni vognen er noget af dens last stadig intakt."
 
 msgid "You search through the flotsam, and find some wood and some gold."
-msgstr ""
+msgstr "Du undersøger vraggodset og finder noget træ og guld."
 
 msgid "You search through the flotsam, and find some wood."
-msgstr ""
+msgstr "Du undersøger vraggodset og finder noget træ."
 
 msgid "You search through the flotsam, but find nothing."
-msgstr ""
+msgstr "Du gennemsøger vraggodset, men du finder intet af værdi."
 
 msgid "Shrine of the 1st Circle"
-msgstr ""
+msgstr "Helligdom af den 1. cirkel"
 
 msgid ""
 "You come across a small shrine attended by a group of novice acolytes.\n"
 "In exchange for your protection, they agree to teach you a simple spell - "
 "'%{spell}'."
 msgstr ""
+"Du støder på en lille helligdom, der overværes af en gruppe præstelærlinge.\n"
+"Til gengæld for din beskyttelse, er de enige om at lære dig en simpel "
+"besværgelse - '%{spell}'."
 
 msgid "Shrine of the 2nd Circle"
-msgstr ""
+msgstr "Helligdom af den 2. cirkel"
 
 msgid ""
 "You come across an ornate shrine attended by a group of rotund friars.\n"
 "In exchange for your protection, they agree to teach you a spell - "
 "'%{spell}'."
 msgstr ""
+"Du støder på en udsmykket helligdom, der overværes af en gruppe runde "
+"munke.\n"
+"Til gengæld for din beskyttelse, er de enige om at lære dig en simpel "
+"besværgelse - '%{spell}'."
 
 msgid "Shrine of the 3rd Circle"
-msgstr ""
+msgstr "Helligdom af den 3. cirkel"
 
 msgid ""
 "You come across a lavish shrine attended by a group of high priests.\n"
 "In exchange for your protection, they agree to teach you a sophisticated "
 "spell - '%{spell}'."
 msgstr ""
+"Du støder på en overdådig helligdom, der overværes af en gruppe højpræste.\n"
+"Til gengæld for din beskyttelse, er de enige om at lære dig en simpel "
+"besværgelse - '%{spell}'."
 
 msgid ""
 "\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
+"\n"
+"Desværre har du ikke visdom til at forstå besværgelsen, og du er ikke i "
+"stand til at lære den."
 
 msgid ""
 "\n"
 "Unfortunately, you already have knowledge of this spell, so there is nothing "
 "more for them to teach you."
 msgstr ""
+"\n"
+"Desværre kender du allerede til denne besværgelse, så der er ikke mere de "
+"kan lære dig."
 
 msgid ""
 "\n"
 "Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
+"\n"
+"Desværre har du ingen magibog, at nedskrive besværgelsen i."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -6595,8 +6597,9 @@ msgid ""
 msgstr ""
 "En magisk barriere står højt foran dig og blokerer din vej. Runer på buen "
 "siger,\n"
-"\"Tal nøglen, og du kan bestå.\"\n"
-"Når du taler det magiske ord, opløses den glødende barriere i intetheden."
+"\"Sig nøgleordet, og du kan passere.\"\n"
+"Idet du siger det magiske nøgleord, opløses den glødende barriere i "
+"intetheden."
 
 msgid ""
 "A magical barrier stands tall before you, blocking your way. Runes on the "
@@ -6607,7 +6610,7 @@ msgstr ""
 "En magisk barriere står højt foran dig og blokerer din vej. Runer på buen "
 "siger,\n"
 "\"Sig nøgleordet, og du kan passere.\"\n"
-"Du taler, men der sker intet."
+"Du udtaler noget, men der sker intet."
 
 msgid ""
 "You enter the tent and see an old woman gazing into a magic gem. She looks "
@@ -6620,63 +6623,64 @@ msgstr ""
 "\"På mine rejser har jeg lært meget om mystisk magi. Et stort orakel lærte "
 "mig sine færdigheder. Jeg har svaret, du søger.\""
 
-#, fuzzy
 msgid "No spell book is present."
-msgstr "Ingen magi at kaste."
+msgstr "Der er ingen magibog at finde."
 
-#, fuzzy
 msgid ""
 "This spell costs %{mana} spell points. You have no spell points, so you "
 "cannot cast it."
-msgstr "Du har ingen Magibog, så du kan ikke kaste magi."
+msgstr ""
+"Denne besværgelse koster %{mana} mana. Du har ingen mana, så du kan ikke "
+"kaste den."
 
-#, fuzzy
 msgid ""
 "This spell costs %{mana} spell points. You only have %{point} spell points, "
 "so you cannot cast it."
-msgstr "Du har ingen Magibog, så du kan ikke kaste magi."
+msgstr ""
+"Denne besværgelse koster %{mana} mana. Du har kun %{point} mana, så du kan "
+"ikke kaste den."
 
 msgid "The spell was not found."
-msgstr ""
+msgstr "Besværgelsen blev ikke fundet."
 
 msgid "Only heroes can cast this spell."
-msgstr ""
+msgstr "Kun helte kan kaste denne magi."
 
 msgid "This hero is not able to cast adventure spells."
-msgstr ""
+msgstr "Denne helt er ikke i stand til at kaste eventyrmagi."
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
+"Din helt er for træt til at kaste denne besværgelse i dag. Prøv igen i "
+"morgen."
 
 msgid "This spell cannot be cast on a boat."
-msgstr ""
+msgstr "Denne besværgelse kan ikke kastes ombord på et skib."
 
 msgid "This spell can only be cast near an ocean."
-msgstr ""
+msgstr "Denne besværgelse kan kun kastes i nærheden af et hav."
 
 msgid ""
 "There are no boats available and no ocean adjacent to the hero where this "
 "spell will work."
 msgstr ""
+"Der er hverken et hav ved siden af helten eller nogen tilgængelige skibe at "
+"hidkalde."
 
-#, fuzzy
 msgid "There are no boats available for this spell."
-msgstr "Der er i øjeblikket intet væsen at rekruttére."
+msgstr "Der er ingen tilgængelige skibe at hidkalde."
 
-#, fuzzy
 msgid "There is no ocean adjacent to the hero where this spell will work."
 msgstr ""
-"Der er ingen åben plads ved siden af din helt til at hidkalde en Elemental "
-"på."
+"Der er intet hav ved siden af helten, hvor denne besværgelse vil virke."
 
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
 "You cannot cast this spell."
 msgstr ""
 
-#, fuzzy
 msgid "This hero is already in a town, so you cannot cast this spell."
-msgstr "Du har ingen magibog, så du kan ikke kaste magi."
+msgstr "Denne helt er allerede i en by, så du kan ikke kaste besværgelsen."
 
 msgid ""
 "The nearest town is %{town}.\n"
@@ -7328,13 +7332,13 @@ msgid "Barbarian"
 msgstr "Barbar"
 
 msgid "Sorceress"
-msgstr "Troldkvinde"
+msgstr "Heks"
 
 msgid "Warlock"
 msgstr "Heksemester"
 
 msgid "Wizard"
-msgstr "Troldmand"
+msgstr "Magiker"
 
 msgid "Necromancer"
 msgstr "Nekromantiker"
@@ -7355,9 +7359,7 @@ msgid "doubleLined|Barbarian"
 msgstr "Barbar"
 
 msgid "doubleLined|Sorceress"
-msgstr ""
-"Trold-\n"
-"kvinde"
+msgstr "Heks"
 
 msgid "doubleLined|Warlock"
 msgstr ""
@@ -7365,9 +7367,7 @@ msgstr ""
 "mester"
 
 msgid "doubleLined|Wizard"
-msgstr ""
-"Trold-\n"
-"mand"
+msgstr "Magiker"
 
 msgid ""
 "doubleLined|Necro-\n"
@@ -7416,109 +7416,109 @@ msgid "speed|Instant"
 msgstr "Fantom"
 
 msgid "week|Squirrel"
-msgstr ""
+msgstr "egern"
 
 msgid "week|Rabbit"
-msgstr ""
+msgstr "hare"
 
 msgid "week|Gopher"
-msgstr ""
+msgstr "jordegern"
 
 msgid "week|Badger"
-msgstr ""
+msgstr "grævling"
 
 msgid "week|Rat"
-msgstr ""
+msgstr "rotte"
 
 msgid "week|Eagle"
-msgstr ""
+msgstr "ørn"
 
 msgid "week|Weasel"
-msgstr ""
+msgstr "væsel"
 
 msgid "week|Raven"
-msgstr ""
+msgstr "ravn"
 
 msgid "week|Mongoose"
-msgstr ""
+msgstr "mangust"
 
 msgid "week|Dog"
-msgstr ""
+msgstr "hund"
 
 msgid "week|Aardvark"
-msgstr ""
+msgstr "jordsvin"
 
 msgid "week|Lizard"
-msgstr ""
+msgstr "firben"
 
 msgid "week|Tortoise"
-msgstr ""
+msgstr "landskildpadde"
 
 msgid "week|Hedgehog"
-msgstr ""
+msgstr "pindsvin"
 
 msgid "week|Condor"
-msgstr ""
+msgstr "kondor"
 
 msgid "week|Ant"
-msgstr ""
+msgstr "myre"
 
 msgid "week|Grasshopper"
-msgstr ""
+msgstr "græshoppe"
 
 msgid "week|Dragonfly"
-msgstr ""
+msgstr "guldsmed"
 
 msgid "week|Spider"
-msgstr ""
+msgstr "edderkop"
 
 msgid "week|Butterfly"
-msgstr ""
+msgstr "sommerfugl"
 
 msgid "week|Bumblebee"
-msgstr ""
+msgstr "humlebi"
 
 msgid "week|Locust"
-msgstr ""
+msgstr "ørkengræshoppe"
 
 msgid "week|Earthworm"
-msgstr ""
+msgstr "regnorm"
 
 msgid "week|Hornet"
-msgstr ""
+msgstr "hveps"
 
 msgid "week|Beetle"
-msgstr ""
+msgstr "mariehøne"
 
 msgid "week|PLAGUE"
-msgstr ""
+msgstr "FORPESTET"
 
 msgid "week|Unnamed"
-msgstr ""
+msgstr "unavngivet"
 
 msgid "Desert"
-msgstr ""
+msgstr "Ørken"
 
 msgid "Snow"
-msgstr ""
+msgstr "Sne"
 
 msgid "Wasteland"
-msgstr ""
+msgstr "Ødemark"
 
 msgid "Beach"
-msgstr ""
+msgstr "Strand"
 
 msgid "Lava"
-msgstr ""
+msgstr "Lava"
 
 msgid "Dirt"
-msgstr ""
+msgstr "Jord"
 
 msgid "Grass"
-msgstr ""
+msgstr "Græs"
 
 msgid "Ocean"
-msgstr ""
+msgstr "Hav"
 
 msgid "maps|Small"
 msgstr "Lille"
@@ -7575,7 +7575,7 @@ msgid "Sign"
 msgstr "Skilt"
 
 msgid "Buoy"
-msgstr ""
+msgstr "Bøje"
 
 msgid "Skeleton"
 msgstr "Skelet"
@@ -7596,10 +7596,10 @@ msgid "Fountain"
 msgstr "Springvand"
 
 msgid "Gazebo"
-msgstr ""
+msgstr "Lysthus"
 
 msgid "Genie Lamp"
-msgstr ""
+msgstr "Magisk lampe"
 
 msgid "Archer's House"
 msgstr "Bueskyttes hus"
@@ -7614,10 +7614,10 @@ msgid "Peasant Hut"
 msgstr "Bondehytte"
 
 msgid "Stables"
-msgstr ""
+msgstr "Stalde"
 
 msgid "Alchemist's Tower"
-msgstr "Alkymists tårn"
+msgstr "Alkymisttårn"
 
 msgid "Event"
 msgstr "Begivenhed"
@@ -7660,7 +7660,7 @@ msgid "Shrine of the First Circle"
 msgstr "Helligdom for 1. cirkel"
 
 msgid "Shipwreck"
-msgstr ""
+msgstr "Skibsvrag"
 
 msgid "Sea Chest"
 msgstr "Søkiste"
@@ -7692,7 +7692,7 @@ msgid "Mermaid"
 msgstr "Havfrue"
 
 msgid "Boat"
-msgstr "Båd"
+msgstr "Skib"
 
 msgid "Random Ultimate Artifact"
 msgstr "Tilfældigt ultimativt artefakt"
@@ -7755,10 +7755,10 @@ msgid "Sirens"
 msgstr "Sirener"
 
 msgid "Standing Stones"
-msgstr ""
+msgstr "Bautasten"
 
 msgid "Idol"
-msgstr "Idol"
+msgstr "Stenidol"
 
 msgid "Tree of Knowledge"
 msgstr "Visdomstræ"
@@ -7770,7 +7770,7 @@ msgid "Temple"
 msgstr "Tempel"
 
 msgid "Hill Fort"
-msgstr ""
+msgstr "Bakkefort"
 
 msgid "Halfling Hole"
 msgstr "Halvlang-hul"
@@ -7797,7 +7797,7 @@ msgid "Tar Pit"
 msgstr "Tjæresø"
 
 msgid "Artesian Spring"
-msgstr ""
+msgstr "Artesisk springvand"
 
 msgid "Troll Bridge"
 msgstr "Troldebro"
@@ -7809,22 +7809,22 @@ msgid "Witch's Hut"
 msgstr "Heksens hytte"
 
 msgid "Xanadu"
-msgstr ""
+msgstr "Xanadu"
 
 msgid "Lean-To"
-msgstr ""
+msgstr "Shelter"
 
 msgid "Magellan's Maps"
-msgstr ""
+msgstr "Magellans kort"
 
 msgid "Flotsam"
-msgstr ""
+msgstr "Vraggods"
 
 msgid "Derelict Ship"
-msgstr ""
+msgstr "Forladt skib"
 
 msgid "Shipwreck Survivor"
-msgstr ""
+msgstr "Skibbruden"
 
 msgid "Bottle"
 msgstr "Flaske"
@@ -7841,10 +7841,10 @@ msgid "Observation Tower"
 msgstr "Observationstårn"
 
 msgid "Freeman's Foundry"
-msgstr ""
+msgstr "Friborgeres støberi"
 
 msgid "Reefs"
-msgstr ""
+msgstr "Rev"
 
 msgid "Trees"
 msgstr "Træer"
@@ -7862,16 +7862,16 @@ msgid "Rock"
 msgstr "Sten"
 
 msgid "Water Lake"
-msgstr ""
+msgstr "Indsø"
 
 msgid "Mandrake"
-msgstr ""
+msgstr "Alrune"
 
 msgid "Dead Tree"
 msgstr "Dødt træ"
 
 msgid "Stump"
-msgstr ""
+msgstr "Stub"
 
 msgid "Crater"
 msgstr "Krater"
@@ -7880,19 +7880,19 @@ msgid "Cactus"
 msgstr "Kaktus"
 
 msgid "Mound"
-msgstr ""
+msgstr "Høj"
 
 msgid "Dune"
-msgstr ""
+msgstr "Klit"
 
 msgid "Lava Pool"
-msgstr ""
+msgstr "Lavasø"
 
 msgid "Shrub"
-msgstr ""
+msgstr "Buskads"
 
 msgid "Barrow Mounds"
-msgstr ""
+msgstr "Gravhøj"
 
 msgid "Random Artifact - Treasure"
 msgstr "Tilfældigt artefakt - Skat"
@@ -8022,28 +8022,28 @@ msgid "Wolves"
 msgstr "Ulve"
 
 msgid "Ogre"
-msgstr "Trold"
-
-msgid "Ogres"
-msgstr "Trolde"
-
-msgid "Ogre Lord"
-msgstr "Troldherre"
-
-msgid "Ogre Lords"
-msgstr "Troldherrer"
-
-msgid "Troll"
 msgstr "Jætte"
 
-msgid "Trolls"
+msgid "Ogres"
 msgstr "Jætter"
 
+msgid "Ogre Lord"
+msgstr "Jætteherre"
+
+msgid "Ogre Lords"
+msgstr "Jætteherrer"
+
+msgid "Troll"
+msgstr "Trold"
+
+msgid "Trolls"
+msgstr "Trolde"
+
 msgid "War Troll"
-msgstr "Krigsjætte"
+msgstr "Krigstrold"
 
 msgid "War Trolls"
-msgstr "Krigsjætter"
+msgstr "Krigstrolde"
 
 msgid "Cyclopes"
 msgstr "Kykloper"
@@ -8190,16 +8190,16 @@ msgid "Rocs"
 msgstr "Roker"
 
 msgid "Mage"
-msgstr "Magiker"
+msgstr "Troldmand"
 
 msgid "Magi"
-msgstr "Magikere"
+msgstr "Troldmænd"
 
 msgid "Archmage"
-msgstr "Ærkemagiker"
+msgstr "Ærketroldmand"
 
 msgid "Archmagi"
-msgstr "Ærkemagikere"
+msgstr "Ærketroldmænd"
 
 msgid "Giant"
 msgstr "Kæmpe"
@@ -8352,100 +8352,100 @@ msgid "Random Monsters 4"
 msgstr "Tilfældige monstre 4"
 
 msgid "Double shot"
-msgstr ""
+msgstr "Dobbeltskud"
 
 msgid "2-hex monster"
-msgstr ""
+msgstr "2-feltsvæsen"
 
 msgid "Double strike"
-msgstr ""
+msgstr "Dobbeltslag"
 
 msgid "Double damage to Undead"
-msgstr ""
+msgstr "Dobbelt skade til udøde"
 
 msgid "% magic resistance"
-msgstr ""
+msgstr "% magiresistens"
 
 msgid "Immune to Mind spells"
-msgstr ""
+msgstr "Immun overfor sindsbesværgelser"
 
 msgid "Immune to Elemental spells"
-msgstr ""
+msgstr "Immun overfor elementalbesværgelser"
 
 msgid "Immune to Fire spells"
-msgstr ""
+msgstr "Immun overfor ildbesværgelser"
 
 msgid "Immune to Cold spells"
-msgstr ""
+msgstr "Immun overfor koldbesværgelser"
 
 msgid "Immune to "
-msgstr ""
+msgstr "Immun overfor "
 
 msgid "% immunity to %{spell} spell"
-msgstr ""
+msgstr "% immunitet overfor %{spell} besværgelse"
 
 msgid "% damage from Elemental spells"
-msgstr ""
+msgstr "% skade af elementalbesværgelser"
 
 msgid "% chance to Dispel beneficial spells"
-msgstr ""
+msgstr "% chance, for at fordrive gavnlige besværgelser"
 
 msgid "% chance to Paralyze"
-msgstr ""
+msgstr "% chance, for at lamme"
 
 msgid "% chance to Petrify"
-msgstr ""
+msgstr "% chance, for at forstene"
 
 msgid "% chance to Blind"
-msgstr ""
+msgstr "% chance, for at blinde"
 
 msgid "% chance to Curse"
-msgstr ""
+msgstr "% chance, for at forbande"
 
 msgid "% chance to cast %{spell} spell"
-msgstr ""
+msgstr "% chance, for at kaste en %{spell} besværgelse"
 
 msgid "HP regeneration"
-msgstr ""
+msgstr "Selvhelbredende"
 
 msgid "Two hexes attack"
-msgstr ""
+msgstr "2-feltsangreb"
 
 msgid "Flyer"
-msgstr ""
+msgstr "Kan flyve"
 
 msgid "Always retaliates"
-msgstr ""
+msgstr "Slår altid igen"
 
 msgid "Attacks all adjacent enemies"
-msgstr ""
+msgstr "Angriber alle fjender omkring sig"
 
 msgid "No melee penalty"
-msgstr ""
+msgstr "Ingen nærkampsstraf"
 
 msgid "Dragon"
-msgstr ""
+msgstr "Drage"
 
 msgid "Undead"
-msgstr ""
+msgstr "Udød"
 
 msgid "No enemy retaliation"
-msgstr ""
+msgstr "Fjender kan ikke slå igen"
 
 msgid "HP drain"
-msgstr ""
+msgstr "Stjæler liv"
 
 msgid "Cloud attack"
-msgstr ""
+msgstr "Skyangreb"
 
 msgid "Decreases enemy's morale by "
-msgstr ""
+msgstr "Sænker fjendens moral med "
 
 msgid "% chance to halve enemy"
-msgstr ""
+msgstr "% chance for at halvere fjenden"
 
 msgid "Soul Eater"
-msgstr ""
+msgstr "Sjælefortærer"
 
 msgid "Elemental"
 msgstr "Elementalt"
@@ -8454,22 +8454,22 @@ msgid "No Morale"
 msgstr "Ingen moral"
 
 msgid "200% damage from Fire spells"
-msgstr ""
+msgstr "200% skade af ildbesværgelser"
 
 msgid "200% damage from Cold spells"
-msgstr ""
+msgstr "200% skade af koldbesværgelser"
 
 msgid "% damage from %{spell} spell"
-msgstr ""
+msgstr "% skade af %{spell} besværgelsen"
 
 msgid "% immunity to "
-msgstr ""
+msgstr "% immunitet overfor "
 
 msgid "Lightning"
-msgstr ""
+msgstr "Lyn"
 
 msgid "% damage from "
-msgstr ""
+msgstr "% skade af "
 
 msgid "The three Anduran artifacts magically combine into one."
 msgstr ""
@@ -10135,10 +10135,10 @@ msgid ""
 msgstr ""
 
 msgid "The ultimate artifact is really the %{name}."
-msgstr ""
+msgstr "Den ultimative artefakt er i virkeligheden %{name}."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr ""
+msgstr "Den ultimative artefakt kan findes i verdens %{name}-regioner."
 
 msgid "north-west"
 msgstr "nordvest"
@@ -10177,13 +10177,15 @@ msgid "The end of the world is near."
 msgstr "Verdens ende er nær."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
-msgstr ""
+msgstr "Lord Slayers knogler er begravet i fundamentet af arenaen."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr "En sortdrage kan til enhver tid klare en titan."
 
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr ""
+"Til hende sagde han: \"snakke, snakke, snakke...\", og til det svarede hun: "
+"\"Bla, bla, bla...\""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
