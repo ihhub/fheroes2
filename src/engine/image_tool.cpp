@@ -29,21 +29,14 @@
 #include <vector>
 
 #include <SDL_error.h>
+#include <SDL_pixels.h>
 #include <SDL_stdinc.h>
+#include <SDL_surface.h>
 #include <SDL_version.h>
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#include <SDL_pixels.h>
-#include <SDL_surface.h>
-#else
-#include <SDL_video.h>
-#endif
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #if defined( WITH_IMAGE )
 #define ENABLE_PNG
 #include <SDL_image.h>
-#endif
 #endif
 
 #include "image_palette.h"
@@ -82,11 +75,7 @@ namespace
         const int32_t width = image.width();
         const int32_t height = image.height();
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
         SDL_Surface * surface = SDL_CreateRGBSurface( 0, width, height, 8, 0, 0, 0, 0 );
-#else
-        SDL_Surface * surface = SDL_CreateRGBSurface( SDL_SWSURFACE, width, height, 8, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
-#endif
         if ( surface == nullptr ) {
             ERROR_LOG( "Error while creating a SDL surface for an image to be saved under " << path << ". Error " << SDL_GetError() )
             return false;
@@ -103,16 +92,10 @@ namespace
             col.r = *value;
             col.g = *( value + 1 );
             col.b = *( value + 2 );
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
             col.a = 255;
-#endif
         }
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
         SDL_SetPaletteColors( surface->format->palette, paletteSDL.data(), 0, 256 );
-#else
-        SDL_SetPalette( surface, SDL_LOGPAL | SDL_PHYSPAL, paletteSDL.data(), 0, 256 );
-#endif
 
         if ( surface->pitch != width ) {
             const uint8_t * imageIn = image.image();
@@ -173,155 +156,72 @@ namespace fheroes2
     bool Load( const std::string & path, Image & image )
     {
         std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> surface( nullptr, SDL_FreeSurface );
-
-        {
-            std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> loadedSurface( nullptr, SDL_FreeSurface );
+        std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> loadedSurface( nullptr, SDL_FreeSurface );
 
 #if defined( ENABLE_PNG )
-            loadedSurface.reset( IMG_Load( path.c_str() ) );
+        loadedSurface.reset( IMG_Load( path.c_str() ) );
 #else
-            loadedSurface.reset( SDL_LoadBMP( path.c_str() ) );
+        loadedSurface.reset( SDL_LoadBMP( path.c_str() ) );
 #endif
-            if ( !loadedSurface ) {
-                return false;
-            }
+        if ( !loadedSurface ) {
+            return false;
+        }
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 // SDL_PIXELFORMAT_BGRA32 and other RGBA color variants are only supported starting with SDL 2.0.5
 #if !SDL_VERSION_ATLEAST( 2, 0, 5 )
 #error Minimal supported SDL version is 2.0.5.
 #endif
 
-            // Image loading functions can theoretically return SDL_Surface in any supported color format, so we will convert it to a specific format for subsequent
-            // processing
-            const std::unique_ptr<SDL_PixelFormat, std::function<void( SDL_PixelFormat * )>> pixelFormat( SDL_AllocFormat( SDL_PIXELFORMAT_BGRA32 ), SDL_FreeFormat );
-            if ( !pixelFormat ) {
-                return false;
-            }
-
-            surface.reset( SDL_ConvertSurface( loadedSurface.get(), pixelFormat.get(), 0 ) );
-            if ( !surface ) {
-                return false;
-            }
-
-            assert( SDL_MUSTLOCK( surface.get() ) == SDL_FALSE && surface->format->BytesPerPixel == 4 );
-#else
-            // With SDL1, we just use the loaded SDL_Surface as is and hope for the best
-            surface = std::move( loadedSurface );
-#endif
+        // Image loading functions can theoretically return SDL_Surface in any supported color format, so we will convert it to a specific format for subsequent
+        // processing
+        const std::unique_ptr<SDL_PixelFormat, std::function<void( SDL_PixelFormat * )>> pixelFormat( SDL_AllocFormat( SDL_PIXELFORMAT_BGRA32 ), SDL_FreeFormat );
+        if ( !pixelFormat ) {
+            return false;
         }
 
-        assert( surface && SDL_MUSTLOCK( surface.get() ) == SDL_FALSE );
+        surface.reset( SDL_ConvertSurface( loadedSurface.get(), pixelFormat.get(), 0 ) );
+        if ( !surface ) {
+            return false;
+        }
 
-        // TODO: with SDL2 we can use specific color format of SDL_Surface, therefore, most of this code will not be needed
-        if ( surface->format->BytesPerPixel == 1 ) {
-            const SDL_Palette * palette = surface->format->palette;
-            assert( palette != nullptr );
+        assert( SDL_MUSTLOCK( surface.get() ) == SDL_FALSE && surface->format->BytesPerPixel == 4 );
 
-            image.resize( surface->w, surface->h );
+        image.resize( surface->w, surface->h );
+        image.reset();
 
-            const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
-            uint8_t * outY = image.image();
-            uint8_t * transformY = image.transform();
+        const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
+        uint8_t * outY = image.image();
+        uint8_t * transformY = image.transform();
 
-            const uint8_t * inYEnd = inY + surface->h * surface->pitch;
+        const uint8_t * inYEnd = inY + surface->h * surface->pitch;
 
-            for ( ; inY != inYEnd; inY += surface->pitch, outY += surface->w, transformY += surface->w ) {
-                const uint8_t * inX = inY;
-                uint8_t * outX = outY;
-                uint8_t * transformX = transformY;
-                const uint8_t * inXEnd = inX + surface->w;
+        for ( ; inY != inYEnd; inY += surface->pitch, outY += surface->w, transformY += surface->w ) {
+            const uint8_t * inX = inY;
+            uint8_t * outX = outY;
+            uint8_t * transformX = transformY;
+            const uint8_t * inXEnd = inX + surface->w * 4;
 
-                for ( ; inX != inXEnd; ++inX, ++outX, ++transformX ) {
-                    assert( *inX < palette->ncolors );
-                    const SDL_Color * color = palette->colors + *inX;
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-                    if ( color->a < 255 ) {
-                        if ( color->a == 0 ) {
-                            *outX = 0;
-                            *transformX = 1;
-                        }
-                        else if ( color->r == 0 && color->g == 0 && color->b == 0 ) {
-                            *outX = 0;
-                            *transformX = 2;
-                        }
-                        else {
-                            *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
-                            *transformX = 0;
-                        }
+            for ( ; inX != inXEnd; inX += 4, ++outX, ++transformX ) {
+                const uint8_t alpha = *( inX + 3 );
+                if ( alpha < 255 ) {
+                    if ( alpha == 0 ) {
+                        *outX = 0;
+                        *transformX = 1;
                     }
-                    else {
-                        *outX = GetColorId( color->r, color->g, color->b );
-                        *transformX = 0;
-                    }
-#else
-                    // SDL 1 doesn't support RGBA colors.
-                    *outX = GetColorId( color->r, color->g, color->b );
-                    *transformX = 0;
-#endif
-                }
-            }
-        }
-        else if ( surface->format->BytesPerPixel == 3 ) {
-            image.resize( surface->w, surface->h );
-            memset( image.transform(), 0, surface->w * surface->h );
-
-            const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
-            uint8_t * outY = image.image();
-
-            const uint8_t * inYEnd = inY + surface->h * surface->pitch;
-
-            for ( ; inY != inYEnd; inY += surface->pitch, outY += surface->w ) {
-                const uint8_t * inX = inY;
-                uint8_t * outX = outY;
-                const uint8_t * inXEnd = inX + surface->w * 3;
-
-                for ( ; inX != inXEnd; inX += 3, ++outX ) {
-                    *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
-                }
-            }
-        }
-        else if ( surface->format->BytesPerPixel == 4 ) {
-            image.resize( surface->w, surface->h );
-            image.reset();
-
-            const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
-            uint8_t * outY = image.image();
-            uint8_t * transformY = image.transform();
-
-            const uint8_t * inYEnd = inY + surface->h * surface->pitch;
-
-            for ( ; inY != inYEnd; inY += surface->pitch, outY += surface->w, transformY += surface->w ) {
-                const uint8_t * inX = inY;
-                uint8_t * outX = outY;
-                uint8_t * transformX = transformY;
-                const uint8_t * inXEnd = inX + surface->w * 4;
-
-                for ( ; inX != inXEnd; inX += 4, ++outX, ++transformX ) {
-                    const uint8_t alpha = *( inX + 3 );
-                    if ( alpha < 255 ) {
-                        if ( alpha == 0 ) {
-                            *outX = 0;
-                            *transformX = 1;
-                        }
-                        else if ( *inX == 0 && *( inX + 1 ) == 0 && *( inX + 2 ) == 0 ) {
-                            *outX = 0;
-                            *transformX = 2;
-                        }
-                        else {
-                            *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
-                            *transformX = 0;
-                        }
+                    else if ( *inX == 0 && *( inX + 1 ) == 0 && *( inX + 2 ) == 0 ) {
+                        *outX = 0;
+                        *transformX = 2;
                     }
                     else {
                         *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
                         *transformX = 0;
                     }
                 }
+                else {
+                    *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
+                    *transformX = 0;
+                }
             }
-        }
-        else {
-            return false;
         }
 
         return true;
