@@ -352,31 +352,35 @@ namespace
             isInitialized = true;
             const uint32_t size = 64 * 64 * 64;
 
-            uint32_t r = 0;
-            uint32_t g = 0;
-            uint32_t b = 0;
+            int32_t r = 0;
+            int32_t g = 0;
+            int32_t b = 0;
 
             const uint8_t * gamePalette = fheroes2::getGamePalette();
 
             for ( uint32_t id = 0; id < size; ++id ) {
-                r = ( id % 64 );
-                g = ( id >> 6 ) % 64;
-                b = ( id >> 12 );
-                int32_t minDistance = 3 * 255 * 255;
+                r = static_cast<int32_t>( id % 64 );
+                g = static_cast<int32_t>( id >> 6 ) % 64;
+                b = static_cast<int32_t>( id >> 12 );
+                int32_t minDistance = INT32_MAX;
                 uint32_t bestPos = 0;
 
+                // Use the "No cycle" palette.
                 const uint8_t * correctorX = transformTable + 256 * 15;
 
                 for ( uint32_t i = 0; i < 256; ++i, ++correctorX ) {
                     const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *correctorX ) * 3;
 
-                    const int32_t offsetRed = static_cast<int32_t>( *palette ) - static_cast<int32_t>( r );
+                    const int32_t sumRed = static_cast<int32_t>( *palette ) + r;
+                    const int32_t offsetRed = static_cast<int32_t>( *palette ) - r;
                     ++palette;
-                    const int32_t offsetGreen = static_cast<int32_t>( *palette ) - static_cast<int32_t>( g );
+                    const int32_t offsetGreen = static_cast<int32_t>( *palette ) - g;
                     ++palette;
-                    const int32_t offsetBlue = static_cast<int32_t>( *palette ) - static_cast<int32_t>( b );
+                    const int32_t offsetBlue = static_cast<int32_t>( *palette ) - b;
                     ++palette;
-                    const int32_t distance = offsetRed * offsetRed + offsetGreen * offsetGreen + offsetBlue * offsetBlue;
+                    // Based on "Redmean" color distance calculation (https://www.compuphase.com/cmetric.htm).
+                    const int32_t distance = ( 2 * 2 * 256 + sumRed ) * offsetRed * offsetRed + 4 * 2 * 256 * offsetGreen * offsetGreen
+                                             + ( 2 * ( 2 * 256 + 255 ) - sumRed ) * offsetBlue * offsetBlue;
                     if ( minDistance > distance ) {
                         minDistance = distance;
                         bestPos = *correctorX;
