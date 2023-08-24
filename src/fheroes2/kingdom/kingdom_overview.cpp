@@ -54,12 +54,13 @@
 #include "screen.h"
 #include "skill.h"
 #include "skill_bar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_kingdom.h"
 #include "ui_scrollbar.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
@@ -295,25 +296,29 @@ void StatsHeroesList::RedrawItem( const HeroRow & row, int32_t dstx, int32_t dst
         return;
     }
 
-    Text text( "", Font::SMALL );
-
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 10 ), display, dstx, dsty );
 
     // base info
     Interface::RedrawHeroesIcon( *row.hero, dstx + 5, dsty + 4 );
 
-    text.Set( std::to_string( row.hero->GetAttack() ) );
-    text.Blit( dstx + 90 - text.w(), dsty + 20 );
+    int32_t offsetX = dstx + 90;
+    const int32_t offsetY = dsty + 22;
 
-    text.Set( std::to_string( row.hero->GetDefense() ) );
-    text.Blit( dstx + 125 - text.w(), dsty + 20 );
+    fheroes2::Text text( std::to_string( row.hero->GetAttack() ), fheroes2::FontType::smallWhite() );
+    text.draw( offsetX - text.width(), offsetY, display );
 
-    text.Set( std::to_string( row.hero->GetPower() ) );
-    text.Blit( dstx + 160 - text.w(), dsty + 20 );
+    offsetX += 35;
+    text.set( std::to_string( row.hero->GetDefense() ), fheroes2::FontType::smallWhite() );
+    text.draw( offsetX - text.width(), offsetY, display );
 
-    text.Set( std::to_string( row.hero->GetKnowledge() ) );
-    text.Blit( dstx + 195 - text.w(), dsty + 20 );
+    offsetX += 35;
+    text.set( std::to_string( row.hero->GetPower() ), fheroes2::FontType::smallWhite() );
+    text.draw( offsetX - text.width(), offsetY, display );
+
+    offsetX += 35;
+    text.set( std::to_string( row.hero->GetKnowledge() ), fheroes2::FontType::smallWhite() );
+    text.draw( offsetX - text.width(), offsetY, display );
 
     // primary skills info
     row.primSkillsBar->setRenderingOffset( { dstx + 56, dsty - 3 } );
@@ -335,27 +340,31 @@ void StatsHeroesList::RedrawItem( const HeroRow & row, int32_t dstx, int32_t dst
 void StatsHeroesList::RedrawBackground( const fheroes2::Point & dst )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Text text( "", Font::SMALL );
 
-    // header
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 6 ), display, dst.x + 30, dst.y );
+    const fheroes2::Sprite & header = fheroes2::AGG::GetICN( ICN::OVERVIEW, 6 );
+    fheroes2::Copy( header, 0, 0, display, dst.x + 30, dst.y, header.width(), header.height() );
 
-    text.Set( _( "Hero/Stats" ) );
-    text.Blit( dst.x + 130 - text.w() / 2, dst.y + 1 );
+    const int32_t offxetY = dst.y + 3;
 
-    text.Set( _( "Skills" ) );
-    text.Blit( dst.x + 300 - text.w() / 2, dst.y + 1 );
+    fheroes2::Text text( _( "Hero/Stats" ), fheroes2::FontType::smallWhite() );
+    text.draw( dst.x + 130 - text.width() / 2, offxetY, display );
 
-    text.Set( _( "Artifacts" ) );
-    text.Blit( dst.x + 500 - text.w() / 2, dst.y + 1 );
+    text.set( _( "Skills" ), fheroes2::FontType::smallWhite() );
+    text.draw( dst.x + 300 - text.width() / 2, offxetY, display );
 
-    // scrollbar background
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 ), display, dst.x + scrollbarOffset + 1, dst.y + 17 );
+    text.set( _( "Artifacts" ), fheroes2::FontType::smallWhite() );
+    text.draw( dst.x + 500 - text.width() / 2, offxetY, display );
 
-    // items background
-    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
+    // Scrollbar background.
+    const fheroes2::Sprite & scrollbar = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
+    fheroes2::Copy( scrollbar, 0, 0, display, dst.x + scrollbarOffset + 1, dst.y + 17, scrollbar.width(), scrollbar.height() );
+
+    // Items background.
+    const fheroes2::Sprite & itemsBack = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
+    const int32_t itemsBackWidth = itemsBack.width();
+    const int32_t itemsBackHeight = itemsBack.height();
     for ( int ii = 0; ii < VisibleItemCount(); ++ii ) {
-        fheroes2::Blit( back, display, dst.x + 30, dst.y + 17 + ii * ( back.height() + 4 ) );
+        fheroes2::Copy( itemsBack, 0, 0, display, dst.x + 30, dst.y + 17 + ii * ( itemsBackHeight + 4 ), itemsBackWidth, itemsBackHeight );
     }
 }
 
@@ -488,6 +497,8 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const fheroes2::Poi
         // click castle icon
         if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
             Game::OpenCastleDialog( *row.castle, false, false );
+
+            row.Init( row.castle );
         }
 
         // click hero icon
@@ -503,8 +514,6 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const fheroes2::Poi
         else {
             return;
         }
-
-        row.Init( row.castle );
 
         needFadeIn = true;
     }
@@ -572,7 +581,6 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, int32_t dstx, int32_t ds
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    Text text( "", Font::SMALL );
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 11 ), display, dstx, dsty );
 
     // base info
@@ -583,21 +591,25 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, int32_t dstx, int32_t ds
     if ( hero ) {
         Interface::RedrawHeroesIcon( *hero, dstx + 82, dsty + 19 );
         const std::string sep = "-";
-        text.Set( std::to_string( hero->GetAttack() ) + sep + std::to_string( hero->GetDefense() ) + sep + std::to_string( hero->GetPower() ) + sep
-                  + std::to_string( hero->GetKnowledge() ) );
-        text.Blit( dstx + 104 - text.w() / 2, dsty + 43 );
+
+        const fheroes2::Text text( std::to_string( hero->GetAttack() ) + sep + std::to_string( hero->GetDefense() ) + sep + std::to_string( hero->GetPower() ) + sep
+                                       + std::to_string( hero->GetKnowledge() ),
+                                   fheroes2::FontType::smallWhite() );
+        text.draw( dstx + 104 - text.width() / 2, dsty + 45, display );
     }
     else if ( row.castle->GetCaptain().isValid() ) {
         const Captain & captain = row.castle->GetCaptain();
         captain.PortraitRedraw( dstx + 82, dsty + 19, PORT_SMALL, display );
         const std::string sep = "-";
-        text.Set( std::to_string( captain.GetAttack() ) + sep + std::to_string( captain.GetDefense() ) + sep + std::to_string( captain.GetPower() ) + sep
-                  + std::to_string( captain.GetKnowledge() ) );
-        text.Blit( dstx + 104 - text.w() / 2, dsty + 43 );
+
+        const fheroes2::Text text( std::to_string( captain.GetAttack() ) + sep + std::to_string( captain.GetDefense() ) + sep + std::to_string( captain.GetPower() ) + sep
+                                       + std::to_string( captain.GetKnowledge() ),
+                                   fheroes2::FontType::smallWhite() );
+        text.draw( dstx + 104 - text.width() / 2, dsty + 45, display );
     }
 
-    text.Set( row.castle->GetName() );
-    text.Blit( dstx + 72 - text.w() / 2, dsty + 62 );
+    const fheroes2::Text text( row.castle->GetName(), fheroes2::FontType::smallWhite() );
+    text.draw( dstx + 72 - text.width() / 2, dsty + 63, display );
 
     // army info
     if ( row.garrisonArmyBar ) {
@@ -617,22 +629,24 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, int32_t dstx, int32_t ds
 void StatsCastlesList::RedrawBackground( const fheroes2::Point & dst )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Text text( "", Font::SMALL );
 
-    // header
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 7 ), display, dst.x + 30, dst.y );
+    const fheroes2::Sprite & header = fheroes2::AGG::GetICN( ICN::OVERVIEW, 7 );
+    fheroes2::Copy( header, 0, 0, display, dst.x + 30, dst.y, header.width(), header.height() );
 
-    text.Set( _( "Town/Castle" ) );
-    text.Blit( dst.x + 105 - text.w() / 2, dst.y + 1 );
+    const int32_t offsetY = dst.y + 3;
 
-    text.Set( _( "Garrison" ) );
-    text.Blit( dst.x + 275 - text.w() / 2, dst.y + 1 );
+    fheroes2::Text text( _( "Town/Castle" ), fheroes2::FontType::smallWhite() );
+    text.draw( dst.x + 105 - text.width() / 2, offsetY, display );
 
-    text.Set( _( "Available" ) );
-    text.Blit( dst.x + 500 - text.w() / 2, dst.y + 1 );
+    text.set( _( "Garrison" ), fheroes2::FontType::smallWhite() );
+    text.draw( dst.x + 275 - text.width() / 2, offsetY, display );
 
-    // scrollbar background
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 ), display, dst.x + scrollbarOffset + 1, dst.y + 17 );
+    text.set( _( "Available" ), fheroes2::FontType::smallWhite() );
+    text.draw( dst.x + 500 - text.width() / 2, offsetY, display );
+
+    // Scrollbar background.
+    const fheroes2::Sprite & scrollbar = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
+    fheroes2::Copy( scrollbar, 0, 0, display, dst.x + scrollbarOffset + 1, dst.y + 17, scrollbar.width(), scrollbar.height() );
 
     // items background
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
@@ -650,71 +664,73 @@ void StatsCastlesList::RedrawBackground( const fheroes2::Point & dst )
 void RedrawIncomeInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
 {
     const Funds income = myKingdom.GetIncome( Kingdom::INCOME_ARTIFACTS | Kingdom::INCOME_HERO_SKILLS | Kingdom::INCOME_CAMPAIGN_BONUS );
-    Text text( "", Font::SMALL );
+    const int32_t offsetY = pt.y + 410;
+    fheroes2::Display & display = fheroes2::Display::instance();
 
-    text.Set( CapturedExtInfoString( Resource::WOOD, myKingdom.GetColor(), income ) );
-    text.Blit( pt.x + 54 - text.w() / 2, pt.y + 408 );
+    fheroes2::Text text( CapturedExtInfoString( Resource::WOOD, myKingdom.GetColor(), income ), fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 54 - text.width() / 2, offsetY, display );
 
-    text.Set( CapturedExtInfoString( Resource::MERCURY, myKingdom.GetColor(), income ) );
-    text.Blit( pt.x + 146 - text.w() / 2, pt.y + 408 );
+    text.set( CapturedExtInfoString( Resource::MERCURY, myKingdom.GetColor(), income ), fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 146 - text.width() / 2, offsetY, display );
 
-    text.Set( CapturedExtInfoString( Resource::ORE, myKingdom.GetColor(), income ) );
-    text.Blit( pt.x + 228 - text.w() / 2, pt.y + 408 );
+    text.set( CapturedExtInfoString( Resource::ORE, myKingdom.GetColor(), income ), fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 228 - text.width() / 2, offsetY, display );
 
-    text.Set( CapturedExtInfoString( Resource::SULFUR, myKingdom.GetColor(), income ) );
-    text.Blit( pt.x + 294 - text.w() / 2, pt.y + 408 );
+    text.set( CapturedExtInfoString( Resource::SULFUR, myKingdom.GetColor(), income ), fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 294 - text.width() / 2, offsetY, display );
 
-    text.Set( CapturedExtInfoString( Resource::CRYSTAL, myKingdom.GetColor(), income ) );
-    text.Blit( pt.x + 360 - text.w() / 2, pt.y + 408 );
+    text.set( CapturedExtInfoString( Resource::CRYSTAL, myKingdom.GetColor(), income ), fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 360 - text.width() / 2, offsetY, display );
 
-    text.Set( CapturedExtInfoString( Resource::GEMS, myKingdom.GetColor(), income ) );
-    text.Blit( pt.x + 428 - text.w() / 2, pt.y + 408 );
+    text.set( CapturedExtInfoString( Resource::GEMS, myKingdom.GetColor(), income ), fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 428 - text.width() / 2, offsetY, display );
 
-    text.Set( CapturedExtInfoString( Resource::GOLD, myKingdom.GetColor(), income ) );
-    text.Blit( pt.x + 494 - text.w() / 2, pt.y + 408 );
+    text.set( CapturedExtInfoString( Resource::GOLD, myKingdom.GetColor(), income ), fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 494 - text.width() / 2, offsetY, display );
 }
 
 void RedrawFundsInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
 {
     const Funds & funds = myKingdom.GetFunds();
-    Text text( "", Font::SMALL );
+    int32_t offsetY = pt.y + 450;
 
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 4, 422, display, pt.x + 4, pt.y + 422, 530, 56 );
 
-    text.Set( std::to_string( funds.wood ) );
-    text.Blit( pt.x + 56 - text.w() / 2, pt.y + 448 );
+    fheroes2::Text text( std::to_string( funds.wood ), fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 56 - text.width() / 2, offsetY, display );
 
-    text.Set( std::to_string( funds.mercury ) );
-    text.Blit( pt.x + 146 - text.w() / 2, pt.y + 448 );
+    text.set( std::to_string( funds.mercury ), fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 146 - text.width() / 2, offsetY, display );
 
-    text.Set( std::to_string( funds.ore ) );
-    text.Blit( pt.x + 226 - text.w() / 2, pt.y + 448 );
+    text.set( std::to_string( funds.ore ), fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 226 - text.width() / 2, offsetY, display );
 
-    text.Set( std::to_string( funds.sulfur ) );
-    text.Blit( pt.x + 294 - text.w() / 2, pt.y + 448 );
+    text.set( std::to_string( funds.sulfur ), fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 294 - text.width() / 2, offsetY, display );
 
-    text.Set( std::to_string( funds.crystal ) );
-    text.Blit( pt.x + 362 - text.w() / 2, pt.y + 448 );
+    text.set( std::to_string( funds.crystal ), fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 362 - text.width() / 2, offsetY, display );
 
-    text.Set( std::to_string( funds.gems ) );
-    text.Blit( pt.x + 428 - text.w() / 2, pt.y + 448 );
+    text.set( std::to_string( funds.gems ), fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 428 - text.width() / 2, offsetY, display );
 
-    text.Set( std::to_string( funds.gold ) );
-    text.Blit( pt.x + 496 - text.w() / 2, pt.y + 448 );
+    text.set( std::to_string( funds.gold ), fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 496 - text.width() / 2, offsetY, display );
 
-    text.Set( _( "Gold Per Day:" ) + std::string( " " ) + std::to_string( myKingdom.GetIncome().Get( Resource::GOLD ) ) );
-    text.Blit( pt.x + 180, pt.y + 462 );
+    offsetY += 14;
+    text.set( _( "Gold Per Day:" ) + std::string( " " ) + std::to_string( myKingdom.GetIncome().Get( Resource::GOLD ) ), fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 180, offsetY, display );
 
     std::string msg = _( "Day: %{day}" );
     StringReplace( msg, "%{day}", world.GetDay() );
-    text.Set( msg );
-    text.Blit( pt.x + 360, pt.y + 462 );
+    text.set( msg, fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 360, offsetY, display );
 
     // Show Lighthouse count
     const uint32_t lighthouseCount = world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, myKingdom.GetColor() );
-    text.Set( std::to_string( lighthouseCount ) );
-    text.Blit( pt.x + 105, pt.y + 462 );
+    text.set( std::to_string( lighthouseCount ), fheroes2::FontType::smallWhite() );
+    text.draw( pt.x + 105, offsetY, display );
 
     const fheroes2::Sprite & lighthouse = fheroes2::AGG::GetICN( ICN::OVERVIEW, 14 );
     fheroes2::Blit( lighthouse, 0, 0, display, pt.x + 100 - lighthouse.width(), pt.y + 459, lighthouse.width(), lighthouse.height() );
@@ -810,13 +826,13 @@ void Kingdom::openOverviewDialog()
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MousePressRight( buttonHeroes.area() ) ) {
-            Dialog::Message( _( "Heroes" ), _( "View Heroes." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Heroes" ), _( "View Heroes." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonCastle.area() ) ) {
-            Dialog::Message( _( "Towns/Castles" ), _( "View Towns and Castles." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Towns/Castles" ), _( "View Towns and Castles." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonExit.area() ) ) {
-            Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( rectIncome ) || le.MousePressRight( rectGoldPerDay ) ) {
             fheroes2::showKingdomIncome( *this, Dialog::ZERO );
@@ -866,30 +882,26 @@ void Kingdom::openOverviewDialog()
             continue;
         }
 
-        // check if graphics in main world map window should change, this can happen in several situations:
-        // - hero dismissed -> hero icon list is updated and world map focus changed
-        // - hero hired -> hero icon list is updated
+        // Check if graphics in main world map window should change, this can happen if
+        // hero is hired or dismissed: hero icon list is updated.
         // So, it's equivalent to check if hero list changed
         if ( listHeroes.Refresh( heroes ) ) {
             worldMapRedrawMask |= Interface::AdventureMap::Get().getRedrawMask();
-            // redraw the main game window on screen, which will also erase current kingdom window
-            Interface::AdventureMap::Get().redraw();
-            // redraw Kingdom window from scratch, because it's now invalid
-            background.render();
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), display, cur_pt.x, cur_pt.y );
-            buttonHeroes.draw();
-            buttonCastle.draw();
-            buttonExit.draw();
         }
 
         listStats->Redraw();
+
         RedrawIncomeInfo( cur_pt, *this );
-        RedrawFundsInfo( cur_pt, *this );
+
+        if ( Modes( KINGDOM_OVERVIEW_CASTLE_SELECTION ) ) {
+            // Funds could be changed only after an action in the castle.
+            RedrawFundsInfo( cur_pt, *this );
+        }
 
         if ( needFadeIn ) {
             needFadeIn = false;
 
-            fheroes2::fadeInDisplay( background.activeArea(), false );
+            fheroes2::fadeInDisplay( background.activeArea(), !isDefaultScreenSize );
         }
         else {
             display.render();
