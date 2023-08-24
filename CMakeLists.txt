@@ -30,6 +30,8 @@ set(CMAKE_CXX_STANDARD 17)
 include(CMakeDependentOption)
 include(GNUInstallDirs)
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 #
 # Compile-time options
 #
@@ -57,9 +59,19 @@ find_package(${USE_SDL_VERSION}_mixer REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(Threads)
 
+# TODO: Modern versions of SDL2* packages provide the CMake config files that define the SDL2::SDL2, SDL2_mixer::SDL2_mixer and SDL2_image::SDL2_image
+# TODO: imported targets, but older versions do not. To solve this problem, we have to use FindSDL2*.cmake modules from the cmake/ subdirectory and
+# TODO: create aliases for imported targets provided by these modules.
+
+# TODO: remove this alias and modules from the cmake/ subdirectory as soon as the distributions start using a newer version of SDL_mixer
+add_library(${USE_SDL_VERSION}_mixer::${USE_SDL_VERSION}_mixer ALIAS ${USE_SDL_VERSION}::Mixer)
+
 if(ENABLE_IMAGE)
 	find_package(${USE_SDL_VERSION}_image REQUIRED)
 	find_package(PNG REQUIRED)
+
+	# TODO: remove this alias and modules from the cmake/ subdirectory as soon as the distributions start using a newer version of SDL_image
+	add_library(${USE_SDL_VERSION}_image::${USE_SDL_VERSION}_image ALIAS ${USE_SDL_VERSION}::Image)
 endif(ENABLE_IMAGE)
 
 #
