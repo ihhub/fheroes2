@@ -106,7 +106,7 @@ void RedrawCurrentInfo( const fheroes2::Point & pos, const uint32_t result, cons
 
     text.draw( pos.x + 151 - text.width() / 2, pos.y + 147, display );
 
-    const std::string sgold = std::to_string( paymentCosts.gold ) + " " + "(" + std::to_string( funds.gold - paymentCosts.gold ) + ")";
+    std::string sgold = std::to_string( paymentCosts.gold ) + " " + "(" + std::to_string( funds.gold - paymentCosts.gold ) + ")";
     const int rsext = paymentMonster.GetValidItems() & ~Resource::GOLD;
 
     text.set( std::move( sgold ), fheroes2::FontType::smallWhite() );
@@ -129,7 +129,7 @@ void RedrawCurrentInfo( const fheroes2::Point & pos, const uint32_t result, cons
     fheroes2::Copy( background, 0, 166, display, pos.x, pos.y + 166, background.width(), text.height() );
 
     if ( !label.empty() ) {
-        text.set( std::move( label ), fheroes2::FontType::smallWhite() );
+        text.set( label, fheroes2::FontType::smallWhite() );
         text.draw( pos.x + 151 - text.width() / 2, pos.y + 166, display );
     }
 }
