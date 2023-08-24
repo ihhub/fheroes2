@@ -5649,13 +5649,14 @@ namespace
 
 namespace fheroes2
 {
-    ButtonFontRestorer::ButtonFontRestorer( std::vector<fheroes2::Sprite> & font, const fheroes2::Point & newOffsets )
+    ButtonFontRestorer::ButtonFontRestorer( std::vector<fheroes2::Sprite> & font, const int32_t & newOffset )
         : _font( font )
         , _originalOffsets( font )
     {
-        // The first 15 characters are special characters and are not used on buttons
+        // The first 15 characters are special characters and are not used on buttons.
+        // We only need to change the x offsets.
         for ( int charCode = 16; charCode < font.size(); ++charCode ) {
-            font[charCode].setPosition( newOffsets.x, newOffsets.y );
+            font[charCode].setPosition( newOffset, font[charCode].y() );
         }
     }
 

@@ -34,7 +34,7 @@ namespace fheroes2
     class ButtonFontRestorer
     {
     public:
-        ButtonFontRestorer( std::vector<fheroes2::Sprite> & font, const fheroes2::Point & newOffsets );
+        ButtonFontRestorer( std::vector<fheroes2::Sprite> & font, const int32_t & newOffset );
         ButtonFontRestorer( const ButtonFontRestorer & ) = delete;
 
         ~ButtonFontRestorer();
