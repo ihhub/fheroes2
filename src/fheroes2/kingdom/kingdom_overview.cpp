@@ -92,7 +92,7 @@ namespace
 
 struct HeroRow
 {
-    Heroes * hero;
+    Heroes * hero{ nullptr };
     std::unique_ptr<ArmyBar> armyBar;
     std::unique_ptr<ArtifactsBar> artifactsBar;
     std::unique_ptr<SecondarySkillsBar> secSkillsBar;
@@ -108,6 +108,7 @@ struct HeroRow
     HeroRow & operator=( const HeroRow & ) = delete;
     HeroRow( HeroRow && ) = default;
     HeroRow & operator=( HeroRow && ) = default;
+    ~HeroRow() = default;
 
     void Init( Heroes * ptr )
     {
@@ -370,7 +371,7 @@ void StatsHeroesList::RedrawBackground( const fheroes2::Point & dst )
 
 struct CstlRow
 {
-    Castle * castle;
+    Castle * castle{ nullptr };
     std::unique_ptr<ArmyBar> garrisonArmyBar;
     std::unique_ptr<ArmyBar> heroArmyBar;
     std::unique_ptr<DwellingsBar> dwellingsBar;
@@ -385,6 +386,7 @@ struct CstlRow
     CstlRow & operator=( const CstlRow & ) = delete;
     CstlRow( CstlRow && ) = default;
     CstlRow & operator=( CstlRow && ) = default;
+    ~CstlRow() = default;
 
     void Init( Castle * ptr )
     {
@@ -743,7 +745,7 @@ void Kingdom::openOverviewDialog()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT, false );
+    const fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT, false );
 
     // Fade-out game screen only for 640x480 resolution.
     const bool isDefaultScreenSize = display.isDefaultSize();
