@@ -22,7 +22,6 @@
 
 #include <vector>
 
-#include "math_base.h"
 #include "ui_language.h"
 
 namespace fheroes2
