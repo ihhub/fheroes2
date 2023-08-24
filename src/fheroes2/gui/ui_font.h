@@ -20,8 +20,10 @@
 
 #pragma once
 
+#include <cstdint>
 #include <vector>
 
+#include "image.h"
 #include "ui_language.h"
 
 namespace fheroes2
