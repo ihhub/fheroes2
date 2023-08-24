@@ -41,6 +41,7 @@
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "localevent.h"
+#include "logging.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
@@ -556,6 +557,8 @@ namespace Interface
     void Editor::mouseCursorAreaPressRight( const int32_t tileIndex ) const
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
+
+        DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
 
         switch ( tile.GetObject() ) {
         case MP2::OBJ_NON_ACTION_CASTLE:

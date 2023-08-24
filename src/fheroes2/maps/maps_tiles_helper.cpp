@@ -443,7 +443,8 @@ namespace
         if ( hasBits( groundDirection, Direction::RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM ) ) {
             // There is no ground direction to the top, top-left and left tiles.
 
-            if ( hasBits( beachDirection, Direction::TOP | Direction::LEFT ) ) {
+            if ( hasBits( beachDirection, Direction::TOP | Direction::LEFT ) || hasBits( beachDirection, Direction::TOP | Direction::BOTTOM_LEFT )
+                 || hasBits( beachDirection, Direction::TOP_RIGHT | Direction::LEFT ) ) {
                 // To the top and left there is a beach/water.
                 tile.setTerrain( imageOffset + 4U + 16U + static_cast<uint16_t>( Rand::Get( 3 ) ), true, false );
                 return true;
@@ -456,13 +457,13 @@ namespace
                     // Top is beach transition and left is dirt transition.
                     tile.setTerrain( imageOffset + 36U, true, false );
                 }
-                else if ( hasBits( beachDirection, Direction::TOP_RIGHT ) ) {
-                    // Top-right is beach transition and left is dirt transition.
-                    tile.setTerrain( imageOffset + 33U, true, false );
-                }
                 else if ( hasBits( beachDirection, Direction::LEFT ) ) {
                     // Left is beach transition and top is dirt transition.
                     tile.setTerrain( imageOffset + 37U, true, false );
+                }
+                else if ( hasBits( beachDirection, Direction::TOP_RIGHT ) ) {
+                    // Top-right is beach transition and left is dirt transition.
+                    tile.setTerrain( imageOffset + 33U, true, false );
                 }
                 else if ( hasBits( beachDirection, Direction::BOTTOM_LEFT ) ) {
                     // Bottom-left is beach transition and left is dirt transition.
@@ -479,7 +480,8 @@ namespace
         if ( hasBits( groundDirection, Direction::LEFT | Direction::BOTTOM_LEFT | Direction::BOTTOM ) ) {
             // There is no ground direction to the top, top-right and right tiles.
 
-            if ( hasBits( beachDirection, Direction::TOP | Direction::RIGHT ) ) {
+            if ( hasBits( beachDirection, Direction::TOP | Direction::RIGHT ) || hasBits( beachDirection, Direction::TOP | Direction::BOTTOM_RIGHT )
+                 || hasBits( beachDirection, Direction::TOP_LEFT | Direction::RIGHT ) ) {
                 // To the top and right there is a beach/water.
                 tile.setTerrain( imageOffset + 4U + 16U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, false );
                 return true;
@@ -492,13 +494,13 @@ namespace
                     // Top is beach transition and right is dirt transition.
                     tile.setTerrain( imageOffset + 36U, false, false );
                 }
-                else if ( hasBits( beachDirection, Direction::TOP_LEFT ) ) {
-                    // Top-left is beach transition and right is dirt transition.
-                    tile.setTerrain( imageOffset + 33U, false, false );
-                }
                 else if ( hasBits( beachDirection, Direction::RIGHT ) ) {
                     // Right is beach transition and top is dirt transition.
                     tile.setTerrain( imageOffset + 37U, false, false );
+                }
+                else if ( hasBits( beachDirection, Direction::TOP_LEFT ) ) {
+                    // Top-left is beach transition and right is dirt transition.
+                    tile.setTerrain( imageOffset + 33U, false, false );
                 }
                 else if ( hasBits( beachDirection, Direction::BOTTOM_RIGHT ) ) {
                     // Bottom-right is beach transition and top is dirt transition.
@@ -515,7 +517,8 @@ namespace
         if ( hasBits( groundDirection, Direction::TOP | Direction::TOP_LEFT | Direction::LEFT ) ) {
             // There is no ground direction to the right, bottom-right and bottom tiles.
 
-            if ( hasBits( beachDirection, Direction::RIGHT | Direction::BOTTOM ) ) {
+            if ( hasBits( beachDirection, Direction::RIGHT | Direction::BOTTOM ) || hasBits( beachDirection, Direction::RIGHT | Direction::BOTTOM_LEFT )
+                 || hasBits( beachDirection, Direction::TOP_RIGHT | Direction::BOTTOM ) ) {
                 // To the bottom and right there is a beach/water.
                 tile.setTerrain( imageOffset + 4U + 16U + static_cast<uint16_t>( Rand::Get( 3 ) ), false, true );
                 return true;
@@ -528,13 +531,13 @@ namespace
                     // Bottom is beach transition and right is dirt transition.
                     tile.setTerrain( imageOffset + 36U, false, true );
                 }
-                else if ( hasBits( beachDirection, Direction::BOTTOM_LEFT ) ) {
-                    // Bottom-left is beach transition and right is dirt transition.
-                    tile.setTerrain( imageOffset + 33U, false, true );
-                }
                 else if ( hasBits( beachDirection, Direction::RIGHT ) ) {
                     // Right is beach transition and bottom is dirt transition.
                     tile.setTerrain( imageOffset + 37U, false, true );
+                }
+                else if ( hasBits( beachDirection, Direction::BOTTOM_LEFT ) ) {
+                    // Bottom-left is beach transition and right is dirt transition.
+                    tile.setTerrain( imageOffset + 33U, false, true );
                 }
                 else if ( hasBits( beachDirection, Direction::TOP_RIGHT ) ) {
                     // Top-right is beach transition and bottom is dirt transition.
@@ -551,8 +554,9 @@ namespace
         if ( hasBits( groundDirection, Direction::TOP | Direction::TOP_RIGHT | Direction::RIGHT ) ) {
             // There is no ground direction to the left, bottom-left and bottom tiles.
 
-            if ( hasBits( beachDirection, Direction::LEFT | Direction::BOTTOM ) ) {
-                // To the bottom and left there is a beach/water.
+            if ( hasBits( beachDirection, Direction::LEFT | Direction::BOTTOM ) || hasBits( beachDirection, Direction::LEFT | Direction::BOTTOM_RIGHT )
+                 || hasBits( beachDirection, Direction::TOP_LEFT | Direction::BOTTOM ) ) {
+                // To the bottom and left there is a beach/water. Or a narrow path to the other land.
                 tile.setTerrain( imageOffset + 4U + 16U + static_cast<uint16_t>( Rand::Get( 3 ) ), true, true );
                 return true;
             }
@@ -564,13 +568,13 @@ namespace
                     // Bottom is beach transition and left is dirt transition.
                     tile.setTerrain( imageOffset + 36U, true, true );
                 }
-                else if ( hasBits( beachDirection, Direction::BOTTOM_RIGHT ) ) {
-                    // Bottom-right is beach transition and left is dirt transition.
-                    tile.setTerrain( imageOffset + 33U, true, true );
-                }
                 else if ( hasBits( beachDirection, Direction::LEFT ) ) {
                     // Left is beach transition and bottom is dirt transition.
                     tile.setTerrain( imageOffset + 37U, true, true );
+                }
+                else if ( hasBits( beachDirection, Direction::BOTTOM_RIGHT ) ) {
+                    // Bottom-right is beach transition and left is dirt transition.
+                    tile.setTerrain( imageOffset + 33U, true, true );
                 }
                 else if ( hasBits( beachDirection, Direction::TOP_LEFT ) ) {
                     // Top-left is beach transition and bottom is dirt transition.
