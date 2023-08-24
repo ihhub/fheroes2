@@ -82,7 +82,8 @@ find_package_handle_standard_args(SDL2
 
 find_package_handle_standard_args(SDL2main
     REQUIRED_VARS SDL2main_LIBRARIES SDL2_INCLUDE_DIR
-    VERSION_VAR SDL2_VERSION_STRING)
+    VERSION_VAR SDL2_VERSION_STRING
+    NAME_MISMATCHED)
 
 if(SDL2_FOUND)
     set(SDL2_LIBRARIES ${SDL2_LIBRARY})
