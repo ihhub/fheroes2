@@ -162,18 +162,20 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int
         const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
         fheroes2::Display & display = fheroes2::Display::instance();
 
+        dsty += 2;
+
         fheroes2::Text text{ std::move( savname ), font };
         text.fitToOneRow( 150 );
-        text.draw( dstx + 5, dsty + 2, display );
+        text.draw( dstx + 5, dsty, display );
 
         text.set( shortDate, font );
-        text.draw( dstx + 225 - text.width(), dsty + 2, display );
+        text.draw( dstx + 225 - text.width(), dsty, display );
 
         text.set( shortHours, font );
-        text.draw( dstx + 245 - text.width(), dsty + 2, display );
+        text.draw( dstx + 245 - text.width(), dsty, display );
 
         text.set( shortMinutes, font );
-        text.draw( dstx + 245, dsty + 2, display );
+        text.draw( dstx + 245, dsty, display );
     }
 }
 
