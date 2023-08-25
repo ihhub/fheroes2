@@ -490,14 +490,7 @@ namespace fheroes2
 
     TextBase::~TextBase() = default;
 
-    Text::Text( const std::string & text, const FontType fontType )
-        : _text( text )
-        , _fontType( fontType )
-    {
-        // Do nothing.
-    }
-
-    Text::Text( std::string && text, const FontType fontType )
+    Text::Text( std::string text, const FontType fontType )
         : _text( std::move( text ) )
         , _fontType( fontType )
     {
@@ -632,13 +625,7 @@ namespace fheroes2
         return _text.empty();
     }
 
-    void Text::set( const std::string & text, const FontType fontType )
-    {
-        _text = text;
-        _fontType = fontType;
-    }
-
-    void Text::set( std::string && text, const FontType fontType )
+    void Text::set( std::string text, const FontType fontType )
     {
         _text = std::move( text );
         _fontType = fontType;
@@ -680,14 +667,7 @@ namespace fheroes2
 
     MultiFontText::~MultiFontText() = default;
 
-    void MultiFontText::add( const Text & text )
-    {
-        if ( !text._text.empty() ) {
-            _texts.emplace_back( text );
-        }
-    }
-
-    void MultiFontText::add( Text && text )
+    void MultiFontText::add( Text text )
     {
         if ( !text._text.empty() ) {
             _texts.emplace_back( std::move( text ) );

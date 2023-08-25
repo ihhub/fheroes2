@@ -25,6 +25,7 @@
 
 #include <cstdint>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "army_bar.h"
@@ -573,7 +574,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
         StringReplace( message, _( "%{race2} %{name2}" ), _( "Monsters" ) );
     }
 
-    fheroes2::Text text( message, fheroes2::FontType::normalWhite() );
+    fheroes2::Text text( std::move( message ), fheroes2::FontType::normalWhite() );
     text.draw( top.x + 320 - text.width() / 2, top.y + 29, display );
 
     // portrait
