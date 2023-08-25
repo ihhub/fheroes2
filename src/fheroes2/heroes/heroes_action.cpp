@@ -3281,6 +3281,10 @@ namespace
 
                 fheroes2::Display & display = fheroes2::Display::instance();
 
+                const size_t fullTimeViewCount = 3;
+                size_t viewCount = 0;
+                size_t maxDelay = 7;
+
                 for ( const int32_t eyeIndex : eyeMagiIndexes ) {
                     const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ) );
 
@@ -3298,9 +3302,9 @@ namespace
                     display.render();
 
                     LocalEvent & le = LocalEvent::Get();
-                    int delay = 0;
+                    size_t delay = 0;
 
-                    while ( le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) && delay < 7 ) {
+                    while ( delay < maxDelay && le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
                         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                             ++delay;
                             Game::updateAdventureMapAnimationIndex();
@@ -3308,6 +3312,11 @@ namespace
 
                             display.render();
                         }
+                    }
+
+                    ++viewCount;
+                    if ( viewCount > fullTimeViewCount && maxDelay > 0 ) {
+                        --maxDelay;
                     }
                 }
 
