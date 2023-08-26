@@ -629,7 +629,7 @@ MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
     MapsFileInfoList result;
     result.reserve( uniqueMaps.size() );
 
-    for ( auto& [name, info] : uniqueMaps ) {
+    for ( auto & [name, info] : uniqueMaps ) {
         result.emplace_back( std::move( info ) );
     }
 
@@ -663,7 +663,7 @@ MapsFileInfoList Maps::prepareResurrectionMapsFileInfoList()
     MapsFileInfoList result;
     result.reserve( uniqueMaps.size() );
 
-    for ( auto& [name, info] : uniqueMaps ) {
+    for ( auto & [name, info] : uniqueMaps ) {
         result.emplace_back( std::move( info ) );
     }
 
