@@ -1080,7 +1080,8 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
         const Text text( str, Font::SMALL );
         const fheroes2::Rect rect = btnAccept.area();
 
-        text.Blit( rect.x + ( rect.width - text.w() ) / 2, rect.y - 15 );
+        // Since button area includes 3D effect on the left side we need to shift the text.
+        text.Blit( rect.x + ( rect.width - text.w() ) / 2 + 2, rect.y - 15 );
     };
 
     const int icn = isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR;
