@@ -28,6 +28,7 @@
 #include <cstdint>
 #include <ctime>
 #include <ostream>
+#include <utility>
 
 #include "campaign_savedata.h"
 #include "campaign_scenariodata.h"
