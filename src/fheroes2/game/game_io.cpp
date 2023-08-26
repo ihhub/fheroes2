@@ -338,7 +338,7 @@ bool Game::LoadSAV2FileInfo( const std::string & filePath, Maps::FileInfo & file
         return false;
     }
 
-    fileInfo = header.info;
+    fileInfo = std::move( header.info );
     fileInfo.file = filePath;
 
     return true;
