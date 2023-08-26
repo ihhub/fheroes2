@@ -2490,8 +2490,6 @@ namespace
     {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
-        
-
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         const std::string title( MP2::StringObject( objectType ) );
 
@@ -2517,10 +2515,11 @@ namespace
                     secondFrame.addItem( &powerUI );
                     secondFrame.addItem( &knowledgeUI );
 
-                    fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ),
-                                           fheroes2::Text( _( "The butler admits you to see the master of the house. He trains you in the four skills a hero should know." ),
-                                                           fheroes2::FontType::normalWhite() ), Dialog::OK,
-                               { &firstFrame, &secondFrame } );
+                    fheroes2::
+                        showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ),
+                                     fheroes2::Text( _( "The butler admits you to see the master of the house. He trains you in the four skills a hero should know." ),
+                                                     fheroes2::FontType::normalWhite() ),
+                                     Dialog::OK, { &firstFrame, &secondFrame } );
                 }
 
                 hero.IncreasePrimarySkill( Skill::Primary::ATTACK );
