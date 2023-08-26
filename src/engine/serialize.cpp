@@ -461,7 +461,7 @@ std::string_view StreamBuf::toStringView( size_t sz )
     uint8_t * it2 = itget + ( sz ? sz : sizeg() );
     it2 = std::find( it1, it2, 0 );
     itget = it1 + ( sz ? sz : sizeg() );
-    return std::string_view( reinterpret_cast<const char *>( it1 ), it2 - it1 );
+    return { reinterpret_cast<const char *>( it1 ), it2 - it1 };
 }
 
 void StreamBuf::skip( size_t sz )
