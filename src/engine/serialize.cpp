@@ -455,6 +455,15 @@ std::string StreamBuf::toString( size_t sz )
     return std::string( it1, it2 );
 }
 
+std::string_view StreamBuf::toStringView( size_t sz )
+{
+    uint8_t * it1 = itget;
+    uint8_t * it2 = itget + ( sz ? sz : sizeg() );
+    it2 = std::find( it1, it2, 0 );
+    itget = it1 + ( sz ? sz : sizeg() );
+    return std::string_view( reinterpret_cast<const char *>( it1 ), it2 - it1 );
+}
+
 void StreamBuf::skip( size_t sz )
 {
     itget += sz <= sizeg() ? sz : sizeg();
@@ -632,7 +641,7 @@ StreamBuf StreamFile::toStreamBuf( const size_t size )
     return buffer;
 }
 
-std::string StreamFile::toString( size_t sz )
+std::string StreamFile::toString( const size_t sz )
 {
     const std::vector<uint8_t> buf = getRaw( sz );
     std::vector<uint8_t>::const_iterator itend = std::find( buf.begin(), buf.end(), 0 );

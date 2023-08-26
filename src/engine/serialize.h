@@ -296,6 +296,8 @@ public:
 
     std::string toString( size_t sz = 0 /* all data */ );
 
+    std::string_view toStringView( size_t sz = 0 );
+
 protected:
     void reset();
 
@@ -356,7 +358,7 @@ public:
 
     void putRaw( const char *, size_t ) override;
 
-    std::string toString( size_t = 0 /* all data */ );
+    std::string toString( const size_t sz = 0 );
 
 protected:
     size_t sizeg() const override;

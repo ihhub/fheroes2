@@ -199,7 +199,7 @@ void StringReplace( std::string & dst, const char * pred, const std::string & sr
     }
 }
 
-std::vector<std::string> StringSplit( const std::string & str, const std::string & sep )
+std::vector<std::string> StringSplit( const std::string & str, const char sep )
 {
     std::vector<std::string> vec;
     size_t pos1 = 0;
@@ -207,7 +207,25 @@ std::vector<std::string> StringSplit( const std::string & str, const std::string
 
     while ( pos1 < str.size() && std::string::npos != ( pos2 = str.find( sep, pos1 ) ) ) {
         vec.push_back( str.substr( pos1, pos2 - pos1 ) );
-        pos1 = pos2 + sep.size();
+        pos1 = pos2 + 1;
+    }
+
+    // tail
+    if ( pos1 < str.size() )
+        vec.push_back( str.substr( pos1, str.size() - pos1 ) );
+
+    return vec;
+}
+
+std::vector<std::string_view> StringSplit( const std::string_view & str, const char sep )
+{
+    std::vector<std::string_view> vec;
+    size_t pos1 = 0;
+    size_t pos2;
+
+    while ( pos1 < str.size() && std::string::npos != ( pos2 = str.find( sep, pos1 ) ) ) {
+        vec.push_back( str.substr( pos1, pos2 - pos1 ) );
+        pos1 = pos2 + 1;
     }
 
     // tail
