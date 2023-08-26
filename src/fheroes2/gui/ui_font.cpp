@@ -22,10 +22,12 @@
 
 #include <cassert>
 #include <cstddef>
+#include <cstdint>
 #include <initializer_list>
 #include <memory>
 
 #include "icn.h"
+#include "image.h"
 #include "math_base.h"
 
 namespace
@@ -5666,22 +5668,6 @@ namespace
 
 namespace fheroes2
 {
-    ButtonFontRestorer::ButtonFontRestorer( std::vector<fheroes2::Sprite> & font, const int32_t & newOffset )
-        : _font( font )
-        , _originalOffsets( font )
-    {
-        // The first 15 characters are special characters and are not used on buttons.
-        // We only need to change the x offsets.
-        for ( size_t charCode = 16; charCode < font.size(); ++charCode ) {
-            font[charCode].setPosition( newOffset, font[charCode].y() );
-        }
-    }
-
-    ButtonFontRestorer::~ButtonFontRestorer()
-    {
-        _font = _originalOffsets;
-    }
-
     void generateAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite )
     {
         switch ( language ) {

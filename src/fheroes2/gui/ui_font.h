@@ -20,30 +20,13 @@
 
 #pragma once
 
-#include <cstdint>
 #include <vector>
 
-#include "image.h"
 #include "ui_language.h"
 
 namespace fheroes2
 {
-    // this class is used for situations when we need to remove letter-specific offsets, like when we display single letters in a row,
-    // and then restore these offsets within the scope of the code
-    class ButtonFontRestorer
-    {
-    public:
-        ButtonFontRestorer( std::vector<fheroes2::Sprite> & font, const int32_t & newOffset );
-        ButtonFontRestorer( const ButtonFontRestorer & ) = delete;
-
-        ~ButtonFontRestorer();
-
-        ButtonFontRestorer & operator=( const ButtonFontRestorer & ) = delete;
-
-    private:
-        std::vector<fheroes2::Sprite> & _font;
-        const std::vector<fheroes2::Sprite> _originalOffsets;
-    };
+    class Sprite;
 
     void generateAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite );
 
