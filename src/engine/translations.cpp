@@ -264,23 +264,21 @@ namespace
                     ERROR_LOG( "Incorrect mo file ID: " << GetHexString( id ) )
                     return false;
                 }
-                else {
-                    uint16_t major;
-                    uint16_t minor;
-                    sf >> major >> minor;
 
-                    if ( 0 != major ) {
-                        ERROR_LOG( "incorrect major version: " << GetHexString( major, 4 ) )
-                        return false;
-                    }
-                    else {
-                        sf >> count >> offset_strings1 >> offset_strings2 >> hash_size >> hash_offset;
+                uint16_t major;
+                uint16_t minor;
+                sf >> major >> minor;
 
-                        sf.seek( 0 );
-                        buf = sf.toStreamBuf( size );
-                        sf.close();
-                    }
+                if ( 0 != major ) {
+                    ERROR_LOG( "incorrect major version: " << GetHexString( major, 4 ) )
+                    return false;
                 }
+
+                sf >> count >> offset_strings1 >> offset_strings2 >> hash_size >> hash_offset;
+
+                sf.seek( 0 );
+                buf = sf.toStreamBuf( size );
+                sf.close();
             }
 
             // parse encoding and plural forms

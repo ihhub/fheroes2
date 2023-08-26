@@ -266,21 +266,6 @@ StreamBuf & StreamBuf::operator=( StreamBuf && st ) noexcept
     return *this;
 }
 
-size_t StreamBuf::capacity() const
-{
-    return itend - itbeg;
-}
-
-const uint8_t * StreamBuf::data() const
-{
-    return itget;
-}
-
-size_t StreamBuf::size() const
-{
-    return sizeg();
-}
-
 void StreamBuf::reset()
 {
     itput = itbeg;
@@ -475,11 +460,6 @@ void StreamBuf::skip( size_t sz )
     itget += sz <= sizeg() ? sz : sizeg();
 }
 
-void StreamBuf::seek( size_t sz )
-{
-    itget = itbeg + sz < itend ? itbeg + sz : itend;
-}
-
 StreamFile::StreamFile()
     : _file( nullptr )
 {}
@@ -609,14 +589,14 @@ void StreamFile::putLE32( uint32_t val )
     putUint<uint32_t>( htole32( val ) );
 }
 
-std::vector<uint8_t> StreamFile::getRaw( size_t sz )
+std::vector<uint8_t> StreamFile::getRaw( const size_t size )
 {
-    const size_t chunkSize = sz > 0 ? sz : sizeg();
+    const size_t chunkSize = size > 0 ? size : sizeg();
     if ( chunkSize == 0 || !_file ) {
         return std::vector<uint8_t>();
     }
 
-    std::vector<uint8_t> v( sz ? sz : sizeg() );
+    std::vector<uint8_t> v( chunkSize );
     const size_t count = std::fread( &v[0], chunkSize, 1, _file );
     if ( count != 1 ) {
         setfail( true );
@@ -632,12 +612,24 @@ void StreamFile::putRaw( const char * ptr, size_t sz )
         std::fwrite( ptr, sz, 1, _file );
 }
 
-StreamBuf StreamFile::toStreamBuf( size_t sz )
+StreamBuf StreamFile::toStreamBuf( const size_t size )
 {
-    std::vector<uint8_t> buf = getRaw( sz );
-    StreamBuf sb( buf.size() );
-    sb.putRaw( reinterpret_cast<const char *>( &buf[0] ), buf.size() );
-    return sb;
+    const size_t chunkSize = size > 0 ? size : sizeg();
+    if ( chunkSize == 0 || !_file ) {
+        return StreamBuf{};
+    }
+
+    StreamBuf buffer( chunkSize );
+
+    const size_t count = std::fread( buffer.data(), chunkSize, 1, _file );
+    if ( count != 1 ) {
+        setfail( true );
+        return StreamBuf{};
+    }
+
+    buffer.advance( chunkSize );
+
+    return buffer;
 }
 
 std::string StreamFile::toString( size_t sz )

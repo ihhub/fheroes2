@@ -248,12 +248,38 @@ public:
     StreamBuf & operator=( const StreamBuf & st ) = delete;
     StreamBuf & operator=( StreamBuf && st ) noexcept;
 
-    const uint8_t * data() const;
-    size_t size() const;
-    size_t capacity() const;
+    const uint8_t * data() const
+    {
+        return itget;
+    }
 
-    void seek( size_t );
-    void skip( size_t ) override;
+    // If you use this method to write data update the cursor by calling advance() method.
+    uint8_t * data()
+    {
+        return itget;
+    }
+
+    void advance( const size_t size )
+    {
+        itput += size;
+    }
+
+    size_t size() const
+    {
+        return sizeg();
+    }
+
+    size_t capacity() const
+    {
+        return itend - itbeg;
+    }
+
+    void seek( size_t sz )
+    {
+        itget = itbeg + sz < itend ? itbeg + sz : itend;
+    }
+
+    void skip( size_t sz ) override;
 
     uint16_t getBE16() override;
     uint16_t getLE16() override;
@@ -309,7 +335,8 @@ public:
     bool open( const std::string &, const std::string & mode );
     void close();
 
-    StreamBuf toStreamBuf( size_t = 0 /* all data */ );
+    // 0 stands for full data.
+    StreamBuf toStreamBuf( const size_t size = 0 );
 
     void seek( size_t );
     void skip( size_t ) override;
@@ -324,7 +351,9 @@ public:
     void putBE32( uint32_t ) override;
     void putLE32( uint32_t ) override;
 
-    std::vector<uint8_t> getRaw( size_t = 0 /* all data */ ) override;
+    // 0 stands for full data.
+    std::vector<uint8_t> getRaw( const size_t size = 0 ) override;
+
     void putRaw( const char *, size_t ) override;
 
     std::string toString( size_t = 0 /* all data */ );
