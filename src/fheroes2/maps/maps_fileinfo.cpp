@@ -623,7 +623,7 @@ MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
             }
         }
 
-        uniqueMaps[System::GetBasename( mapFile )] = fi;
+        uniqueMaps.try_emplace( System::GetBasename( mapFile ), std::move( fi ) );
     }
 
     MapsFileInfoList result;
