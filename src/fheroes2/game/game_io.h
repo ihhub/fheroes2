@@ -53,7 +53,7 @@ namespace Game
     // Returns GameMode::CANCEL in case of failure.
     fheroes2::GameMode Load( const std::string & filePath );
 
-    bool LoadSAV2FileInfo( const std::string & filePath, Maps::FileInfo & fileInfo );
+    bool LoadSAV2FileInfo( std::string filePath, Maps::FileInfo & fileInfo );
 
     bool SaveCompletedCampaignScenario();
 }

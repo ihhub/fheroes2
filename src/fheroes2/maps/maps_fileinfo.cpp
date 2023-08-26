@@ -205,11 +205,11 @@ void Maps::FileInfo::Reset()
     worldMonth = 0;
 }
 
-bool Maps::FileInfo::ReadSAV( const std::string & filePath )
+bool Maps::FileInfo::ReadSAV( std::string filePath )
 {
     Reset();
 
-    return Game::LoadSAV2FileInfo( filePath, *this );
+    return Game::LoadSAV2FileInfo( std::move( filePath ), *this );
 }
 
 bool Maps::FileInfo::ReadMP2( const std::string & filePath )

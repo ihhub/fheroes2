@@ -299,7 +299,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     return returnValue;
 }
 
-bool Game::LoadSAV2FileInfo( const std::string & filePath, Maps::FileInfo & fileInfo )
+bool Game::LoadSAV2FileInfo( std::string filePath, Maps::FileInfo & fileInfo )
 {
     DEBUG_LOG( DBG_GAME, DBG_INFO, filePath )
 
@@ -340,7 +340,7 @@ bool Game::LoadSAV2FileInfo( const std::string & filePath, Maps::FileInfo & file
     }
 
     fileInfo = std::move( header.info );
-    fileInfo.file = filePath;
+    fileInfo.file = std::move( filePath );
 
     return true;
 }
