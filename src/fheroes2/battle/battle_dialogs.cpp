@@ -1080,7 +1080,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
         const Text text( str, Font::SMALL );
         const fheroes2::Rect rect = btnAccept.area();
 
-        // Since button area includes 3D effect on the left side we need to shift the text.
+        // Since button area includes 3D effect on the left side we need to shift the text by X axis to center it in relation to the button.
         text.Blit( rect.x + ( rect.width - text.w() ) / 2 + 2, rect.y - 15 );
     };
 
