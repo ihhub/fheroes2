@@ -627,11 +627,10 @@ MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
     }
 
     MapsFileInfoList result;
-
     result.reserve( uniqueMaps.size() );
 
-    for ( const auto & item : uniqueMaps ) {
-        result.push_back( item.second );
+    for ( auto & item : uniqueMaps ) {
+        result.emplace_back( std::move( item.second ) );
     }
 
     std::sort( result.begin(), result.end(), Maps::FileInfo::NameSorting );
