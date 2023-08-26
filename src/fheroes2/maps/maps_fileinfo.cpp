@@ -629,8 +629,8 @@ MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
     MapsFileInfoList result;
     result.reserve( uniqueMaps.size() );
 
-    for ( auto & item : uniqueMaps ) {
-        result.emplace_back( std::move( item.second ) );
+    for ( auto& [name, info] : uniqueMaps ) {
+        result.emplace_back( std::move( info ) );
     }
 
     std::sort( result.begin(), result.end(), Maps::FileInfo::NameSorting );
@@ -661,11 +661,10 @@ MapsFileInfoList Maps::prepareResurrectionMapsFileInfoList()
     }
 
     MapsFileInfoList result;
-
     result.reserve( uniqueMaps.size() );
 
-    for ( auto & item : uniqueMaps ) {
-        result.emplace_back( std::move( item.second ) );
+    for ( auto& [name, info] : uniqueMaps ) {
+        result.emplace_back( std::move( info ) );
     }
 
     std::sort( result.begin(), result.end(), Maps::FileInfo::NameSorting );
