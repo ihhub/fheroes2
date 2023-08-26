@@ -657,15 +657,15 @@ MapsFileInfoList Maps::prepareResurrectionMapsFileInfoList()
         fi.description = "Resurrection map test description.\nThe Map Editor is currently in development.";
         fi.difficulty = 3;
 
-        uniqueMaps[System::GetBasename( mapFile )] = fi;
+        uniqueMaps.try_emplace( System::GetBasename( mapFile ), std::move( fi ) );
     }
 
     MapsFileInfoList result;
 
     result.reserve( uniqueMaps.size() );
 
-    for ( const auto & item : uniqueMaps ) {
-        result.push_back( item.second );
+    for ( auto & item : uniqueMaps ) {
+        result.emplace_back( std::move( item.second ) );
     }
 
     std::sort( result.begin(), result.end(), Maps::FileInfo::NameSorting );
