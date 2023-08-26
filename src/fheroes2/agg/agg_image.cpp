@@ -371,15 +371,16 @@ namespace
         _originalOffsets.reserve( _font.size() );
 
         for ( size_t i = 0; i < _font.size(); ++i ) {
-            _originalOffsets.emplace_back( _font[i].x(), _font[i].y() );
-            _font[i].setPosition( offset.x, offset.y );
+            const int32_t originalYOffset = _font[i].y();
+            _originalOffsets.emplace_back( _font[i].x(), originalYOffset );
+            _font[i].setPosition( offset.x, originalYOffset );
         }
     }
 
     ButtonFontRestorer::~ButtonFontRestorer()
     {
         if ( _originalOffsets.size() != _font.size() ) {
-            // If this assertion blows up then something is wrong with the font as they must have the same size.
+            // If this assertion blows up then something is wrong with the fonts as they must have the same size.
             assert( 0 );
             return;
         }
@@ -1852,8 +1853,10 @@ namespace fheroes2
                     break;
                 }
 
-                ButtonFontRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
-                ButtonFontRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
+                // we need to temporarily remove the letter specific X offsets on the because they will be off-center
+                // when we are displaying one letter per line
+                ButtonFontRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], { -1, 0 } );
+                ButtonFontRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], { -1, 0 } );
                 getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON, ICN::UNKNOWN );
 
                 break;
