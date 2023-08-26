@@ -370,10 +370,10 @@ namespace
     {
         _originalOffsets.reserve( _font.size() );
 
-        for ( size_t i = 0; i < _font.size(); ++i ) {
-            const int32_t originalYOffset = _font[i].y();
-            _originalOffsets.emplace_back( _font[i].x(), originalYOffset );
-            _font[i].setPosition( offset.x, originalYOffset );
+        for ( fheroes2::Sprite & characterSprite : font ) {
+            const int32_t originalYOffset = characterSprite.y();
+            _originalOffsets.emplace_back( characterSprite.x(), originalYOffset );
+            characterSprite.setPosition( offset.x, originalYOffset );
         }
     }
 
