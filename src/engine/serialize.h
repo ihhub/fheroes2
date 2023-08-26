@@ -297,7 +297,7 @@ public:
 
     std::string toString( size_t sz = 0 /* all data */ );
 
-    std::string_view toStringView( size_t sz = 0 );
+    std::string_view toStringView( const size_t sz );
 
 protected:
     void reset();

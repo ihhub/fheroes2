@@ -455,7 +455,7 @@ std::string StreamBuf::toString( size_t sz )
     return std::string( it1, it2 );
 }
 
-std::string_view StreamBuf::toStringView( size_t sz )
+std::string_view StreamBuf::toStringView( const size_t sz )
 {
     uint8_t * it1 = itget;
     uint8_t * it2 = itget + ( sz ? sz : sizeg() );
