@@ -348,6 +348,47 @@ namespace
 
     OriginalAlphabetPreserver alphabetPreserver;
 
+    // this class is used for situations when we need to remove letter-specific offsets, like when we display single letters in a row,
+    // and then restore these offsets within the scope of the code
+    class ButtonFontRestorer
+    {
+    public:
+        ButtonFontRestorer( std::vector<fheroes2::Sprite> & font, const fheroes2::Point & offset );
+        ButtonFontRestorer( const ButtonFontRestorer & ) = delete;
+
+        ~ButtonFontRestorer();
+
+        ButtonFontRestorer & operator=( const ButtonFontRestorer & ) = delete;
+
+    private:
+        std::vector<fheroes2::Sprite> & _font;
+        std::vector<fheroes2::Point> _originalOffsets;
+    };
+
+    ButtonFontRestorer::ButtonFontRestorer( std::vector<fheroes2::Sprite> & font, const fheroes2::Point & offset )
+        : _font( font )
+    {
+        _originalOffsets.reserve( _font.size() );
+
+        for ( size_t i = 0; i < _font.size(); ++i ) {
+            _originalOffsets.emplace_back( _font[i].x(), _font[i].y() );
+            _font[i].setPosition( offset.x, offset.y );
+        }
+    }
+
+    ButtonFontRestorer::~ButtonFontRestorer()
+    {
+        if ( _originalOffsets.size() != _font.size() ) {
+            // If this assertion blows up then something is wrong with the font as they must have the same size.
+            assert( 0 );
+            return;
+        }
+
+        for ( size_t i = 0; i < _font.size(); ++i ) {
+            _font[i].setPosition( _originalOffsets[i].x, _originalOffsets[i].y );
+        }
+    }
+
     void invertTransparency( fheroes2::Image & image )
     {
         if ( image.singleLayer() ) {
@@ -1811,8 +1852,8 @@ namespace fheroes2
                     break;
                 }
 
-                fheroes2::ButtonFontRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
-                fheroes2::ButtonFontRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
+                ButtonFontRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
+                ButtonFontRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
                 getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON, ICN::UNKNOWN );
 
                 break;
