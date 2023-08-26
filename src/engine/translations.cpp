@@ -236,7 +236,7 @@ namespace
             uint32_t magicNumber = 0;
             sf >> magicNumber;
 
-            if ( magicNumber !=  0x950412de ) {
+            if ( magicNumber != 0x950412de ) {
                 ERROR_LOG( "Incorrect magic number " << GetHexString( magicNumber ) << " for " << file )
                 return false;
             }
