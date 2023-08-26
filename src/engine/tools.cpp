@@ -203,9 +203,14 @@ std::vector<std::string> StringSplit( const std::string & str, const char sep )
 {
     std::vector<std::string> vec;
     size_t pos1 = 0;
-    size_t pos2;
+    size_t pos2 = 0;
 
-    while ( pos1 < str.size() && std::string::npos != ( pos2 = str.find( sep, pos1 ) ) ) {
+    while ( pos1 < str.size() ) {
+        pos2 = str.find( sep, pos1 );
+        if ( pos2 == std::string::npos ) {
+            break;
+        }
+
         vec.push_back( str.substr( pos1, pos2 - pos1 ) );
         pos1 = pos2 + 1;
     }
@@ -221,9 +226,14 @@ std::vector<std::string_view> StringSplit( const std::string_view & str, const c
 {
     std::vector<std::string_view> vec;
     size_t pos1 = 0;
-    size_t pos2;
+    size_t pos2 = 0;
 
-    while ( pos1 < str.size() && std::string::npos != ( pos2 = str.find( sep, pos1 ) ) ) {
+    while ( pos1 < str.size() ) {
+        pos2 = str.find( sep, pos1 );
+        if ( pos2 == std::string_view::npos ) {
+            break;
+        }
+
         vec.push_back( str.substr( pos1, pos2 - pos1 ) );
         pos1 = pos2 + 1;
     }
