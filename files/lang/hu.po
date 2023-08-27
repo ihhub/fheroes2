@@ -2547,11 +2547,11 @@ msgstr "Hős mutatása"
 
 #, fuzzy
 msgid "The above spells are available here."
-msgstr "Az említett varázslatok beíródtak a varázskönyvedbe."
+msgstr "A fenti varázslatok érhetők el itt."
 
 #, fuzzy
 msgid "The above spells have been added to your book."
-msgstr "Az említett varázslatok beíródtak a varázskönyvedbe."
+msgstr "A fenti varázslatok beíródtak a varázskönyvedbe."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
@@ -4903,10 +4903,10 @@ msgid " All dwellings increase population."
 msgstr " Mindegyik toborzóhelynek nőtt a termelése."
 
 msgid "New Week!"
-msgstr ""
+msgstr "Új hét!"
 
 msgid "Beware!"
-msgstr ""
+msgstr "Vigyázat!"
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
@@ -10436,4 +10436,4 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Victory!"
-#~ msgstr "Ector"
+#~ msgstr "Győzelem!"
