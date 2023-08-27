@@ -590,6 +590,7 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
     case OBJ_COAST:
     case OBJ_DERELICT_SHIP:
     case OBJ_FLOTSAM:
+    case OBJ_HEROES:
     case OBJ_MAGELLANS_MAPS:
     case OBJ_MERMAID:
     case OBJ_MONSTER:
