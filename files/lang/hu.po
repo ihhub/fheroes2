@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-22 00:24+0000\n"
-"PO-Revision-Date: 2022-12-03 03:43+0100\n"
-"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
+"POT-Creation-Date: 2023-08-26 16:18+0200\n"
+"PO-Revision-Date: 2023-08-27 12:24+0200\n"
+"Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -16,165 +16,184 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2011-06-02 03:12+0000\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr ""
-"HARC\n"
-"SORÁN"
+"CSAK\n"
+"CSATA"
 
 msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
+"ÚJ\n"
+"JÁTÉK"
 
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
+"JÁTÉK\n"
+"MENTÉS"
 
 msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
+"JÁTÉK\n"
+"BETÖLTÉS"
 
 msgid "INFO"
-msgstr ""
+msgstr "INFÓ"
 
 msgid "QUIT"
-msgstr ""
+msgstr "KILÉPÉS"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "MÉGSEM"
 
 msgid "OKAY"
-msgstr ""
+msgstr "OK"
 
 msgid "smallerButton|OKAY"
-msgstr ""
+msgstr "OK"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "ELFOGAD"
 
 msgid "DECLINE"
-msgstr ""
+msgstr "ELUTASÍT"
 
 msgid "LEARN"
-msgstr ""
+msgstr "OLVAS"
 
 msgid "TRADE"
-msgstr ""
+msgstr "ÜZLET"
 
 msgid "YES"
-msgstr ""
+msgstr "IGEN"
 
 msgid "NO"
-msgstr ""
+msgstr "NEM"
 
 msgid "EXIT"
-msgstr ""
+msgstr "KILÉP"
 
 msgid "smallerButton|EXIT"
-msgstr ""
+msgstr "EXIT"
 
 msgid "DISMISS"
-msgstr ""
+msgstr "ELBOCSÁT"
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "FEJLESZT"
 
 msgid "RESTART"
-msgstr ""
+msgstr "ÚJRAINDÍT"
 
 msgid "HEROES"
-msgstr ""
+msgstr "HŐSÖK"
 
 msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
+"VÁROS\n"
+"/VÁR"
 
 msgid "S"
-msgstr ""
+msgstr "S"
 
 msgid "M"
-msgstr ""
+msgstr "M"
 
 msgid "L"
-msgstr ""
+msgstr "L"
 
 msgid "X-L"
-msgstr ""
+msgstr "XL"
 
 msgid "ALL"
-msgstr ""
+msgstr "MIND"
 
 msgid "SELECT"
-msgstr ""
+msgstr "KIVÁL."
 
 msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
+"NORMÁL\n"
+"JÁTÉK"
 
 msgid ""
 "CAMPAIGN\n"
 "GAME"
 msgstr ""
+"HADJÁRAT\n"
+"JÁTÉK"
 
 msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
 msgstr ""
+"TÖBB-\n"
+"JÁTÉKOS\n"
+"MÓD"
 
 msgid "CONFIG"
-msgstr ""
+msgstr "BEÁLLÍT"
 
 msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
+"EREDETI\n"
+"HADJÁRAT"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
+"KIEGÉSZÍTŐ\n"
+"HADJÁRAT"
 
 msgid "HOT SEAT"
-msgstr ""
+msgstr "HELYCSERE"
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 JÁTÉKOS"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 JÁTÉKOS"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 JÁTÉKOS"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 JÁTÉKOS"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 JÁTÉKOS"
 
 msgid "GIFT"
-msgstr "AJÁNDÉK"
+msgstr "AJÁND."
 
 msgid "MAX"
-msgstr ""
+msgstr "MAX"
 
 msgid "DIFFICULTY"
 msgstr "NEHÉZSÉG"
 
 msgid "VIEW INTRO"
-msgstr ""
+msgstr "BEVEZETŐ"
 
 msgid "MIN"
-msgstr ""
+msgstr "MIN"
 
 msgid "Warrior"
 msgstr "Harcos"
@@ -2527,7 +2546,7 @@ msgid "The above spells are available here."
 msgstr "Az említett varázslatok beíródtak a varázskönyvedbe."
 
 #, fuzzy
-msgid "The spells the hero can learn have been added to their book."
+msgid "The above spells have been added to your book."
 msgstr "Az említett varázslatok beíródtak a varázskönyvedbe."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
@@ -4702,10 +4721,6 @@ msgstr ""
 "Sikerült %{count} aranyat felhalmoznod a kincstáradban.\n"
 "Az összes ellenfeled fejet hajt elötted."
 
-#, fuzzy
-msgid "Victory!"
-msgstr "Ector"
-
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
@@ -4882,9 +4897,6 @@ msgstr " Minden populáció megfeleződött."
 
 msgid " All dwellings increase population."
 msgstr " Mindegyik toborzóhelynek nőtt a termelése."
-
-msgid "New Month!"
-msgstr ""
 
 msgid "New Week!"
 msgstr ""
@@ -10417,3 +10429,7 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Victory!"
+#~ msgstr "Ector"
