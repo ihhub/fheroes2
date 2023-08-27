@@ -304,7 +304,7 @@ protected:
     size_t sizeg() const override;
     size_t sizep() const override;
 
-    void reallocbuf( size_t );
+    void reallocbuf( size_t size );
 
     uint8_t get8() override;
     void put8( const uint8_t v ) override;
@@ -356,7 +356,7 @@ public:
 
     void putRaw( const char *, size_t ) override;
 
-    std::string toString( const size_t sz = 0 );
+    std::string toString( const size_t size = 0 );
 
 protected:
     size_t sizeg() const override;
