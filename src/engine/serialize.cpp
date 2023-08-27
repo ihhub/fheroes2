@@ -451,9 +451,8 @@ std::string StreamBuf::toString( const size_t size )
     const size_t length = ( size > 0 && size < sizeg() ) ? size : sizeg();
 
     uint8_t * it1 = itget;
-    uint8_t * it2 = itget + length;
-    it2 = std::find( it1, it2, 0 );
-    itget = it1 + length;
+    itget += length;
+    uint8_t * it2 = std::find( it1, itget, 0 );
 
     return { it1, it2 };
 }
