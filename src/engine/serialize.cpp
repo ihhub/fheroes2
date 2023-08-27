@@ -653,5 +653,5 @@ std::string StreamFile::toString( const size_t size /* = 0 */ )
 
     const auto itend = std::find( buf.begin(), buf.end(), 0 );
 
-    return std::string( buf.begin(), itend );
+    return { buf.begin(), itend };
 }
