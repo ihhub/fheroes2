@@ -6811,7 +6811,7 @@ msgid ""
 "spell will work."
 msgstr ""
 "Nie można rzucić zaklęcia, ponieważ nie ma dostępnej łodzi oraz nie ma "
-"miejsca koło bohatera przy brzegu."
+"miejsca blisko bohatera przy brzegu."
 
 msgid "There are no boats available for this spell."
 msgstr "Nie możesz rzucić zaklęcia, ponieważ nie ma dostępnej łodzi."
