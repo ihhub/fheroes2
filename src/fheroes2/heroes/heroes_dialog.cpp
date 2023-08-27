@@ -52,6 +52,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 
@@ -102,8 +103,9 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     StringReplace( message, "%{name}", name );
     StringReplace( message, "%{race}", Race::String( _race ) );
     StringReplace( message, "%{level}", GetLevel() );
-    const Text text( message, Font::BIG );
-    text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 1 );
+
+    const fheroes2::Text title( message, fheroes2::FontType::normalWhite() );
+    title.draw( cur_pt.x + 320 - title.width() / 2, cur_pt.y + 3, display );
 
     PrimarySkillsBar primskill_bar( this, false );
     primskill_bar.setTableSize( { 4, 1 } );
