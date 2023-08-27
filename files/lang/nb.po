@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-22 00:24+0000\n"
+"POT-Creation-Date: 2023-08-27 10:37+0000\n"
 "PO-Revision-Date: 2023-08-11 23:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1871,7 +1871,8 @@ msgstr "Kan ikke bygges. Det har allerede blitt bygd her denne runden."
 msgid "For this action it is necessary to build a castle first."
 msgstr "For å utføre denne handlingen må man bygge en borg først."
 
-msgid "Cannot build %{name} because castle is too far from water."
+#, fuzzy
+msgid "Cannot build %{name} because the castle is too far away from an ocean."
 msgstr "Borgen er for langt unna vann til å bygge %{name}."
 
 # bygning? usikker funksjon
