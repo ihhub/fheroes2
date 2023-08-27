@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-22 00:24+0000\n"
+"POT-Creation-Date: 2023-08-27 10:37+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1719,7 +1719,8 @@ msgstr "Вы ўжо будавалі сёння ў гэтым замку."
 msgid "For this action it is necessary to build a castle first."
 msgstr ""
 
-msgid "Cannot build %{name} because castle is too far from water."
+#, fuzzy
+msgid "Cannot build %{name} because the castle is too far away from an ocean."
 msgstr "Нельга пабудаваць %{name}, бо замак занадта далёка ад вады."
 
 msgid "disable build."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-22 14:39+0000\n"
+"POT-Creation-Date: 2023-08-27 10:37+0000\n"
 "PO-Revision-Date: 2023-08-21 15:41+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1791,7 +1791,8 @@ msgstr "Kan inte byggas. Du har redan byggt här idag."
 msgid "For this action it is necessary to build a castle first."
 msgstr "För denna åtgärd är det nödvändigt att först bygga ett slott."
 
-msgid "Cannot build %{name} because castle is too far from water."
+#, fuzzy
+msgid "Cannot build %{name} because the castle is too far away from an ocean."
 msgstr "Kan ej bygga %{name}. Slottet är för långt borta från vatten."
 
 msgid "disable build."
