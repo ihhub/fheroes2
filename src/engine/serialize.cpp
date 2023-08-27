@@ -338,15 +338,17 @@ void StreamBuf::reallocbuf( size_t size )
 
 void StreamBuf::put8( const uint8_t v )
 {
-    if ( sizep() == 0 ) {
+    if ( sizep() < 1 ) {
         reallocbuf( capacity() + capacity() / 2 );
-        assert( itput != nullptr );
     }
 
-    if ( sizep() > 0 ) {
-        *itput = v;
-        ++itput;
+    if ( sizep() < 1 ) {
+        assert( 0 );
+        return;
     }
+
+    *itput = v;
+    ++itput;
 }
 
 uint8_t StreamBuf::get8()
@@ -450,8 +452,10 @@ void StreamBuf::putRaw( const char * ptr, size_t sz )
         }
     }
 
-    // Make sure that the possible previous memory reallocation was correct.
-    assert( sizep() >= sz );
+    if ( sizep() < sz ) {
+        assert( 0 );
+        return;
+    }
 
     memcpy( itput, ptr, sz );
     itput = itput + sz;
