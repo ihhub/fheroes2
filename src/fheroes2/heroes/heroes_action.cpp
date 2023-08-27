@@ -2507,19 +2507,11 @@ namespace
                     const fheroes2::SmallPrimarySkillDialogElement powerUI( Skill::Primary::POWER, "+1" );
                     const fheroes2::SmallPrimarySkillDialogElement knowledgeUI( Skill::Primary::KNOWLEDGE, "+1" );
 
-                    fheroes2::FrameDialogElement firstFrame( BOXAREA_WIDTH );
-                    fheroes2::FrameDialogElement secondFrame( BOXAREA_WIDTH );
-
-                    firstFrame.addItem( &attackUI );
-                    firstFrame.addItem( &defenseUI );
-                    secondFrame.addItem( &powerUI );
-                    secondFrame.addItem( &knowledgeUI );
-
                     fheroes2::
                         showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ),
                                      fheroes2::Text( _( "The butler admits you to see the master of the house. He trains you in the four skills a hero should know." ),
                                                      fheroes2::FontType::normalWhite() ),
-                                     Dialog::OK, { &firstFrame, &secondFrame } );
+                                     Dialog::OK, { &attackUI, &defenseUI, &powerUI, &knowledgeUI } );
                 }
 
                 hero.IncreasePrimarySkill( Skill::Primary::ATTACK );
