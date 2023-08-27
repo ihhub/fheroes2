@@ -446,22 +446,16 @@ void StreamBuf::putRaw( const char * ptr, size_t sz )
     itput = itput + sz;
 }
 
-std::string StreamBuf::toString( size_t sz )
+std::string StreamBuf::toString( const size_t size )
 {
-    uint8_t * it1 = itget;
-    uint8_t * it2 = itget + ( sz ? sz : sizeg() );
-    it2 = std::find( it1, it2, 0 );
-    itget = it1 + ( sz ? sz : sizeg() );
-    return std::string( it1, it2 );
-}
+    const size_t length = ( size > 0 && size < sizeg() ) ? size : sizeg();
 
-std::string_view StreamBuf::toStringView( const size_t sz )
-{
     uint8_t * it1 = itget;
-    uint8_t * it2 = itget + ( sz ? sz : sizeg() );
+    uint8_t * it2 = itget + length;
     it2 = std::find( it1, it2, 0 );
-    itget = it1 + ( sz ? sz : sizeg() );
-    return { reinterpret_cast<const char *>( it1 ), static_cast<size_t>( it2 - it1 ) };
+    itget = it1 + length;
+
+    return { it1, it2 };
 }
 
 void StreamBuf::skip( size_t sz )

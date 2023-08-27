@@ -295,9 +295,7 @@ public:
     std::vector<uint8_t> getRaw( size_t sz = 0 /* all data */ ) override;
     void putRaw( const char * ptr, size_t sz ) override;
 
-    std::string toString( size_t sz = 0 /* all data */ );
-
-    std::string_view toStringView( const size_t sz );
+    std::string toString( const size_t size = 0 );
 
 protected:
     void reset();

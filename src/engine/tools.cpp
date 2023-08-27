@@ -222,29 +222,6 @@ std::vector<std::string> StringSplit( const std::string & str, const char sep )
     return vec;
 }
 
-std::vector<std::string_view> StringSplit( const std::string_view & str, const char sep )
-{
-    std::vector<std::string_view> vec;
-    size_t pos1 = 0;
-    size_t pos2 = 0;
-
-    while ( pos1 < str.size() ) {
-        pos2 = str.find( sep, pos1 );
-        if ( pos2 == std::string_view::npos ) {
-            break;
-        }
-
-        vec.push_back( str.substr( pos1, pos2 - pos1 ) );
-        pos1 = pos2 + 1;
-    }
-
-    // tail
-    if ( pos1 < str.size() )
-        vec.push_back( str.substr( pos1, str.size() - pos1 ) );
-
-    return vec;
-}
-
 std::string insertCharToString( const std::string & inputString, const size_t position, const char character )
 {
     std::string outputString = inputString;

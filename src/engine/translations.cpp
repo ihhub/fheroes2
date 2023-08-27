@@ -147,8 +147,8 @@ namespace
 
     struct chunk
     {
-        uint32_t offset{ 0 };
-        uint32_t length{ 0 };
+        uint32_t offset;
+        uint32_t length;
 
         chunk( const uint32_t off, const uint32_t len )
             : offset( off )
@@ -177,15 +177,16 @@ namespace
         return ~crc;
     }
 
-    std::string getTag( const std::string_view & str, const std::string & tag, const std::string & sep )
+    std::string getTag( const std::string & str, const std::string & tag, const std::string & sep )
     {
-        std::string res;
-        if ( str.size() > tag.size() && tag == str.substr( 0, tag.size() ) ) {
-            size_t pos = str.find( sep );
-            if ( pos != std::string::npos )
-                res = str.substr( pos + sep.size() );
+        if ( str.size() > tag.size() && str.rfind( tag, 0 ) == 0 ) {
+            const size_t pos = str.find( sep );
+            if ( pos != std::string::npos ) {
+                return str.substr( pos + sep.size() );
+            }
         }
-        return res;
+
+        return {};
     }
 
     const char * stripContext( const char * str )
@@ -272,9 +273,9 @@ namespace
                 const uint32_t offset2 = buf.get32();
 
                 buf.seek( offset2 );
-                const std::vector<std::string_view> tags = StringSplit( buf.toStringView( length2 ), '\n' );
+                const std::vector<std::string> tags = StringSplit( buf.toString( length2 ), '\n' );
 
-                for ( const std::string_view & tag : tags ) {
+                for ( const std::string & tag : tags ) {
                     if ( encoding.empty() ) {
                         encoding = getTag( tag, "Content-Type", "charset=" );
                     }
@@ -296,7 +297,7 @@ namespace
 
                 const uint32_t offset1 = buf.get32();
                 buf.seek( offset1 );
-                const std::string_view msg1 = buf.toStringView( length1 );
+                const std::string msg1 = buf.toString( length1 );
 
                 const uint32_t crc = crc32b( msg1.data() );
                 buf.seek( translationOffset + index * 8 );
