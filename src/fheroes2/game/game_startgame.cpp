@@ -501,10 +501,6 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
         break;
     }
 
-    case MP2::OBJ_MONSTER:
-        // TODO: Can monsters be placed on water?
-        return isWater ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, hero.getNumOfTravelDays( tile.GetIndex() ) ) : Cursor::POINTER;
-
     case MP2::OBJ_COAST:
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, hero.getNumOfTravelDays( tile.GetIndex() ) );
 

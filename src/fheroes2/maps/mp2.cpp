@@ -583,8 +583,8 @@ bool MP2::isActionObject( const MapObjectType objectType, const bool accessedFro
 bool MP2::isWaterActionObject( const MapObjectType objectType )
 {
     switch ( objectType ) {
+    // It's funny, but the OG editor can place artifacts on the water, thus, hero should be able to reach them by water
     case OBJ_ARTIFACT:
-    case OBJ_BARRIER:
     case OBJ_BOTTLE:
     case OBJ_BUOY:
     case OBJ_COAST:
@@ -593,23 +593,17 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
     case OBJ_HEROES:
     case OBJ_MAGELLANS_MAPS:
     case OBJ_MERMAID:
-    case OBJ_MONSTER:
-    case OBJ_RESOURCE:
     case OBJ_SEA_CHEST:
     case OBJ_SHIPWRECK:
     case OBJ_SHIPWRECK_SURVIVOR:
     case OBJ_SIRENS:
     case OBJ_WHIRLPOOL:
         return true;
-    case OBJ_BOAT:
-    case OBJ_CASTLE:
-        return false;
     default:
         break;
     }
 
-    // price loyalty: editor allow place other objects
-    return Settings::Get().isPriceOfLoyaltySupported() ? isActionObject( objectType ) : false;
+    return false;
 }
 
 bool MP2::isActionObject( const MapObjectType objectType )
