@@ -4902,6 +4902,9 @@ msgstr " Minden populáció megfeleződött."
 msgid " All dwellings increase population."
 msgstr " Mindegyik toborzóhelynek nőtt a termelése."
 
+msgid "New Month!"
+msgstr "Új hónap!"
+
 msgid "New Week!"
 msgstr "Új hét!"
 
