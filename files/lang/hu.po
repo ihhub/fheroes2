@@ -2530,28 +2530,23 @@ msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
 msgid "Town"
 msgstr "Város"
 
-#, fuzzy
 msgid "Exit Castle"
 msgstr "Kastély elhagyása"
 
-#, fuzzy
 msgid "Exit Town"
 msgstr "Város elhagyása"
 
-#, fuzzy
 msgid "Show Income"
 msgstr "Jövedelem:"
 
 msgid "View Hero"
 msgstr "Hős mutatása"
 
-#, fuzzy
 msgid "The above spells are available here."
 msgstr "A fenti varázslatok érhetők el itt."
 
-#, fuzzy
-msgid "The above spells have been added to your book."
-msgstr "A fenti varázslatok beíródtak a varázskönyvedbe."
+msgid "The spells the hero can learn have been added to their book."
+msgstr "A hős által megtanulható varázslatok beíródtak a varázskönyvébe."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
