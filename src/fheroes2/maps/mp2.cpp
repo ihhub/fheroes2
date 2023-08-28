@@ -583,7 +583,8 @@ bool MP2::isActionObject( const MapObjectType objectType, const bool accessedFro
 bool MP2::isWaterActionObject( const MapObjectType objectType )
 {
     switch ( objectType ) {
-    // It's funny, but the OG editor can place artifacts on the water, thus, hero should be able to reach them by water
+    // These are the types of objects that can be placed on water tiles by the original editor and,
+    // therefore, should be accessible to the hero who is on board the boat (yes, artifacts too).
     case OBJ_ARTIFACT:
     case OBJ_BOTTLE:
     case OBJ_BUOY:
@@ -599,11 +600,18 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
     case OBJ_SIRENS:
     case OBJ_WHIRLPOOL:
         return true;
+
+    case OBJ_BOAT:
+    case OBJ_CASTLE:
+        return false;
+
     default:
         break;
     }
 
-    return false;
+    // Here we would have to return false, but some map editors allow to place arbitrary objects
+    // on water tiles, so we have to work with this.
+    return isActionObject( objectType );
 }
 
 bool MP2::isActionObject( const MapObjectType objectType )

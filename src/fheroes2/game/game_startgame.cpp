@@ -501,6 +501,10 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
         break;
     }
 
+    // Some map editors allow to place monsters on water tiles
+    case MP2::OBJ_MONSTER:
+        return isWater ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, hero.getNumOfTravelDays( tile.GetIndex() ) ) : Cursor::POINTER;
+
     case MP2::OBJ_COAST:
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
