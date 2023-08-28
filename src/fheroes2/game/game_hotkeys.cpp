@@ -33,13 +33,17 @@
 #include <type_traits>
 #include <utility>
 
+#include "battle_arena.h"
+#include "dialog.h"
 #include "localevent.h"
 #include "logging.h"
+#include "players.h"
 #include "settings.h"
 #include "system.h"
 #include "tinyconfig.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 #include "ui_language.h"
 
 namespace
@@ -173,6 +177,19 @@ namespace
             = { HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|choose the original campaign" ), fheroes2::Key::KEY_O };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_EXPANSION_CAMPAIGN )]
             = { HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|choose the expansion campaign" ), fheroes2::Key::KEY_E };
+
+#if defined( WITH_DEBUG )
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_MAIN_MENU )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|map editor main menu" ), fheroes2::Key::KEY_E };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new map menu" ), fheroes2::Key::KEY_N };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_LOAD_MAP_MENU )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|load map menu" ), fheroes2::Key::KEY_L };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new map from scratch" ), fheroes2::Key::KEY_S };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new random map" ), fheroes2::Key::KEY_R };
+#endif
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ROLAND )]
             = { HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|roland campaign" ), fheroes2::Key::KEY_1 };
@@ -314,8 +331,8 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_JOIN_STACKS )] = { HotKeyCategory::ARMY, gettext_noop( "hotkey|join stacks" ), fheroes2::Key::KEY_ALT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_UPGRADE_TROOP )]
             = { HotKeyCategory::ARMY, gettext_noop( "hotkey|upgrade troop" ), fheroes2::Key::KEY_U };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_DISMISS_TROOP )]
-            = { HotKeyCategory::ARMY, gettext_noop( "hotkey|dismiss troop" ), fheroes2::Key::KEY_D };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_DISMISS )]
+            = { HotKeyCategory::ARMY, gettext_noop( "hotkey|dismiss hero or troop" ), fheroes2::Key::KEY_D };
     }
 
     std::string getHotKeyFileContent()
@@ -389,9 +406,9 @@ const char * Game::getHotKeyEventNameByEventId( const HotKeyEvent eventID )
 std::vector<Game::HotKeyEvent> Game::getAllHotKeyEvents()
 {
     std::vector<Game::HotKeyEvent> events;
-    events.reserve( hotKeyEventInfo.size() - 2 );
+    events.reserve( hotKeyEventInfo.size() - 1 );
 
-    for ( size_t i = 1; i < hotKeyEventInfo.size() - 1; ++i ) {
+    for ( size_t i = 1; i < hotKeyEventInfo.size(); ++i ) {
         events.emplace_back( static_cast<Game::HotKeyEvent>( i ) );
     }
 
@@ -469,4 +486,57 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
         conf.setTextSupportMode( !conf.isTextSupportModeEnabled() );
         conf.Save( Settings::configFileName );
     }
+#if defined( WITH_DEBUG )
+    else if ( key == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::WORLD_TRANSFER_CONTROL_TO_AI )].key ) {
+        static bool recursiveCall = false;
+
+        if ( !recursiveCall ) {
+            class RecursionGuard
+            {
+            public:
+                explicit RecursionGuard( bool & rc )
+                    : _recursiveCall( rc )
+                {
+                    _recursiveCall = true;
+                }
+
+                RecursionGuard( const RecursionGuard & ) = delete;
+
+                ~RecursionGuard()
+                {
+                    _recursiveCall = false;
+                }
+
+                RecursionGuard & operator=( const RecursionGuard & ) = delete;
+
+            private:
+                bool & _recursiveCall;
+            };
+
+            const RecursionGuard recursionGuard( recursiveCall );
+
+            Player * player = Settings::Get().GetPlayers().GetCurrent();
+
+            // Do not allow to transfer control to/from AI during battle
+            if ( player && ( player->isControlHuman() || player->isAIAutoControlMode() ) && Battle::GetArena() == nullptr ) {
+                if ( player->isAIAutoControlMode() ) {
+                    if ( fheroes2::showStandardTextMessage( _( "Warning" ),
+                                                            _( "Do you want to regain control from AI? The effect will take place only on the next turn." ),
+                                                            Dialog::YES | Dialog::NO )
+                         == Dialog::YES ) {
+                        player->setAIAutoControlMode( false );
+                    }
+                }
+                else {
+                    if ( fheroes2::showStandardTextMessage( _( "Warning" ),
+                                                            _( "Do you want to transfer control from you to the AI? The effect will take place only on the next turn." ),
+                                                            Dialog::YES | Dialog::NO )
+                         == Dialog::YES ) {
+                        player->setAIAutoControlMode( true );
+                    }
+                }
+            }
+        }
+    }
+#endif
 }

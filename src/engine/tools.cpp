@@ -30,7 +30,12 @@
 #include <cstdlib>
 #include <cstring>
 #include <fstream> // IWYU pragma: keep
+#include <limits>
 #include <memory>
+#include <system_error>
+
+#include <zconf.h>
+#include <zlib.h>
 
 #include "translations.h"
 
@@ -189,24 +194,25 @@ void StringReplace( std::string & dst, const char * pred, const std::string & sr
 {
     size_t pos;
 
-    while ( std::string::npos != ( pos = dst.find( pred ) ) )
+    while ( std::string::npos != ( pos = dst.find( pred ) ) ) {
         dst.replace( pos, std::strlen( pred ), src );
+    }
 }
 
-void StringReplace( std::string & dst, const char * pred, int value )
-{
-    StringReplace( dst, pred, std::to_string( value ) );
-}
-
-std::vector<std::string> StringSplit( const std::string & str, const std::string & sep )
+std::vector<std::string> StringSplit( const std::string & str, const char sep )
 {
     std::vector<std::string> vec;
     size_t pos1 = 0;
-    size_t pos2;
+    size_t pos2 = 0;
 
-    while ( pos1 < str.size() && std::string::npos != ( pos2 = str.find( sep, pos1 ) ) ) {
+    while ( pos1 < str.size() ) {
+        pos2 = str.find( sep, pos1 );
+        if ( pos2 == std::string::npos ) {
+            break;
+        }
+
         vec.push_back( str.substr( pos1, pos2 - pos1 ) );
-        pos1 = pos2 + sep.size();
+        pos1 = pos2 + 1;
     }
 
     // tail
@@ -216,16 +222,18 @@ std::vector<std::string> StringSplit( const std::string & str, const std::string
     return vec;
 }
 
-std::string InsertString( const std::string & src, size_t pos, const char * c )
+std::string insertCharToString( const std::string & inputString, const size_t position, const char character )
 {
-    std::string res = src;
+    std::string outputString = inputString;
 
-    if ( pos >= src.size() )
-        res.append( c );
-    else
-        res.insert( pos, c );
+    if ( position >= inputString.size() ) {
+        outputString.append( 1, character );
+    }
+    else {
+        outputString.insert( position, 1, character );
+    }
 
-    return res;
+    return outputString;
 }
 
 int Sign( int s )
@@ -395,17 +403,13 @@ namespace fheroes2
 
     uint32_t calculateCRC32( const uint8_t * data, const size_t length )
     {
-        uint32_t crc = 0xFFFFFFFF;
-        for ( size_t i = 0; i < length; ++i ) {
-            crc ^= static_cast<uint32_t>( data[i] );
-
-            for ( int bit = 0; bit < 8; ++bit ) {
-                const uint32_t poly = ( crc & 1 ) ? 0xEDB88320 : 0x0;
-                crc = ( crc >> 1 ) ^ poly;
-            }
+        if ( length > std::numeric_limits<uInt>::max() ) {
+            throw std::
+                system_error( std::make_error_code( std::errc::value_too_large ),
+                              "Too large `length` provided to `calculateCRC32`. Must be no larger than `std::numeric_limits<uInt>::max()` (usually `(1 << 32) - 1`)." );
         }
 
-        return ~crc;
+        return static_cast<uint32_t>( crc32( 0, data, static_cast<uInt>( length ) ) );
     }
 
     void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding )

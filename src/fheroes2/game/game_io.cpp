@@ -28,6 +28,7 @@
 #include <cstdint>
 #include <ctime>
 #include <ostream>
+#include <utility>
 
 #include "campaign_savedata.h"
 #include "campaign_scenariodata.h"
@@ -158,7 +159,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
 {
     DEBUG_LOG( DBG_GAME, DBG_INFO, filePath )
 
-    auto showGenericErrorMessage = []() { fheroes2::showStandardTextMessage( _( "Error" ), _( "The save file is corrupted." ), Dialog::OK ); };
+    const auto showGenericErrorMessage = []() { fheroes2::showStandardTextMessage( _( "Error" ), _( "The save file is corrupted." ), Dialog::OK ); };
 
     StreamFile fs;
     fs.setbigendian( true );
@@ -298,7 +299,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     return returnValue;
 }
 
-bool Game::LoadSAV2FileInfo( const std::string & filePath, Maps::FileInfo & fileInfo )
+bool Game::LoadSAV2FileInfo( std::string filePath, Maps::FileInfo & fileInfo )
 {
     DEBUG_LOG( DBG_GAME, DBG_INFO, filePath )
 
@@ -338,8 +339,8 @@ bool Game::LoadSAV2FileInfo( const std::string & filePath, Maps::FileInfo & file
         return false;
     }
 
-    fileInfo = header.info;
-    fileInfo.file = filePath;
+    fileInfo = std::move( header.info );
+    fileInfo.file = std::move( filePath );
 
     return true;
 }

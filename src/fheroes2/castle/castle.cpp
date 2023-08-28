@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "castle.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -34,7 +36,6 @@
 #include "audio_manager.h"
 #include "battle_board.h"
 #include "battle_tower.h"
-#include "castle.h"
 #include "castle_building_info.h"
 #include "dialog.h"
 #include "difficulty.h"
@@ -644,10 +645,17 @@ double Castle::getVisitValue( const Heroes & hero ) const
 
     for ( size_t i = 0; i < futureArmy.Size(); ++i ) {
         Troop * troop = futureArmy.GetTroop( i );
-        if ( troop != nullptr && troop->isValid() ) {
-            const payment_t payment = troop->GetTotalUpgradeCost();
+        if ( troop != nullptr && troop->isValid() && troop->isAllowUpgrade() ) {
+            if ( GetRace() != troop->GetRace() ) {
+                continue;
+            }
 
-            if ( GetRace() == troop->GetRace() && isBuild( troop->GetUpgrade().GetDwelling() ) && potentialFunds >= payment ) {
+            if ( !isBuild( troop->GetUpgrade().GetDwelling() ) ) {
+                continue;
+            }
+
+            const payment_t payment = troop->GetTotalUpgradeCost();
+            if ( potentialFunds >= payment ) {
                 potentialFunds -= payment;
                 troop->Upgrade();
             }
@@ -668,7 +676,7 @@ bool Castle::isExactBuildingBuilt( const uint32_t buildingToCheck ) const
         return false;
     }
 
-    auto checkBuilding = [this]( const uint32_t expectedLevels, const uint32_t allPossibleLevels ) {
+    const auto checkBuilding = [this]( const uint32_t expectedLevels, const uint32_t allPossibleLevels ) {
         // All expected levels should be built
         assert( ( building & expectedLevels ) == expectedLevels );
 
@@ -779,48 +787,42 @@ void Castle::ActionNewWeek()
         = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6,
             DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5, DWELLING_UPGRADE6, DWELLING_UPGRADE7 };
 
-    const bool isNeutral = GetColor() == Color::NONE;
+    const bool isNeutral = ( GetColor() == Color::NONE );
+    const bool isPlagueWeek = ( world.GetWeekType().GetType() == WeekName::PLAGUE );
+    const bool isMonsterWeek = ( world.GetWeekType().GetType() == WeekName::MONSTERS );
 
-    // Increase the population
-    if ( world.GetWeekType().GetType() != WeekName::PLAGUE ) {
+    if ( !isPlagueWeek ) {
         static const std::array<uint32_t, 6> basicDwellings
             = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6 };
 
         // Normal population growth
         for ( const uint32_t dwellingId : basicDwellings ) {
-            uint32_t * dwellingPtr = GetDwelling( dwellingId );
-
-            // Such dwelling (or its upgrade) has not been built
-            if ( dwellingPtr == nullptr ) {
+            uint32_t * dwellingMonsters = GetDwelling( dwellingId );
+            if ( dwellingMonsters == nullptr ) {
+                // Such dwelling (or its upgrade) has not been built
                 continue;
             }
 
             uint32_t growth = Monster( race, GetActualDwelling( dwellingId ) ).GetGrown();
 
-            // The well is built
             if ( building & BUILD_WELL ) {
+                // The well is built.
                 growth += GetGrownWell();
             }
 
-            // The Horde building is built
             if ( ( dwellingId == DWELLING_MONSTER1 ) && ( building & BUILD_WEL2 ) ) {
                 growth += GetGrownWel2();
             }
 
-            if ( isControlAI() && !isNeutral ) {
-                growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty() ) );
-            }
-
-            // Neutral towns always have 50% population growth
             if ( isNeutral ) {
+                // Neutral towns always have 50% population growth.
                 growth /= 2;
             }
 
-            *dwellingPtr += growth;
+            *dwellingMonsters += growth;
         }
 
-        // Week Of
-        if ( world.GetWeekType().GetType() == WeekName::MONSTERS && !world.BeginMonth() ) {
+        if ( isMonsterWeek && !world.BeginMonth() ) {
             for ( const uint32_t dwellingId : allDwellings ) {
                 // A building of exactly this level should be built (its upgraded versions should not be considered)
                 if ( !isExactBuildingBuilt( dwellingId ) ) {
@@ -833,18 +835,18 @@ void Castle::ActionNewWeek()
                     continue;
                 }
 
-                uint32_t * dwellingPtr = GetDwelling( dwellingId );
-                assert( dwellingPtr != nullptr );
+                uint32_t * dwellingMonsters = GetDwelling( dwellingId );
+                assert( dwellingMonsters != nullptr );
 
-                *dwellingPtr += GetGrownWeekOf();
-
+                *dwellingMonsters += GetGrownWeekOf();
                 break;
             }
         }
 
-        // Neutral town: increase the garrison
         if ( isNeutral ) {
+            // Neutral towns have additional increase in garrison army.
             JoinRNDArmy();
+
             // The probability that a town will get additional troops is 40%, castle always gets them
             if ( isCastle() || Rand::Get( 1, 100 ) <= 40 ) {
                 JoinRNDArmy();
@@ -856,14 +858,12 @@ void Castle::ActionNewWeek()
     if ( world.BeginMonth() ) {
         assert( world.GetMonth() > 1 );
 
-        // Population halved
-        if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
+        if ( isPlagueWeek ) {
             for ( uint32_t & dwellingRef : dwelling ) {
                 dwellingRef /= 2;
             }
         }
-        // Month Of
-        else if ( world.GetWeekType().GetType() == WeekName::MONSTERS ) {
+        else if ( isMonsterWeek ) {
             for ( const uint32_t dwellingId : allDwellings ) {
                 // A building of exactly this level should be built (its upgraded versions should not be considered)
                 if ( !isExactBuildingBuilt( dwellingId ) ) {
@@ -876,14 +876,54 @@ void Castle::ActionNewWeek()
                     continue;
                 }
 
-                uint32_t * dwellingPtr = GetDwelling( dwellingId );
-                assert( dwellingPtr != nullptr );
+                uint32_t * dwellingMonsters = GetDwelling( dwellingId );
+                assert( dwellingMonsters != nullptr );
 
-                *dwellingPtr += *dwellingPtr * GetGrownMonthOf() / 100;
-
+                *dwellingMonsters += *dwellingMonsters * GetGrownMonthOf() / 100;
                 break;
             }
         }
+    }
+}
+
+void Castle::ActionNewWeekAIBonuses()
+{
+    if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
+        // No growth bonus can be applied.
+        return;
+    }
+
+    if ( !isControlAI() ) {
+        // No AI - no perks!
+        return;
+    }
+
+    if ( GetColor() == Color::NONE ) {
+        // Neutrals aren't considered as AI players.
+        return;
+    }
+
+    static const std::array<uint32_t, 6> basicDwellings
+        = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6 };
+
+    for ( const uint32_t dwellingId : basicDwellings ) {
+        uint32_t * dwellingMonsters = GetDwelling( dwellingId );
+        if ( dwellingMonsters == nullptr ) {
+            // Such dwelling (or its upgrade) has not been built.
+            continue;
+        }
+
+        uint32_t originalGrowth = Monster( race, GetActualDwelling( dwellingId ) ).GetGrown();
+
+        if ( building & BUILD_WELL ) {
+            originalGrowth += GetGrownWell();
+        }
+
+        if ( ( dwellingId == DWELLING_MONSTER1 ) && ( building & BUILD_WEL2 ) ) {
+            originalGrowth += GetGrownWel2();
+        }
+
+        *dwellingMonsters += static_cast<uint32_t>( originalGrowth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty() ) );
     }
 }
 
@@ -1068,36 +1108,45 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
 
 bool Castle::RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force )
 {
-    Monster monster( race, GetActualDwelling( dw ) );
-    Troop troop( monster, std::min( count, getRecruitLimit( monster, GetKingdom().GetFunds() ) ) );
+    const Monster monster( race, GetActualDwelling( dw ) );
+    assert( count <= getRecruitLimit( monster, GetKingdom().GetFunds() ) );
 
-    if ( !RecruitMonster( troop, false ) ) {
-        if ( force ) {
-            Troop * weak = GetArmy().GetWeakestTroop();
-            if ( weak && weak->GetStrength() < troop.GetStrength() ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO,
-                           name << ": " << troop.GetCount() << " " << troop.GetMultiName() << " replace " << weak->GetCount() << " " << weak->GetMultiName() )
-                weak->Set( troop );
-                return true;
-            }
-        }
+    const Troop troop( monster, std::min( count, getRecruitLimit( monster, GetKingdom().GetFunds() ) ) );
 
-        return false;
+    if ( RecruitMonster( troop, false ) ) {
+        return true;
     }
-    return true;
+
+    // TODO: before removing an existing stack of monsters try to upgrade them and also merge some stacks.
+
+    if ( force ) {
+        Troop * weak = GetArmy().GetWeakestTroop();
+        if ( weak && weak->GetStrength() < troop.GetStrength() ) {
+            DEBUG_LOG( DBG_GAME, DBG_INFO,
+                       name << ": " << troop.GetCount() << " " << troop.GetMultiName() << " replace " << weak->GetCount() << " " << weak->GetMultiName() )
+            weak->Set( troop );
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void Castle::recruitBestAvailable( Funds budget )
 {
     for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
-        if ( isBuild( dw ) ) {
-            const Monster monster( race, GetActualDwelling( dw ) );
-            const uint32_t willRecruit = getRecruitLimit( monster, budget );
+        if ( !isBuild( dw ) ) {
+            continue;
+        }
 
-            if ( RecruitMonsterFromDwelling( dw, willRecruit, true ) ) {
-                // success, reduce the budget
-                budget -= ( monster.GetCost() * willRecruit );
-            }
+        const Monster monster( race, GetActualDwelling( dw ) );
+        const uint32_t willRecruit = getRecruitLimit( monster, budget );
+        if ( willRecruit == 0 ) {
+            continue;
+        }
+
+        if ( RecruitMonsterFromDwelling( dw, willRecruit, true ) ) {
+            budget -= ( monster.GetCost() * willRecruit );
         }
     }
 }
@@ -2442,7 +2491,7 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
     }
 
     // Add castle bonuses if there are any troops defending the castle
-    if ( isCastle() && totalStrength > 1 ) {
+    if ( isCastle() && totalStrength > 0.1 ) {
         const Battle::Tower tower( *this, Battle::TowerType::TWR_CENTER, Rand::DeterministicRandomGenerator( 0 ), 0 );
         const double towerStr = tower.GetStrengthWithBonus( tower.GetAttackBonus(), 0 );
 
@@ -2454,12 +2503,12 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
             totalStrength += towerStr / 2;
         }
 
-        if ( attackingHero && ( !attackingHero->GetArmy().isMeleeDominantArmy() || attackingHero->HasSecondarySkill( Skill::Secondary::BALLISTICS ) ) ) {
-            totalStrength *= isBuild( BUILD_MOAT ) ? 1.2 : 1.15;
-        }
-        else {
+        if ( attackingHero && !attackingHero->HasSecondarySkill( Skill::Secondary::BALLISTICS ) && attackingHero->GetArmy().isMeleeDominantArmy() ) {
             // Heavy penalty if the attacking hero does not have a ballistic skill, and his army is based on melee infantry
             totalStrength *= isBuild( BUILD_MOAT ) ? 1.45 : 1.25;
+        }
+        else {
+            totalStrength *= isBuild( BUILD_MOAT ) ? 1.2 : 1.15;
         }
     }
 

@@ -277,8 +277,15 @@ public:
     static const char * GetName( int heroid );
 
     bool isValid() const override;
-    bool isFreeman() const;
-    void SetFreeman( int reason );
+    // Returns true if the hero is active on the adventure map (i.e. has a valid ID, is not imprisoned, and is hired by
+    // some kingdom), otherwise returns false
+    bool isActive() const;
+
+    // Returns true if the hero is available for hire (i.e. has a valid ID, is not imprisoned, and is not hired by any
+    // kingdom), otherwise returns false
+    bool isAvailableForHire() const;
+    // Dismisses the hero (makes him available for hire) because of a 'reason'. See the implementation for details.
+    void Dismiss( int reason );
 
     bool isLosingGame() const;
     const Castle * inCastle() const override;
@@ -370,19 +377,35 @@ public:
     int GetLevelSkill( int ) const override;
     uint32_t GetSecondaryValues( int skill ) const override;
     void LearnSkill( const Skill::Secondary & );
-    Skill::SecSkills & GetSecondarySkills();
+
+    Skill::SecSkills & GetSecondarySkills()
+    {
+        return secondary_skills;
+    }
 
     bool PickupArtifact( const Artifact & );
-    bool HasUltimateArtifact() const;
-    uint32_t GetCountArtifacts() const;
-    bool IsFullBagArtifacts() const;
+
+    bool HasUltimateArtifact() const
+    {
+        return bag_artifacts.ContainUltimateArtifact();
+    }
+
+    uint32_t GetCountArtifacts() const
+    {
+        return bag_artifacts.CountArtifacts();
+    }
+
+    bool IsFullBagArtifacts() const
+    {
+        return bag_artifacts.isFull();
+    }
 
     int GetMobilityIndexSprite() const;
 
     // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
     int GetManaIndexSprite() const;
 
-    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog = false );
+    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog );
     void MeetingDialog( Heroes & );
 
     bool Recruit( const int col, const fheroes2::Point & pt );
@@ -454,10 +477,10 @@ public:
     void Move2Dest( const int32_t destination );
     bool isMoveEnabled() const;
     bool CanMove() const;
-    void SetMove( bool );
+    void SetMove( const bool enable );
     bool isAction() const;
     void ResetAction();
-    void Action( int tileIndex, bool isDestination );
+    void Action( int tileIndex );
     void ActionNewPosition( const bool allowMonsterAttack );
     void ApplyPenaltyMovement( uint32_t penalty );
     void ActionSpellCast( const Spell & spell );
@@ -553,6 +576,16 @@ public:
         return _aiRole;
     }
 
+    void setDimensionDoorUsage( const uint32_t newUsage )
+    {
+        _dimensionDoorsUsed = newUsage;
+    }
+
+    uint32_t getDimensionDoorUses() const
+    {
+        return _dimensionDoorsUsed;
+    }
+
     uint8_t getAlphaValue() const
     {
         return static_cast<uint8_t>( _alphaValue );
@@ -574,7 +607,6 @@ private:
     void LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect = false );
     void AngleStep( int );
     bool MoveStep( const bool jumpToNextTile );
-    static void MoveStep( Heroes &, int32_t to, bool newpos );
     static uint32_t GetStartingXp();
     bool isInVisibleMapArea() const;
 
@@ -621,6 +653,9 @@ private:
 
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;
+
+    // Tracking how many spells this hero used this turn
+    uint32_t _dimensionDoorsUsed = 0;
 
     mutable int _alphaValue;
 
@@ -676,7 +711,7 @@ struct AllHeroes : public VecHeroes
     }
 
     Heroes * GetHero( const Castle & castle ) const;
-    Heroes * GetFreeman( const int race, const int heroIDToIgnore ) const;
+    Heroes * GetHeroForHire( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( int32_t ) const;
 };
 

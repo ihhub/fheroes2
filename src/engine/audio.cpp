@@ -42,7 +42,6 @@
 #include <SDL_mixer.h>
 #include <SDL_rwops.h>
 #include <SDL_stdinc.h>
-#include <SDL_version.h>
 
 #include "core.h"
 #include "dir.h"
@@ -55,8 +54,13 @@ namespace
 {
     struct AudioSpec
     {
+#if defined( TARGET_PS_VITA )
+        // Notice: The PS Vita sound resampler is CPU intensive if the value is not 22050.
+        int frequency = 22050;
+#else
         // Notice: Value 22050 causes music distortion on Windows.
         int frequency = 44100;
+#endif
         uint16_t format = AUDIO_S16;
         // Stereo audio support
         int channels = 2;
@@ -176,11 +180,7 @@ namespace
 
     // This is the callback function set by Mix_ChannelFinished(). As a rule, it is called from
     // a SDL_Mixer internal thread. Calls of any SDL_Mixer functions are not allowed in callbacks.
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void SDLCALL channelFinished( const int channelId )
-#else
-    void channelFinished( const int channelId )
-#endif
     {
         // This callback function should never be called if audio is not initialized
         assert( isInitialized );
@@ -268,11 +268,7 @@ namespace
                     ERROR_LOG( "Failed to create a music track from memory. The error: " << SDL_GetError() )
                 }
                 else {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
                     result = Mix_LoadMUS_RW( rwops, 0 );
-#else
-                    result = Mix_LoadMUS_RW( rwops );
-#endif
                     if ( result == nullptr ) {
                         ERROR_LOG( "Failed to create a music track from memory. The error: " << Mix_GetError() )
                     }
@@ -447,7 +443,7 @@ namespace
     public:
         void restartCurrentMusicTrack()
         {
-            std::scoped_lock<std::mutex> lock( _mutex );
+            const std::scoped_lock<std::mutex> lock( _mutex );
 
             _trackChangeCounter = musicTrackManager.getCurrentTrackChangeCounter();
 
@@ -502,11 +498,7 @@ namespace
 
     // This is the callback function set by Mix_HookMusicFinished(). As a rule, it is called from
     // a SDL_Mixer internal thread. Calls of any SDL_Mixer functions are not allowed in callbacks.
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void SDLCALL musicFinished()
-#else
-    void musicFinished()
-#endif
     {
         // This callback function should never be called if audio is not initialized
         assert( isInitialized );
@@ -641,7 +633,6 @@ void Audio::Init()
         return;
     }
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     const int initializationFlags = MIX_INIT_FLAC | MIX_INIT_MP3 | MIX_INIT_OGG | MIX_INIT_MID;
     const int initializedFlags = Mix_Init( initializationFlags );
     if ( ( initializedFlags & initializationFlags ) != initializationFlags ) {
@@ -664,7 +655,6 @@ void Audio::Init()
             DEBUG_LOG( DBG_ENGINE, DBG_WARN, "MID module failed to be initialized" )
         }
     }
-#endif
 
     const AudioSpec audioSpec;
 
@@ -741,9 +731,7 @@ void Audio::Quit()
         musicTrackManager.clearMusicDB();
 
         Mix_CloseAudio();
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
         Mix_Quit();
-#endif
 
         mixerChannelCount = 0;
 

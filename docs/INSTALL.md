@@ -22,6 +22,7 @@ Precompiled binaries of the release version are currently available for the foll
   * [**macOS native app**](#macos-native-app)
 * [**Linux**](#linux)
   * [**Flatpak**](#flatpak-linux)
+  * [**Gentoo**](#gentoo-package)
   * [**Homebrew**](#homebrew-linux)
   * [**AUR package**](#aur-package)
   * [**Linux ZIP archive**](#linux-zip-archive)
@@ -116,7 +117,7 @@ Follow the [**instructions below**](#macos-resources) to gather resources necess
   method (using [**MacPorts**](#macports) or [**Homebrew**](#homebrew-mac)), or
   [**build the project from source**](DEVELOPMENT.md#macos-and-linux).
 
-* After downloading the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl_2.sh` from
+* After downloading the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl2.sh` from
   the `script/macos` subdirectory. This will install the SDL libraries required to run the game.
 
 Follow the [**instructions below**](#macos-resources) to gather resources necessary for fheroes2 to function as expected.
@@ -191,6 +192,43 @@ The recommended option requires the Heroes of Might and Magic II installer file 
 For the manual installation you have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the original game or demo directory to the
 `~/.var/app/io.github.ihhub.Fheroes2/data/fheroes2` directory. The destination folder will be opened when this option is selected.
 
+<a name="gentoo-package"></a>
+### Gentoo package
+
+If you are using [**Gentoo**](https://gentoo.org), you can install the game using package manager. There are several options:
+
+#### GOG version
+
+If you purchased the game from GOG, add `games-strategy/homm2-gold-gog GOG-EULA` line to your `/etc/portage/package.license`, then use the following command:
+
+```sh
+sudo emerge -av games-strategy/homm2-gold-gog
+```
+
+It will ask you to put the .exe installer of the game and optionally the zip file with FLAC music to your distfiles directory,
+and if it's there, it will unpack everything to the correct places and pull `games-engines/fheroes2` as a dependency.
+
+USE-flag `flac` determines whether the game will use FLAC music or OGG music.
+
+#### Demo version
+
+You can install the demo version for free by adding `games-strategy/homm2-demo HoMM2-Demo` line to your `/etc/portage/package.license`, then using the following command:
+
+```sh
+sudo emerge -av games-strategy/homm2-demo
+```
+
+#### Another legal installation
+
+If you installed the game from original CD, use the following commands:
+
+```sh
+sudo emerge -av games-engines/fheroes2
+/usr/share/fheroes2/extract_homm2_resources.sh
+```
+
+The second command (Note: run it without root) will ask you where your data files are.
+
 <a name="homebrew-linux"></a>
 ### Homebrew
 
@@ -240,7 +278,7 @@ makepkg -si
 * After downloading the ZIP archive, extract it to a suitable directory of your choice. Then you will need to install the SDL libraries
   required to run the game. The installation procedure depends on the Linux distribution you are using:
 
-  * **Debian-based**: run the script `install_sdl_2.sh` from the `script/linux` subdirectory.
+  * **Debian-based**: run the script `install_sdl2.sh` from the `script/linux` subdirectory.
 
   * **Pacman-based (e.g. Arch Linux)**: run the following command: `sudo pacman -S sdl2 sdl2_mixer`.
 
@@ -291,20 +329,15 @@ makepkg -si
 
 You can download the precompiled binaries of the latest commit (snapshot) for
 **Windows** (
-[**x64 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x64-SDL2),
-[**x64 SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x64-SDL1),
-[**x86 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x86-SDL2) and
-[**x86 SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x86-SDL1)
+[**x64 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x64-SDL2) and
+[**x86 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-windows-x86-SDL2)
 ),
 **macOS x86-64** (
-[**SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-osx-sdl2_dev) and
-[**SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-osx-sdl1_dev)
+[**SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-osx-sdl2_dev)
 ),
 **Ubuntu** (
-[**x86-64 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl2_dev),
-[**x86-64 SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl1_dev),
-[**ARM64 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-arm-sdl2_dev) and
-[**ARM64 SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-arm-sdl1_dev)
+[**x86-64 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl2_dev) and
+[**ARM64 SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-arm-sdl2_dev)
 ),
 [**Android**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-android),
 [**PlayStation Vita**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-psv-sdl2_dev) and

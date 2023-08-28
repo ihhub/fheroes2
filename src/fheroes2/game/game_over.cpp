@@ -129,7 +129,7 @@ namespace
         if ( !body.empty() ) {
             AudioManager::PlayMusic( MUS::VICTORY, Music::PlaybackMode::PLAY_ONCE );
 
-            fheroes2::showStandardTextMessage( "", body, Dialog::OK );
+            fheroes2::showStandardTextMessage( "Victory!", body, Dialog::OK );
         }
     }
 
@@ -277,7 +277,7 @@ std::string GameOver::GetActualDescription( uint32_t cond )
         const int currentColor = currentPlayer->GetColor();
         const int friendColors = currentPlayer->GetFriends();
 
-        auto makeListOfPlayers = []( const int colors ) {
+        const auto makeListOfPlayers = []( const int colors ) {
             std::pair<std::string, size_t> result{ {}, 0 };
 
             for ( const int col : Colors( colors ) ) {
@@ -432,7 +432,16 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
 
         const Kingdom & myKingdom = world.GetKingdom( humanColors );
 
-        if ( myKingdom.isControlHuman() || Players::Get( humanColors )->isAIAutoControlMode() ) {
+#if defined( WITH_DEBUG )
+        const Player * humanPlayer = Players::Get( humanColors );
+        assert( humanPlayer != nullptr );
+
+        const bool isAIAutoControlMode = humanPlayer->isAIAutoControlMode();
+#else
+        const bool isAIAutoControlMode = false;
+#endif
+
+        if ( myKingdom.isControlHuman() || isAIAutoControlMode ) {
             result = world.CheckKingdomWins( myKingdom );
 
             if ( result != GameOver::COND_NONE ) {
@@ -486,7 +495,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
         }
         // Check the regular win/loss conditions
         else {
-            auto checkWinLossConditions = []( const int color ) -> uint32_t {
+            const auto checkWinLossConditions = []( const int color ) -> uint32_t {
                 // Don't check colors that don't belong to any kingdom (e.g. Color::NONE)
                 if ( Color::Count( color ) != 1 ) {
                     return GameOver::COND_NONE;
@@ -494,8 +503,17 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
 
                 const Kingdom & kingdom = world.GetKingdom( color );
 
+#if defined( WITH_DEBUG )
+                const Player * player = Players::Get( color );
+                assert( player != nullptr );
+
+                const bool isAIAutoControlMode = player->isAIAutoControlMode();
+#else
+                const bool isAIAutoControlMode = false;
+#endif
+
                 // Check the win/loss conditions for human-controlled players only
-                if ( !kingdom.isControlHuman() && !Players::Get( color )->isAIAutoControlMode() ) {
+                if ( !kingdom.isControlHuman() && !isAIAutoControlMode ) {
                     return GameOver::COND_NONE;
                 }
 

@@ -55,16 +55,22 @@ std::string StringTrim( std::string );
 std::string StringLower( std::string str );
 std::string StringUpper( std::string str );
 
-std::vector<std::string> StringSplit( const std::string &, const std::string & );
+std::vector<std::string> StringSplit( const std::string & str, const char sep );
 
 // Function to replace the pattern in workString with patternReplacement. Here the patternReplacement is converted to lowercase except for the first word in a sentence.
 void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement );
-void StringReplace( std::string &, const char *, const std::string & );
-void StringReplace( std::string &, const char *, int );
+void StringReplace( std::string & dst, const char * pred, const std::string & src );
+
+template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
+void StringReplace( std::string & dst, const char * pred, const T value )
+{
+    StringReplace( dst, pred, std::to_string( value ) );
+}
 
 int CountBits( uint32_t );
 
-std::string InsertString( const std::string &, size_t, const char * );
+// Returns a new text string with the inserted character in the input string at the specified position.
+std::string insertCharToString( const std::string & inputString, const size_t position, const char character );
 
 namespace fheroes2
 {

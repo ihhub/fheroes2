@@ -20,8 +20,10 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <string>
 #include <vector>
 
 #include "image.h"
@@ -31,6 +33,8 @@
 
 namespace fheroes2
 {
+    struct FontType;
+
     class MovableSprite : public Sprite
     {
     public:
@@ -57,6 +61,12 @@ namespace fheroes2
         }
 
         void setPosition( int32_t x_, int32_t y_ ) override;
+
+    protected:
+        void _resetRestorer()
+        {
+            _restorer.reset();
+        }
 
     private:
         ImageRestorer _restorer;
@@ -118,11 +128,24 @@ namespace fheroes2
 
     Image CreateRippleEffect( const Image & in, const int32_t frameId, const double scaleX = 0.05, const double waveFrequency = 20.0 );
 
-    void FadeDisplay( const Image & top, const Point & pos, const uint8_t endAlpha, const int32_t fadeTimeMs );
+    // Fade-out the whole screen.
+    void fadeOutDisplay();
+
+    // Fade-out the display image in ROI. The 'halfFade' parameter sets to do only half of fade-out: till half-darkened image.
+    void fadeOutDisplay( const Rect & roi, const bool halfFade );
+
+    // Fade-in the prepared image in display instance on the whole screen. The last frame is fully bright so it is a copy of original image.
+    void fadeInDisplay();
+
+    // Fade-in the prepared display image in ROI. The 'halfFade' parameter sets to do only half of fade-in: from the half-darkened image.
+    // The last frame is fully bright so it is a copy of original image.
+    void fadeInDisplay( const Rect & roi, const bool halfFade );
 
     void FadeDisplayWithPalette( const Image & top, const Point & pos, const uint8_t paletteId, const int32_t fadeTimeMs, const int32_t frameCount );
 
-    void FadeDisplay( int32_t fadeTimeMs = 500 );
+    // Returns the character position number in the 'text' string.
+    size_t getTextInputCursorPosition( const std::string & text, const FontType & fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
+                                       const int32_t textStartXOffset );
 
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t fadeTimeMs,
                                   const int32_t frameCount );

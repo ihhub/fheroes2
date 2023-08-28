@@ -33,31 +33,26 @@
 #include <SDL_events.h>
 #include <SDL_main.h> // IWYU pragma: keep
 #include <SDL_mouse.h>
-#include <SDL_version.h>
 
 #if defined( _WIN32 )
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #include <cassert>
-#else
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#endif
-
 #endif
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_manager.h"
 #include "bin_info.h"
 #include "core.h"
 #include "cursor.h"
 #include "dir.h"
 #include "embedded_image.h"
+#include "exception.h"
 #include "game.h"
 #include "game_logo.h"
 #include "game_video.h"
 #include "game_video_type.h"
 #include "h2d.h"
+#include "icn.h"
 #include "image.h"
 #include "image_palette.h"
 #include "localevent.h"
@@ -120,6 +115,22 @@ namespace
 
         if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
             System::MakeDirectory( dataFilesSave );
+    }
+
+    void displayMissingResourceWindow()
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
+
+        display.fill( 0 );
+        fheroes2::Resize( image, display );
+
+        display.render();
+
+        LocalEvent & le = LocalEvent::Get();
+        while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() ) {
+            // Do nothing.
+        }
     }
 
     class DisplayInitializer
@@ -185,20 +196,12 @@ namespace
                 _aggInitializer.reset( new AGG::AGGInitializer );
 
                 _h2dInitializer.reset( new fheroes2::h2d::H2DInitializer );
+
+                // Verify that the font is present and it is not corrupted.
+                fheroes2::AGG::GetICN( ICN::FONT, 0 );
             }
             catch ( ... ) {
-                fheroes2::Display & display = fheroes2::Display::instance();
-                const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
-
-                display.fill( 0 );
-                fheroes2::Resize( image, display );
-
-                display.render();
-
-                LocalEvent & le = LocalEvent::Get();
-                while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() ) {
-                    // Do nothing.
-                }
+                displayMissingResourceWindow();
 
                 throw;
             }
@@ -224,22 +227,10 @@ namespace
     };
 }
 
-// SDL1: this app is not linked against the SDLmain.lib, implement our own WinMain
-#if defined( _WIN32 ) && !SDL_VERSION_ATLEAST( 2, 0, 0 )
-#undef main
-
-int main( int argc, char ** argv );
-
-int WINAPI WinMain( HINSTANCE /* hInstance */, HINSTANCE /* hPrevInstance */, LPSTR /* pCmdLine */, int /* nCmdShow */ )
-{
-    return main( __argc, __argv );
-}
-#endif
-
 int main( int argc, char ** argv )
 {
 // SDL2main.lib converts argv to UTF-8, but this application expects ANSI, use the original argv
-#if defined( _WIN32 ) && SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if defined( _WIN32 )
     assert( argc == __argc );
 
     argv = __argv;
@@ -307,13 +298,23 @@ int main( int argc, char ** argv )
             Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
         }
 
-        // init cursor
-        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+        try {
+            const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        Game::mainGameLoop( conf.isFirstGameRun() );
+            Game::mainGameLoop( conf.isFirstGameRun() );
+        }
+        catch ( const fheroes2::InvalidDataResources & ex ) {
+            ERROR_LOG( ex.what() )
+            displayMissingResourceWindow();
+            return EXIT_FAILURE;
+        }
     }
     catch ( const std::exception & ex ) {
         ERROR_LOG( "Exception '" << ex.what() << "' occurred during application runtime." )
+        return EXIT_FAILURE;
+    }
+    catch ( ... ) {
+        ERROR_LOG( "An unknown exception occurred during application runtime." )
         return EXIT_FAILURE;
     }
 

@@ -451,7 +451,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
                     break;
                 }
 
-            const Monster mons = Dialog::SelectMonster( cur );
+            const Monster mons = Dialog::selectMonster( cur );
 
             if ( mons.isValid() ) {
                 uint32_t count = 1;
@@ -554,6 +554,9 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
 
         switch ( Dialog::ArmyInfo( troop, flags, false, _troopWindowOffsetY ) ) {
         case Dialog::UPGRADE:
+            // If this assertion blows up then you are executing this code for a monster which has no upgrades.
+            assert( troop.isAllowUpgrade() );
+
             world.GetKingdom( _army->GetColor() ).OddFundsResource( troop.GetTotalUpgradeCost() );
             troop.Upgrade();
             break;

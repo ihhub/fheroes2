@@ -39,6 +39,7 @@
 #include "normal/ai_normal.h"
 #include "race.h"
 #include "rand.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "world.h"
@@ -47,7 +48,7 @@ namespace
 {
     const int playersSize = KINGDOMMAX + 1;
     Player * _players[playersSize] = { nullptr };
-    int human_colors = 0;
+    int humanColors{ Color::NONE };
 
     enum
     {
@@ -116,7 +117,10 @@ Player::Player( int col )
     , id( World::GetUniq() )
     , _ai( std::make_shared<AI::Normal>() )
     , _handicapStatus( HandicapStatus::NONE )
+#if defined( WITH_DEBUG )
     , _isAIAutoControlMode( false )
+    , _isAIAutoControlModePlanned( false )
+#endif
 {
     // Do nothing.
 }
@@ -137,10 +141,12 @@ std::string Player::GetName() const
 
 int Player::GetControl() const
 {
+#if defined( WITH_DEBUG )
     if ( _isAIAutoControlMode ) {
         assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
         return CONTROL_AI;
     }
+#endif
 
     return control;
 }
@@ -185,11 +191,33 @@ void Player::setHandicapStatus( const HandicapStatus status )
     _handicapStatus = status;
 }
 
+#if defined( WITH_DEBUG )
 void Player::setAIAutoControlMode( const bool enable )
 {
     assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
-    _isAIAutoControlMode = enable;
+
+    // If this mode should be enabled, then it happens immediately
+    if ( enable ) {
+        _isAIAutoControlMode = enable;
+    }
+    // Otherwise, the change is first planned and then committed, in which case this mode should be actually enabled
+    else {
+        assert( _isAIAutoControlMode );
+    }
+
+    _isAIAutoControlModePlanned = enable;
 }
+
+void Player::commitAIAutoControlMode()
+{
+    assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
+
+    // If this method has been called, then this mode should be actually enabled
+    assert( _isAIAutoControlMode );
+
+    _isAIAutoControlMode = _isAIAutoControlModePlanned;
+}
+#endif
 
 StreamBase & operator<<( StreamBase & msg, const Focus & focus )
 {
@@ -259,7 +287,6 @@ StreamBase & operator>>( StreamBase & msg, Player & player )
 }
 
 Players::Players()
-    : current_color( 0 )
 {
     reserve( KINGDOMMAX );
 }
@@ -279,8 +306,8 @@ void Players::clear()
     for ( uint32_t ii = 0; ii < KINGDOMMAX + 1; ++ii )
         _players[ii] = nullptr;
 
-    current_color = 0;
-    human_colors = 0;
+    _currentColor = Color::NONE;
+    humanColors = Color::NONE;
 }
 
 void Players::Init( int colors )
@@ -397,12 +424,12 @@ const std::vector<Player *> & Players::getVector() const
 
 Player * Players::GetCurrent()
 {
-    return Get( current_color );
+    return Get( _currentColor );
 }
 
 const Player * Players::GetCurrent() const
 {
-    return Get( current_color );
+    return Get( _currentColor );
 }
 
 int Players::GetPlayerFriends( int color )
@@ -429,6 +456,28 @@ bool Players::GetPlayerInGame( int color )
     return player && player->isPlay();
 }
 
+std::vector<int> Players::getInPlayOpponents( const int color )
+{
+    std::vector<int> opponentColors;
+
+    const Player * playerOfColor = Players::Get( color );
+    assert( playerOfColor != nullptr );
+
+    const int friends = playerOfColor->GetFriends();
+
+    for ( const Player * player : Settings::Get().GetPlayers() ) {
+        assert( player != nullptr );
+
+        const int currentColor = player->GetColor();
+
+        if ( player->isPlay() && ( ( currentColor & friends ) == 0 ) ) {
+            opponentColors.emplace_back( currentColor );
+        }
+    }
+
+    return opponentColors;
+}
+
 void Players::SetPlayerInGame( int color, bool f )
 {
     Player * player = Get( color );
@@ -445,33 +494,37 @@ void Players::SetStartGame()
     for_each( begin(), end(), [&races]( Player * player ) { PlayerFixRandomRace( player, races ); } );
     for_each( begin(), end(), []( Player * player ) { PlayerFixMultiControl( player ); } );
 
-    current_color = Color::NONE;
-    human_colors = Color::NONE;
+    _currentColor = Color::NONE;
+    humanColors = Color::NONE;
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, String() )
 }
 
 int Players::HumanColors()
 {
-    if ( 0 == human_colors )
-        human_colors = Settings::Get().GetPlayers().GetColors( CONTROL_HUMAN, true );
-    return human_colors;
+    if ( humanColors == Color::NONE ) {
+        humanColors = Settings::Get().GetPlayers().GetColors( CONTROL_HUMAN, true );
+    }
+
+    return humanColors;
 }
 
 int Players::FriendColors()
 {
-    int colors = 0;
-    const Players & players = Settings::Get().GetPlayers();
-
-    if ( players.current_color & Players::HumanColors() ) {
-        const Player * player = players.GetCurrent();
-        if ( player )
-            colors = player->GetFriends();
+    const Player * player = Settings::Get().GetPlayers().GetCurrent();
+    if ( player ) {
+        return player->GetFriends();
     }
-    else
-        colors = Players::HumanColors();
 
-    return colors;
+    return 0;
+}
+
+void Players::setCurrentColor( const int color )
+{
+    // We can set only one of 6 player colors ( BLUE | GREEN | RED | YELLOW | ORANGE | PURPLE ) or NONE (neutral player).
+    assert( Color::Count( color ) == 1 || color == Color::NONE );
+
+    _currentColor = color;
 }
 
 std::string Players::String() const
@@ -513,7 +566,7 @@ std::string Players::String() const
 
 StreamBase & operator<<( StreamBase & msg, const Players & players )
 {
-    msg << players.GetColors() << players.current_color;
+    msg << players.GetColors() << players.getCurrentColor();
 
     for ( Players::const_iterator it = players.begin(); it != players.end(); ++it )
         msg << ( **it );
@@ -527,8 +580,15 @@ StreamBase & operator>>( StreamBase & msg, Players & players )
     int current;
     msg >> colors >> current;
 
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove the logic below." );
+    // The old save files made at the end of a campaign scenario has player color set to '-1' which is not supported now.
+    // So we change the incorrect color '-1' to 'Color::NONE'.
+    if ( current == -1 ) {
+        current = Color::NONE;
+    }
+
     players.clear();
-    players.current_color = current;
+    players.setCurrentColor( current );
     const Colors vcolors( colors );
 
     for ( uint32_t ii = 0; ii < vcolors.size(); ++ii ) {

@@ -26,7 +26,6 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <functional>
 #include <iterator>
 #include <ostream>
 #include <random>
@@ -62,14 +61,11 @@
 #include "monster.h"
 #include "players.h"
 #include "rand.h"
-#include "screen.h"
-#include "settings.h"
 #include "skill.h"
 #include "speed.h"
 #include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
-#include "ui_tool.h"
 #include "world.h"
 
 namespace
@@ -147,7 +143,7 @@ namespace
     {
         Battle::Unit * result = nullptr;
 
-        std::function<bool( const Battle::Unit * )> unitFilter = []( const Battle::Unit * unit ) { return unit->GetSpeed() > Speed::STANDING; };
+        const auto unitFilter = []( const Battle::Unit * unit ) { return unit->GetSpeed() > Speed::STANDING; };
 
         Battle::Units::iterator it1 = std::find_if( units1.begin(), units1.end(), unitFilter );
         Battle::Units::iterator it2 = std::find_if( units2.begin(), units2.end(), unitFilter );
@@ -380,25 +376,22 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
 
         if ( icn_covr != ICN::UNKNOWN )
             board.SetCovrObjects( icn_covr );
-        else
-            board.SetCobjObjects( world.GetTiles( tileIndex ), seededGen );
+
+        board.SetCobjObjects( world.GetTiles( tileIndex ), seededGen );
     }
 
     AI::Get().battleBegins();
 
     if ( _interface ) {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        if ( Settings::isFadeEffectEnabled() )
-            fheroes2::FadeDisplay();
-
         _interface->fullRedraw();
-        display.render();
 
         // Wait for the end of M82::PREBATTL playback. Make sure that we check the music status first as HandleEvents() call is not instant.
         LocalEvent & le = LocalEvent::Get();
         while ( Mixer::isPlaying( -1 ) && le.HandleEvents() ) {
-            // Do nothing.
+            if ( le.KeyPress( fheroes2::Key::KEY_ESCAPE ) || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                // Cancel waiting for M82::PREBATTL to over and start the battle.
+                break;
+            }
         }
     }
 }
@@ -562,7 +555,7 @@ void Battle::Arena::Turns()
                 // Castle towers act either during the turn of the first unit from the defending army, or at the end of
                 // the turn if none of the units from the defending army are able to act (for example, all are blinded)
                 if ( !towersActed && ( troop == nullptr || troop->GetColor() == _army2->GetColor() ) ) {
-                    auto towerAction = [this, &orderHistory, troop]( const size_t idx ) {
+                    const auto towerAction = [this, &orderHistory, troop]( const size_t idx ) {
                         assert( idx < std::size( _towers ) );
 
                         if ( _towers[idx] == nullptr || !_towers[idx]->isValid() ) {
@@ -898,7 +891,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
 
         if ( spell == Spell::EARTHQUAKE && !castle ) {
             if ( msg ) {
-                *msg = _( "That spell will affect no one!" );
+                *msg = _( "That spell will have no effect!" );
             }
             return true;
         }
@@ -916,7 +909,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
 
             if ( 0 > GetFreePositionNearHero( _currentColor ) ) {
                 if ( msg ) {
-                    *msg = _( "There is no open space adjacent to your hero to summon an Elemental to." );
+                    *msg = _( "There is no open space adjacent to your hero where you can summon an Elemental to." );
                 }
                 return true;
             }
@@ -940,7 +933,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
             }
 
             if ( msg ) {
-                *msg = _( "That spell will affect no one!" );
+                *msg = _( "That spell will have no effect!" );
             }
             return true;
         }

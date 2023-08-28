@@ -29,10 +29,6 @@ if(ENABLE_STRICT_COMPILATION)
 	add_compile_options($<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:/WX>)
 endif(ENABLE_STRICT_COMPILATION)
 
-if(MINGW)
-	set(MINGW_LIBRARIES mingw32 winmm)
-endif(MINGW)
-
 if(MACOS_APP_BUNDLE)
 	set(FHEROES2_ICON ${CMAKE_CURRENT_SOURCE_DIR}/../resources/fheroes2.icns)
 	set_source_files_properties(${FHEROES2_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
@@ -97,6 +93,7 @@ target_include_directories(
 	campaign
 	castle
 	dialog
+	editor
 	game
 	gui
 	h2d
@@ -115,9 +112,6 @@ target_include_directories(
 
 target_link_libraries(
 	fheroes2
-	${MINGW_LIBRARIES}  # Be sure define it first. Beware WinMain@16 error!!
-	${SDL_MIXER_LIBRARIES}
 	engine
-	Threads::Threads
-	ZLIB::ZLIB
+	${USE_SDL_VERSION}::${USE_SDL_VERSION}main
 	)

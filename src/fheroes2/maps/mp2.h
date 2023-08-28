@@ -470,22 +470,28 @@ namespace MP2
 
     bool isHiddenForPuzzle( const int terrainType, const ObjectIcnType objectIcnType, uint8_t index );
 
-    // The method check whether the object is an action object depending on its location. For example, castle can't be located on water.
-    bool isActionObject( const MapObjectType objectType, const bool locatesOnWater );
+    // The method checks whether the object is an action object depending on whether it is accessed from water or from land.
+    // For example, castle can't be accessed from water.
+    //
+    // TODO: make a separate function to determine whether the object is an action object depending on its location and not
+    // TODO: on where it is accessed from.
+    bool isActionObject( const MapObjectType objectType, const bool accessedFromWater );
 
-    // The method checks if the object is an action independent form its location.
+    // The method checks if the object is an action object regardless of where it is accessed from.
     bool isActionObject( const MapObjectType objectType );
+
+    // The method checks if the object is an action object if it is accessed from water.
+    bool isWaterActionObject( const MapObjectType objectType );
 
     // Returns proper object type if the object is an action object. Otherwise it returns the object type itself.
     MapObjectType getBaseActionObjectType( const MapObjectType objectType );
 
-    bool isWaterActionObject( const MapObjectType objectType );
-
-    bool isQuantityObject( const MapObjectType objectType );
+    bool isValuableResourceObject( const MapObjectType objectType );
     bool isCaptureObject( const MapObjectType objectType );
     bool isPickupObject( const MapObjectType objectType );
     bool isArtifactObject( const MapObjectType objectType );
-    bool isProtectedObject( const MapObjectType objectType );
+    // Returns true if it is impossible to refuse a fight when visiting a protected object of this type.
+    bool isBattleMandatoryifObjectIsProtected( const MapObjectType objectType );
     // Returns true if this object can be safely visited by AI for fog discovery purposes.
     bool isSafeForFogDiscoveryObject( const MapObjectType objectType );
 
@@ -501,6 +507,13 @@ namespace MP2
 
     bool getDiggingHoleSprite( const int terrainType, ObjectIcnType & objectIcnType, uint8_t & index );
     bool isDiggingHoleSprite( const int terrainType, const ObjectIcnType objectIcnType, const uint8_t index );
+
+    // Only specific objects from the original MP2 format require extended metadata.
+    // These objects store a UID in their initial metadata (quantity1 and quantity2 values).
+    bool doesObjectNeedExtendedMetadata( const MP2::MapObjectType type );
+
+    // Only specific objects from the original MP2 format contain metadata (quantity1 and quantity2 values).
+    bool doesObjectContainMetadata( const MP2::MapObjectType type );
 }
 
 #endif

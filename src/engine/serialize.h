@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -25,12 +25,14 @@
 #define H2SERIALIZE_H
 
 #include <algorithm>
+#include <array>
 #include <cstdint>
 #include <cstdio>
 #include <iterator>
 #include <list>
 #include <map>
 #include <string>
+#include <tuple>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -112,25 +114,25 @@ public:
         put8( ch );
     }
 
-    StreamBase & operator>>( bool & );
-    StreamBase & operator>>( char & );
-    StreamBase & operator>>( uint8_t & );
-    StreamBase & operator>>( uint16_t & );
-    StreamBase & operator>>( int16_t & );
-    StreamBase & operator>>( uint32_t & );
-    StreamBase & operator>>( int32_t & );
-    StreamBase & operator>>( std::string & );
+    StreamBase & operator>>( bool & v );
+    StreamBase & operator>>( char & v );
+    StreamBase & operator>>( uint8_t & v );
+    StreamBase & operator>>( uint16_t & v );
+    StreamBase & operator>>( int16_t & v );
+    StreamBase & operator>>( uint32_t & v );
+    StreamBase & operator>>( int32_t & v );
+    StreamBase & operator>>( std::string & v );
 
     StreamBase & operator>>( fheroes2::Point & point_ );
 
-    StreamBase & operator<<( const bool );
-    StreamBase & operator<<( const char );
-    StreamBase & operator<<( const uint8_t );
-    StreamBase & operator<<( const uint16_t );
-    StreamBase & operator<<( const int16_t );
-    StreamBase & operator<<( const uint32_t );
-    StreamBase & operator<<( const int32_t );
-    StreamBase & operator<<( const std::string & );
+    StreamBase & operator<<( const bool v );
+    StreamBase & operator<<( const char v );
+    StreamBase & operator<<( const uint8_t v );
+    StreamBase & operator<<( const uint16_t v );
+    StreamBase & operator<<( const int16_t v );
+    StreamBase & operator<<( const uint32_t v );
+    StreamBase & operator<<( const int32_t v );
+    StreamBase & operator<<( const std::string & v );
 
     StreamBase & operator<<( const fheroes2::Point & point_ );
 
@@ -206,6 +208,16 @@ public:
         return *this;
     }
 
+    template <class Type, size_t Count>
+    StreamBase & operator<<( const std::array<Type, Count> & data )
+    {
+        put32( static_cast<uint32_t>( data.size() ) );
+        for ( const auto & value : data ) {
+            *this << value;
+        }
+        return *this;
+    }
+
 protected:
     size_t flags;
 
@@ -236,12 +248,38 @@ public:
     StreamBuf & operator=( const StreamBuf & st ) = delete;
     StreamBuf & operator=( StreamBuf && st ) noexcept;
 
-    const uint8_t * data() const;
-    size_t size() const;
-    size_t capacity() const;
+    const uint8_t * data() const
+    {
+        return itget;
+    }
 
-    void seek( size_t );
-    void skip( size_t ) override;
+    // If you use this method to write data update the cursor by calling advance() method.
+    uint8_t * data()
+    {
+        return itget;
+    }
+
+    void advance( const size_t size )
+    {
+        itput += size;
+    }
+
+    size_t size() const
+    {
+        return sizeg();
+    }
+
+    size_t capacity() const
+    {
+        return itend - itbeg;
+    }
+
+    void seek( size_t sz )
+    {
+        itget = itbeg + sz < itend ? itbeg + sz : itend;
+    }
+
+    void skip( size_t sz ) override;
 
     uint16_t getBE16() override;
     uint16_t getLE16() override;
@@ -256,7 +294,7 @@ public:
     std::vector<uint8_t> getRaw( size_t sz = 0 /* all data */ ) override;
     void putRaw( const char * ptr, size_t sz ) override;
 
-    std::string toString( size_t sz = 0 /* all data */ );
+    std::string toString( const size_t size = 0 );
 
 protected:
     void reset();
@@ -266,7 +304,7 @@ protected:
     size_t sizeg() const override;
     size_t sizep() const override;
 
-    void reallocbuf( size_t );
+    void reallocbuf( size_t size );
 
     uint8_t get8() override;
     void put8( const uint8_t v ) override;
@@ -297,7 +335,8 @@ public:
     bool open( const std::string &, const std::string & mode );
     void close();
 
-    StreamBuf toStreamBuf( size_t = 0 /* all data */ );
+    // 0 stands for full data.
+    StreamBuf toStreamBuf( const size_t size = 0 );
 
     void seek( size_t );
     void skip( size_t ) override;
@@ -312,10 +351,12 @@ public:
     void putBE32( uint32_t ) override;
     void putLE32( uint32_t ) override;
 
-    std::vector<uint8_t> getRaw( size_t = 0 /* all data */ ) override;
+    // 0 stands for full data.
+    std::vector<uint8_t> getRaw( const size_t size = 0 ) override;
+
     void putRaw( const char *, size_t ) override;
 
-    std::string toString( size_t = 0 /* all data */ );
+    std::string toString( const size_t size = 0 );
 
 protected:
     size_t sizeg() const override;

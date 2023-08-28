@@ -30,12 +30,14 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dir.h"
+#include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
 #include "gamedefs.h"
@@ -55,32 +57,11 @@
 #include "ui_keyboard.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "world.h"
 
 namespace
 {
-    size_t GetInsertPosition( const std::string & text, const int32_t cursorPosition, const int32_t startXPosition )
-    {
-        if ( text.empty() ) {
-            // The text is empty, return start position.
-            return 0;
-        }
-
-        if ( cursorPosition <= startXPosition ) {
-            return 0;
-        }
-
-        int32_t positionOffset = 0;
-        for ( size_t i = 0; i < text.size(); ++i ) {
-            positionOffset += Text::getCharacterWidth( static_cast<uint8_t>( text[i] ), Font::BIG );
-            if ( positionOffset + startXPosition > cursorPosition ) {
-                return i;
-            }
-        }
-
-        return text.size();
-    }
-
     std::string ResizeToShortName( const std::string & str )
     {
         std::string res = System::GetBasename( str );
@@ -90,10 +71,27 @@ namespace
         }
         return res;
     }
+
+    bool RedrawExtraInfo( const fheroes2::Rect & windowArea, const std::string & header, const std::string & filename, const fheroes2::Rect & field )
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        const fheroes2::Text title( header, fheroes2::FontType::normalYellow() );
+        title.draw( windowArea.x + ( windowArea.width - title.width() ) / 2, windowArea.y + 32, display );
+
+        if ( filename.empty() ) {
+            return false;
+        }
+
+        fheroes2::Text currentFilename( filename, fheroes2::FontType::normalWhite() );
+        currentFilename.fitToOneRow( field.width );
+        currentFilename.draw( field.x, field.y + 3, display );
+
+        return currentFilename.width() + 10 > field.width;
+    }
 }
 
 std::string SelectFileListSimple( const std::string &, const std::string &, const bool );
-bool RedrawExtraInfo( const fheroes2::Point &, const std::string &, const std::string &, const fheroes2::Rect & );
 
 class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
 {
@@ -159,38 +157,42 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int
 {
     char shortDate[20];
     char shortHours[20];
-    char shortTime[20];
+    char shortMinutes[20];
 
     const tm tmi = System::GetTM( info.timestamp );
 
     std::fill( shortDate, std::end( shortDate ), static_cast<char>( 0 ) );
     std::fill( shortHours, std::end( shortHours ), static_cast<char>( 0 ) );
-    std::fill( shortTime, std::end( shortTime ), static_cast<char>( 0 ) );
+    std::fill( shortMinutes, std::end( shortMinutes ), static_cast<char>( 0 ) );
     std::strftime( shortDate, ARRAY_COUNT( shortDate ) - 1, "%b %d,", &tmi );
     std::strftime( shortHours, ARRAY_COUNT( shortHours ) - 1, "%H", &tmi );
-    std::strftime( shortTime, ARRAY_COUNT( shortTime ) - 1, ":%M", &tmi );
+    std::strftime( shortMinutes, ARRAY_COUNT( shortMinutes ) - 1, ":%M", &tmi );
     std::string savname( System::GetBasename( info.file ) );
 
     if ( !savname.empty() ) {
-        Text text;
-
         const std::string saveExtension = Game::GetSaveFileExtension();
         const size_t dotPos = savname.size() - saveExtension.size();
 
         if ( StringLower( savname.substr( dotPos ) ) == saveExtension )
             savname.erase( dotPos );
 
-        text.Set( savname, ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 5, dsty, 150 );
+        const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
+        fheroes2::Display & display = fheroes2::Display::instance();
 
-        text.Set( shortDate, ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 225 - text.w(), dsty );
+        dsty += 2;
 
-        text.Set( shortHours, ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 245 - text.w(), dsty );
+        fheroes2::Text text{ std::move( savname ), font };
+        text.fitToOneRow( 150 );
+        text.draw( dstx + 5, dsty, display );
 
-        text.Set( shortTime, ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 245, dsty );
+        text.set( shortDate, font );
+        text.draw( dstx + 225 - text.width(), dsty, display );
+
+        text.set( shortHours, font );
+        text.draw( dstx + 245 - text.width(), dsty, display );
+
+        text.set( shortMinutes, font );
+        text.draw( dstx + 245, dsty, display );
     }
 }
 
@@ -226,8 +228,8 @@ MapsFileInfoList GetSortedMapsFileInfoList()
 
     MapsFileInfoList list2( list1.size() );
     int32_t saveFileCount = 0;
-    for ( const std::string & saveFile : list1 ) {
-        if ( list2[saveFileCount].ReadSAV( saveFile ) ) {
+    for ( std::string & saveFile : list1 ) {
+        if ( list2[saveFileCount].ReadSAV( std::move( saveFile ) ) ) {
             ++saveFileCount;
         }
     }
@@ -334,7 +336,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     }
 
     listbox.Redraw();
-    RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
+    RedrawExtraInfo( rt, header, filename, enter_field );
 
     buttonOk.draw();
     buttonCancel.draw();
@@ -348,6 +350,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         buttonVirtualKB = makeButtonWithShadow( rt.x + 315, rt.y + 283, released, pressed, display, { -4, 4 } );
 
         buttonVirtualKB.draw();
+
+        Game::passAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY );
     }
 
     display.render();
@@ -358,17 +362,20 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
     const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
-    while ( le.HandleEvents() && result.empty() ) {
+    bool isCursorVisible = true;
+
+    while ( le.HandleEvents( !isEditing || Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) && result.empty() ) {
         le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
         if ( isEditing ) {
             le.MousePressLeft( buttonVirtualKB.area() ) ? buttonVirtualKB.drawOnPress() : buttonVirtualKB.drawOnRelease();
         }
 
-        listbox.QueueEventProcessing();
+        const bool listboxEvent = listbox.QueueEventProcessing();
+
+        bool isListboxSelected = listbox.isSelected();
 
         bool needRedraw = false;
-        bool isListboxSelected = listbox.isSelected();
 
         if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
              || listbox.isDoubleClicked() ) {
@@ -391,14 +398,14 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                 needRedraw = true;
             }
             else if ( le.MouseClickLeft( enter_field ) ) {
-                charInsertPos = GetInsertPosition( filename, le.GetMouseCursor().x, enter_field.x );
+                charInsertPos = fheroes2::getTextInputCursorPosition( filename, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x, enter_field.x );
                 if ( filename.empty() ) {
                     buttonOk.disable();
                 }
 
                 needRedraw = true;
             }
-            else if ( le.KeyPress() && ( !is_limit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() ) ) {
+            else if ( !listboxEvent && le.KeyPress() && ( !is_limit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() ) ) {
                 charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
                 if ( filename.empty() ) {
                     buttonOk.disable();
@@ -453,6 +460,12 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             needRedraw = true;
         }
 
+        // Text input cursor blink.
+        if ( isEditing && Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
+            isCursorVisible = !isCursorVisible;
+            needRedraw = true;
+        }
+
         if ( !needRedraw && !listbox.IsNeedRedraw() ) {
             continue;
         }
@@ -471,8 +484,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             lastSelectedSaveFileName = "";
         }
 
-        is_limit = isEditing ? RedrawExtraInfo( rt.getPosition(), header, InsertString( filename, charInsertPos, "_" ), enter_field )
-                             : RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
+        is_limit = isEditing ? RedrawExtraInfo( rt, header, insertCharToString( filename, charInsertPos, isCursorVisible ? '_' : '\x7F' ), enter_field )
+                             : RedrawExtraInfo( rt, header, filename, enter_field );
 
         buttonOk.draw();
         buttonCancel.draw();
@@ -485,17 +498,4 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     }
 
     return result;
-}
-
-bool RedrawExtraInfo( const fheroes2::Point & dst, const std::string & header, const std::string & filename, const fheroes2::Rect & field )
-{
-    Text text( header, Font::BIG );
-    text.Blit( dst.x + 175 - text.w() / 2, dst.y + 30 );
-
-    if ( !filename.empty() ) {
-        text.Set( filename, Font::BIG );
-        text.Blit( field.x, field.y + 1, field.width );
-    }
-
-    return text.w() + 10 > field.width;
 }

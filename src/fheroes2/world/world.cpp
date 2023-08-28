@@ -370,7 +370,6 @@ void World::Reset()
     _seed = 0;
 }
 
-/* new maps */
 void World::NewMaps( int32_t sw, int32_t sh )
 {
     Reset();
@@ -439,9 +438,9 @@ bool World::isValidCastleEntrance( const fheroes2::Point & tilePosition ) const
     return Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) && ( GetTiles( tilePosition.x, tilePosition.y ).GetObject( false ) == MP2::OBJ_CASTLE );
 }
 
-Heroes * World::GetFreemanHeroes( const int race, const int heroIDToIgnore /* = Heroes::UNKNOWN */ ) const
+Heroes * World::GetHeroForHire( const int race, const int heroIDToIgnore /* = Heroes::UNKNOWN */ ) const
 {
-    return vec_heroes.GetFreeman( race, heroIDToIgnore );
+    return vec_heroes.GetHeroForHire( race, heroIDToIgnore );
 }
 
 Heroes * World::FromJailHeroes( int32_t index )
@@ -543,6 +542,13 @@ void World::NewDay()
     assert( day > 0 );
 
     vec_eventsday.remove_if( [this]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
+}
+
+void World::NewDayAI()
+{
+    if ( BeginWeek() ) {
+        vec_castles.NewWeekAI();
+    }
 }
 
 void World::NewWeek()
@@ -970,10 +976,17 @@ uint32_t World::CountObeliskOnMaps()
 
 void World::ActionForMagellanMaps( int color )
 {
+    const Kingdom & kingdom = world.GetKingdom( color );
+    const bool isAIPlayer = kingdom.isControlAI();
+
     const int alliedColors = Players::GetPlayerFriends( color );
 
     for ( Maps::Tiles & tile : vec_tiles ) {
         if ( tile.isWater() ) {
+            if ( isAIPlayer && tile.isFog( color ) ) {
+                AI::Get().revealFog( tile, kingdom );
+            }
+
             tile.ClearFog( alliedColors );
         }
     }
@@ -1008,12 +1021,23 @@ const Heroes * World::GetHeroesCondLoss() const
 
 bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 {
+#ifndef NDEBUG
+#if defined( WITH_DEBUG )
+    const Player * kingdomPlayer = Players::Get( kingdom.GetColor() );
+    assert( kingdomPlayer != nullptr );
+
+    const bool isKingdomInAIAutoControlMode = kingdomPlayer->isAIAutoControlMode();
+#else
+    const bool isKingdomInAIAutoControlMode = false;
+#endif // WITH_DEBUG
+#endif // !NDEBUG
+
     const Settings & conf = Settings::Get();
 
     switch ( wins ) {
     case GameOver::WINS_ALL:
         // This method should be called with this condition only for a human-controlled kingdom
-        assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
+        assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
         return kingdom.GetColor() == vec_kingdoms.GetNotLossColors();
 
@@ -1024,7 +1048,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 
     case GameOver::WINS_HERO: {
         // This method should be called with this condition only for a human-controlled kingdom
-        assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
+        assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
         if ( heroes_cond_wins == Heroes::UNKNOWN ) {
             return false;
@@ -1033,13 +1057,13 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         const Heroes * hero = GetHeroesCondWins();
         assert( hero != nullptr );
 
-        // The hero in question should be either a freeman or be hired by a human-controlled kingdom
-        return ( hero->isFreeman() || GetKingdom( hero->GetColor() ).isControlHuman() );
+        // The hero in question should either be available for hire or be hired by a human-controlled kingdom
+        return ( hero->isAvailableForHire() || GetKingdom( hero->GetColor() ).isControlHuman() );
     }
 
     case GameOver::WINS_ARTIFACT: {
         // This method should be called with this condition only for a human-controlled kingdom
-        assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
+        assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
         const KingdomHeroes & heroes = kingdom.GetHeroes();
         if ( conf.WinsFindUltimateArtifact() ) {
@@ -1053,7 +1077,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 
     case GameOver::WINS_SIDE:
         // This method should be called with this condition only for a human-controlled kingdom
-        assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
+        assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
         return !( Game::GetActualKingdomColors() & ~Players::GetPlayerFriends( kingdom.GetColor() ) );
 
@@ -1070,8 +1094,19 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 
 bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
 {
+#ifndef NDEBUG
+#if defined( WITH_DEBUG )
+    const Player * kingdomPlayer = Players::Get( kingdom.GetColor() );
+    assert( kingdomPlayer != nullptr );
+
+    const bool isKingdomInAIAutoControlMode = kingdomPlayer->isAIAutoControlMode();
+#else
+    const bool isKingdomInAIAutoControlMode = false;
+#endif // WITH_DEBUG
+#endif // !NDEBUG
+
     // This method should only be called for a human-controlled kingdom
-    assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
+    assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
     const Settings & conf = Settings::Get();
 
@@ -1092,13 +1127,22 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
         const Heroes * hero = GetHeroesCondLoss();
         assert( hero != nullptr );
 
-        // The hero in question should be either a freeman...
-        if ( hero->isFreeman() ) {
+        // The hero in question should either be available for hire...
+        if ( hero->isAvailableForHire() ) {
             return true;
         }
 
+#if defined( WITH_DEBUG )
+        const Player * heroPlayer = Players::Get( hero->GetColor() );
+        assert( heroPlayer != nullptr );
+
+        const bool isHeroInAIAutoControlMode = heroPlayer->isAIAutoControlMode();
+#else
+        const bool isHeroInAIAutoControlMode = false;
+#endif
+
         // .. or be hired by an AI-controlled kingdom
-        if ( GetKingdom( hero->GetColor() ).isControlAI() && !Players::Get( hero->GetColor() )->isAIAutoControlMode() ) {
+        if ( GetKingdom( hero->GetColor() ).isControlAI() && !isHeroInAIAutoControlMode ) {
             // Exception for campaign: hero is not considered lost if he is hired by a friendly AI-controlled kingdom
             if ( conf.isCampaignGameType() && Players::isFriends( kingdom.GetColor(), hero->GetColor() ) ) {
                 return false;
@@ -1122,8 +1166,19 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
 
 uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 {
+#ifndef NDEBUG
+#if defined( WITH_DEBUG )
+    const Player * kingdomPlayer = Players::Get( kingdom.GetColor() );
+    assert( kingdomPlayer != nullptr );
+
+    const bool isKingdomInAIAutoControlMode = kingdomPlayer->isAIAutoControlMode();
+#else
+    const bool isKingdomInAIAutoControlMode = false;
+#endif // WITH_DEBUG
+#endif // !NDEBUG
+
     // This method should only be called for a human-controlled kingdom
-    assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
+    assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
     const Settings & conf = Settings::Get();
 
@@ -1153,8 +1208,19 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 
 uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
 {
+#ifndef NDEBUG
+#if defined( WITH_DEBUG )
+    const Player * kingdomPlayer = Players::Get( kingdom.GetColor() );
+    assert( kingdomPlayer != nullptr );
+
+    const bool isKingdomInAIAutoControlMode = kingdomPlayer->isAIAutoControlMode();
+#else
+    const bool isKingdomInAIAutoControlMode = false;
+#endif // WITH_DEBUG
+#endif // !NDEBUG
+
     // This method should only be called for a human-controlled kingdom
-    assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
+    assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
     const Settings & conf = Settings::Get();
 
@@ -1284,6 +1350,12 @@ bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int3
     return false;
 }
 
+void World::setOldTileQuantityData( const int32_t tileIndex, const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata )
+{
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove this method and _oldTileQuantityData member." );
+    _oldTileQuantityData[tileIndex] = std::make_tuple( quantityValue1, quantityValue2, additionalMetadata );
+}
+
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
 {
     return msg << obj.objcol << obj.guardians;
@@ -1390,8 +1462,32 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.width = width;
     w.height = height;
 
-    msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1004_RELEASE ) {
+        w._oldTileQuantityData.resize( static_cast<size_t>( width ) * height );
+    }
+
+    msg >> w.vec_tiles >> w.vec_heroes;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1004_RELEASE ) {
+        for ( Maps::Tiles & tile : w.vec_tiles ) {
+            const auto & oldMetadata = w._oldTileQuantityData[tile.GetIndex()];
+            tile.quantityIntoMetadata( std::get<0>( oldMetadata ), std::get<1>( oldMetadata ), std::get<2>( oldMetadata ) );
+        }
+
+        w._oldTileQuantityData.clear();
+    }
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1005_RELEASE ) {
+        for ( Maps::Tiles & tile : w.vec_tiles ) {
+            tile.fixOldArtifactIDs();
+        }
+    }
+
+    msg >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week >> w.month >> w.heroes_cond_wins
+        >> w.heroes_cond_loss;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1002_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1002_RELEASE ) {
@@ -1412,13 +1508,13 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1003_RELEASE ) {
         for ( Maps::Tiles & tile : w.vec_tiles ) {
             if ( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE ) {
-                const int32_t spellId = Maps::getMineSpellIdFromTile( tile );
+                const int32_t spellId = static_cast<int32_t>( tile.metadata()[2] );
 
                 if ( spellId == Spell::HAUNT ) {
-                    const ResourceCount rc = getResourcesFromTile( tile );
-                    const int resource = rc.isValid() ? rc.first : Resource::GOLD;
+                    const Funds rc{ static_cast<int32_t>( tile.metadata()[0] ), 1 };
+                    const int resource = ( rc.GetValidItemsCount() > 0 ) ? rc.getFirstValidResource().first : Resource::GOLD;
 
-                    Maps::Tiles::RestoreAbandonedMine( tile, resource );
+                    Maps::restoreAbandonedMine( tile, resource );
 
                     Heroes * hero = tile.GetHeroes();
                     if ( hero ) {

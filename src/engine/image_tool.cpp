@@ -22,25 +22,21 @@
 #include <cassert>
 #include <cstdint>
 #include <cstring>
+#include <functional>
+#include <memory>
 #include <ostream>
 #include <string_view>
 #include <vector>
 
 #include <SDL_error.h>
+#include <SDL_pixels.h>
+#include <SDL_stdinc.h>
+#include <SDL_surface.h>
 #include <SDL_version.h>
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#include <SDL_pixels.h>
-#include <SDL_surface.h>
-#else
-#include <SDL_video.h>
-#endif
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #if defined( WITH_IMAGE )
 #define ENABLE_PNG
 #include <SDL_image.h>
-#endif
 #endif
 
 #include "image_palette.h"
@@ -79,11 +75,7 @@ namespace
         const int32_t width = image.width();
         const int32_t height = image.height();
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
         SDL_Surface * surface = SDL_CreateRGBSurface( 0, width, height, 8, 0, 0, 0, 0 );
-#else
-        SDL_Surface * surface = SDL_CreateRGBSurface( SDL_SWSURFACE, width, height, 8, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
-#endif
         if ( surface == nullptr ) {
             ERROR_LOG( "Error while creating a SDL surface for an image to be saved under " << path << ". Error " << SDL_GetError() )
             return false;
@@ -100,13 +92,10 @@ namespace
             col.r = *value;
             col.g = *( value + 1 );
             col.b = *( value + 2 );
+            col.a = 255;
         }
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
         SDL_SetPaletteColors( surface->format->palette, paletteSDL.data(), 0, 256 );
-#else
-        SDL_SetPalette( surface, SDL_LOGPAL | SDL_PHYSPAL, paletteSDL.data(), 0, 256 );
-#endif
 
         if ( surface->pitch != width ) {
             const uint8_t * imageIn = image.image();
@@ -166,127 +155,74 @@ namespace fheroes2
 
     bool Load( const std::string & path, Image & image )
     {
+        std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> surface( nullptr, SDL_FreeSurface );
+        std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> loadedSurface( nullptr, SDL_FreeSurface );
+
 #if defined( ENABLE_PNG )
-        SDL_Surface * surface = IMG_Load( path.c_str() );
+        loadedSurface.reset( IMG_Load( path.c_str() ) );
 #else
-        SDL_Surface * surface = SDL_LoadBMP( path.c_str() );
+        loadedSurface.reset( SDL_LoadBMP( path.c_str() ) );
 #endif
-        if ( surface == nullptr ) {
+        if ( !loadedSurface ) {
             return false;
         }
 
-        if ( surface->format->BytesPerPixel == 1 ) {
-            const SDL_Palette * palette = surface->format->palette;
-            assert( palette != nullptr );
-
-            image.resize( surface->w, surface->h );
-
-            const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
-            uint8_t * outY = image.image();
-            uint8_t * transformY = image.transform();
-
-            const uint8_t * inYEnd = inY + surface->h * surface->pitch;
-
-            for ( ; inY != inYEnd; inY += surface->pitch, outY += surface->w, transformY += surface->w ) {
-                const uint8_t * inX = inY;
-                uint8_t * outX = outY;
-                uint8_t * transformX = transformY;
-                const uint8_t * inXEnd = inX + surface->w;
-
-                for ( ; inX != inXEnd; ++inX, ++outX, ++transformX ) {
-                    assert( *inX < palette->ncolors );
-                    const SDL_Color * color = palette->colors + *inX;
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-                    if ( color->a < 255 ) {
-                        if ( color->a == 0 ) {
-                            *outX = 0;
-                            *transformX = 1;
-                        }
-                        else if ( color->r == 0 && color->g == 0 && color->b == 0 ) {
-                            *outX = 0;
-                            *transformX = 2;
-                        }
-                        else {
-                            *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
-                            *transformX = 0;
-                        }
-                    }
-                    else {
-                        *outX = GetColorId( color->r, color->g, color->b );
-                        *transformX = 0;
-                    }
-#else
-                    // SDL 1 doesn't support RGBA colors.
-                    *outX = GetColorId( color->r, color->g, color->b );
-                    *transformX = 0;
+// SDL_PIXELFORMAT_BGRA32 and other RGBA color variants are only supported starting with SDL 2.0.5
+#if !SDL_VERSION_ATLEAST( 2, 0, 5 )
+#error Minimal supported SDL version is 2.0.5.
 #endif
-                }
-            }
+
+        // Image loading functions can theoretically return SDL_Surface in any supported color format, so we will convert it to a specific format for subsequent
+        // processing
+        const std::unique_ptr<SDL_PixelFormat, std::function<void( SDL_PixelFormat * )>> pixelFormat( SDL_AllocFormat( SDL_PIXELFORMAT_BGRA32 ), SDL_FreeFormat );
+        if ( !pixelFormat ) {
+            return false;
         }
-        else if ( surface->format->BytesPerPixel == 3 ) {
-            image.resize( surface->w, surface->h );
-            memset( image.transform(), 0, surface->w * surface->h );
 
-            const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
-            uint8_t * outY = image.image();
-
-            const uint8_t * inYEnd = inY + surface->h * surface->pitch;
-
-            for ( ; inY != inYEnd; inY += surface->pitch, outY += surface->w ) {
-                const uint8_t * inX = inY;
-                uint8_t * outX = outY;
-                const uint8_t * inXEnd = inX + surface->w * 3;
-
-                for ( ; inX != inXEnd; inX += 3, ++outX ) {
-                    *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
-                }
-            }
+        surface.reset( SDL_ConvertSurface( loadedSurface.get(), pixelFormat.get(), 0 ) );
+        if ( !surface ) {
+            return false;
         }
-        else if ( surface->format->BytesPerPixel == 4 ) {
-            image.resize( surface->w, surface->h );
-            image.reset();
 
-            const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
-            uint8_t * outY = image.image();
-            uint8_t * transformY = image.transform();
+        assert( SDL_MUSTLOCK( surface.get() ) == SDL_FALSE && surface->format->BytesPerPixel == 4 );
 
-            const uint8_t * inYEnd = inY + surface->h * surface->pitch;
+        image.resize( surface->w, surface->h );
+        image.reset();
 
-            for ( ; inY != inYEnd; inY += surface->pitch, outY += surface->w, transformY += surface->w ) {
-                const uint8_t * inX = inY;
-                uint8_t * outX = outY;
-                uint8_t * transformX = transformY;
-                const uint8_t * inXEnd = inX + surface->w * 4;
+        const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
+        uint8_t * outY = image.image();
+        uint8_t * transformY = image.transform();
 
-                for ( ; inX != inXEnd; inX += 4, ++outX, ++transformX ) {
-                    const uint8_t alpha = *( inX + 3 );
-                    if ( alpha < 255 ) {
-                        if ( alpha == 0 ) {
-                            *outX = 0;
-                            *transformX = 1;
-                        }
-                        else if ( *inX == 0 && *( inX + 1 ) == 0 && *( inX + 2 ) == 0 ) {
-                            *outX = 0;
-                            *transformX = 2;
-                        }
-                        else {
-                            *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
-                            *transformX = 0;
-                        }
+        const uint8_t * inYEnd = inY + surface->h * surface->pitch;
+
+        for ( ; inY != inYEnd; inY += surface->pitch, outY += surface->w, transformY += surface->w ) {
+            const uint8_t * inX = inY;
+            uint8_t * outX = outY;
+            uint8_t * transformX = transformY;
+            const uint8_t * inXEnd = inX + surface->w * 4;
+
+            for ( ; inX != inXEnd; inX += 4, ++outX, ++transformX ) {
+                const uint8_t alpha = *( inX + 3 );
+                if ( alpha < 255 ) {
+                    if ( alpha == 0 ) {
+                        *outX = 0;
+                        *transformX = 1;
+                    }
+                    else if ( *inX == 0 && *( inX + 1 ) == 0 && *( inX + 2 ) == 0 ) {
+                        *outX = 0;
+                        *transformX = 2;
                     }
                     else {
                         *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
                         *transformX = 0;
                     }
                 }
+                else {
+                    *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *inX );
+                    *transformX = 0;
+                }
             }
         }
-        else {
-            SDL_FreeSurface( surface );
-            return false;
-        }
-
-        SDL_FreeSurface( surface );
 
         return true;
     }
@@ -303,79 +239,94 @@ namespace fheroes2
 
         const uint8_t * dataEnd = data + sizeData;
 
+        // The need for a transform layer can only be determined during ICN decoding.
+        bool noTransformLayer = true;
+
         while ( true ) {
             if ( 0 == *data ) { // 0x00 - end of row
+                noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= width );
+
                 imageData += width;
                 imageTransform += width;
                 posX = 0;
                 ++data;
             }
             else if ( 0x80 > *data ) { // 0x01-0x7F - repeat a pixel N times
-                uint32_t pixelCount = *data;
+                const uint8_t pixelCount = *data;
                 ++data;
-                while ( pixelCount > 0 && data != dataEnd ) {
-                    imageData[posX] = *data;
-                    imageTransform[posX] = 0;
-                    ++posX;
-                    ++data;
-                    --pixelCount;
+
+                if ( data + pixelCount > dataEnd ) {
+                    // Image data is corrupted - we can not read data beyond dataEnd.
+                    break;
                 }
+
+                memcpy( imageData + posX, data, pixelCount );
+                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+
+                data += pixelCount;
+                posX += pixelCount;
             }
             else if ( 0x80 == *data ) { // 0x80 - end of image
+                noTransformLayer = noTransformLayer && ( static_cast<int32_t>( posX ) >= width );
+
                 break;
             }
             else if ( 0xC0 > *data ) { // 0xBF - empty (transparent) pixels
+                noTransformLayer = false;
+
                 posX += *data - 0x80;
                 ++data;
             }
             else if ( 0xC0 == *data ) { // 0xC0 - transform layer
+                noTransformLayer = false;
+
                 ++data;
 
                 const uint8_t transformValue = *data;
-                const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) << 6 ) / 256 + 2 ); // 1 is for skipping
+                const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) >> 2 ) + 2 ); // 1 is for skipping
 
-                uint32_t pixelCount = *data % 4 ? *data % 4 : *( ++data );
+                const uint32_t countValue = transformValue & 0x03;
+                const uint32_t pixelCount = ( countValue != 0 ) ? countValue : *( ++data );
 
                 if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
-                    while ( pixelCount > 0 ) {
-                        imageTransform[posX] = transformType;
-                        ++posX;
-                        --pixelCount;
-                    }
+                    memset( imageTransform + posX, transformType, pixelCount );
                 }
-                else {
-                    posX += pixelCount;
-                }
+
+                posX += pixelCount;
 
                 ++data;
             }
             else if ( 0xC1 == *data ) { // 0xC1
                 ++data;
-                uint32_t pixelCount = *data;
+                const uint32_t pixelCount = *data;
                 ++data;
-                while ( pixelCount > 0 ) {
-                    imageData[posX] = *data;
-                    imageTransform[posX] = 0;
-                    ++posX;
-                    --pixelCount;
-                }
+
+                memset( imageData + posX, *data, pixelCount );
+                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+
+                posX += pixelCount;
+
                 ++data;
             }
             else {
-                uint32_t pixelCount = *data - 0xC0;
+                const uint32_t pixelCount = *data - 0xC0;
                 ++data;
-                while ( pixelCount > 0 ) {
-                    imageData[posX] = *data;
-                    imageTransform[posX] = 0;
-                    ++posX;
-                    --pixelCount;
-                }
+
+                memset( imageData + posX, *data, pixelCount );
+                memset( imageTransform + posX, static_cast<uint8_t>( 0 ), pixelCount );
+
+                posX += pixelCount;
+
                 ++data;
             }
 
             if ( data >= dataEnd ) {
                 break;
             }
+        }
+
+        if ( noTransformLayer ) {
+            sprite._disableTransformLayer();
         }
 
         return sprite;
@@ -391,10 +342,9 @@ namespace fheroes2
 
         for ( size_t i = 0; i < imageCount; ++i ) {
             Image & tilImage = output[i];
-            tilImage.resize( width, height );
             tilImage._disableTransformLayer();
+            tilImage.resize( width, height );
             memcpy( tilImage.image(), data + i * imageSize, imageSize );
-            std::fill( tilImage.transform(), tilImage.transform() + imageSize, static_cast<uint8_t>( 0 ) );
         }
     }
 

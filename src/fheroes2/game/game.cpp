@@ -62,6 +62,7 @@ namespace
     std::vector<Player> savedPlayers;
 
     bool updateSoundsOnFocusUpdate = true;
+    bool needFadeIn{ true };
 
     uint32_t maps_animation_frame = 0;
 }
@@ -143,7 +144,7 @@ void Game::SavePlayers( const std::string & mapFileName, const Players & players
 
 fheroes2::GameMode Game::Credits()
 {
-    ShowCredits();
+    ShowCredits( true );
 
     return fheroes2::GameMode::MAIN_MENU;
 }
@@ -156,6 +157,21 @@ bool Game::UpdateSoundsOnFocusUpdate()
 void Game::SetUpdateSoundsOnFocusUpdate( const bool update )
 {
     updateSoundsOnFocusUpdate = update;
+}
+
+bool Game::validateDisplayFadeIn()
+{
+    if ( needFadeIn ) {
+        needFadeIn = false;
+        return true;
+    }
+
+    return false;
+}
+
+void Game::setDisplayFadeIn()
+{
+    needFadeIn = true;
 }
 
 void Game::Init()

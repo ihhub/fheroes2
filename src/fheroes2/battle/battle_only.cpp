@@ -21,14 +21,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_only.h"
+
 #include <cstdint>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "army_bar.h"
 #include "army_troop.h"
 #include "battle.h"
-#include "battle_only.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -201,7 +203,7 @@ bool Battle::Only::ChangeSettings()
             exit = true;
 
         if ( allow1 && le.MouseClickLeft( rtPortrait1 ) ) {
-            int hid = Dialog::SelectHeroes( hero1 ? hero1->GetID() : Heroes::UNKNOWN );
+            int hid = Dialog::selectHeroes( hero1 ? hero1->GetID() : Heroes::UNKNOWN );
             if ( hero2 && hid == hero2->GetID() ) {
                 Dialog::Message( _( "Error" ), _( "Please select another hero." ), Font::BIG, Dialog::OK );
             }
@@ -210,11 +212,12 @@ bool Battle::Only::ChangeSettings()
                 if ( hero1 )
                     hero1->GetSecondarySkills().FillMax( Skill::Secondary() );
                 UpdateHero1( cur_pt );
-                redraw = true;
             }
+
+            redraw = true;
         }
         else if ( allow2 && le.MouseClickLeft( rtPortrait2 ) ) {
-            int hid = Dialog::SelectHeroes( hero2 ? hero2->GetID() : Heroes::UNKNOWN );
+            int hid = Dialog::selectHeroes( hero2 ? hero2->GetID() : Heroes::UNKNOWN );
             if ( hero1 && hid == hero1->GetID() ) {
                 Dialog::Message( _( "Error" ), _( "Please select another hero." ), Font::BIG, Dialog::OK );
             }
@@ -226,8 +229,9 @@ bool Battle::Only::ChangeSettings()
                 if ( player2.isControlLocal() && nullptr == cinfo2 ) {
                     cinfo2.reset( new ControlInfo( { cur_pt.x + 500, cur_pt.y + 425 }, player2.GetControl() ) );
                 }
-                redraw = true;
             }
+
+            redraw = true;
         }
 
         if ( hero1 && allow1 ) {
@@ -347,10 +351,14 @@ bool Battle::Only::ChangeSettings()
                 MoraleIndicator::QueueEventProcessing( *moraleIndicator1 );
             else if ( le.MouseCursor( luckIndicator1->GetArea() ) )
                 LuckIndicator::QueueEventProcessing( *luckIndicator1 );
-            else if ( le.MouseCursor( primskill_bar1->GetArea() ) && primskill_bar1->QueueEventProcessing() )
+            else if ( le.MouseCursor( primskill_bar1->GetArea() ) ) {
+                primskill_bar1->QueueEventProcessing();
                 redraw = true;
-            else if ( le.MouseCursor( secskill_bar1->GetArea() ) && secskill_bar1->QueueEventProcessing() )
+            }
+            else if ( le.MouseCursor( secskill_bar1->GetArea() ) ) {
+                secskill_bar1->QueueEventProcessing();
                 redraw = true;
+            }
         }
 
         if ( hero2 && allow2 ) {
@@ -358,10 +366,14 @@ bool Battle::Only::ChangeSettings()
                 MoraleIndicator::QueueEventProcessing( *moraleIndicator2 );
             else if ( le.MouseCursor( luckIndicator2->GetArea() ) )
                 LuckIndicator::QueueEventProcessing( *luckIndicator2 );
-            else if ( le.MouseCursor( primskill_bar2->GetArea() ) && primskill_bar2->QueueEventProcessing() )
+            else if ( le.MouseCursor( primskill_bar2->GetArea() ) ) {
+                primskill_bar2->QueueEventProcessing();
                 redraw = true;
-            else if ( le.MouseCursor( secskill_bar2->GetArea() ) && secskill_bar2->QueueEventProcessing() )
+            }
+            else if ( le.MouseCursor( secskill_bar2->GetArea() ) ) {
+                secskill_bar2->QueueEventProcessing();
                 redraw = true;
+            }
         }
 
         if ( cinfo2 && allow1 ) {
@@ -562,7 +574,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
         StringReplace( message, _( "%{race2} %{name2}" ), _( "Monsters" ) );
     }
 
-    fheroes2::Text text( message, fheroes2::FontType::normalWhite() );
+    fheroes2::Text text( std::move( message ), fheroes2::FontType::normalWhite() );
     text.draw( top.x + 320 - text.width() / 2, top.y + 29, display );
 
     // portrait
@@ -621,4 +633,6 @@ void Battle::Only::StartBattle()
 
         Battle::Loader( hero1->GetArmy(), ( hero2 ? hero2->GetArmy() : monsters ), hero1->GetIndex() + 1 );
     }
+
+    conf.SetCurrentColor( Color::NONE );
 }

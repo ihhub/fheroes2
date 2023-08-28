@@ -47,7 +47,7 @@ int main( int argc, char ** argv )
     }
 
     const char * paletteFileName = argv[1];
-    const char * outputImage = argv[2];
+    const char * outputFileName = argv[2];
 
     {
         StreamFile paletteStream;
@@ -65,25 +65,28 @@ int main( int argc, char ** argv )
         fheroes2::setGamePalette( palette );
     }
 
-    fheroes2::Image output( 256, 256 );
-    output.reset();
+    fheroes2::Image image( 256, 256 );
+    image.reset();
     // We do not need to care about the transform layer.
-    output._disableTransformLayer();
+    image._disableTransformLayer();
 
     // These color indexes are from PAL::GetCyclingPalette() method.
     const std::set<uint8_t> cyclingColors{ 214, 215, 216, 217, 218, 219, 220, 221, 231, 232, 233, 234, 235, 238, 239, 240, 241 };
 
     for ( uint8_t y = 0; y < 16; ++y ) {
         for ( uint8_t x = 0; x < 16; ++x ) {
-            fheroes2::Fill( output, x * 16, y * 16, 16, 16, x + y * 16 );
+            fheroes2::Fill( image, x * 16, y * 16, 16, 16, x + y * 16 );
 
             if ( cyclingColors.count( x + y * 16 ) > 0 ) {
-                fheroes2::Fill( output, x * 16, y * 16, 4, 4, 0 );
+                fheroes2::Fill( image, x * 16, y * 16, 4, 4, 0 );
             }
         }
     }
 
-    fheroes2::Save( output, outputImage );
+    if ( !fheroes2::Save( image, outputFileName ) ) {
+        std::cerr << "Error writing to file " << outputFileName << std::endl;
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }

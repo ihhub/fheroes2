@@ -27,6 +27,7 @@
 #include <cstdlib>
 #include <ostream>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "army.h"
@@ -45,6 +46,7 @@
 #include "heroes_base.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "kingdom.h"
 #include "localevent.h"
@@ -54,7 +56,6 @@
 #include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "mp2.h"
-#include "pairs.h"
 #include "payment.h"
 #include "profit.h"
 #include "resource.h"
@@ -89,17 +90,17 @@ namespace
         RadarUpdater( const bool performUpdate, const fheroes2::Point & updatedPosition, const fheroes2::Rect & areaToRestore )
             : _performUpdate( performUpdate )
             , _updatedPosition( updatedPosition )
-            , _prevPosition( Interface::Basic::Get().GetGameArea().getCurrentCenterInPixels() )
+            , _prevPosition( Interface::AdventureMap::Get().getGameArea().getCurrentCenterInPixels() )
             , _restorer( fheroes2::Display::instance(), areaToRestore.x, areaToRestore.y, areaToRestore.width, areaToRestore.height )
         {
             if ( !_performUpdate || _updatedPosition == _prevPosition ) {
                 return;
             }
 
-            Interface::Basic & iface = Interface::Basic::Get();
+            Interface::AdventureMap & iface = Interface::AdventureMap::Get();
 
-            iface.GetGameArea().SetCenter( updatedPosition );
-            iface.Redraw( Interface::REDRAW_RADAR_CURSOR );
+            iface.getGameArea().SetCenter( updatedPosition );
+            iface.redraw( Interface::REDRAW_RADAR_CURSOR );
 
             _restorer.restore();
         }
@@ -110,10 +111,10 @@ namespace
                 return;
             }
 
-            Interface::Basic & iface = Interface::Basic::Get();
+            Interface::AdventureMap & iface = Interface::AdventureMap::Get();
 
-            iface.GetGameArea().SetCenterInPixels( _prevPosition );
-            iface.Redraw( Interface::REDRAW_RADAR_CURSOR );
+            iface.getGameArea().SetCenterInPixels( _prevPosition );
+            iface.redraw( Interface::REDRAW_RADAR_CURSOR );
 
             _restorer.restore();
         }
@@ -146,10 +147,11 @@ namespace
 
     std::string showMineInfo( const Maps::Tiles & tile, const bool isOwned )
     {
-        const int32_t resourceType = getResourcesFromTile( tile ).first;
+        const int32_t resourceType = getDailyIncomeObjectResources( tile ).getFirstValidResource().first;
         std::string objectInfo = Maps::GetMinesName( resourceType );
 
         if ( isOwned ) {
+            // TODO: we should use the value from funds.
             objectInfo.append( getMinesIncomeString( resourceType ) );
         }
 
@@ -172,7 +174,7 @@ namespace
         const Troop & troop = getTroopFromTile( tile );
 
         if ( troop.isValid() ) {
-            str.append( "\n \n" );
+            str.append( "\n\n" );
 
             if ( isOwned ) {
                 str.append( _( "guarded by %{count} %{monster}" ) );
@@ -219,7 +221,7 @@ namespace
         std::string str = MP2::StringObject( tile.GetObject( false ) );
 
         if ( isOwned ) {
-            str += "\n \n";
+            str += "\n\n";
 
             const Troop & troop = getTroopFromTile( tile );
 
@@ -244,7 +246,7 @@ namespace
         if ( isVisited ) {
             const Spell & spell = getSpellFromTile( tile );
 
-            str.append( "\n(" );
+            str.append( "\n\n(" );
             str.append( spell.GetName() );
             str += ')';
 
@@ -265,25 +267,25 @@ namespace
         std::string str = MP2::StringObject( tile.GetObject( false ) );
 
         if ( isVisited ) {
-            const Skill::Secondary & skill = getSecondarySkillFromTile( tile );
+            const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( tile );
 
-            str.append( "\n(" );
+            str.append( "\n\n(" );
             str.append( Skill::Secondary::String( skill.Skill() ) );
             str += ')';
 
             const Heroes * hero = Interface::GetFocusHeroes();
 
             if ( hero ) {
+                str.append( "\n(" );
+
                 if ( hero->HasSecondarySkill( skill.Skill() ) ) {
-                    str.append( "\n(" );
                     str.append( _( "already knows this skill" ) );
-                    str += ')';
                 }
                 else if ( hero->HasMaxSecondarySkill() ) {
-                    str.append( "\n(" );
                     str.append( _( "already has max skills" ) );
-                    str += ')';
                 }
+
+                str += ')';
             }
         }
 
@@ -295,7 +297,7 @@ namespace
         std::string str = MP2::StringObject( tile.GetObject( false ) );
         const Heroes * hero = Interface::GetFocusHeroes();
         if ( hero ) {
-            str.append( "\n \n" );
+            str.append( "\n\n" );
             str.append( hero->isVisited( tile ) ? _( "(already visited)" ) : _( "(not visited)" ) );
         }
 
@@ -307,7 +309,7 @@ namespace
         std::string str = MP2::StringObject( objectType );
         const Heroes * hero = Interface::GetFocusHeroes();
         if ( hero ) {
-            str.append( "\n \n" );
+            str.append( "\n\n" );
             str.append( hero->isObjectTypeVisited( objectType ) ? _( "(already visited)" ) : _( "(not visited)" ) );
         }
 
@@ -318,7 +320,7 @@ namespace
     {
         std::string str = MP2::StringObject( objectType );
 
-        str.append( "\n \n" );
+        str.append( "\n\n" );
         str.append( isVisited ? _( "(already visited)" ) : _( "(not visited)" ) );
 
         return str;
@@ -339,7 +341,7 @@ namespace
         StringReplace( str, "%{color}", fheroes2::getTentColorName( tentColor ) );
 
         if ( kingdom.IsVisitTravelersTent( tentColor ) ) {
-            str.append( "\n \n" );
+            str.append( "\n\n" );
             str.append( _( "(already visited)" ) );
         }
 
@@ -362,7 +364,7 @@ namespace
             str = Maps::Ground::String( tile.GetGround() );
         }
 
-        str.append( "\n \n" );
+        str.append( "\n\n" );
 
         // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
         if ( tile.GoodForUltimateArtifact() || world.GetUltimateArtifact().getPosition() == tile.GetIndex() ) {
@@ -398,7 +400,7 @@ namespace
         const int32_t mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
         const int32_t my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
 
-        const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
+        const Interface::GameArea & gamearea = Interface::AdventureMap::Get().getGameArea();
         const fheroes2::Rect & ar = gamearea.GetROI();
 
         int32_t xpos = mx + TILEWIDTH - ( imageBox.width() / 2 );
@@ -417,7 +419,7 @@ namespace
         const int32_t playerColor = Settings::Get().CurrentColor();
         const MP2::MapObjectType objectType = tile.GetObject( false );
 
-        if ( tile.isCaptureObjectProtected() || objectType == MP2::OBJ_ABANDONED_MINE ) {
+        if ( objectType == MP2::OBJ_ABANDONED_MINE || isCaptureObjectProtected( tile ) ) {
             return showGuardiansInfo( tile, playerColor == getColorFromTile( tile ) );
         }
 
@@ -451,8 +453,12 @@ namespace
         case MP2::OBJ_MAGELLANS_MAPS:
             return showObjectVisitInfo( objectType, kingdom.isVisited( objectType ) );
 
-        case MP2::OBJ_RESOURCE:
-            return Resource::String( tile.GetQuantity1() );
+        case MP2::OBJ_RESOURCE: {
+            const Funds funds = getFundsFromTile( tile );
+            assert( funds.GetValidItemsCount() == 1 );
+
+            return Resource::String( funds.getFirstValidResource().first );
+        }
 
         case MP2::OBJ_MINES:
             return showMineInfo( tile, playerColor == getColorFromTile( tile ) );
@@ -461,7 +467,11 @@ namespace
         case MP2::OBJ_SAWMILL: {
             std::string objectInfo = MP2::StringObject( objectType );
             if ( playerColor == getColorFromTile( tile ) ) {
-                objectInfo.append( getMinesIncomeString( getResourcesFromTile( tile ).first ) );
+                const Funds funds = getDailyIncomeObjectResources( tile );
+                assert( funds.GetValidItemsCount() == 1 );
+
+                // TODO: we should use the value from funds.
+                objectInfo.append( getMinesIncomeString( funds.getFirstValidResource().first ) );
             }
             return objectInfo;
         }
@@ -555,7 +565,9 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 
     std::string infoString;
 
-    if ( tile.isFog( Settings::Get().CurrentColor() ) ) {
+    const int32_t playerColor = Settings::Get().CurrentColor();
+
+    if ( ( playerColor != 0 ) && tile.isFog( playerColor ) ) {
         infoString = _( "Uncharted Territory" );
     }
     else {
@@ -669,20 +681,22 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     dst_pt.y += castleIcon.height() + 2;
     text.draw( dst_pt.x, dst_pt.y, display );
 
-    const uint32_t count = castle.GetArmy().GetOccupiedSlotCount();
-
     // draw defenders
-    if ( count == 0 ) {
-        text.set( _( "None" ), fheroes2::FontType::smallWhite() );
-        dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
-        dst_pt.y += 47;
-        text.draw( dst_pt.x, dst_pt.y, display );
-    }
-    else if ( isDetailedView || thievesGuildsCount > 0 ) {
-        dst_pt.x = cur_rt.x - 1;
-        dst_pt.y += 21;
+    if ( isDetailedView || thievesGuildsCount > 0 ) {
+        const Army & castleArmy = castle.GetArmy();
 
-        Army::drawMultipleMonsterLines( castle.GetArmy(), dst_pt.x, dst_pt.y, 192, false, isDetailedView, true, thievesGuildsCount );
+        if ( castleArmy.isValid() ) {
+            dst_pt.x = cur_rt.x - 1;
+            dst_pt.y += 21;
+
+            Army::drawMultipleMonsterLines( castleArmy, dst_pt.x, dst_pt.y, 192, false, isDetailedView, true, thievesGuildsCount );
+        }
+        else {
+            text.set( _( "None" ), fheroes2::FontType::smallWhite() );
+            dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
+            dst_pt.y += 47;
+            text.draw( dst_pt.x, dst_pt.y, display );
+        }
     }
     else {
         text.set( _( "Unknown" ), fheroes2::FontType::smallWhite() );

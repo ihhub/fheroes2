@@ -32,6 +32,7 @@
 #include "payment.h"
 #include "rand.h"
 #include "resource.h"
+#include "settings.h"
 
 namespace AI
 {
@@ -67,11 +68,17 @@ namespace AI
 
     void OptimizeTroopsOrder( Army & army )
     {
-        // Optimize troops placement before the battle
+        if ( !army.isValid() ) {
+            return;
+        }
+
+        // Optimize troops placement in case of a battle
+        army.MergeSameMonsterTroops();
+
+        // Validate and pick the troops
         std::vector<Troop> archers;
         std::vector<Troop> others;
 
-        // Validate and pick the troops
         for ( size_t slot = 0; slot < Army::maximumTroopCount; ++slot ) {
             const Troop * troop = army.GetTroop( slot );
             if ( troop && troop->isValid() ) {
@@ -135,10 +142,23 @@ namespace AI
                 break;
             }
         }
+
+        // Complicate the task of a potential attacker
+        army.splitStackOfWeakestUnitsIntoFreeSlots();
     }
 
     bool CanPurchaseHero( const Kingdom & kingdom )
     {
-        return kingdom.GetCountCastle() > 0 && kingdom.AllowRecruitHero( true );
+        if ( kingdom.GetCountCastle() == 0 ) {
+            return false;
+        }
+
+        if ( kingdom.GetColor() == Settings::Get().CurrentColor() ) {
+            // This is the AI's current turn.
+            return kingdom.AllowPayment( PaymentConditions::RecruitHero() );
+        }
+
+        // This is not the current turn for the AI so we need to roughly calculate the possible future income on the next day.
+        return kingdom.AllowPayment( PaymentConditions::RecruitHero() - kingdom.GetIncome() );
     }
 }

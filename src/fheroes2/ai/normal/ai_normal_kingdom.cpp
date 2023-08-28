@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <string>
@@ -48,7 +49,6 @@
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
-#include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "mus.h"
 #include "pairs.h"
@@ -62,8 +62,6 @@
 
 namespace
 {
-    const double fighterStrengthMultiplier = 3;
-
     struct HeroValue
     {
         Heroes * hero = nullptr;
@@ -77,6 +75,51 @@ namespace
         {
             // Do nothing.
         }
+    };
+
+    class TemporaryHeroEraser
+    {
+    public:
+        TemporaryHeroEraser() = delete;
+
+        TemporaryHeroEraser( const TemporaryHeroEraser & ) = delete;
+
+        TemporaryHeroEraser( TemporaryHeroEraser && ) = delete;
+
+        explicit TemporaryHeroEraser( const std::vector<Heroes *> & heroes )
+        {
+            for ( Heroes * hero : heroes ) {
+                assert( hero != nullptr && hero->isActive() );
+
+                Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
+                if ( tile.GetHeroes() == nullptr ) {
+                    // This could happen when a hero is moving.
+                    continue;
+                }
+
+                assert( tile.GetHeroes() == hero );
+                _heroes.emplace_back( hero );
+
+                tile.SetHeroes( nullptr );
+            }
+        }
+
+        ~TemporaryHeroEraser()
+        {
+            for ( Heroes * hero : _heroes ) {
+                Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
+                assert( tile.GetHeroes() == nullptr );
+
+                tile.SetHeroes( hero );
+            }
+        }
+
+        TemporaryHeroEraser & operator=( const TemporaryHeroEraser & ) = delete;
+
+        TemporaryHeroEraser & operator=( TemporaryHeroEraser && ) = delete;
+
+    private:
+        std::vector<Heroes *> _heroes;
     };
 
     void setHeroRoles( KingdomHeroes & heroes )
@@ -149,13 +192,67 @@ namespace
                 continue;
             }
 
-            if ( object.strength > medianStrength * fighterStrengthMultiplier ) {
+            if ( object.strength > medianStrength * 3 ) {
                 object.hero->setAIRole( Heroes::Role::FIGHTER );
             }
             else {
                 object.hero->setAIRole( Heroes::Role::HUNTER );
             }
         }
+    }
+
+    std::optional<AI::EnemyArmy> getEnemyArmyOnTile( const int kingdomColor, const Maps::Tiles & tile )
+    {
+        const MP2::MapObjectType object = tile.GetObject();
+        const int32_t tileIndex = tile.GetIndex();
+
+        if ( object == MP2::OBJ_HEROES ) {
+            const Heroes * hero = tile.GetHeroes();
+            // TODO: this function can be called when the game world is not fully initialized yet
+            if ( hero == nullptr ) {
+                return {};
+            }
+
+            if ( hero->isFriends( kingdomColor ) ) {
+                return {};
+            }
+
+            // If the hero is standing in one place, then he does not pose a threat (as well as the castle in which he may be located)
+            if ( hero->Modes( Heroes::PATROL ) && hero->GetPatrolDistance() == 0 ) {
+                return {};
+            }
+
+            const Castle * castle = hero->inCastle();
+            // Rough estimate - if the hero is in the castle, then we sum up the power of the castle garrison with the power of the hero's army
+            const double threat = castle ? castle->GetArmy().GetStrength() + hero->GetArmy().GetStrength() : hero->GetArmy().GetStrength();
+
+            return AI::EnemyArmy( tileIndex, hero, threat, hero->GetMaxMovePoints() );
+        }
+
+        if ( object == MP2::OBJ_CASTLE ) {
+            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
+            // TODO: this function can be called when the game world is not fully initialized yet
+            if ( castle == nullptr ) {
+                return {};
+            }
+
+            // Neutral castles don't pose a threat because they can't hire heroes
+            if ( castle->GetColor() == Color::NONE || castle->isFriends( kingdomColor ) ) {
+                return {};
+            }
+
+            // If it's just a town where there's no way to build a castle, then there's no way to hire heroes who might pose a threat
+            if ( !castle->isCastle() && !castle->AllowBuyBuilding( BUILD_CASTLE ) ) {
+                return {};
+            }
+
+            const double threat = castle->GetArmy().GetStrength();
+
+            // 1500 is slightly more than a fresh hero's maximum move points hired in a castle.
+            return AI::EnemyArmy( tileIndex, nullptr, threat, 1500 );
+        }
+
+        return {};
     }
 }
 
@@ -171,7 +268,7 @@ namespace AI
         // Re-hiring a hero related to any of the WINS_HERO or LOSS_HERO conditions is not allowed
         const auto heroesToIgnore = std::make_pair( world.GetHeroesCondWins(), world.GetHeroesCondLoss() );
 
-        auto useIfPossible = [&heroesToIgnore]( Heroes * hero ) -> Heroes * {
+        const auto useIfPossible = [&heroesToIgnore]( Heroes * hero ) -> Heroes * {
             if ( std::apply( [hero]( const auto... heroToIgnore ) { return ( ( hero == heroToIgnore ) || ... ); }, heroesToIgnore ) ) {
                 return nullptr;
             }
@@ -207,6 +304,9 @@ namespace AI
 
     void Normal::reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )
     {
+        // It is impossible to reinforce dead heroes.
+        assert( hero.isActive() );
+
         const Heroes::AIHeroMeetingUpdater heroMeetingUpdater( hero );
 
         if ( !hero.HaveSpellBook() && castle.GetLevelMageGuild() > 0 && !hero.IsFullBagArtifacts() ) {
@@ -217,60 +317,76 @@ namespace AI
         Army & heroArmy = hero.GetArmy();
         Army & garrison = castle.GetArmy();
 
+        // Merge all troops in the castle to have the best army.
+        heroArmy.JoinStrongestFromArmy( garrison );
+
+        // Upgrade troops and try to merge them again.
         heroArmy.UpgradeTroops( castle );
+        garrison.UpgradeTroops( castle );
+        heroArmy.JoinStrongestFromArmy( garrison );
+
+        // Recruit more troops and also merge them.
         castle.recruitBestAvailable( budget );
         heroArmy.JoinStrongestFromArmy( garrison );
 
         const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
-        // check if we should leave some troops in the garrison
+
+        // Check if we should leave some troops in the garrison
         // TODO: amount of troops left could depend on region's safetyFactor
         if ( castle.isCastle() && _regions[regionID].safetyFactor <= 100 && !garrison.isValid() ) {
-            const Heroes::Role heroRole = hero.getAIRole();
-            const bool isFigtherHero = ( heroRole == Heroes::Role::FIGHTER || heroRole == Heroes::Role::CHAMPION );
+            auto [troopForTransferToGarrison, transferHalf] = [&hero, &heroArmy]() -> std::pair<Troop *, bool> {
+                const Heroes::Role heroRole = hero.getAIRole();
+                const bool isFighterRole = ( heroRole == Heroes::Role::FIGHTER || heroRole == Heroes::Role::CHAMPION );
 
-            bool onlyHalf = false;
-            Troop * unitToSwap = heroArmy.GetSlowestTroop();
-            if ( unitToSwap ) {
                 // We need to compare a strength of troops excluding hero's stats.
                 const double troopsStrength = Troops( heroArmy.getTroops() ).GetStrength();
+                const double significanceRatio = isFighterRole ? 20.0 : 10.0;
 
-                const double significanceRatio = isFigtherHero ? 20.0 : 10.0;
-                if ( unitToSwap->GetStrength() > troopsStrength / significanceRatio ) {
-                    Troop * weakest = heroArmy.GetWeakestTroop();
+                {
+                    Troop * candidateTroop = heroArmy.GetSlowestTroop();
+                    assert( candidateTroop != nullptr );
 
-                    assert( weakest != nullptr );
-                    if ( weakest ) {
-                        unitToSwap = weakest;
-                        if ( weakest->GetStrength() > troopsStrength / significanceRatio ) {
-                            if ( isFigtherHero ) {
-                                // if it's an important hero and all troops are significant - keep the army
-                                unitToSwap = nullptr;
-                            }
-                            else {
-                                onlyHalf = true;
-                            }
-                        }
+                    if ( candidateTroop->GetStrength() <= troopsStrength / significanceRatio ) {
+                        return { candidateTroop, false };
                     }
                 }
-            }
-            if ( unitToSwap ) {
-                const uint32_t count = unitToSwap->GetCount();
-                const uint32_t toMove = onlyHalf ? count / 2 : count;
-                if ( garrison.JoinTroop( unitToSwap->GetMonster(), toMove, true ) ) {
-                    if ( !onlyHalf ) {
-                        unitToSwap->Reset();
+
+                // if this is an important hero, then all his troops are significant
+                if ( isFighterRole ) {
+                    return {};
+                }
+
+                {
+                    Troop * candidateTroop = heroArmy.GetWeakestTroop();
+                    assert( candidateTroop != nullptr );
+
+                    if ( candidateTroop->GetStrength() <= troopsStrength / significanceRatio ) {
+                        return { candidateTroop, true };
+                    }
+                }
+
+                return {};
+            }();
+
+            if ( troopForTransferToGarrison ) {
+                assert( heroArmy.GetOccupiedSlotCount() > 1 );
+
+                const uint32_t initialCount = troopForTransferToGarrison->GetCount();
+                const uint32_t countToTransfer = transferHalf ? initialCount / 2 : initialCount;
+
+                if ( garrison.JoinTroop( troopForTransferToGarrison->GetMonster(), countToTransfer, true ) ) {
+                    if ( countToTransfer == initialCount ) {
+                        troopForTransferToGarrison->Reset();
                     }
                     else {
-                        unitToSwap->SetCount( count - toMove );
+                        troopForTransferToGarrison->SetCount( initialCount - countToTransfer );
                     }
-
-                    // TODO: redistribute troops properly.
-                    OptimizeTroopsOrder( garrison );
                 }
             }
         }
 
         OptimizeTroopsOrder( heroArmy );
+        OptimizeTroopsOrder( garrison );
     }
 
     void Normal::evaluateRegionSafety()
@@ -377,59 +493,204 @@ namespace AI
         return sortedCastleList;
     }
 
-    std::set<int> Normal::findCastlesInDanger( const KingdomCastles & castles, const std::vector<std::pair<int, const Army *>> & enemyArmies, int myColor )
+    std::set<int> Normal::findCastlesInDanger( const Kingdom & kingdom )
     {
-        const uint32_t threatDistanceLimit = 3000; // 30 tiles, roughly how much maxed out hero can move in a turn
         std::set<int> castlesInDanger;
 
-        for ( const std::pair<int, const Army *> & enemy : enemyArmies ) {
-            if ( enemy.second == nullptr )
-                continue;
+        // Since we are estimating danger for a castle and we need to know if an enemy hero can reach it
+        // if no our heroes exist. So we are temporary removing them from the map.
+        const TemporaryHeroEraser heroEraser( kingdom.GetHeroes() );
 
-            const double attackerStrength = enemy.second->GetStrength();
-
-            for ( const Castle * castle : castles ) {
-                if ( !castle )
+        for ( const auto & [dummy, enemyArmy] : _enemyArmies ) {
+            for ( const Castle * castle : kingdom.GetCastles() ) {
+                if ( castle == nullptr ) {
+                    // How is it even possible? Check the logic!
+                    assert( 0 );
                     continue;
+                }
 
-                const int castleIndex = castle->GetIndex();
-                // skip precise distance check if army is too far to be a threat
-                if ( Maps::GetApproximateDistance( enemy.first, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit )
-                    continue;
-
-                const double defenders = castle->GetArmy().GetStrength();
-
-                const double attackerThreat = attackerStrength - defenders;
-                if ( attackerThreat > 0 ) {
-                    const uint32_t dist = _pathfinder.getDistance( enemy.first, castleIndex, myColor, attackerStrength );
-                    if ( dist && dist < threatDistanceLimit ) {
-                        // castle is under threat
-                        castlesInDanger.insert( castleIndex );
-
-                        auto attackTask = _priorityTargets.find( enemy.first );
-                        if ( attackTask == _priorityTargets.end() ) {
-                            _priorityTargets[enemy.first] = { PriorityTaskType::ATTACK, attackerStrength, castleIndex };
-                        }
-                        else {
-                            attackTask->second.secondaryTaskTileId.insert( castleIndex );
-                        }
-
-                        auto defenseTask = _priorityTargets.find( castleIndex );
-                        if ( defenseTask == _priorityTargets.end() ) {
-                            _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, attackerThreat, enemy.first };
-                        }
-                        else {
-                            defenseTask->second.secondaryTaskTileId.insert( enemy.first );
-                        }
-                    }
+                if ( updateIndividualPriorityForCastle( *castle, enemyArmy ) ) {
+                    castlesInDanger.insert( castle->GetIndex() );
                 }
             }
         }
+
         return castlesInDanger;
+    }
+
+    void Normal::updatePriorityForEnemyArmy( const Kingdom & kingdom, const EnemyArmy & enemyArmy )
+    {
+        // Since we are estimating danger for a castle and we need to know if an enemy hero can reach it
+        // if no our heroes exist. So we are temporary removing them from the map.
+        const TemporaryHeroEraser heroEraser( kingdom.GetHeroes() );
+
+        for ( const Castle * castle : kingdom.GetCastles() ) {
+            if ( castle == nullptr ) {
+                // How is it even possible? Check the logic!
+                assert( 0 );
+                continue;
+            }
+
+            updateIndividualPriorityForCastle( *castle, enemyArmy );
+        }
+    }
+
+    void Normal::updatePriorityForCastle( const Castle & castle )
+    {
+        // Since we are estimating danger for a castle and we need to know if an enemy hero can reach it
+        // if no our heroes exist. So we are temporary removing them from the map.
+        const TemporaryHeroEraser heroEraser( castle.GetKingdom().GetHeroes() );
+
+        for ( const auto & [dummy, enemyArmy] : _enemyArmies ) {
+            updateIndividualPriorityForCastle( castle, enemyArmy );
+        }
+    }
+
+    bool Normal::updateIndividualPriorityForCastle( const Castle & castle, const EnemyArmy & enemyArmy )
+    {
+        // 30 tiles, roughly how much maxed out hero can move in a turn.
+        const uint32_t threatDistanceLimit = 3000;
+
+        const int32_t castleIndex = castle.GetIndex();
+        // skip precise distance check if army is too far to be a threat
+        if ( Maps::GetApproximateDistance( enemyArmy.index, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit ) {
+            return false;
+        }
+
+        const uint32_t dist = _pathfinder.getDistance( enemyArmy.index, castleIndex, castle.GetColor(), enemyArmy.strength );
+        if ( dist == 0 || dist >= threatDistanceLimit ) {
+            return false;
+        }
+
+        uint32_t daysToReach = ( dist + enemyArmy.movePoints - 1 ) / enemyArmy.movePoints;
+        if ( daysToReach > 3 ) {
+            // It is too far away. Ignore it.
+            return false;
+        }
+
+        double enemyStrength = enemyArmy.strength;
+
+        --daysToReach;
+        while ( daysToReach > 0 ) {
+            // Each day reduces enemy strength by 50%. If an enemy is too far away then there is no reason to panic.
+            enemyStrength /= 2;
+            --daysToReach;
+        }
+
+        auto attackTask = _priorityTargets.find( enemyArmy.index );
+        if ( attackTask == _priorityTargets.end() ) {
+            _priorityTargets[enemyArmy.index] = { PriorityTaskType::ATTACK, castleIndex };
+        }
+        else {
+            attackTask->second.secondaryTaskTileId.insert( castleIndex );
+        }
+
+        auto defenseTask = _priorityTargets.find( castleIndex );
+        if ( defenseTask == _priorityTargets.end() ) {
+            _priorityTargets[castleIndex] = { PriorityTaskType::DEFEND, enemyArmy.index };
+        }
+        else {
+            defenseTask->second.secondaryTaskTileId.insert( enemyArmy.index );
+        }
+
+        // If the castle guard (including the garrison and the guest hero) is weaker than the enemy, then the
+        // castle is considered to be in danger
+        if ( castle.GetGarrisonStrength( enemyArmy.hero ) < enemyStrength ) {
+            return true;
+        }
+
+        // If the guest hero himself is not able to defeat a threatening enemy in an open field, then the castle
+        // is considered to be in danger, and the guest hero should probably stay in it
+        const Heroes * hero = castle.GetHero();
+        if ( hero && hero->GetArmy().GetStrength() <= enemyStrength * ARMY_ADVANTAGE_SMALL ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    void Normal::removePriorityAttackTarget( const int32_t tileIndex )
+    {
+        const auto it = _priorityTargets.find( tileIndex );
+        if ( it == _priorityTargets.end() ) {
+            return;
+        }
+
+        const PriorityTask & attackTask = it->second;
+        if ( attackTask.type != PriorityTaskType::ATTACK ) {
+            return;
+        }
+
+        for ( const int32_t secondaryTaskId : attackTask.secondaryTaskTileId ) {
+            // If this assertion blows then you are attacking and defending the same tile!
+            assert( secondaryTaskId != tileIndex );
+
+            auto defenseTask = _priorityTargets.find( secondaryTaskId );
+            if ( defenseTask == _priorityTargets.end() ) {
+                continue;
+            }
+
+            if ( defenseTask->second.type != PriorityTaskType::DEFEND ) {
+                continue;
+            }
+
+            // check if a secondary task still present
+            std::set<int> & defenseSecondaries = defenseTask->second.secondaryTaskTileId;
+            defenseSecondaries.erase( tileIndex );
+            if ( defenseSecondaries.empty() ) {
+                // if no one else was threatening this then we no longer have to defend
+                _priorityTargets.erase( secondaryTaskId );
+            }
+        }
+
+        _priorityTargets.erase( tileIndex );
+    }
+
+    void Normal::updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tiles & tile )
+    {
+        const int32_t tileIndex = tile.GetIndex();
+
+        _enemyArmies.erase( tileIndex );
+
+        const auto enemyArmy = getEnemyArmyOnTile( kingdom.GetColor(), tile );
+        if ( enemyArmy ) {
+            _enemyArmies[enemyArmy->index] = *enemyArmy;
+
+            updatePriorityForEnemyArmy( kingdom, *enemyArmy );
+        }
     }
 
     void Normal::KingdomTurn( Kingdom & kingdom )
     {
+#if defined( WITH_DEBUG )
+        class AIAutoControlModeCommitter
+        {
+        public:
+            explicit AIAutoControlModeCommitter( const Kingdom & kingdom )
+                : _kingdomColor( kingdom.GetColor() )
+            {}
+
+            AIAutoControlModeCommitter( const AIAutoControlModeCommitter & ) = delete;
+
+            ~AIAutoControlModeCommitter()
+            {
+                Player * player = Players::Get( _kingdomColor );
+                assert( player != nullptr );
+
+                if ( player->isAIAutoControlMode() ) {
+                    player->commitAIAutoControlMode();
+                }
+            }
+
+            AIAutoControlModeCommitter & operator=( const AIAutoControlModeCommitter & ) = delete;
+
+        private:
+            const int _kingdomColor;
+        };
+
+        const AIAutoControlModeCommitter aiAutoControlModeCommitter( kingdom );
+#endif
+
         const int myColor = kingdom.GetColor();
 
         if ( kingdom.isLoss() || myColor == Color::NONE ) {
@@ -438,7 +699,7 @@ namespace AI
         }
 
         // reset indicator
-        Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
+        Interface::StatusWindow & status = Interface::AdventureMap::Get().getStatusWindow();
         status.DrawAITurnProgress( 0 );
 
         AudioManager::PlayMusicAsync( MUS::COMPUTER_TURN, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
@@ -459,6 +720,7 @@ namespace AI
 
         for ( Heroes * hero : heroes ) {
             hero->ResetModes( Heroes::SLEEPER );
+            hero->setDimensionDoorUsage( 0 );
 
             const double strength = hero->GetArmy().GetStrength();
             _combinedHeroStrength += strength;
@@ -474,11 +736,10 @@ namespace AI
             underViewSpell = true;
         }
 
-        std::vector<std::pair<int, const Army *>> enemyArmies;
-
         const int mapSize = world.w() * world.h();
         _priorityTargets.clear();
-        _mapObjects.clear();
+        _enemyArmies.clear();
+        _mapActionObjects.clear();
         _regions.clear();
         _regions.resize( world.getRegionCount() );
 
@@ -488,72 +749,57 @@ namespace AI
 
             const uint32_t regionID = tile.GetRegion();
             if ( regionID >= _regions.size() ) {
-                // shouldn't be possible, assert
-                assert( regionID < _regions.size() );
+                assert( 0 );
                 continue;
             }
 
             RegionStats & stats = _regions[regionID];
             if ( !underViewSpell && tile.isFog( myColor ) ) {
-                ++stats.fogCount;
                 continue;
             }
 
-            if ( objectType == MP2::OBJ_NONE || objectType == MP2::OBJ_COAST )
+            if ( !MP2::isActionObject( objectType ) ) {
                 continue;
+            }
 
-            stats.validObjects.emplace_back( idx, objectType );
-            _mapObjects.emplace_back( idx, objectType );
+            _mapActionObjects.emplace_back( idx, objectType );
 
             if ( objectType == MP2::OBJ_HEROES ) {
                 const Heroes * hero = tile.GetHeroes();
-                if ( !hero )
-                    continue;
+                assert( hero != nullptr );
 
                 if ( hero->GetColor() == myColor && !hero->Modes( Heroes::PATROL ) ) {
                     ++stats.friendlyHeroes;
 
                     const int wisdomLevel = hero->GetLevelSkill( Skill::Secondary::WISDOM );
-                    if ( wisdomLevel + 2 > stats.spellLevel )
+                    if ( wisdomLevel + 2 > stats.spellLevel ) {
                         stats.spellLevel = wisdomLevel + 2;
-                }
-                else if ( !Players::isFriends( myColor, hero->GetColor() ) && ( !hero->Modes( Heroes::PATROL ) || hero->GetPatrolDistance() != 0 ) ) {
-                    const Army & heroArmy = hero->GetArmy();
-                    enemyArmies.emplace_back( idx, &heroArmy );
-
-                    const double heroThreat = heroArmy.GetStrength();
-                    if ( stats.highestThreat < heroThreat ) {
-                        stats.highestThreat = heroThreat;
                     }
                 }
-                // check object underneath the hero as well (maybe a castle)
+
+                // This hero can be in a castle
                 objectType = tile.GetObject( false );
             }
 
             if ( objectType == MP2::OBJ_CASTLE ) {
-                const int tileColor = getColorFromTile( tile );
-                if ( myColor == tileColor || Players::isFriends( myColor, tileColor ) ) {
+                const Castle * castle = world.getCastleEntrance( Maps::GetPoint( idx ) );
+                assert( castle != nullptr );
+
+                if ( castle->isFriends( myColor ) ) {
                     ++stats.friendlyCastles;
                 }
-                else if ( tileColor != Color::NONE ) {
+                else if ( castle->GetColor() != Color::NONE ) {
                     ++stats.enemyCastles;
-
-                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( idx ) );
-                    if ( !castle )
-                        continue;
-
-                    const Army & castleArmy = castle->GetArmy();
-                    enemyArmies.emplace_back( idx, &castleArmy );
-
-                    const double castleThreat = castleArmy.GetStrength();
-                    if ( stats.highestThreat < castleThreat ) {
-                        stats.highestThreat = castleThreat;
-                    }
                 }
             }
-            else if ( objectType == MP2::OBJ_MONSTER ) {
-                stats.averageMonster += Army( tile ).GetStrength();
-                ++stats.monsterCount;
+
+            const auto enemyArmy = getEnemyArmyOnTile( myColor, tile );
+            if ( enemyArmy ) {
+                _enemyArmies[enemyArmy->index] = *enemyArmy;
+
+                if ( stats.highestThreat < enemyArmy->strength ) {
+                    stats.highestThreat = enemyArmy->strength;
+                }
             }
         }
 
@@ -561,7 +807,7 @@ namespace AI
 
         updateKingdomBudget( kingdom );
 
-        DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapObjects.size() << " valid objects" )
+        DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapActionObjects.size() << " valid objects" )
 
         uint32_t progressStatus = 1;
         status.DrawAITurnProgress( progressStatus );
@@ -578,13 +824,23 @@ namespace AI
             // Step 3. Reassign heroes roles
             setHeroRoles( heroes );
 
-            castlesInDanger = findCastlesInDanger( castles, enemyArmies, myColor );
+            castlesInDanger = findCastlesInDanger( kingdom );
+            for ( Heroes * hero : heroes ) {
+                if ( castlesInDanger.find( hero->GetIndex() ) != castlesInDanger.end() ) {
+                    // If a hero is in a castle and this castle is in danger then the hero is most likely not able to defeat
+                    // a threatening enemy in an open field. Therefore let's make him stay in the castle.
+                    // TODO: allow the hero to still do some actions but always return to the castle at the end of the turn.
+
+                    HeroesActionComplete( *hero, hero->GetIndex(), hero->GetMapsObject() );
+                }
+            }
+
             sortedCastleList = getSortedCastleList( castles, castlesInDanger );
 
             const uint32_t startProgressValue = progressStatus;
             const uint32_t endProgressValue = ( progressStatus == 1 ) ? 8 : std::max( progressStatus + 1U, 9U );
 
-            const bool moreTaskForHeroes = HeroesTurn( heroes, startProgressValue, endProgressValue );
+            bool moreTaskForHeroes = HeroesTurn( heroes, startProgressValue, endProgressValue );
 
             if ( progressStatus == 1 ) {
                 progressStatus = 8;
@@ -592,10 +848,35 @@ namespace AI
             }
 
             // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
-            if ( !purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
-                break;
+            if ( purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
+                assert( !heroes.empty() && heroes.back() != nullptr );
+                updateMapActionObjectCache( heroes.back()->GetIndex() );
+                ++availableHeroCount;
+                continue;
             }
-            ++availableHeroCount;
+
+            if ( !moreTaskForHeroes && world.LastDay() ) {
+                // Heroes have nothing to do. In this case it is wise to move heroes to castles especially if it is the last day of a week.
+                // So for the next day a hero will have a maximum amount of spell points as well as new troops.
+                for ( const Castle * castle : castles ) {
+                    assert( castle != nullptr );
+
+                    if ( castle->GetHero() == nullptr ) {
+                        const auto [dummy, inserted] = _priorityTargets.try_emplace( castle->GetIndex(), PriorityTaskType::REINFORCE );
+                        if ( inserted ) {
+                            DEBUG_LOG( DBG_AI, DBG_INFO, castle->GetName() << " is designated as a priority target to reinforce nearby heroes" )
+
+                            moreTaskForHeroes = true;
+                        }
+                    }
+                }
+
+                if ( moreTaskForHeroes ) {
+                    continue;
+                }
+            }
+
+            break;
         }
 
         status.DrawAITurnProgress( 9 );
@@ -616,8 +897,8 @@ namespace AI
         status.DrawAITurnProgress( 10 );
     }
 
-    bool Normal::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
-                                    bool moreTasksForHeroes )
+    bool Normal::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, const int32_t availableHeroCount,
+                                    const bool moreTasksForHeroes )
     {
         const bool slowEarlyGame = world.CountDay() < 5 && sortedCastleList.size() == 1;
         int32_t heroLimit = world.w() / Maps::SMALL + 1;
@@ -669,5 +950,10 @@ namespace AI
 
         // target found, buy hero
         return recruitmentCastle && recruitHero( *recruitmentCastle, !slowEarlyGame, false );
+    }
+
+    void Normal::tradingPostVisitEvent( Kingdom & /*kingdom*/ )
+    {
+        // Do nothing.
     }
 }

@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Objects;
 
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
@@ -37,7 +38,6 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -46,19 +46,23 @@ public final class ToolsetActivity extends AppCompatActivity
 {
     public static final class ToolsetActivityViewModel extends ViewModel
     {
-        public static final int RESULT_NONE = 0;
-        public static final int RESULT_SUCCESS = 1;
-        public static final int RESULT_NO_ASSETS = 2;
-        public static final int RESULT_ERROR = 3;
+        private enum BackgroundTaskResult
+        {
+            RESULT_NONE,
+            RESULT_SUCCESS,
+            RESULT_NO_ASSETS,
+            RESULT_ERROR
+        }
 
         private static final class Status
         {
-            public boolean isHoMM2AssetsPresent;
-            public boolean isBackgroundTaskExecuting;
-            public final int backgroundTaskResult;
-            public final String backgroundTaskError;
+            private boolean isHoMM2AssetsPresent;
+            private boolean isBackgroundTaskExecuting;
+            private final BackgroundTaskResult backgroundTaskResult;
+            private final String backgroundTaskError;
 
-            Status( final boolean isHoMM2AssetsPresent, final boolean isBackgroundTaskExecuting, final int backgroundTaskResult, final String backgroundTaskError )
+            private Status( final boolean isHoMM2AssetsPresent, final boolean isBackgroundTaskExecuting, final BackgroundTaskResult backgroundTaskResult,
+                            final String backgroundTaskError )
             {
                 this.isHoMM2AssetsPresent = isHoMM2AssetsPresent;
                 this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;
@@ -66,7 +70,7 @@ public final class ToolsetActivity extends AppCompatActivity
                 this.backgroundTaskError = backgroundTaskError;
             }
 
-            Status setIsHoMM2AssetsPresent( final boolean isHoMM2AssetsPresent )
+            private Status setIsHoMM2AssetsPresent( final boolean isHoMM2AssetsPresent )
             {
                 this.isHoMM2AssetsPresent = isHoMM2AssetsPresent;
 
@@ -74,7 +78,7 @@ public final class ToolsetActivity extends AppCompatActivity
             }
 
             @SuppressWarnings( "SameParameterValue" )
-            Status setIsBackgroundTaskExecuting( final boolean isBackgroundTaskExecuting )
+            private Status setIsBackgroundTaskExecuting( final boolean isBackgroundTaskExecuting )
             {
                 this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;
 
@@ -82,39 +86,41 @@ public final class ToolsetActivity extends AppCompatActivity
             }
         }
 
-        private final MutableLiveData<Status> liveStatus = new MutableLiveData<>( new Status( false, false, RESULT_NONE, "" ) );
+        private final MutableLiveData<Status> liveStatus = new MutableLiveData<>( new Status( false, false, BackgroundTaskResult.RESULT_NONE, "" ) );
 
-        public LiveData<Status> getLiveStatus()
-        {
-            return liveStatus;
-        }
-
-        public void validateAssets( final File externalFilesDir )
+        private void validateAssets( final File externalFilesDir )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
             liveStatus.setValue( status.setIsHoMM2AssetsPresent( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ) ) );
         }
 
-        public void extractAssets( final File externalFilesDir, final File cacheDir, final Uri zipFileUri, final ContentResolver contentResolver )
+        private void extractAssets( final File externalFilesDir, final File cacheDir, final Uri zipFileUri, final ContentResolver contentResolver )
         {
             final Status status = Objects.requireNonNull( liveStatus.getValue() );
+
+            if ( status.isBackgroundTaskExecuting ) {
+                return;
+            }
 
             liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
             new Thread( () -> {
-                try ( final InputStream iStream = contentResolver.openInputStream( zipFileUri ) ) {
-                    if ( HoMM2AssetManagement.extractHoMM2AssetsFromZip( externalFilesDir, cacheDir, iStream ) ) {
-                        liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, RESULT_SUCCESS, "" ) );
+                try ( final InputStream in = contentResolver.openInputStream( zipFileUri ) ) {
+                    if ( HoMM2AssetManagement.extractHoMM2AssetsFromZip( externalFilesDir, cacheDir, in ) ) {
+                        liveStatus.postValue(
+                            new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, BackgroundTaskResult.RESULT_SUCCESS, "" ) );
                     }
                     else {
-                        liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, RESULT_NO_ASSETS, "" ) );
+                        liveStatus.postValue(
+                            new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, BackgroundTaskResult.RESULT_NO_ASSETS, "" ) );
                     }
                 }
                 catch ( final Exception ex ) {
-                    Log.e( "fheroes2", "Failed to extract the ZIP file.", ex );
+                    Log.e( "fheroes2", "Failed to extract the assets.", ex );
 
-                    liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, RESULT_ERROR, String.format( "%s", ex ) ) );
+                    liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, BackgroundTaskResult.RESULT_ERROR,
+                                                      String.format( "%s", ex ) ) );
                 }
             } ).start();
         }
@@ -139,7 +145,7 @@ public final class ToolsetActivity extends AppCompatActivity
         setContentView( R.layout.activity_toolset );
 
         viewModel = new ViewModelProvider( this ).get( ToolsetActivityViewModel.class );
-        viewModel.getLiveStatus().observe( this, this::updateUI );
+        viewModel.liveStatus.observe( this, this::updateUI );
     }
 
     @Override
@@ -168,7 +174,19 @@ public final class ToolsetActivity extends AppCompatActivity
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void downloadHoMM2DemoButtonClicked( final View view )
     {
-        startActivity( new Intent( Intent.ACTION_VIEW, Uri.parse( getString( R.string.activity_toolset_homm2_demo_url ) ) ) );
+        try {
+            startActivity( new Intent( Intent.ACTION_VIEW, Uri.parse( getString( R.string.activity_toolset_homm2_demo_url ) ) ) );
+        }
+        catch ( final Exception ex ) {
+            Log.e( "fheroes2", "Failed to download the HoMM2 demo archive.", ex );
+
+            ( new AlertDialog.Builder( this ) )
+                .setTitle( R.string.activity_toolset_download_homm2_demo_error_title )
+                .setMessage( R.string.activity_toolset_download_homm2_demo_error_message )
+                .setPositiveButton( R.string.activity_toolset_download_homm2_demo_error_positive_btn_text, ( dialog, which ) -> {} )
+                .create()
+                .show();
+        }
     }
 
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
@@ -194,27 +212,25 @@ public final class ToolsetActivity extends AppCompatActivity
         downloadHoMM2DemoButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
         saveFileManagerButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
 
-        gameStatusTextView.setVisibility( modelStatus.isHoMM2AssetsPresent ? View.GONE : View.VISIBLE );
-        backgroundTaskProgressBar.setVisibility( !modelStatus.isBackgroundTaskExecuting ? View.GONE : View.VISIBLE );
-        lastTaskStatusTextView.setVisibility( modelStatus.isBackgroundTaskExecuting ? View.GONE : View.VISIBLE );
-
-        String statusText;
-
         switch ( modelStatus.backgroundTaskResult ) {
-        case ToolsetActivityViewModel.RESULT_NONE:
-            statusText = "";
+        case RESULT_NONE:
             break;
-        case ToolsetActivityViewModel.RESULT_SUCCESS:
-            statusText = getString( R.string.activity_toolset_last_task_status_lbl_text_completed_successfully );
+        case RESULT_SUCCESS:
+            lastTaskStatusTextView.setText( getString( R.string.activity_toolset_last_task_status_lbl_text_completed_successfully ) );
             break;
-        case ToolsetActivityViewModel.RESULT_NO_ASSETS:
-            statusText = getString( R.string.activity_toolset_last_task_status_lbl_text_no_assets_found );
+        case RESULT_NO_ASSETS:
+            lastTaskStatusTextView.setText( getString( R.string.activity_toolset_last_task_status_lbl_text_no_assets_found ) );
+            break;
+        case RESULT_ERROR:
+            lastTaskStatusTextView.setText( String.format( getString( R.string.activity_toolset_last_task_status_lbl_text_failed ), modelStatus.backgroundTaskError ) );
             break;
         default:
-            statusText = String.format( getString( R.string.activity_toolset_last_task_status_lbl_text_failed ), modelStatus.backgroundTaskError );
+            assert false;
             break;
         }
 
-        lastTaskStatusTextView.setText( statusText );
+        gameStatusTextView.setVisibility( modelStatus.isHoMM2AssetsPresent ? View.GONE : View.VISIBLE );
+        backgroundTaskProgressBar.setVisibility( !modelStatus.isBackgroundTaskExecuting ? View.GONE : View.VISIBLE );
+        lastTaskStatusTextView.setVisibility( modelStatus.isBackgroundTaskExecuting ? View.GONE : View.VISIBLE );
     }
 }

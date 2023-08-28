@@ -104,6 +104,9 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_selectscenario.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_system_options.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_thievesguild.cpp" />
+    <ClCompile Include="src\fheroes2\editor\editor_interface.cpp" />
+    <ClCompile Include="src\fheroes2\editor\editor_interface_panel.cpp" />
+    <ClCompile Include="src\fheroes2\editor\editor_mainmenu.cpp" />
     <ClCompile Include="src\fheroes2\game\difficulty.cpp" />
     <ClCompile Include="src\fheroes2\game\fheroes2.cpp" />
     <ClCompile Include="src\fheroes2\game\game.cpp" />
@@ -126,6 +129,7 @@
     <ClCompile Include="src\fheroes2\game\game_video.cpp" />
     <ClCompile Include="src\fheroes2\game\highscores.cpp" />
     <ClCompile Include="src\fheroes2\gui\cursor.cpp" />
+    <ClCompile Include="src\fheroes2\gui\interface_base.cpp" />
     <ClCompile Include="src\fheroes2\gui\interface_border.cpp" />
     <ClCompile Include="src\fheroes2\gui\interface_buttons.cpp" />
     <ClCompile Include="src\fheroes2\gui\interface_cpanel.cpp" />
@@ -177,6 +181,7 @@
     <ClCompile Include="src\fheroes2\kingdom\profit.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\puzzle.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\race.cpp" />
+    <ClCompile Include="src\fheroes2\kingdom\resource_trading.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\speed.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\view_world.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\week.cpp" />
@@ -186,6 +191,7 @@
     <ClCompile Include="src\fheroes2\maps\maps_objects.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_tiles.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_tiles_helper.cpp" />
+    <ClCompile Include="src\fheroes2\maps\maps_tiles_render.cpp" />
     <ClCompile Include="src\fheroes2\maps\mp2.cpp" />
     <ClCompile Include="src\fheroes2\maps\mp2_helper.cpp" />
     <ClCompile Include="src\fheroes2\maps\position.cpp" />
@@ -229,6 +235,7 @@
     <ClInclude Include="src\engine\core.h" />
     <ClInclude Include="src\engine\dir.h" />
     <ClInclude Include="src\engine\endian_h2.h" />
+    <ClInclude Include="src\engine\exception.h" />
     <ClInclude Include="src\engine\h2d_file.h" />
     <ClInclude Include="src\engine\image.h" />
     <ClInclude Include="src\engine\image_palette.h" />
@@ -297,6 +304,9 @@
     <ClInclude Include="src\fheroes2\dialog\dialog_selectitems.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_selectscenario.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_system_options.h" />
+    <ClInclude Include="src\fheroes2\editor\editor.h" />
+    <ClInclude Include="src\fheroes2\editor\editor_interface.h" />
+    <ClInclude Include="src\fheroes2\editor\editor_interface_panel.h" />
     <ClInclude Include="src\fheroes2\game\difficulty.h" />
     <ClInclude Include="src\fheroes2\game\game.h" />
     <ClInclude Include="src\fheroes2\game\game_credits.h" />
@@ -313,6 +323,7 @@
     <ClInclude Include="src\fheroes2\game\game_video_type.h" />
     <ClInclude Include="src\fheroes2\game\highscores.h" />
     <ClInclude Include="src\fheroes2\gui\cursor.h" />
+    <ClInclude Include="src\fheroes2\gui\interface_base.h" />
     <ClInclude Include="src\fheroes2\gui\interface_border.h" />
     <ClInclude Include="src\fheroes2\gui\interface_buttons.h" />
     <ClInclude Include="src\fheroes2\gui\interface_cpanel.h" />
@@ -361,6 +372,7 @@
     <ClInclude Include="src\fheroes2\kingdom\profit.h" />
     <ClInclude Include="src\fheroes2\kingdom\puzzle.h" />
     <ClInclude Include="src\fheroes2\kingdom\race.h" />
+    <ClInclude Include="src\fheroes2\kingdom\resource_trading.h" />
     <ClInclude Include="src\fheroes2\kingdom\speed.h" />
     <ClInclude Include="src\fheroes2\kingdom\view_world.h" />
     <ClInclude Include="src\fheroes2\kingdom\week.h" />
@@ -370,6 +382,7 @@
     <ClInclude Include="src\fheroes2\maps\maps_objects.h" />
     <ClInclude Include="src\fheroes2\maps\maps_tiles.h" />
     <ClInclude Include="src\fheroes2\maps\maps_tiles_helper.h" />
+    <ClInclude Include="src\fheroes2\maps\maps_tiles_render.h" />
     <ClInclude Include="src\fheroes2\maps\mp2.h" />
     <ClInclude Include="src\fheroes2\maps\mp2_helper.h" />
     <ClInclude Include="src\fheroes2\maps\pairs.h" />

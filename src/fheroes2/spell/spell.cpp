@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "spell.h"
+
 #include <algorithm>
 #include <cassert>
 #include <vector>
@@ -32,7 +34,6 @@
 #include "race.h"
 #include "rand.h"
 #include "serialize.h"
-#include "spell.h"
 #include "translations.h"
 
 struct spellstats_t
@@ -102,8 +103,10 @@ spellstats_t spells[] = {
     { gettext_noop( "Mirror Image" ), 25, 0, 0, 26, 0,
       gettext_noop(
           "Creates an illusionary unit that duplicates one of your existing units.  This illusionary unit does the same damages as the original, but will vanish if it takes any damage." ) },
-    { gettext_noop( "Shield" ), 3, 0, 0, 15, 2, gettext_noop( "Halves damage received from ranged attacks for a single unit." ) },
-    { gettext_noop( "Mass Shield" ), 7, 0, 0, 65, 0, gettext_noop( "Halves damage received from ranged attacks for all of your units." ) },
+    { gettext_noop( "Shield" ), 3, 0, 0, 15, 2,
+      gettext_noop( "Halves damage received from ranged attacks for a single unit. Does not affect damage received from Turrets or Ballistae." ) },
+    { gettext_noop( "Mass Shield" ), 7, 0, 0, 65, 0,
+      gettext_noop( "Halves damage received from ranged attacks for all of your units. Does not affect damage received from Turrets or Ballistae." ) },
     { gettext_noop( "Summon Earth Elemental" ), 30, 0, 0, 56, 3, gettext_noop( "Summons Earth Elementals to fight for your army." ) },
     { gettext_noop( "Summon Air Elemental" ), 30, 0, 0, 57, 3, gettext_noop( "Summons Air Elementals to fight for your army." ) },
     { gettext_noop( "Summon Fire Elemental" ), 30, 0, 0, 58, 3, gettext_noop( "Summons Fire Elementals to fight for your army." ) },
@@ -216,27 +219,38 @@ double Spell::getStrategicValue( double armyStrength, uint32_t currentSpellPoint
     const double amountModifier = ( casts == 1 ) ? 1 : casts - ( 0.05 * casts * casts );
 
     if ( isAdventure() ) {
-        // AI uses Dimension door and View All only spells right now
-        if ( id == Spell::DIMENSIONDOOR ) {
-            return 500.0 * amountModifier;
+        // TODO: update this logic if you add support for more Adventure Map spells.
+        switch ( id ) {
+        case Spell::DIMENSIONDOOR:
+            return 500 * amountModifier;
+        case Spell::TOWNGATE:
+        case Spell::TOWNPORTAL:
+            return 250 * amountModifier;
+        case Spell::VIEWALL:
+            return 500;
+        default:
+            break;
         }
-        if ( id == Spell::VIEWALL ) {
-            return 500.0;
-        }
-        return 0.0;
+
+        return 0;
     }
 
     if ( isDamage() ) {
         // Benchmark for Lightning for 20 power * 20 knowledge (maximum uses) is 2500.0
         return amountModifier * Damage() * spellPower;
     }
+
     // These high impact spells can turn tide of battle
     if ( isResurrect() || isMassActions() || id == Spell::BLIND || id == Spell::PARALYZE ) {
         return armyStrength * 0.1 * amountModifier;
     }
+
     if ( isSummon() ) {
-        return Monster( id ).GetMonsterStrength() * ExtraValue() * spellPower * amountModifier;
+        // Summoning spells can be effective only per single turn as a summoned stack of monster could be killed within the same turn.
+        // Also if the opponent targets the army's monsters and kill all of them the battle would be lost for this hero.
+        return Monster( id ).GetMonsterStrength() * ExtraValue() * spellPower;
     }
+
     return armyStrength * 0.04 * amountModifier;
 }
 
@@ -432,7 +446,7 @@ uint32_t Spell::Restore() const
         break;
     }
 
-    return Resurrect();
+    return 0;
 }
 
 uint32_t Spell::Resurrect() const
@@ -455,28 +469,106 @@ uint32_t Spell::ExtraValue() const
     return spells[id].extraValue;
 }
 
-Spell Spell::Rand( int lvl, bool adv )
+uint32_t Spell::weightForRace( const int race ) const
 {
-    std::vector<Spell> v;
-    v.reserve( 15 );
+    switch ( id ) {
+    case Spell::HOLYWORD:
+    case Spell::HOLYSHOUT:
+        if ( race == Race::NECR ) {
+            return 0;
+        }
+        break;
 
-    for ( int32_t sp = NONE; sp < PETRIFY; ++sp ) {
-        const Spell spell( sp );
-        if ( ( ( adv && !spell.isCombat() ) || ( !adv && spell.isCombat() ) ) && lvl == spell.Level() )
-            v.push_back( spell );
+    case Spell::DEATHRIPPLE:
+    case Spell::DEATHWAVE:
+        if ( race != Race::NECR ) {
+            return 0;
+        }
+        break;
+
+    case Spell::SUMMONEELEMENT:
+    case Spell::SUMMONAELEMENT:
+    case Spell::SUMMONFELEMENT:
+    case Spell::SUMMONWELEMENT:
+    case Spell::TOWNPORTAL:
+    case Spell::VISIONS:
+    case Spell::HAUNT:
+    case Spell::SETEGUARDIAN:
+    case Spell::SETAGUARDIAN:
+    case Spell::SETFGUARDIAN:
+    case Spell::SETWGUARDIAN:
+        return 0;
+
+    default:
+        break;
     }
-    return !v.empty() ? Rand::Get( v ) : Spell( Spell::NONE );
+
+    return 10;
 }
 
-Spell Spell::RandCombat( int lvl )
+Spell Spell::Rand( const int level, const bool isAdventure )
 {
-    return Rand( lvl, false );
+    std::vector<Spell> vec;
+    vec.reserve( 15 );
+
+    for ( int32_t spellId = NONE; spellId < PETRIFY; ++spellId ) {
+        const Spell spell( spellId );
+
+        if ( level != spell.Level() ) {
+            continue;
+        }
+
+        if ( isAdventure ) {
+            if ( !spell.isAdventure() ) {
+                continue;
+            }
+        }
+        else {
+            if ( !spell.isCombat() ) {
+                continue;
+            }
+        }
+
+        vec.push_back( spell );
+    }
+
+    return !vec.empty() ? Rand::Get( vec ) : Spell::NONE;
 }
 
-Spell Spell::RandAdventure( int lvl )
+Spell Spell::RandCombat( const int level )
 {
-    Spell res = Rand( lvl, true );
-    return res.isValid() ? res : RandCombat( lvl );
+    return Rand( level, false );
+}
+
+Spell Spell::RandAdventure( const int level )
+{
+    const Spell spell = Rand( level, true );
+
+    return spell.isValid() ? spell : RandCombat( level );
+}
+
+std::vector<int> Spell::getAllSpellIdsSuitableForSpellBook( const int spellLevel /* = -1 */ )
+{
+    std::vector<int> result;
+    result.reserve( SPELL_COUNT );
+
+    for ( int spellId = 0; spellId < SPELL_COUNT; ++spellId ) {
+        if ( spellId == NONE || ( spellId >= RANDOM && spellId <= PETRIFY ) ) {
+            continue;
+        }
+
+        if ( spellLevel > 0 ) {
+            const Spell spell( spellId );
+
+            if ( spell.Level() != spellLevel ) {
+                continue;
+            }
+        }
+
+        result.push_back( spellId );
+    }
+
+    return result;
 }
 
 bool Spell::isUndeadOnly() const
@@ -693,33 +785,6 @@ bool Spell::isApplyToEnemies() const
     }
 
     return false;
-}
-
-bool Spell::isRaceCompatible( int race ) const
-{
-    switch ( id ) {
-    case MASSCURE:
-    case MASSBLESS:
-    case HOLYSHOUT:
-    case HOLYWORD:
-    case BLESS:
-    case CURE:
-        if ( Race::NECR == race )
-            return false;
-        break;
-
-    case DEATHWAVE:
-    case DEATHRIPPLE:
-    case ANIMATEDEAD:
-        if ( Race::NECR != race )
-            return false;
-        break;
-
-    default:
-        break;
-    }
-
-    return true;
 }
 
 int32_t Spell::CalculateDimensionDoorDistance()

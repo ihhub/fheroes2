@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "artifact.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -33,14 +35,15 @@
 #include <utility>
 
 #include "agg_image.h"
-#include "artifact.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "game_io.h"
 #include "gamedefs.h"
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
 #include "rand.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "skill.h"
@@ -54,11 +57,11 @@
 
 namespace
 {
-    const std::map<ArtifactSetData, std::vector<uint32_t>> artifactSets
+    const std::map<ArtifactSetData, std::vector<int32_t>> artifactSets
         = { { ArtifactSetData( Artifact::BATTLE_GARB, gettext_noop( "The three Anduran artifacts magically combine into one." ) ),
               { Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
 
-    std::array<uint8_t, Artifact::UNKNOWN + 1> artifactGlobalStatus = {};
+    std::array<uint8_t, Artifact::ARTIFACT_COUNT> artifactGlobalStatus = { 0 };
 
     enum
     {
@@ -340,7 +343,7 @@ double Artifact::getArtifactValue() const
         case fheroes2::ArtifactBonusType::NONE:
             break;
         default:
-            // Did you add a new artifact ? Add your logic here.
+            // Did you add a new artifact bonus? Add your logic here.
             assert( 0 );
             break;
         }
@@ -364,7 +367,7 @@ double Artifact::getArtifactValue() const
             artifactValue -= curse.value;
             break;
         default:
-            // Did you add a new artifact ? Add your logic here.
+            // Did you add a new artifact curse? Add your logic here.
             assert( 0 );
             break;
         }
@@ -425,21 +428,28 @@ int32_t Artifact::getSpellId() const
     return Spell::NONE;
 }
 
-/* get rand all artifact */
 int Artifact::Rand( level_t lvl )
 {
     std::vector<int> v;
     v.reserve( 25 );
 
     // if possibly: make unique on map
-    for ( int art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
-        if ( ( lvl & Artifact( art ).Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) && !( artifactGlobalStatus[art] & ART_RNDUSED ) )
+    for ( int art = UNKNOWN + 1; art < ARTIFACT_COUNT; ++art ) {
+        const Artifact artifact{ art };
+
+        if ( artifact.isValid() && ( lvl & artifact.Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) && !( artifactGlobalStatus[art] & ART_RNDUSED ) ) {
             v.push_back( art );
+        }
+    }
 
     if ( v.empty() ) {
-        for ( int art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
-            if ( ( lvl & Artifact( art ).Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) )
+        for ( int art = UNKNOWN + 1; art < ARTIFACT_COUNT; ++art ) {
+            const Artifact artifact{ art };
+
+            if ( artifact.isValid() && ( lvl & artifact.Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) ) {
                 v.push_back( art );
+            }
+        }
     }
 
     int res = !v.empty() ? Rand::Get( v ) : Artifact::UNKNOWN;
@@ -450,24 +460,31 @@ int Artifact::Rand( level_t lvl )
 
 Artifact Artifact::FromMP2IndexSprite( uint32_t index )
 {
+    // Add 1 to all values to properly convert from the old map format.
     if ( 0xA2 > index )
-        return Artifact( ( index - 1 ) / 2 );
-    else if ( Settings::Get().isPriceOfLoyaltySupported() && 0xAB < index && 0xCE > index )
-        return Artifact( ( index - 1 ) / 2 );
-    else if ( 0xA3 == index )
+        return { static_cast<int32_t>( index - 1 ) / 2 + 1 };
+
+    if ( Settings::Get().isPriceOfLoyaltySupported() && 0xAB < index && 0xCE > index )
+        return { static_cast<int32_t>( index - 1 ) / 2 + 1 };
+
+    if ( 0xA3 == index )
         return { Rand( ART_LEVEL_ALL_NORMAL ) };
-    else if ( 0xA4 == index )
+
+    if ( 0xA4 == index )
         return { Rand( ART_ULTIMATE ) };
-    else if ( 0xA7 == index )
+
+    if ( 0xA7 == index )
         return { Rand( ART_LEVEL_TREASURE ) };
-    else if ( 0xA9 == index )
+
+    if ( 0xA9 == index )
         return { Rand( ART_LEVEL_MINOR ) };
-    else if ( 0xAB == index )
+
+    if ( 0xAB == index )
         return { ART_LEVEL_MAJOR };
 
-    DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown index: " << static_cast<int>( index ) )
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown Artifact object index: " << index )
 
-    return Artifact( UNKNOWN );
+    return { UNKNOWN };
 }
 
 const char * Artifact::getDiscoveryDescription( const Artifact & art )
@@ -482,7 +499,20 @@ StreamBase & operator<<( StreamBase & msg, const Artifact & art )
 
 StreamBase & operator>>( StreamBase & msg, Artifact & art )
 {
-    return msg >> art.id >> art.ext;
+    msg >> art.id >> art.ext;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1005_RELEASE ) {
+        // Old save formats contain different values for artifacts.
+        if ( art.id == 103 ) {
+            art.id = Artifact::UNKNOWN;
+        }
+        else {
+            ++art.id;
+        }
+    }
+
+    return msg;
 }
 
 BagArtifacts::BagArtifacts()
@@ -867,7 +897,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
         }
     }
 
-    auto isPureCursedArtifact = []( const Artifact & artifact ) {
+    const auto isPureCursedArtifact = []( const Artifact & artifact ) {
         const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact.GetID() );
         return !data.curses.empty() && data.bonuses.empty();
     };
@@ -876,7 +906,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
     transferArtifactsByCondition( combined, giftBag, isPureCursedArtifact );
 
     if ( !taker.HasSecondarySkill( Skill::Secondary::NECROMANCY ) && giver.HasSecondarySkill( Skill::Secondary::NECROMANCY ) ) {
-        auto isNecromancyArtifact = []( const Artifact & artifact ) {
+        const auto isNecromancyArtifact = []( const Artifact & artifact ) {
             const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact.GetID() );
             if ( data.bonuses.empty() ) {
                 return false;
@@ -897,7 +927,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
 
     // Scrolls are effective if they contain spells which are not present in the book.
     if ( taker.HaveSpellBook() ) {
-        auto isScrollSpellDuplicated = [&taker]( const Artifact & artifact ) {
+        const auto isScrollSpellDuplicated = [&taker]( const Artifact & artifact ) {
             const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact.GetID() );
             if ( data.bonuses.empty() ) {
                 return false;
@@ -920,7 +950,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
     }
 
     // A unique artifact is an artifact with no curses and all its bonuses are unique.
-    auto isUniqueArtifact = []( const Artifact & artifact ) {
+    const auto isUniqueArtifact = []( const Artifact & artifact ) {
         const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact.GetID() );
         if ( !data.curses.empty() ) {
             return false;
@@ -1137,7 +1167,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
             }
             else if ( _allowOpeningMagicBook ) {
                 if ( _statusBar != nullptr ) {
-                    std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) { _statusBar->ShowMessage( status ); };
+                    const std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) { _statusBar->ShowMessage( status ); };
                     _hero->OpenSpellBook( SpellBook::Filter::ALL, false, false, &statusCallback );
                 }
                 else {
@@ -1166,7 +1196,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
     }
     else {
         if ( can_change ) {
-            const Artifact newArtifact = Dialog::SelectArtifact();
+            const Artifact newArtifact = Dialog::selectArtifact();
 
             if ( isMagicBook( newArtifact ) ) {
                 const_cast<Heroes *>( _hero )->SpellBookActivate();
@@ -1312,11 +1342,6 @@ void ArtifactsBar::messageMagicBookAbortTrading() const
 {
     fheroes2::showStandardTextMessage( "", _( "This item can't be traded." ), Dialog::OK );
 }
-
-ArtifactSetData::ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage )
-    : _assembledArtifactID( artifactID )
-    , _assembleMessage( assembleMessage )
-{}
 
 std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
 {

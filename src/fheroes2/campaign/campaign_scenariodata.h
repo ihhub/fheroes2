@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -109,7 +109,6 @@ namespace Campaign
         ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount );
         ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount, const int32_t spellId );
 
-        friend StreamBase & operator<<( StreamBase & msg, const ScenarioBonusData & data );
         friend StreamBase & operator>>( StreamBase & msg, ScenarioBonusData & data );
 
         std::string getName() const;

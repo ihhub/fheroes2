@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -184,13 +184,19 @@ public:
 
     void setHandicapStatus( const HandicapStatus status );
 
-    // This mode sets control from a human player to AI so the game will be continued by AI.
-    void setAIAutoControlMode( const bool enable );
-
+#if defined( WITH_DEBUG )
     bool isAIAutoControlMode() const
     {
         return _isAIAutoControlMode;
     }
+
+    // Sets whether a given human player is controlled by AI. See the implementation for details.
+    void setAIAutoControlMode( const bool enable );
+
+    // Turns the planned value of whether a given human player is controlled by AI into the actual value.
+    // Should be called only if this mode is actually enabled.
+    void commitAIAutoControlMode();
+#endif
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const Player & );
@@ -206,8 +212,14 @@ protected:
     std::shared_ptr<AI::Base> _ai;
     HandicapStatus _handicapStatus;
 
-    // This member should not be saved anywhere.
+#if defined( WITH_DEBUG )
+    // These members should not be saved anywhere
+
+    // Actual value of whether a given human player is controlled by AI
     bool _isAIAutoControlMode;
+    // Planned value of whether a given human player is controlled by AI (will become actual upon committing it)
+    bool _isAIAutoControlModePlanned;
+#endif
 };
 
 StreamBase & operator<<( StreamBase &, const Player & );
@@ -243,14 +255,25 @@ public:
     static int GetPlayerRace( int color );
     static int GetPlayerFriends( int color );
     static bool GetPlayerInGame( int color );
+    static std::vector<int> getInPlayOpponents( const int color );
     static bool isFriends( int player, int colors );
     static void SetPlayerRace( int color, int race );
     static void SetPlayerControl( int color, int ctrl );
     static void SetPlayerInGame( int color, bool );
     static int HumanColors();
+    // Return current player friends colors, if player does not exist he has no friends (returns 0).
     static int FriendColors();
 
-    int current_color;
+    int getCurrentColor() const
+    {
+        return _currentColor;
+    }
+
+    // The color should belong to one player or be NONE (neutral player).
+    void setCurrentColor( const int color );
+
+private:
+    int _currentColor{ Color::NONE };
 };
 
 StreamBase & operator<<( StreamBase &, const Players & );

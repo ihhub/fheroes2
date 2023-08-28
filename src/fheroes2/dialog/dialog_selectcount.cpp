@@ -33,6 +33,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_delays.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -46,10 +47,13 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_keyboard.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 
 namespace
 {
+    const int32_t textOffset = 24;
+
     void SwitchMaxMinButtons( fheroes2::ButtonBase & minButton, fheroes2::ButtonBase & maxButton, uint32_t currentValue, uint32_t minimumValue )
     {
         const bool isMinValue = ( currentValue <= minimumValue );
@@ -263,9 +267,9 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     fheroes2::Blit( inputArea, display, dst_pt.x, dst_pt.y );
     const fheroes2::Rect text_rt( dst_pt.x, dst_pt.y, inputArea.width(), inputArea.height() );
 
-    Text text( "_", Font::BIG );
+    fheroes2::Text text( "_", fheroes2::FontType::normalWhite() );
     fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
-    text.Blit( dst_pt.x + ( inputArea.width() - text.w() ) / 2, dst_pt.y - 1 );
+    text.draw( text_rt.x + ( text_rt.width - text.width() ) / 2, text_rt.y + 3, display );
 
     const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
@@ -304,10 +308,13 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
     LocalEvent & le = LocalEvent::Get();
 
+    bool isCursorVisible = true;
+
+    Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
+
     const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
-    // message loop
-    while ( le.HandleEvents() ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
         bool redraw = false;
 
         buttonOk.isEnabled() && le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -325,6 +332,9 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
         if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( text_rt ) ) ) {
             fheroes2::openVirtualKeyboard( res );
+            if ( charLimit > 0 && res.size() > charLimit ) {
+                res.resize( charLimit );
+            }
             charInsertPos = res.size();
             redraw = true;
         }
@@ -333,6 +343,12 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
                 charInsertPos = InsertKeySym( res, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
                 redraw = true;
             }
+        }
+        else if ( le.MouseClickLeft( text_rt ) ) {
+            charInsertPos = fheroes2::getTextInputCursorPosition( res, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x,
+                                                                  text_rt.x + ( text_rt.width - text.width() ) / 2 );
+
+            redraw = true;
         }
 
         if ( le.MousePressRight( buttonCancel.area() ) ) {
@@ -343,6 +359,12 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
         }
         else if ( le.MousePressRight( buttonVirtualKB.area() ) ) {
             Dialog::Message( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Font::BIG );
+        }
+
+        // Text input cursor blink.
+        if ( Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
+            isCursorVisible = !isCursorVisible;
+            redraw = true;
         }
 
         if ( redraw ) {
@@ -356,13 +378,12 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
                 buttonOk.draw();
             }
 
-            text.Set( InsertString( res, charInsertPos, "_" ) );
+            text.set( insertCharToString( res, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
+            text.fitToOneRow( inputArea.width() - textOffset );
 
-            if ( text.w() < inputArea.width() - 24 ) {
-                fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
-                text.Blit( text_rt.x + ( text_rt.width - text.w() ) / 2, text_rt.y + 1 );
-                display.render();
-            }
+            fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
+            text.draw( text_rt.x + ( text_rt.width - text.width() ) / 2, text_rt.y + 3, display );
+            display.render();
         }
     }
 

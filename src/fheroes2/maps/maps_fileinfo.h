@@ -54,7 +54,7 @@ namespace Maps
         FileInfo & operator=( FileInfo && ) = default;
 
         bool ReadMP2( const std::string & filePath );
-        bool ReadSAV( const std::string & filePath );
+        bool ReadSAV( std::string filePath );
 
         bool operator==( const FileInfo & fi ) const
         {
@@ -196,6 +196,9 @@ using MapsFileInfoList = std::vector<Maps::FileInfo>;
 namespace Maps
 {
     MapsFileInfoList PrepareMapsFileInfoList( const bool multi );
+
+    // Creates the list of fheroes2 Resurrection map files.
+    MapsFileInfoList prepareResurrectionMapsFileInfoList();
 }
 
 #endif

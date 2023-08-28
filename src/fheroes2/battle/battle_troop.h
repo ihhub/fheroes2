@@ -182,11 +182,11 @@ namespace Battle
         bool isUnderSpellEffect( const Spell & spell ) const;
         std::vector<Spell> getCurrentSpellEffects() const;
         void PostAttackAction();
-        void SetBlindAnswer( bool value );
-        void SpellModesAction( const Spell &, uint32_t, const HeroBase * );
-        void SpellApplyDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, TargetInfo & target );
+
+        // Sets whether a unit performs a retaliatory attack while being blinded (i.e. with reduced efficiency)
+        void SetBlindRetaliation( bool value );
+
         uint32_t CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, uint32_t targetDamage, bool ignoreDefendingHero ) const;
-        void SpellRestoreAction( const Spell &, uint32_t, const HeroBase * );
 
         bool SwitchAnimation( int rule, bool reverse = false );
         bool SwitchAnimation( const std::vector<int> & animationList, bool reverse = false );
@@ -262,7 +262,7 @@ namespace Battle
             return idleTimer.checkDelay();
         }
 
-        // Remove temporary affection(s) (usually spell effect(s)). Multiple affections can be removed using a single call.
+        // Removes temporary affection(s) (usually spell effect(s)). Multiple affections can be removed using a single call.
         void removeAffection( const uint32_t mode );
 
         // TODO: find a better way to expose it without a million getters/setters
@@ -272,10 +272,17 @@ namespace Battle
         uint32_t ApplyDamage( const uint32_t dmg );
         uint32_t Resurrect( const uint32_t points, const bool allow_overflow, const bool skip_dead );
 
-        // Add a temporary affection (usually a spell effect) with the specified duration. Only one affection can be added.
+        // Applies a damage-causing spell to this unit
+        void SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * hero, TargetInfo & target );
+        // Applies a restoring or reviving spell to this unit
+        void SpellRestoreAction( const Spell & spell, const uint32_t spellPoints, const HeroBase * hero );
+        // Applies a spell to this unit that changes its parameters
+        void SpellModesAction( const Spell & spell, uint32_t duration, const HeroBase * hero );
+
+        // Adds a temporary affection (usually a spell effect) with the specified duration. Only one affection can be added.
         void addAffection( const uint32_t mode, const uint32_t duration );
 
-        // Replace some temporary affection(s) with another affection. Multiple affections can be replaced by a new one (but
+        // Replaces some temporary affection(s) with another affection. Multiple affections can be replaced by a new one (but
         // only one) with a single call.
         void replaceAffection( const uint32_t modeToReplace, const uint32_t replacementMode, const uint32_t duration );
 
@@ -292,7 +299,9 @@ namespace Battle
         Unit * mirror;
         RandomizedDelay idleTimer;
 
-        bool blindanswer;
+        // Whether a unit performs a retaliatory attack while being blinded (i.e. with reduced efficiency)
+        bool _blindRetaliation;
+
         uint8_t customAlphaMask;
 
         const Rand::DeterministicRandomGenerator & _randomGenerator;

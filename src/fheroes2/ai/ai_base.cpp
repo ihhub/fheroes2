@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -88,6 +88,16 @@ namespace AI
         // Do nothing.
     }
 
+    void Base::HeroesBeginMovement( Heroes & /* hero */ )
+    {
+        // Do nothing.
+    }
+
+    void Base::HeroesFinishMovement( Heroes & /* hero */ )
+    {
+        // Do nothing.
+    }
+
     void Base::HeroesPreBattle( HeroBase &, bool )
     {
         // Do nothing.
@@ -103,17 +113,12 @@ namespace AI
         // Do nothing.
     }
 
-    void Base::HeroesClearTask( const Heroes & )
-    {
-        // Do nothing.
-    }
-
     std::string Base::HeroesString( const Heroes & )
     {
         return std::string();
     }
 
-    void Base::HeroesActionComplete( Heroes & /*hero*/, int32_t /* tileIndex*/, const MP2::MapObjectType /*objectType*/ )
+    void Base::HeroesActionComplete( Heroes & /*hero*/, const int32_t /* tileIndex*/, const MP2::MapObjectType /*objectType*/ )
     {
         // Do nothing.
     }

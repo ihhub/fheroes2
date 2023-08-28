@@ -37,6 +37,7 @@
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
+#include "campaign_savedata.h"
 #include "dialog.h"
 #include "game.h"
 #include "heroes.h"
@@ -217,21 +218,27 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
     }
 
     const bool isHumanBattle = army1.isControlHuman() || army2.isControlHuman();
-    bool showBattle = !Settings::Get().BattleAutoResolve() && isHumanBattle;
+
+    const Settings & conf = Settings::Get();
+    bool showBattle = !conf.BattleAutoResolve() && isHumanBattle;
 
 #ifdef WITH_DEBUG
-    if ( IS_DEBUG( DBG_BATTLE, DBG_TRACE ) )
-        showBattle = true;
-#endif
-
     if ( !showBattle ) {
-        const Player * player1 = Players::Get( army1.GetColor() );
-        const Player * player2 = Players::Get( army2.GetColor() );
-
-        if ( ( player1 != nullptr && player1->isAIAutoControlMode() ) || ( player2 != nullptr && player2->isAIAutoControlMode() ) ) {
+        // The battle is always shown either in battle debugging mode ...
+        if ( IS_DEBUG( DBG_BATTLE, DBG_TRACE ) ) {
             showBattle = true;
         }
+        // ... or when any of the participating human players are controlled by AI
+        else {
+            const Player * player1 = Players::Get( army1.GetColor() );
+            const Player * player2 = Players::Get( army2.GetColor() );
+
+            if ( ( player1 != nullptr && player1->isAIAutoControlMode() ) || ( player2 != nullptr && player2->isAIAutoControlMode() ) ) {
+                showBattle = true;
+            }
+        }
     }
+#endif
 
     const uint32_t battleSeed = computeBattleSeed( mapsindex, world.GetMapSeed(), army1, army2 );
 
@@ -294,6 +301,14 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
 
                 if ( winnerHero->isControlHuman() ) {
                     std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
+                }
+            }
+
+            if ( loserHero->isControlAI() ) {
+                const Heroes * loserAdventureHero = dynamic_cast<const Heroes *>( loserHero );
+
+                if ( loserAdventureHero != nullptr && conf.isCampaignGameType() ) {
+                    Campaign::CampaignSaveData::Get().setEnemyDefeatedAward( loserAdventureHero->GetID() );
                 }
             }
         }

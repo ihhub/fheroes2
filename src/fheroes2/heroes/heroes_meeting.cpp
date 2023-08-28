@@ -40,6 +40,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_hotkeys.h"
+#include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "heroes_indicator.h"
@@ -75,9 +76,9 @@ namespace
         size_t toIdx = 0;
 
         for ( size_t fromIdx = 0; fromIdx < bagFrom.size(); ++fromIdx ) {
-            if ( bagFrom[fromIdx].GetID() != Artifact::UNKNOWN && bagFrom[fromIdx].GetID() != Artifact::MAGIC_BOOK ) {
+            if ( bagFrom[fromIdx].isValid() && bagFrom[fromIdx].GetID() != Artifact::MAGIC_BOOK ) {
                 while ( toIdx < bagTo.size() ) {
-                    if ( bagTo[toIdx].GetID() == Artifact::UNKNOWN )
+                    if ( !bagTo[toIdx].isValid() )
                         break;
 
                     ++toIdx;
@@ -116,7 +117,7 @@ public:
         if ( !troop.isValid() )
             return;
 
-        Text text( std::to_string( troop.GetCount() ), Font::SMALL );
+        const Text text( std::to_string( troop.GetCount() ), Font::SMALL );
 
         const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
         fheroes2::Rect srcrt( 0, 0, mons32.width(), mons32.height() );
@@ -229,7 +230,7 @@ public:
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
         fheroes2::Blit( sprite, image, roi.x + ( roi.width - sprite.width() ) / 2, roi.y + ( roi.height - sprite.height() ) / 2 );
 
-        Text text( std::to_string( skill.Level() ), Font::SMALL );
+        const Text text( std::to_string( skill.Level() ), Font::SMALL );
         text.Blit( roi.x + ( roi.width - text.w() ) - 3, roi.y + roi.height - text.h(), image );
     }
 
@@ -248,7 +249,14 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     const fheroes2::Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
     fheroes2::ImageRestorer restorer( display, cur_pt.x, cur_pt.y, backSprite.width(), backSprite.height() );
 
-    fheroes2::Rect src_rt( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+    const fheroes2::Rect src_rt( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+
+    // Fade-out game screen only for 640x480 resolution.
+    const fheroes2::Rect fadeRoi( src_rt + cur_pt );
+    const bool isDefaultScreenSize = display.isDefaultSize();
+    if ( isDefaultScreenSize ) {
+        fheroes2::fadeOutDisplay();
+    }
 
     // background
     fheroes2::Point dst_pt( cur_pt );
@@ -258,7 +266,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     std::string message( _( "%{name1} meets %{name2}" ) );
     StringReplace( message, "%{name1}", GetName() );
     StringReplace( message, "%{name2}", otherHero.GetName() );
-    Text text( message, Font::BIG );
+    const Text text( message, Font::BIG );
     text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 27 );
 
     const int iconsH1XOffset = 34;
@@ -269,13 +277,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     dst_pt.x = cur_pt.x + 93;
     dst_pt.y = cur_pt.y + portraitYOffset;
     const fheroes2::Sprite & portrait1 = GetPortrait( PORT_BIG );
-    fheroes2::Rect hero1Area( dst_pt.x, dst_pt.y, portrait1.width(), portrait1.height() );
+    const fheroes2::Rect hero1Area( dst_pt.x, dst_pt.y, portrait1.width(), portrait1.height() );
     PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     dst_pt.x = cur_pt.x + 445;
     dst_pt.y = cur_pt.y + portraitYOffset;
     const fheroes2::Sprite & portrait2 = otherHero.GetPortrait( PORT_BIG );
-    fheroes2::Rect hero2Area( dst_pt.x, dst_pt.y, portrait2.width(), portrait2.height() );
+    const fheroes2::Rect hero2Area( dst_pt.x, dst_pt.y, portrait2.width(), portrait2.height() );
     otherHero.PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     MoraleIndicator moraleIndicator1( this );
@@ -391,7 +399,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     // button exit
     dst_pt.x = cur_pt.x + 280;
     dst_pt.y = cur_pt.y + 428;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::SWAPBTN, 0, 1 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_EXIT_HEROES_MEETING, 0, 1 );
 
     moveArmyToHero2.draw();
     moveArmyToHero1.draw();
@@ -399,7 +407,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     moveArtifactsToHero1.draw();
     buttonExit.draw();
 
-    display.render();
+    // Fade-in heroes meeting dialog. Use half fade if game resolution is not 640x480.
+    // This dialog currently does not have borders so its ROI is the same as fade ROI.
+    fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
 
     const int32_t hero1ScoutAreaBonus = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
     const int32_t hero2ScoutAreaBonus = otherHero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE );
@@ -510,8 +520,29 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             LuckIndicator::QueueEventProcessing( luckIndicator2 );
         }
 
-        if ( le.MouseClickLeft( hero1Area ) ) {
-            Game::OpenHeroesDialog( *this, false, true, true );
+        const bool isHero1LeftClicked = le.MouseClickLeft( hero1Area );
+
+        if ( isHero1LeftClicked || le.MouseClickLeft( hero2Area ) ) {
+            // Currently we are calling hero dialog with borders from meeting dialog without borders
+            // so the engine thinks that we are opening there was now window before to fade-out.
+            // We also have to cache the display image to properly restore it after closing hero dialog.
+
+            const fheroes2::Rect restorerRoi( cur_pt.x - 2 * BORDERWIDTH, cur_pt.y - BORDERWIDTH, src_rt.width + 3 * BORDERWIDTH, src_rt.height + 3 * BORDERWIDTH );
+            fheroes2::ImageRestorer dialogRestorer( display, restorerRoi.x, restorerRoi.y, restorerRoi.width, restorerRoi.height );
+
+            // If game display resolution is 640x480 then all fade effects are done in 'OpenHeroesDialog()' except fade-in after dialog close.
+            if ( !isDefaultScreenSize ) {
+                fheroes2::fadeOutDisplay( fadeRoi, true );
+            }
+
+            Game::OpenHeroesDialog( isHero1LeftClicked ? *this : otherHero, false, true, true );
+
+            if ( !isDefaultScreenSize ) {
+                dialogRestorer.restore();
+            }
+            else {
+                dialogRestorer.reset();
+            }
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
@@ -527,30 +558,12 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             selectArmy2.Redraw( display );
 
             moraleIndicator1.Redraw();
-            luckIndicator1.Redraw();
-
-            display.render();
-        }
-        else if ( le.MouseClickLeft( hero2Area ) ) {
-            Game::OpenHeroesDialog( otherHero, false, true, true );
-
-            armyCountBackgroundRestorerLeft.restore();
-            armyCountBackgroundRestorerRight.restore();
-
-            selectArtifacts1.ResetSelected();
-            selectArtifacts2.ResetSelected();
-            selectArtifacts1.Redraw( display );
-            selectArtifacts2.Redraw( display );
-
-            selectArmy1.ResetSelected();
-            selectArmy2.ResetSelected();
-            selectArmy1.Redraw( display );
-            selectArmy2.Redraw( display );
-
             moraleIndicator2.Redraw();
+            luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
-            display.render();
+            display.updateNextRenderRoi( restorerRoi );
+            fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
         }
         else if ( le.MouseClickLeft( moveArmyToHero2.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
             const ArmyTroop * keep = nullptr;
@@ -653,6 +666,10 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     backPrimary.reset();
     armyCountBackgroundRestorerLeft.reset();
     armyCountBackgroundRestorerRight.reset();
+
+    // Fade-out heroes meeting dialog.
+    fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
+
     restorer.restore();
 
     // If the scout area bonus is increased with the new artifact we reveal the fog and update the radar.
@@ -665,5 +682,12 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         otherHero.ScoutRadar();
     }
 
-    display.render();
+    // Set fade-in game screen only for 640x480 resolution.
+    if ( isDefaultScreenSize ) {
+        Game::setDisplayFadeIn();
+    }
+    else {
+        // Heroes meeting dialog currently does not have borders so its ROI is the same as fade ROI.
+        display.render( fadeRoi );
+    }
 }

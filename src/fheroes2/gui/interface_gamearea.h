@@ -37,7 +37,7 @@
 
 namespace Interface
 {
-    class Basic;
+    class BaseInterface;
 
     enum ScrollingType
     {
@@ -150,7 +150,7 @@ namespace Interface
     class GameArea
     {
     public:
-        explicit GameArea( Basic & basic );
+        explicit GameArea( BaseInterface & interface );
         GameArea( const GameArea & ) = default;
         GameArea( GameArea && ) = delete;
 
@@ -203,6 +203,8 @@ namespace Interface
         // Do not call this method directly if the rendering takes place on the screen, use
         // Interface::Basic::Redraw() instead to avoid issues in the "no interface" mode
         void Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw = false ) const;
+
+        void renderTileAreaSelect( fheroes2::Image & dst, const int32_t startTile, const int32_t endTile ) const;
 
         void BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const fheroes2::Point & mp, bool flip, uint8_t alpha ) const;
 
@@ -262,7 +264,7 @@ namespace Interface
         }
 
     private:
-        Basic & interface;
+        BaseInterface & _interface;
 
         fheroes2::Rect _windowROI; // visible to draw area of World Map in pixels
         fheroes2::Point _topLeftTileOffset; // offset of tiles to be drawn (from here we can find any tile ID)

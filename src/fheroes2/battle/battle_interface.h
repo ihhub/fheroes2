@@ -26,6 +26,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -45,7 +46,6 @@ class Castle;
 class HeroBase;
 class Kingdom;
 class LocalEvent;
-class Settings;
 
 namespace fheroes2
 {
@@ -114,7 +114,7 @@ namespace Battle
     class OpponentSprite
     {
     public:
-        OpponentSprite( const fheroes2::Rect &, const HeroBase *, bool );
+        OpponentSprite( const fheroes2::Rect & area, const HeroBase * hero, const bool isReflect );
         OpponentSprite( const OpponentSprite & ) = delete;
 
         OpponentSprite & operator=( const OpponentSprite & ) = delete;
@@ -130,8 +130,8 @@ namespace Battle
         // Return true is animation state was changed.
         bool updateAnimationState();
 
-        void SetAnimation( int rule );
-        void IncreaseAnimFrame( bool loop = false );
+        void SetAnimation( const int rule );
+        void IncreaseAnimFrame( const bool loop = false );
 
         bool isFinishFrame() const
         {
@@ -178,14 +178,14 @@ namespace Battle
 
         Status & operator=( const Status & ) = delete;
 
-        void SetPosition( int32_t, int32_t );
+        void SetPosition( const int32_t cx, const int32_t cy );
 
         void SetLogs( StatusListBox * logs )
         {
             listlog = logs;
         }
 
-        void SetMessage( const std::string & message, bool top = false );
+        void SetMessage( const std::string & messageString, const bool top = false );
         void Redraw( fheroes2::Image & output ) const;
 
         const std::string & GetMessage() const
@@ -281,18 +281,24 @@ namespace Battle
         void RedrawPartialFinish();
 
         void getPendingActions( Actions & actions );
-        void HumanTurn( const Unit &, Actions & );
+        void HumanTurn( const Unit & unit, Actions & actions );
 
         const fheroes2::Rect & GetArea() const
         {
             return _surfaceInnerArea;
         }
 
+        // Battlefield interface ROI.
+        const fheroes2::Rect & GetInterfaceRoi() const
+        {
+            return _interfacePosition;
+        }
+
         fheroes2::Point GetMouseCursor() const;
 
-        void SetStatus( const std::string &, bool = false );
+        void SetStatus( const std::string & message, const bool top = false );
         void SetOrderOfUnits( const std::shared_ptr<const Units> & units );
-        void FadeArena( bool clearMessageLog );
+        void FadeArena( const bool clearMessageLog );
 
         void RedrawActionNewTurn() const;
         void RedrawActionAttackPart1( Unit & attacker, const Unit & defender, const TargetsInfo & targets );
@@ -300,24 +306,24 @@ namespace Battle
         void RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets );
         void RedrawActionSpellCastPart1( const Spell & spell, int32_t dst, const HeroBase * caster, const TargetsInfo & targets );
         void RedrawActionSpellCastPart2( const Spell & spell, const TargetsInfo & targets );
-        void RedrawActionResistSpell( const Unit & target, bool playSound );
+        void RedrawActionResistSpell( const Unit & target, const bool playSound );
         void RedrawActionMonsterSpellCastStatus( const Spell & spell, const Unit & attacker, const TargetInfo & target );
-        void RedrawActionMove( Unit &, const Indexes & );
-        void RedrawActionFly( Unit &, const Position & );
-        void RedrawActionMorale( Unit &, bool );
-        void RedrawActionLuck( const Unit & );
-        void RedrawActionTowerPart1( const Tower &, const Unit & );
-        void RedrawActionTowerPart2( const Tower &, const TargetInfo & );
+        void RedrawActionMove( Unit & unit, const Indexes & path );
+        void RedrawActionFly( Unit & unit, const Position & pos );
+        void RedrawActionMorale( Unit & unit, const bool isGoodMorale );
+        void RedrawActionLuck( const Unit & unit );
+        void RedrawActionTowerPart1( const Tower & tower, const Unit & defender );
+        void RedrawActionTowerPart2( const Tower & tower, const TargetInfo & target );
         void RedrawActionCatapultPart1( const int catapultTargetId, const bool isHit );
         void RedrawActionCatapultPart2( const int catapultTargetId );
-        void RedrawActionTeleportSpell( Unit &, int32_t );
-        void RedrawActionEarthQuakeSpell( const std::vector<int> & );
+        void RedrawActionTeleportSpell( Unit & target, const int32_t dst );
+        void RedrawActionEarthQuakeSpell( const std::vector<int> & targets );
         void RedrawActionSummonElementalSpell( Unit & target );
-        void RedrawActionMirrorImageSpell( const Unit &, const Position & );
-        void RedrawActionSkipStatus( const Unit & );
+        void RedrawActionMirrorImageSpell( const Unit & target, const Position & pos );
+        void RedrawActionSkipStatus( const Unit & unit );
         void RedrawActionRemoveMirrorImage( const std::vector<Unit *> & mirrorImages );
         void RedrawBridgeAnimation( const bool bridgeDownAnimation );
-        void RedrawMissileAnimation( const fheroes2::Point & startPos, const fheroes2::Point & endPos, double angle, uint32_t monsterID );
+        void RedrawMissileAnimation( const fheroes2::Point & startPos, const fheroes2::Point & endPos, const double angle, const uint32_t monsterID );
 
     private:
         enum CreatureSpellAnimation
@@ -327,19 +333,21 @@ namespace Battle
             RESURRECT
         };
 
-        void HumanBattleTurn( const Unit &, Actions &, std::string & );
-        void HumanCastSpellTurn( const Unit &, Actions &, std::string & );
+        void HumanBattleTurn( const Unit & unit, Actions & actions, std::string & msg );
+        void HumanCastSpellTurn( const Unit & /* unused */, Actions & actions, std::string & msg );
 
         void RedrawCover();
-        void RedrawCoverStatic( const Settings & conf, const Board & board );
-        void RedrawLowObjects( int32_t );
-        void RedrawHighObjects( int32_t );
-        void RedrawCastle( const Castle &, int32_t );
-        void RedrawCastleMainTower( const Castle & );
+        void _redrawBattleGround();
+        void _redrawCoverStatic();
+        void RedrawLowObjects( const int32_t cellId );
+        void RedrawHighObjects( const int32_t cellId );
+        void RedrawCastle( const Castle & castle, const int32_t cellId );
+        void RedrawCastleMainTower( const Castle & castle );
         void RedrawKilled();
         void RedrawInterface();
         void RedrawOpponents();
         void RedrawOpponentsFlags();
+        void redrawPreRender();
         void RedrawArmies();
         void RedrawTroopSprite( const Unit & unit );
 
@@ -348,53 +356,54 @@ namespace Battle
         void RedrawTroopCount( const Unit & unit );
 
         void RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker = nullptr, const Unit * defender = nullptr );
-        void RedrawActionArrowSpell( const Unit & );
-        void RedrawActionColdRaySpell( Unit & );
-        void RedrawActionDisruptingRaySpell( const Unit & );
-        void RedrawActionBloodLustSpell( const Unit & );
+        void RedrawActionArrowSpell( const Unit & target );
+        void RedrawActionColdRaySpell( Unit & target );
+        void RedrawActionDisruptingRaySpell( const Unit & target );
+        void RedrawActionBloodLustSpell( const Unit & target );
         void RedrawActionStoneSpell( const Unit & target );
-        void RedrawActionColdRingSpell( int32_t, const TargetsInfo & );
-        void RedrawActionElementalStormSpell( const TargetsInfo & );
+        void RedrawActionColdRingSpell( const int32_t dst, const TargetsInfo & targets );
+        void RedrawActionElementalStormSpell( const TargetsInfo & targets );
         void RedrawActionArmageddonSpell();
         void RedrawActionHolyShoutSpell( const uint8_t strength );
-        void RedrawActionResurrectSpell( Unit &, const Spell & );
-        void RedrawActionDeathWaveSpell( const int strength );
-        void RedrawActionLightningBoltSpell( const Unit & );
-        void RedrawActionChainLightningSpell( const TargetsInfo & );
+        void RedrawActionResurrectSpell( Unit & target, const Spell & spell );
+        void RedrawActionDeathWaveSpell( const int32_t strength );
+        void RedrawActionLightningBoltSpell( const Unit & target );
+        void RedrawActionChainLightningSpell( const TargetsInfo & targets );
         void RedrawLightningOnTargets( const std::vector<fheroes2::Point> & points, const fheroes2::Rect & drawRoi ); // helper function
-        void RedrawRaySpell( const Unit & target, int spellICN, int spellSound, int32_t size );
+        void RedrawRaySpell( const Unit & target, const int spellICN, const int spellSound, const int32_t size );
 
         // Wait for all possible battlefield action delays that could be set in previous functions to pass.
         // Use this if a function may be called from other functions with different render delay types.
         void WaitForAllActionDelays();
 
-        void AnimateOpponents( OpponentSprite * target );
+        void AnimateOpponents( OpponentSprite * hero );
         void AnimateUnitWithDelay( Unit & unit, const bool skipLastFrameRender = false );
         void RedrawTroopDefaultDelay( Unit & unit );
-        void RedrawTroopWithFrameAnimation( Unit & unit, int icn, int m82, CreatureSpellAnimation animation );
-        void RedrawTargetsWithFrameAnimation( int32_t dst, const TargetsInfo & targets, int icn, int m82, int repeatCount = 0 );
-        void RedrawTargetsWithFrameAnimation( const TargetsInfo &, int, int, bool );
+        void RedrawTroopWithFrameAnimation( Unit & unit, const int icn, const int m82, const CreatureSpellAnimation animation );
+        void RedrawTargetsWithFrameAnimation( const int32_t dst, const TargetsInfo & targets, const int icn, const int m82, int repeatCount = 0 );
+        void RedrawTargetsWithFrameAnimation( const TargetsInfo & targets, const int icn, const int m82, const bool wnce );
 
         bool IdleTroopsAnimation() const;
         void ResetIdleTroopAnimation() const;
         void SwitchAllUnitsAnimation( const int32_t animationState ) const;
         void UpdateContourColor();
         void CheckGlobalEvents( LocalEvent & );
-        void SetHeroAnimationReactionToTroopDeath( const int32_t deathColor );
+        void SetHeroAnimationReactionToTroopDeath( const int32_t deathColor ) const;
 
-        void ProcessingHeroDialogResult( int, Actions & );
+        void ProcessingHeroDialogResult( const int result, Actions & actions );
 
-        void EventAutoSwitch( const Unit &, Actions & );
-        void EventAutoFinish( Actions & a );
+        void _openBattleSettingsDialog();
+        void EventAutoSwitch( const Unit & unit, Actions & actions );
+        void EventAutoFinish( Actions & actions );
         void EventShowOptions();
-        void ButtonAutoAction( const Unit &, Actions & );
+        void ButtonAutoAction( const Unit & unit, Actions & actions );
         void ButtonSettingsAction();
-        void ButtonSkipAction( Actions & );
-        void MouseLeftClickBoardAction( int themes, const Cell & cell, Actions & a );
+        void ButtonSkipAction( Actions & acrions );
+        void MouseLeftClickBoardAction( const int themes, const Cell & cell, Actions & actions );
         void MousePressRightBoardAction( const Cell & cell ) const;
 
-        int GetBattleCursor( std::string & ) const;
-        int GetBattleSpellCursor( std::string & ) const;
+        int GetBattleCursor( std::string & statusMsg ) const;
+        int GetBattleSpellCursor( std::string & statusMsg ) const;
 
         Arena & arena;
         Dialog::FrameBorder border;
@@ -402,6 +411,7 @@ namespace Battle
         fheroes2::Rect _interfacePosition;
         fheroes2::Rect _surfaceInnerArea;
         fheroes2::Image _mainSurface;
+        fheroes2::Image _battleGround;
         fheroes2::Image _hexagonGrid;
         fheroes2::Image _hexagonShadow;
         fheroes2::Image _hexagonGridShadow;
@@ -415,8 +425,8 @@ namespace Battle
         fheroes2::Button btn_skip;
         Status status;
 
-        OpponentSprite * opponent1;
-        OpponentSprite * opponent2;
+        std::unique_ptr<OpponentSprite> _opponent1;
+        std::unique_ptr<OpponentSprite> _opponent2;
 
         Spell humanturn_spell;
         bool humanturn_exit;
@@ -425,6 +435,9 @@ namespace Battle
         int catapult_frame;
 
         int _interruptAutoBattleForColor;
+
+        // The Channel ID of pre-battle sound. Used to check it is over to start the battle music.
+        std::optional<int> _preBattleSoundChannelId{ -1 };
 
         uint8_t _contourColor;
         bool _brightLandType; // used to determine current monster contour cycling colors
