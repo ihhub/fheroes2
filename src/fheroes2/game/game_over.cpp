@@ -411,12 +411,14 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
     const int humanColors = Players::HumanColors();
     const int currentColor = conf.CurrentColor();
     const bool isSinglePlayer = ( Color::Count( humanColors ) == 1 );
+    // Remembers whether the current player was considered active at the time of calling this function
+    const bool isCurrentPlayerWasActive = ( currentColor & colors );
 
     int activeHumanColors = 0;
 
     for ( const int color : Colors( colors ) ) {
         if ( !world.GetKingdom( color ).isPlay() ) {
-            if ( ( !isSinglePlayer && color != currentColor ) || ( color & humanColors ) == 0 ) {
+            if ( ( !isSinglePlayer && color != currentColor ) || !( color & humanColors ) ) {
                 Game::DialogPlayers( color, _( "Major Event!" ), _( "%{color} player has been vanquished!" ) );
             }
 
@@ -430,19 +432,19 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
     if ( isSinglePlayer ) {
         assert( activeHumanColors <= 1 );
 
-        const Kingdom & myKingdom = world.GetKingdom( humanColors );
+        const Kingdom & kingdom = world.GetKingdom( humanColors );
 
 #if defined( WITH_DEBUG )
-        const Player * humanPlayer = Players::Get( humanColors );
-        assert( humanPlayer != nullptr );
+        const Player * player = Players::Get( humanColors );
+        assert( player != nullptr );
 
-        const bool isAIAutoControlMode = humanPlayer->isAIAutoControlMode();
+        const bool isAIAutoControlMode = player->isAIAutoControlMode();
 #else
         const bool isAIAutoControlMode = false;
 #endif
 
-        if ( myKingdom.isControlHuman() || isAIAutoControlMode ) {
-            result = world.CheckKingdomWins( myKingdom );
+        if ( kingdom.isControlHuman() || isAIAutoControlMode ) {
+            result = world.CheckKingdomWins( kingdom );
 
             if ( result != GameOver::COND_NONE ) {
                 DialogWins( result );
@@ -463,17 +465,17 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
             }
             else {
                 // If the player's kingdom has been vanquished, he loses regardless of other conditions
-                if ( !myKingdom.isPlay() ) {
+                if ( !kingdom.isPlay() ) {
                     result = GameOver::LOSS_ALL;
                 }
                 else {
-                    result = world.CheckKingdomLoss( myKingdom );
+                    result = world.CheckKingdomLoss( kingdom );
                 }
 
                 if ( result != GameOver::COND_NONE ) {
-                    // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town
-                    // This case was already handled at the end of the Interface::Basic::HumanTurn()
-                    if ( !( result == GameOver::LOSS_ALL && myKingdom.GetCastles().empty() && myKingdom.GetLostTownDays() == 0 ) ) {
+                    // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town.
+                    // This case was already handled at the end of the Interface::AdventureMap::HumanTurn().
+                    if ( !( result == GameOver::LOSS_ALL && kingdom.GetCastles().empty() && kingdom.GetLostTownDays() == 0 ) ) {
                         DialogLoss( result );
                     }
 
@@ -486,25 +488,74 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
         }
     }
     else {
-        // There are no active human-controlled players left, game over
-        if ( activeHumanColors == 0 ) {
+        // The result of the multiplayer game shouldn't be stored by this class
+        const uint32_t multiplayerResult = [currentColor, activeHumanColors]() -> uint32_t {
+            // If all human-controlled players have been vanquished, then the game is over
+            if ( activeHumanColors == 0 ) {
+                return GameOver::LOSS_ALL;
+            }
+
+            // Do not perform other checks if there is no active kingdom at the moment
+            if ( !( currentColor & Color::ALL ) ) {
+                return GameOver::COND_NONE;
+            }
+
+            const Kingdom & kingdom = world.GetKingdom( currentColor );
+
+#if defined( WITH_DEBUG )
+            const Player * player = Players::Get( currentColor );
+            assert( player != nullptr );
+
+            const bool isAIAutoControlMode = player->isAIAutoControlMode();
+#else
+            const bool isAIAutoControlMode = false;
+#endif
+
+            // Check the win/loss conditions for human-controlled players only
+            if ( !kingdom.isControlHuman() && !isAIAutoControlMode ) {
+                return GameOver::COND_NONE;
+            }
+
+            // If the player's kingdom has been vanquished, this particular player loses regardless of other conditions
+            if ( !kingdom.isPlay() ) {
+                return GameOver::LOSS_ALL;
+            }
+
+            uint32_t condition = world.CheckKingdomWins( kingdom );
+
+            if ( condition != GameOver::COND_NONE ) {
+                return condition;
+            }
+
+            condition = world.CheckKingdomLoss( kingdom );
+
+            // LOSS_TOWN is currently not supported in multiplayer
+            if ( condition == GameOver::LOSS_HERO || condition == GameOver::LOSS_TIME || ( condition & GameOver::LOSS_ENEMY_WINS ) ) {
+                return condition;
+            }
+
+            return GameOver::COND_NONE;
+        }();
+
+        if ( multiplayerResult & GameOver::WINS ) {
+            DialogWins( multiplayerResult );
+
             AudioManager::ResetAudio();
-            Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
+            Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
 
             res = fheroes2::GameMode::MAIN_MENU;
         }
-        // Check the regular win/loss conditions
-        else {
-            const auto checkWinLossConditions = []( const int color ) -> uint32_t {
-                // Don't check colors that don't belong to any kingdom (e.g. Color::NONE)
-                if ( Color::Count( color ) != 1 ) {
-                    return GameOver::COND_NONE;
+        else if ( multiplayerResult & GameOver::LOSS ) {
+            const bool showLossDialog = [currentColor, isCurrentPlayerWasActive, multiplayerResult]() {
+                // We shouldn't show the loss notification dialog if there is no active kingdom at the moment
+                if ( !( currentColor & Color::ALL ) ) {
+                    return false;
                 }
 
-                const Kingdom & kingdom = world.GetKingdom( color );
+                const Kingdom & kingdom = world.GetKingdom( currentColor );
 
 #if defined( WITH_DEBUG )
-                const Player * player = Players::Get( color );
+                const Player * player = Players::Get( currentColor );
                 assert( player != nullptr );
 
                 const bool isAIAutoControlMode = player->isAIAutoControlMode();
@@ -512,53 +563,38 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
                 const bool isAIAutoControlMode = false;
 #endif
 
-                // Check the win/loss conditions for human-controlled players only
+                // We shouldn't show the loss notification dialog to AI players
                 if ( !kingdom.isControlHuman() && !isAIAutoControlMode ) {
-                    return GameOver::COND_NONE;
+                    return false;
                 }
 
-                // If the player's kingdom has been vanquished, this particular player loses regardless of other conditions
-                if ( !kingdom.isPlay() ) {
-                    return GameOver::LOSS_ALL;
+                // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town.
+                // This case was already handled at the end of the Interface::AdventureMap::HumanTurn().
+                if ( multiplayerResult == GameOver::LOSS_ALL && kingdom.GetCastles().empty() && kingdom.GetLostTownDays() == 0 ) {
+                    return false;
                 }
 
-                uint32_t condition = world.CheckKingdomWins( kingdom );
-
-                if ( condition != GameOver::COND_NONE ) {
-                    return condition;
+                // LOSS_ALL fulfillment by itself is not a reason to end the multiplayer game, and in this case, this function can be called multiple times.
+                // Show the loss notification dialog just once.
+                if ( !isCurrentPlayerWasActive ) {
+                    return false;
                 }
 
-                condition = world.CheckKingdomLoss( kingdom );
+                return true;
+            }();
 
-                // LOSS_TOWN is currently not supported in multiplayer
-                if ( condition == GameOver::LOSS_HERO || condition == GameOver::LOSS_TIME || ( condition & GameOver::LOSS_ENEMY_WINS ) ) {
-                    return condition;
-                }
+            // LOSS_ALL fulfillment by itself is not a reason to end the multiplayer game, unless all human-controlled players are vanquished
+            const bool endGame = ( multiplayerResult != GameOver::LOSS_ALL || activeHumanColors == 0 );
 
-                return GameOver::COND_NONE;
-            };
+            if ( showLossDialog ) {
+                DialogLoss( multiplayerResult );
+            }
 
-            // The result of the multiplayer game shouldn't be stored by this class
-            const uint32_t multiplayerResult = checkWinLossConditions( currentColor );
-
-            if ( multiplayerResult & GameOver::WINS ) {
-                DialogWins( multiplayerResult );
-
+            if ( endGame ) {
                 AudioManager::ResetAudio();
-                Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
+                Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
 
                 res = fheroes2::GameMode::MAIN_MENU;
-            }
-            else if ( multiplayerResult & GameOver::LOSS ) {
-                DialogLoss( multiplayerResult );
-
-                // LOSS_ALL fulfillment is not a reason to end the game, only this player is vanquished
-                if ( multiplayerResult != GameOver::LOSS_ALL ) {
-                    AudioManager::ResetAudio();
-                    Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
-
-                    res = fheroes2::GameMode::MAIN_MENU;
-                }
             }
         }
     }
