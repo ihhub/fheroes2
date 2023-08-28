@@ -3281,13 +3281,12 @@ namespace
 
                 fheroes2::Display & display = fheroes2::Display::instance();
 
-                const size_t fullTimeViewCount = 3;
-                size_t viewCount = 0;
                 size_t maxDelay = 7;
 
-                for ( const int32_t eyeIndex : eyeMagiIndexes ) {
-                    const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ) );
+                const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ) );
+                bool skipAnimation = false;
 
+                for ( const int32_t eyeIndex : eyeMagiIndexes ) {
                     Maps::ClearFog( eyeIndex, scoutRange, hero.GetColor() );
 
                     const fheroes2::Point eyePosition = Maps::GetPoint( eyeIndex );
@@ -3299,12 +3298,21 @@ namespace
                     I.getRadar().SetRenderArea( eyeRoi );
                     I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
+                    if ( skipAnimation ) {
+                        continue;
+                    }
+
                     display.render();
 
                     LocalEvent & le = LocalEvent::Get();
                     size_t delay = 0;
 
                     while ( delay < maxDelay && le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
+                        if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                            skipAnimation = true;
+                            break;
+                        }
+
                         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                             ++delay;
                             Game::updateAdventureMapAnimationIndex();
@@ -3312,11 +3320,6 @@ namespace
 
                             display.render();
                         }
-                    }
-
-                    ++viewCount;
-                    if ( viewCount > fullTimeViewCount && maxDelay > 0 ) {
-                        --maxDelay;
                     }
                 }
 
