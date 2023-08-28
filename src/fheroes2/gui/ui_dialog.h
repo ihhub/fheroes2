@@ -336,33 +336,4 @@ namespace fheroes2
 
         mutable uint32_t _currentIndex;
     };
-
-    class FrameDialogElement : public DialogElement
-    {
-    public:
-        explicit FrameDialogElement( const int32_t width )
-            : _width( width )
-        {
-            // Do nothing.
-        }
-
-        ~FrameDialogElement() override = default;
-
-        void addItem( const DialogElement * item );
-
-        void draw( Image & output, const Point & offset ) const override;
-
-        void processEvents( const Point & offset ) const override;
-
-        // Never call this method as a custom image has nothing to popup.
-        void showPopup( const int buttons ) const override;
-
-        bool update( Image & output, const Point & offset ) const override;
-
-    private:
-        const int32_t _width{ 0 };
-
-        std::vector<const DialogElement *> _items;
-        std::vector<Point> _offsets;
-    };
 }

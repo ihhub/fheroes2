@@ -639,16 +639,16 @@ namespace fheroes2
 
         switch ( _skillType ) {
         case Skill::Primary::ATTACK:
-            fheroes2::Copy( originalImage, 216, 51, output, offset.x, offset.y, _iconSize.width, _iconSize.height );
+            Copy( originalImage, 216, 51, output, offset.x, offset.y, _iconSize.width, _iconSize.height );
             break;
         case Skill::Primary::DEFENSE:
-            fheroes2::Copy( originalImage, 216, 84, output, offset.x, offset.y, _iconSize.width, _iconSize.height );
+            Copy( originalImage, 216, 84, output, offset.x, offset.y, _iconSize.width, _iconSize.height );
             break;
         case Skill::Primary::POWER:
-            fheroes2::Copy( originalImage, 216, 117, output, offset.x, offset.y, _iconSize.width, _iconSize.height );
+            Copy( originalImage, 216, 117, output, offset.x, offset.y, _iconSize.width, _iconSize.height );
             break;
         case Skill::Primary::KNOWLEDGE:
-            fheroes2::Copy( originalImage, 216, 150, output, offset.x, offset.y, _iconSize.width, _iconSize.height );
+            Copy( originalImage, 216, 150, output, offset.x, offset.y, _iconSize.width, _iconSize.height );
             break;
         default:
             // Are you sure you are passing the correct Primary Skill type?
@@ -805,111 +805,5 @@ namespace fheroes2
         }
 
         return false;
-    }
-
-    void FrameDialogElement::addItem( const DialogElement * item )
-    {
-        if ( item == nullptr ) {
-            // What are you trying to do?
-            assert( item != nullptr );
-            return;
-        }
-
-        _items.push_back( item );
-
-        int32_t height = 0;
-        int32_t currentWidth = 0;
-        int32_t currentHeight = 0;
-
-        _offsets.clear();
-
-        for ( const DialogElement * currentItem : _items ) {
-            const Size & area = currentItem->area();
-
-            if ( currentWidth == 0 ) {
-                _offsets.emplace_back( 0, height );
-                currentWidth = area.width;
-                currentHeight = area.height;
-            }
-            else if ( currentWidth + area.width + elementOffsetX > _width ) {
-                const int32_t leftOffset = ( _width - currentWidth ) / 2;
-
-                for ( auto iter = _offsets.rbegin(); iter != _offsets.rend(); ++iter ) {
-                    if ( iter->y != height ) {
-                        break;
-                    }
-
-                    iter->x += leftOffset;
-                }
-
-                height += currentHeight;
-                height += textOffsetY;
-
-                _offsets.emplace_back( 0, height );
-
-                currentWidth = area.width;
-                currentHeight = area.height;
-            }
-            else {
-                currentWidth += elementOffsetX;
-
-                _offsets.emplace_back( currentWidth, height );
-
-                currentWidth += area.width;
-                currentHeight = std::max( currentHeight, area.height );
-            }
-        }
-
-        const int32_t leftOffset = ( _width - currentWidth ) / 2;
-
-        for ( auto iter = _offsets.rbegin(); iter != _offsets.rend(); ++iter ) {
-            if ( iter->y != height ) {
-                break;
-            }
-
-            iter->x += leftOffset;
-        }
-
-        height += currentHeight;
-
-        _area = { _width, height };
-    }
-
-    void FrameDialogElement::draw( Image & output, const Point & offset ) const
-    {
-        assert( _offsets.size() == _items.size() );
-
-        for ( size_t i = 0; i < _items.size(); ++i ) {
-            _items[i]->draw( output, offset + _offsets[i] );
-        }
-    }
-
-    void FrameDialogElement::processEvents( const Point & offset ) const
-    {
-        assert( _offsets.size() == _items.size() );
-
-        for ( size_t i = 0; i < _items.size(); ++i ) {
-            _items[i]->processEvents( offset + _offsets[i] );
-        }
-    }
-
-    void FrameDialogElement::showPopup( const int /* buttons */ ) const
-    {
-        assert( 0 );
-    }
-
-    bool FrameDialogElement::update( Image & output, const Point & offset ) const
-    {
-        bool update = false;
-
-        assert( _offsets.size() == _items.size() );
-
-        for ( size_t i = 0; i < _items.size(); ++i ) {
-            if ( _items[i]->update( output, offset + _offsets[i] ) ) {
-                update = true;
-            }
-        }
-
-        return update;
     }
 }
