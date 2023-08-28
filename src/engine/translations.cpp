@@ -149,13 +149,6 @@ namespace
         uint32_t offset;
         uint32_t length;
 
-        chunk()
-            : offset( 0 )
-            , length( 0 )
-        {
-            // Do nothing.
-        }
-
         chunk( const uint32_t off, const uint32_t len )
             : offset( off )
             , length( len )
@@ -185,13 +178,14 @@ namespace
 
     std::string getTag( const std::string & str, const std::string & tag, const std::string & sep )
     {
-        std::string res;
-        if ( str.size() > tag.size() && tag == str.substr( 0, tag.size() ) ) {
-            size_t pos = str.find( sep );
-            if ( pos != std::string::npos )
-                res = str.substr( pos + sep.size() );
+        if ( str.size() > tag.size() && str.rfind( tag, 0 ) == 0 ) {
+            const size_t pos = str.find( sep );
+            if ( pos != std::string::npos ) {
+                return str.substr( pos + sep.size() );
+            }
         }
-        return res;
+
+        return {};
     }
 
     const char * stripContext( const char * str )
@@ -204,30 +198,12 @@ namespace
 
     struct mofile
     {
-        uint32_t count;
-        uint32_t offset_strings1;
-        uint32_t offset_strings2;
-        uint32_t hash_size;
-        uint32_t hash_offset;
-        LocaleType locale;
+        // TODO: plural forms are not in use: Plural-Forms.
+        LocaleType locale{ LocaleType::LOCALE_EN };
         StreamBuf buf;
         std::map<uint32_t, chunk> hash_offsets;
         std::string domain;
         std::string encoding;
-        std::string plural_forms;
-        uint32_t nplurals;
-
-        mofile()
-            : count( 0 )
-            , offset_strings1( 0 )
-            , offset_strings2( 0 )
-            , hash_size( 0 )
-            , hash_offset( 0 )
-            , locale( LocaleType::LOCALE_EN )
-            , nplurals( 0 )
-        {
-            // Do nothing.
-        }
 
         const char * ngettext( const char * str, size_t plural )
         {
@@ -239,8 +215,10 @@ namespace
             const uint8_t * ptr = buf.data();
 
             while ( plural > 0 ) {
-                while ( *ptr )
+                while ( *ptr ) {
                     ++ptr;
+                }
+
                 --plural;
                 ++ptr;
             }
@@ -255,61 +233,63 @@ namespace
                 return false;
             }
 
-            {
-                const size_t size = sf.size();
-                uint32_t id = 0;
-                sf >> id;
+            const size_t fileSize = sf.size();
+            uint32_t magicNumber = 0;
+            sf >> magicNumber;
 
-                if ( 0x950412de != id ) {
-                    ERROR_LOG( "Incorrect mo file ID: " << GetHexString( id ) )
-                    return false;
-                }
-                else {
-                    uint16_t major;
-                    uint16_t minor;
-                    sf >> major >> minor;
-
-                    if ( 0 != major ) {
-                        ERROR_LOG( "incorrect major version: " << GetHexString( major, 4 ) )
-                        return false;
-                    }
-                    else {
-                        sf >> count >> offset_strings1 >> offset_strings2 >> hash_size >> hash_offset;
-
-                        sf.seek( 0 );
-                        buf = sf.toStreamBuf( size );
-                        sf.close();
-                    }
-                }
+            if ( magicNumber != 0x950412de ) {
+                ERROR_LOG( "Incorrect magic number " << GetHexString( magicNumber ) << " for " << file )
+                return false;
             }
 
-            // parse encoding and plural forms
-            if ( count > 0 ) {
-                buf.seek( offset_strings2 );
-                uint32_t length2 = buf.get32();
-                uint32_t offset2 = buf.get32();
+            uint16_t majorVersion;
+            uint16_t minorVersion;
+            sf >> majorVersion >> minorVersion;
+
+            if ( 0 != majorVersion ) {
+                ERROR_LOG( "Incorrect major version " << GetHexString( majorVersion, 4 ) << " for " << file )
+                return false;
+            }
+
+            uint32_t originalOffset = 0;
+            uint32_t translationOffset = 0;
+            uint32_t stringCount = 0;
+
+            // TODO: validate these values.
+            uint32_t hashSize = 0;
+            uint32_t hashOffset = 0;
+
+            sf >> stringCount >> originalOffset >> translationOffset >> hashSize >> hashOffset;
+
+            sf.seek( 0 );
+            buf = sf.toStreamBuf( fileSize );
+            sf.close();
+
+            // Parse encoding.
+            if ( stringCount > 0 ) {
+                buf.seek( translationOffset );
+                const uint32_t length2 = buf.get32();
+                const uint32_t offset2 = buf.get32();
 
                 buf.seek( offset2 );
-                std::vector<std::string> tags = StringSplit( buf.toString( length2 ), "\n" );
+                const std::vector<std::string> tags = StringSplit( buf.toString( length2 ), '\n' );
 
-                for ( std::vector<std::string>::const_iterator it = tags.begin(); it != tags.end(); ++it ) {
-                    if ( encoding.empty() )
-                        encoding = getTag( *it, "Content-Type", "charset=" );
-
-                    if ( plural_forms.empty() )
-                        plural_forms = getTag( *it, "Plural-Forms", ": " );
+                for ( const std::string & tag : tags ) {
+                    if ( encoding.empty() ) {
+                        encoding = getTag( tag, "Content-Type", "charset=" );
+                    }
+                    // TODO: parse plural form information here and use it in the code.
                 }
             }
 
-            uint32_t totalTranslationStrings = count;
+            uint32_t totalTranslationStrings = stringCount;
 
-            // generate hash table
-            for ( uint32_t index = 0; index < count; ++index ) {
-                buf.seek( offset_strings1 + index * 8 /* length, offset */ );
+            for ( uint32_t index = 0; index < stringCount; ++index ) {
+                buf.seek( originalOffset + index * 8 );
 
                 const uint32_t length1 = buf.get32();
                 if ( length1 == 0 ) {
-                    // This is an empty translation. Skip it.
+                    // This is an empty original text. Skip it.
                     --totalTranslationStrings;
                     continue;
                 }
@@ -318,8 +298,8 @@ namespace
                 buf.seek( offset1 );
                 const std::string msg1 = buf.toString( length1 );
 
-                const uint32_t crc = crc32b( msg1.c_str() );
-                buf.seek( offset_strings2 + index * 8 /* length, offset */ );
+                const uint32_t crc = crc32b( msg1.data() );
+                buf.seek( translationOffset + index * 8 );
 
                 const uint32_t length2 = buf.get32();
                 if ( length2 == 0 ) {
@@ -330,11 +310,9 @@ namespace
 
                 const uint32_t offset2 = buf.get32();
 
-                std::map<uint32_t, chunk>::const_iterator it = hash_offsets.find( crc );
-                if ( it == hash_offsets.end() )
-                    hash_offsets[crc] = chunk( offset2, length2 );
-                else {
-                    ERROR_LOG( "Incorrect hash value for: " << msg1 )
+                const auto [dummy, inserted] = hash_offsets.try_emplace( crc, chunk{ offset2, length2 } );
+                if ( !inserted ) {
+                    ERROR_LOG( "Clashing hash value for: " << msg1 )
                 }
             }
 

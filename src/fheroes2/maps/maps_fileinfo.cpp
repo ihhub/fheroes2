@@ -205,11 +205,11 @@ void Maps::FileInfo::Reset()
     worldMonth = 0;
 }
 
-bool Maps::FileInfo::ReadSAV( const std::string & filePath )
+bool Maps::FileInfo::ReadSAV( std::string filePath )
 {
     Reset();
 
-    return Game::LoadSAV2FileInfo( filePath, *this );
+    return Game::LoadSAV2FileInfo( std::move( filePath ), *this );
 }
 
 bool Maps::FileInfo::ReadMP2( const std::string & filePath )
@@ -623,15 +623,14 @@ MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
             }
         }
 
-        uniqueMaps[System::GetBasename( mapFile )] = fi;
+        uniqueMaps.try_emplace( System::GetBasename( mapFile ), std::move( fi ) );
     }
 
     MapsFileInfoList result;
-
     result.reserve( uniqueMaps.size() );
 
-    for ( const auto & item : uniqueMaps ) {
-        result.push_back( item.second );
+    for ( auto & [name, info] : uniqueMaps ) {
+        result.emplace_back( std::move( info ) );
     }
 
     std::sort( result.begin(), result.end(), Maps::FileInfo::NameSorting );
@@ -658,15 +657,14 @@ MapsFileInfoList Maps::prepareResurrectionMapsFileInfoList()
         fi.description = "Resurrection map test description.\nThe Map Editor is currently in development.";
         fi.difficulty = 3;
 
-        uniqueMaps[System::GetBasename( mapFile )] = fi;
+        uniqueMaps.try_emplace( System::GetBasename( mapFile ), std::move( fi ) );
     }
 
     MapsFileInfoList result;
-
     result.reserve( uniqueMaps.size() );
 
-    for ( const auto & item : uniqueMaps ) {
-        result.push_back( item.second );
+    for ( auto & [name, info] : uniqueMaps ) {
+        result.emplace_back( std::move( info ) );
     }
 
     std::sort( result.begin(), result.end(), Maps::FileInfo::NameSorting );
