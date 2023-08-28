@@ -10437,6 +10437,5 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-
-#~ msgid "Victory!"
-#~ msgstr "Győzelem!"
+msgid "Victory!"
+msgstr "Győzelem!"
