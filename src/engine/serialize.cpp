@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "serialize.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstring>
@@ -28,7 +30,6 @@
 
 #include "endian_h2.h"
 #include "logging.h"
-#include "serialize.h"
 
 namespace
 {
@@ -200,15 +201,20 @@ StreamBuf::StreamBuf( const size_t sz )
     , itput( nullptr )
     , itend( nullptr )
 {
-    if ( sz )
+    if ( sz ) {
         reallocbuf( sz );
-    setbigendian( IS_BIGENDIAN ); /* default: hardware endian */
+    }
+
+    setbigendian( IS_BIGENDIAN );
 }
 
 StreamBuf::~StreamBuf()
 {
-    if ( itbeg && !isconstbuf() )
-        delete[] itbeg;
+    if ( itbeg == nullptr || isconstbuf() ) {
+        return;
+    }
+
+    delete[] itbeg;
 }
 
 StreamBuf::StreamBuf( StreamBuf && st ) noexcept
@@ -234,8 +240,10 @@ StreamBuf::StreamBuf( const std::vector<uint8_t> & buf )
     itend = itbeg + buf.size();
     itget = itbeg;
     itput = itend;
+
     setconstbuf( true );
-    setbigendian( IS_BIGENDIAN ); /* default: hardware endian */
+
+    setbigendian( IS_BIGENDIAN );
 }
 
 StreamBuf::StreamBuf( const uint8_t * buf, size_t bufsz )
@@ -248,8 +256,10 @@ StreamBuf::StreamBuf( const uint8_t * buf, size_t bufsz )
     itend = itbeg + bufsz;
     itget = itbeg;
     itput = itend;
+
     setconstbuf( true );
-    setbigendian( IS_BIGENDIAN ); /* default: hardware endian */
+
+    setbigendian( IS_BIGENDIAN );
 }
 
 StreamBuf & StreamBuf::operator=( StreamBuf && st ) noexcept
@@ -264,21 +274,6 @@ StreamBuf & StreamBuf::operator=( StreamBuf && st ) noexcept
     }
 
     return *this;
-}
-
-size_t StreamBuf::capacity() const
-{
-    return itend - itbeg;
-}
-
-const uint8_t * StreamBuf::data() const
-{
-    return itget;
-}
-
-size_t StreamBuf::size() const
-{
-    return sizeg();
 }
 
 void StreamBuf::reset()
@@ -307,27 +302,28 @@ size_t StreamBuf::sizep() const
     return itend - itput;
 }
 
-void StreamBuf::reallocbuf( size_t sz )
+void StreamBuf::reallocbuf( size_t size )
 {
-    setconstbuf( false );
+    // Instances created from read-only memory blocks are read-only and should never be reallocated
+    assert( !isconstbuf() );
 
     if ( !itbeg ) {
-        if ( sz < minBufferCapacity )
-            sz = minBufferCapacity;
+        if ( size < minBufferCapacity ) {
+            size = minBufferCapacity;
+        }
 
-        itbeg = new uint8_t[sz];
-        itend = itbeg + sz;
-        std::fill( itbeg, itend, static_cast<uint8_t>( 0 ) );
+        itbeg = new uint8_t[size]{};
+        itend = itbeg + size;
 
         reset();
     }
-    else if ( sizep() < sz ) {
-        if ( sz < minBufferCapacity )
-            sz = minBufferCapacity;
+    else if ( sizep() < size ) {
+        if ( size < minBufferCapacity ) {
+            size = minBufferCapacity;
+        }
 
-        uint8_t * ptr = new uint8_t[sz];
+        uint8_t * ptr = new uint8_t[size]{};
 
-        std::fill( ptr, ptr + sz, static_cast<uint8_t>( 0 ) );
         std::copy( itbeg, itput, ptr );
 
         itput = ptr + tellp();
@@ -336,21 +332,23 @@ void StreamBuf::reallocbuf( size_t sz )
         delete[] itbeg;
 
         itbeg = ptr;
-        itend = itbeg + sz;
+        itend = itbeg + size;
     }
 }
 
 void StreamBuf::put8( const uint8_t v )
 {
-    if ( sizep() == 0 ) {
+    if ( sizep() < 1 ) {
         reallocbuf( capacity() + capacity() / 2 );
-        assert( itput != nullptr );
     }
 
-    if ( sizep() > 0 ) {
-        *itput = v;
-        ++itput;
+    if ( sizep() < 1 ) {
+        assert( 0 );
+        return;
     }
+
+    *itput = v;
+    ++itput;
 }
 
 uint8_t StreamBuf::get8()
@@ -454,30 +452,29 @@ void StreamBuf::putRaw( const char * ptr, size_t sz )
         }
     }
 
-    // Make sure that the possible previous memory reallocation was correct.
-    assert( sizep() >= sz );
+    if ( sizep() < sz ) {
+        assert( 0 );
+        return;
+    }
 
     memcpy( itput, ptr, sz );
     itput = itput + sz;
 }
 
-std::string StreamBuf::toString( size_t sz )
+std::string StreamBuf::toString( const size_t size /* = 0 */ )
 {
+    const size_t length = ( size > 0 && size < sizeg() ) ? size : sizeg();
+
     uint8_t * it1 = itget;
-    uint8_t * it2 = itget + ( sz ? sz : sizeg() );
-    it2 = std::find( it1, it2, 0 );
-    itget = it1 + ( sz ? sz : sizeg() );
-    return std::string( it1, it2 );
+    itget += length;
+    uint8_t * it2 = std::find( it1, itget, 0 );
+
+    return { it1, it2 };
 }
 
 void StreamBuf::skip( size_t sz )
 {
     itget += sz <= sizeg() ? sz : sizeg();
-}
-
-void StreamBuf::seek( size_t sz )
-{
-    itget = itbeg + sz < itend ? itbeg + sz : itend;
 }
 
 StreamFile::StreamFile()
@@ -609,18 +606,19 @@ void StreamFile::putLE32( uint32_t val )
     putUint<uint32_t>( htole32( val ) );
 }
 
-std::vector<uint8_t> StreamFile::getRaw( size_t sz )
+std::vector<uint8_t> StreamFile::getRaw( const size_t size )
 {
-    const size_t chunkSize = sz > 0 ? sz : sizeg();
+    const size_t chunkSize = size > 0 ? size : sizeg();
     if ( chunkSize == 0 || !_file ) {
-        return std::vector<uint8_t>();
+        return {};
     }
 
-    std::vector<uint8_t> v( sz ? sz : sizeg() );
+    std::vector<uint8_t> v( chunkSize );
+
     const size_t count = std::fread( &v[0], chunkSize, 1, _file );
     if ( count != 1 ) {
         setfail( true );
-        v.clear();
+        return {};
     }
 
     return v;
@@ -628,21 +626,36 @@ std::vector<uint8_t> StreamFile::getRaw( size_t sz )
 
 void StreamFile::putRaw( const char * ptr, size_t sz )
 {
-    if ( _file )
+    if ( _file ) {
         std::fwrite( ptr, sz, 1, _file );
+    }
 }
 
-StreamBuf StreamFile::toStreamBuf( size_t sz )
+StreamBuf StreamFile::toStreamBuf( const size_t size )
 {
-    std::vector<uint8_t> buf = getRaw( sz );
-    StreamBuf sb( buf.size() );
-    sb.putRaw( reinterpret_cast<const char *>( &buf[0] ), buf.size() );
-    return sb;
+    const size_t chunkSize = size > 0 ? size : sizeg();
+    if ( chunkSize == 0 || !_file ) {
+        return StreamBuf{};
+    }
+
+    StreamBuf buffer( chunkSize );
+
+    const size_t count = std::fread( buffer.data(), chunkSize, 1, _file );
+    if ( count != 1 ) {
+        setfail( true );
+        return StreamBuf{};
+    }
+
+    buffer.advance( chunkSize );
+
+    return buffer;
 }
 
-std::string StreamFile::toString( size_t sz )
+std::string StreamFile::toString( const size_t size /* = 0 */ )
 {
-    const std::vector<uint8_t> buf = getRaw( sz );
-    std::vector<uint8_t>::const_iterator itend = std::find( buf.begin(), buf.end(), 0 );
-    return std::string( buf.begin(), itend != buf.end() ? itend : buf.end() );
+    const std::vector<uint8_t> buf = getRaw( size );
+
+    const auto itend = std::find( buf.begin(), buf.end(), 0 );
+
+    return { buf.begin(), itend };
 }

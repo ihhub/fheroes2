@@ -71,10 +71,27 @@ namespace
         }
         return res;
     }
+
+    bool RedrawExtraInfo( const fheroes2::Rect & windowArea, const std::string & header, const std::string & filename, const fheroes2::Rect & field )
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        const fheroes2::Text title( header, fheroes2::FontType::normalYellow() );
+        title.draw( windowArea.x + ( windowArea.width - title.width() ) / 2, windowArea.y + 32, display );
+
+        if ( filename.empty() ) {
+            return false;
+        }
+
+        fheroes2::Text currentFilename( filename, fheroes2::FontType::normalWhite() );
+        currentFilename.fitToOneRow( field.width );
+        currentFilename.draw( field.x, field.y + 3, display );
+
+        return currentFilename.width() + 10 > field.width;
+    }
 }
 
 std::string SelectFileListSimple( const std::string &, const std::string &, const bool );
-bool RedrawExtraInfo( const fheroes2::Point &, const std::string &, const std::string &, const fheroes2::Rect & );
 
 class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
 {
@@ -211,8 +228,8 @@ MapsFileInfoList GetSortedMapsFileInfoList()
 
     MapsFileInfoList list2( list1.size() );
     int32_t saveFileCount = 0;
-    for ( const std::string & saveFile : list1 ) {
-        if ( list2[saveFileCount].ReadSAV( saveFile ) ) {
+    for ( std::string & saveFile : list1 ) {
+        if ( list2[saveFileCount].ReadSAV( std::move( saveFile ) ) ) {
             ++saveFileCount;
         }
     }
@@ -319,7 +336,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     }
 
     listbox.Redraw();
-    RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
+    RedrawExtraInfo( rt, header, filename, enter_field );
 
     buttonOk.draw();
     buttonCancel.draw();
@@ -467,8 +484,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             lastSelectedSaveFileName = "";
         }
 
-        is_limit = isEditing ? RedrawExtraInfo( rt.getPosition(), header, insertCharToString( filename, charInsertPos, isCursorVisible ? '_' : '\x7F' ), enter_field )
-                             : RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
+        is_limit = isEditing ? RedrawExtraInfo( rt, header, insertCharToString( filename, charInsertPos, isCursorVisible ? '_' : '\x7F' ), enter_field )
+                             : RedrawExtraInfo( rt, header, filename, enter_field );
 
         buttonOk.draw();
         buttonCancel.draw();
@@ -481,17 +498,4 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     }
 
     return result;
-}
-
-bool RedrawExtraInfo( const fheroes2::Point & dst, const std::string & header, const std::string & filename, const fheroes2::Rect & field )
-{
-    Text text( header, Font::BIG );
-    text.Blit( dst.x + 175 - text.w() / 2, dst.y + 30 );
-
-    if ( !filename.empty() ) {
-        text.Set( filename, Font::BIG );
-        text.Blit( field.x, field.y + 1, field.width );
-    }
-
-    return text.w() + 10 > field.width;
 }

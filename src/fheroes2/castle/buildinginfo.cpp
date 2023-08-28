@@ -623,7 +623,7 @@ std::string BuildingInfo::GetConditionDescription() const
 
     case BUILD_DISABLE:
         if ( building == BUILD_SHIPYARD ) {
-            res = _( "Cannot build %{name} because castle is too far from water." );
+            res = _( "Cannot build %{name} because the castle is too far away from an ocean." );
             StringReplace( res, "%{name}", Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) );
         }
         else {

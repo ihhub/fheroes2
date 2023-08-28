@@ -56,6 +56,7 @@
 #include "ui_button.h"
 #include "ui_castle.h"
 #include "ui_kingdom.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 #include "world.h"
 
@@ -212,8 +213,8 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     DrawImageCastle( dst_pt );
 
     // castle name
-    Text text( GetName(), Font::SMALL );
-    text.Blit( cur_pt.x + 538 - text.w() / 2, cur_pt.y + 1 );
+    const fheroes2::Text castleName( GetName(), fheroes2::FontType::smallWhite() );
+    castleName.draw( cur_pt.x + 538 - castleName.width() / 2, cur_pt.y + 3, display );
 
     BuildingInfo dwelling1( *this, DWELLING_MONSTER1 );
     dwelling1.SetPos( cur_pt.x + 5, cur_pt.y + 2 );
@@ -337,7 +338,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     fheroes2::MovableSprite cursorFormat( fheroes2::AGG::GetICN( ICN::HSICONS, 11 ) );
 
     if ( isBuild( BUILD_CAPTAIN ) ) {
-        text.Set( Skill::Primary::String( Skill::Primary::ATTACK ) + std::string( " " ), Font::SMALL );
+        Text text( Skill::Primary::String( Skill::Primary::ATTACK ) + std::string( " " ), Font::SMALL );
         dst_pt.x = cur_pt.x + 535;
         dst_pt.y = cur_pt.y + 168;
         text.Blit( dst_pt );
