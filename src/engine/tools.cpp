@@ -199,15 +199,20 @@ void StringReplace( std::string & dst, const char * pred, const std::string & sr
     }
 }
 
-std::vector<std::string> StringSplit( const std::string & str, const std::string & sep )
+std::vector<std::string> StringSplit( const std::string & str, const char sep )
 {
     std::vector<std::string> vec;
     size_t pos1 = 0;
-    size_t pos2;
+    size_t pos2 = 0;
 
-    while ( pos1 < str.size() && std::string::npos != ( pos2 = str.find( sep, pos1 ) ) ) {
+    while ( pos1 < str.size() ) {
+        pos2 = str.find( sep, pos1 );
+        if ( pos2 == std::string::npos ) {
+            break;
+        }
+
         vec.push_back( str.substr( pos1, pos2 - pos1 ) );
-        pos1 = pos2 + sep.size();
+        pos1 = pos2 + 1;
     }
 
     // tail

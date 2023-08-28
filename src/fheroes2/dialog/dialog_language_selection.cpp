@@ -18,13 +18,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "dialog_language_selection.h"
+
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <string>
 
 #include "agg_image.h"
 #include "cursor.h"
-#include "dialog_language_selection.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
 #include "icn.h"
