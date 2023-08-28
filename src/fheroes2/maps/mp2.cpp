@@ -591,6 +591,7 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
     case OBJ_COAST:
     case OBJ_DERELICT_SHIP:
     case OBJ_FLOTSAM:
+    // Heroes cannot be placed on water by the original editor, but they can board a boat
     case OBJ_HEROES:
     case OBJ_MAGELLANS_MAPS:
     case OBJ_MERMAID:
