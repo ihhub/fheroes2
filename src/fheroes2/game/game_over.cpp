@@ -418,7 +418,9 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
 
     for ( const int color : Colors( colors ) ) {
         if ( !world.GetKingdom( color ).isPlay() ) {
-            if ( ( !isSinglePlayer && color != currentColor ) || !( color & humanColors ) ) {
+            // This notification should always be displayed for the AI players. For human players, this should only be displayed in a multiplayer game for a
+            // human player who is not currently active - in all other cases, the "you have been eliminated" dialog should be displayed.
+            if ( !( color & humanColors ) || ( !isSinglePlayer && color != currentColor ) ) {
                 Game::DialogPlayers( color, _( "Major Event!" ), _( "%{color} player has been vanquished!" ) );
             }
 
