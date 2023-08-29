@@ -3291,15 +3291,14 @@ namespace
                     Maps::ClearFog( eyeIndex, scoutRange, hero.GetColor() );
 
                     const fheroes2::Point eyePosition = Maps::GetPoint( eyeIndex );
-
-                    I.getGameArea().SetCenter( eyePosition );
-
                     const fheroes2::Rect eyeRoi( eyePosition.x - scoutRange, eyePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 );
 
                     if ( skipAnimation ) {
                         clearRadarArea = fheroes2::getBoundaryRect( clearRadarArea, eyeRoi );
                         continue;
                     }
+
+                    I.getGameArea().SetCenter( eyePosition );
 
                     I.getRadar().SetRenderArea( eyeRoi );
                     I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
