@@ -10177,7 +10177,7 @@ msgid ""
 "Halves damage received from ranged attacks for a single unit. Does not "
 "affect damage received from Turrets or Ballistae."
 msgstr ""
-"Znižuje poškodenie z útokov na diaľku o polovicu pre jednu jednotku.Nechráni "
+"Znižuje poškodenie z útokov na diaľku o polovicu pre jednu jednotku. Nechráni "
 "pred vežami a balistami."
 
 msgid "Mass Shield"
