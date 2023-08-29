@@ -3835,7 +3835,7 @@ namespace fheroes2
                 LoadOriginalICN( originalId );
 
                 if ( _icnVsSprite[originalId].size() < 13 ) {
-                    break;
+                    return true;
                 }
 
                 _icnVsSprite[id].resize( 2 );
@@ -3871,14 +3871,14 @@ namespace fheroes2
                     FillTransform( pressed, pressed.width() - 2, pressed.height() - 3, 1, 1, 1 );
                 }
 
-                break;
+                return true;
             }
             case ICN::EMPTY_POL_BUTTON: {
                 const int originalID = ICN::X_CMPBTN;
                 LoadOriginalICN( originalID );
 
                 if ( _icnVsSprite[originalID].size() < 8 ) {
-                    break;
+                    return true;
                 }
 
                 _icnVsSprite[id].resize( 2 );
@@ -3886,7 +3886,7 @@ namespace fheroes2
                 const Sprite & originalReleased = GetICN( originalID, 4 );
                 const Sprite & originalPressed = GetICN( originalID, 5 );
                 if ( originalReleased.width() != 94 && originalPressed.width() != 94 && originalReleased.height() < 5 && originalPressed.height() < 5 ) {
-                    break;
+                    return true;
                 }
                 Sprite & releasedWithDarkBorder = _icnVsSprite[id][0];
                 releasedWithDarkBorder.resize( originalReleased.width() + 2, originalReleased.height() + 1 );
@@ -3913,14 +3913,14 @@ namespace fheroes2
                 Fill( releasedWithDarkBorder, 5, 3, 88, 18, originalReleased.image()[pixelPosition] );
                 Fill( pressed, 4, 5, 87, 17, originalPressed.image()[pixelPosition] );
 
-                break;
+                return true;
             }
             case ICN::EMPTY_GUILDWELL_BUTTON: {
                 const int originalID = ICN::WELLXTRA;
                 LoadOriginalICN( originalID );
 
                 if ( _icnVsSprite[originalID].size() < 3 ) {
-                    break;
+                    return true;
                 }
                 _icnVsSprite[id].resize( 2 );
 
@@ -3937,7 +3937,7 @@ namespace fheroes2
                     Fill( out, 7 - i * 2, 2 + i, 50 + i, 14, getButtonFillingColor( i == 0 ) );
                 }
 
-                break;
+                return true;
             }
             case ICN::EMPTY_GOOD_MEDIUM_BUTTON:
             case ICN::EMPTY_EVIL_MEDIUM_BUTTON: {
@@ -3946,7 +3946,7 @@ namespace fheroes2
                 LoadOriginalICN( originalId );
 
                 if ( _icnVsSprite[originalId].size() < 10 ) {
-                    break;
+                    return true;
                 }
 
                 _icnVsSprite[id].resize( 2 );
@@ -3963,7 +3963,7 @@ namespace fheroes2
                     Fill( pressed, 27, 16, 42, 27, getButtonFillingColor( false, isGoodInterface ) );
                 }
 
-                break;
+                return true;
             }
             case ICN::BRCREST: {
                 LoadOriginalICN( id );
