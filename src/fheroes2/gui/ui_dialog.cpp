@@ -635,7 +635,7 @@ namespace fheroes2
 
     void SmallPrimarySkillDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const fheroes2::Sprite & originalImage = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+        const Sprite & originalImage = AGG::GetICN( ICN::SWAPWIN, 0 );
 
         switch ( _skillType ) {
         case Skill::Primary::ATTACK:
