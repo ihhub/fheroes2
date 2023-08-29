@@ -227,6 +227,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     dst_pt.y = cur_pt.y + 318;
     fheroes2::ButtonSprite buttonDismiss( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 ),
                                           fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 1 ), fheroes2::AGG::GetICN( ICN::DISMISS_HERO_DISABLED_BUTTON, 0 ) );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 ), display, { cur_pt.x + 9, cur_pt.y + 318 }, { -3, 5 } );
 
     // button exit
     dst_pt.x = cur_pt.x + 603;
