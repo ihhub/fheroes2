@@ -60,9 +60,12 @@ namespace
     template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
     bool convertToInt( const std::string_view str, T & intValue )
     {
-        const auto [ptr, ec] = std::from_chars( str.data(), str.data() + str.size(), intValue );
+        const char * first = str.data();
+        const char * last = str.data() + str.size();
 
-        return ec == std::errc();
+        const auto [ptr, ec] = std::from_chars( first, last, intValue );
+
+        return ( ptr == last && ec == std::errc() );
     }
 }
 
