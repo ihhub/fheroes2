@@ -271,13 +271,7 @@ namespace fheroes2
         assert( 0 );
     }
 
-    CustomImageDialogElement::CustomImageDialogElement( const Image & image )
-        : _image( image )
-    {
-        _area = { _image.width(), _image.height() };
-    }
-
-    CustomImageDialogElement::CustomImageDialogElement( Image && image )
+    CustomImageDialogElement::CustomImageDialogElement( Image image )
         : _image( std::move( image ) )
     {
         _area = { _image.width(), _image.height() };
@@ -332,23 +326,10 @@ namespace fheroes2
         showMessage( header, description, buttons, { this } );
     }
 
-    ResourceDialogElement::ResourceDialogElement( const int32_t resourceType, const std::string & text )
-        : _resourceType( resourceType )
-        , _icnIndex( Resource::getIconIcnIndex( resourceType ) )
-        , _text( text )
-    {
-        init();
-    }
-
-    ResourceDialogElement::ResourceDialogElement( const int32_t resourceType, std::string && text )
+    ResourceDialogElement::ResourceDialogElement( const int32_t resourceType, std::string text )
         : _resourceType( resourceType )
         , _icnIndex( Resource::getIconIcnIndex( resourceType ) )
         , _text( std::move( text ) )
-    {
-        init();
-    }
-
-    void ResourceDialogElement::init()
     {
         const Text quantityText( _text, FontType::smallWhite() );
 
@@ -576,21 +557,9 @@ namespace fheroes2
         showMessage( header, description, buttons, { &experienceUI } );
     }
 
-    PrimarySkillDialogElement::PrimarySkillDialogElement( const int32_t skillType, const std::string & text )
-        : _skillType( skillType )
-        , _text( text )
-    {
-        init();
-    }
-
-    PrimarySkillDialogElement::PrimarySkillDialogElement( const int32_t skillType, std::string && text )
+    PrimarySkillDialogElement::PrimarySkillDialogElement( const int32_t skillType, std::string text )
         : _skillType( skillType )
         , _text( std::move( text ) )
-    {
-        init();
-    }
-
-    void PrimarySkillDialogElement::init()
     {
         assert( _skillType >= Skill::Primary::ATTACK && _skillType <= Skill::Primary::KNOWLEDGE );
 
@@ -652,6 +621,45 @@ namespace fheroes2
         const PrimarySkillDialogElement elementUI( _skillType, std::string() );
 
         showMessage( header, description, buttons, { &elementUI } );
+    }
+
+    SmallPrimarySkillDialogElement::SmallPrimarySkillDialogElement( const int32_t skillType, std::string text )
+        : PrimarySkillDialogElement( skillType, std::move( text ) )
+    {
+        _area = _iconSize;
+
+        if ( !_text.empty() ) {
+            _area.height += Text{ _text, FontType::smallWhite() }.height( _iconSize.width ) + 2;
+        }
+    }
+
+    void SmallPrimarySkillDialogElement::draw( Image & output, const Point & offset ) const
+    {
+        const Sprite & originalImage = AGG::GetICN( ICN::SWAPWIN, 0 );
+
+        switch ( _skillType ) {
+        case Skill::Primary::ATTACK:
+            Copy( originalImage, 216, 51, output, offset.x, offset.y, _iconSize.width, _iconSize.height );
+            break;
+        case Skill::Primary::DEFENSE:
+            Copy( originalImage, 216, 84, output, offset.x, offset.y, _iconSize.width, _iconSize.height );
+            break;
+        case Skill::Primary::POWER:
+            Copy( originalImage, 216, 117, output, offset.x, offset.y, _iconSize.width, _iconSize.height );
+            break;
+        case Skill::Primary::KNOWLEDGE:
+            Copy( originalImage, 216, 150, output, offset.x, offset.y, _iconSize.width, _iconSize.height );
+            break;
+        default:
+            // Are you sure you are passing the correct Primary Skill type?
+            assert( 0 );
+            break;
+        }
+
+        if ( !_text.empty() ) {
+            const Text descriptionText( _text, FontType::smallWhite() );
+            descriptionText.draw( offset.x, offset.y + _iconSize.height + 2, _iconSize.width, output );
+        }
     }
 
     SecondarySkillDialogElement::SecondarySkillDialogElement( const Skill::Secondary & skill, const Heroes & hero )
