@@ -4004,7 +4004,27 @@ namespace fheroes2
                 h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
                 h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
 
-                break;
+                return true;
+            }
+            case ICN::COVR0010: {
+                // The original image contains some "glowing" (color cycling) pixels.
+                // They should be fixed.
+                LoadOriginalICN( id );
+
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & sprite = _icnVsSprite[id][0];
+                    uint8_t * image = sprite.image();
+                    const uint8_t * imageEnd = image + sprite.width() * sprite.height();
+                    const uint8_t * transform = sprite.transform();
+
+                    for ( ; image != imageEnd; ++image, ++transform ) {
+                        if ( *transform == 0 && *image > 36 ) {
+                            *image = 10;
+                        }
+                    }
+                }
+
+                return true;
             }
             default:
                 break;
