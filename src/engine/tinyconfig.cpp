@@ -103,7 +103,17 @@ bool TinyConfig::Load( const std::string & cfile )
 int TinyConfig::IntParams( const std::string & key ) const
 {
     const_iterator it = find( ModifyKey( key ) );
-    return it != end() ? GetInt( it->second ) : 0;
+    if ( it == end() ) {
+        return 0;
+    }
+
+    int result;
+
+    if ( !convertToInt( it->second, result ) ) {
+        return 0;
+    }
+
+    return result;
 }
 
 std::string TinyConfig::StrParams( const std::string & key ) const
