@@ -4009,8 +4009,7 @@ namespace fheroes2
             case ICN::COVR0010:
             case ICN::COVR0011:
             case ICN::COVR0012: {
-                // The original image contains some "glowing" (color cycling) pixels.
-                // They should be fixed.
+                // The original image contains some foreign pixels that do not belong to the image.
                 LoadOriginalICN( id );
 
                 if ( !_icnVsSprite[id].empty() ) {
@@ -4020,7 +4019,7 @@ namespace fheroes2
                     const uint8_t * transform = sprite.transform();
 
                     for ( ; image != imageEnd; ++image, ++transform ) {
-                        // Mask all non white/black and brown pixels.
+                        // Mask all non white/black or brown pixels.
                         if ( *transform == 0 && *image > 36 && ( *image < 108 || *image > 130 ) ) {
                             *image = 10;
                         }
