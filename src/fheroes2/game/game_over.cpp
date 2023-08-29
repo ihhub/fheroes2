@@ -129,7 +129,7 @@ namespace
         if ( !body.empty() ) {
             AudioManager::PlayMusic( MUS::VICTORY, Music::PlaybackMode::PLAY_ONCE );
 
-            fheroes2::showStandardTextMessage( "Victory!", body, Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Victory!" ), body, Dialog::OK );
         }
     }
 
