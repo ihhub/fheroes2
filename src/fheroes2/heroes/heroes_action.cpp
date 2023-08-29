@@ -2502,8 +2502,16 @@ namespace
                 {
                     const MusicalEffectPlayer musicalEffectPlayer( MUS::XANADU );
 
-                    Dialog::Message( title, _( "The butler admits you to see the master of the house. He trains you in the four skills a hero should know." ), Font::BIG,
-                                     Dialog::OK );
+                    const fheroes2::SmallPrimarySkillDialogElement attackUI( Skill::Primary::ATTACK, "+1" );
+                    const fheroes2::SmallPrimarySkillDialogElement defenseUI( Skill::Primary::DEFENSE, "+1" );
+                    const fheroes2::SmallPrimarySkillDialogElement powerUI( Skill::Primary::POWER, "+1" );
+                    const fheroes2::SmallPrimarySkillDialogElement knowledgeUI( Skill::Primary::KNOWLEDGE, "+1" );
+
+                    fheroes2::
+                        showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ),
+                                     fheroes2::Text( _( "The butler admits you to see the master of the house. He trains you in the four skills a hero should know." ),
+                                                     fheroes2::FontType::normalWhite() ),
+                                     Dialog::OK, { &attackUI, &defenseUI, &powerUI, &knowledgeUI } );
                 }
 
                 hero.IncreasePrimarySkill( Skill::Primary::ATTACK );
