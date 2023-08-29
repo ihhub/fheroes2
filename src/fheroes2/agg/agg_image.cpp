@@ -348,7 +348,7 @@ namespace
 
     OriginalAlphabetPreserver alphabetPreserver;
 
-    // this class is used for situations when we need to remove letter-specific offsets, like when we display single letters in a row,
+    // This class is used for situations when we need to remove letter-specific offsets, like when we display single letters in a row,
     // and then restore these offsets within the scope of the code
     class ButtonFontRestorer
     {
@@ -1628,7 +1628,7 @@ namespace fheroes2
                         setButtonCornersTransparent( released );
                         fheroes2::makeTransparentBackground( released, pressed, buttonBackground );
                     }
-                    // generate the DIFFICULTY button as it is not present in the original resources
+                    // Generate the DIFFICULTY button because it is not present in the original resources
                     fheroes2::getTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
                                                     isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, buttonBackground );
                     break;
@@ -1853,10 +1853,10 @@ namespace fheroes2
                     break;
                 }
 
-                // we need to temporarily remove the letter specific X offsets on the because they will be off-center
+                // We need to temporarily remove the letter specific X offsets on the because they will be off-center
                 // when we are displaying one letter per line
-                ButtonFontRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], { -1, 0 } );
-                ButtonFontRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], { -1, 0 } );
+                const ButtonFontRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], { -1, 0 } );
+                const ButtonFontRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], { -1, 0 } );
                 getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON, ICN::UNKNOWN );
 
                 break;
