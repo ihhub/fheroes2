@@ -1125,6 +1125,11 @@ bool Heroes::PickupArtifact( const Artifact & art )
         std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
     }
 
+    // If the hero is in jail and gets an artifact assigned using the map editor, then there is no need to scout the area
+    if ( GetColor() == Color::NONE ) {
+        return true;
+    }
+
     const auto scout = [this]( const int32_t artifactID ) {
         const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifactID ).bonuses;
         if ( std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) == bonuses.end() ) {
