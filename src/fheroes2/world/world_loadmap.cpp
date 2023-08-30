@@ -518,8 +518,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     Heroes * hero = GetHeroForHire( raceType );
 
                     if ( hero ) {
-                        hero->LoadFromMP2( objectTileId, Color::NONE, hero->GetRace(), pblock );
-                        hero->SetModes( Heroes::JAIL );
+                        hero->LoadFromMP2( objectTileId, Color::NONE, hero->GetRace(), true, pblock );
                     }
                     else {
                         DEBUG_LOG( DBG_GAME, DBG_WARN, "MP2 file format: no free heroes are available from race " << Race::String( raceType ) )
@@ -553,7 +552,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                         }
 
                         if ( hero ) {
-                            hero->LoadFromMP2( objectTileId, colorRace.first, colorRace.second, pblock );
+                            hero->LoadFromMP2( objectTileId, colorRace.first, colorRace.second, false, pblock );
                         }
                     }
                     else {

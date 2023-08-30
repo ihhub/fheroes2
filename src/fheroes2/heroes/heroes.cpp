@@ -258,7 +258,7 @@ Heroes::Heroes( int heroid, int rc )
     move_point = GetMaxMovePoints();
 }
 
-void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const std::vector<uint8_t> & data )
+void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data )
 {
     assert( data.size() == MP2::MP2_HEROES_STRUCTURE_SIZE );
 
@@ -390,7 +390,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     // - unused 15 bytes
     //    Always zeros.
 
-    modes = 0;
+    modes = isInJail ? JAIL : 0;
 
     SetIndex( mapIndex );
     SetColor( colorType );
@@ -1126,7 +1126,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
     }
 
     // If the hero is in jail and gets an artifact assigned using the map editor, then there is no need to scout the area
-    if ( GetColor() == Color::NONE ) {
+    if ( Modes( JAIL ) ) {
         return true;
     }
 
