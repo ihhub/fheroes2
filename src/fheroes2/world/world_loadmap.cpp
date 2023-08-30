@@ -543,7 +543,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     if ( kingdom.AllowRecruitHero( false ) ) {
                         Heroes * hero = nullptr;
 
-                        if ( pblock[17] && pblock[18] < Heroes::BAX ) {
+                        if ( pblock[17] && pblock[18] < Heroes::BRAX ) {
                             hero = vec_heroes.Get( pblock[18] );
                         }
 

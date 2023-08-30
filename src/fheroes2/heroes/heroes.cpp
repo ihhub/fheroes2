@@ -1774,7 +1774,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
             return mediumSizePortrait.try_emplace( id, std::move( output ) ).first->second;
         }
         case PORT_SMALL:
-            return Heroes::DEBUG_HERO > id ? fheroes2::AGG::GetICN( ICN::MINIPORT, id ) : fheroes2::AGG::GetICN( ICN::MINIPORT, BAX );
+            return Heroes::DEBUG_HERO > id ? fheroes2::AGG::GetICN( ICN::MINIPORT, id ) : fheroes2::AGG::GetICN( ICN::MINIPORT, BRAX );
         default:
             break;
         }
@@ -1921,7 +1921,7 @@ void AllHeroes::Init()
     push_back( new Heroes( Heroes::ELIZA, Race::SORC, 5000 ) );
     push_back( new Heroes( Heroes::ARCHIBALD, Race::WRLK, 5000 ) );
     push_back( new Heroes( Heroes::HALTON, Race::KNGT, 5000 ) );
-    push_back( new Heroes( Heroes::BAX, Race::NECR, 5000 ) );
+    push_back( new Heroes( Heroes::BRAX, Race::NECR, 5000 ) );
 
     // PoL
     if ( Settings::Get().isCurrentMapPriceOfLoyalty() ) {

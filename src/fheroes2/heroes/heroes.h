@@ -145,7 +145,7 @@ public:
         ELIZA,
         ARCHIBALD,
         HALTON,
-        BAX,
+        BRAX,
         // From The Price of Loyalty expansion.
         SOLMYR,
         DAINWIN,
