@@ -3289,16 +3289,24 @@ namespace
 
                 fheroes2::Display & display = fheroes2::Display::instance();
 
-                for ( const int32_t eyeIndex : eyeMagiIndexes ) {
-                    const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ) );
+                const size_t maxDelay = 7;
 
+                const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ) );
+                bool skipAnimation = false;
+                fheroes2::Rect radarRenderArea;
+
+                for ( const int32_t eyeIndex : eyeMagiIndexes ) {
                     Maps::ClearFog( eyeIndex, scoutRange, hero.GetColor() );
 
                     const fheroes2::Point eyePosition = Maps::GetPoint( eyeIndex );
+                    const fheroes2::Rect eyeRoi( eyePosition.x - scoutRange, eyePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 );
+
+                    if ( skipAnimation ) {
+                        radarRenderArea = fheroes2::getBoundaryRect( radarRenderArea, eyeRoi );
+                        continue;
+                    }
 
                     I.getGameArea().SetCenter( eyePosition );
-
-                    const fheroes2::Rect eyeRoi( eyePosition.x - scoutRange, eyePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 );
 
                     I.getRadar().SetRenderArea( eyeRoi );
                     I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
@@ -3306,9 +3314,14 @@ namespace
                     display.render();
 
                     LocalEvent & le = LocalEvent::Get();
-                    int delay = 0;
+                    size_t delay = 0;
 
-                    while ( le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) && delay < 7 ) {
+                    while ( delay < maxDelay && le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
+                        if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                            skipAnimation = true;
+                            break;
+                        }
+
                         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                             ++delay;
                             Game::updateAdventureMapAnimationIndex();
@@ -3317,6 +3330,11 @@ namespace
                             display.render();
                         }
                     }
+                }
+
+                if ( skipAnimation ) {
+                    I.getRadar().SetRenderArea( radarRenderArea );
+                    I.setRedraw( Interface::REDRAW_RADAR );
                 }
 
                 I.getGameArea().SetCenter( hero.GetCenter() );
