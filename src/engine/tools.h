@@ -47,7 +47,6 @@ std::string GetHexString( T value, int width = 8 )
     return stream.str();
 }
 
-int GetInt( const std::string & );
 int Sign( int );
 
 std::string StringTrim( std::string );

@@ -23,9 +23,6 @@
 
 #include "maps_fileinfo.h"
 
-#if defined( _WIN32 )
-#include <locale>
-#endif
 #include <algorithm>
 #include <cassert>
 #include <cstring>
