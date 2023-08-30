@@ -390,7 +390,11 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     // - unused 15 bytes
     //    Always zeros.
 
-    modes = isInJail ? JAIL : 0;
+    modes = 0;
+
+    if ( isInJail ) {
+        SetModes( JAIL );
+    }
 
     SetIndex( mapIndex );
     SetColor( colorType );

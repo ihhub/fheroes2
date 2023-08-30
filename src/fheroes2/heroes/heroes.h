@@ -163,7 +163,7 @@ public:
         UNKNOWN
     };
 
-    enum flags_t : uint32_t
+    enum Flags : uint32_t
     {
         SHIPMASTER = 0x00000001,
 
