@@ -95,57 +95,6 @@ int CountBits( uint32_t val )
     return res;
 }
 
-int GetInt( const std::string & str )
-{
-    int res = 0;
-
-    // decimal
-    if ( std::all_of( str.begin(), str.end(), []( const unsigned char c ) { return std::isdigit( c ); } ) ) {
-        std::istringstream ss( str );
-        ss >> res;
-    }
-    else if ( str.size() > 2 && ( str.at( 0 ) == '+' || str.at( 0 ) == '-' )
-              && std::all_of( str.begin() + 1, str.end(), []( const unsigned char c ) { return std::isdigit( c ); } ) ) {
-        std::istringstream ss( str );
-        ss >> res;
-    }
-    else
-        // hex
-        if ( str.size() > 3 && str.at( 0 ) == '0' && std::tolower( str.at( 1 ) ) == 'x'
-             && std::all_of( str.begin() + 2, str.end(), []( const unsigned char c ) { return std::isxdigit( c ); } ) ) {
-        std::istringstream ss( str );
-        ss >> std::hex >> res;
-    }
-    else
-    // str
-    {
-        std::string lower = StringLower( str );
-
-        if ( lower == "on" )
-            return 1;
-        else if ( lower == "one" )
-            return 1;
-        else if ( lower == "two" )
-            return 2;
-        else if ( lower == "three" )
-            return 3;
-        else if ( lower == "four" )
-            return 4;
-        else if ( lower == "five" )
-            return 5;
-        else if ( lower == "six" )
-            return 6;
-        else if ( lower == "seven" )
-            return 7;
-        else if ( lower == "eight" )
-            return 8;
-        else if ( lower == "nine" )
-            return 9;
-    }
-
-    return res;
-}
-
 void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement )
 {
     if ( pattern == nullptr ) {
