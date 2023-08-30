@@ -3285,7 +3285,7 @@ namespace
 
                 const int32_t scoutRange = static_cast<int32_t>( GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ) );
                 bool skipAnimation = false;
-                fheroes2::Rect clearRadarArea;
+                fheroes2::Rect radarRenderArea;
 
                 for ( const int32_t eyeIndex : eyeMagiIndexes ) {
                     Maps::ClearFog( eyeIndex, scoutRange, hero.GetColor() );
@@ -3294,7 +3294,7 @@ namespace
                     const fheroes2::Rect eyeRoi( eyePosition.x - scoutRange, eyePosition.y - scoutRange, 2 * scoutRange + 1, 2 * scoutRange + 1 );
 
                     if ( skipAnimation ) {
-                        clearRadarArea = fheroes2::getBoundaryRect( clearRadarArea, eyeRoi );
+                        radarRenderArea = fheroes2::getBoundaryRect( radarRenderArea, eyeRoi );
                         continue;
                     }
 
@@ -3325,7 +3325,7 @@ namespace
                 }
 
                 if ( skipAnimation ) {
-                    I.getRadar().SetRenderArea( clearRadarArea );
+                    I.getRadar().SetRenderArea( radarRenderArea );
                     I.setRedraw( Interface::REDRAW_RADAR );
                 }
 
