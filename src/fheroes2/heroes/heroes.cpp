@@ -1578,18 +1578,20 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
         }
     }
 
-    // level up sec. skill
     if ( selected.isValid() ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << ", selected: " << Skill::Secondary::String( selected.Skill() ) )
         Skill::Secondary * secs = secondary_skills.FindSkill( selected.Skill() );
 
-        if ( secs )
+        if ( secs ) {
             secs->NextLevel();
-        else
+        }
+        else {
             secondary_skills.AddSkill( Skill::Secondary( selected.Skill(), Skill::Level::BASIC ) );
+        }
 
-        // Scout the area around the hero if his Scouting skill was leveled and he belongs to any kingdom.
-        if ( ( selected.Skill() == Skill::Secondary::SCOUTING ) && ( GetColor() != Color::NONE ) ) {
+        // Campaign-only heroes get additional experience immediately upon their creation, even while still neutral.
+        // We should not try to scout the area around such heroes.
+        if ( selected.Skill() == Skill::Secondary::SCOUTING && GetColor() != Color::NONE ) {
             Scout( GetIndex() );
             if ( isControlHuman() ) {
                 ScoutRadar();
