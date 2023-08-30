@@ -516,6 +516,7 @@ public:
 
     void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const;
     void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const;
+
     void Scout( const int tileIndex ) const;
     int GetScoutingDistance() const;
 
