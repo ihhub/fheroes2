@@ -201,7 +201,7 @@ namespace Interface
         void SetRedraw() const;
 
         // Do not call this method directly if the rendering takes place on the screen, use
-        // Interface::Basic::Redraw() instead to avoid issues in the "no interface" mode
+        // Interface::BaseInterface::Redraw() instead to avoid issues in the "no interface" mode
         void Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw = false ) const;
 
         void renderTileAreaSelect( fheroes2::Image & dst, const int32_t startTile, const int32_t endTile ) const;
