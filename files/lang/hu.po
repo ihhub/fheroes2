@@ -4720,6 +4720,9 @@ msgstr ""
 "Sikerült %{count} aranyat felhalmoznod a kincstáradban.\n"
 "Az összes ellenfeled fejet hajt elötted."
 
+msgid "Victory!"
+msgstr "Győzelem!"
+
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
@@ -10431,6 +10434,3 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-msgid "Victory!"
-msgstr "Győzelem!"
