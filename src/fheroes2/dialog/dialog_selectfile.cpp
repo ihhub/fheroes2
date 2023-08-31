@@ -228,8 +228,8 @@ MapsFileInfoList GetSortedMapsFileInfoList()
 
     MapsFileInfoList list2( list1.size() );
     int32_t saveFileCount = 0;
-    for ( const std::string & saveFile : list1 ) {
-        if ( list2[saveFileCount].ReadSAV( saveFile ) ) {
+    for ( std::string & saveFile : list1 ) {
+        if ( list2[saveFileCount].ReadSAV( std::move( saveFile ) ) ) {
             ++saveFileCount;
         }
     }
