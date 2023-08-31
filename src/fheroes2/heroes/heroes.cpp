@@ -258,7 +258,7 @@ Heroes::Heroes( int heroid, int rc )
     move_point = GetMaxMovePoints();
 }
 
-void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const std::vector<uint8_t> & data )
+void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data )
 {
     assert( data.size() == MP2::MP2_HEROES_STRUCTURE_SIZE );
 
@@ -391,6 +391,10 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     //    Always zeros.
 
     modes = 0;
+
+    if ( isInJail ) {
+        SetModes( JAIL );
+    }
 
     SetIndex( mapIndex );
     SetColor( colorType );
@@ -1125,6 +1129,11 @@ bool Heroes::PickupArtifact( const Artifact & art )
         std::for_each( assembledArtifacts.begin(), assembledArtifacts.end(), Dialog::ArtifactSetAssembled );
     }
 
+    // If the hero is in jail and gets an artifact assigned using the map editor, then there is no need to scout the area
+    if ( Modes( JAIL ) ) {
+        return true;
+    }
+
     const auto scout = [this]( const int32_t artifactID ) {
         const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifactID ).bonuses;
         if ( std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE ) ) == bonuses.end() ) {
@@ -1573,18 +1582,20 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
         }
     }
 
-    // level up sec. skill
     if ( selected.isValid() ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << ", selected: " << Skill::Secondary::String( selected.Skill() ) )
         Skill::Secondary * secs = secondary_skills.FindSkill( selected.Skill() );
 
-        if ( secs )
+        if ( secs ) {
             secs->NextLevel();
-        else
+        }
+        else {
             secondary_skills.AddSkill( Skill::Secondary( selected.Skill(), Skill::Level::BASIC ) );
+        }
 
-        // Scout the area around the hero if his Scouting skill was leveled and he belongs to any kingdom.
-        if ( ( selected.Skill() == Skill::Secondary::SCOUTING ) && ( GetColor() != Color::NONE ) ) {
+        // Campaign-only heroes get additional experience immediately upon their creation, even while still neutral.
+        // We should not try to scout the area around such heroes.
+        if ( selected.Skill() == Skill::Secondary::SCOUTING && GetColor() != Color::NONE ) {
             Scout( GetIndex() );
             if ( isControlHuman() ) {
                 ScoutRadar();
@@ -1767,7 +1778,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
             return mediumSizePortrait.try_emplace( id, std::move( output ) ).first->second;
         }
         case PORT_SMALL:
-            return Heroes::DEBUG_HERO > id ? fheroes2::AGG::GetICN( ICN::MINIPORT, id ) : fheroes2::AGG::GetICN( ICN::MINIPORT, BAX );
+            return Heroes::DEBUG_HERO > id ? fheroes2::AGG::GetICN( ICN::MINIPORT, id ) : fheroes2::AGG::GetICN( ICN::MINIPORT, BRAX );
         default:
             break;
         }
@@ -1914,7 +1925,7 @@ void AllHeroes::Init()
     push_back( new Heroes( Heroes::ELIZA, Race::SORC, 5000 ) );
     push_back( new Heroes( Heroes::ARCHIBALD, Race::WRLK, 5000 ) );
     push_back( new Heroes( Heroes::HALTON, Race::KNGT, 5000 ) );
-    push_back( new Heroes( Heroes::BAX, Race::NECR, 5000 ) );
+    push_back( new Heroes( Heroes::BRAX, Race::NECR, 5000 ) );
 
     // PoL
     if ( Settings::Get().isCurrentMapPriceOfLoyalty() ) {
