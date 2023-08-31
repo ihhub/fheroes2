@@ -97,10 +97,11 @@ fheroes2::GameMode Dialog::FileOptions()
                 fheroes2::showMessage( fheroes2::Text( _( "Load Game" ), fheroes2::FontType::normalYellow() ),
                                        fheroes2::Text( _( "No save files to load." ), fheroes2::FontType::normalWhite() ), Dialog::OK );
             }
-
-            if ( Interface::AdventureMap::Get().EventLoadGame() == fheroes2::GameMode::LOAD_GAME ) {
-                result = fheroes2::GameMode::LOAD_GAME;
-                break;
+            else {
+                if ( Interface::AdventureMap::Get().EventLoadGame() == fheroes2::GameMode::LOAD_GAME ) {
+                    result = fheroes2::GameMode::LOAD_GAME;
+                    break;
+                }
             }
         }
         else if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
