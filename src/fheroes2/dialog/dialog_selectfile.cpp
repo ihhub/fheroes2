@@ -459,8 +459,7 @@ namespace
         }
         else if ( listbox.isSelected() ) {
             // Render the game date from file info.
-            redrawShortGameDate( display, listbox.GetCurrent(), dateTimeoffsetX, textInputRoi.y + 4, dateTimeWidth,
-                                 fheroes2::FontType::normalYellow() );
+            redrawShortGameDate( display, listbox.GetCurrent(), dateTimeoffsetX, textInputRoi.y + 4, dateTimeWidth, fheroes2::FontType::normalYellow() );
         }
 
         display.render( background.totalArea() );
@@ -609,8 +608,7 @@ namespace
                 }
                 else {
                     redrawTextInputField( filename, textInputRoi, false );
-                    redrawShortGameDate( display, listbox.GetCurrent(), dateTimeoffsetX, textInputRoi.y + 4, dateTimeWidth,
-                                         fheroes2::FontType::normalYellow() );
+                    redrawShortGameDate( display, listbox.GetCurrent(), dateTimeoffsetX, textInputRoi.y + 4, dateTimeWidth, fheroes2::FontType::normalYellow() );
                 }
             }
 
