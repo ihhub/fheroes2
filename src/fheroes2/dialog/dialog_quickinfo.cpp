@@ -276,7 +276,7 @@ namespace
             const Heroes * hero = Interface::GetFocusHeroes();
 
             if ( hero ) {
-                std::string heroStr;
+                const char * heroStr = nullptr;
 
                 if ( hero->HasSecondarySkill( skill.Skill() ) ) {
                     heroStr = ( _( "already knows this skill" ) );
@@ -285,7 +285,7 @@ namespace
                     heroStr = ( _( "already has max skills" ) );
                 }
 
-                if ( !heroStr.empty() ) {
+                if ( heroStr != nullptr ) {
                     str.append( "\n(" );
                     str.append( heroStr );
                     str += ')';
