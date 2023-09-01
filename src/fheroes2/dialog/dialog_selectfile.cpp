@@ -74,11 +74,11 @@ namespace
 
     bool redrawTextInputField( const std::string & filename, const fheroes2::Rect & field, const bool whiteFont )
     {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
         if ( filename.empty() ) {
             return false;
         }
+
+        fheroes2::Display & display = fheroes2::Display::instance();
 
         const int32_t maxTextWidth = field.width - 4;
 
@@ -171,6 +171,12 @@ namespace
 
     void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current )
     {
+        std::string savname( System::GetBasename( info.file ) );
+
+        if ( savname.empty() ) {
+            return;
+        }
+
         const size_t arraySize = 5;
 
         char shortMonth[arraySize];
@@ -185,46 +191,43 @@ namespace
         std::strftime( shortDate, arraySize, "%d", &tmi );
         std::strftime( shortHours, arraySize, "%H", &tmi );
         std::strftime( shortMinutes, arraySize, "%M", &tmi );
-        std::string savname( System::GetBasename( info.file ) );
 
-        if ( !savname.empty() ) {
-            const std::string saveExtension = Game::GetSaveFileExtension();
-            const size_t dotPos = savname.size() - saveExtension.size();
+        const std::string saveExtension = Game::GetSaveFileExtension();
+        const size_t dotPos = savname.size() - saveExtension.size();
 
-            if ( StringLower( savname.substr( dotPos ) ) == saveExtension ) {
-                savname.erase( dotPos );
-            }
-
-            const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
-            fheroes2::Display & display = fheroes2::Display::instance();
-
-            dsty += 2;
-
-            fheroes2::Text text{ std::move( savname ), font };
-            const int32_t textMaxWidth = _listBackground->width() - 119;
-            text.fitToOneRow( textMaxWidth );
-            text.draw( dstx + ( textMaxWidth - text.width() ) / 2, dsty, display );
-
-            dstx += textMaxWidth;
-
-            text.set( shortMonth, font );
-            text.draw( dstx + 4, dsty, display );
-
-            text.set( shortDate, font );
-            text.draw( dstx + 56 - text.width() / 2, dsty, display );
-
-            text.set( ",", font );
-            text.draw( dstx + 66, dsty, display );
-
-            text.set( shortHours, font );
-            text.draw( dstx + 82 - text.width() / 2, dsty, display );
-
-            text.set( ":", font );
-            text.draw( dstx + 92, dsty, display );
-
-            text.set( shortMinutes, font );
-            text.draw( dstx + 105 - text.width() / 2, dsty, display );
+        if ( StringLower( savname.substr( dotPos ) ) == saveExtension ) {
+            savname.erase( dotPos );
         }
+
+        const fheroes2::FontType font = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        dsty += 2;
+
+        fheroes2::Text text{ std::move( savname ), font };
+        const int32_t textMaxWidth = _listBackground->width() - 119;
+        text.fitToOneRow( textMaxWidth );
+        text.draw( dstx + ( textMaxWidth - text.width() ) / 2, dsty, display );
+
+        dstx += textMaxWidth;
+
+        text.set( shortMonth, font );
+        text.draw( dstx + 4, dsty, display );
+
+        text.set( shortDate, font );
+        text.draw( dstx + 56 - text.width() / 2, dsty, display );
+
+        text.set( ",", font );
+        text.draw( dstx + 66, dsty, display );
+
+        text.set( shortHours, font );
+        text.draw( dstx + 82 - text.width() / 2, dsty, display );
+
+        text.set( ":", font );
+        text.draw( dstx + 92, dsty, display );
+
+        text.set( shortMinutes, font );
+        text.draw( dstx + 105 - text.width() / 2, dsty, display );
     }
 
     void FileInfoListBox::RedrawBackground( const fheroes2::Point & /* unused */ )
@@ -258,13 +261,13 @@ namespace
         list1.ReadDir( Game::GetSaveDir(), Game::GetSaveFileExtension(), false );
 
         MapsFileInfoList list2( list1.size() );
-        int32_t saveFileCount = 0;
+        size_t saveFileCount = 0;
         for ( const std::string & saveFile : list1 ) {
             if ( list2[saveFileCount].ReadSAV( saveFile ) ) {
                 ++saveFileCount;
             }
         }
-        if ( static_cast<size_t>( saveFileCount ) != list2.size() ) {
+        if ( saveFileCount != list2.size() ) {
             list2.resize( saveFileCount );
         }
         std::sort( list2.begin(), list2.end(), Maps::FileInfo::FileSorting );
