@@ -7351,7 +7351,7 @@ msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
 "only do half damage."
 msgstr ""
-"Otur drabbar ibland hjältens trupper i strid, som får de att bara göra "
+"Otur drabbar ibland hjältens trupper i strid, som får de att bara gör "
 "hälften i skada."
 
 msgid ""
