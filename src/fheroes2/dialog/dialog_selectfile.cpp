@@ -400,13 +400,13 @@ namespace
             MapsFileInfoList::iterator it = lists.begin();
             for ( ; it != lists.end(); ++it ) {
                 if ( ( *it ).file == lastfile ) {
-                    fileTimestamp = ( *it ).timestamp;
                     break;
                 }
             }
 
             if ( it != lists.end() ) {
                 listbox.SetCurrent( std::distance( lists.begin(), it ) );
+                fileTimestamp = ( *it ).timestamp;
             }
             else {
                 if ( !isEditing ) {
@@ -442,7 +442,7 @@ namespace
 
             Game::passAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY );
         }
-        else {
+        else if ( listbox.isSelected() ) {
             // Render date and time of selected file.
             redrawDateTime( display, fileTimestamp, textInputRoi.x + textInputRoi.width, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
         }
