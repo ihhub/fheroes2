@@ -201,7 +201,7 @@ namespace
             dsty += 2;
 
             fheroes2::Text text{ std::move( savname ), font };
-            const int32_t textMaxWidth = _listBackground->width() - 120;
+            const int32_t textMaxWidth = _listBackground->width() - 119;
             text.fitToOneRow( textMaxWidth );
             text.draw( dstx + ( textMaxWidth - text.width() ) / 2, dsty, display );
 
@@ -297,7 +297,7 @@ namespace
 
         // We divide the save-files list: file name and file date/time.
         background.applyTextBackgroundShading( { listRoi.x, listRoi.y, textInputRoi.width, listRoi.height } );
-        background.applyTextBackgroundShading( { listRoi.x + textInputRoi.width - 2, listRoi.y, listRoi.width - textInputRoi.width + 2, listRoi.height } );
+        background.applyTextBackgroundShading( { listRoi.x + textInputRoi.width, listRoi.y, listRoi.width - textInputRoi.width, listRoi.height } );
         background.applyTextBackgroundShading( textInputRoi );
 
         fheroes2::ImageRestorer textInputBackground( fheroes2::Display::instance(), textInputRoi.x, textInputRoi.y, textInputRoi.width, textInputRoi.height );
