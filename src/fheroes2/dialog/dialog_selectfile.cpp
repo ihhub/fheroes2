@@ -115,7 +115,7 @@ namespace
             // To avoid this we have to replace all '\' symbols by '/' symbols.
             std::string fullPath = info.file;
 
-            // TODO: Make '\' symbol in small font to properly show file path in OS familliar style.
+            // TODO: Make '\' symbol in small font to properly show file path in OS familiar style.
             StringReplace( fullPath, "\\", "/" );
 
             const fheroes2::Text header( ResizeToShortName( info.file ), fheroes2::FontType::normalYellow() );
@@ -295,7 +295,7 @@ namespace
         const fheroes2::Rect listRoi( area.x + 24, area.y + 37, area.width - 75, area.height - listHeightDeduction );
         const fheroes2::Rect textInputRoi( listRoi.x, listRoi.y + listRoi.height + 12, listRoi.width - 119, 21 );
 
-        // We divide the savefiles list: file name and file date/time.
+        // We divide the save-files list: file name and file date/time.
         background.applyTextBackgroundShading( { listRoi.x, listRoi.y, textInputRoi.width, listRoi.height } );
         background.applyTextBackgroundShading( { listRoi.x + textInputRoi.width - 2, listRoi.y, listRoi.width - textInputRoi.width + 2, listRoi.height } );
         background.applyTextBackgroundShading( textInputRoi );
@@ -304,7 +304,7 @@ namespace
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        // Prepare OKAY and CANCEL buttont and render their shadows.
+        // Prepare OKAY and CANCEL buttons and render their shadows.
         const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
         const int32_t buttonOffsetY = area.y + area.height - 32;
         fheroes2::Button buttonOk( area.x + 18, buttonOffsetY, buttonOkIcn, 0, 1 );
