@@ -72,7 +72,43 @@ namespace
         return res;
     }
 
-    bool redrawTextInputField( const std::string & filename, const fheroes2::Rect & field, const bool whiteFont )
+    void redrawDateTime( fheroes2::Image & output, const uint32_t timestamp, const int32_t dstx, const int32_t dsty, const fheroes2::FontType font )
+    {
+        const size_t arraySize = 5;
+
+        char shortMonth[arraySize];
+        char shortDate[arraySize];
+        char shortHours[arraySize];
+        char shortMinutes[arraySize];
+
+        const tm tmi = System::GetTM( timestamp );
+
+        // TODO: Use system locale date format (e.g. 9 Mar instead of Mar 09).
+        std::strftime( shortMonth, arraySize, "%b", &tmi );
+        std::strftime( shortDate, arraySize, "%d", &tmi );
+        std::strftime( shortHours, arraySize, "%H", &tmi );
+        std::strftime( shortMinutes, arraySize, "%M", &tmi );
+
+        fheroes2::Text text( shortMonth, font );
+        text.draw( dstx + 4, dsty, output );
+
+        text.set( shortDate, font );
+        text.draw( dstx + 56 - text.width() / 2, dsty, output );
+
+        text.set( ",", font );
+        text.draw( dstx + 66, dsty, output );
+
+        text.set( shortHours, font );
+        text.draw( dstx + 82 - text.width() / 2, dsty, output );
+
+        text.set( ":", font );
+        text.draw( dstx + 92, dsty, output );
+
+        text.set( shortMinutes, font );
+        text.draw( dstx + 105 - text.width() / 2, dsty, output );
+    }
+
+    bool redrawTextInputField( const std::string & filename, const fheroes2::Rect & field, const bool isEditing )
     {
         if ( filename.empty() ) {
             return false;
@@ -82,7 +118,7 @@ namespace
 
         const int32_t maxTextWidth = field.width - 4;
 
-        fheroes2::Text currentFilename( filename, whiteFont ? fheroes2::FontType::normalWhite() : fheroes2::FontType::normalYellow() );
+        fheroes2::Text currentFilename( filename, isEditing ? fheroes2::FontType::normalWhite() : fheroes2::FontType::normalYellow() );
         const int32_t initialTextWidth = currentFilename.width();
         currentFilename.fitToOneRow( maxTextWidth );
         currentFilename.draw( field.x + 2 + ( maxTextWidth - currentFilename.width() ) / 2, field.y + 4, display );
@@ -97,9 +133,7 @@ namespace
         using Interface::ListBox<Maps::FileInfo>::ActionListSingleClick;
         using Interface::ListBox<Maps::FileInfo>::ActionListPressRight;
 
-        explicit FileInfoListBox( const fheroes2::Point & pt )
-            : Interface::ListBox<Maps::FileInfo>( pt )
-        {}
+        using ListBox::ListBox;
 
         void RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current ) override;
         void RedrawBackground( const fheroes2::Point & dst ) override;
@@ -140,7 +174,7 @@ namespace
             fheroes2::showMessage( header, body, Dialog::ZERO );
         }
 
-        int getCurrentId()
+        int getCurrentId() const
         {
             return _currentId;
         }
@@ -177,21 +211,6 @@ namespace
             return;
         }
 
-        const size_t arraySize = 5;
-
-        char shortMonth[arraySize];
-        char shortDate[arraySize];
-        char shortHours[arraySize];
-        char shortMinutes[arraySize];
-
-        const tm tmi = System::GetTM( info.timestamp );
-
-        // TODO: Use system locale date format (e.g. 9 Mar instead of Mar 09).
-        std::strftime( shortMonth, arraySize, "%b", &tmi );
-        std::strftime( shortDate, arraySize, "%d", &tmi );
-        std::strftime( shortHours, arraySize, "%H", &tmi );
-        std::strftime( shortMinutes, arraySize, "%M", &tmi );
-
         const std::string saveExtension = Game::GetSaveFileExtension();
         const size_t dotPos = savname.size() - saveExtension.size();
 
@@ -211,23 +230,7 @@ namespace
 
         dstx += textMaxWidth;
 
-        text.set( shortMonth, font );
-        text.draw( dstx + 4, dsty, display );
-
-        text.set( shortDate, font );
-        text.draw( dstx + 56 - text.width() / 2, dsty, display );
-
-        text.set( ",", font );
-        text.draw( dstx + 66, dsty, display );
-
-        text.set( shortHours, font );
-        text.draw( dstx + 82 - text.width() / 2, dsty, display );
-
-        text.set( ":", font );
-        text.draw( dstx + 92, dsty, display );
-
-        text.set( shortMinutes, font );
-        text.draw( dstx + 105 - text.width() / 2, dsty, display );
+        redrawDateTime( display, info.timestamp, dstx, dsty, font );
     }
 
     void FileInfoListBox::RedrawBackground( const fheroes2::Point & /* unused */ )
@@ -303,7 +306,17 @@ namespace
         background.applyTextBackgroundShading( { listRoi.x + textInputRoi.width, listRoi.y, listRoi.width - textInputRoi.width, listRoi.height } );
         background.applyTextBackgroundShading( textInputRoi );
 
-        fheroes2::ImageRestorer textInputBackground( fheroes2::Display::instance(), textInputRoi.x, textInputRoi.y, textInputRoi.width, textInputRoi.height );
+        std::unique_ptr<fheroes2::ImageRestorer> textInputBackground;
+        if ( isEditing ) {
+            textInputBackground
+                = std::make_unique<fheroes2::ImageRestorer>( fheroes2::Display::instance(), textInputRoi.x, textInputRoi.y, textInputRoi.width, textInputRoi.height );
+        }
+        else {
+            // Make background for the selected file date and time.
+            background.applyTextBackgroundShading( { textInputRoi.x + textInputRoi.width, textInputRoi.y, listRoi.width - textInputRoi.width, textInputRoi.height } );
+            textInputBackground
+                = std::make_unique<fheroes2::ImageRestorer>( fheroes2::Display::instance(), textInputRoi.x, textInputRoi.y, listRoi.width, textInputRoi.height );
+        }
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
@@ -377,6 +390,7 @@ namespace
         listbox.updateScrollBarImage();
 
         std::string filename;
+        uint32_t fileTimestamp{ 0 };
         size_t charInsertPos = 0;
 
         if ( !lastfile.empty() ) {
@@ -386,6 +400,7 @@ namespace
             MapsFileInfoList::iterator it = lists.begin();
             for ( ; it != lists.end(); ++it ) {
                 if ( ( *it ).file == lastfile ) {
+                    fileTimestamp = ( *it ).timestamp;
                     break;
                 }
             }
@@ -404,6 +419,7 @@ namespace
 
         if ( filename.empty() && listbox.isSelected() ) {
             filename = ResizeToShortName( listbox.GetCurrent().file );
+            fileTimestamp = listbox.GetCurrent().timestamp;
             charInsertPos = filename.size();
         }
 
@@ -425,6 +441,10 @@ namespace
             buttonVirtualKB->draw();
 
             Game::passAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY );
+        }
+        else {
+            // Render date and time of selected file.
+            redrawDateTime( display, fileTimestamp, textInputRoi.x + textInputRoi.width, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
         }
 
         display.render( background.totalArea() );
@@ -559,6 +579,7 @@ namespace
                     lastSelectedSaveFileName = selectedFileName;
                     filename = selectedFileName;
                     charInsertPos = filename.size();
+                    fileTimestamp = listbox.GetCurrent().timestamp;
                 }
                 else if ( isEditing ) {
                     // Empty last selected save file name so that we can replace the input field's name if we select the same save file again
@@ -566,9 +587,15 @@ namespace
                     lastSelectedSaveFileName = "";
                 }
 
-                textInputBackground.restore();
-                isTextLimit = isEditing ? redrawTextInputField( insertCharToString( filename, charInsertPos, isCursorVisible ? '_' : '\x7F' ), textInputRoi, true )
-                                        : redrawTextInputField( filename, textInputRoi, false );
+                textInputBackground->restore();
+
+                if ( isEditing ) {
+                    isTextLimit = redrawTextInputField( insertCharToString( filename, charInsertPos, isCursorVisible ? '_' : '\x7F' ), textInputRoi, true );
+                }
+                else {
+                    redrawTextInputField( filename, textInputRoi, false );
+                    redrawDateTime( display, fileTimestamp, textInputRoi.x + textInputRoi.width, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
+                }
             }
 
             display.render( background.activeArea() );
