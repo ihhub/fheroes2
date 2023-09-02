@@ -186,7 +186,7 @@ public:
     static void Refresh();
 
     int Themes() const;
-    bool SetThemes( int, bool force = false );
+    bool SetThemes( int name, bool force = false );
 
     void setCustomImage( const fheroes2::Image & image, const fheroes2::Point & offset );
 

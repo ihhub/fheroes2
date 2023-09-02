@@ -73,7 +73,7 @@ bool Cursor::SetThemes( int name, bool force )
         SetOffset( name, { ( spr.width() - spr.x() ) / 2, ( spr.height() - spr.y() ) / 2 } );
         fheroes2::cursor().update( spr, -_offset.x, -_offset.y );
 
-        // immediately apply new offset, force
+        // Apply new offset.
         const fheroes2::Point & currentPos = LocalEvent::Get().GetMouseCursor();
         Move( currentPos.x, currentPos.y );
         return true;
@@ -252,15 +252,16 @@ CursorRestorer::CursorRestorer( const bool visible, const int theme )
 
 CursorRestorer::~CursorRestorer()
 {
-    Cursor & cursor = Cursor::Get();
+    fheroes2::Cursor & cursorRenderer = fheroes2::cursor();
+    Cursor & cursorIcon = Cursor::Get();
 
-    if ( fheroes2::cursor().isVisible() != _visible || cursor.Themes() != _theme ) {
-        cursor.SetThemes( _theme );
+    if ( cursorRenderer.isVisible() != _visible || cursorIcon.Themes() != _theme ) {
+        cursorIcon.SetThemes( _theme );
 
-        fheroes2::cursor().show( _visible );
+        cursorRenderer.show( _visible );
 
         // immediately render cursor area in case of software emulated cursor
-        if ( fheroes2::cursor().isSoftwareEmulation() ) {
+        if ( cursorRenderer.isSoftwareEmulation() ) {
             const fheroes2::Point & pos = LocalEvent::Get().GetMouseCursor();
 
             fheroes2::Display::instance().render( { pos.x, pos.y, 1, 1 } );

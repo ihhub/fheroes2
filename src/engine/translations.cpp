@@ -191,8 +191,15 @@ namespace
     const char * stripContext( const char * str )
     {
         const char * pos = str;
-        while ( *pos && *pos++ != contextSeparator )
-            ;
+        while ( *pos ) {
+            if ( *pos == contextSeparator ) {
+                ++pos;
+                break;
+            }
+
+            ++pos;
+        }
+
         return *pos ? pos : str;
     }
 
