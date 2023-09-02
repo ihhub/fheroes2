@@ -16,165 +16,184 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2011-06-02 03:12+0000\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr ""
-"HARC\n"
-"SORÁN"
+"CSAK\n"
+"CSATA"
 
 msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
+"ÚJ\n"
+"JÁTÉK"
 
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
+"JÁTÉK\n"
+"MENTÉS"
 
 msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
+"JÁTÉK\n"
+"BETÖLTÉS"
 
 msgid "INFO"
-msgstr ""
+msgstr "INFÓ"
 
 msgid "QUIT"
-msgstr ""
+msgstr "KILÉPÉS"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "MÉGSEM"
 
 msgid "OKAY"
-msgstr ""
+msgstr "OK"
 
 msgid "smallerButton|OKAY"
-msgstr ""
+msgstr "OK"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "ELFOGAD"
 
 msgid "DECLINE"
-msgstr ""
+msgstr "ELUTASÍT"
 
 msgid "LEARN"
-msgstr ""
+msgstr "OLVAS"
 
 msgid "TRADE"
-msgstr ""
+msgstr "ÜZLET"
 
 msgid "YES"
-msgstr ""
+msgstr "IGEN"
 
 msgid "NO"
-msgstr ""
+msgstr "NEM"
 
 msgid "EXIT"
-msgstr ""
+msgstr "KILÉP"
 
 msgid "smallerButton|EXIT"
-msgstr ""
+msgstr "EXIT"
 
 msgid "DISMISS"
-msgstr ""
+msgstr "ELBOCSÁT"
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "FEJLESZT"
 
 msgid "RESTART"
-msgstr ""
+msgstr "ÚJRAINDÍT"
 
 msgid "HEROES"
-msgstr ""
+msgstr "HŐSÖK"
 
 msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
+"VÁROS\n"
+"/VÁR"
 
 msgid "S"
-msgstr ""
+msgstr "S"
 
 msgid "M"
-msgstr ""
+msgstr "M"
 
 msgid "L"
-msgstr ""
+msgstr "L"
 
 msgid "X-L"
-msgstr ""
+msgstr "XL"
 
 msgid "ALL"
-msgstr ""
+msgstr "MIND"
 
 msgid "SELECT"
-msgstr ""
+msgstr "KIVÁL."
 
 msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
+"NORMÁL\n"
+"JÁTÉK"
 
 msgid ""
 "CAMPAIGN\n"
 "GAME"
 msgstr ""
+"HADJÁRAT\n"
+"JÁTÉK"
 
 msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
 msgstr ""
+"TÖBB-\n"
+"JÁTÉKOS\n"
+"MÓD"
 
 msgid "CONFIG"
-msgstr ""
+msgstr "BEÁLLÍT"
 
 msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
+"EREDETI\n"
+"HADJÁRAT"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
+"KIEGÉSZÍTŐ\n"
+"HADJÁRAT"
 
 msgid "HOT SEAT"
-msgstr ""
+msgstr "HELYCSERE"
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 JÁTÉKOS"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 JÁTÉKOS"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 JÁTÉKOS"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 JÁTÉKOS"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 JÁTÉKOS"
 
 msgid "GIFT"
-msgstr "AJÁNDÉK"
+msgstr "AJÁND."
 
 msgid "MAX"
-msgstr ""
+msgstr "MAX"
 
 msgid "DIFFICULTY"
 msgstr "NEHÉZSÉG"
 
 msgid "VIEW INTRO"
-msgstr ""
+msgstr "BEVEZETŐ"
 
 msgid "MIN"
-msgstr ""
+msgstr "MIN"
 
 msgid "Warrior"
 msgstr "Harcos"
@@ -2508,28 +2527,23 @@ msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
 msgid "Town"
 msgstr "Város"
 
-#, fuzzy
 msgid "Exit Castle"
 msgstr "Kastély elhagyása"
 
-#, fuzzy
 msgid "Exit Town"
 msgstr "Város elhagyása"
 
-#, fuzzy
 msgid "Show Income"
 msgstr "Jövedelem:"
 
 msgid "View Hero"
 msgstr "Hős mutatása"
 
-#, fuzzy
 msgid "The above spells are available here."
-msgstr "Az említett varázslatok beíródtak a varázskönyvedbe."
+msgstr "A fenti varázslatok érhetők el itt."
 
-#, fuzzy
 msgid "The spells the hero can learn have been added to their book."
-msgstr "Az említett varázslatok beíródtak a varázskönyvedbe."
+msgstr "A hős által megtanulható varázslatok beíródtak a varázskönyvébe."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
@@ -4703,9 +4717,8 @@ msgstr ""
 "Sikerült %{count} aranyat felhalmoznod a kincstáradban.\n"
 "Az összes ellenfeled fejet hajt elötted."
 
-#, fuzzy
 msgid "Victory!"
-msgstr "Ector"
+msgstr "Győzelem!"
 
 msgid ""
 "The enemy has captured %{name}!\n"
@@ -4885,13 +4898,13 @@ msgid " All dwellings increase population."
 msgstr " Mindegyik toborzóhelynek nőtt a termelése."
 
 msgid "New Month!"
-msgstr ""
+msgstr "Új hónap!"
 
 msgid "New Week!"
-msgstr ""
+msgstr "Új hét!"
 
 msgid "Beware!"
-msgstr ""
+msgstr "Vigyázat!"
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
