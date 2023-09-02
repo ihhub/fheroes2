@@ -282,9 +282,7 @@ namespace Interface
 
             // cursor is over the radar
             if ( le.MouseCursor( _radar.GetRect() ) ) {
-                if ( Cursor::POINTER != cursor.Themes() ) {
-                    cursor.SetThemes( Cursor::POINTER );
-                }
+                cursor.SetThemes( Cursor::POINTER );
 
                 // TODO: Add checks for object placing/moving, and other Editor functions that uses mouse dragging.
                 if ( !_gameArea.isDragScroll() && ( _editorPanel.getBrushSize() > 0 || _selectedTile == -1 ) ) {
@@ -297,18 +295,16 @@ namespace Interface
             }
             // cursor is over the buttons area
             else if ( le.MouseCursor( _editorPanel.getRect() ) ) {
-                if ( Cursor::POINTER != cursor.Themes() ) {
-                    cursor.SetThemes( Cursor::POINTER );
-                }
+                cursor.SetThemes( Cursor::POINTER );
+
                 if ( !_gameArea.NeedScroll() ) {
                     res = _editorPanel.queueEventProcessing();
                 }
             }
             // cursor is somewhere else
             else if ( !_gameArea.NeedScroll() ) {
-                if ( Cursor::POINTER != cursor.Themes() ) {
-                    cursor.SetThemes( Cursor::POINTER );
-                }
+                cursor.SetThemes( Cursor::POINTER );
+
                 _gameArea.ResetCursorPosition();
             }
 
