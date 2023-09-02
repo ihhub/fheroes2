@@ -2819,7 +2819,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             Dialog::Message( _( "Ballista" ), ballistaMessage, Font::BIG, le.MousePressRight() ? 0 : Dialog::OK );
         }
     }
-    else if ( conf.BattleShowArmyOrder() && le.MouseCursor( turnOrderRect ) ) {
+    else if ( conf.BattleShowTurnOrder() && le.MouseCursor( turnOrderRect ) ) {
         cursor.SetThemes( Cursor::POINTER );
         armies_order.QueueEventProcessing( msg, _interfacePosition.getPosition() );
     }
