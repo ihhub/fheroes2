@@ -27,6 +27,7 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
 #include <map>
 #include <ostream>
 #include <string>
@@ -190,10 +191,9 @@ namespace
 
     const char * stripContext( const char * str )
     {
-        const char * pos = str;
-        while ( *pos && *pos++ != contextSeparator )
-            ;
-        return *pos ? pos : str;
+        const char * pos = std::strchr( str, contextSeparator );
+
+        return pos ? ++pos : str;
     }
 
     struct mofile
