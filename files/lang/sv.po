@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-02 00:54+0000\n"
+"POT-Creation-Date: 2023-09-02 14:42+0000\n"
 "PO-Revision-Date: 2023-09-01 15:20+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -384,14 +384,15 @@ msgstr "Hastighet: %{speed}"
 msgid "Speed"
 msgstr "Hastighet"
 
-msgid "Army Order"
-msgstr "Truppturordning"
-
 msgid "Off"
 msgstr "Av"
 
 msgid "On"
 msgstr "På"
+
+#, fuzzy
+msgid "Turn Order"
+msgstr "Truppturordning"
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -429,7 +430,8 @@ msgstr ""
 msgid "Set the speed of combat actions and animations."
 msgstr "Ange hastigheten för animationer på slagfältet."
 
-msgid "Toggle to display army order during the battle."
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
 msgstr "Visa truppturordningen på slagfältet."
 
 msgid ""
