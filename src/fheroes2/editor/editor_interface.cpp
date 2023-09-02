@@ -101,7 +101,7 @@ namespace Interface
                                      - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
     }
 
-    void Editor::redraw( const uint32_t force /* = 0 */ )
+    void Editor::redraw( const uint32_t force )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -377,7 +377,7 @@ namespace Interface
                 }
 
                 if ( needRedraw() ) {
-                    redraw();
+                    redraw( 0 );
 
                     // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
                     assert( getRedrawMask() == 0 );
