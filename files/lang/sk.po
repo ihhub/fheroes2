@@ -98,7 +98,9 @@ msgid "RESTART"
 msgstr "REŠTART"
 
 msgid "HEROES"
-msgstr "HRDINOVIA"
+msgstr ""
+"HRDI-\n"
+"NOVIA"
 
 msgid ""
 "TOWNS/\n"
