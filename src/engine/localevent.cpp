@@ -677,7 +677,7 @@ void LocalEvent::CloseController()
     }
 }
 
-void LocalEvent::OpenTouchpad()
+void LocalEvent::OpenTouchpad() const
 {
     const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {

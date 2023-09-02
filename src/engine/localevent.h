@@ -290,7 +290,7 @@ public:
 
     void OpenController();
     void CloseController();
-    void OpenTouchpad();
+    void OpenTouchpad() const;
 
     void SetControllerPointerSpeed( const int newSpeed )
     {
