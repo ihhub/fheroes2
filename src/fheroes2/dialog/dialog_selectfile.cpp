@@ -302,8 +302,8 @@ namespace
         const int32_t listHeightDeduction = 112;
         const int32_t listAreaOffsetY = 3;
         const int32_t listAreaHeightDeduction = 4;
-        // If we have not much save files we reduce the maximum dialog height but not less than for 4 elements.
-        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * std::max( static_cast<int32_t>( lists.size() ), 4 ) + listAreaOffsetY
+        // If we have not much save files we reduce the maximum dialog height but not less than for 11 elements.
+        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * std::max( static_cast<int32_t>( lists.size() ), 11 ) + listAreaOffsetY
                                         + listAreaHeightDeduction + listHeightDeduction;
 
         fheroes2::Display & display = fheroes2::Display::instance();
