@@ -62,6 +62,9 @@
 
 namespace
 {
+    // This constant sets the maximum displayed file name width. This value affects the dialog horizontal size.
+    const int32_t maxFileNameWidth = 260;
+
     std::string ResizeToShortName( const std::string & str )
     {
         std::string res = System::GetBasename( str );
@@ -132,14 +135,12 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const int32_t maxTextWidth = field.width - 4;
-
         fheroes2::Text currentFilename( filename, isEditing ? fheroes2::FontType::normalWhite() : fheroes2::FontType::normalYellow() );
         const int32_t initialTextWidth = currentFilename.width();
-        currentFilename.fitToOneRow( maxTextWidth );
-        currentFilename.draw( field.x + 2 + ( maxTextWidth - currentFilename.width() ) / 2, field.y + 4, display );
+        currentFilename.fitToOneRow( maxFileNameWidth );
+        currentFilename.draw( field.x + 4 + ( maxFileNameWidth - currentFilename.width() ) / 2, field.y + 4, display );
 
-        return ( initialTextWidth + 12 ) > maxTextWidth;
+        return ( initialTextWidth + 10 ) > maxFileNameWidth;
     }
 
     class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
@@ -240,13 +241,10 @@ namespace
         dsty += 2;
 
         fheroes2::Text text{ std::move( savname ), font };
-        const int32_t textMaxWidth = _listBackground->width() - 119;
-        text.fitToOneRow( textMaxWidth );
-        text.draw( dstx + ( textMaxWidth - text.width() ) / 2, dsty, display );
+        text.fitToOneRow( maxFileNameWidth );
+        text.draw( dstx + 4 + ( maxFileNameWidth - text.width() ) / 2, dsty, display );
 
-        dstx += textMaxWidth;
-
-        redrawDateTime( display, info.timestamp, dstx, dsty, font );
+        redrawDateTime( display, info.timestamp, dstx + maxFileNameWidth + 9, dsty, font );
     }
 
     void FileInfoListBox::RedrawBackground( const fheroes2::Point & /* unused */ )
@@ -302,20 +300,20 @@ namespace
         MapsFileInfoList lists = getSortedMapsFileInfoList();
 
         const int32_t listHeightDeduction = 112;
-        const int32_t listAreaOffserY = 3;
+        const int32_t listAreaOffsetY = 3;
         const int32_t listAreaHeightDeduction = 4;
         // If we have not much save files we reduce the maximum dialog height but not less than for 4 elements.
-        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * std::max( static_cast<int32_t>( lists.size() ), 4 ) + listAreaOffserY
+        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * std::max( static_cast<int32_t>( lists.size() ), 4 ) + listAreaOffsetY
                                         + listAreaHeightDeduction + listHeightDeduction;
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
         // Dialog height is also capped with the current screen height.
-        fheroes2::StandardWindow background( 455, std::min( display.height() - 100, maxDialogHeight ), true, display );
+        fheroes2::StandardWindow background( maxFileNameWidth + 204, std::min( display.height() - 100, maxDialogHeight ), true, display );
 
         const fheroes2::Rect area = background.activeArea();
         const fheroes2::Rect listRoi( area.x + 24, area.y + 37, area.width - 75, area.height - listHeightDeduction );
-        const fheroes2::Rect textInputRoi( listRoi.x, listRoi.y + listRoi.height + 12, listRoi.width - 119, 21 );
+        const fheroes2::Rect textInputRoi( listRoi.x, listRoi.y + listRoi.height + 12, maxFileNameWidth + 8, 21 );
         const int32_t dateTimeoffsetX = textInputRoi.x + textInputRoi.width;
         const int32_t dateTimeWidth = listRoi.width - textInputRoi.width;
 
@@ -362,7 +360,7 @@ namespace
         // Initialize list background restorer to use it in list method 'listbox.RedrawBackground()'.
         listbox.initListBackgroundRestorer( listRoi );
 
-        listbox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - listAreaOffserY, listRoi.height - listAreaHeightDeduction } );
+        listbox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - listAreaOffsetY, listRoi.height - listAreaHeightDeduction } );
 
         // Render the scrollbar.
         const fheroes2::Sprite & scrollBar = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
