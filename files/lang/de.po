@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-27 10:37+0000\n"
+"POT-Creation-Date: 2023-09-02 14:42+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -390,14 +390,15 @@ msgstr "Geschw.: %{speed}"
 msgid "Speed"
 msgstr "Geschwindigkeit"
 
-msgid "Army Order"
-msgstr "Reihen- folge"
-
 msgid "Off"
 msgstr "Aus"
 
 msgid "On"
 msgstr "An"
+
+#, fuzzy
+msgid "Turn Order"
+msgstr "Reihen- folge"
 
 msgid "Auto Spell Casting"
 msgstr "Auto Zauber"
@@ -429,7 +430,8 @@ msgstr "Schadens-Information"
 msgid "Set the speed of combat actions and animations."
 msgstr "Geschwindigkeit von Kampfhandlungen und Animationen festlegen."
 
-msgid "Toggle to display army order during the battle."
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
 msgstr "Schaltet die Ansicht der Reihenfolge von Armeen ein oder aus."
 
 msgid ""
