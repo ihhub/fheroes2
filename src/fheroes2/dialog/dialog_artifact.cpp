@@ -30,7 +30,7 @@
 
 void Dialog::ArtifactSetAssembled( const ArtifactSetData & artifactSetData )
 {
-    const Artifact artifact( static_cast<int>( artifactSetData._assembledArtifactID ) );
+    const Artifact artifact( artifactSetData._assembledArtifactID );
     const fheroes2::ArtifactDialogElement artifactUI( artifact );
 
     AudioManager::PlaySound( M82::TREASURE );

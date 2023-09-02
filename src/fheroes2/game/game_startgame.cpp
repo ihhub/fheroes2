@@ -796,7 +796,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     }
 #endif
 
-                    redraw();
+                    redraw( 0 );
                     validateFadeInAndRender();
 
                     // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
@@ -1312,7 +1312,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             }
 
             if ( needRedraw() ) {
-                redraw();
+                redraw( 0 );
 
                 // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
                 assert( getRedrawMask() == 0 );
