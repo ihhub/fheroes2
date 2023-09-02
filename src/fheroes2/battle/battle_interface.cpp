@@ -1004,7 +1004,7 @@ void Battle::TurnOrder::QueueEventProcessing( std::string & msg, const fheroes2:
 }
 
 void Battle::TurnOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
-                                      fheroes2::Image & output ) const
+                                    fheroes2::Image & output ) const
 {
     // Render background.
     const fheroes2::Sprite & backgroundOriginal = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
