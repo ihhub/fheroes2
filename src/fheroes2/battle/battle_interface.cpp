@@ -2932,10 +2932,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     }
     else if ( le.MouseCursor( { _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height } ) ) {
         const int themes = GetBattleCursor( msg );
-
-        if ( cursor.Themes() != themes ) {
-            cursor.SetThemes( themes );
-        }
+        cursor.SetThemes( themes );
 
         const Cell * cell = Board::GetCell( index_pos );
 
@@ -2992,9 +2989,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
     }
     else if ( le.MouseCursor( _interfacePosition ) && humanturn_spell.isValid() ) {
         const int themes = GetBattleSpellCursor( msg );
-
-        if ( cursor.Themes() != themes )
-            cursor.SetThemes( themes );
+        cursor.SetThemes( themes );
 
         const Cell * cell = Board::GetCell( index_pos );
         if ( cell && _currentUnit && cell->GetUnit() ) {
