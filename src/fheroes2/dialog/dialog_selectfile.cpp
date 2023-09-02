@@ -236,7 +236,7 @@ MapsFileInfoList GetSortedMapsFileInfoList()
     if ( static_cast<size_t>( saveFileCount ) != list2.size() ) {
         list2.resize( saveFileCount );
     }
-    std::sort( list2.begin(), list2.end(), Maps::FileInfo::FileSorting );
+    std::sort( list2.begin(), list2.end(), Maps::FileInfo::TimestampSorting );
 
     return list2;
 }

@@ -63,6 +63,7 @@ namespace Maps
 
         static bool NameSorting( const FileInfo & lhs, const FileInfo & rhs );
         static bool FileSorting( const FileInfo & lhs, const FileInfo & rhs );
+        static bool TimestampSorting( const FileInfo & lhs, const FileInfo & rhs );
 
         bool isAllowCountPlayers( int playerCount ) const;
 

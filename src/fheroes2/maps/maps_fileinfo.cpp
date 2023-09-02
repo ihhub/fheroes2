@@ -430,6 +430,11 @@ bool Maps::FileInfo::NameSorting( const FileInfo & lhs, const FileInfo & rhs )
     return CaseInsensitiveCompare( lhs.name, rhs.name );
 }
 
+bool Maps::FileInfo::TimestampSorting( const FileInfo & lhs, const FileInfo & rhs )
+{
+    return lhs.timestamp > rhs.timestamp;
+}
+
 int Maps::FileInfo::KingdomRace( int color ) const
 {
     switch ( color ) {
