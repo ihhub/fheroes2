@@ -458,7 +458,7 @@ namespace Battle
         std::unique_ptr<StatusListBox> listlog;
 
         PopupDamageInfo popup;
-        TurnOrder armies_order;
+        TurnOrder _turnOrder;
 
         CursorRestorer _cursorRestorer;
         std::unique_ptr<fheroes2::StandardWindow> _background;
