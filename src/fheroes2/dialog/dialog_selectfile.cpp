@@ -310,7 +310,7 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        // Dialog height is also caped with the current screen height.
+        // Dialog height is also capped with the current screen height.
         fheroes2::StandardWindow background( 455, std::min( display.height() - 100, maxDialogHeight ), true, display );
 
         const fheroes2::Rect area = background.activeArea();
@@ -596,8 +596,8 @@ namespace
                     charInsertPos = filename.size();
                 }
                 else if ( isEditing ) {
-                    // Empty last selected save file name so that we can replace the input field's name if we select the same save file again
-                    // but when loading (isEditing == false), this doesn't matter since we cannot write to the input field
+                    // Empty last selected save file name so that we can replace the input field's name if we select the same save file again.
+                    // But when loading (i.e. isEditing == false), this doesn't matter since we cannot write to the input field
                     lastSelectedSaveFileName = "";
                 }
 

@@ -300,7 +300,7 @@ namespace Interface
             if ( content != nullptr && _currentId >= 0 && _currentId < _size() ) {
                 content->erase( content->begin() + _currentId );
 
-                // List item is removed, so we need redraw the list.
+                // List item is removed, so we need to redraw the list.
                 needRedraw = true;
             }
         }
@@ -316,7 +316,7 @@ namespace Interface
             if ( IsValid() ) {
                 _currentId = -1;
 
-                // List item is unselected, so we need redraw the list with no selected elements.
+                // List item is unselected, so we need to redraw the list with no selected elements.
                 needRedraw = true;
             }
         }
