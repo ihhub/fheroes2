@@ -964,13 +964,13 @@ void Battle::Status::clear()
     bar2.Clear();
 }
 
-Battle::ArmiesOrder::ArmiesOrder()
+Battle::TurnOrder::TurnOrder()
     : _army2Color( 0 )
 {
     // Do nothing.
 }
 
-void Battle::ArmiesOrder::Set( const fheroes2::Rect & rt, const std::shared_ptr<const Units> & units, const int army2Color )
+void Battle::TurnOrder::Set( const fheroes2::Rect & rt, const std::shared_ptr<const Units> & units, const int army2Color )
 {
     _area = rt;
     _orders = units;
@@ -981,7 +981,7 @@ void Battle::ArmiesOrder::Set( const fheroes2::Rect & rt, const std::shared_ptr<
     }
 }
 
-void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
+void Battle::TurnOrder::QueueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -1003,7 +1003,7 @@ void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes
     }
 }
 
-void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
+void Battle::TurnOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
                                       fheroes2::Image & output ) const
 {
     // Render background.
@@ -1073,7 +1073,7 @@ void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::
     }
 }
 
-void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output )
+void Battle::TurnOrder::Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output )
 {
     if ( _orders.expired() ) {
         // Nothing to show.
@@ -2802,7 +2802,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
     // Add offsets to inner objects
     const fheroes2::Rect mainTowerRect = main_tower + _interfacePosition.getPosition();
-    const fheroes2::Rect armiesOrderRect = armies_order + _interfacePosition.getPosition();
+    const fheroes2::Rect turnOrderRect = armies_order + _interfacePosition.getPosition();
     if ( Arena::GetTower( TowerType::TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
         cursor.SetThemes( Cursor::WAR_INFO );
         msg = _( "View Ballista info" );
@@ -2819,7 +2819,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             Dialog::Message( _( "Ballista" ), ballistaMessage, Font::BIG, le.MousePressRight() ? 0 : Dialog::OK );
         }
     }
-    else if ( conf.BattleShowTurnOrder() && le.MouseCursor( armiesOrderRect ) ) {
+    else if ( conf.BattleShowArmyOrder() && le.MouseCursor( turnOrderRect ) ) {
         cursor.SetThemes( Cursor::POINTER );
         armies_order.QueueEventProcessing( msg, _interfacePosition.getPosition() );
     }
