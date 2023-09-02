@@ -75,23 +75,7 @@ namespace
         return res;
     }
 
-    void redrawShortGameDate( fheroes2::Image & output, const Maps::FileInfo & info, const int32_t dstx, const int32_t dsty, const int32_t dateTimeWidth,
-                              const fheroes2::FontType font )
-    {
-        if ( info.worldDay == 0 && info.worldWeek == 0 && info.worldMonth == 0 ) {
-            return;
-        }
-
-        std::string statusMsg = _( "M:%{month}, W:%{week}, D:%{day}" );
-        StringReplace( statusMsg, "%{month}", info.worldMonth );
-        StringReplace( statusMsg, "%{week}", info.worldWeek );
-        StringReplace( statusMsg, "%{day}", info.worldDay );
-
-        const fheroes2::Text text( statusMsg, font );
-        text.draw( dstx + ( dateTimeWidth - text.width() ) / 2, dsty, output );
-    }
-
-    void redrawDateTime( fheroes2::Image & output, const uint32_t timestamp, const int32_t dstx, const int32_t dsty, const fheroes2::FontType font )
+    void redrawDateTime( fheroes2::Image & output, const time_t timestamp, const int32_t dstx, const int32_t dsty, const fheroes2::FontType font )
     {
         const size_t arraySize = 5;
 
@@ -321,18 +305,10 @@ namespace
         background.applyTextBackgroundShading( { listRoi.x, listRoi.y, textInputRoi.width, listRoi.height } );
         background.applyTextBackgroundShading( { listRoi.x + textInputRoi.width, listRoi.y, dateTimeWidth, listRoi.height } );
         background.applyTextBackgroundShading( textInputRoi );
+        // Make background for the selected file date and time.
+        background.applyTextBackgroundShading( { dateTimeoffsetX, textInputRoi.y, dateTimeWidth, textInputRoi.height } );
 
-        std::unique_ptr<fheroes2::ImageRestorer> textInputBackground;
-        if ( isEditing ) {
-            textInputBackground
-                = std::make_unique<fheroes2::ImageRestorer>( fheroes2::Display::instance(), textInputRoi.x, textInputRoi.y, textInputRoi.width, textInputRoi.height );
-        }
-        else {
-            // Make background for the selected file date and time.
-            background.applyTextBackgroundShading( { dateTimeoffsetX, textInputRoi.y, dateTimeWidth, textInputRoi.height } );
-            textInputBackground
-                = std::make_unique<fheroes2::ImageRestorer>( fheroes2::Display::instance(), textInputRoi.x, textInputRoi.y, listRoi.width, textInputRoi.height );
-        }
+        fheroes2::ImageRestorer textInputAndDateBackground( fheroes2::Display::instance(), textInputRoi.x, textInputRoi.y, listRoi.width, textInputRoi.height );
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
@@ -447,8 +423,10 @@ namespace
             fheroes2::Sprite released;
             fheroes2::Sprite pressed;
 
-            makeButtonSprites( released, pressed, "...", 15, isEvilInterface, false );
-            buttonVirtualKB = std::make_unique<fheroes2::ButtonSprite>( dateTimeoffsetX + 5, textInputRoi.y - 3, released, pressed );
+            const int32_t buttonWidth = 17;
+
+            makeButtonSprites( released, pressed, "...", buttonWidth, isEvilInterface, false );
+            buttonVirtualKB = std::make_unique<fheroes2::ButtonSprite>( area.x + ( area.width - buttonWidth ) / 2, buttonOffsetY, released, pressed );
 
             fheroes2::addGradientShadow( released, display, buttonVirtualKB->area().getPosition(), { -5, 5 } );
             buttonVirtualKB->draw();
@@ -456,8 +434,8 @@ namespace
             Game::passAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY );
         }
         else if ( listbox.isSelected() ) {
-            // Render the game date from file info.
-            redrawShortGameDate( display, listbox.GetCurrent(), dateTimeoffsetX, textInputRoi.y + 4, dateTimeWidth, fheroes2::FontType::normalYellow() );
+            // Render the saved file date and time.
+            redrawDateTime( display, listbox.GetCurrent().timestamp, dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
         }
 
         display.render( background.totalArea() );
@@ -599,14 +577,15 @@ namespace
                     lastSelectedSaveFileName = "";
                 }
 
-                textInputBackground->restore();
+                textInputAndDateBackground.restore();
 
                 if ( isEditing ) {
                     isTextLimit = redrawTextInputField( insertCharToString( filename, charInsertPos, isCursorVisible ? '_' : '\x7F' ), textInputRoi, true );
+                    redrawDateTime( display, std::time( nullptr ), dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalWhite() );
                 }
                 else {
                     redrawTextInputField( filename, textInputRoi, false );
-                    redrawShortGameDate( display, listbox.GetCurrent(), dateTimeoffsetX, textInputRoi.y + 4, dateTimeWidth, fheroes2::FontType::normalYellow() );
+                    redrawDateTime( display, listbox.GetCurrent().timestamp, dateTimeoffsetX, textInputRoi.y + 4, fheroes2::FontType::normalYellow() );
                 }
             }
 
