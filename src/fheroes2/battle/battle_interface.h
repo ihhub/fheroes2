@@ -204,13 +204,13 @@ namespace Battle
         StatusListBox * listlog;
     };
 
-    class ArmiesOrder : public fheroes2::Rect
+    class TurnOrder : public fheroes2::Rect
     {
     public:
-        ArmiesOrder();
-        ArmiesOrder( const ArmiesOrder & ) = delete;
+        TurnOrder();
+        TurnOrder( const TurnOrder & ) = delete;
 
-        ArmiesOrder & operator=( const ArmiesOrder & ) = delete;
+        TurnOrder & operator=( const TurnOrder & ) = delete;
 
         void Set( const fheroes2::Rect & rt, const std::shared_ptr<const Units> & units, const int army2Color );
         void Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output );
@@ -458,7 +458,7 @@ namespace Battle
         std::unique_ptr<StatusListBox> listlog;
 
         PopupDamageInfo popup;
-        ArmiesOrder armies_order;
+        TurnOrder armies_order;
 
         CursorRestorer _cursorRestorer;
         std::unique_ptr<fheroes2::StandardWindow> _background;
