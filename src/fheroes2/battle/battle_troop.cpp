@@ -605,7 +605,7 @@ uint32_t Battle::Unit::GetDamage( const Unit & enemy ) const
     return res;
 }
 
-uint32_t Battle::Unit::HowManyWillKilled( uint32_t dmg ) const
+uint32_t Battle::Unit::HowManyWillBeKilled( const uint32_t dmg ) const
 {
     if ( Modes( CAP_MIRRORIMAGE ) ) {
         return GetCount();
@@ -622,7 +622,7 @@ uint32_t Battle::Unit::ApplyDamage( const uint32_t dmg )
         return 0;
     }
 
-    const uint32_t killed = HowManyWillKilled( dmg );
+    const uint32_t killed = HowManyWillBeKilled( dmg );
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, dmg << " to " << String() << " and killed: " << killed )
 

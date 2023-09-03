@@ -234,7 +234,7 @@ namespace Battle
             return position.GetRect();
         }
 
-        uint32_t HowManyWillKilled( uint32_t ) const;
+        uint32_t HowManyWillBeKilled( const uint32_t dmg ) const;
 
         void SetResponse();
         void UpdateDirection();

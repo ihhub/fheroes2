@@ -545,7 +545,7 @@ namespace AI
                 assert( enemy != nullptr );
 
                 const uint32_t guaranteedDamage = currentUnit.Modes( SP_BLESS ) ? currentUnit.CalculateMaxDamage( *enemy ) : currentUnit.CalculateMinDamage( *enemy );
-                const uint32_t guaranteedKills = enemy->HowManyWillKilled( guaranteedDamage );
+                const uint32_t guaranteedKills = enemy->HowManyWillBeKilled( guaranteedDamage );
 
                 assert( guaranteedKills <= enemy->GetCount() );
 
