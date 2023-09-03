@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-02 14:42+0000\n"
-"PO-Revision-Date: 2023-09-03 12:18+0200\n"
+"POT-Creation-Date: 2023-09-03 12:06+0000\n"
+"PO-Revision-Date: 2023-09-01 15:20+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -3100,12 +3100,6 @@ msgstr ""
 "\n"
 "Plats: "
 
-msgid "File to Save:"
-msgstr "Fil att Spara:"
-
-msgid "File to Load:"
-msgstr "Fil att Ladda:"
-
 msgid "Click to save the current game."
 msgstr "Klicka för att spara nuvarande spel."
 
@@ -3117,6 +3111,12 @@ msgstr "Är du säker på att du vill radera filen:"
 
 msgid "Warning!"
 msgstr "Varning!"
+
+msgid "File to Save:"
+msgstr "Fil att Spara:"
+
+msgid "File to Load:"
+msgstr "Fil att Ladda:"
 
 msgid "Accept the choice made."
 msgstr "Acceptera alla ändringar."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-02 14:42+0000\n"
+"POT-Creation-Date: 2023-09-03 12:06+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3060,12 +3060,6 @@ msgstr ""
 "\n"
 "Percorso: "
 
-msgid "File to Save:"
-msgstr "File da Salvare:"
-
-msgid "File to Load:"
-msgstr "File da Caricare:"
-
 msgid "Click to save the current game."
 msgstr "Clicca per salvare la partita in corso."
 
@@ -3077,6 +3071,12 @@ msgstr "Sei sicuro di voler cancellare il file:"
 
 msgid "Warning!"
 msgstr "Attenzione!"
+
+msgid "File to Save:"
+msgstr "File da Salvare:"
+
+msgid "File to Load:"
+msgstr "File da Caricare:"
 
 msgid "Accept the choice made."
 msgstr "Accetta la scelta."
