@@ -648,12 +648,15 @@ namespace fheroes2
 
         const fheroes2::Text releasedText( supportedText, releasedButtonFont );
         const fheroes2::Text pressedText( supportedText, { fheroes2::FontSize::BUTTON_PRESSED, buttonFont } );
-        const int32_t textWidth = releasedText.width( releasedText.width() );
+
+        const int32_t maximumTextAreaWidth = 200; // Why is such a wide button needed?
+        // We need to pass an argument to width() so that it correctly accounts for multi-lined texts.
+        // TODO: Remove the need for the argument once width() has been improved to handle this.
+        const int32_t textWidth = releasedText.width( maximumTextAreaWidth );
         assert( textWidth > 0 );
 
         const int32_t borderedTextWidth = textWidth + textAreaBorder;
 
-        const int32_t maximumTextAreaWidth = 200; // Why is such a wide button needed?
         const int32_t textAreaWidth = std::clamp( borderedTextWidth, minimumTextAreaWidth, maximumTextAreaWidth );
 
         assert( textAreaWidth + backgroundBorders > 0 );
