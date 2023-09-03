@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-25 01:17+0000\n"
-"PO-Revision-Date: 2023-09-02 18:26+0200\n"
+"PO-Revision-Date: 2023-09-03 11:33+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -384,9 +384,6 @@ msgstr "Hastighed: %{speed}"
 msgid "Speed"
 msgstr "Hastighed"
 
-msgid "Army Order"
-msgstr "Hærorden"
-
 msgid "Off"
 msgstr "Fra"
 
@@ -394,7 +391,7 @@ msgid "On"
 msgstr "Til"
 
 msgid "Turn Order"
-msgstr "Tur-orden"
+msgstr "Turorden"
 
 msgid "Auto Spell Casting"
 msgstr "Autobrug af magi"
@@ -403,10 +400,12 @@ msgid "Grid"
 msgstr "Gitter"
 
 msgid "Shadow Movement"
-msgstr "Skyggebevægelse"
+msgstr ""
+"Skygge-\n"
+"bevægelse"
 
 msgid "Shadow Cursor"
-msgstr "Skygge-markør"
+msgstr "Skyggemarkør"
 
 msgid "Audio"
 msgstr "Lyd"
@@ -2667,7 +2666,7 @@ msgid "View information on the scenario you are currently playing."
 msgstr "Vis information om det scenarie, du er i gang med at spille."
 
 msgid "Dig for the Ultimate Artifact."
-msgstr "Grav efter det Ultimative Artefakt."
+msgstr "Grav efter Det Ultimative Artefakt."
 
 msgid "Digging"
 msgstr "Gravning"
@@ -2698,7 +2697,7 @@ msgid "Shots"
 msgstr "Skud"
 
 msgid "Shots Left"
-msgstr "Resterende skud"
+msgstr "Skudbeholdning"
 
 msgid "Hit Points"
 msgstr "Liv"
