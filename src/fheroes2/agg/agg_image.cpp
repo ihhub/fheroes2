@@ -1848,60 +1848,24 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( ICN::HSBTNS, 0 );
-                    _icnVsSprite[id][1] = GetICN( ICN::HSBTNS, 1 );
+                    // The original DISMISS button has a broken transform layer and thinner pressed state than released state,
+                    // so we use our empty vertical button as a template
+                    _icnVsSprite[id][0] = GetICN( ICN::EMPTY_VERTICAL_GOOD_BUTTON, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::EMPTY_VERTICAL_GOOD_BUTTON, 1 );
 
-                    if ( _icnVsSprite[id].size() >= 4 ) {
-                        // extract the EXIT button without background
-                        Sprite exitReleased = _icnVsSprite[id][2];
-                        Sprite exitPressed = _icnVsSprite[id][3];
+                    // Copy the DISMISS text back from the original button
+                    const Sprite & originalReleased = GetICN( ICN::HSBTNS, 0 );
+                    const Sprite & originalPressed = GetICN( ICN::HSBTNS, 1 );
 
-                        // make the border parts around EXIT button transparent
-                        Image exitCommonMask = ExtractCommonPattern( { &exitReleased, &exitPressed } );
-                        fheroes2::Save( exitCommonMask, "exitCommonMask.png", 96 );
-                        invertTransparency( exitCommonMask );
-                        fheroes2::Save( exitCommonMask, "exitCommonMaskInverted.png", 96 );
+                    Copy( originalReleased, 9, 2, _icnVsSprite[id][0], 4, 2, 21, 112 );
+                    Copy( originalPressed, 9, 5, _icnVsSprite[id][1], 3, 5, 19, 111  );
 
-                        CopyTransformLayer( exitCommonMask, exitReleased );
-                        CopyTransformLayer( exitCommonMask, exitPressed );
-
-                        // fix DISMISS button: get the EXIT button, then slap the text back
-                        Sprite & dismissReleased = _icnVsSprite[id][0];
-
-                        Sprite tmpReleased = dismissReleased;
-                        Blit( exitReleased, 0, 0, tmpReleased, 5, 0, 27, 120 );
-                        Blit( dismissReleased, 9, 4, tmpReleased, 9, 4, 19, 110 );
-
-                        dismissReleased = std::move( tmpReleased );
-
-                        Sprite & dismissPressed = _icnVsSprite[id][1];
-
-                        // start with the released state as well to capture more details
-                        Sprite tmpPressed = dismissReleased;
-                        Blit( exitPressed, 0, 0, tmpPressed, 5, 0, 27, 120 );
-                        Blit( dismissPressed, 9, 5, tmpPressed, 8, 5, 19, 110 );
-
-                        dismissPressed = std::move( tmpPressed );
-                    }
-
-
-                    // Remove embedded shadows so that we can generate shadows with our own code later
-                    for ( uint32_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
-                        const Sprite & original = GetICN( ICN::HSBTNS, i );
-
-                        Sprite & out = _icnVsSprite[id][i];
-                        out.resize( original.width() /*- 5*/, original.height() /*- 5*/ );
-
-                        Copy( original, 5, 0, out, 0, 0, original.width() /*- 5*/, original.height() /*- 5*/ );
-                        // setButtonCornersTransparent( out );
-                    }
-                    fheroes2::Save( _icnVsSprite[id][0], "released.bmp", 96 );
-                    fheroes2::Save( _icnVsSprite[id][1], "pressed.bmp", 96 );
+                    // TODO: Add transparent backgrounds
                     break;
                 }
 
-                // We need to temporarily remove the letter specific X offsets on the because they will be off-center
-                // when we are displaying one letter per line
+                // We need to temporarily remove the letter specific X offsets in the font because if not the letters will
+                // be off-center when we are displaying one letter per line
                 const ButtonFontRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], { -1, 0 } );
                 const ButtonFontRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], { -1, 0 } );
                 getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON, ICN::UNKNOWN );
@@ -3172,7 +3136,7 @@ namespace fheroes2
                 uint32_t startIcnId = 0;
 
                 if ( id == ICN::DISMISS_HERO_DISABLED_BUTTON ) {
-                    buttonIcnId = ICN::HSBTNS;
+                    buttonIcnId = ICN::BUTTON_VERTICAL_DISMISS;
                     startIcnId = 0;
                 }
                 else if ( id == ICN::NEW_CAMPAIGN_DISABLED_BUTTON ) {
@@ -4063,6 +4027,19 @@ namespace fheroes2
 
                 Copy( originalReleased, released );
                 Copy( originalPressed, pressed );
+
+                // Fix the broken transform layer of the original vertical button that is being used our template.
+                Image exitCommonMask = ExtractCommonPattern( { &released, &pressed } );
+                // Fix wrong non-transparent pixels of the transform layer that ExtractCommonPattern() missed.
+                FillTransform( exitCommonMask, 3, 2, 1, 115, 1 );
+                FillTransform( exitCommonMask, 4, 116, 1, 1, 1 );
+                FillTransform( exitCommonMask, 4, 117, 18, 1, 1 );
+                FillTransform( exitCommonMask, exitCommonMask.width() - 4, 114, 1, 2, 1 );
+
+                invertTransparency( exitCommonMask );
+
+                CopyTransformLayer( exitCommonMask, released );
+                CopyTransformLayer( exitCommonMask, pressed );
 
                 if ( released.width() > 2 && released.height() > 2 && pressed.width() > 2 && pressed.height() > 2 ) {
                     // Clean the button states.
