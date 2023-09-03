@@ -120,7 +120,7 @@ namespace
             font = fheroes2::FontColor::WHITE;
             textMargin = 0 + 0;
             minimumTextAreaWidth = 19;
-            backgroundBorders = 4 + 4;
+            backgroundBorders = 5 + 4;
             // TODO: The center of the button will change according to the height of it when we can resize it.
             // The height offsets will need to be adjusted when this is possible, now they point to the
             // center of the empty button.
