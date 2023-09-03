@@ -480,7 +480,7 @@ namespace fheroes2
             return 26 + 6 + 1;
         case fheroes2::FontSize::BUTTON_RELEASED:
         case fheroes2::FontSize::BUTTON_PRESSED:
-            return 16;
+            return 15;
         default:
             assert( 0 ); // Did you add a new font size? Please add implementation.
         }
