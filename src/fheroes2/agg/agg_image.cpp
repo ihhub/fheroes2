@@ -354,7 +354,7 @@ namespace
     class ButtonFontRestorer
     {
     public:
-        ButtonFontRestorer( std::vector<fheroes2::Sprite> & font, const fheroes2::Point & offset );
+        ButtonFontRestorer( std::vector<fheroes2::Sprite> & font, const int32_t offsetX );
         ButtonFontRestorer( const ButtonFontRestorer & ) = delete;
 
         ~ButtonFontRestorer();
@@ -363,31 +363,30 @@ namespace
 
     private:
         std::vector<fheroes2::Sprite> & _font;
-        std::vector<fheroes2::Point> _originalOffsets;
+        std::vector<int32_t> _originalXOffsets;
     };
 
-    ButtonFontRestorer::ButtonFontRestorer( std::vector<fheroes2::Sprite> & font, const fheroes2::Point & offset )
+    ButtonFontRestorer::ButtonFontRestorer( std::vector<fheroes2::Sprite> & font, const int32_t offsetX )
         : _font( font )
     {
-        _originalOffsets.reserve( _font.size() );
+        _originalXOffsets.reserve( _font.size() );
 
         for ( fheroes2::Sprite & characterSprite : font ) {
-            const int32_t originalYOffset = characterSprite.y();
-            _originalOffsets.emplace_back( characterSprite.x(), originalYOffset );
-            characterSprite.setPosition( offset.x, originalYOffset );
+            _originalXOffsets.emplace_back( characterSprite.x() );
+            characterSprite.setPosition( offsetX, characterSprite.y() );
         }
     }
 
     ButtonFontRestorer::~ButtonFontRestorer()
     {
-        if ( _originalOffsets.size() != _font.size() ) {
+        if ( _originalXOffsets.size() != _font.size() ) {
             // If this assertion blows up then something is wrong with the fonts as they must have the same size.
             assert( 0 );
             return;
         }
 
         for ( size_t i = 0; i < _font.size(); ++i ) {
-            _font[i].setPosition( _originalOffsets[i].x, _originalOffsets[i].y );
+            _font[i].setPosition( _originalXOffsets[i], _font[i].y() );
         }
     }
 
@@ -1868,8 +1867,8 @@ namespace fheroes2
 
                 // We need to temporarily remove the letter specific X offsets in the font because if not the letters will
                 // be off-centered when we are displaying one letter per line
-                const ButtonFontRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], { -1, 0 } );
-                const ButtonFontRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], { -1, 0 } );
+                const ButtonFontRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
+                const ButtonFontRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
                 getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
                                       ICN::REDBAK_SMALL_VERTICAL );
 
@@ -1885,11 +1884,11 @@ namespace fheroes2
                     _icnVsSprite[id][1] = GetICN( ICN::EMPTY_VERTICAL_GOOD_BUTTON, 1 );
 
                     // Copy the EXIT text back from the original button
-                    const Sprite & originalReleased = GetICN( ICN::HSBTNS, 0 );
-                    const Sprite & originalPressed = GetICN( ICN::HSBTNS, 1 );
+                    const Sprite & originalReleased = GetICN( ICN::HSBTNS, 2 );
+                    const Sprite & originalPressed = GetICN( ICN::HSBTNS, 3 );
 
-                    Copy( originalReleased, 9, 2, _icnVsSprite[id][0], 4, 2, 21, 112 );
-                    Copy( originalPressed, 9, 5, _icnVsSprite[id][1], 3, 5, 19, 111 );
+                    Copy( originalReleased, 4, 2, _icnVsSprite[id][0], 4, 2, 21, 112 );
+                    Copy( originalPressed, 3, 5, _icnVsSprite[id][1], 3, 5, 19, 111 );
 
                     fheroes2::makeTransparentBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], ICN::REDBAK_SMALL_VERTICAL );
 
@@ -1898,8 +1897,8 @@ namespace fheroes2
 
                 // We need to temporarily remove the letter specific X offsets in the font because if not the letters will
                 // be off-centered when we are displaying one letter per line
-                const ButtonFontRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], { -1, 0 } );
-                const ButtonFontRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], { -1, 0 } );
+                const ButtonFontRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
+                const ButtonFontRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
                 getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "E\nX\nI\nT" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
                                       ICN::REDBAK_SMALL_VERTICAL );
 
