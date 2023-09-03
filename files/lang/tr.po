@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-27 10:37+0000\n"
+"POT-Creation-Date: 2023-09-03 12:06+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -367,14 +367,15 @@ msgstr "Hız: %{speed}"
 msgid "Speed"
 msgstr "Hız"
 
-msgid "Army Order"
-msgstr "Ordu Düzeni"
-
 msgid "Off"
 msgstr "Kapalı"
 
 msgid "On"
 msgstr "Açık"
+
+#, fuzzy
+msgid "Turn Order"
+msgstr "Ordu Düzeni"
 
 msgid "Auto Spell Casting"
 msgstr "Otomatik Büyü Yapma"
@@ -406,7 +407,8 @@ msgstr ""
 msgid "Set the speed of combat actions and animations."
 msgstr "Savaş eylemlerinin ve animasyonların hızını ayarlayın."
 
-msgid "Toggle to display army order during the battle."
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
 msgstr "Savaş sırasında ordu düzenini görüntülemek için geçiş yapın."
 
 msgid ""
@@ -2931,12 +2933,6 @@ msgid ""
 "Location: "
 msgstr ""
 
-msgid "File to Save:"
-msgstr ""
-
-msgid "File to Load:"
-msgstr ""
-
 msgid "Click to save the current game."
 msgstr ""
 
@@ -2947,6 +2943,12 @@ msgid "Are you sure you want to delete file:"
 msgstr ""
 
 msgid "Warning!"
+msgstr ""
+
+msgid "File to Save:"
+msgstr ""
+
+msgid "File to Load:"
 msgstr ""
 
 msgid "Accept the choice made."

@@ -591,7 +591,7 @@ namespace Maps
     void redrawPassable( const Tiles & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area )
     {
 #ifdef WITH_DEBUG
-        if ( tile.isFog( friendColors ) ) {
+        if ( friendColors != 0 && tile.isFog( friendColors ) ) {
             area.BlitOnTile( dst, getDebugFogImage(), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }
         if ( 0 == tile.GetPassable() || DIRECTION_ALL != tile.GetPassable() ) {
