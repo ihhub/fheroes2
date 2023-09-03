@@ -4066,51 +4066,52 @@ namespace fheroes2
                 Sprite & released = _icnVsSprite[id][0];
                 Sprite & pressed = _icnVsSprite[id][1];
 
-                Copy( originalReleased, released );
-                Copy( originalPressed, pressed );
+                if ( originalReleased.width() > 2 && originalReleased.height() > 2 && originalPressed.width() > 2 && originalPressed.height() > 2 ) {
+                    released.resize( originalReleased.width() + 1, originalReleased.height() + 1 );
+                    pressed.resize( originalPressed.width() + 1, originalPressed.height() + 1 );
+                    released.reset();
+                    pressed.reset();
 
-                // Fix the broken transform layer of the original vertical button that is being used our template.
-                Image exitCommonMask = ExtractCommonPattern( { &released, &pressed } );
-                // Fix wrong non-transparent pixels of the transform layer that ExtractCommonPattern() missed.
-                FillTransform( exitCommonMask, 3, 2, 1, 115, 1 );
-                FillTransform( exitCommonMask, 4, 116, 1, 1, 1 );
-                FillTransform( exitCommonMask, 4, 117, 18, 1, 1 );
-                FillTransform( exitCommonMask, exitCommonMask.width() - 4, 114, 1, 2, 1 );
+                    Copy( originalReleased, 0, 0, released, 1, 0, originalReleased.width(), originalReleased.height() );
+                    Copy( originalPressed, 0, 0, pressed, 1, 0, originalPressed.width(), originalPressed.height() );
+                    FillTransform( released, 1, 4, 1, released.height() - 4, 1 );
 
-                invertTransparency( exitCommonMask );
+                    // Fix the carried over broken transform layer of the original vertical button that is being used.
+                    Image exitCommonMask = ExtractCommonPattern( { &released, &pressed } );
+                    // Fix wrong non-transparent pixels of the transform layer that ExtractCommonPattern() missed.
+                    FillTransform( exitCommonMask, 4, 2, 1, 115, 1 );
+                    FillTransform( exitCommonMask, 5, 116, 1, 1, 1 );
+                    FillTransform( exitCommonMask, 5, 117, 18, 1, 1 );
+                    FillTransform( exitCommonMask, exitCommonMask.width() - 4, 114, 1, 2, 1 );
 
-                CopyTransformLayer( exitCommonMask, released );
-                CopyTransformLayer( exitCommonMask, pressed );
+                    invertTransparency( exitCommonMask );
+                    // Make the extended width and height lines transparent.
+                    FillTransform( exitCommonMask, 0, 0, 1, exitCommonMask.height(), 1 );
+                    FillTransform( exitCommonMask, exitCommonMask.width() - 4, exitCommonMask.height() - 1, 4, 1, 1 );
 
-                if ( released.width() > 2 && released.height() > 2 && pressed.width() > 2 && pressed.height() > 2 ) {
-                    // Clean the button states.
-                    Fill( released, 5, 4, 18, 111, getButtonFillingColor( true ) );
-                    Fill( pressed, 4, 5, 18, 111, getButtonFillingColor( false ) );
+                    CopyTransformLayer( exitCommonMask, released );
+                    CopyTransformLayer( exitCommonMask, pressed );
 
-                    // Make the background transparent.
-                    FillTransform( pressed, 0, 0, pressed.width(), 1, 1 );
-                    FillTransform( pressed, 0, 1, 3, 1, 1 );
-                    FillTransform( pressed, 0, 2, 2, 1, 1 );
-                    FillTransform( pressed, 0, 3, 1, 1, 1 );
+                    // Restore dark-brown lines on the left and bottom borders of the button backgrounds.
+                    const Sprite & originalDismiss = GetICN( ICN::HSBTNS, 0 );
 
+                    Copy( originalReleased, 0, 4, released, 1, 4, 1, released.height() - 4 );
+                    Copy( originalDismiss, 6, originalDismiss.height() - 7, released, 2, released.height() - 1, 22, 1 );
+                    Copy( originalDismiss, 6, originalDismiss.height() - 7, released, 1, released.height() - 1, 1, 1 );
+
+                    Copy( originalPressed, 0, 4, pressed, 1, 4, 1, pressed.height() - 4 );
+                    Copy( originalDismiss, 6, originalDismiss.height() - 7, pressed, 2, pressed.height() - 1, 22, 1 );
+                    Copy( originalDismiss, 6, originalDismiss.height() - 7, pressed, 1, pressed.height() - 1, 1, 1 );
+
+                    // Clean the button states' text areas.
+                    Fill( released, 6, 4, 18, 111, getButtonFillingColor( true ) );
+                    Fill( pressed, 5, 5, 18, 111, getButtonFillingColor( false ) );
+
+                    // Make the background transparent by removing remaining red background pieces.
+                    FillTransform( pressed, 5, 0, 21, 1, 1 );
                     FillTransform( pressed, pressed.width() - 3, 1, 2, 1, 1 );
-                    FillTransform( pressed, pressed.width() - 2, 2, 1, 1, 1 );
-
-                    FillTransform( pressed, pressed.width() - 1, 1, 1, pressed.height() - 1, 1 );
-                    FillTransform( pressed, pressed.width() - 2, pressed.height() - 2, 1, 2, 1 );
-                    FillTransform( pressed, pressed.width() - 3, pressed.height() - 1, 1, 1, 1 );
-
-                    FillTransform( released, 0, 0, 4, 1, 1 );
-                    FillTransform( released, 0, 1, 3, 1, 1 );
-                    FillTransform( released, 0, 2, 2, 1, 1 );
-                    FillTransform( released, 0, 3, 1, 1, 1 );
-
-                    FillTransform( released, released.width() - 2, 0, 2, 1, 1 );
-                    FillTransform( released, released.width() - 1, 1, 1, 1, 1 );
-
-                    FillTransform( released, released.width() - 1, released.height() - 3, 1, 3, 1 );
-                    FillTransform( released, released.width() - 2, released.height() - 2, 1, 2, 1 );
-                    FillTransform( released, released.width() - 3, released.height() - 1, 1, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 2, 2, 2, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 1, 3, 1, pressed.height() - 6, 1 );
                 }
 
                 break;
