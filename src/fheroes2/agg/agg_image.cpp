@@ -1857,8 +1857,8 @@ namespace fheroes2
                     const Sprite & originalReleased = GetICN( ICN::HSBTNS, 0 );
                     const Sprite & originalPressed = GetICN( ICN::HSBTNS, 1 );
 
-                    Copy( originalReleased, 9, 2, _icnVsSprite[id][0], 4, 2, 21, 112 );
-                    Copy( originalPressed, 9, 5, _icnVsSprite[id][1], 3, 5, 19, 111 );
+                    Copy( originalReleased, 9, 2, _icnVsSprite[id][0], 5, 2, 21, 112 );
+                    Copy( originalPressed, 9, 5, _icnVsSprite[id][1], 4, 5, 19, 111 );
 
                     fheroes2::makeTransparentBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], ICN::REDBAK_SMALL_VERTICAL );
 
@@ -1887,8 +1887,8 @@ namespace fheroes2
                     const Sprite & originalReleased = GetICN( ICN::HSBTNS, 2 );
                     const Sprite & originalPressed = GetICN( ICN::HSBTNS, 3 );
 
-                    Copy( originalReleased, 4, 2, _icnVsSprite[id][0], 4, 2, 21, 112 );
-                    Copy( originalPressed, 3, 5, _icnVsSprite[id][1], 3, 5, 19, 111 );
+                    Copy( originalReleased, 4, 2, _icnVsSprite[id][0], 5, 2, 21, 112 );
+                    Copy( originalPressed, 3, 5, _icnVsSprite[id][1], 4, 5, 19, 111 );
 
                     fheroes2::makeTransparentBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], ICN::REDBAK_SMALL_VERTICAL );
 
