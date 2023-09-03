@@ -589,11 +589,10 @@ namespace
             }
         }
 
-        if ( groundDirection == ( Direction::TOP_LEFT | Direction::TOP | Direction::BOTTOM | Direction::BOTTOM_RIGHT | DIRECTION_CENTER_ROW )
-             || groundDirection == ( Direction::TOP_RIGHT | Direction::TOP | Direction::BOTTOM | Direction::BOTTOM_LEFT | DIRECTION_CENTER_ROW ) ) {
+        if ( hasBits( groundDirection, Direction::TOP | Direction::RIGHT | Direction::BOTTOM | Direction::LEFT ) ) {
             const int ground = tile.GetGround();
             if ( ground != Maps::Ground::WATER ) {
-                // Two opposite corners needs ground transition.
+                // More than one corner needs ground transition.
                 // For these cases there is no extra tile image, but for now we can leave a tile with ground without transition as it is barely noticeable.
                 // TODO: Design tile images for these cases.
 
