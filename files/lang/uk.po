@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-27 10:37+0000\n"
-"PO-Revision-Date: 2023-09-01 16:15+0300\n"
+"PO-Revision-Date: 2023-09-03 08:52+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -549,7 +549,7 @@ msgid "Spell Points"
 msgstr "Мана"
 
 msgid "Hero's Options"
-msgstr "Параметри Героя"
+msgstr "Дії Героя"
 
 msgid "Cast Spell"
 msgstr "Накласти чари"
@@ -567,7 +567,7 @@ msgid "Hero Screen"
 msgstr ""
 
 msgid "Captain's Options"
-msgstr "Параметри Капітана"
+msgstr "Дії Капітана"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
@@ -687,10 +687,10 @@ msgstr ""
 "наступного раунду."
 
 msgid "View Captain's options"
-msgstr "Переглянути параметри Капітана"
+msgstr "Відкрити вікно дій Капітана"
 
 msgid "View Hero's options"
-msgstr "Переглянути параметри Героя"
+msgstr "Відкрити вікно дій Героя"
 
 msgid "View opposing Captain"
 msgstr "Переглянути ворожого Капітана"
@@ -8609,7 +8609,7 @@ msgid "Power Ring"
 msgstr "Перстень Могутності"
 
 msgid "The %{name} returns %{count} extra spell points per day to your hero."
-msgstr "%{name} "
+msgstr "%{name} щодня відновлює очки мани у кількості: %{count} од."
 
 msgid ""
 "You find a small tree that closely resembles the great Warlock Carnauth with "
