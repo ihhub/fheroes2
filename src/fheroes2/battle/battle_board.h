@@ -94,10 +94,10 @@ namespace Battle
         static int32_t OptimalAttackTarget( const Unit & attacker, const Unit & target, const int32_t from );
         static int32_t OptimalAttackValue( const Unit & attacker, const Unit & target, const int32_t from );
 
-        // Returns the distance in a straight line between two cells with the given indexes. If any of the indexes is not valid, then returns 0.
+        // Returns the distance between two cells with the given indexes. If any of the indexes is not valid, then returns 0.
         static uint32_t GetDistance( const int32_t index1, const int32_t index2 );
 
-        // Returns the distance in a straight line between two given positions. This distance is calculated as the distance between the cells of
+        // Returns the distance between two given positions. This distance is calculated as the distance between the cells of
         // both positions closest to each other. If any of the positions is not valid, then returns 0.
         static uint32_t GetDistance( const Position & pos1, const Position & pos2 );
 
