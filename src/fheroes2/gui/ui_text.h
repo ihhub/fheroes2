@@ -126,8 +126,7 @@ namespace fheroes2
         friend class MultiFontText;
 
         Text() = default;
-        Text( const std::string & text, const FontType fontType );
-        Text( std::string && text, const FontType fontType );
+        Text( std::string text, const FontType fontType );
         Text( const Text & text ) = default;
         Text( Text && text ) = default;
         Text & operator=( const Text & text ) = default;
@@ -148,8 +147,7 @@ namespace fheroes2
 
         bool empty() const override;
 
-        void set( const std::string & text, const FontType fontType );
-        void set( std::string && text, const FontType fontType );
+        void set( std::string text, const FontType fontType );
 
         // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
         void fitToOneRow( const int32_t maxWidth );
@@ -168,8 +166,7 @@ namespace fheroes2
         MultiFontText() = default;
         ~MultiFontText() override;
 
-        void add( const Text & text );
-        void add( Text && text );
+        void add( Text text );
 
         int32_t width() const override;
         int32_t height() const override;

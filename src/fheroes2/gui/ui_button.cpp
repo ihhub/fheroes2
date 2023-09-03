@@ -300,11 +300,11 @@ namespace fheroes2
         : ButtonBase( offsetX, offsetY )
     {}
 
-    ButtonSprite::ButtonSprite( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Sprite & disabled )
+    ButtonSprite::ButtonSprite( int32_t offsetX, int32_t offsetY, Sprite released, Sprite pressed, Sprite disabled )
         : ButtonBase( offsetX, offsetY )
-        , _released( released )
-        , _pressed( pressed )
-        , _disabled( disabled )
+        , _released( std::move( released ) )
+        , _pressed( std::move( pressed ) )
+        , _disabled( std::move( disabled ) )
     {}
 
     void ButtonSprite::setSprite( const Sprite & released, const Sprite & pressed, const Sprite & disabled )
@@ -572,7 +572,7 @@ namespace fheroes2
         disabledWithBackground.setPosition( 0, 0 );
         Blit( disabled, disabledWithBackground, disabled.x(), disabled.y() );
 
-        return { offsetX, offsetY, releasedWithBackground, pressedWithBackground, disabledWithBackground };
+        return { offsetX, offsetY, std::move( releasedWithBackground ), std::move( pressedWithBackground ), std::move( disabledWithBackground ) };
     }
 
     ButtonSprite makeButtonWithShadow( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background,
@@ -599,7 +599,8 @@ namespace fheroes2
         disabledWithBackground.setPosition( 0, 0 );
         Blit( disabled, disabledWithBackground, disabled.x() - shadow.x(), disabled.y() - shadow.y() );
 
-        return { offsetX + shadow.x(), offsetY + shadow.y(), releasedWithBackground, pressedWithBackground, disabledWithBackground };
+        return { offsetX + shadow.x(), offsetY + shadow.y(), std::move( releasedWithBackground ), std::move( pressedWithBackground ),
+                 std::move( disabledWithBackground ) };
     }
 
     void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, int32_t width, Point & releasedOffset, Point & pressedOffset,

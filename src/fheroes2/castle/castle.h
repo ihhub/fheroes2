@@ -112,11 +112,11 @@ enum buildcond_t
 class Castle : public MapPosition, public BitModes, public ColorBase, public Control
 {
 public:
-    enum flags_t
+    enum : uint32_t
     {
-        ALLOWCASTLE = 0x0002,
-        CUSTOMARMY = 0x0004,
-        ALLOWBUILD = 0x0008
+        ALLOWCASTLE = 0x00000002,
+        CUSTOMARMY = 0x00000004,
+        ALLOWBUILD = 0x00000008
     };
 
     enum class CastleDialogReturnValue : int
@@ -451,7 +451,7 @@ public:
 
     void NewMonth()
     {
-        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewMonth(); } );
+        std::for_each( _castles.begin(), _castles.end(), []( const Castle * castle ) { castle->ActionNewMonth(); } );
     }
 
     // begin/end methods so we can iterate through the elements

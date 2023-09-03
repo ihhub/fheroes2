@@ -414,16 +414,17 @@ msgstr "Hurtighet : %{speed}"
 msgid "Speed"
 msgstr "Hurtighet"
 
-msgid "Army Order"
-msgstr ""
-"Tur-\n"
-"rekkefølge"
-
 msgid "Off"
 msgstr "Av"
 
 msgid "On"
 msgstr "På"
+
+#, fuzzy
+msgid "Turn Order"
+msgstr ""
+"Tur-\n"
+"rekkefølge"
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -461,7 +462,8 @@ msgstr "Skadeinfo"
 msgid "Set the speed of combat actions and animations."
 msgstr "Juster hastigheten til handlingene og animasjonene i kamp."
 
-msgid "Toggle to display army order during the battle."
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
 msgstr ""
 "Skru på denne innstillingen for å vise rekkefølgen av krigernes tur i kamp."
 
@@ -1901,7 +1903,8 @@ msgstr "Kan ikke bygges. Det har allerede blitt bygd her denne runden."
 msgid "For this action it is necessary to build a castle first."
 msgstr "For å utføre denne handlingen må man bygge en borg først."
 
-msgid "Cannot build %{name} because castle is too far from water."
+#, fuzzy
+msgid "Cannot build %{name} because the castle is too far away from an ocean."
 msgstr "Borgen er for langt unna vann til å bygge %{name}."
 
 # bygning? usikker funksjon
@@ -3243,12 +3246,6 @@ msgstr ""
 "\n"
 "Plassering: "
 
-msgid "File to Save:"
-msgstr "Lagringsfil:"
-
-msgid "File to Load:"
-msgstr "Lastingsfil:"
-
 msgid "Click to save the current game."
 msgstr "Klikk for å lagre det nåværende spillet."
 
@@ -3260,6 +3257,12 @@ msgstr "Er du sikker på at du vil slette filen:"
 
 msgid "Warning!"
 msgstr "Advarsel!"
+
+msgid "File to Save:"
+msgstr "Lagringsfil:"
+
+msgid "File to Load:"
+msgstr "Lastingsfil:"
 
 msgid "Accept the choice made."
 msgstr "Bekreft valget og gå videre."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-22 00:24+0000\n"
+"POT-Creation-Date: 2023-09-03 12:06+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -370,14 +370,15 @@ msgstr "Snelheid: %{speed}"
 msgid "Speed"
 msgstr "Snelheid"
 
-msgid "Army Order"
-msgstr "Legerorde"
-
 msgid "Off"
 msgstr "Uit"
 
 msgid "On"
 msgstr "Aan"
+
+#, fuzzy
+msgid "Turn Order"
+msgstr "Legerorde"
 
 msgid "Auto Spell Casting"
 msgstr "Automatisch spreuk uitroepen"
@@ -409,7 +410,8 @@ msgstr ""
 msgid "Set the speed of combat actions and animations."
 msgstr "Zet de snelheid van gevechts acties en animaties."
 
-msgid "Toggle to display army order during the battle."
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
 msgstr "Schakel om het legerorde weer te geven tijdens het gevecht."
 
 msgid ""
@@ -1855,7 +1857,8 @@ msgstr "Kan niet bouwen. Je hebt hier vandaag al gebouwd."
 msgid "For this action it is necessary to build a castle first."
 msgstr "Voor deze actie moet je eerst een kasteel bouwen."
 
-msgid "Cannot build %{name} because castle is too far from water."
+#, fuzzy
+msgid "Cannot build %{name} because the castle is too far away from an ocean."
 msgstr "Kan %{name} niet bouwen omdat het kasteel te ver van water is."
 
 msgid "disable build."
@@ -3097,12 +3100,6 @@ msgid ""
 "Location: "
 msgstr ""
 
-msgid "File to Save:"
-msgstr ""
-
-msgid "File to Load:"
-msgstr ""
-
 msgid "Click to save the current game."
 msgstr ""
 
@@ -3113,6 +3110,12 @@ msgid "Are you sure you want to delete file:"
 msgstr ""
 
 msgid "Warning!"
+msgstr ""
+
+msgid "File to Save:"
+msgstr ""
+
+msgid "File to Load:"
 msgstr ""
 
 msgid "Accept the choice made."

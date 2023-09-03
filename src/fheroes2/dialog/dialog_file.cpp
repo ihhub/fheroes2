@@ -97,8 +97,8 @@ fheroes2::GameMode Dialog::FileOptions()
                 fheroes2::showMessage( fheroes2::Text( _( "Load Game" ), fheroes2::FontType::normalYellow() ),
                                        fheroes2::Text( _( "No save files to load." ), fheroes2::FontType::normalWhite() ), Dialog::OK );
             }
-            else {
-                result = Interface::AdventureMap::Get().EventLoadGame();
+            else if ( Interface::AdventureMap::Get().EventLoadGame() == fheroes2::GameMode::LOAD_GAME ) {
+                result = fheroes2::GameMode::LOAD_GAME;
                 break;
             }
         }

@@ -22,6 +22,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <ostream>
+#include <string>
 #include <vector>
 
 #include "agg_image.h"
@@ -41,6 +43,7 @@
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "localevent.h"
+#include "logging.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
@@ -101,7 +104,7 @@ namespace Interface
                                      - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
     }
 
-    void Editor::redraw( const uint32_t force /* = 0 */ )
+    void Editor::redraw( const uint32_t force )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -282,9 +285,7 @@ namespace Interface
 
             // cursor is over the radar
             if ( le.MouseCursor( _radar.GetRect() ) ) {
-                if ( Cursor::POINTER != cursor.Themes() ) {
-                    cursor.SetThemes( Cursor::POINTER );
-                }
+                cursor.SetThemes( Cursor::POINTER );
 
                 // TODO: Add checks for object placing/moving, and other Editor functions that uses mouse dragging.
                 if ( !_gameArea.isDragScroll() && ( _editorPanel.getBrushSize() > 0 || _selectedTile == -1 ) ) {
@@ -297,18 +298,16 @@ namespace Interface
             }
             // cursor is over the buttons area
             else if ( le.MouseCursor( _editorPanel.getRect() ) ) {
-                if ( Cursor::POINTER != cursor.Themes() ) {
-                    cursor.SetThemes( Cursor::POINTER );
-                }
+                cursor.SetThemes( Cursor::POINTER );
+
                 if ( !_gameArea.NeedScroll() ) {
                     res = _editorPanel.queueEventProcessing();
                 }
             }
             // cursor is somewhere else
             else if ( !_gameArea.NeedScroll() ) {
-                if ( Cursor::POINTER != cursor.Themes() ) {
-                    cursor.SetThemes( Cursor::POINTER );
-                }
+                cursor.SetThemes( Cursor::POINTER );
+
                 _gameArea.ResetCursorPosition();
             }
 
@@ -381,7 +380,7 @@ namespace Interface
                 }
 
                 if ( needRedraw() ) {
-                    redraw();
+                    redraw( 0 );
 
                     // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
                     assert( getRedrawMask() == 0 );
@@ -556,6 +555,8 @@ namespace Interface
     void Editor::mouseCursorAreaPressRight( const int32_t tileIndex ) const
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
+
+        DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
 
         switch ( tile.GetObject() ) {
         case MP2::OBJ_NON_ACTION_CASTLE:

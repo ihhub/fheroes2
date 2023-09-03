@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-22 00:24+0000\n"
+"POT-Creation-Date: 2023-09-03 12:06+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -386,14 +386,15 @@ msgstr "Vitesse : %{speed}"
 msgid "Speed"
 msgstr "Vitesse"
 
-msgid "Army Order"
-msgstr "Ordre de jeu"
-
 msgid "Off"
 msgstr "Désactivé"
 
 msgid "On"
 msgstr "Activé"
+
+#, fuzzy
+msgid "Turn Order"
+msgstr "Ordre de jeu"
 
 msgid "Auto Spell Casting"
 msgstr "Sorts auto"
@@ -427,7 +428,8 @@ msgstr "Infos sur dégâts"
 msgid "Set the speed of combat actions and animations."
 msgstr "Définir la vitesse des actions et animations de combat."
 
-msgid "Toggle to display army order during the battle."
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
 msgstr ""
 "Activer ou désactiver l'affichage de l'ordre de jeu des créatures pendant le "
 "combat."
@@ -1877,7 +1879,8 @@ msgstr "Construction impossible. Une construction a déjà eu lieu aujourd'hui."
 msgid "For this action it is necessary to build a castle first."
 msgstr "Pour effectuer cette action il faut d'abord construire un château."
 
-msgid "Cannot build %{name} because castle is too far from water."
+#, fuzzy
+msgid "Cannot build %{name} because the castle is too far away from an ocean."
 msgstr "Impossible de construire %{name} - le château est trop loin de l'eau."
 
 msgid "disable build."
@@ -3219,12 +3222,6 @@ msgstr ""
 "\n"
 "Emplacement : "
 
-msgid "File to Save:"
-msgstr "Fichier à sauvegarder :"
-
-msgid "File to Load:"
-msgstr "Fichier à charger :"
-
 msgid "Click to save the current game."
 msgstr "Enregistrer le jeu en cours."
 
@@ -3236,6 +3233,12 @@ msgstr "Voulez-vous vraiment effacer le fichier :"
 
 msgid "Warning!"
 msgstr "Attention !"
+
+msgid "File to Save:"
+msgstr "Fichier à sauvegarder :"
+
+msgid "File to Load:"
+msgstr "Fichier à charger :"
 
 msgid "Accept the choice made."
 msgstr "Confirmez le choix."

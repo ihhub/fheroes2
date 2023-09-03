@@ -141,7 +141,7 @@ namespace fheroes2
     {
     public:
         ButtonSprite( int32_t offsetX = 0, int32_t offsetY = 0 );
-        ButtonSprite( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Sprite & disabled = Sprite() );
+        ButtonSprite( int32_t offsetX, int32_t offsetY, Sprite released, Sprite pressed, Sprite disabled = Sprite() );
         ButtonSprite( const ButtonSprite & ) = delete;
         ButtonSprite( ButtonSprite && ) noexcept = default;
 

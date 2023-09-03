@@ -276,16 +276,20 @@ namespace
             const Heroes * hero = Interface::GetFocusHeroes();
 
             if ( hero ) {
-                str.append( "\n(" );
+                const char * heroStr = nullptr;
 
                 if ( hero->HasSecondarySkill( skill.Skill() ) ) {
-                    str.append( _( "already knows this skill" ) );
+                    heroStr = ( _( "already knows this skill" ) );
                 }
                 else if ( hero->HasMaxSecondarySkill() ) {
-                    str.append( _( "already has max skills" ) );
+                    heroStr = ( _( "already has max skills" ) );
                 }
 
-                str += ')';
+                if ( heroStr != nullptr ) {
+                    str.append( "\n(" );
+                    str.append( heroStr );
+                    str += ')';
+                }
             }
         }
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2022                                             *
+ *   Copyright (C) 2021 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,14 +18,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "army_ui_helper.h"
+
 #include <cassert>
 #include <cstddef>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "army.h"
 #include "army_troop.h"
-#include "army_ui_helper.h"
 #include "game.h"
 #include "icn.h"
 #include "image.h"
@@ -75,7 +77,7 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
         }
 
         const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, troop->GetSpriteIndex() );
-        fheroes2::Text text( monstersCountRepresentation, fheroes2::FontType::smallWhite() );
+        fheroes2::Text text( std::move( monstersCountRepresentation ), fheroes2::FontType::smallWhite() );
 
         // This is the drawing of army troops in compact form in the small info window beneath resources
         if ( isCompact ) {

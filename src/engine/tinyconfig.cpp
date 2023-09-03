@@ -60,9 +60,12 @@ namespace
     template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
     bool convertToInt( const std::string_view str, T & intValue )
     {
-        const auto [ptr, ec] = std::from_chars( str.data(), str.data() + str.size(), intValue );
+        const char * first = str.data();
+        const char * last = str.data() + str.size();
 
-        return ec == std::errc();
+        const auto [ptr, ec] = std::from_chars( first, last, intValue );
+
+        return ( ptr == last && ec == std::errc() );
     }
 }
 
@@ -77,7 +80,7 @@ bool TinyConfig::Load( const std::string & cfile )
     if ( !sf.open( cfile, "rb" ) )
         return false;
 
-    std::vector<std::string> rows = StringSplit( sf.toString(), "\n" );
+    std::vector<std::string> rows = StringSplit( sf.toString(), '\n' );
 
     for ( std::vector<std::string>::const_iterator it = rows.begin(); it != rows.end(); ++it ) {
         std::string str = StringTrim( *it );
@@ -103,7 +106,17 @@ bool TinyConfig::Load( const std::string & cfile )
 int TinyConfig::IntParams( const std::string & key ) const
 {
     const_iterator it = find( ModifyKey( key ) );
-    return it != end() ? GetInt( it->second ) : 0;
+    if ( it == end() ) {
+        return 0;
+    }
+
+    int result;
+
+    if ( !convertToInt( it->second, result ) ) {
+        return 0;
+    }
+
+    return result;
 }
 
 std::string TinyConfig::StrParams( const std::string & key ) const

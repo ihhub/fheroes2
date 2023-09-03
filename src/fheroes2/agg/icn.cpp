@@ -839,7 +839,7 @@ int ICN::PORTxxxx( int heroId )
         return ICN::PORT0057;
     case Heroes::HALTON:
         return ICN::PORT0058;
-    case Heroes::BAX:
+    case Heroes::BRAX:
         return ICN::PORT0059;
 
     case Heroes::SOLMYR:

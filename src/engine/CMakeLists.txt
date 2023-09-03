@@ -44,23 +44,16 @@ target_compile_definitions(
 target_include_directories(
 	engine
 	PUBLIC
-	$<$<BOOL:${ENABLE_IMAGE}>:${${USE_SDL_VERSION}_IMAGE_INCLUDE_DIR}>
-	${${USE_SDL_VERSION}_MIXER_INCLUDE_DIR}
-	${${USE_SDL_VERSION}_INCLUDE_DIR}
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-	$<INSTALL_INTERFACE:include>
 	)
 
 target_link_libraries(
 	engine
 	smacker
-	${${USE_SDL_VERSION}MAIN_LIBRARY}
-	${${USE_SDL_VERSION}_LIBRARY}
-	${${USE_SDL_VERSION}_MIXER_LIBRARIES}
-	$<$<BOOL:${ENABLE_IMAGE}>:${${USE_SDL_VERSION}_IMAGE_LIBRARIES}>
+	${USE_SDL_VERSION}::${USE_SDL_VERSION}
+	${USE_SDL_VERSION}_mixer::${USE_SDL_VERSION}_mixer
+	$<$<BOOL:${ENABLE_IMAGE}>:${USE_SDL_VERSION}_image::${USE_SDL_VERSION}_image>
 	$<$<BOOL:${ENABLE_IMAGE}>:PNG::PNG>
-	Threads::Threads # To match the build settings of the main app
+	Threads::Threads
 	ZLIB::ZLIB
 	)
-
-export(TARGETS engine FILE EngineConfig.cmake)

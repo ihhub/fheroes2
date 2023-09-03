@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-22 00:24+0000\n"
-"PO-Revision-Date: 2023-07-01 14:09+0200\n"
+"POT-Creation-Date: 2023-09-03 12:06+0000\n"
+"PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
 "channels/733093692860137523/817386375888371772\n"
@@ -75,7 +75,7 @@ msgid "LEARN"
 msgstr "NAUKA"
 
 msgid "TRADE"
-msgstr "WYŚLIJ"
+msgstr "WYMIEŃ"
 
 msgid "YES"
 msgstr "TAK"
@@ -366,20 +366,18 @@ msgstr ""
 msgid "You have already cast a spell this round."
 msgstr "W tej rundzie zaklęcie zostało już rzucone."
 
-#, fuzzy
 msgid "That spell will have no effect!"
-msgstr "To zaklęcie na nikogo nie zadziała!"
+msgstr "To zaklęcie nie da żadnego efektu!"
 
 msgid "You may only summon one type of elemental per combat."
 msgstr "W czasie walki możesz przywołać tylko jeden rodzaj żywiołaka."
 
-#, fuzzy
 msgid ""
 "There is no open space adjacent to your hero where you can summon an "
 "Elemental to."
 msgstr ""
 "Obok twojego bohatera nie ma wolnego miejsca gdzie można by przywołać "
-"żywiołaki."
+"Żywiołaki."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
@@ -394,14 +392,15 @@ msgstr "Szybkość: %{speed}"
 msgid "Speed"
 msgstr "Szybkość"
 
-msgid "Army Order"
-msgstr "Kolejność jednostek"
-
 msgid "Off"
 msgstr "Wyłączone"
 
 msgid "On"
 msgstr "Włączone"
+
+#, fuzzy
+msgid "Turn Order"
+msgstr "Kolejność jednostek"
 
 msgid "Auto Spell Casting"
 msgstr "Auto. czary"
@@ -433,7 +432,8 @@ msgstr "Obrażenia"
 msgid "Set the speed of combat actions and animations."
 msgstr "Pozwala na ustawienie szybkości akcji i animacji w walce."
 
-msgid "Toggle to display army order during the battle."
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
 msgstr ""
 "Ukrycie lub pokazanie kolejności wykonywania akcji przez stwory w czasie "
 "walki."
@@ -731,9 +731,8 @@ msgstr "Pokazuje rezultat akcji wykonanych przez indywidualną jednostkę."
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Czy na pewno chcesz dokończyć walkę w trybie automatycznym?"
 
-#, fuzzy
 msgid "Are you sure you want to enable auto combat?"
-msgstr "Czy na pewno chcesz się wycofać?"
+msgstr "Czy na pewno chcesz włączyć automatyczną walkę?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} pomija turę."
@@ -1863,7 +1862,8 @@ msgstr "Nie można budować. Już to robiono w tej turze."
 msgid "For this action it is necessary to build a castle first."
 msgstr "Najpierw trzeba zbudować zamek."
 
-msgid "Cannot build %{name} because castle is too far from water."
+#, fuzzy
+msgid "Cannot build %{name} because the castle is too far away from an ocean."
 msgstr "%{name} - nie można zbudować, zamek jest za daleko od wody."
 
 msgid "disable build."
@@ -2534,9 +2534,10 @@ msgstr "Pokaż bohatera"
 msgid "The above spells are available here."
 msgstr "Tu są dostępne powyższe zaklęcia."
 
-#, fuzzy
 msgid "The spells the hero can learn have been added to their book."
-msgstr "Powyższe zaklęcia zostały dodane do twojej księgi."
+msgstr ""
+"Zaklęcia, których bohater mógł się nauczyć, zostały dodane do jego Księgi "
+"Zaklęć."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
@@ -2861,7 +2862,6 @@ msgstr "Wybierz język gry"
 msgid "Change the graphics settings of the game."
 msgstr "Zmień ustawienia grafiki gry."
 
-#, fuzzy
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 "Zmień kursor na kolorowy lub czarno-biały. Wybór ma jedynie charakter "
@@ -3179,12 +3179,6 @@ msgstr ""
 "\n"
 "Położenie pliku: "
 
-msgid "File to Save:"
-msgstr "Zapisz plik:"
-
-msgid "File to Load:"
-msgstr "Wczytaj plik:"
-
 msgid "Click to save the current game."
 msgstr "Zapisz bieżącą grę."
 
@@ -3196,6 +3190,12 @@ msgstr "Czy na pewno chcesz usunąć plik:"
 
 msgid "Warning!"
 msgstr "Uwaga!"
+
+msgid "File to Save:"
+msgstr "Zapisz plik:"
+
+msgid "File to Load:"
+msgstr "Wczytaj plik:"
 
 msgid "Accept the choice made."
 msgstr "Zastosuj wprowadzone zmiany."
@@ -3582,9 +3582,8 @@ msgstr "Wyschnięty"
 msgid "Beach Objects"
 msgstr ""
 
-#, fuzzy
 msgid "Towns"
-msgstr "Miasto"
+msgstr "Miasta"
 
 msgid "Heroes"
 msgstr "Bohaterowie"
@@ -3592,9 +3591,8 @@ msgstr "Bohaterowie"
 msgid "Artifacts"
 msgstr "Artefakty"
 
-#, fuzzy
 msgid "Treasures"
-msgstr "Skarb"
+msgstr "Skarby"
 
 msgid ""
 "Draws terrain in\n"
@@ -4383,9 +4381,8 @@ msgstr "połącz jednostki"
 msgid "hotkey|upgrade troop"
 msgstr "ulepsz stworzenie"
 
-#, fuzzy
 msgid "hotkey|dismiss hero or troop"
-msgstr "zwolnij stworzenie"
+msgstr "zwolnij bohatera lub stworzenie"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
@@ -4656,9 +4653,8 @@ msgstr ""
 "W twoim skarbcu udało ci się zebrać ponad %{count} szt. złota.\n"
 "Wszyscy przeciwnicy korzą się przed twym bogactwem i potęgą."
 
-#, fuzzy
 msgid "Victory!"
-msgstr "Ector"
+msgstr "Zwycięstwo!"
 
 msgid ""
 "The enemy has captured %{name}!\n"
@@ -4853,7 +4849,7 @@ msgid " All dwellings increase population."
 msgstr " Populacja całego królestwa zwiększa się."
 
 msgid "New Month!"
-msgstr ""
+msgstr "Nowy miesiąc!"
 
 msgid "New Week!"
 msgstr "Nowy tydzień!"
@@ -6779,7 +6775,6 @@ msgstr ""
 msgid "No spell book is present."
 msgstr "Nie posiadasz Księgi Zaklęć."
 
-#, fuzzy
 msgid ""
 "This spell costs %{mana} spell points. You have no spell points, so you "
 "cannot cast it."
@@ -6787,13 +6782,12 @@ msgstr ""
 "To zaklęcie kosztuje %{mana} pkt. magii. Nie masz w ogóle many, więc nie "
 "możesz go rzucić."
 
-#, fuzzy
 msgid ""
 "This spell costs %{mana} spell points. You only have %{point} spell points, "
 "so you cannot cast it."
 msgstr ""
-"To zaklęcie kosztuje %{mana} pkt. magii. Masz tylko %{point}, więc nie "
-"możesz go rzucić."
+"To zaklęcie kosztuje %{mana} pkt. magii. Masz tylko %{point} pkt. magii, "
+"więc nie możesz go rzucić."
 
 msgid "The spell was not found."
 msgstr "Zaklęcie nie zostało znalezione."
@@ -6809,44 +6803,36 @@ msgstr ""
 "Twój bohater jest zbyt zmęczony, by rzucić dziś to zaklęcie. Spróbuj "
 "ponownie jutro."
 
-#, fuzzy
 msgid "This spell cannot be cast on a boat."
-msgstr "Ten czar nie może być rzucony z łodzi."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
 
-#, fuzzy
 msgid "This spell can only be cast near an ocean."
-msgstr "Ten czar może być rzucony tylko przy wodzie."
+msgstr "To zaklęcie może być rzucone tylko przy wodzie."
 
-#, fuzzy
 msgid ""
 "There are no boats available and no ocean adjacent to the hero where this "
 "spell will work."
 msgstr ""
-"Nie ma dostępnej łodzi oraz nie ma miejsca koło bohatera przy brzegu do "
-"rzucenia czaru."
+"Nie można rzucić zaklęcia, ponieważ nie ma dostępnej łodzi oraz nie ma "
+"miejsca blisko bohatera przy brzegu."
 
-#, fuzzy
 msgid "There are no boats available for this spell."
-msgstr "Nie możesz rzucić czaru, ponieważ nie ma dostępnej łodzi."
+msgstr "Nie możesz rzucić zaklęcia, ponieważ nie ma dostępnej łodzi."
 
-#, fuzzy
 msgid "There is no ocean adjacent to the hero where this spell will work."
 msgstr ""
-"Nie możesz rzucić czaru, ponieważ nie ma miejsca koło bohatera przy brzegu."
+"Nie możesz rzucić zaklęcia, ponieważ nie ma miejsca koło bohatera przy "
+"brzegu."
 
-#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
 "You cannot cast this spell."
 msgstr ""
 "Nie posiadasz w tym momencie żadnego miasta lub zamku, z tego powodu nie "
-"możesz rzucić zaklęcia."
+"możesz rzucić tego zaklęcia."
 
-#, fuzzy
 msgid "This hero is already in a town, so you cannot cast this spell."
-msgstr ""
-"Ten bohater znajduje się już w zamku, z tego powodu nie możesz rzucić "
-"zaklęcia."
+msgstr "Ten bohater znajduje się już w zamku, więc nie możesz rzucić zaklęcia."
 
 msgid ""
 "The nearest town is %{town}.\n"
@@ -6857,25 +6843,22 @@ msgstr ""
 " \n"
 "To miasto jest zajęte przez twojego bohatera %{hero}."
 
-#, fuzzy
 msgid "This spell is already in effect."
-msgstr "Ten czar już został rzucony."
+msgstr "To zaklęcie zostało już rzucone."
 
-#, fuzzy
 msgid ""
 "No opponent neither has nor can have any hero under their command anymore. "
 "Casting this spell will have no effect."
 msgstr ""
-"Żaden przeciwnik nie może mieć bohatera. Użycie tego czaru nie da żadnych "
-"rezultatów."
+"Żaden przeciwnik nie ma ani nie może mieć bohatera. Użycie tego zaklęcia nie "
+"da żadnego rezultatu."
 
-#, fuzzy
 msgid ""
 "No opponent has a hero under their command at this time. Casting this spell "
 "will have no effect."
 msgstr ""
-"Żaden przeciwnik nie ma aktualnie bohatera. Użycie tego czaru nie da żadnych "
-"rezultatów."
+"Żaden przeciwnik nie ma aktualnie bohatera. Użycie tego zaklęcia nie da "
+"żadnego rezultatu."
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -6884,7 +6867,6 @@ msgstr ""
 "Aby zaklęcie 'Wizje' zadziałało, musisz znajdować się w zasięgu %{count} pól "
 "od przeciwnika."
 
-#, fuzzy
 msgid ""
 "You must be standing on the entrance to a mine (sawmills and alchemist labs "
 "do not count) to cast this spell."
@@ -6895,13 +6877,12 @@ msgstr ""
 msgid "You must first defeat the ghosts guarding the mine to cast this spell."
 msgstr "Aby rzucić ten czar, musisz najpierw pokonać duchy strzegące kopalni."
 
-#, fuzzy
 msgid ""
 "There are already at least as many elementals guarding the mine as this hero "
 "can generate. Casting this spell will have no effect."
 msgstr ""
-"Kopalni strzeże już tyle żywiołaków, ilu mógłbyś przywołać. Rzucenie tego "
-"zaklęcia nie da żadnego rezultatu."
+"Nie przywołasz więcej Żywiołaków, niż aktualnie strzeże kopalnii. Rzucenie "
+"tego zaklęcia nie da żadnego rezultatu."
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name}, %{race} (poziom %{level})"
@@ -10485,24 +10466,22 @@ msgstr ""
 msgid "Shield"
 msgstr "Tarcza"
 
-#, fuzzy
 msgid ""
 "Halves damage received from ranged attacks for a single unit. Does not "
 "affect damage received from Turrets or Ballistae."
 msgstr ""
-"Zmniejsza o połowę obrażenia, jakie otrzymuje jedna z twoich jednostek z "
-"powodu ataków dystansowych."
+"Zmniejsza o połowę obrażenia, jakie otrzymuje jedno z twoich stworzeń z "
+"powodu ataków dystansowych. Nie zmienia obrażeń otrzymanych od wieżyczek."
 
 msgid "Mass Shield"
 msgstr "Grupowa Tarcza"
 
-#, fuzzy
 msgid ""
 "Halves damage received from ranged attacks for all of your units. Does not "
 "affect damage received from Turrets or Ballistae."
 msgstr ""
-"Zmniejsza o połowę obrażenia, jakie otrzymują wszystkie twoje jednostki z "
-"powodu ataków dystansowych."
+"Zmniejsza o połowę obrażenia, jakie otrzymują wszystkie twoje stworzenia z "
+"powodu ataków dystansowych. Nie dotyczy obrażeń otrzymywanych od wieżyczek."
 
 msgid "Summon Earth Elemental"
 msgstr "Przywołanie Żywiołaka Ziemi"
