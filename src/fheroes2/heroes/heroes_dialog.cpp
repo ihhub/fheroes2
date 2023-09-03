@@ -230,7 +230,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 ), display, { cur_pt.x + 9, cur_pt.y + 318 }, { -3, 5 } );
 
     // button exit
-    dst_pt.x = cur_pt.x + 603;
+    dst_pt.x = cur_pt.x + 602;
     dst_pt.y = cur_pt.y + 318;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_VERTICAL_EXIT, 0, 1 );
 
