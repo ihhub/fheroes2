@@ -506,11 +506,13 @@ namespace fheroes2
 
     Text::~Text() = default;
 
+    // TODO: Properly handle strings with many text lines ('\n'). Now their widths are counted as if they're one line.
     int32_t Text::width() const
     {
         return getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
     }
 
+    // TODO: Properly handle strings with many text lines ('\n'). Now their heights are counted as if they're one line.
     int32_t Text::height() const
     {
         return getFontHeight( _fontType.size );
