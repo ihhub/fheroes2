@@ -567,7 +567,7 @@ namespace AI
 
             // Filters out unsafe potential positions (i.e. positions reachable for enemy units during one turn) and calculates the distances
             // to the nearest enemy unit for safe positions.
-            const auto filterPotentialPositions = [&arena, &currentUnit, &enemies]( std::map<Position, uint32_t> & potentialPositions ) {
+            const auto filterPotentialPositions = [&currentUnit, &enemies]( std::map<Position, uint32_t> & potentialPositions ) {
                 class UnitRemover
                 {
                 public:
@@ -638,7 +638,7 @@ namespace AI
                 for ( const Unit * enemy : enemies ) {
                     assert( enemy != nullptr );
 
-                    const auto isPositionReachableForEnemy = [&arena, enemy]( const Position & position ) {
+                    const auto isPositionReachableForEnemy = [enemy]( const Position & position ) {
                         const uint32_t enemySpeed = enemy->GetSpeed( false, true );
 
                         // Blinded or paralyzed unit is considered harmless
