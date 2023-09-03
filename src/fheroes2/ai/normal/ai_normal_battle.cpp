@@ -542,11 +542,9 @@ namespace AI
                 return -1;
             }
 
-            // If the given position is not safe (i.e. the unit occupying this position can be attacked by at least one of
-            // the enemy units during one turn), then returns 0. Otherwise returns the distance to the nearest enemy unit.
-            const auto getSafeDistanceToNearestEnemy = [&arena, &currentUnit, &enemies]( const Position & pos ) -> uint32_t {
-                assert( pos.GetHead() != nullptr );
-
+            // Filters out unsafe potential positions (i.e. positions available to enemy units during one turn) and calculates the distances
+            // to the nearest enemy unit for safe positions.
+            const auto filterPotentialPositions = [&arena, &currentUnit, &enemies]( std::map<Position, uint32_t> & potentialPositions ) {
                 class UnitRemover
                 {
                 public:
@@ -609,69 +607,73 @@ namespace AI
                     Unit * unitToRestore = nullptr;
                 };
 
-                // In order to correctly assess the safety of a potential position for the unit to be moved, we need
+                // In order to correctly assess the safety of potential positions for the unit to be moved, we need
                 // to temporarily remove this unit from the battlefield, otherwise, it can block the movement of enemy
-                // units towards this new potential position.
+                // units towards these new potential positions.
                 const UnitRemover unitRemover( currentUnit );
-
-                uint32_t minDistance = UINT32_MAX;
 
                 for ( const Unit * enemy : enemies ) {
                     assert( enemy != nullptr );
 
                     const uint32_t enemySpeed = enemy->GetSpeed( false, true );
 
-                    // Blinded or paralyzed unit is considered safe
-                    if ( enemySpeed > Speed::STANDING ) {
-                        for ( const int32_t idx : Board::GetAroundIndexes( pos ) ) {
-                            const Position enemyPos = Position::GetPosition( *enemy, idx );
-                            if ( !arena.isPositionReachable( *enemy, enemyPos, false ) ) {
-                                continue;
+                    for ( auto iter = potentialPositions.begin(); iter != potentialPositions.end(); ) {
+                        auto & [position, distanceToNearestEnemy] = *iter;
+                        assert( position.GetHead() != nullptr );
+
+                        const bool isPositionReachableForEnemy = [&arena, enemy, enemySpeed]( const Position & pos ) {
+                            // Blinded or paralyzed unit is considered harmless
+                            if ( enemySpeed == Speed::STANDING ) {
+                                return false;
                             }
 
-                            const uint32_t moveCost = arena.CalculateMoveCost( *enemy, enemyPos );
-                            if ( moveCost > enemySpeed ) {
-                                continue;
+                            for ( const int32_t idx : Board::GetAroundIndexes( pos ) ) {
+                                const Position enemyPos = Position::GetPosition( *enemy, idx );
+                                if ( !arena.isPositionReachable( *enemy, enemyPos, false ) ) {
+                                    continue;
+                                }
+
+                                const uint32_t moveCost = arena.CalculateMoveCost( *enemy, enemyPos );
+                                if ( moveCost > enemySpeed ) {
+                                    continue;
+                                }
+
+                                return true;
                             }
 
-                            return 0;
+                            return false;
+                        }( position );
+
+                        if ( isPositionReachableForEnemy ) {
+                            iter = potentialPositions.erase( iter );
+
+                            continue;
                         }
+
+                        distanceToNearestEnemy = std::min( distanceToNearestEnemy, Board::GetDistance( position, enemy->GetPosition() ) );
+                        assert( distanceToNearestEnemy > 0 );
+
+                        ++iter;
                     }
-
-                    const auto getMinDistanceToEnemy = [&pos, enemy]() {
-                        const int32_t headIdx = pos.GetHead()->GetIndex();
-                        const int32_t tailIdx = pos.GetTail() ? pos.GetTail()->GetIndex() : -1;
-
-                        const int32_t enemyHeadIdx = enemy->GetHeadIndex();
-                        const int32_t enemyTailIdx = enemy->GetTailIndex();
-
-                        assert( enemyHeadIdx != -1 );
-
-                        uint32_t distance = Board::GetDistance( headIdx, enemyHeadIdx );
-
-                        if ( enemyTailIdx != -1 ) {
-                            distance = std::min( distance, Board::GetDistance( headIdx, enemyTailIdx ) );
-                        }
-
-                        if ( tailIdx != -1 ) {
-                            distance = std::min( distance, Board::GetDistance( tailIdx, enemyHeadIdx ) );
-
-                            if ( enemyTailIdx != -1 ) {
-                                distance = std::min( distance, Board::GetDistance( tailIdx, enemyTailIdx ) );
-                            }
-                        }
-
-                        return distance;
-                    };
-
-                    minDistance = std::min( minDistance, getMinDistanceToEnemy() );
                 }
-
-                return minDistance;
             };
 
+            // Key is a potential position, value is the distance between this position and the nearest enemy unit
+            std::map<Position, uint32_t> potentialPositions;
+
+            // The current position is also considered as a potential one (in this case, the unit will not retreat anywhere)
+            potentialPositions.emplace( currentUnit.GetPosition(), UINT32_MAX );
+
+            for ( const int32_t idx : arena.getAllAvailableMoves( currentUnit ) ) {
+                potentialPositions.emplace( Position::GetReachable( currentUnit, idx ), UINT32_MAX );
+            }
+
+            filterPotentialPositions( potentialPositions );
+
             // If the current position is safe enough, then it is not worth retreating
-            if ( getSafeDistanceToNearestEnemy( currentUnit.GetPosition() ) > 0 ) {
+            if ( potentialPositions.find( currentUnit.GetPosition() ) != potentialPositions.end() ) {
+                assert( potentialPositions[currentUnit.GetPosition()] > 0 );
+
                 return -1;
             }
 
@@ -680,14 +682,12 @@ namespace AI
             // i.e. the smaller the x the better). The idea is that corner cells should be avoided whenever possible when retreating.
             std::pair<uint32_t, double> safestParams{ 0, 0.0 };
 
-            for ( const int32_t idx : arena.getAllAvailableMoves( currentUnit ) ) {
-                const uint32_t distance = getSafeDistanceToNearestEnemy( Position::GetReachable( currentUnit, idx ) );
-                if ( distance == 0 ) {
-                    continue;
-                }
+            for ( const auto & [position, distanceToNearestEnemy] : potentialPositions ) {
+                assert( position.GetHead() != nullptr && distanceToNearestEnemy > 0 );
 
+                const int32_t idx = position.GetHead()->GetIndex();
                 const uint32_t distanceToBattlefieldCenter = Board::GetDistance( idx, ARENASIZE / 2 );
-                const std::pair<uint32_t, double> idxParams{ distance, distanceToBattlefieldCenter == 0 ? 1.0 : 1.0 / distanceToBattlefieldCenter };
+                const std::pair<uint32_t, double> idxParams{ distanceToNearestEnemy, distanceToBattlefieldCenter == 0 ? 1.0 : 1.0 / distanceToBattlefieldCenter };
 
                 if ( safestParams < idxParams ) {
                     safestIdx = idx;

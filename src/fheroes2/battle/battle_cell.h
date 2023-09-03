@@ -123,6 +123,16 @@ namespace Battle
         const Cell * GetHead() const;
         Cell * GetTail();
         const Cell * GetTail() const;
+
+        bool operator<( const Position & other ) const
+        {
+            using Base = std::pair<Cell *, Cell *>;
+
+            const Base & baseOfThis = *this;
+            const Base & baseOfOther = other;
+
+            return baseOfThis < baseOfOther;
+        }
     };
 }
 
