@@ -1858,7 +1858,7 @@ namespace fheroes2
                     const Sprite & originalPressed = GetICN( ICN::HSBTNS, 1 );
 
                     Copy( originalReleased, 9, 2, _icnVsSprite[id][0], 4, 2, 21, 112 );
-                    Copy( originalPressed, 9, 5, _icnVsSprite[id][1], 3, 5, 19, 111  );
+                    Copy( originalPressed, 9, 5, _icnVsSprite[id][1], 3, 5, 19, 111 );
 
                     // TODO: Add transparent backgrounds
                     break;
