@@ -565,7 +565,7 @@ namespace AI
                 return -1;
             }
 
-            // Filters out unsafe potential positions (i.e. positions available to enemy units during one turn) and calculates the distances
+            // Filters out unsafe potential positions (i.e. positions reachable for enemy units during one turn) and calculates the distances
             // to the nearest enemy unit for safe positions.
             const auto filterPotentialPositions = [&arena, &currentUnit, &enemies]( std::map<Position, uint32_t> & potentialPositions ) {
                 class UnitRemover
