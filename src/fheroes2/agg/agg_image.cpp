@@ -351,33 +351,33 @@ namespace
 
     // This class is used for situations when we need to remove letter-specific offsets, like when we display single letters in a row,
     // and then restore these offsets within the scope of the code
-    class ButtonFontRestorer
+    class ButtonFontOffsetRestorer
     {
     public:
-        ButtonFontRestorer( std::vector<fheroes2::Sprite> & font, const int32_t offsetX );
-        ButtonFontRestorer( const ButtonFontRestorer & ) = delete;
+        ButtonFontOffsetRestorer( std::vector<fheroes2::Sprite> & font, const int32_t offsetX );
+        ButtonFontOffsetRestorer( const ButtonFontOffsetRestorer & ) = delete;
 
-        ~ButtonFontRestorer();
+        ~ButtonFontOffsetRestorer();
 
-        ButtonFontRestorer & operator=( const ButtonFontRestorer & ) = delete;
+        ButtonFontOffsetRestorer & operator=( const ButtonFontOffsetRestorer & ) = delete;
 
     private:
         std::vector<fheroes2::Sprite> & _font;
         std::vector<int32_t> _originalXOffsets;
     };
 
-    ButtonFontRestorer::ButtonFontRestorer( std::vector<fheroes2::Sprite> & font, const int32_t offsetX )
+    ButtonFontOffsetRestorer::ButtonFontOffsetRestorer( std::vector<fheroes2::Sprite> & font, const int32_t offsetX )
         : _font( font )
     {
         _originalXOffsets.reserve( _font.size() );
 
-        for ( fheroes2::Sprite & characterSprite : font ) {
+        for ( fheroes2::Sprite & characterSprite : _font ) {
             _originalXOffsets.emplace_back( characterSprite.x() );
             characterSprite.setPosition( offsetX, characterSprite.y() );
         }
     }
 
-    ButtonFontRestorer::~ButtonFontRestorer()
+    ButtonFontOffsetRestorer::~ButtonFontOffsetRestorer()
     {
         if ( _originalXOffsets.size() != _font.size() ) {
             // If this assertion blows up then something is wrong with the fonts as they must have the same size.
@@ -1867,8 +1867,8 @@ namespace fheroes2
 
                 // We need to temporarily remove the letter specific X offsets in the font because if not the letters will
                 // be off-centered when we are displaying one letter per line
-                const ButtonFontRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
-                const ButtonFontRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
+                const ButtonFontOffsetRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
+                const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
                 getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
                                       ICN::REDBAK_SMALL_VERTICAL );
 
@@ -1897,8 +1897,8 @@ namespace fheroes2
 
                 // We need to temporarily remove the letter specific X offsets in the font because if not the letters will
                 // be off-centered when we are displaying one letter per line
-                const ButtonFontRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
-                const ButtonFontRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
+                const ButtonFontOffsetRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
+                const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
                 getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "E\nX\nI\nT" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
                                       ICN::REDBAK_SMALL_VERTICAL );
 
