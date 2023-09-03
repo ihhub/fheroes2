@@ -74,7 +74,7 @@ namespace
 
         switch ( scenarioID ) {
         case 2:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::BAX, 0, 0, gettext_noop( "Necromancer Guild" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::BRAX, 0, 0, gettext_noop( "Necromancer Guild" ) );
             break;
         case 3:
             obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::OGRE, gettext_noop( "Ogre Alliance" ) );

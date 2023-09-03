@@ -171,6 +171,7 @@ namespace
         const fheroes2::SupportedLanguage currentLanguage = fheroes2::getCurrentLanguage();
         const fheroes2::SupportedLanguage resourceLanguage = fheroes2::getResourceLanguage();
         return ( currentLanguage == fheroes2::SupportedLanguage::English && resourceLanguage == fheroes2::SupportedLanguage::English )
+               || ( currentLanguage == fheroes2::SupportedLanguage::Czech && resourceLanguage == fheroes2::SupportedLanguage::Czech )
                || ( currentLanguage == fheroes2::SupportedLanguage::Polish && resourceLanguage == fheroes2::SupportedLanguage::Polish )
                || ( currentLanguage == fheroes2::SupportedLanguage::French && resourceLanguage == fheroes2::SupportedLanguage::French )
                || ( currentLanguage == fheroes2::SupportedLanguage::German && resourceLanguage == fheroes2::SupportedLanguage::German )
@@ -3835,7 +3836,7 @@ namespace fheroes2
                 LoadOriginalICN( originalId );
 
                 if ( _icnVsSprite[originalId].size() < 13 ) {
-                    break;
+                    return true;
                 }
 
                 _icnVsSprite[id].resize( 2 );
@@ -3871,14 +3872,14 @@ namespace fheroes2
                     FillTransform( pressed, pressed.width() - 2, pressed.height() - 3, 1, 1, 1 );
                 }
 
-                break;
+                return true;
             }
             case ICN::EMPTY_POL_BUTTON: {
                 const int originalID = ICN::X_CMPBTN;
                 LoadOriginalICN( originalID );
 
                 if ( _icnVsSprite[originalID].size() < 8 ) {
-                    break;
+                    return true;
                 }
 
                 _icnVsSprite[id].resize( 2 );
@@ -3886,7 +3887,7 @@ namespace fheroes2
                 const Sprite & originalReleased = GetICN( originalID, 4 );
                 const Sprite & originalPressed = GetICN( originalID, 5 );
                 if ( originalReleased.width() != 94 && originalPressed.width() != 94 && originalReleased.height() < 5 && originalPressed.height() < 5 ) {
-                    break;
+                    return true;
                 }
                 Sprite & releasedWithDarkBorder = _icnVsSprite[id][0];
                 releasedWithDarkBorder.resize( originalReleased.width() + 2, originalReleased.height() + 1 );
@@ -3913,14 +3914,14 @@ namespace fheroes2
                 Fill( releasedWithDarkBorder, 5, 3, 88, 18, originalReleased.image()[pixelPosition] );
                 Fill( pressed, 4, 5, 87, 17, originalPressed.image()[pixelPosition] );
 
-                break;
+                return true;
             }
             case ICN::EMPTY_GUILDWELL_BUTTON: {
                 const int originalID = ICN::WELLXTRA;
                 LoadOriginalICN( originalID );
 
                 if ( _icnVsSprite[originalID].size() < 3 ) {
-                    break;
+                    return true;
                 }
                 _icnVsSprite[id].resize( 2 );
 
@@ -3937,7 +3938,7 @@ namespace fheroes2
                     Fill( out, 7 - i * 2, 2 + i, 50 + i, 14, getButtonFillingColor( i == 0 ) );
                 }
 
-                break;
+                return true;
             }
             case ICN::EMPTY_GOOD_MEDIUM_BUTTON:
             case ICN::EMPTY_EVIL_MEDIUM_BUTTON: {
@@ -3946,7 +3947,7 @@ namespace fheroes2
                 LoadOriginalICN( originalId );
 
                 if ( _icnVsSprite[originalId].size() < 10 ) {
-                    break;
+                    return true;
                 }
 
                 _icnVsSprite[id].resize( 2 );
@@ -3963,7 +3964,7 @@ namespace fheroes2
                     Fill( pressed, 27, 16, 42, 27, getButtonFillingColor( false, isGoodInterface ) );
                 }
 
-                break;
+                return true;
             }
             case ICN::BRCREST: {
                 LoadOriginalICN( id );
@@ -4004,7 +4005,29 @@ namespace fheroes2
                 h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
                 h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
 
-                break;
+                return true;
+            }
+            case ICN::COVR0010:
+            case ICN::COVR0011:
+            case ICN::COVR0012: {
+                // The original image contains some foreign pixels that do not belong to the image.
+                LoadOriginalICN( id );
+
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & sprite = _icnVsSprite[id][0];
+                    const uint8_t * image = sprite.image();
+                    const uint8_t * imageEnd = image + static_cast<size_t>( sprite.width() ) * sprite.height();
+                    uint8_t * transform = sprite.transform();
+
+                    for ( ; image != imageEnd; ++image, ++transform ) {
+                        // Mask all non white/black or brown pixels.
+                        if ( *transform == 0 && *image > 36 && ( *image < 108 || *image > 130 ) ) {
+                            *transform = 1;
+                        }
+                    }
+                }
+
+                return true;
             }
             default:
                 break;

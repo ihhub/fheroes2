@@ -518,8 +518,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     Heroes * hero = GetHeroForHire( raceType );
 
                     if ( hero ) {
-                        hero->LoadFromMP2( objectTileId, Color::NONE, hero->GetRace(), pblock );
-                        hero->SetModes( Heroes::JAIL );
+                        hero->LoadFromMP2( objectTileId, Color::NONE, hero->GetRace(), true, pblock );
                     }
                     else {
                         DEBUG_LOG( DBG_GAME, DBG_WARN, "MP2 file format: no free heroes are available from race " << Race::String( raceType ) )
@@ -536,21 +535,25 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     std::pair<int, int> colorRace = Maps::getColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
                     const Kingdom & kingdom = GetKingdom( colorRace.first );
 
-                    if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE )
+                    if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE ) {
                         colorRace.second = kingdom.GetRace();
+                    }
 
-                    // check heroes max count
+                    // Check if the kingdom has exceeded the limit on hired heroes
                     if ( kingdom.AllowRecruitHero( false ) ) {
                         Heroes * hero = nullptr;
 
-                        if ( pblock[17] && pblock[18] < Heroes::BAX )
+                        if ( pblock[17] && pblock[18] < Heroes::BRAX ) {
                             hero = vec_heroes.Get( pblock[18] );
+                        }
 
-                        if ( !hero || !hero->isAvailableForHire() )
+                        if ( !hero || !hero->isAvailableForHire() ) {
                             hero = GetHeroForHire( colorRace.second );
+                        }
 
-                        if ( hero )
-                            hero->LoadFromMP2( objectTileId, colorRace.first, colorRace.second, pblock );
+                        if ( hero ) {
+                            hero->LoadFromMP2( objectTileId, colorRace.first, colorRace.second, false, pblock );
+                        }
                     }
                     else {
                         DEBUG_LOG( DBG_GAME, DBG_WARN, "load heroes maximum" )

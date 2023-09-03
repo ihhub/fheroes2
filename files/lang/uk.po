@@ -423,7 +423,8 @@ msgstr ""
 msgid "Set the speed of combat actions and animations."
 msgstr "Встановити швидкість бойових дій та анімації."
 
-msgid "Toggle to display army order during the battle."
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
 msgstr "Перемкнути відображення черговості ходів загонів під час битви."
 
 msgid ""

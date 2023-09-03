@@ -145,7 +145,7 @@ public:
         ELIZA,
         ARCHIBALD,
         HALTON,
-        BAX,
+        BRAX,
         // From The Price of Loyalty expansion.
         SOLMYR,
         DAINWIN,
@@ -163,7 +163,7 @@ public:
         UNKNOWN
     };
 
-    enum flags_t : uint32_t
+    enum : uint32_t
     {
         SHIPMASTER = 0x00000001,
 
@@ -291,7 +291,7 @@ public:
     const Castle * inCastle() const override;
     Castle * inCastleMutable() const;
 
-    void LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const std::vector<uint8_t> & data );
+    void LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data );
     void PostLoad();
 
     int GetRace() const override;
@@ -516,6 +516,7 @@ public:
 
     void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const;
     void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const;
+
     void Scout( const int tileIndex ) const;
     int GetScoutingDistance() const;
 

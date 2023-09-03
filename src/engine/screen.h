@@ -291,7 +291,7 @@ namespace fheroes2
             _image = Sprite( image, offsetX, offsetY );
         }
 
-        void setPosition( int32_t x, int32_t y )
+        void setPosition( const int32_t x, const int32_t y )
         {
             _image.setPosition( x, y );
         }

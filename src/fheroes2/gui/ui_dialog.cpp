@@ -271,7 +271,13 @@ namespace fheroes2
         assert( 0 );
     }
 
-    CustomImageDialogElement::CustomImageDialogElement( Image image )
+    CustomImageDialogElement::CustomImageDialogElement( const Image & image )
+        : _image( image )
+    {
+        _area = { _image.width(), _image.height() };
+    }
+
+    CustomImageDialogElement::CustomImageDialogElement( Image && image )
         : _image( std::move( image ) )
     {
         _area = { _image.width(), _image.height() };
