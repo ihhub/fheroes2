@@ -124,8 +124,8 @@ namespace
             // TODO: The center of the button will change according to the height of it when we can resize it.
             // The height offsets will need to be adjusted when this is possible, now they point to the
             // center of the empty button.
-            releasedOffset = { 4, 52 };
-            pressedOffset = { 3, 53 };
+            releasedOffset = { 5, 52 };
+            pressedOffset = { 4, 53 };
             break;
         default:
             // Was a new empty button template added?
