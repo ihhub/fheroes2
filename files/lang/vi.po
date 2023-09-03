@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-03 12:06+0000\n"
+"POT-Creation-Date: 2023-08-27 10:37+0000\n"
 "PO-Revision-Date: 2023-05-07 22:12+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -385,15 +385,14 @@ msgstr "Tốc độ: %{speed}"
 msgid "Speed"
 msgstr "Tốc độ"
 
+msgid "Army Order"
+msgstr "Thứ tự Quân"
+
 msgid "Off"
 msgstr "Tắt"
 
 msgid "On"
 msgstr "Bật"
-
-#, fuzzy
-msgid "Turn Order"
-msgstr "Thứ tự Quân"
 
 msgid "Auto Spell Casting"
 msgstr "Tự động Niệm Phép"
@@ -425,8 +424,7 @@ msgstr "Thông tin Thiệt hại"
 msgid "Set the speed of combat actions and animations."
 msgstr "Đặt tốc độ của hành động chiến đấu và hình ảnh động."
 
-#, fuzzy
-msgid "Toggle to display the turn order during the battle."
+msgid "Toggle to display army order during the battle."
 msgstr "Chuyển đổi để hiển thị thứ tự quân đội trong trận chiến."
 
 msgid ""
@@ -3136,6 +3134,12 @@ msgstr ""
 "\n"
 "Vị trí: "
 
+msgid "File to Save:"
+msgstr ""
+
+msgid "File to Load:"
+msgstr ""
+
 msgid "Click to save the current game."
 msgstr "Nhấp để lưu trò chơi hiện tại."
 
@@ -3147,12 +3151,6 @@ msgstr "Ngươi có chắc muốn xóa file:"
 
 msgid "Warning!"
 msgstr "Cảnh báo!"
-
-msgid "File to Save:"
-msgstr ""
-
-msgid "File to Load:"
-msgstr ""
 
 msgid "Accept the choice made."
 msgstr "Chấp nhận sự lựa chọn được thực hiện."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-03 12:06+0000\n"
+"POT-Creation-Date: 2023-08-27 10:37+0000\n"
 "PO-Revision-Date: 2023-08-10 16:59+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -388,15 +388,14 @@ msgstr "Скорость: %{speed}"
 msgid "Speed"
 msgstr "Скорость"
 
+msgid "Army Order"
+msgstr "Порядок действий"
+
 msgid "Off"
 msgstr "Выкл."
 
 msgid "On"
 msgstr "Вкл."
-
-#, fuzzy
-msgid "Turn Order"
-msgstr "Порядок действий"
 
 msgid "Auto Spell Casting"
 msgstr "Магия в автобитве"
@@ -428,8 +427,7 @@ msgstr "Информация об уроне"
 msgid "Set the speed of combat actions and animations."
 msgstr "Установить скорость действий и анимации существ в бою."
 
-#, fuzzy
-msgid "Toggle to display the turn order during the battle."
+msgid "Toggle to display army order during the battle."
 msgstr "Включить/выключить показ порядка действий отрядов в бою."
 
 msgid ""
@@ -3173,6 +3171,12 @@ msgstr ""
 "\n"
 "Путь к файлу: "
 
+msgid "File to Save:"
+msgstr "Сохранить файл:"
+
+msgid "File to Load:"
+msgstr "Загрузить файл:"
+
 msgid "Click to save the current game."
 msgstr "Нажмите, чтобы сохранить текущую игру."
 
@@ -3184,12 +3188,6 @@ msgstr "Вы действительно хотите удалить файл:"
 
 msgid "Warning!"
 msgstr "Внимание!"
-
-msgid "File to Save:"
-msgstr "Сохранить файл:"
-
-msgid "File to Load:"
-msgstr "Загрузить файл:"
 
 msgid "Accept the choice made."
 msgstr "Принять изменения."

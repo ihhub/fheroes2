@@ -796,7 +796,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     }
 #endif
 
-                    redraw( 0 );
+                    redraw();
                     validateFadeInAndRender();
 
                     // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
@@ -1111,7 +1111,9 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
         if ( isMovingHero ) {
             // hero is moving, set the appropriate cursor
-            cursor.SetThemes( Cursor::WAIT );
+            if ( cursor.Themes() != Cursor::WAIT ) {
+                cursor.SetThemes( Cursor::WAIT );
+            }
 
             // if the hero is currently moving, pressing any mouse button should stop him
             if ( le.MouseClickLeft() || le.MousePressRight() ) {
@@ -1120,34 +1122,34 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         }
         // cursor is over the status window
         else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( _statusWindow.GetRect() ) ) {
-            cursor.SetThemes( Cursor::POINTER );
-
+            if ( Cursor::POINTER != cursor.Themes() )
+                cursor.SetThemes( Cursor::POINTER );
             _statusWindow.QueueEventProcessing();
         }
         // cursor is over the buttons area
         else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.MouseCursor( buttonsArea.GetRect() ) ) {
-            cursor.SetThemes( Cursor::POINTER );
-
+            if ( Cursor::POINTER != cursor.Themes() )
+                cursor.SetThemes( Cursor::POINTER );
             res = buttonsArea.QueueEventProcessing();
             isCursorOverButtons = true;
         }
         // cursor is over the icons panel
         else if ( ( !isHiddenInterface || conf.ShowIcons() ) && le.MouseCursor( iconsPanel.GetRect() ) ) {
-            cursor.SetThemes( Cursor::POINTER );
-
+            if ( Cursor::POINTER != cursor.Themes() )
+                cursor.SetThemes( Cursor::POINTER );
             iconsPanel.QueueEventProcessing();
         }
         // cursor is over the radar
         else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( _radar.GetRect() ) ) {
-            cursor.SetThemes( Cursor::POINTER );
-
+            if ( Cursor::POINTER != cursor.Themes() )
+                cursor.SetThemes( Cursor::POINTER );
             if ( !_gameArea.isDragScroll() )
                 _radar.QueueEventProcessing();
         }
         // cursor is over the control panel
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
-            cursor.SetThemes( Cursor::POINTER );
-
+            if ( Cursor::POINTER != cursor.Themes() )
+                cursor.SetThemes( Cursor::POINTER );
             res = controlPanel.QueueEventProcessing();
         }
         // cursor is over the game area
@@ -1156,8 +1158,8 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         }
         // cursor is somewhere else
         else if ( !_gameArea.NeedScroll() ) {
-            cursor.SetThemes( Cursor::POINTER );
-
+            if ( Cursor::POINTER != cursor.Themes() )
+                cursor.SetThemes( Cursor::POINTER );
             _gameArea.ResetCursorPosition();
         }
 
@@ -1310,7 +1312,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             }
 
             if ( needRedraw() ) {
-                redraw( 0 );
+                redraw();
 
                 // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
                 assert( getRedrawMask() == 0 );

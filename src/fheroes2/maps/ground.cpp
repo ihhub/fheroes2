@@ -30,92 +30,6 @@
 #include "skill.h"
 #include "translations.h"
 
-uint16_t Maps::Ground::getTerrainStartImageIndex( const int groundId )
-{
-    switch ( groundId ) {
-    case WATER:
-        return 0U;
-    case GRASS:
-        return 30U;
-    case SNOW:
-        return 92U;
-    case SWAMP:
-        return 146U;
-    case LAVA:
-        return 208U;
-    case DESERT:
-        return 262U;
-    case DIRT:
-        return 321U;
-    case WASTELAND:
-        return 361U;
-    case BEACH:
-        return 415U;
-    default:
-        // Have you added a new ground? Add the logic above!
-        assert( 0 );
-        return 0;
-    }
-}
-
-int Maps::Ground::getGroundByImageIndex( const uint16_t terrainImageIndex )
-{
-    if ( 30U > terrainImageIndex ) {
-        return Maps::Ground::WATER;
-    }
-    if ( 92U > terrainImageIndex ) {
-        return Maps::Ground::GRASS;
-    }
-    if ( 146U > terrainImageIndex ) {
-        return Maps::Ground::SNOW;
-    }
-    if ( 208U > terrainImageIndex ) {
-        return Maps::Ground::SWAMP;
-    }
-    if ( 262U > terrainImageIndex ) {
-        return Maps::Ground::LAVA;
-    }
-    if ( 321U > terrainImageIndex ) {
-        return Maps::Ground::DESERT;
-    }
-    if ( 361U > terrainImageIndex ) {
-        return Maps::Ground::DIRT;
-    }
-    if ( 415U > terrainImageIndex ) {
-        return Maps::Ground::WASTELAND;
-    }
-    if ( 432U > terrainImageIndex ) {
-        return Maps::Ground::BEACH;
-    }
-
-    // Have you added a new ground? Add the logic above!
-    assert( 0 );
-    return Maps::Ground::UNKNOWN;
-}
-
-bool Maps::Ground::isTerrainTransitionImage( const uint16_t terrainImageIndex )
-{
-    const int groundId = getGroundByImageIndex( terrainImageIndex );
-    switch ( groundId ) {
-    case WATER:
-    case DIRT:
-        return terrainImageIndex < 16U + getTerrainStartImageIndex( groundId );
-    case GRASS:
-    case SNOW:
-    case SWAMP:
-    case LAVA:
-    case DESERT:
-    case WASTELAND:
-        return terrainImageIndex < 38U + getTerrainStartImageIndex( groundId );
-    case BEACH:
-        return false;
-    default:
-        // Have you added a new ground? Add the logic above!
-        assert( 0 );
-        return false;
-    }
-}
-
 const char * Maps::Ground::String( int groundId )
 {
     switch ( groundId ) {
@@ -220,46 +134,56 @@ uint32_t Maps::Ground::GetPenalty( const Maps::Tiles & tile, uint32_t level )
 uint16_t Maps::Ground::getRandomTerrainImageIndex( const int groundId )
 {
     if ( groundId == WATER ) {
-        return static_cast<uint16_t>( Rand::Get( 3 ) ) + 16U + getTerrainStartImageIndex( groundId );
-    }
-
-    // Terrain image main contain an extra image (rock, flowers, crack, etc.).
-    // There are no extra water terrain tiles.
-    if ( Rand ::Get( 6 ) == 0 ) {
-        switch ( groundId ) {
-        case GRASS:
-        case SWAMP:
-            return static_cast<uint16_t>( Rand::Get( 15 ) ) + 46U + getTerrainStartImageIndex( groundId );
-        case SNOW:
-        case WASTELAND:
-        case LAVA:
-            return static_cast<uint16_t>( Rand::Get( 7 ) ) + 46U + getTerrainStartImageIndex( groundId );
-        case DESERT:
-            return static_cast<uint16_t>( Rand::Get( 12 ) ) + 46U + getTerrainStartImageIndex( groundId );
-        case DIRT:
-            return static_cast<uint16_t>( Rand::Get( 15 ) ) + 24U + getTerrainStartImageIndex( groundId );
-        case BEACH:
-            return static_cast<uint16_t>( Rand::Get( 8 ) ) + 8U + getTerrainStartImageIndex( groundId );
-        default:
-            // Have you added a new ground? Add the logic above!
-            assert( 0 );
-            return 0;
-        }
+        return static_cast<uint16_t>( Rand::Get( 3 ) ) + 16u;
     }
 
     const uint16_t indexOffset = static_cast<uint16_t>( Rand::Get( 7 ) );
     switch ( groundId ) {
-    case GRASS:
-    case SNOW:
-    case SWAMP:
-    case LAVA:
     case DESERT:
+        return indexOffset + 300U;
+    case SNOW:
+        return indexOffset + 130U;
+    case SWAMP:
+        return indexOffset + 184U;
     case WASTELAND:
-        return indexOffset + 38U + getTerrainStartImageIndex( groundId );
-    case DIRT:
-        return indexOffset + 16U + getTerrainStartImageIndex( groundId );
+        return indexOffset + 399U;
     case BEACH:
-        return indexOffset + getTerrainStartImageIndex( groundId );
+        return indexOffset + 415U;
+    case LAVA:
+        return indexOffset + 246U;
+    case DIRT:
+        return indexOffset + 337U;
+    case GRASS:
+        return indexOffset + 68U;
+    default:
+        // Have you added a new ground? Add the logic above!
+        assert( 0 );
+        return 0;
+    }
+}
+
+uint16_t Maps::Ground::getRandomTerrainSpecialImageIndex( const int groundId )
+{
+    switch ( groundId ) {
+    case DESERT:
+        return static_cast<uint16_t>( Rand::Get( 12 ) ) + 308U;
+    case SNOW:
+        return static_cast<uint16_t>( Rand::Get( 7 ) ) + 138U;
+    case SWAMP:
+        return static_cast<uint16_t>( Rand::Get( 15 ) ) + 192U;
+    case WASTELAND:
+        return static_cast<uint16_t>( Rand::Get( 7 ) ) + 407U;
+    case BEACH:
+        return static_cast<uint16_t>( Rand::Get( 8 ) ) + 423U;
+    case LAVA:
+        return static_cast<uint16_t>( Rand::Get( 7 ) ) + 254U;
+    case DIRT:
+        return static_cast<uint16_t>( Rand::Get( 15 ) ) + 345U;
+    case GRASS:
+        return static_cast<uint16_t>( Rand::Get( 15 ) ) + 76U;
+    case WATER:
+        // There are no extra water terrain tiles. We return normal tiles instead.
+        return getRandomTerrainImageIndex( groundId );
     default:
         // Have you added a new ground? Add the logic above!
         assert( 0 );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,7 +30,7 @@
 
 void Dialog::ArtifactSetAssembled( const ArtifactSetData & artifactSetData )
 {
-    const Artifact artifact( artifactSetData._assembledArtifactID );
+    const Artifact artifact( static_cast<int>( artifactSetData._assembledArtifactID ) );
     const fheroes2::ArtifactDialogElement artifactUI( artifact );
 
     AudioManager::PlaySound( M82::TREASURE );

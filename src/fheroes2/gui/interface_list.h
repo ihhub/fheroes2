@@ -297,12 +297,8 @@ namespace Interface
 
         void RemoveSelected()
         {
-            if ( content != nullptr && _currentId >= 0 && _currentId < _size() ) {
+            if ( content != nullptr && _currentId >= 0 && _currentId < _size() )
                 content->erase( content->begin() + _currentId );
-
-                // List item is removed, so we need to redraw the list.
-                needRedraw = true;
-            }
         }
 
         bool isSelected() const
@@ -313,12 +309,8 @@ namespace Interface
         void Unselect()
         {
             Verify();
-            if ( IsValid() ) {
+            if ( IsValid() )
                 _currentId = -1;
-
-                // List item is unselected, so we need to redraw the list with no selected elements.
-                needRedraw = true;
-            }
         }
 
         bool QueueEventProcessing() override

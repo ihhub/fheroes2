@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-03 12:06+0000\n"
+"POT-Creation-Date: 2023-08-27 10:37+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -392,15 +392,14 @@ msgstr "Szybkość: %{speed}"
 msgid "Speed"
 msgstr "Szybkość"
 
+msgid "Army Order"
+msgstr "Kolejność jednostek"
+
 msgid "Off"
 msgstr "Wyłączone"
 
 msgid "On"
 msgstr "Włączone"
-
-#, fuzzy
-msgid "Turn Order"
-msgstr "Kolejność jednostek"
 
 msgid "Auto Spell Casting"
 msgstr "Auto. czary"
@@ -432,8 +431,7 @@ msgstr "Obrażenia"
 msgid "Set the speed of combat actions and animations."
 msgstr "Pozwala na ustawienie szybkości akcji i animacji w walce."
 
-#, fuzzy
-msgid "Toggle to display the turn order during the battle."
+msgid "Toggle to display army order during the battle."
 msgstr ""
 "Ukrycie lub pokazanie kolejności wykonywania akcji przez stwory w czasie "
 "walki."
@@ -3179,6 +3177,12 @@ msgstr ""
 "\n"
 "Położenie pliku: "
 
+msgid "File to Save:"
+msgstr "Zapisz plik:"
+
+msgid "File to Load:"
+msgstr "Wczytaj plik:"
+
 msgid "Click to save the current game."
 msgstr "Zapisz bieżącą grę."
 
@@ -3190,12 +3194,6 @@ msgstr "Czy na pewno chcesz usunąć plik:"
 
 msgid "Warning!"
 msgstr "Uwaga!"
-
-msgid "File to Save:"
-msgstr "Zapisz plik:"
-
-msgid "File to Load:"
-msgstr "Wczytaj plik:"
 
 msgid "Accept the choice made."
 msgstr "Zastosuj wprowadzone zmiany."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-03 12:06+0000\n"
+"POT-Creation-Date: 2023-08-27 10:37+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -371,15 +371,15 @@ msgstr "Rapidez: %{speed}"
 msgid "Speed"
 msgstr "Veloc."
 
+msgid "Army Order"
+msgstr ""
+
 #, fuzzy
 msgid "Off"
 msgstr "off"
 
 msgid "On"
 msgstr "Ligado"
-
-msgid "Turn Order"
-msgstr ""
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -414,7 +414,7 @@ msgstr "Dano"
 msgid "Set the speed of combat actions and animations."
 msgstr ""
 
-msgid "Toggle to display the turn order during the battle."
+msgid "Toggle to display army order during the battle."
 msgstr ""
 
 msgid ""
@@ -3122,6 +3122,12 @@ msgid ""
 "Location: "
 msgstr ""
 
+msgid "File to Save:"
+msgstr "Arquivo a Salvar:"
+
+msgid "File to Load:"
+msgstr "Arquivo a Carregar:"
+
 #, fuzzy
 msgid "Click to save the current game."
 msgstr "Salvar o jogo atual."
@@ -3135,12 +3141,6 @@ msgstr "Você tem certeza que quer deletar este arquivo:"
 
 msgid "Warning!"
 msgstr "Aviso!"
-
-msgid "File to Save:"
-msgstr "Arquivo a Salvar:"
-
-msgid "File to Load:"
-msgstr "Arquivo a Carregar:"
 
 msgid "Accept the choice made."
 msgstr "Aceitar a escolha feita."

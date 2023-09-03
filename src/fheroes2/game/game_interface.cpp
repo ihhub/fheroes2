@@ -115,7 +115,7 @@ Interface::AdventureMap & Interface::AdventureMap::Get()
     return basic;
 }
 
-void Interface::AdventureMap::redraw( const uint32_t force )
+void Interface::AdventureMap::redraw( const uint32_t force /* = 0 */ )
 {
     if ( _lockRedraw ) {
         setRedraw( force );

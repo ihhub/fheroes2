@@ -33,7 +33,7 @@ namespace Interface
     public:
         static Editor & Get();
 
-        void redraw( const uint32_t force ) override;
+        void redraw( const uint32_t force = 0 ) override;
 
         // Regenerates the game area and updates the panel positions depending on the UI settings
         void reset() override;

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-03 12:06+0000\n"
+"POT-Creation-Date: 2023-08-25 01:17+0000\n"
 "PO-Revision-Date: 2023-09-01 08:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -353,7 +353,7 @@ msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
 msgstr ""
-"Artefaktet Negationskuglen er i kraft, hvilket deaktiverer brug af enhver "
+"Artefaktet Negationens Kugle er i kraft, hvilket deaktiverer brug af enhver "
 "kampmagi."
 
 msgid "You have already cast a spell this round."
@@ -384,14 +384,14 @@ msgstr "Hastighed: %{speed}"
 msgid "Speed"
 msgstr "Hastighed"
 
+msgid "Army Order"
+msgstr "Hærorden"
+
 msgid "Off"
 msgstr "Fra"
 
 msgid "On"
 msgstr "Til"
-
-msgid "Turn Order"
-msgstr "Turorden"
 
 msgid "Auto Spell Casting"
 msgstr "Autobrug af magi"
@@ -400,12 +400,10 @@ msgid "Grid"
 msgstr "Gitter"
 
 msgid "Shadow Movement"
-msgstr ""
-"Skygge-\n"
-"bevægelse"
+msgstr "Skyggebevægelse"
 
 msgid "Shadow Cursor"
-msgstr "Skyggemarkør"
+msgstr "Skygge-markør"
 
 msgid "Audio"
 msgstr "Lyd"
@@ -425,8 +423,8 @@ msgstr "Skadeinfo"
 msgid "Set the speed of combat actions and animations."
 msgstr "Indstil hastighed for kamphandlinger og animationer."
 
-msgid "Toggle to display the turn order during the battle."
-msgstr "Vælg om kampens turorden skal vises eller ej."
+msgid "Toggle to display army order during the battle."
+msgstr "Vælg om kampens hærorden skal vises eller ej."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -968,13 +966,13 @@ msgid "scenarioName|Defender"
 msgstr "Forsvarer"
 
 msgid "Corlagon's Defense"
-msgstr "Korlagons Forsvar"
+msgstr "Corlagons Forsvar"
 
 msgid "The Crown"
 msgstr "Kronen"
 
 msgid "The Gauntlet"
-msgstr "Kapløbet"
+msgstr "Handsken"
 
 msgid "Betrayal"
 msgstr "Forræderi"
@@ -1048,8 +1046,9 @@ msgstr ""
 "Saml så stor en hær som muligt og indtag fjendens borg. Du er kun oppe imod "
 "én fjende. Men du skal rejse langt, for at komme til fjendens borg. Alle "
 "tropper, du har i din hær i slutningen af dette scenarie, vil være med dig i "
-"det sidste scenarie. Du taber dette scenarie, hvis du ikke indtager borgen "
-"inden for 8 uger."
+"det sidste scenarie.\n"
+"\n"
+"Du taber dette scenarie, hvis du ikke indtager borgen inden for 8 uger."
 
 msgid ""
 "Find the Crown before Archibald's heroes find it. Roland will need the Crown "
@@ -1064,9 +1063,9 @@ msgid ""
 "enemy. Remember that capturing Lord Corlagon will ensure that he will not "
 "fight against you in the final scenario."
 msgstr ""
-"Tre allierede fjender står foran dig og sejren, inklusive Fyrst Korlagon. "
+"Tre allierede fjender står foran dig og sejren, inklusive Lord Corlagon. "
 "Roland er i en borg mod nordvest, og du vil tabe, hvis han falder for "
-"fjenden. Husk, at fange Fyrst Korlagon vil sikre, at han ikke vil kæmpe mod "
+"fjenden. Husk, at fange Lord Corlagon vil sikre, at han ikke vil kæmpe mod "
 "dig i det endelige scenarie."
 
 msgid ""
@@ -1142,6 +1141,7 @@ msgstr ""
 "Gode magikere har taget nekromantikerens borg. Du skal genindtage den, for "
 "at opnå sejr. Husk, at selvom du starter med en stærk hær, har du ingen "
 "borg.\n"
+"\n"
 "Du taber dette scenarie, hvis ikke du indtager en by inden 7 dage er gået. "
 "(Tip: Mod sydøst ligger den nærmeste borg.)"
 
@@ -1162,7 +1162,7 @@ msgid ""
 "Capture all enemy castles to win."
 msgstr ""
 "Du skal nedkæmpe et bondeoprør ledet af Rolands styrker. Alle er allierede "
-"imod dig, men du har Fyrst Korlagon, en erfaren helt, til at hjælpe dig. "
+"imod dig, men du har Lord Corlagon, en erfaren helt, til at hjælpe dig. "
 "Indtag alle fjendens borge, for at vinde."
 
 msgid ""
@@ -1221,7 +1221,7 @@ msgid "Betrayal's End"
 msgstr "Forræderiets Ende"
 
 msgid "Corruption's Heart"
-msgstr "Fordærvelsens Hjerte"
+msgstr "Hjertet af Korruptionen"
 
 msgid "The Giant's Pass"
 msgstr "Kæmpens Pas"
@@ -1255,8 +1255,10 @@ msgid ""
 msgstr ""
 "Efter at have forberedt din ankomst, har Kraeger sørget for en styrke af "
 "nekromantikere, for at forpurre din mission, som er at indtage borgen "
-"Scabsdale. Du taber dette scenarie, hvis du ikke når det inden den første "
-"dag i den tredje uge. Ellers bliver nekromantikerne for stærke for dig."
+"Scabsdale.\n"
+"\n"
+"Du taber dette scenarie, hvis du ikke når det inden den første dag i den "
+"tredje uge. Ellers bliver nekromantikerne for stærke for dig."
 
 msgid ""
 "The barbarian despot in this area is, as yet, ignorant of your presence. "
@@ -1487,7 +1489,7 @@ msgid " bonus"
 msgstr " bonus"
 
 msgid " defeated"
-msgstr " død"
+msgstr " besejret"
 
 msgid " will always run away from your army."
 msgstr " vil altid flygte i rædsel for din hær."
@@ -1600,7 +1602,7 @@ msgid "campaignBonus|Steelskin"
 msgstr "Stålhud"
 
 msgid "campaignBonus|Summon Earth"
-msgstr "Hidkald jord-elem."
+msgstr "Hidkald jord-elemental"
 
 msgid "campaignBonus|View Heroes"
 msgstr "Vis helte"
@@ -1612,10 +1614,10 @@ msgid "campaignBonus|Black Pearl"
 msgstr "Den sorte perle"
 
 msgid "campaignBonus|Caster's Bracelet"
-msgstr "Magisk armbånd"
+msgstr "Besværgelsesarmbåndet"
 
 msgid "campaignBonus|Defender Helm"
-msgstr "Forsvarshjelm"
+msgstr "Forsvarshjelmen"
 
 msgid "campaignBonus|Breastplate"
 msgstr "Brystpladen"
@@ -1624,34 +1626,34 @@ msgid "campaignBonus|Dragon Sword"
 msgstr "Dragesværdet"
 
 msgid "campaignBonus|Fizbin Medal"
-msgstr "Fizbin-medalje"
+msgstr "Fizbin Ulykkesmedaljen"
 
 msgid "campaignBonus|Foremost Scroll"
-msgstr "Magisk skriftrulle"
+msgstr "Yppersteskriftrullen"
 
 msgid "campaignBonus|Gauntlets"
 msgstr "Handsker"
 
 msgid "campaignBonus|Hideous Mask"
-msgstr "Hæslig maske"
+msgstr "Den hæslige maske"
 
 msgid "campaignBonus|Mage's Ring"
-msgstr "Troldmandsring"
+msgstr "Magikerens ring"
 
 msgid "campaignBonus|Major Scroll"
-msgstr "Magisk skriftrulle"
+msgstr "Den store skriftrulle"
 
 msgid "campaignBonus|Medal of Honor"
-msgstr "Æresmedalje"
+msgstr "Æresmedaljen"
 
 msgid "campaignBonus|Medal of Valor"
-msgstr "Tapperhedsmedalje"
+msgstr "Tapperhedsmedaljen"
 
 msgid "campaignBonus|Minor Scroll"
-msgstr "Magisk skriftrulle"
+msgstr "Den lille skriftrulle"
 
 msgid "campaignBonus|Nomad Boots"
-msgstr "Syvmilestøvler"
+msgstr "Nomadens støvler"
 
 msgid "campaignBonus|Power Axe"
 msgstr "Kraftøksen"
@@ -1660,16 +1662,16 @@ msgid "campaignBonus|Spiked Shield"
 msgstr "Pigskjoldet"
 
 msgid "campaignBonus|Stealth Shield"
-msgstr "Skalkeskjold"
+msgstr "Værnerens Skalkeskjold"
 
 msgid "campaignBonus|Tax Lien"
 msgstr "Skattepant"
 
 msgid "campaignBonus|Thunder Mace"
-msgstr "Morgenstjerne"
+msgstr "Torden-morgenstjernen"
 
 msgid "campaignBonus|Traveler's Boots"
-msgstr "Syvmilestøvler"
+msgstr "Traverens støvler"
 
 msgid "campaignBonus|White Pearl"
 msgstr "Den hvide perle"
@@ -1684,7 +1686,7 @@ msgid "campaignBonus|Expert Archery"
 msgstr "Ekspert skydning"
 
 msgid "campaignBonus|Basic Ballistics"
-msgstr "Beg. ballistik"
+msgstr "Begynder ballistik"
 
 msgid "campaignBonus|Advanced Ballistics"
 msgstr "Øvet ballistik"
@@ -1693,7 +1695,7 @@ msgid "campaignBonus|Expert Ballistics"
 msgstr "Ekspert ballistik"
 
 msgid "campaignBonus|Basic Diplomacy"
-msgstr "Beg. diplomati"
+msgstr "Begynder diplomati"
 
 msgid "campaignBonus|Advanced Diplomacy"
 msgstr "Øvet diplomati"
@@ -1720,7 +1722,7 @@ msgid "campaignBonus|Expert Estates"
 msgstr "Ekspert adelskab"
 
 msgid "campaignBonus|Basic Leadership"
-msgstr "Beg. lederskab"
+msgstr "Begynder lederskab"
 
 msgid "campaignBonus|Advanced Leadership"
 msgstr "Øvet lederskab"
@@ -1747,49 +1749,49 @@ msgid "campaignBonus|Expert Luck"
 msgstr "Ekspert held"
 
 msgid "campaignBonus|Basic Mysticism"
-msgstr "Beg. mysticisme"
+msgstr "Begynder mysticisme"
 
 msgid "campaignBonus|Advanced Mysticism"
 msgstr "Øvet mysticisme"
 
 msgid "campaignBonus|Expert Mysticism"
-msgstr "Eks. mysticisme"
+msgstr "Ekspert mysticisme"
 
 msgid "campaignBonus|Basic Navigation"
-msgstr "Beg. navigation"
+msgstr "Begynder navigation"
 
 msgid "campaignBonus|Advanced Navigation"
 msgstr "Øvet navigation"
 
 msgid "campaignBonus|Expert Navigation"
-msgstr "Eks. navigation"
+msgstr "Ekspert navigation"
 
 msgid "campaignBonus|Basic Necromancy"
-msgstr "Beg. nekromantik"
+msgstr "Begynder nekromantik"
 
 msgid "campaignBonus|Advanced Necromancy"
 msgstr "Øvet nekromantik"
 
 msgid "campaignBonus|Expert Necromancy"
-msgstr "Eks. nekromantik"
+msgstr "Ekspert nekromantik"
 
 msgid "campaignBonus|Basic Pathfinding"
-msgstr "Beg. stifinding"
+msgstr "Begynder stifinding"
 
 msgid "campaignBonus|Advanced Pathfinding"
 msgstr "Øvet stifinding"
 
 msgid "campaignBonus|Expert Pathfinding"
-msgstr "Eks. stifinding"
+msgstr "Ekspert stifinding"
 
 msgid "campaignBonus|Basic Scouting"
-msgstr "Beg. udspejdning"
+msgstr "Begynder udspejdning"
 
 msgid "campaignBonus|Advanced Scouting"
 msgstr "Øvet udspejdning"
 
 msgid "campaignBonus|Expert Scouting"
-msgstr "Eks. udspejdning"
+msgstr "Ekspert udspejdning"
 
 msgid "campaignBonus|Basic Wisdom"
 msgstr "Begynder visdom"
@@ -1804,21 +1806,19 @@ msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
 "scenario."
 msgstr ""
-"I dette scenarie vil din hovedhelt starte med artefaktet \"%{artifact}\"."
+"I dette scenarie vil din hovedhelt starte med \"%{artifact}\"-artefaktet."
 
 msgid ""
 "The kingdom will receive %{amount} additional %{resource} at the start of "
 "the scenario."
 msgstr ""
-"I dette scenarie vil dit kongerige modtage yderligere %{amount} %{resource}"
-"stykker."
+"I dette scenarie vil dit kongerige modtage %{amount} yderligere %{resource}."
 
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
 msgstr ""
-"I dette scenarie vil dit kongerige starte med %{amount} %{resource}stykker "
-"mindre."
+"I dette scenarie vil dit kongerige starte med %{amount} mindre %{resource}."
 
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
@@ -1839,7 +1839,7 @@ msgstr ""
 "Hovedhelten vil i dette scenarie begynde med yderligere %{count} %{skill}."
 
 msgid "The main hero will have %{skill} at the start of the scenario."
-msgstr "Hovedhelten vil i dette scenarie starte med at have lært %{skill}"
+msgstr "Hovedhelten vil i dette scenarie begynde med %{skill}"
 
 msgid "Roland"
 msgstr "Roland"
@@ -2082,7 +2082,7 @@ msgid "Timberhill"
 msgstr ""
 
 msgid "Troy"
-msgstr "Troja"
+msgstr ""
 
 msgid "Forder Oaks"
 msgstr ""
@@ -2666,7 +2666,7 @@ msgid "View information on the scenario you are currently playing."
 msgstr "Vis information om det scenarie, du er i gang med at spille."
 
 msgid "Dig for the Ultimate Artifact."
-msgstr "Grav efter Det Ultimative Artefakt."
+msgstr "Grav efter det Ultimative Artefakt."
 
 msgid "Digging"
 msgstr "Gravning"
@@ -2697,7 +2697,7 @@ msgid "Shots"
 msgstr "Skud"
 
 msgid "Shots Left"
-msgstr "Skudreserve"
+msgstr "Resterende skud"
 
 msgid "Hit Points"
 msgstr "Liv"
@@ -3202,6 +3202,12 @@ msgstr ""
 "\n"
 "Placering: "
 
+msgid "File to Save:"
+msgstr "Fil som skal gemmes:"
+
+msgid "File to Load:"
+msgstr "Fil som skal indlæses:"
+
 msgid "Click to save the current game."
 msgstr "Klik for at gemme igangværende spil."
 
@@ -3213,12 +3219,6 @@ msgstr "Er du sikker på at du vil slette denne fil:"
 
 msgid "Warning!"
 msgstr "Advarsel!"
-
-msgid "File to Save:"
-msgstr "Fil som skal gemmes:"
-
-msgid "File to Load:"
-msgstr "Fil som skal indlæses:"
 
 msgid "Accept the choice made."
 msgstr "Acceptér de trufne valg."
@@ -3275,7 +3275,7 @@ msgid "Your side defeats the opposing side."
 msgstr "Din side besejrer den modsatte."
 
 msgid "Accumulate a large amount of gold."
-msgstr "Saml en stor mængde guld."
+msgstr "Saml af store mængder guld."
 
 msgid "Victory Condition"
 msgstr "Vindervilkår"
@@ -3621,15 +3621,11 @@ msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
 msgstr ""
-"Tegner terræn indenfor en firkant med et størrelsesforhold på\n"
-"%{size}x%{size}."
 
 msgid ""
 "Erases objects in\n"
 "%{size} by %{size} square increments."
 msgstr ""
-"Fjerner alle ting indenfor en firkant med et størrelsesforhold på\n"
-"%{size}x%{size}."
 
 msgid "Small Brush"
 msgstr "Lille pensel"
@@ -3641,126 +3637,111 @@ msgid "Large Brush"
 msgstr "Stor pensel"
 
 msgid "Area Fill"
-msgstr "Områdeudfyldning"
+msgstr ""
 
 msgid "Used to click and drag for filling in large areas."
 msgstr ""
-"Bruges til at fylde områder, ved at klikke og trække musen henover dem."
 
 msgid "Clear Area"
-msgstr "Tøm område"
+msgstr ""
 
 msgid "Used to click and drag for clearing large areas."
 msgstr ""
-"Bruges til at tømme områder, ved at klikke og trække musen henover dem."
 
 msgid ""
 "Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
 "eliminates the penalty.)"
 msgstr ""
-"Koster %{rate}x normal skridtpoint for alle helte. (Stifinding reducerer "
-"eller eliminerer straffen.)"
 
 msgid "Traversable only by boat."
-msgstr "Farbar kun ved sejlads."
+msgstr ""
 
 msgid "No special modifiers."
-msgstr "Ingen særlige påvirkninger."
+msgstr ""
 
 msgid "Used to place objects most appropriate for use on %{terrain}."
 msgstr ""
-"Bruges til at placere objekter, som passer best på terræntypen %{terrain}."
 
 msgid ""
 "Used to place\n"
 "a town or castle."
 msgstr ""
-"Bruges til at placere\n"
-"en by eller borg"
 
 msgid ""
 "Used to place\n"
 "a monster group."
 msgstr ""
-"Bruges til at placere\n"
-"en gruppe væsener"
 
 msgid "Used to place a hero."
-msgstr "Bruges til at placere en helt."
+msgstr ""
 
 msgid "Used to place an artifact."
-msgstr "Bruges til at placere et artefakt."
+msgstr ""
 
 msgid ""
 "Used to place\n"
 "a resource or treasure."
 msgstr ""
-"Bruges til at placere\n"
-"en resurse eller skat"
 
 msgid "Terrain Mode"
-msgstr "Terræn-tilstand"
+msgstr ""
 
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
-"Bruges til at tegne det underliggende græs, jord, vand, osv. på kortet."
 
 msgid "Object Mode"
-msgstr "Objekt-tilstand"
+msgstr ""
 
 msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
 msgstr ""
-"Bruges til at placere objekter (bjerge, træer, skatte, osv.) på kortet."
 
 msgid "Detail Mode"
-msgstr "Detalje-tilstand"
+msgstr ""
 
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Bruges til specialredigering af væsener, helte og byer."
 
 msgid "Allows you to draw streams by clicking and dragging."
-msgstr "Lader dig tegne åer ved at klikke og trække i dem."
+msgstr ""
 
 msgid "Stream Mode"
-msgstr "Å-tilstand"
+msgstr ""
 
 msgid "Allows you to draw roads by clicking and dragging."
-msgstr "Lader dig tegne stier ved at klikke og trække i dem."
+msgstr ""
 
 msgid "Road Mode"
-msgstr "Vej-tilstand"
+msgstr ""
 
 msgid "Erase Mode"
-msgstr "Viskelæder"
+msgstr ""
 
 msgid "Used to erase objects off the map."
-msgstr "Bruges til at fjerne objekter af kortet."
+msgstr ""
 
 msgid "Change between zoom and normal view."
-msgstr "Vælg mellem normal og forstørret visning."
+msgstr ""
 
 msgid "Magnify"
-msgstr "Forstør"
+msgstr ""
 
 msgid "Undo"
-msgstr "Fortryd"
+msgstr ""
 
 msgid "Undo your last action. Press again to redo the action."
-msgstr "Fortryd din sidste handling. Tryk igen for at gentage handlingen."
+msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr ""
-"Opret et nyt kort, enten fra bunden eller ved hjælp af den automatiske "
-"kortgenerator."
 
 msgid "Edit map title, description, and other general information."
-msgstr "Rediger kortets navn, beskrivelse eller andre informationer."
+msgstr ""
 
 msgid "Specifications"
 msgstr "Specifikationer"
 
 msgid "File Options"
-msgstr "Filindstillinger"
+msgstr ""
 
 msgid ""
 "Open the file options menu, where you can save or load maps, or quit out of "
@@ -3770,10 +3751,10 @@ msgstr ""
 "eller afslutte Korteditoren."
 
 msgid "View the editor system options, which let you customize the editor."
-msgstr "Vis korteditorens systemindstillinger, som lader dig tilpasse den."
+msgstr ""
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr "Opret et kort, som er %{size} kvadrater høj og %{size} kvadrater bred."
+msgstr ""
 
 msgid "Cancel back to the New Map menu."
 msgstr "Afbryd og gå tilbage til hovedmenuen for Nyt-kort."
@@ -3782,13 +3763,13 @@ msgid "Cancel back to the main menu."
 msgstr "Afbryd og gå tilbage til hovedmenuen."
 
 msgid "From Scratch"
-msgstr "Fra bunden"
+msgstr ""
 
 msgid "Start from scratch with a blank map."
-msgstr "Begynd på et kort helt fra bunden."
+msgstr ""
 
 msgid "Create a randomly generated map."
-msgstr "Opret et kort automatisk."
+msgstr ""
 
 msgid "Random"
 msgstr "Tilfældigt"
@@ -4666,7 +4647,7 @@ msgstr ""
 "Din opgave er fuldført!"
 
 msgid "Ultimate Artifact"
-msgstr "Det Ultimative Artefakt"
+msgstr "Den Ultimative Artefakt"
 
 msgid ""
 "The enemy is beaten.\n"
@@ -4679,7 +4660,7 @@ msgid ""
 "You have built up over %{count} gold in your treasury.\n"
 "All enemies bow before your wealth and power."
 msgstr ""
-"Du har opbygget over %{count} guldstykker i dit skatkammer.\n"
+"Du har opbygget over %{count} guld i dit skatkammer.\n"
 "Alle fjender bøjer sig for din rigdom og magt!"
 
 msgid "Victory!"
@@ -4696,7 +4677,7 @@ msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
 "You must bow done in defeat before his wealth and power."
 msgstr ""
-"Fjenden har opbygget over %{count} guldstykker i sit skatkammer.\n"
+"Fjenden har opbygget over %{count} guld i sit skatkammer.\n"
 "Med dette nederlag skal du nu bøje dig for hans rigdom og magt!"
 
 msgid "You have been eliminated from the game!!!"
@@ -4748,8 +4729,6 @@ msgid_plural ""
 msgstr[0] ""
 "Alliancen består af %{allies}, og du skal besejre fjenden %{enemies}."
 msgstr[1] ""
-"Alliancen består af %{allies}, og du skal besejre fjendens alliance af "
-"%{enemies}."
 
 msgid "Capture the castle '%{name}'."
 msgstr "Erobr borgen '%{name}'."
@@ -4764,7 +4743,7 @@ msgid "Find the ultimate artifact."
 msgstr "Find Det Ultimative Artefakt."
 
 msgid "Find the '%{name}' artifact."
-msgstr "Find artefaktet '%{name}'."
+msgstr "Find '%{name}'-artefaktet."
 
 msgid "Accumulate %{count} gold."
 msgstr "Saml %{count} guldstykker."
@@ -4917,64 +4896,64 @@ msgstr ""
 "land!"
 
 msgid "Lord Kilburn"
-msgstr "Fyrst Kilburn"
+msgstr ""
 
 msgid "Tsabu"
-msgstr "Sabu"
+msgstr ""
 
 msgid "Sir Galant"
-msgstr "Herr Galant"
+msgstr ""
 
 msgid "Thundax"
-msgstr "Thorøks"
+msgstr ""
 
 msgid "Lord Haart"
-msgstr "Fyrst Hjart"
+msgstr ""
 
 msgid "Ariel"
-msgstr "Ariel"
+msgstr ""
 
 msgid "Rebecca"
-msgstr "Rebekka"
+msgstr ""
 
 msgid "Sandro"
-msgstr "Sander"
+msgstr ""
 
 msgid "Crodo"
-msgstr "Krodo"
+msgstr ""
 
 msgid "Barock"
-msgstr "Barock"
+msgstr ""
 
 msgid "Antoine"
-msgstr "Antonius"
+msgstr ""
 
 msgid "Astra"
-msgstr "Astra"
+msgstr ""
 
 msgid "Agar"
-msgstr "Agar"
+msgstr ""
 
 msgid "Vatawna"
-msgstr "Vatavne"
+msgstr ""
 
 msgid "Vesper"
-msgstr "Vesper"
+msgstr ""
 
 msgid "Ambrose"
-msgstr "Ambrosius"
+msgstr ""
 
 msgid "Troyan"
-msgstr "Trojan"
+msgstr ""
 
 msgid "Jojosh"
-msgstr "Joshua"
+msgstr ""
 
 msgid "Wrathmont"
-msgstr "Vredeberg"
+msgstr ""
 
 msgid "Maximus"
-msgstr "Maximus"
+msgstr ""
 
 msgid "Next Hero"
 msgstr "Næste helt"
@@ -5270,154 +5249,154 @@ msgid "%{object} raided"
 msgstr "%{object} røvet"
 
 msgid "Ector"
-msgstr "Hektor"
+msgstr ""
 
 msgid "Gwenneth"
-msgstr "Lykke"
+msgstr ""
 
 msgid "Sir Gallant"
-msgstr "Herr Gallant"
+msgstr ""
 
 msgid "Tyro"
-msgstr "Tyr"
+msgstr ""
 
 msgid "Dimitry"
-msgstr "Dimitri"
+msgstr ""
 
 msgid "Ruby"
-msgstr "Rubin"
+msgstr ""
 
 msgid "Crag Hack"
-msgstr "Lars Hug"
+msgstr ""
 
 msgid "Fineous"
-msgstr "Fineas"
+msgstr ""
 
 msgid "Jezebel"
-msgstr "Izabel"
+msgstr ""
 
 msgid "Atlas"
-msgstr "Atlas"
+msgstr ""
 
 msgid "Ergon"
-msgstr "Egon"
+msgstr ""
 
 msgid "Jaclyn"
-msgstr "Jakobine"
+msgstr ""
 
 msgid "Gem"
-msgstr "Perle"
+msgstr ""
 
 msgid "Natasha"
-msgstr "Natasja"
+msgstr ""
 
 msgid "Carlawn"
-msgstr "Karlana"
+msgstr ""
 
 msgid "Luna"
-msgstr "Luna"
+msgstr ""
 
 msgid "Arie"
-msgstr "Arie"
+msgstr ""
 
 msgid "Barok"
-msgstr "Barok"
+msgstr ""
 
 msgid "Kastore"
-msgstr "Kastor"
+msgstr ""
 
 msgid "Falagar"
-msgstr "Falagar"
+msgstr ""
 
 msgid "Dawn"
-msgstr "Dagny"
+msgstr ""
 
 msgid "Flint"
-msgstr "Flint"
+msgstr ""
 
 msgid "Halon"
-msgstr "Halon"
+msgstr ""
 
 msgid "Myra"
-msgstr "Mira"
+msgstr ""
 
 msgid "Myrini"
-msgstr "Myrine"
+msgstr ""
 
 msgid "Wilfrey"
-msgstr "Vilfred"
+msgstr ""
 
 msgid "Mandigal"
-msgstr "Mandalei"
+msgstr ""
 
 msgid "Sarakin"
-msgstr "Sarakin"
+msgstr ""
 
 msgid "Charity"
-msgstr "Godemine"
+msgstr ""
 
 msgid "Darlana"
-msgstr "Darlana"
+msgstr ""
 
 msgid "Ranloo"
-msgstr "Ranlov"
+msgstr ""
 
 msgid "Rialdo"
-msgstr "Rialdo"
+msgstr ""
 
 msgid "Zam"
-msgstr "Zam"
+msgstr ""
 
 msgid "Zom"
-msgstr "Zom"
+msgstr ""
 
 msgid "Celia"
-msgstr "Celia"
+msgstr ""
 
 msgid "Roxana"
-msgstr "Roxanne"
+msgstr ""
 
 msgid "Lord Corlagon"
-msgstr "Fyrst Korlagon"
+msgstr ""
 
 msgid "Lord Halton"
-msgstr "Fyrst Halton"
+msgstr ""
 
 msgid "Sister Eliza"
-msgstr "Søster Eliza"
+msgstr ""
 
 msgid "Brother Brax"
-msgstr "Bror Braks"
+msgstr ""
 
 msgid "Dainwin"
-msgstr "Dejnvin"
+msgstr ""
 
 msgid "Joseph"
-msgstr "Josef"
+msgstr ""
 
 msgid "Mog"
-msgstr "Mog"
+msgstr ""
 
 msgid "Solmyr"
-msgstr "Solmyr"
+msgstr ""
 
 msgid "Ceallach"
-msgstr "Ketil"
+msgstr ""
 
 msgid "Drakonia"
-msgstr "Drakonia"
+msgstr ""
 
 msgid "Elderian"
-msgstr "Oldrian"
+msgstr ""
 
 msgid "Gallavant"
-msgstr "Gallavant"
+msgstr ""
 
 msgid "Jarkonas"
-msgstr "Harkonas"
+msgstr ""
 
 msgid "Martine"
-msgstr "Martine"
+msgstr ""
 
 msgid " gives you maximum morale"
 msgstr " giver dig maksimal moral"
@@ -8762,7 +8741,7 @@ msgstr ""
 "heltemod med en udsøgt juvelhalskæde."
 
 msgid "Caster's Bracelet of Magic"
-msgstr "Kasterens Magiarmbånd"
+msgstr "Kasterens Armbånd af Magi"
 
 msgid ""
 "While searching through the rubble of a caved-in mine, you free a group of "
@@ -8772,7 +8751,7 @@ msgstr ""
 "fangede dværge. Taknemmelig giver lederen dig et gyldent armbånd."
 
 msgid "Mage's Ring of Power"
-msgstr "Troldmandens Magtring"
+msgstr "Troldmandens Ring af Magt"
 
 msgid ""
 "A cry of pain leads you to a Centaur, caught in a trap. Upon setting the "
@@ -8784,7 +8763,7 @@ msgstr ""
 "indhold, finder du en blændende juvelbesat ring."
 
 msgid "Witch's Broach of Magic"
-msgstr "Troldkællingens Magibroche"
+msgstr "Heksebrochen af Magi"
 
 msgid ""
 "Alongside the remains of a burnt witch lies a beautiful broach, intricately "
@@ -9006,7 +8985,7 @@ msgstr ""
 "folderne."
 
 msgid "Endless Sack of Gold"
-msgstr "Den Uudtømmelige Guldsæk"
+msgstr "Den Bundløse guldsæk"
 
 msgid "The %{name} provides you with %{count} gold per day."
 msgstr "%{name} giver dig %{count} guldstykker om dagen."
@@ -9023,7 +9002,7 @@ msgstr ""
 "ordsprog: 'Det man finder, må man beholde'. Du griber sækken og går."
 
 msgid "Endless Bag of Gold"
-msgstr "Den Uudtømmelige Guldtaske"
+msgstr "Den Bundløse Guldtaske"
 
 msgid ""
 "A noblewoman, separated from her traveling companions, asks for your help. "
@@ -9034,7 +9013,7 @@ msgstr ""
 "guld."
 
 msgid "Endless Purse of Gold"
-msgstr "Den Uudtømmelige Guldpose"
+msgstr "Den Bundløse Guldpose"
 
 msgid ""
 "In your travels, you find a leather purse filled with gold that once "
@@ -9331,7 +9310,7 @@ msgstr ""
 "Ringen ligner en slange, der bider sig selv i halen."
 
 msgid "Ankh"
-msgstr "Ankhen"
+msgstr "Anken"
 
 msgid ""
 "The %{name} doubles the effectiveness of all your resurrect and animate "
@@ -9366,7 +9345,7 @@ msgstr ""
 "som betaling, en kopi af Elementalernes Bog."
 
 msgid "Elemental Ring"
-msgstr "Elemental-ringen"
+msgstr "Elemental-ring"
 
 msgid "The %{name} halves the casting cost of all summoning spells."
 msgstr "%{name} halverer manaprisen for at kaste hidkaldelsesbesværgelser."
@@ -9660,11 +9639,11 @@ msgid ""
 "pouch of sulfur to help with the war effort."
 msgstr ""
 "Du besøger en alkymist, som efter at have set din hær, bliver påvirket af "
-"din sags retskaffenhed. Din nye loyale undersåt giver dig sin uudtømmelige "
+"din sags retskaffenhed. Din nye loyale undersåt giver dig sin bundløse "
 "svovlpose, for at hjælpe med krigsindsatsen."
 
 msgid "Endless Vial of Mercury"
-msgstr "Den Uudtømmelige Kviksølvsflaske"
+msgstr "Den Bundløse Kviksølvsflaske"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
 msgstr "%{name} giver %{count} mængde kviksølv om dagen."
@@ -9694,8 +9673,8 @@ msgstr ""
 "En kort regnbyge frembringer en regnbue ... og du kan se, hvor den ender. Du "
 "rider hurtigt derhen og griber krukken med guld, som du finder der. Alfen, "
 "der ejer den, som ikke er i stand til at forhindre dig i at tage den, "
-"tilbyder dig en uudtømmelig juvelpose, for at få sit guld tilbage. Du "
-"accepterer tilbuddet."
+"tilbyder dig en bundløs juvelpose, for at få sit guld tilbage. Du accepterer "
+"tilbuddet."
 
 msgid "Endless Cord of Wood"
 msgstr "Den Endeløse Træsnor"
@@ -9715,7 +9694,7 @@ msgstr ""
 "fortryllet, så du tager hele bunken med dig."
 
 msgid "Endless Cart of Ore"
-msgstr "Den Uudtømmelige Malmvogn"
+msgstr "Den Bundløse Malmvogn"
 
 msgid "The %{name} provides %{count} unit of ore per day."
 msgstr "%{name} giver %{count} mængder malm om dagen."
@@ -9761,7 +9740,7 @@ msgstr ""
 "vil være en god souvenir, tager du den."
 
 msgid "Spiked Shield"
-msgstr "Pigskjoldet"
+msgstr "Det Spidse Skjold"
 
 msgid ""
 "You come upon a bridge spanning a dry gully. Before you can cross, a Troll "
@@ -9772,7 +9751,7 @@ msgstr ""
 "Du støder på en bro, der strækker sig over en udtørret bjergkløft. Før du "
 "kan krydse, træder en trold ud under broen og kræver betaling, før den giver "
 "dig lov til at passere. Du nægter. Trolden angriber, hvilket tvinger dig til "
-"at dræbe den. Du tager dets pigskjold som et trofæ."
+"at dræbe den. Du tager dets spidse skjold som et trofæ."
 
 msgid "White Pearl"
 msgstr "Den Hvide Perle"
@@ -9807,7 +9786,7 @@ msgid "Dummy 1"
 msgstr "Pladsholder 1"
 
 msgid "The reserved artifact."
-msgstr "Pladsholder-artefaktet."
+msgstr "Pladsholder-artefakten."
 
 msgid "Dummy 2"
 msgstr "Pladsholder 2"
@@ -9900,7 +9879,7 @@ msgstr ""
 "accepterer."
 
 msgid "Battle Garb of Anduran"
-msgstr "Andurans Udstyr"
+msgstr "Andurans Kampudstyr"
 
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts.  It provides "
@@ -10734,10 +10713,10 @@ msgstr ""
 "%{hp} HP."
 
 msgid "The ultimate artifact is really the %{name}."
-msgstr "Det ultimative artefakt er i virkeligheden %{name}."
+msgstr "Den ultimative artefakt er i virkeligheden %{name}."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr "Det ultimative artefakt kan findes i verdens %{name}-regioner."
+msgstr "Den ultimative artefakt kan findes i verdens %{name}-regioner."
 
 msgid "north-west"
 msgstr "nordvest"
@@ -10776,7 +10755,7 @@ msgid "The end of the world is near."
 msgstr "Verdens ende er nær."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
-msgstr "Fyrst Slayers knogler er begravet i fundamentet af arenaen."
+msgstr "Lord Slayers knogler er begravet i fundamentet af arenaen."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr "En sortdrage kan til enhver tid klare en titan."

@@ -128,13 +128,13 @@ public:
         const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
         buttonOk.setICNInfo( buttonOkIcn, 0, 1 );
         buttonOk.setPosition( area.x + buttonFromBorderOffsetX, buttonY );
-        const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( buttonOkIcn, 0 );
+        const fheroes2::Sprite buttonOkSprite = fheroes2::AGG::GetICN( buttonOkIcn, 0 );
         fheroes2::addGradientShadow( buttonOkSprite, display, buttonOk.area().getPosition(), { -5, 5 } );
         buttonOk.draw();
 
         const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
         buttonCancel.setICNInfo( buttonCancelIcn, 0, 1 );
-        const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( buttonCancelIcn, 0 );
+        const fheroes2::Sprite buttonCancelSprite = fheroes2::AGG::GetICN( buttonCancelIcn, 0 );
         buttonCancel.setPosition( area.x + area.width - buttonCancelSprite.width() - buttonFromBorderOffsetX, buttonY );
         fheroes2::addGradientShadow( buttonCancelSprite, display, buttonCancel.area().getPosition(), { -5, 5 } );
         buttonCancel.draw();
@@ -270,7 +270,7 @@ public:
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         const Monster mons( index );
-        const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
+        const fheroes2::Sprite monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
 
         renderItem( monsterSprite, mons.GetName(), { dstx, dsty }, { 45, 43 }, current );
     }

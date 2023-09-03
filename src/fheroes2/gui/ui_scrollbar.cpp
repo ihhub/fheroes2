@@ -81,25 +81,18 @@ namespace fheroes2
 
     bool Scrollbar::moveToIndex( const int indexId )
     {
-        const int32_t roiWidth = _area.width - width();
-        const int32_t roiHeight = _area.height - height();
-
-        if ( _maxIndex == _minIndex ) {
-            // There are less elements than the list height. We set scrollbar slider to the center of scrollbar.
-            setPosition( _area.x + roiWidth / 2, _area.y + roiHeight / 2 );
-
+        if ( _maxIndex == _minIndex )
             return false;
-        }
 
-        if ( indexId < _minIndex ) {
+        if ( indexId < _minIndex )
             _currentIndex = _minIndex;
-        }
-        else if ( indexId > _maxIndex ) {
+        else if ( indexId > _maxIndex )
             _currentIndex = _maxIndex;
-        }
-        else {
+        else
             _currentIndex = indexId;
-        }
+
+        const int roiWidth = _area.width - width();
+        const int roiHeight = _area.height - height();
 
         Point newPosition;
 

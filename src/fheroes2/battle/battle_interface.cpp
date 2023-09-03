@@ -92,7 +92,7 @@ namespace
 {
     const int32_t cellYOffset = -9;
 
-    const int32_t turnOrderMonsterIconSize = 43; // in both directions.
+    const int32_t armyOrderMonsterIconSize = 43; // in both directions.
 
     // The parameters of castle buildings destruction by a catapult:
     // Smoke cloud frame number, after which the building should be drawn as destroyed.
@@ -964,13 +964,13 @@ void Battle::Status::clear()
     bar2.Clear();
 }
 
-Battle::TurnOrder::TurnOrder()
+Battle::ArmiesOrder::ArmiesOrder()
     : _army2Color( 0 )
 {
     // Do nothing.
 }
 
-void Battle::TurnOrder::Set( const fheroes2::Rect & rt, const std::shared_ptr<const Units> & units, const int army2Color )
+void Battle::ArmiesOrder::Set( const fheroes2::Rect & rt, const std::shared_ptr<const Units> & units, const int army2Color )
 {
     _area = rt;
     _orders = units;
@@ -981,7 +981,7 @@ void Battle::TurnOrder::Set( const fheroes2::Rect & rt, const std::shared_ptr<co
     }
 }
 
-void Battle::TurnOrder::QueueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
+void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes2::Point & offset ) const
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -1003,12 +1003,12 @@ void Battle::TurnOrder::QueueEventProcessing( std::string & msg, const fheroes2:
     }
 }
 
-void Battle::TurnOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
-                                    fheroes2::Image & output ) const
+void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
+                                      fheroes2::Image & output ) const
 {
     // Render background.
     const fheroes2::Sprite & backgroundOriginal = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
-    fheroes2::Copy( backgroundOriginal, 37, 268, output, pos.x + 1, pos.y + 1, turnOrderMonsterIconSize - 2, turnOrderMonsterIconSize - 2 );
+    fheroes2::Copy( backgroundOriginal, 37, 268, output, pos.x + 1, pos.y + 1, armyOrderMonsterIconSize - 2, armyOrderMonsterIconSize - 2 );
 
     // Draw a monster's sprite.
     const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, unit.GetSpriteIndex() );
@@ -1028,7 +1028,7 @@ void Battle::TurnOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Un
     number.Blit( pos.x + 2, pos.y + 2, output );
 
     if ( isCurrentUnit ) {
-        fheroes2::DrawRect( output, { pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize }, currentUnitColor );
+        fheroes2::DrawRect( output, { pos.x, pos.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize }, currentUnitColor );
     }
     else {
         uint8_t color = 0;
@@ -1063,17 +1063,17 @@ void Battle::TurnOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Un
             break;
         }
 
-        fheroes2::DrawRect( output, { pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize }, color );
+        fheroes2::DrawRect( output, { pos.x, pos.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize }, color );
 
         if ( unit.Modes( Battle::TR_MOVED ) ) {
-            fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize,
+            fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize,
                                     PAL::GetPalette( PAL::PaletteType::GRAY ) );
-            fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize, 3 );
+            fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize, 3 );
         }
     }
 }
 
-void Battle::TurnOrder::Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output )
+void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output )
 {
     if ( _orders.expired() ) {
         // Nothing to show.
@@ -1087,20 +1087,20 @@ void Battle::TurnOrder::Redraw( const Unit * current, const uint8_t currentUnitC
         return unit->isValid();
     } ) );
 
-    const int32_t maximumUnitsToDraw = _area.width / turnOrderMonsterIconSize;
+    const int32_t maximumUnitsToDraw = _area.width / armyOrderMonsterIconSize;
 
     int32_t offsetX = _area.x;
 
     if ( validUnitCount > maximumUnitsToDraw ) {
-        offsetX += ( _area.width - turnOrderMonsterIconSize * maximumUnitsToDraw ) / 2;
+        offsetX += ( _area.width - armyOrderMonsterIconSize * maximumUnitsToDraw ) / 2;
     }
     else {
-        offsetX += ( _area.width - turnOrderMonsterIconSize * validUnitCount ) / 2;
+        offsetX += ( _area.width - armyOrderMonsterIconSize * validUnitCount ) / 2;
     }
 
     fheroes2::Rect::x = offsetX;
     fheroes2::Rect::y = _area.y;
-    fheroes2::Rect::height = turnOrderMonsterIconSize;
+    fheroes2::Rect::height = armyOrderMonsterIconSize;
 
     _rects.clear();
 
@@ -1122,10 +1122,10 @@ void Battle::TurnOrder::Redraw( const Unit * current, const uint8_t currentUnitC
             continue;
         }
 
-        _rects.emplace_back( unit, fheroes2::Rect( offsetX, _area.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize ) );
+        _rects.emplace_back( unit, fheroes2::Rect( offsetX, _area.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize ) );
         RedrawUnit( _rects.back().second, *unit, unit->GetColor() == _army2Color, current == unit, currentUnitColor, output );
-        offsetX += turnOrderMonsterIconSize;
-        fheroes2::Rect::width += turnOrderMonsterIconSize;
+        offsetX += armyOrderMonsterIconSize;
+        fheroes2::Rect::width += armyOrderMonsterIconSize;
 
         ++unitsDrawn;
         ++unitsProcessed;
@@ -1295,7 +1295,7 @@ Battle::Interface::~Interface()
 
 void Battle::Interface::SetOrderOfUnits( const std::shared_ptr<const Units> & units )
 {
-    _turnOrder.Set( GetArea(), units, arena.GetArmy2Color() );
+    armies_order.Set( GetArea(), units, arena.GetArmy2Color() );
 }
 
 fheroes2::Point Battle::Interface::GetMouseCursor() const
@@ -1398,8 +1398,8 @@ void Battle::Interface::RedrawPartialFinish()
 
 void Battle::Interface::redrawPreRender()
 {
-    if ( Settings::Get().BattleShowTurnOrder() ) {
-        _turnOrder.Redraw( _currentUnit, _contourColor, _mainSurface );
+    if ( Settings::Get().BattleShowArmyOrder() ) {
+        armies_order.Redraw( _currentUnit, _contourColor, _mainSurface );
     }
 
 #ifdef WITH_DEBUG
@@ -2802,7 +2802,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
     // Add offsets to inner objects
     const fheroes2::Rect mainTowerRect = main_tower + _interfacePosition.getPosition();
-    const fheroes2::Rect turnOrderRect = _turnOrder + _interfacePosition.getPosition();
+    const fheroes2::Rect armiesOrderRect = armies_order + _interfacePosition.getPosition();
     if ( Arena::GetTower( TowerType::TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
         cursor.SetThemes( Cursor::WAR_INFO );
         msg = _( "View Ballista info" );
@@ -2819,9 +2819,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             Dialog::Message( _( "Ballista" ), ballistaMessage, Font::BIG, le.MousePressRight() ? 0 : Dialog::OK );
         }
     }
-    else if ( conf.BattleShowTurnOrder() && le.MouseCursor( turnOrderRect ) ) {
+    else if ( conf.BattleShowArmyOrder() && le.MouseCursor( armiesOrderRect ) ) {
         cursor.SetThemes( Cursor::POINTER );
-        _turnOrder.QueueEventProcessing( msg, _interfacePosition.getPosition() );
+        armies_order.QueueEventProcessing( msg, _interfacePosition.getPosition() );
     }
     else if ( le.MouseCursor( btn_auto.area() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
@@ -2932,7 +2932,10 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     }
     else if ( le.MouseCursor( { _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height } ) ) {
         const int themes = GetBattleCursor( msg );
-        cursor.SetThemes( themes );
+
+        if ( cursor.Themes() != themes ) {
+            cursor.SetThemes( themes );
+        }
 
         const Cell * cell = Board::GetCell( index_pos );
 
@@ -2989,7 +2992,9 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
     }
     else if ( le.MouseCursor( _interfacePosition ) && humanturn_spell.isValid() ) {
         const int themes = GetBattleSpellCursor( msg );
-        cursor.SetThemes( themes );
+
+        if ( cursor.Themes() != themes )
+            cursor.SetThemes( themes );
 
         const Cell * cell = Board::GetCell( index_pos );
         if ( cell && _currentUnit && cell->GetUnit() ) {

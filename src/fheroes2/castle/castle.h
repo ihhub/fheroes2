@@ -451,7 +451,7 @@ public:
 
     void NewMonth()
     {
-        std::for_each( _castles.begin(), _castles.end(), []( const Castle * castle ) { castle->ActionNewMonth(); } );
+        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewMonth(); } );
     }
 
     // begin/end methods so we can iterate through the elements

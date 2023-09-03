@@ -89,7 +89,7 @@ namespace Interface
 
         static AdventureMap & Get();
 
-        void redraw( const uint32_t force ) override;
+        void redraw( const uint32_t force = 0 ) override;
 
         int32_t GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water );
 

@@ -206,9 +206,9 @@ namespace
         const fheroes2::Sprite & speedIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, speedIcnIndex );
         fheroes2::drawOption( areas[0], speedIcon, _( "Speed" ), str, fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
-        const bool isShowTurnOrderEnabled = conf.BattleShowTurnOrder();
-        const fheroes2::Sprite & turnOrderIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isShowTurnOrderEnabled ? 4 : 3 );
-        fheroes2::drawOption( areas[1], turnOrderIcon, _( "Turn Order" ), isShowTurnOrderEnabled ? _( "On" ) : _( "Off" ),
+        const bool isShowArmyOrderEnabled = conf.BattleShowArmyOrder();
+        const fheroes2::Sprite & armyOrderIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, isShowArmyOrderEnabled ? 4 : 3 );
+        fheroes2::drawOption( areas[1], armyOrderIcon, _( "Army Order" ), isShowArmyOrderEnabled ? _( "On" ) : _( "Off" ),
                               fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
 
         const bool isBattleAudoSpellCastEnabled = conf.BattleAutoSpellcast();
@@ -311,7 +311,7 @@ namespace
                 redrawScreen = true;
             }
             else if ( le.MouseClickLeft( optionAreas[1] ) ) {
-                conf.setBattleShowTurnOrder( !conf.BattleShowTurnOrder() );
+                conf.setBattleShowArmyOrder( !conf.BattleShowArmyOrder() );
                 redrawScreen = true;
             }
             else if ( le.MouseClickLeft( optionAreas[2] ) ) {
@@ -345,7 +345,7 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Speed" ), _( "Set the speed of combat actions and animations." ), 0 );
             }
             else if ( le.MousePressRight( optionAreas[1] ) ) {
-                fheroes2::showStandardTextMessage( _( "Turn Order" ), _( "Toggle to display the turn order during the battle." ), 0 );
+                fheroes2::showStandardTextMessage( _( "Army Order" ), _( "Toggle to display army order during the battle." ), 0 );
             }
             else if ( le.MousePressRight( optionAreas[2] ) ) {
                 fheroes2::showStandardTextMessage(
