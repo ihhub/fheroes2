@@ -671,6 +671,7 @@ namespace fheroes2
 
         // The button font letters are all shifted 1 pixel to the left due to shadows, so we have to add 1 to the x position when drawing
         // to properly center-align
+        // TODO: The above adjustment will break the center-alignment of all buttons generated with this function, so we need to go in and adjust their offsets.
         releasedText.draw( releasedOffset.x + 1, releasedOffset.y + ( releasedText.height() - releasedTextSize.height ) / 2, textAreaWidth, released );
         pressedText.draw( pressedOffset.x + 1, pressedOffset.y + ( pressedText.height() - pressedTextSize.height ) / 2, textAreaWidth, pressed );
     }
