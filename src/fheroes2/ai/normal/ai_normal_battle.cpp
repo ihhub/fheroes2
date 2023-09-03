@@ -539,8 +539,29 @@ namespace AI
 
         // Calculate the index of the cell to which it is worth retreating in order to escape from the enemy if possible
         const int32_t escapeIdx = [&arena, &currentUnit, &enemies]() {
+            // If there is only one enemy unit left that is guaranteed to be killed then it is pointless to retreat
+            if ( enemies.size() == 1 ) {
+                const Unit * enemy = enemies.front();
+                assert( enemy != nullptr );
+
+                const uint32_t guaranteedDamage = currentUnit.Modes( SP_BLESS ) ? currentUnit.CalculateMaxDamage( *enemy ) : currentUnit.CalculateMinDamage( *enemy );
+                const uint32_t guaranteedKills = enemy->HowManyWillKilled( guaranteedDamage );
+
+                assert( guaranteedKills <= enemy->GetCount() );
+
+                if ( guaranteedKills == enemy->GetCount() ) {
+                    return -1;
+                }
+            }
+
             // If at least one of the enemies is flying then it is pointless to retreat
-            if ( std::find_if( enemies.begin(), enemies.end(), []( const Unit * enemy ) { return enemy->isFlying(); } ) != enemies.end() ) {
+            if ( std::find_if( enemies.begin(), enemies.end(),
+                               []( const Unit * enemy ) {
+                                   assert( enemy != nullptr );
+
+                                   return enemy->isFlying();
+                               } )
+                 != enemies.end() ) {
                 return -1;
             }
 
