@@ -1905,7 +1905,6 @@ namespace fheroes2
 
                 break;
             }
-                
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 // Did you add a new image for one language without generating a default
