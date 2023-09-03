@@ -972,6 +972,7 @@ namespace ICN
         RECR2BKG_EVIL,
         STONEBAK_EVIL,
         STONEBAK_SMALL_POL,
+        REDBAK_SMALL_VERTICAL,
         WELLBKG_EVIL,
         CASLWIND_EVIL,
         CASLXTRA_EVIL,

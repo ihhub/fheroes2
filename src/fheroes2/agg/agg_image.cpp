@@ -1860,7 +1860,8 @@ namespace fheroes2
                     Copy( originalReleased, 9, 2, _icnVsSprite[id][0], 4, 2, 21, 112 );
                     Copy( originalPressed, 9, 5, _icnVsSprite[id][1], 3, 5, 19, 111 );
 
-                    // TODO: Add transparent backgrounds
+                    fheroes2::makeTransparentBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], ICN::REDBAK_SMALL_VERTICAL );
+
                     break;
                 }
 
@@ -1868,7 +1869,8 @@ namespace fheroes2
                 // be off-center when we are displaying one letter per line
                 const ButtonFontRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], { -1, 0 } );
                 const ButtonFontRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], { -1, 0 } );
-                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON, ICN::UNKNOWN );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
+                                      ICN::REDBAK_SMALL_VERTICAL );
 
                 break;
             }
@@ -3651,6 +3653,14 @@ namespace fheroes2
                 const fheroes2::Sprite & original = GetICN( ICN::X_CMPBKG, 0 );
                 if ( !original.empty() ) {
                     _icnVsSprite[id][0] = Crop( original, original.width() - 272, original.height() - 52, 244, 28 );
+                }
+                return true;
+            }
+            case ICN::REDBAK_SMALL_VERTICAL: {
+                _icnVsSprite[id].resize( 1 );
+                const fheroes2::Sprite & original = GetICN( ICN::HEROBKG, 0 );
+                if ( !original.empty() ) {
+                    _icnVsSprite[id][0] = Crop( original, 0, 0, 37, 230 );
                 }
                 return true;
             }
