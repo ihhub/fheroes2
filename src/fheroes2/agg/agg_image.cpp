@@ -158,7 +158,8 @@ namespace
                                                 ICN::POL_CAMPAIGN_BUTTONS,
                                                 ICN::BUTTON_VIEWWORLD_EXIT_GOOD,
                                                 ICN::BUTTON_VIEWWORLD_EXIT_EVIL,
-                                                ICN::BUTTON_VERTICAL_DISMISS };
+                                                ICN::BUTTON_VERTICAL_DISMISS,
+                                                ICN::BUTTON_VERTICAL_EXIT };
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -1866,7 +1867,7 @@ namespace fheroes2
                 }
 
                 // We need to temporarily remove the letter specific X offsets in the font because if not the letters will
-                // be off-center when we are displaying one letter per line
+                // be off-centered when we are displaying one letter per line
                 const ButtonFontRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], { -1, 0 } );
                 const ButtonFontRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], { -1, 0 } );
                 getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
@@ -1874,6 +1875,37 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_VERTICAL_EXIT: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    // The original EXIT button has a broken transform layer and we need to remove the shadows,
+                    // so we use our empty vertical button as a template
+                    _icnVsSprite[id][0] = GetICN( ICN::EMPTY_VERTICAL_GOOD_BUTTON, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::EMPTY_VERTICAL_GOOD_BUTTON, 1 );
+
+                    // Copy the EXIT text back from the original button
+                    const Sprite & originalReleased = GetICN( ICN::HSBTNS, 0 );
+                    const Sprite & originalPressed = GetICN( ICN::HSBTNS, 1 );
+
+                    Copy( originalReleased, 9, 2, _icnVsSprite[id][0], 4, 2, 21, 112 );
+                    Copy( originalPressed, 9, 5, _icnVsSprite[id][1], 3, 5, 19, 111 );
+
+                    fheroes2::makeTransparentBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], ICN::REDBAK_SMALL_VERTICAL );
+
+                    break;
+                }
+
+                // We need to temporarily remove the letter specific X offsets in the font because if not the letters will
+                // be off-centered when we are displaying one letter per line
+                const ButtonFontRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], { -1, 0 } );
+                const ButtonFontRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], { -1, 0 } );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "E\nX\nI\nT" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
+                                      ICN::REDBAK_SMALL_VERTICAL );
+
+                break;
+            }
+                
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 // Did you add a new image for one language without generating a default
@@ -2475,6 +2507,7 @@ namespace fheroes2
             case ICN::BUTTON_VIEWWORLD_EXIT_GOOD:
             case ICN::BUTTON_VIEWWORLD_EXIT_EVIL:
             case ICN::BUTTON_VERTICAL_DISMISS:
+            case ICN::BUTTON_VERTICAL_EXIT:
                 generateLanguageSpecificImages( id );
                 return true;
             case ICN::PHOENIX:

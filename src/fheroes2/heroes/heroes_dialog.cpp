@@ -232,7 +232,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     // button exit
     dst_pt.x = cur_pt.x + 603;
     dst_pt.y = cur_pt.y + 318;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::HSBTNS, 2, 3 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_VERTICAL_EXIT, 0, 1 );
 
     LocalEvent & le = LocalEvent::Get();
 
