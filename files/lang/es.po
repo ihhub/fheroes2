@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-27 10:37+0000\n"
+"POT-Creation-Date: 2023-09-02 14:42+0000\n"
 "PO-Revision-Date: 2023-06-27 18:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -375,14 +375,14 @@ msgstr "Velocidad: %{speed}"
 msgid "Speed"
 msgstr "Velocidad"
 
-msgid "Army Order"
-msgstr ""
-
 msgid "Off"
 msgstr "Desactivado"
 
 msgid "On"
 msgstr "Activado"
+
+msgid "Turn Order"
+msgstr ""
 
 #, fuzzy
 msgid "Auto Spell Casting"
@@ -416,7 +416,7 @@ msgstr "Info de Daño"
 msgid "Set the speed of combat actions and animations."
 msgstr "Ajustar velocidad de las acciones y animaciones de combate."
 
-msgid "Toggle to display army order during the battle."
+msgid "Toggle to display the turn order during the battle."
 msgstr ""
 
 msgid ""
