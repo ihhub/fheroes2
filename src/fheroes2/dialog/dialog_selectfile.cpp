@@ -286,9 +286,12 @@ namespace
         const int32_t listHeightDeduction = 112;
         const int32_t listAreaOffsetY = 3;
         const int32_t listAreaHeightDeduction = 4;
-        // If we have not much save files we reduce the maximum dialog height but not less than for 11 elements.
-        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * std::max( static_cast<int32_t>( lists.size() ), 11 ) + listAreaOffsetY
-                                        + listAreaHeightDeduction + listHeightDeduction;
+
+        // If we don't have many save files, we reduce the maximum dialog height,
+        // but not less than enough for 11 elements.
+        // We also limit the maximum list height to 22 lines.
+        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * std::clamp( static_cast<int32_t>( lists.size() ), 11, 22 )
+                                        + listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
