@@ -21,11 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_cell.h"
+
 #include <cassert>
 
 #include "battle_arena.h"
 #include "battle_board.h"
-#include "battle_cell.h"
 #include "battle_troop.h"
 #include "tools.h"
 
@@ -92,20 +93,20 @@ Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t
 
     if ( unit.isWide() ) {
         const auto checkCells = [&unit]( Cell * headCell, Cell * tailCell ) {
-            Position res;
+            Position pos;
 
             if ( headCell == nullptr || ( !unit.GetPosition().contains( headCell->GetIndex() ) && !headCell->isPassable( true ) ) ) {
-                return res;
+                return pos;
             }
 
             if ( tailCell == nullptr || ( !unit.GetPosition().contains( tailCell->GetIndex() ) && !tailCell->isPassable( true ) ) ) {
-                return res;
+                return pos;
             }
 
-            res.first = headCell;
-            res.second = tailCell;
+            pos.first = headCell;
+            pos.second = tailCell;
 
-            return res;
+            return pos;
         };
 
         const int tailDirection = unit.isReflect() ? RIGHT : LEFT;
@@ -139,13 +140,13 @@ Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t
     return result;
 }
 
-Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_t dst )
+Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_t dst, const std::optional<uint32_t> speed /* = {} */ )
 {
     Arena * arena = GetArena();
     assert( arena != nullptr );
 
     if ( unit.isWide() ) {
-        const auto checkCells = [&unit, arena]( Cell * headCell, Cell * tailCell ) -> Position {
+        const auto checkCells = [&unit, speed, arena]( Cell * headCell, Cell * tailCell ) -> Position {
             if ( headCell == nullptr || tailCell == nullptr ) {
                 return {};
             }
@@ -155,7 +156,12 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
             pos.first = headCell;
             pos.second = tailCell;
 
-            if ( arena->isPositionReachable( unit, pos, true ) ) {
+            if ( speed ) {
+                if ( arena->isPositionReachable( unit, pos, false ) && arena->CalculateMoveCost( unit, pos ) <= *speed ) {
+                    return pos;
+                }
+            }
+            else if ( arena->isPositionReachable( unit, pos, true ) ) {
                 return pos;
             }
 
@@ -207,7 +213,12 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
 
     pos.first = headCell;
 
-    if ( arena->isPositionReachable( unit, pos, true ) ) {
+    if ( speed ) {
+        if ( arena->isPositionReachable( unit, pos, false ) && arena->CalculateMoveCost( unit, pos ) <= *speed ) {
+            return pos;
+        }
+    }
+    else if ( arena->isPositionReachable( unit, pos, true ) ) {
         return pos;
     }
 

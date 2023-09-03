@@ -647,15 +647,12 @@ namespace AI
                         }
 
                         for ( const int32_t idx : Board::GetAroundIndexes( position ) ) {
-                            const Position enemyPos = Position::GetPosition( *enemy, idx );
-                            if ( !arena.isPositionReachable( *enemy, enemyPos, false ) ) {
+                            const Position enemyPos = Position::GetReachable( *enemy, idx, enemySpeed );
+                            if ( enemyPos.GetHead() == nullptr ) {
                                 continue;
                             }
 
-                            const uint32_t moveCost = arena.CalculateMoveCost( *enemy, enemyPos );
-                            if ( moveCost > enemySpeed ) {
-                                continue;
-                            }
+                            assert( !enemy->isWide() || enemyPos.GetTail() != nullptr );
 
                             return true;
                         }
