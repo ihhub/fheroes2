@@ -2615,7 +2615,7 @@ msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
 "upgrade them?"
 msgstr ""
-"Din trupper kan uppgraderas, men det kommer att bli dyrt. Vill du uppgradera "
+"Dina trupper kan uppgraderas, men det kommer att bli dyrt. Vill du uppgradera "
 "dem?"
 
 msgid "Are you sure you want to dismiss this army?"
