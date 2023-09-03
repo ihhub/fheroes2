@@ -727,7 +727,12 @@ namespace
 
                 // The ground on the tile has been changed, so we need to update the transitions on all the tiles around.
                 for ( const int32_t index : around ) {
-                    updateTerrainTransitionOnTile( index );
+                    if ( !updateTerrainTransitionOnTile( index ) ) {
+                        // TODO: Find a better solution without using recursions. In example, undo the tiles in 1 tile radius.
+                        DEBUG_LOG( DBG_DEVEL, DBG_WARN, "Recursive call for tile at " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId << ")." )
+
+                        updateTerrainTransitionOnArea( newGroundId, index, index, 1 );
+                    }
                 }
 
                 needRevert = false;
