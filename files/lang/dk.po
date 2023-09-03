@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-25 01:17+0000\n"
-"PO-Revision-Date: 2023-09-03 14:44+0200\n"
+"POT-Creation-Date: 2023-09-03 12:06+0000\n"
+"PO-Revision-Date: 2023-09-01 08:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -3202,12 +3202,6 @@ msgstr ""
 "\n"
 "Placering: "
 
-msgid "File to Save:"
-msgstr "Fil som skal gemmes:"
-
-msgid "File to Load:"
-msgstr "Fil som skal indlæses:"
-
 msgid "Click to save the current game."
 msgstr "Klik for at gemme igangværende spil."
 
@@ -3219,6 +3213,12 @@ msgstr "Er du sikker på at du vil slette denne fil:"
 
 msgid "Warning!"
 msgstr "Advarsel!"
+
+msgid "File to Save:"
+msgstr "Fil som skal gemmes:"
+
+msgid "File to Load:"
+msgstr "Fil som skal indlæses:"
 
 msgid "Accept the choice made."
 msgstr "Acceptér de trufne valg."

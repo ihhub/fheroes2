@@ -89,7 +89,7 @@ namespace
                 return;
 
             const int32_t ox = 84 + 81 * ( i & 1 );
-            const int32_t oy = 71 + 78 * ( i >> 1 ) - ( ( i + isRight ) % 2 ) * 5;
+            const int32_t oy = 71 + 78 * ( i >> 1 ) - ( ( i + ( isRight ? 1 : 0 ) ) % 2 ) * 5;
 
             const Spell & spell = spells[i + index];
             const std::string & spellName = spell.GetName();

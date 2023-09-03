@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-02 14:42+0000\n"
+"POT-Creation-Date: 2023-09-03 12:06+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3179,12 +3179,6 @@ msgstr ""
 "\n"
 "Położenie pliku: "
 
-msgid "File to Save:"
-msgstr "Zapisz plik:"
-
-msgid "File to Load:"
-msgstr "Wczytaj plik:"
-
 msgid "Click to save the current game."
 msgstr "Zapisz bieżącą grę."
 
@@ -3196,6 +3190,12 @@ msgstr "Czy na pewno chcesz usunąć plik:"
 
 msgid "Warning!"
 msgstr "Uwaga!"
+
+msgid "File to Save:"
+msgstr "Zapisz plik:"
+
+msgid "File to Load:"
+msgstr "Wczytaj plik:"
 
 msgid "Accept the choice made."
 msgstr "Zastosuj wprowadzone zmiany."
