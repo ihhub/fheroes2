@@ -638,36 +638,36 @@ namespace AI
                 for ( const Unit * enemy : enemies ) {
                     assert( enemy != nullptr );
 
-                    const uint32_t enemySpeed = enemy->GetSpeed( false, true );
+                    const auto isPositionReachableForEnemy = [&arena, enemy]( const Position & position ) {
+                        const uint32_t enemySpeed = enemy->GetSpeed( false, true );
+
+                        // Blinded or paralyzed unit is considered harmless
+                        if ( enemySpeed == Speed::STANDING ) {
+                            return false;
+                        }
+
+                        for ( const int32_t idx : Board::GetAroundIndexes( position ) ) {
+                            const Position enemyPos = Position::GetPosition( *enemy, idx );
+                            if ( !arena.isPositionReachable( *enemy, enemyPos, false ) ) {
+                                continue;
+                            }
+
+                            const uint32_t moveCost = arena.CalculateMoveCost( *enemy, enemyPos );
+                            if ( moveCost > enemySpeed ) {
+                                continue;
+                            }
+
+                            return true;
+                        }
+
+                        return false;
+                    };
 
                     for ( auto iter = potentialPositions.begin(); iter != potentialPositions.end(); ) {
                         auto & [position, distanceToNearestEnemy] = *iter;
                         assert( position.GetHead() != nullptr );
 
-                        const bool isPositionReachableForEnemy = [&arena, enemy, enemySpeed]( const Position & pos ) {
-                            // Blinded or paralyzed unit is considered harmless
-                            if ( enemySpeed == Speed::STANDING ) {
-                                return false;
-                            }
-
-                            for ( const int32_t idx : Board::GetAroundIndexes( pos ) ) {
-                                const Position enemyPos = Position::GetPosition( *enemy, idx );
-                                if ( !arena.isPositionReachable( *enemy, enemyPos, false ) ) {
-                                    continue;
-                                }
-
-                                const uint32_t moveCost = arena.CalculateMoveCost( *enemy, enemyPos );
-                                if ( moveCost > enemySpeed ) {
-                                    continue;
-                                }
-
-                                return true;
-                            }
-
-                            return false;
-                        }( position );
-
-                        if ( isPositionReachableForEnemy ) {
+                        if ( isPositionReachableForEnemy( position ) ) {
                             iter = potentialPositions.erase( iter );
 
                             continue;
@@ -684,7 +684,7 @@ namespace AI
             // Key is a potential position, value is the distance between this position and the nearest enemy unit
             std::map<Position, uint32_t> potentialPositions;
 
-            // The current position is also considered as a potential one (in this case, the unit will not retreat anywhere)
+            // The current position is also considered as a potential one
             potentialPositions.emplace( currentUnit.GetPosition(), UINT32_MAX );
 
             for ( const int32_t idx : arena.getAllAvailableMoves( currentUnit ) ) {
