@@ -31,6 +31,7 @@
 
 #include "color.h"
 #include "direction.h"
+#include "ground.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "world_regions.h"
@@ -164,11 +165,14 @@ namespace Maps
             tilePassable = DIRECTION_ALL;
         }
 
-        int GetGround() const;
+        int GetGround() const
+        {
+            return Ground::getGroundByImageIndex( _terrainImageIndex );
+        }
 
         bool isWater() const
         {
-            return 30 > _terrainImageIndex;
+            return Ground::getGroundByImageIndex( _terrainImageIndex ) == Ground::WATER;
         }
 
         bool isSameMainObject( const MP2::MapObjectType objectType ) const
