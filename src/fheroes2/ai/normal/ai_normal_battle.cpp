@@ -681,7 +681,8 @@ namespace AI
 
             int32_t safestIdx = -1;
             // Distance to the nearest enemy unit (the more, the better) and inverse of the distance to the central cell of the battlefield (1/x,
-            // i.e. the smaller the x the better). The idea is that corner cells should be avoided whenever possible when retreating.
+            // i.e. the smaller the x the better). The idea is that corner cells should be avoided whenever possible when retreating because they
+            // can easily be blocked by enemy units.
             std::pair<uint32_t, double> safestParams{ 0, 0.0 };
 
             for ( const auto & [position, distanceToNearestEnemy] : potentialPositions ) {
