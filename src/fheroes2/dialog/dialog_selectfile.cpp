@@ -426,7 +426,7 @@ namespace
             fheroes2::Sprite released;
             fheroes2::Sprite pressed;
 
-            const int32_t buttonWidth = 17;
+            const int32_t buttonWidth = buttonCancelSprite.width() / 2;
 
             makeButtonSprites( released, pressed, "...", buttonWidth, isEvilInterface, false );
             buttonVirtualKB = std::make_unique<fheroes2::ButtonSprite>( area.x + ( area.width - buttonWidth ) / 2, buttonOffsetY, released, pressed );
