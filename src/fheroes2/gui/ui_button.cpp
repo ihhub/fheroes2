@@ -97,24 +97,24 @@ namespace
             textMargin = 4 + 4;
             minimumTextAreaWidth = 87;
             backgroundBorders = 6 + 3;
-            releasedOffset = { 5, 5 };
-            pressedOffset = { 4, 6 };
+            releasedOffset = { 6, 5 };
+            pressedOffset = { 5, 6 };
             break;
         case ICN::EMPTY_POL_BUTTON:
             font = fheroes2::FontColor::GRAY;
             textMargin = 4 + 4;
             minimumTextAreaWidth = 87;
             backgroundBorders = 4 + 3;
-            releasedOffset = { 5, 5 };
-            pressedOffset = { 4, 6 };
+            releasedOffset = { 4, 5 };
+            pressedOffset = { 3, 6 };
             break;
         case ICN::EMPTY_GUILDWELL_BUTTON:
             font = fheroes2::FontColor::WHITE;
             textMargin = 2 + 2;
             minimumTextAreaWidth = 53;
             backgroundBorders = 5 + 3;
-            releasedOffset = { 5, 2 };
-            pressedOffset = { 4, 3 };
+            releasedOffset = { 4, 2 };
+            pressedOffset = { 3, 3 };
             break;
         case ICN::EMPTY_VERTICAL_GOOD_BUTTON:
             font = fheroes2::FontColor::WHITE;
@@ -674,7 +674,6 @@ namespace fheroes2
 
         // The button font letters are all shifted 1 pixel to the left due to shadows, so we have to add 1 to the x position when drawing
         // to properly center-align
-        // TODO: The above adjustment will break the center-alignment of all buttons generated with this function, so we need to go in and adjust their offsets.
         releasedText.draw( releasedOffset.x + 1, releasedOffset.y + ( releasedText.height() - releasedTextSize.height ) / 2, textAreaWidth, released );
         pressedText.draw( pressedOffset.x + 1, pressedOffset.y + ( pressedText.height() - pressedTextSize.height ) / 2, textAreaWidth, pressed );
     }
