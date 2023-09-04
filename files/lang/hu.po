@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-02 14:42+0000\n"
+"POT-Creation-Date: 2023-09-04 01:25+0000\n"
 "PO-Revision-Date: 2022-12-03 03:43+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -194,6 +194,23 @@ msgstr "BEVEZETŐ"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Harcos"
@@ -3219,12 +3236,6 @@ msgid ""
 "Location: "
 msgstr ""
 
-msgid "File to Save:"
-msgstr "Mentés:"
-
-msgid "File to Load:"
-msgstr "Betöltés:"
-
 #, fuzzy
 msgid "Click to save the current game."
 msgstr "Kattints a főmenübe való visszatéréshez."
@@ -3238,6 +3249,12 @@ msgstr "Biztos benne hogy törli a fájlt:"
 
 msgid "Warning!"
 msgstr "Figyelem!"
+
+msgid "File to Save:"
+msgstr "Mentés:"
+
+msgid "File to Load:"
+msgstr "Betöltés:"
 
 msgid "Accept the choice made."
 msgstr "A választás elfogadása."

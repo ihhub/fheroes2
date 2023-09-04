@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-02 14:42+0000\n"
+"POT-Creation-Date: 2023-09-04 01:25+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -192,6 +192,23 @@ msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Guerrier"
@@ -3222,12 +3239,6 @@ msgstr ""
 "\n"
 "Emplacement : "
 
-msgid "File to Save:"
-msgstr "Fichier à sauvegarder :"
-
-msgid "File to Load:"
-msgstr "Fichier à charger :"
-
 msgid "Click to save the current game."
 msgstr "Enregistrer le jeu en cours."
 
@@ -3239,6 +3250,12 @@ msgstr "Voulez-vous vraiment effacer le fichier :"
 
 msgid "Warning!"
 msgstr "Attention !"
+
+msgid "File to Save:"
+msgstr "Fichier à sauvegarder :"
+
+msgid "File to Load:"
+msgstr "Fichier à charger :"
 
 msgid "Accept the choice made."
 msgstr "Confirmez le choix."
