@@ -159,7 +159,9 @@ namespace
                                                 ICN::BUTTON_VIEWWORLD_EXIT_GOOD,
                                                 ICN::BUTTON_VIEWWORLD_EXIT_EVIL,
                                                 ICN::BUTTON_VERTICAL_DISMISS,
-                                                ICN::BUTTON_VERTICAL_EXIT };
+                                                ICN::BUTTON_VERTICAL_EXIT,
+                                                ICN::DISMISS_HERO_DISABLED_BUTTON,
+                                                ICN::NEW_CAMPAIGN_DISABLED_BUTTON };
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -3163,24 +3165,13 @@ namespace fheroes2
             case ICN::DISMISS_HERO_DISABLED_BUTTON:
             case ICN::NEW_CAMPAIGN_DISABLED_BUTTON: {
                 _icnVsSprite[id].resize( 1 );
+
+                int buttonIcnId = ( id == ICN::DISMISS_HERO_DISABLED_BUTTON ) ? ICN::BUTTON_VERTICAL_DISMISS : ICN::BUTTON_CAMPAIGN_GAME;
+
+                const Sprite & released = GetICN( buttonIcnId, 0 );
+                const Sprite & pressed = GetICN( buttonIcnId, 1 );
+
                 Sprite & output = _icnVsSprite[id][0];
-
-                int buttonIcnId = ICN::UNKNOWN;
-                uint32_t startIcnId = 0;
-
-                if ( id == ICN::DISMISS_HERO_DISABLED_BUTTON ) {
-                    buttonIcnId = ICN::BUTTON_VERTICAL_DISMISS;
-                    startIcnId = 0;
-                }
-                else if ( id == ICN::NEW_CAMPAIGN_DISABLED_BUTTON ) {
-                    buttonIcnId = ICN::BTNNEWGM;
-                    startIcnId = 2;
-                }
-
-                assert( buttonIcnId != ICN::UNKNOWN ); // Did you add a new disabled button and forget to add the condition above?
-
-                const Sprite & released = GetICN( buttonIcnId, startIcnId );
-                const Sprite & pressed = GetICN( buttonIcnId, startIcnId + 1 );
                 output = released;
 
                 ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
