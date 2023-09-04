@@ -794,8 +794,8 @@ namespace AI
 
                         affectedUnits.emplace( enemy );
 
-                        for ( const int32_t cellId : Board::GetAroundIndexes( targetIdx ) ) {
-                            const Unit * unit = Board::GetCell( cellId )->GetUnit();
+                        for ( const int32_t cellIdx : Board::GetAroundIndexes( targetIdx ) ) {
+                            const Unit * unit = Board::GetCell( cellIdx )->GetUnit();
                             if ( unit == nullptr ) {
                                 continue;
                             }
