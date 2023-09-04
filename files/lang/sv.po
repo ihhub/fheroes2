@@ -95,7 +95,8 @@ msgid "RESTART"
 msgstr "OMSTART"
 
 msgid "HEROES"
-msgstr "HJÄLTAR"
+msgstr "HJÄLT-\n"
+"AR"
 
 msgid ""
 "TOWNS/\n"
@@ -117,7 +118,7 @@ msgid "X-L"
 msgstr "XL"
 
 msgid "ALL"
-msgstr "ALL"
+msgstr "ALLA"
 
 msgid "SELECT"
 msgstr "VÄLJ"
@@ -2631,7 +2632,7 @@ msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
 "upgrade them?"
 msgstr ""
-"Din trupper kan uppgraderas, men det kommer att bli dyrt. Vill du uppgradera "
+"Dina trupper kan uppgraderas, men det kommer att bli dyrt. Vill du uppgradera "
 "dem?"
 
 msgid "Are you sure you want to dismiss this army?"
@@ -2726,7 +2727,7 @@ msgid "Toggle ambient music level."
 msgstr "Välj ljudnivå för bakgrundsmusik."
 
 msgid "Toggle foreground sounds level."
-msgstr ""
+msgstr "Välj ljudnivå för ljudeffekter."
 
 msgid "Change the type of music."
 msgstr "Ändra musiktyp."
@@ -2816,17 +2817,17 @@ msgid ""
 "Difficulty"
 msgstr ""
 "Kartans\n"
-"Svårighetsgrad"
+"Svårighet"
 
 msgid ""
 "Game\n"
 "Difficulty"
 msgstr ""
 "Spelets\n"
-"Svårighetsgrad"
+"Svårighet"
 
 msgid "Rating"
-msgstr "Betyg"
+msgstr "Rang"
 
 msgid "Map Size"
 msgstr "Kartstorlek"
@@ -3715,10 +3716,10 @@ msgid "difficulty|Easy"
 msgstr "Lätt"
 
 msgid "difficulty|Normal"
-msgstr "Normalt"
+msgstr "Normal"
 
 msgid "difficulty|Hard"
-msgstr "Svårt"
+msgstr "Svår"
 
 msgid "difficulty|Expert"
 msgstr "Professionell"
@@ -4974,7 +4975,7 @@ msgid "Nothing here. Where could it be?"
 msgstr "Ingenting här. Var kan den vara?"
 
 msgid "Try searching on clear ground."
-msgstr "Försök att söka på bar mark."
+msgstr "Försök att gräva på bar mark."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
@@ -7318,7 +7319,7 @@ msgstr ""
 "förmågor."
 
 msgid "Hero/Stats"
-msgstr "Hjälte/Statistik"
+msgstr "Hjälte/Data"
 
 msgid "Skills"
 msgstr "Förmågor"
