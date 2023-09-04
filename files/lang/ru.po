@@ -8201,7 +8201,7 @@ msgid "Ogres"
 msgstr "Огры"
 
 msgid "Ogre Lord"
-msgstr "Лорд огрв"
+msgstr "Лорд огров"
 
 msgid "Ogre Lords"
 msgstr "Лорды огров"
