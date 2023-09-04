@@ -770,47 +770,68 @@ namespace AI
         else {
             BattleTargetPair target;
 
-            double highestValue = -1;
+            double highestPriority = -1;
+
+            const auto updatePriorityTarget = [&target, &highestPriority]( const double priority, const Unit * enemy, const int32_t targetIdx ) {
+                if ( highestPriority < priority ) {
+                    highestPriority = priority;
+
+                    target.cell = targetIdx;
+                    target.unit = enemy;
+
+                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set distance attack priority on " << enemy->GetName() << " value " << priority )
+                }
+            };
 
             for ( const Unit * enemy : enemies ) {
                 assert( enemy != nullptr );
 
-                double attackPriority = enemy->GetScoreQuality( currentUnit );
-
                 if ( currentUnit.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) ) {
-                    // TODO: update logic to handle tail case as well. Right now archers always shoot to head.
-                    std::set<const Unit *> targetedUnits;
+                    const auto calculateAreaShotAttackPriority = [&currentUnit, enemy]( const int32_t targetIdx ) {
+                        double result = 0.0;
 
-                    for ( const int32_t cellId : Board::GetAroundIndexes( enemy->GetHeadIndex() ) ) {
-                        const Unit * unit = Board::GetCell( cellId )->GetUnit();
+                        std::set<const Unit *> affectedUnits;
 
-                        if ( unit != nullptr ) {
-                            targetedUnits.emplace( unit );
+                        affectedUnits.emplace( enemy );
+
+                        for ( const int32_t cellId : Board::GetAroundIndexes( targetIdx ) ) {
+                            const Unit * unit = Board::GetCell( cellId )->GetUnit();
+                            if ( unit == nullptr ) {
+                                continue;
+                            }
+
+                            affectedUnits.emplace( unit );
                         }
+
+                        for ( const Unit * unit : affectedUnits ) {
+                            result += unit->GetScoreQuality( currentUnit );
+                        }
+
+                        return result;
+                    };
+
+                    const int32_t enemyHeadIdx = enemy->GetHeadIndex();
+                    assert( enemyHeadIdx != -1 );
+
+                    updatePriorityTarget( calculateAreaShotAttackPriority( enemyHeadIdx ), enemy, enemyHeadIdx );
+
+                    if ( enemy->isWide() ) {
+                        const int32_t enemyTailIdx = enemy->GetTailIndex();
+                        assert( enemyTailIdx != -1 );
+
+                        updatePriorityTarget( calculateAreaShotAttackPriority( enemyTailIdx ), enemy, enemyTailIdx );
                     }
 
-                    for ( const Unit * unit : targetedUnits ) {
-                        if ( enemy == unit ) {
-                            continue;
-                        }
-
-                        attackPriority += unit->GetScoreQuality( currentUnit );
-                    }
+                    continue;
                 }
 
-                if ( highestValue < attackPriority ) {
-                    highestValue = attackPriority;
-
-                    target.unit = enemy;
-
-                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set distance attack priority on " << enemy->GetName() << " value " << attackPriority )
-                }
+                updatePriorityTarget( enemy->GetScoreQuality( currentUnit ), enemy, -1 );
             }
 
             if ( target.unit ) {
-                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), -1, 0 );
+                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.cell, 0 );
 
-                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer shoots at enemy " << target.unit->GetName() << " value: " << highestValue )
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer shoots at enemy " << target.unit->GetName() << " value: " << highestPriority )
             }
         }
 
