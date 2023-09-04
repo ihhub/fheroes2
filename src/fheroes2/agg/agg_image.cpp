@@ -3161,8 +3161,7 @@ namespace fheroes2
                 return true;
             }
             case ICN::DISMISS_HERO_DISABLED_BUTTON:
-            case ICN::NEW_CAMPAIGN_DISABLED_BUTTON:
-            case ICN::MAX_DISABLED_BUTTON: {
+            case ICN::NEW_CAMPAIGN_DISABLED_BUTTON: {
                 _icnVsSprite[id].resize( 1 );
                 Sprite & output = _icnVsSprite[id][0];
 
@@ -3176,10 +3175,6 @@ namespace fheroes2
                 else if ( id == ICN::NEW_CAMPAIGN_DISABLED_BUTTON ) {
                     buttonIcnId = ICN::BTNNEWGM;
                     startIcnId = 2;
-                }
-                else if ( id == ICN::MAX_DISABLED_BUTTON ) {
-                    buttonIcnId = ICN::RECRUIT;
-                    startIcnId = 4;
                 }
 
                 assert( buttonIcnId != ICN::UNKNOWN ); // Did you add a new disabled button and forget to add the condition above?
