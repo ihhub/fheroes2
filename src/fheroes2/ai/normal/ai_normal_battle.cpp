@@ -539,7 +539,7 @@ namespace AI
 
         // Calculate the index of the cell to which it is worth retreating in order to escape from the enemy if possible
         const int32_t escapeIdx = [&arena, &currentUnit, &enemies]() {
-            // If there is only one enemy unit left that is guaranteed to be killed then it is pointless to retreat
+            // If there is only one enemy unit left, which is guaranteed to be killed (not taking into account potential bad luck), then it is pointless to retreat
             if ( enemies.size() == 1 ) {
                 const Unit * enemy = enemies.front();
                 assert( enemy != nullptr );
