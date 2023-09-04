@@ -46,17 +46,22 @@ namespace Maps
             ALL = DESERT | SNOW | SWAMP | WASTELAND | BEACH | LAVA | DIRT | GRASS
         };
 
+        // Returns index of first ground image in GROUND32.TIL
+        uint16_t getTerrainStartImageIndex( const int groundId );
+        // Returns ground index by ground image index in GROUND32.TIL
+        int getGroundByImageIndex( const uint16_t terrainImageIndex );
+        // Returns true if ground image index corresponds to image with transition to other ground.
+        bool isTerrainTransitionImage( const uint16_t terrainImageIndex );
+
         const uint32_t roadPenalty = 75;
         const uint32_t defaultGroundPenalty = 100;
         const uint32_t slowestMovePenalty = 200;
 
         const char * String( int groundId );
-        uint32_t GetPenalty( const Maps::Tiles & tile, uint32_t pathfinding );
+        uint32_t GetPenalty( const Maps::Tiles & tile, uint32_t pathfindingLevel );
 
-        // Returns the terrain index (used in TIL file) for normal terrain layout.
+        // Returns the random ground image index (used in GROUND32.TIL) for main (without transition) terrain layout.
         uint16_t getRandomTerrainImageIndex( const int groundId );
-        // Returns the terrain index (used in TIL file) for extra terrain layout (stone, flowers, crack, etc.).
-        uint16_t getRandomTerrainSpecialImageIndex( const int groundId );
     }
 }
 

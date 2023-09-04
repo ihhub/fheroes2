@@ -38,7 +38,6 @@
 #include "artifact.h"
 #include "castle.h"
 #include "game_io.h"
-#include "ground.h"
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
@@ -946,29 +945,6 @@ void Maps::Tiles::AddonsSort()
     }
 
     // Level 2 objects don't have any rendering priorities so they should be rendered first in queue first to render.
-}
-
-int Maps::Tiles::GetGround() const
-{
-    // list grounds from GROUND32.TIL
-    if ( 30 > _terrainImageIndex )
-        return Maps::Ground::WATER;
-    if ( 92 > _terrainImageIndex )
-        return Maps::Ground::GRASS;
-    if ( 146 > _terrainImageIndex )
-        return Maps::Ground::SNOW;
-    if ( 208 > _terrainImageIndex )
-        return Maps::Ground::SWAMP;
-    if ( 262 > _terrainImageIndex )
-        return Maps::Ground::LAVA;
-    if ( 321 > _terrainImageIndex )
-        return Maps::Ground::DESERT;
-    if ( 361 > _terrainImageIndex )
-        return Maps::Ground::DIRT;
-    if ( 415 > _terrainImageIndex )
-        return Maps::Ground::WASTELAND;
-
-    return Maps::Ground::BEACH;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( uint32_t uniq1 )

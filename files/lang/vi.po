@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-02 14:42+0000\n"
+"POT-Creation-Date: 2023-09-04 01:25+0000\n"
 "PO-Revision-Date: 2023-05-07 22:12+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -193,6 +193,23 @@ msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Chiến binh"
@@ -3136,12 +3153,6 @@ msgstr ""
 "\n"
 "Vị trí: "
 
-msgid "File to Save:"
-msgstr ""
-
-msgid "File to Load:"
-msgstr ""
-
 msgid "Click to save the current game."
 msgstr "Nhấp để lưu trò chơi hiện tại."
 
@@ -3153,6 +3164,12 @@ msgstr "Ngươi có chắc muốn xóa file:"
 
 msgid "Warning!"
 msgstr "Cảnh báo!"
+
+msgid "File to Save:"
+msgstr ""
+
+msgid "File to Load:"
+msgstr ""
 
 msgid "Accept the choice made."
 msgstr "Chấp nhận sự lựa chọn được thực hiện."

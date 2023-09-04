@@ -246,7 +246,7 @@ namespace fheroes2
                                 const bool isTransparentBackground = false );
 
     // Makes a button that has the width necessary to fit a provided text using an empty button template
-    void getTextAdaptedButton( Sprite & released, Sprite & pressed, const char * text, const int icnId );
+    void getTextAdaptedButton( Sprite & released, Sprite & pressed, const char * text, const int icnId, const int buttonBackgroundIcnID );
 
     // Generate released and pressed button sprites with the text on it over a transparent or a default (STONEBAK/STONEBAK_EVIL) background.
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface,

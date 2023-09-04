@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-02 14:42+0000\n"
+"POT-Creation-Date: 2023-09-04 01:25+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -196,6 +196,23 @@ msgstr "INTRO ANZEIGEN"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Krieger"
@@ -3224,12 +3241,6 @@ msgstr ""
 "\n"
 "Ort: "
 
-msgid "File to Save:"
-msgstr "Datei zum Speichern:"
-
-msgid "File to Load:"
-msgstr "Datei zum Laden:"
-
 msgid "Click to save the current game."
 msgstr "Klicken Sie, um das aktuelle Spiel zu speichern."
 
@@ -3241,6 +3252,12 @@ msgstr "Sind Sie sicher, dass Sie die Datei löschen möchten:"
 
 msgid "Warning!"
 msgstr "Achtung!"
+
+msgid "File to Save:"
+msgstr "Datei zum Speichern:"
+
+msgid "File to Load:"
+msgstr "Datei zum Laden:"
 
 msgid "Accept the choice made."
 msgstr "Akzeptieren Sie die getroffene Wahl."

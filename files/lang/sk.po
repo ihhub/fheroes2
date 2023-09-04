@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-02 14:42+0000\n"
+"POT-Creation-Date: 2023-09-04 01:25+0000\n"
 "PO-Revision-Date: 2023-08-29 13:33+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -199,6 +199,23 @@ msgstr "ZOBRAZIŤ INTRO"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Bojovník"
@@ -3153,12 +3170,6 @@ msgstr ""
 "\n"
 "Umiestnenie: "
 
-msgid "File to Save:"
-msgstr "Uložiť súbor:"
-
-msgid "File to Load:"
-msgstr "Nahrať súbor:"
-
 msgid "Click to save the current game."
 msgstr "Klikni pre uloženie terajšej hry."
 
@@ -3170,6 +3181,12 @@ msgstr "Určite chceš vymazať súbor:"
 
 msgid "Warning!"
 msgstr "Pozor!"
+
+msgid "File to Save:"
+msgstr "Uložiť súbor:"
+
+msgid "File to Load:"
+msgstr "Nahrať súbor:"
 
 msgid "Accept the choice made."
 msgstr "Prijať uskutočnený výber."
