@@ -6144,7 +6144,7 @@ msgid ""
 msgstr ""
 "Vita stenpelare stöder ett tak som stiger upp mot himmelen. När du går in så "
 "möts du av en kraftig vindpust som nästan får dig omkull. Vinden "
-"materialiserar sig inför dig i en halv skenbar form. Varelsen frågar dig med "
+"materialiserar sig inför dig i en halvt skenbar form. Varelsen frågar dig med "
 "en röst som bäst kan beskrivas som en högljudd viskning: \"Varför har du "
 "kommit? Är du här för att framkalla vindens och luftens styrka?\""
 
