@@ -9401,7 +9401,7 @@ msgid ""
 msgstr ""
 "Du möter en gammal Trollkarlsvän som ska åt motsatt riktning. Han ger dig en "
 "gåva: en Trollstav som förhindrar att fienden kastar "
-"förskingringsbesvärjelser på dig och din allierade."
+"förskingringsbesvärjelser på dig och dina allierade."
 
 msgid "Golden Bow"
 msgstr "Gyllene Båge"
