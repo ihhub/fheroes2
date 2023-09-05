@@ -1078,6 +1078,8 @@ namespace ICN
         BUTTON_VERTICAL_DISMISS,
         BUTTON_VERTICAL_EXIT,
 
+        BUTTON_SKIP,
+
         GAME_OPTION_ICON,
 
         // IMPORTANT! Put any new entry just above this one.

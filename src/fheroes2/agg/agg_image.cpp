@@ -159,7 +159,8 @@ namespace
                                                 ICN::BUTTON_VIEWWORLD_EXIT_GOOD,
                                                 ICN::BUTTON_VIEWWORLD_EXIT_EVIL,
                                                 ICN::BUTTON_VERTICAL_DISMISS,
-                                                ICN::BUTTON_VERTICAL_EXIT };
+                                                ICN::BUTTON_VERTICAL_EXIT,
+                                                ICN::BUTTON_SKIP };
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -1905,6 +1906,27 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_SKIP: {
+                _icnVsSprite[id].resize( 2 );
+                const int32_t originalId = ICN::TEXTBAR;
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( originalId, 0 );
+                    _icnVsSprite[id][1] = GetICN( originalId, 1 );
+                    break;
+                }
+
+                for ( int i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( originalId, i );
+                    // Clean the button
+                    Fill( out, 4 - i, 3, 41, 30, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SKIP" ), { 5, 4 }, { 4, 5 }, { 41, 30 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 // Did you add a new image for one language without generating a default
@@ -2507,6 +2529,7 @@ namespace fheroes2
             case ICN::BUTTON_VIEWWORLD_EXIT_EVIL:
             case ICN::BUTTON_VERTICAL_DISMISS:
             case ICN::BUTTON_VERTICAL_EXIT:
+            case ICN::BUTTON_SKIP:
                 generateLanguageSpecificImages( id );
                 return true;
             case ICN::PHOENIX:

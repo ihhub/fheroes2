@@ -1248,7 +1248,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     btn_auto.setPosition( area.x, satusOffsetY );
     btn_settings.setPosition( area.x, area.y + area.height - settingsRect.height );
 
-    btn_skip.setICNInfo( ICN::TEXTBAR, 0, 1 );
+    btn_skip.setICNInfo( ICN::BUTTON_SKIP, 0, 1 );
     btn_skip.setPosition( area.x + area.width - btn_skip.area().width, area.y + area.height - btn_skip.area().height );
 
     status.SetPosition( area.x + settingsRect.width, satusOffsetY );
