@@ -1918,7 +1918,7 @@ namespace fheroes2
                     break;
                 }
 
-                for ( int i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( originalId, i );
                     // Clean the button
