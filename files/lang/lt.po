@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-27 10:37+0000\n"
+"POT-Creation-Date: 2023-09-04 01:25+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -174,6 +174,23 @@ msgid "VIEW INTRO"
 msgstr ""
 
 msgid "MIN"
+msgstr ""
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
 msgstr ""
 
 msgid "Warrior"
@@ -354,13 +371,13 @@ msgstr ""
 msgid "Speed"
 msgstr "Greitis"
 
-msgid "Army Order"
-msgstr ""
-
 msgid "Off"
 msgstr ""
 
 msgid "On"
+msgstr ""
+
+msgid "Turn Order"
 msgstr ""
 
 msgid "Auto Spell Casting"
@@ -393,7 +410,7 @@ msgstr ""
 msgid "Set the speed of combat actions and animations."
 msgstr ""
 
-msgid "Toggle to display army order during the battle."
+msgid "Toggle to display the turn order during the battle."
 msgstr ""
 
 msgid ""
@@ -3022,12 +3039,6 @@ msgid ""
 "Location: "
 msgstr ""
 
-msgid "File to Save:"
-msgstr "Įrašyti į failą:"
-
-msgid "File to Load:"
-msgstr "Failas įkėlimui:"
-
 msgid "Click to save the current game."
 msgstr ""
 
@@ -3040,6 +3051,12 @@ msgstr "Ar jūs tikrai norite ištrinti failą:"
 
 msgid "Warning!"
 msgstr "Įspėjimas!"
+
+msgid "File to Save:"
+msgstr "Įrašyti į failą:"
+
+msgid "File to Load:"
+msgstr "Failas įkėlimui:"
 
 msgid "Accept the choice made."
 msgstr ""

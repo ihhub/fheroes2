@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-27 10:37+0000\n"
-"PO-Revision-Date: 2023-08-11 23:17+0200\n"
+"POT-Creation-Date: 2023-09-03 18:11+0200\n"
+"PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -194,6 +194,36 @@ msgstr "VIS VIDEO"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"B\n"
+"O\n"
+"R\n"
+"T\n"
+"V\n"
+"I\n"
+"S"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"F\n"
+"O\n"
+"R\n"
+"L\n"
+"A\n"
+"T"
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -384,16 +414,17 @@ msgstr "Hurtighet : %{speed}"
 msgid "Speed"
 msgstr "Hurtighet"
 
-msgid "Army Order"
-msgstr ""
-"Tur-\n"
-"rekkefølge"
-
 msgid "Off"
 msgstr "Av"
 
 msgid "On"
 msgstr "På"
+
+#, fuzzy
+msgid "Turn Order"
+msgstr ""
+"Tur-\n"
+"rekkefølge"
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -431,7 +462,8 @@ msgstr "Skadeinfo"
 msgid "Set the speed of combat actions and animations."
 msgstr "Juster hastigheten til handlingene og animasjonene i kamp."
 
-msgid "Toggle to display army order during the battle."
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
 msgstr ""
 "Skru på denne innstillingen for å vise rekkefølgen av krigernes tur i kamp."
 
@@ -3214,12 +3246,6 @@ msgstr ""
 "\n"
 "Plassering: "
 
-msgid "File to Save:"
-msgstr "Lagringsfil:"
-
-msgid "File to Load:"
-msgstr "Lastingsfil:"
-
 msgid "Click to save the current game."
 msgstr "Klikk for å lagre det nåværende spillet."
 
@@ -3231,6 +3257,12 @@ msgstr "Er du sikker på at du vil slette filen:"
 
 msgid "Warning!"
 msgstr "Advarsel!"
+
+msgid "File to Save:"
+msgstr "Lagringsfil:"
+
+msgid "File to Load:"
+msgstr "Lastingsfil:"
 
 msgid "Accept the choice made."
 msgstr "Bekreft valget og gå videre."

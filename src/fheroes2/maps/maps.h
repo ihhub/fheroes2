@@ -53,7 +53,9 @@ namespace Maps
     const char * GetMinesName( int res );
 
     int GetDirection( int from, int to );
-    int32_t GetDirectionIndex( int32_t from, int vector );
+    int32_t GetDirectionIndex( const int32_t from, const int direction );
+    // Returns the nearest point on the map to the current tile, located in the given direction vector.
+    fheroes2::Point getDirectionPoint( const fheroes2::Point & from, const int direction );
     bool isValidDirection( int32_t from, int vector );
 
     bool isValidAbsIndex( const int32_t index );

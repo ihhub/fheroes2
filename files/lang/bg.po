@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-27 10:37+0000\n"
+"POT-Creation-Date: 2023-09-04 01:25+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -193,6 +193,23 @@ msgstr ""
 
 msgid "MIN"
 msgstr "МИН"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Войн"
@@ -385,14 +402,15 @@ msgstr "Скорост: %{speed}"
 msgid "Speed"
 msgstr "Скорост"
 
-msgid "Army Order"
-msgstr "Армейска заповед"
-
 msgid "Off"
 msgstr "Изкл"
 
 msgid "On"
 msgstr "Вкл"
+
+#, fuzzy
+msgid "Turn Order"
+msgstr "Армейска заповед"
 
 msgid "Auto Spell Casting"
 msgstr "Автоматично заклинание"
@@ -424,7 +442,8 @@ msgstr "Инфо за щетите"
 msgid "Set the speed of combat actions and animations."
 msgstr "Задай скоростта на бойните действия и анимациите."
 
-msgid "Toggle to display army order during the battle."
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
 msgstr "Превключи за показване на армейския ред по време на битката."
 
 msgid ""
@@ -3176,12 +3195,6 @@ msgstr ""
 "\n"
 "Местоположение: "
 
-msgid "File to Save:"
-msgstr "Файл за запазване:"
-
-msgid "File to Load:"
-msgstr "Файл за зареждане:"
-
 msgid "Click to save the current game."
 msgstr "Кликни, за да запазиш текущата игра."
 
@@ -3193,6 +3206,12 @@ msgstr "Сигурен ли си, че искаш да изтриеш файла
 
 msgid "Warning!"
 msgstr "Внимание!"
+
+msgid "File to Save:"
+msgstr "Файл за запазване:"
+
+msgid "File to Load:"
+msgstr "Файл за зареждане:"
 
 msgid "Accept the choice made."
 msgstr "Приемете направения избор."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-27 10:37+0000\n"
+"POT-Creation-Date: 2023-09-04 01:25+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -175,6 +175,23 @@ msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Strijder"
@@ -370,14 +387,15 @@ msgstr "Snelheid: %{speed}"
 msgid "Speed"
 msgstr "Snelheid"
 
-msgid "Army Order"
-msgstr "Legerorde"
-
 msgid "Off"
 msgstr "Uit"
 
 msgid "On"
 msgstr "Aan"
+
+#, fuzzy
+msgid "Turn Order"
+msgstr "Legerorde"
 
 msgid "Auto Spell Casting"
 msgstr "Automatisch spreuk uitroepen"
@@ -409,7 +427,8 @@ msgstr ""
 msgid "Set the speed of combat actions and animations."
 msgstr "Zet de snelheid van gevechts acties en animaties."
 
-msgid "Toggle to display army order during the battle."
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
 msgstr "Schakel om het legerorde weer te geven tijdens het gevecht."
 
 msgid ""
@@ -3098,12 +3117,6 @@ msgid ""
 "Location: "
 msgstr ""
 
-msgid "File to Save:"
-msgstr ""
-
-msgid "File to Load:"
-msgstr ""
-
 msgid "Click to save the current game."
 msgstr ""
 
@@ -3114,6 +3127,12 @@ msgid "Are you sure you want to delete file:"
 msgstr ""
 
 msgid "Warning!"
+msgstr ""
+
+msgid "File to Save:"
+msgstr ""
+
+msgid "File to Load:"
 msgstr ""
 
 msgid "Accept the choice made."

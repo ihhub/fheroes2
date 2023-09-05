@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-27 10:37+0000\n"
+"POT-Creation-Date: 2023-09-04 01:25+0000\n"
 "PO-Revision-Date: 2022-10-26 02:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -194,6 +194,23 @@ msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Válečník"
@@ -386,14 +403,15 @@ msgstr "Rychlost: %{speed}"
 msgid "Speed"
 msgstr "Rychlost"
 
-msgid "Army Order"
-msgstr "Uspořádání jednotek"
-
 msgid "Off"
 msgstr "Vyp"
 
 msgid "On"
 msgstr "Zap"
+
+#, fuzzy
+msgid "Turn Order"
+msgstr "Uspořádání jednotek"
 
 msgid "Auto Spell Casting"
 msgstr "Automické Kouzlení"
@@ -425,7 +443,8 @@ msgstr "Škody Info"
 msgid "Set the speed of combat actions and animations."
 msgstr "Nastavit rychlost akcí a animací v bitvě"
 
-msgid "Toggle to display army order during the battle."
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
 msgstr "Zapnout zobrazení pořadí tahu jednotek v bitvě."
 
 msgid ""
@@ -3148,12 +3167,6 @@ msgstr ""
 "\n"
 "Cesta: "
 
-msgid "File to Save:"
-msgstr "Uložit do souboru:"
-
-msgid "File to Load:"
-msgstr "Soubor k načtení:"
-
 msgid "Click to save the current game."
 msgstr "Klikni pro uložení aktuální hry."
 
@@ -3165,6 +3178,12 @@ msgstr "Jsi si jist, že chceš smazat soubor:"
 
 msgid "Warning!"
 msgstr "Výstraha!"
+
+msgid "File to Save:"
+msgstr "Uložit do souboru:"
+
+msgid "File to Load:"
+msgstr "Soubor k načtení:"
 
 msgid "Accept the choice made."
 msgstr ""

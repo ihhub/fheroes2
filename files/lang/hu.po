@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-27 10:37+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
-"Last-Translator: Berda Jenő <big4billy@gmail.com>\n"
+"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
+"POT-Creation-Date: 2023-09-04 01:25+0000\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -423,6 +423,9 @@ msgstr "Ki"
 msgid "On"
 msgstr "Be"
 
+msgid "Turn Order"
+msgstr ""
+
 msgid "Auto Spell Casting"
 msgstr "Automata varázslás"
 
@@ -457,6 +460,8 @@ msgstr "A harci cselekmények és animációk gyorsaságának beállítása."
 
 msgid "Toggle to display army order during the battle."
 msgstr "Csatában a támadási sorrend kijelzésének váltása."
+msgid "Toggle to display the turn order during the battle."
+msgstr ""
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -3121,12 +3126,6 @@ msgid ""
 "Location: "
 msgstr ""
 
-msgid "File to Save:"
-msgstr "Mentés:"
-
-msgid "File to Load:"
-msgstr "Betöltés:"
-
 #, fuzzy
 msgid "Click to save the current game."
 msgstr "Kattints a főmenübe való visszatéréshez."
@@ -3140,6 +3139,12 @@ msgstr "Biztos benne hogy törli a fájlt:"
 
 msgid "Warning!"
 msgstr "Figyelem!"
+
+msgid "File to Save:"
+msgstr "Mentés:"
+
+msgid "File to Load:"
+msgstr "Betöltés:"
 
 msgid "Accept the choice made."
 msgstr "A választás elfogadása."
