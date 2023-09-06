@@ -792,8 +792,10 @@ namespace AI
             if ( immediateDangerAssessmentResult.unit != nullptr ) {
                 evaluateEnemyTarget( immediateDangerAssessmentResult.unit );
             }
-            // There is no priority target, choose to attack an enemy whose retaliatory strike will cause as little damage as possible
-            else {
+
+            // Either there is no priority target, or the priority target is not suitable according to the results of its evaluation,
+            // choose the most suitable target in the usual way
+            if ( target.unit == nullptr ) {
                 for ( const int cellIdx : Board::GetAdjacentEnemies( currentUnit ) ) {
                     evaluateEnemyTarget( Board::GetCell( cellIdx )->GetUnit() );
                 }
