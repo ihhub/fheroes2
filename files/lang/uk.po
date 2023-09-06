@@ -8131,7 +8131,7 @@ msgid ""
 "flames. Before your eyes the flames become the image of a beautiful woman. "
 "She holds out a magnificent sword to you."
 msgstr ""
-" Поки ви йдете вузькою стежкою, кущ неподалік несподівано спалахує вогнем. "
+"Поки ви йдете вузькою стежкою, кущ неподалік несподівано спалахує вогнем. "
 "Перед вашими очима постає образ вродливої жінки. Вона простягає вам чудового "
 "меча."
 
