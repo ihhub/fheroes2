@@ -641,8 +641,7 @@ namespace AI
                         return false;
                     };
 
-                    for ( auto iter = potentialPositions.begin(); iter != potentialPositions.end(); ) {
-                        auto & [position, characteristics] = *iter;
+                    for ( auto & [position, characteristics] : potentialPositions ) {
                         assert( position.GetHead() != nullptr );
 
                         if ( isPositionReachableForEnemy( position ) ) {
@@ -651,8 +650,6 @@ namespace AI
 
                         characteristics.distanceToNearestEnemy = std::min( characteristics.distanceToNearestEnemy, Board::GetDistance( position, enemy->GetPosition() ) );
                         assert( characteristics.distanceToNearestEnemy > 0 );
-
-                        ++iter;
                     }
                 }
             };
