@@ -810,7 +810,7 @@ namespace AI
 
             double highestPriority = -1;
 
-            const auto evaluateEnemyTarget = [&currentUnit, &target, &highestPriority]( const Unit * enemy ) {
+            const auto evaluateEnemyTarget = [&arena, &currentUnit, &target, &highestPriority]( const Unit * enemy ) {
                 assert( enemy != nullptr );
 
                 const auto updateBestTarget = [&target, &highestPriority, enemy]( const double priority, const int32_t targetIdx ) {
@@ -825,23 +825,28 @@ namespace AI
                 };
 
                 if ( currentUnit.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) ) {
-                    const auto calculateAreaShotAttackPriority = [&currentUnit, enemy]( const int32_t targetIdx ) {
+                    const auto calculateAreaShotAttackPriority = [&arena, &currentUnit, enemy]( const int32_t targetIdx ) {
                         double result = 0.0;
 
-                        std::set<const Unit *> affectedUnits;
+                        // Indexes of the head cells of the units are used instead of pointers because the exact result of adding several
+                        // floating-point numbers may depend on the order of their addition, so the order of the elements must be deterministic.
+                        std::set<int32_t> affectedUnitsIndexes;
 
-                        affectedUnits.emplace( enemy );
+                        affectedUnitsIndexes.insert( enemy->GetHeadIndex() );
 
                         for ( const int32_t cellIdx : Board::GetAroundIndexes( targetIdx ) ) {
-                            const Unit * unit = Board::GetCell( cellIdx )->GetUnit();
+                            const Unit * unit = arena.GetTroopBoard( cellIdx );
                             if ( unit == nullptr ) {
                                 continue;
                             }
 
-                            affectedUnits.emplace( unit );
+                            affectedUnitsIndexes.insert( unit->GetHeadIndex() );
                         }
 
-                        for ( const Unit * unit : affectedUnits ) {
+                        for ( const int32_t unitIdx : affectedUnitsIndexes ) {
+                            const Unit * unit = arena.GetTroopBoard( unitIdx );
+                            assert( unit != nullptr );
+
                             result += unit->GetScoreQuality( currentUnit );
                         }
 
