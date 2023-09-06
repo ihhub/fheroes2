@@ -337,7 +337,7 @@ namespace AI
         Arena::GetBoard()->SetPositionQuality( currentUnit );
 
         if ( currentUnit.isArchers() ) {
-            const Actions & archerActions = archerDecision( arena, currentUnit );
+            const Actions archerActions = archerDecision( arena, currentUnit );
             actions.insert( actions.end(), archerActions.begin(), archerActions.end() );
         }
         else {
@@ -376,10 +376,10 @@ namespace AI
                                                      << " threat level: " << target.unit->GetScoreQuality( currentUnit ) )
                 }
             }
-            // else skip
+            // Else skip the turn
         }
 
-        // no action was taken - skip
+        // No action was taken, skip the turn
         if ( actions.size() == actionsSize ) {
             actions.emplace_back( CommandType::MSG_BATTLE_SKIP, currentUnit.GetUID() );
         }
@@ -542,7 +542,9 @@ namespace AI
         const BattleTargetPair immediateDangerAssessmentResult = [&arena, &currentUnit, &enemies]() -> BattleTargetPair {
             struct PositionCharacteristics
             {
+                // Indexes of the head cells of all enemy units that can potentially reach this position
                 std::set<int32_t> threateningEnemiesIndexes;
+                // Distance between this position and the nearest enemy unit
                 uint32_t distanceToNearestEnemy{ UINT32_MAX };
             };
 
@@ -655,8 +657,6 @@ namespace AI
                 }
             };
 
-            // Key is a potential position, value is a pair consisting of a set of indexes of the head cells of all enemy units that can
-            // potentially reach this position, and the distance between this position and the nearest enemy unit
             std::map<Position, PositionCharacteristics> potentialPositions;
 
             // The current position is also considered as a potential one
