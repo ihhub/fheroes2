@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <numeric>
 #include <ostream>
 #include <set>
 #include <string>
@@ -537,37 +538,15 @@ namespace AI
         // Current unit can be under the influence of the Hypnotize spell
         const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), &currentUnit );
 
-        // Calculate the index of the cell to which it is worth retreating in order to escape from the enemy if possible
-        const int32_t escapeIdx = [&arena, &currentUnit, &enemies]() {
-            // If there is only one enemy unit left, which is guaranteed to be killed (not taking into account potential bad luck), then it is pointless to retreat
-            if ( enemies.size() == 1 ) {
-                const Unit * enemy = enemies.front();
-                assert( enemy != nullptr );
+        // Assess the current threat level and decide whether to retreat to another position or attack a specific unit in order to potentially free an exit for retreat
+        const BattleTargetPair immediateDangerAssessmentResult = [&arena, &currentUnit, &enemies]() -> BattleTargetPair {
+            struct PositionCharacteristics
+            {
+                std::set<int32_t> threateningEnemiesIndexes;
+                uint32_t distanceToNearestEnemy{ UINT32_MAX };
+            };
 
-                const uint32_t guaranteedDamage = currentUnit.Modes( SP_BLESS ) ? currentUnit.CalculateMaxDamage( *enemy ) : currentUnit.CalculateMinDamage( *enemy );
-                const uint32_t guaranteedKills = enemy->HowManyWillBeKilled( guaranteedDamage );
-
-                assert( guaranteedKills <= enemy->GetCount() );
-
-                if ( guaranteedKills == enemy->GetCount() ) {
-                    return -1;
-                }
-            }
-
-            // If at least one of the enemies is flying then it is pointless to retreat
-            if ( std::find_if( enemies.begin(), enemies.end(),
-                               []( const Unit * enemy ) {
-                                   assert( enemy != nullptr );
-
-                                   return enemy->isFlying();
-                               } )
-                 != enemies.end() ) {
-                return -1;
-            }
-
-            // Filters out unsafe potential positions (i.e. positions reachable for enemy units during one turn) and calculates the distances
-            // to the nearest enemy unit for safe positions.
-            const auto filterPotentialPositions = [&currentUnit, &enemies]( std::map<Position, uint32_t> & potentialPositions ) {
+            const auto evaluatePotentialPositions = [&currentUnit, &enemies]( std::map<Position, PositionCharacteristics> & potentialPositions ) {
                 class UnitRemover
                 {
                 public:
@@ -661,54 +640,106 @@ namespace AI
                     };
 
                     for ( auto iter = potentialPositions.begin(); iter != potentialPositions.end(); ) {
-                        auto & [position, distanceToNearestEnemy] = *iter;
+                        auto & [position, characteristics] = *iter;
                         assert( position.GetHead() != nullptr );
 
                         if ( isPositionReachableForEnemy( position ) ) {
-                            iter = potentialPositions.erase( iter );
-
-                            continue;
+                            characteristics.threateningEnemiesIndexes.insert( enemy->GetHeadIndex() );
                         }
 
-                        distanceToNearestEnemy = std::min( distanceToNearestEnemy, Board::GetDistance( position, enemy->GetPosition() ) );
-                        assert( distanceToNearestEnemy > 0 );
+                        characteristics.distanceToNearestEnemy = std::min( characteristics.distanceToNearestEnemy, Board::GetDistance( position, enemy->GetPosition() ) );
+                        assert( characteristics.distanceToNearestEnemy > 0 );
 
                         ++iter;
                     }
                 }
             };
 
-            // Key is a potential position, value is the distance between this position and the nearest enemy unit
-            std::map<Position, uint32_t> potentialPositions;
+            // Key is a potential position, value is a pair consisting of a set of indexes of the head cells of all enemy units that can
+            // potentially reach this position, and the distance between this position and the nearest enemy unit
+            std::map<Position, PositionCharacteristics> potentialPositions;
 
             // The current position is also considered as a potential one
-            potentialPositions.emplace( currentUnit.GetPosition(), UINT32_MAX );
+            potentialPositions.try_emplace( currentUnit.GetPosition() );
 
             for ( const int32_t idx : arena.getAllAvailableMoves( currentUnit ) ) {
-                potentialPositions.emplace( Position::GetReachable( currentUnit, idx ), UINT32_MAX );
+                potentialPositions.try_emplace( Position::GetReachable( currentUnit, idx ) );
             }
 
-            filterPotentialPositions( potentialPositions );
+            evaluatePotentialPositions( potentialPositions );
 
-            // If the current position is safe enough, then it is not worth retreating
-            if ( potentialPositions.find( currentUnit.GetPosition() ) != potentialPositions.end() ) {
-                assert( potentialPositions[currentUnit.GetPosition()] > 0 );
+            {
+                const auto currentPositionIter = potentialPositions.find( currentUnit.GetPosition() );
+                assert( currentPositionIter != potentialPositions.end() );
 
-                return -1;
+                const auto & [position, characteristics] = *currentPositionIter;
+
+                // If the current position is not in danger, then nothing special should be done
+                if ( characteristics.threateningEnemiesIndexes.empty() ) {
+                    return {};
+                }
+
+                // If the current position is in danger, then we need to see if we will suffer any losses after the enemy attack
+                const uint32_t potentialEnemyDamage
+                    = std::accumulate( characteristics.threateningEnemiesIndexes.begin(), characteristics.threateningEnemiesIndexes.end(), static_cast<uint32_t>( 0 ),
+                                       [&arena, &currentUnit]( const uint32_t total, const int32_t enemyIdx ) {
+                                           const Unit * enemy = arena.GetTroopBoard( enemyIdx );
+                                           assert( enemy != nullptr );
+
+                                           // The potential event of enemy's good luck is not taken into account here
+                                           return total + enemy->CalculateMaxDamage( currentUnit );
+                                       } );
+
+                // If we don't suffer any losses, then instead of retreating, we have to see if we can completely destroy some
+                // enemy stack to increase the field for maneuver in the future
+                if ( currentUnit.HowManyWillBeKilled( potentialEnemyDamage ) == 0 ) {
+                    const auto guaranteedKillIter = std::find_if( characteristics.threateningEnemiesIndexes.begin(), characteristics.threateningEnemiesIndexes.end(),
+                                                                  [&arena, &currentUnit]( const int32_t enemyIdx ) {
+                                                                      const Unit * enemy = arena.GetTroopBoard( enemyIdx );
+                                                                      assert( enemy != nullptr );
+
+                                                                      // The event of bad luck is deliberately not taken into account here, so that it does not look like
+                                                                      // cheating, because a human player in a similar situation does not know about this event in advance
+                                                                      const uint32_t guaranteedDamage = currentUnit.Modes( SP_BLESS )
+                                                                                                            ? currentUnit.CalculateMaxDamage( *enemy )
+                                                                                                            : currentUnit.CalculateMinDamage( *enemy );
+                                                                      const uint32_t guaranteedKills = enemy->HowManyWillBeKilled( guaranteedDamage );
+
+                                                                      assert( guaranteedKills <= enemy->GetCount() );
+
+                                                                      return ( guaranteedKills == enemy->GetCount() );
+                                                                  } );
+
+                    // If we find such an enemy stack, then we return it as a priority target
+                    if ( guaranteedKillIter != characteristics.threateningEnemiesIndexes.end() ) {
+                        const Unit * enemy = arena.GetTroopBoard( *guaranteedKillIter );
+                        assert( enemy != nullptr );
+
+                        return { -1, enemy };
+                    }
+                }
             }
 
+            // The current position is in danger, and there is no priority target, let's try to find a position to retreat
             int32_t safestIdx = -1;
             // Distance to the nearest enemy unit (the more, the better) and inverse of the distance to the central cell of the battlefield (1/x,
             // i.e. the smaller the x the better). The idea is that corner cells should be avoided whenever possible when retreating because they
             // can easily be blocked by enemy units.
             std::pair<uint32_t, double> safestParams{ 0, 0.0 };
 
-            for ( const auto & [position, distanceToNearestEnemy] : potentialPositions ) {
-                assert( position.GetHead() != nullptr && distanceToNearestEnemy > 0 );
+            for ( const auto & [position, characteristics] : potentialPositions ) {
+                assert( position.GetHead() != nullptr && characteristics.distanceToNearestEnemy > 0 );
+
+                // Only completely safe positions are considered as candidates
+                if ( !characteristics.threateningEnemiesIndexes.empty() ) {
+                    continue;
+                }
 
                 const int32_t idx = position.GetHead()->GetIndex();
                 const uint32_t distanceToBattlefieldCenter = Board::GetDistance( idx, ARENASIZE / 2 );
-                const std::pair<uint32_t, double> idxParams{ distanceToNearestEnemy, distanceToBattlefieldCenter == 0 ? 1.0 : 1.0 / distanceToBattlefieldCenter };
+
+                const auto idxParams
+                    = std::make_pair( characteristics.distanceToNearestEnemy, distanceToBattlefieldCenter == 0 ? 1.0 : 1.0 / distanceToBattlefieldCenter );
 
                 if ( safestParams < idxParams ) {
                     safestIdx = idx;
@@ -716,15 +747,17 @@ namespace AI
                 }
             }
 
-            return safestIdx;
+            return { safestIdx, nullptr };
         }();
 
-        // The current position of the archers is not safe, but there is somewhere to escape
-        if ( escapeIdx != -1 ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer escapes from enemy, target cell is " << escapeIdx )
+        // The current position of the archers is not safe, but there is somewhere to retreat
+        if ( immediateDangerAssessmentResult.cell != -1 ) {
+            const int32_t retreatIdx = immediateDangerAssessmentResult.cell;
+
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer retreats from enemy, target cell is " << retreatIdx )
 
             // The target cell of the movement must be the cell that the unit's head will occupy
-            const int32_t moveTargetIdx = getUnitMovementTarget( currentUnit, escapeIdx );
+            const int32_t moveTargetIdx = getUnitMovementTarget( currentUnit, retreatIdx );
 
             if ( currentUnit.GetHeadIndex() != moveTargetIdx ) {
                 actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnit.GetUID(), moveTargetIdx );
@@ -736,15 +769,13 @@ namespace AI
                 assert( 0 );
             }
         }
-        // Archers are blocked and there is nowhere to escape, they are fighting in melee
+        // Archers are blocked and there is nowhere to retreat, they are fighting in melee
         else if ( currentUnit.isHandFighting() ) {
             BattleTargetPair target;
 
             int bestOutcome = INT_MIN;
 
-            // Choose to attack an enemy whose retaliatory strike will cause as little damage as possible
-            for ( const int cell : Board::GetAdjacentEnemies( currentUnit ) ) {
-                const Unit * enemy = Board::GetCell( cell )->GetUnit();
+            const auto evaluateEnemyTarget = [&currentUnit, &target, &bestOutcome]( const Unit * enemy ) {
                 assert( enemy != nullptr );
 
                 const int archerMeleeDmg = currentUnit.GetDamage( *enemy );
@@ -754,16 +785,26 @@ namespace AI
                     bestOutcome = damageDiff;
 
                     target.unit = enemy;
-                    target.cell = cell;
 
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set melee attack priority on " << enemy->GetName() << " value " << damageDiff )
                 }
+            };
+
+            // There is a priority target, attack it
+            if ( immediateDangerAssessmentResult.unit != nullptr ) {
+                evaluateEnemyTarget( immediateDangerAssessmentResult.unit );
+            }
+            // There is no priority target, choose to attack an enemy whose retaliatory strike will cause as little damage as possible
+            else {
+                for ( const int cellIdx : Board::GetAdjacentEnemies( currentUnit ) ) {
+                    evaluateEnemyTarget( Board::GetCell( cellIdx )->GetUnit() );
+                }
             }
 
-            if ( target.unit && target.cell != -1 ) {
-                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.cell, -1 );
+            if ( target.unit ) {
+                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), -1, -1 );
 
-                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer fights in melee with enemy " << target.unit->GetName() << " outcome: " << bestOutcome )
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer attacks enemy " << target.unit->GetName() << " in melee, outcome: " << bestOutcome )
             }
         }
         // Archers are able to shoot
@@ -772,19 +813,19 @@ namespace AI
 
             double highestPriority = -1;
 
-            const auto updatePriorityTarget = [&target, &highestPriority]( const double priority, const Unit * enemy, const int32_t targetIdx ) {
-                if ( highestPriority < priority ) {
-                    highestPriority = priority;
-
-                    target.cell = targetIdx;
-                    target.unit = enemy;
-
-                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set distance attack priority on " << enemy->GetName() << " value " << priority )
-                }
-            };
-
-            for ( const Unit * enemy : enemies ) {
+            const auto evaluateEnemyTarget = [&currentUnit, &target, &highestPriority]( const Unit * enemy ) {
                 assert( enemy != nullptr );
+
+                const auto updateBestTarget = [&target, &highestPriority]( const double priority, const Unit * enemy, const int32_t targetIdx ) {
+                    if ( highestPriority < priority ) {
+                        highestPriority = priority;
+
+                        target.cell = targetIdx;
+                        target.unit = enemy;
+
+                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set distance attack priority on " << enemy->GetName() << " value " << priority )
+                    }
+                };
 
                 if ( currentUnit.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) ) {
                     const auto calculateAreaShotAttackPriority = [&currentUnit, enemy]( const int32_t targetIdx ) {
@@ -813,19 +854,29 @@ namespace AI
                     const int32_t enemyHeadIdx = enemy->GetHeadIndex();
                     assert( enemyHeadIdx != -1 );
 
-                    updatePriorityTarget( calculateAreaShotAttackPriority( enemyHeadIdx ), enemy, enemyHeadIdx );
+                    updateBestTarget( calculateAreaShotAttackPriority( enemyHeadIdx ), enemy, enemyHeadIdx );
 
                     if ( enemy->isWide() ) {
                         const int32_t enemyTailIdx = enemy->GetTailIndex();
                         assert( enemyTailIdx != -1 );
 
-                        updatePriorityTarget( calculateAreaShotAttackPriority( enemyTailIdx ), enemy, enemyTailIdx );
+                        updateBestTarget( calculateAreaShotAttackPriority( enemyTailIdx ), enemy, enemyTailIdx );
                     }
 
-                    continue;
+                    return;
                 }
 
-                updatePriorityTarget( enemy->GetScoreQuality( currentUnit ), enemy, -1 );
+                updateBestTarget( enemy->GetScoreQuality( currentUnit ), enemy, -1 );
+            };
+
+            // There is a priority target, attack it
+            if ( immediateDangerAssessmentResult.unit != nullptr ) {
+                evaluateEnemyTarget( immediateDangerAssessmentResult.unit );
+            }
+
+            // Either there is no priority target, or a shot at it does more harm than good, choose the most suitable target in the usual way
+            if ( target.unit == nullptr ) {
+                std::for_each( enemies.begin(), enemies.end(), evaluateEnemyTarget );
             }
 
             if ( target.unit ) {

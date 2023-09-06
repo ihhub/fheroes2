@@ -235,6 +235,21 @@ bool Battle::Position::contains( int cellIndex ) const
     return ( first && first->GetIndex() == cellIndex ) || ( second && second->GetIndex() == cellIndex );
 }
 
+bool Battle::Position::operator<( const Position & other ) const
+{
+    assert( first == nullptr || Board::isValidIndex( first->GetIndex() ) );
+    assert( second == nullptr || Board::isValidIndex( second->GetIndex() ) );
+
+    assert( other.first == nullptr || Board::isValidIndex( other.first->GetIndex() ) );
+    assert( other.second == nullptr || Board::isValidIndex( other.second->GetIndex() ) );
+
+    // It is necessary to guarantee a stable order of positions, it should depend on the indexes of cells, and not on the values of pointers to these cells
+    const auto theseIndexes = std::make_pair( first ? first->GetIndex() : -1, second ? second->GetIndex() : -1 );
+    const auto otherIndexes = std::make_pair( other.first ? other.first->GetIndex() : -1, other.second ? other.second->GetIndex() : -1 );
+
+    return theseIndexes < otherIndexes;
+}
+
 Battle::Cell::Cell( int32_t ii )
     : index( ii )
     , object( 0 )
