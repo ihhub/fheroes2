@@ -639,7 +639,7 @@ msgid "Move %{monster} here"
 msgstr "A %{monster} ide megy"
 
 msgid "Shoot %{monster}"
-msgstr "%{monster} lő"
+msgstr "%{monster} lövése"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
@@ -647,7 +647,7 @@ msgstr[0] "(1 lövés maradt)"
 msgstr[1] "(%{count} lövés maradt)"
 
 msgid "Attack %{monster}"
-msgstr "%{monster} támad"
+msgstr "%{monster} támadása"
 
 msgid "Turn %{turn}"
 msgstr "Kör %{turn}"
