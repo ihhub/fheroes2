@@ -679,7 +679,7 @@ namespace AI
                     return {};
                 }
 
-                // If the current position is in danger, then we need to see if we will suffer any losses after the enemy attack
+                // If the current position is in danger, then we need to see if we will suffer any potential losses after the enemy attack
                 const uint32_t potentialEnemyDamage
                     = std::accumulate( characteristics.threateningEnemiesIndexes.begin(), characteristics.threateningEnemiesIndexes.end(), static_cast<uint32_t>( 0 ),
                                        [&arena, &currentUnit]( const uint32_t total, const int32_t enemyIdx ) {
@@ -690,7 +690,7 @@ namespace AI
                                            return total + enemy->CalculateMaxDamage( currentUnit );
                                        } );
 
-                // If we don't suffer any losses, then instead of retreating, we have to see if we can completely destroy some
+                // If we don't suffer any losses, then instead of retreating, we have to see if we can completely destroy some threatening
                 // enemy stack to increase the field for maneuver in the future
                 if ( currentUnit.HowManyWillBeKilled( potentialEnemyDamage ) == 0 ) {
                     const auto guaranteedKillIter = std::find_if( characteristics.threateningEnemiesIndexes.begin(), characteristics.threateningEnemiesIndexes.end(),
