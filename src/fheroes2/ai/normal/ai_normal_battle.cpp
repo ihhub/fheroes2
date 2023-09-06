@@ -680,10 +680,22 @@ namespace AI
                 // If the current position is in danger, then we need to see if we can completely destroy some threatening
                 // enemy stack to increase the field for maneuver in the future
                 const Unit * priorityTarget = nullptr;
+                const bool isCurrentUnitHandFighting = currentUnit.isHandFighting();
 
                 for ( const int32_t enemyIdx : characteristics.threateningEnemiesIndexes ) {
                     const Unit * enemy = arena.GetTroopBoard( enemyIdx );
                     assert( enemy != nullptr );
+
+                    // If we are fighting in melee, we cannot consider distant enemy stacks as potential targets
+                    if ( isCurrentUnitHandFighting ) {
+                        if ( !Unit::isHandFighting( currentUnit, *enemy ) ) {
+                            continue;
+                        }
+                    }
+                    else {
+                        // If the archer does not fight in melee, there should be no enemy units next to him
+                        assert( !Unit::isHandFighting( currentUnit, *enemy ) );
+                    }
 
                     // The event of bad luck is deliberately not taken into account here, so that it does not look like
                     // cheating, because a human player in a similar situation does not know about this event in advance

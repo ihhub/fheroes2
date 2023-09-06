@@ -118,8 +118,6 @@ namespace Battle
         bool isHaveDamage() const;
 
         bool OutOfWalls() const;
-        bool canReach( int index ) const;
-        bool canReach( const Unit & unit ) const;
 
         std::string String( bool more = false ) const;
 
@@ -269,6 +267,9 @@ namespace Battle
         AnimationState animation;
 
     private:
+        bool canReach( int index ) const;
+        bool canReach( const Unit & unit ) const;
+
         uint32_t ApplyDamage( const uint32_t dmg );
         uint32_t Resurrect( const uint32_t points, const bool allow_overflow, const bool skip_dead );
 
