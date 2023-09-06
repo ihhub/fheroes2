@@ -677,43 +677,50 @@ namespace AI
                     return {};
                 }
 
-                // If the current position is in danger, then we need to see if we will suffer any potential losses after the enemy attack
-                const uint32_t potentialEnemyDamage
-                    = std::accumulate( characteristics.threateningEnemiesIndexes.begin(), characteristics.threateningEnemiesIndexes.end(), static_cast<uint32_t>( 0 ),
-                                       [&arena, &currentUnit]( const uint32_t total, const int32_t enemyIdx ) {
-                                           const Unit * enemy = arena.GetTroopBoard( enemyIdx );
-                                           assert( enemy != nullptr );
-
-                                           // The potential event of enemy's good luck is not taken into account here
-                                           return total + enemy->CalculateMaxDamage( currentUnit );
-                                       } );
-
-                // If we don't suffer any losses, then instead of retreating, we have to see if we can completely destroy some threatening
+                // If the current position is in danger, then we need to see if we can completely destroy some threatening
                 // enemy stack to increase the field for maneuver in the future
-                if ( currentUnit.HowManyWillBeKilled( potentialEnemyDamage ) == 0 ) {
-                    const auto guaranteedKillIter = std::find_if( characteristics.threateningEnemiesIndexes.begin(), characteristics.threateningEnemiesIndexes.end(),
-                                                                  [&arena, &currentUnit]( const int32_t enemyIdx ) {
-                                                                      const Unit * enemy = arena.GetTroopBoard( enemyIdx );
-                                                                      assert( enemy != nullptr );
+                const Unit * priorityTarget = nullptr;
 
-                                                                      // The event of bad luck is deliberately not taken into account here, so that it does not look like
-                                                                      // cheating, because a human player in a similar situation does not know about this event in advance
-                                                                      const uint32_t guaranteedDamage = currentUnit.Modes( SP_BLESS )
-                                                                                                            ? currentUnit.CalculateMaxDamage( *enemy )
-                                                                                                            : currentUnit.CalculateMinDamage( *enemy );
-                                                                      const uint32_t guaranteedKills = enemy->HowManyWillBeKilled( guaranteedDamage );
+                for ( const int32_t enemyIdx : characteristics.threateningEnemiesIndexes ) {
+                    const Unit * enemy = arena.GetTroopBoard( enemyIdx );
+                    assert( enemy != nullptr );
 
-                                                                      assert( guaranteedKills <= enemy->GetCount() );
+                    // The event of bad luck is deliberately not taken into account here, so that it does not look like
+                    // cheating, because a human player in a similar situation does not know about this event in advance
+                    const uint32_t guaranteedDamage = currentUnit.Modes( SP_BLESS ) ? currentUnit.CalculateMaxDamage( *enemy ) : currentUnit.CalculateMinDamage( *enemy );
+                    const uint32_t guaranteedKills = enemy->HowManyWillBeKilled( guaranteedDamage );
 
-                                                                      return ( guaranteedKills == enemy->GetCount() );
-                                                                  } );
+                    assert( guaranteedKills <= enemy->GetCount() );
 
-                    // If we find such an enemy stack, then we return it as a priority target
-                    if ( guaranteedKillIter != characteristics.threateningEnemiesIndexes.end() ) {
-                        const Unit * enemy = arena.GetTroopBoard( *guaranteedKillIter );
-                        assert( enemy != nullptr );
+                    if ( guaranteedKills != enemy->GetCount() ) {
+                        continue;
+                    }
 
-                        return { -1, enemy };
+                    // If we can completely destroy multiple enemy stacks, then we need to choose the one that is able to inflict maximum damage on us
+                    // (not taking into account the potential event of enemy's good luck)
+                    if ( priorityTarget != nullptr && enemy->CalculateMaxDamage( currentUnit ) < priorityTarget->CalculateMaxDamage( currentUnit ) ) {
+                        continue;
+                    }
+
+                    priorityTarget = enemy;
+                }
+
+                // If we find such an enemy stack, then we need to see if we will suffer any potential losses after the attack of the enemy stacks
+                // threatening us (without taking into account this enemy stack, because it should already be dead at the time of the attack)
+                if ( priorityTarget ) {
+                    const uint32_t potentialEnemyDamage
+                        = std::accumulate( characteristics.threateningEnemiesIndexes.begin(), characteristics.threateningEnemiesIndexes.end(), static_cast<uint32_t>( 0 ),
+                                           [&arena, &currentUnit, priorityTarget]( const uint32_t total, const int32_t enemyIdx ) {
+                                               const Unit * enemy = arena.GetTroopBoard( enemyIdx );
+                                               assert( enemy != nullptr );
+
+                                               // The potential event of enemy's good luck is not taken into account here
+                                               return enemy == priorityTarget ? total : total + enemy->CalculateMaxDamage( currentUnit );
+                                           } );
+
+                    // If we don't suffer any losses, then instead of retreating, we return this enemy stack as a priority target
+                    if ( currentUnit.HowManyWillBeKilled( potentialEnemyDamage ) == 0 ) {
+                        return { -1, priorityTarget };
                     }
                 }
             }
