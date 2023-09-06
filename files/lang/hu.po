@@ -384,7 +384,7 @@ msgstr "Csak egyféle elementált idézhetsz meg egy csatában."
 msgid ""
 "There is no open space adjacent to your hero where you can summon an "
 "Elemental to."
-msgstr "Nincs szabad hely a hősöd körül, egy újabb Elementál idézéséhez."
+msgstr "Nincs szabad hely a hősöd körül egy újabb Elementál idézéséhez."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
@@ -841,7 +841,7 @@ msgid "Error"
 msgstr "Hiba"
 
 msgid "No spells to cast."
-msgstr "Nincsenek a varázslataid."
+msgstr "Nincsenek varázslataid."
 
 msgid "Are you sure you want to retreat?"
 msgstr "Biztos, hogy vissza akarsz vonulni?"
@@ -958,7 +958,7 @@ msgid "Kraeger defeated"
 msgstr "Kraeger legyőzetett"
 
 msgid "Wayward Son"
-msgstr "Wayward fia"
+msgstr "Önfejű fiú"
 
 msgid "Uncle Ivan"
 msgstr "Iván nagybácsi"
@@ -988,7 +988,7 @@ msgid "The Crown"
 msgstr "Korona"
 
 msgid "The Gauntlet"
-msgstr "Páncélkesztyű"
+msgstr "A vesszőfutás"
 
 msgid "Betrayal"
 msgstr "Árulás"
