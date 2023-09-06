@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-04 01:25+0000\n"
-"PO-Revision-Date: 2023-09-06 19:54+0200\n"
+"PO-Revision-Date: 2023-09-06 20:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -1940,7 +1940,7 @@ msgid "Baywatch"
 msgstr "Stráž zálivu"
 
 msgid "Fountainhead"
-msgstr "Fontánohlava"
+msgstr "Prameň"
 
 msgid "Vertigo"
 msgstr "Závrat"
@@ -3762,7 +3762,7 @@ msgid "Create a randomly generated map."
 msgstr "Vytvoriť náhodne vygenerovanú mapu."
 
 msgid "Random"
-msgstr ""
+msgstr "Náhodná"
 
 msgid "Cancel back to the Map Editor main menu."
 msgstr "Zrušenie a návrat do hlavnej ponuky Editora máp."
@@ -4880,64 +4880,64 @@ msgstr ""
 "%{color} hráč, tvoji hrdinovia ťa opustili a ty si vyhostený z tejto krajiny."
 
 msgid "Lord Kilburn"
-msgstr ""
+msgstr "Lord Kilburn"
 
 msgid "Tsabu"
-msgstr ""
+msgstr "Tsabu"
 
 msgid "Sir Galant"
-msgstr ""
+msgstr "Sir Galant"
 
 msgid "Thundax"
-msgstr ""
+msgstr "Thundax"
 
 msgid "Lord Haart"
-msgstr ""
+msgstr "Lord Haart"
 
 msgid "Ariel"
-msgstr ""
+msgstr "Ariel"
 
 msgid "Rebecca"
-msgstr ""
+msgstr "Rebecca"
 
 msgid "Sandro"
-msgstr ""
+msgstr "Sandro"
 
 msgid "Crodo"
-msgstr ""
+msgstr "Crodo"
 
 msgid "Barock"
-msgstr ""
+msgstr "Barock"
 
 msgid "Antoine"
-msgstr ""
+msgstr "Antoine"
 
 msgid "Astra"
-msgstr ""
+msgstr "Astra"
 
 msgid "Agar"
-msgstr ""
+msgstr "Agar"
 
 msgid "Vatawna"
-msgstr ""
+msgstr "Vatawna"
 
 msgid "Vesper"
-msgstr ""
+msgstr "Vesper"
 
 msgid "Ambrose"
-msgstr ""
+msgstr "Ambrose"
 
 msgid "Troyan"
-msgstr ""
+msgstr "Troyan"
 
 msgid "Jojosh"
-msgstr ""
+msgstr "Jojosh"
 
 msgid "Wrathmont"
-msgstr ""
+msgstr "Wrathmont"
 
 msgid "Maximus"
-msgstr ""
+msgstr "Maximus"
 
 msgid "Next Hero"
 msgstr "Ďalší hrdina"
@@ -5141,13 +5141,13 @@ msgid "View %{skill} Info"
 msgstr "Zobraz info: %{skill}"
 
 msgid "Keyboard|123"
-msgstr ""
+msgstr "123"
 
 msgid "Keyboard|SPACE"
 msgstr "MEDZERNÍK"
 
 msgid "Keyboard|ABC"
-msgstr ""
+msgstr "ABC"
 
 msgid "Kingdom Income"
 msgstr "Príjmy kráľovstva"
@@ -5222,7 +5222,7 @@ msgid "Vietnamese"
 msgstr "Vietnamsky"
 
 msgid ", FPS: "
-msgstr ""
+msgstr ", FPS: "
 
 msgid "%{object} robber"
 msgstr "%{object} vykradnutý"
@@ -5231,40 +5231,40 @@ msgid "%{object} raided"
 msgstr "%{object} vyplienená"
 
 msgid "Ector"
-msgstr ""
+msgstr "Ector"
 
 msgid "Gwenneth"
-msgstr ""
+msgstr "Gwenneth"
 
 msgid "Sir Gallant"
-msgstr ""
+msgstr "Sir Gallant"
 
 msgid "Tyro"
-msgstr ""
+msgstr "Tyro"
 
 msgid "Dimitry"
 msgstr "Dimitri"
 
 msgid "Ruby"
-msgstr ""
+msgstr "Ruby"
 
 msgid "Crag Hack"
-msgstr ""
+msgstr "Crag Hack"
 
 msgid "Fineous"
-msgstr ""
+msgstr "Fineous"
 
 msgid "Jezebel"
 msgstr "Jezabel"
 
 msgid "Atlas"
-msgstr ""
+msgstr "Atlas"
 
 msgid "Ergon"
-msgstr ""
+msgstr "Ergon"
 
 msgid "Jaclyn"
-msgstr ""
+msgstr "Jaclyn"
 
 msgid "Gem"
 msgstr "Zafíra"
@@ -5273,76 +5273,76 @@ msgid "Natasha"
 msgstr "Nataša"
 
 msgid "Carlawn"
-msgstr ""
+msgstr "Carlawn"
 
 msgid "Luna"
-msgstr ""
+msgstr "Luna"
 
 msgid "Arie"
-msgstr ""
+msgstr "Arie"
 
 msgid "Barok"
-msgstr ""
+msgstr "Barok"
 
 msgid "Kastore"
-msgstr ""
+msgstr "Kastore"
 
 msgid "Falagar"
-msgstr ""
+msgstr "Falagar"
 
 msgid "Dawn"
-msgstr ""
+msgstr "Dawn"
 
 msgid "Flint"
-msgstr ""
+msgstr "Flint"
 
 msgid "Halon"
-msgstr ""
+msgstr "Halon"
 
 msgid "Myra"
-msgstr ""
+msgstr "Myra"
 
 msgid "Myrini"
-msgstr ""
+msgstr "Myrini"
 
 msgid "Wilfrey"
-msgstr ""
+msgstr "Wilfrey"
 
 msgid "Mandigal"
-msgstr ""
+msgstr "Mandigal"
 
 msgid "Sarakin"
-msgstr ""
+msgstr "Sarakin"
 
 msgid "Charity"
-msgstr ""
+msgstr "Charity"
 
 msgid "Darlana"
-msgstr ""
+msgstr "Darlana"
 
 msgid "Ranloo"
-msgstr ""
+msgstr "Ranloo"
 
 msgid "Rialdo"
-msgstr ""
+msgstr "Rialdo"
 
 msgid "Zam"
-msgstr ""
+msgstr "Zam"
 
 msgid "Zom"
-msgstr ""
+msgstr "Zom"
 
 msgid "Celia"
-msgstr ""
+msgstr "Celia"
 
 msgid "Roxana"
-msgstr ""
+msgstr "Roxana"
 
 msgid "Lord Corlagon"
-msgstr ""
+msgstr "Lord Corlagon"
 
 msgid "Lord Halton"
-msgstr ""
+msgstr "Lord Halton"
 
 msgid "Sister Eliza"
 msgstr "Sestra Eliza"
@@ -5351,34 +5351,34 @@ msgid "Brother Brax"
 msgstr "Brat Brax"
 
 msgid "Dainwin"
-msgstr ""
+msgstr "Dainwin"
 
 msgid "Joseph"
-msgstr ""
+msgstr "Joseph"
 
 msgid "Mog"
-msgstr ""
+msgstr "Mog"
 
 msgid "Solmyr"
-msgstr ""
+msgstr "Solmyr"
 
 msgid "Ceallach"
-msgstr ""
+msgstr "Ceallach"
 
 msgid "Drakonia"
-msgstr ""
+msgstr "Drakonia"
 
 msgid "Elderian"
-msgstr ""
+msgstr "Elderian"
 
 msgid "Gallavant"
-msgstr ""
+msgstr "Gallavant"
 
 msgid "Jarkonas"
-msgstr ""
+msgstr "Jarkonas"
 
 msgid "Martine"
-msgstr ""
+msgstr "Martine"
 
 msgid " gives you maximum morale"
 msgstr " dáva maximálnu morálku"
@@ -7479,7 +7479,7 @@ msgid "Necromancer"
 msgstr "Nekromant"
 
 msgid "Multi"
-msgstr ""
+msgstr "Multi"
 
 msgid "race|Random"
 msgstr "Náhodná"
@@ -7510,7 +7510,7 @@ msgid ""
 msgstr "Nekromant"
 
 msgid "doubleLinedRace|Multi"
-msgstr ""
+msgstr "Multi"
 
 msgid "doubleLinedRace|Random"
 msgstr "Náhodná"
@@ -7777,7 +7777,7 @@ msgid "Monster"
 msgstr "Tvor"
 
 msgid "Obelisk"
-msgstr ""
+msgstr "Obelisk"
 
 msgid "Oasis"
 msgstr "Oáza"
@@ -10115,7 +10115,7 @@ msgid ""
 "%{count} HP per level of spell power."
 msgstr ""
 "Odstráni všetky negatívne kúzla zoslané na jednu z vašich jednotiek a obnoví "
-"až %{count} HP za úroveň Sily kúziel."
+"až %{count} zdravia za úroveň Sily kúziel."
 
 msgid "Mass Cure"
 msgstr "Hromadné liečenie"
@@ -10125,7 +10125,7 @@ msgid ""
 "%{count} HP per level of spell power, per creature."
 msgstr ""
 "Odstráni všetky negatívne kúzla zoslané na tvoje vojsko a obnoví až %{count} "
-"HP na úroveň sily kúziel, na každého tvora."
+"zdravia na úroveň sily kúziel, na každého tvora."
 
 msgid "Resurrect"
 msgstr "Vzkriesenie"
@@ -10574,7 +10574,7 @@ msgid ""
 msgstr "Pomocou tohto kúzla povoláš %{count} bojovníkov (%{monster})."
 
 msgid "This spell restores %{hp} HP."
-msgstr "Toto kúzlo obnoví %{hp} HP."
+msgstr "Toto kúzlo obnoví %{hp} zdravia."
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
 msgstr ""
@@ -10592,7 +10592,7 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 "Toto kúzlo ovláda do\n"
-"%{hp} HP."
+"%{hp} zdravia."
 
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Ultimátny artefakt je v skutočnosti %{name}."
