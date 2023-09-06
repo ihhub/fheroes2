@@ -627,6 +627,7 @@ namespace AI
                             return false;
                         }
 
+                        // The potential event of enemy's good morale is not taken into account here
                         for ( const int32_t idx : Board::GetAroundIndexes( position ) ) {
                             const Position enemyPos = Position::GetReachable( *enemy, idx, enemySpeed );
                             if ( enemyPos.GetHead() == nullptr ) {
