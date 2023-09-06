@@ -816,7 +816,7 @@ namespace AI
             const auto evaluateEnemyTarget = [&currentUnit, &target, &highestPriority]( const Unit * enemy ) {
                 assert( enemy != nullptr );
 
-                const auto updateBestTarget = [&target, &highestPriority]( const double priority, const Unit * enemy, const int32_t targetIdx ) {
+                const auto updateBestTarget = [&target, &highestPriority, enemy]( const double priority, const int32_t targetIdx ) {
                     if ( highestPriority < priority ) {
                         highestPriority = priority;
 
@@ -854,19 +854,19 @@ namespace AI
                     const int32_t enemyHeadIdx = enemy->GetHeadIndex();
                     assert( enemyHeadIdx != -1 );
 
-                    updateBestTarget( calculateAreaShotAttackPriority( enemyHeadIdx ), enemy, enemyHeadIdx );
+                    updateBestTarget( calculateAreaShotAttackPriority( enemyHeadIdx ), enemyHeadIdx );
 
                     if ( enemy->isWide() ) {
                         const int32_t enemyTailIdx = enemy->GetTailIndex();
                         assert( enemyTailIdx != -1 );
 
-                        updateBestTarget( calculateAreaShotAttackPriority( enemyTailIdx ), enemy, enemyTailIdx );
+                        updateBestTarget( calculateAreaShotAttackPriority( enemyTailIdx ), enemyTailIdx );
                     }
 
                     return;
                 }
 
-                updateBestTarget( enemy->GetScoreQuality( currentUnit ), enemy, -1 );
+                updateBestTarget( enemy->GetScoreQuality( currentUnit ), -1 );
             };
 
             // There is a priority target, attack it
