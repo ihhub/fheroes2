@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-04 01:25+0000\n"
-"PO-Revision-Date: 2023-08-10 16:59+0300\n"
+"PO-Revision-Date: 2023-09-05 19:18+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -208,6 +208,13 @@ msgid ""
 "S\n"
 "S"
 msgstr ""
+"У\n"
+"В\n"
+"О\n"
+"Л\n"
+"И\n"
+"Т\n"
+"Ь"
 
 msgid ""
 "E\n"
@@ -215,6 +222,11 @@ msgid ""
 "I\n"
 "T"
 msgstr ""
+"В\n"
+"Ы\n"
+"Й\n"
+"Т\n"
+"И"
 
 msgid "Warrior"
 msgstr "Воин"
@@ -411,7 +423,6 @@ msgstr "Выкл."
 msgid "On"
 msgstr "Вкл."
 
-#, fuzzy
 msgid "Turn Order"
 msgstr "Порядок действий"
 
@@ -445,7 +456,6 @@ msgstr "Информация об уроне"
 msgid "Set the speed of combat actions and animations."
 msgstr "Установить скорость действий и анимации существ в бою."
 
-#, fuzzy
 msgid "Toggle to display the turn order during the battle."
 msgstr "Включить/выключить показ порядка действий отрядов в бою."
 
@@ -1877,9 +1887,8 @@ msgstr "Невозможно построить. Вы уже строили зд
 msgid "For this action it is necessary to build a castle first."
 msgstr "Для этого Вам нужно сперва построить замок."
 
-#, fuzzy
 msgid "Cannot build %{name} because the castle is too far away from an ocean."
-msgstr "%{name} невозможно построить - замок слишком далеко от воды."
+msgstr "%{name} невозможно построить - замок слишком далеко от океана."
 
 msgid "disable build."
 msgstr "отключить строение."
@@ -2541,9 +2550,8 @@ msgstr "Просмотреть героя"
 msgid "The above spells are available here."
 msgstr "Доступные заклинания."
 
-#, fuzzy
 msgid "The spells the hero can learn have been added to their book."
-msgstr "Заклинания добавлены в Вашу книгу."
+msgstr "Заклинания, доступные герою, добавлены в Волшебную Книгу."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Щедрые чаевые вытянули из уст трактирщика следующий слух:"
@@ -2638,13 +2646,13 @@ msgid "View World"
 msgstr "Обзор мира"
 
 msgid "View the entire world."
-msgstr "Увидеть мир с высоты птичьего полёта."
+msgstr "Осмотреть весь мир."
 
 msgid "Puzzle"
-msgstr "Карта-Загадка"
+msgstr "Головоломка"
 
 msgid "View the obelisk puzzle."
-msgstr "Посмотреть найденные фрагменты карты."
+msgstr "Посмотреть найденные на обелисках фрагменты головоломки."
 
 msgid "Scenario Information"
 msgstr "Информация о сценарии"
@@ -3209,7 +3217,7 @@ msgid "File to Load:"
 msgstr "Загрузить файл:"
 
 msgid "Accept the choice made."
-msgstr "Принять изменения."
+msgstr "Подтвердить Ваш выбор."
 
 msgid "Select Skill:"
 msgstr "Выберите навык:"
@@ -3905,7 +3913,7 @@ msgid "Project Coordination and Core Development"
 msgstr "Координатор проекта и основной разработчик"
 
 msgid "Development"
-msgstr "Разработчик"
+msgstr "Разработка"
 
 msgid "Visit us at "
 msgstr "Посетите нас "
@@ -4263,7 +4271,7 @@ msgid "hotkey|adventure options"
 msgstr "игровые действия"
 
 msgid "hotkey|puzzle map"
-msgstr "карта-загадка"
+msgstr "карта-головоломка"
 
 msgid "hotkey|scenario information"
 msgstr "информация о сценарии"
@@ -4648,9 +4656,8 @@ msgstr ""
 "В вашей сокровищнице накопилось более %{count} золота.\n"
 "Ваши враги преклоняются перед Вашим богатством и могуществом."
 
-#, fuzzy
 msgid "Victory!"
-msgstr "Эктор"
+msgstr "Победа!"
 
 msgid ""
 "The enemy has captured %{name}!\n"
@@ -4853,7 +4860,7 @@ msgid " All dwellings increase population."
 msgstr " Население всех жилищ возросло."
 
 msgid "New Month!"
-msgstr ""
+msgstr "Новый месяц!"
 
 msgid "New Week!"
 msgstr "Новая неделя!"
@@ -5755,14 +5762,14 @@ msgstr ""
 "поприветствовали Вас и пригласили позаниматься вместе с ними."
 
 msgid "\"Go 'way!\", the witch doctor barks, \"you know all I know.\""
-msgstr "\"Убирайся!\" - рявкнула ведьма, \"ты и так знаешь всё, что знаю я.\""
+msgstr "\"Убирайся!\" - рявкнул колдун, \"ты и так знаешь всё, что знаю я.\""
 
 msgid ""
 "An Orcish witch doctor living in the hut deepens your knowledge of magic by "
 "showing you how to cast stones, read portents, and decipher the intricacies "
 "of chicken entrails."
 msgstr ""
-"Орочья ведьма, живущая в этой хижине, углубила Ваши познания в магии, "
+"Орочий колдун, живущий в этой хижине, углубил Ваши познания в магии, "
 "показав, как гадать на камнях, читать знамения и извлекать сущность бытия из "
 "хитросплетения цыплячьих потрохов."
 
@@ -5892,17 +5899,17 @@ msgid ""
 "ocean. Grateful, he says, \"I would give you an artifact as a reward, but "
 "you're all full.\""
 msgstr ""
-"Вы спасли жертву кораблекрушения от неминуемой гибели в безжалостном океане. "
-"Матрос сказал, \"За своё спасение я хотел отблагодарить Вас артефактом, но я "
-"вижу, что Ваша сумка и так переполнена.\""
+"Вы спасли выжившего после кораблекрушения от неминуемой гибели в "
+"безжалостном океане. Матрос сказал, \"За своё спасение я хотел отблагодарить "
+"Вас артефактом, но я вижу, что Ваша сумка и так переполнена.\""
 
 msgid ""
 "You've pulled a shipwreck survivor from certain death in an unforgiving "
 "ocean. Grateful, he rewards you for your act of kindness by giving you the "
 "%{art}."
 msgstr ""
-"Вы спасли жертву кораблекрушения от неминуемой гибели в безжалостном океане. "
-"Награда за вашу доброту - %{art}."
+"Вы спасли выжившего после кораблекрушения от неминуемой гибели в "
+"безжалостном океане. Награда за вашу доброту - %{art}."
 
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
 msgstr ""
@@ -7496,10 +7503,10 @@ msgid "Sorceress"
 msgstr "Колдунья"
 
 msgid "Warlock"
-msgstr "Чародей"
+msgstr "Чернокнижник"
 
 msgid "Wizard"
-msgstr "Волшебник"
+msgstr "Чародей"
 
 msgid "Necromancer"
 msgstr "Некромант"
@@ -7523,10 +7530,12 @@ msgid "doubleLined|Sorceress"
 msgstr "Колдунья"
 
 msgid "doubleLined|Warlock"
-msgstr "Чародей"
+msgstr ""
+"Черно-\n"
+"книжник"
 
 msgid "doubleLined|Wizard"
-msgstr "Волшебник"
+msgstr "Чародей"
 
 msgid ""
 "doubleLined|Necro-\n"
@@ -7928,7 +7937,7 @@ msgid "Tree of Knowledge"
 msgstr "Древо знаний"
 
 msgid "Witch Doctor's Hut"
-msgstr "Хижина ведьмы"
+msgstr "Хижина колдуна"
 
 msgid "Temple"
 msgstr "Храм"
@@ -8186,16 +8195,16 @@ msgid "Wolves"
 msgstr "Волки"
 
 msgid "Ogre"
-msgstr "Людоед"
+msgstr "Огр"
 
 msgid "Ogres"
-msgstr "Людоеды"
+msgstr "Огры"
 
 msgid "Ogre Lord"
-msgstr "Свирепый людоед"
+msgstr "Лорд огров"
 
 msgid "Ogre Lords"
-msgstr "Свирепые людоеды"
+msgstr "Лорды огров"
 
 msgid "Troll"
 msgstr "Тролль"
@@ -8276,10 +8285,10 @@ msgid "Centaurs"
 msgstr "Кентавры"
 
 msgid "Gargoyle"
-msgstr "Гаргулья"
+msgstr "Горгулья"
 
 msgid "Gargoyles"
-msgstr "Гаргульи"
+msgstr "Горгульи"
 
 msgid "Griffin"
 msgstr "Грифон"
@@ -8330,10 +8339,10 @@ msgid "Halflings"
 msgstr "Полурослики"
 
 msgid "Boar"
-msgstr "Боров"
+msgstr "Вепрь"
 
 msgid "Boars"
-msgstr "Боровы"
+msgstr "Вепри"
 
 msgid "Iron Golem"
 msgstr "Железный голем"
