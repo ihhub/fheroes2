@@ -480,7 +480,7 @@ namespace fheroes2
             return 26 + 6 + 1;
         case fheroes2::FontSize::BUTTON_RELEASED:
         case fheroes2::FontSize::BUTTON_PRESSED:
-            return 16;
+            return 15;
         default:
             assert( 0 ); // Did you add a new font size? Please add implementation.
         }
@@ -499,11 +499,13 @@ namespace fheroes2
 
     Text::~Text() = default;
 
+    // TODO: Properly handle strings with many text lines ('\n'). Now their widths are counted as if they're one line.
     int32_t Text::width() const
     {
         return getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
     }
 
+    // TODO: Properly handle strings with many text lines ('\n'). Now their heights are counted as if they're one line.
     int32_t Text::height() const
     {
         return getFontHeight( _fontType.size );

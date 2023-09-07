@@ -43,29 +43,31 @@ namespace
 
     void updateNormalFontLetterShadow( fheroes2::Image & letter )
     {
-        fheroes2::updateShadow( letter, { -1, 2 }, 2 );
+        fheroes2::updateShadow( letter, { -1, 2 }, 2, false );
     }
 
     void updateSmallFontLetterShadow( fheroes2::Image & letter )
     {
-        fheroes2::updateShadow( letter, { -1, 1 }, 2 );
+        fheroes2::updateShadow( letter, { -1, 1 }, 2, true );
     }
 
     fheroes2::Sprite addContour( fheroes2::Sprite & input, const fheroes2::Point & contourOffset, const uint8_t colorId )
     {
-        if ( input.empty() || contourOffset.x > 0 || contourOffset.y < 0 || ( -contourOffset.x >= input.width() ) || ( contourOffset.y >= input.height() ) )
+        if ( input.empty() || contourOffset.x > 0 || contourOffset.y < 0 || ( -contourOffset.x >= input.width() ) || ( contourOffset.y >= input.height() ) ) {
             return input;
+        }
 
         fheroes2::Sprite output = input;
 
-        const int32_t width = output.width() + contourOffset.x;
-        const int32_t height = output.height() - contourOffset.y;
-
         const int32_t imageWidth = output.width();
 
-        uint8_t * imageOutY = output.image() + imageWidth * contourOffset.y;
+        const int32_t width = imageWidth + contourOffset.x;
+        const int32_t height = output.height() - contourOffset.y;
+
+        const int32_t offsetY = imageWidth * contourOffset.y;
+        uint8_t * imageOutY = output.image() + offsetY;
         const uint8_t * transformInY = input.transform() - contourOffset.x;
-        uint8_t * transformOutY = output.transform() + imageWidth * contourOffset.y;
+        uint8_t * transformOutY = output.transform() + offsetY;
         const uint8_t * transformOutYEnd = transformOutY + imageWidth * height;
 
         for ( ; transformOutY != transformOutYEnd; transformInY += imageWidth, transformOutY += imageWidth, imageOutY += imageWidth ) {
@@ -75,7 +77,9 @@ namespace
             const uint8_t * transformOutXEnd = transformOutX + width;
 
             for ( ; transformOutX != transformOutXEnd; ++transformInX, ++transformOutX, ++imageOutX ) {
-                if ( *transformInX == 0 && *transformOutX == 1 ) {
+                if ( *transformOutX == 1 && ( *transformInX == 0 || ( *( transformInX + contourOffset.x ) == 0 && *( transformInX + offsetY ) == 0 ) ) ) {
+                    // When there are two pixels adjacent diagonally we create a contour pixel in the corner that is closer to the image.
+                    // Doing so there will be no "empty" pixels between the image and its shadow (for 1 pixel offset case).
                     *imageOutX = colorId;
                     *transformOutX = 0;
                 }
@@ -87,19 +91,19 @@ namespace
 
     void applyGoodButtonReleasedLetterEffects( fheroes2::Sprite & letter )
     {
-        updateShadow( letter, { 1, -1 }, 2 );
-        updateShadow( letter, { 2, -2 }, 4 );
+        updateShadow( letter, { 1, -1 }, 2, true );
+        updateShadow( letter, { 2, -2 }, 4, true );
         letter = addContour( letter, { -1, 1 }, buttonContourColor );
-        updateShadow( letter, { -1, 1 }, 7 );
+        updateShadow( letter, { -1, 1 }, 7, true );
     }
 
     void applyGoodButtonPressedLetterEffects( fheroes2::Sprite & letter )
     {
         ReplaceColorId( letter, buttonGoodReleasedColor, buttonGoodPressedColor );
 
-        fheroes2::updateShadow( letter, { 1, -1 }, 2 );
-        fheroes2::updateShadow( letter, { -1, 1 }, 7 );
-        fheroes2::updateShadow( letter, { -2, 2 }, 8 );
+        fheroes2::updateShadow( letter, { 1, -1 }, 2, true );
+        fheroes2::updateShadow( letter, { -1, 1 }, 7, true );
+        fheroes2::updateShadow( letter, { -2, 2 }, 8, true );
     }
 
     void applyEvilButtonReleasedLetterEffects( fheroes2::Sprite & letter )

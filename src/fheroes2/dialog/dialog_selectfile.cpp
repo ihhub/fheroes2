@@ -483,16 +483,20 @@ namespace
             else if ( isEditing ) {
                 if ( le.MouseClickLeft( buttonVirtualKB->area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textInputRoi ) ) ) {
                     fheroes2::openVirtualKeyboard( filename );
+
                     charInsertPos = filename.size();
                     listbox.Unselect();
                     isListboxSelected = false;
                     needRedraw = true;
+
+                    // Set the whole screen to redraw next time to properly restore image under the Virtual Keyboard dialog.
+                    display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
                 }
                 else if ( le.MouseClickLeft( textInputRoi ) ) {
                     const fheroes2::Text text( filename, fheroes2::FontType::normalWhite() );
-                    charInsertPos
-                        = fheroes2::getTextInputCursorPosition( insertCharToString( filename, charInsertPos, '_' ), fheroes2::FontType::normalWhite(), charInsertPos,
-                                                                le.GetMouseCursor().x, textInputRoi.x + ( textInputRoi.width - text.width() ) / 2 );
+                    const int32_t textStartOffsetX = isTextLimit ? 8 : ( textInputRoi.width - text.width() ) / 2;
+                    charInsertPos = fheroes2::getTextInputCursorPosition( filename, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x,
+                                                                          textInputRoi.x + textStartOffsetX );
                     if ( filename.empty() ) {
                         buttonOk.disable();
                     }
