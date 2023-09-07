@@ -259,6 +259,22 @@ namespace
         return groundDirection;
     }
 
+    // Returns the direction vector bits from 'centerTileIndex' where '_tileIsRoad' bit is set for the tiles around.
+    int getRoadDirecton( const Maps::Tiles & tile )
+    {
+        const int32_t centerTileIndex = tile.GetIndex();
+        int roadDirection = ( tile.isRoad() ) ? Direction::CENTER : 0;
+        const Maps::Indexes around = Maps::getAroundIndexes( centerTileIndex );
+
+        for ( const int32_t tileIndex : around ) {
+            if ( world.GetTiles( tileIndex ).isRoad() ) {
+                roadDirection |= Maps::GetDirection( centerTileIndex, tileIndex );
+            }
+        }
+
+        return roadDirection;
+    }
+
     bool hasBits( const int value, const int bits )
     {
         return ( value & bits ) == bits;
@@ -596,7 +612,7 @@ namespace
                 // For these cases there is no extra tile image, but for now we can leave a tile with ground without transition as it is barely noticeable.
                 // TODO: Design tile images for these cases.
 
-                tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( ground ), false, false );
+                tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( ground, true ), false, false );
                 return true;
             }
         }
@@ -629,7 +645,7 @@ namespace
             Maps::Tiles & tile = world.GetTiles( tileId );
             if ( Maps::Ground::isTerrainTransitionImage( tile.getTerrainImageIndex() ) ) {
                 // We change image with the transition to original terrain image without transition.
-                tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( ground ), false, false );
+                tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( ground, true ), false, false );
             }
             return true;
         }
@@ -714,7 +730,7 @@ namespace
                 DEBUG_LOG( DBG_DEVEL, DBG_WARN,
                            "Trying ground " << Maps::Ground::String( newGround ) << " at " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId << ")." )
 
-                world.GetTiles( tileId ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( newGround ), false, false );
+                world.GetTiles( tileId ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( newGround, true ), false, false );
 
                 if ( !updateTerrainTransitionOnTile( tileId ) ) {
                     // The ground image has not been set properly. We move on to the next type of the ground.
@@ -742,7 +758,7 @@ namespace
 
             // If all ground replacements fail we revert the ground change to the initial ground type.
             if ( needRevert && !newGrounds.empty() ) {
-                world.GetTiles( tileId ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( groundOnTile ), false, false );
+                world.GetTiles( tileId ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( groundOnTile, true ), false, false );
                 DEBUG_LOG( DBG_DEVEL, DBG_WARN,
                            "Reverting ground to " << Maps::Ground::String( groundOnTile ) << " at " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId
                                                   << ")." )
@@ -827,12 +843,50 @@ namespace Maps
             const int32_t tileOffset = y * mapWidth;
             for ( int32_t x = startX; x <= endX; ++x ) {
                 // In original editor these tiles are never flipped.
-                world.GetTiles( x + tileOffset ).setTerrain( Ground::getRandomTerrainImageIndex( groundId ), false, false );
+                world.GetTiles( x + tileOffset ).setTerrain( Ground::getRandomTerrainImageIndex( groundId, true ), false, false );
             }
         }
 
         // Set ground transitions on the boundaries of filled terrain area.
         updateTerrainTransitionOnAreaBoundaries( groundId, startX, endX, startY, endY );
+    }
+
+    void setRoadOnTile( Tiles & tile, const bool setRoad )
+    {
+        if ( setRoad == tile.isRoad() || tile.GetGround() == Ground::WATER ) {
+            // We cannot place roads on the water or above already placed roads.
+            return;
+        }
+
+        tile.setRoad( setRoad );
+
+        if ( setRoad ) {
+            // Place the Road image on tiles.
+            if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+                tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_ROAD );
+
+                const int roadDirection = getRoadDirecton( tile );
+
+                if ( hasBits( roadDirection, Direction::LEFT ) || hasBits( roadDirection, Direction::RIGHT ) ) {
+                    tile.setObjectSpriteIndex( Rand::Get( 1 ) ? 2U : 28U );
+                }
+                else {
+                    tile.setObjectSpriteIndex( Rand::Get( 1 ) ? 0U : 26U );
+                }
+
+                const uint16_t groundImageIndex = tile.getTerrainImageIndex();
+                if ( Maps::Ground::isTerrainExtraImage( groundImageIndex ) ) {
+                    // Reset terrain image
+                    tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( tile.GetGround(), false ), false, false );
+                }
+            }
+            // TODO: check the tile addons else.
+        }
+        else {
+            if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_ROAD ) {
+                tile.resetObjectSprite();
+            }
+        }
     }
 
     int32_t getMineSpellIdFromTile( const Tiles & tile )

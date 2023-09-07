@@ -519,7 +519,7 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
     addons_level2.clear();
 
     // those bitfields are set by map editor regardless if map object is there
-    tileIsRoad = ( ( mp2.objectName1 >> 1 ) & 1 ) && ( ( mp2.objectName1 >> 2 ) == MP2::OBJ_ICN_TYPE_ROAD );
+    _tileIsRoad = ( ( mp2.objectName1 >> 1 ) & 1 ) && ( ( mp2.objectName1 >> 2 ) == MP2::OBJ_ICN_TYPE_ROAD );
 
     // If an object has priority 2 (shadow) or 3 (ground) then we put it as an addon.
     if ( mp2.mapObjectType == MP2::OBJ_NONE && ( _layerType >> 1 ) & 1 ) {
@@ -888,7 +888,7 @@ void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
     // MP2 "objectName" is a bitfield
     // 6 bits is for object ICN type, 1 bit is isRoad flag, 1 bit is hasAnimation flag
     if ( ( ( mt.objectName1 >> 1 ) & 1 ) && ( ( mt.objectName1 >> 2 ) == MP2::OBJ_ICN_TYPE_ROAD ) ) {
-        tileIsRoad = true;
+        _tileIsRoad = true;
     }
 }
 
@@ -923,10 +923,10 @@ void Maps::Tiles::AddonsSort()
     }
 
     // Some original maps have issues with identifying tiles as roads. This code fixes it. It's not an ideal solution but works fine in most of cases.
-    if ( !tileIsRoad ) {
+    if ( !_tileIsRoad ) {
         for ( const TilesAddon & addon : addons_level1 ) {
             if ( addon.isRoad() ) {
-                tileIsRoad = true;
+                _tileIsRoad = true;
                 break;
             }
         }
@@ -976,7 +976,7 @@ std::string Maps::Tiles::String() const
        << "image index     : " << static_cast<int>( _imageIndex ) << " (animated: " << hasSpriteAnimation() << ")" << std::endl
        << "layer type      : " << static_cast<int>( _layerType ) << " - " << getObjectLayerName( _layerType ) << std::endl
        << "region          : " << _region << std::endl
-       << "ground          : " << Ground::String( GetGround() ) << " (isRoad: " << tileIsRoad << ")" << std::endl
+       << "ground          : " << Ground::String( GetGround() ) << " (isRoad: " << _tileIsRoad << ")" << std::endl
        << "ground img index: " << _terrainImageIndex << ", image flags: " << static_cast<int>( _terrainFlags ) << std::endl
        << "shadow          : " << ( isShadowSprite( _objectIcnType, _imageIndex ) ? "true" : "false" ) << std::endl
        << "passable from   : " << ( tilePassable ? Direction::String( tilePassable ) : "nowhere" );
@@ -1967,7 +1967,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 
     return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid
                << static_cast<ObjectIcnTypeUnderlyingType>( tile._objectIcnType ) << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex
-               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile._metadata << tile.heroID << tile.tileIsRoad
+               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile._metadata << tile.heroID << tile._tileIsRoad
                << tile.addons_level1 << tile.addons_level2 << tile._layerType << tile._boatOwnerColor;
 }
 
@@ -2052,7 +2052,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
         }
     }
 
-    msg >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2 >> tile._layerType;
+    msg >> tile.heroID >> tile._tileIsRoad >> tile.addons_level1 >> tile.addons_level2 >> tile._layerType;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1002_RELEASE, "Remove the check below." );
     if ( Game::GetVersionOfCurrentSaveFile() >= FORMAT_VERSION_1002_RELEASE ) {

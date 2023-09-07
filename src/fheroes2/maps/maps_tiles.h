@@ -202,7 +202,15 @@ namespace Maps
 
         bool isRoad() const
         {
-            return tileIsRoad || _mainObjectType == MP2::OBJ_CASTLE;
+            return _tileIsRoad || _mainObjectType == MP2::OBJ_CASTLE;
+        }
+
+        void setRoad( const bool setRoad )
+        {
+            _tileIsRoad = setRoad;
+            if ( setRoad ) {
+                _layerType = TERRAIN_LAYER;
+            }
         }
 
         bool isStream() const;
@@ -435,7 +443,7 @@ namespace Maps
 
         std::array<uint32_t, 3> _metadata{ 0 };
 
-        bool tileIsRoad = false;
+        bool _tileIsRoad = false;
 
         // Heroes can only summon neutral empty boats or empty boats belonging to their kingdom.
         uint8_t _boatOwnerColor = Color::NONE;

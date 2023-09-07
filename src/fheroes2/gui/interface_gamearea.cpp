@@ -787,10 +787,13 @@ void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int
     const fheroes2::Rect imageRoi{ startX, startY, sizeX, sizeY };
     const fheroes2::Rect overlappedRoi = _windowROI ^ imageRoi;
 
-    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, std::min( 2, overlappedRoi.height ), 181 );
-    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + 2, std::min( 2, overlappedRoi.width ), overlappedRoi.height - 4, 181 );
-    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + overlappedRoi.height - 2, overlappedRoi.width, 2, 181 );
-    fheroes2::Fill( dst, overlappedRoi.x + overlappedRoi.width - 2, overlappedRoi.y + 2, 2, overlappedRoi.height - 4, 181 );
+    const int32_t limitedLineWidth = std::min( 2, overlappedRoi.width );
+    const int32_t limitedLineHeight = std::min( 2, overlappedRoi.height );
+
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, limitedLineHeight, 181 );
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + 2, limitedLineWidth, overlappedRoi.height - 4, 181 );
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + overlappedRoi.height - limitedLineHeight, overlappedRoi.width, limitedLineHeight, 181 );
+    fheroes2::Fill( dst, overlappedRoi.x + overlappedRoi.width - limitedLineWidth, overlappedRoi.y + 2, limitedLineWidth, overlappedRoi.height - 4, 181 );
 }
 
 void Interface::GameArea::updateMapFogDirections()
