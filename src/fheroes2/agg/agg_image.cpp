@@ -160,6 +160,8 @@ namespace
                                                 ICN::BUTTON_VIEWWORLD_EXIT_EVIL,
                                                 ICN::BUTTON_VERTICAL_DISMISS,
                                                 ICN::BUTTON_VERTICAL_EXIT,
+                                                ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN,
+                                                ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
                                                 ICN::BUTTON_HSCORES_VERTICAL_EXIT,
                                                 ICN::DISMISS_HERO_DISABLED_BUTTON,
                                                 ICN::NEW_CAMPAIGN_DISABLED_BUTTON };
@@ -1908,28 +1910,47 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
+            case ICN::BUTTON_HSCORES_VERTICAL_STANDARD:
             case ICN::BUTTON_HSCORES_VERTICAL_EXIT: {
                 _icnVsSprite[id].resize( 2 );
+
                 const int32_t originalID = ICN::HISCORE;
+                int32_t originalICNIndex = 0;
+                if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD ) {
+                    originalICNIndex = 2;
+                }
+                else if ( id == ICN::BUTTON_HSCORES_VERTICAL_EXIT ) {
+                    originalICNIndex = 4;
+                }
+
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( originalID, 4 );
-                    _icnVsSprite[id][1] = GetICN( originalID, 5 );
+                    _icnVsSprite[id][0] = GetICN( originalID, originalICNIndex );
+                    _icnVsSprite[id][1] = GetICN( originalID, originalICNIndex + 1 );
                     break;
                 }
 
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    const Sprite & originalButton = GetICN( originalID, 4 + i );
+                    const Sprite & originalButton = GetICN( originalID, originalICNIndex + i );
                     Sprite & out = _icnVsSprite[id][i];
 
                     out = originalButton;
                     // Clean the button
-                    Fill( out, 4, 4, 19, 123, getButtonFillingColor( i == 0 ) );
+                    Fill( out, 4 - i, 4 + i, 19, 123, getButtonFillingColor( i == 0 ) );
+                }
+
+                const char * buttonText = gettext_noop( "C\nA\nM\nP\nA\nI\nG\nN" );
+
+                if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD ) {
+                    buttonText = gettext_noop( "S\nT\nA\nN\nD\nA\nR\nD" );
+                }
+                else if ( id == ICN::BUTTON_HSCORES_VERTICAL_EXIT ) {
+                    buttonText = gettext_noop( "E\nX\nI\nT" );
                 }
 
                 ButtonFontOffsetRestorer fontRestorerReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
                 ButtonFontOffsetRestorer fontRestorerPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "E\nX\nI\nT" ), { 5, 4 }, { 4, 5 }, { 20, 123 },
-                                    fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], buttonText, { 4, 4 }, { 3, 5 }, { 21, 124 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -2535,6 +2556,8 @@ namespace fheroes2
             case ICN::BUTTON_VIEWWORLD_EXIT_EVIL:
             case ICN::BUTTON_VERTICAL_DISMISS:
             case ICN::BUTTON_VERTICAL_EXIT:
+            case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
+            case ICN::BUTTON_HSCORES_VERTICAL_STANDARD:
             case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
                 generateLanguageSpecificImages( id );
                 return true;
