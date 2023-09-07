@@ -447,18 +447,18 @@ void Battle::Unit::NewTurn()
     }
 }
 
-uint32_t Battle::Unit::GetSpeed( bool skipStandingCheck, bool skipMovedCheck ) const
+uint32_t Battle::Unit::GetSpeed( const bool skipStandingCheck, const bool skipMovedCheck ) const
 {
     uint32_t modesToCheck = SP_BLIND | IS_PARALYZE_MAGIC;
     if ( !skipMovedCheck ) {
         modesToCheck |= TR_MOVED;
     }
 
-    if ( !skipStandingCheck && ( !GetCount() || Modes( modesToCheck ) ) )
+    if ( !skipStandingCheck && ( !GetCount() || Modes( modesToCheck ) ) ) {
         return Speed::STANDING;
+    }
 
-    uint32_t speed = Monster::GetSpeed();
-    Spell spell;
+    const uint32_t speed = Monster::GetSpeed();
 
     if ( Modes( SP_HASTE ) ) {
         return Speed::GetHasteSpeedFromSpell( speed );
@@ -1700,7 +1700,7 @@ int Battle::Unit::GetColor() const
 int Battle::Unit::GetCurrentColor() const
 {
     if ( Modes( SP_BERSERKER ) ) {
-        return -1; // be aware of unknown color
+        return -1; // Be aware of unknown color
     }
 
     if ( Modes( SP_HYPNOTIZE ) ) {
@@ -1717,7 +1717,8 @@ int Battle::Unit::GetCurrentOrArmyColor() const
 {
     const int color = GetCurrentColor();
 
-    if ( color < 0 ) { // unknown color in case of SP_BERSERKER mode
+    // Unknown color in case of SP_BERSERKER mode
+    if ( color < 0 ) {
         return GetArmyColor();
     }
 
@@ -1726,8 +1727,9 @@ int Battle::Unit::GetCurrentOrArmyColor() const
 
 int Battle::Unit::GetCurrentControl() const
 {
+    // Let's say that berserkers belong to AI, which is not present in the battle
     if ( Modes( SP_BERSERKER ) ) {
-        return CONTROL_AI; // let's say that it belongs to AI which is not present in the battle
+        return CONTROL_AI;
     }
 
     if ( Modes( SP_HYPNOTIZE ) ) {
