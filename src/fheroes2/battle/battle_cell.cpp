@@ -145,8 +145,21 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
     Arena * arena = GetArena();
     assert( arena != nullptr );
 
+    const auto checkReachability = [&unit, speed, arena]( const Position & pos ) -> Position {
+        if ( speed ) {
+            if ( arena->isPositionReachable( unit, pos, false ) && arena->CalculateMoveCost( unit, pos ) <= *speed ) {
+                return pos;
+            }
+        }
+        else if ( arena->isPositionReachable( unit, pos, true ) ) {
+            return pos;
+        }
+
+        return {};
+    };
+
     if ( unit.isWide() ) {
-        const auto checkCells = [&unit, speed, arena]( Cell * headCell, Cell * tailCell ) -> Position {
+        const auto checkCells = [&checkReachability]( Cell * headCell, Cell * tailCell ) -> Position {
             if ( headCell == nullptr || tailCell == nullptr ) {
                 return {};
             }
@@ -156,16 +169,7 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
             pos.first = headCell;
             pos.second = tailCell;
 
-            if ( speed ) {
-                if ( arena->isPositionReachable( unit, pos, false ) && arena->CalculateMoveCost( unit, pos ) <= *speed ) {
-                    return pos;
-                }
-            }
-            else if ( arena->isPositionReachable( unit, pos, true ) ) {
-                return pos;
-            }
-
-            return {};
+            return checkReachability( pos );
         };
 
         const auto tryHead = [&unit, dst, &checkCells]() -> Position {
@@ -213,16 +217,7 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
 
     pos.first = headCell;
 
-    if ( speed ) {
-        if ( arena->isPositionReachable( unit, pos, false ) && arena->CalculateMoveCost( unit, pos ) <= *speed ) {
-            return pos;
-        }
-    }
-    else if ( arena->isPositionReachable( unit, pos, true ) ) {
-        return pos;
-    }
-
-    return {};
+    return checkReachability( pos );
 }
 
 bool Battle::Position::isReflect() const
