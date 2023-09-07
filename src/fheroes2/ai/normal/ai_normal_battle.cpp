@@ -1147,20 +1147,28 @@ namespace AI
             const auto cacheItemIter = aroundIndexesCache.try_emplace( nearbyUnit, Board::GetAroundIndexes( *nearbyUnit ) ).first;
             assert( cacheItemIter != aroundIndexesCache.end() );
 
-            for ( const int32_t cellIdx : cacheItemIter->second ) {
-                const Position pos = Position::GetReachable( currentUnit, cellIdx );
+            // Movement distance and straight line distance. Straight line distance is used for
+            // flying units, since their movement distance is the same for any reachable position.
+            std::pair<uint32_t, uint32_t> shortestDist{ UINT32_MAX, UINT32_MAX };
 
+            for ( const int32_t cellIdx : cacheItemIter->second ) {
+                if ( !Board::CanAttackTargetFromPosition( currentUnit, *nearbyUnit, cellIdx ) ) {
+                    continue;
+                }
+
+                const Position pos = Position::GetReachable( currentUnit, cellIdx );
                 if ( pos.GetHead() == nullptr ) {
                     continue;
                 }
 
                 assert( !currentUnit.isWide() || pos.GetTail() != nullptr );
 
-                if ( Board::CanAttackTargetFromPosition( currentUnit, *nearbyUnit, cellIdx ) ) {
+                const auto dist = std::make_pair( arena.CalculateMoveDistance( currentUnit, pos ), Board::GetDistance( currentUnit.GetPosition(), pos ) );
+                if ( targetInfo.cell == -1 || dist < shortestDist ) {
+                    shortestDist = dist;
+
                     targetInfo.cell = cellIdx;
                     targetInfo.unit = nearbyUnit;
-
-                    break;
                 }
             }
 
@@ -1191,6 +1199,7 @@ namespace AI
                     const uint32_t dist = arena.CalculateMoveDistance( currentUnit, pos );
                     if ( targetInfo.cell == -1 || dist < shortestDist ) {
                         shortestDist = dist;
+
                         targetInfo.cell = cellIdx;
                     }
                 }
