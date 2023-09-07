@@ -490,8 +490,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
         }
     }
     else {
-        // The result of the multiplayer game shouldn't be stored by this class
-        const uint32_t multiplayerResult = [currentColor, activeHumanColors]() -> uint32_t {
+        result = [currentColor, activeHumanColors]() -> uint32_t {
             // If all human-controlled players have been vanquished, then the game is over
             if ( activeHumanColors == 0 ) {
                 return GameOver::LOSS_ALL;
@@ -539,16 +538,16 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
             return GameOver::COND_NONE;
         }();
 
-        if ( multiplayerResult & GameOver::WINS ) {
-            DialogWins( multiplayerResult );
+        if ( result & GameOver::WINS ) {
+            DialogWins( result );
 
             AudioManager::ResetAudio();
             Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
 
-            res = fheroes2::GameMode::MAIN_MENU;
+            res = fheroes2::GameMode::HIGHSCORES_STANDARD;
         }
-        else if ( multiplayerResult & GameOver::LOSS ) {
-            const bool showLossDialog = [currentColor, isCurrentPlayerWasActive, multiplayerResult]() {
+        else if ( result & GameOver::LOSS ) {
+            const bool showLossDialog = [currentColor, isCurrentPlayerWasActive, currentResult = result]() {
                 // We shouldn't show the loss notification dialog if there is no active kingdom at the moment
                 if ( !( currentColor & Color::ALL ) ) {
                     return false;
@@ -572,7 +571,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
 
                 // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town.
                 // This case was already handled at the end of the Interface::AdventureMap::HumanTurn().
-                if ( multiplayerResult == GameOver::LOSS_ALL && kingdom.GetCastles().empty() && kingdom.GetLostTownDays() == 0 ) {
+                if ( currentResult == GameOver::LOSS_ALL && kingdom.GetCastles().empty() && kingdom.GetLostTownDays() == 0 ) {
                     return false;
                 }
 
@@ -586,10 +585,10 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
             }();
 
             // LOSS_ALL fulfillment by itself is not a reason to end the multiplayer game, unless all human-controlled players are vanquished
-            const bool endGame = ( multiplayerResult != GameOver::LOSS_ALL || activeHumanColors == 0 );
+            const bool endGame = ( result != GameOver::LOSS_ALL || activeHumanColors == 0 );
 
             if ( showLossDialog ) {
-                DialogLoss( multiplayerResult );
+                DialogLoss( result );
             }
 
             if ( endGame ) {
