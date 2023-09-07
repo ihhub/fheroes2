@@ -547,7 +547,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
             res = fheroes2::GameMode::HIGHSCORES_STANDARD;
         }
         else if ( result & GameOver::LOSS ) {
-            const bool showLossDialog = [currentColor, isCurrentPlayerWasActive, currentResult = result]() {
+            const bool showLossDialog = [currentColor, isCurrentPlayerWasActive, this]() {
                 // We shouldn't show the loss notification dialog if there is no active kingdom at the moment
                 if ( !( currentColor & Color::ALL ) ) {
                     return false;
@@ -571,7 +571,7 @@ fheroes2::GameMode GameOver::Result::checkGameOver()
 
                 // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town.
                 // This case was already handled at the end of the Interface::AdventureMap::HumanTurn().
-                if ( currentResult == GameOver::LOSS_ALL && kingdom.GetCastles().empty() && kingdom.GetLostTownDays() == 0 ) {
+                if ( result == GameOver::LOSS_ALL && kingdom.GetCastles().empty() && kingdom.GetLostTownDays() == 0 ) {
                     return false;
                 }
 
