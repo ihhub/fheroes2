@@ -538,7 +538,8 @@ namespace AI
         // Current unit can be under the influence of the Hypnotize spell
         const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), &currentUnit );
 
-        // Assess the current threat level and decide whether to retreat to another position or attack a specific unit in order to potentially free an exit for retreat
+        // Assess the current threat level and decide whether to retreat to another position or attack a
+        // specific unit in order to increase the field for maneuver in the future
         const BattleTargetPair immediateDangerAssessmentResult = [&arena, &currentUnit, &enemies]() -> BattleTargetPair {
             struct PositionCharacteristics
             {
@@ -686,14 +687,14 @@ namespace AI
                     const Unit * enemy = arena.GetTroopBoard( enemyIdx );
                     assert( enemy != nullptr );
 
-                    // If we are fighting in melee, we cannot consider distant enemy stacks as potential targets
+                    // If archers are fighting in melee, then we cannot consider distant enemy stacks as potential targets
                     if ( isCurrentUnitHandFighting ) {
                         if ( !Unit::isHandFighting( currentUnit, *enemy ) ) {
                             continue;
                         }
                     }
                     else {
-                        // If the archer does not fight in melee, there should be no enemy units next to him
+                        // If archers are not fighting in melee, then there should be no enemy units near them
                         assert( !Unit::isHandFighting( currentUnit, *enemy ) );
                     }
 
@@ -709,7 +710,6 @@ namespace AI
                     }
 
                     // If we can completely destroy multiple enemy stacks, then we need to choose the one that is able to inflict maximum damage on us
-                    // (not taking into account the potential event of enemy's good luck)
                     if ( priorityTarget != nullptr && enemy->CalculateMaxDamage( currentUnit ) < priorityTarget->CalculateMaxDamage( currentUnit ) ) {
                         continue;
                     }
@@ -730,7 +730,7 @@ namespace AI
                                                return enemy == priorityTarget ? total : total + enemy->CalculateMaxDamage( currentUnit );
                                            } );
 
-                    // If we don't suffer any losses, then instead of retreating, we return this enemy stack as a priority target
+                    // If we don't suffer any losses, then instead of retreating, we designate this enemy stack as a priority target
                     if ( currentUnit.HowManyWillBeKilled( potentialEnemyDamage ) == 0 ) {
                         return { -1, priorityTarget };
                     }
