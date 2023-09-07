@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-04 01:25+0000\n"
-"PO-Revision-Date: 2023-09-06 20:52+0200\n"
+"PO-Revision-Date: 2023-09-07 22:21+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -1892,40 +1892,40 @@ msgid "Build %{name}."
 msgstr "Postav budovu %{name}."
 
 msgid "Blackridge"
-msgstr "Čierny hrebeň"
+msgstr "Čierny Hrebeň"
 
 msgid "Hillstone"
-msgstr "Horský kameň"
+msgstr "Horský Kameň"
 
 msgid "Pinehurst"
-msgstr "Borovicový kopček"
+msgstr "Borovicový Kopček"
 
 msgid "Whiteshield"
-msgstr "Biely štít"
+msgstr "Biely Štít"
 
 msgid "Woodhaven"
-msgstr "Drevený prístav"
+msgstr "Drevený Prístav"
 
 msgid "Blackwind"
-msgstr "Čierny vietor"
+msgstr "Čierny Vietor"
 
 msgid "Bloodreign"
 msgstr "Krvomoc"
 
 msgid "Dragontooth"
-msgstr "Dračí zub"
+msgstr "Dračí Zub"
 
 msgid "Greywind"
-msgstr "Sivý vietor"
+msgstr "Sivý Vietor"
 
 msgid "Portsmith"
-msgstr "Kutý prístav"
+msgstr "Kutý Prístav"
 
 msgid "Atlantium"
 msgstr "Atlantium"
 
 msgid "Middle Gate"
-msgstr "Stredná brána"
+msgstr "Stredná Brána"
 
 msgid "Sansobar"
 msgstr "Sansobar"
@@ -1958,7 +1958,7 @@ msgid "Lakeside"
 msgstr "Pri jazere"
 
 msgid "Nightshadow"
-msgstr "Nočný tieň"
+msgstr "Nočný Tieň"
 
 msgid "Olympus"
 msgstr "Olympus"
@@ -1988,19 +1988,19 @@ msgid "Basenji"
 msgstr "Basendži"
 
 msgid "Blackfang"
-msgstr "Čierny tesák"
+msgstr "Čierny Tesák"
 
 msgid "New Dawn"
-msgstr "Nový úsvit"
+msgstr "Nový Úsvit"
 
 msgid "Sorpigal"
 msgstr "Sorpigal"
 
 msgid "Avone"
-msgstr "Avone"
+msgstr "Zdravá Voda"
 
 msgid "Big Oak"
-msgstr "Veľký dub"
+msgstr "Veľký Dub"
 
 msgid "Chandler"
 msgstr "Čendler"
@@ -2009,7 +2009,7 @@ msgid "Erliquin"
 msgstr "Erlikín"
 
 msgid "Hampshire"
-msgstr "Hampshire"
+msgstr "Studnička"
 
 msgid "Antioch"
 msgstr "Antiochia"
@@ -2018,13 +2018,13 @@ msgid "Avalon"
 msgstr "Avalon"
 
 msgid "Roc Haven"
-msgstr "Útočisko rochov"
+msgstr "Rochovník"
 
 msgid "South Mill"
-msgstr "Južný mlyn"
+msgstr "Južný Mlyn"
 
 msgid "Weed Patch"
-msgstr "Záhon buriny"
+msgstr "Záhon Buriny"
 
 msgid "Brownston"
 msgstr "Hnedokam"
@@ -2033,28 +2033,28 @@ msgid "Hilltop"
 msgstr "Vrchol"
 
 msgid "Weddington"
-msgstr "Weddington"
+msgstr "Bohušove Panstvo"
 
 msgid "Westfork"
-msgstr "Západné rozcestie"
+msgstr "Západné Rozcestie"
 
 msgid "Whittingham"
-msgstr "Whittingham"
+msgstr "Vítova Ves"
 
 msgid "Cathcart"
-msgstr "Cathvoz"
+msgstr "Vozov"
 
 msgid "Elk's Head"
-msgstr "Losia hlava"
+msgstr "Losia Hlava"
 
 msgid "Roscomon"
-msgstr "Roscomon"
+msgstr "Karolov Vŕšok"
 
 msgid "Sherman"
 msgstr "Šerman"
 
 msgid "Yorksford"
-msgstr "Yorkobrod"
+msgstr "Kančí Brod"
 
 msgid "Blackburn"
 msgstr "Černopal"
@@ -2063,16 +2063,16 @@ msgid "Blacksford"
 msgstr "Černobrod"
 
 msgid "Burton"
-msgstr "Burton"
+msgstr "Dvorná"
 
 msgid "Pig's Eye"
-msgstr "Svinské oko"
+msgstr "Svinské Oko"
 
 msgid "Viper's Nest"
-msgstr "Hniezdo zmije"
+msgstr "Hniezdo Zmije"
 
 msgid "Fenton"
-msgstr "Fenton"
+msgstr "Močiarno"
 
 msgid "Lankershire"
 msgstr "Krivokraj"
@@ -2081,7 +2081,7 @@ msgid "Lombard"
 msgstr "Lombard"
 
 msgid "Timberhill"
-msgstr "Drevený kopec"
+msgstr "Drevený Kopec"
 
 msgid "Troy"
 msgstr "Trója"
@@ -2090,22 +2090,22 @@ msgid "Forder Oaks"
 msgstr "Dubobrod"
 
 msgid "Meramec"
-msgstr "Meramek"
+msgstr "Horká Voda"
 
 msgid "Quick Silver"
 msgstr "Ortutie"
 
 msgid "Westmoor"
-msgstr "Západný močiar"
+msgstr "Západný Močiar"
 
 msgid "Willow"
 msgstr "Vrbina"
 
 msgid "Corackston"
-msgstr "Corackston"
+msgstr "Starý Lom"
 
 msgid "Sheltemburg"
-msgstr "Sheltemburg"
+msgstr "Štítnica"
 
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Nedá sa najať - v tomto meste už máš hrdinu."
