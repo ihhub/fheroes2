@@ -451,10 +451,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
                 _bridge->SetPassability( *troop );
             }
 
-            if ( troop->isControlRemote() ) {
-                RemoteTurn( *troop, actions );
-            }
-            else if ( ( troop->GetCurrentControl() & CONTROL_AI ) || ( troop->GetCurrentColor() & _autoBattleColors ) ) {
+            if ( ( troop->GetCurrentControl() & CONTROL_AI ) || ( troop->GetCurrentColor() & _autoBattleColors ) ) {
                 AI::Get().BattleTurn( *this, *troop, actions );
             }
             else {
@@ -621,12 +618,6 @@ void Battle::Arena::Turns()
         const Force * army_loss = ( result_game.army1 & RESULT_LOSS ? _army1.get() : ( result_game.army2 & RESULT_LOSS ? _army2.get() : nullptr ) );
         result_game.killed = army_loss ? army_loss->GetDeadCounts() : 0;
     }
-}
-
-void Battle::Arena::RemoteTurn( const Unit & b, Actions & a )
-{
-    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "switching control to AI" )
-    AI::Get().BattleTurn( *this, b, a );
 }
 
 void Battle::Arena::HumanTurn( const Unit & b, Actions & a )

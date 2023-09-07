@@ -228,7 +228,6 @@ namespace Battle
         };
 
     private:
-        void RemoteTurn( const Unit &, Actions & );
         void HumanTurn( const Unit &, Actions & );
 
         void TurnTroop( Unit * troop, const Units & orderHistory );
