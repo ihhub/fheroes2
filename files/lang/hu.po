@@ -204,6 +204,14 @@ msgid ""
 "S\n"
 "S"
 msgstr ""
+"E\n"
+"L\n"
+"B\n"
+"O\n"
+"C\n"
+"S\n"
+"Á\n"
+"T"
 
 msgid ""
 "E\n"
@@ -211,6 +219,11 @@ msgid ""
 "I\n"
 "T"
 msgstr ""
+"K\n"
+"I\n"
+"L\n"
+"É\n"
+"P"
 
 msgid "Warrior"
 msgstr "Harcos"
@@ -441,7 +454,7 @@ msgid "Set the speed of combat actions and animations."
 msgstr "A harci cselekmények és animációk gyorsaságának beállítása."
 
 msgid "Toggle to display the turn order during the battle."
-msgstr ""
+msgstr "Csatában a támadási sorrend kijelzésének váltása."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -1077,21 +1090,21 @@ msgstr "Öld meg a törpöket"
 
 #, fuzzy
 msgid "Country Lords"
-msgstr "Ogre Nagyúr"
+msgstr "Vidéki nagyurak"
 
 #, fuzzy
 msgid "Dragon Master"
-msgstr "\"Sárkánymester\""
+msgstr "Sárkánymester"
 
 msgid "Rebellion"
-msgstr ""
+msgstr "Lázadás"
 
 msgid "Apocalypse"
-msgstr ""
+msgstr "Apikalipszis"
 
 #, fuzzy
 msgid "Greater Glory"
-msgstr "Nemes Druida"
+msgstr "Nagyobb dicsőség"
 
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region.  "
@@ -1152,30 +1165,30 @@ msgid ""
 msgstr ""
 
 msgid "Arrow's Flight"
-msgstr ""
+msgstr "A nyíl röpte"
 
 msgid "Island of Chaos"
-msgstr ""
+msgstr "A káosz szigete"
 
 msgid "The Abyss"
-msgstr ""
+msgstr "A szakadék"
 
 msgid "Uprising"
-msgstr ""
+msgstr "Felkelés"
 
 msgid "Aurora Borealis"
-msgstr ""
+msgstr "Sarki fény"
 
 #, fuzzy
 msgid "Betrayal's End"
-msgstr "\"Árulás!'"
+msgstr "Az árulás vége"
 
 #, fuzzy
 msgid "Corruption's Heart"
-msgstr "Kapitány Őrház"
+msgstr "A romlás szíve"
 
 msgid "The Giant's Pass"
-msgstr ""
+msgstr "Óriás hágó"
 
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
@@ -1220,31 +1233,29 @@ msgid ""
 "hero for all time."
 msgstr ""
 
-#, fuzzy
 msgid "Border Towns"
-msgstr "Városok mutatása"
+msgstr "Határvárosok"
 
 msgid "Conquer and Unify"
-msgstr ""
+msgstr "Hódíts és egyesíts"
 
-#, fuzzy
 msgid "Crazy Uncle Ivan"
-msgstr "Uncle nagybácsi"
+msgstr "Őrült Iván nagybácsi"
 
 msgid "The Wayward Son"
-msgstr ""
+msgstr "Önfejú fiú"
 
 msgid "Ivory Gates"
-msgstr "Ivory Gates"
+msgstr "Elefántcsont kapuk"
 
 msgid "The Elven Lands"
-msgstr ""
+msgstr "Elf vidék"
 
 msgid "The Epic Battle"
-msgstr ""
+msgstr "A hősies csata"
 
 msgid "The Southern War"
-msgstr ""
+msgstr "A déli háború"
 
 msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
@@ -1287,17 +1298,15 @@ msgid ""
 "everyone, and don't lose the hero Jarkonas VI."
 msgstr ""
 
-#, fuzzy
 msgid "Fount of Wizardry"
-msgstr "Varázsjogar"
+msgstr "A varázslat forrása"
 
 #, fuzzy
 msgid "Power's End"
-msgstr "Hatalom gyűrűje"
+msgstr "A hatalom vége"
 
-#, fuzzy
 msgid "The Eternal Scrolls"
-msgstr "Emerald-sziget"
+msgstr "Örök pergamenek"
 
 #, fuzzy
 msgid "The Shrouded Isles"
@@ -1327,16 +1336,16 @@ msgid ""
 msgstr ""
 
 msgid "Blood is Thicker"
-msgstr ""
+msgstr "A vér nem válik vízzé"
 
 msgid "King and Country"
-msgstr ""
+msgstr "Király és ország"
 
 msgid "Pirate Isles"
-msgstr ""
+msgstr "Kalóz szigetek"
 
 msgid "Stranded"
-msgstr ""
+msgstr "Zátonyra futott"
 
 msgid ""
 "Capture the town on the island off the southeast shore in order to construct "
@@ -1359,20 +1368,19 @@ msgid ""
 msgstr ""
 
 msgid " bane"
-msgstr ""
+msgstr " veszedelem"
 
 msgid " alliance"
-msgstr ""
+msgstr " szövetség"
 
 msgid "Carry-over forces"
 msgstr ""
 
-#, fuzzy
 msgid " bonus"
-msgstr "bónusz a pirosnak"
+msgstr " bónusz"
 
 msgid " defeated"
-msgstr ""
+msgstr " legyőzetett"
 
 msgid " will always run away from your army."
 msgstr ""
