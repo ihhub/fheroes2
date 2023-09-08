@@ -361,7 +361,7 @@ public:
 class SelectEnumSecSkill : public SelectEnum
 {
 public:
-    static int getSkillFromListIndex(int index)
+    static int getSkillFromListIndex( int index )
     {
         return 1 + index / 3;
     }
@@ -400,8 +400,8 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
 
     std::iota( skills.begin(), skills.end(), 0 );
     skills.erase( std::remove_if( skills.begin(), skills.end(),
-                                  [&hero]( const int listIndex ) { return hero.HasSecondarySkill( SelectEnumSecSkill::getSkillFromListIndex( listIndex ) ); } ), 
-                  skills.end());
+                                  [&hero]( const int listIndex ) { return hero.HasSecondarySkill( SelectEnumSecSkill::getSkillFromListIndex( listIndex ) ); } ),
+                  skills.end() );
 
     SelectEnumSecSkill listbox( { 350, fheroes2::Display::instance().height() - 200 } );
 
