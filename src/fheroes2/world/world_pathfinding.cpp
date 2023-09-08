@@ -315,7 +315,57 @@ namespace
         }
 
         // ... and this tile should be reachable from the shore (as if this shore tile were a water tile)
-        return toTile.isPassableFrom( Direction::Reflect( direction ), true, false, color );
+        if ( !toTile.isPassableFrom( Direction::Reflect( direction ), true, false, color ) ) {
+            return false;
+        }
+
+        // Even if it is possible to use the Summon Boat spell to get to this tile, this should not be done
+        // if there is already a boat on an adjacent reachable tile, because such a behavior looks ugly.
+        // Boat from the adjacent tile should be used instead.
+        const bool isEmptyBoatNearby = [from, color, &fromTile, fromWater]() {
+            const int32_t fromX = from % world.w();
+            const int32_t fromY = from / world.w();
+
+            for ( int32_t dy = -1; dy <= 1; ++dy ) {
+                for ( int32_t dx = -1; dx <= 1; ++dx ) {
+                    if ( dx == 0 && dy == 0 ) {
+                        continue;
+                    }
+
+                    const int32_t tileX = fromX + dx;
+                    const int32_t tileY = fromY + dy;
+
+                    if ( !Maps::isValidAbsPoint( tileX, tileY ) ) {
+                        continue;
+                    }
+
+                    const int32_t tileIdx = tileY * world.w() + tileX;
+                    const int tileDirection = Maps::GetDirection( from, tileIdx );
+
+                    assert( tileDirection != Direction::UNKNOWN && tileDirection != Direction::CENTER );
+
+                    if ( !fromTile.isPassableTo( tileDirection ) ) {
+                        continue;
+                    }
+
+                    const Maps::Tiles & tile = world.GetTiles( tileIdx );
+
+                    if ( tile.GetObject() != MP2::OBJ_BOAT ) {
+                        continue;
+                    }
+
+                    if ( !tile.isPassableFrom( Direction::Reflect( tileDirection ), fromWater, false, color ) ) {
+                        continue;
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }();
+
+        return !isEmptyBoatNearby;
     }
 
     bool isTileAccessibleForAIWithArmy( const int tileIndex, const double armyStrength, const double minimalAdvantage )
