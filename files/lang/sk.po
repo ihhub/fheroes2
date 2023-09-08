@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-04 01:25+0000\n"
-"PO-Revision-Date: 2023-08-29 13:33+0200\n"
+"PO-Revision-Date: 2023-09-07 22:21+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -209,6 +209,13 @@ msgid ""
 "S\n"
 "S"
 msgstr ""
+"P\n"
+"R\n"
+"E\n"
+"P\n"
+"U\n"
+"S\n"
+"Ť"
 
 msgid ""
 "E\n"
@@ -216,6 +223,10 @@ msgid ""
 "I\n"
 "T"
 msgstr ""
+"P\n"
+"R\n"
+"E\n"
+"Č"
 
 msgid "Warrior"
 msgstr "Bojovník"
@@ -411,7 +422,6 @@ msgstr "Vypnuté"
 msgid "On"
 msgstr "Zapnuté"
 
-#, fuzzy
 msgid "Turn Order"
 msgstr "Poradie"
 
@@ -445,9 +455,8 @@ msgstr "Info škôd"
 msgid "Set the speed of combat actions and animations."
 msgstr "Nastav rýchlosť bojových akcií a animácií."
 
-#, fuzzy
 msgid "Toggle to display the turn order during the battle."
-msgstr "Zmeň zobrazenie poradia armády počas boja."
+msgstr "Prepni zobrazenie poradia armády počas boja."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -1883,40 +1892,40 @@ msgid "Build %{name}."
 msgstr "Postav budovu %{name}."
 
 msgid "Blackridge"
-msgstr "Čierny hrebeň"
+msgstr "Čierny Hrebeň"
 
 msgid "Hillstone"
-msgstr "Horský kameň"
+msgstr "Horský Kameň"
 
 msgid "Pinehurst"
-msgstr "Borovicový kopček"
+msgstr "Borovicový Kopček"
 
 msgid "Whiteshield"
-msgstr "Biely štít"
+msgstr "Biely Štít"
 
 msgid "Woodhaven"
-msgstr "Drevený prístav"
+msgstr "Drevený Prístav"
 
 msgid "Blackwind"
-msgstr "Čierny vietor"
+msgstr "Čierny Vietor"
 
 msgid "Bloodreign"
 msgstr "Krvomoc"
 
 msgid "Dragontooth"
-msgstr "Dračí zub"
+msgstr "Dračí Zub"
 
 msgid "Greywind"
-msgstr "Sivý vietor"
+msgstr "Sivý Vietor"
 
 msgid "Portsmith"
-msgstr "Kutý prístav"
+msgstr "Kutý Prístav"
 
 msgid "Atlantium"
 msgstr "Atlantium"
 
 msgid "Middle Gate"
-msgstr "Stredná brána"
+msgstr "Stredná Brána"
 
 msgid "Sansobar"
 msgstr "Sansobar"
@@ -1931,7 +1940,7 @@ msgid "Baywatch"
 msgstr "Stráž zálivu"
 
 msgid "Fountainhead"
-msgstr "Fontánohlava"
+msgstr "Prameň"
 
 msgid "Vertigo"
 msgstr "Závrat"
@@ -1949,7 +1958,7 @@ msgid "Lakeside"
 msgstr "Pri jazere"
 
 msgid "Nightshadow"
-msgstr "Nočný tieň"
+msgstr "Nočný Tieň"
 
 msgid "Olympus"
 msgstr "Olympus"
@@ -1979,19 +1988,19 @@ msgid "Basenji"
 msgstr "Basendži"
 
 msgid "Blackfang"
-msgstr "Čierny tesák"
+msgstr "Čierny Tesák"
 
 msgid "New Dawn"
-msgstr "Nový úsvit"
+msgstr "Nový Úsvit"
 
 msgid "Sorpigal"
 msgstr "Sorpigal"
 
 msgid "Avone"
-msgstr "Avone"
+msgstr "Zdravá Voda"
 
 msgid "Big Oak"
-msgstr "Veľký dub"
+msgstr "Veľký Dub"
 
 msgid "Chandler"
 msgstr "Čendler"
@@ -2000,7 +2009,7 @@ msgid "Erliquin"
 msgstr "Erlikín"
 
 msgid "Hampshire"
-msgstr "Hampshire"
+msgstr "Studnička"
 
 msgid "Antioch"
 msgstr "Antiochia"
@@ -2009,13 +2018,13 @@ msgid "Avalon"
 msgstr "Avalon"
 
 msgid "Roc Haven"
-msgstr "Útočisko rochov"
+msgstr "Rochovník"
 
 msgid "South Mill"
-msgstr "Južný mlyn"
+msgstr "Južný Mlyn"
 
 msgid "Weed Patch"
-msgstr "Záhon buriny"
+msgstr "Záhon Buriny"
 
 msgid "Brownston"
 msgstr "Hnedokam"
@@ -2024,28 +2033,28 @@ msgid "Hilltop"
 msgstr "Vrchol"
 
 msgid "Weddington"
-msgstr "Weddington"
+msgstr "Bohušove Panstvo"
 
 msgid "Westfork"
-msgstr "Západné rozcestie"
+msgstr "Západné Rozcestie"
 
 msgid "Whittingham"
-msgstr "Whittingham"
+msgstr "Vítova Ves"
 
 msgid "Cathcart"
-msgstr "Cathvoz"
+msgstr "Vozov"
 
 msgid "Elk's Head"
-msgstr "Losia hlava"
+msgstr "Losia Hlava"
 
 msgid "Roscomon"
-msgstr "Roscomon"
+msgstr "Karolov Vŕšok"
 
 msgid "Sherman"
 msgstr "Šerman"
 
 msgid "Yorksford"
-msgstr "Yorkobrod"
+msgstr "Kančí Brod"
 
 msgid "Blackburn"
 msgstr "Černopal"
@@ -2054,16 +2063,16 @@ msgid "Blacksford"
 msgstr "Černobrod"
 
 msgid "Burton"
-msgstr "Burton"
+msgstr "Dvorná"
 
 msgid "Pig's Eye"
-msgstr "Svinské oko"
+msgstr "Svinské Oko"
 
 msgid "Viper's Nest"
-msgstr "Hniezdo zmije"
+msgstr "Hniezdo Zmije"
 
 msgid "Fenton"
-msgstr "Fenton"
+msgstr "Močiarno"
 
 msgid "Lankershire"
 msgstr "Krivokraj"
@@ -2072,7 +2081,7 @@ msgid "Lombard"
 msgstr "Lombard"
 
 msgid "Timberhill"
-msgstr "Drevený kopec"
+msgstr "Drevený Kopec"
 
 msgid "Troy"
 msgstr "Trója"
@@ -2081,22 +2090,22 @@ msgid "Forder Oaks"
 msgstr "Dubobrod"
 
 msgid "Meramec"
-msgstr "Meramek"
+msgstr "Horká Voda"
 
 msgid "Quick Silver"
 msgstr "Ortutie"
 
 msgid "Westmoor"
-msgstr "Západný močiar"
+msgstr "Západný Močiar"
 
 msgid "Willow"
 msgstr "Vrbina"
 
 msgid "Corackston"
-msgstr "Corackston"
+msgstr "Starý Lom"
 
 msgid "Sheltemburg"
-msgstr "Sheltemburg"
+msgstr "Štítnica"
 
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Nedá sa najať - v tomto meste už máš hrdinu."
@@ -3607,18 +3616,20 @@ msgid "Area Fill"
 msgstr "Výplň oblasti"
 
 msgid "Used to click and drag for filling in large areas."
-msgstr ""
+msgstr "Slúži na kliknutie a ťahanie na vyplnenie veľkých plôch."
 
 msgid "Clear Area"
-msgstr ""
+msgstr "Vyčistiť oblasť"
 
 msgid "Used to click and drag for clearing large areas."
-msgstr ""
+msgstr "Slúži na kliknutie a ťahanie na vyčistenie veľkých plôch."
 
 msgid ""
 "Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
 "eliminates the penalty.)"
 msgstr ""
+"Stojí %{rate} krát normálny pohyb pre všetkých hrdinov. (Hľadanie cesty "
+"znižuje alebo odstraňuje tento postih.)"
 
 msgid "Traversable only by boat."
 msgstr "Prejazdné len loďou."
@@ -3714,17 +3725,18 @@ msgstr ""
 msgid "Edit map title, description, and other general information."
 msgstr "Upraviť názov mapy, popis a ďalšie všeobecné informácie."
 
-#, fuzzy
 msgid "Specifications"
-msgstr "Opevnenia"
+msgstr "Parametre"
 
 msgid "File Options"
-msgstr ""
+msgstr "Súborové menu"
 
 msgid ""
 "Open the file options menu, where you can save or load maps, or quit out of "
 "the editor."
 msgstr ""
+"Otvorte súborové menu, v ktorom môžete ukladať alebo načítavať mapy, "
+"prípadne ukončiť prácu s editorom."
 
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
@@ -3750,7 +3762,7 @@ msgid "Create a randomly generated map."
 msgstr "Vytvoriť náhodne vygenerovanú mapu."
 
 msgid "Random"
-msgstr ""
+msgstr "Náhodná"
 
 msgid "Cancel back to the Map Editor main menu."
 msgstr "Zrušenie a návrat do hlavnej ponuky Editora máp."
@@ -4234,7 +4246,7 @@ msgid "hotkey|end turn"
 msgstr "ukonči kolo"
 
 msgid "hotkey|file options"
-msgstr "možnosti súboru"
+msgstr "súborové menu"
 
 msgid "hotkey|adventure options"
 msgstr "možnosti výpravy"
@@ -4868,64 +4880,64 @@ msgstr ""
 "%{color} hráč, tvoji hrdinovia ťa opustili a ty si vyhostený z tejto krajiny."
 
 msgid "Lord Kilburn"
-msgstr ""
+msgstr "Lord Kilburn"
 
 msgid "Tsabu"
-msgstr ""
+msgstr "Tsabu"
 
 msgid "Sir Galant"
-msgstr ""
+msgstr "Sir Galant"
 
 msgid "Thundax"
-msgstr ""
+msgstr "Thundax"
 
 msgid "Lord Haart"
-msgstr ""
+msgstr "Lord Haart"
 
 msgid "Ariel"
-msgstr ""
+msgstr "Ariel"
 
 msgid "Rebecca"
-msgstr ""
+msgstr "Rebecca"
 
 msgid "Sandro"
-msgstr ""
+msgstr "Sandro"
 
 msgid "Crodo"
-msgstr ""
+msgstr "Crodo"
 
 msgid "Barock"
-msgstr ""
+msgstr "Barock"
 
 msgid "Antoine"
-msgstr ""
+msgstr "Antoine"
 
 msgid "Astra"
-msgstr ""
+msgstr "Astra"
 
 msgid "Agar"
-msgstr ""
+msgstr "Agar"
 
 msgid "Vatawna"
-msgstr ""
+msgstr "Vatawna"
 
 msgid "Vesper"
-msgstr ""
+msgstr "Vesper"
 
 msgid "Ambrose"
-msgstr ""
+msgstr "Ambrose"
 
 msgid "Troyan"
-msgstr ""
+msgstr "Troyan"
 
 msgid "Jojosh"
-msgstr ""
+msgstr "Jojosh"
 
 msgid "Wrathmont"
-msgstr ""
+msgstr "Wrathmont"
 
 msgid "Maximus"
-msgstr ""
+msgstr "Maximus"
 
 msgid "Next Hero"
 msgstr "Ďalší hrdina"
@@ -5129,13 +5141,13 @@ msgid "View %{skill} Info"
 msgstr "Zobraz info: %{skill}"
 
 msgid "Keyboard|123"
-msgstr ""
+msgstr "123"
 
 msgid "Keyboard|SPACE"
 msgstr "MEDZERNÍK"
 
 msgid "Keyboard|ABC"
-msgstr ""
+msgstr "ABC"
 
 msgid "Kingdom Income"
 msgstr "Príjmy kráľovstva"
@@ -5210,49 +5222,49 @@ msgid "Vietnamese"
 msgstr "Vietnamsky"
 
 msgid ", FPS: "
-msgstr ""
+msgstr ", FPS: "
 
 msgid "%{object} robber"
-msgstr ""
+msgstr "%{object} vykradnutý"
 
 msgid "%{object} raided"
-msgstr ""
+msgstr "%{object} vyplienená"
 
 msgid "Ector"
-msgstr ""
+msgstr "Ector"
 
 msgid "Gwenneth"
-msgstr ""
+msgstr "Gwenneth"
 
 msgid "Sir Gallant"
-msgstr ""
+msgstr "Sir Gallant"
 
 msgid "Tyro"
-msgstr ""
+msgstr "Tyro"
 
 msgid "Dimitry"
 msgstr "Dimitri"
 
 msgid "Ruby"
-msgstr ""
+msgstr "Ruby"
 
 msgid "Crag Hack"
-msgstr ""
+msgstr "Crag Hack"
 
 msgid "Fineous"
-msgstr ""
+msgstr "Fineous"
 
 msgid "Jezebel"
 msgstr "Jezabel"
 
 msgid "Atlas"
-msgstr ""
+msgstr "Atlas"
 
 msgid "Ergon"
-msgstr ""
+msgstr "Ergon"
 
 msgid "Jaclyn"
-msgstr ""
+msgstr "Jaclyn"
 
 msgid "Gem"
 msgstr "Zafíra"
@@ -5261,76 +5273,76 @@ msgid "Natasha"
 msgstr "Nataša"
 
 msgid "Carlawn"
-msgstr ""
+msgstr "Carlawn"
 
 msgid "Luna"
-msgstr ""
+msgstr "Luna"
 
 msgid "Arie"
-msgstr ""
+msgstr "Arie"
 
 msgid "Barok"
-msgstr ""
+msgstr "Barok"
 
 msgid "Kastore"
-msgstr ""
+msgstr "Kastore"
 
 msgid "Falagar"
-msgstr ""
+msgstr "Falagar"
 
 msgid "Dawn"
-msgstr ""
+msgstr "Dawn"
 
 msgid "Flint"
-msgstr ""
+msgstr "Flint"
 
 msgid "Halon"
-msgstr ""
+msgstr "Halon"
 
 msgid "Myra"
-msgstr ""
+msgstr "Myra"
 
 msgid "Myrini"
-msgstr ""
+msgstr "Myrini"
 
 msgid "Wilfrey"
-msgstr ""
+msgstr "Wilfrey"
 
 msgid "Mandigal"
-msgstr ""
+msgstr "Mandigal"
 
 msgid "Sarakin"
-msgstr ""
+msgstr "Sarakin"
 
 msgid "Charity"
-msgstr ""
+msgstr "Charity"
 
 msgid "Darlana"
-msgstr ""
+msgstr "Darlana"
 
 msgid "Ranloo"
-msgstr ""
+msgstr "Ranloo"
 
 msgid "Rialdo"
-msgstr ""
+msgstr "Rialdo"
 
 msgid "Zam"
-msgstr ""
+msgstr "Zam"
 
 msgid "Zom"
-msgstr ""
+msgstr "Zom"
 
 msgid "Celia"
-msgstr ""
+msgstr "Celia"
 
 msgid "Roxana"
-msgstr ""
+msgstr "Roxana"
 
 msgid "Lord Corlagon"
-msgstr ""
+msgstr "Lord Corlagon"
 
 msgid "Lord Halton"
-msgstr ""
+msgstr "Lord Halton"
 
 msgid "Sister Eliza"
 msgstr "Sestra Eliza"
@@ -5339,34 +5351,34 @@ msgid "Brother Brax"
 msgstr "Brat Brax"
 
 msgid "Dainwin"
-msgstr ""
+msgstr "Dainwin"
 
 msgid "Joseph"
-msgstr ""
+msgstr "Joseph"
 
 msgid "Mog"
-msgstr ""
+msgstr "Mog"
 
 msgid "Solmyr"
-msgstr ""
+msgstr "Solmyr"
 
 msgid "Ceallach"
-msgstr ""
+msgstr "Ceallach"
 
 msgid "Drakonia"
-msgstr ""
+msgstr "Drakonia"
 
 msgid "Elderian"
-msgstr ""
+msgstr "Elderian"
 
 msgid "Gallavant"
-msgstr ""
+msgstr "Gallavant"
 
 msgid "Jarkonas"
-msgstr ""
+msgstr "Jarkonas"
 
 msgid "Martine"
-msgstr ""
+msgstr "Martine"
 
 msgid " gives you maximum morale"
 msgstr " dáva maximálnu morálku"
@@ -7467,7 +7479,7 @@ msgid "Necromancer"
 msgstr "Nekromant"
 
 msgid "Multi"
-msgstr ""
+msgstr "Multi"
 
 msgid "race|Random"
 msgstr "Náhodná"
@@ -7498,7 +7510,7 @@ msgid ""
 msgstr "Nekromant"
 
 msgid "doubleLinedRace|Multi"
-msgstr ""
+msgstr "Multi"
 
 msgid "doubleLinedRace|Random"
 msgstr "Náhodná"
@@ -7765,7 +7777,7 @@ msgid "Monster"
 msgstr "Tvor"
 
 msgid "Obelisk"
-msgstr ""
+msgstr "Obelisk"
 
 msgid "Oasis"
 msgstr "Oáza"
@@ -10103,7 +10115,7 @@ msgid ""
 "%{count} HP per level of spell power."
 msgstr ""
 "Odstráni všetky negatívne kúzla zoslané na jednu z vašich jednotiek a obnoví "
-"až %{count} HP za úroveň Sily kúziel."
+"až %{count} zdravia za úroveň Sily kúziel."
 
 msgid "Mass Cure"
 msgstr "Hromadné liečenie"
@@ -10113,7 +10125,7 @@ msgid ""
 "%{count} HP per level of spell power, per creature."
 msgstr ""
 "Odstráni všetky negatívne kúzla zoslané na tvoje vojsko a obnoví až %{count} "
-"HP na úroveň sily kúziel, na každého tvora."
+"zdravia na úroveň sily kúziel, na každého tvora."
 
 msgid "Resurrect"
 msgstr "Vzkriesenie"
@@ -10562,7 +10574,7 @@ msgid ""
 msgstr "Pomocou tohto kúzla povoláš %{count} bojovníkov (%{monster})."
 
 msgid "This spell restores %{hp} HP."
-msgstr "Toto kúzlo obnoví %{hp} HP."
+msgstr "Toto kúzlo obnoví %{hp} zdravia."
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
 msgstr ""
@@ -10580,7 +10592,7 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 "Toto kúzlo ovláda do\n"
-"%{hp} HP."
+"%{hp} zdravia."
 
 msgid "The ultimate artifact is really the %{name}."
 msgstr "Ultimátny artefakt je v skutočnosti %{name}."
