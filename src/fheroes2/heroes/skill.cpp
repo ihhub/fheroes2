@@ -508,13 +508,13 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
     case EAGLEEYE:
         switch ( Level() ) {
         case Level::BASIC:
-            str = _( "%{skill} gives your hero a %{count} percent chance to learn any given 1st or 2nd level enemy spell used against him in a combat." );
+            str = _( "%{skill} gives your hero a %{count} percent chance to learn any given 1st or 2nd level spell that was cast by an enemy during combat." );
             break;
         case Level::ADVANCED:
-            str = _( "%{skill} gives your hero a %{count} percent chance to learn any given 3rd level spell (or below) used against him in combat." );
+            str = _( "%{skill} gives your hero a %{count} percent chance to learn any given 3rd level spell (or below) that was cast by an enemy during combat." );
             break;
         case Level::EXPERT:
-            str = _( "%{skill} gives your hero a %{count} percent chance to learn any given 4th level spell (or below) used against him in combat." );
+            str = _( "%{skill} gives your hero a %{count} percent chance to learn any given 4th level spell (or below) that was cast by an enemy during combat." );
             break;
         default:
             break;
