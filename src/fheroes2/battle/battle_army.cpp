@@ -82,6 +82,7 @@ Battle::Units::Units( const Units & units, const Unit * unitToRemove )
 
 void Battle::Units::SortFastest()
 {
+    // It is important to maintain the initial order of units having the same speed for the proper operation of the unit turn queue
     std::stable_sort( begin(), end(), Army::FastestTroop );
 }
 

@@ -251,7 +251,7 @@ std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startU
 
         const bool isBlackListed = std::find( blackList.begin(), blackList.end(), cellUnit ) != blackList.end();
         if ( !isBlackListed ) {
-            foundUnits.emplace_back( cellUnit, GetDistance( startUnit->GetHeadIndex(), cellUnit->GetHeadIndex() ) );
+            foundUnits.emplace_back( cellUnit, GetDistance( startUnit->GetPosition(), cellUnit->GetPosition() ) );
         }
     }
 
