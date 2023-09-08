@@ -1787,221 +1787,247 @@ msgstr "Nem tudod felépíteni %{name}-t."
 msgid "Build %{name}."
 msgstr "%{name} építése"
 
+#, fuzzy
 msgid "Blackridge"
-msgstr "Blackridge"
+msgstr "Híd"
 
 msgid "Hillstone"
-msgstr "Hillstone"
+msgstr ""
 
 msgid "Pinehurst"
-msgstr "Pinehurst"
+msgstr ""
 
+#, fuzzy
 msgid "Whiteshield"
-msgstr "Whiteshield"
+msgstr "Fehér Gyöngy"
 
+#, fuzzy
 msgid "Woodhaven"
-msgstr "Woodhaven"
+msgstr "Fa"
 
+#, fuzzy
 msgid "Blackwind"
-msgstr "Blackwind"
+msgstr "Kovácsműhely"
 
+#, fuzzy
 msgid "Bloodreign"
-msgstr "Bloodreign"
+msgstr "Jó Morál"
 
+#, fuzzy
 msgid "Dragontooth"
-msgstr "Dragontooth"
+msgstr "Szitakötő"
 
 msgid "Greywind"
-msgstr "Greywind"
+msgstr ""
 
 msgid "Portsmith"
-msgstr "Portsmith"
+msgstr ""
 
 msgid "Atlantium"
-msgstr "Atlantium"
+msgstr ""
 
 msgid "Middle Gate"
-msgstr "Middle Gate"
+msgstr ""
 
 msgid "Sansobar"
-msgstr "Sansobar"
+msgstr ""
 
+#, fuzzy
 msgid "Tundara"
-msgstr "Tundara"
+msgstr "Thundax"
 
+#, fuzzy
 msgid "Vulcania"
-msgstr "Vulcania"
+msgstr "Vulkán"
 
 msgid "Baywatch"
-msgstr "Baywatch"
+msgstr ""
 
+#, fuzzy
 msgid "Fountainhead"
-msgstr "Fountainhead"
+msgstr "Szökőkút"
 
 msgid "Vertigo"
-msgstr "Vertigo"
+msgstr ""
 
 msgid "Wildabar"
-msgstr "Wildabar"
+msgstr ""
 
 msgid "Winterkill"
-msgstr "Winterkill"
+msgstr ""
 
 msgid "Brindamoor"
-msgstr "Brindamoor"
+msgstr ""
 
 msgid "Lakeside"
-msgstr "Lakeside"
+msgstr ""
 
 msgid "Nightshadow"
-msgstr "Nightshadow"
+msgstr ""
 
 msgid "Olympus"
-msgstr "Olympus"
+msgstr ""
 
+#, fuzzy
 msgid "Sandcaster"
-msgstr "Sandcaster"
+msgstr "Sandro"
 
 msgid "Alamar"
 msgstr "Alamar"
 
+#, fuzzy
 msgid "Burlock"
-msgstr "Burlock"
+msgstr "Boszorkánymester"
 
+#, fuzzy
 msgid "Dragadune"
-msgstr "Dragadune"
+msgstr "Szitakötő"
 
 msgid "Kalindra"
 msgstr "Kalindra"
 
 msgid "Xabran"
-msgstr "Xabran"
+msgstr ""
 
 msgid "Algary"
-msgstr "Algary"
+msgstr ""
 
 msgid "Basenji"
-msgstr "Basenji"
+msgstr ""
 
+#, fuzzy
 msgid "Blackfang"
-msgstr "Blackfang"
+msgstr "Fekete Sárkány"
 
+#, fuzzy
 msgid "New Dawn"
-msgstr "New Dawn"
+msgstr "Dawn"
 
 msgid "Sorpigal"
-msgstr "Sorpigal"
+msgstr ""
 
 msgid "Avone"
-msgstr "Avone"
+msgstr ""
 
 msgid "Big Oak"
-msgstr "Big Oak"
+msgstr ""
 
 msgid "Chandler"
-msgstr "Chandler"
+msgstr ""
 
 msgid "Erliquin"
-msgstr "Erliquin"
+msgstr ""
 
 msgid "Hampshire"
-msgstr "Hampshire"
+msgstr ""
 
+#, fuzzy
 msgid "Antioch"
-msgstr "Antioch"
+msgstr "animáció"
 
+#, fuzzy
 msgid "Avalon"
-msgstr "Avalon"
+msgstr "Halon"
 
 msgid "Roc Haven"
-msgstr "Roc Haven"
+msgstr ""
 
 msgid "South Mill"
-msgstr "South Mill"
+msgstr ""
 
+#, fuzzy
 msgid "Weed Patch"
-msgstr "Weed Patch"
+msgstr "Arany Óra"
 
+#, fuzzy
 msgid "Brownston"
-msgstr "Brownston"
+msgstr "Barna"
 
 msgid "Hilltop"
-msgstr "Hilltop"
+msgstr ""
 
 msgid "Weddington"
-msgstr "Weddington"
+msgstr ""
 
 msgid "Westfork"
-msgstr "Westfork"
+msgstr ""
 
+#, fuzzy
 msgid "Whittingham"
-msgstr "Whittingham"
+msgstr "Besorolás"
 
 msgid "Cathcart"
-msgstr "Cathcart"
+msgstr ""
 
 msgid "Elk's Head"
-msgstr "Elk's Head"
+msgstr ""
 
 msgid "Roscomon"
-msgstr "Roscomon"
+msgstr ""
 
+#, fuzzy
 msgid "Sherman"
 msgstr "Sherman"
 
 msgid "Yorksford"
-msgstr "Yorksford"
+msgstr ""
 
+#, fuzzy
 msgid "Blackburn"
-msgstr "Blackburn"
+msgstr "Fekete Sárkány"
 
+#, fuzzy
 msgid "Blacksford"
-msgstr "Blacksford"
+msgstr "Fekete torony"
 
 msgid "Burton"
-msgstr "Burton"
+msgstr ""
 
 msgid "Pig's Eye"
-msgstr "Pig's Eye"
+msgstr ""
 
 msgid "Viper's Nest"
-msgstr "Viper's Nest"
+msgstr ""
 
 msgid "Fenton"
-msgstr "Fenton"
+msgstr ""
 
+#, fuzzy
 msgid "Lankershire"
-msgstr "Lankershire"
+msgstr "Vezetés"
 
 msgid "Lombard"
-msgstr "Lombard"
+msgstr ""
 
 msgid "Timberhill"
-msgstr "Timberhill"
+msgstr ""
 
+#, fuzzy
 msgid "Troy"
-msgstr "Trója"
+msgstr "Troyan"
 
+#, fuzzy
 msgid "Forder Oaks"
-msgstr "Forder Oaks"
+msgstr "Városok mutatása"
 
 msgid "Meramec"
-msgstr "Meramec"
+msgstr ""
 
 msgid "Quick Silver"
-msgstr "Quick Silver"
+msgstr ""
 
 msgid "Westmoor"
-msgstr "Westmoor"
+msgstr ""
 
+#, fuzzy
 msgid "Willow"
-msgstr "Willow"
+msgstr "Sárga"
 
 msgid "Corackston"
-msgstr "Corackston"
+msgstr ""
 
 msgid "Sheltemburg"
-msgstr "Sheltemburg"
+msgstr ""
 
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Nem lehet tobrozni - van már hősöd ebben a városban.."
