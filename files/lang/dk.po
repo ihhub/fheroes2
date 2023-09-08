@@ -194,6 +194,23 @@ msgstr "VIS INTRO"
 msgid "MIN"
 msgstr "MIN"
 
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Kriger"
 
