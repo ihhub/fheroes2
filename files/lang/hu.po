@@ -2036,16 +2036,16 @@ msgid "Cannot recruit - you have too many Heroes."
 msgstr "Nem lehet tobrozni - túl sok hősöd van."
 
 msgid "Cannot afford a Hero"
-msgstr "Nem vásárolható meg a hős"
+msgstr "Nem vásárolható meg a Hős"
 
 msgid "There is no room in the garrison for this army."
-msgstr "Nincs elég hely a helyőrségben a csapat számára."
+msgstr ""
 
 msgid "Fortifications"
 msgstr "Erődítmények"
 
 msgid "Farm"
-msgstr "Szántóföldek"
+msgstr "Tanya"
 
 msgid "Thatched Hut"
 msgstr "Nádkunyhó"
@@ -2054,7 +2054,7 @@ msgid "Archery Range"
 msgstr "Íjászpálya"
 
 msgid "Upg. Archery Range"
-msgstr "Fejl. íjászpálya"
+msgstr "Fejlesztett íjászpálya"
 
 msgid "Blacksmith"
 msgstr "Kovácsműhely"
