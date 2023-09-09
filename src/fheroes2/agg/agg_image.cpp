@@ -1939,12 +1939,15 @@ namespace fheroes2
                     Fill( out, 4 - i, 4 + i, 19, 123, getButtonFillingColor( i == 0 ) );
                 }
 
-                const char * buttonText = gettext_noop( "C\nA\nM\nP\nA\nI\nG\nN" );
+                const char * buttonText;
 
-                if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD ) {
+                if ( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN ) {
+                    buttonText = gettext_noop( "C\nA\nM\nP\nA\nI\nG\nN" );
+                }
+                else if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD ) {
                     buttonText = gettext_noop( "S\nT\nA\nN\nD\nA\nR\nD" );
                 }
-                else if ( id == ICN::BUTTON_HSCORES_VERTICAL_EXIT ) {
+                else {
                     buttonText = gettext_noop( "E\nX\nI\nT" );
                 }
 
