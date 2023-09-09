@@ -109,7 +109,7 @@ namespace
             const int32_t rowCount = fheroes2::Text{ spellName, fheroes2::FontType::smallWhite() }.rows( maxTextWidth );
 
             const fheroes2::Text text( spellName + ( rowCount == 1 ? '\n' : ' ' ) + '[' + std::to_string( spellCost ) + ']',
-                isAvailable ? fheroes2::FontType::smallWhite() : fheroes2::FontType{ fheroes2::FontSize::SMALL, fheroes2::FontColor::GRAY } );
+                                       isAvailable ? fheroes2::FontType::smallWhite() : fheroes2::FontType{ fheroes2::FontSize::SMALL, fheroes2::FontColor::GRAY } );
             text.draw( px + ox - 40, py + oy + 2, maxTextWidth, output );
 
             rect.x += outputOffset.x;
