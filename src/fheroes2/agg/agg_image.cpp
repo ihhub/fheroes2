@@ -161,8 +161,8 @@ namespace
                                                 ICN::BUTTON_VERTICAL_DISMISS,
                                                 ICN::BUTTON_VERTICAL_EXIT,
                                                 ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN,
-                                                ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
                                                 ICN::BUTTON_HSCORES_VERTICAL_EXIT,
+                                                ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
                                                 ICN::DISMISS_HERO_DISABLED_BUTTON,
                                                 ICN::NEW_CAMPAIGN_DISABLED_BUTTON };
 
@@ -1911,8 +1911,8 @@ namespace fheroes2
                 break;
             }
             case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
-            case ICN::BUTTON_HSCORES_VERTICAL_STANDARD:
-            case ICN::BUTTON_HSCORES_VERTICAL_EXIT: {
+            case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
+            case ICN::BUTTON_HSCORES_VERTICAL_STANDARD: {
                 _icnVsSprite[id].resize( 2 );
 
                 const int32_t originalID = ICN::HISCORE;
@@ -1923,6 +1923,9 @@ namespace fheroes2
                 else if ( id == ICN::BUTTON_HSCORES_VERTICAL_EXIT ) {
                     originalICNIndex = 4;
                 }
+                else {
+                    assert( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN );
+                }
 
                 if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( originalID, originalICNIndex );
@@ -1930,13 +1933,13 @@ namespace fheroes2
                     break;
                 }
 
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    const Sprite & originalButton = GetICN( originalID, originalICNIndex + i );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    const Sprite & originalButton = GetICN( originalID, originalICNIndex + static_cast<uint32_t>( i ) );
                     Sprite & out = _icnVsSprite[id][i];
 
                     out = originalButton;
                     // Clean the button
-                    Fill( out, 4 - i, 4 + i, 19, 123, getButtonFillingColor( i == 0 ) );
+                    Fill( out, 4 - static_cast<uint32_t>( i ), 4 + static_cast<uint32_t>( i ), 19, 123, getButtonFillingColor( i == 0 ) );
                 }
 
                 const char * buttonText;
@@ -2560,8 +2563,8 @@ namespace fheroes2
             case ICN::BUTTON_VERTICAL_DISMISS:
             case ICN::BUTTON_VERTICAL_EXIT:
             case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
-            case ICN::BUTTON_HSCORES_VERTICAL_STANDARD:
             case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
+            case ICN::BUTTON_HSCORES_VERTICAL_STANDARD:
                 generateLanguageSpecificImages( id );
                 return true;
             case ICN::PHOENIX:
