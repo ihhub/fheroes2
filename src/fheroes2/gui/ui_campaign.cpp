@@ -41,6 +41,7 @@
 #include "monster.h"
 #include "skill.h"
 #include "spell.h"
+#include "spell_info.h"
 #include "ui_campaign.h"
 #include "ui_dialog.h"
 #include "ui_monster.h"
@@ -103,7 +104,7 @@ namespace fheroes2
         case Campaign::ScenarioBonusData::SPELL: {
             const Spell spell( bonusData._subType );
             const SpellDialogElement spellUI( spell, nullptr );
-            const TextDialogElement spellDescriptionUI( std::make_shared<Text>( spell.GetDescription(), FontType::normalWhite() ) );
+            const TextDialogElement spellDescriptionUI( std::make_shared<Text>( getSpellDescription( spell, nullptr ), FontType::normalWhite() ) );
 
             showMessage( Text( bonusData.getName(), FontType::normalYellow() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
                          { &spellUI, &spellDescriptionUI } );
