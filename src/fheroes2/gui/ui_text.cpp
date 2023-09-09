@@ -306,8 +306,10 @@ namespace
 
             assert( correctedLineWidth <= maxWidth );
             // For button font single letters in a row we add 1 extra pixel to the width to more properly center odd-width letters.
-            const int32_t extraOffsetX
-                = ( size == 1 && ( fontType.size == fheroes2::FontSize::BUTTON_RELEASED || fontType.size == fheroes2::FontSize::BUTTON_PRESSED ) ) ? 1 : 0;
+            const int32_t extraOffsetX = ( size == 1 && ( maxWidth % 2 == 0 )
+                                           && ( fontType.size == fheroes2::FontSize::BUTTON_RELEASED || fontType.size == fheroes2::FontSize::BUTTON_PRESSED ) )
+                                             ? 1
+                                             : 0;
             render( data, size, x + ( maxWidth - correctedLineWidth + extraOffsetX ) / 2, y, output, fontType );
         }
         else {
