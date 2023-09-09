@@ -298,26 +298,34 @@ Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t max
         return results;
     }
 
-    results.reserve( ( maxDistanceFromTile * 2 + 1 ) * ( maxDistanceFromTile * 2 + 1 ) - 1 );
+    const size_t areaSideSize = maxDistanceFromTile * 2 + 1;
+    results.reserve( areaSideSize * areaSideSize - 1 );
 
-    assert( world.w() > 0 );
+    const int32_t worldWidth = world.w();
+    const int32_t worldHeight = world.h();
 
-    const int32_t centerX = tileIndex % world.w();
-    const int32_t centerY = tileIndex / world.w();
+    assert( worldWidth > 0 && worldHeight > 0 );
 
-    for ( int32_t y = -maxDistanceFromTile; y <= maxDistanceFromTile; ++y ) {
-        for ( int32_t x = -maxDistanceFromTile; x <= maxDistanceFromTile; ++x ) {
+    const int32_t centerX = tileIndex % worldWidth;
+    const int32_t centerY = tileIndex / worldWidth;
+
+    // We avoid getting out of map boundaries
+    const int32_t minTileX = std::max( centerX - maxDistanceFromTile, 0 );
+    const int32_t minTileY = std::max( centerY - maxDistanceFromTile, 0 );
+    const int32_t maxTileX = std::min( centerX + maxDistanceFromTile + 1, worldWidth );
+    const int32_t maxTileY = std::min( centerY + maxDistanceFromTile + 1, worldHeight );
+
+    for ( int32_t tileY = minTileY; tileY < maxTileY; ++tileY ) {
+        const int32_t indexOffsetY = tileY * worldWidth;
+        const bool isCenterY = ( tileY == centerY );
+
+        for ( int32_t tileX = minTileX; tileX < maxTileX; ++tileX ) {
             // the central tile is not included
-            if ( x == 0 && y == 0 ) {
+            if ( isCenterY && tileX == centerX ) {
                 continue;
             }
 
-            const int32_t tileX = centerX + x;
-            const int32_t tileY = centerY + y;
-
-            if ( isValidAbsPoint( tileX, tileY ) ) {
-                results.push_back( tileY * world.w() + tileX );
-            }
+            results.push_back( indexOffsetY + tileX );
         }
     }
 
