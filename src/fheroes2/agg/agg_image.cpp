@@ -1939,7 +1939,7 @@ namespace fheroes2
 
                     out = originalButton;
                     // Clean the button
-                    Fill( out, 4 - static_cast<uint32_t>( i ), 4 + static_cast<uint32_t>( i ), 19, 123, getButtonFillingColor( i == 0 ) );
+                    Fill( out, 4 - static_cast<int32_t>( i ), 4 + static_cast<int32_t>( i ), 19, 123, getButtonFillingColor( i == 0 ) );
                 }
 
                 const char * buttonText;
