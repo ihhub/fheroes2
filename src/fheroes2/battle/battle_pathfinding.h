@@ -51,7 +51,8 @@ namespace Battle
     struct BattleNode final
     {
         BattleNodeIndex _from = { -1, -1 };
-        // Cost of moving to this node. May differ from _distance due to penalties (e.g. moat penalty).
+        // Cost of moving to this node. May differ from _distance due to penalties (e.g. moat penalty) and
+        // also in the case of flying units.
         uint32_t _cost = 0;
         // Distance to this node, measured in the number of movements that need to be performed to get here.
         // The reversal of a wide unit is not considered as a movement. For flying units, this distance is
