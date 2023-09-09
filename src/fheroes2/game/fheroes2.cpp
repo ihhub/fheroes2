@@ -60,6 +60,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
+#include "timing.h"
 #include "ui_tool.h"
 #include "zzlib.h"
 
@@ -128,8 +129,20 @@ namespace
         display.render();
 
         LocalEvent & le = LocalEvent::Get();
-        while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() ) {
-            // Do nothing.
+
+        // Display the message for 5 seconds so that the user sees it enough and not immediately closes without reading properly.
+        const fheroes2::Time timer;
+
+        bool closeWindow = false;
+
+        while ( le.HandleEvents() ) {
+            if ( closeWindow && timer.getS() >= 5 ) {
+                break;
+            }
+
+            if ( le.KeyPress() || le.MouseClickLeft() ) {
+                closeWindow = true;
+            }
         }
     }
 
