@@ -60,6 +60,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
+#include "timing.h"
 #include "ui_tool.h"
 #include "zzlib.h"
 
