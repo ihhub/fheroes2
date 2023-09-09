@@ -1155,11 +1155,7 @@ namespace AI
                 }
 
                 const Position pos = Position::GetReachable( currentUnit, cellIdx );
-                if ( pos.GetHead() == nullptr ) {
-                    continue;
-                }
-
-                assert( !currentUnit.isWide() || pos.GetTail() != nullptr );
+                assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
 
                 const uint32_t dist = arena.CalculateMoveDistance( currentUnit, pos );
                 if ( targetInfo.cell == -1 || dist < shortestDist ) {
