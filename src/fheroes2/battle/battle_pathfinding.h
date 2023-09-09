@@ -54,7 +54,8 @@ namespace Battle
         // The cost of moving to this node. May differ from _distance due to penalties (e.g. moat penalty).
         uint32_t _cost = 0;
         // The distance to this node, measured in the number of movements that need to be performed to get here.
-        // The reversal of a wide unit is not considered as a movement.
+        // The reversal of a wide unit is not considered as a movement. Flying units always perform only 1 movement
+        // to reach any node.
         uint32_t _distance = 0;
 
         BattleNode() = default;
@@ -83,8 +84,9 @@ namespace Battle
         uint32_t getCost( const Unit & unit, const Position & position );
 
         // Returns the distance to a given position (i.e. the number of movements that need to be performed to get to
-        // this position, the reversal of a wide unit is not considered as a movement) for a given unit. It's the
-        // caller's responsibility to make sure that this position is reachable before calling this method.
+        // this position, the reversal of a wide unit is not considered as a movement) for a given unit. Flying units
+        // always perform only 1 movement to reach any position. It's the caller's responsibility to make sure that
+        // this position is reachable before calling this method.
         uint32_t getDistance( const Unit & unit, const Position & position );
 
         // Builds and returns the path (or its part) for a given unit to a given position that can be traversed during

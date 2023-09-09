@@ -153,8 +153,9 @@ namespace Battle
         }
 
         // Returns the distance to a given position (i.e. the number of movements that need to be performed to get to
-        // this position, the reversal of a wide unit is not considered as a movement) for a given unit. It's the
-        // caller's responsibility to make sure that this position is reachable before calling this method.
+        // this position, the reversal of a wide unit is not considered as a movement) for a given unit. Flying units
+        // always perform only 1 movement to reach any position. It's the caller's responsibility to make sure that
+        // this position is reachable before calling this method.
         uint32_t CalculateMoveDistance( const Unit & unit, const Position & position )
         {
             return _battlePathfinder.getDistance( unit, position );
