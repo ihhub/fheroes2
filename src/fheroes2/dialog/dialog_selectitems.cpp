@@ -396,12 +396,14 @@ public:
 
 Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int skillId /* = Skill::Secondary::UNKNOWN */ )
 {
-    std::vector<int> skills( static_cast<size_t>( MAXSECONDARYSKILL * 3 ), 0 );
+    std::vector<int> skills;
+    skills.reserve( MAXSECONDARYSKILL * 3 );
 
-    std::iota( skills.begin(), skills.end(), 0 );
-    skills.erase( std::remove_if( skills.begin(), skills.end(),
-                                  [&hero]( const int listIndex ) { return hero.HasSecondarySkill( SelectEnumSecSkill::getSkillFromListIndex( listIndex ) ); } ),
-                  skills.end() );
+    for ( int i = 0; i < MAXSECONDARYSKILL * 3; ++i ) {
+        if ( !hero.HasSecondarySkill( SelectEnumSecSkill::getSkillFromListIndex( i ) ) ) {
+            skills.push_back( i );
+        }
+    }
 
     SelectEnumSecSkill listbox( { 350, fheroes2::Display::instance().height() - 200 } );
 
