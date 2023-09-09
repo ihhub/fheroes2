@@ -1315,7 +1315,8 @@ int Army::GetControl() const
 
 uint32_t Army::getTotalCount() const
 {
-    return std::accumulate( begin(), end(), 0u, []( const uint32_t count, const Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } );
+    return std::accumulate( begin(), end(), static_cast<uint32_t>( 0 ),
+                            []( const uint32_t count, const Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } );
 }
 
 std::string Army::String() const
@@ -1801,7 +1802,8 @@ void Army::ArrangeForBattle( const Monster & monster, const uint32_t monstersCou
         at( i + shift )->Set( monster, i < remainder ? quotient + 1 : quotient );
     }
 
-    assert( std::accumulate( begin(), end(), 0U, []( const uint32_t count, const Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } )
+    assert( std::accumulate( begin(), end(), static_cast<uint32_t>( 0 ),
+                             []( const uint32_t count, const Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } )
             == monstersCount );
 }
 

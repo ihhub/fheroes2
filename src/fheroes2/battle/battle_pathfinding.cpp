@@ -165,7 +165,7 @@ namespace Battle
                         continue;
                     }
 
-                    // Turning back is not a movement
+                    // Reversal is not a movement
                     const uint32_t cost = currentNode._cost + ( newNodeIdx == flippedCurrentNodeIdx ? 0 : movementPenalty );
                     const uint32_t distance = currentNode._distance + ( newNodeIdx == flippedCurrentNodeIdx ? 0 : 1 );
 
@@ -240,6 +240,24 @@ namespace Battle
         const auto & [index, node] = *iter;
 
         return ( index == _pathStart || node._from != BattleNodeIndex{ -1, -1 } ) && ( !isOnCurrentTurn || node._cost <= _speed );
+    }
+
+    uint32_t BattlePathfinder::getCost( const Unit & unit, const Position & position )
+    {
+        assert( position.GetHead() != nullptr );
+
+        reEvaluateIfNeeded( unit );
+
+        const BattleNodeIndex nodeIdx = { position.GetHead()->GetIndex(), position.GetTail() ? position.GetTail()->GetIndex() : -1 };
+
+        const auto iter = _cache.find( nodeIdx );
+        assert( iter != _cache.end() );
+
+        const auto & [index, node] = *iter;
+        // MSVC 2017 fails to properly expand the assert() macro without additional parentheses
+        assert( ( index == _pathStart || node._from != BattleNodeIndex{ -1, -1 } ) );
+
+        return node._cost;
     }
 
     uint32_t BattlePathfinder::getDistance( const Unit & unit, const Position & position )

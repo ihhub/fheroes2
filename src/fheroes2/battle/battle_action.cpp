@@ -1070,19 +1070,8 @@ void Battle::Arena::ApplyActionAutoFinish( const Command & /* cmd */ )
     const int army1Color = GetArmy1Color();
     const int army2Color = GetArmy2Color();
 
-    if ( army1Control & CONTROL_REMOTE ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "remote player: " << Color::String( army1Color ) << ", auto finish disabled" )
-
-        return;
-    }
-    if ( army2Control & CONTROL_REMOTE ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "remote player: " << Color::String( army2Color ) << ", auto finish disabled" )
-
-        return;
-    }
-
     if ( !( army1Control & CONTROL_HUMAN ) && !( army2Control & CONTROL_HUMAN ) ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "no local human-controlled player participates in the battle, auto finish disabled" )
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "no human-controlled player participates in the battle, auto finish disabled" )
 
         return;
     }
