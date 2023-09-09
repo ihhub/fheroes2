@@ -1915,8 +1915,8 @@ namespace fheroes2
             case ICN::BUTTON_HSCORES_VERTICAL_STANDARD: {
                 _icnVsSprite[id].resize( 2 );
 
-                const int32_t originalID = ICN::HISCORE;
-                int32_t originalICNIndex = 0;
+                const int originalID = ICN::HISCORE;
+                uint32_t originalICNIndex = 0;
                 if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD ) {
                     originalICNIndex = 2;
                 }
