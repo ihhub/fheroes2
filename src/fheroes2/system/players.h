@@ -53,9 +53,10 @@ enum
 {
     CONTROL_NONE = 0,
     CONTROL_HUMAN = 1,
-    CONTROL_REMOTE = 2, /*, CONTROL_LOCAL = CONTROL_AI | CONTROL_HUMAN */
+    // CONTROL_REMOTE = 2,
     CONTROL_AI = 4
 };
+
 enum
 {
     FOCUS_UNSEL = 0,
@@ -102,8 +103,6 @@ struct Control
 
     bool isControlAI() const;
     bool isControlHuman() const;
-    bool isControlRemote() const;
-    bool isControlLocal() const;
 };
 
 class Player : public BitModes, public Control
