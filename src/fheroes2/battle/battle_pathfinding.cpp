@@ -78,8 +78,6 @@ namespace Battle
 
         // Flying units can land wherever they can fit
         if ( _isFlying ) {
-            const Position & startingPos = unit.GetPosition();
-
             for ( const Cell & cell : *board ) {
                 const Position pos = Position::GetPosition( unit, cell.GetIndex() );
 
@@ -99,7 +97,7 @@ namespace Battle
 
                 // Wide units can occupy overlapping positions, the distance between which is actually zero,
                 // but since the movement takes place, we will consider the distance equal to 1 in this case
-                const uint32_t distance = std::max( Board::GetDistance( startingPos, pos ), 1U );
+                const uint32_t distance = std::max( Board::GetDistance( unit.GetPosition(), pos ), 1U );
 
                 _cache.try_emplace( newNodeIdx, _pathStart, 1, distance );
             }
