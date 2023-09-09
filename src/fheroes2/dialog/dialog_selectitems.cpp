@@ -24,7 +24,6 @@
 #include "dialog_selectitems.h"
 
 #include <algorithm>
-#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <numeric>
@@ -397,7 +396,7 @@ public:
 Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int skillId /* = Skill::Secondary::UNKNOWN */ )
 {
     std::vector<int> skills;
-    skills.reserve( MAXSECONDARYSKILL * 3 );
+    skills.reserve( static_cast<size_t>( MAXSECONDARYSKILL * 3 ) );
 
     for ( int i = 0; i < MAXSECONDARYSKILL * 3; ++i ) {
         if ( !hero.HasSecondarySkill( SelectEnumSecSkill::getSkillFromListIndex( i ) ) ) {
