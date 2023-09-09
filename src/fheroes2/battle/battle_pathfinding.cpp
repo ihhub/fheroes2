@@ -97,8 +97,9 @@ namespace Battle
                     continue;
                 }
 
-                const uint32_t distance = Board::GetDistance( startingPos, pos );
-                assert( distance > 0 );
+                // Wide units can occupy overlapping positions, the distance between which is actually zero,
+                // but since the movement takes place, we will consider the distance equal to 1 in this case
+                const uint32_t distance = std::max( Board::GetDistance( startingPos, pos ), 1U );
 
                 _cache.try_emplace( newNodeIdx, _pathStart, 1, distance );
             }
