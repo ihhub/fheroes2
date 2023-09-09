@@ -25,6 +25,7 @@
 #define H2BATTLE_CELL_H
 
 #include <cstdint>
+#include <optional>
 #include <utility>
 
 #include "math_base.h"
@@ -110,19 +111,22 @@ namespace Battle
 
         // Returns the position that a given unit would occupy after moving to the cell
         // with a given index (without taking into account the pathfinder's info) or an
-        // empty Position object if this index is unreachable in principle for this unit
+        // empty Position object if this index is unreachable in principle for this unit.
         static Position GetPosition( const Unit & unit, const int32_t dst );
 
         // Returns the reachable position for a given unit, which corresponds to a given
         // index, or an empty Position object if this index is unreachable for this unit
-        // on the current turn
-        static Position GetReachable( const Unit & unit, const int32_t dst );
+        // on the current turn. if 'speed' is set, then this value will be used to check
+        // the position reachability instead of the speed returned by 'unit'.
+        static Position GetReachable( const Unit & unit, const int32_t dst, const std::optional<uint32_t> speed = {} );
 
         fheroes2::Rect GetRect() const;
         Cell * GetHead();
         const Cell * GetHead() const;
         Cell * GetTail();
         const Cell * GetTail() const;
+
+        bool operator<( const Position & other ) const;
     };
 }
 

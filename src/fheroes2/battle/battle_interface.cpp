@@ -6517,8 +6517,8 @@ void Battle::PopupDamageInfo::Redraw() const
 
     Text damageText( str, Font::SMALL );
 
-    const uint32_t minNumKilled = _defender->HowManyWillKilled( _minDamage );
-    const uint32_t maxNumKilled = _defender->HowManyWillKilled( _maxDamage );
+    const uint32_t minNumKilled = _defender->HowManyWillBeKilled( _minDamage );
+    const uint32_t maxNumKilled = _defender->HowManyWillBeKilled( _maxDamage );
 
     assert( minNumKilled <= _defender->GetCount() && maxNumKilled <= _defender->GetCount() );
 
