@@ -309,7 +309,7 @@ Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t max
     const int32_t centerX = tileIndex % worldWidth;
     const int32_t centerY = tileIndex / worldWidth;
 
-    // We avoid getting out of map boundaries
+    // We avoid getting out of map boundaries.
     const int32_t minTileX = std::max( centerX - maxDistanceFromTile, 0 );
     const int32_t minTileY = std::max( centerY - maxDistanceFromTile, 0 );
     const int32_t maxTileX = std::min( centerX + maxDistanceFromTile + 1, worldWidth );
@@ -320,7 +320,7 @@ Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t max
         const bool isCenterY = ( tileY == centerY );
 
         for ( int32_t tileX = minTileX; tileX < maxTileX; ++tileX ) {
-            // the central tile is not included
+            // Skip the center tile.
             if ( isCenterY && tileX == centerX ) {
                 continue;
             }
