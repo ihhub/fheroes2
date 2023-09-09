@@ -24,7 +24,6 @@
 #define H2SPELL_H
 
 #include <cstdint>
-#include <string>
 #include <vector>
 
 #define DEFAULT_SPELL_DURATION 3
@@ -146,7 +145,7 @@ public:
     }
 
     const char * GetName() const;
-    std::string GetDescription() const;
+    const char * GetDescription() const;
 
     // Returns the number of spell points consumed/required by this spell
     uint32_t spellPoints( const HeroBase * hero = nullptr ) const;

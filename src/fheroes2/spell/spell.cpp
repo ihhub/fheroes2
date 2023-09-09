@@ -34,7 +34,6 @@
 #include "race.h"
 #include "rand.h"
 #include "serialize.h"
-#include "tools.h"
 #include "translations.h"
 
 struct spellstats_t
@@ -148,23 +147,9 @@ const char * Spell::GetName() const
     return _( spells[id].name );
 }
 
-std::string Spell::GetDescription() const
+const char * Spell::GetDescription() const
 {
-    std::string replacedDescription = _( spells[id].description );
-    const uint32_t spellExtraValue = spells[id].extraValue;
-    switch ( spellExtraValue ) {
-    case 1:
-        StringReplace( replacedDescription, "%{count}", _( "one" ) );
-        break;
-    case 2:
-        StringReplace( replacedDescription, "%{count}", _( "two" ) );
-        break;
-    default:
-        StringReplace( replacedDescription, "%{count}", spellExtraValue );
-        break;
-    }
-
-    return replacedDescription;
+    return _( spells[id].description );
 }
 
 uint32_t Spell::movePoints() const

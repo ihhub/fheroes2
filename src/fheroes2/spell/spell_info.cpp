@@ -42,6 +42,25 @@
 #include "translations.h"
 #include "world.h"
 
+namespace
+{
+    void updateSpellDescription( const Spell & spell, std::string & description )
+    {
+        const uint32_t spellExtraValue = spell.ExtraValue();
+        switch ( spellExtraValue ) {
+        case 1:
+            StringReplace( description, "%{count}", _( "one" ) );
+            break;
+        case 2:
+            StringReplace( description, "%{count}", _( "two" ) );
+            break;
+        default:
+            StringReplace( description, "%{count}", spellExtraValue );
+            break;
+        }
+    }
+}
+
 namespace fheroes2
 {
     uint32_t getSpellDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
@@ -194,6 +213,7 @@ namespace fheroes2
     std::string getSpellDescription( const Spell & spell, const HeroBase * hero )
     {
         std::string description = spell.GetDescription();
+        updateSpellDescription( spell, description );
 
         if ( hero == nullptr ) {
             return description;
