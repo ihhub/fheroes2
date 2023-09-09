@@ -414,7 +414,7 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
 
     if ( result == Dialog::OK || listbox.ok ) {
         const int skillIndex = listbox.GetCurrent();
-        return { 1 + skillIndex / 3, 1 + ( skillIndex % 3 ) };
+        return { SelectEnumSecSkill::getSkillFromListIndex( skillIndex ), SelectEnumSecSkill::getLevelFromListIndex( skillIndex ) };
     }
 
     return {};
