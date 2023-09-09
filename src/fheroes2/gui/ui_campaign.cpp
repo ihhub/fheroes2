@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "ui_campaign.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
@@ -42,7 +44,6 @@
 #include "skill.h"
 #include "spell.h"
 #include "spell_info.h"
-#include "ui_campaign.h"
 #include "ui_dialog.h"
 #include "ui_monster.h"
 #include "ui_text.h"
