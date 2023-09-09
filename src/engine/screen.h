@@ -319,7 +319,7 @@ namespace fheroes2
         void ( *_cursorUpdater )();
 
         Cursor()
-            : _emulation( true )
+            : _emulation( false )
             , _show( false )
             , _cursorUpdater( nullptr )
         {}

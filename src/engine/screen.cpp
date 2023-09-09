@@ -543,12 +543,7 @@ namespace
         RenderCursor()
             : _cursor( nullptr )
         {
-            _emulation = false;
-
-            const int returnCode = SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
-            if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to set cursor state. The error value: " << returnCode << ", description: " << SDL_GetError() )
-            }
+            // Do nothing.
         }
 
     private:
