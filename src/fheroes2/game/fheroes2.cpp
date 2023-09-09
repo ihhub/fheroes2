@@ -130,7 +130,7 @@ namespace
         LocalEvent & le = LocalEvent::Get();
 
         // Display the message for 5 seconds so that the user sees it enough and not immediately closes without reading properly.
-        fheroes2::Time timer;
+        const fheroes2::Time timer;
 
         bool closeWindow = false;
 
