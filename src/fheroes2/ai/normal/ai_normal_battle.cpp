@@ -553,7 +553,7 @@ namespace AI
                 class UnitRemover
                 {
                 public:
-                    UnitRemover( const Unit & unitToRemove )
+                    explicit UnitRemover( const Unit & unitToRemove )
                     {
                         const int32_t headIdx = unitToRemove.GetHeadIndex();
                         const int32_t tailIdx = unitToRemove.GetTailIndex();
