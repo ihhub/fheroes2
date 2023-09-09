@@ -24,6 +24,7 @@
 #include "dialog_selectitems.h"
 
 #include <algorithm>
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <numeric>
