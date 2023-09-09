@@ -244,7 +244,7 @@ namespace
 
                         if ( temp != data ) {
                             // The '-' symbol has been found. In this case we consider everything after it as a separate word.
-                            offset->x += getLineWidth( data - lineLength, static_cast<int32_t>( temp + lineLength - data ), fontType );
+                            offset->x += getLineWidth( data - lineLength, static_cast<int32_t>( temp + lineLength - data ) + 1, fontType );
                             data = temp;
                             ++data;
                         }
