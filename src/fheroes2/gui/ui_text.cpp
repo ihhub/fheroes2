@@ -283,15 +283,15 @@ namespace
         const uint8_t * dataEnd = data + size;
 
         for ( ; data != dataEnd; ++data ) {
+            if ( isSpaceChar( *data ) ) {
+                offsetX += spaceCharWidth;
+                continue;
+            }
+
             if ( *data == lineSeparator ) {
                 // This should never happen as line cannot contain line separator in the middle.
                 // But due to some limitations in UI we have to deal with it.
                 // The only way is to just ignore it here.
-                continue;
-            }
-
-            if ( isSpaceChar( *data ) ) {
-                offsetX += spaceCharWidth;
                 continue;
             }
 
