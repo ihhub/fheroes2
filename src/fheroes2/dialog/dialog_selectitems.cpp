@@ -390,7 +390,7 @@ public:
 
     void ActionListPressRight( int & index ) override
     {
-        fheroes2::SecondarySkillDialogElement( Skill::Secondary( 1 + index / 3, 1 + ( index % 3 ) ), Heroes() ).showPopup( Dialog::ZERO );
+        fheroes2::SecondarySkillDialogElement( Skill::Secondary( getSkillFromListIndex( index ), getLevelFromListIndex( index ) ), Heroes() ).showPopup( Dialog::ZERO );
     }
 };
 
