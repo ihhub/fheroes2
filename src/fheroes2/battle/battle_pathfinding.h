@@ -51,11 +51,11 @@ namespace Battle
     struct BattleNode final
     {
         BattleNodeIndex _from = { -1, -1 };
-        // The cost of moving to this node. May differ from _distance due to penalties (e.g. moat penalty).
+        // Cost of moving to this node. May differ from _distance due to penalties (e.g. moat penalty).
         uint32_t _cost = 0;
-        // The distance to this node, measured in the number of movements that need to be performed to get here.
-        // The reversal of a wide unit is not considered as a movement. Flying units always perform only 1 movement
-        // to reach any node.
+        // Distance to this node, measured in the number of movements that need to be performed to get here.
+        // The reversal of a wide unit is not considered as a movement. For flying units, this distance is
+        // estimated as the straight line distance to the position corresponding to this node.
         uint32_t _distance = 0;
 
         BattleNode() = default;
@@ -76,28 +76,28 @@ namespace Battle
 
         BattlePathfinder & operator=( const BattlePathfinder & ) = delete;
 
-        // Checks whether a given position is reachable for a given unit, either on the current turn or in principle
+        // Checks whether the given position is reachable for the given unit, either on the current turn or in principle
         bool isPositionReachable( const Unit & unit, const Position & position, const bool isOnCurrentTurn );
 
-        // Returns the cost of moving to a given position for a given unit. It's the caller's responsibility to make
+        // Returns the cost of moving to the given position for the given unit. It's the caller's responsibility to make
         // sure that this position is reachable before calling this method.
         uint32_t getCost( const Unit & unit, const Position & position );
 
-        // Returns the distance to a given position (i.e. the number of movements that need to be performed to get to
-        // this position, the reversal of a wide unit is not considered as a movement) for a given unit. Flying units
-        // always perform only 1 movement to reach any position. It's the caller's responsibility to make sure that
-        // this position is reachable before calling this method.
+        // Returns the distance to the given position (i.e. the number of movements that need to be performed to get to
+        // this position, the reversal of a wide unit is not considered as a movement) for the given unit. For flying
+        // units, this distance is estimated as the straight line distance to the given position. It's the caller's
+        // responsibility to make sure that this position is reachable before calling this method.
         uint32_t getDistance( const Unit & unit, const Position & position );
 
-        // Builds and returns the path (or its part) for a given unit to a given position that can be traversed during
+        // Builds and returns the path (or its part) for the given unit to the given position that can be traversed during
         // the current turn. If this position is unreachable by this unit, then an empty path is returned.
         Indexes buildPath( const Unit & unit, const Position & position );
 
-        // Returns the indexes of all cells that can be occupied by a given unit's head on the current turn
+        // Returns the indexes of all cells that can be occupied by the given unit's head on the current turn
         Indexes getAllAvailableMoves( const Unit & unit );
 
     private:
-        // Rebuilds the graph of available positions for a given unit if necessary (if it is not already cached)
+        // Rebuilds the graph of available positions for the given unit if necessary (if it is not already cached)
         void reEvaluateIfNeeded( const Unit & unit );
 
         std::unordered_map<BattleNodeIndex, BattleNode, BattleNodeIndexHash> _cache;

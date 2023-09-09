@@ -78,6 +78,8 @@ namespace Battle
 
         // Flying units can land wherever they can fit
         if ( _isFlying ) {
+            const Position & startingPos = unit.GetPosition();
+
             for ( const Cell & cell : *board ) {
                 const Position pos = Position::GetPosition( unit, cell.GetIndex() );
 
@@ -95,7 +97,10 @@ namespace Battle
                     continue;
                 }
 
-                _cache.try_emplace( newNodeIdx, _pathStart, 1, 1 );
+                const uint32_t distance = Board::GetDistance( startingPos, pos );
+                assert( distance > 0 );
+
+                _cache.try_emplace( newNodeIdx, _pathStart, 1, distance );
             }
 
             return;
