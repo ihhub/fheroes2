@@ -44,6 +44,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -104,9 +105,11 @@ namespace
             fheroes2::Rect rect( px + ox - ( icon.width() + icon.width() % 2 ) / 2, py + oy - icon.height() - vertOffset + 2, icon.width(), icon.height() + 10 );
             fheroes2::Blit( icon, output, rect.x, rect.y );
 
-            TextBox box( spellName, Font::SMALL, 80 );
-            box.Set( spellName + ( box.row() == 1 ? '\n' : ' ' ) + '[' + std::to_string( spellCost ) + ']', isAvailable ? Font::SMALL : Font::GRAY_SMALL, 80 );
-            box.Blit( px + ox - 40, py + oy, output );
+            const int32_t maxTextWidth = 80;
+            const int32_t rowCount = fheroes2::Text{ spellName, fheroes2::FontType::smallWhite() }.rows( maxTextWidth );
+
+            const fheroes2::Text text( spellName + ( rowCount == 1 ? '\n' : ' ' ) + '[' + std::to_string( spellCost ) + ']', fheroes2::FontType::smallWhite() );
+            text.draw( px + ox - 40, py + oy + 2, maxTextWidth, output );
 
             rect.x += outputOffset.x;
             rect.y += outputOffset.y;
