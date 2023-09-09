@@ -188,27 +188,55 @@ void Battle::Board::SetEnemyQuality( const Unit & unit ) const
     }
 }
 
-uint32_t Battle::Board::GetDistance( int32_t index1, int32_t index2 )
+uint32_t Battle::Board::GetDistance( const int32_t index1, const int32_t index2 )
 {
-    if ( isValidIndex( index1 ) && isValidIndex( index2 ) ) {
-        const int32_t x1 = index1 % ARENAW;
-        const int32_t y1 = index1 / ARENAW;
+    if ( !isValidIndex( index1 ) || !isValidIndex( index2 ) ) {
+        return 0;
+    }
 
-        const int32_t x2 = index2 % ARENAW;
-        const int32_t y2 = index2 / ARENAW;
+    const int32_t x1 = index1 % ARENAW;
+    const int32_t y1 = index1 / ARENAW;
 
-        const int32_t du = y2 - y1;
-        const int32_t dv = ( x2 + y2 / 2 ) - ( x1 + y1 / 2 );
+    const int32_t x2 = index2 % ARENAW;
+    const int32_t y2 = index2 / ARENAW;
 
-        if ( ( du >= 0 && dv >= 0 ) || ( du < 0 && dv < 0 ) ) {
-            return std::max( std::abs( du ), std::abs( dv ) );
-        }
-        else {
-            return std::abs( du ) + std::abs( dv );
+    const int32_t du = y2 - y1;
+    const int32_t dv = ( x2 + y2 / 2 ) - ( x1 + y1 / 2 );
+
+    if ( ( du >= 0 && dv >= 0 ) || ( du < 0 && dv < 0 ) ) {
+        return std::max( std::abs( du ), std::abs( dv ) );
+    }
+
+    return std::abs( du ) + std::abs( dv );
+}
+
+uint32_t Battle::Board::GetDistance( const Position & pos1, const Position & pos2 )
+{
+    if ( pos1.GetHead() == nullptr || pos2.GetHead() == nullptr ) {
+        return 0;
+    }
+
+    const int32_t head1Idx = pos1.GetHead()->GetIndex();
+    const int32_t tail1Idx = pos1.GetTail() ? pos1.GetTail()->GetIndex() : -1;
+
+    const int32_t head2Idx = pos2.GetHead()->GetIndex();
+    const int32_t tail2Idx = pos2.GetTail() ? pos2.GetTail()->GetIndex() : -1;
+
+    uint32_t distance = Board::GetDistance( head1Idx, head2Idx );
+
+    if ( tail2Idx != -1 ) {
+        distance = std::min( distance, Board::GetDistance( head1Idx, tail2Idx ) );
+    }
+
+    if ( tail1Idx != -1 ) {
+        distance = std::min( distance, Board::GetDistance( tail1Idx, head2Idx ) );
+
+        if ( tail2Idx != -1 ) {
+            distance = std::min( distance, Board::GetDistance( tail1Idx, tail2Idx ) );
         }
     }
 
-    return 0;
+    return distance;
 }
 
 std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startUnit, const std::vector<Battle::Unit *> & blackList )

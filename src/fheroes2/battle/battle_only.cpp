@@ -226,7 +226,7 @@ bool Battle::Only::ChangeSettings()
                 if ( hero2 )
                     hero2->GetSecondarySkills().FillMax( Skill::Secondary() );
                 UpdateHero2( cur_pt );
-                if ( player2.isControlLocal() && nullptr == cinfo2 ) {
+                if ( nullptr == cinfo2 ) {
                     cinfo2.reset( new ControlInfo( { cur_pt.x + 500, cur_pt.y + 425 }, player2.GetControl() ) );
                 }
             }
