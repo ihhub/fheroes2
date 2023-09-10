@@ -7329,7 +7329,7 @@ msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
-"%{skill} даёт %{count} процентов возможности выучить заклинание 1-го , 2-го "
+"%{skill} даёт %{count} процентов возможности выучить заклинание 1-го, 2-го "
 "или 3-го круга, применённое в бою противником."
 
 msgid ""
