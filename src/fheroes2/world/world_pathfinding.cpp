@@ -25,7 +25,6 @@
 #include <cmath>
 #include <cstdlib>
 #include <memory>
-#include <numeric>
 #include <set>
 #include <tuple>
 #include <type_traits>
@@ -340,6 +339,26 @@ namespace
 
         return true;
     }
+
+    uint32_t subtractMovePoints( const uint32_t movePoints, const uint32_t subtractedMovePoints, const uint32_t maxMovePoints )
+    {
+        // We do not perform pathfinding for a real hero on the map, this is no-op
+        if ( maxMovePoints == 0 ) {
+            return 0;
+        }
+
+        // This movement takes place at the beginning of a new turn: start with max movement points,
+        // don't carry leftovers from the previous turn
+        if ( movePoints < subtractedMovePoints ) {
+            assert( maxMovePoints >= subtractedMovePoints );
+
+            return maxMovePoints - subtractedMovePoints;
+        }
+
+        // This movement takes place on the same turn
+        return movePoints - subtractedMovePoints;
+    }
+
 }
 
 uint32_t WorldPathfinder::getDistance( int targetIndex ) const
@@ -384,25 +403,6 @@ uint32_t WorldPathfinder::getMovementPenalty( const int from, const int to, cons
     }
 
     return penalty;
-}
-
-uint32_t WorldPathfinder::subtractMovePoints( const uint32_t movePoints, const uint32_t subtractedMovePoints, const uint32_t maxMovePoints ) const
-{
-    // We do not perform pathfinding for a real hero on the map, this is no-op
-    if ( maxMovePoints == 0 ) {
-        return 0;
-    }
-
-    // This movement takes place at the beginning of a new turn: start with max movement points,
-    // don't carry leftovers from the previous turn
-    if ( movePoints < subtractedMovePoints ) {
-        assert( maxMovePoints >= subtractedMovePoints );
-
-        return maxMovePoints - subtractedMovePoints;
-    }
-
-    // This movement takes place on the same turn
-    return movePoints - subtractedMovePoints;
 }
 
 void WorldPathfinder::reset()

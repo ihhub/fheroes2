@@ -98,9 +98,6 @@ protected:
     // overridden by a derived class.
     virtual uint32_t getMovementPenalty( const int from, const int to, const int direction ) const;
 
-    // Subtracts movement points taking the transition between turns into account
-    uint32_t subtractMovePoints( const uint32_t movePoints, const uint32_t subtractedMovePoints, const uint32_t maxMovePoints ) const;
-
     std::vector<WorldNode> _cache;
     std::vector<int> _mapOffset;
 
@@ -137,7 +134,7 @@ private:
 
     // Returns the maximum number of movement points. The logic of this class does not require separate accounting of
     // the maximum number of movement points on land and on water.
-    virtual uint32_t getMaxMovePoints( const bool onWater ) const;
+    uint32_t getMaxMovePoints( const bool onWater ) const override;
 
     // Hero properties should be cached here because they can change even if the hero's position does not change,
     // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
