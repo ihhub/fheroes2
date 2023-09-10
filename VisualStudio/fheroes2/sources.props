@@ -244,7 +244,6 @@
     <ClInclude Include="src\engine\localevent.h" />
     <ClInclude Include="src\engine\math_base.h" />
     <ClInclude Include="src\engine\pal.h" />
-    <ClInclude Include="src\engine\pathfinding.h" />
     <ClInclude Include="src\engine\rand.h" />
     <ClInclude Include="src\engine\screen.h" />
     <ClInclude Include="src\engine\serialize.h" />
