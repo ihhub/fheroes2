@@ -358,7 +358,6 @@ namespace
         // This movement takes place on the same turn
         return movePoints - subtractedMovePoints;
     }
-
 }
 
 uint32_t WorldPathfinder::getDistance( int targetIndex ) const
