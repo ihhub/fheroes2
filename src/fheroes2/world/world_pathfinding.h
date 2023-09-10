@@ -38,11 +38,11 @@ namespace Route
 
 struct WorldNode final
 {
-    int _from = -1;
-    uint32_t _cost = 0;
-    MP2::MapObjectType _objectID = MP2::OBJ_NONE;
+    int _from{ -1 };
+    uint32_t _cost{ 0 };
+    MP2::MapObjectType _objectID{ MP2::OBJ_NONE };
     // The number of movement points remaining for the hero after moving to this node
-    uint32_t _remainingMovePoints = 0;
+    uint32_t _remainingMovePoints{ 0 };
 
     WorldNode() = default;
     WorldNode( const int node, const uint32_t cost, const MP2::MapObjectType object, const uint32_t remainingMovePoints )
@@ -104,10 +104,10 @@ protected:
     // Hero properties should be cached here because they can change even if the hero's position does not change,
     // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
     // pathfinder's cache
-    int _pathStart = -1;
-    int _color = Color::NONE;
-    uint32_t _remainingMovePoints = 0;
-    uint8_t _pathfindingSkill = Skill::Level::EXPERT;
+    int _pathStart{ -1 };
+    int _color{ Color::NONE };
+    uint32_t _remainingMovePoints{ 0 };
+    uint8_t _pathfindingSkill{ Skill::Level::EXPERT };
 };
 
 class PlayerWorldPathfinder final : public WorldPathfinder
@@ -140,7 +140,7 @@ private:
     // Hero properties should be cached here because they can change even if the hero's position does not change,
     // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
     // pathfinder's cache
-    uint32_t _maxMovePoints = 0;
+    uint32_t _maxMovePoints{ 0 };
 };
 
 class AIWorldPathfinder final : public WorldPathfinder
@@ -226,8 +226,8 @@ private:
     // Hero properties should be cached here because they can change even if the hero's position does not change,
     // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
     // pathfinder's cache
-    uint32_t _maxMovePointsOnLand = 0;
-    uint32_t _maxMovePointsOnWater = 0;
+    uint32_t _maxMovePointsOnLand{ 0 };
+    uint32_t _maxMovePointsOnWater{ 0 };
     double _armyStrength{ -1 };
     bool _isArtifactsBagFull{ false };
     bool _isSummonBoatSpellAvailable{ false };

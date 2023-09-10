@@ -593,6 +593,8 @@ void AIWorldPathfinder::reset()
 {
     WorldPathfinder::reset();
 
+    _maxMovePointsOnLand = 0;
+    _maxMovePointsOnWater = 0;
     _armyStrength = -1;
     _isArtifactsBagFull = false;
     _isSummonBoatSpellAvailable = false;
