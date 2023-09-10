@@ -132,8 +132,9 @@ private:
     // Follows regular passability rules (for the human player)
     void processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx ) override;
 
-    // Returns the maximum number of movement points. The logic of this class does not require separate accounting of
-    // the maximum number of movement points on land and on water.
+    // Returns the maximum number of movement points. This class is not intended for planning paths passing both on
+    // land and on water at the same time, so the maximum number of movement points corresponding to the type of
+    // surface on which the hero is currently located is used.
     uint32_t getMaxMovePoints( const bool onWater ) const override;
 
     // Hero properties should be cached here because they can change even if the hero's position does not change,
