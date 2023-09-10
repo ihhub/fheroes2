@@ -305,8 +305,12 @@ namespace
             const int32_t correctedLineWidth = getTruncatedLineWidth( data, size, fontType );
 
             assert( correctedLineWidth <= maxWidth );
-
-            render( data, size, x + ( maxWidth - correctedLineWidth ) / 2, y, output, fontType );
+            // For button font single letters in a row we add 1 extra pixel to the width to more properly center odd-width letters.
+            const int32_t extraOffsetX = ( size == 1 && ( maxWidth % 2 == 0 )
+                                           && ( fontType.size == fheroes2::FontSize::BUTTON_RELEASED || fontType.size == fheroes2::FontSize::BUTTON_PRESSED ) )
+                                             ? 1
+                                             : 0;
+            render( data, size, x + ( maxWidth - correctedLineWidth + extraOffsetX ) / 2, y, output, fontType );
         }
         else {
             render( data, size, x, y, output, fontType );

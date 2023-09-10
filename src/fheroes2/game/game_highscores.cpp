@@ -352,10 +352,8 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
     // Render first animation frame.
     redrawHighScoreAnimation( top, monsterAnimationFrameId, isCampaign );
 
-    // button that goes to standard: releasedIndex == 2, pressedIndex == 3
-    // button that goes to campaign: releasedIndex == 0, pressedIndex == 1
-    fheroes2::Button buttonOtherHighScore( top.x + 8, top.y + 315, ICN::HISCORE, isCampaign ? 2 : 0, isCampaign ? 3 : 1 );
-    fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315, ICN::HISCORE, 4, 5 );
+    fheroes2::Button buttonOtherHighScore( top.x + 8, top.y + 315, isCampaign ? ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN : ICN::BUTTON_HSCORES_VERTICAL_STANDARD, 0, 1 );
+    fheroes2::Button buttonExit( top.x + back.width() - 36, top.y + 315, ICN::BUTTON_HSCORES_VERTICAL_EXIT, 0, 1 );
 
     buttonOtherHighScore.draw();
     buttonExit.draw();
