@@ -37,6 +37,68 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2023-09-11" version="v1.0.8">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.8</url>
+      <description>
+        <p>Changes in v1.0.8 (11 September 2023):</p>
+        <ul>
+          <li>fix spell rendering issues when words are divided in the middle</li>
+          <li>fix ? symbols appearing in single-line texts</li>
+          <li>generate vertical high scores buttons</li>
+          <li>display missing resource dialog not less than 5 seconds</li>
+          <li>show only skills that the hero does not already have in battle only skill selection list</li>
+          <li>show highscores after multiplayer game</li>
+          <li>improve the logic of kiting enemies with archers</li>
+          <li>update Vietnamese translation</li>
+          <li>update Hungarian Translation</li>
+          <li>adjust the description of the Eagle Eye skill</li>
+          <li>fix an empty gap in between lines in buttons font</li>
+          <li>update Russian translation</li>
+          <li>translate disabled buttons and reset them when changing languages</li>
+          <li>make vertical buttons translatable</li>
+          <li>implement terrain transitions in Editor</li>
+          <li>rework the Save/Load game dialog to allow variable dialog size and support Evil interface</li>
+          <li>change Army Order to Turn Order</li>
+          <li>Add Czech to original resource exception</li>
+          <li>do not close File options menu on cancelling load game dialog</li>
+          <li>fix foreign pixels on snow battlefield objects</li>
+          <li>do not try to scout the area if the hero is in jail and gets an artifact assigned using the map editor</li>
+          <li>update Slovak translation</li>
+          <li>cancel Hut of Magi reveal area animation when a player clicks any button</li>
+          <li>show the "You have been eliminated from the game" message in the multiplayer game</li>
+          <li>add small skill icons for Xanadu visit dialog</li>
+          <li>fix invalid logic for some objects on water</li>
+          <li>update Polish translation</li>
+          <li>speed up map, translation and save files loading</li>
+          <li>fix missing hero and town name in dialogs for non-English languages</li>
+          <li>fix Load/Save file title position and color</li>
+          <li>change Shipyard construction message</li>
+          <li>expand clickable area for settings in the Main Menu</li>
+          <li>shift text in Surrender window</li>
+          <li>show ... in Load/Save File dialog for long names</li>
+          <li>fix monster name position in monster info dialog</li>
+          <li>speed up rendering for specific buttons</li>
+          <li>fix multiple rendering issue in Kingdom Overview dialog</li>
+          <li>adjust text for Quick Info dialogs</li>
+          <li>improve fading animation using Redmean color distance calculation</li>
+          <li>limit Dimension Door spell usage for AI heroes on lower difficulties</li>
+          <li>center text in hero battle info window</li>
+          <li>add A and O with diaereses to CP1252 button font</li>
+          <li>fix size of the button letter Æ</li>
+          <li>improve Mage guild status message for learnt spells</li>
+          <li>add "New Month!" title for new month</li>
+          <li>add "Victory!" title to victory dialog</li>
+          <li>update Danish translation</li>
+          <li>update Ukrainian translation</li>
+          <li>allow early exit from puzzle map during reveal animation</li>
+          <li>remember map filter selection until you quit the game</li>
+          <li>improve the distance estimation when an AI-controlled hero passes through objects on the map</li>
+          <li>update Swedish translation</li>
+          <li>AI heroes should decline battles if passing by</li>
+          <li>implement basic terrain draw in Map Editor</li>
+        </ul>
+      </description>
+    </release>
     <release date="2023-08-15" version="v1.0.7">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.7</url>
       <description>

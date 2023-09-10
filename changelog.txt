@@ -1,3 +1,59 @@
+version 1.0.8 (11 September 2023)
+- fix spell rendering issues when words are divided in the middle
+- fix ? symbols appearing in single-line texts
+- generate vertical high scores buttons
+- display missing resource dialog not less than 5 seconds
+- show only skills that the hero does not already have in battle only skill selection list
+- show highscores after multiplayer game
+- improve the logic of kiting enemies with archers
+- update Vietnamese translation
+- update Hungarian Translation
+- adjust the description of the Eagle Eye skill
+- fix an empty gap in between lines in buttons font
+- update Russian translation
+- translate disabled buttons and reset them when changing languages
+- make vertical buttons translatable
+- implement terrain transitions in Editor
+- rework the Save/Load game dialog to allow variable dialog size and support Evil interface
+- change Army Order to Turn Order
+- Add Czech to original resource exception
+- do not close File options menu on cancelling load game dialog
+- fix foreign pixels on snow battlefield objects
+- do not try to scout the area if the hero is in jail and gets an artifact assigned using the map editor
+- update Slovak translation
+- cancel Hut of Magi reveal area animation when a player clicks any button
+- show the "You have been eliminated from the game" message in the multiplayer game
+- add small skill icons for Xanadu visit dialog
+- fix invalid logic for some objects on water
+- update Polish translation
+- speed up map, translation and save files loading
+- fix missing hero and town name in dialogs for non-English languages
+- fix Load/Save file title position and color
+- change Shipyard construction message
+- expand clickable area for settings in the Main Menu
+- shift text in Surrender window
+- show ... in Load/Save File dialog for long names
+- fix monster name position in monster info dialog
+- speed up rendering for specific buttons
+- fix multiple rendering issue in Kingdom Overview dialog
+- adjust text for Quick Info dialogs
+- improve fading animation using Redmean color distance calculation
+- limit Dimension Door spell usage for AI heroes on lower difficulties
+- center text in hero battle info window
+- add A and O with diaereses to CP1252 button font
+- fix size of the button letter Æ
+- improve Mage guild status message for learnt spells
+- add "New Month!" title for new month
+- add "Victory!" title to victory dialog
+- update Danish translation
+- update Ukrainian translation
+- allow early exit from puzzle map during reveal animation
+- remember map filter selection until you quit the game
+- improve the distance estimation when an AI-controlled hero passes through objects on the map
+- update Swedish translation
+- AI heroes should decline battles if passing by
+- implement basic terrain draw in Map Editor
+
 version 1.0.7 (15 August 2023)
 - properly update uncovered fog with all hero actions
 - fix an issue when AI hero "jumps back" during the fog discovery
