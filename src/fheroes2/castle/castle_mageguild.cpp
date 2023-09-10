@@ -43,7 +43,6 @@
 #include "settings.h"
 #include "spell.h"
 #include "spell_storage.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -127,8 +126,8 @@ void RowSpells::Redraw( fheroes2::Image & output )
             const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
             fheroes2::Blit( icon, output, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
 
-            TextBox text( spell.GetName(), Font::SMALL, 78 );
-            text.Blit( dst.x + 18, dst.y + 55 );
+            const fheroes2::Text text( spell.GetName(), fheroes2::FontType::smallWhite() );
+            text.draw( dst.x + 18, dst.y + 57, 78, fheroes2::Display::instance() );
         }
     }
 }

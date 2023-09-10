@@ -35,6 +35,8 @@ namespace
 {
     const uint8_t lineSeparator = '\n';
 
+    const uint8_t hyphenChar{ '-' };
+
     const uint8_t invalidChar = '?';
 
     class CharValidator
@@ -232,7 +234,23 @@ namespace
 
                     if ( lineLength == lastWordLength ) {
                         // This is the only word in the line.
-                        offset->x += lineWidth;
+                        // Search for '-' symbol to avoid truncating the word in the middle.
+                        const uint8_t * hyphenPos = data - lineLength;
+                        for ( ; hyphenPos != data; ++hyphenPos ) {
+                            if ( *hyphenPos == hyphenChar ) {
+                                break;
+                            }
+                        }
+
+                        if ( hyphenPos != data ) {
+                            // The '-' symbol has been found. In this case we consider everything after it as a separate word.
+                            offset->x += getLineWidth( data - lineLength, static_cast<int32_t>( hyphenPos + lineLength - data ) + 1, fontType );
+                            data = hyphenPos;
+                            ++data;
+                        }
+                        else {
+                            offset->x += lineWidth;
+                        }
                     }
                     else {
                         if ( isSpace ) {
@@ -393,7 +411,23 @@ namespace
                     const uint8_t * line = data - lineLength;
                     if ( lineLength == lastWordLength ) {
                         // This is the only word in the line.
-                        renderLine( line, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
+                        // Search for '-' symbol to avoid truncating the word in the middle.
+                        const uint8_t * hyphenPos = data - lineLength;
+                        for ( ; hyphenPos != data; ++hyphenPos ) {
+                            if ( *hyphenPos == hyphenChar ) {
+                                break;
+                            }
+                        }
+
+                        if ( hyphenPos != data ) {
+                            renderLine( line, static_cast<int32_t>( hyphenPos + lineLength - data ) + 1, x + offset->x, yPos + offset->y, maxWidth, output, fontType,
+                                        align );
+                            data = hyphenPos;
+                            ++data;
+                        }
+                        else {
+                            renderLine( line, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
+                        }
                     }
                     else {
                         if ( isSpace ) {
