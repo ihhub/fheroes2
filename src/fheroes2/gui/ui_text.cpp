@@ -288,6 +288,14 @@ namespace
                 continue;
             }
 
+            // TODO: remove this hack or expand it to cover more cases.
+            if ( *data == lineSeparator ) {
+                // This should never happen as line cannot contain line separator in the middle.
+                // But due to some limitations in UI we have to deal with it.
+                // The only way is to just ignore it here.
+                continue;
+            }
+
             const fheroes2::Sprite & charSprite = fheroes2::AGG::getChar( validator.isValid( *data ) ? *data : invalidChar, fontType );
             assert( !charSprite.empty() );
 
