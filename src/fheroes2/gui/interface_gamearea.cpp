@@ -957,14 +957,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         return;
     }
 
-    const int32_t index = GetValidTileIdFromPoint( mousePosition );
-
-    // change cursor if need
-    if ( ( updateCursor || index != _prevIndexPos ) && isCursorOverGamearea ) {
-        Cursor::Get().SetThemes( Interface::AdventureMap::GetCursorTileIndex( index ) );
-        _prevIndexPos = index;
-        updateCursor = false;
-    }
+    int32_t index = GetValidTileIdFromPoint( mousePosition );
 
     // out of range
     if ( !isCursorOverGamearea || !Maps::isValidAbsIndex( index ) ) {
@@ -987,6 +980,16 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     }
     else if ( le.MousePressRight( tileROI ) ) {
         _interface.mouseCursorAreaPressRight( index );
+    }
+
+    // The cursor may have moved after mouse click events.
+    index = GetValidTileIdFromPoint( le.GetMouseCursor() );
+
+    // Change the cursor image if needed.
+    if ( ( updateCursor || index != _prevIndexPos ) ) {
+        Cursor::Get().SetThemes( Interface::AdventureMap::GetCursorTileIndex( index ) );
+        _prevIndexPos = index;
+        updateCursor = false;
     }
 }
 
