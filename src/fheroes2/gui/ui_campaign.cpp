@@ -202,7 +202,7 @@ namespace fheroes2
         case Campaign::CampaignAwardData::TYPE_GET_SPELL: {
             const Spell spell( awardData._subType );
             const SpellDialogElement spellUI( spell, nullptr );
-            const TextDialogElement spellDescriptionUI( std::make_shared<Text>( spell.GetDescription(), FontType::normalWhite() ) );
+            const TextDialogElement spellDescriptionUI( std::make_shared<Text>( getSpellDescription( spell, nullptr ), FontType::normalWhite() ) );
 
             showMessage( Text( awardData.getName(), FontType::normalYellow() ), Text( awardData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
                          { &spellUI, &spellDescriptionUI } );
