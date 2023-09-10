@@ -951,7 +951,6 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
     int heroAnimationSpriteId = 0;
 
     bool isCursorOverButtons = false;
-    bool isCursorOverGamearea = false;
 
     const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_HERO_DELAY, Game::MAPS_DELAY };
 
@@ -1107,7 +1106,14 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         const bool isHiddenInterface = conf.isHideInterfaceEnabled();
         const bool prevIsCursorOverButtons = isCursorOverButtons;
         isCursorOverButtons = false;
-        isCursorOverGamearea = false;
+
+        // Process Game Area and Radar events before updating the cursor because its position can change during these events.
+        if ( !isMovingHero && !_gameArea.NeedScroll() ) {
+            if ( !_radar.isDragRadar() )
+                _gameArea.QueueEventProcessing( le.MouseCursor( _gameArea.GetROI() ) );
+            else if ( !le.MousePressLeft() )
+                _radar.QueueEventProcessing();
+        }
 
         if ( isMovingHero ) {
             // hero is moving, set the appropriate cursor
@@ -1150,23 +1156,11 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
             res = controlPanel.QueueEventProcessing();
         }
-        // cursor is over the game area
-        else if ( le.MouseCursor( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
-            isCursorOverGamearea = true;
-        }
-        // cursor is somewhere else
-        else if ( !_gameArea.NeedScroll() ) {
+        // The cursor is not over the Game Area.
+        else if ( !le.MouseCursor( _gameArea.GetROI() ) && !_gameArea.NeedScroll() ) {
             cursor.SetThemes( Cursor::POINTER );
 
             _gameArea.ResetCursorPosition();
-        }
-
-        // gamearea
-        if ( !_gameArea.NeedScroll() && !isMovingHero ) {
-            if ( !_radar.isDragRadar() )
-                _gameArea.QueueEventProcessing( isCursorOverGamearea );
-            else if ( !le.MousePressLeft() )
-                _radar.QueueEventProcessing();
         }
 
         if ( prevIsCursorOverButtons && !isCursorOverButtons ) {
@@ -1370,7 +1364,12 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
         }
         else {
             Game::OpenHeroesDialog( *otherHero, true, true );
-            Cursor::Get().SetThemes( Cursor::HEROES );
+
+            // The cursor may be moved in opened dialog, so we update it according to its new position over the game area.
+            const LocalEvent & le = LocalEvent::Get();
+            if ( le.MouseCursor( _gameArea.GetROI() ) ) {
+                Cursor::Get().SetThemes( GetCursorTileIndex( _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) );
+            }
         }
 
         break;
@@ -1395,7 +1394,12 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
         }
         else {
             Game::OpenCastleDialog( *otherCastle );
-            Cursor::Get().SetThemes( Cursor::CASTLE );
+
+            // The cursor may be moved in opened dialog, so we update it according to its new position over the game area.
+            const LocalEvent & le = LocalEvent::Get();
+            if ( le.MouseCursor( _gameArea.GetROI() ) ) {
+                Cursor::Get().SetThemes( GetCursorTileIndex( _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) );
+            }
         }
 
         break;
