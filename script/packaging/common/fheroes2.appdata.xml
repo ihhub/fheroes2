@@ -42,6 +42,7 @@
       <description>
         <p>Changes in v1.0.8 (11 September 2023):</p>
         <ul>
+          <li>fix number placeholders not being replaced in campaign spell bonus texts</li>
           <li>fix spell rendering issues when words are divided in the middle</li>
           <li>fix ? symbols appearing in single-line texts</li>
           <li>generate vertical high scores buttons</li>

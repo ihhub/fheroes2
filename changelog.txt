@@ -1,4 +1,5 @@
 version 1.0.8 (11 September 2023)
+- fix number placeholders not being replaced in campaign spell bonus texts
 - fix spell rendering issues when words are divided in the middle
 - fix ? symbols appearing in single-line texts
 - generate vertical high scores buttons
