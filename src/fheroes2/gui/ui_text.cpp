@@ -35,6 +35,8 @@ namespace
 {
     const uint8_t lineSeparator = '\n';
 
+    const uint8_t hyphenChar{ '-' };
+
     const uint8_t invalidChar = '?';
 
     class CharValidator
@@ -232,7 +234,23 @@ namespace
 
                     if ( lineLength == lastWordLength ) {
                         // This is the only word in the line.
-                        offset->x += lineWidth;
+                        // Search for '-' symbol to avoid truncating the word in the middle.
+                        const uint8_t * hyphenPos = data - lineLength;
+                        for ( ; hyphenPos != data; ++hyphenPos ) {
+                            if ( *hyphenPos == hyphenChar ) {
+                                break;
+                            }
+                        }
+
+                        if ( hyphenPos != data ) {
+                            // The '-' symbol has been found. In this case we consider everything after it as a separate word.
+                            offset->x += getLineWidth( data - lineLength, static_cast<int32_t>( hyphenPos + lineLength - data ) + 1, fontType );
+                            data = hyphenPos;
+                            ++data;
+                        }
+                        else {
+                            offset->x += lineWidth;
+                        }
                     }
                     else {
                         if ( isSpace ) {
@@ -288,6 +306,14 @@ namespace
                 continue;
             }
 
+            // TODO: remove this hack or expand it to cover more cases.
+            if ( *data == lineSeparator ) {
+                // This should never happen as line cannot contain line separator in the middle.
+                // But due to some limitations in UI we have to deal with it.
+                // The only way is to just ignore it here.
+                continue;
+            }
+
             const fheroes2::Sprite & charSprite = fheroes2::AGG::getChar( validator.isValid( *data ) ? *data : invalidChar, fontType );
             assert( !charSprite.empty() );
 
@@ -305,8 +331,12 @@ namespace
             const int32_t correctedLineWidth = getTruncatedLineWidth( data, size, fontType );
 
             assert( correctedLineWidth <= maxWidth );
-
-            render( data, size, x + ( maxWidth - correctedLineWidth ) / 2, y, output, fontType );
+            // For button font single letters in a row we add 1 extra pixel to the width to more properly center odd-width letters.
+            const int32_t extraOffsetX = ( size == 1 && ( maxWidth % 2 == 0 )
+                                           && ( fontType.size == fheroes2::FontSize::BUTTON_RELEASED || fontType.size == fheroes2::FontSize::BUTTON_PRESSED ) )
+                                             ? 1
+                                             : 0;
+            render( data, size, x + ( maxWidth - correctedLineWidth + extraOffsetX ) / 2, y, output, fontType );
         }
         else {
             render( data, size, x, y, output, fontType );
@@ -381,7 +411,23 @@ namespace
                     const uint8_t * line = data - lineLength;
                     if ( lineLength == lastWordLength ) {
                         // This is the only word in the line.
-                        renderLine( line, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
+                        // Search for '-' symbol to avoid truncating the word in the middle.
+                        const uint8_t * hyphenPos = data - lineLength;
+                        for ( ; hyphenPos != data; ++hyphenPos ) {
+                            if ( *hyphenPos == hyphenChar ) {
+                                break;
+                            }
+                        }
+
+                        if ( hyphenPos != data ) {
+                            renderLine( line, static_cast<int32_t>( hyphenPos + lineLength - data ) + 1, x + offset->x, yPos + offset->y, maxWidth, output, fontType,
+                                        align );
+                            data = hyphenPos;
+                            ++data;
+                        }
+                        else {
+                            renderLine( line, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
+                        }
                     }
                     else {
                         if ( isSpace ) {

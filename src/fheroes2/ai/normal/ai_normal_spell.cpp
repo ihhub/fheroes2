@@ -146,7 +146,7 @@ namespace AI
             const uint32_t damage = totalDamage * ( 100 - unit->GetMagicResist( spell, spellPower, _commander ) ) / 100;
             // If we're retreating we don't care about partial damage, only actual units killed
             if ( retreating )
-                return unit->GetMonsterStrength() * unit->HowManyWillKilled( damage );
+                return unit->GetMonsterStrength() * unit->HowManyWillBeKilled( damage );
 
             // Otherwise calculate amount of strength lost (% of unit times total strength)
             double unitPercentageLost = std::min( static_cast<double>( damage ) / unit->GetHitPoints(), 1.0 );

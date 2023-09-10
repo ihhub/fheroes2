@@ -141,8 +141,11 @@ Battle::Force::Force( Army & parent, bool opposite, const Rand::DeterministicRan
 
 Battle::Force::~Force()
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
+    std::for_each( begin(), end(), []( Unit * unit ) {
+        assert( unit != nullptr );
+
+        delete unit;
+    } );
 }
 
 const HeroBase * Battle::Force::GetCommander() const
