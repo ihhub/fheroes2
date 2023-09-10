@@ -1249,13 +1249,33 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                             _gameArea.SetRedraw();
                         }
 
-                        isMovingHero = true;
+                        // Update the hero's move status.
+                        isMovingHero = hero->isMoveEnabled();
 
                         if ( hero->isAction() ) {
-                            // check if the game is over after the hero's action
+                            // The action can not be performed while moving, only after the move is ended.
+                            assert( !isMovingHero );
+
+                            // Check if the game is over after the hero's action.
                             res = gameResult.checkGameOver();
 
                             hero->ResetAction();
+                        }
+
+                        if ( !isMovingHero ) {
+                            // Reset the 'ENABLEMOVE' state on this loop to properly update cursor on this, not next frame.
+                            hero->SetMove( false );
+
+                            // During the action and/or move the game area and/or cursor position might change, so we should update the cursor image.
+                            if ( le.MouseCursor( _gameArea.GetROI() ) ) {
+                                // We do not use '_gameArea.SetUpdateCursor()' here because we need to update cursor before the current frame render
+                                // and '_gameArea.QueueEventProcessing()' is called earlier in this loop and may update the cursor only for the next frame.
+                                cursor.SetThemes( GetCursorTileIndex( _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) );
+                            }
+                            else {
+                                // When the cursor is not over the game area we use the Pointer cursor.
+                                cursor.SetThemes( Cursor::POINTER );
+                            }
                         }
                     }
                     else {
@@ -1366,10 +1386,7 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
             Game::OpenHeroesDialog( *otherHero, true, true );
 
             // The cursor may be moved in opened dialog, so we update it according to its new position over the game area.
-            const LocalEvent & le = LocalEvent::Get();
-            if ( le.MouseCursor( _gameArea.GetROI() ) ) {
-                Cursor::Get().SetThemes( GetCursorTileIndex( _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) );
-            }
+            _gameArea.SetUpdateCursor();
         }
 
         break;
@@ -1396,10 +1413,7 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
             Game::OpenCastleDialog( *otherCastle );
 
             // The cursor may be moved in opened dialog, so we update it according to its new position over the game area.
-            const LocalEvent & le = LocalEvent::Get();
-            if ( le.MouseCursor( _gameArea.GetROI() ) ) {
-                Cursor::Get().SetThemes( GetCursorTileIndex( _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) );
-            }
+            _gameArea.SetUpdateCursor();
         }
 
         break;
