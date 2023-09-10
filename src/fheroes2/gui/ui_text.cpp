@@ -35,7 +35,7 @@ namespace
 {
     const uint8_t lineSeparator = '\n';
 
-    const uint8_t dashChar{ '-' };
+    const uint8_t hyphenChar{ '-' };
 
     const uint8_t invalidChar = '?';
 
@@ -237,7 +237,7 @@ namespace
                         // Search for '-' symbol to avoid truncating the word in the middle.
                         const uint8_t * temp = data - lineLength;
                         for ( ; temp != data; ++temp ) {
-                            if ( *temp == dashChar ) {
+                            if ( *temp == hyphenChar ) {
                                 break;
                             }
                         }
@@ -402,7 +402,7 @@ namespace
                         // Search for '-' symbol to avoid truncating the word in the middle.
                         const uint8_t * temp = data - lineLength;
                         for ( ; temp != data; ++temp ) {
-                            if ( *temp == dashChar ) {
+                            if ( *temp == hyphenChar ) {
                                 break;
                             }
                         }
