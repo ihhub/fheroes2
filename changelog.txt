@@ -3,7 +3,7 @@ version 1.0.8 (11 September 2023)
 - fix spell rendering issues when words are divided in the middle
 - fix ? symbols appearing in single-line texts
 - generate vertical high scores buttons
-- display missing resource dialog not less than 5 seconds
+- display missing resource dialog for at least 5 seconds
 - show only skills that the hero does not already have in battle only skill selection list
 - show highscores after multiplayer game
 - improve the logic of kiting enemies with archers
@@ -36,7 +36,7 @@ version 1.0.8 (11 September 2023)
 - show ... in Load/Save File dialog for long names
 - fix monster name position in monster info dialog
 - speed up rendering for specific buttons
-- fix multiple rendering issue in Kingdom Overview dialog
+- fix multiple rendering issues in the Kingdom Overview dialog
 - adjust text for Quick Info dialogs
 - improve fading animation using Redmean color distance calculation
 - limit Dimension Door spell usage for AI heroes on lower difficulties

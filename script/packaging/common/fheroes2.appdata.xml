@@ -46,7 +46,7 @@
           <li>fix spell rendering issues when words are divided in the middle</li>
           <li>fix ? symbols appearing in single-line texts</li>
           <li>generate vertical high scores buttons</li>
-          <li>display missing resource dialog not less than 5 seconds</li>
+          <li>display missing resource dialog for at least 5 seconds</li>
           <li>show only skills that the hero does not already have in battle only skill selection list</li>
           <li>show highscores after multiplayer game</li>
           <li>improve the logic of kiting enemies with archers</li>
@@ -79,7 +79,7 @@
           <li>show ... in Load/Save File dialog for long names</li>
           <li>fix monster name position in monster info dialog</li>
           <li>speed up rendering for specific buttons</li>
-          <li>fix multiple rendering issue in Kingdom Overview dialog</li>
+          <li>fix multiple rendering issues in the Kingdom Overview dialog</li>
           <li>adjust text for Quick Info dialogs</li>
           <li>improve fading animation using Redmean color distance calculation</li>
           <li>limit Dimension Door spell usage for AI heroes on lower difficulties</li>
