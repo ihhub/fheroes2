@@ -288,6 +288,7 @@ namespace
                 continue;
             }
 
+            // TODO: remove this hack or expand it to cover more cases.
             if ( *data == lineSeparator ) {
                 // This should never happen as line cannot contain line separator in the middle.
                 // But due to some limitations in UI we have to deal with it.
