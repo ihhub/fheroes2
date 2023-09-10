@@ -408,8 +408,8 @@ namespace
                         }
 
                         if ( hyphenPos != data ) {
-                            renderLine(
-                                line, static_cast<int32_t>( hyphenPos + lineLength - data ) + 1, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
+                            renderLine( line, static_cast<int32_t>( hyphenPos + lineLength - data ) + 1, x + offset->x, yPos + offset->y, maxWidth, output, fontType,
+                                        align );
                             data = hyphenPos;
                             ++data;
                         }
