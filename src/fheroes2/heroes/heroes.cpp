@@ -253,8 +253,9 @@ Heroes::Heroes( int heroid, int rc )
         break;
     }
 
-    if ( !magic_point )
+    if ( !magic_point ) {
         SetSpellPoints( GetMaxSpellPoints() );
+    }
     move_point = GetMaxMovePoints();
 }
 
@@ -727,7 +728,6 @@ uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
         const Troop * troop = army.GetSlowestTroop();
         if ( troop ) {
             switch ( troop->GetSpeed() ) {
-            case Speed::CRAWLING:
             case Speed::VERYSLOW:
                 result = 1000;
                 break;
@@ -744,11 +744,10 @@ uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
                 result = 1400;
                 break;
             case Speed::ULTRAFAST:
-            case Speed::BLAZING:
-            case Speed::INSTANT:
                 result = 1500;
                 break;
             default:
+                assert( 0 );
                 break;
             }
         }
