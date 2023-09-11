@@ -361,6 +361,16 @@ public:
 class SelectEnumSecSkill : public SelectEnum
 {
 public:
+    static int getSkillFromListIndex( int index )
+    {
+        return 1 + index / 3;
+    }
+
+    static int getLevelFromListIndex( int index )
+    {
+        return 1 + ( index % 3 );
+    }
+
     explicit SelectEnumSecSkill( const fheroes2::Size & rt )
         : SelectEnum( rt )
     {
@@ -372,7 +382,7 @@ public:
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
-        const Skill::Secondary skill( 1 + index / 3, 1 + ( index % 3 ) );
+        const Skill::Secondary skill( getSkillFromListIndex( index ), getLevelFromListIndex( index ) );
         const fheroes2::Sprite & skillSprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
 
         renderItem( skillSprite, skill.GetName(), { dstx, dsty }, { 45, 42 }, current );
@@ -380,15 +390,20 @@ public:
 
     void ActionListPressRight( int & index ) override
     {
-        fheroes2::SecondarySkillDialogElement( Skill::Secondary( 1 + index / 3, 1 + ( index % 3 ) ), Heroes() ).showPopup( Dialog::ZERO );
+        fheroes2::SecondarySkillDialogElement( Skill::Secondary( getSkillFromListIndex( index ), getLevelFromListIndex( index ) ), Heroes() ).showPopup( Dialog::ZERO );
     }
 };
 
-Skill::Secondary Dialog::selectSecondarySkill( const int skillId /* = Skill::Secondary::UNKNOWN */ )
+Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int skillId /* = Skill::Secondary::UNKNOWN */ )
 {
-    std::vector<int> skills( static_cast<size_t>( MAXSECONDARYSKILL * 3 ), 0 );
+    std::vector<int> skills;
+    skills.reserve( static_cast<size_t>( MAXSECONDARYSKILL * 3 ) );
 
-    std::iota( skills.begin(), skills.end(), 0 );
+    for ( int i = 0; i < MAXSECONDARYSKILL * 3; ++i ) {
+        if ( !hero.HasSecondarySkill( SelectEnumSecSkill::getSkillFromListIndex( i ) ) ) {
+            skills.push_back( i );
+        }
+    }
 
     SelectEnumSecSkill listbox( { 350, fheroes2::Display::instance().height() - 200 } );
 
@@ -401,7 +416,7 @@ Skill::Secondary Dialog::selectSecondarySkill( const int skillId /* = Skill::Sec
 
     if ( result == Dialog::OK || listbox.ok ) {
         const int skillIndex = listbox.GetCurrent();
-        return { 1 + skillIndex / 3, 1 + ( skillIndex % 3 ) };
+        return { SelectEnumSecSkill::getSkillFromListIndex( skillIndex ), SelectEnumSecSkill::getLevelFromListIndex( skillIndex ) };
     }
 
     return {};

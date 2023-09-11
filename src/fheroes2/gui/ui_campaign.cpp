@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,6 +17,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+#include "ui_campaign.h"
 
 #include <algorithm>
 #include <cassert>
@@ -41,7 +43,7 @@
 #include "monster.h"
 #include "skill.h"
 #include "spell.h"
-#include "ui_campaign.h"
+#include "spell_info.h"
 #include "ui_dialog.h"
 #include "ui_monster.h"
 #include "ui_text.h"
@@ -103,7 +105,7 @@ namespace fheroes2
         case Campaign::ScenarioBonusData::SPELL: {
             const Spell spell( bonusData._subType );
             const SpellDialogElement spellUI( spell, nullptr );
-            const TextDialogElement spellDescriptionUI( std::make_shared<Text>( spell.GetDescription(), FontType::normalWhite() ) );
+            const TextDialogElement spellDescriptionUI( std::make_shared<Text>( getSpellDescription( spell, nullptr ), FontType::normalWhite() ) );
 
             showMessage( Text( bonusData.getName(), FontType::normalYellow() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
                          { &spellUI, &spellDescriptionUI } );
@@ -200,7 +202,7 @@ namespace fheroes2
         case Campaign::CampaignAwardData::TYPE_GET_SPELL: {
             const Spell spell( awardData._subType );
             const SpellDialogElement spellUI( spell, nullptr );
-            const TextDialogElement spellDescriptionUI( std::make_shared<Text>( spell.GetDescription(), FontType::normalWhite() ) );
+            const TextDialogElement spellDescriptionUI( std::make_shared<Text>( getSpellDescription( spell, nullptr ), FontType::normalWhite() ) );
 
             showMessage( Text( awardData.getName(), FontType::normalYellow() ), Text( awardData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
                          { &spellUI, &spellDescriptionUI } );

@@ -7287,6 +7287,7 @@ msgstr ""
 "%{skill} dáva katapultu tvojho hrdinu jeden výstrel navyše a každý výstrel "
 "automaticky zničí akúkoľvek stenu, okrem opevnenej steny v Rytierskom hrade."
 
+#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
@@ -7294,6 +7295,7 @@ msgstr ""
 "%{skill} dáva tvojmu hrdinovi %{count}-percentnú šancu naučiť sa akékoľvek "
 "kúzlo 1. alebo 2. úrovne, ktoré bolo zoslané nepriateľom počas boja."
 
+#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
@@ -7301,6 +7303,7 @@ msgstr ""
 "%{skill} dáva tvojmu hrdinovi %{count}-percentnú šancu naučiť sa akékoľvek "
 "kúzlo 3. úrovne (alebo nižšej), ktoré bolo zoslané nepriateľom počas boja."
 
+#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
@@ -9438,8 +9441,9 @@ msgstr ""
 msgid "Wand of Negation"
 msgstr "Negačný prútik"
 
-msgid "The %{name} protects your troops from the Dispel Magic spell."
-msgstr "%{name} chráni tvoje jednotky voči kúzlu rozptylu."
+#, fuzzy
+msgid "The %{name} makes all your troops immune to dispel magic spells."
+msgstr "%{name} robí všetky tvoje jednotky imúnnymi voči kúzlam smrti."
 
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
@@ -10692,6 +10696,9 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "The %{name} protects your troops from the Dispel Magic spell."
+#~ msgstr "%{name} chráni tvoje jednotky voči kúzlu rozptylu."
 
 #~ msgid "Damg"
 #~ msgstr "Pošk"
