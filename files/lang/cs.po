@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-11 14:45+0000\n"
-"PO-Revision-Date: 2023-09-11 20:20+0200\n"
+"PO-Revision-Date: 2023-09-11 20:29+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "Language: cs\n"
@@ -7260,76 +7260,76 @@ msgid "week|Squirrel"
 msgstr ""
 
 msgid "week|Rabbit"
-msgstr "Králíka"
+msgstr ""
 
 msgid "week|Gopher"
-msgstr "Sysla"
+msgstr ""
 
 msgid "week|Badger"
-msgstr "Jezevce"
+msgstr ""
 
 msgid "week|Rat"
-msgstr "Krysy"
+msgstr ""
 
 msgid "week|Eagle"
-msgstr "Orla"
+msgstr ""
 
 msgid "week|Weasel"
-msgstr "Lasičky"
+msgstr ""
 
 msgid "week|Raven"
-msgstr "Krkavce"
+msgstr ""
 
 msgid "week|Mongoose"
-msgstr "Mangusty"
+msgstr ""
 
 msgid "week|Dog"
-msgstr "Psa"
+msgstr ""
 
 msgid "week|Aardvark"
-msgstr "Hrabáče"
+msgstr ""
 
 msgid "week|Lizard"
-msgstr "Ještěrky"
+msgstr ""
 
 msgid "week|Tortoise"
-msgstr "Želvy"
+msgstr ""
 
 msgid "week|Hedgehog"
-msgstr "Ježka"
+msgstr ""
 
 msgid "week|Condor"
-msgstr "Kondora"
+msgstr ""
 
 msgid "week|Ant"
-msgstr "Mravence"
+msgstr ""
 
 msgid "week|Grasshopper"
-msgstr "Kobylky"
+msgstr ""
 
 msgid "week|Dragonfly"
-msgstr "Vážky"
+msgstr ""
 
 msgid "week|Spider"
-msgstr "Pavouka"
+msgstr ""
 
 msgid "week|Butterfly"
-msgstr "Motýla"
+msgstr ""
 
 msgid "week|Bumblebee"
-msgstr "Čmeláka"
+msgstr ""
 
 msgid "week|Locust"
-msgstr "Sarančata"
+msgstr ""
 
 msgid "week|Earthworm"
-msgstr "Žížaly"
+msgstr ""
 
 msgid "week|Hornet"
-msgstr "Sršně"
+msgstr ""
 
 msgid "week|Beetle"
-msgstr "Brouka"
+msgstr ""
 
 msgid "week|PLAGUE"
 msgstr "MORU"
