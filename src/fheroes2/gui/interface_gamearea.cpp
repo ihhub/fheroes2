@@ -958,7 +958,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     }
 
     if ( !isCursorOverGamearea ) {
-        // In this case cursor image changes in 'Interface::AdventureMap::HumanTurn()' so there is nothing more to do here.
+        // In this case the cursor image changes in 'Interface::AdventureMap::HumanTurn()' so there is nothing more to do here.
         return;
     }
 
