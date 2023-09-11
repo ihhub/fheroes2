@@ -134,15 +134,19 @@ namespace
 int Interface::AdventureMap::GetScrollPosition()
 {
     int scrollPosition = SCROLL_NONE;
-    LocalEvent & le = LocalEvent::Get();
-    if ( isScrollLeft( le.GetMouseCursor() ) )
+    const LocalEvent & le = LocalEvent::Get();
+    if ( isScrollLeft( le.GetMouseCursor() ) ) {
         scrollPosition |= SCROLL_LEFT;
-    else if ( isScrollRight( le.GetMouseCursor() ) )
+    }
+    else if ( isScrollRight( le.GetMouseCursor() ) ) {
         scrollPosition |= SCROLL_RIGHT;
-    if ( isScrollTop( le.GetMouseCursor() ) )
+    }
+    if ( isScrollTop( le.GetMouseCursor() ) ) {
         scrollPosition |= SCROLL_TOP;
-    else if ( isScrollBottom( le.GetMouseCursor() ) )
+    }
+    else if ( isScrollBottom( le.GetMouseCursor() ) ) {
         scrollPosition |= SCROLL_BOTTOM;
+    }
     return scrollPosition;
 }
 
@@ -1077,10 +1081,10 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             int scrollPosition = GetScrollPosition();
 
             if ( scrollPosition != SCROLL_NONE ) {
-                if ( lastScrollPosition != scrollPosition ) {
-                    scrollDelayType = Game::SCROLL_START_DELAY;
+                if ( _lastScrollPosition != scrollPosition ) {
+                    _scrollDelayType = Game::SCROLL_START_DELAY;
                 }
-                if ( Game::validateAnimationDelay( scrollDelayType ) ) {
+                if ( Game::validateAnimationDelay( _scrollDelayType ) ) {
                     if ( fastScrollRepeatCount < fastScrollStartThreshold ) {
                         ++fastScrollRepeatCount;
                     }
@@ -1088,13 +1092,13 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
                 if ( fastScrollRepeatCount >= fastScrollStartThreshold ) {
                     _gameArea.SetScroll( scrollPosition );
-                    scrollDelayType = Game::SCROLL_START_DELAY;
+                    _scrollDelayType = Game::SCROLL_START_DELAY;
                 }
             }
             else {
                 fastScrollRepeatCount = 0;
             }
-            lastScrollPosition = scrollPosition;
+            _lastScrollPosition = scrollPosition;
         }
         else {
             fastScrollRepeatCount = 0;
@@ -1390,10 +1394,11 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
             RedrawFocus();
         }
         else {
+            Game::AnimateResetDelay( Game::CASTLE_EXIT_SCROLL_MAP_DELAY );
             Game::OpenCastleDialog( *otherCastle );
             Cursor::Get().SetThemes( Cursor::CASTLE );
-            scrollDelayType = Game::CASTLE_EXIT_SCROLL_MAP_DELAY;
-            lastScrollPosition = GetScrollPosition();
+            _scrollDelayType = Game::CASTLE_EXIT_SCROLL_MAP_DELAY;
+            _lastScrollPosition = GetScrollPosition();
         }
 
         break;

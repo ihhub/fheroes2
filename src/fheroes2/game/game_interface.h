@@ -165,8 +165,8 @@ namespace Interface
         ControlPanel controlPanel;
 
         bool _lockRedraw;
-        Game::DelayType scrollDelayType;
-        int lastScrollPosition;
+        Game::DelayType _scrollDelayType;
+        int _lastScrollPosition;
     };
 }
 
