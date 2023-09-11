@@ -406,7 +406,9 @@ uint32_t WorldPathfinder::getMovementPenalty( const int from, const int to, cons
 
 void WorldPathfinder::reset()
 {
-    // TODO: this optimization will only work correctly for square maps
+    // The following optimization will only work correctly for square maps
+    assert( world.w() == world.h() );
+
     const size_t worldSize = world.getSize();
 
     if ( _cache.size() != worldSize ) {
