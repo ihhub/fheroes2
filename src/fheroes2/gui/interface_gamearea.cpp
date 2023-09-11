@@ -957,10 +957,20 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         return;
     }
 
+    if ( !isCursorOverGamearea ) {
+        // In this case cursor image changes in 'Interface::AdventureMap::HumanTurn()' so there is nothing more to do here.
+        return;
+    }
+
     int32_t index = GetValidTileIdFromPoint( mousePosition );
 
-    // out of range
-    if ( !isCursorOverGamearea || !Maps::isValidAbsIndex( index ) ) {
+    if ( !Maps::isValidAbsIndex( index ) ) {
+        // Change the cursor image when it gets out of the map boundaries.
+        if ( index != _prevIndexPos ) {
+            Cursor::Get().SetThemes( Cursor::POINTER );
+            _prevIndexPos = index;
+        }
+
         return;
     }
 
@@ -986,7 +996,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     index = GetValidTileIdFromPoint( le.GetMouseCursor() );
 
     // Change the cursor image if needed.
-    if ( ( updateCursor || index != _prevIndexPos ) ) {
+    if ( updateCursor || index != _prevIndexPos ) {
         Cursor::Get().SetThemes( Interface::AdventureMap::GetCursorTileIndex( index ) );
         _prevIndexPos = index;
         updateCursor = false;
