@@ -286,11 +286,16 @@ namespace
                                   "a1exsh\n"
                                   "vincent-grosbois\n"
                                   "eos428\n"
-                                  "felix642\n"
                                   "Arthusppp\n"
+                                  "felix642\n"
                                   "Vasilenko Alexey\n"
                                   "Andrii Kurdiumov\n"
+                                  "Mr-Bajs\n"
                                   "dimag0g\n"
+                                  "Effektus\n"
+                                  "Laserlicht\n"
+                                  "Stisen1\n"
+                                  "Mauri Mustonen\n"
                                   "tau3\n" );
 
         fheroes2::Text name( std::move( contributors ), fheroes2::FontType::normalWhite() );
@@ -304,11 +309,13 @@ namespace
                                 "Benjamin Hughes\n"
                                 "Brandon Wright\n"
                                 "Connor Townsend\n"
+                                "Hajler\n"
                                 "Kiril Lipatov\n"
                                 "Kresimir Condic\n"
                                 "Kuza\n"
                                 "Matt Taylor\n"
                                 "slvclw\n"
+                                "TechnoCore\n"
                                 "William Hoskinson\n" );
 
         name.set( std::move( supporters ), fheroes2::FontType::normalWhite() );
@@ -327,9 +334,10 @@ namespace
         name.set( _( "and many-many other supporters!" ), fheroes2::FontType::normalWhite() );
         name.draw( textInitialOffsetX + textOffsetX, offsetY, textWidth, output );
 
-        offsetY += name.height();
-
         const fheroes2::Sprite & hydra = fheroes2::AGG::GetICN( ICN::HYDRA, 11 );
+
+        offsetY = output.height() - hydra.height() - 40;
+
         fheroes2::Blit( hydra, output, textInitialOffsetX - hydra.width() / 2, offsetY );
 
         return output;
