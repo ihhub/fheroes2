@@ -965,10 +965,11 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     int32_t index = GetValidTileIdFromPoint( mousePosition );
 
     if ( !Maps::isValidAbsIndex( index ) ) {
-        // Change the cursor image when it gets out of the map boundaries.
-        if ( index != _prevIndexPos ) {
+        // Change the cursor image when it gets out of the map boundaries or by 'updateCursor' flag.
+        if ( updateCursor || index != _prevIndexPos ) {
             Cursor::Get().SetThemes( Cursor::POINTER );
             _prevIndexPos = index;
+            updateCursor = false;
         }
 
         return;
