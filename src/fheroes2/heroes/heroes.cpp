@@ -727,8 +727,6 @@ uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
         const Troop * troop = army.GetSlowestTroop();
         if ( troop ) {
             switch ( troop->GetSpeed() ) {
-            default:
-                break;
             case Speed::CRAWLING:
             case Speed::VERYSLOW:
                 result = 1000;
@@ -749,6 +747,8 @@ uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
             case Speed::BLAZING:
             case Speed::INSTANT:
                 result = 1500;
+                break;
+            default:
                 break;
             }
         }
