@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-04 01:25+0000\n"
-"PO-Revision-Date: 2022-10-26 02:17+0200\n"
+"POT-Creation-Date: 2023-09-11 14:45+0000\n"
+"PO-Revision-Date: 2023-09-11 20:20+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "Language: cs\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -59,7 +59,7 @@ msgid "OKAY"
 msgstr "OKAY"
 
 msgid "smallerButton|OKAY"
-msgstr ""
+msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "PŘIJMI"
@@ -83,7 +83,7 @@ msgid "EXIT"
 msgstr "PRYČ"
 
 msgid "smallerButton|EXIT"
-msgstr ""
+msgstr "VEN"
 
 msgid "DISMISS"
 msgstr "PROPUSŤ"
@@ -163,22 +163,22 @@ msgstr ""
 "KAMPAŇ"
 
 msgid "HOT SEAT"
-msgstr ""
+msgstr "HORKÉ KŘESLO"
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 HRÁČI"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 HRÁČI"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 HRÁČI"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 HRÁČŮ"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 HRÁČŮ"
 
 msgid "GIFT"
 msgstr "DARUJ"
@@ -190,7 +190,7 @@ msgid "DIFFICULTY"
 msgstr "OBTÍŽNOST"
 
 msgid "VIEW INTRO"
-msgstr ""
+msgstr "ZOBRAZIT ÚVOD"
 
 msgid "MIN"
 msgstr "MIN"
@@ -204,6 +204,15 @@ msgid ""
 "S\n"
 "S"
 msgstr ""
+"P\n"
+"R\n"
+"O\n"
+"P\n"
+"U\n"
+"S\n"
+"T\n"
+"I\n"
+"T"
 
 msgid ""
 "E\n"
@@ -211,6 +220,48 @@ msgid ""
 "I\n"
 "T"
 msgstr ""
+"O\n"
+"D\n"
+"E\n"
+"J\n"
+"Í\n"
+"T"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"K\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"Ň"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
 
 msgid "Warrior"
 msgstr "Válečník"
@@ -376,7 +427,6 @@ msgstr "Artefakt Sféra Negace znemožňuje v této bitvě použít jakékoliv k
 msgid "You have already cast a spell this round."
 msgstr "V tomto kole si již kouzlil."
 
-#, fuzzy
 msgid "That spell will have no effect!"
 msgstr "Toto kouzlo nebude na nikoho učinkovat!"
 
@@ -409,9 +459,8 @@ msgstr "Vyp"
 msgid "On"
 msgstr "Zap"
 
-#, fuzzy
 msgid "Turn Order"
-msgstr "Uspořádání jednotek"
+msgstr "Pořadí tahu"
 
 msgid "Auto Spell Casting"
 msgstr "Automické Kouzlení"
@@ -443,9 +492,8 @@ msgstr "Škody Info"
 msgid "Set the speed of combat actions and animations."
 msgstr "Nastavit rychlost akcí a animací v bitvě"
 
-#, fuzzy
 msgid "Toggle to display the turn order during the battle."
-msgstr "Zapnout zobrazení pořadí tahu jednotek v bitvě."
+msgstr "Zap/Vyp zobrazení pořadí tahu jednotek v bitvě."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -646,8 +694,8 @@ msgstr "Vystřel na %{monster}"
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
 msgstr[0] "(1 výstřel zbývá)"
-msgstr[1] "(%{count} výstřelů zbývá)"
-msgstr[2] ""
+msgstr[1] "(%{count} výstřely zbývají)"
+msgstr[2] "(%{count} výstřelů zbývá)"
 
 msgid "Attack %{monster}"
 msgstr "Zaútoč na %{monster}"
@@ -2686,17 +2734,17 @@ msgid "Are you sure you want to dismiss this army?"
 msgstr "Jsi si jist, že chceš jednotku propustit?"
 
 msgid "Upgrade"
-msgstr ""
+msgstr "Povýšit"
 
 #, fuzzy
 msgid "Upgrade your troops."
 msgstr "Nemůžeš si dovolit vylepšit své jednotky!"
 
 msgid "Dismiss"
-msgstr ""
+msgstr "Propustit"
 
 msgid "Dismiss this army."
-msgstr ""
+msgstr "Propustit tuto armádu."
 
 msgid "Followers"
 msgstr "Následovníci"
@@ -3356,19 +3404,19 @@ msgid "Enemy Speed"
 msgstr "Rychlost"
 
 msgid "Slow"
-msgstr ""
+msgstr "Pomalá"
 
 msgid "Normal"
-msgstr ""
+msgstr "Normální"
 
 msgid "Fast"
-msgstr ""
+msgstr "Rychlá"
 
 msgid "Very Fast"
-msgstr ""
+msgstr "Velmi rychlá"
 
 msgid "Scroll Speed"
-msgstr ""
+msgstr "Rychlost posunu"
 
 msgid "Evil"
 msgstr "Zlý"
@@ -3392,10 +3440,10 @@ msgid "Interface"
 msgstr "Rozhraní"
 
 msgid "Auto Resolve"
-msgstr ""
+msgstr "Automaticky"
 
 msgid "Auto, No Spells"
-msgstr ""
+msgstr "Auto, Bez kouzel"
 
 msgid "Battles"
 msgstr ""
@@ -4430,7 +4478,7 @@ msgid "' language, but the current language of the game is '"
 msgstr "' jazyk, aktuálně máš ale nastaven jazyk '"
 
 msgid "Hot Seat"
-msgstr ""
+msgstr "Horké křeslo"
 
 msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
@@ -4441,13 +4489,13 @@ msgid "A single player game playing out a single map."
 msgstr ""
 
 msgid "Standard Game"
-msgstr ""
+msgstr "Standardní hra"
 
 msgid "A single player game playing through a series of maps."
 msgstr ""
 
 msgid "Campaign Game"
-msgstr ""
+msgstr "Kampaňová hra"
 
 msgid ""
 "A multi-player game, with several human players completing against each "
@@ -4455,10 +4503,10 @@ msgid ""
 msgstr ""
 
 msgid "Multi-Player Game"
-msgstr ""
+msgstr "Hra pro více hráčů"
 
 msgid "fheroes2 Resurrection Team presents"
-msgstr ""
+msgstr "Tým fheroes2 Resurrection uvádí"
 
 msgid "Greetings!"
 msgstr "Vítej!"
@@ -4536,7 +4584,7 @@ msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr "Jedna ze čtyř nových kampaní z datadisku Price of Loyalty."
 
 msgid "Loading video. Please wait..."
-msgstr ""
+msgstr "Načítání videa. Prosím, čekej..."
 
 msgid "Host"
 msgstr ""
@@ -4640,7 +4688,7 @@ msgstr ""
 "Všichni nepřátelé se klanějí Tvému bohatství a síle."
 
 msgid "Victory!"
-msgstr ""
+msgstr "Vítězství!"
 
 msgid ""
 "The enemy has captured %{name}!\n"
@@ -4832,13 +4880,13 @@ msgid " All dwellings increase population."
 msgstr "Všechna obydlí přináší novou populaci."
 
 msgid "New Month!"
-msgstr ""
+msgstr "Nový měsíc!"
 
 msgid "New Week!"
 msgstr "Začal nový týden!"
 
 msgid "Beware!"
-msgstr ""
+msgstr "Pozor!"
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
@@ -5130,7 +5178,7 @@ msgid "Keyboard|123"
 msgstr ""
 
 msgid "Keyboard|SPACE"
-msgstr ""
+msgstr "Mezerník"
 
 msgid "Keyboard|ABC"
 msgstr ""
@@ -5204,7 +5252,7 @@ msgid "Danish"
 msgstr ""
 
 msgid "Slovak"
-msgstr ""
+msgstr "Slovensky"
 
 msgid "Vietnamese"
 msgstr ""
@@ -5244,7 +5292,7 @@ msgid "Fineous"
 msgstr ""
 
 msgid "Jezebel"
-msgstr ""
+msgstr "Jezábel"
 
 msgid "Atlas"
 msgstr ""
@@ -5334,10 +5382,10 @@ msgid "Lord Halton"
 msgstr ""
 
 msgid "Sister Eliza"
-msgstr ""
+msgstr "Sestra Eliza"
 
 msgid "Brother Brax"
-msgstr ""
+msgstr "Bratr Brax"
 
 msgid "Dainwin"
 msgstr ""
@@ -6910,23 +6958,26 @@ msgstr ""
 "%{skill} dává katapultu střelu navíc, kdy každý z výstřelů okamžitě zboří "
 "zasažené místo zdi hradu, výjma zesílených hradeb v Rytířském hradu."
 
+#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
-"2nd level enemy spell used against him in a combat."
+"2nd level spell that was cast by an enemy during combat."
 msgstr ""
 "%{skill} dává hrdinovi %{count} procentní šanci naučit se jakékoliv kouzlo "
 "prvé nebo druhé úrovně, které protivník použil v boji."
 
+#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
-"level spell (or below) used against him in combat."
+"level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "%{skill} dává hrdinovi %{count} procentní šanci naučit se jakékoliv kouzlo "
 "třetí (nebo nižší) úrovně, které protivník použil v boji."
 
+#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
-"level spell (or below) used against him in combat."
+"level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "%{skill} dává hrdinovi %{count} procentní šanci naučit se jakékoliv kouzlo "
 "čtvrté (nebo nižší) úrovně, které protivník použil v boji."
@@ -7209,82 +7260,82 @@ msgid "week|Squirrel"
 msgstr ""
 
 msgid "week|Rabbit"
-msgstr ""
+msgstr "Králíka"
 
 msgid "week|Gopher"
-msgstr ""
+msgstr "Sysla"
 
 msgid "week|Badger"
-msgstr ""
+msgstr "Jezevce"
 
 msgid "week|Rat"
-msgstr ""
+msgstr "Krysy"
 
 msgid "week|Eagle"
-msgstr ""
+msgstr "Orla"
 
 msgid "week|Weasel"
-msgstr ""
+msgstr "Lasičky"
 
 msgid "week|Raven"
-msgstr ""
+msgstr "Krkavce"
 
 msgid "week|Mongoose"
-msgstr ""
+msgstr "Mangusty"
 
 msgid "week|Dog"
-msgstr ""
+msgstr "Psa"
 
 msgid "week|Aardvark"
-msgstr ""
+msgstr "Hrabáče"
 
 msgid "week|Lizard"
-msgstr ""
+msgstr "Ještěrky"
 
 msgid "week|Tortoise"
-msgstr ""
+msgstr "Želvy"
 
 msgid "week|Hedgehog"
-msgstr ""
+msgstr "Ježka"
 
 msgid "week|Condor"
-msgstr ""
+msgstr "Kondora"
 
 msgid "week|Ant"
-msgstr ""
+msgstr "Mravence"
 
 msgid "week|Grasshopper"
-msgstr ""
+msgstr "Kobylky"
 
 msgid "week|Dragonfly"
-msgstr ""
+msgstr "Vážky"
 
 msgid "week|Spider"
-msgstr ""
+msgstr "Pavouka"
 
 msgid "week|Butterfly"
-msgstr ""
+msgstr "Motýla"
 
 msgid "week|Bumblebee"
-msgstr ""
+msgstr "Čmeláka"
 
 msgid "week|Locust"
-msgstr ""
+msgstr "Sarančata"
 
 msgid "week|Earthworm"
-msgstr ""
+msgstr "Žížaly"
 
 msgid "week|Hornet"
-msgstr ""
+msgstr "Sršně"
 
 msgid "week|Beetle"
-msgstr ""
+msgstr "Brouka"
 
 msgid "week|PLAGUE"
-msgstr ""
+msgstr "MORU"
 
 msgid "week|Unnamed"
-msgstr ""
+msgstr "Bez jména"
 
 msgid "Desert"
 msgstr "Poušť"
@@ -8046,16 +8097,16 @@ msgid "Vampire Lords"
 msgstr "Lordi Upíři"
 
 msgid "Lich"
-msgstr ""
+msgstr "Kostěj"
 
 msgid "Liches"
 msgstr "Lichové"
 
 msgid "Power Lich"
-msgstr "Mocný Lich"
+msgstr "Mocný Kostěj"
 
 msgid "Power Liches"
-msgstr "Mocní Lichové"
+msgstr "Mocní Kostějové"
 
 msgid "Bone Dragon"
 msgstr "Kostěný Drak"
@@ -8919,7 +8970,7 @@ msgstr ""
 msgid "Wand of Negation"
 msgstr ""
 
-msgid "The %{name} protects your troops from the Dispel Magic spell."
+msgid "The %{name} makes all your troops immune to dispel magic spells."
 msgstr ""
 
 msgid ""
@@ -9335,7 +9386,7 @@ msgid ""
 msgstr ""
 
 msgid "Sphere of Negation"
-msgstr ""
+msgstr "Sféra negace"
 
 msgid "The %{name} disables all spell casting, for both sides, in combat."
 msgstr ""
@@ -9379,7 +9430,7 @@ msgid ""
 msgstr ""
 
 msgid "Sword of Anduran"
-msgstr ""
+msgstr "Anduranův meč"
 
 msgid "Spade of Necromancy"
 msgstr ""
