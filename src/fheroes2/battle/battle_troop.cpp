@@ -799,7 +799,6 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
     if ( !myhero )
         return true;
 
-    // check artifact
     Artifact guard_art( Artifact::UNKNOWN );
     switch ( spell.GetID() ) {
     case Spell::CURSE:
@@ -827,6 +826,7 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
         guard_art = myhero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::HOLY_SPELL_IMMUNITY );
         break;
     case Spell::DISPEL:
+    case Spell::MASSDISPEL:
         guard_art = myhero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::DISPEL_SPELL_IMMUNITY );
         break;
     default:
