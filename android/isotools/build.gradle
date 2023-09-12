@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 android {
     namespace 'com.github.stephenc.javaisotools'
 
-    compileSdkVersion 34
+    compileSdk 34
 
     defaultConfig {
         minSdkVersion 19
