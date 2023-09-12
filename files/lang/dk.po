@@ -9560,9 +9560,8 @@ msgstr ""
 msgid "Wand of Negation"
 msgstr "Negationens Tryllestav"
 
-#, fuzzy
 msgid "The %{name} makes all your troops immune to dispel magic spells."
-msgstr "%{name} gør alle dine tropper immune overfor dødsbesværgelser."
+msgstr "%{name} gør alle dine tropper immune overfor magi-ophævelser."
 
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
