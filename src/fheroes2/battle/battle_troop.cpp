@@ -447,18 +447,18 @@ void Battle::Unit::NewTurn()
     }
 }
 
-uint32_t Battle::Unit::GetSpeed( bool skipStandingCheck, bool skipMovedCheck ) const
+uint32_t Battle::Unit::GetSpeed( const bool skipStandingCheck, const bool skipMovedCheck ) const
 {
     uint32_t modesToCheck = SP_BLIND | IS_PARALYZE_MAGIC;
     if ( !skipMovedCheck ) {
         modesToCheck |= TR_MOVED;
     }
 
-    if ( !skipStandingCheck && ( !GetCount() || Modes( modesToCheck ) ) )
+    if ( !skipStandingCheck && ( !GetCount() || Modes( modesToCheck ) ) ) {
         return Speed::STANDING;
+    }
 
-    uint32_t speed = Monster::GetSpeed();
-    Spell spell;
+    const uint32_t speed = Monster::GetSpeed();
 
     if ( Modes( SP_HASTE ) ) {
         return Speed::GetHasteSpeedFromSpell( speed );
@@ -605,7 +605,7 @@ uint32_t Battle::Unit::GetDamage( const Unit & enemy ) const
     return res;
 }
 
-uint32_t Battle::Unit::HowManyWillKilled( uint32_t dmg ) const
+uint32_t Battle::Unit::HowManyWillBeKilled( const uint32_t dmg ) const
 {
     if ( Modes( CAP_MIRRORIMAGE ) ) {
         return GetCount();
@@ -622,7 +622,7 @@ uint32_t Battle::Unit::ApplyDamage( const uint32_t dmg )
         return 0;
     }
 
-    const uint32_t killed = HowManyWillKilled( dmg );
+    const uint32_t killed = HowManyWillBeKilled( dmg );
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, dmg << " to " << String() << " and killed: " << killed )
 
@@ -799,7 +799,6 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
     if ( !myhero )
         return true;
 
-    // check artifact
     Artifact guard_art( Artifact::UNKNOWN );
     switch ( spell.GetID() ) {
     case Spell::CURSE:
@@ -827,6 +826,7 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
         guard_art = myhero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::HOLY_SPELL_IMMUNITY );
         break;
     case Spell::DISPEL:
+    case Spell::MASSDISPEL:
         guard_art = myhero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::DISPEL_SPELL_IMMUNITY );
         break;
     default:
@@ -1700,7 +1700,7 @@ int Battle::Unit::GetColor() const
 int Battle::Unit::GetCurrentColor() const
 {
     if ( Modes( SP_BERSERKER ) ) {
-        return -1; // be aware of unknown color
+        return -1; // Be aware of unknown color
     }
 
     if ( Modes( SP_HYPNOTIZE ) ) {
@@ -1717,7 +1717,8 @@ int Battle::Unit::GetCurrentOrArmyColor() const
 {
     const int color = GetCurrentColor();
 
-    if ( color < 0 ) { // unknown color in case of SP_BERSERKER mode
+    // Unknown color in case of SP_BERSERKER mode
+    if ( color < 0 ) {
         return GetArmyColor();
     }
 
@@ -1726,8 +1727,9 @@ int Battle::Unit::GetCurrentOrArmyColor() const
 
 int Battle::Unit::GetCurrentControl() const
 {
+    // Let's say that berserkers belong to AI, which is not present in the battle
     if ( Modes( SP_BERSERKER ) ) {
-        return CONTROL_AI; // let's say that it belongs to AI which is not present in the battle
+        return CONTROL_AI;
     }
 
     if ( Modes( SP_HYPNOTIZE ) ) {

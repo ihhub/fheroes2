@@ -21,11 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_cell.h"
+
 #include <cassert>
 
 #include "battle_arena.h"
 #include "battle_board.h"
-#include "battle_cell.h"
 #include "battle_troop.h"
 #include "tools.h"
 
@@ -92,20 +93,20 @@ Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t
 
     if ( unit.isWide() ) {
         const auto checkCells = [&unit]( Cell * headCell, Cell * tailCell ) {
-            Position res;
+            Position pos;
 
             if ( headCell == nullptr || ( !unit.GetPosition().contains( headCell->GetIndex() ) && !headCell->isPassable( true ) ) ) {
-                return res;
+                return pos;
             }
 
             if ( tailCell == nullptr || ( !unit.GetPosition().contains( tailCell->GetIndex() ) && !tailCell->isPassable( true ) ) ) {
-                return res;
+                return pos;
             }
 
-            res.first = headCell;
-            res.second = tailCell;
+            pos.first = headCell;
+            pos.second = tailCell;
 
-            return res;
+            return pos;
         };
 
         const int tailDirection = unit.isReflect() ? RIGHT : LEFT;
@@ -139,13 +140,26 @@ Battle::Position Battle::Position::GetPosition( const Unit & unit, const int32_t
     return result;
 }
 
-Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_t dst )
+Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_t dst, const std::optional<uint32_t> speed /* = {} */ )
 {
     Arena * arena = GetArena();
     assert( arena != nullptr );
 
+    const auto checkReachability = [&unit, speed, arena]( const Position & pos ) -> Position {
+        if ( speed ) {
+            if ( arena->isPositionReachable( unit, pos, false ) && arena->CalculateMoveCost( unit, pos ) <= *speed ) {
+                return pos;
+            }
+        }
+        else if ( arena->isPositionReachable( unit, pos, true ) ) {
+            return pos;
+        }
+
+        return {};
+    };
+
     if ( unit.isWide() ) {
-        const auto checkCells = [&unit, arena]( Cell * headCell, Cell * tailCell ) -> Position {
+        const auto checkCells = [&checkReachability]( Cell * headCell, Cell * tailCell ) -> Position {
             if ( headCell == nullptr || tailCell == nullptr ) {
                 return {};
             }
@@ -155,11 +169,7 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
             pos.first = headCell;
             pos.second = tailCell;
 
-            if ( arena->isPositionReachable( unit, pos, true ) ) {
-                return pos;
-            }
-
-            return {};
+            return checkReachability( pos );
         };
 
         const auto tryHead = [&unit, dst, &checkCells]() -> Position {
@@ -207,11 +217,7 @@ Battle::Position Battle::Position::GetReachable( const Unit & unit, const int32_
 
     pos.first = headCell;
 
-    if ( arena->isPositionReachable( unit, pos, true ) ) {
-        return pos;
-    }
-
-    return {};
+    return checkReachability( pos );
 }
 
 bool Battle::Position::isReflect() const
@@ -222,6 +228,21 @@ bool Battle::Position::isReflect() const
 bool Battle::Position::contains( int cellIndex ) const
 {
     return ( first && first->GetIndex() == cellIndex ) || ( second && second->GetIndex() == cellIndex );
+}
+
+bool Battle::Position::operator<( const Position & other ) const
+{
+    assert( first == nullptr || Board::isValidIndex( first->GetIndex() ) );
+    assert( second == nullptr || Board::isValidIndex( second->GetIndex() ) );
+
+    assert( other.first == nullptr || Board::isValidIndex( other.first->GetIndex() ) );
+    assert( other.second == nullptr || Board::isValidIndex( other.second->GetIndex() ) );
+
+    // It is necessary to guarantee a stable order of positions, it should depend on the indexes of cells, and not on the values of pointers to these cells
+    const auto theseIndexes = std::make_pair( first ? first->GetIndex() : -1, second ? second->GetIndex() : -1 );
+    const auto otherIndexes = std::make_pair( other.first ? other.first->GetIndex() : -1, other.second ? other.second->GetIndex() : -1 );
+
+    return theseIndexes < otherIndexes;
 }
 
 Battle::Cell::Cell( int32_t ii )

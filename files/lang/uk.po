@@ -223,6 +223,28 @@ msgstr ""
 "І\n"
 "Д"
 
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+
 msgid "Warrior"
 msgstr "Воїн"
 
@@ -8686,7 +8708,8 @@ msgstr ""
 msgid "Wand of Negation"
 msgstr "Жезл Заперечення"
 
-msgid "The %{name} protects your troops from the Dispel Magic spell."
+#, fuzzy
+msgid "The %{name} makes all your troops immune to dispel magic spells."
 msgstr "%{name} захищає ваші війська від закляття Розсіювання Магії."
 
 msgid ""

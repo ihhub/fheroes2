@@ -99,16 +99,6 @@ bool Control::isControlHuman() const
     return ( CONTROL_HUMAN & GetControl() ) != 0;
 }
 
-bool Control::isControlLocal() const
-{
-    return !isControlRemote();
-}
-
-bool Control::isControlRemote() const
-{
-    return ( CONTROL_REMOTE & GetControl() ) != 0;
-}
-
 Player::Player( int col )
     : control( CONTROL_NONE )
     , color( col )
@@ -546,10 +536,6 @@ std::string Players::String() const
 
         case CONTROL_HUMAN:
             os << "human";
-            break;
-
-        case CONTROL_REMOTE:
-            os << "remote";
             break;
 
         default:

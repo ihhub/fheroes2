@@ -36,7 +36,7 @@ namespace Dialog
     int selectHeroes( const int heroId = Heroes::UNKNOWN );
     Artifact selectArtifact( const int artifactId = Artifact::UNKNOWN );
     Spell selectSpell( const int spellId = Spell::NONE );
-    Skill::Secondary selectSecondarySkill( const int skillId = Skill::Secondary::UNKNOWN );
+    Skill::Secondary selectSecondarySkill( const Heroes & hero, const int skillId = Skill::Secondary::UNKNOWN );
 }
 
 #endif
