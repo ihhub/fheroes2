@@ -90,14 +90,14 @@ dependencies {
     implementation 'com.google.android.material:material:1.9.0'
 }
 
-task copyH2D(type: Copy) {
+tasks.register('copyH2D', Copy) {
     from('../../files/data') {
         include '*.h2d'
     }
     into 'src/main/assets/files/data'
 }
 
-task copyTranslations(type: Copy) {
+tasks.register('copyTranslations', Copy) {
     from('../../files/lang') {
         include '*.mo'
     }
