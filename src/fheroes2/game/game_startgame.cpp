@@ -1273,15 +1273,21 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                             hero->SetMove( false );
 
                             // During the action and/or movement the adventure map and/or cursor position may have changed, so we should update the cursor image.
-                            if ( le.MouseCursor( _gameArea.GetROI() ) ) {
-                                // We do not use '_gameArea.SetUpdateCursor()' here because we need to update the cursor before rendering the current frame
-                                // and '_gameArea.QueueEventProcessing()' was called earlier in this loop and will only be able to update the cursor in the
-                                // next loop for the next frame.
-                                cursor.SetThemes( GetCursorTileIndex( _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) );
+                            if ( Game::isFadeInNeeded() ) {
+                                // Do not change cursor right now because fade-in is scheduled.
+                                _gameArea.SetUpdateCursor();
                             }
                             else {
-                                // When the cursor is not over the game area we use the Pointer cursor.
-                                cursor.SetThemes( Cursor::POINTER );
+                                if ( le.MouseCursor( _gameArea.GetROI() ) ) {
+                                    // We do not use '_gameArea.SetUpdateCursor()' here because we need to update the cursor before rendering the current frame
+                                    // and '_gameArea.QueueEventProcessing()' was called earlier in this loop and will only be able to update the cursor in the
+                                    // next loop for the next frame.
+                                    cursor.SetThemes( GetCursorTileIndex( _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) );
+                                }
+                                else {
+                                    // When the cursor is not over the game area we use the Pointer cursor.
+                                    cursor.SetThemes( Cursor::POINTER );
+                                }
                             }
                         }
                     }
