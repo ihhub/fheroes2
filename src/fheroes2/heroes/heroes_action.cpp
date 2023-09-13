@@ -3161,7 +3161,7 @@ namespace
             body = _(
                 "The head groom speaks to you, \"That is a fine looking horse you have. I am afraid we can give you no better, but the horses your cavalry are riding look to be of poor breeding stock. We have many trained war horses which would aid your riders greatly. I insist you take them.\"" );
         }
-        if ( isCavalryPresent && !visited ) {
+        else if ( isCavalryPresent && !visited ) {
             body = _(
                 "As you approach the stables, the head groom appears, leading a fine looking war horse. \"This steed will help speed you in your travels. Alas, he will grow tired in a week. You must also let me give better horses to your mounted soldiers, their horses look shoddy and weak.\"" );
         }
