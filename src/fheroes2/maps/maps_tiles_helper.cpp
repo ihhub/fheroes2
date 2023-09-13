@@ -819,6 +819,116 @@ namespace
             updateTerrainTransitionOnArea( groundId, tileId, tileId, 1 );
         }
     }
+
+    uint8_t getRoadImageForTile( const int roadDirection )
+    {
+        if ( hasNoBits( roadDirection, Direction::CENTER ) ) {
+            if ( hasBits( roadDirection, Direction::TOP | Direction::TOP_RIGHT ) && hasNoBits( roadDirection, Direction::TOP_LEFT ) ) {
+                // Нужна доп. проверка что ещё выше.
+                return 8U;
+            }
+            if ( hasBits( roadDirection, Direction::TOP | Direction::TOP_LEFT ) && hasNoBits( roadDirection, Direction::TOP_RIGHT ) ) {
+                // Нужна доп. проверка что ещё выше.
+                return 15U;
+            }
+            if ( hasBits( roadDirection, Direction::TOP ) && ( hasBits( roadDirection, Direction::TOP_LEFT ) || hasBits( roadDirection, Direction::TOP_RIGHT ) ) ) {
+                return Rand::Get( 1 ) ? 1U : 27U;
+            }
+            if ( hasBits( roadDirection, Direction::BOTTOM | Direction::RIGHT ) && hasNoBits( roadDirection, Direction::TOP | Direction::LEFT ) ) {
+                return Rand::Get( 1 ) ? 22U : 24U;
+            }
+            if ( hasBits( roadDirection, Direction::BOTTOM | Direction::LEFT ) && hasNoBits( roadDirection, Direction::TOP | Direction::RIGHT ) ) {
+                return Rand::Get( 1 ) ? 23U : 25U;
+            }
+
+            // This tile should not have a road image.
+            return 255U;
+        }
+
+        if ( hasBits( roadDirection, DIRECTION_TOP_ROW | DIRECTION_CENTER_ROW ) ) {
+            // _ - horizontal road in this and in the upper tile.
+            return 21U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP_LEFT | Direction::BOTTOM_RIGHT )
+             && hasNoBits( roadDirection, Direction::TOP | Direction::RIGHT | Direction::BOTTOM | Direction::LEFT ) ) {
+            // \ - diagonal road from top-left to bottom-right.
+            return Rand::Get( 1 ) ? 17U : 29U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP_RIGHT | Direction::BOTTOM_LEFT )
+             && hasNoBits( roadDirection, Direction::TOP | Direction::RIGHT | Direction::BOTTOM | Direction::LEFT ) ) {
+            // / - diagonal road from top-right to bottom-left.
+            return Rand::Get( 1 ) ? 18U : 30U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP | DIRECTION_CENTER_ROW ) && hasNoBits( roadDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) {
+            // _|_ - cross.
+            return 3U;
+        }
+        if ( hasBits( roadDirection, DIRECTION_TOP_ROW ) && hasNoBits( roadDirection, Direction::LEFT | Direction::RIGHT ) ) {
+            // T - cross.
+            return 4U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP | Direction::TOP_RIGHT ) && hasNoBits( roadDirection, Direction::RIGHT | Direction::LEFT ) ) {
+            // Это и 5 и 9, нужна доп. проверка что ещё выше!
+            return 5U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP | Direction::RIGHT | Direction::BOTTOM ) && hasNoBits( roadDirection, Direction::TOP_RIGHT | Direction::LEFT ) ) {
+            // L - cross.
+            return 6U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP | Direction::RIGHT ) && hasNoBits( roadDirection, Direction::BOTTOM | Direction::LEFT ) ) {
+            // Road from the top tile to this and to the right tile.
+            return 7U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP | Direction::TOP_RIGHT | Direction::BOTTOM )
+             && hasNoBits( roadDirection, Direction::TOP_LEFT | Direction::LEFT | Direction::RIGHT ) ) {
+            // Road from this tile to top and top-right tiles.
+            return 9U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP | Direction::TOP_LEFT ) && hasNoBits( roadDirection, Direction::LEFT ) ) {
+            return 12U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP | Direction::TOP_LEFT | Direction::BOTTOM ) && hasNoBits( roadDirection, Direction::RIGHT | Direction::LEFT ) ) {
+            // Это и 12!!
+            return 13U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP | Direction::LEFT | Direction::BOTTOM ) && hasNoBits( roadDirection, Direction::TOP_LEFT | Direction::RIGHT ) ) {
+            // _| - cross.
+            return 14U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP | Direction::LEFT ) && hasNoBits( roadDirection, Direction::BOTTOM | Direction::RIGHT ) ) {
+            return 16U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP_LEFT ) && ( hasBits( roadDirection, Direction::LEFT ) || hasBits( roadDirection, Direction::BOTTOM_LEFT ) )
+             && hasNoBits( roadDirection, DIRECTION_RIGHT_COL ) ) {
+            // ) - road.
+            return 19U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP_RIGHT ) && ( hasBits( roadDirection, Direction::RIGHT ) || hasBits( roadDirection, Direction::BOTTOM_RIGHT ) )
+             && hasNoBits( roadDirection, DIRECTION_LEFT_COL ) ) {
+            // ( - road.
+            return 20U;
+        }
+        if ( hasBits( roadDirection, Direction::LEFT ) && hasNoBits( roadDirection, Direction::TOP | Direction::RIGHT ) ) {
+            return Rand::Get( 1 ) ? 23U : 25U;
+        }
+        if ( hasBits( roadDirection, Direction::RIGHT ) && hasNoBits( roadDirection, Direction::TOP | Direction::LEFT ) ) {
+            return Rand::Get( 1 ) ? 22U : 24U;
+        }
+        if ( hasBits( roadDirection, Direction::LEFT | Direction::RIGHT ) && hasNoBits( roadDirection, Direction::TOP ) ) {
+            // _ - horizontal road.
+            return Rand::Get( 1 ) ? 2U : 28U;
+        }
+        if ( hasNoBits( roadDirection, Direction::LEFT | Direction::RIGHT ) ) {
+            // | - vertical road.
+            return Rand::Get( 1 ) ? 0U : 26U;
+        }
+
+        // We have not found the appropriate road image and return the value for the incorrect image index.
+
+        DEBUG_LOG( DBG_DEVEL, DBG_WARN, "No proper road image found for road directions: " << Direction::String( roadDirection ) )
+
+        return 255U;
+    }
 }
 
 namespace Maps
@@ -862,20 +972,30 @@ namespace Maps
 
         if ( setRoad ) {
             // Place the Road image on tiles.
-            if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+            if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN || tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_ROAD ) {
+                const int32_t roadImageIndex = getRoadImageForTile( getRoadDirecton( tile ) );
+
+                if ( roadImageIndex == 255U ) {
+                    return;
+                }
+
                 tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_ROAD );
+                tile.setObjectSpriteIndex( getRoadImageForTile( getRoadDirecton( tile ) ) );
 
-                const int roadDirection = getRoadDirecton( tile );
+                for ( const int32_t tileIndex : getAroundIndexes( tile.GetIndex() ) ) {
+                    Tiles & tileAround = world.GetTiles( tileIndex );
+                    const uint8_t imageIndex = getRoadImageForTile( getRoadDirecton( tileAround ) );
+                    if ( imageIndex == 255U ) {
+                        continue;
+                    }
 
-                if ( hasBits( roadDirection, Direction::LEFT ) || hasBits( roadDirection, Direction::RIGHT ) ) {
-                    tile.setObjectSpriteIndex( Rand::Get( 1 ) ? 2U : 28U );
+                    if ( tileAround.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+                        tileAround.setObjectIcnType( MP2::OBJ_ICN_TYPE_ROAD );
+                    }
+                    tileAround.setObjectSpriteIndex( imageIndex );
                 }
-                else {
-                    tile.setObjectSpriteIndex( Rand::Get( 1 ) ? 0U : 26U );
-                }
 
-                const uint16_t groundImageIndex = tile.getTerrainImageIndex();
-                if ( Maps::Ground::isTerrainExtraImage( groundImageIndex ) ) {
+                if ( Maps::Ground::isTerrainExtraImage( tile.getTerrainImageIndex() ) ) {
                     // Reset terrain image
                     tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( tile.GetGround(), false ), false, false );
                 }
