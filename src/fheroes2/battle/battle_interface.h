@@ -460,7 +460,6 @@ namespace Battle
         PopupDamageInfo popup;
         TurnOrder _turnOrder;
 
-        CursorRestorer _cursorRestorer;
         std::unique_ptr<fheroes2::StandardWindow> _background;
 
         struct BridgeMovementAnimation

@@ -321,8 +321,8 @@ void Puzzle::ShowMapsDialog() const
 
     const fheroes2::Display & display = fheroes2::Display::instance();
 
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    // Set the cursor image. After this dialog the Game Area will be shown, so it does not require a cursor restorer.
+    Cursor::Get().SetThemes( Cursor::POINTER );
 
     // restore the original music on exit
     const AudioManager::MusicRestorer musicRestorer;

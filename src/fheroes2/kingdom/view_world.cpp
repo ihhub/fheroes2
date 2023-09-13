@@ -601,8 +601,8 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         interface.reset();
     }
 
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    // Set the cursor image. After this dialog the Game Area will be shown, so it does not require a cursor restorer.
+    Cursor::Get().SetThemes( Cursor::POINTER );
 
     LocalEvent::PauseCycling();
 

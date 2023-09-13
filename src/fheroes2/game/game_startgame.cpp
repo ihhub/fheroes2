@@ -1397,9 +1397,6 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
         }
         else {
             Game::OpenHeroesDialog( *otherHero, true, true );
-
-            // The cursor may have moved in Hero's dialog, so we update it according to the new position on the game area.
-            _gameArea.SetUpdateCursor();
         }
 
         break;
@@ -1424,9 +1421,6 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
         }
         else {
             Game::OpenCastleDialog( *otherCastle );
-
-            // The cursor may have moved in Hero's dialog, so we update it according to the new position on the game area.
-            _gameArea.SetUpdateCursor();
         }
 
         break;
