@@ -2879,13 +2879,13 @@ msgid "Graphics"
 msgstr "Grafika"
 
 msgid "Black & White"
-msgstr "Čiernobiela"
+msgstr "Čiernobiely"
 
 msgid "Mouse Cursor"
 msgstr "Kurzor myši"
 
 msgid "Color"
-msgstr "Farba"
+msgstr "Farebný"
 
 msgid "Text Support"
 msgstr "Podpora textu"
