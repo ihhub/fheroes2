@@ -36,6 +36,7 @@
 #include "dialog_system_options.h"
 #include "direction.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "game_io.h"
 #include "game_mode.h"
@@ -95,6 +96,9 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
         RedrawFocus();
 
         hero->SetMove( true );
+
+        // We reset this delay to start hero moving immediately and set all the variables needed to handle game events correctly.
+        Game::passAnimationDelay( Game::DelayType::CURRENT_HERO_DELAY );
     }
 }
 
