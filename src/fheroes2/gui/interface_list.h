@@ -377,7 +377,7 @@ namespace Interface
             if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_HOME ) && ( _topId > 0 ) ) {
                 needRedraw = true;
 
-                _topId  = 0;
+                _topId = 0;
 
                 UpdateScrollbarRange();
                 _scrollbar.moveToIndex( _topId );
