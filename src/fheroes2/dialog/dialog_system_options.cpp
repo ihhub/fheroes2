@@ -385,11 +385,6 @@ namespace fheroes2
             case DialogAction::Configuration:
                 action = openSystemOptionsDialog();
                 break;
-            case DialogAction::Graphics:
-                fheroes2::openGraphicsSettingsDialog( redrawAdventureMap );
-
-                action = DialogAction::Configuration;
-                break;
             case DialogAction::Language: {
                 const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
 
@@ -410,6 +405,11 @@ namespace fheroes2
                 action = DialogAction::Configuration;
                 break;
             }
+            case DialogAction::Graphics:
+                fheroes2::openGraphicsSettingsDialog( redrawAdventureMap );
+
+                action = DialogAction::Configuration;
+                break;
             case DialogAction::AudioSettings:
                 Dialog::openAudioSettingsDialog( true );
 
