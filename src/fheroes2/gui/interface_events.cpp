@@ -97,7 +97,9 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
 
         hero->SetMove( true );
 
-        // We reset this delay to start hero moving immediately and set all the variables needed to handle game events correctly.
+        // We pass this delay to start hero moving immediately and set all the variables needed to handle game events correctly
+        // and to stop handling mouse click events until hero stops. Otherwise there could be a rare case
+        // when double click is faster than this delay and the second click will also be handled which should not happen.
         Game::passAnimationDelay( Game::DelayType::CURRENT_HERO_DELAY );
     }
 }
