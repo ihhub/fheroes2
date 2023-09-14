@@ -18,12 +18,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "dialog_graphics_settings.h"
+
 #include <cstdint>
 #include <string>
 #include <utility>
 
 #include "agg_image.h"
-#include "dialog_graphics_settings.h"
+
 #include "dialog_resolution.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
