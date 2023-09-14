@@ -20,14 +20,15 @@
 
 #include "dialog_system_options.h"
 
-#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "dialog_audio.h"
 #include "dialog_graphics_settings.h"
 #include "dialog_hotkeys.h"

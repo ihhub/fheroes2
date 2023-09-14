@@ -20,6 +20,7 @@
 
 #include "dialog_interface_settings.h"
 
+#include <cassert>
 #include <cstdint>
 #include <string>
 #include <utility>
@@ -37,7 +38,6 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_option_item.h"
-#include "ui_text.h"
 
 namespace
 {
