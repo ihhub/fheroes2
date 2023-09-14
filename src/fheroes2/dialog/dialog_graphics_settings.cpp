@@ -26,7 +26,6 @@
 #include "dialog_graphics_settings.h"
 #include "dialog_resolution.h"
 #include "game_hotkeys.h"
-#include "game_mainmenu_ui.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
@@ -221,9 +220,9 @@ namespace
 
 namespace fheroes2
 {
-    void openGraphicsSettingsDialog()
+    void openGraphicsSettingsDialog( const std::function<void()> & updateUI )
     {
-        drawMainMenuScreen();
+        updateUI();
 
         Settings & conf = Settings::Get();
 
@@ -237,7 +236,7 @@ namespace fheroes2
                 if ( Dialog::SelectResolution() ) {
                     conf.Save( Settings::configFileName );
                 }
-                drawMainMenuScreen();
+                updateUI();
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::Mode:

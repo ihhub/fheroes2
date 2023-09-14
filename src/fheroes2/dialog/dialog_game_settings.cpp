@@ -46,6 +46,19 @@
 
 namespace
 {
+    enum class SelectedWindow : int
+    {
+        Configuration,
+        Language,
+        Graphics,
+        AudioSettings,
+        HotKeys,
+        CursorType,
+        TextSupportMode,
+        UpdateSettings,
+        Exit
+    };
+
     const fheroes2::Size offsetBetweenOptions{ 92, 110 };
 
     const fheroes2::Point optionOffset{ 36, 47 };
@@ -106,19 +119,6 @@ namespace
             fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 9 ), _( "Text Support" ), _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
     }
-
-    enum class SelectedWindow : int
-    {
-        Configuration,
-        Graphics,
-        Language,
-        HotKeys,
-        CursorType,
-        TextSupportMode,
-        UpdateSettings,
-        AudioSettings,
-        Exit
-    };
 
     SelectedWindow showConfigurationWindow()
     {
@@ -246,15 +246,13 @@ namespace fheroes2
 
         Settings & conf = Settings::Get();
 
+        bool saveConfiguration = false;
+
         SelectedWindow windowType = SelectedWindow::Configuration;
         while ( windowType != SelectedWindow::Exit ) {
             switch ( windowType ) {
             case SelectedWindow::Configuration:
                 windowType = showConfigurationWindow();
-                break;
-            case SelectedWindow::Graphics:
-                fheroes2::openGraphicsSettingsDialog();
-                windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::Language: {
                 const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
@@ -274,6 +272,14 @@ namespace fheroes2
                 windowType = SelectedWindow::UpdateSettings;
                 break;
             }
+            case SelectedWindow::Graphics:
+                fheroes2::openGraphicsSettingsDialog( [](){ drawMainMenuScreen(); } );
+                windowType = SelectedWindow::Configuration;
+                break;
+            case SelectedWindow::AudioSettings:
+                Dialog::openAudioSettingsDialog( false );
+                windowType = SelectedWindow::Configuration;
+                break;
             case SelectedWindow::HotKeys:
                 fheroes2::openHotkeysDialog();
                 windowType = SelectedWindow::Configuration;
@@ -287,16 +293,16 @@ namespace fheroes2
                 windowType = SelectedWindow::UpdateSettings;
                 break;
             case SelectedWindow::UpdateSettings:
-                conf.Save( Settings::configFileName );
-                windowType = SelectedWindow::Configuration;
-                break;
-            case SelectedWindow::AudioSettings:
-                Dialog::openAudioSettingsDialog( false );
+                saveConfiguration = true;
                 windowType = SelectedWindow::Configuration;
                 break;
             default:
                 return;
             }
+        }
+
+        if ( saveConfiguration ) {
+            conf.Save( Settings::configFileName );
         }
     }
 }
