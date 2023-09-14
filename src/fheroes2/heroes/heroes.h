@@ -353,7 +353,11 @@ public:
     }
 
     uint32_t GetMaxSpellPoints() const override;
+
+    // Returns the maximum number of hero movement points, depending on the surface type on which the hero is currently located
     uint32_t GetMaxMovePoints() const;
+    // Returns the maximum number of hero movement points, depending on the specified surface type (water or land)
+    uint32_t GetMaxMovePoints( const bool onWater ) const;
 
     uint32_t GetMovePoints() const
     {

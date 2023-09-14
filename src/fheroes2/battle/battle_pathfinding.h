@@ -50,14 +50,14 @@ namespace Battle
 
     struct BattleNode final
     {
-        BattleNodeIndex _from = { -1, -1 };
+        BattleNodeIndex _from{ -1, -1 };
         // Cost of moving to this node. May differ from _distance due to penalties (e.g. moat penalty) and
         // also in the case of flying units.
-        uint32_t _cost = 0;
+        uint32_t _cost{ 0 };
         // Distance to this node, measured in the number of movements that need to be performed to get here.
         // The reversal of a wide unit is not considered as a movement. For flying units, this distance is
         // estimated as the straight line distance to the position corresponding to this node.
-        uint32_t _distance = 0;
+        uint32_t _distance{ 0 };
 
         BattleNode() = default;
         BattleNode( BattleNodeIndex node, const uint32_t cost, const uint32_t distance )
@@ -104,12 +104,12 @@ namespace Battle
         std::unordered_map<BattleNodeIndex, BattleNode, BattleNodeIndexHash> _cache;
 
         // Parameters of the unit for which the current cache is created
-        BattleNodeIndex _pathStart = { -1, -1 };
-        uint32_t _speed = 0;
-        bool _isWide = false;
-        bool _isFlying = false;
+        BattleNodeIndex _pathStart{ -1, -1 };
+        uint32_t _speed{ 0 };
+        bool _isWide{ false };
+        bool _isFlying{ false };
         // The unit's color (or rather, the unit's army color) affects the ability to pass the castle bridge
-        int _color = 0;
+        int _color{ 0 };
         // Board cells passability status at the time of current cache creation
         std::bitset<ARENASIZE> _boardStatus;
     };
