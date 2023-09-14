@@ -253,8 +253,9 @@ Heroes::Heroes( int heroid, int rc )
         break;
     }
 
-    if ( !magic_point )
+    if ( !magic_point ) {
         SetSpellPoints( GetMaxSpellPoints() );
+    }
     move_point = GetMaxMovePoints();
 }
 
@@ -702,67 +703,73 @@ uint32_t Heroes::GetMaxSpellPoints() const
 
 uint32_t Heroes::GetMaxMovePoints() const
 {
-    uint32_t point = 0;
+    return GetMaxMovePoints( isShipMaster() );
+}
 
-    // start point
-    if ( isShipMaster() ) {
-        point = 1500;
+uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
+{
+    uint32_t result = 0;
 
-        // skill navigation
-        point = UpdateMovementPoints( point, Skill::Secondary::NAVIGATION );
+    if ( onWater ) {
+        // Initial mobility on water does not depend on the composition of the army
+        result = 1500;
 
-        // artifact bonus
-        point += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_MOBILITY );
+        // Influence of Navigation skill
+        result = UpdateMovementPoints( result, Skill::Secondary::NAVIGATION );
 
-        // visited object
-        point += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
+        // Artifact bonuses
+        result += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_MOBILITY );
+
+        // Bonuses from captured lighthouses
+        result += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
     }
     else {
+        // Initial mobility on land depends on the speed of the slowest army unit
         const Troop * troop = army.GetSlowestTroop();
-
-        if ( troop )
+        if ( troop ) {
             switch ( troop->GetSpeed() ) {
-            default:
-                break;
-            case Speed::CRAWLING:
             case Speed::VERYSLOW:
-                point = 1000;
+                result = 1000;
                 break;
             case Speed::SLOW:
-                point = 1100;
+                result = 1100;
                 break;
             case Speed::AVERAGE:
-                point = 1200;
+                result = 1200;
                 break;
             case Speed::FAST:
-                point = 1300;
+                result = 1300;
                 break;
             case Speed::VERYFAST:
-                point = 1400;
+                result = 1400;
                 break;
             case Speed::ULTRAFAST:
-            case Speed::BLAZING:
-            case Speed::INSTANT:
-                point = 1500;
+                result = 1500;
+                break;
+            default:
+                assert( 0 );
                 break;
             }
+        }
 
-        // skill logistics
-        point = UpdateMovementPoints( point, Skill::Secondary::LOGISTICS );
+        // Influence of Logistics skill
+        result = UpdateMovementPoints( result, Skill::Secondary::LOGISTICS );
 
-        // artifact bonus
-        point += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LAND_MOBILITY );
+        // Artifact bonuses
+        result += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LAND_MOBILITY );
 
-        // visited object
-        if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
-            point += GameStatic::getMovementPointBonus( MP2::OBJ_STABLES );
+        // Bonuses from visited objects
+        if ( isObjectTypeVisited( MP2::OBJ_STABLES ) ) {
+            result += GameStatic::getMovementPointBonus( MP2::OBJ_STABLES );
+        }
     }
 
+    // AI-controlled heroes receive additional movement bonus depending on the game difficulty
     if ( isControlAI() ) {
-        point += Difficulty::GetHeroMovementBonus( Game::getDifficulty() );
+        result += Difficulty::GetHeroMovementBonus( Game::getDifficulty() );
     }
 
-    return point;
+    return result;
 }
 
 int Heroes::GetMorale() const
