@@ -374,6 +374,26 @@ namespace Interface
 
                 return true;
             }
+            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_HOME ) && ( _topId > 0 ) ) {
+                needRedraw = true;
+
+                _topId  = 0;
+
+                UpdateScrollbarRange();
+                _scrollbar.moveToIndex( _topId );
+
+                return true;
+            }
+            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_END ) && ( _topId + maxItems < _size() ) ) {
+                needRedraw = true;
+
+                _topId = _size() - maxItems;
+
+                UpdateScrollbarRange();
+                _scrollbar.moveToIndex( _topId );
+
+                return true;
+            }
             if ( ( le.MouseClickLeft( buttonPgUp.area() ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( _scrollbar.getArea() )
                    || _timedButtonPgUp.isDelayPassed() )
                  && ( _topId > 0 ) ) {
