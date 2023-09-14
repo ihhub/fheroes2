@@ -36,6 +36,7 @@
 #include "dialog_system_options.h"
 #include "direction.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "game_io.h"
 #include "game_mode.h"
@@ -95,6 +96,11 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
         RedrawFocus();
 
         hero->SetMove( true );
+
+        // We pass this delay to start hero moving immediately and set all the variables needed to handle game events correctly
+        // and to stop handling mouse click events until hero stops. Otherwise there could be a rare case
+        // when double click is faster than this delay and the second click will also be handled which should not happen.
+        Game::passAnimationDelay( Game::DelayType::CURRENT_HERO_DELAY );
     }
 }
 
