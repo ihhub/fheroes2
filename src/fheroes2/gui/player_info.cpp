@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -392,19 +392,19 @@ bool Interface::PlayersInfo::QueueEventProcessing()
     if ( le.MousePressRight() ) {
         const Player * player = GetFromOpponentClick( le.GetMouseCursor() );
         if ( player != nullptr ) {
-            Dialog::Message(
+            fheroes2::showStandardTextMessage(
                 _( "Opponents" ),
                 _( "This lets you change player starting positions and colors. A particular color will always start in a particular location. Some positions may only be played by a computer player or only by a human player." ),
-                Font::BIG );
+                Dialog::ZERO );
             return true;
         }
 
         player = GetFromClassClick( le.GetMouseCursor() );
         if ( player != nullptr ) {
-            Dialog::Message(
+            fheroes2::showStandardTextMessage(
                 _( "Class" ),
                 _( "This lets you change the class of a player. Classes are not always changeable. Depending on the scenario, a player may receive additional towns and/or heroes not of their primary alignment." ),
-                Font::BIG );
+                Dialog::ZERO );
             return true;
         }
 

@@ -46,6 +46,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_keyboard.h"
 #include "ui_text.h"
 #include "ui_tool.h"
@@ -352,13 +353,13 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
         }
 
         if ( le.MousePressRight( buttonCancel.area() ) ) {
-            Dialog::Message( _( "Cancel" ), _( "Exit this menu without doing anything." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonOk.area() ) ) {
-            Dialog::Message( _( "Okay" ), _( "Click to apply the entered text." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to apply the entered text." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonVirtualKB.area() ) ) {
-            Dialog::Message( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
         }
 
         // Text input cursor blink.

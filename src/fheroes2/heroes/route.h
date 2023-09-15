@@ -201,6 +201,8 @@ namespace Route
     StreamBase & operator<<( StreamBase &, const Path & );
     StreamBase & operator>>( StreamBase &, Step & );
     StreamBase & operator>>( StreamBase &, Path & );
+
+    uint32_t calculatePathPenalty( const std::list<Step> & path );
 }
 
 #endif

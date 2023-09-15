@@ -133,7 +133,7 @@ namespace
             return dist;
         }
 
-        const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( dimensionDoorSteps );
+        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( dimensionDoorSteps );
         assert( dimensionDoorDist > 0 );
 
         if ( dist == 0 || dimensionDoorDist < dist / 2 ) {
@@ -2038,7 +2038,7 @@ namespace AI
                 uint32_t dist = _pathfinder.getDistance( node.first );
 
                 bool useDimensionDoor = false;
-                const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
+                const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
                 if ( dimensionDoorDist > 0 && ( dist == 0 || dimensionDoorDist < dist / 2 ) ) {
                     dist = dimensionDoorDist;
                     useDimensionDoor = true;
@@ -2073,7 +2073,7 @@ namespace AI
 
             // TODO: add logic to check fog discovery based on Dimension Door distance, not the nearest tile.
             bool useDimensionDoor = false;
-            const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, fogDiscoveryTarget ) );
+            const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, fogDiscoveryTarget ) );
             if ( dimensionDoorDist > 0 && ( distanceToFogDiscovery == 0 || dimensionDoorDist < distanceToFogDiscovery / 2 ) ) {
                 distanceToFogDiscovery = dimensionDoorDist;
                 useDimensionDoor = true;
@@ -2453,7 +2453,7 @@ namespace AI
 
             // check if we want to use Dimension Door spell or move regularly
             std::list<Route::Step> dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
-            uint32_t dimensionDoorDistance = AIWorldPathfinder::calculatePathPenalty( dimensionPath );
+            uint32_t dimensionDoorDistance = Route::calculatePathPenalty( dimensionPath );
             uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
             if ( dimensionDoorDistance && ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) ) {
                 while ( ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) && !dimensionPath.empty() && bestHero->MayStillMove( false, false )

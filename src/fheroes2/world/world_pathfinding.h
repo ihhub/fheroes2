@@ -26,7 +26,6 @@
 
 #include "color.h"
 #include "mp2.h"
-#include "pathfinding.h"
 #include "skill.h"
 
 class Heroes;
@@ -37,49 +36,45 @@ namespace Route
     class Step;
 }
 
-struct WorldNode : public PathfindingNode<MP2::MapObjectType>
+struct WorldNode final
 {
+    int _from{ -1 };
+    uint32_t _cost{ 0 };
+    MP2::MapObjectType _objectID{ MP2::OBJ_NONE };
     // The number of movement points remaining for the hero after moving to this node
-    uint32_t _remainingMovePoints = 0;
+    uint32_t _remainingMovePoints{ 0 };
 
     WorldNode() = default;
-
     WorldNode( const int node, const uint32_t cost, const MP2::MapObjectType object, const uint32_t remainingMovePoints )
-        : PathfindingNode( node, cost, object )
+        : _from( node )
+        , _cost( cost )
+        , _objectID( object )
         , _remainingMovePoints( remainingMovePoints )
     {}
 
-    WorldNode( const WorldNode & ) = delete;
-    WorldNode( WorldNode && ) = default;
-
-    ~WorldNode() override = default;
-
-    WorldNode & operator=( const WorldNode & ) = delete;
-    WorldNode & operator=( WorldNode && ) = default;
-
-    void resetNode() override
+    void reset()
     {
-        PathfindingNode::resetNode();
-
+        _from = -1;
+        _cost = 0;
+        _objectID = MP2::OBJ_NONE;
         _remainingMovePoints = 0;
     }
 };
 
-// Abstract class that provides base functionality to path through World map
-class WorldPathfinder : public Pathfinder<WorldNode>
+// Abstract class that provides basic functionality for navigating the World Map
+class WorldPathfinder
 {
 public:
     WorldPathfinder() = default;
     WorldPathfinder( const WorldPathfinder & ) = delete;
 
-    ~WorldPathfinder() override = default;
+    virtual ~WorldPathfinder() = default;
 
     WorldPathfinder & operator=( const WorldPathfinder & ) = delete;
 
-    // This method resizes the cache and re-calculates map offsets if values are out of sync with World class
-    virtual void checkWorldSize();
+    virtual void reset();
 
-    static uint32_t calculatePathPenalty( const std::list<Route::Step> & path );
+    uint32_t getDistance( int targetIndex ) const;
 
 protected:
     virtual void processWorldMap();
@@ -89,8 +84,12 @@ protected:
     // can be overridden by a derived class.
     virtual bool isMovementAllowed( const int from, const int direction ) const;
 
-    // This method defines pathfinding rules. This has to be implemented by the derived class.
+    // Defines the pathfinding rules and should be implemented by a derived class.
     virtual void processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx ) = 0;
+
+    // Returns the maximum number of movement points, depending on whether the movement is performed by land or by
+    // water. Should be implemented by a derived class.
+    virtual uint32_t getMaxMovePoints( const bool onWater ) const = 0;
 
     // Calculates the movement penalty when moving from the source tile to the adjacent destination tile in the
     // specified direction. If the "last move" logic should be taken into account (when performing pathfinding
@@ -99,18 +98,16 @@ protected:
     // overridden by a derived class.
     virtual uint32_t getMovementPenalty( const int from, const int to, const int direction ) const;
 
-    // Subtracts movement points taking the transition between turns into account
-    uint32_t subtractMovePoints( const uint32_t movePoints, const uint32_t subtractedMovePoints ) const;
-
+    std::vector<WorldNode> _cache;
     std::vector<int> _mapOffset;
 
     // Hero properties should be cached here because they can change even if the hero's position does not change,
     // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
     // pathfinder's cache
-    int _color = Color::NONE;
-    uint32_t _remainingMovePoints = 0;
-    uint32_t _maxMovePoints = 0;
-    uint8_t _pathfindingSkill = Skill::Level::EXPERT;
+    int _pathStart{ -1 };
+    int _color{ Color::NONE };
+    uint32_t _remainingMovePoints{ 0 };
+    uint8_t _pathfindingSkill{ Skill::Level::EXPERT };
 };
 
 class PlayerWorldPathfinder final : public WorldPathfinder
@@ -134,6 +131,16 @@ public:
 private:
     // Follows regular passability rules (for the human player)
     void processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx ) override;
+
+    // Returns the maximum number of movement points. This class is not intended for planning paths passing both on
+    // land and on water at the same time, so the maximum number of movement points corresponding to the type of
+    // surface on which the hero is currently located is used.
+    uint32_t getMaxMovePoints( const bool onWater ) const override;
+
+    // Hero properties should be cached here because they can change even if the hero's position does not change,
+    // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
+    // pathfinder's cache
+    uint32_t _maxMovePoints{ 0 };
 };
 
 class AIWorldPathfinder final : public WorldPathfinder
@@ -161,7 +168,7 @@ public:
 
     static bool isHeroPossiblyBlockingWay( const Heroes & hero );
 
-    std::vector<IndexObject> getObjectsOnTheWay( const int targetIndex, const bool checkAdjacent = false ) const;
+    std::vector<IndexObject> getObjectsOnTheWay( const int targetIndex ) const;
 
     std::list<Route::Step> getDimensionDoorPath( const Heroes & hero, int targetIndex ) const;
 
@@ -173,7 +180,7 @@ public:
     // Used for non-hero armies, like castles or monsters
     uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
     // Faster, but does not re-evaluate the map (exposed method of the base class)
-    using Pathfinder::getDistance;
+    using WorldPathfinder::getDistance;
 
     // Returns the coefficient of the minimum required advantage in army strength in order to be able to "pass through"
     // protected tiles from the AI pathfinder's point of view
@@ -206,6 +213,10 @@ private:
     // Follows custom passability rules (for the AI)
     void processCurrentNode( std::vector<int> & nodesToExplore, const int currentNodeIdx ) override;
 
+    // Returns the maximum number of movement points, depending on whether the movement is performed by land or by
+    // water
+    uint32_t getMaxMovePoints( const bool onWater ) const override;
+
     // Adds special logic for AI-controlled heroes to correctly calculate movement penalties when such a hero passes
     // through objects on the map or overcomes water obstacles using boats. If this logic should be taken into account
     // (when performing pathfinding for a real hero on the map), then the source tile should be already accessible for
@@ -215,6 +226,8 @@ private:
     // Hero properties should be cached here because they can change even if the hero's position does not change,
     // so it should be possible to compare the old values with the new ones to detect the need to recalculate the
     // pathfinder's cache
+    uint32_t _maxMovePointsOnLand{ 0 };
+    uint32_t _maxMovePointsOnWater{ 0 };
     double _armyStrength{ -1 };
     bool _isArtifactsBagFull{ false };
     bool _isSummonBoatSpellAvailable{ false };
