@@ -77,7 +77,6 @@
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
