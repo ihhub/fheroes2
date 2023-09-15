@@ -109,7 +109,7 @@ namespace fheroes2
 
         void postRender()
         {
-             _text.hide();
+            _text.hide();
         }
 
     private:

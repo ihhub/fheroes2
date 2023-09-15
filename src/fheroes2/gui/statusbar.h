@@ -44,7 +44,7 @@ public:
 
 private:
     fheroes2::Rect _roi;
-    
+
     std::string _prevMessage;
     fheroes2::Rect _prevMessageRoi;
 };

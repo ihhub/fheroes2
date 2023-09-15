@@ -180,7 +180,7 @@ namespace
             // Initialize local event processing.
             _systemInfoRenderer = std::make_unique<fheroes2::SystemInfoRenderer>();
 
-            LocalEvent::RegisterCycling( [this](){ _systemInfoRenderer->preRender(); }, [this](){ _systemInfoRenderer->postRender(); } );
+            LocalEvent::RegisterCycling( [this]() { _systemInfoRenderer->preRender(); }, [this]() { _systemInfoRenderer->postRender(); } );
 
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
