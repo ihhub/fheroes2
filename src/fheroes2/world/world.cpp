@@ -765,7 +765,7 @@ std::string World::getCurrentRumor() const
     case 6:
         return _( "A Black Dragon will take out a Titan any day of the week." );
     case 7:
-        return _( "He told her: Yada yada yada...  and then she said: Blah, blah, blah..." );
+        return _( "He told her: Yada yada yada... and then she said: Blah, blah, blah..." );
     case 8:
         return _( "An unknown force is being resurrected..." );
     case 9:
