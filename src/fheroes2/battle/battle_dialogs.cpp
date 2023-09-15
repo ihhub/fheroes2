@@ -372,7 +372,7 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Hot Keys" ), _( "Check and configure all the hot keys present in the game." ), 0 );
             }
             else if ( le.MousePressRight( optionAreas[8] ) ) {
-                Dialog::Message( _( "Damage Info" ), _( "Toggle to display damage information during the battle." ), Font::BIG );
+                fheroes2::showStandardTextMessage( _( "Damage Info" ), _( "Toggle to display damage information during the battle." ), 0 );
             }
             else if ( le.MousePressRight( buttonOkay.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
@@ -987,27 +987,27 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
         }
 
         if ( le.MousePressRight( btnCast.area() ) && _currentColor == hero.GetColor() ) {
-            Dialog::Message( _( "Cast Spell" ),
-                             _( "Cast a magical spell. You may only cast one spell per combat round. The round is reset when every creature has had a turn." ),
-                             Font::BIG );
+            fheroes2::showStandardTextMessage(
+                _( "Cast Spell" ), _( "Cast a magical spell. You may only cast one spell per combat round. The round is reset when every creature has had a turn." ),
+                Dialog::ZERO );
         }
         else if ( le.MousePressRight( btnRetreat.area() ) && _currentColor == hero.GetColor() && !hero.isCaptain() ) {
-            Dialog::Message(
+            fheroes2::showStandardTextMessage(
                 _( "Retreat" ),
                 _( "Retreat your hero, abandoning your creatures. Your hero will be available for you to recruit again, however, the hero will have only a novice hero's forces." ),
-                Font::BIG );
+                Dialog::ZERO );
         }
         else if ( le.MousePressRight( btnSurrender.area() ) && _currentColor == hero.GetColor() && !hero.isCaptain() ) {
-            Dialog::Message(
+            fheroes2::showStandardTextMessage(
                 _( "Surrender" ),
                 _( "Surrendering costs gold. However if you pay the ransom, the hero and all of his or her surviving creatures will be available to recruit again." ),
-                Font::BIG );
+                Dialog::ZERO );
         }
         else if ( le.MousePressRight( portraitArea ) && actionHero != nullptr ) {
-            Dialog::Message( _( "Hero Screen" ), _( "Open Hero Screen to view full information about the hero." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Hero Screen" ), _( "Open Hero Screen to view full information about the hero." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( btnClose.area() ) ) {
-            Dialog::Message( _( "Cancel" ), _( "Return to the battle." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Return to the battle." ), Dialog::ZERO );
         }
 
         if ( statusMessage != status.GetMessage() ) {
