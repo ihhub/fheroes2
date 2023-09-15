@@ -1,5 +1,5 @@
 # Russian translation of fheroes2
-# Copyright (C) 2021 - 2022 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2021 - 2023 fheroes2 team <fhomm2@gmail.com>
 # Copyright (C) 2009 Igor Orlov <igororlov@inbox.ru>
 # Copyright (C) 2009 Andrey Afletdinov <afletdinov@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:37+0000\n"
-"PO-Revision-Date: 2023-09-10 07:12+0300\n"
+"PO-Revision-Date: 2023-09-15 21:53+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -1060,7 +1060,6 @@ msgstr "Предательство"
 msgid "Final Justice"
 msgstr "Акт отчаяния"
 
-#, fuzzy
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
 "rebellion against his brother. They are not allied with each other, so they "
@@ -1154,7 +1153,6 @@ msgstr ""
 "Это последняя битва. И Вы, и Ваш враг вооружены до зубов, и все враги в "
 "союзе против Вас. Захватите Арчибальда, чтобы положить конец войне!"
 
-#, fuzzy
 msgid ""
 "Switching sides leaves you with three castles against the enemy's one. This "
 "battle will be the easiest one you will face for the rest of the war..."
@@ -1191,7 +1189,6 @@ msgstr "Апокалипсис"
 msgid "Greater Glory"
 msgstr "К вящей славе"
 
-#, fuzzy
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region. They "
 "are not allied with one another, so they will spend most of their energy "
@@ -1588,7 +1585,6 @@ msgstr ""
 "Драконы, рыча и огрызаясь, соглашаются объединить усилия с Вами, своим "
 "\"союзником\"."
 
-#, fuzzy
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
 "attention. He shouts to them, \"Who of you is brave enough to join this "
@@ -1600,7 +1596,6 @@ msgstr ""
 "\". Эльфы взрываются радостными возгласами и бегут, чтобы примкнуть к Вашим "
 "рядам."
 
-#, fuzzy
 msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours. You may "
 "pass.\""
@@ -1610,7 +1605,6 @@ msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
 msgstr "Огры хрюкают в знак признания: \"Союзники Арчибальда могут пройти\"."
 
-#, fuzzy
 msgid ""
 "The dragons see you and call out. \"Our alliance with Archibald compels us "
 "to join you. Unfortunately you have no room. A pity!\" They quickly scatter."
@@ -1619,7 +1613,6 @@ msgstr ""
 "присоединиться к Вам. К сожалению, в Вашей армии нет места. Жаль!\" Взмахнув "
 "крыльями, они улетают прочь."
 
-#, fuzzy
 msgid ""
 "The elves stand at attention as you approach. Their leader calls to you and "
 "says, \"Let us not impede your progress, ally! Move on, and may victory be "
@@ -2715,7 +2708,6 @@ msgstr "Выход, без изменений."
 msgid "Arena"
 msgstr "Арена"
 
-#, fuzzy
 msgid ""
 "You enter the arena and face a pack of vicious lions. You handily defeat "
 "them, to the wild cheers of the crowd. Impressed by your skill, the aged "
@@ -3402,7 +3394,6 @@ msgstr "Название выбранной карты."
 msgid "Selected Map Difficulty"
 msgstr "Сложность игры"
 
-#, fuzzy
 msgid ""
 "The map difficulty of the currently selected map. The map difficulty is "
 "determined by the scenario designer. More difficult maps might include more "
@@ -3483,7 +3474,6 @@ msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 "Изменить скорость, с которой Ваши герои перемещаются на главном экране."
 
-#, fuzzy
 msgid ""
 "Sets the speed that A.I. heroes move at. You can also elect not to view A.I. "
 "movement at all."
@@ -4661,7 +4651,6 @@ msgstr "6 игроков"
 msgid "Play with 6 human players."
 msgstr "Все игроки - люди."
 
-#, fuzzy
 msgid "Dragon city has fallen! You are now the Master of the Dragons."
 msgstr "Город драконов пал! Теперь Вы повелитель драконов."
 
@@ -5899,7 +5888,6 @@ msgstr ""
 "Глоток воды в оазисе освежает, но иной пользы не приносит. Этот оазис, "
 "возможно, снова поможет Вам после следующей битвы."
 
-#, fuzzy
 msgid ""
 "A drink at the oasis fills your troops with strength and lifts their "
 "spirits. You can travel a bit further today."
@@ -8878,7 +8866,6 @@ msgstr "Защитная Перчатка"
 msgid "The %{name} increase your defense skill by %{count}."
 msgstr "%{name} увеличивает силу защиты на %{count}."
 
-#, fuzzy
 msgid ""
 "You encounter the infamous Black Knight! After a grueling duel ending in a "
 "draw, the Knight, out of respect, offers you a pair of armored gauntlets."
@@ -9172,7 +9159,6 @@ msgstr "Зачарованные Часы"
 msgid "The %{name} extends the duration of all your spells by %{count} turns."
 msgstr "%{name} увеличивает длительность всех заклинаний на %{count} ход."
 
-#, fuzzy
 msgid ""
 "A surprise turn in the landscape finds you in the midst of a grisly scene: "
 "Vultures picking at the aftermath of a terrible battle. Your cursory search "
@@ -9496,11 +9482,9 @@ msgstr ""
 msgid "Wand of Negation"
 msgstr "Посох Отрицания"
 
-#, fuzzy
 msgid "The %{name} makes all your troops immune to dispel magic spells."
 msgstr "%{name} делает все Ваши отряды невосприимчивыми к заклинаниям смерти."
 
-#, fuzzy
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
 "He presents  you with a gift: A wand that prevents the use of the dispel "
@@ -9637,7 +9621,6 @@ msgstr "Ужасная Маска"
 msgid "The %{name} prevents all 'wandering' armies from joining your hero."
 msgstr "%{name} не позволяет нейтральным войскам вступать в Вашу армию."
 
-#, fuzzy
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
 "Warlock, unearths his fabled mask. Trembling, you put it on and it twists "
@@ -9733,7 +9716,6 @@ msgstr "Бездонный Мешочек Кристаллов"
 msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру кристаллов."
 
-#, fuzzy
 msgid ""
 "Taking shelter from a storm in a small cave, you notice a small patch of "
 "crystal in one corner. Curious, you break a piece off and notice that the "
@@ -9773,7 +9755,6 @@ msgstr ""
 msgid "White Pearl"
 msgstr "Белая Жемчужина"
 
-#, fuzzy
 msgid ""
 "A walk across a dry saltwater lake bed yields an unlikely prize: A white "
 "pearl amidst shattered shells and debris."
@@ -9897,7 +9878,6 @@ msgstr ""
 msgid "Battle Garb of Anduran"
 msgstr "Боевой Доспех Андурана"
 
-#, fuzzy
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for your troops and gives you the Town Portal spell."
@@ -9967,7 +9947,6 @@ msgstr ""
 "%{name} увеличивает защиту от магии холода на %{count} процентов, но также в "
 "два раза увеличивает урон от магии огня."
 
-#, fuzzy
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
 "your horse. The pain subsides, but you still feel as if your chest is "
@@ -9995,7 +9974,6 @@ msgstr ""
 msgid "Holy Hammer"
 msgstr "Святой Молот"
 
-#, fuzzy
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
 "of Zombies. He asks you to take his hammer and finish what he started. As "
@@ -10183,7 +10161,6 @@ msgstr "Молния"
 msgid "Chain Lightning"
 msgstr "Цепь молний"
 
-#, fuzzy
 msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
 "strike the nearest creature with half damage, then strike the NEXT nearest "
@@ -10282,16 +10259,17 @@ msgid "Mass Bless"
 msgstr "Общее благословение"
 
 msgid "Magically increases the defense skill of the selected creatures."
-msgstr "Магически увеличивает защиту выбранного отряда на 3."
+msgstr "Магически увеличивает защиту выбранного отряда."
 
 msgid "Stoneskin"
 msgstr "Каменная кожа"
 
-#, fuzzy
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
-msgstr "Увеличивает защиту выбранного существа на 5."
+msgstr ""
+"Увеличивает защиту выбранного отряда. Это заклинание является более мощной "
+"версией заклинания 'Каменная кожа'."
 
 msgid "Steelskin"
 msgstr "Стальная кожа"
@@ -10314,7 +10292,6 @@ msgstr "Наносит урон всей нежити, находящейся н
 msgid "Holy Word"
 msgstr "Святое слово"
 
-#, fuzzy
 msgid ""
 "Damages all undead in the battle. This is an improved version of Holy Word."
 msgstr ""
@@ -10433,7 +10410,6 @@ msgstr "Дыхание смерти"
 msgid "Death Wave"
 msgstr "Волна смерти"
 
-#, fuzzy
 msgid ""
 "Damages all living (non-undead) units in the battle. This spell is an "
 "improved version of Death Ripple."
@@ -10462,7 +10438,6 @@ msgstr "Навсегда излечивает и поднимает павшую
 msgid "Mirror Image"
 msgstr "Фантом"
 
-#, fuzzy
 msgid ""
 "Creates an illusionary unit that duplicates one of your existing units. This "
 "illusionary unit does the same damages as the original, but will vanish if "
@@ -10564,7 +10539,6 @@ msgstr "Позволяет получить подробную информац�
 msgid "Summon Boat"
 msgstr "Призвать корабль"
 
-#, fuzzy
 msgid ""
 "Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
 "A friendly boat is one which you just built or were the most recent player "
@@ -10607,7 +10581,6 @@ msgstr ""
 msgid "Haunt"
 msgstr "Запустение"
 
-#, fuzzy
 msgid ""
 "Haunts a mine you control with Ghosts. This mine stops producing resources. "
 "(If I can't keep it, nobody will!)"
@@ -10642,7 +10615,6 @@ msgstr "Призывает Водных элементалей охранять 
 msgid "Petrification"
 msgstr "Окаменение"
 
-#, fuzzy
 msgid ""
 "Turns the affected creature into stone. A petrified creature receives half "
 "damage from a direct attack."
@@ -10755,7 +10727,6 @@ msgstr "Останки лорда закопаны у основания аре�
 msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr "Чёрный Дракон победит Титана в любой день недели."
 
-#, fuzzy
 msgid "He told her: Yada yada yada... and then she said: Blah, blah, blah..."
 msgstr "Он сказал ей: Бе бе бе... а потом она сказала: Бла, бла, бла..."
 
