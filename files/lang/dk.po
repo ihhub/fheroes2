@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-11 14:45+0000\n"
-"PO-Revision-Date: 2023-09-10 09:36+0200\n"
+"PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -1514,7 +1514,7 @@ msgid ""
 "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do "
 "not lose Gallavant or your quest will be over."
 msgstr ""
-"Find og besejr Martine, piratlederen, som bor i Piratlagunen. \n"
+"Find og besejr Martine, piratlederen, som bor i byen Pirate Cove. \n"
 "\n"
 "Du taber dette scenarie, hvis du mister Gallavant. For så vil din mission "
 "være forbi."
@@ -1916,7 +1916,7 @@ msgid "Voyage Home"
 msgstr "Hjemrejse"
 
 msgid "Wizard's Isle"
-msgstr "Troldmændenes Ø"
+msgstr "Troldmandsøen"
 
 msgid "Descendants"
 msgstr "Efterkommere"
@@ -1952,220 +1952,220 @@ msgid "Build %{name}."
 msgstr "Byg %{name}"
 
 msgid "Blackridge"
-msgstr ""
+msgstr "Sortekam"
 
 msgid "Hillstone"
-msgstr ""
+msgstr "Voldsten"
 
 msgid "Pinehurst"
-msgstr ""
+msgstr "Fyrenskov"
 
 msgid "Whiteshield"
-msgstr ""
+msgstr "Hvidskjold"
 
 msgid "Woodhaven"
-msgstr ""
+msgstr "Skovhaven"
 
 msgid "Blackwind"
-msgstr ""
+msgstr "Sortrup"
 
 msgid "Bloodreign"
-msgstr ""
+msgstr "Bloddum"
 
 msgid "Dragontooth"
-msgstr ""
+msgstr "Draggård"
 
 msgid "Greywind"
-msgstr ""
+msgstr "Gråvinde"
 
 msgid "Portsmith"
-msgstr ""
+msgstr "Smedehaven"
 
 msgid "Atlantium"
-msgstr ""
+msgstr "Atlantum"
 
 msgid "Middle Gate"
-msgstr ""
+msgstr "Midborg"
 
 msgid "Sansobar"
-msgstr ""
+msgstr "Sansobar"
 
 msgid "Tundara"
-msgstr ""
+msgstr "Tundara"
 
 msgid "Vulcania"
-msgstr ""
+msgstr "Vulkania"
 
 msgid "Baywatch"
-msgstr ""
+msgstr "Bugtvad"
 
 msgid "Fountainhead"
-msgstr ""
+msgstr "Kildspring"
 
 msgid "Vertigo"
-msgstr ""
+msgstr "Snurrum"
 
 msgid "Wildabar"
-msgstr ""
+msgstr "Vildabar"
 
 msgid "Winterkill"
-msgstr ""
+msgstr "Barfrost"
 
 msgid "Brindamoor"
-msgstr ""
+msgstr "Fakkelhede"
 
 msgid "Lakeside"
-msgstr ""
+msgstr "Søsted"
 
 msgid "Nightshadow"
-msgstr ""
+msgstr "Natskygge"
 
 msgid "Olympus"
-msgstr ""
+msgstr "Olympos"
 
 msgid "Sandcaster"
-msgstr ""
+msgstr "Sandborg"
 
 msgid "Alamar"
-msgstr ""
+msgstr "Alamar"
 
 msgid "Burlock"
-msgstr ""
+msgstr "Burlock"
 
 msgid "Dragadune"
-msgstr ""
+msgstr "Dragadune"
 
 msgid "Kalindra"
-msgstr ""
+msgstr "Kalindra"
 
 msgid "Xabran"
-msgstr ""
+msgstr "Sabran"
 
 msgid "Algary"
-msgstr ""
+msgstr "Algær"
 
 msgid "Basenji"
-msgstr ""
+msgstr "Dingo"
 
 msgid "Blackfang"
-msgstr ""
+msgstr "Blackfang"
 
 msgid "New Dawn"
-msgstr ""
+msgstr "Nygry"
 
 msgid "Sorpigal"
-msgstr ""
+msgstr "Sorpigal"
 
 msgid "Avone"
-msgstr ""
+msgstr "Avone"
 
 msgid "Big Oak"
-msgstr ""
+msgstr "Stor-ege"
 
 msgid "Chandler"
-msgstr ""
+msgstr "Lysning"
 
 msgid "Erliquin"
-msgstr ""
+msgstr "Arliquin"
 
 msgid "Hampshire"
-msgstr ""
+msgstr "Hampdrup"
 
 msgid "Antioch"
-msgstr ""
+msgstr "Antiokia"
 
 msgid "Avalon"
-msgstr ""
+msgstr "Avalon"
 
 msgid "Roc Haven"
-msgstr ""
+msgstr "Rokskov"
 
 msgid "South Mill"
-msgstr ""
+msgstr "Søndermølle"
 
 msgid "Weed Patch"
-msgstr ""
+msgstr "Bakkestjerne"
 
 msgid "Brownston"
-msgstr ""
+msgstr "Brunborg"
 
 msgid "Hilltop"
-msgstr ""
+msgstr "Bakketop"
 
 msgid "Weddington"
-msgstr ""
+msgstr "Væderup"
 
 msgid "Westfork"
-msgstr ""
+msgstr "Vesterskille"
 
 msgid "Whittingham"
-msgstr ""
+msgstr "Viderup"
 
 msgid "Cathcart"
-msgstr ""
+msgstr "Kasgård"
 
 msgid "Elk's Head"
-msgstr ""
+msgstr "Elgevir"
 
 msgid "Roscomon"
-msgstr ""
+msgstr "Rosenborg"
 
 msgid "Sherman"
-msgstr ""
+msgstr "Ulsakse"
 
 msgid "Yorksford"
-msgstr ""
+msgstr "Rodbæk"
 
 msgid "Blackburn"
-msgstr ""
+msgstr "Kulbrand"
 
 msgid "Blacksford"
-msgstr ""
+msgstr "Mørkbæk"
 
 msgid "Burton"
-msgstr ""
+msgstr "Skodby"
 
 msgid "Pig's Eye"
-msgstr ""
+msgstr "Svinerøje"
 
 msgid "Viper's Nest"
-msgstr ""
+msgstr "Bande-rede"
 
 msgid "Fenton"
-msgstr ""
+msgstr "Hegnby"
 
 msgid "Lankershire"
-msgstr ""
+msgstr "Langherred"
 
 msgid "Lombard"
-msgstr ""
+msgstr "Lombard"
 
 msgid "Timberhill"
-msgstr ""
+msgstr "Tømmerhøj"
 
 msgid "Troy"
 msgstr "Troja"
 
 msgid "Forder Oaks"
-msgstr ""
+msgstr "Egebæk"
 
 msgid "Meramec"
-msgstr ""
+msgstr "Meramek"
 
 msgid "Quick Silver"
-msgstr ""
+msgstr "Kviksølver"
 
 msgid "Westmoor"
-msgstr ""
+msgstr "Vesthede"
 
 msgid "Willow"
-msgstr ""
+msgstr "Virlund"
 
 msgid "Corackston"
-msgstr ""
+msgstr "Coraktun"
 
 msgid "Sheltemburg"
-msgstr ""
+msgstr "Sheltemborg"
 
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Umuligt at rekruttere - Du har allerede en helt i denne borg."
@@ -4003,7 +4003,7 @@ msgid "Dev and Support"
 msgstr "Udv. og support"
 
 msgid "Special Thanks to"
-msgstr "Specielt tak til"
+msgstr "Særlig tak til"
 
 msgid "and many other contributors!"
 msgstr "og mange andre bidragere!"
@@ -7390,7 +7390,6 @@ msgstr ""
 "%{skill} giver din helts katapult et ekstra skud, og hvert skud ødelægger "
 "automatisk enhver mur, undtagen en befæstet mur i en ridderborg."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
@@ -7398,7 +7397,6 @@ msgstr ""
 "%{skill} giver %{count} procent chance, for at lære en given besværgelse af "
 "1-2.niveau, som en fjendtlig helt har kastet i løbet af en kamp mod din helt."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
@@ -7406,7 +7404,6 @@ msgstr ""
 "%{skill} giver %{count} procent chance, for at lære en given besværgelse af "
 "1-3.niveau, som en fjendtlig helt har kastet i løbet af en kamp mod din helt."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
@@ -9563,9 +9560,8 @@ msgstr ""
 msgid "Wand of Negation"
 msgstr "Negationens Tryllestav"
 
-#, fuzzy
 msgid "The %{name} makes all your troops immune to dispel magic spells."
-msgstr "%{name} gør alle dine tropper immune overfor dødsbesværgelser."
+msgstr "%{name} gør alle dine tropper immune overfor magi-ophævelser."
 
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
