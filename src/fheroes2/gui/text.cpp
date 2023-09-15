@@ -25,6 +25,7 @@
 #include <cctype>
 
 #include "agg_image.h"
+#include "image.h"
 #include "text.h"
 
 namespace

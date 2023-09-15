@@ -29,9 +29,13 @@
 #include <list>
 #include <string>
 
-#include "image.h"
 #include "math_base.h"
 #include "screen.h"
+
+namespace fheroes2
+{
+    class Image;
+}
 
 namespace Font
 {

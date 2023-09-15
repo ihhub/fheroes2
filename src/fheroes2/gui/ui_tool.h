@@ -25,6 +25,7 @@
 #include <cstdint>
 #include <deque>
 #include <functional>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -36,8 +37,6 @@
 
 namespace fheroes2
 {
-    struct FontType;
-
     class MovableSprite : public Sprite
     {
     public:

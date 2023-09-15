@@ -24,7 +24,9 @@
 #include <algorithm>
 #include <cstdint>
 #include <functional>
+#include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -47,6 +49,7 @@
 #include "ui_button.h"
 #include "ui_kingdom.h"
 #include "ui_scrollbar.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 #include "world.h"
 

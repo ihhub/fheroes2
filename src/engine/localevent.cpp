@@ -727,7 +727,7 @@ namespace
             return !_isPaused && _prevDraw.getMs() >= 220;
         }
 
-        void registerDrawing( std::function<void()> preRenderDrawing, std::function<void()> postRenderDrawing )
+        void registerDrawing( const std::function<void()> preRenderDrawing, const std::function<void()> postRenderDrawing )
         {
             if ( preRenderDrawing != nullptr )
                 _preRenderDrawing = preRenderDrawing;
@@ -778,7 +778,7 @@ LocalEvent & LocalEvent::Get()
     return le;
 }
 
-void LocalEvent::RegisterCycling( std::function<void()> preRenderDrawing, std::function<void()> postRenderDrawing )
+void LocalEvent::RegisterCycling( const std::function<void()> preRenderDrawing, const std::function<void()> postRenderDrawing )
 {
     colorCycling.registerDrawing( preRenderDrawing, postRenderDrawing );
     colorCycling.resume();
