@@ -1403,7 +1403,7 @@ namespace
 
         case MP2::OBJ_OASIS:
             msg = visited ? _( "The drink at the oasis is refreshing, but offers no further benefit. The oasis might help again if you fought a battle first." )
-                          : _( "A drink at the oasis fills your troops with strength and lifts their spirits.  You can travel a bit further today." );
+                          : _( "A drink at the oasis fills your troops with strength and lifts their spirits. You can travel a bit further today." );
             move = GameStatic::getMovementPointBonus( MP2::OBJ_OASIS );
             break;
 

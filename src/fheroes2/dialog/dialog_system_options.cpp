@@ -366,7 +366,7 @@ namespace
             }
             else if ( le.MousePressRight( aiSpeedRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Enemy Speed" ),
-                                                   _( "Sets the speed that A.I. heroes move at.  You can also elect not to view A.I. movement at all." ), 0 );
+                                                   _( "Sets the speed that A.I. heroes move at. You can also elect not to view A.I. movement at all." ), 0 );
             }
             else if ( le.MousePressRight( scrollSpeedRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Scroll Speed" ), _( "Sets the speed at which you scroll the window." ), 0 );

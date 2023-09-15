@@ -658,7 +658,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
         else if ( le.MousePressRight( curDifficulty ) )
             ShowToolTip(
                 _( "Selected Map Difficulty" ),
-                _( "The map difficulty of the currently selected map.  The map difficulty is determined by the scenario designer. More difficult maps might include more or stronger enemies, fewer resources, or other special conditions making things tougher for the human player." ) );
+                _( "The map difficulty of the currently selected map. The map difficulty is determined by the scenario designer. More difficult maps might include more or stronger enemies, fewer resources, or other special conditions making things tougher for the human player." ) );
         else if ( le.MousePressRight( curDescription ) )
             ShowToolTip( _( "Selected Description" ), _( "The description of the currently selected map." ) );
         else if ( le.MousePressRight( buttonOk.area() ) )

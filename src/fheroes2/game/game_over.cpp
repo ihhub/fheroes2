@@ -64,7 +64,7 @@ namespace
         if ( conf.isCampaignGameType() ) {
             const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
             if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
-                body = _( "Dragon city has fallen!  You are now the Master of the Dragons." );
+                body = _( "Dragon city has fallen! You are now the Master of the Dragons." );
             }
         }
 

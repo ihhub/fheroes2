@@ -111,7 +111,7 @@ namespace
             { gettext_noop( "Armored Gauntlets of Protection" ),
               gettext_noop( "The %{name} increase your defense skill by %{count}." ),
               gettext_noop(
-                  "You encounter the infamous Black Knight!  After a grueling duel ending in a draw, the Knight, out of respect, offers you a pair of armored gauntlets." ),
+                  "You encounter the infamous Black Knight! After a grueling duel ending in a draw, the Knight, out of respect, offers you a pair of armored gauntlets." ),
               {},
               {} },
             { gettext_noop( "Defender Helm of Protection" ),
@@ -249,7 +249,7 @@ namespace
             { gettext_noop( "Enchanted Hourglass" ),
               gettext_noop( "The %{name} extends the duration of all your spells by %{count} turns." ),
               gettext_noop(
-                  "A surprise turn in the landscape finds you in the midst of a grisly scene:  Vultures picking at the aftermath of a terrible battle. Your cursory search of the remains turns up an enchanted hourglass." ),
+                  "A surprise turn in the landscape finds you in the midst of a grisly scene: Vultures picking at the aftermath of a terrible battle. Your cursory search of the remains turns up an enchanted hourglass." ),
               {},
               {} },
             { gettext_noop( "Gold Watch" ),
@@ -368,7 +368,7 @@ namespace
             { gettext_noop( "Wand of Negation" ),
               gettext_noop( "The %{name} makes all your troops immune to dispel magic spells." ),
               gettext_noop(
-                  "You meet an old Wizard friend of yours traveling in the opposite direction. He presents  you with a gift:  A wand that prevents the use of the dispel magic spell on your allies." ),
+                  "You meet an old Wizard friend of yours traveling in the opposite direction. He presents  you with a gift: A wand that prevents the use of the dispel magic spell on your allies." ),
               {},
               {} },
             { gettext_noop( "Golden Bow" ),
@@ -415,7 +415,7 @@ namespace
             { gettext_noop( "Hideous Mask" ),
               gettext_noop( "The %{name} prevents all 'wandering' armies from joining your hero." ),
               gettext_noop(
-                  "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting Warlock, unearths his fabled mask. Trembling, you put it on and it twists your visage into an awful grimace!  Oh no!  It's actually the hideous mask of Gromluck Greene, and you are stuck with it." ),
+                  "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting Warlock, unearths his fabled mask. Trembling, you put it on and it twists your visage into an awful grimace! Oh no! It's actually the hideous mask of Gromluck Greene, and you are stuck with it." ),
               {},
               {} },
             { gettext_noop( "Endless Pouch of Sulfur" ),
@@ -451,7 +451,7 @@ namespace
             { gettext_noop( "Endless Pouch of Crystal" ),
               gettext_noop( "The %{name} provides %{count} unit of crystal per day." ),
               gettext_noop(
-                  "Taking shelter from a storm in a small cave,  you notice a small patch of crystal in one corner. Curious, you break a piece off and notice that the original crystal grows the lost piece back. You decide to stuff the entire patch into a pouch and take it with you." ),
+                  "Taking shelter from a storm in a small cave, you notice a small patch of crystal in one corner. Curious, you break a piece off and notice that the original crystal grows the lost piece back. You decide to stuff the entire patch into a pouch and take it with you." ),
               {},
               {} },
             { gettext_noop( "Spiked Helm" ),
@@ -463,7 +463,7 @@ namespace
             { gettext_noop( "Spiked Shield" ), gettext_noop( "The %{name} increases your attack and defense skills by %{count} each." ), gettext_noop( "You come upon a bridge spanning a dry gully. Before you can cross, a Troll steps out from under the bridge and demands payment before it will permit you to pass. You refuse, and the Troll charges, forcing you to slay it. You take its spiked shield as a trophy." ), {}, {} },
             { gettext_noop( "White Pearl" ),
               gettext_noop( "The %{name} increases your spell power and knowledge by %{count} each." ),
-              gettext_noop( "A walk across a dry saltwater lake bed yields an unlikely prize:  A white pearl amidst shattered shells and debris." ),
+              gettext_noop( "A walk across a dry saltwater lake bed yields an unlikely prize: A white pearl amidst shattered shells and debris." ),
               {},
               {} },
             { gettext_noop( "Black Pearl" ),
@@ -508,7 +508,7 @@ namespace
               {} },
             { gettext_noop( "Battle Garb of Anduran" ),
               gettext_noop(
-                  "The %{name} combines the powers of the three Anduran artifacts.  It provides maximum luck and morale for your troops and gives you the Town Portal spell." ),
+                  "The %{name} combines the powers of the three Anduran artifacts. It provides maximum luck and morale for your troops and gives you the Town Portal spell." ),
               gettext_noop(
                   "Out of pity for a poor peasant, you purchase a chest of old junk they are hawking for too much gold. Later, as you search through it, you find it contains the 3 pieces of the legendary battle garb of Anduran!" ),
               {},
@@ -523,7 +523,7 @@ namespace
             { gettext_noop( "Heart of Ice" ),
               gettext_noop( "The %{name} provides %{count} percent protection from cold, but doubles the damage taken from fire." ),
               gettext_noop(
-                  "Suddenly, a biting coldness engulfs your body. You seize up, falling from your horse. The pain subsides, but you still feel as if your chest is frozen.  As you pick yourself up off of the ground, you hear hearty laughter. You turn around just in time to see a Frost Giant run off into the woods and disappear." ),
+                  "Suddenly, a biting coldness engulfs your body. You seize up, falling from your horse. The pain subsides, but you still feel as if your chest is frozen. As you pick yourself up off of the ground, you hear hearty laughter. You turn around just in time to see a Frost Giant run off into the woods and disappear." ),
               {},
               {} },
             { gettext_noop( "Helmet of Anduran" ),
@@ -532,7 +532,7 @@ namespace
                   "You spy a gleaming object poking up out of the ground. You send a member of your party over to investigate. He comes back with a golden helmet in his hands. You realize that it must be the helmet of the legendary Anduran, the only man who was known to wear solid gold armor." ),
               {},
               {} },
-            { gettext_noop( "Holy Hammer" ), gettext_noop( "The %{name} increases your attack skill by %{count}." ), gettext_noop( "You come upon a battle where a Paladin has been mortally wounded by a group of Zombies. He asks you to take his hammer and finish what he started.  As you pick it up, it begins to hum, and then everything becomes a blur. The Zombies lie dead, the hammer dripping with blood. You strap it to your belt." ), {}, {} },
+            { gettext_noop( "Holy Hammer" ), gettext_noop( "The %{name} increases your attack skill by %{count}." ), gettext_noop( "You come upon a battle where a Paladin has been mortally wounded by a group of Zombies. He asks you to take his hammer and finish what he started. As you pick it up, it begins to hum, and then everything becomes a blur. The Zombies lie dead, the hammer dripping with blood. You strap it to your belt." ), {}, {} },
             { gettext_noop( "Legendary Scepter" ),
               gettext_noop( "The %{name} adds %{count} points to all attributes." ),
               gettext_noop(
