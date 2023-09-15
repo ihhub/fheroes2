@@ -35,7 +35,7 @@ class StatusBar : public fheroes2::MovableText
 public:
     StatusBar();
 
-    void setRoi( const fheroes2::Rect roi )
+    void setRoi( const fheroes2::Rect & roi )
     {
         _roi = roi;
     }
