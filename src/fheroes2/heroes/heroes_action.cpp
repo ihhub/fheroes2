@@ -1657,10 +1657,9 @@ namespace
 
                 if ( troop ) {
                     if ( Monster::ROGUE == troop->GetID() )
-                        fheroes2::
-                            showStandardTextMessage(
-                                title, _( "You come upon an ancient artifact. As you reach for it, a pack of Rogues leap out of the brush to guard their stolen loot." ),
-                                Dialog::OK );
+                        fheroes2::showStandardTextMessage(
+                            title, _( "You come upon an ancient artifact. As you reach for it, a pack of Rogues leap out of the brush to guard their stolen loot." ),
+                            Dialog::OK );
                     else {
                         msg = _(
                             "Through a clearing you observe an ancient artifact. Unfortunately, it's guarded by a nearby %{monster}. Do you want to fight the %{monster} for the artifact?" );
@@ -2471,9 +2470,10 @@ namespace
             if ( hero.GetSpellPoints() >= max * 2 ) {
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::WATERSPRING );
 
-                fheroes2::showStandardTextMessage( title,
-                                                   _( "A drink at the spring is supposed to give you twice your normal spell points, but you are already at that level." ),
-                                                   Dialog::OK );
+                fheroes2::
+                    showStandardTextMessage( title,
+                                             _( "A drink at the spring is supposed to give you twice your normal spell points, but you are already at that level." ),
+                                             Dialog::OK );
             }
             else {
                 hero.SetSpellPoints( max * 2 );
