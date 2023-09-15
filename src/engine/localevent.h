@@ -278,7 +278,7 @@ public:
 
     static int32_t getCurrentKeyModifiers();
 
-    static void RegisterCycling( void ( *preRenderDrawing )() = nullptr, void ( *postRenderDrawing )() = nullptr );
+    static void RegisterCycling( std::function<void()> preRenderDrawing = nullptr, std::function<void()> postRenderDrawing = nullptr );
 
     // These two methods are useful for video playback
     static void PauseCycling();

@@ -28,23 +28,25 @@
 #include <string>
 
 #include "math_base.h"
-#include "text.h"
+#include "ui_tool.h"
 
-class StatusBar : public TextSprite
+class StatusBar : public fheroes2::MovableText
 {
 public:
-    StatusBar() = default;
+    StatusBar();
 
-    void SetCenter( const int32_t cx, const int32_t cy )
+    void setRoi( const fheroes2::Rect roi )
     {
-        center = { cx, cy };
+        _roi = roi;
     }
 
-    void ShowMessage( const std::string & msg );
+    void ShowMessage( std::string msg );
 
 private:
-    fheroes2::Point center;
-    std::string prev;
+    fheroes2::Rect _roi;
+    
+    std::string _prevMessage;
+    fheroes2::Rect _prevMessageRoi;
 };
 
 #endif

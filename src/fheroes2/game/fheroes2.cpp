@@ -178,7 +178,9 @@ namespace
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
 
             // Initialize local event processing.
-            LocalEvent::RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
+            _systemInfoRenderer = std::make_unique<fheroes2::SystemInfoRenderer>();
+
+            LocalEvent::RegisterCycling( [this](){ _systemInfoRenderer->preRender(); }, [this](){ _systemInfoRenderer->postRender(); } );
 
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
@@ -196,6 +198,10 @@ namespace
         {
             fheroes2::Display::instance().release();
         }
+
+    private:
+        // This member must not be initialized before Display.
+        std::unique_ptr<fheroes2::SystemInfoRenderer> _systemInfoRenderer;
     };
 
     class DataInitializer

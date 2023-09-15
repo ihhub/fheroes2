@@ -20,8 +20,10 @@
 
 #pragma once
 
+#include <chrono>
 #include <cstddef>
 #include <cstdint>
+#include <deque>
 #include <functional>
 #include <string>
 #include <vector>
@@ -30,6 +32,7 @@
 #include "math_base.h"
 #include "timing.h"
 #include "ui_base.h"
+#include "ui_text.h"
 
 namespace fheroes2
 {
@@ -71,6 +74,48 @@ namespace fheroes2
     private:
         ImageRestorer _restorer;
         bool _isHidden;
+    };
+
+    class MovableText
+    {
+    public:
+        MovableText( Image & output );
+
+        void update( std::unique_ptr<TextBase> text );
+
+        void draw( const int32_t x, const int32_t y );
+
+        void hide();
+
+        bool isHidden() const
+        {
+            return _isHidden;
+        }
+
+    private:
+        Image & _output;
+        ImageRestorer _restorer;
+        std::unique_ptr<TextBase> _text;
+        bool _isHidden;
+    };
+
+    // Renderer of current time and FPS on screen
+    class SystemInfoRenderer
+    {
+    public:
+        SystemInfoRenderer();
+
+        void preRender();
+
+        void postRender()
+        {
+             _text.hide();
+        }
+
+    private:
+        std::chrono::time_point<std::chrono::steady_clock> _startTime;
+        fheroes2::MovableText _text;
+        std::deque<double> _fps;
     };
 
     class TimedEventValidator : public ActionObject
@@ -151,10 +196,4 @@ namespace fheroes2
                                   const int32_t frameCount );
 
     void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int32_t paletteCount );
-
-    // Display pre-render function to show screen system info
-    void PreRenderSystemInfo();
-
-    // Display post-render function to hide screen system info
-    void PostRenderSystemInfo();
 }

@@ -62,6 +62,8 @@ public:
         : pos_rt( rt )
         , back( fheroes2::Display::instance() )
         , tradpostIcnId( Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST )
+        , textSell( fheroes2::Display::instance() )
+        , textBuy( fheroes2::Display::instance() )
         , _singlePlayer( false )
     {
         Settings & conf = Settings::Get();
@@ -91,9 +93,6 @@ public:
 
         const TextBox text( _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." ), Font::BIG,
                             fheroes2::Rect( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 ) );
-
-        textSell.SetFont( Font::SMALL );
-        textBuy.SetFont( Font::SMALL );
 
         const Players & players = conf.GetPlayers();
         int playerCount = 0;
@@ -125,8 +124,8 @@ private:
     fheroes2::ImageRestorer back;
     const int tradpostIcnId;
 
-    TextSprite textSell;
-    TextSprite textBuy;
+    fheroes2::MovableText textSell;
+    fheroes2::MovableText textBuy;
     bool _singlePlayer;
 };
 
@@ -235,19 +234,25 @@ void TradeWindowGUI::RedrawInfoBuySell( uint32_t count_sell, uint32_t count_buy,
 
     _scrollbar.hide();
 
-    textSell.Hide();
-    textSell.SetText( std::string( "-" ) + std::to_string( count_sell ) + " " + "(" + std::to_string( max_sell - count_sell ) + ")" );
-    dst_pt.x = pos_rt.x + pos_rt.width / 2 - 70 - ( textSell.w() + 1 ) / 2;
-    dst_pt.y = pos_rt.y + 116;
-    textSell.SetPos( dst_pt.x, dst_pt.y );
-    textSell.Show();
+    auto text = std::make_unique<fheroes2::Text>( std::string( "-" ) + std::to_string( count_sell ) + " " + "(" + std::to_string( max_sell - count_sell ) + ")",
+                                                  fheroes2::FontType::smallWhite() );
 
-    textBuy.Hide();
-    textBuy.SetText( std::string( "+" ) + std::to_string( count_buy ) + " " + "(" + std::to_string( orig_buy + count_buy ) + ")" );
-    dst_pt.x = pos_rt.x + pos_rt.width / 2 + 70 - ( textBuy.w() + 1 ) / 2;
+    int32_t textWidth = text->width();
+
+    textSell.update( std::move( text ) );
+    dst_pt.x = pos_rt.x + pos_rt.width / 2 - 70 - ( textWidth + 1 ) / 2;
     dst_pt.y = pos_rt.y + 116;
-    textBuy.SetPos( dst_pt.x, dst_pt.y );
-    textBuy.Show();
+    textSell.draw( dst_pt.x, dst_pt.y );
+
+    text = std::make_unique<fheroes2::Text>( std::string( "+" ) + std::to_string( count_buy ) + " " + "(" + std::to_string( orig_buy + count_buy ) + ")",
+                                             fheroes2::FontType::smallWhite() );
+
+    textWidth = text->width();
+
+    textBuy.update( std::move( text ) );
+    dst_pt.x = pos_rt.x + pos_rt.width / 2 + 70 - ( textWidth + 1 ) / 2;
+    dst_pt.y = pos_rt.y + 116;
+    textBuy.draw( dst_pt.x, dst_pt.y );
 
     _scrollbar.show();
 }

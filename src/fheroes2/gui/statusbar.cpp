@@ -25,15 +25,34 @@
 #include "screen.h"
 #include "tools.h"
 
-void StatusBar::ShowMessage( const std::string & msg )
+StatusBar::StatusBar()
+    : MovableText( fheroes2::Display::instance() )
 {
-    if ( msg != prev ) {
-        const fheroes2::Rect prevRoi = GetRect();
-        SetText( msg );
-        SetPos( center.x - w() / 2, center.y - h() / 2 );
-        Show();
+    // Do nothing.
+}
 
-        fheroes2::Display::instance().render( fheroes2::getBoundaryRect( prevRoi, GetRect() ) );
-        prev = msg;
+void StatusBar::ShowMessage( std::string msg )
+{
+    if ( msg == _prevMessage ) {
+        // No updates.
+        return;
     }
+
+    _prevMessage = std::move( msg );
+
+    hide();
+
+    auto text = std::make_unique<fheroes2::Text>( _prevMessage, fheroes2::FontType::normalWhite() );
+    if ( text->width() > _roi.width ) {
+        text->fitToOneRow( _roi.width );
+    }
+
+    const fheroes2::Rect messageRoi{ _roi.x + ( _roi.width - text->width() ) / 2, _roi.y, text->width(), text->height() };
+
+    update( std::move( text ) );
+
+    draw( messageRoi.x, messageRoi.y );
+
+    fheroes2::Display::instance().render( fheroes2::getBoundaryRect( _prevMessageRoi, messageRoi ) );
+    _prevMessageRoi = std::move( messageRoi );
 }

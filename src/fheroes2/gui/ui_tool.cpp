@@ -23,12 +23,10 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
-#include <chrono>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <deque>
 #include <string>
 #include <utility>
 
@@ -40,7 +38,6 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#include "text.h"
 #include "translations.h"
 
 namespace
@@ -53,77 +50,6 @@ namespace
     // For 100 ms duration 6 frames will result in 60 FPS.
     const uint32_t screenFadeFrameCount = 6;
     const uint8_t screenFadeStep = ( fullBrightAlpha - fullDarkAlpha ) / screenFadeFrameCount;
-
-    // Renderer of current time and FPS on screen
-    class SystemInfoRenderer
-    {
-    public:
-        SystemInfoRenderer()
-            : _startTime( std::chrono::steady_clock::now() )
-        {}
-
-        void preRender()
-        {
-            if ( !Settings::Get().isSystemInfoEnabled() ) {
-                return;
-            }
-
-            const int32_t offsetX = 26;
-            const int32_t offsetY = fheroes2::Display::instance().height() - 30;
-
-            const tm tmi = System::GetTM( std::time( nullptr ) );
-
-            std::array<char, 9> mbstr{ 0 };
-            std::strftime( mbstr.data(), mbstr.size(), "%H:%M:%S", &tmi );
-
-            std::string info( mbstr.data() );
-
-            const std::chrono::time_point<std::chrono::steady_clock> endTime = std::chrono::steady_clock::now();
-            const std::chrono::duration<double> time = endTime - _startTime;
-            _startTime = endTime;
-
-            const double totalTime = time.count() * 1000.0;
-            const double fps = totalTime < 1 ? 0 : 1000 / totalTime;
-
-            _fps.push_front( fps );
-            while ( _fps.size() > 10 ) {
-                _fps.pop_back();
-            }
-
-            double averageFps = 0;
-            for ( const double value : _fps ) {
-                averageFps += value;
-            }
-
-            averageFps /= static_cast<double>( _fps.size() );
-            const int32_t currentFps = static_cast<int32_t>( averageFps );
-
-            info += _( ", FPS: " );
-            info += std::to_string( currentFps );
-            if ( averageFps < 10 ) {
-                info += '.';
-                info += std::to_string( static_cast<int32_t>( ( averageFps - currentFps ) * 10 ) );
-            }
-
-            _text.SetPos( offsetX, offsetY );
-            _text.SetText( info );
-            _text.Show();
-        }
-
-        void postRender()
-        {
-            if ( _text.isShow() ) {
-                _text.Hide();
-            }
-        }
-
-    private:
-        std::chrono::time_point<std::chrono::steady_clock> _startTime;
-        TextSprite _text;
-        std::deque<double> _fps;
-    };
-
-    SystemInfoRenderer systemInfoRenderer;
 
     void fadeDisplay( const uint8_t startAlpha, const uint8_t endAlpha, const fheroes2::Rect & roi, const uint32_t fadeTimeMs, const uint32_t frameCount )
     {
@@ -241,6 +167,91 @@ namespace fheroes2
             _restorer.restore();
             _isHidden = true;
         }
+    }
+
+    MovableText::MovableText( Image & output )
+        : _output( output )
+        , _restorer( output, 0, 0, 0, 0 )
+        , _isHidden( false )
+    {
+        // Do nothing.
+    }
+
+    void MovableText::update( std::unique_ptr<TextBase> text )
+    {
+        _text = std::move( text );
+    }
+
+    void MovableText::draw( const int32_t x, const int32_t y )
+    {
+        hide();
+
+        _restorer.update( x, y, _text->width(), _text->height() );
+        _text->draw( x, y, _output );
+
+        _isHidden = false;
+    }
+
+    void MovableText::hide()
+    {
+        if ( !_isHidden ) {
+            _restorer.restore();
+            _isHidden = true;
+        }
+    }
+
+    SystemInfoRenderer::SystemInfoRenderer()
+        : _startTime( std::chrono::steady_clock::now() )
+        , _text( fheroes2::Display::instance() )
+    {
+        // Do nothing.
+    }
+
+    void SystemInfoRenderer::preRender()
+    {
+        if ( !Settings::Get().isSystemInfoEnabled() ) {
+            return;
+        }
+
+        const int32_t offsetX = 26;
+        const int32_t offsetY = fheroes2::Display::instance().height() - 30;
+
+        const tm tmi = System::GetTM( std::time( nullptr ) );
+
+        std::array<char, 9> mbstr{ 0 };
+        std::strftime( mbstr.data(), mbstr.size(), "%H:%M:%S", &tmi );
+
+        std::string info( mbstr.data() );
+
+        const std::chrono::time_point<std::chrono::steady_clock> endTime = std::chrono::steady_clock::now();
+        const std::chrono::duration<double> time = endTime - _startTime;
+        _startTime = endTime;
+
+        const double totalTime = time.count() * 1000.0;
+        const double fps = totalTime < 1 ? 0 : 1000 / totalTime;
+
+        _fps.push_front( fps );
+        while ( _fps.size() > 10 ) {
+            _fps.pop_back();
+        }
+
+        double averageFps = 0;
+        for ( const double value : _fps ) {
+            averageFps += value;
+        }
+
+        averageFps /= static_cast<double>( _fps.size() );
+        const int32_t currentFps = static_cast<int32_t>( averageFps );
+
+        info += _( ", FPS: " );
+        info += std::to_string( currentFps );
+        if ( averageFps < 10 ) {
+            info += '.';
+            info += std::to_string( static_cast<int32_t>( ( averageFps - currentFps ) * 10 ) );
+        }
+
+        _text.update( std::make_unique<fheroes2::Text>( info, fheroes2::FontType::normalWhite() ) );
+        _text.draw( offsetX, offsetY );
     }
 
     TimedEventValidator::TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs, const uint64_t delayBetweenUpdateMs )
@@ -708,15 +719,5 @@ namespace fheroes2
             ApplyPalette( image, leftRoi.x, leftRoi.y, image, leftRoi.x, leftRoi.y, leftRoi.width, leftRoi.height, paletteId );
             ApplyPalette( image, rightRoi.x, rightRoi.y, image, rightRoi.x, rightRoi.y, rightRoi.width, rightRoi.height, paletteId );
         }
-    }
-
-    void PreRenderSystemInfo()
-    {
-        systemInfoRenderer.preRender();
-    }
-
-    void PostRenderSystemInfo()
-    {
-        systemInfoRenderer.postRender();
     }
 }
