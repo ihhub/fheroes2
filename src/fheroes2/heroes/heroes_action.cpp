@@ -264,8 +264,8 @@ namespace
         }
 
         if ( 1 == Rand::Get( 1, 3 ) ) {
-            fheroes2::showStandardTextMessage( MP2::StringObject( MP2::MapObjectType::OBJ_WHIRLPOOL ), _( "A whirlpool engulfs your ship. Some of your army has fallen overboard." ),
-                             Dialog::OK );
+            fheroes2::showStandardTextMessage( MP2::StringObject( MP2::MapObjectType::OBJ_WHIRLPOOL ),
+                                               _( "A whirlpool engulfs your ship. Some of your army has fallen overboard." ), Dialog::OK );
 
             if ( weakestTroop->GetCount() == 1 ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " lost " << weakestTroop->GetCount() << " " << weakestTroop->GetName() << " in the whirlpool" )
@@ -1597,14 +1597,14 @@ namespace
                         hero.GetKingdom().OddFundsResource( payment );
                     }
                     else {
-                        fheroes2::showStandardTextMessage( title,
-                                         _( "You try to pay the leprechaun, but realize that you can't afford it. The leprechaun stamps his foot and ignores you." ),
-                                         Dialog::OK );
+                        fheroes2::showStandardTextMessage(
+                            title, _( "You try to pay the leprechaun, but realize that you can't afford it. The leprechaun stamps his foot and ignores you." ),
+                            Dialog::OK );
                     }
                 }
                 else {
                     fheroes2::showStandardTextMessage( title, _( "Insulted by your refusal of his generous offer, the leprechaun stamps his foot and ignores you." ),
-                                     Dialog::OK );
+                                                       Dialog::OK );
                 }
             }
             else if ( condition == Maps::ArtifactCaptureCondition::HAVE_WISDOM_SKILL || condition == Maps::ArtifactCaptureCondition::HAVE_LEADERSHIP_SKILL ) {
@@ -1658,9 +1658,9 @@ namespace
                 if ( troop ) {
                     if ( Monster::ROGUE == troop->GetID() )
                         fheroes2::
-                            showStandardTextMessage( title,
-                                                    _( "You come upon an ancient artifact. As you reach for it, a pack of Rogues leap out of the brush to guard their stolen loot." ),
-                                                    Dialog::OK );
+                            showStandardTextMessage(
+                                title, _( "You come upon an ancient artifact. As you reach for it, a pack of Rogues leap out of the brush to guard their stolen loot." ),
+                                Dialog::OK );
                     else {
                         msg = _(
                             "Through a clearing you observe an ancient artifact. Unfortunately, it's guarded by a nearby %{monster}. Do you want to fight the %{monster} for the artifact?" );
@@ -1781,8 +1781,8 @@ namespace
                 }
             }
             else {
-                fheroes2::showStandardTextMessage(
-                    hdr, _( "After spending hours trying to fish the chest out of the sea, you open it, only to find it empty." ), Dialog::OK );
+                fheroes2::showStandardTextMessage( hdr, _( "After spending hours trying to fish the chest out of the sea, you open it, only to find it empty." ),
+                                                   Dialog::OK );
             }
         }
         else {
@@ -1853,9 +1853,10 @@ namespace
         {
             const MusicalEffectPlayer musicalEffectPlayer( MUS::ARABIAN );
 
-            recruit = ( fheroes2::showStandardTextMessage(
-                            title, _( "You stumble upon a dented and tarnished lamp lodged deep in the earth. Do you wish to rub the lamp?" ), Dialog::YES | Dialog::NO )
-                        == Dialog::YES );
+            recruit
+                = ( fheroes2::showStandardTextMessage( title, _( "You stumble upon a dented and tarnished lamp lodged deep in the earth. Do you wish to rub the lamp?" ),
+                                                       Dialog::YES | Dialog::NO )
+                    == Dialog::YES );
         }
 
         if ( recruit ) {
@@ -2114,10 +2115,10 @@ namespace
         {
             const MusicalEffectPlayer musicalEffectPlayer( MUS::WATCHTOWER );
 
-            enter
-                = ( fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), _( "You come upon an abandoned gold mine. The mine appears to be haunted. Do you wish to enter?" ),
-                                                       Dialog::YES | Dialog::NO )
-                    == Dialog::YES );
+            enter = ( fheroes2::showStandardTextMessage( MP2::StringObject( objectType ),
+                                                         _( "You come upon an abandoned gold mine. The mine appears to be haunted. Do you wish to enter?" ),
+                                                         Dialog::YES | Dialog::NO )
+                      == Dialog::YES );
         }
 
         if ( enter ) {
@@ -2145,8 +2146,8 @@ namespace
                 I.getRadar().SetRenderArea( radarRoi );
                 I.redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
-                fheroes2::showStandardTextMessage(
-                    MP2::StringObject( objectType ), _( "You beat the Ghosts and are able to restore the mine to production." ), Dialog::OK );
+                fheroes2::showStandardTextMessage( MP2::StringObject( objectType ), _( "You beat the Ghosts and are able to restore the mine to production." ),
+                                                   Dialog::OK );
             }
             else {
                 BattleLose( hero, result, true );
@@ -2470,8 +2471,9 @@ namespace
             if ( hero.GetSpellPoints() >= max * 2 ) {
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::WATERSPRING );
 
-                fheroes2::showStandardTextMessage(
-                    title, _( "A drink at the spring is supposed to give you twice your normal spell points, but you are already at that level." ), Dialog::OK );
+                fheroes2::showStandardTextMessage( title,
+                                                   _( "A drink at the spring is supposed to give you twice your normal spell points, but you are already at that level." ),
+                                                   Dialog::OK );
             }
             else {
                 hero.SetSpellPoints( max * 2 );
@@ -2479,8 +2481,9 @@ namespace
                 {
                     const MusicalEffectPlayer musicalEffectPlayer( MUS::WATERSPRING );
 
-                    fheroes2::showStandardTextMessage(
-                        title, _( "A drink from the spring fills your blood with magic! You have twice your normal spell points in reserve." ), Dialog::OK );
+                    fheroes2::showStandardTextMessage( title,
+                                                       _( "A drink from the spring fills your blood with magic! You have twice your normal spell points in reserve." ),
+                                                       Dialog::OK );
                 }
             }
         }
@@ -2496,8 +2499,9 @@ namespace
         const std::string title( MP2::StringObject( objectType ) );
 
         if ( hero.isVisited( tile ) ) {
-            fheroes2::showStandardTextMessage(
-                title, _( "Recognizing you, the butler refuses to admit you. \"The master,\" he says, \"will not see the same student twice.\"" ), Dialog::OK );
+            fheroes2::showStandardTextMessage( title,
+                                               _( "Recognizing you, the butler refuses to admit you. \"The master,\" he says, \"will not see the same student twice.\"" ),
+                                               Dialog::OK );
         }
         else {
             if ( GameStatic::isHeroWorthyToVisitXanadu( hero ) ) {
@@ -2677,8 +2681,8 @@ namespace
         const std::string title( MP2::StringObject( objectType ) );
 
         if ( hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
-            fheroes2::showStandardTextMessage( title, _( "The captain looks at you with surprise and says:\n\"You already have all the maps I know about. Let me fish in peace now.\"" ),
-                             Dialog::OK );
+            fheroes2::showStandardTextMessage(
+                title, _( "The captain looks at you with surprise and says:\n\"You already have all the maps I know about. Let me fish in peace now.\"" ), Dialog::OK );
         }
         else {
             if ( kingdom.AllowPayment( payment ) ) {
@@ -2711,8 +2715,9 @@ namespace
             else {
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::WATCHTOWER );
 
-                fheroes2::showStandardTextMessage( title, _( "The captain sighs. \"You don't have enough money, eh?  You can't expect me to give my maps away for free!\"" ),
-                                 Dialog::OK );
+                fheroes2::showStandardTextMessage( title,
+                                                   _( "The captain sighs. \"You don't have enough money, eh?  You can't expect me to give my maps away for free!\"" ),
+                                                   Dialog::OK );
             }
         }
     }
@@ -2794,9 +2799,9 @@ namespace
         const std::string title( MP2::StringObject( objectType ) );
 
         if ( hero.isVisited( tile ) ) {
-            fheroes2::showStandardTextMessage( title,
-                             _( "Upon your approach, the tree opens its eyes in delight. \"It is good to see you, my student. I hope my teachings have helped you.\"" ),
-                             Dialog::OK );
+            fheroes2::showStandardTextMessage(
+                title, _( "Upon your approach, the tree opens its eyes in delight. \"It is good to see you, my student. I hope my teachings have helped you.\"" ),
+                Dialog::OK );
         }
         else {
             const Funds & payment = getTreeOfKnowledgeRequirement( tile );
@@ -2909,8 +2914,9 @@ namespace
 
             const Maps::Tiles & tile = world.GetTiles( dst_index );
 
-            if ( fheroes2::showStandardTextMessage( title, _( "The entrance to the cave is dark, and a foul, sulfurous smell issues from the cave mouth. Will you enter?" ),
-                                  Dialog::YES | Dialog::NO )
+            if ( fheroes2::showStandardTextMessage( title,
+                                                    _( "The entrance to the cave is dark, and a foul, sulfurous smell issues from the cave mouth. Will you enter?" ),
+                                                    Dialog::YES | Dialog::NO )
                  != Dialog::YES ) {
                 return Outcome::Ignore;
             }
@@ -3142,7 +3148,7 @@ namespace
                 }
                 else {
                     fheroes2::showStandardTextMessage( title, _( "You hear a voice from behind the locked door, \"You don't have enough gold to pay for my services.\"" ),
-                                     Dialog::OK );
+                                                       Dialog::OK );
                 }
             }
         }
@@ -3211,15 +3217,15 @@ namespace
         const std::string title( MP2::StringObject( objectType ) );
 
         if ( hero.isObjectTypeVisited( objectType ) ) {
-            fheroes2::showStandardTextMessage( title, _( "You have your crew stop up their ears with wax before the sirens' eerie song has any chance of luring them to a watery grave." ),
-                             Dialog::OK );
+            fheroes2::showStandardTextMessage(
+                title, _( "You have your crew stop up their ears with wax before the sirens' eerie song has any chance of luring them to a watery grave." ), Dialog::OK );
         }
         else {
             const uint32_t experience = hero.GetArmy().ActionToSirens();
             if ( experience == 0 ) {
-                fheroes2::showStandardTextMessage( title,
-                                 _( "As the sirens sing their eerie song, your small, determined army manages to overcome the urge to dive headlong into the sea." ),
-                                 Dialog::OK );
+                fheroes2::showStandardTextMessage(
+                    title, _( "As the sirens sing their eerie song, your small, determined army manages to overcome the urge to dive headlong into the sea." ),
+                    Dialog::OK );
             }
             else {
                 const fheroes2::ExperienceDialogElement experienceUI( static_cast<int32_t>( experience ) );
@@ -3278,9 +3284,10 @@ namespace
 
         AudioManager::PlaySound( M82::EXPERNCE );
 
-        fheroes2::showStandardTextMessage( MP2::StringObject( objectType ),
-                         _( "You enter a rickety hut and talk to the magician who lives there. He tells you of places near and far which may aid you in your journeys." ),
-                         Dialog::OK );
+        fheroes2::showStandardTextMessage(
+            MP2::StringObject( objectType ),
+            _( "You enter a rickety hut and talk to the magician who lives there. He tells you of places near and far which may aid you in your journeys." ),
+            Dialog::OK );
 
         if ( !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
             hero.SetVisited( dst_index, Visit::GLOBAL );

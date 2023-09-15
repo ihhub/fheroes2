@@ -443,7 +443,8 @@ void Interface::StatusWindow::QueueEventProcessing()
         const fheroes2::Rect & pos = GetArea();
         const bool isFullInfo = StatusType::STATUS_UNKNOWN != _state && pos.height >= ( ston.height() * 3 + 15 );
         if ( isFullInfo ) {
-            fheroes2::showStandardTextMessage( _( "Status Window" ), _( "This window provides information on the status of your hero or kingdom, and shows the date." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Status Window" ), _( "This window provides information on the status of your hero or kingdom, and shows the date." ),
+                                               Dialog::ZERO );
         }
         else {
             fheroes2::showStandardTextMessage(

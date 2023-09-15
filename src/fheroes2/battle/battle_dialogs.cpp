@@ -987,9 +987,9 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
         }
 
         if ( le.MousePressRight( btnCast.area() ) && _currentColor == hero.GetColor() ) {
-            fheroes2::showStandardTextMessage( _( "Cast Spell" ),
-                             _( "Cast a magical spell. You may only cast one spell per combat round. The round is reset when every creature has had a turn." ),
-                             Dialog::ZERO );
+            fheroes2::showStandardTextMessage(
+                _( "Cast Spell" ), _( "Cast a magical spell. You may only cast one spell per combat round. The round is reset when every creature has had a turn." ),
+                Dialog::ZERO );
         }
         else if ( le.MousePressRight( btnRetreat.area() ) && _currentColor == hero.GetColor() && !hero.isCaptain() ) {
             fheroes2::showStandardTextMessage(

@@ -223,7 +223,8 @@ fheroes2::GameMode Game::CampaignSelection()
         }
 
         if ( le.MousePressRight( buttonSuccessionWars.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Original Campaign" ), _( "Either Roland's or Archibald's campaign from the original Heroes of Might and Magic II." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Original Campaign" ), _( "Either Roland's or Archibald's campaign from the original Heroes of Might and Magic II." ),
+                                               Dialog::ZERO );
         }
         if ( le.MousePressRight( buttonPriceOfLoyalty.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Expansion Campaign" ), _( "One of the four new campaigns from the Price of Loyalty expansion set." ), Dialog::ZERO );
@@ -500,9 +501,9 @@ fheroes2::GameMode Game::NewNetwork()
         if ( le.MousePressRight( buttonHost.area() ) )
             fheroes2::showStandardTextMessage( _( "Host" ), _( "The host sets up the game options. There can only be one host per network game." ), Dialog::ZERO );
         if ( le.MousePressRight( buttonGuest.area() ) )
-            fheroes2::showStandardTextMessage( _( "Guest" ),
-                             _( "The guest waits for the host to set up the game, then is automatically added in. There can be multiple guests for TCP/IP games." ),
-                             Dialog::ZERO );
+            fheroes2::showStandardTextMessage(
+                _( "Guest" ), _( "The guest waits for the host to set up the game, then is automatically added in. There can be multiple guests for TCP/IP games." ),
+                Dialog::ZERO );
         if ( le.MousePressRight( buttonCancelGame.area() ) )
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
     }
@@ -583,7 +584,8 @@ fheroes2::GameMode Game::NewGame()
         else if ( le.MousePressRight( buttonCampaignGame.area() ) )
             fheroes2::showStandardTextMessage( _( "Campaign Game" ), _( "A single player game playing through a series of maps." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonMultiGame.area() ) )
-            fheroes2::showStandardTextMessage( _( "Multi-Player Game" ), _( "A multi-player game, with several human players completing against each other on a single map." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Multi-Player Game" ),
+                                               _( "A multi-player game, with several human players completing against each other on a single map." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonBattleGame.area() ) )
             fheroes2::showStandardTextMessage( _( "Battle Only" ), _( "Setup and play a battle without loading any map." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonSettings.area() ) )
@@ -631,9 +633,9 @@ fheroes2::GameMode Game::NewMulti()
 
         // right info
         if ( le.MousePressRight( buttonHotSeat.area() ) )
-            fheroes2::showStandardTextMessage( _( "Hot Seat" ),
-                             _( "Play a Hot Seat game, where 2 to 4 players play around the same computer, switching into the 'Hot Seat' when it is their turn." ),
-                             Dialog::ZERO );
+            fheroes2::showStandardTextMessage(
+                _( "Hot Seat" ), _( "Play a Hot Seat game, where 2 to 4 players play around the same computer, switching into the 'Hot Seat' when it is their turn." ),
+                Dialog::ZERO );
         if ( le.MousePressRight( buttonCancelGame.area() ) )
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
     }

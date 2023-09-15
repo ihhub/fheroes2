@@ -44,13 +44,14 @@
 #include "mp2.h"
 #include "players.h"
 #include "screen.h"
+#include "settings.h"
+#include "translations.h"
+#include "ui_dialog.h"
+#include "world.h"
+
 #ifdef WITH_DEBUG
 #include "logging.h"
 #endif
-#include "settings.h"
-#include "ui_dialog.h"
-#include "translations.h"
-#include "world.h"
 
 namespace
 {

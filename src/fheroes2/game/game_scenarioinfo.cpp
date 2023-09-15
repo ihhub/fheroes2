@@ -372,9 +372,10 @@ namespace
                         Dialog::ZERO );
                 else if ( le.MousePressRight( ratingRoi ) )
                     fheroes2::
-                        showStandardTextMessage( _( "Difficulty Rating" ),
-                                 _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
-                                 Dialog::ZERO );
+                        showStandardTextMessage(
+                            _( "Difficulty Rating" ),
+                            _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
+                            Dialog::ZERO );
                 else if ( le.MousePressRight( buttonOk.area() ) )
                     fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to accept these settings and start a new game." ), Dialog::ZERO );
                 else if ( le.MousePressRight( buttonCancel.area() ) )

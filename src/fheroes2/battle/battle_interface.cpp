@@ -2847,8 +2847,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         ButtonSkipAction( actions );
 
         if ( le.MousePressRight() ) {
-            fheroes2::showStandardTextMessage( _( "Skip" ), _( "Skips the current creature. The current creature ends its turn and does not get to go again until the next round." ),
-                             Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Skip" ),
+                                               _( "Skips the current creature. The current creature ends its turn and does not get to go again until the next round." ),
+                                               Dialog::ZERO );
         }
     }
     else if ( _opponent1 && le.MouseCursor( _opponent1->GetArea() + _interfacePosition.getPosition() ) ) {

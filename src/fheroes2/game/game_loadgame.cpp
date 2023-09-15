@@ -121,9 +121,9 @@ fheroes2::GameMode Game::LoadMulti()
 
         // right info
         else if ( le.MousePressRight( buttonHotSeat.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Hot Seat" ),
-                             _( "Play a Hot Seat game, where 2 to 4 players play around the same computer, switching into the 'Hot Seat' when it is their turn." ),
-                             Dialog::ZERO );
+            fheroes2::showStandardTextMessage(
+                _( "Hot Seat" ), _( "Play a Hot Seat game, where 2 to 4 players play around the same computer, switching into the 'Hot Seat' when it is their turn." ),
+                Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonCancelGame.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
@@ -209,8 +209,8 @@ fheroes2::GameMode Game::LoadGame()
             fheroes2::showStandardTextMessage( _( "Campaign Game" ), _( "A single player game playing through a series of maps." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonMultiplayerGame.area() ) ) {
-            fheroes2::showStandardTextMessage(
-                _( "Multi-Player Game" ), _( "A multi-player game, with several human players completing against each other on a single map." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Multi-Player Game" ),
+                                               _( "A multi-player game, with several human players completing against each other on a single map." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
