@@ -125,6 +125,7 @@ void Game::AnimateDelaysInitialize()
     delays[CUSTOM_BATTLE_UNIT_MOVEMENT_DELAY].setDelay( 10 );
     delays[CURRENT_HERO_DELAY].setDelay( 10 );
     delays[CURRENT_AI_DELAY].setDelay( 10 );
+    delays[CASTLE_EXIT_SCROLL_MAP_DELAY].setDelay( 800 );
 
     for ( fheroes2::TimeDelay & delay : delays ) {
         delay.reset();

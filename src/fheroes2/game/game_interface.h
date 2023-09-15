@@ -26,6 +26,7 @@
 
 #include <cstdint>
 
+#include "game_delays.h"
 #include "game_mode.h"
 #include "interface_base.h"
 #include "interface_buttons.h"
@@ -157,12 +158,15 @@ namespace Interface
         void MoveHeroFromArrowKeys( Heroes & hero, const int direction );
 
         fheroes2::GameMode HumanTurn( const bool isload );
+        static int GetScrollPosition();
 
         IconsPanel iconsPanel;
         ButtonsArea buttonsArea;
         ControlPanel controlPanel;
 
         bool _lockRedraw;
+        Game::DelayType _scrollDelayType;
+        int _lastScrollPosition;
     };
 }
 
