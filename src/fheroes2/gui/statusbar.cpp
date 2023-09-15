@@ -43,9 +43,9 @@ void StatusBar::ShowMessage( std::string msg )
         return;
     }
 
-    _prevMessage = std::move( msg );
+    _prevMessage = msg;
 
-    auto text = std::make_unique<fheroes2::Text>( _prevMessage, fheroes2::FontType::normalWhite() );
+    auto text = std::make_unique<fheroes2::Text>( std::move( msg ), fheroes2::FontType::normalWhite() );
     if ( text->width() > _roi.width ) {
         text->fitToOneRow( _roi.width );
     }

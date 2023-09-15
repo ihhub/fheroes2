@@ -250,7 +250,7 @@ namespace fheroes2
             info += std::to_string( static_cast<int32_t>( ( averageFps - currentFps ) * 10 ) );
         }
 
-        _text.update( std::make_unique<fheroes2::Text>( info, fheroes2::FontType::normalWhite() ) );
+        _text.update( std::make_unique<fheroes2::Text>( std::move( info ), fheroes2::FontType::normalWhite() ) );
         _text.draw( offsetX, offsetY );
     }
 
