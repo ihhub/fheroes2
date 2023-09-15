@@ -47,7 +47,7 @@ void StatusBar::ShowMessage( std::string msg )
         text->fitToOneRow( _roi.width );
     }
 
-    const fheroes2::Rect messageRoi{ _roi.x + ( _roi.width - text->width() ) / 2, _roi.y, text->width(), text->height() };
+    fheroes2::Rect messageRoi{ _roi.x + ( _roi.width - text->width() ) / 2, _roi.y, text->width(), text->height() };
 
     update( std::move( text ) );
 
