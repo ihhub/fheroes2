@@ -48,7 +48,7 @@
 #include "logging.h"
 #endif
 #include "settings.h"
-#include "text.h"
+#include "ui_dialog.h"
 #include "translations.h"
 #include "world.h"
 
@@ -492,7 +492,7 @@ void Interface::Radar::QueueEventProcessing()
             }
         }
         else if ( le.MousePressRight( GetRect() ) ) {
-            Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Dialog::ZERO );
         }
     }
 }
@@ -519,7 +519,7 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
             }
         }
         else if ( le.MousePressRight( GetRect() ) ) {
-            Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Dialog::ZERO );
         }
         else if ( le.MouseWheelUp() ) {
             return roi.zoomIn( false );

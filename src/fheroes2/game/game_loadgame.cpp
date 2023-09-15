@@ -46,9 +46,9 @@
 #include "mus.h"
 #include "screen.h"
 #include "settings.h"
-#include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_tool.h"
 
 namespace
@@ -109,7 +109,7 @@ fheroes2::GameMode Game::LoadMulti()
 
         if ( le.MouseClickLeft( buttonHotSeat.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_HOTSEAT ) ) {
             if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_HOTSEAT ), false ) ) {
-                Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
+                fheroes2::showStandardTextMessage( _( "Load Game" ), _( "No save files to load." ), Dialog::OK );
             }
             else {
                 return fheroes2::GameMode::LOAD_HOT_SEAT;
@@ -121,12 +121,12 @@ fheroes2::GameMode Game::LoadMulti()
 
         // right info
         else if ( le.MousePressRight( buttonHotSeat.area() ) ) {
-            Dialog::Message( _( "Hot Seat" ),
+            fheroes2::showStandardTextMessage( _( "Hot Seat" ),
                              _( "Play a Hot Seat game, where 2 to 4 players play around the same computer, switching into the 'Hot Seat' when it is their turn." ),
-                             Font::BIG );
+                             Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonCancelGame.area() ) ) {
-            Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
         }
     }
 
@@ -182,7 +182,7 @@ fheroes2::GameMode Game::LoadGame()
 
         if ( le.MouseClickLeft( buttonStandardGame.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_STANDARD ) ) {
             if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_STANDARD ), false ) ) {
-                Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
+                fheroes2::showStandardTextMessage( _( "Load Game" ), _( "No save files to load." ), Dialog::OK );
             }
             else {
                 return fheroes2::GameMode::LOAD_STANDARD;
@@ -190,7 +190,7 @@ fheroes2::GameMode Game::LoadGame()
         }
         else if ( buttonCampaignGame.isEnabled() && ( le.MouseClickLeft( buttonCampaignGame.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_CAMPAIGN ) ) ) {
             if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_CAMPAIGN ), false ) ) {
-                Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
+                fheroes2::showStandardTextMessage( _( "Load Game" ), _( "No save files to load." ), Dialog::OK );
             }
             else {
                 return fheroes2::GameMode::LOAD_CAMPAIGN;
@@ -203,16 +203,17 @@ fheroes2::GameMode Game::LoadGame()
             return fheroes2::GameMode::MAIN_MENU;
         }
         else if ( le.MousePressRight( buttonStandardGame.area() ) ) {
-            Dialog::Message( _( "Standard Game" ), _( "A single player game playing out a single map." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Standard Game" ), _( "A single player game playing out a single map." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonCampaignGame.area() ) ) {
-            Dialog::Message( _( "Campaign Game" ), _( "A single player game playing through a series of maps." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Campaign Game" ), _( "A single player game playing through a series of maps." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonMultiplayerGame.area() ) ) {
-            Dialog::Message( _( "Multi-Player Game" ), _( "A multi-player game, with several human players completing against each other on a single map." ), Font::BIG );
+            fheroes2::showStandardTextMessage(
+                _( "Multi-Player Game" ), _( "A multi-player game, with several human players completing against each other on a single map." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonCancel.area() ) ) {
-            Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
         }
     }
 

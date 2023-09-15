@@ -52,6 +52,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -347,7 +348,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         // dismiss
         if ( buttonDismiss.isEnabled() && buttonDismiss.isVisible()
              && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
-             && Dialog::YES == Dialog::Message( GetName(), _( "Are you sure you want to dismiss this Hero?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
+             && Dialog::YES == fheroes2::showStandardTextMessage( GetName(), _( "Are you sure you want to dismiss this Hero?" ), Dialog::YES | Dialog::NO ) ) {
             // Fade-out hero dialog.
             fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
 
@@ -386,10 +387,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             Dialog::QuickInfo( *this );
         }
         else if ( le.MousePressRight( rectSpreadArmyFormat ) ) {
-            Dialog::Message( _( "Spread Formation" ), descriptionSpreadArmyFormat, Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Spread Formation" ), descriptionSpreadArmyFormat, Dialog::ZERO );
         }
         else if ( le.MousePressRight( rectGroupedArmyFormat ) ) {
-            Dialog::Message( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Dialog::ZERO );
         }
 
         // status message

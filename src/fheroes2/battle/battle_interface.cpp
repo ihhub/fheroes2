@@ -2816,7 +2816,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
                 ballistaMessage.append( Battle::Board::GetMoatInfo() );
             }
 
-            Dialog::Message( _( "Ballista" ), ballistaMessage, Font::BIG, le.MousePressRight() ? 0 : Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Ballista" ), ballistaMessage, le.MousePressRight() ? Dialog::ZERO : Dialog::OK );
         }
     }
     else if ( conf.BattleShowTurnOrder() && le.MouseCursor( turnOrderRect ) ) {
@@ -2829,7 +2829,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         ButtonAutoAction( unit, actions );
 
         if ( le.MousePressRight() ) {
-            Dialog::Message( _( "Auto Combat" ), _( "Allows the computer to fight out the battle for you." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Auto Combat" ), _( "Allows the computer to fight out the battle for you." ), Dialog::ZERO );
         }
     }
     else if ( le.MouseCursor( btn_settings.area() ) ) {
@@ -2838,7 +2838,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         ButtonSettingsAction();
 
         if ( le.MousePressRight() ) {
-            Dialog::Message( _( "System Options" ), _( "Allows you to customize the combat screen." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "System Options" ), _( "Allows you to customize the combat screen." ), Dialog::ZERO );
         }
     }
     else if ( le.MouseCursor( btn_skip.area() ) ) {
@@ -2847,8 +2847,8 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         ButtonSkipAction( actions );
 
         if ( le.MousePressRight() ) {
-            Dialog::Message( _( "Skip" ), _( "Skips the current creature. The current creature ends its turn and does not get to go again until the next round." ),
-                             Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Skip" ), _( "Skips the current creature. The current creature ends its turn and does not get to go again until the next round." ),
+                             Dialog::ZERO );
         }
     }
     else if ( _opponent1 && le.MouseCursor( _opponent1->GetArea() + _interfacePosition.getPosition() ) ) {
@@ -6326,7 +6326,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
                 std::string msg;
 
                 if ( arena.isDisableCastSpell( Spell::NONE, &msg ) ) {
-                    Dialog::Message( "", msg, Font::BIG, Dialog::OK );
+                    fheroes2::showStandardTextMessage( "", msg, Dialog::OK );
                 }
                 else {
                     const std::function<void( const std::string & )> statusCallback = [this]( const std::string & statusStr ) {
@@ -6343,7 +6343,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
                         assert( spell.isCombat() );
 
                         if ( arena.isDisableCastSpell( spell, &msg ) ) {
-                            Dialog::Message( "", msg, Font::BIG, Dialog::OK );
+                            fheroes2::showStandardTextMessage( "", msg, Dialog::OK );
                         }
                         else {
                             std::string error;
@@ -6360,14 +6360,14 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
                                 }
                             }
                             else {
-                                Dialog::Message( _( "Error" ), error, Font::BIG, Dialog::OK );
+                                fheroes2::showStandardTextMessage( _( "Error" ), error, Dialog::OK );
                             }
                         }
                     }
                 }
             }
             else
-                Dialog::Message( "", _( "No spells to cast." ), Font::BIG, Dialog::OK );
+                fheroes2::showStandardTextMessage( "", _( "No spells to cast." ), Dialog::OK );
         }
         break;
     }
@@ -6375,14 +6375,14 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
     // retreat
     case 2: {
         if ( arena.CanRetreatOpponent( _currentUnit->GetCurrentOrArmyColor() ) ) {
-            if ( Dialog::YES == Dialog::Message( "", _( "Are you sure you want to retreat?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
+            if ( Dialog::YES == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to retreat?" ), Dialog::YES | Dialog::NO ) ) {
                 actions.emplace_back( CommandType::MSG_BATTLE_RETREAT );
                 actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
                 humanturn_exit = true;
             }
         }
         else {
-            Dialog::Message( "", _( "Retreat disabled" ), Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( "", _( "Retreat disabled" ), Dialog::OK );
         }
         break;
     }
@@ -6404,7 +6404,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
             }
         }
         else {
-            Dialog::Message( "", _( "Surrender disabled" ), Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( "", _( "Surrender disabled" ), Dialog::OK );
         }
         break;
     }

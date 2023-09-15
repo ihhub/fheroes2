@@ -179,7 +179,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                        const std::function<void( const std::string & )> * statusCallback ) const
 {
     if ( !hero.HaveSpellBook() ) {
-        Dialog::Message( "", _( "You have no Magic Book, so you cannot cast a spell." ), Font::BIG, Dialog::OK );
+        fheroes2::showStandardTextMessage( "", _( "You have no Magic Book, so you cannot cast a spell." ), Dialog::OK );
         return Spell::NONE;
     }
 
@@ -195,7 +195,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
     SpellStorage displayedSpells = SetFilter( _spellFilter, &hero );
 
     if ( canCastSpell && displayedSpells.empty() ) {
-        Dialog::Message( "", _( "No spell to cast." ), Font::BIG, Dialog::OK );
+        fheroes2::showStandardTextMessage( "", _( "No spell to cast." ), Dialog::OK );
         return Spell::NONE;
     }
 
@@ -255,7 +255,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
         else if ( le.MouseClickLeft( info_rt ) ) {
             std::string str = _( "Your hero has %{point} spell points remaining." );
             StringReplace( str, "%{point}", hero.GetSpellPoints() );
-            Dialog::Message( "", str, Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( "", str, Dialog::OK );
         }
         else if ( le.MouseClickLeft( advn_rt ) && _spellFilter != Filter::ADVN && displayableSpells != Filter::CMBT ) {
             _spellFilter = Filter::ADVN;
@@ -272,19 +272,19 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
         else if ( le.MousePressRight( info_rt ) ) {
             std::string str = _( "Your hero has %{point} spell points remaining." );
             StringReplace( str, "%{point}", hero.GetSpellPoints() );
-            Dialog::Message( "", str, Font::BIG );
+            fheroes2::showStandardTextMessage( "", str, Dialog::ZERO );
         }
         else if ( le.MousePressRight( advn_rt ) && displayableSpells != Filter::CMBT ) {
-            Dialog::Message( "", _( "View Adventure Spells" ), Font::BIG );
+            fheroes2::showStandardTextMessage( "", _( "View Adventure Spells" ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( cmbt_rt ) && displayableSpells != Filter::ADVN ) {
-            Dialog::Message( "", _( "View Combat Spells" ), Font::BIG );
+            fheroes2::showStandardTextMessage( "", _( "View Combat Spells" ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( prev_list ) ) {
-            Dialog::Message( "", _( "View previous page" ), Font::BIG );
+            fheroes2::showStandardTextMessage( "", _( "View previous page" ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( next_list ) ) {
-            Dialog::Message( "", _( "View next page" ), Font::BIG );
+            fheroes2::showStandardTextMessage( "", _( "View next page" ), Dialog::ZERO );
         }
         else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyCloseWindow() )
             break;
@@ -302,7 +302,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                             curspell = *spell;
                             break;
                         }
-                        Dialog::Message( spell->GetName(), str, Font::BIG, Dialog::OK );
+                        fheroes2::showStandardTextMessage( spell->GetName(), str, Dialog::OK );
                         display.render();
                     }
                     else {

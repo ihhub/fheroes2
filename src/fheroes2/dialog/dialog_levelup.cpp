@@ -211,7 +211,7 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
             display.render();
         }
         else if ( le.MousePressRight( button_hero.area() ) ) {
-            Dialog::Message( "", _( "View Hero" ), Font::BIG );
+            fheroes2::showStandardTextMessage( "", _( "View Hero" ), Dialog::ZERO );
         }
     }
 

@@ -38,6 +38,7 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 
 namespace fheroes2
 {
@@ -129,9 +130,9 @@ void LuckIndicator::QueueEventProcessing( const LuckIndicator & indicator )
     LocalEvent & le = LocalEvent::Get();
 
     if ( le.MouseClickLeft( indicator.area ) )
-        Dialog::Message( fheroes2::LuckString( indicator.luck ), indicator.descriptions, Font::BIG, Dialog::OK );
+        fheroes2::showStandardTextMessage( fheroes2::LuckString( indicator.luck ), indicator.descriptions, Dialog::OK );
     else if ( le.MousePressRight( indicator.area ) )
-        Dialog::Message( fheroes2::LuckString( indicator.luck ), indicator.descriptions, Font::BIG );
+        fheroes2::showStandardTextMessage( fheroes2::LuckString( indicator.luck ), indicator.descriptions, Dialog::ZERO );
 }
 
 MoraleIndicator::MoraleIndicator( const Heroes * h )
@@ -185,9 +186,9 @@ void MoraleIndicator::QueueEventProcessing( const MoraleIndicator & indicator )
     LocalEvent & le = LocalEvent::Get();
 
     if ( le.MouseClickLeft( indicator.area ) )
-        Dialog::Message( fheroes2::MoraleString( indicator.morale ), indicator.descriptions, Font::BIG, Dialog::OK );
+        fheroes2::showStandardTextMessage( fheroes2::MoraleString( indicator.morale ), indicator.descriptions, Dialog::OK );
     else if ( le.MousePressRight( indicator.area ) )
-        Dialog::Message( fheroes2::MoraleString( indicator.morale ), indicator.descriptions, Font::BIG );
+        fheroes2::showStandardTextMessage( fheroes2::MoraleString( indicator.morale ), indicator.descriptions, Dialog::ZERO );
 }
 
 ExperienceIndicator::ExperienceIndicator( const Heroes * h )
@@ -223,7 +224,7 @@ void ExperienceIndicator::QueueEventProcessing() const
     if ( le.MouseClickLeft( area ) || le.MousePressRight( area ) ) {
         std::string message = _( "Level %{level}" );
         StringReplace( message, "%{level}", hero->GetLevel() );
-        Dialog::Message( message, descriptions, Font::BIG, ( le.MousePressRight() ? 0 : Dialog::OK ) );
+        fheroes2::showStandardTextMessage( message, descriptions, ( le.MousePressRight() ? Dialog::ZERO : Dialog::OK ) );
     }
 }
 
@@ -259,6 +260,6 @@ void SpellPointsIndicator::QueueEventProcessing() const
     LocalEvent & le = LocalEvent::Get();
 
     if ( le.MouseClickLeft( area ) || le.MousePressRight( area ) ) {
-        Dialog::Message( _( "Spell Points" ), descriptions, Font::BIG, ( le.MousePressRight() ? 0 : Dialog::OK ) );
+        fheroes2::showStandardTextMessage( _( "Spell Points" ), descriptions, ( le.MousePressRight() ? Dialog::ZERO : Dialog::OK ) );
     }
 }
