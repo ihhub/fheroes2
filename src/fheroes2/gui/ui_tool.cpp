@@ -35,6 +35,7 @@
 #include "game_delays.h"
 #include "image_palette.h"
 #include "localevent.h"
+#include "render_processor.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
@@ -204,20 +205,11 @@ namespace fheroes2
         : _startTime( std::chrono::steady_clock::now() )
         , _text( fheroes2::Display::instance() )
     {
-        LocalEvent::RegisterCycling( [this]() { preRender(); }, [this]() { postRender(); } );
-    }
-
-    SystemInfoRenderer::~SystemInfoRenderer()
-    {
-        LocalEvent::RegisterCycling( {}, {} );
+        RenderProcessor::instance().registerRenderers( [this]() { preRender(); }, [this]() { postRender(); } );
     }
 
     void SystemInfoRenderer::preRender()
     {
-        if ( !Settings::Get().isSystemInfoEnabled() ) {
-            return;
-        }
-
         const int32_t offsetX = 26;
         const int32_t offsetY = fheroes2::Display::instance().height() - 30;
 
@@ -284,13 +276,13 @@ namespace fheroes2
 
     ScreenPaletteRestorer::ScreenPaletteRestorer()
     {
-        LocalEvent::PauseCycling();
+        RenderProcessor::instance().stopColorCycling();
     }
 
     ScreenPaletteRestorer::~ScreenPaletteRestorer()
     {
         Display::instance().changePalette( nullptr );
-        LocalEvent::ResumeCycling();
+        RenderProcessor::instance().startColorCycling();
     }
 
     void ScreenPaletteRestorer::changePalette( const uint8_t * palette ) const

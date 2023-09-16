@@ -57,6 +57,7 @@
 #include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
+#include "render_processor.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
@@ -179,6 +180,11 @@ namespace
 
             // Initialize system info renderer.
             _systemInfoRenderer = std::make_unique<fheroes2::SystemInfoRenderer>();
+
+            display.subscribe( []( std::vector<uint8_t> & palette ){ return fheroes2::RenderProcessor::instance().preRenderAction( palette ); },
+                               [](){ fheroes2::RenderProcessor::instance().postRenderAction(); } );
+
+            fheroes2::RenderProcessor::instance().startColorCycling();
 
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );

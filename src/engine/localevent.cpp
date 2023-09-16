@@ -46,6 +46,7 @@
 #include "audio.h"
 #include "image.h"
 #include "pal.h"
+#include "render_processor.h"
 #include "screen.h"
 #include "tools.h"
 
@@ -688,108 +689,11 @@ void LocalEvent::OpenTouchpad()
     }
 }
 
-namespace
-{
-    class ColorCycling
-    {
-    public:
-        ColorCycling()
-            : _counter( 0 )
-            , _isPaused( false )
-        {}
-
-        bool applyCycling( std::vector<uint8_t> & palette )
-        {
-            if ( _preRenderDrawing ) {
-                _preRenderDrawing();
-            }
-
-            if ( _timer.getMs() >= 220 ) {
-                _timer.reset();
-                palette = PAL::GetCyclingPalette( _counter );
-                ++_counter;
-                return true;
-            }
-            return false;
-        }
-
-        void reset()
-        {
-            _prevDraw.reset();
-
-            if ( _posRenderDrawing ) {
-                _posRenderDrawing();
-            }
-        }
-
-        bool isRedrawRequired() const
-        {
-            return !_isPaused && _prevDraw.getMs() >= 220;
-        }
-
-        void registerDrawing( const std::function<void()> & preRenderDrawing, const std::function<void()> & postRenderDrawing )
-        {
-            if ( preRenderDrawing )
-                _preRenderDrawing = preRenderDrawing;
-
-            if ( postRenderDrawing )
-                _posRenderDrawing = postRenderDrawing;
-        }
-
-        void pause()
-        {
-            _isPaused = true;
-        }
-
-        void resume()
-        {
-            _isPaused = false;
-            _prevDraw.reset();
-            _timer.reset();
-        }
-
-    private:
-        fheroes2::Time _timer;
-        fheroes2::Time _prevDraw;
-        uint32_t _counter;
-        bool _isPaused;
-
-        std::function<void()> _preRenderDrawing;
-        std::function<void()> _posRenderDrawing;
-    };
-
-    ColorCycling colorCycling;
-
-    bool ApplyCycling( std::vector<uint8_t> & palette )
-    {
-        return colorCycling.applyCycling( palette );
-    }
-
-    void ResetCycling()
-    {
-        colorCycling.reset();
-    }
-}
-
 LocalEvent & LocalEvent::Get()
 {
     static LocalEvent le;
 
     return le;
-}
-
-void LocalEvent::RegisterCycling( const std::function<void()> & preRenderDrawing, const std::function<void()> & postRenderDrawing )
-{
-    colorCycling.registerDrawing( preRenderDrawing, postRenderDrawing );
-    colorCycling.resume();
-
-    fheroes2::Display::instance().subscribe( ApplyCycling, ResetCycling );
-}
-
-void LocalEvent::PauseCycling()
-{
-    colorCycling.pause();
-    fheroes2::Display::instance().subscribe( nullptr, nullptr );
 }
 
 LocalEvent & LocalEvent::GetClean()
@@ -821,7 +725,7 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    if ( colorCycling.isRedrawRequired() ) {
+    if ( fheroes2::RenderProcessor::instance().isClyclingUpdateRequired() ) {
         // To maintain color cycling animation we need to render the whole frame with an updated palette.
         renderRoi = { 0, 0, display.width(), display.height() };
     }

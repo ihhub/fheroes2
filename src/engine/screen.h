@@ -21,6 +21,7 @@
 #pragma once
 
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -217,8 +218,8 @@ namespace fheroes2
         }
 
         // this function must return true if new palette has been generated
-        using PreRenderProcessing = bool ( * )( std::vector<uint8_t> & palette );
-        using PostRenderProcessing = void ( * )();
+        using PreRenderProcessing = std::function<bool(std::vector<uint8_t> &)>;
+        using PostRenderProcessing = std::function<void()>;
 
         void subscribe( PreRenderProcessing preprocessing, PostRenderProcessing postprocessing )
         {

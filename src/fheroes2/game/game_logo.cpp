@@ -30,10 +30,11 @@
 #include "screen.h"
 #include "translations.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 
 void fheroes2::showTeamInfo()
 {
-    LocalEvent::PauseCycling();
+    const ScreenPaletteRestorer restorer;
 
     Display & display = Display::instance();
 
@@ -74,6 +75,4 @@ void fheroes2::showTeamInfo()
             alpha -= 5;
         }
     }
-
-    LocalEvent::ResumeCycling();
 }

@@ -99,12 +99,6 @@ namespace fheroes2
     public:
         SystemInfoRenderer();
 
-        SystemInfoRenderer( const SystemInfoRenderer & ) = delete;
-
-        SystemInfoRenderer & operator=( const SystemInfoRenderer & ) = delete;
-
-        ~SystemInfoRenderer();
-
         void preRender();
 
         void postRender()

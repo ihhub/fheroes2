@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,40 +18,53 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "statusbar.h"
+#include "render_processor.h"
 
-#include <memory>
-#include <utility>
+#include "pal.h"
 
-#include "screen.h"
-#include "tools.h"
-#include "ui_text.h"
-
-StatusBar::StatusBar()
-    : MovableText( fheroes2::Display::instance() )
+namespace
 {
-    // Do nothing.
+    const uint64_t frameHalfInterval{ 4 };
 }
 
-void StatusBar::ShowMessage( std::string msg )
+namespace fheroes2
 {
-    if ( msg == _prevMessage ) {
-        // No updates.
-        return;
+    RenderProcessor & RenderProcessor::instance()
+    {
+        static RenderProcessor processor;
+        return processor;
     }
 
-    _prevMessage = msg;
+    bool RenderProcessor::preRenderAction( std::vector<uint8_t> & palette )
+    {
+        if ( !_enableCycling ) {
+            return false;
+        }
 
-    auto text = std::make_unique<fheroes2::Text>( std::move( msg ), fheroes2::FontType::normalWhite() );
-    text->fitToOneRow( _roi.width );
+        if ( _enableRenderers ) {
+            _preRenderer();
+        }
 
-    const int32_t textWidth = text->width();
-    const fheroes2::Rect messageRoi{ _roi.x + ( _roi.width - textWidth ) / 2, _roi.y, textWidth, text->height() };
+        if ( _cyclingTimer.getMs() < ( _cyclingInterval - frameHalfInterval ) ) {
+            // The maximum FPS the engine can handle is 125.
+            // This means that a frame should be generated only every 8 ms.
+            // If the current timer is less than cycling internal minus half of the frame generation then nothing is needed.
+            return false;
+        }
 
-    update( std::move( text ) );
+        // TODO: here we need to deduct possible time difference from the current time to have consistent FPS.
+        _cyclingTimer.reset();
+        palette = PAL::GetCyclingPalette( _cyclingCounter );
+        ++_cyclingCounter;
+        return true;
+    }
 
-    draw( messageRoi.x, messageRoi.y );
+    void RenderProcessor::postRenderAction()
+    {
+        _lastRenderCall.reset();
 
-    fheroes2::Display::instance().render( fheroes2::getBoundaryRect( _prevMessageRoi, messageRoi ) );
-    _prevMessageRoi = messageRoi;
+        if ( _enableCycling && _enableRenderers ) {
+            _postRenderer();
+        }
+    }
 }
