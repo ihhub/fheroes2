@@ -143,35 +143,46 @@ namespace
 
 const char * Heroes::GetName( int heroid )
 {
-    assert( heroid >= 0 && heroid <= UNKNOWN );
+    assert( heroid >= UNKNOWN && heroid <= HEROES_COUNT );
 
-    const std::array<const char *, UNKNOWN + 1> names
-        = { // knight
+    const std::array<const char *, HEROES_COUNT> names
+        = { // Unknown / uninitialized hero.
+            "Unknown",
+
+            // Knight heroes for The Succession Wars.
             gettext_noop( "Lord Kilburn" ), gettext_noop( "Sir Gallant" ), gettext_noop( "Ector" ), gettext_noop( "Gwenneth" ), gettext_noop( "Tyro" ),
             gettext_noop( "Ambrose" ), gettext_noop( "Ruby" ), gettext_noop( "Maximus" ), gettext_noop( "Dimitry" ),
-            // barbarian
+
+            // Barbarian heroes for The Succession Wars.
             gettext_noop( "Thundax" ), gettext_noop( "Fineous" ), gettext_noop( "Jojosh" ), gettext_noop( "Crag Hack" ), gettext_noop( "Jezebel" ),
             gettext_noop( "Jaclyn" ), gettext_noop( "Ergon" ), gettext_noop( "Tsabu" ), gettext_noop( "Atlas" ),
-            // sorceress
+
+            // Sorceress heroes for The Succession Wars.
             gettext_noop( "Astra" ), gettext_noop( "Natasha" ), gettext_noop( "Troyan" ), gettext_noop( "Vatawna" ), gettext_noop( "Rebecca" ), gettext_noop( "Gem" ),
             gettext_noop( "Ariel" ), gettext_noop( "Carlawn" ), gettext_noop( "Luna" ),
-            // warlock
+
+            // Warlock heroes for The Succession Wars.
             gettext_noop( "Arie" ), gettext_noop( "Alamar" ), gettext_noop( "Vesper" ), gettext_noop( "Crodo" ), gettext_noop( "Barok" ), gettext_noop( "Kastore" ),
             gettext_noop( "Agar" ), gettext_noop( "Falagar" ), gettext_noop( "Wrathmont" ),
-            // wizard
+
+            // Wizard heroes for The Succession Wars.
             gettext_noop( "Myra" ), gettext_noop( "Flint" ), gettext_noop( "Dawn" ), gettext_noop( "Halon" ), gettext_noop( "Myrini" ), gettext_noop( "Wilfrey" ),
             gettext_noop( "Sarakin" ), gettext_noop( "Kalindra" ), gettext_noop( "Mandigal" ),
-            // necromant
+
+            // Necromancer heroes for The Succession Wars.
             gettext_noop( "Zom" ), gettext_noop( "Darlana" ), gettext_noop( "Zam" ), gettext_noop( "Ranloo" ), gettext_noop( "Charity" ), gettext_noop( "Rialdo" ),
             gettext_noop( "Roxana" ), gettext_noop( "Sandro" ), gettext_noop( "Celia" ),
-            // campaigns
+
+            // The Succession Wars campaign heroes.
             gettext_noop( "Roland" ), gettext_noop( "Lord Corlagon" ), gettext_noop( "Sister Eliza" ), gettext_noop( "Archibald" ), gettext_noop( "Lord Halton" ),
             gettext_noop( "Brother Brax" ),
-            // loyalty version
+
+            // The Price of Loyalty expansion heroes.
             gettext_noop( "Solmyr" ), gettext_noop( "Dainwin" ), gettext_noop( "Mog" ), gettext_noop( "Uncle Ivan" ), gettext_noop( "Joseph" ),
             gettext_noop( "Gallavant" ), _( "Elderian" ), gettext_noop( "Ceallach" ), gettext_noop( "Drakonia" ), gettext_noop( "Martine" ), gettext_noop( "Jarkonas" ),
-            // debug
-            "Debug Hero", "Unknown" };
+
+            // Debug hero. Should not be used anywhere except development!
+            "Debug Hero" };
 
     return _( names[heroid] );
 }
@@ -179,9 +190,9 @@ const char * Heroes::GetName( int heroid )
 Heroes::Heroes()
     : experience( 0 )
     , army( this )
-    , hid( UNKNOWN )
+    , _id( UNKNOWN )
     , portrait( UNKNOWN )
-    , _race( UNKNOWN )
+    , _race( Race::NONE )
     , save_maps_object( 0 )
     , path( *this )
     , direction( Direction::RIGHT )
@@ -190,7 +201,9 @@ Heroes::Heroes()
     , _alphaValue( 255 )
     , _attackedMonsterTileIndex( -1 )
     , _aiRole( Role::HUNTER )
-{}
+{
+    // Do nothing.
+}
 
 Heroes::Heroes( const int heroID, const int race, const uint32_t additionalExperience )
     : Heroes( heroID, race )
@@ -204,7 +217,7 @@ Heroes::Heroes( int heroid, int rc )
     , experience( GetStartingXp() )
     , secondary_skills( rc )
     , army( this )
-    , hid( heroid )
+    , _id( heroid )
     , portrait( heroid )
     , _race( rc )
     , save_maps_object( MP2::OBJ_NONE )
@@ -220,9 +233,8 @@ Heroes::Heroes( int heroid, int rc )
 
     army.Reset( true );
 
-    // Extra Debug Hero
-    switch ( hid ) {
-    case DEBUG_HERO:
+    // Add to debug hero a lot of stuff.
+    if ( _id == DEBUG_HERO ) {
         army.Clean();
         army.JoinTroop( Monster::BLACK_DRAGON, 2, false );
         army.JoinTroop( Monster::RED_DRAGON, 3, false );
@@ -246,11 +258,6 @@ Heroes::Heroes( int heroid, int rc )
         for ( const int spellId : Spell::getAllSpellIdsSuitableForSpellBook() ) {
             AppendSpellToBook( Spell( spellId ), true );
         }
-
-        break;
-
-    default:
-        break;
     }
 
     if ( !magic_point ) {
@@ -430,12 +437,12 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     if ( doesHeroHaveCustomPortrait ) {
         SetModes( NOTDEFAULTS );
 
-        // Portrait sprite index
-        portrait = dataStream.get();
+        // Portrait sprite index. In should be increased by 1 as in the original game hero IDs start from 0.
+        portrait = dataStream.get() + 1;
 
-        if ( UNKNOWN <= portrait ) {
+        if ( portrait >= HEROES_COUNT ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 file format: incorrect custom portrait ID: " << portrait )
-            portrait = hid;
+            portrait = _id;
         }
 
         // Hero's race may not match the custom portrait
@@ -1086,8 +1093,8 @@ void Heroes::unmarkHeroMeeting()
             continue;
         }
 
-        hero->visit_object.remove( IndexObject( hid, MP2::OBJ_HEROES ) );
-        visit_object.remove( IndexObject( hero->hid, MP2::OBJ_HEROES ) );
+        hero->visit_object.remove( IndexObject( _id, MP2::OBJ_HEROES ) );
+        visit_object.remove( IndexObject( hero->_id, MP2::OBJ_HEROES ) );
     }
 }
 
@@ -1643,7 +1650,7 @@ bool Heroes::MayCastAdventureSpells() const
 
 bool Heroes::isValid() const
 {
-    return hid != UNKNOWN;
+    return _id != UNKNOWN;
 }
 
 bool Heroes::isActive() const
@@ -2106,7 +2113,7 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
      * */
 
     uint32_t hash = world.GetMapSeed();
-    fheroes2::hashCombine( hash, hid );
+    fheroes2::hashCombine( hash, _id );
     fheroes2::hashCombine( hash, _race );
     fheroes2::hashCombine( hash, attack );
     fheroes2::hashCombine( hash, defense );
@@ -2191,7 +2198,7 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
     msg << base;
 
     // Heroes
-    msg << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero.hid << hero.portrait << hero._race << hero.save_maps_object << hero.path
+    msg << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero._id << hero.portrait << hero._race << hero.save_maps_object << hero.path
         << hero.direction << hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
@@ -2212,7 +2219,8 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     msg >> base;
 
     // Heroes
-    msg >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait >> hero._race >> hero.save_maps_object >> hero.path
+    // TODO: increase Hero ID by 1.
+    msg >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero._id >> hero.portrait >> hero._race >> hero.save_maps_object >> hero.path
         >> hero.direction >> hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type

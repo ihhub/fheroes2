@@ -42,26 +42,6 @@ Recruit::Recruit( const Heroes & hero )
     : Recruit( hero, 0 )
 {}
 
-Recruits::Recruits()
-    : std::pair<Recruit, Recruit>()
-{}
-
-void Recruits::Reset()
-{
-    first = {};
-    second = {};
-}
-
-int Recruits::GetID1() const
-{
-    return first.getID();
-}
-
-int Recruits::GetID2() const
-{
-    return second.getID();
-}
-
 Heroes * Recruits::GetHero1() const
 {
     return world.GetHeroes( first.getID() );
@@ -70,16 +50,6 @@ Heroes * Recruits::GetHero1() const
 Heroes * Recruits::GetHero2() const
 {
     return world.GetHeroes( second.getID() );
-}
-
-uint32_t Recruits::getSurrenderDayOfHero1() const
-{
-    return first.getSurrenderDay();
-}
-
-uint32_t Recruits::getSurrenderDayOfHero2() const
-{
-    return second.getSurrenderDay();
 }
 
 void Recruits::SetHero1( Heroes * hero )
@@ -124,5 +94,6 @@ StreamBase & operator<<( StreamBase & msg, const Recruit & recruit )
 
 StreamBase & operator>>( StreamBase & msg, Recruit & recruit )
 {
+    // TODO: change ID.
     return msg >> recruit._id >> recruit._surrenderDay;
 }

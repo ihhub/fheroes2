@@ -64,18 +64,34 @@ private:
 class Recruits : public std::pair<Recruit, Recruit>
 {
 public:
-    Recruits();
+    void Reset()
+    {
+        first = {};
+        second = {};
+    }
 
-    void Reset();
+    int GetID1() const
+    {
+        return first.getID();
+    }
 
-    int GetID1() const;
-    int GetID2() const;
+    int GetID2() const
+    {
+        return second.getID();
+    }
 
     Heroes * GetHero1() const;
     Heroes * GetHero2() const;
 
-    uint32_t getSurrenderDayOfHero1() const;
-    uint32_t getSurrenderDayOfHero2() const;
+    uint32_t getSurrenderDayOfHero1() const
+    {
+        return first.getSurrenderDay();
+    }
+
+    uint32_t getSurrenderDayOfHero2() const
+    {
+        return second.getSurrenderDay();
+    }
 
     void SetHero1( Heroes * hero );
     void SetHero2( Heroes * hero );

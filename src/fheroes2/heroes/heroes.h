@@ -77,9 +77,12 @@ struct HeroSeedsForLevelUp
 class Heroes final : public HeroBase, public ColorBase
 {
 public:
-    enum
+    enum : int32_t
     {
-        // knight
+        // Unknown / uninitialized hero.
+        UNKNOWN = 0,
+
+        // Knight heroes for The Succession Wars.
         LORDKILBURN,
         SIRGALLANTH,
         ECTOR,
@@ -89,7 +92,8 @@ public:
         RUBY,
         MAXIMUS,
         DIMITRY,
-        // barbarian
+
+        // Barbarian heroes for The Succession Wars.
         THUNDAX,
         FINEOUS,
         JOJOSH,
@@ -99,7 +103,8 @@ public:
         ERGON,
         TSABU,
         ATLAS,
-        // sorceress
+
+        // Sorceress heroes for The Succession Wars.
         ASTRA,
         NATASHA,
         TROYAN,
@@ -109,7 +114,8 @@ public:
         ARIEL,
         CARLAWN,
         LUNA,
-        // warlock
+
+        // Warlock heroes for The Succession Wars.
         ARIE,
         ALAMAR,
         VESPER,
@@ -119,7 +125,8 @@ public:
         AGAR,
         FALAGAR,
         WRATHMONT,
-        // wizard
+
+        // Wizard heroes for The Succession Wars.
         MYRA,
         FLINT,
         DAWN,
@@ -129,7 +136,8 @@ public:
         SARAKIN,
         KALINDRA,
         MANDIGAL,
-        // necromancer
+
+        // Necromancer heroes for The Succession Wars.
         ZOM,
         DARLANA,
         ZAM,
@@ -139,14 +147,16 @@ public:
         ROXANA,
         SANDRO,
         CELIA,
-        // From The Succession Wars campaign.
+
+        // The Succession Wars campaign heroes.
         ROLAND,
         CORLAGON,
         ELIZA,
         ARCHIBALD,
         HALTON,
         BRAX,
-        // From The Price of Loyalty expansion.
+
+        // The Price of Loyalty expansion heroes.
         SOLMYR,
         DAINWIN,
         MOG,
@@ -158,9 +168,14 @@ public:
         DRAKONIA,
         MARTINE,
         JARKONAS,
-        // debugger
+
+        // Debug hero. Should not be used anywhere except development!
         DEBUG_HERO,
-        UNKNOWN
+
+        // Resurrection expansion heroes.
+
+        // IMPORTANT! Put all new heroes just above this line.
+        HEROES_COUNT
     };
 
     enum : uint32_t
@@ -305,7 +320,7 @@ public:
 
     int GetID() const
     {
-        return hid;
+        return _id;
     }
 
     double getMeetingValue( const Heroes & otherHero ) const;
@@ -640,7 +655,7 @@ private:
     Army army;
 
     // Hero ID
-    int hid;
+    int _id;
     // Corresponds to the ID of the hero whose portrait is applied. Usually equal to the
     // ID of this hero, unless a custom portrait is applied.
     int portrait;
