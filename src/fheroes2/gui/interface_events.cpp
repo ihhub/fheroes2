@@ -32,6 +32,7 @@
 #include "artifact_ultimate.h"
 #include "audio.h"
 #include "audio_manager.h"
+#include "castle.h"
 #include "dialog.h"
 #include "dialog_system_options.h"
 #include "direction.h"

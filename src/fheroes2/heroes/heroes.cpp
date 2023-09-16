@@ -30,6 +30,7 @@
 #include <map>
 #include <ostream>
 #include <set>
+#include <type_traits>
 #include <utility>
 
 #include "agg_image.h"
