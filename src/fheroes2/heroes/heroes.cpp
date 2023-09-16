@@ -2226,7 +2226,7 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
         hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
     }
 
-     msg >> hero.path >> hero.direction >> hero.sprite_index;
+    msg >> hero.path >> hero.direction >> hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     int16_t patrolX = 0;
