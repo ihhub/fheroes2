@@ -515,15 +515,15 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
         assert( ( ( ( mp2.quantity2 << 8 ) + mp2.quantity1 ) >> 3 ) == 0 );
     }
 
-    addons_level1.clear();
-    addons_level2.clear();
+    _addonBottomLayer.clear();
+    _addonTopLayer.clear();
 
     // those bitfields are set by map editor regardless if map object is there
     tileIsRoad = ( ( mp2.objectName1 >> 1 ) & 1 ) && ( ( mp2.objectName1 >> 2 ) == MP2::OBJ_ICN_TYPE_ROAD );
 
     // If an object has priority 2 (shadow) or 3 (ground) then we put it as an addon.
     if ( mp2.mapObjectType == MP2::OBJ_NONE && ( _layerType >> 1 ) & 1 ) {
-        AddonsPushLevel1( mp2 );
+        pushBottomLayerAddon( mp2 );
     }
     else {
         _uid = mp2.level1ObjectUID;
@@ -533,15 +533,15 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
         _isMarkedAsRoad = ( mp2.objectName1 & 2 ) != 0;
     }
 
-    AddonsPushLevel2( mp2 );
+    pushTopLayerAddon( mp2 );
 }
 
-Heroes * Maps::Tiles::GetHeroes() const
+Heroes * Maps::Tiles::GetHero() const
 {
     return MP2::OBJ_HEROES == _mainObjectType && heroID ? world.GetHeroes( heroID - 1 ) : nullptr;
 }
 
-void Maps::Tiles::SetHeroes( Heroes * hero )
+void Maps::Tiles::SetHero( Heroes * hero )
 {
     if ( hero ) {
         using HeroIDType = decltype( heroID );
@@ -555,7 +555,7 @@ void Maps::Tiles::SetHeroes( Heroes * hero )
         SetObject( MP2::OBJ_HEROES );
     }
     else {
-        hero = GetHeroes();
+        hero = GetHero();
 
         if ( hero ) {
             SetObject( hero->GetMapsObject() );
@@ -577,7 +577,7 @@ fheroes2::Point Maps::Tiles::GetCenter() const
 MP2::MapObjectType Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */ ) const
 {
     if ( !ignoreObjectUnderHero && MP2::OBJ_HEROES == _mainObjectType ) {
-        const Heroes * hero = GetHeroes();
+        const Heroes * hero = GetHero();
         return hero ? hero->GetMapsObject() : MP2::OBJ_NONE;
     }
 
@@ -594,7 +594,7 @@ void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
 void Maps::Tiles::setBoat( const int direction, const int color )
 {
     if ( _objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _imageIndex != 255 ) {
-        AddonsPushLevel1( TilesAddon( OBJECT_LAYER, _uid, _objectIcnType, _imageIndex, false, false ) );
+        pushBottomLayerAddon( TilesAddon( OBJECT_LAYER, _uid, _objectIcnType, _imageIndex, false, false ) );
     }
 
     SetObject( MP2::OBJ_BOAT );
@@ -689,7 +689,7 @@ int Maps::Tiles::getOriginalPassability() const
         return 0;
     }
 
-    for ( const TilesAddon & addon : addons_level1 ) {
+    for ( const TilesAddon & addon : _addonBottomLayer ) {
         if ( isValidReefsSprite( addon._objectIcnType, addon._imageIndex ) ) {
             return 0;
         }
@@ -738,7 +738,7 @@ void Maps::Tiles::updatePassability()
                 tileUIDs.emplace_back( _uid );
             }
 
-            for ( const TilesAddon & addon : addons_level1 ) {
+            for ( const TilesAddon & addon : _addonBottomLayer ) {
                 if ( addon._uid != 0 && ( ( addon._layerType >> 1 ) & 1 ) == 0 ) {
                     tileUIDs.emplace_back( addon._uid );
                 }
@@ -759,7 +759,7 @@ void Maps::Tiles::updatePassability()
             }
 
             // Count how many objects are there excluding shadows, roads and river streams.
-            const std::ptrdiff_t validLevel1ObjectCount = std::count_if( addons_level1.begin(), addons_level1.end(), []( const TilesAddon & addon ) {
+            const std::ptrdiff_t validLevel1ObjectCount = std::count_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), []( const TilesAddon & addon ) {
                 if ( TilesAddon::isShadow( addon ) ) {
                     return false;
                 }
@@ -767,7 +767,7 @@ void Maps::Tiles::updatePassability()
                 return addon._objectIcnType != MP2::OBJ_ICN_TYPE_ROAD && addon._objectIcnType != MP2::OBJ_ICN_TYPE_STREAM;
             } );
 
-            const bool singleObjectTile = validLevel1ObjectCount == 0 && addons_level2.empty() && ( bottomTile._objectIcnType != _objectIcnType );
+            const bool singleObjectTile = validLevel1ObjectCount == 0 && _addonTopLayer.empty() && ( bottomTile._objectIcnType != _objectIcnType );
             const bool isBottomTileObject = ( ( bottomTile._layerType >> 1 ) & 1 ) == 0;
 
             // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
@@ -834,7 +834,7 @@ bool Maps::Tiles::doesObjectExist( const uint32_t uid ) const
         return true;
     }
 
-    for ( const TilesAddon & addon : addons_level1 ) {
+    for ( const TilesAddon & addon : _addonBottomLayer ) {
         if ( addon._uid == uid && ( ( addon._layerType >> 1 ) & 1 ) == 0 ) {
             return true;
         }
@@ -879,10 +879,10 @@ bool Maps::Tiles::isClearGround() const
     return false;
 }
 
-void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
+void Maps::Tiles::pushBottomLayerAddon( const MP2::mp2tile_t & mt )
 {
     if ( mt.objectName1 != 0 && mt.level1IcnImageIndex != 0xFF ) {
-        addons_level1.emplace_back( mt.quantity1, mt.level1ObjectUID, static_cast<MP2::ObjectIcnType>( mt.objectName1 >> 2 ), mt.level1IcnImageIndex, false, false );
+        _addonBottomLayer.emplace_back( mt.quantity1, mt.level1ObjectUID, static_cast<MP2::ObjectIcnType>( mt.objectName1 >> 2 ), mt.level1IcnImageIndex, false, false );
     }
 
     // MP2 "objectName" is a bitfield
@@ -892,26 +892,26 @@ void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
     }
 }
 
-void Maps::Tiles::AddonsPushLevel1( const MP2::mp2addon_t & ma )
+void Maps::Tiles::pushBottomLayerAddon( const MP2::mp2addon_t & ma )
 {
     if ( ma.objectNameN1 != 0 && ma.indexNameN1 != 0xFF ) {
-        addons_level1.emplace_back( ma.quantityN, ma.level1ObjectUID, static_cast<MP2::ObjectIcnType>( ma.objectNameN1 >> 2 ), ma.indexNameN1, false, false );
+        _addonBottomLayer.emplace_back( ma.quantityN, ma.level1ObjectUID, static_cast<MP2::ObjectIcnType>( ma.objectNameN1 >> 2 ), ma.indexNameN1, false, false );
     }
 }
 
-void Maps::Tiles::AddonsPushLevel2( const MP2::mp2tile_t & mt )
+void Maps::Tiles::pushTopLayerAddon( const MP2::mp2tile_t & mt )
 {
     if ( mt.objectName2 != 0 && mt.level2IcnImageIndex != 0xFF ) {
         // TODO: does level 2 even need level value? Verify it.
-        addons_level2.emplace_back( mt.quantity1, mt.level2ObjectUID, static_cast<MP2::ObjectIcnType>( mt.objectName2 >> 2 ), mt.level2IcnImageIndex, false, false );
+        _addonTopLayer.emplace_back( mt.quantity1, mt.level2ObjectUID, static_cast<MP2::ObjectIcnType>( mt.objectName2 >> 2 ), mt.level2IcnImageIndex, false, false );
     }
 }
 
-void Maps::Tiles::AddonsPushLevel2( const MP2::mp2addon_t & ma )
+void Maps::Tiles::pushTopLayerAddon( const MP2::mp2addon_t & ma )
 {
     if ( ma.objectNameN2 != 0 && ma.indexNameN2 != 0xFF ) {
         // TODO: why do we use the same quantityN member for both level 1 and 2?
-        addons_level2.emplace_back( ma.quantityN, ma.level2ObjectUID, static_cast<MP2::ObjectIcnType>( ma.objectNameN2 >> 2 ), ma.indexNameN2, false, false );
+        _addonTopLayer.emplace_back( ma.quantityN, ma.level2ObjectUID, static_cast<MP2::ObjectIcnType>( ma.objectNameN2 >> 2 ), ma.indexNameN2, false, false );
     }
 }
 
@@ -919,12 +919,12 @@ void Maps::Tiles::AddonsSort()
 {
     // Push everything to the container and sort it by level.
     if ( _objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _imageIndex != 255 ) {
-        addons_level1.emplace_front( _layerType, _uid, _objectIcnType, _imageIndex, false, false );
+        _addonBottomLayer.emplace_front( _layerType, _uid, _objectIcnType, _imageIndex, false, false );
     }
 
     // Some original maps have issues with identifying tiles as roads. This code fixes it. It's not an ideal solution but works fine in most of cases.
     if ( !tileIsRoad ) {
-        for ( const TilesAddon & addon : addons_level1 ) {
+        for ( const TilesAddon & addon : _addonBottomLayer ) {
             if ( addon.isRoad() ) {
                 tileIsRoad = true;
                 break;
@@ -932,16 +932,16 @@ void Maps::Tiles::AddonsSort()
         }
     }
 
-    addons_level1.sort( TilesAddon::PredicateSortRules1 );
+    _addonBottomLayer.sort( TilesAddon::PredicateSortRules1 );
 
-    if ( !addons_level1.empty() ) {
-        const TilesAddon & highestPriorityAddon = addons_level1.back();
+    if ( !_addonBottomLayer.empty() ) {
+        const TilesAddon & highestPriorityAddon = _addonBottomLayer.back();
         _uid = highestPriorityAddon._uid;
         _objectIcnType = highestPriorityAddon._objectIcnType;
         _imageIndex = highestPriorityAddon._imageIndex;
         _layerType = highestPriorityAddon._layerType & 0x03;
 
-        addons_level1.pop_back();
+        _addonBottomLayer.pop_back();
     }
 
     // Level 2 objects don't have any rendering priorities so they should be rendered first in queue first to render.
@@ -949,16 +949,16 @@ void Maps::Tiles::AddonsSort()
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( uint32_t uniq1 )
 {
-    Addons::iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), [uniq1]( const TilesAddon & v ) { return v.isUniq( uniq1 ); } );
+    Addons::iterator it = std::find_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), [uniq1]( const TilesAddon & v ) { return v.isUniq( uniq1 ); } );
 
-    return it != addons_level1.end() ? &( *it ) : nullptr;
+    return it != _addonBottomLayer.end() ? &( *it ) : nullptr;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel2( uint32_t uniq2 )
 {
-    Addons::iterator it = std::find_if( addons_level2.begin(), addons_level2.end(), [uniq2]( const TilesAddon & v ) { return v.isUniq( uniq2 ); } );
+    Addons::iterator it = std::find_if( _addonTopLayer.begin(), _addonTopLayer.end(), [uniq2]( const TilesAddon & v ) { return v.isUniq( uniq2 ); } );
 
-    return it != addons_level2.end() ? &( *it ) : nullptr;
+    return it != _addonTopLayer.end() ? &( *it ) : nullptr;
 }
 
 std::string Maps::Tiles::String() const
@@ -989,11 +989,11 @@ std::string Maps::Tiles::String() const
     if ( objectType == MP2::OBJ_BOAT )
         os << "boat owner color: " << Color::String( _boatOwnerColor ) << std::endl;
 
-    for ( const TilesAddon & addon : addons_level1 ) {
+    for ( const TilesAddon & addon : _addonBottomLayer ) {
         os << addon.String( 1 );
     }
 
-    for ( const TilesAddon & addon : addons_level2 ) {
+    for ( const TilesAddon & addon : _addonTopLayer ) {
         os << addon.String( 2 );
     }
 
@@ -1020,7 +1020,7 @@ std::string Maps::Tiles::String() const
         os << "monster count   : " << getMonsterCountFromTile( *this ) << std::endl;
         break;
     case MP2::OBJ_HEROES: {
-        const Heroes * hero = GetHeroes();
+        const Heroes * hero = GetHero();
         if ( hero )
             os << hero->String();
         break;
@@ -1062,9 +1062,9 @@ std::string Maps::Tiles::String() const
 void Maps::Tiles::FixObject()
 {
     if ( MP2::OBJ_NONE == _mainObjectType ) {
-        if ( std::any_of( addons_level1.begin(), addons_level1.end(), TilesAddon::isArtifact ) )
+        if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), TilesAddon::isArtifact ) )
             SetObject( MP2::OBJ_ARTIFACT );
-        else if ( std::any_of( addons_level1.begin(), addons_level1.end(), TilesAddon::isResource ) )
+        else if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), TilesAddon::isResource ) )
             SetObject( MP2::OBJ_RESOURCE );
     }
 }
@@ -1079,11 +1079,11 @@ bool Maps::Tiles::GoodForUltimateArtifact() const
         return false;
     }
 
-    if ( static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) ) != addons_level1.size() ) {
+    if ( static_cast<size_t>( std::count_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), TilesAddon::isShadow ) ) != _addonBottomLayer.size() ) {
         return false;
     }
 
-    if ( static_cast<size_t>( std::count_if( addons_level2.begin(), addons_level2.end(), TilesAddon::isShadow ) ) != addons_level2.size() ) {
+    if ( static_cast<size_t>( std::count_if( _addonTopLayer.begin(), _addonTopLayer.end(), TilesAddon::isShadow ) ) != _addonTopLayer.size() ) {
         return false;
     }
 
@@ -1110,7 +1110,7 @@ bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, con
 
     // Tiles on which allied heroes are located are inaccessible
     if ( _mainObjectType == MP2::OBJ_HEROES ) {
-        const Heroes * hero = GetHeroes();
+        const Heroes * hero = GetHero();
         assert( hero != nullptr );
 
         if ( hero->GetColor() != heroColor && hero->isFriends( heroColor ) ) {
@@ -1147,7 +1147,7 @@ void Maps::Tiles::SetObjectPassable( bool pass )
 
 bool Maps::Tiles::isStream() const
 {
-    for ( const TilesAddon & addon : addons_level1 ) {
+    for ( const TilesAddon & addon : _addonBottomLayer ) {
         if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM || ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNMUL2 && addon._imageIndex < 14 ) ) {
             return true;
         }
@@ -1159,20 +1159,20 @@ bool Maps::Tiles::isStream() const
 bool Maps::Tiles::isShadow() const
 {
     return isShadowSprite( _objectIcnType, _imageIndex )
-           && addons_level1.size() == static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) );
+           && _addonBottomLayer.size() == static_cast<size_t>( std::count_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), TilesAddon::isShadow ) );
 }
 
 Maps::TilesAddon * Maps::Tiles::getAddonWithFlag( const uint32_t uid )
 {
     const auto isFlag = [uid]( const TilesAddon & addon ) { return addon._uid == uid && addon._objectIcnType == MP2::OBJ_ICN_TYPE_FLAG32; };
 
-    auto iter = std::find_if( addons_level1.begin(), addons_level1.end(), isFlag );
-    if ( iter != addons_level1.end() ) {
+    auto iter = std::find_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), isFlag );
+    if ( iter != _addonBottomLayer.end() ) {
         return &( *iter );
     }
 
-    iter = std::find_if( addons_level2.begin(), addons_level2.end(), isFlag );
-    if ( iter != addons_level2.end() ) {
+    iter = std::find_if( _addonTopLayer.begin(), _addonTopLayer.end(), isFlag );
+    if ( iter != _addonTopLayer.end() ) {
         return &( *iter );
     }
 
@@ -1299,8 +1299,8 @@ void Maps::Tiles::updateFlag( const int color, const uint8_t objectSpriteIndex, 
     // Flag deletion or installation must be done in relation to object UID as flag is attached to the object.
     if ( color == Color::NONE ) {
         const auto isFlag = [uid]( const TilesAddon & addon ) { return addon._uid == uid && addon._objectIcnType == MP2::OBJ_ICN_TYPE_FLAG32; };
-        addons_level1.remove_if( isFlag );
-        addons_level2.remove_if( isFlag );
+        _addonBottomLayer.remove_if( isFlag );
+        _addonTopLayer.remove_if( isFlag );
         return;
     }
 
@@ -1310,10 +1310,10 @@ void Maps::Tiles::updateFlag( const int color, const uint8_t objectSpriteIndex, 
         addon->_imageIndex = objectSpriteIndex;
     }
     else if ( setOnUpperLayer ) {
-        addons_level2.emplace_back( OBJECT_LAYER, uid, MP2::OBJ_ICN_TYPE_FLAG32, objectSpriteIndex, false, false );
+        _addonTopLayer.emplace_back( OBJECT_LAYER, uid, MP2::OBJ_ICN_TYPE_FLAG32, objectSpriteIndex, false, false );
     }
     else {
-        addons_level1.emplace_back( OBJECT_LAYER, uid, MP2::OBJ_ICN_TYPE_FLAG32, objectSpriteIndex, false, false );
+        _addonBottomLayer.emplace_back( OBJECT_LAYER, uid, MP2::OBJ_ICN_TYPE_FLAG32, objectSpriteIndex, false, false );
     }
 }
 
@@ -1340,7 +1340,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
     // Some maps have water tiles with OBJ_COAST, it shouldn't be, replace OBJ_COAST with OBJ_NONE
     if ( originalObjectType == MP2::OBJ_COAST && tile.isWater() ) {
-        Heroes * hero = tile.GetHeroes();
+        Heroes * hero = tile.GetHero();
 
         if ( hero ) {
             hero->SetMapsObject( MP2::OBJ_NONE );
@@ -1412,7 +1412,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
         }
 
         // Add-ons of level 1 shouldn't even exist if no top object is present. However, let's play safe and verify it as well.
-        for ( const TilesAddon & addon : tile.addons_level1 ) {
+        for ( const TilesAddon & addon : tile._addonBottomLayer ) {
             objectType = getLoyaltyObject( addon._objectIcnType, addon._imageIndex );
             if ( objectType != MP2::OBJ_NONE )
                 break;
@@ -1423,7 +1423,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
             break;
         }
 
-        for ( const TilesAddon & addon : tile.addons_level2 ) {
+        for ( const TilesAddon & addon : tile._addonTopLayer ) {
             objectType = getLoyaltyObject( addon._objectIcnType, addon._imageIndex );
             if ( objectType != MP2::OBJ_NONE )
                 break;
@@ -1447,8 +1447,8 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
 void Maps::Tiles::Remove( uint32_t uniqID )
 {
-    addons_level1.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v.isUniq( uniqID ); } );
-    addons_level2.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v.isUniq( uniqID ); } );
+    _addonBottomLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v.isUniq( uniqID ); } );
+    _addonTopLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v.isUniq( uniqID ); } );
 
     if ( _uid == uniqID ) {
         resetObjectSprite();
@@ -1460,7 +1460,7 @@ void Maps::Tiles::replaceObject( const uint32_t objectUid, const MP2::ObjectIcnT
                                  const uint8_t originalImageIndex, const uint8_t newImageIndex )
 {
     // We can immediately return from the function as only one object per tile can have the same UID.
-    for ( TilesAddon & addon : addons_level1 ) {
+    for ( TilesAddon & addon : _addonBottomLayer ) {
         if ( addon._uid == objectUid && addon._objectIcnType == originalObjectIcnType && addon._imageIndex == originalImageIndex ) {
             addon._objectIcnType = newObjectIcnType;
             addon._imageIndex = newImageIndex;
@@ -1468,7 +1468,7 @@ void Maps::Tiles::replaceObject( const uint32_t objectUid, const MP2::ObjectIcnT
         }
     }
 
-    for ( TilesAddon & addon : addons_level2 ) {
+    for ( TilesAddon & addon : _addonTopLayer ) {
         if ( addon._uid == objectUid && addon._objectIcnType == originalObjectIcnType && addon._imageIndex == originalImageIndex ) {
             addon._objectIcnType = newObjectIcnType;
             addon._imageIndex = newImageIndex;
@@ -1485,7 +1485,7 @@ void Maps::Tiles::replaceObject( const uint32_t objectUid, const MP2::ObjectIcnT
 void Maps::Tiles::updateObjectImageIndex( const uint32_t objectUid, const MP2::ObjectIcnType objectIcnType, const int imageIndexOffset )
 {
     // We can immediately return from the function as only one object per tile can have the same UID.
-    for ( TilesAddon & addon : addons_level1 ) {
+    for ( TilesAddon & addon : _addonBottomLayer ) {
         if ( addon._uid == objectUid && addon._objectIcnType == objectIcnType ) {
             assert( addon._imageIndex + imageIndexOffset >= 0 && addon._imageIndex + imageIndexOffset < 255 );
             addon._imageIndex = static_cast<uint8_t>( addon._imageIndex + imageIndexOffset );
@@ -1493,7 +1493,7 @@ void Maps::Tiles::updateObjectImageIndex( const uint32_t objectUid, const MP2::O
         }
     }
 
-    for ( TilesAddon & addon : addons_level2 ) {
+    for ( TilesAddon & addon : _addonTopLayer ) {
         if ( addon._uid == objectUid && addon._objectIcnType == objectIcnType ) {
             assert( addon._imageIndex + imageIndexOffset >= 0 && addon._imageIndex + imageIndexOffset < 255 );
             addon._imageIndex = static_cast<uint8_t>( addon._imageIndex + imageIndexOffset );
@@ -1696,13 +1696,13 @@ uint32_t Maps::Tiles::getObjectIdByObjectIcnType( const MP2::ObjectIcnType objec
         return _uid;
     }
 
-    for ( const TilesAddon & addon : addons_level1 ) {
+    for ( const TilesAddon & addon : _addonBottomLayer ) {
         if ( addon._objectIcnType == objectIcnType ) {
             return addon._uid;
         }
     }
 
-    for ( const TilesAddon & addon : addons_level2 ) {
+    for ( const TilesAddon & addon : _addonTopLayer ) {
         if ( addon._objectIcnType == objectIcnType ) {
             return addon._uid;
         }
@@ -1719,14 +1719,14 @@ std::vector<MP2::ObjectIcnType> Maps::Tiles::getValidObjectIcnTypes() const
         objectIcnTypes.emplace_back( _objectIcnType );
     }
 
-    for ( const TilesAddon & addon : addons_level1 ) {
+    for ( const TilesAddon & addon : _addonBottomLayer ) {
         // If this assertion blows up then you put an empty object into an addon which makes no sense!
         assert( addon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN );
 
         objectIcnTypes.emplace_back( addon._objectIcnType );
     }
 
-    for ( const TilesAddon & addon : addons_level2 ) {
+    for ( const TilesAddon & addon : _addonTopLayer ) {
         // If this assertion blows up then you put an empty object into an addon which makes no sense!
         assert( addon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN );
 
@@ -1743,13 +1743,13 @@ bool Maps::Tiles::containsAnyObjectIcnType( const std::vector<MP2::ObjectIcnType
             return true;
         }
 
-        for ( const TilesAddon & addon : addons_level1 ) {
+        for ( const TilesAddon & addon : _addonBottomLayer ) {
             if ( addon._objectIcnType == objectIcnType ) {
                 return true;
             }
         }
 
-        for ( const TilesAddon & addon : addons_level2 ) {
+        for ( const TilesAddon & addon : _addonTopLayer ) {
             if ( addon._objectIcnType == objectIcnType ) {
                 return true;
             }
@@ -1765,13 +1765,13 @@ bool Maps::Tiles::containsSprite( const MP2::ObjectIcnType objectIcnType, const 
         return true;
     }
 
-    for ( const TilesAddon & addon : addons_level1 ) {
+    for ( const TilesAddon & addon : _addonBottomLayer ) {
         if ( addon._objectIcnType == objectIcnType && imageIdx == _imageIndex ) {
             return true;
         }
     }
 
-    for ( const TilesAddon & addon : addons_level2 ) {
+    for ( const TilesAddon & addon : _addonTopLayer ) {
         if ( addon._objectIcnType == objectIcnType && imageIdx == _imageIndex ) {
             return true;
         }
@@ -1793,13 +1793,13 @@ bool Maps::Tiles::isTallObject() const
         tileUIDs.emplace_back( _uid );
     }
 
-    for ( const TilesAddon & addon : addons_level1 ) {
+    for ( const TilesAddon & addon : _addonBottomLayer ) {
         if ( addon._uid != 0 && ( ( addon._layerType >> 1 ) & 1 ) == 0 ) {
             tileUIDs.emplace_back( addon._uid );
         }
     }
 
-    for ( const TilesAddon & addon : addons_level2 ) {
+    for ( const TilesAddon & addon : _addonTopLayer ) {
         if ( addon._uid != 0 && ( ( addon._layerType >> 1 ) & 1 ) == 0 ) {
             tileUIDs.emplace_back( addon._uid );
         }
@@ -1811,13 +1811,13 @@ bool Maps::Tiles::isTallObject() const
             return true;
         }
 
-        for ( const TilesAddon & addon : topTile.addons_level1 ) {
+        for ( const TilesAddon & addon : topTile._addonBottomLayer ) {
             if ( addon._uid == tileUID && !TilesAddon::isShadow( addon ) ) {
                 return true;
             }
         }
 
-        for ( const TilesAddon & addon : topTile.addons_level2 ) {
+        for ( const TilesAddon & addon : topTile._addonTopLayer ) {
             if ( addon._uid == tileUID && !TilesAddon::isShadow( addon ) ) {
                 return true;
             }
@@ -1843,11 +1843,11 @@ int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
     std::set<uint32_t> uids;
     uids.insert( tile.GetObjectUID() );
 
-    for ( const TilesAddon & addon : tile.getLevel1Addons() ) {
+    for ( const TilesAddon & addon : tile.getBottomLayerAddons() ) {
         uids.insert( addon._uid );
     }
 
-    for ( const TilesAddon & addon : tile.getLevel2Addons() ) {
+    for ( const TilesAddon & addon : tile.getTopLayerAddons() ) {
         uids.insert( addon._uid );
     }
 
@@ -1902,7 +1902,7 @@ bool Maps::Tiles::isDetachedObject() const
         return ( ( _layerType >> 1 ) & 1 ) == 0;
     }
 
-    for ( const TilesAddon & addon : addons_level1 ) {
+    for ( const TilesAddon & addon : _addonBottomLayer ) {
         if ( addon._uid == objectUID ) {
             return ( ( addon._layerType >> 1 ) & 1 ) == 0;
         }
@@ -1968,7 +1968,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
     return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid
                << static_cast<ObjectIcnTypeUnderlyingType>( tile._objectIcnType ) << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex
                << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile._metadata << tile.heroID << tile.tileIsRoad
-               << tile.addons_level1 << tile.addons_level2 << tile._layerType << tile._boatOwnerColor;
+               << tile._addonBottomLayer << tile._addonTopLayer << tile._layerType << tile._boatOwnerColor;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
@@ -2052,7 +2052,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
         }
     }
 
-    msg >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2 >> tile._layerType;
+    msg >> tile.heroID >> tile.tileIsRoad >> tile._addonBottomLayer >> tile._addonTopLayer >> tile._layerType;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1002_RELEASE, "Remove the check below." );
     if ( Game::GetVersionOfCurrentSaveFile() >= FORMAT_VERSION_1002_RELEASE ) {

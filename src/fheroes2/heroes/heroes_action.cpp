@@ -533,7 +533,7 @@ namespace
 
     void ActionToHeroes( Heroes & hero, const int32_t dstIndex )
     {
-        Heroes * otherHero = world.GetTiles( dstIndex ).GetHeroes();
+        Heroes * otherHero = world.GetTiles( dstIndex ).GetHero();
         if ( otherHero == nullptr ) {
             // This should never happen
             assert( 0 );

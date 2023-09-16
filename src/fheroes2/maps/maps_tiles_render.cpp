@@ -250,7 +250,7 @@ namespace
 
         // scan for a hero around
         for ( const int32_t idx : Maps::ScanAroundObject( tileIndex, MP2::OBJ_HEROES, false ) ) {
-            const Heroes * hero = world.GetTiles( idx ).GetHeroes();
+            const Heroes * hero = world.GetTiles( idx ).GetHero();
             assert( hero != nullptr );
 
             // hero is going to attack monsters on this tile
@@ -621,7 +621,7 @@ namespace Maps
         std::array<const TilesAddon *, maxPostRenderAddons> postRenderingAddon{};
         size_t postRenderAddonCount = 0;
 
-        for ( const TilesAddon & addon : tile.getLevel1Addons() ) {
+        for ( const TilesAddon & addon : tile.getBottomLayerAddons() ) {
             if ( ( addon._layerType & 0x03 ) != level ) {
                 continue;
             }
@@ -658,7 +658,7 @@ namespace Maps
     {
         const fheroes2::Point & tileOffset = Maps::GetPoint( tile.GetIndex() );
 
-        for ( const TilesAddon & addon : tile.getLevel1Addons() ) {
+        for ( const TilesAddon & addon : tile.getBottomLayerAddons() ) {
             if ( addon._objectIcnType == objectIcnType ) {
                 renderAddonObject( output, area, tileOffset, addon );
             }
@@ -668,7 +668,7 @@ namespace Maps
             renderMainObject( output, area, tileOffset, tile );
         }
 
-        for ( const TilesAddon & addon : tile.getLevel2Addons() ) {
+        for ( const TilesAddon & addon : tile.getTopLayerAddons() ) {
             if ( addon._objectIcnType == objectIcnType ) {
                 renderAddonObject( output, area, tileOffset, addon );
             }
