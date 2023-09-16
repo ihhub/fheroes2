@@ -725,7 +725,7 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    if ( fheroes2::RenderProcessor::instance().isClyclingUpdateRequired() ) {
+    if ( fheroes2::RenderProcessor::instance().isCyclingUpdateRequired() ) {
         // To maintain color cycling animation we need to render the whole frame with an updated palette.
         renderRoi = { 0, 0, display.width(), display.height() };
     }

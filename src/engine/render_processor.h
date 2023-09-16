@@ -60,7 +60,7 @@ namespace fheroes2
             _enableCycling = false;
         }
 
-        bool isClyclingUpdateRequired() const
+        bool isCyclingUpdateRequired() const
         {
             return _enableCycling && _lastRenderCall.getMs() >= _cyclingInterval;
         }
