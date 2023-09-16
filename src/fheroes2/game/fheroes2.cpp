@@ -200,12 +200,9 @@ namespace
 
         ~DisplayInitializer()
         {
-            fheroes2::RenderProcessor & renderProcessor = fheroes2::RenderProcessor::instance();
-
-            renderProcessor.disableRenderers();
-            renderProcessor.stopColorCycling();
-
-            fheroes2::Display::instance().release();
+            fheroes2::Display & display = fheroes2::Display::instance();
+            display.subscribe( {}, {} );
+            display.release();
         }
 
     private:
