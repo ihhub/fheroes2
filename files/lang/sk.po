@@ -10725,12 +10725,3 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} protects your troops from the Dispel Magic spell."
-#~ msgstr "%{name} chráni tvoje jednotky voči kúzlu rozptylu."
-
-#~ msgid "Damg"
-#~ msgstr "Pošk"
-
-#~ msgid "guildWell|EXIT"
-#~ msgstr "ODÍĎ"
