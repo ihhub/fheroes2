@@ -77,7 +77,6 @@ struct HeroSeedsForLevelUp
 class Heroes final : public HeroBase, public ColorBase
 {
 public:
-    friend class Recruits;
     friend class Battle::Only;
 
     enum
