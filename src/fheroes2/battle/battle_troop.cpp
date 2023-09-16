@@ -1104,7 +1104,8 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
     const double attackerPowerLost = ( attacker.Modes( CAP_MIRRORIMAGE ) || defender.Modes( CAP_TOWER ) || defendersDamage >= hp ) ? 1.0 : defendersDamage / hp;
     const bool attackerIsArchers = isArchers();
 
-    double attackerThreat = CalculateDamageUnit( defender, ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2.0 );
+    const uint32_t initialDamage = CalculateDamageUnit( defender, ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2.0 );
+    double attackerThreat = initialDamage;
 
     if ( !canReach( defender ) && !defender.Modes( CAP_TOWER ) && !attackerIsArchers ) {
         // Can't reach, so unit is not dangerous to defender at the moment
@@ -1187,6 +1188,11 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
     // Avoid effectiveness scaling if we're dealing with archers
     if ( !attackerIsArchers || defender.isArchers() )
         attackerThreat *= attackerPowerLost;
+
+    if ( defender.isAbilityPresent( fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
+        const uint32_t killedMonsters = HowManyWillBeKilled( initialDamage );
+        attackerThreat += ( killedMonsters * defender.GetHitPoints() );
+    }
 
     return static_cast<int>( attackerThreat * 100 );
 }
