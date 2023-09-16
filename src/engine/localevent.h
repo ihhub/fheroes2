@@ -278,14 +278,14 @@ public:
 
     static int32_t getCurrentKeyModifiers();
 
-    static void RegisterCycling( const std::function<void()> & preRenderDrawing = {}, const std::function<void()> & postRenderDrawing = {} );
+    static void RegisterCycling( const std::function<void()> & preRenderDrawing, const std::function<void()> & postRenderDrawing );
 
     // These two methods are useful for video playback
     static void PauseCycling();
 
     static void ResumeCycling()
     {
-        RegisterCycling();
+        RegisterCycling( {}, {} );
     }
 
     void OpenController();

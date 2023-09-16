@@ -729,10 +729,10 @@ namespace
 
         void registerDrawing( const std::function<void()> & preRenderDrawing, const std::function<void()> & postRenderDrawing )
         {
-            if ( preRenderDrawing != nullptr )
+            if ( preRenderDrawing )
                 _preRenderDrawing = preRenderDrawing;
 
-            if ( postRenderDrawing != nullptr )
+            if ( postRenderDrawing )
                 _posRenderDrawing = postRenderDrawing;
         }
 
