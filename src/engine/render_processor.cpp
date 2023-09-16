@@ -24,6 +24,8 @@
 
 namespace
 {
+    // The maximum FPS the engine can handle is 125.
+    // This means that a frame should be generated only every 8 ms.
     const uint64_t frameHalfInterval{ 4 };
 }
 
@@ -46,8 +48,6 @@ namespace fheroes2
         }
 
         if ( _cyclingTimer.getMs() < ( _cyclingInterval - frameHalfInterval ) ) {
-            // The maximum FPS the engine can handle is 125.
-            // This means that a frame should be generated only every 8 ms.
             // If the current timer is less than cycling internal minus half of the frame generation then nothing is needed.
             return false;
         }
