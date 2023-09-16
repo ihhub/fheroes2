@@ -802,6 +802,7 @@ LocalEvent & LocalEvent::GetClean()
     le.ResetModes( MOUSE_RELEASED );
     le.ResetModes( MOUSE_CLICKED );
     le.ResetModes( MOUSE_WHEEL );
+    le.ResetModes( MOUSE_TOUCH );
     le.ResetModes( KEY_HOLD );
 
     return le;
@@ -828,12 +829,17 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
 
     SDL_Event event;
 
-    // We shouldn't reset the MOUSE_PRESSED and KEY_HOLD here because these are "lasting" states
+    // We shouldn't reset the MOUSE_PRESSED and KEY_HOLD here because these are "ongoing" states
     ResetModes( KEY_PRESSED );
     ResetModes( MOUSE_MOTION );
     ResetModes( MOUSE_RELEASED );
     ResetModes( MOUSE_CLICKED );
     ResetModes( MOUSE_WHEEL );
+
+    // MOUSE_PRESSED is an "ongoing" state, so we shouldn't reset the MOUSE_TOUCH while that state is active
+    if ( !( modes & MOUSE_PRESSED ) ) {
+        ResetModes( MOUSE_TOUCH );
+    }
 
     while ( SDL_PollEvent( &event ) ) {
         switch ( event.type ) {
@@ -1034,6 +1040,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
 
         SetModes( MOUSE_MOTION );
+        SetModes( MOUSE_TOUCH );
 
         if ( _globalMouseMotionEventHook ) {
             _mouseCursorRenderArea = _globalMouseMotionEventHook( mouse_cu.x, mouse_cu.y );
@@ -1063,6 +1070,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             mouse_pr = mouse_cu;
 
             SetModes( MOUSE_PRESSED );
+            SetModes( MOUSE_TOUCH );
 
             // When the second finger touches the screen, the two-finger gesture processing begins. This
             // gesture simulates the operation of the right mouse button and ends when both fingers are
@@ -1075,6 +1083,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             ResetModes( MOUSE_PRESSED );
             SetModes( MOUSE_RELEASED );
             SetModes( MOUSE_CLICKED );
+            SetModes( MOUSE_TOUCH );
         }
 
         mouse_button = SDL_BUTTON_RIGHT;
@@ -1380,7 +1389,7 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
     _emulatedPointerPosX = mouse_cu.x;
     _emulatedPointerPosY = mouse_cu.y;
 
-    if ( modes & MOUSE_PRESSED )
+    if ( modes & MOUSE_PRESSED ) {
         switch ( button.button ) {
         case SDL_BUTTON_LEFT:
             mouse_pl = mouse_cu;
@@ -1397,7 +1406,9 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
         default:
             break;
         }
-    else // mouse button released
+    }
+    // Mouse button has been released
+    else {
         switch ( button.button ) {
         case SDL_BUTTON_LEFT:
             mouse_rl = mouse_cu;
@@ -1414,6 +1425,7 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
         default:
             break;
         }
+    }
 }
 
 bool LocalEvent::MouseClickLeft()

@@ -2936,21 +2936,30 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         cursor.SetThemes( themes );
 
         const Cell * cell = Board::GetCell( index_pos );
-
         if ( cell ) {
             if ( CursorAttack( themes ) ) {
-                const Unit * b_enemy = cell->GetUnit();
-                popup.SetAttackInfo( cell, _currentUnit, b_enemy );
+                popup.SetAttackInfo( cell, _currentUnit, cell->GetUnit() );
             }
             else {
                 popup.Reset();
             }
 
+            const BoardActionIntent intent{ themes, index_pos };
+            // If the mouse event has been triggered by the touchpad, it should be considered confirmed only if this event orders to
+            // perform the same action that is already suggested on the screen using the mouse cursor and (optionally) cell highlighting.
+            const bool isConfirmed = ( !le.MouseEventFromTouchpad() || _boardActionIntent == intent );
+
             if ( le.MouseClickLeft() ) {
-                MouseLeftClickBoardAction( themes, *cell, actions );
+                MouseLeftClickBoardAction( themes, *cell, isConfirmed, actions );
             }
             else if ( le.MousePressRight() ) {
                 MousePressRightBoardAction( *cell );
+            }
+
+            // Do not remember intermediate touch gestures (such as simulated mouse button pressing) as intents. When using the touchpad,
+            // only a complete simulated click is considered an intent.
+            if ( !le.MouseEventFromTouchpad() || le.MouseClickLeft() ) {
+                _boardActionIntent = intent;
             }
         }
         else {
@@ -2961,6 +2970,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     else if ( le.MouseCursor( status ) ) {
         if ( listlog ) {
             msg = ( listlog->isOpenLog() ? _( "Hide logs" ) : _( "Show logs" ) );
+
             if ( le.MouseClickLeft( status ) ) {
                 listlog->SetOpenLog( !listlog->isOpenLog() );
             }
@@ -2969,10 +2979,12 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
                                        fheroes2::Text( _( "Shows the results of individual monster's actions." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
             }
         }
+
         cursor.SetThemes( Cursor::WAR_POINTER );
     }
     else {
         cursor.SetThemes( Cursor::WAR_NONE );
+
         le.MouseClickLeft();
         le.MousePressRight();
     }
@@ -3159,14 +3171,14 @@ void Battle::Interface::ButtonSettingsAction()
     }
 }
 
-void Battle::Interface::ButtonSkipAction( Actions & acrions )
+void Battle::Interface::ButtonSkipAction( Actions & actions )
 {
     LocalEvent & le = LocalEvent::Get();
 
     le.MousePressLeft( btn_skip.area() ) ? btn_skip.drawOnPress() : btn_skip.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_skip.area() ) && _currentUnit ) {
-        acrions.emplace_back( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID() );
+        actions.emplace_back( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID() );
         humanturn_exit = true;
     }
 }
@@ -3186,11 +3198,8 @@ void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
     }
 }
 
-void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell & cell, Actions & actions )
+void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions )
 {
-    const int32_t index = cell.GetIndex();
-    const Unit * b = cell.GetUnit();
-
     const auto fixupDestinationCell = []( const Unit & unit, const int32_t dst ) {
         // Only wide units may need this fixup
         if ( !unit.isWide() ) {
@@ -3204,12 +3213,20 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
         return pos.GetHead()->GetIndex();
     };
 
+    const int32_t index = cell.GetIndex();
+    const Unit * unitOnCell = cell.GetUnit();
+
     if ( _currentUnit ) {
         switch ( themes ) {
         case Cursor::WAR_FLY:
         case Cursor::WAR_MOVE:
+            if ( !isConfirmed ) {
+                break;
+            }
+
             actions.emplace_back( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index ) );
             actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
+
             humanturn_exit = true;
             break;
 
@@ -3219,17 +3236,21 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
         case Cursor::SWORD_BOTTOMRIGHT:
         case Cursor::SWORD_BOTTOMLEFT:
         case Cursor::SWORD_LEFT: {
-            const Unit * enemy = b;
+            if ( !isConfirmed ) {
+                break;
+            }
+
             const int dir = GetDirectionFromCursorSword( themes );
 
-            if ( enemy && Board::isValidDirection( index, dir ) ) {
+            if ( unitOnCell && Board::isValidDirection( index, dir ) ) {
                 const int32_t move = fixupDestinationCell( *_currentUnit, Board::GetIndexDirection( index, dir ) );
 
                 if ( _currentUnit->GetHeadIndex() != move ) {
                     actions.emplace_back( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), move );
                 }
-                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, _currentUnit->GetUID(), enemy->GetUID(), index, Board::GetReflectDirection( dir ) );
+                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), index, Board::GetReflectDirection( dir ) );
                 actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
+
                 humanturn_exit = true;
             }
             break;
@@ -3237,19 +3258,23 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
 
         case Cursor::WAR_BROKENARROW:
         case Cursor::WAR_ARROW: {
-            const Unit * enemy = b;
+            if ( !isConfirmed ) {
+                break;
+            }
 
-            if ( enemy ) {
-                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, _currentUnit->GetUID(), enemy->GetUID(), index, 0 );
+            if ( unitOnCell ) {
+                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), index, 0 );
                 actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
+
                 humanturn_exit = true;
             }
             break;
         }
 
         case Cursor::WAR_INFO: {
-            if ( b ) {
-                Dialog::ArmyInfo( *b, Dialog::BUTTONS, b->isReflect() );
+            if ( unitOnCell ) {
+                Dialog::ArmyInfo( *unitOnCell, Dialog::BUTTONS, unitOnCell->isReflect() );
+
                 humanturn_redraw = true;
             }
             break;

@@ -398,8 +398,8 @@ namespace Battle
         void EventShowOptions();
         void ButtonAutoAction( const Unit & unit, Actions & actions );
         void ButtonSettingsAction();
-        void ButtonSkipAction( Actions & acrions );
-        void MouseLeftClickBoardAction( const int themes, const Cell & cell, Actions & actions );
+        void ButtonSkipAction( Actions & actions );
+        void MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions );
         void MousePressRightBoardAction( const Cell & cell ) const;
 
         int GetBattleCursor( std::string & statusMsg ) const;
@@ -483,6 +483,20 @@ namespace Battle
         // this may be needed in the future (for example, in expansion) to display some sprites over
         // troops for some time (e.g. long duration spell effects or other permanent effects).
         std::vector<UnitSpellEffectInfo> _unitSpellEffectInfos;
+
+        struct BoardActionIntent
+        {
+            int cursorTheme = Cursor::NONE;
+            int32_t cellIndex = -1;
+
+            bool operator==( const BoardActionIntent & other ) const
+            {
+                return cursorTheme == other.cursorTheme && cellIndex == other.cellIndex;
+            }
+        };
+
+        // Intents are used to confirm actions in combat performed using touch gestures
+        BoardActionIntent _boardActionIntent;
     };
 }
 
