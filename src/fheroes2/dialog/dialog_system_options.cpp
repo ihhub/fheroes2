@@ -59,13 +59,9 @@ namespace
         Language,
         Graphics,
         AudioSettings,
-        HeroSpeed,
-        EnemySpeed,
         HotKeys,
         InterfaceSettings,
         UpdateInterface,
-        TextSupportMode,
-        Battles,
         Close
     };
 
@@ -197,7 +193,7 @@ namespace
         }
     }
 
-    DialogAction openSystemOptionsDialog()
+    DialogAction openSystemOptionsDialog( bool & saveConfiguration )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -212,12 +208,13 @@ namespace
         const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
         const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
-        fheroes2::ImageRestorer emptyDialogRestorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH );
+        fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH );
         const fheroes2::Rect windowRoi{ dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() };
 
-        fheroes2::Fill( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height, 0 );
         fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
+
+        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
 
         const fheroes2::Rect windowLanguageRoi( languageRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowGraphicsRoi( graphicsRoi + windowRoi.getPosition() );
@@ -243,6 +240,12 @@ namespace
         };
 
         drawOptions();
+
+        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &display]() {
+            emptyDialogRestorer.restore();
+            drawOptions();
+            display.render();
+        };
 
         const fheroes2::Point buttonOffset( 112 + windowRoi.x, 362 + windowRoi.y );
         fheroes2::Button okayButton( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
@@ -275,29 +278,53 @@ namespace
             }
 
             if ( le.MouseClickLeft( windowHeroSpeedRoi ) ) {
+                saveConfiguration = true;
                 conf.SetHeroesMoveSpeed( conf.HeroesMoveSpeed() % 10 + 1 );
-                return DialogAction::HeroSpeed;
+                Game::UpdateGameSpeed();
+                refreshWindow();
+
+                continue;
             }
-            if ( le.MouseWheelUp( heroSpeedRoi ) ) {
+            if ( le.MouseWheelUp( windowHeroSpeedRoi ) ) {
+                saveConfiguration = true;
                 conf.SetHeroesMoveSpeed( conf.HeroesMoveSpeed() + 1 );
-                return DialogAction::HeroSpeed;
+                Game::UpdateGameSpeed();
+                refreshWindow();
+
+                continue;
             }
-            if ( le.MouseWheelDn( heroSpeedRoi ) ) {
+            if ( le.MouseWheelDn( windowHeroSpeedRoi ) ) {
+                saveConfiguration = true;
                 conf.SetHeroesMoveSpeed( conf.HeroesMoveSpeed() - 1 );
-                return DialogAction::HeroSpeed;
+                Game::UpdateGameSpeed();
+                refreshWindow();
+
+                continue;
             }
 
             if ( le.MouseClickLeft( windowEnemySpeedRoi ) ) {
+                saveConfiguration = true;
                 conf.SetAIMoveSpeed( ( conf.AIMoveSpeed() + 1 ) % 11 );
-                return DialogAction::EnemySpeed;
+                Game::UpdateGameSpeed();
+                refreshWindow();
+
+                continue;
             }
             if ( le.MouseWheelUp( windowEnemySpeedRoi ) ) {
-                conf.SetScrollSpeed( conf.ScrollSpeed() + 1 );
-                return DialogAction::EnemySpeed;
+                saveConfiguration = true;
+                conf.SetAIMoveSpeed( conf.AIMoveSpeed() + 1 );
+                Game::UpdateGameSpeed();
+                refreshWindow();
+
+                continue;
             }
             if ( le.MouseWheelDn( windowEnemySpeedRoi ) ) {
-                conf.SetScrollSpeed( conf.ScrollSpeed() - 1 );
-                return DialogAction::EnemySpeed;
+                saveConfiguration = true;
+                conf.SetAIMoveSpeed( conf.AIMoveSpeed() - 1 );
+                Game::UpdateGameSpeed();
+                refreshWindow();
+
+                continue;
             }
 
             if ( le.MouseClickLeft( windowHotKeyRoi ) ) {
@@ -307,10 +334,30 @@ namespace
                 return DialogAction::InterfaceSettings;
             }
             if ( le.MouseClickLeft( windowTextSupportModeRoi ) ) {
-                return DialogAction::TextSupportMode;
+                saveConfiguration = true;
+                conf.setTextSupportMode( !conf.isTextSupportModeEnabled() );
+                refreshWindow();
+
+                continue;
             }
             if ( le.MouseClickLeft( windowBattlesRoi ) ) {
-                return DialogAction::Battles;
+                saveConfiguration = true;
+                if ( conf.BattleAutoResolve() ) {
+                    if ( conf.BattleAutoSpellcast() ) {
+                        conf.setBattleAutoSpellcast( false );
+                    }
+                    else {
+                        conf.setBattleAutoResolve( false );
+                    }
+                }
+                else {
+                    conf.setBattleAutoResolve( true );
+                    conf.setBattleAutoSpellcast( true );
+                }
+
+                refreshWindow();
+
+                continue;
             }
 
             if ( le.MousePressRight( windowLanguageRoi ) ) {
@@ -384,7 +431,7 @@ namespace fheroes2
         while ( action != DialogAction::Close ) {
             switch ( action ) {
             case DialogAction::Configuration:
-                action = openSystemOptionsDialog();
+                action = openSystemOptionsDialog( saveConfiguration );
                 break;
             case DialogAction::Language: {
                 const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
@@ -416,13 +463,6 @@ namespace fheroes2
 
                 action = DialogAction::Configuration;
                 break;
-            case DialogAction::HeroSpeed:
-            case DialogAction::EnemySpeed:
-                Game::UpdateGameSpeed();
-
-                saveConfiguration = true;
-                action = DialogAction::Configuration;
-                break;
             case DialogAction::HotKeys:
                 fheroes2::openHotkeysDialog();
 
@@ -431,29 +471,6 @@ namespace fheroes2
             case DialogAction::InterfaceSettings:
                 fheroes2::openInterfaceSettingsDialog( redrawAdventureMap );
 
-                action = DialogAction::Configuration;
-                break;
-            case DialogAction::TextSupportMode:
-                conf.setTextSupportMode( !conf.isTextSupportModeEnabled() );
-
-                saveConfiguration = true;
-                action = DialogAction::Configuration;
-                break;
-            case DialogAction::Battles:
-                if ( conf.BattleAutoResolve() ) {
-                    if ( conf.BattleAutoSpellcast() ) {
-                        conf.setBattleAutoSpellcast( false );
-                    }
-                    else {
-                        conf.setBattleAutoResolve( false );
-                    }
-                }
-                else {
-                    conf.setBattleAutoResolve( true );
-                    conf.setBattleAutoSpellcast( true );
-                }
-
-                saveConfiguration = true;
                 action = DialogAction::Configuration;
                 break;
             default:

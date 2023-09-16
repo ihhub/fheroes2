@@ -223,8 +223,6 @@ namespace fheroes2
 {
     void openGraphicsSettingsDialog( const std::function<void()> & updateUI )
     {
-        updateUI();
-
         Settings & conf = Settings::Get();
 
         SelectedWindow windowType = SelectedWindow::Configuration;

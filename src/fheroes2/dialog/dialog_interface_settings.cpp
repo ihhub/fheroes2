@@ -47,7 +47,6 @@ namespace
         InterfaceType,
         InterfacePresence,
         CursorType,
-        ScrollSpeed,
         Exit
     };
 
@@ -149,7 +148,7 @@ namespace
         fheroes2::drawOption( optionRoi, scrollSpeedIcon, _( "Scroll Speed" ), std::move( scrollSpeedName ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
-    SelectedWindow showConfigurationWindow()
+    SelectedWindow showConfigurationWindow( bool & saveConfiguration )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -161,9 +160,8 @@ namespace
         const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
         const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
-        const fheroes2::Rect windowRoi{ dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() };
-
         const fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH );
+        const fheroes2::Rect windowRoi{ dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() };
 
         fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
@@ -183,6 +181,12 @@ namespace
         };
 
         drawOptions();
+
+        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &display]() {
+            emptyDialogRestorer.restore();
+            drawOptions();
+            display.render();
+        };
 
         const fheroes2::Point buttonOffset( 112 + windowRoi.x, 252 + windowRoi.y );
         fheroes2::Button okayButton( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
@@ -213,17 +217,27 @@ namespace
             if ( le.MouseClickLeft( windowCursorTypeRoi ) ) {
                 return SelectedWindow::CursorType;
             }
+
             if ( le.MouseClickLeft( windowScrollSpeedRoi ) ) {
+                saveConfiguration = true;
                 conf.SetScrollSpeed( ( conf.ScrollSpeed() + 1 ) % ( SCROLL_SPEED_VERY_FAST + 1 ) );
-                return SelectedWindow::ScrollSpeed;
+                refreshWindow();
+
+                continue;
             }
             if ( le.MouseWheelUp( windowScrollSpeedRoi ) ) {
+                saveConfiguration = true;
                 conf.SetScrollSpeed( conf.ScrollSpeed() + 1 );
-                return SelectedWindow::ScrollSpeed;
+                refreshWindow();
+
+                continue;
             }
             if ( le.MouseWheelDn( windowScrollSpeedRoi ) ) {
+                saveConfiguration = true;
                 conf.SetScrollSpeed( conf.ScrollSpeed() - 1 );
-                return SelectedWindow::ScrollSpeed;
+                refreshWindow();
+
+                continue;
             }
 
             if ( le.MousePressRight( windowInterfaceTypeRoi ) ) {
@@ -261,8 +275,6 @@ namespace fheroes2
 {
     void openInterfaceSettingsDialog( const std::function<void()> & updateUI )
     {
-        updateUI();
-
         Settings & conf = Settings::Get();
 
         bool saveConfiguration = false;
@@ -271,7 +283,7 @@ namespace fheroes2
         while ( windowType != SelectedWindow::Exit ) {
             switch ( windowType ) {
             case SelectedWindow::Configuration:
-                windowType = showConfigurationWindow();
+                windowType = showConfigurationWindow( saveConfiguration );
                 break;
             case SelectedWindow::InterfaceType:
                 conf.setEvilInterface( !conf.isEvilInterfaceEnabled() );
@@ -289,11 +301,6 @@ namespace fheroes2
                 break;
             case SelectedWindow::CursorType:
                 conf.setMonochromeCursor( !conf.isMonochromeCursorEnabled() );
-                saveConfiguration = true;
-
-                windowType = SelectedWindow::Configuration;
-                break;
-            case SelectedWindow::ScrollSpeed:
                 saveConfiguration = true;
 
                 windowType = SelectedWindow::Configuration;
