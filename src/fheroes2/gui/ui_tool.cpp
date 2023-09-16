@@ -204,7 +204,12 @@ namespace fheroes2
         : _startTime( std::chrono::steady_clock::now() )
         , _text( fheroes2::Display::instance() )
     {
-        // Do nothing.
+        LocalEvent::RegisterCycling( [this]() { preRender(); }, [this]() { postRender(); } );
+    }
+
+    SystemInfoRenderer::~SystemInfoRenderer()
+    {
+        LocalEvent::RegisterCycling( {}, {} );
     }
 
     void SystemInfoRenderer::preRender()

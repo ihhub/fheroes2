@@ -99,6 +99,8 @@ namespace fheroes2
     public:
         SystemInfoRenderer();
 
+        ~SystemInfoRenderer();
+
         void preRender();
 
         void postRender()
