@@ -105,7 +105,6 @@ namespace fheroes2
 
         ~SystemInfoRenderer();
 
-
         void preRender();
 
         void postRender()
