@@ -181,8 +181,8 @@ namespace
             // Initialize system info renderer.
             _systemInfoRenderer = std::make_unique<fheroes2::SystemInfoRenderer>();
 
-            display.subscribe( []( std::vector<uint8_t> & palette ){ return fheroes2::RenderProcessor::instance().preRenderAction( palette ); },
-                               [](){ fheroes2::RenderProcessor::instance().postRenderAction(); } );
+            display.subscribe( []( std::vector<uint8_t> & palette ) { return fheroes2::RenderProcessor::instance().preRenderAction( palette ); },
+                               []() { fheroes2::RenderProcessor::instance().postRenderAction(); } );
 
             fheroes2::RenderProcessor::instance().startColorCycling();
 
@@ -200,6 +200,11 @@ namespace
 
         ~DisplayInitializer()
         {
+            fheroes2::RenderProcessor & renderProcessor = fheroes2::RenderProcessor::instance();
+
+            renderProcessor.disableRenderers();
+            renderProcessor.stopColorCycling();
+
             fheroes2::Display::instance().release();
         }
 

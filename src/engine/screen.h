@@ -218,7 +218,7 @@ namespace fheroes2
         }
 
         // this function must return true if new palette has been generated
-        using PreRenderProcessing = std::function<bool(std::vector<uint8_t> &)>;
+        using PreRenderProcessing = std::function<bool( std::vector<uint8_t> & )>;
         using PostRenderProcessing = std::function<void()>;
 
         void subscribe( PreRenderProcessing preprocessing, PostRenderProcessing postprocessing )
