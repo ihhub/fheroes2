@@ -697,7 +697,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
     if ( INCOME_HERO_SKILLS & type ) {
         // estates skill bonus
-        for ( const Heroes * hero :heroes ) {
+        for ( const Heroes * hero : heroes ) {
             assert( hero != nullptr );
             totalIncome.gold += hero->GetSecondaryValues( Skill::Secondary::ESTATES );
         }
@@ -753,7 +753,7 @@ double Kingdom::GetArmiesStrength() const
 {
     double res = 0;
 
-    for ( const Heroes * hero :heroes ) {
+    for ( const Heroes * hero : heroes ) {
         assert( hero != nullptr );
         res += hero->GetArmy().GetStrength();
     }
