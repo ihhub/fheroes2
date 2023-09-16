@@ -23,6 +23,7 @@
 
 #include "statusbar.h"
 
+#include <cstdint>
 #include <memory>
 #include <utility>
 

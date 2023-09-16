@@ -221,7 +221,7 @@ namespace fheroes2
         using PreRenderProcessing = std::function<bool( std::vector<uint8_t> & )>;
         using PostRenderProcessing = std::function<void()>;
 
-        void subscribe( PreRenderProcessing preprocessing, PostRenderProcessing postprocessing )
+        void subscribe( const PreRenderProcessing & preprocessing, const PostRenderProcessing & postprocessing )
         {
             _preprocessing = preprocessing;
             _postprocessing = postprocessing;

@@ -29,7 +29,6 @@
 #include <map>
 #include <set>
 #include <utility>
-#include <vector>
 
 #include <SDL_events.h>
 #include <SDL_gamecontroller.h>
@@ -45,7 +44,6 @@
 
 #include "audio.h"
 #include "image.h"
-#include "pal.h"
 #include "render_processor.h"
 #include "screen.h"
 #include "tools.h"

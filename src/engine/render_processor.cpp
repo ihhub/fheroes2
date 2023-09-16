@@ -20,6 +20,8 @@
 
 #include "render_processor.h"
 
+#include <cstdint>
+
 #include "pal.h"
 
 namespace
