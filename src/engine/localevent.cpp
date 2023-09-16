@@ -696,14 +696,13 @@ namespace
         ColorCycling()
             : _counter( 0 )
             , _isPaused( false )
-            , _preRenderDrawing( nullptr )
-            , _posRenderDrawing( nullptr )
         {}
 
         bool applyCycling( std::vector<uint8_t> & palette )
         {
-            if ( _preRenderDrawing != nullptr )
+            if ( _preRenderDrawing ) {
                 _preRenderDrawing();
+            }
 
             if ( _timer.getMs() >= 220 ) {
                 _timer.reset();
@@ -718,8 +717,9 @@ namespace
         {
             _prevDraw.reset();
 
-            if ( _posRenderDrawing != nullptr )
+            if ( _posRenderDrawing ) {
                 _posRenderDrawing();
+            }
         }
 
         bool isRedrawRequired() const
