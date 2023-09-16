@@ -78,7 +78,7 @@ namespace fheroes2
     class MovableText
     {
     public:
-        MovableText( Image & output );
+        explicit MovableText( Image & output );
 
         void update( std::unique_ptr<TextBase> text );
 
