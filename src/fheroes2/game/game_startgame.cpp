@@ -244,7 +244,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
                 adventureMapInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore], false );
             }
             else if ( it != myCastles.end() ) {
-                Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).GetHero();
+                Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).getHero();
                 if ( heroInCastle == nullptr ) {
                     adventureMapInterface.SetFocus( *it );
                 }
@@ -439,7 +439,7 @@ int Interface::AdventureMap::GetCursorFocusCastle( const Castle & castle, const 
     }
 
     case MP2::OBJ_HEROES: {
-        const Heroes * hero = tile.GetHero();
+        const Heroes * hero = tile.getHero();
 
         if ( hero ) {
             return hero->GetColor() == castle.GetColor() ? Cursor::HEROES : Cursor::POINTER;
@@ -476,7 +476,7 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
     }
 
     case MP2::OBJ_HEROES: {
-        const Heroes * otherHero = tile.GetHero();
+        const Heroes * otherHero = tile.getHero();
 
         if ( otherHero ) {
             if ( !otherHero->isShipMaster() ) {
@@ -573,7 +573,7 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
     }
 
     case MP2::OBJ_HEROES: {
-        const Heroes * otherHero = tile.GetHero();
+        const Heroes * otherHero = tile.getHero();
 
         if ( otherHero ) {
             if ( otherHero->GetCenter() == hero.GetCenter() ) {
@@ -1359,7 +1359,7 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
 
     switch ( Cursor::WithoutDistanceThemes( Cursor::Get().Themes() ) ) {
     case Cursor::HEROES: {
-        Heroes * otherHero = tile.GetHero();
+        Heroes * otherHero = tile.getHero();
         if ( otherHero == nullptr ) {
             break;
         }
@@ -1453,7 +1453,7 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
         }
 
         case MP2::OBJ_HEROES: {
-            const Heroes * heroes = tile.GetHero();
+            const Heroes * heroes = tile.getHero();
 
             if ( heroes ) {
                 Dialog::QuickInfo( *heroes );

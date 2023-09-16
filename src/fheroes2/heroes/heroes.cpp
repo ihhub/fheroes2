@@ -866,7 +866,7 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
         army.Reset( false );
     }
 
-    world.GetTiles( pt.x, pt.y ).SetHero( this );
+    world.GetTiles( pt.x, pt.y ).setHero( this );
 
     kingdom.AddHeroes( this );
     // Update the set of recruits in the kingdom
@@ -1675,7 +1675,7 @@ void Heroes::Dismiss( int reason )
     }
     SetColor( Color::NONE );
 
-    world.GetTiles( GetIndex() ).SetHero( nullptr );
+    world.GetTiles( GetIndex() ).setHero( nullptr );
     SetIndex( -1 );
 
     modes = 0;
@@ -1758,9 +1758,9 @@ void Heroes::Move2Dest( const int32_t dstIndex )
         return;
     }
 
-    world.GetTiles( currentIndex ).SetHero( nullptr );
+    world.GetTiles( currentIndex ).setHero( nullptr );
     SetIndex( dstIndex );
-    world.GetTiles( dstIndex ).SetHero( this );
+    world.GetTiles( dstIndex ).setHero( this );
 }
 
 const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )

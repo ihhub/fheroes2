@@ -250,7 +250,7 @@ namespace
 
         // scan for a hero around
         for ( const int32_t idx : Maps::ScanAroundObject( tileIndex, MP2::OBJ_HEROES, false ) ) {
-            const Heroes * hero = world.GetTiles( idx ).GetHero();
+            const Heroes * hero = world.GetTiles( idx ).getHero();
             assert( hero != nullptr );
 
             // hero is going to attack monsters on this tile

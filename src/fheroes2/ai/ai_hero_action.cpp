@@ -414,7 +414,7 @@ namespace
 
     void AIToHeroes( Heroes & hero, const int32_t dstIndex )
     {
-        Heroes * otherHero = world.GetTiles( dstIndex ).GetHero();
+        Heroes * otherHero = world.GetTiles( dstIndex ).getHero();
         if ( otherHero == nullptr ) {
             // This should never happen
             assert( 0 );

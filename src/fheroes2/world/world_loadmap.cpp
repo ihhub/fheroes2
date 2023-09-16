@@ -767,7 +767,7 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
             const fheroes2::Point & cp = castle->GetCenter();
             Heroes * hero = vec_heroes.Get( Heroes::DEBUG_HERO );
 
-            if ( hero && !GetTiles( cp.x, cp.y + 1 ).GetHero() ) {
+            if ( hero && !GetTiles( cp.x, cp.y + 1 ).getHero() ) {
                 hero->Recruit( castle->GetColor(), { cp.x, cp.y + 1 } );
             }
         }
@@ -874,10 +874,10 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
         Heroes * chosenHero = GetHeroes( Maps::GetPoint( tile.GetIndex() ) );
         assert( chosenHero != nullptr );
 
-        tile.SetHero( chosenHero );
+        tile.setHero( chosenHero );
 
         if ( checkPoLObjects ) {
-            Heroes * hero = tile.GetHero();
+            Heroes * hero = tile.getHero();
             assert( hero );
             const BagArtifacts & artifacts = hero->GetBagArtifacts();
             for ( const Artifact & artifact : artifacts ) {

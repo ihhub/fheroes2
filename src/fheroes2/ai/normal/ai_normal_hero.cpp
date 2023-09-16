@@ -577,7 +577,7 @@ namespace
             return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, ( hero.isLosingGame() ? 1.0 : AI::ARMY_ADVANTAGE_MEDIUM ) );
 
         case MP2::OBJ_HEROES: {
-            const Heroes * otherHero = tile.GetHero();
+            const Heroes * otherHero = tile.getHero();
             assert( otherHero != nullptr );
 
             const bool otherHeroInCastle = ( otherHero->inCastle() != nullptr );
@@ -953,7 +953,7 @@ namespace AI
             return calculateCastleValue( castle );
         }
         case MP2::OBJ_HEROES: {
-            const Heroes * otherHero = tile.GetHero();
+            const Heroes * otherHero = tile.getHero();
             if ( !otherHero ) {
                 // How is it even possible?
                 assert( 0 );
@@ -1475,7 +1475,7 @@ namespace AI
             return calculateCastleValue( castle );
         }
         case MP2::OBJ_HEROES: {
-            const Heroes * otherHero = tile.GetHero();
+            const Heroes * otherHero = tile.getHero();
             if ( !otherHero ) {
                 // How is it even possible?
                 assert( 0 );
@@ -1672,7 +1672,7 @@ namespace AI
 
         switch ( objectType ) {
         case MP2::OBJ_HEROES: {
-            const Heroes * otherHero = tile.GetHero();
+            const Heroes * otherHero = tile.getHero();
             if ( !otherHero ) {
                 // How is it even possible?
                 assert( 0 );
@@ -1898,7 +1898,7 @@ namespace AI
 
         for ( const auto & actionObject : _mapActionObjects ) {
             if ( actionObject.second == MP2::OBJ_HEROES ) {
-                assert( world.GetTiles( actionObject.first ).GetHero() != nullptr );
+                assert( world.GetTiles( actionObject.first ).getHero() != nullptr );
             }
 
             const auto [dummy, inserted] = objectIndexes.emplace( actionObject.first );
@@ -1970,7 +1970,7 @@ namespace AI
                     break;
                 }
                 case MP2::OBJ_HEROES: {
-                    const Heroes * anotherHero = destinationTile.GetHero();
+                    const Heroes * anotherHero = destinationTile.getHero();
                     if ( anotherHero == nullptr ) {
                         assert( 0 );
                         break;
@@ -2144,7 +2144,7 @@ namespace AI
             else if ( objectType == MP2::OBJ_HEROES ) {
                 const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
-                const Heroes * anotherHero = tile.GetHero();
+                const Heroes * anotherHero = tile.getHero();
                 if ( anotherHero == nullptr ) {
                     // Another hero lost the battle, but he could defend a castle
                     if ( tile.GetObject() == MP2::OBJ_CASTLE ) {

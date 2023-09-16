@@ -343,8 +343,8 @@ namespace Maps
             _terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
         }
 
-        Heroes * GetHero() const;
-        void SetHero( Heroes * hero );
+        Heroes * getHero() const;
+        void setHero( Heroes * hero );
 
         // If tile is empty (MP2::OBJ_NONE) then verify whether it is a coast and update the tile if needed.
         void updateEmpty();

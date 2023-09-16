@@ -524,7 +524,7 @@ namespace Interface
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
-        Heroes * otherHero = tile.GetHero();
+        Heroes * otherHero = tile.getHero();
         Castle * otherCastle = world.getCastle( tile.GetCenter() );
 
         if ( otherHero ) {
@@ -573,7 +573,7 @@ namespace Interface
             break;
         }
         case MP2::OBJ_HEROES: {
-            const Heroes * heroes = tile.GetHero();
+            const Heroes * heroes = tile.getHero();
 
             if ( heroes ) {
                 Dialog::QuickInfo( *heroes );

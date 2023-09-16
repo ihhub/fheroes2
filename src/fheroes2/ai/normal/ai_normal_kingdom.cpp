@@ -92,15 +92,15 @@ namespace
                 assert( hero != nullptr && hero->isActive() );
 
                 Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
-                if ( tile.GetHero() == nullptr ) {
+                if ( tile.getHero() == nullptr ) {
                     // This could happen when a hero is moving.
                     continue;
                 }
 
-                assert( tile.GetHero() == hero );
+                assert( tile.getHero() == hero );
                 _heroes.emplace_back( hero );
 
-                tile.SetHero( nullptr );
+                tile.setHero( nullptr );
             }
         }
 
@@ -108,9 +108,9 @@ namespace
         {
             for ( Heroes * hero : _heroes ) {
                 Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
-                assert( tile.GetHero() == nullptr );
+                assert( tile.getHero() == nullptr );
 
-                tile.SetHero( hero );
+                tile.setHero( hero );
             }
         }
 
@@ -207,7 +207,7 @@ namespace
         const int32_t tileIndex = tile.GetIndex();
 
         if ( object == MP2::OBJ_HEROES ) {
-            const Heroes * hero = tile.GetHero();
+            const Heroes * hero = tile.getHero();
             // TODO: this function can be called when the game world is not fully initialized yet
             if ( hero == nullptr ) {
                 return {};
@@ -765,7 +765,7 @@ namespace AI
             _mapActionObjects.emplace_back( idx, objectType );
 
             if ( objectType == MP2::OBJ_HEROES ) {
-                const Heroes * hero = tile.GetHero();
+                const Heroes * hero = tile.getHero();
                 assert( hero != nullptr );
 
                 if ( hero->GetColor() == myColor && !hero->Modes( Heroes::PATROL ) ) {

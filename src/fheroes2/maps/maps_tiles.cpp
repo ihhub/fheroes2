@@ -536,12 +536,12 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
     pushTopLayerAddon( mp2 );
 }
 
-Heroes * Maps::Tiles::GetHero() const
+Heroes * Maps::Tiles::getHero() const
 {
     return MP2::OBJ_HEROES == _mainObjectType && heroID ? world.GetHeroes( heroID - 1 ) : nullptr;
 }
 
-void Maps::Tiles::SetHero( Heroes * hero )
+void Maps::Tiles::setHero( Heroes * hero )
 {
     if ( hero ) {
         using HeroIDType = decltype( heroID );
@@ -555,7 +555,7 @@ void Maps::Tiles::SetHero( Heroes * hero )
         SetObject( MP2::OBJ_HEROES );
     }
     else {
-        hero = GetHero();
+        hero = getHero();
 
         if ( hero ) {
             SetObject( hero->GetMapsObject() );
@@ -577,7 +577,7 @@ fheroes2::Point Maps::Tiles::GetCenter() const
 MP2::MapObjectType Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */ ) const
 {
     if ( !ignoreObjectUnderHero && MP2::OBJ_HEROES == _mainObjectType ) {
-        const Heroes * hero = GetHero();
+        const Heroes * hero = getHero();
         return hero ? hero->GetMapsObject() : MP2::OBJ_NONE;
     }
 
@@ -1020,7 +1020,7 @@ std::string Maps::Tiles::String() const
         os << "monster count   : " << getMonsterCountFromTile( *this ) << std::endl;
         break;
     case MP2::OBJ_HEROES: {
-        const Heroes * hero = GetHero();
+        const Heroes * hero = getHero();
         if ( hero )
             os << hero->String();
         break;
@@ -1110,7 +1110,7 @@ bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, con
 
     // Tiles on which allied heroes are located are inaccessible
     if ( _mainObjectType == MP2::OBJ_HEROES ) {
-        const Heroes * hero = GetHero();
+        const Heroes * hero = getHero();
         assert( hero != nullptr );
 
         if ( hero->GetColor() != heroColor && hero->isFriends( heroColor ) ) {
@@ -1340,7 +1340,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
     // Some maps have water tiles with OBJ_COAST, it shouldn't be, replace OBJ_COAST with OBJ_NONE
     if ( originalObjectType == MP2::OBJ_COAST && tile.isWater() ) {
-        Heroes * hero = tile.GetHero();
+        Heroes * hero = tile.getHero();
 
         if ( hero ) {
             hero->SetMapsObject( MP2::OBJ_NONE );

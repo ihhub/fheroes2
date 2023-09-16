@@ -792,7 +792,7 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
     for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.GetObjectSpriteIndex() ) ) {
         const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
 
-        if ( teleportIndex == index || teleportTile.GetHero() != nullptr || teleportTile.isWater() != entranceTile.isWater() ) {
+        if ( teleportIndex == index || teleportTile.getHero() != nullptr || teleportTile.isWater() != entranceTile.isWater() ) {
             continue;
         }
 
@@ -827,7 +827,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
     for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.GetObjectSpriteIndex() ) ) {
         const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
 
-        if ( whirlpoolTile.GetObjectUID() == entranceTile.GetObjectUID() || whirlpoolTile.GetHero() != nullptr ) {
+        if ( whirlpoolTile.GetObjectUID() == entranceTile.GetObjectUID() || whirlpoolTile.getHero() != nullptr ) {
             continue;
         }
 
@@ -1516,7 +1516,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
 
                     Maps::restoreAbandonedMine( tile, resource );
 
-                    Heroes * hero = tile.GetHero();
+                    Heroes * hero = tile.getHero();
                     if ( hero ) {
                         hero->SetMapsObject( MP2::OBJ_MINES );
                     }

@@ -499,7 +499,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
 
                 const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.GetTiles( posX, posY - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
-                const Heroes * hero = tile.GetHero();
+                const Heroes * hero = tile.getHero();
 
                 // Boats are 2 tiles high so for hero on the boat we have to populate info for boat one tile lower than the fog.
                 if ( isTileUnderFog && ( isUpperTileUnderFog || !hero->isShipMaster() ) ) {
