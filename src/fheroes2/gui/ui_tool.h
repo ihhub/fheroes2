@@ -86,11 +86,6 @@ namespace fheroes2
 
         void hide();
 
-        bool isHidden() const
-        {
-            return _isHidden;
-        }
-
     private:
         Image & _output;
         ImageRestorer _restorer;
