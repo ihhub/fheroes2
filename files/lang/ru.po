@@ -10770,12 +10770,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} protects your troops from the Dispel Magic spell."
-#~ msgstr "%{name} защищает Ваши отряды от заклятий снятия чар."
-
-#~ msgid "Damg"
-#~ msgstr "Урон"
-
-#~ msgid "%{spell} failed!!!"
-#~ msgstr "Неудачный вызов %{spell}!"

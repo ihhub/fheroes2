@@ -11001,15 +11001,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} protects your troops from the Dispel Magic spell."
-#~ msgstr "%{name} beskytter krigerne dine fra magiopphevelses trolldommen."
-
-#~ msgid "Damg"
-#~ msgstr "Skade"
-
-#~ msgid "guildWell|EXIT"
-#~ msgstr "UT"
-
-#~ msgid "%{spell} failed!!!"
-#~ msgstr "%{spell} mislyktes!"

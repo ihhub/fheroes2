@@ -10084,9 +10084,3 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Damg"
-#~ msgstr "Škody"
-
-#~ msgid "guildWell|EXIT"
-#~ msgstr "PRYČ"

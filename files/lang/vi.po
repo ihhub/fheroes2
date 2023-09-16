@@ -9770,9 +9770,3 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Damg"
-#~ msgstr "Thiệt hại"
-
-#~ msgid "guildWell|EXIT"
-#~ msgstr "THOÁT"
