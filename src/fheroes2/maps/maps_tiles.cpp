@@ -547,7 +547,7 @@ void Maps::Tiles::SetHeroes( Heroes * hero )
         using HeroIDType = decltype( heroID );
         static_assert( std::is_same_v<HeroIDType, uint8_t>, "Type of heroID has been changed, check the logic below" );
 
-        hero->SetMapsObject( _mainObjectType );
+        hero->setObjectTypeUnderHero( _mainObjectType );
 
         assert( hero->GetID() >= std::numeric_limits<HeroIDType>::min() && hero->GetID() < std::numeric_limits<HeroIDType>::max() );
         heroID = static_cast<HeroIDType>( hero->GetID() + 1 );
@@ -558,8 +558,8 @@ void Maps::Tiles::SetHeroes( Heroes * hero )
         hero = GetHeroes();
 
         if ( hero ) {
-            SetObject( hero->GetMapsObject() );
-            hero->SetMapsObject( MP2::OBJ_NONE );
+            SetObject( hero->getObjectTypeUnderHero() );
+            hero->setObjectTypeUnderHero( MP2::OBJ_NONE );
         }
         else {
             setAsEmpty();
@@ -578,7 +578,7 @@ MP2::MapObjectType Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */
 {
     if ( !ignoreObjectUnderHero && MP2::OBJ_HEROES == _mainObjectType ) {
         const Heroes * hero = GetHeroes();
-        return hero ? hero->GetMapsObject() : MP2::OBJ_NONE;
+        return hero ? hero->getObjectTypeUnderHero() : MP2::OBJ_NONE;
     }
 
     return _mainObjectType;
@@ -1343,7 +1343,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
         Heroes * hero = tile.GetHeroes();
 
         if ( hero ) {
-            hero->SetMapsObject( MP2::OBJ_NONE );
+            hero->setObjectTypeUnderHero( MP2::OBJ_NONE );
         }
         else {
             tile.SetObject( MP2::OBJ_NONE );

@@ -1065,7 +1065,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         // This method should be called with this condition only for a human-controlled kingdom
         assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
-        const KingdomHeroes & heroes = kingdom.GetHeroes();
+        const VecHeroes & heroes = kingdom.GetHeroes();
         if ( conf.WinsFindUltimateArtifact() ) {
             return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->HasUltimateArtifact(); } );
         }
@@ -1241,7 +1241,7 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
     if ( conf.isCampaignGameType() ) {
         const Campaign::ScenarioLossCondition lossCondition = Campaign::getCurrentScenarioLossCondition();
         if ( lossCondition == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
-            const KingdomCastles & castles = kingdom.GetCastles();
+            const VecCastles & castles = kingdom.GetCastles();
             bool hasSorceressVillage = false;
 
             for ( size_t i = 0; i < castles.size(); ++i ) {
@@ -1518,7 +1518,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
 
                     Heroes * hero = tile.GetHeroes();
                     if ( hero ) {
-                        hero->SetMapsObject( MP2::OBJ_MINES );
+                        hero->setObjectTypeUnderHero( MP2::OBJ_MINES );
                     }
                     else {
                         tile.SetObject( MP2::OBJ_MINES );

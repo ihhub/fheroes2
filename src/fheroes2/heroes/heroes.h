@@ -77,6 +77,9 @@ struct HeroSeedsForLevelUp
 class Heroes final : public HeroBase, public ColorBase
 {
 public:
+    friend class Recruits;
+    friend class Battle::Only;
+
     enum
     {
         // knight
@@ -334,8 +337,15 @@ public:
         return GetLevelFromExperience( experience );
     }
 
-    MP2::MapObjectType GetMapsObject() const;
-    void SetMapsObject( const MP2::MapObjectType objectType );
+    MP2::MapObjectType getObjectTypeUnderHero() const
+    {
+        return _objectTypeUnderHero;
+    }
+
+    void setObjectTypeUnderHero( const MP2::MapObjectType objectType )
+    {
+        _objectTypeUnderHero = ( ( objectType != MP2::OBJ_HEROES ) ? objectType : MP2::OBJ_NONE );
+    }
 
     const fheroes2::Point & GetPatrolCenter() const
     {
@@ -347,7 +357,7 @@ public:
         _patrolCenter = pos;
     }
 
-    int GetPatrolDistance() const
+    uint32_t GetPatrolDistance() const
     {
         return _patrolDistance;
     }
@@ -604,9 +614,6 @@ private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
 
-    friend class Recruits;
-    friend class Battle::Only;
-
     HeroSeedsForLevelUp GetSeedsForLevelUp() const;
     void LevelUp( bool skipsecondary, bool autoselect = false );
     void LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect = false );
@@ -645,7 +652,8 @@ private:
     // ID of this hero, unless a custom portrait is applied.
     int portrait;
     int _race;
-    int save_maps_object;
+
+    MP2::MapObjectType _objectTypeUnderHero;
 
     Route::Path path;
 
@@ -654,7 +662,7 @@ private:
     fheroes2::Point _offset; // used only during hero's movement
 
     fheroes2::Point _patrolCenter;
-    int _patrolDistance;
+    uint32_t _patrolDistance;
 
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;
@@ -677,8 +685,8 @@ private:
 
 struct VecHeroes : public std::vector<Heroes *>
 {
-    Heroes * Get( int /* hero id */ ) const;
-    Heroes * Get( const fheroes2::Point & ) const;
+    Heroes * Get( int hid ) const;
+    Heroes * Get( const fheroes2::Point & center ) const;
 };
 
 struct AllHeroes : public VecHeroes

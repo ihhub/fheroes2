@@ -185,7 +185,7 @@ namespace fheroes2
     const Castle * getNearestCastleTownGate( const Heroes & hero )
     {
         const Kingdom & kingdom = hero.GetKingdom();
-        const KingdomCastles & castles = kingdom.GetCastles();
+        const VecCastles & castles = kingdom.GetCastles();
 
         const Point & heroPosition = hero.GetCenter();
         int32_t minDistance = -1;

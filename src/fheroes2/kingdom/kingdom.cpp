@@ -611,7 +611,7 @@ void Kingdom::ApplyPlayWithStartingHero()
 
     bool foundHeroes = false;
 
-    for ( KingdomCastles::const_iterator it = castles.begin(); it != castles.end(); ++it ) {
+    for ( VecCastles::const_iterator it = castles.begin(); it != castles.end(); ++it ) {
         const Castle * castle = *it;
         if ( castle == nullptr )
             continue;
@@ -671,7 +671,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
     if ( INCOME_CASTLES & type ) {
         // castles
-        for ( KingdomCastles::const_iterator it = castles.begin(); it != castles.end(); ++it ) {
+        for ( VecCastles::const_iterator it = castles.begin(); it != castles.end(); ++it ) {
             const Castle & castle = **it;
 
             // castle or town profit
@@ -698,7 +698,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
     if ( INCOME_HERO_SKILLS & type ) {
         // estates skill bonus
-        for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
+        for ( VecHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
             totalIncome.gold += ( **ith ).GetSecondaryValues( Skill::Secondary::ESTATES );
     }
 
@@ -714,7 +714,9 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
     }
 
     if ( isControlAI() && totalIncome.gold > 0 ) {
-        totalIncome.gold = static_cast<int32_t>( totalIncome.gold * Difficulty::GetGoldIncomeBonus( Game::getDifficulty() ) );
+        const int32_t bonusGold = static_cast<int32_t>( totalIncome.gold * Difficulty::GetGoldIncomeBonusForAI( Game::getDifficulty() ) );
+
+        totalIncome.gold += bonusGold;
     }
 
     // Some human players can have handicap for resources.
@@ -750,10 +752,10 @@ double Kingdom::GetArmiesStrength() const
 {
     double res = 0;
 
-    for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
+    for ( VecHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
         res += ( **ith ).GetArmy().GetStrength();
 
-    for ( KingdomCastles::const_iterator itc = castles.begin(); itc != castles.end(); ++itc )
+    for ( VecCastles::const_iterator itc = castles.begin(); itc != castles.end(); ++itc )
         res += ( **itc ).GetArmy().GetStrength();
 
     return res;
