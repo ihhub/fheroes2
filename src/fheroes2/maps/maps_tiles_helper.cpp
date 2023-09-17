@@ -820,16 +820,30 @@ namespace
         }
     }
 
-    uint8_t getRoadImageForTile( const int roadDirection )
+    uint8_t getRoadImageForTile( const Maps::Tiles & tile, const int roadDirection )
     {
+        DEBUG_LOG( DBG_DEVEL, DBG_INFO, "Getting road for tile " << tile.GetIndex() << ": " << Direction::String( roadDirection ) )
+
         if ( hasNoBits( roadDirection, Direction::CENTER ) ) {
             if ( hasBits( roadDirection, Direction::TOP | Direction::TOP_RIGHT ) && hasNoBits( roadDirection, Direction::TOP_LEFT ) ) {
                 // Нужна доп. проверка что ещё выше.
-                return 8U;
+                const int32_t upperTileIndex = tile.GetIndex() - world.w();
+                if ( upperTileIndex > -1 ) {
+                    const Maps::Tiles & upperTile = world.GetTiles( upperTileIndex );
+                    if ( upperTile.isRoad() ) {
+                        return 8U;
+                    }
+                }
             }
             if ( hasBits( roadDirection, Direction::TOP | Direction::TOP_LEFT ) && hasNoBits( roadDirection, Direction::TOP_RIGHT ) ) {
                 // Нужна доп. проверка что ещё выше.
-                return 15U;
+                const int32_t upperTileIndex = tile.GetIndex() - world.w();
+                if ( upperTileIndex > -1 ) {
+                    const Maps::Tiles & upperTile = world.GetTiles( upperTileIndex );
+                    if ( upperTile.isRoad() ) {
+                        return 15U;
+                    }
+                }
             }
             if ( hasBits( roadDirection, Direction::TOP ) && ( hasBits( roadDirection, Direction::TOP_LEFT ) || hasBits( roadDirection, Direction::TOP_RIGHT ) ) ) {
                 return Rand::Get( 1 ) ? 1U : 27U;
@@ -971,41 +985,44 @@ namespace Maps
         tile.setRoad( setRoad );
 
         if ( setRoad ) {
-            // Place the Road image on tiles.
-            if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN || tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_ROAD ) {
-                const int32_t roadImageIndex = getRoadImageForTile( getRoadDirecton( tile ) );
+            const uint8_t roadImageIndex = getRoadImageForTile( tile, getRoadDirecton( tile ) );
+            DEBUG_LOG( DBG_DEVEL, DBG_INFO, "Road index for center tile " << tile.GetIndex() << ": " << int( roadImageIndex ) )
 
-                if ( roadImageIndex == 255U ) {
-                    return;
+            if ( roadImageIndex == 255U ) {
+                return;
+            }
+
+            tile.pushBottomLayerAddon( TilesAddon( TERRAIN_LAYER, World::GetUniq(), MP2::OBJ_ICN_TYPE_ROAD, roadImageIndex, false, true ) );
+
+            for ( const int32_t tileIndex : getAroundIndexes( tile.GetIndex() ) ) {
+                Tiles & tileAround = world.GetTiles( tileIndex );
+                const uint8_t imageIndex = getRoadImageForTile( tileAround, getRoadDirecton( tileAround ) );
+                DEBUG_LOG( DBG_DEVEL, DBG_INFO, "Road index for 'around' tile " << tileAround.GetIndex() << ": " << int( imageIndex ) )
+                if ( imageIndex == 255U ) {
+                    continue;
                 }
 
-                tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_ROAD );
-                tile.setObjectSpriteIndex( getRoadImageForTile( getRoadDirecton( tile ) ) );
-
-                for ( const int32_t tileIndex : getAroundIndexes( tile.GetIndex() ) ) {
-                    Tiles & tileAround = world.GetTiles( tileIndex );
-                    const uint8_t imageIndex = getRoadImageForTile( getRoadDirecton( tileAround ) );
-                    if ( imageIndex == 255U ) {
-                        continue;
+                bool pushNewAddon = true;
+                for ( TilesAddon & addon : tileAround.getBottomLayerAddons() ) {
+                    if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+                        addon._imageIndex = imageIndex;
+                        pushNewAddon = false;
+                        break;
                     }
-
-                    if ( tileAround.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-                        tileAround.setObjectIcnType( MP2::OBJ_ICN_TYPE_ROAD );
-                    }
-                    tileAround.setObjectSpriteIndex( imageIndex );
                 }
 
-                if ( Maps::Ground::isTerrainExtraImage( tile.getTerrainImageIndex() ) ) {
-                    // Reset terrain image
-                    tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( tile.GetGround(), false ), false, false );
+                if ( pushNewAddon ) {
+                    tileAround.pushBottomLayerAddon( TilesAddon( TERRAIN_LAYER, World::GetUniq(), MP2::OBJ_ICN_TYPE_ROAD, imageIndex, false, false ) );
                 }
             }
-            // TODO: check the tile addons else.
+
+            if ( Maps::Ground::isTerrainExtraImage( tile.getTerrainImageIndex() ) ) {
+                // Reset terrain image
+                tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( tile.GetGround(), false ), false, false );
+            }
         }
         else {
-            if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_ROAD ) {
-                tile.resetObjectSprite();
-            }
+            tile.getBottomLayerAddons().clear();
         }
     }
 

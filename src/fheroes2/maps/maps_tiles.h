@@ -208,9 +208,6 @@ namespace Maps
         void setRoad( const bool setRoad )
         {
             _tileIsRoad = setRoad;
-            if ( setRoad ) {
-                _layerType = TERRAIN_LAYER;
-            }
         }
 
         bool isStream() const;

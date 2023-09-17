@@ -442,7 +442,8 @@ std::string Maps::TilesAddon::String( int lvl ) const
        << "image index     : " << static_cast<int>( _imageIndex ) << std::endl
        << "layer type      : " << static_cast<int>( _layerType ) << " (" << static_cast<int>( _layerType % 4 ) << ")"
        << " - " << getObjectLayerName( _layerType % 4 ) << std::endl
-       << "is shadow       : " << ( isShadow( *this ) ? "yes" : "no" ) << std::endl;
+       << "is shadow       : " << ( isShadow( *this ) ? "yes" : "no" ) << std::endl
+       << "is road         : " << ( isRoad() ? "yes" : "no" ) << std::endl;
     return os.str();
 }
 
