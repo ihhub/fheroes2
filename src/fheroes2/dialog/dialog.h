@@ -92,7 +92,6 @@ namespace Dialog
     void QuickInfo( const Castle & castle, const fheroes2::Point & position = {}, const bool showOnRadar = false, const fheroes2::Rect & areaToRestore = {} );
     void QuickInfo( const HeroBase & hero, const fheroes2::Point & position = {}, const bool showOnRadar = false, const fheroes2::Rect & areaToRestore = {} );
 
-    int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
     int LevelUpSelectSkill( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero );
     bool SelectGoldOrExp( const std::string &, const std::string &, uint32_t gold, uint32_t expr, const Heroes & );
     int SelectSkillFromArena();

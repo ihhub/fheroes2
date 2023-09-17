@@ -48,10 +48,10 @@
 #include "settings.h"
 #include "skill.h"
 #include "skill_bar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
@@ -205,7 +205,7 @@ bool Battle::Only::ChangeSettings()
         if ( allow1 && le.MouseClickLeft( rtPortrait1 ) ) {
             int hid = Dialog::selectHeroes( hero1 ? hero1->GetID() : Heroes::UNKNOWN );
             if ( hero2 && hid == hero2->GetID() ) {
-                Dialog::Message( _( "Error" ), _( "Please select another hero." ), Font::BIG, Dialog::OK );
+                fheroes2::showStandardTextMessage( _( "Error" ), _( "Please select another hero." ), Dialog::OK );
             }
             else if ( Heroes::UNKNOWN != hid ) {
                 hero1 = world.GetHeroes( hid );
@@ -219,7 +219,7 @@ bool Battle::Only::ChangeSettings()
         else if ( allow2 && le.MouseClickLeft( rtPortrait2 ) ) {
             int hid = Dialog::selectHeroes( hero2 ? hero2->GetID() : Heroes::UNKNOWN );
             if ( hero1 && hid == hero1->GetID() ) {
-                Dialog::Message( _( "Error" ), _( "Please select another hero." ), Font::BIG, Dialog::OK );
+                fheroes2::showStandardTextMessage( _( "Error" ), _( "Please select another hero." ), Dialog::OK );
             }
             else if ( Heroes::UNKNOWN != hid ) {
                 hero2 = world.GetHeroes( hid );

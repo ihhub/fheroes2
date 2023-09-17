@@ -280,30 +280,30 @@ namespace Maps
             return _fogDirection;
         }
 
-        void AddonsPushLevel1( const MP2::mp2tile_t & mt );
-        void AddonsPushLevel1( const MP2::mp2addon_t & ma );
+        void pushBottomLayerAddon( const MP2::mp2tile_t & mt );
+        void pushBottomLayerAddon( const MP2::mp2addon_t & ma );
 
-        void AddonsPushLevel1( TilesAddon ta )
+        void pushBottomLayerAddon( TilesAddon ta )
         {
-            addons_level1.emplace_back( ta );
+            _addonBottomLayer.emplace_back( ta );
         }
 
-        void AddonsPushLevel2( const MP2::mp2tile_t & mt );
-        void AddonsPushLevel2( const MP2::mp2addon_t & ma );
+        void pushTopLayerAddon( const MP2::mp2tile_t & mt );
+        void pushTopLayerAddon( const MP2::mp2addon_t & ma );
 
-        const Addons & getLevel1Addons() const
+        const Addons & getBottomLayerAddons() const
         {
-            return addons_level1;
+            return _addonBottomLayer;
         }
 
-        Addons & getLevel1Addons()
+        Addons & getBottomLayerAddons()
         {
-            return addons_level1;
+            return _addonBottomLayer;
         }
 
-        const Addons & getLevel2Addons() const
+        const Addons & getTopLayerAddons() const
         {
-            return addons_level2;
+            return _addonTopLayer;
         }
 
         void AddonsSort();
@@ -351,8 +351,8 @@ namespace Maps
             _terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
         }
 
-        Heroes * GetHeroes() const;
-        void SetHeroes( Heroes * hero );
+        Heroes * getHero() const;
+        void setHero( Heroes * hero );
 
         // If tile is empty (MP2::OBJ_NONE) then verify whether it is a coast and update the tile if needed.
         void updateEmpty();
@@ -405,8 +405,8 @@ namespace Maps
 
         static uint8_t convertOldMainObjectType( const uint8_t mainObjectType );
 
-        Addons addons_level1; // bottom layer
-        Addons addons_level2; // top layer
+        Addons _addonBottomLayer;
+        Addons _addonTopLayer;
 
         int32_t _index = 0;
 

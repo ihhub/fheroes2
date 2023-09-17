@@ -32,10 +32,12 @@
 #include "artifact_ultimate.h"
 #include "audio.h"
 #include "audio_manager.h"
+#include "castle.h"
 #include "dialog.h"
 #include "dialog_system_options.h"
 #include "direction.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "game_io.h"
 #include "game_mode.h"
@@ -95,6 +97,11 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
         RedrawFocus();
 
         hero->SetMove( true );
+
+        // We pass this delay to start hero moving immediately and set all the variables needed to handle game events correctly
+        // and to stop handling mouse click events until hero stops. Otherwise there could be a rare case
+        // when double click is faster than this delay and the second click will also be handled which should not happen.
+        Game::passAnimationDelay( Game::DelayType::CURRENT_HERO_DELAY );
     }
 }
 
@@ -119,15 +126,15 @@ void Interface::AdventureMap::MoveHeroFromArrowKeys( Heroes & hero, const int di
 void Interface::AdventureMap::EventNextHero()
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    const KingdomHeroes & myHeroes = myKingdom.GetHeroes();
+    const VecHeroes & myHeroes = myKingdom.GetHeroes();
 
     if ( myHeroes.empty() ) {
         return;
     }
 
     if ( GetFocusHeroes() ) {
-        KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), GetFocusHeroes() );
-        KingdomHeroes::const_iterator currentHero = it;
+        VecHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), GetFocusHeroes() );
+        VecHeroes::const_iterator currentHero = it;
 
         do {
             ++it;
@@ -262,11 +269,11 @@ fheroes2::GameMode Interface::BaseInterface::EventExit()
 void Interface::AdventureMap::EventNextTown()
 {
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    KingdomCastles & myCastles = myKingdom.GetCastles();
+    VecCastles & myCastles = myKingdom.GetCastles();
 
     if ( !myCastles.empty() ) {
         if ( GetFocusCastle() ) {
-            KingdomCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), GetFocusCastle() );
+            VecCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), GetFocusCastle() );
             ++it;
             if ( it == myCastles.end() )
                 it = myCastles.begin();
@@ -444,7 +451,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDefaultAction( const fheroes2::
 
     if ( hero ) {
         // 1. action object
-        if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) ) {
+        if ( MP2::isActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex() );
 
             // The action object can alter the status of the hero (e.g. Stables or Well) or

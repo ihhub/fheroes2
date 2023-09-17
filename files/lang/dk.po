@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-08 08:25+0000\n"
-"PO-Revision-Date: 2023-09-01 08:51+0200\n"
+"POT-Creation-Date: 2023-09-17 07:18+0000\n"
+"PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -203,6 +203,13 @@ msgid ""
 "S\n"
 "S"
 msgstr ""
+"B\n"
+"O\n"
+"R\n"
+"T\n"
+"V\n"
+"I\n"
+"S"
 
 msgid ""
 "E\n"
@@ -210,6 +217,43 @@ msgid ""
 "I\n"
 "T"
 msgstr ""
+"U\n"
+"D"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"F\n"
+"E\n"
+"L\n"
+"T\n"
+"T\n"
+"O\n"
+"G"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"E\n"
+"N\n"
+"K\n"
+"E\n"
+"L\n"
+"T"
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -999,10 +1043,11 @@ msgstr "Forræderi"
 msgid "Final Justice"
 msgstr "Endelige Retfærdighed"
 
+#, fuzzy
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
-"rebellion against his brother.  They are not allied with each other, so they "
-"will spend most of their time fighting with one another.  Victory is yours "
+"rebellion against his brother. They are not allied with each other, so they "
+"will spend most of their time fighting with one another. Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
 "Roland har brug for dig til at besejre herrerne nær hans borg, for at "
@@ -1093,8 +1138,9 @@ msgstr ""
 "Dette er det sidste slag. Både du og din fjende er bevæbnet til tænderne, og "
 "alle er allierede imod dig. For at afslutte krigen skal du fange Archibald!"
 
+#, fuzzy
 msgid ""
-"Switching sides leaves you with three castles against the enemy's one.  This "
+"Switching sides leaves you with three castles against the enemy's one. This "
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
@@ -1128,11 +1174,12 @@ msgstr "Dommedag"
 msgid "Greater Glory"
 msgstr "Større Hæder"
 
+#, fuzzy
 msgid ""
-"King Archibald requires you to defeat the three enemies in this region.  "
-"They are not allied with one another, so they will spend most of their "
-"energy fighting amongst themselves.  You will win when you own all of the "
-"enemy castles and there are no more heroes left to fight."
+"King Archibald requires you to defeat the three enemies in this region. They "
+"are not allied with one another, so they will spend most of their energy "
+"fighting amongst themselves. You will win when you own all of the enemy "
+"castles and there are no more heroes left to fight."
 msgstr ""
 "Kong Archibald kræver, at du besejrer de tre fjender i denne region. De er "
 "ikke allierede med hinanden. Så de vil bruge det meste af deres energi på, "
@@ -1470,7 +1517,7 @@ msgid ""
 "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do "
 "not lose Gallavant or your quest will be over."
 msgstr ""
-"Find og besejr Martine, piratlederen, som bor i Piratlagunen. \n"
+"Find og besejr Martine, piratlederen, som bor i byen Pirate Cove. \n"
 "\n"
 "Du taber dette scenarie, hvis du mister Gallavant. For så vil din mission "
 "være forbi."
@@ -1547,10 +1594,11 @@ msgstr ""
 "Dragerne, snerrende og knurrende, er enige om at følge dig, deres "
 "'allierede'."
 
+#, fuzzy
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
-"attention.  He shouts to them, \"Who of you is brave enough to join this "
-"fearless ally of ours?\"  The group explodes with cheers as they run to join "
+"attention. He shouts to them, \"Who of you is brave enough to join this "
+"fearless ally of ours?\" The group explodes with cheers as they run to join "
 "your ranks."
 msgstr ""
 "Da du nærmer dig gruppen af elvere, påkalder elverlederen deres alles "
@@ -1558,8 +1606,9 @@ msgstr ""
 "sig til denne, vores frygtløse allieret?\" Gruppen bryder ud i jubel, mens "
 "de løber for at slutte sig til dine rækker."
 
+#, fuzzy
 msgid ""
-"The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
+"The dwarves hail you, \"Any friend of Roland is a friend of ours. You may "
 "pass.\""
 msgstr ""
 "Dværgene hylder dig, \"Enhver ven af Roland er vores ven. Du må gerne "
@@ -1571,18 +1620,19 @@ msgstr ""
 "Jætter giver dig et grynt af genkendelse, \"Archibalds allierede kan passere."
 "\""
 
+#, fuzzy
 msgid ""
-"The dragons see you and call out.  \"Our alliance with Archibald compels us "
-"to join you.  Unfortunately you have no room.  A pity!\"  They quickly "
-"scatter."
+"The dragons see you and call out. \"Our alliance with Archibald compels us "
+"to join you. Unfortunately you have no room. A pity!\" They quickly scatter."
 msgstr ""
 "Dragerne ser dig og råber. \"Vores alliance med Archibald tvinger os til at "
 "slutte os til dig. Desværre har du ikke plads. En skam!\" De spreder sig "
 "hurtigt."
 
+#, fuzzy
 msgid ""
-"The elves stand at attention as you approach.  Their leader calls to you and "
-"says, \"Let us not impede your progress, ally!  Move on, and may victory be "
+"The elves stand at attention as you approach. Their leader calls to you and "
+"says, \"Let us not impede your progress, ally! Move on, and may victory be "
 "yours.\""
 msgstr ""
 "Elverne står vagtsomme, mens du nærmer dig. Deres leder kalder på dig og "
@@ -1596,16 +1646,16 @@ msgid "campaignBonus|Animate Dead"
 msgstr "Dødebesjæling"
 
 msgid "campaignBonus|Chain Lightning"
-msgstr "Kædelyn"
+msgstr "Lynkæde"
 
 msgid "campaignBonus|Fireblast"
 msgstr "Flammebrag"
 
 msgid "campaignBonus|Mass Curse"
-msgstr "Masseforbandelse"
+msgstr "Masse-forbandelse"
 
 msgid "campaignBonus|Mass Haste"
-msgstr "Masseforhastning"
+msgstr "Masse-forhastning"
 
 msgid "campaignBonus|Mirror Image"
 msgstr "Spejlbillede"
@@ -1827,15 +1877,15 @@ msgid ""
 "The kingdom will receive %{amount} additional %{resource} at the start of "
 "the scenario."
 msgstr ""
-"I dette scenarie vil dit kongerige modtage yderligere %{amount} %{resource}"
-"stykker."
+"I dette scenarie vil dit kongerige starte med %{amount} ekstra mængder "
+"%{resource}."
 
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
 msgstr ""
-"I dette scenarie vil dit kongerige starte med %{amount} %{resource}stykker "
-"mindre."
+"I dette scenarie vil dit kongerige starte med %{amount} mindre mængder "
+"%{resource}."
 
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
@@ -1847,16 +1897,17 @@ msgstr ""
 "I dette scenarie vil din hovedhelt starte med besværgelsen \"%{spell}\"."
 
 msgid "The starting race of the scenario will be %{race}."
-msgstr "Begynd scenariet med helteklassen %{race}."
+msgstr "Begynd scenariet med %{race}-klassen."
 
 msgid ""
 "The main hero will have additional %{count} %{skill} at the start of the "
 "scenario."
 msgstr ""
-"Hovedhelten vil i dette scenarie begynde med yderligere %{count} %{skill}."
+"Hovedhelten vil i dette scenarie begynde med yderligere %{count} point i "
+"%{skill}."
 
 msgid "The main hero will have %{skill} at the start of the scenario."
-msgstr "Hovedhelten vil i dette scenarie starte med at have lært %{skill}"
+msgstr "Hovedhelten vil i dette scenarie starte med at have lært %{skill}."
 
 msgid "Roland"
 msgstr "Roland"
@@ -1871,7 +1922,7 @@ msgid "Voyage Home"
 msgstr "Hjemrejse"
 
 msgid "Wizard's Isle"
-msgstr "Troldmændenes Ø"
+msgstr "Troldmandsøen"
 
 msgid "Descendants"
 msgstr "Efterkommere"
@@ -1907,220 +1958,220 @@ msgid "Build %{name}."
 msgstr "Byg %{name}"
 
 msgid "Blackridge"
-msgstr ""
+msgstr "Sortekam"
 
 msgid "Hillstone"
-msgstr ""
+msgstr "Voldsten"
 
 msgid "Pinehurst"
-msgstr ""
+msgstr "Fyrenskov"
 
 msgid "Whiteshield"
-msgstr ""
+msgstr "Hvidskjold"
 
 msgid "Woodhaven"
-msgstr ""
+msgstr "Skovhaven"
 
 msgid "Blackwind"
-msgstr ""
+msgstr "Sortrup"
 
 msgid "Bloodreign"
-msgstr ""
+msgstr "Bloddum"
 
 msgid "Dragontooth"
-msgstr ""
+msgstr "Draggård"
 
 msgid "Greywind"
-msgstr ""
+msgstr "Gråvinde"
 
 msgid "Portsmith"
-msgstr ""
+msgstr "Smedehaven"
 
 msgid "Atlantium"
-msgstr ""
+msgstr "Atlantum"
 
 msgid "Middle Gate"
-msgstr ""
+msgstr "Midborg"
 
 msgid "Sansobar"
-msgstr ""
+msgstr "Sansobar"
 
 msgid "Tundara"
-msgstr ""
+msgstr "Tundara"
 
 msgid "Vulcania"
-msgstr ""
+msgstr "Vulkania"
 
 msgid "Baywatch"
-msgstr ""
+msgstr "Bugtvad"
 
 msgid "Fountainhead"
-msgstr ""
+msgstr "Kildspring"
 
 msgid "Vertigo"
-msgstr ""
+msgstr "Snurrum"
 
 msgid "Wildabar"
-msgstr ""
+msgstr "Vildabar"
 
 msgid "Winterkill"
-msgstr ""
+msgstr "Barfrost"
 
 msgid "Brindamoor"
-msgstr ""
+msgstr "Fakkelhede"
 
 msgid "Lakeside"
-msgstr ""
+msgstr "Søsted"
 
 msgid "Nightshadow"
-msgstr ""
+msgstr "Natskygge"
 
 msgid "Olympus"
-msgstr ""
+msgstr "Olympos"
 
 msgid "Sandcaster"
-msgstr ""
+msgstr "Sandborg"
 
 msgid "Alamar"
-msgstr ""
+msgstr "Alamar"
 
 msgid "Burlock"
-msgstr ""
+msgstr "Burlock"
 
 msgid "Dragadune"
-msgstr ""
+msgstr "Dragadune"
 
 msgid "Kalindra"
-msgstr ""
+msgstr "Kalindra"
 
 msgid "Xabran"
-msgstr ""
+msgstr "Sabran"
 
 msgid "Algary"
-msgstr ""
+msgstr "Algær"
 
 msgid "Basenji"
-msgstr ""
+msgstr "Dingo"
 
 msgid "Blackfang"
-msgstr ""
+msgstr "Blackfang"
 
 msgid "New Dawn"
-msgstr ""
+msgstr "Nygry"
 
 msgid "Sorpigal"
-msgstr ""
+msgstr "Sorpigal"
 
 msgid "Avone"
-msgstr ""
+msgstr "Avone"
 
 msgid "Big Oak"
-msgstr ""
+msgstr "Stor-ege"
 
 msgid "Chandler"
-msgstr ""
+msgstr "Lysning"
 
 msgid "Erliquin"
-msgstr ""
+msgstr "Arliquin"
 
 msgid "Hampshire"
-msgstr ""
+msgstr "Hampdrup"
 
 msgid "Antioch"
-msgstr ""
+msgstr "Antiokia"
 
 msgid "Avalon"
-msgstr ""
+msgstr "Avalon"
 
 msgid "Roc Haven"
-msgstr ""
+msgstr "Rokskov"
 
 msgid "South Mill"
-msgstr ""
+msgstr "Søndermølle"
 
 msgid "Weed Patch"
-msgstr ""
+msgstr "Bakkestjerne"
 
 msgid "Brownston"
-msgstr ""
+msgstr "Brunborg"
 
 msgid "Hilltop"
-msgstr ""
+msgstr "Bakketop"
 
 msgid "Weddington"
-msgstr ""
+msgstr "Væderup"
 
 msgid "Westfork"
-msgstr ""
+msgstr "Vesterskille"
 
 msgid "Whittingham"
-msgstr ""
+msgstr "Viderup"
 
 msgid "Cathcart"
-msgstr ""
+msgstr "Kasgård"
 
 msgid "Elk's Head"
-msgstr ""
+msgstr "Elgevir"
 
 msgid "Roscomon"
-msgstr ""
+msgstr "Rosenborg"
 
 msgid "Sherman"
-msgstr ""
+msgstr "Ulsakse"
 
 msgid "Yorksford"
-msgstr ""
+msgstr "Rodbæk"
 
 msgid "Blackburn"
-msgstr ""
+msgstr "Kulbrand"
 
 msgid "Blacksford"
-msgstr ""
+msgstr "Mørkbæk"
 
 msgid "Burton"
-msgstr ""
+msgstr "Skodby"
 
 msgid "Pig's Eye"
-msgstr ""
+msgstr "Svinerøje"
 
 msgid "Viper's Nest"
-msgstr ""
+msgstr "Bande-rede"
 
 msgid "Fenton"
-msgstr ""
+msgstr "Hegnby"
 
 msgid "Lankershire"
-msgstr ""
+msgstr "Langherred"
 
 msgid "Lombard"
-msgstr ""
+msgstr "Lombard"
 
 msgid "Timberhill"
-msgstr ""
+msgstr "Tømmerhøj"
 
 msgid "Troy"
 msgstr "Troja"
 
 msgid "Forder Oaks"
-msgstr ""
+msgstr "Egebæk"
 
 msgid "Meramec"
-msgstr ""
+msgstr "Meramek"
 
 msgid "Quick Silver"
-msgstr ""
+msgstr "Kviksølver"
 
 msgid "Westmoor"
-msgstr ""
+msgstr "Vesthede"
 
 msgid "Willow"
-msgstr ""
+msgstr "Virlund"
 
 msgid "Corackston"
-msgstr ""
+msgstr "Coraktun"
 
 msgid "Sheltemburg"
-msgstr ""
+msgstr "Sheltemborg"
 
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Umuligt at rekruttere - Du har allerede en helt i denne borg."
@@ -2358,7 +2409,7 @@ msgid "The Garbage Heap increases production of Goblins by %{count} per week."
 msgstr "Affaldsbunken øger tilvæksten af vætter med %{count} om ugen."
 
 msgid "The Rainbow increases the luck of the defending units by two."
-msgstr "Regnbuen øger de forsvarende styrkers held med to point."
+msgstr "Regnbuen øger de forsvarende styrkers held med 2 point."
 
 msgid ""
 "The Crystal Garden increases production of Sprites by %{count} per week."
@@ -2694,9 +2745,10 @@ msgstr "Forlad denne menu, uden at gøre noget."
 msgid "Arena"
 msgstr "Arena"
 
+#, fuzzy
 msgid ""
 "You enter the arena and face a pack of vicious lions. You handily defeat "
-"them, to the wild cheers of the crowd.  Impressed by your skill, the aged "
+"them, to the wild cheers of the crowd. Impressed by your skill, the aged "
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 "Du går ind i arenaen og står over for en flok glubske løver. Publikums vilde "
@@ -2733,7 +2785,7 @@ msgstr ""
 "dem alligevel?"
 
 msgid "Are you sure you want to dismiss this army?"
-msgstr "Er du sikker på du vil bortvise denne hær?"
+msgstr "Er du sikker på du vil bortvise denne trop?"
 
 msgid "Upgrade"
 msgstr "Opgradér"
@@ -3018,6 +3070,53 @@ msgstr "Vis flere informationer som billeder i sekundet (FPS) og klokkeslæt."
 
 msgid "Hot Keys:"
 msgstr "Genvejstaster:"
+
+msgid "Evil"
+msgstr "Ond"
+
+msgid "Good"
+msgstr "God"
+
+msgid "Interface Type"
+msgstr "Interface-type"
+
+msgid "Hide"
+msgstr "Skjul"
+
+msgid "Show"
+msgstr "Vis"
+
+msgid "Interface"
+msgstr "Interface"
+
+msgid "Slow"
+msgstr "Langsom"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Fast"
+msgstr "Hurtig"
+
+msgid "Very Fast"
+msgstr "Meget hurtig"
+
+msgid "Scroll Speed"
+msgstr ""
+"Rulle\n"
+"hastighed"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Vælg hvilken interface-type du ønsker at bruge."
+
+msgid "Toggle interface visibility."
+msgstr "Vælg interfacets synlighed til eller fra."
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr "Vælg farvet musemarkør til eller fra. Dette er kun et æstetisk valg."
+
+msgid "Sets the speed at which you scroll the window."
+msgstr "Bestemmer vinduets rullehastighed."
 
 msgid "Select Game Language:"
 msgstr "Vælg spilsprog:"
@@ -3379,8 +3478,9 @@ msgstr "Navnet på det valgte kort."
 msgid "Selected Map Difficulty"
 msgstr "Valgte kort-niveau"
 
+#, fuzzy
 msgid ""
-"The map difficulty of the currently selected map.  The map difficulty is "
+"The map difficulty of the currently selected map. The map difficulty is "
 "determined by the scenario designer. More difficult maps might include more "
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
@@ -3408,41 +3508,6 @@ msgstr "Vis ikke"
 msgid "Enemy Speed"
 msgstr "Fjenders hastighed"
 
-msgid "Slow"
-msgstr "Langsom"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Hurtig"
-
-msgid "Very Fast"
-msgstr "Meget hurtig"
-
-msgid "Scroll Speed"
-msgstr ""
-"Rulle\n"
-"hastighed"
-
-msgid "Evil"
-msgstr "Ond"
-
-msgid "Good"
-msgstr "God"
-
-msgid "Interface Type"
-msgstr "Interface-type"
-
-msgid "Hide"
-msgstr "Skjul"
-
-msgid "Show"
-msgstr "Vis"
-
-msgid "Interface"
-msgstr "Interface"
-
 msgid "Auto Resolve"
 msgstr "Fuldt auto"
 
@@ -3455,27 +3520,24 @@ msgstr "Kamp"
 msgid "autoBattle|Manual"
 msgstr "Manuelt"
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr "Vælg farvet musemarkør til eller fra. Dette er kun et æstetisk valg."
-
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Vælg hvor hurtigt dine helte skal flytte sig på hovedskærmen."
 
+#, fuzzy
 msgid ""
-"Sets the speed that A.I. heroes move at.  You can also elect not to view A."
-"I. movement at all."
+"Sets the speed that A.I. heroes move at. You can also elect not to view A.I. "
+"movement at all."
 msgstr ""
 "Bestemmer hvor hurtigt AI-helte flytter sig.  Du kan også vælge slet ikke at "
 "se på, når de flytter sig."
 
-msgid "Sets the speed at which you scroll the window."
-msgstr "Bestemmer vinduets rullehastighed."
+#, fuzzy
+msgid "Change the interface settings of the game."
+msgstr "Ændr spillets grafikindstillinger."
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Vælg hvilken interface-type du ønsker at bruge."
-
-msgid "Toggle interface visibility."
-msgstr "Vælg interfacets synlighed til eller fra."
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Spilindstillinger"
 
 msgid "Toggle instant battle mode."
 msgstr "Vælg øjeblikkelig kamptilstand."
@@ -3958,7 +4020,7 @@ msgid "Dev and Support"
 msgstr "Udv. og support"
 
 msgid "Special Thanks to"
-msgstr "Specielt tak til"
+msgstr "Særlig tak til"
 
 msgid "and many other contributors!"
 msgstr "og mange andre bidragere!"
@@ -4495,15 +4557,15 @@ msgstr "Et enkeltspillerspil, der gennemspilles på en serie af kort."
 msgid "Campaign Game"
 msgstr "Felttog spil"
 
+msgid "Multi-Player Game"
+msgstr "Flerspiller spil"
+
 msgid ""
 "A multi-player game, with several human players completing against each "
 "other on a single map."
 msgstr ""
 "Et flerspillerspil, hvor flere menneskelige spillere konkurrerer mod "
 "hinanden på ét enkelt kort."
-
-msgid "Multi-Player Game"
-msgstr "Flerspiller spil"
 
 msgid "fheroes2 Resurrection Team presents"
 msgstr "Teamet bag fheroes2 Resurrection præsenterer"
@@ -4658,7 +4720,8 @@ msgstr "6 spillere"
 msgid "Play with 6 human players."
 msgstr "Spil med 2 menneskelige spillere."
 
-msgid "Dragon city has fallen!  You are now the Master of the Dragons."
+#, fuzzy
+msgid "Dragon city has fallen! You are now the Master of the Dragons."
 msgstr "Dragebyen er faldet! Du er nu dragernes mester!"
 
 msgid ""
@@ -4885,7 +4948,9 @@ msgstr[1] ""
 "procent!"
 
 msgid "%{monster} growth +%{count}."
-msgstr "Tilvækst på %{monster} +%{count}."
+msgstr ""
+"Tilvækst: +%{count}\n"
+"%{monster}"
 
 msgid " All populations are halved."
 msgstr "Hele befolkningen er halveret."
@@ -5460,10 +5525,10 @@ msgid "%{count} / day"
 msgstr "%{count} / dag"
 
 msgid "one"
-msgstr "én"
+msgstr "1"
 
 msgid "two"
-msgstr "to"
+msgstr "2"
 
 msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
 msgstr ""
@@ -5498,8 +5563,8 @@ msgid ""
 "again next week.\""
 msgstr ""
 "Mølleren annoncerer:\n"
-"\"Deres excellence, jeg har arbejdet hårdt for at skaffe Dem disse "
-"guldstykker. Få mere ved at komme igen i næste uge.\""
+"\"Deres excellence, jeg beklager, der er ingen resurser at hente i "
+"øjeblikket. Prøv at vende tilbage i næste uge.\""
 
 msgid ""
 "The keeper of the mill announces:\n"
@@ -5902,9 +5967,10 @@ msgstr ""
 "Drikken fra oasen er forfriskende, men giver ingen yderligere fordele. Det "
 "hjælper måske, igen, hvis du udkæmper en kamp først."
 
+#, fuzzy
 msgid ""
 "A drink at the oasis fills your troops with strength and lifts their "
-"spirits.  You can travel a bit further today."
+"spirits. You can travel a bit further today."
 msgstr ""
 "Drikken fra oasen fylder dine tropper med styrke og løfter deres humør.  Du "
 "kan ride lidt længere i dag."
@@ -6127,7 +6193,7 @@ msgid ""
 "of crystal per day."
 msgstr ""
 "Denne krystalmine er nu under din kontrol. Den forsyner dit rige med "
-"%{count} mængde krystaler om dagen."
+"%{count} mængde krystaller om dagen."
 
 msgid ""
 "You gain control of a gem mine. It will provide you with %{count} unit of "
@@ -6355,15 +6421,15 @@ msgid ""
 "The Dragon city has no Dragons willing to join you this week. Perhaps a "
 "Dragon will become available next week."
 msgstr ""
-"I denne uge er der ingen drager i Dragebyen, der vil tilslutte sig din hær. "
-"Måske bliver en drage tilgængelig i næste uge."
+"I denne uge er der ingen røddrager i Dragebyen, der vil tilslutte sig din "
+"hær. Måske bliver en røddrage tilgængelig i næste uge."
 
 msgid ""
 "The Dragon city is willing to offer some Dragons for your army for a price. "
 "Do you wish to recruit Dragons?"
 msgstr ""
-"Dragebyens drager vil gerne tilbyde dig, at lade nogle af dem tilslutte sig "
-"din hær, men for en pris. Ønsker du at rekruttere drager?"
+"Dragebyens røddrager vil gerne tilbyde dig, at lade nogle af dem tilslutte "
+"sig din hær, men for en pris. Ønsker du at rekruttere røddrager?"
 
 msgid ""
 "You stand before the Dragon City, a place off-limits to mere humans. Do you "
@@ -6377,8 +6443,8 @@ msgid ""
 "some Dragons to your army for a price. Do you wish to recruit Dragons?"
 msgstr ""
 "Efter at have besejret dragemestrene, er byens ledere enige om at lade nogle "
-"drager tilslutte sig din hær, men for en pris. Ønsker du at rekruttere "
-"drager?"
+"røddrager tilslutte sig din hær, men for en pris. Ønsker du at rekruttere "
+"røddrager?"
 
 msgid "From the observation tower, you are able to see distant lands."
 msgstr "Fra udsigtstårnet er du i stand til at se fjerne lande."
@@ -6476,7 +6542,7 @@ msgstr ""
 "En pensioneret kaptajn, der bor på denne renoverede fiskeplatform, tilbyder "
 "at sælge dig et komplet kort over havet fra hans yngre dage. Han tilbyder "
 "dig at købe det for 1.000 guldstykker. \n"
-"Ønsker du at købe kortene?"
+"Ønsker du at købe kortet?"
 
 msgid ""
 "The captain sighs. \"You don't have enough money, eh?  You can't expect me "
@@ -7278,7 +7344,7 @@ msgid "%{skill} increases your hero's viewable area by one square."
 msgid_plural ""
 "%{skill} increases your hero's viewable area by %{count} squares."
 msgstr[0] "%{skill} øger din helts sigtbarhed med én firkant."
-msgstr[1] "%{skill} øger din helts sigtbarhed med  %{count} firkanter."
+msgstr[1] "%{skill} øger din helts sigtbarhed med %{count} firkanter."
 
 msgid ""
 "%{skill} allows you to negotiate with monsters who are weaker than your "
@@ -7298,10 +7364,11 @@ msgid ""
 "%{skill} increases your hero's movement points over water by %{count} "
 "percent."
 msgstr ""
-"%{skill} øger din helts bevægelsespoint over vand med %{count} procent."
+"%{skill} øger din helts daglige bevægelsespoint over vand med %{count} "
+"procent."
 
 msgid "%{skill} increases your hero's troops morale by %{count}."
-msgstr "%{skill} øger din helts troppers moral med %{count}."
+msgstr "%{skill} øger din helts moral med %{count} point."
 
 msgid "%{skill} allows your hero to learn third level spells."
 msgstr "%{skill} giver din helt mulighed for at lære magi på tredje niveau."
@@ -7319,7 +7386,7 @@ msgstr[0] "%{skill} regenerer ét af din helts mana per dag."
 msgstr[1] "%{skill} regenerer %{count} af din helts mana per dag."
 
 msgid "%{skill} increases your hero's luck by %{count}."
-msgstr "%{skill} øger din helts held med %{count}."
+msgstr "%{skill} øger din helts held med %{count} point."
 
 msgid ""
 "%{skill} gives your hero's catapult shots a greater chance to hit and do "
@@ -7342,29 +7409,26 @@ msgstr ""
 "%{skill} giver din helts katapult et ekstra skud, og hvert skud ødelægger "
 "automatisk enhver mur, undtagen en befæstet mur i en ridderborg."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
 msgstr ""
-"%{skill} giver din helt en %{count} procent chance for at lære en given 1.- "
-"eller 2.niveau fjendtlig magi, der bruges mod ham i kamp."
+"%{skill} giver %{count} procent chance, for at lære en given besværgelse af "
+"1-2.niveau, som en fjendtlig helt har kastet i løbet af en kamp mod din helt."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
-"%{skill} giver din helt en %{count} procent chance for at lære en given 3."
-"niveau (eller under) fjendtlig magi, der bruges mod ham i kamp."
+"%{skill} giver %{count} procent chance, for at lære en given besværgelse af "
+"1-3.niveau, som en fjendtlig helt har kastet i løbet af en kamp mod din helt."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
-"%{skill} giver din helt en %{count} procent chance for at lære en given 4."
-"niveau (eller under) fjendtlig magi, der bruges mod ham i kamp."
+"%{skill} giver %{count} procent chance, for at lære en given besværgelse af "
+"1-4.niveau, som en fjendtlig helt har kastet i løbet af en kamp mod din helt."
 
 msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
@@ -8726,17 +8790,16 @@ msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} øger din kundskab med %{count} point."
 
 msgid "Ultimate Book of Knowledge"
-msgstr "Den Ultimative Kundskabsbog"
+msgstr "Den Ultimative Bog for Kundskab"
 
 msgid "The %{name} increases your attack skill by %{count}."
-msgstr "%{name} øger dine væseners evne til at angribe med %{count} point."
+msgstr "%{name} øger dine væseners angrebsevne med %{count} point."
 
 msgid "Ultimate Sword of Dominion"
 msgstr "Det Ultimative Herredømmesværd"
 
 msgid "The %{name} increases your defense skill by %{count}."
-msgstr ""
-"%{name} øger dine væseners evne til at forsvare sig med %{count} point."
+msgstr "%{name} øger dine væseners forsvarsevne med %{count} point."
 
 msgid "Ultimate Cloak of Protection"
 msgstr "Den Ultimative Beskyttelseskappe"
@@ -8819,7 +8882,7 @@ msgid "Medal of Valor"
 msgstr "Hædersmedaljen"
 
 msgid "The %{name} increases your morale by %{count}."
-msgstr "%{name} øger din moral med %{count}."
+msgstr "%{name} øger din moral med %{count} point."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -8888,10 +8951,11 @@ msgid "Armored Gauntlets of Protection"
 msgstr "Værnerens Pansrede Handsker"
 
 msgid "The %{name} increase your defense skill by %{count}."
-msgstr "%{name} øger dine forsvarsevne med %{count} point."
+msgstr "%{name} øger din forsvarsevne med %{count} point."
 
+#, fuzzy
 msgid ""
-"You encounter the infamous Black Knight!  After a grueling duel ending in a "
+"You encounter the infamous Black Knight! After a grueling duel ending in a "
 "draw, the Knight, out of respect, offers you a pair of armored gauntlets."
 msgstr ""
 "Du møder den berygtede Sorte Ridder! Efter en opslidende duel, som ender "
@@ -9098,7 +9162,7 @@ msgid "Lucky Rabbit's Foot"
 msgstr "Den Heldige Kaninfod"
 
 msgid "The %{name} increases your luck in combat by %{count}."
-msgstr "%{name} øger dit held i kamp med %{count}."
+msgstr "%{name} øger dit held i kamp med %{count} point."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
@@ -9190,8 +9254,9 @@ msgid "The %{name} extends the duration of all your spells by %{count} turns."
 msgstr ""
 "%{name} forlænger alle dine besværgelsers varighed med %{count} runder."
 
+#, fuzzy
 msgid ""
-"A surprise turn in the landscape finds you in the midst of a grisly scene:  "
+"A surprise turn in the landscape finds you in the midst of a grisly scene: "
 "Vultures picking at the aftermath of a terrible battle. Your cursory search "
 "of the remains turns up an enchanted hourglass."
 msgstr ""
@@ -9516,12 +9581,13 @@ msgstr ""
 msgid "Wand of Negation"
 msgstr "Negationens Tryllestav"
 
-msgid "The %{name} protects your troops from the Dispel Magic spell."
-msgstr "%{name} beskytter dine tropper mod magi-ophævelse."
+msgid "The %{name} makes all your troops immune to dispel magic spells."
+msgstr "%{name} gør alle dine tropper immune overfor magi-ophævelser."
 
+#, fuzzy
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
-"He presents  you with a gift:  A wand that prevents the use of the dispel "
+"He presents  you with a gift: A wand that prevents the use of the dispel "
 "magic spell on your allies."
 msgstr ""
 "Du møder en gammel magikerven, der rejser i den modsatte retning. Han giver "
@@ -9535,7 +9601,7 @@ msgid ""
 "The %{name} eliminates the %{count} percent penalty for your troops shooting "
 "past obstacles (e.g. castle walls)."
 msgstr ""
-"%{name} eliminerer %{count} procentstraffen for dine tropper, der skyder "
+"%{name} eliminerer %{count}-procentstraffen for dine tropper, der skyder "
 "forbi forhindringer (f.eks. borgmure)."
 
 msgid ""
@@ -9588,7 +9654,7 @@ msgstr ""
 "som han siger vil \"hjælpe folk med at se tingene på din måde\"."
 
 msgid "Wizard's Hat"
-msgstr "Troldmandshat"
+msgstr "Troldmandshatten"
 
 msgid "The %{name} increases the duration of your spells by %{count} turns."
 msgstr "%{name} øger dine besværgelsers varighed med %{count} runder."
@@ -9657,11 +9723,12 @@ msgstr "Den Hæslige Maske"
 msgid "The %{name} prevents all 'wandering' armies from joining your hero."
 msgstr "%{name} forhindrer alle 'vandrende' hære i at tilslutte sig din helt."
 
+#, fuzzy
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
 "Warlock, unearths his fabled mask. Trembling, you put it on and it twists "
-"your visage into an awful grimace!  Oh no!  It's actually the hideous mask "
-"of Gromluck Greene, and you are stuck with it."
+"your visage into an awful grimace! Oh no! It's actually the hideous mask of "
+"Gromluck Greene, and you are stuck with it."
 msgstr ""
 "Din plyndring af Sinfilas Gardolads grav, den berømte formskiftende "
 "heksemester, afslører hans sagnomspundne maske. Rystende tager du den på, og "
@@ -9755,8 +9822,9 @@ msgstr "Den Uudtømmelige krystalpose"
 msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr "%{name} giver %{count} mængde krystal om dagen."
 
+#, fuzzy
 msgid ""
-"Taking shelter from a storm in a small cave,  you notice a small patch of "
+"Taking shelter from a storm in a small cave, you notice a small patch of "
 "crystal in one corner. Curious, you break a piece off and notice that the "
 "original crystal grows the lost piece back. You decide to stuff the entire "
 "patch into a pouch and take it with you."
@@ -9797,8 +9865,9 @@ msgstr ""
 msgid "White Pearl"
 msgstr "Den Hvide Perle"
 
+#, fuzzy
 msgid ""
-"A walk across a dry saltwater lake bed yields an unlikely prize:  A white "
+"A walk across a dry saltwater lake bed yields an unlikely prize: A white "
 "pearl amidst shattered shells and debris."
 msgstr ""
 "En tur på tværs af en tør saltvandssø giver en usandsynlig gevinst: En hvid "
@@ -9866,7 +9935,7 @@ msgid ""
 "The %{name} increases your spell power by %{count} but adds the undead "
 "morale penalty."
 msgstr ""
-"%{name} øger din mana med %{count}, men tilfører din hær den udøde "
+"%{name} øger magikraft med %{count} point, men tilfører din hær den udøde "
 "moralstraf."
 
 msgid ""
@@ -9922,8 +9991,9 @@ msgstr ""
 msgid "Battle Garb of Anduran"
 msgstr "Andurans Udstyr"
 
+#, fuzzy
 msgid ""
-"The %{name} combines the powers of the three Anduran artifacts.  It provides "
+"The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for your troops and gives you the Town Portal spell."
 msgstr ""
 "%{name} kombinerer kræfterne fra Andurans tre artefakter. \n"
@@ -9994,12 +10064,13 @@ msgstr ""
 "%{name} giver %{count}% beskyttelse mod kuldebesværgelser, men fordobler "
 "skaden fra ildbesværgelser."
 
+#, fuzzy
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
 "your horse. The pain subsides, but you still feel as if your chest is "
-"frozen.  As you pick yourself up off of the ground, you hear hearty "
-"laughter. You turn around just in time to see a Frost Giant run off into the "
-"woods and disappear."
+"frozen. As you pick yourself up off of the ground, you hear hearty laughter. "
+"You turn around just in time to see a Frost Giant run off into the woods and "
+"disappear."
 msgstr ""
 "Pludselig griber en bidende kulde fat i din krop. Du forfryser og falder ned "
 "fra din hest. Smerten aftager, men du føler stadig, som om dit bryst er "
@@ -10024,9 +10095,10 @@ msgstr ""
 msgid "Holy Hammer"
 msgstr "Den Hellige Hammer"
 
+#, fuzzy
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
-"of Zombies. He asks you to take his hammer and finish what he started.  As "
+"of Zombies. He asks you to take his hammer and finish what he started. As "
 "you pick it up, it begins to hum, and then everything becomes a blur. The "
 "Zombies lie dead, the hammer dripping with blood. You strap it to your belt."
 msgstr ""
@@ -10055,14 +10127,6 @@ msgstr ""
 "dig og svarer: \"Tror du, det her er sjovt? Fint. Du kan bære det. Jeg "
 "foretrækker alligevel at flyve.\""
 
-msgid "Masthead"
-msgstr "Masthovedet"
-
-msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
-msgstr ""
-"%{name} øger troppernes held og moral med %{count} point, når de kæmper til "
-"søs."
-
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -10073,6 +10137,14 @@ msgstr ""
 "han, i sin ungdom, brugte til at samle sit mandskab i vanskeligheder. Han "
 "rækker dig så et falmet kort, der viser, hvor han gemte det. Efter megen "
 "udforskning finder du det gemt under en nærliggende dok."
+
+msgid "Masthead"
+msgstr "Masthovedet"
+
+msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
+msgstr ""
+"%{name} øger troppernes held og moral med %{count} point, når de kæmper til "
+"søs."
 
 msgid "Sphere of Negation"
 msgstr "Negationskuglen"
@@ -10119,6 +10191,9 @@ msgstr ""
 "En tidligere kaptajn af vagten beundrer din sag og giver dig den fortryllede "
 "sværdbryder, som hans liv afhang af under sin tjenesterejse."
 
+msgid "Sword of Anduran"
+msgstr "Andurans Sværd"
+
 msgid ""
 "A Troll stops you and says: \"Pay me 5,000 gold, or the Sword of Anduran "
 "will slay you where you stand.\" You refuse. The troll grabs the sword "
@@ -10131,9 +10206,6 @@ msgstr ""
 "som hænger i dets bælte, skriger af smerte og løber væk. \n"
 "Idet du samler det sagnomspundne sværd op, takker du for, at halvkloge "
 "trolde har tendens til at gribe fat den forkerte ende af skarpe genstande."
-
-msgid "Sword of Anduran"
-msgstr "Andurans Sværd"
 
 msgid "Spade of Necromancy"
 msgstr "Nekromantikerens Spade"
@@ -10189,7 +10261,7 @@ msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
 "creatures."
 msgstr ""
-"Får en kæmpe ildkugle til at ramme og give skade til alle væsner i det "
+"Får en kæmpe ildkugle til at ramme og give skade til alle væsener i det "
 "valgte område."
 
 msgid "Fireball"
@@ -10202,8 +10274,8 @@ msgid ""
 "An improved version of fireball, fireblast affects two hexes around the "
 "center point of the spell, rather than one."
 msgstr ""
-"Flammebrag er en forbedret version af Ildkugle. Den rammer og giver skade "
-"til alle væsner i det valgte område."
+"Rammer og giver skade til alle væsener i det valgte område. Dette er en "
+"forbedret version af Ildkugle."
 
 msgid "Causes a bolt of electrical energy to strike the selected creature."
 msgstr "Får et lyn af elektrisk energi til at ramme det valgte væsen."
@@ -10214,11 +10286,12 @@ msgstr "Lynkile"
 msgid "Chain Lightning"
 msgstr "Lynkæde"
 
+#, fuzzy
 msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
 "strike the nearest creature with half damage, then strike the NEXT nearest "
 "creature with half again damage, and so on, until it becomes too weak to be "
-"harmful.  Warning:  This spell can hit your own creatures!"
+"harmful. Warning: This spell can hit your own creatures!"
 msgstr ""
 "Får et lyn af elektrisk energi til først at ramme det valgte væsen, for "
 "derefter ramme dets nærmeste væsen med 50% skade, så det næstnærmeste væsen "
@@ -10245,9 +10318,7 @@ msgstr ""
 "til %{count} HP per magikraftspoint."
 
 msgid "Mass Cure"
-msgstr ""
-"Masse\n"
-"kur"
+msgstr "Massekur"
 
 msgid ""
 "Removes all negative spells cast upon your forces, and restores up to "
@@ -10261,45 +10332,45 @@ msgstr "Genoplivelse"
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
 msgstr ""
-"Genopliver væsner fra en beskadiget eller død trop indtil slutningen af "
+"Genopliver væsener fra en beskadiget eller død trop indtil slutningen af "
 "kampen."
 
 msgid "Resurrect True"
 msgstr "Ægte genoplivelse"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
-msgstr "Genopliver væsner fra en beskadiget eller død trop permanent."
+msgstr "Genopliver væsener fra en beskadiget eller død trop permanent."
 
 msgid "Haste"
 msgstr "Forhastning"
 
 msgid "Increases the speed of any creature by %{count}."
-msgstr "Øger ethvert væsens hastighed med %{count}."
+msgstr "Øger en af dine troppers bevægelseshastighed med %{count} point."
 
 msgid "Increases the speed of all of your creatures by %{count}."
-msgstr "Øger alle dine væsners hastighed med %{count}."
+msgstr "Øger hele din hærs bevægelseshastighed med %{count} point."
 
 msgid "Mass Haste"
 msgstr ""
-"Masse\n"
+"Masse-\n"
 "forhastning"
 
 msgid "Slows target to half movement rate."
-msgstr "Halverer et væsens bevægelseshastighed."
+msgstr "Halverer en fjendtlig trops bevægelseshastighed."
 
 msgid "spell|Slow"
 msgstr "Forsløvning"
 
 msgid "Mass Slow"
 msgstr ""
-"Masse\n"
+"Masse-\n"
 "forsløvning"
 
 msgid "Slows all enemies to half movement rate."
-msgstr "Halverer alle fjenders bevægelseshastighed."
+msgstr "Halverer hele den fjendtlige hærs bevægelseshastighed."
 
 msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr "Skygger de berørte væsners øjne og forhindrer dem i at bevæge sig."
+msgstr "Skygger den berørte trops øjne og forhindrer dem i at bevæge sig."
 
 msgid "spell|Blind"
 msgstr "Blinding"
@@ -10308,14 +10379,14 @@ msgid "Bless"
 msgstr "Velsignelse"
 
 msgid "Causes the selected creatures to inflict maximum damage."
-msgstr "Får det valgte væsen til at yde maksimal skade."
+msgstr "Får den valgte trop til at yde maksimal skade."
 
 msgid "Causes all of your units to inflict maximum damage."
 msgstr "Får hele din hær til at yde maksimal skade."
 
 msgid "Mass Bless"
 msgstr ""
-"Masse\n"
+"Masse-\n"
 "velsignelse"
 
 msgid "Magically increases the defense skill of the selected creatures."
@@ -10324,18 +10395,19 @@ msgstr "Øger på magisk vis den valgte trops forsvarsevne."
 msgid "Stoneskin"
 msgstr "Stenhud"
 
+#, fuzzy
 msgid ""
-"Increases the defense skill of the targeted creatures.  This is an improved "
+"Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
-"Øger den valgte trops forsvarsevne. Dette er en forbedret version af magien "
-"Stenskin."
+"Øger den valgte trops forsvarsevne. Dette er en forbedret version af "
+"besværgelsen Stenhud."
 
 msgid "Steelskin"
 msgstr "Stålhud"
 
 msgid "Causes the selected creatures to inflict minimum damage."
-msgstr "Får det valgte væsen til at yde minimal skade."
+msgstr "Får den valgte trop til at yde minimal skade."
 
 msgid "Curse"
 msgstr "Forbandelse"
@@ -10345,7 +10417,7 @@ msgstr "Får alle fjendtlige tropper til at yde minimal skade."
 
 msgid "Mass Curse"
 msgstr ""
-"Masse\n"
+"Masse-\n"
 "forbandelse"
 
 msgid "Damages all undead in the battle."
@@ -10354,10 +10426,11 @@ msgstr "Skader alle udøde på slagmarken."
 msgid "Holy Word"
 msgstr "Helligt Ord"
 
+#, fuzzy
 msgid ""
-"Damages all undead in the battle.  This is an improved version of Holy Word."
+"Damages all undead in the battle. This is an improved version of Holy Word."
 msgstr ""
-"Skader alle udøde på slagmarken.  Dette er en forbedret version af Helligt "
+"Skader alle udøde på slagmarken. Dette er en forbedret version af Helligt "
 "Ord."
 
 msgid "Holy Shout"
@@ -10367,26 +10440,26 @@ msgid "Anti-Magic"
 msgstr "Anti-magi"
 
 msgid "Prevents harmful magic against the selected creatures."
-msgstr "Forhindrer skadelig magi mod de valgte væsner."
+msgstr "Forhindrer skadelig magi mod den valgte trop."
 
 msgid "Dispel Magic"
 msgstr ""
-"Magi\n"
+"Magi-\n"
 "ophævelse"
 
 msgid "Removes all magic spells from a single target."
-msgstr "Fjerner alle magiske besværgelser fra det valgte væsen."
+msgstr "Fjerner alle magiske besværgelser fra den valgte trop."
 
 msgid "Mass Dispel"
 msgstr ""
-"Masse\n"
+"Masse-\n"
 "ophævelse"
 
 msgid "Removes all magic spells from all creatures."
-msgstr "Fjerner alle magiske besværgelser fra samtlige væsener."
+msgstr "Fjerner alle magiske besværgelser fra samtlige tropper."
 
 msgid "Causes a magic arrow to strike the selected target."
-msgstr "Får en magisk pil til at ramme det valgte væsen."
+msgstr "Får en magisk pil til at ramme den valgte trop."
 
 msgid "Magic Arrow"
 msgstr "Magisk Pil"
@@ -10396,7 +10469,7 @@ msgstr "Bersærker"
 
 msgid "Causes a creature to attack its nearest neighbor."
 msgstr ""
-"Får et væsen til, på sin tur, at angribe det nærmeste væsen, ven som fjende!"
+"Får en trop til, på sin tur, at angribe den nærmeste trop, ven som fjende!"
 
 msgid "Armageddon"
 msgstr "Ragnarok"
@@ -10405,20 +10478,20 @@ msgid ""
 "Holy terror strikes the battlefield, causing severe damage to all creatures."
 msgstr ""
 "Guddommelig rædsel rammer slagmarken og forårsager alvorlig skade på alle "
-"væsner."
+"tropper."
 
 msgid "Elemental Storm"
 msgstr "Elemental Storm"
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
-msgstr "Magiske elementer strømmer ned på slagmarken og skader alle væsner."
+msgstr "Magiske elementer strømmer ned på slagmarken og skader alle tropper."
 
 msgid ""
 "A rain of rocks strikes an area of the battlefield, damaging all nearby "
 "creatures."
 msgstr ""
 "En regn af sten rammer det valgte område på slagmarken, som skader alle "
-"berørte væsner."
+"berørte tropper."
 
 msgid "Meteor Shower"
 msgstr "Meteorregn"
@@ -10428,7 +10501,7 @@ msgstr "Paralyse"
 
 msgid "The targeted creatures are paralyzed, unable to move or retaliate."
 msgstr ""
-"Det valgte væsen lammes og vil derefter være ude af stand til at bevæge sig "
+"Den valgte trop lammes og vil derefter være ude af stand til at bevæge sig "
 "eller slå igen."
 
 msgid "Hypnotize"
@@ -10445,7 +10518,7 @@ msgid "Cold Ray"
 msgstr "Koldstråle"
 
 msgid "Drains body heat from a single enemy unit."
-msgstr "Dræner kropsvarmen fra en enkelt fjendtlig enhed."
+msgstr "Dræner kropsvarmen fra en enkelt fjendtlig trop."
 
 msgid "Cold Ring"
 msgstr "Koldring"
@@ -10459,37 +10532,40 @@ msgstr ""
 
 msgid "Disrupting Ray"
 msgstr ""
-"Erossions\n"
-"ståle"
+"Erossions-\n"
+"stråle"
 
 msgid "Reduces the defense rating of an enemy unit by three."
-msgstr "Reducerer en fjendtlig trops forsvarspoint med 3."
+msgstr "Reducerer en fjendtlig trops forsvarsevne med 3 point."
 
 msgid "Damages all living (non-undead) units in the battle."
 msgstr "Skader alle levende (ikke-udøde) tropper på slagmarken."
 
 msgid "Death Ripple"
 msgstr ""
-"Døds\n"
+"Døds-\n"
 "krusning"
 
 msgid "Death Wave"
-msgstr "Dødsbølge"
+msgstr ""
+"Døds-\n"
+"bølge"
 
+#, fuzzy
 msgid ""
-"Damages all living (non-undead) units in the battle.  This spell is an "
+"Damages all living (non-undead) units in the battle. This spell is an "
 "improved version of Death Ripple."
 msgstr ""
-"Skader alle levende (ikke-udøde) tropper på slagmarken.  Denne besværgelse "
-"er en forbedret version af Dødskrusning."
+"Skader alle levende (ikke-udøde) tropper på slagmarken. Dette er en "
+"forbedret version af besværgelsen Dødskrusning."
 
 msgid "Dragon Slayer"
 msgstr ""
-"Drage\n"
+"Drage-\n"
 "dræber"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
-msgstr "Øger i høj grad en enheds angrebsevne mod drager."
+msgstr "Øger i høj grad en trops angrebsevne mod drager."
 
 msgid "Blood Lust"
 msgstr "Blodlyst"
@@ -10498,18 +10574,21 @@ msgid "Increases a unit's attack skill."
 msgstr "Øger en trops angrebsevne."
 
 msgid "Animate Dead"
-msgstr "Dødebesjæling"
+msgstr ""
+"Døde-\n"
+"besjæling"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
-msgstr "Genopliver væsner fra en beskadiget eller død udød trop permanent."
+msgstr "Genopliver væsener fra en beskadiget eller død udød trop permanent."
 
 msgid "Mirror Image"
 msgstr "Spejlbillede"
 
+#, fuzzy
 msgid ""
-"Creates an illusionary unit that duplicates one of your existing units.  "
-"This illusionary unit does the same damages as the original, but will vanish "
-"if it takes any damage."
+"Creates an illusionary unit that duplicates one of your existing units. This "
+"illusionary unit does the same damages as the original, but will vanish if "
+"it takes any damage."
 msgstr ""
 "Skaber en illusionær trop, der dublerer en af dine eksisterende tropper. "
 "Denne illusionære trop giver det samme i skade som originalen, men den "
@@ -10527,36 +10606,44 @@ msgstr ""
 
 msgid "Mass Shield"
 msgstr ""
-"Masse\n"
+"Masse-\n"
 "skærmning"
 
 msgid ""
 "Halves damage received from ranged attacks for all of your units. Does not "
 "affect damage received from Turrets or Ballistae."
 msgstr ""
-"Halverer skade modtaget fra afstandsangreb for alle dine tropper. Påvirker "
-"ikke skade modtaget af skydetårne eller ballister."
+"Halverer skade modtaget fra afstandsangreb for hele din hær. Påvirker ikke "
+"skade modtaget af skydetårne eller ballister."
 
 msgid "Summon Earth Elemental"
-msgstr "Hidkald jord-elemental"
+msgstr ""
+"Hidkald jord-\n"
+"elemental"
 
 msgid "Summons Earth Elementals to fight for your army."
 msgstr "Hidkald jord-elementaler til at kæmpe for din hær."
 
 msgid "Summon Air Elemental"
-msgstr "Hidkald luft-elemental"
+msgstr ""
+"Hidkald luft-\n"
+"elemental"
 
 msgid "Summons Air Elementals to fight for your army."
 msgstr "Hidkald luft-elementaler til at kæmpe for din hær."
 
 msgid "Summon Fire Elemental"
-msgstr "Hidkald ild-elemental"
+msgstr ""
+"Hidkald ild-\n"
+"elemental"
 
 msgid "Summons Fire Elementals to fight for your army."
 msgstr "Hidkald ild-elementaler til at kæmpe for din hær."
 
 msgid "Summon Water Elemental"
-msgstr "Hidkald vand-elemental"
+msgstr ""
+"Hidkald vand-\n"
+"elemental"
 
 msgid "Summons Water Elementals to fight for your army."
 msgstr "Hidkald vand-elementaler til at kæmpe for din hær."
@@ -10611,10 +10698,11 @@ msgstr ""
 msgid "Summon Boat"
 msgstr "Hidkald skib"
 
+#, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore "
-"location.  A friendly boat is one which you just built or were the most "
-"recent player to occupy."
+"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
+"A friendly boat is one which you just built or were the most recent player "
+"to occupy."
 msgstr ""
 "Hidkalder det nærmeste ubesatte, venlige skib til et tilstødende landsted. "
 "Et venligt skib kan være et skib, som du lige har bygget eller har været den "
@@ -10627,20 +10715,21 @@ msgstr ""
 
 msgid "Dimension Door"
 msgstr ""
-"Dimensions\n"
+"Dimensions-\n"
 "dør"
 
 msgid "Returns the caster to any town or castle currently owned."
 msgstr "Returnerer kasteren til enhver af spillerens byer eller borge."
 
 msgid "Town Gate"
-msgstr "Byportal"
+msgstr "Byflugt"
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
 "by you."
 msgstr ""
-"Returnerer helten til den by eller borg, forudsat at det kontrolleres af dig."
+"Returnerer helten til en af dine byer eller borge, efter eget valg, forudsat "
+"at den er under din kontrol."
 
 msgid "Visions"
 msgstr "Visioner"
@@ -10654,34 +10743,35 @@ msgstr ""
 msgid "Haunt"
 msgstr "Besæt"
 
+#, fuzzy
 msgid ""
-"Haunts a mine you control with Ghosts.  This mine stops producing "
-"resources.  (If I can't keep it, nobody will!)"
+"Haunts a mine you control with Ghosts. This mine stops producing resources. "
+"(If I can't keep it, nobody will!)"
 msgstr ""
 "Hjemsøger en mine, du kontrollerer med spøgelser. Denne mine holder op med "
 "at producere resurser. ('Hvis jeg ikke kan beholde den, er der ingen der "
 "vil!')"
 
 msgid "Set Earth Guardian"
-msgstr "Sæt jord-værger"
+msgstr "Sæt Jord-vagt"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
 msgstr "Sætter jord-elementaler til at beskytte en mine mod fjendtlige hære."
 
 msgid "Set Air Guardian"
-msgstr "Sæt luft-værger"
+msgstr "Sæt Luft-vagt"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
 msgstr "Sætter luft-elementaler til at beskytte en mine mod fjendtlige hære."
 
 msgid "Set Fire Guardian"
-msgstr "Sæt ild-værger"
+msgstr "Sæt Ild-vagt"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
 msgstr "Sætter ild-elementaler til at beskytte en mine mod fjendtlige hære."
 
 msgid "Set Water Guardian"
-msgstr "Sæt vand-værger"
+msgstr "Sæt Vand-vagt"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Sætter vand-elementaler til at beskytte en mine mod fjendtlige hære."
@@ -10689,11 +10779,12 @@ msgstr "Sætter vand-elementaler til at beskytte en mine mod fjendtlige hære."
 msgid "Petrification"
 msgstr "Forstening"
 
+#, fuzzy
 msgid ""
-"Turns the affected creature into stone.  A petrified creature receives half "
+"Turns the affected creature into stone. A petrified creature receives half "
 "damage from a direct attack."
 msgstr ""
-"Forvandler det berørte væsen til sten. Et forstenet væsen får halv skade fra "
+"Forvandler den berørte trop til sten. En forstenet trop får halv skade fra "
 "et direkte angreb."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
@@ -10703,7 +10794,7 @@ msgid "No spell to cast."
 msgstr "Ingen magi at kaste."
 
 msgid "Your hero has %{point} spell points remaining."
-msgstr "Din helt har %{point} mana tilbage."
+msgstr "Din helt har %{point} manapoint tilbage."
 
 msgid "View Adventure Spells"
 msgstr "Vis eventyrmagi"
@@ -10796,12 +10887,13 @@ msgid "The end of the world is near."
 msgstr "Verdens ende er nær."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
-msgstr "Fyrst Slayers knogler er begravet i fundamentet af arenaen."
+msgstr "Fyrst Slayers knogler er begravet i arenaens fundament."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr "En sortdrage kan til enhver tid klare en titan."
 
-msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
+#, fuzzy
+msgid "He told her: Yada yada yada... and then she said: Blah, blah, blah..."
 msgstr ""
 "Til hende sagde han: \"snakke, snakke, snakke...\", og til det svarede hun: "
 "\"Bla, bla, bla...\""

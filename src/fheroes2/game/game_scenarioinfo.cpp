@@ -55,10 +55,10 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "world.h"
@@ -363,21 +363,21 @@ namespace
 
             if ( le.MousePressRight( rectPanel ) ) {
                 if ( le.MousePressRight( buttonSelectMaps.area() ) )
-                    Dialog::Message( _( "Scenario" ), _( "Click here to select which scenario to play." ), Font::BIG );
+                    fheroes2::showStandardTextMessage( _( "Scenario" ), _( "Click here to select which scenario to play." ), Dialog::ZERO );
                 else if ( 0 <= GetRectIndex( coordDifficulty, le.GetMouseCursor() ) )
-                    Dialog::Message(
+                    fheroes2::showStandardTextMessage(
                         _( "Game Difficulty" ),
                         _( "This lets you change the starting difficulty at which you will play. Higher difficulty levels start you of with fewer resources, and at the higher settings, give extra resources to the computer." ),
-                        Font::BIG );
+                        Dialog::ZERO );
                 else if ( le.MousePressRight( ratingRoi ) )
-                    Dialog::
-                        Message( _( "Difficulty Rating" ),
-                                 _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
-                                 Font::BIG );
+                    fheroes2::showStandardTextMessage(
+                        _( "Difficulty Rating" ),
+                        _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
+                        Dialog::ZERO );
                 else if ( le.MousePressRight( buttonOk.area() ) )
-                    Dialog::Message( _( "Okay" ), _( "Click to accept these settings and start a new game." ), Font::BIG );
+                    fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to accept these settings and start a new game." ), Dialog::ZERO );
                 else if ( le.MousePressRight( buttonCancel.area() ) )
-                    Dialog::Message( _( "Cancel" ), _( "Click to return to the main menu." ), Font::BIG );
+                    fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Click to return to the main menu." ), Dialog::ZERO );
                 else
                     playersInfo.QueueEventProcessing();
             }
@@ -428,7 +428,7 @@ fheroes2::GameMode Game::ScenarioInfo()
 
     const MapsFileInfoList lists = Maps::PrepareMapsFileInfoList( Settings::Get().IsGameType( Game::TYPE_MULTI ) );
     if ( lists.empty() ) {
-        Dialog::Message( _( "Warning" ), _( "No maps available!" ), Font::BIG, Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;
     }
 

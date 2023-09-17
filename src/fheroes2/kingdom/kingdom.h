@@ -50,12 +50,6 @@ namespace Maps
     class Tiles;
 }
 
-struct KingdomCastles : public VecCastles
-{};
-
-struct KingdomHeroes : public VecHeroes
-{};
-
 class Kingdom : public BitModes, public Control
 {
 public:
@@ -150,20 +144,20 @@ public:
     // without making any changes in it
     Recruits & GetCurrentRecruits();
 
-    const KingdomHeroes & GetHeroes() const
+    const VecHeroes & GetHeroes() const
     {
         return heroes;
     }
-    const KingdomCastles & GetCastles() const
+    const VecCastles & GetCastles() const
     {
         return castles;
     }
 
-    KingdomHeroes & GetHeroes()
+    VecHeroes & GetHeroes()
     {
         return heroes;
     }
-    KingdomCastles & GetCastles()
+    VecCastles & GetCastles()
     {
         return castles;
     }
@@ -219,8 +213,8 @@ private:
 
     uint32_t lost_town_days;
 
-    KingdomCastles castles;
-    KingdomHeroes heroes;
+    VecCastles castles;
+    VecHeroes heroes;
 
     Recruits recruits;
 

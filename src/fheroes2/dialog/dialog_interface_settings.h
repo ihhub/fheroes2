@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,62 +17,11 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
 #pragma once
 
-#include <cassert>
-#include <cstddef>
-#include <cstdint>
-#include <vector>
+#include <functional>
 
-// Base representation of the dataset that mirrors the 2D map being traversed
-template <class T>
-struct PathfindingNode
+namespace fheroes2
 {
-    int _from = -1;
-    uint32_t _cost = 0;
-    T _objectID{};
-
-    PathfindingNode() = default;
-    PathfindingNode( int node, uint32_t cost, T object )
-        : _from( node )
-        , _cost( cost )
-        , _objectID( object )
-    {}
-    virtual ~PathfindingNode() = default;
-    // Sets node values back to the defaults; used before processing new path
-    virtual void resetNode()
-    {
-        _from = -1;
-        _cost = 0;
-        _objectID = T();
-    }
-};
-
-// Template class has to be either PathfindingNode or its derivative
-template <class T>
-class Pathfinder
-{
-public:
-    virtual ~Pathfinder() = default;
-
-    virtual void reset() = 0;
-
-    virtual uint32_t getDistance( int targetIndex ) const
-    {
-        assert( targetIndex >= 0 && static_cast<size_t>( targetIndex ) < _cache.size() );
-
-        return _cache[targetIndex]._cost;
-    }
-
-    virtual const T & getNode( int targetIndex ) const
-    {
-        assert( targetIndex >= 0 && static_cast<size_t>( targetIndex ) < _cache.size() );
-
-        return _cache[targetIndex];
-    }
-
-protected:
-    std::vector<T> _cache;
-    int _pathStart = -1;
-};
+    void openInterfaceSettingsDialog( const std::function<void()> & updateUI );
+}

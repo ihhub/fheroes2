@@ -154,7 +154,7 @@ void PrimarySkillsBar::RedrawItem( int & skill, const fheroes2::Rect & pos, fher
 bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
 {
     if ( Skill::Primary::UNKNOWN != skill ) {
-        Dialog::Message( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, _hero ), Font::BIG, Dialog::OK );
+        fheroes2::showStandardTextMessage( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, _hero ), Dialog::OK );
         return true;
     }
 
@@ -164,7 +164,7 @@ bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
 bool PrimarySkillsBar::ActionBarRightMouseHold( int & skill )
 {
     if ( Skill::Primary::UNKNOWN != skill ) {
-        Dialog::Message( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, _hero ), Font::BIG );
+        fheroes2::showStandardTextMessage( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, _hero ), Dialog::ZERO );
         return true;
     }
 

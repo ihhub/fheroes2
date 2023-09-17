@@ -30,6 +30,7 @@
 #include <map>
 #include <ostream>
 #include <set>
+#include <type_traits>
 #include <utility>
 
 #include "agg_image.h"
@@ -44,6 +45,7 @@
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
+#include "game_io.h"
 #include "game_static.h"
 #include "gamedefs.h"
 #include "ground.h"
@@ -62,6 +64,7 @@
 #include "players.h"
 #include "race.h"
 #include "rand.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "speed.h"
@@ -182,7 +185,7 @@ Heroes::Heroes()
     , hid( UNKNOWN )
     , portrait( UNKNOWN )
     , _race( UNKNOWN )
-    , save_maps_object( 0 )
+    , _objectTypeUnderHero( MP2::OBJ_NONE )
     , path( *this )
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
@@ -207,7 +210,7 @@ Heroes::Heroes( int heroid, int rc )
     , hid( heroid )
     , portrait( heroid )
     , _race( rc )
-    , save_maps_object( MP2::OBJ_NONE )
+    , _objectTypeUnderHero( MP2::OBJ_NONE )
     , path( *this )
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
@@ -253,8 +256,9 @@ Heroes::Heroes( int heroid, int rc )
         break;
     }
 
-    if ( !magic_point )
+    if ( !magic_point ) {
         SetSpellPoints( GetMaxSpellPoints() );
+    }
     move_point = GetMaxMovePoints();
 }
 
@@ -528,7 +532,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
 void Heroes::PostLoad()
 {
     // An object on which the hero currently stands
-    save_maps_object = MP2::OBJ_NONE;
+    _objectTypeUnderHero = MP2::OBJ_NONE;
 
     // Fix a custom hero without an army
     if ( !army.isValid() ) {
@@ -702,67 +706,73 @@ uint32_t Heroes::GetMaxSpellPoints() const
 
 uint32_t Heroes::GetMaxMovePoints() const
 {
-    uint32_t point = 0;
+    return GetMaxMovePoints( isShipMaster() );
+}
 
-    // start point
-    if ( isShipMaster() ) {
-        point = 1500;
+uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
+{
+    uint32_t result = 0;
 
-        // skill navigation
-        point = UpdateMovementPoints( point, Skill::Secondary::NAVIGATION );
+    if ( onWater ) {
+        // Initial mobility on water does not depend on the composition of the army
+        result = 1500;
 
-        // artifact bonus
-        point += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_MOBILITY );
+        // Influence of Navigation skill
+        result = UpdateMovementPoints( result, Skill::Secondary::NAVIGATION );
 
-        // visited object
-        point += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
+        // Artifact bonuses
+        result += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_MOBILITY );
+
+        // Bonuses from captured lighthouses
+        result += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
     }
     else {
+        // Initial mobility on land depends on the speed of the slowest army unit
         const Troop * troop = army.GetSlowestTroop();
-
-        if ( troop )
+        if ( troop ) {
             switch ( troop->GetSpeed() ) {
-            default:
-                break;
-            case Speed::CRAWLING:
             case Speed::VERYSLOW:
-                point = 1000;
+                result = 1000;
                 break;
             case Speed::SLOW:
-                point = 1100;
+                result = 1100;
                 break;
             case Speed::AVERAGE:
-                point = 1200;
+                result = 1200;
                 break;
             case Speed::FAST:
-                point = 1300;
+                result = 1300;
                 break;
             case Speed::VERYFAST:
-                point = 1400;
+                result = 1400;
                 break;
             case Speed::ULTRAFAST:
-            case Speed::BLAZING:
-            case Speed::INSTANT:
-                point = 1500;
+                result = 1500;
+                break;
+            default:
+                assert( 0 );
                 break;
             }
+        }
 
-        // skill logistics
-        point = UpdateMovementPoints( point, Skill::Secondary::LOGISTICS );
+        // Influence of Logistics skill
+        result = UpdateMovementPoints( result, Skill::Secondary::LOGISTICS );
 
-        // artifact bonus
-        point += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LAND_MOBILITY );
+        // Artifact bonuses
+        result += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LAND_MOBILITY );
 
-        // visited object
-        if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
-            point += GameStatic::getMovementPointBonus( MP2::OBJ_STABLES );
+        // Bonuses from visited objects
+        if ( isObjectTypeVisited( MP2::OBJ_STABLES ) ) {
+            result += GameStatic::getMovementPointBonus( MP2::OBJ_STABLES );
+        }
     }
 
+    // AI-controlled heroes receive additional movement bonus depending on the game difficulty
     if ( isControlAI() ) {
-        point += Difficulty::GetHeroMovementBonus( Game::getDifficulty() );
+        result += Difficulty::GetHeroMovementBonus( Game::getDifficulty() );
     }
 
-    return point;
+    return result;
 }
 
 int Heroes::GetMorale() const
@@ -859,7 +869,7 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
         army.Reset( false );
     }
 
-    world.GetTiles( pt.x, pt.y ).SetHeroes( this );
+    world.GetTiles( pt.x, pt.y ).setHero( this );
 
     kingdom.AddHeroes( this );
     // Update the set of recruits in the kingdom
@@ -1073,7 +1083,7 @@ void Heroes::markHeroMeeting( int heroID )
 
 void Heroes::unmarkHeroMeeting()
 {
-    const KingdomHeroes & heroes = GetKingdom().GetHeroes();
+    const VecHeroes & heroes = GetKingdom().GetHeroes();
     for ( Heroes * hero : heroes ) {
         if ( hero == nullptr || hero == this ) {
             continue;
@@ -1668,7 +1678,7 @@ void Heroes::Dismiss( int reason )
     }
     SetColor( Color::NONE );
 
-    world.GetTiles( GetIndex() ).SetHeroes( nullptr );
+    world.GetTiles( GetIndex() ).setHero( nullptr );
     SetIndex( -1 );
 
     modes = 0;
@@ -1697,16 +1707,6 @@ int Heroes::GetControl() const
 uint32_t Heroes::GetStartingXp()
 {
     return Rand::Get( 40, 90 );
-}
-
-MP2::MapObjectType Heroes::GetMapsObject() const
-{
-    return static_cast<MP2::MapObjectType>( save_maps_object );
-}
-
-void Heroes::SetMapsObject( const MP2::MapObjectType objectType )
-{
-    save_maps_object = ( ( objectType != MP2::OBJ_HEROES ) ? objectType : MP2::OBJ_NONE );
 }
 
 void Heroes::ActionPreBattle()
@@ -1751,9 +1751,9 @@ void Heroes::Move2Dest( const int32_t dstIndex )
         return;
     }
 
-    world.GetTiles( currentIndex ).SetHeroes( nullptr );
+    world.GetTiles( currentIndex ).setHero( nullptr );
     SetIndex( dstIndex );
-    world.GetTiles( dstIndex ).SetHeroes( this );
+    world.GetTiles( dstIndex ).setHero( this );
 }
 
 const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
@@ -2184,8 +2184,10 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
     msg << base;
 
     // Heroes
-    msg << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero.hid << hero.portrait << hero._race << hero.save_maps_object << hero.path
-        << hero.direction << hero.sprite_index;
+    using ObjectTypeUnderHeroType = std::underlying_type_t<decltype( hero._objectTypeUnderHero )>;
+
+    msg << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero.hid << hero.portrait << hero._race
+        << static_cast<ObjectTypeUnderHeroType>( hero._objectTypeUnderHero ) << hero.path << hero.direction << hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     const int16_t patrolX = static_cast<int16_t>( hero._patrolCenter.x );
@@ -2205,8 +2207,27 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     msg >> base;
 
     // Heroes
-    msg >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait >> hero._race >> hero.save_maps_object >> hero.path
-        >> hero.direction >> hero.sprite_index;
+    msg >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait >> hero._race;
+
+    using ObjectTypeUnderHeroType = std::underlying_type_t<decltype( hero._objectTypeUnderHero )>;
+    static_assert( std::is_same_v<ObjectTypeUnderHeroType, uint8_t>, "Type of _objectTypeUnderHero has been changed, check the logic below." );
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
+        int temp = 0;
+        msg >> temp;
+
+        hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
+    }
+    else {
+        ObjectTypeUnderHeroType temp = 0;
+
+        msg >> temp;
+
+        hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
+    }
+
+    msg >> hero.path >> hero.direction >> hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     int16_t patrolX = 0;

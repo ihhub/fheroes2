@@ -25,6 +25,7 @@
 
 #include <cassert>
 #include <memory>
+#include <numeric>
 
 #include "game_io.h"
 #include "heroes.h"
@@ -406,4 +407,9 @@ StreamBase & Route::operator>>( StreamBase & msg, Path & path )
     }
 
     return msg >> path._hide >> base;
+}
+
+uint32_t Route::calculatePathPenalty( const std::list<Step> & path )
+{
+    return std::accumulate( path.begin(), path.end(), static_cast<uint32_t>( 0 ), []( const uint32_t total, const Step & step ) { return total + step.GetPenalty(); } );
 }

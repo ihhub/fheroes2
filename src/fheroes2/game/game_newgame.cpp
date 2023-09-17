@@ -223,13 +223,14 @@ fheroes2::GameMode Game::CampaignSelection()
         }
 
         if ( le.MousePressRight( buttonSuccessionWars.area() ) ) {
-            Dialog::Message( _( "Original Campaign" ), _( "Either Roland's or Archibald's campaign from the original Heroes of Might and Magic II." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Original Campaign" ), _( "Either Roland's or Archibald's campaign from the original Heroes of Might and Magic II." ),
+                                               Dialog::ZERO );
         }
         if ( le.MousePressRight( buttonPriceOfLoyalty.area() ) ) {
-            Dialog::Message( _( "Expansion Campaign" ), _( "One of the four new campaigns from the Price of Loyalty expansion set." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Expansion Campaign" ), _( "One of the four new campaigns from the Price of Loyalty expansion set." ), Dialog::ZERO );
         }
         if ( le.MousePressRight( buttonCancelGame.area() ) ) {
-            Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
         }
     }
 
@@ -498,13 +499,13 @@ fheroes2::GameMode Game::NewNetwork()
 
         // right info
         if ( le.MousePressRight( buttonHost.area() ) )
-            Dialog::Message( _( "Host" ), _( "The host sets up the game options. There can only be one host per network game." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Host" ), _( "The host sets up the game options. There can only be one host per network game." ), Dialog::ZERO );
         if ( le.MousePressRight( buttonGuest.area() ) )
-            Dialog::Message( _( "Guest" ),
-                             _( "The guest waits for the host to set up the game, then is automatically added in. There can be multiple guests for TCP/IP games." ),
-                             Font::BIG );
+            fheroes2::showStandardTextMessage(
+                _( "Guest" ), _( "The guest waits for the host to set up the game, then is automatically added in. There can be multiple guests for TCP/IP games." ),
+                Dialog::ZERO );
         if ( le.MousePressRight( buttonCancelGame.area() ) )
-            Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
     }
 
     return fheroes2::GameMode::MAIN_MENU;
@@ -579,17 +580,18 @@ fheroes2::GameMode Game::NewGame()
             return fheroes2::GameMode::NEW_BATTLE_ONLY;
 
         if ( le.MousePressRight( buttonStandardGame.area() ) )
-            Dialog::Message( _( "Standard Game" ), _( "A single player game playing out a single map." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Standard Game" ), _( "A single player game playing out a single map." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonCampaignGame.area() ) )
-            Dialog::Message( _( "Campaign Game" ), _( "A single player game playing through a series of maps." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Campaign Game" ), _( "A single player game playing through a series of maps." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonMultiGame.area() ) )
-            Dialog::Message( _( "Multi-Player Game" ), _( "A multi-player game, with several human players completing against each other on a single map." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Multi-Player Game" ),
+                                               _( "A multi-player game, with several human players completing against each other on a single map." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonBattleGame.area() ) )
-            Dialog::Message( _( "Battle Only" ), _( "Setup and play a battle without loading any map." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Battle Only" ), _( "Setup and play a battle without loading any map." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonSettings.area() ) )
-            Dialog::Message( _( "Game Settings" ), _( "Change language, resolution and settings of the game." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Game Settings" ), _( "Change language, resolution and settings of the game." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonCancelGame.area() ) )
-            Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
     }
 
     return fheroes2::GameMode::QUIT_GAME;
@@ -631,11 +633,11 @@ fheroes2::GameMode Game::NewMulti()
 
         // right info
         if ( le.MousePressRight( buttonHotSeat.area() ) )
-            Dialog::Message( _( "Hot Seat" ),
-                             _( "Play a Hot Seat game, where 2 to 4 players play around the same computer, switching into the 'Hot Seat' when it is their turn." ),
-                             Font::BIG );
+            fheroes2::showStandardTextMessage(
+                _( "Hot Seat" ), _( "Play a Hot Seat game, where 2 to 4 players play around the same computer, switching into the 'Hot Seat' when it is their turn." ),
+                Dialog::ZERO );
         if ( le.MousePressRight( buttonCancelGame.area() ) )
-            Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
     }
 
     return fheroes2::GameMode::QUIT_GAME;
@@ -691,17 +693,17 @@ uint32_t Game::SelectCountPlayers()
 
         // right info
         if ( le.MousePressRight( button2Players.area() ) )
-            Dialog::Message( _( "2 Players" ), _( "Play with 2 human players, and optionally, up to 4 additional computer players." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "2 Players" ), _( "Play with 2 human players, and optionally, up to 4 additional computer players." ), Dialog::ZERO );
         if ( le.MousePressRight( button3Players.area() ) )
-            Dialog::Message( _( "3 Players" ), _( "Play with 3 human players, and optionally, up to 3 additional computer players." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "3 Players" ), _( "Play with 3 human players, and optionally, up to 3 additional computer players." ), Dialog::ZERO );
         if ( le.MousePressRight( button4Players.area() ) )
-            Dialog::Message( _( "4 Players" ), _( "Play with 4 human players, and optionally, up to 2 additional computer players." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "4 Players" ), _( "Play with 4 human players, and optionally, up to 2 additional computer players." ), Dialog::ZERO );
         if ( le.MousePressRight( button5Players.area() ) )
-            Dialog::Message( _( "5 Players" ), _( "Play with 5 human players, and optionally, up to 1 additional computer player." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "5 Players" ), _( "Play with 5 human players, and optionally, up to 1 additional computer player." ), Dialog::ZERO );
         if ( le.MousePressRight( button6Players.area() ) )
-            Dialog::Message( _( "6 Players" ), _( "Play with 6 human players." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "6 Players" ), _( "Play with 6 human players." ), Dialog::ZERO );
         if ( le.MousePressRight( buttonCancel.area() ) )
-            Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
     }
 
     return 0;

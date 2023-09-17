@@ -67,6 +67,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_scrollbar.h"
 #include "ui_window.h"
 #include "view_world.h"
@@ -285,7 +286,7 @@ namespace
         assert( !hero.GetKingdom().Modes( Kingdom::IDENTIFYHERO ) );
 
         hero.GetKingdom().SetModes( Kingdom::IDENTIFYHERO );
-        Message( _( "Identify Hero" ), _( "Enemy heroes are now fully identifiable." ), Font::BIG, Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "Identify Hero" ), _( "Enemy heroes are now fully identifiable." ), Dialog::OK );
 
         return true;
     }
@@ -542,7 +543,7 @@ namespace
                 break;
             }
 
-            Dialog::Message( hdr, msg, Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( hdr, msg, Dialog::OK );
         }
 
         hero.SetModes( Heroes::VISIONS );
