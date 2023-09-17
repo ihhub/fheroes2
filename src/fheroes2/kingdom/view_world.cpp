@@ -46,6 +46,7 @@
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "mp2.h"
+#include "render_processor.h"
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
@@ -604,7 +605,8 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    LocalEvent::PauseCycling();
+    fheroes2::RenderProcessor & renderProcessor = fheroes2::RenderProcessor::instance();
+    renderProcessor.stopColorCycling();
 
     // Creates fixed radar on top-right, suitable for the View World window
     Interface::Radar radar( interface.getRadar(), fheroes2::Display::instance() );
@@ -724,7 +726,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     // Memorize the last zoom level value.
     conf.SetViewWorldZoomLevel( currentROI._zoomLevel );
 
-    LocalEvent::ResumeCycling();
+    renderProcessor.startColorCycling();
 
     // Fade-out View World screen and fade-in the Adventure map screen.
     fheroes2::fadeOutDisplay( fadeRoi, false );

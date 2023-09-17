@@ -36,6 +36,7 @@
 #include "game.h"
 #include "gamedefs.h"
 #include "logging.h"
+#include "render_processor.h"
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
@@ -724,9 +725,11 @@ void Settings::setSystemInfo( const bool enable )
 {
     if ( enable ) {
         _optGlobal.SetModes( GLOBAL_SYSTEM_INFO );
+        fheroes2::RenderProcessor::instance().enableRenderers();
     }
     else {
         _optGlobal.ResetModes( GLOBAL_SYSTEM_INFO );
+        fheroes2::RenderProcessor::instance().disableRenderers();
     }
 }
 

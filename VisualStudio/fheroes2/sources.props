@@ -13,6 +13,7 @@
     <ClCompile Include="src\engine\logging.cpp" />
     <ClCompile Include="src\engine\pal.cpp" />
     <ClCompile Include="src\engine\rand.cpp" />
+    <ClCompile Include="src\engine\render_processor.cpp" />
     <ClCompile Include="src\engine\screen.cpp" />
     <ClCompile Include="src\engine\serialize.cpp" />
     <ClCompile Include="src\engine\smk_decoder.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="src\engine\math_base.h" />
     <ClInclude Include="src\engine\pal.h" />
     <ClInclude Include="src\engine\rand.h" />
+    <ClInclude Include="src\engine\render_processor.h" />
     <ClInclude Include="src\engine\screen.h" />
     <ClInclude Include="src\engine\serialize.h" />
     <ClInclude Include="src\engine\smk_decoder.h" />

@@ -197,7 +197,8 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     fheroes2::Blit( bar, display, dst_pt.x, dst_pt.y );
 
     StatusBar statusBar;
-    statusBar.SetCenter( dst_pt.x + bar.width() / 2, dst_pt.y + 13 );
+    // Status bar must be smaller due to extra art on both sides.
+    statusBar.setRoi( { dst_pt.x + 16, dst_pt.y + 3, bar.width() - 16 * 2, 0 } );
 
     // artifact bar
     dst_pt.x = cur_pt.x + 51;
