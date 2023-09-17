@@ -248,8 +248,9 @@ namespace
         LocalEvent & le = LocalEvent::Get();
         Settings & conf = Settings::Get();
 
-        // setup cursor
-        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+        // Set the cursor image. This dialog is called from the battlefield and does not require a cursor restorer.
+        // Battlefield event processor will set the appropriate cursor after this dialog is closed.
+        Cursor::Get().SetThemes( Cursor::POINTER );
 
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
@@ -498,8 +499,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     const Troops killed1 = _army1->GetKilledTroops();
     const Troops killed2 = _army2->GetKilledTroops();
 
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    // Set the cursor image. After this dialog the Game Area or the Battlefield will be shown, so it does not require a cursor restorer.
+    Cursor::Get().SetThemes( Cursor::POINTER );
 
     std::string msg;
     std::string title;
@@ -729,8 +730,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
 void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
 {
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    // Set the cursor image. This dialog does not require a cursor restorer.
+    Cursor::Get().SetThemes( Cursor::POINTER );
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
@@ -1029,8 +1030,8 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
     LocalEvent & le = LocalEvent::Get();
     const Settings & conf = Settings::Get();
 
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    // Set the cursor image. After this dialog the Game Area or the Battlefield will be shown, so it does not require a cursor restorer.
+    Cursor::Get().SetThemes( Cursor::POINTER );
 
     const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 

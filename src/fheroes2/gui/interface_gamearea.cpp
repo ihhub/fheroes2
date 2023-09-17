@@ -957,17 +957,21 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         return;
     }
 
-    const int32_t index = GetValidTileIdFromPoint( mousePosition );
-
-    // change cursor if need
-    if ( ( updateCursor || index != _prevIndexPos ) && isCursorOverGamearea ) {
-        Cursor::Get().SetThemes( Interface::AdventureMap::GetCursorTileIndex( index ) );
-        _prevIndexPos = index;
-        updateCursor = false;
+    if ( !isCursorOverGamearea ) {
+        // In this case the cursor image changes in 'Interface::AdventureMap::HumanTurn()' so there is nothing more to do here.
+        return;
     }
 
-    // out of range
-    if ( !isCursorOverGamearea || !Maps::isValidAbsIndex( index ) ) {
+    int32_t index = GetValidTileIdFromPoint( mousePosition );
+
+    if ( !Maps::isValidAbsIndex( index ) ) {
+        // Change the cursor image when it gets out of the map boundaries or by 'updateCursor' flag.
+        if ( updateCursor || index != _prevIndexPos ) {
+            Cursor::Get().SetThemes( Cursor::POINTER );
+            _prevIndexPos = index;
+            updateCursor = false;
+        }
+
         return;
     }
 
@@ -987,6 +991,16 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     }
     else if ( le.MousePressRight( tileROI ) ) {
         _interface.mouseCursorAreaPressRight( index );
+    }
+
+    // The cursor may have moved after mouse click events.
+    index = GetValidTileIdFromPoint( le.GetMouseCursor() );
+
+    // Change the cursor image if needed.
+    if ( updateCursor || index != _prevIndexPos ) {
+        Cursor::Get().SetThemes( Interface::AdventureMap::GetCursorTileIndex( index ) );
+        _prevIndexPos = index;
+        updateCursor = false;
     }
 }
 
