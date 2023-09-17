@@ -11031,12 +11031,3 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} protects your troops from the Dispel Magic spell."
-#~ msgstr "%{name} empêche le contre-sort d'affecter vos troupes."
-
-#~ msgid "Damg"
-#~ msgstr "Dégâts"
-
-#~ msgid "%{spell} failed!!!"
-#~ msgstr "%{spell} a échoué !"

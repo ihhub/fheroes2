@@ -10825,15 +10825,3 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} protects your troops from the Dispel Magic spell."
-#~ msgstr "%{name} защитава твойте войски от заклинанието Разсейващата магия."
-
-#~ msgid "Damg"
-#~ msgstr "Щета"
-
-#~ msgid "guildWell|EXIT"
-#~ msgstr "ИЗХОД"
-
-#~ msgid "%{spell} failed!!!"
-#~ msgstr "%{spell} е неуспешна!!!"

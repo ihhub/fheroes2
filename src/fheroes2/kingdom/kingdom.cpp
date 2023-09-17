@@ -481,7 +481,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
 
     // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
     if ( objectType == MP2::OBJ_HEROES ) {
-        const Heroes * hero = tile.GetHeroes();
+        const Heroes * hero = tile.getHero();
 
         // Hero can only be met if he either belongs to this kingdom or is an enemy hero (in the latter case, an attack will occur)
         return hero && ( color == hero->GetColor() || !Players::isFriends( color, hero->GetColor() ) );
@@ -617,7 +617,7 @@ void Kingdom::ApplyPlayWithStartingHero()
 
         // check manual set hero (castle position + point(0, 1))?
         const fheroes2::Point & cp = castle->GetCenter();
-        Heroes * hero = world.GetTiles( cp.x, cp.y + 1 ).GetHeroes();
+        Heroes * hero = world.GetTiles( cp.x, cp.y + 1 ).getHero();
 
         // and move manual set hero to castle
         if ( hero && hero->GetColor() == GetColor() ) {

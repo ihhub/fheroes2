@@ -9919,9 +9919,3 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Damg"
-#~ msgstr "Danni"
-
-#~ msgid "%{spell} failed!!!"
-#~ msgstr "%{spell} fallita!!!"

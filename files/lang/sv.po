@@ -10726,15 +10726,3 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} protects your troops from the Dispel Magic spell."
-#~ msgstr "%{name} skyddar hjältens trupper från Skingra magi-besvärjelser."
-
-#~ msgid "Damg"
-#~ msgstr "Skada"
-
-#~ msgid "guildWell|EXIT"
-#~ msgstr "LÄMNA"
-
-#~ msgid "%{spell} failed!!!"
-#~ msgstr "%{spell} misslyckades!"
