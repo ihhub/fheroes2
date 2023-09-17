@@ -1920,7 +1920,7 @@ msgid "Cannot build %{name} because the castle is too far away from an ocean."
 msgstr "Kan ej bygga %{name}. Slottet är för långt borta från hav."
 
 msgid "disable build."
-msgstr ""
+msgstr "Inaktivera bygge"
 
 msgid "Cannot afford %{name}."
 msgstr "Har inte råd med %{name}."
