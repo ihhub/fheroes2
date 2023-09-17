@@ -1385,14 +1385,18 @@ namespace fheroes2
             // Previous position of cursor must be updated as well to avoid ghost effect.
             _renderFrame( getBoundaryRect( temp, _prevRoi ) );
 
-            _postprocessing();
+            if ( _postprocessing ) {
+                _postprocessing();
+            }
 
             Copy( backup, 0, 0, *this, backup.x(), backup.y(), backup.width(), backup.height() );
         }
         else {
             _renderFrame( getBoundaryRect( temp, _prevRoi ) );
 
-            _postprocessing();
+            if ( _postprocessing ) {
+                _postprocessing();
+            }
         }
 
         _prevRoi = temp;

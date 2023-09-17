@@ -45,7 +45,7 @@ namespace fheroes2
             return false;
         }
 
-        if ( _enableRenderers ) {
+        if ( _enableRenderers && _preRenderer ) {
             _preRenderer();
         }
 
@@ -65,7 +65,7 @@ namespace fheroes2
     {
         _lastRenderCall.reset();
 
-        if ( _enableCycling && _enableRenderers ) {
+        if ( _enableCycling && _enableRenderers && _postRenderer ) {
             _postRenderer();
         }
     }

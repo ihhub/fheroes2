@@ -39,6 +39,12 @@ namespace fheroes2
             _postRenderer = postRenderer;
         }
 
+        void unregisterRenderers()
+        {
+            _preRenderer = {};
+            _postRenderer = {};
+        }
+
         void enableRenderers()
         {
             _enableRenderers = true;

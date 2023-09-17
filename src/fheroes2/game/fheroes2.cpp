@@ -201,6 +201,8 @@ namespace
 
         ~DisplayInitializer()
         {
+            fheroes2::RenderProcessor::instance().unregisterRenderers();
+
             fheroes2::Display & display = fheroes2::Display::instance();
             display.subscribe( {}, {} );
             display.release();
