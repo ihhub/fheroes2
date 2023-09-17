@@ -248,8 +248,8 @@ namespace
         LocalEvent & le = LocalEvent::Get();
         Settings & conf = Settings::Get();
 
-        // Set the cursor image.This dialog is called from the battlefield and does not require a cursor restorer.
-        // Battlefield event proccessror will set the appropriate cursor after this dialog is closed.
+        // Set the cursor image. This dialog is called from the battlefield and does not require a cursor restorer.
+        // Battlefield event processor will set the appropriate cursor after this dialog is closed.
         Cursor::Get().SetThemes( Cursor::POINTER );
 
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
@@ -730,7 +730,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
 void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
 {
-    // Set the cursor image.This dialog does not require a cursor restorer.
+    // Set the cursor image. This dialog does not require a cursor restorer.
     Cursor::Get().SetThemes( Cursor::POINTER );
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();

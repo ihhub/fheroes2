@@ -217,7 +217,7 @@ namespace
 
 Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionWindow, const bool fade, const bool renderBackgroundDialog )
 {
-    // Set the cursor image.This dialog does not require a cursor restorer. It is called from other dialogs that have the same cursor
+    // Set the cursor image. This dialog does not require a cursor restorer. It is called from other dialogs that have the same cursor
     // or from the Game Area that will set the appropriate cursor after this dialog is closed.
     Cursor::Get().SetThemes( Cursor::POINTER );
 
