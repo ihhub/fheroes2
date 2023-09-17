@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 15:37+0000\n"
+"POT-Creation-Date: 2023-09-17 07:18+0000\n"
 "PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2856,6 +2856,51 @@ msgstr ""
 msgid "Hot Keys:"
 msgstr ""
 
+msgid "Evil"
+msgstr ""
+
+msgid "Good"
+msgstr ""
+
+msgid "Interface Type"
+msgstr "Тип Інтерфейсу"
+
+msgid "Hide"
+msgstr ""
+
+msgid "Show"
+msgstr ""
+
+msgid "Interface"
+msgstr ""
+
+msgid "Slow"
+msgstr ""
+
+msgid "Normal"
+msgstr "Звичайна"
+
+msgid "Fast"
+msgstr ""
+
+msgid "Very Fast"
+msgstr ""
+
+msgid "Scroll Speed"
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr ""
+
+msgid "Sets the speed at which you scroll the window."
+msgstr ""
+
 msgid "Select Game Language:"
 msgstr "Обрати мову гри:"
 
@@ -3223,39 +3268,6 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr ""
 
-msgid "Slow"
-msgstr ""
-
-msgid "Normal"
-msgstr "Звичайна"
-
-msgid "Fast"
-msgstr ""
-
-msgid "Very Fast"
-msgstr ""
-
-msgid "Scroll Speed"
-msgstr ""
-
-msgid "Evil"
-msgstr ""
-
-msgid "Good"
-msgstr ""
-
-msgid "Interface Type"
-msgstr "Тип Інтерфейсу"
-
-msgid "Hide"
-msgstr ""
-
-msgid "Show"
-msgstr ""
-
-msgid "Interface"
-msgstr ""
-
 msgid "Auto Resolve"
 msgstr ""
 
@@ -3268,9 +3280,6 @@ msgstr ""
 msgid "autoBattle|Manual"
 msgstr ""
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr ""
-
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
@@ -3279,14 +3288,13 @@ msgid ""
 "movement at all."
 msgstr ""
 
-msgid "Sets the speed at which you scroll the window."
-msgstr ""
+#, fuzzy
+msgid "Change the interface settings of the game."
+msgstr "Змінити графічні налаштування гри."
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
-msgid "Toggle interface visibility."
-msgstr ""
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Тип Інтерфейсу"
 
 msgid "Toggle instant battle mode."
 msgstr ""

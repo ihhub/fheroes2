@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 15:37+0000\n"
+"POT-Creation-Date: 2023-09-17 07:18+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3071,6 +3071,53 @@ msgstr "Vis flere informationer som billeder i sekundet (FPS) og klokkeslæt."
 msgid "Hot Keys:"
 msgstr "Genvejstaster:"
 
+msgid "Evil"
+msgstr "Ond"
+
+msgid "Good"
+msgstr "God"
+
+msgid "Interface Type"
+msgstr "Interface-type"
+
+msgid "Hide"
+msgstr "Skjul"
+
+msgid "Show"
+msgstr "Vis"
+
+msgid "Interface"
+msgstr "Interface"
+
+msgid "Slow"
+msgstr "Langsom"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Fast"
+msgstr "Hurtig"
+
+msgid "Very Fast"
+msgstr "Meget hurtig"
+
+msgid "Scroll Speed"
+msgstr ""
+"Rulle\n"
+"hastighed"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Vælg hvilken interface-type du ønsker at bruge."
+
+msgid "Toggle interface visibility."
+msgstr "Vælg interfacets synlighed til eller fra."
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr "Vælg farvet musemarkør til eller fra. Dette er kun et æstetisk valg."
+
+msgid "Sets the speed at which you scroll the window."
+msgstr "Bestemmer vinduets rullehastighed."
+
 msgid "Select Game Language:"
 msgstr "Vælg spilsprog:"
 
@@ -3461,41 +3508,6 @@ msgstr "Vis ikke"
 msgid "Enemy Speed"
 msgstr "Fjenders hastighed"
 
-msgid "Slow"
-msgstr "Langsom"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Hurtig"
-
-msgid "Very Fast"
-msgstr "Meget hurtig"
-
-msgid "Scroll Speed"
-msgstr ""
-"Rulle\n"
-"hastighed"
-
-msgid "Evil"
-msgstr "Ond"
-
-msgid "Good"
-msgstr "God"
-
-msgid "Interface Type"
-msgstr "Interface-type"
-
-msgid "Hide"
-msgstr "Skjul"
-
-msgid "Show"
-msgstr "Vis"
-
-msgid "Interface"
-msgstr "Interface"
-
 msgid "Auto Resolve"
 msgstr "Fuldt auto"
 
@@ -3508,9 +3520,6 @@ msgstr "Kamp"
 msgid "autoBattle|Manual"
 msgstr "Manuelt"
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr "Vælg farvet musemarkør til eller fra. Dette er kun et æstetisk valg."
-
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Vælg hvor hurtigt dine helte skal flytte sig på hovedskærmen."
 
@@ -3522,14 +3531,13 @@ msgstr ""
 "Bestemmer hvor hurtigt AI-helte flytter sig.  Du kan også vælge slet ikke at "
 "se på, når de flytter sig."
 
-msgid "Sets the speed at which you scroll the window."
-msgstr "Bestemmer vinduets rullehastighed."
+#, fuzzy
+msgid "Change the interface settings of the game."
+msgstr "Ændr spillets grafikindstillinger."
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Vælg hvilken interface-type du ønsker at bruge."
-
-msgid "Toggle interface visibility."
-msgstr "Vælg interfacets synlighed til eller fra."
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Spilindstillinger"
 
 msgid "Toggle instant battle mode."
 msgstr "Vælg øjeblikkelig kamptilstand."

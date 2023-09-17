@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 15:37+0000\n"
+"POT-Creation-Date: 2023-09-17 07:18+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3045,6 +3045,52 @@ msgstr "Показване на допълнителна информация к
 msgid "Hot Keys:"
 msgstr "Бързи клавиши:"
 
+msgid "Evil"
+msgstr "Зъл"
+
+msgid "Good"
+msgstr "Добър"
+
+msgid "Interface Type"
+msgstr "Интерфейс"
+
+msgid "Hide"
+msgstr "Скрий"
+
+msgid "Show"
+msgstr "Покажи"
+
+msgid "Interface"
+msgstr "Интерфейс"
+
+msgid "Slow"
+msgstr "Бавно"
+
+msgid "Normal"
+msgstr "Нормлано"
+
+msgid "Fast"
+msgstr "Бързо"
+
+msgid "Very Fast"
+msgstr "Мн. бързo"
+
+msgid "Scroll Speed"
+msgstr "Скорост на Превъртане"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Превключи типа на интерфейса, който искаш да използваш."
+
+msgid "Toggle interface visibility."
+msgstr "Превключва видимостта на интерфейса."
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr ""
+"Включване/изключване на цветните курсори. Това е само естетически избор."
+
+msgid "Sets the speed at which you scroll the window."
+msgstr "Задава скоростта, с която превърташ прозореца."
+
 msgid "Select Game Language:"
 msgstr "Език на играта:"
 
@@ -3436,39 +3482,6 @@ msgstr "Не показвай"
 msgid "Enemy Speed"
 msgstr "Скорост на Противник"
 
-msgid "Slow"
-msgstr "Бавно"
-
-msgid "Normal"
-msgstr "Нормлано"
-
-msgid "Fast"
-msgstr "Бързо"
-
-msgid "Very Fast"
-msgstr "Мн. бързo"
-
-msgid "Scroll Speed"
-msgstr "Скорост на Превъртане"
-
-msgid "Evil"
-msgstr "Зъл"
-
-msgid "Good"
-msgstr "Добър"
-
-msgid "Interface Type"
-msgstr "Интерфейс"
-
-msgid "Hide"
-msgstr "Скрий"
-
-msgid "Show"
-msgstr "Покажи"
-
-msgid "Interface"
-msgstr "Интерфейс"
-
 msgid "Auto Resolve"
 msgstr "Авто"
 
@@ -3481,10 +3494,6 @@ msgstr "Сражения"
 msgid "autoBattle|Manual"
 msgstr "Ръчно"
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr ""
-"Включване/изключване на цветните курсори. Това е само естетически избор."
-
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Промени скоростта, с която твоите герои се движат на главния екран."
 
@@ -3496,14 +3505,13 @@ msgstr ""
 "Задава скоростта, която И.И. героите се движат. Можеш също да изберш да не "
 "гледаш движението на И.И.."
 
-msgid "Sets the speed at which you scroll the window."
-msgstr "Задава скоростта, с която превърташ прозореца."
+#, fuzzy
+msgid "Change the interface settings of the game."
+msgstr "Промени графичните настройки на играта."
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Превключи типа на интерфейса, който искаш да използваш."
-
-msgid "Toggle interface visibility."
-msgstr "Превключва видимостта на интерфейса."
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Игрови настройки"
 
 msgid "Toggle instant battle mode."
 msgstr "Превключи режима на незабавна битка."

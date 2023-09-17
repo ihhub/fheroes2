@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 15:37+0000\n"
+"POT-Creation-Date: 2023-09-17 07:18+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -2950,6 +2950,54 @@ msgstr ""
 msgid "Hot Keys:"
 msgstr ""
 
+msgid "Evil"
+msgstr "Mal"
+
+msgid "Good"
+msgstr "Bom"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Aparência"
+
+#, fuzzy
+msgid "Hide"
+msgstr "Ponte"
+
+#, fuzzy
+msgid "Show"
+msgstr "Neve"
+
+msgid "Interface"
+msgstr "Aparência"
+
+msgid "Slow"
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Fast"
+msgstr ""
+
+msgid "Very Fast"
+msgstr ""
+
+msgid "Scroll Speed"
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr ""
+
+msgid "Sets the speed at which you scroll the window."
+msgstr ""
+
 msgid "Select Game Language:"
 msgstr "Escolha o idioma do jogo:"
 
@@ -3361,42 +3409,6 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr "Veloc."
 
-msgid "Slow"
-msgstr ""
-
-msgid "Normal"
-msgstr ""
-
-msgid "Fast"
-msgstr ""
-
-msgid "Very Fast"
-msgstr ""
-
-msgid "Scroll Speed"
-msgstr ""
-
-msgid "Evil"
-msgstr "Mal"
-
-msgid "Good"
-msgstr "Bom"
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Aparência"
-
-#, fuzzy
-msgid "Hide"
-msgstr "Ponte"
-
-#, fuzzy
-msgid "Show"
-msgstr "Neve"
-
-msgid "Interface"
-msgstr "Aparência"
-
 msgid "Auto Resolve"
 msgstr ""
 
@@ -3409,9 +3421,6 @@ msgstr ""
 msgid "autoBattle|Manual"
 msgstr ""
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr ""
-
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
@@ -3420,14 +3429,13 @@ msgid ""
 "movement at all."
 msgstr ""
 
-msgid "Sets the speed at which you scroll the window."
-msgstr ""
+#, fuzzy
+msgid "Change the interface settings of the game."
+msgstr "Mudar a resolução do jogo."
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
-msgid "Toggle interface visibility."
-msgstr ""
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Configurações"
 
 msgid "Toggle instant battle mode."
 msgstr ""
