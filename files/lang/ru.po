@@ -10259,7 +10259,7 @@ msgid "Mass Bless"
 msgstr "Общее благословение"
 
 msgid "Magically increases the defense skill of the selected creatures."
-msgstr "Магически увеличивает защиту выбранного отряда."
+msgstr "Магически увеличивает защиту выбранного отряда на 3."
 
 msgid "Stoneskin"
 msgstr "Каменная кожа"
@@ -10268,7 +10268,7 @@ msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
-"Увеличивает защиту выбранного отряда. Это заклинание является более мощной "
+"Увеличивает защиту выбранного отряда на 5. Это заклинание является более мощной "
 "версией заклинания 'Каменная кожа'."
 
 msgid "Steelskin"
