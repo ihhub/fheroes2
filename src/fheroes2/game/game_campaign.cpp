@@ -725,7 +725,7 @@ namespace
             case Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO:
                 for ( const Player * player : sortedPlayers ) {
                     const Kingdom & kingdom = world.GetKingdom( player->GetColor() );
-                    const KingdomHeroes & heroes = kingdom.GetHeroes();
+                    const VecHeroes & heroes = kingdom.GetHeroes();
 
                     for ( size_t j = 0; j < heroes.size(); ++j ) {
                         assert( heroes[j] != nullptr );

@@ -203,8 +203,8 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
-    const KingdomCastles & myCastles = myKingdom.GetCastles();
-    KingdomCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), &castle );
+    const VecCastles & myCastles = myKingdom.GetCastles();
+    VecCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), &castle );
 
     const size_t heroCountBefore = myKingdom.GetHeroes().size();
 
@@ -282,8 +282,8 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
 
     Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
-    const KingdomHeroes & myHeroes = hero.GetKingdom().GetHeroes();
-    KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
+    const VecHeroes & myHeroes = hero.GetKingdom().GetHeroes();
+    VecHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
 
     const bool isDefaultScreenSize = fheroes2::Display::instance().isDefaultSize();
     bool needFade = true;
@@ -935,7 +935,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
     // check if the game is over at the beginning of each human-controlled player's turn
     fheroes2::GameMode res = gameResult.checkGameOver();
 
-    const KingdomCastles & myCastles = myKingdom.GetCastles();
+    const VecCastles & myCastles = myKingdom.GetCastles();
     if ( res == fheroes2::GameMode::CANCEL && myCastles.empty() ) {
         ShowWarningLostTownsDialog();
     }

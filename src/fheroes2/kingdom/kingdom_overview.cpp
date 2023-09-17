@@ -140,9 +140,9 @@ struct HeroRow
 class StatsHeroesList : public Interface::ListBox<HeroRow>
 {
 public:
-    StatsHeroesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const KingdomHeroes & heroes );
+    StatsHeroesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const VecHeroes & heroes );
 
-    bool Refresh( KingdomHeroes & heroes );
+    bool Refresh( VecHeroes & heroes );
 
     void RedrawItem( const HeroRow & row, int32_t dstx, int32_t dsty, bool current ) override;
     void RedrawBackground( const fheroes2::Point & dst ) override;
@@ -178,13 +178,13 @@ public:
     bool ActionListCursor( HeroRow & row, const fheroes2::Point & cursor ) override;
 
 private:
-    void SetContent( const KingdomHeroes & heroes );
+    void SetContent( const VecHeroes & heroes );
 
     std::vector<HeroRow> content;
     const fheroes2::Rect _windowArea;
 };
 
-StatsHeroesList::StatsHeroesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const KingdomHeroes & heroes )
+StatsHeroesList::StatsHeroesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const VecHeroes & heroes )
     : Interface::ListBox<HeroRow>( offset )
     , _windowArea( windowArea )
 {
@@ -207,7 +207,7 @@ StatsHeroesList::StatsHeroesList( const fheroes2::Rect & windowArea, const fhero
     SetContent( heroes );
 }
 
-void StatsHeroesList::SetContent( const KingdomHeroes & heroes )
+void StatsHeroesList::SetContent( const VecHeroes & heroes )
 {
     content.clear();
     content.reserve( heroes.size() );
@@ -219,7 +219,7 @@ void StatsHeroesList::SetContent( const KingdomHeroes & heroes )
 
 // Updates the UI list according to current list of kingdom heroes.
 // Returns true if we updated something
-bool StatsHeroesList::Refresh( KingdomHeroes & heroes )
+bool StatsHeroesList::Refresh( VecHeroes & heroes )
 {
     const size_t contentSize = content.size();
 
@@ -434,7 +434,7 @@ struct CstlRow
 class StatsCastlesList : public Interface::ListBox<CstlRow>
 {
 public:
-    StatsCastlesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const KingdomCastles & castles );
+    StatsCastlesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const VecCastles & castles );
 
     void RedrawItem( const CstlRow & row, int32_t dstx, int32_t dsty, bool current ) override;
     void RedrawBackground( const fheroes2::Point & dst ) override;
@@ -481,7 +481,7 @@ private:
     const fheroes2::Rect _windowArea;
 };
 
-StatsCastlesList::StatsCastlesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const KingdomCastles & castles )
+StatsCastlesList::StatsCastlesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const VecCastles & castles )
     : Interface::ListBox<CstlRow>( offset )
     , _windowArea( windowArea )
 {

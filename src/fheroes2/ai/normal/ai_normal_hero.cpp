@@ -1804,7 +1804,7 @@ namespace AI
         int targetIndex = -1;
 
         const Kingdom & kingdom = hero.GetKingdom();
-        const KingdomHeroes & allHeroes = kingdom.GetHeroes();
+        const VecHeroes & allHeroes = kingdom.GetHeroes();
 
         // Check if we have army and should bring it to friendly hero first
         double bestTargetValue = lowestPossibleValue;

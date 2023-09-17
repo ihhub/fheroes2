@@ -30,6 +30,7 @@
 #include <map>
 #include <ostream>
 #include <set>
+#include <type_traits>
 #include <utility>
 
 #include "agg_image.h"
@@ -44,6 +45,7 @@
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
+#include "game_io.h"
 #include "game_static.h"
 #include "gamedefs.h"
 #include "ground.h"
@@ -62,6 +64,7 @@
 #include "players.h"
 #include "race.h"
 #include "rand.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "speed.h"
@@ -182,7 +185,7 @@ Heroes::Heroes()
     , hid( UNKNOWN )
     , portrait( UNKNOWN )
     , _race( UNKNOWN )
-    , save_maps_object( 0 )
+    , _objectTypeUnderHero( MP2::OBJ_NONE )
     , path( *this )
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
@@ -207,7 +210,7 @@ Heroes::Heroes( int heroid, int rc )
     , hid( heroid )
     , portrait( heroid )
     , _race( rc )
-    , save_maps_object( MP2::OBJ_NONE )
+    , _objectTypeUnderHero( MP2::OBJ_NONE )
     , path( *this )
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
@@ -529,7 +532,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
 void Heroes::PostLoad()
 {
     // An object on which the hero currently stands
-    save_maps_object = MP2::OBJ_NONE;
+    _objectTypeUnderHero = MP2::OBJ_NONE;
 
     // Fix a custom hero without an army
     if ( !army.isValid() ) {
@@ -1080,7 +1083,7 @@ void Heroes::markHeroMeeting( int heroID )
 
 void Heroes::unmarkHeroMeeting()
 {
-    const KingdomHeroes & heroes = GetKingdom().GetHeroes();
+    const VecHeroes & heroes = GetKingdom().GetHeroes();
     for ( Heroes * hero : heroes ) {
         if ( hero == nullptr || hero == this ) {
             continue;
@@ -1706,16 +1709,6 @@ uint32_t Heroes::GetStartingXp()
     return Rand::Get( 40, 90 );
 }
 
-MP2::MapObjectType Heroes::GetMapsObject() const
-{
-    return static_cast<MP2::MapObjectType>( save_maps_object );
-}
-
-void Heroes::SetMapsObject( const MP2::MapObjectType objectType )
-{
-    save_maps_object = ( ( objectType != MP2::OBJ_HEROES ) ? objectType : MP2::OBJ_NONE );
-}
-
 void Heroes::ActionPreBattle()
 {
     spell_book.resetState();
@@ -2191,8 +2184,10 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
     msg << base;
 
     // Heroes
-    msg << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero.hid << hero.portrait << hero._race << hero.save_maps_object << hero.path
-        << hero.direction << hero.sprite_index;
+    using ObjectTypeUnderHeroType = std::underlying_type_t<decltype( hero._objectTypeUnderHero )>;
+
+    msg << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero.hid << hero.portrait << hero._race
+        << static_cast<ObjectTypeUnderHeroType>( hero._objectTypeUnderHero ) << hero.path << hero.direction << hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     const int16_t patrolX = static_cast<int16_t>( hero._patrolCenter.x );
@@ -2212,8 +2207,27 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     msg >> base;
 
     // Heroes
-    msg >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait >> hero._race >> hero.save_maps_object >> hero.path
-        >> hero.direction >> hero.sprite_index;
+    msg >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait >> hero._race;
+
+    using ObjectTypeUnderHeroType = std::underlying_type_t<decltype( hero._objectTypeUnderHero )>;
+    static_assert( std::is_same_v<ObjectTypeUnderHeroType, uint8_t>, "Type of _objectTypeUnderHero has been changed, check the logic below." );
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
+        int temp = 0;
+        msg >> temp;
+
+        hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
+    }
+    else {
+        ObjectTypeUnderHeroType temp = 0;
+
+        msg >> temp;
+
+        hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
+    }
+
+    msg >> hero.path >> hero.direction >> hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     int16_t patrolX = 0;
