@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 15:37+0000\n"
+"POT-Creation-Date: 2023-09-17 07:18+0000\n"
 "PO-Revision-Date: 2023-06-27 18:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3016,6 +3016,55 @@ msgstr "Muestra información adicional como FPS y la hora actual."
 msgid "Hot Keys:"
 msgstr "Atajos de Teclado:"
 
+msgid "Evil"
+msgstr "Mal"
+
+msgid "Good"
+msgstr "Bien"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Interfaz"
+
+msgid "Hide"
+msgstr ""
+
+msgid "Show"
+msgstr ""
+
+msgid "Interface"
+msgstr "Interfaz"
+
+#, fuzzy
+msgid "Slow"
+msgstr "Ralentizar en Masas"
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Muy rápida"
+
+msgid "Scroll Speed"
+msgstr "Velocidad de desplazamiento"
+
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr "Activa o desactiva el cursor de color. Elección estética."
+
+msgid "Sets the speed at which you scroll the window."
+msgstr ""
+
 msgid "Select Game Language:"
 msgstr "Seleccionar Idioma del Juego:"
 
@@ -3418,43 +3467,6 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr "Velocidad"
 
-#, fuzzy
-msgid "Slow"
-msgstr "Ralentizar en Masas"
-
-#, fuzzy
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr ""
-
-#, fuzzy
-msgid "Very Fast"
-msgstr "Muy rápida"
-
-msgid "Scroll Speed"
-msgstr "Velocidad de desplazamiento"
-
-msgid "Evil"
-msgstr "Mal"
-
-msgid "Good"
-msgstr "Bien"
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Interfaz"
-
-msgid "Hide"
-msgstr ""
-
-msgid "Show"
-msgstr ""
-
-msgid "Interface"
-msgstr "Interfaz"
-
 msgid "Auto Resolve"
 msgstr ""
 
@@ -3468,9 +3480,6 @@ msgstr "Botella"
 msgid "autoBattle|Manual"
 msgstr ""
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr "Activa o desactiva el cursor de color. Elección estética."
-
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
@@ -3479,14 +3488,13 @@ msgid ""
 "movement at all."
 msgstr ""
 
-msgid "Sets the speed at which you scroll the window."
-msgstr ""
+#, fuzzy
+msgid "Change the interface settings of the game."
+msgstr "Cambiar los ajustes gráficos del juego."
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
-msgid "Toggle interface visibility."
-msgstr ""
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Ajustes"
 
 msgid "Toggle instant battle mode."
 msgstr ""

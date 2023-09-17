@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 15:37+0000\n"
+"POT-Creation-Date: 2023-09-17 07:18+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3068,6 +3068,53 @@ msgstr "Zeige zusätzliche Informationen wie die FPS und die aktuelle Zeit an."
 msgid "Hot Keys:"
 msgstr "Hotkeys:"
 
+msgid "Evil"
+msgstr "Böse"
+
+msgid "Good"
+msgstr "Gut"
+
+msgid "Interface Type"
+msgstr "Interface"
+
+msgid "Hide"
+msgstr "Ausblenden"
+
+msgid "Show"
+msgstr "Einblenden"
+
+msgid "Interface"
+msgstr "Interface"
+
+msgid "Slow"
+msgstr "Langsam"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Fast"
+msgstr "Schnell"
+
+msgid "Very Fast"
+msgstr "Sehr Schnell"
+
+msgid "Scroll Speed"
+msgstr "Scrollgeschw."
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Schaltet die Art der Schnittstelle um, die Sie verwenden möchten."
+
+msgid "Toggle interface visibility."
+msgstr "Sichtbarkeit der Interface ändern."
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr ""
+"Schaltet den farbigen Cursor ein oder aus. Dies ist nur eine ästhetische "
+"Entscheidung."
+
+msgid "Sets the speed at which you scroll the window."
+msgstr "Legt die Geschwindigkeit fest, mit der Sie das Fenster verschieben."
+
 msgid "Select Game Language:"
 msgstr "Spielsprache wählen:"
 
@@ -3461,39 +3508,6 @@ msgstr "Nicht anzeigen"
 msgid "Enemy Speed"
 msgstr "Feindgeschw."
 
-msgid "Slow"
-msgstr "Langsam"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Schnell"
-
-msgid "Very Fast"
-msgstr "Sehr Schnell"
-
-msgid "Scroll Speed"
-msgstr "Scrollgeschw."
-
-msgid "Evil"
-msgstr "Böse"
-
-msgid "Good"
-msgstr "Gut"
-
-msgid "Interface Type"
-msgstr "Interface"
-
-msgid "Hide"
-msgstr "Ausblenden"
-
-msgid "Show"
-msgstr "Einblenden"
-
-msgid "Interface"
-msgstr "Interface"
-
 msgid "Auto Resolve"
 msgstr "Auto-Auflösen"
 
@@ -3505,11 +3519,6 @@ msgstr "Schlachten"
 
 msgid "autoBattle|Manual"
 msgstr "Manuell"
-
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr ""
-"Schaltet den farbigen Cursor ein oder aus. Dies ist nur eine ästhetische "
-"Entscheidung."
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3524,14 +3533,13 @@ msgstr ""
 "Legt die Geschwindigkeit fest, mit der sich die KI-Helden bewegen.  Sie "
 "können auch festlegen, dass die KI-Bewegung überhaupt nicht angezeigt wird."
 
-msgid "Sets the speed at which you scroll the window."
-msgstr "Legt die Geschwindigkeit fest, mit der Sie das Fenster verschieben."
+#, fuzzy
+msgid "Change the interface settings of the game."
+msgstr "Ändere die Grafikeinstellungen des Spiels."
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Schaltet die Art der Schnittstelle um, die Sie verwenden möchten."
-
-msgid "Toggle interface visibility."
-msgstr "Sichtbarkeit der Interface ändern."
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Spieleinstellungen"
 
 msgid "Toggle instant battle mode."
 msgstr "Sofortigen Kampfmodus umschalten."
