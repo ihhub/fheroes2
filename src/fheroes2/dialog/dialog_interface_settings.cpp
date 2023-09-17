@@ -185,7 +185,7 @@ namespace
         const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &display]() {
             emptyDialogRestorer.restore();
             drawOptions();
-            display.render();
+            display.render( emptyDialogRestorer.rect() );
         };
 
         const fheroes2::Point buttonOffset( 112 + windowRoi.x, 252 + windowRoi.y );
