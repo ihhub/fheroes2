@@ -79,6 +79,11 @@ namespace fheroes2
     {
     public:
         explicit MovableText( Image & output );
+        MovableText( const MovableText & ) = delete;
+
+        ~MovableText() = default;
+
+        MovableText & operator=( const MovableText & ) = delete;
 
         void update( std::unique_ptr<TextBase> text );
 
@@ -98,6 +103,11 @@ namespace fheroes2
     {
     public:
         SystemInfoRenderer();
+        SystemInfoRenderer( const SystemInfoRenderer & ) = delete;
+
+        ~SystemInfoRenderer() = default;
+
+        SystemInfoRenderer & operator=( const SystemInfoRenderer & ) = delete;
 
         void preRender();
 
