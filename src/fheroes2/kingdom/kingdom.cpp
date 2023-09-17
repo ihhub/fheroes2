@@ -481,7 +481,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
 
     // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
     if ( objectType == MP2::OBJ_HEROES ) {
-        const Heroes * hero = tile.GetHeroes();
+        const Heroes * hero = tile.getHero();
 
         // Hero can only be met if he either belongs to this kingdom or is an enemy hero (in the latter case, an attack will occur)
         return hero && ( color == hero->GetColor() || !Players::isFriends( color, hero->GetColor() ) );
@@ -611,14 +611,13 @@ void Kingdom::ApplyPlayWithStartingHero()
 
     bool foundHeroes = false;
 
-    for ( KingdomCastles::const_iterator it = castles.begin(); it != castles.end(); ++it ) {
-        const Castle * castle = *it;
+    for ( const Castle * castle : castles ) {
         if ( castle == nullptr )
             continue;
 
         // check manual set hero (castle position + point(0, 1))?
         const fheroes2::Point & cp = castle->GetCenter();
-        Heroes * hero = world.GetTiles( cp.x, cp.y + 1 ).GetHeroes();
+        Heroes * hero = world.GetTiles( cp.x, cp.y + 1 ).getHero();
 
         // and move manual set hero to castle
         if ( hero && hero->GetColor() == GetColor() ) {
@@ -671,18 +670,18 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
     if ( INCOME_CASTLES & type ) {
         // castles
-        for ( KingdomCastles::const_iterator it = castles.begin(); it != castles.end(); ++it ) {
-            const Castle & castle = **it;
+        for ( const Castle * castle : castles ) {
+            assert( castle != nullptr );
 
             // castle or town profit
-            totalIncome += ProfitConditions::FromBuilding( ( castle.isCastle() ? BUILD_CASTLE : BUILD_TENT ), 0 );
+            totalIncome += ProfitConditions::FromBuilding( ( castle->isCastle() ? BUILD_CASTLE : BUILD_TENT ), 0 );
 
             // statue
-            if ( castle.isBuild( BUILD_STATUE ) )
+            if ( castle->isBuild( BUILD_STATUE ) )
                 totalIncome += ProfitConditions::FromBuilding( BUILD_STATUE, 0 );
 
             // dungeon for warlock
-            if ( castle.isBuild( BUILD_SPEC ) && Race::WRLK == castle.GetRace() )
+            if ( castle->isBuild( BUILD_SPEC ) && Race::WRLK == castle->GetRace() )
                 totalIncome += ProfitConditions::FromBuilding( BUILD_SPEC, Race::WRLK );
         }
     }
@@ -698,8 +697,10 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
     if ( INCOME_HERO_SKILLS & type ) {
         // estates skill bonus
-        for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
-            totalIncome.gold += ( **ith ).GetSecondaryValues( Skill::Secondary::ESTATES );
+        for ( const Heroes * hero : heroes ) {
+            assert( hero != nullptr );
+            totalIncome.gold += hero->GetSecondaryValues( Skill::Secondary::ESTATES );
+        }
     }
 
     if ( ( type & INCOME_CAMPAIGN_BONUS ) && Settings::Get().isCampaignGameType() ) {
@@ -714,7 +715,9 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
     }
 
     if ( isControlAI() && totalIncome.gold > 0 ) {
-        totalIncome.gold = static_cast<int32_t>( totalIncome.gold * Difficulty::GetGoldIncomeBonus( Game::getDifficulty() ) );
+        const int32_t bonusGold = static_cast<int32_t>( totalIncome.gold * Difficulty::getGoldIncomeBonusForAI( Game::getDifficulty() ) );
+
+        totalIncome.gold += bonusGold;
     }
 
     // Some human players can have handicap for resources.
@@ -750,11 +753,15 @@ double Kingdom::GetArmiesStrength() const
 {
     double res = 0;
 
-    for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
-        res += ( **ith ).GetArmy().GetStrength();
+    for ( const Heroes * hero : heroes ) {
+        assert( hero != nullptr );
+        res += hero->GetArmy().GetStrength();
+    }
 
-    for ( KingdomCastles::const_iterator itc = castles.begin(); itc != castles.end(); ++itc )
-        res += ( **itc ).GetArmy().GetStrength();
+    for ( const Castle * castle : castles ) {
+        assert( castle != nullptr );
+        res += castle->GetArmy().GetStrength();
+    }
 
     return res;
 }

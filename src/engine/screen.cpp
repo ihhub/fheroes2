@@ -1385,7 +1385,7 @@ namespace fheroes2
             // Previous position of cursor must be updated as well to avoid ghost effect.
             _renderFrame( getBoundaryRect( temp, _prevRoi ) );
 
-            if ( _postprocessing != nullptr ) {
+            if ( _postprocessing ) {
                 _postprocessing();
             }
 
@@ -1394,7 +1394,7 @@ namespace fheroes2
         else {
             _renderFrame( getBoundaryRect( temp, _prevRoi ) );
 
-            if ( _postprocessing != nullptr ) {
+            if ( _postprocessing ) {
                 _postprocessing();
             }
         }
@@ -1410,7 +1410,7 @@ namespace fheroes2
     void Display::_renderFrame( const Rect & roi ) const
     {
         bool updateImage = true;
-        if ( _preprocessing != nullptr ) {
+        if ( _preprocessing ) {
             std::vector<uint8_t> palette;
             if ( _preprocessing( palette ) ) {
                 _engine->updatePalette( palette );

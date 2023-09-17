@@ -56,7 +56,6 @@
 #include "mus.h"
 #include "screen.h"
 #include "statusbar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -218,8 +217,9 @@ namespace
 
 Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionWindow, const bool fade, const bool renderBackgroundDialog )
 {
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    // Set the cursor image. This dialog does not require a cursor restorer. It is called from other dialogs that have the same cursor
+    // or from the Game Area that will set the appropriate cursor after this dialog is closed.
+    Cursor::Get().SetThemes( Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -296,8 +296,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     fheroes2::Blit( bar, display, cur_pt.x + buttonPrevCastle.area().width, cur_pt.y + statusBarOffsetY );
 
     StatusBar statusBar;
-    statusBar.SetFont( Font::BIG );
-    statusBar.SetCenter( cur_pt.x + buttonPrevCastle.area().width + bar.width() / 2, cur_pt.y + statusBarOffsetY + 12 );
+    // Status bar must be smaller due to extra art on both sides.
+    statusBar.setRoi( { cur_pt.x + buttonPrevCastle.area().width + 16, cur_pt.y + statusBarOffsetY + 2, bar.width() - 16 * 2, 0 } );
 
     // button next castle
     fheroes2::Button buttonNextCastle( cur_pt.x + buttonPrevCastle.area().width + bar.width(), cur_pt.y + statusBarOffsetY, ICN::SMALLBAR, 3, 4 );

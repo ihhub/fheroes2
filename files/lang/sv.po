@@ -3000,6 +3000,55 @@ msgstr "Visa extra information som FPS och nuvarande tid."
 msgid "Hot Keys:"
 msgstr "Tangentbordsgenvägar"
 
+msgid "Evil"
+msgstr "Ond"
+
+msgid "Good"
+msgstr "God"
+
+msgid "Interface Type"
+msgstr ""
+"Gränssnitts-\n"
+"format"
+
+msgid "Hide"
+msgstr "Dölj"
+
+msgid "Show"
+msgstr "Visa"
+
+msgid "Interface"
+msgstr "Gränssnitt"
+
+msgid "Slow"
+msgstr "Långsam"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Fast"
+msgstr "Snabb"
+
+msgid "Very Fast"
+msgstr "Mkt. snabb"
+
+msgid "Scroll Speed"
+msgstr ""
+"Skroll-\n"
+"hastighet"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Välj vilket gränssnitt du vill använda."
+
+msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr "Välj färglagd eller svartvit muspekare."
+
+msgid "Sets the speed at which you scroll the window."
+msgstr "Välj skrollhastigheten."
+
 msgid "Select Game Language:"
 msgstr "Välj spelspråk:"
 
@@ -3391,43 +3440,6 @@ msgstr ""
 "Fiende-\n"
 "hastighet"
 
-msgid "Slow"
-msgstr "Långsam"
-
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr "Snabb"
-
-msgid "Very Fast"
-msgstr "Mkt. snabb"
-
-msgid "Scroll Speed"
-msgstr ""
-"Skroll-\n"
-"hastighet"
-
-msgid "Evil"
-msgstr "Ond"
-
-msgid "Good"
-msgstr "God"
-
-msgid "Interface Type"
-msgstr ""
-"Gränssnitts-\n"
-"format"
-
-msgid "Hide"
-msgstr "Dölj"
-
-msgid "Show"
-msgstr "Visa"
-
-msgid "Interface"
-msgstr "Gränssnitt"
-
 msgid "Auto Resolve"
 msgstr "Snabbstrid"
 
@@ -3442,9 +3454,6 @@ msgstr "Strider"
 msgid "autoBattle|Manual"
 msgstr "Manuell"
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr "Välj färglagd eller svartvit muspekare."
-
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Ändra hastigheten för dina hjältars rörelser på kartan."
 
@@ -3455,14 +3464,13 @@ msgstr ""
 "Välj hastigheten för datorns rörelser på kartan. Du kan välja inte visa "
 "datorns rörelser alls."
 
-msgid "Sets the speed at which you scroll the window."
-msgstr "Välj skrollhastigheten."
+#, fuzzy
+msgid "Change the interface settings of the game."
+msgstr "Ändra spelets grafikinställningar"
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Välj vilket gränssnitt du vill använda."
-
-msgid "Toggle interface visibility."
-msgstr ""
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Spelinställningar"
 
 msgid "Toggle instant battle mode."
 msgstr "Aktivera Snabbstrid."
@@ -10749,15 +10757,3 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} protects your troops from the Dispel Magic spell."
-#~ msgstr "%{name} skyddar hjältens trupper från Skingra magi-besvärjelser."
-
-#~ msgid "Damg"
-#~ msgstr "Skada"
-
-#~ msgid "guildWell|EXIT"
-#~ msgstr "LÄMNA"
-
-#~ msgid "%{spell} failed!!!"
-#~ msgstr "%{spell} misslyckades!"

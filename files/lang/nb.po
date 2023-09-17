@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 15:37+0000\n"
+"POT-Creation-Date: 2023-09-17 07:18+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3075,6 +3075,53 @@ msgstr "Vis ekstra informasjon som bilder per sekund (FPS) og tid."
 msgid "Hot Keys:"
 msgstr "Hurtigtaster:"
 
+msgid "Evil"
+msgstr "Ond"
+
+msgid "Good"
+msgstr "God"
+
+msgid "Interface Type"
+msgstr "Grensesnitt"
+
+msgid "Hide"
+msgstr "Løs"
+
+msgid "Show"
+msgstr "Bundet"
+
+msgid "Interface"
+msgstr "Grensesnitt"
+
+msgid "Slow"
+msgstr "Treg"
+
+msgid "Normal"
+msgstr "Middels"
+
+msgid "Fast"
+msgstr "Fort"
+
+msgid "Very Fast"
+msgstr "Rask"
+
+msgid "Scroll Speed"
+msgstr ""
+"Panorerings-\n"
+"fart"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Velg den typen grensesnitt du ønsker."
+
+msgid "Toggle interface visibility."
+msgstr "Skift synlighet for grensesnittet."
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr "Skru farget markør av eller på. Dette er kun smak og behag."
+
+msgid "Sets the speed at which you scroll the window."
+msgstr "Setter farten du panorerer rundt kartet på."
+
 msgid "Select Game Language:"
 msgstr "Velg språk:"
 
@@ -3465,41 +3512,6 @@ msgstr "Skjul"
 msgid "Enemy Speed"
 msgstr "Fiendefart"
 
-msgid "Slow"
-msgstr "Treg"
-
-msgid "Normal"
-msgstr "Middels"
-
-msgid "Fast"
-msgstr "Fort"
-
-msgid "Very Fast"
-msgstr "Rask"
-
-msgid "Scroll Speed"
-msgstr ""
-"Panorerings-\n"
-"fart"
-
-msgid "Evil"
-msgstr "Ond"
-
-msgid "Good"
-msgstr "God"
-
-msgid "Interface Type"
-msgstr "Grensesnitt"
-
-msgid "Hide"
-msgstr "Løs"
-
-msgid "Show"
-msgstr "Bundet"
-
-msgid "Interface"
-msgstr "Grensesnitt"
-
 msgid "Auto Resolve"
 msgstr "Datastyrt"
 
@@ -3512,9 +3524,6 @@ msgstr "Kampstyring"
 msgid "autoBattle|Manual"
 msgstr "Manuell"
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr "Skru farget markør av eller på. Dette er kun smak og behag."
-
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Juster hvor fort heltene dine flytter seg rundt på kartet."
 
@@ -3526,14 +3535,13 @@ msgstr ""
 "Justerer hvor fort datamaskinspillere flytter seg rundt på kartet. Du kan "
 "også velge å ikke vise hva de gjør i det hele tatt."
 
-msgid "Sets the speed at which you scroll the window."
-msgstr "Setter farten du panorerer rundt kartet på."
+#, fuzzy
+msgid "Change the interface settings of the game."
+msgstr "Endre bildeinnstillingene til spillet."
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Velg den typen grensesnitt du ønsker."
-
-msgid "Toggle interface visibility."
-msgstr "Skift synlighet for grensesnittet."
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Spillinnstillinger"
 
 msgid "Toggle instant battle mode."
 msgstr "Skift modus for hurtigkamp."
@@ -11001,15 +11009,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} protects your troops from the Dispel Magic spell."
-#~ msgstr "%{name} beskytter krigerne dine fra magiopphevelses trolldommen."
-
-#~ msgid "Damg"
-#~ msgstr "Skade"
-
-#~ msgid "guildWell|EXIT"
-#~ msgstr "UT"
-
-#~ msgid "%{spell} failed!!!"
-#~ msgstr "%{spell} mislyktes!"

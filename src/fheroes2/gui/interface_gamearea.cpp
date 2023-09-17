@@ -297,7 +297,7 @@ namespace
 
         // There is a tile below the current.
         const Maps::Tiles & tileBelow = world.GetTiles( x, y + 1 );
-        const Maps::Addons & lowerTileAddons = tileBelow.getLevel2Addons();
+        const Maps::Addons & lowerTileAddons = tileBelow.getTopLayerAddons();
 
         for ( const Maps::TilesAddon & lowerAddon : lowerTileAddons ) {
             if ( lowerAddon._uid == uid ) {
@@ -499,7 +499,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
 
                 const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.GetTiles( posX, posY - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
-                const Heroes * hero = tile.GetHeroes();
+                const Heroes * hero = tile.getHero();
 
                 // Boats are 2 tiles high so for hero on the boat we have to populate info for boat one tile lower than the fog.
                 if ( isTileUnderFog && ( isUpperTileUnderFog || !hero->isShipMaster() ) ) {
@@ -658,7 +658,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             // any other level 2 objects with the same UID.
 
             topLayerTallObjects.clear();
-            for ( const Maps::TilesAddon & addon : tile.getLevel2Addons() ) {
+            for ( const Maps::TilesAddon & addon : tile.getTopLayerAddons() ) {
                 if ( isTallTopLayerObject( x, y, addon._uid ) ) {
                     topLayerTallObjects.emplace_back( &addon );
                 }
@@ -957,17 +957,21 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         return;
     }
 
-    const int32_t index = GetValidTileIdFromPoint( mousePosition );
-
-    // change cursor if need
-    if ( ( updateCursor || index != _prevIndexPos ) && isCursorOverGamearea ) {
-        Cursor::Get().SetThemes( Interface::AdventureMap::GetCursorTileIndex( index ) );
-        _prevIndexPos = index;
-        updateCursor = false;
+    if ( !isCursorOverGamearea ) {
+        // In this case the cursor image changes in 'Interface::AdventureMap::HumanTurn()' so there is nothing more to do here.
+        return;
     }
 
-    // out of range
-    if ( !isCursorOverGamearea || !Maps::isValidAbsIndex( index ) ) {
+    int32_t index = GetValidTileIdFromPoint( mousePosition );
+
+    if ( !Maps::isValidAbsIndex( index ) ) {
+        // Change the cursor image when it gets out of the map boundaries or by 'updateCursor' flag.
+        if ( updateCursor || index != _prevIndexPos ) {
+            Cursor::Get().SetThemes( Cursor::POINTER );
+            _prevIndexPos = index;
+            updateCursor = false;
+        }
+
         return;
     }
 
@@ -987,6 +991,16 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     }
     else if ( le.MousePressRight( tileROI ) ) {
         _interface.mouseCursorAreaPressRight( index );
+    }
+
+    // The cursor may have moved after mouse click events.
+    index = GetValidTileIdFromPoint( le.GetMouseCursor() );
+
+    // Change the cursor image if needed.
+    if ( updateCursor || index != _prevIndexPos ) {
+        Cursor::Get().SetThemes( Interface::AdventureMap::GetCursorTileIndex( index ) );
+        _prevIndexPos = index;
+        updateCursor = false;
     }
 }
 

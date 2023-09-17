@@ -133,7 +133,7 @@ namespace
                 return false;
             }
 
-            const Heroes * otherHero = tile.GetHeroes();
+            const Heroes * otherHero = tile.getHero();
             assert( otherHero != nullptr );
 
             // Friendly heroes cannot be passed through

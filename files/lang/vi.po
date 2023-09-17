@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 15:37+0000\n"
+"POT-Creation-Date: 2023-09-17 07:18+0000\n"
 "PO-Revision-Date: 2023-09-04 09:26+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2981,6 +2981,51 @@ msgstr ""
 msgid "Hot Keys:"
 msgstr "Phím tắt:"
 
+msgid "Evil"
+msgstr "Xấu"
+
+msgid "Good"
+msgstr "Tốt"
+
+msgid "Interface Type"
+msgstr "Kiểu Giao diện"
+
+msgid "Hide"
+msgstr "Ẩn"
+
+msgid "Show"
+msgstr "Hiện"
+
+msgid "Interface"
+msgstr "Giao diện"
+
+msgid "Slow"
+msgstr "Chậm"
+
+msgid "Normal"
+msgstr "Thường"
+
+msgid "Fast"
+msgstr "Nhanh"
+
+msgid "Very Fast"
+msgstr "Rất nhanh"
+
+msgid "Scroll Speed"
+msgstr "Tốc độ Cuộn"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Chuyển đổi loại giao diện ngươi muốn sử dụng."
+
+msgid "Toggle interface visibility."
+msgstr "Chuyển đổi khả năng hiển thị giao diện."
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr "Bật hoặc tắt con trỏ màu. Đây chỉ là một sự lựa chọn thẩm mỹ."
+
+msgid "Sets the speed at which you scroll the window."
+msgstr "Đặt tốc độ cuộn cửa sổ."
+
 msgid "Select Game Language:"
 msgstr "Chọn Ngôn ngữ Game:"
 
@@ -3372,39 +3417,6 @@ msgstr "Không Hiện"
 msgid "Enemy Speed"
 msgstr "Tốc độ Địch"
 
-msgid "Slow"
-msgstr "Chậm"
-
-msgid "Normal"
-msgstr "Thường"
-
-msgid "Fast"
-msgstr "Nhanh"
-
-msgid "Very Fast"
-msgstr "Rất nhanh"
-
-msgid "Scroll Speed"
-msgstr "Tốc độ Cuộn"
-
-msgid "Evil"
-msgstr "Xấu"
-
-msgid "Good"
-msgstr "Tốt"
-
-msgid "Interface Type"
-msgstr "Kiểu Giao diện"
-
-msgid "Hide"
-msgstr "Ẩn"
-
-msgid "Show"
-msgstr "Hiện"
-
-msgid "Interface"
-msgstr "Giao diện"
-
 msgid "Auto Resolve"
 msgstr "Tự động Giải quyết"
 
@@ -3417,9 +3429,6 @@ msgstr "Chiến trường"
 msgid "autoBattle|Manual"
 msgstr "Thủ công"
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr "Bật hoặc tắt con trỏ màu. Đây chỉ là một sự lựa chọn thẩm mỹ."
-
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Thay đổi tốc độ di chuyển của các tướng trên màn hình chính."
 
@@ -3431,14 +3440,13 @@ msgstr ""
 "Đặt tốc độ mà tướng A.I. di chuyển. Ngươi cũng có thể chọn không xem tướng A."
 "I. di chuyển."
 
-msgid "Sets the speed at which you scroll the window."
-msgstr "Đặt tốc độ cuộn cửa sổ."
+#, fuzzy
+msgid "Change the interface settings of the game."
+msgstr "Thay đổi đồ họa của game."
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Chuyển đổi loại giao diện ngươi muốn sử dụng."
-
-msgid "Toggle interface visibility."
-msgstr "Chuyển đổi khả năng hiển thị giao diện."
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Cài đặt Trò chơi"
 
 msgid "Toggle instant battle mode."
 msgstr "Chuyển đổi chế độ chiến đấu ngay lập tức."
@@ -9770,9 +9778,3 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Damg"
-#~ msgstr "Thiệt hại"
-
-#~ msgid "guildWell|EXIT"
-#~ msgstr "THOÁT"
