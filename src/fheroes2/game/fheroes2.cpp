@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <exception>
+#include <functional>
 #include <iostream>
 #include <list>
 #include <memory>
@@ -179,13 +180,17 @@ namespace
 
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
 
+            fheroes2::RenderProcessor & renderProcessor = fheroes2::RenderProcessor::instance();
+
+            display.subscribe( std::bind( &fheroes2::RenderProcessor::preRenderAction, &renderProcessor, std::placeholders::_1 ),
+                               std::bind( &fheroes2::RenderProcessor::postRenderAction, &renderProcessor ) );
+
             // Initialize system info renderer.
             _systemInfoRenderer = std::make_unique<fheroes2::SystemInfoRenderer>();
 
-            display.subscribe( []( std::vector<uint8_t> & palette ) { return fheroes2::RenderProcessor::instance().preRenderAction( palette ); },
-                               []() { fheroes2::RenderProcessor::instance().postRenderAction(); } );
-
-            fheroes2::RenderProcessor::instance().startColorCycling();
+            renderProcessor.registerRenderers( std::bind( &fheroes2::SystemInfoRenderer::preRender, _systemInfoRenderer.get() ),
+                                               std::bind( &fheroes2::SystemInfoRenderer::postRender, _systemInfoRenderer.get() ) );
+            renderProcessor.startColorCycling();
 
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );

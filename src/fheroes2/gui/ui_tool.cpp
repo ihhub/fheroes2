@@ -204,9 +204,7 @@ namespace fheroes2
     SystemInfoRenderer::SystemInfoRenderer()
         : _startTime( std::chrono::steady_clock::now() )
         , _text( fheroes2::Display::instance() )
-    {
-        RenderProcessor::instance().registerRenderers( [this]() { preRender(); }, [this]() { postRender(); } );
-    }
+    {}
 
     void SystemInfoRenderer::preRender()
     {
