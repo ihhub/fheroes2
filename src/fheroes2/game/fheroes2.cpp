@@ -24,7 +24,6 @@
 #include <cstdint>
 #include <cstdlib>
 #include <exception>
-#include <functional>
 #include <iostream>
 #include <list>
 #include <memory>
@@ -182,14 +181,14 @@ namespace
 
             fheroes2::RenderProcessor & renderProcessor = fheroes2::RenderProcessor::instance();
 
-            display.subscribe( std::bind( &fheroes2::RenderProcessor::preRenderAction, &renderProcessor, std::placeholders::_1 ),
-                               std::bind( &fheroes2::RenderProcessor::postRenderAction, &renderProcessor ) );
+            display.subscribe( [&renderProcessor]( std::vector<uint8_t> & palette ) { return renderProcessor.preRenderAction( palette ); },
+                               [&renderProcessor]() { renderProcessor.postRenderAction(); } );
 
             // Initialize system info renderer.
             _systemInfoRenderer = std::make_unique<fheroes2::SystemInfoRenderer>();
 
-            renderProcessor.registerRenderers( std::bind( &fheroes2::SystemInfoRenderer::preRender, _systemInfoRenderer.get() ),
-                                               std::bind( &fheroes2::SystemInfoRenderer::postRender, _systemInfoRenderer.get() ) );
+            renderProcessor.registerRenderers( [sysInfoRenderer = _systemInfoRenderer.get()]() { sysInfoRenderer->preRender(); },
+                                               [sysInfoRenderer = _systemInfoRenderer.get()]() { sysInfoRenderer->postRender(); } );
             renderProcessor.startColorCycling();
 
             // Update mouse cursor when switching between software emulation and OS mouse modes.

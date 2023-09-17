@@ -31,6 +31,10 @@ namespace fheroes2
     class RenderProcessor
     {
     public:
+        RenderProcessor( const RenderProcessor & ) = delete;
+
+        RenderProcessor & operator=( const RenderProcessor & ) = delete;
+
         static RenderProcessor & instance();
 
         void registerRenderers( const std::function<void()> & preRenderer, const std::function<void()> & postRenderer )
@@ -74,6 +78,8 @@ namespace fheroes2
         }
 
     private:
+        RenderProcessor() = default;
+
         std::function<void()> _preRenderer;
         std::function<void()> _postRenderer;
 
