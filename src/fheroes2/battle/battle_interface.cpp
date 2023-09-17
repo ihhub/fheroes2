@@ -2946,7 +2946,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
             const BoardActionIntent intent{ themes, index_pos };
             // If the mouse event has been triggered by the touchpad, it should be considered confirmed only if this event orders to
-            // perform the same action that is already suggested on the screen using the mouse cursor and (optionally) cell highlighting.
+            // perform the same action that is already indicated on the battle board with the mouse cursor.
             const bool isConfirmed = ( !le.MouseEventFromTouchpad() || _boardActionIntent == intent );
 
             if ( le.MouseClickLeft() ) {
@@ -3015,7 +3015,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
 
         const BoardActionIntent intent{ themes, index_pos };
         // If the mouse event has been triggered by the touchpad, it should be considered confirmed only if this event orders to
-        // perform the same action that is already suggested on the screen using the mouse cursor and (optionally) cell highlighting.
+        // perform the same action that is already indicated on the battle board with the mouse cursor.
         const bool isConfirmed = ( !le.MouseEventFromTouchpad() || _boardActionIntent == intent );
 
         if ( le.MouseClickLeft() && Cursor::WAR_NONE != cursor.Themes() && isConfirmed ) {
