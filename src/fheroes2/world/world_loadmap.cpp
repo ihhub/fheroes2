@@ -257,8 +257,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 format: incorrect addon index " << addonIndex )
                 break;
             }
-            tile.AddonsPushLevel1( vec_mp2addons[addonIndex] );
-            tile.AddonsPushLevel2( vec_mp2addons[addonIndex] );
+            tile.pushBottomLayerAddon( vec_mp2addons[addonIndex] );
+            tile.pushTopLayerAddon( vec_mp2addons[addonIndex] );
             addonIndex = vec_mp2addons[addonIndex].nextAddonIndex;
         }
 
@@ -767,7 +767,7 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
             const fheroes2::Point & cp = castle->GetCenter();
             Heroes * hero = vec_heroes.Get( Heroes::DEBUG_HERO );
 
-            if ( hero && !GetTiles( cp.x, cp.y + 1 ).GetHeroes() ) {
+            if ( hero && !GetTiles( cp.x, cp.y + 1 ).getHero() ) {
                 hero->Recruit( castle->GetColor(), { cp.x, cp.y + 1 } );
             }
         }
@@ -874,10 +874,10 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
         Heroes * chosenHero = GetHeroes( Maps::GetPoint( tile.GetIndex() ) );
         assert( chosenHero != nullptr );
 
-        tile.SetHeroes( chosenHero );
+        tile.setHero( chosenHero );
 
         if ( checkPoLObjects ) {
-            Heroes * hero = tile.GetHeroes();
+            Heroes * hero = tile.getHero();
             assert( hero );
             const BagArtifacts & artifacts = hero->GetBagArtifacts();
             for ( const Artifact & artifact : artifacts ) {

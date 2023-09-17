@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,61 +18,55 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#include "render_processor.h"
 
-#include <cassert>
-#include <cstddef>
 #include <cstdint>
-#include <vector>
 
-// Base representation of the dataset that mirrors the 2D map being traversed
-template <class T>
-struct PathfindingNode
+#include "pal.h"
+
+namespace
 {
-    int _from = -1;
-    uint32_t _cost = 0;
-    T _objectID{};
+    // The maximum FPS the engine can handle is 125.
+    // This means that a frame should be generated only every 8 ms.
+    const uint64_t frameHalfInterval{ 4 };
+}
 
-    PathfindingNode() = default;
-    PathfindingNode( int node, uint32_t cost, T object )
-        : _from( node )
-        , _cost( cost )
-        , _objectID( object )
-    {}
-    virtual ~PathfindingNode() = default;
-    // Sets node values back to the defaults; used before processing new path
-    virtual void resetNode()
-    {
-        _from = -1;
-        _cost = 0;
-        _objectID = T();
-    }
-};
-
-// Template class has to be either PathfindingNode or its derivative
-template <class T>
-class Pathfinder
+namespace fheroes2
 {
-public:
-    virtual ~Pathfinder() = default;
-
-    virtual void reset() = 0;
-
-    virtual uint32_t getDistance( int targetIndex ) const
+    RenderProcessor & RenderProcessor::instance()
     {
-        assert( targetIndex >= 0 && static_cast<size_t>( targetIndex ) < _cache.size() );
-
-        return _cache[targetIndex]._cost;
+        static RenderProcessor processor;
+        return processor;
     }
 
-    virtual const T & getNode( int targetIndex ) const
+    bool RenderProcessor::preRenderAction( std::vector<uint8_t> & palette )
     {
-        assert( targetIndex >= 0 && static_cast<size_t>( targetIndex ) < _cache.size() );
+        if ( !_enableCycling ) {
+            return false;
+        }
 
-        return _cache[targetIndex];
+        if ( _enableRenderers && _preRenderer ) {
+            _preRenderer();
+        }
+
+        if ( _cyclingTimer.getMs() < ( _cyclingInterval - frameHalfInterval ) ) {
+            // If the current timer is less than cycling internal minus half of the frame generation then nothing is needed.
+            return false;
+        }
+
+        // TODO: here we need to deduct possible time difference from the current time to have consistent FPS.
+        _cyclingTimer.reset();
+        palette = PAL::GetCyclingPalette( _cyclingCounter );
+        ++_cyclingCounter;
+        return true;
     }
 
-protected:
-    std::vector<T> _cache;
-    int _pathStart = -1;
-};
+    void RenderProcessor::postRenderAction()
+    {
+        _lastRenderCall.reset();
+
+        if ( _enableCycling && _enableRenderers && _postRenderer ) {
+            _postRenderer();
+        }
+    }
+}

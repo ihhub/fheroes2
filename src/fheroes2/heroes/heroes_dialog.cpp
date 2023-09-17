@@ -48,18 +48,19 @@
 #include "skill.h"
 #include "skill_bar.h"
 #include "statusbar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 
 int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog )
 {
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    // Set the cursor image.This dialog does not require a cursor restorer. It is called from other dialogs that have the same cursor
+    // or from the Game Area that will set the appropriate cursor after this dialog is closed.
+    Cursor::Get().SetThemes( Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -197,7 +198,8 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     fheroes2::Blit( bar, display, dst_pt.x, dst_pt.y );
 
     StatusBar statusBar;
-    statusBar.SetCenter( dst_pt.x + bar.width() / 2, dst_pt.y + 13 );
+    // Status bar must be smaller due to extra art on both sides.
+    statusBar.setRoi( { dst_pt.x + 16, dst_pt.y + 3, bar.width() - 16 * 2, 0 } );
 
     // artifact bar
     dst_pt.x = cur_pt.x + 51;
@@ -347,7 +349,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         // dismiss
         if ( buttonDismiss.isEnabled() && buttonDismiss.isVisible()
              && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
-             && Dialog::YES == Dialog::Message( GetName(), _( "Are you sure you want to dismiss this Hero?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
+             && Dialog::YES == fheroes2::showStandardTextMessage( GetName(), _( "Are you sure you want to dismiss this Hero?" ), Dialog::YES | Dialog::NO ) ) {
             // Fade-out hero dialog.
             fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
 
@@ -386,10 +388,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             Dialog::QuickInfo( *this );
         }
         else if ( le.MousePressRight( rectSpreadArmyFormat ) ) {
-            Dialog::Message( _( "Spread Formation" ), descriptionSpreadArmyFormat, Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Spread Formation" ), descriptionSpreadArmyFormat, Dialog::ZERO );
         }
         else if ( le.MousePressRight( rectGroupedArmyFormat ) ) {
-            Dialog::Message( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Dialog::ZERO );
         }
 
         // status message

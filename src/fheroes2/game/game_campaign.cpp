@@ -725,7 +725,7 @@ namespace
             case Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO:
                 for ( const Player * player : sortedPlayers ) {
                     const Kingdom & kingdom = world.GetKingdom( player->GetColor() );
-                    const KingdomHeroes & heroes = kingdom.GetHeroes();
+                    const VecHeroes & heroes = kingdom.GetHeroes();
 
                     for ( size_t j = 0; j < heroes.size(); ++j ) {
                         assert( heroes[j] != nullptr );
@@ -1583,7 +1583,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             const bool isSWCampaign = ( chosenCampaignID == Campaign::ROLAND_CAMPAIGN ) || ( chosenCampaignID == Campaign::ARCHIBALD_CAMPAIGN );
 
             if ( !world.LoadMapMP2( mapInfo.file, isSWCampaign ) ) {
-                Dialog::Message( _( "Campaign Scenario loading failure" ), _( "Please make sure that campaign files are correct and present." ), Font::BIG, Dialog::OK );
+                fheroes2::showStandardTextMessage( _( "Campaign Scenario loading failure" ), _( "Please make sure that campaign files are correct and present." ),
+                                                   Dialog::OK );
 
                 // TODO: find a way to restore world for the current game after a failure.
                 conf.SetCurrentFileInfo( Maps::FileInfo() );

@@ -226,7 +226,7 @@ void Interface::ButtonsArea::SetButtonStatus()
         buttonSpell.enable();
 
     const Kingdom & kingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    const KingdomHeroes & heroes = kingdom.GetHeroes();
+    const VecHeroes & heroes = kingdom.GetHeroes();
 
     bool isMovableHeroPresent = false;
     for ( size_t i = 0; i < heroes.size(); ++i ) {

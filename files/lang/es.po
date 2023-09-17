@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-11 14:45+0000\n"
+"POT-Creation-Date: 2023-09-17 07:18+0000\n"
 "PO-Revision-Date: 2023-06-27 18:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -1057,8 +1057,8 @@ msgstr "Justicia Final"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
-"rebellion against his brother.  They are not allied with each other, so they "
-"will spend most of their time fighting with one another.  Victory is yours "
+"rebellion against his brother. They are not allied with each other, so they "
+"will spend most of their time fighting with one another. Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
 
@@ -1117,7 +1117,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Switching sides leaves you with three castles against the enemy's one.  This "
+"Switching sides leaves you with three castles against the enemy's one. This "
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
@@ -1150,10 +1150,10 @@ msgid "Greater Glory"
 msgstr "Gloria Mayor"
 
 msgid ""
-"King Archibald requires you to defeat the three enemies in this region.  "
-"They are not allied with one another, so they will spend most of their "
-"energy fighting amongst themselves.  You will win when you own all of the "
-"enemy castles and there are no more heroes left to fight."
+"King Archibald requires you to defeat the three enemies in this region. They "
+"are not allied with one another, so they will spend most of their energy "
+"fighting amongst themselves. You will win when you own all of the enemy "
+"castles and there are no more heroes left to fight."
 msgstr ""
 
 msgid ""
@@ -1490,13 +1490,13 @@ msgstr ""
 
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
-"attention.  He shouts to them, \"Who of you is brave enough to join this "
-"fearless ally of ours?\"  The group explodes with cheers as they run to join "
+"attention. He shouts to them, \"Who of you is brave enough to join this "
+"fearless ally of ours?\" The group explodes with cheers as they run to join "
 "your ranks."
 msgstr ""
 
 msgid ""
-"The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
+"The dwarves hail you, \"Any friend of Roland is a friend of ours. You may "
 "pass.\""
 msgstr ""
 
@@ -1505,14 +1505,13 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The dragons see you and call out.  \"Our alliance with Archibald compels us "
-"to join you.  Unfortunately you have no room.  A pity!\"  They quickly "
-"scatter."
+"The dragons see you and call out. \"Our alliance with Archibald compels us "
+"to join you. Unfortunately you have no room. A pity!\" They quickly scatter."
 msgstr ""
 
 msgid ""
-"The elves stand at attention as you approach.  Their leader calls to you and "
-"says, \"Let us not impede your progress, ally!  Move on, and may victory be "
+"The elves stand at attention as you approach. Their leader calls to you and "
+"says, \"Let us not impede your progress, ally! Move on, and may victory be "
 "yours.\""
 msgstr ""
 
@@ -2696,9 +2695,10 @@ msgstr "Cerrar este menú sin hacer cambios."
 msgid "Arena"
 msgstr "Arena"
 
+#, fuzzy
 msgid ""
 "You enter the arena and face a pack of vicious lions. You handily defeat "
-"them, to the wild cheers of the crowd.  Impressed by your skill, the aged "
+"them, to the wild cheers of the crowd. Impressed by your skill, the aged "
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 "Entras a la arena y te enfrentas a un grupo de fieros leones. Los derrotas "
@@ -3015,6 +3015,55 @@ msgstr "Muestra información adicional como FPS y la hora actual."
 
 msgid "Hot Keys:"
 msgstr "Atajos de Teclado:"
+
+msgid "Evil"
+msgstr "Mal"
+
+msgid "Good"
+msgstr "Bien"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Interfaz"
+
+msgid "Hide"
+msgstr ""
+
+msgid "Show"
+msgstr ""
+
+msgid "Interface"
+msgstr "Interfaz"
+
+#, fuzzy
+msgid "Slow"
+msgstr "Ralentizar en Masas"
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Muy rápida"
+
+msgid "Scroll Speed"
+msgstr "Velocidad de desplazamiento"
+
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr "Activa o desactiva el cursor de color. Elección estética."
+
+msgid "Sets the speed at which you scroll the window."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Seleccionar Idioma del Juego:"
@@ -3386,8 +3435,9 @@ msgstr "El nombre del mapa actualmente seleccionado."
 msgid "Selected Map Difficulty"
 msgstr "Dificultad del mapa elegido"
 
+#, fuzzy
 msgid ""
-"The map difficulty of the currently selected map.  The map difficulty is "
+"The map difficulty of the currently selected map. The map difficulty is "
 "determined by the scenario designer. More difficult maps might include more "
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
@@ -3417,43 +3467,6 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr "Velocidad"
 
-#, fuzzy
-msgid "Slow"
-msgstr "Ralentizar en Masas"
-
-#, fuzzy
-msgid "Normal"
-msgstr "Normal"
-
-msgid "Fast"
-msgstr ""
-
-#, fuzzy
-msgid "Very Fast"
-msgstr "Muy rápida"
-
-msgid "Scroll Speed"
-msgstr "Velocidad de desplazamiento"
-
-msgid "Evil"
-msgstr "Mal"
-
-msgid "Good"
-msgstr "Bien"
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Interfaz"
-
-msgid "Hide"
-msgstr ""
-
-msgid "Show"
-msgstr ""
-
-msgid "Interface"
-msgstr "Interfaz"
-
 msgid "Auto Resolve"
 msgstr ""
 
@@ -3467,25 +3480,21 @@ msgstr "Botella"
 msgid "autoBattle|Manual"
 msgstr ""
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr "Activa o desactiva el cursor de color. Elección estética."
-
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
 msgid ""
-"Sets the speed that A.I. heroes move at.  You can also elect not to view A."
-"I. movement at all."
+"Sets the speed that A.I. heroes move at. You can also elect not to view A.I. "
+"movement at all."
 msgstr ""
 
-msgid "Sets the speed at which you scroll the window."
-msgstr ""
+#, fuzzy
+msgid "Change the interface settings of the game."
+msgstr "Cambiar los ajustes gráficos del juego."
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
-msgid "Toggle interface visibility."
-msgstr ""
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Ajustes"
 
 msgid "Toggle instant battle mode."
 msgstr ""
@@ -4533,15 +4542,15 @@ msgstr "Un solo jugador jugando un único mapa."
 msgid "Campaign Game"
 msgstr "Partida de Campaña."
 
+msgid "Multi-Player Game"
+msgstr "Juego multi-jugador"
+
 msgid ""
 "A multi-player game, with several human players completing against each "
 "other on a single map."
 msgstr ""
 "Una partida multijugador con varios jugadores humanos compitiendo entre "
 "ellos en un mapa."
-
-msgid "Multi-Player Game"
-msgstr "Juego multi-jugador"
 
 msgid "fheroes2 Resurrection Team presents"
 msgstr ""
@@ -4693,7 +4702,7 @@ msgstr "6 Jugadores"
 msgid "Play with 6 human players."
 msgstr "Jugar con 6 jugadores humanos."
 
-msgid "Dragon city has fallen!  You are now the Master of the Dragons."
+msgid "Dragon city has fallen! You are now the Master of the Dragons."
 msgstr ""
 
 msgid ""
@@ -5957,9 +5966,10 @@ msgstr ""
 "Beber en el oasis es refrescante, pero no ofrece ningún beneficio adicional. "
 "El oasis te podrá ayudar otra vez si primero has luchado en una batalla."
 
+#, fuzzy
 msgid ""
 "A drink at the oasis fills your troops with strength and lifts their "
-"spirits.  You can travel a bit further today."
+"spirits. You can travel a bit further today."
 msgstr ""
 "Al beber en el oasis se restablecen las fuerzas de tus tropas y se elevan "
 "sus espíritus. Puedes viajar un poco más hoy."
@@ -8959,7 +8969,7 @@ msgid "The %{name} increase your defense skill by %{count}."
 msgstr ""
 
 msgid ""
-"You encounter the infamous Black Knight!  After a grueling duel ending in a "
+"You encounter the infamous Black Knight! After a grueling duel ending in a "
 "draw, the Knight, out of respect, offers you a pair of armored gauntlets."
 msgstr ""
 
@@ -9192,7 +9202,7 @@ msgid "The %{name} extends the duration of all your spells by %{count} turns."
 msgstr ""
 
 msgid ""
-"A surprise turn in the landscape finds you in the midst of a grisly scene:  "
+"A surprise turn in the landscape finds you in the midst of a grisly scene: "
 "Vultures picking at the aftermath of a terrible battle. Your cursory search "
 "of the remains turns up an enchanted hourglass."
 msgstr ""
@@ -9445,7 +9455,7 @@ msgstr ""
 
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
-"He presents  you with a gift:  A wand that prevents the use of the dispel "
+"He presents  you with a gift: A wand that prevents the use of the dispel "
 "magic spell on your allies."
 msgstr ""
 
@@ -9557,8 +9567,8 @@ msgstr ""
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
 "Warlock, unearths his fabled mask. Trembling, you put it on and it twists "
-"your visage into an awful grimace!  Oh no!  It's actually the hideous mask "
-"of Gromluck Greene, and you are stuck with it."
+"your visage into an awful grimace! Oh no! It's actually the hideous mask of "
+"Gromluck Greene, and you are stuck with it."
 msgstr ""
 
 msgid "Endless Pouch of Sulfur"
@@ -9633,7 +9643,7 @@ msgstr ""
 "unidades de cristal al día."
 
 msgid ""
-"Taking shelter from a storm in a small cave,  you notice a small patch of "
+"Taking shelter from a storm in a small cave, you notice a small patch of "
 "crystal in one corner. Curious, you break a piece off and notice that the "
 "original crystal grows the lost piece back. You decide to stuff the entire "
 "patch into a pouch and take it with you."
@@ -9663,7 +9673,7 @@ msgid "White Pearl"
 msgstr "Perla Blanca"
 
 msgid ""
-"A walk across a dry saltwater lake bed yields an unlikely prize:  A white "
+"A walk across a dry saltwater lake bed yields an unlikely prize: A white "
 "pearl amidst shattered shells and debris."
 msgstr ""
 
@@ -9782,7 +9792,7 @@ msgid "Battle Garb of Anduran"
 msgstr "Traje de Batalla de Anduran"
 
 msgid ""
-"The %{name} combines the powers of the three Anduran artifacts.  It provides "
+"The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for your troops and gives you the Town Portal spell."
 msgstr ""
 
@@ -9845,12 +9855,13 @@ msgid ""
 "damage taken from fire."
 msgstr ""
 
+#, fuzzy
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
 "your horse. The pain subsides, but you still feel as if your chest is "
-"frozen.  As you pick yourself up off of the ground, you hear hearty "
-"laughter. You turn around just in time to see a Frost Giant run off into the "
-"woods and disappear."
+"frozen. As you pick yourself up off of the ground, you hear hearty laughter. "
+"You turn around just in time to see a Frost Giant run off into the woods and "
+"disappear."
 msgstr ""
 "De repente, un frío aterrador envuelve tu cuerpo. Te agarrotas de tal modo "
 "que te caes del caballo. El dolor se suaviza lentamente, pero aún tienes la "
@@ -9875,9 +9886,10 @@ msgstr ""
 msgid "Holy Hammer"
 msgstr "Martillo Sagrado"
 
+#, fuzzy
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
-"of Zombies. He asks you to take his hammer and finish what he started.  As "
+"of Zombies. He asks you to take his hammer and finish what he started. As "
 "you pick it up, it begins to hum, and then everything becomes a blur. The "
 "Zombies lie dead, the hammer dripping with blood. You strap it to your belt."
 msgstr ""
@@ -9906,12 +9918,6 @@ msgstr ""
 "te mira y te responde: \"¿Crees que es divertido? Vale. Puedes llevártelo. "
 "De cualquier modo, prefiero volar.\""
 
-msgid "Masthead"
-msgstr "El Mástil"
-
-msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
-msgstr ""
-
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -9922,6 +9928,12 @@ msgstr ""
 "usar para arengar a su tripulación en momentos difíciles. Te da entonces un "
 "mapa borroso que muestra dónde lo escondió. Después de un buen rato "
 "explorando, lo encuentras escondido debajo de un embarcadero cercano."
+
+msgid "Masthead"
+msgstr "El Mástil"
+
+msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
+msgstr ""
 
 msgid "Sphere of Negation"
 msgstr "La Esfera de la Negación"
@@ -9969,6 +9981,9 @@ msgstr ""
 "Rompedora de Espadas encantada en la que confiaba durante sus años de "
 "servicio."
 
+msgid "Sword of Anduran"
+msgstr "La Espada de Anduran"
+
 msgid ""
 "A Troll stops you and says: \"Pay me 5,000 gold, or the Sword of Anduran "
 "will slay you where you stand.\" You refuse. The troll grabs the sword "
@@ -9981,9 +9996,6 @@ msgstr ""
 "su cinturón, chilla de dolor, y huye corriendo. Al recoger la fabulosa "
 "espada, das gracias por los trolls medio idiotas que tienden a agarrar el "
 "extremo incorrecto de los objetos afilados."
-
-msgid "Sword of Anduran"
-msgstr "La Espada de Anduran"
 
 msgid "Spade of Necromancy"
 msgstr "Pica de Nigromancia"
@@ -10058,11 +10070,12 @@ msgstr "Rayo"
 msgid "Chain Lightning"
 msgstr "Cadena de Rayos"
 
+#, fuzzy
 msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
 "strike the nearest creature with half damage, then strike the NEXT nearest "
 "creature with half again damage, and so on, until it becomes too weak to be "
-"harmful.  Warning:  This spell can hit your own creatures!"
+"harmful. Warning: This spell can hit your own creatures!"
 msgstr ""
 "Hace que un rayo alcance a la criatura seleccionada, seguidamente alcanza a "
 "la criatura más cercana causándo la midad de daño, luego alcanza a una "
@@ -10164,8 +10177,9 @@ msgstr ""
 msgid "Stoneskin"
 msgstr "Piel de Roca"
 
+#, fuzzy
 msgid ""
-"Increases the defense skill of the targeted creatures.  This is an improved "
+"Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 "Incrementa la habilidad de Defensa de las criaturas seleccionadas. Ésta es "
@@ -10192,8 +10206,9 @@ msgstr "Daña a todos los Nomuertos en combate."
 msgid "Holy Word"
 msgstr "Palabra Sagrada"
 
+#, fuzzy
 msgid ""
-"Damages all undead in the battle.  This is an improved version of Holy Word."
+"Damages all undead in the battle. This is an improved version of Holy Word."
 msgstr ""
 "Daña a todos los nomuertos en la batalla. Es una versión mejorada de la "
 "Palabra Sagrada."
@@ -10307,8 +10322,9 @@ msgstr "Onda de la Muerte"
 msgid "Death Wave"
 msgstr "Ola de la Muerte"
 
+#, fuzzy
 msgid ""
-"Damages all living (non-undead) units in the battle.  This spell is an "
+"Damages all living (non-undead) units in the battle. This spell is an "
 "improved version of Death Ripple."
 msgstr ""
 "Daña todas las unidades Vivientes (no Nomuertas) en la batalla. Es una "
@@ -10337,10 +10353,11 @@ msgstr ""
 msgid "Mirror Image"
 msgstr "Doble Imagen"
 
+#, fuzzy
 msgid ""
-"Creates an illusionary unit that duplicates one of your existing units.  "
-"This illusionary unit does the same damages as the original, but will vanish "
-"if it takes any damage."
+"Creates an illusionary unit that duplicates one of your existing units. This "
+"illusionary unit does the same damages as the original, but will vanish if "
+"it takes any damage."
 msgstr ""
 "Crea una unidad ficticia que duplica a una de tus unidades existentes. Ésta "
 "causará los mismos daños que la original, pero se esfumará si recibe algún "
@@ -10439,10 +10456,11 @@ msgstr "Permite al lanzador ver información detallada de los héroes enemigos."
 msgid "Summon Boat"
 msgstr "LLamar Barco"
 
+#, fuzzy
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore "
-"location.  A friendly boat is one which you just built or were the most "
-"recent player to occupy."
+"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
+"A friendly boat is one which you just built or were the most recent player "
+"to occupy."
 msgstr ""
 "LLama a un barco amigo desocupado al punto de costa más cercano. Un barco "
 "amigo es aquel que has contruido o has sido el último jugador en ocupar."
@@ -10480,9 +10498,10 @@ msgstr ""
 msgid "Haunt"
 msgstr "Encantar"
 
+#, fuzzy
 msgid ""
-"Haunts a mine you control with Ghosts.  This mine stops producing "
-"resources.  (If I can't keep it, nobody will!)"
+"Haunts a mine you control with Ghosts. This mine stops producing resources. "
+"(If I can't keep it, nobody will!)"
 msgstr ""
 "Encanta una mina que controlas con Fantasmas. La mina no podrá producir "
 "recursos para nadie."
@@ -10518,7 +10537,7 @@ msgid "Petrification"
 msgstr "Fortificación"
 
 msgid ""
-"Turns the affected creature into stone.  A petrified creature receives half "
+"Turns the affected creature into stone. A petrified creature receives half "
 "damage from a direct attack."
 msgstr ""
 
@@ -10638,7 +10657,7 @@ msgstr ""
 msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr ""
 
-msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
+msgid "He told her: Yada yada yada... and then she said: Blah, blah, blah..."
 msgstr ""
 
 msgid "An unknown force is being resurrected..."
@@ -10652,9 +10671,3 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "guildWell|EXIT"
-#~ msgstr "SALIR"
-
-#~ msgid "%{spell} failed!!!"
-#~ msgstr "¡%{spell} fallido!"

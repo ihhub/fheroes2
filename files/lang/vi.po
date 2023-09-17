@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-11 14:45+0000\n"
+"POT-Creation-Date: 2023-09-17 07:18+0000\n"
 "PO-Revision-Date: 2023-09-04 09:26+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1009,10 +1009,11 @@ msgstr "Sự phản bội"
 msgid "Final Justice"
 msgstr "Công lý Cuối cùng"
 
+#, fuzzy
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
-"rebellion against his brother.  They are not allied with each other, so they "
-"will spend most of their time fighting with one another.  Victory is yours "
+"rebellion against his brother. They are not allied with each other, so they "
+"will spend most of their time fighting with one another. Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
 "Roland cần ngươi đánh bại các lãnh chúa gần lâu đài của anh ta để bắt đầu "
@@ -1105,8 +1106,9 @@ msgstr ""
 "răng, và tất cả đều liên minh chống lại bạn. Bắt giữ Archibald để kết thúc "
 "chiến tranh!"
 
+#, fuzzy
 msgid ""
-"Switching sides leaves you with three castles against the enemy's one.  This "
+"Switching sides leaves you with three castles against the enemy's one. This "
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
@@ -1141,11 +1143,12 @@ msgstr "Tận thế"
 msgid "Greater Glory"
 msgstr "Vinh quang Lớn hơn"
 
+#, fuzzy
 msgid ""
-"King Archibald requires you to defeat the three enemies in this region.  "
-"They are not allied with one another, so they will spend most of their "
-"energy fighting amongst themselves.  You will win when you own all of the "
-"enemy castles and there are no more heroes left to fight."
+"King Archibald requires you to defeat the three enemies in this region. They "
+"are not allied with one another, so they will spend most of their energy "
+"fighting amongst themselves. You will win when you own all of the enemy "
+"castles and there are no more heroes left to fight."
 msgstr ""
 "Vua Archibald yêu cầu bạn đánh bại ba kẻ thù trong khu vực này. Họ không "
 "liên minh với nhau, vì vậy họ sẽ dành phần lớn năng lượng để chiến đấu với "
@@ -1546,10 +1549,11 @@ msgstr ""
 "Những con rồng gầm gừ và gầm gừ đồng ý gia nhập lực lượng với ngươi, 'Đồng "
 "minh' của chúng."
 
+#, fuzzy
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
-"attention.  He shouts to them, \"Who of you is brave enough to join this "
-"fearless ally of ours?\"  The group explodes with cheers as they run to join "
+"attention. He shouts to them, \"Who of you is brave enough to join this "
+"fearless ally of ours?\" The group explodes with cheers as they run to join "
 "your ranks."
 msgstr ""
 "Khi ngươi đến gần nhóm yêu tinh, thủ lĩnh của họ sẽ kêu gọi tất cả họ chú ý. "
@@ -1557,8 +1561,9 @@ msgstr ""
 "minh dũng cảm này của chúng tôi?\" Cả nhóm bùng nổ với tiếng reo hò khi họ "
 "chạy đến gia nhập hàng ngũ của ngươi."
 
+#, fuzzy
 msgid ""
-"The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
+"The dwarves hail you, \"Any friend of Roland is a friend of ours. You may "
 "pass.\""
 msgstr ""
 "Những người lùn chào đón ngươi, \"Bất kỳ người bạn nào của Roland đều là bạn "
@@ -1570,18 +1575,19 @@ msgstr ""
 "Yêu tinh nhận ra ngươi và càu nhàu, \"Đồng minh của Archibald có thể vượt "
 "qua.\""
 
+#, fuzzy
 msgid ""
-"The dragons see you and call out.  \"Our alliance with Archibald compels us "
-"to join you.  Unfortunately you have no room.  A pity!\"  They quickly "
-"scatter."
+"The dragons see you and call out. \"Our alliance with Archibald compels us "
+"to join you. Unfortunately you have no room. A pity!\" They quickly scatter."
 msgstr ""
 "Những con rồng nhìn thấy ngươi và gọi ra. \"Liên minh của chúng tôi với "
 "Archibald buộc chúng tôi phải tham gia cùng ngươi. Thật không may, ngươi "
 "không có chỗ. Thật đáng tiếc!\" Họ nhanh chóng chạy tán loạn."
 
+#, fuzzy
 msgid ""
-"The elves stand at attention as you approach.  Their leader calls to you and "
-"says, \"Let us not impede your progress, ally!  Move on, and may victory be "
+"The elves stand at attention as you approach. Their leader calls to you and "
+"says, \"Let us not impede your progress, ally! Move on, and may victory be "
 "yours.\""
 msgstr ""
 "Yêu tinh đứng chú ý khi ngươi đến gần. Thủ lĩnh của họ gọi cho ngươi và nói: "
@@ -2668,9 +2674,10 @@ msgstr "Thoát khỏi trình đơn này và không làm gì cả."
 msgid "Arena"
 msgstr "Đấu trường"
 
+#, fuzzy
 msgid ""
 "You enter the arena and face a pack of vicious lions. You handily defeat "
-"them, to the wild cheers of the crowd.  Impressed by your skill, the aged "
+"them, to the wild cheers of the crowd. Impressed by your skill, the aged "
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 "Ngươi bước vào đấu trường và đối mặt với một bầy sư tử hung ác. Ngươi dễ "
@@ -2973,6 +2980,51 @@ msgstr ""
 
 msgid "Hot Keys:"
 msgstr "Phím tắt:"
+
+msgid "Evil"
+msgstr "Xấu"
+
+msgid "Good"
+msgstr "Tốt"
+
+msgid "Interface Type"
+msgstr "Kiểu Giao diện"
+
+msgid "Hide"
+msgstr "Ẩn"
+
+msgid "Show"
+msgstr "Hiện"
+
+msgid "Interface"
+msgstr "Giao diện"
+
+msgid "Slow"
+msgstr "Chậm"
+
+msgid "Normal"
+msgstr "Thường"
+
+msgid "Fast"
+msgstr "Nhanh"
+
+msgid "Very Fast"
+msgstr "Rất nhanh"
+
+msgid "Scroll Speed"
+msgstr "Tốc độ Cuộn"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Chuyển đổi loại giao diện ngươi muốn sử dụng."
+
+msgid "Toggle interface visibility."
+msgstr "Chuyển đổi khả năng hiển thị giao diện."
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr "Bật hoặc tắt con trỏ màu. Đây chỉ là một sự lựa chọn thẩm mỹ."
+
+msgid "Sets the speed at which you scroll the window."
+msgstr "Đặt tốc độ cuộn cửa sổ."
 
 msgid "Select Game Language:"
 msgstr "Chọn Ngôn ngữ Game:"
@@ -3335,8 +3387,9 @@ msgstr "Tên của bản đồ hiện được chọn."
 msgid "Selected Map Difficulty"
 msgstr "Chọn Độ khó của Bản đồ"
 
+#, fuzzy
 msgid ""
-"The map difficulty of the currently selected map.  The map difficulty is "
+"The map difficulty of the currently selected map. The map difficulty is "
 "determined by the scenario designer. More difficult maps might include more "
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
@@ -3364,39 +3417,6 @@ msgstr "Không Hiện"
 msgid "Enemy Speed"
 msgstr "Tốc độ Địch"
 
-msgid "Slow"
-msgstr "Chậm"
-
-msgid "Normal"
-msgstr "Thường"
-
-msgid "Fast"
-msgstr "Nhanh"
-
-msgid "Very Fast"
-msgstr "Rất nhanh"
-
-msgid "Scroll Speed"
-msgstr "Tốc độ Cuộn"
-
-msgid "Evil"
-msgstr "Xấu"
-
-msgid "Good"
-msgstr "Tốt"
-
-msgid "Interface Type"
-msgstr "Kiểu Giao diện"
-
-msgid "Hide"
-msgstr "Ẩn"
-
-msgid "Show"
-msgstr "Hiện"
-
-msgid "Interface"
-msgstr "Giao diện"
-
 msgid "Auto Resolve"
 msgstr "Tự động Giải quyết"
 
@@ -3409,27 +3429,24 @@ msgstr "Chiến trường"
 msgid "autoBattle|Manual"
 msgstr "Thủ công"
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr "Bật hoặc tắt con trỏ màu. Đây chỉ là một sự lựa chọn thẩm mỹ."
-
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Thay đổi tốc độ di chuyển của các tướng trên màn hình chính."
 
+#, fuzzy
 msgid ""
-"Sets the speed that A.I. heroes move at.  You can also elect not to view A."
-"I. movement at all."
+"Sets the speed that A.I. heroes move at. You can also elect not to view A.I. "
+"movement at all."
 msgstr ""
 "Đặt tốc độ mà tướng A.I. di chuyển. Ngươi cũng có thể chọn không xem tướng A."
 "I. di chuyển."
 
-msgid "Sets the speed at which you scroll the window."
-msgstr "Đặt tốc độ cuộn cửa sổ."
+#, fuzzy
+msgid "Change the interface settings of the game."
+msgstr "Thay đổi đồ họa của game."
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Chuyển đổi loại giao diện ngươi muốn sử dụng."
-
-msgid "Toggle interface visibility."
-msgstr "Chuyển đổi khả năng hiển thị giao diện."
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Cài đặt Trò chơi"
 
 msgid "Toggle instant battle mode."
 msgstr "Chuyển đổi chế độ chiến đấu ngay lập tức."
@@ -4411,15 +4428,15 @@ msgstr "Một trò chơi một người chơi chơi qua một loạt bản đồ
 msgid "Campaign Game"
 msgstr "Trò chơi Chiến dịch"
 
+msgid "Multi-Player Game"
+msgstr "Trò chơi Nhiều người"
+
 msgid ""
 "A multi-player game, with several human players completing against each "
 "other on a single map."
 msgstr ""
 "Một trò chơi nhiều người chơi, trong đó một số người chơi sẽ đấu với nhau "
 "trên một bản đồ."
-
-msgid "Multi-Player Game"
-msgstr "Trò chơi Nhiều người"
 
 msgid "fheroes2 Resurrection Team presents"
 msgstr "fheroes2 Resurrection Team giới thiệu"
@@ -4563,7 +4580,7 @@ msgstr "6 người chơi"
 msgid "Play with 6 human players."
 msgstr "Chơi với 6 người chơi."
 
-msgid "Dragon city has fallen!  You are now the Master of the Dragons."
+msgid "Dragon city has fallen! You are now the Master of the Dragons."
 msgstr ""
 
 msgid ""
@@ -5622,7 +5639,7 @@ msgstr ""
 
 msgid ""
 "A drink at the oasis fills your troops with strength and lifts their "
-"spirits.  You can travel a bit further today."
+"spirits. You can travel a bit further today."
 msgstr ""
 
 msgid ""
@@ -8231,7 +8248,7 @@ msgid "The %{name} increase your defense skill by %{count}."
 msgstr ""
 
 msgid ""
-"You encounter the infamous Black Knight!  After a grueling duel ending in a "
+"You encounter the infamous Black Knight! After a grueling duel ending in a "
 "draw, the Knight, out of respect, offers you a pair of armored gauntlets."
 msgstr ""
 
@@ -8462,7 +8479,7 @@ msgid "The %{name} extends the duration of all your spells by %{count} turns."
 msgstr ""
 
 msgid ""
-"A surprise turn in the landscape finds you in the midst of a grisly scene:  "
+"A surprise turn in the landscape finds you in the midst of a grisly scene: "
 "Vultures picking at the aftermath of a terrible battle. Your cursory search "
 "of the remains turns up an enchanted hourglass."
 msgstr ""
@@ -8715,7 +8732,7 @@ msgstr ""
 
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
-"He presents  you with a gift:  A wand that prevents the use of the dispel "
+"He presents  you with a gift: A wand that prevents the use of the dispel "
 "magic spell on your allies."
 msgstr ""
 
@@ -8821,8 +8838,8 @@ msgstr ""
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
 "Warlock, unearths his fabled mask. Trembling, you put it on and it twists "
-"your visage into an awful grimace!  Oh no!  It's actually the hideous mask "
-"of Gromluck Greene, and you are stuck with it."
+"your visage into an awful grimace! Oh no! It's actually the hideous mask of "
+"Gromluck Greene, and you are stuck with it."
 msgstr ""
 
 msgid "Endless Pouch of Sulfur"
@@ -8894,7 +8911,7 @@ msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr ""
 
 msgid ""
-"Taking shelter from a storm in a small cave,  you notice a small patch of "
+"Taking shelter from a storm in a small cave, you notice a small patch of "
 "crystal in one corner. Curious, you break a piece off and notice that the "
 "original crystal grows the lost piece back. You decide to stuff the entire "
 "patch into a pouch and take it with you."
@@ -8924,7 +8941,7 @@ msgid "White Pearl"
 msgstr "Ngọc trai Trắng"
 
 msgid ""
-"A walk across a dry saltwater lake bed yields an unlikely prize:  A white "
+"A walk across a dry saltwater lake bed yields an unlikely prize: A white "
 "pearl amidst shattered shells and debris."
 msgstr ""
 
@@ -9020,7 +9037,7 @@ msgid "Battle Garb of Anduran"
 msgstr ""
 
 msgid ""
-"The %{name} combines the powers of the three Anduran artifacts.  It provides "
+"The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for your troops and gives you the Town Portal spell."
 msgstr ""
 
@@ -9072,9 +9089,9 @@ msgstr ""
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
 "your horse. The pain subsides, but you still feel as if your chest is "
-"frozen.  As you pick yourself up off of the ground, you hear hearty "
-"laughter. You turn around just in time to see a Frost Giant run off into the "
-"woods and disappear."
+"frozen. As you pick yourself up off of the ground, you hear hearty laughter. "
+"You turn around just in time to see a Frost Giant run off into the woods and "
+"disappear."
 msgstr ""
 
 msgid "Helmet of Anduran"
@@ -9092,7 +9109,7 @@ msgstr ""
 
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
-"of Zombies. He asks you to take his hammer and finish what he started.  As "
+"of Zombies. He asks you to take his hammer and finish what he started. As "
 "you pick it up, it begins to hum, and then everything becomes a blur. The "
 "Zombies lie dead, the hammer dripping with blood. You strap it to your belt."
 msgstr ""
@@ -9111,17 +9128,17 @@ msgid ""
 "flying anyway.\""
 msgstr ""
 
-msgid "Masthead"
-msgstr ""
-
-msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
-msgstr ""
-
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
 "map that shows where he hid it. After much exploring, you find it stashed "
 "underneath a nearby dock."
+msgstr ""
+
+msgid "Masthead"
+msgstr ""
+
+msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
 msgstr ""
 
 msgid "Sphere of Negation"
@@ -9160,15 +9177,15 @@ msgid ""
 "Sword Breaker that he relied on during his tour of duty."
 msgstr ""
 
+msgid "Sword of Anduran"
+msgstr ""
+
 msgid ""
 "A Troll stops you and says: \"Pay me 5,000 gold, or the Sword of Anduran "
 "will slay you where you stand.\" You refuse. The troll grabs the sword "
 "hanging from its belt, screams in pain, and runs away. Picking up the fabled "
 "sword, you give thanks that half-witted Trolls tend to grab the wrong end of "
 "sharp objects."
-msgstr ""
-
-msgid "Sword of Anduran"
 msgstr ""
 
 msgid "Spade of Necromancy"
@@ -9241,7 +9258,7 @@ msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
 "strike the nearest creature with half damage, then strike the NEXT nearest "
 "creature with half again damage, and so on, until it becomes too weak to be "
-"harmful.  Warning:  This spell can hit your own creatures!"
+"harmful. Warning: This spell can hit your own creatures!"
 msgstr ""
 
 msgid "Teleport"
@@ -9328,7 +9345,7 @@ msgid "Stoneskin"
 msgstr "Thạch bì"
 
 msgid ""
-"Increases the defense skill of the targeted creatures.  This is an improved "
+"Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 
@@ -9354,7 +9371,7 @@ msgid "Holy Word"
 msgstr ""
 
 msgid ""
-"Damages all undead in the battle.  This is an improved version of Holy Word."
+"Damages all undead in the battle. This is an improved version of Holy Word."
 msgstr ""
 
 msgid "Holy Shout"
@@ -9455,7 +9472,7 @@ msgid "Death Wave"
 msgstr ""
 
 msgid ""
-"Damages all living (non-undead) units in the battle.  This spell is an "
+"Damages all living (non-undead) units in the battle. This spell is an "
 "improved version of Death Ripple."
 msgstr ""
 
@@ -9481,9 +9498,9 @@ msgid "Mirror Image"
 msgstr ""
 
 msgid ""
-"Creates an illusionary unit that duplicates one of your existing units.  "
-"This illusionary unit does the same damages as the original, but will vanish "
-"if it takes any damage."
+"Creates an illusionary unit that duplicates one of your existing units. This "
+"illusionary unit does the same damages as the original, but will vanish if "
+"it takes any damage."
 msgstr ""
 
 msgid "Shield"
@@ -9575,9 +9592,9 @@ msgid "Summon Boat"
 msgstr ""
 
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore "
-"location.  A friendly boat is one which you just built or were the most "
-"recent player to occupy."
+"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
+"A friendly boat is one which you just built or were the most recent player "
+"to occupy."
 msgstr ""
 
 msgid "Allows the caster to magically transport to a nearby location."
@@ -9608,8 +9625,8 @@ msgid "Haunt"
 msgstr ""
 
 msgid ""
-"Haunts a mine you control with Ghosts.  This mine stops producing "
-"resources.  (If I can't keep it, nobody will!)"
+"Haunts a mine you control with Ghosts. This mine stops producing resources. "
+"(If I can't keep it, nobody will!)"
 msgstr ""
 
 msgid "Set Earth Guardian"
@@ -9639,8 +9656,9 @@ msgstr ""
 msgid "Petrification"
 msgstr "Hóa đá"
 
+#, fuzzy
 msgid ""
-"Turns the affected creature into stone.  A petrified creature receives half "
+"Turns the affected creature into stone. A petrified creature receives half "
 "damage from a direct attack."
 msgstr ""
 "Biến sinh vật bị ảnh hưởng thành đá. Một sinh vật hóa đá nhận một nửa sát "
@@ -9746,7 +9764,7 @@ msgstr "Xương của Giết Chúa chôn vùi dưới móng của đấu trườ
 msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr "Rồng Đen sẽ mang Khổng Lồ bất cứ ngày nào trong ngày."
 
-msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
+msgid "He told her: Yada yada yada... and then she said: Blah, blah, blah..."
 msgstr ""
 
 msgid "An unknown force is being resurrected..."
@@ -9760,9 +9778,3 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Damg"
-#~ msgstr "Thiệt hại"
-
-#~ msgid "guildWell|EXIT"
-#~ msgstr "THOÁT"

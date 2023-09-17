@@ -1611,7 +1611,7 @@ namespace Maps
                 resourceType = Resource::FromIndexSprite( tile.GetObjectSpriteIndex() );
             }
             else {
-                for ( TilesAddon & addon : tile.getLevel1Addons() ) {
+                for ( TilesAddon & addon : tile.getBottomLayerAddons() ) {
                     if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
                         resourceType = Resource::FromIndexSprite( addon._imageIndex );
                         // If this happens we are in trouble. It looks like that map maker put the resource under an object which is impossible to do.
@@ -2128,7 +2128,7 @@ namespace Maps
         // except when there is already MONS32.ICN here.
         if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_MONS32 && tile.GetObjectSpriteIndex() != 255 ) {
             // Push object sprite to Level 1 Addons preserving the Layer Type.
-            tile.AddonsPushLevel1( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex(), false, false ) );
+            tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex(), false, false ) );
 
             // Set unique UID for placed monster.
             tile.setObjectUID( World::GetUniq() );
@@ -2336,7 +2336,7 @@ namespace Maps
         tile.setObjectIcnType( objectIcnTypeTemp );
         tile.setObjectSpriteIndex( imageIndexTemp );
 
-        for ( TilesAddon & addon : tile.getLevel1Addons() ) {
+        for ( TilesAddon & addon : tile.getBottomLayerAddons() ) {
             if ( addon._uid == tile.GetObjectUID() ) {
                 restoreLeftSprite( addon._objectIcnType, addon._imageIndex );
             }

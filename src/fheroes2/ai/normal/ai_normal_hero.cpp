@@ -133,7 +133,7 @@ namespace
             return dist;
         }
 
-        const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( dimensionDoorSteps );
+        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( dimensionDoorSteps );
         assert( dimensionDoorDist > 0 );
 
         if ( dist == 0 || dimensionDoorDist < dist / 2 ) {
@@ -577,7 +577,7 @@ namespace
             return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, ( hero.isLosingGame() ? 1.0 : AI::ARMY_ADVANTAGE_MEDIUM ) );
 
         case MP2::OBJ_HEROES: {
-            const Heroes * otherHero = tile.GetHeroes();
+            const Heroes * otherHero = tile.getHero();
             assert( otherHero != nullptr );
 
             const bool otherHeroInCastle = ( otherHero->inCastle() != nullptr );
@@ -953,7 +953,7 @@ namespace AI
             return calculateCastleValue( castle );
         }
         case MP2::OBJ_HEROES: {
-            const Heroes * otherHero = tile.GetHeroes();
+            const Heroes * otherHero = tile.getHero();
             if ( !otherHero ) {
                 // How is it even possible?
                 assert( 0 );
@@ -1475,7 +1475,7 @@ namespace AI
             return calculateCastleValue( castle );
         }
         case MP2::OBJ_HEROES: {
-            const Heroes * otherHero = tile.GetHeroes();
+            const Heroes * otherHero = tile.getHero();
             if ( !otherHero ) {
                 // How is it even possible?
                 assert( 0 );
@@ -1672,7 +1672,7 @@ namespace AI
 
         switch ( objectType ) {
         case MP2::OBJ_HEROES: {
-            const Heroes * otherHero = tile.GetHeroes();
+            const Heroes * otherHero = tile.getHero();
             if ( !otherHero ) {
                 // How is it even possible?
                 assert( 0 );
@@ -1804,7 +1804,7 @@ namespace AI
         int targetIndex = -1;
 
         const Kingdom & kingdom = hero.GetKingdom();
-        const KingdomHeroes & allHeroes = kingdom.GetHeroes();
+        const VecHeroes & allHeroes = kingdom.GetHeroes();
 
         // Check if we have army and should bring it to friendly hero first
         double bestTargetValue = lowestPossibleValue;
@@ -1898,7 +1898,7 @@ namespace AI
 
         for ( const auto & actionObject : _mapActionObjects ) {
             if ( actionObject.second == MP2::OBJ_HEROES ) {
-                assert( world.GetTiles( actionObject.first ).GetHeroes() != nullptr );
+                assert( world.GetTiles( actionObject.first ).getHero() != nullptr );
             }
 
             const auto [dummy, inserted] = objectIndexes.emplace( actionObject.first );
@@ -1970,7 +1970,7 @@ namespace AI
                     break;
                 }
                 case MP2::OBJ_HEROES: {
-                    const Heroes * anotherHero = destinationTile.GetHeroes();
+                    const Heroes * anotherHero = destinationTile.getHero();
                     if ( anotherHero == nullptr ) {
                         assert( 0 );
                         break;
@@ -2038,7 +2038,7 @@ namespace AI
                 uint32_t dist = _pathfinder.getDistance( node.first );
 
                 bool useDimensionDoor = false;
-                const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
+                const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
                 if ( dimensionDoorDist > 0 && ( dist == 0 || dimensionDoorDist < dist / 2 ) ) {
                     dist = dimensionDoorDist;
                     useDimensionDoor = true;
@@ -2073,7 +2073,7 @@ namespace AI
 
             // TODO: add logic to check fog discovery based on Dimension Door distance, not the nearest tile.
             bool useDimensionDoor = false;
-            const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, fogDiscoveryTarget ) );
+            const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, fogDiscoveryTarget ) );
             if ( dimensionDoorDist > 0 && ( distanceToFogDiscovery == 0 || dimensionDoorDist < distanceToFogDiscovery / 2 ) ) {
                 distanceToFogDiscovery = dimensionDoorDist;
                 useDimensionDoor = true;
@@ -2144,7 +2144,7 @@ namespace AI
             else if ( objectType == MP2::OBJ_HEROES ) {
                 const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
-                const Heroes * anotherHero = tile.GetHeroes();
+                const Heroes * anotherHero = tile.getHero();
                 if ( anotherHero == nullptr ) {
                     // Another hero lost the battle, but he could defend a castle
                     if ( tile.GetObject() == MP2::OBJ_CASTLE ) {
@@ -2453,7 +2453,7 @@ namespace AI
 
             // check if we want to use Dimension Door spell or move regularly
             std::list<Route::Step> dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
-            uint32_t dimensionDoorDistance = AIWorldPathfinder::calculatePathPenalty( dimensionPath );
+            uint32_t dimensionDoorDistance = Route::calculatePathPenalty( dimensionPath );
             uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
             if ( dimensionDoorDistance && ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) ) {
                 while ( ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) && !dimensionPath.empty() && bestHero->MayStillMove( false, false )

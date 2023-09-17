@@ -1147,20 +1147,22 @@ namespace AI
             const auto cacheItemIter = aroundIndexesCache.try_emplace( nearbyUnit, Board::GetAroundIndexes( *nearbyUnit ) ).first;
             assert( cacheItemIter != aroundIndexesCache.end() );
 
-            for ( const int32_t cellIdx : cacheItemIter->second ) {
-                const Position pos = Position::GetReachable( currentUnit, cellIdx );
+            uint32_t shortestDist = UINT32_MAX;
 
-                if ( pos.GetHead() == nullptr ) {
+            for ( const int32_t cellIdx : cacheItemIter->second ) {
+                if ( !Board::CanAttackTargetFromPosition( currentUnit, *nearbyUnit, cellIdx ) ) {
                     continue;
                 }
 
-                assert( !currentUnit.isWide() || pos.GetTail() != nullptr );
+                const Position pos = Position::GetReachable( currentUnit, cellIdx );
+                assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
 
-                if ( Board::CanAttackTargetFromPosition( currentUnit, *nearbyUnit, cellIdx ) ) {
+                const uint32_t dist = arena.CalculateMoveDistance( currentUnit, pos );
+                if ( targetInfo.cell == -1 || dist < shortestDist ) {
+                    shortestDist = dist;
+
                     targetInfo.cell = cellIdx;
                     targetInfo.unit = nearbyUnit;
-
-                    break;
                 }
             }
 
@@ -1191,6 +1193,7 @@ namespace AI
                     const uint32_t dist = arena.CalculateMoveDistance( currentUnit, pos );
                     if ( targetInfo.cell == -1 || dist < shortestDist ) {
                         shortestDist = dist;
+
                         targetInfo.cell = cellIdx;
                     }
                 }

@@ -47,6 +47,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 
 namespace
 {
@@ -736,7 +737,7 @@ bool DwellingsBar::ActionBarLeftMouseSingleClick( DwellingItem & dwl )
         castle.RecruitMonster( Dialog::RecruitMonster( dwl.mons, castle.getMonstersInDwelling( dwl.type ), true, -60 ) );
     }
     else if ( !castle.isBuild( BUILD_CASTLE ) )
-        Dialog::Message( "", GetBuildConditionDescription( NEED_CASTLE ), Font::BIG, Dialog::OK );
+        fheroes2::showStandardTextMessage( "", GetBuildConditionDescription( NEED_CASTLE ), Dialog::OK );
     else {
         BuildingInfo dwelling( castle, static_cast<building_t>( dwl.type ) );
 
