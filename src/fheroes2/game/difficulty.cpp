@@ -64,7 +64,7 @@ int Difficulty::GetScoutingBonus( int difficulty )
     return 0;
 }
 
-double Difficulty::GetGoldIncomeBonusForAI( const int difficulty )
+double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
