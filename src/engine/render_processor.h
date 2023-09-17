@@ -33,6 +33,8 @@ namespace fheroes2
     public:
         RenderProcessor( const RenderProcessor & ) = delete;
 
+        ~RenderProcessor() = default;
+
         RenderProcessor & operator=( const RenderProcessor & ) = delete;
 
         static RenderProcessor & instance();
