@@ -2995,9 +2995,10 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    // reset cast
+    // Cancel the spellcast
     if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
         humanturn_spell = Spell::NONE;
+
         _teleportSpellSrcIdx = -1;
     }
     else if ( le.MouseCursor( _interfacePosition ) && humanturn_spell.isValid() ) {
@@ -3012,36 +3013,50 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
             popup.Reset();
         }
 
-        if ( le.MouseClickLeft() && Cursor::WAR_NONE != cursor.Themes() ) {
+        const BoardActionIntent intent{ themes, index_pos };
+        // If the mouse event has been triggered by the touchpad, it should be considered confirmed only if this event orders to
+        // perform the same action that is already suggested on the screen using the mouse cursor and (optionally) cell highlighting.
+        const bool isConfirmed = ( !le.MouseEventFromTouchpad() || _boardActionIntent == intent );
+
+        if ( le.MouseClickLeft() && Cursor::WAR_NONE != cursor.Themes() && isConfirmed ) {
             if ( !Board::isValidIndex( index_pos ) ) {
-                DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                           "dst: "
-                               << "out of range" )
+                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Spell destination is out of range: " << index_pos )
                 return;
             }
 
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << index_pos )
 
             if ( Cursor::SP_TELEPORT == cursor.Themes() ) {
-                if ( 0 > _teleportSpellSrcIdx )
+                if ( _teleportSpellSrcIdx < 0 ) {
                     _teleportSpellSrcIdx = index_pos;
+                }
                 else {
                     actions.emplace_back( CommandType::MSG_BATTLE_CAST, Spell::TELEPORT, _teleportSpellSrcIdx, index_pos );
+
                     humanturn_spell = Spell::NONE;
                     humanturn_exit = true;
+
                     _teleportSpellSrcIdx = -1;
                 }
             }
             else if ( Cursor::SP_MIRRORIMAGE == cursor.Themes() ) {
                 actions.emplace_back( CommandType::MSG_BATTLE_CAST, Spell::MIRRORIMAGE, index_pos );
+
                 humanturn_spell = Spell::NONE;
                 humanturn_exit = true;
             }
             else {
                 actions.emplace_back( CommandType::MSG_BATTLE_CAST, humanturn_spell.GetID(), index_pos );
+
                 humanturn_spell = Spell::NONE;
                 humanturn_exit = true;
             }
+        }
+
+        // Do not remember intermediate touch gestures (such as simulated mouse button pressing) as intents. When using the touchpad,
+        // only a complete simulated click is considered an intent.
+        if ( !le.MouseEventFromTouchpad() || le.MouseClickLeft() ) {
+            _boardActionIntent = intent;
         }
     }
     else {
