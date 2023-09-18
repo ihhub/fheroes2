@@ -455,7 +455,7 @@ bool Maps::TilesAddon::PredicateSortRules1( const Maps::TilesAddon & ta1, const 
 bool Maps::TilesAddon::isRoad() const
 {
     switch ( _objectIcnType ) {
-        // road sprite
+    // road sprite
     case MP2::OBJ_ICN_TYPE_ROAD:
         if ( 1 == _imageIndex || 8 == _imageIndex || 10 == _imageIndex || 11 == _imageIndex || 15 == _imageIndex || 22 == _imageIndex || 23 == _imageIndex
              || 24 == _imageIndex || 25 == _imageIndex || 27 == _imageIndex )
@@ -463,14 +463,14 @@ bool Maps::TilesAddon::isRoad() const
         else
             return true;
 
-        // castle or town gate
+    // castle or town gate
     case MP2::OBJ_ICN_TYPE_OBJNTOWN:
         if ( 13 == _imageIndex || 29 == _imageIndex || 45 == _imageIndex || 61 == _imageIndex || 77 == _imageIndex || 93 == _imageIndex || 109 == _imageIndex
              || 125 == _imageIndex || 141 == _imageIndex || 157 == _imageIndex || 173 == _imageIndex || 189 == _imageIndex )
             return true;
         break;
 
-        // Random castle or town gate.
+    // Random castle or town gate.
     case MP2::OBJ_ICN_TYPE_OBJNTWRD:
         return ( _imageIndex == 13 || _imageIndex == 29 );
 
@@ -1362,23 +1362,23 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
         const uint8_t originalObjectSpriteIndex = tile.GetObjectSpriteIndex();
         switch ( originalObjectSpriteIndex ) {
-            // Random monster placeholder "MON"
+        // Random monster placeholder "MON"
         case 66:
             monsterObjectType = MP2::OBJ_RANDOM_MONSTER;
             break;
-            // Random monster placeholder "MON 1"
+        // Random monster placeholder "MON 1"
         case 67:
             monsterObjectType = MP2::OBJ_RANDOM_MONSTER_WEAK;
             break;
-            // Random monster placeholder "MON 2"
+        // Random monster placeholder "MON 2"
         case 68:
             monsterObjectType = MP2::OBJ_RANDOM_MONSTER_MEDIUM;
             break;
-            // Random monster placeholder "MON 3"
+        // Random monster placeholder "MON 3"
         case 69:
             monsterObjectType = MP2::OBJ_RANDOM_MONSTER_STRONG;
             break;
-            // Random monster placeholder "MON 4"
+        // Random monster placeholder "MON 4"
         case 70:
             monsterObjectType = MP2::OBJ_RANDOM_MONSTER_VERY_STRONG;
             break;
@@ -2150,7 +2150,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
     // Old format contained Gold values divided by 100 due to uint8_t limitation. We don't have such limitation anymore.
 
     switch ( objectType ) {
-        // Alchemist Lab, Sawmill and Mines have first value as a resource type and the second value as resource count per day.
+    // Alchemist Lab, Sawmill and Mines have first value as a resource type and the second value as resource count per day.
     case MP2::OBJ_ALCHEMIST_LAB:
     case MP2::OBJ_MINES:
     case MP2::OBJ_SAWMILL:
@@ -2177,7 +2177,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         _metadata[2] = additionalMetadata;
         break;
 
-        // Abandoned mine was mixed with Mines in the old save formats.
+    // Abandoned mine was mixed with Mines in the old save formats.
     case MP2::OBJ_ABANDONED_MINE:
         if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1003_RELEASE ) {
             _metadata[0] = quantityValue1;
@@ -2190,7 +2190,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         }
         break;
 
-        // Monster dwellings always store only one value - the number of monsters.
+    // Monster dwellings always store only one value - the number of monsters.
     case MP2::OBJ_AIR_ALTAR:
     case MP2::OBJ_ARCHER_HOUSE:
     case MP2::OBJ_BARROW_MOUNDS:
@@ -2215,13 +2215,13 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         _metadata[0] = ( static_cast<uint32_t>( quantityValue1 ) << 8 ) + quantityValue2;
         break;
 
-        // Genie's Lamp must have some monsters inside otherwise this object should not exist on Adventure Map.
+    // Genie's Lamp must have some monsters inside otherwise this object should not exist on Adventure Map.
     case MP2::OBJ_GENIE_LAMP:
         _metadata[0] = ( static_cast<uint32_t>( quantityValue1 ) << 8 ) + quantityValue2;
         assert( _metadata[0] > 0 );
         break;
 
-        // Shrines as well as Pyramid always contain one type of spell.
+    // Shrines as well as Pyramid always contain one type of spell.
     case MP2::OBJ_SHRINE_FIRST_CIRCLE:
     case MP2::OBJ_SHRINE_SECOND_CIRCLE:
     case MP2::OBJ_SHRINE_THIRD_CIRCLE:
@@ -2229,13 +2229,13 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         _metadata[0] = quantityValue1;
         break;
 
-        // Monster object store the number of monsters (which must be bigger than 0) and join condition type.
+    // Monster object store the number of monsters (which must be bigger than 0) and join condition type.
     case MP2::OBJ_MONSTER:
         _metadata[0] = ( static_cast<uint32_t>( quantityValue1 ) << 8 ) + quantityValue2;
         _metadata[2] = additionalMetadata;
         break;
 
-        // Resource contains the type and the amount.
+    // Resource contains the type and the amount.
     case MP2::OBJ_RESOURCE:
         _metadata[0] = quantityValue1;
         if ( quantityValue1 == Resource::GOLD ) {
@@ -2252,7 +2252,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         _metadata[0] = quantityValue1;
         break;
 
-        // Tree of Knowledge contains either nothing for free level up or the amount of required resources.
+    // Tree of Knowledge contains either nothing for free level up or the amount of required resources.
     case MP2::OBJ_TREE_OF_KNOWLEDGE:
         _metadata[0] = quantityValue1;
         if ( quantityValue1 == Resource::GOLD ) {
@@ -2263,12 +2263,12 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         }
         break;
 
-        // Witch's Hut contains a basic level of  a secondary skill.
+    // Witch's Hut contains a basic level of  a secondary skill.
     case MP2::OBJ_WITCHS_HUT:
         _metadata[0] = quantityValue1;
         break;
 
-        // Magic Garden and Water Wheel either contain nothing when it was visited or some resources.
+    // Magic Garden and Water Wheel either contain nothing when it was visited or some resources.
     case MP2::OBJ_MAGIC_GARDEN:
     case MP2::OBJ_WATER_WHEEL:
         _metadata[0] = quantityValue1;
@@ -2280,12 +2280,12 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         }
         break;
 
-        // Skeleton contains an artifact.
+    // Skeleton contains an artifact.
     case MP2::OBJ_SKELETON:
         _metadata[0] = quantityValue1;
         break;
 
-        // Lean-To contains one resource type and its amount.
+    // Lean-To contains one resource type and its amount.
     case MP2::OBJ_LEAN_TO:
         _metadata[0] = quantityValue1;
         if ( quantityValue1 == Resource::GOLD ) {
@@ -2296,7 +2296,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         }
         break;
 
-        // Wagon can contain either an artifact or a resource.
+    // Wagon can contain either an artifact or a resource.
     case MP2::OBJ_WAGON:
         if ( quantityValue2 > 0 ) {
             _metadata[0] = Artifact::UNKNOWN;
@@ -2313,13 +2313,13 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         }
         break;
 
-        // Flotsam can contain Wood and Gold.
+    // Flotsam can contain Wood and Gold.
     case MP2::OBJ_FLOTSAM:
         _metadata[0] = quantityValue1;
         _metadata[1] = quantityValue2 * 100;
         break;
 
-        // Treasure and Sea Chests can contain an artifact and gold.
+    // Treasure and Sea Chests can contain an artifact and gold.
     case MP2::OBJ_GRAVEYARD:
     case MP2::OBJ_SEA_CHEST:
     case MP2::OBJ_TREASURE_CHEST:
@@ -2327,7 +2327,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         _metadata[1] = quantityValue2 * 100;
         break;
 
-        // Derelict Ship always has only Gold.
+    // Derelict Ship always has only Gold.
     case MP2::OBJ_DERELICT_SHIP:
         _metadata[0] = quantityValue1;
         if ( quantityValue1 == Resource::GOLD ) {
@@ -2338,20 +2338,20 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         }
         break;
 
-        // Daemon Cave is tricky: it can contain experience, gold and artifact.
+    // Daemon Cave is tricky: it can contain experience, gold and artifact.
     case MP2::OBJ_DAEMON_CAVE:
         _metadata[0] = quantityValue1;
         _metadata[1] = ( 0x0f & quantityValue2 ) * 100;
         _metadata[2] = ( quantityValue2 >> 4 );
         break;
 
-        // Campfire contains some random resources and gold which has the same value as resource but multiplied by 100.
+    // Campfire contains some random resources and gold which has the same value as resource but multiplied by 100.
     case MP2::OBJ_CAMPFIRE:
         _metadata[0] = quantityValue1;
         _metadata[1] = quantityValue2;
         break;
 
-        // Windmill contains some resources.
+    // Windmill contains some resources.
     case MP2::OBJ_WINDMILL:
         _metadata[0] = quantityValue1;
         if ( quantityValue1 == Resource::GOLD ) {
@@ -2362,19 +2362,19 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         }
         break;
 
-        // Artifact contains artifact ID, possible resources and condition to grab it.
+    // Artifact contains artifact ID, possible resources and condition to grab it.
     case MP2::OBJ_ARTIFACT:
         _metadata[0] = quantityValue1;
         _metadata[1] = ( 0x0f & quantityValue2 );
         _metadata[2] = ( quantityValue2 >> 4 );
         break;
 
-        // Shipwreck Survivor has an artifact.
+    // Shipwreck Survivor has an artifact.
     case MP2::OBJ_SHIPWRECK_SURVIVOR:
         _metadata[0] = quantityValue1;
         break;
 
-        // Shipwreck contains Gold, Artifact and winning conditions. However, old format did not store the amount of Gold, we need to add it.
+    // Shipwreck contains Gold, Artifact and winning conditions. However, old format did not store the amount of Gold, we need to add it.
     case MP2::OBJ_SHIPWRECK:
         _metadata[0] = quantityValue1;
         _metadata[2] = ( quantityValue2 >> 4 );
@@ -2403,7 +2403,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
 
         break;
 
-        // These objects should not have any metadata.
+    // These objects should not have any metadata.
     case MP2::OBJ_ACTION_CACTUS:
     case MP2::OBJ_ACTION_COAST:
     case MP2::OBJ_ACTION_CRATER:
@@ -2459,7 +2459,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
     case MP2::OBJ_XANADU:
         break;
 
-        // Metadata for these objects is stored outside this class.
+    // Metadata for these objects is stored outside this class.
     case MP2::OBJ_BOTTLE:
     case MP2::OBJ_CASTLE:
     case MP2::OBJ_EVENT:
@@ -2470,7 +2470,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         assert( MP2::doesObjectNeedExtendedMetadata( objectType ) );
         break;
 
-        // These objects must not even exist in a save file.
+    // These objects must not even exist in a save file.
     case MP2::OBJ_EXPANSION_DWELLING:
     case MP2::OBJ_EXPANSION_OBJECT:
     case MP2::OBJ_RANDOM_ARTIFACT:
