@@ -792,7 +792,7 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
     for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.GetObjectSpriteIndex() ) ) {
         const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
 
-        if ( teleportIndex == index || teleportTile.GetHeroes() != nullptr || teleportTile.isWater() != entranceTile.isWater() ) {
+        if ( teleportIndex == index || teleportTile.getHero() != nullptr || teleportTile.isWater() != entranceTile.isWater() ) {
             continue;
         }
 
@@ -827,7 +827,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
     for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.GetObjectSpriteIndex() ) ) {
         const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
 
-        if ( whirlpoolTile.GetObjectUID() == entranceTile.GetObjectUID() || whirlpoolTile.GetHeroes() != nullptr ) {
+        if ( whirlpoolTile.GetObjectUID() == entranceTile.GetObjectUID() || whirlpoolTile.getHero() != nullptr ) {
             continue;
         }
 
@@ -930,7 +930,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
         return false;
     }
 
-    tile.AddonsPushLevel1( Maps::TilesAddon( Maps::BACKGROUND_LAYER, GetUniq(), objectIcnType, imageIndex, false, false ) );
+    tile.pushBottomLayerAddon( Maps::TilesAddon( Maps::BACKGROUND_LAYER, GetUniq(), objectIcnType, imageIndex, false, false ) );
 
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
         ultimate_artifact.markAsFound();
@@ -1065,7 +1065,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         // This method should be called with this condition only for a human-controlled kingdom
         assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
-        const KingdomHeroes & heroes = kingdom.GetHeroes();
+        const VecHeroes & heroes = kingdom.GetHeroes();
         if ( conf.WinsFindUltimateArtifact() ) {
             return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->HasUltimateArtifact(); } );
         }
@@ -1241,7 +1241,7 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
     if ( conf.isCampaignGameType() ) {
         const Campaign::ScenarioLossCondition lossCondition = Campaign::getCurrentScenarioLossCondition();
         if ( lossCondition == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
-            const KingdomCastles & castles = kingdom.GetCastles();
+            const VecCastles & castles = kingdom.GetCastles();
             bool hasSorceressVillage = false;
 
             for ( size_t i = 0; i < castles.size(); ++i ) {
@@ -1516,9 +1516,9 @@ StreamBase & operator>>( StreamBase & msg, World & w )
 
                     Maps::restoreAbandonedMine( tile, resource );
 
-                    Heroes * hero = tile.GetHeroes();
+                    Heroes * hero = tile.getHero();
                     if ( hero ) {
-                        hero->SetMapsObject( MP2::OBJ_MINES );
+                        hero->setObjectTypeUnderHero( MP2::OBJ_MINES );
                     }
                     else {
                         tile.SetObject( MP2::OBJ_MINES );

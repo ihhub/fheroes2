@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 15:37+0000\n"
+"POT-Creation-Date: 2023-09-17 07:18+0000\n"
 "PO-Revision-Date: 2023-09-15 21:53+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3030,6 +3030,51 @@ msgstr ""
 msgid "Hot Keys:"
 msgstr "Горячие клавиши:"
 
+msgid "Evil"
+msgstr "Злой"
+
+msgid "Good"
+msgstr "Добрый"
+
+msgid "Interface Type"
+msgstr "Интерфейс"
+
+msgid "Hide"
+msgstr "Скрыть"
+
+msgid "Show"
+msgstr "Показать"
+
+msgid "Interface"
+msgstr "Интерфейс"
+
+msgid "Slow"
+msgstr "Медленная"
+
+msgid "Normal"
+msgstr "Обычная"
+
+msgid "Fast"
+msgstr "Быстрая"
+
+msgid "Very Fast"
+msgstr "Очень быстрая"
+
+msgid "Scroll Speed"
+msgstr "Скорость прокрутки"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Переключить тип интерфейса, который Вы хотите использовать."
+
+msgid "Toggle interface visibility."
+msgstr "Показать/скрыть интерфейс."
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr "Включить или выключить цветной курсор. Это эстетический выбор."
+
+msgid "Sets the speed at which you scroll the window."
+msgstr "Устанавливает скорость прокрутки окна на карте мира."
+
 msgid "Select Game Language:"
 msgstr "Выберите язык игры:"
 
@@ -3422,39 +3467,6 @@ msgstr "Скрыть"
 msgid "Enemy Speed"
 msgstr "Скор. врагов"
 
-msgid "Slow"
-msgstr "Медленная"
-
-msgid "Normal"
-msgstr "Обычная"
-
-msgid "Fast"
-msgstr "Быстрая"
-
-msgid "Very Fast"
-msgstr "Очень быстрая"
-
-msgid "Scroll Speed"
-msgstr "Скорость прокрутки"
-
-msgid "Evil"
-msgstr "Злой"
-
-msgid "Good"
-msgstr "Добрый"
-
-msgid "Interface Type"
-msgstr "Интерфейс"
-
-msgid "Hide"
-msgstr "Скрыть"
-
-msgid "Show"
-msgstr "Показать"
-
-msgid "Interface"
-msgstr "Интерфейс"
-
 msgid "Auto Resolve"
 msgstr "Авто, с магией"
 
@@ -3467,9 +3479,6 @@ msgstr "Битвы"
 msgid "autoBattle|Manual"
 msgstr "Вручную"
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr "Включить или выключить цветной курсор. Это эстетический выбор."
-
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 "Изменить скорость, с которой Ваши герои перемещаются на главном экране."
@@ -3481,14 +3490,13 @@ msgstr ""
 "Устанавливает скорость, с которой двигаются герои ИИ. Вы также можете не "
 "просматривать движение ИИ вовсе."
 
-msgid "Sets the speed at which you scroll the window."
-msgstr "Устанавливает скорость прокрутки окна на карте мира."
+#, fuzzy
+msgid "Change the interface settings of the game."
+msgstr "Настроить параметры графики."
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Переключить тип интерфейса, который Вы хотите использовать."
-
-msgid "Toggle interface visibility."
-msgstr "Показать/скрыть интерфейс."
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Настройки игры"
 
 msgid "Toggle instant battle mode."
 msgstr "Режим мгновенного боя."
@@ -10741,12 +10749,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "The %{name} protects your troops from the Dispel Magic spell."
-#~ msgstr "%{name} защищает Ваши отряды от заклятий снятия чар."
-
-#~ msgid "Damg"
-#~ msgstr "Урон"
-
-#~ msgid "%{spell} failed!!!"
-#~ msgstr "Неудачный вызов %{spell}!"

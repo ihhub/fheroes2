@@ -52,6 +52,7 @@
 #include "bin_info.h"
 #include "castle.h"
 #include "color.h"
+#include "cursor.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
@@ -1153,9 +1154,10 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     , index_pos( -1 )
     , _teleportSpellSrcIdx( -1 )
     , listlog( nullptr )
-    , _cursorRestorer( true, Cursor::WAR_POINTER )
     , _bridgeAnimation( { false, BridgeMovementAnimation::UP_POSITION } )
 {
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
+
     // border
     const fheroes2::Display & display = fheroes2::Display::instance();
 

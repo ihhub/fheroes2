@@ -203,8 +203,8 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
-    const KingdomCastles & myCastles = myKingdom.GetCastles();
-    KingdomCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), &castle );
+    const VecCastles & myCastles = myKingdom.GetCastles();
+    VecCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), &castle );
 
     const size_t heroCountBefore = myKingdom.GetHeroes().size();
 
@@ -244,7 +244,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
                 adventureMapInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore], false );
             }
             else if ( it != myCastles.end() ) {
-                Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).GetHeroes();
+                Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).getHero();
                 if ( heroInCastle == nullptr ) {
                     adventureMapInterface.SetFocus( *it );
                 }
@@ -282,8 +282,8 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
 
     Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
-    const KingdomHeroes & myHeroes = hero.GetKingdom().GetHeroes();
-    KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
+    const VecHeroes & myHeroes = hero.GetKingdom().GetHeroes();
+    VecHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
 
     const bool isDefaultScreenSize = fheroes2::Display::instance().isDefaultSize();
     bool needFade = true;
@@ -439,7 +439,7 @@ int Interface::AdventureMap::GetCursorFocusCastle( const Castle & castle, const 
     }
 
     case MP2::OBJ_HEROES: {
-        const Heroes * hero = tile.GetHeroes();
+        const Heroes * hero = tile.getHero();
 
         if ( hero ) {
             return hero->GetColor() == castle.GetColor() ? Cursor::HEROES : Cursor::POINTER;
@@ -476,7 +476,7 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
     }
 
     case MP2::OBJ_HEROES: {
-        const Heroes * otherHero = tile.GetHeroes();
+        const Heroes * otherHero = tile.getHero();
 
         if ( otherHero ) {
             if ( !otherHero->isShipMaster() ) {
@@ -573,7 +573,7 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
     }
 
     case MP2::OBJ_HEROES: {
-        const Heroes * otherHero = tile.GetHeroes();
+        const Heroes * otherHero = tile.getHero();
 
         if ( otherHero ) {
             if ( otherHero->GetCenter() == hero.GetCenter() ) {
@@ -935,7 +935,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
     // check if the game is over at the beginning of each human-controlled player's turn
     fheroes2::GameMode res = gameResult.checkGameOver();
 
-    const KingdomCastles & myCastles = myKingdom.GetCastles();
+    const VecCastles & myCastles = myKingdom.GetCastles();
     if ( res == fheroes2::GameMode::CANCEL && myCastles.empty() ) {
         ShowWarningLostTownsDialog();
     }
@@ -1255,13 +1255,40 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                             _gameArea.SetRedraw();
                         }
 
-                        isMovingHero = true;
+                        // Update the hero's move status.
+                        isMovingHero = hero->isMoveEnabled();
 
                         if ( hero->isAction() ) {
-                            // check if the game is over after the hero's action
+                            // The action can not be performed while moving, only after the move is ended.
+                            assert( !isMovingHero );
+
+                            // Check if the game is over after the hero's action.
                             res = gameResult.checkGameOver();
 
                             hero->ResetAction();
+                        }
+
+                        if ( !isMovingHero ) {
+                            // Reset the 'ENABLEMOVE' state on this loop to properly update the cursor in this frame and not in the next.
+                            hero->SetMove( false );
+
+                            // During the action and/or movement the adventure map and/or cursor position may have changed, so we should update the cursor image.
+                            if ( Game::isFadeInNeeded() ) {
+                                // Do not change cursor right now because fade-in is scheduled.
+                                _gameArea.SetUpdateCursor();
+                            }
+                            else {
+                                if ( le.MouseCursor( _gameArea.GetROI() ) ) {
+                                    // We do not use '_gameArea.SetUpdateCursor()' here because we need to update the cursor before rendering the current frame
+                                    // and '_gameArea.QueueEventProcessing()' was called earlier in this loop and will only be able to update the cursor in the
+                                    // next loop for the next frame.
+                                    cursor.SetThemes( GetCursorTileIndex( _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) );
+                                }
+                                else {
+                                    // When the cursor is not over the game area we use the Pointer cursor.
+                                    cursor.SetThemes( Cursor::POINTER );
+                                }
+                            }
                         }
                     }
                     else {
@@ -1359,7 +1386,7 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
 
     switch ( Cursor::WithoutDistanceThemes( Cursor::Get().Themes() ) ) {
     case Cursor::HEROES: {
-        Heroes * otherHero = tile.GetHeroes();
+        Heroes * otherHero = tile.getHero();
         if ( otherHero == nullptr ) {
             break;
         }
@@ -1370,7 +1397,6 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
         }
         else {
             Game::OpenHeroesDialog( *otherHero, true, true );
-            Cursor::Get().SetThemes( Cursor::HEROES );
         }
 
         break;
@@ -1395,7 +1421,6 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
         }
         else {
             Game::OpenCastleDialog( *otherCastle );
-            Cursor::Get().SetThemes( Cursor::CASTLE );
         }
 
         break;
@@ -1453,7 +1478,7 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
         }
 
         case MP2::OBJ_HEROES: {
-            const Heroes * heroes = tile.GetHeroes();
+            const Heroes * heroes = tile.getHero();
 
             if ( heroes ) {
                 Dialog::QuickInfo( *heroes );

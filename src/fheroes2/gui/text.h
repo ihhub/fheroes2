@@ -29,9 +29,13 @@
 #include <list>
 #include <string>
 
-#include "image.h"
 #include "math_base.h"
 #include "screen.h"
+
+namespace fheroes2
+{
+    class Image;
+}
 
 namespace Font
 {
@@ -93,42 +97,6 @@ protected:
     TextAscii * message;
     uint32_t gw;
     uint32_t gh;
-};
-
-class TextSprite : protected Text
-{
-public:
-    TextSprite();
-    TextSprite( const std::string &, int ft, int32_t, int32_t );
-
-    void SetPos( int32_t, int32_t );
-    void SetText( const std::string & );
-    void SetText( const std::string &, int );
-    void SetFont( int );
-
-    void Show();
-    void Hide();
-
-    bool isShow() const
-    {
-        return !hide;
-    }
-
-    int w() const
-    {
-        return gw;
-    }
-
-    int h() const
-    {
-        return gh + 5;
-    }
-
-    fheroes2::Rect GetRect() const;
-
-private:
-    fheroes2::ImageRestorer _restorer;
-    bool hide;
 };
 
 class TextBox : protected fheroes2::Rect

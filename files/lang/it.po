@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 15:37+0000\n"
+"POT-Creation-Date: 2023-09-17 07:18+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2896,6 +2896,54 @@ msgstr ""
 msgid "Hot Keys:"
 msgstr ""
 
+msgid "Evil"
+msgstr "Cattivo"
+
+msgid "Good"
+msgstr "Buono"
+
+msgid "Interface Type"
+msgstr "Stile d'Interfaccia"
+
+msgid "Hide"
+msgstr "Nascondi"
+
+msgid "Show"
+msgstr "Mostra"
+
+msgid "Interface"
+msgstr "Interfaccia"
+
+#, fuzzy
+msgid "Slow"
+msgstr "Pianissimo"
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normale"
+
+msgid "Fast"
+msgstr ""
+
+#, fuzzy
+msgid "Very Fast"
+msgstr "Velocissima"
+
+msgid "Scroll Speed"
+msgstr "Velocità dello Scorrimento"
+
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr ""
+
+msgid "Sets the speed at which you scroll the window."
+msgstr ""
+
 msgid "Select Game Language:"
 msgstr "Scegli la lingua del gioco:"
 
@@ -3291,42 +3339,6 @@ msgstr "Nascondi"
 msgid "Enemy Speed"
 msgstr "Velocità Nemica"
 
-#, fuzzy
-msgid "Slow"
-msgstr "Pianissimo"
-
-#, fuzzy
-msgid "Normal"
-msgstr "Normale"
-
-msgid "Fast"
-msgstr ""
-
-#, fuzzy
-msgid "Very Fast"
-msgstr "Velocissima"
-
-msgid "Scroll Speed"
-msgstr "Velocità dello Scorrimento"
-
-msgid "Evil"
-msgstr "Cattivo"
-
-msgid "Good"
-msgstr "Buono"
-
-msgid "Interface Type"
-msgstr "Stile d'Interfaccia"
-
-msgid "Hide"
-msgstr "Nascondi"
-
-msgid "Show"
-msgstr "Mostra"
-
-msgid "Interface"
-msgstr "Interfaccia"
-
 msgid "Auto Resolve"
 msgstr "Auto-Risolva"
 
@@ -3339,9 +3351,6 @@ msgstr "Battaglie"
 msgid "autoBattle|Manual"
 msgstr "Manuali"
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr ""
-
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
@@ -3350,14 +3359,13 @@ msgid ""
 "movement at all."
 msgstr ""
 
-msgid "Sets the speed at which you scroll the window."
-msgstr ""
+#, fuzzy
+msgid "Change the interface settings of the game."
+msgstr "Cambia le impostazioni dell'audio del gioco."
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
-msgid "Toggle interface visibility."
-msgstr ""
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Impostazioni del gioco."
 
 msgid "Toggle instant battle mode."
 msgstr ""
@@ -9919,9 +9927,3 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Damg"
-#~ msgstr "Danni"
-
-#~ msgid "%{spell} failed!!!"
-#~ msgstr "%{spell} fallita!!!"

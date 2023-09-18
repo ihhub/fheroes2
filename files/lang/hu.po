@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 15:37+0000\n"
+"POT-Creation-Date: 2023-09-17 07:18+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -2991,6 +2991,55 @@ msgstr ""
 msgid "Hot Keys:"
 msgstr ""
 
+msgid "Evil"
+msgstr "Gonosz"
+
+msgid "Good"
+msgstr "Jó"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Kezelőfelület"
+
+#, fuzzy
+msgid "Hide"
+msgstr "50-99"
+
+#, fuzzy
+msgid "Show"
+msgstr "Hó"
+
+msgid "Interface"
+msgstr "Kezelőfelület"
+
+#, fuzzy
+msgid "Slow"
+msgstr "Teljes Lassítás"
+
+msgid "Normal"
+msgstr "Normál"
+
+msgid "Fast"
+msgstr ""
+
+msgid "Very Fast"
+msgstr ""
+
+msgid "Scroll Speed"
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr ""
+
+msgid "Sets the speed at which you scroll the window."
+msgstr ""
+
 msgid "Select Game Language:"
 msgstr ""
 
@@ -3394,43 +3443,6 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr "Sebesség"
 
-#, fuzzy
-msgid "Slow"
-msgstr "Teljes Lassítás"
-
-msgid "Normal"
-msgstr "Normál"
-
-msgid "Fast"
-msgstr ""
-
-msgid "Very Fast"
-msgstr ""
-
-msgid "Scroll Speed"
-msgstr ""
-
-msgid "Evil"
-msgstr "Gonosz"
-
-msgid "Good"
-msgstr "Jó"
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Kezelőfelület"
-
-#, fuzzy
-msgid "Hide"
-msgstr "50-99"
-
-#, fuzzy
-msgid "Show"
-msgstr "Hó"
-
-msgid "Interface"
-msgstr "Kezelőfelület"
-
 msgid "Auto Resolve"
 msgstr ""
 
@@ -3444,9 +3456,6 @@ msgstr "Üveg"
 msgid "autoBattle|Manual"
 msgstr ""
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr ""
-
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
@@ -3455,14 +3464,13 @@ msgid ""
 "movement at all."
 msgstr ""
 
-msgid "Sets the speed at which you scroll the window."
-msgstr ""
+#, fuzzy
+msgid "Change the interface settings of the game."
+msgstr "Itt lehet megváltoztatni a játék hangbeállításait."
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
-msgid "Toggle interface visibility."
-msgstr ""
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Beállítások"
 
 msgid "Toggle instant battle mode."
 msgstr ""
