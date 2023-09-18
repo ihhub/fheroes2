@@ -59,7 +59,7 @@ namespace AI
 
         // If this is an action object and one of AI heroes is moving,
         // we have to stop him because the new object might be more valuable than the current target.
-        const KingdomHeroes & heroes = kingdom.GetHeroes();
+        const VecHeroes & heroes = kingdom.GetHeroes();
         for ( Heroes * hero : heroes ) {
             if ( hero == nullptr ) {
                 // How is it even possible?

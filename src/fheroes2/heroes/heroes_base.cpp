@@ -453,7 +453,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
 
         if ( spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) {
-            const KingdomCastles & castles = hero->GetKingdom().GetCastles();
+            const VecCastles & castles = hero->GetKingdom().GetCastles();
             bool hasCastles = std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return castle && castle->GetHero() == nullptr; } );
             if ( !hasCastles ) {
                 if ( res != nullptr ) {

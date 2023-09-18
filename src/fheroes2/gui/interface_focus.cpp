@@ -174,9 +174,9 @@ void Interface::AdventureMap::ResetFocus( const int priority, const bool retainS
 
     switch ( priority ) {
     case GameFocus::FIRSTHERO: {
-        const KingdomHeroes & heroes = myKingdom.GetHeroes();
+        const VecHeroes & heroes = myKingdom.GetHeroes();
         // skip sleeping
-        KingdomHeroes::const_iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return !hero->Modes( Heroes::SLEEPER ); } );
+        VecHeroes::const_iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return !hero->Modes( Heroes::SLEEPER ); } );
 
         if ( it != heroes.end() )
             SetFocus( *it, false );

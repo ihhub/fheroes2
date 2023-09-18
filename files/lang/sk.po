@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 15:37+0000\n"
+"POT-Creation-Date: 2023-09-17 07:18+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3022,6 +3022,51 @@ msgstr "Ukáž informácie navyše ako FPS a momentálny čas."
 msgid "Hot Keys:"
 msgstr "Skratky:"
 
+msgid "Evil"
+msgstr "Zlo"
+
+msgid "Good"
+msgstr "Dobro"
+
+msgid "Interface Type"
+msgstr "Typ rozhrania"
+
+msgid "Hide"
+msgstr "Skry"
+
+msgid "Show"
+msgstr "Zobraz"
+
+msgid "Interface"
+msgstr "Rozhranie"
+
+msgid "Slow"
+msgstr "Pomalá"
+
+msgid "Normal"
+msgstr "Normálna"
+
+msgid "Fast"
+msgstr "Rýchla"
+
+msgid "Very Fast"
+msgstr "Veľmi rýchla"
+
+msgid "Scroll Speed"
+msgstr "Rýchlosť posunu"
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Prepni typ rozhrania, ktorý chceš vidieť."
+
+msgid "Toggle interface visibility."
+msgstr "Prepni viditeľnosť rozhrania."
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr "Prepni farebný kurzor. Toto je len estetická voľba."
+
+msgid "Sets the speed at which you scroll the window."
+msgstr "Nastaví rýchlosť, ktorou sa posúva okno."
+
 msgid "Select Game Language:"
 msgstr "Zvoľ jazyk hry:"
 
@@ -3409,39 +3454,6 @@ msgstr "Neukazuj"
 msgid "Enemy Speed"
 msgstr "Rýchlosť nepriateľa"
 
-msgid "Slow"
-msgstr "Pomalá"
-
-msgid "Normal"
-msgstr "Normálna"
-
-msgid "Fast"
-msgstr "Rýchla"
-
-msgid "Very Fast"
-msgstr "Veľmi rýchla"
-
-msgid "Scroll Speed"
-msgstr "Rýchlosť posunu"
-
-msgid "Evil"
-msgstr "Zlo"
-
-msgid "Good"
-msgstr "Dobro"
-
-msgid "Interface Type"
-msgstr "Typ rozhrania"
-
-msgid "Hide"
-msgstr "Skry"
-
-msgid "Show"
-msgstr "Zobraz"
-
-msgid "Interface"
-msgstr "Rozhranie"
-
 msgid "Auto Resolve"
 msgstr "Automaticky"
 
@@ -3454,9 +3466,6 @@ msgstr "Boje"
 msgid "autoBattle|Manual"
 msgstr "Manuálne"
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr "Prepni farebný kurzor. Toto je len estetická voľba."
-
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Zmeň rýchlosť, ktorou sa tvoji hrdinovia pohybujú v hlavnom okne."
 
@@ -3468,14 +3477,13 @@ msgstr ""
 "Nastaví rýchlosť, ktorou sa počítačom riadení hrdinovia hýbu. Tento pohyb je "
 "možné nezobraziť."
 
-msgid "Sets the speed at which you scroll the window."
-msgstr "Nastaví rýchlosť, ktorou sa posúva okno."
+#, fuzzy
+msgid "Change the interface settings of the game."
+msgstr "Zmeň nastavenie grafiky hry."
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Prepni typ rozhrania, ktorý chceš vidieť."
-
-msgid "Toggle interface visibility."
-msgstr "Prepni viditeľnosť rozhrania."
+#, fuzzy
+msgid "Interface Settings"
+msgstr "Nastavenie hry"
 
 msgid "Toggle instant battle mode."
 msgstr "Prepni mód rýchleho boja."

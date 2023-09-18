@@ -122,7 +122,7 @@ namespace
         std::vector<Heroes *> _heroes;
     };
 
-    void setHeroRoles( KingdomHeroes & heroes )
+    void setHeroRoles( VecHeroes & heroes )
     {
         if ( heroes.empty() ) {
             // No heroes exist.
@@ -460,7 +460,7 @@ namespace AI
         }
     }
 
-    std::vector<AICastle> Normal::getSortedCastleList( const KingdomCastles & castles, const std::set<int> & castlesInDanger )
+    std::vector<AICastle> Normal::getSortedCastleList( const VecCastles & castles, const std::set<int> & castlesInDanger )
     {
         std::vector<AICastle> sortedCastleList;
         for ( Castle * castle : castles ) {
@@ -704,8 +704,8 @@ namespace AI
 
         AudioManager::PlayMusicAsync( MUS::COMPUTER_TURN, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
-        KingdomHeroes & heroes = kingdom.GetHeroes();
-        const KingdomCastles & castles = kingdom.GetCastles();
+        VecHeroes & heroes = kingdom.GetHeroes();
+        const VecCastles & castles = kingdom.GetCastles();
 
         // Clear the cache of neutral monsters as their strength might have changed.
         _neutralMonsterStrengthCache.clear();
@@ -831,7 +831,7 @@ namespace AI
                     // a threatening enemy in an open field. Therefore let's make him stay in the castle.
                     // TODO: allow the hero to still do some actions but always return to the castle at the end of the turn.
 
-                    HeroesActionComplete( *hero, hero->GetIndex(), hero->GetMapsObject() );
+                    HeroesActionComplete( *hero, hero->GetIndex(), hero->getObjectTypeUnderHero() );
                 }
             }
 

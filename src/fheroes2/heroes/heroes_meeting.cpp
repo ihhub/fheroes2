@@ -242,8 +242,9 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    // Set the cursor image. This dialog is called after hero's move and does not require a cursor restorer:
+    // Game Area event processor will change it to the appropriate one after this dialog is closed.
+    Cursor::Get().SetThemes( Cursor::POINTER );
 
     const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
     const fheroes2::Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );

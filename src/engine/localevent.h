@@ -287,16 +287,6 @@ public:
 
     static int32_t getCurrentKeyModifiers();
 
-    static void RegisterCycling( void ( *preRenderDrawing )() = nullptr, void ( *postRenderDrawing )() = nullptr );
-
-    // These two methods are useful for video playback
-    static void PauseCycling();
-
-    static void ResumeCycling()
-    {
-        RegisterCycling();
-    }
-
     void OpenController();
     void CloseController();
 

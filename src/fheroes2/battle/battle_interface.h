@@ -33,7 +33,6 @@
 
 #include "battle_animation.h"
 #include "battle_board.h"
-#include "cursor.h"
 #include "dialog.h"
 #include "icn.h"
 #include "image.h"
@@ -460,7 +459,6 @@ namespace Battle
         PopupDamageInfo popup;
         TurnOrder _turnOrder;
 
-        CursorRestorer _cursorRestorer;
         std::unique_ptr<fheroes2::StandardWindow> _background;
 
         struct BridgeMovementAnimation

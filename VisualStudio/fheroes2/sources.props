@@ -13,6 +13,7 @@
     <ClCompile Include="src\engine\logging.cpp" />
     <ClCompile Include="src\engine\pal.cpp" />
     <ClCompile Include="src\engine\rand.cpp" />
+    <ClCompile Include="src\engine\render_processor.cpp" />
     <ClCompile Include="src\engine\screen.cpp" />
     <ClCompile Include="src\engine\serialize.cpp" />
     <ClCompile Include="src\engine\smk_decoder.cpp" />
@@ -91,6 +92,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_giftresources.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_graphics_settings.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_hotkeys.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_interface_settings.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_language_selection.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_levelup.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_marketplace.cpp" />
@@ -244,6 +246,7 @@
     <ClInclude Include="src\engine\math_base.h" />
     <ClInclude Include="src\engine\pal.h" />
     <ClInclude Include="src\engine\rand.h" />
+    <ClInclude Include="src\engine\render_processor.h" />
     <ClInclude Include="src\engine\screen.h" />
     <ClInclude Include="src\engine\serialize.h" />
     <ClInclude Include="src\engine\smk_decoder.h" />
@@ -297,6 +300,7 @@
     <ClInclude Include="src\fheroes2\dialog\dialog_game_settings.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_graphics_settings.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_hotkeys.h" />
+    <ClInclude Include="src\fheroes2\dialog\dialog_interface_settings.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_language_selection.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_resolution.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_selectitems.h" />
