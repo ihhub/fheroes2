@@ -33,6 +33,7 @@
 
 #include "battle_animation.h"
 #include "battle_board.h"
+#include "cursor.h"
 #include "dialog.h"
 #include "icn.h"
 #include "image.h"

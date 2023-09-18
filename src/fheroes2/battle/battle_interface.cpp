@@ -52,7 +52,6 @@
 #include "bin_info.h"
 #include "castle.h"
 #include "color.h"
-#include "cursor.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
