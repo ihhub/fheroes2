@@ -496,6 +496,53 @@ namespace Battle
 
         // Intents are used to confirm actions in combat performed using touch gestures
         BoardActionIntent _boardActionIntent;
+
+        class BoardActionIntentUpdater
+        {
+        public:
+            BoardActionIntentUpdater( Interface & interface, const bool isFromTouchpad )
+                : _interface( interface )
+                , _isFromTouchpad( isFromTouchpad )
+            {}
+
+            BoardActionIntentUpdater( const BoardActionIntentUpdater & ) = delete;
+
+            ~BoardActionIntentUpdater()
+            {
+                // Do not remember intermediate touch gestures (such as simulated mouse button pressing) as intents. When using the touchpad,
+                // only a complete simulated click is considered an intent.
+                if ( _isFromTouchpad && !_isClick ) {
+                    return;
+                }
+
+                _interface._boardActionIntent = _intent.value_or( BoardActionIntent{} );
+            }
+
+            BoardActionIntentUpdater & operator=( const BoardActionIntentUpdater & ) = delete;
+
+            void setClick()
+            {
+                _isClick = true;
+            }
+
+            void setIntent( const BoardActionIntent & intent )
+            {
+                _intent = intent;
+            }
+
+            bool isConfirmed()
+            {
+                // If the mouse event has been triggered by the touchpad, it should be considered confirmed only if this event orders to
+                // perform the same action that is already indicated on the battle board with the mouse cursor.
+                return ( !_isFromTouchpad || _interface._boardActionIntent == _intent );
+            }
+
+        private:
+            Interface & _interface;
+            const bool _isFromTouchpad;
+            bool _isClick{ false };
+            std::optional<BoardActionIntent> _intent;
+        };
     };
 }
 
