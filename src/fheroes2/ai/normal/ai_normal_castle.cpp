@@ -29,6 +29,7 @@
 #include "army_troop.h"
 #include "battle_tower.h"
 #include "castle.h"
+#include "heroes.h"
 #include "kingdom.h"
 #include "maps_tiles.h"
 #include "monster.h"

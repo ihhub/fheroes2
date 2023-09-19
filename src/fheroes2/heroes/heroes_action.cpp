@@ -533,7 +533,7 @@ namespace
 
     void ActionToHeroes( Heroes & hero, const int32_t dstIndex )
     {
-        Heroes * otherHero = world.GetTiles( dstIndex ).GetHeroes();
+        Heroes * otherHero = world.GetTiles( dstIndex ).getHero();
         if ( otherHero == nullptr ) {
             // This should never happen
             assert( 0 );
@@ -621,7 +621,7 @@ namespace
 
         // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
         hero.setDirection( boatDirection );
-        hero.SetMapsObject( MP2::OBJ_NONE );
+        hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
         world.GetTiles( dst_index ).resetObjectSprite();
         hero.SetShipMaster( true );
 
@@ -2130,7 +2130,7 @@ namespace
                 hero.IncreaseExperience( result.GetExperienceAttacker() );
 
                 Maps::restoreAbandonedMine( tile, Resource::GOLD );
-                hero.SetMapsObject( MP2::OBJ_MINES );
+                hero.setObjectTypeUnderHero( MP2::OBJ_MINES );
                 setColorOnTile( tile, hero.GetColor() );
 
                 // TODO: make a function that will automatically get the object size in tiles and return a ROI for radar update.
@@ -2762,7 +2762,7 @@ namespace
             event_maps->SetVisited( hero.GetColor() );
 
             if ( event_maps->cancel ) {
-                hero.SetMapsObject( MP2::OBJ_NONE );
+                hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
                 world.RemoveMapObject( event_maps );
             }
         }
