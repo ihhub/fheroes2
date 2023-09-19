@@ -873,16 +873,18 @@ namespace
             }
 
             // The next 4 conditions are to end the horizontal roads.
-            if ( hasBits( roadDirection, Direction::LEFT ) && hasNoBits( roadDirection, Direction::TOP ) && checkRoadIcnIndex( tile.GetIndex() - 1, { 2, 28 } ) ) {
+            if ( hasBits( roadDirection, Direction::LEFT ) && hasNoBits( roadDirection, Direction::TOP ) && checkRoadIcnIndex( tile.GetIndex() - 1, { 2, 21, 28 } ) ) {
                 return Rand::Get( 1 ) ? 23U : 25U;
             }
-            if ( hasBits( roadDirection, Direction::RIGHT ) && hasNoBits( roadDirection, Direction::TOP ) && checkRoadIcnIndex( tile.GetIndex() + 1, { 2, 28 } ) ) {
+            if ( hasBits( roadDirection, Direction::RIGHT ) && hasNoBits( roadDirection, Direction::TOP ) && checkRoadIcnIndex( tile.GetIndex() + 1, { 2, 21, 28 } ) ) {
                 return Rand::Get( 1 ) ? 22U : 24U;
             }
-            if ( hasBits( roadDirection, Direction::TOP_LEFT ) && hasNoBits( roadDirection, Direction::TOP ) && checkRoadIcnIndex( tile.GetIndex() - 1, { 1, 27 } ) ) {
+            if ( hasBits( roadDirection, Direction::TOP_LEFT ) && hasNoBits( roadDirection, Direction::TOP )
+                 && checkRoadIcnIndex( tile.GetIndex() - 1, { 1, 4, 21, 27 } ) ) {
                 return 15U;
             }
-            if ( hasBits( roadDirection, Direction::TOP_RIGHT ) && hasNoBits( roadDirection, Direction::TOP ) && checkRoadIcnIndex( tile.GetIndex() + 1, { 1, 27 } ) ) {
+            if ( hasBits( roadDirection, Direction::TOP_RIGHT ) && hasNoBits( roadDirection, Direction::TOP )
+                 && checkRoadIcnIndex( tile.GetIndex() + 1, { 1, 4, 21, 27 } ) ) {
                 return 8U;
             }
 
@@ -913,8 +915,10 @@ namespace
             // _|_ - cross.
             return 3U;
         }
-        if ( hasBits( roadDirection, DIRECTION_TOP_ROW ) && hasNoBits( roadDirection, Direction::LEFT | Direction::RIGHT ) ) {
-            // T - cross.
+        if ( hasBits( roadDirection, Direction::TOP )
+             && ( hasBits( roadDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) || ( checkRoadIcnIndex( tile.GetIndex() - world.w(), { 2, 28 } ) ) )
+             && hasNoBits( roadDirection, Direction::LEFT | Direction::RIGHT ) ) {
+            // T - cross. Also used for 90 degrees turn from the bottom to the left/right.
             return 4U;
         }
         if ( hasBits( roadDirection, Direction::TOP | Direction::TOP_RIGHT ) && hasNoBits( roadDirection, Direction::TOP_LEFT | Direction::RIGHT | Direction::LEFT ) ) {
