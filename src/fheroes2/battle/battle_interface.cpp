@@ -2950,8 +2950,6 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             boardActionIntentUpdater.setIntent( { themes, index_pos } );
 
             if ( le.MouseClickLeft() ) {
-                boardActionIntentUpdater.setClick();
-
                 MouseLeftClickBoardAction( themes, *cell, boardActionIntentUpdater.isConfirmed(), actions );
             }
             else if ( le.MousePressRight() ) {
@@ -3013,42 +3011,38 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
 
         boardActionIntentUpdater.setIntent( { themes, index_pos } );
 
-        if ( le.MouseClickLeft() ) {
-            boardActionIntentUpdater.setClick();
+        if ( le.MouseClickLeft() && Cursor::WAR_NONE != cursor.Themes() && boardActionIntentUpdater.isConfirmed() ) {
+            if ( !Board::isValidIndex( index_pos ) ) {
+                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Spell destination is out of range: " << index_pos )
+                return;
+            }
 
-            if ( Cursor::WAR_NONE != cursor.Themes() && boardActionIntentUpdater.isConfirmed() ) {
-                if ( !Board::isValidIndex( index_pos ) ) {
-                    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Spell destination is out of range: " << index_pos )
-                    return;
-                }
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << index_pos )
 
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << index_pos )
-
-                if ( Cursor::SP_TELEPORT == cursor.Themes() ) {
-                    if ( _teleportSpellSrcIdx < 0 ) {
-                        _teleportSpellSrcIdx = index_pos;
-                    }
-                    else {
-                        actions.emplace_back( CommandType::MSG_BATTLE_CAST, Spell::TELEPORT, _teleportSpellSrcIdx, index_pos );
-
-                        humanturn_spell = Spell::NONE;
-                        humanturn_exit = true;
-
-                        _teleportSpellSrcIdx = -1;
-                    }
-                }
-                else if ( Cursor::SP_MIRRORIMAGE == cursor.Themes() ) {
-                    actions.emplace_back( CommandType::MSG_BATTLE_CAST, Spell::MIRRORIMAGE, index_pos );
-
-                    humanturn_spell = Spell::NONE;
-                    humanturn_exit = true;
+            if ( Cursor::SP_TELEPORT == cursor.Themes() ) {
+                if ( _teleportSpellSrcIdx < 0 ) {
+                    _teleportSpellSrcIdx = index_pos;
                 }
                 else {
-                    actions.emplace_back( CommandType::MSG_BATTLE_CAST, humanturn_spell.GetID(), index_pos );
+                    actions.emplace_back( CommandType::MSG_BATTLE_CAST, Spell::TELEPORT, _teleportSpellSrcIdx, index_pos );
 
                     humanturn_spell = Spell::NONE;
                     humanturn_exit = true;
+
+                    _teleportSpellSrcIdx = -1;
                 }
+            }
+            else if ( Cursor::SP_MIRRORIMAGE == cursor.Themes() ) {
+                actions.emplace_back( CommandType::MSG_BATTLE_CAST, Spell::MIRRORIMAGE, index_pos );
+
+                humanturn_spell = Spell::NONE;
+                humanturn_exit = true;
+            }
+            else {
+                actions.emplace_back( CommandType::MSG_BATTLE_CAST, humanturn_spell.GetID(), index_pos );
+
+                humanturn_spell = Spell::NONE;
+                humanturn_exit = true;
             }
         }
     }

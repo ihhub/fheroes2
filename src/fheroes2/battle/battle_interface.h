@@ -509,9 +509,8 @@ namespace Battle
 
             ~BoardActionIntentUpdater()
             {
-                // Do not remember intermediate touch gestures (such as simulated mouse button pressing) as intents. When using the touchpad,
-                // only a complete simulated click is considered an intent.
-                if ( _isFromTouchpad && !_isClick ) {
+                // Do not remember intermediate touch gestures as intents
+                if ( _isFromTouchpad ) {
                     return;
                 }
 
@@ -519,11 +518,6 @@ namespace Battle
             }
 
             BoardActionIntentUpdater & operator=( const BoardActionIntentUpdater & ) = delete;
-
-            void setClick()
-            {
-                _isClick = true;
-            }
 
             void setIntent( const BoardActionIntent & intent )
             {
@@ -540,7 +534,6 @@ namespace Battle
         private:
             Interface & _interface;
             const bool _isFromTouchpad;
-            bool _isClick{ false };
             std::optional<BoardActionIntent> _intent;
         };
     };
