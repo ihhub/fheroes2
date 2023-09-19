@@ -1082,7 +1082,7 @@ namespace Maps
             // To properly update the around sprites we call the update function twice.
             // TODO: rewrite the 'getAroundIndexes()' to start indexes from the center to edges
             // and not from the top-left corner to the bottom-right. Or make a new function for this.
-            updateRoadAround( tile, 1, false );
+            updateRoadAround( tile, 2, false );
             updateRoadAround( tile, 2, false );
 
             if ( Maps::Ground::isTerrainExtraImage( tile.getTerrainImageIndex() ) ) {
@@ -1094,7 +1094,8 @@ namespace Maps
             // Remove all road object sprites from this tile.
             tile.getBottomLayerAddons().remove_if( []( Maps::TilesAddon const & addon ) { return addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD; } );
 
-            updateRoadAround( tile, 1, true );
+            // TODO: Find a proper order to update roads without calling this function twice.
+            updateRoadAround( tile, 2, true );
             updateRoadAround( tile, 2, false );
         }
     }
