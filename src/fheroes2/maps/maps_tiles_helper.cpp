@@ -979,9 +979,14 @@ namespace
         return 255U;
     }
 
-    void updateRoadAround( const Maps::Tiles & centerTile, const int32_t aroundDiastance )
+    void updateRoadAround( const Maps::Tiles & centerTile, const int32_t aroundDiastance, const bool includeCenterTile )
     {
-        for ( const int32_t tileIndex : Maps::getAroundIndexes( centerTile.GetIndex(), aroundDiastance ) ) {
+        Maps::Indexes tileIndexes = Maps::getAroundIndexes( centerTile.GetIndex(), aroundDiastance );
+        if ( includeCenterTile ) {
+            tileIndexes.push_back( centerTile.GetIndex() );
+        }
+
+        for ( const int32_t tileIndex : tileIndexes ) {
             Maps::Tiles & tileAround = world.GetTiles( tileIndex );
             const uint8_t imageIndex = getRoadImageForTile( tileAround, getRoadDirecton( tileAround ) );
             DEBUG_LOG( DBG_DEVEL, DBG_INFO, "Road index for 'around' tile " << tileAround.GetIndex() << ": " << int( imageIndex ) )
@@ -1070,8 +1075,11 @@ namespace Maps
                 tile.pushBottomLayerAddon( TilesAddon( TERRAIN_LAYER, World::GetUniq(), MP2::OBJ_ICN_TYPE_ROAD, roadImageIndex, false, true ) );
             }
 
-            updateRoadAround( tile, 2 );
-            updateRoadAround( tile, 2 );
+            // To properly update the around sprites we call the update function twice.
+            // TODO: rewrite the 'getAroundIndexes()' to start indexes from the center to edges
+            // and not from the top-left corner to the bottom-right. Or make a new function for this.
+            updateRoadAround( tile, 1, false );
+            updateRoadAround( tile, 2, false );
 
             if ( Maps::Ground::isTerrainExtraImage( tile.getTerrainImageIndex() ) ) {
                 // Reset terrain image
@@ -1079,9 +1087,11 @@ namespace Maps
             }
         }
         else {
-            tile.getBottomLayerAddons().clear();
+            // Remove all road object sprites from this tile.
+            tile.getBottomLayerAddons().remove_if( []( Maps::TilesAddon const & addon ) { return addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD; } );
 
-            updateRoadAround( tile, 2 );
+            updateRoadAround( tile, 1, true );
+            updateRoadAround( tile, 2, false );
         }
     }
 

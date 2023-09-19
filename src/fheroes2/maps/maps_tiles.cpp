@@ -2246,7 +2246,7 @@ void Maps::Tiles::quantityIntoMetadata( const uint8_t quantityValue1, const uint
         }
         break;
 
-        // Barrier and Traveler's Tent contain color.
+    // Barrier and Traveler's Tent contain color.
     case MP2::OBJ_BARRIER:
     case MP2::OBJ_TRAVELLER_TENT:
         _metadata[0] = quantityValue1;
