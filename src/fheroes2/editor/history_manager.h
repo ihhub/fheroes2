@@ -20,7 +20,10 @@
 
 #pragma once
 
+#include <algorithm>
+#include <cstddef>
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace fheroes2

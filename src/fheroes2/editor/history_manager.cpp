@@ -21,6 +21,7 @@
 #include "history_manager.h"
 
 #include <cassert>
+#include <cstdint>
 
 #include "maps_tiles.h"
 #include "world.h"
@@ -46,7 +47,7 @@ namespace
             std::swap( temp, _before );
 
             const int32_t size = world.w() * world.h();
-            if ( size != temp.size() ) {
+            if ( size != static_cast<int32_t>( temp.size() ) ) {
                 assert( 0 );
                 return false;
             }

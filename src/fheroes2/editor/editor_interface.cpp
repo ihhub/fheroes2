@@ -247,12 +247,15 @@ namespace Interface
                     fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. Open focused object dialog is not implemented yet.",
                                                        Dialog::OK );
                 }
+// TODO: remove this macro check once the Editor is ready for public.
+#if defined( WITH_DEBUG )
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_UNDO_LAST_ACTION ) ) {
                     undoAction();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_REDO_LAST_ACTION ) ) {
                     redoAction();
                 }
+#endif
             }
 
             if ( res != fheroes2::GameMode::CANCEL ) {
