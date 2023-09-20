@@ -105,7 +105,7 @@ namespace fheroes2
 
     ActionCreator::~ActionCreator()
     {
-        if ( static_cast<MapAction *>( _action.get() )->prepare() ) {
+        if ( dynamic_cast<MapAction *>( _action.get() )->prepare() ) {
             _manager.add( std::move( _action ) );
         }
     }

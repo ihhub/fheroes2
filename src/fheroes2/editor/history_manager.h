@@ -44,7 +44,7 @@ namespace fheroes2
     class ActionCreator
     {
     public:
-        ActionCreator( HistoryManager & manager );
+        explicit ActionCreator( HistoryManager & manager );
 
         ~ActionCreator();
 
