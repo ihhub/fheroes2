@@ -120,8 +120,8 @@ namespace Maps
             return ( _addonBottomLayer == tile._addonBottomLayer ) && ( _addonTopLayer == tile._addonTopLayer ) && ( _index == tile._index )
                    && ( _terrainImageIndex == tile._terrainImageIndex ) && ( _terrainFlags == tile._terrainFlags ) && ( _uid == tile._uid )
                    && ( _layerType == tile._layerType ) && ( _objectIcnType == tile._objectIcnType ) && ( _imageIndex == tile._imageIndex )
-                   && ( _hasObjectAnimation == tile._hasObjectAnimation ) && ( _isMarkedAsRoad == tile._isMarkedAsRoad )
-                   && ( _mainObjectType == tile._mainObjectType ) && ( _metadata == tile._metadata ) && ( _tilePassabilityDirections == tile._tilePassabilityDirections )
+                   && ( _hasObjectAnimation == tile._hasObjectAnimation ) && ( _isMarkedAsRoad == tile._isMarkedAsRoad ) && ( _mainObjectType == tile._mainObjectType )
+                   && ( _metadata == tile._metadata ) && ( _tilePassabilityDirections == tile._tilePassabilityDirections )
                    && ( _isTileMarkedAsRoad == tile._isTileMarkedAsRoad ) && ( _occupantHeroId == tile._occupantHeroId );
         }
 

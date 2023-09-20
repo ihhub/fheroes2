@@ -87,6 +87,7 @@ namespace
 
             return ( !_before.empty() );
         }
+
     private:
         std::vector<Maps::Tiles> _before;
         std::vector<Maps::Tiles> _after;
@@ -103,7 +104,7 @@ namespace fheroes2
 
     ActionCreator::~ActionCreator()
     {
-        if ( static_cast<MapAction*>( _action.get() )->prepare() ) {
+        if ( static_cast<MapAction *>( _action.get() )->prepare() ) {
             _manager.add( std::move( _action ) );
         }
     }

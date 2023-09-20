@@ -1967,8 +1967,8 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 
     return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile._tilePassabilityDirections << tile._uid
                << static_cast<ObjectIcnTypeUnderlyingType>( tile._objectIcnType ) << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex
-               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile._metadata << tile._occupantHeroId << tile._isTileMarkedAsRoad
-               << tile._addonBottomLayer << tile._addonTopLayer << tile._layerType << tile._boatOwnerColor;
+               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile._metadata << tile._occupantHeroId
+               << tile._isTileMarkedAsRoad << tile._addonBottomLayer << tile._addonTopLayer << tile._layerType << tile._boatOwnerColor;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
