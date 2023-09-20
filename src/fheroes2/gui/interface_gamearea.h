@@ -234,7 +234,7 @@ namespace Interface
             _prevIndexPos = -1;
         }
 
-        void SetAreaPosition( int32_t, int32_t, int32_t, int32_t );
+        void SetAreaPosition( int32_t x, int32_t y , int32_t w, int32_t h );
 
         fheroes2::Point getCurrentCenterInPixels() const
         {

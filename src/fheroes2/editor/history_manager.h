@@ -61,6 +61,12 @@ namespace fheroes2
     class HistoryManager
     {
     public:
+        void reset()
+        {
+            _actions.clear();
+            _lastActionId = 0;
+        }
+
         void add( std::unique_ptr<Action> action )
         {
             _actions.resize( _lastActionId );
