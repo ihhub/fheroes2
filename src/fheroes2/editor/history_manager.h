@@ -48,6 +48,10 @@ namespace fheroes2
 
         ~ActionCreator();
 
+        ActionCreator( const ActionCreator & ) = delete;
+
+        ActionCreator & operator=( const ActionCreator & ) = delete;
+
     private:
         HistoryManager & _manager;
 
