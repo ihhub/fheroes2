@@ -117,7 +117,7 @@ namespace fheroes2
                 _manager.add( std::move( _action ) );
             }
         }
-        catch( ... ) {
+        catch ( ... ) {
             // If an exemption happens here then something is very wrong with the code.
             assert( 0 );
         }
