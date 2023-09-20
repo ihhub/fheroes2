@@ -105,7 +105,14 @@ namespace fheroes2
 
     ActionCreator::~ActionCreator()
     {
-        if ( dynamic_cast<MapAction *>( _action.get() )->prepare() ) {
+        auto * action = dynamic_cast<MapAction *>( _action.get() );
+        if ( action == nullptr ) {
+            // How is it even possible?
+            assert( 0 );
+            return;
+        }
+
+        if ( action->prepare() ) {
             _manager.add( std::move( _action ) );
         }
     }
