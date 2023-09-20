@@ -20,63 +20,86 @@
 
 #pragma once
 
-#include <cstdint>
+#include <memory>
+#include <vector>
 
-#include "editor_interface_panel.h"
-#include "game_mode.h"
-#include "history_manager.h"
-#include "interface_base.h"
-
-namespace Interface
+namespace fheroes2
 {
-    class EditorInterface final : public BaseInterface
+    class HistoryManager;
+
+    class Action
     {
     public:
-        static EditorInterface & Get();
+        virtual ~Action() = default;
 
-        void redraw( const uint32_t force ) override;
+        virtual bool redo() = 0;
 
-        // Regenerates the game area and updates the panel positions depending on the UI settings
-        void reset() override;
+        virtual bool undo() = 0;
+    };
 
-        // Start Map Editor interface main function.
-        fheroes2::GameMode startEdit();
+    // Remember the map state and create an action if the map has changed.
+    class ActionCreator
+    {
+    public:
+        ActionCreator( HistoryManager & manager );
 
-        static fheroes2::GameMode eventLoadMap();
-        static fheroes2::GameMode eventNewMap();
-        static fheroes2::GameMode eventFileDialog();
-        void eventViewWorld();
+        ~ActionCreator();
 
-        bool useMouseDragMovement() override
+    private:
+        HistoryManager & _manager;
+
+        std::unique_ptr<Action> _action;
+    };
+
+    class HistoryManager
+    {
+    public:
+        void add( std::unique_ptr<Action> action )
         {
-            return _editorPanel.useMouseDragMovement();
+            _actions.resize( _lastActionId );
+
+            _actions.push_back( std::move( action ) );
+
+            ++_lastActionId;
         }
 
-        void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
-        void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
-
-        void undoAction()
+        bool undo()
         {
-            if ( _historyManager.undo() ) {
-                _redraw |= REDRAW_GAMEAREA;
+            if ( _lastActionId == 0 ) {
+                // Nothing to do.
+                return false;
             }
+
+            --_lastActionId;
+            return _actions[_lastActionId]->undo();
         }
 
-        void redoAction()
+        bool redo()
         {
-            if ( _historyManager.redo() ) {
-                _redraw |= REDRAW_GAMEAREA;
+            if ( _lastActionId == _actions.size() ) {
+                // Nothing to do.
+                return false;
             }
+
+            const bool result = _actions[_lastActionId]->redo();
+            ++_lastActionId;
+
+            return result;
+        }
+
+        bool isUndoAvailable() const
+        {
+            return ( _lastActionId > 0 );
+        }
+
+        bool isRedoAvailable() const
+        {
+            return ( _lastActionId < _actions.size() );
         }
 
     private:
-        EditorInterface();
+        std::vector<std::unique_ptr<Action>> _actions;
 
-        EditorPanel _editorPanel;
-
-        int32_t _selectedTile{ -1 };
-        int32_t _tileUnderCursor{ -1 };
-
-        fheroes2::HistoryManager _historyManager;
+        size_t _lastActionId{ 0 };
     };
 }

@@ -189,6 +189,10 @@ namespace
             = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new map from scratch" ), fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU )]
             = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new random map" ), fheroes2::Key::KEY_R };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_UNDO_LAST_ACTION )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|undo last action" ), fheroes2::Key::KEY_U };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_REDO_LAST_ACTION )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|redo last action" ), fheroes2::Key::KEY_R };
 #endif
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ROLAND )]

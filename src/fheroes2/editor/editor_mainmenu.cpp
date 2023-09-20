@@ -256,7 +256,7 @@ namespace Editor
                     fheroes2::fadeOutDisplay();
                     Game::setDisplayFadeIn();
 
-                    return Interface::Editor::Get().startEdit();
+                    return Interface::EditorInterface::Get().startEdit();
                 }
                 return fheroes2::GameMode::EDITOR_NEW_MAP;
             }

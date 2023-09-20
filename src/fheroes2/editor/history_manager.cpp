@@ -1,0 +1,110 @@
+/***************************************************************************
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2023                                                    *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+#include "history_manager.h"
+
+#include <cassert>
+
+#include "maps_tiles.h"
+#include "world.h"
+
+namespace
+{
+    class MapAction : public fheroes2::Action
+    {
+    public:
+        MapAction()
+        {
+            const int32_t size = world.w() * world.h();
+            _before.reserve( size );
+
+            for ( int32_t i = 0; i < size; ++i ) {
+                _before.push_back( world.GetTiles( i ) );
+            }
+        }
+
+        bool prepare()
+        {
+            std::vector<Maps::Tiles> temp;
+            std::swap( temp, _before );
+
+            const int32_t size = world.w() * world.h();
+            if ( size != temp.size() ) {
+                assert( 0 );
+                return false;
+            }
+
+            bool foundDifference = false;
+
+            for ( int32_t i = 0; i < size; ++i ) {
+                if ( temp[i] != world.GetTiles( i ) ) {
+                    _before.push_back( std::move( temp[i] ) );
+                    _after.push_back( world.GetTiles( i ) );
+                    foundDifference = true;
+                }
+            }
+
+            assert( _before.size() == _after.size() );
+
+            return foundDifference;
+        }
+
+        bool redo() override
+        {
+            for ( const Maps::Tiles & tile : _after ) {
+                Maps::Tiles temp{ tile };
+
+                world.GetTiles( tile.GetIndex() ) = std::move( temp );
+            }
+
+            return ( !_after.empty() );
+        }
+
+        bool undo() override
+        {
+            for ( const Maps::Tiles & tile : _before ) {
+                Maps::Tiles temp{ tile };
+
+                world.GetTiles( tile.GetIndex() ) = std::move( temp );
+            }
+
+            return ( !_before.empty() );
+        }
+    private:
+        std::vector<Maps::Tiles> _before;
+        std::vector<Maps::Tiles> _after;
+    };
+}
+
+namespace fheroes2
+{
+    ActionCreator::ActionCreator( HistoryManager & manager )
+        : _manager( manager )
+    {
+        _action = std::make_unique<MapAction>();
+    }
+
+    ActionCreator::~ActionCreator()
+    {
+        if ( static_cast<MapAction*>( _action.get() )->prepare() ) {
+            _manager.add( std::move( _action ) );
+        }
+    }
+}
