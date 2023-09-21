@@ -24,7 +24,7 @@
 #include <cstddef>
 #include <memory>
 #include <utility>
-#include <vector>
+#include <deque>
 
 namespace fheroes2
 {
@@ -74,6 +74,11 @@ namespace fheroes2
             _actions.push_back( std::move( action ) );
 
             ++_lastActionId;
+
+            if ( _actions.size() > maxActions ) {
+                --_lastActionId;
+                _actions.pop_front();
+            }
         }
 
         bool undo()
@@ -111,7 +116,10 @@ namespace fheroes2
         }
 
     private:
-        std::vector<std::unique_ptr<Action>> _actions;
+        // We shouldn't store too many actions. It is extremely rare when there is a need to revert so many changes.
+        static const size_t maxActions{ 500 };
+
+        std::deque<std::unique_ptr<Action>> _actions;
 
         size_t _lastActionId{ 0 };
     };

@@ -118,7 +118,7 @@ namespace fheroes2
             }
         }
         catch ( ... ) {
-            // If an exemption happens here then something is very wrong with the code.
+            // If an exception happens here then something is very wrong with the code.
             assert( 0 );
         }
     }

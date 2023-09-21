@@ -57,7 +57,8 @@ namespace
         WORLD_MAP,
         BATTLE,
         TOWN,
-        ARMY
+        ARMY,
+        EDITOR,
     };
 
     const char * getHotKeyCategoryName( const HotKeyCategory category )
@@ -79,6 +80,8 @@ namespace
             return "Town";
         case HotKeyCategory::ARMY:
             return "Army";
+        case HotKeyCategory::EDITOR:
+            return "Editor";
         default:
             // Did you add a new category? Add the logic above!
             assert( 0 );
@@ -180,19 +183,19 @@ namespace
 
 #if defined( WITH_DEBUG )
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_MAIN_MENU )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|map editor main menu" ), fheroes2::Key::KEY_E };
+            = { HotKeyCategory::EDITOR, gettext_noop( "hotkey|map editor main menu" ), fheroes2::Key::KEY_E };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new map menu" ), fheroes2::Key::KEY_N };
+            = { HotKeyCategory::EDITOR, gettext_noop( "hotkey|new map menu" ), fheroes2::Key::KEY_N };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_LOAD_MAP_MENU )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|load map menu" ), fheroes2::Key::KEY_L };
+            = { HotKeyCategory::EDITOR, gettext_noop( "hotkey|load map menu" ), fheroes2::Key::KEY_L };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new map from scratch" ), fheroes2::Key::KEY_S };
+            = { HotKeyCategory::EDITOR, gettext_noop( "hotkey|new map from scratch" ), fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new random map" ), fheroes2::Key::KEY_R };
+            = { HotKeyCategory::EDITOR, gettext_noop( "hotkey|new random map" ), fheroes2::Key::KEY_R };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_UNDO_LAST_ACTION )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|undo last action" ), fheroes2::Key::KEY_U };
+            = { HotKeyCategory::EDITOR, gettext_noop( "hotkey|undo last action" ), fheroes2::Key::KEY_U };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_REDO_LAST_ACTION )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|redo last action" ), fheroes2::Key::KEY_R };
+            = { HotKeyCategory::EDITOR, gettext_noop( "hotkey|redo last action" ), fheroes2::Key::KEY_R };
 #endif
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ROLAND )]

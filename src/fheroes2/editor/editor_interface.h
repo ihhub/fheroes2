@@ -58,14 +58,14 @@ namespace Interface
         void undoAction()
         {
             if ( _historyManager.undo() ) {
-                _redraw |= REDRAW_GAMEAREA;
+                _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
             }
         }
 
         void redoAction()
         {
             if ( _historyManager.redo() ) {
-                _redraw |= REDRAW_GAMEAREA;
+                _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
             }
         }
 
