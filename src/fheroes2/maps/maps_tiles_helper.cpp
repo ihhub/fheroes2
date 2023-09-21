@@ -1004,17 +1004,49 @@ namespace
         }
 
         if ( pushNewAddon ) {
+            // We are not marking the addon as road because it should never be used.
             tile.pushBottomLayerAddon( Maps::TilesAddon( Maps::TERRAIN_LAYER, World::GetUniq(), MP2::OBJ_ICN_TYPE_ROAD, imageIndex, false, false ) );
         }
     }
 
-    void updateRoadSpritesAround( const Maps::Tiles & centerTile, const int32_t aroundDiastance )
+    // Update tiles in a square starting from the center tile. This function can be called to update only tiles not marked as road.
+    void updateRoadSpritesAround( const Maps::Tiles & centerTile, const int32_t centerToRectBorderDistance, const bool onlyNotMarkedAsRoad )
     {
-        Maps::Indexes tileIndexes = Maps::getAroundIndexes( centerTile.GetIndex(), aroundDiastance );
-        for ( const int32_t tileIndex : tileIndexes ) {
-            Maps::Tiles & tile = world.GetTiles( tileIndex );
+        // We should update road sprites step by step starting from the center. 'getAroundIndexes()' cannot be used here.
+        const int32_t centerTileIndex = centerTile.GetIndex();
+        const int32_t areaSideSize = centerToRectBorderDistance * 2 + 1;
+        const int32_t worldWidth = world.w();
+        const int32_t worldHeight = world.h();
 
-            updateRoadSpriteOnTile( tile );
+        assert( worldWidth > 0 && worldHeight > 0 );
+
+        const int32_t centerX = centerTileIndex % worldWidth;
+        const int32_t centerY = centerTileIndex / worldWidth;
+
+        // We avoid getting out of map boundaries.
+        const int32_t minTileX = std::max( centerX - centerToRectBorderDistance, 0 );
+        const int32_t minTileY = std::max( centerY - centerToRectBorderDistance, 0 );
+        const int32_t maxTileX = std::min( centerX + centerToRectBorderDistance + 1, worldWidth );
+        const int32_t maxTileY = std::min( centerY + centerToRectBorderDistance + 1, worldHeight );
+
+        for ( int32_t distance = 0; distance < areaSideSize; ++distance ) {
+            for ( int32_t tileY = minTileY; tileY < maxTileY; ++tileY ) {
+                const int32_t indexOffsetY = tileY * worldWidth;
+                const int32_t distanceY = std::abs( tileY - centerY );
+
+                for ( int32_t tileX = minTileX; tileX < maxTileX; ++tileX ) {
+                    if ( std::abs( tileX - centerX ) + distanceY != distance ) {
+                        continue;
+                    }
+
+                    Maps::Tiles & tile = world.GetTiles( indexOffsetY + tileX );
+                    if ( onlyNotMarkedAsRoad && tile.isRoad() ) {
+                        continue;
+                    }
+
+                    updateRoadSpriteOnTile( tile );
+                }
+            }
         }
     }
 }
@@ -1059,13 +1091,9 @@ namespace Maps
         tile.setRoad( setRoad );
 
         if ( setRoad ) {
-            updateRoadSpriteOnTile( tile );
-
-            // To properly update the around sprites we call the update function twice.
-            // TODO: rewrite the 'getAroundIndexes()' to start indexes from the center to edges
-            // and not from the top-left corner to the bottom-right. Or make a new function for this.
-            updateRoadSpritesAround( tile, 2 );
-            updateRoadSpritesAround( tile, 2 );
+            // To properly update the around sprites we call the update function the second time for tiles not marked as road.
+            updateRoadSpritesAround( tile, 2, false );
+            updateRoadSpritesAround( tile, 2, true );
 
             if ( Maps::Ground::isTerrainExtraImage( tile.getTerrainImageIndex() ) ) {
                 // Reset terrain image
@@ -1075,11 +1103,10 @@ namespace Maps
         else {
             // Remove all road object sprites from this tile.
             tile.getBottomLayerAddons().remove_if( []( Maps::TilesAddon const & addon ) { return addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD; } );
-            updateRoadSpriteOnTile( tile );
 
-            // TODO: Find a proper order to update roads without calling this function twice.
-            updateRoadSpritesAround( tile, 2 );
-            updateRoadSpritesAround( tile, 2 );
+            // To properly update the around sprites we call the update function the second time for tiles not marked as road.
+            updateRoadSpritesAround( tile, 2, false );
+            updateRoadSpritesAround( tile, 2, true );
         }
     }
 
