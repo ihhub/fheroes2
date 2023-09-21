@@ -22,6 +22,7 @@
 
 #include <cassert>
 #include <cstdint>
+#include <vector>
 
 #include "maps_tiles.h"
 #include "world.h"
