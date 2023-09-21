@@ -85,6 +85,9 @@ namespace
         bool undo() override
         {
             for ( const Maps::Tiles & tile : _before ) {
+                // Copy operator is disabled for Maps::Tiles class.
+                // This is done to avoid any tile copy made by a developer during the gameplay like map initialization.
+                // Therefore, such a trick is required to assign a new value.
                 Maps::Tiles temp{ tile };
 
                 world.GetTiles( tile.GetIndex() ) = std::move( temp );
