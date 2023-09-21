@@ -52,7 +52,6 @@
 #include "bin_info.h"
 #include "castle.h"
 #include "color.h"
-#include "cursor.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
@@ -2748,6 +2747,8 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     LocalEvent & le = LocalEvent::Get();
     const Settings & conf = Settings::Get();
 
+    BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.MouseEventFromTouchpad() );
+
     if ( le.KeyPress() ) {
         // Skip the turn
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SKIP ) ) {
@@ -2938,18 +2939,18 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         cursor.SetThemes( themes );
 
         const Cell * cell = Board::GetCell( index_pos );
-
         if ( cell ) {
             if ( CursorAttack( themes ) ) {
-                const Unit * b_enemy = cell->GetUnit();
-                popup.SetAttackInfo( cell, _currentUnit, b_enemy );
+                popup.SetAttackInfo( cell, _currentUnit, cell->GetUnit() );
             }
             else {
                 popup.Reset();
             }
 
+            boardActionIntentUpdater.setIntent( { themes, index_pos } );
+
             if ( le.MouseClickLeft() ) {
-                MouseLeftClickBoardAction( themes, *cell, actions );
+                MouseLeftClickBoardAction( themes, *cell, boardActionIntentUpdater.isConfirmed(), actions );
             }
             else if ( le.MousePressRight() ) {
                 MousePressRightBoardAction( *cell );
@@ -2963,6 +2964,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     else if ( le.MouseCursor( status ) ) {
         if ( listlog ) {
             msg = ( listlog->isOpenLog() ? _( "Hide logs" ) : _( "Show logs" ) );
+
             if ( le.MouseClickLeft( status ) ) {
                 listlog->SetOpenLog( !listlog->isOpenLog() );
             }
@@ -2971,10 +2973,12 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
                                        fheroes2::Text( _( "Shows the results of individual monster's actions." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
             }
         }
+
         cursor.SetThemes( Cursor::WAR_POINTER );
     }
     else {
         cursor.SetThemes( Cursor::WAR_NONE );
+
         le.MouseClickLeft();
         le.MousePressRight();
     }
@@ -2985,9 +2989,12 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    // reset cast
+    BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.MouseEventFromTouchpad() );
+
+    // Cancel the spellcast
     if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
         humanturn_spell = Spell::NONE;
+
         _teleportSpellSrcIdx = -1;
     }
     else if ( le.MouseCursor( _interfacePosition ) && humanturn_spell.isValid() ) {
@@ -3002,33 +3009,38 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
             popup.Reset();
         }
 
-        if ( le.MouseClickLeft() && Cursor::WAR_NONE != cursor.Themes() ) {
+        boardActionIntentUpdater.setIntent( { themes, index_pos } );
+
+        if ( le.MouseClickLeft() && Cursor::WAR_NONE != cursor.Themes() && boardActionIntentUpdater.isConfirmed() ) {
             if ( !Board::isValidIndex( index_pos ) ) {
-                DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                           "dst: "
-                               << "out of range" )
+                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Spell destination is out of range: " << index_pos )
                 return;
             }
 
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << index_pos )
 
             if ( Cursor::SP_TELEPORT == cursor.Themes() ) {
-                if ( 0 > _teleportSpellSrcIdx )
+                if ( _teleportSpellSrcIdx < 0 ) {
                     _teleportSpellSrcIdx = index_pos;
+                }
                 else {
                     actions.emplace_back( CommandType::MSG_BATTLE_CAST, Spell::TELEPORT, _teleportSpellSrcIdx, index_pos );
+
                     humanturn_spell = Spell::NONE;
                     humanturn_exit = true;
+
                     _teleportSpellSrcIdx = -1;
                 }
             }
             else if ( Cursor::SP_MIRRORIMAGE == cursor.Themes() ) {
                 actions.emplace_back( CommandType::MSG_BATTLE_CAST, Spell::MIRRORIMAGE, index_pos );
+
                 humanturn_spell = Spell::NONE;
                 humanturn_exit = true;
             }
             else {
                 actions.emplace_back( CommandType::MSG_BATTLE_CAST, humanturn_spell.GetID(), index_pos );
+
                 humanturn_spell = Spell::NONE;
                 humanturn_exit = true;
             }
@@ -3161,14 +3173,14 @@ void Battle::Interface::ButtonSettingsAction()
     }
 }
 
-void Battle::Interface::ButtonSkipAction( Actions & acrions )
+void Battle::Interface::ButtonSkipAction( Actions & actions )
 {
     LocalEvent & le = LocalEvent::Get();
 
     le.MousePressLeft( btn_skip.area() ) ? btn_skip.drawOnPress() : btn_skip.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_skip.area() ) && _currentUnit ) {
-        acrions.emplace_back( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID() );
+        actions.emplace_back( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID() );
         humanturn_exit = true;
     }
 }
@@ -3188,11 +3200,8 @@ void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
     }
 }
 
-void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell & cell, Actions & actions )
+void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions )
 {
-    const int32_t index = cell.GetIndex();
-    const Unit * b = cell.GetUnit();
-
     const auto fixupDestinationCell = []( const Unit & unit, const int32_t dst ) {
         // Only wide units may need this fixup
         if ( !unit.isWide() ) {
@@ -3206,12 +3215,20 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
         return pos.GetHead()->GetIndex();
     };
 
+    const int32_t index = cell.GetIndex();
+    const Unit * unitOnCell = cell.GetUnit();
+
     if ( _currentUnit ) {
         switch ( themes ) {
         case Cursor::WAR_FLY:
         case Cursor::WAR_MOVE:
+            if ( !isConfirmed ) {
+                break;
+            }
+
             actions.emplace_back( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index ) );
             actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
+
             humanturn_exit = true;
             break;
 
@@ -3221,17 +3238,21 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
         case Cursor::SWORD_BOTTOMRIGHT:
         case Cursor::SWORD_BOTTOMLEFT:
         case Cursor::SWORD_LEFT: {
-            const Unit * enemy = b;
+            if ( !isConfirmed ) {
+                break;
+            }
+
             const int dir = GetDirectionFromCursorSword( themes );
 
-            if ( enemy && Board::isValidDirection( index, dir ) ) {
+            if ( unitOnCell && Board::isValidDirection( index, dir ) ) {
                 const int32_t move = fixupDestinationCell( *_currentUnit, Board::GetIndexDirection( index, dir ) );
 
                 if ( _currentUnit->GetHeadIndex() != move ) {
                     actions.emplace_back( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), move );
                 }
-                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, _currentUnit->GetUID(), enemy->GetUID(), index, Board::GetReflectDirection( dir ) );
+                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), index, Board::GetReflectDirection( dir ) );
                 actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
+
                 humanturn_exit = true;
             }
             break;
@@ -3239,19 +3260,23 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
 
         case Cursor::WAR_BROKENARROW:
         case Cursor::WAR_ARROW: {
-            const Unit * enemy = b;
+            if ( !isConfirmed ) {
+                break;
+            }
 
-            if ( enemy ) {
-                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, _currentUnit->GetUID(), enemy->GetUID(), index, 0 );
+            if ( unitOnCell ) {
+                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), index, 0 );
                 actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
+
                 humanturn_exit = true;
             }
             break;
         }
 
         case Cursor::WAR_INFO: {
-            if ( b ) {
-                Dialog::ArmyInfo( *b, Dialog::BUTTONS, b->isReflect() );
+            if ( unitOnCell ) {
+                Dialog::ArmyInfo( *unitOnCell, Dialog::BUTTONS, unitOnCell->isReflect() );
+
                 humanturn_redraw = true;
             }
             break;
