@@ -22,9 +22,9 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <deque>
 #include <memory>
 #include <utility>
-#include <deque>
 
 namespace fheroes2
 {
