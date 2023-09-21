@@ -2747,7 +2747,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     LocalEvent & le = LocalEvent::Get();
     const Settings & conf = Settings::Get();
 
-    BoardActionIntentUpdater boardActionIntentUpdater( *this, le.MouseEventFromTouchpad() );
+    BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.MouseEventFromTouchpad() );
 
     if ( le.KeyPress() ) {
         // Skip the turn
@@ -2989,7 +2989,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    BoardActionIntentUpdater boardActionIntentUpdater( *this, le.MouseEventFromTouchpad() );
+    BoardActionIntentUpdater boardActionIntentUpdater( _boardActionIntent, le.MouseEventFromTouchpad() );
 
     // Cancel the spellcast
     if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {

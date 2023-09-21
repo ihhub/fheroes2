@@ -500,8 +500,8 @@ namespace Battle
         class BoardActionIntentUpdater
         {
         public:
-            BoardActionIntentUpdater( Interface & interface, const bool isFromTouchpad )
-                : _interface( interface )
+            BoardActionIntentUpdater( BoardActionIntent & storedIntent, const bool isFromTouchpad )
+                : _storedIntent( storedIntent )
                 , _isFromTouchpad( isFromTouchpad )
             {}
 
@@ -514,7 +514,7 @@ namespace Battle
                     return;
                 }
 
-                _interface._boardActionIntent = _intent.value_or( BoardActionIntent{} );
+                _storedIntent = _intent.value_or( BoardActionIntent{} );
             }
 
             BoardActionIntentUpdater & operator=( const BoardActionIntentUpdater & ) = delete;
@@ -528,11 +528,11 @@ namespace Battle
             {
                 // If the mouse event has been triggered by the touchpad, it should be considered confirmed only if this event orders to
                 // perform the same action that is already indicated on the battle board with the mouse cursor.
-                return ( !_isFromTouchpad || _interface._boardActionIntent == _intent );
+                return ( !_isFromTouchpad || _storedIntent == _intent );
             }
 
         private:
-            Interface & _interface;
+            BoardActionIntent & _storedIntent;
             const bool _isFromTouchpad;
             std::optional<BoardActionIntent> _intent;
         };
