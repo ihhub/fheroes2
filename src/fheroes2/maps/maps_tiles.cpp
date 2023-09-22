@@ -423,25 +423,18 @@ namespace
     bool isSpriteRoad( const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex )
     {
         switch ( objectIcnType ) {
-        // road sprite
-        case MP2::OBJ_ICN_TYPE_ROAD:
-            if ( 1 == imageIndex || 8 == imageIndex || 10 == imageIndex || 11 == imageIndex || 15 == imageIndex || 22 == imageIndex || 23 == imageIndex
-                 || 24 == imageIndex || 25 == imageIndex || 27 == imageIndex )
-                return false;
-            else
-                return true;
-
-        // castle or town gate
-        case MP2::OBJ_ICN_TYPE_OBJNTOWN:
-            if ( 13 == imageIndex || 29 == imageIndex || 45 == imageIndex || 61 == imageIndex || 77 == imageIndex || 93 == imageIndex || 109 == imageIndex
-                 || 125 == imageIndex || 141 == imageIndex || 157 == imageIndex || 173 == imageIndex || 189 == imageIndex )
-                return true;
-            break;
-
-        // Random castle or town gate.
-        case MP2::OBJ_ICN_TYPE_OBJNTWRD:
-            return ( imageIndex == 13 || imageIndex == 29 );
-
+        case MP2::OBJ_ICN_TYPE_ROAD: {
+            static const std::set<uint8_t> allowedIndecies{ 0, 2, 3, 4, 5, 6, 7, 9, 12, 13, 14, 16, 17, 18, 19, 20, 21, 26, 28, 29, 30, 31 };
+            return ( allowedIndecies.count( imageIndex ) == 1 );
+        }
+        case MP2::OBJ_ICN_TYPE_OBJNTOWN: {
+            static const std::set<uint8_t> allowedIndecies{ 13, 29, 45, 61, 77, 93, 109, 125, 141, 157, 173, 189 };
+            return ( allowedIndecies.count( imageIndex ) == 1 );
+        }
+        case MP2::OBJ_ICN_TYPE_OBJNTWRD: {
+            static const std::set<uint8_t> allowedIndecies{ 13, 29 };
+            return ( allowedIndecies.count( imageIndex ) == 1 );
+        }
         default:
             break;
         }
