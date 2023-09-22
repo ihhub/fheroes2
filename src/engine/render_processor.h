@@ -21,62 +21,78 @@
 #pragma once
 
 #include <cstdint>
+#include <functional>
+#include <vector>
 
-#include "editor_interface_panel.h"
-#include "game_mode.h"
-#include "history_manager.h"
-#include "interface_base.h"
+#include "timing.h"
 
-namespace Interface
+namespace fheroes2
 {
-    class EditorInterface final : public BaseInterface
+    class RenderProcessor
     {
     public:
-        static EditorInterface & Get();
+        RenderProcessor( const RenderProcessor & ) = delete;
 
-        void redraw( const uint32_t force ) override;
+        ~RenderProcessor() = default;
 
-        // Regenerates the game area and updates the panel positions depending on the UI settings
-        void reset() override;
+        RenderProcessor & operator=( const RenderProcessor & ) = delete;
 
-        // Start Map Editor interface main function.
-        fheroes2::GameMode startEdit();
+        static RenderProcessor & instance();
 
-        static fheroes2::GameMode eventLoadMap();
-        static fheroes2::GameMode eventNewMap();
-        static fheroes2::GameMode eventFileDialog();
-        void eventViewWorld();
-
-        bool useMouseDragMovement() override
+        void registerRenderers( const std::function<void()> & preRenderer, const std::function<void()> & postRenderer )
         {
-            return _editorPanel.useMouseDragMovement();
+            _preRenderer = preRenderer;
+            _postRenderer = postRenderer;
         }
 
-        void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
-        void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
-
-        void undoAction()
+        void unregisterRenderers()
         {
-            if ( _historyManager.undo() ) {
-                _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
-            }
+            _preRenderer = {};
+            _postRenderer = {};
         }
 
-        void redoAction()
+        void enableRenderers()
         {
-            if ( _historyManager.redo() ) {
-                _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
-            }
+            _enableRenderers = true;
+        }
+
+        void disableRenderers()
+        {
+            _enableRenderers = false;
+        }
+
+        bool preRenderAction( std::vector<uint8_t> & palette );
+        void postRenderAction();
+
+        void startColorCycling()
+        {
+            _enableCycling = true;
+        }
+
+        void stopColorCycling()
+        {
+            _enableCycling = false;
+        }
+
+        bool isCyclingUpdateRequired() const
+        {
+            return _enableCycling && _lastRenderCall.getMs() >= _cyclingInterval;
         }
 
     private:
-        EditorInterface();
+        RenderProcessor() = default;
 
-        EditorPanel _editorPanel;
+        std::function<void()> _preRenderer;
+        std::function<void()> _postRenderer;
 
-        int32_t _selectedTile{ -1 };
-        int32_t _tileUnderCursor{ -1 };
+        bool _enableRenderers{ false };
+        bool _enableCycling{ false };
 
-        fheroes2::HistoryManager _historyManager;
+        fheroes2::Time _cyclingTimer;
+        fheroes2::Time _lastRenderCall;
+
+        uint32_t _cyclingCounter{ 0 };
+
+        static const uint64_t _cyclingInterval{ 220 };
     };
 }

@@ -499,7 +499,7 @@ bool Maps::TilesAddon::isShadow( const TilesAddon & ta )
 
 void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
 {
-    tilePassable = DIRECTION_ALL;
+    _tilePassabilityDirections = DIRECTION_ALL;
 
     _layerType = mp2.quantity1 & 0x03;
     _metadata[0] = ( ( ( mp2.quantity2 << 8 ) + mp2.quantity1 ) >> 3 );
@@ -520,7 +520,7 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
     _addonTopLayer.clear();
 
     // those bitfields are set by map editor regardless if map object is there
-    _tileIsRoad = ( ( mp2.objectName1 >> 1 ) & 1 ) && ( ( mp2.objectName1 >> 2 ) == MP2::OBJ_ICN_TYPE_ROAD );
+    _isTileMarkedAsRoad = ( ( mp2.objectName1 >> 1 ) & 1 ) && ( ( mp2.objectName1 >> 2 ) == MP2::OBJ_ICN_TYPE_ROAD );
 
     // If an object has priority 2 (shadow) or 3 (ground) then we put it as an addon.
     if ( mp2.mapObjectType == MP2::OBJ_NONE && ( _layerType >> 1 ) & 1 ) {
@@ -539,19 +539,19 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
 
 Heroes * Maps::Tiles::getHero() const
 {
-    return MP2::OBJ_HEROES == _mainObjectType && heroID ? world.GetHeroes( heroID - 1 ) : nullptr;
+    return MP2::OBJ_HEROES == _mainObjectType && _occupantHeroId ? world.GetHeroes( _occupantHeroId - 1 ) : nullptr;
 }
 
 void Maps::Tiles::setHero( Heroes * hero )
 {
     if ( hero ) {
-        using HeroIDType = decltype( heroID );
+        using HeroIDType = decltype( _occupantHeroId );
         static_assert( std::is_same_v<HeroIDType, uint8_t>, "Type of heroID has been changed, check the logic below" );
 
         hero->setObjectTypeUnderHero( _mainObjectType );
 
         assert( hero->GetID() >= std::numeric_limits<HeroIDType>::min() && hero->GetID() < std::numeric_limits<HeroIDType>::max() );
-        heroID = static_cast<HeroIDType>( hero->GetID() + 1 );
+        _occupantHeroId = static_cast<HeroIDType>( hero->GetID() + 1 );
 
         SetObject( MP2::OBJ_HEROES );
     }
@@ -566,7 +566,7 @@ void Maps::Tiles::setHero( Heroes * hero )
             setAsEmpty();
         }
 
-        heroID = 0;
+        _occupantHeroId = 0;
     }
 }
 
@@ -702,28 +702,28 @@ int Maps::Tiles::getOriginalPassability() const
 
 void Maps::Tiles::setInitialPassability()
 {
-    using TilePassableType = decltype( tilePassable );
+    using TilePassableType = decltype( _tilePassabilityDirections );
     static_assert( std::is_same_v<TilePassableType, uint16_t>, "Type of tilePassable has been changed, check the logic below" );
 
     const int passability = getOriginalPassability();
     assert( passability >= std::numeric_limits<TilePassableType>::min() && passability <= std::numeric_limits<TilePassableType>::max() );
 
-    tilePassable = static_cast<TilePassableType>( passability );
+    _tilePassabilityDirections = static_cast<TilePassableType>( passability );
 }
 
 void Maps::Tiles::updatePassability()
 {
     if ( !Maps::isValidDirection( _index, Direction::LEFT ) ) {
-        tilePassable &= ~( Direction::LEFT | Direction::TOP_LEFT | Direction::BOTTOM_LEFT );
+        _tilePassabilityDirections &= ~( Direction::LEFT | Direction::TOP_LEFT | Direction::BOTTOM_LEFT );
     }
     if ( !Maps::isValidDirection( _index, Direction::RIGHT ) ) {
-        tilePassable &= ~( Direction::RIGHT | Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT );
+        _tilePassabilityDirections &= ~( Direction::RIGHT | Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT );
     }
     if ( !Maps::isValidDirection( _index, Direction::TOP ) ) {
-        tilePassable &= ~( Direction::TOP | Direction::TOP_LEFT | Direction::TOP_RIGHT );
+        _tilePassabilityDirections &= ~( Direction::TOP | Direction::TOP_LEFT | Direction::TOP_RIGHT );
     }
     if ( !Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
-        tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
+        _tilePassabilityDirections &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
     }
 
     const MP2::MapObjectType objectType = GetObject( false );
@@ -747,7 +747,7 @@ void Maps::Tiles::updatePassability()
 
             for ( const uint32_t objectId : tileUIDs ) {
                 if ( bottomTile.doesObjectExist( objectId ) ) {
-                    tilePassable = 0;
+                    _tilePassabilityDirections = 0;
                     return;
                 }
             }
@@ -755,7 +755,7 @@ void Maps::Tiles::updatePassability()
             // If an object locates on land and the bottom tile is water mark the current tile as impassable. It's done for cases that a hero won't be able to
             // disembark on the tile.
             if ( !isWater() && bottomTile.isWater() ) {
-                tilePassable = 0;
+                _tilePassabilityDirections = 0;
                 return;
             }
 
@@ -781,50 +781,50 @@ void Maps::Tiles::updatePassability()
                 if ( isBottomTileActionObject ) {
                     if ( ( MP2::getActionObjectDirection( bottomTileObjectType ) & Direction::TOP ) == 0 ) {
                         if ( isShortObject( bottomTileObjectType ) ) {
-                            tilePassable &= ~Direction::BOTTOM;
+                            _tilePassabilityDirections &= ~Direction::BOTTOM;
                         }
                         else {
-                            tilePassable = 0;
+                            _tilePassabilityDirections = 0;
                             return;
                         }
                     }
                 }
                 else if ( bottomTile._mainObjectType != MP2::OBJ_NONE && correctedObjectType != bottomTileObjectType && MP2::isActionObject( correctedObjectType )
                           && isShortObject( correctedObjectType ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
-                    tilePassable &= ~Direction::BOTTOM;
+                    _tilePassabilityDirections &= ~Direction::BOTTOM;
                 }
                 else if ( isShortObject( bottomTileObjectType )
                           || ( !bottomTile.containsAnyObjectIcnType( getValidObjectIcnTypes() )
                                && ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
-                    tilePassable &= ~Direction::BOTTOM;
+                    _tilePassabilityDirections &= ~Direction::BOTTOM;
                 }
                 else {
-                    tilePassable = 0;
+                    _tilePassabilityDirections = 0;
                     return;
                 }
             }
         }
         else {
-            tilePassable = 0;
+            _tilePassabilityDirections = 0;
             return;
         }
     }
 
     // Left side.
-    if ( ( tilePassable & Direction::TOP_LEFT ) && Maps::isValidDirection( _index, Direction::LEFT ) ) {
+    if ( ( _tilePassabilityDirections & Direction::TOP_LEFT ) && Maps::isValidDirection( _index, Direction::LEFT ) ) {
         const Tiles & leftTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::LEFT ) );
         const bool leftTileTallObject = leftTile.isTallObject();
         if ( leftTileTallObject && ( leftTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
-            tilePassable &= ~Direction::TOP_LEFT;
+            _tilePassabilityDirections &= ~Direction::TOP_LEFT;
         }
     }
 
     // Right side.
-    if ( ( tilePassable & Direction::TOP_RIGHT ) && Maps::isValidDirection( _index, Direction::RIGHT ) ) {
+    if ( ( _tilePassabilityDirections & Direction::TOP_RIGHT ) && Maps::isValidDirection( _index, Direction::RIGHT ) ) {
         const Tiles & rightTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::RIGHT ) );
         const bool rightTileTallObject = rightTile.isTallObject();
         if ( rightTileTallObject && ( rightTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
-            tilePassable &= ~Direction::TOP_RIGHT;
+            _tilePassabilityDirections &= ~Direction::TOP_RIGHT;
         }
     }
 }
@@ -846,7 +846,7 @@ bool Maps::Tiles::doesObjectExist( const uint32_t uid ) const
 
 void Maps::Tiles::UpdateRegion( uint32_t newRegionID )
 {
-    if ( tilePassable ) {
+    if ( _tilePassabilityDirections ) {
         _region = newRegionID;
     }
     else {
@@ -889,7 +889,7 @@ void Maps::Tiles::pushBottomLayerAddon( const MP2::mp2tile_t & mt )
     // MP2 "objectName" is a bitfield
     // 6 bits is for object ICN type, 1 bit is isRoad flag, 1 bit is hasAnimation flag
     if ( ( ( mt.objectName1 >> 1 ) & 1 ) && ( ( mt.objectName1 >> 2 ) == MP2::OBJ_ICN_TYPE_ROAD ) ) {
-        _tileIsRoad = true;
+        _isTileMarkedAsRoad = true;
     }
 }
 
@@ -924,10 +924,10 @@ void Maps::Tiles::AddonsSort()
     }
 
     // Some original maps have issues with identifying tiles as roads. This code fixes it. It's not an ideal solution but works fine in most of cases.
-    if ( !_tileIsRoad ) {
+    if ( !_isTileMarkedAsRoad ) {
         for ( const TilesAddon & addon : _addonBottomLayer ) {
             if ( addon.isRoad() ) {
-                _tileIsRoad = true;
+                _isTileMarkedAsRoad = true;
                 break;
             }
         }
@@ -977,10 +977,10 @@ std::string Maps::Tiles::String() const
        << "image index     : " << static_cast<int>( _imageIndex ) << " (animated: " << hasSpriteAnimation() << ")" << std::endl
        << "layer type      : " << static_cast<int>( _layerType ) << " - " << getObjectLayerName( _layerType ) << std::endl
        << "region          : " << _region << std::endl
-       << "ground          : " << Ground::String( GetGround() ) << " (isRoad: " << _tileIsRoad << ")" << std::endl
+       << "ground          : " << Ground::String( GetGround() ) << " (isRoad: " << _isTileMarkedAsRoad << ")" << std::endl
        << "ground img index: " << _terrainImageIndex << ", image flags: " << static_cast<int>( _terrainFlags ) << std::endl
        << "shadow          : " << ( isShadowSprite( _objectIcnType, _imageIndex ) ? "true" : "false" ) << std::endl
-       << "passable from   : " << ( tilePassable ? Direction::String( tilePassable ) : "nowhere" );
+       << "passable from   : " << ( _tilePassabilityDirections ? Direction::String( _tilePassabilityDirections ) : "nowhere" );
 
     os << std::endl
        << "metadata value 1: " << _metadata[0] << std::endl
@@ -1128,7 +1128,7 @@ bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, con
         }
     }
 
-    return ( direction & tilePassable ) != 0;
+    return ( direction & _tilePassabilityDirections ) != 0;
 }
 
 void Maps::Tiles::SetObjectPassable( bool pass )
@@ -1136,9 +1136,9 @@ void Maps::Tiles::SetObjectPassable( bool pass )
     switch ( GetObject( false ) ) {
     case MP2::OBJ_TROLL_BRIDGE:
         if ( pass )
-            tilePassable |= Direction::TOP_LEFT;
+            _tilePassabilityDirections |= Direction::TOP_LEFT;
         else
-            tilePassable &= ~Direction::TOP_LEFT;
+            _tilePassabilityDirections &= ~Direction::TOP_LEFT;
         break;
 
     default:
@@ -1966,10 +1966,10 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
     using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( tile._objectIcnType )>;
     using MainObjectTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainObjectType )>;
 
-    return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile.tilePassable << tile._uid
+    return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile._tilePassabilityDirections << tile._uid
                << static_cast<ObjectIcnTypeUnderlyingType>( tile._objectIcnType ) << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex
-               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile._metadata << tile.heroID << tile._tileIsRoad
-               << tile._addonBottomLayer << tile._addonTopLayer << tile._layerType << tile._boatOwnerColor;
+               << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile._metadata << tile._occupantHeroId
+               << tile._isTileMarkedAsRoad << tile._addonBottomLayer << tile._addonTopLayer << tile._layerType << tile._boatOwnerColor;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
@@ -1989,7 +1989,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
         msg >> tile._terrainImageIndex >> tile._terrainFlags;
     }
 
-    msg >> tile.tilePassable >> tile._uid;
+    msg >> tile._tilePassabilityDirections >> tile._uid;
 
     using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( tile._objectIcnType )>;
     static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
@@ -2053,7 +2053,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
         }
     }
 
-    msg >> tile.heroID >> tile._tileIsRoad >> tile._addonBottomLayer >> tile._addonTopLayer >> tile._layerType;
+    msg >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._addonBottomLayer >> tile._addonTopLayer >> tile._layerType;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1002_RELEASE, "Remove the check below." );
     if ( Game::GetVersionOfCurrentSaveFile() >= FORMAT_VERSION_1002_RELEASE ) {

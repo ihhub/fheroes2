@@ -13,6 +13,7 @@
     <ClCompile Include="src\engine\logging.cpp" />
     <ClCompile Include="src\engine\pal.cpp" />
     <ClCompile Include="src\engine\rand.cpp" />
+    <ClCompile Include="src\engine\render_processor.cpp" />
     <ClCompile Include="src\engine\screen.cpp" />
     <ClCompile Include="src\engine\serialize.cpp" />
     <ClCompile Include="src\engine\smk_decoder.cpp" />
@@ -107,6 +108,7 @@
     <ClCompile Include="src\fheroes2\editor\editor_interface.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_interface_panel.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_mainmenu.cpp" />
+    <ClCompile Include="src\fheroes2\editor\history_manager.cpp" />
     <ClCompile Include="src\fheroes2\game\difficulty.cpp" />
     <ClCompile Include="src\fheroes2\game\fheroes2.cpp" />
     <ClCompile Include="src\fheroes2\game\game.cpp" />
@@ -245,6 +247,7 @@
     <ClInclude Include="src\engine\math_base.h" />
     <ClInclude Include="src\engine\pal.h" />
     <ClInclude Include="src\engine\rand.h" />
+    <ClInclude Include="src\engine\render_processor.h" />
     <ClInclude Include="src\engine\screen.h" />
     <ClInclude Include="src\engine\serialize.h" />
     <ClInclude Include="src\engine\smk_decoder.h" />
@@ -307,6 +310,7 @@
     <ClInclude Include="src\fheroes2\editor\editor.h" />
     <ClInclude Include="src\fheroes2\editor\editor_interface.h" />
     <ClInclude Include="src\fheroes2\editor\editor_interface_panel.h" />
+    <ClInclude Include="src\fheroes2\editor\history_manager.h" />
     <ClInclude Include="src\fheroes2\game\difficulty.h" />
     <ClInclude Include="src\fheroes2\game\game.h" />
     <ClInclude Include="src\fheroes2\game\game_credits.h" />
