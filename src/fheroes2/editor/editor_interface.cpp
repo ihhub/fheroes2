@@ -567,12 +567,16 @@ namespace Interface
             _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
         }
         else if ( _editorPanel.isRoadDraw() ) {
+            const fheroes2::ActionCreator action( _historyManager );
+
             Maps::setRoadOnTile( tile, true );
 
             _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
         }
         else if ( _editorPanel.isEraseMode() ) {
             const int32_t brushSize = _editorPanel.getBrushSize();
+
+            const fheroes2::ActionCreator action( _historyManager );
 
             // TODO: implement other brush sizes.
             if ( brushSize < 2 ) {
