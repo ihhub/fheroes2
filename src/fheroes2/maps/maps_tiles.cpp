@@ -593,7 +593,7 @@ void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
 
 void Maps::Tiles::setBoat( const int direction, const int color )
 {
-    if ( _objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _imageIndex != 255 ) {
+    if ( _objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
         pushBottomLayerAddon( TilesAddon( OBJECT_LAYER, _uid, _objectIcnType, _imageIndex ) );
     }
 
