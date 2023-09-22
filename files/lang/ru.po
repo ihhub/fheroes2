@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-21 11:05+0000\n"
+"POT-Creation-Date: 2023-09-22 00:50+0000\n"
 "PO-Revision-Date: 2023-09-15 21:53+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3774,8 +3774,8 @@ msgstr "Лупа"
 msgid "Undo"
 msgstr "Отменить"
 
-msgid "Undo your last action. Press again to redo the action."
-msgstr "Отменить предыдущее действие. Повторное нажатие повторяет действие."
+msgid "Undo your last action."
+msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr ""
@@ -4226,6 +4226,14 @@ msgstr "новая карта с нуля"
 
 msgid "hotkey|new random map"
 msgstr "новая случайная карта"
+
+#, fuzzy
+msgid "hotkey|undo last action"
+msgstr "действие по умолчанию"
+
+#, fuzzy
+msgid "hotkey|redo last action"
+msgstr "действие по умолчанию"
 
 msgid "hotkey|roland campaign"
 msgstr "кампания за роланда"
@@ -10749,3 +10757,6 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Undo your last action. Press again to redo the action."
+#~ msgstr "Отменить предыдущее действие. Повторное нажатие повторяет действие."

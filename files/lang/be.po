@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-17 07:18+0000\n"
+"POT-Creation-Date: 2023-09-22 00:50+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3557,7 +3557,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-msgid "Undo your last action. Press again to redo the action."
+msgid "Undo your last action."
 msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
@@ -3998,6 +3998,14 @@ msgstr ""
 #, fuzzy
 msgid "hotkey|new random map"
 msgstr "Зводка аб каралеўстве"
+
+#, fuzzy
+msgid "hotkey|undo last action"
+msgstr "Наладкі замка"
+
+#, fuzzy
+msgid "hotkey|redo last action"
+msgstr "Наладкі замка"
 
 msgid "hotkey|roland campaign"
 msgstr ""

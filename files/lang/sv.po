@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 15:37+0000\n"
+"POT-Creation-Date: 2023-09-22 00:50+0000\n"
 "PO-Revision-Date: 2023-09-15 19:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3747,8 +3747,8 @@ msgstr "Förstora"
 msgid "Undo"
 msgstr "Ångra"
 
-msgid "Undo your last action. Press again to redo the action."
-msgstr "Ångra din senaste händelse. Klicka igen för att ångra dig igen."
+msgid "Undo your last action."
+msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr "Skapa en ny blank karta eller en slumpad karta med kartgeneratorn."
@@ -4196,6 +4196,14 @@ msgstr "Ny blank karta"
 
 msgid "hotkey|new random map"
 msgstr "Ny slumpad karta"
+
+#, fuzzy
+msgid "hotkey|undo last action"
+msgstr "Nästa stad"
+
+#, fuzzy
+msgid "hotkey|redo last action"
+msgstr "Rolands kampanj"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"
@@ -10757,3 +10765,6 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Undo your last action. Press again to redo the action."
+#~ msgstr "Ångra din senaste händelse. Klicka igen för att ångra dig igen."

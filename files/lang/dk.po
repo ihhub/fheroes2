@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-17 07:18+0000\n"
+"POT-Creation-Date: 2023-09-22 00:50+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3824,8 +3824,8 @@ msgstr "Forstør"
 msgid "Undo"
 msgstr "Fortryd"
 
-msgid "Undo your last action. Press again to redo the action."
-msgstr "Fortryd din sidste handling. Tryk igen for at gentage handlingen."
+msgid "Undo your last action."
+msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr ""
@@ -4273,6 +4273,14 @@ msgstr "Nyt blankt kort"
 
 msgid "hotkey|new random map"
 msgstr "Generer nyt kort"
+
+#, fuzzy
+msgid "hotkey|undo last action"
+msgstr "Standardhandling"
+
+#, fuzzy
+msgid "hotkey|redo last action"
+msgstr "Standardhandling"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands felttog"
@@ -10909,3 +10917,6 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Undo your last action. Press again to redo the action."
+#~ msgstr "Fortryd din sidste handling. Tryk igen for at gentage handlingen."

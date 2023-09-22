@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-17 07:18+0000\n"
+"POT-Creation-Date: 2023-09-22 00:50+0000\n"
 "PO-Revision-Date: 2023-09-11 20:29+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3762,7 +3762,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-msgid "Undo your last action. Press again to redo the action."
+msgid "Undo your last action."
 msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
@@ -4215,6 +4215,14 @@ msgstr ""
 #, fuzzy
 msgid "hotkey|new random map"
 msgstr "Přehled Království"
+
+#, fuzzy
+msgid "hotkey|undo last action"
+msgstr "Zobrazit následující město"
+
+#, fuzzy
+msgid "hotkey|redo last action"
+msgstr "Zobrazit následující město"
 
 msgid "hotkey|roland campaign"
 msgstr ""
