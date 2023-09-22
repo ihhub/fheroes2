@@ -21,6 +21,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <deque>
 #include <memory>
@@ -79,6 +80,8 @@ namespace fheroes2
                 --_lastActionId;
                 _actions.pop_front();
             }
+
+            assert( _actions.size() <= maxActions );
         }
 
         bool undo()
