@@ -796,7 +796,7 @@ namespace AI
                 assert( enemy != nullptr );
 
                 const int archerMeleeDmg = currentUnit.GetDamage( *enemy );
-                const int damageDiff = archerMeleeDmg - enemy->CalculateRetaliationDamage( archerMeleeDmg );
+                const int damageDiff = archerMeleeDmg - enemy->EstimateRetaliatoryDamage( archerMeleeDmg );
 
                 if ( bestOutcome < damageDiff ) {
                     bestOutcome = damageDiff;

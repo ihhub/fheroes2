@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "monster.h"
+
 #include <algorithm>
 #include <vector>
 
@@ -28,7 +30,6 @@
 #include "color.h"
 #include "icn.h"
 #include "luck.h"
-#include "monster.h"
 #include "morale.h"
 #include "race.h"
 #include "rand.h"
@@ -828,13 +829,15 @@ payment_t Monster::GetUpgradeCost() const
     return ( upgr.GetCost() - GetCost() ) * 2;
 }
 
-uint32_t Monster::GetCountFromHitPoints( const Monster & mons, uint32_t hp )
+uint32_t Monster::GetCountFromHitPoints( const Monster & mons, const uint32_t hp )
 {
-    if ( hp ) {
-        const uint32_t hp1 = mons.GetHitPoints();
-        const uint32_t count = hp / hp1;
-        return ( count * hp1 ) < hp ? count + 1 : count;
+    if ( hp == 0 ) {
+        return 0;
     }
 
-    return 0;
+    const uint32_t singleMonsterHP = mons.GetHitPoints();
+    const uint32_t quotient = hp / singleMonsterHP;
+    const uint32_t remainder = hp % singleMonsterHP;
+
+    return ( remainder > 0 ? quotient + 1 : quotient );
 }
