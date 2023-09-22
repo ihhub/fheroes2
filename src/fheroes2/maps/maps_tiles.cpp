@@ -443,15 +443,6 @@ namespace
     }
 }
 
-Maps::TilesAddon::TilesAddon( const uint8_t layerType, const uint32_t uid, const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex )
-    : _uid( uid )
-    , _layerType( layerType )
-    , _objectIcnType( objectIcnType )
-    , _imageIndex( imageIndex )
-{
-    // Do nothing.
-}
-
 std::string Maps::TilesAddon::String( int lvl ) const
 {
     std::ostringstream os;
