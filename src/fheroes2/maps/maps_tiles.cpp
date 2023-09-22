@@ -419,16 +419,42 @@ namespace
 
         return MP2::OBJ_NONE;
     }
+
+    bool isSpriteRoad( const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex )
+    {
+        switch ( objectIcnType ) {
+        // road sprite
+        case MP2::OBJ_ICN_TYPE_ROAD:
+            if ( 1 == imageIndex || 8 == imageIndex || 10 == imageIndex || 11 == imageIndex || 15 == imageIndex || 22 == imageIndex || 23 == imageIndex
+                 || 24 == imageIndex || 25 == imageIndex || 27 == imageIndex )
+                return false;
+            else
+                return true;
+
+        // castle or town gate
+        case MP2::OBJ_ICN_TYPE_OBJNTOWN:
+            if ( 13 == imageIndex || 29 == imageIndex || 45 == imageIndex || 61 == imageIndex || 77 == imageIndex || 93 == imageIndex || 109 == imageIndex
+                 || 125 == imageIndex || 141 == imageIndex || 157 == imageIndex || 173 == imageIndex || 189 == imageIndex )
+                return true;
+            break;
+
+        // Random castle or town gate.
+        case MP2::OBJ_ICN_TYPE_OBJNTWRD:
+            return ( imageIndex == 13 || imageIndex == 29 );
+
+        default:
+            break;
+        }
+
+        return false;
+    }
 }
 
-Maps::TilesAddon::TilesAddon( const uint8_t layerType, const uint32_t uid, const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex,
-                              const bool hasObjectAnimation, const bool isMarkedAsRoad )
+Maps::TilesAddon::TilesAddon( const uint8_t layerType, const uint32_t uid, const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex )
     : _uid( uid )
     , _layerType( layerType )
     , _objectIcnType( objectIcnType )
     , _imageIndex( imageIndex )
-    , _hasObjectAnimation( hasObjectAnimation )
-    , _isMarkedAsRoad( isMarkedAsRoad )
 {
     // Do nothing.
 }
@@ -451,35 +477,6 @@ bool Maps::TilesAddon::PredicateSortRules1( const Maps::TilesAddon & ta1, const 
     return ( ( ta1._layerType % 4 ) > ( ta2._layerType % 4 ) );
 }
 
-bool Maps::TilesAddon::isRoad() const
-{
-    switch ( _objectIcnType ) {
-    // road sprite
-    case MP2::OBJ_ICN_TYPE_ROAD:
-        if ( 1 == _imageIndex || 8 == _imageIndex || 10 == _imageIndex || 11 == _imageIndex || 15 == _imageIndex || 22 == _imageIndex || 23 == _imageIndex
-             || 24 == _imageIndex || 25 == _imageIndex || 27 == _imageIndex )
-            return false;
-        else
-            return true;
-
-    // castle or town gate
-    case MP2::OBJ_ICN_TYPE_OBJNTOWN:
-        if ( 13 == _imageIndex || 29 == _imageIndex || 45 == _imageIndex || 61 == _imageIndex || 77 == _imageIndex || 93 == _imageIndex || 109 == _imageIndex
-             || 125 == _imageIndex || 141 == _imageIndex || 157 == _imageIndex || 173 == _imageIndex || 189 == _imageIndex )
-            return true;
-        break;
-
-    // Random castle or town gate.
-    case MP2::OBJ_ICN_TYPE_OBJNTWRD:
-        return ( _imageIndex == 13 || _imageIndex == 29 );
-
-    default:
-        break;
-    }
-
-    return false;
-}
-
 bool Maps::TilesAddon::isResource( const TilesAddon & ta )
 {
     return ( MP2::OBJ_ICN_TYPE_OBJNRSRC == ta._objectIcnType ) && ( ta._imageIndex % 2 );
@@ -500,7 +497,7 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
 {
     _tilePassabilityDirections = DIRECTION_ALL;
 
-    _layerType = mp2.quantity1 & 0x03;
+    _layerType = ( mp2.quantity1 & 0x03 );
     _metadata[0] = ( ( ( mp2.quantity2 << 8 ) + mp2.quantity1 ) >> 3 );
     _fogColors = Color::ALL;
     _terrainImageIndex = mp2.terrainImageIndex;
@@ -518,22 +515,32 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
     _addonBottomLayer.clear();
     _addonTopLayer.clear();
 
-    // those bitfields are set by map editor regardless if map object is there
-    _isTileMarkedAsRoad = ( ( mp2.objectName1 >> 1 ) & 1 ) && ( ( mp2.objectName1 >> 2 ) == MP2::OBJ_ICN_TYPE_ROAD );
+    const MP2::ObjectIcnType bottomObjectIcnType = static_cast<MP2::ObjectIcnType>( mp2.objectName1 >> 2 );
 
-    // If an object has priority 2 (shadow) or 3 (ground) then we put it as an addon.
-    if ( mp2.mapObjectType == MP2::OBJ_NONE && ( _layerType >> 1 ) & 1 ) {
-        pushBottomLayerAddon( mp2 );
+    // In the original Editor the road bit is set even if no road exist.
+    // It is important to verify the existence of a road without relying on this bit.
+    if ( isSpriteRoad( bottomObjectIcnType, mp2.bottomIcnImageIndex ) ) {
+        _isTileMarkedAsRoad = true;
+    }
+
+    if ( mp2.mapObjectType == MP2::OBJ_NONE && ( _layerType == SHADOW_LAYER || _layerType == TERRAIN_LAYER ) ) {
+        // If an object sits on shadow or terrain layer then we should put it as a bottom layer add-on.
+        if ( bottomObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
+            _addonBottomLayer.emplace_back( mp2.quantity1, mp2.level1ObjectUID, bottomObjectIcnType, mp2.bottomIcnImageIndex );
+        }
     }
     else {
         _uid = mp2.level1ObjectUID;
-        _objectIcnType = static_cast<MP2::ObjectIcnType>( mp2.objectName1 >> 2 );
-        _imageIndex = mp2.level1IcnImageIndex;
-        _hasObjectAnimation = ( mp2.objectName1 & 1 ) != 0;
-        _isMarkedAsRoad = ( mp2.objectName1 & 2 ) != 0;
+        _objectIcnType = bottomObjectIcnType;
+        _imageIndex = mp2.bottomIcnImageIndex;
     }
 
-    pushTopLayerAddon( mp2 );
+    const MP2::ObjectIcnType topObjectIcnType = static_cast<MP2::ObjectIcnType>( mp2.objectName2 >> 2 );
+
+    if ( topObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
+        // TODO: does level 2 even need level value? Verify it.
+        _addonTopLayer.emplace_back( mp2.quantity1, mp2.level2ObjectUID, topObjectIcnType, mp2.topIcnImageIndex );
+    }
 }
 
 Heroes * Maps::Tiles::getHero() const
@@ -594,7 +601,7 @@ void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
 void Maps::Tiles::setBoat( const int direction, const int color )
 {
     if ( _objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _imageIndex != 255 ) {
-        pushBottomLayerAddon( TilesAddon( OBJECT_LAYER, _uid, _objectIcnType, _imageIndex, false, false ) );
+        pushBottomLayerAddon( TilesAddon( OBJECT_LAYER, _uid, _objectIcnType, _imageIndex ) );
     }
 
     SetObject( MP2::OBJ_BOAT );
@@ -879,57 +886,40 @@ bool Maps::Tiles::isClearGround() const
     return false;
 }
 
-void Maps::Tiles::pushBottomLayerAddon( const MP2::mp2tile_t & mt )
-{
-    if ( mt.objectName1 != 0 && mt.level1IcnImageIndex != 0xFF ) {
-        _addonBottomLayer.emplace_back( mt.quantity1, mt.level1ObjectUID, static_cast<MP2::ObjectIcnType>( mt.objectName1 >> 2 ), mt.level1IcnImageIndex, false, false );
-    }
-
-    // MP2 "objectName" is a bitfield
-    // 6 bits is for object ICN type, 1 bit is isRoad flag, 1 bit is hasAnimation flag
-    if ( ( ( mt.objectName1 >> 1 ) & 1 ) && ( ( mt.objectName1 >> 2 ) == MP2::OBJ_ICN_TYPE_ROAD ) ) {
-        _isTileMarkedAsRoad = true;
-    }
-}
-
 void Maps::Tiles::pushBottomLayerAddon( const MP2::mp2addon_t & ma )
 {
-    if ( ma.objectNameN1 != 0 && ma.indexNameN1 != 0xFF ) {
-        _addonBottomLayer.emplace_back( ma.quantityN, ma.level1ObjectUID, static_cast<MP2::ObjectIcnType>( ma.objectNameN1 >> 2 ), ma.indexNameN1, false, false );
+    const MP2::ObjectIcnType objectIcnType = static_cast<MP2::ObjectIcnType>( ma.objectNameN1 >> 2 );
+    if ( objectIcnType == MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
+        // No object exist.
+        return;
     }
-}
 
-void Maps::Tiles::pushTopLayerAddon( const MP2::mp2tile_t & mt )
-{
-    if ( mt.objectName2 != 0 && mt.level2IcnImageIndex != 0xFF ) {
-        // TODO: does level 2 even need level value? Verify it.
-        _addonTopLayer.emplace_back( mt.quantity1, mt.level2ObjectUID, static_cast<MP2::ObjectIcnType>( mt.objectName2 >> 2 ), mt.level2IcnImageIndex, false, false );
+    // In the original Editor the road bit is set even if no road exist.
+    // It is important to verify the existence of a road without relying on this bit.
+    if ( isSpriteRoad( objectIcnType, ma.bottomIcnImageIndex ) ) {
+        _isTileMarkedAsRoad = true;
     }
+
+    _addonBottomLayer.emplace_back( ma.quantityN, ma.level1ObjectUID, objectIcnType, ma.bottomIcnImageIndex );
 }
 
 void Maps::Tiles::pushTopLayerAddon( const MP2::mp2addon_t & ma )
 {
-    if ( ma.objectNameN2 != 0 && ma.indexNameN2 != 0xFF ) {
-        // TODO: why do we use the same quantityN member for both level 1 and 2?
-        _addonTopLayer.emplace_back( ma.quantityN, ma.level2ObjectUID, static_cast<MP2::ObjectIcnType>( ma.objectNameN2 >> 2 ), ma.indexNameN2, false, false );
+    const MP2::ObjectIcnType objectIcnType = static_cast<MP2::ObjectIcnType>( ma.objectNameN2 >> 2 );
+    if ( objectIcnType == MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
+        // No object exist.
+        return;
     }
+
+    // TODO: why do we use the same quantityN member for both level 1 and 2?
+    _addonTopLayer.emplace_back( ma.quantityN, ma.level2ObjectUID, objectIcnType, ma.topIcnImageIndex );
 }
 
 void Maps::Tiles::AddonsSort()
 {
     // Push everything to the container and sort it by level.
-    if ( _objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _imageIndex != 255 ) {
-        _addonBottomLayer.emplace_front( _layerType, _uid, _objectIcnType, _imageIndex, false, false );
-    }
-
-    // Some original maps have issues with identifying tiles as roads. This code fixes it. It's not an ideal solution but works fine in most of cases.
-    if ( !_isTileMarkedAsRoad ) {
-        for ( const TilesAddon & addon : _addonBottomLayer ) {
-            if ( addon.isRoad() ) {
-                _isTileMarkedAsRoad = true;
-                break;
-            }
-        }
+    if ( _objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+        _addonBottomLayer.emplace_front( _layerType, _uid, _objectIcnType, _imageIndex );
     }
 
     _addonBottomLayer.sort( TilesAddon::PredicateSortRules1 );
@@ -973,7 +963,7 @@ std::string Maps::Tiles::String() const
        << "UID             : " << _uid << std::endl
        << "MP2 object type : " << static_cast<int>( objectType ) << " (" << MP2::StringObject( objectType ) << ")" << std::endl
        << "ICN object type : " << static_cast<int>( _objectIcnType ) << " (" << ICN::GetString( MP2::getIcnIdFromObjectIcnType( _objectIcnType ) ) << ")" << std::endl
-       << "image index     : " << static_cast<int>( _imageIndex ) << " (animated: " << hasSpriteAnimation() << ")" << std::endl
+       << "image index     : " << static_cast<int>( _imageIndex ) << std::endl
        << "layer type      : " << static_cast<int>( _layerType ) << " - " << getObjectLayerName( _layerType ) << std::endl
        << "region          : " << _region << std::endl
        << "ground          : " << Ground::String( GetGround() ) << " (isRoad: " << _isTileMarkedAsRoad << ")" << std::endl
@@ -1310,10 +1300,10 @@ void Maps::Tiles::updateFlag( const int color, const uint8_t objectSpriteIndex, 
         addon->_imageIndex = objectSpriteIndex;
     }
     else if ( setOnUpperLayer ) {
-        _addonTopLayer.emplace_back( OBJECT_LAYER, uid, MP2::OBJ_ICN_TYPE_FLAG32, objectSpriteIndex, false, false );
+        _addonTopLayer.emplace_back( OBJECT_LAYER, uid, MP2::OBJ_ICN_TYPE_FLAG32, objectSpriteIndex );
     }
     else {
-        _addonBottomLayer.emplace_back( OBJECT_LAYER, uid, MP2::OBJ_ICN_TYPE_FLAG32, objectSpriteIndex, false, false );
+        _addonBottomLayer.emplace_back( OBJECT_LAYER, uid, MP2::OBJ_ICN_TYPE_FLAG32, objectSpriteIndex );
     }
 }
 
@@ -1917,16 +1907,13 @@ void Maps::Tiles::swap( TilesAddon & addon ) noexcept
     std::swap( addon._imageIndex, _imageIndex );
     std::swap( addon._uid, _uid );
     std::swap( addon._layerType, _layerType );
-    std::swap( addon._hasObjectAnimation, _hasObjectAnimation );
-    std::swap( addon._isMarkedAsRoad, _isMarkedAsRoad );
 }
 
 StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 {
     using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
 
-    return msg << ta._layerType << ta._uid << static_cast<ObjectIcnTypeUnderlyingType>( ta._objectIcnType ) << ta._hasObjectAnimation << ta._isMarkedAsRoad
-               << ta._imageIndex;
+    return msg << ta._layerType << ta._uid << static_cast<ObjectIcnTypeUnderlyingType>( ta._objectIcnType ) << ta._imageIndex;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
@@ -1936,23 +1923,24 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
     using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
     static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1001_RELEASE ) {
-        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-        msg >> objectIcnType;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1001_RELEASE ) {
+            ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+            msg >> objectIcnType;
 
-        ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType >> 2 );
+            ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType >> 2 );
+        }
+        else {
+            ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+            msg >> objectIcnType;
 
-        ta._hasObjectAnimation = ( objectIcnType & 1 ) != 0;
-        ta._isMarkedAsRoad = ( objectIcnType & 2 ) != 0;
-    }
-    else {
-        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-        msg >> objectIcnType;
+            ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
 
-        ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
-
-        msg >> ta._hasObjectAnimation >> ta._isMarkedAsRoad;
+            bool temp;
+            msg >> temp >> temp;
+        }
     }
 
     msg >> ta._imageIndex;
@@ -1966,7 +1954,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
     using MainObjectTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainObjectType )>;
 
     return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile._tilePassabilityDirections << tile._uid
-               << static_cast<ObjectIcnTypeUnderlyingType>( tile._objectIcnType ) << tile._hasObjectAnimation << tile._isMarkedAsRoad << tile._imageIndex
+               << static_cast<ObjectIcnTypeUnderlyingType>( tile._objectIcnType ) << tile._imageIndex
                << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile._metadata << tile._occupantHeroId
                << tile._isTileMarkedAsRoad << tile._addonBottomLayer << tile._addonTopLayer << tile._layerType << tile._boatOwnerColor;
 }
@@ -1993,23 +1981,24 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( tile._objectIcnType )>;
     static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1001_RELEASE ) {
-        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-        msg >> objectIcnType;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1001_RELEASE ) {
+            ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+            msg >> objectIcnType;
 
-        tile._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType >> 2 );
+            tile._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType >> 2 );
+        }
+        else {
+            ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+            msg >> objectIcnType;
 
-        tile._hasObjectAnimation = ( objectIcnType & 1 ) != 0;
-        tile._isMarkedAsRoad = ( objectIcnType & 2 ) != 0;
-    }
-    else {
-        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-        msg >> objectIcnType;
+            tile._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
 
-        tile._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
-
-        msg >> tile._hasObjectAnimation >> tile._isMarkedAsRoad;
+            bool temp;
+            msg >> temp >> temp;
+        }
     }
 
     msg >> tile._imageIndex;
