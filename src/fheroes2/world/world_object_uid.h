@@ -28,7 +28,7 @@ namespace Maps
 
     uint32_t getNewObjectUID();
 
-    uint32_t getLatestObjectUID();
+    uint32_t getLastObjectUID();
 
-    void setLatestObjectUID( const uint32_t uid );
+    void setLastObjectUID( const uint32_t uid );
 }

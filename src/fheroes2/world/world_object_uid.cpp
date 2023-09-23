@@ -39,12 +39,12 @@ namespace Maps
         return objectCounter;
     }
 
-    uint32_t getLatestObjectUID()
+    uint32_t getLastObjectUID()
     {
         return objectCounter;
     }
 
-    void setLatestObjectUID( const uint32_t uid )
+    void setLastObjectUID( const uint32_t uid )
     {
         objectCounter = uid;
     }

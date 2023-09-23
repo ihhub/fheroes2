@@ -137,7 +137,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     // Go to the end of the file and read last 4 bytes which are used as a UID counter for all objects on the map.
     fs.seek( totalFileSize - 4 );
 
-    Maps::setLatestObjectUID( fs.getLE32() );
+    // In theory, this counter can be smaller than the some object UIDs if the map is corrupted or modified manually.
+    Maps::setLastObjectUID( fs.getLE32() );
 
     // Go to the end of the map info section to read two 32-bit values representing width and height of the map.
     fs.seek( MP2::MP2_MAP_INFO_SIZE - 2 * 4 );
