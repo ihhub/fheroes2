@@ -388,7 +388,7 @@ void SpellBook::Edit( const HeroBase & hero )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    auto cursorRestorer = std::make_unique<CursorRestorer>( true, Cursor::POINTER );
 
     size_t current_index = 0;
     SpellStorage displayedSpells = SetFilter( Filter::ALL, &hero );
@@ -472,6 +472,8 @@ void SpellBook::Edit( const HeroBase & hero )
     }
 
     restorer.restore();
+    cursorRestorer.reset();
+
     display.render();
 }
 
