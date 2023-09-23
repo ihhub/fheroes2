@@ -645,7 +645,7 @@ void Dialog::DwellingInfo( const Monster & monster, const uint32_t available )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // Set cursor.
-    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+    const CursorRestorer cursorRestorer( false, Cursor::Get().Themes() );
 
     const fheroes2::Point dialogOffset( ( display.width() - windowSize.width ) / 2, display.height() / 2 - display.DEFAULT_HEIGHT / 2 + BORDERWIDTH );
 

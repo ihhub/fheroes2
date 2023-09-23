@@ -554,7 +554,7 @@ namespace
 
 void Dialog::QuickInfo( const Maps::Tiles & tile )
 {
-    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+    auto cursorRestorer = std::make_unique<CursorRestorer>( false, Cursor::Get().Themes() );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -597,15 +597,17 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     while ( le.HandleEvents() && le.MousePressRight() )
         ;
 
-    // restore background
+    // Restore background and the cursor.
     restorer.restore();
+    cursorRestorer.reset();
+
     display.render( restorer.rect() );
 }
 
 void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position /* = {} */, const bool showOnRadar /* = false */,
                         const fheroes2::Rect & areaToRestore /* = {} */ )
 {
-    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+    auto cursorRestorer = std::make_unique<CursorRestorer>( false, Cursor::Get().Themes() );
 
     // Update radar if needed
     RadarUpdater radarUpdater( showOnRadar, castle.GetCenter(), areaToRestore );
@@ -715,8 +717,9 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     while ( le.HandleEvents() && le.MousePressRight() )
         ;
 
-    // restore background
+    // Restore background and the cursor.
     back.restore();
+    cursorRestorer.reset();
 
     // Restore radar view
     radarUpdater.restore();
@@ -727,7 +730,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
 void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position /* = {} */, const bool showOnRadar /* = false */,
                         const fheroes2::Rect & areaToRestore /* = {} */ )
 {
-    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+    auto cursorRestorer = std::make_unique<CursorRestorer>( false, Cursor::Get().Themes() );
 
     // Update radar if needed
     RadarUpdater radarUpdater( showOnRadar, hero.GetCenter(), areaToRestore );
@@ -929,8 +932,9 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
     while ( le.HandleEvents() && le.MousePressRight() )
         ;
 
-    // restore background
+    // Restore background and the cursor.
     restorer.restore();
+    cursorRestorer.reset();
 
     // Restore radar view
     radarUpdater.restore();
