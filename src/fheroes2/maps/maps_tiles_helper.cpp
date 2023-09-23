@@ -912,8 +912,10 @@ namespace
             // / - diagonal road from top-right to bottom-left.
             return Rand::Get( 1 ) ? 18U : 30U;
         }
-        if ( ( hasBits( roadDirection, Direction::TOP | DIRECTION_CENTER_ROW )
-               || ( hasBits( roadDirection, Direction::TOP | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) && hasNoBits( roadDirection, Direction::BOTTOM ) ) )
+        if ( hasBits( roadDirection, Direction::TOP )
+             && ( hasBits( roadDirection, Direction::LEFT | Direction::RIGHT ) || hasBits( roadDirection, Direction::BOTTOM_LEFT | Direction::RIGHT )
+                  || hasBits( roadDirection, Direction::LEFT | Direction::BOTTOM_RIGHT )
+                  || ( hasBits( roadDirection, Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) && hasNoBits( roadDirection, Direction::BOTTOM ) ) )
              && hasNoBits( roadDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) {
             // _|_ - cross.
             return 3U;
