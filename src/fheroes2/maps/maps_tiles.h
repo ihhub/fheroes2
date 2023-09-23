@@ -78,14 +78,10 @@ namespace Maps
             return _uid == id;
         }
 
-        std::string String( int level ) const;
-
         static bool isShadow( const TilesAddon & ta );
 
         static bool isResource( const TilesAddon & ta );
         static bool isArtifact( const TilesAddon & ta );
-
-        static bool PredicateSortRules1( const TilesAddon & ta1, const TilesAddon & ta2 );
 
         // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
         uint32_t _uid{ 0 };
@@ -220,11 +216,6 @@ namespace Maps
         TilesAddon * FindAddonLevel2( uint32_t uniq2 );
 
         void SetObject( const MP2::MapObjectType objectType );
-
-        void SetIndex( const uint32_t index )
-        {
-            _index = index;
-        }
 
         void resetBoatOwnerColor()
         {

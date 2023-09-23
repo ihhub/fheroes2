@@ -441,25 +441,22 @@ namespace
 
         return false;
     }
+
+    std::string getAddonInfo( const Maps::TilesAddon & addon, const int lvl )
+    {
+        std::ostringstream os;
+        os << "--------- Level " << lvl << " --------" << std::endl
+           << "UID             : " << addon._uid << std::endl
+           << "ICN object type : " << static_cast<int>( addon._objectIcnType ) << " (" << ICN::GetString( MP2::getIcnIdFromObjectIcnType( addon._objectIcnType ) )
+           << ")" << std::endl
+           << "image index     : " << static_cast<int>( addon._imageIndex ) << std::endl
+           << "layer type      : " << static_cast<int>( addon._layerType )
+           << " - " << getObjectLayerName( addon._layerType ) << std::endl
+           << "is shadow       : " << ( Maps::TilesAddon::isShadow( addon ) ? "yes" : "no" ) << std::endl;
+        return os.str();
+    }
 }
 
-std::string Maps::TilesAddon::String( int lvl ) const
-{
-    std::ostringstream os;
-    os << "--------- Level " << lvl << " --------" << std::endl
-       << "UID             : " << _uid << std::endl
-       << "ICN object type : " << static_cast<int>( _objectIcnType ) << " (" << ICN::GetString( MP2::getIcnIdFromObjectIcnType( _objectIcnType ) ) << ")" << std::endl
-       << "image index     : " << static_cast<int>( _imageIndex ) << std::endl
-       << "layer type      : " << static_cast<int>( _layerType ) << " (" << static_cast<int>( _layerType % 4 ) << ")"
-       << " - " << getObjectLayerName( _layerType % 4 ) << std::endl
-       << "is shadow       : " << ( isShadow( *this ) ? "yes" : "no" ) << std::endl;
-    return os.str();
-}
-
-bool Maps::TilesAddon::PredicateSortRules1( const Maps::TilesAddon & ta1, const Maps::TilesAddon & ta2 )
-{
-    return ( ( ta1._layerType % 4 ) > ( ta2._layerType % 4 ) );
-}
 
 bool Maps::TilesAddon::isResource( const TilesAddon & ta )
 {
@@ -481,19 +478,18 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
 {
     _tilePassabilityDirections = DIRECTION_ALL;
 
-    _layerType = ( mp2.quantity1 & 0x03 );
     _metadata[0] = ( ( ( mp2.quantity2 << 8 ) + mp2.quantity1 ) >> 3 );
     _fogColors = Color::ALL;
     _terrainImageIndex = mp2.terrainImageIndex;
     _terrainFlags = mp2.terrainFlags;
     _boatOwnerColor = Color::NONE;
+    _index = index;
 
-    SetIndex( index );
     SetObject( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
 
     if ( !MP2::doesObjectContainMetadata( _mainObjectType ) ) {
         // No metadata should exist for this object!
-        assert( ( ( ( mp2.quantity2 << 8 ) + mp2.quantity1 ) >> 3 ) == 0 );
+        assert( _metadata[0] == 0 );
     }
 
     _addonBottomLayer.clear();
@@ -501,29 +497,32 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
 
     const MP2::ObjectIcnType bottomObjectIcnType = static_cast<MP2::ObjectIcnType>( mp2.objectName1 >> 2 );
 
+    const uint8_t layerType = ( mp2.quantity1 & 0x03 );
+
     // In the original Editor the road bit is set even if no road exist.
     // It is important to verify the existence of a road without relying on this bit.
     if ( isSpriteRoad( bottomObjectIcnType, mp2.bottomIcnImageIndex ) ) {
         _isTileMarkedAsRoad = true;
     }
 
-    if ( mp2.mapObjectType == MP2::OBJ_NONE && ( _layerType == SHADOW_LAYER || _layerType == TERRAIN_LAYER ) ) {
+    if ( mp2.mapObjectType == MP2::OBJ_NONE && ( layerType == SHADOW_LAYER || layerType == TERRAIN_LAYER ) ) {
         // If an object sits on shadow or terrain layer then we should put it as a bottom layer add-on.
         if ( bottomObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
-            _addonBottomLayer.emplace_back( mp2.quantity1, mp2.level1ObjectUID, bottomObjectIcnType, mp2.bottomIcnImageIndex );
+            _addonBottomLayer.emplace_back( layerType, mp2.level1ObjectUID, bottomObjectIcnType, mp2.bottomIcnImageIndex );
         }
     }
     else {
+        _layerType = layerType;
         _uid = mp2.level1ObjectUID;
         _objectIcnType = bottomObjectIcnType;
         _imageIndex = mp2.bottomIcnImageIndex;
     }
 
     const MP2::ObjectIcnType topObjectIcnType = static_cast<MP2::ObjectIcnType>( mp2.objectName2 >> 2 );
-
     if ( topObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
-        // TODO: does level 2 even need level value? Verify it.
-        _addonTopLayer.emplace_back( mp2.quantity1, mp2.level2ObjectUID, topObjectIcnType, mp2.topIcnImageIndex );
+        // Top layer objects do not have any internal structure (layers) so all of them should have the same internal layer.
+        // TODO: remove layer type for top layer objects.
+        _addonTopLayer.emplace_back( OBJECT_LAYER, mp2.level2ObjectUID, topObjectIcnType, mp2.topIcnImageIndex );
     }
 }
 
@@ -884,7 +883,7 @@ void Maps::Tiles::pushBottomLayerAddon( const MP2::mp2addon_t & ma )
         _isTileMarkedAsRoad = true;
     }
 
-    _addonBottomLayer.emplace_back( ma.quantityN, ma.level1ObjectUID, objectIcnType, ma.bottomIcnImageIndex );
+    _addonBottomLayer.emplace_back( static_cast<uint8_t>( ma.quantityN & 0x03 ), ma.level1ObjectUID, objectIcnType, ma.bottomIcnImageIndex );
 }
 
 void Maps::Tiles::pushTopLayerAddon( const MP2::mp2addon_t & ma )
@@ -895,25 +894,35 @@ void Maps::Tiles::pushTopLayerAddon( const MP2::mp2addon_t & ma )
         return;
     }
 
-    // TODO: why do we use the same quantityN member for both level 1 and 2?
-    _addonTopLayer.emplace_back( ma.quantityN, ma.level2ObjectUID, objectIcnType, ma.topIcnImageIndex );
+    // Top layer objects do not have any internal structure (layers) so all of them should have the same internal layer.
+    // TODO: remove layer type for top layer objects.
+    _addonTopLayer.emplace_back( OBJECT_LAYER, ma.level2ObjectUID, objectIcnType, ma.topIcnImageIndex );
 }
 
 void Maps::Tiles::AddonsSort()
 {
+    if ( _addonBottomLayer.empty() ) {
+        // Nothing to sort.
+        return;
+    }
+
     // Push everything to the container and sort it by level.
     if ( _objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
         _addonBottomLayer.emplace_front( _layerType, _uid, _objectIcnType, _imageIndex );
     }
 
-    _addonBottomLayer.sort( TilesAddon::PredicateSortRules1 );
+    // Sort by internal layers.
+    _addonBottomLayer.sort( []( const auto & left, const auto & right ) { return ( left._layerType > right._layerType ); } );
 
     if ( !_addonBottomLayer.empty() ) {
         const TilesAddon & highestPriorityAddon = _addonBottomLayer.back();
         _uid = highestPriorityAddon._uid;
         _objectIcnType = highestPriorityAddon._objectIcnType;
         _imageIndex = highestPriorityAddon._imageIndex;
-        _layerType = highestPriorityAddon._layerType & 0x03;
+        _layerType = highestPriorityAddon._layerType;
+
+        // If this assertion blows up then you are not storing correct values for layer type!
+        assert( _layerType <= TERRAIN_LAYER );
 
         _addonBottomLayer.pop_back();
     }
@@ -964,11 +973,11 @@ std::string Maps::Tiles::String() const
         os << "boat owner color: " << Color::String( _boatOwnerColor ) << std::endl;
 
     for ( const TilesAddon & addon : _addonBottomLayer ) {
-        os << addon.String( 1 );
+        os << getAddonInfo( addon, 1 );
     }
 
     for ( const TilesAddon & addon : _addonTopLayer ) {
-        os << addon.String( 2 );
+        os << getAddonInfo( addon, 2 );
     }
 
     os << "--- Extra information ---" << std::endl;
@@ -1902,7 +1911,14 @@ StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 
 StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 {
-    msg >> ta._layerType >> ta._uid;
+    msg >> ta._layerType;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
+        ta._layerType = ( ta._layerType & 0x03 );
+    }
+
+    msg >> ta._uid;
 
     using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
     static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
