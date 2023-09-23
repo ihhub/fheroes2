@@ -1012,17 +1012,16 @@ namespace
         }
     }
 
-    // Update tiles in a square starting from the center tile. This function can be called to update only tiles not marked as road.
-    void updateRoadSpritesAround( const Maps::Tiles & centerTile, const int32_t centerToRectBorderDistance, const bool onlyNotMarkedAsRoad )
+    // Update tiles in a square starting from the center tile to edges or in reverse order. This function can be called to update only tiles not marked as road.
+    void updateRoadSpritesAround( const Maps::Tiles & centerTile, const int32_t centerToRectBorderDistance, const bool onlyNotMarkedAsRoad, const bool fromEdgesToCenter )
     {
         // We should update road sprites step by step starting from the center. 'getAroundIndexes()' cannot be used here.
-        const int32_t centerTileIndex = centerTile.GetIndex();
-        const int32_t areaSideSize = centerToRectBorderDistance * 2 + 1;
         const int32_t worldWidth = world.w();
         const int32_t worldHeight = world.h();
 
         assert( worldWidth > 0 && worldHeight > 0 );
 
+        const int32_t centerTileIndex = centerTile.GetIndex();
         const int32_t centerX = centerTileIndex % worldWidth;
         const int32_t centerY = centerTileIndex / worldWidth;
 
@@ -1032,13 +1031,17 @@ namespace
         const int32_t maxTileX = std::min( centerX + centerToRectBorderDistance + 1, worldWidth );
         const int32_t maxTileY = std::min( centerY + centerToRectBorderDistance + 1, worldHeight );
 
-        for ( int32_t distance = 0; distance < areaSideSize; ++distance ) {
+        const int32_t distanceMax = centerToRectBorderDistance * 2 + 1;
+
+        for ( int32_t distance = 0; distance < distanceMax; ++distance ) {
+            const int32_t correctedDistance = fromEdgesToCenter ? distanceMax - 1 - distance : distance;
+
             for ( int32_t tileY = minTileY; tileY < maxTileY; ++tileY ) {
                 const int32_t indexOffsetY = tileY * worldWidth;
                 const int32_t distanceY = std::abs( tileY - centerY );
 
                 for ( int32_t tileX = minTileX; tileX < maxTileX; ++tileX ) {
-                    if ( std::abs( tileX - centerX ) + distanceY != distance ) {
+                    if ( std::abs( tileX - centerX ) + distanceY != correctedDistance ) {
                         continue;
                     }
 
@@ -1095,8 +1098,8 @@ namespace Maps
 
         if ( setRoad ) {
             // To properly update the around sprites we call the update function the second time for tiles not marked as road.
-            updateRoadSpritesAround( tile, 2, false );
-            updateRoadSpritesAround( tile, 2, true );
+            updateRoadSpritesAround( tile, 2, false, false );
+            updateRoadSpritesAround( tile, 2, true, true );
 
             if ( Maps::Ground::isTerrainExtraImage( tile.getTerrainImageIndex() ) ) {
                 // Reset terrain image
@@ -1108,8 +1111,8 @@ namespace Maps
             tile.removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
 
             // To properly update the around sprites we call the update function the second time for tiles not marked as road.
-            updateRoadSpritesAround( tile, 2, false );
-            updateRoadSpritesAround( tile, 2, true );
+            updateRoadSpritesAround( tile, 2, false, false );
+            updateRoadSpritesAround( tile, 2, true, true );
         }
     }
 
