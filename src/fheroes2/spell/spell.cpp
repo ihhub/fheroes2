@@ -441,8 +441,8 @@ bool Spell::canCastCombatSpell( std::string * res ) const
 {
     const Battle::Arena * arena = Battle::GetArena();
     assert( arena != nullptr );
-    const Battle::Force & playerForce = arena->GetForce1();
-    const Battle::Force & opposingForce = arena->GetForce2();
+    const Battle::Force & playerForce = arena->GetCurrentForce();
+    const Battle::Force & opposingForce = arena->getOpposingForce();
 
     if ( *this == Spell::BLESS || *this == Spell::MASSBLESS ) {
         if ( playerForce.onlyHasMonster( Monster::PEASANT ) ) {

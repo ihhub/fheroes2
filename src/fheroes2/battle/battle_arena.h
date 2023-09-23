@@ -118,6 +118,9 @@ namespace Battle
         Force & GetForce2() const;
         Force & getForce( const int color ) const;
         Force & getEnemyForce( const int color ) const;
+        // Return opposing players force who is currently not having a turn.
+        Force & getOpposingForce() const;
+        // Return players force who is currently having a turn.
         Force & GetCurrentForce() const;
 
         int GetArmy1Color() const;
