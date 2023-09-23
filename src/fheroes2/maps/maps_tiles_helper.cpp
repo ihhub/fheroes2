@@ -87,12 +87,12 @@ namespace
             uidResource = tile.GetObjectUID();
         }
 
-        Maps::Tiles::updateTileById( tile, uidResource, resourceSprite );
+        Maps::Tiles::updateTileObjectIcnIndex( tile, uidResource, resourceSprite );
 
         // Replace shadow of the resource.
         if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
             assert( resourceSprite > 0 );
-            Maps::Tiles::updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ), uidResource, resourceSprite - 1 );
+            Maps::Tiles::updateTileObjectIcnIndex( world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ), uidResource, resourceSprite - 1 );
         }
     }
 
@@ -133,20 +133,20 @@ namespace
             uidArtifact = tile.GetObjectUID();
         }
 
-        static_assert( std::is_same_v<decltype( Maps::Tiles::updateTileById ), void( Maps::Tiles &, uint32_t, uint8_t )>,
-                       "Type of updateTileById() has been changed, check the logic below" );
+        static_assert( std::is_same_v<decltype( Maps::Tiles::updateTileObjectIcnIndex ), void( Maps::Tiles &, uint32_t, uint8_t )>,
+                       "Type of updateTileObjectIcnIndex() has been changed, check the logic below" );
 
         // Please refer to ICN::OBJNARTI for artifact images. Since in the original game artifact UID start from 0 we have to deduct 1 from the current artifact ID.
         const uint32_t artSpriteIndex = ( art.GetID() - 1 ) * 2 + 1;
 
         assert( artSpriteIndex > std::numeric_limits<uint8_t>::min() && artSpriteIndex <= std::numeric_limits<uint8_t>::max() );
 
-        Maps::Tiles::updateTileById( tile, uidArtifact, static_cast<uint8_t>( artSpriteIndex ) );
+        Maps::Tiles::updateTileObjectIcnIndex( tile, uidArtifact, static_cast<uint8_t>( artSpriteIndex ) );
 
         // replace artifact shadow
         if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
-            Maps::Tiles::updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ), uidArtifact,
-                                         static_cast<uint8_t>( artSpriteIndex - 1 ) );
+            Maps::Tiles::updateTileObjectIcnIndex( world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ), uidArtifact,
+                                                   static_cast<uint8_t>( artSpriteIndex - 1 ) );
         }
     }
 
@@ -1000,21 +1000,13 @@ namespace
             return;
         }
 
-        bool pushNewAddon = true;
+        const uint32_t roadUid = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_ROAD );
 
-        Maps::Addons & addons = tile.getBottomLayerAddons();
-
-        for ( Maps::TilesAddon & addon : addons ) {
-            if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
-                addon._imageIndex = imageIndex;
-                pushNewAddon = false;
-                break;
-            }
-        }
-
-        if ( pushNewAddon ) {
-            // We are not marking the addon as road because it should never be used.
+        if ( roadUid == 0 ) {
             tile.pushBottomLayerAddon( Maps::TilesAddon( Maps::TERRAIN_LAYER, World::GetUniq(), MP2::OBJ_ICN_TYPE_ROAD, imageIndex, false, false ) );
+        }
+        else {
+            Maps::Tiles::updateTileObjectIcnIndex( tile, roadUid, imageIndex );
         }
     }
 

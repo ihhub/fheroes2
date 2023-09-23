@@ -395,7 +395,8 @@ namespace Maps
 
         void swap( TilesAddon & addon ) noexcept;
 
-        static void updateTileById( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
+        // Update tile or bottom layer object image index.
+        static void updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
 
         // The old code was using weird quantity based values which were very hard to understand.
         // Since we must have backwards compatibility we need to do the conversion.
