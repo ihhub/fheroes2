@@ -21,8 +21,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "dialog.h"
-
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
@@ -40,6 +38,7 @@
 #include "castle.h"
 #include "color.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
 #include "gamedefs.h"
