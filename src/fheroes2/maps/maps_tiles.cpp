@@ -447,11 +447,10 @@ namespace
         std::ostringstream os;
         os << "--------- Level " << lvl << " --------" << std::endl
            << "UID             : " << addon._uid << std::endl
-           << "ICN object type : " << static_cast<int>( addon._objectIcnType ) << " (" << ICN::GetString( MP2::getIcnIdFromObjectIcnType( addon._objectIcnType ) )
-           << ")" << std::endl
+           << "ICN object type : " << static_cast<int>( addon._objectIcnType ) << " (" << ICN::GetString( MP2::getIcnIdFromObjectIcnType( addon._objectIcnType ) ) << ")"
+           << std::endl
            << "image index     : " << static_cast<int>( addon._imageIndex ) << std::endl
-           << "layer type      : " << static_cast<int>( addon._layerType )
-           << " - " << getObjectLayerName( addon._layerType ) << std::endl
+           << "layer type      : " << static_cast<int>( addon._layerType ) << " - " << getObjectLayerName( addon._layerType ) << std::endl
            << "is shadow       : " << ( Maps::TilesAddon::isShadow( addon ) ? "yes" : "no" ) << std::endl;
         return os.str();
     }
