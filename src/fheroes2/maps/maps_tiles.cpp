@@ -456,7 +456,6 @@ namespace
     }
 }
 
-
 bool Maps::TilesAddon::isResource( const TilesAddon & ta )
 {
     return ( MP2::OBJ_ICN_TYPE_OBJNRSRC == ta._objectIcnType ) && ( ta._imageIndex % 2 );
