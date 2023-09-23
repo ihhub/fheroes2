@@ -64,6 +64,7 @@
 #include "serialize.h"
 #include "trees.h"
 #include "world.h"
+#include "world_object_uid.h"
 
 namespace
 {
@@ -631,7 +632,7 @@ void Maps::Tiles::setBoat( const int direction, const int color )
         break;
     }
 
-    _uid = World::GetUniq();
+    _uid = getNewObjectUID();
 
     using BoatOwnerColorType = decltype( _boatOwnerColor );
     static_assert( std::is_same_v<BoatOwnerColorType, uint8_t>, "Type of _boatOwnerColor has been changed, check the logic below" );

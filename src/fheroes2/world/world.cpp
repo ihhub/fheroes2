@@ -63,6 +63,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "week.h"
+#include "world_object_uid.h"
 
 namespace
 {
@@ -143,11 +144,6 @@ namespace
 
         return count;
     }
-}
-
-namespace GameStatic
-{
-    extern uint32_t uniq;
 }
 
 MapObjects::~MapObjects()
@@ -930,7 +926,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
         return false;
     }
 
-    tile.pushBottomLayerAddon( Maps::TilesAddon( Maps::BACKGROUND_LAYER, GetUniq(), objectIcnType, imageIndex, false, false ) );
+    tile.pushBottomLayerAddon( Maps::TilesAddon( Maps::BACKGROUND_LAYER, Maps::getNewObjectUID(), objectIcnType, imageIndex, false, false ) );
 
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
         ultimate_artifact.markAsFound();
@@ -1266,11 +1262,6 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
     }
 
     return GameOver::COND_NONE;
-}
-
-uint32_t World::GetUniq()
-{
-    return ++GameStatic::uniq;
 }
 
 uint32_t World::getDistance( const Heroes & hero, int targetIndex )

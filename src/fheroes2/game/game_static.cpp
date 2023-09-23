@@ -116,12 +116,6 @@ namespace Skill
         /* scouting */ 1,  /* wisdom */ 1 };
 }
 
-namespace GameStatic
-{
-    // world
-    uint32_t uniq = 0;
-}
-
 uint32_t GameStatic::GetLostOnWhirlpoolPercent()
 {
     return 50;

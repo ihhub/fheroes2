@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,32 +18,34 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#include "world_object_uid.h"
 
-#include <cstdint>
-
-enum SaveFileFormat : uint16_t
+namespace
 {
-    // !!! IMPORTANT !!!
-    // If you're adding a new version you must assign it to CURRENT_FORMAT_VERSION located at the bottom.
-    // If you're removing an old version you must assign the oldest available to LAST_SUPPORTED_FORMAT_VERSION located at the bottom.
+    uint32_t objectCounter{ 0 };
+}
 
-    FORMAT_VERSION_1009_RELEASE = 10014,
-    FORMAT_VERSION_PRE1_1009_RELEASE = 10012,
-    FORMAT_VERSION_1007_RELEASE = 10011,
-    FORMAT_VERSION_1005_RELEASE = 10010,
-    FORMAT_VERSION_PRE1_1005_RELEASE = 10009,
-    FORMAT_VERSION_1004_RELEASE = 10008,
-    FORMAT_VERSION_1003_RELEASE = 10007,
-    FORMAT_VERSION_1002_RELEASE = 10006,
-    FORMAT_VERSION_PRE2_1002_RELEASE = 10005,
-    FORMAT_VERSION_PRE1_1002_RELEASE = 10004,
-    FORMAT_VERSION_1001_RELEASE = 10003,
-    FORMAT_VERSION_PRE2_1001_RELEASE = 10002,
-    FORMAT_VERSION_PRE1_1001_RELEASE = 10001,
-    FORMAT_VERSION_1000_RELEASE = 10000,
+namespace Maps
+{
+    void resetObjectUID()
+    {
+        objectCounter = 0;
+    }
 
-    LAST_SUPPORTED_FORMAT_VERSION = FORMAT_VERSION_1000_RELEASE,
+    uint32_t getNewObjectUID()
+    {
+        ++objectCounter;
 
-    CURRENT_FORMAT_VERSION = FORMAT_VERSION_PRE1_1009_RELEASE
-};
+        return objectCounter;
+    }
+
+    uint32_t getLatestObjectUID()
+    {
+        return objectCounter;
+    }
+
+    void setLatestObjectUID( const uint32_t uid )
+    {
+        objectCounter = uid;
+    }
+}
