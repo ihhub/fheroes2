@@ -913,7 +913,7 @@ namespace
             return Rand::Get( 1 ) ? 18U : 30U;
         }
         if ( ( hasBits( roadDirection, Direction::TOP | DIRECTION_CENTER_ROW )
-               || hasBits( roadDirection, Direction::TOP | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) )
+               || ( hasBits( roadDirection, Direction::TOP | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) && hasNoBits( roadDirection, Direction::BOTTOM ) ) )
              && hasNoBits( roadDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) {
             // _|_ - cross.
             return 3U;
@@ -971,7 +971,7 @@ namespace
             return 20U;
         }
         if ( ( hasBits( roadDirection, Direction::LEFT ) || hasBits( roadDirection, Direction::RIGHT )
-               || hasBits( roadDirection, Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT ) )
+               || ( hasBits( roadDirection, Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT ) && hasNoBits( roadDirection, Direction::BOTTOM ) ) )
              && hasNoBits( roadDirection, Direction::TOP ) ) {
             // _ - horizontal road.
             return Rand::Get( 1 ) ? 2U : 28U;
