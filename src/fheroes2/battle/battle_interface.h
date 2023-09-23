@@ -33,6 +33,7 @@
 
 #include "battle_animation.h"
 #include "battle_board.h"
+#include "cursor.h"
 #include "dialog.h"
 #include "icn.h"
 #include "image.h"
@@ -397,8 +398,8 @@ namespace Battle
         void EventShowOptions();
         void ButtonAutoAction( const Unit & unit, Actions & actions );
         void ButtonSettingsAction();
-        void ButtonSkipAction( Actions & acrions );
-        void MouseLeftClickBoardAction( const int themes, const Cell & cell, Actions & actions );
+        void ButtonSkipAction( Actions & actions );
+        void MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions );
         void MousePressRightBoardAction( const Cell & cell ) const;
 
         int GetBattleCursor( std::string & statusMsg ) const;
@@ -481,6 +482,60 @@ namespace Battle
         // this may be needed in the future (for example, in expansion) to display some sprites over
         // troops for some time (e.g. long duration spell effects or other permanent effects).
         std::vector<UnitSpellEffectInfo> _unitSpellEffectInfos;
+
+        struct BoardActionIntent
+        {
+            int cursorTheme = Cursor::NONE;
+            int32_t cellIndex = -1;
+
+            bool operator==( const BoardActionIntent & other ) const
+            {
+                return cursorTheme == other.cursorTheme && cellIndex == other.cellIndex;
+            }
+        };
+
+        // Intents are used to confirm actions in combat performed using touch gestures
+        BoardActionIntent _boardActionIntent;
+
+        class BoardActionIntentUpdater
+        {
+        public:
+            BoardActionIntentUpdater( BoardActionIntent & storedIntent, const bool isFromTouchpad )
+                : _storedIntent( storedIntent )
+                , _isFromTouchpad( isFromTouchpad )
+            {}
+
+            BoardActionIntentUpdater( const BoardActionIntentUpdater & ) = delete;
+
+            ~BoardActionIntentUpdater()
+            {
+                // Do not remember intermediate touch gestures as intents
+                if ( _isFromTouchpad ) {
+                    return;
+                }
+
+                _storedIntent = _intent.value_or( BoardActionIntent{} );
+            }
+
+            BoardActionIntentUpdater & operator=( const BoardActionIntentUpdater & ) = delete;
+
+            void setIntent( const BoardActionIntent & intent )
+            {
+                _intent = intent;
+            }
+
+            bool isConfirmed()
+            {
+                // If the mouse event has been triggered by the touchpad, it should be considered confirmed only if this event orders to
+                // perform the same action that is already indicated on the battle board with the mouse cursor.
+                return ( !_isFromTouchpad || _storedIntent == _intent );
+            }
+
+        private:
+            BoardActionIntent & _storedIntent;
+            const bool _isFromTouchpad;
+            std::optional<BoardActionIntent> _intent;
+        };
     };
 }
 

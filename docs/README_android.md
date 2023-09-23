@@ -28,6 +28,12 @@ on the item.
 By default normal adventure map scrolling on the borders of the screen is disabled. To pane the viewing area around you
 need to press anywhere on the adventure map and slide around to change where you are viewing.
 
+During combat, actions (such as moving, attacking, or casting a spell) performed using the touchpad/touchscreen must be
+confirmed. The first touch event just places the cursor at the touch point, displaying information about the action being
+performed (the cell/cells to be moved to, the angle of attack and the cells subject to attack, the spell and the cells
+affected by this spell, potential damage, and so on). The second touch event is confirmatory, and performs the corresponding
+action if and only if this action exactly corresponds to the action that the first touch demonstrates.
+
 ## Android specific notes
 Fullscreen is enabled by default. To have the info bar with the clock visible you can disable fullscreen mode within the
 main menu settings under "Graphics".
