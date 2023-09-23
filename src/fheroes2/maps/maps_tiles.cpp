@@ -1921,21 +1921,21 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
     using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;
     static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
-        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1001_RELEASE ) {
-            ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-            msg >> objectIcnType;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1001_RELEASE ) {
+        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+        msg >> objectIcnType;
 
-            ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType >> 2 );
-        }
-        else {
-            ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-            msg >> objectIcnType;
+        ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType >> 2 );
+    }
+    else {
+        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+        msg >> objectIcnType;
 
-            ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
+        ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
 
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
             bool temp;
             msg >> temp >> temp;
         }
@@ -1979,21 +1979,21 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( tile._objectIcnType )>;
     static_assert( std::is_same_v<ObjectIcnTypeUnderlyingType, uint8_t>, "Type of _objectIcnType has been changed, check the logic below" );
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
-        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1001_RELEASE ) {
-            ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-            msg >> objectIcnType;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1001_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1001_RELEASE ) {
+        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+        msg >> objectIcnType;
 
-            tile._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType >> 2 );
-        }
-        else {
-            ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-            msg >> objectIcnType;
+        tile._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType >> 2 );
+    }
+    else {
+        ObjectIcnTypeUnderlyingType objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+        msg >> objectIcnType;
 
-            tile._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
+        tile._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
 
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
             bool temp;
             msg >> temp >> temp;
         }
