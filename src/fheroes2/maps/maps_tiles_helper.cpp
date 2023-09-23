@@ -851,7 +851,9 @@ namespace
                     return 15U;
                 }
             }
-            if ( hasBits( roadDirection, Direction::TOP ) && ( hasBits( roadDirection, Direction::TOP_LEFT ) || hasBits( roadDirection, Direction::TOP_RIGHT ) ) ) {
+            if ( hasBits( roadDirection, Direction::TOP )
+                 && ( hasBits( roadDirection, Direction::TOP_LEFT ) || hasBits( roadDirection, Direction::TOP_RIGHT )
+                      || hasBits( roadDirection, Direction::LEFT | Direction::RIGHT ) ) ) {
                 // We can do this because we have Direction::TOP.
                 const int32_t upperTileIndex = tileIndex - world.w();
                 if ( checkRoadIcnIndex( upperTileIndex, { 2, 3, 21, 28 } ) ) {
@@ -910,7 +912,9 @@ namespace
             // / - diagonal road from top-right to bottom-left.
             return Rand::Get( 1 ) ? 18U : 30U;
         }
-        if ( hasBits( roadDirection, Direction::TOP | DIRECTION_CENTER_ROW ) && hasNoBits( roadDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) {
+        if ( ( hasBits( roadDirection, Direction::TOP | DIRECTION_CENTER_ROW )
+               || hasBits( roadDirection, Direction::TOP | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) )
+             && hasNoBits( roadDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) {
             // _|_ - cross.
             return 3U;
         }
@@ -966,11 +970,13 @@ namespace
             // ( - road.
             return 20U;
         }
-        if ( ( hasBits( roadDirection, Direction::LEFT ) || hasBits( roadDirection, Direction::RIGHT ) ) && hasNoBits( roadDirection, Direction::TOP ) ) {
+        if ( ( hasBits( roadDirection, Direction::LEFT ) || hasBits( roadDirection, Direction::RIGHT )
+               || hasBits( roadDirection, Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT ) )
+             && hasNoBits( roadDirection, Direction::TOP ) ) {
             // _ - horizontal road.
             return Rand::Get( 1 ) ? 2U : 28U;
         }
-        if ( hasNoBits( roadDirection, Direction::LEFT | Direction::RIGHT ) ) {
+        if ( hasNoBits( roadDirection, Direction::LEFT | Direction::TOP_LEFT | Direction::TOP_RIGHT | Direction::RIGHT ) ) {
             // | - vertical road.
             return Rand::Get( 1 ) ? 0U : 26U;
         }
