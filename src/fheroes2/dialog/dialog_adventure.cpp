@@ -44,7 +44,7 @@ int Dialog::AdventureOptions( bool enabledig )
     const int apanel = isEvilInterface ? ICN::APANELE : ICN::APANEL;
 
     // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    auto cursorRestorer = std::make_unique<CursorRestorer>( true, Cursor::POINTER );
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( apanbkg, 0 );
@@ -118,8 +118,10 @@ int Dialog::AdventureOptions( bool enabledig )
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
     }
 
-    // restore background
+    // Restore background and cursor.
     back.restore();
+    cursorRestorer.reset();
+
     display.render();
 
     return result;

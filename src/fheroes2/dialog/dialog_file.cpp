@@ -48,7 +48,7 @@ fheroes2::GameMode Dialog::FileOptions()
     const int cpanbkg = isEvilInterface ? ICN::CPANBKGE : ICN::CPANBKG;
 
     // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    auto cursorRestorer = std::make_unique<CursorRestorer>( true, Cursor::POINTER );
 
     // Image sprite.
     const fheroes2::Sprite & background = fheroes2::AGG::GetICN( cpanbkg, 0 );
@@ -140,8 +140,10 @@ fheroes2::GameMode Dialog::FileOptions()
         }
     }
 
-    // restore background
+    // Restore background and cursor.
     back.restore();
+    cursorRestorer.reset();
+
     display.render();
 
     return result;
