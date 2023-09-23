@@ -1457,6 +1457,17 @@ void Maps::Tiles::Remove( uint32_t uniqID )
     }
 }
 
+void Maps::Tiles::removeObjects( const MP2::ObjectIcnType objectIcnType )
+{
+    _addonBottomLayer.remove_if( [objectIcnType]( const Maps::TilesAddon & addon ) { return addon._objectIcnType == objectIcnType; } );
+    _addonTopLayer.remove_if( [objectIcnType]( const Maps::TilesAddon & addon ) { return addon._objectIcnType == objectIcnType; } );
+
+    if ( _objectIcnType == objectIcnType ) {
+        resetObjectSprite();
+        _uid = 0;
+    }
+}
+
 void Maps::Tiles::replaceObject( const uint32_t objectUid, const MP2::ObjectIcnType originalObjectIcnType, const MP2::ObjectIcnType newObjectIcnType,
                                  const uint8_t originalImageIndex, const uint8_t newImageIndex )
 {

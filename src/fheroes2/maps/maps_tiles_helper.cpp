@@ -990,17 +990,19 @@ namespace
     void updateRoadSpriteOnTile( Maps::Tiles & tile )
     {
         const uint8_t imageIndex = getRoadImageForTile( tile, getRoadDirecton( tile ) );
-        Maps::Addons & addons = tile.getBottomLayerAddons();
 
         if ( imageIndex == 255U ) {
             if ( !tile.isRoad() ) {
-                addons.remove_if( []( Maps::TilesAddon const & addon ) { return addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD; } );
+                // After update this tile should not contain a road sprite. We remove it.
+                tile.removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
             }
 
             return;
         }
 
         bool pushNewAddon = true;
+
+        Maps::Addons & addons = tile.getBottomLayerAddons();
 
         for ( Maps::TilesAddon & addon : addons ) {
             if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
@@ -1109,7 +1111,7 @@ namespace Maps
         }
         else {
             // Remove all road object sprites from this tile.
-            tile.getBottomLayerAddons().remove_if( []( Maps::TilesAddon const & addon ) { return addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD; } );
+            tile.removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
 
             // To properly update the around sprites we call the update function the second time for tiles not marked as road.
             updateRoadSpritesAround( tile, 2, false );

@@ -326,6 +326,8 @@ namespace Maps
 
         void AddonsSort();
         void Remove( uint32_t uniqID );
+        // Use to remove object by ICN type only from this tile. Should be used only for 1 tile size objects and roads or streams.
+        void removeObjects( const MP2::ObjectIcnType objectIcnType );
 
         void updateObjectImageIndex( const uint32_t objectUid, const MP2::ObjectIcnType objectIcnType, const int imageIndexOffset );
         void replaceObject( const uint32_t objectUid, const MP2::ObjectIcnType originalObjectIcnType, const MP2::ObjectIcnType newObjectIcnType,
