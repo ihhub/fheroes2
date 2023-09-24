@@ -142,7 +142,7 @@ namespace
                     std::string message = _( "Create a map that is %{size} squares wide and %{size} squares high." );
                     StringReplace( message, "%{size}", mapSize );
                     mapSize += " x " + mapSize;
-                    fheroes2::showStandardTextMessage( mapSize, message, Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( std::move( mapSize ), std::move( message ), Dialog::ZERO );
                 }
             }
 

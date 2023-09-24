@@ -87,9 +87,9 @@ namespace
 
     Maps::mapsize_t currentMapFilter = Maps::ZERO;
 
-    void ShowToolTip( const std::string & header, const std::string & body )
+    void ShowToolTip( std::string header, std::string body )
     {
-        fheroes2::showStandardTextMessage( header, body, Dialog::ZERO );
+        fheroes2::showStandardTextMessage( std::move( header ), std::move( body ), Dialog::ZERO );
     }
 
     void mapInfo( const Maps::FileInfo & info )
