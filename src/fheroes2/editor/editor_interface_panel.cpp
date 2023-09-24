@@ -26,7 +26,6 @@
 
 #include "agg_image.h"
 #include "dialog.h"
-#include "dialog_selectitems.h"
 #include "dialog_system_options.h"
 #include "editor_interface.h"
 #include "ground.h"
@@ -34,7 +33,6 @@
 #include "image.h"
 #include "interface_base.h"
 #include "localevent.h"
-#include "monster.h"
 #include "screen.h"
 #include "tools.h"
 #include "translations.h"
@@ -428,17 +426,6 @@ namespace Interface
             }
             else if ( le.MousePressRight( _objectButtonsRect[Brush::TREASURES] ) ) {
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
-            }
-            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::MONSTERS] ) ) {
-                // TODO: find a way to avoid updating the cursor while using this mode.
-                _customCursor = {};
-
-                const Monster monster = Dialog::selectMonster();
-                if ( monster.GetID() != Monster::UNKNOWN ) {
-                    _customCursor = { ICN::MONS32, monster.GetSpriteIndex() };
-                    _interface.updateCursor( 0 );
-                    return res;
-                }
             }
         }
 

@@ -598,13 +598,6 @@ namespace Interface
 
     void EditorInterface::updateCursor( const int32_t /*tileIndex*/ )
     {
-        const auto & customCursor = _editorPanel.getCustomCursor();
-
-        if ( customCursor.icnId != ICN::UNKNOWN ) {
-            Cursor::Get().setCustomImage( fheroes2::AGG::GetICN( customCursor.icnId, customCursor.index ), {} );
-        }
-        else {
-            Cursor::Get().SetThemes( Cursor::POINTER );
-        }
+        Cursor::Get().SetThemes( Cursor::POINTER );
     }
 }
