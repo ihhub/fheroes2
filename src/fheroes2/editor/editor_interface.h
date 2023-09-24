@@ -69,8 +69,14 @@ namespace Interface
             }
         }
 
+        void updateCursor( const int32_t tileIndex ) override;
+
     private:
-        EditorInterface();
+        EditorInterface()
+            : _editorPanel( *this )
+        {
+            // Do nothing.
+        }
 
         EditorPanel _editorPanel;
 

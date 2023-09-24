@@ -35,6 +35,13 @@ namespace Interface
     class EditorPanel
     {
     public:
+        struct CustomCursorInfo
+        {
+            int icnId{ 0 };
+
+            uint32_t index{ 0 };
+        };
+
         explicit EditorPanel( EditorInterface & interface_ );
 
         ~EditorPanel() = default;
@@ -72,6 +79,11 @@ namespace Interface
         // Do not call this method directly, use Interface::Editor::redraw() instead.
         // The name of this method starts from _ on purpose to do not mix with other public methods.
         void _redraw() const;
+
+        const CustomCursorInfo & getCustomCursor() const
+        {
+            return _customCursor;
+        }
 
     private:
         static int _getGroundId( const uint8_t brushId );
@@ -168,5 +180,7 @@ namespace Interface
         uint8_t _selectedTerrain{ Brush::WATER };
         uint8_t _selectedObject{ Brush::WATER };
         uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
+
+        CustomCursorInfo _customCursor;
     };
 }

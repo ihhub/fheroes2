@@ -73,12 +73,6 @@ namespace
 
 namespace Interface
 {
-    Interface::EditorInterface::EditorInterface()
-        : _editorPanel( *this )
-    {
-        // Do nothing.
-    }
-
     void EditorInterface::reset()
     {
         const fheroes2::Display & display = fheroes2::Display::instance();
@@ -599,6 +593,18 @@ namespace Interface
         default:
             Dialog::QuickInfo( tile );
             break;
+        }
+    }
+
+    void EditorInterface::updateCursor( const int32_t /*tileIndex*/ )
+    {
+        const auto & customCursor = _editorPanel.getCustomCursor();
+
+        if ( customCursor.icnId != ICN::UNKNOWN ) {
+            Cursor::Get().setCustomImage( fheroes2::AGG::GetICN( customCursor.icnId, customCursor.index ), {} );
+        }
+        else {
+            Cursor::Get().SetThemes( Cursor::POINTER );
         }
     }
 }

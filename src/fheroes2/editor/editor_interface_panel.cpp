@@ -25,7 +25,9 @@
 #include <string>
 
 #include "agg_image.h"
+#include "cursor.h"
 #include "dialog.h"
+#include "dialog_selectitems.h"
 #include "dialog_system_options.h"
 #include "editor_interface.h"
 #include "ground.h"
@@ -426,6 +428,16 @@ namespace Interface
             }
             else if ( le.MousePressRight( _objectButtonsRect[Brush::TREASURES] ) ) {
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
+            }
+            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::MONSTERS] ) ) {
+                _customCursor = {};
+
+                const Monster monster = Dialog::selectMonster();
+                if ( monster.GetID() != Monster::UNKNOWN ) {
+                    _customCursor = { ICN::MONS32, monster.GetSpriteIndex() };
+                    _interface.updateCursor( 0 );
+                    return res;
+                }
             }
         }
 
