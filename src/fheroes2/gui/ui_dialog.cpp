@@ -244,8 +244,8 @@ namespace fheroes2
 
     int showStandardTextMessage( std::string headerText, std::string messageBody, const int buttons )
     {
-        fheroes2::Text header( std::move( headerText ), fheroes2::FontType::normalYellow() );
-        fheroes2::Text body( std::move( messageBody ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text header( std::move( headerText ), fheroes2::FontType::normalYellow() );
+        const fheroes2::Text body( std::move( messageBody ), fheroes2::FontType::normalWhite() );
         return fheroes2::showMessage( header, body, buttons );
     }
 

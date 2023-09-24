@@ -867,8 +867,7 @@ namespace
                 message.append( _( "Inside, you find some of the wagon's cargo still intact." ) );
 
                 fheroes2::showResourceMessage( fheroes2::Text( std::move( title ), fheroes2::FontType::normalYellow() ),
-                                               fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ),
-                                               Dialog::OK, funds );
+                                               fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ), Dialog::OK, funds );
 
                 hero.GetKingdom().AddFundsResource( funds );
             }
@@ -898,8 +897,7 @@ namespace
                                                        : _( "You search through the flotsam, and find some wood." );
 
             fheroes2::showResourceMessage( fheroes2::Text( std::move( title ), fheroes2::FontType::normalYellow() ),
-                                           fheroes2::Text( std::move( msg ), fheroes2::FontType::normalWhite() ),
-                                           Dialog::OK, funds );
+                                           fheroes2::Text( std::move( msg ), fheroes2::FontType::normalWhite() ), Dialog::OK, funds );
 
             hero.GetKingdom().AddFundsResource( funds );
         }
@@ -1152,7 +1150,7 @@ namespace
                 // Modify luck
                 AudioManager::PlaySound( M82::BADLUCK );
 
-                const std::string msg = _( "You come upon the pyramid of a great and ancient king.\nRoutine exploration reveals that the pyramid is completely empty." );
+                std::string msg = _( "You come upon the pyramid of a great and ancient king.\nRoutine exploration reveals that the pyramid is completely empty." );
 
                 const fheroes2::LuckDialogElement luckUI( false );
                 fheroes2::showMessage( fheroes2::Text( std::move( title ), fheroes2::FontType::normalYellow() ),
@@ -1270,8 +1268,7 @@ namespace
 
                 const fheroes2::PrimarySkillDialogElement primarySkillUI( skill, "+1" );
                 fheroes2::showMessage( fheroes2::Text( std::move( title ), fheroes2::FontType::normalYellow() ), 
-                                       fheroes2::Text( std::move( msg ), fheroes2::FontType::normalWhite() ), Dialog::OK,
-                                       { &primarySkillUI } );
+                                       fheroes2::Text( std::move( msg ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &primarySkillUI } );
             }
 
             hero.SetVisited( dst_index );
@@ -1345,16 +1342,14 @@ namespace
                         const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
                         fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ),
-                                               fheroes2::Text( std::move( win ), fheroes2::FontType::normalWhite() ),
-                                               Dialog::OK, { &goldUI } );
+                                               fheroes2::Text( std::move( win ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &goldUI } );
                     }
                     else {
                         const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
                         const fheroes2::ArtifactDialogElement artifactUI( art );
 
                         fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ),
-                                               fheroes2::Text( std::move( win ), fheroes2::FontType::normalWhite() ),
-                                               Dialog::OK, { &artifactUI, &goldUI } );
+                                               fheroes2::Text( std::move( win ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI, &goldUI } );
 
                         hero.PickupArtifact( art );
                     }
@@ -1363,8 +1358,7 @@ namespace
                     const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
 
                     fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ),
-                                           fheroes2::Text( std::move( win ), fheroes2::FontType::normalWhite() ),
-                                           Dialog::OK, { &goldUI } );
+                                           fheroes2::Text( std::move( win ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &goldUI } );
                 }
 
                 hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
@@ -1387,8 +1381,7 @@ namespace
 
             const fheroes2::MoraleDialogElement moraleUI( false );
             fheroes2::showMessage( fheroes2::Text( std::move( title ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( std::move( msg ), fheroes2::FontType::normalWhite() ), Dialog::OK,
-                                   { &moraleUI } );
+                                   fheroes2::Text( std::move( msg ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &moraleUI } );
         }
     }
 
@@ -1445,8 +1438,7 @@ namespace
             }
 
             fheroes2::showMessage( fheroes2::Text( std::move( title ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( std::move( msg ), fheroes2::FontType::normalWhite() ), Dialog::OK,
-                                   elementUI );
+                                   fheroes2::Text( std::move( msg ), fheroes2::FontType::normalWhite() ), Dialog::OK, elementUI );
 
             hero.IncreaseMovePoints( move );
 
@@ -1497,8 +1489,7 @@ namespace
 
                 const fheroes2::ExperienceDialogElement experienceUI( exp );
                 fheroes2::showMessage( fheroes2::Text( std::move( title ), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( std::move( msg ), fheroes2::FontType::normalWhite() ), Dialog::OK,
-                                       { &experienceUI } );
+                                       fheroes2::Text( std::move( msg ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &experienceUI } );
             }
 
             hero.IncreaseExperience( exp );
@@ -1535,8 +1526,7 @@ namespace
             const fheroes2::ArtifactDialogElement artifactUI( art );
 
             fheroes2::showMessage( fheroes2::Text( MP2::StringObject( objectType ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( std::move( str ), fheroes2::FontType::normalWhite() ), Dialog::OK,
-                                   { &artifactUI } );
+                                   fheroes2::Text( std::move( str ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
 
             hero.PickupArtifact( art );
         }
