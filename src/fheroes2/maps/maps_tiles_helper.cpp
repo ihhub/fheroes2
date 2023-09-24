@@ -56,6 +56,7 @@
 #include "tools.h"
 #include "week.h"
 #include "world.h"
+#include "world_object_uid.h"
 
 namespace
 {
@@ -2131,7 +2132,7 @@ namespace Maps
             tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
 
             // Set unique UID for placed monster.
-            tile.setObjectUID( World::GetUniq() );
+            tile.setObjectUID( getNewObjectUID() );
             tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_MONS32 );
         }
 

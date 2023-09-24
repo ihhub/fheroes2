@@ -64,6 +64,7 @@
 #include "serialize.h"
 #include "trees.h"
 #include "world.h"
+#include "world_object_uid.h"
 
 namespace
 {
@@ -619,7 +620,7 @@ void Maps::Tiles::setBoat( const int direction, const int color )
         break;
     }
 
-    _uid = World::GetUniq();
+    _uid = getNewObjectUID();
 
     using BoatOwnerColorType = decltype( _boatOwnerColor );
     static_assert( std::is_same_v<BoatOwnerColorType, uint8_t>, "Type of _boatOwnerColor has been changed, check the logic below" );
@@ -1911,8 +1912,8 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 {
     msg >> ta._layerType;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1009_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1009_RELEASE ) {
         ta._layerType = ( ta._layerType & 0x03 );
     }
 
@@ -1934,8 +1935,8 @@ StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 
         ta._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
 
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
-        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1009_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1009_RELEASE ) {
             bool temp;
             msg >> temp >> temp;
         }
@@ -1992,8 +1993,8 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 
         tile._objectIcnType = static_cast<MP2::ObjectIcnType>( objectIcnType );
 
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
-        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1009_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1009_RELEASE ) {
             bool temp;
             msg >> temp >> temp;
         }
