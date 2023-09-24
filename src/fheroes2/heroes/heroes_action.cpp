@@ -1267,7 +1267,7 @@ namespace
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::SKILL );
 
                 const fheroes2::PrimarySkillDialogElement primarySkillUI( skill, "+1" );
-                fheroes2::showMessage( fheroes2::Text( std::move( title ), fheroes2::FontType::normalYellow() ), 
+                fheroes2::showMessage( fheroes2::Text( std::move( title ), fheroes2::FontType::normalYellow() ),
                                        fheroes2::Text( std::move( msg ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &primarySkillUI } );
             }
 
