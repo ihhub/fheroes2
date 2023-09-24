@@ -57,6 +57,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_monster.h"
 #include "ui_text.h"
 
 namespace
@@ -651,43 +652,15 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
 
 int Dialog::ArmyJoinFree( const Troop & troop )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    const Text title( _( "Followers" ), Font::YELLOW_BIG );
+    fheroes2::Sprite monsterImage = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
+    fheroes2::renderMonsterFrame( troop, monsterImage, { 6, 6 } );
 
     std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you.\nDo you accept?" );
     StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
 
-    TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
-    const int buttons = Dialog::YES | Dialog::NO;
-    int posy = 0;
-
-    FrameBox box( 10 + 2 * title.h() + textbox.h() + 10, true );
-    const fheroes2::Rect & pos = box.GetArea();
-
-    title.Blit( pos.x + ( pos.width - title.w() ) / 2, pos.y );
-
-    posy = pos.y + 2 * title.h() - 3;
-    textbox.Blit( pos.x, posy );
-
-    fheroes2::ButtonGroup btnGroup( pos, buttons );
-    btnGroup.draw();
-
-    display.render();
-
-    LocalEvent & le = LocalEvent::Get();
-
-    // message loop
-    int result = Dialog::ZERO;
-
-    while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        result = btnGroup.processEvents();
-    }
-
-    return result;
+    const fheroes2::CustomImageDialogElement imageUI( std::move( monsterImage ) );
+    return fheroes2::showMessage( fheroes2::Text( _( "Followers" ), fheroes2::FontType::normalYellow() ),
+                                  fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ), Dialog::YES | Dialog::NO, { &imageUI } );
 }
 
 int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const uint32_t gold )
