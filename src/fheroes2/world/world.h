@@ -346,7 +346,6 @@ public:
     void resetPathfinder();
 
     void ComputeStaticAnalysis();
-    static uint32_t GetUniq();
 
     uint32_t GetMapSeed() const;
     uint32_t GetWeekSeed() const;

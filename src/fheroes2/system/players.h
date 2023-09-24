@@ -206,7 +206,6 @@ protected:
     int race;
     int friends;
     std::string name;
-    uint32_t id;
     Focus focus;
     std::shared_ptr<AI::Base> _ai;
     HandicapStatus _handicapStatus;

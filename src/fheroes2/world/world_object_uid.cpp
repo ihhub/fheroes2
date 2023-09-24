@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,37 +18,34 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "mp2_helper.h"
-#include "mp2.h"
-#include "serialize.h"
+#include "world_object_uid.h"
 
-namespace MP2
+namespace
 {
-    void loadTile( StreamBase & stream, mp2tile_t & tile )
+    uint32_t objectCounter{ 0 };
+}
+
+namespace Maps
+{
+    void resetObjectUID()
     {
-        tile.terrainImageIndex = stream.getLE16();
-        tile.objectName1 = stream.get();
-        tile.bottomIcnImageIndex = stream.get();
-        tile.quantity1 = stream.get();
-        tile.quantity2 = stream.get();
-        tile.objectName2 = stream.get();
-        tile.topIcnImageIndex = stream.get();
-        tile.terrainFlags = stream.get();
-        tile.mapObjectType = stream.get();
-        tile.nextAddonIndex = stream.getLE16();
-        tile.level1ObjectUID = stream.getLE32();
-        tile.level2ObjectUID = stream.getLE32();
+        objectCounter = 0;
     }
 
-    void loadAddon( StreamBase & stream, mp2addon_t & addon )
+    uint32_t getNewObjectUID()
     {
-        addon.nextAddonIndex = stream.getLE16();
-        addon.objectNameN1 = stream.get() * 2; // TODO: why we multiply by 2 here?
-        addon.bottomIcnImageIndex = stream.get();
-        addon.quantityN = stream.get();
-        addon.objectNameN2 = stream.get();
-        addon.topIcnImageIndex = stream.get();
-        addon.level1ObjectUID = stream.getLE32();
-        addon.level2ObjectUID = stream.getLE32();
+        ++objectCounter;
+
+        return objectCounter;
+    }
+
+    uint32_t getLastObjectUID()
+    {
+        return objectCounter;
+    }
+
+    void setLastObjectUID( const uint32_t uid )
+    {
+        objectCounter = uid;
     }
 }
