@@ -653,15 +653,11 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
 
 int Dialog::ArmyJoinFree( const Troop & troop )
 {
-    fheroes2::Sprite monsterImage = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
-    fheroes2::renderMonsterFrame( troop, monsterImage, { 6, 6 } );
-
     std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you.\nDo you accept?" );
     StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
 
-    const fheroes2::CustomImageDialogElement imageUI( std::move( monsterImage ) );
     return fheroes2::showMessage( fheroes2::Text( _( "Followers" ), fheroes2::FontType::normalYellow() ),
-                                  fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ), Dialog::YES | Dialog::NO, { &imageUI } );
+                                  fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ), Dialog::YES | Dialog::NO );
 }
 
 int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const uint32_t gold )
