@@ -208,11 +208,6 @@ namespace Maps
             return _isTileMarkedAsRoad || _mainObjectType == MP2::OBJ_CASTLE;
         }
 
-        void setRoad( const bool setRoad )
-        {
-            _isTileMarkedAsRoad = setRoad;
-        }
-
         bool isStream() const;
         bool isShadow() const;
         bool GoodForUltimateArtifact() const;
@@ -277,10 +272,7 @@ namespace Maps
 
         void pushBottomLayerAddon( const MP2::mp2addon_t & ma );
 
-        void pushBottomLayerAddon( TilesAddon ta )
-        {
-            _addonBottomLayer.emplace_back( ta );
-        }
+        void pushBottomLayerAddon( TilesAddon ta );
 
         void pushTopLayerAddon( const MP2::mp2addon_t & ma );
 
@@ -340,11 +332,7 @@ namespace Maps
             return _terrainImageIndex;
         }
 
-        void setTerrain( const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip )
-        {
-            _terrainImageIndex = terrainImageIndex;
-            _terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
-        }
+        void setTerrain( const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip );
 
         Heroes * getHero() const;
         void setHero( Heroes * hero );
@@ -386,6 +374,8 @@ namespace Maps
 
         // Set or remove a flag which belongs to UID of the object.
         void updateFlag( const int color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer );
+
+        void _updateRoadFlag();
 
         bool isTallObject() const;
 

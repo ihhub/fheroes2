@@ -247,9 +247,8 @@ uint16_t Maps::Ground::getRandomTerrainImageIndex( const int groundId, const boo
         return static_cast<uint16_t>( Rand::Get( 3 ) ) + 16U + getTerrainStartImageIndex( groundId );
     }
 
-    // Terrain image main contain an extra image (rock, flowers, crack, etc.).
-    // There are no extra water terrain tiles.
-    if ( allowExtraImages && Rand ::Get( 6 ) == 0 ) {
+    // Terrain images, except Water, can contain extra objects that are a part of the image.
+    if ( allowExtraImages && Rand::Get( 6 ) == 0 ) {
         switch ( groundId ) {
         case GRASS:
         case SWAMP:

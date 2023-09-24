@@ -62,6 +62,8 @@ class Castle;
 
 namespace
 {
+    const uint32_t mapUpdateFlags = Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR;
+
     int32_t getBrushAreaEndIndex( const int32_t brushSize, const int32_t startIndex )
     {
         const int32_t worldWidth = world.w();
@@ -370,7 +372,7 @@ namespace Interface
                 // Reset the area start tile.
                 _selectedTile = -1;
 
-                _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
+                _redraw |= mapUpdateFlags;
             }
 
             // fast scroll
@@ -564,30 +566,31 @@ namespace Interface
                 _selectedTile = -1;
             }
 
-            _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
+            _redraw |= mapUpdateFlags;
         }
         else if ( _editorPanel.isRoadDraw() ) {
             const fheroes2::ActionCreator action( _historyManager );
 
-            Maps::setRoadOnTile( tile, true );
-
-            _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
+            if ( Maps::updateRoadOnTile( tile, true ) ) {
+                _redraw |= mapUpdateFlags;
+            }
         }
         else if ( _editorPanel.isEraseMode() ) {
             const int32_t brushSize = _editorPanel.getBrushSize();
 
-            const fheroes2::ActionCreator action( _historyManager );
-
             // TODO: implement other brush sizes.
             if ( brushSize < 2 ) {
-                Maps::setRoadOnTile( tile, false );
+                const fheroes2::ActionCreator action( _historyManager );
+
+                if ( Maps::updateRoadOnTile( tile, false ) ) {
+                    _redraw |= mapUpdateFlags;
+                }
+
                 if ( brushSize == 0 ) {
                     // This is a case when area was not selected but a single tile was clicked.
                     _selectedTile = -1;
                 }
             }
-
-            _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
         }
     }
 
