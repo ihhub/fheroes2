@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-17 07:18+0000\n"
-"PO-Revision-Date: 2023-09-23 16:42+0200\n"
+"PO-Revision-Date: 2023-09-24 15:53+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "Language: cs\n"
@@ -2563,9 +2563,8 @@ msgstr "Zobrazit hrdinu"
 msgid "The above spells are available here."
 msgstr "Nacházejí se zde výše uvedená kouzla."
 
-#, fuzzy
 msgid "The spells the hero can learn have been added to their book."
-msgstr "Výše uvedená kouzla byly přidány to tvé knihy."
+msgstr "Do knihy byla přidána kouzla, která se hrdina může naučit."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Vrchní po štědrém spropitném postil tuto zvěst:"
@@ -3745,7 +3744,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-msgid "Undo your last action. Press again to redo the action."
+msgid "Undo your last action."
 msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
@@ -4197,6 +4196,14 @@ msgstr ""
 #, fuzzy
 msgid "hotkey|new random map"
 msgstr "Přehled Království"
+
+#, fuzzy
+msgid "hotkey|undo last action"
+msgstr "Zobrazit následující město"
+
+#, fuzzy
+msgid "hotkey|redo last action"
+msgstr "Zobrazit následující město"
 
 msgid "hotkey|roland campaign"
 msgstr ""
@@ -6948,7 +6955,6 @@ msgstr ""
 "%{skill} dává katapultu střelu navíc, kdy každý z výstřelů okamžitě zboří "
 "zasažené místo zdi hradu, výjma zesílených hradeb v Rytířském hradu."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
@@ -6956,7 +6962,6 @@ msgstr ""
 "%{skill} dává hrdinovi %{count} procentní šanci naučit se jakékoliv kouzlo "
 "prvé nebo druhé úrovně, které protivník použil v boji."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
@@ -6964,7 +6969,6 @@ msgstr ""
 "%{skill} dává hrdinovi %{count} procentní šanci naučit se jakékoliv kouzlo "
 "třetí (nebo nižší) úrovně, které protivník použil v boji."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
@@ -8240,13 +8244,13 @@ msgid "% chance to cast %{spell} spell"
 msgstr ""
 
 msgid "HP regeneration"
-msgstr ""
+msgstr "Regenerace života"
 
 msgid "Two hexes attack"
 msgstr ""
 
 msgid "Flyer"
-msgstr ""
+msgstr "Létající"
 
 msgid "Always retaliates"
 msgstr ""
@@ -8258,16 +8262,16 @@ msgid "No melee penalty"
 msgstr ""
 
 msgid "Dragon"
-msgstr ""
+msgstr "Dračí"
 
 msgid "Undead"
-msgstr ""
+msgstr "Nemrtvý"
 
 msgid "No enemy retaliation"
-msgstr ""
+msgstr "Žádná odplata nepřítele"
 
 msgid "HP drain"
-msgstr ""
+msgstr "Odčerpání života"
 
 msgid "Cloud attack"
 msgstr ""
@@ -8279,10 +8283,10 @@ msgid "% chance to halve enemy"
 msgstr ""
 
 msgid "Soul Eater"
-msgstr ""
+msgstr "Požírač duší"
 
 msgid "Elemental"
-msgstr ""
+msgstr "Elementál"
 
 msgid "No Morale"
 msgstr "Žádná morálka"
@@ -8333,46 +8337,46 @@ msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
 msgid "Ultimate Book of Knowledge"
-msgstr ""
+msgstr "Ultimátní kniha vědomostí"
 
 msgid "The %{name} increases your attack skill by %{count}."
 msgstr ""
 
 msgid "Ultimate Sword of Dominion"
-msgstr ""
+msgstr "Ultimátní meč nadvlády"
 
 msgid "The %{name} increases your defense skill by %{count}."
 msgstr ""
 
 msgid "Ultimate Cloak of Protection"
-msgstr ""
+msgstr "Ultimátní plášť ochrany"
 
 msgid "The %{name} increases your spell power by %{count}."
 msgstr ""
 
 msgid "Ultimate Wand of Magic"
-msgstr ""
+msgstr "Ultimátní kouzelná hůlka"
 
 msgid "The %{name} increases your attack and defense skills by %{count} each."
 msgstr ""
 
 msgid "Ultimate Shield"
-msgstr ""
+msgstr "Ultimátní štít"
 
 msgid "The %{name} increases your spell power and knowledge by %{count} each."
 msgstr ""
 
 msgid "Ultimate Staff"
-msgstr ""
+msgstr "Ultimátní tyč"
 
 msgid "The %{name} increases each of your basic skills by %{count} points."
 msgstr ""
 
 msgid "Ultimate Crown"
-msgstr ""
+msgstr "Ultimátní koruna"
 
 msgid "Golden Goose"
-msgstr ""
+msgstr "Zlatá husa"
 
 msgid "The %{name} brings in an income of %{count} gold per day."
 msgstr ""
