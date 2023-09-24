@@ -967,7 +967,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     if ( !Maps::isValidAbsIndex( index ) ) {
         // Change the cursor image when it gets out of the map boundaries or by 'updateCursor' flag.
         if ( updateCursor || index != _prevIndexPos ) {
-            Cursor::Get().SetThemes( Cursor::POINTER );
+            _interface.updateCursor( index );
             _prevIndexPos = index;
             updateCursor = false;
         }
@@ -998,7 +998,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 
     // Change the cursor image if needed.
     if ( updateCursor || index != _prevIndexPos ) {
-        Cursor::Get().SetThemes( Interface::AdventureMap::GetCursorTileIndex( index ) );
+        _interface.updateCursor( index );
         _prevIndexPos = index;
         updateCursor = false;
     }
