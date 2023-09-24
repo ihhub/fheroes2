@@ -25,7 +25,6 @@
 #include <string>
 
 #include "agg_image.h"
-#include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "dialog_system_options.h"
@@ -35,6 +34,7 @@
 #include "image.h"
 #include "interface_base.h"
 #include "localevent.h"
+#include "monster.h"
 #include "screen.h"
 #include "tools.h"
 #include "translations.h"
@@ -430,6 +430,7 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::MONSTERS] ) ) {
+                // TODO: find a way to avoid updating the cursor while using this mode.
                 _customCursor = {};
 
                 const Monster monster = Dialog::selectMonster();
