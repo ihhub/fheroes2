@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-17 07:18+0000\n"
-"PO-Revision-Date: 2023-09-24 15:53+0200\n"
+"PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "Language: cs\n"
@@ -8199,7 +8199,7 @@ msgid "Double strike"
 msgstr ""
 
 msgid "Double damage to Undead"
-msgstr ""
+msgstr "Dvojnásobné zranění nemrtvých"
 
 msgid "% magic resistance"
 msgstr ""
@@ -8310,7 +8310,7 @@ msgid "% damage from "
 msgstr ""
 
 msgid "The three Anduran artifacts magically combine into one."
-msgstr ""
+msgstr "Tři Anduranovy artefakty se magicky spojí v jeden."
 
 #, fuzzy
 msgid "View Spells"
@@ -8416,7 +8416,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Valor"
-msgstr ""
+msgstr "Medaile za statečnost"
 
 msgid "The %{name} increases your morale by %{count}."
 msgstr "%{name} zvýší tvou morálku o %{count}."
@@ -8427,7 +8427,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Courage"
-msgstr ""
+msgstr "Medaile za odvahu"
 
 msgid ""
 "After saving a young boy from a vicious pack of Wolves, you return him to "
@@ -8435,7 +8435,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Honor"
-msgstr ""
+msgstr "Medaile cti"
 
 msgid ""
 "After freeing a princess of a neighboring kingdom from the evil clutches of "
@@ -8443,7 +8443,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Distinction"
-msgstr ""
+msgstr "Medaile za zásluhy"
 
 msgid ""
 "Ridding the countryside of the hideous Minotaur who made a sport of eating "
@@ -8451,7 +8451,7 @@ msgid ""
 msgstr ""
 
 msgid "Fizbin of Misfortune"
-msgstr ""
+msgstr "Fizbin neštěstí"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
 msgstr ""
@@ -8829,7 +8829,7 @@ msgid ""
 msgstr ""
 
 msgid "Ankh"
-msgstr ""
+msgstr "Anch"
 
 msgid ""
 "The %{name} doubles the effectiveness of all your resurrect and animate "
