@@ -2129,7 +2129,7 @@ namespace Maps
         // except when there is already MONS32.ICN here.
         if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_MONS32 && tile.GetObjectSpriteIndex() != 255 ) {
             // Push object sprite to Level 1 Addons preserving the Layer Type.
-            tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex(), false, false ) );
+            tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
 
             // Set unique UID for placed monster.
             tile.setObjectUID( getNewObjectUID() );

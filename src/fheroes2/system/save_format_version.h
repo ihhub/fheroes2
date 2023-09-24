@@ -29,6 +29,7 @@ enum SaveFileFormat : uint16_t
     // If you're removing an old version you must assign the oldest available to LAST_SUPPORTED_FORMAT_VERSION located at the bottom.
 
     FORMAT_VERSION_1009_RELEASE = 10014,
+    FORMAT_VERSION_PRE2_1009_RELEASE = 10013,
     FORMAT_VERSION_PRE1_1009_RELEASE = 10012,
     FORMAT_VERSION_1007_RELEASE = 10011,
     FORMAT_VERSION_1005_RELEASE = 10010,
