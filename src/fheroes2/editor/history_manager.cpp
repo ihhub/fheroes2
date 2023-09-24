@@ -26,6 +26,7 @@
 
 #include "maps_tiles.h"
 #include "world.h"
+#include "world_object_uid.h"
 
 namespace
 {
@@ -33,6 +34,7 @@ namespace
     {
     public:
         MapAction()
+            : _latestObjectUIDBefore( Maps::getLastObjectUID() )
         {
             const int32_t size = world.w() * world.h();
             _before.reserve( size );
@@ -53,6 +55,8 @@ namespace
                 return false;
             }
 
+            _latestObjectUIDAfter = Maps::getLastObjectUID();
+
             bool foundDifference = false;
 
             for ( int32_t i = 0; i < size; ++i ) {
@@ -64,6 +68,8 @@ namespace
             }
 
             assert( _before.size() == _after.size() );
+
+            // TODO: logically if the last object UID has been changed then we should mark the difference.
 
             return foundDifference;
         }
@@ -79,6 +85,8 @@ namespace
                 world.GetTiles( tile.GetIndex() ) = std::move( temp );
             }
 
+            Maps::setLastObjectUID( _latestObjectUIDAfter );
+
             return ( !_after.empty() );
         }
 
@@ -93,12 +101,17 @@ namespace
                 world.GetTiles( tile.GetIndex() ) = std::move( temp );
             }
 
+            Maps::setLastObjectUID( _latestObjectUIDBefore );
+
             return ( !_before.empty() );
         }
 
     private:
         std::vector<Maps::Tiles> _before;
         std::vector<Maps::Tiles> _after;
+
+        const uint32_t _latestObjectUIDBefore{ 0 };
+        uint32_t _latestObjectUIDAfter{ 0 };
     };
 }
 
