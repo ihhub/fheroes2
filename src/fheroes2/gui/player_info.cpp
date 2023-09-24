@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "player_info.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
@@ -31,7 +33,6 @@
 #include "image.h"
 #include "localevent.h"
 #include "maps_fileinfo.h"
-#include "player_info.h"
 #include "players.h"
 #include "race.h"
 #include "screen.h"
