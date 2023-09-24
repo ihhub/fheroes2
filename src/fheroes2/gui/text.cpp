@@ -289,28 +289,6 @@ void Text::Blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst ) const
     return message->blit( ax, ay, maxw, dst );
 }
 
-int32_t Text::getFitWidth( const std::string & text, const int fontId, const int32_t width_ )
-{
-    if ( text.empty() || width_ < 1 )
-        return 0;
-
-    int32_t fitWidth = 0;
-    uint32_t characterCount = 0;
-
-    TextAscii textWrapper( text, fontId );
-
-    while ( fitWidth < width_ && characterCount < text.size() ) {
-        ++characterCount;
-        const int32_t foundWidth = textWrapper.w( 0, characterCount );
-        if ( foundWidth > width_ )
-            break;
-
-        fitWidth = foundWidth;
-    }
-
-    return fitWidth;
-}
-
 TextBox::TextBox( const std::string & msg, int ft, uint32_t width_ )
     : align( ALIGN_CENTER )
 {
