@@ -408,7 +408,7 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
         // Fog directions should be updated 1 tile outside of the cleared fog.
         fogRevealMinPos -= { 1, 1 };
         fogRevealMaxPos += { 1, 1 };
-        Maps::Tiles::updateFogDirectionsInArea( fogRevealMinPos, fogRevealMaxPos, alliedColors );
+        Maps::updateFogDirectionsInArea( fogRevealMinPos, fogRevealMaxPos, alliedColors );
     }
 }
 

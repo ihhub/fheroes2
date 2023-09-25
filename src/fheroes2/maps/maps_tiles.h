@@ -255,9 +255,6 @@ namespace Maps
 
         void removeOwnershipFlag( const MP2::MapObjectType objectType );
 
-        // Determine the fog direction in the area between min and max positions for given player(s) color code and store it in corresponding tile data.
-        static void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color );
-
         // Return fog direction of tile. A tile without fog returns "Direction::UNKNOWN".
         uint16_t getFogDirection() const
         {
@@ -350,6 +347,12 @@ namespace Maps
 
         bool containsSprite( const MP2::ObjectIcnType objectIcnType, const uint32_t imageIdx ) const;
 
+        // Do NOT call this method directly!!!
+        void setFogDirection( const uint16_t fogDirection )
+        {
+            _fogDirection = fogDirection;
+        }
+
         // Some tiles have incorrect object type. This is due to original Editor issues.
         static void fixTileObjectType( Tiles & tile );
 
@@ -376,11 +379,6 @@ namespace Maps
         bool isTallObject() const;
 
         bool isDetachedObject() const;
-
-        void _setFogDirection( const uint16_t fogDirection )
-        {
-            _fogDirection = fogDirection;
-        }
 
         int getOriginalPassability() const;
 

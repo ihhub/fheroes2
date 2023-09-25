@@ -797,7 +797,7 @@ void Interface::GameArea::updateMapFogDirections()
 {
     const int32_t friendColors = Players::FriendColors();
 
-    Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, friendColors );
+    Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, friendColors );
 }
 
 void Interface::GameArea::Scroll()
