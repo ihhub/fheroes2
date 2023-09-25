@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-22 00:50+0000\n"
+"POT-Creation-Date: 2023-09-24 16:12+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -2705,16 +2705,16 @@ msgstr ""
 msgid "Dismiss this army."
 msgstr ""
 
-#, fuzzy
-msgid "Followers"
-msgstr "Virágok"
-
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
 msgstr ""
 "Egy  %{monster} csoportja a nagyobb dicsőség reményében csatlakozna hozzád.\n"
 "Elfogadod őket?"
+
+#, fuzzy
+msgid "Followers"
+msgstr "Virágok"
 
 #, fuzzy
 msgid ""

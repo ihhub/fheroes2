@@ -227,6 +227,7 @@
     <ClCompile Include="src\fheroes2\system\settings.cpp" />
     <ClCompile Include="src\fheroes2\world\world.cpp" />
     <ClCompile Include="src\fheroes2\world\world_loadmap.cpp" />
+    <ClCompile Include="src\fheroes2\world\world_object_uid.cpp" />
     <ClCompile Include="src\fheroes2\world\world_pathfinding.cpp" />
     <ClCompile Include="src\fheroes2\world\world_regions.cpp" />
     <ClCompile Include="src\thirdparty\libsmacker\smacker.c" />
@@ -423,6 +424,7 @@
     <ClInclude Include="src\fheroes2\system\settings.h" />
     <ClInclude Include="src\fheroes2\system\version.h" />
     <ClInclude Include="src\fheroes2\world\world.h" />
+    <ClInclude Include="src\fheroes2\world\world_object_uid.h" />
     <ClInclude Include="src\fheroes2\world\world_pathfinding.h" />
     <ClInclude Include="src\fheroes2\world\world_regions.h" />
     <ClInclude Include="src\thirdparty\libsmacker\smacker.h" />

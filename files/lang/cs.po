@@ -2737,15 +2737,15 @@ msgstr "Propustit"
 msgid "Dismiss this army."
 msgstr "Propustit tuto armádu."
 
-msgid "Followers"
-msgstr "Následovníci"
-
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
 msgstr ""
 "Skupina %{monster} s touhou po velké slávě se chce k Tobě přidat.\n"
 "Přijímáš?"
+
+msgid "Followers"
+msgstr "Následovníci"
 
 msgid ""
 "The %{monster} is swayed by your diplomatic tongue, and offers to join your "
