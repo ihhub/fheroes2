@@ -669,7 +669,7 @@ int Maps::Tiles::getOriginalPassability() const
         return MP2::getActionObjectDirection( objectType );
     }
 
-    if ( ( _objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN || _imageIndex == 255 ) || ( ( _layerType >> 1 ) & 1 ) || isShadow() ) {
+    if ( _objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN || ( ( _layerType >> 1 ) & 1 ) || isShadow() ) {
         // No object exists. Make it fully passable.
         return DIRECTION_ALL;
     }
