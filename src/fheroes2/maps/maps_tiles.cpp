@@ -842,32 +842,6 @@ void Maps::Tiles::UpdateRegion( uint32_t newRegionID )
     }
 }
 
-bool Maps::Tiles::isClearGround() const
-{
-    const MP2::MapObjectType objectType = GetObject( true );
-
-    switch ( objectType ) {
-    case MP2::OBJ_NONE:
-    case MP2::OBJ_COAST:
-        return true;
-    case MP2::OBJ_BOAT:
-        return false;
-
-    default:
-        break;
-    }
-
-    if ( ( _objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) || _imageIndex == 255 || ( ( _layerType >> 1 ) & 1 ) == 1 ) {
-        if ( MP2::isActionObject( objectType, isWater() ) ) {
-            return false;
-        }
-        // No objects are here.
-        return true;
-    }
-
-    return false;
-}
-
 void Maps::Tiles::pushBottomLayerAddon( const MP2::mp2addon_t & ma )
 {
     const MP2::ObjectIcnType objectIcnType = static_cast<MP2::ObjectIcnType>( ma.objectNameN1 >> 2 );

@@ -2408,4 +2408,31 @@ namespace Maps
             break;
         }
     }
+
+    bool isClearGround( const Tiles & tile )
+    {
+        const MP2::MapObjectType objectType = tile.GetObject( true );
+
+        switch ( objectType ) {
+        case MP2::OBJ_NONE:
+        case MP2::OBJ_COAST:
+            return true;
+        case MP2::OBJ_BOAT:
+            return false;
+
+        default:
+            break;
+        }
+
+        if ( ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) || ( tile.getLayerType() == Maps::SHADOW_LAYER )
+             || ( tile.getLayerType() == Maps::TERRAIN_LAYER ) ) {
+            if ( MP2::isActionObject( objectType, tile.isWater() ) ) {
+                return false;
+            }
+            // No objects are here.
+            return true;
+        }
+
+        return false;
+    }
 }

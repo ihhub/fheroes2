@@ -251,12 +251,6 @@ namespace Maps
         // Update passability based on neighbours around.
         void updatePassability();
 
-        int getOriginalPassability() const;
-
-        bool isClearGround() const;
-
-        bool doesObjectExist( const uint32_t uid ) const;
-
         void setOwnershipFlag( const MP2::MapObjectType objectType, const int color );
 
         void removeOwnershipFlag( const MP2::MapObjectType objectType );
@@ -387,6 +381,10 @@ namespace Maps
         {
             _fogDirection = fogDirection;
         }
+
+        int getOriginalPassability() const;
+
+        bool doesObjectExist( const uint32_t uid ) const;
 
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );
