@@ -763,6 +763,11 @@ uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allow_overfl
     return resurrect;
 }
 
+bool Battle::Unit::canShoot() const
+{
+    return isArchers() && !Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) && !isHandFighting();
+}
+
 uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected )
 {
     killed = ApplyDamage( dmg );

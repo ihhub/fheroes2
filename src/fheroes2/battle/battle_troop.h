@@ -180,6 +180,8 @@ namespace Battle
             return shots;
         }
 
+        bool canShoot() const;
+
         uint32_t ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected );
 
         uint32_t CalculateMinDamage( const Unit & ) const;
