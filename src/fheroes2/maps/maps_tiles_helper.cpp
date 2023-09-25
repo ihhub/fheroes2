@@ -838,7 +838,7 @@ namespace
 
         if ( hasNoBits( roadDirection, Direction::CENTER ) ) {
             if ( hasBits( roadDirection, Direction::TOP ) && hasNoBits( roadDirection, Direction::TOP_LEFT ) ) {
-                // We can do this because we have Direction::TOP.
+                // We can do this without 'isValidDirection()' check because we have Direction::TOP.
                 const int32_t upperTileIndex = tileIndex - world.w();
                 if ( checkRoadIcnIndex( upperTileIndex, { 7, 17, 20, 22, 24, 29 } ) ) {
                     return 8U;
@@ -846,7 +846,7 @@ namespace
             }
 
             if ( hasBits( roadDirection, Direction::TOP ) && hasNoBits( roadDirection, Direction::TOP_RIGHT ) ) {
-                // We can do this because we have Direction::TOP.
+                // We can do this without 'isValidDirection()' check because we have Direction::TOP.
                 const int32_t upperTileIndex = tileIndex - world.w();
                 if ( checkRoadIcnIndex( upperTileIndex, { 16, 18, 19, 23, 25, 30 } ) ) {
                     return 15U;
@@ -855,21 +855,21 @@ namespace
             if ( hasBits( roadDirection, Direction::TOP )
                  && ( hasBits( roadDirection, Direction::TOP_LEFT ) || hasBits( roadDirection, Direction::TOP_RIGHT )
                       || hasBits( roadDirection, Direction::LEFT | Direction::RIGHT ) ) ) {
-                // We can do this because we have Direction::TOP.
+                // We can do this without 'isValidDirection()' check because we have Direction::TOP.
                 const int32_t upperTileIndex = tileIndex - world.w();
                 if ( checkRoadIcnIndex( upperTileIndex, { 2, 3, 21, 28 } ) ) {
                     return Rand::Get( 1 ) ? 1U : 27U;
                 }
             }
             if ( hasBits( roadDirection, Direction::BOTTOM | Direction::RIGHT ) && hasNoBits( roadDirection, Direction::TOP | Direction::LEFT ) ) {
-                // We can do this because we have Direction::Bottom.
+                // We can do this without 'isValidDirection()' check because we have Direction::BOTTOM.
                 const int32_t lowerTileIndex = tileIndex + world.w();
                 if ( checkRoadIcnIndex( lowerTileIndex, { 8, 9, 18, 20, 30 } ) ) {
                     return Rand::Get( 1 ) ? 22U : 24U;
                 }
             }
             if ( hasBits( roadDirection, Direction::BOTTOM | Direction::LEFT ) && hasNoBits( roadDirection, Direction::TOP | Direction::RIGHT ) ) {
-                // We can do this because we have Direction::Bottom.
+                // We can do this without 'isValidDirection()' check because we have Direction::BOTTOM.
                 const int32_t lowerTileIndex = tileIndex + world.w();
                 if ( checkRoadIcnIndex( lowerTileIndex, { 12, 15, 17, 19, 29 } ) ) {
                     return Rand::Get( 1 ) ? 23U : 25U;
@@ -1099,7 +1099,7 @@ namespace Maps
 
     bool updateRoadOnTile( Tiles & tile, const bool setRoad )
     {
-        if ( setRoad == tile.isRoad() || ( setRoad && tile.GetGround() == Ground::WATER ) ) {
+        if ( setRoad == tile.isRoad() || ( tile.GetGround() == Ground::WATER ) ) {
             // We cannot place roads on the water or above already placed roads.
             return false;
         }
@@ -1115,7 +1115,7 @@ namespace Maps
 
             updateRoadSpritesAround( tile );
 
-            if ( Maps::Ground::isTerrainExtraImage( tile.getTerrainImageIndex() ) ) {
+            if ( Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( tile.getTerrainImageIndex() ) ) {
                 // We need to set terrain image without extra objects under the road.
                 tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( tile.GetGround(), false ), false, false );
             }

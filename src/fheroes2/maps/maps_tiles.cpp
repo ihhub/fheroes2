@@ -530,13 +530,13 @@ void Maps::Tiles::setTerrain( const uint16_t terrainImageIndex, const bool horiz
     _terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
 
     if ( _isTileMarkedAsRoad ) {
-        if ( GetGround() == Ground::WATER ) {
-            // There can not be roads on the water.
+        if ( Ground::getGroundByImageIndex( terrainImageIndex ) == Ground::WATER ) {
+            // Road can not be on the water. Remove it.
             updateRoadOnTile( *this, false );
         }
         else {
             // There can not be extra objects under the roads.
-            if ( Maps::Ground::isTerrainExtraImage( terrainImageIndex ) ) {
+            if ( Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {
                 // We need to set terrain image without extra objects under the road.
                 _terrainImageIndex = Ground::getRandomTerrainImageIndex( Ground::getGroundByImageIndex( terrainImageIndex ), false );
 
@@ -1496,7 +1496,7 @@ void Maps::Tiles::removeObjects( const MP2::ObjectIcnType objectIcnType )
         _uid = 0;
     }
 
-    this->_updateRoadFlag();
+    _updateRoadFlag();
 }
 
 void Maps::Tiles::replaceObject( const uint32_t objectUid, const MP2::ObjectIcnType originalObjectIcnType, const MP2::ObjectIcnType newObjectIcnType,

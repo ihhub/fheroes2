@@ -116,7 +116,7 @@ bool Maps::Ground::isTerrainTransitionImage( const uint16_t terrainImageIndex )
     }
 }
 
-bool Maps::Ground::isTerrainExtraImage( const uint16_t terrainImageIndex )
+bool Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( const uint16_t terrainImageIndex )
 {
     const int groundId = getGroundByImageIndex( terrainImageIndex );
     switch ( groundId ) {
@@ -241,14 +241,14 @@ uint32_t Maps::Ground::GetPenalty( const Maps::Tiles & tile, uint32_t level )
     return result;
 }
 
-uint16_t Maps::Ground::getRandomTerrainImageIndex( const int groundId, const bool allowExtraImages )
+uint16_t Maps::Ground::getRandomTerrainImageIndex( const int groundId, const bool allowEmbeddedObjectsAppearOnTerrain )
 {
     if ( groundId == WATER ) {
         return static_cast<uint16_t>( Rand::Get( 3 ) ) + 16U + getTerrainStartImageIndex( groundId );
     }
 
     // Terrain images, except Water, can contain extra objects that are a part of the image.
-    if ( allowExtraImages && Rand::Get( 6 ) == 0 ) {
+    if ( allowEmbeddedObjectsAppearOnTerrain && Rand::Get( 6 ) == 0 ) {
         switch ( groundId ) {
         case GRASS:
         case SWAMP:
