@@ -80,9 +80,6 @@ namespace Maps
 
         static bool isShadow( const TilesAddon & ta );
 
-        static bool isResource( const TilesAddon & ta );
-        static bool isArtifact( const TilesAddon & ta );
-
         // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
         uint32_t _uid{ 0 };
 

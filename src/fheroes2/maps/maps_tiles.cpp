@@ -455,17 +455,17 @@ namespace
            << "is shadow       : " << ( Maps::TilesAddon::isShadow( addon ) ? "yes" : "no" ) << std::endl;
         return os.str();
     }
-}
 
-bool Maps::TilesAddon::isResource( const TilesAddon & ta )
-{
-    return ( MP2::OBJ_ICN_TYPE_OBJNRSRC == ta._objectIcnType ) && ( ta._imageIndex % 2 );
-}
+    bool isResource( const Maps::TilesAddon & ta )
+    {
+        return ( MP2::OBJ_ICN_TYPE_OBJNRSRC == ta._objectIcnType ) && ( ta._imageIndex % 2 );
+    }
 
-bool Maps::TilesAddon::isArtifact( const TilesAddon & ta )
-{
-    // OBJNARTI (skip ultimate)
-    return ( MP2::OBJ_ICN_TYPE_OBJNARTI == ta._objectIcnType ) && ( ta._imageIndex > 0x10 ) && ( ta._imageIndex % 2 );
+    bool isArtifact( const Maps::TilesAddon & ta )
+    {
+        // OBJNARTI (skip ultimate)
+        return ( MP2::OBJ_ICN_TYPE_OBJNARTI == ta._objectIcnType ) && ( ta._imageIndex > 0x10 ) && ( ta._imageIndex % 2 );
+    }
 }
 
 bool Maps::TilesAddon::isShadow( const TilesAddon & ta )
@@ -1018,9 +1018,9 @@ std::string Maps::Tiles::String() const
 void Maps::Tiles::FixObject()
 {
     if ( MP2::OBJ_NONE == _mainObjectType ) {
-        if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), TilesAddon::isArtifact ) )
+        if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), isArtifact ) )
             SetObject( MP2::OBJ_ARTIFACT );
-        else if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), TilesAddon::isResource ) )
+        else if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), isResource ) )
             SetObject( MP2::OBJ_RESOURCE );
     }
 }
