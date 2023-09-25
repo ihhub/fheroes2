@@ -73,13 +73,6 @@ namespace Maps
             return ( _uid == addon._uid ) && ( _layerType == addon._layerType ) && ( _objectIcnType == addon._objectIcnType ) && ( _imageIndex == addon._imageIndex );
         }
 
-        bool isUniq( const uint32_t id ) const
-        {
-            return _uid == id;
-        }
-
-        static bool isShadow( const TilesAddon & ta );
-
         // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
         uint32_t _uid{ 0 };
 

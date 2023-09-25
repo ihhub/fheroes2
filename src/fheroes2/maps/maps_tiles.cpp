@@ -443,6 +443,22 @@ namespace
         return false;
     }
 
+    bool isAddonShadow( const Maps::TilesAddon & ta )
+    {
+        return isShadowSprite( ta._objectIcnType, ta._imageIndex );
+    }
+
+    bool isAddonResource( const Maps::TilesAddon & ta )
+    {
+        return ( MP2::OBJ_ICN_TYPE_OBJNRSRC == ta._objectIcnType ) && ( ta._imageIndex % 2 );
+    }
+
+    bool isAddonArtifact( const Maps::TilesAddon & ta )
+    {
+        // OBJNARTI (skip ultimate)
+        return ( MP2::OBJ_ICN_TYPE_OBJNARTI == ta._objectIcnType ) && ( ta._imageIndex > 0x10 ) && ( ta._imageIndex % 2 );
+    }
+
     std::string getAddonInfo( const Maps::TilesAddon & addon, const int lvl )
     {
         std::ostringstream os;
@@ -452,25 +468,9 @@ namespace
            << std::endl
            << "image index     : " << static_cast<int>( addon._imageIndex ) << std::endl
            << "layer type      : " << static_cast<int>( addon._layerType ) << " - " << getObjectLayerName( addon._layerType ) << std::endl
-           << "is shadow       : " << ( Maps::TilesAddon::isShadow( addon ) ? "yes" : "no" ) << std::endl;
+           << "is shadow       : " << ( isAddonShadow( addon ) ? "yes" : "no" ) << std::endl;
         return os.str();
     }
-
-    bool isResource( const Maps::TilesAddon & ta )
-    {
-        return ( MP2::OBJ_ICN_TYPE_OBJNRSRC == ta._objectIcnType ) && ( ta._imageIndex % 2 );
-    }
-
-    bool isArtifact( const Maps::TilesAddon & ta )
-    {
-        // OBJNARTI (skip ultimate)
-        return ( MP2::OBJ_ICN_TYPE_OBJNARTI == ta._objectIcnType ) && ( ta._imageIndex > 0x10 ) && ( ta._imageIndex % 2 );
-    }
-}
-
-bool Maps::TilesAddon::isShadow( const TilesAddon & ta )
-{
-    return isShadowSprite( ta._objectIcnType, ta._imageIndex );
 }
 
 void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
@@ -749,7 +749,7 @@ void Maps::Tiles::updatePassability()
 
             // Count how many objects are there excluding shadows, roads and river streams.
             const std::ptrdiff_t validLevel1ObjectCount = std::count_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), []( const TilesAddon & addon ) {
-                if ( TilesAddon::isShadow( addon ) ) {
+                if ( isAddonShadow( addon ) ) {
                     return false;
                 }
 
@@ -905,14 +905,14 @@ void Maps::Tiles::AddonsSort()
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( uint32_t uniq1 )
 {
-    Addons::iterator it = std::find_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), [uniq1]( const TilesAddon & v ) { return v.isUniq( uniq1 ); } );
+    Addons::iterator it = std::find_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), [uniq1]( const TilesAddon & v ) { return v._uid == uniq1; } );
 
     return it != _addonBottomLayer.end() ? &( *it ) : nullptr;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel2( uint32_t uniq2 )
 {
-    Addons::iterator it = std::find_if( _addonTopLayer.begin(), _addonTopLayer.end(), [uniq2]( const TilesAddon & v ) { return v.isUniq( uniq2 ); } );
+    Addons::iterator it = std::find_if( _addonTopLayer.begin(), _addonTopLayer.end(), [uniq2]( const TilesAddon & v ) { return v._uid == uniq2; } );
 
     return it != _addonTopLayer.end() ? &( *it ) : nullptr;
 }
@@ -1018,9 +1018,9 @@ std::string Maps::Tiles::String() const
 void Maps::Tiles::FixObject()
 {
     if ( MP2::OBJ_NONE == _mainObjectType ) {
-        if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), isArtifact ) )
+        if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), isAddonArtifact ) )
             SetObject( MP2::OBJ_ARTIFACT );
-        else if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), isResource ) )
+        else if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), isAddonResource ) )
             SetObject( MP2::OBJ_RESOURCE );
     }
 }
@@ -1035,11 +1035,11 @@ bool Maps::Tiles::GoodForUltimateArtifact() const
         return false;
     }
 
-    if ( static_cast<size_t>( std::count_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), TilesAddon::isShadow ) ) != _addonBottomLayer.size() ) {
+    if ( static_cast<size_t>( std::count_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), isAddonShadow ) ) != _addonBottomLayer.size() ) {
         return false;
     }
 
-    if ( static_cast<size_t>( std::count_if( _addonTopLayer.begin(), _addonTopLayer.end(), TilesAddon::isShadow ) ) != _addonTopLayer.size() ) {
+    if ( static_cast<size_t>( std::count_if( _addonTopLayer.begin(), _addonTopLayer.end(), isAddonShadow ) ) != _addonTopLayer.size() ) {
         return false;
     }
 
@@ -1115,7 +1115,7 @@ bool Maps::Tiles::isStream() const
 bool Maps::Tiles::isShadow() const
 {
     return isShadowSprite( _objectIcnType, _imageIndex )
-           && _addonBottomLayer.size() == static_cast<size_t>( std::count_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), TilesAddon::isShadow ) );
+           && _addonBottomLayer.size() == static_cast<size_t>( std::count_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), isAddonShadow ) );
 }
 
 Maps::TilesAddon * Maps::Tiles::getAddonWithFlag( const uint32_t uid )
@@ -1403,8 +1403,8 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
 void Maps::Tiles::Remove( uint32_t uniqID )
 {
-    _addonBottomLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v.isUniq( uniqID ); } );
-    _addonTopLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v.isUniq( uniqID ); } );
+    _addonBottomLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v._uid == uniqID; } );
+    _addonTopLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v._uid == uniqID; } );
 
     if ( _uid == uniqID ) {
         resetObjectSprite();
@@ -1640,13 +1640,13 @@ bool Maps::Tiles::isTallObject() const
         }
 
         for ( const TilesAddon & addon : topTile._addonBottomLayer ) {
-            if ( addon._uid == tileUID && !TilesAddon::isShadow( addon ) ) {
+            if ( addon._uid == tileUID && !isAddonShadow( addon ) ) {
                 return true;
             }
         }
 
         for ( const TilesAddon & addon : topTile._addonTopLayer ) {
-            if ( addon._uid == tileUID && !TilesAddon::isShadow( addon ) ) {
+            if ( addon._uid == tileUID && !isAddonShadow( addon ) ) {
                 return true;
             }
         }
