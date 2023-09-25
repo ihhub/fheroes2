@@ -2426,11 +2426,7 @@ namespace Maps
 
         if ( ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) || ( tile.getLayerType() == Maps::SHADOW_LAYER )
              || ( tile.getLayerType() == Maps::TERRAIN_LAYER ) ) {
-            if ( MP2::isActionObject( objectType, tile.isWater() ) ) {
-                return false;
-            }
-            // No objects are here.
-            return true;
+            return !MP2::isActionObject( objectType, tile.isWater() );
         }
 
         return false;
