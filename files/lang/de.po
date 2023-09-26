@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-17 07:18+0000\n"
+"POT-Creation-Date: 2023-09-24 16:12+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2793,9 +2793,6 @@ msgstr "Entlassen"
 msgid "Dismiss this army."
 msgstr "Entlassen der Armee."
 
-msgid "Followers"
-msgstr "Anhänger"
-
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
@@ -2803,6 +2800,9 @@ msgstr ""
 "Eine Gruppe von %{monster}, die nach größerem Ruhm streben, möchte sich "
 "Ihnen anschließen.\n"
 "Nehmen Sie an?"
+
+msgid "Followers"
+msgstr "Anhänger"
 
 msgid ""
 "The %{monster} is swayed by your diplomatic tongue, and offers to join your "
@@ -3830,10 +3830,8 @@ msgstr "Vergrößern"
 msgid "Undo"
 msgstr "Rückgängig"
 
-msgid "Undo your last action. Press again to redo the action."
+msgid "Undo your last action."
 msgstr ""
-"Macht die letzte Aktion rückgängig. Erneut drücken, um die Aktion zu "
-"wiederholen."
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr ""
@@ -4288,6 +4286,14 @@ msgstr "Neue Karte von Beginn Menü"
 
 msgid "hotkey|new random map"
 msgstr "Neue zufällige Karte Menü"
+
+#, fuzzy
+msgid "hotkey|undo last action"
+msgstr "Standardaktion"
+
+#, fuzzy
+msgid "hotkey|redo last action"
+msgstr "Standardaktion"
 
 msgid "hotkey|roland campaign"
 msgstr "Roland-Feldzug"
@@ -11062,3 +11068,8 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Undo your last action. Press again to redo the action."
+#~ msgstr ""
+#~ "Macht die letzte Aktion rückgängig. Erneut drücken, um die Aktion zu "
+#~ "wiederholen."

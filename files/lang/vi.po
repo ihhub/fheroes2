@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-17 07:18+0000\n"
+"POT-Creation-Date: 2023-09-24 16:12+0000\n"
 "PO-Revision-Date: 2023-09-04 09:26+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2728,12 +2728,12 @@ msgstr "Giải tán"
 msgid "Dismiss this army."
 msgstr "Giải tán đội quân này."
 
-msgid "Followers"
-msgstr ""
-
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
+msgstr ""
+
+msgid "Followers"
 msgstr ""
 
 msgid ""
@@ -3713,7 +3713,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-msgid "Undo your last action. Press again to redo the action."
+msgid "Undo your last action."
 msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
@@ -4147,6 +4147,12 @@ msgid "hotkey|new map from scratch"
 msgstr ""
 
 msgid "hotkey|new random map"
+msgstr ""
+
+msgid "hotkey|undo last action"
+msgstr ""
+
+msgid "hotkey|redo last action"
 msgstr ""
 
 msgid "hotkey|roland campaign"

@@ -475,27 +475,42 @@ uint32_t Battle::Unit::GetMoveRange() const
     return isFlying() ? ARENASIZE : GetSpeed( false, false );
 }
 
-uint32_t Battle::Unit::CalculateRetaliationDamage( uint32_t damageTaken ) const
+uint32_t Battle::Unit::EstimateRetaliatoryDamage( const uint32_t damageTaken ) const
 {
-    // Check if there will be retaliation in the first place
-    if ( damageTaken > hp || Modes( CAP_MIRRORIMAGE ) || !AllowResponse() ) {
+    // The entire unit is destroyed, no retaliation
+    if ( damageTaken >= hp ) {
         return 0;
     }
 
-    const uint32_t unitsLeft = ( hp - damageTaken ) / Monster::GetHitPoints();
-
-    uint32_t damagePerUnit = 0;
-    if ( Modes( SP_CURSE ) ) {
-        damagePerUnit = Monster::GetDamageMin();
-    }
-    else if ( Modes( SP_BLESS ) ) {
-        damagePerUnit = Monster::GetDamageMax();
-    }
-    else {
-        damagePerUnit = ( Monster::GetDamageMin() + Monster::GetDamageMax() ) / 2;
+    // Mirror images are destroyed anyway and hypnotized units never respond to an attack
+    if ( Modes( TR_RESPONDED | CAP_MIRRORIMAGE | SP_HYPNOTIZE ) ) {
+        return 0;
     }
 
-    return unitsLeft * damagePerUnit;
+    // Units with this ability retaliate even when under the influence of paralyzing spells
+    if ( Modes( IS_PARALYZE_MAGIC ) && !isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+        return 0;
+    }
+
+    const uint32_t unitsLeft = GetCountFromHitPoints( *this, hp - damageTaken );
+    assert( unitsLeft > 0 );
+
+    const uint32_t damagePerUnit = [this]() {
+        if ( Modes( SP_CURSE ) ) {
+            return Monster::GetDamageMin();
+        }
+
+        if ( Modes( SP_BLESS ) ) {
+            return Monster::GetDamageMax();
+        }
+
+        return ( Monster::GetDamageMin() + Monster::GetDamageMax() ) / 2;
+    }();
+
+    const uint32_t retaliatoryDamage = unitsLeft * damagePerUnit;
+
+    // The retaliatory damage of a blinded unit is halved
+    return ( Modes( SP_BLIND ) ? retaliatoryDamage / 2 : retaliatoryDamage );
 }
 
 uint32_t Battle::Unit::CalculateMinDamage( const Unit & enemy ) const
@@ -627,7 +642,11 @@ uint32_t Battle::Unit::ApplyDamage( const uint32_t dmg )
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, dmg << " to " << String() << " and killed: " << killed )
 
     if ( Modes( IS_PARALYZE_MAGIC ) ) {
-        SetModes( TR_RESPONDED );
+        // Units with this ability retaliate even when under the influence of paralyzing spells
+        if ( !isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+            SetModes( TR_RESPONDED );
+        }
+
         SetModes( TR_MOVED );
 
         removeAffection( IS_PARALYZE_MAGIC );
@@ -742,6 +761,11 @@ uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allow_overfl
         dead -= ( resurrect < dead ? resurrect : dead );
 
     return resurrect;
+}
+
+bool Battle::Unit::canShoot() const
+{
+    return isArchers() && !Modes( SP_BLIND | IS_PARALYZE_MAGIC ) && !isHandFighting();
 }
 
 uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected )
@@ -1010,16 +1034,12 @@ bool Battle::Unit::AllowResponse() const
         return false;
     }
 
-    // Blindness can be cast by an attacking unit. In this case, there should be no response to the attack.
+    // Blindness can be cast by an attacking unit. There should never be any retaliation in this case.
     if ( Modes( SP_BLIND ) && !_blindRetaliation ) {
         return false;
     }
 
-    // Units with this ability retaliate even when under the influence of paralyzing spells
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
-        return true;
-    }
-
+    // Paralyzing magic can be cast by an attacking unit. There should never be any retaliation in this case.
     if ( Modes( IS_PARALYZE_MAGIC ) ) {
         return false;
     }
@@ -1029,6 +1049,10 @@ bool Battle::Unit::AllowResponse() const
 
 void Battle::Unit::SetResponse()
 {
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+        return;
+    }
+
     SetModes( TR_RESPONDED );
 }
 

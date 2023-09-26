@@ -2759,9 +2759,6 @@ msgstr "Avskeda"
 msgid "Dismiss this army."
 msgstr "Avskeda armén."
 
-msgid "Followers"
-msgstr "Anhängare"
-
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
@@ -2769,6 +2766,9 @@ msgstr ""
 "En grupp %{monster} med en längtan efter ära och berömmelse önskar att göra "
 "dig sällskap.\n"
 "Accepterar du?"
+
+msgid "Followers"
+msgstr "Anhängare"
 
 msgid ""
 "The %{monster} is swayed by your diplomatic tongue, and offers to join your "
@@ -3771,8 +3771,8 @@ msgstr "Förstora"
 msgid "Undo"
 msgstr "Ångra"
 
-msgid "Undo your last action. Press again to redo the action."
-msgstr "Ångra din senaste händelse. Klicka igen för att ångra dig igen."
+msgid "Undo your last action."
+msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr "Skapa en ny blank karta eller en slumpad karta med kartgeneratorn."
@@ -4220,6 +4220,14 @@ msgstr "Ny blank karta"
 
 msgid "hotkey|new random map"
 msgstr "Ny slumpad karta"
+
+#, fuzzy
+msgid "hotkey|undo last action"
+msgstr "Nästa stad"
+
+#, fuzzy
+msgid "hotkey|redo last action"
+msgstr "Rolands kampanj"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"
@@ -10781,3 +10789,6 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Undo your last action. Press again to redo the action."
+#~ msgstr "Ångra din senaste händelse. Klicka igen för att ångra dig igen."

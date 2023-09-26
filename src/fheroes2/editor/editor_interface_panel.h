@@ -30,12 +30,12 @@
 
 namespace Interface
 {
-    class Editor;
+    class EditorInterface;
 
     class EditorPanel
     {
     public:
-        explicit EditorPanel( Editor & interface_ );
+        explicit EditorPanel( EditorInterface & interface_ );
 
         ~EditorPanel() = default;
 
@@ -74,8 +74,6 @@ namespace Interface
         void _redraw() const;
 
     private:
-        Editor & _interface;
-
         static int _getGroundId( const uint8_t brushId );
 
         static const char * _getTerrainTypeName( const uint8_t brushId )
@@ -137,6 +135,8 @@ namespace Interface
             // The last element corresponds to the editor brush size count.
             BRUSH_SIZE_COUNT = 4U
         };
+
+        EditorInterface & _interface;
 
         fheroes2::Button _buttonMagnify;
         fheroes2::Button _buttonUndo;

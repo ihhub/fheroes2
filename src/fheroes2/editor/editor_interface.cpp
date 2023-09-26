@@ -35,6 +35,7 @@
 #include "game_hotkeys.h"
 #include "gamedefs.h"
 #include "heroes.h"
+#include "history_manager.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_base.h"
@@ -72,13 +73,7 @@ namespace
 
 namespace Interface
 {
-    Interface::Editor::Editor()
-        : _editorPanel( *this )
-    {
-        Editor::reset();
-    }
-
-    void Editor::reset()
+    void EditorInterface::reset()
     {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -102,9 +97,11 @@ namespace Interface
 
         _gameArea.SetCenterInPixels( prevCenter + fheroes2::Point( newRoi.x + newRoi.width / 2, newRoi.y + newRoi.height / 2 )
                                      - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
+
+        _historyManager.reset();
     }
 
-    void Editor::redraw( const uint32_t force )
+    void EditorInterface::redraw( const uint32_t force )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -153,13 +150,13 @@ namespace Interface
         _redraw = 0;
     }
 
-    Interface::Editor & Interface::Editor::Get()
+    Interface::EditorInterface & Interface::EditorInterface::Get()
     {
-        static Editor editorInterface;
+        static EditorInterface editorInterface;
         return editorInterface;
     }
 
-    fheroes2::GameMode Interface::Editor::startEdit()
+    fheroes2::GameMode Interface::EditorInterface::startEdit()
     {
         reset();
 
@@ -246,6 +243,15 @@ namespace Interface
                     fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. Open focused object dialog is not implemented yet.",
                                                        Dialog::OK );
                 }
+// TODO: remove this macro check once the Editor is ready for public.
+#if defined( WITH_DEBUG )
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_UNDO_LAST_ACTION ) ) {
+                    undoAction();
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_REDO_LAST_ACTION ) ) {
+                    redoAction();
+                }
+#endif
             }
 
             if ( res != fheroes2::GameMode::CANCEL ) {
@@ -350,6 +356,8 @@ namespace Interface
                 if ( isCursorOverGamearea && _editorPanel.getBrushSize() == 0 ) {
                     const int groundId = _editorPanel.selectedGroundType();
 
+                    const fheroes2::ActionCreator action( _historyManager );
+
                     Maps::setTerrainOnTiles( _selectedTile, _tileUnderCursor, groundId );
                 }
 
@@ -397,7 +405,7 @@ namespace Interface
         return res;
     }
 
-    fheroes2::GameMode Editor::eventLoadMap()
+    fheroes2::GameMode EditorInterface::eventLoadMap()
     {
         return Dialog::YES
                        == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to load a new map? (Any unsaved changes to the current map will be lost.)" ),
@@ -406,7 +414,7 @@ namespace Interface
                    : fheroes2::GameMode::CANCEL;
     }
 
-    fheroes2::GameMode Editor::eventNewMap()
+    fheroes2::GameMode EditorInterface::eventNewMap()
     {
         return Dialog::YES
                        == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to create a new map? (Any unsaved changes to the current map will be lost.)" ),
@@ -415,7 +423,7 @@ namespace Interface
                    : fheroes2::GameMode::CANCEL;
     }
 
-    fheroes2::GameMode Editor::eventFileDialog()
+    fheroes2::GameMode EditorInterface::eventFileDialog()
     {
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const int cpanbkg = isEvilInterface ? ICN::CPANBKGE : ICN::CPANBKG;
@@ -445,7 +453,7 @@ namespace Interface
 
         display.render( back.rect() );
 
-        fheroes2::GameMode result = fheroes2::GameMode::QUIT_GAME;
+        fheroes2::GameMode result = fheroes2::GameMode::CANCEL;
 
         LocalEvent & le = LocalEvent::Get();
 
@@ -487,7 +495,6 @@ namespace Interface
                 }
             }
             else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
-                result = fheroes2::GameMode::CANCEL;
                 break;
             }
             else if ( le.MousePressRight( buttonNew.area() ) ) {
@@ -514,13 +521,13 @@ namespace Interface
         return result;
     }
 
-    void Editor::eventViewWorld()
+    void EditorInterface::eventViewWorld()
     {
         // TODO: Make proper borders restoration for low height resolutions, like for hide interface mode.
         ViewWorld::ViewWorldWindow( 0, ViewWorldMode::ViewAll, *this );
     }
 
-    void Editor::mouseCursorAreaClickLeft( const int32_t tileIndex )
+    void EditorInterface::mouseCursorAreaClickLeft( const int32_t tileIndex )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
@@ -539,6 +546,8 @@ namespace Interface
             const int32_t brushSize = _editorPanel.getBrushSize();
             const int groundId = _editorPanel.selectedGroundType();
 
+            const fheroes2::ActionCreator action( _historyManager );
+
             if ( brushSize > 0 ) {
                 Maps::setTerrainOnTiles( tileIndex, getBrushAreaEndIndex( brushSize, tileIndex ), groundId );
             }
@@ -552,7 +561,7 @@ namespace Interface
         }
     }
 
-    void Editor::mouseCursorAreaPressRight( const int32_t tileIndex ) const
+    void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
@@ -585,5 +594,10 @@ namespace Interface
             Dialog::QuickInfo( tile );
             break;
         }
+    }
+
+    void EditorInterface::updateCursor( const int32_t /*tileIndex*/ )
+    {
+        Cursor::Get().SetThemes( Cursor::POINTER );
     }
 }

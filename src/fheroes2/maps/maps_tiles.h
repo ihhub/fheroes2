@@ -53,8 +53,14 @@ namespace Maps
     {
         TilesAddon() = default;
 
-        TilesAddon( const uint8_t layerType, const uint32_t uid, const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex, const bool hasObjectAnimation,
-                    const bool isMarkedAsRoad );
+        TilesAddon( const uint8_t layerType, const uint32_t uid, const MP2::ObjectIcnType objectIcnType, const uint8_t imageIndex )
+            : _uid( uid )
+            , _layerType( layerType )
+            , _objectIcnType( objectIcnType )
+            , _imageIndex( imageIndex )
+        {
+            // Do nothing.
+        }
 
         TilesAddon( const TilesAddon & ) = default;
 
@@ -62,26 +68,20 @@ namespace Maps
 
         TilesAddon & operator=( const TilesAddon & ) = delete;
 
+        bool operator==( const TilesAddon & addon ) const
+        {
+            return ( _uid == addon._uid ) && ( _layerType == addon._layerType ) && ( _objectIcnType == addon._objectIcnType ) && ( _imageIndex == addon._imageIndex );
+        }
+
         bool isUniq( const uint32_t id ) const
         {
             return _uid == id;
         }
 
-        bool isRoad() const;
-
-        bool hasSpriteAnimation() const
-        {
-            return _hasObjectAnimation;
-        }
-
-        std::string String( int level ) const;
-
         static bool isShadow( const TilesAddon & ta );
 
         static bool isResource( const TilesAddon & ta );
         static bool isArtifact( const TilesAddon & ta );
-
-        static bool PredicateSortRules1( const TilesAddon & ta1, const TilesAddon & ta2 );
 
         // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
         uint32_t _uid{ 0 };
@@ -94,12 +94,6 @@ namespace Maps
 
         // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
         uint8_t _imageIndex{ 255 };
-
-        // An indicator where the object has extra animation frames on Adventure Map.
-        bool _hasObjectAnimation{ false };
-
-        // An indicator that this tile is a road. Logically it shouldn't be set for addons.
-        bool _isMarkedAsRoad{ false };
     };
 
     using Addons = std::list<TilesAddon>;
@@ -108,6 +102,20 @@ namespace Maps
     {
     public:
         Tiles() = default;
+
+        bool operator==( const Tiles & tile ) const
+        {
+            return ( _addonBottomLayer == tile._addonBottomLayer ) && ( _addonTopLayer == tile._addonTopLayer ) && ( _index == tile._index )
+                   && ( _terrainImageIndex == tile._terrainImageIndex ) && ( _terrainFlags == tile._terrainFlags ) && ( _uid == tile._uid )
+                   && ( _layerType == tile._layerType ) && ( _objectIcnType == tile._objectIcnType ) && ( _imageIndex == tile._imageIndex )
+                   && ( _mainObjectType == tile._mainObjectType ) && ( _metadata == tile._metadata ) && ( _tilePassabilityDirections == tile._tilePassabilityDirections )
+                   && ( _isTileMarkedAsRoad == tile._isTileMarkedAsRoad ) && ( _occupantHeroId == tile._occupantHeroId );
+        }
+
+        bool operator!=( const Tiles & tile ) const
+        {
+            return !operator==( tile );
+        }
 
         void Init( int32_t index, const MP2::mp2tile_t & mp2 );
 
@@ -157,12 +165,12 @@ namespace Maps
 
         uint16_t GetPassable() const
         {
-            return tilePassable;
+            return _tilePassabilityDirections;
         }
 
         void resetPassability()
         {
-            tilePassable = DIRECTION_ALL;
+            _tilePassabilityDirections = DIRECTION_ALL;
         }
 
         int GetGround() const
@@ -180,15 +188,10 @@ namespace Maps
             return objectType == _mainObjectType;
         }
 
-        bool hasSpriteAnimation() const
-        {
-            return _hasObjectAnimation;
-        }
-
         // Checks whether it is possible to move into this tile from the specified direction
         bool isPassableFrom( const int direction ) const
         {
-            return ( direction & tilePassable ) != 0;
+            return ( direction & _tilePassabilityDirections ) != 0;
         }
 
         // Checks whether it is possible to move into this tile from the specified direction under the specified conditions
@@ -197,12 +200,12 @@ namespace Maps
         // Checks whether it is possible to exit this tile in the specified direction
         bool isPassableTo( const int direction ) const
         {
-            return ( direction & tilePassable ) != 0;
+            return ( direction & _tilePassabilityDirections ) != 0;
         }
 
         bool isRoad() const
         {
-            return tileIsRoad || _mainObjectType == MP2::OBJ_CASTLE;
+            return _isTileMarkedAsRoad || _mainObjectType == MP2::OBJ_CASTLE;
         }
 
         bool isStream() const;
@@ -213,11 +216,6 @@ namespace Maps
         TilesAddon * FindAddonLevel2( uint32_t uniq2 );
 
         void SetObject( const MP2::MapObjectType objectType );
-
-        void SetIndex( const uint32_t index )
-        {
-            _index = index;
-        }
 
         void resetBoatOwnerColor()
         {
@@ -272,7 +270,6 @@ namespace Maps
             return _fogDirection;
         }
 
-        void pushBottomLayerAddon( const MP2::mp2tile_t & mt );
         void pushBottomLayerAddon( const MP2::mp2addon_t & ma );
 
         void pushBottomLayerAddon( TilesAddon ta )
@@ -280,7 +277,6 @@ namespace Maps
             _addonBottomLayer.emplace_back( ta );
         }
 
-        void pushTopLayerAddon( const MP2::mp2tile_t & mt );
         void pushTopLayerAddon( const MP2::mp2addon_t & ma );
 
         const Addons & getBottomLayerAddons() const
@@ -397,10 +393,13 @@ namespace Maps
 
         static uint8_t convertOldMainObjectType( const uint8_t mainObjectType );
 
+        // The following members are used in the Editor and in the game.
+
         Addons _addonBottomLayer;
+
         Addons _addonTopLayer;
 
-        int32_t _index = 0;
+        int32_t _index{ 0 };
 
         uint16_t _terrainImageIndex{ 0 };
 
@@ -418,30 +417,30 @@ namespace Maps
         // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
         uint8_t _imageIndex{ 255 };
 
-        // An indicator where the object has extra animation frames on Adventure Map.
-        bool _hasObjectAnimation{ false };
-
-        // An indicator that this tile is a road. Logically it shouldn't be set for addons.
-        bool _isMarkedAsRoad{ false };
-
         MP2::MapObjectType _mainObjectType{ MP2::OBJ_NONE };
-        uint16_t tilePassable = DIRECTION_ALL;
-        uint8_t _fogColors = Color::ALL;
+
+        std::array<uint32_t, 3> _metadata{ 0 };
+
+        uint16_t _tilePassabilityDirections{ DIRECTION_ALL };
+
+        bool _isTileMarkedAsRoad{ false };
+
+        // This member holds Hero ID that is incremented by 1.
+        // TODO: once hero IDs are going to be updated change the logic for this member as well.
+        uint8_t _occupantHeroId{ 0 };
+
+        // The following members are only used in the game.
+
+        uint8_t _fogColors{ Color::ALL };
 
         // Fog direction to render fog in Game Area.
         uint16_t _fogDirection{ DIRECTION_ALL };
 
-        uint8_t heroID = 0;
-
-        std::array<uint32_t, 3> _metadata{ 0 };
-
-        bool tileIsRoad = false;
-
         // Heroes can only summon neutral empty boats or empty boats belonging to their kingdom.
-        uint8_t _boatOwnerColor = Color::NONE;
+        uint8_t _boatOwnerColor{ Color::NONE };
 
         // This field does not persist in savegame.
-        uint32_t _region = REGION_NODE_BLOCKED;
+        uint32_t _region{ REGION_NODE_BLOCKED };
     };
 
     StreamBase & operator<<( StreamBase & msg, const TilesAddon & ta );

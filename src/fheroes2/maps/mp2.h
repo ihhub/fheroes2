@@ -54,17 +54,25 @@ namespace MP2
         // Terrain image index used for terrain tile display on Adventure Map.
         uint16_t terrainImageIndex;
 
-        uint8_t objectName1; // Ground (bottom) level object type (first 2 bits) and object tile set (6 bits). Tile set refers to ICN ID.
-        uint8_t level1IcnImageIndex; // ICN image index (image index for corresponding ICN Id) for ground (bottom) object. 255 means it's an empty object.
+        // Ground (bottom) level object type (first 2 bits) and object tile set (6 bits). Tile set refers to ICN ID.
+        uint8_t objectName1;
+
+        // ICN image index (image index for corresponding ICN Id) for ground (bottom) object. 255 means it's an empty object.
+        uint8_t bottomIcnImageIndex;
 
         // First 2 bits correspond to object layer type used to identify the order of rendering on Adventure Map.
         // The third bit is unknown. TODO: find out what the third bit is used for.
         // The last 5 bits are used together with quantity 2 as the value for the object.
         uint8_t quantity1;
 
-        uint8_t quantity2; // Used as a part of quantity, field size is actually 13 bits. Has most significant bits
-        uint8_t objectName2; // Top level object type (first 2 bits) and object tile set (6 bits). Tile set refers to ICN ID.
-        uint8_t level2IcnImageIndex; // ICN image index (image index for corresponding ICN Id) for top level object. 255 means it's an empty object.
+        // Used as a part of quantity, field size is actually 13 bits. Has most significant bits.
+        uint8_t quantity2;
+
+        // Top level object type (first 2 bits) and object tile set (6 bits). Tile set refers to ICN ID.
+        uint8_t objectName2;
+
+        // ICN image index (image index for corresponding ICN Id) for top level object. 255 means it's an empty object.
+        uint8_t topIcnImageIndex;
 
         // First 2 bits responsible for terrain shape (0 - 3).
         // Third, forth and fifth bits belong to tiles of water touching land (beach). There are only two combinations of them (from lowest to highest):
@@ -78,7 +86,8 @@ namespace MP2
         // Refer to MapObjectType enumeration below.
         uint8_t mapObjectType;
 
-        uint16_t nextAddonIndex; // Next add-on index. Zero value means it's the last addon chunk.
+        // Next add-on index. Zero value means it's the last addon chunk.
+        uint16_t nextAddonIndex;
 
         // Ground (bottom) level object UID. An object can allocate more than 1 tile. Each tile could have multiple objects pieces.
         // UID is used to find all pieces/addons which belong to the same object.
@@ -94,13 +103,20 @@ namespace MP2
     // Addon structure from the original map format.
     struct mp2addon_t
     {
-        uint16_t nextAddonIndex; // Next add-on index. Zero value means it's the last addon chunk.
+        // Next add-on index. Zero value means it's the last addon chunk.
+        uint16_t nextAddonIndex;
 
         uint8_t objectNameN1; // level 1.N. Last bit indicates if object is animated. Second-last controls overlay
-        uint8_t indexNameN1; // level 1.N or 0xFF
+
+        // ICN image index (image index for corresponding ICN Id) for ground (bottom) object. 255 means it's an empty object.
+        uint8_t bottomIcnImageIndex;
+
         uint8_t quantityN; // Bitfield containing metadata
+
         uint8_t objectNameN2; // level 2.N
-        uint8_t indexNameN2; // level 1.N or 0xFF
+
+        // ICN image index (image index for corresponding ICN Id) for top level object. 255 means it's an empty object.
+        uint8_t topIcnImageIndex;
 
         // Ground (bottom) level object UID. An object can allocate more than 1 tile. Each tile could have multiple objects pieces.
         // UID is used to find all pieces/addons which belong to the same object.

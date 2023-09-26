@@ -42,7 +42,7 @@
 
 namespace Interface
 {
-    EditorPanel::EditorPanel( Editor & interface_ )
+    EditorPanel::EditorPanel( EditorInterface & interface_ )
         : _interface( interface_ )
     {
         int32_t icnIndex = 0;
@@ -439,18 +439,19 @@ namespace Interface
         if ( le.MouseClickLeft( _rectMagnify ) ) {
             _interface.eventViewWorld();
         }
-        else if ( le.MouseClickLeft( _rectUndo ) ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. This function is not available yet.", Dialog::OK );
+        else if ( _buttonUndo.isEnabled() && le.MouseClickLeft( _rectUndo ) ) {
+            _interface.undoAction();
+            return fheroes2::GameMode::CANCEL;
         }
         else if ( le.MouseClickLeft( _rectNew ) ) {
-            res = Editor::eventNewMap();
+            res = EditorInterface::eventNewMap();
         }
         else if ( le.MouseClickLeft( _rectSpecs ) ) {
             // TODO: Make the scenario info editor.
             Dialog::GameInfo();
         }
         else if ( le.MouseClickLeft( _rectFile ) ) {
-            res = Interface::Editor::eventFileDialog();
+            res = Interface::EditorInterface::eventFileDialog();
         }
         else if ( le.MouseClickLeft( _rectSystem ) ) {
             // Replace this with Editor options dialog.
@@ -478,7 +479,7 @@ namespace Interface
             fheroes2::showStandardTextMessage( _( "Magnify" ), _( "Change between zoom and normal view." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _rectUndo ) ) {
-            fheroes2::showStandardTextMessage( _( "Undo" ), _( "Undo your last action. Press again to redo the action." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Undo" ), _( "Undo your last action." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _rectNew ) ) {
             fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map either from scratch or using the random map generator." ), Dialog::ZERO );

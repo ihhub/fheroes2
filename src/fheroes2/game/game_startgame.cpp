@@ -617,6 +617,11 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
     return Cursor::POINTER;
 }
 
+void Interface::AdventureMap::updateCursor( const int32_t tileIndex )
+{
+    Cursor::Get().SetThemes( GetCursorTileIndex( tileIndex ) );
+}
+
 int Interface::AdventureMap::GetCursorTileIndex( int32_t dstIndex )
 {
     if ( !Maps::isValidAbsIndex( dstIndex ) ) {
