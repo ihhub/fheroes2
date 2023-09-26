@@ -24,7 +24,6 @@
 #include <cstdint>
 #include <vector>
 
-#include "maps_tiles.h"
 #include "world.h"
 #include "world_object_uid.h"
 
@@ -106,6 +105,18 @@ namespace
             return ( !_before.empty() );
         }
 
+        Maps::Tiles getTileBeforeAction( const int32_t tileIndex )
+        {
+            if ( !Maps::isValidAbsIndex( tileIndex ) ) {
+                // You are trying to get a non-existent tile.
+                assert( 0 );
+
+                return {};
+            }
+
+            return _before[tileIndex];
+        }
+
     private:
         std::vector<Maps::Tiles> _before;
         std::vector<Maps::Tiles> _after;
@@ -141,5 +152,10 @@ namespace fheroes2
             // If an exception happens here then something is very wrong with the code.
             assert( 0 );
         }
+    }
+
+    Maps::Tiles ActionCreator::getTileBeforeAction( const int32_t tileIndex ) const
+    {
+        return dynamic_cast<MapAction *>( _action.get() )->getTileBeforeAction( tileIndex );
     }
 }

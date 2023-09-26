@@ -24,6 +24,7 @@
 #include <cassert>
 #include <ostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -573,6 +574,15 @@ namespace Interface
 
             if ( Maps::updateRoadOnTile( tile, true ) ) {
                 _redraw |= mapUpdateFlags;
+            }
+            else {
+                // Road was not set on this tile, we revert all changes on it.
+
+                // Copy operator is disabled for Maps::Tiles class.
+                // This is done to avoid any tile copy made by a developer during the gameplay like map initialization.
+                // Therefore, such a trick is required to assign a new value.
+                Maps::Tiles temp{ action.getTileBeforeAction( tile.GetIndex() ) };
+                tile = std::move( temp );
             }
         }
         else if ( _editorPanel.isEraseMode() ) {
