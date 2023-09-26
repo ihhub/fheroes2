@@ -486,9 +486,12 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
 
     SetObject( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
 
-    if ( !MP2::doesObjectContainMetadata( _mainObjectType ) ) {
-        // No metadata should exist for this object!
-        assert( _metadata[0] == 0 );
+    if ( !MP2::doesObjectContainMetadata( _mainObjectType ) && ( _metadata[0] != 0 ) ) {
+        // No metadata should exist for non-action objects.
+        // Some maps have invalid format. Even if this metadata is set here, it will later be reset during world map loading.
+        DEBUG_LOG( DBG_GAME, DBG_WARN,
+                       "Metadata present for non action object " << MP2::StringObject( _mainObjectType ) << " at tile " << _index << ". Metadata value "
+                       << _metadata[0] )
     }
 
     _addonBottomLayer.clear();
