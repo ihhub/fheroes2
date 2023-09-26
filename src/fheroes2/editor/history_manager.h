@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <cstdint>
 #include <deque>
 #include <memory>
 #include <utility>
