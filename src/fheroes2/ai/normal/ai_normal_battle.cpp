@@ -151,6 +151,7 @@ namespace AI
                 targetCell = moveIndex;
             }
         }
+
         return targetCell;
     }
 
@@ -917,6 +918,8 @@ namespace AI
     {
         BattleTargetPair target;
 
+        const Castle * castle = Arena::GetCastle();
+        const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
         // Current unit can be under the influence of the Hypnotize spell
         const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), &currentUnit );
 
@@ -965,7 +968,7 @@ namespace AI
                         DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Arena::GetPath() returned an empty path to cell " << move.first << " for " << currentUnit.GetName() << "!" )
                     }
                     // Unit rushes through the moat, step into the moat to get more freedom of action on the next turn
-                    else if ( Board::isMoatIndex( path.back(), currentUnit ) ) {
+                    else if ( isMoatBuilt && Board::isMoatIndex( path.back(), currentUnit ) ) {
                         target.cell = path.back();
 
                         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " stopping in the moat at " << target.cell )
