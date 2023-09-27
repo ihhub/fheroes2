@@ -995,8 +995,9 @@ namespace
         const uint8_t imageIndex = getRoadImageForTile( tile, getRoadDirecton( tile ) | ( forceRoadOnTile ? Direction::CENTER : Direction::UNKNOWN ) );
 
         if ( imageIndex == 255U ) {
-            if ( !tile.isRoad() ) {
-                // After update this tile should not contain a road sprite. We remove it.
+            // After the check this tile should not contain a road sprite.
+            if ( !forceRoadOnTile && !tile.isRoad() ) {
+                // We remove any existing road sprite if this tile does not contain (or was not forced to contain) the main road sprite.
                 tile.removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
             }
 

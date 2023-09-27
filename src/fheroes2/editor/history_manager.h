@@ -28,8 +28,6 @@
 #include <memory>
 #include <utility>
 
-#include "maps_tiles.h"
-
 namespace fheroes2
 {
     class HistoryManager;
@@ -55,8 +53,6 @@ namespace fheroes2
         ActionCreator( const ActionCreator & ) = delete;
 
         ActionCreator & operator=( const ActionCreator & ) = delete;
-
-        Maps::Tiles getTileBeforeAction( const int32_t tileIndex ) const;
 
     private:
         HistoryManager & _manager;
