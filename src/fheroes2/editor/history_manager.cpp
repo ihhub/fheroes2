@@ -24,7 +24,6 @@
 #include <cstdint>
 #include <vector>
 
-#include "maps.h"
 #include "maps_tiles.h"
 #include "world.h"
 #include "world_object_uid.h"
