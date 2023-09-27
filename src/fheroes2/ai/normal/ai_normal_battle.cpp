@@ -126,33 +126,44 @@ namespace AI
         return bestOutcome;
     }
 
-    int32_t FindNextTurnAttackMove( const Indexes & moves, const Unit & currentUnit, const Battle::Units & enemies )
+    int32_t findOptimalPositionForSubsequentAttack( const Indexes & path, const Unit & currentUnit, const Battle::Units & enemies )
     {
         double lowestThreat = 0.0;
-        int32_t targetCell = -1;
+        int32_t targetIdx = -1;
 
-        for ( const int moveIndex : moves ) {
-            double cellThreatLevel = 0.0;
+        for ( const int stepIdx : path ) {
+            const Position pos = Position::GetReachable( currentUnit, stepIdx );
+            // If this step of the path is not reachable, then the following steps are also not reachable, there is no point in further checks
+            if ( pos.GetHead() == nullptr ) {
+                break;
+            }
+
+            double posThreatLevel = 0.0;
 
             for ( const Unit * enemy : enemies ) {
+                assert( enemy != nullptr );
+
                 // Archers and Flyers are always threatening, skip
                 if ( enemy->isFlying() || ( enemy->isArchers() && !enemy->isHandFighting() ) ) {
                     continue;
                 }
 
-                if ( Board::GetDistance( moveIndex, enemy->GetHeadIndex() ) <= enemy->GetMoveRange() + 1 ) {
-                    cellThreatLevel += enemy->GetScoreQuality( currentUnit );
+                // Also consider the next turn, even if the enemy unit has already acted during the current turn
+                const uint32_t enemyAttackRange = enemy->GetSpeed( false, true ) + 1;
+
+                if ( Board::GetDistance( pos, enemy->GetPosition() ) <= enemyAttackRange ) {
+                    posThreatLevel += enemy->GetScoreQuality( currentUnit );
                 }
             }
 
-            // Also allow to move up closer if there's still no threat
-            if ( targetCell == -1 || cellThreatLevel < lowestThreat || std::fabs( cellThreatLevel ) < 0.001 ) {
-                lowestThreat = cellThreatLevel;
-                targetCell = moveIndex;
+            // We need to get as close to the target as possible (taking into account the threat level)
+            if ( targetIdx == -1 || posThreatLevel < lowestThreat || std::fabs( posThreatLevel - lowestThreat ) < 0.001 ) {
+                lowestThreat = posThreatLevel;
+                targetIdx = stepIdx;
             }
         }
 
-        return targetCell;
+        return targetIdx;
     }
 
     std::pair<int32_t, uint32_t> findNearestCellNextToUnit( Arena & arena, const Unit & currentUnit, const Unit & target )
@@ -974,7 +985,7 @@ namespace AI
                         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " stopping in the moat at " << target.cell )
                     }
                     else {
-                        target.cell = FindNextTurnAttackMove( path, currentUnit, enemies );
+                        target.cell = findOptimalPositionForSubsequentAttack( path, currentUnit, enemies );
 
                         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " stopping at " << target.cell )
                     }
