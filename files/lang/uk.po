@@ -1236,7 +1236,6 @@ msgstr ""
 "озброєні, та шукають способу вигнати вас з їх острова. Уникайте їх, та "
 "захопіть Місто Драконів щоб перемогти."
 
-#, fuzzy
 msgid ""
 "Your orders are to conquer the country lords that have sworn to serve "
 "Roland. All of the enemy castles are unified against you. Since you start "
