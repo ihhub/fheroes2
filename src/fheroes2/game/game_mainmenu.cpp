@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
@@ -99,8 +100,13 @@ void Game::mainGameLoop( bool isFirstGameRun )
 {
     fheroes2::GameMode result = fheroes2::GameMode::MAIN_MENU;
 
-    while ( result != fheroes2::GameMode::QUIT_GAME ) {
+    bool exit = false;
+
+    while ( !exit ) {
         switch ( result ) {
+        case fheroes2::GameMode::QUIT_GAME:
+            exit = true;
+            break;
         case fheroes2::GameMode::MAIN_MENU:
             result = Game::MainMenu( isFirstGameRun );
             isFirstGameRun = false;
@@ -187,6 +193,10 @@ void Game::mainGameLoop( bool isFirstGameRun )
 #endif
 
         default:
+            // If this assertion blows up then you are entering an infinite loop!
+            // Add the logic for the newly added entry.
+            assert( 0 );
+            exit = true;
             break;
         }
     }

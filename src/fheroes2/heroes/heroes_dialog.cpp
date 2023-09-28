@@ -116,15 +116,15 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // morale
     dst_pt.x = cur_pt.x + 514;
-    dst_pt.y = cur_pt.y + 35;
+    dst_pt.y = cur_pt.y + 34;
 
     MoraleIndicator moraleIndicator( this );
     moraleIndicator.SetPos( dst_pt );
     moraleIndicator.Redraw();
 
     // luck
-    dst_pt.x = cur_pt.x + 552;
-    dst_pt.y = cur_pt.y + 35;
+    dst_pt.x = cur_pt.x + 550;
+    dst_pt.y = cur_pt.y + 34;
 
     LuckIndicator luckIndicator( this );
     luckIndicator.SetPos( dst_pt );

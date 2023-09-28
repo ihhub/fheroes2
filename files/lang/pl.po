@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-17 07:18+0000\n"
+"POT-Creation-Date: 2023-09-24 16:12+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -2758,15 +2758,15 @@ msgstr "Zwolnij"
 msgid "Dismiss this army."
 msgstr "Zwolnij ten oddział."
 
-msgid "Followers"
-msgstr "Sprzymierzeńcy"
-
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
 msgstr ""
 "Chcą się do ciebie przyłączyć %{monster}, pragnąc zyskać chwałę.\n"
 "Zgadzasz się?"
+
+msgid "Followers"
+msgstr "Sprzymierzeńcy"
 
 msgid ""
 "The %{monster} is swayed by your diplomatic tongue, and offers to join your "
@@ -3767,7 +3767,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-msgid "Undo your last action. Press again to redo the action."
+msgid "Undo your last action."
 msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
@@ -4220,6 +4220,14 @@ msgstr "nowa mapa od początku"
 
 msgid "hotkey|new random map"
 msgstr "nowa losowa mapa"
+
+#, fuzzy
+msgid "hotkey|undo last action"
+msgstr "domyślna akcja"
+
+#, fuzzy
+msgid "hotkey|redo last action"
+msgstr "domyślna akcja"
 
 msgid "hotkey|roland campaign"
 msgstr "kampania Rolanda"

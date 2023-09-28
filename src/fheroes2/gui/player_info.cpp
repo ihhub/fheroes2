@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "player_info.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
@@ -31,12 +33,10 @@
 #include "image.h"
 #include "localevent.h"
 #include "maps_fileinfo.h"
-#include "player_info.h"
 #include "players.h"
 #include "race.h"
 #include "screen.h"
 #include "settings.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
@@ -291,11 +291,11 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
         }
 
         // draw player name
-        Text name( info.player->GetName(), Font::SMALL );
-
+        fheroes2::Text name( info.player->GetName(), fheroes2::FontType::smallWhite() );
         const int32_t maximumTextWidth = playerIcon.width() - 4;
-        const int32_t fitWidth = Text::getFitWidth( info.player->GetName(), Font::SMALL, maximumTextWidth );
-        name.Blit( info.playerTypeRoi.x + 2 + ( maximumTextWidth - fitWidth ) / 2, info.playerTypeRoi.y + info.playerTypeRoi.height - 1, maximumTextWidth );
+        name.fitToOneRow( maximumTextWidth );
+
+        name.draw( info.playerTypeRoi.x + 2 + ( maximumTextWidth - name.width() ) / 2, info.playerTypeRoi.y + info.playerTypeRoi.height + 1, display );
 
         // 2. redraw class
         const bool isActivePlayer = displayInGameInfo ? info.player->isPlay() : conf.AllowChangeRace( info.player->GetColor() );
