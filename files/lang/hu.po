@@ -92,7 +92,7 @@ msgid "UPGRADE"
 msgstr "FEJLESZT"
 
 msgid "RESTART"
-msgstr "ÚJRAINDÍT"
+msgstr "ÚJRA"
 
 msgid "HEROES"
 msgstr "HŐSÖK"
@@ -2468,22 +2468,20 @@ msgid "The spells the hero can learn have been added to their book."
 msgstr "A hős által megtanulható varázslatok beíródtak a varázskönyvébe."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
-msgstr ""
+msgstr "A nagylelkű borravalód hatására a csapos a következő szóbeszédet osztja meg "
+"veled:"
 
 msgid "Recruit Hero"
 msgstr "Hős toborzása"
 
-#, fuzzy
 msgid "%{name} is a level %{value} %{race} "
-msgstr "%{name} %{value} szintű %{race}"
+msgstr "%{name} %{value}. szintű %{race}"
 
-#, fuzzy
 msgid "with %{count} artifacts."
-msgstr " %{count} varázstárggyal"
+msgstr "%{count} varázstárggyal"
 
-#, fuzzy
 msgid "with 1 artifact."
-msgstr " egy varázstárggyal"
+msgstr "egy varázstárggyal"
 
 #, fuzzy
 msgid "without artifacts."
@@ -2518,33 +2516,29 @@ msgstr "A helyőrség csataalakzata legyen 'Laza'."
 msgid "Set garrison combat formation to 'Grouped'"
 msgstr "A helyőrség csataalakzata legyen 'Szoros'."
 
-#, fuzzy
 msgid "Exit Castle Options"
-msgstr "Kastély beállítások"
+msgstr "Kilépés a vár beállításokból"
 
 msgid "Castle Options"
-msgstr "Kastély beállítások"
+msgstr "Vár beállítások"
 
 msgid "Not enough resources to recruit creatures."
-msgstr ""
+msgstr "Nincs elég erőforrás a lények toborzásához."
 
 msgid "You are unable to recruit at this time, your ranks are full."
 msgstr "Most nem tudsz toborozni, a csapatod tele van."
 
 msgid "No creatures available for purchase."
-msgstr ""
+msgstr "Nincsenek megvásárolható lények."
 
-#, fuzzy
 msgid "Recruit Creatures"
-msgstr "Hős toborzása"
+msgstr "Lények toborzása"
 
-#, fuzzy
 msgid "Max"
-msgstr "Maximus"
+msgstr "Max"
 
-#, fuzzy
 msgid "Hire all creatures in the town."
-msgstr "Összes hős és város elvesztése"
+msgstr "Összes lény toborzása."
 
 msgid "Available"
 msgstr "Rendelkezésre áll"
@@ -2556,7 +2550,7 @@ msgid "Damage"
 msgstr "Sebzés"
 
 msgid "HP"
-msgstr "ÉP"
+msgstr "Életerő"
 
 msgid "Growth"
 msgstr "Szaporulat"
@@ -2566,20 +2560,19 @@ msgstr "hét"
 
 #, fuzzy
 msgid "View World"
-msgstr "Minden mutatása"
+msgstr "Világ mutatása"
 
 msgid "View the entire world."
 msgstr "Az egész világ mutatása."
 
 msgid "Puzzle"
-msgstr ""
+msgstr "Rejtvény"
 
 msgid "View the obelisk puzzle."
-msgstr "Az obeliszk puzzle mutatása."
+msgstr "Az obeliszk rejtvény mutatása"
 
-#, fuzzy
 msgid "Scenario Information"
-msgstr "Laza felállás"
+msgstr "Küldetés információ"
 
 msgid "View information on the scenario you are currently playing."
 msgstr "Nézd meg az éppen játszott küldetés információit."
@@ -2588,7 +2581,7 @@ msgid "Dig for the Ultimate Artifact."
 msgstr "A Szent Varázstárgy kiásása."
 
 msgid "Digging"
-msgstr ""
+msgstr "Ásás"
 
 msgid "Exit this menu without doing anything."
 msgstr "Kilépés ebből a menüből, bármilyen cselekvés nélkül."
@@ -2601,6 +2594,10 @@ msgid ""
 "them, to the wild cheers of the crowd. Impressed by your skill, the aged "
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
+"Belépve a küzdőtérre egy csomó megvadult oroszlánnal találod szembe magad, "
+"melyeket könnyedén leterítesz a tömeg éljenzése közepette. Látva a "
+"tehetségedet az idős gladiátormester felajánlja, hogy kiképzést ad neked egy "
+"választott képességből."
 
 msgid "Attack Skill"
 msgstr "Támadóerő"
@@ -2615,13 +2612,13 @@ msgid "Shots Left"
 msgstr "Maradék lövések"
 
 msgid "Hit Points"
-msgstr "Életerő-pontok"
+msgstr "Életerő"
 
 msgid "Hit Points Left"
-msgstr "Maradék életerő-pontok"
+msgstr "Maradék életerő"
 
 msgid "You can't afford to upgrade your troops!"
-msgstr ""
+msgstr "Nem engedheted meg magadnak a csapatok fejlesztését!"
 
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
@@ -2634,37 +2631,35 @@ msgid "Are you sure you want to dismiss this army?"
 msgstr "Biztos vagy benne hogy feloszlatod ezt a sereget?"
 
 msgid "Upgrade"
-msgstr ""
+msgstr "Fejlesztés"
 
 msgid "Upgrade your troops."
-msgstr ""
+msgstr "Fejleszti a csapataidat."
 
 msgid "Dismiss"
-msgstr ""
+msgstr "Elbocsátás"
 
 msgid "Dismiss this army."
-msgstr ""
+msgstr "Sereg feloszlatása."
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
 msgstr ""
-"Egy  %{monster} csoportja a nagyobb dicsőség reményében csatlakozna hozzád.\n"
+"Egy %{monster} csoport a nagyobb dicsőség reményében csatlakozna hozzád.\n"
 "Elfogadod őket?"
 
-#, fuzzy
 msgid "Followers"
-msgstr "Virágok"
+msgstr "Követők"
 
-#, fuzzy
 msgid ""
 "The %{monster} is swayed by your diplomatic tongue, and offers to join your "
 "army for the sum of %{gold} gold.\n"
 "Do you accept?"
 msgstr ""
-"%{offer} %{monster} mindegyike csatlakozna hozzád összesen %{gold} "
-"aranyért.\n"
-"Elfogadod az ajánlatukat?"
+"A %{monster} lények a diplomatikus modorod hatására hajlanak rá, hogy "
+"csatlakozzanak hozzád %{gold} arany ellenében.\n"
+"Elfogadod?"
 
 msgid ""
 "The creatures are swayed by your diplomatic\n"
@@ -2681,7 +2676,7 @@ msgid ""
 "Do you accept?"
 msgstr ""
 "A %{total} seregből %{offer} %{monster} csatlakozna hozzád összesen %{gold} "
-"aranyért. A többiek pedig elhagynának.\n"
+"aranyért. A többiek pedig szabadon távoznának.\n"
 "Elfogadod az ajánlatot?"
 
 msgid ""
@@ -2693,26 +2688,23 @@ msgstr ""
 "aranyért.\n"
 "Elfogadod az ajánlatukat?"
 
-#, fuzzy
 msgid "(Rate: %{percent})"
-msgstr "(elérhető: %{count})"
+msgstr "(arány: %{count})"
 
 msgid "off"
 msgstr "ki"
 
-#, fuzzy
 msgid "Music"
-msgstr "zene"
+msgstr "Zene"
 
 msgid "Effects"
-msgstr ""
+msgstr "Effektusok"
 
 msgid "MIDI"
-msgstr ""
+msgstr "MIDI"
 
-#, fuzzy
 msgid "MIDI Expansion"
-msgstr "Kúria"
+msgstr ""
 
 msgid "External"
 msgstr ""
