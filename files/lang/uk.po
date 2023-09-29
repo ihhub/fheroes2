@@ -1241,7 +1241,7 @@ msgid ""
 "Roland. All of the enemy castles are unified against you. Since you start "
 "without a castle, you must hurry to capture one before the end of the week. "
 "Capture all enemy castles for victory."
-msgstr "Вам наказано захопити "
+msgstr ""
 
 msgid ""
 "Find the Crown before Roland's heroes find it. Archibald will need the Crown "
