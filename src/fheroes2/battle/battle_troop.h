@@ -162,7 +162,6 @@ namespace Battle
         int GetControl() const override;
         int GetCurrentControl() const;
 
-        uint32_t GetMoveRange() const;
         uint32_t GetSpeed( const bool skipStandingCheck, const bool skipMovedCheck ) const;
 
         uint32_t GetDamage( const Unit & ) const;

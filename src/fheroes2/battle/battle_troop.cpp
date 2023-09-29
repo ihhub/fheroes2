@@ -470,11 +470,6 @@ uint32_t Battle::Unit::GetSpeed( const bool skipStandingCheck, const bool skipMo
     return speed;
 }
 
-uint32_t Battle::Unit::GetMoveRange() const
-{
-    return isFlying() ? ARENASIZE : GetSpeed( false, false );
-}
-
 uint32_t Battle::Unit::EstimateRetaliatoryDamage( const uint32_t damageTaken ) const
 {
     // The entire unit is destroyed, no retaliation
