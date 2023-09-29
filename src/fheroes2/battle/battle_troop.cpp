@@ -470,11 +470,6 @@ uint32_t Battle::Unit::GetSpeed( const bool skipStandingCheck, const bool skipMo
     return speed;
 }
 
-uint32_t Battle::Unit::GetMoveRange() const
-{
-    return isFlying() ? ARENASIZE : GetSpeed( false, false );
-}
-
 uint32_t Battle::Unit::EstimateRetaliatoryDamage( const uint32_t damageTaken ) const
 {
     // The entire unit is destroyed, no retaliation
@@ -761,6 +756,11 @@ uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allow_overfl
         dead -= ( resurrect < dead ? resurrect : dead );
 
     return resurrect;
+}
+
+bool Battle::Unit::canShoot() const
+{
+    return isArchers() && !Modes( SP_BLIND | IS_PARALYZE_MAGIC ) && !isHandFighting();
 }
 
 uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected )

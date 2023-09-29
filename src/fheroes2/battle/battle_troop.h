@@ -162,7 +162,6 @@ namespace Battle
         int GetControl() const override;
         int GetCurrentControl() const;
 
-        uint32_t GetMoveRange() const;
         uint32_t GetSpeed( const bool skipStandingCheck, const bool skipMovedCheck ) const;
 
         uint32_t GetDamage( const Unit & ) const;
@@ -179,6 +178,8 @@ namespace Battle
         {
             return shots;
         }
+
+        bool canShoot() const;
 
         uint32_t ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected );
 

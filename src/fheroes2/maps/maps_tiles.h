@@ -253,10 +253,7 @@ namespace Maps
 
         void pushBottomLayerAddon( const MP2::mp2addon_t & ma );
 
-        void pushBottomLayerAddon( TilesAddon ta )
-        {
-            _addonBottomLayer.emplace_back( ta );
-        }
+        void pushBottomLayerAddon( TilesAddon ta );
 
         void pushTopLayerAddon( const MP2::mp2addon_t & ma );
 
@@ -277,6 +274,8 @@ namespace Maps
 
         void AddonsSort();
         void Remove( uint32_t uniqID );
+        // Use to remove object by ICN type only from this tile. Should be used only for 1 tile size objects and roads or streams.
+        void removeObjects( const MP2::ObjectIcnType objectIcnType );
 
         void updateObjectImageIndex( const uint32_t objectUid, const MP2::ObjectIcnType objectIcnType, const int imageIndexOffset );
         void replaceObject( const uint32_t objectUid, const MP2::ObjectIcnType originalObjectIcnType, const MP2::ObjectIcnType newObjectIcnType,
@@ -314,11 +313,7 @@ namespace Maps
             return _terrainImageIndex;
         }
 
-        void setTerrain( const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip )
-        {
-            _terrainImageIndex = terrainImageIndex;
-            _terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
-        }
+        void setTerrain( const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip );
 
         Heroes * getHero() const;
         void setHero( Heroes * hero );
@@ -350,7 +345,8 @@ namespace Maps
 
         void swap( TilesAddon & addon ) noexcept;
 
-        static void updateTileById( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
+        // Update tile or bottom layer object image index.
+        static void updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
 
         // The old code was using weird quantity based values which were very hard to understand.
         // Since we must have backwards compatibility we need to do the conversion.
@@ -365,6 +361,8 @@ namespace Maps
 
         // Set or remove a flag which belongs to UID of the object.
         void updateFlag( const int color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer );
+
+        void _updateRoadFlag();
 
         bool isTallObject() const;
 

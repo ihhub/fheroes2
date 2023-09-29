@@ -204,6 +204,14 @@ msgid ""
 "S\n"
 "S"
 msgstr ""
+"E\n"
+"L\n"
+"B\n"
+"O\n"
+"C\n"
+"S\n"
+"Á\n"
+"T"
 
 msgid ""
 "E\n"
@@ -211,6 +219,11 @@ msgid ""
 "I\n"
 "T"
 msgstr ""
+"K\n"
+"I\n"
+"L\n"
+"É\n"
+"P"
 
 msgid ""
 "C\n"
@@ -463,7 +476,7 @@ msgid "Set the speed of combat actions and animations."
 msgstr "A harci cselekmények és animációk gyorsaságának beállítása."
 
 msgid "Toggle to display the turn order during the battle."
-msgstr ""
+msgstr "Csatában a támadási sorrend kijelzésének váltása."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -1024,29 +1037,44 @@ msgid ""
 "will spend most of their time fighting with one another. Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
+"Rolandnak szüksége van rád, hogy legyőzze a vára körüli uraságokat és "
+"megkezdje a bátyja elleni felkelést. Az uraságok nem szövetségesei "
+"egymásnak, idejüket az egymással való csatározásokkal töltik. Csak akkor "
+"tiéd a győzelem, ha elesett minden váruk és hősük."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
 "They are wealthy and powerful, so be prepared for a tough fight. Capture all "
 "enemy castles to win."
 msgstr ""
+"Helyi nagyurak megtagadták a hűségesküt Rolandnak, így erővel kell őket "
+"igába hajtani. Gazdagok és erősek, így kemény harcra kell felkészüljél. A "
+"győzelemhez minden ellenséges várat el kell foglalnod."
 
 msgid ""
 "Your task is to defend the Dwarves against Archibald's forces. Capture all "
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
+"A feladatod megvédeni a törpöket Archibald csapataitól. Minden ellenséges "
+"várat el kell foglalnod, de közben nem szabad elvesztened minden törp várat, "
+"különben veszítesz."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
+"Négy, egymással szövetséges ellenféllel kell szembenézned egy nyílt "
+"csatában. A tét: erőforrások és kincsek. Foglalj el minden ellenséges várat "
+"a győzelemhez."
 
 msgid ""
 "Your enemies are allied against you and start close by, so be ready to come "
 "out fighting. You will need to own all four castles in this small valley to "
 "win."
 msgstr ""
+"Ellenségeid szövetkeztek ellened és közelednek, így készen kell állnod a "
+"harcra. A kis völgy mind a négy várára szükséged lesz a győzelemhez."
 
 msgid ""
 "The Sorceress' guild of Noraston has requested Roland's aid against an "
@@ -1054,6 +1082,10 @@ msgid ""
 "don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy "
 "castle on an island in the ocean.)"
 msgstr ""
+"Noraston boszorkányszövetsége a Roland segítségét kérte Archibald támadásai "
+"ellen. Foglalj el minden ellenséges várat és közben ne veszítsd el "
+"Norastont, különben elbukod a küldetést. (Tipp: van egy vár egy óceáni "
+"szigeten is)"
 
 msgid ""
 "Gather as large an army as possible and capture the enemy castle within 8 "
@@ -1061,11 +1093,16 @@ msgid ""
 "to the enemy castle. Any troops you have in your army at the end of this "
 "scenario will be with you in the final battle."
 msgstr ""
+"Gyűjts akkora sereget, amennyit csak lehet és foglald el az ellenséges várat "
+"8 héten belül. Csak egy ellenfeled lesz, de hosszú út vezet a váráig. A "
+"küldetés végén megmaradt lényeidet tovább viheted a végső ütközetbe."
 
 msgid ""
 "Find the Crown before Archibald's heroes find it. Roland will need the Crown "
 "for the final battle against Archibald."
 msgstr ""
+"Találd meg a Koronát, mielőtt Archibald hőseik teszik meg ugyanezt. "
+"Rolandnak szüksége lesz a Koronára a végső összecsapásban Archibald ellen."
 
 msgid ""
 "Three allied enemies stand before you and victory, including Lord Corlagon. "
@@ -1073,17 +1110,26 @@ msgid ""
 "enemy. Remember that capturing Lord Corlagon will ensure that he will not "
 "fight against you in the final scenario."
 msgstr ""
+"Három, egymással szövetséges ellenfél - köztük Lord Corlagon - áll közted és "
+"a győzelem között. Roland vára észak-nyugaton van, melyet nem veszíthetsz "
+"el. Ne feledd, Lord Corlagon elfogása biztosítja, hogy ő ne harcoljon "
+"ellened a végső ütközetben."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Archibald to end the war!"
 msgstr ""
+"Ez a végső ütközet. Te és ellenfeleid is állig felfegyverkezve várják a "
+"csatát. Fogd el Archibaldot és megnyered a háborút!"
 
 msgid ""
 "Switching sides leaves you with three castles against the enemy's one. This "
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
+"Miután átálltál a másik oldalra, három kastélyod maradt az ellenség "
+"egyetlenével szemben. Ez a csata lesz a legkönnyebb, mellyel a háború "
+"további részében szembesülsz, te hitszegő."
 
 msgid "Barbarian Wars"
 msgstr "Barbár háborúk"
@@ -1097,23 +1143,20 @@ msgstr "Nekromanták"
 msgid "Slay the Dwarves"
 msgstr "Öld meg a törpöket"
 
-#, fuzzy
 msgid "Country Lords"
-msgstr "Ogre Nagyúr"
+msgstr "Vidéki nagyurak"
 
-#, fuzzy
 msgid "Dragon Master"
-msgstr "\"Sárkánymester\""
+msgstr "Sárkánymester"
 
 msgid "Rebellion"
-msgstr ""
+msgstr "Lázadás"
 
 msgid "Apocalypse"
-msgstr ""
+msgstr "Apokalipszis"
 
-#, fuzzy
 msgid "Greater Glory"
-msgstr "Nemes Druida"
+msgstr "Nagyobb dicsőség"
 
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region. They "
@@ -1174,30 +1217,28 @@ msgid ""
 msgstr ""
 
 msgid "Arrow's Flight"
-msgstr ""
+msgstr "A nyíl röpte"
 
 msgid "Island of Chaos"
-msgstr ""
+msgstr "A káosz szigete"
 
 msgid "The Abyss"
-msgstr ""
+msgstr "A szakadék"
 
 msgid "Uprising"
-msgstr ""
+msgstr "Felkelés"
 
 msgid "Aurora Borealis"
-msgstr ""
+msgstr "Sarki fény"
 
-#, fuzzy
 msgid "Betrayal's End"
-msgstr "\"Árulás!'"
+msgstr "Az árulás vége"
 
-#, fuzzy
 msgid "Corruption's Heart"
-msgstr "Kapitány Őrház"
+msgstr "A romlás szíve"
 
 msgid "The Giant's Pass"
-msgstr ""
+msgstr "Óriás hágó"
 
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
@@ -1242,31 +1283,29 @@ msgid ""
 "hero for all time."
 msgstr ""
 
-#, fuzzy
 msgid "Border Towns"
-msgstr "Városok mutatása"
+msgstr "Határvárosok"
 
 msgid "Conquer and Unify"
-msgstr ""
+msgstr "Hódíts és egyesíts"
 
-#, fuzzy
 msgid "Crazy Uncle Ivan"
-msgstr "Uncle nagybácsi"
+msgstr "Őrült Iván nagybácsi"
 
 msgid "The Wayward Son"
-msgstr ""
+msgstr "Önfejű fiú"
 
 msgid "Ivory Gates"
-msgstr "Ivory Gates"
+msgstr "Elefántcsont kapuk"
 
 msgid "The Elven Lands"
-msgstr ""
+msgstr "Tünde vidék"
 
 msgid "The Epic Battle"
-msgstr ""
+msgstr "A hősies csata"
 
 msgid "The Southern War"
-msgstr ""
+msgstr "A déli háború"
 
 msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
@@ -1309,21 +1348,17 @@ msgid ""
 "everyone, and don't lose the hero Jarkonas VI."
 msgstr ""
 
-#, fuzzy
 msgid "Fount of Wizardry"
-msgstr "Varázsjogar"
+msgstr "A varázslat forrása"
 
-#, fuzzy
 msgid "Power's End"
-msgstr "Hatalom gyűrűje"
+msgstr "A hatalom vége"
 
-#, fuzzy
 msgid "The Eternal Scrolls"
-msgstr "Emerald-sziget"
+msgstr "Örök pergamenek"
 
-#, fuzzy
 msgid "The Shrouded Isles"
-msgstr "Emerald-sziget"
+msgstr "Ködbe borult szigetek"
 
 msgid ""
 "Your mission is to vanquish the warring mages in the magical Shrouded Isles. "
@@ -1349,16 +1384,16 @@ msgid ""
 msgstr ""
 
 msgid "Blood is Thicker"
-msgstr ""
+msgstr "A vér nem válik vízzé"
 
 msgid "King and Country"
-msgstr ""
+msgstr "Király és ország"
 
 msgid "Pirate Isles"
-msgstr ""
+msgstr "Kalóz szigetek"
 
 msgid "Stranded"
-msgstr ""
+msgstr "Hajótörés"
 
 msgid ""
 "Capture the town on the island off the southeast shore in order to construct "
@@ -1381,48 +1416,48 @@ msgid ""
 msgstr ""
 
 msgid " bane"
-msgstr ""
+msgstr " veszedelem"
 
 msgid " alliance"
-msgstr ""
+msgstr " szövetség"
 
 msgid "Carry-over forces"
 msgstr ""
 
-#, fuzzy
 msgid " bonus"
-msgstr "bónusz a pirosnak"
+msgstr " bónusz"
 
 msgid " defeated"
-msgstr ""
+msgstr " legyőzetett"
 
 msgid " will always run away from your army."
-msgstr ""
+msgstr " mindig elmenekülnek majd a sereged elől."
 
 msgid " will be willing to join your army."
-msgstr ""
+msgstr " csatlakozni szándékoznak majd a seregedhez."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
-msgstr ""
+msgstr "\"%{artifact}\" varázstárgy továbbvihető a további küldetésekre."
 
 msgid "The army will be carried over the scenario."
-msgstr ""
+msgstr "A hadsereg továbbvihető a további küldetésekre."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
-msgstr ""
+msgstr "Királyságod napi +%{count} %{resource} erőforrással gyarapszik."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
-msgstr ""
+msgstr "\"%{spell}\" varázslat továbbvihető a további küldetésekre."
 
 msgid "%{hero} can be hired in the scenario."
-msgstr ""
+msgstr "%{hero} hős felvehető a küldetésben."
 
 msgid ""
 "%{hero} has been defeated and will not appear in the subsequent scenarios."
-msgstr ""
+msgstr "%{hero} legyőzetett, így nem szerepel a további küldetésekben."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
+"A törpök felismerik a szövetségeseiket és szívesen csatlakoznak csapataidhoz."
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
 msgstr ""
@@ -1460,331 +1495,270 @@ msgid ""
 msgstr ""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
-msgstr ""
+msgstr "\"Törp veszedelem! Fuss az életedért.\""
 
-#, fuzzy
 msgid "campaignBonus|Animate Dead"
-msgstr "Feltámasztás"
+msgstr "Halott feltámasztás"
 
-#, fuzzy
 msgid "campaignBonus|Chain Lightning"
 msgstr "Láncvillám"
 
 msgid "campaignBonus|Fireblast"
-msgstr ""
+msgstr "Tűzrobbanás"
 
 msgid "campaignBonus|Mass Curse"
-msgstr ""
+msgstr "Tömeges átok"
 
 msgid "campaignBonus|Mass Haste"
-msgstr ""
+msgstr "Tömeges gyorsítás"
 
-#, fuzzy
 msgid "campaignBonus|Mirror Image"
-msgstr "Tükörkép"
+msgstr "Tükör képmás"
 
 msgid "campaignBonus|Resurrect"
-msgstr ""
+msgstr "Újraélesztés"
 
-#, fuzzy
 msgid "campaignBonus|Steelskin"
-msgstr "Varázsgyűrű"
+msgstr "Acélbőr"
 
-#, fuzzy
 msgid "campaignBonus|Summon Earth"
-msgstr "Hajó idézése"
+msgstr "Föld idézés"
 
-#, fuzzy
 msgid "campaignBonus|View Heroes"
 msgstr "Hősök mutatása"
 
 msgid "campaignBonus|Ballista"
-msgstr ""
+msgstr "Hajítógép"
 
-#, fuzzy
 msgid "campaignBonus|Black Pearl"
-msgstr "Fekete Gyöngy"
+msgstr "Fekete gyöngy"
 
-#, fuzzy
 msgid "campaignBonus|Caster's Bracelet"
-msgstr "Idéző Varázslat Karkötője"
+msgstr "Varázs Karperec"
 
-#, fuzzy
 msgid "campaignBonus|Defender Helm"
-msgstr "Védekező"
+msgstr "Védősisak"
 
-#, fuzzy
 msgid "campaignBonus|Breastplate"
-msgstr "Anduran Mellvértje"
+msgstr "Mellvért"
 
-#, fuzzy
 msgid "campaignBonus|Dragon Sword"
 msgstr "Sárkánykard"
 
 msgid "campaignBonus|Fizbin Medal"
-msgstr ""
+msgstr "Fizbin medál"
 
 msgid "campaignBonus|Foremost Scroll"
-msgstr ""
+msgstr "Legfőbb pergamentekercs"
 
-#, fuzzy
 msgid "campaignBonus|Gauntlets"
-msgstr "Anduran Mellvértje"
+msgstr "Kesztyűk"
 
-#, fuzzy
 msgid "campaignBonus|Hideous Mask"
-msgstr "Förtelmes Maszk"
+msgstr "Szörnyű Maszk"
 
-#, fuzzy
 msgid "campaignBonus|Mage's Ring"
-msgstr "Varázsgyűrű"
+msgstr "Varázsló gyűrűje"
 
 msgid "campaignBonus|Major Scroll"
-msgstr ""
+msgstr "Nagy pergamentekercs"
 
-#, fuzzy
 msgid "campaignBonus|Medal of Honor"
-msgstr "Becsület Medál"
+msgstr "Becsületrend"
 
-#, fuzzy
 msgid "campaignBonus|Medal of Valor"
-msgstr "Vitézség Medál"
+msgstr "Vitézség medál"
 
-#, fuzzy
 msgid "campaignBonus|Minor Scroll"
-msgstr "Kis Pergamentekercs"
+msgstr "Kis pergamentekercs"
 
-#, fuzzy
 msgid "campaignBonus|Nomad Boots"
-msgstr "Nomád"
+msgstr "Nomád csizma"
 
 msgid "campaignBonus|Power Axe"
-msgstr ""
+msgstr "Hatalom fejszéje"
 
-#, fuzzy
 msgid "campaignBonus|Spiked Shield"
-msgstr "Tüskés Pajzs"
+msgstr "Tüskés pajzs"
 
-#, fuzzy
 msgid "campaignBonus|Stealth Shield"
-msgstr "Szent Pajzs"
+msgstr "Tolvaj pajzs"
 
 msgid "campaignBonus|Tax Lien"
-msgstr ""
+msgstr "Adó kiváltság"
 
-#, fuzzy
 msgid "campaignBonus|Thunder Mace"
-msgstr "Hatalom Mennydörgő Buzogánya"
+msgstr "Mennydörgés pálcája"
 
-#, fuzzy
 msgid "campaignBonus|Traveler's Boots"
 msgstr "Utazócsizma"
 
-#, fuzzy
 msgid "campaignBonus|White Pearl"
-msgstr "Fehér Gyöngy"
+msgstr "Fehér gyöngy"
 
-#, fuzzy
 msgid "campaignBonus|Basic Archery"
-msgstr "Fekete Gyöngy"
+msgstr "Alap íjászat"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Archery"
-msgstr "Haladó"
+msgstr "Haladó íjászat"
 
-#, fuzzy
 msgid "campaignBonus|Expert Archery"
-msgstr "Hatalom Mennydörgő Buzogánya"
+msgstr "Szakértő íjászat"
 
-#, fuzzy
 msgid "campaignBonus|Basic Ballistics"
-msgstr "Fekete Gyöngy"
+msgstr "Alap ballisztika"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Ballistics"
-msgstr "Ballisztika"
+msgstr "Haladó ballisztika"
 
-#, fuzzy
 msgid "campaignBonus|Expert Ballistics"
-msgstr "Ballisztika"
+msgstr "Szakértő ballisztika"
 
-#, fuzzy
 msgid "campaignBonus|Basic Diplomacy"
-msgstr "Anduran Mellvértje"
+msgstr "Alap diplomácia"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Diplomacy"
-msgstr "Diplomácia"
+msgstr "Haladó diplomácia"
 
-#, fuzzy
 msgid "campaignBonus|Expert Diplomacy"
-msgstr "Diplomácia"
+msgstr "Szakértő diplomácia"
 
-#, fuzzy
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Fekete Gyöngy"
+msgstr "Alap sasszem"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr "Sasszem"
+msgstr "Haladó sasszem"
 
-#, fuzzy
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr "Sasszem"
+msgstr "Szakértő sasszem"
 
-#, fuzzy
 msgid "campaignBonus|Basic Estates"
-msgstr "Anduran Mellvértje"
+msgstr "Alap vagyon"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Estates"
-msgstr "Anduran Mellvértje"
+msgstr "Haladó vagyon"
 
-#, fuzzy
 msgid "campaignBonus|Expert Estates"
-msgstr "Anduran Mellvértje"
+msgstr "Szakértő vagyon"
 
-#, fuzzy
 msgid "campaignBonus|Basic Leadership"
-msgstr "Fekete Gyöngy"
+msgstr "Alap vezetés"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Leadership"
-msgstr "Vezetés"
+msgstr "Haladó vezetés"
 
-#, fuzzy
 msgid "campaignBonus|Expert Leadership"
-msgstr "Vezetés"
+msgstr "Szakértő vezetés"
 
-#, fuzzy
 msgid "campaignBonus|Basic Logistics"
-msgstr "Láncvillám"
+msgstr "Alap logisztika"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Logistics"
-msgstr "Logisztika"
+msgstr "Haladó logisztika"
 
-#, fuzzy
 msgid "campaignBonus|Expert Logistics"
-msgstr "Logisztika"
+msgstr "Szakértő logisztika"
 
-#, fuzzy
 msgid "campaignBonus|Basic Luck"
-msgstr "Fekete Gyöngy"
+msgstr "Alap szerencse"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Luck"
-msgstr "Feltámasztás"
+msgstr "Haladó szerencse"
 
-#, fuzzy
 msgid "campaignBonus|Expert Luck"
-msgstr "Hatalom Mennydörgő Buzogánya"
+msgstr "Szakértő szerencse"
 
-#, fuzzy
 msgid "campaignBonus|Basic Mysticism"
-msgstr "Misztika"
+msgstr "Alap misztika"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Mysticism"
-msgstr "Misztika"
+msgstr "Haladó misztika"
 
-#, fuzzy
 msgid "campaignBonus|Expert Mysticism"
-msgstr "Misztika"
+msgstr "Szakértő misztika"
 
-#, fuzzy
 msgid "campaignBonus|Basic Navigation"
-msgstr "Láncvillám"
+msgstr "Alap navigáció"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Navigation"
-msgstr "Navigáció"
+msgstr "Fejlett navigáció"
 
-#, fuzzy
 msgid "campaignBonus|Expert Navigation"
-msgstr "Navigáció"
+msgstr "Szakértő navigáció"
 
-#, fuzzy
 msgid "campaignBonus|Basic Necromancy"
-msgstr "Fekete Gyöngy"
+msgstr "Alap nekromancia"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Necromancy"
-msgstr "Nekromancia"
+msgstr "Haladó nekromancia"
 
-#, fuzzy
 msgid "campaignBonus|Expert Necromancy"
-msgstr "Nekromancia"
+msgstr "Szakértő nekromancia"
 
-#, fuzzy
 msgid "campaignBonus|Basic Pathfinding"
-msgstr "Láncvillám"
+msgstr "Alap nyomkövetés"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr "Nyomkövetés"
+msgstr "Haladó nyomkövetés"
 
-#, fuzzy
 msgid "campaignBonus|Expert Pathfinding"
-msgstr "Nyomkövetés"
+msgstr "Szakértő nyomkövetés"
 
-#, fuzzy
 msgid "campaignBonus|Basic Scouting"
-msgstr "Varázsgyűrű"
+msgstr "Alap felderítés"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Scouting"
-msgstr "Varázsgyűrű"
+msgstr "Haladó felderítés"
 
-#, fuzzy
 msgid "campaignBonus|Expert Scouting"
-msgstr "Varázsgyűrű"
+msgstr "Szakértő felderítés"
 
-#, fuzzy
 msgid "campaignBonus|Basic Wisdom"
-msgstr "Fekete Gyöngy"
+msgstr "Alap bölcsesség"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Wisdom"
-msgstr "Feltámasztás"
+msgstr "Haladó bölcsesség"
 
-#, fuzzy
 msgid "campaignBonus|Expert Wisdom"
-msgstr "Tüskés Pajzs"
+msgstr "Szakértő bölcsesség"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
 "scenario."
-msgstr ""
+msgstr "A főhős \"%{artifact}\" varázstárggyal kezdi a küldetést."
 
 msgid ""
 "The kingdom will receive %{amount} additional %{resource} at the start of "
 "the scenario."
 msgstr ""
+"A királyság %{amount} %{resource} plusz erőforrással indul a küldetésben."
 
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
 msgstr ""
+"A királyság %{amount} %{resource} erőforrással kevesebbel indul a "
+"küldetésben."
 
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
-msgstr ""
+msgstr "A főhős %{count} %{monster} lénnyel kezdi meg a küldetést."
 
 msgid ""
 "The main hero will have \"%{spell}\" spell at the start of the scenario."
-msgstr ""
+msgstr "A főhős \"%{spell}\" varázslat birtokában kezdi meg a küldetést."
 
 msgid "The starting race of the scenario will be %{race}."
-msgstr ""
+msgstr "A(z) %{race} kezd a küldetésben."
 
 msgid ""
 "The main hero will have additional %{count} %{skill} at the start of the "
 "scenario."
 msgstr ""
+"A főhős további %{count} %{skill} képesség birtokában kezdi a küldetést."
 
 msgid "The main hero will have %{skill} at the start of the scenario."
-msgstr ""
+msgstr "A főhős %{skill} képesség birtokában kezdi a küldetést."
 
 msgid "Roland"
 msgstr "Roland"
@@ -1793,52 +1767,44 @@ msgid "Archibald"
 msgstr "Archibald"
 
 msgid "The Price of Loyalty"
-msgstr ""
+msgstr "A hűség ára"
 
 msgid "Voyage Home"
-msgstr ""
+msgstr "Hazaút"
 
-#, fuzzy
 msgid "Wizard's Isle"
-msgstr "Varázslósüveg"
+msgstr "Varázsló-sziget"
 
-#, fuzzy
 msgid "Descendants"
-msgstr "Paraszt"
+msgstr "Utódok"
 
 msgid "The %{building} produces %{monster}."
-msgstr "A(z) %{building} %{monster}-t termel."
+msgstr "A(z) %{building} %{monster}-t hoz létre."
 
 msgid "Requires:"
-msgstr "Szükséges:"
+msgstr "Előfeltétel:"
 
-#, fuzzy
 msgid "Cannot build. You have already built here today."
 msgstr "Nem építhető. Már építettél ide ebben körben."
 
 msgid "For this action it is necessary to build a castle first."
-msgstr "Ehhez a művelethez először a kastélyt fel kell építeni."
+msgstr "Ehhez a művelethez először a várat kell felépíteni."
 
-#, fuzzy
 msgid "Cannot build %{name} because the castle is too far away from an ocean."
-msgstr "Nem lehet %{name} építeni, mert a vár túl messze van a víztől."
+msgstr "%{name}: nem lehet megépíteni, mert a vár túl messze van a víztől."
 
 msgid "disable build."
-msgstr ""
+msgstr "építés letiltása."
 
-#, fuzzy
 msgid "Cannot afford %{name}."
-msgstr "Nem vásárolható meg a Hős"
+msgstr "Nem engedheted meg magadnak %{name}-t."
 
-#, fuzzy
 msgid "%{name} is already built."
-msgstr "%{name} már felépült"
+msgstr "%{name} már fel van építve."
 
-#, fuzzy
 msgid "Cannot build %{name}."
-msgstr "%{name}-t nem lehet építeni."
+msgstr "Nem tudod felépíteni %{name}-t."
 
-#, fuzzy
 msgid "Build %{name}."
 msgstr "%{name} építése"
 
@@ -2378,7 +2344,7 @@ msgid "Tent"
 msgstr "Sátor"
 
 msgid "Captain's Quarters"
-msgstr "Kapitány Őrház"
+msgstr "Kapitány őrház"
 
 msgid "Mage Guild, Level 1"
 msgstr "Varázstorony, 1. szint"

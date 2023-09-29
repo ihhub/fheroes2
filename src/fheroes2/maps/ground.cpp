@@ -116,6 +116,30 @@ bool Maps::Ground::isTerrainTransitionImage( const uint16_t terrainImageIndex )
     }
 }
 
+bool Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( const uint16_t terrainImageIndex )
+{
+    const int groundId = getGroundByImageIndex( terrainImageIndex );
+    switch ( groundId ) {
+    case WATER:
+        return false;
+    case GRASS:
+    case SWAMP:
+    case SNOW:
+    case WASTELAND:
+    case LAVA:
+    case DESERT:
+        return terrainImageIndex > 45U + getTerrainStartImageIndex( groundId );
+    case DIRT:
+        return terrainImageIndex > 23U + getTerrainStartImageIndex( groundId );
+    case BEACH:
+        return terrainImageIndex > 7U + getTerrainStartImageIndex( groundId );
+    default:
+        // Have you added a new ground? Add the logic above!
+        assert( 0 );
+        return false;
+    }
+}
+
 const char * Maps::Ground::String( int groundId )
 {
     switch ( groundId ) {
@@ -217,15 +241,14 @@ uint32_t Maps::Ground::GetPenalty( const Maps::Tiles & tile, uint32_t level )
     return result;
 }
 
-uint16_t Maps::Ground::getRandomTerrainImageIndex( const int groundId )
+uint16_t Maps::Ground::getRandomTerrainImageIndex( const int groundId, const bool allowEmbeddedObjectsAppearOnTerrain )
 {
     if ( groundId == WATER ) {
         return static_cast<uint16_t>( Rand::Get( 3 ) ) + 16U + getTerrainStartImageIndex( groundId );
     }
 
-    // Terrain image main contain an extra image (rock, flowers, crack, etc.).
-    // There are no extra water terrain tiles.
-    if ( Rand ::Get( 6 ) == 0 ) {
+    // Terrain images, except Water, can contain extra objects that are a part of the image.
+    if ( allowEmbeddedObjectsAppearOnTerrain && Rand::Get( 6 ) == 0 ) {
         switch ( groundId ) {
         case GRASS:
         case SWAMP:
