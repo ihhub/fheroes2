@@ -45,13 +45,15 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
     }
 
     const int chunk = width / count;
+    Troops reversedTroops = troops.GetReversed();
 
     if ( !isCompact ) {
-        cx += chunk / 2;
+        cx -= chunk / 2;
+        cx += width;
     }
 
-    for ( size_t slot = 0; slot <= troops.Size(); ++slot ) {
-        const Troop * troop = troops.GetTroop( slot );
+    for ( size_t slot = 0; slot < reversedTroops.Size(); ++slot ) {
+        const Troop * troop = reversedTroops.GetTroop( slot );
         if ( troop == nullptr || !troop->isValid() ) {
             continue;
         }
@@ -90,10 +92,12 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
         }
         else {
             const int offsetY = 28 - monster.height();
-            fheroes2::Blit( monster, output, cx - monster.width() / 2 + monster.x() + 2, cy + offsetY + monster.y() );
-            text.draw( cx - text.width() / 2, cy + 29, output );
+            int x = ( cx - ( monster.width() / 2 ) ) + monster.x() -12; //( monster.width() / 2 ) - 25;
+            int y = cy + offsetY + monster.y(); 
+            fheroes2::Blit( monster, output, x, y);
+            text.draw( cx - text.width() / 2  -12, cy + 29, output );
         }
-        cx += chunk;
+        cx -= chunk;
         --count;
     }
 }

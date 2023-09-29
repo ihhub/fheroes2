@@ -122,6 +122,8 @@ public:
     // Combines all stacks consisting of identical monsters
     void MergeSameMonsterTroops();
 
+    Troops GetReversed() const;
+
 protected:
     void JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotForGiver );
 
