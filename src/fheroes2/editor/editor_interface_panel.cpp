@@ -73,6 +73,11 @@ namespace Interface
 
     int32_t EditorPanel::getBrushSize() const
     {
+        // Roads and streams are placed using only 1x1 brush.
+        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD ) {
+            return 1;
+        }
+
         switch ( _selectedBrushSize ) {
         case BrushSize::SMALL:
             return 1;
@@ -457,7 +462,7 @@ namespace Interface
             // Replace this with Editor options dialog.
             fheroes2::showSystemOptionsDialog();
         }
-        if ( le.MousePressRight( _instrumentButtonsRect[Instrument::TERRAIN] ) ) {
+        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::TERRAIN] ) ) {
             fheroes2::showStandardTextMessage( _( "Terrain Mode" ), _( "Used to draw the underlying grass, dirt, water, etc. on the map." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::OBJECT] ) ) {

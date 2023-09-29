@@ -527,6 +527,29 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
     }
 }
 
+void Maps::Tiles::setTerrain( const uint16_t terrainImageIndex, const bool horizontalFlip, const bool verticalFlip )
+{
+    _terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
+
+    if ( _isTileMarkedAsRoad ) {
+        if ( Ground::getGroundByImageIndex( terrainImageIndex ) == Ground::WATER ) {
+            // Road can not be on the water. Remove it.
+            updateRoadOnTile( *this, false );
+        }
+        else {
+            // There can not be extra objects under the roads.
+            if ( Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {
+                // We need to set terrain image without extra objects under the road.
+                _terrainImageIndex = Ground::getRandomTerrainImageIndex( Ground::getGroundByImageIndex( terrainImageIndex ), false );
+
+                return;
+            }
+        }
+    }
+
+    _terrainImageIndex = terrainImageIndex;
+}
+
 Heroes * Maps::Tiles::getHero() const
 {
     return MP2::OBJ_HEROES == _mainObjectType && _occupantHeroId ? world.GetHeroes( _occupantHeroId - 1 ) : nullptr;
@@ -898,6 +921,15 @@ void Maps::Tiles::pushTopLayerAddon( const MP2::mp2addon_t & ma )
     // Top layer objects do not have any internal structure (layers) so all of them should have the same internal layer.
     // TODO: remove layer type for top layer objects.
     _addonTopLayer.emplace_back( OBJECT_LAYER, ma.level2ObjectUID, objectIcnType, ma.topIcnImageIndex );
+}
+
+void Maps::Tiles::pushBottomLayerAddon( TilesAddon ta )
+{
+    if ( isSpriteRoad( ta._objectIcnType, ta._imageIndex ) ) {
+        _isTileMarkedAsRoad = true;
+    }
+
+    _addonBottomLayer.emplace_back( ta );
 }
 
 void Maps::Tiles::AddonsSort()
@@ -1301,6 +1333,22 @@ void Maps::Tiles::updateFlag( const int color, const uint8_t objectSpriteIndex, 
     }
 }
 
+void Maps::Tiles::_updateRoadFlag()
+{
+    _isTileMarkedAsRoad = isSpriteRoad( _objectIcnType, _imageIndex );
+
+    if ( _isTileMarkedAsRoad ) {
+        return;
+    }
+
+    for ( const TilesAddon & addon : _addonBottomLayer ) {
+        if ( isSpriteRoad( addon._objectIcnType, addon._imageIndex ) ) {
+            _isTileMarkedAsRoad = true;
+            return;
+        }
+    }
+}
+
 void Maps::Tiles::fixTileObjectType( Tiles & tile )
 {
     const MP2::MapObjectType originalObjectType = tile.GetObject( false );
@@ -1438,6 +1486,19 @@ void Maps::Tiles::Remove( uint32_t uniqID )
         resetObjectSprite();
         _uid = 0;
     }
+}
+
+void Maps::Tiles::removeObjects( const MP2::ObjectIcnType objectIcnType )
+{
+    _addonBottomLayer.remove_if( [objectIcnType]( const Maps::TilesAddon & addon ) { return addon._objectIcnType == objectIcnType; } );
+    _addonTopLayer.remove_if( [objectIcnType]( const Maps::TilesAddon & addon ) { return addon._objectIcnType == objectIcnType; } );
+
+    if ( _objectIcnType == objectIcnType ) {
+        resetObjectSprite();
+        _uid = 0;
+    }
+
+    _updateRoadFlag();
 }
 
 void Maps::Tiles::replaceObject( const uint32_t objectUid, const MP2::ObjectIcnType originalObjectIcnType, const MP2::ObjectIcnType newObjectIcnType,
@@ -1629,7 +1690,7 @@ void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, con
     }
 }
 
-void Maps::Tiles::updateTileById( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex )
+void Maps::Tiles::updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex )
 {
     Maps::TilesAddon * addon = tile.FindAddonLevel1( uid );
     if ( addon != nullptr ) {
@@ -1638,6 +1699,8 @@ void Maps::Tiles::updateTileById( Maps::Tiles & tile, const uint32_t uid, const 
     else if ( tile._uid == uid ) {
         tile._imageIndex = newIndex;
     }
+
+    tile._updateRoadFlag();
 }
 
 void Maps::Tiles::updateEmpty()
