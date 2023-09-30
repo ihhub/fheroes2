@@ -76,12 +76,12 @@
 #include "screen.h"
 #include "settings.h"
 #include "spell_book.h"
+#include "text.h"
 #include "timing.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_scrollbar.h"
-#include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
@@ -103,6 +103,8 @@ namespace
     const int32_t bridgeDestroyFrame = 6;
     // The number of frames the second smoke cloud is delayed by.
     const int32_t bridgeDestroySmokeDelay = 2;
+
+    const int32_t offsetForTextBar{ 32 };
 
     struct LightningPoint
     {
@@ -920,9 +922,6 @@ Battle::Status::Status()
 {
     width = back1.width();
     height = back1.height() + back2.height();
-
-    bar1.Set( Font::BIG );
-    bar2.Set( Font::BIG );
 }
 
 void Battle::Status::SetPosition( const int32_t cx, const int32_t cy )
@@ -934,14 +933,20 @@ void Battle::Status::SetPosition( const int32_t cx, const int32_t cy )
 void Battle::Status::SetMessage( const std::string & messageString, const bool top )
 {
     if ( top ) {
-        bar1.Set( messageString );
+        _upperText.set( messageString, fheroes2::FontType::normalWhite() );
+        // The text cannot go beyond the text area so it is important to truncate it when necessary.
+        _upperText.fitToOneRow( back1.width() - offsetForTextBar * 2 );
+
         if ( listlog ) {
             listlog->AddMessage( messageString );
         }
     }
-    else if ( messageString != message ) {
-        bar2.Set( messageString );
-        message = messageString;
+    else if ( messageString != _lastMessage ) {
+        _lowerText.set( messageString, fheroes2::FontType::normalWhite() );
+        // The text cannot go beyond the text area so it is important to truncate it when necessary.
+        _lowerText.fitToOneRow( back1.width() - offsetForTextBar * 2 );
+
+        _lastMessage = messageString;
     }
 }
 
@@ -950,18 +955,18 @@ void Battle::Status::Redraw( fheroes2::Image & output ) const
     fheroes2::Copy( back1, 0, 0, output, x, y, back1.width(), back1.height() );
     fheroes2::Copy( back2, 0, 0, output, x, y + back1.height(), back2.width(), back2.height() );
 
-    if ( bar1.Size() ) {
-        bar1.Blit( x + ( back1.width() - bar1.w() ) / 2, y + 2 );
+    if ( !_upperText.empty() ) {
+        _upperText.draw( x + ( back1.width() - _upperText.width() ) / 2, y + 4, fheroes2::Display::instance() );
     }
-    if ( bar2.Size() ) {
-        bar2.Blit( x + ( back2.width() - bar2.w() ) / 2, y + back1.height() - 2 );
+    if ( !_lowerText.empty() ) {
+        _lowerText.draw( x + ( back2.width() - _lowerText.width() ) / 2, y + back1.height(), fheroes2::Display::instance() );
     }
 }
 
 void Battle::Status::clear()
 {
-    bar1.Clear();
-    bar2.Clear();
+    _upperText.set( "", fheroes2::FontType::normalWhite() );
+    _lowerText.set( "", fheroes2::FontType::normalWhite() );
 }
 
 Battle::TurnOrder::TurnOrder()
