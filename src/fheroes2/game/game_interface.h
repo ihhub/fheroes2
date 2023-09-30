@@ -110,7 +110,7 @@ namespace Interface
         void updateFocus();
 
         void EventSwitchHeroSleeping();
-        fheroes2::GameMode EventDefaultAction( const fheroes2::GameMode gameMode );
+        fheroes2::GameMode EventDefaultAction();
         void EventOpenFocus() const;
         fheroes2::GameMode EventSaveGame() const;
         void EventPuzzleMaps() const;
@@ -118,7 +118,7 @@ namespace Interface
         void EventSystemDialog() const;
         void EventNextHero();
         void EventNextTown();
-        void EventContinueMovement() const;
+        fheroes2::GameMode EventContinueMovement();
         void EventKingdomInfo() const;
         void EventCastSpell();
         void EventSwitchShowRadar() const;
