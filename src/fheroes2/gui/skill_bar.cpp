@@ -21,6 +21,7 @@
 #include "skill_bar.h"
 
 #include <cassert>
+#include <utility>
 
 #include "agg_image.h"
 #include "dialog.h"

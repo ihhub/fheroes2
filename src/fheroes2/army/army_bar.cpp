@@ -44,6 +44,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_monster.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace
