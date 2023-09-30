@@ -443,6 +443,22 @@ namespace
         return false;
     }
 
+    bool isAddonShadow( const Maps::TilesAddon & ta )
+    {
+        return isShadowSprite( ta._objectIcnType, ta._imageIndex );
+    }
+
+    bool isAddonResource( const Maps::TilesAddon & ta )
+    {
+        return ( MP2::OBJ_ICN_TYPE_OBJNRSRC == ta._objectIcnType ) && ( ta._imageIndex % 2 );
+    }
+
+    bool isAddonArtifact( const Maps::TilesAddon & ta )
+    {
+        // OBJNARTI (skip ultimate)
+        return ( MP2::OBJ_ICN_TYPE_OBJNARTI == ta._objectIcnType ) && ( ta._imageIndex > 0x10 ) && ( ta._imageIndex % 2 );
+    }
+
     std::string getAddonInfo( const Maps::TilesAddon & addon, const int lvl )
     {
         std::ostringstream os;
@@ -452,25 +468,9 @@ namespace
            << std::endl
            << "image index     : " << static_cast<int>( addon._imageIndex ) << std::endl
            << "layer type      : " << static_cast<int>( addon._layerType ) << " - " << getObjectLayerName( addon._layerType ) << std::endl
-           << "is shadow       : " << ( Maps::TilesAddon::isShadow( addon ) ? "yes" : "no" ) << std::endl;
+           << "is shadow       : " << ( isAddonShadow( addon ) ? "yes" : "no" ) << std::endl;
         return os.str();
     }
-}
-
-bool Maps::TilesAddon::isResource( const TilesAddon & ta )
-{
-    return ( MP2::OBJ_ICN_TYPE_OBJNRSRC == ta._objectIcnType ) && ( ta._imageIndex % 2 );
-}
-
-bool Maps::TilesAddon::isArtifact( const TilesAddon & ta )
-{
-    // OBJNARTI (skip ultimate)
-    return ( MP2::OBJ_ICN_TYPE_OBJNARTI == ta._objectIcnType ) && ( ta._imageIndex > 0x10 ) && ( ta._imageIndex % 2 );
-}
-
-bool Maps::TilesAddon::isShadow( const TilesAddon & ta )
-{
-    return isShadowSprite( ta._objectIcnType, ta._imageIndex );
 }
 
 void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
@@ -694,7 +694,7 @@ int Maps::Tiles::getOriginalPassability() const
         return MP2::getActionObjectDirection( objectType );
     }
 
-    if ( ( _objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN || _imageIndex == 255 ) || ( ( _layerType >> 1 ) & 1 ) || isShadow() ) {
+    if ( _objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN || ( ( _layerType >> 1 ) & 1 ) || isShadow() ) {
         // No object exists. Make it fully passable.
         return DIRECTION_ALL;
     }
@@ -774,7 +774,7 @@ void Maps::Tiles::updatePassability()
 
             // Count how many objects are there excluding shadows, roads and river streams.
             const std::ptrdiff_t validLevel1ObjectCount = std::count_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), []( const TilesAddon & addon ) {
-                if ( TilesAddon::isShadow( addon ) ) {
+                if ( isAddonShadow( addon ) ) {
                     return false;
                 }
 
@@ -867,32 +867,6 @@ void Maps::Tiles::UpdateRegion( uint32_t newRegionID )
     }
 }
 
-bool Maps::Tiles::isClearGround() const
-{
-    const MP2::MapObjectType objectType = GetObject( true );
-
-    switch ( objectType ) {
-    case MP2::OBJ_NONE:
-    case MP2::OBJ_COAST:
-        return true;
-    case MP2::OBJ_BOAT:
-        return false;
-
-    default:
-        break;
-    }
-
-    if ( ( _objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) || _imageIndex == 255 || ( ( _layerType >> 1 ) & 1 ) == 1 ) {
-        if ( MP2::isActionObject( objectType, isWater() ) ) {
-            return false;
-        }
-        // No objects are here.
-        return true;
-    }
-
-    return false;
-}
-
 void Maps::Tiles::pushBottomLayerAddon( const MP2::mp2addon_t & ma )
 {
     const MP2::ObjectIcnType objectIcnType = static_cast<MP2::ObjectIcnType>( ma.objectNameN1 >> 2 );
@@ -965,14 +939,14 @@ void Maps::Tiles::AddonsSort()
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( uint32_t uniq1 )
 {
-    Addons::iterator it = std::find_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), [uniq1]( const TilesAddon & v ) { return v.isUniq( uniq1 ); } );
+    Addons::iterator it = std::find_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), [uniq1]( const TilesAddon & v ) { return v._uid == uniq1; } );
 
     return it != _addonBottomLayer.end() ? &( *it ) : nullptr;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel2( uint32_t uniq2 )
 {
-    Addons::iterator it = std::find_if( _addonTopLayer.begin(), _addonTopLayer.end(), [uniq2]( const TilesAddon & v ) { return v.isUniq( uniq2 ); } );
+    Addons::iterator it = std::find_if( _addonTopLayer.begin(), _addonTopLayer.end(), [uniq2]( const TilesAddon & v ) { return v._uid == uniq2; } );
 
     return it != _addonTopLayer.end() ? &( *it ) : nullptr;
 }
@@ -1078,9 +1052,9 @@ std::string Maps::Tiles::String() const
 void Maps::Tiles::FixObject()
 {
     if ( MP2::OBJ_NONE == _mainObjectType ) {
-        if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), TilesAddon::isArtifact ) )
+        if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), isAddonArtifact ) )
             SetObject( MP2::OBJ_ARTIFACT );
-        else if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), TilesAddon::isResource ) )
+        else if ( std::any_of( _addonBottomLayer.begin(), _addonBottomLayer.end(), isAddonResource ) )
             SetObject( MP2::OBJ_RESOURCE );
     }
 }
@@ -1095,11 +1069,11 @@ bool Maps::Tiles::GoodForUltimateArtifact() const
         return false;
     }
 
-    if ( static_cast<size_t>( std::count_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), TilesAddon::isShadow ) ) != _addonBottomLayer.size() ) {
+    if ( static_cast<size_t>( std::count_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), isAddonShadow ) ) != _addonBottomLayer.size() ) {
         return false;
     }
 
-    if ( static_cast<size_t>( std::count_if( _addonTopLayer.begin(), _addonTopLayer.end(), TilesAddon::isShadow ) ) != _addonTopLayer.size() ) {
+    if ( static_cast<size_t>( std::count_if( _addonTopLayer.begin(), _addonTopLayer.end(), isAddonShadow ) ) != _addonTopLayer.size() ) {
         return false;
     }
 
@@ -1175,7 +1149,7 @@ bool Maps::Tiles::isStream() const
 bool Maps::Tiles::isShadow() const
 {
     return isShadowSprite( _objectIcnType, _imageIndex )
-           && _addonBottomLayer.size() == static_cast<size_t>( std::count_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), TilesAddon::isShadow ) );
+           && _addonBottomLayer.size() == static_cast<size_t>( std::count_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), isAddonShadow ) );
 }
 
 Maps::TilesAddon * Maps::Tiles::getAddonWithFlag( const uint32_t uid )
@@ -1479,8 +1453,8 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
 void Maps::Tiles::Remove( uint32_t uniqID )
 {
-    _addonBottomLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v.isUniq( uniqID ); } );
-    _addonTopLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v.isUniq( uniqID ); } );
+    _addonBottomLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v._uid == uniqID; } );
+    _addonTopLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v._uid == uniqID; } );
 
     if ( _uid == uniqID ) {
         resetObjectSprite();
@@ -1560,134 +1534,6 @@ void Maps::Tiles::ClearFog( const int colors )
     // skill by picking up a Treasure Chest from a nearby tile or buying a map in a Magellan's Maps object using the space
     // bar button. Reset the pathfinder(s) to make the newly discovered tiles immediately available for this hero.
     world.resetPathfinder();
-}
-
-void Maps::Tiles::updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color )
-{
-    assert( ( minPos.x <= maxPos.x ) && ( minPos.y <= maxPos.y ) );
-
-    const int32_t worldWidth = world.w();
-    const int32_t worldHeight = world.w();
-
-    // Do not get over the world borders.
-    const int32_t minX = std::max( minPos.x, 0 );
-    const int32_t minY = std::max( minPos.y, 0 );
-    // Add extra 1 to reach the given maxPos point.
-    const int32_t maxX = std::min( maxPos.x + 1, worldWidth );
-    const int32_t maxY = std::min( maxPos.y + 1, worldHeight );
-
-    // Fog data range is 1 tile bigger from each side as for the fog directions we have to check all tiles around each tile in the area.
-    const int32_t fogMinX = std::max( minX - 1, 0 );
-    const int32_t fogMinY = std::max( minY - 1, 0 );
-    const int32_t fogMaxX = std::min( maxX + 1, worldWidth );
-    const int32_t fogMaxY = std::min( maxY + 1, worldHeight );
-
-    const int32_t fogDataWidth = maxX - minX + 2;
-    const int32_t fogDataSize = fogDataWidth * ( maxY - minY + 2 );
-
-    // A vector to cache 'isFog()' data. This vector type is not <bool> as using std::vector<uint8_t> gives the higher performance.
-    // 1 is for the 'true' state, 0 is for the 'false' state.
-    std::vector<uint8_t> fogData( fogDataSize, 1 );
-
-    // Set the 'fogData' index offset from the tile index.
-    const int32_t fogDataOffset = 1 - minX + ( 1 - minY ) * fogDataWidth;
-
-    // Cache the 'fogData' data for the given area to use it in fog direction calculation.
-    // The loops run only within the world area, if 'fogData' area includes tiles outside the world borders we do not update them as the are already set to 1.
-    for ( int32_t y = fogMinY; y < fogMaxY; ++y ) {
-        const int32_t fogTileOffsetY = y * worldWidth;
-        const int32_t fogDataOffsetY = y * fogDataWidth + fogDataOffset;
-
-        for ( int32_t x = fogMinX; x < fogMaxX; ++x ) {
-            fogData[x + fogDataOffsetY] = world.GetTiles( x + fogTileOffsetY ).isFog( color ) ? 1 : 0;
-        }
-    }
-
-    // Set the 'fogData' index offset from the tile index for the TOP LEFT direction from the tile.
-    const int32_t topLeftDirectionOffset = -1 - fogDataWidth;
-
-#ifndef NDEBUG
-    // Cache the maximum border for fogDataIndex corresponding the "CENTER" tile to use in assertion. Should be removed if assertion is removed.
-    const int32_t centerfogDataIndexLimit = fogDataSize + topLeftDirectionOffset;
-#endif
-
-    // Calculate fog directions using the cached 'isFog' data.
-    for ( int32_t y = minY; y < maxY; ++y ) {
-        const int32_t fogCenterDataOffsetY = y * fogDataWidth + fogDataOffset;
-
-        for ( int32_t x = minX; x < maxX; ++x ) {
-            Maps::Tiles & tile = world.GetTiles( x, y );
-
-            int32_t fogDataIndex = x + fogCenterDataOffsetY;
-
-            if ( fogData[fogDataIndex] == 0 ) {
-                // For the tile is without fog we set the UNKNOWN direction.
-                tile._setFogDirection( Direction::UNKNOWN );
-            }
-            else {
-                // The tile is under the fog so its CENTER direction for fog is true.
-                uint16_t fogDirection = Direction::CENTER;
-
-                // 'fogDataIndex' should not get out of maximum 'fogData' vector index after all increments.
-                assert( fogDataIndex < centerfogDataIndexLimit );
-
-                // Check all tiles around for 'fogData' starting from the top left direction and if it is true then logically add the direction to 'fogDirection'.
-                fogDataIndex += topLeftDirectionOffset;
-
-                assert( fogDataIndex >= 0 );
-
-                if ( fogData[fogDataIndex] == 1 ) {
-                    fogDirection |= Direction::TOP_LEFT;
-                }
-
-                ++fogDataIndex;
-
-                if ( fogData[fogDataIndex] == 1 ) {
-                    fogDirection |= Direction::TOP;
-                }
-
-                ++fogDataIndex;
-
-                if ( fogData[fogDataIndex] == 1 ) {
-                    fogDirection |= Direction::TOP_RIGHT;
-                }
-
-                // Set index to the left direction tile of the next fog data raw.
-                fogDataIndex += fogDataWidth - 2;
-
-                if ( fogData[fogDataIndex] == 1 ) {
-                    fogDirection |= Direction::LEFT;
-                }
-
-                // Skip the center tile as it was already checked.
-                fogDataIndex += 2;
-
-                if ( fogData[fogDataIndex] == 1 ) {
-                    fogDirection |= Direction::RIGHT;
-                }
-
-                fogDataIndex += fogDataWidth - 2;
-
-                if ( fogData[fogDataIndex] == 1 ) {
-                    fogDirection |= Direction::BOTTOM_LEFT;
-                }
-
-                ++fogDataIndex;
-
-                if ( fogData[fogDataIndex] == 1 ) {
-                    fogDirection |= Direction::BOTTOM;
-                }
-
-                ++fogDataIndex;
-
-                if ( fogData[fogDataIndex] == 1 ) {
-                    fogDirection |= Direction::BOTTOM_RIGHT;
-                }
-
-                tile._setFogDirection( fogDirection );
-            }
-        }
-    }
 }
 
 void Maps::Tiles::updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex )
@@ -1859,13 +1705,13 @@ bool Maps::Tiles::isTallObject() const
         }
 
         for ( const TilesAddon & addon : topTile._addonBottomLayer ) {
-            if ( addon._uid == tileUID && !TilesAddon::isShadow( addon ) ) {
+            if ( addon._uid == tileUID && !isAddonShadow( addon ) ) {
                 return true;
             }
         }
 
         for ( const TilesAddon & addon : topTile._addonTopLayer ) {
-            if ( addon._uid == tileUID && !TilesAddon::isShadow( addon ) ) {
+            if ( addon._uid == tileUID && !isAddonShadow( addon ) ) {
                 return true;
             }
         }

@@ -104,7 +104,7 @@ namespace
 
             const Maps::Tiles & indexedTile = mapTiles[indexId];
 
-            if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
+            if ( indexedTile.isWater() || !isClearGround( indexedTile ) ) {
                 continue;
             }
 
@@ -135,7 +135,7 @@ namespace
 
         for ( const int32_t indexId : indexes ) {
             const Maps::Tiles & indexedTile = mapTiles[indexId];
-            if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
+            if ( indexedTile.isWater() || !isClearGround( indexedTile ) ) {
                 continue;
             }
 
@@ -636,7 +636,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
                 excludeTiles.emplace( tileId );
             }
         }
-        else if ( tile.isClearGround() ) {
+        else if ( isClearGround( tile ) ) {
             if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 4, excludeTiles ) ) {
                 continue;
             }

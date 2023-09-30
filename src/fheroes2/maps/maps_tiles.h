@@ -73,16 +73,6 @@ namespace Maps
             return ( _uid == addon._uid ) && ( _layerType == addon._layerType ) && ( _objectIcnType == addon._objectIcnType ) && ( _imageIndex == addon._imageIndex );
         }
 
-        bool isUniq( const uint32_t id ) const
-        {
-            return _uid == id;
-        }
-
-        static bool isShadow( const TilesAddon & ta );
-
-        static bool isResource( const TilesAddon & ta );
-        static bool isArtifact( const TilesAddon & ta );
-
         // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
         uint32_t _uid{ 0 };
 
@@ -251,18 +241,9 @@ namespace Maps
         // Update passability based on neighbours around.
         void updatePassability();
 
-        int getOriginalPassability() const;
-
-        bool isClearGround() const;
-
-        bool doesObjectExist( const uint32_t uid ) const;
-
         void setOwnershipFlag( const MP2::MapObjectType objectType, const int color );
 
         void removeOwnershipFlag( const MP2::MapObjectType objectType );
-
-        // Determine the fog direction in the area between min and max positions for given player(s) color code and store it in corresponding tile data.
-        static void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color );
 
         // Return fog direction of tile. A tile without fog returns "Direction::UNKNOWN".
         uint16_t getFogDirection() const
@@ -351,6 +332,12 @@ namespace Maps
 
         bool containsSprite( const MP2::ObjectIcnType objectIcnType, const uint32_t imageIdx ) const;
 
+        // Do NOT call this method directly!!!
+        void setFogDirection( const uint16_t fogDirection )
+        {
+            _fogDirection = fogDirection;
+        }
+
         // Some tiles have incorrect object type. This is due to original Editor issues.
         static void fixTileObjectType( Tiles & tile );
 
@@ -381,10 +368,9 @@ namespace Maps
 
         bool isDetachedObject() const;
 
-        void _setFogDirection( const uint16_t fogDirection )
-        {
-            _fogDirection = fogDirection;
-        }
+        int getOriginalPassability() const;
+
+        bool doesObjectExist( const uint32_t uid ) const;
 
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );

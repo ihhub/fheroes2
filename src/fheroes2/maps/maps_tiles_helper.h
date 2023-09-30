@@ -24,6 +24,7 @@
 
 #include "army_troop.h"
 #include "artifact.h"
+#include "math_base.h"
 #include "mp2.h"
 #include "resource.h"
 #include "skill.h"
@@ -154,4 +155,9 @@ namespace Maps
     void restoreAbandonedMine( Tiles & tile, const int resource );
 
     void removeObjectSprite( Tiles & tile );
+
+    bool isClearGround( const Tiles & tile );
+
+    // Determine the fog direction in the area between min and max positions for given player(s) color code and store it in corresponding tile data.
+    void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color );
 }

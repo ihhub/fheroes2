@@ -2706,4 +2706,155 @@ namespace Maps
             break;
         }
     }
+
+    bool isClearGround( const Tiles & tile )
+    {
+        const MP2::MapObjectType objectType = tile.GetObject( true );
+
+        switch ( objectType ) {
+        case MP2::OBJ_NONE:
+        case MP2::OBJ_COAST:
+            return true;
+        case MP2::OBJ_BOAT:
+            return false;
+
+        default:
+            break;
+        }
+
+        if ( ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) || ( tile.getLayerType() == Maps::SHADOW_LAYER )
+             || ( tile.getLayerType() == Maps::TERRAIN_LAYER ) ) {
+            return !MP2::isActionObject( objectType, tile.isWater() );
+        }
+
+        return false;
+    }
+
+    void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color )
+    {
+        assert( ( minPos.x <= maxPos.x ) && ( minPos.y <= maxPos.y ) );
+
+        const int32_t worldWidth = world.w();
+        const int32_t worldHeight = world.w();
+
+        // Do not get over the world borders.
+        const int32_t minX = std::max( minPos.x, 0 );
+        const int32_t minY = std::max( minPos.y, 0 );
+        // Add extra 1 to reach the given maxPos point.
+        const int32_t maxX = std::min( maxPos.x + 1, worldWidth );
+        const int32_t maxY = std::min( maxPos.y + 1, worldHeight );
+
+        // Fog data range is 1 tile bigger from each side as for the fog directions we have to check all tiles around each tile in the area.
+        const int32_t fogMinX = std::max( minX - 1, 0 );
+        const int32_t fogMinY = std::max( minY - 1, 0 );
+        const int32_t fogMaxX = std::min( maxX + 1, worldWidth );
+        const int32_t fogMaxY = std::min( maxY + 1, worldHeight );
+
+        const int32_t fogDataWidth = maxX - minX + 2;
+        const int32_t fogDataSize = fogDataWidth * ( maxY - minY + 2 );
+
+        // A vector to cache 'isFog()' data. This vector type is not <bool> as using std::vector<uint8_t> gives the higher performance.
+        // 1 is for the 'true' state, 0 is for the 'false' state.
+        std::vector<uint8_t> fogData( fogDataSize, 1 );
+
+        // Set the 'fogData' index offset from the tile index.
+        const int32_t fogDataOffset = 1 - minX + ( 1 - minY ) * fogDataWidth;
+
+        // Cache the 'fogData' data for the given area to use it in fog direction calculation.
+        // The loops run only within the world area, if 'fogData' area includes tiles outside the world borders we do not update them as the are already set to 1.
+        for ( int32_t y = fogMinY; y < fogMaxY; ++y ) {
+            const int32_t fogTileOffsetY = y * worldWidth;
+            const int32_t fogDataOffsetY = y * fogDataWidth + fogDataOffset;
+
+            for ( int32_t x = fogMinX; x < fogMaxX; ++x ) {
+                fogData[x + fogDataOffsetY] = world.GetTiles( x + fogTileOffsetY ).isFog( color ) ? 1 : 0;
+            }
+        }
+
+        // Set the 'fogData' index offset from the tile index for the TOP LEFT direction from the tile.
+        const int32_t topLeftDirectionOffset = -1 - fogDataWidth;
+
+#ifndef NDEBUG
+        // Cache the maximum border for fogDataIndex corresponding the "CENTER" tile to use in assertion. Should be removed if assertion is removed.
+        const int32_t centerfogDataIndexLimit = fogDataSize + topLeftDirectionOffset;
+#endif
+
+        // Calculate fog directions using the cached 'isFog' data.
+        for ( int32_t y = minY; y < maxY; ++y ) {
+            const int32_t fogCenterDataOffsetY = y * fogDataWidth + fogDataOffset;
+
+            for ( int32_t x = minX; x < maxX; ++x ) {
+                Maps::Tiles & tile = world.GetTiles( x, y );
+
+                int32_t fogDataIndex = x + fogCenterDataOffsetY;
+
+                if ( fogData[fogDataIndex] == 0 ) {
+                    // For the tile is without fog we set the UNKNOWN direction.
+                    tile.setFogDirection( Direction::UNKNOWN );
+                }
+                else {
+                    // The tile is under the fog so its CENTER direction for fog is true.
+                    uint16_t fogDirection = Direction::CENTER;
+
+                    // 'fogDataIndex' should not get out of maximum 'fogData' vector index after all increments.
+                    assert( fogDataIndex < centerfogDataIndexLimit );
+
+                    // Check all tiles around for 'fogData' starting from the top left direction and if it is true then logically add the direction to 'fogDirection'.
+                    fogDataIndex += topLeftDirectionOffset;
+
+                    assert( fogDataIndex >= 0 );
+
+                    if ( fogData[fogDataIndex] == 1 ) {
+                        fogDirection |= Direction::TOP_LEFT;
+                    }
+
+                    ++fogDataIndex;
+
+                    if ( fogData[fogDataIndex] == 1 ) {
+                        fogDirection |= Direction::TOP;
+                    }
+
+                    ++fogDataIndex;
+
+                    if ( fogData[fogDataIndex] == 1 ) {
+                        fogDirection |= Direction::TOP_RIGHT;
+                    }
+
+                    // Set index to the left direction tile of the next fog data raw.
+                    fogDataIndex += fogDataWidth - 2;
+
+                    if ( fogData[fogDataIndex] == 1 ) {
+                        fogDirection |= Direction::LEFT;
+                    }
+
+                    // Skip the center tile as it was already checked.
+                    fogDataIndex += 2;
+
+                    if ( fogData[fogDataIndex] == 1 ) {
+                        fogDirection |= Direction::RIGHT;
+                    }
+
+                    fogDataIndex += fogDataWidth - 2;
+
+                    if ( fogData[fogDataIndex] == 1 ) {
+                        fogDirection |= Direction::BOTTOM_LEFT;
+                    }
+
+                    ++fogDataIndex;
+
+                    if ( fogData[fogDataIndex] == 1 ) {
+                        fogDirection |= Direction::BOTTOM;
+                    }
+
+                    ++fogDataIndex;
+
+                    if ( fogData[fogDataIndex] == 1 ) {
+                        fogDirection |= Direction::BOTTOM_RIGHT;
+                    }
+
+                    tile.setFogDirection( fogDirection );
+                }
+            }
+        }
+    }
 }

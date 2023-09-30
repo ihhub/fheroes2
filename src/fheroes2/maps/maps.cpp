@@ -37,6 +37,7 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "players.h"
 #include "race.h"
 #include "resource.h"
@@ -407,7 +408,7 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
         // Fog directions should be updated 1 tile outside of the cleared fog.
         fogRevealMinPos -= { 1, 1 };
         fogRevealMaxPos += { 1, 1 };
-        Maps::Tiles::updateFogDirectionsInArea( fogRevealMinPos, fogRevealMaxPos, alliedColors );
+        Maps::updateFogDirectionsInArea( fogRevealMinPos, fogRevealMaxPos, alliedColors );
     }
 }
 
@@ -463,7 +464,7 @@ Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObject
 Maps::Indexes Maps::GetFreeIndexesAroundTile( const int32_t center )
 {
     Indexes results = getAroundIndexes( center );
-    results.erase( std::remove_if( results.begin(), results.end(), []( const int32_t tile ) { return !world.GetTiles( tile ).isClearGround(); } ), results.end() );
+    results.erase( std::remove_if( results.begin(), results.end(), []( const int32_t tile ) { return !isClearGround( world.GetTiles( tile ) ); } ), results.end() );
     return results;
 }
 
