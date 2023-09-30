@@ -51,6 +51,9 @@ namespace Difficulty
     double GetAIRetreatRatio( int difficulty );
 
     uint32_t GetDimensionDoorLimit( int difficulty );
+
+    // Returns true if AI should avoid having free slots in the army
+    bool AISplittingWeakStacks( const int difficulty );
 }
 
 #endif

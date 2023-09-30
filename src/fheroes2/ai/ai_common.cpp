@@ -27,6 +27,8 @@
 #include "army.h"
 #include "army_troop.h"
 #include "castle.h"
+#include "difficulty.h"
+#include "game.h"
 #include "kingdom.h"
 #include "normal/ai_normal.h"
 #include "payment.h"
@@ -143,8 +145,10 @@ namespace AI
             }
         }
 
-        // Complicate the task of a potential attacker
-        army.splitStackOfWeakestUnitsIntoFreeSlots();
+        if ( Difficulty::AISplittingWeakStacks( Game::getDifficulty() ) ) {
+            // Complicate the task of a potential attacker
+            army.splitStackOfWeakestUnitsIntoFreeSlots();
+        }
     }
 
     bool CanPurchaseHero( const Kingdom & kingdom )
