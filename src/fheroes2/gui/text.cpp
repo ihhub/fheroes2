@@ -21,11 +21,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "text.h"
+
 #include <algorithm>
 #include <cctype>
 
 #include "agg_image.h"
-#include "text.h"
+#include "image.h"
 
 namespace
 {
@@ -287,28 +289,6 @@ void Text::Blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst ) const
     return message->blit( ax, ay, maxw, dst );
 }
 
-int32_t Text::getFitWidth( const std::string & text, const int fontId, const int32_t width_ )
-{
-    if ( text.empty() || width_ < 1 )
-        return 0;
-
-    int32_t fitWidth = 0;
-    uint32_t characterCount = 0;
-
-    TextAscii textWrapper( text, fontId );
-
-    while ( fitWidth < width_ && characterCount < text.size() ) {
-        ++characterCount;
-        const int32_t foundWidth = textWrapper.w( 0, characterCount );
-        if ( foundWidth > width_ )
-            break;
-
-        fitWidth = foundWidth;
-    }
-
-    return fitWidth;
-}
-
 TextBox::TextBox( const std::string & msg, int ft, uint32_t width_ )
     : align( ALIGN_CENTER )
 {
@@ -421,59 +401,4 @@ void TextBox::Blit( int32_t ax, int32_t ay, fheroes2::Image & sf )
 
         ay += ( *it ).h();
     }
-}
-
-TextSprite::TextSprite()
-    : _restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
-    , hide( true )
-{}
-
-TextSprite::TextSprite( const std::string & msg, int ft, int32_t ax, int32_t ay )
-    : Text( msg, ft )
-    , _restorer( fheroes2::Display::instance(), ax, ay, gw, gh + 5 )
-    , hide( true )
-{}
-
-void TextSprite::Show()
-{
-    Blit( _restorer.x(), _restorer.y() );
-    hide = false;
-}
-
-void TextSprite::Hide()
-{
-    if ( !hide )
-        _restorer.restore();
-    hide = true;
-}
-
-void TextSprite::SetText( const std::string & msg )
-{
-    Hide();
-    Set( msg );
-    _restorer.update( _restorer.x(), _restorer.y(), gw, gh + 5 );
-}
-
-void TextSprite::SetText( const std::string & msg, int ft )
-{
-    Hide();
-    Set( msg, ft );
-    _restorer.update( _restorer.x(), _restorer.y(), gw, gh + 5 );
-}
-
-void TextSprite::SetFont( int ft )
-{
-    Hide();
-    Set( ft );
-    _restorer.update( _restorer.x(), _restorer.y(), gw, gh + 5 );
-}
-
-void TextSprite::SetPos( int32_t ax, int32_t ay )
-{
-    _restorer.update( ax, ay, gw, gh + 5 );
-}
-
-fheroes2::Rect TextSprite::GetRect() const
-{
-    return { _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() };
 }

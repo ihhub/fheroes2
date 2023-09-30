@@ -22,6 +22,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <ostream>
+#include <string>
 #include <vector>
 
 #include "agg_image.h"
@@ -33,6 +35,7 @@
 #include "game_hotkeys.h"
 #include "gamedefs.h"
 #include "heroes.h"
+#include "history_manager.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_base.h"
@@ -41,6 +44,7 @@
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "localevent.h"
+#include "logging.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
@@ -58,6 +62,8 @@ class Castle;
 
 namespace
 {
+    const uint32_t mapUpdateFlags = Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR;
+
     int32_t getBrushAreaEndIndex( const int32_t brushSize, const int32_t startIndex )
     {
         const int32_t worldWidth = world.w();
@@ -69,13 +75,7 @@ namespace
 
 namespace Interface
 {
-    Interface::Editor::Editor()
-        : _editorPanel( *this )
-    {
-        Editor::reset();
-    }
-
-    void Editor::reset()
+    void EditorInterface::reset()
     {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -99,9 +99,11 @@ namespace Interface
 
         _gameArea.SetCenterInPixels( prevCenter + fheroes2::Point( newRoi.x + newRoi.width / 2, newRoi.y + newRoi.height / 2 )
                                      - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
+
+        _historyManager.reset();
     }
 
-    void Editor::redraw( const uint32_t force /* = 0 */ )
+    void EditorInterface::redraw( const uint32_t force )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -113,7 +115,7 @@ namespace Interface
 
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
 
-            if ( _editorPanel.isTerrainEdit() && ( _tileUnderCursor > -1 ) ) {
+            if ( _editorPanel.showAreaSelectRect() && ( _tileUnderCursor > -1 ) ) {
                 const int32_t brushSize = _editorPanel.getBrushSize();
 
                 if ( brushSize > 0 ) {
@@ -150,13 +152,13 @@ namespace Interface
         _redraw = 0;
     }
 
-    Interface::Editor & Interface::Editor::Get()
+    Interface::EditorInterface & Interface::EditorInterface::Get()
     {
-        static Editor editorInterface;
+        static EditorInterface editorInterface;
         return editorInterface;
     }
 
-    fheroes2::GameMode Interface::Editor::startEdit()
+    fheroes2::GameMode Interface::EditorInterface::startEdit()
     {
         reset();
 
@@ -243,6 +245,15 @@ namespace Interface
                     fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. Open focused object dialog is not implemented yet.",
                                                        Dialog::OK );
                 }
+// TODO: remove this macro check once the Editor is ready for public.
+#if defined( WITH_DEBUG )
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_UNDO_LAST_ACTION ) ) {
+                    undoAction();
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_REDO_LAST_ACTION ) ) {
+                    redoAction();
+                }
+#endif
             }
 
             if ( res != fheroes2::GameMode::CANCEL ) {
@@ -282,9 +293,7 @@ namespace Interface
 
             // cursor is over the radar
             if ( le.MouseCursor( _radar.GetRect() ) ) {
-                if ( Cursor::POINTER != cursor.Themes() ) {
-                    cursor.SetThemes( Cursor::POINTER );
-                }
+                cursor.SetThemes( Cursor::POINTER );
 
                 // TODO: Add checks for object placing/moving, and other Editor functions that uses mouse dragging.
                 if ( !_gameArea.isDragScroll() && ( _editorPanel.getBrushSize() > 0 || _selectedTile == -1 ) ) {
@@ -297,18 +306,16 @@ namespace Interface
             }
             // cursor is over the buttons area
             else if ( le.MouseCursor( _editorPanel.getRect() ) ) {
-                if ( Cursor::POINTER != cursor.Themes() ) {
-                    cursor.SetThemes( Cursor::POINTER );
-                }
+                cursor.SetThemes( Cursor::POINTER );
+
                 if ( !_gameArea.NeedScroll() ) {
                     res = _editorPanel.queueEventProcessing();
                 }
             }
             // cursor is somewhere else
             else if ( !_gameArea.NeedScroll() ) {
-                if ( Cursor::POINTER != cursor.Themes() ) {
-                    cursor.SetThemes( Cursor::POINTER );
-                }
+                cursor.SetThemes( Cursor::POINTER );
+
                 _gameArea.ResetCursorPosition();
             }
 
@@ -331,7 +338,7 @@ namespace Interface
                     _tileUnderCursor = tileIndex;
 
                     // Force redraw if cursor position was changed as area rectangle is also changed.
-                    if ( _editorPanel.isTerrainEdit() && ( brushSize > 0 || _selectedTile != -1 ) ) {
+                    if ( _editorPanel.showAreaSelectRect() && ( brushSize > 0 || _selectedTile != -1 ) ) {
                         _redraw |= REDRAW_GAMEAREA;
                     }
                 }
@@ -351,13 +358,15 @@ namespace Interface
                 if ( isCursorOverGamearea && _editorPanel.getBrushSize() == 0 ) {
                     const int groundId = _editorPanel.selectedGroundType();
 
+                    const fheroes2::ActionCreator action( _historyManager );
+
                     Maps::setTerrainOnTiles( _selectedTile, _tileUnderCursor, groundId );
                 }
 
                 // Reset the area start tile.
                 _selectedTile = -1;
 
-                _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
+                _redraw |= mapUpdateFlags;
             }
 
             // fast scroll
@@ -381,7 +390,7 @@ namespace Interface
                 }
 
                 if ( needRedraw() ) {
-                    redraw();
+                    redraw( 0 );
 
                     // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.
                     assert( getRedrawMask() == 0 );
@@ -398,7 +407,7 @@ namespace Interface
         return res;
     }
 
-    fheroes2::GameMode Editor::eventLoadMap()
+    fheroes2::GameMode EditorInterface::eventLoadMap()
     {
         return Dialog::YES
                        == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to load a new map? (Any unsaved changes to the current map will be lost.)" ),
@@ -407,7 +416,7 @@ namespace Interface
                    : fheroes2::GameMode::CANCEL;
     }
 
-    fheroes2::GameMode Editor::eventNewMap()
+    fheroes2::GameMode EditorInterface::eventNewMap()
     {
         return Dialog::YES
                        == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to create a new map? (Any unsaved changes to the current map will be lost.)" ),
@@ -416,7 +425,7 @@ namespace Interface
                    : fheroes2::GameMode::CANCEL;
     }
 
-    fheroes2::GameMode Editor::eventFileDialog()
+    fheroes2::GameMode EditorInterface::eventFileDialog()
     {
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const int cpanbkg = isEvilInterface ? ICN::CPANBKGE : ICN::CPANBKG;
@@ -446,7 +455,7 @@ namespace Interface
 
         display.render( back.rect() );
 
-        fheroes2::GameMode result = fheroes2::GameMode::QUIT_GAME;
+        fheroes2::GameMode result = fheroes2::GameMode::CANCEL;
 
         LocalEvent & le = LocalEvent::Get();
 
@@ -488,7 +497,6 @@ namespace Interface
                 }
             }
             else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
-                result = fheroes2::GameMode::CANCEL;
                 break;
             }
             else if ( le.MousePressRight( buttonNew.area() ) ) {
@@ -515,30 +523,32 @@ namespace Interface
         return result;
     }
 
-    void Editor::eventViewWorld()
+    void EditorInterface::eventViewWorld()
     {
         // TODO: Make proper borders restoration for low height resolutions, like for hide interface mode.
         ViewWorld::ViewWorldWindow( 0, ViewWorldMode::ViewAll, *this );
     }
 
-    void Editor::mouseCursorAreaClickLeft( const int32_t tileIndex )
+    void EditorInterface::mouseCursorAreaClickLeft( const int32_t tileIndex )
     {
-        const Maps::Tiles & tile = world.GetTiles( tileIndex );
+        Maps::Tiles & tile = world.GetTiles( tileIndex );
 
-        Heroes * otherHero = tile.GetHeroes();
+        Heroes * otherHero = tile.getHero();
         Castle * otherCastle = world.getCastle( tile.GetCenter() );
 
         if ( otherHero ) {
-            // TODO: Make hero edit dialog: like Battle only dialog, but only for one hero.
+            // TODO: Make hero edit dialog: e.g. with functions like in Battle only dialog, but only for one hero.
             Game::OpenHeroesDialog( *otherHero, true, true );
         }
         else if ( otherCastle ) {
-            // TODO: Make Castle edit dialog: like original build dialog.
+            // TODO: Make Castle edit dialog: e.g. like original build dialog.
             Game::OpenCastleDialog( *otherCastle );
         }
         else if ( _editorPanel.isTerrainEdit() ) {
             const int32_t brushSize = _editorPanel.getBrushSize();
             const int groundId = _editorPanel.selectedGroundType();
+
+            const fheroes2::ActionCreator action( _historyManager );
 
             if ( brushSize > 0 ) {
                 Maps::setTerrainOnTiles( tileIndex, getBrushAreaEndIndex( brushSize, tileIndex ), groundId );
@@ -549,13 +559,40 @@ namespace Interface
 
                 _selectedTile = -1;
             }
-            _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
+
+            _redraw |= mapUpdateFlags;
+        }
+        else if ( _editorPanel.isRoadDraw() ) {
+            const fheroes2::ActionCreator action( _historyManager );
+
+            if ( Maps::updateRoadOnTile( tile, true ) ) {
+                _redraw |= mapUpdateFlags;
+            }
+        }
+        else if ( _editorPanel.isEraseMode() ) {
+            const int32_t brushSize = _editorPanel.getBrushSize();
+
+            // TODO: implement other brush sizes.
+            if ( brushSize < 2 ) {
+                const fheroes2::ActionCreator action( _historyManager );
+
+                if ( Maps::updateRoadOnTile( tile, false ) ) {
+                    _redraw |= mapUpdateFlags;
+                }
+
+                if ( brushSize == 0 ) {
+                    // This is a case when area was not selected but a single tile was clicked.
+                    _selectedTile = -1;
+                }
+            }
         }
     }
 
-    void Editor::mouseCursorAreaPressRight( const int32_t tileIndex ) const
+    void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
+
+        DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
 
         switch ( tile.GetObject() ) {
         case MP2::OBJ_NON_ACTION_CASTLE:
@@ -572,7 +609,7 @@ namespace Interface
             break;
         }
         case MP2::OBJ_HEROES: {
-            const Heroes * heroes = tile.GetHeroes();
+            const Heroes * heroes = tile.getHero();
 
             if ( heroes ) {
                 Dialog::QuickInfo( *heroes );
@@ -584,5 +621,10 @@ namespace Interface
             Dialog::QuickInfo( tile );
             break;
         }
+    }
+
+    void EditorInterface::updateCursor( const int32_t /*tileIndex*/ )
+    {
+        Cursor::Get().SetThemes( Cursor::POINTER );
     }
 }

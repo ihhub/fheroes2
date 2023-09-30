@@ -128,13 +128,13 @@ public:
         const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
         buttonOk.setICNInfo( buttonOkIcn, 0, 1 );
         buttonOk.setPosition( area.x + buttonFromBorderOffsetX, buttonY );
-        const fheroes2::Sprite buttonOkSprite = fheroes2::AGG::GetICN( buttonOkIcn, 0 );
+        const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( buttonOkIcn, 0 );
         fheroes2::addGradientShadow( buttonOkSprite, display, buttonOk.area().getPosition(), { -5, 5 } );
         buttonOk.draw();
 
         const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
         buttonCancel.setICNInfo( buttonCancelIcn, 0, 1 );
-        const fheroes2::Sprite buttonCancelSprite = fheroes2::AGG::GetICN( buttonCancelIcn, 0 );
+        const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( buttonCancelIcn, 0 );
         buttonCancel.setPosition( area.x + area.width - buttonCancelSprite.width() - buttonFromBorderOffsetX, buttonY );
         fheroes2::addGradientShadow( buttonCancelSprite, display, buttonCancel.area().getPosition(), { -5, 5 } );
         buttonCancel.draw();
@@ -270,7 +270,7 @@ public:
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         const Monster mons( index );
-        const fheroes2::Sprite monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
+        const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
 
         renderItem( monsterSprite, mons.GetName(), { dstx, dsty }, { 45, 43 }, current );
     }
@@ -361,6 +361,16 @@ public:
 class SelectEnumSecSkill : public SelectEnum
 {
 public:
+    static int getSkillFromListIndex( int index )
+    {
+        return 1 + index / 3;
+    }
+
+    static int getLevelFromListIndex( int index )
+    {
+        return 1 + ( index % 3 );
+    }
+
     explicit SelectEnumSecSkill( const fheroes2::Size & rt )
         : SelectEnum( rt )
     {
@@ -372,7 +382,7 @@ public:
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
-        const Skill::Secondary skill( 1 + index / 3, 1 + ( index % 3 ) );
+        const Skill::Secondary skill( getSkillFromListIndex( index ), getLevelFromListIndex( index ) );
         const fheroes2::Sprite & skillSprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
 
         renderItem( skillSprite, skill.GetName(), { dstx, dsty }, { 45, 42 }, current );
@@ -380,15 +390,20 @@ public:
 
     void ActionListPressRight( int & index ) override
     {
-        fheroes2::SecondarySkillDialogElement( Skill::Secondary( 1 + index / 3, 1 + ( index % 3 ) ), Heroes() ).showPopup( Dialog::ZERO );
+        fheroes2::SecondarySkillDialogElement( Skill::Secondary( getSkillFromListIndex( index ), getLevelFromListIndex( index ) ), Heroes() ).showPopup( Dialog::ZERO );
     }
 };
 
-Skill::Secondary Dialog::selectSecondarySkill( const int skillId /* = Skill::Secondary::UNKNOWN */ )
+Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int skillId /* = Skill::Secondary::UNKNOWN */ )
 {
-    std::vector<int> skills( static_cast<size_t>( MAXSECONDARYSKILL * 3 ), 0 );
+    std::vector<int> skills;
+    skills.reserve( static_cast<size_t>( MAXSECONDARYSKILL * 3 ) );
 
-    std::iota( skills.begin(), skills.end(), 0 );
+    for ( int i = 0; i < MAXSECONDARYSKILL * 3; ++i ) {
+        if ( !hero.HasSecondarySkill( SelectEnumSecSkill::getSkillFromListIndex( i ) ) ) {
+            skills.push_back( i );
+        }
+    }
 
     SelectEnumSecSkill listbox( { 350, fheroes2::Display::instance().height() - 200 } );
 
@@ -401,7 +416,7 @@ Skill::Secondary Dialog::selectSecondarySkill( const int skillId /* = Skill::Sec
 
     if ( result == Dialog::OK || listbox.ok ) {
         const int skillIndex = listbox.GetCurrent();
-        return { 1 + skillIndex / 3, 1 + ( skillIndex % 3 ) };
+        return { SelectEnumSecSkill::getSkillFromListIndex( skillIndex ), SelectEnumSecSkill::getLevelFromListIndex( skillIndex ) };
     }
 
     return {};

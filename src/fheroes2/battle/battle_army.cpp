@@ -82,6 +82,7 @@ Battle::Units::Units( const Units & units, const Unit * unitToRemove )
 
 void Battle::Units::SortFastest()
 {
+    // It is important to maintain the initial order of units having the same speed for the proper operation of the unit turn queue
     std::stable_sort( begin(), end(), Army::FastestTroop );
 }
 
@@ -141,8 +142,11 @@ Battle::Force::Force( Army & parent, bool opposite, const Rand::DeterministicRan
 
 Battle::Force::~Force()
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
+    std::for_each( begin(), end(), []( Unit * unit ) {
+        assert( unit != nullptr );
+
+        delete unit;
+    } );
 }
 
 const HeroBase * Battle::Force::GetCommander() const

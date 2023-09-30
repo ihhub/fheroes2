@@ -55,6 +55,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_castle.h"
+#include "ui_dialog.h"
 #include "ui_kingdom.h"
 #include "ui_text.h"
 #include "ui_tool.h"
@@ -442,8 +443,8 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     fheroes2::Blit( bar, display, cur_pt.x + buttonPrevCastle.area().width, cur_pt.y + statusBarOffsetY );
 
     StatusBar statusBar;
-    statusBar.SetFont( Font::BIG );
-    statusBar.SetCenter( cur_pt.x + buttonPrevCastle.area().width + bar.width() / 2, cur_pt.y + statusBarOffsetY + 12 );
+    // Status bar must be smaller due to extra art on both sides.
+    statusBar.setRoi( { cur_pt.x + buttonPrevCastle.area().width + 16, cur_pt.y + statusBarOffsetY + 2, bar.width() - 16 * 2, 0 } );
 
     // button next castle
     fheroes2::Button buttonNextCastle( cur_pt.x + buttonPrevCastle.area().width + bar.width(), cur_pt.y + statusBarOffsetY, ICN::SMALLBAR, 3, 4 );
@@ -502,7 +503,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             fheroes2::showKingdomIncome( world.GetKingdom( GetColor() ), 0 );
         }
         else if ( le.MousePressRight( buttonExit.area() ) ) {
-            Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
         }
 
         // click left
@@ -615,9 +616,9 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
 
         // Right click
         if ( isCaptainBuilt && le.MousePressRight( rectSpreadArmyFormat ) )
-            Dialog::Message( _( "Spread Formation" ), descriptionSpreadArmyFormat, Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Spread Formation" ), descriptionSpreadArmyFormat, Dialog::ZERO );
         else if ( isCaptainBuilt && le.MousePressRight( rectGroupedArmyFormat ) )
-            Dialog::Message( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Dialog::ZERO );
         else if ( hero1 && le.MousePressRight( rectHero1 ) ) {
             LocalEvent::GetClean();
             hero1->OpenDialog( true, true, false, false, false );
@@ -633,10 +634,10 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
         }
         else if ( le.MousePressRight( buttonNextCastle.area() ) ) {
-            Dialog::Message( _( "Show next town" ), _( "Click to show next town." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show next town." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonPrevCastle.area() ) ) {
-            Dialog::Message( _( "Show previous town" ), _( "Click to show previous town." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show previous town." ), Dialog::ZERO );
         }
 
         // status info

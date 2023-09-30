@@ -47,7 +47,6 @@ std::string GetHexString( T value, int width = 8 )
     return stream.str();
 }
 
-int GetInt( const std::string & );
 int Sign( int );
 
 std::string StringTrim( std::string );
@@ -55,7 +54,7 @@ std::string StringTrim( std::string );
 std::string StringLower( std::string str );
 std::string StringUpper( std::string str );
 
-std::vector<std::string> StringSplit( const std::string &, const std::string & );
+std::vector<std::string> StringSplit( const std::string & str, const char sep );
 
 // Function to replace the pattern in workString with patternReplacement. Here the patternReplacement is converted to lowercase except for the first word in a sentence.
 void StringReplaceWithLowercase( std::string & workString, const char * pattern, const std::string & patternReplacement );

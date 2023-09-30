@@ -56,11 +56,11 @@
 #include "mus.h"
 #include "screen.h"
 #include "statusbar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_castle.h"
+#include "ui_dialog.h"
 #include "ui_kingdom.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -172,10 +172,10 @@ namespace
         }
 
         if ( hero->IsFullBagArtifacts() ) {
-            Dialog::Message(
+            fheroes2::showStandardTextMessage(
                 hero->GetName(),
                 _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
-                Font::BIG, Dialog::OK );
+                Dialog::OK );
 
             return false;
         }
@@ -217,8 +217,9 @@ namespace
 
 Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionWindow, const bool fade, const bool renderBackgroundDialog )
 {
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    // Set the cursor image. This dialog does not require a cursor restorer. It is called from other dialogs that have the same cursor
+    // or from the Game Area that will set the appropriate cursor after this dialog is closed.
+    Cursor::Get().SetThemes( Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -295,8 +296,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     fheroes2::Blit( bar, display, cur_pt.x + buttonPrevCastle.area().width, cur_pt.y + statusBarOffsetY );
 
     StatusBar statusBar;
-    statusBar.SetFont( Font::BIG );
-    statusBar.SetCenter( cur_pt.x + buttonPrevCastle.area().width + bar.width() / 2, cur_pt.y + statusBarOffsetY + 12 );
+    // Status bar must be smaller due to extra art on both sides.
+    statusBar.setRoi( { cur_pt.x + buttonPrevCastle.area().width + 16, cur_pt.y + statusBarOffsetY + 2, bar.width() - 16 * 2, 0 } );
 
     // button next castle
     fheroes2::Button buttonNextCastle( cur_pt.x + buttonPrevCastle.area().width + bar.width(), cur_pt.y + statusBarOffsetY, ICN::SMALLBAR, 3, 4 );
@@ -422,13 +423,13 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 fheroes2::showKingdomIncome( GetKingdom(), 0 );
             }
             else if ( le.MousePressRight( buttonExit.area() ) ) {
-                Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
+                fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( buttonNextCastle.area() ) ) {
-                Dialog::Message( _( "Show next town" ), _( "Click to show next town." ), Font::BIG );
+                fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show next town." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( buttonPrevCastle.area() ) ) {
-                Dialog::Message( _( "Show previous town" ), _( "Click to show previous town." ), Font::BIG );
+                fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show previous town." ), Dialog::ZERO );
             }
 
             // selector troops event
@@ -510,7 +511,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                         Dialog::DwellingInfo( Monster( race, it->id ), getMonstersInDwelling( it->id ) );
                     }
                     else {
-                        Dialog::Message( GetStringBuilding( it->id ), GetDescriptionBuilding( it->id ), Font::BIG );
+                        fheroes2::showStandardTextMessage( GetStringBuilding( it->id ), GetDescriptionBuilding( it->id ), Dialog::ZERO );
                     }
 
                     // Nothing we need to do after.
@@ -564,7 +565,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                         case BUILD_SPEC:
                         case BUILD_SHRINE: {
                             fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                            Dialog::Message( GetStringBuilding( it->id ), GetDescriptionBuilding( it->id ), Font::BIG, Dialog::OK );
+                            fheroes2::showStandardTextMessage( GetStringBuilding( it->id ), GetDescriptionBuilding( it->id ), Dialog::OK );
                             break;
                         }
 
@@ -592,7 +593,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                         case BUILD_TENT: {
                             fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             if ( !Modes( ALLOWCASTLE ) ) {
-                                Dialog::Message( _( "Town" ), _( "This town may not be upgraded to a castle." ), Font::BIG, Dialog::OK );
+                                fheroes2::showStandardTextMessage( _( "Town" ), _( "This town may not be upgraded to a castle." ), Dialog::OK );
                             }
                             else if ( Dialog::OK == DialogBuyCastle( true ) ) {
                                 AudioManager::PlaySound( M82::BUILDTWN );

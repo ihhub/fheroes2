@@ -297,8 +297,12 @@ namespace Interface
 
         void RemoveSelected()
         {
-            if ( content != nullptr && _currentId >= 0 && _currentId < _size() )
+            if ( content != nullptr && _currentId >= 0 && _currentId < _size() ) {
                 content->erase( content->begin() + _currentId );
+
+                // List item is removed, so we need to redraw the list.
+                needRedraw = true;
+            }
         }
 
         bool isSelected() const
@@ -309,8 +313,12 @@ namespace Interface
         void Unselect()
         {
             Verify();
-            if ( IsValid() )
+            if ( IsValid() ) {
                 _currentId = -1;
+
+                // List item is unselected, so we need to redraw the list with no selected elements.
+                needRedraw = true;
+            }
         }
 
         bool QueueEventProcessing() override
@@ -363,6 +371,26 @@ namespace Interface
                 ++_currentId;
                 SetCurrentVisible();
                 ActionCurrentDn();
+
+                return true;
+            }
+            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_HOME ) && ( _topId > 0 ) ) {
+                needRedraw = true;
+
+                _topId = 0;
+
+                UpdateScrollbarRange();
+                _scrollbar.moveToIndex( _topId );
+
+                return true;
+            }
+            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_END ) && ( _topId + maxItems < _size() ) ) {
+                needRedraw = true;
+
+                _topId = _size() - maxItems;
+
+                UpdateScrollbarRange();
+                _scrollbar.moveToIndex( _topId );
 
                 return true;
             }

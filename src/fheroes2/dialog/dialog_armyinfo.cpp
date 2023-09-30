@@ -590,8 +590,8 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
 
         if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
              && Dialog::YES
-                    == Dialog::Message( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ), Font::BIG,
-                                        Dialog::YES | Dialog::NO ) ) {
+                    == fheroes2::showStandardTextMessage( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ),
+                                                          Dialog::YES | Dialog::NO ) ) {
             result = Dialog::DISMISS;
             break;
         }
@@ -651,43 +651,11 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
 
 int Dialog::ArmyJoinFree( const Troop & troop )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    const Text title( _( "Followers" ), Font::YELLOW_BIG );
-
     std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you.\nDo you accept?" );
     StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
 
-    TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
-    const int buttons = Dialog::YES | Dialog::NO;
-    int posy = 0;
-
-    FrameBox box( 10 + 2 * title.h() + textbox.h() + 10, true );
-    const fheroes2::Rect & pos = box.GetArea();
-
-    title.Blit( pos.x + ( pos.width - title.w() ) / 2, pos.y );
-
-    posy = pos.y + 2 * title.h() - 3;
-    textbox.Blit( pos.x, posy );
-
-    fheroes2::ButtonGroup btnGroup( pos, buttons );
-    btnGroup.draw();
-
-    display.render();
-
-    LocalEvent & le = LocalEvent::Get();
-
-    // message loop
-    int result = Dialog::ZERO;
-
-    while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        result = btnGroup.processEvents();
-    }
-
-    return result;
+    return fheroes2::showMessage( fheroes2::Text( _( "Followers" ), fheroes2::FontType::normalYellow() ),
+                                  fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ), Dialog::YES | Dialog::NO );
 }
 
 int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const uint32_t gold )

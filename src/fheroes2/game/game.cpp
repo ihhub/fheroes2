@@ -159,6 +159,15 @@ void Game::SetUpdateSoundsOnFocusUpdate( const bool update )
     updateSoundsOnFocusUpdate = update;
 }
 
+bool Game::isFadeInNeeded()
+{
+    return needFadeIn;
+}
+
+void Game::setDisplayFadeIn()
+{
+    needFadeIn = true;
+}
 bool Game::validateDisplayFadeIn()
 {
     if ( needFadeIn ) {
@@ -167,11 +176,6 @@ bool Game::validateDisplayFadeIn()
     }
 
     return false;
-}
-
-void Game::setDisplayFadeIn()
-{
-    needFadeIn = true;
 }
 
 void Game::Init()

@@ -77,6 +77,8 @@ struct HeroSeedsForLevelUp
 class Heroes final : public HeroBase, public ColorBase
 {
 public:
+    friend class Battle::Only;
+
     enum
     {
         // knight
@@ -145,7 +147,7 @@ public:
         ELIZA,
         ARCHIBALD,
         HALTON,
-        BAX,
+        BRAX,
         // From The Price of Loyalty expansion.
         SOLMYR,
         DAINWIN,
@@ -163,7 +165,7 @@ public:
         UNKNOWN
     };
 
-    enum flags_t : uint32_t
+    enum : uint32_t
     {
         SHIPMASTER = 0x00000001,
 
@@ -291,7 +293,7 @@ public:
     const Castle * inCastle() const override;
     Castle * inCastleMutable() const;
 
-    void LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const std::vector<uint8_t> & data );
+    void LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data );
     void PostLoad();
 
     int GetRace() const override;
@@ -334,8 +336,15 @@ public:
         return GetLevelFromExperience( experience );
     }
 
-    MP2::MapObjectType GetMapsObject() const;
-    void SetMapsObject( const MP2::MapObjectType objectType );
+    MP2::MapObjectType getObjectTypeUnderHero() const
+    {
+        return _objectTypeUnderHero;
+    }
+
+    void setObjectTypeUnderHero( const MP2::MapObjectType objectType )
+    {
+        _objectTypeUnderHero = ( ( objectType != MP2::OBJ_HEROES ) ? objectType : MP2::OBJ_NONE );
+    }
 
     const fheroes2::Point & GetPatrolCenter() const
     {
@@ -347,13 +356,17 @@ public:
         _patrolCenter = pos;
     }
 
-    int GetPatrolDistance() const
+    uint32_t GetPatrolDistance() const
     {
         return _patrolDistance;
     }
 
     uint32_t GetMaxSpellPoints() const override;
+
+    // Returns the maximum number of hero movement points, depending on the surface type on which the hero is currently located
     uint32_t GetMaxMovePoints() const;
+    // Returns the maximum number of hero movement points, depending on the specified surface type (water or land)
+    uint32_t GetMaxMovePoints( const bool onWater ) const;
 
     uint32_t GetMovePoints() const
     {
@@ -516,6 +529,7 @@ public:
 
     void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const;
     void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const;
+
     void Scout( const int tileIndex ) const;
     int GetScoutingDistance() const;
 
@@ -599,9 +613,6 @@ private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
 
-    friend class Recruits;
-    friend class Battle::Only;
-
     HeroSeedsForLevelUp GetSeedsForLevelUp() const;
     void LevelUp( bool skipsecondary, bool autoselect = false );
     void LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect = false );
@@ -640,7 +651,8 @@ private:
     // ID of this hero, unless a custom portrait is applied.
     int portrait;
     int _race;
-    int save_maps_object;
+
+    MP2::MapObjectType _objectTypeUnderHero;
 
     Route::Path path;
 
@@ -649,7 +661,7 @@ private:
     fheroes2::Point _offset; // used only during hero's movement
 
     fheroes2::Point _patrolCenter;
-    int _patrolDistance;
+    uint32_t _patrolDistance;
 
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;
@@ -672,8 +684,8 @@ private:
 
 struct VecHeroes : public std::vector<Heroes *>
 {
-    Heroes * Get( int /* hero id */ ) const;
-    Heroes * Get( const fheroes2::Point & ) const;
+    Heroes * Get( int hid ) const;
+    Heroes * Get( const fheroes2::Point & center ) const;
 };
 
 struct AllHeroes : public VecHeroes

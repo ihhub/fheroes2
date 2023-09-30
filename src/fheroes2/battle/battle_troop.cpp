@@ -447,18 +447,18 @@ void Battle::Unit::NewTurn()
     }
 }
 
-uint32_t Battle::Unit::GetSpeed( bool skipStandingCheck, bool skipMovedCheck ) const
+uint32_t Battle::Unit::GetSpeed( const bool skipStandingCheck, const bool skipMovedCheck ) const
 {
     uint32_t modesToCheck = SP_BLIND | IS_PARALYZE_MAGIC;
     if ( !skipMovedCheck ) {
         modesToCheck |= TR_MOVED;
     }
 
-    if ( !skipStandingCheck && ( !GetCount() || Modes( modesToCheck ) ) )
+    if ( !skipStandingCheck && ( !GetCount() || Modes( modesToCheck ) ) ) {
         return Speed::STANDING;
+    }
 
-    uint32_t speed = Monster::GetSpeed();
-    Spell spell;
+    const uint32_t speed = Monster::GetSpeed();
 
     if ( Modes( SP_HASTE ) ) {
         return Speed::GetHasteSpeedFromSpell( speed );
@@ -470,32 +470,42 @@ uint32_t Battle::Unit::GetSpeed( bool skipStandingCheck, bool skipMovedCheck ) c
     return speed;
 }
 
-uint32_t Battle::Unit::GetMoveRange() const
+uint32_t Battle::Unit::EstimateRetaliatoryDamage( const uint32_t damageTaken ) const
 {
-    return isFlying() ? ARENASIZE : GetSpeed( false, false );
-}
-
-uint32_t Battle::Unit::CalculateRetaliationDamage( uint32_t damageTaken ) const
-{
-    // Check if there will be retaliation in the first place
-    if ( damageTaken > hp || Modes( CAP_MIRRORIMAGE ) || !AllowResponse() ) {
+    // The entire unit is destroyed, no retaliation
+    if ( damageTaken >= hp ) {
         return 0;
     }
 
-    const uint32_t unitsLeft = ( hp - damageTaken ) / Monster::GetHitPoints();
-
-    uint32_t damagePerUnit = 0;
-    if ( Modes( SP_CURSE ) ) {
-        damagePerUnit = Monster::GetDamageMin();
-    }
-    else if ( Modes( SP_BLESS ) ) {
-        damagePerUnit = Monster::GetDamageMax();
-    }
-    else {
-        damagePerUnit = ( Monster::GetDamageMin() + Monster::GetDamageMax() ) / 2;
+    // Mirror images are destroyed anyway and hypnotized units never respond to an attack
+    if ( Modes( TR_RESPONDED | CAP_MIRRORIMAGE | SP_HYPNOTIZE ) ) {
+        return 0;
     }
 
-    return unitsLeft * damagePerUnit;
+    // Units with this ability retaliate even when under the influence of paralyzing spells
+    if ( Modes( IS_PARALYZE_MAGIC ) && !isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+        return 0;
+    }
+
+    const uint32_t unitsLeft = GetCountFromHitPoints( *this, hp - damageTaken );
+    assert( unitsLeft > 0 );
+
+    const uint32_t damagePerUnit = [this]() {
+        if ( Modes( SP_CURSE ) ) {
+            return Monster::GetDamageMin();
+        }
+
+        if ( Modes( SP_BLESS ) ) {
+            return Monster::GetDamageMax();
+        }
+
+        return ( Monster::GetDamageMin() + Monster::GetDamageMax() ) / 2;
+    }();
+
+    const uint32_t retaliatoryDamage = unitsLeft * damagePerUnit;
+
+    // The retaliatory damage of a blinded unit is halved
+    return ( Modes( SP_BLIND ) ? retaliatoryDamage / 2 : retaliatoryDamage );
 }
 
 uint32_t Battle::Unit::CalculateMinDamage( const Unit & enemy ) const
@@ -605,7 +615,7 @@ uint32_t Battle::Unit::GetDamage( const Unit & enemy ) const
     return res;
 }
 
-uint32_t Battle::Unit::HowManyWillKilled( uint32_t dmg ) const
+uint32_t Battle::Unit::HowManyWillBeKilled( const uint32_t dmg ) const
 {
     if ( Modes( CAP_MIRRORIMAGE ) ) {
         return GetCount();
@@ -622,12 +632,16 @@ uint32_t Battle::Unit::ApplyDamage( const uint32_t dmg )
         return 0;
     }
 
-    const uint32_t killed = HowManyWillKilled( dmg );
+    const uint32_t killed = HowManyWillBeKilled( dmg );
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, dmg << " to " << String() << " and killed: " << killed )
 
     if ( Modes( IS_PARALYZE_MAGIC ) ) {
-        SetModes( TR_RESPONDED );
+        // Units with this ability retaliate even when under the influence of paralyzing spells
+        if ( !isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+            SetModes( TR_RESPONDED );
+        }
+
         SetModes( TR_MOVED );
 
         removeAffection( IS_PARALYZE_MAGIC );
@@ -744,6 +758,11 @@ uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allow_overfl
     return resurrect;
 }
 
+bool Battle::Unit::canShoot() const
+{
+    return isArchers() && !Modes( SP_BLIND | IS_PARALYZE_MAGIC ) && !isHandFighting();
+}
+
 uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected )
 {
     killed = ApplyDamage( dmg );
@@ -799,7 +818,6 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
     if ( !myhero )
         return true;
 
-    // check artifact
     Artifact guard_art( Artifact::UNKNOWN );
     switch ( spell.GetID() ) {
     case Spell::CURSE:
@@ -827,6 +845,7 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
         guard_art = myhero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::HOLY_SPELL_IMMUNITY );
         break;
     case Spell::DISPEL:
+    case Spell::MASSDISPEL:
         guard_art = myhero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::DISPEL_SPELL_IMMUNITY );
         break;
     default:
@@ -1010,16 +1029,12 @@ bool Battle::Unit::AllowResponse() const
         return false;
     }
 
-    // Blindness can be cast by an attacking unit. In this case, there should be no response to the attack.
+    // Blindness can be cast by an attacking unit. There should never be any retaliation in this case.
     if ( Modes( SP_BLIND ) && !_blindRetaliation ) {
         return false;
     }
 
-    // Units with this ability retaliate even when under the influence of paralyzing spells
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
-        return true;
-    }
-
+    // Paralyzing magic can be cast by an attacking unit. There should never be any retaliation in this case.
     if ( Modes( IS_PARALYZE_MAGIC ) ) {
         return false;
     }
@@ -1029,6 +1044,10 @@ bool Battle::Unit::AllowResponse() const
 
 void Battle::Unit::SetResponse()
 {
+    if ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+        return;
+    }
+
     SetModes( TR_RESPONDED );
 }
 
@@ -1700,7 +1719,7 @@ int Battle::Unit::GetColor() const
 int Battle::Unit::GetCurrentColor() const
 {
     if ( Modes( SP_BERSERKER ) ) {
-        return -1; // be aware of unknown color
+        return -1; // Be aware of unknown color
     }
 
     if ( Modes( SP_HYPNOTIZE ) ) {
@@ -1717,7 +1736,8 @@ int Battle::Unit::GetCurrentOrArmyColor() const
 {
     const int color = GetCurrentColor();
 
-    if ( color < 0 ) { // unknown color in case of SP_BERSERKER mode
+    // Unknown color in case of SP_BERSERKER mode
+    if ( color < 0 ) {
         return GetArmyColor();
     }
 
@@ -1726,8 +1746,9 @@ int Battle::Unit::GetCurrentOrArmyColor() const
 
 int Battle::Unit::GetCurrentControl() const
 {
+    // Let's say that berserkers belong to AI, which is not present in the battle
     if ( Modes( SP_BERSERKER ) ) {
-        return CONTROL_AI; // let's say that it belongs to AI which is not present in the battle
+        return CONTROL_AI;
     }
 
     if ( Modes( SP_HYPNOTIZE ) ) {

@@ -36,6 +36,7 @@
 #include "game.h"
 #include "gamedefs.h"
 #include "logging.h"
+#include "render_processor.h"
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
@@ -70,7 +71,7 @@ namespace
         GLOBAL_EVIL_INTERFACE = 0x00080000,
         GLOBAL_HIDE_INTERFACE = 0x00100000,
         GLOBAL_BATTLE_SHOW_DAMAGE = 0x00200000,
-        GLOBAL_BATTLE_SHOW_ARMY_ORDER = 0x00400000,
+        GLOBAL_BATTLE_SHOW_TURN_ORDER = 0x00400000,
         GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
         GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
         GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
@@ -219,8 +220,8 @@ bool Settings::Read( const std::string & filePath )
         setBattleAutoSpellcast( config.StrParams( "auto spell casting" ) == "on" );
     }
 
-    if ( config.Exists( "battle army order" ) ) {
-        setBattleShowArmyOrder( config.StrParams( "battle army order" ) == "on" );
+    if ( config.Exists( "battle turn order" ) ) {
+        setBattleShowTurnOrder( config.StrParams( "battle turn order" ) == "on" );
     }
 
     if ( config.Exists( "use evil interface" ) ) {
@@ -409,8 +410,8 @@ std::string Settings::String() const
     os << std::endl << "# auto combat spell casting: on/off" << std::endl;
     os << "auto spell casting = " << ( _optGlobal.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# show army order during battle: on/off" << std::endl;
-    os << "battle army order = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER ) ? "on" : "off" ) << std::endl;
+    os << std::endl << "# show turn order during battle: on/off" << std::endl;
+    os << "battle turn order = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_TURN_ORDER ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# use evil interface style: on/off" << std::endl;
     os << "use evil interface = " << ( _optGlobal.Modes( GLOBAL_EVIL_INTERFACE ) ? "on" : "off" ) << std::endl;
@@ -647,13 +648,13 @@ void Settings::setBattleAutoSpellcast( bool enable )
     }
 }
 
-void Settings::setBattleShowArmyOrder( const bool enable )
+void Settings::setBattleShowTurnOrder( const bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+        _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_TURN_ORDER );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+        _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_TURN_ORDER );
     }
 }
 
@@ -724,9 +725,11 @@ void Settings::setSystemInfo( const bool enable )
 {
     if ( enable ) {
         _optGlobal.SetModes( GLOBAL_SYSTEM_INFO );
+        fheroes2::RenderProcessor::instance().enableRenderers();
     }
     else {
         _optGlobal.ResetModes( GLOBAL_SYSTEM_INFO );
+        fheroes2::RenderProcessor::instance().disableRenderers();
     }
 }
 
@@ -882,9 +885,9 @@ bool Settings::BattleAutoSpellcast() const
     return _optGlobal.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST );
 }
 
-bool Settings::BattleShowArmyOrder() const
+bool Settings::BattleShowTurnOrder() const
 {
-    return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+    return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_TURN_ORDER );
 }
 
 void Settings::setDebug( int debug )

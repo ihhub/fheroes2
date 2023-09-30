@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-27 10:37+0000\n"
-"PO-Revision-Date: 2022-10-26 02:17+0200\n"
+"POT-Creation-Date: 2023-09-17 07:18+0000\n"
+"PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "Language: cs\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -59,7 +59,7 @@ msgid "OKAY"
 msgstr "OKAY"
 
 msgid "smallerButton|OKAY"
-msgstr ""
+msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "PŘIJMI"
@@ -83,7 +83,7 @@ msgid "EXIT"
 msgstr "PRYČ"
 
 msgid "smallerButton|EXIT"
-msgstr ""
+msgstr "VEN"
 
 msgid "DISMISS"
 msgstr "PROPUSŤ"
@@ -163,22 +163,22 @@ msgstr ""
 "KAMPAŇ"
 
 msgid "HOT SEAT"
-msgstr ""
+msgstr "HORKÉ KŘESLO"
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 HRÁČI"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 HRÁČI"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 HRÁČI"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 HRÁČŮ"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 HRÁČŮ"
 
 msgid "GIFT"
 msgstr "DARUJ"
@@ -190,10 +190,76 @@ msgid "DIFFICULTY"
 msgstr "OBTÍŽNOST"
 
 msgid "VIEW INTRO"
-msgstr ""
+msgstr "ZOBRAZIT ÚVOD"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"P\n"
+"R\n"
+"O\n"
+"P\n"
+"U\n"
+"S\n"
+"Ť"
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"O\n"
+"D\n"
+"E\n"
+"J\n"
+"Í\n"
+"T"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"K\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"Ň"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
 
 msgid "Warrior"
 msgstr "Válečník"
@@ -359,19 +425,17 @@ msgstr "Artefakt Sféra Negace znemožňuje v této bitvě použít jakékoliv k
 msgid "You have already cast a spell this round."
 msgstr "V tomto kole si již kouzlil."
 
-#, fuzzy
 msgid "That spell will have no effect!"
 msgstr "Toto kouzlo nebude na nikoho učinkovat!"
 
 msgid "You may only summon one type of elemental per combat."
 msgstr "V této bitvě můžeš přivolat pouze jeden druh elementálů."
 
-#, fuzzy
 msgid ""
 "There is no open space adjacent to your hero where you can summon an "
 "Elemental to."
 msgstr ""
-"Tvému hrdinovi nepřipadá žádné místo, kam by se dali Elemantálové přivolat"
+"Vedle vašeho hrdiny není žádné volné místo, kam by se dal Elementál přivolat."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
@@ -386,14 +450,14 @@ msgstr "Rychlost: %{speed}"
 msgid "Speed"
 msgstr "Rychlost"
 
-msgid "Army Order"
-msgstr "Uspořádání jednotek"
-
 msgid "Off"
 msgstr "Vyp"
 
 msgid "On"
 msgstr "Zap"
+
+msgid "Turn Order"
+msgstr "Pořadí tahu"
 
 msgid "Auto Spell Casting"
 msgstr "Automické Kouzlení"
@@ -423,10 +487,10 @@ msgid "Damage Info"
 msgstr "Škody Info"
 
 msgid "Set the speed of combat actions and animations."
-msgstr "Nastavit rychlost akcí a animací v bitvě"
+msgstr "Nastavit rychlost akcí a animací v bitvě."
 
-msgid "Toggle to display army order during the battle."
-msgstr "Zapnout zobrazení pořadí tahu jednotek v bitvě."
+msgid "Toggle to display the turn order during the battle."
+msgstr "Zap/Vyp zobrazení pořadí tahu jednotek v bitvě."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -454,7 +518,7 @@ msgid ""
 msgstr "Zap/Vyp stín aktuální pozice kurzoru myši na mřížce."
 
 msgid "Change the audio settings of the game."
-msgstr "Změnit nastavení zvuku"
+msgstr "Změnit nastavení zvuku."
 
 msgid "Check and configure all the hot keys present in the game."
 msgstr ""
@@ -627,8 +691,8 @@ msgstr "Vystřel na %{monster}"
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
 msgstr[0] "(1 výstřel zbývá)"
-msgstr[1] "(%{count} výstřelů zbývá)"
-msgstr[2] ""
+msgstr[1] "(%{count} výstřely zbývají)"
+msgstr[2] "(%{count} výstřelů zbývá)"
 
 msgid "Attack %{monster}"
 msgstr "Zaútoč na %{monster}"
@@ -652,7 +716,7 @@ msgid "Select spell target"
 msgstr "Vyber na koho seslat"
 
 msgid "View Ballista info"
-msgstr "Zobrazit informace o Katapultu."
+msgstr "Zobrazit informace o Katapultu"
 
 msgid "Ballista"
 msgstr "Katapult"
@@ -715,9 +779,8 @@ msgstr "Zobrazuje následky počínání jednotlivých stvůr."
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Jsi si jist, že chceš dokončit boj v automatickém módu?"
 
-#, fuzzy
 msgid "Are you sure you want to enable auto combat?"
-msgstr "Jsi si jist, že chceš utéct z boje?"
+msgstr "Určitě chceš povolit automatický boj?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} nebudou táhnout."
@@ -740,12 +803,11 @@ msgstr[0] "1 %{defender} umírá."
 msgstr[1] "%{count} %{defender} umírají."
 msgstr[2] "%{count} %{defender} umírají."
 
-#, fuzzy
 msgid "1 soul is incorporated."
 msgid_plural "%{count} souls are incorporated."
-msgstr[0] "Zrcadlová jednotka byla vytvořena."
-msgstr[1] "Zrcadlová jednotka byla vytvořena."
-msgstr[2] "Zrcadlová jednotka byla vytvořena."
+msgstr[0] "Jedna duše je začleněna."
+msgstr[1] "%{count} duše jsou začleněny."
+msgstr[2] "%{count} duší je začleněno."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
@@ -989,8 +1051,8 @@ msgstr "Poslední zůčtování"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
-"rebellion against his brother.  They are not allied with each other, so they "
-"will spend most of their time fighting with one another.  Victory is yours "
+"rebellion against his brother. They are not allied with each other, so they "
+"will spend most of their time fighting with one another. Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
 "Roland potřebuje abys porazil šlechtice poblíž jeho hradu a tím začal "
@@ -1021,7 +1083,7 @@ msgid ""
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
 "Budeš vystaven přímému souboji o suroviny a zdroje se čtyřmi spojeneckými "
-"protivníky. Zaber všechny nepřátelské hrady a vyhraješ. "
+"protivníky. Zaber všechny nepřátelské hrady a vyhraješ."
 
 msgid ""
 "Your enemies are allied against you and start close by, so be ready to come "
@@ -1080,7 +1142,7 @@ msgstr ""
 "ve spojenectví proti tobě. Poraž Archibalda a ukonči tuto válku!"
 
 msgid ""
-"Switching sides leaves you with three castles against the enemy's one.  This "
+"Switching sides leaves you with three castles against the enemy's one. This "
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
@@ -1115,10 +1177,10 @@ msgid "Greater Glory"
 msgstr "Větší Sláva"
 
 msgid ""
-"King Archibald requires you to defeat the three enemies in this region.  "
-"They are not allied with one another, so they will spend most of their "
-"energy fighting amongst themselves.  You will win when you own all of the "
-"enemy castles and there are no more heroes left to fight."
+"King Archibald requires you to defeat the three enemies in this region. They "
+"are not allied with one another, so they will spend most of their energy "
+"fighting amongst themselves. You will win when you own all of the enemy "
+"castles and there are no more heroes left to fight."
 msgstr ""
 "Král Archibald potřebuje abys porazil tři protivníky v tomto regionu. "
 "Protivníci nemají mezi sebou smluvené spojenectví, proto asi spotřebují "
@@ -1457,7 +1519,7 @@ msgid " bane"
 msgstr " zkáza"
 
 msgid " alliance"
-msgstr "aliance"
+msgstr " aliance"
 
 msgid "Carry-over forces"
 msgstr "Převedené vojska"
@@ -1469,7 +1531,7 @@ msgid " defeated"
 msgstr " poražení"
 
 msgid " will always run away from your army."
-msgstr " vždy utečou před Tvými vojsky"
+msgstr " vždy utečou před Tvými vojsky."
 
 msgid " will be willing to join your army."
 msgstr " se budou chtít k Tobě přidat."
@@ -1509,41 +1571,40 @@ msgstr ""
 
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
-"attention.  He shouts to them, \"Who of you is brave enough to join this "
-"fearless ally of ours?\"  The group explodes with cheers as they run to join "
+"attention. He shouts to them, \"Who of you is brave enough to join this "
+"fearless ally of ours?\" The group explodes with cheers as they run to join "
 "your ranks."
 msgstr ""
 "Když se přiblížíš ke skupině elfů, jejich vůdce je všechny vyzve k "
 "pozornosti. Zakřičí na ně: \"Kdo z vás je dost odvážný, aby se přidal k "
-"našemu neohroženému spojenci?\"  Skupina propukne v jásot a běží aby se "
+"našemu neohroženému spojenci?\" Skupina propukne v jásot a běží aby se "
 "přidali k Tvým řadám."
 
 msgid ""
-"The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
+"The dwarves hail you, \"Any friend of Roland is a friend of ours. You may "
 "pass.\""
 msgstr ""
-"Skřítci tě vítají, \"Každý Rolandův přítel je i náš přítel.  Můžeš projít.\""
+"Skřítci tě vítají, \"Každý Rolandův přítel je i náš přítel. Můžeš projít.\""
 
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
 msgstr "Zlobři na tebe uznale zavrčí: \"Archibaldovi spojenci mohou projít.\""
 
 msgid ""
-"The dragons see you and call out.  \"Our alliance with Archibald compels us "
-"to join you.  Unfortunately you have no room.  A pity!\"  They quickly "
-"scatter."
+"The dragons see you and call out. \"Our alliance with Archibald compels us "
+"to join you. Unfortunately you have no room. A pity!\" They quickly scatter."
 msgstr ""
 "Draci Tě vidí a zvolají. \"Naše spojenectví s Archibaldem nás zavazuje "
 "abychom se k Tobě připojili. Bohužel už nemáš místo. To je škoda!\" A rychle "
 "se rozprchli."
 
 msgid ""
-"The elves stand at attention as you approach.  Their leader calls to you and "
-"says, \"Let us not impede your progress, ally!  Move on, and may victory be "
+"The elves stand at attention as you approach. Their leader calls to you and "
+"says, \"Let us not impede your progress, ally! Move on, and may victory be "
 "yours.\""
 msgstr ""
 "Elfové stojí v pozoru, když se přiblížíš.  Jejich vůdce zvolá a řekne: "
-"\"Nebudeme Ti bránít v postupu, spojenče!  Pokračuj, věříme ve Tvé vítězství."
+"\"Nebudeme Ti bránít v postupu, spojenče! Pokračuj, věříme ve Tvé vítězství."
 "\""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
@@ -1839,7 +1900,6 @@ msgstr "Nelze postavit. Dnes si zde již stavěl."
 msgid "For this action it is necessary to build a castle first."
 msgstr "Pro tuto akci bude nutné nejdříve postavit hrad."
 
-#, fuzzy
 msgid "Cannot build %{name} because the castle is too far away from an ocean."
 msgstr "%{name} nelze postavit, protože hrad je moc daleko od moře."
 
@@ -2503,9 +2563,8 @@ msgstr "Zobrazit hrdinu"
 msgid "The above spells are available here."
 msgstr "Nacházejí se zde výše uvedená kouzla."
 
-#, fuzzy
 msgid "The spells the hero can learn have been added to their book."
-msgstr "Výše uvedená kouzla byly přidány to tvé knihy."
+msgstr "Do knihy byla přidána kouzla, která se hrdina může naučit."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr "Vrchní po štědrém spropitném postil tuto zvěst:"
@@ -2628,7 +2687,7 @@ msgstr "Aréna"
 
 msgid ""
 "You enter the arena and face a pack of vicious lions. You handily defeat "
-"them, to the wild cheers of the crowd.  Impressed by your skill, the aged "
+"them, to the wild cheers of the crowd. Impressed by your skill, the aged "
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 "Vstupuješ do arény kde se utkáš se smečkou rozzuřených lvů. Lehce je "
@@ -2667,20 +2726,16 @@ msgid "Are you sure you want to dismiss this army?"
 msgstr "Jsi si jist, že chceš jednotku propustit?"
 
 msgid "Upgrade"
-msgstr ""
+msgstr "Povýšit"
 
-#, fuzzy
 msgid "Upgrade your troops."
-msgstr "Nemůžeš si dovolit vylepšit své jednotky!"
+msgstr "Vylepši své jednotky."
 
 msgid "Dismiss"
-msgstr ""
+msgstr "Propustit"
 
 msgid "Dismiss this army."
-msgstr ""
-
-msgid "Followers"
-msgstr "Následovníci"
+msgstr "Propustit tuto armádu."
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
@@ -2688,6 +2743,9 @@ msgid ""
 msgstr ""
 "Skupina %{monster} s touhou po velké slávě se chce k Tobě přidat.\n"
 "Přijímáš?"
+
+msgid "Followers"
+msgstr "Následovníci"
 
 msgid ""
 "The %{monster} is swayed by your diplomatic tongue, and offers to join your "
@@ -2824,12 +2882,11 @@ msgid "Change the language of the game."
 msgstr "Změnit jazyk hry."
 
 msgid "Select Game Language"
-msgstr "Vybrat jazyk hry."
+msgstr "Vybrat jazyk hry"
 
 msgid "Change the graphics settings of the game."
 msgstr "Změnit grafické nastavení hry."
 
-#, fuzzy
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr "Přepnout barevný kurzor zap/vyp. Toto je jenom volba vzhledu."
 
@@ -2946,6 +3003,53 @@ msgstr "Zobraz extra informace jako FPS a místní čas."
 
 msgid "Hot Keys:"
 msgstr "Kláv. zkratky:"
+
+msgid "Evil"
+msgstr "Zlý"
+
+msgid "Good"
+msgstr "Dobrý"
+
+msgid "Interface Type"
+msgstr "Rozhraní"
+
+#, fuzzy
+msgid "Hide"
+msgstr "Horda"
+
+#, fuzzy
+msgid "Show"
+msgstr "Sníh"
+
+msgid "Interface"
+msgstr "Rozhraní"
+
+msgid "Slow"
+msgstr "Pomalá"
+
+msgid "Normal"
+msgstr "Normální"
+
+msgid "Fast"
+msgstr "Rychlá"
+
+msgid "Very Fast"
+msgstr "Velmi rychlá"
+
+msgid "Scroll Speed"
+msgstr "Rychlost posunu"
+
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr "Přepnout barevný kurzor zap/vyp. Toto je jenom volba vzhledu."
+
+msgid "Sets the speed at which you scroll the window."
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Vybrat jazyk:"
@@ -3148,12 +3252,6 @@ msgstr ""
 "\n"
 "Cesta: "
 
-msgid "File to Save:"
-msgstr "Uložit do souboru:"
-
-msgid "File to Load:"
-msgstr "Soubor k načtení:"
-
 msgid "Click to save the current game."
 msgstr "Klikni pro uložení aktuální hry."
 
@@ -3165,6 +3263,12 @@ msgstr "Jsi si jist, že chceš smazat soubor:"
 
 msgid "Warning!"
 msgstr "Výstraha!"
+
+msgid "File to Save:"
+msgstr "Uložit do souboru:"
+
+msgid "File to Load:"
+msgstr "Soubor k načtení:"
 
 msgid "Accept the choice made."
 msgstr ""
@@ -3310,7 +3414,7 @@ msgid "Selected Map Difficulty"
 msgstr ""
 
 msgid ""
-"The map difficulty of the currently selected map.  The map difficulty is "
+"The map difficulty of the currently selected map. The map difficulty is "
 "determined by the scenario designer. More difficult maps might include more "
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
@@ -3336,47 +3440,11 @@ msgstr ""
 msgid "Enemy Speed"
 msgstr "Rychlost"
 
-msgid "Slow"
-msgstr ""
-
-msgid "Normal"
-msgstr ""
-
-msgid "Fast"
-msgstr ""
-
-msgid "Very Fast"
-msgstr ""
-
-msgid "Scroll Speed"
-msgstr ""
-
-msgid "Evil"
-msgstr "Zlý"
-
-msgid "Good"
-msgstr "Dobrý"
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Rozhraní"
-
-#, fuzzy
-msgid "Hide"
-msgstr "Horda"
-
-#, fuzzy
-msgid "Show"
-msgstr "Sníh"
-
-msgid "Interface"
-msgstr "Rozhraní"
-
 msgid "Auto Resolve"
-msgstr ""
+msgstr "Automaticky"
 
 msgid "Auto, No Spells"
-msgstr ""
+msgstr "Auto, Bez kouzel"
 
 msgid "Battles"
 msgstr ""
@@ -3384,25 +3452,19 @@ msgstr ""
 msgid "autoBattle|Manual"
 msgstr ""
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr "Přepnout barevný kurzor zap/vyp. Toto je jenom volba vzhledu."
-
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
 msgid ""
-"Sets the speed that A.I. heroes move at.  You can also elect not to view A."
-"I. movement at all."
+"Sets the speed that A.I. heroes move at. You can also elect not to view A.I. "
+"movement at all."
 msgstr ""
 
-msgid "Sets the speed at which you scroll the window."
-msgstr ""
+msgid "Change the interface settings of the game."
+msgstr "Změnit grafické nastavení hry."
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
-msgid "Toggle interface visibility."
-msgstr ""
+msgid "Interface Settings"
+msgstr "Grafické Nastavení"
 
 msgid "Toggle instant battle mode."
 msgstr ""
@@ -3682,7 +3744,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-msgid "Undo your last action. Press again to redo the action."
+msgid "Undo your last action."
 msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
@@ -4082,7 +4144,6 @@ msgstr ""
 msgid "hotkey|multi-player game"
 msgstr "Spusti hru jednoho nebo více hráčů."
 
-#, fuzzy
 msgid "hotkey|settings"
 msgstr "Nastavení"
 
@@ -4135,6 +4196,14 @@ msgstr ""
 #, fuzzy
 msgid "hotkey|new random map"
 msgstr "Přehled Království"
+
+#, fuzzy
+msgid "hotkey|undo last action"
+msgstr "Zobrazit následující město"
+
+#, fuzzy
+msgid "hotkey|redo last action"
+msgstr "Zobrazit následující město"
 
 msgid "hotkey|roland campaign"
 msgstr ""
@@ -4332,18 +4401,15 @@ msgstr ""
 msgid "hotkey|well"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|marketplace"
 msgstr "Tržiště"
 
 msgid "hotkey|mage guild"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|shipyard"
 msgstr "Loděnice"
 
-#, fuzzy
 msgid "hotkey|thieves guild"
 msgstr "Cech zlodějů"
 
@@ -4386,7 +4452,7 @@ msgid "The save file is corrupted."
 msgstr "Soubor je požkozen."
 
 msgid "Unsupported save format: "
-msgstr "Nepodporovaný formát:"
+msgstr "Nepodporovaný formát: "
 
 msgid "Current game version: "
 msgstr "Aktuální verze hry: "
@@ -4411,7 +4477,7 @@ msgid "' language, but the current language of the game is '"
 msgstr "' jazyk, aktuálně máš ale nastaven jazyk '"
 
 msgid "Hot Seat"
-msgstr ""
+msgstr "Horké křeslo"
 
 msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
@@ -4422,24 +4488,24 @@ msgid "A single player game playing out a single map."
 msgstr ""
 
 msgid "Standard Game"
-msgstr ""
+msgstr "Standardní hra"
 
 msgid "A single player game playing through a series of maps."
 msgstr ""
 
 msgid "Campaign Game"
-msgstr ""
+msgstr "Kampaňová hra"
+
+msgid "Multi-Player Game"
+msgstr "Hra pro více hráčů"
 
 msgid ""
 "A multi-player game, with several human players completing against each "
 "other on a single map."
 msgstr ""
 
-msgid "Multi-Player Game"
-msgstr ""
-
 msgid "fheroes2 Resurrection Team presents"
-msgstr ""
+msgstr "Tým fheroes2 Resurrection uvádí"
 
 msgid "Greetings!"
 msgstr "Vítej!"
@@ -4517,7 +4583,7 @@ msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr "Jedna ze čtyř nových kampaní z datadisku Price of Loyalty."
 
 msgid "Loading video. Please wait..."
-msgstr ""
+msgstr "Načítání videa. Prosím, čekej..."
 
 msgid "Host"
 msgstr ""
@@ -4579,8 +4645,8 @@ msgstr ""
 msgid "Play with 6 human players."
 msgstr ""
 
-msgid "Dragon city has fallen!  You are now the Master of the Dragons."
-msgstr "Drači město padlo! Stal ses Pánem Draků. "
+msgid "Dragon city has fallen! You are now the Master of the Dragons."
+msgstr "Drači město padlo! Stal ses Pánem Draků."
 
 msgid ""
 "You captured %{name}!\n"
@@ -4621,7 +4687,7 @@ msgstr ""
 "Všichni nepřátelé se klanějí Tvému bohatství a síle."
 
 msgid "Victory!"
-msgstr ""
+msgstr "Vítězství!"
 
 msgid ""
 "The enemy has captured %{name}!\n"
@@ -4654,9 +4720,8 @@ msgstr ""
 "Nepodařilo se Ti dokončit úkol včas.\n"
 "Vše je ztraceno."
 
-#, fuzzy
 msgid "Defeat!"
-msgstr " poražení"
+msgstr "Porážka!"
 
 msgid ""
 "Base score: %{score}\n"
@@ -4672,9 +4737,9 @@ msgstr "Vyčerpání času. (Výhra není dosažena do urč. doby.)"
 
 msgid "You must defeat the enemy %{enemies}."
 msgid_plural "You must defeat the enemy alliance of %{enemies}."
-msgstr[0] "Musíš porazit %{enemies}. "
-msgstr[1] "Musíš porazit alianci %{enemies} nepřítele."
-msgstr[2] ""
+msgstr[0] "Musíš porazit %{enemies}."
+msgstr[1] "Musíš porazit nepřátelskou alianci %{enemies}."
+msgstr[2] "Musíš porazit nepřátelskou alianci %{enemies}."
 
 msgid ""
 "The alliance consisting of %{allies} and you must defeat the enemy "
@@ -4683,11 +4748,13 @@ msgid_plural ""
 "The alliance consisting of %{allies} and you must defeat the enemy alliance "
 "of %{enemies}."
 msgstr[0] ""
-"Aliance je složená z %{allies}, musíte porazit nepřítele %{enemies}. "
+"Aliance je složená z %{allies}, musíte porazit nepřítele %{enemies}."
 msgstr[1] ""
 "Aliance je složená z %{allies}, musíte porazit nepřátelskou alianci tvořící "
 "%{enemies}."
 msgstr[2] ""
+"Aliance je složená z %{allies}, musíte porazit nepřátelskou alianci tvořící "
+"%{enemies}."
 
 msgid "Capture the castle '%{name}'."
 msgstr "Dobytí hradu '%{name}'."
@@ -4800,26 +4867,27 @@ msgid_plural ""
 msgstr[0] ""
 "Při pravidelném nárůstu populace %{monster} narostla o %{count} procent!"
 msgstr[1] ""
-"Při pravidelném nárůstu populace %{monster} narostla o %{count} procent!"
+"Při pravidelném nárůstu populace %{monster} narostla o %{count} procenta!"
 msgstr[2] ""
+"Při pravidelném nárůstu populace %{monster} narostla o %{count} procent!"
 
 msgid "%{monster} growth +%{count}."
 msgstr "Růst %{monster} +%{count}."
 
 msgid " All populations are halved."
-msgstr "Celá populace je na polovině."
+msgstr " Celá populace je na polovině."
 
 msgid " All dwellings increase population."
-msgstr "Všechna obydlí přináší novou populaci."
+msgstr " Všechna obydlí přináší novou populaci."
 
 msgid "New Month!"
-msgstr ""
+msgstr "Nový měsíc!"
 
 msgid "New Week!"
 msgstr "Začal nový týden!"
 
 msgid "Beware!"
-msgstr ""
+msgstr "Pozor!"
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
@@ -4857,9 +4925,8 @@ msgstr ""
 msgid "Tsabu"
 msgstr ""
 
-#, fuzzy
 msgid "Sir Galant"
-msgstr "Zanech vzdušného strážce"
+msgstr "Sir Galant"
 
 msgid "Thundax"
 msgstr ""
@@ -4937,7 +5004,7 @@ msgid "End Turn"
 msgstr "Ukončit tah"
 
 msgid "End your turn and left the computer take its turn."
-msgstr "Ukonči svůj tah a nech táhnout počítač. "
+msgstr "Ukonči svůj tah a nech táhnout počítač."
 
 msgid "Adventure Options"
 msgstr "Možnosti hry"
@@ -5103,15 +5170,14 @@ msgstr ""
 "Těžce hendikepovaní hráči začínají s menším počtem zdrojů a získávají o 30% "
 "méně zdrojů za den."
 
-#, fuzzy
 msgid "View %{skill} Info"
-msgstr "Zobrazit informace o %{name}."
+msgstr "Zobrazit informace o %{skill}"
 
 msgid "Keyboard|123"
 msgstr ""
 
 msgid "Keyboard|SPACE"
-msgstr ""
+msgstr "Mezerník"
 
 msgid "Keyboard|ABC"
 msgstr ""
@@ -5185,7 +5251,7 @@ msgid "Danish"
 msgstr ""
 
 msgid "Slovak"
-msgstr ""
+msgstr "Slovensky"
 
 msgid "Vietnamese"
 msgstr ""
@@ -5225,7 +5291,7 @@ msgid "Fineous"
 msgstr ""
 
 msgid "Jezebel"
-msgstr ""
+msgstr "Jezábel"
 
 msgid "Atlas"
 msgstr ""
@@ -5315,10 +5381,10 @@ msgid "Lord Halton"
 msgstr ""
 
 msgid "Sister Eliza"
-msgstr ""
+msgstr "Sestra Eliza"
 
 msgid "Brother Brax"
-msgstr ""
+msgstr "Bratr Brax"
 
 msgid "Dainwin"
 msgstr ""
@@ -5743,7 +5809,7 @@ msgstr ""
 
 msgid ""
 "A drink at the oasis fills your troops with strength and lifts their "
-"spirits.  You can travel a bit further today."
+"spirits. You can travel a bit further today."
 msgstr ""
 
 msgid ""
@@ -6404,9 +6470,8 @@ msgid ""
 "oracle taught me his skill. I have the answer you seek.\""
 msgstr ""
 
-#, fuzzy
 msgid "No spell book is present."
-msgstr "Žádné kouzlo k seslání."
+msgstr "Nemáš Knihu kouzel, bez ní nemůžeš kouzlit."
 
 #, fuzzy
 msgid ""
@@ -6538,9 +6603,8 @@ msgstr "Zobrazit předchozí město"
 msgid "Show next hero"
 msgstr "Zobrazit následující město"
 
-#, fuzzy
 msgid "Blood Morale"
-msgstr "Morálka"
+msgstr "Krevní morálka"
 
 msgid "%{morale} Morale"
 msgstr ""
@@ -6826,8 +6890,9 @@ msgid_plural ""
 "%{skill} increases your hero's viewable area by %{count} squares."
 msgstr[0] "%{skill} rozšiřuje viditelnou oblast kolem hrdiny o jeden čtverec."
 msgstr[1] ""
-"%{skill} rozšiřuje viditelnou oblast kolem hrdiny o %{count} čtverců."
+"%{skill} rozšiřuje viditelnou oblast kolem hrdiny o %{count} čtverce."
 msgstr[2] ""
+"%{skill} rozšiřuje viditelnou oblast kolem hrdiny o %{count} čtverců."
 
 msgid ""
 "%{skill} allows you to negotiate with monsters who are weaker than your "
@@ -6860,13 +6925,12 @@ msgstr "%{skill} umožnuje hrdinovi naučit se kouzla čtvrtého stupně."
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr "%{skill} umožnuje hrdinovi naučit se kouzla pátého stupně."
 
-#, fuzzy
 msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
 "%{skill} regenerates %{count} additional spell points per day to your hero."
-msgstr[0] "regeneruje jeden bod magické energie za den."
-msgstr[1] "regeneruje %{count} bodů magické energie za den."
-msgstr[2] ""
+msgstr[0] "%{skill} regeneruje jeden bod magické energie za den."
+msgstr[1] "%{skill} regeneruje %{count} body magické energie za den."
+msgstr[2] "%{skill} regeneruje %{count} bodů magické energie za den."
 
 msgid "%{skill} increases your hero's luck by %{count}."
 msgstr "%{skill} zvyšuje štěstí hrdiny o %{count}."
@@ -6893,21 +6957,21 @@ msgstr ""
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
-"2nd level enemy spell used against him in a combat."
+"2nd level spell that was cast by an enemy during combat."
 msgstr ""
 "%{skill} dává hrdinovi %{count} procentní šanci naučit se jakékoliv kouzlo "
 "prvé nebo druhé úrovně, které protivník použil v boji."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
-"level spell (or below) used against him in combat."
+"level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "%{skill} dává hrdinovi %{count} procentní šanci naučit se jakékoliv kouzlo "
 "třetí (nebo nižší) úrovně, které protivník použil v boji."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
-"level spell (or below) used against him in combat."
+"level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "%{skill} dává hrdinovi %{count} procentní šanci naučit se jakékoliv kouzlo "
 "čtvrté (nebo nižší) úrovně, které protivník použil v boji."
@@ -7262,10 +7326,10 @@ msgid "week|Beetle"
 msgstr ""
 
 msgid "week|PLAGUE"
-msgstr ""
+msgstr "MORU"
 
 msgid "week|Unnamed"
-msgstr ""
+msgstr "Bez jména"
 
 msgid "Desert"
 msgstr "Poušť"
@@ -7400,13 +7464,13 @@ msgid "Lighthouse"
 msgid_plural "Lighthouses"
 msgstr[0] "Maják"
 msgstr[1] "Majáky"
-msgstr[2] ""
+msgstr[2] "Majáků"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
-msgstr[0] "Vodní Mlýn"
+msgstr[0] "Vodní Mlýnů"
 msgstr[1] "Vodní Mlýny"
-msgstr[2] ""
+msgstr[2] "Vodních Mlýnů"
 
 msgid "Mines"
 msgstr "Doly"
@@ -7457,7 +7521,7 @@ msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Větrný mlýn"
 msgstr[1] "Větrné mlýny"
-msgstr[2] ""
+msgstr[2] "Větrných mlýnů"
 
 msgid "Artifact"
 msgstr "Artefakt"
@@ -7610,7 +7674,7 @@ msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Kouzelná zahrada"
 msgstr[1] "Kouzelné zahrady"
-msgstr[2] ""
+msgstr[2] "Kouzelných zahrad"
 
 msgid "Observation Tower"
 msgstr "Rozhledna"
@@ -8027,16 +8091,16 @@ msgid "Vampire Lords"
 msgstr "Lordi Upíři"
 
 msgid "Lich"
-msgstr ""
+msgstr "Kostěj"
 
 msgid "Liches"
 msgstr "Lichové"
 
 msgid "Power Lich"
-msgstr "Mocný Lich"
+msgstr "Mocný Kostěj"
 
 msgid "Power Liches"
-msgstr "Mocní Lichové"
+msgstr "Mocní Kostějové"
 
 msgid "Bone Dragon"
 msgstr "Kostěný Drak"
@@ -8128,17 +8192,14 @@ msgstr ""
 msgid "Double shot"
 msgstr ""
 
-#, fuzzy
 msgid "2-hex monster"
-msgstr ""
-"Mračna\n"
-"%{monster}"
+msgstr "Tvor přes 2 šestúhelníky"
 
 msgid "Double strike"
 msgstr ""
 
 msgid "Double damage to Undead"
-msgstr ""
+msgstr "Dvojnásobné zranění nemrtvých"
 
 msgid "% magic resistance"
 msgstr ""
@@ -8183,13 +8244,13 @@ msgid "% chance to cast %{spell} spell"
 msgstr ""
 
 msgid "HP regeneration"
-msgstr ""
+msgstr "Regenerace života"
 
 msgid "Two hexes attack"
 msgstr ""
 
 msgid "Flyer"
-msgstr ""
+msgstr "Létající"
 
 msgid "Always retaliates"
 msgstr ""
@@ -8201,16 +8262,16 @@ msgid "No melee penalty"
 msgstr ""
 
 msgid "Dragon"
-msgstr ""
+msgstr "Dračí"
 
 msgid "Undead"
-msgstr ""
+msgstr "Nemrtvý"
 
 msgid "No enemy retaliation"
-msgstr ""
+msgstr "Žádná odplata nepřítele"
 
 msgid "HP drain"
-msgstr ""
+msgstr "Odčerpání života"
 
 msgid "Cloud attack"
 msgstr ""
@@ -8222,14 +8283,13 @@ msgid "% chance to halve enemy"
 msgstr ""
 
 msgid "Soul Eater"
-msgstr ""
+msgstr "Požírač duší"
 
 msgid "Elemental"
-msgstr ""
+msgstr "Elementál"
 
-#, fuzzy
 msgid "No Morale"
-msgstr "Morálka"
+msgstr "Žádná morálka"
 
 msgid "200% damage from Fire spells"
 msgstr ""
@@ -8250,7 +8310,7 @@ msgid "% damage from "
 msgstr ""
 
 msgid "The three Anduran artifacts magically combine into one."
-msgstr ""
+msgstr "Tři Anduranovy artefakty se magicky spojí v jeden."
 
 #, fuzzy
 msgid "View Spells"
@@ -8264,9 +8324,8 @@ msgstr "Zobrazit %{name}"
 msgid "Move %{name}"
 msgstr "Zobrazit %{name}"
 
-#, fuzzy
 msgid "Cannot move the Spellbook"
-msgstr "Seslat kouzlo"
+msgstr "Nelze přesunout knihu kouzel"
 
 msgid "This item can't be traded."
 msgstr ""
@@ -8278,46 +8337,46 @@ msgid "The %{name} increases your knowledge by %{count}."
 msgstr ""
 
 msgid "Ultimate Book of Knowledge"
-msgstr ""
+msgstr "Ultimátní kniha vědomostí"
 
 msgid "The %{name} increases your attack skill by %{count}."
 msgstr ""
 
 msgid "Ultimate Sword of Dominion"
-msgstr ""
+msgstr "Ultimátní meč nadvlády"
 
 msgid "The %{name} increases your defense skill by %{count}."
 msgstr ""
 
 msgid "Ultimate Cloak of Protection"
-msgstr ""
+msgstr "Ultimátní plášť ochrany"
 
 msgid "The %{name} increases your spell power by %{count}."
 msgstr ""
 
 msgid "Ultimate Wand of Magic"
-msgstr ""
+msgstr "Ultimátní kouzelná hůlka"
 
 msgid "The %{name} increases your attack and defense skills by %{count} each."
 msgstr ""
 
 msgid "Ultimate Shield"
-msgstr ""
+msgstr "Ultimátní štít"
 
 msgid "The %{name} increases your spell power and knowledge by %{count} each."
 msgstr ""
 
 msgid "Ultimate Staff"
-msgstr ""
+msgstr "Ultimátní tyč"
 
 msgid "The %{name} increases each of your basic skills by %{count} points."
 msgstr ""
 
 msgid "Ultimate Crown"
-msgstr ""
+msgstr "Ultimátní koruna"
 
 msgid "Golden Goose"
-msgstr ""
+msgstr "Zlatá husa"
 
 msgid "The %{name} brings in an income of %{count} gold per day."
 msgstr ""
@@ -8357,11 +8416,10 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Valor"
-msgstr ""
+msgstr "Medaile za statečnost"
 
-#, fuzzy
 msgid "The %{name} increases your morale by %{count}."
-msgstr "Pomník zvyšuje příjem města o 250 za den."
+msgstr "%{name} zvýší tvou morálku o %{count}."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -8369,7 +8427,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Courage"
-msgstr ""
+msgstr "Medaile za odvahu"
 
 msgid ""
 "After saving a young boy from a vicious pack of Wolves, you return him to "
@@ -8377,7 +8435,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Honor"
-msgstr ""
+msgstr "Medaile cti"
 
 msgid ""
 "After freeing a princess of a neighboring kingdom from the evil clutches of "
@@ -8385,7 +8443,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Distinction"
-msgstr ""
+msgstr "Medaile za zásluhy"
 
 msgid ""
 "Ridding the countryside of the hideous Minotaur who made a sport of eating "
@@ -8393,7 +8451,7 @@ msgid ""
 msgstr ""
 
 msgid "Fizbin of Misfortune"
-msgstr ""
+msgstr "Fizbin neštěstí"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
 msgstr ""
@@ -8419,7 +8477,7 @@ msgid "The %{name} increase your defense skill by %{count}."
 msgstr ""
 
 msgid ""
-"You encounter the infamous Black Knight!  After a grueling duel ending in a "
+"You encounter the infamous Black Knight! After a grueling duel ending in a "
 "draw, the Knight, out of respect, offers you a pair of armored gauntlets."
 msgstr ""
 
@@ -8575,9 +8633,8 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr ""
 
-#, fuzzy
 msgid "The %{name} increases your luck in combat by %{count}."
-msgstr "Pomník zvyšuje příjem města o 250 za den."
+msgstr "%{name} zvyšuje tvé štěstí v boji o %{count}."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
@@ -8624,9 +8681,8 @@ msgstr ""
 msgid "Sailor's Astrolabe of Mobility"
 msgstr ""
 
-#, fuzzy
 msgid "The %{name} increases your movement on sea."
-msgstr "Pomník zvyšuje příjem města o 250 za den."
+msgstr "%{name} zvyšuje tvůj pohyb na moři."
 
 msgid ""
 "An old sea captain is being tortured by Ogres. You save him, and in return "
@@ -8652,7 +8708,7 @@ msgid "The %{name} extends the duration of all your spells by %{count} turns."
 msgstr ""
 
 msgid ""
-"A surprise turn in the landscape finds you in the midst of a grisly scene:  "
+"A surprise turn in the landscape finds you in the midst of a grisly scene: "
 "Vultures picking at the aftermath of a terrible battle. Your cursory search "
 "of the remains turns up an enchanted hourglass."
 msgstr ""
@@ -8773,7 +8829,7 @@ msgid ""
 msgstr ""
 
 msgid "Ankh"
-msgstr ""
+msgstr "Anch"
 
 msgid ""
 "The %{name} doubles the effectiveness of all your resurrect and animate "
@@ -8900,12 +8956,12 @@ msgstr ""
 msgid "Wand of Negation"
 msgstr ""
 
-msgid "The %{name} protects your troops from the Dispel Magic spell."
+msgid "The %{name} makes all your troops immune to dispel magic spells."
 msgstr ""
 
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
-"He presents  you with a gift:  A wand that prevents the use of the dispel "
+"He presents  you with a gift: A wand that prevents the use of the dispel "
 "magic spell on your allies."
 msgstr ""
 
@@ -8992,9 +9048,8 @@ msgstr ""
 msgid "Tax Lien"
 msgstr ""
 
-#, fuzzy
 msgid "The %{name} costs you %{count} gold pieces per day."
-msgstr "Pomník zvyšuje příjem města o 250 za den."
+msgstr "%{name} tě stojí %{count} zlaťáků denně."
 
 msgid ""
 "Your big spending habits have earned you a massive tax bill that you can't "
@@ -9012,8 +9067,8 @@ msgstr ""
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
 "Warlock, unearths his fabled mask. Trembling, you put it on and it twists "
-"your visage into an awful grimace!  Oh no!  It's actually the hideous mask "
-"of Gromluck Greene, and you are stuck with it."
+"your visage into an awful grimace! Oh no! It's actually the hideous mask of "
+"Gromluck Greene, and you are stuck with it."
 msgstr ""
 
 msgid "Endless Pouch of Sulfur"
@@ -9085,7 +9140,7 @@ msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr ""
 
 msgid ""
-"Taking shelter from a storm in a small cave,  you notice a small patch of "
+"Taking shelter from a storm in a small cave, you notice a small patch of "
 "crystal in one corner. Curious, you break a piece off and notice that the "
 "original crystal grows the lost piece back. You decide to stuff the entire "
 "patch into a pouch and take it with you."
@@ -9115,7 +9170,7 @@ msgid "White Pearl"
 msgstr ""
 
 msgid ""
-"A walk across a dry saltwater lake bed yields an unlikely prize:  A white "
+"A walk across a dry saltwater lake bed yields an unlikely prize: A white "
 "pearl amidst shattered shells and debris."
 msgstr ""
 
@@ -9211,7 +9266,7 @@ msgid "Battle Garb of Anduran"
 msgstr ""
 
 msgid ""
-"The %{name} combines the powers of the three Anduran artifacts.  It provides "
+"The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for your troops and gives you the Town Portal spell."
 msgstr ""
 
@@ -9263,9 +9318,9 @@ msgstr ""
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
 "your horse. The pain subsides, but you still feel as if your chest is "
-"frozen.  As you pick yourself up off of the ground, you hear hearty "
-"laughter. You turn around just in time to see a Frost Giant run off into the "
-"woods and disappear."
+"frozen. As you pick yourself up off of the ground, you hear hearty laughter. "
+"You turn around just in time to see a Frost Giant run off into the woods and "
+"disappear."
 msgstr ""
 
 msgid "Helmet of Anduran"
@@ -9283,7 +9338,7 @@ msgstr ""
 
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
-"of Zombies. He asks you to take his hammer and finish what he started.  As "
+"of Zombies. He asks you to take his hammer and finish what he started. As "
 "you pick it up, it begins to hum, and then everything becomes a blur. The "
 "Zombies lie dead, the hammer dripping with blood. You strap it to your belt."
 msgstr ""
@@ -9302,12 +9357,6 @@ msgid ""
 "flying anyway.\""
 msgstr ""
 
-msgid "Masthead"
-msgstr ""
-
-msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
-msgstr ""
-
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -9315,8 +9364,14 @@ msgid ""
 "underneath a nearby dock."
 msgstr ""
 
-msgid "Sphere of Negation"
+msgid "Masthead"
 msgstr ""
+
+msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
+msgstr ""
+
+msgid "Sphere of Negation"
+msgstr "Sféra negace"
 
 msgid "The %{name} disables all spell casting, for both sides, in combat."
 msgstr ""
@@ -9351,15 +9406,15 @@ msgid ""
 "Sword Breaker that he relied on during his tour of duty."
 msgstr ""
 
+msgid "Sword of Anduran"
+msgstr "Anduranův meč"
+
 msgid ""
 "A Troll stops you and says: \"Pay me 5,000 gold, or the Sword of Anduran "
 "will slay you where you stand.\" You refuse. The troll grabs the sword "
 "hanging from its belt, screams in pain, and runs away. Picking up the fabled "
 "sword, you give thanks that half-witted Trolls tend to grab the wrong end of "
 "sharp objects."
-msgstr ""
-
-msgid "Sword of Anduran"
 msgstr ""
 
 msgid "Spade of Necromancy"
@@ -9441,12 +9496,12 @@ msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
 "strike the nearest creature with half damage, then strike the NEXT nearest "
 "creature with half again damage, and so on, until it becomes too weak to be "
-"harmful.  Warning:  This spell can hit your own creatures!"
+"harmful. Warning: This spell can hit your own creatures!"
 msgstr ""
 "Způsobí zásah vybrané stvůry bleskem elektrické energie ale následně zasáhne "
 "nejbližší stvůru s polovičním poškozením a poté zasáhne DALŠÍ nejbližší "
 "stvůru s opět polovičním poškozením a tak dále, dokud není příliš slabý na "
-"to, aby byl škodlivý.  Pozor:  Kouzlo může zasáhnout i Tvou stranu!"
+"to, aby byl škodlivý. Pozor: Kouzlo může zasáhnout i Tvou stranu!"
 
 msgid "Teleport"
 msgstr ""
@@ -9536,10 +9591,10 @@ msgid "Stoneskin"
 msgstr "Kamenná kůže"
 
 msgid ""
-"Increases the defense skill of the targeted creatures.  This is an improved "
+"Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
-"Zvyšuje obrannou sílu u cílových stvůr.  Jedná se o vylepšenou verzi kouzla "
+"Zvyšuje obrannou sílu u cílových stvůr. Jedná se o vylepšenou verzi kouzla "
 "Kamenná kůže."
 
 msgid "Steelskin"
@@ -9564,9 +9619,9 @@ msgid "Holy Word"
 msgstr "Slovo Svaté"
 
 msgid ""
-"Damages all undead in the battle.  This is an improved version of Holy Word."
+"Damages all undead in the battle. This is an improved version of Holy Word."
 msgstr ""
-"Poškodí všechny nemrtvé v bitvě.  Jedná se o vylepšenou verzi kouzla Slovo "
+"Poškodí všechny nemrtvé v bitvě. Jedná se o vylepšenou verzi kouzla Slovo "
 "Svaté."
 
 msgid "Holy Shout"
@@ -9618,7 +9673,7 @@ msgstr "Na bojiště se snesou magické živly a poškodí všechny jednotky."
 msgid ""
 "A rain of rocks strikes an area of the battlefield, damaging all nearby "
 "creatures."
-msgstr "Déšť kamenů zasáhne oblast bojiště a poškodí všechny stvůry poblíž. "
+msgstr "Déšť kamenů zasáhne oblast bojiště a poškodí všechny stvůry poblíž."
 
 msgid "Meteor Shower"
 msgstr "Spŕška meteorů"
@@ -9671,10 +9726,10 @@ msgid "Death Wave"
 msgstr "Smrtící vlna"
 
 msgid ""
-"Damages all living (non-undead) units in the battle.  This spell is an "
+"Damages all living (non-undead) units in the battle. This spell is an "
 "improved version of Death Ripple."
 msgstr ""
-"Poškodí všechny živé (nemrtvé) jednotky v bitvě.  Toto kouzlo je vylepšená "
+"Poškodí všechny živé (nemrtvé) jednotky v bitvě. Toto kouzlo je vylepšená "
 "verze kouzla Smrtící vlnka."
 
 msgid "Dragon Slayer"
@@ -9699,12 +9754,12 @@ msgid "Mirror Image"
 msgstr "Dvojník"
 
 msgid ""
-"Creates an illusionary unit that duplicates one of your existing units.  "
-"This illusionary unit does the same damages as the original, but will vanish "
-"if it takes any damage."
+"Creates an illusionary unit that duplicates one of your existing units. This "
+"illusionary unit does the same damages as the original, but will vanish if "
+"it takes any damage."
 msgstr ""
 "Vytvoří iluzorní jednotku, která je duplikátem jedné z Tvých stávajících "
-"jednotek.  Tato iluzorní jednotka způsobuje stejné poškození jako původní "
+"jednotek. Tato iluzorní jednotka způsobuje stejné poškození jako původní "
 "jednotka, ale zmizí pokud utrpí jakékoliv poškození."
 
 msgid "Shield"
@@ -9801,9 +9856,9 @@ msgid "Summon Boat"
 msgstr "Přivolej loď"
 
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore "
-"location.  A friendly boat is one which you just built or were the most "
-"recent player to occupy."
+"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
+"A friendly boat is one which you just built or were the most recent player "
+"to occupy."
 msgstr ""
 "Přivolá nejbližší neobsazenou přátelskou loď na přilehlé místo na pobřeží. "
 "Přátelská loď je taková, kterou jsi právě postavil nebo jsi ji použil jako "
@@ -9839,8 +9894,8 @@ msgid "Haunt"
 msgstr "Strašidla"
 
 msgid ""
-"Haunts a mine you control with Ghosts.  This mine stops producing "
-"resources.  (If I can't keep it, nobody will!)"
+"Haunts a mine you control with Ghosts. This mine stops producing resources. "
+"(If I can't keep it, nobody will!)"
 msgstr ""
 "V dole, který ovládáte začnou strašit duchové. Tento důl pak přestane "
 "produkovat zdroje. (Pokud ho nebudu mít já, tak nikdo jiný!)"
@@ -9877,10 +9932,10 @@ msgid "Petrification"
 msgstr "Zkamenění"
 
 msgid ""
-"Turns the affected creature into stone.  A petrified creature receives half "
+"Turns the affected creature into stone. A petrified creature receives half "
 "damage from a direct attack."
 msgstr ""
-"Promění zasaženou stvůru v kámen.  Zkamenělý tvor pak utrpí při přímém útoku "
+"Promění zasaženou stvůru v kámen. Zkamenělý tvor pak utrpí při přímém útoku "
 "pouze poloviční poškození."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
@@ -9985,8 +10040,8 @@ msgstr "Kosti pána Přemožitele jsou pohřbeny v základech bitevní arény."
 msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr "Černý drak sejme Titána kdykoliv a kdekoliv."
 
-msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
-msgstr "On jí řekl: Yada yada yada...  ona pak řekla: Bla, bla, bla..."
+msgid "He told her: Yada yada yada... and then she said: Blah, blah, blah..."
+msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
@@ -9999,9 +10054,3 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Damg"
-#~ msgstr "Škody"
-
-#~ msgid "guildWell|EXIT"
-#~ msgstr "PRYČ"

@@ -583,32 +583,36 @@ bool MP2::isActionObject( const MapObjectType objectType, const bool accessedFro
 bool MP2::isWaterActionObject( const MapObjectType objectType )
 {
     switch ( objectType ) {
+    // These are the types of objects that can be placed on water tiles by the original editor and,
+    // therefore, should be accessible to the hero who is on board the boat (yes, artifacts too).
     case OBJ_ARTIFACT:
-    case OBJ_BARRIER:
     case OBJ_BOTTLE:
     case OBJ_BUOY:
     case OBJ_COAST:
     case OBJ_DERELICT_SHIP:
     case OBJ_FLOTSAM:
+    // Heroes cannot be placed on water by the original editor, but they can board a boat
+    case OBJ_HEROES:
     case OBJ_MAGELLANS_MAPS:
     case OBJ_MERMAID:
-    case OBJ_MONSTER:
-    case OBJ_RESOURCE:
     case OBJ_SEA_CHEST:
     case OBJ_SHIPWRECK:
     case OBJ_SHIPWRECK_SURVIVOR:
     case OBJ_SIRENS:
     case OBJ_WHIRLPOOL:
         return true;
+
     case OBJ_BOAT:
     case OBJ_CASTLE:
         return false;
+
     default:
         break;
     }
 
-    // price loyalty: editor allow place other objects
-    return Settings::Get().isPriceOfLoyaltySupported() ? isActionObject( objectType ) : false;
+    // Here we would have to return false, but some map editors allow to place arbitrary objects
+    // on water tiles, so we have to work with this.
+    return isActionObject( objectType );
 }
 
 bool MP2::isActionObject( const MapObjectType objectType )

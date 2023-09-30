@@ -61,7 +61,7 @@ namespace Rand
 }
 
 struct VecHeroes;
-struct KingdomCastles;
+struct VecCastles;
 
 namespace AI
 {
@@ -250,7 +250,6 @@ namespace AI
         double _myArmyAverageSpeed = 0;
         double _enemyAverageSpeed = 0;
         double _enemySpellStrength = 0;
-        int _highestDamageExpected = 0;
         bool _attackingCastle = false;
         bool _defendingCastle = false;
         bool _considerRetreat = false;
@@ -277,7 +276,7 @@ namespace AI
         bool recruitHero( Castle & castle, bool buyArmy, bool underThreat );
         void reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget );
         void evaluateRegionSafety();
-        std::vector<AICastle> getSortedCastleList( const KingdomCastles & castles, const std::set<int> & castlesInDanger );
+        std::vector<AICastle> getSortedCastleList( const VecCastles & castles, const std::set<int> & castlesInDanger );
 
         bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero ) override;
         double getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const;

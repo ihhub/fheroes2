@@ -44,6 +44,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -89,7 +90,7 @@ namespace
                 return;
 
             const int32_t ox = 84 + 81 * ( i & 1 );
-            const int32_t oy = 71 + 78 * ( i >> 1 ) - ( ( i + isRight ) % 2 ) * 5;
+            const int32_t oy = 71 + 78 * ( i >> 1 ) - ( ( i + ( isRight ? 1 : 0 ) ) % 2 ) * 5;
 
             const Spell & spell = spells[i + index];
             const std::string & spellName = spell.GetName();
@@ -104,9 +105,12 @@ namespace
             fheroes2::Rect rect( px + ox - ( icon.width() + icon.width() % 2 ) / 2, py + oy - icon.height() - vertOffset + 2, icon.width(), icon.height() + 10 );
             fheroes2::Blit( icon, output, rect.x, rect.y );
 
-            TextBox box( spellName, Font::SMALL, 80 );
-            box.Set( spellName + ( box.row() == 1 ? '\n' : ' ' ) + '[' + std::to_string( spellCost ) + ']', isAvailable ? Font::SMALL : Font::GRAY_SMALL, 80 );
-            box.Blit( px + ox - 40, py + oy, output );
+            const int32_t maxTextWidth = 80;
+            const int32_t rowCount = fheroes2::Text{ spellName, fheroes2::FontType::smallWhite() }.rows( maxTextWidth );
+
+            const fheroes2::Text text( spellName + ( rowCount == 1 ? '\n' : ' ' ) + '[' + std::to_string( spellCost ) + ']',
+                                       isAvailable ? fheroes2::FontType::smallWhite() : fheroes2::FontType{ fheroes2::FontSize::SMALL, fheroes2::FontColor::GRAY } );
+            text.draw( px + ox - 40, py + oy + 2, maxTextWidth, output );
 
             rect.x += outputOffset.x;
             rect.y += outputOffset.y;
@@ -175,7 +179,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                        const std::function<void( const std::string & )> * statusCallback ) const
 {
     if ( !hero.HaveSpellBook() ) {
-        Dialog::Message( "", _( "You have no Magic Book, so you cannot cast a spell." ), Font::BIG, Dialog::OK );
+        fheroes2::showStandardTextMessage( "", _( "You have no Magic Book, so you cannot cast a spell." ), Dialog::OK );
         return Spell::NONE;
     }
 
@@ -191,7 +195,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
     SpellStorage displayedSpells = SetFilter( _spellFilter, &hero );
 
     if ( canCastSpell && displayedSpells.empty() ) {
-        Dialog::Message( "", _( "No spell to cast." ), Font::BIG, Dialog::OK );
+        fheroes2::showStandardTextMessage( "", _( "No spell to cast." ), Dialog::OK );
         return Spell::NONE;
     }
 
@@ -251,7 +255,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
         else if ( le.MouseClickLeft( info_rt ) ) {
             std::string str = _( "Your hero has %{point} spell points remaining." );
             StringReplace( str, "%{point}", hero.GetSpellPoints() );
-            Dialog::Message( "", str, Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( "", str, Dialog::OK );
         }
         else if ( le.MouseClickLeft( advn_rt ) && _spellFilter != Filter::ADVN && displayableSpells != Filter::CMBT ) {
             _spellFilter = Filter::ADVN;
@@ -268,19 +272,19 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
         else if ( le.MousePressRight( info_rt ) ) {
             std::string str = _( "Your hero has %{point} spell points remaining." );
             StringReplace( str, "%{point}", hero.GetSpellPoints() );
-            Dialog::Message( "", str, Font::BIG );
+            fheroes2::showStandardTextMessage( "", str, Dialog::ZERO );
         }
         else if ( le.MousePressRight( advn_rt ) && displayableSpells != Filter::CMBT ) {
-            Dialog::Message( "", _( "View Adventure Spells" ), Font::BIG );
+            fheroes2::showStandardTextMessage( "", _( "View Adventure Spells" ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( cmbt_rt ) && displayableSpells != Filter::ADVN ) {
-            Dialog::Message( "", _( "View Combat Spells" ), Font::BIG );
+            fheroes2::showStandardTextMessage( "", _( "View Combat Spells" ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( prev_list ) ) {
-            Dialog::Message( "", _( "View previous page" ), Font::BIG );
+            fheroes2::showStandardTextMessage( "", _( "View previous page" ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( next_list ) ) {
-            Dialog::Message( "", _( "View next page" ), Font::BIG );
+            fheroes2::showStandardTextMessage( "", _( "View next page" ), Dialog::ZERO );
         }
         else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyCloseWindow() )
             break;
@@ -298,7 +302,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                             curspell = *spell;
                             break;
                         }
-                        Dialog::Message( spell->GetName(), str, Font::BIG, Dialog::OK );
+                        fheroes2::showStandardTextMessage( spell->GetName(), str, Dialog::OK );
                         display.render();
                     }
                     else {

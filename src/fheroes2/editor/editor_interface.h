@@ -24,16 +24,17 @@
 
 #include "editor_interface_panel.h"
 #include "game_mode.h"
+#include "history_manager.h"
 #include "interface_base.h"
 
 namespace Interface
 {
-    class Editor final : public BaseInterface
+    class EditorInterface final : public BaseInterface
     {
     public:
-        static Editor & Get();
+        static EditorInterface & Get();
 
-        void redraw( const uint32_t force = 0 ) override;
+        void redraw( const uint32_t force ) override;
 
         // Regenerates the game area and updates the panel positions depending on the UI settings
         void reset() override;
@@ -54,12 +55,34 @@ namespace Interface
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
         void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
 
+        void undoAction()
+        {
+            if ( _historyManager.undo() ) {
+                _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
+            }
+        }
+
+        void redoAction()
+        {
+            if ( _historyManager.redo() ) {
+                _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
+            }
+        }
+
+        void updateCursor( const int32_t tileIndex ) override;
+
     private:
-        Editor();
+        EditorInterface()
+            : _editorPanel( *this )
+        {
+            // Do nothing.
+        }
 
         EditorPanel _editorPanel;
 
         int32_t _selectedTile{ -1 };
         int32_t _tileUnderCursor{ -1 };
+
+        fheroes2::HistoryManager _historyManager;
     };
 }

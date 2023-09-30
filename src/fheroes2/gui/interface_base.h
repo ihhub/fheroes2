@@ -131,6 +131,8 @@ namespace Interface
         // Regenerates the game area and updates the panel positions depending on the UI settings
         virtual void reset() = 0;
 
+        virtual void updateCursor( const int32_t tileIndex ) = 0;
+
     protected:
         BaseInterface();
 

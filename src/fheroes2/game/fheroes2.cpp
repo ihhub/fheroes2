@@ -21,6 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstdint>
 #include <cstdlib>
 #include <exception>
 #include <iostream>
@@ -57,9 +58,11 @@
 #include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
+#include "render_processor.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
+#include "timing.h"
 #include "ui_tool.h"
 #include "zzlib.h"
 
@@ -128,8 +131,20 @@ namespace
         display.render();
 
         LocalEvent & le = LocalEvent::Get();
-        while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() ) {
-            // Do nothing.
+
+        // Display the message for 5 seconds so that the user sees it enough and not immediately closes without reading properly.
+        const fheroes2::Time timer;
+
+        bool closeWindow = false;
+
+        while ( le.HandleEvents() ) {
+            if ( closeWindow && timer.getS() >= 5 ) {
+                break;
+            }
+
+            if ( le.KeyPress() || le.MouseClickLeft() ) {
+                closeWindow = true;
+            }
         }
     }
 
@@ -164,8 +179,17 @@ namespace
 
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
 
-            // Initialize local event processing.
-            LocalEvent::RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
+            fheroes2::RenderProcessor & renderProcessor = fheroes2::RenderProcessor::instance();
+
+            display.subscribe( [&renderProcessor]( std::vector<uint8_t> & palette ) { return renderProcessor.preRenderAction( palette ); },
+                               [&renderProcessor]() { renderProcessor.postRenderAction(); } );
+
+            // Initialize system info renderer.
+            _systemInfoRenderer = std::make_unique<fheroes2::SystemInfoRenderer>();
+
+            renderProcessor.registerRenderers( [sysInfoRenderer = _systemInfoRenderer.get()]() { sysInfoRenderer->preRender(); },
+                                               [sysInfoRenderer = _systemInfoRenderer.get()]() { sysInfoRenderer->postRender(); } );
+            renderProcessor.startColorCycling();
 
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
@@ -181,8 +205,16 @@ namespace
 
         ~DisplayInitializer()
         {
-            fheroes2::Display::instance().release();
+            fheroes2::RenderProcessor::instance().unregisterRenderers();
+
+            fheroes2::Display & display = fheroes2::Display::instance();
+            display.subscribe( {}, {} );
+            display.release();
         }
+
+    private:
+        // This member must not be initialized before Display.
+        std::unique_ptr<fheroes2::SystemInfoRenderer> _systemInfoRenderer;
     };
 
     class DataInitializer

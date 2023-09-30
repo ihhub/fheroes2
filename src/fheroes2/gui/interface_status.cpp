@@ -49,6 +49,7 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 #include "world.h"
 
 namespace
@@ -442,13 +443,14 @@ void Interface::StatusWindow::QueueEventProcessing()
         const fheroes2::Rect & pos = GetArea();
         const bool isFullInfo = StatusType::STATUS_UNKNOWN != _state && pos.height >= ( ston.height() * 3 + 15 );
         if ( isFullInfo ) {
-            Dialog::Message( _( "Status Window" ), _( "This window provides information on the status of your hero or kingdom, and shows the date." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Status Window" ), _( "This window provides information on the status of your hero or kingdom, and shows the date." ),
+                                               Dialog::ZERO );
         }
         else {
-            Dialog::Message(
+            fheroes2::showStandardTextMessage(
                 _( "Status Window" ),
                 _( "This window provides information on the status of your hero or kingdom, and shows the date. Left click here to cycle through these windows." ),
-                Font::BIG );
+                Dialog::ZERO );
         }
     }
 }

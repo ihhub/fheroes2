@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,10 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "cursor.h"
+
 #include <cassert>
 
 #include "agg_image.h"
-#include "cursor.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -73,7 +74,7 @@ bool Cursor::SetThemes( int name, bool force )
         SetOffset( name, { ( spr.width() - spr.x() ) / 2, ( spr.height() - spr.y() ) / 2 } );
         fheroes2::cursor().update( spr, -_offset.x, -_offset.y );
 
-        // immediately apply new offset, force
+        // Apply new offset.
         const fheroes2::Point & currentPos = LocalEvent::Get().GetMouseCursor();
         Move( currentPos.x, currentPos.y );
         return true;
@@ -252,18 +253,12 @@ CursorRestorer::CursorRestorer( const bool visible, const int theme )
 
 CursorRestorer::~CursorRestorer()
 {
-    Cursor & cursor = Cursor::Get();
+    fheroes2::Cursor & cursorRenderer = fheroes2::cursor();
+    Cursor & cursorIcon = Cursor::Get();
 
-    if ( fheroes2::cursor().isVisible() != _visible || cursor.Themes() != _theme ) {
-        cursor.SetThemes( _theme );
+    if ( cursorRenderer.isVisible() != _visible || cursorIcon.Themes() != _theme ) {
+        cursorIcon.SetThemes( _theme );
 
-        fheroes2::cursor().show( _visible );
-
-        // immediately render cursor area in case of software emulated cursor
-        if ( fheroes2::cursor().isSoftwareEmulation() ) {
-            const fheroes2::Point & pos = LocalEvent::Get().GetMouseCursor();
-
-            fheroes2::Display::instance().render( { pos.x, pos.y, 1, 1 } );
-        }
+        cursorRenderer.show( _visible );
     }
 }

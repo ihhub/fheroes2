@@ -250,7 +250,7 @@ namespace
 
         // scan for a hero around
         for ( const int32_t idx : Maps::ScanAroundObject( tileIndex, MP2::OBJ_HEROES, false ) ) {
-            const Heroes * hero = world.GetTiles( idx ).GetHeroes();
+            const Heroes * hero = world.GetTiles( idx ).getHero();
             assert( hero != nullptr );
 
             // hero is going to attack monsters on this tile
@@ -591,7 +591,7 @@ namespace Maps
     void redrawPassable( const Tiles & tile, fheroes2::Image & dst, const int friendColors, const Interface::GameArea & area )
     {
 #ifdef WITH_DEBUG
-        if ( tile.isFog( friendColors ) ) {
+        if ( friendColors != 0 && tile.isFog( friendColors ) ) {
             area.BlitOnTile( dst, getDebugFogImage(), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }
         if ( 0 == tile.GetPassable() || DIRECTION_ALL != tile.GetPassable() ) {
@@ -621,7 +621,7 @@ namespace Maps
         std::array<const TilesAddon *, maxPostRenderAddons> postRenderingAddon{};
         size_t postRenderAddonCount = 0;
 
-        for ( const TilesAddon & addon : tile.getLevel1Addons() ) {
+        for ( const TilesAddon & addon : tile.getBottomLayerAddons() ) {
             if ( ( addon._layerType & 0x03 ) != level ) {
                 continue;
             }
@@ -658,7 +658,7 @@ namespace Maps
     {
         const fheroes2::Point & tileOffset = Maps::GetPoint( tile.GetIndex() );
 
-        for ( const TilesAddon & addon : tile.getLevel1Addons() ) {
+        for ( const TilesAddon & addon : tile.getBottomLayerAddons() ) {
             if ( addon._objectIcnType == objectIcnType ) {
                 renderAddonObject( output, area, tileOffset, addon );
             }
@@ -668,7 +668,7 @@ namespace Maps
             renderMainObject( output, area, tileOffset, tile );
         }
 
-        for ( const TilesAddon & addon : tile.getLevel2Addons() ) {
+        for ( const TilesAddon & addon : tile.getTopLayerAddons() ) {
             if ( addon._objectIcnType == objectIcnType ) {
                 renderAddonObject( output, area, tileOffset, addon );
             }
