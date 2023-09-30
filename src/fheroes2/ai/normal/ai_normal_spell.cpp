@@ -270,10 +270,10 @@ namespace AI
         const int currentSpeed = target.GetSpeed( false, true );
         const int newSpeed = Speed::GetSlowSpeedFromSpell( currentSpeed );
         const int lostSpeed = currentSpeed - newSpeed; // usually 2
-        double ratio = 0.1 * lostSpeed;
+        double ratio = 0.15 * lostSpeed;
 
         if ( currentSpeed < _myArmyAverageSpeed ) { // Slow isn't useful if target is already slower than our army
-            ratio /= 2;
+            ratio /= 3;
         }
         if ( target.Modes( SP_HASTE ) ) {
             ratio *= 2;
@@ -293,7 +293,7 @@ namespace AI
         double ratio = 0.05 * gainedSpeed;
 
         if ( currentSpeed < _enemyAverageSpeed ) { // Haste is very useful if target is slower than army
-            ratio *= 2;
+            ratio *= 3;
         }
         if ( target.Modes( SP_SLOW ) ) {
             ratio *= 2;
