@@ -106,6 +106,15 @@ namespace
 
     const int32_t offsetForTextBar{ 32 };
 
+    const int32_t maxElementsInBattleLog{ 6 };
+
+    // This value must be equal to the height of Normal font.
+    const int32_t battleLogElementHeight{ 17 };
+
+    const int32_t battleLogLastElementOffset{ 4 };
+
+    const int32_t battleLogElementWidth{ fheroes2::Display::DEFAULT_WIDTH - 32 - 16 };
+
     struct LightningPoint
     {
         explicit LightningPoint( const fheroes2::Point & p = fheroes2::Point(), const int32_t thick = 1 )
@@ -370,16 +379,14 @@ namespace Battle
         {
             assert( px >= 0 && py >= 0 );
 
-            const int32_t mx = 6;
-            const int32_t sw = fheroes2::Display::DEFAULT_WIDTH;
-            const int32_t sh = mx * 20;
-            border.SetPosition( px, py - sh - 2, sw - 32, sh - 30 );
+            const int32_t totalElementHeight = maxElementsInBattleLog * battleLogElementHeight - battleLogLastElementOffset;
+            border.SetPosition( px, py - totalElementHeight - 32, fheroes2::Display::DEFAULT_WIDTH - 32, totalElementHeight );
             const fheroes2::Rect & area = border.GetArea();
-            const int32_t ax = area.x + area.width - 20;
 
             SetTopLeft( area.getPosition() );
-            SetAreaMaxItems( mx );
+            SetAreaMaxItems( maxElementsInBattleLog );
 
+            const int32_t ax = area.x + area.width - 20;
             SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( ax + 8, area.y - 10 ) );
             SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( ax + 8, area.y + area.height - 11 ) );
 
@@ -394,7 +401,7 @@ namespace Battle
 
             setScrollBarImage( scrollbarSlider );
             _scrollbar.hide();
-            SetAreaItems( { area.x, area.y, area.width - 10, area.height } );
+            SetAreaItems( { area.x, area.y, area.width - 16, area.height + battleLogLastElementOffset } );
             SetListContent( messages );
         }
 
@@ -424,8 +431,10 @@ namespace Battle
 
         void RedrawItem( const std::string & str, int32_t px, int32_t py, bool /* unused */ ) override
         {
-            const Text text( str, Font::BIG );
-            text.Blit( px, py );
+            fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
+            text.fitToOneRow( battleLogElementWidth );
+
+            text.draw( px, py, fheroes2::Display::instance() );
         }
 
         void RedrawBackground( const fheroes2::Point & /* unused*/ ) override
