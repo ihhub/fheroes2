@@ -270,10 +270,10 @@ namespace AI
         const int currentSpeed = target.GetSpeed( false, true );
         const int newSpeed = Speed::GetSlowSpeedFromSpell( currentSpeed );
         const int lostSpeed = currentSpeed - newSpeed; // usually 2
-        double ratio = 0.15 * lostSpeed;
+        double ratio = 0.1 * lostSpeed;
 
         if ( currentSpeed < _myArmyAverageSpeed ) { // Slow isn't useful if target is already slower than our army
-            ratio /= 3;
+            ratio /= 2;
         }
         if ( target.Modes( SP_HASTE ) ) {
             ratio *= 2;
@@ -293,7 +293,7 @@ namespace AI
         double ratio = 0.05 * gainedSpeed;
 
         if ( currentSpeed < _enemyAverageSpeed ) { // Haste is very useful if target is slower than army
-            ratio *= 3;
+            ratio *= 2;
         }
         if ( target.Modes( SP_SLOW ) ) {
             ratio *= 2;
@@ -378,6 +378,8 @@ namespace AI
         case Spell::DRAGONSLAYER:
         case Spell::ANTIMAGIC:
         case Spell::MIRRORIMAGE:
+        case Spell::SHIELD:
+        case Spell::MASSSHIELD:
             ratio = 0.0;
             break;
         default:
@@ -424,6 +426,13 @@ namespace AI
         }
         else if ( spellID == Spell::BERSERKER && !target.isArchers() ) {
             ratio /= ReduceEffectivenessByDistance( target );
+        }
+        else if ( spellID == Spell::SHIELD || spellID == Spell::MASSSHIELD ) {
+            ratio = _enemyRangedUnitsOnly / _enemyArmyStrength * 0.25;
+
+            if ( target.canShoot() ) {
+                ratio *= 1.25;
+            }
         }
         else if ( spellID == Spell::DRAGONSLAYER ) {
             // TODO: add logic to check if the enemy army contains a dragon.
