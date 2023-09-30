@@ -58,7 +58,6 @@
 #include "screen.h"
 #include "settings.h"
 #include "smk_decoder.h"
-#include "text.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -250,8 +249,8 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     // Fade-out screen before playing video.
     fheroes2::fadeOutDisplay();
 
-    const Text loadingScreen( _( "Loading video. Please wait..." ), Font::BIG );
-    loadingScreen.Blit( display.width() / 2 - loadingScreen.w() / 2, display.height() / 2 - loadingScreen.h() / 2 );
+    const fheroes2::Text loadingScreen( _( "Loading video. Please wait..." ), fheroes2::FontType::normalWhite() );
+    loadingScreen.draw( display.width() / 2 - loadingScreen.width() / 2, display.height() / 2 - loadingScreen.height() / 2 + 2, display );
     display.render();
 
     Video::ShowVideo( "INTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
