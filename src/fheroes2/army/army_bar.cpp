@@ -41,7 +41,6 @@
 #include "localevent.h"
 #include "monster.h"
 #include "race.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_monster.h"
@@ -249,7 +248,7 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool se
         return;
     }
 
-    Text text( std::to_string( troop.GetCount() ), ( use_mini_sprite ? Font::SMALL : Font::BIG ) );
+    const fheroes2::Text text( std::to_string( troop.GetCount() ),  use_mini_sprite ? fheroes2::FontType::smallWhite() : fheroes2::FontType::normalWhite() );
 
     if ( use_mini_sprite ) {
         const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
@@ -268,12 +267,12 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool se
         fheroes2::Blit( mons32, srcrt.x, srcrt.y, dstsf, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - 1, srcrt.width,
                         srcrt.height );
 
-        text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h(), dstsf );
+        text.draw( pos.x + pos.width - text.width() - 3, pos.y + pos.height - text.height() + 2, dstsf );
     }
     else {
         fheroes2::renderMonsterFrame( troop, dstsf, pos.getPosition() );
 
-        text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h() - 1, dstsf );
+        text.draw( pos.x + pos.width - text.width() - 3, pos.y + pos.height - text.height() + 1, dstsf );
     }
 
     if ( selected ) {
