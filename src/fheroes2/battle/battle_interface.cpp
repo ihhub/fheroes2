@@ -76,7 +76,6 @@
 #include "screen.h"
 #include "settings.h"
 #include "spell_book.h"
-#include "text.h"
 #include "timing.h"
 #include "tools.h"
 #include "translations.h"
@@ -967,6 +966,7 @@ void Battle::Status::Redraw( fheroes2::Image & output ) const
     if ( !_upperText.empty() ) {
         _upperText.draw( x + ( back1.width() - _upperText.width() ) / 2, y + 4, fheroes2::Display::instance() );
     }
+
     if ( !_lowerText.empty() ) {
         _lowerText.draw( x + ( back2.width() - _lowerText.width() ) / 2, y + back1.height(), fheroes2::Display::instance() );
     }
@@ -1038,8 +1038,8 @@ void Battle::TurnOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Un
                         revert );
     }
 
-    const Text number( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), Font::SMALL );
-    number.Blit( pos.x + 2, pos.y + 2, output );
+    const fheroes2::Text number( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), fheroes2::FontType::smallWhite() );
+    number.draw( pos.x + 2, pos.y + 4, output );
 
     if ( isCurrentUnit ) {
         fheroes2::DrawRect( output, { pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize }, currentUnitColor );
@@ -1423,8 +1423,8 @@ void Battle::Interface::redrawPreRender()
         assert( board != nullptr );
 
         for ( const Cell & cell : *board ) {
-            const Text text( std::to_string( cell.GetIndex() ), Font::SMALL );
-            text.Blit( cell.GetPos().x + 20, cell.GetPos().y + 22, _mainSurface );
+            const fheroes2::Text text( std::to_string( cell.GetIndex() ), fheroes2::FontType::smallWhite() );
+            text.draw( cell.GetPos().x + 20, cell.GetPos().y + 24, _mainSurface );
         }
     }
 #endif
@@ -1932,8 +1932,8 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 
     fheroes2::Copy( bar, 0, 0, _mainSurface, sx, sy, bar.width(), bar.height() );
 
-    const Text text( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), Font::SMALL );
-    text.Blit( sx + ( bar.width() - text.w() ) / 2, sy, _mainSurface );
+    const fheroes2::Text text( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), fheroes2::FontType::smallWhite() );
+    text.draw( sx + ( bar.width() - text.width() ) / 2, sy + 2, _mainSurface );
 }
 
 void Battle::Interface::RedrawCover()
@@ -6557,7 +6557,7 @@ void Battle::PopupDamageInfo::Redraw() const
     StringReplace( str, "%{min}", std::to_string( _minDamage ) );
     StringReplace( str, "%{max}", std::to_string( _maxDamage ) );
 
-    Text damageText( str, Font::SMALL );
+    const fheroes2::Text damageText( str, fheroes2::FontType::smallWhite() );
 
     const uint32_t minNumKilled = _defender->HowManyWillBeKilled( _minDamage );
     const uint32_t maxNumKilled = _defender->HowManyWillBeKilled( _maxDamage );
@@ -6569,7 +6569,7 @@ void Battle::PopupDamageInfo::Redraw() const
     StringReplace( str, "%{min}", std::to_string( minNumKilled ) );
     StringReplace( str, "%{max}", std::to_string( maxNumKilled ) );
 
-    Text killedText( str, Font::SMALL );
+    const fheroes2::Text killedText( str, fheroes2::FontType::smallWhite() );
 
     const fheroes2::Rect & cellRect = _cell->GetPos();
 
@@ -6577,8 +6577,8 @@ void Battle::PopupDamageInfo::Redraw() const
     const int borderWidth = BorderWidth();
     const int x = _battleUIRect.x + cellRect.x + cellRect.width;
     const int y = _battleUIRect.y + cellRect.y;
-    const int w = std::max( damageText.w(), killedText.w() ) + 2 * borderWidth;
-    const int h = damageText.h() + killedText.h() + 2 * borderWidth;
+    const int w = std::max( damageText.width(), killedText.width() ) + 2 * borderWidth;
+    const int h = damageText.height() + killedText.height() + 2 * borderWidth;
 
     // If the damage info popup doesn't fit the battlefield draw surface, then try to place it on the left side of the cell
     const bool isLeftSidePopup = ( cellRect.x + cellRect.width + w ) > _battleUIRect.width;
@@ -6587,6 +6587,8 @@ void Battle::PopupDamageInfo::Redraw() const
     Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), borderRect );
 
     const int leftTextBorder = borderRect.x + borderWidth;
-    damageText.Blit( leftTextBorder, borderRect.y + borderWidth );
-    killedText.Blit( leftTextBorder, borderRect.y + borderRect.height / 2 );
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+    damageText.draw( leftTextBorder, borderRect.y + borderWidth + 2, display );
+    killedText.draw( leftTextBorder, borderRect.y + borderRect.height / 2 + 2, display );
 }
