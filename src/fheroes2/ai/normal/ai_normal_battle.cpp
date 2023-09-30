@@ -126,32 +126,44 @@ namespace AI
         return bestOutcome;
     }
 
-    int32_t FindNextTurnAttackMove( const Indexes & moves, const Unit & currentUnit, const Battle::Units & enemies )
+    int32_t findOptimalPositionForSubsequentAttack( const Indexes & path, const Unit & currentUnit, const Battle::Units & enemies )
     {
         double lowestThreat = 0.0;
-        int32_t targetCell = -1;
+        int32_t targetIdx = -1;
 
-        for ( const int moveIndex : moves ) {
-            double cellThreatLevel = 0.0;
+        for ( const int stepIdx : path ) {
+            const Position pos = Position::GetReachable( currentUnit, stepIdx );
+            // If this step of the path is not reachable, then the following steps are also not reachable, there is no point in further checks
+            if ( pos.GetHead() == nullptr ) {
+                break;
+            }
+
+            double posThreatLevel = 0.0;
 
             for ( const Unit * enemy : enemies ) {
+                assert( enemy != nullptr );
+
                 // Archers and Flyers are always threatening, skip
                 if ( enemy->isFlying() || ( enemy->isArchers() && !enemy->isHandFighting() ) ) {
                     continue;
                 }
 
-                if ( Board::GetDistance( moveIndex, enemy->GetHeadIndex() ) <= enemy->GetMoveRange() + 1 ) {
-                    cellThreatLevel += enemy->GetScoreQuality( currentUnit );
+                // Also consider the next turn, even if the enemy unit has already acted during the current turn
+                const uint32_t enemyAttackRange = enemy->GetSpeed( false, true ) + 1;
+
+                if ( Board::GetDistance( pos, enemy->GetPosition() ) <= enemyAttackRange ) {
+                    posThreatLevel += enemy->GetScoreQuality( currentUnit );
                 }
             }
 
-            // Also allow to move up closer if there's still no threat
-            if ( targetCell == -1 || cellThreatLevel < lowestThreat || std::fabs( cellThreatLevel ) < 0.001 ) {
-                lowestThreat = cellThreatLevel;
-                targetCell = moveIndex;
+            // We need to get as close to the target as possible (taking into account the threat level)
+            if ( targetIdx == -1 || posThreatLevel < lowestThreat || std::fabs( posThreatLevel - lowestThreat ) < 0.001 ) {
+                lowestThreat = posThreatLevel;
+                targetIdx = stepIdx;
             }
         }
-        return targetCell;
+
+        return targetIdx;
     }
 
     std::pair<int32_t, uint32_t> findNearestCellNextToUnit( Arena & arena, const Unit & currentUnit, const Unit & target )
@@ -419,7 +431,7 @@ namespace AI
             const double unitStr = unit.GetStrength();
 
             _enemyArmyStrength += unitStr;
-            if ( unit.isArchers() ) {
+            if ( unit.canShoot() ) {
                 _enemyShooterStr += unitStr;
             }
 
@@ -462,7 +474,7 @@ namespace AI
                 continue;
             }
             _myArmyStrength += unitStr;
-            if ( unit.isArchers() ) {
+            if ( unit.canShoot() ) {
                 _myShooterStr += unitStr;
             }
         }
@@ -796,7 +808,7 @@ namespace AI
                 assert( enemy != nullptr );
 
                 const int archerMeleeDmg = currentUnit.GetDamage( *enemy );
-                const int damageDiff = archerMeleeDmg - enemy->CalculateRetaliationDamage( archerMeleeDmg );
+                const int damageDiff = archerMeleeDmg - enemy->EstimateRetaliatoryDamage( archerMeleeDmg );
 
                 if ( bestOutcome < damageDiff ) {
                     bestOutcome = damageDiff;
@@ -917,6 +929,8 @@ namespace AI
     {
         BattleTargetPair target;
 
+        const Castle * castle = Arena::GetCastle();
+        const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
         // Current unit can be under the influence of the Hypnotize spell
         const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), &currentUnit );
 
@@ -965,13 +979,13 @@ namespace AI
                         DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Arena::GetPath() returned an empty path to cell " << move.first << " for " << currentUnit.GetName() << "!" )
                     }
                     // Unit rushes through the moat, step into the moat to get more freedom of action on the next turn
-                    else if ( Board::isMoatIndex( path.back(), currentUnit ) ) {
+                    else if ( isMoatBuilt && Board::isMoatIndex( path.back(), currentUnit ) ) {
                         target.cell = path.back();
 
                         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " stopping in the moat at " << target.cell )
                     }
                     else {
-                        target.cell = FindNextTurnAttackMove( path, currentUnit, enemies );
+                        target.cell = findOptimalPositionForSubsequentAttack( path, currentUnit, enemies );
 
                         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " stopping at " << target.cell )
                     }

@@ -297,7 +297,7 @@ public:
 
     static Monster Rand( const LevelType type );
 
-    static uint32_t GetCountFromHitPoints( const Monster &, uint32_t );
+    static uint32_t GetCountFromHitPoints( const Monster & mons, const uint32_t hp );
 
     static uint32_t GetMissileICN( uint32_t monsterID );
 

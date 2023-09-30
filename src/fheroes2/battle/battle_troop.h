@@ -162,7 +162,6 @@ namespace Battle
         int GetControl() const override;
         int GetCurrentControl() const;
 
-        uint32_t GetMoveRange() const;
         uint32_t GetSpeed( const bool skipStandingCheck, const bool skipMovedCheck ) const;
 
         uint32_t GetDamage( const Unit & ) const;
@@ -180,15 +179,24 @@ namespace Battle
             return shots;
         }
 
+        bool canShoot() const;
+
         uint32_t ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected );
-        uint32_t CalculateRetaliationDamage( uint32_t damageTaken ) const;
+
         uint32_t CalculateMinDamage( const Unit & ) const;
         uint32_t CalculateMaxDamage( const Unit & ) const;
         uint32_t CalculateDamageUnit( const Unit & enemy, double dmg ) const;
+
+        // Returns a very rough estimate of the retaliatory damage after this unit receives the damage of the specified value.
+        // The returned value is not suitable for accurate calculations, but only for approximate comparison with other units
+        // in similar circumstances.
+        uint32_t EstimateRetaliatoryDamage( const uint32_t damageTaken ) const;
+
         bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
         bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = nullptr, bool forceApplyToAlly = false ) const;
         bool isUnderSpellEffect( const Spell & spell ) const;
         std::vector<Spell> getCurrentSpellEffects() const;
+
         void PostAttackAction();
 
         // Sets whether a unit performs a retaliatory attack while being blinded (i.e. with reduced efficiency)

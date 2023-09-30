@@ -108,6 +108,7 @@
     <ClCompile Include="src\fheroes2\editor\editor_interface.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_interface_panel.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_mainmenu.cpp" />
+    <ClCompile Include="src\fheroes2\editor\history_manager.cpp" />
     <ClCompile Include="src\fheroes2\game\difficulty.cpp" />
     <ClCompile Include="src\fheroes2\game\fheroes2.cpp" />
     <ClCompile Include="src\fheroes2\game\game.cpp" />
@@ -226,6 +227,7 @@
     <ClCompile Include="src\fheroes2\system\settings.cpp" />
     <ClCompile Include="src\fheroes2\world\world.cpp" />
     <ClCompile Include="src\fheroes2\world\world_loadmap.cpp" />
+    <ClCompile Include="src\fheroes2\world\world_object_uid.cpp" />
     <ClCompile Include="src\fheroes2\world\world_pathfinding.cpp" />
     <ClCompile Include="src\fheroes2\world\world_regions.cpp" />
     <ClCompile Include="src\thirdparty\libsmacker\smacker.c" />
@@ -309,6 +311,7 @@
     <ClInclude Include="src\fheroes2\editor\editor.h" />
     <ClInclude Include="src\fheroes2\editor\editor_interface.h" />
     <ClInclude Include="src\fheroes2\editor\editor_interface_panel.h" />
+    <ClInclude Include="src\fheroes2\editor\history_manager.h" />
     <ClInclude Include="src\fheroes2\game\difficulty.h" />
     <ClInclude Include="src\fheroes2\game\game.h" />
     <ClInclude Include="src\fheroes2\game\game_credits.h" />
@@ -421,6 +424,7 @@
     <ClInclude Include="src\fheroes2\system\settings.h" />
     <ClInclude Include="src\fheroes2\system\version.h" />
     <ClInclude Include="src\fheroes2\world\world.h" />
+    <ClInclude Include="src\fheroes2\world\world_object_uid.h" />
     <ClInclude Include="src\fheroes2\world\world_pathfinding.h" />
     <ClInclude Include="src\fheroes2\world\world_regions.h" />
     <ClInclude Include="src\thirdparty\libsmacker\smacker.h" />

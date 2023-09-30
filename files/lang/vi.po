@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2023-09-13 23:05+0700\n"
-"POT-Creation-Date: 2023-09-15 15:37+0000\n"
+"POT-Creation-Date: 2023-09-24 16:12+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -2760,12 +2760,12 @@ msgstr "Giải tán"
 msgid "Dismiss this army."
 msgstr "Giải tán đội quân này."
 
-msgid "Followers"
-msgstr ""
-
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
+msgstr ""
+
+msgid "Followers"
 msgstr ""
 
 msgid ""
@@ -4203,6 +4203,12 @@ msgid "hotkey|new map from scratch"
 msgstr ""
 
 msgid "hotkey|new random map"
+msgstr ""
+
+msgid "hotkey|undo last action"
+msgstr ""
+
+msgid "hotkey|redo last action"
 msgstr ""
 
 msgid "hotkey|roland campaign"
