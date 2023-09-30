@@ -23,8 +23,8 @@
 
 #include "interface_buttons.h"
 
-#include <cstddef>
-#include <vector>
+#include <algorithm>
+#include <cassert>
 
 #include "dialog.h"
 #include "game_interface.h"
@@ -33,6 +33,7 @@
 #include "interface_base.h"
 #include "kingdom.h"
 #include "localevent.h"
+#include "mp2.h"
 #include "route.h"
 #include "settings.h"
 #include "translations.h"
