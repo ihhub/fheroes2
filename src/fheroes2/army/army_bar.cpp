@@ -248,7 +248,7 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool se
         return;
     }
 
-    const fheroes2::Text text( std::to_string( troop.GetCount() ),  use_mini_sprite ? fheroes2::FontType::smallWhite() : fheroes2::FontType::normalWhite() );
+    const fheroes2::Text text( std::to_string( troop.GetCount() ), use_mini_sprite ? fheroes2::FontType::smallWhite() : fheroes2::FontType::normalWhite() );
 
     if ( use_mini_sprite ) {
         const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
