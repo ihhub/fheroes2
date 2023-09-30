@@ -475,7 +475,7 @@ void SpellBook::Edit( const HeroBase & hero )
     restorer.restore();
     cursorRestorer.reset();
 
-    display.render();
+    display.render( restorer.rect() );
 }
 
 void SpellBook::resetState()

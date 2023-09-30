@@ -124,7 +124,7 @@ int Dialog::AdventureOptions( bool enabledig )
     back.restore();
     cursorRestorer.reset();
 
-    display.render();
+    display.render( back.rect() );
 
     return result;
 }

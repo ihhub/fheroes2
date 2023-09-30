@@ -146,7 +146,7 @@ fheroes2::GameMode Dialog::FileOptions()
     back.restore();
     cursorRestorer.reset();
 
-    display.render();
+    display.render( back.rect() );
 
     return result;
 }
