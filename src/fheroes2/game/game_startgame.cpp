@@ -617,6 +617,11 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
     return Cursor::POINTER;
 }
 
+void Interface::AdventureMap::updateCursor( const int32_t tileIndex )
+{
+    Cursor::Get().SetThemes( GetCursorTileIndex( tileIndex ) );
+}
+
 int Interface::AdventureMap::GetCursorTileIndex( int32_t dstIndex )
 {
     if ( !Maps::isValidAbsIndex( dstIndex ) ) {
@@ -738,7 +743,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                         // Fully update fog directions in Hot Seat mode to cover the map with fog on player change.
                         // TODO: Cover the Adventure map area with fog sprites without rendering the "Game Area" for player change.
-                        Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, Color::NONE );
+                        Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, Color::NONE );
 
                         redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
 
@@ -801,7 +806,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
                     // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
                     if ( isHotSeatGame ) {
-                        Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, hotSeatAIFogColors( player ) );
+                        Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, hotSeatAIFogColors( player ) );
                     }
 
                     if ( !loadedFromSave ) {

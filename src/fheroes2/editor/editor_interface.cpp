@@ -62,6 +62,8 @@ class Castle;
 
 namespace
 {
+    const uint32_t mapUpdateFlags = Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR;
+
     int32_t getBrushAreaEndIndex( const int32_t brushSize, const int32_t startIndex )
     {
         const int32_t worldWidth = world.w();
@@ -73,12 +75,6 @@ namespace
 
 namespace Interface
 {
-    Interface::EditorInterface::EditorInterface()
-        : _editorPanel( *this )
-    {
-        // Do nothing.
-    }
-
     void EditorInterface::reset()
     {
         const fheroes2::Display & display = fheroes2::Display::instance();
@@ -119,7 +115,7 @@ namespace Interface
 
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
 
-            if ( _editorPanel.isTerrainEdit() && ( _tileUnderCursor > -1 ) ) {
+            if ( _editorPanel.showAreaSelectRect() && ( _tileUnderCursor > -1 ) ) {
                 const int32_t brushSize = _editorPanel.getBrushSize();
 
                 if ( brushSize > 0 ) {
@@ -342,7 +338,7 @@ namespace Interface
                     _tileUnderCursor = tileIndex;
 
                     // Force redraw if cursor position was changed as area rectangle is also changed.
-                    if ( _editorPanel.isTerrainEdit() && ( brushSize > 0 || _selectedTile != -1 ) ) {
+                    if ( _editorPanel.showAreaSelectRect() && ( brushSize > 0 || _selectedTile != -1 ) ) {
                         _redraw |= REDRAW_GAMEAREA;
                     }
                 }
@@ -370,7 +366,7 @@ namespace Interface
                 // Reset the area start tile.
                 _selectedTile = -1;
 
-                _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
+                _redraw |= mapUpdateFlags;
             }
 
             // fast scroll
@@ -535,17 +531,17 @@ namespace Interface
 
     void EditorInterface::mouseCursorAreaClickLeft( const int32_t tileIndex )
     {
-        const Maps::Tiles & tile = world.GetTiles( tileIndex );
+        Maps::Tiles & tile = world.GetTiles( tileIndex );
 
         Heroes * otherHero = tile.getHero();
         Castle * otherCastle = world.getCastle( tile.GetCenter() );
 
         if ( otherHero ) {
-            // TODO: Make hero edit dialog: like Battle only dialog, but only for one hero.
+            // TODO: Make hero edit dialog: e.g. with functions like in Battle only dialog, but only for one hero.
             Game::OpenHeroesDialog( *otherHero, true, true );
         }
         else if ( otherCastle ) {
-            // TODO: Make Castle edit dialog: like original build dialog.
+            // TODO: Make Castle edit dialog: e.g. like original build dialog.
             Game::OpenCastleDialog( *otherCastle );
         }
         else if ( _editorPanel.isTerrainEdit() ) {
@@ -563,7 +559,32 @@ namespace Interface
 
                 _selectedTile = -1;
             }
-            _redraw |= REDRAW_GAMEAREA | REDRAW_RADAR;
+
+            _redraw |= mapUpdateFlags;
+        }
+        else if ( _editorPanel.isRoadDraw() ) {
+            const fheroes2::ActionCreator action( _historyManager );
+
+            if ( Maps::updateRoadOnTile( tile, true ) ) {
+                _redraw |= mapUpdateFlags;
+            }
+        }
+        else if ( _editorPanel.isEraseMode() ) {
+            const int32_t brushSize = _editorPanel.getBrushSize();
+
+            // TODO: implement other brush sizes.
+            if ( brushSize < 2 ) {
+                const fheroes2::ActionCreator action( _historyManager );
+
+                if ( Maps::updateRoadOnTile( tile, false ) ) {
+                    _redraw |= mapUpdateFlags;
+                }
+
+                if ( brushSize == 0 ) {
+                    // This is a case when area was not selected but a single tile was clicked.
+                    _selectedTile = -1;
+                }
+            }
         }
     }
 
@@ -600,5 +621,10 @@ namespace Interface
             Dialog::QuickInfo( tile );
             break;
         }
+    }
+
+    void EditorInterface::updateCursor( const int32_t /*tileIndex*/ )
+    {
+        Cursor::Get().SetThemes( Cursor::POINTER );
     }
 }

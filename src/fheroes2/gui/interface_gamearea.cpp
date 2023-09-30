@@ -787,17 +787,20 @@ void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int
     const fheroes2::Rect imageRoi{ startX, startY, sizeX, sizeY };
     const fheroes2::Rect overlappedRoi = _windowROI ^ imageRoi;
 
-    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, std::min( 2, overlappedRoi.height ), 181 );
-    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + 2, std::min( 2, overlappedRoi.width ), overlappedRoi.height - 4, 181 );
-    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + overlappedRoi.height - 2, overlappedRoi.width, 2, 181 );
-    fheroes2::Fill( dst, overlappedRoi.x + overlappedRoi.width - 2, overlappedRoi.y + 2, 2, overlappedRoi.height - 4, 181 );
+    const int32_t limitedLineWidth = std::min( 2, overlappedRoi.width );
+    const int32_t limitedLineHeight = std::min( 2, overlappedRoi.height );
+
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, limitedLineHeight, 181 );
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + 2, limitedLineWidth, overlappedRoi.height - 4, 181 );
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + overlappedRoi.height - limitedLineHeight, overlappedRoi.width, limitedLineHeight, 181 );
+    fheroes2::Fill( dst, overlappedRoi.x + overlappedRoi.width - limitedLineWidth, overlappedRoi.y + 2, limitedLineWidth, overlappedRoi.height - 4, 181 );
 }
 
 void Interface::GameArea::updateMapFogDirections()
 {
     const int32_t friendColors = Players::FriendColors();
 
-    Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, friendColors );
+    Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, friendColors );
 }
 
 void Interface::GameArea::Scroll()
@@ -967,7 +970,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     if ( !Maps::isValidAbsIndex( index ) ) {
         // Change the cursor image when it gets out of the map boundaries or by 'updateCursor' flag.
         if ( updateCursor || index != _prevIndexPos ) {
-            Cursor::Get().SetThemes( Cursor::POINTER );
+            _interface.updateCursor( index );
             _prevIndexPos = index;
             updateCursor = false;
         }
@@ -998,7 +1001,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 
     // Change the cursor image if needed.
     if ( updateCursor || index != _prevIndexPos ) {
-        Cursor::Get().SetThemes( Interface::AdventureMap::GetCursorTileIndex( index ) );
+        _interface.updateCursor( index );
         _prevIndexPos = index;
         updateCursor = false;
     }

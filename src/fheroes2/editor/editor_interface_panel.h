@@ -56,9 +56,25 @@ namespace Interface
             return _selectedInstrument == Instrument::TERRAIN;
         }
 
+        bool isRoadDraw() const
+        {
+            return _selectedInstrument == Instrument::ROAD;
+        }
+
+        bool isEraseMode() const
+        {
+            return _selectedInstrument == Instrument::ERASE;
+        }
+
+        bool showAreaSelectRect() const
+        {
+            return _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD
+                   || _selectedInstrument == Instrument::ERASE;
+        }
+
         bool useMouseDragMovement() const
         {
-            return ( _selectedInstrument != Instrument::TERRAIN ) || ( _selectedBrushSize != BrushSize::AREA );
+            return !( ( _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::ERASE ) && _selectedBrushSize == BrushSize::AREA );
         }
 
         // Set Editor panel positions on screen.
