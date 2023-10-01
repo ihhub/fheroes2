@@ -48,6 +48,7 @@
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
+#include "monster.h"
 #include "mp2.h"
 #include "screen.h"
 #include "settings.h"
