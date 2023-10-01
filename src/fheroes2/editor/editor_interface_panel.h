@@ -61,6 +61,11 @@ namespace Interface
             return _selectedInstrument == Instrument::ROAD;
         }
 
+        bool isStreamDraw() const
+        {
+            return _selectedInstrument == Instrument::STREAM;
+        }
+
         bool isEraseMode() const
         {
             return _selectedInstrument == Instrument::ERASE;

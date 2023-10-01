@@ -277,6 +277,23 @@ namespace
         return roadDirection;
     }
 
+    // Returns the direction vector bits from 'centerTileIndex' to the around tiles with streams.
+    int getStreamDirecton( const Maps::Tiles & tile )
+    {
+        // For streams we can check only the next four directions.
+        const Directions directionsToCheck{ Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM };
+        const int32_t centerTileIndex = tile.GetIndex();
+        int streamDirection = ( tile.isStream() ) ? Direction::CENTER : 0;
+
+        for ( const int direction : directionsToCheck ) {
+            if ( Maps::isValidDirection( centerTileIndex, direction ) && world.GetTiles( Maps::GetDirectionIndex( centerTileIndex, direction ) ).isStream() ) {
+                streamDirection |= direction;
+            }
+        }
+
+        return streamDirection;
+    }
+
     bool hasBits( const int value, const int bits )
     {
         return ( value & bits ) == bits;
@@ -1066,6 +1083,97 @@ namespace
         // for tiles not marked as road in reverse order and for 1 tile more distance from the center.
         updateRoadSpritesInArea( tile, 3, true );
     }
+
+    uint8_t getStreamImageForTile( const int streamDirection )
+    {
+        if ( hasNoBits( streamDirection, Direction::CENTER ) ) {
+            // This tile should not have a stream image.
+            return 255U;
+        }
+
+        if ( hasBits( streamDirection, Direction::LEFT | Direction::BOTTOM ) && hasNoBits( streamDirection, Direction::TOP | Direction::RIGHT ) ) {
+            // \ - stream from the left to the bottom.
+            return 0U;
+        }
+        if ( hasBits( streamDirection, Direction::RIGHT | Direction::BOTTOM ) && hasNoBits( streamDirection, Direction::TOP | Direction::LEFT ) ) {
+            // / - stream from the right to the bottom.
+            return 1U;
+        }
+        if ( hasBits( streamDirection, Direction::RIGHT | Direction::TOP ) && hasNoBits( streamDirection, Direction::BOTTOM | Direction::LEFT ) ) {
+            // \ - stream from the top to the right.
+            return 4U;
+        }
+        if ( hasBits( streamDirection, Direction::LEFT | Direction::TOP ) && hasNoBits( streamDirection, Direction::BOTTOM | Direction::RIGHT ) ) {
+            // / - stream from the top to the left.
+            return 7U;
+        }
+        if ( hasBits( streamDirection, Direction::LEFT | Direction::TOP | Direction::RIGHT ) && hasNoBits( streamDirection, Direction::BOTTOM ) ) {
+            // _|_ - stream from the top to the left and right.
+            return 8U;
+        }
+        if ( hasBits( streamDirection, Direction::BOTTOM | Direction::TOP | Direction::RIGHT ) && hasNoBits( streamDirection, Direction::LEFT ) ) {
+            // |- - stream from the top to the right and bottom.
+            return 9U;
+        }
+        if ( hasBits( streamDirection, Direction::BOTTOM | Direction::TOP | Direction::LEFT ) && hasNoBits( streamDirection, Direction::RIGHT ) ) {
+            // -| - stream from the top to the left and bottom.
+            return 10U;
+        }
+        if ( hasBits( streamDirection, Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) && hasNoBits( streamDirection, Direction::TOP ) ) {
+            // \/ - stream from the left and right to the bottom.
+            return 11U;
+        }
+        if ( hasBits( streamDirection, Direction::BOTTOM | Direction::LEFT | Direction::TOP | Direction::RIGHT ) ) {
+            // -|- - streams are all around.
+            return 6U;
+        }
+        if ( ( hasBits( streamDirection, Direction::LEFT ) || hasBits( streamDirection, Direction::RIGHT ) )
+             && hasNoBits( streamDirection, Direction::TOP | Direction::BOTTOM ) ) {
+            // - - horizontal stream.
+            return Rand::Get( 1 ) ? 2U : 5U;
+        }
+
+        // | - in all other cases are the vertical stream sprite, including the case when there are no other streams around.
+        return Rand::Get( 1 ) ? 3U : 12U;
+    }
+
+    void updateStreamSpriteOnTile( Maps::Tiles & tile, const bool forceStreamOnTile )
+    {
+        const uint8_t imageIndex = getStreamImageForTile( getStreamDirecton( tile ) | ( forceStreamOnTile ? Direction::CENTER : Direction::UNKNOWN ) );
+
+        if ( imageIndex == 255U ) {
+            // After the check this tile should not contain a stream sprite.
+            if ( !forceStreamOnTile && !tile.isStream() ) {
+                // We remove any existing stream sprite if this tile does not contain (or was not forced to contain) the main sprite.
+                tile.removeObjects( MP2::OBJ_ICN_TYPE_STREAM );
+            }
+
+            return;
+        }
+
+        const uint32_t streamUid = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_STREAM );
+
+        if ( streamUid == 0 ) {
+            tile.pushBottomLayerAddon( Maps::TilesAddon( Maps::TERRAIN_LAYER, Maps::getNewObjectUID(), MP2::OBJ_ICN_TYPE_STREAM, imageIndex ) );
+        }
+        else {
+            Maps::Tiles::updateTileObjectIcnIndex( tile, streamUid, imageIndex );
+        }
+    }
+
+    // Update streams on the left, top, right and bottom tiles around.
+    void updateStreamSpritesAround( const Maps::Tiles & centerTile )
+    {
+        // For streams we should update only the next four directions.
+        const Directions directionsToCheck{ Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM };
+        const int32_t centerTileIndex = centerTile.GetIndex();
+
+        for ( const int direction : directionsToCheck ) {
+            if ( Maps::isValidDirection( centerTileIndex, direction ) ) {
+                updateStreamSpriteOnTile( world.GetTiles( Maps::GetDirectionIndex( centerTileIndex, direction ) ), false );
+            }
+        }
+    }
 }
 
 namespace Maps
@@ -1129,6 +1237,41 @@ namespace Maps
 
             // After removing the road from the tile it may have road sprites for the nearby tiles with road.
             updateRoadSpriteOnTile( tile, false );
+        }
+
+        return true;
+    }
+
+    bool updateStreamOnTile( Tiles & tile, const bool setStream )
+    {
+        if ( setStream == tile.isStream() || ( tile.GetGround() == Ground::WATER ) ) {
+            // We cannot place streams on the water or on already placed streams.
+            return false;
+        }
+
+        if ( setStream ) {
+            // Force set stream on this tile and update its sprite.
+            updateStreamSpriteOnTile( tile, true );
+
+            if ( !tile.isStream() ) {
+                // The stream was not set. How can it happen?
+                assert( 0 );
+
+                return false;
+            }
+
+            updateStreamSpritesAround( tile );
+
+            if ( Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( tile.getTerrainImageIndex() ) ) {
+                // We need to set terrain image without extra objects under the stream.
+                tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( tile.GetGround(), false ), false, false );
+            }
+        }
+        else {
+            // Remove all road object sprites from this tile.
+            tile.removeObjects( MP2::OBJ_ICN_TYPE_STREAM );
+
+            updateStreamSpritesAround( tile );
         }
 
         return true;
