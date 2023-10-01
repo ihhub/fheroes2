@@ -593,7 +593,7 @@ namespace Interface
             else if ( !Maps::isClearGround( tile ) ) {
                 fheroes2::showStandardTextMessage( _( "Monster" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
             }
-            else {
+            else if ( Monster{ _editorPanel.getMonsterId() }.isValid() ) {
                 const fheroes2::ActionCreator action( _historyManager );
 
                 Maps::setMonsterOnTile( tile, _editorPanel.getMonsterId(), 0 );
