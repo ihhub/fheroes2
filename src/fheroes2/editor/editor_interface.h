@@ -21,6 +21,7 @@
 #pragma once
 
 #include <cstdint>
+#include <functional>
 
 #include "editor_interface_panel.h"
 #include "game_mode.h"
@@ -71,6 +72,11 @@ namespace Interface
 
         void updateCursor( const int32_t tileIndex ) override;
 
+        void setCursorUpdater( std::function<void( const int32_t )> cursorUpdater )
+        {
+            _cursorUpdater = cursorUpdater;
+        }
+
     private:
         EditorInterface()
             : _editorPanel( *this )
@@ -82,6 +88,8 @@ namespace Interface
 
         int32_t _selectedTile{ -1 };
         int32_t _tileUnderCursor{ -1 };
+
+        std::function<void( const int32_t )> _cursorUpdater;
 
         fheroes2::HistoryManager _historyManager;
     };
