@@ -81,7 +81,6 @@
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_scrollbar.h"
-#include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
@@ -103,6 +102,17 @@ namespace
     const int32_t bridgeDestroyFrame = 6;
     // The number of frames the second smoke cloud is delayed by.
     const int32_t bridgeDestroySmokeDelay = 2;
+
+    const int32_t offsetForTextBar{ 32 };
+
+    const int32_t maxElementsInBattleLog{ 6 };
+
+    // This value must be equal to the height of Normal font.
+    const int32_t battleLogElementHeight{ 17 };
+
+    const int32_t battleLogLastElementOffset{ 4 };
+
+    const int32_t battleLogElementWidth{ fheroes2::Display::DEFAULT_WIDTH - 32 - 16 };
 
     struct LightningPoint
     {
@@ -368,16 +378,14 @@ namespace Battle
         {
             assert( px >= 0 && py >= 0 );
 
-            const int32_t mx = 6;
-            const int32_t sw = fheroes2::Display::DEFAULT_WIDTH;
-            const int32_t sh = mx * 20;
-            border.SetPosition( px, py - sh - 2, sw - 32, sh - 30 );
+            const int32_t totalElementHeight = maxElementsInBattleLog * battleLogElementHeight - battleLogLastElementOffset;
+            border.SetPosition( px, py - totalElementHeight - 32, fheroes2::Display::DEFAULT_WIDTH - 32, totalElementHeight );
             const fheroes2::Rect & area = border.GetArea();
-            const int32_t ax = area.x + area.width - 20;
 
             SetTopLeft( area.getPosition() );
-            SetAreaMaxItems( mx );
+            SetAreaMaxItems( maxElementsInBattleLog );
 
+            const int32_t ax = area.x + area.width - 20;
             SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( ax + 8, area.y - 10 ) );
             SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( ax + 8, area.y + area.height - 11 ) );
 
@@ -392,7 +400,7 @@ namespace Battle
 
             setScrollBarImage( scrollbarSlider );
             _scrollbar.hide();
-            SetAreaItems( { area.x, area.y, area.width - 10, area.height } );
+            SetAreaItems( { area.x, area.y, area.width - 16, area.height + battleLogLastElementOffset } );
             SetListContent( messages );
         }
 
@@ -422,8 +430,10 @@ namespace Battle
 
         void RedrawItem( const std::string & str, int32_t px, int32_t py, bool /* unused */ ) override
         {
-            const Text text( str, Font::BIG );
-            text.Blit( px, py );
+            fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
+            text.fitToOneRow( battleLogElementWidth );
+
+            text.draw( px, py, fheroes2::Display::instance() );
         }
 
         void RedrawBackground( const fheroes2::Point & /* unused*/ ) override
@@ -920,9 +930,6 @@ Battle::Status::Status()
 {
     width = back1.width();
     height = back1.height() + back2.height();
-
-    bar1.Set( Font::BIG );
-    bar2.Set( Font::BIG );
 }
 
 void Battle::Status::SetPosition( const int32_t cx, const int32_t cy )
@@ -934,14 +941,20 @@ void Battle::Status::SetPosition( const int32_t cx, const int32_t cy )
 void Battle::Status::SetMessage( const std::string & messageString, const bool top )
 {
     if ( top ) {
-        bar1.Set( messageString );
+        _upperText.set( messageString, fheroes2::FontType::normalWhite() );
+        // The text cannot go beyond the text area so it is important to truncate it when necessary.
+        _upperText.fitToOneRow( back1.width() - offsetForTextBar * 2 );
+
         if ( listlog ) {
             listlog->AddMessage( messageString );
         }
     }
-    else if ( messageString != message ) {
-        bar2.Set( messageString );
-        message = messageString;
+    else if ( messageString != _lastMessage ) {
+        _lowerText.set( messageString, fheroes2::FontType::normalWhite() );
+        // The text cannot go beyond the text area so it is important to truncate it when necessary.
+        _lowerText.fitToOneRow( back1.width() - offsetForTextBar * 2 );
+
+        _lastMessage = messageString;
     }
 }
 
@@ -950,18 +963,21 @@ void Battle::Status::Redraw( fheroes2::Image & output ) const
     fheroes2::Copy( back1, 0, 0, output, x, y, back1.width(), back1.height() );
     fheroes2::Copy( back2, 0, 0, output, x, y + back1.height(), back2.width(), back2.height() );
 
-    if ( bar1.Size() ) {
-        bar1.Blit( x + ( back1.width() - bar1.w() ) / 2, y + 2 );
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    if ( !_upperText.empty() ) {
+        _upperText.draw( x + ( back1.width() - _upperText.width() ) / 2, y + 4, display );
     }
-    if ( bar2.Size() ) {
-        bar2.Blit( x + ( back2.width() - bar2.w() ) / 2, y + back1.height() - 2 );
+
+    if ( !_lowerText.empty() ) {
+        _lowerText.draw( x + ( back2.width() - _lowerText.width() ) / 2, y + back1.height(), display );
     }
 }
 
 void Battle::Status::clear()
 {
-    bar1.Clear();
-    bar2.Clear();
+    _upperText.set( "", fheroes2::FontType::normalWhite() );
+    _lowerText.set( "", fheroes2::FontType::normalWhite() );
 }
 
 Battle::TurnOrder::TurnOrder()
@@ -1024,8 +1040,8 @@ void Battle::TurnOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Un
                         revert );
     }
 
-    const Text number( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), Font::SMALL );
-    number.Blit( pos.x + 2, pos.y + 2, output );
+    const fheroes2::Text number( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), fheroes2::FontType::smallWhite() );
+    number.draw( pos.x + 2, pos.y + 4, output );
 
     if ( isCurrentUnit ) {
         fheroes2::DrawRect( output, { pos.x, pos.y, turnOrderMonsterIconSize, turnOrderMonsterIconSize }, currentUnitColor );
@@ -1409,8 +1425,8 @@ void Battle::Interface::redrawPreRender()
         assert( board != nullptr );
 
         for ( const Cell & cell : *board ) {
-            const Text text( std::to_string( cell.GetIndex() ), Font::SMALL );
-            text.Blit( cell.GetPos().x + 20, cell.GetPos().y + 22, _mainSurface );
+            const fheroes2::Text text( std::to_string( cell.GetIndex() ), fheroes2::FontType::smallWhite() );
+            text.draw( cell.GetPos().x + 20, cell.GetPos().y + 24, _mainSurface );
         }
     }
 #endif
@@ -1918,8 +1934,8 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 
     fheroes2::Copy( bar, 0, 0, _mainSurface, sx, sy, bar.width(), bar.height() );
 
-    const Text text( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), Font::SMALL );
-    text.Blit( sx + ( bar.width() - text.w() ) / 2, sy, _mainSurface );
+    const fheroes2::Text text( fheroes2::abbreviateNumber( static_cast<int32_t>( unit.GetCount() ) ), fheroes2::FontType::smallWhite() );
+    text.draw( sx + ( bar.width() - text.width() ) / 2, sy + 2, _mainSurface );
 }
 
 void Battle::Interface::RedrawCover()
@@ -6543,7 +6559,7 @@ void Battle::PopupDamageInfo::Redraw() const
     StringReplace( str, "%{min}", std::to_string( _minDamage ) );
     StringReplace( str, "%{max}", std::to_string( _maxDamage ) );
 
-    Text damageText( str, Font::SMALL );
+    const fheroes2::Text damageText( str, fheroes2::FontType::smallWhite() );
 
     const uint32_t minNumKilled = _defender->HowManyWillBeKilled( _minDamage );
     const uint32_t maxNumKilled = _defender->HowManyWillBeKilled( _maxDamage );
@@ -6555,7 +6571,7 @@ void Battle::PopupDamageInfo::Redraw() const
     StringReplace( str, "%{min}", std::to_string( minNumKilled ) );
     StringReplace( str, "%{max}", std::to_string( maxNumKilled ) );
 
-    Text killedText( str, Font::SMALL );
+    const fheroes2::Text killedText( str, fheroes2::FontType::smallWhite() );
 
     const fheroes2::Rect & cellRect = _cell->GetPos();
 
@@ -6563,8 +6579,8 @@ void Battle::PopupDamageInfo::Redraw() const
     const int borderWidth = BorderWidth();
     const int x = _battleUIRect.x + cellRect.x + cellRect.width;
     const int y = _battleUIRect.y + cellRect.y;
-    const int w = std::max( damageText.w(), killedText.w() ) + 2 * borderWidth;
-    const int h = damageText.h() + killedText.h() + 2 * borderWidth;
+    const int w = std::max( damageText.width(), killedText.width() ) + 2 * borderWidth;
+    const int h = damageText.height() + killedText.height() + 2 * borderWidth;
 
     // If the damage info popup doesn't fit the battlefield draw surface, then try to place it on the left side of the cell
     const bool isLeftSidePopup = ( cellRect.x + cellRect.width + w ) > _battleUIRect.width;
@@ -6573,6 +6589,8 @@ void Battle::PopupDamageInfo::Redraw() const
     Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), borderRect );
 
     const int leftTextBorder = borderRect.x + borderWidth;
-    damageText.Blit( leftTextBorder, borderRect.y + borderWidth );
-    killedText.Blit( leftTextBorder, borderRect.y + borderRect.height / 2 );
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+    damageText.draw( leftTextBorder, borderRect.y + borderWidth + 2, display );
+    killedText.draw( leftTextBorder, borderRect.y + borderRect.height / 2 + 2, display );
 }
