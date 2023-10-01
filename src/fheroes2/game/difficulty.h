@@ -53,7 +53,7 @@ namespace Difficulty
     uint32_t GetDimensionDoorLimit( int difficulty );
 
     // Returns true if AI should avoid having free slots in the army
-    bool AISplittingWeakStacks( const int difficulty );
+    bool allowAIToSplitWeakStacks( const int difficulty );
 }
 
 #endif

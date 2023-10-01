@@ -145,7 +145,7 @@ namespace AI
             }
         }
 
-        if ( Difficulty::AISplittingWeakStacks( Game::getDifficulty() ) ) {
+        if ( Difficulty::allowAIToSplitWeakStacks( Game::getDifficulty() ) ) {
             // Complicate the task of a potential attacker
             army.splitStackOfWeakestUnitsIntoFreeSlots();
         }
