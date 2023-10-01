@@ -589,7 +589,7 @@ namespace Interface
         }
         else if ( _editorPanel.isMonsterSettingMode() ) {
             if ( tile.isWater() ) {
-                fheroes2::showStandardTextMessage( _( "Monster" ), _( "Monsters cannot be set on water." ), Dialog::OK );
+                fheroes2::showStandardTextMessage( _( "Monster" ), _( "Monsters cannot be placed on water." ), Dialog::OK );
             }
             else if ( !Maps::isClearGround( tile ) ) {
                 fheroes2::showStandardTextMessage( _( "Monster" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
