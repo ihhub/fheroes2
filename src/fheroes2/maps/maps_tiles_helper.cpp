@@ -1143,11 +1143,6 @@ namespace
 
         if ( imageIndex == 255U ) {
             // After the check this tile should not contain a stream sprite.
-            if ( !forceStreamOnTile && !tile.isStream() ) {
-                // We remove any existing stream sprite if this tile does not contain (or was not forced to contain) the main sprite.
-                tile.removeObjects( MP2::OBJ_ICN_TYPE_STREAM );
-            }
-
             return;
         }
 
