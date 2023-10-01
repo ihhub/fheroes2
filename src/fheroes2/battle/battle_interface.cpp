@@ -963,12 +963,14 @@ void Battle::Status::Redraw( fheroes2::Image & output ) const
     fheroes2::Copy( back1, 0, 0, output, x, y, back1.width(), back1.height() );
     fheroes2::Copy( back2, 0, 0, output, x, y + back1.height(), back2.width(), back2.height() );
 
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     if ( !_upperText.empty() ) {
-        _upperText.draw( x + ( back1.width() - _upperText.width() ) / 2, y + 4, fheroes2::Display::instance() );
+        _upperText.draw( x + ( back1.width() - _upperText.width() ) / 2, y + 4, display );
     }
 
     if ( !_lowerText.empty() ) {
-        _lowerText.draw( x + ( back2.width() - _lowerText.width() ) / 2, y + back1.height(), fheroes2::Display::instance() );
+        _lowerText.draw( x + ( back2.width() - _lowerText.width() ) / 2, y + back1.height(), display );
     }
 }
 
