@@ -72,7 +72,7 @@ namespace Interface
 
         void updateCursor( const int32_t tileIndex ) override;
 
-        void setCursorUpdater( std::function<void( const int32_t )> cursorUpdater )
+        void setCursorUpdater( const std::function<void( const int32_t )> & cursorUpdater )
         {
             _cursorUpdater = cursorUpdater;
         }

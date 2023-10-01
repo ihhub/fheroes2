@@ -449,11 +449,11 @@ namespace Interface
                 if ( monster.GetID() != Monster::UNKNOWN ) {
                     _monsterId = monster.GetID();
 
-                    _interface.setCursorUpdater( [monster = monster](const int32_t /*tileIndex*/ ) {
+                    _interface.setCursorUpdater( [monster = monster]( const int32_t /*tileIndex*/ ) {
                         const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MONS32, monster.GetSpriteIndex() );
 
-                            Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 } );
-                        } );
+                        Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 } );
+                    } );
 
                     _interface.updateCursor( 0 );
                     return res;
