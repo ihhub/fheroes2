@@ -76,10 +76,6 @@ namespace Maps
         FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT = 4
     };
 
-    void setTerrainOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId );
-    bool updateRoadOnTile( Tiles & tile, const bool setRoad );
-    bool updateStreamOnTile( Tiles & tile, const bool setStream );
-
     // Only for MP2::OBJ_MINES.
     int32_t getMineSpellIdFromTile( const Tiles & tile );
     void setMineSpellOnTile( Tiles & tile, const int32_t spellId );
@@ -161,4 +157,10 @@ namespace Maps
 
     // Determine the fog direction in the area between min and max positions for given player(s) color code and store it in corresponding tile data.
     void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color );
+
+    // The functions below are used only in the map Editor.
+
+    void setTerrainOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId );
+    bool updateRoadOnTile( Tiles & tile, const bool setRoad );
+    bool updateStreamOnTile( Tiles & tile, const bool setStream );
 }
