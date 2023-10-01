@@ -161,7 +161,7 @@ void Interface::AdventureMap::EventNextHero()
     RedrawFocus();
 }
 
-fheroes2::GameMode Interface::AdventureMap::EventContinueMovement()
+fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
 {
     Heroes * hero = GetFocusHeroes();
 

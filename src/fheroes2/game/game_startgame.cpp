@@ -1034,8 +1034,8 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 EventSwitchShowStatus();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_ICONS ) )
                 EventSwitchShowIcons();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_CONTINUE_HERO_MOVEMENT ) )
-                res = EventContinueMovement();
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_START_HERO_MOVEMENT ) )
+                res = EventHeroMovement();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DIG_ARTIFACT ) )
                 res = EventDigArtifact();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SLEEP_HERO ) )
