@@ -31,6 +31,7 @@
 
 #include "ai.h"
 #include "color.h"
+#include "difficulty.h"
 #include "mp2.h"
 #include "pairs.h"
 #include "resource.h"
@@ -318,6 +319,8 @@ namespace AI
         // Monster strength is constant over the same turn for AI but its calculation is a heavy operation.
         // In order to avoid extra computations during AI turn it is important to keep cache of monster strength but update it when an action on a monster is taken.
         std::map<int32_t, double> _neutralMonsterStrengthCache;
+
+        int _difficulty{ Difficulty::NORMAL };
 
         void CastleTurn( Castle & castle, const bool defensiveStrategy );
 

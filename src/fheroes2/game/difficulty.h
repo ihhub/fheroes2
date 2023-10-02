@@ -51,6 +51,10 @@ namespace Difficulty
     double GetAIRetreatRatio( int difficulty );
 
     uint32_t GetDimensionDoorLimit( int difficulty );
+
+    bool areAIHeroRolesAllowed( const int difficulty );
+
+    int getMinStatDiffBetweenAIRoles( const int difficulty );
 }
 
 #endif
