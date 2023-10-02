@@ -967,7 +967,8 @@ namespace AI
                     return valueToIgnore;
                 }
 
-                if ( hero.getAIRole() == otherHero->getAIRole() && hero.getStatsValue() + Difficulty::getMinStatDiffBetweenAIRoles( _difficulty ) > otherHero->getStatsValue() ) {
+                if ( hero.getAIRole() == otherHero->getAIRole()
+                     && hero.getStatsValue() + Difficulty::getMinStatDiffBetweenAIRoles( _difficulty ) > otherHero->getStatsValue() ) {
                     // Two heroes are almost identical. No reason to meet.
                     return valueToIgnore;
                 }
@@ -1489,7 +1490,8 @@ namespace AI
                     // The other hero has a lower role. Do not waste time for meeting. Let him to come.
                     return valueToIgnore;
                 }
-                if ( hero.getAIRole() == otherHero->getAIRole() && hero.getStatsValue() + Difficulty::getMinStatDiffBetweenAIRoles( _difficulty ) + 1 > otherHero->getStatsValue() ) {
+                if ( hero.getAIRole() == otherHero->getAIRole()
+                     && hero.getStatsValue() + Difficulty::getMinStatDiffBetweenAIRoles( _difficulty ) + 1 > otherHero->getStatsValue() ) {
                     // Two heroes are almost identical. No reason to meet.
                     return valueToIgnore;
                 }
