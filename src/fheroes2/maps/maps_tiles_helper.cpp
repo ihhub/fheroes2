@@ -280,12 +280,11 @@ namespace
     // Returns the direction vector bits from 'centerTileIndex' to the around tiles with streams.
     int getStreamDirecton( const Maps::Tiles & tile )
     {
-        // For streams we can check only the next four directions.
-        const Directions directionsToCheck{ Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM };
         const int32_t centerTileIndex = tile.GetIndex();
         int streamDirection = ( tile.isStream() ) ? Direction::CENTER : 0;
 
-        for ( const int direction : directionsToCheck ) {
+        // For streams we can check only the next four directions.
+        for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
             if ( Maps::isValidDirection( centerTileIndex, direction ) && world.GetTiles( Maps::GetDirectionIndex( centerTileIndex, direction ) ).isStream() ) {
                 streamDirection |= direction;
             }
@@ -1159,11 +1158,10 @@ namespace
     // Update streams on the left, top, right and bottom tiles around.
     void updateStreamSpritesAround( const Maps::Tiles & centerTile )
     {
-        // For streams we should update only the next four directions.
-        const Directions directionsToCheck{ Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM };
         const int32_t centerTileIndex = centerTile.GetIndex();
 
-        for ( const int direction : directionsToCheck ) {
+        // For streams we should update only the next four directions.
+        for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
             if ( Maps::isValidDirection( centerTileIndex, direction ) ) {
                 updateStreamSpriteOnTile( world.GetTiles( Maps::GetDirectionIndex( centerTileIndex, direction ) ), false );
             }
