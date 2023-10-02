@@ -44,16 +44,36 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
         count = troops.GetOccupiedSlotCount();
     }
 
-    const int chunk = width / count;
+    int slotsToSkip = 1;
+    if ( count < 5 ) {
+        slotsToSkip = 1;
+    }
+    else if ( count >= 7 ) {
+        slotsToSkip = 0;
+    }
+
+    int marginLeft = 18;
+    const int chunk = ( width - marginLeft ) / (count + ( slotsToSkip * 2 ) );
     Troops reversedTroops = troops.GetReversed();
+    const size_t slots = reversedTroops.Size() + slotsToSkip;
 
     if ( !isCompact ) {
         cx -= chunk / 2;
         cx += width;
     }
 
-    for ( size_t slot = 0; slot < reversedTroops.Size(); ++slot ) {
-        const Troop * troop = reversedTroops.GetTroop( slot );
+    const int slotOffset = slotsToSkip;
+
+    for ( size_t slot = 0; slot < slots; ++slot ) {
+
+        if ( slotsToSkip > 0 ) {
+            slotsToSkip--;
+            cx -= chunk;
+            continue;
+        }
+ 
+        const Troop * troop = reversedTroops.GetTroop( slot - slotOffset );
+
         if ( troop == nullptr || !troop->isValid() ) {
             continue;
         }
@@ -91,11 +111,14 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
             text.draw( cx + chunk - text.width() - offset, cy + 23, output );
         }
         else {
-            const int offsetY = 28 - monster.height();
-            int x = ( cx - ( monster.width() / 2 ) ) + monster.x() -12; //( monster.width() / 2 ) - 25;
-            int y = cy + offsetY + monster.y(); 
-            fheroes2::Blit( monster, output, x, y);
-            text.draw( cx - text.width() / 2  -12, cy + 29, output );
+            if ( slotsToSkip == 0 ) {
+                const int offsetY = 28 - monster.height();
+                const int OffsetX = -15; //(monster.width() / 2) -12;
+                int x = ( cx - ( monster.width() / 2 ) ) + OffsetX;
+                int y = cy + offsetY + monster.y(); 
+                fheroes2::Blit( monster, output, x, y);
+                text.draw( ( cx - text.width() / 2 ) +  OffsetX , cy + 29, output );
+            }
         }
         cx -= chunk;
         --count;
