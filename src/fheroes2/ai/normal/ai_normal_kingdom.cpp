@@ -702,7 +702,7 @@ namespace AI
         const AIAutoControlModeCommitter aiAutoControlModeCommitter( kingdom );
 #endif
 
-        // Since getDifficulty() is not instant (especially for campaigns) we are caching it to avoid extra calls within the code.
+        // Since getDifficulty() call is not instant (especially for campaigns) we are caching it to avoid extra calls within the code.
         _difficulty = Game::getDifficulty();
 
         const int myColor = kingdom.GetColor();
