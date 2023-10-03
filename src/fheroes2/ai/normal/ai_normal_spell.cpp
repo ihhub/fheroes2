@@ -386,6 +386,8 @@ namespace AI
         case Spell::DRAGONSLAYER:
         case Spell::ANTIMAGIC:
         case Spell::MIRRORIMAGE:
+        case Spell::SHIELD:
+        case Spell::MASSSHIELD:
             ratio = 0.0;
             break;
         default:
@@ -437,6 +439,13 @@ namespace AI
         }
         else if ( spellID == Spell::BERSERKER && !target.isArchers() ) {
             ratio /= ReduceEffectivenessByDistance( target );
+        }
+        else if ( spellID == Spell::SHIELD || spellID == Spell::MASSSHIELD ) {
+            ratio = _enemyRangedUnitsOnly / _enemyArmyStrength * 0.3;
+
+            if ( target.canShoot() ) {
+                ratio *= 1.25;
+            }
         }
         else if ( spellID == Spell::DRAGONSLAYER ) {
             // TODO: add logic to check if the enemy army contains a dragon.
