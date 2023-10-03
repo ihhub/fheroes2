@@ -496,68 +496,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     LocalEvent & le = LocalEvent::Get();
     const Settings & conf = Settings::Get();
 
-    //Army monsters2;
-
-    //monsters2.GetTroop( 0 )->Set( Monster::BOAR, 1 );
-    //monsters2.GetTroop( 1 )->Set( Monster::BOAR, 50 );
-    //monsters2.GetTroop( 2 )->Set( Monster::BOAR, 1 );
-    //monsters2.GetTroop( 3 )->Set( Monster::BOAR, 1 );
-    //monsters2.GetTroop( 4 )->Set( Monster::BOAR, 1 );
-
-
-    Troops killedcustom = Troops(); 
-    Troop troop = Troop(Monster::AIR_ELEMENT, 10);
-    Troop troopBoar = Troop( Monster::BOAR, 10 );
-    Troop troopCav = Troop( Monster::CAVALRY, 10 );
-
-    killedcustom.PushBack( troopBoar, 6 );
-    killedcustom.PushBack( troop, 6 );
-    killedcustom.PushBack( troop, 6 );
-    killedcustom.PushBack( troop, 6 );
-    killedcustom.PushBack( troopCav, 6 );
-    killedcustom.PushBack( troopCav, 6 );
-    killedcustom.PushBack( troopCav, 6 );
-    killedcustom.PushBack( troop, 6 );
-    killedcustom.PushBack( troop, 6 );
-    killedcustom.PushBack( troop, 6 );
-    killedcustom.PushBack( troop, 6 );
-    killedcustom.PushBack( troop, 6 );
-    killedcustom.PushBack( troopBoar, 6 );
-    //killedcustom.PushBack( troop, 6 );
-    //killedcustom.PushBack( troop, 6 );
-    //killedcustom.PushBack( troopCav, 6 );
-    //killedcustom.PushBack( troop, 6 );
-    //killedcustom.PushBack( troop, 6 );
-    //killedcustom.PushBack( troop, 6 );
-    //killedcustom.PushBack( troopBoar, 6 );
-    //killedcustom.PushBack( troopBoar, 6 );
-    //killedcustom.PushBack( troopBoar, 6 );
-    //killedcustom.PushBack( troopBoar, 6 );
-    killedcustom.GetTroop( 0 )->SetCount( 2 );
-    killedcustom.GetTroop( 1 )->SetCount( 2 );
-    killedcustom.GetTroop( 2 )->SetCount(3 );
-    killedcustom.GetTroop( 3 )->SetCount( 34 );
-    killedcustom.GetTroop( 4 )->SetCount( 3 );
-    killedcustom.GetTroop( 5 )->SetCount( 2 );
-    killedcustom.GetTroop( 6 )->SetCount( 3 );
-    killedcustom.GetTroop( 7 )->SetCount( 34 );
-    killedcustom.GetTroop( 8 )->SetCount( 3 );
-    killedcustom.GetTroop( 6 )->SetCount( 2 );
-    killedcustom.GetTroop( 7 )->SetCount( 3 );
-    killedcustom.GetTroop( 8 )->SetCount( 34 );
-    killedcustom.GetTroop( 9 )->SetCount( 3 );
-    //killedcustom.GetTroop( 10 )->SetCount( 3 );
-    //killedcustom.GetTroop( 11 )->SetCount( 2 );
-    //killedcustom.GetTroop( 12 )->SetCount( 3 );
-    //killedcustom.GetTroop( 13 )->SetCount( 34 );
-    //killedcustom.GetTroop( 14 )->SetCount( 3 );
-    //killedcustom.GetTroop( 15 )->SetCount( 3 );
-    //killedcustom.GetTroop( 16 )->SetCount( 2 );
-    //killedcustom.GetTroop( 17 )->SetCount( 3 );
-    //killedcustom.GetTroop( 18 )->SetCount( 34 );
-    //killedcustom.GetTroop( 19 )->SetCount( 3 );
-
-    const Troops killed1 = killedcustom; //_army1->GetKilledTroops();
+    const Troops killed1 = _army1->GetKilledTroops();
     const Troops killed2 = _army2->GetKilledTroops();
 
     // Set the cursor image. After this dialog the Game Area or the Battlefield will be shown, so it does not require a cursor restorer.

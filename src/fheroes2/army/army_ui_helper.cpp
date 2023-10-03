@@ -45,8 +45,8 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
     }
 
     int slotsToSkip = 1;
-    if ( count < 5 ) {
-        slotsToSkip = 1;
+    if ( count <= 2 ) {
+        slotsToSkip = 2;
     }
     else if ( count >= 7 ) {
         slotsToSkip = 0;
@@ -65,7 +65,7 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
     const int slotOffset = slotsToSkip;
 
     for ( size_t slot = 0; slot < slots; ++slot ) {
-
+        //Skip the monster handling when a slot is empty
         if ( slotsToSkip > 0 ) {
             slotsToSkip--;
             cx -= chunk;
@@ -113,7 +113,13 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
         else {
             if ( slotsToSkip == 0 ) {
                 const int offsetY = 28 - monster.height();
-                const int OffsetX = -15; //(monster.width() / 2) -12;
+                int OffsetX = -14;    
+
+                //Center the monster if there is only one
+                if ( count == 1 && slot == 1 ) {
+                    OffsetX = -10;
+                }
+
                 int x = ( cx - ( monster.width() / 2 ) ) + OffsetX;
                 int y = cy + offsetY + monster.y(); 
                 fheroes2::Blit( monster, output, x, y);
