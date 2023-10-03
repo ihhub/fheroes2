@@ -217,6 +217,10 @@ public:
     bool MouseClickLeft( const fheroes2::Rect & rt );
     bool MouseClickRight( const fheroes2::Rect & rt );
 
+    // The long press event is triggered only once. If this event has been triggered, then after releasing
+    // the mouse button, the click event will not be triggered.
+    bool MouseLongPressLeft( const fheroes2::Rect & rt );
+
     bool MouseWheelUp() const;
     bool MouseWheelDn() const;
 
@@ -330,14 +334,12 @@ private:
         MOUSE_PRESSED = 0x0004,
         // Mouse button has just been released
         MOUSE_RELEASED = 0x0008,
-        // Mouse button has been clicked
-        MOUSE_CLICKED = 0x0010,
         // Mouse wheel has been rotated
-        MOUSE_WHEEL = 0x0020,
+        MOUSE_WHEEL = 0x0010,
         // Current mouse event has been triggered by the touchpad
-        MOUSE_TOUCH = 0x0040,
+        MOUSE_TOUCH = 0x0020,
         // Key on the keyboard is currently being held down
-        KEY_HOLD = 0x0080,
+        KEY_HOLD = 0x0040,
     };
 
     enum
@@ -371,6 +373,34 @@ private:
     fheroes2::Point mouse_cu; // point cursor
 
     fheroes2::Point mouse_wm; // wheel movement
+
+    class LongPressDelay final : public fheroes2::TimeDelay
+    {
+    public:
+        using TimeDelay::TimeDelay;
+
+        void reset()
+        {
+            TimeDelay::reset();
+
+            _triggered = false;
+        }
+
+        bool isTriggered() const
+        {
+            return _triggered;
+        }
+
+        void setTriggered()
+        {
+            _triggered = true;
+        }
+
+    private:
+        bool _triggered{ false };
+    };
+
+    LongPressDelay _mouseButtonLongPressDelay;
 
     std::function<fheroes2::Rect( const int32_t, const int32_t )> _globalMouseMotionEventHook;
     std::function<void( const fheroes2::Key, const int32_t )> _globalKeyDownEventHook;

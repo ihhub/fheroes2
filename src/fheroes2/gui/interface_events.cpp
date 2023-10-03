@@ -177,6 +177,18 @@ fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
     return fheroes2::GameMode::CANCEL;
 }
 
+void Interface::AdventureMap::EventResetHeroPath()
+{
+    Heroes * hero = GetFocusHeroes();
+    if ( hero == nullptr ) {
+        return;
+    }
+
+    hero->GetPath().Reset();
+
+    setRedraw( REDRAW_GAMEAREA | REDRAW_BUTTONS );
+}
+
 void Interface::AdventureMap::EventKingdomInfo() const
 {
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );

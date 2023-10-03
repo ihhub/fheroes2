@@ -143,7 +143,6 @@ void Interface::ButtonsArea::ResetButtons()
 fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
-    fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
     le.MousePressLeft( nextHeroRect ) ? buttonNextHero.drawOnPress() : buttonNextHero.drawOnRelease();
     le.MousePressLeft( heroMovementRect ) ? buttonHeroMovement.drawOnPress() : buttonHeroMovement.drawOnRelease();
@@ -154,6 +153,8 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
     le.MousePressLeft( fileRect ) ? buttonFile.drawOnPress() : buttonFile.drawOnRelease();
     le.MousePressLeft( systemRect ) ? buttonSystem.drawOnPress() : buttonSystem.drawOnRelease();
 
+    fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
+
     // Move border window
     if ( Settings::Get().ShowButtons() && BorderWindow::QueueEventProcessing() ) {
         SetRedraw();
@@ -161,8 +162,11 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
     else if ( buttonNextHero.isEnabled() && le.MouseClickLeft( nextHeroRect ) ) {
         interface.EventNextHero();
     }
-    else if ( le.MouseClickLeft( heroMovementRect ) ) {
+    else if ( buttonHeroMovement.isEnabled() && le.MouseClickLeft( heroMovementRect ) ) {
         res = interface.EventHeroMovement();
+    }
+    else if ( buttonHeroMovement.isEnabled() && le.MouseLongPressLeft( heroMovementRect ) ) {
+        interface.EventResetHeroPath();
     }
     else if ( le.MouseClickLeft( kingdomRect ) ) {
         interface.EventKingdomInfo();
@@ -183,24 +187,34 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
         interface.EventSystemDialog();
     }
 
-    if ( le.MousePressRight( nextHeroRect ) )
+    if ( le.MousePressRight( nextHeroRect ) ) {
         fheroes2::showStandardTextMessage( _( "Next Hero" ), _( "Select the next Hero." ), Dialog::ZERO );
-    else if ( le.MousePressRight( heroMovementRect ) )
-        fheroes2::showStandardTextMessage( _( "Hero Movement" ), _( "Start the Hero's movement along the current path or re-visit the object occupied by the Hero." ),
-                                           Dialog::ZERO );
-    else if ( le.MousePressRight( kingdomRect ) )
+    }
+    else if ( le.MousePressRight( heroMovementRect ) ) {
+        fheroes2::showStandardTextMessage(
+            _( "Hero Movement" ),
+            _( "Start the Hero's movement along the current path or re-visit the object occupied by the Hero. Press and hold this button to reset the Hero's path." ),
+            Dialog::ZERO );
+    }
+    else if ( le.MousePressRight( kingdomRect ) ) {
         fheroes2::showStandardTextMessage( _( "Kingdom Summary" ), _( "View a Summary of your Kingdom." ), Dialog::ZERO );
-    else if ( le.MousePressRight( spellRect ) )
+    }
+    else if ( le.MousePressRight( spellRect ) ) {
         fheroes2::showStandardTextMessage( _( "Cast Spell" ), _( "Cast an adventure spell." ), Dialog::ZERO );
-    else if ( le.MousePressRight( endTurnRect ) )
+    }
+    else if ( le.MousePressRight( endTurnRect ) ) {
         fheroes2::showStandardTextMessage( _( "End Turn" ), _( "End your turn and left the computer take its turn." ), Dialog::ZERO );
-    else if ( le.MousePressRight( adventureRect ) )
+    }
+    else if ( le.MousePressRight( adventureRect ) ) {
         fheroes2::showStandardTextMessage( _( "Adventure Options" ), _( "Bring up the adventure options menu." ), Dialog::ZERO );
-    else if ( le.MousePressRight( fileRect ) )
+    }
+    else if ( le.MousePressRight( fileRect ) ) {
         fheroes2::showStandardTextMessage( _( "File Options" ), _( "Bring up the file options menu, allowing you to load, save, start a new game or quit." ),
                                            Dialog::ZERO );
-    else if ( le.MousePressRight( systemRect ) )
+    }
+    else if ( le.MousePressRight( systemRect ) ) {
         fheroes2::showStandardTextMessage( _( "System Options" ), _( "Bring up the system options menu, allowing you to customize your game." ), Dialog::ZERO );
+    }
 
     return res;
 }

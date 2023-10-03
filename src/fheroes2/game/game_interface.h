@@ -119,6 +119,7 @@ namespace Interface
         void EventNextHero();
         void EventNextTown();
         fheroes2::GameMode EventHeroMovement();
+        void EventResetHeroPath();
         void EventKingdomInfo() const;
         void EventCastSpell();
         void EventSwitchShowRadar() const;
