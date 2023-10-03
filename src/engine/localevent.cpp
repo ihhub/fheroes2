@@ -52,7 +52,7 @@ namespace
 {
     const uint32_t globalLoopSleepTime{ 1 };
 
-    // If such or more ms has passed between pressing and releasing the mouse button, then this is a long press. Otherwise, this is a click.
+    // If such or more ms has passed after pressing the mouse button, then this is a long press.
     const uint32_t mouseButtonLongPressTimeout{ 750 };
 
     int getSDLKey( const fheroes2::Key key )
