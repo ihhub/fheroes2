@@ -569,6 +569,13 @@ namespace Interface
                 _redraw |= mapUpdateFlags;
             }
         }
+        else if ( _editorPanel.isStreamDraw() ) {
+            const fheroes2::ActionCreator action( _historyManager );
+
+            if ( Maps::updateStreamOnTile( tile, true ) ) {
+                _redraw |= mapUpdateFlags;
+            }
+        }
         else if ( _editorPanel.isEraseMode() ) {
             const int32_t brushSize = _editorPanel.getBrushSize();
 
@@ -577,6 +584,9 @@ namespace Interface
                 const fheroes2::ActionCreator action( _historyManager );
 
                 if ( Maps::updateRoadOnTile( tile, false ) ) {
+                    _redraw |= mapUpdateFlags;
+                }
+                if ( Maps::updateStreamOnTile( tile, false ) ) {
                     _redraw |= mapUpdateFlags;
                 }
 
