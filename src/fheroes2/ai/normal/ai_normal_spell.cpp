@@ -428,7 +428,7 @@ namespace AI
             ratio /= ReduceEffectivenessByDistance( target );
         }
         else if ( spellID == Spell::SHIELD || spellID == Spell::MASSSHIELD ) {
-            ratio = _enemyRangedUnitsOnly / _enemyArmyStrength * 0.25;
+            ratio = _enemyRangedUnitsOnly / _enemyArmyStrength * 0.3;
 
             if ( target.canShoot() ) {
                 ratio *= 1.25;
