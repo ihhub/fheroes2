@@ -552,7 +552,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
 void RedrawResourceSprite( const fheroes2::Image & sf, int32_t px, int32_t py, int32_t value )
 {
-    fheroes2::Display& display = fheroes2::Display::instance();
+    fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( sf, display, px, py );
 
     const fheroes2::Text text( std::to_string( value ), fheroes2::FontType::smallWhite() );
@@ -581,7 +581,7 @@ void RedrawFromResource( const fheroes2::Point & pt, const Funds & rs )
 
 void RedrawResourceSprite2( const fheroes2::Image & sf, int32_t px, int32_t py, bool show, const Kingdom & kingdom, int from, int res, bool trading )
 {
-    fheroes2::Display& display = fheroes2::Display::instance();
+    fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( sf, display, px, py );
 
     if ( show ) {

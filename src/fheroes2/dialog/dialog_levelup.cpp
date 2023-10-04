@@ -93,7 +93,7 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
     StringReplace( message, "%{skill1}", sec1.GetName() );
     StringReplace( message, "%{skill2}", sec2.GetName() );
 
-    fheroes2::Text box1( std::move( header ), fheroes2::FontType::normalWhite() );//,  );
+    fheroes2::Text box1( std::move( header ), fheroes2::FontType::normalWhite() );
     fheroes2::Text box2( std::move( message ), fheroes2::FontType::normalWhite() );
     const int spacer = 10;
 

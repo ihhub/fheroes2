@@ -241,7 +241,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     res.reserve( 48 );
     size_t charInsertPos = 0;
 
-    const fheroes2::Text titlebox( title, fheroes2::FontType::normalYellow() ); //Font::YELLOW_BIG, BOXAREA_WIDTH );
+    const fheroes2::Text titlebox( title, fheroes2::FontType::normalYellow() );
     const fheroes2::Text textbox( header, fheroes2::FontType::normalWhite() );
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
