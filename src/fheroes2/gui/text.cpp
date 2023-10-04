@@ -33,7 +33,7 @@ namespace
 {
     bool isSmallFont( int font )
     {
-        return font == Font::SMALL || font == Font::YELLOW_SMALL || font == Font::GRAY_SMALL;
+        return font == Font::SMALL;
     }
 }
 
@@ -255,30 +255,6 @@ void Text::Set( const std::string & msg )
     gh = message->h();
 }
 
-void Text::Set( int ft )
-{
-    message->setFont( ft );
-    gw = message->w();
-    gh = message->h();
-}
-
-void Text::Clear()
-{
-    message->clear();
-    gw = 0;
-    gh = 0;
-}
-
-size_t Text::Size() const
-{
-    return message->size();
-}
-
-void Text::Blit( const fheroes2::Point & dst_pt, fheroes2::Image & dst ) const
-{
-    return message->blit( dst_pt.x, dst_pt.y, 0, dst );
-}
-
 void Text::Blit( int32_t ax, int32_t ay, fheroes2::Image & dst ) const
 {
     return message->blit( ax, ay, 0, dst );
@@ -290,16 +266,8 @@ void Text::Blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst ) const
 }
 
 TextBox::TextBox( const std::string & msg, int ft, uint32_t width_ )
-    : align( ALIGN_CENTER )
 {
     Set( msg, ft, width_ );
-}
-
-TextBox::TextBox( const std::string & msg, int ft, const fheroes2::Rect & rt )
-    : align( ALIGN_CENTER )
-{
-    Set( msg, ft, rt.width );
-    Blit( rt.x, rt.y );
 }
 
 void TextBox::Set( const std::string & msg, int ft, uint32_t width_ )
@@ -388,16 +356,7 @@ void TextBox::Blit( int32_t ax, int32_t ay, fheroes2::Image & sf )
     fheroes2::Rect::y = ay;
 
     for ( std::list<Text>::const_iterator it = messages.begin(); it != messages.end(); ++it ) {
-        switch ( align ) {
-        case ALIGN_LEFT:
-            ( *it ).Blit( ax, ay, sf );
-            break;
-
-        // center
-        default:
-            ( *it ).Blit( ax + ( fheroes2::Rect::width - ( *it ).w() ) / 2, ay, sf );
-            break;
-        }
+        ( *it ).Blit( ax + ( fheroes2::Rect::width - ( *it ).w() ) / 2, ay, sf );
 
         ay += ( *it ).h();
     }

@@ -37,9 +37,9 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
-#include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_text.h"
 #include "world.h"
 
 bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & message, uint32_t gold, uint32_t expr, const Heroes & hero )
@@ -52,15 +52,14 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     const fheroes2::Sprite & sprite_gold = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
     const fheroes2::Sprite & sprite_expr = fheroes2::AGG::GetICN( ICN::EXPMRL, 4 );
 
-    TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
-    TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
+    fheroes2::Text headerText( header, fheroes2::FontType::normalYellow() );
+    fheroes2::Text messageText( message, fheroes2::FontType::normalWhite() );
 
-    Text text;
-    text.Set( std::to_string( gold ) + " (" + _( "Total: " ) + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")",
-              Font::SMALL );
+    fheroes2::Text text{ std::to_string( gold ) + " (" + _( "Total: " ) + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")",
+                         fheroes2::FontType::smallWhite() };
 
     const int spacer = 10;
-    FrameBox box( box1.h() + spacer + box2.h() + spacer + sprite_expr.height() + 2 + text.h(), true );
+    FrameBox box( headerText.height( BOXAREA_WIDTH ) + spacer + messageText.height( BOXAREA_WIDTH ) + spacer + sprite_expr.height() + 2 + text.height(), true );
 
     fheroes2::Point pt;
 
@@ -78,28 +77,32 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
 
     fheroes2::Rect pos = box.GetArea();
 
-    if ( !header.empty() )
-        box1.Blit( pos.x, pos.y );
-    pos.y += box1.h() + spacer;
+    if ( !header.empty() ) {
+        headerText.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
+    }
 
-    if ( !message.empty() )
-        box2.Blit( pos.x, pos.y );
-    pos.y += box2.h() + spacer;
+    pos.y += headerText.height( BOXAREA_WIDTH ) + spacer;
+
+    if ( !message.empty() ) {
+        messageText.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
+    }
+
+    pos.y += messageText.height( BOXAREA_WIDTH ) + spacer;
 
     pos.y += sprite_expr.height();
     // sprite1
     pos.x = box.GetArea().x + box.GetArea().width / 2 - sprite_gold.width() - 30;
     fheroes2::Blit( sprite_gold, display, pos.x, pos.y - sprite_gold.height() );
     // text
-    text.Blit( pos.x + sprite_gold.width() / 2 - text.w() / 2, pos.y + 2 );
+    text.draw( pos.x + sprite_gold.width() / 2 - text.width() / 2, pos.y + 4, display );
 
     // sprite2
     pos.x = box.GetArea().x + box.GetArea().width / 2 + 30;
     fheroes2::Blit( sprite_expr, display, pos.x, pos.y - sprite_expr.height() );
     // text
-    text.Set( std::to_string( expr ) + " (" + _( "Need: " ) + std::to_string( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() ) + ")",
-              Font::SMALL );
-    text.Blit( pos.x + sprite_expr.width() / 2 - text.w() / 2, pos.y + 2 );
+    text.set( std::to_string( expr ) + " (" + _( "Need: " ) + std::to_string( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() ) + ")",
+              fheroes2::FontType::smallWhite() );
+    text.draw( pos.x + sprite_expr.width() / 2 - text.width() / 2, pos.y + 4, display );
 
     button_yes.draw();
     button_no.draw();

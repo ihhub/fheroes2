@@ -4389,12 +4389,8 @@ namespace fheroes2
 
             // TODO: correct naming and standardize the code
             switch ( fontType ) {
-            case Font::GRAY_SMALL:
-                return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
             case Font::YELLOW_BIG:
                 return GetICN( ICN::YELLOW_FONT, character - 0x20 );
-            case Font::YELLOW_SMALL:
-                return GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
             case Font::BIG:
                 return GetICN( ICN::FONT, character - 0x20 );
             case Font::SMALL:
@@ -4414,8 +4410,6 @@ namespace fheroes2
             case Font::YELLOW_BIG:
                 return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
             case Font::SMALL:
-            case Font::GRAY_SMALL:
-            case Font::YELLOW_SMALL:
                 return static_cast<uint32_t>( GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
             default:
                 assert( 0 );

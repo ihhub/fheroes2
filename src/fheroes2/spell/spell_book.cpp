@@ -40,7 +40,6 @@
 #include "localevent.h"
 #include "math_base.h"
 #include "screen.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
@@ -120,21 +119,21 @@ namespace
 
     void SpellBookRedrawManaPoints( const fheroes2::Point & dst, uint32_t manaPoints, fheroes2::Image & output )
     {
-        fheroes2::Point tp( dst.x + 11, dst.y + 9 );
+        fheroes2::Point tp( dst.x + 11, dst.y + 11 );
         if ( manaPoints > 999 ) {
             manaPoints = 999; // just in case of a broken code
         }
 
-        Text text( manaPoints >= 100 ? std::to_string( manaPoints / 100 ) : " ", Font::SMALL );
-        text.Blit( tp.x - text.w() / 2, tp.y, output );
-        tp.y += text.h();
+        fheroes2::Text text( manaPoints >= 100 ? std::to_string( manaPoints / 100 ) : " ", fheroes2::FontType::smallWhite() );
+        text.draw( tp.x - text.width() / 2, tp.y, output );
+        tp.y += text.height();
 
-        text.Set( manaPoints >= 10 ? std::to_string( ( manaPoints % 100 ) / 10 ) : " ", Font::SMALL );
-        text.Blit( tp.x - text.w() / 2, tp.y, output );
-        tp.y += text.h();
+        text.set( manaPoints >= 10 ? std::to_string( ( manaPoints % 100 ) / 10 ) : " ", fheroes2::FontType::smallWhite() );
+        text.draw( tp.x - text.width() / 2, tp.y, output );
+        tp.y += text.height();
 
-        text.Set( manaPoints > 0 ? std::to_string( manaPoints % 10 ) : "0", Font::SMALL );
-        text.Blit( tp.x - text.w() / 2, tp.y, output );
+        text.set( manaPoints > 0 ? std::to_string( manaPoints % 10 ) : "0", fheroes2::FontType::smallWhite() );
+        text.draw( tp.x - text.width() / 2, tp.y, output );
     }
 
     void SpellBookRedrawLists( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, const fheroes2::Point & pt, uint32_t manaPoints,

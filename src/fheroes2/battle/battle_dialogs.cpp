@@ -847,11 +847,10 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
 
     std::string str;
     Text text;
-    text.Set( Font::SMALL );
     str = hero.isCaptain() ? _( "Captain of %{name}" ) : _( "%{name} the %{race}" );
     StringReplace( str, "%{name}", hero.GetName() );
     StringReplace( str, "%{race}", Race::String( hero.GetRace() ) );
-    text.Set( str );
+    text.Set( str, Font::SMALL );
     fheroes2::Point tp{ pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 11 };
     text.Blit( tp.x, tp.y );
 

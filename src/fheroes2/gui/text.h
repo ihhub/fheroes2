@@ -43,17 +43,9 @@ namespace Font
     {
         SMALL = 0x01,
         BIG = 0x02,
-        YELLOW_BIG = 0x04,
-        YELLOW_SMALL = 0x08,
-        GRAY_SMALL = 0x10
+        YELLOW_BIG = 0x04
     };
 }
-enum
-{
-    ALIGN_NONE,
-    ALIGN_LEFT,
-    ALIGN_CENTER
-};
 
 class TextAscii;
 
@@ -71,11 +63,6 @@ public:
 
     void Set( const std::string &, int );
     void Set( const std::string & );
-    void Set( int );
-
-    void Clear();
-
-    size_t Size() const;
 
     int w() const
     {
@@ -88,7 +75,6 @@ public:
 
     void Blit( int32_t ax, int32_t ay, fheroes2::Image & dst = fheroes2::Display::instance() ) const;
     void Blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst = fheroes2::Display::instance() ) const;
-    void Blit( const fheroes2::Point & dst_pt, fheroes2::Image & dst = fheroes2::Display::instance() ) const;
 
 protected:
     TextAscii * message;
@@ -100,14 +86,8 @@ class TextBox : protected fheroes2::Rect
 {
 public:
     TextBox( const std::string &, int, uint32_t width_ );
-    TextBox( const std::string &, int, const fheroes2::Rect & );
 
     void Set( const std::string &, int, uint32_t width_ );
-
-    void SetAlign( int type )
-    {
-        align = type;
-    }
 
     int32_t w() const
     {
@@ -119,18 +99,12 @@ public:
         return fheroes2::Rect::height;
     }
 
-    size_t row() const
-    {
-        return messages.size();
-    }
-
     void Blit( int32_t, int32_t, fheroes2::Image & sf = fheroes2::Display::instance() );
 
 private:
     void Append( const std::string &, int, uint32_t );
 
     std::list<Text> messages;
-    int align;
 };
 
 #endif
