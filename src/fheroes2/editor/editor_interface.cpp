@@ -640,7 +640,7 @@ namespace Interface
 
     void EditorInterface::updateCursor( const int32_t tileIndex )
     {
-        if ( _cursorUpdater ) {
+        if ( _cursorUpdater && tileIndex >= 0 ) {
             _cursorUpdater( tileIndex );
         }
         else {
