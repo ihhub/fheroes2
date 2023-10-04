@@ -320,8 +320,7 @@ namespace AI
 
         // Make sure this spell can be applied to the current unit (skip check for dispel estimation)
         if ( !forDispel
-             && ( ( target.isImmovable() && spellID != Spell::ANTIMAGIC ) || target.isUnderSpellEffect( spell )
-                  || !target.AllowApplySpell( spell, _commander ) ) ) {
+             && ( ( target.isImmovable() && spellID != Spell::ANTIMAGIC ) || target.isUnderSpellEffect( spell ) || !target.AllowApplySpell( spell, _commander ) ) ) {
             return 0.0;
         }
 

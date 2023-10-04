@@ -30,7 +30,6 @@
 #include "army_troop.h"
 #include "artifact.h"
 #include "artifact_info.h"
-#include "battle.h"
 #include "battle_arena.h"
 #include "battle_cell.h"
 #include "battle_troop.h"
