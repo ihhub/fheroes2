@@ -539,21 +539,6 @@ void Troops::MergeSameMonsterTroops()
     }
 }
 
-Troops Troops::GetReversed() const
-{
-    Troops result;
-    result.reserve( size() );
-
-    for ( auto iter = rbegin(); iter != rend(); ++iter ) {
-
-        Troop * newTroop = new Troop( **iter );
-        result.push_back( newTroop );
-    }
-
-    return result;
-}
-
-
 bool Troops::MergeSameMonsterOnce()
 {
     for ( size_t slot = 0; slot < size(); ++slot ) {
