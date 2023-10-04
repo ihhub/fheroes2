@@ -142,14 +142,21 @@ namespace AI
         const int spellPower = _commander->GetPower();
         const uint32_t totalDamage = spell.Damage() * spellPower;
 
-        const auto damageHeuristic = [this, &totalDamage, &spell, &spellPower, &retreating]( const Unit * unit ) {
+        const auto damageHeuristic = [this, &totalDamage, &spell, &spellPower, &retreating]( const Unit * unit, const double armyStrength, const double armySpeed ) {
             const uint32_t damage = totalDamage * ( 100 - unit->GetMagicResist( spell, spellPower, _commander ) ) / 100;
             // If we're retreating we don't care about partial damage, only actual units killed
             if ( retreating )
                 return unit->GetMonsterStrength() * unit->HowManyWillBeKilled( damage );
 
             // Otherwise calculate amount of strength lost (% of unit times total strength)
-            double unitPercentageLost = std::min( static_cast<double>( damage ) / unit->GetHitPoints(), 1.0 );
+            const uint32_t hitpoints = unit->GetHitPoints();
+            if ( damage >= hitpoints ) {
+                // bonus for finishing a stack
+                const double bonus = ( unit->GetSpeed() > armySpeed ) ? 0.07 : 0.035;
+                return unit->GetStrength() + armyStrength * bonus;
+            }
+
+            double unitPercentageLost = std::min( static_cast<double>( damage ) / hitpoints, 1.0 );
 
             // Penalty for waking up disabled unit (if you kill only 30%, rest 70% is your penalty)
             if ( unit->Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) ) {
@@ -160,16 +167,16 @@ namespace AI
 
         if ( spell.isSingleTarget() ) {
             for ( const Unit * enemy : enemies ) {
-                bestOutcome.updateOutcome( damageHeuristic( enemy ), enemy->GetHeadIndex() );
+                bestOutcome.updateOutcome( damageHeuristic( enemy, _enemyArmyStrength, _enemyAverageSpeed ), enemy->GetHeadIndex() );
             }
         }
         else if ( spell.isApplyWithoutFocusObject() ) {
             double spellHeuristic = 0;
             for ( const Unit * enemy : enemies ) {
-                spellHeuristic += damageHeuristic( enemy );
+                spellHeuristic += damageHeuristic( enemy, _enemyArmyStrength, _enemyAverageSpeed );
             }
             for ( const Unit * unit : friendly ) {
-                const double valueLost = damageHeuristic( unit );
+                const double valueLost = damageHeuristic( unit, _myArmyStrength, _myArmyAverageSpeed );
                 // check if we're retreating and will lose current unit
                 if ( retreating && unit->isUID( currentUnit.GetUID() ) && std::fabs( valueLost - unit->GetStrength() ) < 0.001 ) {
                     // avoid this spell and return early
@@ -182,25 +189,26 @@ namespace AI
         }
         else {
             // Area of effect spells like Fireball
-            const auto areaOfEffectCheck = [&damageHeuristic, &bestOutcome, &currentUnit, &retreating]( const TargetsInfo & targets, const int32_t index, int myColor ) {
-                double spellHeuristic = 0;
-                for ( const TargetInfo & target : targets ) {
-                    if ( target.defender->GetCurrentColor() == myColor ) {
-                        const double valueLost = damageHeuristic( target.defender );
-                        // check if we're retreating and will lose current unit
-                        if ( retreating && target.defender->isUID( currentUnit.GetUID() ) && std::fabs( valueLost - target.defender->GetStrength() ) < 0.001 ) {
-                            // avoid this spell and return without updating the outcome
-                            return;
-                        }
-                        spellHeuristic -= valueLost;
-                    }
-                    else {
-                        spellHeuristic += damageHeuristic( target.defender );
-                    }
-                }
+            const auto areaOfEffectCheck
+                = [this, &damageHeuristic, &bestOutcome, &currentUnit, &retreating]( const TargetsInfo & targets, const int32_t index, int myColor ) {
+                      double spellHeuristic = 0;
+                      for ( const TargetInfo & target : targets ) {
+                          if ( target.defender->GetCurrentColor() == myColor ) {
+                              const double valueLost = damageHeuristic( target.defender, _myArmyStrength, _myArmyAverageSpeed );
+                              // check if we're retreating and will lose current unit
+                              if ( retreating && target.defender->isUID( currentUnit.GetUID() ) && std::fabs( valueLost - target.defender->GetStrength() ) < 0.001 ) {
+                                  // avoid this spell and return without updating the outcome
+                                  return;
+                              }
+                              spellHeuristic -= valueLost;
+                          }
+                          else {
+                              spellHeuristic += damageHeuristic( target.defender, _enemyArmyStrength, _enemyAverageSpeed );
+                          }
+                      }
 
-                bestOutcome.updateOutcome( spellHeuristic, index );
-            };
+                      bestOutcome.updateOutcome( spellHeuristic, index );
+                  };
 
             if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
                 for ( const Unit * enemy : enemies ) {
@@ -270,10 +278,10 @@ namespace AI
         const int currentSpeed = target.GetSpeed( false, true );
         const int newSpeed = Speed::GetSlowSpeedFromSpell( currentSpeed );
         const int lostSpeed = currentSpeed - newSpeed; // usually 2
-        double ratio = 0.15 * lostSpeed;
+        double ratio = 0.1 * lostSpeed;
 
         if ( currentSpeed < _myArmyAverageSpeed ) { // Slow isn't useful if target is already slower than our army
-            ratio /= 3;
+            ratio /= 2;
         }
         if ( target.Modes( SP_HASTE ) ) {
             ratio *= 2;
@@ -293,7 +301,7 @@ namespace AI
         double ratio = 0.05 * gainedSpeed;
 
         if ( currentSpeed < _enemyAverageSpeed ) { // Haste is very useful if target is slower than army
-            ratio *= 3;
+            ratio *= 2;
         }
         if ( target.Modes( SP_SLOW ) ) {
             ratio *= 2;
@@ -326,7 +334,7 @@ namespace AI
         case Spell::BLIND: {
             if ( targetIsLast )
                 return 0.0;
-            ratio = 0.85;
+            ratio = 0.8;
             break;
         }
         case Spell::CURSE:
@@ -336,13 +344,13 @@ namespace AI
         case Spell::BERSERKER: {
             if ( targetIsLast )
                 return 0.0;
-            ratio = 0.95;
+            ratio = 0.85;
             break;
         }
         case Spell::PARALYZE: {
             if ( targetIsLast )
                 return 0.0;
-            ratio = 0.9;
+            ratio = 0.85;
             break;
         }
         case Spell::HYPNOTIZE: {
@@ -378,6 +386,8 @@ namespace AI
         case Spell::DRAGONSLAYER:
         case Spell::ANTIMAGIC:
         case Spell::MIRRORIMAGE:
+        case Spell::SHIELD:
+        case Spell::MASSSHIELD:
             ratio = 0.0;
             break;
         default:
@@ -397,13 +407,18 @@ namespace AI
             for ( const Spell & otherSpell : spellList ) {
                 if ( otherSpell.isResurrect() && _commander->HaveSpellPoints( otherSpell ) && target.AllowApplySpell( otherSpell, _commander ) ) {
                     // Can resurrect unit in the future, limit the ratio
-                    ratioLimit = 0.15;
+                    ratioLimit = 0.35;
                     break;
                 }
             }
-            // With 20 spell power and 200 spell points _enemySpellStrength will be 3000.0 (anything over is ignored here)
-            // Then convert 0...3000 range into 0.0 to 0.9 ratio and clamp it
-            ratio = std::min( _enemySpellStrength / antimagicLowLimit * 0.06, ratioLimit );
+
+            // Convert 0...5000 range into 0.0 to 0.9 ratio and clamp it
+            ratio = std::min( _enemySpellStrength / antimagicLowLimit * 0.036, ratioLimit );
+
+            // Hero is stronger than its army, possible hit and run tactic
+            if ( _enemySpellStrength > _enemyArmyStrength ) {
+                ratio *= 1.5;
+            }
 
             if ( target.Modes( IS_BAD_MAGIC ) ) {
                 ratio *= 2;
@@ -424,6 +439,13 @@ namespace AI
         }
         else if ( spellID == Spell::BERSERKER && !target.isArchers() ) {
             ratio /= ReduceEffectivenessByDistance( target );
+        }
+        else if ( spellID == Spell::SHIELD || spellID == Spell::MASSSHIELD ) {
+            ratio = _enemyRangedUnitsOnly / _enemyArmyStrength * 0.3;
+
+            if ( target.canShoot() ) {
+                ratio *= 1.25;
+            }
         }
         else if ( spellID == Spell::DRAGONSLAYER ) {
             // TODO: add logic to check if the enemy army contains a dragon.
@@ -514,7 +536,7 @@ namespace AI
 
             // if we are winning battle; permanent resurrect bonus
             if ( _myArmyStrength > _enemyArmyStrength && spell.GetID() != Spell::RESURRECT ) {
-                spellValue *= 1.5;
+                spellValue *= 2;
             }
 
             bestOutcome.updateOutcome( spellValue, unit->GetHeadIndex() );
