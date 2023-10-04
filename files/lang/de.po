@@ -408,12 +408,11 @@ msgstr "Dieser Zauber wirkt sich auf niemanden aus!"
 msgid "You may only summon one type of elemental per combat."
 msgstr "Ihr könnt nur eine Art von Wesen pro Kampf beschwören."
 
-#, fuzzy
 msgid ""
 "There is no open space adjacent to your hero where you can summon an "
 "Elemental to."
 msgstr ""
-"In der Nähe Eures Helden gibt es keinen freien Platz, um einen Wesen zu "
+"In der Nähe Eures Helden gibt es keinen freien Platz, um ein Wesen zu "
 "beschwören."
 
 msgid ""
@@ -587,7 +586,7 @@ msgid "Defense"
 msgstr "Verteid."
 
 msgid "Spell Power"
-msgstr "Z-Kraft"
+msgstr "Zauberkraft"
 
 msgid "Knowledge"
 msgstr "Wissen"
@@ -599,7 +598,7 @@ msgid "Luck"
 msgstr "Glück"
 
 msgid "Spell Points"
-msgstr "ZS-Punkte"
+msgstr "Zauberpunkte"
 
 msgid "Hero's Options"
 msgstr "Helden-Optionen"
@@ -620,7 +619,7 @@ msgid "Hero Screen"
 msgstr "Heldenbildschirm"
 
 msgid "Captain's Options"
-msgstr "Möglichkeiten für den Kapitän"
+msgstr "Möglichkeiten des Hauptmanns"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
@@ -770,9 +769,8 @@ msgstr "Ergebnisse der Aktionen der einzelnen Monster anzeigen."
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Seid Ihr sicher, dass Ihr den Kampf im Automodus beenden möchtet?"
 
-#, fuzzy
 msgid "Are you sure you want to enable auto combat?"
-msgstr "Seid Ihr sicher, dass Ihr euch zurückziehen wollt?"
+msgstr "Wollt Ihr den automatischen Kampfmodus wirklich aktivieren?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} setzt den Zug aus."
@@ -1034,7 +1032,6 @@ msgstr "Verrat"
 msgid "Final Justice"
 msgstr "Gerechtigkeit"
 
-#, fuzzy
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
 "rebellion against his brother. They are not allied with each other, so they "
@@ -1129,7 +1126,6 @@ msgstr ""
 "die Zähne bewaffnet, und alle sind gegen Euch verbündet. Nehmt Archibald " 
 "gefangen und der Krieg ist beendet!"
 
-#, fuzzy
 msgid ""
 "Switching sides leaves you with three castles against the enemy's one. This "
 "battle will be the easiest one you will face for the rest of the war..."
@@ -1166,7 +1162,6 @@ msgstr "Apocalypse"
 msgid "Greater Glory"
 msgstr "Größte Ehre"
 
-#, fuzzy
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region. They "
 "are not allied with one another, so they will spend most of their energy "
@@ -1577,7 +1572,6 @@ msgstr ""
 "Die Drachen, knurrend und grollend, stimmen zu, sich mit Euch, ihrem "
 "\"Verbündeten\", zusammenzuschließen."
 
-#, fuzzy
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
 "attention. He shouts to them, \"Who of you is brave enough to join this "
@@ -1589,7 +1583,6 @@ msgstr ""
 "unserem furchtlosen Verbündeten anzuschließen?\" Die Gruppe explodiert vor "
 "Jubel, als sie hinüberstürmen um in Euren Reihen aufgenommen zu werden."
 
-#, fuzzy
 msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours. You may "
 "pass.\""
@@ -1603,7 +1596,6 @@ msgstr ""
 "Die Oger geben ein anerkennendes Grunzen von sich: \"Archibalds Verbündete "
 "dürfen durchgehen.\""
 
-#, fuzzy
 msgid ""
 "The dragons see you and call out. \"Our alliance with Archibald compels us "
 "to join you. Unfortunately you have no room. A pity!\" They quickly scatter."
@@ -1612,7 +1604,6 @@ msgstr ""
 "uns, uns Euch anzuschließen. Leider habt Ihr keinen Platz. Das ist schade! "
 "\" Schnell zerstreuen sie sich."
 
-#, fuzzy
 msgid ""
 "The elves stand at attention as you approach. Their leader calls to you and "
 "says, \"Let us not impede your progress, ally! Move on, and may victory be "
@@ -1919,9 +1910,8 @@ msgstr "Kann nicht gebaut werden. Ihr habt an diesem Tag hier bereits gebaut."
 msgid "For this action it is necessary to build a castle first."
 msgstr "Für diese Aktion ist es notwendig, zuerst eine Burg zu bauen."
 
-#, fuzzy
 msgid "Cannot build %{name} because the castle is too far away from an ocean."
-msgstr "%{name} kann nicht gebaut werden, weil keine Gewässern in der Nähe sind."
+msgstr "%{name} kann nicht gebaut werden, weil keine Gewässer in der Nähe sind."
 
 msgid "disable build."
 msgstr "Bauen deaktivieren."
@@ -2552,7 +2542,7 @@ msgstr ""
 "Zauberpunkte wieder aufzufüllen."
 
 msgid "Recruit %{name}"
-msgstr "Rekrutieren %{name}"
+msgstr "%{name} rekrutieren"
 
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
 msgstr "Monat: %{month}, Woche: %{week}, Tag: %{day}"
@@ -2601,9 +2591,8 @@ msgstr "Helden anzeigen"
 msgid "The above spells are available here."
 msgstr "Die oben genannten Zaubersprüche sind hier verfügbar."
 
-#, fuzzy
 msgid "The spells the hero can learn have been added to their book."
-msgstr "Diese Zaubersprüche wurden Eure Buch hinzugefügt."
+msgstr "Diese Zaubersprüche wurden Eurem Zauberbuch hinzugefügt."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
@@ -2725,7 +2714,6 @@ msgstr "Dieses Menü verlassen."
 msgid "Arena"
 msgstr "Arena"
 
-#, fuzzy
 msgid ""
 "You enter the arena and face a pack of vicious lions. You handily defeat "
 "them, to the wild cheers of the crowd. Impressed by your skill, the aged "
@@ -2931,7 +2919,6 @@ msgstr "Spielsprache auswählen"
 msgid "Change the graphics settings of the game."
 msgstr "Grafikeinstellungen des Spiels ändern."
 
-#, fuzzy
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 "Farbigen Cursor ein- oder ausschalten. Dies ist nur eine ästhetische "
@@ -3461,15 +3448,14 @@ msgstr "Der Name der aktuell ausgewählten Karte."
 msgid "Selected Map Difficulty"
 msgstr "Ausgewählter Schwierigkeitsgrad"
 
-#, fuzzy
 msgid ""
 "The map difficulty of the currently selected map. The map difficulty is "
 "determined by the scenario designer. More difficult maps might include more "
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
 msgstr ""
-"Die Kartenschwierigkeit der aktuell ausgewählten Karte. Der "
-"Schwierigkeitsgrad der Karte wird vom Szenario-Designer festgelegt. "
+"Der Schwierigkeitsgrad der aktuell ausgewählten Karte. Die "
+"Kartenschwierigkeit wird vom Szenario-Ersteller festgelegt. "
 "Schwierigere Karten können mehr oder stärkere Feinde, weniger Ressourcen "
 "oder andere spezielle Bedingungen enthalten, die die Dinge für den "
 "menschlichen Spieler schwieriger machen."
@@ -3509,7 +3495,6 @@ msgstr ""
 "Ändert die Geschwindigkeit, mit der sich Euer Helden auf dem "
 "Hauptbildschirm bewegen."
 
-#, fuzzy
 msgid ""
 "Sets the speed that A.I. heroes move at. You can also elect not to view A.I. "
 "movement at all."
@@ -3517,9 +3502,8 @@ msgstr ""
 "Legt die Geschwindigkeit fest, mit der sich die KI-Helden bewegen. Ihr "
 "könnt auch festlegen, dass die KI-Bewegung überhaupt nicht angezeigt wird."
 
-#, fuzzy
 msgid "Change the interface settings of the game."
-msgstr "Ändere die Grafikeinstellungen des Spiels."
+msgstr "Die Grafikeinstellungen des Spiels ändern."
 
 #, fuzzy
 msgid "Interface Settings"
@@ -4735,10 +4719,9 @@ msgstr "6 Spieler"
 msgid "Play with 6 human players."
 msgstr "Ein Spiel mit 6 menschlichen Spielern."
 
-#, fuzzy
 msgid "Dragon city has fallen! You are now the Master of the Dragons."
 msgstr ""
-"Die Drachenstadt ist gefallen! Ihr seid sind jetzt der Meister der Drachen."
+"Die Drachenstadt ist gefallen! Ihr seid sind nun der Meister der Drachen."
 
 msgid ""
 "You captured %{name}!\n"
@@ -6023,7 +6006,6 @@ msgstr ""
 "Der Schluck an der Oase ist erfrischend, bietet aber keinen weiteren Nutzen. "
 "Die Oase könnte helfen, wenn Ihr zuvor eine Schlacht geschlagen habt."
 
-#, fuzzy
 msgid ""
 "A drink at the oasis fills your troops with strength and lifts their "
 "spirits. You can travel a bit further today."
@@ -6978,9 +6960,8 @@ msgstr ""
 "\"Auf meinen Reisen habe ich viel über die geheim Magie gelernt. Ein großes "
 "Orakel lehrte mich sein Können. Ich habe die Antwort, die Ihr sucht.\""
 
-#, fuzzy
 msgid "No spell book is present."
-msgstr "Das Zauberbuch ist nicht vorhanden."
+msgstr "Kein Zauberbuch vorhanden."
 
 msgid ""
 "This spell costs %{mana} spell points. You have no spell points, so you "
@@ -6989,7 +6970,6 @@ msgstr ""
 "Dieser Zauberspruch kostet %{mana} Zauberpunkte. Ihr habt keine Zauberpunkte, "
 "also könnt Ihr den Zauber nicht sprechen."
 
-#, fuzzy
 msgid ""
 "This spell costs %{mana} spell points. You only have %{point} spell points, "
 "so you cannot cast it."
@@ -7039,10 +7019,9 @@ msgstr ""
 "Ihr besitzt derzeit keine Stadt oder Burg, die nicht von einem Helden "
 "bewohnt wird, daher kann der Zauber nicht wirken."
 
-#, fuzzy
 msgid "This hero is already in a town, so you cannot cast this spell."
 msgstr ""
-"Dieser Held befindet sich bereits in einer Stadt, sodass der Zauber "
+"Dieser Held befindet sich bereits in einer Stadt, sodass dieser Zauber "
 "nicht verwendet werden kann."
 
 msgid ""
@@ -7054,7 +7033,6 @@ msgstr ""
 " \n"
 "Diese Stadt ist von deinem Helden %{hero} besetzt."
 
-#, fuzzy
 msgid "This spell is already in effect."
 msgstr "Dieser Zauber ist bereits in Gebrauch."
 
@@ -7079,7 +7057,6 @@ msgstr ""
 "Ihr müsst sich innerhalb von %{count} Feldern eines Monsters befinden, "
 "damit die Vision wirkt."
 
-#, fuzzy
 msgid ""
 "You must be standing on the entrance to a mine (sawmills and alchemist labs "
 "do not count) to cast this spell."
@@ -7507,7 +7484,6 @@ msgstr ""
 "Schuss zerstört automatisch jede Mauer, außer einer befestigten Mauer in "
 "einer Ritterburg."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
@@ -7516,7 +7492,6 @@ msgstr ""
 "Zauber der Stufe 1 oder 2 zu erlernen, der in einem Kampf gegen ihn "
 "eingesetzt wird."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
@@ -7525,7 +7500,6 @@ msgstr ""
 "Zauber der Stufe 3 (oder niedriger) zu lernen, der im Kampf gegen ihn "
 "eingesetzt wird."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
@@ -9064,7 +9038,6 @@ msgstr "Panzerhandschuhe des Schutzes"
 msgid "The %{name} increase your defense skill by %{count}."
 msgstr "Die %{name} erhöhen Eure Verteidigung um %{count}."
 
-#, fuzzy
 msgid ""
 "You encounter the infamous Black Knight! After a grueling duel ending in a "
 "draw, the Knight, out of respect, offers you a pair of armored gauntlets."
@@ -9369,13 +9342,12 @@ msgid "The %{name} extends the duration of all your spells by %{count} turns."
 msgstr ""
 "Der %{name} verlängert die Dauer aller Eurer Zauber um %{count} Runden."
 
-#, fuzzy
 msgid ""
 "A surprise turn in the landscape finds you in the midst of a grisly scene: "
 "Vultures picking at the aftermath of a terrible battle. Your cursory search "
 "of the remains turns up an enchanted hourglass."
 msgstr ""
-"Ploetzlich wandelt sich die Landschaft und Ihr befindet Euch inmitten einer "
+"Plötzlich wandelt sich die Landschaft und Ihr befindet Euch inmitten einer "
 "grässlichen Szenerie: Geier rupfen an den Überresten einer schrecklichen "
 "Schlacht. Bei der flüchtigen Durchsuchung der Überreste stoßt Ihr auf eine "
 "verzauberte Sanduhr."
@@ -9714,7 +9686,6 @@ msgstr "Stab der Aufhebung"
 msgid "The %{name} makes all your troops immune to dispel magic spells."
 msgstr "Der %{name} macht alle Eure Truppen immun gegen Todeszauber."
 
-#, fuzzy
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
 "He presents  you with a gift: A wand that prevents the use of the dispel "
@@ -9861,14 +9832,13 @@ msgstr ""
 "Der %{name} verhindert, dass sich alle \"wandernden\" Armeen Eurem Helden "
 "anschließen."
 
-#, fuzzy
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
 "Warlock, unearths his fabled mask. Trembling, you put it on and it twists "
 "your visage into an awful grimace! Oh no! It's actually the hideous mask of "
 "Gromluck Greene, and you are stuck with it."
 msgstr ""
-"Ihr plündert das Grab von Sinfilas Gardolad, dem beruehmten "
+"Ihr plündert das Grab von Sinfilas Gardolad, dem berühmten "
 "gestaltenwandlendem Hexenmeister und grabt seine sagenumwobene Maske aus. "
 "Zitternd setzt Ihr sie auf, und Euer Gesicht wird zu einer furchtbaren "
 "Fratze entstellt! Oh nein! Jetzt habt Ihr die scheussliche Maske von "
@@ -9963,7 +9933,6 @@ msgstr "Endloser Kristallbeutel"
 msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr "Der %{name} liefert %{count} Einheiten Kristall pro Tag."
 
-#, fuzzy
 msgid ""
 "Taking shelter from a storm in a small cave, you notice a small patch of "
 "crystal in one corner. Curious, you break a piece off and notice that the "
@@ -10006,13 +9975,12 @@ msgstr ""
 msgid "White Pearl"
 msgstr "Weisse Perle"
 
-#, fuzzy
 msgid ""
 "A walk across a dry saltwater lake bed yields an unlikely prize: A white "
 "pearl amidst shattered shells and debris."
 msgstr ""
-"Bei einem Spaziergang über das Bett eines trockenen Salzwassersees findet "
-"Ihr eine unwahrscheinliche Beute: Eine weiße Perle inmitten von "
+"Bei einem Spaziergang über das Bett eines vertrockneten Salzwassersees "
+"findet Ihr eine unwahrscheinliche Beute: Eine weiße Perle inmitten von "
 "zerbrochenen Muscheln und Schutt."
 
 msgid "Black Pearl"
@@ -10133,7 +10101,6 @@ msgstr ""
 msgid "Battle Garb of Anduran"
 msgstr "Kampfrüstung von Anduran"
 
-#, fuzzy
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for your troops and gives you the Town Portal spell."
@@ -10207,7 +10174,6 @@ msgstr ""
 "Der %{name} bietet %{count} Prozent Schutz vor Kälte, verdoppelt aber den "
 "durch Feuer erlittenen Schaden."
 
-#, fuzzy
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
 "your horse. The pain subsides, but you still feel as if your chest is "
@@ -10238,7 +10204,6 @@ msgstr ""
 msgid "Holy Hammer"
 msgstr "Heiliger Hammer"
 
-#, fuzzy
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
 "of Zombies. He asks you to take his hammer and finish what he started. As "
@@ -10432,7 +10397,6 @@ msgstr "Blitzstrahl"
 msgid "Chain Lightning"
 msgstr "Kettenblitzstrahl"
 
-#, fuzzy
 msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
 "strike the nearest creature with half damage, then strike the NEXT nearest "
@@ -10544,12 +10508,11 @@ msgstr ""
 msgid "Stoneskin"
 msgstr "Steinhaut"
 
-#, fuzzy
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
-"Erhöht die Verteidigungsfähigkeit der ausgewählten Kreaturen.  Dies ist eine "
+"Erhöht die Verteidigungsfähigkeit der ausgewählten Kreaturen. Dies ist eine "
 "verbesserte Version von Steinhaut."
 
 msgid "Steelskin"
@@ -10574,11 +10537,10 @@ msgstr "Schadet allen Untoten im Kampf."
 msgid "Holy Word"
 msgstr "Heiliges Wort"
 
-#, fuzzy
 msgid ""
 "Damages all undead in the battle. This is an improved version of Holy Word."
 msgstr ""
-"Schadet allen Untoten im Kampf.  Dies ist eine verbesserte Version von "
+"Schadet allen Untoten im Kampf. Dies ist eine verbesserte Version von "
 "Heiliges Wort."
 
 msgid "Holy Shout"
@@ -10691,12 +10653,11 @@ msgstr "Kleine Todeswelle"
 msgid "Death Wave"
 msgstr "Todeswelle"
 
-#, fuzzy
 msgid ""
 "Damages all living (non-undead) units in the battle. This spell is an "
 "improved version of Death Ripple."
 msgstr ""
-"Schadet allen lebenden (nicht untoten) Einheiten in der Schlacht.  Dieser "
+"Schadet allen lebenden (nicht untoten) Einheiten in der Schlacht. Dieser "
 "Zauber ist eine verbesserte Version von Kleine Todeswelle."
 
 msgid "Dragon Slayer"
@@ -10722,15 +10683,14 @@ msgstr ""
 msgid "Mirror Image"
 msgstr "Spiegelbild"
 
-#, fuzzy
 msgid ""
 "Creates an illusionary unit that duplicates one of your existing units. This "
 "illusionary unit does the same damages as the original, but will vanish if "
 "it takes any damage."
 msgstr ""
-"Erzeugt eine illusionäre Einheit, die eine Eurer vorhandenen Einheiten "
-"dupliziert.  Diese illusionäre Einheit verursacht den gleichen Schaden wie "
-"das Original, verschwindet aber, wenn sie Schaden nimmt."
+"Erzeugt eine illusionäre Einheit als Spiegelbild einer wirklichen Einheit. "
+"Die illusionäre Einheit verursacht die gleichen Schäden wie die Echte,"
+"löst sich aber bei der geringsten Verletzung in Luft auf."
 
 msgid "Shield"
 msgstr "Schild"
@@ -10827,15 +10787,14 @@ msgstr ""
 msgid "Summon Boat"
 msgstr "Boot herbeirufen"
 
-#, fuzzy
 msgid ""
 "Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
 "A friendly boat is one which you just built or were the most recent player "
 "to occupy."
 msgstr ""
-"Ruft das nächstgelegene unbesetzte, befreundete Boot an einen benachbarten "
-"Ort am Ufer.  Ein befreundetes Boot ist eines, das Ihr gerade gebaut habt "
-"oder das Ihr als letzter Spieler besetzt habt."
+"Ruft das nächstgelegene unbesetzte, eigene Boot an ein dem Helden "
+"angrenzendes Ufer. Ein eigenes Boot ist eines, das Ihr gerade gebaut "
+"oder das Ihr als letzter Spieler belegt habt."
 
 msgid "Allows the caster to magically transport to a nearby location."
 msgstr ""
@@ -10871,13 +10830,12 @@ msgstr ""
 msgid "Haunt"
 msgstr "Spuk"
 
-#, fuzzy
 msgid ""
 "Haunts a mine you control with Ghosts. This mine stops producing resources. "
 "(If I can't keep it, nobody will!)"
 msgstr ""
-"Verflucht eine Mine, die Ihr kontrolliert, mit Geistern. Diese Mine "
-"produziert keine Rohstoffe mehr. (Wenn ich sie nicht behalten kann, soll es "
+"Lässt Geister in einer von Euch kontrollierten Mine spuken. Diese Mine "
+"stellt die Produktion ein. (Wenn ich sie nicht behalten kann, soll es "
 "niemand tun!)"
 
 msgid "Set Earth Guardian"
@@ -10908,12 +10866,11 @@ msgstr ""
 msgid "Petrification"
 msgstr "Versteinerung"
 
-#, fuzzy
 msgid ""
 "Turns the affected creature into stone. A petrified creature receives half "
 "damage from a direct attack."
 msgstr ""
-"Verwandelt die betroffene Kreatur in Stein.  Eine versteinerte Kreatur "
+"Verwandelt die betroffene Kreatur in Stein. Eine versteinerte Kreatur "
 "erleidet bei einem direkten Angriff die Hälfte des Schadens."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
