@@ -149,7 +149,7 @@ namespace AI
                 return unit->GetMonsterStrength() * unit->HowManyWillBeKilled( damage );
 
             // Otherwise calculate amount of strength lost (% of unit times total strength)
-            const uint32_t hitpoints = unit->GetHitPoints();
+            const uint32_t hitpoints = unit->Modes( CAP_MIRRORIMAGE ) ? 1 : unit->GetHitPoints();
             if ( damage >= hitpoints ) {
                 // bonus for finishing a stack
                 const double bonus = ( unit->GetSpeed() > armySpeed ) ? 0.07 : 0.035;
