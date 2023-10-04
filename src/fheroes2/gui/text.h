@@ -24,7 +24,6 @@
 #ifndef H2TEXT_H
 #define H2TEXT_H
 
-#include <cstddef>
 #include <cstdint>
 #include <list>
 #include <string>

@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cstddef>
 
 #include "agg_image.h"
 #include "image.h"

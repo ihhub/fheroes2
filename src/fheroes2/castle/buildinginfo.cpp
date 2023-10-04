@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <utility>
 
 #include "agg_image.h"
 #include "army_troop.h"
@@ -47,6 +48,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_text.h"
 
 namespace
 {
