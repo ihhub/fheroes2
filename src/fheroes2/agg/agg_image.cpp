@@ -48,7 +48,6 @@
 #include "rand.h"
 #include "screen.h"
 #include "serialize.h"
-#include "text.h"
 #include "til.h"
 #include "tools.h"
 #include "translations.h"
@@ -4379,42 +4378,6 @@ namespace fheroes2
             }
 
             return _tilVsImage[tilId][shapeId][index];
-        }
-
-        const Sprite & GetLetter( uint32_t character, uint32_t fontType )
-        {
-            if ( character < 0x21 ) {
-                return errorImage;
-            }
-
-            // TODO: correct naming and standardize the code
-            switch ( fontType ) {
-            case Font::YELLOW_BIG:
-                return GetICN( ICN::YELLOW_FONT, character - 0x20 );
-            case Font::BIG:
-                return GetICN( ICN::FONT, character - 0x20 );
-            case Font::SMALL:
-                return GetICN( ICN::SMALFONT, character - 0x20 );
-            default:
-                assert( 0 );
-                break;
-            }
-
-            return GetICN( ICN::SMALFONT, character - 0x20 );
-        }
-
-        uint32_t ASCIILastSupportedCharacter( const uint32_t fontType )
-        {
-            switch ( fontType ) {
-            case Font::BIG:
-            case Font::YELLOW_BIG:
-                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
-            case Font::SMALL:
-                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
-            default:
-                assert( 0 );
-                return 0;
-            }
         }
 
         int32_t GetAbsoluteICNHeight( int icnId )

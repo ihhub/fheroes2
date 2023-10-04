@@ -64,12 +64,12 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_option_item.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 
 namespace
@@ -560,40 +560,42 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
     int32_t messageYOffset = 0;
     if ( !title.empty() ) {
-        TextBox box( title, Font::YELLOW_BIG, bsTextWidth );
-        box.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset );
+        const fheroes2::Text box( title, fheroes2::FontType::normalYellow() );
+        box.draw( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + 2, bsTextWidth, display );
         messageYOffset = bsTextIndent;
     }
 
     if ( !msg.empty() ) {
-        TextBox box( msg, Font::BIG, bsTextWidth );
-        box.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + messageYOffset );
+        const fheroes2::Text box( msg, fheroes2::FontType::normalWhite() );
+        box.draw( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + messageYOffset + 2, bsTextWidth, display );
     }
 
     // battlefield casualties
-    Text text( _( "Battlefield Casualties" ), Font::SMALL );
-    text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 270 );
+    fheroes2::Text text( _( "Battlefield Casualties" ), fheroes2::FontType::smallWhite() );
+    text.draw( pos_rt.x + ( pos_rt.width - text.width() ) / 2, pos_rt.y + 272, display );
 
     // attacker
-    text.Set( _( "Attacker" ), Font::SMALL );
-    text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 285 );
+    text.set( _( "Attacker" ), fheroes2::FontType::smallWhite() );
+    text.draw( pos_rt.x + ( pos_rt.width - text.width() ) / 2, pos_rt.y + 287, display );
 
-    if ( killed1.isValid() )
+    if ( killed1.isValid() ) {
         Army::drawSingleDetailedMonsterLine( killed1, pos_rt.x + 25, pos_rt.y + 308, 270 );
+    }
     else {
-        text.Set( _( "None" ), Font::SMALL );
-        text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 300 );
+        text.set( _( "None" ), fheroes2::FontType::smallWhite() );
+        text.draw( pos_rt.x + ( pos_rt.width - text.width() ) / 2, pos_rt.y + 302, display );
     }
 
     // defender
-    text.Set( _( "Defender" ), Font::SMALL );
-    text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 345 );
+    text.set( _( "Defender" ), fheroes2::FontType::smallWhite() );
+    text.draw( pos_rt.x + ( pos_rt.width - text.width() ) / 2, pos_rt.y + 347, display );
 
-    if ( killed2.isValid() )
+    if ( killed2.isValid() ) {
         Army::drawSingleDetailedMonsterLine( killed2, pos_rt.x + 25, pos_rt.y + 368, 270 );
+    }
     else {
-        text.Set( _( "None" ), Font::SMALL );
-        text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 360 );
+        text.set( _( "None" ), fheroes2::FontType::smallWhite() );
+        text.draw( pos_rt.x + ( pos_rt.width - text.width() ) / 2, pos_rt.y + 362, display );
     }
 
     if ( allowToCancel ) {
@@ -685,8 +687,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                     Game::PlayPickupSound();
                 }
 
-                TextBox box( artMsg, Font::YELLOW_BIG, bsTextWidth );
-                box.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset );
+                const fheroes2::Text box( artMsg, fheroes2::FontType::normalYellow() );
+                box.draw( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + 2, bsTextWidth, display );
 
                 const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::WINLOSEB, 0 );
                 const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
@@ -695,8 +697,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                 fheroes2::Blit( border, display, artifactOffset.x, artifactOffset.y );
                 fheroes2::Blit( artifact, display, artifactOffset.x + 8, artifactOffset.y + 8 );
 
-                TextBox artName( art.GetName(), Font::SMALL, bsTextWidth );
-                artName.Blit( pos_rt.x + bsTextXOffset, artifactOffset.y + border.height() + 5 );
+                const fheroes2::Text artName( art.GetName(), fheroes2::FontType::smallWhite() );
+                artName.draw( pos_rt.x + bsTextXOffset, artifactOffset.y + border.height() + 7, bsTextWidth, display );
 
                 const fheroes2::Rect artifactArea( artifactOffset.x, artifactOffset.y, border.width(), border.height() );
 
@@ -765,25 +767,26 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
     int xOffset = renderArea.x + bsTextXOffset;
     int yOffset = renderArea.y + bsTextYOffset;
 
-    TextBox titleBox( _( "Necromancy!" ), Font::YELLOW_BIG, bsTextWidth );
-    titleBox.Blit( xOffset, yOffset );
+    const fheroes2::Text titleBox( _( "Necromancy!" ), fheroes2::FontType::normalYellow() );
+    titleBox.draw( xOffset, yOffset + 2, bsTextWidth, display );
 
     const Monster mons( Monster::SKELETON );
     std::string msg = _( "Practicing the dark arts of necromancy, you are able to raise %{count} of the enemy's dead to return under your service as %{monster}." );
     StringReplace( msg, "%{count}", raiseCount );
     StringReplace( msg, "%{monster}", mons.GetPluralName( raiseCount ) );
 
-    TextBox messageBox( msg, Font::BIG, bsTextWidth );
+    const fheroes2::Text messageBox( msg, fheroes2::FontType::normalWhite() );
     yOffset += bsTextIndent;
-    messageBox.Blit( xOffset, yOffset );
+    messageBox.draw( xOffset, yOffset + 2, bsTextWidth, display );
 
     const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
-    yOffset += messageBox.h() + monsterSprite.height();
+    yOffset += messageBox.height( bsTextWidth ) + monsterSprite.height();
     fheroes2::Blit( monsterSprite, display, ( display.width() - monsterSprite.width() ) / 2, yOffset );
 
-    const Text raiseCountText( std::to_string( raiseCount ), Font::SMALL );
+    fheroes2::Text raiseCountText( std::to_string( raiseCount ), fheroes2::FontType::smallWhite() );
+    raiseCountText.fitToOneRow( bsTextWidth );
     yOffset += 30;
-    raiseCountText.Blit( ( display.width() - raiseCountText.w() ) / 2, yOffset, bsTextWidth );
+    raiseCountText.draw( ( display.width() - raiseCountText.width() ) / 2, yOffset + 2, display );
     Game::PlayPickupSound();
 
     const int buttonOffset = 121;
@@ -845,54 +848,52 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     int col = ( Color::NONE == hero.GetColor() ? 1 : Color::GetIndex( hero.GetColor() ) + 1 );
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::VIEWGEN, col ), display, pos_rt.x + 133, pos_rt.y + 36 );
 
-    std::string str;
-    Text text;
-    str = hero.isCaptain() ? _( "Captain of %{name}" ) : _( "%{name} the %{race}" );
+    std::string str = hero.isCaptain() ? _( "Captain of %{name}" ) : _( "%{name} the %{race}" );
     StringReplace( str, "%{name}", hero.GetName() );
     StringReplace( str, "%{race}", Race::String( hero.GetRace() ) );
-    text.Set( str, Font::SMALL );
-    fheroes2::Point tp{ pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 11 };
-    text.Blit( tp.x, tp.y );
+    fheroes2::Text text( str, fheroes2::FontType::smallWhite() );
+    fheroes2::Point tp{ pos_rt.x + ( pos_rt.width - text.width() ) / 2, pos_rt.y + 11 };
+    text.draw( tp.x, tp.y + 2, display );
 
     const fheroes2::Point statsTextOffset{ pos_rt.x + 148 - dialogShadow.x, pos_rt.y + 40 };
     const int32_t maxStatsTextWidth{ 111 };
     const int32_t statsTextRowHeight{ 11 };
 
     str = _( "Attack" ) + std::string( ": " ) + std::to_string( hero.GetAttack() );
-    text.Set( str );
-    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.w() ) / 2;
+    text.set( str, fheroes2::FontType::smallWhite() );
+    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.width() ) / 2;
     tp.y = statsTextOffset.y;
-    text.Blit( tp.x, tp.y );
+    text.draw( tp.x, tp.y + 2, display );
     str = _( "Defense" ) + std::string( ": " ) + std::to_string( hero.GetDefense() );
-    text.Set( str );
-    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.w() ) / 2;
+    text.set( str, fheroes2::FontType::smallWhite() );
+    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.width() ) / 2;
     tp.y += statsTextRowHeight;
-    text.Blit( tp.x, tp.y );
+    text.draw( tp.x, tp.y + 2, display );
     str = _( "Spell Power" ) + std::string( ": " ) + std::to_string( hero.GetPower() );
-    text.Set( str );
-    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.w() ) / 2;
+    text.set( str, fheroes2::FontType::smallWhite() );
+    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.width() ) / 2;
     tp.y += statsTextRowHeight;
-    text.Blit( tp.x, tp.y );
+    text.draw( tp.x, tp.y + 2, display );
     str = _( "Knowledge" ) + std::string( ": " ) + std::to_string( hero.GetKnowledge() );
-    text.Set( str );
-    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.w() ) / 2;
+    text.set( str, fheroes2::FontType::smallWhite() );
+    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.width() ) / 2;
     tp.y += statsTextRowHeight;
-    text.Blit( tp.x, tp.y );
+    text.draw( tp.x, tp.y + 2, display );
     str = _( "Morale" ) + std::string( ": " ) + Morale::String( hero.GetMorale() );
-    text.Set( str );
-    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.w() ) / 2;
+    text.set( str, fheroes2::FontType::smallWhite() );
+    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.width() ) / 2;
     tp.y += statsTextRowHeight;
-    text.Blit( tp.x, tp.y );
+    text.draw( tp.x, tp.y + 2, display );
     str = _( "Luck" ) + std::string( ": " ) + Luck::String( hero.GetLuck() );
-    text.Set( str );
-    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.w() ) / 2;
+    text.set( str, fheroes2::FontType::smallWhite() );
+    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.width() ) / 2;
     tp.y += statsTextRowHeight;
-    text.Blit( tp.x, tp.y );
+    text.draw( tp.x, tp.y + 2, display );
     str = _( "Spell Points" ) + std::string( ": " ) + std::to_string( hero.GetSpellPoints() ) + "/" + std::to_string( hero.GetMaxSpellPoints() );
-    text.Set( str );
-    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.w() ) / 2;
+    text.set( str, fheroes2::FontType::smallWhite() );
+    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.width() ) / 2;
     tp.y += statsTextRowHeight * 2;
-    text.Blit( tp.x, tp.y );
+    text.draw( tp.x, tp.y + 2, display );
 
     fheroes2::Button btnCast( pos_rt.x + 15, pos_rt.y + 148, ICN::VIEWGEN, 9, 10 );
     fheroes2::Button btnRetreat( pos_rt.x + 74, pos_rt.y + 148, ICN::VIEWGEN, 11, 12 );
@@ -1077,11 +1078,11 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
 
         StringReplace( str, "%{gold}", cost - kingdom.GetFunds().gold );
 
-        const Text text( str, Font::SMALL );
+        const fheroes2::Text text( str, fheroes2::FontType::smallWhite() );
         const fheroes2::Rect rect = btnAccept.area();
 
         // Since button area includes 3D effect on the left side we need to shift the text by X axis to center it in relation to the button.
-        text.Blit( rect.x + ( rect.width - text.w() ) / 2 + 2, rect.y - 15 );
+        text.draw( rect.x + ( rect.width - text.width() ) / 2 + 2, rect.y - 13, fheroes2::Display::instance() );
     };
 
     const int icn = isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR;
@@ -1092,14 +1093,14 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
     std::string str = hero.isCaptain() ? _( "Captain of %{name} states:" ) : _( "%{name} states:" );
     StringReplace( str, "%{name}", hero.GetName() );
 
-    Text text( str, Font::BIG );
-    text.Blit( pos_rt.x + 312 - text.w() / 2, pos_rt.y + 30 );
+    const fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
+    text.draw( pos_rt.x + 312 - text.width() / 2, pos_rt.y + 32, display );
 
     str = _( "\"I will accept your surrender and grant you and your troops safe passage for the price of %{price} gold.\"" );
     StringReplace( str, "%{price}", cost );
 
-    TextBox box( str, Font::BIG, 275 );
-    box.Blit( pos_rt.x + 175, pos_rt.y + 50 );
+    fheroes2::Text box( str, fheroes2::FontType::normalWhite() );
+    box.draw( pos_rt.x + 175, pos_rt.y + 52, 275, display );
 
     fheroes2::ImageRestorer back( display, pos_rt.x, pos_rt.y, pos_rt.width, pos_rt.height );
 
