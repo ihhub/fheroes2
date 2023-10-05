@@ -758,9 +758,9 @@ uint32_t Battle::Unit::Resurrect( const uint32_t points, const bool allow_overfl
     return resurrect;
 }
 
-bool Battle::Unit::canShoot() const
+bool Battle::Unit::isImmovable() const
 {
-    return isArchers() && !Modes( SP_BLIND | IS_PARALYZE_MAGIC ) && !isHandFighting();
+    return Modes( SP_BLIND | IS_PARALYZE_MAGIC );
 }
 
 uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected )
@@ -1199,7 +1199,7 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
         }
     }
     // Finally ignore disabled units (if belong to the enemy)
-    else if ( attacker.Modes( SP_BLIND ) || attacker.Modes( IS_PARALYZE_MAGIC ) ) {
+    else if ( attacker.isImmovable() ) {
         attackerThreat = 0;
     }
 
