@@ -158,3 +158,15 @@ uint32_t Difficulty::GetDimensionDoorLimit( int difficulty )
     }
     return UINT32_MAX;
 }
+
+bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+    case Difficulty::NORMAL:
+        return false;
+    default:
+        break;
+    }
+    return true;
+}
