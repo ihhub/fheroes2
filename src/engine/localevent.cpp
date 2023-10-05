@@ -1346,7 +1346,7 @@ bool LocalEvent::MouseClickLeft()
         return false;
     }
 
-    if ( _mouseButtonLongPressDelay.isPassed() ) {
+    if ( _mouseButtonLongPressDelay.isTriggered() ) {
         return false;
     }
 
@@ -1369,7 +1369,7 @@ bool LocalEvent::MouseClickLeft( const fheroes2::Rect & rt )
         return false;
     }
 
-    if ( _mouseButtonLongPressDelay.isPassed() ) {
+    if ( _mouseButtonLongPressDelay.isTriggered() ) {
         return false;
     }
 
@@ -1388,7 +1388,7 @@ bool LocalEvent::MouseClickMiddle()
         return false;
     }
 
-    if ( _mouseButtonLongPressDelay.isPassed() ) {
+    if ( _mouseButtonLongPressDelay.isTriggered() ) {
         return false;
     }
 
@@ -1407,7 +1407,7 @@ bool LocalEvent::MouseClickRight()
         return false;
     }
 
-    if ( _mouseButtonLongPressDelay.isPassed() ) {
+    if ( _mouseButtonLongPressDelay.isTriggered() ) {
         return false;
     }
 
@@ -1430,7 +1430,7 @@ bool LocalEvent::MouseClickRight( const fheroes2::Rect & rt )
         return false;
     }
 
-    if ( _mouseButtonLongPressDelay.isPassed() ) {
+    if ( _mouseButtonLongPressDelay.isTriggered() ) {
         return false;
     }
 
