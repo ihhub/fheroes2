@@ -468,9 +468,8 @@ msgstr "Schadens-Information"
 msgid "Set the speed of combat actions and animations."
 msgstr "Geschwindigkeit von Kampfhandlungen und Animationen festlegen."
 
-#, fuzzy
 msgid "Toggle to display the turn order during the battle."
-msgstr "Ansicht der Reihenfolge von Armeen ein- oder ausschalten."
+msgstr "Ansicht der Reihenfolge von Truppen ein- oder ausschalten."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
