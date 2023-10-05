@@ -5811,7 +5811,7 @@ msgstr ""
 msgid "You drink from the enchanted fountain, but nothing happens."
 msgstr "Ihr trinkt aus dem verwunschenen Brunnen, aber es passiert nichts."
 
-msgid "Youg happens."
+msgid "You enter the faerie ring, but nothing happens."
 msgstr "Ihr betretet den Feenring, aber nichts passiert."
 
 msgid ""
