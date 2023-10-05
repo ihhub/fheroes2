@@ -2560,10 +2560,13 @@ namespace Maps
     {
         tile.SetObject( MP2::OBJ_MONSTER );
 
-        // If there was another object sprite here (shadow for example) push it down to Addons,
-        // except when there is already MONS32.ICN here.
-        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_MONS32 && tile.GetObjectSpriteIndex() != 255 ) {
-            // Push object sprite to Level 1 Addons preserving the Layer Type.
+        if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+            // No object exists on this tile. Add one.
+            tile.setObjectUID( getNewObjectUID() );
+            tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_MONS32 );
+        }
+        else if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_MONS32 ) {
+            // If there is another object sprite here (shadow for example) push it down to add-ons.
             tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
 
             // Set unique UID for placed monster.

@@ -48,6 +48,7 @@
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
+#include "monster.h"
 #include "mp2.h"
 #include "screen.h"
 #include "settings.h"
@@ -596,6 +597,20 @@ namespace Interface
                 }
             }
         }
+        else if ( _editorPanel.isMonsterSettingMode() ) {
+            if ( tile.isWater() ) {
+                fheroes2::showStandardTextMessage( _( "Monster" ), _( "Monsters cannot be placed on water." ), Dialog::OK );
+            }
+            else if ( !Maps::isClearGround( tile ) ) {
+                fheroes2::showStandardTextMessage( _( "Monster" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+            }
+            else if ( Monster{ _editorPanel.getMonsterId() }.isValid() ) {
+                const fheroes2::ActionCreator action( _historyManager );
+
+                Maps::setMonsterOnTile( tile, _editorPanel.getMonsterId(), 0 );
+                _redraw |= mapUpdateFlags;
+            }
+        }
     }
 
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const
@@ -633,8 +648,13 @@ namespace Interface
         }
     }
 
-    void EditorInterface::updateCursor( const int32_t /*tileIndex*/ )
+    void EditorInterface::updateCursor( const int32_t tileIndex )
     {
-        Cursor::Get().SetThemes( Cursor::POINTER );
+        if ( _cursorUpdater && tileIndex >= 0 ) {
+            _cursorUpdater( tileIndex );
+        }
+        else {
+            Cursor::Get().SetThemes( Cursor::POINTER );
+        }
     }
 }
