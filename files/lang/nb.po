@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-24 16:12+0000\n"
+"POT-Creation-Date: 2023-10-05 13:54+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3659,6 +3659,15 @@ msgstr "Lagre det nåværende kartet."
 
 msgid "Quit out of the map editor."
 msgstr "Forlat karttegneren"
+
+msgid "Monster"
+msgstr "Monster"
+
+msgid "Monsters cannot be placed on water."
+msgstr ""
+
+msgid "Choose a tile which does not contain any objects."
+msgstr ""
 
 msgid "Ocean Objects"
 msgstr "Sjøting"
@@ -8018,9 +8027,6 @@ msgstr[1] "Vannhjul"
 
 msgid "Mines"
 msgstr "Gruver"
-
-msgid "Monster"
-msgstr "Monster"
 
 msgid "Obelisk"
 msgstr "Obelisk"

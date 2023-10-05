@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-24 16:12+0000\n"
+"POT-Creation-Date: 2023-10-05 13:54+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3659,6 +3659,15 @@ msgstr "Speichern Sie die aktuelle Karte."
 
 msgid "Quit out of the map editor."
 msgstr "Verlasse den Karteneditor."
+
+msgid "Monster"
+msgstr "Monster"
+
+msgid "Monsters cannot be placed on water."
+msgstr ""
+
+msgid "Choose a tile which does not contain any objects."
+msgstr ""
 
 msgid "Ocean Objects"
 msgstr "Ozean-Objekte"
@@ -8057,9 +8066,6 @@ msgstr[1] "Wasserräder"
 
 msgid "Mines"
 msgstr "Minen"
-
-msgid "Monster"
-msgstr "Monster"
 
 msgid "Obelisk"
 msgstr "Obelisk"

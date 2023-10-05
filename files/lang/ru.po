@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-24 16:12+0000\n"
+"POT-Creation-Date: 2023-10-05 13:54+0000\n"
 "PO-Revision-Date: 2023-09-15 21:53+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3615,6 +3615,15 @@ msgstr "Сохранить текущую карту."
 
 msgid "Quit out of the map editor."
 msgstr "Выйти из редактора карт."
+
+msgid "Monster"
+msgstr "Отряд"
+
+msgid "Monsters cannot be placed on water."
+msgstr ""
+
+msgid "Choose a tile which does not contain any objects."
+msgstr ""
 
 msgid "Ocean Objects"
 msgstr "Объекты океана"
@@ -7861,9 +7870,6 @@ msgstr[2] "Водяных колёс"
 
 msgid "Mines"
 msgstr "Шахты"
-
-msgid "Monster"
-msgstr "Отряд"
 
 msgid "Obelisk"
 msgstr "Обелиск"
