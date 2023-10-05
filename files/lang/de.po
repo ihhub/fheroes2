@@ -2581,13 +2581,13 @@ msgid "Exit"
 msgstr "Verlassen"
 
 msgid "Click to show next town."
-msgstr "Clicken um die nächste Stadt anzuzeigen."
+msgstr "Klicken um die nächste Stadt anzuzeigen."
 
 msgid "Show next town"
 msgstr "Nächste Stadt anzeigen"
 
 msgid "Click to show previous town."
-msgstr "Clicken um die vorherige Stadt anzuzeigen."
+msgstr "Klicken um die vorherige Stadt anzuzeigen."
 
 msgid "Show previous town"
 msgstr "Vorherige Stadt anzeigen"
