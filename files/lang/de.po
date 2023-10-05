@@ -395,25 +395,24 @@ msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
 msgstr ""
-"Das Artefakt \"Sphäre der Verneinung\" ist in diesem Kampf aktiv und macht "
+"Das Artefakt \"Sphäre der Aufhebung\" ist in diesem Kampf aktiv und macht "
 "alle Kampfzauber unwirksam."
 
 msgid "You have already cast a spell this round."
-msgstr "Sie haben in dieser Runde bereits einen Zauberspruch gewirkt."
+msgstr "Ihr habt in dieser Runde bereits einen Zauberspruch ausgesprochen."
 
 #, fuzzy
 msgid "That spell will have no effect!"
 msgstr "Dieser Zauber wirkt sich auf niemanden aus!"
 
 msgid "You may only summon one type of elemental per combat."
-msgstr "Sie können nur eine Art von Wesen pro Kampf beschwören."
+msgstr "Ihr könnt nur eine Art von Wesen pro Kampf beschwören."
 
-#, fuzzy
 msgid ""
 "There is no open space adjacent to your hero where you can summon an "
 "Elemental to."
 msgstr ""
-"In der Nähe Ihres Helden gibt es keinen freien Platz, um einen Wesen zu "
+"In der Nähe Eures Helden gibt es keinen freien Platz, um ein Wesen zu "
 "beschwören."
 
 msgid ""
@@ -471,43 +470,42 @@ msgstr "Geschwindigkeit von Kampfhandlungen und Animationen festlegen."
 
 #, fuzzy
 msgid "Toggle to display the turn order during the battle."
-msgstr "Schaltet die Ansicht der Reihenfolge von Armeen ein oder aus."
+msgstr "Ansicht der Reihenfolge von Armeen ein- oder ausschalten."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
 "is on. (Note: This does not affect spell casting for computer players in any "
 "way, nor does it affect quick combat.)"
 msgstr ""
-"Schaltet um, ob der Computer bei aktiviertem Autokampf für Sie zaubert oder "
-"nicht. (Hinweis: Dies hat keinen Einfluss auf das Zaubern für "
+"Umschalten, ob bei aktiviertem Autokampf der Computer selbständig zaubert "
+"oder nicht. (Hinweis: Dies hat keinen Einfluss auf das Zaubern für "
 "Computerspieler und auch nicht auf den Schnellkampf)."
 
 msgid ""
 "Toggle the hex grid on or off. The hex grid always underlies movement, even "
 "if turned off. This switch only determines if the grid is visible."
 msgstr ""
-"Schaltet das Hex-Gitter ein oder aus. Das Hex-Gitter liegt immer unter der "
-"Bewegung, auch wenn es ausgeschaltet ist. Dieser Schalter bestimmt nur, ob "
-"das Gitter sichtbar ist."
+"Hex-Gitters ein-/ausblenden. Das Hex-Gitter bestimmt immer die Bewegung, "
+"auch wenn es ausgeblendet ist. Dieser Schalter bestimmt nur, ob es sichtbar ist."
 
 msgid ""
 "Toggle on or off shadows showing where your creatures can move and attack."
 msgstr ""
-"Schalten Sie die Schatten ein oder aus, die zeigen, wo sich Ihre Kreaturen "
-"bewegen und angreifen können."
+"Schattierung ein-/ausblenden, die anzeigt, wo die Kreatur "
+"hinbewegt werden und angreifen kann."
 
 msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
-"Schaltet einen Schatten ein oder aus, der die aktuelle Hex-Position des "
+"Schatten ein-/ausschalten, der die aktuelle Hex-Position des "
 "Mauszeigers anzeigt."
 
 msgid "Change the audio settings of the game."
-msgstr "Ändere die Audioeinstellungen des Spiels."
+msgstr "Audioeinstellungen des Spiels ändern."
 
 msgid "Check and configure all the hot keys present in the game."
-msgstr "Überprüfe und konfiguriere alle im Spiel verwendeten Hotkeys."
+msgstr "Alle im Spiel verwendeten Hotkeys überprüfen und konfigurieren."
 
 msgid "Toggle to display damage information during the battle."
 msgstr "Schaltet die Ansicht der Schadensinformation während des Kampfes um."
