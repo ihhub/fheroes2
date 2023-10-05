@@ -217,8 +217,8 @@ public:
     bool MouseClickLeft( const fheroes2::Rect & rt );
     bool MouseClickRight( const fheroes2::Rect & rt );
 
-    // The long press event is triggered only once. If this event has been triggered, then after releasing
-    // the mouse button, the click event will not be triggered.
+    // The long press event is triggered only once. If this event was triggered (i.e. this method was called
+    // and returned true), then after releasing the mouse button, the click event will not be triggered.
     bool MouseLongPressLeft( const fheroes2::Rect & rt );
 
     bool MouseWheelUp() const;
