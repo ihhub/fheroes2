@@ -9331,7 +9331,7 @@ msgid ""
 "find a healthy green four-leaf clover."
 msgstr ""
 "Inmitten einer Gegend toter und trockener Vegetation findet Ihr, zu Eurer "
-"Ueberraschung, einen gesunden, grünen, vierblättrigen Klee."
+"Überraschung, einen gesunden, grünen, vierblättrigen Klee."
 
 msgid "True Compass of Mobility"
 msgstr "Wahrer Kompass der Mobilität"
