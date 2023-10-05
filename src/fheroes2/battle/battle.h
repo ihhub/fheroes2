@@ -45,19 +45,11 @@ namespace Battle
 
     struct Result
     {
-        uint32_t army1;
-        uint32_t army2;
-        uint32_t exp1;
-        uint32_t exp2;
-        uint32_t killed;
-
-        Result()
-            : army1( 0 )
-            , army2( 0 )
-            , exp1( 0 )
-            , exp2( 0 )
-            , killed( 0 )
-        {}
+        uint32_t army1{ 0 };
+        uint32_t army2{ 0 };
+        uint32_t exp1{ 0 };
+        uint32_t exp2{ 0 };
+        uint32_t killed{ 0 };
 
         bool AttackerWins() const;
         bool DefenderWins() const;
