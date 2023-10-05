@@ -43,6 +43,7 @@
 #include "color.h"
 #include "difficulty.h"
 #include "direction.h"
+#include "game.h"
 #include "game_interface.h"
 #include "game_over.h"
 #include "game_static.h"
@@ -968,7 +969,7 @@ namespace AI
                 }
 
                 if ( hero.getAIRole() == otherHero->getAIRole()
-                     && hero.getStatsValue() + Difficulty::getMinStatDiffBetweenAIRoles( _difficulty ) > otherHero->getStatsValue() ) {
+                     && hero.getStatsValue() + Difficulty::getMinStatDiffBetweenAIRoles( Game::getDifficulty() ) > otherHero->getStatsValue() ) {
                     // Two heroes are almost identical. No reason to meet.
                     return valueToIgnore;
                 }
@@ -1491,7 +1492,7 @@ namespace AI
                     return valueToIgnore;
                 }
                 if ( hero.getAIRole() == otherHero->getAIRole()
-                     && hero.getStatsValue() + Difficulty::getMinStatDiffBetweenAIRoles( _difficulty ) + 1 > otherHero->getStatsValue() ) {
+                     && hero.getStatsValue() + Difficulty::getMinStatDiffBetweenAIRoles( Game::getDifficulty() ) + 1 > otherHero->getStatsValue() ) {
                     // Two heroes are almost identical. No reason to meet.
                     return valueToIgnore;
                 }

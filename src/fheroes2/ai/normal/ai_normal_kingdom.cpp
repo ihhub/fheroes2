@@ -702,9 +702,6 @@ namespace AI
         const AIAutoControlModeCommitter aiAutoControlModeCommitter( kingdom );
 #endif
 
-        // Since getDifficulty() call is not instant (especially for campaigns) we are caching it to avoid extra calls within the code.
-        _difficulty = Game::getDifficulty();
-
         const int myColor = kingdom.GetColor();
 
         if ( kingdom.isLoss() || myColor == Color::NONE ) {
@@ -836,7 +833,7 @@ namespace AI
             }
 
             // Step 3. Reassign heroes roles
-            setHeroRoles( heroes, _difficulty );
+            setHeroRoles( heroes, Game::getDifficulty() );
 
             castlesInDanger = findCastlesInDanger( kingdom );
             for ( Heroes * hero : heroes ) {
