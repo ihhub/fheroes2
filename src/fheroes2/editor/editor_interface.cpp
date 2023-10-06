@@ -608,6 +608,9 @@ namespace Interface
                 const fheroes2::ActionCreator action( _historyManager );
 
                 Maps::setMonsterOnTile( tile, _editorPanel.getMonsterId(), 0 );
+                // Since setMonsterOnTile() function interprets 0 as a random number of monsters it is important to set the correct value.
+                Maps::setMonsterCountOnTile( tile, 0 );
+
                 _redraw |= mapUpdateFlags;
             }
         }
