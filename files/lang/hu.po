@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-24 16:12+0000\n"
+"POT-Creation-Date: 2023-10-06 16:20+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3565,6 +3565,15 @@ msgstr "Kattints a főmenübe való visszatéréshez."
 msgid "Quit out of the map editor."
 msgstr ""
 
+msgid "Monster"
+msgstr "Szörny"
+
+msgid "Monsters cannot be placed on water."
+msgstr ""
+
+msgid "Choose a tile which does not contain any objects."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -4265,7 +4274,7 @@ msgid "hotkey|next hero"
 msgstr "Következő hősök"
 
 #, fuzzy
-msgid "hotkey|continue hero movement"
+msgid "hotkey|start hero movement"
 msgstr "Mozgás folytatása"
 
 #, fuzzy
@@ -4969,11 +4978,14 @@ msgstr "Következő hős"
 msgid "Select the next Hero."
 msgstr "Következő hős kiválasztása."
 
-msgid "Continue Movement"
-msgstr "Mozgás folytatása"
+#, fuzzy
+msgid "Hero Movement"
+msgstr "Mozgás árnyék"
 
-msgid "Continue the Hero's movement along the current path."
-msgstr "Folytatódik a hős menete a jelenlegi úton."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
+msgstr ""
 
 msgid "Kingdom Summary"
 msgstr "Királyság összesítése"
@@ -7717,9 +7729,6 @@ msgstr[1] "Vizikerék"
 msgid "Mines"
 msgstr "Bányák"
 
-msgid "Monster"
-msgstr "Szörny"
-
 msgid "Obelisk"
 msgstr "Obeliszk"
 
@@ -10401,3 +10410,9 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Continue Movement"
+#~ msgstr "Mozgás folytatása"
+
+#~ msgid "Continue the Hero's movement along the current path."
+#~ msgstr "Folytatódik a hős menete a jelenlegi úton."

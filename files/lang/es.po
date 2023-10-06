@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-24 16:12+0000\n"
+"POT-Creation-Date: 2023-10-06 16:20+0000\n"
 "PO-Revision-Date: 2023-06-27 18:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3621,6 +3621,15 @@ msgstr "Guardar la partida en curso."
 msgid "Quit out of the map editor."
 msgstr ""
 
+msgid "Monster"
+msgstr "Monstruo"
+
+msgid "Monsters cannot be placed on water."
+msgstr ""
+
+msgid "Choose a tile which does not contain any objects."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -4322,7 +4331,7 @@ msgid "hotkey|next hero"
 msgstr "Mostrar el siguiente héroe"
 
 #, fuzzy
-msgid "hotkey|continue hero movement"
+msgid "hotkey|start hero movement"
 msgstr "Continuar movimento"
 
 #, fuzzy
@@ -5060,11 +5069,14 @@ msgstr "Siguiente Héroe"
 msgid "Select the next Hero."
 msgstr "Seleccione el siguiente Héroe"
 
-msgid "Continue Movement"
+#, fuzzy
+msgid "Hero Movement"
 msgstr "Continuar movimento"
 
-msgid "Continue the Hero's movement along the current path."
-msgstr "Continuar el movimento de tu héroe por el sendero actual."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
+msgstr ""
 
 msgid "Kingdom Summary"
 msgstr "Resumen del reino"
@@ -7938,9 +7950,6 @@ msgstr[1] "Molinos de Agua"
 msgid "Mines"
 msgstr "Minas"
 
-msgid "Monster"
-msgstr "Monstruo"
-
 msgid "Obelisk"
 msgstr "Obelisco"
 
@@ -10679,3 +10688,9 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Continue Movement"
+#~ msgstr "Continuar movimento"
+
+#~ msgid "Continue the Hero's movement along the current path."
+#~ msgstr "Continuar el movimento de tu héroe por el sendero actual."

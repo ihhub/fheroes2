@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-24 16:12+0000\n"
-"PO-Revision-Date: 2023-10-06 21:32+0300\n"
+"POT-Creation-Date: 2023-10-06 16:20+0000\n"
+"PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -3540,6 +3540,15 @@ msgstr "Збережіть поточну мапу."
 msgid "Quit out of the map editor."
 msgstr ""
 
+msgid "Monster"
+msgstr "Монстр"
+
+msgid "Monsters cannot be placed on water."
+msgstr ""
+
+msgid "Choose a tile which does not contain any objects."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -4193,8 +4202,9 @@ msgstr ""
 msgid "hotkey|next hero"
 msgstr ""
 
-msgid "hotkey|continue hero movement"
-msgstr ""
+#, fuzzy
+msgid "hotkey|start hero movement"
+msgstr "звичайна Гра"
 
 msgid "hotkey|cast adventure spell"
 msgstr ""
@@ -4842,10 +4852,13 @@ msgstr ""
 msgid "Select the next Hero."
 msgstr ""
 
-msgid "Continue Movement"
-msgstr ""
+#, fuzzy
+msgid "Hero Movement"
+msgstr "Затінення Сітки"
 
-msgid "Continue the Hero's movement along the current path."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
 msgstr ""
 
 msgid "Kingdom Summary"
@@ -7242,9 +7255,6 @@ msgstr[2] "Водяні Колеса"
 
 msgid "Mines"
 msgstr "Копальні"
-
-msgid "Monster"
-msgstr "Монстр"
 
 msgid "Obelisk"
 msgstr "Обеліск"

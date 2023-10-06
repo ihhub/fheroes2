@@ -412,6 +412,7 @@ namespace AI
         _enemyArmyStrength = 0;
         _myShooterStr = 0;
         _enemyShooterStr = 0;
+        _enemyRangedUnitsOnly = 0;
         _enemyAverageSpeed = 0;
         _enemySpellStrength = 0;
         _considerRetreat = false;
@@ -431,8 +432,8 @@ namespace AI
             const double unitStr = unit.GetStrength();
 
             _enemyArmyStrength += unitStr;
-            if ( unit.canShoot() ) {
-                _enemyShooterStr += unitStr;
+            if ( unit.isArchers() && !unit.isImmovable() ) {
+                _enemyRangedUnitsOnly += unitStr;
             }
 
             // average speed is weighted by troop strength
@@ -440,6 +441,7 @@ namespace AI
             _enemyAverageSpeed += speed * unitStr;
             sumEnemyStr += unitStr;
         }
+        _enemyShooterStr += _enemyRangedUnitsOnly;
 
         if ( sumEnemyStr > 0.0 ) {
             _enemyAverageSpeed /= sumEnemyStr;
@@ -474,7 +476,7 @@ namespace AI
                 continue;
             }
             _myArmyStrength += unitStr;
-            if ( unit.canShoot() ) {
+            if ( unit.isArchers() && !unit.isImmovable() ) {
                 _myShooterStr += unitStr;
             }
         }

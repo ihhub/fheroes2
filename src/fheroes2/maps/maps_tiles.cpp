@@ -531,13 +531,14 @@ void Maps::Tiles::setTerrain( const uint16_t terrainImageIndex, const bool horiz
 {
     _terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
 
-    if ( _isTileMarkedAsRoad ) {
+    if ( _isTileMarkedAsRoad || isStream() ) {
         if ( Ground::getGroundByImageIndex( terrainImageIndex ) == Ground::WATER ) {
-            // Road can not be on the water. Remove it.
+            // Road or stream can not be on the water. Remove it.
             updateRoadOnTile( *this, false );
+            updateStreamOnTile( *this, false );
         }
         else {
-            // There can not be extra objects under the roads.
+            // There can not be extra objects under the roads and streams.
             if ( Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {
                 // We need to set terrain image without extra objects under the road.
                 _terrainImageIndex = Ground::getRandomTerrainImageIndex( Ground::getGroundByImageIndex( terrainImageIndex ), false );

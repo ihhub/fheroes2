@@ -101,7 +101,7 @@ namespace Game
         //
         WORLD_SAVE_GAME,
         WORLD_NEXT_HERO,
-        WORLD_CONTINUE_HERO_MOVEMENT,
+        WORLD_START_HERO_MOVEMENT,
         WORLD_CAST_SPELL,
         WORLD_SLEEP_HERO,
         WORLD_NEXT_TOWN,
