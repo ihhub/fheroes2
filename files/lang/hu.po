@@ -2045,7 +2045,6 @@ msgstr "Szántóföldek"
 msgid "Thatched Hut"
 msgstr "Nádkunyhó"
 
-
 msgid "Archery Range"
 msgstr "Íjászpálya"
 
