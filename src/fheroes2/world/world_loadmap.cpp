@@ -513,10 +513,18 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                         break;
                     }
 
-                    Heroes * hero = GetHeroForHire( raceType );
+                    Heroes * hero = nullptr;
+
+                    if ( pblock[17] && pblock[18] <= Heroes::JARKONAS ) {
+                        hero = vec_heroes.Get( pblock[18] );
+                    }
+
+                    if ( !hero || !hero->isAvailableForHire() ) {
+                        hero = GetHeroForHire( raceType );
+                    }
 
                     if ( hero ) {
-                        hero->LoadFromMP2( objectTileId, Color::NONE, hero->GetRace(), true, pblock );
+                        hero->LoadFromMP2( objectTileId, Color::NONE, raceType, true, pblock );
                     }
                     else {
                         DEBUG_LOG( DBG_GAME, DBG_WARN, "MP2 file format: no free heroes are available from race " << Race::String( raceType ) )
@@ -541,7 +549,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     if ( kingdom.AllowRecruitHero( false ) ) {
                         Heroes * hero = nullptr;
 
-                        if ( pblock[17] && pblock[18] < Heroes::BRAX ) {
+                        if ( pblock[17] && pblock[18] <= Heroes::JARKONAS ) {
                             hero = vec_heroes.Get( pblock[18] );
                         }
 
@@ -551,6 +559,9 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
                         if ( hero ) {
                             hero->LoadFromMP2( objectTileId, colorRace.first, colorRace.second, false, pblock );
+                        }
+                        else {
+                            DEBUG_LOG( DBG_GAME, DBG_WARN, "MP2 file format: no free heroes are available from race " << Race::String( colorRace.second ) )
                         }
                     }
                     else {
@@ -672,7 +683,7 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
         heroes_cond_loss = hero ? hero->GetID() : Heroes::UNKNOWN;
 
         if ( hero ) {
-            hero->SetModes( Heroes::NOTDISMISS | Heroes::NOTDEFAULTS );
+            hero->SetModes( Heroes::NOTDISMISS | Heroes::CUSTOM );
         }
     }
 

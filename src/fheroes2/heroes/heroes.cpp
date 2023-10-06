@@ -425,6 +425,26 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     SetIndex( mapIndex );
     SetColor( colorType );
 
+    const bool hasHeroRaceChanged = ( _race != raceType );
+    if ( hasHeroRaceChanged ) {
+        _race = raceType;
+
+        // Since the hero's race has been changed, we have to reset the initial spell
+        spell_book.clear();
+
+        const Spell spell = Skill::Primary::GetInitialSpell( _race );
+        if ( spell.isValid() ) {
+            SpellBookActivate();
+            AppendSpellToBook( spell, true );
+        }
+        else {
+            bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
+        }
+
+        // Since the hero's race has been changed, we have to reset the default army
+        army.Reset( true );
+    }
+
     StreamBuf dataStream( data );
 
     // Skip first unused byte.
@@ -446,6 +466,11 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
         }
 
         army.Assign( troops, std::end( troops ) );
+
+        // On some maps, customized heroes don't have an army, give them a minimal army
+        if ( !army.isValid() ) {
+            army.Reset( false );
+        }
     }
     else {
         dataStream.skip( 15 );
@@ -453,7 +478,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
 
     const bool doesHeroHaveCustomPortrait = ( dataStream.get() != 0 );
     if ( doesHeroHaveCustomPortrait ) {
-        SetModes( NOTDEFAULTS );
+        SetModes( CUSTOM );
 
         // Portrait sprite index
         portrait = dataStream.get();
@@ -462,14 +487,6 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 file format: incorrect custom portrait ID: " << portrait )
             portrait = hid;
         }
-
-        // Hero's race may not match the custom portrait
-        _race = raceType;
-
-        // Since we changed the hero's race, we have to update the initial spell as well. Let's remove the
-        // existing spell and the spell book itself for now, the new one will be added later if necessary.
-        spell_book.clear();
-        bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
     }
     else {
         dataStream.skip( 1 );
@@ -497,8 +514,8 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
 
     const bool doesHeroHaveCustomSecondarySkills = ( dataStream.get() != 0 );
     if ( doesHeroHaveCustomSecondarySkills ) {
-        SetModes( NOTDEFAULTS );
-        SetModes( CUSTOMSKILLS );
+        SetModes( CUSTOM );
+
         std::vector<Skill::Secondary> secs( 8 );
 
         for ( Skill::Secondary & skill : secs ) {
@@ -532,7 +549,8 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
 
     const bool doesHeroHaveCustomName = ( dataStream.get() != 0 );
     if ( doesHeroHaveCustomName ) {
-        SetModes( NOTDEFAULTS );
+        SetModes( CUSTOM );
+
         name = dataStream.toString( 13 );
     }
     else {
@@ -542,37 +560,22 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     const bool doesAIHeroSetOnPatrol = ( dataStream.get() != 0 );
     if ( doesAIHeroSetOnPatrol ) {
         SetModes( PATROL );
+
         _patrolCenter = GetCenter();
     }
 
     // Patrol distance
     _patrolDistance = dataStream.get();
 
-    PostLoad();
-}
-
-void Heroes::PostLoad()
-{
-    // An object on which the hero currently stands
-    _objectTypeUnderHero = MP2::OBJ_NONE;
-
-    // Fix a custom hero without an army
-    if ( !army.isValid() ) {
-        army.Reset( false );
-    }
+    // TODO: remove this temporary assertion
+    assert( _objectTypeUnderHero == MP2::OBJ_NONE );
 
     // Level up if needed
     int level = GetLevel();
     while ( 1 < level-- ) {
-        SetModes( NOTDEFAULTS );
-        LevelUp( Modes( CUSTOMSKILLS ), true );
-    }
+        SetModes( CUSTOM );
 
-    // Hero's race could be changed during load, so we may need to add an initial spell once again
-    const Spell spell = Skill::Primary::GetInitialSpell( _race );
-    if ( spell.isValid() ) {
-        SpellBookActivate();
-        AppendSpellToBook( spell, true );
+        LevelUp( doesHeroHaveCustomSecondarySkills, true );
     }
 
     SetSpellPoints( GetMaxSpellPoints() );
@@ -2006,7 +2009,7 @@ Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) c
         for ( const Heroes * hero : *this ) {
             assert( hero != nullptr );
 
-            if ( !hero->Modes( Heroes::NOTDEFAULTS ) ) {
+            if ( !hero->Modes( Heroes::CUSTOM ) ) {
                 continue;
             }
 
@@ -2019,46 +2022,48 @@ Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) c
     std::vector<int> heroesForHire;
     heroesForHire.reserve( maxHeroCount );
 
-    const auto fillHeroesForHire
-        = [this, heroIDToIgnore, &customHeroesPortraits, &heroesForHire]( const int minHeroId, const int maxHeroId, const bool avoidCustomHeroes ) {
-              for ( int hid = minHeroId; hid <= maxHeroId; ++hid ) {
-                  if ( hid == heroIDToIgnore ) {
-                      continue;
-                  }
-
-                  const Heroes * hero = at( hid );
-                  assert( hero != nullptr );
-
-                  if ( !hero->isAvailableForHire() ) {
-                      continue;
-                  }
-
-                  if ( avoidCustomHeroes && customHeroesPortraits.find( hero->getPortraitId() ) != customHeroesPortraits.end() ) {
-                      continue;
-                  }
-
-                  heroesForHire.push_back( hid );
-              }
-          };
-
-    // First, try to find a free hero of the specified race (avoiding customized heroes, as well as heroes with non-unique portraits)
-    {
-        const auto [minHeroId, maxHeroId] = getHeroIdRangeForRace( race );
-
-        fillHeroesForHire( minHeroId, maxHeroId, true );
-    }
-
-    // If no suitable heroes were found, then try to find a free hero of any race
-    if ( heroesForHire.empty() ) {
+    const auto fillHeroesForHire = [this, heroIDToIgnore, &customHeroesPortraits, &heroesForHire]( const int raceFilter, const bool avoidCustomHeroes ) {
         const auto [minHeroId, maxHeroId] = getHeroIdRangeForRace( Race::NONE );
 
-        // Prefer non-customized heroes with unique portraits
-        fillHeroesForHire( minHeroId, maxHeroId, true );
+        for ( const Heroes * hero : *this ) {
+            assert( hero != nullptr );
 
-        // No suitable heroes were found, any free hero will do
-        if ( heroesForHire.empty() ) {
-            fillHeroesForHire( minHeroId, maxHeroId, false );
+            // Only regular heroes are available for hire
+            if ( hero->GetID() > maxHeroId ) {
+                continue;
+            }
+
+            if ( hero->GetID() == heroIDToIgnore ) {
+                continue;
+            }
+
+            if ( raceFilter != Race::NONE && hero->GetRace() != raceFilter ) {
+                continue;
+            }
+
+            if ( !hero->isAvailableForHire() ) {
+                continue;
+            }
+
+            if ( avoidCustomHeroes && customHeroesPortraits.find( hero->getPortraitId() ) != customHeroesPortraits.end() ) {
+                continue;
+            }
+
+            heroesForHire.push_back( hero->GetID() );
         }
+    };
+
+    // First, try to find a free hero of the specified race (avoiding customized heroes, as well as heroes with non-unique portraits)
+    fillHeroesForHire( race, true );
+
+    // If no suitable heroes were found, then try to find a free hero of any race (avoiding customized heroes, as well as heroes with non-unique portraits)
+    if ( heroesForHire.empty() && race != Race::NONE ) {
+        fillHeroesForHire( Race::NONE, true );
+    }
+
+    // No suitable heroes were found, any free hero will do
+    if ( heroesForHire.empty() ) {
+        fillHeroesForHire( Race::NONE, false );
     }
 
     // All the heroes are busy
