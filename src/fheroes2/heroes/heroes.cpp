@@ -79,6 +79,28 @@ namespace
 {
     const size_t maxHeroCount = 71;
 
+    std::pair<int, int> getHeroIdRangeForRace( const int race )
+    {
+        switch ( race ) {
+        case Race::KNGT:
+            return { Heroes::LORDKILBURN, Heroes::DIMITRY };
+        case Race::BARB:
+            return { Heroes::THUNDAX, Heroes::ATLAS };
+        case Race::SORC:
+            return { Heroes::ASTRA, Heroes::LUNA };
+        case Race::WRLK:
+            return { Heroes::ARIE, Heroes::WRATHMONT };
+        case Race::WZRD:
+            return { Heroes::MYRA, Heroes::MANDIGAL };
+        case Race::NECR:
+            return { Heroes::ZOM, Heroes::CELIA };
+        default:
+            break;
+        }
+
+        return { Heroes::LORDKILBURN, Heroes::CELIA };
+    };
+
     int ObjectVisitedModifiersResult( const std::vector<MP2::MapObjectType> & objectTypes, const Heroes & hero, std::string * strs )
     {
         int result = 0;
@@ -1892,32 +1914,18 @@ AllHeroes::~AllHeroes()
 
 void AllHeroes::Init()
 {
-    if ( !empty() )
+    if ( !empty() ) {
         AllHeroes::clear();
+    }
 
-    // knight: LORDKILBURN, SIRGALLANTH, ECTOR, GVENNETH, TYRO, AMBROSE, RUBY, MAXIMUS, DIMITRY
-    for ( uint32_t hid = Heroes::LORDKILBURN; hid <= Heroes::DIMITRY; ++hid )
-        push_back( new Heroes( hid, Race::KNGT ) );
+    for ( const int race : std::array<int, 6>{ Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR } ) {
+        const auto [minHeroId, maxHeroId] = getHeroIdRangeForRace( race );
+        assert( minHeroId <= maxHeroId );
 
-    // barbarian: THUNDAX, FINEOUS, JOJOSH, CRAGHACK, JEZEBEL, JACLYN, ERGON, TSABU, ATLAS
-    for ( uint32_t hid = Heroes::THUNDAX; hid <= Heroes::ATLAS; ++hid )
-        push_back( new Heroes( hid, Race::BARB ) );
-
-    // sorceress: ASTRA, NATASHA, TROYAN, VATAWNA, REBECCA, GEM, ARIEL, CARLAWN, LUNA
-    for ( uint32_t hid = Heroes::ASTRA; hid <= Heroes::LUNA; ++hid )
-        push_back( new Heroes( hid, Race::SORC ) );
-
-    // warlock: ARIE, ALAMAR, VESPER, CRODO, BAROK, KASTORE, AGAR, FALAGAR, WRATHMONT
-    for ( uint32_t hid = Heroes::ARIE; hid <= Heroes::WRATHMONT; ++hid )
-        push_back( new Heroes( hid, Race::WRLK ) );
-
-    // wizard: MYRA, FLINT, DAWN, HALON, MYRINI, WILFREY, SARAKIN, KALINDRA, MANDIGAL
-    for ( uint32_t hid = Heroes::MYRA; hid <= Heroes::MANDIGAL; ++hid )
-        push_back( new Heroes( hid, Race::WZRD ) );
-
-    // necromancer: ZOM, DARLANA, ZAM, RANLOO, CHARITY, RIALDO, ROXANA, SANDRO, CELIA
-    for ( uint32_t hid = Heroes::ZOM; hid <= Heroes::CELIA; ++hid )
-        push_back( new Heroes( hid, Race::NECR ) );
+        for ( int hid = minHeroId; hid <= maxHeroId; ++hid ) {
+            push_back( new Heroes( hid, race ) );
+        }
+    }
 
     // SW campaign
     push_back( new Heroes( Heroes::ROLAND, Race::WZRD, 5000 ) );
@@ -1943,8 +1951,9 @@ void AllHeroes::Init()
     }
     else {
         // for non-PoL maps, just add unknown heroes instead in place of the PoL-specific ones
-        for ( int i = Heroes::SOLMYR; i <= Heroes::JARKONAS; ++i )
+        for ( int i = Heroes::SOLMYR; i <= Heroes::JARKONAS; ++i ) {
             push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
+        }
     }
 
     if ( IS_DEVEL() ) {
@@ -1959,8 +1968,12 @@ void AllHeroes::Init()
 
 void AllHeroes::clear()
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
+    std::for_each( begin(), end(), []( Heroes * hero ) {
+        assert( hero != nullptr );
+
+        delete hero;
+    } );
+
     std::vector<Heroes *>::clear();
 }
 
@@ -1987,65 +2000,64 @@ Heroes * AllHeroes::GetHero( const Castle & castle ) const
 
 Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) const
 {
-    int min = Heroes::UNKNOWN;
-    int max = Heroes::UNKNOWN;
+    const std::set<int> customHeroesPortraits = [this]() {
+        std::set<int> result;
 
-    switch ( race ) {
-    case Race::KNGT:
-        min = Heroes::LORDKILBURN;
-        max = Heroes::DIMITRY;
-        break;
+        for ( const Heroes * hero : *this ) {
+            assert( hero != nullptr );
 
-    case Race::BARB:
-        min = Heroes::THUNDAX;
-        max = Heroes::ATLAS;
-        break;
+            if ( !hero->Modes( Heroes::NOTDEFAULTS ) ) {
+                continue;
+            }
 
-    case Race::SORC:
-        min = Heroes::ASTRA;
-        max = Heroes::LUNA;
-        break;
+            result.insert( hero->getPortraitId() );
+        }
 
-    case Race::WRLK:
-        min = Heroes::ARIE;
-        max = Heroes::WRATHMONT;
-        break;
-
-    case Race::WZRD:
-        min = Heroes::MYRA;
-        max = Heroes::MANDIGAL;
-        break;
-
-    case Race::NECR:
-        min = Heroes::ZOM;
-        max = Heroes::CELIA;
-        break;
-
-    default:
-        min = Heroes::LORDKILBURN;
-        max = Heroes::CELIA;
-        break;
-    }
+        return result;
+    }();
 
     std::vector<int> heroesForHire;
     heroesForHire.reserve( maxHeroCount );
 
-    // First try to find a free hero of the specified race (skipping custom heroes)
-    for ( int i = min; i <= max; ++i ) {
-        if ( i != heroIDToIgnore && at( i )->isAvailableForHire() && !at( i )->Modes( Heroes::NOTDEFAULTS ) ) {
-            heroesForHire.push_back( i );
-        }
+    const auto fillHeroesForHire
+        = [this, heroIDToIgnore, &customHeroesPortraits, &heroesForHire]( const int minHeroId, const int maxHeroId, const bool avoidCustomHeroes ) {
+              for ( int hid = minHeroId; hid <= maxHeroId; ++hid ) {
+                  if ( hid == heroIDToIgnore ) {
+                      continue;
+                  }
+
+                  const Heroes * hero = at( hid );
+                  assert( hero != nullptr );
+
+                  if ( !hero->isAvailableForHire() ) {
+                      continue;
+                  }
+
+                  if ( avoidCustomHeroes && customHeroesPortraits.find( hero->getPortraitId() ) != customHeroesPortraits.end() ) {
+                      continue;
+                  }
+
+                  heroesForHire.push_back( hid );
+              }
+          };
+
+    // First, try to find a free hero of the specified race (avoiding customized heroes, as well as heroes with non-unique portraits)
+    {
+        const auto [minHeroId, maxHeroId] = getHeroIdRangeForRace( race );
+
+        fillHeroesForHire( minHeroId, maxHeroId, true );
     }
 
-    // If no heroes are found, then try to find a free hero of any race
-    if ( race != Race::NONE && heroesForHire.empty() ) {
-        min = Heroes::LORDKILBURN;
-        max = Heroes::CELIA;
+    // If no suitable heroes were found, then try to find a free hero of any race
+    if ( heroesForHire.empty() ) {
+        const auto [minHeroId, maxHeroId] = getHeroIdRangeForRace( Race::NONE );
 
-        for ( int i = min; i <= max; ++i ) {
-            if ( i != heroIDToIgnore && at( i )->isAvailableForHire() ) {
-                heroesForHire.push_back( i );
-            }
+        // Prefer non-customized heroes with unique portraits
+        fillHeroesForHire( minHeroId, maxHeroId, true );
+
+        // No suitable heroes were found, any free hero will do
+        if ( heroesForHire.empty() ) {
+            fillHeroesForHire( minHeroId, maxHeroId, false );
         }
     }
 
@@ -2066,8 +2078,7 @@ Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) c
         return at( Rand::Get( heroesForHireNotRecruits ) );
     }
 
-    // There are no heroes who are not yet available for recruitment, allow heroes
-    // to be available for recruitment in several kingdoms at the same time
+    // There are no heroes who are not yet available for recruitment, allow heroes to be available for recruitment in several kingdoms at the same time
     return at( Rand::Get( heroesForHire ) );
 }
 
