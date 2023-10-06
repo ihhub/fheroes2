@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-24 16:12+0000\n"
-"PO-Revision-Date: 2023-10-04 12:52+0300\n"
+"PO-Revision-Date: 2023-10-06 21:32+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4\n"
 
 msgid ""
 "BATTLE\n"
@@ -2192,16 +2192,16 @@ msgid "Upg. Armory"
 msgstr "Зброярня Ветеранів"
 
 msgid "Jousting Arena"
-msgstr ""
+msgstr "Іподром"
 
 msgid "Upg. Jousting Arena"
-msgstr ""
+msgstr "Турнірна Арена"
 
 msgid "Cathedral"
-msgstr ""
+msgstr "Катедра"
 
 msgid "Upg. Cathedral"
-msgstr ""
+msgstr "Собор"
 
 msgid "Coliseum"
 msgstr "Колізей"
@@ -2210,55 +2210,55 @@ msgid "Garbage Heap"
 msgstr "Смітник"
 
 msgid "Hut"
-msgstr ""
+msgstr "Хата"
 
 msgid "Stick Hut"
-msgstr ""
+msgstr "Хижка"
 
 msgid "Upg. Stick Hut"
-msgstr ""
+msgstr "Халупа"
 
 msgid "Den"
-msgstr ""
+msgstr "Лігво"
 
 msgid "Adobe"
-msgstr ""
+msgstr "Глинянка"
 
 msgid "Upg. Adobe"
-msgstr ""
+msgstr "Мазанка"
 
 msgid "Bridge"
-msgstr ""
+msgstr "Міст"
 
 msgid "Upg. Bridge"
-msgstr ""
+msgstr "Великий Міст"
 
 msgid "Pyramid"
-msgstr ""
+msgstr "Піраміда"
 
 msgid "Rainbow"
-msgstr ""
+msgstr "Райдуга"
 
 msgid "Crystal Garden"
-msgstr ""
+msgstr "Кришталевий сад"
 
 msgid "Treehouse"
-msgstr ""
+msgstr "Хатинка на Дереві"
 
 msgid "Cottage"
-msgstr ""
+msgstr "Хатинка"
 
 msgid "Upg. Cottage"
-msgstr ""
+msgstr "Котедж"
 
 msgid "Stonehenge"
-msgstr ""
+msgstr "Кромлех"
 
 msgid "Upg. Stonehenge"
-msgstr ""
+msgstr "Стоунгендж"
 
 msgid "Fenced Meadow"
-msgstr ""
+msgstr "Огороджена Галявина"
 
 msgid "sorceress|Red Tower"
 msgstr "Червона Вежа"
@@ -2321,13 +2321,13 @@ msgid "Ivory Tower"
 msgstr "Вежа Магів"
 
 msgid "Upg. Ivory Tower"
-msgstr ""
+msgstr "Вежа Архімагів"
 
 msgid "Cloud Castle"
 msgstr "Хмарна Фортеця"
 
 msgid "Upg. Cloud Castle"
-msgstr ""
+msgstr "Хмарний Замок"
 
 msgid "Storm"
 msgstr "Шторм"
