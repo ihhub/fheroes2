@@ -197,7 +197,9 @@ namespace Interface
         std::array<fheroes2::Rect, BrushSize::BRUSH_SIZE_COUNT> _brushSizeButtonsRect;
 
         uint8_t _selectedInstrument{ Instrument::TERRAIN };
-        uint8_t _selectedTerrain{ Brush::WATER };
+
+        // A brand new map is always filled with Water so there is no need to make Water terrain brush as a default terrain selection.
+        uint8_t _selectedTerrain{ Brush::GRASS };
         uint8_t _selectedObject{ Brush::WATER };
         uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
 
