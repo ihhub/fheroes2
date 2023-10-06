@@ -443,9 +443,7 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::MONSTERS] ) ) {
-                _monsterId = Monster::UNKNOWN;
-
-                const Monster monster = Dialog::selectMonster();
+                const Monster monster = Dialog::selectMonster( _monsterId );
                 if ( monster.GetID() != Monster::UNKNOWN ) {
                     _monsterId = monster.GetID();
 
