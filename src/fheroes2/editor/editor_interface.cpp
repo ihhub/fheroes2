@@ -48,6 +48,7 @@
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
+#include "monster.h"
 #include "mp2.h"
 #include "screen.h"
 #include "settings.h"
@@ -569,6 +570,13 @@ namespace Interface
                 _redraw |= mapUpdateFlags;
             }
         }
+        else if ( _editorPanel.isStreamDraw() ) {
+            const fheroes2::ActionCreator action( _historyManager );
+
+            if ( Maps::updateStreamOnTile( tile, true ) ) {
+                _redraw |= mapUpdateFlags;
+            }
+        }
         else if ( _editorPanel.isEraseMode() ) {
             const int32_t brushSize = _editorPanel.getBrushSize();
 
@@ -579,11 +587,28 @@ namespace Interface
                 if ( Maps::updateRoadOnTile( tile, false ) ) {
                     _redraw |= mapUpdateFlags;
                 }
+                if ( Maps::updateStreamOnTile( tile, false ) ) {
+                    _redraw |= mapUpdateFlags;
+                }
 
                 if ( brushSize == 0 ) {
                     // This is a case when area was not selected but a single tile was clicked.
                     _selectedTile = -1;
                 }
+            }
+        }
+        else if ( _editorPanel.isMonsterSettingMode() ) {
+            if ( tile.isWater() ) {
+                fheroes2::showStandardTextMessage( _( "Monster" ), _( "Monsters cannot be placed on water." ), Dialog::OK );
+            }
+            else if ( !Maps::isClearGround( tile ) ) {
+                fheroes2::showStandardTextMessage( _( "Monster" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+            }
+            else if ( Monster{ _editorPanel.getMonsterId() }.isValid() ) {
+                const fheroes2::ActionCreator action( _historyManager );
+
+                Maps::setMonsterOnTile( tile, _editorPanel.getMonsterId(), 0 );
+                _redraw |= mapUpdateFlags;
             }
         }
     }
@@ -623,8 +648,13 @@ namespace Interface
         }
     }
 
-    void EditorInterface::updateCursor( const int32_t /*tileIndex*/ )
+    void EditorInterface::updateCursor( const int32_t tileIndex )
     {
-        Cursor::Get().SetThemes( Cursor::POINTER );
+        if ( _cursorUpdater && tileIndex >= 0 ) {
+            _cursorUpdater( tileIndex );
+        }
+        else {
+            Cursor::Get().SetThemes( Cursor::POINTER );
+        }
     }
 }

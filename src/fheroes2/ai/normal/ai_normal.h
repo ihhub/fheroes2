@@ -247,6 +247,7 @@ namespace AI
         double _enemyArmyStrength = 0;
         double _myShooterStr = 0;
         double _enemyShooterStr = 0;
+        double _enemyRangedUnitsOnly = 0;
         double _myArmyAverageSpeed = 0;
         double _enemyAverageSpeed = 0;
         double _enemySpellStrength = 0;

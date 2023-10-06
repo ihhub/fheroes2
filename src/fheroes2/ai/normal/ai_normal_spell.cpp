@@ -149,7 +149,7 @@ namespace AI
                 return unit->GetMonsterStrength() * unit->HowManyWillBeKilled( damage );
 
             // Otherwise calculate amount of strength lost (% of unit times total strength)
-            const uint32_t hitpoints = unit->GetHitPoints();
+            const uint32_t hitpoints = unit->Modes( CAP_MIRRORIMAGE ) ? 1 : unit->GetHitPoints();
             if ( damage >= hitpoints ) {
                 // bonus for finishing a stack
                 const double bonus = ( unit->GetSpeed() > armySpeed ) ? 0.07 : 0.035;
@@ -159,7 +159,7 @@ namespace AI
             double unitPercentageLost = std::min( static_cast<double>( damage ) / hitpoints, 1.0 );
 
             // Penalty for waking up disabled unit (if you kill only 30%, rest 70% is your penalty)
-            if ( unit->Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) ) {
+            if ( unit->isImmovable() ) {
                 unitPercentageLost += unitPercentageLost - 1.0;
             }
             return unitPercentageLost * unit->GetStrength();
@@ -320,8 +320,7 @@ namespace AI
 
         // Make sure this spell can be applied to the current unit (skip check for dispel estimation)
         if ( !forDispel
-             && ( ( target.Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) && spellID != Spell::ANTIMAGIC ) || target.isUnderSpellEffect( spell )
-                  || !target.AllowApplySpell( spell, _commander ) ) ) {
+             && ( ( target.isImmovable() && spellID != Spell::ANTIMAGIC ) || target.isUnderSpellEffect( spell ) || !target.AllowApplySpell( spell, _commander ) ) ) {
             return 0.0;
         }
 
@@ -386,6 +385,8 @@ namespace AI
         case Spell::DRAGONSLAYER:
         case Spell::ANTIMAGIC:
         case Spell::MIRRORIMAGE:
+        case Spell::SHIELD:
+        case Spell::MASSSHIELD:
             ratio = 0.0;
             break;
         default:
@@ -437,6 +438,13 @@ namespace AI
         }
         else if ( spellID == Spell::BERSERKER && !target.isArchers() ) {
             ratio /= ReduceEffectivenessByDistance( target );
+        }
+        else if ( spellID == Spell::SHIELD || spellID == Spell::MASSSHIELD ) {
+            ratio = _enemyRangedUnitsOnly / _enemyArmyStrength * 0.3;
+
+            if ( target.isArchers() ) {
+                ratio *= 1.25;
+            }
         }
         else if ( spellID == Spell::DRAGONSLAYER ) {
             // TODO: add logic to check if the enemy army contains a dragon.

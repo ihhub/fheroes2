@@ -26,6 +26,7 @@
 #include "game_mode.h"
 #include "ground.h"
 #include "math_base.h"
+#include "monster.h"
 #include "ui_button.h"
 
 namespace Interface
@@ -61,15 +62,30 @@ namespace Interface
             return _selectedInstrument == Instrument::ROAD;
         }
 
+        bool isStreamDraw() const
+        {
+            return _selectedInstrument == Instrument::STREAM;
+        }
+
         bool isEraseMode() const
         {
             return _selectedInstrument == Instrument::ERASE;
         }
 
+        bool isMonsterSettingMode() const
+        {
+            return ( _selectedInstrument == OBJECT ) && ( _selectedObject == MONSTERS );
+        }
+
+        int32_t getMonsterId() const
+        {
+            return _monsterId;
+        }
+
         bool showAreaSelectRect() const
         {
             return _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD
-                   || _selectedInstrument == Instrument::ERASE;
+                   || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode();
         }
 
         bool useMouseDragMovement() const
@@ -184,5 +200,7 @@ namespace Interface
         uint8_t _selectedTerrain{ Brush::WATER };
         uint8_t _selectedObject{ Brush::WATER };
         uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
+
+        int32_t _monsterId{ Monster::UNKNOWN };
     };
 }

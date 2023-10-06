@@ -55,6 +55,9 @@ namespace Difficulty
     bool areAIHeroRolesAllowed( const int difficulty );
 
     int getMinStatDiffBetweenAIRoles( const int difficulty );
+
+    // Returns true if AI should avoid having free slots in the army
+    bool allowAIToSplitWeakStacks( const int difficulty );
 }
 
 #endif

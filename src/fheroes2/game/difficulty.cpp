@@ -197,3 +197,15 @@ int Difficulty::getMinStatDiffBetweenAIRoles( const int difficulty )
 
     return 2;
 }
+
+bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+    case Difficulty::NORMAL:
+        return false;
+    default:
+        break;
+    }
+    return true;
+}
