@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 13:54+0000\n"
+"POT-Creation-Date: 2023-10-06 16:20+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4364,7 +4364,8 @@ msgstr "Lagre parti"
 msgid "hotkey|next hero"
 msgstr "Neste helt"
 
-msgid "hotkey|continue hero movement"
+#, fuzzy
+msgid "hotkey|start hero movement"
 msgstr "Fortsett heltens forflytning"
 
 msgid "hotkey|cast adventure spell"
@@ -5091,13 +5092,16 @@ msgstr "Neste helt"
 msgid "Select the next Hero."
 msgstr "Velg neste helt."
 
-msgid "Continue Movement"
-msgstr "Fortsett reise"
-
-msgid "Continue the Hero's movement along the current path."
+#, fuzzy
+msgid "Hero Movement"
 msgstr ""
-"Fortsett heltens reise langs den\n"
-"nåværende ruten."
+"Uthevd\n"
+"rekkevidde"
+
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
+msgstr ""
 
 msgid "Kingdom Summary"
 msgstr "Oppsummert kongedømme"
@@ -11021,6 +11025,14 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Continue Movement"
+#~ msgstr "Fortsett reise"
+
+#~ msgid "Continue the Hero's movement along the current path."
+#~ msgstr ""
+#~ "Fortsett heltens reise langs den\n"
+#~ "nåværende ruten."
 
 #~ msgid "Undo your last action. Press again to redo the action."
 #~ msgstr ""
