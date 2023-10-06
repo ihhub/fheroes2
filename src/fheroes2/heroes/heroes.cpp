@@ -99,7 +99,7 @@ namespace
         }
 
         return { Heroes::LORDKILBURN, Heroes::CELIA };
-    };
+    }
 
     int ObjectVisitedModifiersResult( const std::vector<MP2::MapObjectType> & objectTypes, const Heroes & hero, std::string * strs )
     {
