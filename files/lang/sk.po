@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 13:54+0000\n"
+"POT-Creation-Date: 2023-10-06 16:20+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4285,7 +4285,8 @@ msgstr "ulož hru"
 msgid "hotkey|next hero"
 msgstr "ďalší hrdina"
 
-msgid "hotkey|continue hero movement"
+#, fuzzy
+msgid "hotkey|start hero movement"
 msgstr "pokračuj v pohybe hrdinom"
 
 msgid "hotkey|cast adventure spell"
@@ -5000,11 +5001,14 @@ msgstr "Ďalší hrdina"
 msgid "Select the next Hero."
 msgstr "Vybrať ďalšieho Hrdinu."
 
-msgid "Continue Movement"
-msgstr "Pokračovať v pohybe"
+#, fuzzy
+msgid "Hero Movement"
+msgstr "Tieň pohybu"
 
-msgid "Continue the Hero's movement along the current path."
-msgstr "Pokračovať po vytýčenej trase Hrdinu."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
+msgstr ""
 
 msgid "Kingdom Summary"
 msgstr "Zhrnutie kráľovstva"
@@ -10708,6 +10712,12 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Continue Movement"
+#~ msgstr "Pokračovať v pohybe"
+
+#~ msgid "Continue the Hero's movement along the current path."
+#~ msgstr "Pokračovať po vytýčenej trase Hrdinu."
 
 #~ msgid "Undo your last action. Press again to redo the action."
 #~ msgstr ""

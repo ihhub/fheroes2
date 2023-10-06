@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 13:54+0000\n"
+"POT-Creation-Date: 2023-10-06 16:20+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -4304,7 +4304,8 @@ msgstr "zapisz grę"
 msgid "hotkey|next hero"
 msgstr "pokaż następnego bohatera"
 
-msgid "hotkey|continue hero movement"
+#, fuzzy
+msgid "hotkey|start hero movement"
 msgstr "kontynuuj ruch"
 
 msgid "hotkey|cast adventure spell"
@@ -5027,11 +5028,14 @@ msgstr "Następny bohater"
 msgid "Select the next Hero."
 msgstr "Wybierz następnego bohatera."
 
-msgid "Continue Movement"
-msgstr "Kontynuuj ruch"
+#, fuzzy
+msgid "Hero Movement"
+msgstr "Cieniowanie pola"
 
-msgid "Continue the Hero's movement along the current path."
-msgstr "Kontynuuj ruch bohatera wzdłuż wybranej ścieżki."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
+msgstr ""
 
 msgid "Kingdom Summary"
 msgstr "Przegląd królestwa"
@@ -10858,3 +10862,9 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Continue Movement"
+#~ msgstr "Kontynuuj ruch"
+
+#~ msgid "Continue the Hero's movement along the current path."
+#~ msgstr "Kontynuuj ruch bohatera wzdłuż wybranej ścieżki."

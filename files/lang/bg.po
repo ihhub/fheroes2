@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 13:54+0000\n"
+"POT-Creation-Date: 2023-10-06 16:20+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4337,7 +4337,8 @@ msgstr "запази играта"
 msgid "hotkey|next hero"
 msgstr "следващия герой"
 
-msgid "hotkey|continue hero movement"
+#, fuzzy
+msgid "hotkey|start hero movement"
 msgstr "продължи движението на героя"
 
 msgid "hotkey|cast adventure spell"
@@ -5057,11 +5058,14 @@ msgstr "Следващият герой"
 msgid "Select the next Hero."
 msgstr "Избери следващия герой."
 
-msgid "Continue Movement"
-msgstr "Продължи движението"
+#, fuzzy
+msgid "Hero Movement"
+msgstr "Движение на сенките"
 
-msgid "Continue the Hero's movement along the current path."
-msgstr "Продължи движението на героя по текущия път."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
+msgstr ""
 
 msgid "Kingdom Summary"
 msgstr "Резюме за Кралството"
@@ -10847,6 +10851,12 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Continue Movement"
+#~ msgstr "Продължи движението"
+
+#~ msgid "Continue the Hero's movement along the current path."
+#~ msgstr "Продължи движението на героя по текущия път."
 
 #~ msgid "Undo your last action. Press again to redo the action."
 #~ msgstr ""

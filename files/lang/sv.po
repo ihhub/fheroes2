@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 13:54+0000\n"
+"POT-Creation-Date: 2023-10-06 16:20+0000\n"
 "PO-Revision-Date: 2023-09-17 19:00+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4304,7 +4304,8 @@ msgstr "Spara spel"
 msgid "hotkey|next hero"
 msgstr "Nästa hjälte"
 
-msgid "hotkey|continue hero movement"
+#, fuzzy
+msgid "hotkey|start hero movement"
 msgstr "Fortsätt förflyttning"
 
 msgid "hotkey|cast adventure spell"
@@ -5017,11 +5018,14 @@ msgstr "Nästa Hjälte"
 msgid "Select the next Hero."
 msgstr "Välj nästa Hjälte."
 
-msgid "Continue Movement"
-msgstr "Fortsätt förflyttning"
+#, fuzzy
+msgid "Hero Movement"
+msgstr "Skuggförflyttning"
 
-msgid "Continue the Hero's movement along the current path."
-msgstr "Upprepa Hjältens förflyttning längst den aktuella stigen."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
+msgstr ""
 
 msgid "Kingdom Summary"
 msgstr "Rikessammanfattning"
@@ -10795,6 +10799,12 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Continue Movement"
+#~ msgstr "Fortsätt förflyttning"
+
+#~ msgid "Continue the Hero's movement along the current path."
+#~ msgstr "Upprepa Hjältens förflyttning längst den aktuella stigen."
 
 #~ msgid "Undo your last action. Press again to redo the action."
 #~ msgstr "Ångra din senaste händelse. Klicka igen för att ångra dig igen."
