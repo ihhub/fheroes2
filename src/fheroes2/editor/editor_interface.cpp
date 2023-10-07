@@ -613,6 +613,13 @@ namespace Interface
 
                 _redraw |= mapUpdateFlags;
             }
+            else if ( Monster{ _editorPanel.getMonsterId() }.isRandomMonster() ) {
+                const fheroes2::ActionCreator action( _historyManager );
+
+                Maps::setRandomMonsterOnTile( tile, _editorPanel.getMonsterId() );
+
+                _redraw |= mapUpdateFlags;
+            }
         }
     }
 
