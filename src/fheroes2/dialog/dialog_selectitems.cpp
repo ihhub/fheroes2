@@ -279,7 +279,13 @@ public:
 
     void ActionListPressRight( int & index ) override
     {
-        Dialog::ArmyInfo( Troop( Monster( index ), 0 ), Dialog::ZERO );
+        const Monster monster( index );
+        if ( !monster.isValid() ) {
+            fheroes2::showStandardTextMessage( monster.GetName(), "", Dialog::ZERO );
+            return;
+        }
+
+        Dialog::ArmyInfo( Troop( monster, 0 ), Dialog::ZERO );
     }
 };
 
@@ -518,12 +524,16 @@ Artifact Dialog::selectArtifact( const int artifactId /* = Artifact::UNKNOWN */ 
     return ( result == Dialog::OK || listbox.ok ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
 }
 
-Monster Dialog::selectMonster( const int monsterId /* = Monster::UNKNOWN */ )
+Monster Dialog::selectMonster( const int monsterId, const bool includeRandomMonsters )
 {
-    std::vector<int> monsters( static_cast<int>( Monster::WATER_ELEMENT ), Monster::UNKNOWN );
+    std::vector<int> monsters( Monster::MONSTER_COUNT - 1, Monster::UNKNOWN );
 
     // Skip Monster::UNKNOWN and start from the next one.
     std::iota( monsters.begin(), monsters.end(), Monster::UNKNOWN + 1 );
+
+    if ( !includeRandomMonsters ) {
+        monsters.erase( std::remove_if( monsters.begin(), monsters.end(), []( const int id ) { return Monster( id ).isRandomMonster(); } ), monsters.end() );
+    }
 
     SelectEnumMonster listbox( { 280, fheroes2::Display::instance().height() - 200 } );
 
