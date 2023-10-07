@@ -380,9 +380,8 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             if ( Game::isPriceOfLoyaltyCampaignPresent() ) {
                 return fheroes2::GameMode::EDITOR_MAIN_MENU;
             }
-            else {
-                fheroes2::showStandardTextMessage( _( "Editor" ), _( "The Editor requires \"The Price of Loyalty\" version of the game." ), Dialog::OK );
-            }
+
+            fheroes2::showStandardTextMessage( _( "Editor" ), _( "The Editor requires \"The Price of Loyalty\" version of the game." ), Dialog::OK );
         }
 #endif
 
