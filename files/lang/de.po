@@ -3103,14 +3103,12 @@ msgstr "%{skill} +1"
 msgid "You have learned %{skill}."
 msgstr "Ihr habt %{skill} gelernt."
 
-#, fuzzy
 msgid ""
 "%{name} has gained a level.\n"
 "\n"
 "%{skill} +1"
 msgstr "%{name} hat eine neue Stufe erreicht."
 
-#, fuzzy
 msgid ""
 "You may learn either:\n"
 "%{skill1}\n"
