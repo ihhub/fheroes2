@@ -234,6 +234,9 @@ namespace Editor
         fheroes2::Button randomMap( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNENEW, 2, 3 );
         fheroes2::Button cancel( buttonPos.x, buttonPos.y + 5 * buttonYStep, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
+        // TODO: enable it back once random map generator is ready.
+        randomMap.disable();
+
         scratchMap.draw();
         randomMap.draw();
         cancel.draw();
@@ -244,7 +247,11 @@ namespace Editor
 
         while ( le.HandleEvents() ) {
             le.MousePressLeft( scratchMap.area() ) ? scratchMap.drawOnPress() : scratchMap.drawOnRelease();
-            le.MousePressLeft( randomMap.area() ) ? randomMap.drawOnPress() : randomMap.drawOnRelease();
+
+            if ( randomMap.isEnabled() ) {
+                le.MousePressLeft( randomMap.area() ) ? randomMap.drawOnPress() : randomMap.drawOnRelease();
+            }
+
             le.MousePressLeft( cancel.area() ) ? cancel.drawOnPress() : cancel.drawOnRelease();
 
             if ( le.MouseClickLeft( scratchMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) ) {
@@ -261,7 +268,7 @@ namespace Editor
                 return fheroes2::GameMode::EDITOR_NEW_MAP;
             }
 
-            if ( le.MouseClickLeft( randomMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU ) ) {
+            if ( randomMap.isEnabled() && ( le.MouseClickLeft( randomMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU ) ) ) {
                 if ( selectMapSize() != Maps::ZERO ) {
                     showWIPInfo();
                 }
