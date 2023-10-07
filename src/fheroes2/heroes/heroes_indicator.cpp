@@ -35,10 +35,10 @@
 #include "luck.h"
 #include "morale.h"
 #include "screen.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_text.h"
 
 namespace fheroes2
 {
@@ -210,11 +210,13 @@ void ExperienceIndicator::Redraw() const
     if ( !hero )
         return;
 
-    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
-    fheroes2::Blit( sprite3, fheroes2::Display::instance(), area.x, area.y );
+    fheroes2::Display & display = fheroes2::Display::instance();
 
-    Text text( std::to_string( hero->GetExperience() ), Font::SMALL );
-    text.Blit( area.x + 17 - text.w() / 2, area.y + 23 );
+    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
+    fheroes2::Blit( sprite3, display, area.x, area.y );
+
+    const fheroes2::Text text( std::to_string( hero->GetExperience() ), fheroes2::FontType::smallWhite() );
+    text.draw( area.x + 17 - text.width() / 2, area.y + 25, display );
 }
 
 void ExperienceIndicator::QueueEventProcessing() const
@@ -248,11 +250,13 @@ void SpellPointsIndicator::Redraw() const
     if ( !hero )
         return;
 
-    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
-    fheroes2::Blit( sprite3, fheroes2::Display::instance(), area.x, area.y );
+    fheroes2::Display & display = fheroes2::Display::instance();
 
-    Text text( std::to_string( hero->GetSpellPoints() ) + "/" + std::to_string( hero->GetMaxSpellPoints() ), Font::SMALL );
-    text.Blit( area.x + sprite3.width() / 2 - text.w() / 2, area.y + 21 );
+    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
+    fheroes2::Blit( sprite3, display, area.x, area.y );
+
+    const fheroes2::Text text( std::to_string( hero->GetSpellPoints() ) + "/" + std::to_string( hero->GetMaxSpellPoints() ), fheroes2::FontType::smallWhite() );
+    text.draw( area.x + sprite3.width() / 2 - text.width() / 2, area.y + 23, display );
 }
 
 void SpellPointsIndicator::QueueEventProcessing() const

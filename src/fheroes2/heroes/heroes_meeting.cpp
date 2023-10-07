@@ -52,10 +52,10 @@
 #include "screen.h"
 #include "skill.h"
 #include "skill_bar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 
 namespace
@@ -117,7 +117,7 @@ public:
         if ( !troop.isValid() )
             return;
 
-        const Text text( std::to_string( troop.GetCount() ), Font::SMALL );
+        const fheroes2::Text text( std::to_string( troop.GetCount() ), fheroes2::FontType::smallWhite() );
 
         const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
         fheroes2::Rect srcrt( 0, 0, mons32.width(), mons32.height() );
@@ -143,7 +143,7 @@ public:
 
         fheroes2::Blit( mons32, srcrt.x, srcrt.y, image, roi.x + offsetX, roi.y + offsetY, srcrt.width, srcrt.height );
 
-        text.Blit( roi.x + ( roi.width - text.w() ) / 2, roi.y + roi.height - 1, image );
+        text.draw( roi.x + ( roi.width - text.width() ) / 2, roi.y + roi.height + 1, image );
 
         if ( isSelected ) {
             spcursor.setPosition( roi.x, roi.y );
@@ -230,8 +230,8 @@ public:
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
         fheroes2::Blit( sprite, image, roi.x + ( roi.width - sprite.width() ) / 2, roi.y + ( roi.height - sprite.height() ) / 2 );
 
-        const Text text( std::to_string( skill.Level() ), Font::SMALL );
-        text.Blit( roi.x + ( roi.width - text.w() ) - 3, roi.y + roi.height - text.h(), image );
+        const fheroes2::Text text( std::to_string( skill.Level() ), fheroes2::FontType::smallWhite() );
+        text.draw( roi.x + ( roi.width - text.width() ) - 3, roi.y + roi.height - text.height() + 2, image );
     }
 
 private:
@@ -267,8 +267,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     std::string message( _( "%{name1} meets %{name2}" ) );
     StringReplace( message, "%{name1}", GetName() );
     StringReplace( message, "%{name2}", otherHero.GetName() );
-    const Text text( message, Font::BIG );
-    text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 27 );
+    const fheroes2::Text text( message, fheroes2::FontType::normalWhite() );
+    text.draw( cur_pt.x + 320 - text.width() / 2, cur_pt.y + 29, display );
 
     const int iconsH1XOffset = 34;
     const int iconsH2XOffset = 566;

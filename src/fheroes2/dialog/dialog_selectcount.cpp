@@ -42,7 +42,6 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -125,8 +124,8 @@ public:
         const fheroes2::Sprite & sprite_edit = fheroes2::AGG::GetICN( ICN::TOWNWIND, 4 );
         fheroes2::Blit( sprite_edit, display, pos.x, pos.y + 4 );
 
-        const Text text( std::to_string( vcur ), Font::BIG );
-        text.Blit( pos.x + ( sprite_edit.width() - text.w() ) / 2, pos.y + 5 );
+        const fheroes2::Text text( std::to_string( vcur ), fheroes2::FontType::normalWhite() );
+        text.draw( pos.x + ( sprite_edit.width() - text.width() ) / 2, pos.y + 7, display );
 
         btnUp.draw();
         btnDn.draw();
@@ -174,15 +173,15 @@ bool Dialog::SelectCount( const std::string & header, uint32_t min, uint32_t max
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    Text text( header, Font::BIG );
+    fheroes2::Text text( header, fheroes2::FontType::normalWhite() );
     const int spacer = 10;
 
-    const FrameBox box( text.h() + spacer + 30, true );
+    const FrameBox box( text.height() + spacer + 30, true );
     SelectValue sel( min, max, cur, step );
 
     const fheroes2::Rect & pos = box.GetArea();
 
-    text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y );
+    text.draw( pos.x + ( pos.width - text.width() ) / 2, pos.y + 2, display );
 
     sel.SetPos( fheroes2::Point( pos.x + 80, pos.y + 30 ) );
     sel.Redraw();
@@ -190,9 +189,9 @@ bool Dialog::SelectCount( const std::string & header, uint32_t min, uint32_t max
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    text.Set( _( "MAX" ), Font::SMALL );
-    const fheroes2::Rect rectMax( pos.x + 173, pos.y + 38, text.w(), text.h() );
-    text.Blit( rectMax.x, rectMax.y );
+    text.set( _( "MAX" ), fheroes2::FontType::smallWhite() );
+    const fheroes2::Rect rectMax( pos.x + 173, pos.y + 38, text.width(), text.height() );
+    text.draw( rectMax.x, rectMax.y + 2, display );
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -242,28 +241,28 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     res.reserve( 48 );
     size_t charInsertPos = 0;
 
-    TextBox titlebox( title, Font::YELLOW_BIG, BOXAREA_WIDTH );
-    TextBox textbox( header, Font::BIG, BOXAREA_WIDTH );
+    const fheroes2::Text titlebox( title, fheroes2::FontType::normalYellow() );
+    const fheroes2::Text textbox( header, fheroes2::FontType::normalWhite() );
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     const fheroes2::Sprite & inputArea = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
-    const int32_t titleHeight = title.empty() ? 0 : titlebox.h() + 10;
-    const FrameBox box( 10 + titleHeight + textbox.h() + 10 + inputArea.height(), true );
+    const int32_t titleHeight = title.empty() ? 0 : titlebox.height( BOXAREA_WIDTH ) + 10;
+    const FrameBox box( 10 + titleHeight + textbox.height( BOXAREA_WIDTH ) + 10 + inputArea.height(), true );
     const fheroes2::Rect & box_rt = box.GetArea();
 
     if ( !title.empty() ) {
-        titlebox.Blit( box_rt.x + ( box_rt.width - textbox.w() ) / 2, box_rt.y + 10 );
+        titlebox.draw( box_rt.x + ( box_rt.width - textbox.width() ) / 2, box_rt.y + 12, BOXAREA_WIDTH, display );
     }
 
     // text
     fheroes2::Point dst_pt;
-    dst_pt.x = box_rt.x + ( box_rt.width - textbox.w() ) / 2;
+    dst_pt.x = box_rt.x;
     dst_pt.y = box_rt.y + 10 + titleHeight;
-    textbox.Blit( dst_pt.x, dst_pt.y );
+    textbox.draw( dst_pt.x, dst_pt.y + 2, BOXAREA_WIDTH, display );
 
-    dst_pt.y = box_rt.y + 10 + titleHeight + textbox.h() + 10;
+    dst_pt.y = box_rt.y + 10 + titleHeight + textbox.height( BOXAREA_WIDTH ) + 10;
     dst_pt.x = box_rt.x + ( box_rt.width - inputArea.width() ) / 2;
     fheroes2::Blit( inputArea, display, dst_pt.x, dst_pt.y );
     const fheroes2::Rect text_rt( dst_pt.x, dst_pt.y, inputArea.width(), inputArea.height() );
@@ -409,13 +408,12 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
 
     const NonFixedFrameBox box( boxHeight, boxYPosition, true );
     SelectValue sel( min, redistributeMax, redistributeCount, 1 );
-    Text text;
 
     const fheroes2::Rect & pos = box.GetArea();
     const int center = pos.x + pos.width / 2;
 
-    text.Set( _( "How many troops to move?" ), Font::BIG );
-    text.Blit( center - text.w() / 2, pos.y );
+    fheroes2::Text text( _( "How many troops to move?" ), fheroes2::FontType::normalWhite() );
+    text.draw( center - text.width() / 2, pos.y + 2, display );
 
     sel.SetPos( fheroes2::Point( pos.x + 70, pos.y + 30 ) );
     sel.Redraw();
@@ -439,8 +437,8 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
             vrts[i] = fheroes2::Rect( center + offset + deltaXStart + i * deltaX, pos.y + 95, spriteWidth, sprites[i].height() );
         }
 
-        text.Set( _( "Fast separation into slots:" ), Font::BIG );
-        text.Blit( center - text.w() / 2, pos.y + 65 );
+        text.set( _( "Fast separation into slots:" ), fheroes2::FontType::normalWhite() );
+        text.draw( center - text.width() / 2, pos.y + 67, display );
 
         for ( uint32_t i = 0; i < freeSlots - 1; ++i ) {
             fheroes2::Blit( sprites[i], display, vrts[i].x, vrts[i].y );

@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -36,7 +37,6 @@
 #include "screen.h"
 #include "settings.h"
 #include "skill.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -77,9 +77,7 @@ int DialogOneSecondary( const Heroes & hero, const std::string & name, const int
 
 int DialogSelectSecondary( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero )
 {
-    std::string header = _( "%{name} has gained a level." );
-    header.append( "\n \n" );
-    header.append( _( "%{skill} +1" ) );
+    std::string header = _( "%{name} has gained a level.\n\n%{skill} +1" );
     StringReplace( header, "%{name}", name );
     StringReplace( header, "%{skill}", Skill::Primary::String( primarySkillType ) );
 
@@ -92,20 +90,15 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
     const fheroes2::Sprite & sprite_skill1 = fheroes2::AGG::GetICN( ICN::SECSKILL, sec1.GetIndexSprite1() );
     const fheroes2::Sprite & sprite_skill2 = fheroes2::AGG::GetICN( ICN::SECSKILL, sec2.GetIndexSprite1() );
 
-    std::string message = _( "You may learn either:" );
-    message.append( "\n%{skill1}\n" );
-    message.append( " " );
-    message.append( _( "or" ) );
-    message.append( " " );
-    message.append( "\n%{skill2}" );
+    std::string message = _( "You may learn either:\n%{skill1}\nor\n%{skill2}" );
     StringReplace( message, "%{skill1}", sec1.GetName() );
     StringReplace( message, "%{skill2}", sec2.GetName() );
 
-    TextBox box1( header, Font::BIG, BOXAREA_WIDTH );
-    TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
+    fheroes2::Text box1( std::move( header ), fheroes2::FontType::normalWhite() );
+    fheroes2::Text box2( std::move( message ), fheroes2::FontType::normalWhite() );
     const int spacer = 10;
 
-    Dialog::FrameBox box( box1.h() + spacer + box2.h() + 10 + sprite_frame.height(), true );
+    Dialog::FrameBox box( box1.height( BOXAREA_WIDTH ) + spacer + box2.height( BOXAREA_WIDTH ) + 10 + sprite_frame.height(), true );
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int buttonLearnIcnID = isEvilInterface ? ICN::BUTTON_SMALL_LEARN_EVIL : ICN::BUTTON_SMALL_LEARN_GOOD;
@@ -122,13 +115,11 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
     const fheroes2::Rect & boxArea = box.GetArea();
     fheroes2::Point pos( boxArea.x, boxArea.y );
 
-    if ( !header.empty() )
-        box1.Blit( pos.x, pos.y );
-    pos.y += box1.h() + spacer;
+    box1.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
+    pos.y += box1.height( BOXAREA_WIDTH ) + spacer;
 
-    if ( !message.empty() )
-        box2.Blit( pos.x, pos.y );
-    pos.y += box2.h() + spacer;
+    box2.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
+    pos.y += box2.height( BOXAREA_WIDTH ) + spacer;
 
     // sprite1
     pos.x = box.GetArea().x + box.GetArea().width / 2 - sprite_frame.width() - 20;
@@ -137,12 +128,10 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
     fheroes2::Rect rect_image1( pos.x, pos.y, sprite_skill1.width(), sprite_skill1.height() );
     fheroes2::Blit( sprite_skill1, display, pos.x, pos.y + 3 );
 
-    Text text;
-    // text
-    text.Set( Skill::Secondary::String( sec1.Skill() ), Font::SMALL );
-    text.Blit( pos.x + ( sprite_skill1.width() - text.w() ) / 2, pos.y + 5 );
-    text.Set( Skill::Level::String( sec1.Level() ), Font::SMALL );
-    text.Blit( pos.x + ( sprite_skill1.width() - text.w() ) / 2, pos.y + sprite_skill1.height() - 12 );
+    fheroes2::Text text{ Skill::Secondary::String( sec1.Skill() ), fheroes2::FontType::smallWhite() };
+    text.draw( pos.x + ( sprite_skill1.width() - text.width() ) / 2, pos.y + 7, display );
+    text.set( Skill::Level::String( sec1.Level() ), fheroes2::FontType::smallWhite() );
+    text.draw( pos.x + ( sprite_skill1.width() - text.width() ) / 2, pos.y + sprite_skill1.height() - 10, display );
 
     // sprite2
     pos.x = box.GetArea().x + box.GetArea().width / 2 + 20;
@@ -152,10 +141,10 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
     fheroes2::Rect rect_image2( pos.x, pos.y, sprite_skill2.width(), sprite_skill2.height() );
     fheroes2::Blit( sprite_skill2, display, pos.x, pos.y + 3 );
     // text
-    Text name_skill2( Skill::Secondary::String( sec2.Skill() ), Font::SMALL );
-    name_skill2.Blit( pos.x + ( sprite_skill2.width() - name_skill2.w() ) / 2, pos.y + 5 );
-    Text name_level2( Skill::Level::String( sec2.Level() ), Font::SMALL );
-    name_level2.Blit( pos.x + ( sprite_skill2.width() - name_level2.w() ) / 2, pos.y + sprite_skill2.height() - 12 );
+    fheroes2::Text name_skill2( Skill::Secondary::String( sec2.Skill() ), fheroes2::FontType::smallWhite() );
+    name_skill2.draw( pos.x + ( sprite_skill2.width() - name_skill2.width() ) / 2, pos.y + 7, display );
+    fheroes2::Text name_level2( Skill::Level::String( sec2.Level() ), fheroes2::FontType::smallWhite() );
+    name_level2.draw( pos.x + ( sprite_skill2.width() - name_level2.width() ) / 2, pos.y + sprite_skill2.height() - 10, display );
 
     // hero button
     pt.x = box.GetArea().x + box.GetArea().width / 2 - 18;
@@ -165,8 +154,8 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
     fheroes2::ButtonSprite button_hero
         = fheroes2::makeButtonWithBackground( pt.x, pt.y, fheroes2::AGG::GetICN( icnHeroes, 0 ), fheroes2::AGG::GetICN( icnHeroes, 1 ), display );
 
-    text.Set( std::to_string( hero.GetSecondarySkills().Count() ) + "/" + std::to_string( HEROESMAXSKILL ), Font::BIG );
-    text.Blit( box.GetArea().x + ( box.GetArea().width - text.w() ) / 2, pt.y - 15 );
+    text.set( std::to_string( hero.GetSecondarySkills().Count() ) + "/" + std::to_string( HEROESMAXSKILL ), fheroes2::FontType::normalWhite() );
+    text.draw( box.GetArea().x + ( box.GetArea().width - text.width() ) / 2, pt.y - 13, display );
 
     button_learn1.draw();
     button_learn2.draw();
