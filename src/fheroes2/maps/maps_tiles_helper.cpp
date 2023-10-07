@@ -3038,4 +3038,60 @@ namespace Maps
 
         tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( monsSpriteIndex ) );
     }
+
+    bool removeMonsterFromTile( Tiles & tile )
+    {
+        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_MONS32 ) {
+            return false;
+        }
+
+        setMonsterCountOnTile( tile, 0 );
+        tile.removeObjects( MP2::OBJ_ICN_TYPE_MONS32 );
+        resetObjectMetadata( tile );
+        tile.setAsEmpty();
+
+        return true;
+    }
+
+    bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint8_t objectsToErase )
+    {
+        const int32_t mapWidth = world.w();
+        const int32_t maxTileId = mapWidth * world.h() - 1;
+        if ( startTileId < 0 || startTileId > maxTileId || endTileId < 0 || endTileId > maxTileId ) {
+            return false;
+        }
+
+        const fheroes2::Point startTileOffset = GetPoint( startTileId );
+        const fheroes2::Point endTileOffset = GetPoint( endTileId );
+
+        const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
+        const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
+        const int32_t endX = std::max( startTileOffset.x, endTileOffset.x );
+        const int32_t endY = std::max( startTileOffset.y, endTileOffset.y );
+
+        bool needRedraw = false;
+
+        for ( int32_t y = startY; y <= endY; ++y ) {
+            const int32_t tileOffset = y * mapWidth;
+            for ( int32_t x = startX; x <= endX; ++x ) {
+                needRedraw |= eraseOjects( world.GetTiles( x + tileOffset ), objectsToErase );
+            }
+        }
+
+        return needRedraw;
+    }
+
+    bool eraseOjects( Tiles & tile, const uint8_t /*objectsToErase*/ )
+    {
+        bool needRedraw = false;
+
+        needRedraw |= updateRoadOnTile( tile, false );
+
+        needRedraw |= updateStreamOnTile( tile, false );
+
+        needRedraw |= removeMonsterFromTile( tile );
+
+        return needRedraw;
+    }
+
 }

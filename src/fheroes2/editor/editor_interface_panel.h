@@ -72,6 +72,11 @@ namespace Interface
             return _selectedInstrument == Instrument::ERASE;
         }
 
+        uint8_t getEraseMask() const
+        {
+            return _eraseMask;
+        }
+
         bool isMonsterSettingMode() const
         {
             return ( _selectedInstrument == OBJECT ) && ( _selectedObject == MONSTERS );
@@ -168,6 +173,20 @@ namespace Interface
             BRUSH_SIZE_COUNT = 4U
         };
 
+        enum EraseMask : uint8_t
+        {
+            ERASE_TERRAIN_OBJECTS = 0x01,
+            ERASE_CASTLES = 0x02,
+            ERASE_MONSTERS = 0x04,
+            ERASE_HEROES = 0x08,
+            ERASE_ARTIFACTS = 0x10,
+            ERASE_STREAMS = 0x20,
+            ERASE_ROADS = 0x40,
+            ERASE_TREASURES = 0x80,
+
+            ERASE_ALL_OBJECTS = ERASE_TERRAIN_OBJECTS | ERASE_CASTLES | ERASE_MONSTERS | ERASE_HEROES | ERASE_ARTIFACTS | ERASE_STREAMS | ERASE_ROADS | ERASE_TREASURES,
+        };
+
         EditorInterface & _interface;
 
         fheroes2::Button _buttonMagnify;
@@ -202,6 +221,7 @@ namespace Interface
         uint8_t _selectedTerrain{ Brush::GRASS };
         uint8_t _selectedObject{ Brush::WATER };
         uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
+        uint8_t _eraseMask{ EraseMask::ERASE_ALL_OBJECTS };
 
         int32_t _monsterId{ Monster::UNKNOWN };
     };
