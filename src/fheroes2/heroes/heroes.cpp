@@ -2028,7 +2028,7 @@ Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) c
         for ( const Heroes * hero : *this ) {
             assert( hero != nullptr );
 
-            // Only regular heroes are available for hire
+            // Only regular (non-campaign) heroes are available for hire
             if ( hero->GetID() > maxHeroId ) {
                 continue;
             }
