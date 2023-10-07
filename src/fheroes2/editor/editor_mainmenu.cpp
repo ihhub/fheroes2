@@ -18,8 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#if defined( WITH_DEBUG )
-
 #include <array>
 #include <cstddef>
 #include <cstdint>
@@ -319,4 +317,3 @@ namespace Editor
         return fheroes2::GameMode::EDITOR_MAIN_MENU;
     }
 }
-#endif
