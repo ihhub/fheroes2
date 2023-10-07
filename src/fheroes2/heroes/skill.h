@@ -59,7 +59,7 @@ namespace Skill
         std::string StringWithBonus( const Heroes & hero, const Secondary & skill );
     }
 
-    class Secondary : public std::pair<int, int>
+    class Secondary final : public std::pair<int, int>
     {
     public:
         enum
@@ -123,11 +123,17 @@ namespace Skill
 
     StreamBase & operator>>( StreamBase &, Secondary & );
 
-    class SecSkills : protected std::vector<Secondary>
+    class SecSkills final : protected std::vector<Secondary>
     {
     public:
         SecSkills();
         explicit SecSkills( int race );
+        SecSkills( const SecSkills & ) = delete;
+
+        ~SecSkills() = default;
+
+        SecSkills & operator=( const SecSkills & ) = delete;
+        SecSkills & operator=( SecSkills && ) = default;
 
         int GetLevel( int skill ) const;
         uint32_t GetValues( int skill ) const;

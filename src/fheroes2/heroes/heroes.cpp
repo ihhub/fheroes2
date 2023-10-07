@@ -429,19 +429,17 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     if ( hasHeroRaceChanged ) {
         _race = raceType;
 
-        // Since the hero's race has been changed, we have to reset the initial spell
+        // Since the hero's race has been changed, the previous initial spell is no longer relevant
         spell_book.clear();
+        bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
 
-        const Spell spell = Skill::Primary::GetInitialSpell( _race );
-        if ( spell.isValid() ) {
-            SpellBookActivate();
-            AppendSpellToBook( spell, true );
-        }
-        else {
-            bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
-        }
+        // Bring the primary skills and the initial spell in line with the new race
+        HeroBase::LoadDefaults( HeroBase::HEROES, _race );
 
-        // Since the hero's race has been changed, we have to reset the default army
+        // Bring the secondary skills in line with the new race
+        secondary_skills = Skill::SecSkills( _race );
+
+        // Assign a default army according to the new hero's race
         army.Reset( true );
     }
 
@@ -1011,7 +1009,6 @@ void Heroes::calculatePath( int32_t dstIdx )
     }
 }
 
-/* if hero in castle */
 const Castle * Heroes::inCastle() const
 {
     return inCastleMutable();
