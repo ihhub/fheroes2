@@ -78,7 +78,9 @@ namespace
         GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
         GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000,
         GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000,
-        GLOBAL_SCREEN_SCALING_TYPE_NEAREST = 0x20000000
+        GLOBAL_SCREEN_SCALING_TYPE_NEAREST = 0x20000000,
+        // TODO: remove this setting once the Editor goes public.
+        GLOBAL_ENABLE_EDITOR = 0x40000000
     };
 }
 
@@ -318,6 +320,10 @@ bool Settings::Read( const std::string & filePath )
 
     if ( config.Exists( "screen scaling type" ) ) {
         setScreenScalingTypeNearest( config.StrParams( "screen scaling type" ) == "nearest" );
+    }
+
+    if ( config.Exists( "editor" ) && config.StrParams( "editor" ) == "beta" ) {
+        _optGlobal.ResetModes( GLOBAL_ENABLE_EDITOR );
     }
 
     return true;
@@ -833,6 +839,11 @@ bool Settings::isHideInterfaceEnabled() const
 bool Settings::isEvilInterfaceEnabled() const
 {
     return _optGlobal.Modes( GLOBAL_EVIL_INTERFACE );
+}
+
+bool Settings::isEditorEnabled() const
+{
+    return _optGlobal.Modes( GLOBAL_ENABLE_EDITOR );
 }
 
 bool Settings::ShowControlPanel() const
