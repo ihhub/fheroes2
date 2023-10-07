@@ -43,8 +43,8 @@ class Heroes;
 class HeroesIndicator
 {
 public:
-    explicit HeroesIndicator( const Heroes * hero_ = nullptr )
-        : hero( hero_ )
+    explicit HeroesIndicator( const Heroes * hero = nullptr )
+        : _hero( hero )
     {
         descriptions.reserve( 256 );
     }
@@ -54,7 +54,7 @@ public:
     void SetHero( const Heroes * hero );
 
 protected:
-    const Heroes * hero;
+    const Heroes * _hero;
     fheroes2::Rect area;
     fheroes2::ImageRestorer back{ fheroes2::Display::instance() };
     std::string descriptions;
