@@ -77,7 +77,7 @@ int DialogOneSecondary( const Heroes & hero, const std::string & name, const int
 
 int DialogSelectSecondary( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero )
 {
-    std::string header = _( "%{name} has gained a level.\n%{skill} +1" );
+    std::string header = _( "%{name} has gained a level.\n\n%{skill} +1" );
     StringReplace( header, "%{name}", name );
     StringReplace( header, "%{skill}", Skill::Primary::String( primarySkillType ) );
 
