@@ -59,7 +59,7 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
         }
 
         int marginLeft = 18;
-        chunk = ( width - marginLeft ) / ( count + ( slotsToSkip * 2 ) );
+        chunk = static_cast<int32_t>( ( width - marginLeft ) / ( count + ( slotsToSkip * 2 ) ) );
 
         slots = troops.Size() + slotsToSkip;
 
