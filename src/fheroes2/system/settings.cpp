@@ -323,7 +323,7 @@ bool Settings::Read( const std::string & filePath )
     }
 
     if ( config.Exists( "editor" ) && config.StrParams( "editor" ) == "beta" ) {
-        _optGlobal.ResetModes( GLOBAL_ENABLE_EDITOR );
+        _optGlobal.SetModes( GLOBAL_ENABLE_EDITOR );
     }
 
     return true;
@@ -472,6 +472,10 @@ std::string Settings::String() const
 
     os << std::endl << "# scaling type: nearest or linear (set by default)" << std::endl;
     os << "screen scaling type = " << ( _optGlobal.Modes( GLOBAL_SCREEN_SCALING_TYPE_NEAREST ) ? "nearest" : "linear" ) << std::endl;
+
+    if ( _optGlobal.Modes( GLOBAL_ENABLE_EDITOR ) ) {
+        os << "editor = beta" << std::endl;
+    }
 
     return os.str();
 }
