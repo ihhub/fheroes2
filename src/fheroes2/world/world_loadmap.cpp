@@ -515,6 +515,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
                     Heroes * hero = nullptr;
 
+                    // Byte 17 determines whether the hero has a custom portrait, and byte 18 contains the custom portrait ID. If the hero has a custom portrait, then we
+                    // should directly use the hero corresponding to this portrait, if possible.
                     if ( pblock[17] && pblock[18] <= Heroes::JARKONAS ) {
                         hero = vec_heroes.Get( pblock[18] );
                     }
@@ -549,6 +551,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     if ( kingdom.AllowRecruitHero( false ) ) {
                         Heroes * hero = nullptr;
 
+                        // Byte 17 determines whether the hero has a custom portrait, and byte 18 contains the custom portrait ID. If the hero has a custom portrait, then
+                        // we should directly use the hero corresponding to this portrait, if possible.
                         if ( pblock[17] && pblock[18] <= Heroes::JARKONAS ) {
                             hero = vec_heroes.Get( pblock[18] );
                         }
