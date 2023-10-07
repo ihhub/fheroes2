@@ -47,7 +47,7 @@ public:
         : hero( hero_ )
     {
         descriptions.reserve( 256 );
-    };
+    }
 
     const fheroes2::Rect & GetArea() const;
     void SetPos( const fheroes2::Point & pt );
