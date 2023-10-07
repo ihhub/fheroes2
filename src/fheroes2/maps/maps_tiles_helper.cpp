@@ -3093,5 +3093,4 @@ namespace Maps
 
         return needRedraw;
     }
-
 }
