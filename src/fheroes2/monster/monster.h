@@ -50,7 +50,7 @@ public:
         LEVEL_4
     };
 
-    enum monster_t
+    enum monster_t : int32_t
     {
         UNKNOWN,
 
@@ -122,17 +122,22 @@ public:
         FIRE_ELEMENT,
         WATER_ELEMENT,
 
-        MONSTER_RND1,
-        MONSTER_RND2,
-        MONSTER_RND3,
-        MONSTER_RND4,
-        MONSTER_RND,
+        // Editor-related monsters.
+        RANDOM_MONSTER,
+        RANDOM_MONSTER_LEVEL_1,
+        RANDOM_MONSTER_LEVEL_2,
+        RANDOM_MONSTER_LEVEL_3,
+        RANDOM_MONSTER_LEVEL_4,
 
         // IMPORTANT! Put all new monsters just above this line.
         MONSTER_COUNT
     };
 
-    Monster( const int m = UNKNOWN );
+    Monster( const int m = UNKNOWN )
+        : id ( m )
+    {
+        // Do nothing;
+    }
     explicit Monster( const Spell & );
     Monster( int race, uint32_t dw );
     virtual ~Monster() = default;
@@ -208,7 +213,12 @@ public:
 
     bool isValid() const
     {
-        return id != UNKNOWN;
+        return id != UNKNOWN && id < MONSTER_COUNT && !isRandomMonster();
+    }
+
+    bool isRandomMonster() const
+    {
+        return ( id >= RANDOM_MONSTER && id <= RANDOM_MONSTER_LEVEL_4 );
     }
 
     bool isElemental() const
