@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-24 16:12+0000\n"
+"POT-Creation-Date: 2023-10-07 13:24+0000\n"
 "PO-Revision-Date: 2023-09-04 09:26+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3041,11 +3041,20 @@ msgstr "%{skill} +1"
 msgid "You have learned %{skill}."
 msgstr "Ngươi đã học %{skill}."
 
-msgid "You may learn either:"
-msgstr "Ngươi có thể học một trong hai:"
+#, fuzzy
+msgid ""
+"%{name} has gained a level.\n"
+"\n"
+"%{skill} +1"
+msgstr "%{name} đã đạt được một mức độ."
 
-msgid "or"
-msgstr "hoặc"
+#, fuzzy
+msgid ""
+"You may learn either:\n"
+"%{skill1}\n"
+"or\n"
+"%{skill2}"
+msgstr "Ngươi có thể học một trong hai:"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -3560,6 +3569,15 @@ msgstr "Lưu bản đồ hiện tại."
 
 msgid "Quit out of the map editor."
 msgstr "Thoát khỏi biên tập bản đồ."
+
+msgid "Monster"
+msgstr "Quái vật"
+
+msgid "Monsters cannot be placed on water."
+msgstr ""
+
+msgid "Choose a tile which does not contain any objects."
+msgstr ""
 
 msgid "Ocean Objects"
 msgstr "Đối tượng Đại dương"
@@ -4221,7 +4239,7 @@ msgstr ""
 msgid "hotkey|next hero"
 msgstr ""
 
-msgid "hotkey|continue hero movement"
+msgid "hotkey|start hero movement"
 msgstr ""
 
 msgid "hotkey|cast adventure spell"
@@ -4889,10 +4907,13 @@ msgstr "Tướng Tiếp theo"
 msgid "Select the next Hero."
 msgstr "Chọn Tướng tiếp theo."
 
-msgid "Continue Movement"
-msgstr "Tiếp tục Di chuyển"
+#, fuzzy
+msgid "Hero Movement"
+msgstr "Bóng Di chuyển"
 
-msgid "Continue the Hero's movement along the current path."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
 msgstr ""
 
 msgid "Kingdom Summary"
@@ -7258,9 +7279,6 @@ msgstr[0] "Bánh xe Nước"
 
 msgid "Mines"
 msgstr "Mỏ"
-
-msgid "Monster"
-msgstr "Quái vật"
 
 msgid "Obelisk"
 msgstr "Đài tưởng niệm"
