@@ -381,7 +381,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
                 return fheroes2::GameMode::EDITOR_MAIN_MENU;
             }
 
-            fheroes2::showStandardTextMessage( _( "Editor" ), _( "The Editor requires \"The Price of Loyalty\" version of the game." ), Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Editor" ), _( "The Editor requires \"The Price of Loyalty\" expansion files to work." ), Dialog::OK );
         }
 #endif
 
