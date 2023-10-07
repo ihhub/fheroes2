@@ -376,7 +376,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         }
 #if defined( WITH_DEBUG )
         // Editor is still in development.
-        else if ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) ) {
+        else if ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) && Game::isPriceOfLoyaltyCampaignPresent() ) {
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 #endif
