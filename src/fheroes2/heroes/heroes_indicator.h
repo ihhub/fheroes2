@@ -97,7 +97,7 @@ private:
 class ExperienceIndicator : public HeroesIndicator
 {
 public:
-    explicit ExperienceIndicator( const Heroes * h = nullptr );
+    explicit ExperienceIndicator( const Heroes * hero = nullptr );
 
     void Redraw() const;
     void QueueEventProcessing() const;
@@ -106,7 +106,7 @@ public:
 class SpellPointsIndicator : public HeroesIndicator
 {
 public:
-    explicit SpellPointsIndicator( const Heroes * h = nullptr );
+    explicit SpellPointsIndicator( const Heroes * hero = nullptr );
 
     void Redraw() const;
     void QueueEventProcessing() const;

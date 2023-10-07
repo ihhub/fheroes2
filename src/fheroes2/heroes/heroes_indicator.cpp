@@ -63,9 +63,9 @@ const fheroes2::Rect & HeroesIndicator::GetArea() const
     return area;
 }
 
-void HeroesIndicator::SetHero( const Heroes * h )
+void HeroesIndicator::SetHero( const Heroes * hero )
 {
-    _hero = h;
+    _hero = hero;
 }
 
 void HeroesIndicator::SetPos( const fheroes2::Point & pt )
@@ -180,8 +180,8 @@ void MoraleIndicator::QueueEventProcessing( const MoraleIndicator & indicator )
     }
 }
 
-ExperienceIndicator::ExperienceIndicator( const Heroes * h )
-    : HeroesIndicator( h )
+ExperienceIndicator::ExperienceIndicator( const Heroes * hero )
+    : HeroesIndicator( hero )
 {
     area.width = 35;
     area.height = 36;
@@ -220,8 +220,8 @@ void ExperienceIndicator::QueueEventProcessing() const
     }
 }
 
-SpellPointsIndicator::SpellPointsIndicator( const Heroes * h )
-    : HeroesIndicator( h )
+SpellPointsIndicator::SpellPointsIndicator( const Heroes * hero )
+    : HeroesIndicator( hero )
 {
     area.width = 35;
     area.height = 36;
