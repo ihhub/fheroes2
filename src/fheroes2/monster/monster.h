@@ -134,7 +134,7 @@ public:
     };
 
     Monster( const int m = UNKNOWN )
-        : id ( m )
+        : id( m )
     {
         // Do nothing;
     }
