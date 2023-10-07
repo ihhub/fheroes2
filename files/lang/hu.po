@@ -10383,13 +10383,3 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "or"
-#~ msgstr "Erőd"
-
-#~ msgid "Continue Movement"
-#~ msgstr "Mozgás folytatása"
-
-#~ msgid "Continue the Hero's movement along the current path."
-#~ msgstr "Folytatódik a hős menete a jelenlegi úton."

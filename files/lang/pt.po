@@ -10109,12 +10109,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "or"
-#~ msgstr "ou"
-
-#~ msgid "Continue Movement"
-#~ msgstr "Continuar a Andar"
-
-#~ msgid "Continue the Hero's movement along the current path."
-#~ msgstr "Continue o movimento do herói ao longo do trajeto atual."

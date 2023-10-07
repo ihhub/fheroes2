@@ -10776,15 +10776,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "or"
-#~ msgstr "или"
-
-#~ msgid "Continue Movement"
-#~ msgstr "Продолжить движение"
-
-#~ msgid "Continue the Hero's movement along the current path."
-#~ msgstr "Продолжить движение по намеченному пути."
-
-#~ msgid "Undo your last action. Press again to redo the action."
-#~ msgstr "Отменить предыдущее действие. Повторное нажатие повторяет действие."

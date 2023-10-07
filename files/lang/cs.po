@@ -10072,12 +10072,3 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "or"
-#~ msgstr "nebo"
-
-#~ msgid "Continue Movement"
-#~ msgstr "Pokračovat v pohybu"
-
-#~ msgid "Continue the Hero's movement along the current path."
-#~ msgstr "Pokračování ve vytyčené cestě Hrdiny."

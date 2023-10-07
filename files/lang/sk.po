@@ -10721,17 +10721,3 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "or"
-#~ msgstr "alebo"
-
-#~ msgid "Continue Movement"
-#~ msgstr "Pokračovať v pohybe"
-
-#~ msgid "Continue the Hero's movement along the current path."
-#~ msgstr "Pokračovať po vytýčenej trase Hrdinu."
-
-#~ msgid "Undo your last action. Press again to redo the action."
-#~ msgstr ""
-#~ "Vrátiť späť tvoju poslednú akciu. Ak chceš akciu zopakovať, stlač "
-#~ "tlačidlo znova."

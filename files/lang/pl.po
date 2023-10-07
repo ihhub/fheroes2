@@ -10871,12 +10871,3 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "or"
-#~ msgstr "lub"
-
-#~ msgid "Continue Movement"
-#~ msgstr "Kontynuuj ruch"
-
-#~ msgid "Continue the Hero's movement along the current path."
-#~ msgstr "Kontynuuj ruch bohatera wzdłuż wybranej ścieżki."

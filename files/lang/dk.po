@@ -10938,15 +10938,3 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "or"
-#~ msgstr "eller"
-
-#~ msgid "Continue Movement"
-#~ msgstr "Fortsæt rejse."
-
-#~ msgid "Continue the Hero's movement along the current path."
-#~ msgstr "Fortsæt heltens rejse langs den nuværende sti."
-
-#~ msgid "Undo your last action. Press again to redo the action."
-#~ msgstr "Fortryd din sidste handling. Tryk igen for at gentage handlingen."

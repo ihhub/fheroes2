@@ -11065,12 +11065,3 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "or"
-#~ msgstr "ou"
-
-#~ msgid "Continue Movement"
-#~ msgstr "Continuer le mouvement"
-
-#~ msgid "Continue the Hero's movement along the current path."
-#~ msgstr "Continue le déplacement du héros le long du chemin actuel."
