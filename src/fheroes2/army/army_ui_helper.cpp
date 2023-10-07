@@ -33,7 +33,7 @@
 #include "image.h"
 #include "ui_text.h"
 
-void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_t cy, const uint32_t width, uint32_t first, uint32_t count, const bool isCompact,
+void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_t cy, const int32_t width, uint32_t first, uint32_t count, const bool isCompact,
                                  const bool isDetailedView, const bool isGarrisonView, const uint32_t thievesGuildsCount, Image & output )
 {
     if ( !troops.isValid() ) {
@@ -47,7 +47,7 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
     int chunk = static_cast<int32_t>( width / count );
     size_t slots = troops.Size();
     int slotsToSkip = 1;
-    Troops reversedTroops;
+
     int slotOffset = 1;
 
     if ( !isCompact ) {
@@ -59,26 +59,12 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
         }
 
         int marginLeft = 18;
-        chunk = static_cast<int32_t>( ( width - marginLeft ) / ( count + ( slotsToSkip * 2 ) ) );
+        chunk =  ( width - marginLeft ) / ( count + ( slotsToSkip * 2 ) ) ;
 
-        if ( troops.Size() > 0 ) {
-            for ( size_t i = troops.Size() - 1;; ) {
-                const Troop * monster = troops.GetTroop( i );
-                reversedTroops.PushBack( *monster, monster->GetCount() );
-
-                if ( i > 0 ) {
-                    --i;
-                }
-                else {
-                    break;
-                }
-            }
-        }
-
-        slots = reversedTroops.Size() + slotsToSkip;
+        slots = troops.Size() + slotsToSkip;
 
         cx -= chunk / 2;
-        cx += static_cast<int32_t>( width );
+        cx += width;
         slotOffset = slotsToSkip;
     }
 
@@ -90,9 +76,12 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
             continue;
         }
 
-        const Troop * troop = troops.GetTroop( slot );
-        if ( !isCompact ) {
-            troop = reversedTroops.GetTroop( slot - slotOffset );
+        const Troop * troop = nullptr;
+        if ( isCompact ) {
+            troop = troops.GetTroop( slot );
+        }
+        else {
+            troop = troops.GetTroop( ( troops.Size() - 1 ) - slot + slotOffset ); 
         }
 
         if ( troop == nullptr || !troop->isValid() ) {
@@ -131,21 +120,19 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
             fheroes2::Blit( monster, output, cx + offset, cy + offsetY + monster.y() );
             text.draw( cx + chunk - text.width() - offset, cy + 23, output );
         }
-        else {
-            if ( slotsToSkip == 0 ) {
-                const int offsetY = 28 - monster.height();
-                int OffsetX = -14;
+        else if ( slotsToSkip == 0 ) {
+            const int offsetY = 28 - monster.height();
+            int offsetX = -14;
 
-                // Center the monster if there is only one
-                if ( count == 1 && slot == 1 ) {
-                    OffsetX = -10;
-                }
-
-                int x = ( cx - ( monster.width() / 2 ) ) + OffsetX;
-                int y = cy + offsetY + monster.y();
-                fheroes2::Blit( monster, output, x, y );
-                text.draw( ( cx - text.width() / 2 ) + OffsetX, cy + 29, output );
+            // Center the monster if there is only one
+            if ( count == 1 && slot == 1 ) {
+                offsetX = -10;
             }
+
+            int x = ( cx - ( monster.width() / 2 ) ) + offsetX;
+            int y = cy + offsetY + monster.y();
+            fheroes2::Blit( monster, output, x, y );
+            text.draw( ( cx - text.width() / 2 ) + offsetX, cy + 29, output );
         }
         if ( isCompact ) {
             cx += chunk;
