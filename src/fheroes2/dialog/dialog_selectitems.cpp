@@ -471,7 +471,7 @@ Artifact Dialog::selectArtifact( const int artifactId /* = Artifact::UNKNOWN */ 
 
 Monster Dialog::selectMonster( const int monsterId, const bool includeRandomMonsters )
 {
-    std::vector<int> monsters( static_cast<int>( Monster::MONSTER_COUNT - 1 ), Monster::UNKNOWN );
+    std::vector<int> monsters( Monster::MONSTER_COUNT - 1, Monster::UNKNOWN );
 
     // Skip Monster::UNKNOWN and start from the next one.
     std::iota( monsters.begin(), monsters.end(), Monster::UNKNOWN + 1 );

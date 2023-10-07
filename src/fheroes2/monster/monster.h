@@ -136,7 +136,7 @@ public:
     Monster( const int m = UNKNOWN )
         : id( m )
     {
-        // Do nothing;
+        // Do nothing.
     }
     explicit Monster( const Spell & );
     Monster( int race, uint32_t dw );
