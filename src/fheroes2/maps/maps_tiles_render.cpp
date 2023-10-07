@@ -62,7 +62,7 @@ namespace
         case ICN::UNKNOWN:
         case ICN::MONS32:
         case ICN::BOAT32:
-        case ICN::MINIHERO:
+        // case ICN::MINIHERO:
             // Either it is an invalid sprite or a sprite which needs to be divided into tiles in order to properly render it.
             return true;
         default:

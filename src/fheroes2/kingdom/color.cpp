@@ -115,6 +115,29 @@ int Color::GetFirst( int colors )
     return NONE;
 }
 
+uint8_t Color::IndexToColor( const int byte )
+{
+    switch ( byte ) {
+    case 0:
+        return BLUE;
+    case 1:
+        return GREEN;
+    case 2:
+        return RED;
+    case 3:
+        return YELLOW;
+    case 4:
+        return ORANGE;
+    case 5:
+        return PURPLE;
+
+    default:
+        break;
+    }
+
+    return Color::NONE;
+}
+
 const char * fheroes2::getBarrierColorName( const int color )
 {
     switch ( color ) {

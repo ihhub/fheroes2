@@ -77,15 +77,15 @@ namespace Interface
             return ( _selectedInstrument == OBJECT ) && ( _selectedObject == MONSTERS );
         }
 
-        int32_t getMonsterId() const
+        bool isHeroSettingMode() const
         {
-            return _monsterId;
+            return ( _selectedInstrument == OBJECT ) && ( _selectedObject == HEROES );
         }
 
         bool showAreaSelectRect() const
         {
             return _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD
-                   || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode();
+                   || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode() || isHeroSettingMode();
         }
 
         bool useMouseDragMovement() const
@@ -104,6 +104,16 @@ namespace Interface
         // Do not call this method directly, use Interface::Editor::redraw() instead.
         // The name of this method starts from _ on purpose to do not mix with other public methods.
         void _redraw() const;
+
+        int32_t getMonsterId() const
+        {
+            return _monsterId;
+        }
+
+        int32_t getHeroId() const
+        {
+            return _heroId;
+        }
 
     private:
         static int _getGroundId( const uint8_t brushId );
@@ -204,5 +214,7 @@ namespace Interface
         uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
 
         int32_t _monsterId{ Monster::UNKNOWN };
+
+        int32_t _heroId{ 0 };
     };
 }

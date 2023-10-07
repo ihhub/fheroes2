@@ -105,3 +105,30 @@ int Race::Rand()
 
     return Race::NECR;
 }
+
+uint8_t Race::IndexToRace( const int byte )
+{
+    switch ( byte ) {
+    case 0:
+        return Race::KNGT;
+    case 1:
+        return Race::BARB;
+    case 2:
+        return Race::SORC;
+    case 3:
+        return Race::WRLK;
+    case 4:
+        return Race::WZRD;
+    case 5:
+        return Race::NECR;
+    case 6:
+        return Race::MULT;
+    case 7:
+        return Race::RAND;
+
+    default:
+        break;
+    }
+
+    return Race::NONE;
+}

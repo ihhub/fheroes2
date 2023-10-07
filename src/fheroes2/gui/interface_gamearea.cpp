@@ -494,7 +494,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             switch ( objectType ) {
             case MP2::OBJ_HEROES: {
-                if ( !drawHeroes ) {
+                if ( !drawHeroes || _interface.isEditor() ) {
                     continue;
                 }
 

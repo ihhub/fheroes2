@@ -62,17 +62,19 @@ namespace Color
         ALL = BLUE | GREEN | RED | YELLOW | ORANGE | PURPLE
     };
 
-    std::string String( int );
-    int Count( int );
-    int GetIndex( int );
-    int GetFirst( int );
-    int FromInt( int );
+    std::string String( int color );
+    int Count( int colors );
+    int GetIndex( int color );
+    int GetFirst( int colors );
+    int FromInt( int col );
+
+    uint8_t IndexToColor( const int byte );
 }
 
 class Colors : public std::vector<int>
 {
 public:
-    explicit Colors( int = Color::ALL );
+    explicit Colors( int colors = Color::ALL );
 };
 
 class Kingdom;

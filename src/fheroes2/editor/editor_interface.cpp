@@ -614,6 +614,21 @@ namespace Interface
                 _redraw |= mapUpdateFlags;
             }
         }
+        else if ( _editorPanel.isHeroSettingMode() ) {
+            if ( tile.isWater() ) {
+                fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Heroes cannot be placed on water." ), Dialog::OK );
+            }
+            else if ( !Maps::isClearGround( tile ) ) {
+                fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+            }
+            else if ( _editorPanel.getHeroId() > 0 ) {
+                const fheroes2::ActionCreator action( _historyManager );
+
+                Maps::setEditorHeroOnTile( tile, _editorPanel.getHeroId() );
+
+                _redraw |= mapUpdateFlags;
+            }
+        }
     }
 
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const

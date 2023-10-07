@@ -23,6 +23,8 @@
 #ifndef H2RACE_H
 #define H2RACE_H
 
+#include <cstdint>
+
 namespace Race
 {
     enum
@@ -39,9 +41,11 @@ namespace Race
         ALL = KNGT | BARB | SORC | WRLK | WZRD | NECR
     };
 
-    const char * String( int );
-    const char * DoubleLinedString( int );
+    const char * String( int race );
+    const char * DoubleLinedString( int race );
     int Rand();
+
+    uint8_t IndexToRace( const int byte );
 }
 
 #endif
