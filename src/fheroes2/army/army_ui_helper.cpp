@@ -59,7 +59,7 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
         }
 
         int marginLeft = 18;
-        chunk =  ( width - marginLeft ) / ( count + ( slotsToSkip * 2 ) ) ;
+        chunk = ( width - marginLeft ) / ( count + ( slotsToSkip * 2 ) );
 
         slots = troops.Size() + slotsToSkip;
 
@@ -81,7 +81,7 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
             troop = troops.GetTroop( slot );
         }
         else {
-            troop = troops.GetTroop( ( troops.Size() - 1 ) - slot + slotOffset ); 
+            troop = troops.GetTroop( ( troops.Size() - 1 ) - slot + slotOffset );
         }
 
         if ( troop == nullptr || !troop->isValid() ) {
