@@ -74,24 +74,6 @@ uint32_t Monster::GetMissileICN( uint32_t monsterID )
     return ICN::UNKNOWN;
 }
 
-Monster::Monster( const int m )
-    : id( UNKNOWN )
-{
-    if ( m <= WATER_ELEMENT ) {
-        id = m;
-    }
-    else if ( MONSTER_RND1 == m )
-        id = Rand( LevelType::LEVEL_1 ).GetID();
-    else if ( MONSTER_RND2 == m )
-        id = Rand( LevelType::LEVEL_2 ).GetID();
-    else if ( MONSTER_RND3 == m )
-        id = Rand( LevelType::LEVEL_3 ).GetID();
-    else if ( MONSTER_RND4 == m )
-        id = Rand( LevelType::LEVEL_4 ).GetID();
-    else if ( MONSTER_RND == m )
-        id = Rand( LevelType::LEVEL_ANY ).GetID();
-}
-
 Monster::Monster( const Spell & sp )
     : id( UNKNOWN )
 {
@@ -620,7 +602,7 @@ Monster::LevelType Monster::GetRandomUnitLevel() const
     case SKELETON:
     case ZOMBIE:
     case ROGUE:
-    case MONSTER_RND1:
+    case RANDOM_MONSTER_LEVEL_1:
         return LevelType::LEVEL_1;
 
     case RANGER:
@@ -638,7 +620,7 @@ Monster::LevelType Monster::GetRandomUnitLevel() const
     case MUTANT_ZOMBIE:
     case MUMMY:
     case NOMAD:
-    case MONSTER_RND2:
+    case RANDOM_MONSTER_LEVEL_2:
         return LevelType::LEVEL_2;
 
     case SWORDSMAN:
@@ -668,7 +650,7 @@ Monster::LevelType Monster::GetRandomUnitLevel() const
     case AIR_ELEMENT:
     case FIRE_ELEMENT:
     case WATER_ELEMENT:
-    case MONSTER_RND3:
+    case RANDOM_MONSTER_LEVEL_3:
         return LevelType::LEVEL_3;
 
     case PALADIN:
@@ -685,10 +667,10 @@ Monster::LevelType Monster::GetRandomUnitLevel() const
     case POWER_LICH:
     case BONE_DRAGON:
     case GENIE:
-    case MONSTER_RND4:
+    case RANDOM_MONSTER_LEVEL_4:
         return LevelType::LEVEL_4;
 
-    case MONSTER_RND:
+    case RANDOM_MONSTER:
         switch ( Rand::Get( 0, 3 ) ) {
         default:
             return LevelType::LEVEL_1;
