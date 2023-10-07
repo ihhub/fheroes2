@@ -39,8 +39,8 @@
 #include "image.h"
 #include "math_base.h"
 #include "spell.h"
-#include "text.h"
 #include "ui_button.h"
+#include "ui_text.h"
 
 class Castle;
 class HeroBase;
@@ -190,17 +190,17 @@ namespace Battle
 
         const std::string & GetMessage() const
         {
-            return message;
+            return _lastMessage;
         }
 
         void clear();
 
     private:
-        Text bar1;
-        Text bar2;
+        fheroes2::Text _upperText;
+        fheroes2::Text _lowerText;
         const fheroes2::Sprite & back1;
         const fheroes2::Sprite & back2;
-        std::string message;
+        std::string _lastMessage;
         StatusListBox * listlog;
     };
 

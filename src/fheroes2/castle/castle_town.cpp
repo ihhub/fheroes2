@@ -25,6 +25,7 @@
 #include <cstdint>
 #include <functional>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "army.h"
@@ -50,7 +51,6 @@
 #include "settings.h"
 #include "skill.h"
 #include "statusbar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -74,7 +74,7 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     const int spacer = 10;
     const fheroes2::Sprite & portrait_frame = fheroes2::AGG::GetICN( ICN::SURRENDR, 4 );
 
-    TextBox recruitHeroText( _( "Recruit Hero" ), Font::YELLOW_BIG, BOXAREA_WIDTH );
+    fheroes2::Text recruitHeroText( _( "Recruit Hero" ), fheroes2::FontType::normalYellow() );
 
     uint32_t count = hero->GetCountArtifacts();
     if ( hero->hasArtifact( Artifact::MAGIC_BOOK ) )
@@ -94,42 +94,40 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     StringReplace( str, "%{race}", Race::String( hero->GetRace() ) );
     StringReplace( str, "%{count}", count );
 
-    TextBox heroDescriptionText( str, Font::BIG, BOXAREA_WIDTH );
+    fheroes2::Text heroDescriptionText( std::move( str ), fheroes2::FontType::normalWhite() );
 
     Resource::BoxSprite rbs( PaymentConditions::RecruitHero(), BOXAREA_WIDTH );
 
-    Dialog::FrameBox box( recruitHeroText.h() + spacer + portrait_frame.height() + spacer + heroDescriptionText.h() + spacer + rbs.GetArea().height, true );
-    const fheroes2::Rect & box_rt = box.GetArea();
-    LocalEvent & le = LocalEvent::Get();
-    fheroes2::Point dst_pt;
+    const int32_t dialogHeight = recruitHeroText.height( BOXAREA_WIDTH ) + spacer + portrait_frame.height() + spacer + heroDescriptionText.height( BOXAREA_WIDTH )
+                                 + spacer + rbs.GetArea().height;
 
-    dst_pt.x = box_rt.x + ( box_rt.width - recruitHeroText.w() ) / 2;
-    dst_pt.y = box_rt.y;
-    recruitHeroText.Blit( dst_pt.x, dst_pt.y );
+    Dialog::FrameBox box( dialogHeight, true );
+    const fheroes2::Rect & dialogRoi = box.GetArea();
+
+    recruitHeroText.draw( dialogRoi.x, dialogRoi.y + 2, BOXAREA_WIDTH, display );
 
     // portrait and frame
-    dst_pt.x = box_rt.x + ( box_rt.width - portrait_frame.width() ) / 2;
-    dst_pt.y = dst_pt.y + recruitHeroText.h() + spacer;
-    fheroes2::Blit( portrait_frame, display, dst_pt.x, dst_pt.y );
+    fheroes2::Point pos{ dialogRoi.x + ( dialogRoi.width - portrait_frame.width() ) / 2, dialogRoi.y + recruitHeroText.height( BOXAREA_WIDTH ) + spacer };
+    fheroes2::Blit( portrait_frame, display, pos.x, pos.y );
 
-    const fheroes2::Rect heroPortraitArea( dst_pt.x, dst_pt.y, portrait_frame.width(), portrait_frame.height() );
-    dst_pt.x = dst_pt.x + 5;
-    dst_pt.y = dst_pt.y + 6;
-    hero->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
+    const fheroes2::Rect heroPortraitArea( pos.x, pos.y, portrait_frame.width(), portrait_frame.height() );
+    pos.x = pos.x + 5;
+    pos.y = pos.y + 6;
+    hero->PortraitRedraw( pos.x, pos.y, PORT_BIG, display );
 
-    dst_pt.x = box_rt.x;
-    dst_pt.y = dst_pt.y + portrait_frame.height() + spacer;
-    heroDescriptionText.Blit( dst_pt.x, dst_pt.y );
+    pos.x = dialogRoi.x;
+    pos.y = pos.y + portrait_frame.height() + spacer;
+    heroDescriptionText.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
 
-    rbs.SetPos( dst_pt.x, dst_pt.y + heroDescriptionText.h() + spacer );
+    rbs.SetPos( pos.x, pos.y + heroDescriptionText.height( BOXAREA_WIDTH ) + spacer );
     rbs.Redraw();
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const int okayButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
-    dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( okayButtonIcnID, 0 ).height();
-    fheroes2::Button button1( dst_pt.x, dst_pt.y, okayButtonIcnID, 0, 1 );
+    pos.x = dialogRoi.x;
+    pos.y = dialogRoi.y + dialogRoi.height - fheroes2::AGG::GetICN( okayButtonIcnID, 0 ).height();
+    fheroes2::Button button1( pos.x, pos.y, okayButtonIcnID, 0, 1 );
 
     if ( !AllowBuyHero() ) {
         button1.disable();
@@ -137,16 +135,16 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
 
     const int cancelButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
 
-    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).width();
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).height();
-    fheroes2::Button button2( dst_pt.x, dst_pt.y, cancelButtonIcnID, 0, 1 );
+    pos.x = dialogRoi.x + dialogRoi.width - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).width();
+    pos.y = dialogRoi.y + dialogRoi.height - fheroes2::AGG::GetICN( cancelButtonIcnID, 0 ).height();
+    fheroes2::Button button2( pos.x, pos.y, cancelButtonIcnID, 0, 1 );
 
     button1.draw();
     button2.draw();
 
     display.render();
 
-    // message loop
+    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
         le.MousePressLeft( button1.area() ) ? button1.drawOnPress() : button1.drawOnRelease();
         le.MousePressLeft( button2.area() ) ? button2.drawOnPress() : button2.drawOnRelease();
@@ -339,41 +337,37 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     fheroes2::MovableSprite cursorFormat( fheroes2::AGG::GetICN( ICN::HSICONS, 11 ) );
 
     if ( isBuild( BUILD_CAPTAIN ) ) {
-        Text text( Skill::Primary::String( Skill::Primary::ATTACK ) + std::string( " " ), Font::SMALL );
+        const int32_t skillValueOffsetX = 90;
+        const int32_t skillOffsetY = 12;
+
+        fheroes2::Text text( Skill::Primary::String( Skill::Primary::ATTACK ), fheroes2::FontType::smallWhite() );
         dst_pt.x = cur_pt.x + 535;
-        dst_pt.y = cur_pt.y + 168;
-        text.Blit( dst_pt );
+        dst_pt.y = cur_pt.y + 170;
+        text.draw( dst_pt.x, dst_pt.y, display );
 
-        text.Set( std::to_string( captain.GetAttack() ) );
-        dst_pt.x += 90;
-        text.Blit( dst_pt );
+        text.set( std::to_string( captain.GetAttack() ), fheroes2::FontType::smallWhite() );
+        text.draw( dst_pt.x + skillValueOffsetX, dst_pt.y, display );
 
-        text.Set( Skill::Primary::String( Skill::Primary::DEFENSE ) + std::string( " " ) );
-        dst_pt.x = cur_pt.x + 535;
-        dst_pt.y += 12;
-        text.Blit( dst_pt );
+        dst_pt.y += skillOffsetY;
+        text.set( Skill::Primary::String( Skill::Primary::DEFENSE ), fheroes2::FontType::smallWhite() );
+        text.draw( dst_pt.x, dst_pt.y, display );
 
-        text.Set( std::to_string( captain.GetDefense() ) );
-        dst_pt.x += 90;
-        text.Blit( dst_pt );
+        text.set( std::to_string( captain.GetDefense() ), fheroes2::FontType::smallWhite() );
+        text.draw( dst_pt.x + skillValueOffsetX, dst_pt.y, display );
 
-        text.Set( Skill::Primary::String( Skill::Primary::POWER ) + std::string( " " ) );
-        dst_pt.x = cur_pt.x + 535;
-        dst_pt.y += 12;
-        text.Blit( dst_pt );
+        dst_pt.y += skillOffsetY;
+        text.set( Skill::Primary::String( Skill::Primary::POWER ), fheroes2::FontType::smallWhite() );
+        text.draw( dst_pt.x, dst_pt.y, display );
 
-        text.Set( std::to_string( captain.GetPower() ) );
-        dst_pt.x += 90;
-        text.Blit( dst_pt );
+        text.set( std::to_string( captain.GetPower() ), fheroes2::FontType::smallWhite() );
+        text.draw( dst_pt.x + skillValueOffsetX, dst_pt.y, display );
 
-        text.Set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ) + std::string( " " ) );
-        dst_pt.x = cur_pt.x + 535;
-        dst_pt.y += 12;
-        text.Blit( dst_pt );
+        dst_pt.y += skillOffsetY;
+        text.set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ), fheroes2::FontType::smallWhite() );
+        text.draw( dst_pt.x, dst_pt.y, display );
 
-        text.Set( std::to_string( captain.GetKnowledge() ) );
-        dst_pt.x += 90;
-        text.Blit( dst_pt );
+        text.set( std::to_string( captain.GetKnowledge() ), fheroes2::FontType::smallWhite() );
+        text.draw( dst_pt.x + skillValueOffsetX, dst_pt.y, display );
 
         fheroes2::Blit( spriteSpreadArmyFormat, display, rectSpreadArmyFormat.x, rectSpreadArmyFormat.y );
         fheroes2::Blit( spriteGroupedArmyFormat, display, rectGroupedArmyFormat.x, rectGroupedArmyFormat.y );

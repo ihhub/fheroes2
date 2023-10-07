@@ -87,7 +87,7 @@ void Cursor::setCustomImage( const fheroes2::Image & image, const fheroes2::Poin
 {
     theme = NONE;
 
-    fheroes2::cursor().update( image, 0, 0 );
+    fheroes2::cursor().update( image, -offset.x, -offset.y );
 
     // Immediately apply new mouse offset.
     const fheroes2::Point & currentPos = LocalEvent::Get().GetMouseCursor();

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-24 16:12+0000\n"
+"POT-Creation-Date: 2023-10-07 13:24+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3128,11 +3128,20 @@ msgstr "%{skill} +1"
 msgid "You have learned %{skill}."
 msgstr "Vous avez appris %{skill}."
 
-msgid "You may learn either:"
-msgstr "Vous pouvez apprendre :"
+#, fuzzy
+msgid ""
+"%{name} has gained a level.\n"
+"\n"
+"%{skill} +1"
+msgstr "%{name} a gagné un niveau."
 
-msgid "or"
-msgstr "ou"
+#, fuzzy
+msgid ""
+"You may learn either:\n"
+"%{skill1}\n"
+"or\n"
+"%{skill2}"
+msgstr "Vous pouvez apprendre :"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -3664,6 +3673,15 @@ msgid "Save the current map."
 msgstr "Enregistrer le jeu en cours."
 
 msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Monster"
+msgstr "Monstre"
+
+msgid "Monsters cannot be placed on water."
+msgstr ""
+
+msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
 msgid "Ocean Objects"
@@ -4363,7 +4381,7 @@ msgid "hotkey|next hero"
 msgstr "Afficher le héros suivant"
 
 #, fuzzy
-msgid "hotkey|continue hero movement"
+msgid "hotkey|start hero movement"
 msgstr "Continuer le mouvement"
 
 #, fuzzy
@@ -5112,11 +5130,14 @@ msgstr "Héros suivant"
 msgid "Select the next Hero."
 msgstr "Passer au héros suivant."
 
-msgid "Continue Movement"
-msgstr "Continuer le mouvement"
+#, fuzzy
+msgid "Hero Movement"
+msgstr "Ombre de portée"
 
-msgid "Continue the Hero's movement along the current path."
-msgstr "Continue le déplacement du héros le long du chemin actuel."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
+msgstr ""
 
 msgid "Kingdom Summary"
 msgstr "Informations sur votre royaume"
@@ -8056,9 +8077,6 @@ msgstr[1] "Roue hydraulique"
 
 msgid "Mines"
 msgstr "Mines"
-
-msgid "Monster"
-msgstr "Monstre"
 
 msgid "Obelisk"
 msgstr "Obélisque"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-24 16:12+0000\n"
+"POT-Creation-Date: 2023-10-07 13:24+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3014,11 +3014,18 @@ msgstr ""
 msgid "You have learned %{skill}."
 msgstr "Você aprendeu ${skill}."
 
-msgid "You may learn either:"
+msgid ""
+"%{name} has gained a level.\n"
+"\n"
+"%{skill} +1"
 msgstr ""
 
-msgid "or"
-msgstr "ou"
+msgid ""
+"You may learn either:\n"
+"%{skill1}\n"
+"or\n"
+"%{skill2}"
+msgstr ""
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -3560,6 +3567,15 @@ msgid "Save the current map."
 msgstr "Salvar o jogo atual."
 
 msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Monster"
+msgstr ""
+
+msgid "Monsters cannot be placed on water."
+msgstr ""
+
+msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
 msgid "Ocean Objects"
@@ -4262,7 +4278,7 @@ msgid "hotkey|next hero"
 msgstr "Mostrar proxima cidade"
 
 #, fuzzy
-msgid "hotkey|continue hero movement"
+msgid "hotkey|start hero movement"
 msgstr "Continuar a Andar"
 
 #, fuzzy
@@ -4978,11 +4994,14 @@ msgstr "Proximo Herói"
 msgid "Select the next Hero."
 msgstr "Selecione o proximo Herói"
 
-msgid "Continue Movement"
+#, fuzzy
+msgid "Hero Movement"
 msgstr "Continuar a Andar"
 
-msgid "Continue the Hero's movement along the current path."
-msgstr "Continue o movimento do herói ao longo do trajeto atual."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
+msgstr ""
 
 msgid "Kingdom Summary"
 msgstr "Resumo do Reino"
@@ -7522,9 +7541,6 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "Mines"
-msgstr ""
-
-msgid "Monster"
 msgstr ""
 
 msgid "Obelisk"

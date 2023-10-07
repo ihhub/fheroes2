@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-24 16:12+0000\n"
+"POT-Creation-Date: 2023-10-07 13:24+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2903,10 +2903,17 @@ msgstr ""
 msgid "You have learned %{skill}."
 msgstr ""
 
-msgid "You may learn either:"
+msgid ""
+"%{name} has gained a level.\n"
+"\n"
+"%{skill} +1"
 msgstr ""
 
-msgid "or"
+msgid ""
+"You may learn either:\n"
+"%{skill1}\n"
+"or\n"
+"%{skill2}"
 msgstr ""
 
 msgid ""
@@ -3392,6 +3399,15 @@ msgid "Save the current map."
 msgstr ""
 
 msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Monster"
+msgstr ""
+
+msgid "Monsters cannot be placed on water."
+msgstr ""
+
+msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
 msgid "Ocean Objects"
@@ -4045,7 +4061,7 @@ msgstr ""
 msgid "hotkey|next hero"
 msgstr ""
 
-msgid "hotkey|continue hero movement"
+msgid "hotkey|start hero movement"
 msgstr ""
 
 msgid "hotkey|cast adventure spell"
@@ -4698,10 +4714,13 @@ msgstr ""
 msgid "Select the next Hero."
 msgstr ""
 
-msgid "Continue Movement"
-msgstr ""
+#, fuzzy
+msgid "Hero Movement"
+msgstr "Mișcare a umbrelor"
 
-msgid "Continue the Hero's movement along the current path."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
 msgstr ""
 
 msgid "Kingdom Summary"
@@ -7076,9 +7095,6 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "Mines"
-msgstr ""
-
-msgid "Monster"
 msgstr ""
 
 msgid "Obelisk"

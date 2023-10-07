@@ -25,7 +25,9 @@
 #include <string>
 
 #include "agg_image.h"
+#include "cursor.h"
 #include "dialog.h"
+#include "dialog_selectitems.h"
 #include "dialog_system_options.h"
 #include "editor_interface.h"
 #include "ground.h"
@@ -74,7 +76,7 @@ namespace Interface
     int32_t EditorPanel::getBrushSize() const
     {
         // Roads and streams are placed using only 1x1 brush.
-        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD ) {
+        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || isMonsterSettingMode() ) {
             return 1;
         }
 
@@ -301,6 +303,10 @@ namespace Interface
                 if ( le.MousePressLeft( _instrumentButtonsRect[i] ) ) {
                     if ( _instrumentButtons[i].drawOnPress() ) {
                         _selectedInstrument = static_cast<uint8_t>( i );
+
+                        // Reset cursor updater since this UI element was clicked.
+                        _interface.setCursorUpdater( {} );
+
                         setRedraw();
                     }
                 }
@@ -399,6 +405,10 @@ namespace Interface
             for ( size_t i = 0; i < _objectButtonsRect.size(); ++i ) {
                 if ( ( _selectedObject != i ) && le.MousePressLeft( _objectButtonsRect[i] ) ) {
                     _selectedObject = static_cast<uint8_t>( i );
+
+                    // Reset cursor updater since this UI element was clicked.
+                    _interface.setCursorUpdater( {} );
+
                     setRedraw();
 
                     // There is no need to continue the loop as only one button can be pressed at one moment.
@@ -431,6 +441,21 @@ namespace Interface
             }
             else if ( le.MousePressRight( _objectButtonsRect[Brush::TREASURES] ) ) {
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
+            }
+            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::MONSTERS] ) ) {
+                const Monster monster = Dialog::selectMonster( _monsterId, true );
+                if ( monster.GetID() != Monster::UNKNOWN ) {
+                    _monsterId = monster.GetID();
+
+                    _interface.setCursorUpdater( [monster = monster]( const int32_t /*tileIndex*/ ) {
+                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MONS32, monster.GetSpriteIndex() );
+
+                        Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 } );
+                    } );
+
+                    _interface.updateCursor( 0 );
+                    return res;
+                }
             }
         }
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 15:37+0000\n"
+"POT-Creation-Date: 2023-10-07 13:24+0000\n"
 "PO-Revision-Date: 2023-09-17 19:00+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3090,11 +3090,20 @@ msgstr "%{skill} +1"
 msgid "You have learned %{skill}."
 msgstr "Du har lärt dig %{skill}."
 
-msgid "You may learn either:"
-msgstr "Du kan lära dig antingen:"
+#, fuzzy
+msgid ""
+"%{name} has gained a level.\n"
+"\n"
+"%{skill} +1"
+msgstr "%{name} har gått upp en nivå."
 
-msgid "or"
-msgstr "eller"
+#, fuzzy
+msgid ""
+"You may learn either:\n"
+"%{skill1}\n"
+"or\n"
+"%{skill2}"
+msgstr "Du kan lära dig antingen:"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -3614,6 +3623,15 @@ msgstr "Spara nuvarande karta."
 
 msgid "Quit out of the map editor."
 msgstr "Lämna kartredigeraren."
+
+msgid "Monster"
+msgstr "Monster"
+
+msgid "Monsters cannot be placed on water."
+msgstr ""
+
+msgid "Choose a tile which does not contain any objects."
+msgstr ""
 
 msgid "Ocean Objects"
 msgstr "Havsföremål"
@@ -4295,7 +4313,8 @@ msgstr "Spara spel"
 msgid "hotkey|next hero"
 msgstr "Nästa hjälte"
 
-msgid "hotkey|continue hero movement"
+#, fuzzy
+msgid "hotkey|start hero movement"
 msgstr "Fortsätt förflyttning"
 
 msgid "hotkey|cast adventure spell"
@@ -5008,11 +5027,14 @@ msgstr "Nästa Hjälte"
 msgid "Select the next Hero."
 msgstr "Välj nästa Hjälte."
 
-msgid "Continue Movement"
-msgstr "Fortsätt förflyttning"
+#, fuzzy
+msgid "Hero Movement"
+msgstr "Skuggförflyttning"
 
-msgid "Continue the Hero's movement along the current path."
-msgstr "Upprepa Hjältens förflyttning längst den aktuella stigen."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
+msgstr ""
 
 msgid "Kingdom Summary"
 msgstr "Rikessammanfattning"
@@ -7863,9 +7885,6 @@ msgstr[1] "Vattenkvarnar"
 
 msgid "Mines"
 msgstr "Gruvor"
-
-msgid "Monster"
-msgstr "Monster"
 
 msgid "Obelisk"
 msgstr "Obelisk"
@@ -10789,6 +10808,3 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Undo your last action. Press again to redo the action."
-#~ msgstr "Ångra din senaste händelse. Klicka igen för att ångra dig igen."
