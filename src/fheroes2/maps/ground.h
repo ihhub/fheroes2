@@ -52,6 +52,7 @@ namespace Maps
         int getGroundByImageIndex( const uint16_t terrainImageIndex );
         // Returns true if ground image index corresponds to image with transition to other ground.
         bool isTerrainTransitionImage( const uint16_t terrainImageIndex );
+        bool doesTerrainImageIndexContainEmbeddedObjects( const uint16_t terrainImageIndex );
 
         const uint32_t roadPenalty = 75;
         const uint32_t defaultGroundPenalty = 100;
@@ -61,7 +62,7 @@ namespace Maps
         uint32_t GetPenalty( const Maps::Tiles & tile, uint32_t pathfindingLevel );
 
         // Returns the random ground image index (used in GROUND32.TIL) for main (without transition) terrain layout.
-        uint16_t getRandomTerrainImageIndex( const int groundId );
+        uint16_t getRandomTerrainImageIndex( const int groundId, const bool allowEmbeddedObjectsAppearOnTerrain );
     }
 }
 

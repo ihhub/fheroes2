@@ -31,6 +31,7 @@
 #include "ai.h"
 #include "castle.h"
 #include "game.h"
+#include "game_io.h"
 #include "gamedefs.h"
 #include "heroes.h"
 #include "logging.h"
@@ -104,7 +105,6 @@ Player::Player( int col )
     , color( col )
     , race( Race::NONE )
     , friends( col )
-    , id( World::GetUniq() )
     , _ai( std::make_shared<AI::Normal>() )
     , _handicapStatus( HandicapStatus::NONE )
 #if defined( WITH_DEBUG )
@@ -253,7 +253,7 @@ StreamBase & operator<<( StreamBase & msg, const Player & player )
     const BitModes & modes = player;
 
     assert( player._ai != nullptr );
-    msg << modes << player.id << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai
+    msg << modes << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai
         << static_cast<uint8_t>( player._handicapStatus );
     return msg;
 }
@@ -262,7 +262,15 @@ StreamBase & operator>>( StreamBase & msg, Player & player )
 {
     BitModes & modes = player;
 
-    msg >> modes >> player.id >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
+    msg >> modes;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
+        uint32_t temp;
+        msg >> temp;
+    }
+
+    msg >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
 
     assert( player._ai );
     msg >> *player._ai;

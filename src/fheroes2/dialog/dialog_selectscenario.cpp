@@ -364,8 +364,9 @@ void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & )
 
 const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps )
 {
-    if ( allMaps.empty() )
+    if ( allMaps.empty() ) {
         return nullptr;
+    }
 
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -448,63 +449,50 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
 
     fheroes2::ButtonBase * currentPressedButton = nullptr;
 
-    switch ( currentMapFilter ) {
-    case Maps::SMALL:
-        if ( small.empty() ) {
+    {
+        MapsFileInfoList * currentMapsList = nullptr;
+
+        const auto resetFilter = [&all, &buttonSelectAll, &currentPressedButton, &currentMapsList]() {
             currentPressedButton = &buttonSelectAll;
-            listbox.SelectMapSize( all, Maps::ZERO );
+            currentMapsList = &all;
             currentMapFilter = Maps::ZERO;
-        }
-        else {
+        };
+
+        switch ( currentMapFilter ) {
+        case Maps::SMALL:
             currentPressedButton = &buttonSelectSmall;
-            buttonSelectSmall.press();
-            listbox.SelectMapSize( small, Maps::SMALL );
-        }
-        break;
-    case Maps::MEDIUM:
-        if ( medium.empty() ) {
-            currentPressedButton = &buttonSelectAll;
-            buttonSelectAll.press();
-            listbox.SelectMapSize( all, Maps::ZERO );
-            currentMapFilter = Maps::ZERO;
-        }
-        else {
+            currentMapsList = &small;
+            break;
+        case Maps::MEDIUM:
             currentPressedButton = &buttonSelectMedium;
-            listbox.SelectMapSize( medium, Maps::MEDIUM );
-        }
-        break;
-    case Maps::LARGE:
-        if ( small.empty() ) {
-            currentPressedButton = &buttonSelectAll;
-            listbox.SelectMapSize( all, Maps::ZERO );
-            currentMapFilter = Maps::ZERO;
-        }
-        else {
+            currentMapsList = &medium;
+            break;
+        case Maps::LARGE:
             currentPressedButton = &buttonSelectLarge;
-            listbox.SelectMapSize( large, Maps::LARGE );
-        }
-        break;
-    case Maps::XLARGE:
-        if ( xlarge.empty() ) {
-            currentPressedButton = &buttonSelectAll;
-            listbox.SelectMapSize( all, Maps::ZERO );
-            currentMapFilter = Maps::ZERO;
-        }
-        else {
+            currentMapsList = &large;
+            break;
+        case Maps::XLARGE:
             currentPressedButton = &buttonSelectXLarge;
-            listbox.SelectMapSize( xlarge, Maps::XLARGE );
+            currentMapsList = &xlarge;
+            break;
+        default:
+            resetFilter();
+            break;
         }
-        break;
-    default:
-        currentPressedButton = &buttonSelectAll;
-        listbox.SelectMapSize( all, Maps::ZERO );
-        currentMapFilter = Maps::ZERO;
-        break;
+
+        assert( currentMapsList != nullptr );
+
+        if ( currentMapsList->empty() ) {
+            resetFilter();
+        }
+
+        assert( currentPressedButton != nullptr && currentMapsList != nullptr && !currentMapsList->empty() );
+
+        listbox.SelectMapSize( *currentMapsList, currentMapFilter );
+        listbox.SetCurrent( GetInitialMapId( *currentMapsList ) );
+
+        currentPressedButton->press();
     }
-
-    currentPressedButton->press();
-
-    listbox.SetCurrent( GetInitialMapId( all ) );
 
     fheroes2::OptionButtonGroup buttonGroup;
     buttonGroup.addButton( &buttonSelectSmall );

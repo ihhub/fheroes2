@@ -63,6 +63,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "week.h"
+#include "world_object_uid.h"
 
 namespace
 {
@@ -103,7 +104,7 @@ namespace
 
             const Maps::Tiles & indexedTile = mapTiles[indexId];
 
-            if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
+            if ( indexedTile.isWater() || !isClearGround( indexedTile ) ) {
                 continue;
             }
 
@@ -134,7 +135,7 @@ namespace
 
         for ( const int32_t indexId : indexes ) {
             const Maps::Tiles & indexedTile = mapTiles[indexId];
-            if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
+            if ( indexedTile.isWater() || !isClearGround( indexedTile ) ) {
                 continue;
             }
 
@@ -143,11 +144,6 @@ namespace
 
         return count;
     }
-}
-
-namespace GameStatic
-{
-    extern uint32_t uniq;
 }
 
 MapObjects::~MapObjects()
@@ -400,11 +396,11 @@ void World::NewMaps( int32_t sw, int32_t sh )
 
         mp2tile.terrainImageIndex = static_cast<uint16_t>( Rand::Get( 16, 19 ) ); // index sprite ground, see ground32.til
         mp2tile.objectName1 = 0; // object sprite level 1
-        mp2tile.level1IcnImageIndex = 0xff; // index sprite level 1
+        mp2tile.bottomIcnImageIndex = 0xff; // index sprite level 1
         mp2tile.quantity1 = 0;
         mp2tile.quantity2 = 0;
         mp2tile.objectName2 = 0; // object sprite level 2
-        mp2tile.level2IcnImageIndex = 0xff; // index sprite level 2
+        mp2tile.topIcnImageIndex = 0xff; // index sprite level 2
         mp2tile.terrainFlags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
         mp2tile.mapObjectType = MP2::OBJ_NONE;
         mp2tile.nextAddonIndex = 0;
@@ -640,7 +636,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
                 excludeTiles.emplace( tileId );
             }
         }
-        else if ( tile.isClearGround() ) {
+        else if ( isClearGround( tile ) ) {
             if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 4, excludeTiles ) ) {
                 continue;
             }
@@ -930,7 +926,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
         return false;
     }
 
-    tile.pushBottomLayerAddon( Maps::TilesAddon( Maps::BACKGROUND_LAYER, GetUniq(), objectIcnType, imageIndex, false, false ) );
+    tile.pushBottomLayerAddon( Maps::TilesAddon( Maps::BACKGROUND_LAYER, Maps::getNewObjectUID(), objectIcnType, imageIndex ) );
 
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
         ultimate_artifact.markAsFound();
@@ -1266,11 +1262,6 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
     }
 
     return GameOver::COND_NONE;
-}
-
-uint32_t World::GetUniq()
-{
-    return ++GameStatic::uniq;
 }
 
 uint32_t World::getDistance( const Heroes & hero, int targetIndex )

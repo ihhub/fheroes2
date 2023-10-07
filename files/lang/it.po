@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-17 07:18+0000\n"
+"POT-Creation-Date: 2023-09-24 16:12+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2620,9 +2620,6 @@ msgstr ""
 msgid "Dismiss this army."
 msgstr ""
 
-msgid "Followers"
-msgstr "Accoliti"
-
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
@@ -2630,6 +2627,9 @@ msgstr ""
 "Un gruppo di %{monster} con un desiderio di gloria vuole unirsi alla tua "
 "armata.\n"
 "Accetti?"
+
+msgid "Followers"
+msgstr "Accoliti"
 
 msgid ""
 "The %{monster} is swayed by your diplomatic tongue, and offers to join your "
@@ -3650,7 +3650,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-msgid "Undo your last action. Press again to redo the action."
+msgid "Undo your last action."
 msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
@@ -4101,6 +4101,14 @@ msgstr ""
 #, fuzzy
 msgid "hotkey|new random map"
 msgstr "Sommario Regno"
+
+#, fuzzy
+msgid "hotkey|undo last action"
+msgstr "Va alla città pross."
+
+#, fuzzy
+msgid "hotkey|redo last action"
+msgstr "Va alla città pross."
 
 msgid "hotkey|roland campaign"
 msgstr ""

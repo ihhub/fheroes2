@@ -247,7 +247,7 @@ namespace Editor
             le.MousePressLeft( randomMap.area() ) ? randomMap.drawOnPress() : randomMap.drawOnRelease();
             le.MousePressLeft( cancel.area() ) ? cancel.drawOnPress() : cancel.drawOnRelease();
 
-            if ( le.MouseClickLeft( scratchMap.area() ) ) {
+            if ( le.MouseClickLeft( scratchMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) ) {
                 const Maps::mapsize_t mapSize = selectMapSize();
                 if ( mapSize != Maps::ZERO ) {
                     // TODO: Put this call to the 'world' instance to a separate '.cpp' file were will be all map editing functions.
@@ -256,12 +256,12 @@ namespace Editor
                     fheroes2::fadeOutDisplay();
                     Game::setDisplayFadeIn();
 
-                    return Interface::Editor::Get().startEdit();
+                    return Interface::EditorInterface::Get().startEdit();
                 }
                 return fheroes2::GameMode::EDITOR_NEW_MAP;
             }
 
-            if ( le.MouseClickLeft( randomMap.area() ) ) {
+            if ( le.MouseClickLeft( randomMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU ) ) {
                 if ( selectMapSize() != Maps::ZERO ) {
                     showWIPInfo();
                 }
@@ -272,13 +272,13 @@ namespace Editor
                 return fheroes2::GameMode::EDITOR_MAIN_MENU;
             }
 
-            if ( le.MousePressRight( scratchMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) ) {
+            if ( le.MousePressRight( scratchMap.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "From Scratch" ), _( "Start from scratch with a blank map." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( randomMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU ) ) {
+            else if ( le.MousePressRight( randomMap.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Random" ), _( "Create a randomly generated map." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( cancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            else if ( le.MousePressRight( cancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the Map Editor main menu." ), Dialog::ZERO );
             }
         }
