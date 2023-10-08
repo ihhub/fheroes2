@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 07:12+0000\n"
+"POT-Creation-Date: 2023-10-08 14:08+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3326,6 +3326,13 @@ msgstr "Datei zum Laden:"
 msgid "Accept the choice made."
 msgstr "Akzeptieren Sie die getroffene Wahl."
 
+msgid "Unknown Hero"
+msgstr "Unbekannter Held"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "Spieler %{color}"
+
 msgid "Select Skill:"
 msgstr "Fähigkeit auswählen:"
 
@@ -3657,6 +3664,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Helden"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr "Ozean-Objekte"
 
@@ -3686,9 +3699,6 @@ msgstr "Strand-Objekte"
 
 msgid "Towns"
 msgstr "Städte"
-
-msgid "Heroes"
-msgstr "Helden"
 
 msgid "Artifacts"
 msgstr "Artefakte"
@@ -4172,9 +4182,6 @@ msgstr "Verpackungsdesign"
 
 msgid "Your Name"
 msgstr "Ihr Name"
-
-msgid "Unknown Hero"
-msgstr "Unbekannter Held"
 
 msgid "Standard"
 msgstr "Standard"
