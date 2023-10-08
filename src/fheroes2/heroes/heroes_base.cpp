@@ -477,7 +477,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             const Heroes * townHero = castle->GetHero();
             if ( townHero != nullptr ) {
                 if ( res != nullptr ) {
-                    *res = _( "The nearest town is %{town}.\n \nThis town is occupied by your hero %{hero}." );
+                    *res = _( "The nearest town is %{town}.\n\nThis town is occupied by your hero %{hero}." );
                     StringReplace( *res, "%{town}", castle->GetName() );
                     StringReplace( *res, "%{hero}", townHero->GetName() );
                 }

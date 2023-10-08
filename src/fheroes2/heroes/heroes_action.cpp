@@ -989,7 +989,7 @@ namespace
         assert( skill.isValid() );
 
         if ( skill.isValid() ) {
-            std::string msg = _( "You approach the hut and observe a witch inside studying an ancient tome on %{skill}.\n \n" );
+            std::string msg = _( "You approach the hut and observe a witch inside studying an ancient tome on %{skill}.\n\n" );
             const std::string & skill_name = Skill::Secondary::String( skill.Skill() );
             StringReplace( msg, "%{skill}", skill_name );
 
@@ -3397,7 +3397,7 @@ namespace
                 return Outcome::Ignore;
             }
 
-            std::string question( _( "The Sphinx asks you the following riddle:\n \n'%{riddle}'\n \nYour answer?" ) );
+            std::string question( _( "The Sphinx asks you the following riddle:\n\n'%{riddle}'\n\nYour answer?" ) );
             StringReplace( question, "%{riddle}", riddle->message );
 
             std::string answer;
